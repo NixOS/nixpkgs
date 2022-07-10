@@ -5,6 +5,7 @@
 , autoPatchelfHook
 , bash
 , coreutils
+, copyDesktopItems
 , cryptsetup
 , dosfstools
 , e2fsprogs
@@ -15,6 +16,7 @@
 , gtk3
 , hexdump
 , makeWrapper
+, makeDesktopItem
 , ntfs3g
 , parted
 , procps
@@ -47,11 +49,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "ventoy-bin";
-  version = "1.0.77";
+  version = "1.0.78";
 
   src = fetchurl {
     url = "https://github.com/ventoy/Ventoy/releases/download/v${version}/ventoy-${version}-linux.tar.gz";
-    hash = "sha256-DmDWt06gjrAEZ9Qvb7qbKbfJr/u84qmQ44kfDA3HDp0=";
+    hash = "sha256-vlSnnExtuh85yGFYUBeE7BRsVwl+kn7nSaIx2d3WICk=";
   };
 
   patches = [
@@ -66,6 +68,9 @@ in stdenv.mkDerivation rec {
 
   patchFlags = [ "-p0" ];
 
+  dontConfigure = true;
+  dontBuild = true;
+
   postPatch = ''
     # Fix permissions.
     find -type f -name \*.sh -exec chmod a+x '{}' \;
@@ -79,6 +84,7 @@ in stdenv.mkDerivation rec {
     autoPatchelfHook
     makeWrapper
   ]
+  ++ lib.optional (withQt5 || withGtk3) copyDesktopItems
   ++ lib.optional withQt5 qt5.wrapQtAppsHook;
 
   buildInputs = [
@@ -102,6 +108,18 @@ in stdenv.mkDerivation rec {
   ++ lib.optional withNtfs ntfs3g
   ++ lib.optional withXfs xfsprogs
   ++ lib.optional withQt5 qt5.qtbase;
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Ventoy";
+      desktopName = "Ventoy";
+      comment = "Tool to create bootable USB drive for ISO/WIM/IMG/VHD(x)/EFI files";
+      icon = "VentoyLogo";
+      exec = "ventoy-gui";
+      terminal = false;
+      categories = [ "Utility" ];
+      startupNotify = true;
+    })];
 
   installPhase = ''
     runHook preInstall
@@ -146,7 +164,7 @@ in stdenv.mkDerivation rec {
     done
   ''
   # VentoGUI uses the `ventoy_gui_type` file to determine the type of GUI.
-  # See <https://github.com/ventoy/Ventoy/blob/471432fc50ffad80bde5de0b22e4c30fa3aac41b/LinuxGUI/Ventoy2Disk/ventoy_gui.c#L1044>.
+  # See: https://github.com/ventoy/Ventoy/blob/v1.0.78/LinuxGUI/Ventoy2Disk/ventoy_gui.c#L1096
   + lib.optionalString (withGtk3 || withQt5) ''
     echo "${defaultGuiType}" > "$VENTOY_PATH/ventoy_gui_type"
     makeWrapper "$VENTOY_PATH/VentoyGUI.$ARCH" "$out/bin/ventoy-gui" \
@@ -154,7 +172,6 @@ in stdenv.mkDerivation rec {
                 --chdir "$VENTOY_PATH"
     mkdir "$out"/share/{applications,pixmaps}
     ln -s "$VENTOY_PATH"/WebUI/static/img/VentoyLogo.png "$out"/share/pixmaps/
-    cp ${./ventoy-gui.desktop} "$out"/share/applications/
   ''
   + lib.optionalString (!withGtk3) ''
     rm "$VENTOY_PATH"/tool/{"$ARCH"/Ventoy2Disk.gtk3,VentoyGTK.glade}
@@ -187,9 +204,9 @@ in stdenv.mkDerivation rec {
       800+ image files are tested.  90%+ distros in DistroWatch supported.
     '';
     changelog = "https://www.ventoy.net/doc_news.html";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ k4leg AndersonTorres ];
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "mipsel-linux" ];
-    maintainers = with maintainers; [ k4leg ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }
