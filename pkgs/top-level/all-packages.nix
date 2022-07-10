@@ -12581,6 +12581,8 @@ with pkgs;
     tex = texlive.combined.scheme-full;
   };
 
+  bun = callPackage ../development/web/bun { };
+
   cakelisp = callPackage ../development/compilers/cakelisp { };
 
   ciao = callPackage ../development/compilers/ciao { };
@@ -15649,7 +15651,9 @@ with pkgs;
 
   cli11 = callPackage ../development/tools/misc/cli11 { };
 
-  datree = callPackage ../development/tools/datree { };
+  datree = callPackage ../development/tools/datree {
+    buildGoModule = buildGo118Module;
+  };
 
   dcadec = callPackage ../development/tools/dcadec { };
 

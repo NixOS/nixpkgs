@@ -55,6 +55,6 @@ buildPythonPackage rec {
     homepage = "http://icspy.readthedocs.org/en/stable/";
     changelog = "https://github.com/ics-py/ics-py/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
   };
 }
