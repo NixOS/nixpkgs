@@ -41,6 +41,9 @@ let
         (whenBetween "5.2" "5.18" yes)
       ];
       DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT = whenAtLeast "5.18" yes;
+      # Reduced debug info conflict with BTF and have been enabled in
+      # aarch64 defconfig since 5.13
+      DEBUG_INFO_REDUCED        = whenAtLeast "5.13" (option no);
       # Disabled on 32-bit platforms, fails to build on 5.15+ with `Failed to parse base BTF 'vmlinux': -22`
       DEBUG_INFO_BTF            = whenAtLeast "5.2" (option (if stdenv.hostPlatform.is32bit && (versionAtLeast version "5.15") then no else yes));
       BPF_LSM                   = whenAtLeast "5.7" (option yes);
