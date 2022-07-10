@@ -72,6 +72,24 @@ stdenv.mkDerivation rec {
       url = "https://github.com/Clozure/ccl/commit/997de91062d1f152d0c3b322a1e3694243e4a403.patch";
       sha256 = "10w6zw8wgalkdyya4m48lgca4p9wgcp1h44hy9wqr94dzlllq0f6";
     })
+    # Fix image load failure on macOS 11 and newer
+    (fetchpatch {
+      name = "macos-11-loading.patch";
+      url = "https://github.com/Clozure/ccl/commit/553c0f25f38b2b0d5922ca7b4f62f09eb85ace1c.patch";
+      sha256 = "sha256-kzSPzyykSiIUF0rASTOOvl+rkjmqE98PcBWhxLADulQ=";
+    })
+    # Fix CCL running under Rosetta 2 on aarch64-darwin
+    (fetchpatch {
+      name = "darwin-rosetta-2.patch";
+      url = "https://github.com/Clozure/ccl/commit/ca107b94f9e3c2aa693c14f4a4b44a11ffa65b7d.patch";
+      sha256 = "sha256-8xgPtEgQFdJVA8A4vyv0L+lLZH2wo2+bvHPJXxP5OZ4=";
+    })
+    # Use the clang-integrated assembler on Darwin
+    (fetchpatch {
+      name = "darwin-assembler-fix.patch";
+      url = "https://github.com/Clozure/ccl/commit/b321ec147ca6b1c93a01d7d35bf25092e7b1b6b1.patch";
+      sha256 = "sha256-2Bi55SDdFtO+KFuOglJQiU0jN16rcfkVGBhEuQKDe6M=";
+    })
   ];
 
   buildInputs = if stdenv.isDarwin then [ bootstrap_cmds m4 ] else [ glibc m4 ];
@@ -84,7 +102,9 @@ stdenv.mkDerivation rec {
       --replace "M4 = gm4"   "M4 = m4" \
       --replace "dtrace"     "/usr/sbin/dtrace" \
       --replace "/bin/rm"    "${coreutils}/bin/rm" \
-      --replace "/bin/echo"  "${coreutils}/bin/echo"
+      --replace "/bin/echo"  "${coreutils}/bin/echo" \
+      --replace "AS = as"    "AS = ${stdenv.cc}/bin/clang" \
+      --replace "ASFLAGS ="  "ASFLAGS = -c -x assembler -"
 
     substituteInPlace lisp-kernel/m4macros.m4 \
       --replace "/bin/pwd" "${coreutils}/bin/pwd"
@@ -101,7 +121,13 @@ stdenv.mkDerivation rec {
     make -C lisp-kernel/${CCL_KERNEL} clean
     make -C lisp-kernel/${CCL_KERNEL} all
 
-    ./${CCL_RUNTIME} -n -b -e '(ccl:rebuild-ccl :full t)' -e '(ccl:quit)'
+    # Per the release notes, it’s not possible to do a full rebuild on macOS 10.15 or newer.
+    ./${CCL_RUNTIME} -n -b -e '(ccl:rebuild-ccl ${if stdenv.isDarwin then ":clean" else ":full"} t)' -e '(ccl:quit)'
+  '';
+
+  sandboxProfile = ''
+    (allow file-read* (subpath "/dev/dtrace") (literal "/usr/sbin/dtrace"))
+    (allow process-exec (literal "/usr/sbin/dtrace"))
   '';
 
   installPhase = ''
@@ -121,8 +147,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://ccl.clozure.com/";
     maintainers = with maintainers; [ raskin tohl ];
     platforms   = attrNames options;
-    # assembler failures during build, x86_64-darwin broken since 2020-10-14
-    broken      = (stdenv.isDarwin && stdenv.isx86_64);
     license     = licenses.asl20;
   };
 }
