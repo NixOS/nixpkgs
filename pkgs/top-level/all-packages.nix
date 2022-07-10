@@ -10763,7 +10763,7 @@ with pkgs;
 
   squashfsTools = callPackage ../tools/filesystems/squashfs { };
 
-  squashfs-tools-ng = callPackage ../tools/filesystems/squashfs-tools-ng { };
+  squashfs-tools-ng = darwin.apple_sdk_11_0.callPackage ../tools/filesystems/squashfs-tools-ng { };
 
   squashfuse = callPackage ../tools/filesystems/squashfuse { };
 
