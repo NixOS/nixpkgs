@@ -72,7 +72,10 @@ stdenv.mkDerivation rec {
     "-DGAMES=OFF"
     "-DMAPVIEW=OFF"
     "-DAIDEBUG=OFF"
-  ] ++ lib.optional stdenv.isDarwin "-DCORESERVICES_LIB=${CoreServices}";
+  ] ++ lib.optionals stdenv.isDarwin [
+   "-DCORESERVICES_LIB=${CoreServices}"
+   "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14"
+  ];
 
   # Set the data directory for each executable. We cannot set it at build time
   # with the PKGDATADIR cmake variable because each executable needs a specific
@@ -106,7 +109,5 @@ stdenv.mkDerivation rec {
     license = [ licenses.mit licenses.cc-by-sa-30 ];
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
-    # Requires SDK 10.14 https://github.com/NixOS/nixpkgs/issues/101229
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }
