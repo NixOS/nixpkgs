@@ -11,6 +11,21 @@ let
   patches = [
     ./use-go-in-path.patch
   ];
+
+  # Patch the protoc alias so that it always builds from source.
+  rulesProto = fetchFromGitHub {
+    owner = "bazelbuild";
+    repo = "rules_proto";
+    rev = "4.0.0-3.19.2";
+    sha256 = "sha256-wdmp+Tmf63PPr7G4X5F7rDas45WEETU3eKb47PFVI6o=";
+    postFetch = ''
+      sed -i 's|name = "protoc"|name = "_protoc_original"|' $out/proto/private/BUILD.release
+      cat <<EOF >>$out/proto/private/BUILD.release
+      alias(name = "protoc", actual = "@com_github_protocolbuffers_protobuf//:protoc", visibility = ["//visibility:public"])
+      EOF
+    '';
+  };
+
 in
 buildBazelPackage rec {
   pname = "bazel-watcher";
@@ -27,6 +42,7 @@ buildBazelPackage rec {
   removeRulesCC = false;
 
   bazel = bazel_5;
+  bazelFlags = [ "--override_repository=rules_proto=${rulesProto}" ];
   bazelBuildFlags = lib.optionals stdenv.cc.isClang [ "--cxxopt=-x" "--cxxopt=c++" "--host_cxxopt=-x" "--host_cxxopt=c++" ];
   bazelTarget = "//ibazel";
 
@@ -61,7 +77,7 @@ buildBazelPackage rec {
       sed -e '/^FILE:@bazel_gazelle_go_repository_tools.*/d' -i $bazelOut/external/\@*.marker
     '';
 
-    sha256 = "sha256-vij20VMBlKTBOACjH+XP4Z15BOmXYvlmErkVgjOln3M=";
+    sha256 = "sha256-Tkmq5/vrakWeIsnTQ9o0h2XhT/Ot+r6LRSCE5c6PSEk=";
   };
 
   buildAttrs = {
