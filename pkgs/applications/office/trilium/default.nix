@@ -2,14 +2,6 @@
 
 let
   description = "Hierarchical note taking application with focus on building large personal knowledge bases";
-  desktopItem = makeDesktopItem {
-    name = "Trilium";
-    exec = "trilium";
-    icon = "trilium";
-    comment = description;
-    desktopName = "Trilium Notes";
-    categories = [ "Office" ];
-  };
 
   metaCommon = with lib; {
     inherit description;
@@ -20,21 +12,20 @@ let
     maintainers = with maintainers; [ fliegendewurst ];
   };
 
-  version = "0.52.4";
+  version = "0.53.2";
 
   desktopSource.url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
-  desktopSource.sha256 = "1b8hq7ql6r3ki9yi143r1b81icli6wy8r2c47npdj8h9rj30rx2c";
+  desktopSource.sha256 = "0sjljyn7x0kv1692wccdjsll8h49r9lyqbrfnz4cn147xinclyw4";
 
   serverSource.url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz";
-  serverSource.sha256 = "12lg7naf89cxaym9sfzxs9scwy6i95s2qf8yvyxqy6rl51cf4jfs";
+  serverSource.sha256 = "0y5xjf4r0c2hw2ch4ml55fq1nlmgnakq4zh3ch8sdgzm86nchavb";
 
 in {
 
   trilium-desktop = stdenv.mkDerivation rec {
     pname = "trilium-desktop";
     inherit version;
-    meta = with metaCommon; {
-      inherit description homepage license sourceProvenance platforms maintainers;
+    meta = metaCommon // {
       mainProgram = "trilium";
     };
 
@@ -49,7 +40,16 @@ in {
 
     buildInputs = atomEnv.packages ++ [ libxshmfence ];
 
-    desktopItems = [ desktopItem ];
+    desktopItems = [
+      (makeDesktopItem {
+        name = "Trilium";
+        exec = "trilium";
+        icon = "trilium";
+        comment = meta.description;
+        desktopName = "Trilium Notes";
+        categories = [ "Office" ];
+      })
+    ];
 
     installPhase = ''
       runHook preInstall
