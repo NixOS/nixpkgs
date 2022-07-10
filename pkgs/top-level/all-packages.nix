@@ -2669,6 +2669,8 @@ with pkgs;
 
   sshchecker = callPackage ../tools/security/sshchecker { };
 
+  sshs = callPackage ../development/tools/sshs { };
+
   titaniumenv = callPackage ../development/mobile/titaniumenv { };
 
   abootimg = callPackage ../development/mobile/abootimg {};
