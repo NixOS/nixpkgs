@@ -247,6 +247,8 @@ in {
 
   aioairzone = callPackage ../development/python-modules/aioairzone { };
 
+  aioaladdinconnect = callPackage ../development/python-modules/aioaladdinconnect { };
+
   aioambient = callPackage ../development/python-modules/aioambient { };
 
   aioapns = callPackage ../development/python-modules/aioapns { };
