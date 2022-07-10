@@ -186,7 +186,7 @@ in
 
     dysnomia.properties = {
       hostname = config.networking.hostName;
-      inherit (config.nixpkgs.localSystem) system;
+      inherit (pkgs.stdenv.hostPlatform) system;
 
       supportedTypes = [
         "echo"
