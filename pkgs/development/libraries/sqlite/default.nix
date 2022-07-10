@@ -1,7 +1,12 @@
-{ lib, stdenv, fetchurl, zlib, interactive ? false, readline, ncurses
-, python3Packages
+{ lib, stdenv, fetchurl, zlib, readline, ncurses
+
+# for tests
+, python3Packages, sqldiff, sqlite-analyzer
+
+# uses readline & ncurses for a better interactive experience if set to true
+, interactive ? false
+# TODO: can be removed since 3.36 since it is the default now.
 , enableDeserialize ? false
-, sqldiff, sqlite-analyzer
 }:
 
 with lib;
