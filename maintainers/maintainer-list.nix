@@ -7051,6 +7051,12 @@
     githubId = 4032;
     name = "Kristoffer Thømt Ravneberg";
   };
+  kravemir = {
+    email = "kravec.miroslav@gmail.com";
+    github = "kravemir";
+    githubId = 1643935;
+    name = "Miroslav Kravec";
+  };
   kritnich = {
     email = "kritnich@kritni.ch";
     github = "Kritnich";
