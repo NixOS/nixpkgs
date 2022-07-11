@@ -9,6 +9,8 @@
 , lame
 , libev
 , libmicrohttpd
+, libopenmpt
+, mpg123
 , ncurses
 , lib
 , stdenv
@@ -25,23 +27,16 @@
 
 stdenv.mkDerivation rec {
   pname = "musikcube";
-  version = "0.97.0";
+  version = "0.98.0";
 
   src = fetchFromGitHub {
     owner = "clangen";
     repo = pname;
     rev = version;
-    sha256 = "sha256-W9Ng1kqai5qhaDs5KWg/1sOTIAalBXLng1MG8sl/ZOg=";
+    sha256 = "sha256-bnwOxEcvRXWPuqtkv8YlpclvH/6ZtQvyvHy4mqJCwik=";
   };
 
   patches = [
-    # Fix pending upstream inclusion for ncurses-6.3 support:
-    #  https://github.com/clangen/musikcube/pull/474
-    (fetchpatch {
-      name = "ncurses-6.3.patch";
-      url = "https://github.com/clangen/musikcube/commit/1240720e27232fdb199a4da93ca6705864442026.patch";
-      sha256 = "0bhjgwnj6d24wb1m9xz1vi1k9xk27arba1absjbcimggn54pinid";
-    })
     ./0001-apple-cmake.patch
   ];
 
@@ -58,6 +53,8 @@ stdenv.mkDerivation rec {
     lame
     libev
     libmicrohttpd
+    libopenmpt
+    mpg123
     ncurses
     taglib
   ] ++ lib.optionals systemdSupport [
