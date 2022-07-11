@@ -2,29 +2,34 @@
 
 stdenv.mkDerivation rec {
   pname = "hdfview";
-  version = "3.1.3";
+  version = "3.1.4";
 
   src = fetchurl {
     url = "https://support.hdfgroup.org/ftp/HDF5/releases/HDF-JAVA/${pname}-${version}/src/${pname}-${version}.tar.gz";
-    sha256 = "sha256-VmgHSVMFoy09plU5pSnyaPz8N15toy7QfCtXI7mqDGY=";
+    sha256 = "sha256-iY/NUifU57aX795eWpaUBflrclF/nfvb3OKZEpD9VqA=";
   };
 
   nativeBuildInputs = [
-    ant jdk
-    nettools  # "hostname" required
+    ant
+    jdk
+    nettools # "hostname" required
     copyDesktopItems
   ];
 
   HDFLIBS = (hdf4.override { javaSupport = true; }).out;
   HDF5LIBS = (hdf5.override { javaSupport = true; }).out;
 
-  buildPhase = ''
-    runHook preBuild
+  buildPhase =
+    let
+      arch = if stdenv.isx86_64 then "x86_64" else "aarch64";
+    in
+    ''
+      runHook preBuild
 
-    ant createJPackage
+      ant createJPackage -Dmachine.arch=${arch}
 
-    runHook postBuild
-  '';
+      runHook postBuild
+    '';
 
   desktopItem = makeDesktopItem rec {
     name = "HDFView";
