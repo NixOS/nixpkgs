@@ -9705,6 +9705,8 @@ with pkgs;
 
   pngquant = callPackage ../tools/graphics/pngquant { };
 
+  po4a = perlPackages.Po4a;
+
   podiff = callPackage ../tools/text/podiff { };
 
   podman = callPackage ../applications/virtualization/podman/wrapper.nix { };
@@ -24411,6 +24413,7 @@ with pkgs;
     nlsSupport = false;
     ncursesSupport = false;
     systemdSupport = false;
+    translateManpages = false;
   } else util-linux;
 
   v4l-utils = qt5.callPackage ../os-specific/linux/v4l-utils { };

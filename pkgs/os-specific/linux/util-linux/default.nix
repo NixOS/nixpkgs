@@ -8,6 +8,8 @@
 , systemdSupport ? stdenv.isLinux && !stdenv.hostPlatform.isStatic
 , systemd
 , nlsSupport ? true
+, translateManpages ? true
+, po4a
 }:
 
 stdenv.mkDerivation rec {
@@ -51,6 +53,7 @@ stdenv.mkDerivation rec {
     (lib.withFeature systemdSupport "systemd")
     (lib.withFeatureAs systemdSupport
        "systemdsystemunitdir" "${placeholder "bin"}/lib/systemd/system/")
+    (lib.enableFeature translateManpages "poman")
     "SYSCONFSTATICDIR=${placeholder "lib"}/lib"
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
        "scanf_cv_type_modifier=ms"
@@ -62,7 +65,9 @@ stdenv.mkDerivation rec {
     "usrsbin_execdir=${placeholder "bin"}/sbin"
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config ]
+    ++ lib.optionals translateManpages [ po4a ];
+
   buildInputs = [ zlib ]
     ++ lib.optionals pamSupport [ pam ]
     ++ lib.optionals capabilitiesSupport [ libcap_ng ]
