@@ -38,6 +38,12 @@ stdenv.mkDerivation rec {
       cp -f $src/lib/common-lisp/nyxt/assets/nyxt_''${i}x''${i}.png "$out/share/icons/hicolor/''${i}x''${i}/apps/nyxt.png"
     done
 
+    # REMOVE ME on update. This environment variable is now set in the development
+    # master branch, so this won't be necessary in future releases.
+    gappsWrapperArgs+=(
+      --set WEBKIT_FORCE_SANDBOX 0
+    )
+
     mkdir -p $out/bin && makeWrapper $src/bin/nyxt $out/bin/nyxt \
       --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "${GST_PLUGIN_SYSTEM_PATH_1_0}" \
       --argv0 nyxt "''${gappsWrapperArgs[@]}"
