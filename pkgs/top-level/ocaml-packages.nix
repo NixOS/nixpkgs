@@ -549,7 +549,7 @@ let
 
     dypgen = callPackage ../development/ocaml-modules/dypgen { };
 
-    gapi_ocaml = callPackage ../development/ocaml-modules/gapi-ocaml { };
+    gapi-ocaml = callPackage ../development/ocaml-modules/gapi-ocaml { };
 
     gen_js_api = callPackage ../development/ocaml-modules/gen_js_api { };
 
