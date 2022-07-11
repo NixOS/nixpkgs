@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ andrewrk AndersonTorres ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin; # See https://github.com/NixOS/nixpkgs/issues/86299
+    broken = stdenv.isDarwin && !stdenv.isAarch64; # See https://github.com/NixOS/nixpkgs/issues/86299
   };
 }
