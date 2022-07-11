@@ -61,12 +61,13 @@ stdenv.mkDerivation rec {
     PYTHON = withPython;
   };
 
-  runtimeDeps = [ unzip zip p7zip xz gzip bzip2 gnutar xdg-utils ];
+  runtimeDeps = [ unzip zip p7zip xz gzip bzip2 gnutar ];
 
   postInstall = ''
     wrapProgram $out/bin/far2l \
       --argv0 $out/bin/far2l \
-      --prefix PATH : ${lib.makeBinPath runtimeDeps}
+      --prefix PATH : ${lib.makeBinPath runtimeDeps} \
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
   '';
 
   meta = with lib; {

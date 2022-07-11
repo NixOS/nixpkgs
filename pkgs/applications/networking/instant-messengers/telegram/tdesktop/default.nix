@@ -173,7 +173,7 @@ env.mkDerivation rec {
     wrapProgram $out/bin/telegram-desktop \
       "''${gappsWrapperArgs[@]}" \
       "''${qtWrapperArgs[@]}" \
-      --prefix PATH : ${lib.makeBinPath [ xdg-utils]} \
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils]} \
       --set XDG_RUNTIME_DIR "XDG-RUNTIME-DIR"
     sed -i $out/bin/telegram-desktop \
       -e "s,'XDG-RUNTIME-DIR',\"\''${XDG_RUNTIME_DIR:-/run/user/\$(id --user)}\","

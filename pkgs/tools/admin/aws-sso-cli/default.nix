@@ -21,7 +21,7 @@ buildGoModule rec {
   postInstall = ''
     mv $out/bin/cmd $out/bin/aws-sso
     wrapProgram $out/bin/aws-sso \
-      --prefix PATH : ${lib.makeBinPath [ xdg-utils ]}
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
   '';
 
   meta = with lib; {

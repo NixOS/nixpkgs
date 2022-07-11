@@ -56,7 +56,9 @@ python3Packages.buildPythonApplication rec  {
 
   makeWrapperArgs = [
     "\${gappsWrapperArgs[@]}"
-    "--prefix PATH : ${lib.makeBinPath [ xdg-user-dirs xdg-utils wine winetricks pciutils glxinfo ]}"
+    "--prefix PATH : ${lib.makeBinPath [ xdg-user-dirs wine winetricks pciutils glxinfo ]}"
+    # make xdg-open overrideable at runtime
+    "--suffix PATH : ${lib.makeBinPath [ xdg-utils ]}"
   ];
 
   postPatch = ''

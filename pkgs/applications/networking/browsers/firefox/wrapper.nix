@@ -271,11 +271,12 @@ let
           mv "$executablePath" "$oldExe"
         fi
 
+        # make xdg-open overrideable at runtime
         makeWrapper "$oldExe" \
           "''${executablePath}${nameSuffix}" \
             --prefix LD_LIBRARY_PATH ':' "$libs" \
             --suffix-each GTK_PATH ':' "$gtk_modules" \
-            --prefix PATH ':' "${xdg-utils}/bin" \
+            --suffix PATH ':' "${xdg-utils}/bin" \
             --suffix PATH ':' "$out/bin" \
             --set MOZ_APP_LAUNCHER "${launcherName}" \
             --set MOZ_SYSTEM_DIR "$out/lib/mozilla" \

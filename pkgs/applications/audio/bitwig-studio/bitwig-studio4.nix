@@ -53,9 +53,11 @@ stdenv.mkDerivation rec {
       -not -path '*/resources/*' | \
     while IFS= read -r f ; do
       patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" $f
+      # make xdg-open overrideable at runtime
       wrapProgram $f \
         "''${gappsWrapperArgs[@]}" \
-        --prefix PATH : "${lib.makeBinPath [ xdg-utils ffmpeg ]}" \
+        --prefix PATH : "${lib.makeBinPath [ ffmpeg ]}" \
+        --suffix PATH : "${lib.makeBinPath [ xdg-utils ]}" \
         --suffix LD_LIBRARY_PATH : "${lib.strings.makeLibraryPath buildInputs}"
     done
 
