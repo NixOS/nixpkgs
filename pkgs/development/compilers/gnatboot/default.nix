@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    langC = true;
+    langC = true; # TRICK for gcc-wrapper to wrap it
     langCC = false;
     langFortran = false;
     langAda = true;
