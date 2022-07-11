@@ -11,17 +11,25 @@
 , gsoap
 , openssl
 , zlib
+  # Configuration overridable with .override
+  # If not null, the builder will
+  # move "$out/etc" to "$out/etc.orig" and symlink "$out/etc" to externalEtc.
+, externalEtc ? "/etc"
 }:
 
 stdenv.mkDerivation rec{
   pname = "voms-unstable";
-  version = "2021-05-04";
+  version = "2022-06-14";
 
   src = fetchFromGitHub {
     owner = "italiangrid";
     repo = "voms";
-    rev = "61563152fce3a4e6860dd8ab8ab6e72b7908d8b8";
-    sha256 = "LNR0G4XrgxqjQmjyaKoZJLNoxtAGiTM93FG3jIU1u+Y=";
+    rev = "8e99bb96baaf197f0f557836e2829084bb1bb00e"; # develop branch
+    hash = "sha256-FG4fHO2lsQ3t/ZaKT9xY+xqdQHfdtzi5ULtxLhdPnss=";
+  };
+
+  passthru = {
+    inherit externalEtc;
   };
 
   nativeBuildInputs = [
@@ -59,8 +67,15 @@ stdenv.mkDerivation rec{
     "--with-gsoap-wsdl2h=${gsoap}/bin/wsdl2h"
   ];
 
+  postFixup = ''
+    ${lib.optionalString (externalEtc != null) ''
+      mv "$out"/etc{,.orig}
+      ln -s ${lib.escapeShellArg externalEtc} "$out/etc"
+    ''}
+  '';
+
   meta = with lib; {
-    description = "The VOMS native service and APIs";
+    description = "The C/C++ VOMS server, client and APIs v2.x";
     homepage = "https://italiangrid.github.io/voms/";
     changelog = "https://github.com/italiangrid/voms/blob/master/ChangeLog";
     license = licenses.asl20;
