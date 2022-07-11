@@ -320,7 +320,7 @@ checkFS() {
 
     echo "checking $device..."
 
-    fsck -V -a "$device"
+    fsck @fsckOptions@ "$device"
     fsckResult=$?
 
     if test $(($fsckResult | 2)) = $fsckResult; then

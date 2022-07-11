@@ -343,7 +343,7 @@ let
 
     inherit (config.system.build) earlyMountScript;
 
-    inherit (config.boot.initrd) checkJournalingFS verbose
+    inherit (config.boot.initrd) checkJournalingFS fsckOptions verbose
       preLVMCommands preDeviceCommands postDeviceCommands postMountCommands preFailCommands kernelModules;
 
     resumeDevices = map (sd: if sd ? device then sd.device else "/dev/disk/by-label/${sd.label}")
@@ -524,6 +524,14 @@ in
       type = types.bool;
       description = ''
         Whether to run <command>fsck</command> on journaling filesystems such as ext3.
+      '';
+    };
+
+    boot.initrd.fsckOptions = mkOption {
+      default = "-V -a";
+      type = types.separatedString " ";
+      description = ''
+        Command-line options to pass to <command>fsck</command>.
       '';
     };
 
