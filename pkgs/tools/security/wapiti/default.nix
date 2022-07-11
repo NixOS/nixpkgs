@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "wapiti";
-  version = "3.1.2";
+  version = "3.1.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "wapiti-scanner";
     repo = pname;
     rev = version;
-    sha256 = "sha256-nGAG+7FqEktc55i5Q2urKh52vm/i6kX4kvS2AVUAUjA=";
+    sha256 = "sha256-alrJVe4Miarkk8BziC8Y333b3swJ4b4oQpP2WAdT2rc=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -30,6 +30,7 @@ python3.pkgs.buildPythonApplication rec {
     loguru
     Mako
     markupsafe
+    mitmproxy
     six
     sqlalchemy
     tld
