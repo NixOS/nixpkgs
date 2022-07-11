@@ -578,6 +578,10 @@ in {
   aocd = callPackage ../development/python-modules/aocd { };
 
   apache-airflow = callPackage ../development/python-modules/apache-airflow { };
+  apache-airflow-providers-ftp = callPackage ../development/python-modules/apache-airflow/providers/ftp.nix { };
+  apache-airflow-providers-http = callPackage ../development/python-modules/apache-airflow/providers/http.nix { };
+  apache-airflow-providers-imap = callPackage ../development/python-modules/apache-airflow/providers/imap.nix { };
+  apache-airflow-providers-sqlite = callPackage ../development/python-modules/apache-airflow/providers/sqlite.nix { };
 
   apache-beam = callPackage ../development/python-modules/apache-beam { };
 
@@ -586,6 +590,7 @@ in {
   apipkg = callPackage ../development/python-modules/apipkg { };
 
   apispec = callPackage ../development/python-modules/apispec { };
+  apispec_3 = callPackage ../development/python-modules/apispec/3.nix { };
 
   aplpy = callPackage ../development/python-modules/aplpy { };
 
@@ -1859,6 +1864,7 @@ in {
   colorful = callPackage ../development/python-modules/colorful { };
 
   colorlog = callPackage ../development/python-modules/colorlog { };
+  colorlog_4 = callPackage ../development/python-modules/colorlog/4.nix { };
 
   colorlover = callPackage ../development/python-modules/colorlover { };
 
@@ -3216,6 +3222,7 @@ in {
   flask-versioned = callPackage ../development/python-modules/flask-versioned { };
 
   flask-wtf = callPackage ../development/python-modules/flask-wtf { };
+  flask-wtf_0 = callPackage ../development/python-modules/flask-wtf/0.nix { };
 
   flatbuffers = callPackage ../development/python-modules/flatbuffers {
     inherit (pkgs) flatbuffers;
@@ -11378,6 +11385,7 @@ in {
   wsproto = callPackage ../development/python-modules/wsproto { };
 
   wtforms = callPackage ../development/python-modules/wtforms { };
+  wtforms_2 = callPackage ../development/python-modules/wtforms/2.nix { };
 
   wtf-peewee = callPackage ../development/python-modules/wtf-peewee { };
 

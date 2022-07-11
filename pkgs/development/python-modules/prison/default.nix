@@ -7,13 +7,14 @@
 
 buildPythonPackage rec {
   pname = "prison";
-  version = "0.1.3";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "betodealmeida";
     repo = "python-rison";
-    rev = version;
-    sha256 = "sha256-qor40vUQeTdlO3vwug3GGNX5vkNaF0H7EWlRdsY4bvc=";
+    # The repo doens't have proper tags, commit b77e5bc7cb1a198f2cbf0366bf9acc10b8e67dd5 has version 0.2.1
+    rev = "b77e5bc7cb1a198f2cbf0366bf9acc10b8e67dd5";
+    sha256 = "sha256-aCQ2254appVBsKuJgSeraWWyh1d9rt8KDt/f8afpVwo=";
   };
 
   propagatedBuildInputs = [

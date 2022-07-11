@@ -2,6 +2,7 @@
 , attrs
 , buildPythonPackage
 , fetchFromGitHub
+, flit-core
 , linkify-it-py
 , mdurl
 , psutil
@@ -14,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "markdown-it-py";
-  version = "2.0.1";
+  version = "2.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -23,8 +24,12 @@ buildPythonPackage rec {
     owner = "executablebooks";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0qrsl4ajhi2263i5q1kivp2s3n7naq3byfbsv11rni18skw3i2a6";
+    sha256 = "sha256-6UATJho3SuIbLktZtFcDrCTWIAh52E+n5adcgl49un0=";
   };
+
+  buildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     attrs
