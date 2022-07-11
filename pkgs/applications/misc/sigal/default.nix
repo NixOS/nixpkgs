@@ -36,12 +36,15 @@ python3.pkgs.buildPythonApplication rec {
     pytestCheckHook
   ]);
 
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "test_nonmedia_files"
+  ];
+
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath [ ffmpeg ]}"
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Yet another simple static gallery generator";
     homepage = "http://sigal.saimon.org/";
     license = licenses.mit;

@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pyialarm";
-  version = "1.9.0";
+  version = "2.0.0";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "RyuzakiKK";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mvi8cd9uVFvG1Jc3OeuEwuLjbuMjPRrNRHFUVe3g/NM=";
+    sha256 = "sha256-rJS6KgEy4iuiY6QRue6K6woyGefuTN7/4RLCu8cb8M4=";
   };
 
   propagatedBuildInputs = [

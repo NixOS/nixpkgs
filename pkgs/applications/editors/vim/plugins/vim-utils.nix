@@ -33,24 +33,6 @@ vim-with-plugins in PATH:
       # To automatically load a plugin when opening a filetype, add vimrc lines like:
       # autocmd FileType php :packadd phpCompletion
     };
-
-    # plugins can also be managed by VAM
-    vimrcConfig.vam.knownPlugins = pkgs.vimPlugins; # optional
-    vimrcConfig.vam.pluginDictionaries = [
-      # load always
-      { name = "youcompleteme"; }
-      { names = ["youcompleteme" "foo"]; }
-
-      # only load when opening a .php file
-      { name = "phpCompletion"; ft_regex = "^php\$"; }
-      { name = "phpCompletion"; filename_regex = "^.php\$"; }
-
-      # provide plugin which can be loaded manually:
-      { name = "phpCompletion"; tag = "lazy"; }
-
-      # full documentation at github.com/MarcWeber/vim-addon-manager
-    ];
-
   };
 
 WHAT IS A VIM PLUGIN?
@@ -278,7 +260,7 @@ let
 
         plugins = findDependenciesRecursively (map (pluginToDrv knownPlugins) pathogen.pluginNames);
 
-        pathogenPackages.pathogen = lib.warn "'pathogen' attribute is deprecated. Use 'packages' instead in your vim configuration" {
+        pathogenPackages.pathogen = {
           start = plugins;
         };
       in
@@ -313,71 +295,26 @@ let
          yet
 
       */
-      vamImpl = lib.optionalString (vam != null)
-      (let
+      vamImpl =
+      let
         knownPlugins = vam.knownPlugins or vimPlugins;
 
         # plugins specified by the user
         specifiedPlugins = map (pluginToDrv knownPlugins) (lib.concatMap vamDictToNames vam.pluginDictionaries);
         # plugins with dependencies
         plugins = findDependenciesRecursively specifiedPlugins;
-
-        # Convert scalars, lists, and attrs, to VimL equivalents
-        toVimL = x:
-          if builtins.isString x then "'${lib.replaceStrings [ "\n" "'" ] [ "\n\\ " "''" ] x}'"
-          else if builtins.isAttrs x && builtins ? out then toVimL x # a derivation
-          else if builtins.isAttrs x then "{${lib.concatStringsSep ", " (lib.mapAttrsToList (n: v: "${toVimL n}: ${toVimL v}") x)}}"
-          else if builtins.isList x then "[${lib.concatMapStringsSep ", " toVimL x}]"
-          else if builtins.isInt x || builtins.isFloat x then builtins.toString x
-          else if builtins.isBool x then (if x then "1" else "0")
-          else throw "turning ${lib.generators.toPretty {} x} into a VimL thing not implemented yet";
-
-      in assert builtins.hasAttr "vim-addon-manager" knownPlugins;
-      ''
-        filetype indent plugin on | syn on
-
-        let g:nix_plugin_locations = {}
-        ${lib.concatMapStrings (plugin: ''
-          let g:nix_plugin_locations['${plugin.pname}'] = "${plugin.rtp}"
-        '') plugins}
-        let g:nix_plugin_locations['vim-addon-manager'] = "${knownPlugins.vim-addon-manager.rtp}"
-
-        let g:vim_addon_manager = {}
-
-        if exists('g:nix_plugin_locations')
-          " nix managed config
-
-          " override default function making VAM aware of plugin locations:
-          fun! NixPluginLocation(name)
-            let path = get(g:nix_plugin_locations, a:name, "")
-            return path == "" ? vam#DefaultPluginDirFromName(a:name) : path
-          endfun
-          let g:vim_addon_manager.plugin_dir_by_name = 'NixPluginLocation'
-          " tell Vim about VAM:
-          let &rtp.=(empty(&rtp)?"":','). g:nix_plugin_locations['vim-addon-manager']
-        else
-          " standalone config
-
-          let &rtp.=(empty(&rtp)?"":',').c.plugin_root_dir.'/vim-addon-manager'
-          if !isdirectory(c.plugin_root_dir.'/vim-addon-manager/autoload')
-            " checkout VAM
-            execute '!git clone --depth=1 https://github.com/MarcWeber/vim-addon-manager '
-                \       shellescape(c.plugin_root_dir.'/vim-addon-manager', 1)
-          endif
-        endif
-
-        " tell vam which plugins to load, and when:
-        let l = []
-        ${lib.concatMapStrings (p: "call add(l, ${toVimL p})\n") vam.pluginDictionaries}
-        call vam#Scripts(l, {})
-      '');
+        vamPackages.vam =  {
+          start = plugins;
+        };
+      in
+        nativeImpl vamPackages;
 
       entries = [
         beforePlugins
-        vamImpl
       ]
+      ++ lib.optional (vam != null) (lib.warn "'vam' attribute is deprecated. Use 'packages' instead in your vim configuration" vamImpl)
       ++ lib.optional (packages != null && packages != []) (nativeImpl packages)
-      ++ lib.optional (pathogen != null) pathogenImpl
+      ++ lib.optional (pathogen != null) (lib.warn "'pathogen' attribute is deprecated. Use 'packages' instead in your vim configuration" pathogenImpl)
       ++ lib.optional (plug != null) plugImpl
       ++ [ customRC ];
 
@@ -467,37 +404,6 @@ rec {
   };
 
   vimWithRC = throw "vimWithRC was removed, please use vim.customize instead";
-
-  pluginnames2Nix = {name, namefiles} : vim_configurable.customize {
-    inherit name;
-    vimrcConfig.vam.knownPlugins = vimPlugins;
-    vimrcConfig.vam.pluginDictionaries = ["vim2nix"];
-    vimrcConfig.customRC = ''
-      " Yes - this is impure and will create the cache file and checkout vim-pi
-      " into ~/.vim/vim-addons
-      let g:vim_addon_manager.plugin_root_dir = "/tmp/vim2nix-".$USER
-      if !isdirectory(g:vim_addon_manager.plugin_root_dir)
-        call mkdir(g:vim_addon_manager.plugin_root_dir)
-      else
-        echom repeat("=", 80)
-        echom "WARNING: reusing cache directory :".g:vim_addon_manager.plugin_root_dir
-        echom repeat("=", 80)
-      endif
-      let opts = {}
-      let opts.nix_prefetch_git = "${nix-prefetch-git}/bin/nix-prefetch-git"
-      let opts.nix_prefetch_hg  = "${nix-prefetch-hg}/bin/nix-prefetch-hg"
-      let opts.cache_file = g:vim_addon_manager.plugin_root_dir.'/cache'
-      let opts.plugin_dictionaries = []
-      ${lib.concatMapStrings (file: "let opts.plugin_dictionaries += map(readfile(\"${file}\"), 'eval(v:val)')\n") namefiles }
-
-      " uncomment for debugging failures
-      " let opts.try_catch = 0
-
-      " add more files
-      " let opts.plugin_dictionaries += map(.. other file )
-      call nix#ExportPluginsForNix(opts)
-    '';
-  };
 
   vimGenDocHook = callPackage ({ vim }:
     makeSetupHook {
