@@ -1,5 +1,5 @@
 diff --git a/meson.build b/meson.build
-index 98b1fef5..e03ce888 100644
+index bfab6361..9085db0f 100644
 --- a/meson.build
 +++ b/meson.build
 @@ -187,7 +187,7 @@ if is_64bit_system
@@ -25,7 +25,7 @@ index da27a1bf..18482e06 100644
      process.arg("--app-name=yabridge");
      process.arg(title);
 diff --git a/src/plugin/utils.cpp b/src/plugin/utils.cpp
-index ae2a7b43..5a0d61e1 100644
+index acd431bc..8566281c 100644
 --- a/src/plugin/utils.cpp
 +++ b/src/plugin/utils.cpp
 @@ -93,7 +93,7 @@ std::string PluginInfo::wine_version() const {
