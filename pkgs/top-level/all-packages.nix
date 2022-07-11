@@ -22123,8 +22123,6 @@ with pkgs;
   podgrab = callPackage ../servers/misc/podgrab { };
 
   prosody = callPackage ../servers/xmpp/prosody {
-    # _compat can probably be removed on next minor version after 0.10.0
-    lua = lua5_2_compat;
     withExtraLibs = [];
     withExtraLuaPackages = _: [];
   };
