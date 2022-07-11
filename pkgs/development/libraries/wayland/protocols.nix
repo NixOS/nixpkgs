@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://wayland.freedesktop.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "04vgllmpmrv14x3x64ns01vgwx4hriljayjkz9idgbv83i63hly5";
+    hash = "sha256-xVM4TBxor9di+lN6JWnMkHT+dgDaEtNHJ2HneiulbxM=";
   };
 
   postPatch = lib.optionalString doCheck ''
