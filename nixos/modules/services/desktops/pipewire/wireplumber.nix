@@ -50,6 +50,12 @@ in
         default_access.properties["enable-flatpak-portal"] = false
       '';
     };
+    environment.etc."wireplumber/bluetooth.lua.d/80-systemwide.lua" = lib.mkIf config.services.pipewire.systemWide {
+      text = ''
+        -- When running system-wide, logind-integration needs to be disabled.
+        bluez_monitor.properties["with-logind"] = false
+      '';
+    };
 
     systemd.packages = [ cfg.package ];
 
