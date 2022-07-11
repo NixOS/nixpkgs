@@ -8085,6 +8085,8 @@ with pkgs;
 
   netsniff-ng = callPackage ../tools/networking/netsniff-ng { };
 
+  nixpacks = callPackage ../applications/virtualization/nixpacks { };
+
   nkeys = callPackage ../tools/system/nkeys { };
 
   nyxt = callPackage ../applications/networking/browsers/nyxt { };
