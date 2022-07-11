@@ -17,9 +17,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
-    # Mak CMake place RPATHs such that tests will find the built libraries.
-    # See https://github.com/NixOS/nixpkgs/pull/144561#discussion_r742468811 and https://github.com/NixOS/nixpkgs/pull/108496
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
   ];
 
   # TODO: Re-enable Darwin tests once we're on a release that has https://github.com/google/glog/issues/709#issuecomment-960381653 fixed

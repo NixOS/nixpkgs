@@ -23,7 +23,6 @@ let
 
       cmakeFlags = [
         "-DBUILD_SHARED_LIBS=${if enableShared then "ON" else "OFF"}"
-        "-DCMAKE_SKIP_BUILD_RPATH=OFF" # for tests
       ];
 
       doCheck = true;

@@ -13,7 +13,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake qttranslations ];
   propagatedBuildInputs = [ qtsvg qtwebengine ];
-  cmakeFlags = "-DINSTALL_BUNDLED_DICTS=0";
+  cmakeFlags = [ "-DINSTALL_BUNDLED_DICTS=0" ];
 
   meta = with lib; {
     description = "ePub XHTML Visual Editor";

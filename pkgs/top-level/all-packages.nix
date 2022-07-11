@@ -9705,6 +9705,8 @@ with pkgs;
 
   pngquant = callPackage ../tools/graphics/pngquant { };
 
+  po4a = perlPackages.Po4a;
+
   podiff = callPackage ../tools/text/podiff { };
 
   podman = callPackage ../applications/virtualization/podman/wrapper.nix { };
@@ -13991,18 +13993,18 @@ with pkgs;
     inherit (darwin) apple_sdk;
   };
 
-  rust_1_61 = callPackage ../development/compilers/rust/1_61.nix {
+  rust_1_62 = callPackage ../development/compilers/rust/1_62.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
     llvm_14 = llvmPackages_14.libllvm;
   };
-  rust = rust_1_61;
+  rust = rust_1_62;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
   mrustc-bootstrap = callPackage ../development/compilers/mrustc/bootstrap.nix { stdenv = gcc10StdenvCompat; };
 
-  rustPackages_1_61 = rust_1_61.packages.stable;
-  rustPackages = rustPackages_1_61;
+  rustPackages_1_62 = rust_1_62.packages.stable;
+  rustPackages = rustPackages_1_62;
 
   inherit (rustPackages) cargo clippy rustc rustPlatform;
 
@@ -14892,7 +14894,9 @@ with pkgs;
 
   inherit (ocamlPackages) reason;
 
-  buildRubyGem = callPackage ../development/ruby-modules/gem { };
+  buildRubyGem = callPackage ../development/ruby-modules/gem {
+    inherit (darwin) libobjc;
+  };
   defaultGemConfig = callPackage ../development/ruby-modules/gem-config {
     inherit (darwin) DarwinTools cctools;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -24409,6 +24413,7 @@ with pkgs;
     nlsSupport = false;
     ncursesSupport = false;
     systemdSupport = false;
+    translateManpages = false;
   } else util-linux;
 
   v4l-utils = qt5.callPackage ../os-specific/linux/v4l-utils { };

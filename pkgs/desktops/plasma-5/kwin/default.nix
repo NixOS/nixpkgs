@@ -61,7 +61,6 @@ mkDerivation {
   CXXFLAGS = [
     ''-DNIXPKGS_XWAYLAND=\"${lib.getBin xwayland}/bin/Xwayland\"''
   ];
-  cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=OFF" ];
   postInstall = ''
     # Some package(s) refer to these service types by the wrong name.
     # I would prefer to patch those packages, but I cannot find them!

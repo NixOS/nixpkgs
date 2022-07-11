@@ -53,10 +53,6 @@ in stdenv.mkDerivation rec {
 
   patches = map fetchpatch patchesToFetch;
 
-  preBuild = ''
-    export LD_LIBRARY_PATH="$(pwd)/lib";
-  '';
-
   dontWrapQtApps = true;
 
   # Shared libraries don't work, because of rpath troubles with the current

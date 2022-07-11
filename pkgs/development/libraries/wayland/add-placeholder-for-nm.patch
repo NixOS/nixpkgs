@@ -1,0 +1,13 @@
+diff --git a/egl/meson.build b/egl/meson.build
+index b3cbdf3..cdc15ca 100644
+--- a/egl/meson.build
++++ b/egl/meson.build
+@@ -11,7 +11,7 @@ wayland_egl = library(
+
+ executable('wayland-egl-abi-check', 'wayland-egl-abi-check.c')
+
+-nm_path = find_program('nm').full_path()
++nm_path = find_program('@nm@').full_path()
+
+ test(
+        'wayland-egl symbols check',

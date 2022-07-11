@@ -157,10 +157,6 @@ let
       touch .git/index .git/modules/library/xml/index
     '';
 
-    preBuild = ''
-      export LD_LIBRARY_PATH="$PWD/depends/protobuf''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
-    '';
-
     cmakeFlags = [ "-DDFHACK_BUILD_ARCH=${arch}" "-DDOWNLOAD_RUBY=OFF" ]
       ++ lib.optionals enableStoneSense [ "-DBUILD_STONESENSE=ON" "-DSTONESENSE_INTERNAL_SO=OFF" ];
 
