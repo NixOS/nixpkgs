@@ -17396,7 +17396,7 @@ with pkgs;
       libvdpau-va-gl
       vaapiVdpau
       beignet
-      glxinfo
+      mesa-demos
       vdpauinfo;
   };
 

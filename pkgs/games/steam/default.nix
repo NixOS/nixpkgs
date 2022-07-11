@@ -15,7 +15,7 @@ let
     steam-runtime-wrapped = callPackage ./runtime-wrapped.nix { };
     steam = callPackage ./steam.nix { };
     steam-fhsenv = callPackage ./fhsenv.nix {
-      glxinfo-i686 = pkgsi686Linux.glxinfo;
+      mesa-demos-i686 = pkgsi686Linux.mesa-demos;
       steam-runtime-wrapped-i686 =
         if self.steamArch == "amd64"
         then pkgsi686Linux.${steamPackagesAttr}.steam-runtime-wrapped

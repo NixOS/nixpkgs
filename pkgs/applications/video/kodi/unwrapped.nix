@@ -12,7 +12,7 @@
 , libogg, libvorbis, flac, libxslt
 , lzo, libcdio, libmodplug, libass, libbluray, libudfread
 , sqlite, libmysqlclient, nasm, gnutls, libva, libdrm
-, curl, bzip2, zip, unzip, glxinfo
+, curl, bzip2, zip, unzip, mesa-demos
 , libcec, libcec_platform, dcadec, libuuid
 , libcrossguid, libmicrohttpd
 , bluez, doxygen, giflib, glib, harfbuzz, lcms2, libidn, libpthreadstubs, libtasn1
@@ -129,7 +129,7 @@ in stdenv.mkDerivation {
       libogg libvorbis flac libxslt systemd
       lzo libcdio libmodplug libass libbluray libudfread
       sqlite libmysqlclient avahi lame
-      curl bzip2 zip unzip glxinfo
+      curl bzip2 zip unzip mesa-demos
       libcec libcec_platform dcadec libuuid
       libgcrypt libgpg-error libunistring
       libcrossguid libplist
@@ -228,7 +228,7 @@ in stdenv.mkDerivation {
     postInstall = ''
       for p in $(ls $out/bin/) ; do
         wrapProgram $out/bin/$p \
-          --prefix PATH ":" "${lib.makeBinPath ([ python3Packages.python glxinfo ]
+          --prefix PATH ":" "${lib.makeBinPath ([ python3Packages.python mesa-demos ]
             ++ lib.optional x11Support xdpyinfo ++ lib.optional sambaSupport samba)}" \
           --prefix LD_LIBRARY_PATH ":" "${lib.makeLibraryPath
               ([ curl systemd libmad libvdpau libcec libcec_platform libass ]

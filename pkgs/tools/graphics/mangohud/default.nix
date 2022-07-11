@@ -6,7 +6,7 @@
 , coreutils
 , curl
 , gawk
-, glxinfo
+, mesa-demos
 , gnugrep
 , gnused
 , lsof
@@ -76,10 +76,10 @@ in stdenv.mkDerivation rec {
         coreutils
         curl
         gawk
-        glxinfo
         gnugrep
         gnused
         lsof
+        mesa-demos
         xdg-utils
       ];
 

@@ -6,7 +6,7 @@
 , kauth
 , libdrm
 , hwdata
-, glxinfo
+, mesa-demos
 , procps
 , util-linux
 , vulkan-tools
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec{
     karchive
     kauth
     libdrm
-    glxinfo
+    mesa-demos
     procps
     util-linux
     vulkan-tools
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec{
 
   cmakeFlags = [ "-DWITH_PCI_IDS_PATH=${hwdata}/share/hwdata/pci.ids" ];
 
-  runtimeDeps = [ hwdata glxinfo vulkan-tools util-linux procps ];
+  runtimeDeps = [ hwdata mesa-demos vulkan-tools util-linux procps ];
   binPath = lib.makeBinPath runtimeDeps;
 
   dontWrapQtApps = true;

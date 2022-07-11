@@ -13,7 +13,7 @@
 , gettext
 , winetricks
 , wine
-, glxinfo
+, mesa-demos
 }:
 
 python3Packages.buildPythonApplication rec  {
@@ -56,7 +56,7 @@ python3Packages.buildPythonApplication rec  {
 
   makeWrapperArgs = [
     "\${gappsWrapperArgs[@]}"
-    "--prefix PATH : ${lib.makeBinPath [ xdg-user-dirs xdg-utils wine winetricks pciutils glxinfo ]}"
+    "--prefix PATH : ${lib.makeBinPath [ xdg-user-dirs xdg-utils wine winetricks pciutils mesa-demos ]}"
   ];
 
   postPatch = ''

@@ -4,7 +4,7 @@
 , withRecommendedSystemPrograms ? withRecommends, util-linuxMinimal, dmidecode
 , file, hddtemp, iproute2, ipmitool, usbutils, kmod, lm_sensors, smartmontools
 , binutils, tree, upower, pciutils
-, withRecommendedDisplayInformationPrograms ? withRecommends, glxinfo, xorg
+, withRecommendedDisplayInformationPrograms ? withRecommends, mesa-demos, xorg
 }:
 
 let
@@ -16,7 +16,7 @@ let
   ];
   recommendedDisplayInformationPrograms = lib.optionals
     withRecommendedDisplayInformationPrograms
-    ([ glxinfo ] ++ (with xorg; [ xdpyinfo xprop xrandr ]));
+    ([ mesa-demos ] ++ (with xorg; [ xdpyinfo xprop xrandr ]));
   programs = [ ps dnsutils ] # Core programs
     ++ recommendedSystemPrograms
     ++ recommendedDisplayInformationPrograms;

@@ -37,7 +37,7 @@
 , xrandr
 , pciutils
 , psmisc
-, glxinfo
+, mesa-demos
 , vulkan-tools
 , xboxdrv
 , pulseaudio
@@ -56,7 +56,7 @@ let
     xrandr
     pciutils
     psmisc
-    glxinfo
+    mesa-demos
     vulkan-tools
     xboxdrv
     pulseaudio

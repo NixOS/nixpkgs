@@ -1,4 +1,4 @@
-{ config, lib, writeScript, buildFHSUserEnv, steam, glxinfo-i686
+{ config, lib, writeScript, buildFHSUserEnv, steam, mesa-demos-i686
 , steam-runtime-wrapped, steam-runtime-wrapped-i686 ? null
 , extraPkgs ? pkgs: [ ] # extra packages to add to targetPkgs
 , extraLibraries ? pkgs: [ ] # extra packages to add to multiPkgs
@@ -227,7 +227,7 @@ in buildFHSUserEnv rec {
   runScript = writeScript "steam-wrapper.sh" ''
     #!${runtimeShell}
     if [ -f /host/etc/NIXOS ]; then   # Check only useful on NixOS
-      ${glxinfo-i686}/bin/glxinfo >/dev/null 2>&1
+      ${mesa-demos-i686}/bin/glxinfo >/dev/null 2>&1
       # If there was an error running glxinfo, we know something is wrong with the configuration
       if [ $? -ne 0 ]; then
         cat <<EOF > /dev/stderr

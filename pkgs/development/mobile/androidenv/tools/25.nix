@@ -46,7 +46,7 @@ deployAndroidPackage {
 
     ${lib.optionalString (os == "linux") ''
       wrapProgram $PWD/emulator \
-        --prefix PATH : ${pkgs.file}/bin:${pkgs.glxinfo}/bin:${pkgs.pciutils}/bin \
+        --prefix PATH : ${pkgs.file}/bin:${pkgs.mesa-demos}/bin:${pkgs.pciutils}/bin \
         --set QT_XKB_CONFIG_ROOT ${pkgs.xkeyboard_config}/share/X11/xkb \
         --set QTCOMPOSE ${pkgs.xorg.libX11.out}/share/X11/locale
     ''}

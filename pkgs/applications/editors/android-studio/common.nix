@@ -13,7 +13,6 @@
 , file
 , fontsConf
 , git
-, glxinfo
 , gnugrep
 , gnused
 , gnutar
@@ -36,6 +35,7 @@
 , libXrender
 , libXtst
 , makeWrapper
+, mesa-demos
 , ncurses5
 , nspr
 , nss
@@ -95,7 +95,7 @@ let
 
           # For Android emulator
           file
-          glxinfo
+          mesa-demos
           pciutils
           setxkbmap
 
