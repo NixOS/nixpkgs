@@ -119,7 +119,6 @@ stdenv.mkDerivation rec {
     "-DENABLE_UOA=OFF"
     "-DENABLE_VALA_BINDINGS=ON"
     "-DENABLE_INTROSPECTION=ON"
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
     "-DINCLUDE_INSTALL_DIR=${placeholder "dev"}/include"
     "-DWITH_PHONENUMBER=ON"
     "-DWITH_GWEATHER4=ON"

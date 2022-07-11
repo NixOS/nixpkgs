@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF" # for tests
   ] ++ lib.optionals stdenv.hostPlatform.isRiscV [
     "-DCMAKE_C_FLAGS=-fasynchronous-unwind-tables"
   ];

@@ -32,12 +32,6 @@ llvmPackages.stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DWARNINGS_AS_ERRORS=OFF" "-DWITH_PYTHON_BINDINGS=OFF" ];
 
-  # To handle the lack of 'local' RPATH; required, as they call one of
-  # their built binaries requiring their libs, in the build process.
-  preBuild = ''
-    export LD_LIBRARY_PATH="$(pwd)/src''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
-  '';
-
   # Note: only openblas and not atlas part of this Nix expression
   # see pkgs/development/libraries/science/math/liblapack/3.5.0.nix
   # to get a hint howto setup atlas instead of openblas

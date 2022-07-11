@@ -87,13 +87,6 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  # needed to find libigraph, and liblas on darwin
-  preCheck = if stdenv.isDarwin then ''
-    export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [ blas ]}:$PWD/src"
-  '' else ''
-    export LD_LIBRARY_PATH="$PWD/src"
-  '';
-
   postInstall = ''
     mkdir -p "$out/share"
     cp -r doc "$out/share"

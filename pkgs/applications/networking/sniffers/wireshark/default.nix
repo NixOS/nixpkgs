@@ -59,10 +59,6 @@ in stdenv.mkDerivation {
     sed -i -e '1i cmake_policy(SET CMP0025 NEW)' CMakeLists.txt
   '';
 
-  preBuild = ''
-    export LD_LIBRARY_PATH="$PWD/run"
-  '';
-
   postInstall = ''
     # to remove "cycle detected in the references"
     mkdir -p $dev/lib/wireshark
