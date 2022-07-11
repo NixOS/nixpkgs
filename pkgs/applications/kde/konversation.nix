@@ -1,7 +1,5 @@
 { mkDerivation
 , lib
-, fetchurl
-, fetchpatch
 , extra-cmake-modules
 , kdoctools
 , kbookmarks
@@ -17,6 +15,7 @@
 , kiconthemes
 , kidletime
 , kitemviews
+, knewstuff
 , knotifications
 , knotifyconfig
 , kwindowsystem
@@ -26,16 +25,11 @@
 , solid
 , sonnet
 , phonon
+, qtmultimedia
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "konversation";
-  version = "1.7.7";
-
-  src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/src/${pname}-${version}.tar.xz";
-    sha256 = "R+wWHBOFmBqLmdKMQZ6Iskgj3AG2j7FiOJSBiXTCGKc=";
-  };
 
   buildInputs = [
     kbookmarks
@@ -52,6 +46,7 @@ mkDerivation rec {
     kiconthemes
     kidletime
     kitemviews
+    knewstuff
     knotifications
     knotifyconfig
     kwindowsystem
@@ -61,6 +56,7 @@ mkDerivation rec {
     solid
     sonnet
     phonon
+    qtmultimedia
   ];
 
   nativeBuildInputs = [
@@ -71,7 +67,6 @@ mkDerivation rec {
   meta = {
     description = "Integrated IRC client for KDE";
     license = with lib.licenses; [ gpl2 ];
-    maintainers = with lib.maintainers; [ fridh ];
     homepage = "https://konversation.kde.org";
   };
 }

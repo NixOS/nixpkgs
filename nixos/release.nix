@@ -15,8 +15,8 @@ let
     (if stableBranch then "." else "pre") + "${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
 
   # Run the tests for each platform.  You can run a test by doing
-  # e.g. ‘nix-build -A tests.login.x86_64-linux’, or equivalently,
-  # ‘nix-build tests/login.nix -A result’.
+  # e.g. ‘nix-build release.nix -A tests.login.x86_64-linux’,
+  # or equivalently, ‘nix-build tests/login.nix’.
   # See also nixosTests in pkgs/top-level/all-packages.nix
   allTestsForSystem = system:
     import ./tests/all-tests.nix {
