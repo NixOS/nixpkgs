@@ -65,7 +65,8 @@ let
       patchShebangs scripts/*
       substituteInPlace scripts/Makefile.lib \
         --replace 'DTC_FLAGS += $(DTC_FLAGS_$(basetarget))' 'DTC_FLAGS += $(DTC_FLAGS_$(basetarget)) -@'
-      make ${pkgs.stdenv.hostPlatform.linux-kernel.baseConfig} ARCH="${pkgs.stdenv.hostPlatform.linuxArch}"
+      ln -sv ${cfg.kernelPackage.configfile} .config
+      make oldconfig ARCH="${pkgs.stdenv.hostPlatform.linuxArch}"
       make dtbs ARCH="${pkgs.stdenv.hostPlatform.linuxArch}"
     '';
     installPhase = ''
