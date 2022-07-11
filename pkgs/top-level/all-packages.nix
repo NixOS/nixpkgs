@@ -11644,6 +11644,8 @@ with pkgs;
 
   wal_e = callPackage ../tools/backup/wal-e { };
 
+  wander = callPackage ../tools/admin/wander { };
+
   watchexec = callPackage ../tools/misc/watchexec {
     inherit (darwin.apple_sdk.frameworks) CoreServices Foundation;
   };
