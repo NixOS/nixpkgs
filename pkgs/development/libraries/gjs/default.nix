@@ -12,6 +12,7 @@
 , pango
 , cairo
 , readline
+, libsysprof-capture
 , glib
 , libxml2
 , dbus
@@ -60,6 +61,7 @@ in stdenv.mkDerivation rec {
     gobject-introspection
     cairo
     readline
+    libsysprof-capture
     spidermonkey_91
     dbus # for dbus-run-session
   ];
@@ -73,7 +75,6 @@ in stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dprofiler=disabled"
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
   ];
 
