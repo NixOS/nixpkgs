@@ -1,0 +1,44 @@
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p curl jq gawk
+# vim:ft=bash
+
+set -eu -o pipefail
+
+LATEST_VERSION=$(curl https://api.github.com/repos/oven-sh/bun/releases/latest | jq .tag_name -r | sed 's;bun-v\([0-9]*\.[0-9]*\.[0-9]*\);\1;g')
+
+# nix-instantiate --eval --json -E $(
+NIX_DIST=$(cat default.nix | awk '
+BEGIN {
+DIST=0
+}
+
+/dists = / {
+print "{"
+DIST=1
+}
+
+/dist = / {
+DIST=0
+}
+
+DIST==1 {
+    print $0
+}
+
+END {
+print "}"
+}
+')
+echo $NIX_DIST
+DIST_JSON=$(nix-instantiate --eval --json --strict -E "$NIX_DIST")
+echo $DIST_JSON
+
+for target in $(echo $DIST_JSON | jq '.dists | keys | join("\n")' -r); do
+    ARCH=$(echo $DIST_JSON | jq ".dists.\"$target\".arch" -r)
+    OS=$(echo $DIST_JSON | jq ".dists.\"$target\".shortName" -r)
+    SHA256=$(echo $DIST_JSON | jq ".dists.\"$target\".sha256" -r)
+    sed -i "s;$SHA256;$(nix-prefetch-url "https://github.com/Jarred-Sumner/bun-releases-for-updater/releases/download/bun-v$LATEST_VERSION/bun-$OS-$ARCH.zip");g" default.nix
+    echo "$ARCH $OS $SHA256"
+done
+
+sed -i "s;version = \"[^\"]*\";version = \"$LATEST_VERSION\";g" default.nix

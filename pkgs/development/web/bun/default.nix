@@ -42,6 +42,7 @@ stdenvNoCC.mkDerivation rec {
     install -Dm 755 ./bun $out/bin/bun
     runHook postInstall
   '';
+  passthru.updateScript = ./update-script;
 
   meta = with lib; {
     homepage = "https://bun.sh";
