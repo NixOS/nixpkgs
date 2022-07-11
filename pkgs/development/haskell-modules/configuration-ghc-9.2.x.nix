@@ -120,13 +120,6 @@ self: super: {
   path = doJailbreak super.path;
   polyparse = overrideCabal (drv: { postPatch = "sed -i -e 's, <0.11, <0.12,' polyparse.cabal"; }) (doJailbreak super.polyparse);
   primitive = doJailbreak super.primitive;
-  # https://github.com/protolude/protolude/pull/136
-  protolude = appendPatches [
-    (pkgs.fetchpatch {
-      url = "https://github.com/protolude/protolude/commit/47820a36c25ea6f0c6e44382f7d4f3507358b8e7.diff";
-      sha256 = "sha256-PtHx5SyTgqFzI03YVeQD+RqglO6ASMQWSxdpy4ROMDY=";
-    })
-  ] (doJailbreak super.protolude);
   regex-posix = doJailbreak super.regex-posix;
   resolv = doJailbreak super.resolv;
   retrie = doDistribute (dontCheck self.retrie_1_2_0_1);
