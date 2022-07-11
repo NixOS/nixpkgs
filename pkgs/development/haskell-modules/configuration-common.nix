@@ -1300,6 +1300,7 @@ self: super: {
 
   # Test suite requires running a database server. Testing is done upstream.
   hasql = dontCheck super.hasql;
+  hasql-dynamic-statements = dontCheck super.hasql-dynamic-statements;
   hasql-interpolate = dontCheck super.hasql-interpolate;
   hasql-notifications = dontCheck super.hasql-notifications;
   hasql-pool = dontCheck super.hasql-pool;
