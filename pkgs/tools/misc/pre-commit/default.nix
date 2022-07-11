@@ -13,7 +13,7 @@
 with python3Packages;
 buildPythonPackage rec {
   pname = "pre-commit";
-  version = "2.19.0";
+  version = "2.20.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "pre-commit";
     repo = "pre-commit";
     rev = "v${version}";
-    sha256 = "sha256-5YV0FJhHiq/NJFKYvwddIWUQVxKJpnIJLLNmyY0NX4A=";
+    sha256 = "sha256-+JrnJz+wFbzVw9ysPX85DDE6suF3VU7gQZdp66x5TKY=";
   };
 
   patches = [
