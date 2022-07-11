@@ -67,6 +67,10 @@ let
       inherit llvm_meta;
     };
 
+    bolt = callPackage ./bolt {
+      inherit llvm_meta;
+    };
+
     # `llvm` historically had the binaries.  When choosing an output explicitly,
     # we need to reintroduce `outputSpecified` to get the expected behavior e.g. of lib.get*
     llvm = tools.libllvm.out // { outputSpecified = false; };
