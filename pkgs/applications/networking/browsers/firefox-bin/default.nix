@@ -199,12 +199,12 @@ stdenv.mkDerivation {
     inherit pname channel writeScript xidel coreutils gnused gnugrep gnupg curl runtimeShell;
     baseUrl =
       if channel == "devedition"
-        then "http://archive.mozilla.org/pub/devedition/releases/"
-        else "http://archive.mozilla.org/pub/firefox/releases/";
+        then "https://archive.mozilla.org/pub/devedition/releases/"
+        else "https://archive.mozilla.org/pub/firefox/releases/";
   };
   meta = with lib; {
     description = "Mozilla Firefox, free web browser (binary package)";
-    homepage = "http://www.mozilla.org/firefox/";
+    homepage = "https://www.mozilla.org/firefox/";
     license = licenses.mpl20;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = builtins.attrNames mozillaPlatforms;

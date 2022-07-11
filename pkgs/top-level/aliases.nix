@@ -1655,15 +1655,15 @@ mapAliases ({
     kgamma5 kget kgpg khelpcenter kig kigo killbots kinfocenter kitinerary
     kleopatra klettres klines kmag kmail kmenuedit kmines kmix kmplot
     knavalbattle knetwalk knights kollision kolourpaint kompare konsole kontact
-    korganizer kpkpass krdc kreversi krfb kscreen kscreenlocker kshisen ksquares
-    ksshaskpass ksystemlog kteatime ktimer ktorrent ktouch kturtle kwallet-pam
-    kwalletmanager kwave kwayland-integration kwin kwrited marble milou minuet
-    okular oxygen oxygen-icons5 picmi plasma-browser-integration plasma-desktop
-    plasma-integration plasma-nano plasma-nm plasma-pa plasma-mobile
-    plasma-systemmonitor plasma-thunderbolt plasma-vault plasma-workspace
-    plasma-workspace-wallpapers polkit-kde-agent powerdevil qqc2-breeze-style
-    sddm-kcm skanlite skanpage spectacle systemsettings xdg-desktop-portal-kde
-    yakuake zanshin
+    konversation korganizer kpkpass krdc kreversi krfb kscreen kscreenlocker
+    kshisen ksquares ksshaskpass ksystemlog kteatime ktimer ktorrent ktouch
+    kturtle kwallet-pam kwalletmanager kwave kwayland-integration kwin kwrited
+    marble milou minuet okular oxygen oxygen-icons5 picmi
+    plasma-browser-integration plasma-desktop plasma-integration plasma-nano
+    plasma-nm plasma-pa plasma-mobile plasma-systemmonitor plasma-thunderbolt
+    plasma-vault plasma-workspace plasma-workspace-wallpapers polkit-kde-agent
+    powerdevil qqc2-breeze-style sddm-kcm skanlite skanpage spectacle
+    systemsettings xdg-desktop-portal-kde yakuake zanshin
   ;
 
   inherit (plasma5Packages.thirdParty)

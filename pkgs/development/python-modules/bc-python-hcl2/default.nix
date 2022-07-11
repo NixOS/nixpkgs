@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "bc-python-hcl2";
-  version = "0.3.44";
+  version = "0.3.45";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-C7dknDfoN4rwXI5/YhsKXoertpQUpoOKrbbW4yVXrgQ=";
+    hash = "sha256-OmUN6wpsVP9/CS+JkEhirDBp1MqeA3oEcU77T5nJ9GU=";
   };
 
   # Nose is required during build process, so can not use `checkInputs`.
