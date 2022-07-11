@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [ "-Dtests=${lib.boolToString doCheck}" ];
 
+  hardeningDisable = lib.optional doCheck "fortify";
+
   meta = {
     description = "Wayland protocol extensions";
     longDescription = ''
