@@ -434,7 +434,9 @@ with pkgs;
 
   hwatch = callPackage ../tools/misc/hwatch { };
 
-  hobbes = callPackage ../development/tools/hobbes { stdenv = gcc10StdenvCompat; };
+  hobbes = callPackage ../development/tools/hobbes {
+    stdenv = gcc10StdenvCompat;
+  };
 
   html5validator = python3Packages.callPackage ../applications/misc/html5validator { };
 

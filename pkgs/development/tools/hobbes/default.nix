@@ -1,14 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, cmake, llvm_12, ncurses, readline, zlib, libxml2 }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, llvm
+, ncurses
+, readline
+, zlib
+, libxml2
+, python }:
 
 stdenv.mkDerivation {
   pname = "hobbes";
-  version = "unstable-2021-04-28";
+  version = "unstable-2022-07-06";
 
   src = fetchFromGitHub {
     owner = "morgan-stanley";
     repo = "hobbes";
-    rev = "737c7ca63516f6b3dca0e659c3de75d4325472d6";
-    sha256 = "0fjsmz1sbrp6464mrb9ha7p615w2l2pdldsc2ayvcrvxfyi1r4gj";
+    rev = "02eae25c379d756d5a79aabd9bf203053976ebde";
+    sha256 = "sha256-GjblBdXtQrDszX2KFHE5aseUk4g6Jk7zJCkiwhMijlo=";
   };
 
   # TODO: re-enable Python tests once they work on Python 3
@@ -19,6 +28,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
+    python
   ];
 
   buildInputs = [
