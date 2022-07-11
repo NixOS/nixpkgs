@@ -63,6 +63,8 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = [ maintainers.viric ];
-    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/oxen.x86_64-darwin
+    # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/oxen.x86_64-darwin
+    # or                   https://hydra.nixos.org/job/nixos/release-22.05/nixpkgs.oxen.x86_64-linux
+    broken = stdenv.isDarwin || stdenv.isx86_64;
   };
 }
