@@ -121,6 +121,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://gitlab.com/asus-linux/asusctl">asusd</link>,
+          a service to allow control of such as fan speeds, keyboard
+          LEDs, graphics modes for Asus ROG laptops. Available as
+          <link linkend="opt-services.asusd.enable">services.asusd</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://dragonflydb.io/">dragonflydb</link>,
           a modern replacement for Redis and Memcached. Available as
           <link linkend="opt-services.dragonflydb.enable">services.dragonflydb</link>.
