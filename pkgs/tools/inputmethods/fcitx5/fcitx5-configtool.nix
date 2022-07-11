@@ -14,6 +14,8 @@
 , xkeyboardconfig
 , libxkbfile
 , libXdmcp
+, plasma5Packages
+, plasma-framework
 , kcmSupport ? true
 }:
 
@@ -50,6 +52,8 @@ mkDerivation rec {
   ] ++ lib.optionals kcmSupport [
     kdeclarative
     kwidgetsaddons
+    plasma5Packages.kiconthemes
+    plasma-framework
   ];
 
   meta = with lib; {
