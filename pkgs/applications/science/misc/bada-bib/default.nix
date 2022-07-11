@@ -10,10 +10,13 @@
 , gnome
 , gobject-introspection
 , gtk4
+, gtksourceview5
+, libadwaita
 , libxml2
 , pkg-config
 , python3Packages
-, wrapGAppsHook4 }:
+, wrapGAppsHook4
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "bada-bib";
@@ -42,6 +45,8 @@ python3Packages.buildPythonApplication rec {
     gdk-pixbuf
     glib
     gtk4
+    gtksourceview5
+    libadwaita
   ];
 
   checkInputs = [
