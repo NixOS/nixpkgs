@@ -9052,7 +9052,9 @@ with pkgs;
 
   ntfy = callPackage ../tools/misc/ntfy {};
 
-  ntfy-sh = callPackage ../tools/misc/ntfy-sh {};
+  ntfy-sh = callPackage ../tools/misc/ntfy-sh {
+    buildGoModule = buildGo118Module;
+  };
 
   ntirpc = callPackage ../development/libraries/ntirpc { };
 
