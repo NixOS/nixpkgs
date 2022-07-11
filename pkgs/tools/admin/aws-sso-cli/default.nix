@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, lib, makeWrapper, xdg-utils }:
   buildGoModule rec {
     pname = "aws-sso-cli";
     version = "1.9.2";
@@ -11,8 +11,12 @@
     };
     vendorSha256 = "BlSCLvlrKiubMtfFSZ5ppMmL2ZhJcBXxJfeRgMADYB4=";
 
+    nativeBuildInputs = [ makeWrapper ];
+
     postInstall = ''
       mv $out/bin/cmd $out/bin/aws-sso
+      wrapProgram $out/bin/aws-sso \
+        --prefix PATH : ${lib.makeBinPath [ xdg-utils ]}
     '';
 
     meta = with lib; {
