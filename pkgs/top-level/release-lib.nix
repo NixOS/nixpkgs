@@ -35,6 +35,7 @@ rec {
     pkgs_i686_freebsd = packageSet' { system = "i686-freebsd"; };
     pkgs_i686_cygwin = packageSet' { system = "i686-cygwin"; };
     pkgs_x86_64_cygwin = packageSet' { system = "x86_64-cygwin"; };
+    pkgs_powerpc64le_linux = packageSet' { system = "powerpc64le-linux"; };
 
     in system:
       if system == "x86_64-linux" then pkgs_x86_64_linux
@@ -48,6 +49,7 @@ rec {
       else if system == "i686-freebsd" then pkgs_i686_freebsd
       else if system == "i686-cygwin" then pkgs_i686_cygwin
       else if system == "x86_64-cygwin" then pkgs_x86_64_cygwin
+      else if system == "powerpc64le-linux" then pkgs_powerpc64le_linux
       else abort "unsupported system type: ${system}";
 
   pkgsFor = pkgsForCross null;
