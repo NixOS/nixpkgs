@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2022.7.2";
+  version = "2022.7.3";
   components = {
     "abode" = ps: with ps; [
       abodepy
@@ -61,7 +61,8 @@
       aioairzone
     ];
     "aladdin_connect" = ps: with ps; [
-    ]; # missing inputs: AIOAladdinConnect
+      aioaladdinconnect
+    ];
     "alarm_control_panel" = ps: with ps; [
     ];
     "alarmdecoder" = ps: with ps; [
@@ -2917,7 +2918,8 @@
     "uscis" = ps: with ps; [
     ]; # missing inputs: uscisstatus
     "usgs_earthquakes_feed" = ps: with ps; [
-    ]; # missing inputs: aio_geojson_usgs_earthquakes
+      aio-geojson-usgs-earthquakes
+    ];
     "utility_meter" = ps: with ps; [
       croniter
     ];
@@ -3231,6 +3233,7 @@
     "airtouch4"
     "airvisual"
     "airzone"
+    "aladdin_connect"
     "alarm_control_panel"
     "alarmdecoder"
     "alert"
@@ -3803,6 +3806,7 @@
     "uptime"
     "uptimerobot"
     "usb"
+    "usgs_earthquakes_feed"
     "utility_meter"
     "uvc"
     "vacuum"

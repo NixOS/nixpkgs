@@ -241,11 +241,15 @@ in {
 
   aio-geojson-nsw-rfs-incidents = callPackage ../development/python-modules/aio-geojson-nsw-rfs-incidents { };
 
+  aio-geojson-usgs-earthquakes = callPackage ../development/python-modules/aio-geojson-usgs-earthquakes { };
+
   aio-georss-client = callPackage ../development/python-modules/aio-georss-client { };
 
   aio-georss-gdacs = callPackage ../development/python-modules/aio-georss-gdacs { };
 
   aioairzone = callPackage ../development/python-modules/aioairzone { };
+
+  aioaladdinconnect = callPackage ../development/python-modules/aioaladdinconnect { };
 
   aioambient = callPackage ../development/python-modules/aioambient { };
 
@@ -3755,10 +3759,6 @@ in {
 
   grapheme = callPackage ../development/python-modules/grapheme { };
 
-  graphite_api = callPackage ../development/python-modules/graphite-api { };
-
-  graphite_beacon = callPackage ../development/python-modules/graphite_beacon { };
-
   graphite-web = callPackage ../development/python-modules/graphite-web { };
 
   graphene = callPackage ../development/python-modules/graphene { };
@@ -4279,8 +4279,6 @@ in {
   influxdb = callPackage ../development/python-modules/influxdb { };
 
   influxdb-client = callPackage ../development/python-modules/influxdb-client { };
-
-  influxgraph = callPackage ../development/python-modules/influxgraph { };
 
   inform = callPackage ../development/python-modules/inform { };
 
@@ -5687,6 +5685,8 @@ in {
   mysqlclient = callPackage ../development/python-modules/mysqlclient { };
 
   mysql-connector = callPackage ../development/python-modules/mysql-connector { };
+
+  myst-docutils = callPackage ../development/python-modules/myst-docutils { };
 
   myst-nb = callPackage ../development/python-modules/myst-nb { };
 
@@ -10660,7 +10660,7 @@ in {
   # Used by circus and grab-site, 2020-08-29
   tornado_4 = callPackage ../development/python-modules/tornado/4.nix { };
 
-  # Used by streamlit, graphite_beacon, 2021-01-29
+  # Used by streamlit, 2021-01-29
   tornado_5 = callPackage ../development/python-modules/tornado/5.nix { };
 
   torrequest = callPackage ../development/python-modules/torrequest { };

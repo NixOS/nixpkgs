@@ -12,13 +12,13 @@ let
     then "DYLD_LIBRARY_PATH"
     else "LD_LIBRARY_PATH";
 
-  generic = { version, sha256, patches ? [] }: stdenv.mkDerivation rec {
+  generic = { version, hash, patches ? [] }: stdenv.mkDerivation rec {
     pname = "libressl";
     inherit version;
 
     src = fetchurl {
       url = "mirror://openbsd/LibreSSL/${pname}-${version}.tar.gz";
-      inherit sha256;
+      inherit hash;
     };
 
     nativeBuildInputs = [ cmake ];
@@ -86,11 +86,11 @@ let
 in {
   libressl_3_4 = generic {
     version = "3.4.3";
-    sha256 = "sha256-/4i//jVIGLPM9UXjyv5FTFAxx6dyFwdPUzJx1jw38I0=";
+    hash = "sha256-/4i//jVIGLPM9UXjyv5FTFAxx6dyFwdPUzJx1jw38I0=";
   };
 
   libressl_3_5 = generic {
-    version = "3.5.2";
-    sha256 = "sha256-Vv6rjiHD+mVJ+LfXURZYuOmFGBYoOKeVMUcyZUrfPl8=";
+    version = "3.5.3";
+    hash = "sha256-OrXl6u9pziDGsXDuZNeFtCI19I8uYrCV/KXXtmcriyg=";
   };
 }

@@ -1,6 +1,7 @@
 { lib
 , buildPythonApplication
 , fetchPypi
+, installShellFiles
 , mock
 , openstacksdk
 , pbr
@@ -21,6 +22,10 @@ buildPythonApplication rec {
     hash = "sha256-V7bx/yO0ZoQ4AqaBb0trvGiWtq0F1ld6/udiK+OilTg=";
   };
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
   propagatedBuildInputs = [
     pbr
     python-keystoneclient
@@ -33,7 +38,9 @@ buildPythonApplication rec {
   ];
 
   postInstall = ''
-    install -Dm644 tools/swift.bash_completion $out/share/bash_completion.d/swift
+    installShellCompletion --cmd swift \
+      --bash tools/swift.bash_completion
+    installManPage doc/manpages/*
   '';
 
   checkPhase = ''

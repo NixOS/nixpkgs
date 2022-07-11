@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , pkg-config
 , openssl
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,10 +22,9 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Rust application which displays your currently playing song / album / artist from MPD in Discord using Rich Presence";
     homepage = "https://github.com/JakeStanger/mpd-discord-rpc";
     license = licenses.mit;

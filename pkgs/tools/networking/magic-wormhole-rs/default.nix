@@ -26,7 +26,6 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Rust implementation of Magic Wormhole, with new features and enhancements";
     homepage = "https://github.com/magic-wormhole/magic-wormhole.rs";
     changelog = "https://github.com/magic-wormhole/magic-wormhole.rs/raw/${version}/changelog.md";

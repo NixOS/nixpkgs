@@ -156,6 +156,13 @@
           <link linkend="opt-services.expressvpn.enable">services.expressvpn</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.grafana.com/oss/tempo/">Grafana
+          Tempo</link>, a distributed tracing store. Available as
+          <link linkend="opt-services.tempo.enable">services.tempo</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.11-incompatibilities">
@@ -248,6 +255,16 @@
           riak package removed along with
           <literal>services.riak</literal> module, due to lack of
           maintainer to update the package.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>services.graphite.api</literal> and
+          <literal>services.graphite.beacon</literal> NixOS options, and
+          the <literal>python3.pkgs.graphite_api</literal>,
+          <literal>python3.pkgs.graphite_beacon</literal> and
+          <literal>python3.pkgs.influxgraph</literal> packages, have
+          been removed due to lack of upstream maintenance.
         </para>
       </listitem>
       <listitem>

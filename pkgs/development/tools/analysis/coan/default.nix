@@ -11,9 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl ];
 
-  NIX_CFLAGS_COMPILE = [
-    "-std=c++11"
-  ];
+  CXXFLAGS = "-std=c++11";
 
   enableParallelBuilding = true;
 
@@ -22,7 +20,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "The C preprocessor chainsaw";
     longDescription = ''
       A software engineering tool for analysing preprocessor-based

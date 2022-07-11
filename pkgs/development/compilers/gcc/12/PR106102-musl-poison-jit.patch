@@ -1,0 +1,67 @@
+https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=49d508065bdd36fb1a9b6aad9666b1edb5e06474
+https://gcc.gnu.org/PR106102
+--- a/gcc/jit/jit-playback.cc
++++ b/gcc/jit/jit-playback.cc
+@@ -19,6 +19,7 @@ along with GCC; see the file COPYING3.  If not see
+ <http://www.gnu.org/licenses/>.  */
+ 
+ #include "config.h"
++#define INCLUDE_PTHREAD_H
+ #include "system.h"
+ #include "coretypes.h"
+ #include "target.h"
+@@ -41,8 +42,6 @@ along with GCC; see the file COPYING3.  If not see
+ #include "diagnostic.h"
+ #include "stmt.h"
+ 
+-#include <pthread.h>
+-
+ #include "jit-playback.h"
+ #include "jit-result.h"
+ #include "jit-builtins.h"
+--- a/gcc/jit/jit-recording.cc
++++ b/gcc/jit/jit-recording.cc
+@@ -19,13 +19,13 @@ along with GCC; see the file COPYING3.  If not see
+ <http://www.gnu.org/licenses/>.  */
+ 
+ #include "config.h"
++#define INCLUDE_PTHREAD_H
+ #include "system.h"
+ #include "coretypes.h"
+ #include "tm.h"
+ #include "pretty-print.h"
+ #include "toplev.h"
+ 
+-#include <pthread.h>
+ 
+ #include "jit-builtins.h"
+ #include "jit-recording.h"
+--- a/gcc/jit/libgccjit.cc
++++ b/gcc/jit/libgccjit.cc
+@@ -19,12 +19,12 @@ along with GCC; see the file COPYING3.  If not see
+ <http://www.gnu.org/licenses/>.  */
+ 
+ #include "config.h"
++#define INCLUDE_PTHREAD_H
+ #include "system.h"
+ #include "coretypes.h"
+ #include "timevar.h"
+ #include "typed-splay-tree.h"
+ #include "cppbuiltin.h"
+-#include <pthread.h>
+ 
+ #include "libgccjit.h"
+ #include "jit-recording.h"
+--- a/gcc/system.h
++++ b/gcc/system.h
+@@ -753,6 +753,10 @@ extern int vsnprintf (char *, size_t, const char *, va_list);
+ #endif
+ #endif
+ 
++#ifdef INCLUDE_PTHREAD_H
++#include <pthread.h>
++#endif
++
+ #ifdef INCLUDE_ISL
+ #ifdef HAVE_isl
+ #include <isl/options.h>
