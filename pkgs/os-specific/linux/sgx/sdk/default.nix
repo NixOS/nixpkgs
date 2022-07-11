@@ -29,15 +29,15 @@
 stdenv.mkDerivation rec {
   pname = "sgx-sdk";
   # Version as given in se_version.h
-  version = "2.16.100.4";
+  version = "2.17.100.3";
   # Version as used in the Git tag
-  versionTag = "2.16";
+  versionTag = "2.17";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "linux-sgx";
     rev = "sgx_${versionTag}";
-    hash = "sha256-qgXuJJWiqmcU11umCsE3DnlK4VryuTDAsNf53YPw6UY=";
+    hash = "sha256-ckWOvaH7TYpxskPOe/YqVuiYPCkFM1dWLs3Ob15e7bY=";
     fetchSubmodules = true;
   };
 
