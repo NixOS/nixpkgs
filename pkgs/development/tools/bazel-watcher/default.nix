@@ -46,6 +46,7 @@ buildBazelPackage rec {
   bazelBuildFlags = lib.optionals stdenv.cc.isClang [ "--cxxopt=-x" "--cxxopt=c++" "--host_cxxopt=-x" "--host_cxxopt=c++" ];
   bazelTarget = "//ibazel";
 
+  fetchConfigured = false; # we want to fetch all dependencies, regardless of the current system
   fetchAttrs = {
     inherit patches;
 
@@ -75,9 +76,12 @@ buildBazelPackage rec {
       # should be equivalent.
       rm -rf $bazelOut/external/{bazel_gazelle_go_repository_tools,\@bazel_gazelle_go_repository_tools.marker}
       sed -e '/^FILE:@bazel_gazelle_go_repository_tools.*/d' -i $bazelOut/external/\@*.marker
+
+      # remove com_google_protobuf because it had files with different permissions on linux and darwin
+      rm -rf $bazelOut/external/com_google_protobuf
     '';
 
-    sha256 = "sha256-Tkmq5/vrakWeIsnTQ9o0h2XhT/Ot+r6LRSCE5c6PSEk=";
+    sha256 = "sha256-QjMsWTIHCy6Mbbphk5eK2wIiw900AvmyA0ZV9Be7nPI=";
   };
 
   buildAttrs = {
