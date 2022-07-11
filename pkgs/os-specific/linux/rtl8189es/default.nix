@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "rtl8189es-${kernel.version}-${version}";
-  version = "2021-10-01";
+  version = "2022-05-21";
 
   src = fetchFromGitHub {
     owner = "jwrdegoede";
     repo = "rtl8189ES_linux";
-    rev = "be378f47055da1bae42ff6ec1d62f1a5052ef097";
-    sha256 = "sha256-+19q1Xux2BjquavY+s0UDzTubEt6BEUZ9XVDVmj36us=";
+    rev = "1269e117454069cd47f1822ffa31e29ec19a10da";
+    sha256 = "sha256-3d16zu9RxPKO9uAjHNu/+9z++smH1LSXHmrB0FnQt+E=";
   };
 
   nativeBuildInputs = [ bc nukeReferences ] ++ kernel.moduleBuildDependencies;
@@ -42,6 +42,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ danielfullmer lheckemann ];
-    broken = kernel.kernelAtLeast "5.17";
   };
 }
