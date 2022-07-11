@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchurl, perl, rsync, fetchpatch }:
+{ lib, stdenv, fetchurl, python, rsync, fetchpatch }:
 
 stdenv.mkDerivation {
   pname = "rrsync";
   inherit (rsync) version srcs;
 
-  buildInputs = [ rsync perl ];
+  buildInputs = [ rsync python ];
 
   # Skip configure and build phases.
   # We just want something from the support directory
