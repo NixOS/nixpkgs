@@ -76,10 +76,12 @@ stdenv.mkDerivation {
     "-Dv4l2=true"
     "-Dqcam=disabled"
     "-Dlc-compliance=disabled" # tries unconditionally to download gtest when enabled
-    ];
+  ];
 
   # Fixes error on a deprecated declaration
   NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
+  hardeningDisable = [ "fortify" ];
 
   # Silence fontconfig warnings about missing config
   FONTCONFIG_FILE = makeFontsConf { fontDirectories = []; };
