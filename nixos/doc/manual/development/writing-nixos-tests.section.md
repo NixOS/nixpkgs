@@ -60,6 +60,7 @@ Overrides can be added by defining an anonymous module in `all-tests.nix`.
 You can run a test with attribute name `mytest` in `nixos/tests/all-tests.nix` by invoking:
 
 ```shell
+cd /my/git/clone/of/nixpkgs
 nix-build -A nixosTests.mytest
 ```
 

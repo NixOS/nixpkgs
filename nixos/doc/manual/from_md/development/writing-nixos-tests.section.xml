@@ -77,6 +77,7 @@
         in <literal>nixos/tests/all-tests.nix</literal> by invoking:
       </para>
       <programlisting>
+cd /my/git/clone/of/nixpkgs
 nix-build -A nixosTests.mytest
 </programlisting>
     </section>
