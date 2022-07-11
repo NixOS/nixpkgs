@@ -141,8 +141,9 @@ stdenv.mkDerivation rec {
         --prefix PATH : ${makeBinPath [ iproute2 networkmanager dnsmasq ]} \
         --set LD_LIBRARY_PATH $out/opt/appgate/service
 
+    # make xdg-open overrideable at runtime
     makeWrapper $out/opt/appgate/Appgate $out/bin/appgate \
-        --prefix PATH : ${makeBinPath [ xdg-utils ]} \
+        --suffix PATH : ${makeBinPath [ xdg-utils ]} \
         --set LD_LIBRARY_PATH $out/opt/appgate:${makeLibraryPath deps}
 
     wrapProgram $out/opt/appgate/linux/set_dns --set PYTHONPATH $PYTHONPATH

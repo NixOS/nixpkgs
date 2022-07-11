@@ -111,10 +111,11 @@ stdenv.mkDerivation rec {
 
     cc $localtime64_stub -shared -o "${placeholder "out"}"/opt/BlueJeans/liblocaltime64_stub.so
 
+    # make xdg-open overrideable at runtime
     makeWrapper $out/opt/BlueJeans/bluejeans-v2 $out/bin/bluejeans \
       --set LD_LIBRARY_PATH "${libPath}":"${placeholder "out"}"/opt/BlueJeans \
       --set LD_PRELOAD "$out"/opt/BlueJeans/liblocaltime64_stub.so \
-      --prefix PATH : ${lib.makeBinPath [ xdg-utils ]}
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
 
     substituteInPlace "$out"/share/applications/bluejeans-v2.desktop \
       --replace "/opt/BlueJeans/bluejeans-v2" "$out/bin/bluejeans"

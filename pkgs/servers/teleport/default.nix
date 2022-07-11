@@ -119,8 +119,9 @@ buildGoModule rec {
 
   postInstall = ''
     install -Dm755 -t $client/bin $out/bin/tsh
-    wrapProgram $client/bin/tsh --prefix PATH : ${lib.makeBinPath [ xdg-utils ]}
-    wrapProgram $out/bin/tsh --prefix PATH : ${lib.makeBinPath [ xdg-utils ]}
+    # make xdg-open overrideable at runtime
+    wrapProgram $client/bin/tsh --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
+    wrapProgram $out/bin/tsh --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
   '';
 
   doInstallCheck = true;
