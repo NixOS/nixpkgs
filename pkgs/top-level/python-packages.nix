@@ -10276,7 +10276,7 @@ in {
 
   solc-select = callPackage ../development/python-modules/solc-select { };
 
-  solo-python = disabledIf (!pythonAtLeast "3.6") (callPackage ../development/python-modules/solo-python { });
+  solo1-cli = disabledIf (!pythonAtLeast "3.6") (callPackage ../development/python-modules/solo1-cli { });
 
   somajo = callPackage ../development/python-modules/somajo { };
 
