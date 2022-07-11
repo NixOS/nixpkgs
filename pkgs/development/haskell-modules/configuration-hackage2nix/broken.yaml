@@ -821,7 +821,6 @@ broken-packages:
   - config-parser
   - Configurable
   - configuration
-  - configurator-pg
   - config-value-getopt
   - confsolve
   - congruence-relation
@@ -2073,7 +2072,6 @@ broken-packages:
   - hasql-cursor-transaction
   - hasql-explain-tests
   - hasql-generic
-  - hasql-implicits
   - hasql-resource-pool
   - hasql-simple
   - hasql-streams-example
