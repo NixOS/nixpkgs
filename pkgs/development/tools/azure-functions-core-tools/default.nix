@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "azure-functions-core-tools";
-  version = "3.0.3785";
+  version = "4.0.4736";
 
   src = fetchurl {
     url = "https://github.com/Azure/${pname}/releases/download/${version}/Azure.Functions.Cli.linux-x64.${version}.zip";
-    sha256 = "sha256-NdTEFQaG8eFengjzQr51ezehIHFvQZqmrjpjWk4vZKo=";
+    sha256 = "sha256-9b93nqvaMUjMfmB8WoVuQBHOEfFwkq94cAOfdTGD6WA=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -prd *.dll *.so gozip func $out/bin
+    cp -prd * $out/bin
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${libPath}" "$out/bin/func"
