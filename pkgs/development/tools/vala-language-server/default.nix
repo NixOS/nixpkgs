@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vala-language-server";
-  version = "0.48.4";
+  version = "0.48.5";
 
   src = fetchFromGitHub {
-    owner = "Prince781";
+    owner = "vala-lang";
     repo = pname;
     rev = version;
-    sha256 = "sha256-vCQ/j0DxG9sSEquPh9TtZ5hTADPh0d8sDIDSJdUDK4s=";
+    sha256 = "sha256-gntGnz8uqGz2EGwWWyty/N1ImaUKAPtXVZcjgp73SQM=";
   };
 
   passthru = {
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Code Intelligence for Vala & Genie";
-    homepage = "https://github.com/Prince781/vala-language-server";
+    homepage = "https://github.com/vala-lang/vala-language-server";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ andreasfelix ];
     platforms = platforms.linux;
