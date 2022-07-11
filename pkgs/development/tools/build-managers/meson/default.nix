@@ -1,5 +1,4 @@
 { lib
-, fetchpatch
 , installShellFiles
 , ninja
 , pkg-config
@@ -10,20 +9,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "0.61.2";
+  version = "0.63.0";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    hash = "sha256-AjOn+NlZB5MY9gUrCTnCf2il3oa6YB8lye5oaftfWIk=";
+    hash = "sha256-O1HUUXRMK8cYOFJOyNls1PjEeT1bjV0NCpyKT3yUzW8=";
   };
 
   patches = [
-    # Upstream insists on not allowing bindir and other dir options
-    # outside of prefix for some reason:
-    # https://github.com/mesonbuild/meson/issues/2561
-    # We remove the check so multiple outputs can work sanely.
-    ./allow-dirs-outside-of-prefix.patch
-
     # Meson is currently inspecting fewer variables than autoconf does, which
     # makes it harder for us to use setup hooks, etc.  Taken from
     # https://github.com/mesonbuild/meson/pull/6827
@@ -58,13 +51,6 @@ python3.pkgs.buildPythonApplication rec {
     # unsandboxed non-NixOS builds, see:
     # https://github.com/NixOS/nixpkgs/issues/86131#issuecomment-711051774
     ./boost-Do-not-add-system-paths-on-nix.patch
-
-    # https://github.com/mesonbuild/meson/pull/9841
-    # cross-compilation fix
-    (fetchpatch {
-      url = "https://github.com/mesonbuild/meson/commit/266e8acb5807b38a550cb5145cea0e19545a21d7.patch";
-      sha256 = "sha256-1GdKsm2xvq2GxTNeTyBH5O73hxboL0YI+w2BCoUeWXM=";
-    })
   ] ++ lib.optionals withDarwinFrameworksGtkDocPatch [
     # Fix building gtkdoc for GLib
     # https://github.com/mesonbuild/meson/pull/10186
