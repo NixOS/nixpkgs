@@ -1,8 +1,8 @@
 diff --git a/meson.build b/meson.build
-index 8e1b8bfd..0696bfe6 100644
+index 98b1fef5..e03ce888 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -186,7 +186,7 @@ if is_64bit_system
+@@ -187,7 +187,7 @@ if is_64bit_system
    xcb_64bit_dep = dependency('xcb')
  endif
  if with_32bit_libraries or with_bitbridge
