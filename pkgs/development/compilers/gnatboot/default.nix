@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-8fMBJp6igH+Md5jE4LMubDmC4GLt4A+bZG/Xcz2LAJQ=";
   };
 
-  propagatedNativeBuildInputs = [
+  NativeBuildInputs = [
     autoPatchelfHook
     dejagnu
     elfutils
