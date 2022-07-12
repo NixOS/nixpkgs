@@ -1,4 +1,4 @@
-{ lib, fetchFromGitLab, buildGoModule, scdoc }:
+{ lib, fetchFromGitLab, buildGoModule, scdoc, nix-update-script }:
 
 buildGoModule rec {
   pname = "darkman";
@@ -34,6 +34,10 @@ buildGoModule rec {
     make DESTDIR=$out PREFIX=/ install
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
 
   meta = with lib; {
     description =
