@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mate-applets";
-  version = "1.26.0";
+  version = "1.26.1";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0xy9dwiqvmimqshbfq80jxq65aznlgx491lqq8rl4x8c9sdl7q5p";
+    sha256 = "Orj2HbN23DM85MGHIsY6B/qz6OEnK34OCXrUWXsXwsI=";
   };
 
   nativeBuildInputs = [
