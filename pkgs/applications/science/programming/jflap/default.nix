@@ -64,7 +64,7 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://www.jflap.org/";
     license = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    maintainers = [ maintainers.grnnja ];
+    maintainers = with maintainers; [ grnnja yuu ];
     platforms = jre8.meta.platforms;
   };
 }
