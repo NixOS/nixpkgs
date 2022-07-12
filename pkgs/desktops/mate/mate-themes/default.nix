@@ -48,10 +48,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript {
-    inherit pname version;
-    url = "https://pub.mate-desktop.org/releases/themes";
-  };
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
 
   meta = with lib; {
     description = "A set of themes from MATE";

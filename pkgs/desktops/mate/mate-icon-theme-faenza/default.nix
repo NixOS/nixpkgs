@@ -37,12 +37,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript {
+    inherit pname version;
+    url = "https://github.com/mate-desktop-legacy-archive/mate-icon-theme-faenza";
+  };
 
   meta = with lib; {
     description = "Faenza icon theme from MATE";
     homepage = "https://mate-desktop.org";
-    license = licenses.gpl2Plus;
+    license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = teams.mate.members;
   };
