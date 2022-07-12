@@ -17,13 +17,13 @@
 
 buildDotnetModule rec {
   pname = "ryujinx";
-  version = "1.1.100"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
+  version = "1.1.181"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "26a881176eb6513a98889648e0d5b7fe647cd0e3";
-    sha256 = "09wjygkdr9sr0hwv77czi0x5xw8y585k9pghdm5s3iqjn9gbb45k";
+    rev = "6eb85e846f25ae36a39685d6ac91025deaea306c";
+    sha256 = "0lc8hhcrad26sw2dx0lwml8lk2mxg4db4sgfxnd450xi2qd63kdc";
   };
 
   projectFile = "Ryujinx.sln";
