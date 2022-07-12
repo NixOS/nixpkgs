@@ -158,6 +158,10 @@ let
       (sec "addressbook")
       (strOpt "defaulturl" cfg.addressbook.defaulturl)
     ] ++ (optionalEmptyList "subscriptions" cfg.addressbook.subscriptions)
+      ++ [
+      (sec "meshnets")
+      (boolOpt "yggdrasil" cfg.yggdrasil.enable)
+    ] ++ (optionalNullString "yggaddress" cfg.yggdrasil.address)
       ++ (flip map
       (collect (proto: proto ? port && proto ? address) cfg.proto)
       (proto: let protoOpts = [
@@ -543,6 +547,17 @@ in
         default = 1;
         description = ''
           Maximum number of threads used by NTCP DH worker.
+        '';
+      };
+
+      yggdrasil.enable = mkEnableOption "Yggdrasil";
+
+      yggdrasil.address = mkOption {
+        type = with types; nullOr str;
+        default = null;
+        description = ''
+          Your local yggdrasil address. Specify it if you want to bind your router to a
+          particular address.
         '';
       };
 

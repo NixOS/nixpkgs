@@ -389,10 +389,9 @@ in {
         "mysql.service"
         "postgresql.service"
       ];
-      reloadTriggers = [
-        configFile
-        lovelaceConfigFile
-      ];
+      reloadTriggers = lib.optional (cfg.config != null) configFile
+      ++ lib.optional (cfg.lovelaceConfig != null) lovelaceConfigFile;
+
       preStart = let
         copyConfig = if cfg.configWritable then ''
           cp --no-preserve=mode ${configFile} "${cfg.configDir}/configuration.yaml"
