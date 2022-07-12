@@ -7043,6 +7043,8 @@ in {
 
   py-sneakers = callPackage ../development/python-modules/py-sneakers { };
 
+  py-sr25519-bindings = callPackage ../development/python-modules/py-sr25519-bindings { };
+
   py-tes = callPackage ../development/python-modules/py-tes { };
 
   py-ubjson = callPackage ../development/python-modules/py-ubjson { };
