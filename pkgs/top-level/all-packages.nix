@@ -31030,6 +31030,8 @@ with pkgs;
 
   webcamoid = libsForQt5.callPackage ../applications/video/webcamoid { };
 
+  webex = callPackage ../applications/networking/instant-messengers/webex {};
+
   webmacs = libsForQt5.callPackage ../applications/networking/browsers/webmacs {};
 
   webssh = with python3Packages; toPythonApplication webssh;
