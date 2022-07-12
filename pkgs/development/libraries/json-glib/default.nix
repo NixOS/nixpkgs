@@ -6,10 +6,10 @@
 , ninja
 , pkg-config
 , gettext
-, withIntrospection ? stdenv.buildPlatform == stdenv.hostPlatform
 , gobject-introspection
-, fixDarwinDylibNames
 , gi-docgen
+, libxslt
+, fixDarwinDylibNames
 , gnome
 }:
 
@@ -17,8 +17,7 @@ stdenv.mkDerivation rec {
   pname = "json-glib";
   version = "1.6.6";
 
-  outputs = [ "out" "dev" ]
-    ++ lib.optional withIntrospection "devdoc";
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -37,22 +36,28 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     glib
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin [
-    fixDarwinDylibNames
-  ] ++ lib.optionals withIntrospection [
+    libxslt
     gobject-introspection
     gi-docgen
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
   ];
+
+  buildInputs = [ gobject-introspection ];
 
   propagatedBuildInputs = [
     glib
   ];
 
-  mesonFlags = lib.optionals (!withIntrospection) [
-    "-Dintrospection=disabled"
-    # gi-docgen relies on introspection data
-    "-Dgtk_doc=disabled"
-  ];
+
+  # Run-time dependency gi-docgen found: NO (tried pkgconfig and cmake)
+  # it should be a build-time dep for build
+  # TODO: send upstream
+  postPatch = ''
+    substituteInPlace doc/meson.build \
+      --replace "'gi-docgen', ver" "'gi-docgen', native:true, ver" \
+      --replace "'gi-docgen', req" "'gi-docgen', native:true, req"
+  '';
 
   doCheck = true;
 

@@ -7476,7 +7476,8 @@ in {
   pygobject2 = callPackage ../development/python-modules/pygobject { };
 
   pygobject3 = callPackage ../development/python-modules/pygobject/3.nix {
-    inherit (pkgs) meson;
+    # inherit (pkgs) meson won't work because it won't be spliced
+    inherit (pkgs.buildPackages) meson;
   };
 
   pygogo = callPackage ../development/python-modules/pygogo { };

@@ -16,7 +16,6 @@
 , bash-completion
 , lib
 , CoreServices
-, withIntrospection ? stdenv.buildPlatform == stdenv.hostPlatform
 , gobject-introspection
 }:
 
@@ -38,6 +37,10 @@ stdenv.mkDerivation rec {
     sha256 = "0cghi6n4nhdbajz3wqcgbh5xm94myvnqgsi9g2bz9n1s9904l2fy";
   };
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   strictDeps = true;
   nativeBuildInputs = [
     meson
@@ -50,23 +53,21 @@ stdenv.mkDerivation rec {
     makeWrapper
     glib
     bash-completion
+    gobject-introspection
 
     # documentation
     # TODO add hotdoc here
   ] ++ lib.optionals stdenv.isLinux [
     libcap # for setcap binary
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
   ];
 
   buildInputs = [
     bash-completion
+    gobject-introspection
   ] ++ lib.optionals stdenv.isLinux [
     libcap
     libunwind
     elfutils
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
   ] ++ lib.optionals stdenv.isDarwin [
     CoreServices
   ];
@@ -79,7 +80,6 @@ stdenv.mkDerivation rec {
     "-Ddbghelp=disabled" # not needed as we already provide libunwind and libdw, and dbghelp is a fallback to those
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
     "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
-    "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
   ] ++ lib.optionals stdenv.isDarwin [
     # darwin.libunwind doesn't have pkg-config definitions so meson doesn't detect it.
     "-Dlibunwind=disabled"

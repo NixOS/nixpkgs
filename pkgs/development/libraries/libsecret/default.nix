@@ -31,6 +31,10 @@ stdenv.mkDerivation rec {
     sha256 = "P7PONA/NfbVNh8iT5pv8Kx9uTUsnkGX/5m2snw/RK00=";
   };
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -48,6 +52,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libgcrypt
+    gobject-introspection
   ];
 
   propagatedBuildInputs = [

@@ -13,6 +13,7 @@
 , protobuf
 , config
 , ocl-icd
+, buildPackages
 
 , enableJPEG ? true
 , libjpeg
@@ -291,11 +292,15 @@ stdenv.mkDerivation {
     "-DOPENCV_GENERATE_PKGCONFIG=ON"
     "-DWITH_OPENMP=ON"
     "-DBUILD_PROTOBUF=OFF"
+    "-DProtobuf_PROTOC_EXECUTABLE=${lib.getExe buildPackages.protobuf}"
     "-DPROTOBUF_UPDATE_FILES=ON"
     "-DOPENCV_ENABLE_NONFREE=${printEnabled enableUnfree}"
     "-DBUILD_TESTS=OFF"
     "-DBUILD_PERF_TESTS=OFF"
     "-DBUILD_DOCS=${printEnabled enableDocs}"
+    # "OpenCV disables pkg-config to avoid using of host libraries. Consider using PKG_CONFIG_LIBDIR to specify target SYSROOT"
+    # but we have proper separation of build and host libs :), fixes cross
+    "-DOPENCV_ENABLE_PKG_CONFIG=ON"
     (opencvFlag "IPP" enableIpp)
     (opencvFlag "TIFF" enableTIFF)
     (opencvFlag "WEBP" enableWebP)
