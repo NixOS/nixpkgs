@@ -12,6 +12,20 @@
         proxyType = "direct";
         whitelistUrl = "http://nixos.org";
       };
+      qcnl.settings = {
+        pccsUrl = "https://localhost:8081/sgx/certification/v3/";
+        customRequestOptions = {
+          get_cert = {
+            headers = {
+              head1 = "value1";
+            };
+            params = {
+              param1 = "value1";
+              param2 = "value2";
+            };
+          };
+        };
+      };
     };
 
     # Should have access to the AESM socket
@@ -98,5 +112,9 @@
       with subtest("aesmd.service with quote provider library has set AZDCAP_DEBUG_LOG_LEVEL"):
         azdcp_debug_log_level = machine.succeed(f"xargs -0 -L1 -a /proc/{main_pid}/environ | grep AZDCAP_DEBUG_LOG_LEVEL")
         assert azdcp_debug_log_level == "AZDCAP_DEBUG_LOG_LEVEL=INFO\n", "AZDCAP_DEBUG_LOG_LEVEL is not set to INFO"
-    '';
+
+      with subtest("Writes and binds sgx_default_qcnl.conf in service namespace"):
+        qcnl_config = machine.succeed(f"nsenter -m -t {main_pid} ${pkgs.coreutils}/bin/cat /etc/sgx_default_qcnl.conf")
+        assert qcnl_config == '{"custom_request_options":{"get_cert":{"headers":{"head1":"value1"},"params":{"param1":"value1","param2":"value2"}}},"pccs_url":"https://localhost:8081/sgx/certification/v3/"}'
+  '';
 }
