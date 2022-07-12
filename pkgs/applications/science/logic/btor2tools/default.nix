@@ -23,6 +23,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "lib" ];
 
+  cmakeFlags = [
+    # RPATH of binary /nix/store/.../bin/btorsim contains a forbidden reference to /build/
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+  ];
+
   meta = with lib; {
     description = "A generic parser and tool package for the BTOR2 format";
     homepage    = "https://github.com/Boolector/btor2tools";
