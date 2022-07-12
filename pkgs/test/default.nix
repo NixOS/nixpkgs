@@ -24,6 +24,14 @@ with pkgs;
 
   config = callPackage ./config.nix { };
 
+  # we can't add 'nixpkgs.curl.tests' to hydra jobs due to 'tests' (and 'passthru') being stripped
+  # TODO: add a function in lib-release.nix to get derivations and add `.x86_64-linux` to them
+  # then we can just point release files to nixpkgs.tests.packageTestsForChannelBlockers instead of
+  # nixpkgs.tests.packageTestsForChannelBlockers.curl.withCheck
+  packageTestsForChannelBlockers = recurseIntoAttrs {
+    curl = recurseIntoAttrs pkgs.curl.tests;
+  };
+
   haskell = callPackage ./haskell { };
 
   cc-multilib-gcc = callPackage ./cc-wrapper/multilib.nix { stdenv = gccMultiStdenv; };
