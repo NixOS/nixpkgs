@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python3, rsync, fetchpatch }:
+{ stdenv, python3, rsync }:
 
 stdenv.mkDerivation {
   pname = "rrsync";
