@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/zigtools/zls";
     license = licenses.mit;
     maintainers = with maintainers; [ fortuneteller2k ];
+    platforms = platforms.unix;
   };
 }
