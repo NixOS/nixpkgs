@@ -24,11 +24,15 @@ buildGoModule rec {
   '';
 
   buildPhase = ''
+    runHook preBuild
     make build
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     make DESTDIR=$out PREFIX=/ install
+    runHook postInstall
   '';
 
   meta = with lib; {
