@@ -2,7 +2,7 @@
 , alsa-lib
 , qtbase
 , writeText
-, runtimeShell
+, makeWrapper
 }:
 
 faust.wrapWithBuildEnv rec {
@@ -18,15 +18,12 @@ faust.wrapWithBuildEnv rec {
 
   # Wrap the binary coming out of the the compilation script, so it knows QT_PLUGIN_PATH
   wrapBinary = writeText "wrapBinary" ''
+    source ${makeWrapper}/nix-support/setup-hook
     for p in $FILES; do
       binary=$(basename --suffix=.dsp "$p")
-      touch "$binary"-temp-wrap.sh
-      echo '#!${runtimeShell}' >> "$binary"-temp-wrap.sh
-      echo 'export QT_PLUGIN_PATH=${qtbase}/${qtbase.qtPluginPrefix}' >> "$binary"-temp-wrap.sh
-      echo "./."$binary"-wrapped" >> "$binary"-temp-wrap.sh
-      mv "$binary" ."$binary"-wrapped
-      mv "$binary"-temp-wrap.sh "$binary"
-      chmod +x "$binary"
+      mv $binary ."$binary"-wrapped
+      makeWrapper ./."$binary"-wrapped ."$binary"-temp  --set QT_PLUGIN_PATH "${qtbase}/${qtbase.qtPluginPrefix}"
+      mv ."$binary"-temp $binary
     done
   '';
 
