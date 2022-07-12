@@ -38,6 +38,11 @@ rustPlatform.buildRustPackage rec {
     cp -a docs/swagger $out/share/polaris-swagger
   '';
 
+  preCheck = ''
+    # 'Err' value: Os { code: 24, kind: Uncategorized, message: "Too many open files" }
+    ulimit -n 4096
+  '';
+
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
