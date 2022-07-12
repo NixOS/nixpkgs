@@ -63,5 +63,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.free; # BSD-like
     homepage = "https://portal.hdfgroup.org/display/HDFVIEW/HDFView";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ jiegec ];
   };
 }
