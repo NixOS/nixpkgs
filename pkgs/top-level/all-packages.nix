@@ -35224,7 +35224,9 @@ with pkgs;
   terraform-full = terraform.full;
 
   terraform-providers = recurseIntoAttrs (
-    callPackage ../applications/networking/cluster/terraform-providers { }
+    callPackage ../applications/networking/cluster/terraform-providers {
+      buildGoModule = buildGo118Module;
+    }
   );
 
   terraforming = callPackage ../applications/networking/cluster/terraforming { };
