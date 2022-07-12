@@ -256,8 +256,8 @@
 /pkgs/development/go-packages  @kalbasit @Mic92 @zowoq
 
 # GNOME
-/pkgs/desktops/gnome                              @jtojnar @hedning
-/pkgs/desktops/gnome/extensions       @piegamesde @jtojnar @hedning
+/pkgs/desktops/gnome                              @jtojnar
+/pkgs/desktops/gnome/extensions       @piegamesde @jtojnar
 
 # Cinnamon
 /pkgs/desktops/cinnamon @mkg20001
