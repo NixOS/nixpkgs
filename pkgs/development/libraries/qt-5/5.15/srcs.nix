@@ -1,10 +1,8 @@
 { lib, fetchgit, fetchFromGitHub }:
 
 let
-  version = "5.15.3";
-  overrides = {
-    qtscript.version = "5.15.4";
-  };
+  version = "5.15.5";
+  overrides = {};
 
   mk = name: args:
     let
