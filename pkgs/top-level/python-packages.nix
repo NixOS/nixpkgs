@@ -2913,6 +2913,8 @@ in {
 
   ed25519 = callPackage ../development/python-modules/ed25519 { };
 
+  ed25519-blake2b = callPackage ../development/python-modules/ed25519-blake2b { };
+
   edalize = callPackage ../development/python-modules/edalize { };
 
   editables = callPackage ../development/python-modules/editables { };
