@@ -21,6 +21,7 @@ crystal.buildCrystalPackage rec {
   src = fetchFromGitHub {
     owner = "iv-org";
     repo = pname;
+    fetchSubmodules = true;
     inherit (versions.invidious) rev sha256;
   };
 
