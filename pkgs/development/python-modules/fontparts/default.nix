@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "fontParts";
-  version = "0.10.6";
+  version = "0.10.7";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-mEnQWmzzZ5S8rWzmXuJDjcuoICi6Q+aneX8hGXj11Gg=";
+    sha256 = "sha256-u0hKI2LLWAUGIVRECk6b5y7UKgJHUx2I8R5Q+qkKxcg=";
     extension = "zip";
   };
 
