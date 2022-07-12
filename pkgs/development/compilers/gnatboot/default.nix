@@ -1,4 +1,4 @@
-{ stdenv, lib, autoPatchelfHook, fetchzip, lzma, ncurses5, readline, gmp, mpfr
+{ stdenv, lib, autoPatchelfHook, fetchzip, xz, ncurses5, readline, gmp, mpfr
 , expat, libipt, zlib, dejagnu, sourceHighlight, python3, elfutils, guile, glibc
 }:
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-8fMBJp6igH+Md5jE4LMubDmC4GLt4A+bZG/Xcz2LAJQ=";
   };
 
-  NativeBuildInputs = [
+  nativeBuildInputs = [
     autoPatchelfHook
     dejagnu
     elfutils
@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
     gmp
     guile
     libipt
-    lzma
     mpfr
     ncurses5
     python3
     readline
     sourceHighlight
+    xz
     zlib
   ];
 
