@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, bash, ocaml }:
+{ lib, stdenv, fetchFromGitHub, bash, ocaml, dune_3 }:
 
 stdenv.mkDerivation {
   pname = "rescript-editor-analysis";
-  version = "1.1.3";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "rescript-lang";
     repo = "rescript-vscode";
-    rev = "8d0412a72307b220b7f5774e2612760a2d429059";
-    sha256 = "rHQtfuIiEWlSPuZvNpEafsvlXCj2Uv1YRR1IfvKfC2s=";
+    rev = "1.3.0";
+    sha256 = "IL0sn7cpCHbSR19n6HvLyhp5aqit4EfO+EhK0lA9A1A=";
   };
 
-  nativeBuildInputs = [ ocaml ];
+  nativeBuildInputs = [ ocaml dune_3 ];
 
   postPatch = ''
     cd analysis
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Analysis binary for the ReScript VSCode plugin";
     homepage = "https://github.com/rescript-lang/rescript-vscode";
-    maintainers = with maintainers; [ dlip ];
+    maintainers = with maintainers; [ dlip jayesh-bhoot ];
     license = licenses.mit;
   };
 }
