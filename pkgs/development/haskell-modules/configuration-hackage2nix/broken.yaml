@@ -2675,6 +2675,7 @@ broken-packages:
   - interval
   - interval-algebra
   - interval-patterns
+  - interval-tree-clock
   - IntFormats
   - int-multimap
   - intricacy
@@ -4140,6 +4141,7 @@ broken-packages:
   - push-notifications
   - putlenses
   - puzzle-draw
+  - pvector
   - pyffi
   - pyfi
   - python-pickle
