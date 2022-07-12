@@ -69,6 +69,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional enableWayland wayland;
 
   buildInputs = [
+    gobject-introspection
     orc
     libtheora
     libintl

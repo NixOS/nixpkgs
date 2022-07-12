@@ -110,6 +110,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    gobject-introspection
     libxkbcommon
     (libepoxy.override { inherit x11Support; })
     isocodes

@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    gobject-introspection
     udev
     glib
   ];

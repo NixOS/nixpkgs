@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bash-completion
+    gobject-introspection
   ] ++ lib.optionals stdenv.isLinux [
     libcap
     libunwind

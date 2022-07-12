@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    gobject-introspection
     glib
     libxml2
     sqlite

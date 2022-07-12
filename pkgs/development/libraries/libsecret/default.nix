@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libgcrypt
+    gobject-introspection
   ];
 
   propagatedBuildInputs = [

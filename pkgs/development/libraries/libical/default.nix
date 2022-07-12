@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
     glib
     libxml2
     icu
+    gobject-introspection
   ];
 
   cmakeFlags = [

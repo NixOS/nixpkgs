@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
     fixDarwinDylibNames
   ];
 
+  buildInputs = [ gobject-introspection ];
+
   propagatedBuildInputs = [
     # Required by atk.pc
     glib

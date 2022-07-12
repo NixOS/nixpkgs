@@ -116,6 +116,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    gobject-introspection
     expat
     pam
     spidermonkey_78

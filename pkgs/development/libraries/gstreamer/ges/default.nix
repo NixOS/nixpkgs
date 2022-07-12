@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bash-completion
     libxml2
+    gobject-introspection
   ];
 
   propagatedBuildInputs = [

@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gst-plugins-base
     gst-plugins-bad
+    gobject-introspection
   ];
 
   mesonFlags = [
