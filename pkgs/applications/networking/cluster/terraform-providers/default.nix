@@ -18,7 +18,7 @@ let
      , rev
      , version
      , sha256
-     , vendorSha256 ? throw "vendorSha256 missing: please use `buildGoModule`" /* added 2022/01 */
+     , vendorSha256
      , deleteVendor ? false
      , proxyVendor ? false
      , mkProviderGoModule ? buildGoModule
