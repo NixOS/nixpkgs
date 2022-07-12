@@ -821,7 +821,6 @@ broken-packages:
   - config-parser
   - Configurable
   - configuration
-  - configurator-pg
   - config-value-getopt
   - confsolve
   - congruence-relation
@@ -2073,7 +2072,6 @@ broken-packages:
   - hasql-cursor-transaction
   - hasql-explain-tests
   - hasql-generic
-  - hasql-implicits
   - hasql-resource-pool
   - hasql-simple
   - hasql-streams-example
@@ -2458,7 +2456,6 @@ broken-packages:
   - hspec-snap
   - hspec-structured-formatter
   - hspec-tables
-  - hspec-wai-json
   - HsPerl5
   - hs-pgms
   - hspkcs11
@@ -2677,6 +2674,7 @@ broken-packages:
   - interval
   - interval-algebra
   - interval-patterns
+  - interval-tree-clock
   - IntFormats
   - int-multimap
   - intricacy
@@ -4012,6 +4010,7 @@ broken-packages:
   - postgresql-tx-simple
   - postgresql-tx-squeal
   - postgresql-typed-lifted
+  - postgrest
   - postgres-tmp
   - postgrest-ws
   - postgres-websockets
@@ -4142,6 +4141,7 @@ broken-packages:
   - push-notifications
   - putlenses
   - puzzle-draw
+  - pvector
   - pyffi
   - pyfi
   - python-pickle

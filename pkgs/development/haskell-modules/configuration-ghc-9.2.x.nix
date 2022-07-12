@@ -155,16 +155,6 @@ self: super: {
     ] ++ drv.testFlags or [];
   }) (doJailbreak super.hpack);
 
-  validity = pkgs.lib.pipe super.validity [
-    # head.hackage patch
-    (appendPatch (pkgs.fetchpatch {
-      url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/9110e6972b5daf085e19cad41f97920d3ddac499/patches/validity-0.12.0.0.patch";
-      sha256 = "0hzns596dxvyn8irgi7aflx76wak1qi13chkkvl0055pkgykm08f";
-    }))
-    # head.hackage ignores test suite
-    dontCheck
-  ];
-
   # lens >= 5.1 supports 9.2.1
   lens = doDistribute self.lens_5_1_1;
 
