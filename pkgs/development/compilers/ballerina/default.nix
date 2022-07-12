@@ -1,4 +1,4 @@
-{ lib, makeWrapper, fetchzip, stdenv, openjdk }:
+{ ballerina, lib, writeText, runCommand, makeWrapper, fetchzip, stdenv, openjdk }:
 let
   version = "2201.1.0";
   codeName = "swan-lake";
@@ -20,6 +20,19 @@ in stdenv.mkDerivation {
   '';
   preFixup = ''
     wrapProgram $out/bin/bal --set JAVA_HOME ${openjdk}/lib/openjdk
+  '';
+
+  passthru.tests.smokeTest = let
+    helloWorld = writeText "hello-world.bal" ''
+      import ballerina/io;
+      public function main() {
+        io:println("Hello, World!");
+      }
+    '';
+  in runCommand "ballerina-${version}-smoketest" { } ''
+    ${ballerina}/bin/bal run ${helloWorld} >$out
+    read result <$out
+    [[ $result = "Hello, World!" ]]
   '';
 
   meta = with lib; {
