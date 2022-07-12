@@ -21672,9 +21672,6 @@ with pkgs;
   zig = callPackage ../development/compilers/zig {
     llvmPackages = llvmPackages_13;
   };
-  zig_0_8_1 = callPackage ../development/compilers/zig/0.8.1.nix {
-    llvmPackages = llvmPackages_12;
-  };
 
   zimlib = callPackage ../development/libraries/zimlib { };
 
