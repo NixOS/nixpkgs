@@ -123,19 +123,5 @@ in
         # nixos-rebuild also requires a "system" profile
         ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
       '';
-
-    # Allow the user to login as root without password.
-    users.users.root.initialHashedPassword = mkOverride 150 "";
-
-    # Some more help text.
-    services.getty.helpLine =
-      ''
-
-        Log in as "root" with an empty password.
-      '';
-
-    # Containers should be light-weight, so start sshd on demand.
-    services.openssh.enable = mkDefault true;
-    services.openssh.startWhenNeeded = mkDefault true;
   };
 }
