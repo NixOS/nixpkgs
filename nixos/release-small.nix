@@ -120,7 +120,6 @@ in rec {
         "nixos.tests.proxy.x86_64-linux"
         "nixos.tests.simple.x86_64-linux"
         "nixpkgs.jdk.x86_64-linux"
-        "nixpkgs.tests.packageTestsForChannelBlockers.curl.withCheck.x86_64-linux"
         "nixpkgs.tarball"
       ];
   };
