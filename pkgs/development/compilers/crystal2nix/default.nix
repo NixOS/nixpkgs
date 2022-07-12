@@ -2,13 +2,13 @@
 
 crystal.buildCrystalPackage rec {
   pname = "crystal2nix";
-  version = "0.1.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "peterhoeg";
     repo = "crystal2nix";
     rev = "v${version}";
-    sha256 = "sha256-LKZychkhWy/rVdrP3Yo6g8CL1pGdiZlBykzFjnWh0fg=";
+    hash = "sha256-gb2vgKWVXwYWfUUcFvOLFF0qB4CTBekEllpyKduU1Mo=";
   };
 
   format = "shards";
@@ -25,8 +25,7 @@ crystal.buildCrystalPackage rec {
   # temporarily off. We need the checks to execute the wrapped binary
   doCheck = false;
 
-  # it requires an internet connection when run
-  doInstallCheck = false;
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Utility to convert Crystal's shard.lock files to a Nix file";

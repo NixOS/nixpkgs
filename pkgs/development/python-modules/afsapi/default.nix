@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "afsapi";
-  version = "0.2.5";
+  version = "0.2.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "wlcrs";
     repo = "python-afsapi";
     rev = "refs/tags/${version}";
-    hash = "sha256-GWBj4MsbWb4g67rjVWxe7RHinkv+rYlcAJiY4goFB5c=";
+    hash = "sha256-SPHED/zbrjULtJFz1x+0kq+lDrLeuol+1rOH2/xWEnI=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

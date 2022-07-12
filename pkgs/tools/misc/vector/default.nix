@@ -24,13 +24,13 @@
 , features ? ([ "sinks" "sources" "transforms" "vrl-cli" ]
     # the second feature flag is passed to the rdkafka dependency
     # building on linux fails without this feature flag (both x86_64 and AArch64)
-    ++ lib.optionals enableKafka [ "rdkafka/gssapi-vendored" ]
+    ++ lib.optionals enableKafka [ "rdkafka?/gssapi-vendored" ]
     ++ lib.optional stdenv.targetPlatform.isUnix "unix")
 }:
 
 let
   pname = "vector";
-  version = "0.22.3";
+  version = "0.23.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -39,10 +39,10 @@ rustPlatform.buildRustPackage {
     owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-62oPttkdahTeMsd9lpd9/tc95kluVJuWxzP94i+gWhA=";
+    sha256 = "sha256-Y1RysuCWvdbqckW54r1uH/K9YTuAZk8T4M3HRGFm0EM=";
   };
 
-  cargoSha256 = "sha256-WWX47pbva7ZmPR6hBstJ5VqOwu3mkhhsHK3LHHqQjDE=";
+  cargoSha256 = "sha256-VBmJfRCwSv3t5DPzVj92ajGYk5Ju8xqr4v7IDU17498=";
   nativeBuildInputs = [ pkg-config cmake perl ];
   buildInputs = [ oniguruma openssl protobuf rdkafka zstd ]
     ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
