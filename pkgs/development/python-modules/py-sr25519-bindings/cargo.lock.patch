@@ -327,9 +327,9 @@ index 0000000..10c2a53
 +
 +[[package]]
 +name = "pyo3"
-+version = "0.10.1"
++version = "0.15.1"
 +source = "registry+https://github.com/rust-lang/crates.io-index"
-+checksum = "80348539d1fa3fde72728c3fe9d750ec92c39e89908a774eda074289578c8d33"
++checksum = "7cf01dbf1c05af0a14c7779ed6f3aa9deac9c3419606ac9de537a2d649005720"
 +dependencies = [
 + "indoc",
 + "inventory",

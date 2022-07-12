@@ -8,6 +8,7 @@
 , pynacl
 , crcmod
 , ed25519-blake2b
+, py-sr25519-bindings
 }:
 
 buildPythonPackage rec {
@@ -33,6 +34,7 @@ buildPythonPackage rec {
     pynacl
     crcmod
     ed25519-blake2b
+    py-sr25519-bindings
   ];
 
   pythonImportsCheck = [
