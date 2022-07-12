@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, gtk3, pantheon, breeze-icons, gnome-icon-theme, hicolor-icon-theme, papirus-folders, color ? "blue" }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, gtk3, pantheon, breeze-icons, gnome-icon-theme, hicolor-icon-theme, papirus-folders, color ? null }:
 
 stdenv.mkDerivation rec {
   pname = "papirus-icon-theme";
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
     mv {,e}Papirus* $out/share/icons
 
     for theme in $out/share/icons/*; do
-      ${papirus-folders}/bin/papirus-folders -t $theme -o -C ${color}
-      gtk-update-icon-cache $theme
+      ${lib.optionalString (color != null) "${papirus-folders}/bin/papirus-folders -t $theme -o -C ${color}"}
+      gtk-update-icon-cache --force $theme
     done
 
     runHook postInstall
