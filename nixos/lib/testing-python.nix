@@ -83,10 +83,9 @@ rec {
             "nixos-test-driver-${testName}";
 
       vlans = map (m: m.config.virtualisation.vlans) (lib.attrValues nodes);
-      vms = map (m: m.config.system.build.vm) (lib.attrValues nodes);
 
       nodeHostNames = let
-        nodesList = map (c: c.config.system.name) (lib.attrValues nodes);
+        nodesList = (lib.attrNames nodes);
       in nodesList ++ lib.optional (lib.length nodesList == 1 && !lib.elem "machine" nodesList) "machine";
 
       # TODO: This is an implementation error and needs fixing
@@ -130,8 +129,6 @@ rec {
       ''
         mkdir -p $out/bin
 
-        vmStartScripts=($(for i in ${toString vms}; do echo $i/bin/run-*-vm; done))
-
         ${lib.optionalString (!skipTypeCheck) ''
           # prepend type hints so the test script can be type checked with mypy
           cat "${./test-script-prepend.py}" >> testScriptWithTypes
@@ -160,7 +157,9 @@ rec {
         # set defaults through environment
         # see: ./test-driver/test-driver.py argparse implementation
         wrapProgram $out/bin/nixos-test-driver \
-          --set startScripts "''${vmStartScripts[*]}" \
+          --set startScripts "${lib.concatStringsSep "," (lib.mapAttrsToList
+            (name: machine: "${name}=${machine.config.system.build.vm}/bin/run-${machine.config.system.name}-vm")
+            nodes)}" \
           --set testScript "$out/test-script" \
           --set vlans '${toString vlans}' \
           ${lib.optionalString (interactive) "--add-flags --interactive"}
