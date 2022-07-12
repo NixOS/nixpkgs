@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "helmfile";
@@ -18,6 +18,14 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   ldflags = [ "-s" "-w" "-X github.com/helmfile/helmfile/pkg/app/version.Version=${version}" ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd helmfile \
+      --bash ./autocomplete/helmfile_bash_autocomplete  \
+      --zsh ./autocomplete/helmfile_zsh_autocomplete
+  '';
 
   meta = {
     description = "Declarative spec for deploying Helm charts";
