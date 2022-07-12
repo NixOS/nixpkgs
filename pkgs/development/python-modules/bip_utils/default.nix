@@ -4,11 +4,15 @@
 , pythonOlder
 , ecdsa
 , pysha3
+, coincurve
+, pynacl
+, crcmod
+, ed25519-blake2b
 }:
 
 buildPythonPackage rec {
   pname = "bip_utils";
-  version = "2.2.1";
+  version = "2.5.1";
 
   disabled = pythonOlder "3.6";
 
@@ -16,10 +20,20 @@ buildPythonPackage rec {
     owner = "ebellocchia";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-p2JOZAJxQ/nPZ7vjnB24hA3kz3Io4D3HTP/8mqS/XCc=";
+    sha256 = "sha256-lH8hd+JA1FhGH60MYIIuwHjr/4wFbYeuw/hd60kr1xc=";
   };
 
-  propagatedBuildInputs = [ ecdsa pysha3 ];
+  propagatedBuildInputs = [
+    ecdsa
+    pysha3
+  ];
+
+  buildInputs = [
+    coincurve
+    pynacl
+    crcmod
+    ed25519-blake2b
+  ];
 
   pythonImportsCheck = [
     "bip_utils"
