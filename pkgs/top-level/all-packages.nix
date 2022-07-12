@@ -14306,6 +14306,7 @@ with pkgs;
   cargo-whatfeatures = callPackage ../development/tools/rust/cargo-whatfeatures {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  cargo-workspaces = callPackage ../development/tools/rust/cargo-workspaces {};
 
   cargo-public-api = callPackage ../development/tools/rust/cargo-public-api { };
 
