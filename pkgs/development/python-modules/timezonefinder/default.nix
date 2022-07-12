@@ -1,33 +1,60 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, isPy27
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, h3
 , numba
 , numpy
+, poetry-core
 , pytestCheckHook
-, pytest-cov
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "timezonefinder";
-  version = "5.2.0";
+  version = "6.0.2";
+  format = "pyproject";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a374570295a8dbd923630ce85f754e52578e288cb0a9cf575834415e84758352";
+  src = fetchFromGitHub {
+    owner = "jannikmi";
+    repo = pname;
+    rev = version;
+    hash = "sha256-jquaA/+alSRUaa2wXQ6YoDR4EY9OlZCAdcxS5TR0CAU=";
   };
 
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
   propagatedBuildInputs = [
+    h3
     numpy
   ];
 
-  checkInputs = [ numba pytestCheckHook pytest-cov ];
+  checkInputs = [
+    numba
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'numpy = "^1.22"' 'numpy = "*"'
+  '';
+
+  pythonImportsCheck = [
+    "timezonefinder"
+  ];
+
+  preCheck = ''
+    # Some tests need the CLI on the PATH
+    export PATH=$out/bin:$PATH
+  '';
 
   meta = with lib; {
-    description = "fast python package for finding the timezone of any point on earth (coordinates) offline";
+    description = "Module for finding the timezone of any point on earth (coordinates) offline";
     homepage = "https://github.com/MrMinimal64/timezonefinder";
     license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
   };
 }
