@@ -20893,7 +20893,9 @@ with pkgs;
 
   sfsexp = callPackage ../development/libraries/sfsexp {};
 
-  shhgit = callPackage ../tools/security/shhgit { };
+  shhgit = callPackage ../tools/security/shhgit {
+    buildGoModule = buildGo117Module;
+  };
 
   shhmsg = callPackage ../development/libraries/shhmsg { };
 
