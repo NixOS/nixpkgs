@@ -14,6 +14,7 @@ let
   '';
 
   anyPamMount = any (attrByPath ["pamMount"] false) (attrValues config.security.pam.services);
+  anyHomeLuks = any (user: ! isNull user.cryptHomeLuks) (attrValues config.users.users);
 in
 
 {
@@ -128,7 +129,7 @@ in
 
   };
 
-  config = mkIf (cfg.enable || anyPamMount) {
+  config = mkIf (cfg.enable || anyPamMount || anyHomeLuks) {
 
     environment.systemPackages = [ pkgs.pam_mount ];
     environment.etc."security/pam_mount.conf.xml" = {
