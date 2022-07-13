@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url    = "https://bindfs.org/downloads/${pname}-${version}.tar.gz";
-    sha256 = "1p2i2h0y015yykyy5s52mmaanflllzbgsnspp1agx53pkva5gnkh";
+    sha256 = "sha256-cNpX1J53lP5UuFdb/danlDqrVK2i6OL99L4E4AEUUdw=";
   };
 
   nativeBuildInputs = [ pkg-config ];
