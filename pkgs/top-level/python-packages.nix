@@ -2523,6 +2523,8 @@ in {
 
   dmenu-python = callPackage ../development/python-modules/dmenu { };
 
+  dm-env = callPackage ../development/python-modules/dm-env { };
+
   dm-haiku = callPackage ../development/python-modules/dm-haiku { };
 
   dm-tree = callPackage ../development/python-modules/dm-tree {
