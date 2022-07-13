@@ -28467,7 +28467,9 @@ with pkgs;
     electron = electron_9;
   };
 
-  magnetico = callPackage ../applications/networking/p2p/magnetico { };
+  magnetico = callPackage ../applications/networking/p2p/magnetico {
+    buildGoModule = buildGo117Module;
+  };
 
   mastodon-bot = nodePackages.mastodon-bot;
 
