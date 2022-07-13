@@ -472,8 +472,8 @@ in
         }
         {
           # The user interface breaks without pulse
-          assertion = config.hardware.pulseaudio.enable || (config.services.pipewire.enable && config.services.pipewire.pulse.enable);
-          message = "Plasma Mobile requires pulseaudio.";
+          assertion = config.hardware.pulseaudio.available;
+          message = "Plasma Mobile requires a pulseaudio server to be enabled.";
         }
       ];
 
@@ -509,7 +509,7 @@ in
 
       # The following services are needed or the UI is broken.
       hardware.bluetooth.enable = true;
-      hardware.pulseaudio.enable = true;
+      hardware.pulseaudio.available = true;
       networking.networkmanager.enable = true;
       # Required for autorotate
       hardware.sensor.iio.enable = lib.mkDefault true;
