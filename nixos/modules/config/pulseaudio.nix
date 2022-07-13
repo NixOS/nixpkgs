@@ -92,6 +92,19 @@ in {
         '';
       };
 
+      available = mkOption {
+        type = types.bool;
+        default = cfg.enable;
+        defaultText = lib.literalMD "Set to `true` by modules that implement PulseAudio when enabled.";
+        description = ''
+          Whether a server implementing the PulseAudio protocol will be
+          available on the system.
+
+          This should return true regardless of whether that's the official PulseAudio
+          implementation, or e.g. `pipewire`.
+        '';
+      };
+
       systemWide = mkOption {
         type = types.bool;
         default = false;

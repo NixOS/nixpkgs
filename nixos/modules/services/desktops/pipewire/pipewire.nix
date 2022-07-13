@@ -351,6 +351,8 @@ in {
     environment.systemPackages = [ cfg.package ]
                                  ++ optional cfg.jack.enable jack-libs;
 
+    hardware.pulseaudio.available = lib.mkIf cfg.pulse.enable true;
+
     systemd.packages = [ cfg.package ];
 
     # PipeWire depends on DBUS but doesn't list it. Without this booting
