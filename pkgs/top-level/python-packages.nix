@@ -6773,6 +6773,8 @@ in {
 
   plotly = callPackage ../development/python-modules/plotly { };
 
+  plotnine = callPackage ../development/python-modules/plotnine { };
+
   pluggy = callPackage ../development/python-modules/pluggy { };
 
   plugincode = callPackage ../development/python-modules/plugincode { };
