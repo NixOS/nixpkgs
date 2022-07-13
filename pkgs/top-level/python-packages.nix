@@ -2449,8 +2449,6 @@ in {
 
   django-reversion = callPackage ../development/python-modules/django-reversion { };
 
-  django-sampledatahelper = callPackage ../development/python-modules/django-sampledatahelper { };
-
   django-sesame = callPackage ../development/python-modules/django-sesame { };
 
   django_silk = callPackage ../development/python-modules/django_silk { };
