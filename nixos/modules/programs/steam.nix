@@ -53,8 +53,8 @@ in {
       driSupport32Bit = true;
     };
 
-    # optionally enable 32bit pulseaudio support if pulseaudio is enabled
-    hardware.pulseaudio.support32Bit = config.hardware.pulseaudio.enable;
+    # optionally enable 32bit pulseaudio support if pulseaudio is available
+    hardware.pulseaudio.support32Bit = config.hardware.pulseaudio.available;
 
     hardware.steam-hardware.enable = true;
 
