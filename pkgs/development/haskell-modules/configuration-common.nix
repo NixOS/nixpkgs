@@ -352,7 +352,7 @@ self: super: {
   lvmrun = disableHardening ["format"] (dontCheck super.lvmrun);
   matplotlib = dontCheck super.matplotlib;
 
-  brick_0_71_1 = super.brick_0_71_1.overrideScope (self: super: {
+  brick_0_73 = super.brick_0_73.overrideScope (self: super: {
     vty = self.vty_5_36;
   });
 
