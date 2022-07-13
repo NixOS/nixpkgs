@@ -24034,7 +24034,9 @@ with pkgs;
 
   pam_usb = callPackage ../os-specific/linux/pam_usb { };
 
-  pam_ussh = callPackage ../os-specific/linux/pam_ussh { };
+  pam_ussh = callPackage ../os-specific/linux/pam_ussh {
+    buildGoModule = buildGo117Module;
+  };
 
   paxctl = callPackage ../os-specific/linux/paxctl { };
 
