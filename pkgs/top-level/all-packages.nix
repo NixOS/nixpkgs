@@ -28096,7 +28096,9 @@ with pkgs;
   kubectl = callPackage ../applications/networking/cluster/kubernetes/kubectl.nix { };
   kubectl-convert = kubectl.convert;
 
-  kubemqctl = callPackage ../applications/networking/cluster/kubemqctl { };
+  kubemqctl = callPackage ../applications/networking/cluster/kubemqctl {
+    buildGoModule = buildGo117Module;
+  };
 
   kubent = callPackage ../applications/networking/cluster/kubent { };
 
