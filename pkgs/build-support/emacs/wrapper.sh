@@ -44,4 +44,4 @@ export emacsWithPackages_siteLisp=@wrapperSiteLisp@
 export EMACSNATIVELOADPATH="${newNativeLoadPath[*]}"
 export emacsWithPackages_siteLispNative=@wrapperSiteLispNative@
 
-exec @prog@ @autoloadExpression@ "$@"
+exec @prog@ "$@"

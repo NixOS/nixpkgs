@@ -7777,6 +7777,8 @@ with pkgs;
 
   kytea = callPackage ../tools/text/kytea { };
 
+  kyverno = callPackage ../applications/networking/cluster/kyverno { };
+
   k6 = callPackage ../development/tools/k6 { };
 
   l2md = callPackage ../tools/text/l2md { };
