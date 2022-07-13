@@ -6518,7 +6518,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  git-hound = callPackage ../tools/security/git-hound { };
+  git-hound = callPackage ../tools/security/git-hound {
+    buildGoModule = buildGo117Module;
+  };
 
   git-hub = callPackage ../applications/version-management/git-and-tools/git-hub { };
 
