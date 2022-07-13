@@ -11,9 +11,6 @@ stdenv.mkDerivation rec {
     sha256 = "17z9vwj58i1zc22gv4qscx0dk3nxf5ix443gxsibh3a5zsnc6dkg";
   };
 
-  patches = [
-    ./diamond-0.8.36-no-warning.patch
-  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib ];
