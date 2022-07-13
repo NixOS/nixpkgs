@@ -122,7 +122,7 @@ let
   startplasma = ''
     ${set_XDG_CONFIG_HOME}
     mkdir -p "''${XDG_CONFIG_HOME}"
-  '' + optionalString config.hardware.pulseaudio.enable ''
+  '' + optionalString config.hardware.pulseaudio.available ''
     # Load PulseAudio module for routing support.
     # See also: http://colin.guthr.ie/2009/10/so-how-does-the-kde-pulseaudio-support-work-anyway/
       ${getBin config.hardware.pulseaudio.package}/bin/pactl load-module module-device-manager "do_routing=1"
@@ -560,8 +560,8 @@ in
         }
         {
           # The user interface breaks without pulse
-          assertion = config.hardware.pulseaudio.enable || (config.services.pipewire.enable && config.services.pipewire.pulse.enable);
-          message = "Plasma Mobile requires pulseaudio.";
+          assertion = config.hardware.pulseaudio.available;
+          message = "Plasma Mobile requires a pulseaudio server to be enabled.";
         }
       ];
 
