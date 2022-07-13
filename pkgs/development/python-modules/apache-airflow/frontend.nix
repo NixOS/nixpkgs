@@ -1,30 +1,25 @@
 { src, mkYarnPackage }:
 
-let
-  # HACK: these fields are missing in upstream package.json, but are required by mkYarnPackage
-  additionalFields = {
-    name = "airflow-frontend";
-    version = "1.0.0";
-  };
-  packageJSON = builtins.fromJSON (builtins.readFile "${src}/package.json");
-  patchedPackageJSON = builtins.toFile "package.json" (builtins.toJSON (packageJSON // additionalFields));
-in
 mkYarnPackage {
   name = "airflow-frontend";
   inherit src;
-  packageJSON = patchedPackageJSON;
+  # Note: The package.json upstream is missing `name` and `version` fields, so it needs to be updated manually.
+  # Issue: https://github.com/apache/airflow/issues/25007
+  packageJSON = ./package.json;
+  yarnLock = ./yarn.lock;
+  yarnNix = ./yarn.nix;
   doDist = false;
 
   configurePhase = ''
-    cp -r $node_modules node_modules
+    ln -s $node_modules airflow/www/node_modules
   '';
 
   buildPhase = ''
-    yarn --offline build
+    yarn --cwd airflow/www --offline --frozen-lockfile build
   '';
 
   installPhase = ''
     mkdir -p $out/static/
-    cp -r static/dist $out/static
+    cp -r airflow/www/static/dist $out/static
   '';
 }

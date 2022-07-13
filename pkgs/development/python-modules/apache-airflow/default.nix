@@ -384,8 +384,7 @@ buildPythonPackage rec {
 
   postInstall = let
     frontend = callPackage ./frontend.nix {
-      inherit mkYarnPackage;
-      src = "${src}/airflow/www";
+      inherit mkYarnPackage src;
     };
     in ''
       cp -rv ${frontend}/static/dist $out/${python.sitePackages}/airflow/www/static
