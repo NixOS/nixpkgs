@@ -24,13 +24,13 @@
 
 buildPythonPackage rec {
   pname = "trezor";
-  version = "0.13.2";
+  version = "0.13.3";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cdb696fd01dad6a0cb23b61ea3a4867bb51cecda5cb2a77366fb6a53bff58ac4";
+    sha256 = "055d32174d4ecf2353f7622ee44b8e82e3bef78fe40ce5cdbeafc785b422a049";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -59,6 +59,12 @@ buildPythonPackage rec {
   disabledTestPaths = [
     "tests/test_stellar.py" # requires stellar-sdk
   ];
+
+  pythonImportsCheck = [ "trezorlib" ];
+
+  postCheck = ''
+    $out/bin/trezorctl --version
+  '';
 
   postFixup = ''
     mkdir completions
