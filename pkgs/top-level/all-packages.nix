@@ -35846,7 +35846,9 @@ with pkgs;
 
   zfs-replicate = python3Packages.callPackage ../tools/backup/zfs-replicate { };
 
-  zrepl = callPackage ../tools/backup/zrepl { };
+  zrepl = callPackage ../tools/backup/zrepl {
+    buildGoModule = buildGo117Module;
+  };
 
   uhubctl = callPackage ../tools/misc/uhubctl {};
 
