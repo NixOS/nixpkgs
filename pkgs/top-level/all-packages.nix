@@ -12028,7 +12028,9 @@ with pkgs;
 
   wrk2 = callPackage ../tools/networking/wrk2 { };
 
-  wuzz = callPackage ../tools/networking/wuzz { };
+  wuzz = callPackage ../tools/networking/wuzz {
+    buildGoModule = buildGo117Module;
+  };
 
   wv = callPackage ../tools/misc/wv { };
 
