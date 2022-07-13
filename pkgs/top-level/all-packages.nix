@@ -12219,7 +12219,9 @@ with pkgs;
 
   zfs-autobackup = callPackage ../tools/backup/zfs-autobackup { };
 
-  zfsbackup = callPackage ../tools/backup/zfsbackup { };
+  zfsbackup = callPackage ../tools/backup/zfsbackup {
+    buildGoModule = buildGo117Module;
+  };
 
   zfstools = callPackage ../tools/filesystems/zfstools { };
 
