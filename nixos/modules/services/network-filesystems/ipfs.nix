@@ -283,7 +283,7 @@ in
         User = cfg.user;
         Group = cfg.group;
         StateDirectory = "";
-        ReadWritePaths = [ "" cfg.dataDir ];
+        ReadWritePaths = optionals (!cfg.autoMount) [ "" cfg.dataDir ];
       } // optionalAttrs (cfg.serviceFdlimit != null) { LimitNOFILE = cfg.serviceFdlimit; };
     } // optionalAttrs (!cfg.startWhenNeeded) {
       wantedBy = [ "default.target" ];
