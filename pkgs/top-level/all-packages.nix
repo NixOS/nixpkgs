@@ -7223,7 +7223,9 @@ with pkgs;
 
   httpdirfs = callPackage ../tools/filesystems/httpdirfs { };
 
-  httpdump = callPackage ../tools/security/httpdump { };
+  httpdump = callPackage ../tools/security/httpdump {
+    buildGoModule = buildGo117Module;
+  };
 
   httpie = with python3Packages; toPythonApplication httpie;
 
