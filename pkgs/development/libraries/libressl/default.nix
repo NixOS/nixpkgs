@@ -92,5 +92,14 @@ in {
   libressl_3_5 = generic {
     version = "3.5.3";
     hash = "sha256-OrXl6u9pziDGsXDuZNeFtCI19I8uYrCV/KXXtmcriyg=";
+
+    patches = [
+      # Fix endianness detection on aarch64-darwin, issue #181187
+      (fetchpatch {
+        name = "fix-endian-header-detection.patch";
+        url = "https://patch-diff.githubusercontent.com/raw/libressl-portable/portable/pull/771.patch";
+        sha256 = "sha256-in5U6+sl0HB9qMAtUL6Py4X2rlv0HsqRMIQhhM1oThE=";
+      })
+    ];
   };
 }

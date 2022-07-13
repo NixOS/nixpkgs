@@ -48,6 +48,7 @@
 /pkgs/build-support/writers @lassulus @Profpatsch
 
 # Nixpkgs documentation
+/doc @fricklerhandwerk
 /maintainers/scripts/db-to-md.sh @jtojnar @ryantm
 /maintainers/scripts/doc @jtojnar @ryantm
 /doc/build-aux/pandoc-filters @jtojnar
@@ -256,8 +257,8 @@
 /pkgs/development/go-packages  @kalbasit @Mic92 @zowoq
 
 # GNOME
-/pkgs/desktops/gnome                              @jtojnar @hedning
-/pkgs/desktops/gnome/extensions       @piegamesde @jtojnar @hedning
+/pkgs/desktops/gnome                              @jtojnar
+/pkgs/desktops/gnome/extensions       @piegamesde @jtojnar
 
 # Cinnamon
 /pkgs/desktops/cinnamon @mkg20001
