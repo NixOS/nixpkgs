@@ -17527,7 +17527,9 @@ with pkgs;
 
   filter-audio = callPackage ../development/libraries/filter-audio {};
 
-  filtron = callPackage ../servers/filtron {};
+  filtron = callPackage ../servers/filtron {
+    buildGoModule = buildGo117Module;
+  };
 
   flann = callPackage ../development/libraries/flann { };
 
