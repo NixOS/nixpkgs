@@ -25,7 +25,7 @@ while read pkg_spec; do
 
   pkg_src="$(jq --raw-output '.source' "$(dirname "$pkg_spec")/.nupkg.metadata")"
   if [[ $pkg_src != https://api.nuget.org/* ]]; then
-    pkg_source_url="${nuget_sources_cache[$pkg_src]:=$(curl --fail "$pkg_src" | jq --raw-output '.resources[] | select(."@type" == "PackageBaseAddress/3.0.0")."@id"')}"
+    pkg_source_url="${nuget_sources_cache[$pkg_src]:=$(curl -n --fail "$pkg_src" | jq --raw-output '.resources[] | select(."@type" == "PackageBaseAddress/3.0.0")."@id"')}"
     pkg_url="$pkg_source_url${pkg_name,,}/${pkg_version,,}/${pkg_name,,}.${pkg_version,,}.nupkg"
     echo "  (fetchNuGet { pname = \"$pkg_name\"; version = \"$pkg_version\"; sha256 = \"$pkg_sha256\"; url = \"$pkg_url\"; })" >> ${tmpfile}
   else

@@ -1,12 +1,15 @@
 { lib, stdenv, callPackage, fetchFromGitHub, autoreconfHook, pkg-config, makeWrapper
 , CoreFoundation, IOKit, libossp_uuid
 , nixosTests
-, curl, libcap, libuuid, lm_sensors, zlib, protobuf
+, curl, jemalloc, libuv, zlib
+, libcap, libuuid, lm_sensors, protobuf
 , withCups ? false, cups
-, withDBengine ? true, libuv, lz4, judy
+, withDBengine ? true, judy, lz4
 , withIpmi ? (!stdenv.isDarwin), freeipmi
 , withNetfilter ? (!stdenv.isDarwin), libmnl, libnetfilter_acct
 , withCloud ? (!stdenv.isDarwin), json_c
+, withConnPubSub ? false, google-cloud-cpp, grpc
+, withConnPrometheus ? false, snappy
 , withSsl ? true, openssl
 , withDebug ? false
 }:
@@ -30,14 +33,17 @@ in stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper protobuf ];
-  buildInputs = [ curl.dev zlib.dev protobuf ]
+  buildInputs = [ curl.dev jemalloc libuv zlib.dev ]
     ++ optionals stdenv.isDarwin [ CoreFoundation IOKit libossp_uuid ]
     ++ optionals (!stdenv.isDarwin) [ libcap.dev libuuid.dev ]
     ++ optionals withCups [ cups ]
-    ++ optionals withDBengine [ libuv lz4.dev judy ]
+    ++ optionals withDBengine [ judy lz4.dev ]
     ++ optionals withIpmi [ freeipmi ]
     ++ optionals withNetfilter [ libmnl libnetfilter_acct ]
     ++ optionals withCloud [ json_c ]
+    ++ optionals withConnPubSub [ google-cloud-cpp grpc ]
+    ++ optionals withConnPrometheus [ snappy ]
+    ++ optionals (withCloud || withConnPrometheus) [ protobuf ]
     ++ optionals withSsl [ openssl.dev ];
 
   patches = [
@@ -92,9 +98,11 @@ in stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--disable-ebpf"
-  ] ++ optionals withCloud [
-    "--enable-cloud"
-    "--with-aclk-ng"
+    "--with-jemalloc=${jemalloc}"
+  ] ++ optional (!withDBengine) [
+    "--disable-dbengine"
+  ] ++ optional (!withCloud) [
+    "--disable-cloud"
   ];
 
   postFixup = ''

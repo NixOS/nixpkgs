@@ -2026,7 +2026,6 @@ dont-distribute-packages:
  - hasloGUI
  - hasparql-client
  - hasql-cursor-query
- - hasql-dynamic-statements
  - hasql-postgres
  - hasql-postgres-options
  - hasqlator-mysql
@@ -2418,6 +2417,10 @@ dont-distribute-packages:
  - jobqueue
  - join
  - jordan-openapi
+ - jordan-servant
+ - jordan-servant-client
+ - jordan-servant-openapi
+ - jordan-servant-server
  - jsc
  - jsmw
  - json-ast-json-encoder
@@ -3134,7 +3137,6 @@ dont-distribute-packages:
  - postgresql-simple-typed
  - postgresql-tx-query
  - postgresql-tx-squeal-compat-simple
- - postgrest
  - postmark
  - potoki
  - potoki-cereal
@@ -3559,7 +3561,6 @@ dont-distribute-packages:
  - shady-graphics
  - shake-ats
  - shake-bindist
- - shake-futhark
  - shake-minify-css
  - shake-plus-extended
  - shakebook
@@ -4054,7 +4055,6 @@ dont-distribute-packages:
  - vty-ui-extras
  - waargonaut
  - wahsp
- - wai-control
  - wai-devel
  - wai-dispatch
  - wai-handler-snap

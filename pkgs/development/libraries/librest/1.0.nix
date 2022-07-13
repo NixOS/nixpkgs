@@ -7,20 +7,21 @@
 , gi-docgen
 , glib
 , json-glib
-, libsoup
+, libsoup_3
+, libxml2
 , gobject-introspection
 , gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "rest";
-  version = "0.9.0";
+  version = "0.9.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "hbK8k0ESgTlTm1PuU/BTMxC8ljkv1kWGOgQEELgevmY=";
+    sha256 = "kmalwQ7OOD4ZPft/+we1CcwfUVIauNrXavlu0UISwuM=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +35,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     json-glib
-    libsoup
+    libsoup_3
+    libxml2
   ];
 
   mesonFlags = [

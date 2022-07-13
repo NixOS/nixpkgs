@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "mayavi";
-  version = "4.7.4";
+  version = "4.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ec50e7ec6afb0f9224ad1863d104a0d1ded6c8deb13e720652007aaca2303332";
+    sha256 = "sha256-TGBDYdn1+juBvhjVvxTzBlCw7jju1buhbMikQ5QXj2M=";
   };
 
   postPatch = ''

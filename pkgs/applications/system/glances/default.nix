@@ -1,4 +1,4 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub, isPyPy, lib
+{ stdenv, buildPythonApplication, fetchFromGitHub, fetchpatch, isPyPy, lib
 , defusedxml, future, packaging, psutil, setuptools
 # Optional dependencies:
 , bottle, pysnmp
@@ -20,7 +20,17 @@ buildPythonApplication rec {
   };
 
   # Some tests fail in the sandbox (they e.g. require access to /sys/class/power_supply):
-  patches = lib.optional (doCheck && stdenv.isLinux) ./skip-failing-tests.patch;
+  patches = lib.optional (doCheck && stdenv.isLinux) ./skip-failing-tests.patch
+    ++ lib.optional (doCheck && stdenv.isDarwin)
+    [
+      # Fix "TypeError: unsupported operand type(s) for +=: 'int' and 'NoneType'" on darwin
+      # https://github.com/nicolargo/glances/pull/2082
+      (fetchpatch {
+        name = "fix-typeerror-when-testing-on-darwin.patch";
+        url = "https://patch-diff.githubusercontent.com/raw/nicolargo/glances/pull/2082.patch";
+        sha256 = "sha256-MIePPywZ2dTTqXjf7EJiHlQ7eltiHzgocqrnLeLJwZ4=";
+      })
+    ];
 
   # On Darwin this package segfaults due to mismatch of pure and impure
   # CoreFoundation. This issues was solved for binaries but for interpreted

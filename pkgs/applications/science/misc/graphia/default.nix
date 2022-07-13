@@ -1,22 +1,36 @@
-{ stdenv, lib, cmake, fetchFromGitHub
-, wrapQtAppsHook, qtbase, qtquickcontrols2, qtgraphicaleffects
+{ stdenv
+, lib
+, cmake
+, fetchFromGitHub
+, wrapQtAppsHook
+, qtbase
+, qtquickcontrols2
+, qtgraphicaleffects
 }:
 
 stdenv.mkDerivation rec {
   pname = "graphia";
-  version = "2.2";
+  version = "3.0";
 
   src = fetchFromGitHub {
     owner = "graphia-app";
     repo = "graphia";
     rev = version;
-    sha256 = "sha256:05givvvg743sawqy2vhljkfgn5v1s907sflsnsv11ddx6x51na1w";
+    sha256 = "sha256-9JIVMtu8wlux7vIapOQQIemE7ehIol2XZuIvwLfB8fY=";
   };
+
+  patches = [
+    # Fix for a breakpad incompatibility with glibc>2.33
+    # https://github.com/pytorch/pytorch/issues/70297
+    # https://github.com/google/breakpad/commit/605c51ed96ad44b34c457bbca320e74e194c317e
+    ./breakpad-sigstksz.patch
+  ];
 
   nativeBuildInputs = [
     cmake
     wrapQtAppsHook
   ];
+
   buildInputs = [
     qtbase
     qtquickcontrols2

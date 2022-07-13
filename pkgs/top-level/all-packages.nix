@@ -6154,7 +6154,7 @@ with pkgs;
   };
 
   lp_solve = callPackage ../applications/science/math/lp_solve {
-    inherit (darwin) cctools;
+    inherit (darwin) cctools autoSignDarwinBinariesHook;
   };
 
   fabric-installer = callPackage ../tools/games/minecraft/fabric-installer { };
@@ -7776,6 +7776,8 @@ with pkgs;
   kstars = libsForQt5.callPackage ../applications/science/astronomy/kstars { };
 
   kytea = callPackage ../tools/text/kytea { };
+
+  kyverno = callPackage ../applications/networking/cluster/kyverno { };
 
   k6 = callPackage ../development/tools/k6 { };
 
@@ -16855,9 +16857,7 @@ with pkgs;
 
   ytt = callPackage ../development/tools/ytt {};
 
-  zls = callPackage ../development/tools/zls {
-    zig = zig_0_8_1;
-  };
+  zls = callPackage ../development/tools/zls { };
 
   zydis = callPackage ../development/libraries/zydis { };
 
@@ -17745,7 +17745,11 @@ with pkgs;
 
   ghcid = haskellPackages.ghcid.bin;
 
-  graphia = libsForQt5.callPackage ../applications/science/misc/graphia { };
+  graphia = libsForQt514.callPackage ../applications/science/misc/graphia {
+    # Using gcc 10 because this fails to build with gcc 11
+    # Error similar to this https://github.com/RPCS3/rpcs3/issues/10291
+    stdenv = gcc10Stdenv;
+  };
 
   icon-lang = callPackage ../development/interpreters/icon-lang { };
 
@@ -17865,13 +17869,13 @@ with pkgs;
 
   relibc = callPackage ../development/libraries/relibc { };
 
-  # Only supported on Linux
+  # Only supported on Linux and only on glibc
   glibcLocales =
-    if stdenv.hostPlatform.isLinux
+    if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu
     then callPackage ../development/libraries/glibc/locales.nix { }
     else null;
   glibcLocalesUtf8 =
-    if stdenv.hostPlatform.isLinux
+    if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu
     then callPackage ../development/libraries/glibc/locales.nix { allLocales = false; }
     else null;
 
@@ -21673,9 +21677,6 @@ with pkgs;
 
   zig = callPackage ../development/compilers/zig {
     llvmPackages = llvmPackages_13;
-  };
-  zig_0_8_1 = callPackage ../development/compilers/zig/0.8.1.nix {
-    llvmPackages = llvmPackages_12;
   };
 
   zimlib = callPackage ../development/libraries/zimlib { };
@@ -28480,6 +28481,8 @@ with pkgs;
   mdzk = callPackage ../applications/misc/mdzk {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
+
+  media-downloader = callPackage ../applications/video/media-downloader { };
 
   mediaelch = libsForQt5.callPackage ../applications/misc/mediaelch { };
 

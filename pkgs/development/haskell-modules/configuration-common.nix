@@ -352,10 +352,14 @@ self: super: {
   lvmrun = disableHardening ["format"] (dontCheck super.lvmrun);
   matplotlib = dontCheck super.matplotlib;
 
+  brick_0_71_1 = super.brick_0_71_1.overrideScope (self: super: {
+    vty = self.vty_5_36;
+  });
+
   # https://github.com/matterhorn-chat/matterhorn/issues/679 they do not want to be on stackage
   # Needs brick ^>= 0.70
   matterhorn = doJailbreak (super.matterhorn.overrideScope (self: super: {
-    brick = self.brick_0_70_1;
+    brick = self.brick_0_71_1;
   }));
 
   memcache = dontCheck super.memcache;
@@ -627,12 +631,6 @@ self: super: {
 
   # 2022-03-19: Testsuite is failing: https://github.com/puffnfresh/haskell-jwt/issues/2
   jwt = dontCheck super.jwt;
-
-  # 2022-03-16: ghc 9 support has not been merged: https://github.com/hasura/monad-validate/pull/5
-  monad-validate = appendPatch (fetchpatch {
-    url = "https://github.com/hasura/monad-validate/commit/7ba916e23c219a8cd397e2a1801c74682b52fcf0.patch";
-    sha256 = "sha256-udJ+/2VvfWA5Bm36nftH0sbPNuMkWj8rCh9cNN2f9Zw=";
-  }) (dontCheck super.monad-validate);
 
   # Build the latest git version instead of the official release. This isn't
   # ideal, but Chris doesn't seem to make official releases any more.
@@ -1293,10 +1291,6 @@ self: super: {
 
   # 2021-12-26: Too strict bounds on doctest
   polysemy-plugin = doJailbreak super.polysemy-plugin;
-
-  # Test suite requires running a database server. Testing is done upstream.
-  hasql-notifications = dontCheck super.hasql-notifications;
-  hasql-pool = dontCheck super.hasql-pool;
 
   # hasn‘t bumped upper bounds
   # upstream: https://github.com/obsidiansystems/which/pull/6
@@ -2558,21 +2552,9 @@ self: super: {
     lsp-types = self.lsp-types_1_5_0_0;
   });
 
-  # A delay between futhark package uploads caused us to end up with conflicting
-  # versions of futhark and futhark-manifest
-  futhark = assert super.futhark.version == "0.21.12"; overrideCabal (drv: {
-    editedCabalFile = null;
-    revision = null;
-    version = "0.21.13";
-    sha256 = "0bzqlsaaqbbi47zvmvv7hd6hcz54hzw676rh9nxcjxgff3hzqb08";
-    libraryHaskellDepends = drv.libraryHaskellDepends or [] ++ [
-      self.fgl
-      self.fgl-visualize
-      self.co-log-core
-    ];
-  }) (super.futhark.override {
+  futhark = super.futhark.override {
     lsp = self.lsp_1_5_0_0;
-  });
+  };
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super // (let
   # We need to build purescript with these dependencies and thus also its reverse
