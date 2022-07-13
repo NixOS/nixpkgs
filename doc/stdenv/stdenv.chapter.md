@@ -953,7 +953,7 @@ The [generic builder][generic-builder] populates `PATH` from inputs of the deriv
 
 [generic-builder]: https://github.com/NixOS/nixpkgs/blob/19d4f7dc485f74109bd66ef74231285ff797a823/pkgs/stdenv/generic/builder.sh
 
-#### Invocation
+#### Invocation {#patch-shebangs.sh-invocation}
 
 Multiple paths can be specified.
 
