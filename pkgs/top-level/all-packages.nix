@@ -7299,6 +7299,8 @@ with pkgs;
 
   iannix = libsForQt5.callPackage ../applications/audio/iannix { };
 
+  iaito = libsForQt5.callPackage ../tools/security/iaito { };
+
   jamulus = libsForQt5.callPackage ../applications/audio/jamulus { };
 
   ibm-sw-tpm2 = callPackage ../tools/security/ibm-sw-tpm2 { };
