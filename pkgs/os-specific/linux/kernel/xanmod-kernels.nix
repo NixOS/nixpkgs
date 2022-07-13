@@ -8,9 +8,9 @@ let
   };
 
   ttVariant = {
-    version = "5.15.47";
+    version = "5.15.54";
     suffix = "xanmod1-tt";
-    hash = "sha256-/0cfH59Oe62cF92tNNXfKKFnPztY4hjiVbvCth59HJU=";
+    hash = "sha256-4ck9PAFuIt/TxA/U+moGlVfCudJnzSuAw7ooFG3OJis=";
   };
 
   edgeVariant = {
