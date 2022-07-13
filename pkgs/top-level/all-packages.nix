@@ -28084,7 +28084,9 @@ with pkgs;
 
   kube-score = callPackage ../applications/networking/cluster/kube-score { };
 
-  kubectl-evict-pod = callPackage ../applications/networking/cluster/kubectl-evict-pod { };
+  kubectl-evict-pod = callPackage ../applications/networking/cluster/kubectl-evict-pod {
+    buildGoModule = buildGo117Module;
+  };
 
   kubeval = callPackage ../applications/networking/cluster/kubeval { };
 
