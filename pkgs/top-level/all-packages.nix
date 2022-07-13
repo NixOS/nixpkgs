@@ -8120,6 +8120,8 @@ with pkgs;
 
   node2nix = nodePackages.node2nix;
 
+  oddjob = callPackage ../os-specific/linux/oddjob { };
+
   openipmi = callPackage ../tools/system/openipmi { };
 
   ox = callPackage ../applications/editors/ox { };
