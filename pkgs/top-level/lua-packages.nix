@@ -60,7 +60,7 @@ in
   # wraps programs in $out/bin with valid LUA_PATH/LUA_CPATH
   wrapLua = callPackage ../development/interpreters/lua-5/wrap-lua.nix {
     inherit lua lib;
-    inherit (pkgs) makeSetupHook makeWrapper;
+    inherit (pkgs.buildPackages) makeSetupHook makeWrapper;
   };
 
   luarocks = callPackage ../development/tools/misc/luarocks/default.nix {
