@@ -10318,7 +10318,9 @@ with pkgs;
 
   sacd = callPackage ../tools/cd-dvd/sacd { };
 
-  safe = callPackage ../tools/security/safe { };
+  safe = callPackage ../tools/security/safe {
+    buildGoModule = buildGo117Module;
+  };
 
   safety-cli = with python3.pkgs; toPythonApplication safety;
 
