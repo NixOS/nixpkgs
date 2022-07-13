@@ -1,4 +1,11 @@
 /* This file defines some basic smoke tests for cross compilation.
+   Individual jobs can be tested by running:
+
+   $ nix-build pkgs/top-level/release-cross.nix -A <jobname>.<package> --arg supportedSystems '[builtins.currentSystem]'
+
+   e.g.
+
+   $ nix-build pkgs/top-level/release-cross.nix -A crossMingw32.nixUnstable --arg supportedSystems '[builtins.currentSystem]'
 */
 
 { # The platforms *from* which we cross compile.
