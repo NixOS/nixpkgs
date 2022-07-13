@@ -124,16 +124,6 @@ stdenv.mkDerivation (finalAttrs: {
     rm $out/lib/libregress-1.0${stdenv.targetPlatform.extensions.sharedLibrary}
   '';
 
-  # when cross-compiling and using the wrapper then when a package looks up the g_ir_X
-  # variable with pkg-config they'll get the host version which can't be run
-  # switch the variables to use g_ir_X from path instead of an absolute path
-  postFixup = lib.optionalString (!lib.hasSuffix "wrapped" finalAttrs.pname) ''
-    find "''${!outputDev}/lib/pkgconfig" -name '*.pc' | while read pc; do
-        substituteInPlace "$pc" \
-          --replace '=''${bindir}/g-ir' '=g-ir'
-    done
-  '';
-
   setupHook = ./setup-hook.sh;
 
   passthru = {

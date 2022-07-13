@@ -28,5 +28,22 @@ gobject-introspection-unwrapped.overrideAttrs (previousAttrs: {
       chmod +x "$dev/bin/g-ir-compiler"
       chmod +x "$dev/bin/g-ir-scanner"
     )
+  ''
+  # when cross-compiling and using the wrapper then when a package looks up the g_ir_X
+  # variable with pkg-config they'll get the host version which can't be run
+  # override the variable to use the absolute path to g_ir_X in PATH which can be run
+  + ''
+    cat >> $dev/nix-support/setup-hook <<-'EOF'
+      override-pkg-config-gir-variables() {
+        PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_G_IR_SCANNER="$(type -p g-ir-scanner)"
+        PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_G_IR_COMPILER="$(type -p g-ir-compiler)"
+        PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_G_IR_GENERATE="$(type -p g-ir-generate)"
+        export PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_G_IR_SCANNER
+        export PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_G_IR_COMPILER
+        export PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_G_IR_GENERATE
+      }
+
+      preConfigureHooks+=(override-pkg-config-gir-variables)
+    EOF
   '';
 })
