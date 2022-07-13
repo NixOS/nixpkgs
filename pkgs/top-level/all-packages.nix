@@ -23213,7 +23213,9 @@ with pkgs;
 
   alfred = callPackage ../os-specific/linux/batman-adv/alfred.nix { };
 
-  alertmanager-bot = callPackage ../servers/monitoring/alertmanager-bot { };
+  alertmanager-bot = callPackage ../servers/monitoring/alertmanager-bot {
+    buildGoModule = buildGo117Module;
+  };
 
   alertmanager-irc-relay = callPackage ../servers/monitoring/alertmanager-irc-relay { };
 
