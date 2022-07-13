@@ -22192,7 +22192,9 @@ with pkgs;
 
   gerbera = callPackage ../servers/gerbera {};
 
-  gobetween = callPackage ../servers/gobetween { };
+  gobetween = callPackage ../servers/gobetween {
+    buildGoModule = buildGo117Module;
+  };
 
   gobgpd = callPackage ../servers/misc/gobgpd { };
 
