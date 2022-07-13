@@ -15,14 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libgit2";
-  version = "1.4.3";
+  version = "1.4.4";
   # also check the following packages for updates: python3.pkgs.pygit2 and libgit2-glib
 
   src = fetchFromGitHub {
     owner = "libgit2";
     repo = "libgit2";
     rev = "v${version}";
-    sha256 = "sha256-WnRzH5uMVEStA5ns4GNgMD5YoLQoats9aPLfnz9RoQs=";
+    sha256 = "sha256-uEwxXRBN329p1GqAzYb7HkFqwAfc6nFtBgANxloqdog=";
   };
 
   cmakeFlags = [
