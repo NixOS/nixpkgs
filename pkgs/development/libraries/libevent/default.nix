@@ -1,8 +1,7 @@
 { lib, stdenv, fetchurl, findutils, fixDarwinDylibNames
-, sslSupport? true, openssl
+, sslSupport ? true, openssl
+, fetchpatch
 }:
-
-assert sslSupport -> openssl != null;
 
 stdenv.mkDerivation rec {
   pname = "libevent";
@@ -12,6 +11,14 @@ stdenv.mkDerivation rec {
     url = "https://github.com/libevent/libevent/releases/download/release-${version}-stable/libevent-${version}-stable.tar.gz";
     sha256 = "1fq30imk8zd26x8066di3kpc5zyfc5z6frr3zll685zcx4dxxrlj";
   };
+
+  patches = [
+    # Don't define BIO_get_init() for LibreSSL 3.5+
+    (fetchpatch {
+      url = "https://github.com/libevent/libevent/commit/883630f76cbf512003b81de25cd96cb75c6cf0f9.patch";
+      sha256 = "sha256-VPJqJUAovw6V92jpqIXkIR1xYGbxIWxaHr8cePWI2SU=";
+    })
+  ];
 
   preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
     MACOSX_DEPLOYMENT_TARGET=10.16
@@ -27,14 +34,10 @@ stdenv.mkDerivation rec {
     ++ lib.optional sslSupport "openssl"
     ;
 
-  nativeBuildInputs = []
-    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames
-    ;
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
-  buildInputs = []
-    ++ lib.optional sslSupport openssl
-    ++ lib.optional stdenv.isCygwin findutils
-    ;
+  buildInputs = lib.optional sslSupport openssl
+    ++ lib.optional stdenv.isCygwin findutils;
 
   doCheck = false; # needs the net
 
