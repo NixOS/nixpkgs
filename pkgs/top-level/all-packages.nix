@@ -4701,6 +4701,8 @@ with pkgs;
 
   blueman = callPackage ../tools/bluetooth/blueman { };
 
+  bluetuith = callPackage ../tools/bluetooth/bluetuith { };
+
   bmrsa = callPackage ../tools/security/bmrsa/11.nix { };
 
   bogofilter = callPackage ../tools/misc/bogofilter { };
