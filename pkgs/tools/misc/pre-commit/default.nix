@@ -142,6 +142,9 @@ buildPythonPackage rec {
     "test_install_existing_hooks_no_overwrite"
     "test_installed_from_venv"
     "test_uninstall_restores_legacy_hooks"
+
+    # won't happen with our hook-tmpl patch
+    "test_environment_not_sourced"
   ];
 
   pythonImportsCheck = [
