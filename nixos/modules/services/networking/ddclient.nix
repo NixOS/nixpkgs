@@ -13,7 +13,7 @@ let
     foreground=YES
     use=${cfg.use}
     login=${cfg.username}
-    password=${lib.optionalString (cfg.protocol == "nsupdate") "/run/${RuntimeDirectory}/ddclient.key"}
+    password=${if cfg.protocol == "nsupdate" then "/run/${RuntimeDirectory}/ddclient.key" else "@password_placeholder@"}
     protocol=${cfg.protocol}
     ${lib.optionalString (cfg.script != "") "script=${cfg.script}"}
     ${lib.optionalString (cfg.server != "") "server=${cfg.server}"}
@@ -33,10 +33,9 @@ let
     ${lib.optionalString (cfg.configFile == null) (if (cfg.protocol == "nsupdate") then ''
       install ${cfg.passwordFile} /run/${RuntimeDirectory}/ddclient.key
     '' else if (cfg.passwordFile != null) then ''
-      password=$(printf "%q" "$(head -n 1 "${cfg.passwordFile}")")
-      sed -i "s|^password=$|password=$password|" /run/${RuntimeDirectory}/ddclient.conf
+      "${pkgs.replace-secret}/bin/replace-secret" "@password_placeholder@" "${cfg.passwordFile}" "/run/${RuntimeDirectory}/ddclient.conf"
     '' else ''
-      sed -i '/^password=$/d' /run/${RuntimeDirectory}/ddclient.conf
+      sed -i '/^password=@password_placeholder@$/d' /run/${RuntimeDirectory}/ddclient.conf
     '')}
   '';
 
