@@ -108,7 +108,7 @@ in
     ] # TODO: NetworkManager doesn't belong here
       ++ optional config.networking.networkmanager.enable networkmanagerapplet
       ++ optional config.powerManagement.enable xfce4-power-manager
-      ++ optionals config.hardware.pulseaudio.enable [
+      ++ optionals config.hardware.pulseaudio.available [
         pavucontrol
         # volume up/down keys support:
         # xfce4-pulseaudio-plugin includes all the functionalities of xfce4-volumed-pulse
