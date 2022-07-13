@@ -10437,6 +10437,9 @@ with pkgs;
 
   seexpr = callPackage ../development/compilers/seexpr { };
 
+  semgrep = python3.pkgs.callPackage ../tools/security/semgrep { };
+  semgrep-core = callPackage ../tools/security/semgrep/semgrep-core.nix { };
+
   setroot = callPackage  ../tools/X11/setroot { };
 
   setserial = callPackage ../tools/system/setserial { };
