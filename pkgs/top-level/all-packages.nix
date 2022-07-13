@@ -28116,7 +28116,9 @@ with pkgs;
     buildGoModule = buildGo117Module;
   };
 
-  kubectl-doctor = callPackage ../applications/networking/cluster/kubectl-doctor { };
+  kubectl-doctor = callPackage ../applications/networking/cluster/kubectl-doctor {
+    buildGoModule = buildGo117Module;
+  };
 
   kubectl-example = callPackage ../applications/networking/cluster/kubectl-example { };
 
