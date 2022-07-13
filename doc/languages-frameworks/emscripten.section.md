@@ -36,17 +36,11 @@ A few things to note:
 
 ## Declarative usage {#declarative-usage}
 
-Let's see two different examples from `pkgs/top-level/emscripten-packages.nix`:
+Building emscripten packages requires some special considerations which developers should be aware of. See [`pkgs/top-level/emscripten-packages.nix`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/emscripten-packages.nix) for details and examples.
 
-* `pkgs.zlib.override`
-* `pkgs.buildEmscriptenPackage`
-
-Both are interesting concepts.
-
-A special requirement of the `pkgs.buildEmscriptenPackage` is the `doCheck = true` is a default meaning that each emscriptenPackage requires a `checkPhase` implemented.
-
+* `pkgs.buildEmscriptenPackage` sets `docheck = true` by default, which requires that each emscriptenPackage have a `checkPhase`.
 * Use `export EMCC_DEBUG=2` from within a emscriptenPackage's `phase` to get more detailed debug output what is going wrong.
-* ~/.emscripten cache is requiring us to set `HOME=$TMPDIR` in individual phases. This makes compilation slower but also makes it more deterministic.
+* The ``~/.emscripten`` cache requires us to set `HOME=$TMPDIR` in individual phases. This makes compilation slower but also makes it more deterministic. by default the emscripten cache location is set to a new writable `.emscriptencache` directory via the environment variable `EM_CACHE`, because the systemwide default directory is unwritable in the nix store. If overriding the `configurePhase` while creating an emscripten package, this step will need to be included manually  as well.
 
 ### Usage 1: pkgs.zlib.override {#usage-1-pkgs.zlib.override}
 
