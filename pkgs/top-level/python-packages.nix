@@ -1424,6 +1424,8 @@ in {
 
   bson = callPackage ../development/python-modules/bson { };
 
+  bsuite = callPackage ../development/python-modules/bsuite { };
+
   btchip = callPackage ../development/python-modules/btchip { };
 
   bt-proximity = callPackage ../development/python-modules/bt-proximity { };
