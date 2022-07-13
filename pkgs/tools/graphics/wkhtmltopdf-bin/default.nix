@@ -1,28 +1,76 @@
-{ stdenv, lib, fetchurl, wkhtmltopdf, xar, cpio }:
+{ lib
+, autoPatchelfHook
+, cpio
+, freetype
+, zlib
+, openssl
+, dpkg
+, fetchurl
+, gcc-unwrapped
+, libjpeg8
+, libpng
+, fontconfig
+, stdenv
+, wkhtmltopdf
+, xar
+, xorg
+}:
 
-stdenv.mkDerivation rec {
+let
+  darwinAttrs = rec {
+    version = "0.12.6-2";
+    src = fetchurl {
+      url = "https://github.com/wkhtmltopdf/packaging/releases/download/${version}/wkhtmltox-${version}.macos-cocoa.pkg";
+      sha256 = "sha256-gaZrd7UI/t6NvKpnEnIDdIN2Vos2c6F/ZhG21R6YlPg=";
+    };
 
-  pname = "wkhtmltopdf-bin";
-  version = "0.12.6-1";
-  sha256 = "1db59kdprzpmvdj1bg47lmfgi3zlvzvqif11sbym9hw61xy6gp3d";
-  src = fetchurl {
-    url =
-      "https://github.com/wkhtmltopdf/packaging/releases/download/${version}/wkhtmltox-${version}.macos-cocoa.pkg";
-    inherit sha256;
+    nativeBuildInputs = [ xar cpio ];
+
+    unpackPhase = ''
+      xar -xf $src
+      zcat Payload | cpio -i
+      tar -xf usr/local/share/wkhtmltox-installer/wkhtmltox.tar.gz
+    '';
+
+    installPhase = ''
+      mkdir -p $out
+      cp -r bin include lib share $out/
+    '';
   };
 
-  buildInputs = [ xar cpio ];
+  linuxAttrs = rec {
+    version = "0.12.6-3";
+    src = fetchurl {
+      url = "https://github.com/wkhtmltopdf/packaging/releases/download/${version}/wkhtmltox-${version}.archlinux-x86_64.pkg.tar.xz";
+      sha256 = "sha256-6Ewu8sPRbqvYWj27mBlQYpEN+mb+vKT46ljrdEUxckI=";
+    };
 
-  unpackPhase = ''
-    xar -xf $src
-    zcat Payload | cpio -i
-    tar -xf usr/local/share/wkhtmltox-installer/wkhtmltox.tar.gz
-  '';
+    nativeBuildInputs = [ autoPatchelfHook ];
 
-  installPhase = ''
-    mkdir -p $out
-    cp -r bin include lib share $out/
-  '';
+    buildInputs = [
+      xorg.libXext
+      xorg.libXrender
+
+      freetype
+      openssl
+      zlib
+
+      (lib.getLib fontconfig)
+      (lib.getLib gcc-unwrapped)
+      (lib.getLib libjpeg8)
+      (lib.getLib libpng)
+    ];
+
+    unpackPhase = "tar -xf $src";
+
+    installPhase = ''
+      mkdir -p $out
+      cp -r usr/bin usr/include usr/lib usr/share $out/
+    '';
+  };
+in
+stdenv.mkDerivation ({
+  pname = "wkhtmltopdf-bin";
 
   dontStrip = true;
 
@@ -46,6 +94,9 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ nbr ];
-    platforms = [ "x86_64-darwin" ];
+    platforms = [ "x86_64-darwin" "x86_64-linux" ];
   };
 }
+// lib.optionalAttrs (stdenv.hostPlatform.isDarwin) darwinAttrs
+// lib.optionalAttrs (stdenv.hostPlatform.isLinux) linuxAttrs
+)
