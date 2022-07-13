@@ -7,6 +7,7 @@ let
     "ghc8102Binary"
     "ghc8102BinaryMinimal"
     "ghcjs"
+    "ghcjs86"
     "ghcjs810"
     "integer-simple"
     "native-bignum"
@@ -55,6 +56,13 @@ in {
     ghc8102BinaryMinimal = callPackage ../development/compilers/ghc/8.10.2-binary.nix {
       llvmPackages = pkgs.llvmPackages_9;
       minimal = true;
+    };
+
+    ghc865 = callPackage ../development/compilers/ghc/8.6.5.nix {
+      bootPkgs = packages.ghc865Binary;
+      inherit (buildPackages.python3Packages) sphinx;
+      buildLlvmPackages = buildPackages.llvmPackages_6;
+      llvmPackages = pkgs.llvmPackages_6;
     };
 
     ghc884 = callPackage ../development/compilers/ghc/8.8.4.nix {
@@ -110,6 +118,12 @@ in {
     };
 
     ghcjs = compiler.ghcjs810;
+    ghcjs86 = callPackage ../development/compilers/ghcjs/8.6 {
+      bootPkgs = packages.ghc865;
+      ghcjsSrcJson = ../development/compilers/ghcjs/8.6/git.json;
+      stage0 = ../development/compilers/ghcjs/8.6/stage0.nix;
+      ghcjsDepOverrides = callPackage ../development/compilers/ghcjs/8.6/dep-overrides.nix {};
+    };
     ghcjs810 = callPackage ../development/compilers/ghcjs/8.10 {
       bootPkgs = packages.ghc8107;
       ghcjsSrcJson = ../development/compilers/ghcjs/8.10/git.json;
@@ -161,6 +175,11 @@ in {
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
       packageSetConfig = bootstrapPackageSet;
     };
+    ghc865 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc865;
+      ghc = bh.compiler.ghc865;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.6.x.nix { };
+    };
     ghc884 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc884;
       ghc = bh.compiler.ghc884;
@@ -188,6 +207,12 @@ in {
     };
 
     ghcjs = packages.ghcjs810;
+    ghcjs86 = callPackage ../development/haskell-modules rec {
+      buildHaskellPackages = ghc.bootPkgs;
+      ghc = bh.compiler.ghcjs86;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.6.x.nix { };
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs-8.6.nix { };
+    };
     ghcjs810 = callPackage ../development/haskell-modules rec {
       buildHaskellPackages = ghc.bootPkgs;
       ghc = bh.compiler.ghcjs810;

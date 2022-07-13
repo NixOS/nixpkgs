@@ -4,5 +4,6 @@ let inherit (haskellLib) addBuildTools appendConfigureFlag dontHaddock doJailbre
 in self: super: {
   ghcjs = doJailbreak (super.ghcjs.overrideScope (self: super: {
     optparse-applicative = self.optparse-applicative_0_15_1_0;
+    exceptions = super.exceptions_0_10_4;
   }));
 }
