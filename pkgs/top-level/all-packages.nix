@@ -33301,7 +33301,9 @@ with pkgs;
 
   deepdiff = with python3Packages; toPythonApplication deepdiff;
 
-  deepsea = callPackage ../tools/security/deepsea { };
+  deepsea = callPackage ../tools/security/deepsea {
+    buildGoModule = buildGo117Module;
+  };
 
   deeptools = callPackage ../applications/science/biology/deeptools { python = python3; };
 
