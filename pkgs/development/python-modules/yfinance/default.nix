@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "yfinance";
-  version = "0.1.72";
+  version = "0.1.74";
 
   src = fetchFromGitHub {
     owner = "ranaroussi";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-7dA5+PJhuj/KAZoHMxx34yfyxDeiIf6DhufymfvD8Gg=";
+    sha256 = "sha256-3YOUdrLCluOuUieBwl15B6WHSXpMoNAjdeNJT3zmTTI=";
   };
 
   propagatedBuildInputs = [
