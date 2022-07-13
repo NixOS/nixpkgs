@@ -4352,7 +4352,9 @@ with pkgs;
 
   pixiecore = callPackage ../tools/networking/pixiecore {};
 
-  waitron = callPackage ../tools/networking/waitron {};
+  waitron = callPackage ../tools/networking/waitron {
+    buildGoModule = buildGo117Module;
+  };
 
   pyCA = python3Packages.callPackage ../applications/video/pyca {};
 
