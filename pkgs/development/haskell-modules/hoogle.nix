@@ -33,7 +33,7 @@ let
   isGhcjs = ghc.isGhcjs or false;
   opts = lib.optionalString;
   haddockExe =
-    if !isGhcjs
+    if !isGhcjs || lib.versionAtLeast ghc.version "8.10.7"
     then "haddock"
     else "haddock-ghcjs";
   ghcDocLibDir =
