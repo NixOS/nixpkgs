@@ -36,8 +36,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "keyd";
-    # license = licenses.gpl3;
+    description = "A key remapping daemon for linux.";
+    license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
+    platforms = platforms.linux;
   };
 }
