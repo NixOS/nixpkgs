@@ -219,6 +219,7 @@ in python.pkgs.buildPythonApplication rec {
       "httpx"
       "jinja2"
       "pip"
+      "PyJWT"
       "requests"
       "yarl"
     ];

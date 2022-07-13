@@ -21,17 +21,6 @@ let newPython = python3.override {
         sha256 = "1dv6mjsm67l1razcgmq66riqmsb36wns17mnipqr610v0z0zf5j0";
       };
     });
-    # https://github.com/conan-io/conan/issues/8876
-    pyjwt = super.pyjwt.overridePythonAttrs (oldAttrs: rec {
-      version = "1.7.1";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96";
-      };
-      disabledTests = [
-        "test_ec_verify_should_return_false_if_signature_invalid"
-      ];
-    });
     distro = super.distro.overridePythonAttrs (oldAttrs: rec {
       version = "1.5.0";
       src = oldAttrs.src.override {
@@ -43,14 +32,14 @@ let newPython = python3.override {
 };
 
 in newPython.pkgs.buildPythonApplication rec {
-  version = "1.47.0";
+  version = "1.49.0";
   pname = "conan";
 
   src = fetchFromGitHub {
     owner = "conan-io";
     repo = "conan";
     rev = version;
-    sha256 = "1zs2xb22rsy5fsc0fd7c95vrx1mfz7vasyg1lqkzyfimvn5zah6n";
+    hash = "sha256-BJGstNAnAZtpwagsCY+4quTd0/79zL+v4ifKikS3vaw=";
   };
 
   propagatedBuildInputs = with newPython.pkgs; [
