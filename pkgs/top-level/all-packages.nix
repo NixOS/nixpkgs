@@ -7697,7 +7697,9 @@ with pkgs;
     jdk = jdk11;
   };
 
-  kfctl = callPackage ../applications/networking/cluster/kfctl { };
+  kfctl = callPackage ../applications/networking/cluster/kfctl {
+    buildGoModule = buildGo117Module;
+  };
 
   kibana7 = callPackage ../development/tools/misc/kibana/7.x.nix { };
   kibana = kibana7;
