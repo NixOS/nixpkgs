@@ -1,4 +1,5 @@
 {lib, stdenv, fetchFromGitHub
+, buildPackages
 , curl, makeWrapper, which, unzip
 , lua
 # for 'luarocks pack'
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
     fi
   '';
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  nativeBuildInputs = [ makeWrapper installShellFiles buildPackages.lua ];
 
   buildInputs = [ lua curl which ];
 
@@ -63,7 +64,7 @@ stdenv.mkDerivation rec {
     installShellCompletion --cmd luarocks --zsh <($out/bin/luarocks completion zsh)
   '';
 
-  propagatedBuildInputs = [ zip unzip cmake ];
+  propagatedNativeBuildInputs = [ zip unzip cmake ];
 
   # unpack hook for src.rock and rockspec files
   setupHook = ./setup-hook.sh;
