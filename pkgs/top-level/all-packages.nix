@@ -31939,7 +31939,9 @@ with pkgs;
     boost = boost175;
   };
 
-  zcash = callPackage ../applications/blockchains/zcash { };
+  zcash = callPackage ../applications/blockchains/zcash {
+    stdenv = if stdenv.isDarwin then stdenv else llvmPackages_13.stdenv;
+  };
 
   lightwalletd = callPackage ../applications/blockchains/lightwalletd { };
 
