@@ -180,7 +180,7 @@ self: super: {
   } super.memory);
 
   # Use hlint from git for GHC 9.2.1 support
-  hlint = self.hlint_3_4;
+  hlint = self.hlint_3_4_1;
 
   # https://github.com/sjakobi/bsb-http-chunked/issues/38
   bsb-http-chunked = dontCheck super.bsb-http-chunked;

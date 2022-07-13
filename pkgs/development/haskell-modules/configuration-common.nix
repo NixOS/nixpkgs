@@ -2147,6 +2147,14 @@ self: super: {
     ghc-lib-parser = super.ghc-lib-parser_9_2_3_20220709;
   };
 
+  ghc-lib-parser-ex_9_2_0_4 = super.ghc-lib-parser-ex_9_2_0_4.override {
+    ghc-lib-parser = super.ghc-lib-parser_9_2_3_20220709;
+  };
+
+  hlint_3_4_1 = doDistribute (super.hlint_3_4_1.override {
+    ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_4;
+  });
+
   # To strict bound on hspec
   # https://github.com/dagit/zenc/issues/5
   zenc = doJailbreak super.zenc;
