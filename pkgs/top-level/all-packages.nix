@@ -26536,7 +26536,9 @@ with pkgs;
 
   exaile = callPackage ../applications/audio/exaile { };
 
-  exercism = callPackage ../applications/misc/exercism { };
+  exercism = callPackage ../applications/misc/exercism {
+    buildGoModule = buildGo117Module;
+  };
 
   expenses = callPackage ../applications/misc/expenses { };
 
