@@ -51,11 +51,8 @@ self: super: {
   # Tests fail because of typechecking changes
   conduit = dontCheck super.conduit;
 
-  # 0.30 introduced support for GHC 9.2.x, so when this assert fails, the whole block can be removed
-  cryptonite = assert super.cryptonite.version == "0.29"; appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/cryptonite-0.29.patch";
-    sha256 = "1g48lrmqgd88hqvfq3klz7lsrpwrir2v1931myrhh6dy0d9pqj09";
-  }) super.cryptonite;
+  # 0.30 introduced support for GHC 9.2.
+  cryptonite = doDistribute self.cryptonite_0_30;
 
   # cabal-install needs more recent versions of Cabal
   cabal-install = (doJailbreak super.cabal-install).overrideScope (self: super: {
