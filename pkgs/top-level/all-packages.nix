@@ -12018,7 +12018,9 @@ with pkgs;
 
   wpgtk = callPackage ../tools/X11/wpgtk { };
 
-  wrap = callPackage ../tools/text/wrap { };
+  wrap = callPackage ../tools/text/wrap {
+    buildGoModule = buildGo117Module;
+  };
 
   wring = nodePackages.wring;
 
