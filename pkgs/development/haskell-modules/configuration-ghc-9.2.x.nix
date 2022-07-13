@@ -123,14 +123,6 @@ self: super: {
   singleton-bool = doJailbreak super.singleton-bool;
   servant = doJailbreak super.servant;
   servant-auth = doJailbreak super.servant-auth;
-  servant-server = appendPatches [
-    # awaiting release
-    (pkgs.fetchpatch {
-      url = "https://github.com/haskell-servant/servant/commit/61d0d14b5cb01db3d589101b3f17b0178f52e386.diff";
-      relative = "servant-server";
-      sha256 = "sha256-3lM8xLO8avVRo8oncJR8QLDSWEzOaoCmzgVtyaEBEw8=";
-    })
-  ] (doJailbreak super.servant-server);
   servant-swagger = doJailbreak super.servant-swagger;
   servant-auth-swagger = doJailbreak super.servant-auth-swagger;
   shelly = doJailbreak super.shelly;
