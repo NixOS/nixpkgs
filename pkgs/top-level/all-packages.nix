@@ -35886,7 +35886,9 @@ with pkgs;
 
   kaf = callPackage ../development/tools/kaf { };
 
-  kcli = callPackage ../development/tools/kcli { };
+  kcli = callPackage ../development/tools/kcli {
+    buildGoModule = buildGo117Module;
+  };
 
   pxlib = callPackage ../development/libraries/pxlib {};
 
