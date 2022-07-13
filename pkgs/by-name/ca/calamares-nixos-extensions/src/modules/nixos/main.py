@@ -336,7 +336,6 @@ def catenate(d, key, *values):
 
     d[key] = "".join(values)
 
-
 def run():
     """NixOS Configuration."""
 
@@ -433,13 +432,13 @@ def run():
 
     if (gs.value("localeConf") is not None):
         localeconf = gs.value("localeConf")
-        locale = localeconf.pop("LANG")
+        locale = localeconf.pop("LANG").split("/")[0]
         cfg += cfglocale
         catenate(variables, "LANG", locale)
         if (len(set(localeconf.values())) != 1 or list(set(localeconf.values()))[0] != locale):
             cfg += cfglocaleextra
             for conf in localeconf:
-                catenate(variables, conf, localeconf.get(conf))
+                catenate(variables, conf, localeconf.get(conf).split("/")[0])
 
     # Choose desktop environment
     if gs.value("packagechooser_packagechooser") == "gnome":
