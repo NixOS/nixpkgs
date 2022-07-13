@@ -10825,7 +10825,9 @@ with pkgs;
 
   svgcleaner = callPackage ../tools/graphics/svgcleaner { };
 
-  ssb = callPackage ../tools/security/ssb { };
+  ssb = callPackage ../tools/security/ssb {
+    buildGoModule = buildGo117Module;
+  };
 
   ssb-patchwork = callPackage ../applications/networking/ssb-patchwork { };
 
