@@ -2222,9 +2222,10 @@ self: super: {
   # file revision on hackage was gifted CRLF line endings
   gogol-core = appendPatch ./patches/gogol-core-144.patch super.gogol-core;
 
-  # Too strict bound on deepseq
-  # https://github.com/hadolint/hadolint/issues/800
-  hadolint = doJailbreak super.hadolint;
+  # Stackage LTS 19 still has 10.*
+  hadolint = super.hadolint.override {
+    language-docker = self.language-docker_11_0_0;
+  };
 
   nix-tree = super.nix-tree;
 
