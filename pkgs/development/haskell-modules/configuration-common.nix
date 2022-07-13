@@ -352,15 +352,22 @@ self: super: {
   lvmrun = disableHardening ["format"] (dontCheck super.lvmrun);
   matplotlib = dontCheck super.matplotlib;
 
-  brick_0_73 = super.brick_0_73.overrideScope (self: super: {
+  brick_0_73 = doDistribute (super.brick_0_73.overrideScope (self: super: {
     vty = self.vty_5_36;
-  });
+    text-zipper = self.text-zipper_0_12;
+  }));
 
   # https://github.com/matterhorn-chat/matterhorn/issues/679 they do not want to be on stackage
-  # Needs brick ^>= 0.70
-  matterhorn = doJailbreak (super.matterhorn.overrideScope (self: super: {
-    brick = self.brick_0_71_1;
-  }));
+  matterhorn = doJailbreak (appendPatches [
+    # Fix build with brick 0.73
+    (fetchpatch {
+      name = "matterhorn-brick-0.72.patch";
+      url = "https://github.com/matterhorn-chat/matterhorn/commit/d52df3342b8420e219095aad477205e47fbef11b.patch";
+      sha256 = "1ifvv926g9m8niyc9nl1hy9bkx4kf12ciyv2v8vnrzz3njp4fsrz";
+    })
+  ] (super.matterhorn.overrideScope (self: super: {
+    brick = self.brick_0_73;
+  })));
 
   memcache = dontCheck super.memcache;
   metrics = dontCheck super.metrics;
