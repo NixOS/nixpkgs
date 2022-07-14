@@ -85,19 +85,6 @@ let
       });
     })
 
-    # Pinned due to API changes in pyruckus>0.12
-    (self: super: {
-      pyruckus = super.pyruckus.overridePythonAttrs (oldAttrs: rec {
-        version = "0.12";
-        src = fetchFromGitHub {
-          owner = "gabe565";
-          repo = "pyruckus";
-          rev = version;
-          sha256 = "0ykv6r6blbj3fg9fplk9i7xclkv5d93rwvx0fm5s8ms9f2s9ih8z";
-        };
-      });
-    })
-
     # Pinned due to API changes in 0.1.0
     (mkOverride "poolsense" "0.0.8" "sha256-17MHrYRmqkH+1QLtgq2d6zaRtqvb9ju9dvPt9gB2xCc=")
 
@@ -190,7 +177,7 @@ let
   extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2022.7.3";
+  hassVersion = "2022.7.4";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -208,7 +195,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    hash = "sha256-e0vu3QUalFncWloNum92YLvMWkeuFF74vrNdfmsfEw0=";
+    hash = "sha256-TQsIChMoIlTd8+gN4bxiWFId6V2wB1j3XfhXYpYMw9M=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling

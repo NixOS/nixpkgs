@@ -10,6 +10,7 @@
 , attrPath
 , runtimeShell
 , baseUrl ? "http://archive.mozilla.org/pub/firefox/releases/"
+, versionPrefix ? ""
 , versionSuffix ? ""
 , versionKey ? "version"
 }:
@@ -32,7 +33,7 @@ writeScript "update-${attrPath}" ''
   #  - sorts everything with semver in mind
   #  - picks up latest release
   version=`xidel -s $url --extract "//a" | \
-           grep "^[0-9.]*${versionSuffix}/$" | \
+           grep "^${versionPrefix}[0-9.]*${versionSuffix}/$" | \
            sed s/[/]$// | \
            sort --version-sort | \
            tail -n 1`

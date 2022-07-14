@@ -28,11 +28,11 @@ rec {
 
   firefox-esr-102 = buildMozillaMach rec {
     pname = "firefox-esr";
-    version = "102.0esr";
+    version = "102.0.1esr";
     applicationName = "Mozilla Firefox ESR";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "76494363ffdbd33b61912ac72b5cc15450e4b2936898c84fcf3980ccfa6d7ecc05524a63a60827d6caba999ada5cfd6f121e893ba0587778ce11654d0daf21d7";
+      sha512 = "ce804fa4e5dda3b8c4c7937f18994a184b0eb7d8fb9484dc924d04d3213ee3daf018141f91703daed6d060a99bfc5d915186db10a4ddcf220c2ea43e369e58df";
     };
 
     meta = {
@@ -48,6 +48,7 @@ rec {
     tests = [ nixosTests.firefox-esr-102 ];
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-esr-102-unwrapped";
+      versionPrefix = "102";
       versionSuffix = "esr";
     };
   };
@@ -74,6 +75,7 @@ rec {
     tests = [ nixosTests.firefox-esr-91 ];
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-esr-91-unwrapped";
+      versionPrefix = "91";
       versionSuffix = "esr";
     };
   };
