@@ -1,4 +1,6 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
+, fetchPypi
 , jupyter-packaging
 , jupyter_server
 , pytest-tornasync
