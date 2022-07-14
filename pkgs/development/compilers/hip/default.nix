@@ -31,13 +31,13 @@
 let
   hip = stdenv.mkDerivation rec {
     pname = "hip";
-    version = "5.1.1";
+    version = "5.2.1";
 
     src = fetchFromGitHub {
       owner = "ROCm-Developer-Tools";
       repo = "HIP";
       rev = "rocm-${version}";
-      hash = "sha256-/kIZrbzq1u1pIs1jlmRYZNUGteqVQTI4TlXsHsVIUKE=";
+      hash = "sha256-aXI55bdhAuPUEdQZukKAdtLWA+8UIxjPJ4LTamR/ENk=";
     };
 
     # - fix bash paths
@@ -102,13 +102,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hip";
-  version = "5.1.1";
+  version = "5.2.1";
 
   src = fetchFromGitHub {
     owner = "ROCm-Developer-Tools";
     repo = "hipamd";
     rev = "rocm-${version}";
-    hash = "sha256-TuCMRJb6G/bhD8hG6Ot7MIkgBoShjVboeXrlGh9eYpQ=";
+    hash = "sha256-YsvM+HjoBiukXAMCdE/dpQNMnpP6XRXDuxV1487rok0=";
   };
 
   nativeBuildInputs = [ cmake python3 makeWrapper perl ];
@@ -145,9 +145,30 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl jq common-updater-scripts
+    #!nix-shell -i bash -p curl jq common-updater-scripts nix-prefetch-github
+    version="$(curl -sL "https://api.github.com/repos/ROCm-Developer-Tools/HIP/tags" | jq '.[].name | split("-") | .[1] | select( . != null )' --raw-output | sort -n | tail -1)"
+    current_version="$(grep "version =" pkgs/development/compilers/hip/default.nix | head -n1 | cut -d'"' -f2)"
+    if [[ "$version" != "$current_version" ]]; then
+      tarball_meta="$(nix-prefetch-github ROCm-Developer-Tools HIP --rev "rocm-$version")"
+      tarball_hash="$(nix to-base64 sha256-$(jq -r '.sha256' <<< "$tarball_meta"))"
+      sed -i -z "pkgs/development/compilers/hip/default.nix" \
+        -e 's,version = "[^'"'"'"]*",version = "'"$version"'",1' \
+        -e 's,hash = "[^'"'"'"]*",hash = "sha256-'"$tarball_hash"'",1'
+    else
+      echo hip already up-to-date
+    fi
+
     version="$(curl -sL "https://api.github.com/repos/ROCm-Developer-Tools/hipamd/tags" | jq '.[].name | split("-") | .[1] | select( . != null )' --raw-output | sort -n | tail -1)"
-    update-source-version hip "$version"
+    current_version="$(grep "version =" pkgs/development/compilers/hip/default.nix | tail -n1 | cut -d'"' -f2)"
+    if [[ "$version" != "$current_version" ]]; then
+      tarball_meta="$(nix-prefetch-github ROCm-Developer-Tools hipamd --rev "rocm-$version")"
+      tarball_hash="$(nix to-base64 sha256-$(jq -r '.sha256' <<< "$tarball_meta"))"
+      sed -i -z "pkgs/development/compilers/hip/default.nix" \
+        -e 's,version = "[^'"'"'"]*",version = "'"$version"'",2' \
+        -e 's,hash = "[^'"'"'"]*",hash = "sha256-'"$tarball_hash"'",2'
+    else
+      echo hipamd already up-to-date
+    fi
   '';
 
   meta = with lib; {
