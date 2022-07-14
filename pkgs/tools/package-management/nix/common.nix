@@ -167,7 +167,7 @@ self = stdenv.mkDerivation {
   ] ++ lib.optionals (!withLibseccomp) [
     # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
     "--disable-seccomp-sandboxing"
-  ] ++ lib.optionals (atLeast210 && stdenv.cc.isGNU) [
+  ] ++ lib.optionals (atLeast210 && stdenv.cc.isGNU && !enableStatic) [
     "--enable-lto"
   ];
 
