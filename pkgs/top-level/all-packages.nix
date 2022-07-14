@@ -8144,6 +8144,8 @@ with pkgs;
 
   kea = callPackage ../tools/networking/kea { };
 
+  iredis = callPackage ../tools/admin/iredis { };
+
   ispell = callPackage ../tools/text/ispell {};
 
   iodash = callPackage ../development/libraries/iodash { };
