@@ -3,6 +3,7 @@
 , haskellPackages
 , haskell
 , runCommand
+, buildPackages
 }:
 
 let
@@ -32,7 +33,7 @@ let
   inherit (haskellPackages) arion-compose;
 
   cabalOverrides = o: {
-    buildTools = (o.buildTools or []) ++ [pkgs.makeWrapper];
+    buildTools = (o.buildTools or []) ++ [buildPackages.makeWrapper];
     passthru = (o.passthru or {}) // {
       inherit eval build;
     };
