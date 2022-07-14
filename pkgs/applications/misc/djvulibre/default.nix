@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
     bash
   ];
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     description = "The big set of CLI tools to make/modify/optimize/show/export DJVU files";
     homepage = "http://djvu.sourceforge.net";
