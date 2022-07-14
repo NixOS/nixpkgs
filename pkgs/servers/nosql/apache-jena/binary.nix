@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     url = "https://dlcdn.apache.org/jena/binaries/apache-jena-${version}.tar.gz";
     sha256 = "sha256-/KHjhMNnqac2HG/yvHJa0MwdReX6XuexojaMgRFdaWo=";
   };
-  buildInputs = [
+  nativeBuildInputs = [
     makeWrapper
   ];
   installPhase = ''
