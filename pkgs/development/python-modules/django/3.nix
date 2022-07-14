@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchPypi
 , substituteAll
-, geos
+, geos39
 , gdal
 , asgiref
 , pytz
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   patches = lib.optional withGdal
     (substituteAll {
       src = ./django_3_set_geos_gdal_lib.patch;
-      inherit geos;
+      inherit geos39;
       inherit gdal;
       extension = stdenv.hostPlatform.extensions.sharedLibrary;
     });
