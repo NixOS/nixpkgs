@@ -19,7 +19,12 @@ buildPythonPackage {
   doCheck = doCheck && !isPy27; # setuptools>=41.4 no longer collects correctly on python2
 
   propagatedBuildInputs = [ six ] ++ lib.optionals isPy27 [ google-apputils ];
-  propagatedNativeBuildInputs = [ buildPackages.protobuf ]; # For protoc.
+  propagatedNativeBuildInputs = let
+    protobufVersion = "${lib.versions.major protobuf.version}_${lib.versions.minor protobuf.version}";
+  in [
+    buildPackages."protobuf${protobufVersion}" # For protoc of the same version.
+  ];
+
   nativeBuildInputs = [ pyext ] ++ lib.optionals isPy27 [ google-apputils ];
   buildInputs = [ protobuf ];
 
