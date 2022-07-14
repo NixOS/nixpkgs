@@ -55,7 +55,7 @@ in
 
     meta = with lib; {
       description = "A secure virtual machine monitor for KVM";
-      homepage = "https://chromium.googlesource.com/chromiumos/platform/crosvm/";
+      homepage = "https://chromium.googlesource.com/crosvm/crosvm/";
       maintainers = with maintainers; [ qyliss ];
       license = licenses.bsd3;
       platforms = [ "aarch64-linux" "x86_64-linux" ];
