@@ -76,6 +76,8 @@ buildPythonPackage rec {
     "test_merge_input_strategy_inline"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     homepage = "https://github.com/jupyter/nbdime";
     description = "Tools for diffing and merging of Jupyter notebooks.";
