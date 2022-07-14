@@ -32,6 +32,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jupyter_server_mathjax" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "MathJax resources as a Jupyter Server Extension";
     homepage = "https://jupyter.org";
