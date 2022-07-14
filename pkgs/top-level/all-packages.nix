@@ -4982,6 +4982,8 @@ with pkgs;
 
   evscript = callPackage ../tools/inputmethods/evscript { };
 
+  keyd = callPackage ../tools/inputmethods/keyd { };
+
   gebaar-libinput = callPackage ../tools/inputmethods/gebaar-libinput { stdenv = gcc10StdenvCompat; };
 
   kime = callPackage ../tools/inputmethods/kime { };
