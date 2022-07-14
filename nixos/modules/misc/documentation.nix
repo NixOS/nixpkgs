@@ -7,9 +7,6 @@ let
   cfg = config.documentation;
   allOpts = options;
 
-  /* Modules for which to show options even when not imported. */
-  extraDocModules = [ ../virtualisation/qemu-vm.nix ];
-
   canCacheDocs = m:
     let
       f = import m;
@@ -23,7 +20,7 @@ let
 
   docModules =
     let
-      p = partition canCacheDocs (baseModules ++ extraDocModules);
+      p = partition canCacheDocs (baseModules ++ cfg.nixos.extraModules);
     in
       {
         lazy = p.right;
@@ -233,6 +230,14 @@ in
           <listitem><para>This includes the HTML manual and the <command>nixos-help</command> command if
                     <option>documentation.doc.enable</option> is set.</para></listitem>
           </itemizedlist>
+        '';
+      };
+
+      nixos.extraModules = mkOption {
+        type = types.listOf types.raw;
+        default = [];
+        description = ''
+          Modules for which to show options even when not imported.
         '';
       };
 
