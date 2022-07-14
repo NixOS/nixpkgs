@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , cmake
 , llvmPackages
@@ -6,9 +7,6 @@
 , zlib
 }:
 
-let
-  inherit (llvmPackages) stdenv;
-in
 stdenv.mkDerivation rec {
   pname = "zig";
   version = "0.9.1";
@@ -52,6 +50,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ andrewrk AndersonTorres ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin; # See https://github.com/NixOS/nixpkgs/issues/86299
   };
 }
