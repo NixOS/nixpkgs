@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "linux_logo";
-  version = "6.0";
+  version = "6.01";
 
   src = fetchFromGitHub {
     owner = "deater";
