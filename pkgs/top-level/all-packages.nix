@@ -17873,13 +17873,13 @@ with pkgs;
 
   relibc = callPackage ../development/libraries/relibc { };
 
-  # Only supported on Linux
+  # Only supported on Linux and only on glibc
   glibcLocales =
-    if stdenv.hostPlatform.isLinux
+    if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu
     then callPackage ../development/libraries/glibc/locales.nix { }
     else null;
   glibcLocalesUtf8 =
-    if stdenv.hostPlatform.isLinux
+    if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu
     then callPackage ../development/libraries/glibc/locales.nix { allLocales = false; }
     else null;
 
