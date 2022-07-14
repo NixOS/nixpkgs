@@ -29,6 +29,7 @@ rec {
     };
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbird-91-unwrapped";
+      versionPrefix = "91";
     };
   }).override {
     geolocationSupport = false;
@@ -63,6 +64,7 @@ rec {
     };
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbird-unwrapped";
+      versionPrefix = "102";
     };
   }).override {
     geolocationSupport = false;
