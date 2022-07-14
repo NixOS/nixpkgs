@@ -51,11 +51,8 @@ self: super: {
   # Tests fail because of typechecking changes
   conduit = dontCheck super.conduit;
 
-  # 0.30 introduced support for GHC 9.2.x, so when this assert fails, the whole block can be removed
-  cryptonite = assert super.cryptonite.version == "0.29"; appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/cryptonite-0.29.patch";
-    sha256 = "1g48lrmqgd88hqvfq3klz7lsrpwrir2v1931myrhh6dy0d9pqj09";
-  }) super.cryptonite;
+  # 0.30 introduced support for GHC 9.2.
+  cryptonite = doDistribute self.cryptonite_0_30;
 
   # cabal-install needs more recent versions of Cabal
   cabal-install = (doJailbreak super.cabal-install).overrideScope (self: super: {
@@ -82,7 +79,7 @@ self: super: {
   constraints = doJailbreak super.constraints;
   cpphs = overrideCabal (drv: { postPatch = "sed -i -e 's,time >=1.5 && <1.11,time >=1.5 \\&\\& <1.12,' cpphs.cabal";}) super.cpphs;
   data-fix = doJailbreak super.data-fix;
-  dbus = super.dbus_1_2_24;
+  dbus = self.dbus_1_2_25;
   dec = doJailbreak super.dec;
   ed25519 = doJailbreak super.ed25519;
   ghc-byteorder = doJailbreak super.ghc-byteorder;
@@ -100,8 +97,8 @@ self: super: {
       self.data-default
     ] ++ drv.libraryHaskellDepends or [];
   }) super.ghc-exactprint;
-  ghc-lib = self.ghc-lib_9_2_3_20220527;
-  ghc-lib-parser = self.ghc-lib-parser_9_2_3_20220527;
+  ghc-lib = self.ghc-lib_9_2_3_20220709;
+  ghc-lib-parser = self.ghc-lib-parser_9_2_3_20220709;
   ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_1_0;
   hackage-security = doJailbreak super.hackage-security;
   hashable = super.hashable_1_4_0_2;
@@ -126,14 +123,6 @@ self: super: {
   singleton-bool = doJailbreak super.singleton-bool;
   servant = doJailbreak super.servant;
   servant-auth = doJailbreak super.servant-auth;
-  servant-server = appendPatches [
-    # awaiting release
-    (pkgs.fetchpatch {
-      url = "https://github.com/haskell-servant/servant/commit/61d0d14b5cb01db3d589101b3f17b0178f52e386.diff";
-      relative = "servant-server";
-      sha256 = "sha256-3lM8xLO8avVRo8oncJR8QLDSWEzOaoCmzgVtyaEBEw8=";
-    })
-  ] (doJailbreak super.servant-server);
   servant-swagger = doJailbreak super.servant-swagger;
   servant-auth-swagger = doJailbreak super.servant-auth-swagger;
   shelly = doJailbreak super.shelly;
@@ -180,7 +169,7 @@ self: super: {
   } super.memory);
 
   # Use hlint from git for GHC 9.2.1 support
-  hlint = self.hlint_3_4;
+  hlint = self.hlint_3_4_1;
 
   # https://github.com/sjakobi/bsb-http-chunked/issues/38
   bsb-http-chunked = dontCheck super.bsb-http-chunked;
