@@ -94,6 +94,7 @@ in lib.makeExtensible (self: {
   nix_2_10 = common {
     version = "2.10.2";
     sha256 = "sha256-/8zlkXoZEZd+LgJq5xw8h+u2STqeKLrGTARZklE3CP8=";
+    patches = [ ./patches/flaky-tests.patch ];
   };
 
   stable = self.nix_2_9;
