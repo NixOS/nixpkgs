@@ -142,6 +142,12 @@ in
 
 {
   imports = [
+    ./man-db.nix
+    ./mandoc.nix
+    ./assertions.nix
+    ./meta.nix
+    ../config/system-path.nix
+    ../system/etc/etc.nix
     (mkRenamedOptionModule [ "programs" "info" "enable" ] [ "documentation" "info" "enable" ])
     (mkRenamedOptionModule [ "programs" "man"  "enable" ] [ "documentation" "man"  "enable" ])
     (mkRenamedOptionModule [ "services" "nixosManual" "enable" ] [ "documentation" "nixos" "enable" ])
