@@ -514,6 +514,16 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.nginx.virtualHosts.&lt;name&gt;</literal>
+          now supports <literal>sslCiphers</literal>,
+          <literal>sslProtocols</literal> (nullable),
+          <literal>sslDhparam</literal> and
+          <literal>recommendedTlsSettings</literal>, same as
+          <literal>services.nginx</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           There is a new module for the <literal>thunar</literal>
           program (the Xfce file manager), which depends on the
           <literal>xfconf</literal> dbus service, and also has a dbus

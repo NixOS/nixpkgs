@@ -65,6 +65,22 @@ let
     proxy_set_header        X-Forwarded-Server $host;
   '';
 
+  recommendedTlsConfig = ''
+    # Keep in sync with https://ssl-config.mozilla.org/#server=nginx&config=intermediate
+
+    ssl_session_timeout 1d;
+    ssl_session_cache shared:SSL:10m;
+    # Breaks forward secrecy: https://github.com/mozilla/server-side-tls/issues/135
+    ssl_session_tickets off;
+    # We don't enable insecure ciphers by default, so this allows
+    # clients to pick the most performant, per https://github.com/mozilla/server-side-tls/issues/260
+    ssl_prefer_server_ciphers off;
+
+    # OCSP stapling
+    ssl_stapling on;
+    ssl_stapling_verify on;
+  '';
+
   upstreamConfig = toString (flip mapAttrsToList cfg.upstreams (name: upstream: ''
     upstream ${name} {
       ${toString (flip mapAttrsToList upstream.servers (name: server: ''
@@ -124,21 +140,7 @@ let
       ${optionalString (cfg.sslCiphers != null) "ssl_ciphers ${cfg.sslCiphers};"}
       ${optionalString (cfg.sslDhparam != null) "ssl_dhparam ${cfg.sslDhparam};"}
 
-      ${optionalString (cfg.recommendedTlsSettings) ''
-        # Keep in sync with https://ssl-config.mozilla.org/#server=nginx&config=intermediate
-
-        ssl_session_timeout 1d;
-        ssl_session_cache shared:SSL:10m;
-        # Breaks forward secrecy: https://github.com/mozilla/server-side-tls/issues/135
-        ssl_session_tickets off;
-        # We don't enable insecure ciphers by default, so this allows
-        # clients to pick the most performant, per https://github.com/mozilla/server-side-tls/issues/260
-        ssl_prefer_server_ciphers off;
-
-        # OCSP stapling
-        ssl_stapling on;
-        ssl_stapling_verify on;
-      ''}
+      ${optionalString (cfg.recommendedTlsSettings) recommendedTlsConfig}
 
       ${optionalString (cfg.recommendedGzipSettings) ''
         gzip on;
@@ -322,6 +324,12 @@ let
           ${optionalString (hasSSL && vhost.kTLS) ''
             ssl_conf_command Options KTLS;
           ''}
+
+          ${optionalString (vhost.sslProtocols != null) "ssl_protocols ${vhost.sslProtocols};"}
+          ${optionalString (vhost.sslCiphers != null) "ssl_ciphers ${vhost.sslCiphers};"}
+          ${optionalString (vhost.sslDhparam != null) "ssl_dhparam ${vhost.sslDhparam};"}
+
+          ${optionalString (vhost.recommendedTlsSettings) recommendedTlsConfig}
 
           ${optionalString (hasSSL && vhost.http3) ''
             # Advertise that HTTP/3 is available
