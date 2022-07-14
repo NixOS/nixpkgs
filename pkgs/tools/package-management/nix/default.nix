@@ -47,39 +47,13 @@ in lib.makeExtensible (self: {
     };
   }).override { boehmgc = boehmgc-nix_2_3; };
 
-  nix_2_4 = common {
-    version = "2.4";
-    sha256 = "sha256-op48CCDgLHK0qV1Batz4Ln5FqBiRjlE6qHTiZgt3b6k=";
-    # https://github.com/NixOS/nix/pull/5537
-    patches = [ ./patches/install-nlohmann_json-headers.patch ];
-  };
+  nix_2_4 = throw "nixVersions.nix_2_4 has been removed";
 
-  nix_2_5 = common {
-    version = "2.5.1";
-    sha256 = "sha256-GOsiqy9EaTwDn2PLZ4eFj1VkXcBUbqrqHehRE9GuGdU=";
-    # https://github.com/NixOS/nix/pull/5536
-    patches = [ ./patches/install-nlohmann_json-headers.patch ];
-  };
+  nix_2_5 = throw "nixVersions.nix_2_5 has been removed";
 
-  nix_2_6 = common {
-    version = "2.6.1";
-    sha256 = "sha256-E9iQ7f+9Z6xFcUvvfksTEfn8LsDfzmwrcRBC//5B3V0=";
-  };
+  nix_2_6 = throw "nixVersions.nix_2_6 has been removed";
 
-  nix_2_7 = common {
-    version = "2.7.0";
-    sha256 = "sha256-m8tqCS6uHveDon5GSro5yZor9H+sHeh+v/veF1IGw24=";
-    patches = [
-      # remove when there's a 2.7.1 release
-      # https://github.com/NixOS/nix/pull/6297
-      # https://github.com/NixOS/nix/issues/6243
-      # https://github.com/NixOS/nixpkgs/issues/163374
-      (fetchpatch {
-        url = "https://github.com/NixOS/nix/commit/c9afca59e87afe7d716101e6a75565b4f4b631f7.patch";
-        sha256 = "sha256-xz7QnWVCI12lX1+K/Zr9UpB93b10t1HS9y/5n5FYf8Q=";
-      })
-    ];
-  };
+  nix_2_7 = throw "nixVersions.nix_2_7 has been removed";
 
   nix_2_8 = common {
     version = "2.8.1";
@@ -87,19 +61,17 @@ in lib.makeExtensible (self: {
   };
 
   nix_2_9 = common {
-    version = "2.9.1";
-    sha256 = "sha256-qNL3lQPBsnStkru3j1ajN/H+knXI+X3dku8/dBfSw3g=";
-    patches = [
-      # add missing --git-dir flags
-      # remove once 2.9.2 is out
-      (fetchpatch {
-        url = "https://github.com/NixOS/nix/commit/1a994cc35b33dcfd484e7a96be0e76e23bfb9029.patch";
-        sha256 = "sha256-7rDlqWRSVPijbvrTm4P+YykbMWyJryorXqGLEgg8/Wo=";
-      })
-    ];
+    version = "2.9.2";
+    sha256 = "sha256-uZCaBo9rdWRO/AlQMvVVjpAwzYijB2H5KKQqde6eHkg=";
   };
 
-  stable = self.nix_2_9;
+  nix_2_10 = common {
+    version = "2.10.2";
+    sha256 = "sha256-/8zlkXoZEZd+LgJq5xw8h+u2STqeKLrGTARZklE3CP8=";
+    patches = [ ./patches/flaky-tests.patch ];
+  };
+
+  stable = self.nix_2_10;
 
   unstable = self.stable;
 })

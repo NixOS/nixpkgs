@@ -421,6 +421,7 @@ broken-packages:
   - bizzlelude-js
   - bkr
   - blakesum
+  - Blammo
   - blas
   - blaze-html-contrib
   - blaze-html-hexpat
@@ -1268,6 +1269,7 @@ broken-packages:
   - effin
   - egison-pattern-src
   - ehaskell
+  - ehlo
   - ehs
   - eibd-client-simple
   - eigen
@@ -1380,6 +1382,7 @@ broken-packages:
   - exinst
   - exists
   - exitcode
+  - exon
   - exp-cache
   - explain
   - explicit-constraint-lens
@@ -2150,6 +2153,7 @@ broken-packages:
   - heist-emanote
   - helic
   - helisp
+  - helix
   - hell
   - helm
   - help-esb
@@ -2180,6 +2184,7 @@ broken-packages:
   - hext
   - hextra
   - heyefi
+  - heystone
   - hF2
   - hfann
   - HFitUI
@@ -4146,6 +4151,7 @@ broken-packages:
   - pyfi
   - python-pickle
   - q4c12-twofinger
+  - qbe
   - qc-oi-testgenerator
   - qd
   - qed
@@ -4323,6 +4329,7 @@ broken-packages:
   - relacion
   - relapse
   - relevant-time
+  - reload
   - remark
   - remarks
   - remote
@@ -4655,6 +4662,7 @@ broken-packages:
   - simple-form
   - simple-genetic-algorithm
   - SimpleH
+  - SimpleServer
   - simple-index
   - simpleirc
   - simple-log
@@ -4785,6 +4793,7 @@ broken-packages:
   - sodium
   - soegtk
   - softfloat-hs
+  - solga
   - sonic-visualiser
   - Sonnex
   - SoOSiM
@@ -5059,6 +5068,7 @@ broken-packages:
   - tapioca
   - TaskMonad
   - tasty-auto
+  - tasty-autocollect
   - tasty-fail-fast
   - tasty-grading-system
   - tasty-hedgehog-coverage
@@ -5573,6 +5583,7 @@ broken-packages:
   - wai-request-spec
   - wai-responsible
   - wai-router
+  - wai-routes
   - wai-secure-cookies
   - wai-session-alt
   - wai-session-mysql

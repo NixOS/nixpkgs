@@ -346,7 +346,6 @@ dont-distribute-packages:
  - Shpadoinkle-widgets
  - SimpleGL
  - SimpleLog
- - SimpleServer
  - Smooth
  - Snusmumrik
  - SoccerFun
@@ -2077,7 +2076,6 @@ dont-distribute-packages:
  - helics
  - helics-wai
  - helium
- - helix
  - hellage
  - hellnet
  - hemokit
@@ -3346,7 +3344,6 @@ dont-distribute-packages:
  - relational-record-examples
  - relational-schemas
  - relative-date
- - reload
  - remote-json
  - remote-json-client
  - remote-json-server
@@ -3659,7 +3656,6 @@ dont-distribute-packages:
  - sock2stream
  - socket-io
  - sockets
- - solga
  - solga-swagger
  - solr
  - souffle-dsl
@@ -4068,7 +4064,6 @@ dont-distribute-packages:
  - wai-middleware-rollbar
  - wai-middleware-route
  - wai-middleware-throttle
- - wai-routes
  - wai-routing
  - wai-session-tokyocabinet
  - wai-thrift

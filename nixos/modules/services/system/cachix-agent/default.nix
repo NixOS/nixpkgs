@@ -52,12 +52,15 @@ in {
       path = [ config.nix.package ];
       wantedBy = [ "multi-user.target" ];
 
-      # don't restart while changing
-      restartIfChanged = false;
+      # Cachix requires $USER to be set
+      environment.USER = "root";
+
+      # don't stop the service if the unit disappears
       unitConfig.X-StopOnRemoval = false;
 
-      environment.USER = "root";
       serviceConfig = {
+        # we don't want to kill children processes as those are deployments
+        KillMode = "process";
         Restart = "on-failure";
         EnvironmentFile = cfg.credentialsFile;
         ExecStart = "${cfg.package}/bin/cachix ${lib.optionalString cfg.verbose "--verbose"} deploy agent ${cfg.name} ${if cfg.profile != null then profile else ""}";
