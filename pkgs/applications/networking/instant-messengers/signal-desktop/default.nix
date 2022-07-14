@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "signal-desktop";
-  version = "5.49.0"; # Please backport all updates to the stable channel.
+  version = "5.50.0"; # Please backport all updates to the stable channel.
   # All releases have a limited lifetime and "expire" 90 days after the release.
   # When releases "expire" the application becomes unusable until an update is
   # applied. The expiration date for the current release can be extracted with:
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
-    sha256 = "sha256-rrDUaFcqslSuJwTYx1exEfvuHKKnPZKh+RYerOcKGG0=";
+    sha256 = "sha256-3/a0+FTRSI7MdI/4mAhKl/KEBoEM1rqTUUWTpNFJTSA=";
   };
 
   nativeBuildInputs = [
