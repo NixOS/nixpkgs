@@ -483,7 +483,7 @@ let
             auth ${p11.control} ${pkgs.pam_p11}/lib/security/pam_p11.so ${pkgs.opensc}/lib/opensc-pkcs11.so
           '') +
           (let u2f = config.security.pam.u2f; in optionalString cfg.u2fAuth ''
-            auth ${u2f.control} ${pkgs.pam_u2f}/lib/security/pam_u2f.so ${optionalString u2f.debug "debug"} ${optionalString (u2f.authFile != null) "authfile=${u2f.authFile}"} ${optionalString u2f.interactive "interactive"} ${optionalString u2f.cue "cue"} ${optionalString (u2f.appId != null) "appid=${u2f.appId}"}
+            auth ${u2f.control} ${pkgs.pam_u2f}/lib/security/pam_u2f.so ${optionalString u2f.debug "debug"} ${optionalString (u2f.authFile != null) "authfile=${u2f.authFile}"} ${optionalString u2f.interactive "interactive"} ${optionalString u2f.cue "cue"} ${optionalString (u2f.cue && u2f.cuePrompt != null) "[cue_prompt=${u2f.cuePrompt}]"} ${optionalString (u2f.appId != null) "appid=${u2f.appId}"}
           '') +
           optionalString cfg.usbAuth ''
             auth sufficient ${pkgs.pam_usb}/lib/security/pam_usb.so
@@ -939,6 +939,16 @@ in
           If you set this option to <literal>true</literal>,
           <literal>cue</literal> option is added to <literal>pam-u2f</literal>
           module and reminder message will be displayed.
+        '';
+      };
+
+      cuePrompt = mkOption {
+        type = types.nullOr types.str;
+        description = ''
+          By default <literal>pam-u2f</literal> module does display
+          `Please touch the device.` as a cue prompt.
+
+          Using this option you can change the prompt text.
         '';
       };
     };
