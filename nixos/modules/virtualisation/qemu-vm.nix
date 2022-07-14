@@ -103,6 +103,28 @@ let
   efiFirmware = "${efiPrefix}_CODE.fd";
   efiVarsDefault = "${efiPrefix}_VARS.fd";
 
+  # If we already use useNixStoreImage, we won't gain anything from squashPaths,
+  # so we skip those.
+  useSquashPaths =
+    cfg.squashPaths != [] && !cfg.useNixStoreImage;
+
+  # TODO performance when more than one node has the same `squashPaths`
+  #  - name the file after the closureInfo store hash
+  #  - don't store in per-vm directory
+  #  - skip if the file already exists
+  genSquashCommands = ''
+    time ${pkgs.squashfsTools}/bin/mksquashfs \
+      $(cat ${pkgs.closureInfo { rootPaths = config.virtualisation.squashPaths; }}/store-paths) \
+      "$TMPDIR"/squash-paths.squash \
+      -no-hardlinks -keep-as-directory -all-root -b 1048576 \
+      -noInodeCompression -noIdTableCompression -noDataCompression \
+      -noFragmentCompression -noXattrCompression -4k-align \
+      -quiet -no-progress \
+      -processors $NIX_BUILD_CORES
+  '';
+
+  useOverlayStore = cfg.writableStore || useSquashPaths;
+
   # Shell script to start the VM.
   startVM =
     ''
@@ -158,6 +180,12 @@ let
         fi
         idx=$((idx + 1))
       '')}
+
+      ${lib.optionalString useSquashPaths ''
+        echo 1>&2 "Serializing paths for faster access... (virtualisation.squashPaths)"
+        { ${genSquashCommands} } 1>&2
+        echo 1>&2 "done."
+      ''}
 
       # Start QEMU.
       exec ${qemu-common.qemuBinary qemu} \
@@ -657,6 +685,16 @@ in
         '';
       };
 
+    virtualisation.squashPaths =
+      mkOption {
+        type = types.listOf types.package;
+        default = [];
+        description = ''
+          A list of paths that are added to an uncompressed squashfs that is
+          mounted atop the host store to speed up filesystem operations on those paths.
+        '';
+      };
+
     virtualisation.useBootLoader =
       mkOption {
         type = types.bool;
@@ -769,6 +807,8 @@ in
     );
     boot.loader.grub.gfxmodeBios = with cfg.resolution; "${toString x}x${toString y}";
 
+    boot.initrd.kernelModules = optionals useSquashPaths [ "squashfs" ];
+
     boot.initrd.extraUtilsCommands = lib.mkIf (cfg.useDefaultFilesystems && !config.boot.initrd.systemd.enable)
       ''
         # We need mke2fs in the initrd.
@@ -796,11 +836,11 @@ in
 
         mkdir -p $targetRoot/boot
 
-        ${optionalString cfg.writableStore ''
+        ${optionalString useOverlayStore ''
           echo "mounting overlay filesystem on /nix/store..."
           mkdir -p 0755 $targetRoot/nix/.rw-store/store $targetRoot/nix/.rw-store/work $targetRoot/nix/store
           mount -t overlay overlay $targetRoot/nix/store \
-            -o lowerdir=$targetRoot/nix/.ro-store,upperdir=$targetRoot/nix/.rw-store/store,workdir=$targetRoot/nix/.rw-store/work || fail
+            -o ${optionalString cfg.writableStore "upperdir=$targetRoot/nix/.rw-store/store,workdir=$targetRoot/nix/.rw-store/work,"}lowerdir=${optionalString useSquashPaths "$targetRoot/nix/.squash-store:"}$targetRoot/nix/.ro-store || fail
         ''}
       '';
 
@@ -834,7 +874,7 @@ in
     virtualisation.sharedDirectories = {
       nix-store = mkIf (!cfg.useNixStoreImage) {
         source = builtins.storeDir;
-        target = "/nix/store";
+        target = "/nix/store"; # ignored
       };
       xchg = {
         source = ''"$TMPDIR"/xchg'';
@@ -906,6 +946,13 @@ in
         file = ''"$TMPDIR"/store.img'';
         deviceExtraOpts.bootindex = if cfg.useBootLoader then "3" else "2";
       }])
+      (mkIf useSquashPaths [{
+        name = "nix-store-squash";
+        file = ''"$TMPDIR"/squash-paths.squash'';
+        deviceExtraOpts.bootindex = if cfg.useBootLoader then "4" else "3";
+        driveExtraOpts.format = "raw";
+        driveExtraOpts.read-only = "on";
+      }])
       (mkIf cfg.useBootLoader [
         # The order of this list determines the device names, see
         # note [Disk layout with `useBootLoader`].
@@ -933,7 +980,7 @@ in
       mkSharedDir = tag: share:
         {
           name =
-            if tag == "nix-store" && cfg.writableStore
+            if tag == "nix-store" && useOverlayStore
               then "/nix/.ro-store"
               else share.target;
           value.device = tag;
@@ -962,6 +1009,14 @@ in
       optionalAttrs cfg.useNixStoreImage {
         "/nix/${if cfg.writableStore then ".ro-store" else "store"}" = {
           device = "${lookupDriveDeviceName "nix-store" cfg.qemu.drives}";
+          neededForBoot = true;
+          options = [ "ro" ];
+        };
+      } //
+      optionalAttrs useSquashPaths {
+        "/nix/.squash-store" = {
+          device = "${lookupDriveDeviceName "nix-store-squash" cfg.qemu.drives}";
+          fsType = "squashfs";
           neededForBoot = true;
           options = [ "ro" ];
         };
