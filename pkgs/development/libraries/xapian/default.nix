@@ -2,14 +2,14 @@
 , libuuid, zlib }:
 
 let
-  generic = version: sha256: stdenv.mkDerivation {
+  generic = version: hash: stdenv.mkDerivation {
     pname = "xapian";
     inherit version;
     passthru = { inherit version; };
 
     src = fetchurl {
       url = "https://oligarchy.co.uk/xapian/${version}/xapian-core-${version}.tar.xz";
-      inherit sha256;
+      inherit hash;
     };
 
     outputs = [ "out" "man" "doc" ];
@@ -38,5 +38,5 @@ let
     };
   };
 in {
-  xapian_1_4 = generic "1.4.19" "sha256-H8pI/KbMNSbMS6k90ZT+nBMmhXt47c+zfmjQhtcUqcM=";
+  xapian_1_4 = generic "1.4.20" "sha256-zivl7/cgdcgQbANA5wsQk9vOviq0LcHBvgjdOtQZRC0=";
 }
