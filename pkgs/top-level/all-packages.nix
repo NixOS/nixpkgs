@@ -8144,6 +8144,8 @@ with pkgs;
 
   kea = callPackage ../tools/networking/kea { };
 
+  iredis = callPackage ../tools/admin/iredis { };
+
   ispell = callPackage ../tools/text/ispell {};
 
   iodash = callPackage ../development/libraries/iodash { };
@@ -13198,7 +13200,7 @@ with pkgs;
     inherit (gnome2) libart_lgpl;
   });
 
-  gnat = gnat11;
+  gnat = gnat12;
 
   gnat6 = wrapCC (gcc6.cc.override {
     name = "gnat";
@@ -13229,7 +13231,7 @@ with pkgs;
     gnatboot =
       if stdenv.hostPlatform == stdenv.targetPlatform
          && stdenv.buildPlatform == stdenv.hostPlatform
-      then buildPackages.gnat6
+      then buildPackages.gnatboot
       else buildPackages.gnat9;
   });
 
@@ -13245,7 +13247,7 @@ with pkgs;
     gnatboot =
       if stdenv.hostPlatform == stdenv.targetPlatform
          && stdenv.buildPlatform == stdenv.hostPlatform
-      then buildPackages.gnat6
+      then buildPackages.gnatboot
       else buildPackages.gnat10;
   });
 
@@ -13261,7 +13263,7 @@ with pkgs;
     gnatboot =
       if stdenv.hostPlatform == stdenv.targetPlatform
          && stdenv.buildPlatform == stdenv.hostPlatform
-      then buildPackages.gnat6
+      then buildPackages.gnatboot
       else buildPackages.gnat11;
   });
 
@@ -13277,7 +13279,7 @@ with pkgs;
     gnatboot =
       if stdenv.hostPlatform == stdenv.targetPlatform
          && stdenv.buildPlatform == stdenv.hostPlatform
-      then buildPackages.gnat6
+      then buildPackages.gnatboot
       else buildPackages.gnat12;
   });
 
@@ -16472,7 +16474,7 @@ with pkgs;
 
   rman = callPackage ../development/tools/misc/rman { };
 
-  rnix-lsp = callPackage ../development/tools/rnix-lsp { };
+  rnix-lsp = callPackage ../development/tools/rnix-lsp { nix = nixVersions.nix_2_9; };
 
   rnginline = with python3Packages; toPythonApplication rnginline;
 
@@ -31334,6 +31336,10 @@ with pkgs;
   xmonad-with-packages = callPackage ../applications/window-managers/xmonad/wrapper.nix {
     inherit (haskellPackages) ghcWithPackages;
     packages = _: [ haskellPackages.xmonad-contrib ];
+  };
+
+  xmonadctl = callPackage ../applications/window-managers/xmonad/xmonadctl.nix {
+    inherit (haskellPackages) ghcWithPackages;
   };
 
   xmonad_log_applet = callPackage ../applications/window-managers/xmonad/log-applet {

@@ -208,5 +208,6 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ k4leg AndersonTorres ];
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "mipsel-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    mainProgram = "ventoy";
   };
 }

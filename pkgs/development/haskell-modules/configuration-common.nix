@@ -352,15 +352,22 @@ self: super: {
   lvmrun = disableHardening ["format"] (dontCheck super.lvmrun);
   matplotlib = dontCheck super.matplotlib;
 
-  brick_0_71_1 = super.brick_0_71_1.overrideScope (self: super: {
+  brick_0_73 = doDistribute (super.brick_0_73.overrideScope (self: super: {
     vty = self.vty_5_36;
-  });
+    text-zipper = self.text-zipper_0_12;
+  }));
 
   # https://github.com/matterhorn-chat/matterhorn/issues/679 they do not want to be on stackage
-  # Needs brick ^>= 0.70
-  matterhorn = doJailbreak (super.matterhorn.overrideScope (self: super: {
-    brick = self.brick_0_71_1;
-  }));
+  matterhorn = doJailbreak (appendPatches [
+    # Fix build with brick 0.73
+    (fetchpatch {
+      name = "matterhorn-brick-0.72.patch";
+      url = "https://github.com/matterhorn-chat/matterhorn/commit/d52df3342b8420e219095aad477205e47fbef11b.patch";
+      sha256 = "1ifvv926g9m8niyc9nl1hy9bkx4kf12ciyv2v8vnrzz3njp4fsrz";
+    })
+  ] (super.matterhorn.overrideScope (self: super: {
+    brick = self.brick_0_73;
+  })));
 
   memcache = dontCheck super.memcache;
   metrics = dontCheck super.metrics;
@@ -2139,13 +2146,21 @@ self: super: {
 
   # 2022-03-21: Newest stylish-haskell needs ghc-lib-parser-9_2
   stylish-haskell = (super.stylish-haskell.override {
-    ghc-lib-parser = super.ghc-lib-parser_9_2_3_20220527;
+    ghc-lib-parser = super.ghc-lib-parser_9_2_3_20220709;
     ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_1_0;
   });
 
   ghc-lib-parser-ex_9_2_1_0 = super.ghc-lib-parser-ex_9_2_1_0.override {
-    ghc-lib-parser = super.ghc-lib-parser_9_2_3_20220527;
+    ghc-lib-parser = super.ghc-lib-parser_9_2_3_20220709;
   };
+
+  ghc-lib-parser-ex_9_2_0_4 = super.ghc-lib-parser-ex_9_2_0_4.override {
+    ghc-lib-parser = super.ghc-lib-parser_9_2_3_20220709;
+  };
+
+  hlint_3_4_1 = doDistribute (super.hlint_3_4_1.override {
+    ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_4;
+  });
 
   # To strict bound on hspec
   # https://github.com/dagit/zenc/issues/5
@@ -2207,9 +2222,10 @@ self: super: {
   # file revision on hackage was gifted CRLF line endings
   gogol-core = appendPatch ./patches/gogol-core-144.patch super.gogol-core;
 
-  # Too strict bound on deepseq
-  # https://github.com/hadolint/hadolint/issues/800
-  hadolint = doJailbreak super.hadolint;
+  # Stackage LTS 19 still has 10.*
+  hadolint = super.hadolint.override {
+    language-docker = self.language-docker_11_0_0;
+  };
 
   nix-tree = super.nix-tree;
 
