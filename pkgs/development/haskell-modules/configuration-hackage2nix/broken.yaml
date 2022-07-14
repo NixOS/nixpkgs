@@ -421,6 +421,7 @@ broken-packages:
   - bizzlelude-js
   - bkr
   - blakesum
+  - Blammo
   - blas
   - blaze-html-contrib
   - blaze-html-hexpat
@@ -1268,6 +1269,7 @@ broken-packages:
   - effin
   - egison-pattern-src
   - ehaskell
+  - ehlo
   - ehs
   - eibd-client-simple
   - eigen
@@ -1380,6 +1382,7 @@ broken-packages:
   - exinst
   - exists
   - exitcode
+  - exon
   - exp-cache
   - explain
   - explicit-constraint-lens
@@ -2180,6 +2183,7 @@ broken-packages:
   - hext
   - hextra
   - heyefi
+  - heystone
   - hF2
   - hfann
   - HFitUI
@@ -4146,6 +4150,7 @@ broken-packages:
   - pyfi
   - python-pickle
   - q4c12-twofinger
+  - qbe
   - qc-oi-testgenerator
   - qd
   - qed
@@ -5059,6 +5064,7 @@ broken-packages:
   - tapioca
   - TaskMonad
   - tasty-auto
+  - tasty-autocollect
   - tasty-fail-fast
   - tasty-grading-system
   - tasty-hedgehog-coverage
