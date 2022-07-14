@@ -77,7 +77,7 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     # attempts to use trashcan, build env doesn't allow this
     "test_delete"
-    # server returns wrong status code
+    # test is presumable broken in sandbox
     "test_authorized_requests"
   ];
 
