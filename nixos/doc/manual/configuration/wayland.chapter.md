@@ -24,4 +24,4 @@ xdg.portal.wlr.enable = true;
 
 and configure Pipewire using
 [](#opt-services.pipewire.enable)
-and related options.
+and related options (see the [wiki's Sway entry](https://nixos.wiki/wiki/Sway)).
