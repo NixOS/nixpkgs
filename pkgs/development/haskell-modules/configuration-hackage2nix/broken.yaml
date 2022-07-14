@@ -5505,7 +5505,6 @@ broken-packages:
   - vector-endian
   - vector-fftw
   - vector-functorlazy
-  - vector-hashtables
   - vector-heterogenous
   - vector-random
   - vector-read-instances
