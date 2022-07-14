@@ -69,8 +69,7 @@ in
 
     services.xserver.libinput.enable = mkDefault true;
 
-    xdg.portal.enable = true;
-    xdg.portal.extraPortals = [ pkgs.lxqt.xdg-desktop-portal-lxqt ];
+    xdg.portal.lxqt.enable = true;
   };
 
 }

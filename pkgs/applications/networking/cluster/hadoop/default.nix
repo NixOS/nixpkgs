@@ -26,12 +26,13 @@ with lib;
 assert elem stdenv.system [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
 
 let
-  common = { pname, version, untarDir ? "${pname}-${version}", sha256, jdk, openssl ? null, nativeLibs ? [ ], libPatches ? "", tests }:
+  common = { pname, versions, untarDir ? "${pname}-${version}", hash, jdk, openssl ? null, nativeLibs ? [ ], libPatches ? "", tests }:
     stdenv.mkDerivation rec {
-      inherit pname version jdk libPatches untarDir openssl;
+      inherit pname jdk libPatches untarDir openssl;
+      version = versions.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
       src = fetchurl {
         url = "mirror://apache/hadoop/common/hadoop-${version}/hadoop-${version}" + optionalString stdenv.isAarch64 "-aarch64" + ".tar.gz";
-        sha256 = sha256.${stdenv.system};
+        hash = hash.${stdenv.system};
       };
       doCheck = true;
 
@@ -79,7 +80,7 @@ let
           computers, each of which may be prone to failures.
         '';
         maintainers = with maintainers; [ illustris ];
-        platforms = attrNames sha256;
+        platforms = attrNames hash;
       };
     };
 in
@@ -88,12 +89,17 @@ in
   # https://cwiki.apache.org/confluence/display/HADOOP/Hadoop+Java+Versions
   hadoop_3_3 = common rec {
     pname = "hadoop";
-    version = "3.3.1";
-    untarDir = "${pname}-${version}";
-    sha256 = rec {
-      x86_64-linux = "1b3v16ihysqaxw8za1r5jlnphy8dwhivdx2d0z64309w57ihlxxd";
+    versions = rec {
+      x86_64-linux = "3.3.3";
       x86_64-darwin = x86_64-linux;
-      aarch64-linux = "00ln18vpi07jq2slk3kplyhcj8ad41n0yl880q5cihilk7daclxz";
+      aarch64-linux = "3.3.1";
+      aarch64-darwin = aarch64-linux;
+    };
+    untarDir = "${pname}-${version}";
+    hash = rec {
+      x86_64-linux = "sha256-+nHGG7qkJxKa7wn+wCizTdVCxlrZD9zOxefvk9g7h2Q=";
+      x86_64-darwin = x86_64-linux;
+      aarch64-linux = "sha256-v1Om2pk0wsgKBghRD2wgTSHJoKd3jkm1wPKAeDcKlgI=";
       aarch64-darwin = aarch64-linux;
     };
     jdk = jdk11_headless;
@@ -116,8 +122,8 @@ in
   };
   hadoop_3_2 = common rec {
     pname = "hadoop";
-    version = "3.2.2";
-    sha256.x86_64-linux = "1hxq297cqvkfgz2yfdiwa3l28g44i2abv5921k2d6b4pqd33prwp";
+    versions.x86_64-linux = "3.2.3";
+    hash.x86_64-linux = "sha256-Q2/a1LcKutpJoGySB0qlCcYE2bvC/HoG/dp9nBikuNU=";
     jdk = jdk8_headless;
     # not using native libs because of broken openssl_1_0_2 dependency
     # can be manually overriden
@@ -125,8 +131,8 @@ in
   };
   hadoop2 = common rec {
     pname = "hadoop";
-    version = "2.10.1";
-    sha256.x86_64-linux = "1w31x4bk9f2swnx8qxx0cgwfg8vbpm6cy5lvfnbbpl3rsjhmyg97";
+    versions.x86_64-linux = "2.10.2";
+    hash.x86_64-linux = "sha256-xhA4zxqIRGNhIeBnJO9dLKf/gx/Bq+uIyyZwsIafEyo=";
     jdk = jdk8_headless;
     tests = nixosTests.hadoop2;
   };

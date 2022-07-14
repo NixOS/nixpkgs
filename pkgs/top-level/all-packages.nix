@@ -7777,6 +7777,8 @@ with pkgs;
 
   kytea = callPackage ../tools/text/kytea { };
 
+  kyverno = callPackage ../applications/networking/cluster/kyverno { };
+
   k6 = callPackage ../development/tools/k6 { };
 
   l2md = callPackage ../tools/text/l2md { };
@@ -17867,13 +17869,13 @@ with pkgs;
 
   relibc = callPackage ../development/libraries/relibc { };
 
-  # Only supported on Linux
+  # Only supported on Linux and only on glibc
   glibcLocales =
-    if stdenv.hostPlatform.isLinux
+    if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu
     then callPackage ../development/libraries/glibc/locales.nix { }
     else null;
   glibcLocalesUtf8 =
-    if stdenv.hostPlatform.isLinux
+    if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu
     then callPackage ../development/libraries/glibc/locales.nix { allLocales = false; }
     else null;
 
