@@ -207,6 +207,18 @@ final: prev:
     meta.homepage = "https://github.com/overcache/NeoSolarized/";
   };
 
+  yescapsquit = buildVimPluginFrom2Nix rec {
+    pname = "yescapsquit.vim";
+    version = "0.1";
+    src = fetchFromGitHub {
+      owner = "lucasew";
+      repo = "yescapsquit.vim";
+      rev = version;
+      sha256 = "sha256-awtWWuaAoUz3MqgNb608bwFdvZ/jxBx5ijmE8H6uHfM";
+    };
+    meta.homepage = "https://github.com/lucasew/yescapsquit.vim";
+  };
+
   NrrwRgn = buildVimPluginFrom2Nix {
     pname = "NrrwRgn";
     version = "2022-02-13";
