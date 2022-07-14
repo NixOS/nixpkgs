@@ -26,6 +26,9 @@
 , qtmacextras
 , qmake
 , spacenavSupport ? stdenv.isLinux, libspnav
+, wayland
+, wayland-protocols
+, qtwayland
 }:
 
 mkDerivation rec {
@@ -45,7 +48,7 @@ mkDerivation rec {
     eigen boost glew opencsg cgal mpfr gmp glib
     harfbuzz lib3mf libzip double-conversion freetype fontconfig
     qtbase qtmultimedia qscintilla
-  ] ++ lib.optionals stdenv.isLinux [ libGLU libGL ]
+  ] ++ lib.optionals stdenv.isLinux [ libGLU libGL wayland wayland-protocols qtwayland ]
     ++ lib.optional stdenv.isDarwin qtmacextras
     ++ lib.optional spacenavSupport libspnav
   ;
