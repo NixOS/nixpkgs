@@ -21,8 +21,6 @@
 , imlib
 }:
 
-#FIXME: fix aarch64-darwin build and get rid of ./aarch64-darwin.nix
-
 stdenv.mkDerivation rec {
   pname = "libtiff";
   version = "4.4.0";
