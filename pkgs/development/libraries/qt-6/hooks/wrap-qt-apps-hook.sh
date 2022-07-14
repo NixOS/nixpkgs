@@ -22,6 +22,11 @@ qtUnseenHostPath() {
 qtHostPathHook() {
     qtUnseenHostPath "$1" || return 0
 
+    if ! [ -v qtPluginPrefix ]
+    then
+        echo "wrapQtAppsHook qtHostPathHook: qtPluginPrefix is unset. hint: add qt6.qtbase to buildInputs"
+    fi
+
     local pluginDir="$1/${qtPluginPrefix:?}"
     if [ -d "$pluginDir" ]
     then
