@@ -36,7 +36,7 @@ edk2.mkDerivation projectDscPath {
     lib.optionals secureBoot [ "-D SECURE_BOOT_ENABLE=TRUE" ]
     ++ lib.optionals csmSupport [ "-D CSM_ENABLE" "-D FD_SIZE_2MB" ]
     ++ lib.optionals httpSupport [ "-D NETWORK_HTTP_ENABLE=TRUE" "-D NETWORK_HTTP_BOOT_ENABLE=TRUE" ]
-    ++ lib.optionals tpmSupport [ "-D TPM_ENABLE" "-D TPM2_ENABLE" "-D TPM2_CONFIG_ENABLE"];
+    ++ lib.optionals tpmSupport [ "-D TPM1_ENABLE" "-D TPM2_ENABLE" "-D TPM2_CONFIG_ENABLE"];
 
   postPatch = lib.optionalString csmSupport ''
     cp ${seabios}/Csm16.bin OvmfPkg/Csm/Csm16/Csm16.bin
