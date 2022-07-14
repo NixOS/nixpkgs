@@ -1,0 +1,12 @@
+--- a/Cargo.toml	2022-04-25 18:20:04.329712912 +0200
++++ b/Cargo.toml	2022-04-25 18:20:44.296429608 +0200
+@@ -29,6 +29,9 @@
+ rand = "0.8.3"
+ anyhow = "1.0.43"
+ 
++[patch.crates-io]
++rspotify = { path = "./rspotify-0.10.0" }
++
+ [[bin]]
+ bench = false
+ path = "src/main.rs"
