@@ -49,7 +49,6 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "JupyterLab Server";
     homepage = "https://jupyter.org";
     license = licenses.bsdOriginal;
