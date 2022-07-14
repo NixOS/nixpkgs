@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, callPackage
 , fetchFromGitHub
 , flaky
 , hypothesis
@@ -23,6 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-eopKlDKiTvGmqcqw44MKlhvSKswKZd/VDYRpZbuyOqM=";
   };
 
+  outputs = [
+    "out"
+    "testout"
+  ];
+
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
@@ -33,15 +39,13 @@ buildPythonPackage rec {
     pytest
   ];
 
-  checkInputs = [
-    flaky
-    hypothesis
-    pytestCheckHook
-  ];
+  postInstall = ''
+    mkdir $testout
+    cp -R tests $testout/tests
+  '';
 
-  disabledTestPaths = [
-    "tests/trio" # pytest-trio causes infinite recursion
-  ];
+  doCheck = false;
+  passthru.tests.pytest = callPackage ./tests.nix {};
 
   pythonImportsCheck = [
     "pytest_asyncio"
