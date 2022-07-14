@@ -2153,6 +2153,7 @@ broken-packages:
   - heist-emanote
   - helic
   - helisp
+  - helix
   - hell
   - helm
   - help-esb
@@ -4328,6 +4329,7 @@ broken-packages:
   - relacion
   - relapse
   - relevant-time
+  - reload
   - remark
   - remarks
   - remote
@@ -4660,6 +4662,7 @@ broken-packages:
   - simple-form
   - simple-genetic-algorithm
   - SimpleH
+  - SimpleServer
   - simple-index
   - simpleirc
   - simple-log
@@ -4790,6 +4793,7 @@ broken-packages:
   - sodium
   - soegtk
   - softfloat-hs
+  - solga
   - sonic-visualiser
   - Sonnex
   - SoOSiM
@@ -5579,6 +5583,7 @@ broken-packages:
   - wai-request-spec
   - wai-responsible
   - wai-router
+  - wai-routes
   - wai-secure-cookies
   - wai-session-alt
   - wai-session-mysql

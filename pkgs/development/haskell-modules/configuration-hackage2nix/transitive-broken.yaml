@@ -3656,6 +3656,7 @@ dont-distribute-packages:
  - sock2stream
  - socket-io
  - sockets
+ - solga-swagger
  - solr
  - souffle-dsl
  - sounddelay
