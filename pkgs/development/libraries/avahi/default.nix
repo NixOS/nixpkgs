@@ -87,9 +87,12 @@ stdenv.mkDerivation rec {
     ./CVE-2023-38469.patch
   ];
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+  postPatch = ''
+    # HACK: needed because configure doesn't enable cross-compile mode when build == host.
+    # Required when pkg-config is prefixed with targetPrefix.
+    substituteInPlace configure \
+      --replace "pkg-config" "$PKG_CONFIG"
+  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -117,6 +120,8 @@ stdenv.mkDerivation rec {
     pygobject3
     dbus-python
   ]);
+
+  configurePlatforms = [ "build" "host" ];
 
   configureFlags = [
     "--disable-gdbm"
