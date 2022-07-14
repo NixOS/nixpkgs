@@ -29,7 +29,7 @@ let
   common = { pname, versions, untarDir ? "${pname}-${version}", hash, jdk, openssl ? null, nativeLibs ? [ ], libPatches ? "", tests }:
     stdenv.mkDerivation rec {
       inherit pname jdk libPatches untarDir openssl;
-      version = versions.${stdenv.system};
+      version = versions.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
       src = fetchurl {
         url = "mirror://apache/hadoop/common/hadoop-${version}/hadoop-${version}" + optionalString stdenv.isAarch64 "-aarch64" + ".tar.gz";
         hash = hash.${stdenv.system};
