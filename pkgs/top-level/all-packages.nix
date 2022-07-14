@@ -31331,6 +31331,10 @@ with pkgs;
     packages = _: [ haskellPackages.xmonad-contrib ];
   };
 
+  xmonadctl = callPackage ../applications/window-managers/xmonad/xmonadctl.nix {
+    inherit (haskellPackages) ghcWithPackages;
+  };
+
   xmonad_log_applet = callPackage ../applications/window-managers/xmonad/log-applet {
     inherit (xfce) libxfce4util xfce4-panel;
   };
