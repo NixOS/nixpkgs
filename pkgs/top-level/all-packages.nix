@@ -10366,7 +10366,9 @@ with pkgs;
 
   skim = callPackage ../tools/misc/skim { };
 
-  seaweedfs = callPackage ../applications/networking/seaweedfs { };
+  seaweedfs = callPackage ../applications/networking/seaweedfs {
+    buildGoModule = buildGo118Module;
+  };
 
   sec = callPackage ../tools/admin/sec { };
 
