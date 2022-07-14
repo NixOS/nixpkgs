@@ -32,12 +32,13 @@ in {
   };
 
   nodes = {
-    gitlab = { ... }: {
+    gitlab = { config, ... }: {
       imports = [ common/user-account.nix ];
 
       virtualisation.memorySize = if pkgs.stdenv.is64bit then 4096 else 2047;
       virtualisation.cores = 4;
-      virtualisation.useNixStoreImage = true;
+      virtualisation.squashPaths = builtins.attrValues config.services.gitlab.packages;
+
       systemd.services.gitlab.serviceConfig.Restart = mkForce "no";
       systemd.services.gitlab-workhorse.serviceConfig.Restart = mkForce "no";
       systemd.services.gitaly.serviceConfig.Restart = mkForce "no";
