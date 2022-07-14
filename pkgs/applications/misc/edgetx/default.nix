@@ -29,6 +29,8 @@ mkDerivation rec {
     "-DGTEST_ROOT=${gtest.src}/googletest"
     "-DQT_TRANSLATIONS_DIR=${qttranslations}/translations"
     "-DDFU_UTIL_PATH=${dfu-util}/bin/dfu-util"
+    # file RPATH_CHANGE could not write new RPATH
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];
 
   meta = with lib; {
