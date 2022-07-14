@@ -15,6 +15,7 @@
 , importlib-metadata
 , markdown
 , matplotlib
+, nixosTests
 , numpy
 , packaging
 , pandas
@@ -103,6 +104,8 @@ buildPythonPackage rec {
   # run into https://stackoverflow.com/questions/51203641/attributeerror-module-alembic-context-has-no-attribute-config
   # also, tests use conda so can't run on NixOS without buildFHSEnv
   doCheck = false;
+
+  passthru.tests = { inherit (nixosTests) mlflow; };
 
   meta = with lib; {
     description = "Open source platform for the machine learning lifecycle";

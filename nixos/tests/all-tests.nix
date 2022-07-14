@@ -466,6 +466,7 @@ in {
   miriway = handleTest ./miriway.nix {};
   misc = handleTest ./misc.nix {};
   mjolnir = handleTest ./matrix/mjolnir.nix {};
+  mlflow = handleTest ./mlflow.nix {};
   mod_perl = handleTest ./mod_perl.nix {};
   molly-brown = handleTest ./molly-brown.nix {};
   monica = handleTest ./web-apps/monica.nix {};
