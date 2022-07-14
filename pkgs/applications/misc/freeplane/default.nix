@@ -1,12 +1,24 @@
-{ stdenv, lib, fetchpatch, fetchFromGitHub, makeWrapper, writeText, runtimeShell, jdk11, perl, gradle_6, which }:
+{ stdenv
+, lib
+, fetchpatch
+, fetchFromGitHub
+, makeWrapper
+, makeDesktopItem
+, writeText
+, runtimeShell
+, jdk11
+, perl
+, gradle_6
+, which
+}:
 
 let
   pname = "freeplane";
-  version = "1.9.14";
+  version = "1.10.5";
 
-  src_sha256 = "UiXtGJs+hibB63BaDDLXgjt3INBs+NfMsKcX2Q/kxKw=";
-  deps_outputHash = "tHhRaMIQK8ERuzm+qB9tRe2XSesL0bN3rComB9/qWgg=";
-  emoji_outputHash = "w96or4lpKCRK8A5HaB4Eakr7oVSiQALJ9tCJvKZaM34=";
+  src_hash = lib.fakeHash;
+  deps_outputHash = lib.fakeSha256;
+  emoji_outputHash = lib.fakeSha256;
 
   jdk = jdk11;
   gradle = gradle_6;
@@ -15,14 +27,18 @@ let
     owner = pname;
     repo = pname;
     rev = "release-${version}";
-    sha256 = src_sha256;
+    hash = src_hash;
   };
 
   deps = stdenv.mkDerivation {
     name = "${pname}-deps";
     inherit src;
 
-    nativeBuildInputs = [ jdk perl gradle ];
+    nativeBuildInputs = [
+      jdk
+      perl
+      gradle
+    ];
 
     buildPhase = ''
       GRADLE_USER_HOME=$PWD gradle -Dorg.gradle.java.home=${jdk} --no-daemon jar
@@ -71,7 +87,10 @@ let
     name = "${pname}-emoji";
     inherit src;
 
-    nativeBuildInputs = [ jdk gradle ];
+    nativeBuildInputs = [
+      jdk
+      gradle
+    ];
 
     buildPhase = ''
       GRADLE_USER_HOME=$PWD gradle -Dorg.gradle.java.home=${jdk} --no-daemon --offline --init-script ${gradleInit} :freeplane:downloadEmoji
@@ -91,24 +110,58 @@ let
 in stdenv.mkDerivation rec {
   inherit pname version src;
 
-  nativeBuildInputs = [ makeWrapper jdk gradle ];
+  nativeBuildInputs = [
+    makeWrapper
+    jdk
+    gradle
+  ];
 
   buildPhase = ''
-    mkdir -p -- ./freeplane/build/emoji/{txt,resources/images}
-    cp ${emoji}/emoji/txt/emojilist.txt ./freeplane/build/emoji/txt/emojilist.txt
-    cp -r ${emoji}/resources/images/emoji ./freeplane/build/emoji/resources/images/emoji
-    GRADLE_USER_HOME=$PWD gradle -Dorg.gradle.java.home=${jdk} --no-daemon --offline --init-script ${gradleInit} -x test -x :freeplane:downloadEmoji build
+    mkdir -p -- ./freeplane/build
+    ln -s ${emoji}/emoji ./freeplane/build/emoji
+
+    GRADLE_USER_HOME=$PWD \
+      gradle -Dorg.gradle.java.home=${jdk} \
+      --no-daemon --offline --init-script ${gradleInit} \
+      -x test -x :freeplane:downloadEmoji \
+      build
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "freeplane";
+      desktopName = "freeplane";
+      genericName = "Mind-mapper";
+      exec = "freeplane";
+      icon = "freeplane";
+      comment = meta.description;
+      mimeTypes = [
+        "application/x-freemind"
+        "application/x-freeplane"
+        "text/x-troff-mm"
+      ];
+      categories = [
+        "2DGraphics"
+        "Chart"
+        "Graphics"
+        "Office"
+      ];
+    })
+  ];
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin $out/share
 
-    cp -a ./BIN/. $out/share/${pname}
-    makeWrapper $out/share/${pname}/${pname}.sh $out/bin/${pname} \
-      --set FREEPLANE_BASE_DIR $out/share/${pname} \
+    mkdir -p $out/bin $out/share
+    cp -a ./BIN/. $out/share/freeplane
+
+    makeWrapper $out/share/freeplane/freeplane.sh $out/bin/freeplane \
+      --set FREEPLANE_BASE_DIR $out/share/freeplane \
       --set JAVA_HOME ${jdk} \
-      --prefix PATH : ${lib.makeBinPath [ jdk which ]}
+      --prefix PATH : ${lib.makeBinPath [ jdk which ]} \
+      --prefix _JAVA_AWT_WM_NONREPARENTING : 1 \
+      --prefix _JAVA_OPTIONS : "-Dawt.useSystemAAFontSettings=on"
+
     runHook postInstall
   '';
 
@@ -117,6 +170,8 @@ in stdenv.mkDerivation rec {
     homepage = "https://freeplane.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ chaduffy ];
+    maintainers = with maintainers; [
+      chaduffy
+    ];
   };
 }
