@@ -47,6 +47,9 @@ stdenv.mkDerivation rec {
     "-DWITH_CURL=ON"
     "-DWITH_CLIENT_WMS=ON"
     "-DWITH_CLIENT_WFS=ON"
+
+    # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ] ++ lib.optional withPython "-DWITH_PYTHON=ON";
 
   meta = with lib; {

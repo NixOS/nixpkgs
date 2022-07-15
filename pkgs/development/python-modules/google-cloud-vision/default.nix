@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-vision";
-  version = "2.7.3";
+  version = "2.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-eS67OJ8VfmXYFMrhKBNP++Jt+Q1hxcWMWwymdd/P4vE=";
+    hash = "sha256-LOGfvz61Fw6QNH83lFe8TwI3a72fHLeTFFcqM9QL3QY=";
   };
 
   propagatedBuildInputs = [

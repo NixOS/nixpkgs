@@ -11,13 +11,16 @@ in
   options.system = {
 
     nixos.label = mkOption {
-      type = types.str;
+      type = types.strMatching "[a-zA-Z0-9:_\\.-]*";
       description = ''
         NixOS version name to be used in the names of generated
         outputs and boot labels.
 
         If you ever wanted to influence the labels in your GRUB menu,
         this is the option for you.
+
+        It can only contain letters, numbers and the following symbols:
+        <literal>:</literal>, <literal>_</literal>, <literal>.</literal> and <literal>-</literal>.
 
         The default is <option>system.nixos.tags</option> separated by
         "-" + "-" + <envar>NIXOS_LABEL_VERSION</envar> environment
