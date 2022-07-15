@@ -19,9 +19,8 @@ in
         If you ever wanted to influence the labels in your GRUB menu,
         this is the option for you.
 
-        It can't be any text, so it's expected to have only letters, numbers
-        and the following symbols: <literal>:</literal>, <literal>_</literal>,
-        <literal>.</literal> and <literal>-</literal>.
+        It can only contain letters, numbers and the following symbols:
+        <literal>:</literal>, <literal>_</literal>, <literal>.</literal> and <literal>-</literal>.
 
         The default is <option>system.nixos.tags</option> separated by
         "-" + "-" + <envar>NIXOS_LABEL_VERSION</envar> environment
