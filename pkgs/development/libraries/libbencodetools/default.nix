@@ -1,23 +1,30 @@
-{ stdenv, lib, fetchFromGitLab
+{ stdenv
+, lib
+, fetchFromGitLab
+, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "libbencodetools";
-  version = "unstable-2021-04-15";
+  version = "unstable-2022-05-11";
 
   src = fetchFromGitLab {
     owner = "heikkiorsila";
     repo = "bencodetools";
-    rev = "1ab11f6509a348975e8aec829d7abbf2f8e9b7d1";
-    sha256 = "1i2dgvxxwj844yn45hnfx3785ljbvbkri0nv0jx51z4i08w7cz0h";
+    rev = "384d78d297a561dddbbd0f4632f0c74c0db41577";
+    sha256 = "1d699q9r33hkmmqkbh92ax54mcdf9smscmc0dza2gp4srkhr83qm";
   };
 
   postPatch = ''
-    patchShebangs .
+    patchShebangs configure
+    substituteInPlace configure \
+      --replace 'python_install_option=""' 'python_install_option="--prefix=$out"'
   '';
 
-  configureFlags = [
-    "--without-python"
+  enableParallelBuilding = true;
+
+  nativeBuildInputs = [
+    python3
   ];
 
   meta = with lib; {
