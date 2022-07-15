@@ -120,8 +120,9 @@ installPhase() {
         fi
 
         # Install libraries needed by Proton to support DLSS
-        install -Dm644 -t $i/lib/nvidia/wine/ nvngx.dll _nvngx.dll
-
+        if [ -e nvngx.dll ] && [ -e _nvngx.dll ]; then
+            install -Dm644 -t $i/lib/nvidia/wine/ nvngx.dll _nvngx.dll
+        fi
     done
 
     if [ -n "$bin" ]; then
