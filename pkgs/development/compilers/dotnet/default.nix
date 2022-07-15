@@ -15,9 +15,9 @@ let
   };
 
   ## Files in versions/ are generated automatically by print-hashes.sh ##
-  dotnet_3_1 = (import ./versions/3.1.nix (buildAttrs // { icu = icu70; }));
-  dotnet_5_0 = (import ./versions/5.0.nix (buildAttrs // { inherit icu; }));
-  dotnet_6_0 = (import ./versions/6.0.nix (buildAttrs // { inherit icu; }));
+  dotnet_3_1 = import ./versions/3.1.nix (buildAttrs // { icu = icu70; });
+  dotnet_5_0 = import ./versions/5.0.nix (buildAttrs // { inherit icu; });
+  dotnet_6_0 = import ./versions/6.0.nix (buildAttrs // { inherit icu; });
 in
 rec {
   combinePackages = attrs: callPackage (import ./combine-packages.nix attrs) {};

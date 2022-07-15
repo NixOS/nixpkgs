@@ -57,5 +57,8 @@
         sha512  = "70beea069db182cca211cf04d7a80f3d6a3987d76cbd2bb60590ee76b93a4041b1b86ad91057cddbbaddd501c72327c1bc0a5fec630f38063f84bd60ba2b4792";
       };
     };
+    packages = { fetchNuGet }: [
+
+    ];
   };
 }

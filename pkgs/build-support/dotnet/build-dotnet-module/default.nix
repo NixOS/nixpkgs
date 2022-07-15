@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, linkFarmFromDrvs, callPackage, nuget-to-nix, writeScript, makeWrapper, fetchurl, xml2, dotnetCorePackages, dotnetPackages, mkNugetSource, mkNugetDeps, cacert, srcOnly }:
+{ lib, stdenvNoCC, linkFarmFromDrvs, callPackage, nuget-to-nix, writeScript, makeWrapper, fetchurl, xml2, dotnetCorePackages, dotnetPackages, mkNugetSource, mkNugetDeps, cacert, srcOnly, symlinkJoin }:
 
 { name ? "${args.pname}-${args.version}"
 , pname ? name
@@ -84,12 +84,30 @@ let
     then nugetDeps
     else mkNugetDeps { inherit name; nugetDeps = import nugetDeps; };
 
-  nuget-source = mkNugetSource {
-    name = "${name}-nuget-source";
+  # contains the actual package dependencies
+  _dependenciesSource = mkNugetSource {
+    name = "${name}-dependencies-source";
     description = "A Nuget source with the dependencies for ${name}";
     deps = [ _nugetDeps ] ++ lib.optional (localDeps != null) localDeps;
   };
 
+  # this contains all the nuget packages that are implictly referenced by the dotnet
+  # build system. having them as separate deps allows us to avoid having to regenerate
+  # a packages dependencies when the dotnet-sdk version changes
+  _sdkDeps = mkNugetDeps {
+    name = "dotnet-sdk-${dotnet-sdk.version}-deps";
+    nugetDeps = dotnet-sdk.passthru.packages;
+  };
+
+  _sdkSource = mkNugetSource {
+    name = "dotnet-sdk-${dotnet-sdk.version}-source";
+    deps = [ _sdkDeps ];
+  };
+
+  nuget-source = symlinkJoin {
+    name = "${name}-nuget-source";
+    paths = [ _dependenciesSource _sdkSource ];
+  };
 in stdenvNoCC.mkDerivation (args // {
   nativeBuildInputs = args.nativeBuildInputs or [] ++ [
     dotnetConfigureHook
