@@ -46,7 +46,7 @@ platform_sources () {
     echo "      $nix_platform = {
         url     = \"$url\";
         sha512  = \"$hash\";
-      }; "
+      };"
     done
     echo "    };"
 }
@@ -65,6 +65,7 @@ Examples:
   fi
 
   for sem_version in "$@"; do
+    echo "Generating ./versions/${sem_version}.nix"
     patch_specified=false
     if [[ "$sem_version" =~ ^[0-9]{1,}\.[0-9]{1,}\.[0-9]{1,}$ ]]; then
         patch_specified=true
@@ -84,34 +85,33 @@ Examples:
     aspnetcore_files="$(release_files "$release_content" "aspnetcore-runtime")"
     runtime_files="$(release_files "$release_content" "runtime")"
     sdk_files="$(release_files "$release_content" "sdk")"
-    if [ $major_minor = "3.1" ]; then
-      icu_attr="icu = icu70;"
-    else
-      icu_attr="inherit icu;"
-    fi
 
     major_minor_underscore=${major_minor/./_}
     channel_version=$(jq -r '."channel-version"' <<< "$content")
     support_phase=$(jq -r '."support-phase"' <<< "$content")
-    echo "
-  # v$channel_version ($support_phase)
+    echo "{ buildAspNetCore, buildNetRuntime, buildNetSdk, icu }:
+
+# v$channel_version ($support_phase)
+{
   aspnetcore_$major_minor_underscore = buildAspNetCore {
-    $icu_attr
+    inherit icu;
     version = \"${aspnetcore_version}\";
     $(platform_sources "$aspnetcore_files")
   };
 
   runtime_$major_minor_underscore = buildNetRuntime {
-    $icu_attr
+    inherit icu;
     version = \"${runtime_version}\";
     $(platform_sources "$runtime_files")
   };
 
   sdk_$major_minor_underscore = buildNetSdk {
-    $icu_attr
+    inherit icu;
     version = \"${sdk_version}\";
     $(platform_sources "$sdk_files")
-  }; "
+  };
+}" > "./versions/${sem_version}.nix"
+    echo "Generated ./versions/${sem_version}.nix"
   done
 }
 
