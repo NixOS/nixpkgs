@@ -24961,7 +24961,9 @@ with pkgs;
 
   logiops = callPackage ../misc/drivers/logiops { };
 
-  logitech-udev-rules = callPackage ../os-specific/linux/logitech-udev-rules { };
+  # ltunifi and solaar both provide udev rules but solaar's rules are more
+  # up-to-date so we simply use that instead of having to maintain our own rules
+  logitech-udev-rules = solaar.udev;
 
   # lohit-fonts.assamese lohit-fonts.bengali lohit-fonts.devanagari lohit-fonts.gujarati lohit-fonts.gurmukhi
   # lohit-fonts.kannada lohit-fonts.malayalam lohit-fonts.marathi lohit-fonts.nepali lohit-fonts.odia
