@@ -68,6 +68,8 @@ in stdenv.mkDerivation rec {
     patchelf --set-rpath "${rpath}" $out/dotnet
     find $out -type f -name "*.so" -exec patchelf --set-rpath '$ORIGIN:${rpath}' {} \;
     find $out -type f \( -name "apphost" -or -name "createdump" \) -exec patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" --set-rpath '$ORIGIN:${rpath}' {} \;
+
+    $out/bin/dotnet workload install maui
   '';
 
   doInstallCheck = true;
