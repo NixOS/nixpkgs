@@ -18399,6 +18399,8 @@ with pkgs;
 
   iso-flags = callPackage ../data/icons/iso-flags { };
 
+  isort = with python3Packages; toPythonApplication isort;
+
   ispc = callPackage ../development/compilers/ispc {
     inherit (llvmPackages) stdenv;
   };
