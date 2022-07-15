@@ -31,5 +31,6 @@ buildDotnetModule rec {
     license = licenses.mspl;
     maintainers = with maintainers; [ siraben ];
     platforms = platforms.unix;
+    mainProgram = "formula";
   };
 }
