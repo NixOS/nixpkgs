@@ -20,15 +20,6 @@ let
         jmespath = changeVersion super.jmespath.overridePythonAttrs "0.10.0" "b85d0567b8666149a93172712e68920734333c0ce7e89b78b3e987f71e5ed4f9";
         colorama = changeVersion super.colorama.overridePythonAttrs "0.4.3" "189n8hpijy14jfan4ha9f5n06mnl33cxz7ay92wjqgkr639s0vg9";
         future = changeVersion super.future.overridePythonAttrs "0.16.0" "1nzy1k4m9966sikp0qka7lirh8sqrsyainyf8rk97db7nwdfv773";
-        requests = super.requests.overridePythonAttrs (oldAttrs: rec {
-          version = "2.26.0";
-          checkInputs = oldAttrs.checkInputs ++ [ super.trustme ];
-          src = oldAttrs.src.override {
-            inherit version;
-            hash = "sha256-uKpY+M95P/2HgtPYyxnmbvNverpDU+7IWedGeLAbB6c=";
-          };
-        }
-        );
         wcwidth = changeVersion super.wcwidth.overridePythonAttrs "0.1.9" "1wf5ycjx8s066rdvr0fgz4xds9a8zhs91c4jzxvvymm1c8l8cwzf";
         semantic-version = changeVersion super.semantic-version.overridePythonAttrs "2.8.5" "d2cb2de0558762934679b9a104e82eca7af448c9f4974d1f3eeccff651df8a54";
         pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
@@ -58,7 +49,9 @@ with localPython.pkgs; buildPythonApplication rec {
 
 
   preConfigure = ''
-    substituteInPlace setup.py --replace "six>=1.11.0,<1.15.0" "six"
+    substituteInPlace setup.py \
+      --replace "six>=1.11.0,<1.15.0" "six" \
+      --replace "requests>=2.20.1,<=2.26" "requests"
   '';
 
   buildInputs = [
