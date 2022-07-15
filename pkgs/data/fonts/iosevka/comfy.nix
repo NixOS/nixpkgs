@@ -1,14 +1,18 @@
-{stdenv, lib, nodejs, nodePackages, remarshal, ttfautohint-nox, fetchurl}:
+{ stdenv, lib, nodejs, nodePackages, remarshal, ttfautohint-nox, fetchurl
+, fetchFromGitHub }:
 
 let
   sets = [ "comfy" "comfy-fixed" "comfy-duo" "comfy-wide" "comfy-wide-fixed" ];
-  privateBuildPlan = builtins.readFile ./comfy-private-build-plans.toml;
+  version = "0.2.1";
+  src = fetchFromGitHub {
+    owner = "protesilaos";
+    repo = "iosevka-comfy";
+    rev = version;
+    sha256 = "sha256-Ki3/8REmVb1XtvchdLZJ9Zc+EoP3LP9tvruuP/K1Xpo=";
+  };
+  privateBuildPlan = src.outPath + "/private-build-plans.toml";
   overrideAttrs = (attrs: {
-    version = "0.2.1";
-
-    passthru = {
-      updateScript = ./update-comfy.sh;
-    };
+    inherit version;
 
     meta = with lib; {
       homepage = "https://github.com/protesilaos/iosevka-comfy";
