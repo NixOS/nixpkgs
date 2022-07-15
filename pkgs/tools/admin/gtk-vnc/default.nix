@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gtk-vnc";
-  version = "1.3.0";
+  version = "1.3.1";
 
   outputs = [ "out" "bin" "man" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "X6qlgjuMvowLC6HkVsTnDEsa5mhcn+gaQoLZjPAKIR0=";
+    sha256 = "USdjrE4FWdAVi2aCyl3Ro71jPwgvXkNJ1xWOa1+A8c4=";
   };
 
   nativeBuildInputs = [
