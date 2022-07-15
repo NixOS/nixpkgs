@@ -1,5 +1,4 @@
-{ stdenv, lib, nodejs, nodePackages, remarshal, ttfautohint-nox, fetchurl
-, fetchFromGitHub }:
+{ callPackage, lib, fetchFromGitHub }:
 
 let
   sets = [ "comfy" "comfy-fixed" "comfy-duo" "comfy-wide" "comfy-wide-fixed" ];
@@ -26,8 +25,8 @@ let
       maintainers = [ maintainers.DamienCassou ];
     };
   });
-  makeIosevkaFont = set: (import ./default.nix {
-    inherit stdenv lib nodejs nodePackages remarshal ttfautohint-nox set privateBuildPlan;
+  makeIosevkaFont = set: (callPackage ./. {
+    inherit set privateBuildPlan;
   }).overrideAttrs overrideAttrs;
 in
 builtins.listToAttrs (builtins.map (set: {name=set; value=makeIosevkaFont set;}) sets)
