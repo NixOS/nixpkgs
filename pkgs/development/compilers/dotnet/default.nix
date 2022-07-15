@@ -141,69 +141,69 @@ rec {
   # v6.0 (lts)
   aspnetcore_6_0 = buildAspNetCore {
     inherit icu;
-    version = "6.0.6";
+    version = "6.0.7";
     srcs = {
       x86_64-linux = {
-        url     = "https://download.visualstudio.microsoft.com/download/pr/afd5344f-a9e9-45f9-85b5-de4551c53736/c30996daa407f9bb540ebc5edfcf16fc/aspnetcore-runtime-6.0.6-linux-x64.tar.gz";
-        sha512  = "1a5c0f85820f0eb589700df94de6dbff45fe4089a37f1cd5b1fac33476a2cbd8d5c6f129e55b3716f5a7a2616f1a5a720c52238f21b28a510a3e5c8bcb8c516c";
+        url     = "https://download.visualstudio.microsoft.com/download/pr/98271725-1784-407c-841a-64d87c674512/b433af33506c816e3b5838f5c65d990a/aspnetcore-runtime-6.0.7-linux-x64.tar.gz";
+        sha512  = "d210e2afd009746d2c4d98c07077b89ce174f462c2bdaae9afea107a5b1c9c4ab63460ae3d9ae38c5388f591c0a95d8712359326013b23325b7be19b51835455";
       };
       aarch64-linux = {
-        url     = "https://download.visualstudio.microsoft.com/download/pr/94553ccb-ce1a-401c-8840-bdffb4e9d0cb/ab8a0024df90506d953904ac38b5a978/aspnetcore-runtime-6.0.6-linux-arm64.tar.gz";
-        sha512  = "a3bd7ce99ffb9b87766c49fcf28d802f4072af1d55f1d53ef4043a1a0b038a0fc8046669bbd82f64fb37e4c73703fa8f54a460caaa473d952baf941d23341c90";
+        url     = "https://download.visualstudio.microsoft.com/download/pr/b79c5fa9-a08d-4534-9424-4bacfc3cdc3d/449179d6fe8cda05f52b7be0f6828eb0/aspnetcore-runtime-6.0.7-linux-arm64.tar.gz";
+        sha512  = "0c7317d2170f2632afd7c7c3e5bd84075071802e901de1ed5e54178f8a56266fe0770ebd84502aff9384b06908d4d5bee9d464d215fb20d841de177174f55f93";
       };
       x86_64-darwin = {
-        url     = "https://download.visualstudio.microsoft.com/download/pr/0f5eb01e-6b46-4ef3-8c1c-7b99657a36df/7d4807a527cd5bc5a6a864f1fcd354e7/aspnetcore-runtime-6.0.6-osx-x64.tar.gz";
-        sha512  = "d1a469a5d27afd2f035f9865a295b8948bb2fcefd0e734c61ea8d0fe1b272fd1e0ba3aa4ad414aa68491fc611695c8d94064d1bb02d62cf1e7ea071a73a844da";
+        url     = "https://download.visualstudio.microsoft.com/download/pr/5b4d2b0e-607e-4f9a-944f-0acdefd828d9/79a0271038df505617ef800587a92858/aspnetcore-runtime-6.0.7-osx-x64.tar.gz";
+        sha512  = "6c05250d2affb61a1f34ba297e3c9bd0ddc42d64b1580f5e8cfa218a079cc455aa183f683869ba52e7b9ce58fb223dff8ef9776d4b2e2421ed7e2058d4af0750";
       };
       aarch64-darwin = {
-        url     = "https://download.visualstudio.microsoft.com/download/pr/550f6609-521f-42e4-9b53-ff6c88bbe26a/1abbac456fe075a1b6f0f578716e0c4a/aspnetcore-runtime-6.0.6-osx-arm64.tar.gz";
-        sha512  = "0d62c151b4d25d606becbc0a99d4ed3988aaae97a95990a8d5b6e0e220bdf661e3f7fad64dad6a479f8c9bbd42971d6e5fab7dca43b74ca7ccbc423fa5b200af";
+        url     = "https://download.visualstudio.microsoft.com/download/pr/3d952783-f61f-4399-841a-fa5b5aeffded/15580a465dec6a7c67107e3f96d6da13/aspnetcore-runtime-6.0.7-osx-arm64.tar.gz";
+        sha512  = "4d9dccaeabc1490fb9261f0be0702c2f5b4e96b840edee94d50f9a4655aa4d85bcf5a16d21d43b0a543e5a90cc631510aba35000df465a4ffc6cca7de37907fc";
       };
     };
   };
 
   runtime_6_0 = buildNetRuntime {
     inherit icu;
-    version = "6.0.6";
+    version = "6.0.7";
     srcs = {
       x86_64-linux = {
-        url     = "https://download.visualstudio.microsoft.com/download/pr/ec4172e3-077a-42c0-859d-349e517d7935/82d945cdc4c33fbe440a86a240a58a41/dotnet-runtime-6.0.6-linux-x64.tar.gz";
-        sha512  = "4fe090f934f0ba4e64a63dfccbac97d49b19a913f2a7d73abe85efd604ee5577cefd65d6e0dc02086e9fa28be4ce2bbaecb33ea70d022714138ed54deea58c72";
+        url     = "https://download.visualstudio.microsoft.com/download/pr/bd828687-1706-4041-a804-5e93631fe256/d4ec75936459a7e8c772c929edcbfeda/dotnet-runtime-6.0.7-linux-x64.tar.gz";
+        sha512  = "996bdaf33be0a9c0f1e2d309b997e3a84a31e28d2424853d7fb1600212f4ce600ebe1b9615de5e46c17652f08ad0d7ecd4b3619217c9624b875a26a553f370d8";
       };
       aarch64-linux = {
-        url     = "https://download.visualstudio.microsoft.com/download/pr/44ed3398-9838-4fd0-b225-60d5aadfb00e/00fd4a320d09a380753b45106e2a8e94/dotnet-runtime-6.0.6-linux-arm64.tar.gz";
-        sha512  = "659bf64c5f2e11f2b8cf01dc595a4280d1960bf484fc379d3a382660eea7adb6e69ace49d84522a85920ed53fa2ffb95a3b0ca0ebf63dc909b865028174ed29f";
+        url     = "https://download.visualstudio.microsoft.com/download/pr/f9706e92-c7a1-4dc8-806a-0e95827c5b02/23be52946e4e2425c798208c5f16bb64/dotnet-runtime-6.0.7-linux-arm64.tar.gz";
+        sha512  = "a63e100fe80cb64febfd2920e4065b3cc99f759c3de0897928a42cf14fdc963df324bef1354a7734420078d16e52fd8257dd480da465d865c4349c29cab1ef91";
       };
       x86_64-darwin = {
-        url     = "https://download.visualstudio.microsoft.com/download/pr/30056482-998a-42ed-b3a7-8fc057977e2e/698c75b7f2429e796dd3c13f980e4188/dotnet-runtime-6.0.6-osx-x64.tar.gz";
-        sha512  = "efe5b6287c4a62688bc94aae2d4ed8831ca5d62280ba477bb3efa49666c9fdbb9b091980837882b1b52ddfba566a8ab0071746cbfa63efea99a0bb3ebf19a2a1";
+        url     = "https://download.visualstudio.microsoft.com/download/pr/97def016-12c7-4e24-b924-772485a41faa/e96d9a0502492efa7de3897467f5972c/dotnet-runtime-6.0.7-osx-x64.tar.gz";
+        sha512  = "9c53d16971f0366d6d69fbfe37e92eea806faa1c3502cc1050c0e6d2cf394cf886761146e344862a30d0cb131105f387c05d8ea207be8aa87c81cd4c8f962110";
       };
       aarch64-darwin = {
-        url     = "https://download.visualstudio.microsoft.com/download/pr/f91e108d-487b-4a47-b6e9-52bcc56df7ed/d722468512150e73489f2cee0b2d7087/dotnet-runtime-6.0.6-osx-arm64.tar.gz";
-        sha512  = "0cb4f3c808ae5476ebdbc18840846fb625a51ac5ce53688e83c3ae22a062095f9012c066dbcce231eca50ca3f057d7a29721d4b9cd04c9891ca26fc0c1c4a481";
+        url     = "https://download.visualstudio.microsoft.com/download/pr/044c6d0f-0ac2-450f-b621-637ca24ab2fb/5cd0c43804f3fde6d09cacbfd8525868/dotnet-runtime-6.0.7-osx-arm64.tar.gz";
+        sha512  = "9f08a535921df7c1ce837ef27478f2381e8132a9ebfec7630465fb3243ef2ec9e982d008faec69e0899675dc3a50b379a96967d1eed3c04dada40cb211489127";
       };
     };
   };
 
   sdk_6_0 = buildNetSdk {
     inherit icu;
-    version = "6.0.301";
+    version = "6.0.302";
     srcs = {
       x86_64-linux = {
-        url     = "https://download.visualstudio.microsoft.com/download/pr/77d472e5-194c-421e-992d-e4ca1d08e6cc/56c61ac303ddf1b12026151f4f000a2b/dotnet-sdk-6.0.301-linux-x64.tar.gz";
-        sha512  = "2f434ea4860ee637e9cf19991a80e1febb1105531dd96b4fbc728d538ca0ab202a0bdff128fd13b269fac3ba3bc9d5f9c49039a6e0d7d32751e8a2bb6d790446";
+        url     = "https://download.visualstudio.microsoft.com/download/pr/0e83f50a-0619-45e6-8f16-dc4f41d1bb16/e0de908b2f070ef9e7e3b6ddea9d268c/dotnet-sdk-6.0.302-linux-x64.tar.gz";
+        sha512  = "ac1d124802ca035aa00806312460b371af8e3a55d85383ddd8bb66f427c4fabae75b8be23c45888344e13b283a4f9c7df228447c06d796a57ffa5bb21992e6a4";
       };
       aarch64-linux = {
-        url     = "https://download.visualstudio.microsoft.com/download/pr/06c4ee8e-bf2c-4e46-ab1c-e14dd72311c1/f7bc6c9677eaccadd1d0e76c55d361ea/dotnet-sdk-6.0.301-linux-arm64.tar.gz";
-        sha512  = "978dd04f78ac3d6b594c47f1482bba0abe93f0b37379c1c46a2b9b33bdf5188576b055250546295de39bb22cba93ea9b31c31bb026a319ad1b3fc507db44481f";
+        url     = "https://download.visualstudio.microsoft.com/download/pr/33389348-a7d7-41ae-850f-ec46d3ca9612/36bad11f948b05a4fa9faac93c35e574/dotnet-sdk-6.0.302-linux-arm64.tar.gz";
+        sha512  = "26e98a63665d707b1a7729f1794077316f9927edd88d12d82d0357fe597096b0d89b64a085fcdf0cf49807a443bbfebb48e10ea91cea890846cf4308e67c4ea5";
       };
       x86_64-darwin = {
-        url     = "https://download.visualstudio.microsoft.com/download/pr/cf3e1c73-a9a9-4e08-8607-8f9edae5f3f2/40a021a98a6b6e430a1f170037735f6f/dotnet-sdk-6.0.301-osx-x64.tar.gz";
-        sha512  = "027328a353b65fad0618d1e5abeb973c9f05787d9432631bf9ab5fafe636ea2f494f70c0704e81a1664fe7a3519174bd269dbc795b651b14e9a86c83f8e3adec";
+        url     = "https://download.visualstudio.microsoft.com/download/pr/60719796-b5c5-46dc-a26a-7e8126a292c8/a7b871d6c46136b61c30403d085ef97c/dotnet-sdk-6.0.302-osx-x64.tar.gz";
+        sha512  = "003a06be76bf6228b4c033f34773039d57ebd485cf471a8117f5516f243a47a24d1b485ab9307becc1973107bb1d5b6c3028bbcbb217cbb42f5bee4c6c01c458";
       };
       aarch64-darwin = {
-        url     = "https://download.visualstudio.microsoft.com/download/pr/3859fff3-f8a9-4e05-87cd-bd6db75833f5/64ec1099d45f85d14099da3c1f92a5c3/dotnet-sdk-6.0.301-osx-arm64.tar.gz";
-        sha512  = "899558be856769ad6ccc4606f3a9f996327a7395a72acb18a5fb0899e0c4c4ba8c90b94f16771439193f87a974e1e884dd55a9fc6649fe929ebe47ef19cb4efc";
+        url     = "https://download.visualstudio.microsoft.com/download/pr/01a17a2d-6b92-4521-97a2-ad7d845a8064/44aa4e10f71e70a38b5f6f59d211cbab/dotnet-sdk-6.0.302-osx-arm64.tar.gz";
+        sha512  = "59caea897a56b785245dcd3a6082247aeb879c39ecfab16db60e9dc3db447ca4e3ebe68e992c0551af886cd81f6f0088cb1433f1be6df865afa357f90f37ccf6";
       };
     };
   };
