@@ -1,4 +1,4 @@
-{ lib, hwdata, pkg-config, lxc, buildGo118Package, fetchurl
+{ lib, hwdata, pkg-config, lxc, buildGoPackage, fetchurl
 , makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq, attr
 , squashfsTools, iproute2, iptables, libcap
 , dqlite, raft-canonical, sqlite-replication, udev
@@ -9,7 +9,7 @@
 , nixosTests
 }:
 
-buildGo118Package rec {
+buildGoPackage rec {
   pname = "lxd";
   version = "5.3";
 
