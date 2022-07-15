@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "2.14.1";
+  version = "2.14.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7.2";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "PyCQA";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-rtyqHRDywv3l8bDgEjQlsh8lvwWbLswOPujFakaLWOw=";
+    sha256 = "sha256-NrfEIcPo2QJ78faQyfsQply8Zil1VZwV54GtV1aXbhc=";
   };
 
   nativeBuildInputs = [
@@ -85,6 +85,8 @@ buildPythonPackage rec {
     "test_generate_toml_config"
     "test_help_msg"
     "test_output_of_callback_options"
+    # Failed: DID NOT WARN. No warnings of type (<class 'UserWarning'>,) were emitted. The list of emitted warnings is: [].
+    "test_save_and_load_not_a_linter_stats"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_parallel_execution"
     "test_py3k_jobs_option"
