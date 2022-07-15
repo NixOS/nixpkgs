@@ -33766,8 +33766,6 @@ with pkgs;
 
   groove = callPackage ../applications/science/programming/groove { };
 
-  jflap = callPackage ../applications/science/programming/jflap { };
-
   plm = callPackage ../applications/science/programming/plm { };
 
   ### SCIENCE/LOGIC
@@ -34025,6 +34023,8 @@ with pkgs;
   ### SCIENCE / ENGINEERING
 
   brmodelo = callPackage ../applications/science/engineering/brmodelo { };
+
+  jflap = callPackage ../applications/science/engineering/jflap { };
 
   ### SCIENCE / ELECTRONICS
 
