@@ -7,8 +7,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mkubecek";
     repo = "vmware-host-modules";
-    rev = "w${vmware-workstation.version}-k5.17";
-    sha256 = "sha256-EM6YU2nOwNlAXpQ7cGrLS1N+gAS1KxleVjJTzo22De0=";
+    rev = "w${vmware-workstation.version}-k5.18";
+    sha256 = "sha256-sAeCjaSrBXGP5szfCY5CpMrGwzCw4aM67EN+YfA3AWA=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mkubecek/vmware-host-modules";
     license = licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
-    broken = (kernel.kernelOlder "5.5" && kernel.isHardened) || kernel.kernelAtLeast "5.18";
+    broken = (kernel.kernelOlder "5.5" && kernel.isHardened) || kernel.kernelAtLeast "5.19";
     maintainers = with maintainers; [ deinferno ];
   };
 }

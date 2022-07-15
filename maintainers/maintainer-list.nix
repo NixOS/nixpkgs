@@ -3733,6 +3733,12 @@
     githubId = 1897147;
     name = "Elijah Caine";
   };
+  Elinvention = {
+    email = "elia@elinvention.ovh";
+    github = "Elinvention";
+    githubId = 5737945;
+    name = "Elia Argentieri";
+  };
   elitak = {
     email = "elitak@gmail.com";
     github = "elitak";

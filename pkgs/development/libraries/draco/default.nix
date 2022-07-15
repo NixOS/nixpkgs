@@ -16,14 +16,14 @@ let
   cmakeBool = b: if b then "ON" else "OFF";
 in
 stdenv.mkDerivation rec {
-  version = "1.5.2";
+  version = "1.5.3";
   pname = "draco";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "draco";
     rev = version;
-    sha256 = "sha256-o6KQJFrnxx2kz6g3vXk1w435OmaJhAJjzsKM/gmVJ2M=";
+    sha256 = "sha256-LbWtZtgvZQdgwAGHVsouH6cAIVXP+9Q5n8KjzaBRrBQ=";
     fetchSubmodules = true;
   };
 
