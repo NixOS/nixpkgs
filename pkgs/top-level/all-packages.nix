@@ -9620,6 +9620,8 @@ with pkgs;
 
   pinentry-bemenu = callPackage ../tools/security/pinentry-bemenu { };
 
+  pinentry-rofi = callPackage ../tools/security/pinentry-rofi { };
+
   pingtcp = callPackage ../tools/networking/pingtcp { };
 
   pinnwand = callPackage ../servers/pinnwand { };
