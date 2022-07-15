@@ -2322,6 +2322,8 @@ in {
 
   distorm3 = callPackage ../development/python-modules/distorm3 { };
 
+  distrax = callPackage ../development/python-modules/distrax { };
+
   distributed = callPackage ../development/python-modules/distributed { };
 
   distro = callPackage ../development/python-modules/distro { };
