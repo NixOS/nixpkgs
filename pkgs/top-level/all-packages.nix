@@ -34235,6 +34235,8 @@ with pkgs;
 
   boogie = dotnetPackages.Boogie;
 
+  cbmc = callPackage ../applications/science/logic/cbmc { };
+
   cadical = callPackage ../applications/science/logic/cadical {};
 
   inherit (callPackage ./coq-packages.nix {
