@@ -134,7 +134,9 @@ in stdenvNoCC.mkDerivation (args // {
   passthru = {
     inherit nuget-source;
 
-    fetch-deps = writeScript "fetch-${pname}-deps" ''
+    fetch-deps = let
+      exclusions = dotnet-sdk.passthru.packages { fetchNuGet = attrs: attrs.pname; };
+    in writeScript "fetch-${pname}-deps" ''
       set -euo pipefail
       cd "$(dirname "''${BASH_SOURCE[0]}")"
 
@@ -164,8 +166,10 @@ in stdenvNoCC.mkDerivation (args // {
           ${lib.optionalString (dotnetFlags != []) (builtins.toString dotnetFlags)}
       done
 
+      echo "${lib.concatStringsSep "\n" exclusions}" > "$HOME/package_exclusions"
+
       echo "Writing lockfile..."
-      ${nuget-to-nix}/bin/nuget-to-nix "$HOME/nuget_pkgs" > "$deps_file"
+      ${nuget-to-nix}/bin/nuget-to-nix "$HOME/nuget_pkgs" "$HOME/package_exclusions" > "$deps_file"
       echo "Succesfully wrote lockfile to: $deps_file"
     '';
   } // args.passthru or {};
