@@ -1,21 +1,19 @@
-{lib, stdenv, fetchurl}:
+{lib, stdenv, fetchgit}:
 
 stdenv.mkDerivation rec {
   pname = "fxload";
-  version = "2002.04.11";
+  version = "unstable-2013-01-03";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/linux-hotplug/fxload-${lib.replaceStrings ["."] ["_"] version}.tar.gz";
-    sha256 = "1hql93bp3dxrv1p67nc63xsbqwljyynm997ysldrc3n9ifi6s48m";
+  src = fetchgit {
+    url = "https://git.code.sf.net/p/fx3load/code.git";
+    rev = "31e12677df5d4ab0fdd38c8e47fe5fde82fd4b85";
+    sha256 = "sha256-aHG0fBXhglPk5z8CVhuNefkQbJuicEBf1/zx2vh2F+8=";
   };
 
-  patches = [
-    # Will be needed after linux-headers is updated to >= 2.6.21.
-    (fetchurl {
-      url = "http://sources.gentoo.org/viewcvs.py/*checkout*/gentoo-x86/sys-apps/fxload/files/fxload-20020411-linux-headers-2.6.21.patch?rev=1.1";
-      sha256 = "0ij0c8nr1rbyl5wmyv1cklhkxglvsqz32h21cjw4bjm151kgmk7p";
-    })
-  ];
+  # the source repository contains build debris
+  postPatch = ''
+    make clean
+  '';
 
   preBuild = ''
     substituteInPlace Makefile --replace /usr /
