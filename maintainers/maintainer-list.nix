@@ -9286,6 +9286,12 @@
     githubId = 40049608;
     name = "Andy Chun";
   };
+  nook = {
+    name = "Tom Nook";
+    email = "0xnook@protonmail.com";
+    github = "0xnook";
+    githubId = 88323754;
+  };
   noreferences = {
     email = "norkus@norkus.net";
     github = "jozuas";
@@ -11497,6 +11503,13 @@
     github = "shadaj";
     githubId = 543055;
     name = "Shadaj Laddad";
+  };
+  shadowrz = {
+    email = "shadowrz+nixpkgs@disroot.org";
+    matrix = "@ShadowRZ:matrixim.cc";
+    github = "ShadowRZ";
+    githubId = 23130178;
+    name = "夜坂雅";
   };
   shahrukh330 = {
     email = "shahrukh330@gmail.com";

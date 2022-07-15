@@ -23,7 +23,11 @@ let
   infraContainer = pkgs.dockerTools.buildImage {
     name = "pause";
     tag = "latest";
-    contents = top.package.pause;
+    copyToRoot = pkgs.buildEnv {
+      name = "image-root";
+      pathsToLink = [ "/bin" ];
+      paths = [ top.package.pause ];
+    };
     config.Cmd = ["/bin/pause"];
   };
 

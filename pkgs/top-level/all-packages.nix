@@ -3613,7 +3613,7 @@ with pkgs;
 
   element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix {
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
-    electron = electron_17;
+    electron = electron_19;
   };
   element-desktop-wayland = writeScriptBin "element-desktop" ''
     #!/bin/sh
@@ -10073,6 +10073,8 @@ with pkgs;
 
   redsocks = callPackage ../tools/networking/redsocks { };
 
+  renpy = callPackage ../development/interpreters/renpy { };
+
   rep = callPackage ../development/tools/rep { };
 
   repseek = callPackage ../applications/science/biology/repseek { };
@@ -15856,6 +15858,8 @@ with pkgs;
   framac = callPackage ../development/tools/analysis/frama-c { };
 
   frame = callPackage ../development/libraries/frame { };
+
+  framesh = callPackage ../applications/blockchains/framesh { };
 
   frp = callPackage ../tools/networking/frp { };
 
@@ -27846,7 +27850,7 @@ with pkgs;
     ghostscript = null;
   });
 
-  imagemagickBig = lowPrio (callPackage ../applications/graphics/ImageMagick/7.0.nix {
+  imagemagickBig = lowPrio (callPackage ../applications/graphics/ImageMagick {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Foundation;
   });
 
