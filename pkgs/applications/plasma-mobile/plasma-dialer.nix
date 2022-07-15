@@ -14,7 +14,6 @@
 , kpeople
 , libphonenumber
 , modemmanager-qt
-, protobuf
 , qtfeedback
 , qtmpris
 , qtquickcontrols2
@@ -39,7 +38,6 @@ mkDerivation rec {
     kpeople
     libphonenumber
     modemmanager-qt
-    protobuf # Needed by libphonenumber
     qtfeedback
     qtmpris
     qtquickcontrols2

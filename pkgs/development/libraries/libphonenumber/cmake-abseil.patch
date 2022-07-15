@@ -1,0 +1,47 @@
+diff --git i/cpp/CMakeLists.txt w/cpp/CMakeLists.txt
+index 57261a63..27755707 100644
+--- i/cpp/CMakeLists.txt
++++ w/cpp/CMakeLists.txt
+@@ -126,6 +126,8 @@ if (${USE_BOOST} STREQUAL "OFF" AND ${USE_STDMUTEX} STREQUAL "OFF")
+   find_package (Threads)
+ endif()
+ 
++find_package (absl REQUIRED)
++
+ find_or_build_gtest ()
+ 
+ if (${USE_RE2} STREQUAL "ON")
+diff --git i/tools/cpp/CMakeLists.txt w/tools/cpp/CMakeLists.txt
+index b0941656..c4dc4b20 100644
+--- i/tools/cpp/CMakeLists.txt
++++ w/tools/cpp/CMakeLists.txt
+@@ -26,29 +26,10 @@ project (generate_geocoding_data)
+ # Helper functions dealing with finding libraries and programs this library
+ # depends on.
+ include (gtest.cmake)
+-include (FetchContent)
+-
+-# Downloading the abseil sources.
+-FetchContent_Declare(
+-    abseil-cpp
+-    GIT_REPOSITORY  https://github.com/abseil/abseil-cpp.git
+-    GIT_TAG         origin/master
+-)
+-
+-# Building the abseil binaries
+-FetchContent_GetProperties(abseil-cpp)
+-if (NOT abseil-cpp_POPULATED)
+-    FetchContent_Populate(abseil-cpp)
+-endif ()
+-
+-if (NOT abseil-cpp_POPULATED)
+-   message (FATAL_ERROR "Could not build abseil-cpp binaries.")
+-endif ()
+ 
+ # Safeguarding against any potential link errors as mentioned in
+ # https://github.com/abseil/abseil-cpp/issues/225
+ set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
+-add_subdirectory(${abseil-cpp_SOURCE_DIR} ${abseil-cpp_BINARY_DIR})
+ 
+ find_or_build_gtest ()
+ set (

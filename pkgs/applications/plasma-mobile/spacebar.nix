@@ -12,7 +12,6 @@
 , libphonenumber
 , libqofono
 , modemmanager-qt
-, protobuf
 , qcoro
 , qtquickcontrols2
 }:
@@ -33,7 +32,6 @@ mkDerivation rec {
     kpeople
     libphonenumber
     modemmanager-qt
-    protobuf # Needed by libphonenumber
     qcoro
     qtquickcontrols2
   ];
