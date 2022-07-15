@@ -2244,6 +2244,7 @@ with pkgs;
 
   cosign = callPackage ../tools/security/cosign {
     inherit (darwin.apple_sdk.frameworks) PCSC;
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -3754,6 +3755,7 @@ with pkgs;
   gdu = callPackage ../tools/system/gdu { };
 
   go-chromecast = callPackage ../applications/video/go-chromecast {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -4353,6 +4355,7 @@ with pkgs;
   pixiecore = callPackage ../tools/networking/pixiecore {};
 
   waitron = callPackage ../tools/networking/waitron {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -6519,6 +6522,7 @@ with pkgs;
   };
 
   git-hound = callPackage ../tools/security/git-hound {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -7224,6 +7228,7 @@ with pkgs;
   httpdirfs = callPackage ../tools/filesystems/httpdirfs { };
 
   httpdump = callPackage ../tools/security/httpdump {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -7698,6 +7703,7 @@ with pkgs;
   };
 
   kfctl = callPackage ../applications/networking/cluster/kfctl {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -8639,6 +8645,7 @@ with pkgs;
   };
 
   mole = callPackage ../tools/networking/mole {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -8892,9 +8899,11 @@ with pkgs;
   # Upstream partially documents used Go versions here
   # https://github.com/hashicorp/nomad/blob/master/contributing/golang.md
   nomad_1_2 = callPackage ../applications/networking/cluster/nomad/1.2.nix {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
   nomad_1_3 = callPackage ../applications/networking/cluster/nomad/1.3.nix {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -9115,6 +9124,7 @@ with pkgs;
   openfortivpn = callPackage ../tools/networking/openfortivpn { };
 
   opensnitch = callPackage ../tools/networking/opensnitch/daemon.nix {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -10319,6 +10329,7 @@ with pkgs;
   sacd = callPackage ../tools/cd-dvd/sacd { };
 
   safe = callPackage ../tools/security/safe {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -10826,6 +10837,7 @@ with pkgs;
   svgcleaner = callPackage ../tools/graphics/svgcleaner { };
 
   ssb = callPackage ../tools/security/ssb {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -12019,6 +12031,7 @@ with pkgs;
   wpgtk = callPackage ../tools/X11/wpgtk { };
 
   wrap = callPackage ../tools/text/wrap {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -12029,6 +12042,7 @@ with pkgs;
   wrk2 = callPackage ../tools/networking/wrk2 { };
 
   wuzz = callPackage ../tools/networking/wuzz {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -12220,6 +12234,7 @@ with pkgs;
   zfs-autobackup = callPackage ../tools/backup/zfs-autobackup { };
 
   zfsbackup = callPackage ../tools/backup/zfsbackup {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -17528,6 +17543,7 @@ with pkgs;
   filter-audio = callPackage ../development/libraries/filter-audio {};
 
   filtron = callPackage ../servers/filtron {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -17633,6 +17649,7 @@ with pkgs;
   ganv = callPackage ../development/libraries/ganv { };
 
   garble = callPackage ../build-support/go/garble.nix {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -20894,6 +20911,7 @@ with pkgs;
   sfsexp = callPackage ../development/libraries/sfsexp {};
 
   shhgit = callPackage ../tools/security/shhgit {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -21314,6 +21332,7 @@ with pkgs;
   umockdev = callPackage ../development/libraries/umockdev { };
 
   unconvert = callPackage ../development/tools/unconvert {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -22052,6 +22071,7 @@ with pkgs;
   dcnnt = python3Packages.callPackage ../servers/dcnnt { };
 
   dendrite = callPackage ../servers/dendrite {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -22173,6 +22193,7 @@ with pkgs;
   grafanaPlugins = callPackages ../servers/monitoring/grafana/plugins { };
 
   grafana-agent = callPackage ../servers/monitoring/grafana-agent {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -22193,6 +22214,7 @@ with pkgs;
   gerbera = callPackage ../servers/gerbera {};
 
   gobetween = callPackage ../servers/gobetween {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -22236,6 +22258,7 @@ with pkgs;
 
   hyprspace = callPackage ../applications/networking/hyprspace {
     inherit (darwin) iproute2mac;
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -22827,11 +22850,13 @@ with pkgs;
   prometheus-modemmanager-exporter = callPackage ../servers/monitoring/prometheus/modemmanager-exporter.nix { };
   prometheus-mysqld-exporter = callPackage ../servers/monitoring/prometheus/mysqld-exporter.nix { };
   prometheus-nats-exporter = callPackage ../servers/monitoring/prometheus/nats-exporter.nix {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
   prometheus-nextcloud-exporter = callPackage ../servers/monitoring/prometheus/nextcloud-exporter.nix { };
   prometheus-nginx-exporter = callPackage ../servers/monitoring/prometheus/nginx-exporter.nix { };
   prometheus-nginxlog-exporter = callPackage ../servers/monitoring/prometheus/nginxlog-exporter.nix {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
   prometheus-node-exporter = callPackage ../servers/monitoring/prometheus/node-exporter.nix {
@@ -23182,6 +23207,7 @@ with pkgs;
   mbtileserver = callPackage ../servers/geospatial/mbtileserver { };
 
   pg_featureserv = callPackage ../servers/geospatial/pg_featureserv {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -23214,6 +23240,7 @@ with pkgs;
   alfred = callPackage ../os-specific/linux/batman-adv/alfred.nix { };
 
   alertmanager-bot = callPackage ../servers/monitoring/alertmanager-bot {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -23463,6 +23490,7 @@ with pkgs;
   gomp = callPackage ../applications/version-management/gomp { };
 
   gomplate = callPackage ../development/tools/gomplate {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -23959,6 +23987,7 @@ with pkgs;
   go-migrate = callPackage ../development/tools/go-migrate { };
 
   go-mockery = callPackage ../development/tools/go-mockery {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -24035,6 +24064,7 @@ with pkgs;
   pam_usb = callPackage ../os-specific/linux/pam_usb { };
 
   pam_ussh = callPackage ../os-specific/linux/pam_ussh {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -25464,6 +25494,7 @@ with pkgs;
   vegur = callPackage ../data/fonts/vegur { };
 
   vegeta = callPackage ../tools/networking/vegeta {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -26537,6 +26568,7 @@ with pkgs;
   exaile = callPackage ../applications/audio/exaile { };
 
   exercism = callPackage ../applications/misc/exercism {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -26865,6 +26897,7 @@ with pkgs;
   gopher = callPackage ../applications/networking/gopher/gopher { };
 
   gophernotes = callPackage ../applications/editors/gophernotes {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -27968,6 +28001,7 @@ with pkgs;
   k3sup = callPackage ../applications/networking/cluster/k3sup {};
 
   kconf = callPackage ../applications/networking/cluster/kconf {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -28085,6 +28119,7 @@ with pkgs;
   kube-score = callPackage ../applications/networking/cluster/kube-score { };
 
   kubectl-evict-pod = callPackage ../applications/networking/cluster/kubectl-evict-pod {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -28097,6 +28132,7 @@ with pkgs;
   kubectl-convert = kubectl.convert;
 
   kubemqctl = callPackage ../applications/networking/cluster/kubemqctl {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -28113,10 +28149,12 @@ with pkgs;
   kubebuilder = callPackage ../applications/networking/cluster/kubebuilder { };
 
   kuttl = callPackage ../applications/networking/cluster/kuttl {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
   kubectl-doctor = callPackage ../applications/networking/cluster/kubectl-doctor {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -28454,6 +28492,7 @@ with pkgs;
   mapmap = libsForQt5.callPackage ../applications/video/mapmap { };
 
   marathonctl = callPackage ../tools/virtualization/marathonctl {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -28468,6 +28507,7 @@ with pkgs;
   };
 
   magnetico = callPackage ../applications/networking/p2p/magnetico {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -29979,6 +30019,7 @@ with pkgs;
   sfxr-qt = libsForQt5.callPackage ../applications/audio/sfxr-qt { };
 
   shadowfox = callPackage ../tools/networking/shadowfox {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -30592,6 +30633,7 @@ with pkgs;
   toxic = callPackage ../applications/networking/instant-messengers/toxic { };
 
   toxiproxy = callPackage ../development/tools/toxiproxy {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -31720,6 +31762,7 @@ with pkgs;
   litecoind = litecoin.override { withGui = false; };
 
   livedl = callPackage ../tools/misc/livedl {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -33302,6 +33345,7 @@ with pkgs;
   deepdiff = with python3Packages; toPythonApplication deepdiff;
 
   deepsea = callPackage ../tools/security/deepsea {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -34563,6 +34607,7 @@ with pkgs;
   gotestwaf = callPackage ../tools/security/gotestwaf { };
 
   gowitness = callPackage ../tools/security/gowitness {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -35847,6 +35892,7 @@ with pkgs;
   zfs-replicate = python3Packages.callPackage ../tools/backup/zfs-replicate { };
 
   zrepl = callPackage ../tools/backup/zrepl {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
@@ -35887,6 +35933,7 @@ with pkgs;
   kaf = callPackage ../development/tools/kaf { };
 
   kcli = callPackage ../development/tools/kcli {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
 
