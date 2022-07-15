@@ -9,10 +9,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-iY/NUifU57aX795eWpaUBflrclF/nfvb3OKZEpD9VqA=";
   };
 
+  patches = [
+    # Hardcode isUbuntu=false to avoid calling hostname to detect os
+    ./0001-Hardcode-isUbuntu-false-to-avoid-hostname-dependency.patch
+  ];
+
   nativeBuildInputs = [
     ant
     jdk
-    nettools # "hostname" required
     copyDesktopItems
   ];
 
