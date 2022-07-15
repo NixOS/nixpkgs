@@ -9286,6 +9286,12 @@
     githubId = 40049608;
     name = "Andy Chun";
   };
+  nook = {
+    name = "Tom Nook";
+    email = "0xnook@protonmail.com";
+    github = "0xnook";
+    githubId = 88323754;
+  };
   noreferences = {
     email = "norkus@norkus.net";
     github = "jozuas";

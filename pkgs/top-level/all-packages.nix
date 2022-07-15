@@ -15853,6 +15853,8 @@ with pkgs;
 
   frame = callPackage ../development/libraries/frame { };
 
+  framesh = callPackage ../applications/blockchains/framesh { };
+
   frp = callPackage ../tools/networking/frp { };
 
   fsatrace = callPackage ../development/tools/misc/fsatrace { };
