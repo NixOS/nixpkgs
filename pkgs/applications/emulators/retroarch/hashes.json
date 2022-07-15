@@ -307,6 +307,12 @@
         "sha256": "M3kGA1TU3xui6of9XgUspI+Zf+hjYP1d2mgKwxsy3IQ=",
         "fetchSubmodules": true
     },
+    "nxengine": {
+        "owner": "libretro",
+        "repo": "nxengine-libretro",
+        "rev": "bc692a392473a45f63cdccbb353c3445b530d671",
+        "sha256": "tAZkYHRKL+mI6f7YCnaU0qTSOZGW2o20p6wovMK1n2k="
+    },
     "o2em": {
         "owner": "libretro",
         "repo": "libretro-o2em",
