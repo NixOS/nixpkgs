@@ -22332,7 +22332,7 @@ with pkgs;
   codeowners = callPackage ../development/tools/codeowners { };
 
   couchdb3 = callPackage ../servers/http/couchdb/3.nix {
-    erlang = erlangR22;
+    erlang = buildPackages.erlangR22;
   };
 
   dcnnt = python3Packages.callPackage ../servers/dcnnt { };
