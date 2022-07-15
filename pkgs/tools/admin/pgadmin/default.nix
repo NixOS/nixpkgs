@@ -10,11 +10,11 @@
 
 let
   pname = "pgadmin";
-  version = "6.10";
+  version = "6.11";
 
   src = fetchurl {
     url = "https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v${version}/source/pgadmin4-${version}.tar.gz";
-    sha256 = "sha256-wl7qC0p1NLX4+ulb4AGNPU6D0r838t6t/IYwJZcDnVQ=";
+    sha256 = "sha256-1MvvQvVoWiV5hhgJUcAHbMyZzkADunLtwmszaO4EeCA=";
   };
 
   yarnDeps = mkYarnModules {
@@ -66,24 +66,14 @@ let
     pyotp
     botocore
     boto3
+    azure-mgmt-subscription
+    azure-mgmt-rdbms
+    azure-mgmt-resource
+    azure-identity
   ];
 
-  # override necessary on pgadmin4 6.10
+  # override necessary on pgadmin4 6.11
   pythonPackages = python3.pkgs.overrideScope (final: prev: rec {
-    flask = prev.flask.overridePythonAttrs (oldAttrs: rec {
-      version = "2.0.3";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "sha256-4RIMIoyi9VO0cN9KX6knq2YlhGdSYGmYGz6wqRkCaH0=";
-      };
-      disabledTests = (oldAttrs.disabledTests or [ ]) ++ [
-        "test_aborting"
-      ];
-    });
-    flask-paranoid = prev.flask-paranoid.overridePythonAttrs (oldAttrs: rec {
-      # tests fail due to downgrades here
-      doCheck = false;
-    });
     werkzeug = prev.werkzeug.overridePythonAttrs (oldAttrs: rec {
       version = "2.0.3";
       src = oldAttrs.src.override {
@@ -128,7 +118,9 @@ pythonPackages.buildPythonApplication rec {
       --replace "boto3==1.20.*" "boto3>=1.20" \
       --replace "botocore==1.23.*" "botocore>=1.23" \
       --replace "pytz==2021.*" "pytz" \
-      --replace "Werkzeug==2.0.3" "werkzeug>=2.*"
+      --replace "Werkzeug==2.0.3" "werkzeug>=2.*" \
+      --replace "azure-identity==1.9.0" "azure-identity==1.*" \
+      --replace "azure-mgmt-resource==21.0.0" "azure-mgmt-resource==21.*"
     # don't use Server Mode (can be overridden later)
     substituteInPlace pkg/pip/setup_pip.py \
       --replace "req = req.replace('psycopg2', 'psycopg2-binary')" "req = req" \
