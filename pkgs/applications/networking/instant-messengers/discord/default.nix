@@ -28,8 +28,7 @@ let
         sha256 = "d78NnQZ3MkLje8mHrI6noH2iD2oEvSJ3cDnsmzQsUYc=";
       };
       canary = fetchurl {
-        url =
-          "https://dl-canary.discordapp.net/apps/linux/${version}/discord-canary-${version}.tar.gz";
+        url = "https://dl-canary.discordapp.net/apps/linux/${version}/discord-canary-${version}.tar.gz";
         sha256 = "sha256-OrGg4jXziesHBhQORxREN/wq776RgNGaTyjJNV4pSAU=";
       };
     };
