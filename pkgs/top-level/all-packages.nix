@@ -382,6 +382,8 @@ with pkgs;
 
   cp437 = callPackage ../tools/misc/cp437 { };
 
+  cpm = callPackage ../development/tools/cpm { };
+
   cpu-x = callPackage ../applications/misc/cpu-x { };
 
   crackle = callPackage ../tools/networking/crackle { };
