@@ -5107,6 +5107,12 @@
     githubId = 3656888;
     name = "hhm";
   };
+  hhydraa = {
+    email = "hcurfman@keemail.me";
+    github = "hhydraa";
+    githubId = 58676303;
+    name = "hhydraa";
+  };
   higebu = {
     name = "Yuya Kusakabe";
     email = "yuya.kusakabe@gmail.com";
