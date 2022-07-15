@@ -277,6 +277,7 @@ in
   libreddit = handleTest ./libreddit.nix {};
   libresprite = handleTest ./libresprite.nix {};
   libreswan = handleTest ./libreswan.nix {};
+  libuiohook = handleTest ./libuiohook.nix {};
   lidarr = handleTest ./lidarr.nix {};
   lightdm = handleTest ./lightdm.nix {};
   limesurvey = handleTest ./limesurvey.nix {};

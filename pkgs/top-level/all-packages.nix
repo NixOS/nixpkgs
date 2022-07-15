@@ -19320,6 +19320,10 @@ with pkgs;
 
   libuinputplus = callPackage ../development/libraries/libuinputplus { };
 
+  libuiohook = callPackage ../development/libraries/libuiohook {
+    inherit (darwin.apple_sdk.frameworks) AppKit ApplicationServices Carbon;
+  };
+
   libunistring = callPackage ../development/libraries/libunistring { };
 
   libupnp = callPackage ../development/libraries/pupnp { };
