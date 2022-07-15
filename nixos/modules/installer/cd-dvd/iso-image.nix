@@ -281,7 +281,7 @@ let
     if serial; then set with_serial=yes ;fi
     export with_serial
     clear
-    set timeout=10
+    set timeout=${toString config.boot.loader.timeout}
 
     # This message will only be viewable when "gfxterm" is not used.
     echo ""
