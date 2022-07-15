@@ -354,6 +354,7 @@ in
             plasma-browser-integration
             konsole
             oxygen
+            (lib.getBin qttools) # Expose qdbus in PATH
           ];
         in
         requiredPackages
@@ -399,9 +400,10 @@ in
       services.accounts-daemon.enable = true;
       # when changing an account picture the accounts-daemon reads a temporary file containing the image which systemsettings5 may place under /tmp
       systemd.services.accounts-daemon.serviceConfig.PrivateTmp = false;
+      services.power-profiles-daemon.enable = mkDefault true;
+      services.system-config-printer.enable = mkIf config.services.printing.enable (mkDefault true);
       services.udisks2.enable = true;
       services.upower.enable = config.powerManagement.enable;
-      services.system-config-printer.enable = mkIf config.services.printing.enable (mkDefault true);
       services.xserver.libinput.enable = mkDefault true;
 
       # Extra UDEV rules used by Solid
