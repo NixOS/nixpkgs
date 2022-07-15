@@ -10729,6 +10729,8 @@ in {
 
   trezor = callPackage ../development/python-modules/trezor { };
 
+  trfl = callPackage ../development/python-modules/trfl { };
+
   trimesh = callPackage ../development/python-modules/trimesh { };
 
   trio = callPackage ../development/python-modules/trio {
