@@ -18,6 +18,20 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./no-build-info.patch
+
+    # Pull upstream fix for -fno-common toolchains:
+    #   https://github.com/lsof-org/lsof/pull/226
+    #   https://github.com/lsof-org/lsof/pull/233
+    (fetchpatch {
+      name = "add-extern.patch";
+      url = "https://github.com/lsof-org/lsof/commit/180ffa29b0544f77cabbc54d7f77d50d33dd27d7.patch";
+      sha256 = "sha256-zzcN9HrFYMTBeEekeAwi2RIcVukymgaqtpvFIBV6njU=";
+    })
+    (fetchpatch {
+      name = "add-declaration.patch";
+      url = "https://github.com/lsof-org/lsof/commit/8e47e1491636e8cf41baf834554391be45177b00.patch";
+      sha256 = "sha256-kwkDQp7VApLenOLTPMY24Me+/xUhD56skHWRd4ZB1I4=";
+    })
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
