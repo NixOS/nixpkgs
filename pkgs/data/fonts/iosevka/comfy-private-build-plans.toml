@@ -1,5 +1,5 @@
 # The file below is copy/pasted from
-# https://github.com/protesilaos/iosevka-comfy/blob/0.1.0/private-build-plans.toml. It
+# https://raw.githubusercontent.com/protesilaos/iosevka-comfy/0.2.1/private-build-plans.toml. It
 # seems like ofborg will prevent me from using fetchurl to download
 # this file automatically.
 [buildPlans.iosevka-comfy]       # <iosevka-comfy> is your plan name
@@ -303,9 +303,19 @@ serifs = "sans"
 [buildPlans.iosevka-comfy-duo.variants]
 inherits = "buildPlans.iosevka-comfy"
 
-# The short middle leg in 'm' that we need in the narrow monospaced
-# variants is necessary for legibility, especially at small point sizes.
-# Otherwise it is a gimmick, so we remove it in the "wider" builds.
+# The '0' has a forward slash that cuts diagonally through the middle of
+# the circle, connecting the bottom left part to the top right of the
+# oval shape.  Whereas the narrow variants have a dashed forward slash
+# which does not connect the two sides as it is positioned inside the
+# oval shape.
+[buildPlans.iosevka-comfy-duo.variants.design]
+cv71 = 9    # 0 oval forward slash
+
+# The 'm' character has three legs of equal length, insetad of a shorter
+# middle leg.  The short middle leg in the narrow variants is necessary
+# for legibility, especially at small point sizes (otherwise the
+# character's legs visually blend into what appears to be a solid
+# block).
 [buildPlans.iosevka-comfy-duo.variants.upright]
 cv38 = 5    # m earless normal middle leg
 
@@ -371,9 +381,19 @@ serifs = "sans"
 [buildPlans.iosevka-comfy-wide.variants]
 inherits = "buildPlans.iosevka-comfy"
 
-# The short middle leg in 'm' that we need in the narrow monospaced
-# variants is necessary for legibility, especially at small point sizes.
-# Otherwise it is a gimmick, so we remove it in the "wider" builds.
+# The '0' has a forward slash that cuts diagonally through the middle of
+# the circle, connecting the bottom left part to the top right of the
+# oval shape.  Whereas the narrow variants have a dashed forward slash
+# which does not connect the two sides as it is positioned inside the
+# oval shape.
+[buildPlans.iosevka-comfy-wide.variants.design]
+cv71 = 9    # 0 oval forward slash
+
+# The 'm' character has three legs of equal length, insetad of a shorter
+# middle leg.  The short middle leg in the narrow variants is necessary
+# for legibility, especially at small point sizes (otherwise the
+# character's legs visually blend into what appears to be a solid
+# block).
 [buildPlans.iosevka-comfy-wide.variants.upright]
 cv38 = 5    # m earless normal middle leg
 

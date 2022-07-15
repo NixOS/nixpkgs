@@ -7628,6 +7628,8 @@ with pkgs;
 
   jsubfinder = callPackage ../tools/security/jsubfinder { };
 
+  jtag-remote-server = callPackage ../development/embedded/jtag-remote-server { };
+
   jtc = callPackage ../development/tools/jtc { };
 
   jumpapp = callPackage ../tools/X11/jumpapp {};
@@ -22149,9 +22151,7 @@ with pkgs;
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
-  eventstore = callPackage ../servers/nosql/eventstore {
-    Nuget = dotnetPackages.Nuget;
-  };
+  eventstore = callPackage ../servers/nosql/eventstore { };
 
   exim = callPackage ../servers/mail/exim { };
 
