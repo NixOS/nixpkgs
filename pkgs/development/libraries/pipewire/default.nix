@@ -2,6 +2,7 @@
 , lib
 , buildPackages
 , fetchFromGitLab
+, fetchpatch
 , removeReferencesTo
 , python3
 , meson
@@ -69,7 +70,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.54";
+    version = "0.3.55";
 
     outputs = [
       "out"
@@ -87,7 +88,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-EFkx/K5v4f7clFguiU1xFt9VacSHeVksRye73rOjPPI=";
+      sha256 = "sha256-OAe/SpXLDQTvAEDyShTA4flqXUpjOabAQXulNeF6LLw=";
     };
 
     patches = [
@@ -103,6 +104,13 @@ let
       ./0090-pipewire-config-template-paths.patch
       # Place SPA data files in lib output to avoid dependency cycles
       ./0095-spa-data-dir.patch
+
+      # FIXME: fix JACK crash with Ardour6, recommended by upstream, remove in .55
+      (fetchpatch {
+        name = "fix-jack-crash";
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/40552a0e914c3aef48ce59ce1bfb9d80516aa893.patch";
+        sha256 = "sha256-ifVVBoloq1ILgKDPSjjpaw0kbzl+Ok6PZcjG3rsfRuU=";
+      })
     ];
 
     nativeBuildInputs = [
@@ -150,6 +158,7 @@ let
       "-Dinstalled_test_prefix=${placeholder "installedTests"}"
       "-Dpipewire_pulse_prefix=${placeholder "pulse"}"
       "-Dlibjack-path=${placeholder "jack"}/lib"
+      "-Dlibv4l2-path=${placeholder "out"}/lib"
       "-Dlibcamera=${mesonEnableFeature libcameraSupport}"
       "-Droc=${mesonEnableFeature rocSupport}"
       "-Dlibpulse=${mesonEnableFeature pulseTunnelSupport}"
