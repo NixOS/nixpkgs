@@ -28125,6 +28125,8 @@ with pkgs;
 
   kubectl-example = callPackage ../applications/networking/cluster/kubectl-example { };
 
+  kubectl-node-shell = callPackage ../applications/networking/cluster/kubectl-node-shell { };
+
   kubectl-tree = callPackage ../applications/networking/cluster/kubectl-tree { };
 
   kubelogin = callPackage ../applications/networking/cluster/kubelogin { };
