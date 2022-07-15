@@ -1,35 +1,33 @@
-{ lib, stdenv, fetchurl, ffmpeg, ffmpegSupport ? true, makeWrapper, nixosTests }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, ffmpeg, ffmpegSupport ? true,
+  makeWrapper, pkg-config, taglib, taglib_extras, zlib, callPackage, nixosTests}:
 
 with lib;
 
-stdenv.mkDerivation rec {
+buildGoModule rec {
   pname = "navidrome";
-  version = "0.47.5";
+  version = "v0.47.5";
 
+  # Can't use -trimpath because tests require accurate working dir.
+  allowGoReference = true;
 
-  src = fetchurl (if stdenv.hostPlatform.system == "x86_64-linux"
-  then {
-    url = "https://github.com/deluan/navidrome/releases/download/v${version}/navidrome_${version}_Linux_x86_64.tar.gz";
-    sha256 = "sha256-AkSjtln53HDdIcQgnA8Wj010RXnOlOsFm2wfVgbvwtc=";
-  }
-  else {
-    url = "https://github.com/deluan/navidrome/releases/download/v${version}/navidrome_${version}_Linux_arm64.tar.gz";
-    sha256 = "sha256-+VBRiV2zKa6PwamWj/jmE4iuoohAD6oeGnlFi4/01HM=";
-  });
+  src = fetchFromGitHub {
+    owner = "navidrome";
+    repo = "navidrome";
+    rev = "v${version}";
+    sha256 = import ./source-sha.nix;
+  };
 
-  nativeBuildInputs = [ makeWrapper ];
+  vendorSha256 = import ./vendor-sha.nix;
 
-  unpackPhase = ''
-    tar xvf $src navidrome
-  '';
+  nativeBuildInputs = [ pkg-config makeWrapper ];
 
-  installPhase = ''
-    runHook preInstall
+  buildInputs = [ taglib taglib_extras zlib ];
 
-     mkdir -p $out/bin
-     cp navidrome $out/bin
+  ui = callPackage ./ui.nix { };
 
-    runHook postInstall
+  preBuild = ''
+    rm -rf ui/build
+    cp -r ${ui}/libexec/navidrome-ui/deps/navidrome-ui/build ui/build
   '';
 
   postFixup = optionalString ffmpegSupport ''
@@ -37,12 +35,14 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${makeBinPath [ ffmpeg ]}
   '';
 
-  passthru.tests.navidrome = nixosTests.navidrome;
+  passthru = {
+    updateScript = ./update.sh;
+    tests.navidrome = nixosTests.navidrome;
+  };
 
   meta = {
     description = "Navidrome Music Server and Streamer compatible with Subsonic/Airsonic";
     homepage = "https://www.navidrome.org/";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3Only;
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ aciceri ];
