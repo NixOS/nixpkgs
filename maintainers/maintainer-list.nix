@@ -6621,6 +6621,15 @@
     githubId = 15373888;
     name = "Claudius Holeksa";
   };
+  ken-matsui = {
+    email = "nix@kmatsui.me";
+    github = "ken-matsui";
+    githubId = 26405363;
+    name = "Ken Matsui";
+    keys = [{
+      fingerprint = "3611 8CD3 6DE8 3334 B44A  DDE4 1033 60B3 298E E433";
+    }];
+  };
   kennyballou = {
     email = "kb@devnulllabs.io";
     github = "kennyballou";
