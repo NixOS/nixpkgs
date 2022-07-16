@@ -1,15 +1,33 @@
-{ stdenv, lib, buildPythonPackage, pythonOlder, fetchPypi, ncurses, importlib-metadata }:
+{ stdenv
+, lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, ncurses
+, setuptools
+, importlib-metadata }:
 
 buildPythonPackage rec {
   pname = "cx_Freeze";
-  version = "6.10";
+  version = "6.11.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-5bcb9XuYgawUL76+riyLDTKUtW9uSKtkAyMh47Giuic=";
+    sha256 = "sha256-jzowyeM5TykGVeNG07RgkQZWswrGNHqHSZu1rTZcbnw=";
   };
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.6";
+
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "setuptools>=59.0.1,<=60.10.0" "setuptools"
+    substituteInPlace requirements-dev.txt \
+      --replace "setuptools>=59.0.1,<=60.10.0" "setuptools"
+    substituteInPlace setup.cfg \
+      --replace "setuptools>=59.0.1,<=60.10.0" "setuptools"
+    substituteInPlace pyproject.toml \
+      --replace "setuptools>=51.0.0,<=60.10.0" "setuptools"
+  '';
 
   propagatedBuildInputs = [
     importlib-metadata # upstream has this for 3.8 as well
