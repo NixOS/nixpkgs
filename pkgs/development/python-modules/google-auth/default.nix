@@ -2,46 +2,78 @@
 , lib
 , buildPythonPackage
 , fetchPypi
-, pytestCheckHook
 , cachetools
+, pyasn1-modules
+, rsa
+, six
+, aiohttp
 , cryptography
+, pyopenssl
+, pyu2f
+, requests
+, aioresponses
+, asynctest
 , flask
 , freezegun
+, grpcio
 , mock
 , oauth2client
-, pyasn1-modules
-, pyu2f
+, pytest-asyncio
 , pytest-localserver
+, pytestCheckHook
 , responses
-, rsa
+, urllib3
 }:
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "2.6.6";
+  version = "2.9.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-G6STjgMrc961HlnEZWoA4JOc8LERJXUJnxNrq7RWMxI=";
+    sha256 = "sha256-FCkvo0KfK7HpmGJVTN4e5zDWhA664GeBTT0V2FScCIg=";
   };
 
   propagatedBuildInputs = [
     cachetools
     pyasn1-modules
     rsa
-    pyu2f
+    six
   ];
 
+  passthru.optional-dependencies = {
+    aiohttp = [
+      aiohttp
+      requests
+    ];
+    enterprise_cert = [
+      cryptography
+      pyopenssl
+    ];
+    pyopenssl = [
+      pyopenssl
+    ];
+    reauth = [
+      pyu2f
+    ];
+  };
+
   checkInputs = [
-    cryptography
+    aioresponses
+    asynctest
     flask
     freezegun
+    grpcio
     mock
     oauth2client
-    pytestCheckHook
+    pytest-asyncio
     pytest-localserver
+    pytestCheckHook
     responses
-  ];
+    urllib3
+  ] ++ passthru.optional-dependencies.aiohttp
+  ++ passthru.optional-dependencies.enterprise_cert
+  ++ passthru.optional-dependencies.reauth;
 
   pythonImportsCheck = [
     "google.auth"
