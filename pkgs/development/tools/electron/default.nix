@@ -23,7 +23,7 @@ let
 in
 rec {
 
-  electron = electron_19;
+  electron = electron_18;
 
   electron_9 = mkElectron "9.4.4" {
     x86_64-linux = "781d6ca834d415c71078e1c2c198faba926d6fce19e31448bbf4450869135450";
