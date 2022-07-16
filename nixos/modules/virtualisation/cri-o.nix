@@ -73,7 +73,7 @@ in
       default = crioPackage;
       defaultText = literalDocBook ''
         <literal>pkgs.cri-o</literal> built with
-        <literal>config.${opt.extraPackages}</literal>.
+        <literal>config.virtualisation.cri-o.extraPackages</literal>.
       '';
       internal = true;
       description = ''
