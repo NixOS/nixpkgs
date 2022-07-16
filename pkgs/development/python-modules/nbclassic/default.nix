@@ -11,15 +11,15 @@
 
 buildPythonPackage rec {
   pname = "nbclassic";
-  version = "0.3.5";
+  version = "0.4.3";
   disabled = pythonOlder "3.6";
 
   # tests only on github
   src = fetchFromGitHub {
     owner = "jupyterlab";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1d0x7nwsaw5qjw4iaylc2sxlpiq3hlg9sy3i2nh7sn3wckwl76lc";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-5sof5EOqzK7kNHSXp7eJl3ZagZRWF74e08ahqJId2Z8=";
   };
 
   propagatedBuildInputs = [ jupyter_server notebook ];
