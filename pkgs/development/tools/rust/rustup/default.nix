@@ -61,7 +61,7 @@ rustPlatform.buildRustPackage rec {
     mv rustup-init rustup
     binlinks=(
       cargo rustc rustdoc rust-gdb rust-lldb rls rustfmt cargo-fmt
-      cargo-clippy clippy-driver cargo-miri
+      cargo-clippy clippy-driver cargo-miri rust-gdbgui
     )
     for link in ''${binlinks[@]}; do
       ln -s rustup $link
