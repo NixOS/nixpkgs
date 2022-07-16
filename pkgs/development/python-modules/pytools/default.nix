@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "pytools";
-  version = "2022.1.2";
+  version = "2022.1.12";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-XoJBAYgKJGNUdWNliAplu0FvaoyrZRO2j8u0j7oJD8s=";
+    sha256 = "sha256-TWKHXpoqsqJOOTqai3mUkvGnIb/6hArzgHv9Qocd0fQ=";
   };
 
   propagatedBuildInputs = [
