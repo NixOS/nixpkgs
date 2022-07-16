@@ -22744,6 +22744,8 @@ with pkgs;
 
   check_systemd = callPackage ../servers/monitoring/nagios/plugins/check_systemd.nix { };
 
+  check_zfs = callPackage ../servers/monitoring/nagios/plugins/zfs.nix { };
+
   neo4j = callPackage ../servers/nosql/neo4j {
     jre = jre8_headless;
   };
