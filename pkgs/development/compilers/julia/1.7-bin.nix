@@ -1,4 +1,4 @@
-{ autoPatchelfHook, fetchurl, lib, stdenv }:
+{ autoPatchelfHook, fetchurl, lib, stdenv, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   pname = "julia-bin";
@@ -8,6 +8,15 @@ stdenv.mkDerivation rec {
     x86_64-linux = fetchurl {
       url = "https://julialang-s3.julialang.org/bin/linux/x64/${lib.versions.majorMinor version}/julia-${version}-linux-x86_64.tar.gz";
       sha256 = "0ff7ypr76xf99h3dmy1xdnkq2xn432qnzihxs72xrd4j5nhlybwv";
+    };
+    # Julia uses Rosetta on aarch64-darwin
+    aarch64-darwin = fetchurl {
+      url = "https://julialang-s3.julialang.org/bin/mac/x64/${lib.versions.majorMinor version}/julia-${version}-mac64.tar.gz";
+      sha256 = "sha256-A2g9tDfNe1TMlfogccUgXwwd/jmt7N4Q4b3rtNJBZJM=";
+    };
+    x86_64-darwin = fetchurl {
+      url = "https://julialang-s3.julialang.org/bin/mac/x64/${lib.versions.majorMinor version}/julia-${version}-mac64.tar.gz";
+      sha256 = "sha256-A2g9tDfNe1TMlfogccUgXwwd/jmt7N4Q4b3rtNJBZJM=";
     };
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
@@ -20,6 +29,7 @@ stdenv.mkDerivation rec {
   patches = [
     # Source release Nix patch(es) relevant for binary releases as well.
     ./patches/1.7-bin/0005-nix-Enable-parallel-unit-tests-for-sandbox.patch
+    ./patches/1.7-bin/0005-nix-Disable-https-tests.patch
   ];
   postPatch = ''
     # Revert symlink hack.
@@ -33,7 +43,11 @@ stdenv.mkDerivation rec {
         '@test_skip ca_roots_path() != bundled_ca_roots()'
   '';
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  # Note that fixDarwinDylibNames fails for Darwin because install_name_tool claims "string table not at end" of one
+  # of the dylibs.
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    autoPatchelfHook
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -66,6 +80,6 @@ stdenv.mkDerivation rec {
     # Bundled and linked with various GPL code, although Julia itself is MIT.
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ ninjin raskin ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-darwin" ];
   };
 }

@@ -1,0 +1,20 @@
+diff --git a/test/download_exec.jl b/test/download_exec.jl
+index 777fb67..a081fa3 100644
+--- a/test/download_exec.jl
++++ b/test/download_exec.jl
+@@ -5,6 +5,7 @@ module TestDownload
+ using Test
+ 
+ mktempdir() do temp_dir
++#= Disable impure tests
+     # Download a file
+     file = joinpath(temp_dir, "ip")
+     @test download("https://httpbin.julialang.org/ip", file) == file
+@@ -22,6 +23,7 @@ mktempdir() do temp_dir
+     missing_file = joinpath(temp_dir, "missing")
+     @test_throws Exception download("https://httpbin.julialang.org/status/404", missing_file)
+     @test !isfile(missing_file)
++=#
+ 
+     # Use a TEST-NET (192.0.2.0/24) address which shouldn't be bound
+     invalid_host_file = joinpath(temp_dir, "invalid_host")
