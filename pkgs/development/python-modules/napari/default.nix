@@ -28,15 +28,15 @@
 , wrapQtAppsHook
 }: mkDerivationWith buildPythonPackage rec {
   pname = "napari";
-  version = "0.4.15";
+  version = "0.4.16";
 
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "napari";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-52TDMU6box7TA26P0F9ZgPr8fyzYM646lPUfOektOuE=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-Fx3DoTIb2ev5wMP/gmprPIoxeF2f+Cbac6pnWB/zTTw=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
