@@ -1,7 +1,7 @@
 {
   "version": "103.3",
   "src": {
-    "url": "https://chromium.googlesource.com/chromiumos/platform/crosvm",
+    "url": "https://chromium.googlesource.com/crosvm/crosvm",
     "rev": "e7db3a5cc78ca90ab06aadd5f08bb151090269b6",
     "date": "2022-06-01T00:13:12+00:00",
     "path": "/nix/store/r08jyffmjdq38f8yy57v8wgfjiil6586-crosvm",
