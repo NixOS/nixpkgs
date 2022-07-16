@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "watchfiles";
-  version = "0.14.1";
+  version = "0.15.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,14 +23,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "samuelcolvin";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-XjmmyL7ZRqkYwGGk6/KkxL7e/JA43tQN4W3knTtc7t0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "sha256-sZMj1HQ37gAG3WM+qBMhcCQ2MuUGom23lF8c4L0RQzM=";
+    sha256 = "sha256-DibxoVH7uOy9rxzhiN4HmihA7HtdzErmJOnsI/NWY5I=";
   };
 
   nativeBuildInputs = [
