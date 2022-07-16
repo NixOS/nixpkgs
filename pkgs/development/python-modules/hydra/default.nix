@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "hydra";
-  version = "1.1.1";
+  version = "1.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "facebookresearch";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256:1svzysrjg47gb6lxx66fzd8wbhpbbsppprpbqssf5aqvhxgay3qk";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-4r0ZWW9SGl35Oupf0ejwL/s6Nas6RoSN2egiBrvFZIA=";
   };
 
   nativeBuildInputs = [
