@@ -13,7 +13,7 @@
 
 let
   pname = "napari-npe2";
-  version = "0.3.0";
+  version = "0.5.1";
 in
 buildPythonPackage {
   inherit pname version;
@@ -23,8 +23,8 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "napari";
     repo = "npe2";
-    rev = "v${version}";
-    hash = "sha256-IyDUeztWQ8JWXDo//76iHzAlWWaZP6/0lwCh0eZAZsM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+tTJrtJFUGwOhFzWgA5cFVp458DGuPVkErN/5O2LHk4=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
