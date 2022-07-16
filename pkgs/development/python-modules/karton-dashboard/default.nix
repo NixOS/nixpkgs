@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "karton-dashboard";
-  version = "1.2.1";
+  version = "1.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-C1wtpHyuTlNS6Se1rR0RGUl3xht4aphAtddKlIsOAkI=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-thjAgK5EgevkFdKooljrrejwJorT6Lea9QSF0cZhxmw=";
   };
 
   propagatedBuildInputs = [
