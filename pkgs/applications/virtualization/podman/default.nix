@@ -97,8 +97,5 @@ buildGoModule rec {
     changelog = "https://github.com/containers/podman/blob/v${version}/RELEASE_NOTES.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ marsam ] ++ teams.podman.members;
-    # requires >= 10.13 SDK https://github.com/NixOS/nixpkgs/issues/101229
-    # Undefined symbols for architecture x86_64: "_utimensat"
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

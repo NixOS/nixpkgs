@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "Rosettea";
     repo = "Hilbish";
     rev = "v${version}";
-    sha256 = "sha256-n4+qUCbjqxLmGuCQ0QTscJ3me0UZUP/7ggvGp1pNkfg=";
+    sha256 = "sha256-fUGeQM+7FRGTRL3J4c2+c+NTwrM6d99F2ucKsou2kRk=";
     fetchSubmodules = true;
   };
 
