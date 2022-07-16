@@ -8,7 +8,7 @@ let
   upstreamInfo = with builtins; fromJSON (readFile ./upstream-info.json);
 
   arch = with stdenv.hostPlatform;
-    if isAarch64 then "arm"
+    if isAarch64 then "aarch64"
     else if isx86_64 then "x86_64"
     else throw "no seccomp policy files available for host platform";
 
