@@ -10,9 +10,6 @@ import subprocess
 from os.path import abspath, dirname, splitext
 from urllib.request import urlopen
 
-git_path = 'chromiumos/platform/crosvm'
-git_root = 'https://chromium.googlesource.com/'
-
 # CrOS version numbers look like this:
 # [<chrome-major-version>.]<tip-build>.<branch-build>.<branch-branch-build>
 #
@@ -50,7 +47,7 @@ with urlopen(f'https://chromium.googlesource.com/chromiumos/platform/crosvm/+log
 # can be passed straight to fetchGit when imported by Nix.
 argv = ['nix-prefetch-git',
         '--fetch-submodules',
-        '--url', git_root + git_path,
+        '--url', 'https://chromium.googlesource.com/crosvm/crosvm',
         '--rev', f'refs/heads/{release_branch}']
 output = subprocess.check_output(argv)
 data['src'] = json.loads(output.decode('utf-8'))
