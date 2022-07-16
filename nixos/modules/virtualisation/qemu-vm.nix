@@ -17,6 +17,8 @@ let
 
   cfg = config.virtualisation;
 
+  opt = options.virtualisation;
+
   qemu = cfg.qemu.package;
 
   consoles = lib.concatMapStringsSep " " (c: "console=${c}") cfg.qemu.consoles;
@@ -766,6 +768,26 @@ in
               '';
           }
         ]));
+
+    warnings =
+      optional (
+        cfg.writableStore &&
+        cfg.useNixStoreImage &&
+        opt.writableStore.highestPrio > lib.modules.defaultPriority)
+        ''
+          You have enabled ${opt.useNixStoreImage} = true,
+          without setting ${opt.writableStore} = false.
+
+          This causes a store image to be written to the store, which is
+          costly, especially for the binary cache, and because of the need
+          for more frequent garbage collection.
+
+          If you really need this combination, you can set ${opt.writableStore}
+          explicitly to false, incur the cost and make this warning go away.
+          Otherwise, we recommend
+
+            ${opt.writableStore} = false;
+        '';
 
     # Note [Disk layout with `useBootLoader`]
     #
