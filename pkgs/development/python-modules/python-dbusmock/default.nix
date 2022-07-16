@@ -1,29 +1,35 @@
-{ lib, buildPythonPackage, fetchFromGitHub, runtimeShell,
-  nose, dbus, dbus-python, pygobject3,
-  which, pyflakes, pycodestyle, bluez, networkmanager
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, runtimeShell
+, nose
+, dbus
+, dbus-python
+, pygobject3
+, which
+, pyflakes
+, pycodestyle
+, bluez
+, networkmanager
 }:
 
 buildPythonPackage rec {
   pname = "python-dbusmock";
-  version = "0.26.1";
+  version = "0.28.1";
 
   src = fetchFromGitHub {
     owner = "martinpitt";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-kavbWMTgKU/rBIo7RMs9NkwReYQyEdeFwMBSzEM9wa0=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-r4WAMj+ROrFHJ5kcZ32mArI9+tYakKgIcEgDcD0hTFo=";
   };
 
-  prePatch = ''
-    substituteInPlace tests/test_code.py \
-      --replace "pyflakes3" "pyflakes" \
-      --replace "/bin/bash" "${runtimeShell}" \
-      --replace "--ignore=E124,E402,E731,W504" "--ignore=E124,E402,E731,W504,E501" # ignore long lines too
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'dbus-python' ""
   '';
 
   # TODO: Get the rest of these tests running?
-  # This is a mocking library used as a check dependency for a single derivation.
-  # That derivation's tests pass. Maybe not worth the effort to fix these...
   NOSE_EXCLUDE = lib.concatStringsSep "," [
     "test_bluez4" # NixOS ships BlueZ5
     # These appear to fail because they're expecting to run in an Ubuntu chroot?
@@ -46,14 +52,21 @@ buildPythonPackage rec {
     # "test_networkmanager"
   ];
 
+  propagatedBuildInputs = [
+    dbus-python
+  ];
+
   checkInputs = [
-    nose dbus dbus-python which pycodestyle pyflakes
-    pygobject3 bluez (lib.getOutput "test" bluez) networkmanager
+    dbus
+    pygobject3
+    bluez
+    (lib.getOutput "test" bluez)
+    networkmanager
+    nose
   ];
 
   checkPhase = ''
     runHook preCheck
-    export PATH="$PATH:${lib.getOutput "test" bluez}/test";
     nosetests -v
     runHook postCheck
   '';
