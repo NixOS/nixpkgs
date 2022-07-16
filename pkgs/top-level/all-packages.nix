@@ -13938,6 +13938,8 @@ with pkgs;
 
   opam-installer = callPackage ../development/tools/ocaml/opam/installer.nix { };
 
+  opam2json = callPackage ../development/tools/ocaml/opam2json { };
+
   wrapWatcom = callPackage ../development/compilers/open-watcom/wrapper.nix { };
   open-watcom-v2-unwrapped = callPackage ../development/compilers/open-watcom/v2.nix { };
   open-watcom-v2 = wrapWatcom open-watcom-v2-unwrapped { };
