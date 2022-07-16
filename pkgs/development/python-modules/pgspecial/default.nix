@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "pgspecial";
-  version = "1.13.1";
+  version = "2.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-1dq5ZpCQgnWRbcLGIu+uIX8ULggWX6NmlJ1By8VlhwE=";
+    sha256 = "sha256-ZEQ7vJrQm1fQ9Ny7OO/0TVKFO3QYyepS9YV6vhu1NOw=";
   };
 
   propagatedBuildInputs = [
