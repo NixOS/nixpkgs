@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "amazon-ion";
-  version = "0.9.1";
+  version = "0.9.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "amazon.ion";
     inherit version;
-    hash = "sha256-Moq1e7LmI0L7DHg6UNYvseEDbqdL23aCwL38wDm3yCA=";
+    hash = "sha256-FHlfGuXJUU0Tz3bTinmHHQIwRKyvNGqyts6ICefuqWk=";
   };
 
   postPatch = ''
