@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optional enableJemalloc jemalloc;
 
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=deprecated-copy -Wno-error=pessimizing-move"
-    + lib.optionalString stdenv.cc.isClang "-Wno-error=unused-private-field";
+    + lib.optionalString stdenv.cc.isClang "-Wno-error=unused-private-field -faligned-allocation";
 
   cmakeFlags = [
     "-DPORTABLE=1"
