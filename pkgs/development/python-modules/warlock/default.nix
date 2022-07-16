@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "warlock";
-  version = "1.3.3";
+  version = "2.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bcwaldon";
     repo = pname;
-    rev = version;
-    hash = "sha256-59V4KOwjs/vhA3F3E0j3p5L4JnKPgcExN+mgSWs0Cn0=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-HOCLzFYmOL/tCXT+NO/tCZuVXVowNEPP3g33ZYg4+6Q=";
   };
 
   postPatch = ''
