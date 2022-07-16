@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices }:
+{ lib, stdenv, fetchFromGitHub, nix, rustPlatform, CoreServices }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook";
@@ -20,6 +20,12 @@ rustPlatform.buildRustPackage rec {
   # Can be removed when https://github.com/rust-lang/mdBook/pull/1777
   # is released.
   logLevel = "info";
+
+  passthru = {
+    tests = {
+      inherit nix;
+    };
+  };
 
   meta = with lib; {
     description = "Create books from MarkDown";
