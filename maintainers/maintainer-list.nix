@@ -417,6 +417,12 @@
     githubId = 4732885;
     name = "Ivan Jager";
   };
+  aiotter = {
+    email = "git@aiotter.com";
+    github = "aiotter";
+    githubId = 37664775;
+    name = "Yuto Oguchi";
+  };
   airwoodix = {
     email = "airwoodix@posteo.me";
     github = "airwoodix";

@@ -21686,6 +21686,7 @@ with pkgs;
   libzra = callPackage ../development/libraries/libzra { };
 
   zig = callPackage ../development/compilers/zig {
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
     llvmPackages = llvmPackages_13;
   };
 
