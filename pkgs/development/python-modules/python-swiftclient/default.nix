@@ -12,14 +12,14 @@
 
 buildPythonApplication rec {
   pname = "python-swiftclient";
-  version = "4.0.0";
+  version = "4.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-V7bx/yO0ZoQ4AqaBb0trvGiWtq0F1ld6/udiK+OilTg=";
+    hash = "sha256-O2jHNpnF+8OKzXtvEUPWmSOz+vcQ82XZd6QQS9kni/8=";
   };
 
   nativeBuildInputs = [

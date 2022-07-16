@@ -166,7 +166,7 @@ let
       };
     });
 
-  buildPycharm = { pname, version, src, license, description, wmClass, product, ... }:
+  buildPycharm = { pname, version, src, license, description, wmClass, product, cythonSpeedup ? stdenv.isLinux, ... }:
     (mkJetBrainsProduct {
       inherit pname version src wmClass jdk product;
       productShort = "PyCharm";
@@ -189,6 +189,17 @@ let
         '';
         maintainers = with maintainers; [ ];
       };
+    }).overrideAttrs (finalAttrs: previousAttrs: optionalAttrs cythonSpeedup {
+      buildInputs = with python3.pkgs; [ python3 setuptools ];
+      preInstall = ''
+      echo "compiling cython debug speedups"
+      if [[ -d plugins/python-ce ]]; then
+          ${python3.interpreter} plugins/python-ce/helpers/pydev/setup_cython.py build_ext --inplace
+      else
+          ${python3.interpreter} plugins/python/helpers/pydev/setup_cython.py build_ext --inplace
+      fi
+      '';
+      # See https://www.jetbrains.com/help/pycharm/2022.1/cython-speedups.html
     });
 
   buildRider = { pname, version, src, license, description, wmClass, ... }:
