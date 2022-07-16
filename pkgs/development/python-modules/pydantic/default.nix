@@ -11,7 +11,8 @@
 , pythonOlder
 , typing-extensions
 # dependencies for building documentation.
-, withDocs ? (stdenv.hostPlatform == stdenv.buildPlatform)
+# docs fail to build in Darwin sandbox: https://github.com/samuelcolvin/pydantic/issues/4245
+, withDocs ? (stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.isDarwin)
 , ansi2html
 , markdown-include
 , mkdocs
