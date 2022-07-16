@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "mailsuite";
-  version = "1.6.1";
+  version = "1.8.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "17bsnfjjzv8hx5h397p5pa92l6cqc53i0zjjz2p7bjj3xqzhs45a";
+    sha256 = "sha256-ItGOHnYL5rJvllcU/xAie95f09TnCf4OF4Y9oN65FTY=";
   };
 
   propagatedBuildInputs = [
