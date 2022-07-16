@@ -35,6 +35,5 @@ buildGoModule rec {
     homepage = "https://golangci-lint.run/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ anpryl manveru mic92 ];
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }
