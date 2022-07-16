@@ -25,6 +25,19 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-QMufl6ffJVVVVZespvkCbFpB6++R1lnq1687jEsUjr0=";
     })
   ];
+  # Fix up hardcoded version from the above patch, e.g. seen in bzip2.pc or libbz2.so.1.0.N
+  postPatch = ''
+    patch <<-EOF
+      --- configure.ac
+      +++ configure.ac
+      @@ -3,3 +3,3 @@
+      -AC_INIT([bzip2], [1.0.6], [Julian Seward <jseward@bzip.org>])
+      +AC_INIT([bzip2], [${version}], [Julian Seward <jseward@bzip.org>])
+       BZIP2_LT_CURRENT=1
+      -BZIP2_LT_REVISION=6
+      +BZIP2_LT_REVISION=${lib.versions.patch version}
+    EOF
+  '';
 
   strictDeps = true;
   nativeBuildInputs = [ autoreconfHook ];
