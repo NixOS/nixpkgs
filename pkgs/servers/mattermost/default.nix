@@ -1,11 +1,11 @@
 { lib
-, buildGo118Module
+, buildGoModule
 , fetchFromGitHub
 , fetchurl
 , nixosTests
 }:
 
-buildGo118Module rec {
+buildGoModule rec {
   pname = "mattermost";
   version = "7.1.0";
 

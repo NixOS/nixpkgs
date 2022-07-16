@@ -6621,6 +6621,15 @@
     githubId = 15373888;
     name = "Claudius Holeksa";
   };
+  ken-matsui = {
+    email = "nix@kmatsui.me";
+    github = "ken-matsui";
+    githubId = 26405363;
+    name = "Ken Matsui";
+    keys = [{
+      fingerprint = "3611 8CD3 6DE8 3334 B44A  DDE4 1033 60B3 298E E433";
+    }];
+  };
   kennyballou = {
     email = "kb@devnulllabs.io";
     github = "kennyballou";
@@ -8929,6 +8938,16 @@
     githubId = 818502;
     name = "Nathan Yong";
   };
+  natsukium = {
+    email = "nixpkgs@natsukium.com";
+    github = "natsukium";
+    githubId = 25083790;
+    name = "Tomoya Otabi";
+    keys = [{
+      longkeyid = "ed25519/0x9EA45A31DB994C53";
+      fingerprint = "3D14 6004 004C F882 D519  6CD4 9EA4 5A31 DB99 4C53";
+    }];
+  };
   natto1784 = {
     email = "natto@weirdnatto.in";
     github = "natto1784";
@@ -9038,6 +9057,15 @@
     email = "entropy.overseer@protonmail.com";
     github = "nessdoor";
     githubId = 25993494;
+  };
+  netali = {
+    name = "Jennifer Graul";
+    email = "me@netali.de";
+    github = "NetaliDev";
+    githubId = 15304894;
+    keys = [{
+      fingerprint = "F729 2594 6F58 0B05 8FB3  F271 9C55 E636 426B 40A9";
+    }];
   };
   netcrns = {
     email = "jason.wing@gmx.de";
