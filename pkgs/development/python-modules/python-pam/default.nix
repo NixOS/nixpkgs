@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "python-pam";
-  version = "1.8.4";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "FirefighterBlu3";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0gp7vzd332j7jwndcnz7kc9j283d6lyv32bndd1nqv9ghzv69sxp";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-MR9LYXtkbltAmn7yoyyKZn4yMHyh3rj/i/pA8nJy2xU=";
   };
 
   buildInputs = [
