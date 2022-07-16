@@ -6346,6 +6346,8 @@ in {
 
   patch = callPackage ../development/python-modules/patch { };
 
+  patchelf = callPackage ../development/python-modules/patchelf { };
+
   patch-ng = callPackage ../development/python-modules/patch-ng { };
 
   path = callPackage ../development/python-modules/path { };
