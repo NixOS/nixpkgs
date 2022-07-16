@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "jira";
-  version = "3.1.1";
+  version = "3.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pycontribs";
     repo = pname;
-    rev = version;
-    hash = "sha256-1g7yNKRR7Ua2rjfiE1c94LKAQGVCX0gSeqTc2Pn7QhM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-KRfyXWSnWmkt/SYmrpxG60KytEooMWNhHg8TrvFeATc=";
   };
 
   nativeBuildInputs = [
