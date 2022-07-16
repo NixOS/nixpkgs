@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "catalogue";
-  version = "2.0.7";
+  version = "2.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-U10zrnnr0hyimFUdhdoYaui44d82sPsCRtp3QWPsLWs=";
+    sha256 = "sha256-oczi8XOKMd6yqiSz5Kieb7PoUlVcGDsOzaiivMHq7y4=";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
