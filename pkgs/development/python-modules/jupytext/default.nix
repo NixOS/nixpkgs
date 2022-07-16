@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , GitPython
@@ -63,6 +64,9 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_apply_black_through_jupytext" # we can't do anything about ill-formatted notebooks
+  ] ++ lib.optionals stdenv.isDarwin [
+    # requires access to trash
+    "test_load_save_rename"
   ];
 
   pythonImportsCheck = [

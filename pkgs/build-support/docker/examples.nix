@@ -588,7 +588,7 @@ rec {
       chown 1000 ./home/jane
       ln -s ${pkgs.hello.overrideAttrs (o: {
         # A unique `hello` to make sure that it isn't included via another mechanism by accident.
-        configureFlags = o.configureFlags or "" + " --program-prefix=layeredImageWithFakeRootCommands-";
+        configureFlags = o.configureFlags or [] ++ [ " --program-prefix=layeredImageWithFakeRootCommands-" ];
         doCheck = false;
       })} ./hello
     '';

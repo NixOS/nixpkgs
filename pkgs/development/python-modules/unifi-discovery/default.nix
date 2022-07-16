@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "unifi-discovery";
-  version = "1.1.4";
+  version = "1.1.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-+af1boeJtTI89ZJqgXXsxXQXGDhG4ewgukfKDdhWl9g=";
+    hash = "sha256-WO1oLD09fokMR7lVCqs1Qeodjc+Yg431otl9rohtmPo=";
   };
 
   nativeBuildInputs = [

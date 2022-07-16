@@ -602,10 +602,10 @@ been removed, in this case, it's recommended to use `pytestCheckHook`.
 #### Using pytestCheckHook {#using-pytestcheckhook}
 
 `pytestCheckHook` is a convenient hook which will substitute the setuptools
-`test` command for a checkPhase which runs `pytest`. This is also beneficial
+`test` command for a `checkPhase` which runs `pytest`. This is also beneficial
 when a package may need many items disabled to run the test suite.
 
-Using the example above, the analagous pytestCheckHook usage would be:
+Using the example above, the analagous `pytestCheckHook` usage would be:
 
 ```
   checkInputs = [ pytestCheckHook ];
@@ -624,7 +624,7 @@ Using the example above, the analagous pytestCheckHook usage would be:
   ];
 ```
 
-This is expecially useful when tests need to be conditionallydisabled,
+This is expecially useful when tests need to be conditionally disabled,
 for example:
 
 ```
@@ -640,31 +640,35 @@ for example:
     "socket"
   ];
 ```
-Trying to concatenate the related strings to disable tests in a regular checkPhase
-would be much harder to read. This also enables us to comment on why specific tests
-are disabled.
+
+Trying to concatenate the related strings to disable tests in a regular
+`checkPhase` would be much harder to read. This also enables us to comment on
+why specific tests are disabled.
 
 #### Using pythonImportsCheck {#using-pythonimportscheck}
 
-Although unit tests are highly prefered to validate correctness of a package, not
-all packages have test suites that can be ran easily, and some have none at all.
+Although unit tests are highly preferred to validate correctness of a package, not
+all packages have test suites that can be run easily, and some have none at all.
 To help ensure the package still works, `pythonImportsCheck` can attempt to import
 the listed modules.
 
 ```
   pythonImportsCheck = [ "requests" "urllib" ];
 ```
+
 roughly translates to:
+
 ```
   postCheck = ''
     PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
     python -c "import requests; import urllib"
   '';
 ```
-However, this is done in it's own phase, and not dependent on whether `doCheck = true;`
+
+However, this is done in its own phase, and not dependent on whether `doCheck = true;`.
 
 This can also be useful in verifying that the package doesn't assume commonly
-present packages (e.g. `setuptools`)
+present packages (e.g. `setuptools`).
 
 #### Using pythonRelaxDepsHook {#using-pythonrelaxdepshook}
 
@@ -719,7 +723,7 @@ pkg3
 ```
 
 In general you should always use `pythonRelaxDeps`, because `pythonRemoveDeps`
-will convert build errors in runtime errors. However `pythonRemoveDeps` may
+will convert build errors into runtime errors. However `pythonRemoveDeps` may
 still be useful in exceptional cases, and also to remove dependencies wrongly
 declared by upstream (for example, declaring `black` as a runtime dependency
 instead of a dev dependency).
@@ -738,14 +742,14 @@ creates a special link to the project code. That way, you can run updated code
 without having to reinstall after each and every change you make. Development
 mode is also available. Let's see how you can use it.
 
-In the previous Nix expression the source was fetched from an url. We can also
+In the previous Nix expression the source was fetched from a url. We can also
 refer to a local source instead using `src = ./path/to/source/tree;`
 
 If we create a `shell.nix` file which calls `buildPythonPackage`, and if `src`
 is a local source, and if the local source has a `setup.py`, then development
 mode is activated.
 
-In the following example we create a simple environment that has a Python 3.9
+In the following example, we create a simple environment that has a Python 3.9
 version of our package in it, as well as its dependencies and other packages we
 like to have in the environment, all specified with `propagatedBuildInputs`.
 Indeed, we can just add any package we like to have in our environment to
@@ -862,7 +866,7 @@ Each interpreter has the following attributes:
 
 ### Optimizations {#optimizations}
 
-The Python interpreters are by default not build with optimizations enabled, because
+The Python interpreters are by default not built with optimizations enabled, because
 the builds are in that case not reproducible. To enable optimizations, override the
 interpreter of interest, e.g using
 
@@ -913,7 +917,7 @@ and the aliases
 #### `buildPythonPackage` function {#buildpythonpackage-function}
 
 The `buildPythonPackage` function is implemented in
-`pkgs/development/interpreters/python/mk-python-derivation`
+`pkgs/development/interpreters/python/mk-python-derivation.nix`
 using setup hooks.
 
 The following is an example:
@@ -954,7 +958,7 @@ The `buildPythonPackage` mainly does four things:
 * In the `postFixup` phase, the `wrapPythonPrograms` bash function is called to
   wrap all programs in the `$out/bin/*` directory to include `$PATH`
   environment variable and add dependent libraries to script's `sys.path`.
-* In the `installCheck` phase, `${python.interpreter} setup.py test` is ran.
+* In the `installCheck` phase, `${python.interpreter} setup.py test` is run.
 
 By default tests are run because `doCheck = true`. Test dependencies, like
 e.g. the test runner, should be added to `checkInputs`.
@@ -969,7 +973,7 @@ following are specific to `buildPythonPackage`:
 
 * `catchConflicts ? true`: If `true`, abort package build if a package name
   appears more than once in dependency tree. Default is `true`.
-* `disabled` ? false: If `true`, package is not built for the particular Python
+* `disabled ? false`: If `true`, package is not built for the particular Python
   interpreter version.
 * `dontWrapPythonPrograms ? false`: Skip wrapping of Python programs.
 * `permitUserSite ? false`: Skip setting the `PYTHONNOUSERSITE` environment
@@ -1421,7 +1425,8 @@ in newpkgs.inkscape
 
 ### `python setup.py bdist_wheel` cannot create .whl {#python-setup.py-bdist_wheel-cannot-create-.whl}
 
-Executing `python setup.py bdist_wheel` in a `nix-shell `fails with
+Executing `python setup.py bdist_wheel` in a `nix-shell`fails with
+
 ```
 ValueError: ZIP does not support timestamps before 1980
 ```
@@ -1513,7 +1518,7 @@ in pkgs.mkShell rec {
     # the environment.
     pythonPackages.python
 
-    # This execute some shell code to initialize a venv in $venvDir before
+    # This executes some shell code to initialize a venv in $venvDir before
     # dropping into the shell
     pythonPackages.venvShellHook
 
