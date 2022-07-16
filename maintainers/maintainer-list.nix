@@ -8944,7 +8944,6 @@
     githubId = 25083790;
     name = "Tomoya Otabi";
     keys = [{
-      longkeyid = "ed25519/0x9EA45A31DB994C53";
       fingerprint = "3D14 6004 004C F882 D519  6CD4 9EA4 5A31 DB99 4C53";
     }];
   };
