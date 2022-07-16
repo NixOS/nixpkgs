@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "boulder";
-  version = "2022-07-05";
+  version = "2022-07-11";
 
   src = fetchFromGitHub {
     owner = "letsencrypt";
     repo = "boulder";
     rev = "release-${version}";
-    sha256 = "sha256-WhQOpMeZe+oBitsHPe9kpFt0K1niU4Q9IvlOoDseXDM=";
+    sha256 = "sha256-fDKB7q2e+qdHt+t/BQWX7LkpyiZQtZSHp/x5uv0/c7c=";
     leaveDotGit = true;
     postFetch = ''
       cd $out
