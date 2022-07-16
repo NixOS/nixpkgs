@@ -698,6 +698,23 @@ self: super:
             url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/454b3a826edb5fc6d0fea3a9cfd1a5e8fc568747.diff";
             sha256 = "1l9qg905jvlw3r0kx4xfw5m12pbs0782v2g3267d1m6q4m6fj1zy";
           })
+        ]
+        # TODO: remove with xorgserver >= 21.1.4; https://lists.x.org/archives/xorg/2022-July/061035.html
+        ++ [
+          (fetchpatch {
+            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/f1070c01d616c5f21f939d5ebc533738779451ac.diff";
+            sha256 = "5hcreV3ND8Lklvo7QMpB0VWQ2tifIamRlCr6J82qXt8=";
+          })
+          (fetchpatch {
+            name = "CVE-2022-2319.diff";
+            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/6907b6ea2b4ce949cb07271f5b678d5966d9df42.diff";
+            sha256 = "gWXCalWj2SF4U7wSFGIgK396B0Fs3EtA/EL+34m3FWY=";
+          })
+          (fetchpatch {
+            name = "CVE-2022-2320.diff";
+            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/dd8caf39e9e15d8f302e54045dd08d8ebf1025dc.diff";
+            sha256 = "rBiiXQRreMvexW9vOKblcfCYzul+9La01EAhir4FND8=";
+          })
         ];
         buildInputs = commonBuildInputs ++ [ libdrm mesa ];
         propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ libpciaccess libepoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
