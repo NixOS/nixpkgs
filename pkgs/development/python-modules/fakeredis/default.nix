@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "dsoftwareinc";
     repo = "fakeredis-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-gmQuQIlpE4PdgZ1J5aucSQkJpfrh1qTJNLfyI+cMCJU=";
+    hash = "sha256-IGrWHlWkydGyyQAvagvhzd2vcLQwTZHoasrMC9M/smw=";
   };
 
   nativeBuildInputs = [
