@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "persisting-theory";
-  version = "0.2.1";
+  version = "1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02hcg7js23yjyw6gwxqzvyv2b1wfjrypk98cfxfgf7s8iz67vzq0";
+    sha256 = "sha256-D4QPoiJHvKpRQJTafzsmxgI1lCmrEtLNiL4GtJozYpA=";
   };
 
   checkInputs = [ nose ];
