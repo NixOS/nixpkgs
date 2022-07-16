@@ -122,11 +122,32 @@ let
           TMPDIR=$(mktemp -d nix-vm.XXXXXXXXXX --tmpdir)
       fi
 
-      ${lib.optionalString cfg.useNixStoreImage
-      ''
-        # Create a writable copy/snapshot of the store image.
-        ${qemu}/bin/qemu-img create -f qcow2 -F qcow2 -b ${storeImage}/nixos.qcow2 "$TMPDIR"/store.img
-      ''}
+      ${lib.optionalString (cfg.useNixStoreImage)
+        (if cfg.writableStore
+          then ''
+            # Create a writable copy/snapshot of the store image.
+            ${qemu}/bin/qemu-img create -f qcow2 -F qcow2 -b ${storeImage}/nixos.qcow2 "$TMPDIR"/store.img
+          ''
+          else ''
+            (
+              cd ${builtins.storeDir}
+              ${pkgs.erofs-utils}/bin/mkfs.erofs \
+                --force-uid=0 \
+                --force-gid=0 \
+                -U eb176051-bd15-49b7-9e6b-462e0b467019 \
+                -T 0 \
+                --exclude-regex="$(
+                  <${pkgs.closureInfo { rootPaths = [ config.system.build.toplevel regInfo ]; }}/store-paths \
+                    sed -e 's^.*/^^g' \
+                  | cut -c -10 \
+                  | ${pkgs.python3}/bin/python ${./includes-to-excludes.py} )" \
+                "$TMPDIR"/store.img \
+                . \
+                </dev/null >/dev/null
+            )
+          ''
+        )
+      }
 
       # Create a directory for exchanging data with the VM.
       mkdir -p "$TMPDIR/xchg"
@@ -769,6 +790,8 @@ in
     );
     boot.loader.grub.gfxmodeBios = with cfg.resolution; "${toString x}x${toString y}";
 
+    boot.initrd.kernelModules = optionals (cfg.useNixStoreImage && !cfg.writableStore) [ "erofs" ];
+
     boot.initrd.extraUtilsCommands = lib.mkIf (cfg.useDefaultFilesystems && !config.boot.initrd.systemd.enable)
       ''
         # We need mke2fs in the initrd.
@@ -905,6 +928,7 @@ in
         name = "nix-store";
         file = ''"$TMPDIR"/store.img'';
         deviceExtraOpts.bootindex = if cfg.useBootLoader then "3" else "2";
+        driveExtraOpts.format = if cfg.writableStore then "qcow2" else "raw";
       }])
       (mkIf cfg.useBootLoader [
         # The order of this list determines the device names, see
