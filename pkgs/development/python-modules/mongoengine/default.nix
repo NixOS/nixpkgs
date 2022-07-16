@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "mongoengine";
-  version = "0.24.0";
+  version = "0.24.1";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "MongoEngine";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-BQSB4SGlejARFreeTfqFMzCWvBc6Vvq9EOMLjhAihdI=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-KmCk4YTkwpWePTOOFyp4hGIcxpy/rrfAAC1/Xes/IYk=";
   };
 
   propagatedBuildInputs = [
