@@ -8,20 +8,21 @@ let
 
   pkg = cfg.package.override (optionalAttrs cfg.sso.enable {
     enableSSO = cfg.sso.enable;
-    crowdProperties = ''
-      application.name                        ${cfg.sso.applicationName}
-      application.password                    ${cfg.sso.applicationPassword}
-      application.login.url                   ${cfg.sso.crowd}/console/
-
-      crowd.server.url                        ${cfg.sso.crowd}/services/
-      crowd.base.url                          ${cfg.sso.crowd}/
-
-      session.isauthenticated                 session.isauthenticated
-      session.tokenkey                        session.tokenkey
-      session.validationinterval              ${toString cfg.sso.validationInterval}
-      session.lastvalidation                  session.lastvalidation
-    '';
   });
+
+  crowdProperties = pkgs.writeText "crowd.properties" ''
+    application.name                        ${cfg.sso.applicationName}
+    application.password                    @NIXOS_JIRA_CROWD_SSO_PWD@
+    application.login.url                   ${cfg.sso.crowd}/console/
+
+    crowd.server.url                        ${cfg.sso.crowd}/services/
+    crowd.base.url                          ${cfg.sso.crowd}/
+
+    session.isauthenticated                 session.isauthenticated
+    session.tokenkey                        session.tokenkey
+    session.validationinterval              ${toString cfg.sso.validationInterval}
+    session.lastvalidation                  session.lastvalidation
+  '';
 
 in
 
@@ -112,9 +113,9 @@ in
           description = "Exact name of this JIRA instance in Crowd";
         };
 
-        applicationPassword = mkOption {
+        applicationPasswordFile = mkOption {
           type = types.str;
-          description = "Application password of this JIRA instance in Crowd";
+          description = "Path to the file containing the application password of this JIRA instance in Crowd";
         };
 
         validationInterval = mkOption {
@@ -181,6 +182,7 @@ in
         JIRA_HOME = cfg.home;
         JAVA_HOME = "${cfg.jrePackage}";
         CATALINA_OPTS = concatStringsSep " " cfg.catalinaOptions;
+        JAVA_OPTS = mkIf cfg.sso.enable "-Dcrowd.properties=${cfg.home}/crowd.properties";
       };
 
       preStart = ''
@@ -191,6 +193,14 @@ in
           -e 's,protocol="HTTP/1.1",protocol="HTTP/1.1" proxyName="${cfg.proxy.name}" proxyPort="${toString cfg.proxy.port}" scheme="${cfg.proxy.scheme}" secure="${toString cfg.proxy.secure}",' \
         '') + ''
           ${pkg}/conf/server.xml.dist > ${cfg.home}/server.xml
+
+        ${optionalString cfg.sso.enable ''
+          install -m660 ${crowdProperties} ${cfg.home}/crowd.properties
+          ${pkgs.replace-secret}/bin/replace-secret \
+            '@NIXOS_JIRA_CROWD_SSO_PWD@' \
+            ${cfg.sso.applicationPasswordFile} \
+            ${cfg.home}/crowd.properties
+        ''}
       '';
 
       serviceConfig = {
@@ -204,4 +214,10 @@ in
       };
     };
   };
+
+  imports = [
+    (mkRemovedOptionModule [ "services" "jira" "sso" "applicationPassword" ] ''
+      Use `applicationPasswordFile` instead!
+    '')
+  ];
 }
