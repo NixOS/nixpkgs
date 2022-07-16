@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "stanza";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "stanfordnlp";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1j5918n875p3ibhzc5zp3vb97asbbnb04pj1igxwzl0xm6qcsbh8";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-EAES3UpJqE7wmvCPycFhwI1lMrReN+L6W8CEDwdHTlA=";
   };
 
   disabled = pythonOlder "3.6";
