@@ -14,10 +14,10 @@ let
   pname = "1password-cli";
   version = "2.5.1";
   sources = rec {
-    aarch64-linux = fetch "linux_arm64" "sha256-HZ6AVheJrw9ZR9HGWbB6/kCzbrfYcwApa2z18tDBo1k=" "zip";
-    i686-linux = fetch "linux_386" "sha256-aG6oW0epF+P9pSWMlTStSbBynBDkGX1B+0NHUnwLRhs=" "zip";
-    x86_64-linux = fetch "linux_amd64" "sha256-7GkBVcvXM/WZiXEiIbYh9lS0f4BS4Hc4RCVjr8FoW8A=" "zip";
-    aarch64-darwin = fetch "apple_universal" "sha256-XebD33fX15RsFUdbV+DvMRIi1MSyMfIRC3JOwcmi8kk=" "pkg";
+    aarch64-linux = fetch "linux_arm64" "18jz8x1x83g5dpckfps17z0ca6wxdp9c1qy32zq5cmgcs8vqmaxr" "zip";
+    i686-linux = fetch "linux_386" "10kd8sdbpl04ai1nsq8b3q1m0yvrc032cb89y2xg4g7dxjb48cm5" "zip";
+    x86_64-linux = fetch "linux_amd64" "0vjgba6b2h634zjbpv3mqv9wwdi1521plrxc0wnyscdgkhlfkb01" "zip";
+    aarch64-darwin = fetch "apple_universal" "0v1ks0b7d25jg77k3kf782kq1bhpxfq738vsg6lwlf9b4yslrl1k" "pkg";
     x86_64-darwin = aarch64-darwin;
   };
   platforms = builtins.attrNames sources;
