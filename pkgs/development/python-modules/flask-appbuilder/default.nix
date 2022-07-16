@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "flask-appbuilder";
-  version = "4.0.0";
+  version = "4.1.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -43,7 +43,7 @@ buildPythonPackage rec {
       # https://github.com/dpgaspar/Flask-AppBuilder/pull/1734
       name = "flask-appbuilder-wtf3.patch";
       url = "https://github.com/dpgaspar/Flask-AppBuilder/commit/bccb3d719cd3ceb872fe74a9ab304d74664fbf43.patch";
-      sha256 = "1rsci0ynb7y6k53j164faggjr2g6l5v78w7953qbxcy8f55sb2fv";
+      sha256 = "sha256-8NaTr0RcnsVik/AB4g8QL+FkcRlgkkASFe8fXIvFt/A=";
       excludes = [
         "requirements.txt"
         "setup.py"
