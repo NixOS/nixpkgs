@@ -6,28 +6,45 @@
 , dbus
 , dbus-python
 , pygobject3
-, which
-, pyflakes
-, pycodestyle
 , bluez
 , networkmanager
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "python-dbusmock";
-  version = "0.28.1";
+  version = "0.28.2";
 
   src = fetchFromGitHub {
     owner = "martinpitt";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-r4WAMj+ROrFHJ5kcZ32mArI9+tYakKgIcEgDcD0hTFo=";
+    sha256 = "sha256-GQU3aenqn61Flb4i+zXXwVJFx1TMb5h8AScv/k6rs/A=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'dbus-python' ""
+    substituteInPlace pyproject.toml \
+      --replace '"dbus-python"' ""
   '';
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    dbus-python
+  ];
+
+  checkInputs = [
+    dbus
+    pygobject3
+    bluez
+    (lib.getOutput "test" bluez)
+    networkmanager
+    nose
+  ];
 
   # TODO: Get the rest of these tests running?
   NOSE_EXCLUDE = lib.concatStringsSep "," [
@@ -52,18 +69,6 @@ buildPythonPackage rec {
     # "test_networkmanager"
   ];
 
-  propagatedBuildInputs = [
-    dbus-python
-  ];
-
-  checkInputs = [
-    dbus
-    pygobject3
-    bluez
-    (lib.getOutput "test" bluez)
-    networkmanager
-    nose
-  ];
 
   checkPhase = ''
     runHook preCheck
