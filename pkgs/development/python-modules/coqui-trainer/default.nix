@@ -17,7 +17,7 @@
 
 let
   pname = "coqui-trainer";
-  version = "0.0.12";
+  version = "0.0.13";
 in
 buildPythonPackage {
   inherit pname version;
@@ -26,8 +26,8 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "Trainer";
-    rev = "v${version}";
-    hash = "sha256-MSB3XbQALEKQi6Jtr/d2K8cIqyZryebYEcewGG48HV0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-tRm/TElGjVTgCrI80wCt4F1hO82CsDPz2ynJzQKmbIs=";
   };
 
   propagatedBuildInputs = [
