@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "datasets";
-  version = "1.18.3";
+  version = "2.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -28,8 +28,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
-    rev = version;
-    hash = "sha256-2x6DpsDcVF2O5iJKeMEGw/aJwZPc7gSGaK2947c3B6s=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-VBYCDEOK5KyYuvlybr37LgOchlEUAl/aqiC+J6WQbSA=";
   };
 
   propagatedBuildInputs = [
