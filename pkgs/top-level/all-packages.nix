@@ -34343,6 +34343,8 @@ with pkgs;
 
   cernlib = callPackage ../development/libraries/physics/cernlib { };
 
+  clhep = callPackage ../development/libraries/physics/clhep { };
+
   hepmc2 = callPackage ../development/libraries/physics/hepmc2 { };
 
   hepmc3 = callPackage ../development/libraries/physics/hepmc3 {
