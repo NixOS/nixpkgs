@@ -3,15 +3,15 @@
 
 buildPythonPackage rec {
   pname = "omegaconf";
-  version = "2.1.1";
+  version = "2.2.2";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "omry";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0hh6pk4q6nb94bz9rwa6cysf3nj50rmqkjh34pqkh28nzg44afjw";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-bUJ80sa2ot2JSkt29eFwSiKL6R1X1+VVeE9dFIy4Mg0=";
   };
 
   postPatch = ''
