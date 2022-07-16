@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "mne-python";
-  version = "0.24.1";
+  version = "1.0.3";
 
   disabled = isPy27;
 
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mne-tools";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0n91pj97xmpn0bmlv56q2117szlvvs4b52pjjlm3g8ny4xb3iwr0";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-6eDS/hKqEQqUxJtnfsPhxw9b4p5CC1ifnxVCRBmVVA8=";
   };
 
   propagatedBuildInputs = [ numpy scipy ];
