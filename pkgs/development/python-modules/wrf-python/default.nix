@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "wrf-python";
-  version = "1.3.3";
+  version = "1.3.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "NCAR";
     repo = "wrf-python";
-    rev = version;
-    hash = "sha256-+v4FEK0FVE0oAIb18XDTOInHKfxXyykb1ngk9Uxwf0c=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4iIs/M9fzGJsnKCDSl09OTUoh7j6REBXuutE5uXFe3k=";
   };
 
   propagatedBuildInputs = [
