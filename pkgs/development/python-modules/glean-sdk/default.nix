@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "glean-sdk";
-  version = "44.0.0";
+  version = "50.1.2";
 
   disabled = pythonOlder "3.6";
 
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "sha256-lWFv8eiA3QHp5bhcg4qon/dvKUbFbtH1Q2oXGkk0Me0=";
+    sha256 = "sha256-avTIinFBSoCHeCiX7EoS4ucBK6FyFC1SuAFpSdxwPUk=";
   };
 
   nativeBuildInputs = [
