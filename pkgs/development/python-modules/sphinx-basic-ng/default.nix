@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "sphinx-basic-ng";
-  version = "0.0.1.a11";
+  version = "0.0.1.a12";
   disable = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pradyunsg";
     repo = "sphinx-basic-ng";
     rev = version;
-    sha256 = "sha256-Eur3CadC2NTuBXosG4SN9t2L0qkqN+Q79bcvhvlG/f8=";
+    sha256 = "sha256-3/a/xHPNO96GEMLgWGTLdFoojVsjNyxYgY1gAZr75S0=";
   };
 
   patches = [
