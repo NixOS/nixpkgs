@@ -57,7 +57,8 @@ buildPythonPackage rec {
       --replace 'anyconfig = "0.13.0"' 'anyconfig = "*"' \
       --replace 'environs = "9.5.0"' 'environs = "*"' \
       --replace 'jsonschema = "4.6.0"' 'jsonschema = "*"' \
-      --replace '"ruamel.yaml" = "0.17.21"' '"ruamel.yaml" = "*"'
+      --replace '"ruamel.yaml" = "0.17.21"' '"ruamel.yaml" = "*"' \
+      --replace 'python-json-logger = "2.0.2"' 'python-json-logger = "*"'
   '';
 
   # Module has no tests
