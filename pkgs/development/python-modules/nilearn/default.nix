@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "nilearn";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-+cjjCt71FImRCux3JLVpneF4Qn065jhz2tmyPdMh/nY=";
+    sha256 = "sha256-3YIbT/KzuH9eSwNOoPlfzkN1rOWG3o7Rfmpme94ZJdc=";
   };
 
   checkInputs = [ pytestCheckHook ];
