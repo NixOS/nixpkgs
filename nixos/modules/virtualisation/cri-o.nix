@@ -1,9 +1,8 @@
-{ config, lib, options, pkgs, utils, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 let
   cfg = config.virtualisation.cri-o;
-  opt = options.virtualisation.cri-o;
 
   crioPackage = (pkgs.cri-o.override { inherit (cfg) extraPackages; });
 
@@ -72,10 +71,6 @@ in
     package = mkOption {
       type = types.package;
       default = crioPackage;
-      defaultText = literalDocBook ''
-        <literal>pkgs.cri-o</literal> built with
-        <literal>config.${opt.extraPackages}</literal>.
-      '';
       internal = true;
       description = ''
         The final CRI-O package (including extra packages).
