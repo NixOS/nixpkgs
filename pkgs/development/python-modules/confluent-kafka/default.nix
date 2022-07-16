@@ -1,12 +1,12 @@
 { lib, buildPythonPackage, fetchPypi, isPy3k, rdkafka, requests, avro3k, avro ? null, futures ? null, enum34 ? null }:
 
 buildPythonPackage rec {
-  version = "1.8.2";
+  version = "1.9.0";
   pname = "confluent-kafka";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b79e836c3554bc51c6837a8a0152f7521c9bf31342f5b8e21eba6b28044fa585";
+    sha256 = "sha256-L4cARHNxjRl29XyeIzB8IW2vjL1H/6cRXvDOSJY8nGk=";
   };
 
   buildInputs = [ rdkafka requests ] ++ (if isPy3k then [ avro3k ] else [ enum34 avro futures ]) ;
