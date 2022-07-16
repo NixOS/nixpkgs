@@ -1,8 +1,9 @@
-{ config, lib, pkgs, utils, ... }:
+{ config, lib, options, pkgs, utils, ... }:
 
 with lib;
 let
   cfg = config.virtualisation.cri-o;
+  opt = options.virtualisation.cri-o;
 
   crioPackage = (pkgs.cri-o.override { inherit (cfg) extraPackages; });
 
@@ -73,7 +74,7 @@ in
       default = crioPackage;
       defaultText = literalDocBook ''
         <literal>pkgs.cri-o</literal> built with
-        <literal>config.virtualisation.cri-o.extraPackages</literal>.
+        <literal>config.${opt.extraPackages}</literal>.
       '';
       internal = true;
       description = ''
