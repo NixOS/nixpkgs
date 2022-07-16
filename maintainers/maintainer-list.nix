@@ -6121,6 +6121,12 @@
     githubId = 60272884;
     name = "Jonathan Jeppener-Haltenhoff";
   };
+  jocelynthode = {
+    email = "jocelyn.thode@gmail.com";
+    github = "jocelynthode";
+    githubId = 3967312;
+    name = "Jocelyn Thode";
+  };
   joelancaster = {
     email = "joe.a.lancas@gmail.com";
     github = "JoeLancaster";
