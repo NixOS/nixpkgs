@@ -8,18 +8,20 @@
 , python
 , catch
 , numpy
+, pytest-timeout
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pybind11";
-  version = "2.9.2";
+  version = "2.10.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pybind";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-O3bkexUBa+gfiJEM6KSR8y/iVqHqlCFmz/9EghxdIpw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/X8DZPFsNrKGbhjZ1GFOj17/NU6p4R+saCW3pLKVNeA=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -49,6 +51,7 @@ buildPythonPackage rec {
   checkInputs = [
     catch
     numpy
+    pytest-timeout
     pytestCheckHook
   ];
 
