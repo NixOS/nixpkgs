@@ -322,6 +322,10 @@ let
       orga = "victorhqc";
       repo = "tree-sitter-prisma";
     };
+    "tree-sitter-protobuf" = {
+      orga = "yusdacra";
+      repo = "tree-sitter-protobuf";
+    };
     "tree-sitter-org-nvim" = {
       orga = "milisims";
       repo = "tree-sitter-org";
