@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "sigtools";
-  version = "2.0.3";
+  version = "4.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e7789628ec0d02e421bca76532b0d5da149f96f09e7ed4a5cbf318624b75e949";
+    sha256 = "sha256-fMhKC6VuNLfxXkM3RCaPEODEp21r/s6JzswaHKkROLY=";
   };
 
   propagatedBuildInputs = [ funcsigs six ];
