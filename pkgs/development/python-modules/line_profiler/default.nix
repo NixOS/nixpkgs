@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "line-profiler";
-  version = "3.4.0";
+  version = "3.5.1";
 
   disabled = pythonOlder "3.6" || isPyPy;
 
   src = fetchPypi {
     pname = "line_profiler";
     inherit version;
-    sha256 = "b6b0a8100a2829358e31ef7c6f427b1dcf2b1d8e5d38b55b219719ecf758aee5";
+    sha256 = "sha256-d0ACCL+9XUNBk4qaOk+1GU9a9/wjstSWyRN1X4MQ6Lg=";
   };
 
   nativeBuildInputs = [
