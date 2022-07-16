@@ -45,12 +45,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "imagemagick";
-  version = "7.1.0.43";
+  version = "7.1.0-43";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
-    rev = version;
+    rev = builtins.replaceStrings [ "-" ] [ "." ] version;
     hash = "sha256-SOy7Ci1rzLB12ofSQBWmX86dfbr/ywsRPunHRswlAt4=";
   };
 
