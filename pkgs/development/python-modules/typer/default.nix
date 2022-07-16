@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "typer";
-  version = "0.4.2";
+  version = "0.6.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-uCYcbAFS3XNHi1upa6Z35daUjHFcMQ98kQefMR9i7AM=";
+    sha256 = "sha256-LVcgpeY/c+rzHtqhX2q4fzXwaQ+MojMBfX0j10OpHXM=";
   };
 
   nativeBuildInputs = [
