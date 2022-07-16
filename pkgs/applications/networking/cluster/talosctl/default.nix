@@ -35,8 +35,5 @@ buildGoModule rec {
     homepage = "https://www.talos.dev/";
     license = licenses.mpl20;
     maintainers = with maintainers; [ flokli ];
-    # requires >= 10.14 SDK https://github.com/NixOS/nixpkgs/issues/101229
-    # Undefined symbols for architecture x86_64: "_SecTrustEvaluateWithError"
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }
