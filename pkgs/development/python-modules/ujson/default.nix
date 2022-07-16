@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "ujson";
-  version = "5.3.0";
+  version = "5.4.0";
   disabled = isPyPy || pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-q5OHd7OsA3IjHuZUp/ahN4flh7HKJo2Kp+b7aEbkd9A=";
+    sha256 = "sha256-a5U+CUQeMHUEEwdV5b1rFYUBeNWR9mKSu6RgjE9/mwA=";
   };
 
   nativeBuildInputs = [
