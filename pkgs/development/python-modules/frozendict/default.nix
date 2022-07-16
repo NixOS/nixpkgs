@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "frozendict";
-  version = "2.3.1";
+  version = "2.3.2";
   format = "setuptools";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-vJHGkjPrkWu268QJiLbYSXNXcCQO/JxgvkW0q5GcG94=";
+    sha256 = "sha256-f6xFQvChP75wTbSUL0G6Or/+xa+LEAAllz5Z3/agnQ0=";
   };
 
   pythonImportsCheck = [
