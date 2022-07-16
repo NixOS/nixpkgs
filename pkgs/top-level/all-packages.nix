@@ -23087,6 +23087,8 @@ with pkgs;
 
   searx = callPackage ../servers/web-apps/searx { };
 
+  searxng = python3Packages.toPythonModule (callPackage ../servers/web-apps/searxng { });
+
   selfoss = callPackage ../servers/web-apps/selfoss { };
 
   shaarli = callPackage ../servers/web-apps/shaarli { };
