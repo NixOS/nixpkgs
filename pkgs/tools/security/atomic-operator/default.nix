@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "swimlane";
     repo = pname;
     rev = version;
-    hash = "sha256-fO8bvzeMdJVWlhpzdTmJo9mrT6iorsLqr/GPF9gvE70=";
+    hash = "sha256-DyNqu3vndyLkmfybCfTbgxk3t/ALg7IAkAMg4kBkH7Q=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
