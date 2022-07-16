@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     description =
       "General-purpose programming language and toolchain for maintaining robust, optimal, and reusable software";
     license = licenses.mit;
-    maintainers = with maintainers; [ andrewrk AndersonTorres ];
+    maintainers = with maintainers; [ aiotter andrewrk AndersonTorres ];
     platforms = platforms.unix;
   };
 }
