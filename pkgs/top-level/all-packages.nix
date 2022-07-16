@@ -34134,6 +34134,9 @@ with pkgs;
 
   libjack2 = jack2.override { prefix = "lib"; };
 
+  jack-autoconnect = libsForQt5.callPackage ../applications/audio/jack-autoconnect { };
+  jack_autoconnect = jack-autoconnect;
+
   jacktrip = libsForQt5.callPackage ../applications/audio/jacktrip { };
 
   j2cli = with python3Packages; toPythonApplication j2cli;
