@@ -38,6 +38,7 @@ let
   # default.
   targetPrefix = lib.optionalString (targetPlatform != hostPlatform)
                                            (targetPlatform.config + "-");
+  targetPrefixForSure = targetPlatform.config + "-";
 
   ccVersion = lib.getVersion cc;
   ccName = lib.removePrefix targetPrefix (lib.getName cc);
@@ -182,8 +183,11 @@ stdenv.mkDerivation {
         substituteAll "$wrapper" "$out/bin/$dst"
         chmod +x "$out/bin/$dst"
       }
-    ''
 
+      # We collect here all the wrappers needed to be created
+      # to get consistent prefixed and unprefixed coverage.
+      wrap_if_needed=()
+    ''
     + (if nativeTools then ''
       echo ${if targetPlatform.isDarwin then cc else nativePrefix} > $out/nix-support/orig-cc
 
@@ -210,11 +214,13 @@ stdenv.mkDerivation {
       export named_cxx=${targetPrefix}c++
 
       if [ -e $ccPath/${targetPrefix}gcc ]; then
+        wrap_if_needed+=(gcc)
         wrap ${targetPrefix}gcc $wrapper $ccPath/${targetPrefix}gcc
         ln -s ${targetPrefix}gcc $out/bin/${targetPrefix}cc
         export named_cc=${targetPrefix}gcc
         export named_cxx=${targetPrefix}g++
       elif [ -e $ccPath/clang ]; then
+        wrap_if_needed+=(clang)
         wrap ${targetPrefix}clang $wrapper $ccPath/clang
         ln -s ${targetPrefix}clang $out/bin/${targetPrefix}cc
         export named_cc=${targetPrefix}clang
@@ -222,14 +228,17 @@ stdenv.mkDerivation {
       fi
 
       if [ -e $ccPath/${targetPrefix}g++ ]; then
+        wrap_if_needed+=(g++ c++)
         wrap ${targetPrefix}g++ $wrapper $ccPath/${targetPrefix}g++
         ln -s ${targetPrefix}g++ $out/bin/${targetPrefix}c++
       elif [ -e $ccPath/clang++ ]; then
+        wrap_if_needed+=(clang++)
         wrap ${targetPrefix}clang++ $wrapper $ccPath/clang++
         ln -s ${targetPrefix}clang++ $out/bin/${targetPrefix}c++
       fi
 
       if [ -e $ccPath/cpp ]; then
+        wrap_if_needed+=(cpp)
         wrap ${targetPrefix}cpp $wrapper $ccPath/cpp
       fi
     ''
@@ -246,10 +255,12 @@ stdenv.mkDerivation {
     ''
 
     + optionalString cc.langD or false ''
+      wrap_if_needed+=(gdc)
       wrap ${targetPrefix}gdc $wrapper $ccPath/${targetPrefix}gdc
     ''
 
     + optionalString cc.langFortran or false ''
+      wrap_if_needed+=(gfortran)
       wrap ${targetPrefix}gfortran $wrapper $ccPath/${targetPrefix}gfortran
       ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}g77
       ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}f77
@@ -257,11 +268,79 @@ stdenv.mkDerivation {
     ''
 
     + optionalString cc.langJava or false ''
+      wrap_if_needed+=(gcj)
       wrap ${targetPrefix}gcj $wrapper $ccPath/${targetPrefix}gcj
     ''
 
     + optionalString cc.langGo or false ''
+      wrap_if_needed+=(gccgo)
       wrap ${targetPrefix}gccgo $wrapper $ccPath/${targetPrefix}gccgo
+    ''
+
+    + ''
+      # Can be removed once/if we stop installing unprefixed tools.
+      # Meanwhile make sure both $TOOL and $targetPrefixForSure$TOOL
+      # are both overridden. We also validate for inconsistencies
+      # slightly below.
+      for tool in "''${wrap_if_needed[@]}"; do
+        if [ -e $ccPath/$tool -a ! -e $out/bin/$tool ]; then
+          wrap $tool $wrapper $ccPath/$tool
+        fi
+        if [ -e $ccPath/${targetPrefixForSure}$tool -a ! -e $out/bin/${targetPrefixForSure}$tool ]; then
+          wrap ${targetPrefixForSure}$tool $wrapper $ccPath/${targetPrefixForSure}$tool
+        fi
+      done
+
+      # Validate that all $TOOL wrappers present in $out/bin cover
+      # both $ccPath/$TOOL and $ccPath/$targetPrefixForSure-$TOOL.
+      # Otherwise we get an inconsistency when we expose both wrapped
+      # and unwrapped tool with and without prefix:
+      #   https://github.com/NixOS/nixpkgs/issues/178802
+
+      validate_wrapped() {
+        local maybe_prefixed_bin=$1
+        # 'c++' or 'x86_64-unknown-linux-gnu-c++' -> 'c++'
+        local bin=''${maybe_prefixed_bin#${targetPrefixForSure}}
+        local prefixed_bin=${targetPrefixForSure}$bin
+
+        # Make sure possible unprefixed tool is covered as unprefixed.
+        # Example inconsistency:
+        #   $ccPath:  c++
+        #   $out/bin: foo-c++
+        if [ -e $ccPath/$bin -a -e $out/bin/$prefixed_bin ]; then
+          if [ ! -e $out/bin/$bin ]; then
+            echo "ERROR: '$bin' compiler tool is not overridden by wrapper:"
+            echo "  https://github.com/NixOS/nixpkgs/issues/178802"
+            echo "ccPath binaries:"
+            ls $ccPath
+            echo "wrapped binaries:"
+            ls $out/bin
+            exit 1
+          fi
+        fi
+
+        # Make sure possible prefixed tool is covered as prefixed.
+        # Example inconsistency:
+        #   $ccPath: foo-c++
+        #   $out/bin: c++
+        if [ -e $ccPath/$prefixed_bin -a -e $out/bin/$bin ]; then
+          if [ ! -e $out/bin/$prefixed_bin ]; then
+            echo "ERROR: '$prefixed_bin' compiler tool is not overridden by wrapper:"
+            echo "  https://github.com/NixOS/nixpkgs/issues/178802"
+            echo "ccPath binaries:"
+            ls $ccPath
+            echo "wrapped binaries:"
+            ls $out/bin
+            exit 1
+          fi
+        fi
+      }
+
+      pushd $out/bin
+        for wrapped in *; do
+          validate_wrapped "$wrapped"
+        done
+      popd
     '';
 
   strictDeps = true;
