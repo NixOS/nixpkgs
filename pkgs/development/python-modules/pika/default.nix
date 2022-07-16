@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "pika";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "pika";
     repo = "pika";
-    rev = version;
-    sha256 = "sha256-Wog6Wxa8V/zv/bBrFOigZi6KE5qRf82bf1GK2XwvpDI=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-iWGqnDj8qhXUOTw8UNC7VHVBNyvMr4Kdk6NubX92KRI=";
   };
 
   propagatedBuildInputs = [ gevent tornado twisted ];
