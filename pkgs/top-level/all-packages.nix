@@ -2166,6 +2166,8 @@ with pkgs;
     stdenv = gcc10StdenvCompat;
   };
 
+  boron = callPackage ../development/interpreters/boron { };
+
   botamusique = callPackage ../tools/audio/botamusique { };
 
   boulder = callPackage ../tools/admin/boulder { };
