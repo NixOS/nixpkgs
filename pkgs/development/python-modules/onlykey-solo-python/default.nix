@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "onlykey-solo-python";
-  version = "0.0.28";
+  version = "0.0.32";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Mbi5So2OgeXjg4Fzg7v2gAJuh1Y7ZCYu8Lrha/7PQfY=";
+    sha256 = "sha256-88DuhgX4FCwzIKzw4RqWgMtjRdf5huVlKEHAAEminuQ=";
   };
 
   patches = [
