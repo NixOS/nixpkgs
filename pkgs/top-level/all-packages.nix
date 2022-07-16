@@ -3435,6 +3435,8 @@ with pkgs;
     inherit (haskellPackages) ghcWithPackages diagrams-builder;
   };
 
+  dialect = callPackage ../applications/misc/dialect { };
+
   dialog = callPackage ../tools/misc/dialog { };
 
   dialogbox = libsForQt5.callPackage ../tools/misc/dialogbox { };
@@ -21688,6 +21690,7 @@ with pkgs;
   libzra = callPackage ../development/libraries/libzra { };
 
   zig = callPackage ../development/compilers/zig {
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
     llvmPackages = llvmPackages_13;
   };
 
@@ -22744,6 +22747,8 @@ with pkgs;
   checkSSLCert = callPackage ../servers/monitoring/nagios/plugins/check_ssl_cert.nix { };
 
   check_systemd = callPackage ../servers/monitoring/nagios/plugins/check_systemd.nix { };
+
+  check_zfs = callPackage ../servers/monitoring/nagios/plugins/zfs.nix { };
 
   neo4j = callPackage ../servers/nosql/neo4j {
     jre = jre8_headless;
@@ -29099,6 +29104,8 @@ with pkgs;
   synfigstudio = callPackage ../applications/graphics/synfigstudio { };
 
   taxi = callPackage ../applications/networking/ftp/taxi { };
+
+  taxi-cli = with python3Packages; toPythonApplication taxi;
 
   librep = callPackage ../development/libraries/librep { };
 

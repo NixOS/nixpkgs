@@ -96,9 +96,13 @@ in stdenvNoCC.mkDerivation (args // {
     dotnetInstallHook
     dotnetFixupHook
 
-    dotnet-sdk
     cacert
     makeWrapper
+    dotnet-sdk
+  ];
+
+  makeWrapperArgs = args.makeWrapperArgs or [ ] ++ [
+    "--prefix LD_LIBRARY_PATH : ${dotnet-sdk.icu}/lib"
   ];
 
   # Stripping breaks the executable
