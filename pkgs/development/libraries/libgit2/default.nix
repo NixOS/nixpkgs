@@ -11,6 +11,7 @@
 , http-parser
 , libiconv
 , Security
+, staticBuild ? stdenv.hostPlatform.isStatic
 }:
 
 stdenv.mkDerivation rec {
@@ -29,6 +30,7 @@ stdenv.mkDerivation rec {
     "-DTHREADSAFE=ON"
     "-DUSE_HTTP_PARSER=system"
     "-DUSE_SSH=ON"
+    "-DBUILD_SHARED_LIBS=${if staticBuild then "OFF" else "ON"}"
   ];
 
   nativeBuildInputs = [ cmake python3 pkg-config ];
