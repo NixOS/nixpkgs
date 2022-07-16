@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "cherrypy";
-  version = "18.6.1";
+  version = "18.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -31,8 +31,17 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "CherryPy";
     inherit version;
-    hash = "sha256-8z6HKG57PjCeBOciXY5JOC2dd3PmCSJB1/YTiTxWNJU=";
+    hash = "sha256-cpRS95jKdWOQBG7zGAQ8roZKRoFN6vPmvTTclZrxmN4=";
   };
+
+  postPatch = ''
+    # Disable doctest plugin because times out
+    substituteInPlace pytest.ini \
+      --replace "--doctest-modules" "-vvv" \
+      --replace "-p pytest_cov" "" \
+      --replace "--no-cov-on-fail" ""
+    sed -i "/--cov/d" pytest.ini
+  '';
 
   nativeBuildInputs = [
     setuptools-scm
@@ -55,13 +64,6 @@ buildPythonPackage rec {
     requests-toolbelt
   ];
 
-  preCheck = ''
-    # Disable doctest plugin because times out
-    substituteInPlace pytest.ini \
-      --replace "--doctest-modules" "-vvv"
-    sed -i "/--cov/d" pytest.ini
-  '';
-
   pytestFlagsArray = [
     "-W"
     "ignore::DeprecationWarning"
@@ -73,6 +75,9 @@ buildPythonPackage rec {
     # daemonize and autoreload tests have issue with sockets within sandbox
     "daemonize"
     "Autoreload"
+
+    "test_antistampede"
+    "test_file_stream"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_block"
   ];
