@@ -81,12 +81,12 @@ buildPythonPackage rec {
 
   # Must include current directory into PYTHONPATH, since documentation
   # building process expects "import pydantic" to work.
-  preBuild = lib.optionals withDocs ''
+  preBuild = lib.optionalString withDocs ''
     PYTHONPATH=$PWD:$PYTHONPATH make docs
   '';
 
   # Layout documentation in same way as "sphinxHook" does.
-  postInstall = lib.optionals withDocs ''
+  postInstall = lib.optionalString withDocs ''
     mkdir -p $out/share/doc/$name
     mv ./site $out/share/doc/$name/html
   '';
