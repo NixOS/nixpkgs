@@ -65,6 +65,17 @@ in stdenv.mkDerivation rec {
   };
   inherit buildInputs propagatedBuildInputs;
 
+  patches = [
+    # Upstream invokes `openssl version -d` to derive the canonical system path
+    # for certificates, which resolves to a nix store path, so this patch
+    # statically sets the configure.ac value. There's probably a less-brittle
+    # way to do this! (this will likely fail on a version bump)
+    # References:
+    # - https://github.com/gluster/glusterfs/issues/3234
+    # - https://github.com/gluster/glusterfs/commit/a7dc43f533ad4b8ff68bf57704fefc614da65493
+    ./ssl_cert_path.patch
+  ];
+
   postPatch = ''
     sed -e '/chmod u+s/d' -i contrib/fuse-util/Makefile.am
     substituteInPlace libglusterfs/src/glusterfs/lvm-defaults.h \
