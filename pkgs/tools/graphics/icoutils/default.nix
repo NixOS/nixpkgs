@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   # upgrades to a newer SDK.
   NIX_CFLAGS_COMPILE = lib.optional stdenv.isDarwin "-DTARGET_OS_IPHONE=0";
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs extresso/extresso
     patchShebangs extresso/extresso.in
     patchShebangs extresso/genresscript

@@ -31,7 +31,7 @@ buildPythonPackage rec {
     ffmpeg
   ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace "discord/opus.py" \
       --replace "ctypes.util.find_library('opus')" "'${libopus}/lib/libopus.so.0'"
     substituteInPlace requirements.txt \

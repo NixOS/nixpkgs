@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  patchPhase = ''
+  postPatch = ''
     sed -i "s|prefix=/usr/local|prefix=$out|" Makefile
   '';
 

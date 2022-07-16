@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   # The version bounds in the setup.py file are unnecessarily restrictive.
   # They have both python-slugify and slugify, don't know why
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace setup.py \
       --replace 'urllib3 >= 1.21.1, < 1.25' 'urllib3' \
       --replace " 'slugify'," " "

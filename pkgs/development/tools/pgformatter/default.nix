@@ -19,7 +19,7 @@ perlPackages.buildPerlPackage rec {
   installTargets = [ "pure_install" ];
 
   # Makefile.PL only accepts DESTDIR and INSTALLDIRS, but we need to set more to make this work for NixOS.
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace pg_format \
       --replace "#!/usr/bin/env perl" "#!/usr/bin/perl"
     substituteInPlace Makefile.PL \

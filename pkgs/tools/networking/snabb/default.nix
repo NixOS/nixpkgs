@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=stringop-truncation" ];
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs .
 
     # some hardcodeism

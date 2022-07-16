@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     cp moltengamepad $out/bin
   '';
 
-  patchPhase = ''
+  postPatch = ''
     sed -i -e '159d;161d;472d;473d;474d;475d' source/eventlists/key_list.cpp
   '';
 

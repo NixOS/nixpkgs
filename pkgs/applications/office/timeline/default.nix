@@ -43,7 +43,7 @@ python3.pkgs.buildPythonApplication rec {
   dontBuild = true;
   doCheck = false;
 
-  patchPhase = ''
+  postPatch = ''
     sed -i "s|_ROOT =.*|_ROOT = \"$out/usr/share/timeline/\"|" source/timelinelib/config/paths.py
   '';
 

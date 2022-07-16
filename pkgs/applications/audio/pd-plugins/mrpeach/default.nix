@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  patchPhase = ''
+  postPatch = ''
     for D in net osc
     do
       sed -i "s@prefix = /usr/local@prefix = $out@g" $D/Makefile

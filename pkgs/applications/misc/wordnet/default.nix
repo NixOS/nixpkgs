@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  patchPhase = ''
+  postPatch = ''
     sed "13i#define USE_INTERP_RESULT 1" -i src/stubs.c
   '';
 

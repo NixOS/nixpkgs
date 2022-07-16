@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   buildFlags = lib.optional stdenv.cc.isClang "CC=clang";
   installFlags = [ "PREFIX=\${out}" ];
 
-  patchPhase = ''
+  postPatch = ''
    substituteInPlace rarcrack.c --replace "file -i" "${file}/bin/file -i"
   '';
 

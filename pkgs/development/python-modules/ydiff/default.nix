@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "f5430577ecd30974d766ee9b8333e06dc76a947b4aae36d39612a0787865a121";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace ydiff.py \
       --replace "['git'" "['${gitMinimal}/bin/git'" \
       --replace "['hg'" "['${mercurial}/bin/hg'" \

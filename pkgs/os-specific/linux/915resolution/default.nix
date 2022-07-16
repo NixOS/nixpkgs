@@ -9,7 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "0hmmy4kkz3x6yigz6hk99416ybznd67dpjaxap50nhay9f1snk5n";
   };
 
-  patchPhase = "rm *.o";
+  postPatch = ''
+    rm *.o
+  '';
+
   installPhase = "mkdir -p $out/sbin; cp 915resolution $out/sbin/";
 
   meta = with lib; {

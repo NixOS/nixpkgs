@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pciutils libx86 zlib ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace Makefile.in --replace '$(libdir)/libpci.a' ""
   '';
 

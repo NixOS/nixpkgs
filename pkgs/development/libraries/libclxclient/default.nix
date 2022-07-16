@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${xorg.xorgproto}/include -I${libXft.dev}/include";
 
-  patchPhase = ''
+  postPatch = ''
     cd source
     # use pkg-config instead of pkgcon:
     sed -e 's/pkgconf/pkg-config/g' -i ./Makefile

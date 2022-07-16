@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-0BFGyvkAHiZhM0F8KoJYpktfwW/LCCoU9lKCBNDJcIY=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace "src/cflow.h"					\
       --replace "/usr/bin/cpp"						\
                 "$(cat ${stdenv.cc}/nix-support/orig-cc)/bin/cpp"

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "0mi1mwvfnlpblrbmp0rcyf5p74m771z6nrbsly6cajyn4mlpmbaq";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace ./tests/bd.sh  \
       --replace "/bin/echo" echo
 

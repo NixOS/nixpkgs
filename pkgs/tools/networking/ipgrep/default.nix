@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-NrhcUFQM+L66KaDRRpAoC+z5s54a+1fqEepTRXVZ5Qs=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     mkdir -p ${pname}
     substituteInPlace setup.py \
       --replace "'scripts': []" "'scripts': { '${pname}.py' }"

@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
 
   dontBuild = true;
 
-  patchPhase = ''
+  postPatch = ''
     sed -i '1s;^;#!${python3.interpreter}\n;' ubidump.py
     patchShebangs ubidump.py
   '';

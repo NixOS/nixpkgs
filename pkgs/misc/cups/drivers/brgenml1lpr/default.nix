@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  patchPhase = ''
+  postPatch = ''
     INFDIR=opt/brother/Printers/BrGenML1/inf
     LPDDIR=opt/brother/Printers/BrGenML1/lpd
 

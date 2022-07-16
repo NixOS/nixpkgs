@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sed -i s,data/,$out/share/teetertorture/, src/teetertorture.c
   '';
 
-  patchPhase = ''
+  postPatch = ''
     sed -i '/free(home)/d' src/teetertorture.c
   '';
 

@@ -16,7 +16,7 @@ let
     buildInputs = [ zlib ]
       ++ lib.optionals stdenv.isDarwin [ Foundation Carbon ];
 
-    patchPhase = ''
+    postPatch = ''
       sed s,-Werror,, -i CMakeLists.txt
     '';
 

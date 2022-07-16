@@ -15,7 +15,9 @@ stdenv.mkDerivation  rec {
     xorg.xorgproto
   ];
 
-  patchPhase = "sed -i '41,43d' libbristolaudio/audioEngineJack.c"; # disable alsa/iatomic
+  postPatch = ''
+    sed -i '41,43d' libbristolaudio/audioEngineJack.c # disable alsa/iatomic
+  '';
 
   configurePhase = "./configure --prefix=$out --enable-jack-default-audio --enable-jack-default-midi";
 

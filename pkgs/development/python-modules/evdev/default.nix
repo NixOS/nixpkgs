@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   buildInputs = [ linuxHeaders ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace setup.py --replace /usr/include/linux ${linuxHeaders}/include/linux
   '';
 

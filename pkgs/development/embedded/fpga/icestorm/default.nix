@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   #
   # also, fix up the path to the chosen Python interpreter. for pypy-compatible
   # platforms, it offers significant performance improvements.
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace ./icebox/icebox_vlog.py \
       --replace /usr/local/share "$out/share"
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   makefile = "makefile.linux";
 
-  patchPhase = ''
+  postPatch = ''
     sed -i s/soname,NL/soname,libNL/ src/makefile.linux
   '';
 

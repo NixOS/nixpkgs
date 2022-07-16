@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-v6aJUWDbBZEmz0v6+cSCi/KhOYNUeK/MJLUSgzi39ng=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     sed -e "s#xsltproc#${libxslt.bin}/bin/xsltproc#" -i Makefile
     sed -e "s#PREFIX = /usr/local#PREFIX = $out#" -i Makefile
   '';

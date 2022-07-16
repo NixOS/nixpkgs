@@ -22,7 +22,7 @@ buildPythonPackage rec {
   # it a propagated input.
   propagatedBuildInputs = [ pkgs.sqlite ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace "setup.cfg"                                     \
             --replace "/usr/local/include" "${pkgs.sqlite.dev}/include"   \
             --replace "/usr/local/lib" "${pkgs.sqlite.out}/lib"

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pyopenssl twisted service-identity ];
 
   # fix python3 issues
-  patchPhase = ''
+  postPatch = ''
     sed -i 's/except usage.UsageError, errortext/except usage.UsageError as errortext/' txgithub/scripts/create_token.py
     sed -i 's/except usage.UsageError, errortext/except usage.UsageError as errortext/' txgithub/scripts/gist.py
     sed -i 's/print response\[\x27html_url\x27\]/print(response\[\x27html_url\x27\])/' txgithub/scripts/gist.py

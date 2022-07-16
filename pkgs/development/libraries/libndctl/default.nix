@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       "--disable-asciidoctor" # depends on ruby 2.7, use asciidoc instead
     ];
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs test
 
     substituteInPlace git-version --replace /bin/bash ${stdenv.shell}

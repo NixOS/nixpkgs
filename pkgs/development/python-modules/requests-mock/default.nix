@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "8d72abe54546c1fc9696fa1516672f1031d72a55a1d66c85184f972a24ba0eba";
   };
 
-  patchPhase = ''
+  postPatch = ''
     sed -i 's@python@${python.interpreter}@' .testr.conf
   '';
 

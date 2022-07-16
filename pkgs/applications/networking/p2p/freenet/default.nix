@@ -28,7 +28,7 @@ let
       sha256 = "0wddkfyhsgs7bcq9svicz6l0a35yv82yqzmji3c345hg4hbch3kb";
     };
 
-    patchPhase = ''
+    postPatch = ''
       cp ${freenet_ext} lib/freenet/freenet-ext.jar
       cp ${bcprov} lib/bcprov-${bcprov_version}.jar
 

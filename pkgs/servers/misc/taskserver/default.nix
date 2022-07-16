@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1d110q9vw8g5syzihxymik7hd27z1592wkpz55kya6lphzk8i13v";
   };
 
-  patchPhase = ''
+  postPatch = ''
     pkipath=$out/share/taskd/pki
     mkdir -p $pkipath
     cp -r pki/* $pkipath

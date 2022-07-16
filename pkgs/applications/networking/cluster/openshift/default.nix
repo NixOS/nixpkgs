@@ -26,7 +26,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs ./hack
   '';
 

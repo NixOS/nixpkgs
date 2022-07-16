@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     "-DSDL_gpu_BUILD_TESTS=OFF"
   ];
 
-  patchPhase = ''
+  postPatch = ''
     sed -ie '210s#''${OUTPUT_DIR}/lib#''${CMAKE_INSTALL_LIBDIR}#' src/CMakeLists.txt
     sed -ie '213s#''${OUTPUT_DIR}/lib#''${CMAKE_INSTALL_LIBDIR}#' src/CMakeLists.txt
   '';

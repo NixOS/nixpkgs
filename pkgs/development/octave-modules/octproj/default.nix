@@ -14,7 +14,7 @@ buildOctavePackage rec {
   };
 
   # The sed changes below allow for the package to be compiled.
-  patchPhase = ''
+  postPatch = ''
     sed -i s/"error(errorText)"/"error(\"%s\", errorText)"/g src/*.cc
     sed -i s/"warning(errorText)"/"warning(\"%s\", errorText)"/g src/*.cc
   '';

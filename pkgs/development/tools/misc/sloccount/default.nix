@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   # Make sure the Flex-generated files are newer than the `.l' files, so that
   # Flex isn't needed to recompile them.
-  patchPhase = ''
+  postPatch = ''
     for file in *
     do
       if grep -q /usr/bin/perl "$file"

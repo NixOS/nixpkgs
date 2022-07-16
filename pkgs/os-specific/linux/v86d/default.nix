@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
     hash = "sha256-95LRzVbO/DyddmPwQNNQ290tasCGoQk7FDHlst6LkbA=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs configure
   '';
 

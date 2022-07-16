@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace src/general/config.h --replace "CUSTOM-BUILD" "${version}"
   '';
 

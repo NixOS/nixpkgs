@@ -16,7 +16,7 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake docbook_xsl qttools ];
   buildInputs = [ appstream qtbase qtsvg qtquickcontrols2 qtwebview itstool librsvg ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace pentobi_thumbnailer/CMakeLists.txt --replace "/manpages" "/share/xml/docbook-xsl/manpages/"
     substituteInPlace pentobi/unix/CMakeLists.txt --replace "/manpages" "/share/xml/docbook-xsl/manpages/"
     substituteInPlace pentobi/docbook/CMakeLists.txt --replace "/html" "/share/xml/docbook-xsl/html"

@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-9bcOwORHLZfn95RFur4JdP3Djpq8K8utnWIsniqKAI4=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     sed -i -e "4s:.*:command=${jre}/bin/java:" -e "10s:.*:jarpath=$out/share/jmol/Jmol.jar:" -e "11,21d" jmol
   '';
 

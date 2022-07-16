@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pkgs.ncurses ];
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace setup.py --replace "/bin/bash" "${pkgs.bash}/bin/bash"
   '';
 

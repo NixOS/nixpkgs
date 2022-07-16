@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "02lq602ghws423w04jsyjr92p0nmrfp59n1m5hbbi1c6fhxryghc";
   };
 
-  patchPhase = ''
+  postPatch = ''
     for i in `find . -name \*.py`
     do
         sed -i -e "s|#!/usr/bin/env python|#!${python3}/bin/python|" $i

@@ -24,7 +24,7 @@ buildPythonPackage rec {
   # Python 2.x is not supported.
   disabled = !isPy3k && !isPyPy;
 
-  patchPhase = ''
+  postPatch = ''
     echo 'version = "${version}"' > src/paperwork_shell/_version.py
     chmod a+w -R ..
     patchShebangs ../tools

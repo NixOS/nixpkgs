@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" "FONTFILE=${freefont_ttf}/share/fonts/truetype/FreeSansBold.ttf" ];
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs ./stepseq.lv2/gridgen.sh
     patchShebangs ./matrixmixer.lv2/genttl.sh
     patchShebangs ./matrixmixer.lv2/genhead.sh

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   # The Makefile hardcodes $(BUILDROOT)/usr as installation
   # destination. Just nuke all mentions of /usr to get the right
   # installation location.
-  patchPhase = ''
+  postPatch = ''
     sed -i -e 's,/usr/,/,' Makefile
   '';
 

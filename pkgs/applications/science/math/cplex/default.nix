@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   unpackPhase = "cp $src $name";
 
-  patchPhase = ''
+  postPatch = ''
     sed -i -e 's|/usr/bin/tr"|tr"         |' $name
   '';
 

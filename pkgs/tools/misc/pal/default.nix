@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "072mahxvd7lcvrayl32y589w4v3vh7bmlcnhiksjylknpsvhqiyf";
   };
 
-  patchPhase = ''
+  postPatch = ''
     sed -i -e 's/-o root//' -e 's,ESTDIR}/etc,ESTDIR}'$out/etc, src/Makefile
     sed -i -e 's,/etc/pal\.conf,'$out/etc/pal.conf, src/input.c
   '';

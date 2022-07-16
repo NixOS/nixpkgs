@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ freeglut libGL libGLU ];
 
-  patchPhase = ''
+  postPatch = ''
     sed -i "s;font24.raw;$out/share/font24.raw;g" display.c
   '';
 

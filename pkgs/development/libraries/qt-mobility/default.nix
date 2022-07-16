@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   # https://bugreports.qt-project.org/browse/QTMOBILITY-1085
   #  - features/mobility.prf (/tmp/nix-build-9kh12nhf9cyplfwiws96gz414v6wgl67-qt-mobility-1.2.0.drv-0/qt-mobility-opensource-src-1.2.0)
 
-  patchPhase = ''
+  postPatch = ''
     # required to make the configure script work
     substituteInPlace configure --replace "/bin/pwd" "${coreutils}/bin/pwd"
 

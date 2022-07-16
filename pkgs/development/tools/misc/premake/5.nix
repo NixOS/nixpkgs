@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = optionals stdenv.isDarwin [ Foundation readline ];
 
-  patchPhase = optional stdenv.isDarwin ''
+  postPatch = optional stdenv.isDarwin ''
     substituteInPlace premake5.lua \
       --replace -mmacosx-version-min=10.4 -mmacosx-version-min=10.5
   '';

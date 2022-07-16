@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   # Let's make the library default to our gpg binary
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace gnupg.py \
     --replace "gpgbinary='gpg'" "gpgbinary='${gnupg}/bin/gpg'"
     substituteInPlace test_gnupg.py \

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ getconf ];
 
-  patchPhase = ''
+  postPatch = ''
     for f in Makefile.in autotools/Makefile.am libcperciva/cpusupport/Build/cpusupport.sh configure ; do
       substituteInPlace $f --replace "command -p " ""
     done

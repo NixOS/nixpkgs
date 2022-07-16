@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config makeWrapper autoreconfHook ];
   buildInputs = [ libpcap openssl zlib libnl iw ethtool pciutils ];
 
-  patchPhase = ''
+  postPatch = ''
     sed -e 's@/usr/local/bin@'${wirelesstools}@ -i lib/osdep/linux.c
   '';
 

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     intltoolize -f
   '';
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace libqalculate/Calculator-plot.cc \
       --replace 'commandline = "gnuplot"' 'commandline = "${gnuplot}/bin/gnuplot"' \
       --replace '"gnuplot - ' '"${gnuplot}/bin/gnuplot - '

@@ -15,7 +15,7 @@ buildPythonPackage rec {
   };
 
   # break circular dependency loop
-  patchPhase = ''
+  postPatch = ''
     sed -i '/rdflib/d' setup.cfg
   '';
 

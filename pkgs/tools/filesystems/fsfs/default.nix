@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ fuse openssl ];
 
-  patchPhase = ''
+  postPatch = ''
     sed -i -e 's,CONFDIR=\(.*\),CONFDIR='$out/etc, \
       -e 's,USERCONFPREFIX=\(.*\),USERCONFPREFIX='$out/var/lib, Makefile \
       src/Makefile src/utils/Makefile

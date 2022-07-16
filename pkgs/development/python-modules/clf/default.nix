@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "abc919a1e99667f32fdde15dfb4bc527dbe22cf86a17acb78a449d7f2dfe937e";
   };
 
-  patchPhase = ''
+  postPatch = ''
     sed -i 's/==/>=/' requirements.txt
   '';
 

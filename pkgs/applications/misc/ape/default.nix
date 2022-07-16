@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
      sha256 = "0xyvna2fbr18hi5yvm0zwh77q02dfna1g4g53z9mn2rmlfn2mhjh";
   };
 
-  patchPhase = ''
+  postPatch = ''
     # We move the file first to avoid "same file" error in the default case
     cp ${lexiconPath} new_lexicon.pl
     rm prolog/lexicon/clex_lexicon.pl

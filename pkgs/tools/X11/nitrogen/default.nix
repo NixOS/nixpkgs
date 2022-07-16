@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib gtkmm2 ];
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs data/icon-theme-installer
   '';
 

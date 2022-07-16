@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     configureFlags="--with-bash-completion-dir=$out/share/bash-completion/completions"
   '';
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace Makefile.in \
       --replace "command -p mv" "mv"
     substituteInPlace configure \
