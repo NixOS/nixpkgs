@@ -19,13 +19,13 @@ let
   # https://gitlab.com/gitlab-org/gitlab/-/issues/360783#note_992870101.
   gitPackage =
     let
-      version = "2.35.3";
+      version = "2.35.4";
     in
       pkgs.git.overrideAttrs (oldAttrs: rec {
         inherit version;
         src = pkgs.fetchurl {
           url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-          sha256 = "sha256-FenbT5vy7Z//MMtioAxcfAkBAV9asEjNtOiwTd7gD6I=";
+          sha256 = "sha256-mv13OdNkXggeKQkJ+47QcJ6lYmcw6Qjri1ZJ2ETCTOk=";
         };
       });
 
