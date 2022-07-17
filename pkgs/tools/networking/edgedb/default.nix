@@ -17,16 +17,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "edgedb";
-  version = "unstable-2022-06-27";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "edgedb";
     repo = "edgedb-cli";
-    rev = "3c65c8bf0a09988356ad477d0ae234182f809b0a";
-    sha256 = "sha256-UqoRa5ZbPJEHo9wyyygrN1ssorgY3cLw/mMrCDXr4gw=";
+    rev = "v${version}";
+    sha256 = "sha256-vsPpWsOB3ewfT2gTX91OCh0bcSSuQ3wuSN7GZxARoF0=";
   };
 
-  cargoSha256 = "sha256-6HJkkem44+dat5bmVEM+7GSJFjCz1dYZeRIPEoEwNlI=";
+  cargoSha256 = "sha256-S6/TAo5Q4TLMhl29yHuJMmSokVJJhKryMeLJF4pjiG8=";
 
   nativeBuildInputs = [ makeWrapper pkg-config perl ];
 
