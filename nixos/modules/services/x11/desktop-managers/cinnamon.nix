@@ -205,7 +205,7 @@ in
         # cinnamon xapps
         xviewer
         xreader
-        xed
+        xed-editor
         xplayer
         pix
 
