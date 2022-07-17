@@ -181,6 +181,8 @@ let
 
     checkseum = callPackage ../development/ocaml-modules/checkseum { };
 
+    chrome-trace = callPackage ../development/ocaml-modules/chrome-trace { };
+
     cil = callPackage ../development/ocaml-modules/cil { };
 
     cmdliner_1_0 = callPackage ../development/ocaml-modules/cmdliner/1_0.nix { };
