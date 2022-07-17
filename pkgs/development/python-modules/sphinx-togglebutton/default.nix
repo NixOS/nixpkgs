@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "sphinx-togglebutton";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1f13c25c27a8ff40d6fc924d324746c0adb0dedeef40730c8a8b64ff55c6c92c";
+    sha256 = "sha256-qwyLNmQnsB5MiYAtXQeEcsQn+m6dEtUhw0+gRCVZ3Ho=";
   };
 
   propagatedBuildInputs = [ wheel sphinx docutils ];

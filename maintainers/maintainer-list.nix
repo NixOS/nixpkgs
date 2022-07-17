@@ -417,6 +417,12 @@
     githubId = 4732885;
     name = "Ivan Jager";
   };
+  aiotter = {
+    email = "git@aiotter.com";
+    github = "aiotter";
+    githubId = 37664775;
+    name = "Yuto Oguchi";
+  };
   airwoodix = {
     email = "airwoodix@posteo.me";
     github = "airwoodix";
@@ -6115,6 +6121,12 @@
     githubId = 60272884;
     name = "Jonathan Jeppener-Haltenhoff";
   };
+  jocelynthode = {
+    email = "jocelyn.thode@gmail.com";
+    github = "jocelynthode";
+    githubId = 3967312;
+    name = "Jocelyn Thode";
+  };
   joelancaster = {
     email = "joe.a.lancas@gmail.com";
     github = "JoeLancaster";
@@ -7871,6 +7883,12 @@
     github = "markuskowa";
     githubId = 26470037;
     name = "Markus Kowalewski";
+  };
+  mariaa144 = {
+    email = "speechguard_intensivist@aleeas.com";
+    github = "mariaa144";
+    githubId = 105451387;
+    name = "Maria";
   };
   marijanp = {
     name = "Marijan Petričević";

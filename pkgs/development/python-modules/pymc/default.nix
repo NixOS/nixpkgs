@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pymc";
-  version = "4.1.2";
+  version = "4.1.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "pymc-devs";
     repo = "pymc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QSM9wQwX5EdU6w8ALDSabTpo89GNIBMEB8hJEp9jQB4=";
+    hash = "sha256-fqhtfMGopzVgonF5+qyFhm72KV0hX8QE95slI/HBZYU=";
   };
 
   nativeBuildInputs = [

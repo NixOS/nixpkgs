@@ -18,6 +18,8 @@ import ./make-test-python.nix ({ pkgs, ...} : {
           enable = true;
           jobBuilder = {
             enable = true;
+            accessUser = "admin";
+            accessTokenFile = "/var/lib/jenkins/secrets/initialAdminPassword";
             nixJobs = [
               { job = {
                   name = "job-1";
@@ -100,12 +102,8 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         master.wait_until_succeeds("test -f /var/lib/jenkins/jobs/folder-1/config.xml")
         master.wait_until_succeeds("test -f /var/lib/jenkins/jobs/folder-1/jobs/job-2/config.xml")
 
-        # Wait until jenkins is ready, reload configuration and verify it also
-        # sees the jobs.
-        master.succeed("curl --fail ${jenkinsUrl}/cli")
-        master.succeed("curl ${jenkinsUrl}/jnlpJars/jenkins-cli.jar -O")
-        master.succeed("${pkgs.jre}/bin/java -jar jenkins-cli.jar -s ${jenkinsUrl} -auth admin:$(cat /var/lib/jenkins/secrets/initialAdminPassword) reload-configuration")
-        out = master.succeed("${pkgs.jre}/bin/java -jar jenkins-cli.jar -s ${jenkinsUrl} -auth admin:$(cat /var/lib/jenkins/secrets/initialAdminPassword) list-jobs")
+        # Verify that jenkins also sees the jobs.
+        out = master.succeed("${pkgs.jenkins}/bin/jenkins-cli -s ${jenkinsUrl} -auth admin:$(cat /var/lib/jenkins/secrets/initialAdminPassword) list-jobs")
         jobs = [x.strip() for x in out.splitlines()]
         # Seeing jobs inside folders requires the Folders plugin
         # (https://plugins.jenkins.io/cloudbees-folder/), which we don't have
@@ -123,9 +121,8 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         master.wait_until_fails("test -f /var/lib/jenkins/jobs/folder-1/config.xml")
         master.wait_until_fails("test -f /var/lib/jenkins/jobs/folder-1/jobs/job-2/config.xml")
 
-        # Reload jenkins' configuration and verify it also sees the jobs as removed.
-        master.succeed("${pkgs.jre}/bin/java -jar jenkins-cli.jar -s ${jenkinsUrl} -auth admin:$(cat /var/lib/jenkins/secrets/initialAdminPassword) reload-configuration")
-        out = master.succeed("${pkgs.jre}/bin/java -jar jenkins-cli.jar -s ${jenkinsUrl} -auth admin:$(cat /var/lib/jenkins/secrets/initialAdminPassword) list-jobs")
+        # Verify that jenkins also sees the jobs as removed.
+        out = master.succeed("${pkgs.jenkins}/bin/jenkins-cli -s ${jenkinsUrl} -auth admin:$(cat /var/lib/jenkins/secrets/initialAdminPassword) list-jobs")
         jobs = [x.strip() for x in out.splitlines()]
         assert jobs == [], f"jobs != []: {jobs}"
   '';

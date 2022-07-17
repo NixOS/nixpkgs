@@ -19,8 +19,12 @@ stdenvNoCC.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p ${placeholder "out"}/share/cpm/
     cp ./cmake/CPM.cmake ${placeholder "out"}/share/cpm/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
       libGL
       glfw
       openal
+      stdenv.cc.cc.lib
     ];
   in ''
     # xorg.xrandr needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128

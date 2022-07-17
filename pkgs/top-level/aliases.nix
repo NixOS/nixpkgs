@@ -486,6 +486,7 @@ mapAliases ({
   gitinspector = throw "gitinspector has been removed because it doesn't work with python3"; # Added 2022-01-12
   gksu = throw "gksu has been removed"; # Added 2022-01-16
   glib_networking = throw "'glib_networking' has been renamed to/replaced by 'glib-networking'"; # Converted to throw 2022-02-22
+  glimpse = throw "glimpse was removed, as the project was discontinued. You can use gimp instead."; # Added 2022-07-11
   gmailieer = lieer; # Added 2020-04-19
   gmic_krita_qt = gmic-qt-krita; # Added 2019-09-07
   gmvault = throw "gmvault has been removed because it is unmaintained, mostly broken, and insecure"; # Added 2021-03-08
@@ -1280,7 +1281,6 @@ mapAliases ({
   sickrage = throw "sickbeard has been removed from nixpkgs, as it was unmaintained"; # Added 2022-01-01
   sigurlx = throw "sigurlx has been removed (upstream is gone)"; # Added 2022-01-24
   skrooge2 = throw "'skrooge2' has been renamed to/replaced by 'skrooge'"; # Converted to throw 2022-02-22
-  sky = throw "sky has been removed from nixpkgs (2020-09-16)";
   skype = throw "'skype' has been renamed to/replaced by 'skypeforlinux'"; # Converted to throw 2022-02-22
   skype4pidgin = throw "skype4pidgin has been remove from nixpkgs, because it stopped working when classic Skype was retired"; # Added 2021-07-14
   skype_call_recorder = throw "skype_call_recorder has been removed from nixpkgs, because it stopped working when classic Skype was retired"; # Added 2020-10-31

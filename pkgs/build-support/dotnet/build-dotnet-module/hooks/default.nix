@@ -56,7 +56,7 @@ in
   dotnetFixupHook = callPackage ({ }:
     makeSetupHook {
       name = "dotnet-fixup-hook";
-      deps = [ dotnet-runtime makeWrapper ];
+      deps = [ dotnet-runtime ];
       substitutions = {
         dotnetRuntime = dotnet-runtime;
         runtimeDeps = libraryPath;

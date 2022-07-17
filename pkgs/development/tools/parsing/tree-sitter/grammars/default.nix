@@ -30,9 +30,9 @@
   tree-sitter-glimmer = lib.importJSON ./tree-sitter-glimmer.json;
   tree-sitter-glsl = lib.importJSON ./tree-sitter-glsl.json;
   tree-sitter-go = lib.importJSON ./tree-sitter-go.json;
-  tree-sitter-gowork = lib.importJSON ./tree-sitter-gowork.json;
   tree-sitter-godot-resource = lib.importJSON ./tree-sitter-godot-resource.json;
   tree-sitter-gomod = lib.importJSON ./tree-sitter-gomod.json;
+  tree-sitter-gowork = lib.importJSON ./tree-sitter-gowork.json;
   tree-sitter-graphql = lib.importJSON ./tree-sitter-graphql.json;
   tree-sitter-haskell = lib.importJSON ./tree-sitter-haskell.json;
   tree-sitter-hcl = lib.importJSON ./tree-sitter-hcl.json;

@@ -45,6 +45,10 @@ let
       # aarch64 defconfig since 5.13
       DEBUG_INFO_REDUCED        = whenAtLeast "5.13" (option no);
       DEBUG_INFO_BTF            = whenAtLeast "5.2" (option yes);
+      # Allow loading modules with mismatched BTFs
+      # FIXME: figure out how to actually make BTFs reproducible instead
+      # See https://github.com/NixOS/nixpkgs/pull/181456 for details.
+      MODULE_ALLOW_BTF_MISMATCH = whenAtLeast "5.18" (option yes);
       BPF_LSM                   = whenAtLeast "5.7" (option yes);
       DEBUG_KERNEL              = yes;
       DEBUG_DEVRES              = no;
