@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
-, psycopg2
+, psycopg
 , click
 , configobj
 , sqlparse
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     click
     sqlparse
-    psycopg2
+    psycopg
   ];
 
   checkInputs = [
@@ -35,7 +35,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Meta-commands handler for Postgres Database";
-    homepage = "https://pypi.python.org/pypi/pgspecial";
+    homepage = "https://github.com/dbcli/pgspecial";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }
