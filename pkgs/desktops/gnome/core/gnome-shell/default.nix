@@ -184,6 +184,7 @@ stdenv.mkDerivation rec {
 
     # We can generate it ourselves.
     rm -f man/gnome-shell.1
+    rm data/theme/gnome-shell.css
   '';
 
   preFixup = ''
