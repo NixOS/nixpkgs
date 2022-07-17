@@ -10,7 +10,6 @@
 , wrapGAppsHook
 , libxml2
 , gtk3
-, libnotify
 , gvfs
 , cinnamon-desktop
 , xapps
@@ -24,7 +23,7 @@
 
 stdenv.mkDerivation rec {
   pname = "nemo";
-  version = "5.2.4";
+  version = "5.4.2";
 
   # TODO: add plugins support (see https://github.com/NixOS/nixpkgs/issues/78327)
 
@@ -32,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-v63dFiBKtLCmRnwJ6u814lSv+tfPG+IIJtcWCnOEZjk=";
+    sha256 = "sha256-Xn9CgGe7j2APaJRLvx58z2w+sN7ZeDScQz53ZBBnsQs=";
   };
 
   outputs = [ "out" "dev" ];
@@ -40,7 +39,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gtk3
-    libnotify
     cinnamon-desktop
     libxml2
     xapps
@@ -61,8 +59,6 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    # TODO: https://github.com/NixOS/nixpkgs/issues/36468
-    "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
     # use locales from cinnamon-translations
     "--localedir=${cinnamon-translations}/share/locale"
   ];
