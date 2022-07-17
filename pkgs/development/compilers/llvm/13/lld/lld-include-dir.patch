@@ -1,0 +1,12 @@
+Fix https://github.com/llvm/llvm-project/issues/54874
+diff --git a/MachO/CMakeLists.txt b/MachO/CMakeLists.txt
+index 0779912cc7e..eff1812a6bb 100644
+--- a/MachO/CMakeLists.txt
++++ b/MachO/CMakeLists.txt
+@@ -2,5 +2,5 @@ set(LLVM_TARGET_DEFINITIONS Options.td)
+ tablegen(LLVM Options.inc -gen-opt-parser-defs)
+
+-include_directories(${LLVM_MAIN_SRC_DIR}/../libunwind/include)
++include_directories(${LLVM_MAIN_SRC_DIR}/libunwind/include)
+
+ add_lld_library(lldMachO2
