@@ -5,8 +5,8 @@
 , zlib
 , dbus
 , networkmanager
-, enableJavaScript ? stdenv.isDarwin || lib.meta.availableOn stdenv.hostPlatform spidermonkey_78
-, spidermonkey_78
+, enableJavaScript ? stdenv.isDarwin || lib.meta.availableOn stdenv.hostPlatform duktape
+, duktape
 , pcre
 , gsettings-desktop-schemas
 , glib
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     python3
     zlib
   ] ++ lib.optionals enableJavaScript [
-    (if stdenv.hostPlatform.isDarwin then JavaScriptCore else spidermonkey_78)
+    (if stdenv.hostPlatform.isDarwin then JavaScriptCore else duktape)
   ] ++ (if stdenv.hostPlatform.isDarwin then [
     SystemConfiguration
     CoreFoundation
