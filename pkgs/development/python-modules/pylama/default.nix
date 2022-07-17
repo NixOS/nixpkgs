@@ -15,7 +15,7 @@
 , pytestCheckHook
 }:
 
-buildPythonPackage rec {
+let pylama = buildPythonPackage rec {
   pname = "pylama";
   version = "8.3.8";
 
@@ -46,13 +46,11 @@ buildPythonPackage rec {
     vulture
   ];
 
+  # escape infinite recursion pylint -> isort -> pylama
+  doCheck = false;
+
   checkInputs = [
-    # avoid infinite recursion pylint -> isort -> pylama
-    (pylint.override {
-      isort = isort.overridePythonAttrs (old: {
-        doCheck = false;
-      });
-    })
+    pylint
     pytestCheckHook
   ];
 
@@ -69,6 +67,10 @@ buildPythonPackage rec {
     "pylama.main"
   ];
 
+  passthru.tests = {
+    check = pylama.overridePythonAttrs (_: { doCheck = true; });
+  };
+
   meta = with lib; {
     description = "Code audit tool for python";
     homepage = "https://github.com/klen/pylama";
@@ -76,4 +78,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };
-}
+}; in pylama
