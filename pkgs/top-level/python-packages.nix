@@ -6989,6 +6989,8 @@ in {
     inherit (pkgs.darwin.apple_sdk.frameworks) IOKit;
   };
 
+  psycopg = callPackage ../development/python-modules/psycopg { };
+
   psycopg2 = callPackage ../development/python-modules/psycopg2 { };
 
   psycopg2cffi = callPackage ../development/python-modules/psycopg2cffi { };
