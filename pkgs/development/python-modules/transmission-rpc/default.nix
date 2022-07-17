@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "transmission-rpc";
-  version = "3.3.0";
+  version = "3.3.2";
   disabled = pythonOlder "3.6";
 
   format = "pyproject";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Trim21";
     repo = "transmission-rpc";
-    rev = "v${version}";
-    sha256 = "sha256-Ys9trQMCHqxBSaTobWt8WZwi1F8HKTUKaIxvyo6ZPP0=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-GkhNOKatT/hJFw1l1xrf43jtgxvJ+WVvhz83Oe0MZ6w=";
   };
 
   # remove once upstream has tagged version with dumped typing-extensions
