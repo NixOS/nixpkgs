@@ -214,9 +214,12 @@ in
   /* Cross-built bootstrap tools for every supported platform */
   bootstrapTools = let
     tools = import ../stdenv/linux/make-bootstrap-tools-cross.nix { system = "x86_64-linux"; };
-    maintainers = [ lib.maintainers.dezgeg ];
-    mkBootstrapToolsJob = drv:
+    mkBootstrapToolsJob = name: drv:
       assert lib.elem drv.system supportedSystems;
+      let maintainers = with lib.maintainers;
+            [ dezgeg ]
+            ++ lib.optionals (lib.strings.hasPrefix "mips64"    (lib.lists.elemAt name 0)) [ amjoseph ]
+            ++ lib.optionals (lib.strings.hasPrefix "powerpc64" (lib.lists.elemAt name 0)) [ amjoseph ]; in
       hydraJob' (lib.addMetaAttrs { inherit maintainers; } drv);
-  in lib.mapAttrsRecursiveCond (as: !lib.isDerivation as) (name: mkBootstrapToolsJob) tools;
+  in lib.mapAttrsRecursiveCond (as: !lib.isDerivation as) mkBootstrapToolsJob tools;
 }
