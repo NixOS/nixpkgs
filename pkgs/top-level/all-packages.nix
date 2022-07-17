@@ -20627,13 +20627,9 @@ with pkgs;
     });
 
   qt515 = recurseIntoAttrs (makeOverridable
-    (import ../development/libraries/qt-5/5.15) {
-      inherit newScope;
-      inherit lib stdenv fetchurl fetchpatch fetchgit fetchFromGitHub makeSetupHook makeWrapper;
-      inherit bison cups dconf harfbuzz libGL perl gtk3;
-      inherit (gst_all_1) gstreamer gst-plugins-base;
+    (darwin.apple_sdk_11_0.callPackage ../development/libraries/qt-5/5.15) {
       inherit darwin;
-      inherit buildPackages;
+      inherit (gst_all_1) gstreamer gst-plugins-base;
     });
 
   libsForQt512 = recurseIntoAttrs (import ./qt5-packages.nix {
