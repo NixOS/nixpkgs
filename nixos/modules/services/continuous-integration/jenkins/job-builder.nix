@@ -165,7 +165,7 @@ in {
             jenkins_url="http://${jenkinsCfg.listenAddress}:${toString jenkinsCfg.port}${jenkinsCfg.prefix}"
             auth_file="$RUNTIME_DIRECTORY/jenkins_auth_file.txt"
             trap 'rm -f "$auth_file"' EXIT
-            printf "${cfg.accessUser}:@password_placeholder@" >"$auth_file"
+            (umask 0077; printf "${cfg.accessUser}:@password_placeholder@" >"$auth_file")
             "${pkgs.replace-secret}/bin/replace-secret" "@password_placeholder@" "$access_token_file" "$auth_file"
 
             if ! "${pkgs.jenkins}/bin/jenkins-cli" -s "$jenkins_url" -auth "@$auth_file" reload-configuration; then
