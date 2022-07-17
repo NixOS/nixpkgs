@@ -5,7 +5,7 @@ with lib;
 
 buildGoModule rec {
   pname = "navidrome";
-  version = "v0.47.5";
+  version = import ./version.nix;
 
   # Can't use -trimpath because tests require accurate working dir.
   allowGoReference = true;
