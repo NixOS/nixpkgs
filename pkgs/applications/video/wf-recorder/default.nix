@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     changelog = "https://github.com/ammen99/wf-recorder/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ primeos CrazedProgrammer ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }
