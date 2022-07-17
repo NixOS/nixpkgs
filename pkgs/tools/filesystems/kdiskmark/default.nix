@@ -47,8 +47,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/JonMagon/KDiskMark";
     maintainers = [ maintainers.symphorien ];
-    license = [ lib.licenses.gpl3Only ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Only;
+    platforms = platforms.linux;
   };
 }
 
