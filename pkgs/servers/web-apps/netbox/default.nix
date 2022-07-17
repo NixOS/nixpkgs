@@ -35,6 +35,7 @@ py.pkgs.buildPythonApplication rec {
     ];
 
     propagatedBuildInputs = with py.pkgs; [
+      bleach
       django_4
       django-cors-headers
       django-debug-toolbar
@@ -60,6 +61,7 @@ py.pkgs.buildPythonApplication rec {
       pillow
       psycopg2
       pyyaml
+      sentry-sdk
       social-auth-core
       social-auth-app-django
       svgwrite
