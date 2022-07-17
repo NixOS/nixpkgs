@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/any1/neatvnc/releases/tag/v${version}";
     license = licenses.isc;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ nickcao ];
   };
 }
