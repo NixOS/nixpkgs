@@ -2398,7 +2398,7 @@ self: super: {
     # Revision introduces bound base < 4.15
     revision = null;
     editedCabalFile = null;
-  };
+  });
 
   # https://github.com/kowainik/validation-selective/issues/64
   validation-selective = doJailbreak super.validation-selective;
