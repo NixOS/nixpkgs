@@ -56,7 +56,6 @@ py.pkgs.buildPythonApplication rec {
       jinja2
       markdown
       markdown-include
-      mkdocs-material
       netaddr
       pillow
       psycopg2
@@ -68,6 +67,22 @@ py.pkgs.buildPythonApplication rec {
       tablib
       jsonschema
     ] ++ extraBuildInputs;
+
+    buildInputs = with py.pkgs; [
+      mkdocs-material
+      mkdocs-material-extensions
+      mkdocstrings
+      mkdocstrings-python
+    ];
+
+    nativeBuildInputs = [
+      py.pkgs.mkdocs
+    ];
+
+    postBuild = ''
+      PYTHONPATH=$PYTHONPATH:netbox/
+      python -m mkdocs build
+    '';
 
     installPhase = ''
       mkdir -p $out/opt/netbox
