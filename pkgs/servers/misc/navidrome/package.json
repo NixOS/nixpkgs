@@ -1,0 +1,91 @@
+{
+  "name": "navidrome-ui",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@material-ui/core": "^4.11.4",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.58",
+    "@material-ui/styles": "^4.11.4",
+    "blueimp-md5": "^2.19.0",
+    "clsx": "^1.1.1",
+    "connected-react-router": "^6.9.1",
+    "deepmerge": "^4.2.2",
+    "history": "^4.10.1",
+    "inflection": "^1.13.1",
+    "jwt-decode": "^3.1.2",
+    "lodash.pick": "^4.4.0",
+    "lodash.throttle": "^4.1.1",
+    "prop-types": "^15.7.2",
+    "ra-data-json-server": "^3.18.3",
+    "ra-i18n-polyglot": "^3.18.3",
+    "react": "^17.0.2",
+    "react-admin": "^3.18.3",
+    "react-dnd": "^14.0.4",
+    "react-dnd-html5-backend": "^14.0.2",
+    "react-dom": "^17.0.2",
+    "react-drag-listview": "^0.1.8",
+    "react-ga": "^3.3.0",
+    "react-hotkeys": "^2.0.0",
+    "react-icons": "^4.3.1",
+    "react-image-lightbox": "^5.1.4",
+    "react-jinke-music-player": "^4.24.2",
+    "react-measure": "^2.5.2",
+    "react-redux": "^7.2.5",
+    "react-router-dom": "^5.3.0",
+    "react-scripts": "^4.0.3",
+    "redux": "^4.1.1",
+    "redux-saga": "^1.1.3",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.15.0",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/react-hooks": "^7.0.2",
+    "@testing-library/user-event": "^13.5.0",
+    "css-mediaquery": "^0.1.2",
+    "prettier": "2.4.1",
+    "ra-test": "^3.18.3",
+    "workbox-cli": "^6.3.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "lint": "eslint --max-warnings 0 src/*.js src/**/*.js",
+    "prettier": "prettier --write src/*.js src/**/*.js",
+    "check-formatting": "prettier -c src/*.js src/**/*.js",
+    "update-workbox": "bin/update-workbox.sh"
+  },
+  "homepage": ".",
+  "proxy": "http://localhost:4633/",
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ],
+    "overrides": [
+      {
+        "files": [
+          "src/**/index.js",
+          "src/themes/*.js"
+        ],
+        "rules": {
+          "import/no-anonymous-default-export": "off"
+        }
+      }
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

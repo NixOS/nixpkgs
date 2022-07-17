@@ -6,6 +6,7 @@ yarn2nix-moretea.mkYarnPackage rec {
   pname = "navidrome-ui";
   version = import ./version.nix;
 
+  packageJSON = ./package.json;
   yarnNix = ./yarndeps.nix;
   yarnLock = ./yarn.lock;
 

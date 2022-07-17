@@ -30,7 +30,7 @@ yarn2nix --lockfile=$dirname/yarn.lock > $dirname/yarndeps.nix
 echo "ran yarn2nix"
 
 echo "cleaning up"
-rm -rf node_modules/ package.json
+rm -rf node_modules/
 
 echo "running nix-build for ui"
 nix-build -A navidrome.ui "$nixpkgs"
