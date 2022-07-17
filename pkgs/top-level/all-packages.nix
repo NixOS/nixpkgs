@@ -2166,6 +2166,8 @@ with pkgs;
     stdenv = gcc10StdenvCompat;
   };
 
+  boron = callPackage ../development/interpreters/boron { };
+
   botamusique = callPackage ../tools/audio/botamusique { };
 
   boulder = callPackage ../tools/admin/boulder { };
@@ -22037,6 +22039,8 @@ with pkgs;
 
   sabnzbd = callPackage ../servers/sabnzbd { };
 
+  baserow = python3Packages.callPackage ../servers/baserow { };
+
   bftpd = callPackage ../servers/ftp/bftpd {};
 
   bind = callPackage ../servers/dns/bind { };
@@ -22744,6 +22748,8 @@ with pkgs;
 
   check-openvpn = callPackage ../servers/monitoring/plugins/openvpn.nix { };
 
+  check_smartmon = callPackage ../servers/monitoring/nagios/plugins/smartmon.nix { };
+
   checkSSLCert = callPackage ../servers/monitoring/nagios/plugins/check_ssl_cert.nix { };
 
   check_systemd = callPackage ../servers/monitoring/nagios/plugins/check_systemd.nix { };
@@ -23084,6 +23090,8 @@ with pkgs;
   rss-bridge = callPackage ../servers/web-apps/rss-bridge { };
 
   searx = callPackage ../servers/web-apps/searx { };
+
+  searxng = python3Packages.toPythonModule (callPackage ../servers/web-apps/searxng { });
 
   selfoss = callPackage ../servers/web-apps/selfoss { };
 
@@ -27144,7 +27152,9 @@ with pkgs;
 
   freerdpUnstable = freerdp;
 
-  friture = libsForQt5.callPackage ../applications/audio/friture { };
+  friture = libsForQt5.callPackage ../applications/audio/friture {
+    python3Packages = python39Packages;
+  };
 
   fte = callPackage ../applications/editors/fte { };
 
@@ -34704,6 +34714,9 @@ with pkgs;
   };
 
   libjack2 = jack2.override { prefix = "lib"; };
+
+  jack-autoconnect = libsForQt5.callPackage ../applications/audio/jack-autoconnect { };
+  jack_autoconnect = jack-autoconnect;
 
   jacktrip = libsForQt5.callPackage ../applications/audio/jacktrip { };
 

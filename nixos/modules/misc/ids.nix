@@ -667,6 +667,27 @@ in
       # uid. Users and groups with the same name should have equal
       # uids and gids. Also, don't use gids above 399!
 
+      # For exceptional cases where you really need a gid above 399, leave a
+      # comment stating why.
+      #
+      # Also, avoid the following GID ranges:
+      #
+      #  1000 - 29999: user accounts (see ../config/update-users-groups.pl)
+      # 30000 - 31000: nixbld users (the upper limit is arbitrarily chosen)
+      # 61184 - 65519: systemd DynamicUser (see systemd.exec(5))
+      #         65535: the error return sentinel value when uid_t was 16 bits
+      #
+      # 100000 - 6653600: subgid allocated for user namespaces
+      #                   (see ../config/update-users-groups.pl)
+      #       4294967294: unauthenticated user in some NFS implementations
+      #       4294967295: error return sentinel value
+      #
+      # References:
+      # https://www.debian.org/doc/debian-policy/ch-opersys.html#uid-and-gid-classes
+
+      onepassword = 31001; # 1Password requires that its GID be larger than 1000
+      onepassword-cli = 31002; # 1Password requires that its GID be larger than 1000
+
       users = 100;
       nixbld = 30000;
       nogroup = 65534;
