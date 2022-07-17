@@ -17823,6 +17823,8 @@ with pkgs;
     stdenv = gccCrossLibcStdenv; # doesn't compile without gcc
   };
 
+  gotrue = callPackage ../development/libraries/gotrue { };
+
   muslCross = musl.override {
     stdenv = crossLibcStdenv;
   };

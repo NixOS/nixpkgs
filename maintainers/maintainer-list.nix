@@ -6517,6 +6517,13 @@
     githubId = 66669;
     name = "Jeff Zellner";
   };
+  j0 = {
+    email = "joel@joellee.org";
+    github = "j0";
+    githubId = 8011761;
+    name = "Joel Lee";
+
+  }
   k3a = {
     email = "git+nix@catmail.app";
     name = "Mario Hros";
