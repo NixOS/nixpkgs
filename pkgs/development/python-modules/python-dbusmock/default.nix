@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, runtimeShell
 , nose
 , dbus
 , dbus-python
@@ -13,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "python-dbusmock";
-  version = "0.28.2";
+  version = "0.28.3";
 
   src = fetchFromGitHub {
     owner = "martinpitt";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-GQU3aenqn61Flb4i+zXXwVJFx1TMb5h8AScv/k6rs/A=";
+    sha256 = "sha256-LV94F2f0Ir2Ayzk2YLL76TqeUuC0f7e+bH3vC/xKgfU=";
   };
 
   postPatch = ''
