@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libproxy";
-  version = "0.4.17";
+  version = "0.4.18";
 
   src = fetchFromGitHub {
     owner = "libproxy";
     repo = "libproxy";
     rev = version;
-    sha256 = "0v8q4ln0pd5231kidpi8wpwh0chcjwcmawcki53czlpdrc09z96r";
+    hash = "sha256-pqj1LwRdOK2CUu3hYIsogQIXxWzShDuKEbDTbtWkgnQ=";
   };
 
   outputs = [ "out" "dev" "py3" ];
