@@ -3,7 +3,8 @@
 , buildPythonPackage
 , deprecation
 , docker
-, wrapt }:
+, wrapt
+}:
 
 buildPythonPackage rec {
   pname = "testcontainers";
@@ -30,9 +31,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = ''
-      Allows using docker containers for functional and integration testing
-    '';
+    description = "Allows using docker containers for functional and integration testing";
     homepage = "https://github.com/testcontainers/testcontainers-python";
     license = licenses.asl20;
     maintainers = with maintainers; [ onny ];
