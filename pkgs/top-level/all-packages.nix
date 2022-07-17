@@ -4246,6 +4246,7 @@ with pkgs;
 
   noti = callPackage ../tools/misc/noti {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
+    buildGoPackage = buildGo117Package;
   };
 
   notify = callPackage ../tools/misc/notify { };
