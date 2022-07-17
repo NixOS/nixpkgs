@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "2.14.4";
+  version = "2.14.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7.2";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "PyCQA";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-NrfEIcPo2QJ78faQyfsQply8Zil1VZwV54GtV1aXbhc=";
+    sha256 = "sha256-JTFGplqIA6WavwzKOkrm1rHBKNRrplBPvAdEkb/fTlI=";
   };
 
   nativeBuildInputs = [
