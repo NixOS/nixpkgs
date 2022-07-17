@@ -37,17 +37,14 @@ in appimageTools.wrapType2 rec {
 
   extraInstallCommands = ''
     # directory in /nix/store so readonly
-    cp -r  ${appimageContents}/* $out
     cd $out
     chmod -R +w $out
     mv $out/bin/${name} $out/bin/${pname}
 
     # fixup and install desktop file
     ${desktop-file-utils}/bin/desktop-file-install --dir $out/share/applications \
-      --set-key Exec --set-value ${pname} standard-notes.desktop
-    mv usr/share/icons share
-
-    rm usr/lib/* AppRun standard-notes.desktop .so*
+      --set-key Exec --set-value ${pname} ${appimageContents}/standard-notes.desktop
+    ln -s ${appimageContents}/usr/share/icons share
   '';
 
   meta = with lib; {

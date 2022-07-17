@@ -5,14 +5,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.3.19";
+  version = "3.3.21";
 
   # Fetch from GitHub in order to use `requirements.in`
   src = fetchFromGitHub {
     owner = "flexget";
     repo = "flexget";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dt4XEGJGNq0njhuJBYA6xbyTx1jkrZlJ0Pl83Xjat6I=";
+    hash = "sha256-0XpToyy5Q3d2IpEMaeyhTri4xCBrI3Kmy5lMTqnAqC0=";
   };
 
   postPatch = ''
@@ -44,6 +44,7 @@ python3Packages.buildPythonApplication rec {
     jsonschema
     loguru
     more-itertools
+    packaging
     psutil
     pynzb
     PyRSS2Gen
