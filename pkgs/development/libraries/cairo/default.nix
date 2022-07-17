@@ -55,6 +55,8 @@ in stdenv.mkDerivation rec {
   ] ++ optionals stdenv.hostPlatform.isDarwin [
     # Workaround https://gitlab.freedesktop.org/cairo/cairo/-/issues/121
     ./skip-configure-stderr-check.patch
+    # Backport fix for https://gitlab.freedesktop.org/cairo/cairo/-/issues/420
+    ./patch-cairo-quartz-surfaces.patch
   ];
 
   outputs = [ "out" "dev" "devdoc" ];

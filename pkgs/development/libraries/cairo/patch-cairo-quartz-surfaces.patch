@@ -1,0 +1,308 @@
+This patch fixes a crash on macOS Big Sur and newer, as reported in:
+https://gitlab.freedesktop.org/cairo/cairo/-/issues/420
+
+The crash has been fixed in cairo:
+https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/52
+https://gitlab.freedesktop.org/cairo/cairo/-/commit/ba2afdcacf42eccf263b39efc77b85f3a65dcd74
+https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/119
+https://gitlab.freedesktop.org/cairo/cairo/-/commit/38e486b34d435130f2fb38c429e6016c3c82cd53
+
+This patch file was created by copying a patch in MacPorts, and fixing the file
+paths:
+https://raw.githubusercontent.com/macports/macports-ports/e9fce065c100a6fc78a0c98c151cc9819749f1c1/graphics/cairo/files/patch-cairo-quartz-surfaces.diff
+
+--- a/src/cairo-quartz-image-surface.c
++++ b/src/cairo-quartz-image-surface.c
+@@ -50,10 +50,9 @@
+ #define SURFACE_ERROR_INVALID_FORMAT (_cairo_surface_create_in_error(_cairo_error(CAIRO_STATUS_INVALID_FORMAT)))
+ 
+ static void
+-DataProviderReleaseCallback (void *info, const void *data, size_t size)
++DataProviderReleaseCallback (void *image_info, const void *data, size_t size)
+ {
+-    cairo_surface_t *surface = (cairo_surface_t *) info;
+-    cairo_surface_destroy (surface);
++    free (image_info);
+ }
+ 
+ static cairo_surface_t *
+@@ -88,9 +87,8 @@ _cairo_quartz_image_surface_finish (void *asurface)
+ {
+     cairo_quartz_image_surface_t *surface = (cairo_quartz_image_surface_t *) asurface;
+ 
+-    /* the imageSurface will be destroyed by the data provider's release callback */
+     CGImageRelease (surface->image);
+-
++    cairo_surface_destroy ( (cairo_surface_t*) surface->imageSurface);
+     return CAIRO_STATUS_SUCCESS;
+ }
+ 
+@@ -147,24 +145,29 @@ _cairo_quartz_image_surface_flush (void *asurface,
+     cairo_quartz_image_surface_t *surface = (cairo_quartz_image_surface_t *) asurface;
+     CGImageRef oldImage = surface->image;
+     CGImageRef newImage = NULL;
+-
++    void *image_data;
++    const unsigned int size = surface->imageSurface->height * surface->imageSurface->stride;
+     if (flags)
+ 	return CAIRO_STATUS_SUCCESS;
+ 
+     /* XXX only flush if the image has been modified. */
+ 
+-    /* To be released by the ReleaseCallback */
+-    cairo_surface_reference ((cairo_surface_t*) surface->imageSurface);
++    image_data = _cairo_malloc_ab ( surface->imageSurface->height,
++				    surface->imageSurface->stride);
++    if (unlikely (!image_data))
++	return _cairo_error (CAIRO_STATUS_NO_MEMORY);
+ 
++    memcpy (image_data, surface->imageSurface->data,
++	    surface->imageSurface->height * surface->imageSurface->stride);
+     newImage = CairoQuartzCreateCGImage (surface->imageSurface->format,
+ 					 surface->imageSurface->width,
+ 					 surface->imageSurface->height,
+ 					 surface->imageSurface->stride,
+-					 surface->imageSurface->data,
++					 image_data,
+ 					 TRUE,
+ 					 NULL,
+ 					 DataProviderReleaseCallback,
+-					 surface->imageSurface);
++					 image_data);
+ 
+     surface->image = newImage;
+     CGImageRelease (oldImage);
+@@ -308,7 +311,7 @@ cairo_quartz_image_surface_create (cairo_surface_t *surface)
+     cairo_image_surface_t *image_surface;
+     int width, height, stride;
+     cairo_format_t format;
+-    unsigned char *data;
++    void *image_data;
+ 
+     if (surface->status)
+ 	return surface;
+@@ -321,7 +324,6 @@ cairo_quartz_image_surface_create (cairo_surface_t *surface)
+     height = image_surface->height;
+     stride = image_surface->stride;
+     format = image_surface->format;
+-    data = image_surface->data;
+ 
+     if (!_cairo_quartz_verify_surface_size(width, height))
+ 	return SURFACE_ERROR_INVALID_SIZE;
+@@ -338,20 +340,21 @@ cairo_quartz_image_surface_create (cairo_surface_t *surface)
+ 
+     memset (qisurf, 0, sizeof(cairo_quartz_image_surface_t));
+ 
+-    /* In case the create_cgimage fails, this ref will
+-     * be released via the callback (which will be called in
+-     * case of failure.)
+-     */
+-    cairo_surface_reference (surface);
++    image_data = _cairo_malloc_ab (height, stride);
++    if (unlikely (!image_data)) {
++	free(qisurf);
++	return SURFACE_ERROR_NO_MEMORY;
++    }
+ 
++    memcpy (image_data, image_surface->data, height * stride);
+     image = CairoQuartzCreateCGImage (format,
+ 				      width, height,
+ 				      stride,
+-				      data,
++				      image_data,
+ 				      TRUE,
+ 				      NULL,
+ 				      DataProviderReleaseCallback,
+-				      image_surface);
++				      image_data);
+ 
+     if (!image) {
+ 	free (qisurf);
+@@ -368,7 +371,7 @@ cairo_quartz_image_surface_create (cairo_surface_t *surface)
+     qisurf->height = height;
+ 
+     qisurf->image = image;
+-    qisurf->imageSurface = image_surface;
++    qisurf->imageSurface = (cairo_image_surface_t*) cairo_surface_reference(surface);
+ 
+     return &qisurf->base;
+ }
+@@ -381,7 +384,7 @@ cairo_quartz_image_surface_get_image (cairo_surface_t *asurface)
+ 
+     /* Throw an error for a non-quartz surface */
+     if (! _cairo_surface_is_quartz (asurface)) {
+-        return _cairo_surface_create_in_error (_cairo_error (CAIRO_STATUS_SURFACE_TYPE_MISMATCH));
++        return SURFACE_ERROR_TYPE_MISMATCH;
+     }
+ 
+     return (cairo_surface_t*) surface->imageSurface;
+--- a/src/cairo-quartz-surface.c
++++ b/src/cairo-quartz-surface.c
+@@ -778,20 +778,10 @@ CairoQuartzCreateGradientFunction (const cairo_gradient_pattern_t *gradient,
+ 			     &gradient_callbacks);
+ }
+ 
+-/* Obtain a CGImageRef from a #cairo_surface_t * */
+-
+-typedef struct {
+-    cairo_surface_t *surface;
+-    cairo_image_surface_t *image_out;
+-    void *image_extra;
+-} quartz_source_image_t;
+-
+ static void
+ DataProviderReleaseCallback (void *info, const void *data, size_t size)
+ {
+-    quartz_source_image_t *source_img = info;
+-    _cairo_surface_release_source_image (source_img->surface, source_img->image_out, source_img->image_extra);
+-    free (source_img);
++    free (info);
+ }
+ 
+ static cairo_status_t
+@@ -803,8 +793,9 @@ _cairo_surface_to_cgimage (cairo_surface_t       *source,
+ 			   CGImageRef            *image_out)
+ {
+     cairo_status_t status;
+-    quartz_source_image_t *source_img;
+     cairo_image_surface_t *image_surface;
++    void *image_data, *image_extra;
++    cairo_bool_t acquired = FALSE;
+ 
+     if (source->backend && source->backend->type == CAIRO_SURFACE_TYPE_QUARTZ_IMAGE) {
+ 	cairo_quartz_image_surface_t *surface = (cairo_quartz_image_surface_t *) source;
+@@ -826,19 +817,12 @@ _cairo_surface_to_cgimage (cairo_surface_t       *source,
+ 	}
+     }
+ 
+-    source_img = _cairo_malloc (sizeof (quartz_source_image_t));
+-    if (unlikely (source_img == NULL))
+-	return _cairo_error (CAIRO_STATUS_NO_MEMORY);
+-
+-    source_img->surface = source;
+-
+     if (source->type == CAIRO_SURFACE_TYPE_RECORDING) {
+ 	image_surface = (cairo_image_surface_t *)
+ 	    cairo_image_surface_create (format, extents->width, extents->height);
+ 	if (unlikely (image_surface->base.status)) {
+ 	    status = image_surface->base.status;
+ 	    cairo_surface_destroy (&image_surface->base);
+-	    free (source_img);
+ 	    return status;
+ 	}
+ 
+@@ -848,46 +832,61 @@ _cairo_surface_to_cgimage (cairo_surface_t       *source,
+ 							    NULL);
+ 	if (unlikely (status)) {
+ 	    cairo_surface_destroy (&image_surface->base);
+-	    free (source_img);
+ 	    return status;
+ 	}
+ 
+-	source_img->image_out = image_surface;
+-	source_img->image_extra = NULL;
+-
+ 	cairo_matrix_init_identity (matrix);
+     }
+     else {
+-	status = _cairo_surface_acquire_source_image (source_img->surface,
+-						      &source_img->image_out,
+-						      &source_img->image_extra);
+-	if (unlikely (status)) {
+-	    free (source_img);
++	status = _cairo_surface_acquire_source_image (source, &image_surface,
++						      &image_extra);
++	if (unlikely (status))
+ 	    return status;
+-	}
++	acquired = TRUE;
+     }
+ 
+-    if (source_img->image_out->width == 0 || source_img->image_out->height == 0) {
++    if (image_surface->width == 0 || image_surface->height == 0) {
+ 	*image_out = NULL;
+-	DataProviderReleaseCallback (source_img,
+-				     source_img->image_out->data,
+-				     source_img->image_out->height * source_img->image_out->stride);
+-    } else {
+-	*image_out = CairoQuartzCreateCGImage (source_img->image_out->format,
+-					       source_img->image_out->width,
+-					       source_img->image_out->height,
+-					       source_img->image_out->stride,
+-					       source_img->image_out->data,
+-					       TRUE,
+-					       NULL,
+-					       DataProviderReleaseCallback,
+-					       source_img);
+-
+-	/* TODO: differentiate memory error and unsupported surface type */
+-	if (unlikely (*image_out == NULL))
+-	    status = CAIRO_INT_STATUS_UNSUPPORTED;
++	if (acquired)
++	    _cairo_surface_release_source_image (source, image_surface, image_extra);
++	else
++	    cairo_surface_destroy (&image_surface->base);
++
++	return status;
+     }
+ 
++    image_data = _cairo_malloc_ab (image_surface->height, image_surface->stride);
++    if (unlikely (!image_data))
++    {
++	if (acquired)
++	    _cairo_surface_release_source_image (source, image_surface, image_extra);
++	else
++	    cairo_surface_destroy (&image_surface->base);
++
++	return _cairo_error (CAIRO_STATUS_NO_MEMORY);
++    }
++
++    memcpy (image_data, image_surface->data,
++	    image_surface->height * image_surface->stride);
++    *image_out = CairoQuartzCreateCGImage (image_surface->format,
++					   image_surface->width,
++					   image_surface->height,
++					   image_surface->stride,
++					   image_data,
++					   TRUE,
++					   NULL,
++					   DataProviderReleaseCallback,
++					   image_data);
++
++    /* TODO: differentiate memory error and unsupported surface type */
++    if (unlikely (*image_out == NULL))
++	status = CAIRO_INT_STATUS_UNSUPPORTED;
++
++    if (acquired)
++	_cairo_surface_release_source_image (source, image_surface, image_extra);
++    else
++	cairo_surface_destroy (&image_surface->base);
++
+     return status;
+ }
+ 
+@@ -2273,11 +2272,13 @@ _cairo_quartz_surface_create_internal (CGContextRef cgContext,
+     surface->extents.width = width;
+     surface->extents.height = height;
+     surface->virtual_extents = surface->extents;
++    surface->imageData = NULL;
++    surface->imageSurfaceEquiv = NULL;
++
+ 
+     if (IS_EMPTY (surface)) {
+ 	surface->cgContext = NULL;
+ 	surface->cgContextBaseCTM = CGAffineTransformIdentity;
+-	surface->imageData = NULL;
+ 	surface->base.is_clear = TRUE;
+ 	return surface;
+     }
+@@ -2290,9 +2291,6 @@ _cairo_quartz_surface_create_internal (CGContextRef cgContext,
+     surface->cgContext = cgContext;
+     surface->cgContextBaseCTM = CGContextGetCTM (cgContext);
+ 
+-    surface->imageData = NULL;
+-    surface->imageSurfaceEquiv = NULL;
+-
+     return surface;
+ }
+ 
