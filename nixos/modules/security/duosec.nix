@@ -72,7 +72,7 @@ in
           If specified, Duo authentication is required only for users
           whose primary group or supplementary group list matches one
           of the space-separated pattern lists. Refer to
-          <link xlink:href="https://duo.com/docs/duounix"/> for details.
+          <link xlink:href="https://duo.com/docs/duounix">for details</link>.
         '';
       };
 
