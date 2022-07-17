@@ -83,6 +83,9 @@ mkDerivation rec {
   cmakeFlags = [
     "-DMINIZIP_INCLUDE_DIRS=${minizip2}/include"
     "-DMINIZIP_LIBRARIES=minizip"
+
+    # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];
 
   # The default install phase fails because the paths are somehow messed up in
