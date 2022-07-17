@@ -215,6 +215,7 @@
   ./programs/systemtap.nix
   ./programs/starship.nix
   ./programs/steam.nix
+  ./programs/streamdeck-ui.nix
   ./programs/sway.nix
   ./programs/system-config-printer.nix
   ./programs/thefuck.nix

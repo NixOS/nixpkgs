@@ -27679,6 +27679,8 @@ with pkgs;
 
   srain = callPackage ../applications/networking/irc/srain { };
 
+  streamdeck-ui = libsForQt5.callPackage ../applications/misc/streamdeck-ui { };
+
   super-productivity = callPackage ../applications/office/super-productivity {
     electron = electron_17;
   };
