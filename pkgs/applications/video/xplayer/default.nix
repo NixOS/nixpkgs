@@ -34,13 +34,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "xplayer";
-  version = "2.4.2";
+  version = "2.4.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-qoBJKY0CZyhp9foUehq5hInEENRGZuy1D6jAMjbjYhA=";
+    sha256 = "sha256-0hQHhf2me28YTTKOzEkzoxRoSoHLwtiaHPKNPJ/Fg+0=";
   };
 
   # configure wants to find gst-inspect-1.0 via pkgconfig but
