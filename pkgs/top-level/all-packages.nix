@@ -9798,6 +9798,8 @@ with pkgs;
 
   redsocks = callPackage ../tools/networking/redsocks { };
 
+  renpy = callPackage ../development/interpreters/renpy { };
+
   rep = callPackage ../development/tools/rep { };
 
   repseek = callPackage ../applications/science/biology/repseek { };
@@ -34131,6 +34133,9 @@ with pkgs;
   };
 
   libjack2 = jack2.override { prefix = "lib"; };
+
+  jack-autoconnect = libsForQt5.callPackage ../applications/audio/jack-autoconnect { };
+  jack_autoconnect = jack-autoconnect;
 
   jacktrip = libsForQt5.callPackage ../applications/audio/jacktrip { };
 
