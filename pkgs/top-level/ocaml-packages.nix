@@ -801,7 +801,7 @@ let
 
     metrics-lwt = callPackage ../development/ocaml-modules/metrics/lwt.nix { };
 
-    metrics-mirage = callPackage ../development/ocaml-modules/metrics/mirage.nix { };
+    metrics-rusage = callPackage ../development/ocaml-modules/metrics/rusage.nix { };
 
     metrics-unix = callPackage ../development/ocaml-modules/metrics/unix.nix {
       inherit (pkgs) gnuplot;
