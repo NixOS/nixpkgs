@@ -5,15 +5,15 @@
 
 buildPythonPackage rec {
   pname = "tatsu";
-  version = "5.8.0";
+  version = "5.8.1";
   # upstream only supports 3.10+
   disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "neogeny";
     repo = "TatSu";
-    rev = "v${version}";
-    sha256 = "sha256-spTIHiyspjrIV8DKR7YNpNTNO9SlcLOROuABhmu3ckA=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-2zEpP1WATqzAo0HsBGdjjk/RoliyIim1OltPoJTlxIU=";
   };
 
   nativeBuildInputs = [ pytest-runner ];

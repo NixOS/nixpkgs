@@ -2166,6 +2166,8 @@ with pkgs;
     stdenv = gcc10StdenvCompat;
   };
 
+  boron = callPackage ../development/interpreters/boron { };
+
   botamusique = callPackage ../tools/audio/botamusique { };
 
   boulder = callPackage ../tools/admin/boulder { };
@@ -3434,6 +3436,8 @@ with pkgs;
   diagrams-builder = callPackage ../tools/graphics/diagrams-builder {
     inherit (haskellPackages) ghcWithPackages diagrams-builder;
   };
+
+  dialect = callPackage ../applications/misc/dialect { };
 
   dialog = callPackage ../tools/misc/dialog { };
 
@@ -21684,6 +21688,7 @@ with pkgs;
   libzra = callPackage ../development/libraries/libzra { };
 
   zig = callPackage ../development/compilers/zig {
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
     llvmPackages = llvmPackages_13;
   };
 
@@ -22029,6 +22034,8 @@ with pkgs;
   asterisk-module-sccp = callPackage ../servers/asterisk/sccp { };
 
   sabnzbd = callPackage ../servers/sabnzbd { };
+
+  baserow = python3Packages.callPackage ../servers/baserow { };
 
   bftpd = callPackage ../servers/ftp/bftpd {};
 
@@ -22737,9 +22744,13 @@ with pkgs;
 
   check-openvpn = callPackage ../servers/monitoring/plugins/openvpn.nix { };
 
+  check_smartmon = callPackage ../servers/monitoring/nagios/plugins/smartmon.nix { };
+
   checkSSLCert = callPackage ../servers/monitoring/nagios/plugins/check_ssl_cert.nix { };
 
   check_systemd = callPackage ../servers/monitoring/nagios/plugins/check_systemd.nix { };
+
+  check_zfs = callPackage ../servers/monitoring/nagios/plugins/zfs.nix { };
 
   neo4j = callPackage ../servers/nosql/neo4j {
     jre = jre8_headless;
@@ -23075,6 +23086,8 @@ with pkgs;
   rss-bridge = callPackage ../servers/web-apps/rss-bridge { };
 
   searx = callPackage ../servers/web-apps/searx { };
+
+  searxng = python3Packages.toPythonModule (callPackage ../servers/web-apps/searxng { });
 
   selfoss = callPackage ../servers/web-apps/selfoss { };
 
@@ -27134,7 +27147,9 @@ with pkgs;
 
   freerdpUnstable = freerdp;
 
-  friture = libsForQt5.callPackage ../applications/audio/friture { };
+  friture = libsForQt5.callPackage ../applications/audio/friture {
+    python3Packages = python39Packages;
+  };
 
   fte = callPackage ../applications/editors/fte { };
 
@@ -29094,6 +29109,8 @@ with pkgs;
   synfigstudio = callPackage ../applications/graphics/synfigstudio { };
 
   taxi = callPackage ../applications/networking/ftp/taxi { };
+
+  taxi-cli = with python3Packages; toPythonApplication taxi;
 
   librep = callPackage ../development/libraries/librep { };
 
@@ -34693,6 +34710,9 @@ with pkgs;
 
   libjack2 = jack2.override { prefix = "lib"; };
 
+  jack-autoconnect = libsForQt5.callPackage ../applications/audio/jack-autoconnect { };
+  jack_autoconnect = jack-autoconnect;
+
   jacktrip = libsForQt5.callPackage ../applications/audio/jacktrip { };
 
   j2cli = with python3Packages; toPythonApplication j2cli;
@@ -35475,6 +35495,8 @@ with pkgs;
   webkit2-sharp = callPackage ../development/libraries/webkit2-sharp {  };
 
   websocketd = callPackage ../applications/networking/websocketd { };
+
+  wibo = pkgsi686Linux.callPackage ../applications/emulators/wibo { };
 
   wike = callPackage ../applications/misc/wike { };
 

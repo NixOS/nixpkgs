@@ -56,8 +56,5 @@ buildGoModule rec {
     homepage = "https://github.com/multiprocessio/dsq";
     license = licenses.asl20;
     maintainers = with maintainers; [ liff ];
-    # TODO: Remove once nixpkgs uses macOS SDK 10.14+ for x86_64-darwin
-    # Undefined symbols for architecture x86_64: "_SecTrustEvaluateWithError"
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

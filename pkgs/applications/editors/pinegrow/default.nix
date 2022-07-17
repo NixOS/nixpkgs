@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pinegrow";
-  version = "6.5";
+  version = "6.6";
 
   src = fetchurl {
     url = "https://download.pinegrow.com/PinegrowLinux64.${version}.zip";
-    sha256 = "1l7cf5jgidpykaf68mzf92kywl1vxwl3fg43ibgr2rg4cnl1g82b";
+    sha256 = "sha256-a3SwUNcMXl42+Gy3wjcx/KvVprgFAO0D0lFPohPV3Tk=";
   };
 
   nativeBuildInputs = [

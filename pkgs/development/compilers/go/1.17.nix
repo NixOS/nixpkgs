@@ -60,11 +60,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.17.11";
+  version = "1.17.12";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "sha256-rCZJpllExqWr5VBUAA7uPXcZaIDaNqNVX2LgZUDo61Q=";
+    sha256 = "sha256-DVG1s/KAwPAfU0WYwCGdtYePM32mE3qe5ph3dBNgcgk=";
   };
 
   strictDeps = true;

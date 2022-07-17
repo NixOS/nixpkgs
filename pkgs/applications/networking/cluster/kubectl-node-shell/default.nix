@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation rec {
     description = "Exec into node via kubectl";
     homepage = "https://github.com/kvaps/kubectl-node-shell";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ jocelynthode ];
     platforms = platforms.linux;
   };
 }

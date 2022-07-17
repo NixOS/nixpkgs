@@ -1,8 +1,8 @@
 { lib, stdenv, fetchurl, pkg-config, perl, nixosTests
-, brotliSupport ? false, brotli ? null
-, c-aresSupport ? false, c-ares ? null
-, gnutlsSupport ? false, gnutls ? null
-, gsaslSupport ? false, gsasl ? null
+, brotliSupport ? false, brotli
+, c-aresSupport ? false, c-ares
+, gnutlsSupport ? false, gnutls
+, gsaslSupport ? false, gsasl
 , patchNetrcRegression ? false
 , gssSupport ? with stdenv.hostPlatform; (
     !isWindows &&
@@ -13,18 +13,18 @@
     # fixed in mig, but losing gss support on cross compilation to darwin is
     # not worth the effort.
     !(isDarwin && (stdenv.buildPlatform != stdenv.hostPlatform))
-  ), libkrb5 ? null
-, http2Support ? true, nghttp2 ? null
-, http3Support ? false, nghttp3, ngtcp2 ? null
-, idnSupport ? false, libidn2 ? null
-, ldapSupport ? false, openldap ? null
-, opensslSupport ? zlibSupport, openssl ? null
-, pslSupport ? false, libpsl ? null
-, rtmpSupport ? false, rtmpdump ? null
-, scpSupport ? zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin, libssh2 ? null
-, wolfsslSupport ? false, wolfssl ? null
-, zlibSupport ? true, zlib ? null
-, zstdSupport ? false, zstd ? null
+  ), libkrb5
+, http2Support ? true, nghttp2
+, http3Support ? false, nghttp3, ngtcp2
+, idnSupport ? false, libidn2
+, ldapSupport ? false, openldap
+, opensslSupport ? zlibSupport, openssl
+, pslSupport ? false, libpsl
+, rtmpSupport ? false, rtmpdump
+, scpSupport ? zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin, libssh2
+, wolfsslSupport ? false, wolfssl
+, zlibSupport ? true, zlib
+, zstdSupport ? false, zstd
 
 # for passthru.tests
 , coeurl
@@ -43,23 +43,6 @@
 assert !(gnutlsSupport && opensslSupport);
 assert !(gnutlsSupport && wolfsslSupport);
 assert !(opensslSupport && wolfsslSupport);
-assert brotliSupport -> brotli != null;
-assert c-aresSupport -> c-ares != null;
-assert gnutlsSupport -> gnutls != null;
-assert gsaslSupport -> gsasl != null;
-assert gssSupport -> libkrb5 != null;
-assert http2Support -> nghttp2 != null;
-assert http3Support -> nghttp3 != null;
-assert http3Support -> ngtcp2 != null;
-assert idnSupport -> libidn2 != null;
-assert ldapSupport -> openldap != null;
-assert opensslSupport -> openssl != null;
-assert pslSupport -> libpsl !=null;
-assert rtmpSupport -> rtmpdump !=null;
-assert scpSupport -> libssh2 != null;
-assert wolfsslSupport -> wolfssl != null;
-assert zlibSupport -> zlib != null;
-assert zstdSupport -> zstd != null;
 
 stdenv.mkDerivation rec {
   pname = "curl";

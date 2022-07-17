@@ -59,10 +59,6 @@ let
   # These are the providers that don't fall in line with the default model
   special-providers =
     {
-      # go-module vendor fails with 1.18
-      buildkite = automated-providers.buildkite.override { mkProviderGoModule = buildGo117Module; };
-      # go-module vendor fails with 1.18
-      checkly = automated-providers.checkly.override { mkProviderGoModule = buildGo117Module; };
       # mkisofs needed to create ISOs holding cloud-init data and wrapped to terraform via deecb4c1aab780047d79978c636eeb879dd68630
       libvirt = automated-providers.libvirt.overrideAttrs (_: { propagatedBuildInputs = [ cdrtools ]; });
       # fails to build on x86_64-darwin with 1.18

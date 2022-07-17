@@ -1,4 +1,6 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
+, fetchPypi
 , jupyter-packaging
 , jupyter_server
 , pytest-tornasync
@@ -29,6 +31,8 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "jupyter_server_mathjax" ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "MathJax resources as a Jupyter Server Extension";

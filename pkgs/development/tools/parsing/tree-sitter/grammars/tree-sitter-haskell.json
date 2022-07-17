@@ -1,9 +1,9 @@
 {
   "url": "https://github.com/tree-sitter/tree-sitter-haskell",
-  "rev": "ca0a13f1acb60cf32e74cced3cb623b6c70fa77c",
-  "date": "2022-06-06T23:15:37+02:00",
-  "path": "/nix/store/dmq8mc361rkhrpa5s06h1z9k8khkvi78-tree-sitter-haskell",
-  "sha256": "1r3mfnj1f6p2cqriay22jjfggrmyywimidzmzw8h5q84flngdg2s",
+  "rev": "cf394604ae2ec2a5e65b1afbc7dea21258ede403",
+  "date": "2022-07-02T11:46:11+02:00",
+  "path": "/nix/store/04cbp4wc4ga3d36d9xvqz2wy9bdnyapv-tree-sitter-haskell",
+  "sha256": "1kvh5gwg3c59snqhpsg23b690rnbmcya0i38mqq9n1pdmv2pzxyi",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

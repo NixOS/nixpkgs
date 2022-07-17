@@ -483,7 +483,8 @@ let
             auth ${p11.control} ${pkgs.pam_p11}/lib/security/pam_p11.so ${pkgs.opensc}/lib/opensc-pkcs11.so
           '') +
           (let u2f = config.security.pam.u2f; in optionalString cfg.u2fAuth ''
-            auth ${u2f.control} ${pkgs.pam_u2f}/lib/security/pam_u2f.so ${optionalString u2f.debug "debug"} ${optionalString (u2f.authFile != null) "authfile=${u2f.authFile}"} ${optionalString u2f.interactive "interactive"} ${optionalString u2f.cue "cue"} ${optionalString (u2f.appId != null) "appid=${u2f.appId}"}
+              auth ${u2f.control} ${pkgs.pam_u2f}/lib/security/pam_u2f.so ${optionalString u2f.debug "debug"} ${optionalString (u2f.authFile != null) "authfile=${u2f.authFile}"} ''
+                + ''${optionalString u2f.interactive "interactive"} ${optionalString u2f.cue "cue"} ${optionalString (u2f.appId != null) "appid=${u2f.appId}"} ${optionalString (u2f.origin != null) "origin=${u2f.origin}"}
           '') +
           optionalString cfg.usbAuth ''
             auth sufficient ${pkgs.pam_usb}/lib/security/pam_usb.so
@@ -888,6 +889,24 @@ in
 
             When using <command>pamu2fcfg</command>, you can specify your
             application ID with the <literal>-i</literal> flag.
+
+            More information can be found <link
+            xlink:href="https://developers.yubico.com/pam-u2f/Manuals/pam_u2f.8.html">
+            here</link>
+        '';
+      };
+
+      origin = mkOption {
+        default = null;
+        type = with types; nullOr str;
+        description = ''
+            By default <literal>pam-u2f</literal> module sets the origin
+            to <literal>pam://$HOSTNAME</literal>.
+            Setting origin to an host independent value will allow you to
+            reuse credentials across machines
+
+            When using <command>pamu2fcfg</command>, you can specify your
+            application ID with the <literal>-o</literal> flag.
 
             More information can be found <link
             xlink:href="https://developers.yubico.com/pam-u2f/Manuals/pam_u2f.8.html">
