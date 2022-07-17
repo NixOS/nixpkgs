@@ -8,6 +8,8 @@
 , statsmodels
 , pytestCheckHook
 , geopandas
+, scikit-misc
+, adjusttext
 , mizani }:
 
 buildPythonPackage rec {
@@ -34,8 +36,10 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    adjusttext
     geopandas
     pytestCheckHook
+    scikit-misc
   ];
 
   preCheck = ''
