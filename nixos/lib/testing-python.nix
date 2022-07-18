@@ -157,9 +157,9 @@ rec {
         # set defaults through environment
         # see: ./test-driver/test-driver.py argparse implementation
         wrapProgram $out/bin/nixos-test-driver \
-          --set startScripts "${lib.concatStringsSep "," (lib.mapAttrsToList
-            (name: machine: "${name}=${machine.config.system.build.vm}/bin/run-${machine.config.system.name}-vm")
-            nodes)}" \
+          --set startScripts ${lib.escapeShellArg (builtins.toJSON (lib.mapAttrs
+            (name: machine: "${machine.config.system.build.vm}/bin/run-${machine.config.system.name}-vm")
+            nodes))} \
           --set testScript "$out/test-script" \
           --set vlans '${toString vlans}' \
           ${lib.optionalString (interactive) "--add-flags --interactive"}

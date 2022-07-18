@@ -1,5 +1,6 @@
 from pathlib import Path
 import argparse
+import json
 import ptpython.repl
 import os
 import time
@@ -31,38 +32,6 @@ class EnvDefault(argparse.Action):
 
     def __call__(self, parser, namespace, values, option_string=None):  # type: ignore
         setattr(namespace, self.dest, values)
-
-
-class StoreDictKeyPair(argparse.Action):
-    """An argpars Action that puts values into a dictionary."""
-
-    def __init__(self, envvar, required=False, default=None, nargs=None, **kwargs):  # type: ignore
-        if not default and envvar:
-            if envvar in os.environ:
-                if nargs is not None and (nargs.isdigit() or nargs in ["*", "+"]):
-                    default = os.environ[envvar].split()
-                else:
-                    default = os.environ[envvar]
-                kwargs["help"] = (
-                    kwargs["help"] + f" (default from environment: {default})"
-                )
-        if required and default:
-            required = False
-        my_dict = {}
-        for kv in default.split(","):
-            k, v = kv.split("=")
-            my_dict[k] = v
-        super(StoreDictKeyPair, self).__init__(
-            default=my_dict, required=required, nargs=nargs, **kwargs
-        )
-
-    def __call__(self, parser, namespace, values, option_string=None):  # type: ignore
-        my_dict = {}
-        print("values: " + values)
-        for kv in values.split(","):
-            k, v = kv.split("=")
-            my_dict[k] = v
-        setattr(namespace, self.dest, my_dict)
 
 
 def writeable_dir(arg: str) -> Path:
@@ -97,11 +66,10 @@ def main() -> None:
     )
     arg_parser.add_argument(
         "--start-scripts",
-        action=StoreDictKeyPair,
+        metavar='{"MACHINE-NAME1": "START-SCRIPT1","MACHINE-NAME2":"START-SCRIPT2"...}',
+        action=EnvDefault,
         envvar="startScripts",
-        dest="start_scripts",
-        metavar="MACHINE-NAME1=START-SCRIPT1,MACHINE-NAME2=START-SCRIPT2...",
-        help="start scripts for participating virtual machines",
+        help="JSON dict from machine names to start scripts for participating virtual machines",
     )
     arg_parser.add_argument(
         "--vlans",
@@ -133,7 +101,7 @@ def main() -> None:
         rootlog.info("Machine state will be reset. To keep it, pass --keep-vm-state")
 
     with Driver(
-        args.start_scripts,
+        json.loads(args.start_scripts),
         args.vlans,
         args.testscript.read_text(),
         args.output_directory.resolve(),
