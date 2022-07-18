@@ -243,6 +243,7 @@ in {
             done
           '' + (if cfg.accessUser != "" then reloadScript else "");
       serviceConfig = {
+        Type = "oneshot";
         User = jenkinsCfg.user;
         RuntimeDirectory = "jenkins-job-builder";
       };
