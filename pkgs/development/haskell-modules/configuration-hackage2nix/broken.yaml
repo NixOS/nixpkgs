@@ -3315,7 +3315,6 @@ broken-packages:
   - MonadCatchIO-transformers
   - monad-choice
   - MonadCompose
-  - monad-control-identity
   - monad-fork
   - monad-http
   - monadiccp
