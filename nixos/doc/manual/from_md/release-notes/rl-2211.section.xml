@@ -97,6 +97,16 @@
       </listitem>
       <listitem>
         <para>
+          etcd now defaults to 3.5, updated from 3.3, which brings some
+          deprecations. See the etcd dos on
+          <link xlink:href="https://etcd.io/docs/v3.6/upgrades/upgrade_3_4/">upgrade
+          etcd from 3.3 to 3.4</link> and
+          <link xlink:href="https://etcd.io/docs/v3.3/upgrades/upgrade_3_5/">upgrade
+          etcd from 3.4 to 3.5</link> for more details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>hardware.nvidia</literal> has a new option
           <literal>open</literal> that can be used to opt in the
           opensource version of NVIDIA kernel driver. Note that the
