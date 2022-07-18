@@ -618,6 +618,7 @@
   ./services/misc/plikd.nix
   ./services/misc/podgrab.nix
   ./services/misc/polaris.nix
+  ./services/misc/portunus.nix
   ./services/misc/prowlarr.nix
   ./services/misc/tautulli.nix
   ./services/misc/pinnwand.nix
