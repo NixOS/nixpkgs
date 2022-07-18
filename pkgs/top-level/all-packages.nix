@@ -214,6 +214,8 @@ with pkgs;
 
   quickemu = callPackage ../development/quickemu { };
 
+  adcli = callPackage ../os-specific/linux/adcli { };
+
   aether = callPackage ../applications/networking/aether { };
 
   alda = callPackage ../development/interpreters/alda { };
