@@ -4338,6 +4338,8 @@ self: super: with self; {
 
   gradient_statsd = callPackage ../development/python-modules/gradient_statsd { };
 
+  gradio = callPackage ../development/python-modules/gradio { };
+
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
   grandalf = callPackage ../development/python-modules/grandalf { };
