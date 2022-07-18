@@ -127,7 +127,7 @@ in {
         Type = "simple";
         User = "mxisd";
         Group = "mxisd";
-        EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
+        EnvironmentFile = mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
         ExecStart = "${cfg.package}/bin/${executable} -c ${cfg.dataDir}/mxisd-config.yaml";
         ExecStartPre = "${pkgs.writeShellScript "mxisd-substitute-secrets" ''
           ${pkgs.envsubst}/bin/envsubst -o ${cfg.dataDir}/mxisd-config.yaml \
