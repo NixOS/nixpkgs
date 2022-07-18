@@ -46,6 +46,15 @@ in {
         description = "The mxisd/ma1sd package to use";
       };
 
+      environmentFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Path to an environment-file which may contain secrets to be
+          substituted via <package>envsubst</package>.
+        '';
+      };
+
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/mxisd";
@@ -118,7 +127,12 @@ in {
         Type = "simple";
         User = "mxisd";
         Group = "mxisd";
-        ExecStart = "${cfg.package}/bin/${executable} -c ${configFile}";
+        EnvironmentFile = mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
+        ExecStart = "${cfg.package}/bin/${executable} -c ${cfg.dataDir}/mxisd-config.yaml";
+        ExecStartPre = "${pkgs.writeShellScript "mxisd-substitute-secrets" ''
+          ${pkgs.envsubst}/bin/envsubst -o ${cfg.dataDir}/mxisd-config.yaml \
+            -i ${configFile}
+        ''}";
         WorkingDirectory = cfg.dataDir;
         Restart = "on-failure";
       };

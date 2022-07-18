@@ -61,10 +61,10 @@ in {
       };
 
       group = mkOption {
-        type = types.str;
-        default = "root";
+        type = types.nullOr types.str;
+        default = null;
         example = "wheel";
-        description = "Group to grant access to the Yggdrasil control socket.";
+        description = "Group to grant access to the Yggdrasil control socket. If <code>null</code>, only root can access the socket.";
       };
 
       openMulticastPort = mkOption {
@@ -154,27 +154,16 @@ in {
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "always";
 
-        Group = cfg.group;
+        DynamicUser = true;
+        StateDirectory = "yggdrasil";
         RuntimeDirectory = "yggdrasil";
         RuntimeDirectoryMode = "0750";
         BindReadOnlyPaths = lib.optional configFileProvided cfg.configFile
           ++ lib.optional cfg.persistentKeys keysPath;
+        ReadWritePaths = "/run/yggdrasil";
 
-        # TODO: as of yggdrasil 0.3.8 and systemd 243, yggdrasil fails
-        # to set up the network adapter when DynamicUser is set.  See
-        # github.com/yggdrasil-network/yggdrasil-go/issues/557.  The
-        # following options are implied by DynamicUser according to
-        # the systemd.exec documentation, and can be removed if the
-        # upstream issue is fixed and DynamicUser is set to true:
-        PrivateTmp = true;
-        RemoveIPC = true;
-        NoNewPrivileges = true;
-        ProtectSystem = "strict";
-        RestrictSUIDSGID = true;
-        # End of list of options implied by DynamicUser.
-
-        AmbientCapabilities = "CAP_NET_ADMIN";
-        CapabilityBoundingSet = "CAP_NET_ADMIN";
+        AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
+        CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
         MemoryDenyWriteExecute = true;
         ProtectControlGroups = true;
         ProtectHome = "tmpfs";
@@ -185,7 +174,9 @@ in {
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
         SystemCallFilter = "~@clock @cpu-emulation @debug @keyring @module @mount @obsolete @raw-io @resources";
-      };
+      } // (if (cfg.group != null) then {
+        Group = cfg.group;
+      } else {});
     };
 
     networking.dhcpcd.denyInterfaces = cfg.denyDhcpcdInterfaces;

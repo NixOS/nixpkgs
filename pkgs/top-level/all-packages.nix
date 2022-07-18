@@ -3410,8 +3410,6 @@ with pkgs;
 
   dconf = callPackage ../development/libraries/dconf { };
 
-  dcw-gmt = callPackage ../applications/gis/gmt/dcw.nix { };
-
   ddate = callPackage ../tools/misc/ddate { };
 
   ddosify = callPackage ../development/tools/ddosify { };
@@ -3837,11 +3835,6 @@ with pkgs;
   # well.
   gmic-qt-krita = gmic-qt.override {
     variant = "krita";
-  };
-
-  gmt = callPackage ../applications/gis/gmt {
-    inherit (darwin.apple_sdk.frameworks)
-      Accelerate CoreGraphics CoreVideo;
   };
 
   gpg-tui = callPackage ../tools/security/gpg-tui {
@@ -25598,6 +25591,38 @@ with pkgs;
 
   zuki-themes = callPackage ../data/themes/zuki { };
 
+  ### APPLICATIONS / GIS
+
+  gmt = callPackage ../applications/gis/gmt {
+    inherit (darwin.apple_sdk.frameworks)
+      Accelerate CoreGraphics CoreVideo;
+  };
+
+  gshhg-gmt = callPackage ../applications/gis/gmt/gshhg.nix { };
+
+  dcw-gmt = callPackage ../applications/gis/gmt/dcw.nix { };
+
+  grass = callPackage ../applications/gis/grass { };
+
+  openorienteering-mapper = libsForQt5.callPackage ../applications/gis/openorienteering-mapper { };
+
+  qgis-ltr = callPackage ../applications/gis/qgis/ltr.nix { };
+
+  qgis = callPackage ../applications/gis/qgis { };
+
+  qmapshack = libsForQt5.callPackage ../applications/gis/qmapshack { };
+
+  saga = libsForQt5.callPackage ../applications/gis/saga {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
+
+  udig = callPackage ../applications/gis/udig { };
+
+  whitebox-tools = callPackage ../applications/gis/whitebox-tools {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
+  zombietrackergps = libsForQt5.callPackage ../applications/gis/zombietrackergps { };
 
   ### APPLICATIONS
 
@@ -26961,8 +26986,6 @@ with pkgs;
 
   gpx-viewer = callPackage ../applications/misc/gpx-viewer { };
 
-  grass = callPackage ../applications/gis/grass { };
-
   grepcidr = callPackage ../applications/search/grepcidr { };
 
   grepm = callPackage ../applications/search/grepm { };
@@ -27290,6 +27313,8 @@ with pkgs;
   });
 
   jmusicbot = callPackage ../applications/audio/jmusicbot { };
+
+  josh = callPackage ../applications/version-management/josh { };
 
   junction = callPackage ../applications/misc/junction { };
 
@@ -29333,8 +29358,6 @@ with pkgs;
     vm = callPackage ../applications/audio/open-music-kontrollers/vm.nix { };
   };
 
-  openorienteering-mapper = libsForQt5.callPackage ../applications/gis/openorienteering-mapper { };
-
   openscad = libsForQt5.callPackage ../applications/graphics/openscad {};
 
   open-stage-control = callPackage ../applications/audio/open-stage-control {
@@ -29725,10 +29748,6 @@ with pkgs;
 
   wrapQemuBinfmtP = callPackage ../applications/virtualization/qemu/binfmt-p-wrapper.nix { };
 
-  qgis-ltr = callPackage ../applications/gis/qgis/ltr.nix { };
-
-  qgis = callPackage ../applications/gis/qgis { };
-
   qgroundcontrol = libsForQt5.callPackage ../applications/science/robotics/qgroundcontrol { };
 
   qjackctl = libsForQt5.callPackage ../applications/audio/qjackctl { };
@@ -29745,8 +29764,6 @@ with pkgs;
   };
 
   garmindev = callPackage ../applications/misc/qlandkartegt/garmindev.nix {};
-
-  qmapshack = libsForQt5.callPackage ../applications/gis/qmapshack { };
 
   qmediathekview = libsForQt5.callPackage ../applications/video/qmediathekview { };
 
@@ -31171,10 +31188,6 @@ with pkgs;
     wlroots = wlroots_0_14;
   };
 
-  whitebox-tools = callPackage ../applications/gis/whitebox-tools {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   windowlab = callPackage ../applications/window-managers/windowlab { };
 
   windowmaker = callPackage ../applications/window-managers/windowmaker { };
@@ -31610,8 +31623,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
-  zombietrackergps = libsForQt5.callPackage ../applications/gis/zombietrackergps { };
-
   zoom-us = callPackage ../applications/networking/instant-messengers/zoom-us { };
 
   zotero = callPackage ../applications/office/zotero { };
@@ -31903,10 +31914,6 @@ with pkgs;
 
   quorum = callPackage ../applications/blockchains/quorum { };
 
-  saga = libsForQt5.callPackage ../applications/gis/saga {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
-
   samplv1 = libsForQt5.callPackage ../applications/audio/samplv1 { };
 
   scaleft = callPackage ../applications/networking/scaleft { };
@@ -31931,8 +31938,6 @@ with pkgs;
   digikam = libsForQt5.callPackage ../applications/graphics/digikam {};
 
   drumkv1 = libsForQt5.callPackage ../applications/audio/drumkv1 { };
-
-  gshhg-gmt = callPackage ../applications/gis/gmt/gshhg.nix { };
 
   eureka-editor = callPackage ../applications/misc/eureka-editor { };
 
@@ -32984,8 +32989,6 @@ with pkgs;
   typespeed = callPackage ../games/typespeed { };
 
   uchess = callPackage ../games/uchess { };
-
-  udig = callPackage ../applications/gis/udig { };
 
   ufoai = callPackage ../games/ufoai { };
 

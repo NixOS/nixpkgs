@@ -53,7 +53,7 @@ updateEarlyAccess() {
     OLD_EA_HASH="$(getLocalHash "yuzu-ea")"
 
     NEW_EA_VERSION="$(curl -s ${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
-        "https://api.github.com/repos/pineappleEA/pineapple-src/releases?per_page=1" | jq -r '.[0].name' | cut -d"-" -f2 | cut -d" " -f1)"
+        "https://api.github.com/repos/pineappleEA/pineapple-src/releases?per_page=1" | jq -r '.[0].tag_name' | cut -d"-" -f2 | cut -d" " -f1)"
 
     if [[ "${OLD_EA_VERSION}" = "${NEW_EA_VERSION}" ]]; then
         echo "yuzu-ea is already up to date!"
