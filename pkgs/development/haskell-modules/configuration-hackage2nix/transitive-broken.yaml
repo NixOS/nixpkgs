@@ -427,6 +427,7 @@ dont-distribute-packages:
  - adict
  - adjunction
  - adp-multi-monadiccp
+ - aern2-mfun
  - aeson-native
  - aeson-result
  - affine
@@ -856,6 +857,7 @@ dont-distribute-packages:
  - bytable
  - bytehash
  - bytelog
+ - bytepatch
  - bytestring-builder-varword
  - bytestring-read
  - ca
@@ -952,18 +954,6 @@ dont-distribute-packages:
  - claferIG
  - claferwiki
  - clash
- - clash-ghc
- - clash-lib
- - clash-lib-hedgehog
- - clash-multisignal
- - clash-prelude
- - clash-prelude-hedgehog
- - clash-prelude-quickcheck
- - clash-shake
- - clash-systemverilog
- - clash-verilog
- - clash-vhdl
- - clashilator
  - classify-frog
  - classy-miso
  - clckwrks
@@ -1292,6 +1282,7 @@ dont-distribute-packages:
  - dph-prim-interface
  - dph-prim-par
  - dph-prim-seq
+ - drama
  - dropbox-sdk
  - dropsolve
  - dsh-sql
@@ -2303,7 +2294,6 @@ dont-distribute-packages:
  - hyloutils
  - hyperpublic
  - iException
- - ice40-prim
  - icepeak
  - ide-backend
  - ide-backend-server
@@ -2592,7 +2582,6 @@ dont-distribute-packages:
  - linux-ptrace
  - lio-eci11
  - lio-simple
- - lion
  - liquid-base
  - liquid-bytestring
  - liquid-containers
@@ -3373,8 +3362,6 @@ dont-distribute-packages:
  - restful-snap
  - restricted-workers
  - rethinkdb-model
- - retroclash-lib
- - retroclash-sim
  - rewrite
  - rewriting
  - rezoom
