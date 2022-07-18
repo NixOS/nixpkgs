@@ -12378,6 +12378,8 @@ with pkgs;
 
   yarn-bash-completion = callPackage ../shells/bash/yarn-completion { };
 
+  ble-sh = callPackage ../shells/bash/ble.sh { };
+
   undistract-me = callPackage ../shells/bash/undistract-me { };
 
   dash = callPackage ../shells/dash { };
