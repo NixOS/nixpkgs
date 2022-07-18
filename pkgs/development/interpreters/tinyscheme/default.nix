@@ -13,9 +13,19 @@ stdenv.mkDerivation rec {
 
   prePatch = "dos2unix makefile";
   patches = [
+    # The alternate macOS main makes use of `ccommand` which seems to be
+    # `MetroWerks CodeWarrier` specific:
+    # https://ptgmedia.pearsoncmg.com/imprint_downloads/informit/downloads/9780201703535/macfix.html
+    #
+    # In any case, this is not needed to build on macOS.
+    ./01-remove-macOS-main.patch
+
     # We want to have the makefile pick up $CC, etc. so that we don't have
     # to unnecessarily tie this package to the GCC stdenv.
     ./02-use-toolchain-env-vars.patch
+  ] ++ lib.optionals stdenv.targetPlatform.isDarwin [
+    # On macOS the library suffix is .dylib:
+    ./03-macOS-SOsuf.patch
   ];
   postPatch = ''
     substituteInPlace scheme.c --replace "init.scm" "$out/lib/init.scm"
@@ -29,7 +39,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Lightweight Scheme implementation";
     longDescription = ''
       TinyScheme is a lightweight Scheme interpreter that implements as large a
@@ -40,6 +49,5 @@ stdenv.mkDerivation rec {
     license = licenses.bsdOriginal;
     maintainers = [ maintainers.ebzzry ];
     platforms = platforms.unix;
-    badPlatforms = [ "aarch64-darwin" ];
   };
 }
