@@ -1,15 +1,15 @@
 { lib, stdenv, fetchurl, desktop-file-utils
-, gtk3, libX11
-, makeWrapper, pkg-config, perl, autoreconfHook, wrapGAppsHook
+, gtk3, libX11, cmake, imagemagick
+, pkg-config, perl, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "sgt-puzzles";
-  version = "20200610.9aa7b7c";
+  version = "20220613.387d323";
 
   src = fetchurl {
     url = "http://www.chiark.greenend.org.uk/~sgtatham/puzzles/puzzles-${version}.tar.gz";
-    sha256 = "0rrd1c77ar91zqy4rr4xp1z7x3ywnshlac99cga4hnrgwb7vwl3f";
+    hash = "sha256-Vcm7gxC9R7vvLkgkHblvEOONGLkYSHGMRfSBktgN/oQ=";
   };
 
   sgt-puzzles-menu = fetchurl {
@@ -17,17 +17,16 @@ stdenv.mkDerivation rec {
     sha256 = "088w0x9g3j8pn725ix8ny8knhdsfgjr3hpswsh9fvfkz5vlg2xkm";
   };
 
-  nativeBuildInputs = [ autoreconfHook desktop-file-utils makeWrapper
-    pkg-config perl wrapGAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    desktop-file-utils
+    imagemagick
+    perl
+    pkg-config
+    wrapGAppsHook
+  ];
 
   buildInputs = [ gtk3 libX11 ];
-
-  makeFlags = [ "prefix=$(out)" "gamesdir=$(out)/bin"];
-
-  preInstall = ''
-    mkdir -p "$out"/{bin,share/doc/sgtpuzzles}
-    cp gamedesc.txt LICENCE README "$out/share/doc/sgtpuzzles"
-  '';
 
   postInstall = ''
     for i in  $(basename -s $out/bin/*); do
@@ -57,12 +56,6 @@ stdenv.mkDerivation rec {
     install -Dm644 ${sgt-puzzles-menu} -t $out/etc/xdg/menus/applications-merged/
   '';
 
-  preConfigure = ''
-    perl mkfiles.pl
-    export NIX_LDFLAGS="$NIX_LDFLAGS -lX11"
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error"
-    cp Makefile.gtk Makefile
-  '';
   meta = with lib; {
     description = "Simon Tatham's portable puzzle collection";
     license = licenses.mit;
