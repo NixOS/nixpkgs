@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, python3
+, python
 , fetchFromGitHub
 , mkdocs
 , twine
@@ -53,7 +53,7 @@ let
 
     postInstall = ''
       # FileNotFoundError: [Errno 2] No such file or directory: '$out/lib/python3.10/site-packages/textx/textx.tx
-      cp "$src/textx/textx.tx" "$out/${python3.sitePackages}/${pname}/"
+      cp "$src/textx/textx.tx" "$out/lib/${python.libPrefix}/site-packages/${pname}/"
 
       # Install tests as the tests output.
       mkdir $testout
