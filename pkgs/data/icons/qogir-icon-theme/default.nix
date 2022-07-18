@@ -1,6 +1,7 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
+, gitUpdater
 , gtk3
 , hicolor-icon-theme
 , jdupes
@@ -35,6 +36,8 @@ stdenvNoCC.mkDerivation rec {
     jdupes -L -r $out/share/icons
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater { inherit pname version; };
 
   meta = with lib; {
     description = "Flat colorful design icon theme";
