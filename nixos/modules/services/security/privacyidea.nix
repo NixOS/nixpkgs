@@ -51,6 +51,16 @@ let
     ${cfg.extraConfig}
   '';
 
+  renderValue = x:
+    if isList x then concatMapStringsSep "," (x: ''"${x}"'') x
+    else if isString x && hasInfix "," x then ''"${x}"''
+    else x;
+
+  ldapProxyConfig = pkgs.writeText "ldap-proxy.ini"
+    (generators.toINI {}
+      (flip mapAttrs cfg.ldap-proxy.settings
+        (const (mapAttrs (const renderValue)))));
+
 in
 
 {
@@ -172,7 +182,8 @@ in
         enable = mkEnableOption "PrivacyIDEA LDAP Proxy";
 
         configFile = mkOption {
-          type = types.path;
+          type = types.nullOr types.path;
+          default = null;
           description = ''
             Path to PrivacyIDEA LDAP Proxy configuration (proxy.ini).
           '';
@@ -188,6 +199,26 @@ in
           type = types.str;
           default = "pi-ldap-proxy";
           description = "Group account under which PrivacyIDEA LDAP proxy runs.";
+        };
+
+        settings = mkOption {
+          type = with types; attrsOf (attrsOf (oneOf [ str bool int (listOf str) ]));
+          default = {};
+          description = ''
+            Attribute-set containing the settings for <package>privacyidea-ldap-proxy</package>.
+            It's possible to pass secrets using env-vars as substitutes and
+            use the option <xref linkend="opt-services.privacyidea.ldap-proxy.environmentFile" />
+            to inject them via <package>envsubst</package>.
+          '';
+        };
+
+        environmentFile = mkOption {
+          default = null;
+          type = types.nullOr types.str;
+          description = ''
+            Environment file containing secrets to be substituted into
+            <xref linkend="opt-services.privacyidea.ldap-proxy.settings" />.
+          '';
         };
       };
     };
@@ -276,6 +307,18 @@ in
 
     (mkIf cfg.ldap-proxy.enable {
 
+      assertions = [
+        { assertion = let
+            xor = a: b: a && !b || !a && b;
+          in xor (cfg.ldap-proxy.settings == {}) (cfg.ldap-proxy.configFile == null);
+          message = "configFile & settings are mutually exclusive for services.privacyidea.ldap-proxy!";
+        }
+      ];
+
+      warnings = mkIf (cfg.ldap-proxy.configFile != null) [
+        "Using services.privacyidea.ldap-proxy.configFile is deprecated! Use the RFC42-style settings option instead!"
+      ];
+
       systemd.services.privacyidea-ldap-proxy = let
         ldap-proxy-env = pkgs.python3.withPackages (ps: [ ps.privacyidea-ldap-proxy ]);
       in {
@@ -284,14 +327,27 @@ in
         serviceConfig = {
           User = cfg.ldap-proxy.user;
           Group = cfg.ldap-proxy.group;
-          ExecStart = ''
+          StateDirectory = "privacyidea-ldap-proxy";
+          EnvironmentFile = mkIf (cfg.ldap-proxy.environmentFile != null)
+            [ cfg.ldap-proxy.environmentFile ];
+          ExecStartPre =
+            "${pkgs.writeShellScript "substitute-secrets-ldap-proxy" ''
+              ${pkgs.envsubst}/bin/envsubst \
+                -i ${ldapProxyConfig} \
+                -o $STATE_DIRECTORY/ldap-proxy.ini
+            ''}";
+          ExecStart = let
+            configPath = if cfg.ldap-proxy.settings != {}
+              then "%S/privacyidea-ldap-proxy/ldap-proxy.ini"
+              else cfg.ldap-proxy.configFile;
+          in ''
             ${ldap-proxy-env}/bin/twistd \
               --nodaemon \
               --pidfile= \
               -u ${cfg.ldap-proxy.user} \
               -g ${cfg.ldap-proxy.group} \
               ldap-proxy \
-              -c ${cfg.ldap-proxy.configFile}
+              -c ${configPath}
           '';
           Restart = "always";
         };
