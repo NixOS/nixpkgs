@@ -104,9 +104,9 @@ in
 
       storagePath = mkOption {
         type = types.nullOr types.path;
-        default = if cfg.storageBackend == "file" then "/var/lib/vault" else null;
+        default = if cfg.storageBackend == "file" || cfg.storageBackend == "raft" then "/var/lib/vault" else null;
         defaultText = literalExpression ''
-          if config.${opt.storageBackend} == "file"
+          if config.${opt.storageBackend} == "file" || cfg.storageBackend == "raft"
           then "/var/lib/vault"
           else null
         '';
@@ -172,11 +172,16 @@ in
 
   config = mkIf cfg.enable {
     assertions = [
-      { assertion = cfg.storageBackend == "inmem" -> (cfg.storagePath == null && cfg.storageConfig == null);
+      {
+        assertion = cfg.storageBackend == "inmem" -> (cfg.storagePath == null && cfg.storageConfig == null);
         message = ''The "inmem" storage expects no services.vault.storagePath nor services.vault.storageConfig'';
       }
-      { assertion = (cfg.storageBackend == "file" -> (cfg.storagePath != null && cfg.storageConfig == null)) && (cfg.storagePath != null -> cfg.storageBackend == "file");
-        message = ''You must set services.vault.storagePath only when using the "file" backend'';
+      {
+        assertion = (
+          (cfg.storageBackend == "file" -> (cfg.storagePath != null && cfg.storageConfig == null)) &&
+          (cfg.storagePath != null -> (cfg.storageBackend == "file" || cfg.storageBackend == "raft"))
+        );
+        message = ''You must set services.vault.storagePath only when using the "file" or "raft" backend'';
       }
     ];
 
