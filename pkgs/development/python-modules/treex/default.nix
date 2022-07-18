@@ -34,7 +34,8 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace 'rich = "^11.2.0"' 'rich = "*"' \
-      --replace 'treeo = "^0.0.10"' 'treeo = "*"'
+      --replace 'treeo = "^0.0.10"' 'treeo = "*"' \
+      --replace 'certifi = "^2021.10.8"' 'certifi = "*"'
   '';
 
   nativeBuildInputs = [
