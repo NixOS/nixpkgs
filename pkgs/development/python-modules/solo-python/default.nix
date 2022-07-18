@@ -14,16 +14,16 @@
 
  buildPythonPackage rec {
   pname = "solo-python";
-  version = "0.0.31";
+  version = "0.1.1";
   format = "flit";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "solokeys";
-    repo = pname;
+    repo = "solo1-cli";
     rev = version;
-    sha256 = "sha256-OguAHeNpom+zthREzdhejy5HJUIumrtwB0WJAwUNiSA=";
+    sha256 = "sha256-XVPYr7JwxeZfZ68+vQ7a7MNiAfJ2bvMbM3R1ryVJ+OU=";
   };
 
   patchPhase = ''
@@ -58,5 +58,8 @@
     homepage = "https://github.com/solokeys/solo-python";
     maintainers = with maintainers; [ wucke13 ];
     license = with licenses; [ asl20 mit ];
+    # Broken until compatibility with with fido2 >= 1.0 is made
+    # see https://github.com/solokeys/solo1-cli/pull/152
+    broken = true;
   };
 }
