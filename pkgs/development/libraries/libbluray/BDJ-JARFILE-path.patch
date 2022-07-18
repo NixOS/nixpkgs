@@ -1,11 +1,10 @@
-diff --git a/configure.ac b/configure.ac
-index 5fd3c8de..7ae343e0 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -228,6 +228,10 @@ if test "x$use_bdjava_jar" = "xyes" && test "x$HAVE_ANT" = "xno"; then
-     AC_MSG_ERROR([BD-J requires ANT, but ant was not found. Please install it.])
- fi
- 
+diff -ur a/configure.ac b/configure.ac
+--- a/configure.ac	2022-03-03 09:05:27.000000000 -0800
++++ b/configure.ac	2022-06-04 00:35:32.154279066 -0700
+@@ -279,6 +279,10 @@
+     AS_IF([test "x$with_java12" = "xyes" -a "$BDJ_TYPE" != "j2me"], [java_code_version=1.7])
+ ])
+
 +if test "x$use_bdjava_jar" = "xyes"; then
 +  CPPFLAGS="${CPPFLAGS} -DJARDIR='\"\$(datadir)/java\"'"
 +fi
@@ -13,15 +12,14 @@ index 5fd3c8de..7ae343e0 100644
  AC_DEFINE_UNQUOTED([JAVA_ARCH], ["$java_arch"], ["Defines the architecture of the java vm."])
  AC_DEFINE_UNQUOTED([JDK_HOME], ["$JDK_HOME"], [""])
  AM_CONDITIONAL([USING_BDJAVA_BUILD_JAR], [ test $use_bdjava_jar = "yes" ])
-diff --git a/src/libbluray/bdj/bdj.c b/src/libbluray/bdj/bdj.c
-index 511ad533..e273b9e0 100644
---- a/src/libbluray/bdj/bdj.c
-+++ b/src/libbluray/bdj/bdj.c
-@@ -478,6 +478,7 @@ static const char *_find_libbluray_jar(BDJ_STORAGE *storage)
-     // pre-defined search paths for libbluray.jar
-     static const char * const jar_paths[] = {
- #ifndef _WIN32
+diff -ur a/src/libbluray/bdj/bdj.c b/src/libbluray/bdj/bdj.c
+--- a/src/libbluray/bdj/bdj.c	2022-03-03 09:05:27.000000000 -0800
++++ b/src/libbluray/bdj/bdj.c	2022-06-04 00:39:33.259603941 -0700
+@@ -533,6 +533,7 @@
+ #  ifdef __FreeBSD__
+         "/usr/local/share/java/" BDJ_JARFILE,
+ #  else
 +        JARDIR "/" BDJ_JARFILE,
          "/usr/share/java/" BDJ_JARFILE,
          "/usr/share/libbluray/lib/" BDJ_JARFILE,
- #endif
+ #  endif
