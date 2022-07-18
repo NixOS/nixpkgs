@@ -169,6 +169,12 @@ stdenv.mkDerivation rec {
     # This file is *included* in gtk3 and would introduce runtime reference via __FILE__.
     sed '1i#line 1 "${pname}-${version}/include/glib-2.0/gobject/gobjectnotifyqueue.c"' \
       -i "$dev"/include/glib-2.0/gobject/gobjectnotifyqueue.c
+    for i in $bin/bin/*; do
+      moveToOutput "share/bash-completion/completions/''${i##*/}" "$bin"
+    done
+    for i in $dev/bin/*; do
+      moveToOutput "share/bash-completion/completions/''${i##*/}" "$dev"
+    done
   '' + optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     cp -r ${buildPackages.glib.devdoc} $devdoc
   '';
