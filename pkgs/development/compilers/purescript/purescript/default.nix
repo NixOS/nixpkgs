@@ -61,6 +61,7 @@ in stdenv.mkDerivation rec {
     description = "A strongly-typed functional programming language that compiles to JavaScript";
     homepage = "https://www.purescript.org/";
     license = licenses.bsd3;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ justinwoo mbbx6spp cdepillabout ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     mainProgram = "purs";
