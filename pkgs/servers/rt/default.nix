@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rt";
-  version = "5.0.2";
+  version = "5.0.3";
 
   src = fetchFromGitHub {
     repo = pname;
     rev = "${pname}-${version}";
     owner = "bestpractical";
-    sha256 = "1qdvbsmdynjw2v0clnmhdmrky7w4dsiysv92n7d7jdbawnicqahn";
+    hash = "sha256-ZitlueLEbV3mGJg0aDrLa5IReJiOVaEf+JicbA9zUS4=";
   };
 
   patches = [
@@ -120,8 +120,7 @@ stdenv.mkDerivation rec {
   ];
 
   preAutoreconf = ''
-    substituteInPlace configure.ac \
-      --replace "rt-3.9.EXPORTED" "rt-${version}"
+    echo rt-${version} > .tag
   '';
   preConfigure = ''
     configureFlags="$configureFlags --with-web-user=$UID"
