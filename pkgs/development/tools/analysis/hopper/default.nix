@@ -66,11 +66,14 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.hopperapp.com/index.html";
     description = "A macOS and Linux Disassembler";
+    downloadPage = "https://www.hopperapp.com/download.html";
+    changelog = "https://www.hopperapp.com/rss/html_changelog.php";
     license = licenses.unfree;
+    mainProgram = "hopper";
     maintainers = with maintainers; [
       luis
       Enteee
     ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" /* aarch64-linux is not supported */ ];
   };
 }
