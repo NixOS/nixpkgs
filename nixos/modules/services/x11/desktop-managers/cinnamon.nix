@@ -82,6 +82,7 @@ in
       '';
 
       # Default services
+      services.blueman.enable = mkDefault true;
       hardware.bluetooth.enable = mkDefault true;
       hardware.pulseaudio.enable = mkDefault true;
       security.polkit.enable = true;
@@ -199,7 +200,6 @@ in
       environment.systemPackages = with pkgs // pkgs.gnome // pkgs.cinnamon; utils.removePackagesByName [
         # cinnamon team apps
         bulky
-        blueberry
         warpinator
 
         # cinnamon xapps
