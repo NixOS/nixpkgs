@@ -548,7 +548,7 @@ self: super: builtins.intersectAttrs super {
     # where non-GNU coreutils are used by default.
     postFixup = ''
       wrapProgram $out/bin/git-annex \
-        --prefix PATH : "${pkgs.lib.makeBinPath [ pkgs.coreutils ]}"
+        --prefix PATH : "${pkgs.lib.makeBinPath (with pkgs; [ coreutils lsof ])}"
     '' + (drv.postFixup or "");
     buildTools = [
       pkgs.buildPackages.makeWrapper
