@@ -1,6 +1,8 @@
 { gnustep, lib, fetchFromGitHub, fetchpatch, makeWrapper, python3, lndir
 , openssl, openldap, sope, libmemcached, curl, libsodium, libytnef, libzip, pkg-config, nixosTests
-, oath-toolkit }:
+, oath-toolkit
+, enableActiveSync ? false
+, libwbxml }:
 gnustep.stdenv.mkDerivation rec {
   pname = "SOGo";
   version = "5.7.0";
@@ -13,7 +15,10 @@ gnustep.stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ gnustep.make makeWrapper python3 ];
-  buildInputs = [ gnustep.base sope openssl libmemcached curl libsodium libytnef libzip pkg-config openldap oath-toolkit ];
+  buildInputs = [ gnustep.base sope openssl libmemcached curl libsodium libytnef libzip pkg-config openldap oath-toolkit ]
+    ++ lib.optional enableActiveSync libwbxml;
+
+  patches = lib.optional enableActiveSync ./enable-activesync.patch;
 
   postPatch = ''
     # Exclude NIX_ variables
@@ -60,6 +65,8 @@ gnustep.stdenv.mkDerivation rec {
     for bin in $out/bin/*; do
       wrapProgram $bin --prefix LD_LIBRARY_PATH : $out/lib/sogo --prefix GNUSTEP_CONFIG_FILE : $out/share/GNUstep/GNUstep.conf
     done
+
+    rmdir $out/nix
   '';
 
   passthru.tests.sogo = nixosTests.sogo;
