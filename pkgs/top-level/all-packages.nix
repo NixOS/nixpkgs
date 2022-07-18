@@ -3749,6 +3749,8 @@ with pkgs;
 
   fzf = callPackage ../tools/misc/fzf { };
 
+  fzf-obc = callPackage ../shells/bash/fzf-obc { };
+
   fzf-zsh = callPackage ../shells/zsh/fzf-zsh { };
 
   fzy = callPackage ../tools/misc/fzy { };
