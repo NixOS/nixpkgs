@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, symlinkJoin }:
+{ lib, buildGoModule, fetchFromGitHub, symlinkJoin, nixosTests }:
 
 let
   etcdVersion = "3.5.4";
@@ -39,6 +39,8 @@ let
     ldflags = [ "-X go.etcd.io/etcd/api/v3/version.GitSHA=GitNotFound" ];
 
     meta = commonMeta;
+
+    passthru.tests = { inherit (nixosTests) etcd etcd-cluster; };
   };
 
   etcdutl = buildGoModule rec {
