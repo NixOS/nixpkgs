@@ -5,11 +5,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "1.52.0";
+  version = "1.53.0";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    hash = "sha256-ldr0X+I5+Nfb+WBDOe0m202WOuccGUI5HFL3fpbBNPo=";
+    hash = "sha256-kIW+aGYuS+JgOMsPbeLgPSgLFNKLSqHaZ1CHpjs/IVI=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -51,7 +51,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace "cookiecutter~=1.7.2" "cookiecutter>=1.7.2" \
       --replace "dateparser~=1.0" "dateparser>=0.7" \
       --replace "docker~=4.2.0" "docker>=4.2.0" \
-      --replace "Flask~=1.1.2" "Flask~=2.0" \
+      --replace "Flask~=1.1.4" "Flask~=2.0" \
       --replace "jmespath~=0.10.0" "jmespath" \
       --replace "MarkupSafe==2.0.1" "MarkupSafe #" \
       --replace "PyYAML~=5.3" "PyYAML #" \
