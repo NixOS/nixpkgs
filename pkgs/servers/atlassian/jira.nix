@@ -3,7 +3,7 @@
 , fetchurl
 , gawk
 , enableSSO ? false
-, crowdProperties ? null
+, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     url = "https://product-downloads.atlassian.com/software/jira/downloads/atlassian-jira-software-${version}.tar.gz";
     sha256 = "sha256-Zog0m8tsx8mDLU1rsW5zhhHgyRmi4JGWuy9DV8yp9nY=";
   };
+
+  nativeBuildInputs = [ makeWrapper ];
 
   buildPhase = ''
     mv conf/server.xml conf/server.xml.dist
@@ -27,10 +29,6 @@ stdenv.mkDerivation rec {
     substituteInPlace atlassian-jira/WEB-INF/classes/seraph-config.xml \
       --replace com.atlassian.jira.security.login.JiraSeraphAuthenticator \
                 com.atlassian.jira.security.login.SSOSeraphAuthenticator
-  '' + lib.optionalString (crowdProperties != null) ''
-    cat <<EOF > atlassian-jira/WEB-INF/classes/crowd.properties
-    ${crowdProperties}
-    EOF
   '';
 
   installPhase = ''
@@ -41,6 +39,6 @@ stdenv.mkDerivation rec {
     description = "Proprietary issue tracking product, also providing project management functions";
     homepage = "https://www.atlassian.com/software/jira";
     license = licenses.unfree;
-    maintainers = with maintainers; [ fpletz globin ciil megheaiulian techknowlogick ];
+    maintainers = with maintainers; [ fpletz globin ciil megheaiulian techknowlogick ma27 ];
   };
 }
