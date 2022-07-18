@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   sgt-puzzles-menu = fetchurl {
-    url = "https://raw.githubusercontent.com/Oleh-Kravchenko/portage/master/games-puzzle/sgt-puzzles/files/sgt-puzzles.menu";
+    url = "https://raw.githubusercontent.com/gentoo/gentoo/720e614d0107e86fc1e520bac17726578186843d/games-puzzle/sgt-puzzles/files/sgt-puzzles.menu";
     sha256 = "088w0x9g3j8pn725ix8ny8knhdsfgjr3hpswsh9fvfkz5vlg2xkm";
   };
 
