@@ -4,7 +4,7 @@ Nixpkgs provides fetchers for different protocols and services. Fetchers are fun
 
 ## Caveats
 
-Fetchers create [_fixed output derivations_](https://nixos.org/manual/nix/stable/#fixed-output-drvs) from downloaded files. Later, Nix can reuse the downloaded files via their hash. While the caching improves performance, it can lead to some confusion. For example, consider the following fetcher:
+Fetchers create [_fixed output derivations_](https://nixos.org/manual/nix/stable/#fixed-output-drvs) that downloaded files. Later, Nix can reuse the downloaded files via their hash. While the caching improves performance, it can lead to some confusion. For example, consider the following fetcher:
 
 ```nix
 fetchurl {
