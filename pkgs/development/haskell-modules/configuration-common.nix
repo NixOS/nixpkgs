@@ -2586,6 +2586,10 @@ self: super: {
   # https://github.com/klapaucius/vector-hashtables/issues/11
   vector-hashtables = doJailbreak super.vector-hashtables;
 
+  autodocodec-yaml = super.autodocodec-yaml.override {
+    safe-coloured-text = super.safe-coloured-text_0_2_0_1;
+  };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super // (let
   # We need to build purescript with these dependencies and thus also its reverse
   # dependencies to avoid version mismatches in their dependency closure.
