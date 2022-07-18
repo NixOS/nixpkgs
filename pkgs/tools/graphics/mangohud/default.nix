@@ -26,7 +26,12 @@
 , libXNVCtrl
 , wayland
 , spdlog
+, glew
+, glfw
+, nlohmann_json
+, xorg
 , addOpenGLRunpath
+, gamescopeSupport ? true # build mangoapp and mangohudctl
 }:
 
 let
@@ -102,6 +107,10 @@ in stdenv.mkDerivation rec {
     "-Dvulkan_datadir=${vulkan-headers}/share"
     "-Dwith_wayland=enabled"
     "-Duse_system_spdlog=enabled"
+  ] ++ lib.optionals gamescopeSupport [
+    "-Dmangoapp_layer=true"
+    "-Dmangoapp=true"
+    "-Dmangohudctl=true"
   ];
 
   nativeBuildInputs = [
@@ -122,6 +131,12 @@ in stdenv.mkDerivation rec {
     libXNVCtrl
     wayland
     spdlog
+  ] ++ lib.optionals gamescopeSupport [
+    glew
+    glfw
+    nlohmann_json
+    vulkan-headers
+    xorg.libXrandr
   ];
 
   # Support 32bit Vulkan applications by linking in 32bit Vulkan layer
@@ -137,6 +152,12 @@ in stdenv.mkDerivation rec {
     wrapProgram "$out/bin/mangohud" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ addOpenGLRunpath.driverLink ]} \
       --prefix XDG_DATA_DIRS : "$out/share"
+  '' + lib.optionalString (gamescopeSupport) ''
+    if [[ -e "$out/bin/mangoapp" ]]; then
+      wrapProgram "$out/bin/mangoapp" \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ addOpenGLRunpath.driverLink ]} \
+        --prefix XDG_DATA_DIRS : "$out/share"
+    fi
   '';
 
   meta = with lib; {
