@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     for i in  $(basename -s $out/bin/*); do
 
       ln -s $out/bin/$i $out/bin/sgt-puzzle-$i
-      install -Dm644 icons/$i-48d24.png -t $out/share/icons/hicolor/48x48/apps/
+      install -Dm644 icons/$i-96d24.png -t $out/share/icons/hicolor/96x96/apps/
 
       # Generate/validate/install .desktop files.
       echo "[Desktop Entry]" > $i.desktop
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
         --set-key Name --set-value $i \
         --set-key Comment --set-value "${meta.description}" \
         --set-key Categories --set-value "Game;LogicGame;X-sgt-puzzles;" \
-        --set-key Icon --set-value $out/share/icons/hicolor/48x48/apps/$i-48d24.png \
+        --set-key Icon --set-value $out/share/icons/hicolor/96x96/apps/$i-96d24.png \
         $i.desktop
     done
 
