@@ -38,8 +38,11 @@ stdenv.mkDerivation rec {
     gtk-engine-murrine # murrine engine for Gtk2
   ];
 
+  postPatch = ''
+    patchShebangs install.sh clean-old-theme.sh
+  '';
+
   installPhase = ''
-    patchShebangs .
     mkdir -p $out/share/themes
     name= HOME="$TMPDIR" ./install.sh -t all -d $out/share/themes
     mkdir -p $out/share/doc/${pname}
