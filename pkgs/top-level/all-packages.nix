@@ -26829,6 +26829,7 @@ with pkgs;
 
   inherit (mopidyPackages)
     mopidy
+    mopidy-bandcamp
     mopidy-iris
     mopidy-local
     mopidy-moped
