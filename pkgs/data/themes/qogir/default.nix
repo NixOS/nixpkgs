@@ -1,13 +1,14 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, gitUpdater
 , gdk-pixbuf
 , gnome-themes-extra
 , gtk-engine-murrine
+, jdupes
 , librsvg
 , sassc
 , which
-, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -22,6 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    jdupes
     sassc
     which
   ];
@@ -43,6 +45,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/doc/${pname}
     cp -a src/firefox $out/share/doc/${pname}
     rm $out/share/themes/*/{AUTHORS,COPYING}
+
+    jdupes --link-soft --recurse $out/share
   '';
 
   passthru.updateScript = gitUpdater { inherit pname version; };
