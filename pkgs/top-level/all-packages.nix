@@ -27268,6 +27268,8 @@ with pkgs;
 
   jmusicbot = callPackage ../applications/audio/jmusicbot { };
 
+  josh = callPackage ../applications/version-management/josh { };
+
   junction = callPackage ../applications/misc/junction { };
 
   lemonade = callPackage ../applications/misc/lemonade { };
