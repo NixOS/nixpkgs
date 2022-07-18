@@ -9,10 +9,21 @@
 , librsvg
 , sassc
 , which
+, themeVariants ? [] # default: blue
+, colorVariants ? [] # default: all
+, tweaks ? []
 }:
 
-stdenv.mkDerivation rec {
+let
   pname = "qogir-theme";
+
+in
+lib.checkListOfEnum "${pname}: theme variants" [ "default" "manjaro" "ubuntu" "all" ] themeVariants
+lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] colorVariants
+lib.checkListOfEnum "${pname}: tweaks" [ "image" "square" "round" ] tweaks
+
+stdenv.mkDerivation rec {
+  inherit pname;
   version = "2022-07-17";
 
   src = fetchFromGitHub {
@@ -46,9 +57,16 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/share/themes
-    name= HOME="$TMPDIR" ./install.sh -t all -d $out/share/themes
+
+    name= HOME="$TMPDIR" ./install.sh \
+      ${lib.optionalString (themeVariants != []) "--theme " + builtins.toString themeVariants} \
+      ${lib.optionalString (colorVariants != []) "--color " + builtins.toString colorVariants} \
+      ${lib.optionalString (tweaks != []) "--tweaks " + builtins.toString tweaks} \
+      --dest $out/share/themes
+
     mkdir -p $out/share/doc/${pname}
     cp -a src/firefox $out/share/doc/${pname}
+
     rm $out/share/themes/*/{AUTHORS,COPYING}
 
     jdupes --link-soft --recurse $out/share
