@@ -343,6 +343,15 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>pass-secret-service</literal> package now
+          includes systemd units from upstream, so adding it to the
+          NixOS <literal>services.dbus.packages</literal> option will
+          make it start automatically as a systemd user service when an
+          application tries to talk to the libsecret D-Bus API.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           There is a new module for the <literal>thunar</literal>
           program (the Xfce file manager), which depends on the
           <literal>xfconf</literal> dbus service, and also has a dbus

@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, cmake, boost, catch2, metal }:
+{ lib, stdenv, fetchFromGitHub, cmake, boost, catch2 }:
 stdenv.mkDerivation rec {
   pname = "fcppt";
-  version = "3.5.0";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "freundlich";
     repo = "fcppt";
     rev = version;
-    sha256 = "045cmn4sym6ria96l4fsc1vrs8l4xrl1gzkmja82f4ddj8qkji2f";
+    sha256 = "1pcmi2ck12nanw1rnwf8lmyx85iq20897k6daxx3hw5f23j1kxv6";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ boost catch2 metal ];
+  buildInputs = [ boost catch2 ];
 
   cmakeFlags = [
     "-DENABLE_BOOST=true"
@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://fcppt.org";
     license = licenses.boost;
     maintainers = with maintainers; [ pmiddend ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "x86_64-windows" ];
   };
 }

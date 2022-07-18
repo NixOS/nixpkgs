@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, cmake, perl
-, glib, luajit, openssl, pcre2, pkg-config, sqlite, ragel, icu
+, glib, luajit, openssl, pcre, pkg-config, sqlite, ragel, icu
 , hyperscan, jemalloc, blas, lapack, lua, libsodium
 , withBlas ? true
 , withHyperscan ? stdenv.isx86_64
@@ -23,12 +23,14 @@ stdenv.mkDerivation rec {
   hardeningEnable = [ "pie" ];
 
   nativeBuildInputs = [ cmake pkg-config perl ];
-  buildInputs = [ glib openssl pcre2 sqlite ragel icu jemalloc libsodium ]
+  buildInputs = [ glib openssl pcre sqlite ragel icu jemalloc libsodium ]
     ++ lib.optional withHyperscan hyperscan
     ++ lib.optionals withBlas [ blas lapack ]
     ++ lib.optional withLuaJIT luajit ++ lib.optional (!withLuaJIT) lua;
 
   cmakeFlags = [
+    # pcre2 jit seems to cause crashes: https://github.com/NixOS/nixpkgs/pull/181908
+    "-DENABLE_PCRE2=OFF"
     "-DDEBIAN_BUILD=ON"
     "-DRUNDIR=/run/rspamd"
     "-DDBDIR=/var/lib/rspamd"
