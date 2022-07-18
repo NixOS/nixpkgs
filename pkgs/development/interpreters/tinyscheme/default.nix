@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
       subset of R5RS as was possible without getting very large and complicated.
     '';
     homepage = "http://tinyscheme.sourceforge.net/";
+    changelog = "http://tinyscheme.sourceforge.net/CHANGES";
     license = licenses.bsdOriginal;
     maintainers = [ maintainers.ebzzry ];
     platforms = platforms.unix;
