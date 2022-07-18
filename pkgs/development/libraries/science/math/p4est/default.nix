@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook, pkg-config
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
 , p4est-withMetis ? true, metis
 , p4est-sc
 }:
@@ -34,8 +37,8 @@ stdenv.mkDerivation {
   preAutoreconf = ''
     echo "2.8.0" > .tarball-version
   '';
-  preConfigure = ''
-    ${if mpiSupport then "unset CC" else ""}
+  preConfigure = lib.optionalString mpiSupport ''
+    unset CC
   '';
 
   configureFlags = p4est-sc.configureFlags
