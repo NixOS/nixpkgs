@@ -1,6 +1,5 @@
-{ lib, stdenv
-, makeWrapper
-, runCommand, wrapBintoolsWith, wrapCCWith
+{ lib, stdenv, makeWrapper
+, runCommand, wrapBintoolsWith, wrapCCWith, autoPatchelfHook
 , buildAndroidndk, androidndk, targetAndroidndkPkgs
 }:
 
@@ -11,6 +10,9 @@ let
   # N.B. The Android NDK uses slightly different LLVM-style platform triples
   # than we do. We don't just use theirs because ours are less ambiguous and
   # some builds need that clarity.
+  #
+  # FIXME:
+  # There's some dragons here. Build host and target concepts are being mixed up.
   ndkInfoFun = { config, ... }: {
     x86_64-apple-darwin = {
       double = "darwin-x86_64";
@@ -21,65 +23,96 @@ let
     i686-unknown-linux-android = {
       triple = "i686-linux-android";
       arch = "x86";
-      toolchain = "x86";
-      gccVer = "4.9";
     };
     x86_64-unknown-linux-android = {
       triple = "x86_64-linux-android";
       arch = "x86_64";
-      toolchain = "x86_64";
-      gccVer = "4.9";
     };
     armv7a-unknown-linux-androideabi = {
       arch = "arm";
       triple = "arm-linux-androideabi";
-      toolchain = "arm-linux-androideabi";
-      gccVer = "4.9";
     };
     aarch64-unknown-linux-android = {
       arch = "arm64";
       triple = "aarch64-linux-android";
-      toolchain = "aarch64-linux-android";
-      gccVer = "4.9";
     };
   }.${config} or
     (throw "Android NDK doesn't support ${config}, as far as we know");
 
+  buildInfo = ndkInfoFun stdenv.buildPlatform;
   hostInfo = ndkInfoFun stdenv.hostPlatform;
   targetInfo = ndkInfoFun stdenv.targetPlatform;
 
-  prefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) (stdenv.targetPlatform.config + "-");
+  inherit (stdenv.targetPlatform) sdkVer;
+  suffixSalt = lib.replaceStrings ["-" "."] ["_" "_"] stdenv.targetPlatform.config;
+
+  # targetInfo.triple is what Google thinks the toolchain should be, this is a little
+  # different from what we use. We make it four parts to conform with the existing
+  # standard more properly.
+  targetConfig = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) (stdenv.targetPlatform.config);
 in
 
 rec {
   # Misc tools
-  binaries = runCommand "ndk-toolchain-binutils" {
-    pname = "ndk-toolchain-binutils";
+  binaries = stdenv.mkDerivation {
+    pname = "${targetConfig}-ndk-toolchain";
     inherit (androidndk) version;
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
     propagatedBuildInputs = [ androidndk ];
     passthru = {
-      targetPrefix = prefix;
       isClang = true; # clang based cc, but bintools ld
     };
-  } ''
-    mkdir -p $out/bin
+    dontUnpack = true;
+    dontBuild = true;
+    dontStrip = true;
+    dontConfigure = true;
+    dontPatch = true;
+    autoPatchelfIgnoreMissingDeps = true;
+    installPhase = ''
+      # https://developer.android.com/ndk/guides/other_build_systems
+      mkdir -p $out
+      cp -r ${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/${buildInfo.double} $out/toolchain
+      find $out/toolchain -type d -exec chmod 777 {} \;
 
-    # llvm toolchain
-    for prog in ${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/${hostInfo.double}/bin/*; do
-      ln -s $prog $out/bin/$(basename $prog)
-      ln -s $prog $out/bin/${prefix}$(basename $prog)
-    done
+      if [ ! -d $out/toolchain/sysroot/usr/lib/${targetInfo.triple}/${sdkVer} ]; then
+        echo "NDK does not contain libraries for SDK version ${sdkVer}";
+        exit 1
+      fi
 
-    # bintools toolchain
-    for prog in ${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/${targetInfo.toolchain}-${targetInfo.gccVer}/prebuilt/${hostInfo.double}/bin/*; do
-      prog_suffix=$(basename $prog | sed 's/${targetInfo.triple}-//')
-      ln -s $prog $out/bin/${stdenv.targetPlatform.config}-$prog_suffix
-    done
+      ln -vfs $out/toolchain/sysroot/usr/lib $out/lib
+      ln -s $out/toolchain/sysroot/usr/lib/${targetInfo.triple}/*.so $out/lib/
+      ln -s $out/toolchain/sysroot/usr/lib/${targetInfo.triple}/*.a $out/lib/
+      chmod +w $out/lib/*
+      ln -s $out/toolchain/sysroot/usr/lib/${targetInfo.triple}/${sdkVer}/*.so $out/lib/
+      ln -s $out/toolchain/sysroot/usr/lib/${targetInfo.triple}/${sdkVer}/*.o $out/lib/
 
-    # shitty googly wrappers
-    rm -f $out/bin/${stdenv.targetPlatform.config}-gcc $out/bin/${stdenv.targetPlatform.config}-g++
-  '';
+      echo "INPUT(-lc++_static)" > $out/lib/libc++.a
+
+      ln -s $out/toolchain/bin $out/bin
+      ln -s $out/toolchain/${targetInfo.triple}/bin/* $out/bin/
+      for f in $out/bin/${targetInfo.triple}-*; do
+        ln -s $f ''${f/${targetInfo.triple}-/${targetConfig}-}
+      done
+      for f in $(find $out/toolchain -type d -name ${targetInfo.triple}); do
+        ln -s $f ''${f/${targetInfo.triple}/${targetConfig}}
+      done
+
+      rm -f $out/bin/${targetConfig}-ld
+      ln -s $out/bin/lld $out/bin/${targetConfig}-ld
+
+      (cd $out/bin;
+        for tool in llvm-*; do
+          ln -sf $tool ${targetConfig}-$(echo $tool | sed 's/llvm-//')
+          ln -sf $tool $(echo $tool | sed 's/llvm-//')
+        done)
+
+      # handle last, as llvm-as is for llvm bytecode
+      ln -sf $out/bin/${targetInfo.triple}-as $out/bin/${targetConfig}-as
+      ln -sf $out/bin/${targetInfo.triple}-as $out/bin/as
+
+      patchShebangs $out/bin
+    '';
+  };
 
   binutils = wrapBintoolsWith {
     bintools = binaries;
@@ -95,9 +128,16 @@ rec {
     libc = targetAndroidndkPkgs.libraries;
     extraBuildCommands = ''
       echo "-D__ANDROID_API__=${stdenv.targetPlatform.sdkVer}" >> $out/nix-support/cc-cflags
-      echo "-target ${stdenv.targetPlatform.config}" >> $out/nix-support/cc-cflags
-      echo "-resource-dir=$(echo ${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/${hostInfo.double}/lib*/clang/*)" >> $out/nix-support/cc-cflags
-      echo "--gcc-toolchain=${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/${targetInfo.toolchain}-${targetInfo.gccVer}/prebuilt/${hostInfo.double}" >> $out/nix-support/cc-cflags
+      # Android needs executables linked with -pie since version 5.0
+      # Use -fPIC for compilation, and link with -pie if no -shared flag used in ldflags
+      echo "-target ${targetInfo.triple} -fPIC" >> $out/nix-support/cc-cflags
+      echo "-z,noexecstack -z,relro -z,now" >> $out/nix-support/cc-ldflags
+      echo 'if [[ ! " $@ " =~ " -shared " ]]; then NIX_LDFLAGS_${suffixSalt}+=" -pie"; fi' >> $out/nix-support/add-flags.sh
+      echo "-Xclang -mnoexecstack" >> $out/nix-support/cc-cxxflags
+      if [ ${targetInfo.triple} == arm-linux-androideabi ]; then
+        # https://android.googlesource.com/platform/external/android-cmake/+/refs/heads/cmake-master-dev/android.toolchain.cmake
+        echo "--fix-cortex-a8" >> $out/nix-support/cc-ldflags
+      fi
     '';
   };
 
@@ -107,10 +147,14 @@ rec {
   # cross-compiling packages to wrap incorrectly wrap binaries we don't include
   # anyways.
   libraries = runCommand "bionic-prebuilt" {} ''
-    mkdir -p $out
-    cp -r ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/sysroot/usr/include $out/include
-    chmod +w $out/include
-    cp -r ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/sysroot/usr/include/${targetInfo.triple}/* $out/include
-    ln -s ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/platforms/android-${stdenv.hostPlatform.sdkVer}/arch-${hostInfo.arch}/usr/${if hostInfo.arch == "x86_64" then "lib64" else "lib"} $out/lib
+    lpath=${buildAndroidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/${buildInfo.double}/sysroot/usr/lib/${targetInfo.triple}/${sdkVer}
+    if [ ! -d $lpath ]; then
+      echo "NDK does not contain libraries for SDK version ${sdkVer} <$lpath>"
+      exit 1
+    fi
+    mkdir -p $out/lib
+    cp $lpath/*.so $lpath/*.a $out/lib
+    chmod +w $out/lib/*
+    cp $lpath/* $out/lib
   '';
 }

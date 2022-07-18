@@ -2672,9 +2672,10 @@ with pkgs;
     pkgs_i686 = pkgsi686Linux;
   };
 
-  androidndkPkgs = androidndkPkgs_18b;
-  androidndkPkgs_18b = (callPackage ../development/androidndk-pkgs {})."18b";
+  androidndkPkgs = androidndkPkgs_21;
   androidndkPkgs_21 = (callPackage ../development/androidndk-pkgs {})."21";
+  androidndkPkgs_23b = (callPackage ../development/androidndk-pkgs {})."23b";
+  androidndkPkgs_24 = (callPackage ../development/androidndk-pkgs {})."24";
 
   androidsdk_9_0 = androidenv.androidPkgs_9_0.androidsdk;
 
