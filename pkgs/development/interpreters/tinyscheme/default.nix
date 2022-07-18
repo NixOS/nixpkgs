@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, dos2unix }:
 
 stdenv.mkDerivation rec {
   pname = "tinyscheme";
@@ -9,7 +9,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-F7Cxv/0i89SdWDPiKhILM5A50s/aC0bW/FHdLwG0B60=";
   };
 
-  patchPhase = ''
+  nativeBuildInputs = [ dos2unix ];
+
+  prePatch = "dos2unix makefile";
+  patches = [
+    # We want to have the makefile pick up $CC, etc. so that we don't have
+    # to unnecessarily tie this package to the GCC stdenv.
+    ./02-use-toolchain-env-vars.patch
+  ];
+  postPatch = ''
     substituteInPlace scheme.c --replace "init.scm" "$out/lib/init.scm"
   '';
 
