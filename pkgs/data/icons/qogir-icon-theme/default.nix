@@ -36,7 +36,9 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
     mkdir -p $out/share/icons
     name= ./install.sh -d $out/share/icons
-    jdupes -L -r $out/share/icons
+
+    jdupes --quiet --link-soft --recurse $out/share
+
     runHook postInstall
   '';
 
