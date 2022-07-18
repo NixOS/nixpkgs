@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-LETQPqLDQJITerkZumAvLCYaA40I60aFKKPzoo5WZ+I=";
   };
 
+  strictDeps = true;
   # perl is used for testing go vet
   nativeBuildInputs = [ perl which pkg-config procps ];
   buildInputs = [ cacert pcre ]
