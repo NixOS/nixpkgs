@@ -117,6 +117,13 @@ stdenv.mkDerivation rec {
     # 5.0 hits nixpkgs.
     # https://github.com/sphinx-doc/sphinx/pull/10372
     ./patches/docutils-0.18.1-deprecation.patch
+
+    (fetchSageDiff {
+      name = "eclib-20220621-update.patch";
+      base = "9.7.beta4";
+      rev = "9b65d73399b33043777ba628a4d318638aec6e0e";
+      sha256 = "sha256-pcb9Q9a0ROCZTyfT7TRMtgEqCom8SgrtAaZ8ATgeqVI=";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
