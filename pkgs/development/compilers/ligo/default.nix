@@ -46,6 +46,7 @@ coq.ocamlPackages.buildDunePackage rec {
     yojson
     getopt
     core
+    core_unix
     pprint
     linenoise
 
@@ -82,6 +83,8 @@ coq.ocamlPackages.buildDunePackage rec {
   ];
 
   doCheck = false; # Tests fail, but could not determine the reason
+
+  patches = [ ./ligo.patch ]; # fix for core >= 0.15.0
 
   meta = with lib; {
     homepage = "https://ligolang.org/";

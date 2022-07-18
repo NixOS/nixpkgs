@@ -3,28 +3,27 @@
 , fetchFromGitHub
 , pkg-config
 , libtool
-, bzip2
-, zlib
-, libX11
-, libXext
-, libXt
-, fontconfig
-, freetype
-, ghostscript
-, libjpeg
-, djvulibre
-, lcms2
-, openexr
-, libjxl
-, libpng
-, liblqr1
-, libraw
-, librsvg
-, libtiff
-, libxml2
-, openjpeg
-, libwebp
-, libheif
+, bzip2Support ? true, bzip2
+, zlibSupport ? true, zlib
+, libX11Support ? !stdenv.hostPlatform.isMinGW, libX11
+, libXtSupport ? !stdenv.hostPlatform.isMinGW, libXt
+, fontconfigSupport ? true, fontconfig
+, freetypeSupport ? true, freetype
+, ghostscriptSupport ? false, ghostscript
+, libjpegSupport ? true, libjpeg
+, djvulibreSupport ? true, djvulibre
+, lcms2Support ? true, lcms2
+, openexrSupport ? !stdenv.hostPlatform.isMinGW, openexr
+, libjxlSupport ? true, libjxl
+, libpngSupport ? true, libpng
+, liblqr1Support ? true, liblqr1
+, librawSupport ? true, libraw
+, librsvgSupport ? !stdenv.hostPlatform.isMinGW, librsvg
+, libtiffSupport ? true, libtiff
+, libxml2Support ? true, libxml2
+, openjpegSupport ? !stdenv.hostPlatform.isMinGW, openjpeg
+, libwebpSupport ? !stdenv.hostPlatform.isMinGW, libwebp
+, libheifSupport ? true, libheif
 , potrace
 , curl
 , ApplicationServices
@@ -32,6 +31,8 @@
 , testers
 , imagemagick
 }:
+
+assert libXtSupport -> libX11Support;
 
 let
   arch =
@@ -45,12 +46,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "imagemagick";
-  version = "7.1.0.43";
+  version = "7.1.0-43";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
-    rev = version;
+    rev = builtins.replaceStrings [ "-" ] [ "." ] version;
     hash = "sha256-SOy7Ci1rzLB12ofSQBWmX86dfbr/ywsRPunHRswlAt4=";
   };
 
@@ -59,51 +60,49 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags =
-    [ "--with-frozenpaths" ]
-    ++ (if arch != null then [ "--with-gcc-arch=${arch}" ] else [ "--without-gcc-arch" ])
-    ++ lib.optional (librsvg != null) "--with-rsvg"
-    ++ lib.optional (liblqr1 != null) "--with-lqr"
-    ++ lib.optional (libjxl != null ) "--with-jxl"
-    ++ lib.optionals (ghostscript != null)
-      [
-        "--with-gs-font-dir=${ghostscript}/share/ghostscript/fonts"
-        "--with-gslib"
-      ]
-    ++ lib.optionals stdenv.hostPlatform.isMinGW
-      [ "--enable-static" "--disable-shared" ] # due to libxml2 being without DLLs ATM
-  ;
+  configureFlags = [
+    "--with-frozenpaths"
+    (lib.withFeatureAs (arch != null) "gcc-arch" arch)
+    (lib.withFeature librsvgSupport "rsvg")
+    (lib.withFeature liblqr1Support "lqr")
+    (lib.withFeature libjxlSupport "jxl")
+    (lib.withFeatureAs ghostscriptSupport "gs-font-dir" "${ghostscript}/share/ghostscript/fonts")
+    (lib.withFeature ghostscriptSupport "gslib")
+  ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
+    # due to libxml2 being without DLLs ATM
+    "--enable-static" "--disable-shared"
+  ];
 
   nativeBuildInputs = [ pkg-config libtool ];
 
-  buildInputs =
-    [
-      zlib
-      fontconfig
-      freetype
-      ghostscript
-      potrace
-      liblqr1
-      libpng
-      libraw
-      libtiff
-      libxml2
-      libheif
-      djvulibre
-      libjxl
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isMinGW)
-      [ openexr librsvg openjpeg ]
+  buildInputs = [ potrace ]
+    ++ lib.optional zlibSupport zlib
+    ++ lib.optional fontconfigSupport fontconfig
+    ++ lib.optional ghostscriptSupport ghostscript
+    ++ lib.optional liblqr1Support liblqr1
+    ++ lib.optional libpngSupport libpng
+    ++ lib.optional librawSupport libraw
+    ++ lib.optional libtiffSupport libtiff
+    ++ lib.optional libxml2Support libxml2
+    ++ lib.optional libheifSupport libheif
+    ++ lib.optional djvulibreSupport djvulibre
+    ++ lib.optional libjxlSupport libjxl
+    ++ lib.optional openexrSupport openexr
+    ++ lib.optional librsvgSupport librsvg
+    ++ lib.optional openjpegSupport openjpeg
     ++ lib.optionals stdenv.isDarwin [
       ApplicationServices
       Foundation
     ];
 
-  propagatedBuildInputs =
-    [ bzip2 freetype libjpeg lcms2 curl ]
-    ++ lib.optionals (!stdenv.hostPlatform.isMinGW)
-      [ libX11 libXext libXt libwebp ]
-  ;
+  propagatedBuildInputs = [ curl ]
+    ++ lib.optional bzip2Support bzip2
+    ++ lib.optional freetypeSupport freetype
+    ++ lib.optional libjpegSupport libjpeg
+    ++ lib.optional lcms2Support lcms2
+    ++ lib.optional libX11Support libX11
+    ++ lib.optional libXtSupport libXt
+    ++ lib.optional libwebpSupport libwebp;
 
   postInstall = ''
     (cd "$dev/include" && ln -s ImageMagick* ImageMagick)
@@ -113,7 +112,7 @@ stdenv.mkDerivation rec {
       substituteInPlace "$file" --replace pkg-config \
         "PKG_CONFIG_PATH='$dev/lib/pkgconfig' '${pkg-config}/bin/${pkg-config.targetPrefix}pkg-config'"
     done
-  '' + lib.optionalString (ghostscript != null) ''
+  '' + lib.optionalString ghostscriptSupport ''
     for la in $out/lib/*.la; do
       sed 's|-lgs|-L${lib.getLib ghostscript}/lib -lgs|' -i $la
     done

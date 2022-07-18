@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub
+{ lib, fetchFromGitHub, gitUpdater
 , meson, ninja, pkg-config, wrapGAppsHook
 , desktop-file-utils, gsettings-desktop-schemas, libnotify, libhandy, webkitgtk
 , python3Packages, gettext
@@ -94,6 +94,10 @@ python3Packages.buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
+
+  passthru.updateScript = gitUpdater {
+    inherit pname version;
+  };
 
   meta = with lib; {
     description = "An easy-to-use wineprefix manager";

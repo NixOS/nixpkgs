@@ -10,11 +10,11 @@
 with lib;
 stdenv.mkDerivation rec {
   pname = "weston";
-  version = "10.0.0";
+  version = "10.0.1";
 
   src = fetchurl {
-    url = "https://wayland.freedesktop.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "1bj7wnadr7ssn6xw7k8ki0wpj6np3kjd2pcysfz3h0mr290rc8sw";
+    url = "https://gitlab.freedesktop.org/wayland/weston/-/releases/${version}/downloads/weston-${version}.tar.xz";
+    sha256 = "05a10gfbadyxkwgsncc5vc343f493csgh10vk0878nl6d98557la";
   };
 
   patches = [

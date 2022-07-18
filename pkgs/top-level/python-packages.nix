@@ -2156,6 +2156,8 @@ in {
 
   datatable = callPackage ../development/python-modules/datatable { };
 
+  datauri = callPackage ../development/python-modules/datauri { };
+
   dateparser = callPackage ../development/python-modules/dateparser { };
 
   dateutils = callPackage ../development/python-modules/dateutils { };
@@ -9239,6 +9241,8 @@ in {
 
   reproject = callPackage ../development/python-modules/reproject { };
 
+  reqif = callPackage ../development/python-modules/reqif { };
+
   requests-aws4auth = callPackage ../development/python-modules/requests-aws4auth { };
 
   requests-cache = callPackage ../development/python-modules/requests-cache { };
@@ -10248,6 +10252,8 @@ in {
 
   stravalib = callPackage ../development/python-modules/stravalib { };
 
+  streamdeck = callPackage ../development/python-modules/streamdeck { };
+
   streaming-form-data = callPackage ../development/python-modules/streaming-form-data { };
 
   streamlabswater = callPackage ../development/python-modules/streamlabswater { };
@@ -10504,6 +10510,8 @@ in {
 
   tesserocr = callPackage ../development/python-modules/tesserocr { };
 
+  testcontainers = callPackage ../development/python-modules/testcontainers { };
+
   testfixtures = callPackage ../development/python-modules/testfixtures { };
 
   textfsm = callPackage ../development/python-modules/textfsm { };
@@ -10537,6 +10545,8 @@ in {
   text-unidecode = callPackage ../development/python-modules/text-unidecode { };
 
   textwrap3 = callPackage ../development/python-modules/textwrap3 { };
+
+  textx = callPackage ../development/python-modules/textx { };
 
   tflearn = callPackage ../development/python-modules/tflearn { };
 

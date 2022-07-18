@@ -4246,6 +4246,7 @@ with pkgs;
 
   noti = callPackage ../tools/misc/noti {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
+    buildGoPackage = buildGo117Package;
   };
 
   notify = callPackage ../tools/misc/notify { };
@@ -14247,7 +14248,6 @@ with pkgs;
     coursier = coursier.override { jre = jdk8; };
   };
 
-  metal = callPackage ../development/libraries/metal { };
   metals = callPackage ../development/tools/metals { };
   scalafix = callPackage ../development/tools/scalafix {
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
@@ -27679,6 +27679,8 @@ with pkgs;
 
   srain = callPackage ../applications/networking/irc/srain { };
 
+  streamdeck-ui = libsForQt5.callPackage ../applications/misc/streamdeck-ui { };
+
   super-productivity = callPackage ../applications/office/super-productivity {
     electron = electron_17;
   };
@@ -27833,66 +27835,64 @@ with pkgs;
   fiji = callPackage ../applications/graphics/fiji { };
 
   imagemagick6_light = imagemagick6.override {
-    bzip2 = null;
-    zlib = null;
-    libX11 = null;
-    libXext = null;
-    libXt = null;
-    fontconfig = null;
-    freetype = null;
-    ghostscript = null;
-    libjpeg = null;
-    djvulibre = null;
-    lcms2 = null;
-    openexr = null;
-    libpng = null;
-    liblqr1 = null;
-    librsvg = null;
-    libtiff = null;
-    libxml2 = null;
-    openjpeg = null;
-    libwebp = null;
-    libheif = null;
-    libde265 = null;
+    bzip2Support = false;
+    zlibSupport = false;
+    libX11Support = false;
+    libXtSupport = false;
+    fontconfigSupport = false;
+    freetypeSupport = false;
+    ghostscriptSupport = false;
+    libjpegSupport = false;
+    djvulibreSupport = false;
+    lcms2Support = false;
+    openexrSupport = false;
+    libpngSupport = false;
+    liblqr1Support = false;
+    librsvgSupport = false;
+    libtiffSupport = false;
+    libxml2Support = false;
+    openjpegSupport = false;
+    libwebpSupport = false;
+    libheifSupport = false;
+    libde265Support = false;
   };
 
   imagemagick6 = callPackage ../applications/graphics/ImageMagick/6.x.nix {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Foundation;
-    ghostscript = null;
   };
 
-  imagemagick6Big = imagemagick6.override { inherit ghostscript; };
+  imagemagick6Big = imagemagick6.override {
+    ghostscriptSupport = true;
+  };
 
   imagemagick_light = lowPrio (imagemagick.override {
-    bzip2 = null;
-    zlib = null;
-    libX11 = null;
-    libXext = null;
-    libXt = null;
-    fontconfig = null;
-    freetype = null;
-    ghostscript = null;
-    libjpeg = null;
-    djvulibre = null;
-    lcms2 = null;
-    openexr = null;
-    libjxl = null;
-    libpng = null;
-    liblqr1 = null;
-    librsvg = null;
-    libtiff = null;
-    libxml2 = null;
-    openjpeg = null;
-    libwebp = null;
-    libheif = null;
+    bzip2Support = false;
+    zlibSupport = false;
+    libX11Support = false;
+    libXtSupport = false;
+    fontconfigSupport = false;
+    freetypeSupport = false;
+    libjpegSupport = false;
+    djvulibreSupport = false;
+    lcms2Support = false;
+    openexrSupport = false;
+    libjxlSupport = false;
+    libpngSupport = false;
+    liblqr1Support = false;
+    librsvgSupport = false;
+    libtiffSupport = false;
+    libxml2Support = false;
+    openjpegSupport = false;
+    libwebpSupport = false;
+    libheifSupport = false;
   });
 
-  imagemagick = lowPrio (imagemagickBig.override {
-    ghostscript = null;
-  });
-
-  imagemagickBig = lowPrio (callPackage ../applications/graphics/ImageMagick {
+  imagemagick = lowPrio (callPackage ../applications/graphics/ImageMagick {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Foundation;
+  });
+
+  imagemagickBig = lowPrio (imagemagick.override {
+    ghostscriptSupport = true;
   });
 
   imagination = callPackage ../applications/video/imagination { };
@@ -31108,6 +31108,8 @@ with pkgs;
 
   webcamoid = libsForQt5.callPackage ../applications/video/webcamoid { };
 
+  webex = callPackage ../applications/networking/instant-messengers/webex {};
+
   webmacs = libsForQt5.callPackage ../applications/networking/browsers/webmacs {};
 
   webssh = with python3Packages; toPythonApplication webssh;
@@ -34073,6 +34075,8 @@ with pkgs;
   brmodelo = callPackage ../applications/science/engineering/brmodelo { };
 
   jflap = callPackage ../applications/science/engineering/jflap { };
+
+  strictdoc = python3.pkgs.callPackage ../applications/science/engineering/strictdoc { };
 
   ### SCIENCE / ELECTRONICS
 
