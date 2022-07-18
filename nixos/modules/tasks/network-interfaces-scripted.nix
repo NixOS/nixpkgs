@@ -85,12 +85,14 @@ let
         hasDefaultGatewaySet = (cfg.defaultGateway != null && cfg.defaultGateway.address != "")
                             || (cfg.enableIPv6 && cfg.defaultGateway6 != null && cfg.defaultGateway6.address != "");
 
-        networkLocalCommands = {
+        needNetworkSetup = cfg.resolvconf.enable || cfg.defaultGateway != null || cfg.defaultGateway6 != null;
+
+        networkLocalCommands = lib.mkIf needNetworkSetup {
           after = [ "network-setup.service" ];
           bindsTo = [ "network-setup.service" ];
         };
 
-        networkSetup = lib.mkIf (config.networking.resolvconf.enable || cfg.defaultGateway != null || cfg.defaultGateway6 != null)
+        networkSetup = lib.mkIf needNetworkSetup
           { description = "Networking Setup";
 
             after = [ "network-pre.target" "systemd-udevd.service" "systemd-sysctl.service" ];
