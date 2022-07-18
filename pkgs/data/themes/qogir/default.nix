@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/themes
     name= HOME="$TMPDIR" ./install.sh -t all -d $out/share/themes
     mkdir -p $out/share/doc/${pname}
@@ -50,6 +52,8 @@ stdenv.mkDerivation rec {
     rm $out/share/themes/*/{AUTHORS,COPYING}
 
     jdupes --link-soft --recurse $out/share
+
+    runHook postInstall
   '';
 
   passthru.updateScript = gitUpdater { inherit pname version; };
