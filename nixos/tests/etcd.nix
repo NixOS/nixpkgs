@@ -10,7 +10,6 @@ import ./make-test-python.nix ({ pkgs, ... } : {
   nodes = {
     node = { ... }: {
       services.etcd.enable = true;
-      services.etcd.package = pkgs.etcd;
     };
   };
 
