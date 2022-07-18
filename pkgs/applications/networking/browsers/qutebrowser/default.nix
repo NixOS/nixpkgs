@@ -1,10 +1,12 @@
 { stdenv, lib, fetchurl, fetchzip, python3
 , mkDerivationWith, wrapQtAppsHook, wrapGAppsHook, qtbase, qtwebengine, glib-networking
-, asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2, pipewire_0_2
+, asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2
 , libxslt, gst_all_1 ? null
 , withPdfReader      ? true
 , withMediaPlayback  ? true
 , backend            ? "webengine"
+, pipewireSupport    ? stdenv.isLinux
+, pipewire_0_2
 }:
 
 assert withMediaPlayback -> gst_all_1 != null;
@@ -12,12 +14,11 @@ assert withMediaPlayback -> gst_all_1 != null;
 let
   python3Packages = python3.pkgs;
   pdfjs = let
-    version = "2.8.335";
+    version = "2.14.305";
   in
   fetchzip rec {
-    name = "pdfjs-${version}";
-    url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/${name}-dist.zip";
-    sha256 = "1zschfpxnhdinn9nasl5in4s62ad0h1g369cglamjgxx36x27zly";
+    url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/pdfjs-${version}-dist.zip";
+    hash = "sha256-E7t+0AUndrgi4zfJth0w28RmWLqLyXMUCnueNf/gNi4=";
     stripRoot = false;
   };
 
@@ -31,12 +32,12 @@ let
 
 in mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "qutebrowser";
-  version = "2.4.0";
+  version = "2.5.2";
 
   # the release tarballs are different from the git checkout!
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "8s2auxTrq/ljBXOy+4RHvhkod3h9xOOWThtV9yqFkuw=";
+    hash = "sha256-qb/OFN3EA94N6y7t+YPCMc4APgdZmV7H706jTkl06Qg=";
   };
 
   # Needs tox
@@ -59,7 +60,7 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
     pyyaml backendPackage jinja2 pygments
     # scripts and userscripts libs
     tldextract beautifulsoup4
-    pyreadability pykeepass stem
+    readability-lxml pykeepass stem
     pynacl
     # extensive ad blocking
     adblock
@@ -77,7 +78,7 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace qutebrowser/misc/quitter.py --subst-var-by qutebrowser "$out/bin/qutebrowser"
 
-    sed -i "s,/usr/share/,$out/share/,g" qutebrowser/utils/standarddir.py
+    sed -i "s,/usr,$out,g" qutebrowser/utils/standarddir.py
   '' + lib.optionalString withPdfReader ''
     sed -i "s,/usr/share/pdf.js,${pdfjs},g" qutebrowser/browser/pdfjs.py
   '';
@@ -121,7 +122,7 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
       "''${qtWrapperArgs[@]}"
       --add-flags '--backend ${backend}'
       --set QUTE_QTWEBENGINE_VERSION_OVERRIDE "${lib.getVersion qtwebengine}"
-      ${lib.optionalString (!stdenv.isDarwin && backend == "webengine") ''--prefix LD_LIBRARY_PATH : ${libPath}''}
+      ${lib.optionalString (pipewireSupport && backend == "webengine") ''--prefix LD_LIBRARY_PATH : ${libPath}''}
     )
   '';
 
@@ -130,5 +131,6 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
     description = "Keyboard-focused browser with a minimal GUI";
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ jagajaga rnhmjoj ebzzry dotlambda ];
+    inherit (backendPackage.meta) platforms;
   };
 }

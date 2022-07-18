@@ -38,7 +38,7 @@ let
     rev = version;
     sha256 = "sha256-oZjQnrnj8nCaQjrIz8bWNt6Ib8Wu2ZMXHEPfCCy2fjk=";
 
-    extraPostFetch = ''
+    postFetch = ''
       mv $out ./all
       mv ./all/electrum_ltc/tests $out
     '';

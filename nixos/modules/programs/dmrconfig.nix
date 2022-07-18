@@ -6,7 +6,7 @@ let
   cfg = config.programs.dmrconfig;
 
 in {
-  meta.maintainers = [ maintainers.etu ];
+  meta.maintainers = with maintainers; [ ];
 
   ###### interface
   options = {

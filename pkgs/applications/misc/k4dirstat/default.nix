@@ -7,7 +7,7 @@
 , kjobwidgets
 , kxmlgui
 , lib
-, testVersion
+, testers
 , k4dirstat
 }:
 
@@ -26,7 +26,7 @@ mkDerivation rec {
   buildInputs = [ kiconthemes kio kjobwidgets kxmlgui ];
 
   passthru.tests.version =
-    testVersion {
+    testers.testVersion {
       package = k4dirstat;
       command = "k4dirstat -platform offscreen --version &>/dev/stdout";
     };

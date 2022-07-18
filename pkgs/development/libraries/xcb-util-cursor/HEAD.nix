@@ -21,9 +21,8 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "dev" ];
 
+  nativeBuildInputs = [ autoconf automake ];
   buildInputs = [
-    autoconf
-    automake
     gnum4
     gperf
     libtool

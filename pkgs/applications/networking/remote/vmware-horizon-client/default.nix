@@ -9,7 +9,7 @@
 , configText ? ""
 }:
 let
-  version = "2111";
+  version = "2203";
 
   sysArch =
     if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
@@ -18,7 +18,9 @@ let
 
   # For USB support, ensure that /var/run/vmware/<YOUR-UID>
   # exists and is owned by you. Then run vmware-usbarbitrator as root.
-  bins = [ "vmware-view" "vmware-usbarbitrator" ];
+  bins = [ "vmware-view" "vmware-view-legacy" "vmware-usbarbitrator" ];
+
+  mainProgram = "vmware-view-legacy";
 
   # This forces the default GTK theme (Adwaita) because Horizon is prone to
   # UI usability issues when using non-default themes, such as Adwaita-dark.
@@ -30,11 +32,11 @@ let
   '';
 
   vmwareHorizonClientFiles = stdenv.mkDerivation {
-    name = "vmwareHorizonClientFiles";
+    pname = "vmware-horizon-files";
     inherit version;
     src = fetchurl {
-      url = "https://download3.vmware.com/software/view/viewclients/CART22FH2/VMware-Horizon-Client-Linux-2111-8.4.0-18957622.tar.gz";
-      sha256 = "2f79d2d8d34e6f85a5d21a3350618c4763d60455e7d68647ea40715eaff486f7";
+      url = "https://download3.vmware.com/software/CART23FQ1_LIN_2203_TARBALL/VMware-Horizon-Client-Linux-2203-8.5.0-19586897.tar.gz";
+      sha256 = "27429dddaeedfa8b701d7aa7868f60ad58efa42687d7f27e84375fda9f5cd137";
     };
     nativeBuildInputs = [ makeWrapper ];
     installPhase = ''
@@ -104,8 +106,8 @@ let
     name = "vmware-view";
     desktopName = "VMware Horizon Client";
     icon = "${vmwareHorizonClientFiles}/share/icons/vmware-view.png";
-    exec = "${vmwareFHSUserEnv "vmware-view"}/bin/vmware-view %u";
-    mimeType = "x-scheme-handler/vmware-view";
+    exec = "${vmwareFHSUserEnv mainProgram}/bin/${mainProgram} %u";
+    mimeTypes = [ "x-scheme-handler/vmware-view" ];
   };
 
   binLinkCommands = lib.concatMapStringsSep
@@ -115,7 +117,8 @@ let
 
 in
 stdenv.mkDerivation {
-  name = "vmware-horizon-client";
+  pname = "vmware-horizon-client";
+  inherit version;
 
   dontUnpack = true;
 
@@ -130,7 +133,7 @@ stdenv.mkDerivation {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    mainProgram = "vmware-view";
+    inherit mainProgram;
     description = "Allows you to connect to your VMware Horizon virtual desktop";
     homepage = "https://www.vmware.com/go/viewclients";
     license = licenses.unfree;

@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/jsummers/${pname}/blob/${version}/changelog.txt";
     license = licenses.mit;
     maintainers = with maintainers; [ emily smitop ];
+    mainProgram = "imagew";
     platforms = platforms.all;
   };
 }

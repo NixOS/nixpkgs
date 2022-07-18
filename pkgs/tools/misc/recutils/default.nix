@@ -8,23 +8,24 @@
 
 stdenv.mkDerivation rec {
   pname = "recutils";
-  version = "1.8";
+  version = "1.9";
 
   src = fetchurl {
     url = "mirror://gnu/recutils/${pname}-${version}.tar.gz";
-    hash = "sha256-346uaVk/26U+Jky/SyMH37ghIMCbb6sj4trVGomlsZM=";
+    hash = "sha256-YwFZKwAgwUtFZ1fvXUNNSfYCe45fOkmdEzYvIFxIbg4=";
   };
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = lib.optional stdenv.cc.isClang "format";
 
   buildInputs = [
     curl
   ];
 
   checkInputs = [
-    check
     bc
+    check
   ];
+
   doCheck = true;
 
   meta = with lib; {

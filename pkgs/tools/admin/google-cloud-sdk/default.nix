@@ -108,6 +108,10 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Tools for the google cloud platform";
     longDescription = "The Google Cloud SDK. This package has the programs: gcloud, gsutil, and bq";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryNativeCode  # anthoscli and possibly more
+    ];
     # This package contains vendored dependencies. All have free licenses.
     license = licenses.free;
     homepage = "https://cloud.google.com/sdk/";

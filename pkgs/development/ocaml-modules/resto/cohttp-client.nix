@@ -8,7 +8,7 @@
 
 buildDunePackage {
   pname = "resto-cohttp-client";
-  inherit (resto) src version meta useDune2 doCheck;
+  inherit (resto) src version meta doCheck;
 
   propagatedBuildInputs = [
     resto

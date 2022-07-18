@@ -5,14 +5,14 @@
 }:
 
 python.pkgs.buildPythonApplication rec {
-  version = "2.0.3";
+  version = "2.1";
   pname = "fdroidserver";
 
   src = fetchFromGitLab {
     owner = "fdroid";
     repo = "fdroidserver";
     rev = version;
-    sha256 = "sha256-/tX45t/DsWd0/R9VJJsqNjoOkgGIvqvq05YaVp0pLf0=";
+    sha256 = "0xmmjj7f05p4q8xbbkxqns2vvk2rsvb9n43vjdv0wbydmgpa34k7";
   };
 
   postPatch = ''
@@ -27,7 +27,7 @@ python.pkgs.buildPythonApplication rec {
     install -m 0755 gradlew-fdroid $out/bin
   '';
 
-  buildInputs = [ python.pkgs.Babel ];
+  buildInputs = [ python.pkgs.babel ];
 
   propagatedBuildInputs = with python.pkgs; [
     androguard

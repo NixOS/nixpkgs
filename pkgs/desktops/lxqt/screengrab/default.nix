@@ -17,13 +17,13 @@
 
 mkDerivation rec {
   pname = "screengrab";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1ca5yyvcahabyrdjcsznz9j66yrdlvnfa3650iwlz6922c3dkn2k";
+    sha256 = "EWmEbXY2EEUW2Hq7JwLW/KDgQ8KHs4DZzuGgFjNthPQ=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +51,6 @@ mkDerivation rec {
     description = "Crossplatform tool for fast making screenshots";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

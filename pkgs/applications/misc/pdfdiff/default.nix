@@ -1,9 +1,7 @@
 { lib, python2Packages, fetchurl, xpdf }:
-let
-  py = python2Packages;
-in
-py.buildPythonApplication rec {
-  name = "pdfdiff-${version}";
+
+python2Packages.buildPythonApplication rec {
+  pname = "pdfdiff";
   version = "0.92";
 
   src = fetchurl {

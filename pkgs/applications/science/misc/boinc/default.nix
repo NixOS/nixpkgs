@@ -3,7 +3,7 @@ libGLU, libGL, libXmu, libXi, freeglut, libjpeg, libtool, wxGTK30, xcbutil,
 sqlite, gtk2, patchelf, libXScrnSaver, libnotify, libX11, libxcb }:
 
 let
-  majorVersion = "7.18";
+  majorVersion = "7.20";
   minorVersion = "1";
 in
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "BOINC";
     repo = "boinc";
     rev = "client_release/${majorVersion}/${version}";
-    sha256 = "sha256-ijkfWTFwwJXvh6f0P5hkzWODxU+Ugz6iQUK+5jEpWXQ=";
+    sha256 = "sha256-FRU5s/nvT3VKU78AXYlbzeru7XQwNSqDNMGrdQ3jd1w=";
   };
 
   nativeBuildInputs = [ libtool automake autoconf m4 pkg-config ];
@@ -46,6 +46,10 @@ stdenv.mkDerivation rec {
     homepage = "https://boinc.berkeley.edu/";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;  # arbitrary choice
+    # checking for gcc options needed to detect all undeclared functions... cannot detect
+    # configure: error: in `/build/boinc-7.18.1-src':
+    # configure: error: cannot make gcc report undeclared builtins
+    broken = stdenv.isAarch64;
     maintainers = with maintainers; [ Luflosi ];
   };
 }

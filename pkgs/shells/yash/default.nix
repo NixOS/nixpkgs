@@ -6,14 +6,15 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://osdn.net/dl/yash/yash-${version}.tar.xz";
-    sha256 = "sha256:1jdmj4cyzwxxyyqf20y1zi578h7md860ryffp02qi143zpppn4sm";
+    hash = "sha256-VRN77/2DhIgFuM75DAxq9UB0SvzBA+Gw973z7xmRtck=";
   };
 
+  strictDeps = true;
   buildInputs = [ gettext ncurses ];
 
   meta = with lib; {
-    description = "Yet another POSIX-compliant shell";
     homepage = "https://yash.osdn.jp/index.html.en";
+    description = "Yet another POSIX-compliant shell";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ qbit ];
     platforms = platforms.all;

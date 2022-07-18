@@ -21,15 +21,15 @@
 
 buildPythonPackage rec {
   pname = "qiskit-nature";
-  version = "0.3.1";
+  version = "0.3.2";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner = "qiskit";
+    owner = "Qiskit";
     repo = pname;
     rev = version;
-    sha256 = "sha256-EkYppEOQGmRIxKC4ArXZb0b+p1gPGnP6AU8LbEbOpPo=";
+    sha256 = "sha256-BXUVRZ8X3OJiRexNXZsnvp+Yh8ARNYohYH49/IYFYM0=";
   };
 
   propagatedBuildInputs = [
@@ -56,7 +56,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    "test_two_qubit_reduction"  # unsure of failure reason. Might be related to recent cvxpy update?
+    "test_two_qubit_reduction"  # failure cause unclear
   ];
 
   meta = with lib; {
@@ -64,6 +64,10 @@ buildPythonPackage rec {
     homepage = "https://qiskit.org";
     downloadPage = "https://github.com/QISKit/qiskit-nature/releases";
     changelog = "https://qiskit.org/documentation/release_notes.html";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryNativeCode  # drivers/gaussiand/gauopen/*.so
+    ];
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger ];
   };

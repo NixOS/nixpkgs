@@ -134,6 +134,7 @@ in {
         '';
       };
     };
+    security.polkit.enable = true;
     security.pam.services.swaylock = {};
     hardware.opengl.enable = mkDefault true;
     fonts.enableDefaultFonts = mkDefault true;

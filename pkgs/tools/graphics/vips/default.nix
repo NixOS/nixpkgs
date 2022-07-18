@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ffDJJWe/SzG+lppXEiyfXXL5KLdZgnMjv1SYnuYnh4c=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
-    extraPostFetch = ''
+    postFetch = ''
       rm -r $out/test/test-suite/images/
     '';
   };

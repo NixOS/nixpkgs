@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "channels-redis";
-  version = "3.3.1";
+  version = "3.4.1";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit version;
     pname = "channels_redis";
-    sha256 = "899dc6433f5416cf8ad74505baaf2acb5461efac3cad40751a41119e3f68421b";
+    sha256 = "sha256-eOSi8rKnRP5ah4SOw2te5J9SLGgIzv5sWDZj0NUx+qg=";
   };
 
   buildInputs = [ redis hiredis ];

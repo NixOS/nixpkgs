@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       name = "dhewm3";
       exec = "dhewm3";
       desktopName = "Doom 3";
-      categories = "Game;";
+      categories = [ "Game" ];
     })
   ];
 

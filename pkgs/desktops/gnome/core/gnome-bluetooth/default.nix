@@ -5,15 +5,17 @@
 , meson
 , ninja
 , pkg-config
-, gtk3
+, gtk4
+, libadwaita
 , gettext
 , glib
 , udev
+, upower
 , itstool
 , libxml2
 , wrapGAppsHook
 , libnotify
-, libcanberra-gtk3
+, gsound
 , gobject-introspection
 , gtk-doc
 , docbook-xsl-nons
@@ -24,14 +26,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-bluetooth";
-  version = "3.34.5";
+  version = "42.2";
 
   # TODO: split out "lib"
   outputs = [ "out" "dev" "devdoc" "man" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1a9ynlwwkb3wpg293ym517vmrkk63y809mmcv9a21k5yr199x53c";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "jOjs+rKCctsYMKY/CPnMtTBHNNG+Lb/OeV/kAp5inww=";
   };
 
   nativeBuildInputs = [
@@ -51,23 +53,18 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    gtk3
+    gtk4
+    libadwaita
     udev
+    upower
     libnotify
-    libcanberra-gtk3
-    gnome.adwaita-icon-theme
+    gsound
     gsettings-desktop-schemas
   ];
 
   mesonFlags = [
-    "-Dicon_update=false"
     "-Dgtk_doc=true"
   ];
-
-  postPatch = ''
-    chmod +x meson_post_install.py # patchShebangs requires executable file
-    patchShebangs meson_post_install.py
-  '';
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -77,8 +74,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://help.gnome.org/users/gnome-bluetooth/stable/index.html.en";
-    description = "Application that let you manage Bluetooth in the GNOME destkop";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-bluetooth";
+    description = "Application that lets you manage Bluetooth in the GNOME desktop";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

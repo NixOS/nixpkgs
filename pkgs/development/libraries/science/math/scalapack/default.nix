@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, openssh
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, openssh
 , mpi, blas, lapack
 } :
 
@@ -6,16 +6,23 @@ assert blas.isILP64 == lapack.isILP64;
 
 stdenv.mkDerivation rec {
   pname = "scalapack";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "Reference-ScaLAPACK";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0hiap5i9ik6xpvl721n2slanlqygagc1pg2bcjb27ans6balhsfh";
+    sha256 = "sha256-GNVGWrIWdfyTfbz7c31Vjt9eDlVzCd/aLHoWq2DMyX4=";
   };
 
   passthru = { inherit (blas) isILP64; };
+
+  # upstream patch, remove with next release
+  patches = [ (fetchpatch {
+    name = "gcc-10";
+    url = "https://github.com/Reference-ScaLAPACK/scalapack/commit/a0f76fc0c1c16646875b454b7d6f8d9d17726b5a.patch";
+    sha256 = "0civn149ikghakic30bynqg1bal097hr7i12cm4kq3ssrhq073bp";
+  })];
 
   # Required to activate ILP64.
   # See https://github.com/Reference-ScaLAPACK/scalapack/pull/19

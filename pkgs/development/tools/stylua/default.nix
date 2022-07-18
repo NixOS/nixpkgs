@@ -1,29 +1,25 @@
 { fetchFromGitHub
 , lib
 , rustPlatform
-, stdenvNoCC
 , lua52Support ? true
 , luauSupport ? false
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "stylua";
-  version = "0.12.3";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "johnnymorganz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-bgfG1cPhauU85FG/ZX1n2KqfydMeh92q347UsREkOGo=";
+    sha256 = "sha256-G7fCLkvpO5GHqWCfy2m3GxSgDSHCcYOaXyPDtdmdSY0=";
   };
 
-  cargoSha256 = "sha256-njZTD6O67v787Z1tJ7G0QzxJLhqU2sfpOVw6r4woE9s=";
+  cargoSha256 = "sha256-MqRoGuRMEgOYvL2VI324EXZjrPVCbCE/c7aVEXr0xmw=";
 
   buildFeatures = lib.optional lua52Support "lua52"
     ++ lib.optional luauSupport "luau";
-
-  # test_standard fails on darwin
-  doCheck = !stdenvNoCC.isDarwin;
 
   meta = with lib; {
     description = "An opinionated Lua code formatter";

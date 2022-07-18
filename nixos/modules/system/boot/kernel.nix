@@ -36,7 +36,7 @@ in
 
     boot.kernelPackages = mkOption {
       default = pkgs.linuxPackages;
-      type = types.unspecified // { merge = mergeEqualOption; };
+      type = types.raw;
       apply = kernelPackages: kernelPackages.extend (self: super: {
         kernel = super.kernel.override (originalArgs: {
           inherit randstructSeed;
@@ -241,7 +241,7 @@ in
             "xhci_pci"
             "usbhid"
             "hid_generic" "hid_lenovo" "hid_apple" "hid_roccat"
-            "hid_logitech_hidpp" "hid_logitech_dj" "hid_microsoft"
+            "hid_logitech_hidpp" "hid_logitech_dj" "hid_microsoft" "hid_cherry"
 
           ] ++ optionals pkgs.stdenv.hostPlatform.isx86 [
             # Misc. x86 keyboard stuff.
@@ -272,9 +272,6 @@ in
         boot.kernel.sysctl."kernel.printk" = mkDefault config.boot.consoleLogLevel;
 
         boot.kernelModules = [ "loop" "atkbd" ];
-
-        # The Linux kernel >= 2.6.27 provides firmware.
-        hardware.firmware = [ kernel ];
 
         # Create /etc/modules-load.d/nixos.conf, which is read by
         # systemd-modules-load.service to load required kernel modules.

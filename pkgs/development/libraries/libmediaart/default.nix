@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libmediaart";
-  version = "1.9.5";
+  version = "1.9.6";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1mlw1qgj8nkd9ll6b6h54r1gfdy3zp8a8xqz7qfyfaj85jjgbph7";
+    sha256 = "w7xQJdfbOAWH+cjrgAxhH2taFta0t4/P+T9ih2pnfxc=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config vala gtk-doc docbook_xsl docbook_xml_dtd_412 gobject-introspection ];

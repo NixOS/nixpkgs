@@ -45,7 +45,7 @@ in mkDerivation {
       };
       desktopName = name;
       genericName = "Head tracking software";
-      categories = "Utility;";
+      categories = [ "Utility" ];
     })
   ];
 

@@ -35,7 +35,6 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://libusb.info/";
-    repositories.git = "https://github.com/libusb/libusb-compat-0.1";
     description = "cross-platform user-mode USB device library";
     longDescription = ''
       libusb is a cross-platform user-mode library that provides access to USB devices.

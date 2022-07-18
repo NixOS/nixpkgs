@@ -1,24 +1,24 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "json2hcl";
-  version = "0.0.6";
+  version = "0.0.7";
 
   src = fetchFromGitHub {
-    inherit owner;
+    owner = "kvz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0knil88n2w41w3nzqz6ljgfjkl5r3x0bh7ifqgiyf6sin3pl4pn0";
+    sha256 = "sha256-H3jDZL/guVwJIZs7PD/rIvH3ZRYQzNTU/iUvy8aXs0o=";
   };
 
-  owner = "kvz";
-  goPackagePath = "github.com/${owner}/${pname}";
-  goDeps = ./deps.nix;
+  vendorSha256 = "sha256-GxYuFak+5CJyHgC1/RsS0ub84bgmgL+bI4YKFTb+vIY=";
+
+  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     description = "Convert JSON to HCL, and vice versa";
-    license = with licenses; [ mit ];
-    maintainers = [ maintainers.matthewbauer ];
-    platforms = platforms.unix;
+    homepage = "https://github.com/kvz/json2hcl";
+    license = licenses.mit;
+    maintainers = with maintainers; [ matthewbauer ];
   };
 }

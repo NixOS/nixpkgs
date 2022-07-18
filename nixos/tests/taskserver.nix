@@ -63,6 +63,7 @@ in {
     server = {
       services.taskserver.enable = true;
       services.taskserver.listenHost = "::";
+      services.taskserver.openFirewall = true;
       services.taskserver.fqdn = "server";
       services.taskserver.organisations = {
         testOrganisation.users = [ "alice" "foo" ];

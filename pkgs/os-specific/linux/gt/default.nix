@@ -4,20 +4,23 @@
 }:
 stdenv.mkDerivation {
   pname = "gt";
-  version = "unstable-2021-09-30";
+  version = "unstable-2022-05-08";
 
   src = fetchFromGitHub {
     owner = "linux-usb-gadgets";
     repo = "gt";
-    rev = "7247547a14b2d092dc03fd83218ae65c2f7ff7d6";
-    sha256 = "1has9q2sghd5vyi25l3h2hd4d315vvpld076iwwsg01fx4d9vjmg";
+    rev = "7f9c45d98425a27444e49606ce3cf375e6164e8e";
+    sha256 = "sha256-km4U+t4Id2AZx6GpH24p2WNmvV5RVjJ14sy8tWLCQsk=";
   };
-  sourceRoot = "source";
+
+  sourceRoot = "source/source";
 
   preConfigure = ''
     cmakeFlagsArray+=("-DBASH_COMPLETION_COMPLETIONSDIR=$out/share/bash-completions/completions")
   '';
+
   nativeBuildInputs = [ cmake pkg-config asciidoc ];
+
   buildInputs = [ bash-completion libconfig libusbgx];
 
   meta = {

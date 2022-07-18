@@ -4,11 +4,11 @@ cups, vivaldi-ffmpeg-codecs, libpulseaudio, at-spi2-core, libxkbcommon, mesa }:
 
 stdenv.mkDerivation rec {
   pname = "exodus";
-  version = "21.10.25";
+  version = "22.6.17";
 
   src = fetchurl {
     url = "https://downloads.exodus.io/releases/${pname}-linux-x64-${version}.zip";
-    sha256 = "a85ddda4e73dfadddbb77cf9bc84c30fc6b893ead46367d702976bbf4da5afa4";
+    sha256 = "1gllmrmc1gylw54yrgy1ggpn3kvkyxf7ydjvd5n5kvd8d9xh78ng";
   };
 
   sourceRoot = ".";
@@ -76,6 +76,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.exodus.io/";
     description = "Top-rated cryptocurrency wallet with Trezor integration and built-in Exchange";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mmahut rople380 ];

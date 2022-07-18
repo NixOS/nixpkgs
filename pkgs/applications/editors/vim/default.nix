@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, callPackage, ncurses, gettext, pkg-config
+{ lib, stdenv, fetchurl, callPackage, ncurses, bash, gawk, gettext, pkg-config
 # default vimrc
 , vimrc ? fetchurl {
     name = "default-vimrc";
@@ -18,8 +18,10 @@ stdenv.mkDerivation {
   inherit (common) version src postPatch hardeningDisable enableParallelBuilding meta;
 
   nativeBuildInputs = [ gettext pkg-config ];
-  buildInputs = [ ncurses ]
+  buildInputs = [ ncurses bash gawk ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon Cocoa ];
+
+  strictDeps = true;
 
   configureFlags = [
     "--enable-multibyte"
@@ -35,6 +37,13 @@ stdenv.mkDerivation {
     "vim_cv_stat_ignores_slash=yes"
     "vim_cv_memmove_handles_overlap=yes"
   ];
+
+  # which.sh is used to for vim's own shebang patching, so make it find
+  # binaries for the host platform.
+  preConfigure = ''
+    export HOST_PATH
+    substituteInPlace src/which.sh --replace '$PATH' '$HOST_PATH'
+  '';
 
   postInstall = ''
     ln -s $out/bin/vim $out/bin/vi

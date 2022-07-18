@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ncurses, xlibsWrapper }:
+{ lib, stdenv, fetchurl, fetchpatch, ncurses, xlibsWrapper }:
 
 let
    useX11 = !stdenv.isAarch32 && !stdenv.isMips;
@@ -14,6 +14,18 @@ stdenv.mkDerivation rec {
     url = "https://caml.inria.fr/pub/distrib/ocaml-4.00/${pname}-${version}.tar.bz2";
     sha256 = "33c3f4acff51685f5bfd7c260f066645e767d4e865877bf1613c176a77799951";
   };
+
+  # Compatibility with Glibc 2.34
+  patches = [ (fetchpatch {
+    url = "https://github.com/ocaml/ocaml/commit/60b0cdaf2519d881947af4175ac4c6ff68901be3.patch";
+    sha256 = "sha256:07g9q9sjk4xsbqix7jxggfp36v15pmqw4bms80g5car0hfbszirn";
+  })];
+
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: libcamlrun.a(startup.o):(.bss+0x800): multiple definition of
+  #     `caml_code_fragments_table'; libcamlrun.a(backtrace.o):(.bss+0x20): first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
 
   prefixKey = "-prefix ";
   configureFlags = [ "-no-tk" ] ++ optionals useX11 [ "-x11lib" xlibsWrapper ];

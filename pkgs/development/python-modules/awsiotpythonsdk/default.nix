@@ -6,7 +6,7 @@
 
 buildPythonPackage rec {
   pname = "AWSIoTPythonSDK";
-  version = "1.5.0";
+  version = "1.5.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -14,8 +14,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-iot-device-sdk-python";
-    rev = "v${version}";
-    sha256 = "0bmvwv471mvlwj2rfz08j9qvzsp4vyjz67cbzkvsy6kmihx3wfqh";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-GHMnDRxXkaKDTaawwPtMqa7EZJ8Y35+ScgtfEP9PJGs=";
   };
 
   # Module has no tests

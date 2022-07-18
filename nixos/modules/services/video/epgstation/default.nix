@@ -1,30 +1,40 @@
 { config, lib, options, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.services.epgstation;
   opt = options.services.epgstation;
 
+  description = "EPGStation: DVR system for Mirakurun-managed TV tuners";
+
   username = config.users.users.epgstation.name;
   groupname = config.users.users.epgstation.group;
+  mirakurun = {
+    sock = config.services.mirakurun.unixSocket;
+    option = options.services.mirakurun.unixSocket;
+  };
 
-  settingsFmt = pkgs.formats.json {};
-  settingsTemplate = settingsFmt.generate "config.json" cfg.settings;
+  yaml = pkgs.formats.yaml { };
+  settingsTemplate = yaml.generate "config.yml" cfg.settings;
   preStartScript = pkgs.writeScript "epgstation-prestart" ''
     #!${pkgs.runtimeShell}
 
-    PASSWORD="$(head -n1 "${cfg.basicAuth.passwordFile}")"
-    DB_PASSWORD="$(head -n1 "${cfg.database.passwordFile}")"
+    DB_PASSWORD_FILE=${lib.escapeShellArg cfg.database.passwordFile}
+
+    if [[ ! -f "$DB_PASSWORD_FILE" ]]; then
+      printf "[FATAL] File containing the DB password was not found in '%s'. Double check the NixOS option '%s'." \
+        "$DB_PASSWORD_FILE" ${lib.escapeShellArg opt.database.passwordFile} >&2
+      exit 1
+    fi
+
+    DB_PASSWORD="$(head -n1 ${lib.escapeShellArg cfg.database.passwordFile})"
 
     # setup configuration
-    touch /etc/epgstation/config.json
-    chmod 640 /etc/epgstation/config.json
+    touch /etc/epgstation/config.yml
+    chmod 640 /etc/epgstation/config.yml
     sed \
-      -e "s,@password@,$PASSWORD,g" \
       -e "s,@dbPassword@,$DB_PASSWORD,g" \
-      ${settingsTemplate} > /etc/epgstation/config.json
-    chown "${username}:${groupname}" /etc/epgstation/config.json
+      ${settingsTemplate} > /etc/epgstation/config.yml
+    chown "${username}:${groupname}" /etc/epgstation/config.yml
 
     # NOTE: Use password authentication, since mysqljs does not yet support auth_socket
     if [ ! -e /var/lib/epgstation/db-created ]; then
@@ -35,7 +45,7 @@ let
   '';
 
   streamingConfig = lib.importJSON ./streaming.json;
-  logConfig = {
+  logConfig = yaml.generate "logConfig.yml" {
     appenders.stdout.type = "stdout";
     categories = {
       default = { appenders = [ "stdout" ]; level = "info"; };
@@ -45,53 +55,51 @@ let
     };
   };
 
-  defaultPassword = "INSECURE_GO_CHECK_CONFIGURATION_NIX\n";
+  # Deprecate top level options that are redundant.
+  deprecateTopLevelOption = config:
+    lib.mkRenamedOptionModule
+      ([ "services" "epgstation" ] ++ config)
+      ([ "services" "epgstation" "settings" ] ++ config);
+
+  removeOption = config: instruction:
+    lib.mkRemovedOptionModule
+      ([ "services" "epgstation" ] ++ config)
+      instruction;
 in
 {
-  options.services.epgstation = {
-    enable = mkEnableOption "EPGStation: DTV Software in Japan";
+  meta.maintainers = with lib.maintainers; [ midchildan ];
 
-    usePreconfiguredStreaming = mkOption {
-      type = types.bool;
+  imports = [
+    (deprecateTopLevelOption [ "port" ])
+    (deprecateTopLevelOption [ "socketioPort" ])
+    (deprecateTopLevelOption [ "clientSocketioPort" ])
+    (removeOption [ "basicAuth" ]
+      "Use a TLS-terminated reverse proxy with authentication instead.")
+  ];
+
+  options.services.epgstation = {
+    enable = lib.mkEnableOption description;
+
+    package = lib.mkOption {
+      default = pkgs.epgstation;
+      type = lib.types.package;
+      defaultText = lib.literalExpression "pkgs.epgstation";
+      description = "epgstation package to use";
+    };
+
+    usePreconfiguredStreaming = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Use preconfigured default streaming options.
 
         Upstream defaults:
-        <link xlink:href="https://github.com/l3tnun/EPGStation/blob/master/config/config.sample.json"/>
+        <link xlink:href="https://github.com/l3tnun/EPGStation/blob/master/config/config.yml.template"/>
       '';
     };
 
-    port = mkOption {
-      type = types.port;
-      default = 20772;
-      description = ''
-        HTTP port for EPGStation to listen on.
-      '';
-    };
-
-    socketioPort = mkOption {
-      type = types.port;
-      default = cfg.port + 1;
-      defaultText = literalExpression "config.${opt.port} + 1";
-      description = ''
-        Socket.io port for EPGStation to listen on.
-      '';
-    };
-
-    clientSocketioPort = mkOption {
-      type = types.port;
-      default = cfg.socketioPort;
-      defaultText = literalExpression "config.${opt.socketioPort}";
-      description = ''
-        Socket.io port that the web client is going to connect to. This may be
-        different from <option>socketioPort</option> if EPGStation is hidden
-        behind a reverse proxy.
-      '';
-    };
-
-    openFirewall = mkOption {
-      type = types.bool;
+    openFirewall = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Open ports in the firewall for the EPGStation web interface.
@@ -106,50 +114,17 @@ in
       '';
     };
 
-    basicAuth = {
-      user = mkOption {
-        type = with types; nullOr str;
-        default = null;
-        example = "epgstation";
-        description = ''
-          Basic auth username for EPGStation. If <literal>null</literal>, basic
-          auth will be disabled.
-
-          <warning>
-            <para>
-              Basic authentication has known weaknesses, the most critical being
-              that it sends passwords over the network in clear text. Use this
-              feature to control access to EPGStation within your family and
-              friends, but don't rely on it for security.
-            </para>
-          </warning>
-        '';
-      };
-
-      passwordFile = mkOption {
-        type = types.path;
-        default = pkgs.writeText "epgstation-password" defaultPassword;
-        defaultText = literalDocBook ''a file containing <literal>${defaultPassword}</literal>'';
-        example = "/run/keys/epgstation-password";
-        description = ''
-          A file containing the password for <option>basicAuth.user</option>.
-        '';
-      };
-    };
-
-    database =  {
-      name = mkOption {
-        type = types.str;
+    database = {
+      name = lib.mkOption {
+        type = lib.types.str;
         default = "epgstation";
         description = ''
           Name of the MySQL database that holds EPGStation's data.
         '';
       };
 
-      passwordFile = mkOption {
-        type = types.path;
-        default = pkgs.writeText "epgstation-db-password" defaultPassword;
-        defaultText = literalDocBook ''a file containing <literal>${defaultPassword}</literal>'';
+      passwordFile = lib.mkOption {
+        type = lib.types.path;
         example = "/run/keys/epgstation-db-password";
         description = ''
           A file containing the password for the database named
@@ -158,69 +133,106 @@ in
       };
     };
 
-    settings = mkOption {
+    # The defaults for some options come from the upstream template
+    # configuration, which is the one that users would get if they follow the
+    # upstream instructions. This is, in some cases, different from the
+    # application defaults. Some options like encodeProcessNum and
+    # concurrentEncodeNum doesn't have an optimal default value that works for
+    # all hardware setups and/or performance requirements. For those kind of
+    # options, the application default wouldn't always result in the expected
+    # out-of-the-box behavior because it's the responsibility of the user to
+    # configure them according to their needs. In these cases, the value in the
+    # upstream template configuration should serve as a "good enough" default.
+    settings = lib.mkOption {
       description = ''
-        Options to add to config.json.
+        Options to add to config.yml.
 
         Documentation:
         <link xlink:href="https://github.com/l3tnun/EPGStation/blob/master/doc/conf-manual.md"/>
       '';
 
-      default = {};
+      default = { };
       example = {
         recPriority = 20;
         conflictPriority = 10;
       };
 
-      type = types.submodule {
-        freeformType = settingsFmt.type;
+      type = lib.types.submodule {
+        freeformType = yaml.type;
 
-        options.readOnlyOnce = mkOption {
-          type = types.bool;
-          default = false;
-          description = "Don't reload configuration files at runtime.";
+        options.port = lib.mkOption {
+          type = lib.types.port;
+          default = 20772;
+          description = ''
+            HTTP port for EPGStation to listen on.
+          '';
         };
 
-        options.mirakurunPath = mkOption (let
-          sockPath = config.services.mirakurun.unixSocket;
-        in {
-          type = types.str;
-          default = "http+unix://${replaceStrings ["/"] ["%2F"] sockPath}";
-          defaultText = literalExpression ''
-            "http+unix://''${replaceStrings ["/"] ["%2F"] config.${options.services.mirakurun.unixSocket}}"
+        options.socketioPort = lib.mkOption {
+          type = lib.types.port;
+          default = cfg.settings.port + 1;
+          defaultText = lib.literalExpression "config.${opt.settings}.port + 1";
+          description = ''
+            Socket.io port for EPGStation to listen on. It is valid to share
+            ports with <option>${opt.settings}.port</option>.
+          '';
+        };
+
+        options.clientSocketioPort = lib.mkOption {
+          type = lib.types.port;
+          default = cfg.settings.socketioPort;
+          defaultText = lib.literalExpression "config.${opt.settings}.socketioPort";
+          description = ''
+            Socket.io port that the web client is going to connect to. This may
+            be different from <option>${opt.settings}.socketioPort</option> if
+            EPGStation is hidden behind a reverse proxy.
+          '';
+        };
+
+        options.mirakurunPath = with mirakurun; lib.mkOption {
+          type = lib.types.str;
+          default = "http+unix://${lib.replaceStrings ["/"] ["%2F"] sock}";
+          defaultText = lib.literalExpression ''
+            "http+unix://''${lib.replaceStrings ["/"] ["%2F"] config.${option}}"
           '';
           example = "http://localhost:40772";
           description = "URL to connect to Mirakurun.";
-        });
+        };
 
-        options.encode = mkOption {
-          type = with types; listOf attrs;
+        options.encodeProcessNum = lib.mkOption {
+          type = lib.types.ints.positive;
+          default = 4;
+          description = ''
+            The maximum number of processes that EPGStation would allow to run
+            at the same time for encoding or streaming videos.
+          '';
+        };
+
+        options.concurrentEncodeNum = lib.mkOption {
+          type = lib.types.ints.positive;
+          default = 1;
+          description = ''
+            The maximum number of encoding jobs that EPGStation would run at the
+            same time.
+          '';
+        };
+
+        options.encode = lib.mkOption {
+          type = with lib.types; listOf attrs;
           description = "Encoding presets for recorded videos.";
           default = [
             {
-              name = "H264";
-              cmd = "${pkgs.epgstation}/libexec/enc.sh main";
+              name = "H.264";
+              cmd = "%NODE% ${cfg.package}/libexec/enc.js";
               suffix = ".mp4";
-              default = true;
-            }
-            {
-              name = "H264-sub";
-              cmd = "${pkgs.epgstation}/libexec/enc.sh sub";
-              suffix = "-sub.mp4";
             }
           ];
-          defaultText = literalExpression ''
+          defaultText = lib.literalExpression ''
             [
               {
-                name = "H264";
-                cmd = "''${pkgs.epgstation}/libexec/enc.sh main";
+                name = "H.264";
+                cmd = "%NODE% config.${opt.package}/libexec/enc.js";
                 suffix = ".mp4";
-                default = true;
-              }
-              {
-                name = "H264-sub";
-                cmd = "''${pkgs.epgstation}/libexec/enc.sh sub";
-                suffix = "-sub.mp4";
               }
             ]
           '';
@@ -229,14 +241,25 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = !(lib.hasAttr "readOnlyOnce" cfg.settings);
+        message = ''
+          The option config.${opt.settings}.readOnlyOnce can no longer be used
+          since it's been removed. No replacements are available.
+        '';
+      }
+    ];
+
     environment.etc = {
-      "epgstation/operatorLogConfig.json".text = builtins.toJSON logConfig;
-      "epgstation/serviceLogConfig.json".text = builtins.toJSON logConfig;
+      "epgstation/epgUpdaterLogConfig.yml".source = logConfig;
+      "epgstation/operatorLogConfig.yml".source = logConfig;
+      "epgstation/serviceLogConfig.yml".source = logConfig;
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = with cfg; [ port socketioPort ];
+    networking.firewall = lib.mkIf cfg.openFirewall {
+      allowedTCPPorts = with cfg.settings; [ port socketioPort ];
     };
 
     users.users.epgstation = {
@@ -245,13 +268,13 @@ in
       isSystemUser = true;
     };
 
-    users.groups.epgstation = {};
+    users.groups.epgstation = { };
 
-    services.mirakurun.enable = mkDefault true;
+    services.mirakurun.enable = lib.mkDefault true;
 
     services.mysql = {
-      enable = mkDefault true;
-      package = mkDefault pkgs.mariadb;
+      enable = lib.mkDefault true;
+      package = lib.mkDefault pkgs.mariadb;
       ensureDatabases = [ cfg.database.name ];
       # FIXME: enable once mysqljs supports auth_socket
       # ensureUsers = [ {
@@ -260,39 +283,28 @@ in
       # } ];
     };
 
-    services.epgstation.settings = let
-      defaultSettings = {
-        serverPort = cfg.port;
-        socketioPort = cfg.socketioPort;
-        clientSocketioPort = cfg.clientSocketioPort;
+    services.epgstation.settings =
+      let
+        defaultSettings = {
+          dbtype = lib.mkDefault "mysql";
+          mysql = {
+            socketPath = lib.mkDefault "/run/mysqld/mysqld.sock";
+            user = username;
+            password = lib.mkDefault "@dbPassword@";
+            database = cfg.database.name;
+          };
 
-        dbType = mkDefault "mysql";
-        mysql = {
-          user = username;
-          database = cfg.database.name;
-          socketPath = mkDefault "/run/mysqld/mysqld.sock";
-          password = mkDefault "@dbPassword@";
-          connectTimeout = mkDefault 1000;
-          connectionLimit = mkDefault 10;
+          ffmpeg = lib.mkDefault "${pkgs.ffmpeg-full}/bin/ffmpeg";
+          ffprobe = lib.mkDefault "${pkgs.ffmpeg-full}/bin/ffprobe";
+
+          # for disambiguation with TypeScript files
+          recordedFileExtension = lib.mkDefault ".m2ts";
         };
-
-        basicAuth = mkIf (cfg.basicAuth.user != null) {
-          user = mkDefault cfg.basicAuth.user;
-          password = mkDefault "@password@";
-        };
-
-        ffmpeg = mkDefault "${pkgs.ffmpeg-full}/bin/ffmpeg";
-        ffprobe = mkDefault "${pkgs.ffmpeg-full}/bin/ffprobe";
-
-        fileExtension = mkDefault ".m2ts";
-        maxEncode = mkDefault 2;
-        maxStreaming = mkDefault 2;
-      };
-    in
-    mkMerge [
-      defaultSettings
-      (mkIf cfg.usePreconfiguredStreaming streamingConfig)
-    ];
+      in
+      lib.mkMerge [
+        defaultSettings
+        (lib.mkIf cfg.usePreconfiguredStreaming streamingConfig)
+      ];
 
     systemd.tmpfiles.rules = [
       "d '/var/lib/epgstation/streamfiles' - ${username} ${groupname} - -"
@@ -301,15 +313,15 @@ in
     ];
 
     systemd.services.epgstation = {
-      description = pkgs.epgstation.meta.description;
+      inherit description;
+
       wantedBy = [ "multi-user.target" ];
-      after = [
-        "network.target"
-      ] ++ optional config.services.mirakurun.enable "mirakurun.service"
-        ++ optional config.services.mysql.enable "mysql.service";
+      after = [ "network.target" ]
+        ++ lib.optional config.services.mirakurun.enable "mirakurun.service"
+        ++ lib.optional config.services.mysql.enable "mysql.service";
 
       serviceConfig = {
-        ExecStart = "${pkgs.epgstation}/bin/epgstation start";
+        ExecStart = "${cfg.package}/bin/epgstation start";
         ExecStartPre = "+${preStartScript}";
         User = username;
         Group = groupname;

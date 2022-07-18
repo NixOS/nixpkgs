@@ -4,26 +4,27 @@
 
 let
   pname = "vk-messenger";
-  version = "5.2.3";
+  version = "5.3.2";
 
   src = {
     i686-linux = fetchurl {
       url = "https://desktop.userapi.com/rpm/master/vk-${version}.i686.rpm";
-      sha256 = "09zi2rzsank6lhw1z9yar1rp634y6qskvr2i0rvqg2fij7cy6w19";
+      sha256 = "L0nE0zW4LP8udcE8uPy+cH9lLuQsUSq7cF13Gv7w2rI=";
     };
     x86_64-linux = fetchurl {
       url = "https://desktop.userapi.com/rpm/master/vk-${version}.x86_64.rpm";
-      sha256 = "1m6saanpv1k5wc5s58jpf0wsgjsj7haabx8nycm1fjyhky1chirb";
+      sha256 = "spDw9cfDSlIuCwOqREsqXC19tx62TiAz9fjIS9lYjSQ=";
     };
     x86_64-darwin = fetchurl {
-      url = "https://web.archive.org/web/20210310071550/https://desktop.userapi.com/mac/master/vk.dmg";
-      sha256 = "0j5qsr0fyl55d0x46xm4h2ykwr4y9z1dsllhqx5lnc15nc051s9b";
+      url = "https://web.archive.org/web/20220302083827/https://desktop.userapi.com/mac/master/vk.dmg";
+      sha256 = "hxK8I9sF6njfCxSs1KBCHfnG81JGKUgHKAeFLtuCNe0=";
     };
   }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 
   meta = with lib; {
     description = "Simple and Convenient Messaging App for VK";
     homepage = "https://vk.com/messenger";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = [ ];
     platforms = ["i686-linux" "x86_64-linux" "x86_64-darwin"];

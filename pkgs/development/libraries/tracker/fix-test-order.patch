@@ -1,0 +1,9 @@
+diff --git a/tests/libtracker-data/algebra/filter-scope-1.rq b/tests/libtracker-data/algebra/filter-scope-1.rq
+index 7ee5a24ad..a8cd89ca9 100644
+--- a/tests/libtracker-data/algebra/filter-scope-1.rq
++++ b/tests/libtracker-data/algebra/filter-scope-1.rq
+@@ -7,3 +7,4 @@ SELECT ?v ?w ?v2
+       OPTIONAL {  :x :p ?v2 FILTER(?v = 1) }
+     }
+ }
++ORDER BY ?v ?w ?v2

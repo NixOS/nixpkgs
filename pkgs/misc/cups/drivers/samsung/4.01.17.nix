@@ -75,6 +75,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Samsung's Linux printing drivers; includes binaries without source code";
     homepage = "http://www.samsung.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ joko ];

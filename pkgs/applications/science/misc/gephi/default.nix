@@ -58,6 +58,10 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "A platform for visualizing and manipulating large graphs";
     homepage = "https://gephi.org";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = licenses.gpl3;
     maintainers = [ maintainers.taeer ];
     platforms = [ "x86_64-linux" ];

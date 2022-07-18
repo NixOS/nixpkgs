@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, zlib, glib, libpng, freetype, openssl
 , xorg, fontconfig, qtbase, qtwebengine, qtwebchannel, qtsvg, qtwebsockets, xkeyboard_config
-, alsa-lib, libpulseaudio ? null, libredirect, quazip, which, unzip, llvmPackages, writeShellScriptBin
+, alsa-lib, libpulseaudio ? null, libredirect, quazip, which, unzip, llvmPackages_10, writeShellScriptBin
 }:
 
 let
@@ -13,7 +13,7 @@ let
     [ zlib glib libpng freetype xorg.libSM xorg.libICE xorg.libXrender openssl
       xorg.libXrandr xorg.libXfixes xorg.libXcursor xorg.libXinerama
       xorg.libxcb fontconfig xorg.libXext xorg.libX11 alsa-lib qtbase qtwebengine qtwebchannel qtsvg
-      qtwebsockets libpulseaudio quazip llvmPackages.libcxx llvmPackages.libcxxabi
+      qtwebsockets libpulseaudio quazip llvmPackages_10.libcxx llvmPackages_10.libcxxabi # llvmPackages_11 and higher crash https://github.com/NixOS/nixpkgs/issues/161395
     ];
 
   desktopItem = makeDesktopItem {
@@ -23,7 +23,7 @@ let
     comment = "The TeamSpeak voice communication tool";
     desktopName = "TeamSpeak";
     genericName = "TeamSpeak";
-    categories = "Network";
+    categories = [ "Network" ];
   };
 
   fakeLess = writeShellScriptBin "less" "cat";
@@ -93,6 +93,8 @@ stdenv.mkDerivation rec {
       wrapProgram $out/bin/ts3client \
         --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
         --set QT_PLUGIN_PATH "${qtbase}/${qtbase.qtPluginPrefix}" \
+    '' /* wayland is currently broken, remove when TS3 fixes that */ + ''
+        --set QT_QPA_PLATFORM xcb \
         --set NIX_REDIRECTS /usr/share/X11/xkb=${xkeyboard_config}/share/X11/xkb
     '';
 
@@ -102,6 +104,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "The TeamSpeak voice communication tool";
     homepage = "https://teamspeak.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = {
       fullName = "Teamspeak client license";
       url = "https://www.teamspeak.com/en/privacy-and-terms/";

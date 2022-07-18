@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     platforms = ["x86_64-linux"];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.benley ];
     homepage = "https://www.insynchq.com";

@@ -1,8 +1,9 @@
-{ azure-core
+{ lib
+, stdenv
+, azure-core
 , bokeh
 , buildPythonPackage
 , click
-, configparser
 , docker_pycreds
 , fetchFromGitHub
 , flask
@@ -10,8 +11,8 @@
 , GitPython
 , jsonref
 , jsonschema
-, lib
 , matplotlib
+, nbclient
 , nbformat
 , pandas
 , pathtools
@@ -22,45 +23,45 @@
 , pytest-mock
 , pytest-xdist
 , pytestCheckHook
-, python
 , python-dateutil
+, pythonOlder
+, pytorch
 , pyyaml
 , requests
 , scikit-learn
 , sentry-sdk
+, setproctitle
 , setuptools
 , shortuuid
-, stdenv
+, substituteAll
 , tqdm
-, yaspin
 }:
 
 buildPythonPackage rec {
   pname = "wandb";
-  version = "0.12.10";
+  version = "0.12.20";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "client";
-    rev = "v${version}";
-    sha256 = "198c6zx7xih74cw0dwfqw7s7b7whik7wv4nfq6x6xw0kw86r6hby";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-zS3DA06uLfUApe0kDAbqPA+2is70bnb9EifgFWqcuRg=";
   };
 
-  # The wandb requirements.txt does not distinguish python2/3 dependencies. We
-  # need to drop the subprocess32 dependency when building for python3.
-  patchPhase = ''
-    substituteInPlace requirements.txt --replace "subprocess32>=3.5.3" ""
-  '';
+  patches = [
+    (substituteAll {
+      src = ./hardcode-git-path.patch;
+      git = "${lib.getBin git}/bin/git";
+    })
+  ];
 
-  # git is not a setup.py dependency of wandb, but wandb does expect git to be
-  # in PATH. See https://gist.github.com/samuela/57aeee710e41ab2bf361b7ed8fbbeabf
-  # for the error message, and an example usage here: https://github.com/wandb/client/blob/master/wandb/sdk/internal/meta.py#L139-L141.
   # setuptools is necessary since pkg_resources is required at runtime.
   propagatedBuildInputs = [
     click
-    configparser
     docker_pycreds
-    git
     GitPython
     pathtools
     promise
@@ -70,13 +71,38 @@ buildPythonPackage rec {
     pyyaml
     requests
     sentry-sdk
+    setproctitle
     setuptools
     shortuuid
-    yaspin
+  ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  checkInputs = [
+    azure-core
+    bokeh
+    flask
+    jsonref
+    jsonschema
+    matplotlib
+    nbclient
+    nbformat
+    pandas
+    pydantic
+    pytest-mock
+    pytest-xdist
+    pytestCheckHook
+    pytorch
+    scikit-learn
+    tqdm
   ];
 
   disabledTestPaths = [
     # Tests that try to get chatty over sockets or spin up servers, not possible in the nix build environment.
+    "tests/integrations/test_keras.py"
+    "tests/integrations/test_torch.py"
     "tests/test_cli.py"
     "tests/test_data_types.py"
     "tests/test_file_stream.py"
@@ -89,6 +115,7 @@ buildPythonPackage rec {
     "tests/test_metric_full.py"
     "tests/test_metric_internal.py"
     "tests/test_mode_disabled.py"
+    "tests/test_model_workflows.py"
     "tests/test_mp_full.py"
     "tests/test_public_api.py"
     "tests/test_redir.py"
@@ -97,13 +124,18 @@ buildPythonPackage rec {
     "tests/test_start_method.py"
     "tests/test_tb_watcher.py"
     "tests/test_telemetry_full.py"
+    "tests/test_util.py"
     "tests/wandb_agent_test.py"
     "tests/wandb_artifacts_test.py"
-    "tests/wandb_history_test.py"
     "tests/wandb_integration_test.py"
     "tests/wandb_run_test.py"
     "tests/wandb_settings_test.py"
     "tests/wandb_sweep_test.py"
+    "tests/wandb_tensorflow_test.py"
+    "tests/wandb_verify_test.py"
+
+    # Requires metaflow, which is not yet packaged.
+    "tests/integrations/test_metaflow.py"
 
     # Fails and borks the pytest runner as well.
     "tests/wandb_test.py"
@@ -112,24 +144,15 @@ buildPythonPackage rec {
     "tests/test_tables.py"
   ];
 
-  checkInputs = [
-    azure-core
-    bokeh
-    flask
-    jsonref
-    jsonschema
-    matplotlib
-    nbformat
-    pandas
-    pydantic
-    pytest-mock
-    pytest-xdist
-    pytestCheckHook
-    scikit-learn
-    tqdm
+  # Disable test that fails on darwin due to issue with python3Packages.psutil:
+  # https://github.com/giampaolo/psutil/issues/1219
+  disabledTests = lib.optional stdenv.isDarwin [
+    "test_tpu_system_stats"
   ];
 
-  pythonImportsCheck = [ "wandb" ];
+  pythonImportsCheck = [
+    "wandb"
+  ];
 
   meta = with lib; {
     description = "A CLI and library for interacting with the Weights and Biases API";

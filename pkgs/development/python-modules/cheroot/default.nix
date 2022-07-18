@@ -72,6 +72,7 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     "http_over_https_error"
     "bind_addr_unix"
+    "test_ssl_env"
   ];
 
   disabledTestPaths = [

@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
 let
-  inherit (lib) mkOption types mkIf;
+  inherit (lib) mapAttrs mkIf mkOption optional optionals types;
 
   cfg = config.services.kmscon;
 
@@ -26,6 +26,19 @@ in {
         description = "Whether to use 3D hardware acceleration to render the console.";
         type = types.bool;
         default = false;
+      };
+
+      fonts = mkOption {
+        description = "Fonts used by kmscon, in order of priority.";
+        default = null;
+        example = lib.literalExpression ''[ { name = "Source Code Pro"; package = pkgs.source-code-pro; } ]'';
+        type = with types;
+          let fontType = submodule {
+                options = {
+                  name = mkOption { type = str; description = "Font name, as used by fontconfig."; };
+                  package = mkOption { type = package; description = "Package providing the font."; };
+                };
+          }; in nullOr (nonEmptyListOf fontType);
       };
 
       extraConfig = mkOption {
@@ -87,11 +100,17 @@ in {
 
     systemd.services.systemd-vconsole-setup.enable = false;
 
-    services.kmscon.extraConfig = mkIf cfg.hwRender ''
-      drm
-      hwaccel
-    '';
+    services.kmscon.extraConfig =
+      let
+        render = optionals cfg.hwRender [ "drm" "hwaccel" ];
+        fonts = optional (cfg.fonts != null) "font-name=${lib.concatMapStringsSep ", " (f: f.name) cfg.fonts}";
+      in lib.concatStringsSep "\n" (render ++ fonts);
 
     hardware.opengl.enable = mkIf cfg.hwRender true;
+
+    fonts = mkIf (cfg.fonts != null) {
+      fontconfig.enable = true;
+      fonts = map (f: f.package) cfg.fonts;
+    };
   };
 }

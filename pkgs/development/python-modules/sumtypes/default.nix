@@ -1,18 +1,32 @@
-{ lib, buildPythonPackage, fetchFromGitHub, attrs, pytestCheckHook }:
+{ lib
+, attrs
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "sumtypes";
-  version = "0.1a5";
+  version = "0.1a6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "radix";
-    repo = "sumtypes";
+    repo = pname;
     rev = version;
-    sha256 = "0wcw1624xxx2h6lliv13b59blg60j8sgf5v2ni3cwx3j4wld4csr";
+    sha256 = "sha256-qwQyFKVnGEqHUqFmUSnHVvedsp2peM6rJZcS90paLOo=";
   };
 
-  propagatedBuildInputs = [ attrs ];
-  checkInputs = [ pytestCheckHook ];
+  propagatedBuildInputs = [
+    attrs
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "Algebraic data types for Python";

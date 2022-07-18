@@ -1,20 +1,20 @@
 { lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
 }:
 
 buildGoModule rec {
   pname = "trivy";
-  version = "0.23.0";
+  version = "0.29.2";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-6eOoFZ2ms1upnbO4brKYKBSPw/9cnQT1Cz/0A4dwoxc=";
+    sha256 = "sha256-IZ94kYnZ1iNX4sgYF/XvRNvycXJ4fNmRwFgSpYcSopU=";
   };
-
-  vendorSha256 = "sha256-ZHVcLmjz7cfL5CjUwCEoWr5fgWZmNsCzHL83Mr+p7kA=";
+  vendorSha256 = "sha256-C1dOeVt+ocqj3s3tSXn8B/vHTRRWj8XU5RWmlQ0lZdA=";
 
   excludedPackages = "misc";
 
@@ -24,7 +24,7 @@ buildGoModule rec {
     "-X main.version=v${version}"
   ];
 
-  # Tests requires network access
+  # Tests require network access
   doCheck = false;
 
   doInstallCheck = true;

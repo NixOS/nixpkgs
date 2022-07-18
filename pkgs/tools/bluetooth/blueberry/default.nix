@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bluez-tools
     cinnamon.xapps
-    gnome.gnome-bluetooth
+    gnome.gnome-bluetooth_1_0
     python3Packages.python
     util-linux
   ];

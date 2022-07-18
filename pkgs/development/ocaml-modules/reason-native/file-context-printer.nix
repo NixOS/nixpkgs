@@ -3,7 +3,7 @@
 {
   pname = "file-context-printer";
 
-  buildInputs = [
+  nativeBuildInputs = [
     reason
   ];
 

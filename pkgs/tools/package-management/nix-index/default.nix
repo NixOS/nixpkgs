@@ -4,22 +4,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-index";
-  version = "0.1.2";
+  version = "unstable-2022-03-07";
 
   src = fetchFromGitHub {
     owner = "bennofs";
     repo = "nix-index";
-    rev = "v${version}";
-    sha256 = "05fqfwz34n4ijw7ydw2n6bh4bv64rhks85cn720sy5r7bmhfmfa8";
+    rev = "f09548f66790d2d7d53f07ad2af62993d7cabb08";
+    sha256 = "sha256-xIJCzEHQJ2kHRbT4Ejrb5R5e/VqjKrklV7XneZIiyUg=";
   };
 
-  cargoSha256 = "161lz96a52s53rhhkxxhcg41bsmh8w6rv6nl8gwqmg3biszy7hah";
+  cargoSha256 = "sha256-2Yhnacsx8EWsfZfcfKhV687cblyFDmsfdqGZoK6Lulo=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl curl ]
     ++ lib.optional stdenv.isDarwin Security;
-
-  doCheck = !stdenv.isDarwin;
 
   postInstall = ''
     mkdir -p $out/etc/profile.d

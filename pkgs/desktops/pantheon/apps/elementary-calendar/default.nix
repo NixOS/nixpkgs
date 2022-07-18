@@ -2,8 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , nix-update-script
-, appstream-glib
-, desktop-file-utils
 , meson
 , ninja
 , pkg-config
@@ -11,7 +9,6 @@
 , vala
 , wrapGAppsHook
 , clutter
-, elementary-icon-theme
 , evolution-data-server
 , folks
 , geoclue2
@@ -26,18 +23,16 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-calendar";
-  version = "6.1.0";
+  version = "6.1.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "calendar";
     rev = version;
-    sha256 = "sha256-LaVJ7QLc0UdSLgLIuHP4Anc7kPUelZW9PnIWuqKGtEQ=";
+    sha256 = "sha256-c2c8QNifBDzb0CelB72AIL4G694l6KCSXBjWIHrzZJo=";
   };
 
   nativeBuildInputs = [
-    appstream-glib
-    desktop-file-utils
     meson
     ninja
     pkg-config
@@ -48,7 +43,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     clutter
-    elementary-icon-theme
     evolution-data-server
     folks
     geoclue2

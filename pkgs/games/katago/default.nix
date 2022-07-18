@@ -1,8 +1,7 @@
 { stdenv
 , boost
 , cmake
-, cudatoolkit
-, cudnn
+, cudaPackages
 , eigen
 , fetchFromGitHub
 , gperftools
@@ -29,14 +28,14 @@ assert !enableGPU -> (
 # of gcc.  If you need to use cuda10, please override stdenv with gcc8Stdenv
 stdenv.mkDerivation rec {
   pname = "katago";
-  version = "1.10.0";
-  githash = "ff49d04ad6bcfa056c63492439a41e2f3bce0847";
+  version = "1.11.0";
+  githash = "d8d0cd76cf73df08af3d7061a639488ae9494419";
 
   src = fetchFromGitHub {
     owner = "lightvector";
     repo = "katago";
     rev = "v${version}";
-    sha256 = "sha256-ZLJNNjZ5RdOktWDp88d/ItpokANl2EJ0Gbt9oMGm1Og=";
+    sha256 = "sha256-TZKkkYe2PPzgPhItBZBSJDwU3anhsujuCGIYru55OtU=";
   };
 
   fakegit = writeShellScriptBin "git" "echo ${githash}";
@@ -52,7 +51,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (!enableGPU) [
     eigen
   ] ++ lib.optionals (enableGPU && enableCuda) [
-    cudnn
+    cudaPackages.cudnn
+    cudaPackages.cudatoolkit
     mesa.drivers
   ] ++ lib.optionals (enableGPU && !enableCuda) [
     opencl-headers
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     cd cpp/
   '' + lib.optionalString enableCuda ''
-    export CUDA_PATH="${cudatoolkit}"
+    export CUDA_PATH="${cudaPackages.cudatoolkit}"
     export EXTRA_LDFLAGS="-L/run/opengl-driver/lib"
   '';
 

@@ -1,19 +1,19 @@
 { stdenv, lib, fetchurl, unzip }:
 let
   # You can check the latest version with `curl -sS https://update.tabnine.com/bundles/version`
-  version = "4.0.60";
+  version = "4.4.40";
   supportedPlatforms = {
     "x86_64-linux" = {
       name = "x86_64-unknown-linux-musl";
-      sha256 = "sha256-v5UxRMDDQxpqIKMe9mYMXcpWiacdXzFfaQ6bgab/WmQ=";
+      sha256 = "sha256-goPPGU4oZWBD/C15rbbX5YMqua16A4MdLhBoC4JxaCI=";
     };
     "x86_64-darwin" = {
       name = "x86_64-apple-darwin";
-      sha256 = "sha256-vFMMzMatuu1TY6dnBXycv0HxvkOj4Axfx8p0VW0hOic=";
+      sha256 = "sha256-CgYHQ91U6K3+kMyOSSia2B7IncR5u0eq9h3EZiBsRdU=";
     };
     "aarch64-darwin" = {
       name = "aarch64-apple-darwin";
-      sha256 = "sha256-DUeDQLtvSY7W2nG60UunluCSO0ijJP2CYxpRIZA4LTE=";
+      sha256 = "sha256-JwX3TdKYmLQO3mWb15Ds/60VAAurGxqfJlMCQqy2pxg=";
     };
   };
   platform =

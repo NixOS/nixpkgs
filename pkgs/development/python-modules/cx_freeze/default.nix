@@ -1,12 +1,12 @@
-{ lib, buildPythonPackage, pythonOlder, fetchPypi, ncurses, importlib-metadata }:
+{ stdenv, lib, buildPythonPackage, pythonOlder, fetchPypi, ncurses, importlib-metadata }:
 
 buildPythonPackage rec {
   pname = "cx_Freeze";
-  version = "6.9";
+  version = "6.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "673aa3199af2ef87fc03a43a30e5d78b27ced2cedde925da89c55b5657da267b";
+    sha256 = "sha256-5bcb9XuYgawUL76+riyLDTKUtW9uSKtkAyMh47Giuic=";
   };
 
   disabled = pythonOlder "3.5";
@@ -25,6 +25,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "A set of scripts and modules for freezing Python scripts into executables";
     homepage = "https://marcelotduarte.github.io/cx_Freeze/";
     license = licenses.psfl;

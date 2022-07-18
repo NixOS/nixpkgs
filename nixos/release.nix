@@ -15,8 +15,9 @@ let
     (if stableBranch then "." else "pre") + "${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
 
   # Run the tests for each platform.  You can run a test by doing
-  # e.g. ‘nix-build -A tests.login.x86_64-linux’, or equivalently,
-  # ‘nix-build tests/login.nix -A result’.
+  # e.g. ‘nix-build release.nix -A tests.login.x86_64-linux’,
+  # or equivalently, ‘nix-build tests/login.nix’.
+  # See also nixosTests in pkgs/top-level/all-packages.nix
   allTestsForSystem = system:
     import ./tests/all-tests.nix {
       inherit system;
@@ -24,7 +25,19 @@ let
       callTest = t: {
         ${system} = hydraJob t.test;
       };
+    } // {
+      # for typechecking of the scripts and evaluation of
+      # the nodes, without running VMs.
+      allDrivers =
+        import ./tests/all-tests.nix {
+        inherit system;
+        pkgs = import ./.. { inherit system; };
+        callTest = t: {
+          ${system} = hydraJob t.test.driver;
+        };
+      };
     };
+
   allTests =
     foldAttrs recursiveUpdate {} (map allTestsForSystem supportedSystems);
 
@@ -138,6 +151,13 @@ in rec {
   # Build the initial ramdisk so Hydra can keep track of its size over time.
   initialRamdisk = buildFromConfig ({ ... }: { }) (config: config.system.build.initialRamdisk);
 
+  kexec = forMatchingSystems supportedSystems (system: (import lib/eval-config.nix {
+    inherit system;
+    modules = [
+      ./modules/installer/netboot/netboot-minimal.nix
+    ];
+  }).config.system.build.kexecTree);
+
   netboot = forMatchingSystems supportedSystems (system: makeNetboot {
     module = ./modules/installer/netboot/netboot-minimal.nix;
     inherit system;
@@ -150,13 +170,13 @@ in rec {
   });
 
   iso_plasma5 = forMatchingSystems [ "x86_64-linux" ] (system: makeIso {
-    module = ./modules/installer/cd-dvd/installation-cd-graphical-plasma5.nix;
+    module = ./modules/installer/cd-dvd/installation-cd-graphical-calamares-plasma5.nix;
     type = "plasma5";
     inherit system;
   });
 
   iso_gnome = forMatchingSystems [ "x86_64-linux" ] (system: makeIso {
-    module = ./modules/installer/cd-dvd/installation-cd-graphical-gnome.nix;
+    module = ./modules/installer/cd-dvd/installation-cd-graphical-calamares-gnome.nix;
     type = "gnome";
     inherit system;
   });
@@ -201,6 +221,29 @@ in rec {
 
   );
 
+  # KVM image for proxmox in VMA format
+  proxmoxImage = forMatchingSystems [ "x86_64-linux" ] (system:
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules = [
+        ./modules/virtualisation/proxmox-image.nix
+      ];
+    }).config.system.build.VMA)
+  );
+
+  # LXC tarball for proxmox
+  proxmoxLXC = forMatchingSystems [ "x86_64-linux" ] (system:
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules = [
+        ./modules/virtualisation/proxmox-lxc.nix
+      ];
+    }).config.system.build.tarball)
+  );
 
   # A disk image that can be imported to Amazon EC2 and registered as an AMI
   amazonImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
@@ -298,38 +341,11 @@ in rec {
     "mkdir $out; ln -s $toplevel $out/dummy");
 
 
-  # Provide a tarball that can be unpacked into an SD card, and easily
-  # boot that system from uboot (like for the sheevaplug).
-  # The pc variant helps preparing the expression for the system tarball
-  # in a machine faster than the sheevpalug
-  /*
-  system_tarball_pc = forAllSystems (system: makeSystemTarball {
-    module = ./modules/installer/cd-dvd/system-tarball-pc.nix;
-    inherit system;
-  });
-  */
-
   # Provide container tarball for lxc, libvirt-lxc, docker-lxc, ...
   containerTarball = forAllSystems (system: makeSystemTarball {
     module = ./modules/virtualisation/lxc-container.nix;
     inherit system;
   });
-
-  /*
-  system_tarball_fuloong2f =
-    assert builtins.currentSystem == "mips64-linux";
-    makeSystemTarball {
-      module = ./modules/installer/cd-dvd/system-tarball-fuloong2f.nix;
-      system = "mips64-linux";
-    };
-
-  system_tarball_sheevaplug =
-    assert builtins.currentSystem == "armv5tel-linux";
-    makeSystemTarball {
-      module = ./modules/installer/cd-dvd/system-tarball-sheevaplug.nix;
-      system = "armv5tel-linux";
-    };
-  */
 
   tests = allTests;
 

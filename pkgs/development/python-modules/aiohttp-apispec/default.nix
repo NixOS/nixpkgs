@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "aiohttp-apispec";
-  version = "3.0.0b1";
+  version = "3.0.0b2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "maximdanilchenko";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-LGdi5ZhJ1G0GxUJVBZnwW3Q+x3Yo9FRV9b6REPlq7As=";
+    hash = "sha256-C+/M25oCLTNGGEUj2EyXn3UjcvPvDYFmmUW8IOoF1uU=";
   };
 
   propagatedBuildInputs = [
@@ -39,11 +39,6 @@ buildPythonPackage rec {
     pytest-aiohttp
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "jinja2<3.0" "jinja2"
-  '';
 
   pythonImportsCheck = [
     "aiohttp_apispec"

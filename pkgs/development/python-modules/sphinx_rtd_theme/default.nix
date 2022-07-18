@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "docutils<0.17" "docutils"
+      --replace "docutils<0.18" "docutils"
   '';
 
   preBuild = ''

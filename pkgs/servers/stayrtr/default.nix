@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , buildGoModule
 , stayrtr
-, testVersion
+, testers
 }:
 
 buildGoModule rec {
@@ -23,7 +23,7 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
-  passthru.tests.version = testVersion {
+  passthru.tests.version = testers.testVersion {
     package = stayrtr;
   };
 

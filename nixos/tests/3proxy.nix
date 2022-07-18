@@ -139,7 +139,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     peer0.wait_for_unit("network-online.target")
 
     peer1.wait_for_unit("3proxy.service")
-    peer1.wait_for_open_port("9999")
+    peer1.wait_for_open_port(9999)
 
     # test none auth
     peer0.succeed(
@@ -153,7 +153,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     )
 
     peer2.wait_for_unit("3proxy.service")
-    peer2.wait_for_open_port("9999")
+    peer2.wait_for_open_port(9999)
 
     # test iponly auth
     peer0.succeed(
@@ -167,7 +167,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     )
 
     peer3.wait_for_unit("3proxy.service")
-    peer3.wait_for_open_port("9999")
+    peer3.wait_for_open_port(9999)
 
     # test strong auth
     peer0.succeed(

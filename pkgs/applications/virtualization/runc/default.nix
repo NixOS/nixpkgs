@@ -16,13 +16,13 @@
 
 buildGoModule rec {
   pname = "runc";
-  version = "1.1.0";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";
     rev = "v${version}";
-    sha256 = "sha256-svLxxfiRDLWkdRuHXaDyH5Ta6qmptI8z+s41iZKgbWM=";
+    sha256 = "sha256-s0VRj/hjevtTZ9rUQsAsI2pg4ygahlrBIfFdETWy9W0=";
   };
 
   vendorSha256 = null;

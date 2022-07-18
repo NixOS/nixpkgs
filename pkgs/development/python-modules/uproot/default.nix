@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "uproot";
-  version = "4.1.9";
+  version = "4.2.0";
 
   # fetch from github for tests
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "uproot4";
     rev = version;
-    sha256 = "035gljxm18hvpfvc7nsd7lhawwq3np5sg1y86pzcxc680c6rj6lx";
+    sha256 = "sha256-ft2VXYGb+iPqRUrtOBvl7SgTPfPR4+IOdYFVTNbQAEw=";
   };
 
   propagatedBuildInputs = [

@@ -38,7 +38,7 @@ with lib; mkCoqDerivation {
   '';
 
   propagatedBuildInputs =
-    [ mathcomp.ssreflect mathcomp.algebra mathcomp-finmap mathcomp-bigenough ];
+    [ mathcomp.ssreflect mathcomp.algebra mathcomp-finmap mathcomp.fingroup mathcomp-bigenough ];
 
   meta = {
     description = "A Coq/SSReflect Library for Monoidal Rings and Multinomials";

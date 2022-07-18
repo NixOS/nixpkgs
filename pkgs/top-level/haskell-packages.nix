@@ -8,18 +8,20 @@ let
     "ghc8102BinaryMinimal"
     "ghc8107Binary"
     "ghc8107BinaryMinimal"
+    "ghc922Binary"
+    "ghc922BinaryMinimal"
     "ghcjs"
     "ghcjs810"
     "integer-simple"
     "native-bignum"
     "ghc902"
-    "ghc921"
+    "ghc923"
     "ghcHEAD"
   ];
 
   nativeBignumIncludes = [
     "ghc902"
-    "ghc921"
+    "ghc923"
     "ghcHEAD"
   ];
 
@@ -76,12 +78,23 @@ in {
       minimal = true;
     };
 
+    ghc922Binary = callPackage ../development/compilers/ghc/9.2.2-binary.nix {
+      llvmPackages = pkgs.llvmPackages_12;
+    };
+    ghc922BinaryMinimal = callPackage ../development/compilers/ghc/9.2.2-binary.nix {
+      llvmPackages = pkgs.llvmPackages_12;
+      minimal = true;
+    };
+
     ghc884 = callPackage ../development/compilers/ghc/8.8.4.nix {
       bootPkgs =
         # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
-        # Musl bindists do not exist for ghc 8.6.5, so we use 8.10.* for them
-        if stdenv.isAarch64 || stdenv.hostPlatform.isMusl then
+        # 8.10.2 is needed as using 8.10.7 is broken due to RTS-incompatibilities
+        if stdenv.isAarch64 then
           packages.ghc8102BinaryMinimal
+        # Musl bindists do not exist for ghc 8.6.5, so we use 8.10.* for them
+        else if stdenv.hostPlatform.isMusl then
+          packages.ghc8102Binary
         else
           packages.ghc865Binary;
       inherit (buildPackages.python3Packages) sphinx;
@@ -95,6 +108,9 @@ in {
         # Musl bindists do not exist for ghc 8.6.5, so we use 8.10.* for them
         if stdenv.isAarch64 || stdenv.isAarch32 then
           packages.ghc8107BinaryMinimal
+        else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
+          # to my (@a-m-joseph) knowledge there are no newer official binaries for this platform
+          packages.ghc865Binary
         else
           packages.ghc8107Binary;
       inherit (buildPackages.python3Packages) sphinx;
@@ -111,6 +127,8 @@ in {
         # the oldest ghc with aarch64-darwin support is 8.10.5
         if stdenv.isAarch64 || stdenv.isAarch32 then
           packages.ghc8107BinaryMinimal
+        else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
+          packages.ghc8107
         else
           packages.ghc8107Binary;
       inherit (buildPackages.python3Packages) sphinx;
@@ -118,11 +136,13 @@ in {
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
       llvmPackages = pkgs.llvmPackages_12;
     };
-    ghc921 = callPackage ../development/compilers/ghc/9.2.1.nix {
+    ghc923 = callPackage ../development/compilers/ghc/9.2.3.nix {
       bootPkgs =
         # aarch64 ghc8107Binary exceeds max output size on hydra
         if stdenv.isAarch64 || stdenv.isAarch32 then
           packages.ghc8107BinaryMinimal
+        else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
+          packages.ghc8107
         else
           packages.ghc8107Binary;
       inherit (buildPackages.python3Packages) sphinx;
@@ -134,7 +154,11 @@ in {
       llvmPackages = pkgs.llvmPackages_12;
     };
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
-      bootPkgs = packages.ghc8107Binary;
+      bootPkgs =
+        if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
+          packages.ghc8107
+        else
+          packages.ghc8107Binary;
       inherit (buildPackages.python3Packages) sphinx;
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
@@ -209,6 +233,18 @@ in {
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
       packageSetConfig = bootstrapPackageSet;
     };
+    ghc922Binary = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc922Binary;
+      ghc = bh.compiler.ghc922Binary;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
+      packageSetConfig = bootstrapPackageSet;
+    };
+    ghc922BinaryMinimal = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc922BinaryMinimal;
+      ghc = bh.compiler.ghc922BinaryMinimal;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
+      packageSetConfig = bootstrapPackageSet;
+    };
     ghc884 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc884;
       ghc = bh.compiler.ghc884;
@@ -224,9 +260,9 @@ in {
       ghc = bh.compiler.ghc902;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.0.x.nix { };
     };
-    ghc921 = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc921;
-      ghc = bh.compiler.ghc921;
+    ghc923 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc923;
+      ghc = bh.compiler.ghc923;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
     };
     ghcHEAD = callPackage ../development/haskell-modules {
@@ -245,29 +281,36 @@ in {
 
     # The integer-simple attribute set contains package sets for all the GHC compilers
     # using integer-simple instead of integer-gmp.
-    integer-simple = let
-      integerSimpleGhcNames = pkgs.lib.filter
-        (name: ! builtins.elem name integerSimpleExcludes)
-        (pkgs.lib.attrNames packages);
-    in pkgs.lib.genAttrs integerSimpleGhcNames (name: packages.${name}.override {
-      ghc = bh.compiler.integer-simple.${name};
-      buildHaskellPackages = bh.packages.integer-simple.${name};
-      overrides = _self : _super : {
-        integer-simple = null;
-        integer-gmp = null;
-      };
-    });
+    integer-simple =
+      let
+        integerSimpleGhcNames = pkgs.lib.filter
+          (name: ! builtins.elem name integerSimpleExcludes)
+          (pkgs.lib.attrNames packages);
+      in
+      pkgs.lib.genAttrs integerSimpleGhcNames
+        (name:
+          packages.${name}.override (oldAttrs: {
+            ghc = bh.compiler.integer-simple.${name};
+            buildHaskellPackages = bh.packages.integer-simple.${name};
+            overrides =
+              pkgs.lib.composeExtensions
+                (oldAttrs.overrides or (_: _: {}))
+                (_: _: { integer-simple = null; });
+          })
+        );
 
-    native-bignum = let
-      nativeBignumGhcNames = pkgs.lib.filter
-        (name: builtins.elem name nativeBignumIncludes)
-        (pkgs.lib.attrNames compiler);
-    in pkgs.lib.genAttrs nativeBignumGhcNames (name: packages.${name}.override {
-      ghc = bh.compiler.native-bignum.${name};
-      buildHaskellPackages = bh.packages.native-bignum.${name};
-      overrides = _self : _super : {
-        integer-gmp = null;
-      };
-    });
+    native-bignum =
+      let
+        nativeBignumGhcNames = pkgs.lib.filter
+          (name: builtins.elem name nativeBignumIncludes)
+          (pkgs.lib.attrNames compiler);
+      in
+      pkgs.lib.genAttrs nativeBignumGhcNames
+        (name:
+          packages.${name}.override {
+            ghc = bh.compiler.native-bignum.${name};
+            buildHaskellPackages = bh.packages.native-bignum.${name};
+          }
+        );
   };
 }

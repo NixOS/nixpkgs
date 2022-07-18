@@ -5,6 +5,7 @@ with lib; mkCoqDerivation {
   pname = "coqhammer";
   owner = "lukaszcz";
   defaultVersion = with versions; switch coq.coq-version [
+    { case = "8.15"; out = "1.3.2-coq8.15"; }
     { case = "8.14"; out = "1.3.2-coq8.14"; }
     { case = "8.13"; out = "1.3.2-coq8.13"; }
     { case = "8.12"; out = "1.3.2-coq8.12"; }
@@ -13,6 +14,8 @@ with lib; mkCoqDerivation {
     { case = "8.9";  out = "1.1.1-coq8.9"; }
     { case = "8.8";  out = "1.1-coq8.8"; }
   ] null;
+  release."1.3.2-coq8.15".sha256 = "sha256:0n0y9wda8bx88r17ls9541ibxw013ghp73zshgb65bi7ibznbhha";
+  release."1.3.2-coq8.15".rev = "9a3e689036f12c09800ca3bac05054af0cc49233";
   release."1.3.2-coq8.14".sha256 = "sha256:1pvs4p95lr31jb86f33p2q9v8zq3xbci1fk6s6a2g2snfxng1574";
   release."1.3.2-coq8.13".sha256 = "sha256:0krsm8qj9lgfbggxv2jhkbk3vy2cz63qypnarnl31fdmpykchi4b";
   release."1.3.2-coq8.12".sha256 = "sha256:08mnr13lrdnpims6kf8pk6axf4s8qqs0a71hzg3frkx21d6nawhh";
@@ -25,8 +28,10 @@ with lib; mkCoqDerivation {
   release."1.3-coq8.12".sha256   = "1q1y3cwhd98pkm98g71fsdjz85bfwgcz2xn7s7wwmiraifv5l6z8";
   release."1.3-coq8.11".sha256   = "08zf8qfna7b9p2myfaz4g7bas3a1q1156x78n5isqivlnqfrjc1b";
   release."1.3-coq8.10".sha256   = "1fj8497ir4m79hyrmmmmrag01001wrby0h24wv6525vz0w5py3cd";
-  release."1.1.1-coq8.9".sha256  = "1knjmz4hr8vlp103j8n4fyb2lfxysnm512gh3m2kp85n6as6fvb9";
-  release."1.1-coq8.8".sha256    = "0ms086wp4jmrzyglb8wymchzyflflk01nsfsk4r6qv8rrx81nx9h";
+  release."1.1.1-coq8.9" = { sha256 = "1knjmz4hr8vlp103j8n4fyb2lfxysnm512gh3m2kp85n6as6fvb9";
+                             rev    = "f8b4d81a213aa1f25afbe53c7c9ca1b15e3d42bc"; };
+  release."1.1-coq8.8" =   { sha256 = "0ms086wp4jmrzyglb8wymchzyflflk01nsfsk4r6qv8rrx81nx9h";
+                             rev    = "c3cb54b4d5f33fab372d33c7189861368a08fa22"; };
 
   release."1.3.1-coq8.13".version  = "1.3.1";
   release."1.3.1-coq8.12".version  = "1.3.1";

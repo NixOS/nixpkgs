@@ -4,6 +4,7 @@
 , pytest-runner
 , setuptools-scm
 , pytestCheckHook
+, six
 , lib
 }:
 
@@ -17,12 +18,12 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pytest-runner
     setuptools-scm
   ];
 
   checkInputs = [
     pytestCheckHook
+    six
   ];
 
   meta = with lib; {

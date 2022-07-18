@@ -21,14 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libwnck";
-  version = "40.0";
+  version = "40.1";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "MMt5qDn5DNZvPiAvP5jLUWb6DNm5LrVxrZxHCkMCHYM=";
+    sha256 = "AxNPoRTvP740B1qoNnj1iqLevp/O9OojwHeeKGAdZhE=";
   };
 
   nativeBuildInputs = [

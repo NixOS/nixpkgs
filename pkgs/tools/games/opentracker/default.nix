@@ -52,14 +52,20 @@ buildDotnetModule rec {
     xinput
   ];
 
-  autoPatchelfIgnoreMissingDeps = true; # Attempts to patchelf unneeded SOs
+  autoPatchelfIgnoreMissingDeps = [ "libc.musl-x86_64.so.1" ]; # Attempts to patchelf unneeded SOs
 
   meta = with lib; {
     description = "A tracking application for A Link to the Past Randomizer";
     homepage = "https://github.com/trippsc2/OpenTracker";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      # deps
+      binaryBytecode
+      binaryNativeCode
+    ];
     license = licenses.mit;
     maintainers = [ maintainers.ivar ];
     mainProgram = "OpenTracker";
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }

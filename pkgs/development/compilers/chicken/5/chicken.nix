@@ -45,10 +45,15 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
   postCheck = ''
     ./csi -R chicken.pathname -R chicken.platform \
        -p "(assert (equal? \"${toString binaryVersion}\" (pathname-file (car (repository-path)))))"
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/chicken -version
   '';
 
   meta = {

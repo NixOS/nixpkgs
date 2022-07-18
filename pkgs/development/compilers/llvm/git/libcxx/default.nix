@@ -1,4 +1,6 @@
-{ lib, stdenv, llvm_meta, src, cmake, python3, fixDarwinDylibNames, version
+{ lib, stdenv, llvm_meta
+, monorepoSrc, runCommand
+, cmake, python3, fixDarwinDylibNames, version
 , libcxxabi
 , enableShared ? !stdenv.hostPlatform.isStatic
 
@@ -10,12 +12,26 @@
 , headersOnly ? false
 }:
 
+let
+  basename = "libcxx";
+in
+
 stdenv.mkDerivation rec {
-  pname = if headersOnly then "cxx-headers" else "libcxx";
+  pname = basename + lib.optionalString headersOnly "-headers";
   inherit version;
 
-  inherit src;
-  sourceRoot = "source/libcxx";
+  src = runCommand "${pname}-src-${version}" {} ''
+    mkdir -p "$out"
+    cp -r ${monorepoSrc}/cmake "$out"
+    cp -r ${monorepoSrc}/${basename} "$out"
+    mkdir -p "$out/libcxxabi"
+    cp -r ${monorepoSrc}/libcxxabi/include "$out/libcxxabi"
+    mkdir -p "$out/llvm"
+    cp -r ${monorepoSrc}/llvm/cmake "$out/llvm"
+    cp -r ${monorepoSrc}/llvm/utils "$out/llvm"
+  '';
+
+  sourceRoot = "${src.name}/${basename}";
 
   outputs = [ "out" ] ++ lib.optional (!headersOnly) "dev";
 

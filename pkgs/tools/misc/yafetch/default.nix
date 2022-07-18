@@ -1,29 +1,29 @@
-{ lib, stdenv, fetchFromGitLab }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "yafetch";
-  version = "unstable-2021-07-18";
+  version = "unstable-2022-04-20";
 
-  src = fetchFromGitLab {
-    owner = "cyberkitty";
+  src = fetchFromGitHub {
+    owner = "kira64xyz";
     repo = pname;
-    rev = "f3efbca54df1ffea22cc40034114af141ccff9c1";
-    sha256 = "1cxhrjy9vzq87rzql4dcknkwca7nydysp1p1x4fh1qfw79dfdmxw";
+    rev = "a118cfc13f0b475db7c266105c10138d838788b8";
+    sha256 = "bSJlerfbJG6h5dDwWQKHnVLH6DEuvuUyqaRuJ7jvOsA=";
   };
 
   # Use the provided NixOS logo automatically
   prePatch = ''
     substituteInPlace ./config.h --replace \
-      "#include \"ascii/tux.h\"" "#include \"ascii/nixos.h\""
+      "#include \"ascii/gnu.h\"" "#include \"ascii/nixos.h\""
   '';
 
   # Fixes installation path
   PREFIX = placeholder "out";
 
   meta = with lib; {
-    homepage = "https://gitlab.com/cyberkitty/yafetch";
+    homepage = "https://github.com/kira64xyz/yafetch";
     description = "Yet another fetch clone written in C++";
-    license = licenses.gpl2Only;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ivar ashley ];
     platforms = platforms.linux;
   };

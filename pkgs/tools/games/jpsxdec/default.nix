@@ -24,7 +24,7 @@ let
     icon = pname;
     comment = description;
     desktopName = "jPSXdec";
-    categories = "AudioVideo;Utility;";
+    categories = [ "AudioVideo" "Utility" ];
   };
 in
 stdenv.mkDerivation rec {

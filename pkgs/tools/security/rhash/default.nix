@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--ar=${stdenv.cc.targetPrefix}ar"
+    "--target=${stdenv.hostPlatform.config}"
     (lib.enableFeature enableStatic "static")
     (lib.enableFeature enableStatic "lib-static")
   ];

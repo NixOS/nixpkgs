@@ -29,15 +29,15 @@
 
 stdenv.mkDerivation rec {
   pname = "packagekit";
-  version = "1.2.5pre";
+  version = "1.2.5.1pre";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchFromGitHub {
     owner = "PackageKit";
     repo = "PackageKit";
-    rev = "9c2ef9cddf39ebde587907561f8e7ac99ed6be1a";
-    sha256 = "05z1ds240kcmigygkbgjasr4spn7vd7cbpsbfrghhgnmszx9bjgl";
+    rev = "30bb82da8d4161330a6d7a20c9989149303421a1";
+    sha256 = "k2osc2v0OuGrNjwxdqn785RsbHEJP3p79PG9YqnVE3U=";
   };
 
   buildInputs = [

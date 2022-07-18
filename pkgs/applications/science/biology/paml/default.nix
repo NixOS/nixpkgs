@@ -8,6 +8,12 @@ stdenv.mkDerivation rec {
     sha256 = "0qflf3i27x6jwks3c6q560m1q8r043ja96syah145113iz5wdalp";
   };
 
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: /build/ccKomtcd.o:(.bss+0x4544): multiple definition of `SeqTypes';
+  #     /build/ccx7EsgU.o:(.bss+0x2a0dfdc): first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   preBuild = ''
     cd ./src/
   '';

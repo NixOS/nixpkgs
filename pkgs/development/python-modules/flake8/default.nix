@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "pyflakes >= 2.3.0, < 2.4.0" "pyflakes >= 2.3.0, < 2.5.0"
+      --replace "mccabe>=0.6.0,<0.7.0" "mccabe>=0.7.0,<0.8.0"
   '';
 
   propagatedBuildInputs = [

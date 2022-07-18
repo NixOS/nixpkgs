@@ -99,8 +99,8 @@ in
 
       package = mkOption {
         type = types.package;
-        default = pkgs.hydra-unstable;
-        defaultText = literalExpression "pkgs.hydra-unstable";
+        default = pkgs.hydra_unstable;
+        defaultText = literalExpression "pkgs.hydra_unstable";
         description = "The Hydra package.";
       };
 
@@ -298,27 +298,32 @@ in
         environment = env // {
           HYDRA_DBI = "${env.HYDRA_DBI};application_name=hydra-init";
         };
+        path = [ pkgs.util-linux ];
         preStart = ''
           mkdir -p ${baseDir}
-          chown hydra.hydra ${baseDir}
+          chown hydra:hydra ${baseDir}
           chmod 0750 ${baseDir}
 
           ln -sf ${hydraConf} ${baseDir}/hydra.conf
 
           mkdir -m 0700 -p ${baseDir}/www
-          chown hydra-www.hydra ${baseDir}/www
+          chown hydra-www:hydra ${baseDir}/www
 
           mkdir -m 0700 -p ${baseDir}/queue-runner
           mkdir -m 0750 -p ${baseDir}/build-logs
-          chown hydra-queue-runner.hydra ${baseDir}/queue-runner ${baseDir}/build-logs
+          mkdir -m 0750 -p ${baseDir}/runcommand-logs
+          chown hydra-queue-runner.hydra \
+            ${baseDir}/queue-runner \
+            ${baseDir}/build-logs \
+            ${baseDir}/runcommand-logs
 
           ${optionalString haveLocalDB ''
             if ! [ -e ${baseDir}/.db-created ]; then
-              ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createuser hydra
-              ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createdb -O hydra hydra
+              runuser -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createuser hydra
+              runuser -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createdb -O hydra hydra
               touch ${baseDir}/.db-created
             fi
-            echo "create extension if not exists pg_trgm" | ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} -- ${config.services.postgresql.package}/bin/psql hydra
+            echo "create extension if not exists pg_trgm" | runuser -u ${config.services.postgresql.superUser} -- ${config.services.postgresql.package}/bin/psql hydra
           ''}
 
           if [ ! -e ${cfg.gcRootsDir} ]; then
@@ -338,7 +343,7 @@ in
             rmdir /nix/var/nix/gcroots/per-user/hydra-www/hydra-roots
           fi
 
-          chown hydra.hydra ${cfg.gcRootsDir}
+          chown hydra:hydra ${cfg.gcRootsDir}
           chmod 2775 ${cfg.gcRootsDir}
         '';
         serviceConfig.ExecStart = "${hydra-package}/bin/hydra-init";

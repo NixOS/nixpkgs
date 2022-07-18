@@ -12,7 +12,6 @@
 , curl
 , flex
 , gnutls
-, jemalloc
 , libconfig
 , libdaemon
 , libev
@@ -24,7 +23,6 @@
 , openssl
 , pcre
 , perl
-, prometheus-cpp
 , python2
 , re2
 , zlib
@@ -100,7 +98,6 @@ stdenv.mkDerivation rec {
     ${lib.concatMapStringsSep "\n"
       (x: ''replace_dep "${x.f}" "${x.p.src}" "${x.p.pname or (builtins.parseDrvName x.p.name).name}" "${x.p.name}"'') [
         { f = "curl"; p = curl; }
-        { f = "jemalloc"; p = jemalloc; }
         { f = "libconfig"; p = libconfig; }
         { f = "libdaemon"; p = libdaemon; }
         { f = "libev"; p = libev; }
@@ -109,7 +106,6 @@ stdenv.mkDerivation rec {
         { f = "libssl"; p = openssl; }
         { f = "lz4"; p = lz4; }
         { f = "pcre"; p = pcre; }
-        { f = "prometheus-cpp"; p = prometheus-cpp; }
         { f = "re2"; p = re2; }
     ]}
 
@@ -123,8 +119,9 @@ stdenv.mkDerivation rec {
     ln -s ${nlohmann_json.src}/single_include/nlohmann/json.hpp .
     popd
 
-    pushd prometheus-cpp/prometheus-cpp/3rdparty
-    replace_dep . "${civetweb.src}" civetweb
+    pushd prometheus-cpp
+    tar xf v0.9.0.tar.gz
+    replace_dep prometheus-cpp/3rdparty "${civetweb.src}" civetweb
     popd
 
     sed -i s_/usr/bin/env_${coreutils}/bin/env_g libssl/openssl/config

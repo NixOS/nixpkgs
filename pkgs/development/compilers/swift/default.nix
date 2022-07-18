@@ -10,7 +10,6 @@
 , pkg-config
 , sqlite
 , swig
-, bash
 , libxml2
 , clang_10
 , python3
@@ -29,7 +28,6 @@
 , libgit2
 , fetchFromGitHub
 , fetchpatch
-, findutils
 , makeWrapper
 , gnumake
 , file
@@ -182,17 +180,14 @@ let
 
 in
 stdenv.mkDerivation {
-  name = "swift-${versions.swift}";
+  pname = "swift";
+  version = versions.swift;
 
   nativeBuildInputs = [
     autoconf
     automake
-    bash
     cmake
-    coreutils
-    findutils
     git
-    gnumake
     libtool
     makeWrapper
     ninja
@@ -397,6 +392,7 @@ stdenv.mkDerivation {
   preFixup = "rm -rf $SWIFT_BUILD_ROOT $SWIFT_INSTALL_DIR";
 
   meta = with lib; {
+    broken = true;
     description = "The Swift Programming Language";
     homepage = "https://github.com/apple/swift";
     maintainers = with maintainers; [ dtzWill trepetti dduan ];

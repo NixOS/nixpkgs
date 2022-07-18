@@ -1,8 +1,8 @@
 diff --git a/src/pikepdf/_methods.py b/src/pikepdf/_methods.py
-index 9db6b49..4020bcf 100644
+index 2a170c6..5ee3ba1 100644
 --- a/src/pikepdf/_methods.py
 +++ b/src/pikepdf/_methods.py
-@@ -204,7 +204,7 @@ def _mudraw(buffer, fmt) -> bytes:
+@@ -80,7 +80,7 @@ def _mudraw(buffer, fmt) -> bytes:
          tmp_in.flush()
  
          proc = run(
@@ -12,15 +12,33 @@ index 9db6b49..4020bcf 100644
              check=True,
          )
 diff --git a/src/pikepdf/jbig2.py b/src/pikepdf/jbig2.py
-index 80cc910..64f6d31 100644
+index be390a1..3818ec3 100644
 --- a/src/pikepdf/jbig2.py
 +++ b/src/pikepdf/jbig2.py
-@@ -25,7 +25,7 @@ def extract_jbig2(
-         global_path = Path(tmpdir) / "global"
+@@ -31,7 +31,7 @@ def extract_jbig2(
          output_path = Path(tmpdir) / "outfile"
  
--        args = ["jbig2dec", "-e", "-o", os.fspath(output_path)]
-+        args = ["@jbig2dec@", "-e", "-o", os.fspath(output_path)]
+         args = [
+-            "jbig2dec",
++            "@jbig2dec@",
+             "--embedded",
+             "--format",
+             "png",
+@@ -64,7 +64,7 @@ def _extract_jbig2_bytes(jbig2: bytes, jbig2_globals: bytes) -> bytes:
+         output_path = Path(tmpdir) / "outfile"
  
-         # Get the raw stream, because we can't decode im_obj - that is why we are here
-         # (Strictly speaking we should remove any non-JBIG2 filters if double encoded)
+         args = [
+-            "jbig2dec",
++            "@jbig2dec@",
+             "--embedded",
+             "--format",
+             "png",
+@@ -100,7 +100,7 @@ def extract_jbig2_bytes(
+ 
+ def _check_jbig2dec_available() -> None:  # pragma: no cover
+     try:
+-        proc = run(['jbig2dec', '--version'], stdout=PIPE, check=True, encoding='ascii')
++        proc = run(['@jbig2dec@', '--version'], stdout=PIPE, check=True, encoding='ascii')
+     except (CalledProcessError, FileNotFoundError) as e:
+         raise DependencyError("jbig2dec - not installed or not found") from e
+     else:

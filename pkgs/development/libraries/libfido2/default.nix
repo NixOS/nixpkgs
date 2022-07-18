@@ -12,12 +12,12 @@
 
 stdenv.mkDerivation rec {
   pname = "libfido2";
-  version = "1.9.0";
+  version = "1.10.0";
 
   # releases on https://developers.yubico.com/libfido2/Releases/ are signed
   src = fetchurl {
     url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ujnjrzc20t/IrT0ctuO+fszAlYhhCjsHyGXQ7T5YwtI=";
+    sha256 = "sha256-Um79PVavcGwF0J89IfGO47CxWsDB9cXaGsvCfCcwuZs=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

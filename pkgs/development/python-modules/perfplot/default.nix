@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "perfplot";
-  version = "0.9.13";
+  version = "0.10.1";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "nschloe";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ry5x38sv8gh505z6ip90jymm7kfgyf80y3vjb2i6z567bnblam6";
+    sha256 = "sha256-5qZolEJWjhqk1JakcGBWZ1hxeP1cLqcB7IZ3ufjOC/o=";
   };
 
   nativeBuildInputs = [

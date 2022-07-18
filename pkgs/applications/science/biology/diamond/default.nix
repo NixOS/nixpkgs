@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
       fullName = "University of Tuebingen, Benjamin Buchfink";
       url = "https://raw.githubusercontent.com/bbuchfink/diamond/master/src/COPYING";
     };
-    maintainers = [ maintainers.metabar ];
+    maintainers = [ ];
   };
 }

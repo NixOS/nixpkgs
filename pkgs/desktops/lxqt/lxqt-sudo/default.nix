@@ -16,13 +16,13 @@
 
 mkDerivation rec {
   pname = "lxqt-sudo";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1y2vq3n5sv6cxqpnz79kl3dybfbw65z93cahdz8m6gplzpp24gn4";
+    sha256 = "Oa4OYIDXQUIQ96pEY7rGBq+spwVSU+kgDS7250tYNuc=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +48,6 @@ mkDerivation rec {
     description = "GUI frontend for sudo/su";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

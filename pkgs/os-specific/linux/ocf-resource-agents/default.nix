@@ -1,3 +1,5 @@
+# This combines together OCF definitions from other derivations.
+# https://github.com/ClusterLabs/resource-agents/blob/master/doc/dev-guides/ra-dev-guide.asc
 { stdenv
 , lib
 , runCommand
@@ -8,10 +10,14 @@
 , python3
 , glib
 , drbd
+, pacemaker
 }:
 
 let
   drbdForOCF = drbd.override {
+    forOCF = true;
+  };
+  pacemakerForOCF = pacemaker.override {
     forOCF = true;
   };
 
@@ -53,4 +59,5 @@ runCommand "ocf-resource-agents" {} ''
   mkdir -p $out/usr/lib/ocf
   ${lndir}/bin/lndir -silent "${resource-agentsForOCF}/lib/ocf/" $out/usr/lib/ocf
   ${lndir}/bin/lndir -silent "${drbdForOCF}/usr/lib/ocf/" $out/usr/lib/ocf
+  ${lndir}/bin/lndir -silent "${pacemakerForOCF}/usr/lib/ocf/" $out/usr/lib/ocf
 ''

@@ -2,6 +2,7 @@
 
 let
   cfg = config.services.geoipupdate;
+  inherit (builtins) isAttrs isString isInt isList typeOf hashString;
 in
 {
   imports = [
@@ -27,11 +28,30 @@ in
       };
 
       settings = lib.mkOption {
+        example = lib.literalExpression ''
+          {
+            AccountID = 200001;
+            DatabaseDirectory = "/var/lib/GeoIP";
+            LicenseKey = { _secret = "/run/keys/maxmind_license_key"; };
+            Proxy = "10.0.0.10:8888";
+            ProxyUserPassword = { _secret = "/run/keys/proxy_pass"; };
+          }
+        '';
         description = ''
           <productname>geoipupdate</productname> configuration
           options. See
           <link xlink:href="https://github.com/maxmind/geoipupdate/blob/main/doc/GeoIP.conf.md" />
           for a full list of available options.
+
+          Settings containing secret data should be set to an
+          attribute set containing the attribute
+          <literal>_secret</literal> - a string pointing to a file
+          containing the value the option should be set to. See the
+          example to get a better picture of this: in the resulting
+          <filename>GeoIP.conf</filename> file, the
+          <literal>ProxyUserPassword</literal> key will be set to the
+          contents of the
+          <filename>/run/keys/proxy_pass</filename> file.
         '';
         type = lib.types.submodule {
           freeformType =
@@ -65,11 +85,18 @@ in
             };
 
             LicenseKey = lib.mkOption {
-              type = lib.types.path;
+              type = with lib.types; either path (attrsOf path);
               description = ''
-                A file containing the <productname>MaxMind</productname>
-                license key.
+                A file containing the
+                <productname>MaxMind</productname> license key.
+
+                Always handled as a secret whether the value is
+                wrapped in a <literal>{ _secret = ...; }</literal>
+                attrset or not (refer to <xref
+                linkend="opt-services.geoipupdate.settings" /> for
+                details).
               '';
+              apply = x: if isAttrs x then x else { _secret = x; };
             };
 
             DatabaseDirectory = lib.mkOption {
@@ -102,6 +129,9 @@ in
     systemd.services.geoipupdate-create-db-dir = {
       serviceConfig.Type = "oneshot";
       script = ''
+        set -o errexit -o pipefail -o nounset -o errtrace
+        shopt -s inherit_errexit
+
         mkdir -p ${cfg.settings.DatabaseDirectory}
         chmod 0755 ${cfg.settings.DatabaseDirectory}
       '';
@@ -115,32 +145,41 @@ in
         "network-online.target"
         "nss-lookup.target"
       ];
+      path = [ pkgs.replace-secret ];
       wants = [ "network-online.target" ];
       startAt = cfg.interval;
       serviceConfig = {
         ExecStartPre =
           let
+            isSecret = v: isAttrs v && v ? _secret && isString v._secret;
             geoipupdateKeyValue = lib.generators.toKeyValue {
               mkKeyValue = lib.flip lib.generators.mkKeyValueDefault " " rec {
-                mkValueString = v: with builtins;
+                mkValueString = v:
                   if isInt           v then toString v
                   else if isString   v then v
                   else if true  ==   v then "1"
                   else if false ==   v then "0"
                   else if isList     v then lib.concatMapStringsSep " " mkValueString v
+                  else if isSecret   v then hashString "sha256" v._secret
                   else throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty {}) v}";
               };
             };
+            secretPaths = lib.catAttrs "_secret" (lib.collect isSecret cfg.settings);
+            mkSecretReplacement = file: ''
+              replace-secret ${lib.escapeShellArgs [ (hashString "sha256" file) file "/run/geoipupdate/GeoIP.conf" ]}
+            '';
+            secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
 
             geoipupdateConf = pkgs.writeText "geoipupdate.conf" (geoipupdateKeyValue cfg.settings);
 
             script = ''
+              set -o errexit -o pipefail -o nounset -o errtrace
+              shopt -s inherit_errexit
+
               chown geoip "${cfg.settings.DatabaseDirectory}"
 
               cp ${geoipupdateConf} /run/geoipupdate/GeoIP.conf
-              ${pkgs.replace-secret}/bin/replace-secret '${cfg.settings.LicenseKey}' \
-                                                        '${cfg.settings.LicenseKey}' \
-                                                        /run/geoipupdate/GeoIP.conf
+              ${secretReplacements}
             '';
           in
             "+${pkgs.writeShellScript "start-pre-full-privileges" script}";

@@ -323,7 +323,7 @@ let
     cairoDevice = [ pkgs.gtk2.dev ];
     Cairo = with pkgs; [ libtiff libjpeg cairo.dev xlibsWrapper fontconfig.lib ];
     Cardinal = [ pkgs.which ];
-    chebpol = [ pkgs.fftw ];
+    chebpol = [ pkgs.fftw.dev ];
     ChemmineOB = with pkgs; [ openbabel pkg-config ];
     curl = [ pkgs.curl.dev ];
     data_table = [ pkgs.zlib.dev ] ++ lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
@@ -362,7 +362,7 @@ let
     mwaved = [ pkgs.fftw.dev ];
     mzR = with pkgs; [ zlib boost159.dev netcdf ];
     ncdf4 = [ pkgs.netcdf ];
-    nloptr = with pkgs; [ nlopt pkg-config ];
+    nloptr = with pkgs; [ nlopt pkg-config libiconv ];
     n1qn1 = [ pkgs.gfortran ];
     odbc = [ pkgs.unixODBC ];
     pander = with pkgs; [ pandoc which ];
@@ -389,7 +389,7 @@ let
     Rglpk = [ pkgs.glpk ];
     RGtk2 = [ pkgs.gtk2.dev ];
     rhdf5 = [ pkgs.zlib ];
-    Rhdf5lib = [ pkgs.zlib.dev ];
+    Rhdf5lib = with pkgs; [ zlib.dev hdf5.dev ];
     Rhpc = with pkgs; [ zlib bzip2.dev icu xz.dev mpi pcre.dev ];
     Rhtslib = with pkgs; [ zlib.dev automake autoconf bzip2.dev xz.dev curl.dev ];
     rjags = [ pkgs.jags ];
@@ -493,6 +493,7 @@ let
     HilbertVisGUI = with pkgs; [ pkg-config which ];
     textshaping = [ pkgs.pkg-config ];
     ragg = [ pkgs.pkg-config ];
+    qqconf = [ pkgs.pkg-config ];
   };
 
   packagesWithBuildInputs = {
@@ -649,6 +650,7 @@ let
     DropletUtils = [ pkgs.zlib.dev ];
     RMariaDB = [ pkgs.libmysqlclient.dev ];
     ragg = with pkgs; [ freetype.dev libpng.dev libtiff.dev zlib.dev libjpeg.dev bzip2.dev ];
+    qqconf = [ pkgs.fftw.dev ];
   };
 
   packagesRequiringX = [
@@ -936,6 +938,22 @@ let
   ];
 
   otherOverrides = old: new: {
+    gifski = old.gifski.overrideDerivation (attrs: {
+      cargoDeps = pkgs.rustPlatform.fetchCargoTarball {
+        src = attrs.src;
+        sourceRoot = "gifski/src/myrustlib";
+        hash = "sha256-vBrTQ+5JZA8554Aasbqw7mbaOfJNQjrOpG00IXAcamI=";
+      };
+
+      cargoRoot = "src/myrustlib";
+
+      nativeBuildInputs = attrs.nativeBuildInputs ++ [
+        pkgs.rustPlatform.cargoSetupHook
+        pkgs.cargo
+        pkgs.rustc
+      ];
+    });
+
     stringi = old.stringi.overrideDerivation (attrs: {
       postInstall = let
         icuName = "icudt52l";
@@ -993,10 +1011,6 @@ let
 
     rpf = old.rpf.overrideDerivation (attrs: {
       patchPhase = "patchShebangs configure";
-    });
-
-    Rhdf5lib = old.Rhdf5lib.overrideDerivation (attrs: {
-      patches = [ ./patches/Rhdf5lib.patch ];
     });
 
     rJava = old.rJava.overrideDerivation (attrs: {
@@ -1081,12 +1095,12 @@ let
         patchShebangs configure
       '';
       PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include";
-      PKGCONFIG_LIBS = "-Wl,-rpath,${pkgs.openssl.out}/lib -L${pkgs.openssl.out}/lib -lssl -lcrypto";
+      PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -lssl -lcrypto";
     });
 
     websocket = old.websocket.overrideDerivation (attrs: {
       PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include";
-      PKGCONFIG_LIBS = "-Wl,-rpath,${pkgs.openssl.out}/lib -L${pkgs.openssl.out}/lib -lssl -lcrypto";
+      PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -lssl -lcrypto";
     });
 
     Rserve = old.Rserve.overrideDerivation (attrs: {
@@ -1191,7 +1205,7 @@ let
         patchShebangs configure
         '';
       PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include -I${pkgs.cyrus_sasl.dev}/include -I${pkgs.zlib.dev}/include";
-      PKGCONFIG_LIBS = "-Wl,-rpath,${pkgs.openssl.out}/lib -L${pkgs.openssl.out}/lib -L${pkgs.cyrus_sasl.out}/lib -L${pkgs.zlib.out}/lib -lssl -lcrypto -lsasl2 -lz";
+      PKGCONFIG_LIBS = "-Wl,-rpath,${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.openssl}/lib -L${pkgs.cyrus_sasl.out}/lib -L${pkgs.zlib.out}/lib -lssl -lcrypto -lsasl2 -lz";
     });
 
     ps = old.ps.overrideDerivation (attrs: {
@@ -1296,6 +1310,14 @@ let
 
     geomorph = old.geomorph.overrideDerivation (attrs: {
       RGL_USE_NULL = "true";
+    });
+
+    Rhdf5lib = old.Rhdf5lib.overrideDerivation (attrs: {
+      propagatedBuildInputs = attrs.propagatedBuildInputs ++ [ pkgs.hdf5.dev ];
+    });
+
+    RNifti = old.RNifti.overrideDerivation (attrs: {
+      patches = [ ./patches/RNifti.patch ];
     });
   };
 in

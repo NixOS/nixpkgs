@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "1b0iz7da1sgifx1a5wdyx1kxbzys53v0kyk8nhxfipllmm5qka3k";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [ autoreconfHook ];
 
   # tests are super flaky unfortunately, and regularily break.

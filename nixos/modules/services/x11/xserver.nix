@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, utils, pkgs, ... }:
 
 with lib;
 
@@ -179,6 +179,13 @@ in
         description = ''
           Whether to start the X server automatically.
         '';
+      };
+
+      excludePackages = mkOption {
+        default = [];
+        example = literalExpression "[ pkgs.xterm ]";
+        type = types.listOf types.package;
+        description = "Which X11 packages to exclude from the default environment";
       };
 
       exportConfiguration = mkOption {
@@ -620,9 +627,6 @@ in
       in optional (driver != null) ({ inherit name; modules = []; driverName = name; display = true; } // driver));
 
     assertions = [
-      { assertion = config.security.polkit.enable;
-        message = "X11 requires Polkit to be enabled (‘security.polkit.enable = true’).";
-      }
       (let primaryHeads = filter (x: x.primary) cfg.xrandrHeads; in {
         assertion = length primaryHeads < 2;
         message = "Only one head is allowed to be primary in "
@@ -658,7 +662,7 @@ in
           ${cfgPath}.source = xorg.xf86inputevdev.out + "/share" + cfgPath;
         });
 
-    environment.systemPackages =
+    environment.systemPackages = utils.removePackagesByName
       [ xorg.xorgserver.out
         xorg.xrandr
         xorg.xrdb
@@ -674,7 +678,7 @@ in
         pkgs.xdg-utils
         xorg.xf86inputevdev.out # get evdev.4 man page
         pkgs.nixos-icons # needed for gnome and pantheon about dialog, nixos-manual and maybe more
-      ]
+      ] config.services.xserver.excludePackages
       ++ optional (elem "virtualbox" cfg.videoDrivers) xorg.xrefresh;
 
     environment.pathsToLink = [ "/share/X11" ];

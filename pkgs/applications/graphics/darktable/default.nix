@@ -14,6 +14,7 @@
 , desktop-file-utils
 , exiv2
 , glib
+, glib-networking
 , ilmbase
 , gtk3
 , intltool
@@ -56,12 +57,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.8.1";
+  version = "4.0.0";
   pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    sha256 = "1xmyn9haagizh8qqg91bm1lx3dq1v8failxj943mipnvaj80dvl1";
+    sha256 = "0bfcag6bj5vcmg4z4xjirs43iafcx89al6jl41i5mrhpjzszh5hl";
   };
 
   nativeBuildInputs = [ cmake ninja llvm_13 pkg-config intltool perl desktop-file-utils wrapGAppsHook ];
@@ -71,6 +72,7 @@ stdenv.mkDerivation rec {
     curl
     exiv2
     glib
+    glib-networking
     gtk3
     ilmbase
     lcms2

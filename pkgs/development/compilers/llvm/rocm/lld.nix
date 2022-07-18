@@ -3,6 +3,7 @@
 , cmake
 , libxml2
 , llvm
+, ninja
 
 , version
 , src
@@ -11,15 +12,17 @@
 stdenv.mkDerivation rec {
   inherit version src;
 
+  sourceRoot = "${src.name}/lld";
+
   pname = "lld";
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ninja ];
 
   buildInputs = [ libxml2 llvm ];
 
   outputs = [ "out" "dev" ];
 
-  cmakeFlags = [ "-DLLVM_MAIN_SRC_DIR=${llvm.src}" ];
+  cmakeFlags = [ "-DLLVM_MAIN_SRC_DIR=${src}/llvm" ];
 
   postInstall = ''
     moveToOutput include "$dev"

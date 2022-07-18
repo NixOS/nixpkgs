@@ -3,12 +3,13 @@
 , buildPythonPackage
 , fetchPypi
 , isPy27
+, pythonAtLeast
 }:
 
 buildPythonPackage rec {
   pname = "tornado";
   version = "5.1.1";
-  disabled = isPy27;
+  disabled = isPy27 || pythonAtLeast "3.10";
 
   # We specify the name of the test files to prevent
   # https://github.com/NixOS/nixpkgs/issues/14634

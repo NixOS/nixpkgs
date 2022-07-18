@@ -88,7 +88,7 @@ let unwrapped = stdenv.mkDerivation rec {
     homepage = "https://pidgin.im/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.vcunat ];
+    maintainers = [ ];
   };
 };
 

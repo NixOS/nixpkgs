@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "git-sync";
-  version = "unstable-2021-07-14";
+  version = "unstable-2022-03-20";
 
   src = fetchFromGitHub {
     owner = "simonthum";
     repo = "git-sync";
-    rev = "7d3d34bf3ee2483fba00948f5b97f964b849a590";
-    sha256 = "sha256-PuYREW5NBkYF1tlcLTbOI8570nvHn5ifN8OIInfNNxI=";
+    rev = "8466b77a38b3d5e8b4ed9e3cb1b635e475eeb415";
+    sha256 = "sha256-8rCwpmHV6wgFCLzPJOKzwN5mG8uD5KIlGFwcgQD+SK4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cp -a git-* $out/bin/
+    cp -a contrib/git-* $out/bin/
   '';
 
   wrapperPath = with lib; makeBinPath [

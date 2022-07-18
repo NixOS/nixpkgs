@@ -7,17 +7,18 @@
 , openssl
 , protobuf
 , zlib
+, catch2
 }:
 
 stdenv.mkDerivation rec {
   pname = "eternal-terminal";
-  version = "6.1.11";
+  version = "6.2.1";
 
   src = fetchFromGitHub {
     owner = "MisterTea";
     repo = "EternalTerminal";
     rev = "et-v${version}";
-    hash = "sha256-cCZbG0CD5V/FTj1BuVr083EJ+BCgIcKHomNtpJb3lOo=";
+    hash = "sha256-YQ8Qx6RTmDoNWY8AQlnBJJendQl+tF1QA+Z6h/ar9qs=";
   };
 
   nativeBuildInputs = [
@@ -32,6 +33,10 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
+  preBuild = ''
+    cp ${catch2}/include/catch2/catch.hpp ../external_imported/Catch2/single_include/catch2/catch.hpp
+  '';
+
   cmakeFlags = [
     "-DDISABLE_VCPKG=TRUE"
     "-DDISABLE_SENTRY=TRUE"
@@ -42,15 +47,14 @@ stdenv.mkDerivation rec {
     "-std=c++17"
   ];
 
-  LDFLAGS = lib.optional stdenv.cc.isClang [
-    "-lc++fs"
-  ];
+  doCheck = true;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Remote shell that automatically reconnects without interrupting the session";
     homepage = "https://eternalterminal.dev/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dezgeg pingiun ];
+    maintainers = with maintainers; [ dezgeg ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

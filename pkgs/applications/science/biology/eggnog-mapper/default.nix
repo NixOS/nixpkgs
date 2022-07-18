@@ -1,29 +1,43 @@
-{ lib, fetchFromGitHub, fetchpatch, makeWrapper, python27Packages, wget, diamond, hmmer }:
+{ lib
+, autoPatchelfHook
+, fetchFromGitHub
+, python3Packages
+, wget
+, zlib
+}:
 
-python27Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "eggnog-mapper";
-  version = "1.0.3";
+  version = "2.1.7";
 
   src = fetchFromGitHub {
     owner = "eggnogdb";
-    repo = "eggnog-mapper";
+    repo = pname;
     rev = version;
-    sha256 = "1aaaflppy84bhkh2hb5gnzm4xgrz0rz0cgfpadr9w8cva8p0sqdv";
+    hash = "sha256-auVD/r8m3TAB1KYMQ7Sae23eDg6LRx/daae0505cjwU=";
   };
 
-  patches = (fetchpatch {
-    url = "https://github.com/eggnogdb/eggnog-mapper/commit/6972f601ade85b65090efca747d2302acb58507f.patch";
-    sha256 = "0abnmn0bh11jihf5d3cggiild1ykawzv5f5fhb4cyyi8fvy4hcxf";
-  });
+  postPatch = ''
+    # Not a great solution...
+    substituteInPlace setup.cfg \
+      --replace "==" ">="
+  '';
 
-  nativeBuildInputs = [ makeWrapper ];
-  propagatedBuildInputs = [ python27Packages.biopython wget diamond hmmer ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+  ];
 
-  # make emapper find diamond & hmmer
-  makeWrapperArgs = [
-    ''--prefix PATH ':' "${diamond}/bin"''
-    ''--prefix PATH ':' "${hmmer}/bin"''
-    ];
+  buildInputs = [
+    zlib
+  ];
+
+  propagatedBuildInputs = [
+    wget
+  ] ++ (with python3Packages; [
+    biopython
+    psutil
+    XlsxWriter
+  ]);
 
   # Tests rely on some of the databases being available, which is not bundled
   # with this package as (1) in total, they represent >100GB of data, and (2)

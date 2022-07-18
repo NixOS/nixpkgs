@@ -49,7 +49,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "racket";
-  version = "8.4"; # always change at once with ./minimal.nix
+  version = "8.5"; # always change at once with ./minimal.nix
 
   src = (lib.makeOverridable ({ name, sha256 }:
     fetchurl {
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     }
   )) {
     name = "${pname}-${version}";
-    sha256 = "sha256-uJ+vL+FtBNILkFbwi7qZ6yBA1Rcr7o886zmZ/tFuatM=";
+    sha256 = "sha256-dWnOnpxh5zmou9eqVdcfhuCr8ts1CTqqEF1j/dk0jhs=";
   };
 
   FONTCONFIG_FILE = fontsConf;
@@ -137,6 +137,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A programmable programming language";
     longDescription = ''
       Racket is a full-spectrum programming language. It goes beyond
@@ -149,7 +150,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://racket-lang.org/";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ kkallio henrytill vrthra ];
+    maintainers = with maintainers; [ henrytill vrthra ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-linux" "aarch64-darwin" ];
   };
 }

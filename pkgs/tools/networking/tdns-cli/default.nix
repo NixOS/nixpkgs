@@ -18,5 +18,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/rotty/tdns-cli";
     license = licenses.gpl3;
     maintainers = with maintainers; [ astro ];
+    mainProgram = "tdns";
   };
 }

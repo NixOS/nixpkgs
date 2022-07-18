@@ -16,6 +16,7 @@
 , texlive
 , imagemagick
 , perlPackages
+, writeScript
 }:
 
 let
@@ -27,11 +28,18 @@ let
     imagemagick
     perlPackages.Po4a
   ];
+  inherit (import ./src.nix { inherit fetchFromGitLab; }) version src sample_documents;
 in
 
 python3Packages.buildPythonApplication rec {
-  inherit (import ./src.nix { inherit fetchFromGitLab; }) version src sample_documents;
+  inherit src version;
   pname = "paperwork";
+
+  sample_docs = sample_documents // {
+    # a trick for the update script
+    name = "sample_documents";
+    src = sample_documents;
+  };
 
   sourceRoot = "source/paperwork-gtk";
 
@@ -69,7 +77,7 @@ python3Packages.buildPythonApplication rec {
 
     export XDG_DATA_DIRS=$XDG_DATA_DIRS:${gnome.adwaita-icon-theme}/share
     # build the user manual
-    PATH=$out/bin:$PATH PAPERWORK_TEST_DOCUMENTS=${sample_documents} make data
+    PATH=$out/bin:$PATH PAPERWORK_TEST_DOCUMENTS=${sample_docs} make data
     for i in src/paperwork_gtk/model/help/out/*.pdf; do
       install -Dt $site/model/help/out $i
     done
@@ -122,11 +130,19 @@ python3Packages.buildPythonApplication rec {
     openpaperwork-core
     pypillowfight
     pyxdg
-    python-dateutil
     setuptools
   ];
 
   disallowedRequisites = documentation_deps;
+
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl common-updater-scripts
+    version=$(list-git-tags | sed 's/^v//' | sort -V | tail -n1)
+    update-source-version paperwork "$version" --file=pkgs/applications/office/paperwork/src.nix
+    docs_version="$(curl https://gitlab.gnome.org/World/OpenPaperwork/paperwork/-/raw/$version/paperwork-gtk/src/paperwork_gtk/model/help/screenshot.sh | grep TEST_DOCS_TAG= | cut -d'"' -f2)"
+    update-source-version paperwork.sample_docs "$docs_version" --file=pkgs/applications/office/paperwork/src.nix --version-key=rev
+  '';
 
   meta = {
     description = "A personal document manager for scanned documents";

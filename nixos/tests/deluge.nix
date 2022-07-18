@@ -47,7 +47,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
     simple.wait_for_unit("deluged")
     simple.wait_for_unit("delugeweb")
-    simple.wait_for_open_port("8112")
+    simple.wait_for_open_port(8112)
     declarative.wait_for_unit("network.target")
     declarative.wait_until_succeeds("curl --fail http://simple:8112")
 

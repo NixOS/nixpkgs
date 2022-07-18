@@ -4,7 +4,6 @@
 , fetchFromGitHub
 , asgiref
 , click
-, colorama
 , h11
 , httptools
 , python-dotenv
@@ -19,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "uvicorn";
-  version = "0.16.0";
+  version = "0.17.6";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "14jih6j4q2qp5c9rgl798i5p51b4y6zkkj434q2l1naw0csphk4s";
+    hash = "sha256-iJlAU7zZl9X3FcQlJoJ7KlETZOx6WsE9FcpCK4Cm/Fo=";
   };
 
   outputs = [
@@ -37,7 +36,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     asgiref
     click
-    colorama
     h11
     httptools
     python-dotenv
@@ -68,6 +66,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://www.uvicorn.org/";
+    changelog = "https://github.com/encode/uvicorn/blob/${src.rev}/CHANGELOG.md";
     description = "The lightning-fast ASGI server";
     license = licenses.bsd3;
     maintainers = with maintainers; [ wd15 ];

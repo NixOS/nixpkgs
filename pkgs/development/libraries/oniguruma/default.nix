@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "onig";
-  version = "6.9.7.1";
+  version = "6.9.8";
 
   src = fetchFromGitHub {
     owner = "kkos";
     repo = "oniguruma";
     rev = "v${version}";
-    sha256 = "sha256-IBWxmzmVdKTkHbfy7V8ejpeIdfOU/adGwpUTCMdLU3w=";
+    sha256 = "sha256-8aFZdhh6ovLCR0A17rvWq/Oif66rSMnHcCYHjClNElw=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

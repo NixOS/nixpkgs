@@ -27,7 +27,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "wireplumber";
-  version = "0.4.8";
+  version = "0.4.11";
 
   outputs = [ "out" "dev" ] ++ lib.optional enableDocs "doc";
 
@@ -36,8 +36,17 @@ stdenv.mkDerivation rec {
     owner = "pipewire";
     repo = "wireplumber";
     rev = version;
-    sha256 = "sha256-xwfggrjKHh5mZdvH6dKqQo6o1ltxuYdjoGYaWl31C/Y=";
+    sha256 = "sha256-3NrzOsL0MekxMMXCFubEkazzSWFNsjUsX8n2ECcr7yY=";
   };
+
+  patches = [
+    # fix sound not working in VMs
+    # FIXME: drop in next release
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/pipewire/wireplumber/-/commit/c16e637c329bc9dda8544b18f5bd47a8d63ee253.patch";
+      sha256 = "sha256-xhhAlhOovwIjwAxXxvHRTG4GzpIPYvKQE2F4ZP1Udq8=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
@@ -67,6 +76,9 @@ stdenv.mkDerivation rec {
     "-Delogind=disabled"
     "-Ddoc=${mesonEnableFeature enableDocs}"
     "-Dintrospection=${mesonEnableFeature enableGI}"
+    "-Dsystemd-system-service=true"
+    "-Dsystemd-system-unit-dir=${placeholder "out"}/lib/systemd/system"
+    "-Dsysconfdir=/etc"
   ];
 
   passthru.updateScript = nix-update-script {

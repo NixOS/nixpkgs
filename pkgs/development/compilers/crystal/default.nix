@@ -33,6 +33,7 @@ let
     i686-linux = "linux-i686";
     x86_64-darwin = "darwin-x86_64";
     aarch64-darwin = "darwin-universal";
+    aarch64-linux = "linux-aarch64";
   };
 
   arch = archs.${stdenv.system} or (throw "system ${stdenv.system} not supported");
@@ -40,13 +41,19 @@ let
 
   checkInputs = [ git gmp openssl readline libxml2 libyaml ];
 
+  binaryUrl = version: rel:
+    if arch == archs.aarch64-linux then
+      "https://dev.alpinelinux.org/archive/crystal/crystal-${version}-aarch64-alpine-linux-musl.tar.gz"
+    else
+      "https://github.com/crystal-lang/crystal/releases/download/${version}/crystal-${version}-${toString rel}-${arch}.tar.gz";
+
   genericBinary = { version, sha256s, rel ? 1 }:
     stdenv.mkDerivation rec {
       pname = "crystal-binary";
       inherit version;
 
       src = fetchurl {
-        url = "https://github.com/crystal-lang/crystal/releases/download/${version}/crystal-${version}-${toString rel}-${arch}.tar.gz";
+        url = binaryUrl version rel;
         sha256 = sha256s.${stdenv.system};
       };
 
@@ -138,9 +145,10 @@ let
         export CRYSTAL_CACHE_DIR=$TMP
       '';
 
-      buildInputs = commonBuildInputs extraBuildInputs;
 
+      strictDeps = true;
       nativeBuildInputs = [ binary makeWrapper which pkg-config llvmPackages.llvm ];
+      buildInputs = commonBuildInputs extraBuildInputs;
 
       makeFlags = [
         "CRYSTAL_CONFIG_VERSION=${version}"
@@ -206,13 +214,13 @@ let
       };
 
       meta = with lib; {
+        broken = stdenv.isDarwin;
         description = "A compiled language with Ruby like syntax and type inference";
         homepage = "https://crystal-lang.org/";
         license = licenses.asl20;
-        maintainers = with maintainers; [ david50407 fabianhjr manveru peterhoeg ];
+        maintainers = with maintainers; [ david50407 manveru peterhoeg ];
         platforms = let archNames = builtins.attrNames archs; in
           if (lib.versionOlder version "1.2.0") then remove "aarch64-darwin" archNames else archNames;
-        broken = lib.versionOlder version "0.36.1" && stdenv.isDarwin;
       };
     })
   );
@@ -225,6 +233,7 @@ rec {
       x86_64-linux = "1949argajiyqyq09824yj3wjyv88gd8wbf20xh895saqfykiq880";
       i686-linux = "0w0f4fwr2ijhx59i7ppicbh05hfmq7vffmgl7lal6im945m29vch";
       x86_64-darwin = "01n0rf8zh551vv8wq3h0ifnsai0fz9a77yq87xx81y9dscl9h099";
+      aarch64-linux = "0sns7l4q3z82qi3dc2r4p63f4s8hvifqzgq56ykwyrvawynjhd53";
     };
   };
 

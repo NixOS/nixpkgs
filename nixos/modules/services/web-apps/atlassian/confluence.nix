@@ -189,6 +189,8 @@ in
         User = cfg.user;
         Group = cfg.group;
         PrivateTmp = true;
+        Restart = "on-failure";
+        RestartSec = "10";
         ExecStart = "${pkg}/bin/start-confluence.sh -fg";
         ExecStop = "${pkg}/bin/stop-confluence.sh";
       };

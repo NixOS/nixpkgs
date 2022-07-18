@@ -1,7 +1,7 @@
 { config, lib, stdenv, fetchFromGitHub, pkg-config, cmake
 
 # dependencies
-, glib, libXinerama
+, glib, libXinerama, catch2
 
 # optional features without extra dependencies
 , mpdSupport          ? true
@@ -85,6 +85,8 @@ stdenv.mkDerivation rec {
     sed -i 's/ Example: .*$//' doc/config_settings.xml
 
     substituteInPlace cmake/Conky.cmake --replace "# set(RELEASE true)" "set(RELEASE true)"
+
+    cp ${catch2}/include/catch2/catch.hpp tests/catch2/catch.hpp
   '';
 
   NIX_LDFLAGS = "-lgcc_s";
@@ -132,6 +134,8 @@ stdenv.mkDerivation rec {
   # `make -f src/CMakeFiles/conky.dir/build.make src/CMakeFiles/conky.dir/conky.cc.o`:
   # src/conky.cc:137:23: fatal error: defconfig.h: No such file or directory
   enableParallelBuilding = false;
+
+  doCheck = true;
 
   meta = with lib; {
     homepage = "http://conky.sourceforge.net/";

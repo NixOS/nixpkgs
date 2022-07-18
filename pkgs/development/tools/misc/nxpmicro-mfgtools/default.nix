@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/NXPmicro/mfgtools";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bmilanov jraygauthier ];
+    mainProgram = "uuu";
     platforms = platforms.all;
   };
 }

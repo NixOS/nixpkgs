@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "emoji";
-  version = "1.6.3";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "carpedm20";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0QOtsHGhqbjaEDpSbUXdE8+u6xzWbrTexx+BAeYwKa8=";
+    sha256 = "sha256-vKQ51RP7uy57vP3dOnHZRSp/Wz+YDzeLUR8JnIELE/I=";
   };
 
   checkInputs = [

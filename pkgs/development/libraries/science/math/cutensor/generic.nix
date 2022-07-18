@@ -7,7 +7,7 @@
 , addOpenGLRunpath
 
 , version
-, sha256
+, hash
 }:
 
 let
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://developer.download.nvidia.com/compute/cutensor/${mostOfVersion}/local_installers/libcutensor-${stdenv.hostPlatform.parsed.kernel.name}-${stdenv.hostPlatform.parsed.cpu.name}-${version}.tar.gz";
-    inherit sha256;
+    inherit hash;
   };
 
   outputs = [ "out" "dev" ];
@@ -62,6 +62,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "cuTENSOR: A High-Performance CUDA Library For Tensor Primitives";
     homepage = "https://developer.nvidia.com/cutensor";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ obsidian-systems-maintenance ];

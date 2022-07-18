@@ -136,7 +136,7 @@ in
               '';
             locations = {
               "~ \\.php$".extraConfig = ''
-                include ${pkgs.nginx}/conf/fastcgi_params;
+                include ${config.services.nginx.package}/conf/fastcgi_params;
                 fastcgi_split_path_info ^(.+\.php)(/.+)$;
                 fastcgi_index index.php;
                 fastcgi_pass unix:${config.services.phpfpm.pools.jirafeau.socket};

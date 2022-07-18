@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, python3, xvfb-run
+{ lib, buildPythonPackage, fetchPypi, isPy3k, python, xvfb-run
 , wrapGAppsHook, gobject-introspection, pygobject3, graphviz, gtk3, numpy }:
 
 buildPythonPackage rec {
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   '';
 
   checkPhase = ''
-    xvfb-run -s '-screen 0 800x600x24' ${python3.interpreter} nix_run_setup test
+    xvfb-run -s '-screen 0 800x600x24' ${python.interpreter} nix_run_setup test
   '';
 
   # https://github.com/NixOS/nixpkgs/pull/107872#issuecomment-752175866

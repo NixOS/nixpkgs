@@ -9,7 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "1gsx7k77blfy171b6g3m0k0s0072v6jcawhmx1kjs9w5zlwdkzd0";
   };
 
-  patches = [ ./enable-riscv.patch ];
+  patches = [
+    ./enable-riscv.patch
+    ./enable-powerpc.patch
+  ];
 
   buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices ]);
 

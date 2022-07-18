@@ -8,7 +8,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.0.1";
+  version = "3.1.0";
   pname = "fints";
   disabled = isPy27;
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "raphaelm";
     repo = "python-fints";
     rev = "v${version}";
-    sha256 = "sha256-P9+3QuB5c7WMjic2fSp8pwXrOUHIrLThvfodtbBXLMY=";
+    hash = "sha256-3frJIEZgVnZD2spWYIuEtUt7MVsU/Zj82HOB9fKYQWE=";
   };
 
   propagatedBuildInputs = [ requests mt-940 sepaxml bleach ];

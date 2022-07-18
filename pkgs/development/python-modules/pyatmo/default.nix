@@ -9,7 +9,7 @@
 , pytestCheckHook
 , pythonOlder
 , requests
-, requests_oauthlib
+, requests-oauthlib
 , requests-mock
 , setuptools-scm
 }:
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     aiohttp
     oauthlib
     requests
-    requests_oauthlib
+    requests-oauthlib
   ];
 
   checkInputs = [

@@ -3,7 +3,6 @@
 with lib;
 
 let
-  version = "1.3.0";
   incfile = builtins.toFile "make.inc.custom" ''
     CC        = g++
     FORT      = gfortran
@@ -32,10 +31,11 @@ let
     INC       = -I$(clBLAS)/include
                #-I$(AMDAPP)/include
   '';
-in stdenv.mkDerivation {
-  name = "clmagma-${version}";
+in stdenv.mkDerivation rec {
+  pname = "clmagma";
+  version = "1.3.0";
   src = fetchurl {
-    url = "http://icl.cs.utk.edu/projectsfiles/magma/cl/clmagma-${version}.tar.gz";
+    url = "https://icl.cs.utk.edu/projectsfiles/magma/cl/clmagma-${version}.tar.gz";
     sha256 = "1n27ny0xhwirw2ydn46pfcwy53gzia9zbam4irx44fd4d7f9ydv7";
     name = "clmagma-${version}.tar.gz";
   };
@@ -68,7 +68,7 @@ in stdenv.mkDerivation {
   meta = with lib; {
     description = "Matrix Algebra on GPU and Multicore Architectures, OpenCL port";
     license = licenses.bsd3;
-    homepage = "http://icl.cs.utk.edu/magma/index.html";
+    homepage = "https://icl.cs.utk.edu/magma/index.html";
     platforms = platforms.linux;
     maintainers = with maintainers; [ volhovm ];
   };

@@ -12,9 +12,9 @@ stdenv.mkDerivation rec {
 
   patches = [ ./hivex-syms.patch ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config ];
   buildInputs = [
-    autoreconfHook makeWrapper libxml2
+    libxml2
   ]
   ++ (with perlPackages; [ perl IOStringy ])
   ++ lib.optionals stdenv.isDarwin [ libiconv ];
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Windows registry hive extraction library";
     license = licenses.lgpl2;
     homepage = "https://github.com/libguestfs/hivex";

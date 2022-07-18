@@ -102,17 +102,19 @@ in
     # Taken from: https://github.com/oauth2-proxy/oauth2-proxy/blob/master/providers/providers.go
     provider = mkOption {
       type = types.enum [
-        "google"
+        "adfs"
         "azure"
+        "bitbucket"
+        "digitalocean"
         "facebook"
         "github"
-        "keycloak"
         "gitlab"
+        "google"
+        "keycloak"
+        "keycloak-oidc"
         "linkedin"
         "login.gov"
-        "bitbucket"
         "nextcloud"
-        "digitalocean"
         "oidc"
       ];
       default = "google";
@@ -569,7 +571,10 @@ in
     users.users.oauth2_proxy = {
       description = "OAuth2 Proxy";
       isSystemUser = true;
+      group = "oauth2_proxy";
     };
+
+    users.groups.oauth2_proxy = {};
 
     systemd.services.oauth2_proxy = {
       description = "OAuth2 Proxy";

@@ -46,6 +46,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # Failures seem related to changes in holidays-0.13, https://github.com/azogue/aiopvpc/issues/44
+    "test_number_of_national_holidays"
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml --replace \
       " --cov --cov-report term --cov-report html" ""

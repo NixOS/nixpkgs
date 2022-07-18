@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-power";
-  version = "2.6.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "006h8mrhmdrbd83vhdyahgrfk9wh6j9kjincpp7dz7sl8fsyhmcr";
+    sha256 = "sha256-8Hu2RIgA0gSc+tLNjDqGS+b/HpbsOdR4otpY4UqNzKs=";
   };
 
   nativeBuildInputs = [

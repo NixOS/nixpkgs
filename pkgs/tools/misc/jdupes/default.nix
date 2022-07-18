@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     # Unicode file names lead to different checksums on HFS+ vs. other
     # filesystems because of unicode normalisation. The testdir
     # directories have such files and will be removed.
-    extraPostFetch = "rm -r $out/testdir";
+    postFetch = "rm -r $out/testdir";
   };
 
   dontConfigure = true;

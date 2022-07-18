@@ -5,16 +5,9 @@
 }:
 let
   # Poetry2nix version
-  version = "1.26.0";
+  version = "1.31.0";
 
   inherit (poetryLib) isCompatible readTOML moduleName;
-
-  /* The default list of poetry2nix override overlays */
-  mkEvalPep508 = import ./pep508.nix {
-    inherit lib poetryLib;
-    stdenv = pkgs.stdenv;
-  };
-  getFunctorFn = fn: if builtins.typeOf fn == "set" then fn.__functor else fn;
 
   # Map SPDX identifiers to license names
   spdxLicenses = lib.listToAttrs (lib.filter (pair: pair.name != null) (builtins.map (v: { name = if lib.hasAttr "spdxId" v then v.spdxId else null; value = v; }) (lib.attrValues lib.licenses)));
@@ -121,10 +114,16 @@ lib.makeScope pkgs.newScope (self: {
     , preferWheels ? false
       # Example: { my-app = ./src; }
     , editablePackageSources ? { }
-    , __isBootstrap ? false  # Hack: Always add Poetry as a build input unless bootstrapping
     , pyProject ? readTOML pyproject
     }@attrs:
     let
+      /* The default list of poetry2nix override overlays */
+      mkEvalPep508 = import ./pep508.nix {
+        inherit lib poetryLib;
+        inherit (python) stdenv;
+      };
+      getFunctorFn = fn: if builtins.typeOf fn == "set" then fn.__functor else fn;
+
       poetryPkg = poetry.override { inherit python; };
 
       scripts = pyProject.tool.poetry.scripts or { };
@@ -180,7 +179,6 @@ lib.makeScope pkgs.newScope (self: {
                   value = self.mkPoetryDep (
                     pkgMeta // {
                       inherit pwd preferWheels;
-                      inherit __isBootstrap;
                       source = pkgMeta.source or null;
                       files = lockFiles.${name};
                       pythonPackages = self;
@@ -207,12 +205,12 @@ lib.makeScope pkgs.newScope (self: {
                 in
                 {
                   mkPoetryDep = self.callPackage ./mk-poetry-dep.nix {
-                    inherit pkgs lib python poetryLib evalPep508;
+                    inherit lib python poetryLib evalPep508;
                   };
 
-                  # Use poetry-core from the poetry build (pep517/518 build-system)
-                  poetry-core = if __isBootstrap then null else poetryPkg.passthru.python.pkgs.poetry-core;
-                  poetry = if __isBootstrap then null else poetryPkg;
+                  # # Use poetry-core from the poetry build (pep517/518 build-system)
+                  poetry-core = poetryPkg.passthru.python.pkgs.poetry-core;
+                  poetry = poetryPkg;
 
                   __toPluginAble = toPluginAble self;
 
@@ -222,10 +220,21 @@ lib.makeScope pkgs.newScope (self: {
                   setuptools-scm = super.setuptools_scm;
                 }
             )
+
+            # Fix infinite recursion in a lot of packages because of checkInputs
+            (self: super: lib.mapAttrs
+              (name: value: (
+                if lib.isDerivation value && lib.hasAttr "overridePythonAttrs" value
+                then value.overridePythonAttrs (_: { doCheck = false; })
+                else value
+              ))
+              super)
+
             # Null out any filtered packages, we don't want python.pkgs from nixpkgs
             (self: super: builtins.listToAttrs (builtins.map (x: { name = moduleName x.name; value = null; }) incompatible))
             # Create poetry2nix layer
             baseOverlay
+
           ] ++ # User provided overrides
           (if builtins.typeOf overrides == "list" then overrides else [ overrides ])
         );
@@ -278,11 +287,19 @@ lib.makeScope pkgs.newScope (self: {
         (name: value: projectDir + "/${value.path}")
         (lib.filterAttrs (name: dep: dep.develop or false && hasAttr "path" dep) set);
 
-      editablePackageSources' = (
+      excludedEditablePackageNames = builtins.filter
+        (pkg: editablePackageSources."${pkg}" == null)
+        (builtins.attrNames editablePackageSources);
+
+      allEditablePackageSources = (
         (getEditableDeps (pyProject.tool.poetry."dependencies" or { }))
         // (getEditableDeps (pyProject.tool.poetry."dev-dependencies" or { }))
         // editablePackageSources
       );
+
+      editablePackageSources' = builtins.removeAttrs
+        allEditablePackageSources
+        excludedEditablePackageNames;
 
       poetryPython = self.mkPoetryPackages {
         inherit pyproject poetrylock overrides python pwd preferWheels pyProject;
@@ -318,12 +335,11 @@ lib.makeScope pkgs.newScope (self: {
     , python ? pkgs.python3
     , pwd ? projectDir
     , preferWheels ? false
-    , __isBootstrap ? false  # Hack: Always add Poetry as a build input unless bootstrapping
     , ...
     }@attrs:
     let
       poetryPython = self.mkPoetryPackages {
-        inherit pyproject poetrylock overrides python pwd preferWheels __isBootstrap;
+        inherit pyproject poetrylock overrides python pwd preferWheels;
       };
       py = poetryPython.python;
 
@@ -429,7 +445,7 @@ lib.makeScope pkgs.newScope (self: {
 
     Can be overriden by calling defaultPoetryOverrides.overrideOverlay which takes an overlay function
   */
-  defaultPoetryOverrides = self.mkDefaultPoetryOverrides (import ./overrides.nix { inherit pkgs lib; });
+  defaultPoetryOverrides = self.mkDefaultPoetryOverrides (import ./overrides { inherit pkgs lib; });
 
   /*
     Convenience functions for specifying overlays with or without the poerty2nix default overrides

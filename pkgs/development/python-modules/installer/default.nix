@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "installer";
-  version = "0.3.0";
+  version = "0.5.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pradyunsg";
     repo = pname;
     rev = version;
-    sha256 = "sha256-AxAQgDhRFkb0HB7ttDb+pHuHzwnNDX6UOm9rswzIwmI=";
+    sha256 = "sha256-vhZYUhUcD5fnjkyEqFMvggVGH9Ri8iNgqRgSBQTOCtM=";
   };
 
   nativeBuildInputs = [ flit-core ];

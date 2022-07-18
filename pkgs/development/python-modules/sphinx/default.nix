@@ -4,7 +4,7 @@
 , pythonOlder
 , fetchFromGitHub
 # propagatedBuildInputs
-, Babel
+, babel
 , alabaster
 , docutils
 , imagesize
@@ -30,15 +30,17 @@
 
 buildPythonPackage rec {
   pname = "sphinx";
-  version = "4.4.0";
-  disabled = pythonOlder "3.5";
+  version = "4.5.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "sphinx-doc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Q4CqPO08AfR+CDB02al65A+FHRFUDUfFTba0u8YQx+8=";
-    extraPostFetch = ''
+    sha256 = "sha256-Lw9yZWCQpt02SL/McWPcyFRfVhQHC0TejcYRbVw+VxY=";
+    postFetch = ''
       cd $out
       mv tests/roots/test-images/testimäge.png \
         tests/roots/test-images/testimæge.png
@@ -46,8 +48,19 @@ buildPythonPackage rec {
     '';
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "docutils>=0.14,<0.18" "docutils>=0.14"
+
+    # remove impurity caused by date inclusion
+    # https://github.com/sphinx-doc/sphinx/blob/master/setup.cfg#L4-L6
+    substituteInPlace setup.cfg \
+      --replace "tag_build = .dev" "" \
+      --replace "tag_date = true" ""
+  '';
+
   propagatedBuildInputs = [
-    Babel
+    babel
     alabaster
     docutils
     imagesize
@@ -92,9 +105,11 @@ buildPythonPackage rec {
     # Due to lack of network sandboxing can't guarantee port 7777 isn't bound
     "test_inspect_main_url"
     "test_auth_header_uses_first_match"
+    "test_linkcheck_allowed_redirects"
     "test_linkcheck_request_headers"
     "test_linkcheck_request_headers_no_slash"
     "test_follows_redirects_on_HEAD"
+    "test_get_after_head_raises_connection_error"
     "test_invalid_ssl"
     "test_connect_to_selfsigned_with_tls_verify_false"
     "test_connect_to_selfsigned_with_tls_cacerts"

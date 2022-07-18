@@ -1,6 +1,7 @@
 { lib, stdenv, llvm_meta
 , pkgsBuildBuild
-, src
+, monorepoSrc
+, runCommand
 , fetchpatch
 , cmake
 , python3
@@ -22,7 +23,7 @@
   || stdenv.isAarch32 # broken for the armv7l builder
 )
 , enablePolly ? false
-}:
+} @args:
 
 let
   inherit (lib) optional optionals optionalString;
@@ -35,8 +36,16 @@ in stdenv.mkDerivation (rec {
   pname = "llvm";
   inherit version;
 
-  inherit src;
-  sourceRoot = "source/${pname}";
+  src = runCommand "${pname}-src-${version}" {} (''
+    mkdir -p "$out"
+    cp -r ${monorepoSrc}/cmake "$out"
+    cp -r ${monorepoSrc}/${pname} "$out"
+    cp -r ${monorepoSrc}/third-party "$out"
+  '' + lib.optionalString enablePolly ''
+    cp -r ${monorepoSrc}/polly "$out/llvm/tools"
+  '');
+
+  sourceRoot = "${src.name}/${pname}";
 
   outputs = [ "out" "lib" "dev" "python" ];
 
@@ -51,12 +60,6 @@ in stdenv.mkDerivation (rec {
   checkInputs = [ which ];
 
   patches = [
-    # When cross-compiling we configure llvm-config-native with an approximation
-    # of the flags used for the normal LLVM build. To avoid the need for building
-    # a native libLLVM.so (which would fail) we force llvm-config to be linked
-    # statically against the necessary LLVM components always.
-    ../../llvm-config-link-static.patch
-
     ./gnu-install-dirs.patch
   ] ++ lib.optional enablePolly ./gnu-install-dirs-polly.patch;
 
@@ -196,6 +199,12 @@ in stdenv.mkDerivation (rec {
   + optionalString (stdenv.isDarwin && enableSharedLibraries) ''
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${shortVersion}.dylib
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${release_version}.dylib
+  ''
+  + optionalString enableSharedLibraries ''
+    mkdir -p $dev/lib
+    mv $lib/lib/*.a $dev/lib
+    sed -i -E "s|$lib/lib/(.*)\.a|$dev/lib/\1\.a|" \
+      "$dev/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake"
   ''
   + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
     cp NATIVE/bin/llvm-config $dev/bin/llvm-config-native

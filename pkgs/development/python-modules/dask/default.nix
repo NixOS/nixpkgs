@@ -4,6 +4,7 @@
 , buildPythonPackage
 , cloudpickle
 , distributed
+, fastparquet
 , fetchFromGitHub
 , fetchpatch
 , fsspec
@@ -12,18 +13,20 @@
 , packaging
 , pandas
 , partd
+, pyarrow
 , pytest-rerunfailures
 , pytest-xdist
 , pytestCheckHook
 , pythonOlder
 , pyyaml
+, scipy
 , toolz
-, withExtraComplete ? false
+, zarr
 }:
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2022.01.0";
+  version = "2022.05.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -32,8 +35,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = pname;
     rev = version;
-    sha256 = "sha256-HlVvnhEDzefzv9xchlXl9d4KCumoAqoYUWmIiCXLJyM=
-";
+    hash = "sha256-8M70Pf31PhYnBPRhSG55eWg6gK0lxsIFKF+cRCsf0/U=";
   };
 
   propagatedBuildInputs = [
@@ -43,53 +45,71 @@ buildPythonPackage rec {
     partd
     pyyaml
     toolz
-    pandas
-    jinja2
-    bokeh
-    numpy
-  ] ++ lib.optionals (withExtraComplete) [
-    # infinite recursion between distributed and dask
-    distributed
   ];
 
-  doCheck = true;
+  passthru.optional-dependencies = {
+    array = [
+      numpy
+    ];
+    complete = [
+      distributed
+    ];
+    dataframe = [
+      numpy
+      pandas
+    ];
+    distributed = [
+      distributed
+    ];
+    diagnostics = [
+      bokeh
+      jinja2
+    ];
+  };
 
   checkInputs = [
+    fastparquet
+    pyarrow
     pytestCheckHook
     pytest-rerunfailures
     pytest-xdist
+    scipy
+    zarr
   ];
 
   dontUseSetuptoolsCheck = true;
 
   postPatch = ''
-    # versioneer hack to set version of github package
+    # versioneer hack to set version of GitHub package
     echo "def get_versions(): return {'dirty': False, 'error': None, 'full-revisionid': None, 'version': '${version}'}" > dask/_version.py
 
     substituteInPlace setup.py \
       --replace "version=versioneer.get_version()," "version='${version}'," \
       --replace "cmdclass=versioneer.get_cmdclass()," ""
+
+    substituteInPlace setup.cfg \
+      --replace " --durations=10" "" \
+      --replace " -v" ""
   '';
 
   pytestFlagsArray = [
-    # parallelize
-    "--numprocesses $NIX_BUILD_CORES"
-    # rerun failed tests up to three times
+    # Rerun failed tests up to three times
     "--reruns 3"
-    # don't run tests that require network access
+    # Don't run tests that require network access
     "-m 'not network'"
+    # Ignore warning about pyarrow 5.0.0 feautres
+    "-W"
+    "ignore::FutureWarning"
   ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
-    # this test requires features of python3Packages.psutil that are
+    # Test requires features of python3Packages.psutil that are
     # blocked in sandboxed-builds
     "test_auto_blocksize_csv"
+    # AttributeError: 'str' object has no attribute 'decode'
+    "test_read_dir_nometa"
   ] ++ [
-    # A deprecation warning from newer sqlalchemy versions makes these tests
-    # to fail https://github.com/dask/dask/issues/7406
-    "test_sql"
-    # Test interrupt fails intermittently https://github.com/dask/dask/issues/2192
-    "test_interrupt"
+    "test_chunksize_files"
   ];
 
   __darwinAllowLocalNetworking = true;

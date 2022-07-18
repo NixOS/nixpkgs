@@ -45,10 +45,6 @@ buildPythonPackage rec {
     "test_get_many"
   ];
 
-  pytestFlagsArray = [
-    "-n $NIX_BUILD_CORES"
-  ];
-
   pythonImportsCheck = [
     "diskcache"
   ];

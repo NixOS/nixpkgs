@@ -54,8 +54,8 @@ in
     testScript = ''
       start_all()
 
-      webserver.wait_for_open_port("80")
-      proxy.wait_for_open_port("80")
+      webserver.wait_for_open_port(80)
+      proxy.wait_for_open_port(80)
       client.wait_until_succeeds("curl -s --fail http://proxy/hello-world.txt")
     '';
   })

@@ -54,7 +54,7 @@ in
   config = mkIf cfg.enable {
 
     services.greetd.settings.terminal.vt = mkDefault cfg.vt;
-    services.greetd.settings.default_session = mkDefault "greeter";
+    services.greetd.settings.default_session.user = mkDefault "greeter";
 
     security.pam.services.greetd = {
       allowNullPassword = true;

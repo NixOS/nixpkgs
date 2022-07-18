@@ -1,48 +1,66 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
-
 , meson
 , ninja
 , pkg-config
 , gobject-introspection
 , gsettings-desktop-schemas
 , makeWrapper
-
 , dbus
 , glib
 , dconf
 , libX11
-, libXtst # at-spi2-core can be build without X support, but due it is a client-side library, GUI-less usage is a very rare case
+, libXtst
 , libXi
 , libXext
-
-, gnome # To pass updateScript
+, gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "at-spi2-core";
-  version = "2.42.0";
-
-  src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "11p3lvmbm0hfck3p5xwxxycln8x0cf7l68jjz6an2g7sjh7a2pab";
-  };
+  version = "2.44.1";
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ meson ninja pkg-config gobject-introspection makeWrapper ];
-  # libXext is a transitive dependency of libXi
-  buildInputs = [ libX11 libXtst libXi libXext ];
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "S+sjJwumz3yvILWXNU11GU2Jr7adLvzxX0JxaIum90Y=";
+  };
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gobject-introspection
+    makeWrapper
+  ];
+
+  buildInputs = [
+    libX11
+    # at-spi2-core can be build without X support, but due it is a client-side library, GUI-less usage is a very rare case
+    libXtst
+    libXi
+    # libXext is a transitive dependency of libXi
+    libXext
+  ];
+
   # In atspi-2.pc dbus-1 glib-2.0
-  propagatedBuildInputs = [ dbus glib ];
+  propagatedBuildInputs = [
+    dbus
+    glib
+  ];
 
-  doCheck = false; # fails with "AT-SPI: Couldn't connect to accessibility bus. Is at-spi-bus-launcher running?"
+  # fails with "AT-SPI: Couldn't connect to accessibility bus. Is at-spi-bus-launcher running?"
+  doCheck = false;
 
-  # Provide dbus-daemon fallback when it is not already running when
-  # at-spi2-bus-launcher is executed. This allows us to avoid
-  # including the entire dbus closure in libraries linked with
-  # the at-spi2-core libraries.
-  mesonFlags = [ "-Ddbus_daemon=/run/current-system/sw/bin/dbus-daemon" ];
+  mesonFlags = [
+    # Provide dbus-daemon fallback when it is not already running when
+    # at-spi2-bus-launcher is executed. This allows us to avoid
+    # including the entire dbus closure in libraries linked with
+    # the at-spi2-core libraries.
+    "-Ddbus_daemon=/run/current-system/sw/bin/dbus-daemon"
+  ];
 
   passthru = {
     updateScript = gnome.updateScript {

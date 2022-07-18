@@ -1,7 +1,7 @@
 { mkDerivation, lib, extra-cmake-modules, pam, socat, libgcrypt, qtbase, kwallet, }:
 
 mkDerivation {
-  name = "kwallet-pam";
+  pname = "kwallet-pam";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ pam socat libgcrypt qtbase kwallet ];
   postPatch = ''

@@ -50,6 +50,14 @@ stdenv.mkDerivation rec {
       url = "https://github.com/chernandezba/zesarux/commit/4493439b38f565c5be7c36239ecaf0cf80045627.diff";
       sha256 = "sha256-f+21naPcPXdcVvqU8ymlGfl1WkYGOeOBe9B/WFUauTI=";
     })
+
+    # Patch pending upstream release for libcaca-0.99.beta20 support:
+    #  https://github.com/chernandezba/zesarux/pull/1
+    (fetchpatch {
+      name = "libcaca-0.99.beta20.patch";
+      url = "https://github.com/chernandezba/zesarux/commit/542786338d00ab6fcdf712bbd6f5e891e8b26c34.diff";
+      sha256 = "sha256-UvXvBb9Nzw5HNz0uiv2SV1Oeiw7aVCa0jhEbThDRVec=";
+    })
   ];
 
   postPatch = ''

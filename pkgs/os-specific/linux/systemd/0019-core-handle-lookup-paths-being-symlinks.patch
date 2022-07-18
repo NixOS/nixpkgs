@@ -1,4 +1,4 @@
-From 2ab388cf0be320879e668a6206cb15d002b55f98 Mon Sep 17 00:00:00 2001
+From 169fc6f270ff3e3903a7a31550c964152f9751ec Mon Sep 17 00:00:00 2001
 From: Andreas Rammhold <andreas@rammhold.de>
 Date: Wed, 18 Aug 2021 19:10:08 +0200
 Subject: [PATCH 19/19] core: handle lookup paths being symlinks
@@ -15,10 +15,10 @@ directory itself is already a symlink.
  1 file changed, 31 insertions(+), 2 deletions(-)
 
 diff --git a/src/basic/unit-file.c b/src/basic/unit-file.c
-index 0d58b1c4fe..7314f1245f 100644
+index 30c632dfce..6179100126 100644
 --- a/src/basic/unit-file.c
 +++ b/src/basic/unit-file.c
-@@ -254,6 +254,7 @@ int unit_file_build_name_map(
+@@ -255,6 +255,7 @@ int unit_file_build_name_map(
  
          _cleanup_hashmap_free_ Hashmap *ids = NULL, *names = NULL;
          _cleanup_set_free_free_ Set *paths = NULL;
@@ -26,7 +26,7 @@ index 0d58b1c4fe..7314f1245f 100644
          uint64_t timestamp_hash;
          char **dir;
          int r;
-@@ -273,6 +274,34 @@ int unit_file_build_name_map(
+@@ -274,6 +275,34 @@ int unit_file_build_name_map(
                          return log_oom();
          }
  
@@ -59,9 +59,9 @@ index 0d58b1c4fe..7314f1245f 100644
 +        }
 +
          STRV_FOREACH(dir, (char**) lp->search_path) {
-                 struct dirent *de;
                  _cleanup_closedir_ DIR *d = NULL;
-@@ -351,11 +380,11 @@ int unit_file_build_name_map(
+ 
+@@ -386,11 +415,11 @@ int unit_file_build_name_map(
                                          continue;
                                  }
  
@@ -76,5 +76,5 @@ index 0d58b1c4fe..7314f1245f 100644
                                          log_debug("%s: linked unit file: %s → %s",
                                                    __func__, filename, simplified);
 -- 
-2.33.1
+2.34.0
 

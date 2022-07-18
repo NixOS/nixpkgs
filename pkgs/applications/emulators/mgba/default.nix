@@ -57,8 +57,8 @@ stdenv.mkDerivation rec {
       comment = "A Game Boy Advance Emulator";
       desktopName = "mgba";
       genericName = "Game Boy Advance Emulator";
-      categories = "Game;Emulator;";
-      startupNotify = "false";
+      categories = [ "Game" "Emulator" ];
+      startupNotify = false;
     })
   ];
 

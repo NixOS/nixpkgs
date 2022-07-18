@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, SDL_mixer, SDL, autoreconfHook }:
+{ lib, stdenv, fetchurl, fetchpatch, SDL_mixer, SDL, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "ri_li";
@@ -9,9 +9,19 @@ stdenv.mkDerivation rec {
     sha256 = "f71ccc20c37c601358d963e087ac0d524de8c68e96df09c3aac1ae65edd38dbd";
   };
 
-  patches = [ ./moderinze_cpp.patch ];
+  patches = [
+    ./moderinze_cpp.patch
 
-  CPPFLAGS = "-I${SDL.dev}/include -I${SDL.dev}/include/SDL -I${SDL_mixer}/include";
+    # Build fix for gcc-11 pending upstream inclusion:
+    #  https://sourceforge.net/p/ri-li/bugs/2/
+    (fetchpatch {
+      name = "gcc-11.patch";
+      url = "https://sourceforge.net/p/ri-li/bugs/2/attachment/0001-Fix-build-on-gcc-11.patch";
+      sha256 = "01il9lm3amwp3b435ka9q63p0jwlzajwnbshyazx6n9vcnrr17yw";
+    })
+  ];
+
+  CPPFLAGS = "-I${lib.getDev SDL}/include -I${lib.getDev SDL}/include/SDL -I${SDL_mixer}/include";
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ SDL SDL_mixer ];

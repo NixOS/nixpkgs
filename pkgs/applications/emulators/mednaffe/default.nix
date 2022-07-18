@@ -20,11 +20,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook ];
+
   buildInputs = [ gtk3 mednafen ];
 
-  postInstall = ''
-    wrapProgram $out/bin/mednaffe \
+  enableParallelBuilding = true;
+
+  preFixup = ''
+    gappsWrapperArgs+=(
       --prefix PATH ':' "${mednafen}/bin"
+    )
    '';
 
   meta = with lib; {
@@ -32,6 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/AmatCoder/mednaffe";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ sheenobu yana AndersonTorres ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

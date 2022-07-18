@@ -1,8 +1,8 @@
-{ lib, stdenv, appimageTools, fetchurl, gsettings-desktop-schemas, gtk3, undmg }:
+{ lib, stdenv, appimageTools, fetchurl, undmg }:
 
 let
   pname = "joplin-desktop";
-  version = "2.6.10";
+  version = "2.8.8";
   name = "${pname}-${version}";
 
   inherit (stdenv.hostPlatform) system;
@@ -16,8 +16,8 @@ let
   src = fetchurl {
     url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}.${suffix}";
     sha256 = {
-      x86_64-linux = "sha256-2/QYEzQjB9n/4k5I/fry3ol8Fpsb5+tc1ttVdf2ID+4=";
-      x86_64-darwin = "sha256-BwBpq78hYJVUItUgs9lonBTV4YWJ+qvML6VTj5M4BQ4=";
+      x86_64-linux = "0ivljlw6kdpg94q9syi11zmk54w06m8j3zicx9nppqg720fw4zv3";
+      x86_64-darwin = "0gpr3zi6z98pkg8hsvcmpck754cph53kmgl3bhp3zmmmfj0kxjhs";
     }.${system} or throwSystem;
   };
 
@@ -45,7 +45,6 @@ let
 
     profile = ''
       export LC_ALL=C.UTF-8
-      export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
     '';
 
     multiPkgs = null; # no 32bit needed

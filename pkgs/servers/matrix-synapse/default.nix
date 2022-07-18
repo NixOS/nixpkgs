@@ -11,18 +11,12 @@ in
 with python3.pkgs;
 buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.52.0";
+  version = "1.62.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "091z3rwd10n59andfy1pfjrf6q3n3yrjqrws13lqc02w23aaxzin";
+    sha256 = "sha256-14aHO13FCUEq3pwLUDvrI1au6i8Wykhc5d5C3tLpE3g=";
   };
-
-  # frozendict version constraint is to avoid a debian issue we don't have
-  postPatch = ''
-    substituteInPlace synapse/python_dependencies.py \
-      --replace '"frozendict' '"frozendict", #'
-  '';
 
   buildInputs = [ openssl ];
 

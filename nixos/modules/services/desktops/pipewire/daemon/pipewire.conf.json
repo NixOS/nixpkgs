@@ -3,6 +3,7 @@
     "link.max-buffers": 16,
     "core.daemon": true,
     "core.name": "pipewire-0",
+    "default.clock.min-quantum": 16,
     "vm.overrides": {
       "default.clock.min-quantum": 1024
     }
@@ -19,8 +20,10 @@
   },
   "context.modules": [
     {
-      "name": "libpipewire-module-rtkit",
-      "args": {},
+      "name": "libpipewire-module-rt",
+      "args": {
+        "nice.level": -11
+      },
       "flags": [
         "ifexists",
         "nofail"

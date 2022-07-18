@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wg-netmanager";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "gin66";
     repo = "wg_netmanager";
     rev = "wg_netmanager-v${version}";
-    sha256 = "sha256-2LO1OCGlkjdszwgNBZ+Qwp126VfDq3pxf0Gz+6kzuPI=";
+    sha256 = "sha256-Mr4+TW1yOePEHa7puz6mTRJ514LGQeiEwPW3NKupV/M=";
   };
 
-  cargoSha256 = "sha256-EM0TPMyWMVpLFhan0boAQoAvMHBVgXp6mnYJLHOHiV8=";
+  cargoSha256 = "sha256-cOxkWMFPVmi+/BQWIvExzX5LDyC7C8kaTf5dGwfXj+s=";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 
@@ -21,7 +21,12 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Wireguard network manager";
-    longDescription = "Wireguard network manager, written in rust, simplifies the setup of wireguard nodes, identifies short connections between nodes residing in the same subnet, identifies unreachable aka dead nodes and maintains the routes between all nodes automatically. To achieve this, wireguard network manager needs to be running on each node.";
+    longDescription = ''
+      Wireguard network manager, written in rust, simplifies the setup of wireguard nodes,
+      identifies short connections between nodes residing in the same subnet,
+      identifies unreachable aka dead nodes and maintains the routes between all nodes automatically.
+      To achieve this, wireguard network manager needs to be running on each node.
+    '';
     homepage = "https://github.com/gin66/wg_netmanager";
     license = with licenses; [ mit asl20 bsd3 mpl20 ];
     maintainers = with maintainers; [ gin66 ];

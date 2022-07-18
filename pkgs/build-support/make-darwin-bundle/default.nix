@@ -12,14 +12,14 @@
 
 writeShellScript "make-darwin-bundle-${name}" (''
   function makeDarwinBundlePhase() {
-    mkdir -p "$out/Applications/${name}.app/Contents/MacOS"
-    mkdir -p "$out/Applications/${name}.app/Contents/Resources"
+    mkdir -p "''${!outputBin}/Applications/${name}.app/Contents/MacOS"
+    mkdir -p "''${!outputBin}/Applications/${name}.app/Contents/Resources"
 
     if [ -n "${icon}" ]; then
-      ln -s "${icon}" "$out/Applications/${name}.app/Contents/Resources"
+      ln -s "${icon}" "''${!outputBin}/Applications/${name}.app/Contents/Resources"
     fi
 
-    ${writeDarwinBundle}/bin/write-darwin-bundle "$out" "${name}" "${exec}"
+    ${writeDarwinBundle}/bin/write-darwin-bundle "''${!outputBin}" "${name}" "${exec}"
   }
 
   preDistPhases+=" makeDarwinBundlePhase"

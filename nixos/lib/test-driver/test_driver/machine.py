@@ -198,7 +198,7 @@ class StartCommand:
     ) -> subprocess.Popen:
         return subprocess.Popen(
             self.cmd(monitor_socket_path, shell_socket_path),
-            stdin=subprocess.DEVNULL,
+            stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             shell=True,
@@ -526,10 +526,17 @@ class Machine:
         self.run_callbacks()
         self.connect()
 
-        if timeout is not None:
-            command = "timeout {} sh -c {}".format(timeout, shlex.quote(command))
+        # Always run command with shell opts
+        command = f"set -euo pipefail; {command}"
 
-        out_command = f"( set -euo pipefail; {command} ) | (base64 --wrap 0; echo)\n"
+        timeout_str = ""
+        if timeout is not None:
+            timeout_str = f"timeout {timeout}"
+
+        out_command = (
+            f"{timeout_str} sh -c {shlex.quote(command)} | (base64 --wrap 0; echo)\n"
+        )
+
         assert self.shell
         self.shell.send(out_command.encode())
 
@@ -557,6 +564,28 @@ class Machine:
             ["socat", "READLINE,prompt=$ ", f"FD:{self.shell.fileno()}"],
             pass_fds=[self.shell.fileno()],
         )
+
+    def console_interact(self) -> None:
+        """Allows you to interact with QEMU's stdin
+
+        The shell can be exited with Ctrl+D. Note that Ctrl+C is not allowed to be used.
+        QEMU's stdout is read line-wise.
+
+        Should only be used during test development, not in the production test."""
+        self.log("Terminal is ready (there is no prompt):")
+
+        assert self.process
+        assert self.process.stdin
+
+        while True:
+            try:
+                char = sys.stdin.buffer.read(1)
+            except KeyboardInterrupt:
+                break
+            if char == b"":  # ctrl+d
+                self.log("Closing connection to the console")
+                break
+            self.send_console(char.decode())
 
     def succeed(self, *commands: str, timeout: Optional[int] = None) -> str:
         """Execute each command and check that it succeeds."""
@@ -653,7 +682,7 @@ class Machine:
         with self.nested("waiting for {} to appear on tty {}".format(regexp, tty)):
             retry(tty_matches)
 
-    def send_chars(self, chars: List[str]) -> None:
+    def send_chars(self, chars: str) -> None:
         with self.nested("sending keys ‘{}‘".format(chars)):
             for char in chars:
                 self.send_key(char)
@@ -833,6 +862,12 @@ class Machine:
         key = CHAR_TO_KEY.get(key, key)
         self.send_monitor_command("sendkey {}".format(key))
         time.sleep(0.01)
+
+    def send_console(self, chars: str) -> None:
+        assert self.process
+        assert self.process.stdin
+        self.process.stdin.write(chars.encode())
+        self.process.stdin.flush()
 
     def start(self) -> None:
         if self.booted:

@@ -142,4 +142,8 @@ Removes the pre-existing vendor directory. This should only be used if the depen
 
 ### `subPackages` {#var-go-subPackages}
 
-Limits the builder from building child packages that have not been listed. If `subPackages` is not specified, all child packages will be built.
+Specified as a string or list of strings. Limits the builder from building child packages that have not been listed. If `subPackages` is not specified, all child packages will be built.
+
+### `excludedPackages` {#var-go-excludedPackages}
+
+Specified as a string or list of strings. Causes the builder to skip building child packages that match any of the provided values. If `excludedPackages` is not specified, all child packages will be built.

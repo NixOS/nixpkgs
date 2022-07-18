@@ -295,7 +295,8 @@ in
       # Note: when changing the default, make it conditional on
       # ‘system.stateVersion’ to maintain compatibility with existing
       # systems!
-      mkDefault (if versionAtLeast config.system.stateVersion "21.11" then pkgs.postgresql_13
+      mkDefault (if versionAtLeast config.system.stateVersion "22.05" then pkgs.postgresql_14
+            else if versionAtLeast config.system.stateVersion "21.11" then pkgs.postgresql_13
             else if versionAtLeast config.system.stateVersion "20.03" then pkgs.postgresql_11
             else if versionAtLeast config.system.stateVersion "17.09" then mkThrow "9_6"
             else mkThrow "9_5");

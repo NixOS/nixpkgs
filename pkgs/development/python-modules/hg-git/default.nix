@@ -3,24 +3,34 @@
 , fetchPypi
 , dulwich
 , mercurial
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "hg-git";
-  version = "0.10.3";
+  version = "1.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "27e6d7686a1548d4632dcc977f2ff3ce2e42d80735339b1f3b389b7481260cc4";
+    hash = "sha256-ORGDOWLrnImca+qPtJZmyC8hGxJNCEC+tq2V4jpGIbY=";
   };
 
-  propagatedBuildInputs = [ dulwich mercurial ];
+  propagatedBuildInputs = [
+    dulwich
+    mercurial
+  ];
+
+  pythonImportsCheck = [
+    "hggit"
+  ];
 
   meta = with lib; {
     description = "Push and pull from a Git server using Mercurial";
     homepage = "https://hg-git.github.io/";
-    maintainers = with maintainers; [ koral ];
     license = licenses.gpl2Only;
+    maintainers = with maintainers; [ koral ];
   };
-
 }

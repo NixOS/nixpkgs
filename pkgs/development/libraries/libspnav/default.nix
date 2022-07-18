@@ -21,7 +21,10 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [ "--disable-debug"];
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "AR=${stdenv.cc.targetPrefix}ar"
+  ];
 
   preInstall = ''
     mkdir -p $out/{lib,include}

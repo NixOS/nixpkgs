@@ -5,18 +5,23 @@
 
 stdenv.mkDerivation {
   pname = "freeimage";
-  version = "unstable-2020-07-04";
+  version = "unstable-2021-11-01";
 
   src = fetchsvn {
     url = "svn://svn.code.sf.net/p/freeimage/svn/";
-    rev = "1859";
-    sha256 = "1d94935aqbkb994nqkw7m8xcynyz9rm6k7k59igrbjak8b63qpi6";
+    rev = "1900";
+    sha256 = "rWoNlU/BWKZBPzRb1HqU6T0sT7aK6dpqKPe88+o/4sA=";
   };
-  sourceRoot = "svn-r1859/FreeImage/trunk";
+  sourceRoot = "svn-r1900/FreeImage/trunk";
 
   # Ensure that the bundled libraries are not used at all
-  prePatch = "rm -rf Source/Lib* Source/OpenEXR Source/ZLib";
-  patches = [ ./unbundle.diff ];
+  prePatch = ''
+    rm -rf Source/Lib* Source/OpenEXR Source/ZLib
+  '';
+  patches = [
+    ./unbundle.diff
+    ./libtiff-4.4.0.diff
+  ];
 
   postPatch = ''
     # To support cross compilation, use the correct `pkg-config`.

@@ -15,13 +15,13 @@
 
 buildGoModule rec {
   pname = "opensnitch";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "evilsocket";
     repo = "opensnitch";
     rev = "v${version}";
-    sha256 = "sha256-vtD82v0VlaJtCICXduD3IxJ0xjlBuzGKLWLoCiwPX2I=";
+    sha256 = "sha256-8IfupmQb1romGEvv/xqFkYhp0gGoY4ZEllX6rZYIkqw=";
   };
 
   patches = [
@@ -48,7 +48,12 @@ buildGoModule rec {
 
   postBuild = ''
     mv $GOPATH/bin/daemon $GOPATH/bin/opensnitchd
-    mkdir -p $out/lib/systemd/system
+    mkdir -p $out/etc/opensnitchd $out/lib/systemd/system
+    cp system-fw.json $out/etc/opensnitchd/
+    substitute default-config.json $out/etc/default-config.json \
+      --replace "/var/log/opensnitchd.log" "/dev/stdout" \
+      --replace "iptables" "nftables" \
+      --replace "ebpf" "proc"
     substitute opensnitchd.service $out/lib/systemd/system/opensnitchd.service \
       --replace "/usr/local/bin/opensnitchd" "$out/bin/opensnitchd" \
       --replace "/etc/opensnitchd/rules" "/var/lib/opensnitch/rules" \

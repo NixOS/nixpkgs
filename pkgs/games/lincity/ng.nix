@@ -1,28 +1,57 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, jam, pkg-config
-, zlib, libxml2, libxslt, xorgproto, libX11, libGLU, libGL, SDL
-, SDL_mixer, SDL_image, SDL_ttf, SDL_gfx, physfs
+{ stdenv
+, SDL2
+, SDL2_gfx
+, SDL2_image
+, SDL2_mixer
+, SDL2_ttf
+, autoreconfHook
+, fetchFromGitHub
+, jam
+, lib
+, libGL
+, libGLU
+, libX11
+, libxml2
+, libxslt
+, physfs
+, pkg-config
+, xorgproto
+, zlib
 }:
 
 stdenv.mkDerivation {
   pname = "lincity-ng";
-  version = "2.9beta.20170715";
+  version = "2.9beta.20211125";
 
   src = fetchFromGitHub {
-    owner  = "lincity-ng";
-    repo   = "lincity-ng";
-    rev    = "0c19714b811225238f310633e59f428934185e6b";
-    sha256 = "1gaj9fq97zmb0jsdw4rzrw34pimkmkwbfqps0glpqij4w3srz5f3";
+    owner = "lincity-ng";
+    repo = "lincity-ng";
+    rev = "b9062bec252632ca5d26b98d71453b8762c63173";
+    sha256 = "0l07cn8rmpmlqdppjc2ikh5c7xmwib27504zpmn3n9pryp394r46";
   };
 
   hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [
-    autoreconfHook jam pkg-config
+    autoreconfHook
+    jam
+    pkg-config
   ];
 
   buildInputs = [
-    zlib libxml2 libxslt xorgproto libX11 libGLU libGL SDL SDL_mixer SDL_image
-    SDL_ttf SDL_gfx physfs
+    SDL2
+    SDL2_gfx
+    SDL2_image
+    SDL2_mixer
+    SDL2_ttf
+    libGL
+    libGLU
+    libX11
+    libxml2
+    libxslt
+    physfs
+    xorgproto
+    zlib
   ];
 
   autoreconfPhase = ''

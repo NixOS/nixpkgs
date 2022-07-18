@@ -1,20 +1,17 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "wuzz";
-  version = "0.2.0";
-  rev = "v${version}";
-
-  goPackagePath = "https://github.com/asciimoo/wuzz";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "asciimoo";
-    repo = "wuzz";
-    inherit rev;
-    sha256 = "1fcr5jr0vn5w60bn08lkh2mi0hdarwp361h94in03139j7hhqrfs";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-H0soiKOytchfcFx17az0pGoFbA+hhXLxGJVdaARvnDc=";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "sha256-omeAIq8KBYXRnldiGKDF1g+aOKYc+B4grusmfg5wOuA=";
 
   meta = with lib; {
     homepage = "https://github.com/asciimoo/wuzz";

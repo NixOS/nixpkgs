@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , fetchFromGitHub
 , rustPlatform
 , autoPatchelfHook
@@ -79,6 +80,7 @@ in rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/casperstorm/ajour";
     changelog = "https://github.com/casperstorm/ajour/blob/master/CHANGELOG.md";
     license = licenses.mit;
+    broken = stdenv.isDarwin;
     maintainers = with maintainers; [ hexa ];
   };
 }

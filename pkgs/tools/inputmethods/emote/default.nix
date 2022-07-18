@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "emote";
-  version = "3.0.3";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "tom-james-watson";
     repo = "Emote";
     rev = "v${version}";
-    sha256 = "mqCSl+EGbnL9AfzZT3aa/Y5Rsx433ZmI31BmK3wkaJk=";
+    sha256 = "sha256-brGU5LzE9A1F5AVNIuyd8vFKEh58ijRB5qVEID/KJfY=";
   };
 
   postPatch = ''

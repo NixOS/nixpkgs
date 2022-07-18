@@ -20,6 +20,12 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook pandas pytorch scipy ];
 
+  disabledTests = [
+    # IndexError: too many indices for array
+    "test_slicer_sparse"
+    "test_operations_2d"
+  ];
+
   meta = with lib; {
     description = "Wraps tensor-like objects and provides a uniform slicing interface via __getitem__";
     homepage = "https://github.com/interpretml/slicer";

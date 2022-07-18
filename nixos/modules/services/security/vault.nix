@@ -7,6 +7,8 @@ let
   opt = options.services.vault;
 
   configFile = pkgs.writeText "vault.hcl" ''
+    # vault in dev mode will refuse to start if its configuration sets listener
+    ${lib.optionalString (!cfg.dev) ''
     listener "tcp" {
       address = "${cfg.address}"
       ${if (cfg.tlsCertFile == null || cfg.tlsKeyFile == null) then ''
@@ -17,6 +19,7 @@ let
         ''}
       ${cfg.listenerExtraConfig}
     }
+    ''}
     storage "${cfg.storageBackend}" {
       ${optionalString (cfg.storagePath   != null) ''path = "${cfg.storagePath}"''}
       ${optionalString (cfg.storageConfig != null) cfg.storageConfig}
@@ -30,8 +33,10 @@ let
   '';
 
   allConfigPaths = [configFile] ++ cfg.extraSettingsPaths;
-
-  configOptions = escapeShellArgs (concatMap (p: ["-config" p]) allConfigPaths);
+  configOptions = escapeShellArgs
+    (lib.optional cfg.dev "-dev" ++
+     lib.optional (cfg.dev && cfg.devRootTokenID != null) "-dev-root-token-id=${cfg.devRootTokenID}"
+      ++ (concatMap (p: ["-config" p]) allConfigPaths));
 
 in
 
@@ -45,6 +50,22 @@ in
         default = pkgs.vault;
         defaultText = literalExpression "pkgs.vault";
         description = "This option specifies the vault package to use.";
+      };
+
+      dev = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          In this mode, Vault runs in-memory and starts unsealed. This option is not meant production but for development and testing i.e. for nixos tests.
+        '';
+      };
+
+      devRootTokenID = mkOption {
+        type = types.str;
+        default = false;
+        description = ''
+          Initial root token. This only applies when <option>services.vault.dev</option> is true
+        '';
       };
 
       address = mkOption {
@@ -186,6 +207,9 @@ in
         Group = "vault";
         ExecStart = "${cfg.package}/bin/vault server ${configOptions}";
         ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
+        StateDirectory = "vault";
+        # In `dev` mode vault will put its token here
+        Environment = lib.optional (cfg.dev) "HOME=/var/lib/vault";
         PrivateDevices = true;
         PrivateTmp = true;
         ProtectSystem = "full";

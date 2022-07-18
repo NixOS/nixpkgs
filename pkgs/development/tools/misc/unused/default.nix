@@ -1,23 +1,23 @@
 { lib, fetchFromGitHub, rustPlatform, cmake }:
 rustPlatform.buildRustPackage rec {
   pname = "unused";
-  version = "0.2.3";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "unused-code";
     repo = pname;
     rev = version;
-    sha256 = "sha256-1R50oCVvk+XJG4EhLusY1aY6RjWNeZvlIDS8PJXIA7o=";
+    sha256 = "sha256-+1M8dUfjjrT4llS0C6WYDyNxJ9QZ5s9v+W185TbgwMw=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  cargoSha256 = "sha256-PjCR+kHlgPWkTkhN0idotGmLSe/FaKkgI9AMEJtoRz8=";
+  cargoSha256 = "sha256-hCtkR20+xs1UHZP7oJVpJACVGcMQLQmSS1QE2tmIVhs=";
 
   meta = with lib; {
     description = "A tool to identify potentially unused code";
     homepage = "https://unused.codes";
     license = licenses.mit;
-    maintainers = [ maintainers.lrworth ];
+    maintainers = [ ];
   };
 }

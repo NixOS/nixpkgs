@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pytraccar";
-  version = "0.10.0";
+  version = "0.10.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "ludeeus";
     repo = pname;
     rev = version;
-    sha256 = "08f7rwvbc1h17lvgv9823ssd3p0vw7yzsg40lbkacgqqiv1hxfzs";
+    sha256 = "sha256-fqf7sckvq5GebgpDVVSgwHISu4/wntjc/WF9LFlXN2w=";
   };
 
   propagatedBuildInputs = [

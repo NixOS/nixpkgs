@@ -23,8 +23,8 @@ assert x11Support -> (libX11 != null && libXau != null && libXt != null
   && libXpm != null && xorgproto != null && libXext != null);
 
 stdenv.mkDerivation rec {
-  v = "2.50pre20171114";
-  name = "clisp-${v}";
+  version = "2.50pre20171114";
+  pname = "clisp";
 
   src = fetchhg {
     url = "http://hg.code.sf.net/p/clisp/clisp";

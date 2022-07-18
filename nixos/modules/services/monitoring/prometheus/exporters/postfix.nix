@@ -74,11 +74,13 @@ in
     };
   };
   serviceOpts = {
+    after = mkIf cfg.systemd.enable [ cfg.systemd.unit ];
     serviceConfig = {
       DynamicUser = false;
       # By default, each prometheus exporter only gets AF_INET & AF_INET6,
       # but AF_UNIX is needed to read from the `showq`-socket.
       RestrictAddressFamilies = [ "AF_UNIX" ];
+      SupplementaryGroups = mkIf cfg.systemd.enable [ "systemd-journal" ];
       ExecStart = ''
         ${pkgs.prometheus-postfix-exporter}/bin/postfix_exporter \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \

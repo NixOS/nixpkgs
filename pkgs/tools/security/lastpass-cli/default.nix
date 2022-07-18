@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , asciidoc
 , cmake
 , docbook_xsl
@@ -22,6 +23,16 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "168jg8kjbylfgalhicn0llbykd7kdc9id2989gg0nxlgmnvzl58a";
   };
+
+  patches = [
+    # Pull fix pending upstream inclusion for -fno-common toolchains:
+    #   https://github.com/lastpass/lastpass-cli/pull/576
+    (fetchpatch {
+      name = "fno-common.patch";
+      url = "https://github.com/lastpass/lastpass-cli/commit/e3311cebdb29a3267843cf656a32f01c5062897e.patch";
+      sha256 = "1yjx2p98nb3n8ywc9lhf2zal5fswawb5i6lgnicdin23zngff5l8";
+    })
+  ];
 
   nativeBuildInputs = [ asciidoc cmake docbook_xsl pkg-config ];
 

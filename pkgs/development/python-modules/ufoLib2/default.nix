@@ -5,6 +5,7 @@
 , fonttools
 , pytestCheckHook
 , fs
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -24,6 +25,8 @@ buildPythonPackage rec {
     # required by fonttools[ufo]
     fs
   ];
+
+  nativeBuildInputs = [ setuptools-scm ];
 
   checkInputs = [
     pytestCheckHook

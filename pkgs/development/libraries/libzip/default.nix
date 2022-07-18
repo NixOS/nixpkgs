@@ -32,6 +32,10 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withOpenssl [ openssl ]
     ++ lib.optionals withZstd [ zstd ];
 
+  # Don't build the regression tests because they don't build with
+  # pkgsStatic and are not executed anyway.
+  cmakeFlags = [ "-DBUILD_REGRESS=0" ];
+
   preCheck = ''
     # regress/runtest is a generated file
     patchShebangs regress

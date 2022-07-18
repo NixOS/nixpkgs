@@ -1,17 +1,24 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, darwin
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "fend";
-  version = "0.1.28";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "printfn";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-1bSbeY0ijPKQ/bO1pD/gJ6AC1KNhUlQ1CP0ApbHKkPI=";
+    sha256 = "sha256-eYCFX3JVsTnmVzHQd9JU6BT80kS0LTjVwVcfNJink1M=";
   };
 
-  cargoSha256 = "sha256-d4Kv3CNDrsnit5ukw6EXdgjirGkeTEBZ0nm97ZQ8TZ0=";
+  cargoSha256 = "sha256-+N8/ZKj1Ht2lkTYSEm/lrLtopBQqc82gIFiLzJ6NogU=";
+
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   doInstallCheck = true;
 

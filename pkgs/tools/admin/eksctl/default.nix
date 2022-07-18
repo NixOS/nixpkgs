@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "eksctl";
-  version = "0.83.0";
+  version = "0.105.0";
 
   src = fetchFromGitHub {
     owner = "weaveworks";
     repo = pname;
     rev = version;
-    sha256 = "sha256-PeReZ4sf1MZ3Eia0Ngja9DRgU0xoZTYqj7Q7Vn3p1i8=";
+    sha256 = "sha256-ur9gMo/GR24mSWyNj+2uJJkp1neNMHrPk07l9rjrd1M=";
   };
 
-  vendorSha256 = "sha256-SHcLrrJtDT2eUvAqp19gp0rB7L+WaFWkcZeznUFij0U=";
+  vendorSha256 = "sha256-mwQahKRHR9cy2Yb4IGCIRtA0j38QJoPKNtpS/T4ndC4=";
 
   doCheck = false;
 
@@ -29,10 +29,10 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
-    for shell in bash fish zsh; do
-      $out/bin/eksctl completion $shell > eksctl.$shell
-      installShellCompletion eksctl.$shell
-    done
+    installShellCompletion --cmd eksctl \
+      --bash <($out/bin/eksctl completion bash) \
+      --fish <($out/bin/eksctl completion fish) \
+      --zsh  <($out/bin/eksctl completion zsh)
   '';
 
   meta = with lib; {

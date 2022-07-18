@@ -10,6 +10,7 @@
 , gsettings-desktop-schemas
 , gtk4
 , libadwaita
+, gnome-desktop
 , xdg-desktop-portal
 , wayland
 , gnome
@@ -17,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-gnome";
-  version = "41.1";
+  version = "42.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "u6FEGZ5+1LlJCyScGvZFqGnWKZMmXerDjyGb8EL//fI=";
+    sha256 = "TtEFpmfkYyVGcQPcc0bSAj+uwdXsFTvRcxbak49TrOA=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +38,7 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas # settings exposed by settings portal
     gtk4
     libadwaita
+    gnome-desktop
     xdg-desktop-portal
     wayland # required by GTK 4
   ];
@@ -53,6 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Backend implementation for xdg-desktop-portal for the GNOME desktop environment";
+    homepage = "https://gitlab.gnome.org/GNOME/xdg-desktop-portal-gnome";
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
     license = licenses.lgpl21Plus;

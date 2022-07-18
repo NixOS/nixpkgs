@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-binutils";
-  version = "0.3.3";
+  version = "0.3.6";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-1sJ+vi78lZsYEQBDyUzifdiU47R1Z6Y8ejNI9h5U+Ao=";
+    sha256 = "sha256-tRh3+X6QCdkkJE1O60ZRkDBRbznGZ1aB1AOmcz0EINI=";
   };
 
-  cargoSha256 = "sha256-kZhxKwSEI24LNJ9lPPjtX5etE0XeqaVN7h3HTzpoAY0=";
+  cargoSha256 = "sha256-lZJcsCg7e5ZmClnzKFjm/roXBIyhkPTzS7R6BTmcNIk=";
 
   meta = with lib; {
     description = "Cargo subcommands to invoke the LLVM tools shipped with the Rust toolchain";

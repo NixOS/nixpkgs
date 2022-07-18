@@ -57,7 +57,7 @@ while (<>) {
       $tarball =~ /\/((?:(?:[A-Za-z0-9]|(?:-[^0-9])|(?:-[0-9]*[a-z]))+))[^\/]*$/;
       die unless defined $1;
       $pkg = $1;
-      $pkg =~ s/-//g;
+      $pkg =~ s/(-|[a-f0-9]{40})//g; # Remove hyphen-minus and SHA-1
       #next unless $pkg eq "xcbutil";
     }
 
@@ -71,8 +71,8 @@ while (<>) {
         next;
     }
 
-    # split by first occurence of hyphen followd by only numbers ends line or another hyphen follows
-    my ($name, $version) = split(/-(?=[.0-9]+(?:$|-))/, $pkgName, 2);
+    # Split by first occurrence of hyphen followed by only numbers, ends line, another hyphen follows, or SHA-1
+    my ($name, $version) = split(/-(?=[.0-9]+(?:$|-)|[a-f0-9]{40})/, $pkgName, 2);
 
     $pkgURLs{$pkg} = $tarball;
     $pkgNames{$pkg} = $name;

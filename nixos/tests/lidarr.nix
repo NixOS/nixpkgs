@@ -14,7 +14,7 @@ with lib;
     start_all()
 
     machine.wait_for_unit("lidarr.service")
-    machine.wait_for_open_port("8686")
+    machine.wait_for_open_port(8686)
     machine.succeed("curl --fail http://localhost:8686/")
   '';
 })

@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub, librime }:
 
 stdenv.mkDerivation {
-  name = "brise-unstable-2017-09-16";
+  pname = "brise";
+  version = "unstable-2017-09-16";
 
   src = fetchFromGitHub {
     owner = "rime";

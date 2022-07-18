@@ -1,6 +1,7 @@
 { lib, fetchFromGitHub
 , version
 , suffix ? ""
+, curl
 , sha256 ? null
 , src ? fetchFromGitHub { owner = "NixOS"; repo = "nix"; rev = version; inherit sha256; }
 , patches ? [ ]
@@ -10,6 +11,7 @@ let
   atLeast24 = lib.versionAtLeast version "2.4pre";
   atLeast25 = lib.versionAtLeast version "2.5pre";
   atLeast27 = lib.versionAtLeast version "2.7pre";
+  atLeast210 = lib.versionAtLeast version "2.10pre";
 in
 { stdenv
 , autoconf-archive
@@ -23,7 +25,6 @@ in
 , bzip2
 , callPackage
 , coreutils
-, curl
 , editline
 , flex
 , gnutar
@@ -53,8 +54,8 @@ in
 , confDir
 , stateDir
 , storeDir
-}:
-stdenv.mkDerivation {
+}: let
+self = stdenv.mkDerivation {
   pname = "nix";
 
   version = "${version}${suffix}";
@@ -101,15 +102,17 @@ stdenv.mkDerivation {
     lowdown
   ] ++ lib.optionals (atLeast24 && stdenv.isx86_64) [
     libcpuid
-  ] ++ lib.optional (atLeast27) [
-    nlohmann_json
   ] ++ lib.optionals withLibseccomp [
     libseccomp
   ] ++ lib.optionals withAWS [
     aws-sdk-cpp
   ];
 
-  propagatedBuildInputs = [ boehmgc ];
+  propagatedBuildInputs = [
+    boehmgc
+  ] ++ lib.optional (atLeast27) [
+    nlohmann_json
+  ];
 
   NIX_LDFLAGS = lib.optionals (!atLeast24) [
     # https://github.com/NixOS/nix/commit/3e85c57a6cbf46d5f0fe8a89b368a43abd26daba
@@ -164,6 +167,8 @@ stdenv.mkDerivation {
   ] ++ lib.optionals (!withLibseccomp) [
     # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
     "--disable-seccomp-sandboxing"
+  ] ++ lib.optionals (atLeast210 && stdenv.cc.isGNU && !enableStatic) [
+    "--enable-lto"
   ];
 
   makeFlags = [
@@ -174,6 +179,7 @@ stdenv.mkDerivation {
   installFlags = [ "sysconfdir=$(out)/etc" ];
 
   doInstallCheck = true;
+  installCheckTarget = if atLeast210 then "installcheck" else null;
 
   # socket path becomes too long otherwise
   preInstallCheck = lib.optionalString stdenv.isDarwin ''
@@ -199,14 +205,15 @@ stdenv.mkDerivation {
     '';
     homepage = "https://nixos.org/";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ eelco lovesegfault ];
+    maintainers = with maintainers; [ eelco lovesegfault artturin ];
     platforms = platforms.unix;
     outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
   };
 
   passthru = {
-    inherit boehmgc;
+    inherit aws-sdk-cpp boehmgc;
 
-    perl-bindings = perl.pkgs.toPerlModule (callPackage ./nix-perl.nix { inherit src version;  });
+    perl-bindings = perl.pkgs.toPerlModule (callPackage ./nix-perl.nix { nix = self; });
   };
-}
+};
+in self

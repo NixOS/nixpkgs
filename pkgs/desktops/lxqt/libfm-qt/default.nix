@@ -16,13 +16,13 @@
 
 mkDerivation rec {
   pname = "libfm-qt";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "libfm-qt";
     rev = version;
-    sha256 = "1kk2cv9cp2gdj2pzdgm72c009iyl3mhrvsiz05kdxd4v1kn38ci1";
+    sha256 = "kF3u1Eh45l/HvL5R0PazIfGIdOVYyB2VAI33NwRfLJk=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +50,6 @@ mkDerivation rec {
     description = "Core library of PCManFM-Qt (Qt binding for libfm)";
     license = licenses.lgpl21Plus;
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

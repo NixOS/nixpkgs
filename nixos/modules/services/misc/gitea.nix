@@ -499,6 +499,7 @@ in
         oldLfsJwtSecret = "${cfg.stateDir}/custom/conf/jwt_secret"; # old file for LFS_JWT_SECRET
         lfsJwtSecret = "${cfg.stateDir}/custom/conf/lfs_jwt_secret"; # new file for LFS_JWT_SECRET
         internalToken = "${cfg.stateDir}/custom/conf/internal_token";
+        replaceSecretBin = "${pkgs.replace-secret}/bin/replace-secret";
       in ''
         # copy custom configuration and generate a random secret key if needed
         ${optionalString (cfg.useWizard == false) ''
@@ -526,23 +527,17 @@ in
                 ${gitea}/bin/gitea generate secret INTERNAL_TOKEN > ${internalToken}
             fi
 
-            SECRETKEY="$(head -n1 ${secretKey})"
-            DBPASS="$(head -n1 ${cfg.database.passwordFile})"
-            OAUTH2JWTSECRET="$(head -n1 ${oauth2JwtSecret})"
-            LFSJWTSECRET="$(head -n1 ${lfsJwtSecret})"
-            INTERNALTOKEN="$(head -n1 ${internalToken})"
-            ${if (cfg.mailerPasswordFile == null) then ''
-              MAILERPASSWORD="#mailerpass#"
-            '' else ''
-              MAILERPASSWORD="$(head -n1 ${cfg.mailerPasswordFile} || :)"
+            chmod u+w '${runConfig}'
+            ${replaceSecretBin} '#secretkey#' '${secretKey}' '${runConfig}'
+            ${replaceSecretBin} '#dbpass#' '${cfg.database.passwordFile}' '${runConfig}'
+            ${replaceSecretBin} '#oauth2jwtsecret#' '${oauth2JwtSecret}' '${runConfig}'
+            ${replaceSecretBin} '#lfsjwtsecret#' '${lfsJwtSecret}' '${runConfig}'
+            ${replaceSecretBin} '#internaltoken#' '${internalToken}' '${runConfig}'
+
+            ${lib.optionalString (cfg.mailerPasswordFile != null) ''
+              ${replaceSecretBin} '#mailerpass#' '${cfg.mailerPasswordFile}' '${runConfig}'
             ''}
-            sed -e "s,#secretkey#,$SECRETKEY,g" \
-                -e "s,#dbpass#,$DBPASS,g" \
-                -e "s,#oauth2jwtsecret#,$OAUTH2JWTSECRET,g" \
-                -e "s,#lfsjwtsecret#,$LFSJWTSECRET,g" \
-                -e "s,#internaltoken#,$INTERNALTOKEN,g" \
-                -e "s,#mailerpass#,$MAILERPASSWORD,g" \
-                -i ${runConfig}
+            chmod u-w '${runConfig}'
           }
           (umask 027; gitea_setup)
         ''}

@@ -27,7 +27,8 @@ stdenv.mkDerivation rec {
     description = "Extract Cell Data From Excel xls files";
     homepage = "https://github.com/libxls/libxls";
     license = licenses.bsd2;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ abbradar ];
+    mainProgram = "xls2csv";
+    platforms = platforms.unix;
   };
 }

@@ -36,14 +36,11 @@ let
           /plugin/;
           / {
                   compatible = "raspberrypi";
-                  fragment@0 {
-                          target-path = "/soc";
-                          __overlay__ {
-                                  pps {
-                                          compatible = "pps-gpio";
-                                          status = "okay";
-                                  };
-                          };
+          };
+          &{/soc} {
+                  pps {
+                          compatible = "pps-gpio";
+                          status = "okay";
                   };
           };
         '';
@@ -88,13 +85,14 @@ let
 
   # Compile single Device Tree overlay source
   # file (.dts) into its compiled variant (.dtbo)
-  compileDTS = name: f: pkgs.callPackage({ dtc }: pkgs.stdenv.mkDerivation {
+  compileDTS = name: f: pkgs.callPackage({ stdenv, dtc }: stdenv.mkDerivation {
     name = "${name}-dtbo";
 
     nativeBuildInputs = [ dtc ];
 
     buildCommand = ''
-      dtc -I dts ${f} -O dtb -@ -o $out
+      $CC -E -nostdinc -I${getDev cfg.kernelPackage}/lib/modules/${cfg.kernelPackage.modDirVersion}/source/scripts/dtc/include-prefixes -undef -D__DTS__ -x assembler-with-cpp ${f} | \
+        dtc -I dts -O dtb -@ -o $out
     '';
   }) {};
 

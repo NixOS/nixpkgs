@@ -77,7 +77,7 @@ There is a special handling of the `debug` output, described at [](#stdenv-separ
 
 A commonly adopted convention in `nixpkgs` is that executables provided by the package are contained within its first output. This convention allows the dependent packages to reference the executables provided by packages in a uniform manner. For instance, provided with the knowledge that the `perl` package contains a `perl` executable it can be referenced as `${pkgs.perl}/bin/perl` within a Nix derivation that needs to execute a Perl script.
 
-The `glibc` package is a deliberate single exception to the “binaries first” convention. The `glibc` has `libs` as its first output allowing the libraries provided by `glibc` to be referenced directly (e.g. `${stdenv.glibc}/lib/ld-linux-x86-64.so.2`). The executables provided by `glibc` can be accessed via its `bin` attribute (e.g. `${stdenv.glibc.bin}/bin/ldd`).
+The `glibc` package is a deliberate single exception to the “binaries first” convention. The `glibc` has `libs` as its first output allowing the libraries provided by `glibc` to be referenced directly (e.g. `${glibc}/lib/ld-linux-x86-64.so.2`). The executables provided by `glibc` can be accessed via its `bin` attribute (e.g. `${lib.getBin stdenv.cc.libc}/bin/ldd`).
 
 The reason for why `glibc` deviates from the convention is because referencing a library provided by `glibc` is a very common operation among Nix packages. For instance, third-party executables packaged by Nix are typically patched and relinked with the relevant version of `glibc` libraries from Nix packages (please see the documentation on [patchelf](https://github.com/NixOS/patchelf) for more details).
 

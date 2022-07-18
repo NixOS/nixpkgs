@@ -54,5 +54,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/mher/flower";
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ arnoldfarkas ];
+    knownVulnerabilities = [
+      "CVE-2022-30034"
+    ];
   };
 }

@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
     name = "retroarch";
     meta = with pkgs.lib.maintainers; { maintainers = [ j0hax ]; };
 
-    machine = { ... }:
+    nodes.machine = { ... }:
 
       {
         imports = [ ./common/user-account.nix ];

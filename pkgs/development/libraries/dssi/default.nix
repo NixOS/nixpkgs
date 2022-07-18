@@ -11,9 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "0kl1hzhb7cykzkrqcqgq1dk4xcgrcxv0jja251aq4z4l783jpj7j";
   };
 
+  nativeBuildInputs = [ autoconf automake ];
   buildInputs =
     [ ladspaH libjack2 liblo alsa-lib qt4 libX11 libsndfile libSM
-      libsamplerate libtool autoconf automake xorgproto libICE pkg-config
+      libsamplerate libtool xorgproto libICE pkg-config
     ];
 
   meta = with lib; {

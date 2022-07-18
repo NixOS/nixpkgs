@@ -12,16 +12,16 @@
 
 buildGoModule rec {
   pname = "step-ca";
-  version = "0.18.1";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "smallstep";
     repo = "certificates";
     rev = "v${version}";
-    sha256 = "sha256-oebmJ+xrJTV5gXH3U1lWCSQMHiVnUTa0ZTp39sVB7KM=";
+    sha256 = "sha256-BhPup3q2muYGWzAa/9b4vnIjBces4GhUHZ/mg4CWMRc=";
   };
 
-  vendorSha256 = "sha256-IJXJS+Z93Hw1I1CAeRv4mq8as9DKebqNFa0IMgZ+Kic=";
+  vendorSha256 = "sha256-oVaziWZGslZCVqkEXL32XvOVU54VOf41Qg+VoVWo7x0=";
 
   ldflags = [ "-buildid=" ];
 
@@ -53,7 +53,6 @@ buildGoModule rec {
     description = "A private certificate authority (X.509 & SSH) & ACME server for secure automated certificate management, so you can use TLS everywhere & SSO for SSH";
     homepage = "https://smallstep.com/certificates/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ cmcdragonkai mohe2015 ];
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ cmcdragonkai mohe2015 techknowlogick ];
   };
 }

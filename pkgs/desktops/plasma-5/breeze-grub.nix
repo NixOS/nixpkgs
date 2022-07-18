@@ -3,7 +3,7 @@
 }:
 
 mkDerivation {
-  name = "breeze-grub";
+  pname = "breeze-grub";
   installPhase = ''
     runHook preInstall
 

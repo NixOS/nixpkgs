@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "https://www.astro.caltech.edu/~mcs/tecla/";
     description = "Command-line editing library";
+    homepage = "https://www.astro.caltech.edu/~mcs/tecla/";
     license = "as-is";
-
+    mainProgram = "enhance";
     platforms = lib.platforms.unix;
   };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libcap, openssl, pam }:
+{ lib, stdenv, fetchurl, libcap, libseccomp, openssl, pam, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "vsftpd";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-JrYCrkVLC6bZnvRKCba54N+n9nIoEGc23x8njHC8kdM=";
   };
 
-  buildInputs = [ libcap openssl pam ];
+  buildInputs = [ libcap openssl libseccomp pam ];
 
   patches = [ ./CVE-2015-1419.patch ];
 
@@ -30,9 +30,13 @@ stdenv.mkDerivation rec {
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
 
-  NIX_LDFLAGS = "-lcrypt -lssl -lcrypto -lpam -lcap";
+  NIX_LDFLAGS = "-lcrypt -lssl -lcrypto -lpam -lcap -lseccomp";
 
   enableParallelBuilding = true;
+
+  passthru = {
+    tests = { inherit (nixosTests) vsftpd; };
+  };
 
   meta = with lib; {
     description = "A very secure FTP daemon";

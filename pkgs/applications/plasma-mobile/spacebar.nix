@@ -11,8 +11,10 @@
 , kpeople
 , libphonenumber
 , libqofono
+, modemmanager-qt
 , protobuf
-, telepathy
+, qcoro
+, qtquickcontrols2
 }:
 
 mkDerivation rec {
@@ -30,9 +32,10 @@ mkDerivation rec {
     knotifications
     kpeople
     libphonenumber
-    libqofono
+    modemmanager-qt
     protobuf # Needed by libphonenumber
-    telepathy
+    qcoro
+    qtquickcontrols2
   ];
 
   meta = with lib; {

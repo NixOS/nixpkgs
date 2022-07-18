@@ -19,11 +19,6 @@ let
       pkgs.coreutils
       pkgs.util-linux
     ] ++ lib.optional useHostResolvConf pkgs.openresolv);
-    fsPackagesPath = lib.makeBinPath config.system.fsPackages;
-    systemdUnitPathEnvVar = lib.optionalString (config.boot.extraSystemdUnitPaths != [])
-      ("SYSTEMD_UNIT_PATH="
-      + builtins.concatStringsSep ":" config.boot.extraSystemdUnitPaths
-      + ":"); # If SYSTEMD_UNIT_PATH ends with an empty component (":"), the usual unit load path will be appended to the contents of the variable
     postBootCommands = pkgs.writeText "local-cmds"
       ''
         ${config.boot.postBootCommands}
@@ -47,43 +42,11 @@ in
         '';
       };
 
-      devSize = mkOption {
-        default = "5%";
-        example = "32m";
-        type = types.str;
-        description = ''
-          Size limit for the /dev tmpfs. Look at mount(8), tmpfs size option,
-          for the accepted syntax.
-        '';
-      };
-
-      devShmSize = mkOption {
-        default = "50%";
-        example = "256m";
-        type = types.str;
-        description = ''
-          Size limit for the /dev/shm tmpfs. Look at mount(8), tmpfs size option,
-          for the accepted syntax.
-        '';
-      };
-
-      runSize = mkOption {
-        default = "25%";
-        example = "256m";
-        type = types.str;
-        description = ''
-          Size limit for the /run tmpfs. Look at mount(8), tmpfs size option,
-          for the accepted syntax.
-        '';
-      };
-
       systemdExecutable = mkOption {
-        default = "systemd";
+        default = "/run/current-system/systemd/lib/systemd/systemd";
         type = types.str;
         description = ''
-          The program to execute to start systemd. Typically
-          <literal>systemd</literal>, which will find systemd in the
-          PATH.
+          The program to execute to start systemd.
         '';
       };
 

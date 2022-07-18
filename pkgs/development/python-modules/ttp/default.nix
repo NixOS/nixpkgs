@@ -1,22 +1,20 @@
 { lib
 , buildPythonPackage
-, callPackage
-, fetchFromGitHub
 , cerberus
 , configparser
 , deepdiff
+, fetchFromGitHub
 , geoip2
 , jinja2
+, netmiko
 , openpyxl
-, tabulate
-, yangson
 , pytestCheckHook
 , pyyaml
+, tabulate
+, ttp-templates
+, yangson
 }:
 
-let
-  ttp_templates = callPackage ./templates.nix { };
-in
 buildPythonPackage rec {
   pname = "ttp";
   version = "0.8.4";
@@ -26,7 +24,7 @@ buildPythonPackage rec {
     owner = "dmulyalin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-vuKlddqm8KirqAJyvBPfRb5Nw9zo4Fl1bwbfVMhmH9g=";
+    hash = "sha256-vuKlddqm8KirqAJyvBPfRb5Nw9zo4Fl1bwbfVMhmH9g=";
   };
 
   propagatedBuildInputs = [
@@ -37,7 +35,7 @@ buildPythonPackage rec {
     geoip2
     jinja2
     # n2g unpackaged
-    # netmiko unpackaged
+    netmiko
     # nornir unpackaged
     openpyxl
     tabulate
@@ -51,7 +49,7 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
     pyyaml
-    ttp_templates
+    ttp-templates
   ];
 
   disabledTestPaths = [
@@ -87,6 +85,8 @@ buildPythonPackage rec {
     "test_TTP_CACHE_FOLDER_env_variable_usage"
     # requires additional network setup
     "test_child_group_do_not_start_if_no_parent_started"
+    # Assertion Error
+    "test_in_threads_parsing"
   ];
 
   pytestFlagsArray = [

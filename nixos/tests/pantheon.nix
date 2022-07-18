@@ -7,7 +7,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
     maintainers = teams.pantheon.members;
   };
 
-  machine = { ... }:
+  nodes.machine = { ... }:
 
   {
     imports = [ ./common/user-account.nix ];

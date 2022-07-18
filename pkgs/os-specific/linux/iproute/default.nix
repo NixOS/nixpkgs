@@ -1,15 +1,16 @@
 { lib, stdenv, fetchurl, fetchpatch
 , buildPackages, bison, flex, pkg-config
 , db, iptables, libelf, libmnl
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "iproute2";
-  version = "5.14.0";
+  version = "5.18.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1m4ifnxq7lxnm95l5354z8dk3xj6w9isxmbz53266drgln2sf3r1";
+    sha256 = "W6PUZNUcjCg1UNUH/6w9EPeuxYe3xmsMy2lQZDZGOJ4=";
   };
 
   patches = [
@@ -47,6 +48,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ db iptables libelf libmnl ];
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = gitUpdater {
+    inherit pname version;
+    # No nicer place to find latest release.
+    url = "https://git.kernel.org/pub/scm/network/iproute2/iproute2.git";
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     homepage = "https://wiki.linuxfoundation.org/networking/iproute2";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, pkg-config, xfce4-dev-tools, hicolor-icon-theme, xfce, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitLab, pkg-config, xfce4-dev-tools, hicolor-icon-theme, xfce, wrapGAppsHook, gitUpdater }:
 
 { category
 , pname
@@ -41,9 +41,8 @@ let
 
     pos = builtins.unsafeGetAttrPos "pname" args;
 
-    passthru.updateScript = xfce.updateScript {
+    passthru.updateScript = gitUpdater {
       inherit pname version attrPath rev-prefix odd-unstable patchlevel-unstable;
-      versionLister = xfce.gitLister src.meta.homepage;
     };
 
     meta = with lib; {

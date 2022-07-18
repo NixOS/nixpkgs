@@ -3,10 +3,15 @@
            xmlns:xi="http://www.w3.org/2001/XInclude">
  <title>NixOS Reference Pages</title>
  <info>
-  <author><personname><firstname>Eelco</firstname><surname>Dolstra</surname></personname>
+  <author>
+   <personname><firstname>Eelco</firstname><surname>Dolstra</surname></personname>
    <contrib>Author</contrib>
   </author>
-  <copyright><year>2007-2020</year><holder>Eelco Dolstra</holder>
+  <author>
+   <personname><othername>The Nixpkgs/NixOS contributors</othername></personname>
+   <contrib>Author</contrib>
+  </author>
+  <copyright><year>2007-2022</year><holder>Eelco Dolstra and the Nixpkgs/NixOS contributors</holder>
   </copyright>
  </info>
  <xi:include href="man-configuration.xml" />

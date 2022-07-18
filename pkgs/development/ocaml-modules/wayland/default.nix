@@ -42,8 +42,9 @@ buildDunePackage rec {
 
   meta = {
     description = "Pure OCaml Wayland protocol library";
+    homepage = "https://github.com/talex5/ocaml-wayland";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.sternenseemann ];
-    homepage = "https://github.com/talex5/ocaml-wayland";
+    mainProgram = "wayland-scanner-ocaml";
   };
 }

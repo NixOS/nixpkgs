@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "pgspecial";
-  version = "1.13.0";
+  version = "1.13.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3847e205b19469f16ded05bda24b4758056d67ade4075a5ded4ce6628a9bad01";
+    sha256 = "sha256-1dq5ZpCQgnWRbcLGIu+uIX8ULggWX6NmlJ1By8VlhwE=";
   };
 
   propagatedBuildInputs = [
@@ -26,6 +26,11 @@ buildPythonPackage rec {
   checkInputs = [
     configobj
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # requires a postgresql server
+    "test_slash_dp_pattern_schema"
   ];
 
   meta = with lib; {

@@ -52,5 +52,7 @@ buildPythonPackage rec {
     platforms = [ "x86_64-linux" ];
     homepage = "https://catboost.ai";
     maintainers = with maintainers; [ PlushBeaver ];
+    # _catboost.pyx.cpp:226822:19: error: use of undeclared identifier '_PyGen_Send'
+    broken = withCuda;
   };
 }

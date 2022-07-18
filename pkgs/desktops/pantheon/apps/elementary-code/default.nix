@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , appstream
 , desktop-file-utils
@@ -13,7 +12,6 @@
 , vala
 , wrapGAppsHook
 , editorconfig-core-c
-, elementary-icon-theme
 , granite
 , gtk3
 , gtksourceview4
@@ -29,23 +27,14 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-code";
-  version = "6.1.0";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "code";
     rev = version;
-    sha256 = "sha256-AXmMcPj2hf33G5v3TUg+eZwaKOdVlRvoVXglMJFHRjw=";
+    sha256 = "sha256-QhJNRhYgGbPMd7B1X3kG+pnC/lGUoF7gc7O1PdG49LI=";
   };
-
-  patches = [
-    # Fix build with meson 0.61
-    # https://github.com/elementary/code/pull/1165
-    (fetchpatch {
-      url = "https://github.com/elementary/code/commit/a2607cce3a6b1bb62d02456456d3cbc3c6530bb0.patch";
-      sha256 = "sha256-VKR83IOUYsQhBRlU9JUTlMJtXWv/AyG4wDsjMU2vmU8=";
-    })
-  ];
 
   nativeBuildInputs = [
     appstream
@@ -61,7 +50,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     editorconfig-core-c
-    elementary-icon-theme
     granite
     gtk3
     gtksourceview4

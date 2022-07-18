@@ -1,4 +1,4 @@
-{ i3lock-color, lib, stdenv, fetchFromGitHub }:
+{ i3lock-color, lib, stdenv, fetchFromGitHub, fetchpatch }:
 
 i3lock-color.overrideAttrs (oldAttrs : rec {
   pname = "i3lock-blur";
@@ -10,6 +10,16 @@ i3lock-color.overrideAttrs (oldAttrs : rec {
     rev = version;
     sha256 = "sha256-rBQHYVD9rurzTEXrgEnOziOP22D2EePC1+EV9Wi2pa0=";
   };
+
+  patches = [
+    # Pull patch pending upstream inclusion for -fno-common toolchain
+    # support: https://github.com/karulont/i3lock-blur/pull/22
+    (fetchpatch {
+      name = "fno-common.patch";
+      url = "https://github.com/karulont/i3lock-blur/commit/ec8fe0e7f7d78bf445602ed517efd5c324bb32f7.patch";
+      sha256 = "sha256-0hXUr+ZEB1tpI3xw80/hGzKyeGuna4CQmEvK6t0VBqU=";
+    })
+  ];
 
   meta = with lib; {
     description = "An improved screenlocker based upon XCB and PAM with background blurring filter";

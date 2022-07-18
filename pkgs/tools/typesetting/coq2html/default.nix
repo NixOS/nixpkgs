@@ -8,7 +8,7 @@ stdenv.mkDerivation  rec {
     owner = "xavierleroy";
     repo = "coq2html";
     rev = "v${version}";
-    sha256 = "sha256:1ad825yifn518wk1c2y2ji10q3m468r8ajjgw2nzzy7d608nx7yq";
+    hash = "sha256-2J9uETDt+P+t4E9KhTIypA4MQpTCCxYmR6FYF30RqKk=";
   };
 
   nativeBuildInputs = [ ocaml ];

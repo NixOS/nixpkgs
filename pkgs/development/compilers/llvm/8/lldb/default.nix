@@ -80,6 +80,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = llvm_meta // {
+    broken = stdenv.isDarwin;
     homepage = "https://lldb.llvm.org/";
     description = "A next-generation high-performance debugger";
     longDescription = ''

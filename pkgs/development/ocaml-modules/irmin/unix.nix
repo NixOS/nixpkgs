@@ -26,6 +26,7 @@ buildDunePackage rec {
 
   meta = irmin.meta // {
     description = "Unix backends for Irmin";
+    mainProgram = "irmin";
   };
 
 }

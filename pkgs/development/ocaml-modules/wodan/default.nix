@@ -1,5 +1,5 @@
 { lib, buildDunePackage, fetchFromGitHub, lwt_ppx, ppx_cstruct, optint
-, checkseum, diet, bitv, nocrypto, logs, lru, io-page, mirage-block }:
+, checkseum, diet, bitv, logs, lru, io-page, mirage-block }:
 
 buildDunePackage rec {
   pname = "wodan";
@@ -24,7 +24,7 @@ buildDunePackage rec {
     checkseum
     diet
     bitv
-    nocrypto
+    /* nocrypto */
     logs
     lru
     io-page
@@ -32,6 +32,7 @@ buildDunePackage rec {
   ];
 
   meta = with lib; {
+    broken = true; # nocrypto is no longer available in nixpkgs
     inherit (src.meta) homepage;
     description = "A flash-friendly, safe and flexible filesystem library";
     license = licenses.isc;

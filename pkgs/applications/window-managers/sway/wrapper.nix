@@ -8,6 +8,7 @@
 , isNixOS ? false
 
 , enableXWayland ? true
+, dbusSupport ? true
 }:
 
 assert extraSessionCommands != "" -> withBaseWrapper;
@@ -27,7 +28,7 @@ let
        export DBUS_SESSION_BUS_ADDRESS
        exec ${sway}/bin/sway "$@"
      else
-       exec ${dbus}/bin/dbus-run-session ${sway}/bin/sway "$@"
+       exec ${if !dbusSupport then "" else "${dbus}/bin/dbus-run-session"} ${sway}/bin/sway "$@"
      fi
    '';
 in symlinkJoin {
@@ -36,6 +37,7 @@ in symlinkJoin {
   paths = (optional withBaseWrapper baseWrapper)
     ++ [ sway ];
 
+  strictDeps = false;
   nativeBuildInputs = [ makeWrapper ]
     ++ (optional withGtkWrapper wrapGAppsHook);
 

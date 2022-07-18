@@ -4,14 +4,14 @@
 
 stdenv.mkDerivation rec {
   pname = "alliance";
-  version = "unstable-2021-09-15";
+  version = "unstable-2022-01-13";
 
   src = fetchFromGitLab {
     domain = "gitlab.lip6.fr";
     owner = "vlsi-eda";
     repo = "alliance";
-    rev = "5e83c92d0307cce9d599f7099fb0023f81d26d65";
-    sha256 = "Vd3MTT4eKn4FMt0/F4fQUPcWq25kH0FpeGxQUOetKPY=";
+    rev = "ebece102e15c110fc79f1da50524c68fd9523f0c";
+    hash = "sha256-NGtE3ZmN9LrgXG4NIKrp7dFRVzrKMoudlPUtYYKrZjY=";
   };
 
   prePatch = "cd alliance/src";

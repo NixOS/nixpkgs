@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildPackages, ncurses }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, buildPackages, ncurses }:
 
 let dialect = with lib; last (splitString "-" stdenv.hostPlatform.system); in
 
@@ -16,7 +16,17 @@ stdenv.mkDerivation rec {
     sha256 = "0yxv2jg6rnzys49lyrz9yjb4knamah4xvlqj596y6ix3vm4k3chp";
   };
 
-  patches = [ ./no-build-info.patch ];
+  patches = [
+    ./no-build-info.patch
+
+    # Pull upstream fix for -fno-common toolchains:
+    #   https://github.com/lsof-org/lsof/pull/221
+    (fetchpatch {
+      name = "fno-common.patch";
+      url = "https://github.com/lsof-org/lsof/commit/80e7c890585deec02c527dbcf42bc0e5d8d7c534.patch";
+      sha256 = "17xshi7j7af9nli1zjk1m5f4il2ajvvhw7lii8g8d27rkkgyb8g6";
+    })
+  ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace dialects/linux/dlsof.h --replace "defined(__UCLIBC__)" 1

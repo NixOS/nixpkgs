@@ -1,17 +1,17 @@
-{ lib, mkDerivation, fetchFromGitHub, fetchpatch
+{ lib, mkDerivation, fetchFromGitHub
 , python3, ruby, qtbase, qtmultimedia, qttools, qtxmlpatterns
-, which, perl, makeWrapper
+, which, perl
 }:
 
 mkDerivation rec {
   pname = "klayout";
-  version = "0.27.3";
+  version = "0.27.8";
 
   src = fetchFromGitHub {
     owner = "KLayout";
     repo = "klayout";
     rev = "v${version}";
-    sha256 = "sha256-6g/QoR16rhUfxhH4JxL6EERcoPVG/6MOxUlo6K/WoE0=";
+    hash = "sha256-t/nd7m8XpB026q/kyH16rKkw3qza19ISalB0Juzx4NU=";
   };
 
   postPatch = ''
@@ -21,6 +21,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [
     which
+    perl
     python3
     ruby
   ];
@@ -35,7 +36,7 @@ mkDerivation rec {
   buildPhase = ''
     runHook preBuild
     mkdir -p $out/lib
-    ./build.sh -qt5 -prefix $out/lib -j$NIX_BUILD_CORES
+    ./build.sh -qt5 -prefix $out/lib -option -j$NIX_BUILD_CORES
     runHook postBuild
   '';
 
@@ -54,8 +55,9 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "High performance layout viewer and editor with support for GDS and OASIS";
-    license = with licenses; [ gpl3 ];
+    license = with licenses; [ gpl2Plus ];
     homepage = "https://www.klayout.de/";
+    changelog = "https://www.klayout.de/development.html#${version}";
     platforms = platforms.linux;
     maintainers = with maintainers; [ knedlsepp ];
   };

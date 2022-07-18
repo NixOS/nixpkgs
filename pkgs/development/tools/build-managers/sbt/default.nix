@@ -39,6 +39,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.scala-sbt.org/";
     license = licenses.bsd3;
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
     description = "A build tool for Scala, Java and more";
     maintainers = with maintainers; [ nequissimus ];
     platforms = platforms.unix;

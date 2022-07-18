@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper, perlPackages, libminc }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, makeWrapper, perlPackages, libminc }:
 
 stdenv.mkDerivation rec {
   pname = "mni_autoreg";
@@ -10,6 +10,16 @@ stdenv.mkDerivation rec {
     rev = "ab99e29987dc029737785baebf24896ec37a2d76";
     sha256 = "0axl069nv57vmb2wvqq7s9v3bfxwspzmk37bxm4973ai1irgppjq";
   };
+
+  patches = [
+    # Pull upstream workaround for -fno-common toolchains:
+    #  https://github.com/BIC-MNI/mni_autoreg/pull/28
+    (fetchpatch {
+      name = "fno-common.patch";
+      url = "https://github.com/BIC-MNI/mni_autoreg/commit/06adfacbd84369ea3bcc4376596ac1c0f2e49af9.patch";
+      sha256 = "004sdrbx9kcj1qqwjly6p03svakl0x2sbv83salyg63fv67jynx8";
+    })
+  ];
 
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [ libminc ];

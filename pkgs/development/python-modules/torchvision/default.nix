@@ -11,12 +11,12 @@
 , pillow
 , pytorch
 , pytest
-, cudatoolkit
-, cudnn
 , cudaSupport ? pytorch.cudaSupport or false # by default uses the value from pytorch
 }:
 
 let
+  inherit (pytorch.cudaPackages) cudatoolkit cudnn;
+
   cudatoolkit_joined = symlinkJoin {
     name = "${cudatoolkit.name}-unsplit";
     paths = [ cudatoolkit.out cudatoolkit.lib ];

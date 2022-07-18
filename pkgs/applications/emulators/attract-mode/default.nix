@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "attract-mode";
-  version = "2.6.1";
+  version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "mickelson";
     repo = "attract";
     rev = "v${version}";
-    sha256 = "16p369j0hanm0l2fiy6h9d9pn0f3qblcy9l39all6h7rfxnhp9ii";
+    sha256 = "sha256-gKxUU2y6Gtm5a/tXYw/fsaTBrriNh5vouPGICs3Ph3c=";
   };
 
   nativeBuildInputs = [ pkg-config ];

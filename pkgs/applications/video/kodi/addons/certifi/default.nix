@@ -2,11 +2,11 @@
 buildKodiAddon rec {
   pname = "certifi";
   namespace = "script.module.certifi";
-  version = "2020.12.05+matrix.1";
+  version = "2022.5.18+matrix.1";
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/matrix/${namespace}/${namespace}-${version}.zip";
-    sha256 = "1z49b8va7wdyr714c8ixb2sldi0igffcjj3xpbmga58ph0z985vy";
+    sha256 = "tk4Ven35sicLxrT7SO2yx5kQORjFP6niRuS9SMocJKY=";
   };
 
   passthru = {

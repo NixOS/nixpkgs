@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, sconsPackages
+, scons
 , libX11
 , pkg-config
 , libusb1
@@ -22,9 +22,17 @@ stdenv.mkDerivation rec {
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
-  nativeBuildInputs = [ pkg-config sconsPackages.scons_3_1_2 ];
+  nativeBuildInputs = [ pkg-config scons ];
   buildInputs = [ libX11 libusb1 boost glib dbus-glib ];
+  enableParallelBuilding = true;
   dontUseSconsInstall = true;
+
+  patches = [
+    ./fix-60-sec-delay.patch
+    ./scons-py3.patch
+    ./scons-v4.2.0.patch
+    ./xboxdrvctl-py3.patch
+  ];
 
   meta = with lib; {
     homepage = "https://xboxdrv.gitlab.io/";

@@ -1,25 +1,25 @@
 { lib, stdenv, fetchurl, ... }:
 
-let
-  arch = {
-    x86_64-linux = "x64";
-    i686-linux = "i386";
-    aarch64-linux = "arm64";
-  }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-  libPath = lib.makeLibraryPath [ stdenv.cc.libc ];
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "resilio-sync";
-  version = "2.7.2";
+  version = "2.7.3";
 
-  src = fetchurl {
-    url = "https://download-cdn.resilio.com/${version}/linux-${arch}/resilio-sync_${arch}.tar.gz";
-    sha256 = {
-      x86_64-linux = "0gar5lzv1v4yqmypwqsjnfb64vffzn8mw9vnjr733fgf1pmr57hf";
-      i686-linux   = "1bws7r86h1vysjkhyvp2zk8yvxazmlczvhjlcayldskwq48iyv6w";
-      aarch64-linux = "0j8wk5cf8bcaaqxi8gnqf1mpv8nyfjyr4ibls7jnn2biqq767af2";
-    }.${stdenv.hostPlatform.system};
-  };
+  src = {
+    x86_64-linux = fetchurl {
+      url = "https://download-cdn.resilio.com/${version}/linux-x64/resilio-sync_x64.tar.gz";
+      sha256 = "sha256-DYQs9KofHkvtlsRQHRLwQHoHwSZkr40Ih0RVAw2xv3M=";
+    };
+
+    i686-linux = fetchurl {
+      url = "https://download-cdn.resilio.com/${version}/linux-i386/resilio-sync_i386.tar.gz";
+      sha256 = "sha256-PFKVBs0KthG4tuvooHkAciPhNQP0K8oi2LyoRUs5V7I=";
+    };
+
+    aarch64-linux = fetchurl {
+      url = "https://download-cdn.resilio.com/${version}/linux-arm64/resilio-sync_arm64.tar.gz";
+      sha256 = "sha256-o2DlYOBTkFhQMEDJySlVSNlVqLNbBzacyv2oTwxrXto=";
+    };
+  }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   dontStrip = true; # Don't strip, otherwise patching the rpaths breaks
   sourceRoot = ".";
@@ -28,12 +28,13 @@ in stdenv.mkDerivation rec {
     install -D rslsync "$out/bin/rslsync"
     patchelf \
       --interpreter "$(< $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath ${libPath} "$out/bin/rslsync"
+      --set-rpath ${lib.makeLibraryPath [ stdenv.cc.libc ]} "$out/bin/rslsync"
   '';
 
   meta = with lib; {
     description = "Automatically sync files via secure, distributed technology";
     homepage    = "https://www.resilio.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license     = licenses.unfreeRedistributable;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ domenkozar thoughtpolice cwoac ];

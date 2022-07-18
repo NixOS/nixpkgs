@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aio-geojson-client";
-  version = "0.16";
+  version = "0.17";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "exxamalte";
     repo = "python-aio-geojson-client";
     rev = "v${version}";
-    hash = "sha256-u3SwrSxeBJrBTHfqKY/mAb2p1jqW2AvRsHomKsI81gM=";
+    hash = "sha256-5GiQgtbvYeleovFbXO2vlr2XPsDIWZiElM64O+urMcY=";
   };
 
   propagatedBuildInputs = [

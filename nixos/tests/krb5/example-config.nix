@@ -7,7 +7,7 @@ import ../make-test-python.nix ({ pkgs, ...} : {
     maintainers = [ eqyiel ];
   };
 
-  machine =
+  nodes.machine =
     { pkgs, ... }: {
       krb5 = {
         enable = true;

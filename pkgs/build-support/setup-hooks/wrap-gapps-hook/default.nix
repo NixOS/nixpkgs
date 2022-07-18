@@ -59,8 +59,8 @@ makeSetupHook {
         tested = basic;
       in testLib.runTest "basic-contains-dconf" (
         testLib.skip stdenv.isDarwin ''
-          ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo" "GIO_EXTRA_MODULES=" "${dconf.lib}/lib/gio/modules"}
-          ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar" "GIO_EXTRA_MODULES=" "${dconf.lib}/lib/gio/modules"}
+          ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo" "GIO_EXTRA_MODULES" "${dconf.lib}/lib/gio/modules"}
+          ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar" "GIO_EXTRA_MODULES" "${dconf.lib}/lib/gio/modules"}
         ''
       );
 
@@ -98,8 +98,8 @@ makeSetupHook {
       typelib-user-has-gi-typelib-path = let
         tested = typelib-user;
       in testLib.runTest "typelib-user-has-gi-typelib-path" ''
-        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo" "GI_TYPELIB_PATH=" "${typelib-Mahjong}/lib/girepository-1.0"}
-        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar" "GI_TYPELIB_PATH=" "${typelib-Mahjong}/lib/girepository-1.0"}
+        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo" "GI_TYPELIB_PATH" "${typelib-Mahjong}/lib/girepository-1.0"}
+        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar" "GI_TYPELIB_PATH" "${typelib-Mahjong}/lib/girepository-1.0"}
       '';
 
       # Simple derivation containing a gobject-introspection typelib in lib output.
@@ -143,8 +143,8 @@ makeSetupHook {
       typelib-multiout-user-has-gi-typelib-path = let
         tested = typelib-multiout-user;
       in testLib.runTest "typelib-multiout-user-has-gi-typelib-path" ''
-        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo" "GI_TYPELIB_PATH=" "${typelib-Bechamel.lib}/lib/girepository-1.0"}
-        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar" "GI_TYPELIB_PATH=" "${typelib-Bechamel.lib}/lib/girepository-1.0"}
+        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo" "GI_TYPELIB_PATH" "${typelib-Bechamel.lib}/lib/girepository-1.0"}
+        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar" "GI_TYPELIB_PATH" "${typelib-Bechamel.lib}/lib/girepository-1.0"}
       '';
 
       # Simple derivation that contains a typelib as well as a program using it.
@@ -169,8 +169,8 @@ makeSetupHook {
       typelib-self-user-has-gi-typelib-path = let
         tested = typelib-self-user;
       in testLib.runTest "typelib-self-user-has-gi-typelib-path" ''
-        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo" "GI_TYPELIB_PATH=" "${typelib-self-user}/lib/girepository-1.0"}
-        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar" "GI_TYPELIB_PATH=" "${typelib-self-user}/lib/girepository-1.0"}
+        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo" "GI_TYPELIB_PATH" "${typelib-self-user}/lib/girepository-1.0"}
+        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar" "GI_TYPELIB_PATH" "${typelib-self-user}/lib/girepository-1.0"}
       '';
     };
   };

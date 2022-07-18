@@ -26,7 +26,7 @@ openjdk11.overrideAttrs (oldAttrs: rec {
     '';
     homepage = "https://confluence.jetbrains.com/display/JBR/JetBrains+Runtime";
     inherit (openjdk11.meta) license platforms mainProgram;
-    maintainers = with maintainers; [ edwtjo petabyteboy ];
+    maintainers = with maintainers; [ edwtjo ];
   };
   passthru = oldAttrs.passthru // {
     home = "${jetbrains.jdk}/lib/openjdk";

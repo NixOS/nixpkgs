@@ -15,6 +15,10 @@ buildPythonPackage rec {
     sha256 = "0y855kmx7a8rnf81d3lh5lyxai1908xjp0laf4glwa4c8472m212";
   };
 
+  patches = lib.optionals (pythonAtLeast "3.7") [
+    ./collections-compat.patch
+  ];
+
   propagatedBuildInputs = [ six traceback2 ];
 
   # 1.0.0 and up create a circle dependency with traceback2/pbr
@@ -34,7 +38,5 @@ buildPythonPackage rec {
     description = "A backport of the new features added to the unittest testing framework";
     homepage = "https://pypi.org/project/unittest2/";
     license = licenses.bsd0;
-    # AttributeError: module 'collections' has no attribute 'MutableMapping'
-    broken = pythonAtLeast "3.10";
   };
 }

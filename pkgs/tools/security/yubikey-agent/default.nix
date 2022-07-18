@@ -1,31 +1,33 @@
-{ stdenv, lib, fetchFromGitHub, buildGoModule, libnotify, makeWrapper, pcsclite, pkg-config, darwin }:
+{ stdenv, lib, fetchFromGitHub, buildGoModule, libnotify, pcsclite, pkg-config, darwin }:
 
 buildGoModule rec {
   pname = "yubikey-agent";
-  version = "0.1.5";
 
+  version = "unstable-2022-03-17";
   src = fetchFromGitHub {
     owner = "FiloSottile";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "14s61jgcmpqh70jz0krrai8xg0xqhwmillxkij50vbsagpxjssk6";
+    repo = "yubikey-agent";
+    rev = "205a7ef2554625c7494038600d963123d6311873";
+    sha256 = "sha256-wJpN63KY5scmez6yYFsIr3JLEUB+YSl/XvoatIIeRI0=";
   };
 
   buildInputs =
     lib.optional stdenv.isLinux (lib.getDev pcsclite)
     ++ lib.optional stdenv.isDarwin (darwin.apple_sdk.frameworks.PCSC);
 
-  nativeBuildInputs = [ makeWrapper pkg-config ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
 
   postPatch = lib.optionalString stdenv.isLinux ''
     substituteInPlace main.go --replace 'notify-send' ${libnotify}/bin/notify-send
   '';
 
-  vendorSha256 = "1v4ccn7ysh8ax1nkf1v9fcgsdnz6zjyh6j6ivyljyfvma1lmcrmk";
+  vendorSha256 = "sha256-SnjbkDPVjAnCbM2nLqBsuaPZwOmvDTKiUbi/93BlWVQ=";
 
   doCheck = false;
 
   subPackages = [ "." ];
+
+  ldflags = [ "-s" "-w" "-X main.Version=${version}" ];
 
   postInstall = lib.optionalString stdenv.isLinux ''
     mkdir -p $out/lib/systemd/user

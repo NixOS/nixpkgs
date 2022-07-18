@@ -1,4 +1,5 @@
-{ buildGoModule
+{ stdenv
+, buildGoModule
 , fetchFromGitHub
 , lib
 , nixosTests
@@ -6,16 +7,16 @@
 
 buildGoModule rec {
   pname = "ghostunnel";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "ghostunnel";
     repo = "ghostunnel";
     rev = "v${version}";
-    sha256 = "sha256-EE8gCm/gOp3lmCx1q4PahulipLoBZnEatNAVUXzHIVw=";
+    sha256 = "sha256-VameENcHZ6AttV0D8ekPGGFoMHTiTXAY2FxK/Nxwjmk=";
   };
 
-  vendorSha256 = "sha256-XgmvqB1PCfL2gSDqwqauSixk8vlINHRmX6U0h9EXXdU=";
+  vendorSha256 = null;
 
   deleteVendor = true;
 
@@ -32,6 +33,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A simple TLS proxy with mutual authentication support for securing non-TLS backend applications";
     homepage = "https://github.com/ghostunnel/ghostunnel#readme";
     license = licenses.asl20;

@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , cmake
 , clingo
+, catch2
 }:
 
 stdenv.mkDerivation rec {
@@ -14,6 +15,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "1g2xkz9nsgqnrw3fdf5jchl16f0skj5mm32va61scc2yrchll166";
    };
+
+  patches = [
+    ./clingcon_limits.patch
+  ];
+
+  postPatch = ''
+    cp ${catch2}/include/catch2/catch.hpp libclingcon/tests/catch.hpp
+  '';
 
   nativeBuildInputs = [ cmake clingo ];
 

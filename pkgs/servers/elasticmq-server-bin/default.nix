@@ -28,6 +28,7 @@ let
     meta = with lib; {
       homepage = "https://github.com/softwaremill/elasticmq";
       description = "Message queueing system with Java, Scala and Amazon SQS-compatible interfaces";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.asl20;
       platforms = platforms.unix;
       maintainers = with maintainers; [ peterromfeldhk ];

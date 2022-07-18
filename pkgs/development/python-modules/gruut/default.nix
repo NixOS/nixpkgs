@@ -3,7 +3,7 @@
 , callPackage
 , pythonOlder
 , fetchFromGitHub
-, Babel
+, babel
 , gruut-ipa
 , dateparser
 , jsonlines
@@ -36,14 +36,14 @@ let
 in
 buildPythonPackage rec {
   pname = "gruut";
-  version = "2.2.0";
+  version = "2.2.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-9vj3x2IjTso8ksN1cqe5frwg0Y3GhOB6bPWvaBSBOf8=";
+    sha256 = "sha256-B5fPUW4YaMzDDXxncfrWwxGdUizuaxnPImNMf1ZZJ/I=";
   };
 
   postPatch = ''
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    Babel
+    babel
     gruut-ipa
     jsonlines
     num2words

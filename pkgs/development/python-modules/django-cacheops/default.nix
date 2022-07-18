@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "django-cacheops";
-  version = "6.0";
+  version = "6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "78e161ebd96a32e28e19ec7da31f2afed9e62a79726b8b5f0ed12dd16c2e5841";
+    sha256 = "sha256-toTvOf1DQYnTy7fYVBfNlyr2NSiaAyRHmCRztKifcn0=";
   };
 
   propagatedBuildInputs = [
@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "A slick ORM cache with automatic granular event-driven invalidation for Django";
     homepage = "https://github.com/Suor/django-cacheops";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ petabyteboy ];
+    maintainers = with maintainers; [ ];
   };
 }

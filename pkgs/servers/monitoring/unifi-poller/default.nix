@@ -25,6 +25,6 @@ buildGoModule rec {
     description = "Collect ALL UniFi Controller, Site, Device & Client Data - Export to InfluxDB or Prometheus";
     homepage = "https://github.com/unifi-poller/unifi-poller";
     license = licenses.mit;
-    maintainers = with maintainers; [ elseym ];
+    maintainers = with maintainers; [ ];
   };
 }

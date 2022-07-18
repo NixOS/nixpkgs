@@ -2,19 +2,20 @@
 
 let
   pname = "beekeeper-studio";
-  version = "3.1.0";
+  version = "3.3.8";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v${version}/Beekeeper-Studio-${version}.AppImage";
-    name="${pname}-${version}.AppImage";
-    sha512 = "sha512:1zv4fclac94fzzhgqmjgc5pllxcxajjx6yjf3zblj53cc7m4sp4ydjx3wh4db57j75x8vh7xc3q1xpq6q3sj1dafnap0j0icfi6wznk";
+    name = "${pname}-${version}.AppImage";
+    sha512 = "sha512-riBKlvOzBovJhXUf7YX6SJKshxwGiQR0jyWHfJRkq9+WMspPkpXg4sJMXziARHaa6durXZtqCfzQ08HrfqA4Qg==";
   };
 
   appimageContents = appimageTools.extractType2 {
     inherit name src;
   };
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit name src;
 
   multiPkgs = null; # no 32bit needed

@@ -127,16 +127,26 @@ with lib;
       name = "proxmox-${cfg.filenameSuffix}";
       postVM = let
         # Build qemu with PVE's patch that adds support for the VMA format
-        vma = pkgs.qemu_kvm.overrideAttrs ( super: {
+        vma = pkgs.qemu_kvm.overrideAttrs ( super: rec {
+
+          # proxmox's VMA patch doesn't work with qemu 7.0 yet
+          version = "6.2.0";
+          src = pkgs.fetchurl {
+            url= "https://download.qemu.org/qemu-${version}.tar.xz";
+            hash = "sha256-aOFdjkWsVjJuC5pK+otJo9/oq6NIgiHQmMhGmLymW0U=";
+          };
+
           patches = let
-            rev = "cc707c362ea5c8d832aac270d1ffa7ac66a8908f";
-            path = "debian/patches/pve/0025-PVE-Backup-add-vma-backup-format-code.patch";
+            rev = "b37b17c286da3d32945fbee8ee4fd97a418a50db";
+            path = "debian/patches/pve/0026-PVE-Backup-add-vma-backup-format-code.patch";
             vma-patch = pkgs.fetchpatch {
-              url = "https://git.proxmox.com/?p=pve-qemu.git;a=blob_plain;hb=${rev};f=${path}";
-              sha256 = "1z467xnmfmry3pjy7p34psd5xdil9x0apnbvfz8qbj0bf9fgc8zf";
+              url = "https://git.proxmox.com/?p=pve-qemu.git;a=blob_plain;h=${rev};f=${path}";
+              hash = "sha256-siuDWDUnM9Zq0/L2Faww3ELAOUHhVIHu5RAQn6L4Atc=";
             };
-          in super.patches ++ [ vma-patch ];
+          in [ vma-patch ];
+
           buildInputs = super.buildInputs ++ [ pkgs.libuuid ];
+
         });
       in
       ''

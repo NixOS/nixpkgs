@@ -37,7 +37,13 @@ rec {
   extractType2 = extract;
   wrapType1 = wrapType2;
 
-  wrapAppImage = args@{ name ? "${args.pname}-${args.version}", src, extraPkgs, ... }: buildFHSUserEnv
+  wrapAppImage = args@{
+    name ? "${args.pname}-${args.version}",
+    src,
+    extraPkgs,
+    meta ? {},
+    ...
+  }: buildFHSUserEnv
     (defaultFhsEnvArgs // {
       inherit name;
 
@@ -45,6 +51,10 @@ rec {
         ++ defaultFhsEnvArgs.targetPkgs pkgs ++ extraPkgs pkgs;
 
       runScript = "appimage-exec.sh -w ${src} --";
+
+      meta = {
+        sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+      } // meta;
     } // (removeAttrs args ([ "pname" "version" ] ++ (builtins.attrNames (builtins.functionArgs wrapAppImage)))));
 
   wrapType2 = args@{ name ? "${args.pname}-${args.version}", src, extraPkgs ? pkgs: [ ], ... }: wrapAppImage
@@ -68,6 +78,8 @@ rec {
       xdg-utils
       iana-etc
       krb5
+      gsettings-desktop-schemas
+      hicolor-icon-theme # dont show a gtk warning about hicolor not being installed
     ];
 
     # list of libraries expected in an appimage environment:
@@ -104,9 +116,8 @@ rec {
       xorg.libXi
       xorg.libSM
       xorg.libICE
-      gnome2.GConf
       freetype
-      (curl.override { gnutlsSupport = true; opensslSupport = false; })
+      curlWithGnuTls
       nspr
       nss
       fontconfig
@@ -123,7 +134,6 @@ rec {
       atk
       at-spi2-atk
       libudev0-shim
-      networkmanager098
 
       xorg.libXt
       xorg.libXmu
@@ -179,6 +189,8 @@ rec {
       libjack2
       fribidi
       p11-kit
+
+      gmp
 
       # libraries not on the upstream include list, but nevertheless expected
       # by at least one appimage

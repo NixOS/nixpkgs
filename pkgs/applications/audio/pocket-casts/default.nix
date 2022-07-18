@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Pocket Casts webapp, packaged for the Linux Desktop";
     homepage = "https://github.com/felicianotech/pocket-casts-desktop-app";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     maintainers = with maintainers; [ wolfangaukang ];
     platforms = [ "x86_64-linux" ];

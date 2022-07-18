@@ -17,11 +17,11 @@ lua = luajitPackages;
 
 unwrapped = stdenv.mkDerivation rec {
   pname = "knot-resolver";
-  version = "5.4.4";
+  version = "5.5.1";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-    sha256 = "588964319e943679d391cc9c886d40ef858ecd9b33ae160023b4e2b5182b2cea";
+    sha256 = "9bad1edfd6631446da2d2331bd869887d7fe502f6eeaf62b2e43e2c113f02b6d";
   };
 
   outputs = [ "out" "dev" ];
@@ -55,7 +55,7 @@ unwrapped = stdenv.mkDerivation rec {
 
   # http://knot-resolver.readthedocs.io/en/latest/build.html#requirements
   buildInputs = [ knot-dns lua.lua libuv gnutls lmdb ]
-    ++ optionals stdenv.isLinux [ systemd libcap_ng ]
+    ++ optionals stdenv.isLinux [ /*lib*/systemd libcap_ng ]
     ++ [ nghttp2 ]
     ## optional dependencies; TODO: dnstap
     ;
@@ -79,8 +79,7 @@ unwrapped = stdenv.mkDerivation rec {
     rm -r "$out"/lib/sysusers.d/ # ATM more likely to harm than help
   '';
 
-  doInstallCheck = with stdenv; hostPlatform == buildPlatform
-    && !(isDarwin && isAarch64); # avoid luarocks, as it's broken ATM on the platform
+  doInstallCheck = with stdenv; hostPlatform == buildPlatform;
   installCheckInputs = [ cmocka which cacert lua.cqueues lua.basexx lua.http ];
   installCheckPhase = ''
     meson test --print-errorlogs

@@ -7,6 +7,8 @@
 , extra-cmake-modules
 , cpp-utilities
 , qtutilities
+, qtforkawesome
+, boost
 , cmake
 , kio
 , plasma-framework
@@ -19,17 +21,23 @@
 }:
 
 mkDerivation rec {
-  version = "1.1.3";
+  version = "1.1.20";
   pname = "syncthingtray";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "syncthingtray";
     rev = "v${version}";
-    sha256 = "sha256-ovit2XSkxSjcbpqQUv8IzMqfsfItbtXLbx0/Vy0+J0Y=";
+    sha256 = "sha256-T0ddAROwVSh+IKGZZNDMC7YB2IfQZal2pAQ5ArirtjI=";
   };
 
-  buildInputs = [ qtbase cpp-utilities qtutilities ]
+  buildInputs = [
+    qtbase
+    cpp-utilities
+    qtutilities
+    boost
+    qtforkawesome
+  ]
     ++ lib.optionals webviewSupport [ qtwebengine ]
     ++ lib.optionals jsSupport [ qtdeclarative ]
     ++ lib.optionals kioPluginSupport [ kio ]

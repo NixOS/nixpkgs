@@ -4,7 +4,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "composition";
+  pname = "composition";
   version = "2017-11-12";
 
   idrisDeps = [ hezarfen ];

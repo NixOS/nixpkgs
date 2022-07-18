@@ -1,13 +1,12 @@
-{ stdenvNoCC, fetchgit, lib }:
+{ stdenvNoCC, fetchzip, lib }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "linux-firmware";
-  version = "20220209";
+  version = "20220708";
 
-  src = fetchgit {
-    url = "https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-QWGnaGQrDUQeYUIBq0/63YdHZgyaF4s9fdyLA9bb6qs=";
+  src = fetchzip {
+    url = "https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/snapshot/linux-firmware-${version}.tar.gz";
+    sha256 = "sha256-jsmbBxQ4RHBySBq2lks5tJ6YTwwlkvVe2Xc0CDJY8IE=";
   };
 
   installFlags = [ "DESTDIR=$(out)" ];
@@ -17,7 +16,7 @@ stdenvNoCC.mkDerivation rec {
 
   outputHashMode = "recursive";
   outputHashAlgo = "sha256";
-  outputHash = "sha256-ahXZK13wrcZW/8ZCgUTHU6N4QKsL3NV98eRbYGBp3jw=";
+  outputHash = "sha256-FNYZMJnqR2waODUXisch3ObdEjwQN94QSiBE2dDW4sk=";
 
   meta = with lib; {
     description = "Binary firmware collection packaged by kernel.org";

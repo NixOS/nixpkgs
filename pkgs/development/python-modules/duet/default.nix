@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "duet";
-  version = "0.2.1";
+  version = "0.2.7";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "duet";
     rev = "v${version}";
-    sha256 = "sha256-hK2Cx7dSm1mGM2z9oCoRogfa2aIsjyJcdpSSfdHhPmw=";
+    sha256 = "sha256-9CTAupAxZI1twoLpgr7VfECw70QunE6pk+SskiT3JDw=";
   };
 
   propagatedBuildInputs = [ typing-extensions ];

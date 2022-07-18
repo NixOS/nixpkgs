@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
     license = licenses.free;
+    broken = true;  # ITK5 compatibility issue (https://github.com/BIC-MNI/EZminc/issues/15)
   };
 }

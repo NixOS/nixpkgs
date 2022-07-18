@@ -7,6 +7,7 @@
 , gdkPixbufSupport ? true
 , unicode3Support  ? true
 , emojiSupport     ? false
+, nixosTests
 }:
 
 let
@@ -21,7 +22,7 @@ let
     comment = description;
     desktopName = "URxvt";
     genericName = pname;
-    categories = "System;TerminalEmulator;";
+    categories = [ "System" "TerminalEmulator" ];
   };
 
   fetchPatchFromAUR = { package, name, rev, sha256 }:
@@ -101,6 +102,8 @@ stdenv.mkDerivation {
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
     cp -r ${desktopItem}/share/applications/ $out/share/
   '';
+
+  passthru.tests.test = nixosTests.terminal-emulators.urxvt;
 
   meta = {
     inherit description;

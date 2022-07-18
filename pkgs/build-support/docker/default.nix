@@ -6,8 +6,8 @@
 , coreutils
 , e2fsprogs
 , fakechroot
+, fakeNss
 , fakeroot
-, findutils
 , go
 , jq
 , jshon
@@ -15,8 +15,8 @@
 , makeWrapper
 , moreutils
 , nix
+, nixosTests
 , pigz
-, pkgs
 , rsync
 , runCommand
 , runtimeShell
@@ -25,6 +25,7 @@
 , storeDir ? builtins.storeDir
 , substituteAll
 , symlinkJoin
+, tarsum
 , util-linux
 , vmTools
 , writeReferencesToFile
@@ -80,6 +81,15 @@ rec {
     inherit buildImage buildLayeredImage fakeNss pullImage shadowSetup buildImageWithNixDb;
   };
 
+  tests = {
+    inherit (nixosTests)
+      docker-tools
+      docker-tools-overlay
+      # requires remote builder
+      # docker-tools-cross
+      ;
+  };
+
   pullImage =
     let
       fixName = name: builtins.replaceStrings [ "/" ":" ] [ "-" "-" ] name;
@@ -112,7 +122,7 @@ rec {
         outputHashAlgo = "sha256";
         outputHash = sha256;
 
-        nativeBuildInputs = lib.singleton skopeo;
+        nativeBuildInputs = [ skopeo ];
         SSL_CERT_FILE = "${cacert.out}/etc/ssl/certs/ca-bundle.crt";
 
         sourceURL = "docker://${imageName}@${imageDigest}";
@@ -131,7 +141,7 @@ rec {
 
   # We need to sum layer.tar, not a directory, hence tarsum instead of nix-hash.
   # And we cannot untar it, because then we cannot preserve permissions etc.
-  tarsum = pkgs.tarsum;
+  inherit tarsum; # pkgs.dockerTools.tarsum
 
   # buildEnv creates symlinks to dirs, which is hard to edit inside the overlay VM
   mergeDrvs =
@@ -322,7 +332,7 @@ rec {
     , # JSON containing configuration and metadata for this layer.
       baseJson
     , # Files to add to the layer.
-      contents ? null
+      copyToRoot ? null
     , # When copying the contents into the image, preserve symlinks to
       # directories (see `rsync -K`).  Otherwise, transform those symlinks
       # into directories.
@@ -334,7 +344,8 @@ rec {
     }:
     runCommand "docker-layer-${name}"
       {
-        inherit baseJson contents extraCommands;
+        inherit baseJson extraCommands;
+        contents = copyToRoot;
         nativeBuildInputs = [ jshon rsync tarsum ];
       }
       ''
@@ -380,7 +391,8 @@ rec {
     , # Script to run as root. Bash.
       runAsRoot
     , # Files to add to the layer. If null, an empty layer will be created.
-      contents ? null
+      # To add packages to /bin, use `buildEnv` or similar.
+      copyToRoot ? null
     , # When copying the contents into the image, preserve symlinks to
       # directories (see `rsync -K`).  Otherwise, transform those symlinks
       # into directories.
@@ -408,9 +420,9 @@ rec {
 
       inherit fromImage fromImageName fromImageTag diskSize;
 
-      preMount = lib.optionalString (contents != null && contents != [ ]) ''
+      preMount = lib.optionalString (copyToRoot != null && copyToRoot != [ ]) ''
         echo "Adding contents..."
-        for item in ${escapeShellArgs (map (c: "${c}") (toList contents))}; do
+        for item in ${escapeShellArgs (map (c: "${c}") (toList copyToRoot))}; do
           echo "Adding $item..."
           rsync -a${if keepContentsDirlinks then "K" else "k"} --chown=0:0 $item/ layer/
         done
@@ -490,7 +502,7 @@ rec {
     , # Tag of the parent image; will be read from the image otherwise.
       fromImageTag ? null
     , # Files to put on the image (a nix store path or list of paths).
-      contents ? null
+      copyToRoot ? null
     , # When copying the contents into the image, preserve symlinks to
       # directories (see `rsync -K`).  Otherwise, transform those symlinks
       # into directories.
@@ -507,10 +519,20 @@ rec {
       diskSize ? 1024
     , # Time of creation of the image.
       created ? "1970-01-01T00:00:01Z"
+    , # Deprecated.
+      contents ? null
     ,
     }:
 
     let
+      checked =
+        lib.warnIf (contents != null)
+          "in docker image ${name}: The contents parameter is deprecated. Change to copyToRoot if the contents are designed to be copied to the root filesystem, such as when you use `buildEnv` or similar between contents and your packages. Use copyToRoot = buildEnv { ... }; or similar if you intend to add packages to /bin."
+        lib.throwIf (contents != null && copyToRoot != null) "in docker image ${name}: You can not specify both contents and copyToRoot."
+        ;
+
+      rootContents = if copyToRoot == null then contents else copyToRoot;
+
       baseName = baseNameOf name;
 
       # Create a JSON blob of the configuration. Set the date to unix zero.
@@ -535,17 +557,19 @@ rec {
           mkPureLayer
             {
               name = baseName;
-              inherit baseJson contents keepContentsDirlinks extraCommands uid gid;
+              inherit baseJson keepContentsDirlinks extraCommands uid gid;
+              copyToRoot = rootContents;
             } else
           mkRootLayer {
             name = baseName;
             inherit baseJson fromImage fromImageName fromImageTag
-              contents keepContentsDirlinks runAsRoot diskSize
+              keepContentsDirlinks runAsRoot diskSize
               extraCommands;
+            copyToRoot = rootContents;
           };
       result = runCommand "docker-image-${baseName}.tar.gz"
         {
-          nativeBuildInputs = [ jshon pigz coreutils findutils jq moreutils ];
+          nativeBuildInputs = [ jshon pigz jq moreutils ];
           # Image name must be lowercase
           imageName = lib.toLower name;
           imageTag = if tag == null then "" else tag;
@@ -705,7 +729,7 @@ rec {
       '';
 
     in
-    result;
+    checked result;
 
   # Merge the tarballs of images built with buildImage into a single
   # tarball that contains all images. Running `docker load` on the resulting
@@ -747,31 +771,13 @@ rec {
   # Useful when packaging binaries that insist on using nss to look up
   # username/groups (like nginx).
   # /bin/sh is fine to not exist, and provided by another shim.
-  fakeNss = symlinkJoin {
-    name = "fake-nss";
-    paths = [
-      (writeTextDir "etc/passwd" ''
-        root:x:0:0:root user:/var/empty:/bin/sh
-        nobody:x:65534:65534:nobody:/var/empty:/bin/sh
-      '')
-      (writeTextDir "etc/group" ''
-        root:x:0:
-        nobody:x:65534:
-      '')
-      (writeTextDir "etc/nsswitch.conf" ''
-        hosts: files dns
-      '')
-      (runCommand "var-empty" { } ''
-        mkdir -p $out/var/empty
-      '')
-    ];
-  };
+  inherit fakeNss; # alias
 
   # This provides a /usr/bin/env, for shell scripts using the
   # "#!/usr/bin/env executable" shebang.
   usrBinEnv = runCommand "usr-bin-env" { } ''
     mkdir -p $out/usr/bin
-    ln -s ${pkgs.coreutils}/bin/env $out/usr/bin
+    ln -s ${coreutils}/bin/env $out/usr/bin
   '';
 
   # This provides /bin/sh, pointing to bashInteractive.
@@ -784,12 +790,14 @@ rec {
   # contents. The main purpose is to be able to use nix commands in
   # the container.
   # Be careful since this doesn't work well with multilayer.
-  buildImageWithNixDb = args@{ contents ? null, extraCommands ? "", ... }: (
+  # TODO: add the dependencies of the config json.
+  buildImageWithNixDb = args@{ copyToRoot ? contents, contents ? null, extraCommands ? "", ... }: (
     buildImage (args // {
-      extraCommands = (mkDbExtraCommand contents) + extraCommands;
+      extraCommands = (mkDbExtraCommand copyToRoot) + extraCommands;
     })
   );
 
+  # TODO: add the dependencies of the config json.
   buildLayeredImageWithNixDb = args@{ contents ? null, extraCommands ? "", ... }: (
     buildLayeredImage (args // {
       extraCommands = (mkDbExtraCommand contents) + extraCommands;

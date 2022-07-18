@@ -17,6 +17,12 @@ in {
       defaultText = "config.networking.hostName";
     };
 
+    verbose = mkOption {
+      type = types.bool;
+      description = "Enable verbose output";
+      default = false;
+    };
+
     profile = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -45,12 +51,19 @@ in {
       after = ["network-online.target"];
       path = [ config.nix.package ];
       wantedBy = [ "multi-user.target" ];
-      # don't restart while changing
-      reloadIfChanged = true;
+
+      # Cachix requires $USER to be set
+      environment.USER = "root";
+
+      # don't stop the service if the unit disappears
+      unitConfig.X-StopOnRemoval = false;
+
       serviceConfig = {
+        # we don't want to kill children processes as those are deployments
+        KillMode = "process";
         Restart = "on-failure";
         EnvironmentFile = cfg.credentialsFile;
-        ExecStart = "${cfg.package}/bin/cachix deploy agent ${cfg.name} ${if cfg.profile != null then profile else ""}";
+        ExecStart = "${cfg.package}/bin/cachix ${lib.optionalString cfg.verbose "--verbose"} deploy agent ${cfg.name} ${if cfg.profile != null then profile else ""}";
       };
     };
   };

@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , substituteAll
-, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -17,6 +16,7 @@
 , libxml2
 , glib
 , gobject-introspection
+, json-glib
 , libpeas
 , gsettings-desktop-schemas
 , gettext
@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-pomodoro";
-  version = "0.20.0";
+  version = "0.21.1";
 
   src = fetchFromGitHub {
     owner = "gnome-pomodoro";
     repo = "gnome-pomodoro";
     rev = version;
-    sha256 = "sha256-USzLHoBM0QbBPtbTzJJY02cOSDtmlxPGYhMj7M1FJic=";
+    sha256 = "sha256-47gZsL1Hg30wtq6NeZdi8gbLHUZJ34KLzxvIg5DqyUk=";
   };
 
   patches = [
@@ -39,13 +39,6 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-schema-path.patch;
       inherit pname version;
-    })
-
-    # Fix error reporting code.
-    # https://github.com/gnome-pomodoro/gnome-pomodoro/pull/591
-    (fetchpatch {
-      url = "https://github.com/gnome-pomodoro/gnome-pomodoro/commit/133bd62f15653856d9705b66188b42c20d81719e.patch";
-      sha256 = "A20K+57A6/lYH2Buri2+wrCQgz6EGBdYg2xQbHPSkYc=";
     })
   ];
 
@@ -69,6 +62,7 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-good
     gst_all_1.gstreamer
     gtk3
+    json-glib
     libcanberra
     libpeas
     sqlite

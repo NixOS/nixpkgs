@@ -88,7 +88,6 @@ in (if !buildClient then stdenv.mkDerivation else mkDerivation) rec {
     '';
     license = licenses.gpl3;
     maintainers = with maintainers; [ ttuegel ];
-    repositories.git = "https://github.com/quassel/quassel.git";
     inherit (qtbase.meta) platforms;
   };
 }

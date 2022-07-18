@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0fbwd149wny67rfhczz4cbh713a1qnswjiz7b6c2bxfcwh51f9rc";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gtk2 libXft intltool automake autoconf libtool ];
+  nativeBuildInputs = [ pkg-config automake autoconf ];
+  buildInputs = [ gtk2 libXft intltool libtool ];
 
   preConfigure = ''
     ./autogen.sh

@@ -2,26 +2,27 @@
 , buildPythonPackage
 , fetchPypi
 , markupsafe
-, Babel
+, babel
 , pytestCheckHook
-, email_validator
+, email-validator
 }:
 
 buildPythonPackage rec {
   version = "3.0.1";
-  pname = "WTForms";
+  pname = "wtforms";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "WTForms";
+    inherit version;
     sha256 = "1g654ghavds387hqxmhg9s8x222x89wbq1ggzxbsyn6x2axindbb";
   };
 
-  propagatedBuildInputs = [ markupsafe Babel ];
+  propagatedBuildInputs = [ markupsafe babel ];
 
 
   checkInputs = [
     pytestCheckHook
-    email_validator
+    email-validator
   ];
 
   pythonImportsCheck = [ "wtforms" ];

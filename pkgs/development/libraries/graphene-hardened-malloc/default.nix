@@ -1,14 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, python3, runCommand, makeWrapper, stress-ng }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3
+, runCommand
+, makeWrapper
+, stress-ng
+}:
 
 lib.fix (self: stdenv.mkDerivation rec {
   pname = "graphene-hardened-malloc";
-  version = "8";
+  version = "11";
 
   src = fetchFromGitHub {
     owner = "GrapheneOS";
     repo = "hardened_malloc";
     rev = version;
-    sha256 = "sha256-+5kJb3hhuFTto7zsIymIXl3tpKUOm3v1DCY4EkAOCgo=";
+    sha256 = "sha256-BbjL0W12QXFmGCzFrFYY6CZZeFbUt0elCGhM+mbL/IU=";
   };
 
   doCheck = true;
@@ -20,7 +27,7 @@ lib.fix (self: stdenv.mkDerivation rec {
 
   installPhase = ''
     install -Dm444 -t $out/include include/*
-    install -Dm444 -t $out/lib libhardened_malloc.so
+    install -Dm444 -t $out/lib out/libhardened_malloc.so
 
     mkdir -p $out/bin
     substitute preload.sh $out/bin/preload-hardened-malloc --replace "\$dir" $out/lib
@@ -41,21 +48,21 @@ lib.fix (self: stdenv.mkDerivation rec {
       # standalone executables. this includes disabling tests for
       # malloc_object_size, which doesn't make sense to use via LD_PRELOAD.
       buildPhase = ''
-        pushd test/simple-memory-corruption
+        pushd test
         make LDLIBS= LDFLAGS=-Wl,--unresolved-symbols=ignore-all CXXFLAGS=-lstdc++
         substituteInPlace test_smc.py \
           --replace 'test_malloc_object_size' 'dont_test_malloc_object_size' \
           --replace 'test_invalid_malloc_object_size' 'dont_test_invalid_malloc_object_size'
-        popd # test/simple-memory-corruption
+        popd # test
       '';
 
       installPhase = ''
         mkdir -p $out/test
-        cp -r test/simple-memory-corruption $out/test/simple-memory-corruption
+        cp -r test $out/test
 
         mkdir -p $out/bin
         makeWrapper ${python3.interpreter} $out/bin/run-tests \
-          --add-flags "-I -m unittest discover --start-directory $out/test/simple-memory-corruption"
+          --add-flags "-I -m unittest discover --start-directory $out/test"
       '';
     };
     tests = {

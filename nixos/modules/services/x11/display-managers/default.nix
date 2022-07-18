@@ -219,6 +219,7 @@ in
 
       session = mkOption {
         default = [];
+        type = types.listOf types.attrs;
         example = literalExpression
           ''
             [ { manage = "desktop";

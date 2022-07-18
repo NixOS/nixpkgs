@@ -1,7 +1,7 @@
 diff --git a/alc/helpers.cpp b/alc/helpers.cpp
 index 8c1c856..19bbc0f 100644
---- a/alc/helpers.cpp
-+++ b/alc/helpers.cpp
+--- a/core/helpers.cpp
++++ b/core/helpers.cpp
 @@ -402,6 +402,7 @@ al::vector<std::string> SearchDataFiles(const char *ext, const char *subdir)
  
          DirectorySearch(path.c_str(), ext, &results);

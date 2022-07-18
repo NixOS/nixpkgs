@@ -4,6 +4,7 @@
 , gtk3
 , hicolor-icon-theme
 , jdupes
+, gitUpdater
 , allColorVariants ? false
 , circularFolder ? false
 , colorVariants ? [] # default is standard
@@ -16,13 +17,13 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "black" "blue" "brow
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2022-02-08";
+  version = "2022-03-07";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "08a1jhirvn2x9hhjr0lqqqayhsf446cddapprxpsnsn9q6x2j2gp";
+    sha256 = "vQeWGZmurvT/UQJ1dx6t+ZeKdJ1Oq9TdHBADw64x18g=";
   };
 
   nativeBuildInputs = [
@@ -50,16 +51,18 @@ stdenvNoCC.mkDerivation rec {
       ${lib.optionalString circularFolder "-c"} \
       ${if allColorVariants then "-a" else builtins.toString colorVariants}
 
-    jdupes -L -r $out/share/icons
+    jdupes --link-soft --recurse $out/share
 
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater {inherit pname version; };
 
   meta = with lib; {
     description = "Flat and colorful personality icon theme";
     homepage = "https://github.com/vinceliuice/Tela-circle-icon-theme";
     license = licenses.gpl3Only;
-    platforms = platforms.unix;
+    platforms = platforms.linux; # darwin use case-insensitive filesystems that cause hash mismatches
     maintainers = with maintainers; [ romildo ];
   };
 }

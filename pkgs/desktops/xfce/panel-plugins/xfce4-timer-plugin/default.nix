@@ -28,11 +28,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  passthru.updateScript = xfce.updateScript {
-    inherit pname version;
-    attrPath = "xfce.${pname}";
-    versionLister = xfce.archiveLister category pname;
-  };
+  passthru.updateScript = xfce.archiveUpdater { inherit category pname version; };
 
   meta = with lib; {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-timer-plugin";

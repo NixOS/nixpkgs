@@ -1,17 +1,17 @@
 { lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
-  pname   = "nats-server";
-  version = "2.7.2";
+  pname = "nats-server";
+  version = "2.8.4";
 
   src = fetchFromGitHub {
-    rev    = "v${version}";
-    owner  = "nats-io";
-    repo   = pname;
-    sha256 = "0w4hjz1x6zwcxhnd1y3874agyn8nsdra4fky6kc2rrfikjcw003y";
+    owner = "nats-io";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-hybCAVgHSwby8oSO0T2ZuqAYbqtZDc/adSPMOTdeI+w=";
   };
 
-  vendorSha256 = "1gvvjwx1g8mhcqi3ssb3k5ylkz0afpmnf6h2zfny9rc4dk2cp2dy";
+  vendorSha256 = "sha256-sK79szerxz42Y6V6NyDAveeMOx0XFq28Tjx27JkEWW4=";
 
   doCheck = false;
 
@@ -19,8 +19,8 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "High-Performance server for NATS";
+    homepage = "https://nats.io/";
     license = licenses.asl20;
     maintainers = with maintainers; [ swdunlop derekcollison ];
-    homepage = "https://nats.io/";
   };
 }

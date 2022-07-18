@@ -1,15 +1,16 @@
-{ lib, stdenv, fetchhg, cmake, glib, gst_all_1, makeWrapper, pkg-config
+{ lib, stdenv, fetchFromGitHub, cmake, glib, gst_all_1, makeWrapper, pkg-config
 , python2, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, sqlite, zlib, runtimeShell
 }:
 
 stdenv.mkDerivation {
   pname = "retrofe";
-  version = "0.6.169";
+  version = "0.10.31";
 
-  src = fetchhg {
-    url = "https://bitbucket.org/teamretro/retrofe";
-    rev = "8793e03";
-    sha256 = "0cvsg07ff0fdqh5zgiv2fs7s6c98hn150kpxmpw5fn6jilaszwkm";
+  src = fetchFromGitHub {
+    owner = "phulshof";
+    repo = "RetroFE";
+    rev = "2ddd65a76210d241031c4ac9268255f311df25d1";
+    sha256 = "sha256-uBfECbU2Df/pPpEXXq62S7Ec0YU4lPIsZ8k5UmKD7xQ=";
   };
 
   nativeBuildInputs = [ cmake makeWrapper pkg-config python2 ];
@@ -18,12 +19,9 @@ stdenv.mkDerivation {
     glib gst_all_1.gstreamer SDL2 SDL2_image SDL2_mixer SDL2_ttf sqlite zlib
   ] ++ (with gst_all_1; [ gst-libav gst-plugins-base gst-plugins-good ]);
 
-  patches = [ ./include-paths.patch ];
-
   configurePhase = ''
     cmake RetroFE/Source -BRetroFE/Build -DCMAKE_BUILD_TYPE=Release \
       -DVERSION_MAJOR=0 -DVERSION_MINOR=0 -DVERSION_BUILD=0 \
-      -DGSTREAMER_BASE_INCLUDE_DIRS='${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0'
   '';
 
   buildPhase = ''
@@ -70,7 +68,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A frontend for arcade cabinets and media PCs";
-    homepage = "http://retrofe.com";
+    homepage = "http://retrofe.nl/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ hrdinka ];
     platforms = with platforms; linux;

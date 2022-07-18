@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # memory intensive
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A set of implementations of DBM";
     homepage = "https://dbmx.net/tkrzw/";
     maintainers = with maintainers; [ ehmry ];

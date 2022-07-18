@@ -1,6 +1,6 @@
 { lib, fetchurl, buildDunePackage
 , logs, lwt, mirage-clock, mirage-profile, ptime
-, alcotest
+, alcotest, stdlib-shims
 }:
 
 buildDunePackage rec {
@@ -14,7 +14,7 @@ buildDunePackage rec {
     sha256 = "0h0amzjxy067jljscib7fvw5q8k0adqa8m86affha9hq5jsh07a1";
   };
 
-  propagatedBuildInputs = [ logs lwt mirage-clock mirage-profile ptime ];
+  propagatedBuildInputs = [ logs lwt mirage-clock mirage-profile ptime stdlib-shims ];
 
   doCheck = true;
   checkInputs = [ alcotest ];

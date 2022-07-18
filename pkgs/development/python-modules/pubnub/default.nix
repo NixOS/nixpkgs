@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pubnub";
-  version = "6.0.1";
+  version = "6.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = "python";
-    rev = "v${version}";
-    hash = "sha256-TXxnFKDq1eWShimtNKaUMEQrs1nRQ8NqAQSI8Hutcp8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-NpGhZrfUXKpz520l1S+cCfTrI2T/7XlO0Kk1e+XR8Ew=";
   };
 
   propagatedBuildInputs = [

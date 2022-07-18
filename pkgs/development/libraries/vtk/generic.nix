@@ -73,6 +73,7 @@ in stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DVTK_VERSIONED_INSTALL=OFF"
   ] ++ optionals enableQt [
     "-D${if lib.versionOlder version "9.0" then "VTK_Group_Qt:BOOL=ON" else "VTK_GROUP_ENABLE_Qt:STRING=YES"}"
   ] ++ optionals (enableQt && lib.versionOlder version "8.0") [

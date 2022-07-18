@@ -18,12 +18,12 @@
 , wxGTK
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bochs";
   version = "2.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/${pname}/${pname}/${version}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/project/${finalAttrs.pname}/${finalAttrs.pname}/${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     hash = "sha256-oBCrG/3HKsWgjS4kEs1HHA/r1mrx2TSbwNeWh53lsXo=";
   };
 
@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     libtool
     pkg-config
   ];
+
   buildInputs = [
     SDL2
     curl
@@ -130,7 +131,8 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin;
   };
-}
+})
 # TODO: a better way to organize the options
 # TODO: docbook (docbook-tools from RedHat mirrors should help)

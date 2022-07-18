@@ -1,0 +1,356 @@
+See:
+  https://github.com/Beep6581/RawTherapee/issues/6324
+  https://github.com/Beep6581/RawTherapee/commit/2e0137d54243eb729d4a5f939c4320ec8f8f415d
+
+diff --git a/rtengine/canon_cr3_decoder.cc b/rtengine/canon_cr3_decoder.cc
+index 6274154cb..98c743dad 100644
+--- a/rtengine/canon_cr3_decoder.cc
++++ b/rtengine/canon_cr3_decoder.cc
+@@ -662,7 +662,7 @@ std::uint32_t _byteswap_ulong(std::uint32_t x)
+ #endif
+ 
+ struct LibRaw_abstract_datastream {
+-    IMFILE* ifp;
++    rtengine::IMFILE* ifp;
+ 
+     void lock()
+     {
+diff --git a/rtengine/dcraw.cc b/rtengine/dcraw.cc
+index 812f122b3..5da696af2 100644
+--- a/rtengine/dcraw.cc
++++ b/rtengine/dcraw.cc
+@@ -2025,7 +2025,7 @@ void CLASS phase_one_load_raw_c()
+ #endif
+ {
+     int len[2], pred[2];
+-    IMFILE ifpthr = *ifp;
++    rtengine::IMFILE ifpthr = *ifp;
+     ifpthr.plistener = nullptr;
+ 
+ #ifdef _OPENMP
+@@ -3380,7 +3380,7 @@ void CLASS sony_arw2_load_raw()
+ {
+     uchar *data = new (std::nothrow) uchar[raw_width + 1];
+     merror(data, "sony_arw2_load_raw()");
+-    IMFILE ifpthr = *ifp;
++    rtengine::IMFILE ifpthr = *ifp;
+     int pos = ifpthr.pos;
+     ushort pix[16];
+ 
+@@ -6394,7 +6394,7 @@ int CLASS parse_tiff_ifd (int base)
+   unsigned sony_curve[] = { 0,0,0,0,0,4095 };
+   unsigned *buf, sony_offset=0, sony_length=0, sony_key=0;
+   struct jhead jh;
+-/*RT*/  IMFILE *sfp;
++/*RT*/  rtengine::IMFILE *sfp;
+ /*RT*/  int pana_raw = 0;
+ 
+   if (tiff_nifds >= sizeof tiff_ifd / sizeof tiff_ifd[0])
+@@ -6958,7 +6958,7 @@ it under the terms of the one of two licenses as you choose:
+     fread (buf, sony_length, 1, ifp);
+     sony_decrypt (buf, sony_length/4, 1, sony_key);
+     sfp = ifp;
+-/*RT*/ ifp = fopen (buf, sony_length);
++/*RT*/ ifp = rtengine::fopen (buf, sony_length);
+ // if ((ifp = tmpfile())) {
+ // fwrite (buf, sony_length, 1, ifp);
+ // fseek (ifp, 0, SEEK_SET);
+@@ -7264,7 +7264,7 @@ void CLASS parse_external_jpeg()
+ {
+   const char *file, *ext;
+   char *jname, *jfile, *jext;
+-/*RT*/  IMFILE *save=ifp;
++/*RT*/  rtengine::IMFILE *save=ifp;
+ 
+   ext  = strrchr (ifname, '.');
+   file = strrchr (ifname, '/');
+@@ -7292,7 +7292,7 @@ void CLASS parse_external_jpeg()
+       *jext = '0';
+     }
+   if (strcmp (jname, ifname)) {
+-/*RT*/    if ((ifp = fopen (jname))) {
++/*RT*/    if ((ifp = rtengine::fopen (jname))) {
+ //    if ((ifp = fopen (jname, "rb"))) {
+       if (verbose)
+ 	fprintf (stderr,_("Reading metadata from %s ...\n"), jname);
+diff --git a/rtengine/dcraw.h b/rtengine/dcraw.h
+index 89c1fcaff..f25157088 100644
+--- a/rtengine/dcraw.h
++++ b/rtengine/dcraw.h
+@@ -73,7 +73,7 @@ public:
+ 
+ protected:
+     int exif_base, ciff_base, ciff_len;
+-    IMFILE *ifp;
++    rtengine::IMFILE *ifp;
+     FILE *ofp;
+     short order;
+     const char *ifname;
+@@ -125,7 +125,7 @@ protected:
+         int         cur_buf_size;    // buffer size
+         uchar       *cur_buf;        // currently read block
+         int         fillbytes;          // Counter to add extra byte for block size N*16
+-        IMFILE      *input;
++        rtengine::IMFILE      *input;
+         struct int_pair grad_even[3][41];    // tables of gradients
+         struct int_pair grad_odd[3][41];
+         ushort		*linealloc;
+@@ -278,7 +278,7 @@ void parse_redcine();
+ class getbithuff_t
+ {
+ public:
+-   getbithuff_t(DCraw *p,IMFILE *&i, unsigned &z):parent(p),bitbuf(0),vbits(0),reset(0),ifp(i),zero_after_ff(z){}
++   getbithuff_t(DCraw *p,rtengine::IMFILE *&i, unsigned &z):parent(p),bitbuf(0),vbits(0),reset(0),ifp(i),zero_after_ff(z){}
+    unsigned operator()(int nbits, ushort *huff);
+ 
+ private:
+@@ -288,7 +288,7 @@ private:
+    DCraw *parent;
+    unsigned bitbuf;
+    int vbits, reset;
+-   IMFILE *&ifp;
++   rtengine::IMFILE *&ifp;
+    unsigned &zero_after_ff;
+ };
+ getbithuff_t getbithuff;
+@@ -296,7 +296,7 @@ getbithuff_t getbithuff;
+ class nikbithuff_t
+ {
+ public:
+-   explicit nikbithuff_t(IMFILE *&i):bitbuf(0),errors(0),vbits(0),ifp(i){}
++   explicit nikbithuff_t(rtengine::IMFILE *&i):bitbuf(0),errors(0),vbits(0),ifp(i){}
+    void operator()() {bitbuf = vbits = 0;};
+    unsigned operator()(int nbits, ushort *huff);
+    unsigned errorCount() { return errors; }
+@@ -309,7 +309,7 @@ private:
+    }
+    unsigned bitbuf, errors;
+    int vbits;
+-   IMFILE *&ifp;
++   rtengine::IMFILE *&ifp;
+ };
+ nikbithuff_t nikbithuff;
+ 
+@@ -378,7 +378,7 @@ void parse_qt (int end);
+ // ph1_bithuff(int nbits, ushort *huff);
+ class ph1_bithuff_t {
+ public:
+-   ph1_bithuff_t(DCraw *p, IMFILE *i, short &o):order(o),ifp(i),bitbuf(0),vbits(0){}
++   ph1_bithuff_t(DCraw *p, rtengine::IMFILE *i, short &o):order(o),ifp(i),bitbuf(0),vbits(0){}
+    unsigned operator()(int nbits, ushort *huff);
+    unsigned operator()(int nbits);
+    unsigned operator()();
+@@ -412,7 +412,7 @@ private:
+    }
+ 
+    short &order;
+-   IMFILE* const ifp;
++   rtengine::IMFILE* const ifp;
+    UINT64 bitbuf;
+    int vbits;
+ };
+@@ -430,11 +430,11 @@ void nokia_load_raw();
+ 
+ class pana_bits_t{
+ public:
+-   pana_bits_t(IMFILE *i, unsigned &u, unsigned enc):
++   pana_bits_t(rtengine::IMFILE *i, unsigned &u, unsigned enc):
+     ifp(i), load_flags(u), vbits(0), encoding(enc) {}
+    unsigned operator()(int nbits, unsigned *bytes=nullptr);
+ private:
+-   IMFILE *ifp;
++   rtengine::IMFILE *ifp;
+    unsigned &load_flags;
+    uchar buf[0x4000];
+    int vbits;
+diff --git a/rtengine/dfmanager.cc b/rtengine/dfmanager.cc
+index 1fb1d2e1b..951df2248 100644
+--- a/rtengine/dfmanager.cc
++++ b/rtengine/dfmanager.cc
+@@ -540,7 +540,7 @@ std::vector<badPix> *DFManager::getHotPixels ( const std::string &mak, const std
+ 
+ int DFManager::scanBadPixelsFile( Glib::ustring filename )
+ {
+-    FILE *file = fopen( filename.c_str(), "r" );
++    FILE *file = ::fopen( filename.c_str(), "r" );
+ 
+     if( !file ) {
+         return false;
+diff --git a/rtengine/myfile.cc b/rtengine/myfile.cc
+index 842766dcf..2321d18bb 100644
+--- a/rtengine/myfile.cc
++++ b/rtengine/myfile.cc
+@@ -70,7 +70,7 @@ int munmap(void *start, size_t length)
+ 
+ #ifdef MYFILE_MMAP
+ 
+-IMFILE* fopen (const char* fname)
++rtengine::IMFILE* rtengine::fopen (const char* fname)
+ {
+     int fd;
+ 
+@@ -123,13 +123,13 @@ IMFILE* fopen (const char* fname)
+     return mf;
+ }
+ 
+-IMFILE* gfopen (const char* fname)
++rtengine::IMFILE* rtengine::gfopen (const char* fname)
+ {
+     return fopen(fname);
+ }
+ #else
+ 
+-IMFILE* fopen (const char* fname)
++rtengine::IMFILE* rtengine::fopen (const char* fname)
+ {
+ 
+     FILE* f = g_fopen (fname, "rb");
+@@ -152,7 +152,7 @@ IMFILE* fopen (const char* fname)
+     return mf;
+ }
+ 
+-IMFILE* gfopen (const char* fname)
++rtengine::IMFILE* rtengine::gfopen (const char* fname)
+ {
+ 
+     FILE* f = g_fopen (fname, "rb");
+@@ -176,7 +176,7 @@ IMFILE* gfopen (const char* fname)
+ }
+ #endif //MYFILE_MMAP
+ 
+-IMFILE* fopen (unsigned* buf, int size)
++rtengine::IMFILE* rtengine::fopen (unsigned* buf, int size)
+ {
+ 
+     IMFILE* mf = new IMFILE;
+@@ -190,7 +190,7 @@ IMFILE* fopen (unsigned* buf, int size)
+     return mf;
+ }
+ 
+-void fclose (IMFILE* f)
++void rtengine::fclose (IMFILE* f)
+ {
+ #ifdef MYFILE_MMAP
+ 
+@@ -207,7 +207,7 @@ void fclose (IMFILE* f)
+     delete f;
+ }
+ 
+-int fscanf (IMFILE* f, const char* s ...)
++int rtengine::fscanf (IMFILE* f, const char* s ...)
+ {
+     // fscanf not easily wrapped since we have no terminating \0 at end
+     // of file data and vsscanf() won't tell us how many characters that
+@@ -253,7 +253,7 @@ int fscanf (IMFILE* f, const char* s ...)
+ }
+ 
+ 
+-char* fgets (char* s, int n, IMFILE* f)
++char* rtengine::fgets (char* s, int n, IMFILE* f)
+ {
+ 
+     if (f->pos >= f->size) {
+@@ -270,7 +270,7 @@ char* fgets (char* s, int n, IMFILE* f)
+     return s;
+ }
+ 
+-void imfile_set_plistener(IMFILE *f, rtengine::ProgressListener *plistener, double progress_range)
++void rtengine::imfile_set_plistener(IMFILE *f, rtengine::ProgressListener *plistener, double progress_range)
+ {
+     f->plistener = plistener;
+     f->progress_range = progress_range;
+@@ -278,7 +278,7 @@ void imfile_set_plistener(IMFILE *f, rtengine::ProgressListener *plistener, doub
+     f->progress_current = 0;
+ }
+ 
+-void imfile_update_progress(IMFILE *f)
++void rtengine::imfile_update_progress(IMFILE *f)
+ {
+     if (!f->plistener || f->progress_current < f->progress_next) {
+         return;
+diff --git a/rtengine/myfile.h b/rtengine/myfile.h
+index 423edea9a..c655696e6 100644
+--- a/rtengine/myfile.h
++++ b/rtengine/myfile.h
+@@ -30,8 +30,6 @@ namespace rtengine
+ 
+ class ProgressListener;
+ 
+-}
+-
+ struct IMFILE {
+     int fd;
+     ssize_t pos;
+@@ -141,3 +139,5 @@ inline unsigned char* fdata(int offset, IMFILE* f)
+ 
+ int fscanf (IMFILE* f, const char* s ...);
+ char* fgets (char* s, int n, IMFILE* f);
++
++}
+diff --git a/rtengine/rtthumbnail.cc b/rtengine/rtthumbnail.cc
+index 9da601e2a..097b9e711 100644
+--- a/rtengine/rtthumbnail.cc
++++ b/rtengine/rtthumbnail.cc
+@@ -1922,7 +1922,7 @@ bool Thumbnail::writeImage (const Glib::ustring& fname)
+ 
+     Glib::ustring fullFName = fname + ".rtti";
+ 
+-    FILE* f = g_fopen (fullFName.c_str (), "wb");
++    FILE* f = ::g_fopen (fullFName.c_str (), "wb");
+ 
+     if (!f) {
+         return false;
+@@ -1965,7 +1965,7 @@ bool Thumbnail::readImage (const Glib::ustring& fname)
+         return false;
+     }
+ 
+-    FILE* f = g_fopen(fullFName.c_str (), "rb");
++    FILE* f = ::g_fopen(fullFName.c_str (), "rb");
+ 
+     if (!f) {
+         return false;
+@@ -2191,7 +2191,7 @@ bool Thumbnail::writeData  (const Glib::ustring& fname)
+         return false;
+     }
+ 
+-    FILE *f = g_fopen (fname.c_str (), "wt");
++    FILE *f = ::g_fopen (fname.c_str (), "wt");
+ 
+     if (!f) {
+         if (settings->verbose) {
+@@ -2214,7 +2214,7 @@ bool Thumbnail::readEmbProfile  (const Glib::ustring& fname)
+     embProfile = nullptr;
+     embProfileLength = 0;
+ 
+-    FILE* f = g_fopen (fname.c_str (), "rb");
++    FILE* f = ::g_fopen (fname.c_str (), "rb");
+ 
+     if (f) {
+         if (!fseek (f, 0, SEEK_END)) {
+@@ -2242,7 +2242,7 @@ bool Thumbnail::writeEmbProfile (const Glib::ustring& fname)
+ {
+ 
+     if (embProfileData) {
+-        FILE* f = g_fopen (fname.c_str (), "wb");
++        FILE* f = ::g_fopen (fname.c_str (), "wb");
+ 
+         if (f) {
+             fwrite (embProfileData, 1, embProfileLength, f);
+@@ -2257,7 +2257,7 @@ bool Thumbnail::writeEmbProfile (const Glib::ustring& fname)
+ bool Thumbnail::readAEHistogram  (const Glib::ustring& fname)
+ {
+ 
+-    FILE* f = g_fopen(fname.c_str(), "rb");
++    FILE* f = ::g_fopen(fname.c_str(), "rb");
+ 
+     if (!f) {
+         aeHistogram.reset();
+@@ -2280,7 +2280,7 @@ bool Thumbnail::writeAEHistogram (const Glib::ustring& fname)
+ {
+ 
+     if (aeHistogram) {
+-        FILE* f = g_fopen (fname.c_str (), "wb");
++        FILE* f = ::g_fopen (fname.c_str (), "wb");
+ 
+         if (f) {
+             fwrite (&aeHistogram[0], 1, (65536 >> aeHistCompression)*sizeof (aeHistogram[0]), f);

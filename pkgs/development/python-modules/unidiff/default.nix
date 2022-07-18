@@ -1,13 +1,17 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi, python }:
 
 buildPythonPackage rec {
   pname = "unidiff";
-  version = "0.7.0";
+  version = "0.7.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "91bb13b4969514a400679d9ae5e29a6ffad85346087677f8b5e2e036af817447";
+    sha256 = "2bbcbc986e1fb97f04b1d7b864aa6002ab02f4d8a996bf03aa6e5a81447d1fc5";
   };
+
+  checkPhase = ''
+    ${python.interpreter} -m unittest discover -s tests/
+  '';
 
   pythonImportsCheck = [ "unidiff" ];
 

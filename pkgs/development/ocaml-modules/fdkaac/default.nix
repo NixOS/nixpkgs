@@ -21,7 +21,7 @@ buildDunePackage rec {
     description = "OCaml binding for the fdk-aac library";
     inherit (src.meta) homepage;
     license = lib.licenses.gpl2Only;
-    maintainers = [ lib.maintainers.vbgl ];
+    maintainers = [ lib.maintainers.vbgl lib.maintainers.dandellion ];
   };
 
 }

@@ -1,4 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, six, attrs, twisted, pyopenssl, service-identity, autobahn, treq, mock, pytest }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, six
+, attrs
+, twisted
+, pyopenssl
+, service-identity
+, autobahn
+, treq
+, mock
+}:
 
 buildPythonPackage rec {
   version = "0.4.1";
@@ -9,18 +20,27 @@ buildPythonPackage rec {
     sha256 = "1af10592909caaf519c00e706eac842c5e77f8d4356215fe9c61c7b2258a88fb";
   };
 
-  propagatedBuildInputs = [ six attrs twisted pyopenssl service-identity autobahn ];
+  propagatedBuildInputs = [
+    attrs
+    six
+    twisted
+    autobahn
+  ] ++ autobahn.optional-dependencies.twisted
+  ++ twisted.optional-dependencies.tls;
 
-  # zope.interface import issue
-  doCheck = !isPy27;
-  checkInputs = [ treq mock pytest ];
+  checkInputs = [
+    treq
+    mock
+    twisted
+  ];
   checkPhase = ''
-    pytest
+    trial -j$NIX_BUILD_CORES wormhole_mailbox_server
   '';
 
   meta = with lib; {
     description = "Securely transfer data between computers";
     homepage = "https://github.com/warner/magic-wormhole-mailbox-server";
     license = licenses.mit;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

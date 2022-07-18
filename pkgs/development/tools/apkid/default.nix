@@ -5,13 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "apkid";
-  version = "2.1.1";
+  version = "2.1.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rednaga";
     repo = "APKiD";
     rev = "v${version}";
-    sha256 = "1p6kdjjw2jhwr875445w43k46n6zwpz0l0phkl8d3y1v4gi5l6dx";
+    hash = "sha256-U4CsPTA0fXCzj5iLTbLFGudAvewVCzxe4xl0osoBy5A=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -28,12 +29,14 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   postPatch = ''
-    # The next release will have support for later yara-python releases
+    # We have dex support enabled in yara-python
     substituteInPlace setup.py \
-      --replace "yara-python==3.11.0" "yara-python"
+      --replace "yara-python-dex>=1.0.1" "yara-python"
   '';
 
-  pythonImportsCheck = [ "apkid" ];
+  pythonImportsCheck = [
+    "apkid"
+  ];
 
   meta = with lib; {
     description = "Android Application Identifier";

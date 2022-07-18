@@ -15,14 +15,15 @@
 
 buildPythonPackage rec {
   pname = "intensity-normalization";
-  version = "2.1.4";
+  version = "2.2.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "e7b46039311bcbba40224d85eb07eefe1488bd8a6faa893a180e15e65c48b7f5";
+    pname = "intensity_normalization";
+    inherit version;
+    sha256 = "sha256-Yjd4hXmbT87xNKSqc6zkKNisOVhQzQAUZI5wBiI/UBk=";
   };
 
   propagatedBuildInputs = [
@@ -57,5 +58,7 @@ buildPythonPackage rec {
     description = "MRI intensity normalization tools";
     maintainers = with maintainers; [ bcdarwin ];
     license = licenses.asl20;
+    # depends on simpleitk python wrapper which is not packaged yet
+    broken = true;
   };
 }

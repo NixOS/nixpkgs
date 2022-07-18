@@ -4,7 +4,6 @@
 , fetchPypi
 , fetchpatch
 , python
-, glibcLocales
 , pkg-config
 , gdb
 , numpy
@@ -24,12 +23,13 @@ let
   ;
 
 in buildPythonPackage rec {
-  pname = "Cython";
-  version = "0.29.24";
+  pname = "cython";
+  version = "0.29.30";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-zfBNB8NgCGDowuuq1Oj1KsP+shJFPBdkpJrAjIJ+hEM=";
+    pname = "Cython";
+    inherit version;
+    sha256 = "sha256-IjW2Laj+b6i5lCLI5YPy+5XhQ4Z9M3tcdeS5oahl+eM=";
   };
 
   nativeBuildInputs = [
@@ -40,17 +40,9 @@ in buildPythonPackage rec {
     gdb numpy ncurses
   ];
 
-  buildInputs = [ glibcLocales ];
   LC_ALL = "en_US.UTF-8";
 
   patches = [
-    # https://github.com/cython/cython/issues/2752, needed by sage (https://trac.sagemath.org/ticket/26855) and up to be included in 0.30
-    (fetchpatch {
-      name = "non-int-conversion-to-pyhash.patch";
-      url = "https://github.com/cython/cython/commit/28251032f86c266065e4976080230481b1a1bb29.patch";
-      sha256 = "19rg7xs8gr90k3ya5c634bs8gww1sxyhdavv07cyd2k71afr83gy";
-    })
-
     # backport Cython 3.0 trashcan support (https://github.com/cython/cython/pull/2842) to 0.X series.
     # it does not affect Python code unless the code explicitly uses the feature.
     # trashcan support is needed to avoid stack overflows during object deallocation in sage (https://trac.sagemath.org/ticket/27267)

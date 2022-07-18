@@ -4,9 +4,9 @@
 , curl, writeShellScript, common-updater-scripts }:
 
 let
-  url = "https://hubstaff-production.s3.amazonaws.com/downloads/HubstaffClient/Builds/Release/1.6.4-6681f81d/Hubstaff-1.6.4-6681f81d.sh";
-  version = "1.6.4-6681f81d";
-  sha256 = "1j0rzyqm9zm2w44zwxq61fy19m27ghlv11mbfl7yzh2ccmxljxjm";
+  url = "https://hubstaff-production.s3.amazonaws.com/downloads/HubstaffClient/Builds/Release/1.6.5-31be26f1/Hubstaff-1.6.5-31be26f1.sh";
+  version = "1.6.5-31be26f1";
+  sha256 = "1z1binnqppyxavmjg0l1cvy64ylzy2v454sws2x1am2qhhbnycjm";
 
   rpath = lib.makeLibraryPath
     [ libX11 zlib libSM libICE libXext freetype libXrender fontconfig libXft
@@ -55,7 +55,7 @@ stdenv.mkDerivation {
     ln -s $opt/data/resources $opt/x86_64/resources
   '';
 
-  updateScript = writeShellScript "hubstaff-updater" ''
+  passthru.updateScript = writeShellScript "hubstaff-updater" ''
     set -eu -o pipefail
 
     installation_script_url=$(curl --fail --head --location --silent --output /dev/null --write-out %{url_effective} https://app.hubstaff.com/download/linux)
@@ -70,6 +70,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Time tracking software";
     homepage = "https://hubstaff.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ michalrus srghma ];

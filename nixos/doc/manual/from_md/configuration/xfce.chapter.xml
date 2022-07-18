@@ -27,12 +27,18 @@ services.picom = {
     <literal>pkgs.xfce</literal>.
   </para>
   <section xml:id="sec-xfce-thunar-plugins">
-    <title>Thunar Plugins</title>
+    <title>Thunar</title>
+    <para>
+      Thunar (the Xfce file manager) is automatically enabled when Xfce
+      is enabled. To enable Thunar without enabling Xfce, use the
+      configuration option <xref linkend="opt-programs.thunar.enable" />
+      instead of simply adding <literal>pkgs.xfce.thunar</literal> to
+      <xref linkend="opt-environment.systemPackages" />.
+    </para>
     <para>
       If you'd like to add extra plugins to Thunar, add them to
-      <xref linkend="opt-services.xserver.desktopManager.xfce.thunarPlugins" />.
-      You shouldn't just add them to
-      <xref linkend="opt-environment.systemPackages" />.
+      <xref linkend="opt-programs.thunar.plugins" />. You shouldn't just
+      add them to <xref linkend="opt-environment.systemPackages" />.
     </para>
   </section>
   <section xml:id="sec-xfce-troubleshooting">

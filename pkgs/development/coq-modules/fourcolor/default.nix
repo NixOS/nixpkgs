@@ -16,7 +16,7 @@ mkCoqDerivation {
     { cases = [ (isLe "8.13") (pred.inter (isGe "1.11.0") (isLt "1.13")) ]; out = "1.2.3"; }
   ] null;
 
-  propagatedBuildInputs = [ mathcomp.algebra ];
+  propagatedBuildInputs = [ mathcomp.algebra mathcomp.ssreflect mathcomp.fingroup ];
 
   meta = {
     description = "Formal proof of the Four Color Theorem ";

@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname   = "abc-verifier";
-  version = "2021.11.12";
+  version = "2022.05.06";
 
   src = fetchFromGitHub {
     owner = "yosyshq";
     repo  = "abc";
-    rev   = "f6fa2ddcfc89099726d60386befba874c7ac1e0d";
-    hash  = "sha256-0rvMPZ+kL0m/GjlCLx3eXYQ0osQ2wQiS3+csqPl3U9s=";
+    rev   = "09a7e6dac739133a927ae7064d319068ab927f90";
+    hash  = "sha256-+1UcYjK2mvhlTHl6lVCcj5q+1D8RUTquHaajSl5NuJg=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
     description = "A tool for squential logic synthesis and formal verification";
     homepage    = "https://people.eecs.berkeley.edu/~alanmi/abc";
     license     = licenses.mit;
-    platforms   = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice ];
+    mainProgram = "abc";
+    platforms   = platforms.unix;
   };
 }

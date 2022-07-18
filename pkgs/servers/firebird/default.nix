@@ -5,6 +5,7 @@ let base = {
 
   meta = with lib; {
     description = "SQL relational database management system";
+    downloadPage = "https://github.com/FirebirdSQL/firebird/";
     homepage = "https://firebirdsql.org/";
     changelog = "https://github.com/FirebirdSQL/firebird/blob/master/CHANGELOG.md";
     license = [ "IDPL" "Interbase-1.0" ];
@@ -54,13 +55,13 @@ let base = {
   });
 
   firebird_3 = stdenv.mkDerivation (base // rec {
-    version = "3.0.8";
+    version = "3.0.9";
 
     src = fetchFromGitHub {
       owner = "FirebirdSQL";
       repo = "firebird";
       rev = "v${version}";
-      sha256 = "sha256-l1V3CGxTybPY8pl6WhsExqdWJLiYsOv5BCrU/iD+I7k=";
+      sha256 = "0axgw4zzb7f7yszr8s7svnspv3mgyvpbkb0b3w6c70fnj10hw21c";
     };
 
     buildInputs = base.buildInputs ++ [ zlib libtommath ];

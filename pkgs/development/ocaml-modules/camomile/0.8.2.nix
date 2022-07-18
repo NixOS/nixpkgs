@@ -13,7 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "0x43pjxx70kgip86mmdn08s97k4qzdqc8i79xfyyx28smy1bsa00";
   };
 
-  buildInputs = [ocaml findlib camlp4];
+  nativeBuildInputs = [ ocaml findlib camlp4 ];
+
+  strictDeps = true;
 
   createFindlibDestdir = true;
 
@@ -22,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "A comprehensive Unicode library for OCaml";
     license = lib.licenses.lgpl21;
     branch = "0.8.2";
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
     maintainers = [
       lib.maintainers.maggesi
     ];

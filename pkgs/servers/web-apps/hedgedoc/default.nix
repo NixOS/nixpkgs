@@ -116,7 +116,7 @@ mkYarnPackage rec {
     description = "Realtime collaborative markdown notes on all platforms";
     license = licenses.agpl3;
     homepage = "https://hedgedoc.org";
-    maintainers = with maintainers; [ willibutz ma27 globin ];
+    maintainers = with maintainers; [ willibutz globin ];
     platforms = platforms.linux;
   };
 }

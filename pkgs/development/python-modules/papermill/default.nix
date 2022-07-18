@@ -15,11 +15,9 @@
 , entrypoints
 , tenacity
 , futures ? null
-, black
 , backports_tempfile
 , isPy27
-, pytest
-, pytest-cov
+, pytestCheckHook
 , pytest-mock
 }:
 
@@ -46,20 +44,18 @@ buildPythonPackage rec {
     requests
     entrypoints
     tenacity
-    black
   ] ++ lib.optionals isPy27 [
     futures
     backports_tempfile
   ];
 
   checkInputs = [
-    pytest
-    pytest-cov
+    pytestCheckHook
     pytest-mock
   ];
 
-  checkPhase = ''
-    HOME=$(mktemp -d) pytest
+  preCheck = ''
+    export HOME=$(mktemp -d)
   '';
 
   # the test suite depends on cloud resources azure/aws

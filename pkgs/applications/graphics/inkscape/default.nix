@@ -43,19 +43,25 @@
 let
   python3Env = python3.withPackages
     (ps: with ps; [
+      appdirs
+      beautifulsoup4
+      cachecontrol
       numpy
       lxml
       pillow
       scour
-    ]);
+      pyserial
+      requests
+      pygobject3
+    ] ++ inkex.propagatedBuildInputs);
 in
 stdenv.mkDerivation rec {
   pname = "inkscape";
-  version = "1.1.2";
+  version = "1.2.1";
 
   src = fetchurl {
-    url = "https://media.inkscape.org/dl/resources/file/${pname}-${version}.tar.xz";
-    sha256 = "sha256-P/5UoG0LJaTNi260JFNu8e0gW+E0Q6Oc1DfIx7ibltE=";
+    url = "https://media.inkscape.org/dl/resources/file/inkscape-${version}.tar.xz";
+    sha256 = "Rs59oOunykutwdtw6cu2fgrfm7NCaH3G4ItcohuNTBs=";
   };
 
   # Inkscape hits the ARGMAX when linking on macOS. It appears to be

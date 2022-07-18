@@ -14,7 +14,7 @@
 # enable any extra features.
 
 stdenv.mkDerivation rec {
-  pname = "dblatex";
+  pname = "dblatex${lib.optionalString enableAllFeatures "-full"}";
   version = "0.3.12";
 
   src = fetchurl {

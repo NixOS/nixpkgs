@@ -18,10 +18,8 @@ buildDunePackage rec {
     sha256 = "9cdd282ea1cfc424095d7284e39e4d0ad091de3c3f2580539d03f6966d45ccd5";
   };
 
-  nativeBuildInputs = [
-    dune-configurator
-    pkg-config
-  ];
+  buildInputs = [ dune-configurator ];
+  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [
     bigarray-compat
     optint
@@ -41,9 +39,10 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = {
-    homepage = "https://github.com/mirage/checkseum";
     description = "ADLER-32 and CRC32C Cyclic Redundancy Check";
+    homepage = "https://github.com/mirage/checkseum";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
+    mainProgram = "checkseum.checkseum";
   };
 }

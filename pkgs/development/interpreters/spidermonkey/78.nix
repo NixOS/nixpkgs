@@ -4,7 +4,7 @@
 , autoconf213
 , pkg-config
 , perl
-, python3
+, python39
 , zip
 , buildPackages
 , which
@@ -15,7 +15,6 @@
 , rustc
 , rust-cbindgen
 , yasm
-, llvmPackages_12
 , nspr
 }:
 
@@ -52,10 +51,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoconf213
     cargo
-    llvmPackages_12.llvm # for llvm-objdump
+    rustc.llvmPackages.llvm # for llvm-objdump
     perl
     pkg-config
-    python3
+    python39
     rust-cbindgen
     rustc
     which

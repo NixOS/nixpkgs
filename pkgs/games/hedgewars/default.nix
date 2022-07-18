@@ -103,5 +103,10 @@ mkDerivation rec {
        all movement on the battlefield has ceased).'';
     maintainers = with maintainers; [ kragniz fpletz ];
     inherit (fpc.meta) platforms;
+
+    # Appears to be some sort of C++ linking error.
+    # Example: https://hydra.nixos.org/build/174544990/nixlog/6
+    broken = true;
+    hydraPlatforms = platforms.none;
   };
 }

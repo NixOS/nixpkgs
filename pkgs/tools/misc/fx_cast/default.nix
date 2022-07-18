@@ -3,14 +3,15 @@
 # Update version and hash as usual.
 #
 # ```
+# git clone https://github.com/hensm/fx_cast.git
 # cd fx_cast/app
 # # Add `"name": "fx_cast_bridge", "version": "...",` to package.json and package-lock.json
-# nix run nixpkgs.nodePackages.node2nix -c node2nix -l package-lock.json -d
-# cp -v node-*.nix package*.json ~/p/nixpkgs/pkgs/tools/misc/fx_cast/app
+# nix run nixpkgs#nodePackages.node2nix -- -c node2nix -l package-lock.json -d
+# cp -v node-*.nix package*.json ${nixpkgs_path:?}/pkgs/tools/misc/fx_cast/
 # ```
 { pkgs, stdenv }: let
   nodeEnv = import ./node-env.nix {
-    inherit (pkgs) nodejs stdenv lib python2 runCommand writeTextFile;
+    inherit (pkgs) nodejs stdenv lib python2 runCommand writeTextFile writeShellScript;
     inherit pkgs;
     libtool = if stdenv.isDarwin then pkgs.darwin.cctools else null;
   };
@@ -22,13 +23,13 @@
 in
 stdenv.mkDerivation rec {
   pname = "fx_cast_bridge";
-  version = "0.1.2";
+  version = "0.2.0";
 
   src = pkgs.fetchFromGitHub {
     owner = "hensm";
     repo = "fx_cast";
     rev = "v${version}";
-    hash = "sha256:1prgk9669xgwkdl39clq0l75n0gnkkpn27gp9rbgl4bafrhvmg9a";
+    hash = "sha256-bgoItAOIHxGow7TjlRzaMqtIefcSym1h5n6v/9fFZfc=";
   };
 
   buildInputs = with pkgs; [
@@ -37,7 +38,8 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     ln -vs ${nodePackages.nodeDependencies}/lib/node_modules app/node_modules
-    npm run build:app
+    # The temporary home solves the "failed with exit code 243"
+    HOME="$(mktemp -d)" npm run build:app
   '';
 
   installPhase = ''

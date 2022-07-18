@@ -51,6 +51,5 @@ mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ vandenoever turion doronbehar ];
     platforms = platforms.linux;
-    repositories.git = "https://github.com/musescore/MuseScore";
   };
 }

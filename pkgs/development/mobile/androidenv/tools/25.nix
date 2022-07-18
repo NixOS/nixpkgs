@@ -58,5 +58,5 @@ deployAndroidPackage {
     ${postInstall}
   '';
 
-  meta.licenses = lib.licenses.unfree;
+  meta.license = lib.licenses.unfree;
 }

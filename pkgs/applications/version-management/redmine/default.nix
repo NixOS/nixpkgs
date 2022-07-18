@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, bundlerEnv, ruby, makeWrapper }:
 
 let
-  version = "4.2.3";
+  version = "4.2.5";
   rubyEnv = bundlerEnv {
     name = "redmine-env-${version}";
 
@@ -16,7 +16,7 @@ in
 
     src = fetchurl {
       url = "https://www.redmine.org/releases/${pname}-${version}.tar.gz";
-      sha256 = "033slhr5kmz5b29v7n52336i0r7y4m9si748b22r85s2jpf37xkj";
+      sha256 = "112rc2sjx6x7046fjz7np0ilszvkqapc180ld02ncwmdxaq88w6r";
     };
 
     nativeBuildInputs = [ makeWrapper ];
@@ -45,7 +45,7 @@ in
     meta = with lib; {
       homepage = "https://www.redmine.org/";
       platforms = platforms.linux;
-      maintainers = [ maintainers.aanderse ];
+      maintainers = with maintainers; [ aanderse felixsinger ];
       license = licenses.gpl2;
     };
   }

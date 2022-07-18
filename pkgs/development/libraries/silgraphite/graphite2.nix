@@ -44,8 +44,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An advanced font engine";
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.unix;
+    homepage = "https://graphite.sil.org/";
     license = licenses.lgpl21;
+    maintainers = [ maintainers.raskin ];
+    mainProgram = "gr2fonttest";
+    platforms = platforms.unix;
   };
 }

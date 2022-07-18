@@ -6,7 +6,7 @@ let
   cfg = config.services.mbpfan;
   verbose = if cfg.verbose then "v" else "";
   settingsFormat = pkgs.formats.ini {};
-  settingsFile = settingsFormat.generate "config.conf" cfg.settings;
+  settingsFile = settingsFormat.generate "mbpfan.ini" cfg.settings;
 
 in {
   options.services.mbpfan = {
@@ -31,34 +31,34 @@ in {
 
     settings = mkOption {
       default = {};
-      description = "The INI configuration for Mbpfan.";
+      description = "INI configuration for Mbpfan.";
       type = types.submodule {
         freeformType = settingsFormat.type;
 
         options.general.min_fan1_speed = mkOption {
-          type = types.int;
+          type = types.nullOr types.int;
           default = 2000;
-          description = "The minimum fan speed.";
-        };
-        options.general.max_fan1_speed = mkOption {
-          type = types.int;
-          default = 6199;
-          description = "The maximum fan speed.";
+          description = ''
+            You can check minimum and maximum fan limits with
+            "cat /sys/devices/platform/applesmc.768/fan*_min" and
+            "cat /sys/devices/platform/applesmc.768/fan*_max" respectively.
+            Setting to null implies using default value from applesmc.
+          '';
         };
         options.general.low_temp = mkOption {
           type = types.int;
           default = 55;
-          description = "The low temperature.";
+          description = "If temperature is below this, fans will run at minimum speed.";
         };
         options.general.high_temp = mkOption {
           type = types.int;
           default = 58;
-          description = "The high temperature.";
+          description = "If temperature is above this, fan speed will gradually increase.";
         };
         options.general.max_temp = mkOption {
           type = types.int;
           default = 86;
-          description = "The maximum temperature.";
+          description = "If temperature is above this, fans will run at maximum speed.";
         };
         options.general.polling_interval = mkOption {
           type = types.int;

@@ -3,21 +3,6 @@
 lib.makeScope pkgs.newScope (self: with self; {
   updateScript = callPackage ./update.nix { };
 
-  /* Remove packages of packagesToRemove from packages, based on their names
-
-     Type:
-       removePackagesByName :: [package] -> [package] -> [package]
-
-     Example:
-       removePackagesByName [ nautilus file-roller ] [ file-roller totem ]
-       => [ nautilus ]
-  */
-  removePackagesByName = packages: packagesToRemove:
-    let
-      namesToRemove = map lib.getName packagesToRemove;
-    in
-      lib.filter (x: !(builtins.elem (lib.getName x) namesToRemove)) packages;
-
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
   libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
 
@@ -48,6 +33,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-bluetooth = callPackage ./core/gnome-bluetooth { };
 
+  gnome-bluetooth_1_0 = callPackage ./core/gnome-bluetooth/1.0 { };
+
   gnome-color-manager = callPackage ./core/gnome-color-manager { };
 
   gnome-contacts = callPackage ./core/gnome-contacts { };
@@ -57,8 +44,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome-calculator = callPackage ./core/gnome-calculator { };
 
   gnome-common = callPackage ./core/gnome-common { };
-
-  gnome-desktop = callPackage ./core/gnome-desktop { };
 
   gnome-dictionary = callPackage ./core/gnome-dictionary { };
 
@@ -255,8 +240,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gitg = callPackage ./misc/gitg { };
 
-  libgnome-games-support = callPackage ./misc/libgnome-games-support { };
-
   gnome-applets = callPackage ./misc/gnome-applets { };
 
   gnome-flashback = callPackage ./misc/gnome-flashback { };
@@ -280,8 +263,11 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome-autoar = callPackage ./misc/gnome-autoar { };
 
   gnome-packagekit = callPackage ./misc/gnome-packagekit { };
-}) // lib.optionalAttrs (config.allowAliases or true) {
+}) // lib.optionalAttrs config.allowAliases {
 #### Legacy aliases. They need to be outside the scope or they will shadow the attributes from parent scope.
+
+  gnome-desktop = pkgs.gnome-desktop; # added 2022-03-16
+  libgnome-games-support = pkgs.libgnome-games-support; # added 2022-02-19
 
   bijiben = throw "The ‘gnome.bijiben’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-notes’ directly."; # added 2018-09-26
   evolution_data_server = throw "The ‘gnome.evolution_data_server’ alias was removed on 2022-01-13. Please use ‘gnome.evolution-data-server’ directly."; # added 2018-02-25
@@ -289,7 +275,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   glib_networking = throw "The ‘gnome.glib_networking’ alias was removed on 2022-01-13. Please use ‘pkgs.glib-networking’ directly."; # added 2018-02-25
   gnome_common = throw "The ‘gnome.gnome_common’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-common’ directly."; # added 2018-02-25
   gnome_control_center = throw "The ‘gnome.gnome_control_center’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-control-center’ directly."; # added 2018-02-25
-  gnome_desktop = throw "The ‘gnome.gnome_desktop’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-desktop’ directly."; # added 2018-02-25
+  gnome_desktop = throw "The ‘gnome.gnome_desktop’ alias was removed on 2022-01-13. Please use pkgs.gnome-desktop’ directly."; # added 2018-02-25
   gnome_keyring = throw "The ‘gnome.gnome_keyring’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-keyring’ directly."; # added 2018-02-25
   gnome_online_accounts = throw "The ‘gnome.gnome_online_accounts’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-online-accounts’ directly."; # added 2018-02-25
   gnome_session = throw "The ‘gnome.gnome_session’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-session’ directly."; # added 2018-02-25
@@ -300,7 +286,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome_themes_standard = throw "The ‘gnome.gnome_themes_standard’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-themes-standard’ directly."; # added 2018-02-25
   gnome-tweak-tool = throw "The ‘gnome.gnome-tweak-tool’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-tweaks’ directly."; # added 2018-03-21
   gsettings_desktop_schemas = throw "The ‘gnome.gsettings_desktop_schemas’ alias was removed on 2022-01-13. Please use ‘gnome.gsettings-desktop-schemas’ directly."; # added 2018-02-25
-  libgames-support = throw "The ‘gnome.libgames-support’ alias was removed on 2022-01-13. Please use ‘gnome.libgnome-games-support’ directly."; # added 2018-03-14
+  libgames-support = throw "The ‘gnome.libgames-support’ alias was removed on 2022-01-13. Please use ‘pkgs.libgnome-games-support’ directly."; # added 2018-03-14
   libgnome_keyring = throw "The ‘gnome.libgnome_keyring’ alias was removed on 2022-01-13. Please use ‘gnome.libgnome-keyring’ directly."; # added 2018-02-25
   rarian = throw "The ‘gnome.rarian’ alias was removed on 2022-01-13. Please use ‘pkgs.rarian’ directly."; # added 2018-04-25
   networkmanager_fortisslvpn = throw "The ‘gnome.networkmanager_fortisslvpn’ alias was removed on 2022-01-13. Please use ‘gnome.networkmanager-fortisslvpn’ directly."; # added 2018-02-25

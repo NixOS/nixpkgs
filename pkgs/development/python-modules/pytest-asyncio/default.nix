@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "pytest-asyncio";
-  version = "0.17.2";
+  version = "0.18.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-4wDXvO6pDK0dQLnyfJTTa+GXf9Qtsi6ywYDUIdhkgGo=";
+    hash = "sha256-eopKlDKiTvGmqcqw44MKlhvSKswKZd/VDYRpZbuyOqM=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  buildInputs = [
     pytest
   ];
 
@@ -39,14 +39,19 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTestPaths = [
+    "tests/trio" # pytest-trio causes infinite recursion
+  ];
+
   pythonImportsCheck = [
     "pytest_asyncio"
   ];
 
   meta = with lib; {
-    description = "library for testing asyncio code with pytest";
+    description = "Library for testing asyncio code with pytest";
     homepage = "https://github.com/pytest-dev/pytest-asyncio";
+    changelog = "https://github.com/pytest-dev/pytest-asyncio/blob/${src.rev}/CHANGELOG.rst";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

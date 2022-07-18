@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ntCfXJUOQqL63HWoG+WJr9a+qB16AaL5zf58039t7GU=";
   };
 
+  strictDeps = true;
   installPhase = ''
     install -D -m 0444 liquidprompt $out/bin/liquidprompt
     install -D -m 0444 liquidpromptrc-dist $out/share/doc/liquidprompt/liquidpromptrc-dist

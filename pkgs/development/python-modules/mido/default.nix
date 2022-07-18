@@ -4,9 +4,7 @@
 , fetchPypi
 , substituteAll
 , portmidi
-, pygame
 , python-rtmidi
-, rtmidi-python
 , pytestCheckHook
 }:
 
@@ -27,9 +25,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    pygame
     python-rtmidi
-    rtmidi-python
   ];
 
   checkInputs = [

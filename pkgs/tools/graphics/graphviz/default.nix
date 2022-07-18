@@ -16,10 +16,11 @@
 , pango
 , bash
 , bison
-, fetchpatch
 , xorg
 , ApplicationServices
 , python3
+, fltk
+, exiv2
 , withXorg ? true
 }:
 
@@ -28,25 +29,15 @@ let
 in
 stdenv.mkDerivation {
   pname = "graphviz";
-  version = "2.49.3";
+  version = "3.0.0";
 
   src = fetchFromGitLab {
     owner = "graphviz";
     repo = "graphviz";
     # use rev as tags have disappeared before
-    rev = "3425dae078262591d04fec107ec71ab010651852";
-    sha256 = "1qvyjly7r1ihacdvxq0r59l4csr09sc05palpshzqsiz2wb1izk0";
+    rev = "24cf7232bb8728823466e0ef536862013893e567";
+    sha256 = "sha256-qqrpCJ9WP8wadupp4YRJMMaSCeFIDuFDQvEOpbG/wGM=";
   };
-
-  patches = [
-    # Fix cross.
-    # https://gitlab.com/graphviz/graphviz/-/merge_requests/2281
-    # Remove when version > 2.49.3.
-    (fetchpatch {
-      url = "https://gitlab.com/graphviz/graphviz/-/commit/0cdb89acbb0caf5baf3d04a8821c9d0dfe065ea8.patch";
-      sha256 = "130mqlxzhzaz3vp4ccaq7z7fd9q6vjxmimz70g8y818igsbb13rf";
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -99,10 +90,15 @@ stdenv.mkDerivation {
   postFixup = optionalString withXorg ''
     substituteInPlace $out/bin/dotty --replace '`which lefty`' $out/bin/lefty
     substituteInPlace $out/bin/vimdot \
-      --replace /usr/bin/vi '$(command -v vi)' \
-      --replace /usr/bin/vim '$(command -v vim)' \
+      --replace '"/usr/bin/vi"' '"$(command -v vi)"' \
+      --replace '"/usr/bin/vim"' '"$(command -v vim)"' \
       --replace /usr/bin/vimdot $out/bin/vimdot \
   '';
+
+  passthru.tests = {
+    inherit (python3.pkgs) pygraphviz;
+    inherit fltk exiv2;
+  };
 
   meta = with lib; {
     homepage = "https://graphviz.org";

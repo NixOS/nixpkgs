@@ -8,21 +8,24 @@
 , cloudpickle
 , pyinotify
 , macfsevents
+, toml
 }:
 
 buildPythonPackage rec {
   pname = "doit";
-  version = "0.34.1";
+  version = "0.35.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "49467c1bf8850a292e5fd0254ee1b219f6fd8202a0d3d4bf33af3c2dfb58d688";
+    sha256 = "sha256-cVoyLIdMTLhiOU46DWn/MlcrUln1cDb7/cEFPEwB00g=";
   };
 
-  propagatedBuildInputs = [ cloudpickle ]
-    ++ lib.optional stdenv.isLinux pyinotify
+  propagatedBuildInputs = [
+    cloudpickle
+    toml
+  ] ++ lib.optional stdenv.isLinux pyinotify
     ++ lib.optional stdenv.isDarwin macfsevents;
 
   # hangs on darwin

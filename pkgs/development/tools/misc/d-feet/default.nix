@@ -1,6 +1,7 @@
 { lib
 , pkg-config
 , fetchurl
+, fetchpatch
 , meson
 , ninja
 , glib
@@ -24,6 +25,17 @@ python3.pkgs.buildPythonApplication rec {
     url = "mirror://gnome/sources/d-feet/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "hzPOS5qaVOwYWx2Fv02p2dEQUogqiAdg/2D5d5stHMs=";
   };
+
+  patches = [
+    # Fix build with meson 0.61
+    # data/meson.build:15:0: ERROR: Function does not take positional arguments.
+    # data/meson.build:27:0: ERROR: Function does not take positional arguments.
+    # Patch taken from https://gitlab.gnome.org/GNOME/d-feet/-/merge_requests/32
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/d-feet/-/commit/05465d486afdba116dbc22fc22c1e6573aea4f22.patch";
+      sha256 = "sFI3nd0YE/deGws/YcTpzC/em9QNgicyb4j7cTfOdhY=";
+    })
+  ];
 
   nativeBuildInputs = [
     gettext
@@ -77,6 +89,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://wiki.gnome.org/Apps/DFeet";
     platforms = platforms.linux;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ktosiek ];
+    maintainers = teams.gnome.members;
   };
 }

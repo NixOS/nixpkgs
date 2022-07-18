@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "vendir";
-  version = "0.24.0";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "vmware-tanzu";
     repo = "carvel-vendir";
     rev = "v${version}";
-    sha256 = "sha256-3l0ezObZK/QEmpBlqSm3R3e4pFM7KUnsxDrzvEYExnk=";
+    sha256 = "sha256-a/fftMJuN6YnjPP0Gk6bMckoCouwgtxhf23OuyLR5Tk=";
   };
 
   vendorSha256 = null;

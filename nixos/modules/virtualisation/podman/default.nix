@@ -6,7 +6,10 @@ let
 
   inherit (lib) mkOption types;
 
-  podmanPackage = (pkgs.podman.override { inherit (cfg) extraPackages; });
+  podmanPackage = (pkgs.podman.override {
+    extraPackages = cfg.extraPackages
+      ++ lib.optional (builtins.elem "zfs" config.boot.supportedFilesystems) config.boot.zfs.package;
+  });
 
   # Provides a fake "docker" binary mapping to podman
   dockerCompat = pkgs.runCommand "${podmanPackage.pname}-docker-compat-${podmanPackage.version}" {
@@ -149,6 +152,12 @@ in
 
       systemd.sockets.podman.wantedBy = [ "sockets.target" ];
       systemd.sockets.podman.socketConfig.SocketGroup = "podman";
+
+      systemd.user.services.podman.serviceConfig = {
+        ExecStart = [ "" "${cfg.package}/bin/podman $LOGGING system service" ];
+      };
+
+      systemd.user.sockets.podman.wantedBy = [ "sockets.target" ];
 
       systemd.tmpfiles.packages = [
         # The /run/podman rule interferes with our podman group, so we remove

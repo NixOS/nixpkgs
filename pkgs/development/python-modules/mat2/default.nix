@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , python
 , pythonOlder
@@ -21,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "mat2";
-  version = "0.12.3";
+  version = "0.12.4";
 
   disabled = pythonOlder "3.5";
 
@@ -30,14 +31,13 @@ buildPythonPackage rec {
     owner = "jvoisin";
     repo = "mat2";
     rev = version;
-    hash = "sha256-TW+FwlZ+J1tanPL5WuwXtZJmtYB9LaimeIaPlN/jzqo=";
+    hash = "sha256-HjPr4pb0x2Sdq8ALaZeQRnGHmNAoEV8XUGbhOjY00jc=";
   };
 
   patches = [
     # hardcode paths to some binaries
     (substituteAll ({
       src = ./paths.patch;
-      bwrap = "${bubblewrap}/bin/bwrap";
       exiftool = "${exiftool}/bin/exiftool";
       ffmpeg = "${ffmpeg}/bin/ffmpeg";
     } // lib.optionalAttrs dolphinIntegration {
@@ -51,6 +51,11 @@ buildPythonPackage rec {
     (substituteAll {
       src = ./fix_poppler.patch;
       poppler_path = "${poppler_gi}/lib/girepository-1.0";
+    })
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+    (substituteAll {
+      src = ./bubblewrap-path.patch;
+      bwrap = "${bubblewrap}/bin/bwrap";
     })
   ];
 

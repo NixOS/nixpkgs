@@ -1,4 +1,5 @@
 { lib
+, aenum
 , aiohttp
 , buildPythonPackage
 , fetchFromGitHub
@@ -10,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "intellifire4py";
-  version = "0.9.8";
+  version = "2.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,10 +20,11 @@ buildPythonPackage rec {
     owner = "jeeftor";
     repo = pname;
     rev = version;
-    hash = "sha256-xuFCikmoQX95h0rzkO03I0IpUzLB2rbPo9IoxmstlmE=";
+    hash = "sha256-CO6ImL2e6B2yvHAQs3Cc7oaOllB5V9sap4bQS/XRnWI=";
   };
 
   propagatedBuildInputs = [
+    aenum
     aiohttp
     pydantic
     requests

@@ -11,13 +11,14 @@
 
 buildPythonPackage rec {
   pname = "importlib-resources";
-  version = "5.4.0";
+  version = "5.6.0";
+  format = "pyproject";
   disabled = isPy27;
 
   src = fetchPypi {
     pname = "importlib_resources";
     inherit version;
-    sha256 = "sha256-11bi+F3U3iuom+CyHboqO77C6HGkKjoWcZJYoR+HUGs=";
+    sha256 = "sha256-G5MjjL8jtM3jQkDdgyHZnpvy60vJHAyZsohig+e6rYU=";
   };
 
   nativeBuildInputs = [

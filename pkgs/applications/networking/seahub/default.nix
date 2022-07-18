@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, python3, makeWrapper }:
+{ lib
+, fetchFromGitHub
+, python3
+, makeWrapper
+}:
 let
   # Seahub 8.x.x does not support django-webpack-loader >=1.x.x
   python = python3.override {
@@ -25,9 +29,12 @@ python.pkgs.buildPythonApplication rec {
   };
 
   dontBuild = true;
+
   doCheck = false; # disabled because it requires a ccnet environment
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+  ];
 
   propagatedBuildInputs = with python.pkgs; [
     django
@@ -44,7 +51,7 @@ python.pkgs.buildPythonApplication rec {
     djangorestframework
     openpyxl
     requests
-    requests_oauthlib
+    requests-oauthlib
     pyjwt
     pycryptodome
     qrcode
@@ -65,10 +72,10 @@ python.pkgs.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    homepage = "https://github.com/haiwen/seahub";
     description = "The web end of seafile server";
+    homepage = "https://github.com/haiwen/seahub";
     license = licenses.asl20;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ greizgh schmittlauch ];
+    platforms = platforms.linux;
   };
 }

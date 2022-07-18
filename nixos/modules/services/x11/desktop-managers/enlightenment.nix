@@ -16,6 +16,10 @@ let
 in
 
 {
+  meta = {
+    maintainers = teams.enlightenment.members;
+  };
+
   imports = [
     (mkRenamedOptionModule [ "services" "xserver" "desktopManager" "e19" "enable" ] [ "services" "xserver" "desktopManager" "enlightenment" "enable" ])
   ];
@@ -92,6 +96,7 @@ in
 
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;
+    services.xserver.libinput.enable = mkDefault true;
 
     services.dbus.packages = [ e.efl ];
 

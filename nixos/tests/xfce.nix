@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "xfce";
 
-  machine =
+  nodes.machine =
     { pkgs, ... }:
 
     {

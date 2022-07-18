@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-randomly";
-  version = "3.11.0";
+  version = "3.12.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     repo = pname;
     owner = "pytest-dev";
     rev = version;
-    hash = "sha256-NoYpMpFWz52Z0+KIUumUFp3xMPA1jGw8COojU+bsgHc=";
+    hash = "sha256-n/Xp/HghqcQUreez+QbR3Mi5hE1U4zoOJCdFqD+pVBk=";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [

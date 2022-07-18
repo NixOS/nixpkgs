@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
     downloadPage = "https://jquake.net/?down";
     changelog = "https://jquake.net/?docu";
     maintainers = with maintainers; [ nessdoor ];
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfree;
     platforms = platforms.linux;
   };

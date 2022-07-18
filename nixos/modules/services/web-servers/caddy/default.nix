@@ -299,7 +299,7 @@ in
         # https://www.freedesktop.org/software/systemd/man/systemd.service.html#ExecStart=
         # If the empty string is assigned to this option, the list of commands to start is reset, prior assignments of this option will have no effect.
         ExecStart = [ "" "${cfg.package}/bin/caddy run --config ${cfg.configFile} --adapter ${cfg.adapter} ${optionalString cfg.resume "--resume"}" ];
-        ExecReload = [ "" "${cfg.package}/bin/caddy reload --config ${cfg.configFile} --adapter ${cfg.adapter}" ];
+        ExecReload = [ "" "${cfg.package}/bin/caddy reload --config ${cfg.configFile} --adapter ${cfg.adapter} --force" ];
 
         ExecStartPre = "${cfg.package}/bin/caddy validate --config ${cfg.configFile} --adapter ${cfg.adapter}";
         User = cfg.user;

@@ -1,19 +1,17 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage {
-  pname = "pcstat-unstable";
-  version = "2017-05-28";
-
-  goPackagePath = "github.com/tobert/pcstat";
+buildGoModule rec {
+  pname = "pcstat";
+  version = "0.0.1";
 
   src = fetchFromGitHub {
-    rev    = "91a7346e5b462a61e876c0574cb1ba331a6a5ac5";
-    owner  = "tobert";
-    repo   = "pcstat";
-    sha256 = "88853e42d16c05e580af4fb8aa815a84ea0fc43e3a25e19c85e649a5f5a2874c";
+    owner = "tobert";
+    repo = "pcstat";
+    rev = "v${version}";
+    sha256 = "sha256-rN6oqhvrzMBhwNLm8+r4rZWZYZUhOq2h764KVhSycNo=";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "sha256-1y6rzarkFNX8G4E9FzCLfWxULbdNYK3DeelNCJ+7Y9Q=";
 
   meta = with lib; {
     description = "Page Cache stat: get page cache stats for files on Linux";

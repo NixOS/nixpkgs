@@ -41,7 +41,7 @@ let
       install *.so $out/lib
 
       wrapProgram "$out/bin/app" \
-        --run "cd $out/lib" \
+        --chdir "$out/lib" \
         ${lib.optionalString (!isSimulation)
         ''--prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ sgx-psw ]}"''}
 
@@ -76,7 +76,7 @@ in
 
       for bin in $out/bin/*; do
         wrapProgram $bin \
-          --run "cd $out/lib" \
+          --chdir "$out/lib" \
           ${lib.optionalString (!isSimulation)
           ''--prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ sgx-psw ]}"''}
       done

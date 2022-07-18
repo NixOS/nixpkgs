@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "bandit";
-  version = "1.7.2";
+  version = "1.7.4";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-bRGt6gIUpDgTiHv+caN3tamVXkyCbI/9NBtJTjqyUmA=";
+    sha256 = "sha256-LWOoxXNBe64ziWLUubBvvGCA907NlVoJKEnh5lxxe9I=";
   };
 
   propagatedBuildInputs = [

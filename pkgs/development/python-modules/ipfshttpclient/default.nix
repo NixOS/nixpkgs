@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
@@ -82,6 +83,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ipfshttpclient" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A python client library for the IPFS API";
     homepage = "https://github.com/ipfs-shipyard/py-ipfs-http-client";
     license = licenses.mit;

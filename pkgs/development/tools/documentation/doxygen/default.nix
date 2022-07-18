@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "doxygen";
-  version = "1.8.20";
+  version = "1.9.4";
 
   src = fetchFromGitHub {
     owner = "doxygen";
     repo = "doxygen";
     rev = "Release_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "17chvi3i80rj4750smpizf562xjzd2xcv5rfyh997pyvc1zbq5rh";
+    sha256 = "sha256-Dnr8d+ngSBkgL/BITvsvoERAHQyEXCoQDltbnQ2nXKM=";
   };
 
   nativeBuildInputs = [
@@ -30,19 +30,20 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE =
     lib.optionalString stdenv.isDarwin "-mmacosx-version-min=10.9";
 
-  enableParallelBuilding = false;
-
   meta = {
     license = lib.licenses.gpl2Plus;
-    homepage = "http://doxygen.nl/";
+    homepage = "https://www.doxygen.nl/";
+    changelog = "https://www.doxygen.nl/manual/changelog.html";
     description = "Source code documentation generator tool";
 
     longDescription = ''
-      Doxygen is a documentation system for C++, C, Java, Objective-C,
-      Python, IDL (CORBA and Microsoft flavors), Fortran, VHDL, PHP,
-      C\#, and to some extent D.  It can generate an on-line
-      documentation browser (in HTML) and/or an off-line reference
-      manual (in LaTeX) from a set of documented source files.
+      Doxygen is the de facto standard tool for generating documentation from
+      annotated C++ sources, but it also supports other popular programming
+      languages such as C, Objective-C, C#, PHP, Java, Python, IDL (Corba,
+      Microsoft, and UNO/OpenOffice flavors), Fortran, VHDL and to some extent
+      D. It can generate an on-line documentation browser (in HTML) and/or an
+      off-line reference manual (in LaTeX) from a set of documented source
+      files.
     '';
 
     platforms = if qt5 != null then lib.platforms.linux else lib.platforms.unix;

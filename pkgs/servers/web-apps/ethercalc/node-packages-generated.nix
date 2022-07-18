@@ -31,13 +31,13 @@ let
         sha1 = "6a3e6bf0a63900ba15652808cb15c6813d1a5f25";
       };
     };
-    "adler-32-1.3.0" = {
+    "adler-32-1.3.1" = {
       name = "adler-32";
       packageName = "adler-32";
-      version = "1.3.0";
+      version = "1.3.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/adler-32/-/adler-32-1.3.0.tgz";
-        sha512 = "f5nltvjl+PRUh6YNfUstRaXwJxtfnKEWhAWWlmKvh+Y3J2+98a0KKVYDEhz6NdKGqswLhjNGznxfSsZGOvOd9g==";
+        url = "https://registry.npmjs.org/adler-32/-/adler-32-1.3.1.tgz";
+        sha512 = "ynZ4w/nUUv5rrsR8UUGoe1VC9hZj6V5hU9Qw1HlMDJGEJw5S7TfTErWTjMys6M7vr0YWcPqs3qAr4ss0nDfP+A==";
       };
     };
     "after-0.8.1" = {
@@ -184,13 +184,13 @@ let
         sha1 = "82306becadf44543e826b3907eae93f0237c4e5c";
       };
     };
-    "brace-expansion-1.1.11" = {
+    "brace-expansion-2.0.1" = {
       name = "brace-expansion";
       packageName = "brace-expansion";
-      version = "1.1.11";
+      version = "2.0.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/brace-expansion/-/brace-expansion-1.1.11.tgz";
-        sha512 = "iCuPHDFgrHX7H2vEI/5xpz07zSHB00TpugqhmYtVmMO6518mCuRMoOYFldEBl0g187ufozdaHgWKcYFb61qGiA==";
+        url = "https://registry.npmjs.org/brace-expansion/-/brace-expansion-2.0.1.tgz";
+        sha512 = "XnAIvQ8eM+kC6aULx6wuQiwVsnzsi9d3WxzV3FpWTGA19F621kwdbsAcFKXgKUHZWsy+mY6iL1sHTxWEFCytDA==";
       };
     };
     "buffer-crc32-0.2.3" = {
@@ -391,15 +391,6 @@ let
         sha1 = "69700cf1ee8963454356ac192a6e5e91e232bffb";
       };
     };
-    "concat-map-0.0.1" = {
-      name = "concat-map";
-      packageName = "concat-map";
-      version = "0.0.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz";
-        sha1 = "d8a96bd77fd68df7793a73036a3ba0d5405d477b";
-      };
-    };
     "concat-stream-2.0.0" = {
       name = "concat-stream";
       packageName = "concat-stream";
@@ -481,13 +472,13 @@ let
         sha1 = "09507984ee9bcce3bd1b8861f0de8ab10ae8187d";
       };
     };
-    "crc-32-1.2.0" = {
+    "crc-32-1.2.1" = {
       name = "crc-32";
       packageName = "crc-32";
-      version = "1.2.0";
+      version = "1.2.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/crc-32/-/crc-32-1.2.0.tgz";
-        sha512 = "1uBwHxF+Y/4yF5G48fwnKq6QsIXheor3ZLPT80yGBV1oEUwpPojlEhQbWKVw1VwcTQyMGHK1/XMmTjmlsmTTGA==";
+        url = "https://registry.npmjs.org/crc-32/-/crc-32-1.2.1.tgz";
+        sha512 = "Dn/xm/1vFFgs3nfrpEVScHoIslO9NZRITWGz/1E/St6u4xw99vfZzVkW0OSnzx2h9egej9xwMCEut6sqwokM/w==";
       };
     };
     "csrf-2.0.7" = {
@@ -595,7 +586,7 @@ let
       version = "1.0.1";
       src = fetchurl {
         name = "emitter-1.0.1.tar.gz";
-        url = "https://codeload.github.com/component/emitter/tar.gz/1.0.1";
+        url = "https://codeload.github.com/component/emitter/tar.gz/refs/tags/1.0.1";
         sha256 = "0eae744826723877457f7a7ac7f31d68a5a060673b3a883f6a8e325bf48f313d";
       };
     };
@@ -731,7 +722,7 @@ let
       version = "2.0.1";
       src = fetchurl {
         name = "global-2.0.1.tar.gz";
-        url = "https://codeload.github.com/component/global/tar.gz/v2.0.1";
+        url = "https://codeload.github.com/component/global/tar.gz/refs/tags/v2.0.1";
         sha256 = "42be02b7148745447f6ba21137c972ca82d2cad92d30d63bd4fc310623901785";
       };
     };
@@ -924,13 +915,13 @@ let
         sha1 = "995ae1392ab8affcbfcb2641dd054e943c0d5dce";
       };
     };
-    "minimatch-3.0.4" = {
+    "minimatch-5.0.1" = {
       name = "minimatch";
       packageName = "minimatch";
-      version = "3.0.4";
+      version = "5.0.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/minimatch/-/minimatch-3.0.4.tgz";
-        sha512 = "yJHVQEhyqPLUTgt9B83PXu6W3rx4MvvHvSUvToogpwoGDOUQ+yDrR0HRot+yOCdCO7u4hX3pWft6kWBBcqh0UA==";
+        url = "https://registry.npmjs.org/minimatch/-/minimatch-5.0.1.tgz";
+        sha512 = "nLDxIFRyhDblz3qMuq+SoRZED4+miJ/G+tdDrjkkkRnjAsBexeGpgjLEQ0blJy7rHhR2b93rhQY4SvyWu9v03g==";
       };
     };
     "minimist-0.0.10" = {
@@ -1185,22 +1176,13 @@ let
         sha512 = "zA2SmoLaxZyArQTOPj5LXecR+RagfPSU5Kw1qP+jkWeNlrq+eJZyY2oS68SU1Z/7/myXM4lo9716laOFAVStCQ==";
       };
     };
-    "printj-1.2.3" = {
+    "printj-1.3.1" = {
       name = "printj";
       packageName = "printj";
-      version = "1.2.3";
+      version = "1.3.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/printj/-/printj-1.2.3.tgz";
-        sha512 = "sanczS6xOJOg7IKDvi4sGOUOe7c1tsEzjwlLFH/zgwx/uyImVM9/rgBkc8AfiQa/Vg54nRd8mkm9yI7WV/O+WA==";
-      };
-    };
-    "printj-1.3.0" = {
-      name = "printj";
-      packageName = "printj";
-      version = "1.3.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/printj/-/printj-1.3.0.tgz";
-        sha512 = "017o8YIaz8gLhaNxRB9eBv2mWXI2CtzhPJALnQTP+OPpuUfP0RMWqr/mHCzqVeu1AQxfzSfAtAq66vKB8y7Lzg==";
+        url = "https://registry.npmjs.org/printj/-/printj-1.3.1.tgz";
+        sha512 = "GA3TdL8szPK4AQ2YnOe/b+Y1jUFwmmGMMK/qbY7VcE3Z7FU8JstbKiKRzO6CIiAKPhTO8m01NoQ0V5f3jc4OGg==";
       };
     };
     "proxy-addr-1.0.1" = {
@@ -1806,19 +1788,15 @@ in
           sources."iconv-lite-0.4.4"
         ];
       })
-      sources."brace-expansion-1.1.11"
+      sources."brace-expansion-2.0.1"
       sources."buffer-crc32-0.2.3"
       sources."buffer-from-1.1.2"
       sources."bytes-1.0.0"
       sources."callsite-1.0.0"
       (sources."cfb-1.2.1" // {
         dependencies = [
-          (sources."adler-32-1.3.0" // {
-            dependencies = [
-              sources."printj-1.2.3"
-            ];
-          })
-          sources."printj-1.3.0"
+          sources."adler-32-1.3.1"
+          sources."printj-1.3.1"
         ];
       })
       (sources."codepage-1.14.0" // {
@@ -1844,7 +1822,6 @@ in
           sources."vary-1.0.1"
         ];
       })
-      sources."concat-map-0.0.1"
       sources."concat-stream-2.0.0"
       sources."connect-2.25.9"
       sources."connect-timeout-1.2.2"
@@ -1853,7 +1830,11 @@ in
       sources."cookie-signature-1.0.4"
       sources."core-util-is-1.0.3"
       sources."cors-2.8.5"
-      sources."crc-32-1.2.0"
+      (sources."crc-32-1.2.1" // {
+        dependencies = [
+          sources."printj-1.3.1"
+        ];
+      })
       sources."csrf-2.0.7"
       sources."cssom-0.2.5"
       sources."csurf-1.4.1"
@@ -1937,7 +1918,7 @@ in
       sources."methods-1.1.0"
       sources."mime-1.2.11"
       sources."mime-types-1.0.2"
-      sources."minimatch-3.0.4"
+      sources."minimatch-5.0.1"
       sources."minimist-0.0.10"
       (sources."mkdirp-0.5.0" // {
         dependencies = [

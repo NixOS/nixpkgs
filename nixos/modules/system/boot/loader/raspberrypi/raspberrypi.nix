@@ -86,7 +86,7 @@ in
         type = types.nullOr types.lines;
         description = ''
           Extra options that will be appended to <literal>/boot/config.txt</literal> file.
-          For possible values, see: https://www.raspberrypi.org/documentation/configuration/config-txt/
+          For possible values, see: https://www.raspberrypi.com/documentation/computers/config_txt.html
         '';
       };
     };

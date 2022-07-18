@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
 
     # Hardcode path to fix use with cmake
     sed -i cmake/scripts/ROOTConfig.cmake.in \
-      -e 'iset(nlohmann_json_DIR "${nlohmann_json}/lib/cmake/nlohmann_json/")'
+      -e '1iset(nlohmann_json_DIR "${nlohmann_json}/lib/cmake/nlohmann_json/")'
 
     patchShebangs build/unix/
   '' + lib.optionalString noSplash ''

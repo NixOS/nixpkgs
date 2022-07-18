@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libjpeg, libtiff, zlib
+{ lib, stdenv, fetchurl, fetchpatch, libjpeg, libtiff, zlib
 , postgresql, libmysqlclient, libgeotiff, python3Packages, proj, geos, openssl
 , libpng, sqlite, libspatialite, poppler, hdf4, qhull, giflib, expat
 , libiconv, libxml2
@@ -15,6 +15,16 @@ stdenv.mkDerivation rec {
     url = "https://download.osgeo.org/gdal/${version}/${pname}-${version}.tar.xz";
     sha256 = "1n6w0m2603q9cldlz0wyscp75ci561dipc36jqbf3mjmylybv0x3";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/OSGeo/gdal/commit/7a18e2669a733ebe3544e4f5c735fd4d2ded5fa3.patch";
+      sha256 = "sha256-rBgIxJcgRzZR1gyzDWK/Sh7MdPWeczxEYVELbYEV8JY=";
+      relative = "gdal";
+      # this doesn't apply correctly because of line endings
+      excludes = [ "third_party/LercLib/Lerc2.h" ];
+    })
+  ];
 
   buildInputs = [ libjpeg libtiff libgeotiff libpng proj openssl sqlite
     libspatialite poppler hdf4 qhull giflib expat libxml2 proj ]

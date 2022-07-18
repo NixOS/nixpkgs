@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
     pkgs.git
     appdirs
     click
-    python_magic
+    python-magic
     requests
     termcolor
     toml

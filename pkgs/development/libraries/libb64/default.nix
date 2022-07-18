@@ -36,7 +36,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "ANSI C routines for fast base64 encoding/decoding";
+    homepage = "https://github.com/libb64/libb64";
     license = lib.licenses.publicDomain;
+    mainProgram = "base64";
     platforms = lib.platforms.unix;
   };
 }

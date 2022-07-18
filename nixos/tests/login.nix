@@ -6,7 +6,7 @@ import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... }:
     maintainers = [ eelco ];
   };
 
-  machine =
+  nodes.machine =
     { pkgs, lib, ... }:
     { boot.kernelPackages = lib.mkIf latestKernel pkgs.linuxPackages_latest;
       sound.enable = true; # needed for the factl test, /dev/snd/* exists without them but udev doesn't care then
@@ -29,11 +29,11 @@ import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... }:
           machine.wait_until_succeeds("pgrep -f 'agetty.*tty2'")
 
       with subtest("Log in as alice on a virtual console"):
-          machine.wait_until_tty_matches(2, "login: ")
+          machine.wait_until_tty_matches("2", "login: ")
           machine.send_chars("alice\n")
-          machine.wait_until_tty_matches(2, "login: alice")
+          machine.wait_until_tty_matches("2", "login: alice")
           machine.wait_until_succeeds("pgrep login")
-          machine.wait_until_tty_matches(2, "Password: ")
+          machine.wait_until_tty_matches("2", "Password: ")
           machine.send_chars("foobar\n")
           machine.wait_until_succeeds("pgrep -u alice bash")
           machine.send_chars("touch done\n")

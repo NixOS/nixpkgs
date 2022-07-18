@@ -26,5 +26,6 @@ buildGoModule rec {
     homepage = "https://github.com/optiv/Go365";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "Go365";
   };
 }

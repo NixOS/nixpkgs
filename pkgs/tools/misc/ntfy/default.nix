@@ -1,8 +1,20 @@
-{ lib, python3Packages, fetchFromGitHub, fetchpatch }:
+{ lib
+, python39
+, fetchFromGitHub
+, fetchpatch
+}:
 
-python3Packages.buildPythonApplication rec {
+let
+  python = python39.override {
+    packageOverrides = self: super: {
+      ntfy-webpush = self.callPackage ./webpush.nix { };
+    };
+  };
+in python.pkgs.buildPythonApplication rec {
   pname = "ntfy";
   version = "2.7.0";
+
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dschep";
@@ -11,11 +23,11 @@ python3Packages.buildPythonApplication rec {
     sha256 = "09f02cn4i1l2aksb3azwfb70axqhn7d0d0vl2r6640hqr74nc1cv";
   };
 
-  checkInputs = with python3Packages; [
+  checkInputs = with python.pkgs; [
     mock
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python.pkgs; [
     requests ruamel-yaml appdirs
     sleekxmpp dnspython
     emoji
@@ -37,7 +49,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   checkPhase = ''
-    HOME=$(mktemp -d) ${python3Packages.python.interpreter} setup.py test
+    HOME=$(mktemp -d) ${python.interpreter} setup.py test
   '';
 
   meta = with lib; {

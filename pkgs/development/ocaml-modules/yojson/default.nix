@@ -18,5 +18,6 @@ buildDunePackage rec {
     homepage = "https://github.com/ocaml-community/${pname}";
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];
+    mainProgram = "ydump";
   };
 }

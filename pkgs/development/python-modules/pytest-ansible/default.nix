@@ -40,5 +40,7 @@ buildPythonPackage rec {
     description = "Plugin for py.test to simplify calling ansible modules from tests or fixtures";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
+    # https://github.com/ansible-community/pytest-ansible/blob/v2.2.4/setup.py#L124
+    broken = lib.versionAtLeast ansible.version "2.10";
   };
 }

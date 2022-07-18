@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper, pkg-config
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, makeWrapper, pkg-config
 , avahi, dbus, gettext, git, gnutar, gzip, bzip2, ffmpeg_4, libiconv, openssl, python2
 , v4l-utils, which, zlib }:
 
@@ -27,6 +27,17 @@ in stdenv.mkDerivation {
     rev    = "v${version}";
     sha256 = "1xq059r2bplaa0nd0wkhw80jfwd962x0h5hgd7fz2yp6largw34m";
   };
+
+  patches = [
+    # Pull upstream fix for -fno-common toolchain
+    #   https://github.com/tvheadend/tvheadend/pull/1342
+    # TODO: can be removed with 4.3 release.
+    (fetchpatch {
+      name = "fno-common.patch";
+      url = "https://github.com/tvheadend/tvheadend/commit/bd92f1389f1aacdd08e913b0383a0ca9dc223153.patch";
+      sha256 = "17bsx6mnv4pjiayvx1d57dphva0kvlppvnmmaym06dh4524pnly1";
+    })
+  ];
 
   buildInputs = [
     avahi dbus gettext git gnutar gzip bzip2 ffmpeg_4 libiconv openssl python2

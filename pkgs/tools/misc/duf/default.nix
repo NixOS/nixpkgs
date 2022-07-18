@@ -20,6 +20,6 @@ buildGoModule rec {
     description = "Disk Usage/Free Utility";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ petabyteboy penguwin SuperSandro2000 ];
+    maintainers = with maintainers; [ penguwin SuperSandro2000 ];
   };
 }

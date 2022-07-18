@@ -20,6 +20,6 @@ in fetchFromGitHub {
     description = "A Persian (Farsi) Font - فونت (قلم) فارسی گندم";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = [ maintainers.linarcx ];
+    maintainers = [ ];
   };
 }

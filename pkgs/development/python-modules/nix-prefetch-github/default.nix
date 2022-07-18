@@ -2,12 +2,13 @@
 , lib
 , buildPythonPackage
 , git
+, which
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "nix-prefetch-github";
-  version = "5.0.1";
+  version = "5.1.2";
 
   disabled = pythonOlder "3.7";
 
@@ -15,10 +16,10 @@ buildPythonPackage rec {
     owner = "seppeljordan";
     repo = "nix-prefetch-github";
     rev = "v${version}";
-    sha256 = "DOmFfUCLJ+rnS4PznQaQrDrqjUU4DXmOrC9BspqKZVM=";
+    sha256 = "GHUH3Oog800qrdgXs5AEa4O6ovZ1LT0k3P4YwEHfwlY=";
   };
 
-  checkInputs = [ git ];
+  checkInputs = [ git which ];
 
   checkPhase = ''
     python -m unittest discover

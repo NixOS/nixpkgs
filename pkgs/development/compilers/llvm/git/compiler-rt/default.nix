@@ -1,4 +1,7 @@
-{ lib, stdenv, llvm_meta, version, src, cmake, python3, libllvm, libcxxabi }:
+{ lib, stdenv, llvm_meta, version
+, monorepoSrc, runCommand
+, cmake, python3, libllvm, libcxxabi
+}:
 
 let
 
@@ -7,14 +10,21 @@ let
   haveLibc = stdenv.cc.libc != null;
   inherit (stdenv.hostPlatform) isMusl;
 
+  baseName = "compiler-rt";
+
+  src = runCommand "${baseName}-src-${version}" {} ''
+    mkdir -p "$out"
+    cp -r ${monorepoSrc}/cmake "$out"
+    cp -r ${monorepoSrc}/${baseName} "$out"
+  '';
 in
 
 stdenv.mkDerivation {
-  pname = "compiler-rt" + lib.optionalString (haveLibc) "-libc";
+  pname = baseName + lib.optionalString (haveLibc) "-libc";
   inherit version;
 
   inherit src;
-  sourceRoot = "source/compiler-rt";
+  sourceRoot = "${src.name}/${baseName}";
 
   nativeBuildInputs = [ cmake python3 libllvm.dev ];
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
@@ -58,6 +68,7 @@ stdenv.mkDerivation {
   patches = [
     ./codesign.patch # Revert compiler-rt commit that makes codesign mandatory
     ./X86-support-extension.patch # Add support for i486 i586 i686 by reusing i386 config
+    ./gnu-install-dirs.patch
     # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
     # extra `/`.
     ./normalize-var.patch

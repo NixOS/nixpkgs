@@ -1,9 +1,9 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, rustPlatform
-, pkg-config
 , openssl
+, pkg-config
+, rustPlatform
 , Security
 }:
 
@@ -18,15 +18,16 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-/AXE1e02NfxQzJZd0QX6gJDjmFFmuUTOndulZElgIMI=";
   };
 
-  cargoSha256 = "sha256:1ddyzbpsiy54r13nb9yrm64cbbifixnhkskwg5fvhhzj4ri4ks4a";
+  cargoSha256 = "sha256-iuhJYibyQ7hdeXzqCW2PLq7FiKnZp2VHyKT4qO/6vrU=";
 
   nativeBuildInputs = [ pkg-config ];
+
   buildInputs = lib.optionals stdenv.isLinux [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with lib; {
-    description = "Github user information on terminal";
     homepage = "https://github.com/azur1s/octofetch";
+    description = "Github user information on terminal";
     license = licenses.mit;
     maintainers = with maintainers; [ jyooru ];
   };

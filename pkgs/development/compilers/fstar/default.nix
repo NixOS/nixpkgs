@@ -11,23 +11,29 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-bK3McF/wTjT9q6luihPaEXjx7Lu6+ZbQ9G61Mc4KoB0=";
   };
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  strictDeps = true;
 
-  buildInputs = [
-    z3
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
   ] ++ (with ocamlPackages; [
     ocaml
     findlib
     ocamlbuild
+    menhir
+  ]);
+
+  buildInputs = [
+    z3
+  ] ++ (with ocamlPackages; [
     batteries
     zarith
     stdint
     yojson
     fileutils
-    menhir
     menhirLib
     pprint
-    sedlex_2
+    sedlex
     ppxlib
     ppx_deriving
     ppx_deriving_yojson
@@ -58,9 +64,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "ML-like functional programming language aimed at program verification";
     homepage = "https://www.fstar-lang.org";
-    license = licenses.asl20;
     changelog = "https://github.com/FStarLang/FStar/raw/v${version}/CHANGES.md";
-    platforms = with platforms; darwin ++ linux;
+    license = licenses.asl20;
     maintainers = with maintainers; [ gebner pnmadelaine ];
+    mainProgram = "fstar.exe";
+    platforms = with platforms; darwin ++ linux;
   };
 }

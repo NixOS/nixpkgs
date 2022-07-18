@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
     description = "An enterprise-grade Java-based, Apache 2.0 licensed Ethereum client";
     homepage = "https://www.hyperledger.org/projects/besu";
     license = licenses.asl20;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     platforms = platforms.all;
     maintainers = with maintainers; [ mmahut ];
   };

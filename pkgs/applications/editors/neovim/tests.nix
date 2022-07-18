@@ -150,8 +150,8 @@ rec {
   # and do `:call deoplete#enable()`. It will print an error if the remote
   # plugin is not registered.
   test_nvim_with_remote_plugin = neovim.override {
-    extraName = "-pathogen-remote";
-    configure.pathogen.pluginNames = with vimPlugins; [ deoplete-nvim ];
+    extraName = "-remote";
+    configure.packages.foo.start = with vimPlugins; [ deoplete-nvim ];
   };
 
   # only neovim makes use of `requiredPlugins`, test this here

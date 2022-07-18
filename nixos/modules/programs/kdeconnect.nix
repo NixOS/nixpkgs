@@ -12,8 +12,8 @@ with lib;
       implementation if you use Gnome.
     '';
     package = mkOption {
-      default = pkgs.kdeconnect;
-      defaultText = literalExpression "pkgs.kdeconnect";
+      default = pkgs.plasma5Packages.kdeconnect-kde;
+      defaultText = literalExpression "pkgs.plasma5Packages.kdeconnect-kde";
       type = types.package;
       example = literalExpression "pkgs.gnomeExtensions.gsconnect";
       description = ''

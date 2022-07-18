@@ -52,7 +52,7 @@
 -fi
 -unset cf_openssl_basedir
 +SSL_INCLUDES="-I@openssl.dev@/include"
-+SSL_LIBS="-L@openssl.out@/lib"
++SSL_LIBS="-L@openssl-lib@/lib"
  
  save_CXX="$CXX"
  CXX="$CXX $SSL_INCLUDES"

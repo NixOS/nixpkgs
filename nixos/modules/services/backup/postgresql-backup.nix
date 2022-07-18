@@ -17,8 +17,8 @@ let
 
       compressCmd = getAttr cfg.compression {
         "none" = "cat";
-        "gzip" = "${pkgs.gzip}/bin/gzip -c";
-        "zstd" = "${pkgs.zstd}/bin/zstd -c";
+        "gzip" = "${pkgs.gzip}/bin/gzip -c -${toString cfg.compressionLevel}";
+        "zstd" = "${pkgs.zstd}/bin/zstd -c -${toString cfg.compressionLevel}";
       };
 
       mkSqlPath = prefix: suffix: "${cfg.location}/${db}${prefix}.sql${suffix}";
@@ -130,16 +130,33 @@ in {
           The type of compression to use on the generated database dump.
         '';
       };
+
+      compressionLevel = mkOption {
+        type = types.ints.between 1 19;
+        default = 6;
+        description = ''
+          The compression level used when compression is enabled.
+          gzip accepts levels 1 to 9. zstd accepts levels 1 to 19.
+        '';
+      };
     };
 
   };
 
   config = mkMerge [
     {
-      assertions = [{
-        assertion = cfg.backupAll -> cfg.databases == [];
-        message = "config.services.postgresqlBackup.backupAll cannot be used together with config.services.postgresqlBackup.databases";
-      }];
+      assertions = [
+        {
+          assertion = cfg.backupAll -> cfg.databases == [];
+          message = "config.services.postgresqlBackup.backupAll cannot be used together with config.services.postgresqlBackup.databases";
+        }
+        {
+          assertion = cfg.compression == "none" ||
+            (cfg.compression == "gzip" && cfg.compressionLevel >= 1 && cfg.compressionLevel <= 9) ||
+            (cfg.compression == "zstd" && cfg.compressionLevel >= 1 && cfg.compressionLevel <= 19);
+          message = "config.services.postgresqlBackup.compressionLevel must be set between 1 and 9 for gzip and 1 and 19 for zstd";
+        }
+      ];
     }
     (mkIf cfg.enable {
       systemd.tmpfiles.rules = [

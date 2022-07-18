@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     icon = "xbill";
     desktopName = "XBill";
     comment     = "Get rid of those Wingdows viruses!";
-    categories  = "Game;ArcadeGame;";
+    categories  = [ "Game" "ArcadeGame" ];
   }) ];
 
   postInstall = ''

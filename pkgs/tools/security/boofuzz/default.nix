@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , fetchFromGitHub
 , python3
 }:
@@ -36,9 +37,10 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   disabledTests = [
-    # Tests require socket access
-    "test_raw_l2"
-    "test_raw_l3"
+    "TestNetworkMonitor"
+    "TestNoResponseFailure"
+    "TestProcessMonitor"
+    "TestSocketConnection"
   ];
 
   pythonImportsCheck = [

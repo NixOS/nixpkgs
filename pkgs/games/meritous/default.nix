@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   prePatch = ''
     substituteInPlace Makefile \
       --replace "CPPFLAGS +=" "CPPFLAGS += -DSAVES_IN_HOME -DDATADIR=\\\"$out/share/meritous\\\"" \
-      --replace sld-config ${SDL.dev}/bin/sdl-config
+      --replace sld-config ${lib.getDev SDL}/bin/sdl-config
     substituteInPlace src/audio.c \
       --replace "filename[64]" "filename[256]"
   '';

@@ -44,7 +44,7 @@ python3Packages.buildPythonApplication rec {
   dontBuild = true;
   doCheck = false;
 
-  makeWrapperArgs = ["--prefix PATH : ${wrapperPath}"];
+  makeWrapperArgs = ["--prefix PATH : ${lib.escapeShellArg wrapperPath}"];
 
   installPhase = ''
     make DESTDIR=$out install

@@ -15,7 +15,7 @@ let
 
   buildInputs = [
     fuse bison flex openssl ncurses readline
-    autoconf automake libtool pkg-config zlib libaio libxml2
+    libtool pkg-config zlib libaio libxml2
     acl sqlite liburcu attr makeWrapper util-linux libtirpc gperftools
     liburing
     (python3.withPackages (pkgs: [
@@ -95,7 +95,7 @@ in stdenv.mkDerivation rec {
     "--localstatedir=/var"
   ];
 
-  nativeBuildInputs = [ rpcsvc-proto ];
+  nativeBuildInputs = [ rpcsvc-proto autoconf automake ];
 
   makeFlags = [ "DESTDIR=$(out)" ];
 

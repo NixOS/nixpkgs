@@ -81,7 +81,9 @@ in {
             user = mkOption {
               type = types.str;
               default = redisName name;
-              defaultText = "\"redis\" or \"redis-\${name}\" if name != \"\"";
+              defaultText = literalExpression ''
+                if name == "" then "redis" else "redis-''${name}"
+              '';
               description = "The username and groupname for redis-server.";
             };
 
@@ -105,8 +107,7 @@ in {
 
             bind = mkOption {
               type = with types; nullOr str;
-              default = if name == "" then "127.0.0.1" else null;
-              defaultText = literalExpression ''if name == "" then "127.0.0.1" else null'';
+              default = "127.0.0.1";
               description = ''
                 The IP interface to bind to.
                 <literal>null</literal> means "all interfaces".
@@ -117,7 +118,9 @@ in {
             unixSocket = mkOption {
               type = with types; nullOr path;
               default = "/run/${redisName name}/redis.sock";
-              defaultText = "\"/run/redis/redis.sock\" or \"/run/redis-\${name}/redis.sock\" if name != \"\"";
+              defaultText = literalExpression ''
+                if name == "" then "/run/redis/redis.sock" else "/run/redis-''${name}/redis.sock"
+              '';
               description = "The path to the socket to bind to.";
             };
 
@@ -163,7 +166,11 @@ in {
             save = mkOption {
               type = with types; listOf (listOf int);
               default = [ [900 1] [300 10] [60 10000] ];
-              description = "The schedule in which data is persisted to disk, represented as a list of lists where the first element represent the amount of seconds and the second the number of changes.";
+              description = mdDoc ''
+                The schedule in which data is persisted to disk, represented as a list of lists where the first element represent the amount of seconds and the second the number of changes.
+
+                If set to the empty list (`[]`) then RDB persistence will be disabled (useful if you are using AOF or don't want any persistence).
+              '';
             };
 
             slaveOf = mkOption {
@@ -265,7 +272,11 @@ in {
               syslog-enabled = config.syslog;
               databases = config.databases;
               maxclients = config.maxclients;
-              save = map (d: "${toString (builtins.elemAt d 0)} ${toString (builtins.elemAt d 1)}") config.save;
+              save = if config.save == []
+                then ''""'' # Disable saving with `save = ""`
+                else map
+                  (d: "${toString (builtins.elemAt d 0)} ${toString (builtins.elemAt d 1)}")
+                  config.save;
               dbfilename = "dump.rdb";
               dir = "/var/lib/${redisName name}";
               appendOnly = config.appendOnly;
@@ -370,7 +381,7 @@ in {
         ProtectKernelTunables = true;
         ProtectControlGroups = true;
         RestrictAddressFamilies =
-          optionals (conf.bind != null) ["AF_INET" "AF_INET6"] ++
+          optionals (conf.port != 0) ["AF_INET" "AF_INET6"] ++
           optional (conf.unixSocket != null) "AF_UNIX";
         RestrictNamespaces = true;
         LockPersonality = true;

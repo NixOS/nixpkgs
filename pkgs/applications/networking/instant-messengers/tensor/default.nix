@@ -1,7 +1,7 @@
 { mkDerivation
 , lib
 , stdenv
-, fetchgit
+, fetchFromGitHub
 , qtbase
 , qtquickcontrols
 , qmake
@@ -15,10 +15,11 @@ mkDerivation rec {
   pname = "tensor";
   version = "unstable-2017-02-21";
 
-  src = fetchgit {
-    url = "https://github.com/davidar/tensor.git";
+  src = fetchFromGitHub {
+    owner = "davidar";
+    repo = "tensor";
     rev = "f3f3056d770d7fb4a21c610cee7936ee900569f5";
-    sha256 = "19in8c7a2hxsx2c4lj540w5c3pn1882645m21l91mcriynqr67k9";
+    sha256 = "sha256-aR6TsfUxsxoSDaIWYgRCwd7BCgekSEqY6LpDoQ5DNqY=";
     fetchSubmodules = true;
   };
 
@@ -32,8 +33,8 @@ mkDerivation rec {
     comment = meta.description;
     desktopName = "Tensor Matrix Client";
     genericName = meta.description;
-    categories = "Chat;Utility";
-    mimeType = "application/x-chat";
+    categories = [ "Chat" "Utility" ];
+    mimeTypes = [ "application/x-chat" ];
   };
 
   installPhase = if stdenv.isDarwin then ''

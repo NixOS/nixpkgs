@@ -142,6 +142,7 @@ stdenv.mkDerivation rec {
       gpl3Plus
     ] ++ lib.optional enableVST2 unfree;
     maintainers = with maintainers; [ astro tobiasBora OPNA2608 ];
+    mainProgram = "BespokeSynth";
     platforms = platforms.all;
   };
 }

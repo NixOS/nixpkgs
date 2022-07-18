@@ -21,9 +21,9 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         forceSSL = true;
       };
 
-      security.acme.email = "me@example.org";
       security.acme.acceptTerms = true;
-      security.acme.server = "https://example.com"; # self-signed only
+      security.acme.defaults.email = "me@example.org";
+      security.acme.defaults.server = "https://example.com"; # self-signed only
     };
   };
 
@@ -33,9 +33,6 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     server.wait_for_unit("nginx.service")
     server.wait_for_unit("prosody.service")
 
-    server.wait_until_succeeds(
-        "journalctl -b -u jitsi-videobridge2 -o cat | grep -q 'Performed a successful health check'"
-    )
     server.wait_until_succeeds(
         "journalctl -b -u prosody -o cat | grep -q 'Authenticated as focus@auth.server'"
     )

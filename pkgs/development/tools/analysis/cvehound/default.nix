@@ -1,30 +1,34 @@
-{ lib, fetchFromGitHub, coccinelle, gnugrep, python3Packages }:
+{ lib
+, fetchFromGitHub
+, coccinelle
+, gnugrep
+, python3
+}:
 
-with python3Packages;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "cvehound";
-  version = "1.0.4";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "evdenis";
     repo = "cvehound";
-    rev = version;
-    sha256 = "sha256-m8vpea02flQ8elSvGWv9FqBhsEcBzRYjcUk+dc4kb2M=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-4+0Virpsq4mwOIpostS87VYTX8hsumXEL1w8FiOrNtA=";
   };
 
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath [ coccinelle gnugrep ]}"
   ];
 
-  propagatedBuildInputs = [
-    psutil
+  propagatedBuildInputs = with python3.pkgs; [
+    lxml
     setuptools
     sympy
   ];
 
-  checkInputs = [
+  checkInputs = with python3.pkgs; [
     GitPython
+    psutil
     pytestCheckHook
   ];
 
@@ -32,10 +36,11 @@ buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "tool to check linux kernel source dump for known CVEs";
+    description = "Tool to check linux kernel source dump for known CVEs";
     homepage = "https://github.com/evdenis/cvehound";
+    changelog = "https://github.com/evdenis/cvehound/blob/${src.rev}/ChangeLog";
     # See https://github.com/evdenis/cvehound/issues/22
-    license = with licenses; [ gpl2Only gpl3Only ];
+    license = with licenses; [ gpl2Only gpl3Plus ];
     maintainers = with maintainers; [ ambroisie ];
   };
 }

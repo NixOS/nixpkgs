@@ -1,18 +1,17 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, which }:
+{ lib, stdenv, fetchurl, pkg-config, glib, which, bison, nixosTests, linuxHeaders }:
 
 stdenv.mkDerivation rec {
   pname = "nbd";
-  version = "3.21";
+  version = "3.24";
 
   src = fetchurl {
     url = "mirror://sourceforge/nbd/nbd-${version}.tar.xz";
-    sha256 = "sha256-52iK852Rczu80tsIBixE/lA9AE5RUodAE5xEr/amvvk=";
+    sha256 = "sha256-aHcVbSOnsz917uidL1wskcVCr8PNy2Nt6lqIU5pY0Qw=";
   };
 
-  buildInputs = [ glib ]
-    ++ lib.optional (stdenv ? glibc) stdenv.glibc.linuxHeaders;
+  buildInputs = [ glib linuxHeaders ];
 
-  nativeBuildInputs = [ pkg-config which ];
+  nativeBuildInputs = [ pkg-config which bison ];
 
   postInstall = ''
     mkdir -p "$out/share/doc/nbd-${version}"
@@ -20,6 +19,10 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
+  passthru.tests = {
+    test = nixosTests.nbd;
+  };
 
   # Glib calls `clock_gettime', which is in librt. Linking that library
   # here ensures that a proper rpath is added to the executable so that

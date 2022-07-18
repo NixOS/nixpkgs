@@ -41,7 +41,7 @@ mkCoqDerivation {
 
   nativeBuildInputs = [ autoreconfHook ];
   mlPlugin = true;
-  extraBuildInputs = [ coq.ocamlPackages.ocamlgraph ];
+  buildInputs = [ coq.ocamlPackages.ocamlgraph ];
 
   # dpd_compute.ml uses deprecated Pervasives.compare
   # Versions prior to 0.6.5 do not have the WARN_ERR build flag

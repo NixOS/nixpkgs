@@ -12,6 +12,7 @@ Check for any minor version changes.
 , bison, cups ? null, harfbuzz, libGL, perl
 , gstreamer, gst-plugins-base, gtk3, dconf
 , darwin
+, buildPackages
 
   # options
 , developerBuild ? false
@@ -101,7 +102,7 @@ let
         }
         { inherit self srcs patches; };
 
-      callPackage = self.newScope { inherit qtCompatVersion qtModule srcs; };
+      callPackage = self.newScope { inherit qtCompatVersion qtModule srcs stdenv; };
     in {
 
       inherit callPackage qtCompatVersion qtModule srcs;
@@ -192,7 +193,7 @@ let
       } ../hooks/qmake-hook.sh;
 
       wrapQtAppsHook = makeSetupHook {
-        deps = [ self.qtbase.dev makeWrapper ]
+        deps = [ self.qtbase.dev buildPackages.makeWrapper ]
           ++ lib.optional stdenv.isLinux self.qtwayland.dev;
       } ../hooks/wrap-qt-apps-hook.sh;
     };

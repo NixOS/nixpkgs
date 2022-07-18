@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0q942g9lyd8pjvqimv547n6vik5759r9npw3ws3bdj4ixxqhz59w";
   };
 
-  buildInputs = [ bison flex autoconf automake openssl ];
+  nativeBuildInputs = [ autoconf automake ];
+  buildInputs = [ bison flex openssl ];
 
   # includes an important security patch
   patches = [

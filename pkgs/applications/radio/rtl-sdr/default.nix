@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchgit
+, fetchFromGitHub
 , cmake
 , pkg-config
 , libusb1
@@ -8,12 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rtl-sdr";
-  version = "0.6.0";
+  version = "0.8.0";
 
-  src = fetchgit {
-    url = "git://git.osmocom.org/rtl-sdr.git";
-    rev = "refs/tags/${version}";
-    sha256 = "0lmvsnb4xw4hmz6zs0z5ilsah5hjz29g1s0050n59fllskqr3b8k";
+  src = fetchFromGitHub {
+    owner = "librtlsdr";
+    repo = "librtlsdr";
+    rev = "v${version}";
+    sha256 = "1fgxlkgmdchbrf0nn98ivjr6css5hak3608nr4xrf2qzf7xy2kdk";
   };
 
   postPatch = ''
@@ -28,7 +29,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libusb1 ];
 
-  cmakeFlags = lib.optional stdenv.isLinux "-DINSTALL_UDEV_RULES=ON";
+  cmakeFlags = lib.optional stdenv.isLinux [
+    "-DINSTALL_UDEV_RULES=ON"
+    "-DWITH_RPC=ON"
+  ];
 
   meta = with lib; {
     description = "Turns your Realtek RTL2832 based DVB dongle into a SDR receiver";

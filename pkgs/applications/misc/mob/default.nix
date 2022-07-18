@@ -1,28 +1,32 @@
 { lib
-, buildGoPackage
+, buildGoModule
 , fetchFromGitHub
-
-, withSpeech ? true
+, stdenv
+, withSpeech ? !stdenv.isDarwin
 , makeWrapper
 , espeak-ng
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "mob";
-  version = "2.2.1";
+  version = "3.1.3";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
     owner = "remotemobprogramming";
     repo = pname;
-    sha256 = "sha256-1yE3KFGY51m6OL4LYrz+BSCHQSnbQRSpB3EUqAzSr+M=";
+    rev = "v${version}";
+    sha256 = "sha256-FOZrwOf3IFnwtqAk0RNwvlTUidqWbo1aopSu6SmmV4k=";
   };
+
+  vendorSha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
 
   nativeBuildInputs = [
     makeWrapper
   ];
 
-  goPackagePath = "github.com/remotemobprogramming/mob";
+  ldflags = [ "-s" "-w" ];
+
+  doCheck = false;
 
   preFixup = lib.optionalString withSpeech ''
     wrapProgram $out/bin/mob \
@@ -34,6 +38,5 @@ buildGoPackage rec {
     homepage = "https://github.com/remotemobprogramming/mob";
     license = licenses.mit;
     maintainers = with maintainers; [ ericdallo ];
-    platforms = platforms.linux ++ platforms.darwin;
   };
 }

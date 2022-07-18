@@ -3,9 +3,11 @@
 , unibilium, gperf
 , libvterm-neovim
 , tree-sitter
+, CoreServices
 , glibcLocales ? null, procps ? null
 
-# now defaults to false because some tests can be flaky (clipboard etc)
+# now defaults to false because some tests can be flaky (clipboard etc), see
+# also: https://github.com/neovim/neovim/issues/16233
 , doCheck ? false
 , nodejs ? null, fish ? null, python3 ? null
 }:
@@ -21,24 +23,16 @@ let
     ));
 
   pyEnv = python3.withPackages(ps: with ps; [ pynvim msgpack ]);
-
-  # FIXME: this is verry messy and strange.
-  # see https://github.com/NixOS/nixpkgs/pull/80528
-  luv = lua.pkgs.luv;
-  luvpath = with builtins ; if stdenv.isDarwin
-    then "${luv.libluv}/lib/lua/${lua.luaversion}/libluv.${head (match "([0-9.]+).*" luv.version)}.dylib"
-    else "${luv}/lib/lua/${lua.luaversion}/luv.so";
-
 in
   stdenv.mkDerivation rec {
     pname = "neovim-unwrapped";
-    version = "0.6.1";
+    version = "0.7.2";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      sha256 = "sha256-0XCW047WopPr3pRTy9rF3Ff6MvNRHT4FletzOERD41A=";
+      sha256 = "sha256-eKKQNM02Vhy+3yL2QV+0FSEpcniEa5Aq6hkAUIgLo1k=";
     };
 
     patches = [
@@ -57,13 +51,17 @@ in
       libtermkey
       libuv
       libvterm-neovim
-      luv.libluv
+      # This is actually a c library, hence it's not included in neovimLuaEnv,
+      # see:
+      # https://github.com/luarocks/luarocks/issues/1402#issuecomment-1080616570
+      # and it's definition at: pkgs/development/lua-modules/overrides.nix
+      lua.pkgs.libluv
       msgpack
       ncurses
       neovimLuaEnv
       tree-sitter
       unibilium
-    ] ++ optional stdenv.isDarwin libiconv
+    ] ++ optionals stdenv.isDarwin [ libiconv CoreServices ]
       ++ optionals doCheck [ glibcLocales procps ]
     ;
 
@@ -97,12 +95,12 @@ in
     disallowedReferences = [ stdenv.cc ];
 
     cmakeFlags = [
-      "-DGPERF_PRG=${gperf}/bin/gperf"
-      "-DLUA_PRG=${neovimLuaEnv.interpreter}"
-      "-DLIBLUV_LIBRARY=${luvpath}"
+      # Don't use downloaded dependencies. At the end of the configurePhase one
+      # can spot that cmake says this option was "not used by the project".
+      # That's because all dependencies were found and
+      # third-party/CMakeLists.txt is not read at all.
       "-DUSE_BUNDLED=OFF"
     ]
-    ++ optional doCheck "-DBUSTED_PRG=${neovimLuaEnv}/bin/busted"
     ++ optional (!lua.pkgs.isLuaJIT) "-DPREFER_LUA=ON"
     ;
 
@@ -113,12 +111,6 @@ in
       substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""
     '';
 
-    # For treesitter plugins, libstdc++.so.6, or equivalent will be needed
-    NIX_LDFLAGS =
-      lib.optionals stdenv.cc.isGNU [ "-lstdc++"]
-      ++ lib.optionals stdenv.cc.isClang [ "-lc++" ];
-
-    # export PATH=$PWD/build/bin:${PATH}
     shellHook=''
       export VIMRUNTIME=$PWD/runtime
     '';
@@ -141,7 +133,7 @@ in
       # those contributions were copied from Vim (identified in the commit logs
       # by the vim-patch token). See LICENSE for details."
       license = with licenses; [ asl20 vim ];
-      maintainers = with maintainers; [ manveru rvolosatovs ma27 ];
+      maintainers = with maintainers; [ manveru rvolosatovs ];
       platforms   = platforms.unix;
     };
   }

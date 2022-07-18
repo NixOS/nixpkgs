@@ -156,12 +156,22 @@ in {
           reloadScript = ''
             echo "Asking Jenkins to reload config"
             curl_opts="--silent --fail --show-error"
-            access_token=${if cfg.accessTokenFile != ""
-                           then "$(cat '${cfg.accessTokenFile}')"
-                           else cfg.accessToken}
-            jenkins_url="http://${cfg.accessUser}:$access_token@${jenkinsCfg.listenAddress}:${toString jenkinsCfg.port}${jenkinsCfg.prefix}"
-            crumb=$(curl $curl_opts "$jenkins_url"'/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)')
-            curl $curl_opts -X POST -H "$crumb" "$jenkins_url"/reload
+            access_token_file=${if cfg.accessTokenFile != ""
+                           then cfg.accessTokenFile
+                           else "$RUNTIME_DIRECTORY/jenkins_access_token.txt"}
+            if [ "${cfg.accessToken}" != "" ]; then
+               (umask 0077; printf "${cfg.accessToken}" >"$access_token_file")
+            fi
+            jenkins_url="http://${jenkinsCfg.listenAddress}:${toString jenkinsCfg.port}${jenkinsCfg.prefix}"
+            auth_file="$RUNTIME_DIRECTORY/jenkins_auth_file.txt"
+            trap 'rm -f "$auth_file"' EXIT
+            (umask 0077; printf "${cfg.accessUser}:@password_placeholder@" >"$auth_file")
+            "${pkgs.replace-secret}/bin/replace-secret" "@password_placeholder@" "$access_token_file" "$auth_file"
+
+            if ! "${pkgs.jenkins}/bin/jenkins-cli" -s "$jenkins_url" -auth "@$auth_file" reload-configuration; then
+                echo "error: failed to reload configuration"
+                exit 1
+            fi
           '';
         in
           ''

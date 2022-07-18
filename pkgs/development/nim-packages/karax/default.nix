@@ -3,6 +3,6 @@
 fetchFromGitHub {
   owner = "karaxnim";
   repo = "karax";
-  rev = "1.1.2";
-  sha256 = "07ykrd21hd76vlmkqpvv5xvaxw6aaq87bky47p2420ni85a6d94j";
+  rev = "fa4a2dc";
+  sha256 = "0xl83jsfb9l8kb0nfan9h5y6v96iz4psng2fx06a0qmig4993408";
 }

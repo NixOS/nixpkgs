@@ -1,0 +1,35 @@
+diff --git a/extra-builtins.cc b/extra-builtins.cc
+index 617807a..c417cb3 100644
+--- a/extra-builtins.cc
++++ b/extra-builtins.cc
+@@ -27,7 +27,7 @@ static ExtraBuiltinsSettings extraBuiltinsSettings;
+ 
+ static GlobalConfig::Register rp(&extraBuiltinsSettings);
+ 
+-static void extraBuiltins(EvalState & state, const Pos & pos,
++static void extraBuiltins(EvalState & state, const PosIdx pos,
+     Value ** _args, Value & v)
+ {
+     static auto extraBuiltinsFile = absPath(extraBuiltinsSettings.extraBuiltinsFile);
+@@ -44,10 +44,10 @@ static void extraBuiltins(EvalState & state, const Pos & pos,
+             auto attrs = state.buildBindings(2);
+ 
+             auto sExec = state.symbols.create("exec");
+-            attrs.alloc(sExec).mkPrimOp(new PrimOp { .fun = prim_exec, .arity = 1, .name = sExec });
++            attrs.alloc(sExec).mkPrimOp(new PrimOp { .fun = prim_exec, .arity = 1, .name = "exec" });
+ 
+             auto sImportNative = state.symbols.create("importNative");
+-            attrs.alloc(sImportNative).mkPrimOp(new PrimOp { .fun = prim_importNative, .arity = 2, .name = sImportNative });
++            attrs.alloc(sImportNative).mkPrimOp(new PrimOp { .fun = prim_importNative, .arity = 2, .name = "importNative" });
+ 
+             arg = state.allocValue();
+             arg->mkAttrs(attrs);
+@@ -64,7 +64,7 @@ static void extraBuiltins(EvalState & state, const Pos & pos,
+ static RegisterPrimOp rp1("__extraBuiltins", 0,
+     extraBuiltins);
+ 
+-static void cflags(EvalState & state, const Pos & _pos,
++static void cflags(EvalState & state, const PosIdx _pos,
+     Value ** _args, Value & v)
+ {
+     auto attrs = state.buildBindings(3);

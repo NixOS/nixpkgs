@@ -16,32 +16,34 @@
 , weasyprint
 , prometheus-client
 , python
+, unzip
 }:
 let
-  version = "0.57.5";
+  version = "0.58.18";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "meta.sr.ht";
     rev = version;
-    sha256 = "sha256-qsCwZaCiqvY445U053OCWD98jlIUi9NB2jWVP2oW3Vk=";
+    sha256 = "sha256-OjbQHAzG2nZwpJUIvhKaCJWZbhZDC2R6C+SkbKUpk8o=";
   };
 
-  buildApi = src: buildGoModule {
+  metasrht-api = buildGoModule ({
     inherit src version;
     pname = "metasrht-api";
-    vendorSha256 = "sha256-8Ubrr9qRlgW2wsLHrPHwulSWLz+gp4VPcTvOZpg8TYM=";
-  };
+    modRoot = "api";
+    vendorSha256 = "sha256-kiEuEYZFbwJ6SbKFtxH4SiRaZmqYriRHPoHdTX28+d0=";
+  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
 in
 buildPythonPackage rec {
   pname = "metasrht";
   inherit version src;
 
-  patches = [
-    # Revert change breaking Unix socket support for Redis
-    patches/redis-socket/meta/0001-Revert-Add-webhook-queue-monitoring.patch
-  ];
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "all: api" ""
+  '';
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
@@ -68,7 +70,7 @@ buildPythonPackage rec {
 
   postInstall = ''
     mkdir -p $out/bin
-    cp ${buildApi "${src}/api/"}/bin/api $out/bin/metasrht-api
+    ln -s ${metasrht-api}/bin/api $out/bin/metasrht-api
   '';
 
   pythonImportsCheck = [ "metasrht" ];

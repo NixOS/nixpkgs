@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Tools and Clang plugins for developing code with GLib";
     homepage = "https://freedesktop.org/wiki/Software/tartan";
     license = licenses.gpl3Plus;

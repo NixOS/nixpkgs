@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config python3 wafHook ];
   buildInputs = [ serd sord sratom ];
   propagatedBuildInputs = [ lv2 ];
+  dontAddWafCrossFlags = true;
 
   passthru.tests = {
     inherit pipewire;

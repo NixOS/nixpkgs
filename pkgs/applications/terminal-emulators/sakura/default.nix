@@ -9,6 +9,7 @@
 , perl
 , pkg-config
 , vte
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -42,6 +43,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/sakura \
       --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/
   '';
+
+  passthru.tests.test = nixosTests.terminal-emulators.sakura;
 
   meta = with lib; {
     homepage = "https://www.pleyades.net/david/projects/sakura";

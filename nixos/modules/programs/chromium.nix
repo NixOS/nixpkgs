@@ -108,5 +108,8 @@ in
     # for google-chrome https://www.chromium.org/administrators/linux-quick-start
     environment.etc."opt/chrome/policies/managed/default.json".text = builtins.toJSON defaultProfile;
     environment.etc."opt/chrome/policies/managed/extra.json".text = builtins.toJSON cfg.extraOpts;
+    # for brave
+    environment.etc."brave/policies/managed/default.json".text = builtins.toJSON defaultProfile;
+    environment.etc."brave/policies/managed/extra.json".text = builtins.toJSON cfg.extraOpts;
   };
 }

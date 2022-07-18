@@ -15,13 +15,13 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "nautilus-open-any-terminal";
-  version = "0.2.15";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "Stunkymonkey";
     repo = pname;
     rev = version;
-    sha256 = "sha256-cc6Lh5XeAuU5Os4eJ0QcL6XJYB6DqxeUGaOf6m1OnpY=";
+    sha256 = "sha256-PF6DVpiAPL9NG4jK6wDqdqYw+26Nks/bGEbbaV/5aIs=";
   };
 
   patches = [ ./hardcode-gsettings.patch ];

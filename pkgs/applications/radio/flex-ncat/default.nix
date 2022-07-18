@@ -18,5 +18,6 @@ buildGoModule rec {
     description = "FlexRadio remote control (CAT) via hamlib/rigctl protocol";
     license = licenses.mit;
     maintainers = with maintainers; [ mvs ];
+    mainProgram = "nCAT";
   };
 }

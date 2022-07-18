@@ -1,4 +1,4 @@
-{lib, python3Packages, gettext, qt5, fetchFromGitHub}:
+{ stdenv, lib, python3Packages, gettext, qt5, fetchFromGitHub}:
 
 python3Packages.buildPythonApplication rec {
   pname = "dupeguru";
@@ -57,6 +57,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "GUI tool to find duplicate files in a system";
     homepage = "https://github.com/arsenetar/dupeguru";
     license = licenses.bsd3;

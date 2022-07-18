@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitLab, meson, ninja, pkg-config, gobject-introspection, vala
 , gtk-doc, docbook_xsl, docbook_xml_dtd_43
-, gtk3, gnome
+, gtk3, gnome-desktop
 , dbus, xvfb-run, libxml2
 , hicolor-icon-theme
 }:
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     meson ninja pkg-config gobject-introspection vala libxml2
     gtk-doc docbook_xsl docbook_xml_dtd_43
   ];
-  buildInputs = [ gnome.gnome-desktop gtk3 libxml2 ];
+  buildInputs = [ gnome-desktop gtk3 libxml2 ];
   checkInputs = [ dbus xvfb-run hicolor-icon-theme ];
 
   mesonFlags = [

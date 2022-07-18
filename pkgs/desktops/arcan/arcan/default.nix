@@ -48,13 +48,13 @@
 
 stdenv.mkDerivation rec {
   pname = "arcan" + lib.optionalString useStaticOpenAL "-static-openal";
-  version = "0.6.1";
+  version = "0.6.1.1";
 
   src = fetchFromGitHub {
     owner = "letoram";
     repo = "arcan";
     rev = version;
-    hash = "sha256-2do4+6KB0AAcJk22mN0IA/e/bPaeGipLjI4RSTPqLBg=";
+    hash = "sha256-+dJaBSKGbHOwzA26/jDyh2UF9YRwGUcysJIeAM4kvfc=";
   };
 
   nativeBuildInputs = [
@@ -106,7 +106,6 @@ stdenv.mkDerivation rec {
     ./000-openal.patch
     ./001-luajit.patch
     ./002-libuvc.patch
-    ./003-freetype.patch
   ];
 
   # Emulate external/git/clone.sh

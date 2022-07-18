@@ -12,7 +12,7 @@
 let inherit (lib) optional; in
 
 let self = stdenv.mkDerivation rec {
-  pname = "gmp";
+  pname = "gmp${lib.optionalString cxx "-with-cxx"}";
   version = "6.2.1";
 
   src = fetchurl { # we need to use bz2, others aren't in bootstrapping stdenv
@@ -28,6 +28,7 @@ let self = stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "info" ];
   passthru.static = self.out;
 
+  strictDeps = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ m4 ];
 

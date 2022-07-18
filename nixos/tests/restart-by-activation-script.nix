@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     maintainers = [ das_j ];
   };
 
-  machine = { pkgs, ... }: {
+  nodes.machine = { pkgs, ... }: {
     imports = [ ../modules/profiles/minimal.nix ];
 
     systemd.services.restart-me = {

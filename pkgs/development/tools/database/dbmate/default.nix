@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "dbmate";
-  version = "1.14.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "amacneil";
     repo = "dbmate";
     rev = "v${version}";
-    sha256 = "sha256-CgThS10mDYRj/VdVJeeVTMEbhvLLpWBweQ4dvo3k3Hg=";
+    sha256 = "sha256-eBes5BqoR7K6ntCKjWECwWuoTwAodNtLqcTei5WocLU=";
   };
 
-  vendorSha256 = "sha256-cbMCGC78vc61F4cEobarMPwVts2V3NkH4/CnHGeLd/o=";
+  vendorSha256 = "sha256-U9VTS0rmLHxweFiIcFyoybHMBihy5ezloDC2iLc4IMc=";
 
   doCheck = false;
 

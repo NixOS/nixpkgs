@@ -15,14 +15,17 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ easy-format ];
 
+  strictDeps = true;
+
   postPatch = ''
    patchShebangs .
   '';
 
   meta = {
-    inherit (src.meta) homepage;
     description = "Binary data format designed for speed, safety, ease of use and backward compatibility as protocols evolve";
-    maintainers = [ lib.maintainers.vbgl ];
+    inherit (src.meta) homepage;
     license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.vbgl ];
+    mainProgram = "bdump";
   };
 }

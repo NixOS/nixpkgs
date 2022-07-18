@@ -45,6 +45,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Particle-tracking toolkit";
     homepage = "https://github.com/soft-matter/trackpy";
     license = licenses.bsd3;

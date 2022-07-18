@@ -5,6 +5,7 @@
 , extra-cmake-modules
 
 , kconfig
+, kcoreaddons
 , ki18n
 , kirigami2
 , qtmultimedia
@@ -21,6 +22,7 @@ mkDerivation rec {
 
   buildInputs = [
     kconfig
+    kcoreaddons
     ki18n
     kirigami2
     qtmultimedia

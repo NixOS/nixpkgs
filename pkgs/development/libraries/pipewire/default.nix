@@ -7,7 +7,9 @@
 , python3
 , meson
 , ninja
+, eudev
 , systemd
+, enableSystemd ? true
 , pkg-config
 , docutils
 , doxygen
@@ -20,7 +22,6 @@
 , udev
 , libva
 , libsndfile
-, SDL2
 , vulkan-headers
 , vulkan-loader
 , webrtc-audio-processing
@@ -69,7 +70,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.45";
+    version = "0.3.52";
 
     outputs = [
       "out"
@@ -87,7 +88,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-OnQd98qfOekAsVXLbciZLNPrM84KBX6fOx/f8y2BYI0=";
+      sha256 = "sha256-JWmO36+OF2O9sLB+Z0znwm3TH+O+pEv3cXnuwP6Wy1E=";
     };
 
     patches = [
@@ -103,6 +104,12 @@ let
       ./0090-pipewire-config-template-paths.patch
       # Place SPA data files in lib output to avoid dependency cycles
       ./0095-spa-data-dir.patch
+      # Remove 44.1KHz from allowed rates (multiple regressions reported)
+      # To be removed when 0.3.53 is released
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/16a7c274989f47b0c0d8ba192a30316b545bd26a.patch";
+        sha256 = "sha256-VZ7ChjcR/PGfmH2DmLxfIhd3mj9668l9zLO4k2KBoqg=";
+      })
     ];
 
     nativeBuildInputs = [
@@ -129,9 +136,8 @@ let
       vulkan-headers
       vulkan-loader
       webrtc-audio-processing
-      SDL2
-      systemd
-    ] ++ lib.optionals gstreamerSupport [ gst_all_1.gst-plugins-base gst_all_1.gstreamer ]
+    ] ++ (if enableSystemd then [ systemd ] else [ eudev ])
+    ++ lib.optionals gstreamerSupport [ gst_all_1.gst-plugins-base gst_all_1.gstreamer ]
     ++ lib.optionals libcameraSupport [ libcamera libdrm ]
     ++ lib.optional ffmpegSupport ffmpeg
     ++ lib.optionals bluezSupport [ bluez libfreeaptx ldacbt sbc fdk_aac ]
@@ -139,7 +145,7 @@ let
     ++ lib.optional zeroconfSupport avahi
     ++ lib.optional raopSupport openssl
     ++ lib.optional rocSupport roc-toolkit
-    ++ lib.optionals x11Support [ libcanberra xorg.libxcb ];
+    ++ lib.optionals x11Support [ libcanberra xorg.libX11 xorg.libXfixes ];
 
     # Valgrind binary is required for running one optional test.
     checkInputs = lib.optional withValgrind valgrind;
@@ -156,19 +162,23 @@ let
       "-Dlibpulse=${mesonEnableFeature pulseTunnelSupport}"
       "-Davahi=${mesonEnableFeature zeroconfSupport}"
       "-Dgstreamer=${mesonEnableFeature gstreamerSupport}"
-      "-Dsystemd-system-service=enabled"
+      "-Dsystemd-system-service=${mesonEnableFeature enableSystemd}"
+      "-Dudev=${mesonEnableFeature (!enableSystemd)}"
+      "-Dudevrulesdir=${placeholder "out"}/lib/udev/rules.d"
       "-Dffmpeg=${mesonEnableFeature ffmpegSupport}"
       "-Dbluez5=${mesonEnableFeature bluezSupport}"
       "-Dbluez5-backend-hsp-native=${mesonEnableFeature nativeHspSupport}"
       "-Dbluez5-backend-hfp-native=${mesonEnableFeature nativeHfpSupport}"
       "-Dbluez5-backend-ofono=${mesonEnableFeature ofonoSupport}"
       "-Dbluez5-backend-hsphfpd=${mesonEnableFeature hsphfpdSupport}"
+      "-Dbluez5-codec-lc3plus=disabled"
       "-Dsysconfdir=/etc"
       "-Dpipewire_confdata_dir=${placeholder "lib"}/share/pipewire"
       "-Draop=${mesonEnableFeature raopSupport}"
       "-Dsession-managers="
       "-Dvulkan=enabled"
       "-Dx11=${mesonEnableFeature x11Support}"
+      "-Dsdl2=disabled" # required only to build examples, causes dependency loop
     ];
 
     # Fontconfig error: Cannot load default config file
@@ -195,8 +205,11 @@ let
         cp ${buildPackages.pipewire}/nix-support/*.json "$out/nix-support"
       ''}
 
-      moveToOutput "share/systemd/user/pipewire-pulse.*" "$pulse"
-      moveToOutput "lib/systemd/user/pipewire-pulse.*" "$pulse"
+      ${lib.optionalString enableSystemd ''
+        moveToOutput "share/systemd/user/pipewire-pulse.*" "$pulse"
+        moveToOutput "lib/systemd/user/pipewire-pulse.*" "$pulse"
+      ''}
+
       moveToOutput "bin/pipewire-pulse" "$pulse"
 
       moveToOutput "bin/pw-jack" "$jack"
@@ -214,6 +227,7 @@ let
             "nix-support/client-rt.conf.json"
             "nix-support/client.conf.json"
             "nix-support/jack.conf.json"
+            "nix-support/minimal.conf.json"
             "nix-support/pipewire.conf.json"
             "nix-support/pipewire-pulse.conf.json"
           ];

@@ -2,7 +2,7 @@
 , lib
 , buildPythonPackage
 , fetchPypi
-, argon2_cffi
+, argon2-cffi
 , nose
 , nose_warnings_filters
 , glibcLocales
@@ -27,12 +27,12 @@
 
 buildPythonPackage rec {
   pname = "notebook";
-  version = "6.4.7";
+  version = "6.4.12";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b01da66f11a203b3839d6afa4013674bcfff41c36552f9ad0fbcb2d93c92764a";
+    sha256 = "sha256-YmjJ7JBIz/ekVAXJkMKaycpAsLw+wpJj0hjF4B8rToY=";
   };
 
   LC_ALL = "en_US.utf8";
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     jinja2 tornado ipython_genutils traitlets jupyter_core send2trash
     jupyter-client nbformat nbconvert ipykernel terminado requests pexpect
-    prometheus-client argon2_cffi
+    prometheus-client argon2-cffi
   ];
 
   # disable warning_filters

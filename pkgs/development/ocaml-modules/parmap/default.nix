@@ -10,13 +10,12 @@ buildDunePackage rec {
   };
 
   minimalOCamlVersion = "4.03";
-  useDune2 = true;
 
   buildInputs = [
     dune-configurator
   ];
 
-  doCheck = true;
+  doCheck = false; # prevent running slow benchmarks
 
   meta = with lib; {
     description = "Library for multicore parallel programming";

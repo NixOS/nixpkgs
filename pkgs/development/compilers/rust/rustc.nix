@@ -1,5 +1,5 @@
 { lib, stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget
-, llvmShared, llvmSharedForBuild, llvmSharedForHost, llvmSharedForTarget, llvmPackagesForBuild
+, llvmShared, llvmSharedForBuild, llvmSharedForHost, llvmSharedForTarget, llvmPackages
 , fetchurl, file, python3
 , darwin, cmake, rust, rustPlatform
 , pkg-config, openssl
@@ -179,7 +179,7 @@ in stdenv.mkDerivation rec {
 
   passthru = {
     llvm = llvmShared;
-    llvmPackages = llvmPackagesForBuild;
+    inherit llvmPackages;
   };
 
   meta = with lib; {
@@ -188,5 +188,8 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ madjar cstrahan globin havvy ];
     license = [ licenses.mit licenses.asl20 ];
     platforms = platforms.linux ++ platforms.darwin;
+    # rustc can't generate binaries for dynamically linked Musl.
+    # https://github.com/NixOS/nixpkgs/issues/179242
+    broken = stdenv.targetPlatform.isMusl && !stdenv.targetPlatform.isStatic;
   };
 }

@@ -6,14 +6,19 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "opensnitch-ui";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "evilsocket";
     repo = "opensnitch";
-    rev = "v${version}";
-    sha256 = "sha256-vtD82v0VlaJtCICXduD3IxJ0xjlBuzGKLWLoCiwPX2I=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-8IfupmQb1romGEvv/xqFkYhp0gGoY4ZEllX6rZYIkqw=";
   };
+
+  postPatch = ''
+    substituteInPlace ui/opensnitch/utils.py \
+      --replace /usr/lib/python3/dist-packages/data ${python3Packages.pyasn}/${python3Packages.python.sitePackages}/pyasn/data
+  '';
 
   nativeBuildInputs = [
     python3Packages.pyqt5
@@ -27,12 +32,14 @@ python3Packages.buildPythonApplication rec {
     unicode-slugify
     pyinotify
     notify2
-    # pyasn # dpendency missing but not mandatory
+    pyasn
   ];
 
   preBuild = ''
     make -C ../proto ../ui/opensnitch/ui_pb2.py
+    # sourced from ui/Makefile
     pyrcc5 -o opensnitch/resources_rc.py opensnitch/res/resources.qrc
+    sed -i 's/^import ui_pb2/from . import ui_pb2/' opensnitch/ui_pb2*
   '';
 
   preConfigure = ''
@@ -44,7 +51,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   postInstall = ''
-    mv $out/lib/python3.9/site-packages/usr/* $out/
+    mv $out/${python3Packages.python.sitePackages}/usr/* $out/
   '';
 
   dontWrapQtApps = true;

@@ -135,7 +135,7 @@ in
         User = "spamd";
         Group = "spamd";
         StateDirectory = "spamassassin";
-        ExecStartPost = "+${pkgs.systemd}/bin/systemctl -q --no-block try-reload-or-restart spamd.service";
+        ExecStartPost = "+${config.systemd.package}/bin/systemctl -q --no-block try-reload-or-restart spamd.service";
       };
 
       script = ''

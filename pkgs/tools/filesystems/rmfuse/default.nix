@@ -20,6 +20,24 @@ let
           };
         });
 
+        reportlab = let
+          ft = pkgs.freetype.overrideAttrs (oldArgs: { dontDisableStatic = true; });
+        in super.reportlab.overridePythonAttrs(old: {
+          postPatch = ''
+            substituteInPlace setup.py \
+              --replace "mif = findFile(d,'ft2build.h')" "mif = findFile('${lib.getDev ft}','ft2build.h')"
+          '';
+
+          NIX_CFLAGS_COMPILE = "-I${pkgs.freetype}/include/freetype2";
+
+          nativeBuildInputs = old.nativeBuildInputs ++ [
+            pkgs.pkg-config
+          ];
+          buildInputs = old.buildInputs ++ [
+            pkgs.freetype
+          ];
+        });
+
       })
     ];
   }).python.pkgs;

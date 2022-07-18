@@ -46,13 +46,15 @@ buildPythonPackage rec {
     "--assert=plain"
     "--strict"
     "--tb=native"
-  ] ++ lib.optionals (stdenv.isAarch64) [
+  ] ++ lib.optionals (stdenv.isAarch32 || stdenv.isAarch64) [
     # test gets stuck in epoll_pwait on hydras aarch64 builders
     # https://github.com/MagicStack/uvloop/issues/412
     "--deselect" "tests/test_tcp.py::Test_AIO_TCPSSL::test_remote_shutdown_receives_trailing_data"
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # Flaky test: https://github.com/MagicStack/uvloop/issues/412
     "--deselect" "tests/test_tcp.py::Test_UV_TCPSSL::test_shutdown_timeout_handler_not_set"
+    # Broken: https://github.com/NixOS/nixpkgs/issues/160904
+    "--deselect" "tests/test_context.py::Test_UV_Context::test_create_ssl_server_manual_connection_lost"
   ];
 
   disabledTestPaths = [
@@ -60,8 +62,12 @@ buildPythonPackage rec {
     "tests/test_sourcecode.py"
   ];
 
-  # force using installed/compiled uvloop vs source by moving tests to temp dir
-  preCheck = ''
+  preCheck = lib.optionalString stdenv.isDarwin ''
+    # Work around "OSError: AF_UNIX path too long"
+    # https://github.com/MagicStack/uvloop/issues/463
+    export TMPDIR="/tmp"
+   '' + ''
+    # force using installed/compiled uvloop vs source by moving tests to temp dir
     export TEST_DIR=$(mktemp -d)
     cp -r tests $TEST_DIR
     pushd $TEST_DIR

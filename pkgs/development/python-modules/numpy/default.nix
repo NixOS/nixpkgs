@@ -44,7 +44,7 @@ in buildPythonPackage rec {
   # Attention! v1.22.0 breaks scipy and by extension scikit-learn, so
   # build both to verify they don't break.
   # https://github.com/scipy/scipy/issues/15414
-  version = "1.21.5";
+  version = "1.21.6";
 
   format = "pyproject.toml";
   disabled = pythonOlder "3.7";
@@ -52,7 +52,7 @@ in buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "sha256-alkovGJBJk3OXtUJ5m8zZ2/Jf0ZOepGe3GcvtVMiIe4=";
+    sha256 = "sha256-7LVSUROXBmaf3sL/BzyY746ahEc+UecWIRtBqg8Y5lY=";
   };
 
   patches = lib.optionals python.hasDistutilsCxxPatch [

@@ -11,6 +11,7 @@
 , conf ? null
 , patches ? [ ]
 , extraLibs ? [ ]
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -54,6 +55,8 @@ stdenv.mkDerivation rec {
   '';
 
   installFlags = [ "PREFIX=$(out)" ];
+
+  passthru.tests.test = nixosTests.terminal-emulators.st;
 
   meta = with lib; {
     homepage = "https://st.suckless.org/";

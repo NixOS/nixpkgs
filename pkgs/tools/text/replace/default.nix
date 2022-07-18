@@ -27,8 +27,9 @@ stdenv.mkDerivation rec {
   patches = [./malloc.patch];
 
   meta = {
-    homepage = "https://replace.richardlloyd.org.uk/";
     description = "A tool to replace verbatim strings";
+    homepage = "https://replace.richardlloyd.org.uk/";
+    mainProgram = "replace-literal";
     platforms = lib.platforms.unix;
   };
 }

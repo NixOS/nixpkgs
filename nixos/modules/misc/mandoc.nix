@@ -53,7 +53,9 @@ in {
       # see: https://inbox.vuxu.org/mandoc-tech/20210906171231.GF83680@athene.usta.de/T/#e85f773c1781e3fef85562b2794f9cad7b2909a3c
       extraSetup = lib.mkIf config.documentation.man.generateCaches ''
         ${makewhatis} -T utf8 ${
-          lib.concatMapStringsSep " " (path: "\"$out/${path}\"") cfg.manPath
+          lib.concatMapStringsSep " " (path:
+            "$out/" + lib.escapeShellArg path
+          ) cfg.manPath
         }
       '';
     };

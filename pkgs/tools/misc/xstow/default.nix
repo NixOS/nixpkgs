@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A replacement of GNU Stow written in C++";
     homepage = "http://xstow.sourceforge.net";
     license = licenses.gpl2Only;

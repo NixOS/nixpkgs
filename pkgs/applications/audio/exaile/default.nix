@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/exaile \
       --set PYTHONPATH $PYTHONPATH \
-      ${lib.optionalString streamripperSupport "--prefix PATH : ${lib.makeBinPath [ streamripper ]}"}
+      --prefix PATH : ${lib.makeBinPath ([ python3 ] ++ lib.optionals streamripperSupport [ streamripper ]) }
   '';
 
   meta = with lib; {

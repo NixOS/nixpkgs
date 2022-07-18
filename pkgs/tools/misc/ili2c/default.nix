@@ -32,6 +32,10 @@ stdenv.mkDerivation rec {
       Checks the syntactical correctness of an INTERLIS data model.
     '';
     homepage = "https://www.interlis.ch/downloads/ili2c";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # source bundles dependencies as jars
+    ];
     license = licenses.lgpl21Plus;
     maintainers = [ maintainers.das-g ];
     platforms = platforms.linux;

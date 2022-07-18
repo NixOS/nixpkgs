@@ -2,16 +2,18 @@
 
 buildGoModule rec {
   pname = "phrase-cli";
-  version = "2.4.4";
+  version = "2.4.12";
 
   src = fetchFromGitHub {
     owner = "phrase";
     repo = "phrase-cli";
     rev = version;
-    sha256 = "0xlfcj0jd6x4ynzg6d0p3wlmfq660w3zm13nzx04jfcjnks9sqvl";
+    sha256 = "sha256-+/hs6v3ereja2NtGApVBA3rTib5gAiGndbDg+FybWco=";
   };
 
-  vendorSha256 = "1ablrs3prw011bpad8vn87y3c81q44mps873nhj278hlkz6im34g";
+  vendorSha256 = "sha256-Pt+F2ICuOQZBjMccK1qq/ueGOvnjDmAM5YLRINk2u/g=";
+
+  ldflags = [ "-X=github.com/phrase/phrase-cli/cmd.PHRASE_CLIENT_VERSION=${version}" ];
 
   postInstall = ''
     ln -s $out/bin/phrase-cli $out/bin/phrase

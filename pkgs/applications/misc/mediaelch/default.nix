@@ -18,13 +18,13 @@
 
 mkDerivation rec {
   pname = "mediaelch";
-  version = "2.8.14";
+  version = "2.8.16";
 
   src = fetchFromGitHub {
     owner = "Komet";
     repo = "MediaElch";
     rev = "v${version}";
-    sha256 = "sha256-yHThX5Xs+8SijNKgmg+4Mawbwi3zHA/DJQoIBy0Wchs=";
+    sha256 = "sha256-83bHfIRVAC+3RkCYmV+TBjjQxaFMHfVyxt5Jq44dzeI=";
     fetchSubmodules = true;
   };
 

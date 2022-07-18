@@ -6,7 +6,7 @@
 
 with lib;
 stdenv.mkDerivation rec {
-  name = "dogecoin" + (toString (optional (!withGui) "d")) + "-" + version;
+  pname = "dogecoin" + optionalString (!withGui) "d";
   version = "1.14.5";
 
   src = fetchFromGitHub {

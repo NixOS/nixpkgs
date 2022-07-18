@@ -112,7 +112,7 @@
  	cd lz4/lz4 && CC=${CC} CXX=${CXX} ${MAKE}
  lz4: lz4/lz4/liblz4.a
  
-@@ -148,16 +112,12 @@ clickhouse-cpp: clickhouse-cpp/clickhouse-cpp/clickhouse/libclickhouse-cpp-lib.a
+@@ -148,16 +112,14 @@ clickhouse-cpp: clickhouse-cpp/clickhouse-cpp/clickhouse/libclickhouse-cpp-lib.a
  
  
  libdaemon/libdaemon/libdaemon/.libs/libdaemon.a: 
@@ -124,8 +124,8 @@
  libdaemon: libdaemon/libdaemon/libdaemon/.libs/libdaemon.a
  
  jemalloc/jemalloc/lib/libjemalloc.a:
--	cd jemalloc && rm -rf jemalloc-5.2.0
--	cd jemalloc && tar -jxf jemalloc-5.2.0.tar.bz2
+ 	cd jemalloc && rm -rf jemalloc-5.2.0
+ 	cd jemalloc && tar -jxf jemalloc-5.2.0.tar.bz2
  	cd jemalloc/jemalloc && patch src/jemalloc.c < ../issue823.520.patch
  	cd jemalloc/jemalloc && patch src/jemalloc.c < ../issue2358.patch
  	cd jemalloc/jemalloc && ./configure ${MYJEOPT}

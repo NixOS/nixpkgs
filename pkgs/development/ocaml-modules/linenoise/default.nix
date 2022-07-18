@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "linenoise";
-  version = "1.3.0";
+  version = "1.3.1";
 
   useDune2 = true;
 
@@ -12,7 +12,7 @@ buildDunePackage rec {
     owner = "fxfactorial";
     repo = "ocaml-${pname}";
     rev = "v${version}";
-    sha256 = "0m9mm1arsawi5w5aqm57z41sy1wfxvhfgbdiw7hzy631i391144g";
+    sha256 = "sha256-5DlF56reh52Tvbi3wGK8ZrPBAYK0ZTBV3jz8qUsyKGk=";
   };
 
   propagatedBuildInputs = [ result ];

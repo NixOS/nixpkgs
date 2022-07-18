@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "notcurses";
-  version = "3.0.6";
+  version = "3.0.8";
 
   src = fetchFromGitHub {
     owner = "dankamongmen";
     repo = "notcurses";
     rev = "v${version}";
-    sha256 = "sha256-DGAE3XomAoRhAkKUCxmr8R0dhNXeusSgETzmsbV1RhQ=";
+    sha256 = "sha256-5SNWk1iKDNbyoo413Qvzl2bGaR5Lb+q/UPbPQg7YvRU=";
   };
 
   outputs = [ "out" "dev" ];
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
       replacement for NCURSES on existing systems.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ jb55 AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres ];
     inherit (ncurses.meta) platforms;
   };
 }

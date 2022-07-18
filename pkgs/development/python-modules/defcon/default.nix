@@ -5,13 +5,13 @@
 
 buildPythonPackage rec {
   pname = "defcon";
-  version = "0.10.0";
+  version = "0.10.1";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a009862a0bc3f41f2b1a1b1f80d6aeedb3a17ed77d598da09f5a1bd93e970b3c";
+    sha256 = "sha256-+nlk9xG3mOCS4xHzp54J/V+he7HNMg1aMgFeTFTrMHA=";
     extension = "zip";
   };
 

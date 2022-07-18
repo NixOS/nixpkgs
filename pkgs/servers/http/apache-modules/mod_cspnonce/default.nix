@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mod_cspnonce";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "wyattoday";
     repo = "mod_cspnonce";
     rev = version;
-    sha256 = "0kqvxf1dn8r0ywrfiwsxryjrxii2sq11wisbjnm7770sjwckwqh5";
+    hash = "sha256-uUWRKUjS2LvHgT5xrK+LZLQRHc6wMaxGca2OsVxVlRs=";
   };
 
   buildInputs = [ apacheHttpd ];

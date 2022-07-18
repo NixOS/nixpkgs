@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , wrapGAppsHook
 , meson
 , vala
@@ -9,6 +10,7 @@
 , itstool
 , clutter-gtk
 , libgee
+, libgnome-games-support
 , gnome
 , gtk3
 }:
@@ -22,6 +24,15 @@ stdenv.mkDerivation rec {
     sha256 = "0s5fg4z5in1h39fcr69j1qc5ynmg7a8mfprk3mc3c0csq3snfwz2";
   };
 
+  patches = [
+    # Fix build with meson 0.61
+    # https://gitlab.gnome.org/GNOME/gnome-2048/-/merge_requests/21
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-2048/-/commit/194e22699f7166a016cd39ba26dd719aeecfc868.patch";
+      sha256 = "Qpn/OJJwblRm5Pi453aU2HwbrNjsf+ftmSnns/5qZ9E=";
+    })
+  ];
+
   nativeBuildInputs = [
     itstool
     meson
@@ -34,7 +45,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     clutter-gtk
     libgee
-    gnome.libgnome-games-support
+    libgnome-games-support
     gtk3
   ];
 

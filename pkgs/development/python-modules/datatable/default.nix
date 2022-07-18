@@ -6,6 +6,7 @@
 , llvm
 , pytestCheckHook
 , typesentry
+, isPy310
 }:
 
 buildPythonPackage rec {
@@ -44,15 +45,9 @@ buildPythonPackage rec {
   LLVM = llvm;
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-isystem ${lib.getDev libcxx}/include/c++/v1";
 
-  pytestFlagsArray = let
-    # ini file (not included in tarball) required to change python_files setting,
-    pytestIni = writeText "pytest.ini" ''
-      [pytest]
-      python_files = test_*.py test-*.py
-    '';
-  in [
-    "-c ${pytestIni}"
-  ];
+  # test suite is very cpu intensive, only run small subset to ensure package is working as expected
+  pytestFlagsArray = [ "tests/test-sets.py" ];
+
   disabledTests = [
     # skip tests which are irrelevant to our installation or use way too much memory
     "test_xfunction_paths"
@@ -67,5 +62,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/h2oai/datatable";
     license = licenses.mpl20;
     maintainers = with maintainers; [ abbradar ];
+    # uses custom build system and adds -Wunused-variable -Werror
+    # warning: ‘dt::expr::doc_first’ defined but not used [-Wunused-variable]
+    broken = isPy310;
   };
 }

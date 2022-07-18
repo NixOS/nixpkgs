@@ -18,6 +18,6 @@ buildGoPackage rec {
     description = "Interactive command line client for testing websocket servers";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ petabyteboy ];
+    maintainers = with maintainers; [ ];
   };
 }

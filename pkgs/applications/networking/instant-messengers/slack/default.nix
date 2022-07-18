@@ -44,14 +44,14 @@ let
 
   pname = "slack";
 
-  x86_64-darwin-version = "4.23.0";
-  x86_64-darwin-sha256 = "0l4zfyys0yf95dn0sldyjkhzp7bpn84z9q9li1lvv5jj55f0g9jd";
+  x86_64-darwin-version = "4.27.154";
+  x86_64-darwin-sha256 = "0a3cc9kkiq18vr4hk532vc59cza1hq8qh9x9hlhli4n72n3h7y3n";
 
-  x86_64-linux-version = "4.23.0";
-  x86_64-linux-sha256 = "1wsrxacnj9f3cb6as7ncbdvi02jqcbyc7ijsavps5bls9phkp0is";
+  x86_64-linux-version = "4.27.156";
+  x86_64-linux-sha256 = "sha256-/xtD+/+KGtPr4vQJm8ZczvpyPxfMBw0OE7hzTzFhSs0=";
 
-  aarch64-darwin-version = "4.23.0";
-  aarch64-darwin-sha256 = "053psiqysyi7l8pviq0vwvk2azlxcpdrwfa0b99f1h6lbfcf48f3";
+  aarch64-darwin-version = "4.27.154";
+  aarch64-darwin-sha256 = "1n3vgcsbi1w49w4xqc5hyadb9qwvsqdiirfw9v4s65wsnark1iz6";
 
   version = {
     x86_64-darwin = x86_64-darwin-version;
@@ -80,8 +80,9 @@ let
   meta = with lib; {
     description = "Desktop client for Slack";
     homepage = "https://slack.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ mmahut ];
+    maintainers = with maintainers; [ mmahut maxeaubrey ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-darwin" ];
   };
 

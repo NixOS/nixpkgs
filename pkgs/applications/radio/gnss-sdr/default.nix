@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , armadillo
 , cmake
 , gmp
@@ -20,13 +21,13 @@
 
 gnuradio.pkgs.mkDerivation rec {
   pname = "gnss-sdr";
-  version = "0.0.16";
+  version = "0.0.17";
 
   src = fetchFromGitHub {
     owner = "gnss-sdr";
     repo = "gnss-sdr";
     rev = "v${version}";
-    sha256 = "sha256-ODe4k6PDGtDX11FrbggEbN3tc4UtATaItUIpCKl4JjM=";
+    sha256 = "sha256-0aAjkrVAswoRL/KANBSZ5Jq4Y9VwOHZKUKLpXDdKtk8=";
   };
 
   patches = [

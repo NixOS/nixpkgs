@@ -1,17 +1,19 @@
-{ lib, buildGoModule, fetchFromGitHub, brotli, libsodium }:
+{ lib, buildGoModule, fetchFromGitHub, brotli, libsodium, installShellFiles }:
 
 buildGoModule rec {
   pname = "wal-g";
-  version = "1.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "wal-g";
     repo = "wal-g";
     rev = "v${version}";
-    sha256 = "1hiym5id310rvw7vr8wir2vpf0p5qz71rx6v5i2gpjqml7c97cls";
+    sha256 = "sha256-xltKchk7RtP5tkoUhnJqVb17WW6qW/lSFdHivCbW5zY=";
   };
 
-  vendorSha256 = "09z9x20zna1czhfpl47i98r8163a266mnr6xi17npjsfdvsjkppn";
+  vendorSha256 = "sha256-w9AVcld8Gd1kYE2PkN8RVZ+/xlOZChKoWZFKvqhJuWI=";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [ brotli libsodium ];
 
@@ -23,6 +25,9 @@ buildGoModule rec {
 
   postInstall = ''
     mv $out/bin/pg $out/bin/wal-g
+    installShellCompletion --cmd wal-g \
+      --bash <($out/bin/wal-g completion bash) \
+      --zsh <($out/bin/wal-g completion zsh)
   '';
 
   meta = with lib; {

@@ -55,6 +55,7 @@ class Driver:
         tmp_dir = get_tmp_dir()
 
         with rootlog.nested("start all VLans"):
+            vlans = list(set(vlans))
             self.vlans = [VLan(nr, tmp_dir) for nr in vlans]
 
         def cmd(scripts: List[str]) -> Iterator[NixStartScript]:
@@ -85,7 +86,7 @@ class Driver:
 
     def subtest(self, name: str) -> Iterator[None]:
         """Group logs under a given test name"""
-        with rootlog.nested(name):
+        with rootlog.nested("subtest: " + name):
             try:
                 yield
                 return True

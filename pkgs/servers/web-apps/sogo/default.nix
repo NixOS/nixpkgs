@@ -1,6 +1,6 @@
 { gnustep, lib, fetchFromGitHub, fetchpatch, makeWrapper, python3, lndir
 , openssl, openldap, sope, libmemcached, curl, libsodium, libytnef, libzip, pkg-config, nixosTests
-, oathToolkit }:
+, oath-toolkit }:
 gnustep.stdenv.mkDerivation rec {
   pname = "SOGo";
   version = "5.5.0";
@@ -13,7 +13,7 @@ gnustep.stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ gnustep.make makeWrapper python3 ];
-  buildInputs = [ gnustep.base sope openssl libmemcached curl libsodium libytnef libzip pkg-config openldap oathToolkit ];
+  buildInputs = [ gnustep.base sope openssl libmemcached curl libsodium libytnef libzip pkg-config openldap oath-toolkit ];
 
   patches = [
     # TODO: take a closer look at other patches in https://sources.debian.org/patches/sogo/ and https://github.com/Skrupellos/sogo-patches

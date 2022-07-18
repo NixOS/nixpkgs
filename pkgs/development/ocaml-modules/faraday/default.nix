@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "faraday";
-  version = "0.7.2";
+  version = "0.8.1";
 
   useDune2 = true;
 
@@ -12,7 +12,7 @@ buildDunePackage rec {
     owner = "inhabitedtype";
     repo = pname;
     rev = version;
-    sha256 = "0gdysszzk6b6npic4nhpdnz2nbq7rma6aml0rbn113bfh0rmb36x";
+    sha256 = "sha256-eeR+nst/r2iFxCDmRS+LGr3yl/o27DcsS30YAu1GJmc=";
   };
 
   checkInputs = [ alcotest ];

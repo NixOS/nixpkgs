@@ -18,13 +18,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meld";
-  version = "3.21.1";
+  version = "3.21.2";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "cP6Y65Ms4h1nFw47D2pzF+gT6GLemJM+pROYLpoDMgI=";
+    sha256 = "IV+odABTZ5TFllddE6nIfijxjdNyW43/mG2y4pM6cU4=";
   };
 
   nativeBuildInputs = [

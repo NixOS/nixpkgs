@@ -1,34 +1,40 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-, isodate
-, dictpath
-, openapi-spec-validator
-, openapi-schema-validator
-, six
-, lazy-object-proxy
 , attrs
-, werkzeug
-, parse
-, more-itertools
-, pytestCheckHook
-, falcon
-, flask
+, buildPythonPackage
+, dictpath
 , django
 , djangorestframework
-, responses
+, falcon
+, fetchFromGitHub
+, flask
+, isodate
+, lazy-object-proxy
 , mock
+, more-itertools
+, openapi-schema-validator
+, openapi-spec-validator
+, parse
+, pytestCheckHook
+, pythonOlder
+, responses
+, six
+, webob
+, werkzeug
+, python
 }:
 
 buildPythonPackage rec {
   pname = "openapi-core";
   version = "0.14.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = "openapi-core";
     rev = version;
-    sha256 = "1npsibyf8zx6z230yl19kyap8g25kqvgm7z1w6rm6jxv58yqsp7r";
+    hash = "sha256-+VyNPSq7S1Oz4eGf+jaeRTx0lZ8pUA+G+KZ/5PyK+to=";
   };
 
   postPatch = ''
@@ -36,31 +42,36 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    isodate
-    dictpath
-    openapi-spec-validator
-    openapi-schema-validator
-    six
-    lazy-object-proxy
     attrs
-    werkzeug
-    parse
+    dictpath
+    isodate
+    lazy-object-proxy
     more-itertools
+    openapi-schema-validator
+    openapi-spec-validator
+    parse
+    six
+    werkzeug
   ];
 
   checkInputs = [
-    pytestCheckHook
-    falcon
-    flask
     django
     djangorestframework
-    responses
+    falcon
+    flask
     mock
+    pytestCheckHook
+    responses
+    webob
   ];
 
   disabledTestPaths = [
     # AttributeError: 'str' object has no attribute '__name__'
     "tests/integration/validation"
+    # requires secrets and additional configuration
+    "tests/integration/contrib/test_django.py"
+    # Unable to detect SECRET_KEY and ROOT_URLCONF
+    "tests/integration/contrib/test_django.py"
   ];
 
   disabledTests = [

@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchurl, libosip }:
+{ lib, stdenv, fetchurl, libosip, sqlite }:
 
 stdenv.mkDerivation rec {
   pname = "siproxd";
-  version = "0.8.2";
+  version = "0.8.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/siproxd/siproxd-${version}.tar.gz";
-    sha256 = "1l6cyxxhra825jiiw9npa7jrbfgbyfpk4966cqkrw66cn28y8v2j";
+    sha256 = "0dkpl3myxz3gvj2n2qpqrd19dip9il0vf7qybdvn5wgznrmplvcs";
   };
 
   patches = [ ./cheaders.patch ];
 
-  buildInputs = [ libosip ];
+  buildInputs = [ libosip sqlite ];
 
   meta = {
     homepage = "http://siproxd.sourceforge.net/";

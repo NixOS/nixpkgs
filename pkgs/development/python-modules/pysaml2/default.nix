@@ -14,6 +14,7 @@
 , pytz
 , requests
 , responses
+, setuptools
 , six
 , substituteAll
 , xmlschema
@@ -22,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "pysaml2";
-  version = "7.1.0";
+  version = "7.1.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -31,16 +32,17 @@ buildPythonPackage rec {
     owner = "IdentityPython";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-3Yl6j6KAlw7QQYnwU7+naY6D97IqX766zguekKAuic8=";
+    sha256 = "sha256-nyQcQ1OO9PuuQROg+km2vIRF1sZ22MZhiHpmVXWl+is=";
   };
 
   propagatedBuildInputs = [
     cryptography
-    python-dateutil
     defusedxml
     pyopenssl
+    python-dateutil
     pytz
     requests
+    setuptools
     six
     xmlschema
   ] ++ lib.optionals (pythonOlder "3.9") [

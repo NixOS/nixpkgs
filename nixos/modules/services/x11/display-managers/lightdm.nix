@@ -267,6 +267,8 @@ in
     # Enable the accounts daemon to find lightdm's dbus interface
     environment.systemPackages = [ lightdm ];
 
+    security.polkit.enable = true;
+
     security.pam.services.lightdm.text = ''
         auth      substack      login
         account   include       login
@@ -285,7 +287,7 @@ in
 
         session  required       pam_succeed_if.so audit quiet_success user = lightdm
         session  required       pam_env.so conffile=/etc/pam/environment readenv=0
-        session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
+        session  optional       ${config.systemd.package}/lib/security/pam_systemd.so
         session  optional       pam_keyinit.so force revoke
         session  optional       pam_permit.so
     '';

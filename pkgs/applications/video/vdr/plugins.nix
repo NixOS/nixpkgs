@@ -238,94 +238,19 @@ in {
     };
   };
 
-  fritzbox = let
-    libconvpp = stdenv.mkDerivation {
-      name = "jowi24-libconv++-20130216";
-      propagatedBuildInputs = [ libiconv ];
-      CXXFLAGS = "-std=gnu++11 -Os";
-      src = fetchFromGitHub {
-        owner = "jowi24";
-        repo = "libconvpp";
-        rev = "90769b2216bc66c5ea5e41a929236c20d367c63b";
-        sha256 = "0bf0dwxrzd42l84p8nxcsjdk1gvzlhad93nsbn97z6kr61n4cr33";
-      };
-      installPhase = ''
-        mkdir -p $out/lib $out/include/libconv++
-        cp source.a $out/lib/libconv++.a
-        cp *.h $out/include/libconv++
-      '';
-    };
-
-    liblogpp = stdenv.mkDerivation {
-      name = "jowi24-liblogpp-20130216";
-      CXXFLAGS = "-std=gnu++11 -Os";
-      src = fetchFromGitHub {
-        owner = "jowi24";
-        repo = "liblogpp";
-        rev = "eee4046d2ae440974bcc8ceec00b069f0a2c62b9";
-        sha256 = "01aqvwmwh5kk3mncqpim8llwha9gj5qq0c4cvqfn4h8wqi3d9l3p";
-      };
-      installPhase = ''
-        mkdir -p $out/lib $out/include/liblog++
-        cp source.a $out/lib/liblog++.a
-        cp *.h $out/include/liblog++
-      '';
-    };
-
-    libnetpp = stdenv.mkDerivation {
-      name = "jowi24-libnet++-20180628";
-      CXXFLAGS = "-std=gnu++11 -Os";
-      src = fetchFromGitHub {
-        owner = "jowi24";
-        repo = "libnetpp";
-        rev = "212847f0efaeffee8422059b8e202d844174aaf3";
-        sha256 = "0vjl6ld6aj25rzxm26yjv3h2gy7gp7qnbinpw6sf1shg2xim9x0b";
-      };
-      installPhase = ''
-        mkdir -p $out/lib $out/include/libnet++
-        cp source.a $out/lib/libnet++.a
-        cp *.h $out/include/libnet++
-      '';
-      buildInputs = [ boost liblogpp libconvpp ];
-    };
-
-    libfritzpp = stdenv.mkDerivation {
-      name = "jowi24-libfritzpp-20131201";
-      CXXFLAGS = "-std=gnu++11 -Os";
-      src = fetchFromGitHub {
-        owner = "jowi24";
-        repo = "libfritzpp";
-        rev = "ca19013c9451cbac7a90155b486ea9959ced0f67";
-        sha256 = "0jk93zm3qzl9z96gfs6xl1c8ip8lckgbzibf7jay7dbgkg9kyjfg";
-      };
-      installPhase = ''
-        mkdir -p $out/lib $out/include/libfritz++
-        cp source.a $out/lib/libfritz++.a
-        cp *.h $out/include/libfritz++
-      '';
-      propagatedBuildInputs = [ libgcrypt ];
-      buildInputs = [ boost liblogpp libconvpp libnetpp ];
-    };
-
-  in stdenv.mkDerivation rec {
+  fritzbox = stdenv.mkDerivation rec {
     pname = "vdr-fritzbox";
-    version = "1.5.3";
+    version = "1.5.4";
 
     src = fetchFromGitHub {
       owner = "jowi24";
       repo = "vdr-fritz";
       rev = version;
-      sha256 = "0wab1kyma9jzhm6j33cv9hd2a5d1334ghgdi2051nmr1bdcfcsw8";
+      sha256 = "sha256-DGD73i+ZHFgtCo+pMj5JaMovvb5vS1x20hmc5t29//o=";
+      fetchSubmodules = true;
     };
 
-    postUnpack = ''
-      cp ${libfritzpp}/lib/* $sourceRoot/libfritz++
-      cp ${liblogpp}/lib/* $sourceRoot/liblog++
-      cp ${libnetpp}/lib/* $sourceRoot/libnet++
-      cp ${libconvpp}/lib/* $sourceRoot/libconv++
-    '';
-
-    buildInputs = [ vdr boost libconvpp libfritzpp libnetpp liblogpp ];
+    buildInputs = [ vdr boost libgcrypt ];
 
     installFlags = [ "DESTDIR=$(out)" ];
 

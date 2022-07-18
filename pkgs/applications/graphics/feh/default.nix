@@ -1,16 +1,26 @@
-{ lib, stdenv, fetchurl, makeWrapper
-, xorg, imlib2, libjpeg, libpng
+{ lib, stdenv, fetchFromGitHub, makeWrapper
+, xorg, imlib2, libjpeg, libpng, fetchpatch
 , curl, libexif, jpegexiforient, perl
 , enableAutoreload ? !stdenv.hostPlatform.isDarwin }:
 
 stdenv.mkDerivation rec {
   pname = "feh";
-  version = "3.8";
+  version = "3.9";
 
-  src = fetchurl {
-    url = "https://feh.finalrewind.org/${pname}-${version}.tar.bz2";
-    sha256 = "1a9bsq5j9sl2drzkab0hdhnamalpaszw9mz2prz6scrr5dak8g3z";
+  src = fetchFromGitHub {
+    owner = "derf";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-rgNC4M1TJ5EPeWmVHVzgaxTGLY7CYQf7uOsOn5bkwKE=";
   };
+
+  patches = [
+    # fix test failure when magic=0 is set
+    (fetchpatch {
+      url = "https://github.com/derf/feh/commit/3c1076b31e2e4e3429a5c3d334d555e549fb72d2.patch";
+      sha256 = "sha256-F9N+N/BAeclyPHQYlO9ZV1U8S1VWfHl/8dMKUqA7DF8=";
+    })
+  ];
 
   outputs = [ "out" "man" "doc" ];
 

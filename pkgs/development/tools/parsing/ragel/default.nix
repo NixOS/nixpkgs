@@ -26,6 +26,7 @@ let
       doCheck = true;
 
       meta = with lib; {
+        broken = stdenv.isDarwin;
         homepage = "https://www.colm.net/open-source/ragel/";
         description = "State machine compiler";
         inherit license;

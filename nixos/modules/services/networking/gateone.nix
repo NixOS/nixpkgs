@@ -36,11 +36,11 @@ config = mkIf cfg.enable {
     preStart = ''
       if [ ! -d ${cfg.settingsDir} ] ; then
         mkdir -m 0750 -p ${cfg.settingsDir}
-        chown -R gateone.gateone ${cfg.settingsDir}
+        chown -R gateone:gateone ${cfg.settingsDir}
       fi
       if [ ! -d ${cfg.pidDir} ] ; then
         mkdir -m 0750 -p ${cfg.pidDir}
-        chown -R gateone.gateone ${cfg.pidDir}
+        chown -R gateone:gateone ${cfg.pidDir}
       fi
       '';
     #unitConfig.RequiresMountsFor = "${cfg.settingsDir}";

@@ -8,7 +8,7 @@
 }:
 
 mkDerivation {
-  name = "libkscreen";
+  pname = "libkscreen";
   nativeBuildInputs = [ extra-cmake-modules wayland-scanner ];
   buildInputs = [ kwayland plasma-wayland-protocols wayland libXrandr qtx11extras ];
   outputs = [ "out" "dev" ];

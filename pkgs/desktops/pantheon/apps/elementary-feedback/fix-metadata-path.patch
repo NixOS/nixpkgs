@@ -1,0 +1,17 @@
+diff --git a/src/MainWindow.vala b/src/MainWindow.vala
+index 6fee9d3..b0eb28c 100644
+--- a/src/MainWindow.vala
++++ b/src/MainWindow.vala
+@@ -89,6 +89,12 @@ public class Feedback.MainWindow : Gtk.ApplicationWindow {
+ #endif
+             }
+ 
++#if HAS_APPSTREAM_0_15
++            appstream_pool.add_extra_data_location ("/run/current-system/sw/share/metainfo/", AppStream.FormatStyle.METAINFO);
++#else
++            appstream_pool.add_metadata_location ("/run/current-system/sw/share/metainfo/");
++#endif
++
+             // flatpak's appstream files exists only inside they sandbox
+             unowned var appdata_dir = "/var/lib/flatpak/app/%s/current/active/files/share/appdata";
+             foreach (var app in app_entries) {

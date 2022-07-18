@@ -148,6 +148,7 @@ stdenv.mkDerivation rec {
     install -D d8 $out/bin/d8
     install -D -m644 obj/libv8_monolith.a $out/lib/libv8.a
     install -D -m644 icudtl.dat $out/share/v8/icudtl.dat
+    ln -s libv8.a $out/lib/libv8_monolith.a
     cp -r ../../include $out
 
     mkdir -p $out/lib/pkgconfig
@@ -165,5 +166,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ cstrahan proglodyte matthewbauer ];
     platforms = platforms.unix;
     license = licenses.bsd3;
+    # Fails to build on Darwin, see https://github.com/NixOS/nixpkgs/issues/158076
+    broken = stdenv.isDarwin;
   };
 }

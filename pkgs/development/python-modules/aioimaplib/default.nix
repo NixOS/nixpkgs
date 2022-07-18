@@ -1,4 +1,6 @@
 { lib
+, pythonOlder
+, pythonAtLeast
 , asynctest
 , buildPythonPackage
 , docutils
@@ -14,13 +16,16 @@
 
 buildPythonPackage rec {
   pname = "aioimaplib";
-  version = "0.9.0";
+  version = "1.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "bamthomas";
     repo = pname;
     rev = version;
-    sha256 = "sha256-xxZAeJDuqrPv4kGgDr0ypFuZJk1zcs/bmgeEzI0jpqY=";
+    hash = "sha256-7Ta0BhtQSm228vvUa5z+pzM3UC7+BskgBNjxsbEb9P0=";
   };
 
   checkInputs = [
@@ -33,6 +38,11 @@ buildPythonPackage rec {
     pytestCheckHook
     pytz
     tzlocal
+  ];
+
+  disabledTests = [
+    # https://github.com/bamthomas/aioimaplib/issues/77
+    "test_get_quotaroot"
   ];
 
   pythonImportsCheck = [ "aioimaplib" ];

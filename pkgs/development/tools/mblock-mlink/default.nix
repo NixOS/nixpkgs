@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Driver for mBlock web version";
     homepage = "https://mblock.makeblock.com/en-us/download/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = [ maintainers.mausch ];

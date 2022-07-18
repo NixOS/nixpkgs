@@ -3,7 +3,7 @@
 
 buildPythonPackage rec {
   pname = "ipwhl";
-  version = "1.0.0";
+  version = "1.1.0";
   format = "flit";
   disabled = pythonOlder "3.6";
 
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     owner = "~cnx";
     repo = "ipwhl-utils";
     rev = version;
-    sha256 = "sha256-KstwdmHpn4ypBNpX56NeStqdzy5RElMTW1oR2hCtJ7c=";
+    sha256 = "sha256-YaIYcoUnbiv9wUOFIzGj2sWGbh7NsqRQcqOR2X6+QZA=";
   };
 
   buildInputs = [ ipfs ];

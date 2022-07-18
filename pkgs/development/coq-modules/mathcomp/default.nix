@@ -10,16 +10,16 @@
 # See the documentation at doc/languages-frameworks/coq.section.md.        #
 ############################################################################
 
-{ lib, ncurses, which, graphviz, lua, fetchzip,
+{ lib, ncurses, graphviz, lua, fetchzip,
   mkCoqDerivation, recurseIntoAttrs, withDoc ? false, single ? false,
-  coqPackages, coq, ocamlPackages, version ? null }@args:
+  coqPackages, coq, version ? null }@args:
 with builtins // lib;
 let
   repo  = "math-comp";
   owner = "math-comp";
   withDoc = single && (args.withDoc or false);
   defaultVersion = with versions; switch coq.coq-version [
-      { case = isGe  "8.11";        out = "1.14.0"; }
+      { case = range "8.11" "8.15"; out = "1.14.0"; }
       { case = range "8.11" "8.15"; out = "1.13.0"; }
       { case = range "8.10" "8.13"; out = "1.12.0"; }
       { case = range "8.7"  "8.12"; out = "1.11.0"; }
@@ -59,9 +59,9 @@ let
       derivation = mkCoqDerivation ({
         inherit version pname defaultVersion release releaseRev repo owner;
 
-        nativeBuildInputs = optionals withDoc [ graphviz lua ];
         mlPlugin = versions.isLe "8.6" coq.coq-version;
-        extraBuildInputs = [ ncurses which ];
+        nativeBuildInputs = optionals withDoc [ graphviz lua ];
+        buildInputs = [ ncurses ];
         propagatedBuildInputs = mathcomp-deps;
 
         buildFlags = optional withDoc "doc";

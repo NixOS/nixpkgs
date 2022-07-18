@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-csWowcRSgF5M74yv787MLSXOGXrkxnODCCgC5a3Nd7Y=";
   };
 
-  makeFlags = [ "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" "INSTALL_MOD_PATH=$(out)" ];
+  makeFlags = kernel.makeFlags ++ [ "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" "INSTALL_MOD_PATH=$(out)" ];
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   meta = with lib; {

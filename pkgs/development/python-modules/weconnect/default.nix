@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "weconnect";
-  version = "0.36.4";
+  version = "0.45.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "tillsteinbach";
     repo = "WeConnect-python";
     rev = "v${version}";
-    sha256 = "sha256-B4RZftGngV85Trm0iPj50WAv1M0H+sjQ9ABiGh070/M=";
+    hash = "sha256-iAKw05vMaGTQ/V1uwqbkO2AZOOtsMOfSnponnE5AdXE=";
   };
 
   propagatedBuildInputs = [
@@ -42,8 +42,8 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace "setup_requires=SETUP_REQUIRED," "setup_requires=[]," \
       --replace "tests_require=TEST_REQUIRED," "tests_require=[],"
-    substituteInPlace requirements.txt \
-      --replace "pillow~=9.0.0" "pillow"
+    substituteInPlace image_extra_requirements.txt \
+      --replace "pillow~=9.2.0" "pillow"
     substituteInPlace pytest.ini \
       --replace "--cov=weconnect --cov-config=.coveragerc --cov-report html" "" \
       --replace "pytest-cov" ""

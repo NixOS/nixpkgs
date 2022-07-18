@@ -1,14 +1,17 @@
 { lib, stdenv, pkgs }:
 
-stdenv.mkDerivation {
-  version = "0.4.0";
+let
   pname = "ecdsautils";
+  version = "0.4.1";
+in
+stdenv.mkDerivation {
+  inherit pname version;
 
   src = pkgs.fetchFromGitHub {
     owner = "freifunk-gluon";
-    repo = "ecdsautils";
-    rev = "07538893fb6c2a9539678c45f9dbbf1e4f222b46";
-    sha256 = "18sr8x3qiw8s9l5pfi7r9i3ayplz4jqdml75ga9y933vj7vs0k4d";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-dv0guQTmot5UO1GkMgzvD6uJFyum5kV89LI3xWS1DZA=";
   };
 
   nativeBuildInputs = with pkgs; [ cmake pkg-config doxygen ];
@@ -16,7 +19,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Tiny collection of programs used for ECDSA (keygen, sign, verify)";
-    homepage = "https://github.com/tcatm/ecdsautils/";
+    homepage = "https://github.com/freifunk-gluon/ecdsautils/";
     license = with licenses; [ mit bsd2 ];
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;

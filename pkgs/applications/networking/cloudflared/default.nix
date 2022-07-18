@@ -1,27 +1,38 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, stdenv }:
 
 buildGoModule rec {
   pname = "cloudflared";
-  version = "2022.2.1";
+  version = "2022.5.2";
 
   src = fetchFromGitHub {
     owner  = "cloudflare";
     repo   = "cloudflared";
     rev    = version;
-    hash   = "sha256-y9TduC6Fa1p3UFvSeW9n42AUD63dp/LEagiv3xlT/4U=";
+    hash   = "sha256-xE/Bc+6Ob2u4tQQoykoaa8MhFH2czwz5rMABUqfXNMM=";
   };
 
   vendorSha256 = null;
 
-  doCheck = false;
-
   ldflags = [ "-X main.Version=${version}" ];
+
+  preCheck = ''
+    # Workaround for: sshgen_test.go:74: mkdir /homeless-shelter/.cloudflared: no such file or directory
+    export HOME="$(mktemp -d)";
+
+    # Workaround for: protocol_test.go:11:
+    #   lookup protocol-v2.argotunnel.com on [::1]:53: read udp [::1]:51876->[::1]:53: read: connection refused
+
+    substituteInPlace "edgediscovery/protocol_test.go" \
+      --replace "TestProtocolPercentage" "SkipProtocolPercentage"
+  '';
+
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "CloudFlare Tunnel daemon (and DNS-over-HTTPS client)";
     homepage    = "https://www.cloudflare.com/products/tunnel";
     license     = licenses.asl20;
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ bbigras enorris thoughtpolice ];
+    maintainers = with maintainers; [ bbigras enorris thoughtpolice techknowlogick ];
   };
 }

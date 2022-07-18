@@ -293,9 +293,7 @@ in
         inherit user;
         group = webserver.group;
 
-        # Not yet compatible with php 8 https://www.dokuwiki.org/requirements
-        # https://github.com/splitbrain/dokuwiki/issues/3545
-        phpPackage = pkgs.php74;
+        phpPackage = pkgs.php81;
         phpEnv = {
           DOKUWIKI_LOCAL_CONFIG = "${dokuwikiLocalConfig hostName cfg}";
           DOKUWIKI_PLUGINS_LOCAL_CONFIG = "${dokuwikiPluginsLocalConfig hostName cfg}";
@@ -376,7 +374,7 @@ in
           "~ \\.php$" = {
             extraConfig = ''
               try_files $uri $uri/ /doku.php;
-              include ${pkgs.nginx}/conf/fastcgi_params;
+              include ${config.services.nginx.package}/conf/fastcgi_params;
               fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
               fastcgi_param REDIRECT_STATUS 200;
               fastcgi_pass unix:${config.services.phpfpm.pools."dokuwiki-${hostName}".socket};

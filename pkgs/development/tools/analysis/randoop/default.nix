@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Automatic test generation for Java";
     homepage = "https://randoop.github.io/randoop/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.linux;

@@ -16,7 +16,7 @@ version() {
 }
 
 src_url() {
-  nix-instantiate --eval --strict --expr " with import $root {}; let src = sourcehut.python.pkgs.$1.drvAttrs.src; in src.url or src.meta.homepage" | tr -d '"'
+  nix-instantiate --eval --strict --expr " with import $root {}; let src = sourcehut.python.pkgs.$1.drvAttrs.src; in src.meta.homepage" | tr -d '"'
 }
 
 get_latest_version() {

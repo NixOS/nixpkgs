@@ -1,11 +1,11 @@
-{ pname, version, src, meta, binaryName, desktopName, autoPatchelfHook
-, makeDesktopItem, lib, stdenv, wrapGAppsHook, alsa-lib, at-spi2-atk
+{ pname, version, src, openasar, meta, binaryName, desktopName, autoPatchelfHook
+, makeDesktopItem, lib, stdenv, wrapGAppsHook, makeShellWrapper, alsa-lib, at-spi2-atk
 , at-spi2-core, atk, cairo, cups, dbus, expat, fontconfig, freetype, gdk-pixbuf
 , glib, gtk3, libcxx, libdrm, libnotify, libpulseaudio, libuuid, libX11
 , libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext, libXfixes
 , libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence, mesa, nspr, nss
 , pango, systemd, libappindicator-gtk3, libdbusmenu, writeScript
-, common-updater-scripts }:
+, common-updater-scripts, withOpenASAR ? false }:
 
 stdenv.mkDerivation rec {
   inherit pname version src meta;
@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     mesa
     nss
     wrapGAppsHook
+    makeShellWrapper
   ];
 
   dontWrapGApps = true;
@@ -71,14 +72,16 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    mkdir -p $out/{bin,opt/${binaryName},share/pixmaps}
+    runHook preInstall
+
+    mkdir -p $out/{bin,opt/${binaryName},share/pixmaps,share/icons/hicolor/256x256/apps}
     mv * $out/opt/${binaryName}
 
     chmod +x $out/opt/${binaryName}/${binaryName}
     patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
         $out/opt/${binaryName}/${binaryName}
 
-    wrapProgram $out/opt/${binaryName}/${binaryName} \
+    wrapProgramShell $out/opt/${binaryName}/${binaryName} \
         "''${gappsWrapperArgs[@]}" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}" \
         --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
@@ -89,9 +92,17 @@ stdenv.mkDerivation rec {
     ln -s $out/opt/${binaryName}/${binaryName} $out/bin/${
       lib.strings.toLower binaryName
     } || true
+
     ln -s $out/opt/${binaryName}/discord.png $out/share/pixmaps/${pname}.png
+    ln -s $out/opt/${binaryName}/discord.png $out/share/icons/hicolor/256x256/apps/${pname}.png
 
     ln -s "${desktopItem}/share/applications" $out/share/
+
+    runHook postInstall
+  '';
+
+  postInstall = lib.strings.optionalString withOpenASAR ''
+    cp -f ${openasar} $out/opt/${binaryName}/resources/app.asar
   '';
 
   desktopItem = makeDesktopItem {
@@ -100,8 +111,8 @@ stdenv.mkDerivation rec {
     icon = pname;
     inherit desktopName;
     genericName = meta.description;
-    categories = "Network;InstantMessaging;";
-    mimeType = "x-scheme-handler/discord";
+    categories = [ "Network" "InstantMessaging" ];
+    mimeTypes = [ "x-scheme-handler/discord" ];
   };
 
   passthru.updateScript = writeScript "discord-update-script" ''

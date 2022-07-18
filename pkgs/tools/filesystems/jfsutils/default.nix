@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.1.15";
 
   src = fetchurl {
-    url = "http://jfs.sourceforge.net/project/pub/jfsutils-${version}.tar.gz";
+    url = "mirror://sourceforge/jfs/jfsutils-${version}.tar.gz";
     sha256 = "0kbsy2sk1jv4m82rxyl25gwrlkzvl3hzdga9gshkxkhm83v1aji4";
   };
 
@@ -24,6 +24,20 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libuuid ];
+
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #     ld: extract.o:/build/jfsutils-1.1.15/fscklog/extract.c:67: multiple definition of
+  #       `xchklog_buffer'; display.o:/build/jfsutils-1.1.15/fscklog/display.c:57: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
+  # this required for wipefreespace
+  postInstall = ''
+    mkdir -p $out/include
+    cp include/*.h $out/include
+    mkdir -p $out/lib
+    cp ./libfs/libfs.a $out/lib
+  '';
 
   meta = with lib; {
     description = "IBM JFS utilities";

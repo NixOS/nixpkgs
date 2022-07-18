@@ -1,25 +1,43 @@
-{ lib, fetchPypi, buildPythonPackage, flask
+{ lib
+, fetchPypi
+, buildPythonPackage
+, setuptools-scm
+, flask
 , brotli
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  version = "1.10.1";
+  version = "1.12";
   pname = "Flask-Compress";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "28352387efbbe772cfb307570019f81957a13ff718d994a9125fa705efb73680";
+    sha256 = "sha256-4hWUmfOdYYpNVroEhOe1i1eVa5osbTUQ8JX1uxS3r8U=";
   };
 
-  postPatch = ''
-    sed -i -e 's/use_scm_version=.*/version="${version}",/' setup.py
-  '';
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [ flask brotli ];
+  propagatedBuildInputs = [
+    flask
+    brotli
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "flask_compress"
+  ];
 
   meta = with lib; {
     description = "Compress responses in your Flask app with gzip";
-    homepage = "https://libwilliam.github.io/flask-compress/";
+    homepage = "https://github.com/colour-science/flask-compress";
+    changelog = "https://github.com/colour-science/flask-compress/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
   };
 }

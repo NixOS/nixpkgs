@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "inav-configurator";
-  version = "3.0.2";
+  version = "4.1.0";
 
   src = fetchurl {
     url = "https://github.com/iNavFlight/inav-configurator/releases/download/${version}/INAV-Configurator_linux64_${version}.tar.gz";
-    sha256 = "0v6dcg634wpp9q4ya3mj00j3pg25g62aq209iq2dsvj0a03afbp2";
+    sha256 = "sha256-+rPzytnAQcNGbISFBHb4JS9Nqy0C2i36k+EPBvq/mso=";
   };
 
   icon = fetchurl {
@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
       quadcopters, hexacopters, octocopters and fixed-wing aircraft.
     '';
     homepage = "https://github.com/iNavFlight/inav/wiki";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ tilcreator wucke13 ];
     platforms = platforms.linux;

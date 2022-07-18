@@ -8,15 +8,19 @@
 , tqdm
 , winacl
 , winsspi
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "msldap";
-  version = "0.3.30";
+  version = "0.3.40";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-fX+W1Bq4F0/6DyxWeA6zvoswFQCdDpSk29g7nq1cYYE=";
+    hash = "sha256-4sIqbjlrTX1l1zhj7URhISDo4lcP+JW1Qh3fajUAhbs=";
   };
 
   propagatedBuildInputs = [
@@ -31,7 +35,10 @@ buildPythonPackage rec {
 
   # Project doesn't have tests
   doCheck = false;
-  pythonImportsCheck = [ "msldap" ];
+
+  pythonImportsCheck = [
+    "msldap"
+  ];
 
   meta = with lib; {
     description = "Python LDAP library for auditing MS AD";

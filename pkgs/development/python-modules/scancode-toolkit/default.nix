@@ -8,8 +8,9 @@
 , click
 , colorama
 , commoncode
+, container-inspector
 , debian-inspector
-, dparse
+, dparse2
 , extractcode
 , extractcode-7z
 , extractcode-libarchive
@@ -32,7 +33,8 @@
 , packaging
 , parameter-expansion-patched
 , pefile
-, pkginfo
+, pip-requirements-parser
+, pkginfo2
 , pluggy
 , plugincode
 , publicsuffix2
@@ -58,13 +60,13 @@
 
 buildPythonPackage rec {
   pname = "scancode-toolkit";
-  version = "30.1.0";
+  version = "31.0.0b4";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-UYQf+cBi2FmyZxIbQJo7vLjPuoePIMC8FugvoG1Ebj0=";
+    hash = "sha256-sPFHaIbbWw/wk3Q1PBDj5O4il9ntigoyanecg938a9A=";
   };
 
   dontConfigure = true;
@@ -78,8 +80,9 @@ buildPythonPackage rec {
     click
     colorama
     commoncode
+    container-inspector
     debian-inspector
-    dparse
+    dparse2
     extractcode
     extractcode-7z
     extractcode-libarchive
@@ -88,6 +91,7 @@ buildPythonPackage rec {
     ftfy
     gemfileparser
     html5lib
+    importlib-metadata
     intbitset
     jaraco_functools
     javaproperties
@@ -100,7 +104,8 @@ buildPythonPackage rec {
     packaging
     parameter-expansion-patched
     pefile
-    pkginfo
+    pip-requirements-parser
+    pkginfo2
     pluggy
     plugincode
     publicsuffix2
@@ -118,9 +123,8 @@ buildPythonPackage rec {
     typecode-libmagic
     urlpy
     xmltodict
-    zipp
   ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-metadata
+    zipp
   ] ++ lib.optionals (pythonOlder "3.7") [
     typing
   ];
@@ -131,9 +135,11 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
+      --replace "pdfminer.six >= 20200101" "pdfminer.six" \
       --replace "pluggy >= 0.12.0, < 1.0" "pluggy" \
       --replace "pygmars >= 0.7.0" "pygmars" \
-      --replace "license_expression >= 21.6.14" "license_expression"
+      --replace "license_expression >= 21.6.14" "license_expression" \
+      --replace "intbitset >= 2.3.0,  < 3.0" "intbitset"
   '';
 
   # Importing scancode needs a writeable home, and preCheck happens in between

@@ -1,10 +1,10 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, libtool
 , threadingSupport ? true # multi-threading
-, openglSupport ? false, freeglut ? null, libGL ? null, libGLU ? null # OpenGL (required for vwebp)
-, pngSupport ? true, libpng ? null # PNG image format
-, jpegSupport ? true, libjpeg ? null # JPEG image format
-, tiffSupport ? true, libtiff ? null # TIFF image format
-, gifSupport ? true, giflib ? null # GIF image format
+, openglSupport ? false, freeglut, libGL, libGLU # OpenGL (required for vwebp)
+, pngSupport ? true, libpng # PNG image format
+, jpegSupport ? true, libjpeg # JPEG image format
+, tiffSupport ? true, libtiff # TIFF image format
+, gifSupport ? true, giflib # GIF image format
 #, wicSupport ? true # Windows Imaging Component
 , alignedSupport ? false # Force aligned memory operations
 , swap16bitcspSupport ? false # Byte swap for 16bit color spaces
@@ -13,12 +13,6 @@
 , libwebpdemuxSupport ? true # Build libwebpdemux
 , libwebpdecoderSupport ? true # Build libwebpdecoder
 }:
-
-assert openglSupport -> freeglut != null && libGL != null && libGLU != null;
-assert pngSupport -> (libpng != null);
-assert jpegSupport -> (libjpeg != null);
-assert tiffSupport -> (libtiff != null);
-assert gifSupport -> (giflib != null);
 
 let
   mkFlag = optSet: flag: if optSet then "--enable-${flag}" else "--disable-${flag}";

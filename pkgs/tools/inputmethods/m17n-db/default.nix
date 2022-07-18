@@ -14,8 +14,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  configureFlags = lib.optional (stdenv ? glibc)
-    "--with-charmaps=${stdenv.glibc.out}/share/i18n/charmaps"
+  configureFlags = [ "--with-charmaps=${stdenv.cc.libc}/share/i18n/charmaps" ]
   ;
 
   meta = {

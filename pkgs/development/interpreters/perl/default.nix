@@ -1,6 +1,7 @@
-{ config, lib, stdenv, fetchurl, fetchpatch, fetchFromGitHub, pkgs, buildPackages
+{ config, lib, stdenv, fetchurl, fetchFromGitHub, pkgs, buildPackages
 , callPackage
 , enableThreading ? true, coreutils, makeWrapper
+, zlib
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -19,14 +20,14 @@ let
 
   common = { perl, buildPerl, version, sha256 }: stdenv.mkDerivation (rec {
     inherit version;
-
-    name = "perl-${version}";
+    pname = "perl";
 
     src = fetchurl {
-      url = "mirror://cpan/src/5.0/${name}.tar.gz";
+      url = "mirror://cpan/src/5.0/perl-${version}.tar.gz";
       inherit sha256;
     };
 
+    strictDeps = true;
     # TODO: Add a "dev" output containing the header files.
     outputs = [ "out" "man" "devdoc" ] ++
       optional crossCompiling "mini";
@@ -41,14 +42,7 @@ let
       ]
       ++ optional stdenv.isSunOS ./ld-shared.patch
       ++ optionals stdenv.isDarwin [ ./cpp-precomp.patch ./sw_vers.patch ]
-      ++ optionals crossCompiling [
-        ./MakeMaker-cross.patch
-        # https://github.com/arsv/perl-cross/pull/120
-        (fetchpatch {
-          url = "https://github.com/arsv/perl-cross/commit/3c318ae6572f8b36cb077c8b49c851e2f5fe181e.patch";
-          sha256 = "0cmcy8bams3c68f6xadl52z2w378wcpdjzi3qi4pcyvcfs011l6g";
-        })
-      ];
+      ++ optional crossCompiling ./MakeMaker-cross.patch;
 
     # This is not done for native builds because pwd may need to come from
     # bootstrap tools when building bootstrap perl.
@@ -115,6 +109,16 @@ let
         myhostname="nixpkgs"
         cf_by="nixpkgs"
         cf_time="$(date -d "@$SOURCE_DATE_EPOCH")"
+        EOF
+
+        # Compress::Raw::Zlib should use our zlib package instead of the one
+        # included with the distribution
+        cat > ./cpan/Compress-Raw-Zlib/config.in <<EOF
+        BUILD_ZLIB   = False
+        INCLUDE      = ${zlib.dev}/include
+        LIB          = ${zlib.out}/lib
+        OLD_ZLIB     = False
+        GZIP_OS_CODE = AUTO_DETECT
         EOF
       '' + optionalString stdenv.isDarwin ''
         substituteInPlace hints/darwin.sh --replace "env MACOSX_DEPLOYMENT_TARGET=10.3" ""
@@ -194,14 +198,14 @@ let
       priority = 6; # in `buildEnv' (including the one inside `perl.withPackages') the library files will have priority over files in `perl`
     };
   } // optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
-    crossVersion = "393821c7cf53774233aaf130ff2c8ccec701b0a9"; # Sep 22, 2021
+    crossVersion = "31dac3e264a7f1f53dbf49570771123ebd514055"; # May 03, 2022
 
     perl-cross-src = fetchFromGitHub {
-      name = "perl-cross-${crossVersion}";
+      name = "perl-cross-unstable-${crossVersion}";
       owner = "arsv";
       repo = "perl-cross";
       rev = crossVersion;
-      sha256 = "1fn35b1773aibi2z54m0mar7114737mvfyp81wkdwhakrmzr5nv1";
+      sha256 = "sha256-5hLUP34WwTFRsG0o8zSJm8WM3WfBAhHeYrrQF2MtMKc=";
     };
 
     depsBuildBuild = [ buildPackages.stdenv.cc makeWrapper ];
@@ -230,15 +234,15 @@ in {
   perl534 = common {
     perl = pkgs.perl534;
     buildPerl = buildPackages.perl534;
-    version = "5.34.0";
-    sha256 = "16mywn5afpv1mczv9dlc1w84rbgjgrr0pyr4c0hhb2wnif0zq7jm";
+    version = "5.34.1";
+    sha256 = "sha256-NXlRpJGwuhzjYRJjki/ux4zNWB3dwkpEawM+JazyQqE=";
   };
 
   # the latest Devel version
   perldevel = common {
     perl = pkgs.perldevel;
     buildPerl = buildPackages.perldevel;
-    version = "5.35.4";
-    sha256 = "1ss2r0qq5li6d2qghfv1iah5nl6nraymd7b7ib1iy1395rwyhl4q";
+    version = "5.35.9";
+    sha256 = "sha256-/nmSCIIXHXoC68DxFM9b5GM2AKU4WlLbfWLgduanL7U=";
   };
 }

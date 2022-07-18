@@ -1,31 +1,37 @@
 { config, lib, pkgs, ... }:
 
 with lib;
+
 let
   cfg = config.services.shellhub-agent;
-in {
-
+in
+{
   ###### interface
 
   options = {
 
     services.shellhub-agent = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
+      enable = mkEnableOption "ShellHub Agent daemon";
+
+      package = mkPackageOption pkgs "shellhub-agent" { };
+
+      preferredHostname = mkOption {
+        type = types.str;
+        default = "";
         description = ''
-          Whether to enable the ShellHub Agent daemon, which allows
-          secure remote logins.
+          Set the device preferred hostname. This provides a hint to
+          the server to use this as hostname if it is available.
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.shellhub-agent;
-        defaultText = literalExpression "pkgs.shellhub-agent";
+      keepAliveInterval = mkOption {
+        type = types.int;
+        default = 30;
         description = ''
-          Which ShellHub Agent package to use.
+          Determine the interval to send the keep alive message to
+          the server. This has a direct impact of the bandwidth
+          used by the device.
         '';
       };
 
@@ -74,9 +80,13 @@ in {
         "time-sync.target"
       ];
 
-      environment.SERVER_ADDRESS = cfg.server;
-      environment.PRIVATE_KEY = cfg.privateKey;
-      environment.TENANT_ID = cfg.tenantId;
+      environment = {
+        SHELLHUB_SERVER_ADDRESS = cfg.server;
+        SHELLHUB_PRIVATE_KEY = cfg.privateKey;
+        SHELLHUB_TENANT_ID = cfg.tenantId;
+        SHELLHUB_KEEPALIVE_INTERVAL = toString cfg.keepAliveInterval;
+        SHELLHUB_PREFERRED_HOSTNAME = cfg.preferredHostname;
+      };
 
       serviceConfig = {
         # The service starts sessions for different users.
@@ -85,7 +95,6 @@ in {
         ExecStart = "${cfg.package}/bin/agent";
       };
     };
-
-    environment.systemPackages = [ cfg.package ];
   };
 }
+
