@@ -171,15 +171,6 @@ preConfigure() {
         rm -Rf zlib
     fi
 
-    if test -f "$NIX_CC/nix-support/orig-libc"; then
-        # Patch the configure script so it finds glibc headers.  It's
-        # important for example in order not to get libssp built,
-        # because its functionality is in glibc already.
-        sed -i \
-            -e "s,glibc_header_dir=/usr/include,glibc_header_dir=$libc_dev/include", \
-            gcc/configure
-    fi
-
     if test -n "$crossMingw" -a -n "$crossStageStatic"; then
         mkdir -p ../mingw
         # --with-build-sysroot expects that:
