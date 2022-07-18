@@ -50,6 +50,8 @@ in
       $out/share/satysfi
     '';
 
+    DUNE_PROFILE = "release";
+
     nativeBuildInputs = [ ruby dune_2 ];
 
     buildInputs = [ camlpdf otfm yojson-with-position ] ++ (with ocamlPackages; [

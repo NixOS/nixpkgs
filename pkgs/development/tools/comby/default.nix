@@ -26,6 +26,8 @@ let
         sha256 = "0k60hj8wcrvrk0isr210vnalylkd63ria1kgz5n49inl7w1hfwpv";
       };
 
+      patches = [ ./comby.patch ];
+
       nativeBuildInputs = [
         ocamlPackages.ppx_deriving
         ocamlPackages.ppx_deriving_yojson
@@ -35,6 +37,7 @@ let
 
       buildInputs = [
         ocamlPackages.core
+        ocamlPackages.core_kernel
         ocamlPackages.ocaml_pcre
         ocamlPackages.mparser
         ocamlPackages.mparser-pcre

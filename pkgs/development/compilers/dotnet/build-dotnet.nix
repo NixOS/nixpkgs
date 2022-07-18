@@ -47,14 +47,11 @@ stdenv.mkDerivation rec {
     libunwind
     libuuid
     openssl
-  ] ++ lib.optionals stdenv.isLinux [
-    lttng-ust_2_12
-  ]);
+  ] ++ lib.optional stdenv.isLinux lttng-ust_2_12);
 
   nativeBuildInputs = [
-    autoPatchelfHook
     makeWrapper
-  ];
+  ] ++ lib.optional stdenv.isLinux autoPatchelfHook;
 
   buildInputs = [
     stdenv.cc.cc

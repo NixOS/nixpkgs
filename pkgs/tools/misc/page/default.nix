@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "page";
-  version = "3.1.0";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "I60R";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-3XRtTiIqUI2j9kmsg0yeuipgHEzdJRG2abO3Ll7ukmA=";
+    sha256 = "sha256-e6GkvIojMfsIm4UxRyEvvNkZPGSmUnf9K/0ZISy8kj4=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --zsh $completions_dir/_page
   '';
 
-  cargoSha256 = "sha256-4Z58OkCvlGXmuTeVl0me3a/YImcKwggF9tXfenQnjtA=";
+  cargoSha256 = "sha256-qyaHW4mbJXZ/iGQlIzmTo2dgPLC9JlPKBee+uAuW5PQ=";
 
   meta = with lib; {
     description = "Use neovim as pager";

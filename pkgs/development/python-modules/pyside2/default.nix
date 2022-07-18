@@ -24,13 +24,21 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake ninja qt5.qmake python ];
-  buildInputs = with qt5; [
+  buildInputs = (with qt5; [
     qtbase qtxmlpatterns qtmultimedia qttools qtx11extras qtlocation qtscript
     qtwebsockets qtwebengine qtwebchannel qtcharts qtsensors qtsvg
+  ]) ++ [
+    python.pkgs.setuptools
   ];
   propagatedBuildInputs = [ shiboken2 ];
 
   dontWrapQtApps = true;
+
+  postInstall = ''
+    cd ../../..
+    ${python.interpreter} setup.py egg_info --build-type=pyside2
+    cp -r PySide2.egg-info $out/${python.sitePackages}/
+  '';
 
   meta = with lib; {
     description = "LGPL-licensed Python bindings for Qt";
