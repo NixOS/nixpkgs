@@ -7,6 +7,7 @@ with builtins; with lib; let
     { case = "8.13"; out = { version = "1.13.7"; };}
     { case = "8.14"; out = { version = "1.13.7"; };}
     { case = "8.15"; out = { version = "1.15.0"; };}
+    { case = "8.16"; out = { version = "1.16.5"; };}
   ] {} );
 in mkCoqDerivation {
   pname = "elpi";
@@ -14,12 +15,14 @@ in mkCoqDerivation {
   owner = "LPCIC";
   inherit version;
   defaultVersion = lib.switch coq.coq-version [
+    { case = "8.16"; out = "1.15.1"; }
     { case = "8.15"; out = "1.14.0"; }
     { case = "8.14"; out = "1.11.2"; }
     { case = "8.13"; out = "1.11.1"; }
     { case = "8.12"; out = "1.8.3_8.12"; }
     { case = "8.11"; out = "1.6.3_8.11"; }
   ] null;
+  release."1.15.1".sha256     = "sha256-NT2RlcIsFB9AvBhMxil4ZZIgx+KusMqDflj2HgQxsZg=";
   release."1.14.0".sha256     = "sha256:1v2p5dlpviwzky2i14cj7gcgf8cr0j54bdm9fl5iz1ckx60j6nvp";
   release."1.13.0".sha256     = "1j7s7dlnjbw222gnbrsjgmjck1yrx7h6hwm8zikcyxi0zys17w7n";
   release."1.12.1".sha256     = "sha256-4mO6/co7NcIQSGIQJyoO8lNWXr6dqz+bIYPO/G0cPkY=";
