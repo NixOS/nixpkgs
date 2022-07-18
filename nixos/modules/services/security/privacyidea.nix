@@ -329,7 +329,7 @@ in
           Group = cfg.ldap-proxy.group;
           StateDirectory = "privacyidea-ldap-proxy";
           EnvironmentFile = mkIf (cfg.ldap-proxy.environmentFile != null)
-            cfg.ldap-proxy.environmentFile;
+            [ cfg.ldap-proxy.environmentFile ];
           ExecStartPre =
             "${pkgs.writeShellScript "substitute-secrets-ldap-proxy" ''
               ${pkgs.envsubst}/bin/envsubst \
