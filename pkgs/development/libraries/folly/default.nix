@@ -16,6 +16,7 @@
 , xz
 , zlib
 , zstd
+, jemalloc
 , follyMobile ? false
 }:
 
@@ -50,7 +51,10 @@ stdenv.mkDerivation rec {
     libunwind
     fmt_8
     zstd
-  ];
+  ] ++ lib.optional stdenv.isLinux jemalloc;
+
+  # jemalloc headers are required in include/folly/portability/Malloc.h
+  propagatedBuildInputs = lib.optional stdenv.isLinux jemalloc;
 
   NIX_CFLAGS_COMPILE = [ "-DFOLLY_MOBILE=${if follyMobile then "1" else "0"}" "-fpermissive" ];
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];

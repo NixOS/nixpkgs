@@ -12,22 +12,21 @@ deployAndroidPackage {
   nativeBuildInputs = [ makeWrapper ]
     ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
   autoPatchelfIgnoreMissingDeps = true;
-  buildInputs = lib.optional (os == "linux") [ pkgs.glibc pkgs.stdenv.cc.cc pkgs.python2 pkgs.ncurses5 pkgs.zlib pkgs.libcxx.out pkgs.libxml2 ];
+  buildInputs = lib.optional (os == "linux") [ pkgs.zlib ];
   patchInstructions = lib.optionalString (os == "linux") (''
     patchShebangs .
 
-    # Fix the shebangs of the auto-generated scripts.
-    substituteInPlace ./build/tools/make_standalone_toolchain.py \
-      --replace '#!/bin/bash' '#!${pkgs.bash}/bin/bash'
-
-  '' + lib.optionalString (builtins.compareVersions (lib.getVersion package) "21" > 0) ''
-    patch -p1 \
-      --no-backup-if-mismatch < ${./make_standalone_toolchain.py_18.patch} || true
-    wrapProgram ./build/tools/make_standalone_toolchain.py --prefix PATH : "${runtime_paths}"
-  '' + ''
-
     # TODO: allow this stuff
     rm -rf docs tests
+
+    # Ndk now has a prebuilt toolchains inside, the file layout has changed, we do a symlink
+    # to still support the old standalone toolchains builds.
+    if [ -d $out/libexec/android-sdk/ndk ] && [ ! -d $out/libexec/android-sdk/ndk-bundle ]; then
+        ln -sf $out/libexec/android-sdk/ndk/${package.revision} $out/libexec/android-sdk/ndk-bundle
+    else
+        echo "The ndk-bundle layout has changed. The nix expressions have to be updated!"
+        exit 1
+    fi
 
     # Patch the executables of the toolchains, but not the libraries -- they are needed for crosscompiling
     if [ -d $out/libexec/android-sdk/ndk-bundle/toolchains/renderscript/prebuilt/linux-x86_64/lib64 ]; then

@@ -1,27 +1,28 @@
 { absl-py
 , buildPythonPackage
 , chex
-, dm-haiku
 , fetchFromGitHub
 , jaxlib
 , lib
 , numpy
-, pytest-xdist
-, pytestCheckHook
-, tensorflow
-, tensorflow-datasets
+, callPackage
 }:
 
 buildPythonPackage rec {
   pname = "optax";
-  version = "0.1.1";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-s/BcqzhdfWzR61MStusUPQtuT4+t8NcC5gBGiGggFqw=";
+    hash = "sha256-XAYztMBQpLBHNuNED/iodbwIMJSN/0GxdmTGQ5jD9Ws=";
   };
+
+  outputs = [
+    "out"
+    "testsout"
+  ];
 
   buildInputs = [ jaxlib ];
 
@@ -31,24 +32,21 @@ buildPythonPackage rec {
     numpy
   ];
 
-  checkInputs = [
-    dm-haiku
-    pytest-xdist
-    pytestCheckHook
-    tensorflow
-    tensorflow-datasets
-  ];
+  postInstall = ''
+    mkdir $testsout
+    cp -R examples $testsout/examples
+  '';
 
   pythonImportsCheck = [
     "optax"
   ];
 
-  disabledTestPaths = [
-    # Requires `flax` which depends on `optax` creating circular dependency.
-    "optax/_src/equivalence_test.py"
-    # See https://github.com/deepmind/optax/issues/323.
-    "examples/lookahead_mnist_test.py"
-  ];
+  # check in passthru.tests.pytest to escape infinite recursion with flax
+  doCheck = false;
+
+  passthru.tests = {
+    pytest = callPackage ./tests.nix { };
+  };
 
   meta = with lib; {
     description = "Optax is a gradient processing and optimization library for JAX.";

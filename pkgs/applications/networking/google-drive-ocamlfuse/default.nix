@@ -1,5 +1,5 @@
 { lib, buildDunePackage, fetchFromGitHub
-, ocaml_extlib, ocamlfuse, gapi_ocaml, ocaml_sqlite3
+, ocaml_extlib, ocamlfuse, gapi-ocaml, ocaml_sqlite3
 , tiny_httpd
 , ounit
 }:
@@ -18,7 +18,7 @@ buildDunePackage rec {
   doCheck = true;
   checkInputs = [ ounit ];
 
-  buildInputs = [ ocaml_extlib ocamlfuse gapi_ocaml ocaml_sqlite3 tiny_httpd ];
+  buildInputs = [ ocaml_extlib ocamlfuse gapi-ocaml ocaml_sqlite3 tiny_httpd ];
 
   meta = {
     inherit (src.meta) homepage;

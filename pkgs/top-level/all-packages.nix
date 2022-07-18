@@ -214,6 +214,8 @@ with pkgs;
 
   quickemu = callPackage ../development/quickemu { };
 
+  adcli = callPackage ../os-specific/linux/adcli { };
+
   aether = callPackage ../applications/networking/aether { };
 
   alda = callPackage ../development/interpreters/alda { };
@@ -2672,9 +2674,10 @@ with pkgs;
     pkgs_i686 = pkgsi686Linux;
   };
 
-  androidndkPkgs = androidndkPkgs_18b;
-  androidndkPkgs_18b = (callPackage ../development/androidndk-pkgs {})."18b";
+  androidndkPkgs = androidndkPkgs_21;
   androidndkPkgs_21 = (callPackage ../development/androidndk-pkgs {})."21";
+  androidndkPkgs_23b = (callPackage ../development/androidndk-pkgs {})."23b";
+  androidndkPkgs_24 = (callPackage ../development/androidndk-pkgs {})."24";
 
   androidsdk_9_0 = androidenv.androidPkgs_9_0.androidsdk;
 
@@ -3745,6 +3748,8 @@ with pkgs;
   fx_cast_bridge = callPackage ../tools/misc/fx_cast { };
 
   fzf = callPackage ../tools/misc/fzf { };
+
+  fzf-obc = callPackage ../shells/bash/fzf-obc { };
 
   fzf-zsh = callPackage ../shells/zsh/fzf-zsh { };
 
@@ -9186,6 +9191,8 @@ with pkgs;
   openapi-generator-cli = callPackage ../tools/networking/openapi-generator-cli { jre = pkgs.jre_headless; };
   openapi-generator-cli-unstable = callPackage ../tools/networking/openapi-generator-cli/unstable.nix { jre = pkgs.jre_headless; };
 
+  openbangla-keyboard = libsForQt5.callPackage ../applications/misc/openbangla-keyboard { };
+
   openboard = libsForQt5.callPackage ../applications/graphics/openboard { };
 
   opencc = callPackage ../tools/text/opencc { };
@@ -13946,6 +13953,8 @@ with pkgs;
   };
 
   opam-installer = callPackage ../development/tools/ocaml/opam/installer.nix { };
+
+  opam2json = callPackage ../development/tools/ocaml/opam2json { };
 
   wrapWatcom = callPackage ../development/compilers/open-watcom/wrapper.nix { };
   open-watcom-v2-unwrapped = callPackage ../development/compilers/open-watcom/v2.nix { };

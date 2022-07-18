@@ -21,7 +21,7 @@
 }:
 
 let
-  version = "4.2.1";
+  version = "4.2.2";
 
   libsecp256k1_name =
     if stdenv.isLinux then "libsecp256k1.so.0"
@@ -37,7 +37,7 @@ let
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "sha256-BoikYSsQZAv8WswIr5nmBsGmjZbTXaLAbdO2QtPvc7c=";
+    sha256 = "sha256-bFceOu+3SLtD2eY+aSBEn13xJw7a3aVwX39QfAuqVSo=";
 
     postFetch = ''
       mv $out ./all
@@ -53,7 +53,7 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "sha256-2SxSTH9P380j2KaCbkXjgmQO7K2z81AG6PMA/EMggXA=";
+    sha256 = "sha256-ucLLfqmTKO5Qpg+PnmcdQwht7cWMWJoFjQWnDecEtVs=";
   };
 
   postUnpack = ''

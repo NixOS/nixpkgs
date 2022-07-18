@@ -264,8 +264,6 @@ def main() -> None:
         if installed_version < available_version:
             print("updating systemd-boot from %s to %s" % (installed_version, available_version))
             subprocess.check_call(["@systemd@/bin/bootctl", "--path=@efiSysMountPoint@", "update"])
-        else:
-            print("leaving systemd-boot %s in place (%s is not newer)" % (installed_version, available_version))
 
     mkdir_p("@efiSysMountPoint@/efi/nixos")
     mkdir_p("@efiSysMountPoint@/loader/entries")
