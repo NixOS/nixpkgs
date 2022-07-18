@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, zlib, libpng, libjpeg, SystemConfiguration, Foundation, pkg-config }:
+{ lib, stdenv, testers, fetchFromGitHub, zlib, libpng, libjpeg, SystemConfiguration, Foundation, pkg-config, htmldoc }:
 
 stdenv.mkDerivation rec {
   pname = "htmldoc";
   version = "1.9.16";
   src = fetchFromGitHub {
     owner = "michaelrsweet";
-    repo = "htmldoc";
+    repo = pname;
     rev = "v${version}";
     sha256 = "117cj5sfzl18gan53ld8lxb0wycizcp9jcakcs3nsvnss99rw3a6";
   };
@@ -19,6 +19,11 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace configure --replace "-arch x86_64 -arch arm64" ""
   '';
+
+  passthru.tests = testers.testVersion {
+    package = htmldoc;
+    command = "htmldoc --version";
+  };
 
   meta = with lib; {
     description = "Converts HTML files to PostScript and PDF";
