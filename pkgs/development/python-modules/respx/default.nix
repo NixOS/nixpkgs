@@ -35,6 +35,10 @@ buildPythonPackage rec {
     trio
   ];
 
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
+  ];
+
   postPatch = ''
     sed -i "/--cov/d" setup.cfg
   '';
