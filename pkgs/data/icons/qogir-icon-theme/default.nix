@@ -28,9 +28,12 @@ stdenvNoCC.mkDerivation rec {
   dontPatchELF = true;
   dontRewriteSymlinks = true;
 
+  postPatch = ''
+    patchShebangs install.sh
+  '';
+
   installPhase = ''
     runHook preInstall
-    patchShebangs install.sh
     mkdir -p $out/share/icons
     name= ./install.sh -d $out/share/icons
     jdupes -L -r $out/share/icons
