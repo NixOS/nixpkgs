@@ -7262,7 +7262,9 @@ with pkgs;
 
   hurl = callPackage ../tools/networking/hurl { };
 
-  hub = callPackage ../applications/version-management/git-and-tools/hub { };
+  hub = callPackage ../applications/version-management/git-and-tools/hub {
+    buildGoPackage = buildGo117Package;
+  };
 
   hubicfuse = callPackage ../tools/filesystems/hubicfuse { };
 
