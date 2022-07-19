@@ -214,6 +214,7 @@ in python.pkgs.buildPythonApplication rec {
       "bcrypt"
       "cryptography"
       "httpx"
+      "ifaddr"
       "orjson"
       "PyJWT"
       "requests"
