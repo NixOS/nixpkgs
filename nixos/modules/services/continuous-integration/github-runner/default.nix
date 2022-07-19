@@ -49,9 +49,13 @@ in
     tokenFile = mkOption {
       type = types.path;
       description = ''
-        The full path to a file which contains the runner registration token.
-        The file should contain exactly one line with the token without any newline.
-        The token can be used to re-register a runner of the same name but is time-limited.
+        The full path to a file which contains either a runner registration token or a
+        personal access token (PAT).
+        If a registration token is given, it can be used to re-register a runner of the same
+        name but is time-limited. If the file contains a PAT, the service creates a new
+        registration token on startup as needed. Make sure the PAT has a scope of
+        <literal>admin:org</literal> for organization-wide registrations or a scope of
+        <literal>repo</literal> for a single repository.
 
         Changing this option or the file's content triggers a new runner registration.
       '';
@@ -213,7 +217,10 @@ in
               if [[ -e "$STATE_DIRECTORY/${newConfigTokenFilename}" ]]; then
                 echo "Configuring GitHub Actions Runner"
 
-                token=$(< "$STATE_DIRECTORY"/${newConfigTokenFilename})
+                token=$(${pkgs.python3.interpreter} ${./query_registration_token.py} \
+                  --token-file "$STATE_DIRECTORY/${newConfigTokenFilename}" \
+                  --url ${escapeShellArg cfg.url})
+
                 RUNNER_ROOT="$STATE_DIRECTORY" ${cfg.package}/bin/config.sh \
                   --unattended \
                   --disableupdate \

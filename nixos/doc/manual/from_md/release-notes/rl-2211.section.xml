@@ -296,6 +296,15 @@
       </listitem>
       <listitem>
         <para>
+          <literal>github-runner</literal> gained support for runner
+          registration using a personal access token (PAT) instead of a
+          registration token. See
+          <literal>services.github-runner.tokenFile</literal> for usage
+          instructions.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           A new module was added for the Saleae Logic device family,
           providing the options
           <literal>hardware.saleae-logic.enable</literal> and
