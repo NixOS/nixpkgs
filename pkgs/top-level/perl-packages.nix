@@ -14964,10 +14964,10 @@ let
 
   MojoIOLoopForkCall = buildPerlModule {
     pname = "Mojo-IOLoop-ForkCall";
-    version = "0.20";
+    version = "0.21";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JB/JBERGER/Mojo-IOLoop-ForkCall-0.20.tar.gz";
-      sha256 = "2b9962244c25a71e4757356fb3e1237cf869e26d1c27215115ba7b057a81f1a6";
+      url = "mirror://cpan/authors/id/J/JB/JBERGER/Mojo-IOLoop-ForkCall-0.21.tar.gz";
+      sha256 = "sha256-8dpdh4RxvdhvAcQjhQgAgE9ttCtUU8IW8Jslt5RYS3g=";
     };
     propagatedBuildInputs = [ IOPipely Mojolicious MojoIOLoopDelay ];
     preBuild = ''
