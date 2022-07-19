@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Haruno19/starfetch";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ papojari ];
+    maintainers = with maintainers; [ annaaurora ];
   };
 }
