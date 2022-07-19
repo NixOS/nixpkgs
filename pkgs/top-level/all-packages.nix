@@ -15737,7 +15737,9 @@ with pkgs;
       binutils = binutils;
     };
 
-  dive = callPackage ../development/tools/dive { };
+  dive = callPackage ../development/tools/dive {
+    buildGoModule = buildGo117Module;
+  };
 
   doclifter = callPackage ../development/tools/misc/doclifter { };
 
