@@ -20197,10 +20197,10 @@ let
 
   SQLAbstractLimit = buildPerlPackage {
     pname = "SQL-Abstract-Limit";
-    version = "0.142";
+    version = "0.143";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AS/ASB/SQL-Abstract-Limit-0.142.tar.gz";
-      sha256 = "0y2q7mxngm9m2kvr6isvxra4frb1cjbiplp381p6hhifn7xfz8fl";
+      url = "mirror://cpan/authors/id/A/AS/ASB/SQL-Abstract-Limit-0.143.tar.gz";
+      sha256 = "sha256-0Yr9eIk72DC6JGXArmozQlRgFZADhk3tO1rc9RGJyuk=";
     };
     propagatedBuildInputs = [ DBI SQLAbstract ];
     buildInputs = [ TestDeep TestException ];
