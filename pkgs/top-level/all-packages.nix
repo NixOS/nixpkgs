@@ -24658,6 +24658,8 @@ with pkgs;
 
   colloid-gtk-theme = callPackage ../data/themes/colloid-gtk-theme { };
 
+  colloid-icon-theme = callPackage ../data/icons/colloid-icon-theme { };
+
   comfortaa = callPackage ../data/fonts/comfortaa {};
 
   comic-mono = callPackage ../data/fonts/comic-mono { };
