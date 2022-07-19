@@ -104,8 +104,6 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   darwin-stubs = callPackage ../os-specific/darwin/darwin-stubs { };
 
-  print-reexports = callPackage ../os-specific/darwin/print-reexports { };
-
   rewrite-tbd = callPackage ../os-specific/darwin/rewrite-tbd { };
 
   checkReexportsHook = pkgs.makeSetupHook {

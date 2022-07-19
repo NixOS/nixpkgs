@@ -252,11 +252,6 @@ rec {
            ln -s ${bootstrapTools}/bin/codesign $out/bin
         '';
 
-        print-reexports = self.runCommandLocal "bootstrap-stage0-print-reexports" { } ''
-          mkdir -p $out/bin
-          ln -s ${bootstrapTools}/bin/print-reexports $out/bin
-        '';
-
         rewrite-tbd = self.runCommandLocal "bootstrap-stage0-rewrite-tbd" { } ''
           mkdir -p $out/bin
           ln -s ${bootstrapTools}/bin/rewrite-tbd $out/bin
