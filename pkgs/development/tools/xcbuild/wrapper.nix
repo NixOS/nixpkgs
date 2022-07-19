@@ -55,7 +55,8 @@ done
 while [ $# -gt 0 ]; do
    case "$1" in
          --sdk | -sdk) shift ;;
-         --find | -find)
+         --toolchain | -toolchain) shift ;;
+         --find | -find | -f)
            shift
            command -v $1 ;;
          --log | -log) ;; # noop
