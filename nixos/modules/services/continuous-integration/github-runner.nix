@@ -280,7 +280,6 @@ in
         CapabilityBoundingSet = "";
         # ProtectClock= adds DeviceAllow=char-rtc r
         DeviceAllow = "";
-        LockPersonality = true;
         NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateMounts = true;
@@ -300,13 +299,17 @@ in
         RestrictSUIDSGID = true;
         UMask = "0066";
         ProtectProc = "invisible";
-        ProcSubset = "pid";
         SystemCallFilter = [
-          "~@debug"
-          "~@mount"
-          "~@privileged"
+          "~@capset"
+          "~@clock"
           "~@cpu-emulation"
+          "~@module"
+          "~@mount"
           "~@obsolete"
+          "~@raw-io"
+          "~@reboot"
+          "~setdomainname"
+          "~sethostname"
         ];
         RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" "AF_NETLINK" ];
 
@@ -314,6 +317,17 @@ in
         PrivateNetwork = false;
         # Cannot be true due to Node
         MemoryDenyWriteExecute = false;
+
+        # The more restrictive "pid" option makes `nix` commands in CI emit
+        # "GC Warning: Couldn't read /proc/stat"
+        # You may want to set this to "pid" if not using `nix` commands
+        ProcSubset = "all";
+        # Coverage programs for compiled code such as `cargo-tarpaulin` disable
+        # ASLR (address space layout randomization) which requires the
+        # `personality` syscall
+        # You may want to set this to `true` if not using coverage tooling on
+        # compiled code
+        LockPersonality = false;
       };
     };
   };

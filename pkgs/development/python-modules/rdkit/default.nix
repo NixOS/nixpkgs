@@ -133,6 +133,7 @@ buildPythonPackage rec {
     "-DBOOST_ROOT=${boost}"
     "-DBoost_NO_SYSTEM_PATHS=ON"
     "-DBoost_NO_BOOST_CMAKE=TRUE"
+    "-DCMAKE_SKIP_BUILD_RPATH=ON" # fails to find libs in pythonImportsCheckPhase otherwise
   ];
 
   checkPhase = ''

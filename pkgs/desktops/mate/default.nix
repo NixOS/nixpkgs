@@ -6,9 +6,10 @@ let
   self = rec {
 
     # Update script tailored to mate packages from git repository
-    mateUpdateScript = { pname, version, odd-unstable ? true, url ? "https://pub.mate-desktop.org/releases" }:
-      pkgs.httpTwoLevelsUpdater {
-        inherit pname version odd-unstable url;
+    mateUpdateScript = { pname, version, odd-unstable ? true, rev-prefix ? "v", url ? null }:
+      pkgs.gitUpdater {
+        inherit pname version odd-unstable rev-prefix;
+        url = if url == null then "https://git.mate-desktop.org/${pname}" else url;
         attrPath = "mate.${pname}";
       };
 
