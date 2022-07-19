@@ -155,8 +155,7 @@ let
     };
 
   python = python3.override {
-    # Put packageOverrides at the start so they are applied after defaultOverrides
-    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([ packageOverrides ] ++ defaultOverrides);
+    packageOverrides = lib.composeManyExtensions (defaultOverrides ++ [ packageOverrides ]);
   };
 
   componentPackages = import ./component-packages.nix;
