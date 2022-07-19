@@ -34,7 +34,6 @@ lib.makeScopeWithSplicing splicePackages newScope otherSplices (_: {}) (spliced:
 
   # macOS 10.12 SDK
   apple_sdk_10_12 = pkgs.callPackage ../os-specific/darwin/apple-sdk {
-    inherit (buildPackages.darwin) print-reexports;
     inherit (self) darwin-stubs;
   };
 
