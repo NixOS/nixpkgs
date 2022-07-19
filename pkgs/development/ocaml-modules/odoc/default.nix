@@ -1,6 +1,6 @@
 { lib, fetchurl, buildDunePackage, ocaml
 , astring, cmdliner, cppo, fpath, result, tyxml
-, markup, alcotest, yojson, sexplib0, jq
+, markup, yojson, sexplib0, jq
 , odoc-parser, ppx_expect, bash, fmt
 }:
 
