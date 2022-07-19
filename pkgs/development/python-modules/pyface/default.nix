@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyface";
-  version = "7.4.1";
+  version = "7.4.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-UtzzZ5yj5hCjynxLmQSpbGkWiASNtdflKvjlAZ5HrbY=";
+    sha256 = "sha256-YT7TAcubr7m6o3xEeT13XQPdI9hD7rkm/xPPaJ6v6N0=";
   };
 
   propagatedBuildInputs = [
