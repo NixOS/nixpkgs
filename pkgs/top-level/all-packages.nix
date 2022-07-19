@@ -15041,7 +15041,8 @@ with pkgs;
 
   svdtools = callPackage ../development/embedded/svdtools { };
 
-  swift = callPackage ../development/compilers/swift { };
+  swiftPackages = recurseIntoAttrs (callPackage ../development/compilers/swift { });
+  inherit (swiftPackages) swift;
 
   swiProlog = callPackage ../development/compilers/swi-prolog {
     openssl = openssl_1_1;
