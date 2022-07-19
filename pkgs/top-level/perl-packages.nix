@@ -20206,6 +20206,22 @@ let
     buildInputs = [ TestDeep TestException ];
   };
 
+  SQLAbstractPg = buildPerlPackage {
+    pname = "SQL-Abstract-Pg";
+    version = "1.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SR/SRI/SQL-Abstract-Pg-1.0.tar.gz";
+      sha256 = "sha256-Pic2DfN7jYjzxS2smwNJP5vT7v9sjYj5sIbScRVT9Uc=";
+    };
+    buildInputs = [ TestDeep ];
+    propagatedBuildInputs = [ SQLAbstract ];
+    meta = {
+      homepage = "https://github.com/mojolicious/sql-abstract-pg";
+      description = "PostgreSQL features for SQL::Abstract";
+      license = lib.licenses.artistic2;
+    };
+  };
+
   SQLSplitStatement = buildPerlPackage {
     pname = "SQL-SplitStatement";
     version = "1.00020";
