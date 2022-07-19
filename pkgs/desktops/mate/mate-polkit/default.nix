@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, gobject-introspection, libappindicator-gtk3, libindicator-gtk3, polkit, mateUpdateScript }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, gtk3
+, gobject-introspection
+, libappindicator-gtk3
+, libindicator-gtk3
+, polkit
+, mateUpdateScript
+}:
 
 stdenv.mkDerivation rec {
   pname = "mate-polkit";

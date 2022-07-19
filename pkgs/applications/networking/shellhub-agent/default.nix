@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "shellhub-agent";
-  version = "0.9.3";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "shellhub-io";
     repo = "shellhub";
     rev = "v${version}";
-    sha256 = "WSK2b1DYSYEFqmVIOlhjFGyqC9ok/9rWAz2ZgUZejzo=";
+    sha256 = "WcxRVup7wjA9YNyL6UpFoMfkCmXixfbYatcrmA4OHh4=";
   };
 
   modRoot = "./agent";

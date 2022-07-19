@@ -1,7 +1,7 @@
-{ mkDerivation, SDL2_image, SDL2_ttf, SDL2_net, fpc, ghcWithPackages, ffmpeg, freeglut
+{ stdenv, SDL2_image, SDL2_ttf, SDL2_net, fpc, ghcWithPackages, ffmpeg, freeglut
 , lib, fetchurl, cmake, pkg-config, lua5_1, SDL2, SDL2_mixer
 , zlib, libpng, libGL, libGLU, physfs
-, qtbase, qttools
+, qtbase, qttools, wrapQtAppsHook
 , llvm
 , withServer ? true
 }:
@@ -14,7 +14,7 @@ let
         ]);
 
 in
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "hedgewars";
   version = "1.0.0";
 
@@ -23,7 +23,7 @@ mkDerivation rec {
     sha256 = "0nqm9w02m0xkndlsj6ys3wr0ik8zc14zgilq7k6fwjrf3zk385i1";
   };
 
-  nativeBuildInputs = [ cmake pkg-config qttools ];
+  nativeBuildInputs = [ cmake pkg-config qttools wrapQtAppsHook ];
 
   buildInputs = [
     SDL2_ttf SDL2_net SDL2 SDL2_mixer SDL2_image
@@ -103,10 +103,5 @@ mkDerivation rec {
        all movement on the battlefield has ceased).'';
     maintainers = with maintainers; [ kragniz fpletz ];
     inherit (fpc.meta) platforms;
-
-    # Appears to be some sort of C++ linking error.
-    # Example: https://hydra.nixos.org/build/174544990/nixlog/6
-    broken = true;
-    hydraPlatforms = platforms.none;
   };
 }
