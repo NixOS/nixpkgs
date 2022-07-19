@@ -19680,6 +19680,7 @@ with pkgs;
 
   libwhereami = callPackage ../development/libraries/libwhereami { };
 
+  giflib_4_1 = callPackage ../development/libraries/giflib/4.1.nix { };
   giflib     = callPackage ../development/libraries/giflib { };
 
   libunarr = callPackage ../development/libraries/libunarr { };

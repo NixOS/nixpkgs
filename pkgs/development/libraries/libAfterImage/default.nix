@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, giflib, libjpeg, libpng, libX11, zlib
+{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, giflib_4_1, libjpeg, libpng, libX11, zlib
 , static ? stdenv.hostPlatform.isStatic
 , withX ? !stdenv.isDarwin }:
 
@@ -21,14 +21,6 @@ stdenv.mkDerivation {
       name = "libafterimage-gif.patch";
       url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-libs/libafterimage/files/libafterimage-gif.patch?id=4aa4fca00611b0b3a4007870da43cc5fd63f76c4";
       sha256 = "16pa94wlqpd7h6mzs4f0qm794yk1xczrwsgf93kdd3g0zbjq3rnr";
-    })
-
-    # fix build with newer giflib
-    (fetchpatch {
-      name = "libafterimage-giflib5-v2.patch";
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-libs/libafterimage/files/libafterimage-giflib5-v2.patch?id=4aa4fca00611b0b3a4007870da43cc5fd63f76c4";
-      sha256 = "0qwydqy9bm73cg5n3vm97aj4jfi70p7fxqmfbi54vi78z593brln";
-      stripLen = 1;
     })
 
     # fix build with newer libpng
@@ -58,7 +50,14 @@ stdenv.mkDerivation {
   patchFlags = [ "-p0" ];
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ giflib libjpeg libpng zlib ] ++ lib.optional withX libX11;
+  buildInputs = [
+    # An existing patch for giflib 5 support is broken, see
+    # https://github.com/root-project/root/issues/10990 for more details.
+    giflib_4_1
+    libjpeg
+    libpng
+    zlib
+  ] ++ lib.optional withX libX11;
 
   preConfigure = ''
     rm -rf {libjpeg,libpng,libungif,zlib}/

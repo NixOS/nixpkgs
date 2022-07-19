@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A library for reading and writing gif images";
-    branch = "4.1";
+    maintainers = with maintainers; [ veprbl ];
     license = licenses.mit;
     platforms = platforms.unix;
   };
