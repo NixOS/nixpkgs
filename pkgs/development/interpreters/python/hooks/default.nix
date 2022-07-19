@@ -5,7 +5,6 @@
 , disabledIf
 , isPy3k
 , ensureNewerSourcesForZipFilesHook
-, findutils
 , installShellFiles
 }:
 
@@ -107,7 +106,7 @@ in rec {
       };
     } ./python-imports-check-hook.sh) {};
 
-  pythonNamespacesHook = callPackage ({}:
+  pythonNamespacesHook = callPackage ({ findutils }:
     makeSetupHook {
       name = "python-namespaces-hook.sh";
       substitutions = {
