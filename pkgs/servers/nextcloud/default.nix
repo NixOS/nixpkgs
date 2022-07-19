@@ -51,10 +51,10 @@ in {
   };
 
   nextcloud24 = generic {
-    version = "24.0.2";
-    sha256 = "30d6cac1265dff221836bec46a937dcafd7e7d52ee59b939841750b514e5033d";
+    version = "24.0.3";
+    sha256 = "320c81f9b902922b4bcef3eacf858596a14347fd45bddd26dac198562d212439";
   };
 
-  # tip: get she sha with:
+  # tip: get the sha with:
   # curl 'https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2.sha256'
 }
