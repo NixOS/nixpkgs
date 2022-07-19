@@ -24,7 +24,7 @@ with lib;
 
   testScript = ''
     machine.wait_for_unit("polaris.service")
-    machine.wait_for_open_port("5050")
+    machine.wait_for_open_port(5050)
     machine.succeed("curl http://localhost:5050/api/version")
     machine.succeed("curl -X GET http://localhost:5050/api/initial_setup -H  'accept: application/json' | jq -e '.has_any_users == true'")
   '';
