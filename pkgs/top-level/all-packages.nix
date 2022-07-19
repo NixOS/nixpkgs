@@ -12032,7 +12032,9 @@ with pkgs;
 
   wkhtmltopdf = libsForQt514.callPackage ../tools/graphics/wkhtmltopdf { };
 
-  wkhtmltopdf-bin = callPackage ../tools/graphics/wkhtmltopdf-bin { };
+  wkhtmltopdf-bin = callPackage ../tools/graphics/wkhtmltopdf-bin {
+    libjpeg8 = libjpeg.override { enableJpeg8 = true; };
+  };
 
   wml = callPackage ../development/web/wml { };
 
@@ -34379,6 +34381,8 @@ with pkgs;
   geant4 = libsForQt5.callPackage ../development/libraries/physics/geant4 { };
 
   cernlib = callPackage ../development/libraries/physics/cernlib { };
+
+  clhep = callPackage ../development/libraries/physics/clhep { };
 
   hepmc2 = callPackage ../development/libraries/physics/hepmc2 { };
 
