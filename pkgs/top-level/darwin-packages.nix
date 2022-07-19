@@ -110,8 +110,8 @@ impure-cmds // appleSourcePackages // chooseLibs // {
   rewrite-tbd = callPackage ../os-specific/darwin/rewrite-tbd { };
 
   checkReexportsHook = pkgs.makeSetupHook {
-    deps = [ pkgs.darwin.print-reexports ];
-  } ../os-specific/darwin/print-reexports/setup-hook.sh;
+    deps = [ pkgs.darwin.rewrite-tbd ];
+  } ../os-specific/darwin/rewrite-tbd/setup-hook.sh;
 
   sigtool = callPackage ../os-specific/darwin/sigtool { };
 
