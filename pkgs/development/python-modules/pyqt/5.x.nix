@@ -29,6 +29,14 @@ buildPythonPackage rec {
     sha256 = "1gp5jz71nmg58zsm1h4vzhcphf36rbz37qgsfnzal76i1mz5js9a";
   };
 
+  patches = [
+    # Fix some wrong assumptions by ./project.py
+    # TODO: figure out how to send this upstream
+    ./pyqt5-fix-dbus-mainloop-support.patch
+    # confirm license when installing via pyqt5_sip
+    ./pyqt5-confirm-license.patch
+  ];
+
   outputs = [ "out" "dev" ];
 
   dontWrapQtApps = true;
@@ -66,12 +74,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     dbus-python
     pyqt5_sip
-  ];
-
-  patches = [
-    # Fix some wrong assumptions by ./project.py
-    # TODO: figure out how to send this upstream
-    ./pyqt5-fix-dbus-mainloop-support.patch
   ];
 
   passthru = {
