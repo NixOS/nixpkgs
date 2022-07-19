@@ -18,7 +18,7 @@ let beat = package: extraArgs: buildGoModule (rec {
   meta = with lib; {
     homepage = "https://www.elastic.co/products/beats";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fadenb basvandijk ];
+    maintainers = with maintainers; [ fadenb basvandijk dfithian ];
     platforms = platforms.linux;
   };
 } // extraArgs);
