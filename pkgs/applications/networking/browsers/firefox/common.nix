@@ -143,6 +143,8 @@ assert pipewireSupport -> !waylandSupport || !webrtcSupport -> throw "${pname}: 
 let
   flag = tf: x: [(if tf then "--enable-${x}" else "--disable-${x}")];
 
+  nssPackage = if lib.versionAtLeast version "92" then nss_latest else nss_esr;
+
   # Target the LLVM version that rustc is built with for LTO.
   llvmPackages0 = rustc.llvmPackages;
   llvmPackagesBuildBuild0 = pkgsBuildBuild.rustc.llvmPackages;
@@ -434,7 +436,7 @@ buildStdenv.mkDerivation ({
     zip
     zlib
   ]
-  ++ [ (if (lib.versionAtLeast version "92") then nss_latest else nss_esr) ]
+  ++ [ nssPackage ]
   ++ lib.optional  alsaSupport alsa-lib
   ++ lib.optional  jackSupport libjack2
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
@@ -499,9 +501,14 @@ buildStdenv.mkDerivation ({
     # Remove SDK cruft. FIXME: move to a separate output?
     rm -rf $out/share/idl $out/include $out/lib/${binaryName}-devel-*
 
-    # Needed to find Mozilla runtime
-    gappsWrapperArgs+=(--argv0 "$out/bin/.${binaryName}-wrapped")
+    gappsWrapperArgs+=(
+      # Needed to find Mozilla runtime
+      --argv0 "$out/bin/.${binaryName}-wrapped"
+
+      --prefix LD_LIBRARY_PATH ':' "$libs"
+    )
   '';
+  libs = lib.makeLibraryPath [ nssPackage ];
 
   # Workaround: The separateDebugInfo hook skips artifacts whose build ID's length is not 40.
   # But we got 16-length build ID here. The function body is mainly copied from pkgs/build-support/setup-hooks/separate-debug-info.sh
