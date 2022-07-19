@@ -55,9 +55,6 @@ let
       echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
     '';
     mkExtraBuildCommands = cc: tools.mkExtraBuildCommands0 cc + ''
-      echo 1111
-      sleep 5
-
       ln -s "${targetLlvmLibraries.compiler-rt.out}/lib" "$rsrc/lib"
       ln -s "${targetLlvmLibraries.compiler-rt.out}/share" "$rsrc/share"
     '';
