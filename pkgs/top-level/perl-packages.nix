@@ -25877,10 +25877,10 @@ let
 
   YAMLLibYAML = buildPerlPackage {
     pname = "YAML-LibYAML";
-    version = "0.82";
+    version = "0.83";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TI/TINITA/YAML-LibYAML-0.82.tar.gz";
-      sha256 = "0j7yhxkaasccynl5iq1cqpf4x253p4bi5wsq6qbwwv2wjsiwgd02";
+      url = "mirror://cpan/authors/id/T/TI/TINITA/YAML-LibYAML-0.83.tar.gz";
+      sha256 = "sha256-tHF1tP85etdaT3eB09g8CGN9pv8LrjJq87OJ2FS+xJA=";
     };
   };
 
