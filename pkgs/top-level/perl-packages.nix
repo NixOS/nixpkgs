@@ -14881,10 +14881,10 @@ let
 
   MojoRedis = buildPerlPackage {
     pname = "Mojo-Redis";
-    version = "3.25";
+    version = "3.29";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojo-Redis-3.25.tar.gz";
-      sha256 = "17xxhfavj9j1pzjpxf1j72rq3vm2vj0j4h62088l64v11cs86zig";
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojo-Redis-3.29.tar.gz";
+      sha256 = "sha256-oDMZpF0uYTpsfS1ZrAD9SwtHiGVi5ish3pG0r4llgII=";
     };
     propagatedBuildInputs = [ Mojolicious ProtocolRedisFaster ];
     meta = {
