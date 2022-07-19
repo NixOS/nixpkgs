@@ -31,7 +31,6 @@ self = stdenv.mkDerivation rec {
   outputs = [ "out" "static" ];
 
   cmakeFlags = [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF" # To run libmysql/libmysql_api_test during build.
     "-DWITH_SSL=yes"
     "-DWITH_EMBEDDED_SERVER=yes"
     "-DWITH_UNIT_TESTS=no"

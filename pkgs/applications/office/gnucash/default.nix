@@ -154,8 +154,6 @@ stdenv.mkDerivation rec {
       test-xml-pricedb \
       test-xml-transaction \
       test-xml2-is-file
-
-      export LD_LIBRARY_PATH="$PWD/lib:$PWD/lib/gnucash:$PWD/lib/gnucash/test:$PWD/lib/gnucash/test/future"
   '';
 
   preFixup = ''

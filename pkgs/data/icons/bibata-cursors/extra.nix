@@ -1,12 +1,12 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitHub
 , fetchurl
 , clickgen
 , unzip
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "bibata-extra-cursors";
   version = "1.0.1";
 

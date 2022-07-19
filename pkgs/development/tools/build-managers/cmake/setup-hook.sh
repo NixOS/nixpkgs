@@ -102,9 +102,8 @@ cmakeConfigurePhase() {
         cmakeFlags="-DBUILD_TESTING=OFF $cmakeFlags"
     fi
 
-    # Avoid cmake resetting the rpath of binaries, on make install
-    # And build always Release, to ensure optimisation flags
-    cmakeFlags="-DCMAKE_BUILD_TYPE=${cmakeBuildType:-Release} -DCMAKE_SKIP_BUILD_RPATH=ON $cmakeFlags"
+    # Always build Release, to ensure optimisation flags
+    cmakeFlags="-DCMAKE_BUILD_TYPE=${cmakeBuildType:-Release} $cmakeFlags"
 
     # Disable user package registry to avoid potential side effects
     # and unecessary attempts to access non-existent home folder

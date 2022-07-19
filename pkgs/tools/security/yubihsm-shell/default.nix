@@ -38,11 +38,6 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
-  cmakeFlags = [
-    # help2man fails without this
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
-  ];
-
   postPatch = ''
     # Can't find libyubihsm at runtime because of dlopen() in C code
     substituteInPlace lib/yubihsm.c \

@@ -128,7 +128,6 @@ in mkDerivation rec {
   '';
 
   cmakeFlags = [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
     "-DWITH_3D=True"
     "-DWITH_PDAL=TRUE"
     "-DPYQT5_SIP_DIR=${py.pkgs.pyqt5}/${py.pkgs.python.sitePackages}/PyQt5/bindings"

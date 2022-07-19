@@ -13,13 +13,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake python3 ];
 
-  # let intermediate tools find intermediate library
-  preBuild = lib.optionalString stdenv.isLinux ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$(pwd)/src
-  '' + lib.optionalString stdenv.isDarwin ''
-    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$(pwd)/src
-  '';
-
   meta = with lib; {
     homepage = "https://github.com/BYVoid/OpenCC";
     license = licenses.asl20;

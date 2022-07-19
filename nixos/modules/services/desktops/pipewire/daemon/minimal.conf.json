@@ -91,6 +91,7 @@
         "adapter.auto-port-config": {
           "mode": "dsp",
           "monitor": false,
+          "control": false,
           "position": "unknown"
         }
       }
@@ -109,6 +110,7 @@
         "adapter.auto-port-config": {
           "mode": "dsp",
           "monitor": false,
+          "control": false,
           "position": "unknown"
         }
       }

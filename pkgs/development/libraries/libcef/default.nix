@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  cmakeFlags = "-DPROJECT_ARCH=${platformInfo.projectArch}";
+  cmakeFlags = [ "-DPROJECT_ARCH=${platformInfo.projectArch}" ];
   makeFlags = [ "libcef_dll_wrapper" ];
   dontStrip = true;
   dontPatchELF = true;

@@ -33,7 +33,9 @@ in stdenv.mkDerivation rec {
     ;
   };
 
-  cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=OFF" "-DBUILD_TEST=ON" ];
+  cmakeFlags = [
+    "-DBUILD_TEST=ON"
+  ];
 
   doCheck = true;
 

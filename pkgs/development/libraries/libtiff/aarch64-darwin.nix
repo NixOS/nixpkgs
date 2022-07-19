@@ -19,8 +19,6 @@ stdenv.mkDerivation rec {
     sha256 = "1jrkjv0xya9radddn8idxvs2gqzp3l2b1s8knlizmn7ad3jq817b";
   };
 
-  cmakeFlags = lib.optional stdenv.isDarwin "-DCMAKE_SKIP_BUILD_RPATH=OFF";
-
   # FreeImage needs this patch
   patches = [ ./headers-cmake.patch ];
 

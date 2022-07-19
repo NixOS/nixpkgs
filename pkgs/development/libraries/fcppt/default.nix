@@ -14,7 +14,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost catch2 ];
 
   cmakeFlags = [
-    "-DCMAKE_SKIP_BUILD_RPATH=false"
     "-DENABLE_BOOST=true"
     "-DENABLE_EXAMPLES=true"
     "-DENABLE_CATCH=true"

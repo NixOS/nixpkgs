@@ -36,6 +36,11 @@ stdenv.mkDerivation rec {
     export HOME=$TMPDIR;
   '';
 
+  cmakeFlags = [
+    # file RPATH_CHANGE could not write new RPATH
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+  ];
+
   doCheck = true;
   checkPhase = ''
     runHook preCheck

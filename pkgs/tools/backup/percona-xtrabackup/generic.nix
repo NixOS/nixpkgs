@@ -45,7 +45,6 @@ stdenv.mkDerivation rec {
     "-DWITH_ZLIB=system"
     "-DWITH_VALGRIND=ON"
     "-DWITH_MAN_PAGES=OFF"
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF" # To run libmysql/libmysql_api_test during build.
   ];
 
   postInstall = ''

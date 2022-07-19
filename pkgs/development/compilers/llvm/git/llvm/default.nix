@@ -200,12 +200,6 @@ in stdenv.mkDerivation (rec {
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${shortVersion}.dylib
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${release_version}.dylib
   ''
-  + optionalString enableSharedLibraries ''
-    mkdir -p $dev/lib
-    mv $lib/lib/*.a $dev/lib
-    sed -i -E "s|$lib/lib/(.*)\.a|$dev/lib/\1\.a|" \
-      "$dev/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake"
-  ''
   + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
     cp NATIVE/bin/llvm-config $dev/bin/llvm-config-native
   '';

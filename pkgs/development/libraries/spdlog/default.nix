@@ -36,11 +36,6 @@ let
       '';
 
       doCheck = true;
-      preCheck =  if stdenv.isDarwin then ''
-        export DYLD_LIBRARY_PATH="$(pwd)''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
-      '' else ''
-        export LD_LIBRARY_PATH="$(pwd)''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
-      '';
 
       meta = with lib; {
         description    = "Very fast, header only, C++ logging library";

@@ -52,9 +52,16 @@ in stdenv.mkDerivation rec {
       url = "https://github.com/freedesktop/cairo/commit/78266cc8c0f7a595cfe8f3b694bfb9bcc3700b38.patch";
       sha256 = "048nzfz7rkgqb9xs0dfs56qdw7ckkxr87nbj3p0qziqdq4nb6wki";
     })
-  ] ++ optionals stdenv.hostPlatform.isDarwin [
+
     # Workaround https://gitlab.freedesktop.org/cairo/cairo/-/issues/121
     ./skip-configure-stderr-check.patch
+
+    # Fixes cairo crash on macOS Big Sur
+    # Upstream PR: https://gitlab.freedesktop.org/cairo/cairo/-/issues/420
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/cairo/cairo/-/commit/e22d7212acb454daccc088619ee147af03883974.diff";
+      sha256 = "sha256-8G98nsPz3MLEWPDX9F0jKgXC4hC4NNdFQLSpmW3ay2s=";
+    })
   ];
 
   outputs = [ "out" "dev" "devdoc" ];
