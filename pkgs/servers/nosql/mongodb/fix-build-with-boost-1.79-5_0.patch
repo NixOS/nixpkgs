@@ -1,4 +1,4 @@
-From 5c872a02501cad670d5b7f4f153ae856732a605e Mon Sep 17 00:00:00 2001
+From fb846bdbd07cc3b8ada6179dccd974072c2b69da Mon Sep 17 00:00:00 2001
 From: Et7f3 <cadeaudeelie@gmail.com>
 Date: Tue, 19 Jul 2022 22:01:56 +0200
 Subject: [PATCH] build: Upgrade boost to 1.79.0
@@ -21,7 +21,9 @@ https://github.com/mongodb/mongo/commit/13389dc222fc372442be8c147e09685bb9a26a3a
  src/mongo/db/storage/storage_repair_observer.cpp    | 1 +
  src/mongo/db/storage/wiredtiger/wiredtiger_util.cpp | 1 +
  src/mongo/shell/shell_utils_extended.cpp            | 1 +
- 3 files changed, 3 insertions(+)
+ src/mongo/util/processinfo_linux.cpp                | 1 +
+ src/mongo/util/stacktrace_threads.cpp               | 1 +
+ 5 files changed, 5 insertions(+)
 
 diff --git a/src/mongo/db/storage/storage_repair_observer.cpp b/src/mongo/db/storage/storage_repair_observer.cpp
 index 22b76a6a39c..453f48229cd 100644
@@ -59,6 +61,30 @@ index fbdddc1318d..e37d4c93a11 100644
  #include <fmt/format.h>
  #include <fstream>
  
+diff --git a/src/mongo/util/processinfo_linux.cpp b/src/mongo/util/processinfo_linux.cpp
+index eae0e9b7764..d5cd40f6039 100644
+--- a/src/mongo/util/processinfo_linux.cpp
++++ b/src/mongo/util/processinfo_linux.cpp
+@@ -52,6 +52,7 @@
+ #endif
+ 
+ #include <boost/filesystem.hpp>
++#include <boost/filesystem/fstream.hpp>
+ #include <boost/none.hpp>
+ #include <boost/optional.hpp>
+ #include <fmt/format.h>
+diff --git a/src/mongo/util/stacktrace_threads.cpp b/src/mongo/util/stacktrace_threads.cpp
+index d2ee29d24b4..d485fa22367 100644
+--- a/src/mongo/util/stacktrace_threads.cpp
++++ b/src/mongo/util/stacktrace_threads.cpp
+@@ -36,6 +36,7 @@
+ #include <array>
+ #include <atomic>
+ #include <boost/filesystem.hpp>
++#include <boost/filesystem/fstream.hpp>
+ #include <cstdint>
+ #include <cstdlib>
+ #include <dirent.h>
 -- 
 2.32.1 (Apple Git-133)
 
