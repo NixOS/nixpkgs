@@ -4,9 +4,9 @@
 mkXfceDerivation {
   category = "apps";
   pname = "ristretto";
-  version = "0.12.2";
+  version = "0.12.3";
 
-  sha256 = "sha256-OIt92DpDAZpy/fAOauGnzsufUi+y3Ag7KblZ5EUGuyQ=";
+  sha256 = "sha256-Tkjl01OD6yDbKAHzZVRG7c7KnP0MURmsc0d0DbcFuFk=";
 
   buildInputs = [ glib gtk3 libexif libxfce4ui libxfce4util xfconf ];
 
