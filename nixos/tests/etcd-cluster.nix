@@ -86,10 +86,11 @@ import ./make-test-python.nix ({ pkgs, ... } : let
     };
 
     environment.variables = {
-      ETCDCTL_CERT_FILE = "${etcd_client_cert}";
-      ETCDCTL_KEY_FILE = "${etcd_client_key}";
-      ETCDCTL_CA_FILE = "${ca_pem}";
+      ETCDCTL_CERT = "${etcd_client_cert}";
+      ETCDCTL_KEY = "${etcd_client_key}";
+      ETCDCTL_CACERT = "${ca_pem}";
       ETCDCTL_PEERS = "https://127.0.0.1:2379";
+      ETCDCTL_API = "3";
     };
 
     networking.firewall.allowedTCPPorts = [ 2380 ];
