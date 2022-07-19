@@ -14714,4 +14714,10 @@
     github = "npatsakula";
     githubId = 23001619;
   };
+  dfithian = {
+    email = "daniel.m.fithian@gmail.com";
+    name = "Daniel Fithian";
+    github = "dfithian";
+    githubId = 8409320;
+  };
 }
