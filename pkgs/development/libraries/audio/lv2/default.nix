@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     wafHook
+    python3
   ];
 
   buildInputs = [
     libsndfile
-    python3
   ];
 
   wafConfigureFlags = [
