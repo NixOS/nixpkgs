@@ -137,7 +137,7 @@ in
 
       environment = {
         HOME = runtimeDir;
-        RUNNER_ROOT = runtimeDir;
+        RUNNER_ROOT = stateDir;
       };
 
       path = (with pkgs; [
@@ -214,7 +214,7 @@ in
                 echo "Configuring GitHub Actions Runner"
 
                 token=$(< "$STATE_DIRECTORY"/${newConfigTokenFilename})
-                RUNNER_ROOT="$STATE_DIRECTORY" ${cfg.package}/bin/config.sh \
+                ${cfg.package}/bin/config.sh \
                   --unattended \
                   --disableupdate \
                   --work "$RUNTIME_DIRECTORY" \
