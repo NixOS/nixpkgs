@@ -16,7 +16,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "5.3.0";
+  version = "5.3.1";
   pname = "approvaltests";
   format = "setuptools";
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-nKTMWdXnxAf+UBUHkx+LAY29A/QXH+AtPjC296aarjU=";
+    sha256 = "sha256-9euZpfCxtGJOfkOB+okXUhp9Ow8AOz3cPfC963BO/h4=";
   };
 
   propagatedBuildInputs = [
