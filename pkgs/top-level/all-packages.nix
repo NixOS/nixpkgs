@@ -8621,6 +8621,8 @@ with pkgs;
 
   mktorrent = callPackage ../tools/misc/mktorrent { };
 
+  mloader = callPackage ../tools/misc/mloader { };
+
   mmake = callPackage ../tools/misc/mmake { };
 
   mmixware = callPackage ../development/tools/mmixware { };
