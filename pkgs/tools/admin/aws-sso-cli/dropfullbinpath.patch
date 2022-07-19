@@ -1,0 +1,13 @@
+diff --git a/cmd/config_profiles_cmd.go b/cmd/config_profiles_cmd.go
+index daca7b0..1f4b3dd 100644
+--- a/cmd/config_profiles_cmd.go
++++ b/cmd/config_profiles_cmd.go
+@@ -30,7 +30,7 @@ const (
+ 	AWS_CONFIG_FILE = "~/.aws/config"
+ 	CONFIG_TEMPLATE = `{{range $sso, $struct := . }}{{ range $arn, $profile := $struct }}
+ [profile {{ $profile.Profile }}]
+-credential_process = {{ $profile.BinaryPath }} -u {{ $profile.Open }} -S "{{ $profile.Sso }}" process --arn {{ $profile.Arn }}
++credential_process = aws-sso -u {{ $profile.Open }} -S "{{ $profile.Sso }}" process --arn {{ $profile.Arn }}
+ {{ range $key, $value := $profile.ConfigVariables }}{{ $key }} = {{ $value }}
+ {{end}}{{end}}{{end}}`
+ )

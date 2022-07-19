@@ -18,6 +18,8 @@ buildGoModule rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
+  patches = [ ./dropfullbinpath.patch ];
+
   postInstall = ''
     mv $out/bin/cmd $out/bin/aws-sso
     wrapProgram $out/bin/aws-sso \
