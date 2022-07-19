@@ -156,6 +156,11 @@ let
       makeWrapper $out/Applications/${appName}/Contents/MacOS/Teams $out/bin/teams
       runHook postInstall
     '';
+
+    postInstall = ''
+      substituteInPlace $out/share/applications/teams.desktop \
+        --replace "Icon=teams" "Icon=$out/share/pixmaps/teams.png"
+    '';
   };
 in
 if stdenv.isDarwin
