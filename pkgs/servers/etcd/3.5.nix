@@ -39,8 +39,6 @@ let
     ldflags = [ "-X go.etcd.io/etcd/api/v3/version.GitSHA=GitNotFound" ];
 
     meta = commonMeta;
-
-    passthru.tests = { inherit (nixosTests) etcd etcd-cluster; };
   };
 
   etcdutl = buildGoModule rec {
@@ -75,6 +73,8 @@ symlinkJoin {
   name = "etcd";
   version = etcdVersion;
   meta = commonMeta;
+
+  passthru.tests = { inherit (nixosTests) etcd etcd-cluster; };
 
   paths = [
     etcdserver
