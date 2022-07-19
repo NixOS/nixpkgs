@@ -39,11 +39,23 @@ import ./make-test-python.nix ({ pkgs, ... }: let
     olcRootDN: cn=root,dc=example
     olcRootPW: notapassword
   '';
+
+  ldapClientConfig = {
+    enable = true;
+    loginPam = false;
+    nsswitch = false;
+    server = "ldap://";
+    base = "dc=example";
+  };
+
 in {
   name = "openldap";
 
   nodes.machine = { pkgs, ... }: {
     environment.etc."openldap/root_password".text = "notapassword";
+
+    users.ldap = ldapClientConfig;
+
     services.openldap = {
       enable = true;
       urlList = [ "ldapi:///" "ldap://" ];
@@ -96,6 +108,7 @@ in {
       manualConfigDir = {
         inheritParentConfig = false;
         configuration = { ... }: {
+          users.ldap = ldapClientConfig;
           services.openldap = {
             enable = true;
             configDir = "/var/db/slapd.d";
@@ -119,14 +132,14 @@ in {
     with subtest("declarative contents"):
       machine.succeed('${specializations}/declarativeContents/bin/switch-to-configuration test')
       machine.wait_for_unit("openldap.service")
-      machine.succeed('ldapsearch -LLL -D "cn=root,dc=example" -w notapassword -b "dc=example"')
+      machine.succeed('ldapsearch -LLL -D "cn=root,dc=example" -w notapassword')
       machine.fail('ldapmodify -D cn=root,cn=config -w configpassword -f ${pkgs.writeText "rootpw.ldif" changeRootPw}')
 
     with subtest("mutable config"):
       machine.succeed('${specializations}/mutableConfig/bin/switch-to-configuration test')
-      machine.succeed('ldapsearch -LLL -D "cn=root,dc=example" -w notapassword -b "dc=example"')
+      machine.succeed('ldapsearch -LLL -D "cn=root,dc=example" -w notapassword')
       machine.succeed('ldapmodify -D cn=root,cn=config -w configpassword -f ${pkgs.writeText "rootpw.ldif" changeRootPw}')
-      machine.succeed('ldapsearch -LLL -D "cn=root,dc=example" -w foobar -b "dc=example"')
+      machine.succeed('ldapsearch -LLL -D "cn=root,dc=example" -w foobar')
 
     with subtest("manual config dir"):
       machine.succeed(
@@ -136,8 +149,8 @@ in {
         'chown -R openldap:openldap /var/db/slapd.d /var/db/openldap',
         '${specializations}/manualConfigDir/bin/switch-to-configuration test',
       )
-      machine.succeed('ldapsearch -LLL -D "cn=root,dc=example" -w notapassword -b "dc=example"')
+      machine.succeed('ldapsearch -LLL -D "cn=root,dc=example" -w notapassword')
       machine.succeed('ldapmodify -D cn=root,cn=config -w configpassword -f ${pkgs.writeText "rootpw.ldif" changeRootPw}')
-      machine.succeed('ldapsearch -LLL -D "cn=root,dc=example" -w foobar -b "dc=example"')
+      machine.succeed('ldapsearch -LLL -D "cn=root,dc=example" -w foobar')
   '';
 })

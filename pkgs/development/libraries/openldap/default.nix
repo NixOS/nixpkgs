@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     "STRIP="  # Disable install stripping as it breaks cross-compiling. We strip binaries anyway in fixupPhase.
     "STRIP_OPTS="
     "prefix=${placeholder "out"}"
-    "sysconfdir=${placeholder "out"}/etc"
+    "sysconfdir=/etc"
     "systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     # contrib modules require these
     "moduledir=${placeholder "out"}/lib/modules"
@@ -101,6 +101,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [
     "prefix=${placeholder "out"}"
+    "sysconfdir=${placeholder "out"}/etc"
     "moduledir=${placeholder "out"}/lib/modules"
     "INSTALL=install"
   ];
