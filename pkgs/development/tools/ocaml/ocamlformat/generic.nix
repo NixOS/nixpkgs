@@ -1,5 +1,5 @@
 { lib, fetchurl, fetchzip, ocaml-ng
-, version
+, version ? "0.24.0"
 , tarballName ? "ocamlformat-${version}.tbz",
 }:
 
