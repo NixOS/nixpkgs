@@ -6234,10 +6234,10 @@ let
 
   DBDMariaDB = buildPerlPackage {
     pname = "DBD-MariaDB";
-    version = "1.21";
+    version = "1.22";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PA/PALI/DBD-MariaDB-1.21.tar.gz";
-      sha256 = "068l4ybja5mmy89lwgzl9c1xs37f4fgvf7j7n8k4f78dg8rjp5zm";
+      url = "mirror://cpan/authors/id/P/PA/PALI/DBD-MariaDB-1.22.tar.gz";
+      sha256 = "sha256-C2j9VCuWU/FbIFhXgZhjSNcehafjhD8JGZdwR6F5scY=";
     };
     buildInputs = [ pkgs.mariadb-connector-c DevelChecklib TestDeep TestDistManifest TestPod ];
     propagatedBuildInputs = [ DBI ];
