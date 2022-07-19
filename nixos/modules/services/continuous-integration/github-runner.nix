@@ -49,9 +49,14 @@ in
     tokenFile = mkOption {
       type = types.path;
       description = lib.mdDoc ''
-        The full path to a file which contains the runner registration token.
+        The full path to a file which contains either a runner registration token or a
+        personal access token (PAT).
         The file should contain exactly one line with the token without any newline.
-        The token can be used to re-register a runner of the same name but is time-limited.
+        If a registration token is given, it can be used to re-register a runner of the same
+        name but is time-limited. If the file contains a PAT, the service creates a new
+        registration token on startup as needed. Make sure the PAT has a scope of
+        `admin:org` for organization-wide registrations or a scope of
+        `repo` for a single repository.
 
         Changing this option or the file's content triggers a new runner registration.
       '';
@@ -213,17 +218,27 @@ in
               if [[ -e "$STATE_DIRECTORY/${newConfigTokenFilename}" ]]; then
                 echo "Configuring GitHub Actions Runner"
 
-                token=$(< "$STATE_DIRECTORY"/${newConfigTokenFilename})
-                ${cfg.package}/bin/config.sh \
-                  --unattended \
-                  --disableupdate \
-                  --work "$RUNTIME_DIRECTORY" \
-                  --url ${escapeShellArg cfg.url} \
-                  --token "$token" \
-                  --labels ${escapeShellArg (concatStringsSep "," cfg.extraLabels)} \
-                  --name ${escapeShellArg cfg.name} \
-                  ${optionalString cfg.replace "--replace"} \
+                args=(
+                  --unattended
+                  --disableupdate
+                  --work "$RUNTIME_DIRECTORY"
+                  --url ${escapeShellArg cfg.url}
+                  --labels ${escapeShellArg (concatStringsSep "," cfg.extraLabels)}
+                  --name ${escapeShellArg cfg.name}
+                  ${optionalString cfg.replace "--replace"}
                   ${optionalString (cfg.runnerGroup != null) "--runnergroup ${escapeShellArg cfg.runnerGroup}"}
+                )
+
+                # If the token file contains a PAT (i.e., it starts with "ghp_"), we have to use the --pat option,
+                # if it is not a PAT, we assume it contains a registration token and use the --token option
+                token=$(<"$STATE_DIRECTORY/${newConfigTokenFilename}")
+                if [[ "$token" =~ ^ghp_* ]]; then
+                  args+=(--pat "$token")
+                else
+                  args+=(--token "$token")
+                fi
+
+                ${cfg.package}/bin/config.sh "''${args[@]}"
 
                 # Move the automatically created _diag dir to the logs dir
                 mkdir -p  "$STATE_DIRECTORY/_diag"
