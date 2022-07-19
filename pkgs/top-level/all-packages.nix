@@ -32815,6 +32815,8 @@ with pkgs;
 
   diamond = callPackage ../applications/science/biology/diamond { };
 
+  dssp = callPackage ../applications/science/biology/dssp { };
+
   ecopcr = callPackage ../applications/science/biology/ecopcr { };
 
   eggnog-mapper = callPackage ../applications/science/biology/eggnog-mapper { };
