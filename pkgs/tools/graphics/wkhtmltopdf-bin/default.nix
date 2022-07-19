@@ -33,8 +33,10 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out
       cp -r bin include lib share $out/
+      runHook postInstall
     '';
   };
 
@@ -64,8 +66,10 @@ let
     unpackPhase = "tar -xf $src";
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out
       cp -r usr/bin usr/include usr/lib usr/share $out/
+      runHook postInstall
     '';
   };
 in
