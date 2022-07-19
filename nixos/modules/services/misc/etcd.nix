@@ -156,6 +156,15 @@ in {
   };
 
   config = mkIf cfg.enable {
+     services.etcd.package =
+     # Note: when changing the default, make it conditional on
+     # ‘system.stateVersion’ to maintain compatibility with existing
+     # systems!
+     # Remember to change the default version at pkgs/top-level/all-packages.nix too between NixOS versions
+     mkDefault (if versionAtLeast config.system.stateVersion "22.11" then pkgs.etcd_3_5
+           else if versionAtLeast config.system.stateVersion "22.05" then pkgs.etcd_3_3
+           else throw "please set your desired package for state version ${config.system.stateVersion}");
+
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' 0700 etcd - - -"
     ];
