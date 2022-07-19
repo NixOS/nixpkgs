@@ -300,12 +300,6 @@ rec {
             chmod -R +w $out/lib
             substituteInPlace $out/lib/libSystem.B.tbd --replace /usr/lib/system $out/lib/system
 
-            ln -s libSystem.B.tbd $out/lib/libSystem.tbd
-
-            for name in c dbm dl info m mx poll proc pthread rpcsvc util gcc_s.10.4 gcc_s.10.5; do
-              ln -s libSystem.tbd $out/lib/lib$name.tbd
-            done
-
             ln -s ${bootstrapTools}/lib/*.o $out/lib
 
             ln -s ${bootstrapTools}/lib/libresolv.9.dylib $out/lib

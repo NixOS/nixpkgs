@@ -38,11 +38,6 @@ let
 
       pushd lib
       cp ${darwin-stubs}/usr/lib/libcups*.tbd .
-      ln -s libcups.2.tbd      libcups.tbd
-      ln -s libcupscgi.1.tbd   libcupscgi.tbd
-      ln -s libcupsimage.2.tbd libcupsimage.tbd
-      ln -s libcupsmime.1.tbd  libcupsmime.tbd
-      ln -s libcupsppdc.1.tbd  libcupsppdc.tbd
       popd
     '';
 
