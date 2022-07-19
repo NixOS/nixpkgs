@@ -93,7 +93,7 @@ stdenv.mkDerivation ({
       There is also a C library, if you're into that kind of thing.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ nbr ];
+    maintainers = with maintainers; [ nbr kalbasit ];
     platforms = [ "x86_64-darwin" "x86_64-linux" ];
   };
 }
