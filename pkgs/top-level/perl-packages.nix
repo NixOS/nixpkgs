@@ -20167,12 +20167,12 @@ let
 
   SQLAbstract = buildPerlPackage {
     pname = "SQL-Abstract";
-    version = "1.87";
+    version = "2.000001";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IL/ILMARI/SQL-Abstract-1.87.tar.gz";
-      sha256 = "e926a0a83da7efa18e57e5b2952a2ab3b7563a51733fc6dd5c89f12156481c4a";
+      url = "mirror://cpan/authors/id/M/MS/MSTROUT/SQL-Abstract-2.000001.tar.gz";
+      sha256 = "sha256-NaZCZiw0lCDUS+bg732HZep0PrEq0UOZqjojK7lObpo=";
     };
-    buildInputs = [ TestDeep TestException TestWarn ];
+    buildInputs = [ DataDumperConcise TestDeep TestException TestWarn ];
     propagatedBuildInputs = [ HashMerge MROCompat Moo ];
     meta = {
       description = "Generate SQL from Perl data structures";
