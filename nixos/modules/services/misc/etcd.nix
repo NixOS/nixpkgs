@@ -17,8 +17,8 @@ in {
 
     package = mkOption {
       description = "Which etcd derivation to use.";
-      default = pkgs.etcd;
       type = types.package;
+      example = literalExpression "pkgs.etcd_3_5";
     };
 
     name = mkOption {
