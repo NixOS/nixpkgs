@@ -10,61 +10,7 @@ let
     inherit (stdenv) hostPlatform;
   };
 
-  # Based off lib.makeExtensible, with modifications:
-  makeDerivationExtensible = rattrs:
-    let
-      # NOTE: The following is a hint that will be printed by the Nix cli when
-      # encountering an infinite recursion. It must not be formatted into
-      # separate lines, because Nix would only show the last line of the comment.
-
-      # An infinite recursion here can be caused by having the attribute names of expression `e` in `.overrideAttrs(finalAttrs: previousAttrs: e)` depend on `finalAttrs`. Only the attribute values of `e` can depend on `finalAttrs`.
-      args = rattrs (args // { inherit finalPackage; });
-      #              ^^^^
-
-      finalPackage =
-        mkDerivationSimple
-          (f0:
-            let
-              f = self: super:
-                # Convert f0 to an overlay. Legacy is:
-                #   overrideAttrs (super: {})
-                # We want to introduce self. We follow the convention of overlays:
-                #   overrideAttrs (self: super: {})
-                # Which means the first parameter can be either self or super.
-                # This is surprising, but far better than the confusion that would
-                # arise from flipping an overlay's parameters in some cases.
-                let x = f0 super;
-                in
-                  if builtins.isFunction x
-                  then
-                    # Can't reuse `x`, because `self` comes first.
-                    # Looks inefficient, but `f0 super` was a cheap thunk.
-                    f0 self super
-                  else x;
-            in
-              makeDerivationExtensible
-                (self: let super = rattrs self; in super // f self super))
-          args;
-    in finalPackage;
-
-  # makeDerivationExtensibleConst == makeDerivationExtensible (_: attrs),
-  # but pre-evaluated for a slight improvement in performance.
-  makeDerivationExtensibleConst = attrs:
-    mkDerivationSimple
-      (f0:
-        let
-          f = self: super:
-            let x = f0 super;
-            in
-              if builtins.isFunction x
-              then
-                f0 self super
-              else x;
-        in
-          makeDerivationExtensible (self: attrs // f self attrs))
-      attrs;
-
-  mkDerivationSimple = overrideAttrs:
+  makeDerivation = overrideAttrs:
 
 
 # `mkDerivation` wraps the builtin `derivation` function to
@@ -511,8 +457,4 @@ lib.extendDerivation
    passthru)
   (derivation derivationArg);
 
-in
-  fnOrAttrs:
-    if builtins.isFunction fnOrAttrs
-    then makeDerivationExtensible fnOrAttrs
-    else makeDerivationExtensibleConst fnOrAttrs
+in lib.customisation.makeDerivationExtensible makeDerivation
