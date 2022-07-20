@@ -1,6 +1,7 @@
 { config, lib, stdenv, fetchurl, fetchFromGitHub, pkgs, buildPackages
 , callPackage
 , enableThreading ? true, coreutils, makeWrapper
+, enableCrypt ? true
 , zlib
 }:
 
@@ -82,6 +83,7 @@ let
       ++ optionals ((builtins.match ''5\.[0-9]*[13579]\..+'' version) != null) [ "-Dusedevel" "-Uversiononly" ]
       ++ optional stdenv.isSunOS "-Dcc=gcc"
       ++ optional enableThreading "-Dusethreads"
+      ++ optional (!enableCrypt) "-A clear:d_crypt_r"
       ++ optional stdenv.hostPlatform.isStatic "--all-static"
       ++ optionals (!crossCompiling) [
         "-Dprefix=${placeholder "out"}"
