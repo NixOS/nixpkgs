@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
 
   # remove binaries for x-less install because xgps sconsflag is partially broken
   postFixup = ''
-    ${if guiSupport then "" else "rm $out/bin/xgps*"}
+    ${if guiSupport then "" else "rm -f $out/bin/xgps*"}
     wrapPythonProgramsIn $out/bin "$out $pythonPath"
   '';
 
