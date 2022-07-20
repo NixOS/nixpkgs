@@ -3,12 +3,14 @@
 , fetchFromGitHub
 , pythonOlder
 , buildPythonPackage
+, basemap
 , gfortran
+, netcdf4
+, numpy
+, python
+, setuptools
 , xarray
 , wrapt
-, numpy
-, netcdf4
-, setuptools
 }:
 
 buildPythonPackage rec {
@@ -25,15 +27,16 @@ buildPythonPackage rec {
     hash = "sha256-4iIs/M9fzGJsnKCDSl09OTUoh7j6REBXuutE5uXFe3k=";
   };
 
+  nativeBuildInputs = [
+    gfortran
+  ];
+
   propagatedBuildInputs = [
-    wrapt
+    basemap
     numpy
     setuptools
     xarray
-  ];
-
-  nativeBuildInputs = [
-    gfortran
+    wrapt
   ];
 
   checkInputs = [
@@ -43,7 +46,7 @@ buildPythonPackage rec {
   checkPhase = ''
     runHook preCheck
     cd ./test/ci_tests
-    python utests.py
+    ${python.interpreter} utests.py
     runHook postCheck
   '';
 
@@ -52,10 +55,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "WRF postprocessing library for Python";
     homepage = "http://wrf-python.rtfd.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ mhaselsteiner ];
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
   };
 }
