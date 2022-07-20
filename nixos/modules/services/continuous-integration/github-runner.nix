@@ -123,6 +123,24 @@ in
       default = pkgs.github-runner;
       defaultText = literalExpression "pkgs.github-runner";
     };
+
+    ephemeral = mkOption {
+      type = types.bool;
+      description = lib.mdDoc ''
+        If enabled, causes the following behavior:
+
+        - Passes the `--ephemeral` flag to the runner configuration script
+        - De-registers and stops the runner with GitHub after it has processed one job
+        - On stop, systemd wipes the runtime directory (this always happens, even without using the ephemeral option)
+        - Restarts the service after its successful exit
+        - On start, wipes the state directory and configures a new runner
+
+        You should only enable this option if `tokenFile` points to a file which contains a
+        personal access token (PAT). If you're using the option with a registration token, restarting the
+        service will fail as soon as the registration token expired.
+      '';
+      default = false;
+    };
   };
 
   config = mkIf cfg.enable {
@@ -184,7 +202,7 @@ in
               ${lines}
             '';
             currentConfigPath = "$STATE_DIRECTORY/.nixos-current-config.json";
-            runnerRegistrationConfig = getAttrs [ "name" "tokenFile" "url" "runnerGroup" "extraLabels" ] cfg;
+            runnerRegistrationConfig = getAttrs [ "name" "tokenFile" "url" "runnerGroup" "extraLabels" "ephemeral" ] cfg;
             newConfigPath = builtins.toFile "${svcName}-config.json" (builtins.toJSON runnerRegistrationConfig);
             newConfigTokenFilename = ".new-token";
             runnerCredFiles = [
@@ -194,17 +212,24 @@ in
             ];
             unconfigureRunner = writeScript "unconfigure" ''
               differs=
-              # Set `differs = 1` if current and new runner config differ or if `currentConfigPath` does not exist
-              ${pkgs.diffutils}/bin/diff -q '${newConfigPath}' "${currentConfigPath}" >/dev/null 2>&1 || differs=1
-              # Also trigger a registration if the token content changed
-              ${pkgs.diffutils}/bin/diff -q \
-                "$STATE_DIRECTORY"/${currentConfigTokenFilename} \
-                ${escapeShellArg cfg.tokenFile} \
-                >/dev/null 2>&1 || differs=1
+
+              if [[ "$(ls -A "$STATE_DIRECTORY")" ]]; then
+                # State directory is not empty
+                # Set `differs = 1` if current and new runner config differ or if `currentConfigPath` does not exist
+                ${pkgs.diffutils}/bin/diff -q '${newConfigPath}' "${currentConfigPath}" >/dev/null 2>&1 || differs=1
+                # Also trigger a registration if the token content changed
+                ${pkgs.diffutils}/bin/diff -q \
+                  "$STATE_DIRECTORY"/${currentConfigTokenFilename} \
+                  ${escapeShellArg cfg.tokenFile} \
+                  >/dev/null 2>&1 || differs=1
+                # If .credentials does not exist, assume a previous run de-registered the runner on stop (ephemeral mode)
+                [[ ! -f "$STATE_DIRECTORY/.credentials" ]] && differs=1
+              fi
 
               if [[ -n "$differs" ]]; then
                 echo "Config has changed, removing old runner state."
-                echo "The old runner will still appear in the GitHub Actions UI." \
+                # In ephemeral mode, the runner deletes the `.credentials` file after de-registering it with GitHub
+                [[ -f "$STATE_DIRECTORY/.credentials" ]] && echo "The old runner will still appear in the GitHub Actions UI." \
                   "You have to remove it manually."
                 find "$STATE_DIRECTORY/" -mindepth 1 -delete
 
@@ -227,6 +252,7 @@ in
                   --name ${escapeShellArg cfg.name}
                   ${optionalString cfg.replace "--replace"}
                   ${optionalString (cfg.runnerGroup != null) "--runnergroup ${escapeShellArg cfg.runnerGroup}"}
+                  ${optionalString cfg.ephemeral "--ephemeral"}
                 )
 
                 # If the token file contains a PAT (i.e., it starts with "ghp_"), we have to use the --pat option,
@@ -265,6 +291,10 @@ in
             configureRunner
             setupRuntimeDir
           ];
+
+        # If running in ephemeral mode, restart the service on-exit (i.e., successful de-registration of the runner)
+        # to trigger a fresh registration.
+        Restart = if cfg.ephemeral then "on-success" else "no";
 
         # Contains _diag
         LogsDirectory = [ systemdDir ];
