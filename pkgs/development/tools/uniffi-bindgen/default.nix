@@ -35,6 +35,8 @@ rustPlatform.buildRustPackage rec {
       --suffix PATH : ${lib.strings.makeBinPath [ rustfmt ktlint yapf rubocop ] }
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Toolkit for building cross-platform software components in Rust";
     homepage = "https://mozilla.github.io/uniffi-rs/";
