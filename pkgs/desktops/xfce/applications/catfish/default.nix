@@ -1,5 +1,5 @@
 { lib
-, fetchurl
+, fetchFromGitLab
 , file
 , which
 , intltool
@@ -17,9 +17,12 @@ python3Packages.buildPythonApplication rec {
   pname = "catfish";
   version = "4.16.3";
 
-  src = fetchurl {
-    url = "https://archive.xfce.org/src/apps/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-6amaYtEJgTkVCN1D88v6LVCmm9a30e7vfTC6TGc9z9o=";
+  src = fetchFromGitLab {
+    domain = "gitlab.xfce.org";
+    owner = "apps";
+    repo = pname;
+    rev = "${pname}-${version}";
+    sha256 = "sha256-jAAMZbhviKvSvhaDCva7t0oEDutY+K2vaCPz0B5OoUs=";
   };
 
   nativeBuildInputs = [
