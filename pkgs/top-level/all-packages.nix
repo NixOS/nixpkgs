@@ -7094,6 +7094,8 @@ with pkgs;
      gst-plugins-bad = gst_all_1.gst-plugins-bad.override { enableZbar = true; };
   };
 
+  gnome-extension-manager = callPackage ../applications/misc/gnome-extension-manager { };
+
   gnome-feeds = callPackage ../applications/networking/feedreaders/gnome-feeds {};
 
   gnome-frog = callPackage ../applications/misc/gnome-frog { };
@@ -22177,6 +22179,7 @@ with pkgs;
   tet = callPackage ../development/tools/misc/tet { };
 
   text-engine = callPackage ../development/libraries/text-engine { };
+
   the-foundation = callPackage ../development/libraries/the-foundation { };
 
   theft = callPackage ../development/libraries/theft { };
