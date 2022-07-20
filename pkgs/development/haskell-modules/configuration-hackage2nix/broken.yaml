@@ -2778,7 +2778,6 @@ broken-packages:
   - json-ast-quickcheck
   - JSONb
   - json-builder
-  - json-directory
   - json-encoder
   - jsonextfilter
   - json-extra
