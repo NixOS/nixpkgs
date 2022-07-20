@@ -847,11 +847,11 @@
   };
   AngryAnt = {
     name = "Emil Johansen";
-  	email = "git@eej.dk";
-  	matrix = "@angryant:envs.net";
-  	github = "AngryAnt";
-  	githubId = "102513";
-  	keys = [{
+    email = "git@eej.dk";
+    matrix = "@angryant:envs.net";
+    github = "AngryAnt";
+    githubId = 102513;
+    keys = [{
       fingerprint = "B7B7 582E 564E 789B FCB8  71AB 0C6D FE2F B234 534A";
     }];
   };
