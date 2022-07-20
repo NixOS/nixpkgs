@@ -14924,6 +14924,8 @@ with pkgs;
   pythonInterpreters = callPackage ./../development/interpreters/python { };
   inherit (pythonInterpreters) python27 python37 python38 python39 python310 python311 python3Minimal pypy27 pypy38 pypy37 rustpython;
 
+  # List of extensions with overrides to apply to all Python package sets.
+  pythonPackagesExtensions = [ ];
   # Python package sets.
   python27Packages = python27.pkgs;
   python37Packages = python37.pkgs;
