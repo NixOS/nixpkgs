@@ -371,6 +371,16 @@
       </listitem>
       <listitem>
         <para>
+          <literal>github-runner</literal> gained support for ephemeral
+          runners and registrations using a personal access token (PAT)
+          instead of a registration token. See
+          <literal>services.github-runner.ephemeral</literal> and
+          <literal>services.github-runner.tokenFile</literal> for
+          details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           A new module was added for the Saleae Logic device family,
           providing the options
           <literal>hardware.saleae-logic.enable</literal> and
