@@ -1,12 +1,13 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 , pytestCheckHook
 , pytest-asyncio
 , pretend
 , freezegun
 , simplejson
-, six
+, typing-extensions
 , pythonAtLeast
 }:
 
@@ -22,9 +23,25 @@ buildPythonPackage rec {
     sha256 = "0bc5lj0732j0hjq89llgrncyzs6k3aaffvg07kr3la44w0hlrb4l";
   };
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+  ];
 
-  checkInputs = [ pytestCheckHook pytest-asyncio pretend freezegun simplejson ];
+  pythonImportsCheck = [
+    "structlog"
+  ];
+
+  checkInputs = [
+    freezegun
+    pretend
+    pytest-asyncio
+    pytestCheckHook
+    simplejson
+  ];
+
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
+  ];
 
   meta = with lib; {
     description = "Painless structural logging";
