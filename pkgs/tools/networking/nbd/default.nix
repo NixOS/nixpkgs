@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, which, bison, nixosTests, linuxHeaders }:
+{ lib, stdenv, fetchurl, pkg-config, glib, which, bison, nixosTests, linuxHeaders, gnutls }:
 
 stdenv.mkDerivation rec {
   pname = "nbd";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-aHcVbSOnsz917uidL1wskcVCr8PNy2Nt6lqIU5pY0Qw=";
   };
 
-  buildInputs = [ glib linuxHeaders ];
+  buildInputs = [ glib linuxHeaders gnutls ];
 
   nativeBuildInputs = [ pkg-config which bison ];
 
