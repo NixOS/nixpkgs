@@ -26053,6 +26053,8 @@ with pkgs;
 
   cardboard = callPackage ../applications/window-managers/cardboard { };
 
+  cardo = callPackage ../data/fonts/cardo { };
+
   cage = callPackage ../applications/window-managers/cage {
     wlroots = wlroots_0_14;
   };
