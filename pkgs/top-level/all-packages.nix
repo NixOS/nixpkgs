@@ -23131,6 +23131,8 @@ with pkgs;
 
   unifi = unifi7;
 
+  unifi-protect-backup = callPackage ../applications/backup/unifi-protect-backup { };
+
   unifi-video = callPackage ../servers/unifi-video { };
 
   unpackerr = callPackage ../servers/unpackerr {
@@ -26052,6 +26054,8 @@ with pkgs;
   caerbannog = callPackage ../applications/misc/caerbannog { };
 
   cardboard = callPackage ../applications/window-managers/cardboard { };
+
+  cardo = callPackage ../data/fonts/cardo { };
 
   cage = callPackage ../applications/window-managers/cage {
     wlroots = wlroots_0_14;

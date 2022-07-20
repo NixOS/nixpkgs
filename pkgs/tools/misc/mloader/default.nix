@@ -1,15 +1,12 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{ lib, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "mloader";
-  version = "1.1.8";
+  version = "1.1.9";
 
-  # PyPI tarball doesn't ship requirements.txt
-  src = fetchFromGitHub {
-    owner = "hurlenko";
-    repo = "mloader";
-    rev = version;
-    sha256 = "sha256-cZ9jaRrzzc5M7QYGuLxMv1J1mlfp/UEJ4dugTuJIQ/A=";
+  src = python3Packages.fetchPypi {
+    inherit pname version;
+    sha256 = "81e4dc7117999d502e3345f8e32df8b16cca226b8b508976dde2de81a4cc2b19";
   };
 
   propagatedBuildInputs = with python3Packages; [
