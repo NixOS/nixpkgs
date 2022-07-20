@@ -10,11 +10,15 @@ let
       { case = "8.12"; out = "1.0-beta2-8.12"; }
       # Do not provide 8.13 because it does not compile with equations 1.3 provided by default (only 1.2.3)
       # { case = "8.13"; out = "1.0-beta2-8.13"; }
+      { case = "8.14"; out = "1.0-8.14"; }
+      { case = "8.15"; out = "1.0-8.15"; }
     ] null;
   release = {
     "1.0-beta2-8.11".sha256 = "sha256-I9YNk5Di6Udvq5/xpLSNflfjRyRH8fMnRzbo3uhpXNs=";
     "1.0-beta2-8.12".sha256 = "sha256-I8gpmU9rUQJh0qfp5KOgDNscVvCybm5zX4TINxO1TVA=";
     "1.0-beta2-8.13".sha256 = "sha256-IC56/lEDaAylUbMCfG/3cqOBZniEQk8jmI053DBO5l8=";
+    "1.0-8.14".sha256 = "sha256-iRnaNeHt22JqxMNxOGPPycrO9EoCVjusR2s0GfON1y0=";
+    "1.0-8.15".sha256 = "sha256-8RUC5dHNfLJtJh+IZG4nPTAVC8ZKVh2BHedkzjwLf/k=";
   };
   releaseRev = v: "v${v}";
 

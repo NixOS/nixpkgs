@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     '';
     platforms = platforms.linux;
     changelog = "https://github.com/PolyMC/PolyMC/releases/tag/${version}";
-    license = licenses.gpl3Plus;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ cleverca22 starcraft66 ];
   };
 }

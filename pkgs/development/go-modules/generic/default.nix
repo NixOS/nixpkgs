@@ -278,11 +278,7 @@ let
     meta = {
       # Add default meta information
       platforms = go.meta.platforms or lib.platforms.all;
-    } // meta // {
-      # add an extra maintainer to every package
-      maintainers = (meta.maintainers or []) ++
-                    [ lib.maintainers.kalbasit ];
-    };
+    } // meta;
   });
 in
 lib.warnIf (buildFlags != "" || buildFlagsArray != "")
