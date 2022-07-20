@@ -516,6 +516,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
 
+  didu = callPackage ../tools/misc/didu { };
+
   diffPlugins = (callPackage ../build-support/plugins.nix {}).diffPlugins;
 
   dieHook = makeSetupHook {} ../build-support/setup-hooks/die.sh;
