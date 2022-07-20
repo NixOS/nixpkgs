@@ -6,7 +6,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitea {
     domain = "codeberg.org";
-    owner = "papojari";
+    owner = "annaaurora";
     repo = "seehecht";
     rev = "v${version}";
     sha256 = "sha256-x5zZEDaBmWpyvY+sKuiK4L+hc85prxCueWYUNMi9ty0=";
@@ -22,6 +22,6 @@ rustPlatform.buildRustPackage rec {
     description = "A tool to quickly open a markdown document with already filled out frontmatter";
     license = licenses.lgpl3Only;
     platforms = platforms.all;
-    maintainers = with maintainers; [ papojari ];
+    maintainers = with maintainers; [ annaaurora ];
   };
 }
