@@ -26427,6 +26427,8 @@ with pkgs;
 
   clipit = callPackage ../applications/misc/clipit { };
 
+  clipqr = callPackage ../applications/misc/clipqr { };
+
   cloud-hypervisor = callPackage ../applications/virtualization/cloud-hypervisor { };
 
   clp = callPackage ../applications/science/math/clp { };
