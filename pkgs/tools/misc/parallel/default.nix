@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/parallel \
-      --prefix PATH : "${lib.makeBinPath [ procps perl coreutils ]}"
+      --prefix PATH : "${lib.makeBinPath [ procps perl coreutils ]}" \
+      --add-flags "--will-cite"
   '';
 
   doCheck = true;
@@ -43,6 +44,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/parallel/";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ pSub vrthra tomberek ];
+    maintainers = with maintainers; [ pSub vrthra tomberek ckie ];
   };
 }
