@@ -20709,7 +20709,9 @@ with pkgs;
 
   libx86 = callPackage ../development/libraries/libx86 {};
 
-  libxcrypt = callPackage ../development/libraries/libxcrypt { };
+  libxcrypt = callPackage ../development/libraries/libxcrypt {
+    perl = perl.override { enableCrypt = false; };
+  };
 
   libxdg_basedir = callPackage ../development/libraries/libxdg-basedir { };
 
