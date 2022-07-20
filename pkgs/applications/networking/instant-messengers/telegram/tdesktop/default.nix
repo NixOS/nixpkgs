@@ -23,6 +23,7 @@
 , libopus
 , alsa-lib
 , libpulseaudio
+, pipewire
 , range-v3
 , tl-expected
 , hunspell
@@ -35,6 +36,7 @@
 , util-linuxMinimal
 , pcre
 , libpthreadstubs
+, libXdamage
 , libXdmcp
 , libselinux
 , libsepol
@@ -127,6 +129,7 @@ env.mkDerivation rec {
     libopus
     alsa-lib
     libpulseaudio
+    pipewire
     range-v3
     tl-expected
     hunspell
@@ -139,6 +142,7 @@ env.mkDerivation rec {
     util-linuxMinimal # Required for libmount thus not nativeBuildInputs.
     pcre
     libpthreadstubs
+    libXdamage
     libXdmcp
     libselinux
     libsepol
