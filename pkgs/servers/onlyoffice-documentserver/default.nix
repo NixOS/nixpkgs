@@ -24,9 +24,7 @@ let
 
     preferLocalBuild = true;
 
-    unpackPhase = ''
-      dpkg -x $src .
-    '';
+    unpackCmd = "dpkg -x $curSrc source";
 
     nativeBuildInputs = [
       dpkg
