@@ -5,6 +5,7 @@
 , fetchPypi
 , pillow
 , pytestCheckHook
+, pyyaml
 , setuptools-scm
 , six
 , svgwrite
@@ -29,6 +30,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     attrdict
+    pyyaml
     svgwrite
     six
   ];
