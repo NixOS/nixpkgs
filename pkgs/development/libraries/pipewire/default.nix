@@ -2,7 +2,6 @@
 , lib
 , buildPackages
 , fetchFromGitLab
-, fetchpatch
 , removeReferencesTo
 , python3
 , meson
@@ -70,7 +69,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.55";
+    version = "0.3.56";
 
     outputs = [
       "out"
@@ -88,7 +87,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-OAe/SpXLDQTvAEDyShTA4flqXUpjOabAQXulNeF6LLw=";
+      sha256 = "sha256-wbHHr7BW8Gdj9D1IjzOuD6VuXApJ5E0Zde2iKWImzxg=";
     };
 
     patches = [
@@ -104,13 +103,6 @@ let
       ./0090-pipewire-config-template-paths.patch
       # Place SPA data files in lib output to avoid dependency cycles
       ./0095-spa-data-dir.patch
-
-      # FIXME: fix JACK crash with Ardour6, recommended by upstream, remove in .55
-      (fetchpatch {
-        name = "fix-jack-crash";
-        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/40552a0e914c3aef48ce59ce1bfb9d80516aa893.patch";
-        sha256 = "sha256-ifVVBoloq1ILgKDPSjjpaw0kbzl+Ok6PZcjG3rsfRuU=";
-      })
     ];
 
     nativeBuildInputs = [
