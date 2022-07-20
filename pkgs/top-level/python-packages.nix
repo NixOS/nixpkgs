@@ -1189,6 +1189,8 @@ in {
 
   basemap = callPackage ../development/python-modules/basemap { };
 
+  basemap-data = callPackage ../development/python-modules/basemap-data { };
+
   bash_kernel = callPackage ../development/python-modules/bash_kernel { };
 
   bashlex = callPackage ../development/python-modules/bashlex { };
