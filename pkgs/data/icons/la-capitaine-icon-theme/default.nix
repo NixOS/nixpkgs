@@ -1,5 +1,5 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitHub
 , breeze-icons
 , elementary-icon-theme
@@ -7,7 +7,7 @@
 , hicolor-icon-theme
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "la-capitaine-icon-theme";
   version = "0.6.2";
 

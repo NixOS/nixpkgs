@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub , gtk3, adwaita-icon-theme, breeze-icons, hicolor-icon-theme }:
+{ lib, stdenvNoCC, fetchFromGitHub , gtk3, adwaita-icon-theme, breeze-icons, hicolor-icon-theme }:
 
-stdenv.mkDerivation rec  {
+stdenvNoCC.mkDerivation rec  {
   pname = "kora-icon-theme";
   version = "1.5.2";
 

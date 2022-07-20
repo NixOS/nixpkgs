@@ -35,7 +35,7 @@ let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
   # 22.1 on darwin won't build: https://gitlab.freedesktop.org/mesa/mesa/-/issues/6519
-  version = if stdenv.isDarwin then "22.0.4" else "22.1.1";
+  version = if stdenv.isDarwin then "22.0.4" else "22.1.3";
   branch  = versions.major version;
 
 self = stdenv.mkDerivation {
@@ -50,7 +50,7 @@ self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
     sha256 = {
-      "22.1.1" = "1w8fpki67238l4yc92hsnsh4402py9zspirbmirxp577zxjhi526";
+      "22.1.3" = "1qwky31vdqh3y6i0mxqnrbq7jc39kjcyndpv4mbzz8d2gax353xr";
       "22.0.4" = "1m0y8wgy48hmcidsr7sbk5hcw3v0qr8359fd2x34fvl2z9c1z5y7";
     }.${version};
   };

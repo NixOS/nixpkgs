@@ -17,5 +17,10 @@ stdenv.mkDerivation {
     cp -v vc4emul/vc4emul $out/bin/vc4emul
   '';
 
+  cmakeFlags = [
+    # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+  ];
+
   meta.license = lib.licenses.mit;
 }

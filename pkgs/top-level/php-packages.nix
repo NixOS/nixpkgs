@@ -66,8 +66,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   #
   # Build inputs is used for extra deps that may be needed. And zendExtension
   # will mark the extension as a zend extension or not.
-  mkExtension =
-    { name
+  mkExtension = lib.makeOverridable
+    ({ name
     , configureFlags ? [ "--enable-${name}" ]
     , internalDeps ? [ ]
     , postPhpize ? ""
@@ -151,7 +151,7 @@ lib.makeScope pkgs.newScope (self: with self; {
         description = "PHP upstream extension: ${name}";
         inherit (php.meta) maintainers homepage license;
       };
-    });
+    }));
 
   php = phpPackage;
 

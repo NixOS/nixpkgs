@@ -10,7 +10,7 @@
 # Standard build environment with cmake.
 , lib, stdenv, fetchurl, fetchpatch, cmake
 
-, clhep ? null # not packaged currently
+, clhep
 , expat
 , xercesc
 , zlib
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     "-DGEANT4_USE_INVENTOR=${if enableInventor then "ON" else "OFF"}"
     "-DGEANT4_USE_PYTHON=${if enablePython then "ON" else "OFF"}"
     "-DGEANT4_USE_RAYTRACER_X11=${if enableRaytracerX11 then "ON" else "OFF"}"
-    "-DGEANT4_USE_SYSTEM_CLHEP=${if clhep != null then "ON" else "OFF"}"
+    "-DGEANT4_USE_SYSTEM_CLHEP=ON"
     "-DGEANT4_USE_SYSTEM_EXPAT=ON"
     "-DGEANT4_USE_SYSTEM_ZLIB=ON"
     "-DGEANT4_BUILD_MULTITHREADED=${if enableMultiThreading then "ON" else "OFF"}"
@@ -88,11 +88,11 @@ stdenv.mkDerivation rec {
   ];
   dontWrapQtApps = true; # no binaries
 
-  buildInputs = [ libGLU xlibsWrapper libXmu ]
+  buildInputs = [ clhep libGLU xlibsWrapper libXmu ]
     ++ lib.optionals enableInventor [ libXpm coin3d soxt motif ]
     ++ lib.optionals enablePython [ boost_python python3 ];
 
-  propagatedBuildInputs = [ clhep expat xercesc zlib libGL ]
+  propagatedBuildInputs = [ expat xercesc zlib libGL ]
     ++ lib.optionals enableXM [ motif ]
     ++ lib.optionals enableQt [ qtbase ];
 

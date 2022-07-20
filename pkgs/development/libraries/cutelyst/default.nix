@@ -31,14 +31,6 @@ stdenv.mkDerivation rec {
     "-DPLUGIN_VIEW_GRANTLEE=ON"
   ];
 
-  preBuild = lib.optionalString stdenv.isLinux ''
-    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}`pwd`/Cutelyst:`pwd`/EventLoopEPoll"
-  '';
-
-  postBuild = lib.optionalString stdenv.isLinux ''
-    unset LD_LIBRARY_PATH
-  '';
-
   meta = with lib; {
     description = "C++ Web Framework built on top of Qt";
     homepage = "https://cutelyst.org/";

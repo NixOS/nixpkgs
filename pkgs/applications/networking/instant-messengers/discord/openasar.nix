@@ -1,15 +1,5 @@
 { lib, stdenv, fetchFromGitHub, nodejs, bash, nodePackages, unzip }:
 
-let
-  # OpenAsar fails with default unzip, throwing  "lchmod (file attributes) error: Operation not supported"
-  unzipFix =
-    if stdenv.isLinux then
-      unzip.overrideAttrs (oldAttrs: {
-        buildFlags = oldAttrs.buildFlags ++ [ "LOCAL_UNZIP=-DNO_LCHMOD" ];
-      })
-    else
-      unzip;
-in
 stdenv.mkDerivation rec {
   pname = "openasar";
   version = "unstable-2022-06-27";
@@ -24,7 +14,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Hardcode unzip path
     substituteInPlace ./src/updater/moduleUpdater.js \
-      --replace \'unzip\' \'${unzipFix}/bin/unzip\'
+      --replace \'unzip\' \'${unzip}/bin/unzip\'
     # Remove auto-update feature
     echo "module.exports = async () => log('AsarUpdate', 'Removed');" > ./src/asarUpdate.js
   '';

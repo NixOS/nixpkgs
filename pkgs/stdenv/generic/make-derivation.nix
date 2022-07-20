@@ -330,6 +330,74 @@ else let
         ++ optional (elem "host"   configurePlatforms) "--host=${stdenv.hostPlatform.config}"
         ++ optional (elem "target" configurePlatforms) "--target=${stdenv.targetPlatform.config}";
 
+      cmakeFlags =
+        let
+          explicitFlags =
+            if lib.isString cmakeFlags then lib.warn
+                "String 'cmakeFlags' is deprecated and will be removed in release 23.05. Please use a list of strings. Derivation name: ${derivationArg.name}, file: ${pos.file or "unknown file"}"
+                [cmakeFlags]
+            else if cmakeFlags == null then
+              lib.warn
+                "Null 'cmakeFlags' is deprecated and will be removed in release 23.05. Please use a empty list instead '[]'. Derivation name: ${derivationArg.name}, file: ${pos.file or "unknown file"}"
+                []
+            else
+              cmakeFlags;
+
+          crossFlags = [
+            "-DCMAKE_SYSTEM_NAME=${lib.findFirst lib.isString "Generic" (lib.optional (!stdenv.hostPlatform.isRedox) stdenv.hostPlatform.uname.system)}"
+          ] ++ lib.optionals (stdenv.hostPlatform.uname.processor != null) [
+            "-DCMAKE_SYSTEM_PROCESSOR=${stdenv.hostPlatform.uname.processor}"
+          ] ++ lib.optionals (stdenv.hostPlatform.uname.release != null) [
+            "-DCMAKE_SYSTEM_VERSION=${stdenv.hostPlatform.uname.release}"
+          ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+            "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
+          ] ++ lib.optionals (stdenv.buildPlatform.uname.system != null) [
+            "-DCMAKE_HOST_SYSTEM_NAME=${stdenv.buildPlatform.uname.system}"
+          ] ++ lib.optionals (stdenv.buildPlatform.uname.processor != null) [
+            "-DCMAKE_HOST_SYSTEM_PROCESSOR=${stdenv.buildPlatform.uname.processor}"
+          ] ++ lib.optionals (stdenv.buildPlatform.uname.release != null) [
+            "-DCMAKE_HOST_SYSTEM_VERSION=${stdenv.buildPlatform.uname.release}"
+          ];
+        in
+          explicitFlags ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) crossFlags;
+
+      mesonFlags =
+        let
+          explicitFlags =
+            if lib.isString mesonFlags then lib.warn
+                "String 'mesonFlags' is deprecated and will be removed in release 23.05. Please use a list of strings. Derivation name: ${derivationArg.name}, file: ${pos.file or "unknown file"}"
+                [mesonFlags]
+            else if mesonFlags == null then
+              lib.warn
+                "Null 'mesonFlags' is deprecated and will be removed in release 23.05. Please use a empty list instead '[]'. Derivation name: ${derivationArg.name}, file: ${pos.file or "unknown file"}"
+                []
+            else
+              mesonFlags;
+
+          # See https://mesonbuild.com/Reference-tables.html#cpu-families
+          cpuFamily = platform: with platform;
+            /**/ if isAarch32 then "arm"
+            else if isAarch64 then "aarch64"
+            else if isx86_32  then "x86"
+            else if isx86_64  then "x86_64"
+            else platform.parsed.cpu.family + builtins.toString platform.parsed.cpu.bits;
+
+          crossFile = builtins.toFile "cross-file.conf" ''
+            [properties]
+            needs_exe_wrapper = true
+
+            [host_machine]
+            system = '${stdenv.targetPlatform.parsed.kernel.name}'
+            cpu_family = '${cpuFamily stdenv.targetPlatform}'
+            cpu = '${stdenv.targetPlatform.parsed.cpu.name}'
+            endian = ${if stdenv.targetPlatform.isLittleEndian then "'little'" else "'big'"}
+
+            [binaries]
+            llvm-config = 'llvm-config-native'
+          '';
+          crossFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--cross-file=${crossFile}" ];
+        in crossFlags ++ explicitFlags;
+
       inherit patches;
 
       inherit doCheck doInstallCheck;
@@ -341,42 +409,6 @@ else let
       # most people won't care about these anyways
       outputHashAlgo = attrs.outputHashAlgo or "sha256";
       outputHashMode = attrs.outputHashMode or "recursive";
-    } // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
-      cmakeFlags =
-        (/**/ if lib.isString cmakeFlags then [cmakeFlags]
-         else if cmakeFlags == null      then []
-         else                                     cmakeFlags)
-      ++ [ "-DCMAKE_SYSTEM_NAME=${lib.findFirst lib.isString "Generic" (
-           lib.optional (!stdenv.hostPlatform.isRedox) stdenv.hostPlatform.uname.system)}"]
-      ++ lib.optional (stdenv.hostPlatform.uname.processor != null) "-DCMAKE_SYSTEM_PROCESSOR=${stdenv.hostPlatform.uname.processor}"
-      ++ lib.optional (stdenv.hostPlatform.uname.release != null) "-DCMAKE_SYSTEM_VERSION=${stdenv.hostPlatform.uname.release}"
-      ++ lib.optional (stdenv.hostPlatform.isDarwin) "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
-      ++ lib.optional (stdenv.buildPlatform.uname.system != null) "-DCMAKE_HOST_SYSTEM_NAME=${stdenv.buildPlatform.uname.system}"
-      ++ lib.optional (stdenv.buildPlatform.uname.processor != null) "-DCMAKE_HOST_SYSTEM_PROCESSOR=${stdenv.buildPlatform.uname.processor}"
-      ++ lib.optional (stdenv.buildPlatform.uname.release != null) "-DCMAKE_HOST_SYSTEM_VERSION=${stdenv.buildPlatform.uname.release}";
-
-      mesonFlags = if mesonFlags == null then null else let
-        # See https://mesonbuild.com/Reference-tables.html#cpu-families
-        cpuFamily = platform: with platform;
-          /**/ if isAarch32 then "arm"
-          else if isAarch64 then "aarch64"
-          else if isx86_32  then "x86"
-          else if isx86_64  then "x86_64"
-          else platform.parsed.cpu.family + builtins.toString platform.parsed.cpu.bits;
-        crossFile = builtins.toFile "cross-file.conf" ''
-          [properties]
-          needs_exe_wrapper = true
-
-          [host_machine]
-          system = '${stdenv.targetPlatform.parsed.kernel.name}'
-          cpu_family = '${cpuFamily stdenv.targetPlatform}'
-          cpu = '${stdenv.targetPlatform.parsed.cpu.name}'
-          endian = ${if stdenv.targetPlatform.isLittleEndian then "'little'" else "'big'"}
-
-          [binaries]
-          llvm-config = 'llvm-config-native'
-        '';
-      in [ "--cross-file=${crossFile}" ] ++ mesonFlags;
     } // lib.optionalAttrs (enableParallelBuilding) {
       enableParallelChecking = attrs.enableParallelChecking or true;
     } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != [] || stdenv.hostPlatform.isMusl) {

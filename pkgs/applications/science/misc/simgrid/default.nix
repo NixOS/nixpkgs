@@ -65,6 +65,9 @@ stdenv.mkDerivation rec {
     "-Denable_compile_warnings=off"
     "-Denable_compile_optimizations=${optionOnOff optimize}"
     "-Denable_lto=${optionOnOff optimize}"
+
+    # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];
   makeFlags = optional debug "VERBOSE=1";
 

@@ -22,10 +22,6 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals portaudioSupport [ portaudio ];
 
   doCheck = true;
-  preCheck = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD
-    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD
-  '';
 
   meta = with lib; {
     description = "Digital Speech Decoder";

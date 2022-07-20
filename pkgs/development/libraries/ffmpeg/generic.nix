@@ -238,8 +238,7 @@ stdenv.mkDerivation rec {
       a corporation.
     '';
     license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ codyopel ];
+    maintainers = with maintainers; [ ];
     inherit branch knownVulnerabilities;
   };
 }

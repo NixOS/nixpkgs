@@ -7,7 +7,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "you-get";
-  version = "0.4.1612";
+  version = "0.4.1620";
 
   # Tests aren't packaged, but they all hit the real network so
   # probably aren't suitable for a build environment anyway.
@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-lKEztwwn1pnALuwDiA1Ik9+XCVyO+UMobv+hXu0mn5w=";
+    sha256 = "sha256-wCDaT9Nz1ZiSsqFwX1PXHq6QF6fjLRI9wwvvWxcmYOY=";
   };
 
   patches = [
@@ -39,6 +39,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "A tiny command line utility to download media contents from the web";
     homepage = "https://you-get.org";
+    changelog = "https://github.com/soimort/you-get/raw/v${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ ryneeverett ];
   };

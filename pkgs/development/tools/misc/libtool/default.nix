@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
   # Don't fixup "#! /bin/sh" in Libtool, otherwise it will use the
   # "fixed" path in generated files!
   dontPatchShebangs = true;
+  dontFixLibtool = true;
 
   meta = {
     description = "Generic library support script";

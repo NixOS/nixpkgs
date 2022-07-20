@@ -31,7 +31,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://tatsu.readthedocs.io/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
   };
 
 }

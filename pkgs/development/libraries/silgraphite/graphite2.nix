@@ -35,11 +35,6 @@ stdenv.mkDerivation rec {
     sed -e '/freetype freetype.c/d' -i ../tests/examples/CMakeLists.txt
   '';
 
-  preCheck = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/src/
-    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD/src/
-  '';
-
   doCheck = true;
 
   meta = with lib; {

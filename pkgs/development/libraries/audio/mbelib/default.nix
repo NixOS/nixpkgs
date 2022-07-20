@@ -14,10 +14,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   doCheck = true;
-  preCheck = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD
-    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD
-  '';
 
   meta = with lib; {
     description = "P25 Phase 1 and ProVoice vocoder";

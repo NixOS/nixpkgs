@@ -88,12 +88,6 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  preCheck = ''
-    export LD_LIBRARY_PATH=$(pwd)/bin
-  '' + lib.optionalString (stdenv.isDarwin) ''
-    export DYLD_LIBRARY_PATH=$(pwd)/bin
-  '';
-
   excludedTests = lib.optionals stdenv.isDarwin [
     "MFHDF_TEST-hdftest"
     "MFHDF_TEST-hdftest-shared"
