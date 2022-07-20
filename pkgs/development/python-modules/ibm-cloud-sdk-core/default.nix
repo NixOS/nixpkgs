@@ -59,6 +59,6 @@ buildPythonPackage rec {
     description = "Client library for the IBM Cloud services";
     homepage = "https://github.com/IBM/python-sdk-core";
     license = licenses.asl20;
-    maintainers = with maintainers; [ globin lheckemann ];
+    maintainers = with maintainers; [ globin ];
   };
 }
