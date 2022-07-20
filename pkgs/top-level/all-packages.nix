@@ -27870,6 +27870,8 @@ with pkgs;
     texinfo = texinfo6_7; # Uses @setcontentsaftertitlepage, removed in 6.8.
   };
 
+  ilspy = callPackage ../applications/misc/ilspy { };
+
   imag = callPackage ../applications/misc/imag {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
