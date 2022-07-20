@@ -82,8 +82,8 @@ in
           "default/useradd".text = "GROUP=100 ...";
         }
       '';
-      description = ''
-        Set of files that have to be linked in <filename>/etc</filename>.
+      description = lib.mdDoc ''
+        Set of files that have to be linked in {file}`/etc`.
       '';
 
       type = with types; attrsOf (submodule (
@@ -93,7 +93,7 @@ in
             enable = mkOption {
               type = types.bool;
               default = true;
-              description = ''
+              description = lib.mdDoc ''
                 Whether this /etc file should be generated.  This
                 option allows specific /etc files to be disabled.
               '';
@@ -101,9 +101,9 @@ in
 
             target = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Name of symlink (relative to
-                <filename>/etc</filename>).  Defaults to the attribute
+                {file}`/etc`).  Defaults to the attribute
                 name.
               '';
             };
@@ -111,20 +111,20 @@ in
             text = mkOption {
               default = null;
               type = types.nullOr types.lines;
-              description = "Text of the file.";
+              description = lib.mdDoc "Text of the file.";
             };
 
             source = mkOption {
               type = types.path;
-              description = "Path of the source file.";
+              description = lib.mdDoc "Path of the source file.";
             };
 
             mode = mkOption {
               type = types.str;
               default = "symlink";
               example = "0600";
-              description = ''
-                If set to something else than <literal>symlink</literal>,
+              description = lib.mdDoc ''
+                If set to something else than `symlink`,
                 the file is copied instead of symlinked, with the given
                 file mode.
               '';
@@ -133,7 +133,7 @@ in
             uid = mkOption {
               default = 0;
               type = types.int;
-              description = ''
+              description = lib.mdDoc ''
                 UID of created file. Only takes effect when the file is
                 copied (that is, the mode is not 'symlink').
                 '';
@@ -142,7 +142,7 @@ in
             gid = mkOption {
               default = 0;
               type = types.int;
-              description = ''
+              description = lib.mdDoc ''
                 GID of created file. Only takes effect when the file is
                 copied (that is, the mode is not 'symlink').
               '';
@@ -151,20 +151,20 @@ in
             user = mkOption {
               default = "+${toString config.uid}";
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 User name of created file.
                 Only takes effect when the file is copied (that is, the mode is not 'symlink').
-                Changing this option takes precedence over <literal>uid</literal>.
+                Changing this option takes precedence over `uid`.
               '';
             };
 
             group = mkOption {
               default = "+${toString config.gid}";
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Group name of created file.
                 Only takes effect when the file is copied (that is, the mode is not 'symlink').
-                Changing this option takes precedence over <literal>gid</literal>.
+                Changing this option takes precedence over `gid`.
               '';
             };
 
