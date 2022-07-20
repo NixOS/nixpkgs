@@ -3,18 +3,20 @@
 , fetchPypi
 , six
 , requests
+, azure-core
 }:
 
 buildPythonPackage rec {
-  version = "3.2.0";
+  version = "4.2.0";
   pname = "azure-cosmos";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4f77cc558fecffac04377ba758ac4e23f076dc1c54e2cf2515f85bc15cbde5c6";
+    extension = "zip";
+    sha256 = "867191fa5966446101f7ca3834f23060a85735d0b660303ca353864945d572b6";
   };
 
-  propagatedBuildInputs = [ six requests ];
+  propagatedBuildInputs = [ six requests azure-core ];
 
   pythonNamespaces = [ "azure" ];
 
