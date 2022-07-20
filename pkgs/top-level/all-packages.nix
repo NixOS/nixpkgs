@@ -4429,6 +4429,8 @@ with pkgs;
 
   shisho = callPackage ../tools/security/shisho { };
 
+  siglo = callPackage ../applications/misc/siglo { };
+
   simg2img = callPackage ../tools/filesystems/simg2img { };
 
   snazy = callPackage ../development/tools/snazy { };
