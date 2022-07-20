@@ -152,27 +152,27 @@ in
       type = types.package;
       default = pkgs.invidious;
       defaultText = "pkgs.invidious";
-      description = "The Invidious package to use.";
+      description = lib.mdDoc "The Invidious package to use.";
     };
 
     settings = lib.mkOption {
       type = settingsFormat.type;
       default = { };
-      description = ''
+      description = lib.mdDoc ''
         The settings Invidious should use.
 
-        See <link xlink:href="https://github.com/iv-org/invidious/blob/master/config/config.example.yml">config.example.yml</link> for a list of all possible options.
+        See [config.example.yml](https://github.com/iv-org/invidious/blob/master/config/config.example.yml) for a list of all possible options.
       '';
     };
 
     extraSettingsFile = lib.mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         A file including Invidious settings.
 
-        It gets merged with the setttings specified in <option>services.invidious.settings</option>
-        and can be used to store secrets like <literal>hmac_key</literal> outside of the nix store.
+        It gets merged with the setttings specified in {option}`services.invidious.settings`
+        and can be used to store secrets like `hmac_key` outside of the nix store.
       '';
     };
 
@@ -182,7 +182,7 @@ in
     domain = lib.mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         The FQDN Invidious is reachable on.
 
         This is used to configure nginx and for building absolute URLs.
@@ -193,12 +193,12 @@ in
       type = types.port;
       # Default from https://docs.invidious.io/Configuration.md
       default = 3000;
-      description = ''
+      description = lib.mdDoc ''
         The port Invidious should listen on.
 
         To allow access from outside,
-        you can use either <option>services.invidious.nginx</option>
-        or add <literal>config.services.invidious.port</literal> to <option>networking.firewall.allowedTCPPorts</option>.
+        you can use either {option}`services.invidious.nginx`
+        or add `config.services.invidious.port` to {option}`networking.firewall.allowedTCPPorts`.
       '';
     };
 
@@ -206,7 +206,7 @@ in
       createLocally = lib.mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to create a local database with PostgreSQL.
         '';
       };
@@ -214,10 +214,10 @@ in
       host = lib.mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           The database host Invidious should use.
 
-          If <literal>null</literal>, the local unix socket is used. Otherwise
+          If `null`, the local unix socket is used. Otherwise
           TCP is used.
         '';
       };
@@ -226,7 +226,7 @@ in
         type = types.port;
         default = options.services.postgresql.port.default;
         defaultText = lib.literalExpression "options.services.postgresql.port.default";
-        description = ''
+        description = lib.mdDoc ''
           The port of the database Invidious should use.
 
           Defaults to the the default postgresql port.
@@ -237,7 +237,7 @@ in
         type = types.nullOr types.str;
         apply = lib.mapNullable toString;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Path to file containing the database password.
         '';
       };
@@ -246,11 +246,11 @@ in
     nginx.enable = lib.mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to configure nginx as a reverse proxy for Invidious.
 
-        It serves it under the domain specified in <option>services.invidious.settings.domain</option> with enabled TLS and ACME.
-        Further configuration can be done through <option>services.nginx.virtualHosts.''${config.services.invidious.settings.domain}.*</option>,
+        It serves it under the domain specified in {option}`services.invidious.settings.domain` with enabled TLS and ACME.
+        Further configuration can be done through {option}`services.nginx.virtualHosts.''${config.services.invidious.settings.domain}.*`,
         which can also be used to disable AMCE and TLS.
       '';
     };

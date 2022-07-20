@@ -20,31 +20,31 @@ in
         type = types.package;
         default = pkgs.klipper;
         defaultText = literalExpression "pkgs.klipper";
-        description = "The Klipper package.";
+        description = lib.mdDoc "The Klipper package.";
       };
 
       inputTTY = mkOption {
         type = types.path;
         default = "/run/klipper/tty";
-        description = "Path of the virtual printer symlink to create.";
+        description = lib.mdDoc "Path of the virtual printer symlink to create.";
       };
 
       apiSocket = mkOption {
         type = types.nullOr types.path;
         default = "/run/klipper/api";
-        description = "Path of the API socket to create.";
+        description = lib.mdDoc "Path of the API socket to create.";
       };
 
       octoprintIntegration = mkOption {
         type = types.bool;
         default = false;
-        description = "Allows Octoprint to control Klipper.";
+        description = lib.mdDoc "Allows Octoprint to control Klipper.";
       };
 
       user = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           User account under which Klipper runs.
 
           If null is specified (default), a temporary user will be created by systemd.
@@ -54,7 +54,7 @@ in
       group = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Group account under which Klipper runs.
 
           If null is specified (default), a temporary user will be created by systemd.
@@ -64,8 +64,8 @@ in
       settings = mkOption {
         type = format.type;
         default = { };
-        description = ''
-          Configuration for Klipper. See the <link xlink:href="https://www.klipper3d.org/Overview.html#configuration-and-tuning-guides">documentation</link>
+        description = lib.mdDoc ''
+          Configuration for Klipper. See the [documentation](https://www.klipper3d.org/Overview.html#configuration-and-tuning-guides)
           for supported values.
         '';
       };

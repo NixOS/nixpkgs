@@ -46,31 +46,31 @@ in {
         type = types.package;
         default = pkgs.unbound-with-systemd;
         defaultText = literalExpression "pkgs.unbound-with-systemd";
-        description = "The unbound package to use";
+        description = lib.mdDoc "The unbound package to use";
       };
 
       user = mkOption {
         type = types.str;
         default = "unbound";
-        description = "User account under which unbound runs.";
+        description = lib.mdDoc "User account under which unbound runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "unbound";
-        description = "Group under which unbound runs.";
+        description = lib.mdDoc "Group under which unbound runs.";
       };
 
       stateDir = mkOption {
         type = types.path;
         default = "/var/lib/unbound";
-        description = "Directory holding all state for unbound to run.";
+        description = lib.mdDoc "Directory holding all state for unbound to run.";
       };
 
       resolveLocalQueries = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether unbound should resolve local queries (i.e. add 127.0.0.1 to
           /etc/resolv.conf).
         '';
@@ -79,7 +79,7 @@ in {
       enableRootTrustAnchor = mkOption {
         default = true;
         type = types.bool;
-        description = "Use and update root trust anchor for DNSSEC validation.";
+        description = lib.mdDoc "Use and update root trust anchor for DNSSEC validation.";
       };
 
       localControlSocketPath = mkOption {
@@ -90,16 +90,16 @@ in {
         # but I haven't verified yet.
         type = types.nullOr types.str;
         example = "/run/unbound/unbound.ctl";
-        description = ''
-          When not set to <literal>null</literal> this option defines the path
+        description = lib.mdDoc ''
+          When not set to `null` this option defines the path
           at which the unbound remote control socket should be created at. The
-          socket will be owned by the unbound user (<literal>unbound</literal>)
-          and group will be <literal>nogroup</literal>.
+          socket will be owned by the unbound user (`unbound`)
+          and group will be `nogroup`.
 
           Users that should be permitted to access the socket must be in the
-          <literal>config.services.unbound.group</literal> group.
+          `config.services.unbound.group` group.
 
-          If this option is <literal>null</literal> remote control will not be
+          If this option is `null` remote control will not be
           enabled. Unbounds default values apply.
         '';
       };
@@ -150,10 +150,9 @@ in {
             remote-control.control-enable = true;
           };
         '';
-        description = ''
+        description = lib.mdDoc ''
           Declarative Unbound configuration
-          See the <citerefentry><refentrytitle>unbound.conf</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> manpage for a list of
+          See the {manpage}`unbound.conf(5)` manpage for a list of
           available options.
         '';
       };
