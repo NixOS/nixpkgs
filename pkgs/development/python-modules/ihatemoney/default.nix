@@ -17,7 +17,7 @@
 , flask_mail
 , flask_migrate
 , flask-restful
-, flask_sqlalchemy
+, flask-sqlalchemy
 , flask-talisman
 , flask-wtf
 , debts
