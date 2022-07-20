@@ -35928,6 +35928,8 @@ with pkgs;
 
   bcompare = libsForQt5.callPackage ../applications/version-management/bcompare {};
 
+  xp-pen-deco-01-v2-driver = libsForQt5.xp-pen-deco-01-v2-driver;
+
   pentablet-driver = libsForQt5.callPackage ../misc/drivers/pentablet-driver { };
 
   new-session-manager = callPackage ../applications/audio/new-session-manager { };
