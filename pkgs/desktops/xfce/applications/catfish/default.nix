@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitLab
+, gitUpdater
 , file
 , which
 , intltool
@@ -63,6 +64,11 @@ python3Packages.buildPythonApplication rec {
 
   # Disable check because there is no test in the source distribution
   doCheck = false;
+
+  passthru.updateScript = gitUpdater {
+    inherit pname version;
+    rev-prefix = "${pname}-";
+  };
 
   meta = with lib; {
     homepage = "https://docs.xfce.org/apps/catfish/start";
