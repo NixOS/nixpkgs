@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ferium";
@@ -20,6 +20,15 @@ rustPlatform.buildRustPackage rec {
 
   # Requires an internet connection
   doCheck = false;
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    for shell in bash fish zsh; do
+      $out/bin/ferium complete $shell > ferium.$shell
+      installShellCompletion ferium.$shell
+    done
+  '';
 
   meta = with lib; {
     description = "Fast and multi-source CLI program for managing Minecraft mods and modpacks from Modrinth, CurseForge, and GitHub Releases";
