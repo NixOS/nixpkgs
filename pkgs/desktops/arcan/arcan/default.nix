@@ -8,7 +8,10 @@
 , ffmpeg
 , file
 , freetype
+, glib
+, gumbo
 , harfbuzz
+, jbig2dec
 , leptonica
 , libGL
 , libX11
@@ -24,11 +27,14 @@
 , libvncserver
 , libxcb
 , libxkbcommon
-, lua
+, lua5_1
 , luajit
 , makeWrapper
 , mesa
+, mupdf
 , openal
+, openjpeg
+, pcre
 , pkg-config
 , sqlite
 , tesseract
@@ -48,13 +54,13 @@
 
 stdenv.mkDerivation rec {
   pname = "arcan" + lib.optionalString useStaticOpenAL "-static-openal";
-  version = "0.6.1.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "letoram";
     repo = "arcan";
     rev = version;
-    hash = "sha256-+dJaBSKGbHOwzA26/jDyh2UF9YRwGUcysJIeAM4kvfc=";
+    hash = "sha256-Qwyt927eLqaCqJ4Lo4J1lQX2A24ke+AH52rmSCTnpO0=";
   };
 
   nativeBuildInputs = [
@@ -71,7 +77,10 @@ stdenv.mkDerivation rec {
     ffmpeg
     file
     freetype
+    glib
+    gumbo
     harfbuzz
+    jbig2dec
     leptonica
     libGL
     libX11
@@ -87,10 +96,13 @@ stdenv.mkDerivation rec {
     libvncserver
     libxcb
     libxkbcommon
-    lua
+    lua5_1
     luajit
     mesa
+    mupdf.dev
     openal
+    openjpeg.dev
+    pcre
     sqlite
     tesseract
     valgrind
