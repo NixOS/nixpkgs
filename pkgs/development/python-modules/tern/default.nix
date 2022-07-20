@@ -8,6 +8,7 @@
 , stevedore
 , pbr
 , debian-inspector
+, license-expression
 , regex
 , GitPython
 , prettytable
@@ -36,6 +37,7 @@ buildPythonPackage rec {
     pyyaml
     docker
     dockerfile-parse
+    license-expression
     requests
     stevedore
     debian-inspector
