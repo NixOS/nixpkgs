@@ -15,11 +15,11 @@ buildPythonPackage rec {
   version = "5.0.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ldFvWqMTpSY2YHJ+I1vsrTiPESNoi3b055bthwwFjY4=";
+    hash = "sha256-ldFvWqMTpSY2YHJ+I1vsrTiPESNoi3b055bthwwFjY4=";
   };
 
   propagatedBuildInputs = [
