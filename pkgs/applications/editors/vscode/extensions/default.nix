@@ -1201,8 +1201,8 @@ let
         mktplcRef = {
           name = "haskell";
           publisher = "haskell";
-          version = "1.8.0";
-          sha256 = "sha256-+k8XT2COe9Z8HvZvcrzfVuocRcxXBrVoNHDT/uKK7Hs=";
+          version = "2.2.0";
+          sha256 = "sha256-YGPytmI4PgH6GQuWaRF5quiKGoOabkv7On+WVupI92E=";
         };
         meta = with lib; {
           license = licenses.mit;
@@ -1415,8 +1415,8 @@ let
         mktplcRef = {
           name = "language-haskell";
           publisher = "justusadam";
-          version = "3.4.0";
-          sha256 = "0ab7m5jzxakjxaiwmg0jcck53vnn183589bbxh3iiylkpicrv67y";
+          version = "3.6.0";
+          sha256 = "sha256-rZXRzPmu7IYmyRWANtpJp3wp0r/RwB7eGHEJa7hBvoQ=";
         };
         meta = {
           license = lib.licenses.bsd3;
