@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , cups
 , coreutils
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -39,6 +40,8 @@ stdenv.mkDerivation rec {
     install -Dm 0644 -t $out/share/cups/model *.ppd
     runHook postInstall
   '';
+
+  passthru.tests.vmtest = nixosTests.cups-pdf;
 
   meta = with lib; {
     description = "A CUPS backend that turns print jobs into searchable PDF files";
