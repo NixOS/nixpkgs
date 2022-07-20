@@ -17,6 +17,10 @@ python3Packages.buildPythonApplication rec {
       --replace 'setuptools_scm<6.0' 'setuptools_scm'
   '';
 
+  nativeBuildInputs = with python3Packages; [
+    setuptools-scm
+  ];
+
   propagatedBuildInputs = with python3Packages; [
     b2sdk
     phx-class-registry
@@ -25,16 +29,14 @@ python3Packages.buildPythonApplication rec {
     rst2ansi
   ];
 
-  nativeBuildInputs = with python3Packages; [
-    setuptools-scm
-  ];
-
   checkInputs = with python3Packages; [
     pytestCheckHook
   ];
 
   disabledTests = [
+    # require network
     "test_files_headers"
+    "test_copy_file_by_id"
     "test_integration"
     "test_get_account_info"
   ];
@@ -53,6 +55,5 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/Backblaze/B2_Command_Line_Tool";
     license = licenses.mit;
     maintainers = with maintainers; [ hrdinka kevincox ];
-    platforms = platforms.unix;
   };
 }
