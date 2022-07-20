@@ -15,6 +15,11 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-DyNqu3vndyLkmfybCfTbgxk3t/ALg7IAkAMg4kBkH7Q=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "charset_normalizer~=2.0.0" "charset_normalizer"
+  '';
+
   propagatedBuildInputs = with python3.pkgs; [
     attrs
     certifi
