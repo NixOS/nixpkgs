@@ -25268,6 +25268,8 @@ with pkgs;
 
   qogir-icon-theme = callPackage ../data/icons/qogir-icon-theme { };
 
+  qogir-kde = callPackage ../data/themes/qogir-kde { };
+
   qogir-theme = callPackage ../data/themes/qogir { };
 
   quintom-cursor-theme = callPackage ../data/icons/quintom-cursor-theme { };
