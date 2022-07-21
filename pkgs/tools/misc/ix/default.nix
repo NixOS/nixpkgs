@@ -1,4 +1,4 @@
-{ lib, resholve, fetchurl, runtimeShell, curl }:
+{ lib, resholve, fetchurl, bash, curl }:
 
 resholve.mkDerivation {
   pname = "ix";
@@ -15,15 +15,16 @@ resholve.mkDerivation {
     runHook preInstall
 
     install -Dm555 $src $out/bin/ix
+    substituteInPlace $out/bin/ix \
+      --replace '$echo ' ""
 
     runHook postInstall
   '';
 
   solutions.default = {
     scripts = [ "bin/ix" ];
-    interpreter = runtimeShell;
+    interpreter = "${lib.getBin bash}/bin/bash";
     inputs = [ curl ];
-    keep."$echo" = true;
   };
 
   meta = with lib; {
