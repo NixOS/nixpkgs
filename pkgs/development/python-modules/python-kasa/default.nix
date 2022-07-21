@@ -43,6 +43,10 @@ buildPythonPackage rec {
     voluptuous
   ];
 
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
+  ];
+
   disabledTestPaths = [
     # Skip the examples tests
     "kasa/tests/test_readme_examples.py"
