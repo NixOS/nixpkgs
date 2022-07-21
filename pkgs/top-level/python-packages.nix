@@ -2900,6 +2900,8 @@ in {
 
   eth-utils = callPackage ../development/python-modules/eth-utils { };
 
+  etils = callPackage ../development/python-modules/etils { };
+
   etuples = callPackage ../development/python-modules/etuples { };
 
   et_xmlfile = callPackage ../development/python-modules/et_xmlfile { };
