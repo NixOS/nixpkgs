@@ -11,7 +11,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "openbangla-keyboard";
+  pname = "ibus-openbangla-keyboard";
   version = "2.0.0";
 
   src = fetchFromGitHub {
@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    isIbusEngine = true;
     description = "An OpenSource, Unicode compliant Bengali Input Method";
     homepage = "https://openbangla.github.io/";
     license = licenses.gpl3Plus;
