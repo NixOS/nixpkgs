@@ -1870,6 +1870,8 @@ with pkgs;
 
   aws-sam-cli = callPackage ../development/tools/aws-sam-cli { };
 
+  aws-sso-cli = callPackage ../tools/admin/aws-sso-cli { };
+
   aws-vault = callPackage ../tools/admin/aws-vault { };
 
   aws-workspaces = callPackage ../applications/networking/remote/aws-workspaces { };
@@ -2487,6 +2489,8 @@ with pkgs;
   ssh-mitm = with python3Packages; toPythonApplication ssh-mitm;
 
   sshchecker = callPackage ../tools/security/sshchecker { };
+
+  sshs = callPackage ../development/tools/sshs { };
 
   titaniumenv = callPackage ../development/mobile/titaniumenv { };
 
@@ -19319,6 +19323,10 @@ with pkgs;
   };
 
   libuinputplus = callPackage ../development/libraries/libuinputplus { };
+
+  libuiohook = callPackage ../development/libraries/libuiohook {
+    inherit (darwin.apple_sdk.frameworks) AppKit ApplicationServices Carbon;
+  };
 
   libunistring = callPackage ../development/libraries/libunistring { };
 
