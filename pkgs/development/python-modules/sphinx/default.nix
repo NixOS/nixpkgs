@@ -3,6 +3,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, fetchpatch
 # propagatedBuildInputs
 , babel
 , alabaster
@@ -47,6 +48,15 @@ buildPythonPackage rec {
       patch -p1 < ${./0001-test-images-Use-normalization-equivalent-character.patch}
     '';
   };
+
+  patches = [
+    # https://github.com/sphinx-doc/sphinx/pull/10624
+    (fetchpatch {
+      name = "avoid-deprecated-docutils-0.19-api.patch";
+      sha256 = "sha256-QIrLkxnexNcfuI00UOeCpAamMLqqt4wxoVY1VA72jIw=";
+      url = "https://github.com/sphinx-doc/sphinx/commit/8d99168794ab8be0de1e6281d1b76af8177acd3d.patch";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
