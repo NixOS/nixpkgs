@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   /* Fix up the frontend to load the 'default' cryptoverif library
   ** from under $out/libexec. By default, it expects to find the files
   ** in $CWD which doesn't work. */
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace ./src/syntax.ml \
       --replace \"default\" \"$out/libexec/default\"
   '';

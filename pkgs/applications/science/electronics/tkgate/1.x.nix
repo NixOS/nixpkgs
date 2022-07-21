@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ tcl tk libX11 xorgproto ];
   dontUseImakeConfigure = true;
 
-  patchPhase = ''
+  postPatch = ''
     sed -i config.h \
       -e 's|.*#define.*TKGATE_TCLTK_VERSIONS.*|#define TKGATE_TCLTK_VERSIONS "${tcl.release}"|' \
       -e 's|.*#define.*TKGATE_INCDIRS.*|#define TKGATE_INCDIRS "${tcl}/include ${tk}/include ${libiconvInc} ${libX11.dev}/include"|' \

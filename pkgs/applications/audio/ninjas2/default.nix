@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs dpf/utils/generate-ttl.sh
   '';
 

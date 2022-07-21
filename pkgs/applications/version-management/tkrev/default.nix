@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ tcl tk ];
 
-  patchPhase = ''
+  postPatch = ''
     for file in tkrev/tkrev.tcl tkdiff/tkdiff; do
         substituteInPlace "$file" \
             --replace "exec wish" "exec ${tk}/bin/wish"

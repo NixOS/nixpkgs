@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "sha256-7fpix+GkXsfpRgnkHtk1iXF6ILHri7BtUhNPK6sDQFA=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     sed "s#PREFIX=/usr#PREFIX=$out#g" -i Makefile
     mkdir -p $out/bin
     mkdir -p $out/share/man/man1

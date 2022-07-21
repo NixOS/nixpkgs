@@ -19,7 +19,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "dev" "man" ];
 
-  patchPhase = "patchShebangs utils";
+  postPatch = ''
+    patchShebangs utils
+  '';
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
 

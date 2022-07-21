@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ ];
-  patchPhase = ''
+  postPatch = ''
     patchShebangs .
 
     # Fix up Yosys imports

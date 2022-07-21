@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     '' export CXXCPP="$CXX -E"
     '';
 
-  patchPhase = ''
+  postPatch = ''
     # Fix absolute paths.
     sed -e 's=/bin/mv=mv=g' -e 's=/bin/rm=rm=g'			\
         -e 's=/tmp=$TMPDIR=g' -i autoconf/*		\

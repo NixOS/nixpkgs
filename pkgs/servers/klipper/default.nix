@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   # 2022-06-28: Python 3 is already supported in klipper, alas shebangs remained
   # the same - we replace them in patchPhase.
-  patchPhase = ''
+  postPatch = ''
     for F in klippy.py console.py parsedump.py; do
       substituteInPlace $F \
         --replace '/usr/bin/env python2' '/usr/bin/env python'

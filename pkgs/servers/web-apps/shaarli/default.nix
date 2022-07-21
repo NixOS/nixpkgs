@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "doc" ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace index.php \
       --replace "new ConfigManager();" "new ConfigManager(getenv('SHAARLI_CONFIG'));"
   '';

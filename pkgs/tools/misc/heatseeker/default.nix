@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   # https://github.com/rschmitt/heatseeker/issues/42
   # I've suggested using `/usr/bin/env stty`, but doing that isn't quite as simple
   # as a substitution, and this works since we have the path to coreutils stty.
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace src/screen/unix.rs --replace "/bin/stty" "${coreutils}/bin/stty"
   '';
 

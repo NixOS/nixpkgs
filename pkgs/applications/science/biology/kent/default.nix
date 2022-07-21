@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libpng libuuid zlib bzip2 xz openssl curl libmysqlclient ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace ./src/checkUmask.sh \
       --replace "/bin/bash" "${bash}/bin/bash"
 

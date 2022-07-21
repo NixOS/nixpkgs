@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1jzwdwan8ndvp2lw6j7zbvg5k9rgf2d8dcxjrwc6bwyk59xdxn4p";
   };
 
-  patchPhase = ''
+  postPatch = ''
     # requirement checks are unnecessary at runtime
     echo > requirements.txt
 

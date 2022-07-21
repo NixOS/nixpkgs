@@ -7,7 +7,7 @@ buildPythonPackage {
   src = foundationdb.pythonsrc;
   unpackCmd = "tar xf $curSrc";
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace ./fdb/impl.py \
       --replace libfdb_c.so "${foundationdb.lib}/lib/libfdb_c.so"
   '';

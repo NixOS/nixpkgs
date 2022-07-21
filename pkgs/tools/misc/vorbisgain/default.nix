@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libogg libvorbis ];
 
-  patchPhase = ''
+  postPatch = ''
     chmod -v +x configure
     configureFlags="--mandir=$out/share/man"
   '';

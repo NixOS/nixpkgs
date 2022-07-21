@@ -11,7 +11,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ fltk libjpeg ];
 
-  patchPhase = "sed -i 's#PATH=/bin:/usr/bin rm#'${coreutils}/bin/rm'#' seaview.cxx";
+  postPatch = ''
+    sed -i 's#PATH=/bin:/usr/bin rm#'${coreutils}/bin/rm'#' seaview.cxx
+  '';
+
   installPhase = "mkdir -p $out/bin; cp seaview $out/bin";
 
   meta = with lib; {

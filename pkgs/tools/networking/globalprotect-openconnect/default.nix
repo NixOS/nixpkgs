@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openconnect qtwebsockets qtwebengine ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace GPService/gpservice.h \
       --replace /usr/local/bin/openconnect ${openconnect}/bin/openconnect;
     substituteInPlace GPClient/settingsdialog.ui \

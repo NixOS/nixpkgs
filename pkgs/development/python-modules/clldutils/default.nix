@@ -25,7 +25,7 @@ buildPythonPackage rec {
     sha256 = "07ljq7v1zvaxyl6xn4a2p4097lgd5j9bz71lf05y5bz8k024mxbr";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace setup.cfg --replace "--cov" ""
   '';
 

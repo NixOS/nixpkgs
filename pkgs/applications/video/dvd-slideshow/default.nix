@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
     sha256 = "17c09aqvippiji2sd0pcxjg3nb1mnh9k5nia4gn5lhcvngjcp1q5";
   };
 
-  patchPhase = ''
+  postPatch = ''
     # fix upstream typos
     substituteInPlace dvd-slideshow \
       --replace "version='0.8.4-1'" "version='0.8.4-2'" \

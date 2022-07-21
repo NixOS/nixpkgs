@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1c974v85mbsis52y2knwzh33996q8sza7pqrcs6ydx033s0rxjrp";
   };
 
-  patchPhase = ''
+  postPatch = ''
     # Module info contains some fancy ascii art which breaks the module list
 
     awk -i inplace 'BEGIN {empty=0;write=1;}{if ($0 == ""){empty++;};if(empty==2){write=0};if (write==1){print $0}}' module.info

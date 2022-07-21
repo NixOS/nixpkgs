@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace getver.sh --replace ver=unknown ver=${version}
     substituteInPlace Makefile --replace pkg-config "$PKG_CONFIG"
   '';

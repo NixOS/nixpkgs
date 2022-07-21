@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     libiconv
   ];
 
-  patchPhase = ''
+  postPatch = ''
     sed 's|\<gs\>|${ghostscriptX}/bin/gs|g' -i "src/"*.in
     sed 's|"gs"|"${ghostscriptX}/bin/gs"|g' -i "src/"*.c
   '';

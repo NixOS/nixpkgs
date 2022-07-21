@@ -15,10 +15,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   nativeBuildInputs = [ pkg-config ];
 
-  patchPhase = ''
-    runHook prePatch
+  postPatch = ''
     find . -type f -name "makefile" -exec sed "s/ -static/ -g/g" -i \{\} \;
-    runHook postPatch
   '';
 
   installPhase = ''

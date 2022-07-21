@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     ++ (lib.optional (enableGui && stdenv.isDarwin)
         "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks");
 
-  patchPhase = with builtins; ''
+  postPatch = with builtins; ''
     # use PyPy for icestorm if enabled
     substituteInPlace ./ice40/CMakeLists.txt \
       --replace ''\'''${PYTHON_EXECUTABLE}' '${icestorm.pythonInterp}'

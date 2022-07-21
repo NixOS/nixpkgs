@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "b2a34a8af0a6625ccbdf45cd343b854fc6c1a85231dadc80b8805db836756323";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace dialog.py --replace ":/bin:/usr/bin" ":$out/bin"
   '';
 

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     chmod 755 -R $sourceRoot/libsailing
   '';
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace Makefile \
       --replace gcc cc
   '';

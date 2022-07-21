@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gperf ];
   buildInputs = [ getopt ];
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs .
   '';
 

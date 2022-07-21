@@ -12,7 +12,7 @@
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ python3 alsa-utils timidity ];
 
-  patchPhase = ''
+  postPatch = ''
     sed -i 's@/usr/bin/aplaymidi@/${alsa-utils}/bin/aplaymidi@g' mma-splitrec
     sed -i 's@/usr/bin/aplaymidi@/${alsa-utils}/bin/aplaymidi@g' util/mma-splitrec.py
     sed -i 's@/usr/bin/arecord@/${alsa-utils}/bin/arecord@g' mma-splitrec

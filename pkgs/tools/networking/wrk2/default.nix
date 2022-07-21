@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ luajit openssl zlib ];
 
-  patchPhase = ''
+  postPatch = ''
     rm -rf deps/luajit && mkdir deps/luajit
 
     substituteInPlace ./Makefile \

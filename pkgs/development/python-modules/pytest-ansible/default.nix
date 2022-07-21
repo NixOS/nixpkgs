@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "0vr015msciwzz20zplxalfmfx5hbg8rkf8vwjdg3z12fba8z8ks4";
   };
 
-  patchPhase = ''
+  postPatch = ''
     sed -i "s/'setuptools-markdown'//g" setup.py
   '';
 

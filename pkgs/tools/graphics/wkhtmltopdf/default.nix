@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     qtwebkit qtsvg qtxmlpatterns
   ];
 
-  prePatch = ''
+  postPatch = ''
     for f in src/image/image.pro src/pdf/pdf.pro ; do
       substituteInPlace $f --replace '$(INSTALL_ROOT)' ""
     done

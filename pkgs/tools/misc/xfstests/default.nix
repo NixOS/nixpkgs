@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   hardeningDisable = [ "format" ];
   enableParallelBuilding = true;
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace Makefile \
       --replace "cp include/install-sh ." "cp -f include/install-sh ."
 

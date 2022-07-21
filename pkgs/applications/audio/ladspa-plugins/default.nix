@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ fftw ladspaH libxml2 perlPackages.perl perlPackages.XMLParser ];
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs .
     patchShebangs ./metadata/
     cp ${automake}/share/automake-*/mkinstalldirs .

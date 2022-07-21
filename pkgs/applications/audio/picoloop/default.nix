@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace SDL_GUI.cpp \
     --replace "\"font.ttf\"" "\"$out/share/font.ttf\"" \
     --replace "\"font.bmp\"" "\"$out/share/font.bmp\""

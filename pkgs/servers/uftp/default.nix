@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace makefile --replace gcc cc
   '';
 

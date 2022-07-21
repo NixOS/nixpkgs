@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "1rlmns44pxm6dkh6d3cz9sw8v7pvi53r7r5r3kgwdzkhixjj0cdg";
   };
 
-  patchPhase = ''
+  postPatch = ''
    sed -i -e "s|-I/usr/include||g" -e "s|-I/usr/local/include||g" Makefile
   '';
 

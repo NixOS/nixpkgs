@@ -19,7 +19,7 @@ stdenv.mkDerivation rec
 
   # Can be removed in the next release
   # https://github.com/wdas/ptex/pull/42
-  patchPhase = ''
+  postPatch = ''
     echo v${version} >version
   '';
 

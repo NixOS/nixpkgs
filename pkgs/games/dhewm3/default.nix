@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   # Add libGLU libGL linking
-  patchPhase = ''
+  postPatch = ''
     sed -i 's/\<idlib\()\?\)$/idlib GL\1/' neo/CMakeLists.txt
   '';
 

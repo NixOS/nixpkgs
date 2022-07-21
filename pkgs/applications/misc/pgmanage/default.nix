@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1a1dbc32b3y0ph8ydf800h6pz7dg6g1gxgid4gffk7k58xj0c5yf";
   };
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs src/configure
   '';
 

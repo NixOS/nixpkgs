@@ -12,7 +12,7 @@ mkDerivation rec {
     sha256 = "0mird4k88ml6y61hky2jynrjmnxl849fvhsr5jfdlnv0i7r5vwi5";
   };
 
-  patchPhase = ''
+  postPatch = ''
     sed -i -e '/qmltermwidget/d' cool-retro-term.pro
   '';
 

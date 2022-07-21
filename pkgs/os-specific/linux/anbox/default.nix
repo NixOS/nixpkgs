@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs scripts
 
     cat >cmake/FindGMock.cmake <<'EOF'

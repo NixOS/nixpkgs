@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = lib.optional stdenv.isi686 "pic";
 
-  patchPhase = ''
+  postPatch = ''
     sed -i -e "s|/tmp/make.log|$TMPDIR/make.log|g" src/Pl2Wam/check_boot
   '';
 

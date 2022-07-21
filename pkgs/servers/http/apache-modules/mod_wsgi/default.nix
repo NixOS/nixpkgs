@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ apacheHttpd python ncurses ];
 
-  patchPhase = ''
+  postPatch = ''
     sed -r -i -e "s|^LIBEXECDIR=.*$|LIBEXECDIR=$out/modules|" \
       ${if stdenv.isDarwin then "-e 's|/usr/bin/lipo|lipo|'" else ""} \
       configure

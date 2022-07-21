@@ -14,7 +14,7 @@ python3Packages.buildPythonPackage rec {
 
   propagatedBuildInputs = [ python3Packages.pyqt5 wrapQtAppsHook ];
 
-  patchPhase = ''
+  postPatch = ''
       substituteInPlace ./setup.py \
         --replace "/usr/share" "usr/share"
 

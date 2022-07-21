@@ -17,7 +17,8 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ python ];
-  patchPhase = ''
+
+  postPatch = ''
     chmod +x scripts/create_mutated.sh
     patchShebangs .
 

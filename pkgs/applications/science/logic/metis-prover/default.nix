@@ -14,7 +14,9 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ perl ];
   buildInputs = [ mlton ];
 
-  patchPhase = "patchShebangs .";
+  postPatch = ''
+    patchShebangs .
+  '';
 
   buildPhase = "make mlton";
 

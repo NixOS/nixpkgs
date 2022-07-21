@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0cnl46z28lkqc5x27b8rpghvagahivrqcfvhzcsv9w1qs8qbd6dm";
   };
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs jpegrescan
   '';
 

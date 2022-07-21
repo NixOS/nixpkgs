@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0jmpvy4g68k6xgplj9zsl6brg6vi81mx3nx2x9hfbr1f4zh95j79";
   };
 
-  patchPhase = ''
+  postPatch = ''
     sed -i s,/usr/bin/gzip,gzip, Makefile.in
   '';
 

@@ -14,7 +14,7 @@ buildOctavePackage rec {
 
   # Octave replaced many of the is_thing_type check function with isthing.
   # The patch changes the occurrences of the old functions.
-  patchPhase = ''
+  postPatch = ''
     sed -i s/is_numeric_type/isnumeric/g src/*.cc
     sed -i s/is_real_type/isreal/g src/*.cc
     sed -i s/is_bool_type/islogical/g src/*.cc

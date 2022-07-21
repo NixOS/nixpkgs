@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = [ python3Packages.paramiko ];
 
-  patchPhase = ''
+  postPatch = ''
     sed -i 's,/usr/bin/xfreerdp,${freerdp}/bin/xfreerdp,g' lib/main.py
     sed -i 's,/usr/bin/vncviewer,${tigervnc}/bin/vncviewer,g' lib/main.py
     sed -i 's,/usr/sbin/openvpn,${openvpn}/bin/openvpn,g' lib/main.py

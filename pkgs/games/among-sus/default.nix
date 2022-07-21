@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "0j1158nczhvy5i1ykvzvhlv4ndhibgng0dq1lw2bmi8q6k1q1s0w";
   };
 
-  patchPhase = ''
+  postPatch = ''
     sed -i 's/port = 1234/port = ${port}/g' main.c
   '';
 

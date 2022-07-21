@@ -39,7 +39,7 @@ buildPythonPackage rec {
     pytest-mock
   ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace setup.cfg \
       --replace "--cov" ""
   '';

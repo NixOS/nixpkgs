@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl ];
 
   postUnpack = "rm $sourceRoot/git2log";
-  patchPhase = ''
+  postPatch = ''
     # VERSION is usually generated using Git
     echo "${version}" > VERSION
     substituteInPlace Makefile --replace "/usr" "/"

@@ -20,7 +20,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ funcsigs six ];
 
-  patchPhase = ''sed -i s/test_suite="'"sigtools.tests"'"/test_suite="'"unittest2.collector"'"/ setup.py'';
+  postPatch = ''
+    sed -i s/test_suite="'"sigtools.tests"'"/test_suite="'"unittest2.collector"'"/ setup.py
+  '';
 
   # repeated_test no longer exists in nixpkgs
   # Also see: https://github.com/epsy/sigtools/issues/26

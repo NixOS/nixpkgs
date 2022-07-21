@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config sconsPackages.scons_3_0_1 ];
   buildInputs = [ boost ladspaH ];
 
-  patchPhase = ''
+  postPatch = ''
     # remove TERM:
     sed -i -e '4d' SConstruct
     sed -i "s@mfpmath=sse@mfpmath=sse -I ${boost.dev}/include@g" SConstruct

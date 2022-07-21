@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-HlT/78LUiTkRUB2jHmYrnQY+bBiv4stcZlMyUnelSpc=";
   };
 
-  patchPhase = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile --replace "gcc" "cc"
     substituteInPlace Makefile --replace "-arch i386" ""
   '';

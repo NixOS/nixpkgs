@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "d4f7943cd39dc23fd825eb684b49dc3484860fa8443d30b06ee38af72a53b556";
   };
 
-  patchPhase = ''
+  postPatch = ''
     CFLAGS=" -Wall -Os ''${INCS} -DVERSION=\"''${VERSION}\" -DDZEN_XINERAMA -DDZEN_XPM -DDZEN_XFT `pkg-config --cflags xft`"
     LIBS=" -L/usr/lib -lc -lXft -lXpm -lXinerama -lX11"
     echo "CFLAGS=$CFLAGS" >>config.mk

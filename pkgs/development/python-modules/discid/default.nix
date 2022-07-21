@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "1fc6kvnqwaz9lrs2qgsp8wh0nabf49010r0r53wnsmpmafy315nd";
   };
 
-  patchPhase =
+  postPatch =
     let extension = stdenv.hostPlatform.extensions.sharedLibrary; in
     ''
       substituteInPlace discid/libdiscid.py \

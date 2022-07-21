@@ -17,7 +17,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six jaraco_classes jaraco_text ];
 
   # break dependency cycle
-  patchPhase = ''
+  postPatch = ''
     sed -i "/'jaraco.text',/d" setup.py
   '';
 }

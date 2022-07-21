@@ -12,7 +12,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ faust2jaqt faust2lv2 ];
 
-  patchPhase = "mv ${pname}_faust.dsp ${pname}.dsp";
+  postPatch = ''
+    mv ${pname}_faust.dsp ${pname}.dsp
+  '';
 
   buildPhase = ''
     faust2jaqt -time -vec -t 0 ${pname}.dsp

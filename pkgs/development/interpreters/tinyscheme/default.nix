@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-F7Cxv/0i89SdWDPiKhILM5A50s/aC0bW/FHdLwG0B60=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace scheme.c --replace "init.scm" "$out/lib/init.scm"
   '';
 

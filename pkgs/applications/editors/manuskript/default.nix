@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
     zlib
   ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace manuskript/ui/welcome.py \
       --replace sample-projects $out/share/${pname}/sample-projects
    '';

@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ perl ];
 
-  patchPhase =
+  postPatch =
     ''
       for i in execsnoop iolatency iosnoop kernel/funcslower killsnoop opensnoop; do
         substituteInPlace $i \

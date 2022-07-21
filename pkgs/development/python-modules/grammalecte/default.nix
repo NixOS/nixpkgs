@@ -14,10 +14,8 @@ buildPythonPackage rec {
     sha256 = "076jv3ywdgqqzg92bfbagc7ypy08xjq5zn4vgna6j9350fkfqhzn";
   };
 
-  patchPhase = ''
-    runHook prePatch
+  postPatch = ''
     substituteInPlace grammalecte-server.py --replace sys.version_info.major sys.version_info
-    runHook postPatch
   '';
 
   propagatedBuildInputs = [ bottle ];

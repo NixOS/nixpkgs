@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     py3
   ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace ./dduper --replace "/usr/sbin/btrfs.static" "${btrfsProgsPatched}/bin/btrfs"
   '';
 
