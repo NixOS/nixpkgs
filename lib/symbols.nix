@@ -14,4 +14,16 @@ rec {
     { __toString = _: description; };
 
   # ---- list of global symbols ----
+
+  /* NOCHROOT is an argument that can be passed to various derivation
+     constructors in nixpkgs and tell them to disable the Nix build sandbox
+     instead of using a pre-computed Hash when fetching dependencies.
+
+     For "__noChroot = true" to work on derivations, Nix has to be configured
+     with "sandbox = relaxed".
+
+     NOTE: This argument should never be used by nixpkgs packages themselves
+           and is only meant for third-party usage.
+  */
+  NOCHROOT = mkSymbol "no-chroot";
 }
