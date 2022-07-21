@@ -10,6 +10,12 @@ buildPythonPackage rec {
     sha256 = "sha256-SHdYDDjOtTIOEps4HQg7CoYBxoFm2LmXB/CPoKFonu8=";
   };
 
+  patches = [
+    # use the sip-distinfo executable from PATH instead of trying to guess,
+    # we know it's the right one because it's the _only_ one
+    ./use-sip-distinfo-from-path.patch
+  ];
+
   propagatedBuildInputs = [ packaging sip ];
 
   pythonImportsCheck = [ "pyqtbuild" ];
