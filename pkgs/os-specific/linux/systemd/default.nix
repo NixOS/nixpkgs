@@ -211,8 +211,8 @@ stdenv.mkDerivation {
     substituteInPlace src/basic/path-util.h --replace "@defaultPathNormal@" "${placeholder "out"}/bin/"
     substituteInPlace src/boot/efi/meson.build \
       --replace \
-      "find_program('objcopy'" \
-      "find_program('${stdenv.cc.bintools.targetPrefix}objcopy'"
+      "run_command(cc.cmd_array(), '-print-prog-name=objcopy', check: true).stdout().strip()" \
+      "'${stdenv.cc.bintools.targetPrefix}objcopy'"
   '' + (
     let
       # The following patches references to dynamic libraries to ensure that
