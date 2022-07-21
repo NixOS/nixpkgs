@@ -1201,8 +1201,8 @@ let
         mktplcRef = {
           name = "haskell";
           publisher = "haskell";
-          version = "1.8.0";
-          sha256 = "sha256-+k8XT2COe9Z8HvZvcrzfVuocRcxXBrVoNHDT/uKK7Hs=";
+          version = "2.2.0";
+          sha256 = "sha256-YGPytmI4PgH6GQuWaRF5quiKGoOabkv7On+WVupI92E=";
         };
         meta = with lib; {
           license = licenses.mit;
@@ -1415,8 +1415,8 @@ let
         mktplcRef = {
           name = "language-haskell";
           publisher = "justusadam";
-          version = "3.4.0";
-          sha256 = "0ab7m5jzxakjxaiwmg0jcck53vnn183589bbxh3iiylkpicrv67y";
+          version = "3.6.0";
+          sha256 = "sha256-rZXRzPmu7IYmyRWANtpJp3wp0r/RwB7eGHEJa7hBvoQ=";
         };
         meta = {
           license = lib.licenses.bsd3;
@@ -2028,6 +2028,26 @@ let
         };
       };
 
+      sanaajani.taskrunnercode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "taskrunnercode";
+          publisher = "sanaajani";
+          version = "0.3.0";
+          sha256 = "NVGMM9ugmYZNCWhNmclcGuVJPhJ9h4q2G6nNzVUEpes=";
+        };
+        meta = {
+          description = "Extension to view and run tasks from Explorer pane";
+          longDescription = ''
+            This extension adds an additional "Task Runner" view in your Explorer Pane
+            to visualize and individually run the auto-detected or configured tasks
+            in your project.
+          '';
+          homepage = "https://github.com/sana-ajani/taskrunner-code";
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ pbsds ];
+        };
+      };
+
       scala-lang.scala = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "scala";
@@ -2074,6 +2094,26 @@ let
         meta = {
           license = lib.licenses.mit;
           maintainers = with lib.maintainers; [ kamadorueda ];
+        };
+      };
+
+      shd101wyy.markdown-preview-enhanced = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "shd101wyy";
+          name = "markdown-preview-enhanced";
+          version = "0.6.3";
+          sha256 = "dCWERQ5rHnmYLtYl12gJ+dXLnpMu55WnmF1VfdP0x34=";
+        };
+        meta = {
+          description = "Provides a live preview of markdown using either markdown-it or pandoc";
+          longDescription = ''
+            Markdown Preview Enhanced provides you with many useful functionalities
+            such as automatic scroll sync, math typesetting, mermaid, PlantUML,
+            pandoc, PDF export, code chunk, presentation writer, etc.
+          '';
+          homepage = "https://github.com/shd101wyy/vscode-markdown-preview-enhanced";
+          license = lib.licenses.ncsa;
+          maintainers = with lib.maintainers; [ pbsds ];
         };
       };
 
@@ -2352,6 +2392,8 @@ let
           sha256 = "1bcj546bp0w4yndd0qxwr8grhiwjd1jvf33jgmpm0j96y34vcszz";
         };
         meta = {
+          description = "Show PDF preview in VSCode";
+          homepage = "https://github.com/tomoki1207/vscode-pdfviewer";
           license = lib.licenses.mit;
         };
       };

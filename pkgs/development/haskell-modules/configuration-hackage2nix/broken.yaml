@@ -1424,7 +1424,6 @@ broken-packages:
   - fast-nats
   - fastpbkdf2
   - FastPush
-  - fast-tags
   - FastxPipe
   - fathead-util
   - fb

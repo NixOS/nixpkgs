@@ -6,7 +6,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitea {
     domain = "codeberg.org";
-    owner = "papojari";
+    owner = "annaaurora";
     repo = pname;
     rev = "v${version}";
     sha256 = "qaOH+LXNDq+utwyI1yzHWNt25AvdAXCTAziGV9ElroU=";
@@ -20,8 +20,8 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Panes in the 8 bright terminal colors with shadows of the respective darker color";
-    homepage = "https://codeberg.org/papojari/colorpanes";
+    homepage = "https://codeberg.org/annaaurora/colorpanes";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ papojari ];
+    maintainers = with maintainers; [ annaaurora ];
   };
 }

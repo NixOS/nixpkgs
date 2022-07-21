@@ -2553,15 +2553,6 @@ self: super: {
   })
   super.polynomial);
 
-  fast-tags = appendPatches [
-    (fetchpatch {
-      name = "fast-tags-ghc-9.0-fix-test-nondeterminism.patch";
-      url = "https://github.com/elaforge/fast-tags/commit/af861acc2dd239fedd8b169ddc5e3fa694e7af57.patch";
-      sha256 = "0ml678q1n29daqnxsb5p94s5lf7a6dk4lqbbgmiayxrbyxnlbi4f";
-      excludes = [ ".github/**" ];
-    })
-  ] super.fast-tags;
-
   # lucid-htmx has restrictive upper bounds on lucid and servant:
   #
   #   Setup: Encountered missing or private dependencies:

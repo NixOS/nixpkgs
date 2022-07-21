@@ -6,7 +6,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitea {
     domain = "codeberg.org";
-    owner = "papojari";
+    owner = "annaaurora";
     repo = pname;
     rev = "v${version}";
     sha256 = "sha256-rK4em0maJQS50zPfnuFSxRoXUuFCaw9ZOfmgf70Sdac=";
@@ -16,8 +16,8 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Test the 16 terminal colors in all combinations";
-    homepage = "https://codeberg.org/papojari/sanctity";
+    homepage = "https://codeberg.org/annaaurora/sanctity";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ papojari ];
+    maintainers = with maintainers; [ annaaurora ];
   };
 }

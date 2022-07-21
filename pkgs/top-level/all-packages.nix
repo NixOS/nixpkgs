@@ -16115,7 +16115,9 @@ with pkgs;
 
   kubeaudit = callPackage ../tools/security/kubeaudit { };
 
-  kubectx = callPackage ../development/tools/kubectx { };
+  kubectx = callPackage ../development/tools/kubectx {
+    buildGoModule = buildGo117Module;
+  };
 
   kube-linter = callPackage ../development/tools/kube-linter { };
 
@@ -16958,6 +16960,8 @@ with pkgs;
   arrayfire = callPackage ../development/libraries/arrayfire {};
 
   arrow-cpp = callPackage ../development/libraries/arrow-cpp {};
+
+  arrow-glib = callPackage ../development/libraries/arrow-glib {};
 
   arsenal = callPackage ../tools/security/arsenal { };
 
@@ -18728,6 +18732,8 @@ with pkgs;
   libuchardet = callPackage ../development/libraries/libuchardet { };
 
   libchop = callPackage ../development/libraries/libchop { };
+
+  libcifpp = callPackage ../development/libraries/libcifpp { };
 
   libcint = callPackage ../development/libraries/libcint { };
 
@@ -23129,6 +23135,8 @@ with pkgs;
 
   unifi = unifi7;
 
+  unifi-protect-backup = callPackage ../applications/backup/unifi-protect-backup { };
+
   unifi-video = callPackage ../servers/unifi-video { };
 
   unpackerr = callPackage ../servers/unpackerr {
@@ -26050,6 +26058,8 @@ with pkgs;
   caerbannog = callPackage ../applications/misc/caerbannog { };
 
   cardboard = callPackage ../applications/window-managers/cardboard { };
+
+  cardo = callPackage ../data/fonts/cardo { };
 
   cage = callPackage ../applications/window-managers/cage {
     wlroots = wlroots_0_14;
@@ -33409,6 +33419,8 @@ with pkgs;
   delly = callPackage ../applications/science/biology/delly { };
 
   diamond = callPackage ../applications/science/biology/diamond { };
+
+  dssp = callPackage ../applications/science/biology/dssp { };
 
   ecopcr = callPackage ../applications/science/biology/ecopcr { };
 
