@@ -22,11 +22,11 @@ let
   '' + concatStringsSep "\n" (mapAttrsToList
     (n: v: "${n}=${cfgToString v}") cfg.serverProperties));
 
-  stopScript = pkgs.writeShellScript "minecraft-stop" ''
+  stopScript = pkgs.writeShellScript "minecraft-server-stop" ''
     echo stop > ${config.systemd.sockets.minecraft-server.socketConfig.ListenFIFO}
 
-    # Wait for the PID of the minecraft server to dissapear before
-    # returning, so systemd doesnt attempt to SIGKILL it.
+    # Wait for the PID of the minecraft server to disappear before
+    # returning, so systemd doesn't attempt to SIGKILL it.
     while kill -0 "$1" 2> /dev/null; do
       sleep 1s
     done
