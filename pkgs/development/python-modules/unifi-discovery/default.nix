@@ -39,6 +39,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "--cov=unifi_discovery --cov-report=term-missing:skip-covered" ""
