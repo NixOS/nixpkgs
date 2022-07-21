@@ -10104,6 +10104,8 @@ with pkgs;
 
   realvnc-vnc-viewer = callPackage ../tools/admin/realvnc-vnc-viewer {};
 
+  re-isearch = callPackage ../applications/search/re-isearch { };
+
   reaverwps = callPackage ../tools/networking/reaver-wps {};
 
   reaverwps-t6x = callPackage ../tools/networking/reaver-wps-t6x {};
