@@ -3,17 +3,15 @@
 let
   ltsVariant = {
     version = "5.15.54";
-    suffix = "xanmod1";
     hash = "sha256-0Odo+ZrQok3MMPl/512F8kIQ31mGZH6e9FyVVpXrYf0=";
   };
 
   edgeVariant = {
     version = "5.18.11";
-    suffix = "xanmod1";
     hash = "sha256-UPLwaEWhBu1yriCUJu9L/B8yy+1zxnTQzHaKlT507UY=";
   };
 
-  xanmodKernelFor = { version, suffix, hash }: buildLinux (args // rec {
+  xanmodKernelFor = { version, suffix ? "xanmod1", hash }: buildLinux (args // rec {
     inherit version;
     modDirVersion = "${version}-${suffix}";
 
