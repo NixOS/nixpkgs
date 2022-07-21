@@ -13,17 +13,10 @@ let
     objectClass: organizationalUnit
     ou: users
   '';
-  ldapClientConfig = {
-    enable = true;
-    loginPam = false;
-    nsswitch = false;
-    server = "ldap://";
-    base = "dc=example";
-  };
   testScript = ''
     machine.wait_for_unit("openldap.service")
     machine.succeed(
-        'ldapsearch -LLL -D "cn=root,dc=example" -w notapassword',
+        'ldapsearch -LLL -D "cn=root,dc=example" -w notapassword -b "dc=example"',
     )
   '';
 in {
@@ -64,7 +57,6 @@ in {
         };
         declarativeContents."dc=example" = dbContents;
       };
-      users.ldap = ldapClientConfig;
     };
   }) { inherit pkgs system; };
 
@@ -84,7 +76,6 @@ in {
         rootpw = "notapassword";
         declarativeContents."dc=example" = dbContents;
       };
-      users.ldap = ldapClientConfig;
     };
   }) { inherit system pkgs; };
 
@@ -97,7 +88,6 @@ in {
         enable = true;
         configDir = "/var/db/slapd.d";
       };
-      users.ldap = ldapClientConfig;
     };
 
     testScript = let
