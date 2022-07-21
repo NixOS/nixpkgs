@@ -24,9 +24,11 @@ rec {
   pipewire-audio-capture = callPackage ./pipewire-audio-capture {};
     obs-pipewire-audio-capture = pipewire-audio-capture; # Alias added 2022-07-21
 
+  vkcapture = callPackage ./vkcapture {};
+    obs-vkcapture = vkcapture; # Alias added 2022-07-21
+
   websocket = libsForQt5.callPackage ./websocket {};
     obs-websocket = websocket; # Alias added 2022-07-21
 
   wlrobs = callPackage ./wlrobs.nix {};
-  obs-vkcapture = callPackage ./obs-vkcapture.nix {};
 }
