@@ -20,6 +20,7 @@ let
     lists = callLibs ./lists.nix;
     strings = callLibs ./strings.nix;
     stringsWithDeps = callLibs ./strings-with-deps.nix;
+    symbols = import ./symbols.nix;
 
     # packaging
     customisation = callLibs ./customisation.nix;
