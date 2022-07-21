@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python }:
+{ lib, buildPythonPackage, fetchFromGitHub, python, defusedxml }:
 
 buildPythonPackage rec {
   pname = "untangle";
@@ -11,6 +11,10 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     sha256 = "sha256-cJkN8vT5hW5hRuLxr/6udwMO4GVH1pJhAc6qmPO2EEI=";
   };
+
+  propagatedBuildInputs = [
+    defusedxml
+  ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest discover -s tests
