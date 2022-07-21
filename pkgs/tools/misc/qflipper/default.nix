@@ -23,8 +23,8 @@
 }:
 let
   pname = "qFlipper";
-  version = "1.0.2";
-  sha256 = "sha256-CJQOEUwYPNd4x+uBINrxeYVITtYrsEFaYLHQh2l12kA=";
+  version = "1.1.0";
+  sha256 = "sha256-tZ+GXBv+LB1CYhO4hRtZFP25xUAVZaZJoee7Q7RJLp8=";
   timestamp = "99999999999";
   commit = "nix-${version}";
 

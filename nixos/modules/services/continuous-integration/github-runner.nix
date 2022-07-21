@@ -300,7 +300,6 @@ in
         UMask = "0066";
         ProtectProc = "invisible";
         SystemCallFilter = [
-          "~@capset"
           "~@clock"
           "~@cpu-emulation"
           "~@module"
@@ -308,6 +307,7 @@ in
           "~@obsolete"
           "~@raw-io"
           "~@reboot"
+          "~capset"
           "~setdomainname"
           "~sethostname"
         ];
