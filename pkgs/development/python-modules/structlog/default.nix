@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "structlog";
-  version = "21.5.0";
+  version = "22.1.0";
   format = "flit";
 
   src = fetchFromGitHub {
     owner = "hynek";
     repo = "structlog";
-    rev = version;
-    sha256 = "0bc5lj0732j0hjq89llgrncyzs6k3aaffvg07kr3la44w0hlrb4l";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-2sdH6iP+l+6pBNC+sjpAX8bCdCANqqkaqZRmR68uwxY=";
   };
 
   propagatedBuildInputs = [ six ];
