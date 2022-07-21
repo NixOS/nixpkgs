@@ -332,6 +332,7 @@ in
             [ cfg.ldap-proxy.environmentFile ];
           ExecStartPre =
             "${pkgs.writeShellScript "substitute-secrets-ldap-proxy" ''
+              umask 0077
               ${pkgs.envsubst}/bin/envsubst \
                 -i ${ldapProxyConfig} \
                 -o $STATE_DIRECTORY/ldap-proxy.ini

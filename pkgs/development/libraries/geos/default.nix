@@ -6,20 +6,12 @@
 
 stdenv.mkDerivation rec {
   pname = "geos";
-  version = "3.10.2";
+  version = "3.11.0";
 
   src = fetchurl {
     url = "https://download.osgeo.org/geos/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-ULvFmaw4a0wrOWLcxBHwBAph8gSq7066ciXs3Qz0VxU=";
+    sha256 = "sha256-eauMq/SqhgTRYVV7UuPk2EV1rNwNCMsJqz96rvpNhYo=";
   };
-
-  patches = [
-    # Fix paths with absolute CMAKE_INSTALL_*DIR
-    (fetchpatch {
-      url = "https://github.com/libgeos/geos/commit/11faa4db672ed61d64fd8a6f1a59114f5b5f2406.patch";
-      hash = "sha256-oAArwGq91Z93C6hBPQD0AlY8Q4Nnn6tA40HUPoZ5ftc=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake ];
 
