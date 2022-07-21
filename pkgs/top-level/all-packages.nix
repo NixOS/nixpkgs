@@ -2584,15 +2584,27 @@ with pkgs;
 
   go-audit = callPackage ../tools/system/go-audit { };
 
-  gopass = callPackage ../tools/security/gopass { };
+  gopass = callPackage ../tools/security/gopass {
+    # pinned due to https://github.com/gopasspw/gopass/issues/2280
+    # when go_1_18 is bumped to 1.18.5 please remove go_1_18_3 and buildGo1183Module
+    buildGoModule = buildGo1183Module;
+  };
 
-  gopass-hibp = callPackage ../tools/security/gopass/hibp.nix { };
+  gopass-hibp = callPackage ../tools/security/gopass/hibp.nix {
+    buildGoModule = buildGo1183Module;
+  };
 
-  gopass-jsonapi = callPackage ../tools/security/gopass/jsonapi.nix { };
+  gopass-jsonapi = callPackage ../tools/security/gopass/jsonapi.nix {
+    buildGoModule = buildGo1183Module;
+  };
 
-  git-credential-gopass = callPackage ../tools/security/gopass/git-credential.nix { };
+  git-credential-gopass = callPackage ../tools/security/gopass/git-credential.nix {
+    buildGoModule = buildGo1183Module;
+  };
 
-  gopass-summon-provider = callPackage ../tools/security/gopass/summon.nix { };
+  gopass-summon-provider = callPackage ../tools/security/gopass/summon.nix {
+    buildGoModule = buildGo1183Module;
+  };
 
   gosh = callPackage ../tools/security/gosh { };
 
