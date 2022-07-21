@@ -6,7 +6,7 @@
 , enum34
 , fetchPypi
 , flask
-, flask_sqlalchemy
+, flask-sqlalchemy
 , flask-babelex
 , flask-mongoengine
 , geoalchemy2
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     arrow
     colour
     email-validator
-    flask_sqlalchemy
+    flask-sqlalchemy
     flask-babelex
     flask-mongoengine
     geoalchemy2

@@ -11,13 +11,19 @@
 
 buildPythonPackage rec {
   pname = "Flask-Caching";
-  version = "1.11.1";
+  version = "2.0.0";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "28af189e97defb9e39b43ebe197b54a58aaee81bdeb759f46d969c26d7aa7810";
+    sha256 = "sha256-MwDvzNo1nWnODmgkuQy1cf+JWjkHwxJmwDQsykvEA0A=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "Flask <= 2.1.2" "Flask <= 2.2"
+  '';
 
   propagatedBuildInputs = [
     cachelib

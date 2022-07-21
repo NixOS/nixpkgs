@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "pep8-naming";
-  version = "0.13.0";
+  version = "0.13.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-nzjm3Phnoft61H9f9ywN2uVEps9k6592ALezwLtZgLU=";
+    sha256 = "sha256-Ovd82qnHll98haVs1Xk1RVPJu9P98weKd28S21TdaUQ=";
   };
 
   propagatedBuildInputs = [

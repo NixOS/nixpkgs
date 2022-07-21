@@ -32,6 +32,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
+  ];
+
   disabledTests = [
     # Tests requires network features (e. g., discovery testing)
     "test_Bulb_Discovery"

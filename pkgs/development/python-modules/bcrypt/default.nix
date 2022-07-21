@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "bcrypt";
-  version = "3.2.0";
+  version = "3.2.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5b93c1726e50a93a033c36e5ca7fdcd29a5c7395af50a6892f5d9e7c6cfbfb29";
+    sha256 = "sha256-QzxBDCF3BXcF2iqfLNAd0VdJOyp6wUyFk6FrPatra/s=";
   };
 
   nativeBuildInputs = [

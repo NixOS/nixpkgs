@@ -31,6 +31,18 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
+      backoff = super.backoff.overridePythonAttrs (oldAttrs: rec {
+        version = "1.11.1";
+        src = fetchFromGitHub {
+          owner = "litl";
+          repo = "backoff";
+          rev = "v${version}";
+          hash = "sha256-87IMcLaoCn0Vns8Ub/AFmv0gXtS0aPZX0cSt7+lOPm4=";
+        };
+      });
+    })
+
+    (self: super: {
       bsblan = super.bsblan.overridePythonAttrs (oldAttrs: rec {
         version = "0.5.0";
         postPatch = null;
@@ -214,6 +226,7 @@ in python.pkgs.buildPythonApplication rec {
       "bcrypt"
       "cryptography"
       "httpx"
+      "ifaddr"
       "orjson"
       "PyJWT"
       "requests"

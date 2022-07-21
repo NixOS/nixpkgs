@@ -2,7 +2,6 @@
 , buildPythonPackage
 , callPackage
 , fetchFromGitHub
-, asgiref
 , click
 , h11
 , httptools
@@ -18,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "uvicorn";
-  version = "0.17.6";
+  version = "0.18.2";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    hash = "sha256-iJlAU7zZl9X3FcQlJoJ7KlETZOx6WsE9FcpCK4Cm/Fo=";
+    hash = "sha256-nxtDqYh2OmDtoV10CEBGYQrQBf+Xtuf5k9yR6UfCgYc=";
   };
 
   outputs = [
@@ -34,7 +33,6 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    asgiref
     click
     h11
     httptools

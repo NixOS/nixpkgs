@@ -40,7 +40,7 @@ let
 in
 buildPythonPackage rec {
   pname = "qiskit-ibmq-provider";
-  version = "0.19.1";
+  version = "0.19.2";
 
   disabled = pythonOlder "3.6";
 
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-VdGdaOxCwD2Qa0JCCDVZJtcjhmTssS/KgpcjoaPXYB8=";
+    sha256 = "sha256-jfOyQ0wjYsJOAlix/P9dzBPmkv901eETmBYQzIHZqfg=";
   };
 
   propagatedBuildInputs = [

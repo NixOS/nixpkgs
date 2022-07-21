@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "pymupdf";
-  version = "1.19.6";
+  version = "1.20.1";
 
   src = fetchPypi {
     pname = "PyMuPDF";
     inherit version;
-    sha256 = "sha256-7z0T4n8Vhdd29qJZfxE6q9KNNrZIuYOnKFCyHFOZqwg=";
+    sha256 = "sha256-MFwaZLj7L9Rl4nzIvcvw9kIk8Oxtd2Pj9fLKZ4MTZkk=";
   };
 
   postPatch = ''
