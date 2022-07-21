@@ -830,6 +830,7 @@ dont-distribute-packages:
  - bond
  - bond-haskell
  - bond-haskell-compiler
+ - bookhound-format
  - bookkeeper-permissions
  - boomslang
  - boopadoop
@@ -3310,6 +3311,7 @@ dont-distribute-packages:
  - regex-genex
  - regex-pcre-text
  - regex-pderiv
+ - regex-tdfa_1_3_2
  - regex-xmlschema
  - regexchar
  - regexp-tries
@@ -3518,6 +3520,8 @@ dont-distribute-packages:
  - servant-jsonrpc-client
  - servant-jsonrpc-server
  - servant-matrix-param
+ - servant-oauth2
+ - servant-oauth2-examples
  - servant-polysemy
  - servant-postgresql
  - servant-pushbullet-client
