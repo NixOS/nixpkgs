@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, buildLinux, ... } @ args:
 
 let
-  stableVariant = {
+  ltsVariant = {
     version = "5.15.53";
     suffix = "xanmod1";
     hash = "sha256-mLgzaXG6QaJ0hfzfNlLbAEldxHK6iHuMVUv6p8zqRBo=";
@@ -79,6 +79,6 @@ let
   } // (args.argsOverride or { }));
 in
 {
-  stable = xanmodKernelFor stableVariant;
+  lts = xanmodKernelFor ltsVariant;
   edge = xanmodKernelFor edgeVariant;
 }
