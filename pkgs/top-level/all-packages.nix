@@ -1907,7 +1907,8 @@ with pkgs;
   }) arangodb_3_3 arangodb_3_4 arangodb_3_5;
   arangodb = arangodb_3_4;
 
-  arcanist = callPackage ../development/tools/misc/arcanist { php = php81; };
+  # arcanist currently crashes with some workflows on php8.1, use 8.0
+  arcanist = callPackage ../development/tools/misc/arcanist { php = php80; };
 
   arduino = arduino-core.override { withGui = true; };
 
