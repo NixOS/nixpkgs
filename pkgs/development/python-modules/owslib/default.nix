@@ -8,6 +8,12 @@ buildPythonPackage rec {
     sha256 = "sha256-jEywYzjrZAXCrs7QttCFaCqmHw8uUo8ceI1o3FDflBs=";
   };
 
+  # as now upstream https://github.com/geopython/OWSLib/pull/824
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace 'pyproj ' 'pyproj #'
+  '';
+
   buildInputs = [ pytest ];
   propagatedBuildInputs = [ python-dateutil pyproj pytz requests pyyaml ];
 
