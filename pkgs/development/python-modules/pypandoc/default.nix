@@ -1,4 +1,4 @@
-{ lib, substituteAll, buildPythonPackage, fetchPypi
+{ lib, substituteAll, buildPythonPackage, fetchFromGitHub
 , pandoc, texlive
 }:
 
@@ -6,9 +6,11 @@ buildPythonPackage rec {
   pname = "pypandoc";
   version = "1.8.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-jBtlHTOOhEGEO5kYNfWdVhqEc8/mPwEm0zD9s8tRiAk=";
+  src = fetchFromGitHub {
+    owner = "NicklasTegner";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-1vQmONQFJrjptwVVjw25Wyt59loatjScsdnSax+q/f8=";
   };
 
   patches = [
