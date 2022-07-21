@@ -32,6 +32,10 @@ class VLan:
         rootlog.info("start vlan")
         pty_master, pty_slave = pty.openpty()
 
+        # The --hub is required for the scenario determined by
+        # nixos/tests/networking.nix vlan-ping.
+        # VLAN Tagged traffic (802.1Q) seams to be blocked if a vde_switch is
+        # used without the hub mode (flood packets to all ports).
         self.process = subprocess.Popen(
             ["vde_switch", "-s", self.socket_dir, "--dirmode", "0700", "--hub"],
             stdin=pty_slave,
