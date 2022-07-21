@@ -13462,6 +13462,14 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) Security Foundation;
   };
 
+  go_1_18_3 = go_1_18.overrideAttrs (_: rec {
+    version = "1.18.3";
+    src = fetchurl {
+      url = "https://go.dev/dl/go${version}.src.tar.gz";
+      sha256 = "sha256-ABI4bdy7XzNQ5AfGeZI4EdvSg/zcQhckkxYUqELsvC0=";
+    };
+  });
+
   go = go_1_18;
 
   go-junit-report = callPackage ../development/tools/go-junit-report { };
@@ -21847,6 +21855,10 @@ with pkgs;
   # go 1.18 requires a newer Apple SDK to be build. See commit message for more details.
   buildGo118Module = darwin.apple_sdk_11_0.callPackage ../development/go-modules/generic {
     go = buildPackages.go_1_18;
+  };
+
+  buildGo1183Module = darwin.apple_sdk_11_0.callPackage ../development/go-modules/generic {
+    go = buildPackages.go_1_18_3;
   };
 
   buildGoModule = buildGo118Module;
