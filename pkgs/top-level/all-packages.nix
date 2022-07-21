@@ -9077,6 +9077,8 @@ with pkgs;
 
   leafpad = callPackage ../applications/editors/leafpad { };
 
+  l3afpad = callPackage ../applications/editors/l3afpad { };
+
   leatherman = callPackage ../development/libraries/leatherman { };
 
   ledit = callPackage ../tools/misc/ledit {
