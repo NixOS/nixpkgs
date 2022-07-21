@@ -19,7 +19,9 @@ enforced values with `mkForce`.
 ## Practical Instructions {#sec-building-image-instructions}
 
 ```ShellSession
-$ git clone https://github.com/NixOS/nixpkgs.git
+# a depth of 1 will result in a much faster download and setup of nixpkgs
+# but if you plan to do more advanced git operations you should consider removing it
+$ git clone https://github.com/NixOS/nixpkgs.git --depth 1
 $ cd nixpkgs/nixos
 $ nix-build -A config.system.build.isoImage -I nixos-config=modules/installer/cd-dvd/installation-cd-minimal.nix default.nix
 ```
@@ -55,7 +57,9 @@ file at `modules/installer/cd-dvd/installation-cd-graphical-gnome-macbook.nix`:
 Then build it like in the example above:
 
 ```ShellSession
-$ git clone https://github.com/NixOS/nixpkgs.git
+# a depth of 1 will result in a much faster download and setup of nixpkgs
+# but if you plan to do more advanced git operations you should consider removing it
+$ git clone https://github.com/NixOS/nixpkgs.git --depth 1
 $ cd nixpkgs/nixos
 $ export NIXPKGS_ALLOW_UNFREE=1
 $ nix-build -A config.system.build.isoImage -I nixos-config=modules/installer/cd-dvd/installation-cd-graphical-gnome-macbook.nix default.nix
