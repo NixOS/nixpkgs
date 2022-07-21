@@ -18,9 +18,11 @@ rec {
   ndi = libsForQt5.callPackage ./ndi {};
     obs-ndi = ndi; # Alias added 2022-07-21
 
+  nvfbc = callPackage ./nvfbc {};
+    obs-nvfbc = nvfbc; # Alias added 2022-07-21
+
   obs-websocket = libsForQt5.callPackage ./obs-websocket.nix {};
   wlrobs = callPackage ./wlrobs.nix {};
-  obs-nvfbc = callPackage ./obs-nvfbc.nix {};
   obs-pipewire-audio-capture = callPackage ./obs-pipewire-audio-capture.nix {};
   obs-vkcapture = callPackage ./obs-vkcapture.nix {};
 }
