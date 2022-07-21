@@ -21,10 +21,12 @@ rec {
   nvfbc = callPackage ./nvfbc {};
     obs-nvfbc = nvfbc; # Alias added 2022-07-21
 
+  pipewire-audio-capture = callPackage ./pipewire-audio-capture {};
+    obs-pipewire-audio-capture = pipewire-audio-capture; # Alias added 2022-07-21
+
   websocket = libsForQt5.callPackage ./websocket {};
     obs-websocket = websocket; # Alias added 2022-07-21
 
   wlrobs = callPackage ./wlrobs.nix {};
-  obs-pipewire-audio-capture = callPackage ./obs-pipewire-audio-capture.nix {};
   obs-vkcapture = callPackage ./obs-vkcapture.nix {};
 }
