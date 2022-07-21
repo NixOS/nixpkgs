@@ -12,7 +12,9 @@ rec {
   move-transition = callPackage ./move-transition {};
     obs-move-transition = move-transition; # Alias added 2022-07-21
 
-  obs-multi-rtmp = libsForQt5.callPackage ./obs-multi-rtmp.nix {};
+  multi-rtmp = libsForQt5.callPackage ./multi-rtmp {};
+    obs-multi-rtmp = multi-rtmp; # Alias added 2022-07-21
+
   obs-ndi = libsForQt5.callPackage ./obs-ndi.nix {};
   obs-websocket = libsForQt5.callPackage ./obs-websocket.nix {};
   wlrobs = callPackage ./wlrobs.nix {};
