@@ -222,28 +222,16 @@ in {
     }).lqx;
 
     # This contains the variants of the XanMod kernel
-    xanmodKernels = callPackage ../os-specific/linux/kernel/xanmod-kernels.nix;
-
-    linux_xanmod = (xanmodKernels {
+    xanmodKernels = callPackage ../os-specific/linux/kernel/xanmod-kernels.nix {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
       ];
-    }).lts;
+    };
 
-    linux_xanmod_latest = (xanmodKernels {
-      kernelPatches = [
-        kernelPatches.bridge_stp_helper
-        kernelPatches.request_key_helper
-      ];
-    }).edge;
-
-    linux_xanmod_tt = (xanmodKernels {
-      kernelPatches = [
-        kernelPatches.bridge_stp_helper
-        kernelPatches.request_key_helper
-      ];
-    }).tt;
+    linux_xanmod = xanmodKernels.lts;
+    linux_xanmod_latest = xanmodKernels.edge;
+    linux_xanmod_tt = xanmodKernels.tt;
 
     linux_libre = deblobKernel packageAliases.linux_default.kernel;
 
