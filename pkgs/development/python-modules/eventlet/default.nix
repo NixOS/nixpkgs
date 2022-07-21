@@ -29,10 +29,13 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     dnspython
     greenlet
-    pyopenssl
     six
-  ] ++ lib.optional (pythonOlder "3.5") [
+  ] ++ lib.optionals (pythonOlder "3.5") [
     monotonic
+  ] ++ lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) [
+    # pyopenssl is not well supported by upstream
+    # https://github.com/NixOS/nixpkgs/issues/175875
+    pyopenssl
   ];
 
   checkInputs = [
