@@ -221,7 +221,7 @@ in {
       ];
     }).lqx;
 
-    # This contains both the LTS and EDGE variants of the XanMod kernel
+    # This contains the variants of the XanMod kernel
     xanmodKernels = callPackage ../os-specific/linux/kernel/xanmod-kernels.nix;
 
     linux_xanmod = (xanmodKernels {
@@ -237,6 +237,13 @@ in {
         kernelPatches.request_key_helper
       ];
     }).edge;
+
+    linux_xanmod_tt = (xanmodKernels {
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+      ];
+    }).tt;
 
     linux_libre = deblobKernel packageAliases.linux_default.kernel;
 
@@ -561,6 +568,7 @@ in {
     linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);
     linux_xanmod = recurseIntoAttrs (packagesFor kernels.linux_xanmod);
     linux_xanmod_latest = recurseIntoAttrs (packagesFor kernels.linux_xanmod_latest);
+    linux_xanmod_tt = recurseIntoAttrs (packagesFor kernels.linux_xanmod_tt);
 
     hardkernel_4_14 = recurseIntoAttrs (packagesFor kernels.linux_hardkernel_4_14);
 
