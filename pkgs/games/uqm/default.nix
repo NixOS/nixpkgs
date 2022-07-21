@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchFromGitHub, pkg-config, libGLU, libGL
-, SDL, SDL_image, libpng, libvorbis, libogg, libmikmod
+, SDL2, libpng, libvorbis, libogg, libmikmod
 
 , use3DOVideos ? false, requireFile ? null, writeText ? null
 , haskellPackages ? null
@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ SDL SDL_image libpng libvorbis libogg libmikmod libGLU libGL ];
+  buildInputs = [ SDL2 libpng libvorbis libogg libmikmod libGLU libGL ];
 
   postUnpack = ''
     mkdir -p uqm-${version}/content/packages
