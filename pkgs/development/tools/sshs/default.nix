@@ -27,6 +27,6 @@ buildGoModule rec {
     description = "Terminal user interface for SSH";
     homepage = "https://github.com/quantumsheep/sshs";
     license = licenses.mit;
-    maintainers = with maintainers; [ ihatethefrench ];
+    maintainers = with maintainers; [ not-my-segfault ];
   };
 }
