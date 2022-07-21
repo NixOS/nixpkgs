@@ -5029,6 +5029,8 @@ with pkgs;
 
   keyd = callPackage ../tools/inputmethods/keyd { };
 
+  twitch-tui = callPackage ../applications/networking/instant-messengers/twitch-tui { };
+
   gebaar-libinput = callPackage ../tools/inputmethods/gebaar-libinput { stdenv = gcc10StdenvCompat; };
 
   kime = callPackage ../tools/inputmethods/kime { };
