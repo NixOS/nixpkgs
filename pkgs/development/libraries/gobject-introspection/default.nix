@@ -27,7 +27,7 @@
 # it may be worth thinking about using multiple derivation outputs
 # In that case its about 6MB which could be separated
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gobject-introspection";
   version = "1.72.0";
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   outputBin = "dev";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gobject-introspection/${lib.versions.majorMinor finalAttrs.version}/gobject-introspection-${finalAttrs.version}.tar.xz";
     sha256 = "Av6OWQhh2I+DBg3TnNpcyqYLLaHSHQ+VSZMBsYa+qrw=";
   };
 
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     docbook-xsl-nons
     docbook_xml_dtd_45
     python3
-    setupHook # move .gir files
+    finalAttrs.setupHook # move .gir files
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ gobject-introspection-unwrapped ];
 
   buildInputs = [
@@ -105,6 +105,10 @@ stdenv.mkDerivation rec {
 
   postInstall = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     cp -r ${buildPackages.gobject-introspection-unwrapped.devdoc} $devdoc
+    # these are uncompiled c and header files which aren't installed when cross-compiling because
+    # code that installs them is in tests/meson.build which is only run when not cross-compiling
+    # pygobject3 needs them
+    cp -r ${buildPackages.gobject-introspection-unwrapped.dev}/share/gobject-introspection-1.0/tests $dev/share/gobject-introspection-1.0/tests
   '';
 
   preCheck = ''
@@ -124,7 +128,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gobject-introspection";
       versionPolicy = "odd-unstable";
     };
   };
@@ -144,4 +148,4 @@ stdenv.mkDerivation rec {
       automatically provide bindings to call into the C library.
     '';
   };
-}
+})

@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, callPackage
 , fetchFromGitHub
 , flaky
 , hypothesis
@@ -11,17 +12,22 @@
 
 buildPythonPackage rec {
   pname = "pytest-asyncio";
-  version = "0.18.3";
-  format = "setuptools";
+  version = "0.19.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-eopKlDKiTvGmqcqw44MKlhvSKswKZd/VDYRpZbuyOqM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-A8ngASbSRwY4RjanalnWBGgskZMDO50ffOf6wMNqOvA=";
   };
+
+  outputs = [
+    "out"
+    "testout"
+  ];
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
@@ -33,15 +39,13 @@ buildPythonPackage rec {
     pytest
   ];
 
-  checkInputs = [
-    flaky
-    hypothesis
-    pytestCheckHook
-  ];
+  postInstall = ''
+    mkdir $testout
+    cp -R tests $testout/tests
+  '';
 
-  disabledTestPaths = [
-    "tests/trio" # pytest-trio causes infinite recursion
-  ];
+  doCheck = false;
+  passthru.tests.pytest = callPackage ./tests.nix {};
 
   pythonImportsCheck = [
     "pytest_asyncio"

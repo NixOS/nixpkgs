@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "django-maintenance-mode";
-  version = "0.16.2";
+  version = "0.16.3";
 
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
     repo = pname;
-    rev = version;
-    sha256 = "0krcq04pf4g50q88l7q1wc53jgkhjmvif3acghfqq8c3s2y7mbz7";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-G08xQpLQxnt7JbtIo06z0NlRAMbca3UWbo4aXQR/Wy0=";
   };
 
   checkInputs = [ pytest ];

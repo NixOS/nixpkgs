@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bash-completion
     libxml2
+    gobject-introspection
   ];
 
   propagatedBuildInputs = [
@@ -55,8 +56,6 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-Dintrospection=disabled"
   ];
 
   postPatch = ''

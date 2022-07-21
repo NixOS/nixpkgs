@@ -62,7 +62,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'lark = "^0.11.1"' 'lark = "*"'
+      --replace 'lark = "^0.11.1"' 'lark = "*"' \
+      --replace 'qcs-api-client = ">=0.8.1,<0.21.0"' 'qcs-api-client = "*"'
   '';
 
   disabledTestPaths = [

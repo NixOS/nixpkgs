@@ -7,8 +7,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "coin3d";
     repo = "pivy";
-    rev = version;
-    sha256 = "mU3QRDJd56gGDWqwcxAN3yUCkAkABP/I9gIBMH2MOXA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-mU3QRDJd56gGDWqwcxAN3yUCkAkABP/I9gIBMH2MOXA=";
   };
 
   dontUseCmakeConfigure = true;

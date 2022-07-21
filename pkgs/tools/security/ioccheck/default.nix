@@ -6,6 +6,16 @@
 let
   py = python3.override {
     packageOverrides = self: super: {
+      emoji = super.emoji.overridePythonAttrs (oldAttrs: rec {
+        version = "1.7.0";
+
+        src = fetchFromGitHub {
+          owner = "carpedm20";
+          repo = "emoji";
+          rev = "v${version}";
+          sha256 = "sha256-vKQ51RP7uy57vP3dOnHZRSp/Wz+YDzeLUR8JnIELE/I=";
+        };
+      });
 
       # Support for later tweepy releases is missing
       # https://github.com/ranguli/ioccheck/issues/70

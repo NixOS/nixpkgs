@@ -41,6 +41,10 @@ buildPythonPackage rec {
     time-machine
   ];
 
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
+  ];
+
   disabledTests = [
     # AssertionError: Expected <14:00> to be equal to <17:00>, but was not.
     "test_schedule_parser_with_a_weekly_recurring_enabled_schedule_data"

@@ -8,16 +8,13 @@
 , pkg-config
 , gnome
 , libsysprof-capture
+, gobject-introspection
+, vala
+, libpsl
+, brotli
 , gnomeSupport ? true
 , sqlite
 , glib-networking
-, gobject-introspection
-, withIntrospection ? stdenv.buildPlatform == stdenv.hostPlatform
-, vala
-, withVala ? stdenv.buildPlatform == stdenv.hostPlatform
-, libpsl
-, python3
-, brotli
 }:
 
 stdenv.mkDerivation rec {
@@ -31,19 +28,21 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-8KQnZW5f4Z4d9xwQfojfobLmc8JcVHt4I7YBi0DQEVk=";
   };
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
     glib
-  ] ++ lib.optionals withIntrospection [
     gobject-introspection
-  ] ++ lib.optionals withVala [
     vala
   ];
 
   buildInputs = [
-    python3
+    gobject-introspection
     sqlite
     libpsl
     glib.out
@@ -60,8 +59,6 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dtls_check=false" # glib-networking is a runtime dependency, not a compile-time dependency
     "-Dgssapi=disabled"
-    "-Dvapi=${if withVala then "enabled" else "disabled"}"
-    "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
     "-Dgnome=${lib.boolToString gnomeSupport}"
     "-Dntlm=disabled"
   ] ++ lib.optionals (!stdenv.isLinux) [
@@ -73,6 +70,12 @@ stdenv.mkDerivation rec {
   doCheck = false; # ERROR:../tests/socket-test.c:37:do_unconnected_socket_test: assertion failed (res == SOUP_STATUS_OK): (2 == 200)
 
   postPatch = ''
+    # fixes finding vapigen when cross-compiling
+    # the commit is in 3.0.6
+    # https://gitlab.gnome.org/GNOME/libsoup/-/commit/5280e936d0a76f94dbc5d8489cfbdc0a06343f65
+    substituteInPlace meson.build \
+      --replace "required: vapi_opt)" "required: vapi_opt, native: false)"
+
     patchShebangs libsoup/
   '';
 

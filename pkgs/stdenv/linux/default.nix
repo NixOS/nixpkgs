@@ -421,6 +421,8 @@ in
         shellPackage = prevStage.bash;
       };
 
+      disallowedRequisites = [ bootstrapTools.out ];
+
       # Mainly avoid reference to bootstrap tools
       allowedRequisites = with prevStage; with lib;
         # Simple executable tools

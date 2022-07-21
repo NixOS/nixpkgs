@@ -78,7 +78,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
+    "--benchmark-disable"
+  ];
 
   disabledTests = [
     # touches network

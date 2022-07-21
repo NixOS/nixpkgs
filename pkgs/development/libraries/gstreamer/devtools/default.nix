@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
     # "devdoc" # disabled until `hotdoc` is packaged in nixpkgs
   ];
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -40,6 +44,7 @@ stdenv.mkDerivation rec {
     cairo
     python3
     json-glib
+    gobject-introspection
   ];
 
   propagatedBuildInputs = [
@@ -49,8 +54,6 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-Dintrospection=disabled"
   ];
 
   meta = with lib; {

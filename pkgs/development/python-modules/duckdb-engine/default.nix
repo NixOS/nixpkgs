@@ -8,10 +8,12 @@
 , ipython-sql
 , poetry-core
 , sqlalchemy
+, typing-extensions
 }:
+
 buildPythonPackage rec {
   pname = "duckdb-engine";
-  version = "0.1.11";
+  version = "0.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,15 +21,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "duckdb_engine";
     owner = "Mause";
-    rev = "refs/tags/${version}";
-    hash = "sha256-tjyaV9DmiP2XrKxSCX2qKo7T7GNZtT3y5d1yQLdVuSE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-UoTGFsno92iejBGvCsJ/jnhKJ41K9eTGwC7DomAp7IE=";
   };
 
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [ duckdb sqlalchemy ];
 
-  checkInputs = [ pytestCheckHook hypothesis ipython-sql ];
+  checkInputs = [ pytestCheckHook hypothesis ipython-sql typing-extensions ];
 
   pythonImportsCheck = [ "duckdb_engine" ];
 

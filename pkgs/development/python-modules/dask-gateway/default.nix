@@ -9,11 +9,11 @@
 buildPythonPackage rec {
   pname = "dask-gateway";
   # update dask-gateway lock step with dask-gateway-server
-  version = "0.9.0";
+  version = "2022.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "743f3b88dabe7d1503ac08aadf399eb9205df786b12c5175ea2e10c6ded7df22";
+    sha256 = "sha256-i0OFXjvDg+D4Sdyg6rluP0k6/Ecr+VZn+RiIEQONQX0=";
   };
 
   propagatedBuildInputs = [
