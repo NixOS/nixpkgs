@@ -33,7 +33,7 @@ class VLan:
         pty_master, pty_slave = pty.openpty()
 
         self.process = subprocess.Popen(
-            ["vde_switch", "-s", self.socket_dir, "--dirmode", "0700"],
+            ["vde_switch", "-s", self.socket_dir, "--dirmode", "0700", "--hub"],
             stdin=pty_slave,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -50,7 +50,7 @@ class VLan:
         if not (self.socket_dir / "ctl").exists():
             rootlog.error("cannot start vde_switch")
 
-        rootlog.info(f"running vlan (pid {self.pid})")
+        rootlog.info(f"running vlan (pid {self.pid}; ctl {self.socket_dir})")
 
     def __del__(self) -> None:
         rootlog.info(f"kill vlan (pid {self.pid})")
