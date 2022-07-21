@@ -40,6 +40,14 @@ stdenv.mkDerivation rec {
     "--enable-cross"
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     "--config-musl"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # force x86_64 and use rosetta on m1
+    # https://www.mail-archive.com/tinycc-devel@nongnu.org/msg10199.html
+    "--cpu=x86_64"
+    # avoid failing checks
+    # https://www.mail-archive.com/tinycc-devel@nongnu.org/msg10142.html
+    "--config-bcheck=no"
+    "--config-backtrace=no"
   ];
 
   preConfigure = ''
@@ -90,7 +98,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ joachifm AndersonTorres ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
   };
 }
 # TODO: more multiple outputs
