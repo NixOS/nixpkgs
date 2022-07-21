@@ -23,6 +23,8 @@
 #
 # if vendorSha256 is null, then we won't fetch any dependencies and
 # rely on the vendor folder within the source.
+# if vendorSha256 is symbols.NOCHROOT, then we disable the build sandbox while
+# fetching the dependendencies.
 , vendorSha256
 # Whether to delete the vendor folder supplied with the source.
 , deleteVendor ? false
@@ -129,6 +131,9 @@ let
 
     dontFixup = true;
   }; in modArgs // (
+    if vendorSha256 == lib.symbols.NOCHROOT then
+      { __noChroot = true; }
+    else
       {
         outputHashMode = "recursive";
         outputHashAlgo = "sha256";
