@@ -221,7 +221,7 @@ in {
       ];
     }).lqx;
 
-    # This contains both the STABLE and EDGE variants of the XanMod kernel
+    # This contains both the LTS and EDGE variants of the XanMod kernel
     xanmodKernels = callPackage ../os-specific/linux/kernel/xanmod-kernels.nix;
 
     linux_xanmod = (xanmodKernels {
@@ -229,7 +229,7 @@ in {
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
       ];
-    }).stable;
+    }).lts;
 
     linux_xanmod_latest = (xanmodKernels {
       kernelPatches = [
