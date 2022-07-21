@@ -30,5 +30,5 @@ rec {
   websocket = libsForQt5.callPackage ./websocket {};
     obs-websocket = websocket; # Alias added 2022-07-21
 
-  wlrobs = callPackage ./wlrobs.nix {};
+  wlrobs = callPackage ./wlrobs {};
 }
