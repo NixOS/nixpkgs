@@ -292,6 +292,8 @@ with pkgs;
 
   cfn-nag = callPackage ../development/tools/cfn-nag { };
 
+  cxx-rs = callPackage ../development/libraries/cxx-rs { };
+
   elfcat = callPackage ../tools/misc/elfcat { };
 
   # Zip file format only allows times after year 1980, which makes e.g. Python
