@@ -8,7 +8,6 @@
 , monotonic
 , six
 , nose
-, pyopenssl
 , iana-etc
 , pytestCheckHook
 , libredirect
@@ -29,9 +28,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     dnspython
     greenlet
-    pyopenssl
     six
-  ] ++ lib.optional (pythonOlder "3.5") [
+  ] ++ lib.optionals (pythonOlder "3.5") [
     monotonic
   ];
 
