@@ -18368,6 +18368,8 @@ with pkgs;
 
   libchop = callPackage ../development/libraries/libchop { };
 
+  libcifpp = callPackage ../development/libraries/libcifpp { };
+
   libcint = callPackage ../development/libraries/libcint { };
 
   libclc = callPackage ../development/libraries/libclc { };
@@ -32820,6 +32822,8 @@ with pkgs;
   delly = callPackage ../applications/science/biology/delly { };
 
   diamond = callPackage ../applications/science/biology/diamond { };
+
+  dssp = callPackage ../applications/science/biology/dssp { };
 
   ecopcr = callPackage ../applications/science/biology/ecopcr { };
 
