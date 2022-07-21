@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, writeText, runtimeShell, ncurses, perl }:
+ses, perl }:
 
 buildGoModule rec {
   pname = "fzf";
-  version = "0.30.0";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    sha256 = "sha256-7E6fj/Sjew+zz+iMFkiSJjVn2rymKRvZtEJZH65INxk=";
+    sha256 = "sha256-HKwf/ogNx+jCNSVHI8rt6WYRbuyT18V4nnMyZ6TmwVQ=";
   };
 
-  vendorSha256 = "sha256-omvCzM5kH3nAE57S33NV0OFRJmU+Ty7hhriaG/Dc0o0=";
+  vendorSha256 = "sha256-3ry93xV3KKtFoFGt2yxzMd4jx3QG2+8TBrEEywj7HPQ=";
 
   outputs = [ "out" "man" ];
 
@@ -26,12 +26,10 @@ buildGoModule rec {
   # The vim plugin expects a relative path to the binary; patch it to abspath.
   postPatch = ''
     sed -i -e "s|expand('<sfile>:h:h')|'$out'|" plugin/fzf.vim
-
     if ! grep -q $out plugin/fzf.vim; then
         echo "Failed to replace vim base_dir path with $out"
         exit 1
     fi
-
     # Has a sneaky dependency on perl
     # Include first args to make sure we're patching the right thing
     substituteInPlace shell/key-bindings.zsh \
@@ -48,13 +46,10 @@ buildGoModule rec {
 
   postInstall = ''
     cp bin/fzf-tmux $out/bin
-
     mkdir -p $man/share/man
     cp -r man/man1 $man/share/man
-
     mkdir -p $out/share/vim-plugins/${pname}
     cp -r plugin $out/share/vim-plugins/${pname}
-
     cp -R shell $out/share/fzf
     cat <<SCRIPT > $out/bin/fzf-share
     #!${runtimeShell}
