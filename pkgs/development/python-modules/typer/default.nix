@@ -6,6 +6,7 @@
 , flit-core
 , click
 , pytestCheckHook
+, rich
 , shellingham
 , pytest-xdist
 , pytest-sugar
@@ -38,6 +39,7 @@ buildPythonPackage rec {
     pytest-xdist
     pytest-sugar
     shellingham
+    rich
     coverage # execs coverage in tests
   ];
 
