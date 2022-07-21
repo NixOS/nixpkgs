@@ -11,6 +11,12 @@ let
     hash = "sha256-UPLwaEWhBu1yriCUJu9L/B8yy+1zxnTQzHaKlT507UY=";
   };
 
+  ttVariant = {
+    version = "5.15.54";
+    suffix = "xanmod1-tt";
+    hash = "sha256-4ck9PAFuIt/TxA/U+moGlVfCudJnzSuAw7ooFG3OJis=";
+  };
+
   xanmodKernelFor = { version, suffix ? "xanmod1", hash }: buildLinux (args // rec {
     inherit version;
     modDirVersion = "${version}-${suffix}";
@@ -73,4 +79,5 @@ in
 {
   lts = xanmodKernelFor ltsVariant;
   edge = xanmodKernelFor edgeVariant;
+  tt = xanmodKernelFor ttVariant;
 }
