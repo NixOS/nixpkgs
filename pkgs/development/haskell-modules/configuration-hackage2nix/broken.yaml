@@ -94,7 +94,6 @@ broken-packages:
   - aeson-streams
   - aeson-t
   - aeson-toolkit
-  - aeson-typescript
   - aeson-utils
   - aeson-via
   - aeson-with
