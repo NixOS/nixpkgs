@@ -1,6 +1,7 @@
 { lib, buildPythonPackage, fetchFromGitHub, cmake, python
 , libosmium, protozero, boost, expat, bzip2, zlib, pybind11
-, nose, shapely, pythonOlder, isPyPy, lz4, requests }:
+, shapely, pythonOlder, isPyPy, lz4, requests, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "pyosmium";
@@ -21,9 +22,10 @@ buildPythonPackage rec {
 
   preBuild = "cd ..";
 
-  checkInputs = [ nose shapely ];
-
-  checkPhase = "(cd test && ${python.interpreter} run_tests.py)";
+  checkInputs = [
+    pytestCheckHook
+    shapely
+  ];
 
   meta = with lib; {
     description = "Python bindings for libosmium";
