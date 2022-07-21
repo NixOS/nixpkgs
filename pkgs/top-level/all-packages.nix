@@ -292,6 +292,8 @@ with pkgs;
 
   cfn-nag = callPackage ../development/tools/cfn-nag { };
 
+  cxx-rs = callPackage ../development/libraries/cxx-rs { };
+
   elfcat = callPackage ../tools/misc/elfcat { };
 
   # Zip file format only allows times after year 1980, which makes e.g. Python
@@ -827,6 +829,10 @@ with pkgs;
   copyDesktopItems = makeSetupHook { } ../build-support/setup-hooks/copy-desktop-items.sh;
 
   makeDesktopItem = callPackage ../build-support/make-desktopitem { };
+
+  copyPkgconfigItems = makeSetupHook { } ../build-support/setup-hooks/copy-pkgconfig-items.sh;
+
+  makePkgconfigItem = callPackage ../build-support/make-pkgconfigitem { };
 
   makeDarwinBundle = callPackage ../build-support/make-darwin-bundle { };
 
@@ -10099,6 +10105,8 @@ with pkgs;
   rtss = callPackage ../development/tools/misc/rtss { };
 
   realvnc-vnc-viewer = callPackage ../tools/admin/realvnc-vnc-viewer {};
+
+  re-isearch = callPackage ../applications/search/re-isearch { };
 
   reaverwps = callPackage ../tools/networking/reaver-wps {};
 

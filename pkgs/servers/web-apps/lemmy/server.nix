@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
     description = "🐀 Building a federated alternative to reddit in rust";
     homepage = "https://join-lemmy.org/";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ happysalada ];
+    maintainers = with maintainers; [ happysalada billewanick ];
     mainProgram = "lemmy_server";
   };
 }

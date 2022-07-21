@@ -1,6 +1,8 @@
 { lib
 , stdenv
 , fetchFromRepoOrCz
+, copyPkgconfigItems
+, makePkgconfigItem
 , perl
 , texinfo
 , which
@@ -17,9 +19,30 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    copyPkgconfigItems
     perl
     texinfo
     which
+  ];
+
+  pkgconfigItems = [
+    (makePkgconfigItem rec {
+      name = "libtcc";
+      inherit version;
+      cflags = [ "-I${variables.includedir}" ];
+      libs = [
+        "-L${variables.libdir}"
+        "-Wl,--rpath ${variables.libdir}"
+        "-ltcc"
+        "-ldl"
+      ];
+      variables = rec {
+        prefix = "${placeholder "out"}";
+        includedir = "${prefix}/include";
+        libdir = "${prefix}/lib";
+      };
+      description = "Tiny C compiler backend";
+    })
   ];
 
   postPatch = ''
@@ -41,17 +64,6 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     echo ${version} > VERSION
     configureFlagsArray+=("--elfinterp=$(< $NIX_CC/nix-support/dynamic-linker)")
-  '';
-
-  postFixup = ''
-    cat >libtcc.pc <<EOF
-    Name: libtcc
-    Description: Tiny C compiler backend
-    Version: ${version}
-    Libs: -L$out/lib -Wl,--rpath $out/lib -ltcc -ldl
-    Cflags: -I$out/include
-    EOF
-    install -Dt $out/lib/pkgconfig libtcc.pc -m 444
   '';
 
   outputs = [ "out" "info" "man" ];
