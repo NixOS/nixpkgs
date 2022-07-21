@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "archinfo";
-  version = "9.2.10";
+  version = "9.2.11";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "angr";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-pd7QnJr+XXx+seGDlaLKBIew0Ldcnfsf7d1DgxZFREM=";
+    hash = "sha256-ep0mEOhNe/58l4kYFJIHu/c7wKgnBA0mY0/QAw0EdKM=";
   };
 
   checkInputs = [
