@@ -27,6 +27,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
+  ];
+
   pythonImportsCheck = [ "dynalite_devices_lib" ];
 
   meta = with lib; {
