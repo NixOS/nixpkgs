@@ -7,10 +7,10 @@ _doStrip() {
     # to $out anyways---if it does, that's a bigger problem that a lack of
     # stripping will help catch.
     local -ra flags=(dontStripHost dontStripTarget)
-    local -ra stripCmds=(STRIP TARGET_STRIP)
+    local -ra stripCmds=(STRIP STRIP_FOR_TARGET)
 
     # Optimization
-    if [[ "${STRIP-}" == "${TARGET_STRIP-}" ]]; then
+    if [[ "${STRIP-}" == "${STRIP_FOR_TARGET-}" ]]; then
         dontStripTarget+=1
     fi
 
