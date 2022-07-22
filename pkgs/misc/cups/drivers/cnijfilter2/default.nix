@@ -16,6 +16,10 @@ stdenv.mkDerivation {
     cups glib libxml2 libusb1 libtool
   ];
 
+  patches = [
+    ./patches/get_protocol.patch
+  ];
+
   # lgmon3's --enable-libdir flag is used soley for specifying in which
   # directory the cnnnet.ini cache file should reside.
   # NixOS uses /var/cache/cups, and given the name, it seems like a reasonable
