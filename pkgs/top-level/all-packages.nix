@@ -28127,6 +28127,8 @@ with pkgs;
 
   wayshot = callPackage ../tools/misc/wayshot { };
 
+  waylevel = callPackage ../tools/misc/waylevel { };
+
   wbg = callPackage ../applications/misc/wbg { };
 
   hikari = callPackage ../applications/window-managers/hikari {
