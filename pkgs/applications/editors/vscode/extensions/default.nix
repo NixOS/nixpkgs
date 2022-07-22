@@ -2540,8 +2540,8 @@ let
         mktplcRef = {
           name = "vscode-import-cost";
           publisher = "wix";
-          version = "2.15.0";
-          sha256 = "0d3b6654cdck1syn74vmmd1jmgkrw5v4c4cyrhdxbhggkip732bc";
+          version = "3.3.0";
+          sha256 = "0wl8vl8n0avd6nbfmis0lnlqlyh4yp3cca6kvjzgw5xxdc5bl38r";
         };
         meta = with lib; {
           license = licenses.mit;
