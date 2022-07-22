@@ -428,6 +428,8 @@ let
 
   uidsAreUnique = idsAreUnique (filterAttrs (n: u: u.uid != null) cfg.users) "uid";
   gidsAreUnique = idsAreUnique (filterAttrs (n: g: g.gid != null) cfg.groups) "gid";
+  sdInitrdUidsAreUnique = idsAreUnique (filterAttrs (n: u: u.uid != null) config.boot.initrd.systemd.users) "uid";
+  sdInitrdGidsAreUnique = idsAreUnique (filterAttrs (n: g: g.gid != null) config.boot.initrd.systemd.groups) "gid";
 
   spec = pkgs.writeText "users-groups.json" (builtins.toJSON {
     inherit (cfg) mutableUsers;
@@ -534,6 +536,54 @@ in {
         WARNING: enabling this can lock you out of your system. Enable this only if you know what are you doing.
       '';
     };
+
+    # systemd initrd
+    boot.initrd.systemd.users = mkOption {
+      visible = false;
+      description = ''
+        Users to include in initrd.
+      '';
+      default = {};
+      type = types.attrsOf (types.submodule ({ name, ... }: {
+        options.uid = mkOption {
+          visible = false;
+          type = types.int;
+          description = ''
+            ID of the user in initrd.
+          '';
+          defaultText = literalExpression "config.users.users.\${name}.uid";
+          default = cfg.users.${name}.uid;
+        };
+        options.group = mkOption {
+          visible = false;
+          type = types.singleLineStr;
+          description = ''
+            Group the user belongs to in initrd.
+          '';
+          defaultText = literalExpression "config.users.users.\${name}.group";
+          default = cfg.users.${name}.group;
+        };
+      }));
+    };
+
+    boot.initrd.systemd.groups = mkOption {
+      visible = false;
+      description = ''
+        Groups to include in initrd.
+      '';
+      default = {};
+      type = types.attrsOf (types.submodule ({ name, ... }: {
+        options.gid = mkOption {
+          visible = false;
+          type = types.int;
+          description = ''
+            ID of the group in initrd.
+          '';
+          defaultText = literalExpression "config.users.groups.\${name}.gid";
+          default = cfg.groups.${name}.gid;
+        };
+      }));
+    };
   };
 
 
@@ -639,9 +689,51 @@ in {
       "/etc/profiles/per-user/$USER"
     ];
 
+    # systemd initrd
+    boot.initrd.systemd = lib.mkIf config.boot.initrd.systemd.enable {
+      contents = {
+        "/etc/passwd".text = ''
+          ${lib.concatStringsSep "\n" (lib.mapAttrsToList (n: { uid, group }: let
+            g = config.boot.initrd.systemd.groups.${group};
+          in "${n}:x:${toString uid}:${toString g.gid}::/var/empty:") config.boot.initrd.systemd.users)}
+        '';
+        "/etc/group".text = ''
+          ${lib.concatStringsSep "\n" (lib.mapAttrsToList (n: { gid }: "${n}:x:${toString gid}:") config.boot.initrd.systemd.groups)}
+        '';
+      };
+
+      users = {
+        root = {};
+        nobody = {};
+      };
+
+      groups = {
+        root = {};
+        nogroup = {};
+        systemd-journal = {};
+        tty = {};
+        dialout = {};
+        kmem = {};
+        input = {};
+        video = {};
+        render = {};
+        sgx = {};
+        audio = {};
+        video = {};
+        lp = {};
+        disk = {};
+        cdrom = {};
+        tape = {};
+        kvm = {};
+      };
+    };
+
     assertions = [
       { assertion = !cfg.enforceIdUniqueness || (uidsAreUnique && gidsAreUnique);
         message = "UIDs and GIDs must be unique!";
+      }
+      { assertion = !cfg.enforceIdUniqueness || (sdInitrdUidsAreUnique && sdInitrdGidsAreUnique);
+        message = "systemd initrd UIDs and GIDs must be unique!";
       }
       { # If mutableUsers is false, to prevent users creating a
         # configuration that locks them out of the system, ensure that
