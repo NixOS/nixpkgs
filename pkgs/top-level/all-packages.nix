@@ -222,6 +222,8 @@ with pkgs;
 
   align = callPackage ../tools/text/align { };
 
+  alire = callPackage ../development/tools/alire { };
+
   althttpd = callPackage ../servers/althttpd { };
 
   anders = callPackage ../applications/science/logic/anders { };
