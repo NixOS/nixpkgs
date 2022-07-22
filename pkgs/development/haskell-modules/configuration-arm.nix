@@ -116,4 +116,7 @@ self: super: {
 } // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch32 {
   # AARCH32-SPECIFIC OVERRIDES
 
+  # KAT/ECB/D2 test segfaults on armv7l
+  # https://github.com/haskell-crypto/cryptonite/issues/367
+  cryptonite = dontCheck super.cryptonite;
 }

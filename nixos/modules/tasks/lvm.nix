@@ -85,13 +85,15 @@ in {
           systemd.initrdBin = lib.mkIf config.boot.initrd.services.lvm.enable [ pkgs.vdo ];
 
           extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable)''
-            ls ${pkgs.vdo}/bin/ | grep -v adaptLVMVDO | while read BIN; do
+            ls ${pkgs.vdo}/bin/ | while read BIN; do
               copy_bin_and_libs ${pkgs.vdo}/bin/$BIN
             done
+            substituteInPlace $out/bin/vdorecover --replace "${pkgs.bash}/bin/bash" "/bin/sh"
+            substituteInPlace $out/bin/adaptLVMVDO.sh --replace "${pkgs.bash}/bin/bash" "/bin/sh"
           '';
 
           extraUtilsCommandsTest = mkIf (!config.boot.initrd.systemd.enable)''
-            ls ${pkgs.vdo}/bin/ | grep -v adaptLVMVDO | while read BIN; do
+            ls ${pkgs.vdo}/bin/ | grep -vE '(adaptLVMVDO|vdorecover)' | while read BIN; do
               $out/bin/$(basename $BIN) --help > /dev/null
             done
           '';

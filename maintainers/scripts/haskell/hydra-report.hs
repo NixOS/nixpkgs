@@ -451,8 +451,8 @@ printBuildSummary
       showBuild (name, entry) = printJob id name (summaryBuilds entry, Text.pack (if summaryReverseDeps entry > 0 then " :arrow_heading_up: " <> show (summaryUnbrokenReverseDeps entry) <>" | "<> show (summaryReverseDeps entry) else ""))
       showMaintainedBuild (name, (table, maintainers)) = printJob id name (table, Text.intercalate " " (fmap ("@" <>) (toList maintainers)))
       tldr = case (errors, warnings) of
-               ([],[]) -> [":green_circle: **Ready to merge**"]
-               ([],_) -> [":yellow_circle: **Potential issues**"]
+               ([],[]) -> [":green_circle: **Ready to merge** (if there are no [Evaluation Errors](https://hydra.nixos.org/jobset/nixpkgs/haskell-updates))"]
+               ([],_) -> [":yellow_circle: **Potential issues** (and possibly [Evaluation Errors](https://hydra.nixos.org/jobset/nixpkgs/haskell-updates))"]
                _ -> [":red_circle: **Branch not mergeable**"]
       warnings =
          if' (Unfinished > maybe Success worstState maintainedJob) "`maintained` jobset failed." <>
