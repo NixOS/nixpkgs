@@ -1,5 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ... }:
-
+import ../make-test-python.nix ({ pkgs, ... }:
   let
     imageEnv = pkgs.buildEnv {
       name = "k3s-pause-image-env";
