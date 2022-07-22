@@ -2,15 +2,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "vimv-rs";
-  version = "1.7.5";
+  version = "1.7.7";
 
   src = fetchCrate {
     inherit version;
     crateName = "vimv";
-    sha256 = "sha256-VOHQLdwJ6c8KB/IjMDZe9/pNHmLuouNggIK8uJPu+NQ=";
+    sha256 = "sha256-Y8xFoI/1zpaeT9jMuOME/g2vTLenhNSwGepncc1Ji+0=";
   };
 
-  cargoHash = "sha256-qXT44h4f4Zw1bi/gblczxehA6hqLLjQBpSwVpYd0PE4=";
+  cargoHash = "sha256-yJHOeIjbWQTxLkkVv+YALrAhP5HBZpmbPDiLd+/bWZA=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Foundation ];
 
