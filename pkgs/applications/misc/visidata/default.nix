@@ -25,13 +25,13 @@
 }:
 buildPythonApplication rec {
   pname = "visidata";
-  version = "2.8";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "saulpw";
     repo = "visidata";
     rev = "v${version}";
-    sha256 = "1lcx444yrzmcvix977cgaf18lfrf9yrn2r14ln7knx8ghc15vkqb";
+    hash = "sha256-PKj+imTSAGMpF1tkN0WmE3l/4FmWkm/ktIDzF2ku48s=";
   };
 
   propagatedBuildInputs = [
