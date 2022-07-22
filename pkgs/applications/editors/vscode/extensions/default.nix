@@ -1915,8 +1915,8 @@ let
         mktplcRef = {
           name = "material-icon-theme";
           publisher = "PKief";
-          version = "4.16.0";
-          sha256 = "sha256-AOHvWoVB26caNgEEnKBhw5Z/tRtaTSeVLkO6Rlc/kqo=";
+          version = "4.19.0";
+          sha256 = "1azkkp4bnd7n8v0m4325hfrr6p6ikid88xbxaanypji25pnyq5a4";
         };
         meta = {
           license = lib.licenses.mit;
