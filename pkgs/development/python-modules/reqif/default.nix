@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, python3
+, python
 , pythonOlder
 , fetchFromGitHub
 , poetry-core
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace ./tests/unit/conftest.py --replace \
        "os.path.abspath(os.path.join(__file__, \"../../../../reqif\"))" \
-      "\"${placeholder "out"}/${python3.sitePackages}/reqif\""
+      "\"${placeholder "out"}/${python.sitePackages}/reqif\""
     substituteInPlace pyproject.toml --replace "^" ">="
     substituteInPlace requirements.txt --replace "==" ">="
   '';
