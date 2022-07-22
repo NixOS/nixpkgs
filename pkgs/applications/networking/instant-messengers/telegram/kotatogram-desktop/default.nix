@@ -197,6 +197,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DTDESKTOP_API_TEST=ON"
     "-DDESKTOP_APP_QT6=OFF"
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];
 
   installPhase = optionalString stdenv.isDarwin ''
