@@ -44,7 +44,13 @@ let
     transport_file_type: hash
   '';
 
-  mailmanCfg = lib.generators.toINI {} cfg.settings;
+  mailmanCfg = lib.generators.toINI {}
+    (recursiveUpdate cfg.settings
+      ((optionalAttrs (cfg.restApiPassFile != null) {
+        webservice.admin_pass = "#NIXOS_MAILMAN_REST_API_PASS_SECRET#";
+      })));
+
+  mailmanCfgFile = pkgs.writeText "mailman-raw.cfg" mailmanCfg;
 
   mailmanHyperkittyCfg = pkgs.writeText "mailman-hyperkitty.cfg" ''
     [general]
@@ -247,6 +253,14 @@ in {
         '';
       };
 
+      restApiPassFile = mkOption {
+        default = null;
+        type = types.nullOr types.str;
+        description = ''
+          Path to the file containing the value for <literal>MAILMAN_REST_API_PASS</literal>.
+        '';
+      };
+
       serve = {
         enable = mkEnableOption "Automatic nginx and uwsgi setup for mailman-web";
       };
@@ -363,8 +377,6 @@ in {
     };
     users.groups.mailman = {};
 
-    environment.etc."mailman.cfg".text = mailmanCfg;
-
     environment.etc."mailman3/settings.py".text = ''
       import os
 
@@ -382,6 +394,11 @@ in {
 
       with open('/var/lib/mailman-web/settings_local.json') as f:
           globals().update(json.load(f))
+
+      ${optionalString (cfg.restApiPassFile != null) ''
+        with open('${cfg.restApiPassFile}') as f:
+            MAILMAN_REST_API_PASS = f.read().rstrip('\n')
+      ''}
 
       ${optionalString (cfg.ldap.enable) ''
         import ldap
@@ -456,7 +473,7 @@ in {
         after = [ "network.target" ]
           ++ lib.optional cfg.enablePostfix "postfix-setup.service"
           ++ lib.optional withPostgresql "postgresql.service";
-        restartTriggers = [ config.environment.etc."mailman.cfg".source ];
+        restartTriggers = [ mailmanCfgFile ];
         requires = optional withPostgresql "postgresql.service";
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
@@ -480,6 +497,14 @@ in {
         requires = optional withPostgresql "postgresql.service";
         serviceConfig.Type = "oneshot";
         script = ''
+          install -m0750 -o mailman -g mailman ${mailmanCfgFile} /etc/mailman.cfg
+          ${optionalString (cfg.restApiPassFile != null) ''
+            ${pkgs.replace-secret}/bin/replace-secret \
+              '#NIXOS_MAILMAN_REST_API_PASS_SECRET#' \
+              ${cfg.restApiPassFile} \
+              /etc/mailman.cfg
+          ''}
+
           mailmanDir=/var/lib/mailman
           mailmanWebDir=/var/lib/mailman-web
 
@@ -560,7 +585,7 @@ in {
       mailman-daily = {
         description = "Trigger daily Mailman events";
         startAt = "daily";
-        restartTriggers = [ config.environment.etc."mailman.cfg".source ];
+        restartTriggers = [ mailmanCfgFile ];
         serviceConfig = {
           ExecStart = "${mailmanEnv}/bin/mailman digests --send";
           User = "mailman";
