@@ -227,7 +227,7 @@ in {
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ mic92 kwohlfahrt ];
+  meta.maintainers = with lib.maintainers; [ kwohlfahrt ];
 
   config = let
     dbSettings = mapAttrs' (name: { attrs, ... }: nameValuePair attrs.olcSuffix attrs)

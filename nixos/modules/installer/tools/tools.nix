@@ -34,6 +34,7 @@ let
     name = "nixos-generate-config";
     src = ./nixos-generate-config.pl;
     perl = "${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl";
+    nixInstantiate = "${pkgs.nix}/bin/nix-instantiate";
     detectvirt = "${config.systemd.package}/bin/systemd-detect-virt";
     btrfs = "${pkgs.btrfs-progs}/bin/btrfs";
     inherit (config.system.nixos-generate-config) configuration desktopConfiguration;
