@@ -192,7 +192,7 @@ in {
     };
 
     emergencyAccess = mkOption {
-      type = with types; oneOf [ bool singleLineStr ];
+      type = with types; oneOf [ bool (nullOr (passwdEntry str)) ];
       visible = false;
       description = ''
         Set to true for unauthenticated emergency access, and false for
