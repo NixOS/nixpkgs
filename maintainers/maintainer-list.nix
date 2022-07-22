@@ -14720,4 +14720,10 @@
     github = "dfithian";
     githubId = 8409320;
   };
+  nikstur = {
+    email = "nikstur@outlook.com";
+    name = "nikstur";
+    github = "nikstur";
+    githubId = 61635709;
+  };
 }
