@@ -1,8 +1,10 @@
 { lib
 , stdenv
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
 , substituteAll
+, fetchpatch
 , gdb
 , django
 , flask
@@ -12,20 +14,20 @@
 , pytest-xdist
 , pytestCheckHook
 , requests
-, isPy3k
-, pythonAtLeast
 }:
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.6.0";
+  version = "1.6.2";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-WfZz2SimOTpG8CWNUic8NSp4Qd2JTXk+7JSUEPhuQ6Q=";
+    sha256 = "sha256-jcokiAZ2WwyIvsXNIUzvMIrRttR76RwDSE7gk0xHExc=";
   };
 
   patches = [
@@ -50,6 +52,13 @@ buildPythonPackage rec {
     # To avoid this issue, debugpy should be installed using python.withPackages:
     # python.withPackages (ps: with ps; [ debugpy ])
     ./fix-test-pythonpath.patch
+
+    # Fix compiling attach library from source
+    # https://github.com/microsoft/debugpy/pull/978
+    (fetchpatch {
+      url = "https://github.com/microsoft/debugpy/commit/08b3b13cba9035f4ab3308153aef26e3cc9275f9.patch";
+      sha256 = "sha256-8E+Y40mYQou9T1ozWslEK2XNQtuy5+MBvPvDLt4eQak=";
+    })
   ];
 
   # Remove pre-compiled "attach" libraries and recompile for host platform
@@ -59,16 +68,14 @@ buildPythonPackage rec {
     cd src/debugpy/_vendored/pydevd/pydevd_attach_to_process
     rm *.so *.dylib *.dll *.exe *.pdb
     ${stdenv.cc}/bin/c++ linux_and_mac/attach.cpp -Ilinux_and_mac -fPIC -nostartfiles ${{
-      "x86_64-linux"   = "-shared -m64 -o attach_linux_amd64.so";
-      "i686-linux"     = "-shared -m32 -o attach_linux_x86.so";
+      "x86_64-linux"   = "-shared -o attach_linux_amd64.so";
+      "i686-linux"     = "-shared -o attach_linux_x86.so";
       "aarch64-linux"  = "-shared -o attach_linux_arm64.so";
-      "x86_64-darwin"  = "-std=c++11 -lc -D_REENTRANT -dynamiclib -arch x86_64 -o attach_x86_64.dylib";
-      "i686-darwin"    = "-std=c++11 -lc -D_REENTRANT -dynamiclib -arch i386 -o attach_x86.dylib";
-      "aarch64-darwin" = "-std=c++11 -lc -D_REENTRANT -dynamiclib -arch arm64 -o attach_arm64.dylib";
+      "x86_64-darwin"  = "-std=c++11 -lc -D_REENTRANT -dynamiclib -o attach_x86_64.dylib";
+      "i686-darwin"    = "-std=c++11 -lc -D_REENTRANT -dynamiclib -o attach_x86.dylib";
+      "aarch64-darwin" = "-std=c++11 -lc -D_REENTRANT -dynamiclib -o attach_arm64.dylib";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")}
   )'';
-
-  doCheck = isPy3k;
 
   checkInputs = [
     django
@@ -86,16 +93,8 @@ buildPythonPackage rec {
     "--timeout=0"
   ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.10") [
-    "test_flask_breakpoint_multiproc"
-    "test_subprocess[program-launch-None]"
-    "test_systemexit[0-zero-uncaught-raised-launch(integratedTerminal)-module]"
-    "test_systemexit[0-zero-uncaught--attach_pid-program]"
-    "test_success_exitcodes[-break_on_system_exit_zero-0-attach_listen(cli)-module]"
-    "test_success_exitcodes[--0-attach_connect(api)-program]"
-    "test_run[code-attach_connect(api)]"
-    "test_subprocess[program-launch-None]"
-  ];
+  # Fixes hanging tests on Darwin
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [
     "debugpy"
