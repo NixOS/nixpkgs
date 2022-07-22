@@ -7904,6 +7904,12 @@
     githubId = 31056089;
     name = "Tom Ho";
   };
+  majewsky = {
+    email = "majewsky@gmx.net";
+    github = "majewsky";
+    githubId = 24696;
+    name = "Stefan Majewsky";
+  };
   majiir = {
     email = "majiir@nabaal.net";
     github = "Majiir";
