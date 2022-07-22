@@ -16,7 +16,11 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ gnat gprbuild ];
 
   buildPhase = ''
+    runHook preBuild
+    
     gprbuild -j0 -P alr_env
+    
+    runHook postBuild
   '';
 
   installPhase = ''
