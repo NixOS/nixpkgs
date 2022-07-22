@@ -611,7 +611,6 @@ let
             session optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so
           '' +
           optionalString cfg.pamMount ''
-            session [success=1 default=ignore] ${pkgs.pam}/lib/security/pam_succeed_if.so service = systemd-user quiet
             session optional ${pkgs.pam_mount}/lib/security/pam_mount.so disable_interactive
           '' +
           optionalString use_ldap ''
