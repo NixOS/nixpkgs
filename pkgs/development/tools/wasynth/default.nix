@@ -6,13 +6,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasynth";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "Rerumu";
     repo = "Wasynth";
     rev = "v${version}";
-    sha256 = "sha256-QYWseogWHAjnNRi1OVtiJYOCxOLtHKjmlAd/U8Yv4tI=";
+    sha256 = "sha256-hbY+epUtYSQrvnAbCELsVcqd3UoXGn24FkzWfrM0K14=";
   };
 
   # A lock file isn't provided, so it must be added manually.
