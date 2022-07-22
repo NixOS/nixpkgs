@@ -17,17 +17,13 @@ stdenv.mkDerivation {
 
   buildPhase = ''
     runHook preBuild
-    
     gprbuild -j0 -P alr_env
-    
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    
     gprinstall --mode=usage -P alr_env -p -r --prefix=$out
-    
     runHook postInstall
   '';
 
