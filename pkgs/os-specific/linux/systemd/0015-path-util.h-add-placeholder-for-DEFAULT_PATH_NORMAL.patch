@@ -1,7 +1,7 @@
-From 6f40d7a9d0029b5a805245b938ac62e7b150ea75 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Florian Klink <flokli@flokli.de>
 Date: Sun, 8 Mar 2020 01:05:54 +0100
-Subject: [PATCH 16/18] path-util.h: add placeholder for DEFAULT_PATH_NORMAL
+Subject: [PATCH] path-util.h: add placeholder for DEFAULT_PATH_NORMAL
 
 This will be the $PATH used to lookup ExecStart= etc. options, which
 systemd itself uses extensively.
@@ -28,6 +28,3 @@ index 553aa4fb58..46294f4bb1 100644
  
  #if HAVE_SPLIT_USR
  #  define DEFAULT_PATH DEFAULT_PATH_SPLIT_USR
--- 
-2.36.1
-
