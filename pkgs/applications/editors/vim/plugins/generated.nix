@@ -4286,7 +4286,7 @@ final: prev:
     pname = "marks.nvim";
     version = "2022-05-13";
     src = fetchFromGitHub {
-      owner = "chentau";
+      owner = "chentoast";
       repo = "marks.nvim";
       rev = "56cfa45f9c20373ed90bc4271eae17ee0d452bae";
       sha256 = "0qc452ikyrrx28by0awm9jggv05zcph95kygjya1085g9win87l4";
