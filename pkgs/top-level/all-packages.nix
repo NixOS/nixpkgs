@@ -28282,6 +28282,8 @@ with pkgs;
 
   ladspa-sdk = callPackage ../applications/audio/ladspa-sdk { };
 
+  ladybird = qt6.callPackage ../applications/networking/browsers/ladybird { };
+
   lazpaint = callPackage ../applications/graphics/lazpaint { };
 
   caps = callPackage ../applications/audio/caps { };
