@@ -50,6 +50,8 @@ stdenv.mkDerivation rec {
     "-Dvulkan-registry=${vulkan-headers}/share/vulkan/registry/vk.xml"
     "-Ddemos=false" # Don't build and install the demo programs
     "-Dd3d11=disabled" # Disable the Direct3D 11 based renderer
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-Dunwind=disabled" # libplacebo doesn’t build with `darwin.libunwind`
   ];
 
   meta = with lib; {
