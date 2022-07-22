@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "alex-courtis";
     repo = "way-displays";
     rev = "${version}";
-    sha256 = "sha256-5A0qZRpWw3Deo9cGqGULpQMoPCVh85cWE/wJ5XSbVJk=";
+    sha256 = "sha256-wrfRSJaVz0GjYxuIDvJ+16aaz+kRTtv0q5jN2IG4Uco=";
   };
 
   strictDeps = true;
