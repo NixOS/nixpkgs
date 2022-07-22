@@ -44,12 +44,10 @@ let
       substituteInPlace crypto/async/arch/async_posix.h \
         --replace '!defined(__ANDROID__) && !defined(__OpenBSD__)' \
                   '!defined(__ANDROID__) && !defined(__OpenBSD__) && 0'
-    '' + lib.optionalString static
-    # On static builds, the ENGINESDIR will be empty, but its path will be
-    # compiled into the library. In order to minimize the runtime dependencies
-    # of packages that statically link openssl, we move it into the OPENSSLDIR,
-    # which will be separated into the 'etc' output.
     ''
+    # Move ENGINESDIR into OPENSSLDIR for static builds, in order to move
+    # it to the separate etc output.
+    + lib.optionalString static ''
       substituteInPlace Configurations/unix-Makefile.tmpl \
         --replace 'ENGINESDIR=$(libdir)/engines-{- $sover_dirname -}' \
                   'ENGINESDIR=$(OPENSSLDIR)/engines-{- $sover_dirname -}'
@@ -58,6 +56,10 @@ let
     outputs = [ "bin" "dev" "out" "man" ]
       ++ lib.optional withDocs "doc"
       # Separate output for the runtime dependencies of the static build.
+      # Specifically, move OPENSSLDIR into this output, as its path will be
+      # compiled into 'libcrypto.a'. This makes it a runtime dependency of
+      # any package that statically links openssl, so we want to keep that
+      # output minimal.
       ++ lib.optional static "etc";
     setOutputFlags = false;
     separateDebugInfo =
@@ -117,12 +119,9 @@ let
       (if !static then
          "--openssldir=etc/ssl"
        else
-         # Separate the OPENSSLDIR into its own output, as its path will be
-         # compiled into 'libcrypto.a'. This makes it a runtime dependency of
-         # any package that statically links openssl, so we want to keep that
-         # output minimal. We need to prepend '/.' to the path in order to make
-         # it appear absolute before variable expansion, the 'prefix' would be
-         # prepended to it otherwise.
+         # Move OPENSSLDIR to the 'etc' output for static builds. Prepend '/.'
+         # to the path to make it appear absolute before variable expansion,
+         # else the 'prefix' would be prepended to it.
          "--openssldir=/.$(etc)/etc/ssl"
       )
     ] ++ lib.optionals withCryptodev [
