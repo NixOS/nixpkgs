@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
      url = "https://github.com/open-eid/libdigidocpp/releases/download/v${version}/libdigidocpp-${version}.tar.gz";
-     sha256 = "sha256-n/+R4ho1Qcft3YSKE12oxZjbFHAsUDwoLFNuk5GXf5c=";
+     hash = "sha256-n/+R4ho1Qcft3YSKE12oxZjbFHAsUDwoLFNuk5GXf5c=";
   };
 
   nativeBuildInputs = [ cmake pkg-config xxd ];
