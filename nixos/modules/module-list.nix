@@ -1088,6 +1088,7 @@
   ./services/web-apps/nifi.nix
   ./services/web-apps/node-red.nix
   ./services/web-apps/phylactery.nix
+  ./services/web-apps/onlyoffice.nix
   ./services/web-apps/pict-rs.nix
   ./services/web-apps/peertube.nix
   ./services/web-apps/plantuml-server.nix

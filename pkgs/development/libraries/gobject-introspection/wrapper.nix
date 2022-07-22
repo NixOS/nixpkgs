@@ -1,13 +1,22 @@
 { lib
 , stdenv
 , buildPackages
-, gobject-introspection-unwrapped
 , targetPackages
-}:
+, gobject-introspection-unwrapped
+, ...
+}@_args:
 
 # to build, run
 # `nix build ".#pkgsCross.aarch64-multiplatform.buildPackages.gobject-introspection"`
-gobject-introspection-unwrapped.overrideAttrs (previousAttrs: {
+
+let
+  # ensure that `.override` works when gobject-introspection == gobject-introspection-wrapped
+  args = builtins.removeAttrs _args [ "buildPackages" "targetPackages" "gobject-introspection-unwrapped" ];
+  # passing this stdenv to `targetPackages...` breaks due to splicing not working in `.override``
+  argsForTarget = builtins.removeAttrs args [ "stdenv" ];
+in
+
+(gobject-introspection-unwrapped.override args).overrideAttrs (previousAttrs: {
   pname = "gobject-introspection-wrapped";
   # failure in e.g. pkgsCross.aarch64-multiplatform.polkit
   # subprocess.CalledProcessError: Command '['/nix/store/...-prelink-unstable-2019-06-24/bin/prelink-rtld', '/build/source/build/tmp-introspectzp2ldkyk/PolkitAgent-1.0']' returned non-zero exit status 127.
@@ -21,7 +30,7 @@ gobject-introspection-unwrapped.overrideAttrs (previousAttrs: {
       export emulator=${lib.escapeShellArg (stdenv.targetPlatform.emulator buildPackages)}
       export buildprelink="${buildPackages.prelink}/bin/prelink-rtld"
 
-      export targetgir="${lib.getDev targetPackages.gobject-introspection-unwrapped}"
+      export targetgir="${lib.getDev (targetPackages.gobject-introspection-unwrapped.override argsForTarget)}"
 
       substituteAll "${./wrappers/g-ir-compiler.sh}" "$dev/bin/g-ir-compiler"
       substituteAll "${./wrappers/g-ir-scanner.sh}" "$dev/bin/g-ir-scanner"

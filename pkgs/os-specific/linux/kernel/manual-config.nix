@@ -114,7 +114,8 @@ let
       patches =
         map (p: p.patch) kernelPatches
         # Required for deterministic builds along with some postPatch magic.
-        ++ optional (lib.versionAtLeast version "4.13") ./randstruct-provide-seed.patch
+        ++ optional (lib.versionAtLeast version "4.13" && lib.versionOlder version "5.19") ./randstruct-provide-seed.patch
+        ++ optional (lib.versionAtLeast version "5.19") ./randstruct-provide-seed-5.19.patch
         # Fixes determinism by normalizing metadata for the archive of kheaders
         ++ optional (lib.versionAtLeast version "5.2" && lib.versionOlder version "5.4") ./gen-kheaders-metadata.patch;
 
