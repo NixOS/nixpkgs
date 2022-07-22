@@ -24656,6 +24656,8 @@ with pkgs;
 
   cnstrokeorder = callPackage ../data/fonts/cnstrokeorder {};
 
+  colloid-gtk-theme = callPackage ../data/themes/colloid-gtk-theme { };
+
   comfortaa = callPackage ../data/fonts/comfortaa {};
 
   comic-mono = callPackage ../data/fonts/comic-mono { };
