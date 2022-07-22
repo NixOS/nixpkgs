@@ -11,6 +11,7 @@
 , libXext
 , libXrender
 , icu
+, libSM
 }:
 
 stdenv.mkDerivation rec {
@@ -38,6 +39,7 @@ stdenv.mkDerivation rec {
     libXext
     libXrender
     icu
+    libSM
   ];
 
   meta = with lib; {
