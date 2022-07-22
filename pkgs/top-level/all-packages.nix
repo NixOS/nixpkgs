@@ -15290,6 +15290,7 @@ with pkgs;
   };
 
   metals = callPackage ../development/tools/metals { };
+  scala-update = callPackage ../development/tools/scala-update { };
   scalafix = callPackage ../development/tools/scalafix {
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
