@@ -29,6 +29,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "A very simple application that lets you define default applications on Linux in a sane way";
     homepage = "https://github.com/sandsmark/selectdefaultapplication";
+    maintainers = with maintainers; [ nsnelson ];
     license = licenses.gpl2;
     platforms = platforms.linux;
   };
