@@ -24,7 +24,11 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+    
     gprinstall --mode=usage -P alr_env -p -r --prefix=$out
+    
+    runHook postInstall
   '';
 
   meta = with lib; {
