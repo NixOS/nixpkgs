@@ -43,7 +43,7 @@ buildGoModule rec {
     description = "Easily install prebuilt binaries from GitHub";
     homepage = "https://github.com/zyedidia/eget";
     license = licenses.mit;
-    platforms = platforms.unix;
+    platforms = platforms.all;
     maintainers = with maintainers; [ zendo ];
   };
 }
