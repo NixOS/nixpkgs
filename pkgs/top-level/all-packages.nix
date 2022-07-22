@@ -35136,6 +35136,8 @@ with pkgs;
 
   lguf-brightness = callPackage ../misc/lguf-brightness { };
 
+  lighthouse = callPackage ../applications/blockchains/lighthouse { };
+
   lilypond = callPackage ../misc/lilypond { guile = guile_1_8; };
 
   lilypond-with-fonts = callPackage ../misc/lilypond/with-fonts.nix { };
