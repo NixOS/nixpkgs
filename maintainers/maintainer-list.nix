@@ -5422,10 +5422,10 @@
     githubId = 40234257;
     name = "ilkecan bozdogan";
   };
-  ihatethefrench =  {
+  not-my-segfault =  {
     email = "michal@tar.black";
     matrix = "@michal:tar.black";
-    github = "ihatethefrench";
+    github = "not-my-segfault";
     githubId = 30374463;
     name = "Michal S.";
   };
