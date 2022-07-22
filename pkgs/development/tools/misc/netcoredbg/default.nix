@@ -30,7 +30,9 @@ let
     hardeningDisable = [ "strictoverflow" ];
 
     preConfigure = ''
+      export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
       dotnetVersion="$(${dotnet-sdk}/bin/dotnet --list-runtimes | grep -Po '^Microsoft.NETCore.App \K.*?(?= )')"
+
       cmakeFlagsArray+=(
         "-DDBGSHIM_RUNTIME_DIR=${dotnet-sdk}/shared/Microsoft.NETCore.App/$dotnetVersion"
       )
