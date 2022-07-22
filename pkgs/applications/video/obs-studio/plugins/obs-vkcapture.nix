@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-vkcapture";
-  version = "1.1.3";
+  version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "nowrep";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-iIV9ke2yPEt2Lf4bwiEHFip4tLhMS4raWGyCWpao74w=";
+    hash = "sha256-jY78+sfAd62YnCssosLOLfxmdL6zkTEoeE58bQpswG4=";
   };
 
   nativeBuildInputs = [ cmake ninja ];
@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/nowrep/obs-vkcapture";
     maintainers = with maintainers; [ atila ];
     license = licenses.gpl2Only;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = platforms.linux;
   };
 }
