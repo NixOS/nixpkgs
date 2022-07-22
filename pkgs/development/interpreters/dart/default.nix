@@ -51,7 +51,7 @@ stdenv.mkDerivation {
     mkdir -p $out
     cp -R * $out/
     echo $libPath
-  '' + lib.optionalString (stdenv.isLinux) ''
+  '' + lib.optionalString(stdenv.isLinux) ''
     find $out/bin -executable -type f -exec patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) {} \;
   '';
 
