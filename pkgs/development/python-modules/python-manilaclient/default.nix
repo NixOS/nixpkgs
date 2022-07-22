@@ -26,8 +26,6 @@ buildPythonApplication rec {
   version = "4.0.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-TEGzUNgYTkb2VrvW2E3lurD6N1XcIhH2tjmPlsJ/5MI=";
