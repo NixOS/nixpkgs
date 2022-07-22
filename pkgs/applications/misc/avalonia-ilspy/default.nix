@@ -1,24 +1,22 @@
 { lib
 , stdenv
-
 , fetchzip
 , unzip
 , autoPatchelfHook
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
-
 , lttng-ust
 , libkrb5
 , zlib
 , fontconfig
-
 , openssl_1_1
 , libX11
 , libICE
 , libSM
 , icu
 }:
+
 stdenv.mkDerivation rec {
   pname = "avalonia-ilspy";
   version = "7.2-rc";
