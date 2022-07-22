@@ -783,8 +783,8 @@ let
         mktplcRef = {
           name = "gitlens";
           publisher = "eamodio";
-          version = "12.1.1";
-          sha256 = "0i1wxgc61rrf11zff0481dg9s2lmv1ngpwx8nb2ygf6lh0axr7cj";
+          version = "12.1.2";
+          sha256 = "0wpmfrfpi6wl9v3dknx2qr2m74azpcw8bvhac21v67w6jxnl3jd9";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/eamodio.gitlens/changelog";
