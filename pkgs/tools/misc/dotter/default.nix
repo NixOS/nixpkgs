@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dotter";
-  version = "0.12.11";
+  version = "0.12.13";
 
   src = fetchFromGitHub {
     owner = "SuperCuber";
     repo = "dotter";
     rev = "v${version}";
-    hash = "sha256-7K0p20FqaYFzOmUAeq1ousAPCeqE4AZoARF3UY4p4bY=";
+    hash = "sha256-j3Dj43AbD0V5pZ6mM1uvPsqWAVJrmWyWvwC5NK1cRRY=";
   };
 
-  cargoHash = "sha256-BN6cdRmhvMjYQlaEa840+syuVKKUQ59TPMKicm40MTk=";
+  cargoHash = "sha256-HPs55JBbYObunU0cSm/7lsu/DOk4ne9Ea9MCRJ427zo=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
