@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , meson
 , ninja
@@ -12,14 +13,13 @@
 , libxml2
 , gtk3
 , gtksourceview4
-, gtk-vnc
 , libvirt
 , spice-gtk
 , python3
 , appstream-glib
 , spice-protocol
 , libhandy
-, libsoup
+, libsoup_3
 , libosinfo
 , systemd
 , tracker
@@ -45,7 +45,7 @@
 , numactl
 , libapparmor
 , json-glib
-, webkitgtk
+, webkitgtk_4_1
 , vte
 , glib-networking
 , qemu-utils
@@ -54,11 +54,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-boxes";
-  version = "42.3";
+  version = "43.alpha";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "Vu/3+vgwD6oc4U+An468Knu02RWvx7EnNxKXkWBbYNM=";
+    sha256 = "BEUHGaCDN8/fF1D18N82gwc7Xg6kisynSb4j0Ev7+yY=";
   };
 
   patches = [
@@ -96,7 +96,6 @@ stdenv.mkDerivation rec {
     glib-networking
     gmp
     gnome.adwaita-icon-theme
-    gtk-vnc
     gtk3
     gtksourceview4
     json-glib
@@ -109,7 +108,7 @@ stdenv.mkDerivation rec {
     libosinfo
     librsvg
     libsecret
-    libsoup
+    libsoup_3
     libusb1
     libvirt
     libvirt-glib
@@ -121,7 +120,7 @@ stdenv.mkDerivation rec {
     tracker
     tracker-miners
     vte
-    webkitgtk
+    webkitgtk_4_1
     yajl
   ];
 
