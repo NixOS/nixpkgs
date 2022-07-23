@@ -6705,6 +6705,8 @@ with pkgs;
 
   gnome-feeds = callPackage ../applications/networking/feedreaders/gnome-feeds {};
 
+  gnome-frog = callPackage ../applications/misc/gnome-frog { };
+
   gnome-keysign = callPackage ../tools/security/gnome-keysign { };
 
   gnome-secrets = callPackage ../applications/misc/gnome-secrets { };

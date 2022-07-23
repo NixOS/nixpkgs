@@ -4366,6 +4366,12 @@
     githubId = 405105;
     name = "Dustin Frisch";
   };
+  foo-dogsquared = {
+    email = "foo.dogsquared@gmail.com";
+    github = "foo-dogsquared";
+    githubId = 34962634;
+    name = "Gabriel Arazas";
+  };
   forkk = {
     email = "forkk@forkk.net";
     github = "Forkk";
