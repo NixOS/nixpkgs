@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gtksourceview";
-  version = "5.4.2";
+  version = "5.5.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "rRQOB+uEGRDeSDwJK9SIWr0puq3W6V+iLZPtLfC3nec=";
+    sha256 = "V8kgm1ypfVKq7JbwZfenXQj/k6/i5+b0ezVbhVnH94Q=";
   };
 
   patches = [
