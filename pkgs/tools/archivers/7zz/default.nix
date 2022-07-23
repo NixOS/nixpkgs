@@ -26,13 +26,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "7zz";
-  version = "22.00";
+  version = "22.01";
 
   src = fetchurl {
     url = "https://7-zip.org/a/7z${lib.replaceStrings [ "." ] [ "" ] version}-src.tar.xz";
     hash = {
-      free = "sha256-QzGZgPxHobGwstFfVRtb4V+hqMM7dMIy2/EZcJ2aZe8=";
-      unfree = "sha256-QJafYB6Gr/Saqgug31zm/Tl89+JoOoS1kbAIHkYe9nU=";
+      free = "sha256-mp3cFXOEiVptkUdD1+X8XxwoJhBGs+Ns5qk3HBByfLg=";
+      unfree = "sha256-OTCYcwxwBCOSr4CJF+dllF3CQ33ueq48/MSWbrkg+8U=";
     }.${if enableUnfree then "unfree" else "free"};
     downloadToTemp = (!enableUnfree);
     # remove the unRAR related code from the src drv
