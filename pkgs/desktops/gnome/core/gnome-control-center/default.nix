@@ -63,18 +63,17 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-control-center";
-  version = "42.3";
+  version = "43.alpha";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-zgrjZQ3ir368sKfh/JkS7dtu/40lfz/lD/iynBk0HH4=";
+    sha256 = "sha256-Tcdvb4qrgY3ybL5bAlZ134HkkjEAORco9my2y0xFjz4=";
   };
 
   patches = [
     (substituteAll {
       src = ./paths.patch;
       gcm = gnome-color-manager;
-      gnome_desktop = gnome-desktop;
       inherit glibc libgnomekbd tzdata;
       inherit cups networkmanagerapplet;
     })
@@ -134,16 +133,6 @@ stdenv.mkDerivation rec {
     udisks2
     upower
   ];
-
-  # postPatch = ''
-  #   scriptsToPatch=(
-  #     build-aux/meson/meson_post_install.py
-  #     build-aux/meson/find_xdg_file.py
-  #   )
-  #   # # patchShebangs requires executable file
-  #   # chmod +x "''${scriptsToPatch[@]}"
-  #   # patchShebangs "''${scriptsToPatch[@]}"
-  # '';
 
   preConfigure = ''
     # For ITS rules
