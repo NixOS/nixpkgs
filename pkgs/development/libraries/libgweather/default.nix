@@ -7,25 +7,25 @@
 , libxml2
 , glib
 , gettext
-, libsoup
+, libsoup_3
 , gi-docgen
 , gobject-introspection
 , python3
 , tzdata
-, geocode-glib
+, geocode-glib_2
 , vala
 , gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "libgweather";
-  version = "4.0.0";
+  version = "4.1.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "RA1EgBtvcrSMZ25eN/kQnP7hOU/XTMknJeGxuk+ug0w=";
+    sha256 = "ALuJmOO5qQXzqNMpX8wVZS1rCc2l76Ik5nRN7Xq9plo=";
   };
 
   patches = [
@@ -49,9 +49,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    libsoup
+    libsoup_3
     libxml2
-    geocode-glib
+    geocode-glib_2
   ];
 
   mesonFlags = [
