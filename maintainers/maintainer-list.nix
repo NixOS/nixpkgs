@@ -845,6 +845,16 @@
     githubId = 11699655;
     name = "Stanislas Lange";
   };
+  AngryAnt = {
+    name = "Emil Johansen";
+    email = "git@eej.dk";
+    matrix = "@angryant:envs.net";
+    github = "AngryAnt";
+    githubId = 102513;
+    keys = [{
+      fingerprint = "B7B7 582E 564E 789B FCB8  71AB 0C6D FE2F B234 534A";
+    }];
+  };
   anhdle14 = {
     name = "Le Anh Duc";
     email = "anhdle14@icloud.com";
@@ -5412,10 +5422,10 @@
     githubId = 40234257;
     name = "ilkecan bozdogan";
   };
-  ihatethefrench =  {
+  not-my-segfault =  {
     email = "michal@tar.black";
     matrix = "@michal:tar.black";
-    github = "ihatethefrench";
+    github = "not-my-segfault";
     githubId = 30374463;
     name = "Michal S.";
   };
@@ -14719,5 +14729,11 @@
     name = "Daniel Fithian";
     github = "dfithian";
     githubId = 8409320;
+  };
+  nikstur = {
+    email = "nikstur@outlook.com";
+    name = "nikstur";
+    github = "nikstur";
+    githubId = 61635709;
   };
 }
