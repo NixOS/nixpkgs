@@ -17726,6 +17726,10 @@ with pkgs;
 
   geocode-glib = callPackage ../development/libraries/geocode-glib {};
 
+  geocode-glib_2 = geocode-glib.override {
+    libsoup = libsoup_3;
+  };
+
   geoipWithDatabase = makeOverridable (callPackage ../development/libraries/geoip) {
     drvName = "geoip-tools";
     geoipDatabase = geolite-legacy;
