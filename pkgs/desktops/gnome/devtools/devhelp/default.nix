@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "devhelp";
-  version = "41.2";
+  version = "43.alpha";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/devhelp/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "7KqQsPTaqPsgMPbcaQv1M/+Zp3NDf+Dhis/oLZl/YNI=";
+    sha256 = "8HQxbo51vNjOWx+i1rn0GKrTTmtwt+u4JZkF5eVQjwI=";
   };
 
   patches = [
