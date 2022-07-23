@@ -6829,6 +6829,8 @@ with pkgs;
 
   gost = callPackage ../tools/networking/gost { };
 
+  gostatic = callPackage ../applications/misc/gostatic { };
+
   gource = callPackage ../applications/version-management/gource { };
 
   govc = callPackage ../tools/virtualization/govc { };
