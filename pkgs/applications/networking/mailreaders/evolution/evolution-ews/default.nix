@@ -1,32 +1,55 @@
-{ lib, stdenv, fetchurl, gnome, cmake, gettext, intltool, pkg-config, evolution-data-server, evolution
-, sqlite, gtk3, webkitgtk, libgdata, libmspack }:
+{ stdenv
+, lib
+, fetchurl
+, gnome
+, cmake
+, gettext
+, intltool
+, pkg-config
+, evolution-data-server
+, evolution
+, gtk3
+, libsoup_3
+, libical
+, json-glib
+, libmspack
+, webkitgtk_4_1
+}:
 
 stdenv.mkDerivation rec {
   pname = "evolution-ews";
-  version = "3.44.4";
+  version = "3.45.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "TxgrBaE6wbezOwj7Bm6DlcqpW6fagIiGqpGxQp1tfbM=";
+    sha256 = "RC1WKetKsz/VCQYau1UDiLhfW9cpAMswNKsDEHY456w=";
   };
 
-  nativeBuildInputs = [ cmake gettext intltool pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    gettext
+    intltool
+    pkg-config
+  ];
 
   buildInputs = [
-    evolution-data-server evolution
-    sqlite libgdata
-    gtk3 webkitgtk
+    evolution-data-server
+    evolution
+    gtk3
+    libsoup_3
+    libical
+    json-glib
     libmspack
+    # For evolution-shell-3.0
+    webkitgtk_4_1
   ];
 
   cmakeFlags = [
-    # Building with libmspack as recommended: https://wiki.gnome.org/Apps/Evolution/Building#Build_evolution-ews
-    "-DWITH_MSPACK=ON"
     # don't try to install into ${evolution}
     "-DFORCE_INSTALL_PREFIX=ON"
   ];
 
-   passthru = {
+  passthru = {
     updateScript = gnome.updateScript {
       packageName = "evolution-ews";
       versionPolicy = "odd-unstable";
