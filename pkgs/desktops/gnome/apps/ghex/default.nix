@@ -12,6 +12,7 @@
 , itstool
 , libxml2
 , gtk4
+, libadwaita
 , glib
 , atk
 , gobject-introspection
@@ -20,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ghex";
-  version = "42.3";
+  version = "43.alpha";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/ghex/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "rdQPirJJIdsw0nvljwAnMgGXfYf9yNeezq36iw41Te8=";
+    sha256 = "tJttVHJ8Jmo22JQj0r+1OFB/aVU3Q2IoL8UiLMIxC48=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +44,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk4
+    libadwaita
     atk
     glib
   ];
