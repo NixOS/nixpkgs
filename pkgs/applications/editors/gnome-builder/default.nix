@@ -2,7 +2,6 @@
 , lib
 , ctags
 , cmark
-, appstream-glib
 , desktop-file-utils
 , fetchurl
 , flatpak
@@ -10,20 +9,21 @@
 , libgit2-glib
 , gi-docgen
 , gobject-introspection
-, glade
-, gspell
-, gtk3
-, gtksourceview4
+, enchant
+, icu
+, gtk4
+, gtksourceview5
 , json-glib
 , jsonrpc-glib
-, libdazzle
-, libhandy
+, libadwaita
+, libpanel
 , libpeas
-, libportal-gtk3
+, libportal-gtk4
 , libxml2
 , meson
 , ninja
 , ostree
+, d-spy
 , pcre
 , pcre2
 , pkg-config
@@ -31,26 +31,39 @@
 , sysprof
 , template-glib
 , vala
-, vte
-, webkitgtk
-, wrapGAppsHook
+, vte-gtk4
+, webkitgtk_5_0
+, wrapGAppsHook4
 , dbus
 , xvfb-run
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-builder";
-  version = "42.1";
+  version = "43.alpha0";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "XU1RtwKGW0gBcgHwxgfiSifXIDGo9ciNT86HW1VFZwo=";
+    sha256 = "SSjohWD2mn6riFR8CBeHzadbzi85XMWivgj4K8b5ujY=";
   };
 
+  patches = [
+    # The test environment hardcodes `GI_TYPELIB_PATH` environment variable to direct dependencies of libide & co.
+    # https://gitlab.gnome.org/GNOME/gnome-builder/-/commit/2ce510b0ec0518c29427a29b386bb2ac1a121edf
+    # https://gitlab.gnome.org/GNOME/gnome-builder/-/commit/2964f7c2a0729f2f456cdca29a0f5b7525baf7c1
+    #
+    # But Nix does not have a fallback path for typelibs like /usr/lib on FHS distros and relies solely
+    # on `GI_TYPELIB_PATH` environment variable. So, when Ide started to depend on Vte, which
+    # depends on Pango, among others, GIrepository was unable to find these indirect dependencies
+    # and crashed with:
+    #
+    #     Typelib file for namespace 'Pango', version '1.0' not found (g-irepository-error-quark, 0)
+    ./fix-finding-test-typelibs.patch
+  ];
+
   nativeBuildInputs = [
-    appstream-glib
     desktop-file-utils
     gi-docgen
     gobject-introspection
@@ -59,35 +72,35 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     python3.pkgs.wrapPython
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     ctags
     cmark
     flatpak
-    gnome.devhelp
-    glade
     libgit2-glib
     libpeas
-    libportal-gtk3
-    vte
-    gspell
-    gtk3
-    gtksourceview4
+    libportal-gtk4
+    vte-gtk4
+    enchant
+    icu
+    gtk4
+    gtksourceview5
     json-glib
     jsonrpc-glib
-    libdazzle
-    libhandy
+    libadwaita
+    libpanel
     libxml2
     ostree
+    d-spy
     pcre
     pcre2
     python3
     sysprof
     template-glib
     vala
-    webkitgtk
+    webkitgtk_5_0
   ];
 
   checkInputs = [
@@ -109,7 +122,10 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   postPatch = ''
+    # Drop after https://gitlab.gnome.org/GNOME/gnome-builder/-/merge_requests/609
     patchShebangs build-aux/meson/post_install.py
+    substituteInPlace build-aux/meson/post_install.py \
+      --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
   '';
 
   checkPhase = ''
