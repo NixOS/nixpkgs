@@ -7,11 +7,10 @@
 , gettext
 , libxml2
 , desktop-file-utils
-, python3
-, wrapGAppsHook
-, gtk3
-, libhandy
-, libportal-gtk3
+, wrapGAppsHook4
+, gtk4
+, libadwaita
+, libportal-gtk4
 , gnome
 , gnome-autoar
 , glib-networking
@@ -34,13 +33,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nautilus";
-  version = "42.2";
+  version = "43.alpha";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "mSEtLrdZlvGBcorQSi4thvJXewZOaKNMi4GnA330zLI=";
+    sha256 = "hjVoot3dHPgTNmbDe4Cwf4AN6Wbomh0l4QM0mP+iw5k=";
   };
 
   patches = [
@@ -62,8 +61,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -73,9 +71,9 @@ stdenv.mkDerivation rec {
     gnome.adwaita-icon-theme
     gsettings-desktop-schemas
     gst_all_1.gst-plugins-base
-    gtk3
-    libhandy
-    libportal-gtk3
+    gtk4
+    libadwaita
+    libportal-gtk4
     libexif
     libnotify
     libseccomp
@@ -83,10 +81,11 @@ stdenv.mkDerivation rec {
     shared-mime-info
     tracker
     tracker-miners
+    gnome-autoar
   ];
 
   propagatedBuildInputs = [
-    gnome-autoar
+    gtk4
   ];
 
   preFixup = ''
@@ -96,10 +95,6 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     )
-  '';
-
-  postPatch = ''
-    patchShebangs build-aux/meson/postinstall.py
   '';
 
   passthru = {
