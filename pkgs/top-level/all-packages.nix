@@ -34826,7 +34826,7 @@ with pkgs;
 
   lguf-brightness = callPackage ../misc/lguf-brightness { };
 
-  lilypond = callPackage ../misc/lilypond { guile = guile_1_8; };
+  lilypond = callPackage ../misc/lilypond { };
 
   lilypond-with-fonts = callPackage ../misc/lilypond/with-fonts.nix { };
 
