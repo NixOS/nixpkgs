@@ -1,6 +1,8 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitLab
+, meson
+, ninja
 , pkg-config
 , gobject-introspection
 , gtk-doc
@@ -11,13 +13,16 @@
 
 stdenv.mkDerivation rec {
   pname = "libqrtr-glib";
-  version = "1.0.0";
+  version = "1.2.2";
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  src = fetchurl {
-    url = "https://www.freedesktop.org/software/libqmi/${pname}-${version}.tar.xz";
-    sha256 = "MNh5sq3m+PRh3vOmd3VdtcAji6v2iNXIPAOz5qvjXO4=";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "mobile-broadband";
+    repo = "libqrtr-glib";
+    rev = version;
+    sha256 = "kHLrOXN6wgBrHqipo2KfAM5YejS0/bp7ziBSpt0s1i0=";
   };
 
   strictDeps = true;
@@ -27,6 +32,8 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    meson
+    ninja
     pkg-config
     gobject-introspection
     gtk-doc
@@ -38,8 +45,8 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  configureFlags = lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
-    "--enable-gtk-doc"
+  mesonFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "-Dgtk_doc=false"
   ];
 
   meta = with lib; {
