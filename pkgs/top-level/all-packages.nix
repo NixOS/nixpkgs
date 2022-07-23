@@ -27801,6 +27801,8 @@ with pkgs;
 
   waybar = callPackage ../applications/misc/waybar {};
 
+  wayshot = callPackage ../tools/misc/wayshot { };
+
   wbg = callPackage ../applications/misc/wbg { };
 
   hikari = callPackage ../applications/window-managers/hikari {
