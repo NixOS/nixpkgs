@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-characters";
-  version = "42.0";
+  version = "43.alpha";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-characters/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "XaD/uBb4prRPMDdEyoJ6NAgBGMHJONjXmvF7f+Z5gPg=";
+    sha256 = "+nsOO5XmJXOvLSPmp/OlbbiXGQZJsB6cp+sAfYkS5cA=";
   };
 
   nativeBuildInputs = [
@@ -55,10 +55,6 @@ stdenv.mkDerivation rec {
   postPatch = ''
     chmod +x meson_post_install.py # patchShebangs requires executable file
     patchShebangs meson_post_install.py
-
-    # https://gitlab.gnome.org/GNOME/gnome-characters/-/merge_requests/70
-    substituteInPlace meson_post_install.py \
-      --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
   '';
 
   dontWrapGApps = true;
