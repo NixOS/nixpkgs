@@ -1,5 +1,7 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchFromGitLab
+, fetchpatch
 , pkg-config
 , vala
 , glib
@@ -8,16 +10,17 @@
 , python3
 , libxslt
 , gtk3
-, webkitgtk
+, webkitgtk_4_1
 , json-glib
-, librest
+, librest_1_0
+, libxml2
 , libsecret
 , gtk-doc
 , gobject-introspection
 , gettext
 , icu
 , glib-networking
-, libsoup
+, libsoup_3
 , docbook-xsl-nons
 , docbook_xml_dtd_412
 , gnome
@@ -30,7 +33,9 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-online-accounts";
-  version = "3.44.0";
+  version = "3.45.1";
+
+  outputs = [ "out" "man" "dev" "devdoc" ];
 
   # https://gitlab.gnome.org/GNOME/gnome-online-accounts/issues/87
   src = fetchFromGitLab {
@@ -38,10 +43,16 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "gnome-online-accounts";
     rev = version;
-    sha256 = "sha256-8dp3cizyQVHegDxX9G6iGLW5g44audn431hCPMS/KlA=";
+    sha256 = "sha256-1FqOJ+nKQdK5r2fP7oAvh1LfG+T1S1NSJ+9kNZ5I76Q=";
   };
 
-  outputs = [ "out" "man" "dev" "devdoc" ];
+  patches = [
+    # https://gitlab.gnome.org/GNOME/gnome-online-accounts/-/merge_requests/95
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-online-accounts/-/commit/2da899c48795e9941661f3eb06fc4fc04ec7b0fa.patch";
+      sha256 = "5qDiKnX9gx7eo//Qxa0+M9rsFKpg8dplA3IUZHuacmA=";
+    })
+  ];
 
   mesonFlags = [
     "-Dfedora=false" # not useful in NixOS or for NixOS users.
@@ -75,10 +86,11 @@ stdenv.mkDerivation rec {
     icu
     json-glib
     libkrb5
-    librest
+    librest_1_0
+    libxml2
     libsecret
-    libsoup
-    webkitgtk
+    libsoup_3
+    webkitgtk_4_1
   ];
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
