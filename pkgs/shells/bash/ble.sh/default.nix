@@ -1,13 +1,14 @@
-{ lib, stdenvNoCC, fetchgit, git, curl, jq, nix-prefetch, runtimeShell }:
+{ lib, stdenvNoCC, fetchFromGitHub, git, curl, jq, nix-prefetch, bashInteractive, runtimeShell }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation rec {
   name = "ble.sh";
-  version = "0.3.3";
+  version = "2022-07-21";
 
-  src = fetchgit {
-    url = "https://github.com/akinomyoga/ble.sh.git";
-    rev = "refs/tags/v0.3.3";
-    hash = "sha256-Gfo2S1t5Kdy+8TEDS4M5yhyRShvzQIljdE0MQK1CL+4=";
+  src = fetchFromGitHub {
+    owner = "akinomyoga";
+    repo = "ble.sh";
+    rev = "a45077599d5c48d946de6e9b3c4baaaae9fc2633";
+    hash = "sha256-YUfDr3wmv7UGAoDQJBuXve0R34cQua4OyooppYXJIlU=";
     fetchSubmodules = true;
     leaveDotGit = true;
   };
@@ -16,6 +17,7 @@ stdenvNoCC.mkDerivation {
   buildInputs = [ curl jq nix-prefetch ];
 
   doCheck = true;
+  checkInputs = [ bashInteractive ];
 
   installFlags = [ "INSDIR=$(out)/share" ];
   postInstall = ''
@@ -34,23 +36,26 @@ stdenvNoCC.mkDerivation {
 
     function ble/base/package:nix/update {
       local rev=\$(${curl}/bin/curl -sL 'https://api.github.com/repos/akinomyoga/ble.sh/branches/master' | ${jq}/bin/jq -r '.commit.sha')
+      [[ "\$rev" == "${src.rev}" ]] && return 6
+
+      # We use fetchgit here, because nix-prefetch's fetchFromGitHub is broken
       local hash="\$(${nix-prefetch}/bin/nix-prefetch fetchgit --url 'https://github.com/akinomyoga/ble.sh.git' --branchName master --rev \$rev --leaveDotGit --fetchSubmodules 2>/dev/null)"
 
-      cat <<-EOS >/dev/stderr
-    	You cannot update ble.sh automatically via Nix.
-    	The latest ble.sh from master branch can be installed by overriding nixpkgs like following.
+      cat <<STDERR >/dev/stderr
+    You cannot update ble.sh to the latest version with Nix.
+    The latest ble.sh from master branch can be installed by overriding nixpkgs like following.
 
-    	  pkgs.ble-sh.overrideAttrs (_: {
-    	    src = pkgs.fetchgit {
-    	      url = "https://github.com/akinomyoga/ble.sh.git";
-    	      rev = "\$rev";
-    	      hash = "\$hash";
-    	      fetchSubmodules = true;
-    	      leaveDotGit = true;
-    	    };
-    	    doCheck = false;
-    	  });
-    	EOS
+      pkgs.ble-sh.overrideAttrs (_: {
+        src = pkgs.fetchFromGitHub {
+          owner = "akinomyoga";
+          repo = "ble.sh";
+          rev = "\$rev";
+          hash = "\$hash";
+          fetchSubmodules = true;
+          leaveDotGit = true;
+        };
+      });
+    STDERR
       return 1
     }
     SCRIPT
