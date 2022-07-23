@@ -11971,6 +11971,12 @@
     githubId = 4392850;
     name = "Roland Synnestvedt";
   };
+  rtimush = {
+    email = "rtimush@gmail.com";
+    github = "rtimush";
+    githubId = 831307;
+    name = "Roman Timushev";
+  };
   rtburns-jpl = {
     email = "rtburns@jpl.nasa.gov";
     github = "rtburns-jpl";
