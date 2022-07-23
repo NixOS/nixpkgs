@@ -11,30 +11,25 @@
 , gobject-introspection
 , gdk-pixbuf
 , librest
-, librsvg
 , libgweather
 , geoclue2
 , wrapGAppsHook
-, folks
 , libchamplain
+, libsecret
 , libsoup
 , gsettings-desktop-schemas
-, webkitgtk
 , gjs
-, libgee
 , libhandy
 , geocode-glib
-, evolution-data-server
-, gnome-online-accounts
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-maps";
-  version = "42.3";
+  version = "43.alpha";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-5FZGf6zzyP0QyThrXnTEPZWVrZ+3Ulf32gFK+YPWnNE=";
+    sha256 = "sha256-wFE9g8trmJ5HFZz4nHLnsIgejanl6kfI1+c2LY6uE5A=";
   };
 
   doCheck = true;
@@ -49,24 +44,19 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    evolution-data-server
-    folks
     gdk-pixbuf
     geoclue2
     geocode-glib
     gjs
-    gnome-online-accounts
     gobject-introspection
     gsettings-desktop-schemas
     gtk3
     libchamplain
-    libgee
     libgweather
     libhandy
     librest
-    librsvg
+    libsecret
     libsoup
-    webkitgtk
   ];
 
   postPatch = ''
