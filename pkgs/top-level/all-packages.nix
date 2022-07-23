@@ -27646,6 +27646,8 @@ with pkgs;
     stdenv = clangStdenv;
   };
 
+  hedgedoc-cli = callPackage ../tools/admin/hedgedoc-cli { };
+
   heimer = libsForQt5.callPackage ../applications/misc/heimer { };
 
   hello = callPackage ../applications/misc/hello { };
