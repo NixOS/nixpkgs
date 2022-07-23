@@ -11660,6 +11660,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) OpenCL;
   };
 
+  waifu2x-ncnn-vulkan = callPackage ../tools/graphics/waifu2x-ncnn-vulkan { };
+
   wakatime = python2Packages.callPackage ../tools/misc/wakatime { };
 
   weather = callPackage ../applications/misc/weather { };
