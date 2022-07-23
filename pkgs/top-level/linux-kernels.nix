@@ -499,6 +499,8 @@ in {
 
     qc71_laptop = callPackage ../os-specific/linux/qc71_laptop { };
 
+    hid-ite8291r3 = callPackage ../os-specific/linux/hid-ite8291r3 { };
+
   } // lib.optionalAttrs config.allowAliases {
     ati_drivers_x11 = throw "ati drivers are no longer supported by any kernel >=4.1"; # added 2021-05-18;
   });
