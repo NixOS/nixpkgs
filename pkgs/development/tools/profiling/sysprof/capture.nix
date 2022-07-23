@@ -15,13 +15,14 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dwith_sysprofd=none"
+    "-Dsysprofd=none"
+    "-Dgtk=false"
     "-Dlibsysprof=false"
     "-Dlibunwind=false"
     "-Dhelp=false"
-    "-Denable_tools=false"
-    "-Denable_tests=false"
-    "-Denable_examples=false"
+    "-Dtools=false"
+    "-Dtests=false"
+    "-Dexamples=false"
   ];
 
   meta = sysprof.meta // {
