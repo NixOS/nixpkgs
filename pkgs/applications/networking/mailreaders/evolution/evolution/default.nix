@@ -5,7 +5,7 @@
 , intltool
 , fetchurl
 , libxml2
-, webkitgtk
+, webkitgtk_4_1
 , highlight
 , pkg-config
 , gtk3
@@ -14,7 +14,6 @@
 , libpst
 , gspell
 , evolution-data-server
-, libgdata
 , libgweather
 , glib-networking
 , gsettings-desktop-schemas
@@ -34,7 +33,7 @@
 , nspr
 , icu
 , libcanberra-gtk3
-, geocode-glib
+, geocode-glib_2
 , cmark
 , bogofilter
 , gst_all_1
@@ -46,11 +45,11 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution";
-  version = "3.44.4";
+  version = "3.45.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "8LFuerrTx5RaKcMi8X2rSgjWHpm9fMkbjfNQU8XBLow=";
+    sha256 = "/iRZq5DdZ86JdtWuu6ekP69gqvBJMeTWnxxG10ensW4=";
   };
 
   nativeBuildInputs = [
@@ -81,9 +80,8 @@ stdenv.mkDerivation rec {
     highlight
     icu
     libcanberra-gtk3
-    geocode-glib
+    geocode-glib_2
     cmark
-    libgdata
     libgweather
     libical
     libnotify
@@ -97,7 +95,7 @@ stdenv.mkDerivation rec {
     procps
     shared-mime-info
     sqlite
-    webkitgtk
+    webkitgtk_4_1
   ];
 
   propagatedUserEnvPkgs = [
@@ -112,7 +110,6 @@ stdenv.mkDerivation rec {
     "-DWITH_SA_LEARN=${spamassassin}/bin/sa-learn"
     "-DWITH_BOGOFILTER=${bogofilter}/bin/bogofilter"
     "-DWITH_OPENLDAP=${openldap}"
-    "-DWITH_GWEATHER4=ON"
   ];
 
   requiredSystemFeatures = [
