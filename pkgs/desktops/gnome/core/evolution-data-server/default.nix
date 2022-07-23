@@ -7,7 +7,7 @@
 , python3
 , gobject-introspection
 , gettext
-, libsoup
+, libsoup_3
 , libxml2
 , libsecret
 , icu
@@ -29,7 +29,7 @@
 , ninja
 , libkrb5
 , openldap
-, webkitgtk
+, webkitgtk_4_1
 , libaccounts-glib
 , json-glib
 , glib
@@ -45,13 +45,13 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution-data-server";
-  version = "3.44.3";
+  version = "3.45.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "kEOrU/NB2hAxXFUDhKazIEMBk/yNeGHdJcTpsuC+Qls=";
+    sha256 = "M0t2QR8hDzcEYDsSpCwU/DKY+hL/6abk+/uYeeP+SyI=";
   };
 
   patches = [
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    libsoup
+    libsoup_3
     libxml2
     gtk3
     gnome-online-accounts
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
     sqlite
     libkrb5
     openldap
-    webkitgtk
+    webkitgtk_4_1
     glib-networking
     libcanberra-gtk3
     pcre
@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
     nspr
     libical
     libgdata # needed for GObject inspection, https://gitlab.gnome.org/GNOME/evolution-data-server/-/merge_requests/57/diffs
-    libsoup
+    libsoup_3
   ];
 
   cmakeFlags = [
