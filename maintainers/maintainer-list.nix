@@ -2038,6 +2038,12 @@
     github = "scaredmushroom";
     githubId = 45340040;
   };
+  CaptainJawZ = {
+    email = "CaptainJawZ@outlook.com";
+    name = "Danilo Reyes";
+    github = "CaptainJawZ";
+    githubId = 43111068;
+  };
   carlosdagos = {
     email = "m@cdagostino.io";
     github = "carlosdagos";
