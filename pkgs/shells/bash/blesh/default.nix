@@ -22,13 +22,13 @@ stdenvNoCC.mkDerivation rec {
   installFlags = [ "INSDIR=$(out)/share" ];
   postInstall = ''
     mkdir -p "$out/bin"
-    cat <<SCRIPT >"$out/bin/ble.sh-share"
+    cat <<SCRIPT >"$out/bin/blesh-share"
     #!${runtimeShell}
     # Run this script to find the ble.sh shared folder
     # where all the shell scripts are living.
     echo "$out/share/ble.sh"
     SCRIPT
-    chmod +x "$out/bin/ble.sh-share"
+    chmod +x "$out/bin/blesh-share"
 
     mkdir -p "$out/share/lib"
     cat <<SCRIPT >"$out/share/lib/_package.sh"
