@@ -14974,6 +14974,12 @@
     githubId = 47790121;
     name = "Ryan Burns";
   };
+  rtimush = {
+    email = "rtimush@gmail.com";
+    github = "rtimush";
+    githubId = 831307;
+    name = "Roman Timushev";
+  };
   rtreffer = {
     email = "treffer+nixos@measite.de";
     github = "rtreffer";
