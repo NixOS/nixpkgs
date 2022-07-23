@@ -18547,6 +18547,8 @@ with pkgs;
 
   gcr = callPackage ../development/libraries/gcr { };
 
+  gcr_4 = callPackage ../development/libraries/gcr/4.nix { };
+
   gdl = callPackage ../development/libraries/gdl { };
 
   gdome2 = callPackage ../development/libraries/gdome2 { };
