@@ -5,6 +5,7 @@
 , ninja
 , pkg-config
 , python3
+, asciidoc
 , wrapGAppsHook
 , glib
 , libepoxy
@@ -28,11 +29,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-remote-desktop";
-  version = "42.4";
+  version = "43.alpha";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-TU0jPvov+lRnMGo8w86Le6IyUtQtSxJy1crJ1d5Fy5o=";
+    hash = "sha256-MGLnrsKcyQYoPZ0hY0q3cv8NGVxS8n4aLFzMdtehKXE=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +41,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
+    asciidoc
     wrapGAppsHook
   ];
 
