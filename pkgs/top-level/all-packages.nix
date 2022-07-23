@@ -17348,7 +17348,8 @@ with pkgs;
 
   at-spi2-core = callPackage ../development/libraries/at-spi2-core { };
 
-  at-spi2-atk = callPackage ../development/libraries/at-spi2-atk { };
+  # Not moved to aliases while we decide if we should split the package again.
+  at-spi2-atk = at-spi2-core;
 
   aqbanking = callPackage ../development/libraries/aqbanking { };
 
@@ -18439,7 +18440,8 @@ with pkgs;
 
   ace = callPackage ../development/libraries/ace { };
 
-  atk = callPackage ../development/libraries/atk { };
+  # Not moved to aliases while we decide if we should split the package again.
+  atk = at-spi2-core;
 
   atkmm = callPackage ../development/libraries/atkmm { };
 
