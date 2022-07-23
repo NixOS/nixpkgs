@@ -11,14 +11,14 @@
 , python3
 , gobject-introspection
 , gettext
-, libsoup
+, libsoup_3
 , libxml2
 , libsecret
 , icu
 , sqlite
 , tzdata
 , libcanberra-gtk3
-, gcr
+, gcr_4
 , p11-kit
 , db
 , nspr
@@ -33,7 +33,8 @@
 , ninja
 , libkrb5
 , openldap
-, webkitgtk
+, webkitgtk_4_1
+, webkitgtk_5_0
 , libaccounts-glib
 , json-glib
 , glib
@@ -42,20 +43,19 @@
 , gnome-online-accounts
 , libgweather
 , libgdata
-, gsettings-desktop-schemas
 , boost
 , protobuf
 }:
 
 stdenv.mkDerivation rec {
   pname = "evolution-data-server";
-  version = "3.44.4";
+  version = "3.45.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "wMZliDjVi6RgQqS55Qo7sRKWkeTNuEteugvzMLLMsus=";
+    sha256 = "M0t2QR8hDzcEYDsSpCwU/DKY+hL/6abk+/uYeeP+SyI=";
   };
 
   patches = [
@@ -67,8 +67,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substitute ${./hardcode-gsettings.patch} hardcode-gsettings.patch \
-      --subst-var-by EDS_GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"} \
-      --subst-var-by GDS_GSETTINGS_PATH ${glib.getSchemaPath gsettings-desktop-schemas}
+      --subst-var-by EDS_GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"}
     patches="$patches $PWD/hardcode-gsettings.patch"
   '';
 
@@ -86,11 +85,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    libsoup
-    libxml2
+    libsoup_3
     gtk3
     gnome-online-accounts
-    gcr
+    gcr_4
     p11-kit
     libgweather
     libgdata
@@ -100,7 +98,8 @@ stdenv.mkDerivation rec {
     sqlite
     libkrb5
     openldap
-    webkitgtk
+    webkitgtk_4_1 # For GTK 3 library
+    webkitgtk_5_0 # For GTK 4 library
     glib-networking
     libcanberra-gtk3
     pcre
@@ -116,7 +115,8 @@ stdenv.mkDerivation rec {
     nspr
     libical
     libgdata # needed for GObject inspection, https://gitlab.gnome.org/GNOME/evolution-data-server/-/merge_requests/57/diffs
-    libsoup
+    libsoup_3
+    libxml2
   ];
 
   cmakeFlags = [
