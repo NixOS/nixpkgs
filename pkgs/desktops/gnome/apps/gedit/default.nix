@@ -25,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gedit";
-  version = "42.1";
+  version = "43.alpha";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gedit/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "fx/UPfURDUw33mVBmT9B8PvD78eQkA6SBTR5ugaZIOk=";
+    sha256 = "K3iOqhbYeeOVdGmS/OdmC5WtIpQ5OgHs0t5CzdWW95o=";
   };
 
   patches = [
