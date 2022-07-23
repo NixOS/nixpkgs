@@ -1,5 +1,5 @@
 { config, lib, stdenv, fetchurl, gettext, meson, ninja, pkg-config, perl, python3
-, libiconv, zlib, libffi, pcre, libelf, gnome, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45, libxslt
+, libiconv, zlib, libffi, pcre2, libelf, gnome, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45, libxslt
 # use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
 , util-linuxMinimal ? null
 , buildPackages
@@ -45,11 +45,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "glib";
-  version = "2.72.3";
+  version = "2.73.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Sjmi9iS4US1QDVhAFz7af6hfUcEJBS6ugGrOzoXTRfA=";
+    sha256 = "Xz7jbjT0qqs5PD49xG+wGzL36tbIjUHX8g2IpJze8dk=";
   };
 
   patches = optionals stdenv.isDarwin [
@@ -97,7 +97,9 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   buildInputs = [
-    libelf setupHook pcre
+    libelf
+    setupHook
+    pcre2
   ] ++ optionals (!stdenv.hostPlatform.isWindows) [
     bash gnum4 # install glib-gettextize and m4 macros for other apps to use
   ] ++ optionals stdenv.isLinux [
