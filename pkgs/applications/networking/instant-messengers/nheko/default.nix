@@ -81,10 +81,15 @@ mkDerivation rec {
     "-DCOMPILE_QML=ON" # see https://github.com/Nheko-Reborn/nheko/issues/389
   ];
 
-  preFixup = lib.optionalString voipSupport ''
-    # add gstreamer plugins path to the wrapper
-    qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
-  '';
+  preFixup = ''
+    qtWrapperArgs+=( \
+      --prefix QT_PLUGIN_PATH : ${lib.makeSearchPath "/lib/qt5/plugins" [ qtbase ]} \
+    ''
+    + lib.optionalString voipSupport ''
+      # add gstreamer plugins path to the wrapper
+      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0" \
+    ''
+   + ")";
 
   meta = with lib; {
     description = "Desktop client for the Matrix protocol";
