@@ -15,19 +15,20 @@
 , withVala ? stdenv.buildPlatform == stdenv.hostPlatform
 , libpsl
 , python3
+, gi-docgen
 , brotli
 , libnghttp2
 }:
 
 stdenv.mkDerivation rec {
   pname = "libsoup";
-  version = "3.0.7";
+  version = "3.1.1";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-69+QzzWZwRrLtoGKnZ4/ydLGjlbrgpuTlilyaD4b98g=";
+    sha256 = "sha256-RAO/PnpMeoXLPEpSgcm5nSVuKGOfVXMKUq3UMqr84Fw=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +37,7 @@ stdenv.mkDerivation rec {
     pkg-config
     glib
     python3
+    gi-docgen
   ] ++ lib.optionals withIntrospection [
     gobject-introspection
   ] ++ lib.optionals withVala [
@@ -80,6 +82,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs libsoup/
+  '';
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {
