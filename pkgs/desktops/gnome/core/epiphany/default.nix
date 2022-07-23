@@ -15,8 +15,8 @@
 , libxml2
 , libxslt
 , itstool
-, webkitgtk
-, libsoup
+, webkitgtk_4_1
+, libsoup_3
 , glib-networking
 , libsecret
 , gnome-desktop
@@ -40,11 +40,11 @@
 
 stdenv.mkDerivation rec {
   pname = "epiphany";
-  version = "42.3";
+  version = "43.alpha";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "cxbTxlAOgl2OVyk/pYBHxWcnvuFs1rasgE/+XZsilWA=";
+    sha256 = "TVm7+mQ59arqnWD94npf6GdciFP8uugPSmjZ8CjDF0E=";
   };
 
   patches = lib.optionals withPantheon [
@@ -95,12 +95,12 @@ stdenv.mkDerivation rec {
     libnotify
     libarchive
     libsecret
-    libsoup
+    libsoup_3
     libxml2
     nettle
     p11-kit
     sqlite
-    webkitgtk
+    webkitgtk_4_1
   ];
 
   # Tests need an X display
