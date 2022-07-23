@@ -34498,6 +34498,8 @@ with pkgs;
 
   autotiling = python3Packages.callPackage ../misc/autotiling { };
 
+  autotiling-rs = callPackage ../misc/autotiling-rs { };
+
   avell-unofficial-control-center = python3Packages.callPackage ../applications/misc/avell-unofficial-control-center { };
 
   beep = callPackage ../misc/beep { };
