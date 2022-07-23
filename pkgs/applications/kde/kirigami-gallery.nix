@@ -26,6 +26,6 @@ mkDerivation rec {
     description = "View examples of Kirigami components";
     license = licenses.lgpl2;
     maintainers = with maintainers; [ shadowrz ];
-    broken = lib.versionOlder qtbase.version "5.15";
+    broken = versionOlder qtbase.version "5.15";
   };
 }
