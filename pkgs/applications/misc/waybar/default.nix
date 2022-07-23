@@ -25,18 +25,19 @@
 , swaySupport     ? true,  sway
 , mpdSupport      ? true,  libmpdclient
 , rfkillSupport   ? true
+, upowerSupport   ? true, upower
 , withMediaPlayer ? false, glib, gobject-introspection, python3, python38Packages, playerctl
 }:
 
 stdenv.mkDerivation rec {
   pname = "waybar";
-  version = "0.9.12";
+  version = "0.9.13";
 
   src = fetchFromGitHub {
     owner = "Alexays";
     repo = "Waybar";
     rev = version;
-    sha256 = "sha256-NQ/d+eXmc+GRxl5zby97S4U/YQnsRWGpwNZZL0Sqby8=";
+    sha256 = "sha256-Uzg2IrCDD8uUdGAveA8IjvonJnnnobOrAgjGG1kQ3pU=";
   };
 
   nativeBuildInputs = [
@@ -52,14 +53,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = with lib;
     [ wayland wlroots gtkmm3 libsigcxx jsoncpp spdlog gtk-layer-shell howard-hinnant-date libxkbcommon ]
-    ++ optional  traySupport  libdbusmenu-gtk3
-    ++ optional  pulseSupport libpulseaudio
-    ++ optional  sndioSupport sndio
-    ++ optional  nlSupport    libnl
-    ++ optional  udevSupport  udev
-    ++ optional  evdevSupport libevdev
-    ++ optional  swaySupport  sway
-    ++ optional  mpdSupport   libmpdclient;
+    ++ optional  traySupport   libdbusmenu-gtk3
+    ++ optional  pulseSupport  libpulseaudio
+    ++ optional  sndioSupport  sndio
+    ++ optional  nlSupport     libnl
+    ++ optional  udevSupport   udev
+    ++ optional  evdevSupport  libevdev
+    ++ optional  swaySupport   sway
+    ++ optional  mpdSupport    libmpdclient
+    ++ optional  upowerSupport upower;
 
   checkInputs = [ catch2 ];
   doCheck = runTests;
@@ -74,6 +76,7 @@ stdenv.mkDerivation rec {
       libudev = udevSupport;
       mpd = mpdSupport;
       rfkill = rfkillSupport;
+      upower_glib = upowerSupport;
       tests = runTests;
     }
   ) ++ [

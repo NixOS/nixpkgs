@@ -6,7 +6,14 @@
 
 assert withMysql -> (mysql_jdbc != null);
 
-stdenvNoCC.mkDerivation rec {
+let
+  optionalWarning = cond: msg:
+    if cond then lib.warn msg
+    else lib.id;
+in
+
+optionalWarning (crowdProperties != null) "Using `crowdProperties` is deprecated!"
+(stdenvNoCC.mkDerivation rec {
   pname = "atlassian-confluence";
   version = "7.18.1";
 
@@ -44,6 +51,6 @@ stdenvNoCC.mkDerivation rec {
     description = "Team collaboration software written in Java and mainly used in corporate environments";
     homepage = "https://www.atlassian.com/software/confluence";
     license = licenses.unfree;
-    maintainers = with maintainers; [ fpletz globin willibutz ciil techknowlogick ];
+    maintainers = with maintainers; [ fpletz globin willibutz ciil techknowlogick ma27 ];
   };
-}
+})
