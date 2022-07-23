@@ -11,7 +11,7 @@
 , fontconfig
 , gdm
 , geoclue2
-, geocode-glib
+, geocode-glib_2
 , glib
 , gnome-desktop
 , gnome-online-accounts
@@ -20,12 +20,12 @@
 , json-glib
 , krb5
 , libpwquality
-, librest
+, librest_1_0
 , libsecret
 , networkmanager
 , pango
 , polkit
-, webkitgtk
+, webkitgtk_4_1
 , systemd
 , libhandy
 , libnma
@@ -36,11 +36,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-initial-setup";
-  version = "42.2";
+  version = "43.alpha.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "TYPZiySavhW7Kz5+eurZxH+Ei8p7agkavJCLdlQavns=";
+    sha256 = "40CMKAVdMET/bnDcecI35i6b9lTYh9h7v6Ewo9NHPS8=";
   };
 
   patches = [
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     fontconfig
     gdm
     geoclue2
-    geocode-glib
+    geocode-glib_2
     glib
     gnome-desktop
     gnome-online-accounts
@@ -76,12 +76,12 @@ stdenv.mkDerivation rec {
     libhandy
     libnma
     libpwquality
-    librest
+    librest_1_0
     libsecret
     networkmanager
     pango
     polkit
-    webkitgtk
+    webkitgtk_4_1
   ];
 
   mesonFlags = [
