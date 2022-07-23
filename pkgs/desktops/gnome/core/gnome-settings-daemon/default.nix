@@ -30,7 +30,7 @@
 , modemmanager
 , networkmanager
 , gnome-desktop
-, geocode-glib
+, geocode-glib_2
 , docbook_xsl
 , wrapGAppsHook
 , python3
@@ -42,11 +42,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-settings-daemon";
-  version = "42.2";
+  version = "43.alpha";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-settings-daemon/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "nESXFKqOwSccDbUTffNFgZWUPwXM0KyJNdkzl3cLqwA=";
+    sha256 = "SlKagmJ6aJfhgxW1htr7kKLBQvpiELRAkcp8eVV9ONM=";
   };
 
   patches = [
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     libgweather
     nss
     polkit
-    geocode-glib
+    geocode-glib_2
     geoclue2
     systemd
     libgudev
