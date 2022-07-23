@@ -23,7 +23,9 @@ stdenv.mkDerivation rec {
   sourceRoot = "source/src";
 
   patches = [
+    # Fixes missing target SPIRV-Tools-opt
     ./cmakelists.patch
+    # Load models from $out/share/models instead of $out/bin
     ./models_path.patch
   ];
 
@@ -38,15 +40,18 @@ stdenv.mkDerivation rec {
     ++ lib.optional (!stdenv.isDarwin) libgcc;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin $out/share
     install -Dm555 waifu2x-ncnn-vulkan $out/bin/
     cp -r ${src}/models $out/share
+    runHook postInstall
   '';
 
   meta = with lib; {
     description = "NCNN implementation of waifu2x converter";
     homepage = "https://github.com/nihui/waifu2x-ncnn-vulkan";
     license = licenses.mit;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ chuangzhu ];
   };
 }
