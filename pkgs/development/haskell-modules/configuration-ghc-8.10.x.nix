@@ -139,4 +139,11 @@ self: super: {
   # Not possible to build in the main GHC 9.0 package set
   # https://github.com/awakesecurity/spectacle/issues/49
   spectacle = doDistribute (markUnbroken super.spectacle);
+
+  # missing test dependency, because cabal2nix interprets cabal file with ghc-9
+  autodocodec = addBuildDepends [ self.doctest ] super.autodocodec;
+
+  # Enabling the test suite triggers a dependency hell.
+  # This override will likely be obsolete starting with Stackage LTS 20
+  cabal2json = dontCheck super.cabal2json;
 }

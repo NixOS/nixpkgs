@@ -263,7 +263,6 @@ broken-packages:
   - authenticate-ldap
   - authinfo-hs
   - auto
-  - autodocodec-yaml
   - autom
   - autonix-deps
   - autopack
@@ -526,7 +525,6 @@ broken-packages:
   - cabal2doap
   - cabal2ebuild
   - cabal2ghci
-  - cabal2json
   - cabal-audit
   - cabal-auto-expose
   - cabal-bundle-clib
