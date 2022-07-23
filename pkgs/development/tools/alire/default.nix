@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   pname = "alire";
-  version = "1.3-dev";
+  version = "1.3-dev-2022-06-24";
   src = fetchFromGitHub {
     owner = "alire-project";
     repo = "alire";
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://github.com/alire-project/alire";
-    description = "ALIRE: Ada LIbrary REpository.";
+    description = "Ada LIbrary REpository";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ethindp ];
   };
