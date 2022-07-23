@@ -60,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./7.79.1-darwin-no-systemconfiguration.patch
+    ./easy_lock-h-include-sched-h-if-available-to-fix-build.patch
   ] ++ lib.optional patchNetrcRegression ./netrc-regression.patch;
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
