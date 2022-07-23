@@ -73,7 +73,7 @@ mkYarnPackage rec {
 
     pushd node_modules/sqlite3
     export CPPFLAGS="-I${nodejs}/include/node"
-    npm run install --build-from-source --nodedir=${nodejs}/include/node
+    yarn install --frozen-lockfile
     popd
 
     pushd node_modules/esbuild
@@ -81,7 +81,7 @@ mkYarnPackage rec {
     ln -s ${lib.getBin esbuild-hedgedoc}/bin/esbuild bin/
     popd
 
-    npm run build
+    yarn build
 
     patchShebangs bin/*
 
