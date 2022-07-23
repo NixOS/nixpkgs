@@ -23,6 +23,6 @@ buildGoModule rec {
     description = "A portable devkit for CICD pipelines";
     homepage = "https://dagger.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jfroche ];
+    maintainers = with maintainers; [ jfroche sagikazarmark ];
   };
 }
