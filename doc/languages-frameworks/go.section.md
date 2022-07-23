@@ -115,10 +115,17 @@ Arguments to pass to the Go linker tool via the `-ldflags` argument of `go build
 
 ```nix
   ldflags = [
-    "-s" "-w"
     "-X main.Version=${version}"
     "-X main.Commit=${version}"
   ];
+```
+
+### `defaultLdflags` {#var-go-defaultLdflags}
+
+`-s` and `-w` are set by default for `ldflags`, they can be disabled via `defaultLdflags`. For example:
+
+```nix
+  defaultLdflags = false;
 ```
 
 ### `tags` {#var-go-tags}

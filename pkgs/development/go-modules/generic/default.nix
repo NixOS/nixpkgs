@@ -9,6 +9,8 @@
 
 # Go linker flags, passed to go via -ldflags
 , ldflags ? []
+# set `-s` `-w` ldflags
+, defaultLdflags ? true
 
 # Go tags, passed to go via -tag
 , tags ? []
@@ -144,6 +146,9 @@ let
     GO111MODULE = "on";
     GOFLAGS = lib.optionals (!proxyVendor) [ "-mod=vendor" ] ++ lib.optionals (!allowGoReference) [ "-trimpath" ];
     inherit CGO_ENABLED;
+
+    # need to use both -s and -w for consistency across all platforms
+    ldflags = (args.ldflags or []) ++ lib.optionals defaultLdflags [ "-s" "-w" ];
 
     configurePhase = args.configurePhase or ''
       runHook preConfigure

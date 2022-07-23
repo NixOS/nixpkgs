@@ -9,6 +9,8 @@
 
 # Go linker flags, passed to go via -ldflags
 , ldflags ? []
+# set `-s` `-w` ldflags
+, defaultLdflags ? true
 
 # Go tags, passed to go via -tag
 , tags ? []
@@ -96,6 +98,9 @@ let
 
     GO111MODULE = "off";
     GOFLAGS = lib.optionals (!allowGoReference) [ "-trimpath" ];
+
+    # need to use both -s and -w for consistency across all platforms
+    ldflags = (args.ldflags or []) ++ lib.optionals defaultLdflags [ "-s" "-w" ];
 
     GOARM = toString (lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
 
