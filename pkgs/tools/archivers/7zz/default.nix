@@ -2,9 +2,9 @@
 , lib
 , fetchurl
 
-  # Only used for x86/x86_64
+  # Only used for Linux's x86/x86_64
 , uasm
-, useUasm ? stdenv.hostPlatform.isx86
+, useUasm ? (stdenv.isLinux && stdenv.hostPlatform.isx86)
 
   # RAR code is under non-free unRAR license
   # see the meta.license section below for more details
@@ -16,23 +16,23 @@
 }:
 
 let
-  inherit (stdenv.hostPlatform) system;
-  platformSuffix = {
-    aarch64-linux = "_arm64";
-    i686-linux = "_x86";
-    x86_64-linux = "_x64";
-  }.${system} or
-    (builtins.trace "`platformSuffix` not available for `${system}.` Making a generic `7zz` build." "");
+  makefile = {
+    aarch64-darwin = "../../cmpl_mac_arm64.mak";
+    x86_64-darwin = "../../cmpl_mac_x64.mak";
+    aarch64-linux = "../../cmpl_gcc_arm64.mak";
+    i686-linux = "../../cmpl_gcc_x86.mak";
+    x86_64-linux = "../../cmpl_gcc_x64.mak";
+  }.${stdenv.hostPlatform.system} or "../../cmpl_gcc.mak"; # generic build
 in
 stdenv.mkDerivation rec {
   pname = "7zz";
-  version = "22.00";
+  version = "22.01";
 
   src = fetchurl {
     url = "https://7-zip.org/a/7z${lib.replaceStrings [ "." ] [ "" ] version}-src.tar.xz";
     hash = {
-      free = "sha256-QzGZgPxHobGwstFfVRtb4V+hqMM7dMIy2/EZcJ2aZe8=";
-      unfree = "sha256-QJafYB6Gr/Saqgug31zm/Tl89+JoOoS1kbAIHkYe9nU=";
+      free = "sha256-mp3cFXOEiVptkUdD1+X8XxwoJhBGs+Ns5qk3HBByfLg=";
+      unfree = "sha256-OTCYcwxwBCOSr4CJF+dllF3CQ33ueq48/MSWbrkg+8U=";
     }.${if enableUnfree then "unfree" else "free"};
     downloadToTemp = (!enableUnfree);
     # remove the unRAR related code from the src drv
@@ -51,27 +51,40 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  sourceRoot = "CPP/7zip/Bundles/Alone2";
+  sourceRoot = ".";
+
+  patches = [ ./fix-build-on-darwin.patch ];
+  patchFlags = [ "-p0" ];
+
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [
+    "-Wno-deprecated-copy-dtor"
+  ];
+
+  inherit makefile;
 
   makeFlags =
     [
       "CC=${stdenv.cc.targetPrefix}cc"
       "CXX=${stdenv.cc.targetPrefix}c++"
-    ] ++
-    lib.optionals useUasm [ "MY_ASM=uasm" ] ++
+    ]
+    ++ lib.optionals useUasm [ "MY_ASM=uasm" ]
+    # We need at minimum 10.13 here because of utimensat, however since
+    # we need a bump anyway, let's set the same minimum version as the one in
+    # aarch64-darwin so we don't need additional changes for it
+    ++ lib.optionals stdenv.isDarwin [ "MACOSX_DEPLOYMENT_TARGET=10.16" ]
     # it's the compression code with the restriction, see DOC/License.txt
-    lib.optionals (!enableUnfree) [ "DISABLE_RAR_COMPRESS=true" ];
-
-  makefile = "../../cmpl_gcc${platformSuffix}.mak";
+    ++ lib.optionals (!enableUnfree) [ "DISABLE_RAR_COMPRESS=true" ];
 
   nativeBuildInputs = lib.optionals useUasm [ uasm ];
 
   enableParallelBuilding = true;
 
+  preBuild = "cd CPP/7zip/Bundles/Alone2";
+
   installPhase = ''
     runHook preInstall
 
-    install -Dm555 -t $out/bin b/g${platformSuffix}/7zz
+    install -Dm555 -t $out/bin b/*/7zz
     install -Dm444 -t $out/share/doc/${pname} ../../../../DOC/*.txt
 
     runHook postInstall
@@ -96,7 +109,7 @@ stdenv.mkDerivation rec {
       # the unRAR compression code is disabled by default
       lib.optionals enableUnfree [ unfree ];
     maintainers = with maintainers; [ anna328p peterhoeg jk ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     mainProgram = "7zz";
   };
 }
