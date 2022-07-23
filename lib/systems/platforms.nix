@@ -392,8 +392,11 @@ rec {
 
   apple-m1 = {
     gcc = {
-      # Extracted from `/usr/bin/clang -E - -mcpu=apple-m1 -###`
-      arch = "armv8.5a+fp-armv8+neon+crc+crypto+dotprod+fp16fml+ras+lse+rdm+rcpc+zcm+zcz+fullfp16+sm4+sha3+sha2+aes";
+      # Extracted from `/usr/bin/clang -E - -mcpu=apple-m1 -###`:
+      # armv8.5a+fp-armv8+neon+crc+crypto+dotprod+fp16fml+ras+lse+rdm+rcpc+zcm+zcz+fullfp16+sm4+sha3+sha2+aes
+      # Removed +fp-armv8+neon+zcm+zcz+fullfp16 because clang doesn't know about them when they're used in mcpu?
+      arch = "armv8.5a+crc+crypto+dotprod+fp16fml+ras+lse+rdm+rcpc+sm4+sha3+sha2+aes";
+
       # Newest AppleSilicon CPU llvm11 knows about
       # FIXME: Set to apple-m1 once llvm12 is default
       cpu = "apple-a13";
