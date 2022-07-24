@@ -4738,7 +4738,9 @@ with pkgs;
 
   apparix = callPackage ../tools/misc/apparix { };
 
-  appleseed = callPackage ../tools/graphics/appleseed { };
+  appleseed = libsForQt5.callPackage ../tools/graphics/appleseed {
+    boost = boost170;
+  };
 
   apple-music-electron = callPackage ../applications/audio/apple-music-electron { };
 
