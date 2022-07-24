@@ -12,6 +12,7 @@
 , itstool
 , libxml2
 , gtk4
+, libadwaita
 , glib
 , atk
 , gobject-introspection
@@ -43,6 +44,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk4
+    libadwaita
     atk
     glib
   ];
