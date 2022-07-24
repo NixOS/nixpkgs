@@ -17,7 +17,7 @@
 , sqlite
 , tzdata
 , libcanberra-gtk3
-, gcr
+, gcr_4
 , p11-kit
 , db
 , nspr
@@ -33,6 +33,7 @@
 , libkrb5
 , openldap
 , webkitgtk_4_1
+, webkitgtk_5_0
 , libaccounts-glib
 , json-glib
 , glib
@@ -88,7 +89,7 @@ stdenv.mkDerivation rec {
     libxml2
     gtk3
     gnome-online-accounts
-    gcr
+    gcr_4
     p11-kit
     libgweather
     libgdata
@@ -99,6 +100,7 @@ stdenv.mkDerivation rec {
     libkrb5
     openldap
     webkitgtk_4_1
+    webkitgtk_5_0
     glib-networking
     libcanberra-gtk3
     pcre
