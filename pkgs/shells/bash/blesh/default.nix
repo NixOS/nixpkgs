@@ -1,47 +1,51 @@
-{ lib, stdenvNoCC, fetchFromGitHub, git, curl, jq, nix-prefetch, bashInteractive, runtimeShell }:
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, git
+, bashInteractive
+, glibcLocales
+, runtimeShell
+}:
 
 stdenvNoCC.mkDerivation rec {
   name = "ble.sh";
-  version = "2022-07-21";
+  version = "2022-07-24";
 
   src = fetchFromGitHub {
     owner = "akinomyoga";
     repo = "ble.sh";
-    rev = "a45077599d5c48d946de6e9b3c4baaaae9fc2633";
-    hash = "sha256-YUfDr3wmv7UGAoDQJBuXve0R34cQua4OyooppYXJIlU=";
+    rev = "0b95d5d900b79a63e7f0834da5aa7276b8332a44";
+    hash = "sha256-s/RQKcAFcCUB3Xd/4uOsIgigOE0lCCeVC9K3dfnP/EQ=";
     fetchSubmodules = true;
     leaveDotGit = true;
   };
 
   nativeBuildInputs = [ git ];
-  buildInputs = [ curl jq nix-prefetch ];
 
   doCheck = true;
-  checkInputs = [ bashInteractive ];
+  checkInputs = [ bashInteractive glibcLocales ];
+  preCheck = "export LC_ALL=en_US.UTF-8";
 
   installFlags = [ "INSDIR=$(out)/share" ];
   postInstall = ''
     mkdir -p "$out/bin"
-    cat <<SCRIPT >"$out/bin/blesh-share"
+    cat <<EOF >"$out/bin/blesh-share"
     #!${runtimeShell}
     # Run this script to find the ble.sh shared folder
     # where all the shell scripts are living.
     echo "$out/share/ble.sh"
-    SCRIPT
+    EOF
     chmod +x "$out/bin/blesh-share"
 
     mkdir -p "$out/share/lib"
-    cat <<SCRIPT >"$out/share/lib/_package.sh"
+    cat <<EOF >"$out/share/lib/_package.sh"
     _ble_base_package_type=nix
 
     function ble/base/package:nix/update {
-      if ! nix-env --query ble.sh >/dev/null 2>&1; then
-        echo "Upgrade nix and rebuild the system to update ble.sh" >/dev/stderr
-        return 1
-      fi
-      nix-env --upgrade --attr nixpkgs.blesh
+      echo "Ble.sh is installed by Nix. You can update it there." >/dev/stderr
+      return 1
     }
-    SCRIPT
+    EOF
   '';
 
   meta = with lib; {
