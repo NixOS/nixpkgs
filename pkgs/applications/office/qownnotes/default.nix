@@ -24,7 +24,7 @@ mkDerivation rec {
     longDescription = "QOwnNotes is a plain-text file notepad and todo-list manager with markdown support and Nextcloud/ownCloud integration.";
     homepage = "https://www.qownnotes.org/";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ dtzWill totoroot ];
+    maintainers = with maintainers; [ totoroot ];
     platforms = platforms.linux;
   };
 }
