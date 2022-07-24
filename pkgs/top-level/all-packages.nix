@@ -34730,6 +34730,8 @@ with pkgs;
     buildGoModule = buildGo117Module;
   };
 
+  gtklock = callPackage ../misc/screensavers/gtklock { };
+
   guetzli = callPackage ../applications/graphics/guetzli { };
 
   gummi = callPackage ../applications/misc/gummi { };
