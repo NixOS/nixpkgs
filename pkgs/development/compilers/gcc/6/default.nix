@@ -230,7 +230,7 @@ stdenv.mkDerivation ({
 
   preConfigure = import ../common/pre-configure.nix {
     inherit lib;
-    inherit version targetPlatform hostPlatform gnatboot langJava langAda langGo;
+    inherit version targetPlatform hostPlatform gnatboot langJava langAda langGo crossStageStatic;
   };
 
   dontDisableStatic = true;
