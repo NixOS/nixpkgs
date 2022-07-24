@@ -515,6 +515,10 @@ mapAliases ({
   interfacer = throw "interfacer is deprecated and archived by upstream"; # Added 2022-04-05
   inter-ui = throw "'inter-ui' has been renamed to/replaced by 'inter'"; # Converted to throw 2022-09-24
   iops = throw "iops was removed: upstream is gone"; # Added 2022-02-06
+  ipfs = kubo; # Added 2022-09-27
+  ipfs-migrator-all-fs-repo-migrations = kubo-migrator-all-fs-repo-migrations; # Added 2022-09-27
+  ipfs-migrator-unwrapped = kubo-migrator-unwrapped; # Added 2022-09-27
+  ipfs-migrator = kubo-migrator; # Added 2022-09-27
   iproute = throw "'iproute' has been renamed to/replaced by 'iproute2'"; # Converted to throw 2022-09-24
   ipsecTools = throw "ipsecTools has benn removed, because it was no longer maintained upstream"; # Added 2021-12-15
   itch-setup = throw "itch-setup has benn removed, use itch instead"; # Added 2022-06-02

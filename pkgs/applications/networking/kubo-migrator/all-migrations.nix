@@ -2,23 +2,23 @@
 , stdenv
 , symlinkJoin
 , buildGoModule
-, ipfs-migrator-unwrapped
+, kubo-migrator-unwrapped
 }:
 
 # This package contains all the individual migrations in the bin directory.
-# This is used by fs-repo-migrations and could also be used by IPFS itself
+# This is used by fs-repo-migrations and could also be used by Kubo itself
 # when starting it like this: ipfs daemon --migrate
 
 let
   fs-repo-common = pname: version: buildGoModule {
     inherit pname version;
-    inherit (ipfs-migrator-unwrapped) src;
+    inherit (kubo-migrator-unwrapped) src;
     sourceRoot = "source/${pname}";
     vendorSha256 = null;
     doCheck = false;
-    meta = ipfs-migrator-unwrapped.meta // {
+    meta = kubo-migrator-unwrapped.meta // {
       mainProgram = pname;
-      description = "Individual migration for the filesystem repository of ipfs clients";
+      description = "Individual migration for the filesystem repository of Kubo clients";
     };
   };
 
@@ -58,6 +58,6 @@ let
 in
 
 symlinkJoin {
-  name = "ipfs-migrator-all-fs-repo-migrations-${version}";
+  name = "kubo-migrator-all-fs-repo-migrations-${version}";
   paths = all-migrations;
 }

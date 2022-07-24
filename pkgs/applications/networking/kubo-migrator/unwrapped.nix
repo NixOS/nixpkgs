@@ -4,7 +4,7 @@
 }:
 
 buildGoModule rec {
-  pname = "ipfs-migrator";
+  pname = "kubo-migrator";
   version = "2.0.2";
 
   src = fetchFromGitHub {
@@ -26,7 +26,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Migrations for the filesystem repository of ipfs clients";
+    description = "Migrations for the filesystem repository of Kubo clients";
     homepage = "https://github.com/ipfs/fs-repo-migrations";
     license = licenses.mit;
     maintainers = with maintainers; [ Luflosi elitak ];
