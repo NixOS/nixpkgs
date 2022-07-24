@@ -19,6 +19,7 @@
 , grilo
 , grilo-plugins
 , libpeas
+, libportal-gtk3
 , libhandy
 , adwaita-icon-theme
 , gnome-desktop
@@ -61,6 +62,7 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-libav
     libpeas
+    libportal-gtk3
     libhandy
     shared-mime-info
     gdk-pixbuf
