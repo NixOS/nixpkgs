@@ -19988,6 +19988,8 @@ with pkgs;
 
   libpam-wrapper = callPackage ../development/libraries/libpam-wrapper { };
 
+  libpanel = callPackage ../development/libraries/libpanel { };
+
   libpar2 = callPackage ../development/libraries/libpar2 { };
 
   libpcap = callPackage ../development/libraries/libpcap { };
