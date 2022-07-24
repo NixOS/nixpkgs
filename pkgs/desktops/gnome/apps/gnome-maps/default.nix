@@ -11,21 +11,16 @@
 , gobject-introspection
 , gdk-pixbuf
 , librest
-, librsvg
 , libgweather
 , geoclue2
 , wrapGAppsHook
-, folks
 , libchamplain
+, libsecret
 , libsoup
 , gsettings-desktop-schemas
-, webkitgtk
 , gjs
-, libgee
 , libhandy
 , geocode-glib
-, evolution-data-server
-, gnome-online-accounts
 }:
 
 stdenv.mkDerivation rec {
@@ -49,24 +44,19 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    evolution-data-server
-    folks
     gdk-pixbuf
     geoclue2
     geocode-glib
     gjs
-    gnome-online-accounts
     gobject-introspection
     gsettings-desktop-schemas
     gtk3
     libchamplain
-    libgee
     libgweather
     libhandy
     librest
-    librsvg
+    libsecret
     libsoup
-    webkitgtk
   ];
 
   postPatch = ''
