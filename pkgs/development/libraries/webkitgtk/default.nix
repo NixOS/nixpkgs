@@ -206,6 +206,8 @@ stdenv.mkDerivation rec {
     "-DUSE_APPLE_ICU=OFF"
     "-DUSE_OPENGL_OR_ES=OFF"
     "-DUSE_SYSTEM_MALLOC=ON"
+  ] ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
+    "-DUSE_GTK4=ON"
   ] ++ lib.optionals (!systemdSupport) [
     "-DUSE_SYSTEMD=OFF"
   ] ++ lib.optionals (stdenv.isLinux && enableGLES) [
