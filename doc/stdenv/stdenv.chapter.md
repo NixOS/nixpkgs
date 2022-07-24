@@ -913,9 +913,9 @@ substitute ./foo.in ./foo.out \
     --subst-var someVar
 ```
 
-### `substituteInPlace` \<file\> \<subs\> {#fun-substituteInPlace}
+### `substituteInPlace` \<multiple files\> \<subs\> {#fun-substituteInPlace}
 
-Like `substitute`, but performs the substitutions in place on the file \<file\>.
+Like `substitute`, but performs the substitutions in place on the files passed.
 
 ### `substituteAll` \<infile\> \<outfile\> {#fun-substituteAll}
 
