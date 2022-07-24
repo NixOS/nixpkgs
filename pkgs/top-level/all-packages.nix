@@ -4878,8 +4878,6 @@ with pkgs;
 
   circus = callPackage ../tools/networking/circus { };
 
-  citrix_workspace = citrix_workspace_22_05_0;
-
   cirrus-cli = callPackage ../development/tools/continuous-integration/cirrus-cli { };
 
   inherit (callPackage ../applications/networking/remote/citrix-workspace { })
@@ -4890,7 +4888,9 @@ with pkgs;
     citrix_workspace_21_09_0
     citrix_workspace_21_12_0
     citrix_workspace_22_05_0
+    citrix_workspace_22_07_0
   ;
+  citrix_workspace = citrix_workspace_22_07_0;
 
   cmigemo = callPackage ../tools/text/cmigemo { };
 
