@@ -4,13 +4,13 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "barman";
-  version = "3.0.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "EnterpriseDB";
     repo = pname;
-    rev = "release/${version}";
-    sha256 = "sha256-WLKtra1kNxvm4iO3NEhMNCSioHL9I8GIgkbtu95IyTQ=";
+    rev = "refs/tags/release/${version}";
+    sha256 = "sha256-e6euOtvJx+xUq5pWmWK6l7nv/twOa+0OABUTYvMd8Ow=";
   };
 
   checkInputs = with python3Packages; [
