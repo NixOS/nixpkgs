@@ -7,6 +7,7 @@
 , packaging
 , importlib-metadata
 , pytestCheckHook
+, hatchling
 }:
 
 buildPythonPackage rec {
@@ -28,6 +29,7 @@ buildPythonPackage rec {
     userpath
     argcomplete
     packaging
+    hatchling
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
