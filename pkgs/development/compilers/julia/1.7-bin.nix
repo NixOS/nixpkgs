@@ -62,6 +62,8 @@ stdenv.mkDerivation rec {
   preInstallCheck = ''
     # Some tests require read/write access to $HOME.
     export HOME="$TMPDIR"
+    # Libgit2 complains with our custom CA cert
+    export JULIA_SSL_CA_ROOTS_PATH=""
   '';
   installCheckPhase = ''
     runHook preInstallCheck
