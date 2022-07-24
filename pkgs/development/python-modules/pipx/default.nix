@@ -12,6 +12,7 @@
 buildPythonPackage rec {
   pname = "pipx";
   version = "1.1.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
