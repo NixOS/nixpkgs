@@ -867,6 +867,7 @@ in
             };
             tlsca = mkOption {
               type = types.str;
+              default = "/etc/ssl/certs/ca-certificates.crt";
               example = "server-cert.pem,root.pem";
               description = ''
                 Root CA for LDAP TLS in PEM format.
