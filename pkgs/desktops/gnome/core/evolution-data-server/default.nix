@@ -139,6 +139,7 @@ stdenv.mkDerivation rec {
         }
         ''
           unpackPhase
+          cd "''${sourceRoot:-.}"
           git init
           git add -A
           spatch --sp-file "${./hardcode-gsettings.cocci}" --dir . --in-place
