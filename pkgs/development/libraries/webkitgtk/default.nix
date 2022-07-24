@@ -179,6 +179,8 @@ stdenv.mkDerivation rec {
     geoclue2
   ] ++ lib.optionals withLibsecret [
     libsecret
+  ] ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
+    xorg.libXcomposite
   ];
 
   propagatedBuildInputs = [
