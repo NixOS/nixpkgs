@@ -21931,6 +21931,11 @@ with pkgs;
     libsoup = libsoup_3;
   };
 
+  webkitgtk_5_0 = webkitgtk.override {
+    libsoup = libsoup_3;
+    gtk3 = gtk4;
+  };
+
   websocketpp = callPackage ../development/libraries/websocket++ { };
 
   webrtc-audio-processing_1 = callPackage ../development/libraries/webrtc-audio-processing { stdenv = gcc10StdenvCompat; };
