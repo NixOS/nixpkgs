@@ -123,7 +123,7 @@ let self = stdenv.mkDerivation rec {
   PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
 
   passthru = {
-    libdir = "${self}/lib/mutter-10";
+    libdir = "${self}/lib/mutter-11";
 
     tests = {
       libdirExists = runCommand "mutter-libdir-exists" {} ''
