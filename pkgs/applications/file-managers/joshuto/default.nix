@@ -19,6 +19,6 @@ rustPlatform.buildRustPackage rec {
     description = "Ranger-like terminal file manager written in Rust";
     homepage = "https://github.com/kamiyaa/joshuto";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [ figsoda totoroot ];
   };
 }
