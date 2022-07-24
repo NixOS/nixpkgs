@@ -4047,6 +4047,8 @@ with pkgs;
 
   lepton-eda = callPackage ../applications/science/electronics/lepton-eda { };
 
+  lexend = callPackage ../data/fonts/lexend { };
+
   lexicon = callPackage ../tools/admin/lexicon { };
 
   lief = callPackage ../development/libraries/lief {
