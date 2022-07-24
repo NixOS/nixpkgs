@@ -9605,6 +9605,12 @@
     githubId = 757752;
     name = "Jonas Heinrich";
   };
+  onthestairs = {
+    email = "austinplatt@gmail.com";
+    github = "onthestairs";
+    githubId = 915970;
+    name = "Austin Platt";
+  };
   ony = {
     name = "Mykola Orliuk";
     email = "virkony@gmail.com";
