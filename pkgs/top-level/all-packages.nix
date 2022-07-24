@@ -1231,6 +1231,8 @@ with pkgs;
 
   kanata = callPackage ../tools/system/kanata { };
 
+  kanata-with-cmd = callPackage ../tools/system/kanata { withCmd = true; };
+
   ksnip = libsForQt5.callPackage ../tools/misc/ksnip { };
 
   kubevirt = callPackage ../tools/virtualization/kubevirt { };
