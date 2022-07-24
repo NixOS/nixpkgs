@@ -40,6 +40,13 @@ stdenv.mkDerivation rec {
         url = "https://bugs.launchpad.net/sbcl/+bug/1980570/+attachment/5600916/+files/0001-src-runtime-fix-fno-common-build-on-darwin.patch";
         sha256 = "0avpwgjdaxxdpq8pfvv9darfn4ql5dgqq7zaf3nmxnvhh86ngzij";
       })
+  ] ++ lib.optionals (lib.versionAtLeast version "2.1.10" && lib.versionOlder version "2.2.0") [
+      # Fix -fno-common on arm64
+      (fetchpatch {
+        name = "arm64-fno-common.patch";
+        url = "https://github.com/sbcl/sbcl/commit/ac3739eae36de92feffef5bb9b4b4bd93f6c4942.patch";
+        sha256 = "1kxg0ng7d465rk5v4biikrzaps41x4n1v4ygnb5qh4f5jzkbms8y";
+      })
   ] ++ lib.optionals (version == "2.2.6") [
     # Take contrib blocklist into account for doc generation.  This fixes sbcl
     # build on aarch64, because the docs Makefile tries to require sb-simd,
@@ -101,6 +108,14 @@ stdenv.mkDerivation rec {
   disableFeatures = with lib;
     optional (!threadSupport) "sb-thread" ++
     optionals disableImmobileSpace [ "immobile-space" "immobile-code" "compact-instance-header" ];
+
+  NIX_CFLAGS_COMPILE = lib.optional (lib.versionOlder version "2.1.10") [
+    # Workaround build failure on -fno-common toolchains like upstream
+    # clang-13. Without the change build fails as:
+    #   duplicate symbol '_static_code_space_free_pointer' in: alloc.o traceroot.o
+    # Should be fixed past 2.1.10 release.
+    "-fcommon"
+  ];
 
   buildPhase = ''
     runHook preBuild
