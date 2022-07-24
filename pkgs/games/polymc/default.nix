@@ -16,21 +16,22 @@
 , openal
 , msaClientID ? ""
 , jdks ? [ jdk jdk8 ]
+, extra-cmake-modules
 }:
 
 stdenv.mkDerivation rec {
   pname = "polymc";
-  version = "1.3.2";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "PolyMC";
     repo = "PolyMC";
     rev = version;
-    sha256 = "sha256-hqsyS82UzgCUZ9HjoPKjOLE49fwLntRAh3mVrTsmi3o=";
+    sha256 = "sha256-gaPqCAC/tE6nUONgWSrVm3oBzSnOhZ5xiAJ+QyX+8rA=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake file jdk wrapQtAppsHook ];
+  nativeBuildInputs = [ extra-cmake-modules cmake file jdk wrapQtAppsHook ];
   buildInputs = [ qtbase zlib quazip ];
 
   cmakeFlags = lib.optionals (msaClientID != "") [ "-DLauncher_MSA_CLIENT_ID=${msaClientID}" ];

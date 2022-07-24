@@ -995,7 +995,7 @@ with pkgs;
 
   _6tunnel = callPackage ../tools/networking/6tunnel { };
 
-  _7zz = callPackage ../tools/archivers/7zz { };
+  _7zz = darwin.apple_sdk_11_0.callPackage ../tools/archivers/7zz { };
 
   _9pfs = callPackage ../tools/filesystems/9pfs { };
 
@@ -1909,7 +1909,8 @@ with pkgs;
   }) arangodb_3_3 arangodb_3_4 arangodb_3_5;
   arangodb = arangodb_3_4;
 
-  arcanist = callPackage ../development/tools/misc/arcanist { php = php81; };
+  # arcanist currently crashes with some workflows on php8.1, use 8.0
+  arcanist = callPackage ../development/tools/misc/arcanist { php = php80; };
 
   arduino = arduino-core.override { withGui = true; };
 
@@ -6704,6 +6705,8 @@ with pkgs;
   gnome-desktop = callPackage ../development/libraries/gnome-desktop { };
 
   gnome-feeds = callPackage ../applications/networking/feedreaders/gnome-feeds {};
+
+  gnome-frog = callPackage ../applications/misc/gnome-frog { };
 
   gnome-keysign = callPackage ../tools/security/gnome-keysign { };
 
@@ -27799,6 +27802,8 @@ with pkgs;
 
   waybar = callPackage ../applications/misc/waybar {};
 
+  wayshot = callPackage ../tools/misc/wayshot { };
+
   wbg = callPackage ../applications/misc/wbg { };
 
   hikari = callPackage ../applications/window-managers/hikari {
@@ -34492,6 +34497,8 @@ with pkgs;
   argononed = callPackage ../misc/drivers/argononed { };
 
   autotiling = python3Packages.callPackage ../misc/autotiling { };
+
+  autotiling-rs = callPackage ../misc/autotiling-rs { };
 
   avell-unofficial-control-center = python3Packages.callPackage ../applications/misc/avell-unofficial-control-center { };
 
