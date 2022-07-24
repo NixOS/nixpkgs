@@ -186,12 +186,6 @@ in
       description = "Enable HiDPI scaling in Qt.";
     };
 
-    runUsingSystemd = mkOption {
-      description = "Use systemd to manage the Plasma session";
-      type = types.bool;
-      default = false;
-    };
-
     excludePackages = mkOption {
       description = "List of default packages to exclude from the configuration";
       type = types.listOf types.package;
@@ -232,6 +226,7 @@ in
   };
 
   imports = [
+    (mkRemovedOptionModule [ "services" "xserver" "desktopManager" "plasma5" "runUsingSystemd" ] "systemd startup is now enabled by default.")
     (mkRemovedOptionModule [ "services" "xserver" "desktopManager" "plasma5" "enableQt4Support" ] "Phonon no longer supports Qt 4.")
     (mkRenamedOptionModule [ "services" "xserver" "desktopManager" "kde5" ] [ "services" "xserver" "desktopManager" "plasma5" ])
   ];
@@ -426,15 +421,6 @@ in
       security.pam.services.lightdm.enableKwallet = true;
       security.pam.services.sddm.enableKwallet = true;
 
-      systemd.user.services = {
-        plasma-early-setup = mkIf cfg.runUsingSystemd {
-          description = "Early Plasma setup";
-          wantedBy = [ "graphical-session-pre.target" ];
-          serviceConfig.Type = "oneshot";
-          script = activationScript;
-        };
-      };
-
       xdg.portal.enable = true;
       xdg.portal.extraPortals = [ plasma5.xdg-desktop-portal-kde ];
 
@@ -494,20 +480,6 @@ in
             print-manager
           ];
       in requiredPackages ++ utils.removePackagesByName optionalPackages cfg.excludePackages;
-
-      systemd.user.services = {
-        plasma-run-with-systemd = {
-          description = "Run KDE Plasma via systemd";
-          wantedBy = [ "basic.target" ];
-          serviceConfig.Type = "oneshot";
-          script = ''
-            ${set_XDG_CONFIG_HOME}
-
-            ${kdeFrameworks.kconfig}/bin/kwriteconfig5 \
-              --file startkderc --group General --key systemdBoot ${lib.boolToString cfg.runUsingSystemd}
-          '';
-        };
-      };
     })
 
     # Plasma Mobile
