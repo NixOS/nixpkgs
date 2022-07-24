@@ -18,6 +18,7 @@
 , libgpg-error
 , gtk3
 , wayland
+, wayland-protocols
 , libwebp
 , libwpe
 , libwpe-fdo
@@ -179,6 +180,9 @@ stdenv.mkDerivation rec {
     geoclue2
   ] ++ lib.optionals withLibsecret [
     libsecret
+  ] ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
+    xorg.libXcomposite
+    wayland-protocols
   ];
 
   propagatedBuildInputs = [
@@ -206,6 +210,8 @@ stdenv.mkDerivation rec {
     "-DUSE_APPLE_ICU=OFF"
     "-DUSE_OPENGL_OR_ES=OFF"
     "-DUSE_SYSTEM_MALLOC=ON"
+  ] ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
+    "-DUSE_GTK4=ON"
   ] ++ lib.optionals (!systemdSupport) [
     "-DUSE_SYSTEMD=OFF"
   ] ++ lib.optionals (stdenv.isLinux && enableGLES) [
