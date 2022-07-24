@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-uhN1UdwtU0C0/lpxUYoCcMLABFTPNO5wKsIGOBnFpzw=";
 
-  buildFeatures = lib.lists.optional withCmd "cmd";
+  buildFeatures = lib.optional withCmd "cmd";
 
   nativeBuildInputs = [ pkg-config ];
 
