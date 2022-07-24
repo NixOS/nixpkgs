@@ -132,6 +132,7 @@ with self;
   async_smtp = janePackage {
     pname = "async_smtp";
     hash = "1m00j7wcb0blipnc1m6by70gd96a1k621b4dgvgffp8as04a461r";
+    minimumOCamlVersion = "4.12";
     meta.description = "SMTP client and server";
     propagatedBuildInputs = [ async_extra async_inotify async_sendfile async_shell async_ssl email_message resource_cache re2_stable sexp_macro ];
   };
