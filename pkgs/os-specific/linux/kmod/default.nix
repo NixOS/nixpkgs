@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
 
     docbook_xml_dtd_42 # for the man pages
   ] ++ lib.optionals withDevdoc [ docbook_xml_dtd_43 gtk-doc ];
-  buildInputs = [ xz zstd ] ++ lib.optional stdenv.isDarwin elf-header;
+  buildInputs = [ xz zstd ];
 
   preConfigure = ''
     ./autogen.sh
@@ -46,7 +46,6 @@ in stdenv.mkDerivation rec {
   ] ++ lib.optional withStatic "--enable-static";
 
   patches = [ ./module-dir.patch ]
-    ++ lib.optional stdenv.isDarwin ./darwin.patch
     ++ lib.optional withStatic ./enable-static.patch;
 
   postInstall = ''
@@ -77,7 +76,7 @@ in stdenv.mkDerivation rec {
     downloadPage = "https://www.kernel.org/pub/linux/utils/kernel/kmod/";
     changelog = "https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/plain/NEWS?h=v${version}";
     license = with licenses; [ lgpl21Plus gpl2Plus ]; # GPLv2+ for tools
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ artturin ];
   };
 }
