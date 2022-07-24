@@ -12,7 +12,6 @@
 , gtk3
 , glib
 , wrapGAppsHook
-, python3
 , libnotify
 , itstool
 , gnome
@@ -21,6 +20,7 @@
 , libcanberra-gtk3
 , libxslt
 , docbook-xsl-nons
+, desktop-file-utils
 , libpwquality
 , systemd
 }:
@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
     itstool
     libxslt
     docbook-xsl-nons
+    desktop-file-utils
     wrapGAppsHook
-    python3
     libxml2
   ];
 
@@ -62,11 +62,6 @@ stdenv.mkDerivation rec {
     gnome.gnome-settings-daemon
     gsettings-desktop-schemas
   ];
-
-  postPatch = ''
-    chmod +x meson_post_install.py # patchShebangs requires executable file
-    patchShebangs meson_post_install.py
-  '';
 
   passthru = {
     updateScript = gnome.updateScript {
