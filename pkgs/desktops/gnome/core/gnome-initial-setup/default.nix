@@ -11,7 +11,7 @@
 , fontconfig
 , gdm
 , geoclue2
-, geocode-glib
+, geocode-glib_2
 , glib
 , gnome-desktop
 , gnome-online-accounts
@@ -21,11 +21,12 @@
 , krb5
 , libpwquality
 , librest
+, librest_1_0
 , libsecret
 , networkmanager
 , pango
 , polkit
-, webkitgtk
+, webkitgtk_4_1
 , systemd
 , libhandy
 , libnma
@@ -64,7 +65,7 @@ stdenv.mkDerivation rec {
     fontconfig
     gdm
     geoclue2
-    geocode-glib
+    geocode-glib_2
     glib
     gnome-desktop
     gnome-online-accounts
@@ -77,11 +78,12 @@ stdenv.mkDerivation rec {
     libnma
     libpwquality
     librest
+    librest_1_0
     libsecret
     networkmanager
     pango
     polkit
-    webkitgtk
+    webkitgtk_4_1
   ];
 
   mesonFlags = [
