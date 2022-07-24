@@ -21856,6 +21856,10 @@ with pkgs;
     stdenv = clangStdenv;
   };
 
+  vte-gtk4 = vte.override {
+    gtkVersion = "4";
+  };
+
   vte_290 = callPackage ../development/libraries/vte/2.90.nix { };
 
   vtk_7 = libsForQt515.callPackage ../development/libraries/vtk/7.x.nix {
