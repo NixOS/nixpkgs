@@ -64,6 +64,7 @@ buildPythonPackage rec {
     "legacy_venv"
     "determination"
     "json"
+    "short"
   ];
 
   meta = with lib; {
