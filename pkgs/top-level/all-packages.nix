@@ -22965,7 +22965,7 @@ with pkgs;
 
   qpid-cpp = callPackage ../servers/amqp/qpid-cpp { };
 
-  qremotecontrol-server = callPackage ../servers/misc/qremotecontrol-server { };
+  qremotecontrol-server = libsForQt5.callPackage ../servers/misc/qremotecontrol-server { };
 
   rabbitmq-server = callPackage ../servers/amqp/rabbitmq-server {
     inherit (darwin.apple_sdk.frameworks) AppKit Carbon Cocoa;
