@@ -11,6 +11,7 @@
 , packagekit
 , ostree
 , glib
+, glib-testing
 , appstream
 , libsoup
 , libadwaita
@@ -75,6 +76,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk4
     glib
+    glib-testing
     packagekit
     appstream
     libsoup
@@ -102,6 +104,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (!withFwupd) [
     "-Dfwupd=false"
   ];
+
+  doCheck = true;
 
   passthru = {
     updateScript = gnome.updateScript {
