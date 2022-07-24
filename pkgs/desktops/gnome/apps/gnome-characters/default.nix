@@ -55,10 +55,6 @@ stdenv.mkDerivation rec {
   postPatch = ''
     chmod +x meson_post_install.py # patchShebangs requires executable file
     patchShebangs meson_post_install.py
-
-    # https://gitlab.gnome.org/GNOME/gnome-characters/-/merge_requests/70
-    substituteInPlace meson_post_install.py \
-      --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
   '';
 
   dontWrapGApps = true;
