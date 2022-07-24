@@ -35,28 +35,11 @@ stdenvNoCC.mkDerivation rec {
     _ble_base_package_type=nix
 
     function ble/base/package:nix/update {
-      local rev=\$(${curl}/bin/curl -sL 'https://api.github.com/repos/akinomyoga/ble.sh/branches/master' | ${jq}/bin/jq -r '.commit.sha')
-      [[ "\$rev" == "${src.rev}" ]] && return 6
-
-      # We use fetchgit here, because nix-prefetch's fetchFromGitHub is broken
-      local hash="\$(${nix-prefetch}/bin/nix-prefetch fetchgit --url 'https://github.com/akinomyoga/ble.sh.git' --branchName master --rev \$rev --leaveDotGit --fetchSubmodules 2>/dev/null)"
-
-      cat <<STDERR >/dev/stderr
-    You cannot update ble.sh to the latest version with Nix.
-    The latest ble.sh from master branch can be installed by overriding nixpkgs like following.
-
-      pkgs.ble-sh.overrideAttrs (_: {
-        src = pkgs.fetchFromGitHub {
-          owner = "akinomyoga";
-          repo = "ble.sh";
-          rev = "\$rev";
-          hash = "\$hash";
-          fetchSubmodules = true;
-          leaveDotGit = true;
-        };
-      });
-    STDERR
-      return 1
+      if ! nix-env --query ble.sh >/dev/null 2>&1; then
+        echo "Upgrade nix and rebuild the system to update ble.sh" >/dev/stderr
+        return 1
+      fi
+      nix-env --upgrade --attr nixpkgs.blesh
     }
     SCRIPT
   '';
