@@ -5,10 +5,10 @@
 , ninja
 , gettext
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook4
 , itstool
 , desktop-file-utils
-, vala_0_56
+, vala
 , gobject-introspection
 , libxml2
 , gtk4
@@ -35,13 +35,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    vala_0_56
+    vala
     meson
     ninja
     pkg-config
     gettext
     itstool
-    wrapGAppsHook
+    wrapGAppsHook4
     desktop-file-utils
     libxml2
     gobject-introspection # for finding vapi files
