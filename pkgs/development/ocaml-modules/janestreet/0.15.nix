@@ -437,7 +437,8 @@ with self;
   ocaml_intrinsics = janePackage {
     pname = "ocaml_intrinsics";
     minimumOCamlVersion = "4.08";
-    hash = "1fdfl78b8br0j9w4046i0fmmaqn4cgl06q94rsniyagx9747pnsr";
+    version = "0.15.2";
+    hash = "sha256-f5zqrKaokj1aEvbu7lOuK0RoWSklFr6QFpV+oWbIX9U=";
     meta.description = "Intrinsics";
     buildInputs = [ dune-configurator ];
     doCheck = false; # test rules broken
