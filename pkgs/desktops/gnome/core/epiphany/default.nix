@@ -15,8 +15,8 @@
 , libxml2
 , libxslt
 , itstool
-, webkitgtk
-, libsoup
+, webkitgtk_4_1
+, libsoup_3
 , glib-networking
 , libsecret
 , gnome-desktop
@@ -95,12 +95,12 @@ stdenv.mkDerivation rec {
     libnotify
     libarchive
     libsecret
-    libsoup
+    libsoup_3
     libxml2
     nettle
     p11-kit
     sqlite
-    webkitgtk
+    webkitgtk_4_1
   ];
 
   # Tests need an X display
