@@ -10013,6 +10013,8 @@ with pkgs;
 
   quilt = callPackage ../development/tools/quilt { };
 
+  railway = callPackage ../development/tools/railway { };
+
   quota = if stdenv.isLinux then linuxquota else unixtools.quota;
 
   qvge = libsForQt5.callPackage ../applications/graphics/qvge { };
