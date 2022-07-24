@@ -1176,7 +1176,6 @@ broken-packages:
   - dockerfile-creator
   - docrecords
   - doctest-discover-configurator
-  - doctest-parallel
   - doctest-prop
   - docusign-example
   - docvim
