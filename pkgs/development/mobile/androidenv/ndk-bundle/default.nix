@@ -23,7 +23,7 @@ deployAndroidPackage {
     # to still support the old standalone toolchains builds.
     if [ -d $out/libexec/android-sdk/ndk ] && [ ! -d $out/libexec/android-sdk/ndk-bundle ]; then
         ln -sf $out/libexec/android-sdk/ndk/${package.revision} $out/libexec/android-sdk/ndk-bundle
-    else
+    elif [ ! -d $out/libexec/android-sdk/ndk-bundle ]; then
         echo "The ndk-bundle layout has changed. The nix expressions have to be updated!"
         exit 1
     fi
