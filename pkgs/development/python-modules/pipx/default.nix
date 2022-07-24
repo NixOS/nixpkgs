@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "pipx";
-  version = "1.0.0";
+  version = "1.1.0";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   # no tests in the pypi tarball, so we directly fetch from github
   src = fetchFromGitHub {
     owner = "pipxproject";
     repo = pname;
     rev = version;
-    sha256 = "1sgfrlhci2m83k436dfwfmqjpb8hij6yypm03pm3n8drmr2aaa4s";
+    sha256 = "1006xvxfkm8h0mp28zr07424c03kp5i0vbvagj6q48h7x1a8mhp9";
   };
 
   propagatedBuildInputs = [
