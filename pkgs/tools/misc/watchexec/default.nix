@@ -1,21 +1,23 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, CoreServices, Foundation, installShellFiles, libiconv }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, Cocoa, AppKit, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "watchexec";
-  version = "1.19.0";
+  version = "1.20.4";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "cli-v${version}";
-    sha256 = "sha256-Zqu6Qor7kHSeOFyHjcrl6RhB8gL9pljHt7hEd6/0Kss=";
+    sha256 = "sha256-se3iqz+qjwf71wvHQhCWYryEdUc+kY0Q0ZTg4i1ayNI=";
   };
 
-  cargoSha256 = "sha256-XwgoYaqgDkNggzi2TL/JPfh8LSFSzSWOVMbkmhXX73I=";
+  cargoSha256 = "sha256-YM+Zm3wFp3Lsx5LmyjGwZywV/SZjriL6JMDO1l0tNf4=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices Foundation libiconv ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Cocoa AppKit ];
+
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework AppKit";
 
   checkFlags = [ "--skip=help" "--skip=help_short" ];
 
