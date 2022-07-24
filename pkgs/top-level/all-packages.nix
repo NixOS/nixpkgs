@@ -1275,6 +1275,8 @@ with pkgs;
 
   tauon = callPackage ../applications/audio/tauon { };
 
+  tere = callPackage ../tools/misc/tere { };
+
   termusic = callPackage ../applications/audio/termusic { };
 
   tfk8s = callPackage ../tools/misc/tfk8s { };
