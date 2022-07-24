@@ -18,6 +18,7 @@
 , libgpg-error
 , gtk3
 , wayland
+, wayland-protocols
 , libwebp
 , libwpe
 , libwpe-fdo
@@ -181,6 +182,7 @@ stdenv.mkDerivation rec {
     libsecret
   ] ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
     xorg.libXcomposite
+    wayland-protocols
   ];
 
   propagatedBuildInputs = [
