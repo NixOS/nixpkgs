@@ -9,9 +9,9 @@
 , desktop-file-utils
 , python3
 , wrapGAppsHook
-, gtk3
-, libhandy
-, libportal-gtk3
+, gtk4
+, libadwaita
+, libportal-gtk4
 , gnome
 , gnome-autoar
 , glib-networking
@@ -73,9 +73,9 @@ stdenv.mkDerivation rec {
     gnome.adwaita-icon-theme
     gsettings-desktop-schemas
     gst_all_1.gst-plugins-base
-    gtk3
-    libhandy
-    libportal-gtk3
+    gtk4
+    libadwaita
+    libportal-gtk4
     libexif
     libnotify
     libseccomp
@@ -83,10 +83,11 @@ stdenv.mkDerivation rec {
     shared-mime-info
     tracker
     tracker-miners
+    gnome-autoar
   ];
 
   propagatedBuildInputs = [
-    gnome-autoar
+    gtk4
   ];
 
   preFixup = ''
