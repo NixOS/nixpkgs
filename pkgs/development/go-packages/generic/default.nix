@@ -233,6 +233,8 @@ let
     doCheck = args.doCheck or false;
     checkPhase = args.checkPhase or ''
       runHook preCheck
+      # We do not set trimpath for tests, in case they reference test assets
+      export GOFLAGS=''${GOFLAGS//-trimpath/}
 
       for pkg in $(getGoDirs test); do
         buildGoDir test "$pkg"
