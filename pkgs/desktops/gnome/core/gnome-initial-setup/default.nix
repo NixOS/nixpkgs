@@ -20,7 +20,6 @@
 , json-glib
 , krb5
 , libpwquality
-, librest
 , librest_1_0
 , libsecret
 , networkmanager
@@ -77,7 +76,6 @@ stdenv.mkDerivation rec {
     libhandy
     libnma
     libpwquality
-    librest
     librest_1_0
     libsecret
     networkmanager
