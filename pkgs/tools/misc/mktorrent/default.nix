@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/pobrn/mktorrent/wiki";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ Profpatsch ];
+    platforms = platforms.all;
   };
 }
