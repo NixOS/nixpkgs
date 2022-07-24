@@ -27,7 +27,7 @@
 
 stdenv.mkDerivation rec {
   pname = "upower";
-  version = "0.99.19";
+  version = "1.90.0";
 
   outputs = [ "out" "dev" ]
     ++ lib.optionals withDocs [ "devdoc" ];
@@ -37,17 +37,8 @@ stdenv.mkDerivation rec {
     owner = "upower";
     repo = "upower";
     rev = "v${version}";
-    sha256 = "gpLsBh4jgiDO8bxic2BTFhjIwc2q/tuAIxykTHqK6UM=";
+    hash = "sha256-+C/4dDg6WTLpBgkpNyxjthSdqYdaTLC8vG6jG1LNJ7w=";
   };
-
-  patches = [
-    # Fix test
-    # https://gitlab.freedesktop.org/upower/upower/-/merge_requests/150
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/upower/upower/-/commit/a78ee6039054770b466749f8ec4bfbe4c278d697.patch";
-      sha256 = "aUPXnr/2PlOZNb7mQl43hmKe01DtuBUrGnqvwBFRf7Q=";
-    })
-  ];
 
   strictDeps = true;
 

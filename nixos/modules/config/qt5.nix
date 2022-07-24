@@ -45,41 +45,17 @@ in
           ["lxqt" "lxqt-qtplugin"]
           ["libsForQt5" "plasma-integration"]
         ];
-        description = ''
-          Selects the platform theme to use for Qt5 applications.</para>
-          <para>The options are
-          <variablelist>
-            <varlistentry>
-              <term><literal>gtk</literal></term>
-              <listitem><para>Use GTK theme with
-                <link xlink:href="https://github.com/qt/qtstyleplugins">qtstyleplugins</link>
-              </para></listitem>
-            </varlistentry>
-            <varlistentry>
-              <term><literal>gnome</literal></term>
-              <listitem><para>Use GNOME theme with
-                <link xlink:href="https://github.com/FedoraQt/QGnomePlatform">qgnomeplatform</link>
-              </para></listitem>
-            </varlistentry>
-            <varlistentry>
-              <term><literal>lxqt</literal></term>
-              <listitem><para>Use LXQt style set using the
-                <link xlink:href="https://github.com/lxqt/lxqt-config">lxqt-config-appearance</link>
-                application.
-              </para></listitem>
-            </varlistentry>
-            <varlistentry>
-              <term><literal>qt5ct</literal></term>
-              <listitem><para>Use Qt style set using the
-                <link xlink:href="https://sourceforge.net/projects/qt5ct/">qt5ct</link>
-                application.
-              </para></listitem>
-            </varlistentry>
-            <varlistentry>
-              <term><literal>kde</literal></term>
-              <listitem><para>Use Qt settings from Plasma.</para></listitem>
-            </varlistentry>
-          </variablelist>
+        description = lib.mdDoc ''
+          Selects the platform theme to use for Qt5 applications.
+
+          The options are
+          - `gtk`: Use GTK theme with [qtstyleplugins](https://github.com/qt/qtstyleplugins)
+          - `gnome`: Use GNOME theme with [qgnomeplatform](https://github.com/FedoraQt/QGnomePlatform)
+          - `lxqt`: Use LXQt style set using the [lxqt-config-appearance](https://github.com/lxqt/lxqt-config)
+             application.
+          - `qt5ct`: Use Qt style set using the [qt5ct](https://sourceforge.net/projects/qt5ct/)
+             application.
+          - `kde`: Use Qt settings from Plasma.
         '';
       };
 
@@ -97,27 +73,14 @@ in
           "adwaita-qt"
           ["libsForQt5" "qtstyleplugins"]
         ];
-        description = ''
-          Selects the style to use for Qt5 applications.</para>
-          <para>The options are
-          <variablelist>
-            <varlistentry>
-              <term><literal>adwaita</literal></term>
-              <term><literal>adwaita-dark</literal></term>
-              <listitem><para>Use Adwaita Qt style with
-                <link xlink:href="https://github.com/FedoraQt/adwaita-qt">adwaita</link>
-              </para></listitem>
-            </varlistentry>
-            <varlistentry>
-              <term><literal>cleanlooks</literal></term>
-              <term><literal>gtk2</literal></term>
-              <term><literal>motif</literal></term>
-              <term><literal>plastique</literal></term>
-              <listitem><para>Use styles from
-                <link xlink:href="https://github.com/qt/qtstyleplugins">qtstyleplugins</link>
-              </para></listitem>
-            </varlistentry>
-          </variablelist>
+        description = lib.mdDoc ''
+          Selects the style to use for Qt5 applications.
+
+          The options are
+          - `adwaita`, `adwaita-dark`: Use Adwaita Qt style with
+            [adwaita](https://github.com/FedoraQt/adwaita-qt)
+          - `cleanlooks`, `gtk2`, `motif`, `plastique`: Use styles from
+            [qtstyleplugins](https://github.com/qt/qtstyleplugins)
         '';
       };
     };

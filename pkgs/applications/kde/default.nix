@@ -145,6 +145,7 @@ let
       kio-extras = callPackage ./kio-extras.nix {};
       kio-gdrive = callPackage ./kio-gdrive.nix {};
       kipi-plugins = callPackage ./kipi-plugins.nix {};
+      kirigami-gallery = callPackage ./kirigami-gallery.nix {};
       kitinerary = callPackage ./kitinerary.nix {};
       kldap = callPackage ./kldap.nix {};
       kleopatra = callPackage ./kleopatra.nix {};
