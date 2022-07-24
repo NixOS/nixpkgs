@@ -1,4 +1,16 @@
-{ lib, stdenv, libxml2, libxslt, pkg-config, cmake, fetchFromGitHub, perl, bison, flex, fetchpatch }:
+{ lib
+, stdenv
+, libxml2
+, libxslt
+, pkg-config
+, cmake
+, fetchFromGitHub
+, perl
+, bison
+, flex
+, fetchpatch
+, static ? stdenv.hostPlatform.isStatic
+}:
 
 stdenv.mkDerivation rec {
   pname = "raptor2";
@@ -10,6 +22,11 @@ stdenv.mkDerivation rec {
     rev = "3cca62a33da68143b687c9e486eefc7c7cbb4586";
     sha256 = "sha256-h03IyFH1GHPqajfHBBTb19lCEu+VXzQLGC1wiEGVvgY=";
   };
+
+  cmakeFlags = [
+    # Build defaults to static libraries.
+    "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
+  ];
 
   patches = [
     # https://github.com/dajobe/raptor/pull/52
