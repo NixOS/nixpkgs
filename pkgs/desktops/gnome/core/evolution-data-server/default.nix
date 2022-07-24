@@ -2,6 +2,9 @@
 , lib
 , fetchurl
 , substituteAll
+, runCommand
+, git
+, coccinelle
 , pkg-config
 , gnome
 , python3
@@ -63,8 +66,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substitute ${./hardcode-gsettings.patch} hardcode-gsettings.patch \
-      --subst-var-by ESD_GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"} \
-      --subst-var-by GDS_GSETTINGS_PATH ${glib.getSchemaPath gsettings-desktop-schemas}
+      --subst-var-by ESD_GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"}
     patches="$patches $PWD/hardcode-gsettings.patch"
   '';
 
@@ -125,10 +127,36 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "evolution-data-server";
-      versionPolicy = "odd-unstable";
-    };
+    hardcodeGsettingsPatch =
+      runCommand
+        "hardcode-gsettings.patch"
+        {
+          inherit src;
+          nativeBuildInputs = [
+            git
+            coccinelle
+          ];
+        }
+        ''
+          unpackPhase
+          git init
+          git add -A
+          spatch --sp-file "${./hardcode-gsettings.cocci}" --dir . --in-place
+          git diff > "$out"
+        '';
+
+    updateScript =
+      let
+        gnomeUpdate = gnome.updateScript {
+          packageName = "evolution-data-server";
+          versionPolicy = "odd-unstable";
+        };
+
+        newUpdateScript = lib.escapeShellArgs gnomeUpdate.command + " && cp \"$(nix-build -A evolution-data-server.hardcodeGsettingsPatch)\" \"$0\"";
+      in
+      gnomeUpdate // {
+        command = [ "sh" "-c" newUpdateScript ./hardcode-gsettings.patch ];
+      };
   };
 
   meta = with lib; {
