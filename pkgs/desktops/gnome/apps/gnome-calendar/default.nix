@@ -7,14 +7,14 @@
 , wrapGAppsHook4
 , libgweather
 , geoclue2
-, geocode-glib
+, geocode-glib_2
 , gettext
 , libxml2
 , gnome
 , gtk4
 , evolution-data-server
 , libical
-, libsoup
+, libsoup_3
 , glib
 , gsettings-desktop-schemas
 , libadwaita
@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
     gtk4
     evolution-data-server # waiting for GTK4 port
     libical
-    libsoup
+    libsoup_3
     glib
     libgweather
     geoclue2
-    geocode-glib
+    geocode-glib_2
     gsettings-desktop-schemas
     libadwaita
   ];
