@@ -78,6 +78,9 @@ stdenv.mkDerivation rec {
 
   mesonFlags = lib.optionals (!systemdSupport) [
     "-D_systemd=false"
+  ] ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
+    "-Dgtk3=false"
+    "-Dgtk4=true"
   ];
 
   postPatch = ''
