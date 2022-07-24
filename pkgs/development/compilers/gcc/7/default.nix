@@ -197,7 +197,7 @@ stdenv.mkDerivation ({
 
   preConfigure = import ../common/pre-configure.nix {
     inherit lib;
-    inherit version targetPlatform hostPlatform langGo;
+    inherit version targetPlatform hostPlatform langGo crossStageStatic;
   };
 
   dontDisableStatic = true;
