@@ -35,8 +35,6 @@ mkYarnPackage rec {
     name = "uivonim-build-${version}";
     inherit version src packageJSON yarnLock yarnNix yarnPreBuild distPhase;
 
-    yarnFlags = [ "--offline" ];
-
     buildPhase = ''
       yarn build:prod
     '';
@@ -47,7 +45,7 @@ mkYarnPackage rec {
   };
 
   # The --production flag disables the devDependencies.
-  yarnFlags = [ "--offline" "--production" ];
+  yarnFlags = [ "--production" ];
 
   nativeBuildInputs = [ makeWrapper ];
 
