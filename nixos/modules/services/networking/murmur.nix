@@ -59,6 +59,14 @@ in
         description = "If enabled, start the Murmur Mumble server.";
       };
 
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Open ports in the firewall for the Murmur Mumble server.
+        '';
+      };
+
       autobanAttempts = mkOption {
         type = types.int;
         default = 10;
@@ -289,6 +297,11 @@ in
     };
     users.groups.murmur = {
       gid             = config.ids.gids.murmur;
+    };
+
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [ cfg.port ];
+      allowedUDPPorts = [ cfg.port ];
     };
 
     systemd.services.murmur = {
