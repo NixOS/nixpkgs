@@ -30,6 +30,7 @@ buildGoModule rec {
       )
 
       [ ! -d "$PWD/static" ] && (
+        [ -L "$PWD/static" ] && ${coreutils}/bin/rm "$PWD/static"
         ${coreutils}/bin/ln -s "${placeholder "out"}/static" "$PWD"
       )
     '';
