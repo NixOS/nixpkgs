@@ -995,7 +995,7 @@ with pkgs;
 
   _6tunnel = callPackage ../tools/networking/6tunnel { };
 
-  _7zz = callPackage ../tools/archivers/7zz { };
+  _7zz = darwin.apple_sdk_11_0.callPackage ../tools/archivers/7zz { };
 
   _9pfs = callPackage ../tools/filesystems/9pfs { };
 
@@ -1909,7 +1909,8 @@ with pkgs;
   }) arangodb_3_3 arangodb_3_4 arangodb_3_5;
   arangodb = arangodb_3_4;
 
-  arcanist = callPackage ../development/tools/misc/arcanist { php = php81; };
+  # arcanist currently crashes with some workflows on php8.1, use 8.0
+  arcanist = callPackage ../development/tools/misc/arcanist { php = php80; };
 
   arduino = arduino-core.override { withGui = true; };
 
@@ -10012,6 +10013,8 @@ with pkgs;
 
   quilt = callPackage ../development/tools/quilt { };
 
+  railway = callPackage ../development/tools/railway { };
+
   quota = if stdenv.isLinux then linuxquota else unixtools.quota;
 
   qvge = libsForQt5.callPackage ../applications/graphics/qvge { };
@@ -11671,7 +11674,7 @@ with pkgs;
   wander = callPackage ../tools/admin/wander { };
 
   watchexec = callPackage ../tools/misc/watchexec {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Foundation;
+    inherit (darwin.apple_sdk.frameworks) Cocoa AppKit;
   };
 
   watchlog = callPackage ../tools/misc/watchlog { };
@@ -27801,6 +27804,8 @@ with pkgs;
 
   waybar = callPackage ../applications/misc/waybar {};
 
+  wayshot = callPackage ../tools/misc/wayshot { };
+
   wbg = callPackage ../applications/misc/wbg { };
 
   hikari = callPackage ../applications/window-managers/hikari {
@@ -28029,7 +28034,7 @@ with pkgs;
 
   irssi = callPackage ../applications/networking/irc/irssi { };
 
-  irssi_fish = callPackage ../applications/networking/irc/irssi/fish { };
+  fish-irssi = callPackage ../applications/networking/irc/irssi/fish { };
 
   kirc = callPackage ../applications/networking/irc/kirc { };
 
@@ -34494,6 +34499,8 @@ with pkgs;
   argononed = callPackage ../misc/drivers/argononed { };
 
   autotiling = python3Packages.callPackage ../misc/autotiling { };
+
+  autotiling-rs = callPackage ../misc/autotiling-rs { };
 
   avell-unofficial-control-center = python3Packages.callPackage ../applications/misc/avell-unofficial-control-center { };
 

@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
+, libexif
 , lxqt
 , qtbase
 , qttools
@@ -32,6 +33,7 @@ mkDerivation rec {
   ];
 
   buildInputs = [
+    libexif
     qtbase
     qttools
     qtx11extras

@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = pname;
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-BUKuZza9Jer334LUmU5zmfjg1ISuxg7HETEbUMB80KY=";
   };
 

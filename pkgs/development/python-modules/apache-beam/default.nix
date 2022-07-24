@@ -37,8 +37,8 @@
 , sqlalchemy
 , tenacity
 , typing-extensions
-, scikit-learn
-}:
+, testcontainers
+, scikit-learn }:
 
 buildPythonPackage rec {
   pname = "apache-beam";
@@ -107,6 +107,7 @@ buildPythonPackage rec {
     scikit-learn
     sqlalchemy
     tenacity
+    testcontainers
   ];
 
   # Make sure we're running the tests for the actually installed
@@ -122,8 +123,6 @@ buildPythonPackage rec {
     #         container_init: Callable[[], Union[PostgresContainer, MySqlContainer]],
     #     E   NameError: name 'MySqlContainer' is not defined
     #
-    # Test relies on the testcontainers package, which is not currently (as of
-    # 2022-04-08) available in nixpkgs.
     "apache_beam/io/external/xlang_jdbcio_it_test.py"
 
     # These tests depend on the availability of specific servers backends.
