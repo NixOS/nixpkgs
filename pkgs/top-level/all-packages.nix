@@ -24683,6 +24683,8 @@ with pkgs;
 
   comfortaa = callPackage ../data/fonts/comfortaa {};
 
+  colloid-kde = callPackage ../data/themes/colloid-kde {};
+
   comic-mono = callPackage ../data/fonts/comic-mono { };
 
   comic-neue = callPackage ../data/fonts/comic-neue { };
