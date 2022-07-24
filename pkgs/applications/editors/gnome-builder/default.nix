@@ -2,7 +2,6 @@
 , lib
 , ctags
 , cmark
-, appstream-glib
 , desktop-file-utils
 , fetchurl
 , flatpak
@@ -10,20 +9,21 @@
 , libgit2-glib
 , gi-docgen
 , gobject-introspection
-, glade
-, gspell
-, gtk3
-, gtksourceview4
+, enchant
+, icu
+, gtk4
+, gtksourceview5
 , json-glib
 , jsonrpc-glib
-, libdazzle
-, libhandy
+, libadwaita
+, libpanel
 , libpeas
-, libportal-gtk3
+, libportal-gtk4
 , libxml2
 , meson
 , ninja
 , ostree
+, d-spy
 , pcre
 , pcre2
 , pkg-config
@@ -31,9 +31,9 @@
 , sysprof
 , template-glib
 , vala
-, vte
-, webkitgtk
-, wrapGAppsHook
+, vte-gtk4
+, webkitgtk_5_0
+, wrapGAppsHook4
 , dbus
 , xvfb-run
 }:
@@ -50,7 +50,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    appstream-glib
     desktop-file-utils
     gi-docgen
     gobject-introspection
@@ -59,7 +58,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     python3.pkgs.wrapPython
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -67,27 +66,28 @@ stdenv.mkDerivation rec {
     cmark
     flatpak
     gnome.devhelp
-    glade
     libgit2-glib
     libpeas
-    libportal-gtk3
-    vte
-    gspell
-    gtk3
-    gtksourceview4
+    libportal-gtk4
+    vte-gtk4
+    enchant
+    icu
+    gtk4
+    gtksourceview5
     json-glib
     jsonrpc-glib
-    libdazzle
-    libhandy
+    libadwaita
+    libpanel
     libxml2
     ostree
+    d-spy
     pcre
     pcre2
     python3
     sysprof
     template-glib
     vala
-    webkitgtk
+    webkitgtk_5_0
   ];
 
   checkInputs = [
