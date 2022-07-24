@@ -4,6 +4,7 @@
 , libxslt
 , zlib
 , xcodebuild
+, fetchpatch
 }:
 
 buildPythonPackage rec {
@@ -16,6 +17,14 @@ buildPythonPackage rec {
     rev = "lxml-${version}";
     sha256 = "sha256-ppyLn8B0YFQivRCOE8TjKGdDDQHbb7UdTUkevznoVC8=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2022-2309.patch";
+      url = "https://github.com/lxml/lxml/commit/86368e9cf70a0ad23cccd5ee32de847149af0c6f.patch";
+      sha256 = "sha256-2NHESuG+a2hx+1369l0lSrlRENPgeLxqL18mzvufNh8=";
+    })
+  ];
 
   # setuptoolsBuildPhase needs dependencies to be passed through nativeBuildInputs
   nativeBuildInputs = [ libxml2.dev libxslt.dev cython ] ++ lib.optionals stdenv.isDarwin [ xcodebuild ];
