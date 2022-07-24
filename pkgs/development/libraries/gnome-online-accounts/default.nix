@@ -1,5 +1,7 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchFromGitLab
+, fetchpatch
 , pkg-config
 , vala
 , glib
@@ -10,7 +12,8 @@
 , gtk3
 , webkitgtk_4_1
 , json-glib
-, librest
+, librest_1_0
+, libxml2
 , libsecret
 , gtk-doc
 , gobject-introspection
@@ -32,6 +35,8 @@ stdenv.mkDerivation rec {
   pname = "gnome-online-accounts";
   version = "3.45.1";
 
+  outputs = [ "out" "man" "dev" "devdoc" ];
+
   # https://gitlab.gnome.org/GNOME/gnome-online-accounts/issues/87
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -41,7 +46,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-1FqOJ+nKQdK5r2fP7oAvh1LfG+T1S1NSJ+9kNZ5I76Q=";
   };
 
-  outputs = [ "out" "man" "dev" "devdoc" ];
+  patches = [
+    # https://gitlab.gnome.org/GNOME/gnome-online-accounts/-/merge_requests/95
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-online-accounts/-/commit/2da899c48795e9941661f3eb06fc4fc04ec7b0fa.patch";
+      sha256 = "5qDiKnX9gx7eo//Qxa0+M9rsFKpg8dplA3IUZHuacmA=";
+    })
+  ];
 
   mesonFlags = [
     "-Dfedora=false" # not useful in NixOS or for NixOS users.
@@ -75,7 +86,8 @@ stdenv.mkDerivation rec {
     icu
     json-glib
     libkrb5
-    librest
+    librest_1_0
+    libxml2
     libsecret
     libsoup_3
     webkitgtk_4_1
