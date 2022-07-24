@@ -1464,6 +1464,26 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
+          The <literal>proxmox.qemuConf.bios</literal> option was added,
+          it corresponds to <literal>Hardware-&gt;BIOS</literal> field
+          in Proxmox web interface. Use
+          <literal>&quot;ovmf&quot;</literal> value to build UEFI image,
+          default value remains <literal>&quot;bios&quot;</literal>. New
+          option <literal>proxmox.partitionTableType</literal> defaults
+          to either <literal>&quot;legacy&quot;</literal> or
+          <literal>&quot;efi&quot;</literal>, depending on the
+          <literal>bios</literal> value. Setting
+          <literal>partitionTableType</literal> to
+          <literal>&quot;hybrid&quot;</literal> results in an image,
+          which supports both methods
+          (<literal>&quot;bios&quot;</literal> and
+          <literal>&quot;ovmf&quot;</literal>), thereby remaining
+          bootable after change to Proxmox
+          <literal>Hardware-&gt;BIOS</literal> field.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           memtest86+ was updated from 5.00-coreboot-002 to 6.00-beta2.
           It is now the upstream version from https://www.memtest.org/,
           as coreboot’s fork is no longer available.
