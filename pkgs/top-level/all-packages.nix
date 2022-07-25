@@ -14389,7 +14389,7 @@ with pkgs;
 
   svd2rust = callPackage ../development/tools/rust/svd2rust { };
 
-  svdtools = with python3Packages; toPythonApplication svdtools;
+  svdtools = callPackage ../development/embedded/svdtools { };
 
   swift = callPackage ../development/compilers/swift { };
 
