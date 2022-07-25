@@ -1674,6 +1674,22 @@ let
 
       ms-vscode.cpptools = callPackage ./cpptools { };
 
+      ms-vscode.PowerShell = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "PowerShell";
+          publisher = "ms-vscode";
+          version = "2022.7.2";
+          sha256 = "sha256-YL90dRmOvfbizT+hfkNu267JtG122LTMS9MHCfaMzkk=";
+        };
+        meta = with lib; {
+          description = "A Visual Studio Code extension for PowerShell language support";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell";
+          homepage = "https://github.com/PowerShell/vscode-powershell";
+          license = licenses.mit;
+          maintainers = with maintainers; [ rhoriguchi ];
+        };
+      };
+
       ms-vscode-remote.remote-ssh = callPackage ./remote-ssh { };
 
       ms-vscode.theme-tomorrowkit = buildVscodeMarketplaceExtension {
