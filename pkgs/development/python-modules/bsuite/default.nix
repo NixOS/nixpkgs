@@ -22,7 +22,8 @@
 , pytestCheckHook
 , dm-sonnet
 , rlax
-, distrax }:
+, distrax
+}:
 
 let bsuite = buildPythonPackage rec {
   pname = "bsuite";
