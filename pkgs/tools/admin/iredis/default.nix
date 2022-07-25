@@ -4,11 +4,11 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "iredis";
-  version = "1.12.0";
+  version = "1.12.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c3031094db0aa03d48b6f9be750e32d3e901942a96cc05283029086cb871cd81";
+    sha256 = "sha256-nLwu47wV5QqgtiyiN9bbKzjlZdgd6Qt5KjBlipwRW1Q=";
   };
 
   postPatch = ''
