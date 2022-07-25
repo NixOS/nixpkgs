@@ -64,6 +64,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DENABLE_GTK_DOC=False"
+    "-DGOBJECT_INTROSPECTION=True"
+    "-DICAL_GLIB_VAPI=True"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-DIMPORT_ICAL_GLIB_SRC_GENERATOR=${lib.getDev buildPackages.libical}/lib/cmake/LibIcal/IcalGlibSrcGenerator.cmake"
   ];
