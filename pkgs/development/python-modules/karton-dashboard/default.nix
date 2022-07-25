@@ -4,6 +4,7 @@
 , flask
 , karton-core
 , mistune
+, networkx
 , prometheus-client
 , pythonOlder
 }:
@@ -26,12 +27,14 @@ buildPythonPackage rec {
     flask
     karton-core
     mistune
+    networkx
     prometheus-client
   ];
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "Flask==1.1.1" "Flask" \
+      --replace "Flask==2.0.3" "Flask" \
+      --replace "networkx==2.6.3" "networkx" \
       --replace "prometheus_client==0.11.0" "prometheus_client"
   '';
 
