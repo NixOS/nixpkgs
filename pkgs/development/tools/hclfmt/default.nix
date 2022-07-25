@@ -1,4 +1,5 @@
 { lib, buildGoModule, fetchFromGitHub }:
+
 buildGoModule rec {
   pname = "hclfmt";
   version = "2.12.0";
