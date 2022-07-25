@@ -57,6 +57,10 @@ let
       swift = swift-unwrapped;
     };
 
+    Dispatch = if stdenv.isDarwin
+      then null # part of libsystem
+      else callPackage ./libdispatch { };
+
   };
 
 in self

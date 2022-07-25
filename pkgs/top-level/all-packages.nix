@@ -37567,7 +37567,7 @@ with pkgs;
 
   mictray = callPackage ../tools/audio/mictray { };
 
-  swift-corelibs-libdispatch = callPackage ../development/libraries/swift-corelibs-libdispatch { };
+  swift-corelibs-libdispatch = swiftPackages.Dispatch;
 
   swaysettings = callPackage ../applications/misc/swaysettings { };
 
