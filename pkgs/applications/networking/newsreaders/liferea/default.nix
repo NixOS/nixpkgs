@@ -19,6 +19,7 @@
 , libsecret
 , gobject-introspection
 , glib-networking
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -68,6 +69,12 @@ stdenv.mkDerivation rec {
     buildPythonPath "$out $pythonPath"
     gappsWrapperArgs+=(--prefix PYTHONPATH : "$program_PYTHONPATH")
   '';
+
+  passthru.updateScript = gitUpdater {
+    inherit pname version;
+    url = "https://github.com/lwindolf/${pname}";
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     description = "A GTK-based news feed aggregator";
