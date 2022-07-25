@@ -8,8 +8,8 @@
 }:
 
 stdenvNoCC.mkDerivation rec {
-  name = "ble.sh";
-  version = "2022-07-24";
+  name = "blesh";
+  version = "unstable-2022-07-24";
 
   src = fetchFromGitHub {
     owner = "akinomyoga";
