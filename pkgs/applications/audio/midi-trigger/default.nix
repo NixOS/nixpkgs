@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    mkdir -p -- "$out/lib/lv2"
-    mv -- "$pname".lv2 "$out/lib/lv2"
+    mkdir -p "$out/lib/lv2"
+    mv midi-trigger.lv2 "$out/lib/lv2"
   '';
 
   meta = with lib; {
