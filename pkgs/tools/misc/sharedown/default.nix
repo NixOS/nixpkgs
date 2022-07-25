@@ -55,9 +55,7 @@ stdenvNoCC.mkDerivation rec {
         name = "${pname}-modules-${version}";
         inherit pname version;
 
-        yarnFlags = yarn2nix-moretea.defaultYarnFlags ++ [
-          "--production"
-        ];
+        yarnFlags = [ "--production" ];
 
         pkgConfig = {
           keytar = {
