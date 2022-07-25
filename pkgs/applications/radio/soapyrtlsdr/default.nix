@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/pothosware/SoapyRTLSDR";
     description = "SoapySDR plugin for RTL-SDR devices";
     license = licenses.mit;
-    maintainers = with maintainers; [ ragge ];
+    maintainers = with maintainers; [ ragge luizribeiro ];
     platforms = platforms.unix;
   };
 })
