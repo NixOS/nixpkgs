@@ -350,6 +350,11 @@ rec {
             The "gnu" ABI is ambiguous on 32-bit ARM. Use "gnueabi" or "gnueabihf" instead.
           '';
         }
+        { assertion = platform: with platform; !(isPower64 && isBigEndian);
+          message = ''
+            The "gnu" ABI is ambiguous on big-endian 64-bit PowerPC. Use "gnuabielfv2" or "gnuabielfv1" instead.
+          '';
+        }
       ];
     };
     gnuabi64     = { abi = "64"; };
@@ -360,6 +365,9 @@ rec {
     # https://www.linux-mips.org/pub/linux/mips/doc/ABI/MIPS-N32-ABI-Handbook.pdf
     gnuabin32    = { abi = "n32"; };
     muslabin32   = { abi = "n32"; };
+
+    gnuabielfv2  = { abi = "elfv2"; };
+    gnuabielfv1  = { abi = "elfv1"; };
 
     musleabi     = { float = "soft"; };
     musleabihf   = { float = "hard"; };
