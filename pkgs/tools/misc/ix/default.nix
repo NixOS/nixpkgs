@@ -30,7 +30,7 @@ resholve.mkDerivation {
   meta = with lib; {
     homepage = "http://ix.io";
     description = "Command line pastebin";
-    maintainers = with maintainers; [ asymmetric ];
+    maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.all;
   };
 }
