@@ -28,11 +28,11 @@ rec {
 
   firefox-esr-102 = buildMozillaMach rec {
     pname = "firefox-esr";
-    version = "102.0.1esr";
+    version = "102.1.0esr";
     applicationName = "Mozilla Firefox ESR";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "ce804fa4e5dda3b8c4c7937f18994a184b0eb7d8fb9484dc924d04d3213ee3daf018141f91703daed6d060a99bfc5d915186db10a4ddcf220c2ea43e369e58df";
+      sha512 = "2505b87ce4115445568eb6b7d8af41678bd787fd07f3f79e9f0a22d90cdf752ae5d4371856cf9c56e2d9da7d5b7c3939dc2aab5753fcc017398e7d65260f6f03";
     };
 
     meta = {
