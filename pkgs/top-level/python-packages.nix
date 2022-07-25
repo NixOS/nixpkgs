@@ -3418,6 +3418,8 @@ in {
 
   garages-amsterdam = callPackage ../development/python-modules/garages-amsterdam { };
 
+  gatt = callPackage ../development/python-modules/gatt { };
+
   gattlib = callPackage ../development/python-modules/gattlib {
     inherit (pkgs) bluez glib pkg-config;
   };
@@ -10600,6 +10602,8 @@ in {
   };
 
   tilequant = callPackage ../development/python-modules/tilequant { };
+
+  tiler = callPackage ../development/python-modules/tiler { };
 
   tilestache = callPackage ../development/python-modules/tilestache { };
 
