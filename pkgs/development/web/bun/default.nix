@@ -4,25 +4,31 @@ let
     aarch64-darwin = {
       arch = "aarch64";
       shortName = "darwin";
-      sha256 = "sha256-6mi1I8dga16dQLFy2+qa4dzDzlW6J0fdiv104Re3cZ0=";
+      sha256 = "80304f6cf43c6be3db0303bdcb4de4995ace1a394ac6068bbe1e2b6fba32b2e5";
+    };
+
+    aarch64-linux = {
+      arch = "aarch64";
+      shortName = "linux";
+      sha256 = "6b22b6221014fed9e6b6cb432505424e618ef095b2060945ad119cd8f2155fae";
     };
 
     x86_64-darwin = {
       arch = "x64";
       shortName = "darwin";
-      sha256 = "sha256-RGlpwRKLo4Y6uPvwubclIg3wJWePgKTDJvuzdxOrtfM=";
+      sha256 = "33f4c420467af85584ba444606651a0352906c9135d952b266bb6da100ef95bf";
     };
 
     x86_64-linux = {
       arch = "x64";
       shortName = "linux";
-      sha256 = "sha256-Xjm+1wkAsC5Mn6Fm4MRdGyL4gpw2L++N0nKo7ofXLXs=";
+      sha256 = "524a2d7e51ddda4786799552ae1c18ab8e6173bb30f158f26cae899a7e74f22f";
     };
   };
   dist = dists.${stdenvNoCC.hostPlatform.system} or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
 in
 stdenvNoCC.mkDerivation rec {
-  version = "0.1.2";
+  version = "0.1.5";
   pname = "bun";
 
   src = fetchurl {
