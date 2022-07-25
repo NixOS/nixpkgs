@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  configureFlags = lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+  mesonFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "-Dgtk_doc=false"
   ];
 
