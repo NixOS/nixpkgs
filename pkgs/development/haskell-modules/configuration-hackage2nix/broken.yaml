@@ -3537,7 +3537,6 @@ broken-packages:
   - newtype-th
   - next-ref
   - nextstep-plist
-  - nfc
   - NGrams
   - niagra
   - nibblestring

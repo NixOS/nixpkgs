@@ -973,6 +973,13 @@ self: super: builtins.intersectAttrs super {
     '';
   }) super.jacinda;
 
+  nfc = overrideCabal (drv: {
+    isExecutable = true;
+    executableHaskellDepends = with self; drv.executableHaskellDepends or [] ++ [ base base16-bytestring bytestring ];
+    configureFlags = drv.configureFlags or [] ++ [ "-fbuild-examples" ];
+    enableSeparateBinOutput = true;
+  }) super.nfc;
+
 # haskell-language-server plugins all use the same test harness so we give them what we want in this loop.
 } // pkgs.lib.mapAttrs
   (_: overrideCabal (drv: {
