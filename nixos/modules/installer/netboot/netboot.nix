@@ -81,15 +81,20 @@ with lib;
 
 
     # Create the initrd
-    system.build.netbootRamdisk = pkgs.makeInitrdNG {
+    system.build.netbootRawRamdisk = pkgs.makeInitrdNG {
       inherit (config.boot.initrd) compressor;
-      prepend = [ "${config.system.build.initialRamdisk}/initrd" ];
+      prepend = [ "${config.system.build.rawInitialRamdisk}/initrd" ];
 
       contents =
         [ { object = config.system.build.squashfsStore;
             symlink = "/nix-store.squashfs";
           }
         ];
+    };
+
+    system.build.netbootRamdisk = pkgs.wrapInitrd {
+      rawInitialRamdisk = config.system.build.netbootRawRamdisk;
+      inherit (config.boot.initrd) compressor;
     };
 
     system.build.netbootIpxeScript = pkgs.writeTextDir "netboot.ipxe" ''
