@@ -1,0 +1,59 @@
+From bdeaad4625a4821c18615b0e34530d3fdb2dff4d Mon Sep 17 00:00:00 2001
+From: Ruud van Asseldonk <dev@veniogames.com>
+Date: Sat, 23 Jul 2022 11:58:41 +0200
+Subject: [PATCH] Fix compatibility with LibreSSL 3.5
+
+LibreSSL 3.5 supports the same interface as OpenSSL. This breaks
+compatibility with LibreSSL 3.4, which does not support this interface,
+but if you are using a recent acme-client, you should probably also be
+using a recent LibreSSL.
+---
+ usr.sbin/acme-client/acctproc.c | 16 ++++------------
+ 1 file changed, 4 insertions(+), 12 deletions(-)
+
+diff --git a/usr.sbin/acme-client/acctproc.c b/usr.sbin/acme-client/acctproc.c
+index d1384fb..8b4c057 100644
+--- a/usr.sbin/acme-client/acctproc.c
++++ b/usr.sbin/acme-client/acctproc.c
+@@ -28,14 +28,6 @@
+ #include <openssl/rand.h>
+ #include <openssl/err.h>
+ 
+-#ifdef LIBRESSL_VERSION_NUMBER
+-# define COMPAT_OPENSSL_get0_n(r) (r->n)
+-# define COMPAT_OPENSSL_get0_e(r) (r->e)
+-#else
+-# define COMPAT_OPENSSL_get0_n(r) (RSA_get0_n(r))
+-# define COMPAT_OPENSSL_get0_e(r) (RSA_get0_e(r))
+-#endif
+-
+ #if OPENSSL_VERSION_MAJOR >= 3
+ # include <openssl/core_names.h>
+ #endif
+@@ -102,9 +94,9 @@ op_thumb_rsa(EVP_PKEY *pkey)
+ 
+ 	if ((r = EVP_PKEY_get0_RSA(pkey)) == NULL)
+ 		warnx("EVP_PKEY_get0_RSA");
+-	else if ((n = COMPAT_OPENSSL_get0_n(r)) == NULL)
++	else if ((n = RSA_get0_n(r)) == NULL)
+ 		warnx("bn2string");
+-	else if ((e = COMPAT_OPENSSL_get0_e(r)) == NULL)
++	else if ((e = RSA_get0_e(r)) == NULL)
+ 		warnx("bn2string");
+ #endif
+ 	else if ((mod = bn2string(n)) == NULL)
+@@ -259,9 +251,9 @@ op_sign_rsa(char **prot, EVP_PKEY *pkey, const char *nonce, const char *url)
+ #else
+ 	if ((r = EVP_PKEY_get0_RSA(pkey)) == NULL)
+ 		warnx("EVP_PKEY_get0_RSA");
+-	else if ((n = COMPAT_OPENSSL_get0_n(r)) == NULL)
++	else if ((n = RSA_get0_n(r)) == NULL)
+ 		warnx("bn2string");
+-	else if ((e = COMPAT_OPENSSL_get0_e(r)) == NULL)
++	else if ((e = RSA_get0_e(r)) == NULL)
+ 		warnx("bn2string");
+ #endif
+ 	else if ((mod = bn2string(n)) == NULL)
+-- 
+2.37.1
+

@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-rIeWZSOT+nPzLf2mDtOkN/wmCGffG4H6PCQb2Vxbxxk=";
   };
 
+  patches = [
+    ./libressl-3.5-compat.patch
+  ];
+
   nativeBuildInputs = [
     pkg-config
   ];
