@@ -73,6 +73,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ tweber mmahut ];
+    maintainers = with maintainers; [ tweber mmahut Crafter ];
   };
 }
