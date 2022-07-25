@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub
+{ stdenv, lib, fetchFromGitHub, fetchpatch
 , bzip2, expat, libedit, lmdb, openssl
 , python3 # for tests only
 , cpp11 ? false
@@ -54,6 +54,9 @@ in stdenv.mkDerivation rec {
     # these tests require network access so we need to skip them.
     brokenTests = map escapeRegex [
       "Ice/udp" "Glacier2" "IceGrid/simple" "IceStorm" "IceDiscovery/simple"
+
+      # FIXME: certificate expired, remove for next release?
+      "IceSSL/configuration"
     ];
     # matches CONFIGS flag in makeFlagsArray
     configFlag = optionalString cpp11 "--config=cpp11-shared";
