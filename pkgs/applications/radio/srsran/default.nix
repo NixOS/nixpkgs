@@ -12,6 +12,7 @@
 , uhd
 , soapysdr
 , libbladeRF
+, zeromq
 }:
 
 stdenv.mkDerivation rec {
@@ -37,6 +38,7 @@ stdenv.mkDerivation rec {
     uhd
     soapysdr
     libbladeRF
+    zeromq
   ];
 
   meta = with lib; {
