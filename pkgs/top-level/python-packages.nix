@@ -10609,6 +10609,8 @@ in {
 
   tilequant = callPackage ../development/python-modules/tilequant { };
 
+  tiler = callPackage ../development/python-modules/tiler { };
+
   tilestache = callPackage ../development/python-modules/tilestache { };
 
   timeago = callPackage ../development/python-modules/timeago { };
