@@ -137,6 +137,8 @@ python3Packages.buildPythonApplication rec {
     runHook postCheck
   '';
 
+  passthru.plugins = allPlugins;
+
   meta = with lib; {
     description = "Music tagger and library organizer";
     homepage = "https://beets.io";
