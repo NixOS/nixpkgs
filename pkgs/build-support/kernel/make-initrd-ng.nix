@@ -44,21 +44,6 @@ in
 # can be used to add files in specified paths without them becoming
 # symlinks to store paths.
 , prepend ? []
-
-# Whether to wrap the initramfs in a u-boot image.
-, makeUInitrd ? stdenvNoCC.hostPlatform.linux-kernel.target == "uImage"
-
-# If generating a u-boot image, the architecture to use. The default
-# guess may not align with u-boot's nomenclature correctly, so it can
-# be overridden.
-# See https://gitlab.denx.de/u-boot/u-boot/-/blob/9bfb567e5f1bfe7de8eb41f8c6d00f49d2b9a426/common/image.c#L81-106 for a list.
-, uInitrdArch ? stdenvNoCC.hostPlatform.linuxArch
-
-# The name of the compression, as recognised by u-boot.
-# See https://gitlab.denx.de/u-boot/u-boot/-/blob/9bfb567e5f1bfe7de8eb41f8c6d00f49d2b9a426/common/image.c#L195-204 for a list.
-# If this isn't guessed, you may want to complete the metadata above and send a PR :)
-, uInitrdCompression ? _compressorMeta.ubootName or
-    (throw "Unrecognised compressor ${_compressorName}, please specify uInitrdCompression")
 }: runCommand name {
   compress = "${_compressorExecutable} ${lib.escapeShellArgs _compressorArgsReal}";
   passthru = {
@@ -66,13 +51,10 @@ in
     compressorArgs = _compressorArgsReal;
   };
 
-  inherit extension makeUInitrd uInitrdArch prepend;
-  ${if makeUInitrd then "uInitrdCompression" else null} = uInitrdCompression;
-
   passAsFile = ["contents"];
   contents = lib.concatMapStringsSep "\n" ({ object, symlink, ... }: "${object}\n${if symlink == null then "" else symlink}") contents + "\n";
 
-  nativeBuildInputs = [makeInitrdNGTool patchelf cpio] ++ lib.optional makeUInitrd ubootTools;
+  nativeBuildInputs = [makeInitrdNGTool patchelf cpio];
 } ''
   mkdir ./root
   make-initrd-ng "$contentsPath" ./root
@@ -83,11 +65,5 @@ in
   done
   (cd root && find * .[^.*] -print0 | sort -z | cpio -o -H newc -R +0:+0 --reproducible --null | eval -- $compress >> "$out/initrd")
 
-  if [ -n "$makeUInitrd" ]; then
-      mkimage -A "$uInitrdArch" -O linux -T ramdisk -C "$uInitrdCompression" -d "$out/initrd" $out/initrd.img
-      # Compatibility symlink
-      ln -sf "initrd.img" "$out/initrd"
-  else
-      ln -s "initrd" "$out/initrd$extension"
-  fi
+  ln -s "initrd" "$out/initrd$extension"
 ''

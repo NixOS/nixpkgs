@@ -369,7 +369,7 @@ let
 
   # The closure of the init script of boot stage 1 is what we put in
   # the initial RAM disk.
-  initialRamdisk = pkgs.makeInitrd {
+  rawInitialRamdisk = pkgs.makeInitrd {
     name = "initrd-${kernel-name}";
     inherit (config.boot.initrd) compressor compressorArgs prepend;
 
@@ -417,10 +417,15 @@ let
         config.boot.initrd.extraFiles);
   };
 
+  initialRamdisk = pkgs.wrapInitrd {
+    inherit rawInitialRamdisk;
+    inherit (config.boot.initrd) compressor;
+  };
+
   # Script to add secret files to the initrd at bootloader update time
   initialRamdiskSecretAppender =
     let
-      compressorExe = initialRamdisk.compressorExecutableFunction pkgs;
+      compressorExe = rawInitialRamdisk.compressorExecutableFunction pkgs;
     in pkgs.writeScriptBin "append-initrd-secrets"
       ''
         #!${pkgs.bash}/bin/bash -e
@@ -463,7 +468,7 @@ let
          }
 
         (cd "$tmp" && find . -print0 | sort -z | bsdtar --uid 0 --gid 0 -cnf - -T - | bsdtar --null -cf - --format=newc @-) | \
-          ${compressorExe} ${lib.escapeShellArgs initialRamdisk.compressorArgs} >> "$1"
+          ${compressorExe} ${lib.escapeShellArgs rawInitialRamdisk.compressorArgs} >> "$1"
       '';
 
 in
@@ -738,10 +743,10 @@ in
     ];
 
     system.build = mkMerge [
-      { inherit bootStage1 initialRamdiskSecretAppender extraUtils; }
+      { inherit bootStage1 initialRamdisk initialRamdiskSecretAppender extraUtils; }
 
       # generated in nixos/modules/system/boot/systemd/initrd.nix
-      (mkIf (!config.boot.initrd.systemd.enable) { inherit initialRamdisk; })
+      (mkIf (!config.boot.initrd.systemd.enable) { inherit rawInitialRamdisk; })
     ];
 
     system.requiredKernelConfig = with config.lib.kernelConfig; [
