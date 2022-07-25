@@ -60,7 +60,7 @@ with lib;
         Note: This option overrides <literal>enableIPv6</literal>
       '';
       default = [];
-      example = [ "127.0.0.1" "::1" ];
+      example = [ "127.0.0.1" "[::1]" ];
     };
 
     enableACME = mkOption {
