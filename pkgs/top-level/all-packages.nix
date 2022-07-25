@@ -24844,6 +24844,10 @@ with pkgs;
 
   ginkgo = callPackage ../development/tools/ginkgo { };
 
+  gdlv = callPackage ../development/tools/gdlv {
+    inherit (darwin.apple_sdk.frameworks) OpenGL;
+  };
+
   go-bindata = callPackage ../development/tools/go-bindata { };
 
   go-bindata-assetfs = callPackage ../development/tools/go-bindata-assetfs { };
