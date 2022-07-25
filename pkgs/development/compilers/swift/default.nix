@@ -61,6 +61,10 @@ let
       then null # part of libsystem
       else callPackage ./libdispatch { };
 
+    Foundation = if stdenv.isDarwin
+      then apple_sdk.frameworks.Foundation
+      else callPackage ./foundation { };
+
   };
 
 in self
