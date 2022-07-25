@@ -11,7 +11,7 @@
 , gtk4
 , glib
 , gtksourceview5
-, wrapGAppsHook
+, wrapGAppsHook4
 , gobject-introspection
 , gnome
 , mpfr
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     vala
     gettext
     itstool
-    wrapGAppsHook
+    wrapGAppsHook4
     gobject-introspection # for finding vapi files
   ];
 
