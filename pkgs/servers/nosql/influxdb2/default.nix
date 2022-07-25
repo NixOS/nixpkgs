@@ -1,4 +1,4 @@
-{ buildGo118Module
+{ buildGoModule
 , fetchFromGitHub
 , fetchurl
 , go-bindata
