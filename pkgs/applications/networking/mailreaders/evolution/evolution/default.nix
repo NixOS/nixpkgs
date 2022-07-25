@@ -112,7 +112,6 @@ stdenv.mkDerivation rec {
     "-DWITH_SA_LEARN=${spamassassin}/bin/sa-learn"
     "-DWITH_BOGOFILTER=${bogofilter}/bin/bogofilter"
     "-DWITH_OPENLDAP=${openldap}"
-    "-DWITH_GWEATHER4=ON"
   ];
 
   requiredSystemFeatures = [
