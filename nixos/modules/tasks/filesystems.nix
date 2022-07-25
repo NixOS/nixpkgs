@@ -280,7 +280,8 @@ in
     environment.etc.fstab.text =
       let
         fsToSkipCheck = [ "none" "bindfs" "btrfs" "zfs" "tmpfs" "nfs" "vboxsf" "glusterfs" "apfs" ];
-        skipCheck = fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck;
+        isBindMount = fs: builtins.elem "bind" fs.options;
+        skipCheck = fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck || isBindMount fs;
         # https://wiki.archlinux.org/index.php/fstab#Filepath_spaces
         escape = string: builtins.replaceStrings [ " " "\t" ] [ "\\040" "\\011" ] string;
         swapOptions = sw: concatStringsSep "," (
