@@ -7,7 +7,7 @@ let
       , pkg-config, libxml2, tzdata
 
       # This is important to obtain a version of `libpq` that does not depend on systemd.
-      , enableSystemd ? (lib.versionAtLeast version "9.6" && !stdenv.isDarwin)
+      , enableSystemd ? (lib.versionAtLeast version "9.6" && !stdenv.isDarwin && !stdenv.hostPlatform.isStatic)
       , gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic, libkrb5
 
 
