@@ -1247,6 +1247,8 @@ with pkgs;
 
   midimonster = callPackage ../tools/audio/midimonster { };
 
+  midi-trigger = callPackage ../applications/audio/midi-trigger { };
+
   mprocs = callPackage ../tools/misc/mprocs { };
 
   nominatim = callPackage ../servers/nominatim { };
