@@ -12,15 +12,15 @@
 
 buildPythonPackage rec {
   pname = "readchar";
-  version = "3.0.5";
+  version = "3.1.0";
   format = "setuptools";
 
   # Don't use wheels on PyPI
   src = fetchFromGitHub {
     owner = "magmax";
     repo = "python-${pname}";
-    rev = "v${version}";
-    sha256 = "sha256:01bjw3ipdzxq1ijn9354nlya625i26ri7jac1dnlj1d1gdd8m5lx";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-NzGj8ltOvs9+iXMUix4mXkzgnBnyRWLJ6JUv37dfc04=";
   };
 
   postPatch = ''
