@@ -4878,8 +4878,6 @@ with pkgs;
 
   circus = callPackage ../tools/networking/circus { };
 
-  citrix_workspace = citrix_workspace_22_05_0;
-
   cirrus-cli = callPackage ../development/tools/continuous-integration/cirrus-cli { };
 
   inherit (callPackage ../applications/networking/remote/citrix-workspace { })
@@ -4890,7 +4888,9 @@ with pkgs;
     citrix_workspace_21_09_0
     citrix_workspace_21_12_0
     citrix_workspace_22_05_0
+    citrix_workspace_22_07_0
   ;
+  citrix_workspace = citrix_workspace_22_07_0;
 
   cmigemo = callPackage ../tools/text/cmigemo { };
 
@@ -17724,9 +17724,7 @@ with pkgs;
   gecode_6 = qt5.callPackage ../development/libraries/gecode { };
   gecode = gecode_6;
 
-  gephi = callPackage ../applications/science/misc/gephi {
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
+  gephi = callPackage ../applications/science/misc/gephi { };
 
   gegl = callPackage ../development/libraries/gegl {
     inherit (darwin.apple_sdk.frameworks) OpenCL;
@@ -31156,6 +31154,8 @@ with pkgs;
   waon = callPackage ../applications/audio/waon { };
 
   warp = callPackage ../applications/networking/warp { };
+
+  warpd = callPackage ../applications/misc/warpd { };
 
   w3m = callPackage ../applications/networking/browsers/w3m { };
 
