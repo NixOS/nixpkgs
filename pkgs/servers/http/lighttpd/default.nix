@@ -14,20 +14,12 @@
 
 stdenv.mkDerivation rec {
   pname = "lighttpd";
-  version = "1.4.64";
+  version = "1.4.65";
 
   src = fetchurl {
     url = "https://download.lighttpd.net/lighttpd/releases-${lib.versions.majorMinor version}.x/${pname}-${version}.tar.xz";
-    sha256 = "sha256-4Uidn6dJb78uBxwzi1k7IwDTjCPx5ZZ+UsnvSC4bDiY=";
+    sha256 = "sha256-vw+mimKfvEBAI6kSs3fnAEkzHWeXvLtLPo30w7QjKL4=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "macos-10.12-avoid-ccrandomgeneratebytes.patch";
-      url = "https://redmine.lighttpd.net/projects/lighttpd/repository/14/revisions/6791f71b20a127b5b0091020dd065f4f9c7cafb6/diff?format=diff";
-      sha256 = "1x5ybkvxwinl7s1nv3rrc57m4mj38q0gbyjp1ijr4w5lhabw4vzs";
-    })
-  ];
 
   postPatch = ''
     patchShebangs tests

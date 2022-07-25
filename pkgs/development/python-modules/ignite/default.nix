@@ -7,6 +7,7 @@
 , pythonOlder
 , matplotlib
 , mock
+, packaging
 , pytorch
 , scikit-learn
 , tqdm
@@ -24,7 +25,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytestCheckHook matplotlib mock pytest-xdist torchvision ];
-  propagatedBuildInputs = [ pytorch scikit-learn tqdm ];
+  propagatedBuildInputs = [ packaging pytorch scikit-learn tqdm ];
 
   # runs succesfully in 3.9, however, async isn't correctly closed so it will fail after test suite.
   doCheck = pythonOlder "3.9";

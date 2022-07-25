@@ -1,4 +1,5 @@
 { lib
+, aiofiles
 , aiohttp
 , backoff
 , buildPythonPackage
@@ -20,6 +21,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    aiofiles
     aiohttp
     backoff
     click
