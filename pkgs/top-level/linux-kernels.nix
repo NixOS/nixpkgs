@@ -497,6 +497,8 @@ in {
 
     can-isotp = callPackage ../os-specific/linux/can-isotp { };
 
+    qc71_laptop = callPackage ../os-specific/linux/qc71_laptop { };
+
   } // lib.optionalAttrs config.allowAliases {
     ati_drivers_x11 = throw "ati drivers are no longer supported by any kernel >=4.1"; # added 2021-05-18;
   });
