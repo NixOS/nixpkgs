@@ -452,6 +452,7 @@ let
           "AllMulticast"
           "Unmanaged"
           "RequiredForOnline"
+          "RequiredFamilyForOnline"
           "ActivationPolicy"
         ])
         (assertMacAddress "MACAddress")
@@ -471,6 +472,12 @@ let
           "enslaved"
           "routable"
         ]))
+        (assertValueOneOf "RequiredFamilyForOnline" [
+          "ipv4"
+          "ipv6"
+          "both"
+          "any"
+        ])
         (assertValueOneOf "ActivationPolicy" ([
           "up"
           "always-up"
