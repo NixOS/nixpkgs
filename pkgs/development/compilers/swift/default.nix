@@ -72,6 +72,11 @@ let
       inherit (darwin) DarwinTools;
     };
 
+    swiftpm = callPackage ./swiftpm {
+      inherit (darwin) DarwinTools cctools;
+      inherit (apple_sdk.frameworks) CryptoKit LocalAuthentication;
+    };
+
   };
 
 in self
