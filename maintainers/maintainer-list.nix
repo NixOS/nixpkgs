@@ -10302,6 +10302,12 @@
       }
     ];
   };
+  ProducerMatt = {
+    name = "Matthew Pherigo";
+    email = "ProducerMatt42@gmail.com";
+    github = "ProducerMatt";
+    githubId = 58014742;
+  };
   Profpatsch = {
     email = "mail@profpatsch.de";
     github = "Profpatsch";
