@@ -8,6 +8,7 @@
 , vivisect
 , pytest-sugar
 , pytestCheckHook
+, python-flirt
 }:
 buildPythonPackage rec {
   pname = "viv-utils";
@@ -37,6 +38,14 @@ buildPythonPackage rec {
     pytest-sugar
     pytestCheckHook
   ];
+
+  passthru = {
+    optional-dependencies = {
+      flirt = [
+        python-flirt
+      ];
+    };
+  };
 
   meta = with lib; {
     description = "Utilities for working with vivisect";
