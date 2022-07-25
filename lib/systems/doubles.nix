@@ -94,7 +94,9 @@ in {
                   ++ filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnueabi; })
                   ++ filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnueabihf; })
                   ++ filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnuabin32; })
-                  ++ filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnuabi64; });
+                  ++ filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnuabi64; })
+                  ++ filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnuabielfv1; })
+                  ++ filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnuabielfv2; });
   illumos       = filterDoubles predicates.isSunOS;
   linux         = filterDoubles predicates.isLinux;
   netbsd        = filterDoubles predicates.isNetBSD;
