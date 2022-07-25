@@ -208,6 +208,7 @@
   ./programs/seahorse.nix
   ./programs/slock.nix
   ./programs/shadow.nix
+  ./programs/smartctl.nix
   ./programs/spacefm.nix
   ./programs/singularity.nix
   ./programs/ssh.nix
