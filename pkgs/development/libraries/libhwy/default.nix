@@ -2,24 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libhwy";
-  version = "0.15.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "highway";
     rev = version;
-    sha256 = "sha256-v2HyyHtBydr7QiI83DW1yRv2kWjUOGxFT6mmdrN9XPo=";
+    hash = "sha256-CHjLD2qXmmggJXm15tdp+Nc/vyUIlrg4ZOvI4FA9lkc=";
   };
-
-  patches = [
-    # Remove on next release
-    # https://github.com/google/highway/issues/460
-    (fetchpatch {
-      name = "hwy-add-missing-includes.patch";
-      url = "https://github.com/google/highway/commit/8ccab40c2f931aca6004d175eec342cc60f6baec.patch";
-      sha256 = "sha256-wlp5gIvK2+OlKtsZwxq/pXTbESkUtimHXaYDjcBzmQ0=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake ninja ];
 
