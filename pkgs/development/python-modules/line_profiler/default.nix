@@ -8,6 +8,7 @@
 , scikit-build
 , cmake
 , pythonOlder
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -33,7 +34,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    ipython
+    pytestCheckHook
   ];
 
   dontUseCmakeConfigure = true;
