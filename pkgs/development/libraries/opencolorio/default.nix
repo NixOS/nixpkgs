@@ -21,7 +21,8 @@
 , buildApps ? true # Utility applications
 , lcms2
 , openimageio2
-, openexr }:
+, openexr
+}:
 
 stdenv.mkDerivation rec {
   pname = "opencolorio";
