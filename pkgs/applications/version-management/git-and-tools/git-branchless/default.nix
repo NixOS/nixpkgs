@@ -48,6 +48,15 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_next_ambiguous_interactive"
   ];
 
+  # Fixed in next release
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/arxanas/git-branchless/commit/8bed1e83495a448f479103d2d4b75745aa512667.patch";
+      sha256 = "sha256-bFfXBYxfgx1TxlJ+/2Gh9WsgL2vCJKwwbq4JD8/2c1w=";
+      name = "fix-tests-for-latest-git";
+    })
+  ];
+
   meta = with lib; {
     description = "A suite of tools to help you visualize, navigate, manipulate, and repair your commit history";
     homepage = "https://github.com/arxanas/git-branchless";
