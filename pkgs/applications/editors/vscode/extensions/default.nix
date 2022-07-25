@@ -783,8 +783,8 @@ let
         mktplcRef = {
           name = "gitlens";
           publisher = "eamodio";
-          version = "12.1.1";
-          sha256 = "0i1wxgc61rrf11zff0481dg9s2lmv1ngpwx8nb2ygf6lh0axr7cj";
+          version = "12.1.2";
+          sha256 = "0wpmfrfpi6wl9v3dknx2qr2m74azpcw8bvhac21v67w6jxnl3jd9";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/eamodio.gitlens/changelog";
@@ -1379,8 +1379,8 @@ let
         mktplcRef = {
           name = "svg";
           publisher = "jock";
-          version = "1.4.17";
-          sha256 = "sha256-CDxh/YRyDGocxG4qOcyLXA0zHCg0YJ7XUu3OjFFjleI=";
+          version = "1.4.19";
+          sha256 = "1yl5pxsayplkdqv5jipii7pyj85j2lc4zmibyr69470b6li264rq";
         };
         meta = with lib; {
           license = licenses.mit;
@@ -1648,8 +1648,8 @@ let
         mktplcRef = {
           name = "vscode-docker";
           publisher = "ms-azuretools";
-          version = "1.22.0";
-          sha256 = "sha256-+cY9uLQ4oIk7V/4uCNc6BdIAQCXvPPGeqd0apbDjDos=";
+          version = "1.22.1";
+          sha256 = "1ix363fjxi9g450rs3ghx44z3hppvasf0xpzgha93m90djd7ai52";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1859,8 +1859,8 @@ let
         mktplcRef = {
           name = "vscode-yaml";
           publisher = "redhat";
-          version = "1.7.0";
-          sha256 = "1bbjpaypp0mq5akww5f0pkpq01j0xhhvkfr44f4lb2rdhr5nmnvc";
+          version = "1.9.1";
+          sha256 = "10m70sahl7vf8y82gqz9yk6bk4k4b923xn5rk7fax1nqw0pkln2w";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1915,8 +1915,8 @@ let
         mktplcRef = {
           name = "material-icon-theme";
           publisher = "PKief";
-          version = "4.16.0";
-          sha256 = "sha256-AOHvWoVB26caNgEEnKBhw5Z/tRtaTSeVLkO6Rlc/kqo=";
+          version = "4.19.0";
+          sha256 = "1azkkp4bnd7n8v0m4325hfrr6p6ikid88xbxaanypji25pnyq5a4";
         };
         meta = {
           license = lib.licenses.mit;
@@ -2248,8 +2248,8 @@ let
         mktplcRef = {
           name = "code-spell-checker";
           publisher = "streetsidesoftware";
-          version = "2.2.5";
-          sha256 = "0ayhlzh3b2mcdx6mdj00y4qxvv6mirfpnp8q5zvidm6sv3vwlcj0";
+          version = "2.3.1";
+          sha256 = "0pm9i3zw4aa4qrcqnzb9bz166rl7p6nwb81m9rqzisdc85mx4s3x";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/streetsidesoftware.code-spell-checker/changelog";
@@ -2540,8 +2540,8 @@ let
         mktplcRef = {
           name = "vscode-import-cost";
           publisher = "wix";
-          version = "2.15.0";
-          sha256 = "0d3b6654cdck1syn74vmmd1jmgkrw5v4c4cyrhdxbhggkip732bc";
+          version = "3.3.0";
+          sha256 = "0wl8vl8n0avd6nbfmis0lnlqlyh4yp3cca6kvjzgw5xxdc5bl38r";
         };
         meta = with lib; {
           license = licenses.mit;
