@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, fetchpatch
 , fetchurl
 , tzdata
 , iana-etc
@@ -172,7 +173,11 @@ stdenv.mkDerivation rec {
     touch $TMPDIR/group $TMPDIR/hosts $TMPDIR/passwd
   '';
 
-  patches = [
+  patches = let
+    fetchBase64Patch = args: (fetchpatch args).overrideAttrs (o: {
+      postFetch = "mv $out p; base64 -d p > $out; " + o.postFetch;
+    });
+  in [
     ./remove-tools-1.11.patch
     ./ssl-cert-file-1.16.patch
     ./remove-test-pie-1.15.patch
@@ -182,6 +187,12 @@ stdenv.mkDerivation rec {
     ./skip-nohup-tests.patch
     ./skip-cgo-tests-1.15.patch
     ./go_no_vendor_checks-1.16.patch
+
+    # https://go-review.googlesource.com/c/go/+/417615/
+    (fetchBase64Patch {
+      url = "https://go-review.googlesource.com/changes/go~417615/revisions/3/patch";
+      sha256 = "sha256-Gu5eZUwGGch7et75A/BNynbs4VlQUBClVUxjxPkdjOs=";
+    })
   ];
 
   postPatch = ''
