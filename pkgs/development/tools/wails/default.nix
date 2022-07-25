@@ -66,8 +66,6 @@ buildGoModule rec {
       --set CGO_LDFLAGS "-L${lib.makeLibraryPath [ zlib ]}"
   '';
 
-  doCheck = true;
-
   meta = with lib; {
     description = "Build applications using Go + HTML + CSS + JS";
     homepage = "https://wails.io";
