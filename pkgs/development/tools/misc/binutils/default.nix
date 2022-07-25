@@ -105,6 +105,17 @@ stdenv.mkDerivation {
      (if stdenv.targetPlatform.isMusl
       then substitute { src = ./mips64-default-n64.patch; replacements = [ "--replace" "gnuabi64" "muslabi64" ]; }
       else ./mips64-default-n64.patch)
+  # On PowerPC, when generating assembly code, GCC generates a `.machine`
+  # custom instruction which instructs the assembler to generate code for this
+  # machine. However, some GCC versions generate the wrong one, or make it
+  # too strict, which leads to some confusing "unrecognized opcode: wrtee"
+  # or "unrecognized opcode: eieio" errors.
+  #
+  # To remove when binutils 2.39 is released.
+  #
+  # Upstream commit:
+  # https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=cebc89b9328eab994f6b0314c263f94e7949a553
+  ++ lib.optional stdenv.targetPlatform.isPower ./ppc-make-machine-less-strict.patch
   ;
 
   outputs = [ "out" "info" "man" ];
