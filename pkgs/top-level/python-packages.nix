@@ -10338,8 +10338,6 @@ in {
 
   suseapi = callPackage ../development/python-modules/suseapi { };
 
-  svdtools = callPackage ../development/python-modules/svdtools { };
-
   svg2tikz = callPackage ../development/python-modules/svg2tikz { };
 
   svglib = callPackage ../development/python-modules/svglib { };
