@@ -222,6 +222,12 @@ rec {
       '') plugins}
     '';
 
+  # Function that automatically links the default NDK plugin.
+  linkNdkPlugin = {name, plugin, check}:
+    lib.optionalString check ''
+      ln -s ${plugin}/libexec/android-sdk/${name} ${name}
+    '';
+
   # Function that automatically links a plugin for which only one version exists
   linkPlugin = {name, plugin, check ? true}:
     lib.optionalString check ''
@@ -259,7 +265,7 @@ rec {
       ${linkPlatformPlugins { name = "sources"; plugins = sources; check = includeSources; }}
       ${linkPlugins { name = "cmake"; plugins = cmake; }}
       ${linkNdkPlugins { name = "ndk-bundle"; rootName = "ndk"; plugins = ndk-bundles; }}
-      ${linkPlugin { name = "ndk-bundle"; plugin = ndk-bundle; check = includeNDK; }}
+      ${linkNdkPlugin { name = "ndk-bundle"; plugin = ndk-bundle; check = includeNDK; }}
 
       ${lib.optionalString includeSystemImages ''
         mkdir -p system-images
