@@ -230,6 +230,7 @@ let
       skanlite = callPackage ./skanlite.nix {};
       skanpage = callPackage ./skanpage.nix {};
       spectacle = callPackage ./spectacle.nix {};
+      umbrello = callPackage ./umbrello.nix {};
       yakuake = callPackage ./yakuake.nix {};
       zanshin = callPackage ./zanshin.nix {};
     };
