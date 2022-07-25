@@ -7,25 +7,14 @@
   nodes.machine = { lib, ... }: {
     services.aesmd = {
       enable = true;
-      settings = {
-        defaultQuotingType = "ecdsa_256";
-        proxyType = "direct";
-        whitelistUrl = "http://nixos.org";
-      };
-      qcnl.settings = {
-        pccsUrl = "https://localhost:8081/sgx/certification/v3/";
-        customRequestOptions = {
-          get_cert = {
-            headers = {
-              head1 = "value1";
-            };
-            params = {
-              param1 = "value1";
-              param2 = "value2";
-            };
-          };
-        };
-      };
+      defaultQuotingType = "ecdsa_256";
+      proxyType = "direct";
+      whitelistUrl = "http://nixos.org";
+
+      qcnl.pccsUrl = "https://localhost:8081/sgx/certification/v3/";
+      qcnl.customRequestOptions.get_cert.headers.head1 = "value1";
+      qcnl.customRequestOptions.get_cert.params.param1 = "value1";
+      qcnl.customRequestOptions.get_cert.params.param2 = "value2";
     };
 
     # Should have access to the AESM socket

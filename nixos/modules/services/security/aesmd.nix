@@ -6,7 +6,7 @@ let
 
   sgx-psw = pkgs.sgx-psw.override { inherit (cfg) debug; };
 
-  aesmdConfigFile = with cfg.settings; pkgs.writeText "aesmd.conf" (
+  aesmdConfigFile = with cfg; pkgs.writeText "aesmd.conf" (
     concatStringsSep "\n" (
       optional (whitelistUrl != null) "whitelist url = ${whitelistUrl}" ++
       optional (proxy != null) "aesm proxy = ${proxy}" ++
@@ -18,6 +18,13 @@ let
   );
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "aesmd" "settings" "debug" ]        [ "services" "aesmd" "debug" ])
+    (mkRenamedOptionModule [ "services" "aesmd" "settings" "whitelistUrl" ] [ "services" "aesmd" "whitelistUrl" ])
+    (mkRenamedOptionModule [ "services" "aesmd" "settings" "proxy" ]        [ "services" "aesmd" "proxy" ])
+    (mkRenamedOptionModule [ "services" "aesmd" "settings" "proxyType" ]    [ "services" "aesmd" "proxyType" ])
+  ];
+
   options.services.aesmd = {
     enable = mkEnableOption (lib.mdDoc "Intel's Architectural Enclave Service Manager (AESM) for Intel SGX");
     debug = mkOption {
@@ -41,45 +48,39 @@ in
       example = literalExpression "pkgs.sgx-azure-dcap-client";
       description = lib.mdDoc "Custom quote provider library to use.";
     };
-    settings = mkOption {
-      description = lib.mdDoc "AESM configuration";
-      default = { };
-      type = types.submodule {
-        options.whitelistUrl = mkOption {
-          type = with types; nullOr str;
-          default = null;
-          example = "http://whitelist.trustedservices.intel.com/SGX/LCWL/Linux/sgx_white_list_cert.bin";
-          description = lib.mdDoc "URL to retrieve authorized Intel SGX enclave signers.";
-        };
-        options.proxy = mkOption {
-          type = with types; nullOr str;
-          default = null;
-          example = "http://proxy_url:1234";
-          description = lib.mdDoc "HTTP network proxy.";
-        };
-        options.proxyType = mkOption {
-          type = with types; nullOr (enum [ "default" "direct" "manual" ]);
-          default = if (cfg.settings.proxy != null) then "manual" else null;
-          defaultText = literalExpression ''
-            if (config.${opt.settings}.proxy != null) then "manual" else null
-          '';
-          example = "default";
-          description = lib.mdDoc ''
-            Type of proxy to use. The `default` uses the system's default proxy.
-            If `direct` is given, uses no proxy.
-            A value of `manual` uses the proxy from
-            {option}`services.aesmd.settings.proxy`.
-          '';
-        };
-        options.defaultQuotingType = mkOption {
-          type = with types; nullOr (enum [ "ecdsa_256" "epid_linkable" "epid_unlinkable" ]);
-          default = null;
-          example = "ecdsa_256";
-          description = lib.mdDoc "Attestation quote type.";
-        };
-      };
+    whitelistUrl = mkOption {
+      type = with types; nullOr str;
+      default = null;
+      example = "http://whitelist.trustedservices.intel.com/SGX/LCWL/Linux/sgx_white_list_cert.bin";
+      description = lib.mdDoc "URL to retrieve authorized Intel SGX enclave signers.";
     };
-    qcnl.settings = mkOption {
+    proxy = mkOption {
+      type = with types; nullOr str;
+      default = null;
+      example = "http://proxy_url:1234";
+      description = lib.mdDoc "HTTP network proxy.";
+    };
+    proxyType = mkOption {
+      type = with types; nullOr (enum [ "default" "direct" "manual" ]);
+      default = if (cfg.proxy != null) then "manual" else null;
+      defaultText = literalExpression ''
+        if (config.services.aesmd.proxy != null) then "manual" else null
+      '';
+      example = "default";
+      description = lib.mdDoc ''
+        Type of proxy to use. The `default` uses the system's default proxy.
+        If `direct` is given, uses no proxy.
+        A value of `manual` uses the proxy from
+        {option}`services.aesmd.proxy`.
+      '';
+    };
+    defaultQuotingType = mkOption {
+      type = with types; nullOr (enum [ "ecdsa_256" "epid_linkable" "epid_unlinkable" ]);
+      default = null;
+      example = "ecdsa_256";
+      description = lib.mdDoc "Attestation quote type.";
+    };
+    qcnl = mkOption {
       description = lib.mdDoc "QCNL configuration";
       default = null;
       type = with types; nullOr (submodule {
@@ -269,9 +270,9 @@ in
             # Hardcoded path AESM_CONFIG_FILE in psw/ae/aesm_service/source/utils/aesm_config.cpp
             "${aesmdConfigFile}:/etc/aesmd.conf"
           ]
-          ++ optional (!isNull cfg.qcnl.settings) (let
+          ++ optional (!isNull cfg.qcnl) (let
             toSnakeCase = replaceStrings upperChars (map (s: "_${s}") lowerChars);
-            qcnlConfig = builtins.toJSON (mapAttrs' (name: value: nameValuePair (toSnakeCase name) value) (filterAttrs (n: v: !isNull v) cfg.qcnl.settings));
+            qcnlConfig = builtins.toJSON (mapAttrs' (name: value: nameValuePair (toSnakeCase name) value) (filterAttrs (n: v: !isNull v) cfg.qcnl));
             qcnlConfigFile = pkgs.writeText "sgx_default_qcnl.conf" qcnlConfig;
           in
             # Hardcoded path in qcnl https://github.com/intel/SGXDataCenterAttestationPrimitives/blob/68a77a852cd911a44a97733aec870e9bd93a3b86/QuoteGeneration/qcnl/linux/qcnl_config_impl.cpp#L112
