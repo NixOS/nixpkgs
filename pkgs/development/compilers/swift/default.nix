@@ -65,6 +65,13 @@ let
       then apple_sdk.frameworks.Foundation
       else callPackage ./foundation { };
 
+    # TODO: Apple distributes a binary XCTest with Xcode, but it is not part of
+    # CLTools (or SUS), so would have to figure out how to fetch it. The binary
+    # version has several extra features, like a test runner and ObjC support.
+    XCTest = callPackage ./xctest {
+      inherit (darwin) DarwinTools;
+    };
+
   };
 
 in self
