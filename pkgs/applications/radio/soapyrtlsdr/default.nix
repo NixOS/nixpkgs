@@ -1,18 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, rtl-sdr, soapysdr
-} :
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, rtl-sdr
+, soapysdr
+}:
 
-let
-  version = "0.3.3";
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "soapyrtlsdr";
-  inherit version;
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapyRTLSDR";
-    rev = "soapy-rtl-sdr-${version}";
+    rev = "soapy-rtl-sdr-${finalAttrs.version}";
     sha256 = "sha256-IapdrBE8HhibY52Anm76/mVAoA0GghwnRCxxfGkyLTw=";
   };
 
@@ -28,4 +30,4 @@ in stdenv.mkDerivation {
     maintainers = with maintainers; [ ragge ];
     platforms = platforms.unix;
   };
-}
+})
