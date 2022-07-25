@@ -9,9 +9,8 @@
 , pyyaml
 , typing-extensions
 , uvloop
-, watchgod
+, watchfiles
 , websockets
-, wsproto
 , pythonOlder
 }:
 
@@ -35,15 +34,17 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     click
     h11
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+  ];
+
+  passthru.optional-dependencies.standard = [
     httptools
     python-dotenv
     pyyaml
     uvloop
-    watchgod
+    watchfiles
     websockets
-    wsproto
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
   ];
 
   postInstall = ''
