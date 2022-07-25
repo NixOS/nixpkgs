@@ -16082,7 +16082,10 @@ with pkgs;
 
   hcloud = callPackage ../development/tools/hcloud { };
 
-  hclfmt = callPackage ../development/tools/hclfmt { };
+  hclfmt = callPackage ../development/tools/hclfmt {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
+    buildGoModule = buildGo117Module;
+  };
 
   help2man = callPackage ../development/tools/misc/help2man { };
 
