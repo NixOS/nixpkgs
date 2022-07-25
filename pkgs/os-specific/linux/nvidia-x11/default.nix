@@ -68,6 +68,19 @@ rec {
     sha256_64bit = "sha256-UibkhCBEz/2Qlt6tr2iTTBM9p04FuAzNISNlhLOvsfw=";
     settingsSha256 = "sha256-teXQa0pQctQl1dvddVJtI7U/vVuMu6ER1Xd99Jprpvw=";
     persistencedSha256 = "sha256-FxiTXYABplKFcBXr4orhYWiJq4zVePpplMbg2kvEuXk=";
+    patches =
+      let patch390 = o:
+        (lib.optional ((lib.versions.majorMinor kernel.modDirVersion) == o.version) (fetchpatch {
+          inherit (o) sha256;
+          url = "https://gitlab.com/herecura/packages/nvidia-390xx-dkms/-/raw/herecura/kernel-${o.version}.patch";
+        }));
+      in
+        []
+        ++ (patch390 {
+          version = "5.18";
+          sha256 = "sha256-A6itoozgDWmXKQAU0D8bT2vUaZqh5G5Tg3d3E+CLOTs=";
+        })
+      ;
   };
 
   legacy_340 = generic {

@@ -6,6 +6,8 @@ let
   cfg = config.services.nextcloud;
   fpm = config.services.phpfpm.pools.nextcloud;
 
+  jsonFormat = pkgs.formats.json {};
+
   inherit (cfg) datadir;
 
   phpPackage = cfg.phpPackage.buildEnv {
@@ -547,6 +549,33 @@ in {
       '';
     };
 
+    extraOptions = mkOption {
+      type = jsonFormat.type;
+      default = {};
+      description = ''
+        Extra options which should be appended to nextcloud's config.php file.
+      '';
+      example = literalExpression '' {
+        redis = {
+          host = "/run/redis/redis.sock";
+          port = 0;
+          dbindex = 0;
+          password = "secret";
+          timeout = 1.5;
+        };
+      } '';
+    };
+
+    secretFile = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = ''
+        Secret options which will be appended to nextcloud's config.php file (written as JSON, in the same
+        form as the <xref linkend="opt-services.nextcloud.extraOptions"/> option), for example
+        <programlisting>{"redis":{"password":"secret"}}</programlisting>.
+      '';
+    };
+
     nginx = {
       recommendedHttpHeaders = mkOption {
         type = types.bool;
@@ -706,10 +735,20 @@ in {
                     $file
                   ));
                 }
-
                 return trim(file_get_contents($file));
+              }''}
+            function nix_decode_json_file($file, $error) {
+              if (!file_exists($file)) {
+                throw new \RuntimeException(sprintf($error, $file));
               }
-            ''}
+              $decoded = json_decode(file_get_contents($file), true);
+
+              if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new \RuntimeException(sprintf("Cannot decode %s, because: %s", $file, json_last_error_msg()));
+              }
+
+              return $decoded;
+            }
             $CONFIG = [
               'apps_paths' => [
                 ${optionalString (cfg.extraApps != { }) "[ 'path' => '${cfg.home}/nix-apps', 'url' => '/nix-apps', 'writable' => false ],"}
@@ -728,7 +767,12 @@ in {
               ${optionalString (c.dbport != null) "'dbport' => '${toString c.dbport}',"}
               ${optionalString (c.dbuser != null) "'dbuser' => '${c.dbuser}',"}
               ${optionalString (c.dbtableprefix != null) "'dbtableprefix' => '${toString c.dbtableprefix}',"}
-              ${optionalString (c.dbpassFile != null) "'dbpassword' => nix_read_secret('${c.dbpassFile}'),"}
+              ${optionalString (c.dbpassFile != null) ''
+                  'dbpassword' => nix_read_secret(
+                    "${c.dbpassFile}"
+                  ),
+                ''
+              }
               'dbtype' => '${c.dbtype}',
               'trusted_domains' => ${writePhpArrary ([ cfg.hostName ] ++ c.extraTrustedDomains)},
               'trusted_proxies' => ${writePhpArrary (c.trustedProxies)},
@@ -736,6 +780,18 @@ in {
               ${optionalString (nextcloudGreaterOrEqualThan "23") "'profile.enabled' => ${boolToString cfg.globalProfiles},"}
               ${objectstoreConfig}
             ];
+
+            $CONFIG = array_replace_recursive($CONFIG, nix_decode_json_file(
+              "${jsonFormat.generate "nextcloud-extraOptions.json" cfg.extraOptions}",
+              "impossible: this should never happen (decoding generated extraOptions file %s failed)"
+            ));
+
+            ${optionalString (cfg.secretFile != null) ''
+              $CONFIG = array_replace_recursive($CONFIG, nix_decode_json_file(
+                "${cfg.secretFile}",
+                "Cannot start Nextcloud, secrets file %s set by NixOS doesn't exist!"
+              ));
+            ''}
           '';
           occInstallCmd = let
             mkExport = { arg, value }: "export ${arg}=${value}";
