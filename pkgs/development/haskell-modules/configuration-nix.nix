@@ -988,7 +988,6 @@ self: super: builtins.intersectAttrs super {
     hls-floskell-plugin
     hls-fourmolu-plugin
     hls-module-name-plugin
-    hls-ormolu-plugin
     hls-pragmas-plugin
     hls-splice-plugin;
   # Tests have file permissions expections that don‘t work with the nix store.
@@ -1004,6 +1003,7 @@ self: super: builtins.intersectAttrs super {
   hls-tactics-plugin = dontCheck super.hls-tactics-plugin;
   hls-call-hierarchy-plugin = dontCheck super.hls-call-hierarchy-plugin;
   hls-selection-range-plugin = dontCheck super.hls-selection-range-plugin;
+  hls-ormolu-plugin = dontCheck super.hls-ormolu-plugin;
 
   # Wants to execute cabal-install to (re-)build itself
   hint = dontCheck super.hint;
