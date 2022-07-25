@@ -8,12 +8,12 @@ buildGoModule rec {
     owner  = "cloudflare";
     repo   = "cloudflared";
     rev    = version;
-    sha256   = "sha256-kc6+jn4eTCw37u+kPJdx/kxiaj8MnIddDbUFpPfWdlw=";
+    hash   = "sha256-kc6+jn4eTCw37u+kPJdx/kxiaj8MnIddDbUFpPfWdlw=";
   };
 
   vendorSha256 = null;
 
-  ldflags = [ "-X main.Version=${version}" "-s" "-w" ];
+  ldflags = [ "-s" "-w" "-X main.Version=${version}" ];
 
   preCheck = ''
     # Workaround for: sshgen_test.go:74: mkdir /homeless-shelter/.cloudflared: no such file or directory
