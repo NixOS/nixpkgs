@@ -13,6 +13,13 @@ rec {
     isx86_64       = { cpu = { family = "x86"; bits = 64; }; };
     isPower        = { cpu = { family = "power"; }; };
     isPower64      = { cpu = { family = "power"; bits = 64; }; };
+    # This ABI is the default in NixOS PowerPC64 BE, but not on mainline GCC,
+    # so it sometimes causes issues in certain packages that makes the wrong
+    # assumption on the used ABI.
+    isAbiElfv2 = [
+      { abi = { abi = "elfv2"; }; }
+      { abi = { name = "musl"; }; cpu = { family = "power"; bits = 64; }; }
+    ];
     isx86          = { cpu = { family = "x86"; }; };
     isAarch32      = { cpu = { family = "arm"; bits = 32; }; };
     isAarch64      = { cpu = { family = "arm"; bits = 64; }; };
