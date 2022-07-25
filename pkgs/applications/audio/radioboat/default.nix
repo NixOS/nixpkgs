@@ -7,6 +7,7 @@
 , nix-update-script
 , testers
 , radioboat
+, stdenv
 }:
 
 buildGoModule rec {
@@ -34,7 +35,7 @@ buildGoModule rec {
     wrapProgram $out/bin/radioboat --prefix PATH ":" "${lib.makeBinPath [ mpv ]}";
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     installShellCompletion --cmd radioboat \
       --bash <($out/bin/radioboat completion bash) \
       --fish <($out/bin/radioboat completion fish) \

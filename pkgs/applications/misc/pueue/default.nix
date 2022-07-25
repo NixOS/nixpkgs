@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   checkFlags = [ "--skip=test_single_huge_payload" "--skip=test_create_unix_socket" ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     for shell in bash fish zsh; do
       $out/bin/pueue completions $shell .
     done

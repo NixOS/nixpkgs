@@ -4,6 +4,7 @@
 , lib
 , testers
 , kubevirt
+, stdenv
 }:
 
 buildGoModule rec {
@@ -31,7 +32,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     installShellCompletion --cmd virtctl \
       --bash <($out/bin/virtctl completion bash) \
       --fish <($out/bin/virtctl completion fish) \

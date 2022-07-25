@@ -8,6 +8,7 @@
 , requests
 , setuptools
 , terminaltables
+, stdenv
 }:
 
 let
@@ -62,7 +63,7 @@ buildPythonApplication rec {
   '';
 
   nativeBuildInputs = [ installShellFiles ];
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     installShellCompletion --cmd linode-cli --bash <($out/bin/linode-cli --skip-config completion bash)
   '';
 

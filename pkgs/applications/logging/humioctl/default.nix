@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, installShellFiles, lib }:
+{ buildGoModule, fetchFromGitHub, installShellFiles, lib, stdenv }:
 
 let
   humioCtlVersion = "0.28.11";
@@ -24,7 +24,7 @@ in buildGoModule {
 
     nativeBuildInputs = [ installShellFiles ];
 
-    postInstall = ''
+    postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
       $out/bin/humioctl completion bash > humioctl.bash
       $out/bin/humioctl completion zsh > humioctl.zsh
       installShellCompletion humioctl.{bash,zsh}

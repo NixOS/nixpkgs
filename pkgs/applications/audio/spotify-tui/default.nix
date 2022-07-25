@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.isLinux [ openssl libxcb ]
     ++ lib.optionals stdenv.isDarwin [ AppKit Security ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     for shell in bash fish zsh; do
       $out/bin/spt --completions $shell > spt.$shell
       installShellCompletion spt.$shell
