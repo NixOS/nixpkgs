@@ -163,6 +163,8 @@ package-maintainers:
     - spago
     - stack
     - termonad
+  centromere:
+    - nfc
   dalpd:
     - ghc-vis
     - svgcairo
