@@ -38688,6 +38688,8 @@ with pkgs;
 
   uhexen2 = callPackage ../games/uhexen2 { };
 
+  ultima-xu4 = callPackage ../games/ultima-xu4 { };
+
   ultimatestunts = callPackage ../games/ultimatestunts { };
 
   ultrastar-creator = libsForQt5.callPackage ../tools/misc/ultrastar-creator { };
