@@ -8,6 +8,7 @@
 , libgudev
 , libpcap
 , meson
+, mesonEmulatorHook
 , ninja
 , pkg-config
 , python3
@@ -42,9 +43,12 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
+    gobject-introspection
     glib
     systemd
     libgudev
