@@ -27861,6 +27861,10 @@ with pkgs;
 
   tiramisu = callPackage ../applications/misc/tiramisu { };
 
+  rlaunch = callPackage ../applications/misc/rlaunch {
+    inherit (xorg) libX11 libXft libXinerama;
+  };
+
   rootbar = callPackage ../applications/misc/rootbar {};
 
   waybar = callPackage ../applications/misc/waybar {};
