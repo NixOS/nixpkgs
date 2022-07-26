@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "1b0iz7da1sgifx1a5wdyx1kxbzys53v0kyk8nhxfipllmm5qka3k";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [ autoreconfHook ];
 
   # tests are super flaky unfortunately, and regularily break.
@@ -68,6 +69,6 @@ stdenv.mkDerivation rec {
     description = "Programmable completion for the bash shell";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.peti maintainers.xfix ];
+    maintainers = [ maintainers.xfix ];
   };
 }

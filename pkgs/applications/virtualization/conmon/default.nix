@@ -4,23 +4,24 @@
 , pkg-config
 , glib
 , glibc
+, libseccomp
 , systemd
 , nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "conmon";
-  version = "2.0.29";
+  version = "2.1.3";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Idt+bN9Lf6GEjdGC/sM9Ln1ohXhUy78CrmJxSDA2Y0o=";
+    sha256 = "sha256-/5HYEcJzdGAiaMAh82vlDjzwEc7bf9gAYOAz7fkysR0=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ glib systemd ]
+  buildInputs = [ glib libseccomp systemd ]
   ++ lib.optionals (!stdenv.hostPlatform.isMusl) [ glibc glibc.static ];
 
   # manpage requires building the vendored go-md2man
@@ -31,6 +32,9 @@ stdenv.mkDerivation rec {
     install -D bin/conmon -t $out/bin
     runHook postInstall
   '';
+
+  enableParallelBuilding = true;
+  strictDeps = true;
 
   passthru.tests = { inherit (nixosTests) cri-o podman; };
 

@@ -12,7 +12,7 @@
 , polkit
 , gnutls
 , ppp
-, dhcp
+, dhcpcd
 , iptables
 , nftables
 , python3
@@ -54,11 +54,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "networkmanager";
-  version = "1.32.4";
+  version = "1.38.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/${lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
-    sha256 = "sha256-Kay9QceLfvh/+I/sU2DR6vi1tvy5BVXXORq8XjaSMVg=";
+    sha256 = "sha256-nP/SrcaGUTFt8tL4oJ4XF7sdDC6jic/HIaAQnbmzWCY=";
   };
 
   outputs = [ "out" "dev" "devdoc" "man" "doc" ];
@@ -96,9 +96,9 @@ stdenv.mkDerivation rec {
     "-Dresolvconf=${openresolv}/bin/resolvconf"
 
     # DHCP clients
-    "-Ddhclient=${dhcp}/bin/dhclient"
-    # Upstream prefers dhclient, so don't add dhcpcd to the closure
-    "-Ddhcpcd=no"
+    # ISC DHCP client has reached it's end of life, so stop using it
+    "-Ddhclient=no"
+    "-Ddhcpcd=${dhcpcd}/bin/dhcpcd"
     "-Ddhcpcanon=no"
 
     # Miscellaneous
@@ -119,6 +119,22 @@ stdenv.mkDerivation rec {
     # Meson does not support using different directories during build and
     # for installation like Autotools did with flags passed to make install.
     ./fix-install-paths.patch
+
+    (fetchpatch {
+      # Prevent downgrade to plain network on Enhanced Open profiles
+      url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/b7946e50acc0d20d31b0c1098fdadc2f105ba799.patch";
+      hash = "sha256-CdZiubfqhJQ5w4+s9O8C5WI9Ls/paONzDX4rX6yEmS0=";
+    })
+    (fetchpatch {
+      # Treat OWE BSSIDs as valid candidates for open profiles
+      url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/dd80cdcc1bd5e2535b8e4a1d1d0c62f1d3328a7c.patch";
+      hash = "sha256-QMZvWN3g8K+UH6y05+RkCmF+gHHU4pB+UXfU770AUis=";
+    })
+    (fetchpatch {
+      # Allow distinguishing pure OWE networks from those with transition mode enabled
+      url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/13ea8d2e7dddd8279c82230594cea533ca349dd3.patch";
+      hash = "sha256-BiINGzX/Zp8pwdbMiDScrZvrHtH7coXkZm1HScFuFWA=";
+    })
   ];
 
   buildInputs = [
@@ -191,7 +207,7 @@ stdenv.mkDerivation rec {
     description = "Network configuration and management tool";
     license = licenses.gpl2Plus;
     changelog = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/raw/${version}/NEWS";
-    maintainers = teams.freedesktop.members ++ (with maintainers; [ phreedom domenkozar obadz maxeaubrey ]);
+    maintainers = teams.freedesktop.members ++ (with maintainers; [ domenkozar obadz maxeaubrey ]);
     platforms = platforms.linux;
   };
 }

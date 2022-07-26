@@ -10,13 +10,13 @@
 
 mkDerivation rec {
   pname = "ddcui";
-  version = "0.1.2";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "rockowitz";
     repo = "ddcui";
     rev = "v${version}";
-    sha256 = "0myma1zw6dlygv3xbin662d91zcnwss10syf12q2fppkrd8qdgqf";
+    sha256 = "sha256-a8UGdVLi+i8hvWE3M5d92vnm3VryxRR56jXeBtB2PSk=";
   };
 
   nativeBuildInputs = [

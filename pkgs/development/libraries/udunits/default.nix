@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ AndersonTorres pSub ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
+    mainProgram = "udunits2";
   };
 }

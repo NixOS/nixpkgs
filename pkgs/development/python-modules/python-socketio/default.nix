@@ -1,34 +1,48 @@
 { lib
+, aiohttp
 , bidict
 , buildPythonPackage
 , fetchFromGitHub
 , mock
+, msgpack
 , pytestCheckHook
 , python-engineio
+, pythonOlder
+, requests
+, websocket-client
 }:
 
 buildPythonPackage rec {
   pname = "python-socketio";
-  version = "5.0.4";
+  version = "5.7.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "python-socketio";
     rev = "v${version}";
-    sha256 = "0mpqr53mrdzk9ki24y1inpsfvjlvm7pvxf8q4d52m80i5pcd5v5q";
+    sha256 = "sha256-POYD4w0iBAdaN2L4cpLJz1aCE9J0Iob//VN94/5lJLw=";
   };
 
   propagatedBuildInputs = [
+    aiohttp
     bidict
     python-engineio
+    requests
+    websocket-client
   ];
 
   checkInputs = [
     mock
+    msgpack
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "socketio" ];
+  pythonImportsCheck = [
+    "socketio"
+  ];
 
   meta = with lib; {
     description = "Python Socket.IO server and client";

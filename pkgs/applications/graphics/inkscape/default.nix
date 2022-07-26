@@ -1,14 +1,13 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , boehmgc
 , boost
 , cairo
 , cmake
 , fetchurl
-, fetchpatch
 , gettext
 , ghostscript
 , glib
-, glib-networking
 , glibmm
 , gsl
 , gspell
@@ -44,19 +43,25 @@
 let
   python3Env = python3.withPackages
     (ps: with ps; [
+      appdirs
+      beautifulsoup4
+      cachecontrol
       numpy
       lxml
       pillow
       scour
-    ]);
+      pyserial
+      requests
+      pygobject3
+    ] ++ inkex.propagatedBuildInputs);
 in
 stdenv.mkDerivation rec {
   pname = "inkscape";
-  version = "1.1";
+  version = "1.2.1";
 
   src = fetchurl {
-    url = "https://media.inkscape.org/dl/resources/file/${pname}-${version}.tar.xz";
-    sha256 = "sha256-cebozj/fcC9Z28SidmZeuYLreCKwKbvb7O0t9DAXleY=";
+    url = "https://media.inkscape.org/dl/resources/file/inkscape-${version}.tar.xz";
+    sha256 = "Rs59oOunykutwdtw6cu2fgrfm7NCaH3G4ItcohuNTBs=";
   };
 
   # Inkscape hits the ARGMAX when linking on macOS. It appears to be
@@ -71,15 +76,6 @@ stdenv.mkDerivation rec {
       # Python is used at run-time to execute scripts,
       # e.g., those from the "Effects" menu.
       python3 = "${python3Env}/bin/python";
-    })
-
-    # Fix parsing paths by Python extensions.
-    # https://gitlab.com/inkscape/extensions/-/merge_requests/342
-    (fetchpatch {
-      url = "https://gitlab.com/inkscape/extensions/-/commit/a82c382c610d37837c8f3f5b13224bab8fd3667e.patch";
-      sha256 = "YWrgjCnQ9q6BUsxSLQojIXnDzPxM/SgrIfj1gxQ/JKM=";
-      stripLen = 1;
-      extraPrefix = "share/extensions/";
     })
   ];
 
@@ -117,7 +113,6 @@ stdenv.mkDerivation rec {
     boost
     gettext
     glib
-    glib-networking
     glibmm
     gsl
     gtkmm3

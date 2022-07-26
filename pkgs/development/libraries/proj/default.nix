@@ -3,58 +3,55 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
+, buildPackages
 , sqlite
 , libtiff
 , curl
 , gtest
-, fetchpatch
+, nlohmann_json
 }:
 
 stdenv.mkDerivation rec {
   pname = "proj";
-  version = "7.2.1";
+  version = "9.0.0";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "PROJ";
     rev = version;
-    sha256 = "0mymvfvs8xggl4axvlj7kc1ksd9g94kaz6w1vdv0x2y5mqk93gx9";
+    sha256 = "sha256-zMP+WzC65BFz8g8mF5t7toqxmxCJePysd6WJuqpe8yg=";
   };
 
-  patches = [
-    (fetchpatch { # https://github.com/OSGeo/PROJ/issues/2557
-      name = "gie_self_tests-fail.diff"; # included in >= 8.0.1
-      url = "https://github.com/OSGeo/PROJ/commit/6f1a3c4648bf06862dca0b3725cbb3b7ee0284e3.diff";
-      sha256 = "0gapny0a9c3r0x9szjgn86sspjrrf4vwbija77b17w6ci5cq4pdf";
-    })
-  ];
-
-  postPatch = lib.optionalString (version == "7.2.1") ''
-    substituteInPlace CMakeLists.txt \
-      --replace "MAJOR 7 MINOR 2 PATCH 0" "MAJOR 7 MINOR 2 PATCH 1"
-  '';
-
-  outputs = [ "out" "dev"];
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ sqlite libtiff curl ];
+  buildInputs = [ sqlite libtiff curl nlohmann_json ];
 
   checkInputs = [ gtest ];
 
   cmakeFlags = [
     "-DUSE_EXTERNAL_GTEST=ON"
+    "-DRUN_NETWORK_DEPENDENT_TESTS=OFF"
+    "-DNLOHMANN_JSON_ORIGIN=external"
+    "-DEXE_SQLITE3=${buildPackages.sqlite}/bin/sqlite3"
   ];
 
-  doCheck = stdenv.is64bit;
+  preCheck =
+    let
+      libPathEnvVar = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+    in
+      ''
+        export HOME=$TMPDIR
+        export TMP=$TMPDIR
+        export ${libPathEnvVar}=$PWD/lib
+      '';
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
+  doCheck = true;
 
   meta = with lib; {
     description = "Cartographic Projections Library";
-    homepage = "https://proj4.org";
+    homepage = "https://proj.org/";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ vbgl dotlambda ];

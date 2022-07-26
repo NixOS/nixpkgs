@@ -2,15 +2,17 @@
 
 buildDunePackage rec {
   pname = "bigarray-compat";
-  version = "1.0.0";
+  version = "1.1.0";
 
   useDune2 = true;
+
+  minimalOCamlVersion = "4.02";
 
   src = fetchFromGitHub {
     owner = "mirage";
     repo = pname;
     rev = "v${version}";
-    sha256 = "06j1dwlpisxshdd0nab4n4x266gg1s1n8na16lpgw3fvcznwnimz";
+    sha256 = "sha256-2JVopggK2JuXWEPu8qn12F1jQIJ9OV89XY1rHtUqLkI=";
   };
 
   meta = {

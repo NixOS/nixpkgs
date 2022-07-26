@@ -4,9 +4,10 @@
 , fetchurl, pkg-config, perl, texinfo, setupDebugInfoDirs, buildPackages
 
 # Run time
-, ncurses, readline, gmp, mpfr, expat, libipt, zlib, dejagnu
+, ncurses, readline, gmp, mpfr, expat, libipt, zlib, dejagnu, sourceHighlight
 
 , pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python3 ? null
+, enableDebuginfod ? false, elfutils
 , guile ? null
 , safePaths ? [
    # $debugdir:$datadir/auto-load are whitelisted by default by GDB
@@ -14,6 +15,7 @@
    # targetPackages so we get the right libc when cross-compiling and using buildPackages.gdb
    targetPackages.stdenv.cc.cc.lib
   ]
+, writeScript
 }:
 
 let
@@ -26,29 +28,39 @@ assert pythonSupport -> python3 != null;
 
 stdenv.mkDerivation rec {
   pname = targetPrefix + basename;
-  version = "10.2";
+  version = "12.1";
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}-${version}.tar.xz";
-    sha256 = "0aag1c0fw875pvhjg1qp7x8pf6gf92bjv5gcic5716scacyj58da";
+    hash = "sha256-DheTv48rVNU/Rt6oTM/URvSPgbKXsoxPf8AXuBjWn+0=";
   };
 
-  postPatch = if stdenv.isDarwin then ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace gdb/darwin-nat.c \
       --replace '#include "bfd/mach-o.h"' '#include "mach-o.h"'
-  '' else null;
+  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
+    substituteInPlace sim/erc32/erc32.c  --replace sys/fcntl.h fcntl.h
+    substituteInPlace sim/erc32/interf.c  --replace sys/fcntl.h fcntl.h
+    substituteInPlace sim/erc32/sis.c  --replace sys/fcntl.h fcntl.h
+    substituteInPlace sim/ppc/emul_unix.c --replace sys/termios.h termios.h
+  '';
 
   patches = [
     ./debug-info-from-env.patch
   ] ++ lib.optionals stdenv.isDarwin [
     ./darwin-target-match.patch
+  # Does not nave to be conditional. We apply it conditionally
+  # to speed up inclusion to nearby nixos release.
+  ] ++ lib.optionals stdenv.is32bit [
+    ./32-bit-BFD_VMA-format.patch
   ];
 
   nativeBuildInputs = [ pkg-config texinfo perl setupDebugInfoDirs ];
 
-  buildInputs = [ ncurses readline gmp mpfr expat libipt zlib guile ]
+  buildInputs = [ ncurses readline gmp mpfr expat libipt zlib guile sourceHighlight ]
     ++ lib.optional pythonSupport python3
-    ++ lib.optional doCheck dejagnu;
+    ++ lib.optional doCheck dejagnu
+    ++ lib.optional enableDebuginfod (elfutils.override { enableDebuginfod = true; });
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
@@ -89,7 +101,8 @@ stdenv.mkDerivation rec {
     "--with-expat" "--with-libexpat-prefix=${expat.dev}"
     "--with-auto-load-safe-path=${builtins.concatStringsSep ":" safePaths}"
   ] ++ lib.optional (!pythonSupport) "--without-python"
-    ++ lib.optional stdenv.hostPlatform.isMusl "--disable-nls";
+    ++ lib.optional stdenv.hostPlatform.isMusl "--disable-nls"
+    ++ lib.optional enableDebuginfod "--with-debuginfod=yes";
 
   postInstall =
     '' # Remove Info files already provided by Binutils and other packages.
@@ -98,6 +111,20 @@ stdenv.mkDerivation rec {
 
   # TODO: Investigate & fix the test failures.
   doCheck = false;
+
+  passthru = {
+    updateScript = writeScript "update-gdb" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl pcre common-updater-scripts
+
+      set -eu -o pipefail
+
+      # Expect the text in format of '<h3>GDB version 12.1</h3>'
+      new_version="$(curl -s https://www.sourceware.org/gdb/ |
+          pcregrep -o1 '<h3>GDB version ([0-9.]+)</h3>')"
+      update-source-version ${pname} "$new_version"
+    '';
+  };
 
   meta = with lib; {
     description = "The GNU Project debugger";

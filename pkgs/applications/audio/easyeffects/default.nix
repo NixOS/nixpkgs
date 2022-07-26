@@ -4,18 +4,20 @@
 , fetchFromGitHub
 , calf
 , fftwFloat
+, fmt_8
 , glib
-, glibmm
 , gtk4
-, gtkmm4
 , itstool
+, libadwaita
 , libbs2b
 , libebur128
 , libsamplerate
+, libsigcxx30
 , libsndfile
 , lilv
 , lsp-plugins
 , lv2
+, mda_lv2
 , meson
 , ninja
 , nlohmann_json
@@ -25,20 +27,21 @@
 , rnnoise
 , rubberband
 , speexdsp
-, wrapGAppsHook
+, tbb
+, wrapGAppsHook4
 , zam-plugins
 , zita-convolver
 }:
 
 stdenv.mkDerivation rec {
   pname = "easyeffects";
-  version = "6.0.3";
+  version = "6.2.6";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     rev = "v${version}";
-    sha256 = "sha256-GzqPC/m/HMthLMamhJ4EXX6fxZYscdX1QmXgqHOPEcg=";
+    sha256 = "sha256-1kXYh2Qk0Wj0LgHTcRVAKro7LAPV/UM5i9VmHjmxTx0=";
   };
 
   nativeBuildInputs = [
@@ -48,18 +51,19 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     fftwFloat
+    fmt_8
     glib
-    glibmm
     gtk4
-    gtkmm4
+    libadwaita
     libbs2b
     libebur128
     libsamplerate
+    libsigcxx30
     libsndfile
     lilv
     lv2
@@ -68,6 +72,7 @@ stdenv.mkDerivation rec {
     rnnoise
     rubberband
     speexdsp
+    tbb
     zita-convolver
   ];
 
@@ -79,12 +84,13 @@ stdenv.mkDerivation rec {
   preFixup =
     let
       lv2Plugins = [
-        calf # limiter, compressor exciter, bass enhancer and others
-        lsp-plugins # delay
+        calf # compressor exciter, bass enhancer and others
+        lsp-plugins # delay, limiter, multiband compressor
+        mda_lv2 # loudness
+        zam-plugins # maximizer
       ];
       ladspaPlugins = [
         rubberband # pitch shifting
-        zam-plugins # maximizer
       ];
     in
     ''

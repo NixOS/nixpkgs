@@ -10,6 +10,9 @@
 # Go linker flags, passed to go via -ldflags
 , ldflags ? []
 
+# Go tags, passed to go via -tag
+, tags ? []
+
 # We want parallel builds by default
 , enableParallelBuilding ? true
 
@@ -39,6 +42,10 @@
 , allowGoReference ? false
 
 , CGO_ENABLED ? go.CGO_ENABLED
+
+# needed for buildFlags{,Array} warning
+, buildFlags ? ""
+, buildFlagsArray ? ""
 
 , meta ? {}, ... } @ args:
 
@@ -143,15 +150,32 @@ let
 
       runHook renameImports
 
+      exclude='\(/_\|examples\|Godeps\|testdata'
+      if [[ -n "$excludedPackages" ]]; then
+        IFS=' ' read -r -a excludedArr <<<$excludedPackages
+        printf -v excludedAlternates '%s\\|' "''${excludedArr[@]}"
+        excludedAlternates=''${excludedAlternates%\\|} # drop final \| added by printf
+        exclude+='\|'"$excludedAlternates"
+      fi
+      exclude+='\)'
+
       buildGoDir() {
-        local d; local cmd;
-        cmd="$1"
-        d="$2"
+        local cmd="$1" dir="$2"
+
         . $TMPDIR/buildFlagsArray
-        echo "$d" | grep -q "\(/_\|examples\|Godeps\)" && return 0
-        [ -n "$excludedPackages" ] && echo "$d" | grep -q "$excludedPackages" && return 0
+
+        declare -a flags
+        flags+=($buildFlags "''${buildFlagsArray[@]}")
+        flags+=(''${tags:+-tags=${lib.concatStringsSep "," tags}})
+        flags+=(''${ldflags:+-ldflags="$ldflags"})
+        flags+=("-v" "-p" "$NIX_BUILD_CORES")
+
+        if [ "$cmd" = "test" ]; then
+          flags+=($checkFlags)
+        fi
+
         local OUT
-        if ! OUT="$(go $cmd $buildFlags "''${buildFlagsArray[@]}" ''${ldflags:+-ldflags="$ldflags"} -v -p $NIX_BUILD_CORES $d 2>&1)"; then
+        if ! OUT="$(go $cmd "''${flags[@]}" $dir 2>&1)"; then
           if ! echo "$OUT" | grep -qE '(no( buildable| non-test)?|build constraints exclude all) Go (source )?files'; then
             echo "$OUT" >&2
             return 1
@@ -170,7 +194,7 @@ let
           echo "$subPackages" | sed "s,\(^\| \),\1$goPackagePath/,g"
         else
           pushd "$NIX_BUILD_TOP/go/src" >/dev/null
-          find "$goPackagePath" -type f -name \*$type.go -exec dirname {} \; | grep -v "/vendor/" | sort | uniq
+          find "$goPackagePath" -type f -name \*$type.go -exec dirname {} \; | grep -v "/vendor/" | sort | uniq | grep -v "$exclude"
           popd >/dev/null
         fi
       }
@@ -188,6 +212,7 @@ let
           export NIX_BUILD_CORES=1
       fi
       for pkg in $(getGoDirs ""); do
+        echo "Building subPackage $pkg"
         buildGoDir install "$pkg"
       done
     '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
@@ -210,7 +235,7 @@ let
       runHook preCheck
 
       for pkg in $(getGoDirs test); do
-        buildGoDir test $checkFlags "$pkg"
+        buildGoDir test "$pkg"
       done
 
       runHook postCheck
@@ -254,4 +279,6 @@ let
     } // meta;
   });
 in
+lib.warnIf (buildFlags != "" || buildFlagsArray != "")
+  "Use the `ldflags` and/or `tags` attributes instead of `buildFlags`/`buildFlagsArray`"
   package

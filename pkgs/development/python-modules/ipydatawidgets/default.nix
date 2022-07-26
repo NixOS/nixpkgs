@@ -5,6 +5,7 @@
 , pytest
 , pytest-cov
 , nbval
+, jupyter-packaging
 , ipywidgets
 , numpy
 , six
@@ -21,6 +22,12 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "d0e4b58b59b508165e8562b8f5d1dbfcd739855847ec0477bd9185a5e9b7c5bc";
   };
+
+  nativeBuildInputs = [
+    jupyter-packaging
+  ];
+
+  setupPyBuildFlags = [ "--skip-npm" ];
 
   propagatedBuildInputs = [
     ipywidgets

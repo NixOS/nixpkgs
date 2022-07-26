@@ -2,10 +2,9 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "sympa";
   meta.maintainers = with lib.maintainers; [ mmilata ];
 
-  machine =
+  nodes.machine =
     { ... }:
     {
-      virtualisation.memorySize = 1024;
 
       services.sympa = {
         enable = true;

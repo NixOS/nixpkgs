@@ -1,24 +1,25 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , ctags
+, cmark
 , appstream-glib
 , desktop-file-utils
-, docbook_xsl
-, docbook_xml_dtd_43
 , fetchurl
 , flatpak
 , gnome
 , libgit2-glib
+, gi-docgen
 , gobject-introspection
 , glade
 , gspell
-, gtk-doc
 , gtk3
 , gtksourceview4
 , json-glib
 , jsonrpc-glib
 , libdazzle
+, libhandy
 , libpeas
-, libportal
+, libportal-gtk3
 , libxml2
 , meson
 , ninja
@@ -39,20 +40,20 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-builder";
-  version = "3.40.2";
+  version = "42.1";
+
+  outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "16kikslvcfjqj4q3j857mq9i8cyd965b3lvfzcwijc91x3ylr15j";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "XU1RtwKGW0gBcgHwxgfiSifXIDGo9ciNT86HW1VFZwo=";
   };
 
   nativeBuildInputs = [
     appstream-glib
     desktop-file-utils
-    docbook_xsl
-    docbook_xml_dtd_43
+    gi-docgen
     gobject-introspection
-    gtk-doc
     meson
     ninja
     pkg-config
@@ -63,12 +64,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     ctags
+    cmark
     flatpak
     gnome.devhelp
     glade
     libgit2-glib
     libpeas
-    libportal
+    libportal-gtk3
     vte
     gspell
     gtk3
@@ -76,6 +78,7 @@ stdenv.mkDerivation rec {
     json-glib
     jsonrpc-glib
     libdazzle
+    libhandy
     libxml2
     ostree
     pcre
@@ -92,12 +95,6 @@ stdenv.mkDerivation rec {
     xvfb-run
   ];
 
-  outputs = [ "out" "devdoc" ];
-
-  prePatch = ''
-    patchShebangs build-aux/meson/post_install.py
-  '';
-
   mesonFlags = [
     "-Ddocs=true"
 
@@ -109,9 +106,11 @@ stdenv.mkDerivation rec {
     "-Dnetwork_tests=false"
   ];
 
-  # Some tests fail due to being unable to find the Vte typelib, and I don't
-  # understand why. Somebody should look into fixing this.
   doCheck = true;
+
+  postPatch = ''
+    patchShebangs build-aux/meson/post_install.py
+  '';
 
   checkPhase = ''
     export NO_AT_BRIDGE=1
@@ -134,9 +133,13 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput share/doc/libide "$devdoc"
+  '';
+
   passthru.updateScript = gnome.updateScript {
     packageName = pname;
-    versionPolicy = "odd-unstable";
   };
 
   meta = with lib; {

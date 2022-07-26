@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, flex, bison, python3, autoconf, automake, gnulib, libtool
+{ lib, stdenv, fetchurl, flex, bison, python3, autoreconfHook, gnulib, libtool, bash
 , gettext, ncurses, libusb-compat-0_1, freetype, qemu, lvm2, unifont, pkg-config
 , buildPackages
 , fetchpatch
@@ -51,10 +51,9 @@ stdenv.mkDerivation rec {
   pname = "grub";
   inherit version;
 
-  src = fetchgit {
-    url = "git://git.savannah.gnu.org/grub.git";
-    rev = "${pname}-${version}";
-    sha256 = "1vkxr6b4p7h259vayjw8bfgqj57x68byy939y4bmyaz6g7fgrv0f";
+  src = fetchurl {
+    url = "mirror://gnu/grub/grub-${version}.tar.xz";
+    sha256 = "sha256-t56kSvkbk9F80/6Ava5u1DdwZ4qaWuGSzOqAPrtlfuE=";
   };
 
   patches = [
@@ -64,6 +63,13 @@ stdenv.mkDerivation rec {
       # https://lists.gnu.org/archive/html/grub-devel/2016-04/msg00089.html
       url = "https://marc.info/?l=grub-devel&m=146193404929072&q=mbox";
       sha256 = "00wa1q5adiass6i0x7p98vynj9vsz1w0gn1g4dgz89v35mpyw2bi";
+    })
+
+    # Pull upstream patch to fix linkage against binutils-2.36.
+    (fetchpatch {
+      name = "binutils-2.36";
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=b98275138bf4fc250a1c362dfd2c8b1cf2421701";
+      sha256 = "001m058bsl2pcb0ii84jfm5ias8zgzabrfy6k2cc9w6w1y51ii82";
     })
   ];
 
@@ -75,14 +81,16 @@ stdenv.mkDerivation rec {
   '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ bison flex python3 pkg-config autoconf automake gettext freetype ];
-  buildInputs = [ ncurses libusb-compat-0_1 freetype lvm2 fuse libtool ]
+  nativeBuildInputs = [ bison flex python3 pkg-config gettext freetype autoreconfHook ];
+  buildInputs = [ ncurses libusb-compat-0_1 freetype lvm2 fuse libtool bash ]
     ++ optional doCheck qemu
     ++ optional zfsSupport zfs;
 
   strictDeps = true;
 
   hardeningDisable = [ "all" ];
+
+  separateDebugInfo = !xenSupport;
 
   # Work around a bug in the generated flex lexer (upstream flex bug?)
   NIX_CFLAGS_COMPILE = "-Wno-error";
@@ -108,8 +116,6 @@ stdenv.mkDerivation rec {
       unset CPP # setting CPP intereferes with dependency calculation
 
       patchShebangs .
-
-      ./bootstrap --no-git --gnulib-srcdir=${gnulib}
 
       substituteInPlace ./configure --replace '/usr/share/fonts/unifont' '${unifont}/share/fonts'
     '';
@@ -144,6 +150,9 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # Avoid a runtime reference to gcc
     sed -i $out/lib/grub/*/modinfo.sh -e "/grub_target_cppflags=/ s|'.*'|' '|"
+    # just adding bash to buildInputs wasn't enough to fix the shebang
+    substituteInPlace $out/lib/grub/*/modinfo.sh \
+      --replace ${buildPackages.bash} "/usr/bin/bash"
   '';
 
   passthru.tests = {

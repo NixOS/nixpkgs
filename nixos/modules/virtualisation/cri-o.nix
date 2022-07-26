@@ -38,27 +38,27 @@ in
       type = types.nullOr types.str;
       default = null;
       description = "Override the default pause image for pod sandboxes";
-      example = [ "k8s.gcr.io/pause:3.2" ];
+      example = "k8s.gcr.io/pause:3.2";
     };
 
     pauseCommand = mkOption {
       type = types.nullOr types.str;
       default = null;
       description = "Override the default pause command";
-      example = [ "/pause" ];
+      example = "/pause";
     };
 
     runtime = mkOption {
       type = types.nullOr types.str;
       default = null;
       description = "Override the default runtime";
-      example = [ "crun" ];
+      example = "crun";
     };
 
     extraPackages = mkOption {
       type = with types; listOf package;
       default = [ ];
-      example = literalExample ''
+      example = literalExpression ''
         [
           pkgs.gvisor
         ]

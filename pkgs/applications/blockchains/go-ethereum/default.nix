@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, libobjc, IOKit }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, libobjc, IOKit, nixosTests }:
 
 let
   # A list of binaries to put into separate outputs
@@ -9,17 +9,16 @@ let
 
 in buildGoModule rec {
   pname = "go-ethereum";
-  version = "1.10.6";
+  version = "1.10.20";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-4lapkoxSKdXlD6rmUxnlSKrfH+DeV6/wV05CqJjuzjA=";
+    sha256 = "sha256-PIQP08QxGJmla7LKEtnEXmwJxDYh02q4fmRHZsYtthU=";
   };
 
-  runVend = true;
-  vendorSha256 = "sha256-5qi01y0SIEI0WRYu2I2RN94QFS8rrlioFvnRqqp6wtk=";
+  vendorSha256 = "sha256-AlXfKytDrQrp0gvnC5/gTlJAVJBAQNHm4MoBu9O9jM4=";
 
   doCheck = false;
 
@@ -51,10 +50,12 @@ in buildGoModule rec {
   propagatedBuildInputs =
     lib.optionals stdenv.isDarwin [ libobjc IOKit ];
 
+  passthru.tests = { inherit (nixosTests) geth; };
+
   meta = with lib; {
     homepage = "https://geth.ethereum.org/";
     description = "Official golang implementation of the Ethereum protocol";
     license = with licenses; [ lgpl3Plus gpl3Plus ];
-    maintainers = with maintainers; [ adisbladis lionello xrelkd RaghavSood ];
+    maintainers = with maintainers; [ adisbladis lionello RaghavSood ];
   };
 }

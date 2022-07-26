@@ -10,13 +10,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "chicken";
-  version = "5.2.0";
+  version = "5.3.0";
 
   binaryVersion = 11;
 
   src = fetchurl {
     url = "https://code.call-cc.org/releases/${version}/chicken-${version}.tar.gz";
-    sha256 = "1yl0hxm9cirgcp8jgxp6vv29lpswfvaw3zfkh6rsj0vkrv44k4c1";
+    sha256 = "sha256-w62Z2PnhftgQkS75gaw7DC4vRvsOzAM7XDttyhvbDXY=";
   };
 
   setupHook = lib.optional (bootstrap-chicken != null) ./setup-hook.sh;
@@ -45,10 +45,15 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
   postCheck = ''
     ./csi -R chicken.pathname -R chicken.platform \
        -p "(assert (equal? \"${toString binaryVersion}\" (pathname-file (car (repository-path)))))"
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/chicken -version
   '';
 
   meta = {

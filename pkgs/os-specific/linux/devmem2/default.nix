@@ -1,7 +1,8 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
-  name = "devmem2-2004-08-05";
+  pname = "devmem2";
+  version = "unstable-2004-08-05";
 
   src = fetchurl {
     urls = [

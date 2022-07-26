@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
 , cmake
 , glib
 , gtk3
@@ -9,15 +9,18 @@
 , perl
 , pkg-config
 , vte
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "sakura";
-  version = "3.8.3";
+  version = "3.8.4";
 
-  src = fetchurl {
-    url = "https://launchpad.net/${pname}/trunk/${version}/+download/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-UEDc3TjoqjLNZtWGlIZB3VTVQC+31AP0ASQH0fu+U+Q=";
+  src = fetchFromGitHub {
+    owner = "dabisu";
+    repo = pname;
+    rev = "SAKURA_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-Sqo1gyCvCMlEv1rYqw6P3Dmu10osi/KqB7/WlgTTNAc=";
   };
 
   nativeBuildInputs = [
@@ -36,10 +39,12 @@ stdenv.mkDerivation rec {
 
   # Set path to gsettings-schemata so sakura knows where to find colorchooser,
   # fontchooser etc.
-  postInstall = ''
+  postFixup = ''
     wrapProgram $out/bin/sakura \
       --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/
   '';
+
+  passthru.tests.test = nixosTests.terminal-emulators.sakura;
 
   meta = with lib; {
     homepage = "https://www.pleyades.net/david/projects/sakura";

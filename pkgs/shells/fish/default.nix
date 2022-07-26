@@ -1,8 +1,8 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , coreutils
-, util-linux
 , which
 , gnused
 , gnugrep
@@ -134,7 +134,7 @@ let
 
   fish = stdenv.mkDerivation rec {
     pname = "fish";
-    version = "3.3.1";
+    version = "3.5.1";
 
     src = fetchurl {
       # There are differences between the release tarball and the tarball GitHub
@@ -144,7 +144,7 @@ let
       # --version`), as well as the local documentation for all builtins (and
       # maybe other things).
       url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${pname}-${version}.tar.xz";
-      sha256 = "sha256-tbTuGlJpdiy76ZOkvWUH5nXkEAzpu+hCFKXusrGfrok=";
+      sha256 = "sha256-ptRbPcWkXdMXcuf439/sq8BjmG6PZ9YL18pgzIHbaSg=";
     };
 
     # Fix FHS paths in tests
@@ -180,10 +180,17 @@ let
       rm tests/pexpects/exit.py
       rm tests/pexpects/job_summary.py
       rm tests/pexpects/signals.py
+    '' + lib.optionalString stdenv.isLinux ''
+      # pexpect tests are flaky on aarch64-linux (also x86_64-linux)
+      # See https://github.com/fish-shell/fish-shell/issues/8789
+      rm tests/pexpects/exit_handlers.py
     '';
 
+    outputs = [ "out" "doc" ];
+    strictDeps = true;
     nativeBuildInputs = [
       cmake
+      gettext
     ];
 
     buildInputs = [
@@ -193,13 +200,19 @@ let
     ];
 
     cmakeFlags = [
-      "-DCMAKE_INSTALL_DOCDIR=${placeholder "out"}/share/doc/fish"
+      "-DCMAKE_INSTALL_DOCDIR=${placeholder "doc"}/share/doc/fish"
     ] ++ lib.optionals stdenv.isDarwin [
       "-DMAC_CODESIGN_ID=OFF"
     ];
 
+    # The optional string is kind of an inelegant way to get fish to cross compile.
+    # Fish needs coreutils as a runtime dependency, and it gets put into
+    # CMAKE_PREFIX_PATH, which cmake uses to look up build time programs, so it
+    # was clobbering the PATH. It probably needs to be fixed at a lower level.
     preConfigure = ''
       patchShebangs ./build_tools/git_version_gen.sh
+    '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+      export CMAKE_PREFIX_PATH=
     '';
 
     # Required binaries during execution
@@ -253,8 +266,6 @@ let
       EOF
 
     '' + optionalString stdenv.isLinux ''
-      sed -e "s| ul| ${util-linux}/bin/ul|" \
-          -i "$out/share/fish/functions/__fish_print_help.fish"
       for cur in $out/share/fish/functions/*.fish; do
         sed -e "s|/usr/bin/getent|${getent}/bin/getent|" \
             -i "$cur"
@@ -273,10 +284,10 @@ let
 
     meta = with lib; {
       description = "Smart and user-friendly command line shell";
-      homepage = "http://fishshell.com/";
+      homepage = "https://fishshell.com/";
       license = licenses.gpl2;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ cole-h ];
+      maintainers = with maintainers; [ cole-h winter srapenne ];
     };
 
     passthru = {

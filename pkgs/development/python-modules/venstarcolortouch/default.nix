@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "venstarcolortouch";
-  version = "0.14";
+  version = "0.18";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-wrsu1SffD4/RvDiE6yABfZN/oSDH8Ao/RJK7yL2QKy8=";
+    sha256 = "sha256-ucz0Ejpgiss8boF8dzt45FwpieNoJ6S3DUvtay6FDrw=";
   };
 
   propagatedBuildInputs = [
@@ -19,7 +19,10 @@ buildPythonPackage rec {
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "venstarcolortouch" ];
+
+  pythonImportsCheck = [
+    "venstarcolortouch"
+  ];
 
   meta = with lib; {
     description = "Python interface for Venstar ColorTouch thermostats Resources";

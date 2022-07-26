@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ python toposort rpm ];
 
-  phases = [ "installPhase" "fixupPhase" ];
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p $out/bin
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Create templates of nix expressions from RPM .spec files";
-    maintainers = with maintainers; [ tstrobel ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
     hydraPlatforms = [];
   };

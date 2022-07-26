@@ -1,27 +1,28 @@
-{ lib, buildGoPackage, fetchgit }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "gohai";
-  version = "2018-05-23";
-  rev = "60e13eaed98afa238ad6dfc98224c04fbb7b19b1";
+  version = "unstable-2022-04-12";
 
-  goPackagePath = "github.com/DataDog/gohai";
-
-  src = fetchgit {
-    inherit rev;
-    url    = "https://github.com/DataDog/gohai";
-    sha256 = "15hdw195f6ayrmj1nbyfpfswdai1r1z3qjw927mbma7rwql24dkr";
+  src = fetchFromGitHub {
+    owner = "DataDog";
+    repo = "gohai";
+    rev = "c614f513e87f04d3d19b2d4ae853cc5703f3a9bc";
+    sha256 = "sha256-vdzGGTg9SHYS0OQUn3VvrQGpKxzqxBRXDKOm0c7FvYY=";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "sha256-aN1fwGbBm45e6qdRu+4wnv2ZI7SOsIPONB4vF9o2vlI=";
+
+  ldflags = [ "-s" "-w" ];
+
+  doCheck = false;
 
   meta = with lib; {
-    description      = "System information collector";
-    homepage         = "https://github.com/DataDog/gohai";
-    license          = licenses.mit;
-    maintainers      = [ maintainers.tazjin ];
-    platforms        = platforms.unix;
-    repositories.git = "git://github.com/DataDog/gohai.git";
+    description = "System information collector";
+    homepage = "https://github.com/DataDog/gohai";
+    license = licenses.mit;
+    maintainers = with maintainers; [ tazjin ];
+    platforms = platforms.unix;
 
     longDescription = ''
       Gohai is a tool which collects an inventory of system

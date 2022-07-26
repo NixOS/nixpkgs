@@ -1,10 +1,11 @@
-{lib, stdenv, fetchurl, autoreconfHook }:
+{ lib, stdenv, fetchurl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "gperf-3.0.4";
+  pname = "gperf";
+  version = "3.0.4";
 
   src = fetchurl {
-    url = "mirror://gnu/gperf/${name}.tar.gz";
+    url = "mirror://gnu/gperf/gperf-${version}.tar.gz";
     sha256 = "0gnnm8iqcl52m8iha3sxrzrl9mcyhg7lfrhhqgdn4zj00ji14wbn";
   };
 

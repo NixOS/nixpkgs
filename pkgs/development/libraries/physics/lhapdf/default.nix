@@ -2,15 +2,28 @@
 
 stdenv.mkDerivation rec {
   pname = "lhapdf";
-  version = "6.3.0";
+  version = "6.5.1";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/lhapdf/LHAPDF-${version}.tar.gz";
-    sha256 = "0pcvigpjqzfng06n98bshhhpimiqfg416ak8lz8jdgp6nxr8fkgd";
+    sha256 = "sha256-ElZBniIn0aT5M4f+HagF5kg1FBfTdV6K9aMKNaamZ1E=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  # The Apple SDK only exports locale_t from xlocale.h whereas glibc
+  # had decided that xlocale.h should be a part of locale.h
+  postPatch = lib.optionalString (stdenv.isDarwin && stdenv.cc.isGNU) ''
+    substituteInPlace src/GridPDF.cc --replace '#include <locale>' '#include <xlocale.h>'
+  '';
+
+  nativeBuildInputs = [ makeWrapper ]
+    ++ lib.optionals (python != null && lib.versionAtLeast python.version "3.10") [ python.pkgs.cython ];
   buildInputs = [ python ];
+
+  configureFlags = lib.optionals (python == null) [ "--disable-python" ];
+
+  preBuild = lib.optionalString (python != null && lib.versionAtLeast python.version "3.10") ''
+    rm wrappers/python/lhapdf.cpp
+  '';
 
   enableParallelBuilding = true;
 

@@ -3,9 +3,15 @@
 {
   colorize_nicks = callPackage ./colorize_nicks { };
 
+  edit = callPackage ./edit { };
+
   multiline = callPackage ./multiline {
     inherit (perlPackages) PodParser;
   };
+
+  url_hint = callPackage ./url_hint { };
+
+  weechat-grep = callPackage ./weechat-grep { };
 
   weechat-matrix-bridge = callPackage ./weechat-matrix-bridge {
     inherit (luaPackages) cjson luaffi;
@@ -26,4 +32,6 @@
   buffer_autoset = callPackage ./buffer_autoset { };
 
   highmon = callPackage ./highmon { };
+
+  zncplayback = callPackage ./zncplayback { };
 }

@@ -13,8 +13,7 @@
 let
 
   deps = map (package: stdenv.mkDerivation (with package; {
-    pname = name;
-    inherit version src;
+    inherit pname version src;
 
     buildInputs = [ unzip ];
     unpackPhase = ''
@@ -40,7 +39,7 @@ let
     installPhase = ''
       runHook preInstall
 
-      package=$out/lib/dotnet/${name}/${version}
+      package=$out/lib/dotnet/${pname}/${version}
       mkdir -p $package
       cp -r . $package
       echo "{}" > $package/.nupkg.metadata
@@ -85,9 +84,6 @@ in stdenv.mkDerivation rec {
     rm NuGet.config
     install -m644 -D ${nuget-config} fake-home/.nuget/NuGet/NuGet.Config
     ln -s ${packages}/lib/dotnet fake-home/.nuget/packages
-    HOME=$(pwd)/fake-home dotnet add \
-      src/NuGet/Microsoft.Net.Compilers.Toolset/Microsoft.Net.Compilers.Toolset.Package.csproj \
-      package -n -v 5.10.0-preview.2.7169 nuget.build.tasks.pack
     HOME=$(pwd)/fake-home dotnet msbuild -r -v:m -t:pack \
       -p:Configuration=Release \
       -p:RepositoryUrl="${meta.homepage}" \

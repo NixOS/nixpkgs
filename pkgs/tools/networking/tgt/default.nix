@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tgt";
-  version = "1.0.80";
+  version = "1.0.82";
 
   src = fetchFromGitHub {
     owner = "fujita";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5qBqCHbkL6yw/iT2AtSumw8V0bV74TEyYMRgcPHW2lg=";
+    sha256 = "sha256-uVd1qPNBIqs9+pRnRP/Q8Z5sXpRdcwBejKjt0BJbXWA=";
   };
 
   nativeBuildInputs = [ libxslt docbook_xsl makeWrapper ];
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     sed -i 's|/usr/bin/||' doc/Makefile
     sed -i 's|/usr/include/libaio.h|${libaio}/include/libaio.h|' usr/Makefile
-    sed -i 's|/usr/include/sys/|${stdenv.glibc.dev}/include/sys/|' usr/Makefile
-    sed -i 's|/usr/include/linux/|${stdenv.glibc.dev}/include/linux/|' usr/Makefile
+    sed -i 's|/usr/include/sys/|${stdenv.cc.libc.dev}/include/sys/|' usr/Makefile
+    sed -i 's|/usr/include/linux/|${stdenv.cc.libc.dev}/include/linux/|' usr/Makefile
   '';
 
   postInstall = ''
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "iSCSI Target daemon with RDMA support";
-    homepage = "http://stgt.sourceforge.net/";
+    homepage = "https://github.com/fujita/tgt";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ johnazoidberg ];

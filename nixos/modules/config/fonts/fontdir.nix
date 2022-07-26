@@ -39,6 +39,7 @@ in
       decompressFonts = mkOption {
         type = types.bool;
         default = config.programs.xwayland.enable;
+        defaultText = literalExpression "config.programs.xwayland.enable";
         description = ''
           Whether to decompress fonts in
           <filename>/run/current-system/sw/share/X11/fonts</filename>.
@@ -50,9 +51,8 @@ in
 
   config = mkIf cfg.enable {
 
-    # This is enough to make a symlink because the xserver
-    # module already links all /share/X11 paths.
     environment.systemPackages = [ x11Fonts ];
+    environment.pathsToLink = [ "/share/X11/fonts" ];
 
     services.xserver.filesSection = ''
       FontPath "${x11Fonts}/share/X11/fonts"

@@ -6,6 +6,9 @@
 , extraOptions ? [] # E.g.: [ "--verbose" ]
 # Used by the NixOS module:
 , isNixOS ? false
+
+, enableXWayland ? true
+, dbusSupport ? true
 }:
 
 assert extraSessionCommands != "" -> withBaseWrapper;
@@ -13,7 +16,7 @@ assert extraSessionCommands != "" -> withBaseWrapper;
 with lib;
 
 let
-  sway = sway-unwrapped.override { inherit isNixOS; };
+  sway = sway-unwrapped.override { inherit isNixOS enableXWayland; };
   baseWrapper = writeShellScriptBin "sway" ''
      set -o errexit
      if [ ! "$_SWAY_WRAPPER_ALREADY_EXECUTED" ]; then
@@ -25,7 +28,7 @@ let
        export DBUS_SESSION_BUS_ADDRESS
        exec ${sway}/bin/sway "$@"
      else
-       exec ${dbus}/bin/dbus-run-session ${sway}/bin/sway "$@"
+       exec ${if !dbusSupport then "" else "${dbus}/bin/dbus-run-session"} ${sway}/bin/sway "$@"
      fi
    '';
 in symlinkJoin {
@@ -34,6 +37,7 @@ in symlinkJoin {
   paths = (optional withBaseWrapper baseWrapper)
     ++ [ sway ];
 
+  strictDeps = false;
   nativeBuildInputs = [ makeWrapper ]
     ++ (optional withGtkWrapper wrapGAppsHook);
 
@@ -50,7 +54,10 @@ in symlinkJoin {
       ${optionalString (extraOptions != []) "${concatMapStrings (x: " --add-flags " + x) extraOptions}"}
   '';
 
-  passthru.providedSessions = [ "sway" ];
+  passthru = {
+    inherit (sway.passthru) tests;
+    providedSessions = [ "sway" ];
+  };
 
   inherit (sway) meta;
 }

@@ -2,8 +2,8 @@
 
 let
   # NOTE: raspberrypifw & raspberryPiWirelessFirmware should be updated with this
-  modDirVersion = "5.10.17";
-  tag = "1.20210303";
+  modDirVersion = "5.15.32";
+  tag = "1.20220331";
 in
 lib.overrideDerivation (buildLinux (args // {
   version = "${modDirVersion}-${tag}";
@@ -12,8 +12,8 @@ lib.overrideDerivation (buildLinux (args // {
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "linux";
-    rev = "raspberrypi-kernel_${tag}-1";
-    sha256 = "0ffsllayl18ka4mgp4rdy9h0da5gy1n6g0kfvinvzdzabb5wzvrx";
+    rev = tag;
+    hash = "sha256-dJtOXe4yvZz/iu0Ly5F9/E/2GbpTJF/9ZMU3rC1nKMw=";
   };
 
   defconfig = {
@@ -33,6 +33,11 @@ lib.overrideDerivation (buildLinux (args // {
     #       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # ../drivers/gpu/drm/ast/ast_mode.c:851:18: note: (near initialization for 'ast_crtc_helper_funcs.atomic_flush')
     DRM_AST n
+    # ../drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In function 'amdgpu_dm_atomic_commit_tail':
+    # ../drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:7757:4: error: implicit declaration of function 'is_hdr_metadata_different' [-Werror=implicit-function-declaration]
+    #  7757 |    is_hdr_metadata_different(old_con_state, new_con_state);
+    #       |    ^~~~~~~~~~~~~~~~~~~~~~~~~
+    DRM_AMDGPU n
   '';
 
   extraMeta = if (rpiVersion < 3) then {
@@ -70,6 +75,7 @@ lib.overrideDerivation (buildLinux (args // {
   '' + lib.optionalString (lib.elem stdenv.hostPlatform.system ["armv7l-linux"]) ''
     copyDTB bcm2709-rpi-2-b.dtb bcm2836-rpi-2-b.dtb
   '' + lib.optionalString (lib.elem stdenv.hostPlatform.system ["armv7l-linux" "aarch64-linux"]) ''
+    copyDTB bcm2710-rpi-zero-2.dtb bcm2837-rpi-zero-2.dtb
     copyDTB bcm2710-rpi-3-b.dtb bcm2837-rpi-3-b.dtb
     copyDTB bcm2710-rpi-3-b-plus.dtb bcm2837-rpi-3-a-plus.dtb
     copyDTB bcm2710-rpi-3-b-plus.dtb bcm2837-rpi-3-b-plus.dtb

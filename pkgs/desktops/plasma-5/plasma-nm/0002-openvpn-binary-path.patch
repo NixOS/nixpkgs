@@ -6,7 +6,7 @@ index 2f11ba1d..310f11b4 100644
      connect(m_ui->cmbProxyType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &OpenVpnAdvancedWidget::proxyTypeChanged);
  
      // start openVPN process and get its cipher list
--    const QString openVpnBinary = QStandardPaths::findExecutable("openvpn", QStringList() << "/sbin" << "/usr/sbin");
+-    const QString openVpnBinary = QStandardPaths::findExecutable("openvpn", QStringList{"/sbin", "/usr/sbin"});
 +    const QString openVpnBinary = "@openvpn@/bin/openvpn";
      const QStringList ciphersArgs(QLatin1String("--show-ciphers"));
      const QStringList versionArgs(QLatin1String("--version"));

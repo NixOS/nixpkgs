@@ -1,56 +1,68 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, autopage
+, cmd2
+, installShellFiles
+, openstackdocstheme
 , pbr
 , prettytable
 , pyparsing
-, six
-, stevedore
 , pyyaml
-, cmd2
-, pytestCheckHook
-, testtools
-, fixtures
-, which
+, stevedore
+, sphinx
+, callPackage
 }:
 
 buildPythonPackage rec {
   pname = "cliff";
-  version = "3.8.0";
+  version = "3.10.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8dd215d0a84c9a3ab2fa2aa700849f4e7b786639f66caa0ad4108c85dca95a7c";
+    sha256 = "sha256-BFruPzxkRxll161QfOhHSk4vIIFfu1QFp3D4WWoqAKA=";
   };
 
+  postPatch = ''
+    # only a small portion of the listed packages are actually needed for running the tests
+    # so instead of removing them one by one remove everything
+    rm test-requirements.txt
+  '';
+
+  nativeBuildInputs = [
+    installShellFiles
+    openstackdocstheme
+    sphinx
+  ];
+
   propagatedBuildInputs = [
+    autopage
+    cmd2
     pbr
     prettytable
     pyparsing
-    six
-    stevedore
     pyyaml
-    cmd2
+    stevedore
   ];
 
-  postPatch = ''
-    sed -i -e '/cmd2/c\cmd2' -e '/PrettyTable/c\PrettyTable' requirements.txt
+  postInstall = ''
+    sphinx-build -a -E -d doc/build/doctrees -b man doc/source doc/build/man
+    installManPage doc/build/man/cliff.1
   '';
 
-  checkInputs = [ fixtures pytestCheckHook testtools which ];
-  # add some tests
-  pytestFlagsArray = [
-    "cliff/tests/test_utils.py"
-    "cliff/tests/test_app.py"
-    "cliff/tests/test_command.py"
-    "cliff/tests/test_help.py"
-    "cliff/tests/test_lister.py"
-  ];
+  # check in passthru.tests.pytest to escape infinite recursion with stestr
+  doCheck = false;
+
+  pythonImportsCheck = [ "cliff" ];
+
+  passthru.tests = {
+    pytest = callPackage ./tests.nix { };
+  };
 
   meta = with lib; {
     description = "Command Line Interface Formulation Framework";
-    homepage = "https://docs.openstack.org/cliff/latest/";
+    homepage = "https://github.com/openstack/cliff";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = teams.openstack.members;
   };
 }

@@ -21,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gstreamer-vaapi";
-  version = "1.18.4";
+  version = "1.20.1";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1sia4l88z7kkxm2z9j20l43rqkrnsa47xccski10s5gkhsprinwj";
+    sha256 = "0dqiy8mhcpq3yla8dk69pkjid7hiv98ykvwskb4pk45g6z2zdyw7";
   };
 
   outputs = [
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     description = "Set of VAAPI GStreamer Plug-ins";
     homepage = "https://gstreamer.freedesktop.org";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ tstrobel ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

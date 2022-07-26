@@ -1,13 +1,14 @@
-{ lib, fetchgit
+{ lib, fetchFromGitHub
   , buildPythonApplication, buildPythonPackage
   , pygobject3, pytest-runner, requests, responses, pytest, python-olm
   , canonicaljson, olm
 }:
 let
-  mainsrc = fetchgit {
-    url = "https://github.com/saadnpq/matrixcli";
+  mainsrc = fetchFromGitHub {
+    owner = "saadnpq";
+    repo = "matrixcli";
     rev = "61ebde173ca2f77185c261c2b7f6db297ca89863";
-    sha256 = "0xcjjy2xwlcixr9fwgzcfjjkivqpk104h7dslfa7lz9jq9pzqzvq";
+    sha256 = "sha256-eH/8b8IyfXqUo7odSECYF+84pXTsP+5S7pFR3oWXknU=";
     fetchSubmodules = true;
   };
 
@@ -35,7 +36,6 @@ let
 
 in
 buildPythonApplication rec {
-  name = "${pname}-${version}";
   pname = "matrixcli";
   version = "0.0.2019-08-15";
 

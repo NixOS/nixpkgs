@@ -81,6 +81,8 @@ let
     else if targetPlatform.system == "aarch64-linux"  then "${sharedLibraryLoader}/lib/ld-linux-aarch64.so.1"
     else if targetPlatform.system == "powerpc-linux"  then "${sharedLibraryLoader}/lib/ld.so.1"
     else if targetPlatform.isMips                     then "${sharedLibraryLoader}/lib/ld.so.1"
+    # `ld-linux-riscv{32,64}-<abi>.so.1`
+    else if targetPlatform.isRiscV                    then "${sharedLibraryLoader}/lib/ld-linux-riscv*.so.1"
     else if targetPlatform.isDarwin                   then "/usr/lib/dyld"
     else if targetPlatform.isFreeBSD                  then "/libexec/ld-elf.so.1"
     else if lib.hasSuffix "pc-gnu" targetPlatform.config then "ld.so.1"
@@ -125,6 +127,8 @@ stdenv.mkDerivation {
 
   dontBuild = true;
   dontConfigure = true;
+
+  enableParallelBuilding = true;
 
   unpackPhase = ''
     src=$PWD
@@ -181,39 +185,6 @@ stdenv.mkDerivation {
         wrap ${targetPrefix}$variant ${./ld-wrapper.sh} $underlying
       done
     '';
-
-  emulation = let
-    fmt =
-      /**/ if targetPlatform.isDarwin  then "mach-o"
-      else if targetPlatform.isWindows then "pe"
-      else "elf" + toString targetPlatform.parsed.cpu.bits;
-    endianPrefix = if targetPlatform.isBigEndian then "big" else "little";
-    sep = optionalString (!targetPlatform.isMips && !targetPlatform.isPower && !targetPlatform.isRiscV) "-";
-    arch =
-      /**/ if targetPlatform.isAarch64 then endianPrefix + "aarch64"
-      else if targetPlatform.isAarch32     then endianPrefix + "arm"
-      else if targetPlatform.isx86_64  then "x86-64"
-      else if targetPlatform.isx86_32  then "i386"
-      else if targetPlatform.isMips    then {
-          mips     = "btsmipn32"; # n32 variant
-          mipsel   = "ltsmipn32"; # n32 variant
-          mips64   = "btsmip";
-          mips64el = "ltsmip";
-        }.${targetPlatform.parsed.cpu.name}
-      else if targetPlatform.isMmix then "mmix"
-      else if targetPlatform.isPower then if targetPlatform.isBigEndian then "ppc" else "lppc"
-      else if targetPlatform.isSparc then "sparc"
-      else if targetPlatform.isMsp430 then "msp430"
-      else if targetPlatform.isAvr then "avr"
-      else if targetPlatform.isAlpha then "alpha"
-      else if targetPlatform.isVc4 then "vc4"
-      else if targetPlatform.isOr1k then "or1k"
-      else if targetPlatform.isM68k then "m68k"
-      else if targetPlatform.isS390 then "s390"
-      else if targetPlatform.isRiscV then "lriscv"
-      else throw "unknown emulation for platform: ${targetPlatform.config}";
-    in if targetPlatform.useLLVM or false then ""
-       else targetPlatform.bfdEmulation or (fmt + sep + arch);
 
   strictDeps = true;
   depsTargetTargetPropagated = extraPackages;
@@ -324,10 +295,20 @@ stdenv.mkDerivation {
       echo "-arch ${targetPlatform.darwinArch}" >> $out/nix-support/libc-ldflags
     ''
 
+    ##
+    ## GNU specific extra strip flags
+    ##
+
+    # TODO(@sternenseemann): make a generic strip wrapper?
+    + optionalString (bintools.isGNU or false) ''
+      wrap ${targetPrefix}strip ${./gnu-binutils-strip-wrapper.sh} \
+        "${bintools_bin}/bin/${targetPrefix}strip"
+    ''
+
     ###
     ### Remove LC_UUID
     ###
-    + optionalString (stdenv.targetPlatform.isDarwin && !(stdenv.cc.bintools.bintools.isGNU or false)) ''
+    + optionalString (stdenv.targetPlatform.isDarwin && !(bintools.isGNU or false)) ''
       echo "-no_uuid" >> $out/nix-support/libc-ldflags-before
     ''
 

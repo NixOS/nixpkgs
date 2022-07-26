@@ -1,11 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
-  # https://github.com/erroneousboat/slack-term
+buildGoModule rec {
   pname = "slack-term";
   version = "0.5.0";
-
-  goPackagePath = "github.com/erroneousboat/slack-term";
 
   src = fetchFromGitHub {
     owner = "erroneousboat";
@@ -13,6 +10,7 @@ buildGoPackage rec {
     rev = "v${version}";
     sha256 = "1fbq7bdhy70hlkklppimgdjamnk0v059pg73xm9ax1f4616ki1m6";
   };
+  vendorSha256 = null;
 
   meta = with lib; {
     description = "Slack client for your terminal";

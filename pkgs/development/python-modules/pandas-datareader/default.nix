@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pandas-datareader";
-  version = "0.9.0";
+  version = "0.10.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b2cbc1e16a6ab9ff1ed167ae2ea92839beab9a20823bd00bdfb78155fa04f891";
+    sha256 = "9fc3c63d39bc0c10c2683f1c6d503ff625020383e38f6cbe14134826b454d5a6";
   };
 
   # Tests are trying to load data over the network

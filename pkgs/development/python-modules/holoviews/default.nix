@@ -1,49 +1,52 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, param
-, numpy
-, pyviz-comms
-, ipython
-, notebook
-, pandas
-, matplotlib
+{ lib
 , bokeh
-, scipy
-, panel
+, buildPythonPackage
 , colorcet
+, fetchPypi
+, ipython
+, matplotlib
+, notebook
+, numpy
+, pandas
+, panel
+, param
+, pythonOlder
+, pyviz-comms
+, scipy
 }:
 
 buildPythonPackage rec {
   pname = "holoviews";
-  version = "1.14.4";
+  version = "1.15.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08e8be82c2e514e1700a75f02307f414179dc0ecfa2202702dd304a381909eaa";
+    hash = "sha256-MS5g0kQGw6euxGJhg2s426JYXjZrzLReR0eVBIBetbo=";
   };
 
   propagatedBuildInputs = [
     colorcet
-    param
     numpy
-    pyviz-comms
-    ipython
-    notebook
     pandas
-    matplotlib
-    bokeh
-    scipy
     panel
+    param
+    pyviz-comms
   ];
 
   # tests not fully included with pypi release
   doCheck = false;
 
+  pythonImportsCheck = [
+    "holoviews"
+  ];
+
   meta = with lib; {
     description = "Python data analysis and visualization seamless and simple";
     homepage = "http://www.holoviews.org/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

@@ -1,23 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, which
-, darwin ? null
-, xorgproto ? null
-, libX11
-, libXext ? null
-, libXt ? null
-, fontconfig ? null
-, freetype ? null
-, perl ? null  # For building web manuals
+{ lib, stdenv, fetchFromGitHub
+, fontconfig, freetype, libX11, libXext, libXt, xorgproto
+, Carbon, Cocoa, IOKit, Metal, QuartzCore, DarwinTools
+, perl # For building web manuals
+, which
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "plan9port";
-  version = "2021-04-22";
+  version = "2021-10-19";
 
-  src =  fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "9fans";
-    repo = "plan9port";
-    rev = "70cc6e5ba7798b315c3fb3aae19620a01604a459";
-    hash = "sha256-HCn8R9YSocHrpw/xK5n8gsCLSAbAQgw0NtjO9vYIbKo=";
+    repo = pname;
+    rev = "d0d440860f2000a1560abb3f593cdc325fcead4c";
+    hash = "sha256-2aYXqPGwrReyFPrLDtEjgQd/RJjpOfI3ge/tDocYpRQ=";
   };
 
   postPatch = ''
@@ -41,13 +37,20 @@ stdenv.mkDerivation {
       --replace "case Kcmd+'v':" "case 0x16: case Kcmd+'v':"
   '';
 
-  buildInputs = [
-    perl
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    xorgproto libX11 libXext libXt fontconfig
-    freetype # fontsrv wants ft2build.h provides system fonts for acme and sam.
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    Carbon Cocoa IOKit Metal QuartzCore
+  buildInputs = [ perl ] ++ (if !stdenv.isDarwin then [
+    fontconfig
+    freetype # fontsrv wants ft2build.h
+    libX11
+    libXext
+    libXt
+    xorgproto
+  ] else [
+    Carbon
+    Cocoa
+    IOKit
+    Metal
+    QuartzCore
+    DarwinTools
   ]);
 
   builder = ./builder.sh;
@@ -88,9 +91,12 @@ stdenv.mkDerivation {
       ehmry
       ftrvxmtrx
       kovirobi
+      ylh
     ];
+    mainProgram = "9";
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    # TODO: revisit this when the sdk situation on x86_64-darwin changes
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }
 # TODO: investigate the mouse chording support patch

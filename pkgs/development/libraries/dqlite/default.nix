@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dqlite";
-  version = "1.8.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ghvwlgj5574kpgc53bfhqp4437xxvr05061wwxplpjxn37hy26d";
+    sha256 = "0zalsvr0vy7632nhm96a29lrfy18iqsmbxpyz2lvq80mrjlbrzsn";
   };
 
   nativeBuildInputs = [ autoreconfHook file pkg-config ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://dqlite.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ joko wucke13 ];
+    maintainers = with maintainers; [ joko ];
     platforms = platforms.linux;
   };
 }

@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A small SSH askpass GUI using GTK+2";
     homepage = "https://github.com/atj/ssh-askpass-fullscreen";
     license = licenses.gpl2;

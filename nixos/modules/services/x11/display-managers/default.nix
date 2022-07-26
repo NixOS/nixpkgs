@@ -7,18 +7,18 @@
 # (e.g., KDE, Gnome or a plain xterm), and optionally the *window
 # manager* (e.g. kwin or twm).
 
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
 
   cfg = config.services.xserver;
+  opt = options.services.xserver;
   xorg = pkgs.xorg;
 
   fontconfig = config.fonts.fontconfig;
   xresourcesXft = pkgs.writeText "Xresources-Xft" ''
-    ${optionalString (fontconfig.dpi != 0) ''Xft.dpi: ${toString fontconfig.dpi}''}
     Xft.antialias: ${if fontconfig.antialias then "1" else "0"}
     Xft.rgba: ${fontconfig.subpixel.rgba}
     Xft.lcdfilter: lcd${fontconfig.subpixel.lcdfilter}
@@ -123,10 +123,10 @@ let
         done
 
         if test -d ${pkg}/share/xsessions; then
-          ${xorg.lndir}/bin/lndir ${pkg}/share/xsessions $out/share/xsessions
+          ${pkgs.buildPackages.xorg.lndir}/bin/lndir ${pkg}/share/xsessions $out/share/xsessions
         fi
         if test -d ${pkg}/share/wayland-sessions; then
-          ${xorg.lndir}/bin/lndir ${pkg}/share/wayland-sessions $out/share/wayland-sessions
+          ${pkgs.buildPackages.xorg.lndir}/bin/lndir ${pkg}/share/wayland-sessions $out/share/wayland-sessions
         fi
       '') cfg.displayManager.sessionPackages}
     '';
@@ -148,6 +148,7 @@ in
       xauthBin = mkOption {
         internal = true;
         default = "${xorg.xauth}/bin/xauth";
+        defaultText = literalExpression ''"''${pkgs.xorg.xauth}/bin/xauth"'';
         description = "Path to the <command>xauth</command> program used by display managers.";
       };
 
@@ -218,7 +219,8 @@ in
 
       session = mkOption {
         default = [];
-        example = literalExample
+        type = types.listOf types.attrs;
+        example = literalExpression
           ''
             [ { manage = "desktop";
                 name = "xterm";
@@ -279,9 +281,12 @@ in
             defaultSessionFromLegacyOptions
           else
             null;
+        defaultText = literalDocBook ''
+          Taken from display manager settings or window manager settings, if either is set.
+        '';
         example = "gnome";
         description = ''
-          Graphical session to pre-select in the session chooser (only effective for GDM and LightDM).
+          Graphical session to pre-select in the session chooser (only effective for GDM, LightDM and SDDM).
 
           On GDM, LightDM and SDDM, it will also be used as a session for auto-login.
         '';
@@ -306,9 +311,7 @@ in
 
         execCmd = mkOption {
           type = types.str;
-          example = literalExample ''
-            "''${pkgs.lightdm}/bin/lightdm"
-          '';
+          example = literalExpression ''"''${pkgs.lightdm}/bin/lightdm"'';
           description = "Command to start the display manager.";
         };
 
@@ -340,11 +343,12 @@ in
 
       # Configuration for automatic login. Common for all DM.
       autoLogin = mkOption {
-        type = types.submodule {
+        type = types.submodule ({ config, options, ... }: {
           options = {
             enable = mkOption {
               type = types.bool;
-              default = cfg.displayManager.autoLogin.user != null;
+              default = config.user != null;
+              defaultText = literalExpression "config.${options.user} != null";
               description = ''
                 Automatically log in as <option>autoLogin.user</option>.
               '';
@@ -358,7 +362,7 @@ in
               '';
             };
           };
-        };
+        });
 
         default = {};
         description = ''

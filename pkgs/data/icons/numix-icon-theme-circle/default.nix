@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, gtk3, numix-icon-theme, hicolor-icon-theme }:
+{ lib, stdenvNoCC, fetchFromGitHub, gtk3, numix-icon-theme, hicolor-icon-theme, gitUpdater }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "numix-icon-theme-circle";
-  version = "21.04.14";
+  version = "22.07.11";
 
   src = fetchFromGitHub {
     owner = "numixproject";
     repo = pname;
     rev = version;
-    sha256 = "1z8c0179r8g0y9zh4383brsfhkcyfy79dc8hw94p9zjn5a66547w";
+    sha256 = "sha256-0wDSK1sBYEQ+3wr5BkZvvtFdG66uMzHYAtyvpaZZlTI=";
   };
 
   nativeBuildInputs = [ gtk3 ];
@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater {inherit pname version; };
 
   meta = with lib; {
     description = "Numix icon theme (circle version)";

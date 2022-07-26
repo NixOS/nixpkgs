@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , nixosTests
 , pkg-config
 , systemd
@@ -15,6 +14,7 @@
 , curl
 , nspr
 , bash
+, runtimeShell
 , iproute2
 , iptables
 , procps
@@ -43,11 +43,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libreswan";
-  version = "4.4";
+  version = "4.7";
 
   src = fetchurl {
     url = "https://download.libreswan.org/${pname}-${version}.tar.gz";
-    sha256 = "0xj974yc0y1r7235zl4jhvxqz3bpb8js2fy9ic820zq9swh0lgsz";
+    sha256 = "0i7wyfgkaq6kcfhh1yshb1v7q42n3zvdkhq10f3ks1h075xk7mnx";
   };
 
   strictDeps = true;
@@ -70,20 +70,16 @@ stdenv.mkDerivation rec {
     python3 bash
   ] ++ lib.optional stdenv.isLinux libselinux;
 
-  patches = [
-    # Fix compilation on aarch64, remove on next update
-    (fetchpatch {
-      url = "https://github.com/libreswan/libreswan/commit/ea50d36d2886e44317ba5ba841de1d1bf91aee6c.patch";
-      sha256 = "1jp89rm9jp55zmiyimyhg7yadj0fwwxaw7i5gyclrs38w3y1aacj";
-    })
-  ];
-
   prePatch = ''
-    # Correct iproute2 path
-    sed -e 's|"/sbin/ip"|"${iproute2}/bin/ip"|' \
-        -e 's|"/sbin/iptables"|"${iptables}/bin/iptables"|' \
+    # Correct iproute2 and iptables path
+    sed -e 's|/sbin/ip|${iproute2}/bin/ip|g' \
+        -e 's|/sbin/\(ip6\?tables\)|${iptables}/bin/\1|' \
+        -e 's|/bin/bash|${runtimeShell}|g' \
         -i initsystems/systemd/ipsec.service.in \
+           programs/barf/barf.in \
            programs/verify/verify.in
+    sed -e 's|\([[:blank:]]\)\(ip6\?tables\(-save\)\? -\)|\1${iptables}/bin/\2|' \
+        -i programs/verify/verify.in
 
     # Prevent the makefile from trying to
     # reload the systemd daemon or create tmpfiles
@@ -111,13 +107,12 @@ stdenv.mkDerivation rec {
         -i configs/Makefile
   '';
 
-  # Set appropriate paths for build
-  preBuild = "export INC_USRLOCAL=\${out}";
-
   makeFlags = [
+    "PREFIX=$(out)"
     "INITSYSTEM=systemd"
     "UNITDIR=$(out)/etc/systemd/system/"
     "TMPFILESDIR=$(out)/lib/tmpfiles.d/"
+    "LINUX_VARIANT=nixos"
   ];
 
   # Hack to make install work

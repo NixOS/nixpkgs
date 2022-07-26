@@ -1,6 +1,19 @@
-{ lib, buildPythonPackage, fetchPypi, writeText, asttokens
-, pycryptodome, pytest-xdist, pytest-cov, recommonmark, semantic-version, sphinx
-, sphinx_rtd_theme, pytest-runner }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, pythonRelaxDepsHook
+, writeText
+, asttokens
+, pycryptodome
+, recommonmark
+, semantic-version
+, sphinx
+, sphinx_rtd_theme
+, pytest-runner
+, setuptools-scm
+, git
+}:
 
 let
   sample-contract = writeText "example.vy" ''
@@ -10,26 +23,31 @@ let
     def __init__(foo: address):
         self.count = 1
   '';
-in
 
+in
 buildPythonPackage rec {
   pname = "vyper";
-  version = "0.2.15";
+  version = "0.3.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-cNnKHVKwIx0miC2VhGYBzcSckTnyWYmjNzW0bEzP4bU=";
+    sha256 = "sha256-BAnNj27B1HAb9VVDA69bFGbQjeOpl0g5EB2juajqBAw=";
   };
 
-  nativeBuildInputs = [ pytest-runner ];
+  nativeBuildInputs = [
+    # Git is used in setup.py to compute version information during building
+    # ever since https://github.com/vyperlang/vyper/pull/2816
+    git
 
-  # Replace the dynamic commit hash lookup with the hash from the tag
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'asttokens==' 'asttokens>=' \
-      --replace 'subprocess.check_output("git rev-parse HEAD".split())' "' '" \
-      --replace 'commithash.decode("utf-8").strip()' "'6e7dba7a8b5f29762d3470da4f44634b819c808d'"
-  '';
+    pythonRelaxDepsHook
+    pytest-runner
+    setuptools-scm
+  ];
+
+  pythonRelaxDeps = [ "semantic-version" ];
 
   propagatedBuildInputs = [
     asttokens
@@ -51,5 +69,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/vyperlang/vyper";
     license = licenses.asl20;
     maintainers = with maintainers; [ siraben ];
+    knownVulnerabilities = [
+      "CVE-2022-29255"
+    ];
   };
 }

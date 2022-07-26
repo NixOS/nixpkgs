@@ -25,7 +25,8 @@ TODO tidy this all up. Find source instead of binary. Fix paths ... Find out how
 */
 
 stdenv.mkDerivation {
-  name = "cups-gutenprint-binary-5.0.1";
+  pname = "cups-gutenprint-binary";
+  version = "5.0.1";
 
   src = if stdenv.hostPlatform.system == "x86_64-linux" then fetchurl {
     url = "https://www.openprinting.org/download/printdriver/debian/dists/lsb3.1/main/binary-amd64/gutenprint_5.0.1-1lsb3.1_amd64.deb";
@@ -62,6 +63,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     description = "Some additional CUPS drivers including Canon drivers";
     platforms = [ "x86_64-linux" ];
   };

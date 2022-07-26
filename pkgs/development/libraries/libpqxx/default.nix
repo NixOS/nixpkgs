@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, python3, gnused }:
+{ lib, stdenv, fetchFromGitHub, postgresql, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "libpqxx";
-  version = "7.5.2";
+  version = "7.7.0";
 
   src = fetchFromGitHub {
     owner = "jtv";
     repo = pname;
     rev = version;
-    sha256 = "15ifd28v6xbbx931icydy8xmkd8030b20xzqjja6vwwvzss2w9fa";
+    sha256 = "sha256-O30czHwEDXz5xY4o3MWhmEK06OKTKMQCy0M6qwSEpy8=";
   };
 
-  nativeBuildInputs = [ gnused python3 ];
+  nativeBuildInputs = [ python3 ];
   buildInputs = [ postgresql ];
 
   preConfigure = ''

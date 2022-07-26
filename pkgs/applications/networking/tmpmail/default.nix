@@ -1,14 +1,14 @@
-{ lib, fetchFromGitHub, stdenvNoCC, w3m, curl, jq, makeWrapper, installShellFiles }:
+{ lib, fetchFromGitHub, stdenvNoCC, w3m, curl, jq, makeWrapper, installShellFiles, xclip }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "tmpmail";
-  version = "unstable-2021-02-10";
+  version = "1.2.3";
 
    src = fetchFromGitHub {
     owner = "sdushantha";
     repo = "tmpmail";
-    rev = "150b32083d36006cf7f496e112715ae12ee87727";
-    sha256 = "sha256-yQ9/UUxBTEXK5z3f+tvVRUzIGrAnrqurQ0x56Ad7RKE=";
+    rev = "v${version}";
+    sha256 = "sha256-s4c1M4YHK/CNpH7nPt7rRqlkLUZrpBXvAVS/qxCai9c=";
   };
 
   dontConfigure = true;
@@ -21,13 +21,13 @@ stdenvNoCC.mkDerivation rec {
     mkdir -p $out/bin
     install -Dm755 -t $out/bin tmpmail
     installManPage tmpmail.1
-    wrapProgram $out/bin/tmpmail --prefix PATH : ${lib.makeBinPath [ w3m curl jq ]}
+    wrapProgram $out/bin/tmpmail --prefix PATH : ${lib.makeBinPath [ w3m curl jq xclip ]}
   '';
 
    meta = with lib; {
     homepage = "https://github.com/sdushantha/tmpmail";
     description = "A temporary email right from your terminal written in POSIX sh ";
     license = licenses.mit;
-    maintainers = [ maintainers.legendofmiracles ];
+    maintainers = [ maintainers.lom ];
   };
 }

@@ -5,18 +5,18 @@
 
 stdenv.mkDerivation rec {
   pname = "kirc";
-  version = "0.2.7";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "mcpcpc";
     repo = pname;
     rev = version;
-    hash = "sha256-iaqj4xB15DB3w/RaiCOMdAu8eONhTw1Dz0j5kykAHV4=";
+    hash = "sha256-bLBrkbW/Iv1v9z5NOiMAA/dH5/9FlqusRV5rSqjdlPw=";
   };
 
   dontConfigure = true;
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  installFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
     homepage = "http://kirc.io/";

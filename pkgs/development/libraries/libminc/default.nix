@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.isDarwin;
   checkPhase = ''
-    export LD_LIBRARY_PATH="$(pwd)"  # see #22060
     ctest -j1 -E 'ezminc_rw_test' --output-on-failure
     # -j1: see https://github.com/BIC-MNI/libminc/issues/110
     # ezminc_rw_test: can't find libminc_io.so.5.2.0

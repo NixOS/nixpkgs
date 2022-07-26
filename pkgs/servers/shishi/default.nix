@@ -1,19 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config
-, libgcrypt, libgpgerror, libtasn1
+, libgcrypt, libgpg-error, libtasn1
 
 # Optional Dependencies
 , pam ? null, libidn ? null, gnutls ? null
 }:
 
 let
-  mkFlag = trueStr: falseStr: cond: name: val: "--"
-    + (if cond then trueStr else falseStr)
-    + name
-    + lib.optionalString (val != null && cond != false) "=${val}";
-  mkEnable = mkFlag "enable-" "disable-";
-  mkWith = mkFlag "with-" "without-";
-  mkOther = mkFlag "" "" true;
-
   shouldUsePkg = pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
 
   optPam = shouldUsePkg pam;
@@ -34,22 +26,22 @@ stdenv.mkDerivation rec {
   patches = [ ./gcrypt-fix.patch ./freebsd-unistd.patch ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libgcrypt libgpgerror libtasn1 optPam optLibidn optGnutls ];
+  buildInputs = [ libgcrypt libgpg-error libtasn1 optPam optLibidn optGnutls ];
 
   configureFlags = [
-    (mkOther                      "sysconfdir"    "/etc")
-    (mkOther                      "localstatedir" "/var")
-    (mkEnable true                "libgcrypt"     null)
-    (mkEnable (optPam != null)    "pam"           null)
-    (mkEnable true                "ipv6"          null)
-    (mkWith   (optLibidn != null) "stringprep"    null)
-    (mkEnable (optGnutls != null) "starttls"      null)
-    (mkEnable true                "des"           null)
-    (mkEnable true                "3des"          null)
-    (mkEnable true                "aes"           null)
-    (mkEnable true                "md"            null)
-    (mkEnable false               "null"          null)
-    (mkEnable true                "arcfour"       null)
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+    (enableFeature true                "libgcrypt")
+    (enableFeature (optPam != null)    "pam")
+    (enableFeature true                "ipv6")
+    (withFeature   (optLibidn != null) "stringprep")
+    (enableFeature (optGnutls != null) "starttls")
+    (enableFeature true                "des")
+    (enableFeature true                "3des")
+    (enableFeature true                "aes")
+    (enableFeature true                "md")
+    (enableFeature false               "null")
+    (enableFeature true                "arcfour")
   ];
 
   NIX_CFLAGS_COMPILE
@@ -68,7 +60,7 @@ stdenv.mkDerivation rec {
       -e 's,\(-lgnutls\),-L${optGnutls.out}/lib \1,' \
   '' + ''
       -e 's,\(-lgcrypt\),-L${libgcrypt.out}/lib \1,' \
-      -e 's,\(-lgpg-error\),-L${libgpgerror.out}/lib \1,' \
+      -e 's,\(-lgpg-error\),-L${libgpg-error.out}/lib \1,' \
       -e 's,\(-ltasn1\),-L${libtasn1.out}/lib \1,'
   '';
 
@@ -76,7 +68,7 @@ stdenv.mkDerivation rec {
     homepage    = "https://www.gnu.org/software/shishi/";
     description = "An implementation of the Kerberos 5 network security system";
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ bjg lovek323 ];
+    maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.linux;
   };
 }

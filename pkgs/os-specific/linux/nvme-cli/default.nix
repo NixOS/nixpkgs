@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nvme-cli";
-  version = "1.14";
+  version = "1.16";
 
   src = fetchFromGitHub {
     owner = "linux-nvme";
     repo = "nvme-cli";
     rev = "v${version}";
-    sha256 = "0dpadz945482srqpsbfx1bh7rc499fgpyzz1flhk9g9xjbpapkzc";
+    sha256 = "sha256-/wDQxsN1sji56zfcvqx02iciYnyxjIbL85bNaRwrHYw=";
   };
 
   nativeBuildInputs = [ pkg-config ];

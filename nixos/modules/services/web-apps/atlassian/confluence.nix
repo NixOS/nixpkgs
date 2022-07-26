@@ -8,20 +8,21 @@ let
 
   pkg = cfg.package.override (optionalAttrs cfg.sso.enable {
     enableSSO = cfg.sso.enable;
-    crowdProperties = ''
-      application.name                        ${cfg.sso.applicationName}
-      application.password                    ${cfg.sso.applicationPassword}
-      application.login.url                   ${cfg.sso.crowd}/console/
-
-      crowd.server.url                        ${cfg.sso.crowd}/services/
-      crowd.base.url                          ${cfg.sso.crowd}/
-
-      session.isauthenticated                 session.isauthenticated
-      session.tokenkey                        session.tokenkey
-      session.validationinterval              ${toString cfg.sso.validationInterval}
-      session.lastvalidation                  session.lastvalidation
-    '';
   });
+
+  crowdProperties = pkgs.writeText "crowd.properties" ''
+    application.name                        ${cfg.sso.applicationName}
+    application.password                    ${if cfg.sso.applicationPassword != null then cfg.sso.applicationPassword else "@NIXOS_CONFLUENCE_CROWD_SSO_PWD@"}
+    application.login.url                   ${cfg.sso.crowd}/console/
+
+    crowd.server.url                        ${cfg.sso.crowd}/services/
+    crowd.base.url                          ${cfg.sso.crowd}/
+
+    session.isauthenticated                 session.isauthenticated
+    session.tokenkey                        session.tokenkey
+    session.validationinterval              ${toString cfg.sso.validationInterval}
+    session.lastvalidation                  session.lastvalidation
+  '';
 
 in
 
@@ -107,8 +108,15 @@ in
         };
 
         applicationPassword = mkOption {
-          type = types.str;
+          type = types.nullOr types.str;
+          default = null;
           description = "Application password of this Confluence instance in Crowd";
+        };
+
+        applicationPasswordFile = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = "Path to the application password for Crowd of Confluence.";
         };
 
         validationInterval = mkOption {
@@ -128,14 +136,14 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.atlassian-confluence;
-        defaultText = "pkgs.atlassian-confluence";
+        defaultText = literalExpression "pkgs.atlassian-confluence";
         description = "Atlassian Confluence package to use.";
       };
 
       jrePackage = mkOption {
         type = types.package;
         default = pkgs.oraclejre8;
-        defaultText = "pkgs.oraclejre8";
+        defaultText = literalExpression "pkgs.oraclejre8";
         description = "Note that Atlassian only support the Oracle JRE (JRASERVER-46152).";
       };
     };
@@ -146,6 +154,16 @@ in
       isSystemUser = true;
       group = cfg.group;
     };
+
+    assertions = [
+      { assertion = cfg.sso.enable -> ((cfg.sso.applicationPassword == null) != (cfg.sso.applicationPasswordFile));
+        message = "Please set either applicationPassword or applicationPasswordFile";
+      }
+    ];
+
+    warnings = mkIf (cfg.sso.enable && cfg.sso.applicationPassword != null) [
+      "Using `services.confluence.sso.applicationPassword` is deprecated! Use `applicationPasswordFile` instead!"
+    ];
 
     users.groups.${cfg.group} = {};
 
@@ -173,6 +191,7 @@ in
         CONF_USER = cfg.user;
         JAVA_HOME = "${cfg.jrePackage}";
         CATALINA_OPTS = concatStringsSep " " cfg.catalinaOptions;
+        JAVA_OPTS = mkIf cfg.sso.enable "-Dcrowd.properties=${cfg.home}/crowd.properties";
       };
 
       preStart = ''
@@ -183,12 +202,24 @@ in
           -e 's,protocol="org.apache.coyote.http11.Http11NioProtocol",protocol="org.apache.coyote.http11.Http11NioProtocol" proxyName="${cfg.proxy.name}" proxyPort="${toString cfg.proxy.port}" scheme="${cfg.proxy.scheme}",' \
         '') + ''
           ${pkg}/conf/server.xml.dist > ${cfg.home}/server.xml
+
+        ${optionalString cfg.sso.enable ''
+          install -m660 ${crowdProperties} ${cfg.home}/crowd.properties
+          ${optionalString (cfg.sso.applicationPasswordFile != null) ''
+            ${pkgs.replace-secret}/bin/replace-secret \
+              '@NIXOS_CONFLUENCE_CROWD_SSO_PWD@' \
+              ${cfg.sso.applicationPasswordFile} \
+              ${cfg.home}/crowd.properties
+          ''}
+        ''}
       '';
 
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
         PrivateTmp = true;
+        Restart = "on-failure";
+        RestartSec = "10";
         ExecStart = "${pkg}/bin/start-confluence.sh -fg";
         ExecStop = "${pkg}/bin/stop-confluence.sh";
       };

@@ -1,28 +1,50 @@
-{ lib, stdenv, fetchFromGitHub, gtk_engines, gtk-engine-murrine }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, gnome-shell
+, gtk-engine-murrine
+, gtk_engines
+, sassc
+, gitUpdater
+}:
 
 stdenv.mkDerivation rec {
   pname = "vimix-gtk-themes";
-  version = "2021-04-25";
+  version = "2022-04-24";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "0ak763vs27h5z2pgcqpz1g1hypn5gl0p0ylffawc9zdi1wp2mpxb";
+    sha256 = "0q0ahm060qvr7r9j3x9lxidjnwf032c2g1pcqw9mz93iy7vfn358";
   };
 
-  buildInputs = [ gtk_engines ];
+  nativeBuildInputs = [
+    gnome-shell  # needed to determine the gnome-shell version
+    sassc
+  ];
 
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
+  buildInputs = [
+    gtk_engines
+  ];
+
+  propagatedUserEnvPkgs = [
+    gtk-engine-murrine
+  ];
+
+  postPatch = ''
+    patchShebangs install.sh
+  '';
 
   installPhase = ''
     runHook preInstall
-    patchShebangs .
     mkdir -p $out/share/themes
-    name= ./install.sh --all --dest $out/share/themes
+    name= HOME="$TMPDIR" ./install.sh --all --dest $out/share/themes
     rm $out/share/themes/*/{AUTHORS,LICENSE}
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater {inherit pname version; };
 
   meta = with lib; {
     description = "Flat Material Design theme for GTK based desktop environments";

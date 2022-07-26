@@ -1,6 +1,6 @@
-{ lib, gccStdenv, fetchFromGitHub, cmake, pkg-config, pcre, zlib, sqlite }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, pcre, zlib, sqlite }:
 
-gccStdenv.mkDerivation {
+stdenv.mkDerivation {
   pname = "falcon";
   version = "unstable-2018-10-23";
 

@@ -1,18 +1,27 @@
-{ lib, python3Packages }:
+{ lib
+, python3Packages
+, fetchFromGitHub
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.1.133";
+  version = "3.3.22";
 
-  src = python3Packages.fetchPypi {
-    pname = "FlexGet";
-    inherit version;
-    sha256 = "1mfmy2nbxx9k6hnhwxpf2062rwspigfhbvkpr161grd5amcs2cr6";
+  # Fetch from GitHub in order to use `requirements.in`
+  src = fetchFromGitHub {
+    owner = "flexget";
+    repo = "flexget";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-VDMcOiuEOTzyogkdpVogikrme2Q6drpb40PqDgDtr7Q=";
   };
 
   postPatch = ''
+    # Symlink requirements.in because upstream uses `pip-compile` which yields
+    # python-version dependent requirements
+    ln -sf requirements.in requirements.txt
+
     # remove dependency constraints
-    sed 's/==\([0-9]\.\?\)\+//' -i requirements.txt
+    sed 's/[~<>=].*//' -i requirements.txt
 
     # "zxcvbn-python" was renamed to "zxcvbn", and we don't have the former in
     # nixpkgs. See: https://github.com/NixOS/nixpkgs/issues/62110
@@ -26,38 +35,40 @@ python3Packages.buildPythonApplication rec {
     # See https://github.com/Flexget/Flexget/blob/master/requirements.in
     APScheduler
     beautifulsoup4
-    cherrypy
+    click
     colorama
-    colorclass
     feedparser
-    flask-compress
-    flask-cors
-    flask_login
-    flask-restful
-    flask-restx
-    flask
-    greenlet
     guessit
     html5lib
     jinja2
     jsonschema
     loguru
     more-itertools
-    progressbar
+    packaging
+    psutil
     pynzb
-    pyparsing
     PyRSS2Gen
     python-dateutil
     pyyaml
     rebulk
     requests
+    rich
     rpyc
-    sgmllib3k
     sqlalchemy
-    terminaltables
+
+    # WebUI requirements
+    cherrypy
+    flask-compress
+    flask-cors
+    flask_login
+    flask-restful
+    flask-restx
+    flask
+    pyparsing
+    werkzeug
     zxcvbn
-    psutil
-    # plugins
+
+    # Plugins requirements
     transmission-rpc
   ];
 

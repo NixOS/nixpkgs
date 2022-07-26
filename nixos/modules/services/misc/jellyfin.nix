@@ -19,7 +19,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.jellyfin;
-        example = literalExample "pkgs.jellyfin";
+        defaultText = literalExpression "pkgs.jellyfin";
         description = ''
           Jellyfin package to use.
         '';
@@ -49,51 +49,61 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
+      # This is mostly follows: https://github.com/jellyfin/jellyfin/blob/master/fedora/jellyfin.service
+      # Upstream also disable some hardenings when running in LXC, we do the same with the isContainer option
       serviceConfig = rec {
+        Type = "simple";
         User = cfg.user;
         Group = cfg.group;
         StateDirectory = "jellyfin";
+        StateDirectoryMode = "0700";
         CacheDirectory = "jellyfin";
+        CacheDirectoryMode = "0700";
+        UMask = "0077";
+        WorkingDirectory = "/var/lib/jellyfin";
         ExecStart = "${cfg.package}/bin/jellyfin --datadir '/var/lib/${StateDirectory}' --cachedir '/var/cache/${CacheDirectory}'";
         Restart = "on-failure";
+        TimeoutSec = 15;
+        SuccessExitStatus = ["0" "143"];
 
         # Security options:
-
         NoNewPrivileges = true;
-
-        AmbientCapabilities = "";
-        CapabilityBoundingSet = "";
-
-        # ProtectClock= adds DeviceAllow=char-rtc r
-        DeviceAllow = "";
-
-        LockPersonality = true;
-
-        PrivateTmp = true;
-        PrivateDevices = true;
-        PrivateUsers = true;
-
-        ProtectClock = true;
-        ProtectControlGroups = true;
-        ProtectHostname = true;
-        ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-
-        RemoveIPC = true;
-
-        RestrictNamespaces = true;
+        SystemCallArchitectures = "native";
         # AF_NETLINK needed because Jellyfin monitors the network connection
-        RestrictAddressFamilies = [ "AF_NETLINK" "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK" ];
+        RestrictNamespaces = !config.boot.isContainer;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
+        ProtectControlGroups = !config.boot.isContainer;
+        ProtectHostname = true;
+        ProtectKernelLogs = !config.boot.isContainer;
+        ProtectKernelModules = !config.boot.isContainer;
+        ProtectKernelTunables = !config.boot.isContainer;
+        LockPersonality = true;
+        PrivateTmp = !config.boot.isContainer;
+        # needed for hardware accelaration
+        PrivateDevices = false;
+        PrivateUsers = true;
+        RemoveIPC = true;
 
-        SystemCallArchitectures = "native";
-        SystemCallErrorNumber = "EPERM";
         SystemCallFilter = [
-          "@system-service"
-          "~@cpu-emulation" "~@debug" "~@keyring" "~@memlock" "~@obsolete" "~@privileged" "~@setuid"
+          "~@clock"
+          "~@aio"
+          "~@chown"
+          "~@cpu-emulation"
+          "~@debug"
+          "~@keyring"
+          "~@memlock"
+          "~@module"
+          "~@mount"
+          "~@obsolete"
+          "~@privileged"
+          "~@raw-io"
+          "~@reboot"
+          "~@setuid"
+          "~@swap"
         ];
+        SystemCallErrorNumber = "EPERM";
       };
     };
 

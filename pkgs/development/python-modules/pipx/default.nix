@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pipx";
-  version = "0.16.3";
+  version = "1.0.0";
 
   disabled = pythonOlder "3.6";
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "pipxproject";
     repo = pname;
     rev = version;
-    sha256 = "1w5pzn5mgl9rr9zbmqza5is4mvjvcgjps1q9qa1mvbnyvakdkr4c";
+    sha256 = "1sgfrlhci2m83k436dfwfmqjpb8hij6yypm03pm3n8drmr2aaa4s";
   };
 
   propagatedBuildInputs = [
@@ -68,6 +68,6 @@ buildPythonPackage rec {
       "Install and Run Python Applications in Isolated Environments";
     homepage = "https://github.com/pipxproject/pipx";
     license = licenses.mit;
-    maintainers = with maintainers; [ yevhenshymotiuk ];
+    maintainers = with maintainers; [ yshym ];
   };
 }

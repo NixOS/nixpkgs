@@ -38,9 +38,9 @@ for entry in feed.entries:
     else:
         print('chromium: TODO -> ' + version + '\n')
     print(url)
-    if fixes := re.search(r'This update includes .+ security fixes\.', content).group(0):
-        zero_days = re.search(r'Google is aware( of reports)? that .+ in the wild\.', content)
-        if zero_days:
+    if fixes := re.search(r'This update includes .+ security fix(es)?\.', content):
+        fixes = fixes.group(0)
+        if zero_days := re.search(r'Google is aware( of reports)? th(e|at) .+ in the wild\.', content):
             fixes += " " + zero_days.group(0)
         print('\n' + '\n'.join(textwrap.wrap(fixes, width=72)))
     if cve_list := re.findall(r'CVE-[^: ]+', content):

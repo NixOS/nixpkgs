@@ -8,10 +8,7 @@ let
 
   etc' = filter (f: f.enable) (attrValues config.environment.etc);
 
-  etc = pkgs.runCommand "etc" {
-    preferLocalBuild = true;
-    allowSubstitutes = false;
-
+  etc = pkgs.runCommandLocal "etc" {
     # This is needed for the systemd module
     passthru.targets = map (x: x.target) etc';
   } /* sh */ ''
@@ -56,7 +53,8 @@ let
     mkdir -p "$out/etc"
     ${concatMapStringsSep "\n" (etcEntry: escapeShellArgs [
       "makeEtcEntry"
-      etcEntry.source
+      # Force local source paths to be added to the store
+      "${etcEntry.source}"
       etcEntry.target
       etcEntry.mode
       etcEntry.user
@@ -68,13 +66,15 @@ in
 
 {
 
+  imports = [ ../build.nix ];
+
   ###### interface
 
   options = {
 
     environment.etc = mkOption {
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         { example-configuration-file =
             { source = "/nix/store/.../etc/dir/file.conf.example";
               mode = "0440";
@@ -87,7 +87,7 @@ in
       '';
 
       type = with types; attrsOf (submodule (
-        { name, config, ... }:
+        { name, config, options, ... }:
         { options = {
 
             enable = mkOption {
@@ -174,7 +174,8 @@ in
             target = mkDefault name;
             source = mkIf (config.text != null) (
               let name' = "etc-" + baseNameOf name;
-              in mkDefault (pkgs.writeText name' config.text));
+              in mkDerivedConfig options.text (pkgs.writeText name')
+            );
           };
 
         }));
@@ -189,14 +190,12 @@ in
   config = {
 
     system.build.etc = etc;
-
-    system.activationScripts.etc = stringAfter [ "users" "groups" ]
+    system.build.etcActivationCommands =
       ''
         # Set up the statically computed bits of /etc.
         echo "setting up /etc..."
         ${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl ${./setup-etc.pl} ${etc}/etc
       '';
-
   };
 
 }

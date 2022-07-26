@@ -1,0 +1,88 @@
+From 620c3eb38f0dbea6e877e37e97508513e87a0732 Mon Sep 17 00:00:00 2001
+From: Jeremy Fleischman <jeremyfleischman@gmail.com>
+Date: Sun, 27 Mar 2022 00:44:52 -0700
+Subject: [PATCH] Add new KODI_WEBSERVER_EXTRA_WHITELIST cmake var to allow
+ access to more directories
+
+(This is a backport of
+https://github.com/xbmc/xbmc/commit/a6dedce7ba1f03bdd83b019941d1e369a06f7888
+to Kodi 19.4 Matrix)
+
+This is useful for NixOS, which often ends up creating a `KODI_HOME`
+with symlinks to other files (including the chorus2 interface). Kodi's
+webserver cautiously refuses to follow these symlinks, and you end up
+getting 404s rather than the web page.
+
+See https://forum.kodi.tv/showthread.php?tid=366338&pid=3079493 for a
+discussion of this on the Kodi forum.
+---
+ CMakeLists.txt           | 1 +
+ xbmc/CompileInfo.cpp.in  | 5 +++++
+ xbmc/CompileInfo.h       | 1 +
+ xbmc/utils/FileUtils.cpp | 6 +++++-
+ 4 files changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 2d5369798df23..d5ef6d9390ef0 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -243,6 +243,7 @@ add_custom_command(OUTPUT ${CORE_BUILD_DIR}/xbmc/CompileInfo.cpp
+                                             -DAPP_BUILD_DATE=${APP_BUILD_DATE}
+                                             -DAPP_SHARED_LIBRARY_SUFFIX="${APP_SHARED_LIBRARY_SUFFIX}"
+                                             -Dprefix=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}
++                                            -DKODI_WEBSERVER_EXTRA_WHITELIST="${KODI_WEBSERVER_EXTRA_WHITELIST}"
+                                             -P ${CMAKE_SOURCE_DIR}/cmake/scripts/common/GenerateVersionedFiles.cmake
+                    DEPENDS ${CMAKE_SOURCE_DIR}/version.txt
+                            export-files
+diff --git a/xbmc/CompileInfo.cpp.in b/xbmc/CompileInfo.cpp.in
+index f81fe77902236..4f19203a89cde 100644
+--- a/xbmc/CompileInfo.cpp.in
++++ b/xbmc/CompileInfo.cpp.in
+@@ -105,3 +105,8 @@ std::vector<std::string> CCompileInfo::GetAvailableWindowSystems()
+ {
+   return StringUtils::Split("@CORE_PLATFORM_NAME_LC@", ' ');
+ }
++
++const std::vector<std::string> CCompileInfo::GetWebserverExtraWhitelist()
++{
++  return StringUtils::Split("@KODI_WEBSERVER_EXTRA_WHITELIST@", ',');
++}
+diff --git a/xbmc/CompileInfo.h b/xbmc/CompileInfo.h
+index 553a0194ee77f..e2521324e6576 100644
+--- a/xbmc/CompileInfo.h
++++ b/xbmc/CompileInfo.h
+@@ -32,4 +32,5 @@ class CCompileInfo
+   static const char* GetVersionCode();
+   static std::vector<std::string> GetAvailableWindowSystems();
+   static std::vector<ADDON::RepoInfo> LoadOfficialRepoInfos();
++  static const std::vector<std::string> GetWebserverExtraWhitelist();
+ };
+diff --git a/xbmc/utils/FileUtils.cpp b/xbmc/utils/FileUtils.cpp
+index e51f3d631c256..fc717c9608098 100644
+--- a/xbmc/utils/FileUtils.cpp
++++ b/xbmc/utils/FileUtils.cpp
+@@ -6,6 +6,7 @@
+  *  See LICENSES/README.md for more information.
+  */
+ 
++#include "CompileInfo.h"
+ #include "FileUtils.h"
+ #include "ServiceBroker.h"
+ #include "guilib/GUIKeyboardFactory.h"
+@@ -261,12 +262,15 @@ bool CFileUtils::CheckFileAccessAllowed(const std::string &filePath)
+     "/.ssh/",
+   };
+   // ALLOW kodi paths
+-  const std::vector<std::string> whitelist = {
++  std::vector<std::string> whitelist = {
+     CSpecialProtocol::TranslatePath("special://home"),
+     CSpecialProtocol::TranslatePath("special://xbmc"),
+     CSpecialProtocol::TranslatePath("special://musicartistsinfo")
+   };
+ 
++  auto kodiExtraWhitelist = CCompileInfo::GetWebserverExtraWhitelist();
++  whitelist.insert(whitelist.end(), kodiExtraWhitelist.begin(), kodiExtraWhitelist.end());
++
+   // image urls come in the form of image://... sometimes with a / appended at the end
+   // and can be embedded in a music or video file image://music@...
+   // strip this off to get the real file path

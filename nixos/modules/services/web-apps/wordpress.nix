@@ -1,19 +1,13 @@
 { config, pkgs, lib, ... }:
 
-let
-  inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption types;
-  inherit (lib) any attrValues concatMapStringsSep flatten literalExample;
-  inherit (lib) filterAttrs mapAttrs mapAttrs' mapAttrsToList nameValuePair optional optionalAttrs optionalString;
+with lib;
 
-  cfg = migrateOldAttrs config.services.wordpress;
+let
+  cfg = config.services.wordpress;
   eachSite = cfg.sites;
   user = "wordpress";
   webserver = config.services.${cfg.webserver};
   stateDir = hostName: "/var/lib/wordpress/${hostName}";
-
-  # Migrate config.services.wordpress.<hostName> to config.services.wordpress.sites.<hostName>
-  oldSites = filterAttrs (o: _: o != "sites" && o != "webserver");
-  migrateOldAttrs = cfg: cfg // { sites = cfg.sites // oldSites cfg; };
 
   pkg = hostName: cfg: pkgs.stdenv.mkDerivation rec {
     pname = "wordpress-${hostName}";
@@ -87,6 +81,7 @@ let
         package = mkOption {
           type = types.package;
           default = pkgs.wordpress;
+          defaultText = literalExpression "pkgs.wordpress";
           description = "Which WordPress package to use.";
         };
 
@@ -106,23 +101,23 @@ let
             List of path(s) to respective plugin(s) which are copied from the 'plugins' directory.
             <note><para>These plugins need to be packaged before use, see example.</para></note>
           '';
-          example = ''
-            # Wordpress plugin 'embed-pdf-viewer' installation example
-            embedPdfViewerPlugin = pkgs.stdenv.mkDerivation {
-              name = "embed-pdf-viewer-plugin";
-              # Download the theme from the wordpress site
-              src = pkgs.fetchurl {
-                url = "https://downloads.wordpress.org/plugin/embed-pdf-viewer.2.0.3.zip";
-                sha256 = "1rhba5h5fjlhy8p05zf0p14c9iagfh96y91r36ni0rmk6y891lyd";
+          example = literalExpression ''
+            let
+              # Wordpress plugin 'embed-pdf-viewer' installation example
+              embedPdfViewerPlugin = pkgs.stdenv.mkDerivation {
+                name = "embed-pdf-viewer-plugin";
+                # Download the theme from the wordpress site
+                src = pkgs.fetchurl {
+                  url = "https://downloads.wordpress.org/plugin/embed-pdf-viewer.2.0.3.zip";
+                  sha256 = "1rhba5h5fjlhy8p05zf0p14c9iagfh96y91r36ni0rmk6y891lyd";
+                };
+                # We need unzip to build this package
+                nativeBuildInputs = [ pkgs.unzip ];
+                # Installing simply means copying all files to the output directory
+                installPhase = "mkdir -p $out; cp -R * $out/";
               };
-              # We need unzip to build this package
-              nativeBuildInputs = [ pkgs.unzip ];
-              # Installing simply means copying all files to the output directory
-              installPhase = "mkdir -p $out; cp -R * $out/";
-            };
-
-            And then pass this theme to the themes list like this:
-              plugins = [ embedPdfViewerPlugin ];
+            # And then pass this theme to the themes list like this:
+            in [ embedPdfViewerPlugin ]
           '';
         };
 
@@ -133,23 +128,23 @@ let
             List of path(s) to respective theme(s) which are copied from the 'theme' directory.
             <note><para>These themes need to be packaged before use, see example.</para></note>
           '';
-          example = ''
-            # Let's package the responsive theme
-            responsiveTheme = pkgs.stdenv.mkDerivation {
-              name = "responsive-theme";
-              # Download the theme from the wordpress site
-              src = pkgs.fetchurl {
-                url = "https://downloads.wordpress.org/theme/responsive.3.14.zip";
-                sha256 = "0rjwm811f4aa4q43r77zxlpklyb85q08f9c8ns2akcarrvj5ydx3";
+          example = literalExpression ''
+            let
+              # Let's package the responsive theme
+              responsiveTheme = pkgs.stdenv.mkDerivation {
+                name = "responsive-theme";
+                # Download the theme from the wordpress site
+                src = pkgs.fetchurl {
+                  url = "https://downloads.wordpress.org/theme/responsive.3.14.zip";
+                  sha256 = "0rjwm811f4aa4q43r77zxlpklyb85q08f9c8ns2akcarrvj5ydx3";
+                };
+                # We need unzip to build this package
+                nativeBuildInputs = [ pkgs.unzip ];
+                # Installing simply means copying all files to the output directory
+                installPhase = "mkdir -p $out; cp -R * $out/";
               };
-              # We need unzip to build this package
-              nativeBuildInputs = [ pkgs.unzip ];
-              # Installing simply means copying all files to the output directory
-              installPhase = "mkdir -p $out; cp -R * $out/";
-            };
-
-            And then pass this theme to the themes list like this:
-              themes = [ responsiveTheme ];
+            # And then pass this theme to the themes list like this:
+            in [ responsiveTheme ]
           '';
         };
 
@@ -204,7 +199,7 @@ let
           socket = mkOption {
             type = types.nullOr types.path;
             default = null;
-            defaultText = "/run/mysqld/mysqld.sock";
+            defaultText = literalExpression "/run/mysqld/mysqld.sock";
             description = "Path to the unix socket file to use for authentication.";
           };
 
@@ -217,7 +212,7 @@ let
 
         virtualHost = mkOption {
           type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
-          example = literalExample ''
+          example = literalExpression ''
             {
               adminAddr = "webmaster@example.org";
               forceSSL = true;
@@ -265,48 +260,44 @@ in
 {
   # interface
   options = {
-    services.wordpress = mkOption {
-      type = types.submodule {
-        # Used to support old interface
-        freeformType = types.attrsOf (types.submodule siteOpts);
+    services.wordpress = {
 
-        # New interface
-        options.sites = mkOption {
-          type = types.attrsOf (types.submodule siteOpts);
-          default = {};
-          description = "Specification of one or more WordPress sites to serve";
-        };
-
-        options.webserver = mkOption {
-          type = types.enum [ "httpd" "nginx" ];
-          default = "httpd";
-          description = ''
-            Whether to use apache2 or nginx for virtual host management.
-
-            Further nginx configuration can be done by adapting <literal>services.nginx.virtualHosts.&lt;name&gt;</literal>.
-            See <xref linkend="opt-services.nginx.virtualHosts"/> for further information.
-
-            Further apache2 configuration can be done by adapting <literal>services.httpd.virtualHosts.&lt;name&gt;</literal>.
-            See <xref linkend="opt-services.httpd.virtualHosts"/> for further information.
-          '';
-        };
+      sites = mkOption {
+        type = types.attrsOf (types.submodule siteOpts);
+        default = {};
+        description = "Specification of one or more WordPress sites to serve";
       };
-      default = {};
-      description = "Wordpress configuration";
-    };
 
+      webserver = mkOption {
+        type = types.enum [ "httpd" "nginx" "caddy" ];
+        default = "httpd";
+        description = ''
+          Whether to use apache2 or nginx for virtual host management.
+
+          Further nginx configuration can be done by adapting <literal>services.nginx.virtualHosts.&lt;name&gt;</literal>.
+          See <xref linkend="opt-services.nginx.virtualHosts"/> for further information.
+
+          Further apache2 configuration can be done by adapting <literal>services.httpd.virtualHosts.&lt;name&gt;</literal>.
+          See <xref linkend="opt-services.httpd.virtualHosts"/> for further information.
+        '';
+      };
+
+    };
   };
 
   # implementation
   config = mkIf (eachSite != {}) (mkMerge [{
 
-    assertions = mapAttrsToList (hostName: cfg:
-      { assertion = cfg.database.createLocally -> cfg.database.user == user;
-        message = ''services.wordpress.sites."${hostName}".database.user must be ${user} if the database is to be automatically provisioned'';
-      }
-    ) eachSite;
+    assertions =
+      (mapAttrsToList (hostName: cfg:
+        { assertion = cfg.database.createLocally -> cfg.database.user == user;
+          message = ''services.wordpress.sites."${hostName}".database.user must be ${user} if the database is to be automatically provisioned'';
+        }) eachSite) ++
+      (mapAttrsToList (hostName: cfg:
+        { assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
+          message = ''services.wordpress.sites."${hostName}".database.passwordFile cannot be specified if services.wordpress.sites."${hostName}".database.createLocally is set to true.'';
+        }) eachSite);
 
-    warnings = mapAttrsToList (hostName: _: ''services.wordpress."${hostName}" is deprecated use services.wordpress.sites."${hostName}"'') (oldSites cfg);
 
     services.mysql = mkIf (any (v: v.database.createLocally) (attrValues eachSite)) {
       enable = true;
@@ -358,7 +349,7 @@ in
 
             DirectoryIndex index.php
             Require all granted
-            Options +FollowSymLinks
+            Options +FollowSymLinks -Indexes
           </Directory>
 
           # https://wordpress.org/support/article/hardening-wordpress/#securing-wp-config-php
@@ -457,6 +448,33 @@ in
       }) eachSite;
     };
   })
+
+  (mkIf (cfg.webserver == "caddy") {
+    services.caddy = {
+      enable = true;
+      virtualHosts = mapAttrs' (hostName: cfg: (
+        nameValuePair "http://${hostName}" {
+          extraConfig = ''
+            root    * /${pkg hostName cfg}/share/wordpress
+            file_server
+
+            php_fastcgi unix/${config.services.phpfpm.pools."wordpress-${hostName}".socket}
+
+            @uploads {
+              path_regexp path /uploads\/(.*)\.php
+            }
+            rewrite @uploads /
+
+            @wp-admin {
+              path  not ^\/wp-admin/*
+            }
+            rewrite @wp-admin {path}/index.php?{query}
+          '';
+        }
+      )) eachSite;
+    };
+  })
+
 
   ]);
 }

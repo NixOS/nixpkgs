@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "1kqpc55ppzv9n555qgqpda49n7nvkqimzisyjx2a7338r7q4r5bw";
   };
 
-  buildInputs = [ ocaml findlib ];
+  nativeBuildInputs = [ ocaml findlib ];
+  strictDeps = true;
 
   buildFlags = [ "all" "opt" ];
 
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rixed/ocaml-syslog";
     description = "Simple wrapper to access the system logger from OCaml";
     license = licenses.lgpl21Plus;
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
     maintainers = [ maintainers.rixed ];
   };
 }

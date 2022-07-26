@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , meson
 , ninja
 , gettext
@@ -9,18 +8,20 @@
 , python3
 , gst-plugins-base
 , orc
+, gstreamer
 , gobject-introspection
 , enableZbar ? false
 , faacSupport ? false
 , faac
 , faad2
+, ldacbt
 , libass
 , libkate
-, libmms
 , lrdf
 , ladspaH
 , libnice
 , webrtc-audio-processing
+, webrtc-audio-processing_1
 , lilv
 , lv2
 , serd
@@ -28,7 +29,7 @@
 , sratom
 , libbs2b
 , libmodplug
-, mpeg2dec
+, libmpeg2
 , libmicrodns
 , openjpeg
 , libopus
@@ -40,6 +41,7 @@
 , fdk_aac
 , flite
 , gsm
+, json-glib
 , libaom
 , libdc1394
 , libde265
@@ -47,7 +49,7 @@
 , libdvdnav
 , libdvdread
 , libgudev
-, libofa
+, qrencode
 , libsndfile
 , libusb1
 , neon
@@ -55,6 +57,7 @@
 , opencv4
 , openexr
 , openh264
+, libopenmpt
 , pango
 , rtmpdump
 , sbc
@@ -81,6 +84,7 @@
 , libxml2
 , srt
 , vo-aacenc
+, libfreeaptx
 , VideoToolbox
 , AudioToolbox
 , AVFoundation
@@ -88,32 +92,20 @@
 , CoreVideo
 , Foundation
 , MediaToolbox
+, enableGplPlugins ? true
+, bluezSupport ? stdenv.isLinux
 }:
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-bad";
-  version = "1.18.2";
+  version = "1.20.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "06ildd4rl6cynirv3p00d2ddf5is9svj4i7mkahldzhq24pq5mca";
+    sha256 = "0j1q89dl8369djibc5p27lyj8y8p4maplmdzlryvrw0ib77w5lq9";
   };
-
-  patches = [
-    # Use pkgconfig to inject the includedirs
-    ./fix_pkgconfig_includedir.patch
-  ] ++ lib.optionals stdenv.isDarwin [
-    # Fix “error: cannot initialize a parameter of type 'unsigned long *' with an rvalue of type 'typename std::remove_reference<decltype(*(&opencv_dilate_erode_type))>::type *' (aka 'volatile unsigned long *')” on Darwin.
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/commit/640a65bf966df065d41a511e2d76d1f26a2e770c.patch";
-      sha256 = "E5pig+qEfR58Jticr6ydFxZOhM3ZJ8zgrf5K4BdiB/Y=";
-      includes = [
-        "ext/opencv/gstcvdilateerode.cpp"
-      ];
-    })
-  ];
 
   nativeBuildInputs = [
     meson
@@ -122,6 +114,7 @@ stdenv.mkDerivation rec {
     orc # for orcc
     python3
     gettext
+    gstreamer # for gst-tester-1.0
     gobject-introspection
   ] ++ lib.optionals stdenv.isLinux [
     wayland # for wayland-scanner
@@ -133,16 +126,17 @@ stdenv.mkDerivation rec {
     # gobject-introspection has to be in both nativeBuildInputs and
     # buildInputs. The build tries to link against libgirepository-1.0.so
     gobject-introspection
-    faad2
+    json-glib
+    ldacbt
     libass
     libkate
-    libmms
-    webrtc-audio-processing # webrtc
+    webrtc-audio-processing # required by webrtcdsp
+    #webrtc-audio-processing_1 # required by isac
     libbs2b
     libmodplug
-    mpeg2dec
     libmicrodns
     openjpeg
+    libopenmpt
     libopus
     librsvg
     curl.dev
@@ -153,9 +147,9 @@ stdenv.mkDerivation rec {
     libde265
     libdvdnav
     libdvdread
+    qrencode
     libsndfile
     libusb1
-    mjpegtools
     neon
     openal
     opencv4
@@ -174,17 +168,23 @@ stdenv.mkDerivation rec {
     libGLU
     libgme
     openssl
-    x265
     libxml2
     libintl
     srt
     vo-aacenc
+    libfreeaptx
   ] ++ lib.optionals enableZbar [
     zbar
   ] ++ lib.optionals faacSupport [
     faac
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals enableGplPlugins [
+    libmpeg2
+    mjpegtools
+    faad2
+    x265
+  ] ++ lib.optionals bluezSupport [
     bluez
+  ] ++ lib.optionals stdenv.isLinux [
     libva # vaapi requires libva -> libdrm -> libpciaccess, which is Linux-only in nixpkgs
     wayland
     wayland-protocols
@@ -201,7 +201,6 @@ stdenv.mkDerivation rec {
     libdrm
     libgudev
     libnice
-    libofa
     sbc
     spandsp
 
@@ -231,12 +230,13 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
     "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
+    "-Dglib-asserts=disabled" # asserts should be disabled on stable releases
 
     "-Davtp=disabled"
     "-Ddts=disabled" # required `libdca` library not packaged in nixpkgs as of writing, and marked as "BIG FAT WARNING: libdca is still in early development"
     "-Dzbar=${if enableZbar then "enabled" else "disabled"}"
     "-Dfaac=${if faacSupport then "enabled" else "disabled"}"
-    "-Diqa=disabled" # required `dssim` library not packaging in nixpkgs as of writing
+    "-Diqa=disabled" # required `dssim` library not packaging in nixpkgs as of writing, also this is AGPL so update license when adding support
     "-Dmagicleap=disabled" # required `ml_audio` library not packaged in nixpkgs as of writing
     "-Dmsdk=disabled" # not packaged in nixpkgs as of writing / no Windows support
     # As of writing, with `libmpcdec` in `buildInputs` we get
@@ -250,7 +250,6 @@ stdenv.mkDerivation rec {
     # is needed, and then patching upstream to find it (though it probably
     # already works on Arch?).
     "-Dmusepack=disabled"
-    "-Dopenmpt=disabled" # `libopenmpt` not packaged in nixpkgs as of writing
     "-Dopenni2=disabled" # not packaged in nixpkgs as of writing
     "-Dopensles=disabled" # not packaged in nixpkgs as of writing
     "-Dsctp=disabled" # required `usrsctp` library not packaged in nixpkgs as of writing
@@ -263,17 +262,20 @@ stdenv.mkDerivation rec {
     "-Dwasapi2=disabled" # not packaged in nixpkgs as of writing / no Windows support
     "-Dwpe=disabled" # required `wpe-webkit` library not packaged in nixpkgs as of writing
     "-Dzxing=disabled" # required `zxing-cpp` library not packaged in nixpkgs as of writing
+    "-Disac=disabled" # depends on `webrtc-audio-coding-1` not compatible with 0.3
+    "-Dgs=disabled" # depends on `google-cloud-cpp`
+    "-Donnx=disabled" # depends on `libonnxruntime` not packaged in nixpkgs as of writing
+    "-Dopenaptx=enabled" # since gstreamer-1.20.1 `libfreeaptx` is supported for circumventing the dubious license conflict with `libopenaptx`
+    "-Dbluez=${if bluezSupport then "enabled" else "disabled"}"
   ]
   ++ lib.optionals (!stdenv.isLinux) [
     "-Dva=disabled" # see comment on `libva` in `buildInputs`
   ]
   ++ lib.optionals stdenv.isDarwin [
-    "-Dbluez=disabled"
     "-Dchromaprint=disabled"
     "-Ddirectfb=disabled"
     "-Dflite=disabled"
     "-Dkms=disabled" # renders to libdrm output
-    "-Dofa=disabled"
     "-Dlv2=disabled"
     "-Dsbc=disabled"
     "-Dspandsp=disabled"
@@ -294,7 +296,17 @@ stdenv.mkDerivation rec {
     "-Dapplemedia=disabled"
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "-Dintrospection=disabled"
-  ];
+  ] ++ (if enableGplPlugins then [
+    "-Dgpl=enabled"
+  ] else [
+    "-Ddts=disabled"
+    "-Dfaad=disabled"
+    "-Diqa=disabled"
+    "-Dmpeg2enc=disabled"
+    "-Dmplex=disabled"
+    "-Dresindvd=disabled"
+    "-Dx265=disabled"
+  ]);
 
   # Argument list too long
   strictDeps = true;
@@ -319,7 +331,7 @@ stdenv.mkDerivation rec {
       something - be it a good code review, some documentation, a set of tests,
       a real live maintainer, or some actual wide use.
     '';
-    license = licenses.lgpl2Plus;
+    license = if enableGplPlugins then licenses.gpl2Plus else licenses.lgpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ matthewbauer ];
   };

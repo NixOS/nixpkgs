@@ -2,24 +2,32 @@
 , stdenv
 , fetchFromGitHub
 , autoreconfHook
+, openssl
 }:
 
 stdenv.mkDerivation rec {
   pname = "wolfssl";
-  version = "4.8.1";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "wolfSSL";
     repo = "wolfssl";
     rev = "v${version}-stable";
-    sha256 = "1w9gs9cq2yhj5s3diz3x1l15pgrc1pbm00jccizvcjyibmwyyf2h";
+    sha256 = "sha256-5a83Mi+S+mASdZ6O2+0I+qulsF6yNUe80a3qZvWmXHw=";
   };
+
+  postPatch = ''
+    patchShebangs ./scripts
+    # ocsp tests require network access
+    sed -i -e '/ocsp\.test/d' -e '/ocsp-stapling\.test/d' scripts/include.am
+  '';
 
   # Almost same as Debian but for now using --enable-all --enable-reproducible-build instead of --enable-distro to ensure options.h gets installed
   configureFlags = [
     "--enable-all"
     "--enable-base64encode"
     "--enable-pkcs11"
+    "--enable-writedup"
     "--enable-reproducible-build"
     "--enable-tls13"
   ];
@@ -35,6 +43,9 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
+  doCheck = true;
+  checkInputs = [ openssl ];
+
   postInstall = ''
      # fix recursive cycle:
      # wolfssl-config points to dev, dev propagates bin
@@ -48,6 +59,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.wolfssl.com/";
     platforms = platforms.all;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fab mcmtroffaes ];
+    maintainers = with maintainers; [ fab ];
   };
 }

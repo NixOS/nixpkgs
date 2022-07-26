@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = optional stdenv.isFreeBSD autoreconfHook;
 
   configureFlags = [ "--with-apr=${apr.dev}" "--with-expat=${expat.dev}" ]
@@ -38,7 +39,15 @@ stdenv.mkDerivation rec {
         "--without-freetds" "--without-berkeley-db" "--without-crypto" ]
     ;
 
-  propagatedBuildInputs = [ makeWrapper apr expat libiconv ]
+  # For some reason, db version 6.9 is selected when cross-compiling.
+  # It's unclear as to why, it requires someone with more autotools / configure knowledge to go deeper into that.
+  # Always replacing the link flag with a generic link flag seems to help though, so let's do that for now.
+  postConfigure = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    substituteInPlace Makefile \
+      --replace "-ldb-6.9" "-ldb"
+  '';
+
+  propagatedBuildInputs = [ apr expat libiconv ]
     ++ optional sslSupport openssl
     ++ optional bdbSupport db
     ++ optional ldapSupport openldap
@@ -49,7 +58,7 @@ stdenv.mkDerivation rec {
       substituteInPlace $f \
         --replace "${expat.dev}/lib" "${expat.out}/lib" \
         --replace "${db.dev}/lib" "${db.out}/lib" \
-        --replace "${openssl.dev}/lib" "${openssl.out}/lib"
+        --replace "${openssl.dev}/lib" "${lib.getLib openssl}/lib"
     done
 
     # Give apr1 access to sed for runtime invocations.
@@ -63,7 +72,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "http://apr.apache.org/";
+    homepage = "https://apr.apache.org/";
     description = "A companion library to APR, the Apache Portable Runtime";
     maintainers = [ maintainers.eelco ];
     platforms = platforms.unix;

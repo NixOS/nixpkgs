@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx-libpinyin";
-  version = "0.5.3";
+  version = "0.5.4";
 
   src = fetchurl {
     url = "http://download.fcitx-im.org/fcitx-libpinyin/${pname}-${version}.tar.xz";
-    sha256 = "196c229ckib3xvafkk4n3n3jk9rpksfcjsbbwka6a9k2f34qrjj6";
+    sha256 = "1wvsc21imbgq3chlxfw4aycmkb2vi1bkjj9frvhga2m5b5pq82k5";
   };
 
   nativeBuildInputs = [ cmake pkg-config  ];

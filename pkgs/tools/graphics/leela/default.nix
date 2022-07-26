@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, poppler }:
 
 stdenv.mkDerivation {
-  name = "leela-12.fe7a35a";
+  pname = "leela";
+  version = "12.fe7a35a";
 
   src = fetchFromGitHub {
     owner = "TrilbyWhite";

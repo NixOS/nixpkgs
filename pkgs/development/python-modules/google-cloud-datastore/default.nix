@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-datastore";
-  version = "2.1.3";
+  version = "2.7.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e7a510759b9d55ff63c983e3c42cbf5c35f9b7310f4d611ebe3697da6576bcb4";
+    sha256 = "sha256-8o6OeewuiptrlkVNm2I7fwtqPAt+nNOHveIUEWDjyN0=";
   };
 
   propagatedBuildInputs = [
@@ -41,7 +41,10 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Requires credentials
-    "tests/system/test_system.py"
+    "tests/system/test_allocate_reserve_ids.py"
+    "tests/system/test_query.py"
+    "tests/system/test_put.py"
+    "tests/system/test_transaction.py"
   ];
 
   pythonImportsCheck = [

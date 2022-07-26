@@ -1,21 +1,30 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage rec {
   pname = "pytest-celery";
-  version = "0.0.0";
+  version = "0.1.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "cfd060fc32676afa1e4f51b2938f903f7f75d952186b8c6cf631628c4088f406";
+  format = "flit";
+
+  src = fetchFromGitHub {
+    owner = "celery";
+    repo = "pytest-celery";
+    rev = "v${version}";
+    sha256 = "sha256-vzWwkOS3BLOInaFDk+PegvEmC88ZZ1sG1CmHwhn7r9w=";
   };
 
-  patches = [ ./no-celery.patch ];
+  postPatch = ''
+    # avoid infinite recursion with celery
+    substituteInPlace pyproject.toml \
+      --replace '"celery >= 4.4.0"' ""
+  '';
 
-  doCheck = false; # This package has nothing to test or import.
+  # This package has nothing to test or import.
+  doCheck = false;
 
   meta = with lib; {
-    description = "pytest plugin for unittest subTest() support and subtests fixture";
-    homepage = "https://github.com/pytest-dev/pytest-subtests";
+    description = "Pytest plugin to enable celery.contrib.pytest";
+    homepage = "https://github.com/celery/pytest-celery";
     license = licenses.mit;
     maintainers = [ ];
   };

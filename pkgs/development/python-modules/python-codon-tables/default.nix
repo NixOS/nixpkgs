@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "python-codon-tables";
-  version = "0.1.10";
+  version = "0.1.11";
 
   src = fetchPypi {
     pname = "python_codon_tables";
     inherit version;
-    sha256 = "265beac928cbb77c6745bc728471adc7ffef933b794be303d272ecb9ad37d3d4";
+    sha256 = "ba590fcfb1988f9674c8627464caeb3ea0797d970872a2c27ea09906acd24110";
   };
 
   # no tests in tarball

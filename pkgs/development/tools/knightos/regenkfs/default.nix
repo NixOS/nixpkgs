@@ -12,12 +12,14 @@ rustPlatform.buildRustPackage {
   };
 
   cargoSha256 = "sha256-05VmQdop4vdzw2XEvVdp9+RNmyZvay1Q7gKN2n8rDEQ=";
-  cargoBuildFlags = [ "--features=c-undef" ];
+
+  buildFeatures = [ "c-undef" ];
 
   meta = with lib; {
     description = "Reimplementation of genkfs in Rust";
     homepage = "https://github.com/siraben/regenkfs";
     license = licenses.mit;
     maintainers = with maintainers; [ siraben ];
+    mainProgram = "regenkfs";
   };
 }

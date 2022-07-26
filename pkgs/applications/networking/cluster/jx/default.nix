@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, lib, installShellFiles }:
+{ stdenv, buildGoModule, fetchFromGitHub, lib, installShellFiles }:
 
 buildGoModule rec {
   pname = "jx";
@@ -19,13 +19,12 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildFlagsArray = ''
-    -ldflags=
-    -s -w
-    -X github.com/jenkins-x/jx/pkg/version.Version=${version}
-    -X github.com/jenkins-x/jx/pkg/version.Revision=${src.rev}
-    -X github.com/jenkins-x/jx/pkg/version.GitTreeState=clean
-  '';
+  ldflags = [
+    "-s -w"
+    "-X github.com/jenkins-x/jx/pkg/version.Version=${version}"
+    "-X github.com/jenkins-x/jx/pkg/version.Revision=${src.rev}"
+    "-X github.com/jenkins-x/jx/pkg/version.GitTreeState=clean"
+  ];
 
   postInstall = ''
     for shell in bash zsh; do
@@ -35,6 +34,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Command line tool for installing and using Jenkins X";
     homepage = "https://jenkins-x.io";
     longDescription = ''

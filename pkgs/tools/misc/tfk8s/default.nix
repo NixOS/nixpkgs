@@ -2,21 +2,19 @@
 
 buildGoModule rec {
   pname = "tfk8s";
-  version = "0.1.6";
+  version = "0.1.7";
   tag = "v${version}";
 
   src = fetchFromGitHub {
     owner = "jrhouston";
     repo = "tfk8s";
     rev = tag;
-    sha256 = "sha256-pjgacKyOAlaFqHCKcLmjTl/uWpjMzkHH0UcaIEb+IZI=";
+    sha256 = "0mkfggwjrsp0rzh7ll6nmp9kqcw4fl8q81vk67z5mbd276dkyxrb";
   };
 
-  vendorSha256 = "sha256-eLPmghs05pMMtys97Ja7YGdVMZmMmiaFeMwzaWNxW0I=";
-  runVend = true;
+  vendorSha256 = "sha256-6sMPpizrjM/UIxrAI2KQJy9uxzsjZGrSlQXjvL4wkQg=";
 
-  buildFlagsArray = [
-    "-ldflags="
+  ldflags = [
     "-s"
     "-w"
     "-X main.toolVersion=${tag}"
@@ -45,6 +43,6 @@ buildGoModule rec {
       * Strip out server side fields when piping kubectl get $R -o yaml | tfk8s --strip
     '';
     homepage = "https://github.com/jrhouston/tfk8s/";
-    maintainers = with maintainers; [ superherointj ];
+    maintainers = with maintainers; [ bryanasdev000 ];
   };
 }

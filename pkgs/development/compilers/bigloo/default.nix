@@ -1,21 +1,22 @@
 { fetchurl, lib, stdenv, autoconf, automake, libtool, gmp
-, darwin
+, darwin, libunistring
 }:
 
 stdenv.mkDerivation rec {
   pname = "bigloo";
-  version = "4.3h";
+  version = "4.4b";
 
   src = fetchurl {
     url = "ftp://ftp-sop.inria.fr/indes/fp/Bigloo/bigloo-${version}.tar.gz";
-    sha256 = "0fw08096sf8ma2cncipnidnysxii0h0pc7kcqkjhkhdchknp8vig";
+    sha256 = "sha256-oxOSJwKWmwo7PYAwmeoFrKaYdYvmvQquWXyutolc488=";
   };
 
   nativeBuildInputs = [ autoconf automake libtool ];
 
-  buildInputs = lib.optional stdenv.isDarwin
+  buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.ApplicationServices
-  ;
+    libunistring
+  ];
 
   propagatedBuildInputs = [ gmp ];
 
@@ -53,6 +54,10 @@ stdenv.mkDerivation rec {
     license     = lib.licenses.gpl2Plus;
     platforms   = lib.platforms.unix;
     maintainers = with lib.maintainers; [ thoughtpolice ];
+    # dyld: Library not loaded: /nix/store/w3liqjlrcmzc0sf2kgwjprqgqwqx8z47-libunistring-1.0/lib/libunistring.2.dylib
+    #  Referenced from: /private/tmp/nix-build-bigloo-4.4b.drv-0/bigloo-4.4b/bin/bigloo
+    #  Reason: Incompatible library version: bigloo requires version 5.0.0 or later, but libunistring.2.dylib provides version 4.0.0
+    broken      = (stdenv.isDarwin && stdenv.isx86_64);
 
     longDescription = ''
       Bigloo is a Scheme implementation devoted to one goal: enabling

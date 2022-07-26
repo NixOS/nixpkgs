@@ -6,10 +6,10 @@
 }:
 
 let
-  name    = "distcc";
+  pname = "distcc";
   version = "2021-03-11";
   distcc = stdenv.mkDerivation {
-    name = "${name}-${version}";
+    inherit pname version;
     src = fetchFromGitHub {
       owner = "distcc";
       repo = "distcc";
@@ -17,8 +17,8 @@ let
       sha256 = "0zjba1090awxkmgifr9jnjkxf41zhzc4f6mrnbayn3v6s77ca9x4";
     };
 
-  nativeBuildInputs = [ pkg-config ];
-    buildInputs = [popt avahi pkg-config python3 gtk3 autoconf automake which procps libiberty_static];
+  nativeBuildInputs = [ pkg-config autoconf automake ];
+    buildInputs = [popt avahi pkg-config python3 gtk3 which procps libiberty_static];
     preConfigure =
     ''
       export CPATH=$(ls -d ${gcc.cc}/lib/gcc/*/${gcc.cc.version}/plugin/include)

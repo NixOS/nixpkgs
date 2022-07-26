@@ -20,7 +20,12 @@ buildImage {
   fromImageName = null;
   fromImageTag = "latest";
 
-  contents = pkgs.redis;
+  copyToRoot = pkgs.buildEnv {
+    name = "image-root";
+    paths = [ pkgs.redis ];
+    pathsToLink = [ "/bin" ];
+  };
+
   runAsRoot = ''
     #!${pkgs.runtimeShell}
     mkdir -p /data
@@ -46,7 +51,7 @@ The above example will build a Docker image `redis/latest` from the given base i
 
 - `fromImageTag` can be used to further specify the tag of the base image within the repository, in case an image contains multiple tags. By default it's `null`, in which case `buildImage` will peek the first tag available for the base image.
 
-- `contents` is a derivation that will be copied in the new layer of the resulting image. This can be similarly seen as `ADD contents/ /` in a `Dockerfile`. By default it's `null`.
+- `copyToRoot` is a derivation that will be copied in the new layer of the resulting image. This can be similarly seen as `ADD contents/ /` in a `Dockerfile`. By default it's `null`.
 
 - `runAsRoot` is a bash script that will run as root in an environment that overlays the existing layers of the base image with the new resulting layer, including the previously copied `contents` derivation. This can be similarly seen as `RUN ...` in a `Dockerfile`.
 
@@ -58,7 +63,7 @@ After the new layer has been created, its closure (to which `contents`, `config`
 
 At the end of the process, only one new single layer will be produced and added to the resulting image.
 
-The resulting repository will only list the single image `image/tag`. In the case of [the `buildImage` example](#ex-dockerTools-buildImage) it would be `redis/latest`.
+The resulting repository will only list the single image `image/tag`. In the case of [the `buildImage` example](#ex-dockerTools-buildImage), it would be `redis/latest`.
 
 It is possible to inspect the arguments with which an image was built using its `buildArgs` attribute.
 
@@ -81,13 +86,17 @@ pkgs.dockerTools.buildImage {
   name = "hello";
   tag = "latest";
   created = "now";
-  contents = pkgs.hello;
+  copyToRoot = pkgs.buildEnv {
+    name = "image-root";
+    paths = [ pkgs.hello ];
+    pathsToLink = [ "/bin" ];
+  };
 
   config.Cmd = [ "/bin/hello" ];
 }
 ```
 
-and now the Docker CLI will display a reasonable date and sort the images as expected:
+Now the Docker CLI will display a reasonable date and sort the images as expected:
 
 ```ShellSession
 $ docker images
@@ -95,7 +104,7 @@ REPOSITORY   TAG      IMAGE ID       CREATED              SIZE
 hello        latest   de2bf4786de6   About a minute ago   25.2MB
 ```
 
-however, the produced images will not be binary reproducible.
+However, the produced images will not be binary reproducible.
 
 ## buildLayeredImage {#ssec-pkgs-dockerTools-buildLayeredImage}
 
@@ -119,13 +128,13 @@ Create a Docker image with many of the store paths being on their own layer to i
 
 `contents` _optional_
 
-: Top level paths in the container. Either a single derivation, or a list of derivations.
+: Top-level paths in the container. Either a single derivation, or a list of derivations.
 
     *Default:* `[]`
 
 `config` _optional_
 
-: Run-time configuration of the container. A full list of the options are available at in the [ Docker Image Specification v1.2.0 ](https://github.com/moby/moby/blob/master/image/spec/v1.2.md#image-json-field-descriptions).
+: Run-time configuration of the container. A full list of the options are available at in the [Docker Image Specification v1.2.0](https://github.com/moby/moby/blob/master/image/spec/v1.2.md#image-json-field-descriptions).
 
     *Default:* `{}`
 
@@ -150,6 +159,12 @@ Create a Docker image with many of the store paths being on their own layer to i
 `fakeRootCommands` _optional_
 
 : Shell commands to run while creating the archive for the final layer in a fakeroot environment. Unlike `extraCommands`, you can run `chown` to change the owners of the files in the archive, changing fakeroot's state instead of the real filesystem. The latter would require privileges that the build user does not have. Static binaries do not interact with the fakeroot environment. By default all files in the archive will be owned by root.
+
+`enableFakechroot` _optional_
+
+: Whether to run in `fakeRootCommands` in `fakechroot`, making programs behave as though `/` is the root of the image being created, while files in the Nix store are available as usual. This allows scripts that perform installation in `/` to work as expected. Considering that `fakechroot` is implemented via the same mechanism as `fakeroot`, the same caveats apply.
+
+    *Default:* `false`
 
 ### Behavior of `contents` in the final image {#dockerTools-buildLayeredImage-arg-contents}
 
@@ -189,9 +204,9 @@ pkgs.dockerTools.buildLayeredImage {
 
 Increasing the `maxLayers` increases the number of layers which have a chance to be shared between different images.
 
-Modern Docker installations support up to 128 layers, however older versions support as few as 42.
+Modern Docker installations support up to 128 layers, but older versions support as few as 42.
 
-If the produced image will not be extended by other Docker builds, it is safe to set `maxLayers` to `128`. However it will be impossible to extend the image further.
+If the produced image will not be extended by other Docker builds, it is safe to set `maxLayers` to `128`. However, it will be impossible to extend the image further.
 
 The first (`maxLayers-2`) most "popular" paths will have their own individual layers, then layer \#`maxLayers-1` will contain all the remaining "unpopular" paths, and finally layer \#`maxLayers` will contain the Image configuration.
 
@@ -207,7 +222,7 @@ The image produced by running the output script can be piped directly into `dock
 $(nix-build) | docker load
 ```
 
-Alternatively, the image be piped via `gzip` into `skopeo`, e.g. to copy it into a registry:
+Alternatively, the image be piped via `gzip` into `skopeo`, e.g., to copy it into a registry:
 
 ```ShellSession
 $(nix-build) | gzip --fast | skopeo copy docker-archive:/dev/stdin docker://some_docker_registry/myimage:tag
@@ -296,7 +311,7 @@ buildImage {
 
   runAsRoot = ''
     #!${pkgs.runtimeShell}
-    ${shadowSetup}
+    ${pkgs.dockerTools.shadowSetup}
     groupadd -r redis
     useradd -r -g redis redis
     mkdir /data

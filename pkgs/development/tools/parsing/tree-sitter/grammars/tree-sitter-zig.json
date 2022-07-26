@@ -1,9 +1,10 @@
 {
-  "url": "https://github.com/GrayJack/tree-sitter-zig",
-  "rev": "41bbc7f7b94bde3e948e41e4d42673945238ff03",
-  "date": "2021-03-30T12:55:10-03:00",
-  "path": "/nix/store/av4xgzr3c1rhr7v4fa9mm68krd2qv1lg-tree-sitter-zig",
-  "sha256": "0gjxac43qpqc4332bp3mpdbvh7rqv0q3hvw8834b30ml5q0r0qr0",
+  "url": "https://github.com/maxxnino/tree-sitter-zig",
+  "rev": "8d3224c3bd0890fe08358886ebf54fca2ed448a6",
+  "date": "2022-06-25T10:13:16+07:00",
+  "path": "/nix/store/an534h97z3gi6zk5mzysbx2fp8rvy9c4-tree-sitter-zig",
+  "sha256": "0mw4s92qmxkh9a13h9hg6kv9b704vzx3kr4j6dap0c80dffvfjhk",
+  "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,
   "leaveDotGit": false

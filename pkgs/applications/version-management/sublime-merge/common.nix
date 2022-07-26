@@ -17,7 +17,7 @@ let
   archSha256 = sha256;
   arch = "x64";
 
-  libPath = lib.makeLibraryPath [ xorg.libX11 glib gtk3 cairo pango ];
+  libPath = lib.makeLibraryPath [ xorg.libX11 glib gtk3 cairo pango curl ];
   redirects = [ "/usr/bin/pkexec=${pkexecPath}" "/bin/true=${coreutils}/bin/true" ];
 in let
   binaryPackage = stdenv.mkDerivation {
@@ -121,6 +121,7 @@ in stdenv.mkDerivation (rec {
     description = "Git client from the makers of Sublime Text";
     homepage = "https://www.sublimemerge.com";
     maintainers = with maintainers; [ zookatron ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
   };

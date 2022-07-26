@@ -6,10 +6,6 @@ let
 
   configVersion = 26;
 
-  cacheDir = "cache";
-  lockDir = "lock";
-  feedIconsDir = "feed-icons";
-
   dbPort = if cfg.database.port == null
     then (if cfg.database.type == "pgsql" then 5432 else 3306)
     else cfg.database.port;
@@ -22,20 +18,20 @@ let
   tt-rss-config = let
     password =
       if (cfg.database.password != null) then
-        "${(escape ["'" "\\"] cfg.database.password)}"
+        "'${(escape ["'" "\\"] cfg.database.password)}'"
       else if (cfg.database.passwordFile != null) then
-        "file_get_contents('${cfg.database.passwordFile}'"
+        "file_get_contents('${cfg.database.passwordFile}')"
       else
-        ""
+        null
       ;
   in pkgs.writeText "config.php" ''
     <?php
       putenv('TTRSS_PHP_EXECUTABLE=${pkgs.php}/bin/php');
 
-      putenv('TTRSS_LOCK_DIRECTORY=${lockDir}');
-      putenv('TTRSS_CACHE_DIR=${cacheDir}');
-      putenv('TTRSS_ICONS_DIR=${feedIconsDir}');
-      putenv('TTRSS_ICONS_URL=${feedIconsDir}');
+      putenv('TTRSS_LOCK_DIRECTORY=${cfg.root}/lock');
+      putenv('TTRSS_CACHE_DIR=${cfg.root}/cache');
+      putenv('TTRSS_ICONS_DIR=${cfg.root}/feed-icons');
+      putenv('TTRSS_ICONS_URL=feed-icons');
       putenv('TTRSS_SELF_URL_PATH=${cfg.selfUrlPath}');
 
       putenv('TTRSS_MYSQL_CHARSET=UTF8');
@@ -44,7 +40,7 @@ let
       putenv('TTRSS_DB_HOST=${optionalString (cfg.database.host != null) cfg.database.host}');
       putenv('TTRSS_DB_USER=${cfg.database.user}');
       putenv('TTRSS_DB_NAME=${cfg.database.name}');
-      putenv('TTRSS_DB_PASS=${password}');
+      putenv('TTRSS_DB_PASS=' ${optionalString (password != null) ". ${password}"});
       putenv('TTRSS_DB_PORT=${toString dbPort}');
 
       putenv('TTRSS_AUTH_AUTO_CREATE=${boolToString cfg.auth.autoCreate}');
@@ -101,6 +97,22 @@ let
       ${cfg.extraConfig}
   '';
 
+  # tt-rss and plugins and themes and config.php
+  servedRoot = pkgs.runCommand "tt-rss-served-root" {} ''
+    cp --no-preserve=mode -r ${pkgs.tt-rss} $out
+    cp ${tt-rss-config} $out/config.php
+    ${optionalString (cfg.pluginPackages != []) ''
+    for plugin in ${concatStringsSep " " cfg.pluginPackages}; do
+    cp -r "$plugin"/* "$out/plugins.local/"
+    done
+    ''}
+    ${optionalString (cfg.themePackages != []) ''
+    for theme in ${concatStringsSep " " cfg.themePackages}; do
+    cp -r "$theme"/* "$out/themes.local/"
+    done
+    ''}
+  '';
+
  in {
 
   ###### interface
@@ -114,7 +126,6 @@ let
       root = mkOption {
         type = types.path;
         default = "/var/lib/tt-rss";
-        example = "/var/lib/tt-rss";
         description = ''
           Root of the application.
         '';
@@ -123,7 +134,6 @@ let
       user = mkOption {
         type = types.str;
         default = "tt_rss";
-        example = "tt_rss";
         description = ''
           User account under which both the update daemon and the web-application run.
         '';
@@ -524,6 +534,7 @@ let
     services.phpfpm.pools = mkIf (cfg.pool == "${poolName}") {
       ${poolName} = {
         inherit (cfg) user;
+        phpPackage = pkgs.php80;
         settings = mapAttrs (name: mkDefault) {
           "listen.owner" = "nginx";
           "listen.group" = "nginx";
@@ -544,10 +555,14 @@ let
       enable = true;
       virtualHosts = {
         ${cfg.virtualHost} = {
-          root = "${cfg.root}";
+          root = "${cfg.root}/www";
 
           locations."/" = {
             index = "index.php";
+          };
+
+          locations."^~ /feed-icons" = {
+            root = "${cfg.root}";
           };
 
           locations."~ \\.php$" = {
@@ -562,13 +577,19 @@ let
     };
 
     systemd.tmpfiles.rules = [
-      "d '${cfg.root}' 0755 ${cfg.user} tt_rss - -"
-      "Z '${cfg.root}' 0755 ${cfg.user} tt_rss - -"
+      "d '${cfg.root}' 0555 ${cfg.user} tt_rss - -"
+      "d '${cfg.root}/lock' 0755 ${cfg.user} tt_rss - -"
+      "d '${cfg.root}/cache' 0755 ${cfg.user} tt_rss - -"
+      "d '${cfg.root}/cache/upload' 0755 ${cfg.user} tt_rss - -"
+      "d '${cfg.root}/cache/images' 0755 ${cfg.user} tt_rss - -"
+      "d '${cfg.root}/cache/export' 0755 ${cfg.user} tt_rss - -"
+      "d '${cfg.root}/feed-icons' 0755 ${cfg.user} tt_rss - -"
+      "L+ '${cfg.root}/www' - - - - ${servedRoot}"
     ];
 
     systemd.services = {
       phpfpm-tt-rss = mkIf (cfg.pool == "${poolName}") {
-        restartTriggers = [ tt-rss-config pkgs.tt-rss ];
+        restartTriggers = [ servedRoot ];
       };
 
       tt-rss = {
@@ -594,27 +615,7 @@ let
 
               else "";
 
-        in ''
-          rm -rf "${cfg.root}/*"
-          cp -r "${pkgs.tt-rss}/"* "${cfg.root}"
-          ${optionalString (cfg.pluginPackages != []) ''
-            for plugin in ${concatStringsSep " " cfg.pluginPackages}; do
-              cp -r "$plugin"/* "${cfg.root}/plugins.local/"
-            done
-          ''}
-          ${optionalString (cfg.themePackages != []) ''
-            for theme in ${concatStringsSep " " cfg.themePackages}; do
-              cp -r "$theme"/* "${cfg.root}/themes.local/"
-            done
-          ''}
-          ln -sf "${tt-rss-config}" "${cfg.root}/config.php"
-          chmod -R 755 "${cfg.root}"
-          chmod -R ug+rwX "${cfg.root}/${lockDir}"
-          chmod -R ug+rwX "${cfg.root}/${cacheDir}"
-          chmod -R ug+rwX "${cfg.root}/${feedIconsDir}"
-        ''
-
-        + (optionalString (cfg.database.type == "pgsql") ''
+        in (optionalString (cfg.database.type == "pgsql") ''
           exists=$(${callSql "select count(*) > 0 from pg_tables where tableowner = user"} \
           | tail -n+3 | head -n-2 | sed -e 's/[ \n\t]*//')
 
@@ -639,7 +640,7 @@ let
         serviceConfig = {
           User = "${cfg.user}";
           Group = "tt_rss";
-          ExecStart = "${pkgs.php}/bin/php ${cfg.root}/update.php --daemon --quiet";
+          ExecStart = "${pkgs.php}/bin/php ${cfg.root}/www/update.php --daemon --quiet";
           Restart = "on-failure";
           RestartSec = "60";
           SyslogIdentifier = "tt-rss";

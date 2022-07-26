@@ -12,7 +12,7 @@ The function `buildGoModule` builds Go programs managed with Go modules. It buil
 In the following is an example expression using `buildGoModule`, the following arguments are of special significance to the function:
 
 - `vendorSha256`: is the hash of the output of the intermediate fetcher derivation. `vendorSha256` can also take `null` as an input. When `null` is used as a value, rather than fetching the dependencies and vendoring them, we use the vendoring included within the source repo. If you'd like to not have to update this field on dependency changes, run `go mod vendor` in your source repo and set `vendorSha256 = null;`
-- `runVend`: runs the vend command to generate the vendor directory. This is useful if your code depends on c code and go mod tidy does not include the needed sources to build.
+- `proxyVendor`: Fetches (go mod download) and proxies the vendor directory. This is useful if your code depends on c code and go mod tidy does not include the needed sources to build or if any dependency has case-insensitive conflicts which will produce platform dependant `vendorSha256` checksums.
 
 ```nix
 pet = buildGoModule rec {
@@ -28,14 +28,11 @@ pet = buildGoModule rec {
 
   vendorSha256 = "1879j77k96684wi554rkjxydrj8g3hpp0kvxz03sd8dmwr3lh83j";
 
-  runVend = true;
-
   meta = with lib; {
     description = "Simple command-line snippet manager, written in Go";
     homepage = "https://github.com/knqyf263/pet";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];
-    platforms = platforms.linux ++ platforms.darwin;
   };
 }
 ```
@@ -112,16 +109,6 @@ done
 
 Both `buildGoModule` and `buildGoPackage` can be tweaked to behave slightly differently, if the following attributes are used:
 
-### `buildFlagsArray` and `buildFlags`: {#ex-goBuildFlags-noarray}
-
-These attributes set build flags supported by `go build`. We recommend using `buildFlagsArray`.
-
-```nix
-  buildFlagsArray = [
-    "-tags=release"
-  ];
-```
-
 ### `ldflags` {#var-go-ldflags}
 
 Arguments to pass to the Go linker tool via the `-ldflags` argument of `go build`. The most common use case for this argument is to make the resulting executable aware of its own version. For example:
@@ -134,10 +121,29 @@ Arguments to pass to the Go linker tool via the `-ldflags` argument of `go build
   ];
 ```
 
+### `tags` {#var-go-tags}
+
+Arguments to pass to the Go via the `-tags` argument of `go build`. For example:
+
+```nix
+  tags = [
+    "production"
+    "sqlite"
+  ];
+```
+
+```nix
+  tags = [ "production" ] ++ lib.optionals withSqlite [ "sqlite" ];
+```
+
 ### `deleteVendor` {#var-go-deleteVendor}
 
 Removes the pre-existing vendor directory. This should only be used if the dependencies included in the vendor folder are broken or incomplete.
 
 ### `subPackages` {#var-go-subPackages}
 
-Limits the builder from building child packages that have not been listed. If `subPackages` is not specified, all child packages will be built.
+Specified as a string or list of strings. Limits the builder from building child packages that have not been listed. If `subPackages` is not specified, all child packages will be built.
+
+### `excludedPackages` {#var-go-excludedPackages}
+
+Specified as a string or list of strings. Causes the builder to skip building child packages that match any of the provided values. If `excludedPackages` is not specified, all child packages will be built.

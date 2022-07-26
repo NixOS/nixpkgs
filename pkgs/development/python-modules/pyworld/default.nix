@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "PyWorld is a Python wrapper for WORLD vocoder";
-    homepage = https://github.com/JeremyCCHsu/Python-Wrapper-for-World-Vocoder;
+    homepage = "https://github.com/JeremyCCHsu/Python-Wrapper-for-World-Vocoder";
     license = licenses.mit;
     maintainers = [ maintainers.mic92 ];
   };

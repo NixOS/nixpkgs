@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "hsqldb";
-  version = "2.5.1";
+  version = "2.6.1";
   underscoreMajMin = lib.strings.replaceChars ["."] ["_"] (lib.versions.majorMinor version);
 
   src = fetchurl {
     url = "mirror://sourceforge/project/hsqldb/hsqldb/hsqldb_${underscoreMajMin}/hsqldb-${version}.zip";
-    sha256 = "0yd9px85y036bp3q1assj3fgaykxrwnhnc7cbjgic39cykfy5hrg";
+    sha256 = "sha256-cixyEwjEt68UOotd1TcJNyVUxTRDx4XyfyYg9k6kRtQ=";
   };
 
   nativeBuildInputs = [ unzip makeWrapper ];
@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://hsqldb.org";
     description = "A relational, embedable database management system written in Java and a set of related tools";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     platforms = platforms.unix;
     license = licenses.bsd3;
   };

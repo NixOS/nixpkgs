@@ -4,22 +4,19 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     maintainers = [ sumnerevans ];
   };
 
-  machine =
+  nodes.machine =
     { pkgs, ... }:
     {
       services.airsonic = {
         enable = true;
         maxMemory = 800;
       };
-
-      # Airsonic is a Java application, and unfortunately requires a significant
-      # amount of memory.
-      virtualisation.memorySize = 1024;
     };
 
   testScript = ''
     def airsonic_is_up(_) -> bool:
-        return machine.succeed("curl --fail http://localhost:4040/login")
+        status, _ = machine.execute("curl --fail http://localhost:4040/login")
+        return status == 0
 
 
     machine.start()

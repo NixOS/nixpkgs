@@ -1,7 +1,8 @@
-diff -Naur a/ccx_2.17/src/Makefile b/ccx_2.17/src/Makefile
---- a/ccx_2.17/src/Makefile	2020-07-23 21:41:38.507761972 +0200
-+++ b/ccx_2.17/src/Makefile	2020-08-22 16:53:50.004938281 +0200
-@@ -18,15 +18,10 @@
+diff --git a/ccx_2.19/src/Makefile b/ccx_2.19/src/Makefile
+index c503513..8a69a0c 100755
+--- a/ccx_2.19/src/Makefile
++++ b/ccx_2.19/src/Makefile
+@@ -18,15 +18,10 @@ OCCXF = $(SCCXF:.f=.o)
  OCCXC = $(SCCXC:.c=.o)
  OCCXMAIN = $(SCCXMAIN:.c=.o)
  
@@ -13,10 +14,10 @@ diff -Naur a/ccx_2.17/src/Makefile b/ccx_2.17/src/Makefile
 -	../../../ARPACK/libarpack_INTEL.a \
 -       -lpthread -lm -lc
 -
--ccx_2.17: $(OCCXMAIN) ccx_2.17.a  $(LIBS)
--	./date.pl; $(CC) $(CFLAGS) -c ccx_2.17.c; $(FC)  -Wall -O2 -o $@ $(OCCXMAIN) ccx_2.17.a $(LIBS)
-+ccx_2.17: $(OCCXMAIN) ccx_2.17.a
-+	$(CC) $(CFLAGS) -c ccx_2.17.c; $(FC)  -Wall -O2 -o $@ $(OCCXMAIN) ccx_2.17.a $(LIBS)
+-ccx_2.19: $(OCCXMAIN) ccx_2.19.a  $(LIBS)
+-	./date.pl; $(CC) $(CFLAGS) -c ccx_2.19.c; $(FC)  -Wall -O2 -o $@ $(OCCXMAIN) ccx_2.19.a $(LIBS) -fopenmp
++ccx_2.19: $(OCCXMAIN) ccx_2.19.a
++	$(CC) $(CFLAGS) -c ccx_2.19.c; $(FC)  -Wall -O2 -o $@ $(OCCXMAIN) ccx_2.19.a $(LIBS) -fopenmp
  
- ccx_2.17.a: $(OCCXF) $(OCCXC)
+ ccx_2.19.a: $(OCCXF) $(OCCXC)
  	ar vr $@ $?

@@ -1,17 +1,23 @@
-{ python3Packages, fetchFromGitHub, lib, yubikey-personalization, libu2f-host, libusb1 }:
+{ python3Packages, fetchFromGitHub, lib, yubikey-personalization, libu2f-host, libusb1, procps }:
 
 python3Packages.buildPythonPackage rec {
   pname = "yubikey-manager";
-  version = "4.0.5";
+  version = "4.0.9";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     repo = "yubikey-manager";
-    rev = version;
+    rev = "refs/tags/${version}";
     owner = "Yubico";
-    sha256 = "sha256:0ycp7k6lkxzqwkc16fifhyqaqi7hl3351pwddsn18r5l83jnzdn2";
+    sha256 = "sha256-MwM/b1QP6pkyBjz/r6oC4sW1mKC0CKMay45a0wCktk0=";
   };
 
-  format = "pyproject";
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'fido2 = ">=0.9, <1.0"' 'fido2 = ">*"'
+    substituteInPlace "ykman/pcsc/__init__.py" \
+      --replace 'pkill' '${procps}/bin/pkill'
+  '';
 
   nativeBuildInputs = with python3Packages; [ poetry-core ];
 
@@ -55,6 +61,6 @@ python3Packages.buildPythonPackage rec {
 
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ benley mic92 ];
+    maintainers = with maintainers; [ benley lassulus pinpox ];
   };
 }

@@ -1,48 +1,48 @@
-{ lib, stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl
+, fetchpatch
 , autoconf
 , automake
 , pkg-config
 , zlib
 , libpng
-, libjpeg ? null
-, libwebp ? null
-, libtiff ? null
-, libXpm ? null
+, libjpeg
+, libwebp
+, libtiff
+, libXpm
+, libavif
 , fontconfig
 , freetype
 }:
 
 stdenv.mkDerivation rec {
   pname = "gd";
-  version = "2.3.0";
+  version = "2.3.3";
 
   src = fetchurl {
     url = "https://github.com/libgd/libgd/releases/download/${pname}-${version}/libgd-${version}.tar.xz";
-    sha256 = "0n5czhxzinvjvmhkf5l9fwjdx5ip69k5k7pj6zwb6zs1k9dibngc";
+    sha256 = "0qas3q9xz3wgw06dm2fj0i189rain6n60z1vyq50d5h7wbn25s1z";
   };
 
-  hardeningDisable = [ "format" ];
   patches = [
-    # Fixes an issue where some other packages would fail to build
-    # their documentation with an error like:
-    # "Error: Problem doing text layout"
-    #
-    # Can be removed if Wayland can still be built successfully with
-    # documentation.
-    (fetchpatch {
-      url = "https://github.com/libgd/libgd/commit/3dd0e308cbd2c24fde2fc9e9b707181252a2de95.patch";
-      excludes = [ "tests/gdimagestringft/.gitignore" ];
-      sha256 = "12iqlanl9czig9d7c3rvizrigw2iacimnmimfcny392dv9iazhl1";
+    (fetchpatch { # included in > 2.3.3
+      name = "restore-GD_FLIP.patch";
+      url = "https://github.com/libgd/libgd/commit/f4bc1f5c26925548662946ed7cfa473c190a104a.diff";
+      sha256 = "XRXR3NOkbEub3Nybaco2duQk0n8vxif5mTl2AUacn9w=";
     })
   ];
 
-  # -pthread gets passed to clang, causing warnings
-  configureFlags = lib.optional stdenv.isDarwin "--enable-werror=no";
+  hardeningDisable = [ "format" ];
+
+  configureFlags =
+    [
+      "--enable-gd-formats"
+    ]
+    # -pthread gets passed to clang, causing warnings
+    ++ lib.optional stdenv.isDarwin "--enable-werror=no";
 
   nativeBuildInputs = [ autoconf automake pkg-config ];
 
-  buildInputs = [ zlib fontconfig freetype ];
-  propagatedBuildInputs = [ libpng libjpeg libwebp libtiff libXpm ];
+  buildInputs = [ zlib fontconfig freetype libpng libjpeg libwebp libtiff libXpm libavif ];
 
   outputs = [ "bin" "dev" "out" ];
 

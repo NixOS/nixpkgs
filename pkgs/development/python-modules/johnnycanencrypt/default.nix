@@ -13,24 +13,25 @@
 , pytestCheckHook
 , pythonOlder
 , PCSC
+, libiconv
 }:
 
 buildPythonPackage rec {
   pname = "johnnycanencrypt";
-  version = "0.5.0";
+  version = "0.6.0";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "kushaldas";
     repo = "johnnycanencrypt";
     rev = "v${version}";
-    sha256 = "192wfrlyylrpzq70yki421mi1smk8q2cyki2a1d03q7h6apib3j4";
+    sha256 = "0b1yfddf38dicmjgnw9mk5g0iisa5yq6l9cj6kfskhyrznasvz3g";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit patches src;
     name = "${pname}-${version}";
-    hash = "sha256-2XhXCKyXVlFgbcOoMy/A5ajiIVxBii56YeI29mO720U=";
+    hash = "sha256-1dRFC59GY7M99LvQWy2eXPesmLX5k46rN8l4suLYkQY=";
   };
 
   format = "pyproject";
@@ -55,7 +56,10 @@ buildPythonPackage rec {
   buildInputs = [
     pcsclite
     nettle
-  ] ++ lib.optionals stdenv.isDarwin [ PCSC ];
+  ] ++ lib.optionals stdenv.isDarwin [
+    PCSC
+    libiconv
+  ];
 
   # Needed b/c need to check AFTER python wheel is installed (using Rust Build, not buildPythonPackage)
   doCheck = false;
@@ -70,6 +74,8 @@ buildPythonPackage rec {
   # for compatibility with maturin 0.9.0.
   postPatch = ''
     sed '/project-url = /d' -i Cargo.toml
+    substituteInPlace pyproject.toml \
+      --replace 'manylinux = "off"' 'skip-auditwheel = true'
   '';
 
   preCheck = ''
@@ -85,6 +91,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "johnnycanencrypt" ];
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     homepage = "https://github.com/kushaldas/johnnycanencrypt";
     description = "Python module for OpenPGP written in Rust";
     license = licenses.gpl3Plus;

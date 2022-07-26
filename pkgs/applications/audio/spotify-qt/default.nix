@@ -9,13 +9,13 @@
 
 mkDerivation rec {
    pname = "spotify-qt";
-   version = "3.6";
+   version = "3.8";
 
    src = fetchFromGitHub {
       owner = "kraxarn";
       repo = pname;
       rev = "v${version}";
-      sha256 = "mKHyE6ZffMYYRLMpzMX53chyJyWxhTAaGvtBI3l6wkI=";
+      sha256 = "sha256-Rgtw+nrM8YUBHPIIe9zVhLij/ep07piPf/2MSmTVQKk=";
    };
 
    buildInputs = [ libxcb qtbase qtsvg ];

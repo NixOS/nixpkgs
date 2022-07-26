@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, dpkg, gawk, perl, wget, coreutils, util-linux
-, gnugrep, gnutar, gnused, gzip, makeWrapper }:
+{ lib, stdenv, fetchFromGitLab, dpkg, gawk, perl, wget, coreutils, util-linux
+, gnugrep, gnupg1, gnutar, gnused, gzip, makeWrapper }:
 # USAGE like this: debootstrap sid /tmp/target-chroot-directory
 # There is also cdebootstrap now. Is that easier to maintain?
 let binPath = lib.makeBinPath [
@@ -7,6 +7,7 @@ let binPath = lib.makeBinPath [
     dpkg
     gawk
     gnugrep
+    gnupg1
     gnused
     gnutar
     gzip
@@ -15,13 +16,14 @@ let binPath = lib.makeBinPath [
   ];
 in stdenv.mkDerivation rec {
   pname = "debootstrap";
-  version = "1.0.124";
+  version = "1.0.126";
 
-  src = fetchurl {
-    # git clone git://git.debian.org/d-i/debootstrap.git
-    # I'd like to use the source. However it's lacking the lanny script ? (still true?)
-    url = "mirror://debian/pool/main/d/${pname}/${pname}_${version}.tar.gz";
-    sha256 = "sha256-dwDphksp8WaybFQVPtjCdbRvS5pgRou2B+AZpkwWzY8=";
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "installer-team";
+    repo = pname;
+    rev = version;
+    sha256 = "0hfx6k86kby4xf0xqskpllq00g159j4khh66hfi6dhcdb91dgyd7";
   };
 
   nativeBuildInputs = [ makeWrapper ];

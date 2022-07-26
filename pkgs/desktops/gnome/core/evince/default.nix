@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , meson
 , ninja
@@ -32,25 +33,23 @@
 , dbus
 , python3
 , texlive
-, t1lib
 , gst_all_1
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
+, gi-docgen
 , supportMultimedia ? true # PDF multimedia
 , libgxps
 , supportXPS ? true # Open XML Paper Specification via libgxps
+, withLibsecret ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "evince";
-  version = "40.4";
+  version = "42.3";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evince/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "M0IFAODgYPF4pDUGMZfULa57Z+OcxDepZRCjPd9+lfs=";
+    sha256 = "Sa7PhFyUbJbbF7qJ11yAAsWuiWP1BKmwYm0SZ1kUZF4=";
   };
 
   postPatch = ''
@@ -60,11 +59,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     appstream
-    docbook-xsl-nons
-    docbook_xml_dtd_43
     gettext
     gobject-introspection
-    gtk-doc
+    gi-docgen
     itstool
     meson
     ninja
@@ -89,26 +86,42 @@ stdenv.mkDerivation rec {
     libarchive
     libhandy
     librsvg
-    libsecret
     libspectre
     libxml2
     pango
     poppler
-    t1lib
     texlive.bin.core # kpathsea for DVI support
-  ] ++ lib.optional supportXPS libgxps
-    ++ lib.optionals supportMultimedia (with gst_all_1; [
-      gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav ]);
+  ] ++ lib.optionals withLibsecret [
+    libsecret
+  ] ++ lib.optionals supportXPS [
+    libgxps
+  ] ++ lib.optionals supportMultimedia (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+    gst-libav
+  ]);
 
   mesonFlags = [
     "-Dnautilus=false"
     "-Dps=enabled"
+  ] ++ lib.optionals (!withLibsecret) [
+    "-Dkeyring=disabled"
+  ] ++ lib.optionals (!supportMultimedia) [
+    "-Dmultimedia=disabled"
   ];
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
+  '';
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {
@@ -128,8 +141,8 @@ stdenv.mkDerivation rec {
       on the GNOME Desktop with a single simple application.
     '';
 
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = teams.gnome.members;
+    maintainers = teams.gnome.members ++ teams.pantheon.members;
   };
 }

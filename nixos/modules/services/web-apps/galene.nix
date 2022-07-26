@@ -1,8 +1,9 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 let
   cfg = config.services.galene;
+  opt = options.services.galene;
   defaultstateDir = "/var/lib/galene";
   defaultrecordingsDir = "${cfg.stateDir}/recordings";
   defaultgroupsDir = "${cfg.stateDir}/groups";
@@ -80,6 +81,7 @@ in
       staticDir = mkOption {
         type = types.str;
         default = "${cfg.package.static}/static";
+        defaultText = literalExpression ''"''${package.static}/static"'';
         example = "/var/lib/galene/static";
         description = "Web server directory.";
       };
@@ -87,6 +89,7 @@ in
       recordingsDir = mkOption {
         type = types.str;
         default = defaultrecordingsDir;
+        defaultText = literalExpression ''"''${config.${opt.stateDir}}/recordings"'';
         example = "/var/lib/galene/recordings";
         description = "Recordings directory.";
       };
@@ -94,6 +97,7 @@ in
       dataDir = mkOption {
         type = types.str;
         default = defaultdataDir;
+        defaultText = literalExpression ''"''${config.${opt.stateDir}}/data"'';
         example = "/var/lib/galene/data";
         description = "Data directory.";
       };
@@ -101,13 +105,14 @@ in
       groupsDir = mkOption {
         type = types.str;
         default = defaultgroupsDir;
+        defaultText = literalExpression ''"''${config.${opt.stateDir}}/groups"'';
         example = "/var/lib/galene/groups";
         description = "Web server directory.";
       };
 
       package = mkOption {
         default = pkgs.galene;
-        defaultText = "pkgs.galene";
+        defaultText = literalExpression "pkgs.galene";
         type = types.package;
         description = ''
           Package for running Galene.
@@ -159,6 +164,35 @@ in
             optional (cfg.dataDir == defaultdataDir) "galene/data" ++
             optional (cfg.groupsDir == defaultgroupsDir) "galene/groups" ++
             optional (cfg.recordingsDir == defaultrecordingsDir) "galene/recordings";
+
+          # Hardening
+          CapabilityBoundingSet = [ "" ];
+          DeviceAllow = [ "" ];
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          PrivateDevices = true;
+          PrivateTmp = true;
+          PrivateUsers = true;
+          ProcSubset = "pid";
+          ProtectClock = true;
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectProc = "invisible";
+          ProtectSystem = "strict";
+          ReadWritePaths = cfg.recordingsDir;
+          RemoveIPC = true;
+          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+          UMask = "0077";
         }
       ];
     };

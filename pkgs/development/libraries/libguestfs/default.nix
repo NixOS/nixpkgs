@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, autoreconfHook, makeWrapper
-, ncurses, cpio, gperf, cdrkit, flex, bison, qemu, pcre, augeas, libxml2
+, ncurses, cpio, gperf, cdrkit, flex, bison, qemu, pcre2, augeas, libxml2
 , acl, libcap, libcap_ng, libconfig, systemd, fuse, yajl, libvirt, hivex, db
 , gmp, readline, file, numactl, libapparmor, jansson
 , getopt, perlPackages, ocamlPackages
@@ -12,42 +12,48 @@ assert javaSupport -> jdk != null;
 
 stdenv.mkDerivation rec {
   pname = "libguestfs";
-  version = "1.40.2";
+  version = "1.48.0";
 
   src = fetchurl {
-    url = "https://libguestfs.org/download/1.40-stable/${pname}-${version}.tar.gz";
-    sha256 = "ad6562c48c38e922a314cb45a90996843d81045595c4917f66b02a6c2dfe8058";
+    url = "https://libguestfs.org/download/${lib.versions.majorMinor version}-stable/${pname}-${version}.tar.gz";
+    sha256 = "sha256-FoH93t/PSEym3uxUIwMwoy3vvTDCqx+BeI4lLLXQSCk=";
   };
 
-  nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config ];
+  strictDeps = true;
+  nativeBuildInputs = [
+    autoreconfHook bison cdrkit cpio flex getopt gperf makeWrapper pkg-config qemu
+  ] ++ (with perlPackages; [ perl libintl-perl GetoptLong SysVirt ])
+    ++ (with ocamlPackages; [ ocaml findlib ]);
   buildInputs = [
-    ncurses cpio gperf jansson
-    cdrkit flex bison qemu pcre augeas libxml2 acl libcap libcap_ng libconfig
+    ncurses jansson
+    pcre2 augeas libxml2 acl libcap libcap_ng libconfig
     systemd fuse yajl libvirt gmp readline file hivex db
-    numactl libapparmor getopt perlPackages.ModuleBuild
+    numactl libapparmor perlPackages.ModuleBuild
     libtirpc
-  ] ++ (with perlPackages; [ perl libintl_perl GetoptLong SysVirt ])
-    ++ (with ocamlPackages; [ ocaml findlib ocamlbuild ocaml_libvirt gettext-stub ounit ])
+  ] ++ (with ocamlPackages; [ ocamlbuild ocaml_libvirt gettext-stub ounit ])
     ++ lib.optional javaSupport jdk;
 
   prePatch = ''
     # build-time scripts
     substituteInPlace run.in        --replace '#!/bin/bash' '#!${stdenv.shell}'
-    substituteInPlace ocaml-link.sh --replace '#!/bin/bash' '#!${stdenv.shell}'
+    substituteInPlace ocaml-link.sh.in --replace '#!/bin/bash' '#!${stdenv.shell}'
 
     # $(OCAMLLIB) is read-only "${ocamlPackages.ocaml}/lib/ocaml"
     substituteInPlace ocaml/Makefile.am            --replace '$(DESTDIR)$(OCAMLLIB)' '$(out)/lib/ocaml'
     substituteInPlace ocaml/Makefile.in            --replace '$(DESTDIR)$(OCAMLLIB)' '$(out)/lib/ocaml'
-    substituteInPlace v2v/test-harness/Makefile.am --replace '$(DESTDIR)$(OCAMLLIB)' '$(out)/lib/ocaml'
-    substituteInPlace v2v/test-harness/Makefile.in --replace '$(DESTDIR)$(OCAMLLIB)' '$(out)/lib/ocaml'
 
     # some scripts hardcore /usr/bin/env which is not available in the build env
     patchShebangs .
   '';
-  configureFlags = [ "--disable-appliance" "--disable-daemon" "--with-distro=NixOS" ]
-    ++ lib.optionals (!javaSupport) [ "--disable-java" "--without-java" ];
-  patches = [ ./libguestfs-syms.patch ./ocaml-4.12.patch ];
-  NIX_CFLAGS_COMPILE="-I${libxml2.dev}/include/libxml2/";
+  configureFlags = [
+    "--disable-appliance"
+    "--disable-daemon"
+    "--with-distro=NixOS"
+    "--with-guestfs-path=${placeholder "out"}/lib/guestfs"
+  ] ++ lib.optionals (!javaSupport) [ "--without-java" ];
+  patches = [
+    ./libguestfs-syms.patch
+  ];
   installFlags = [ "REALLY_INSTALL=yes" ];
   enableParallelBuilding = true;
 
@@ -87,7 +93,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tools for accessing and modifying virtual machine disk images";
-    license = with licenses; [ gpl2 lgpl21 ];
+    license = with licenses; [ gpl2Plus lgpl21Plus ];
     homepage = "https://libguestfs.org/";
     maintainers = with maintainers; [offline];
     platforms = platforms.linux;

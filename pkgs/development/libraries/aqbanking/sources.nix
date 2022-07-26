@@ -1,11 +1,22 @@
 {
-  gwenhywfar.version = "5.6.0";
-  gwenhywfar.sha256 = "1isbj4a7vdgagp3kkvx2pjcjy8lba6kzjr11fmr06aci1694dbsp";
-  gwenhywfar.releaseId = "364";
-  libchipcard.version = "5.0.4";
-  libchipcard.sha256 = "0fj2h39ll4kiv28ch8qgzdbdbnzs8gl812qnm660bw89rynpjnnj";
-  libchipcard.releaseId = "158";
-  aqbanking.version = "6.2.10";
-  aqbanking.sha256 = "13dbpi58mw09gnsza11pxy5c8j99r11nkyg2j53y4lqk47rmyhvq";
-  aqbanking.releaseId = "368";
+  # https://www.aquamaniac.de/rdm/projects/gwenhywfar/files
+  gwenhywfar = {
+    version = "5.9.0";
+    hash = "sha256-6Ix9M4Ojy75Gyzsimfcd+55vpWX1oWaLQpc5HIdLDhI=";
+    releaseId = "415";
+  };
+
+  # https://www.aquamaniac.de/rdm/projects/libchipcard/files
+  libchipcard = {
+    version = "5.1.6";
+    hash = "sha256-bAf1J0F/dWIHT5kBLaTRHrTbr9M/SeZrRCzNbjuM/SA=";
+    releaseId = "382";
+  };
+
+  # https://www.aquamaniac.de/rdm/projects/aqbanking/files
+  aqbanking = {
+    version = "6.5.0";
+    hash = "sha256-TS076ghulq2ntoGSBtTrQWjOt+Mtzppo3Gxuq8yetj4=";
+    releaseId = "435";
+  };
 }

@@ -1,10 +1,15 @@
 { lib
+, callPackage
 , stdenv
 , fetchFromGitHub
 , cmake
+, pkg-config
 , glslang
+, libffi
 , libX11
+, libXau
 , libxcb
+, libXdmcp
 , libXrandr
 , spirv-headers
 , spirv-tools
@@ -13,60 +18,23 @@
 }:
 
 let
-  # vulkan-validation-layers requires a custom glslang & robin-hood-hashing
-  # version, while glslang requires custom versions for spirv-tools and spirv-headers.
-  #
-  # The git hashes required for all of these deps is documented upstream here:
-  # https://github.com/KhronosGroup/Vulkan-ValidationLayers/blob/master/scripts/known_good.json
-  # and https://github.com/KhronosGroup/glslang/blob/master/known_good.json
-  localSpirvHeaders = spirv-headers.overrideAttrs (_: {
-    src = fetchFromGitHub {
-      owner = "KhronosGroup";
-      repo = "SPIRV-Headers";
-      rev = "dafead1765f6c1a5f9f8a76387dcb2abe4e54acd"; # pin
-      sha256 = "1kj6wcx9y7r1xyg8n7ai2pzrg9ira7hbakr45wh5p4zyxh0m45n8";
-    };
-  });
-  localGlslang = (glslang.override {
-    argSpirv-tools = spirv-tools.overrideAttrs (_: {
-      src = fetchFromGitHub {
-        owner = "KhronosGroup";
-        repo = "SPIRV-Tools";
-        rev = "dc72924cb31cd9f3dbc3eb47e9d926cf641e3a07"; # pin
-        sha256 = "0pxgbq6xapw9hgrzb3rk5cylzgg1y1bkqz5wxzwqls63pwga5912";
-      };
-    });
-    argSpirv-headers = localSpirvHeaders;
-  }).overrideAttrs (_: {
-    src = fetchFromGitHub {
-      owner = "KhronosGroup";
-      repo = "glslang";
-      rev = "18eef33bd7a4bf5ad8c69f99cb72022608cf6e73"; # pin
-      sha256 = "0wwj7q509pkp8wj7120g1n2ddl4x2r03ljf5czd9794ji6yraidn";
-    };
-  });
-  robin-hood-hashing = fetchFromGitHub {
-    owner = "martinus";
-    repo = "robin-hood-hashing";
-    rev = "3.11.2"; # pin
-    sha256 = "0103mnqpmka1smy0arnrbihlvi7i8xr5im0px8wn4faw4flikkcm";
-  };
+  robin-hood-hashing = callPackage ./robin-hood-hashing.nix {};
 in
 stdenv.mkDerivation rec {
   pname = "vulkan-validation-layers";
-  version = "1.2.182.0";
+  version = "1.3.211.0";
 
   # If we were to use "dev" here instead of headers, the setupHook would be
   # placed in that output instead of "out".
   outputs = ["out" "headers"];
   outputInclude = "headers";
 
-  src = (assert version == vulkan-headers.version;
+  src = (assert (lib.all (pkg: pkg.version == version) [vulkan-headers glslang spirv-tools spirv-headers]);
     fetchFromGitHub {
       owner = "KhronosGroup";
       repo = "Vulkan-ValidationLayers";
       rev = "sdk-${version}";
-      sha256 = "1fnmb7vbm7y1x67bf1xiwdrpj9j4lkvhk9xhb6hp6x2aryvcyrnc";
+      sha256 = "sha256-NGpFfekZtB0rvnGxYVDo808xzgBuo8ZC4bjXjQnTpxU=";
     });
 
   # Include absolute paths to layer libraries in their associated
@@ -77,21 +45,27 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    pkg-config
   ];
 
   buildInputs = [
     libX11
-    libxcb
+    libXau
+    libXdmcp
     libXrandr
+    libffi
+    libxcb
+    spirv-tools
     vulkan-headers
     wayland
   ];
 
   cmakeFlags = [
-    "-DGLSLANG_INSTALL_DIR=${localGlslang}"
-    "-DSPIRV_HEADERS_INSTALL_DIR=${localSpirvHeaders}"
+    "-DGLSLANG_INSTALL_DIR=${glslang}"
+    "-DSPIRV_HEADERS_INSTALL_DIR=${spirv-headers}"
     "-DROBIN_HOOD_HASHING_INSTALL_DIR=${robin-hood-hashing}"
     "-DBUILD_LAYER_SUPPORT_FILES=ON"
+    "-DPKG_CONFIG_EXECUTABLE=${pkg-config}/bin/pkg-config"
     # Hide dev warnings that are useless for packaging
     "-Wno-dev"
   ];

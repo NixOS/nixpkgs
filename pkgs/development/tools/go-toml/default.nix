@@ -1,19 +1,21 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "go-toml";
-  version = "1.9.3";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "pelletier";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Vu/PS01JeSeg1KHkpqL12rTjRJFoc9rla48H/ei2HDM=";
+    sha256 = "sha256-NdUD+QpqKU5CaY2vBEop6hoK6z1Ok4Dn+W9eUHaGFb4=";
   };
 
-  goPackagePath = "github.com/pelletier/go-toml";
+  vendorSha256 = "sha256-TuyrtUAbT++S3glpCD603KV6QMkOFv5FgnPpYcMjy1I=";
 
-  excludedPackages = [ "cmd/tomltestgen" ];
+  excludedPackages = [ "cmd/gotoml-test-decoder" "cmd/tomltestgen" ];
+
+  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     description = "Go library for the TOML language";

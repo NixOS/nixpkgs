@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , hostname
 , pytest
-, python
 , lib, stdenv
 }:
 

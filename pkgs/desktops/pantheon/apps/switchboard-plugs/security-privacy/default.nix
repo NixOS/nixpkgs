@@ -1,46 +1,33 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
-, pantheon
 , meson
 , python3
 , ninja
 , pkg-config
 , vala
+, elementary-settings-daemon
 , libgee
 , granite
+, gsettings-desktop-schemas
+, gala
 , gtk3
 , glib
 , polkit
 , zeitgeist
 , switchboard
-, lightlocker
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-security-privacy";
-  version = "2.2.4";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Sws6FqUL7QAROInDrcqYAp6j1TCC4aGV0/hi5Kmm5wQ=";
-  };
-
-  patches = [
-    # Fix build with latest Vala.
-    (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-security-privacy/commit/c8e422e630bbee0badcf4df26364c9e83e06bad0.patch";
-      sha256 = "5Gm+muZiCraJC5JaGVVo0HDJ7KxjOpclHRW1RKsk3bc=";
-    })
-  ];
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-jT8aYE36ZAeB9ng3RojVqxzmLtzpbsNRHPuDQ03XKcI=";
   };
 
   nativeBuildInputs = [
@@ -52,13 +39,15 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    elementary-settings-daemon # settings schema
+    gala
     glib
     granite
+    gsettings-desktop-schemas
     gtk3
     libgee
     polkit
     switchboard
-    lightlocker
     zeitgeist
   ];
 
@@ -67,12 +56,18 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
   meta = with lib; {
     description = "Switchboard Security & Privacy Plug";
     homepage = "https://github.com/elementary/switchboard-plug-security-privacy";
-    license = licenses.lgpl3Plus;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 
 }

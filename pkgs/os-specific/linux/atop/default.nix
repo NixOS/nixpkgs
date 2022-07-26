@@ -12,16 +12,27 @@
 
 stdenv.mkDerivation rec {
   pname = "atop";
-  version = "2.6.0";
+  version = "2.7.1";
 
   src = fetchurl {
     url = "https://www.atoptool.nl/download/atop-${version}.tar.gz";
-    sha256 = "nsLKOlcWkvfvqglfmaUQZDK8txzCLNbElZfvBIEFj3I=";
+    sha256 = "sha256-ykjS8X4HHe6tXm6cyeOIv2oycNaV5hl2s3lNTZJ7XE4=";
   };
 
-  nativeBuildInputs = lib.optionals withAtopgpu [ python3.pkgs.wrapPython ];
-  buildInputs = [ zlib ncurses ] ++ lib.optionals withAtopgpu [ python3 ];
-  pythonPath = lib.optionals withAtopgpu [ python3.pkgs.pynvml ];
+  nativeBuildInputs = lib.optionals withAtopgpu [
+    python3.pkgs.wrapPython
+  ];
+
+  buildInputs = [
+    zlib
+    ncurses
+  ] ++ lib.optionals withAtopgpu [
+    python3
+  ];
+
+  pythonPath = lib.optionals withAtopgpu [
+    python3.pkgs.pynvml
+  ];
 
   makeFlags = [
     "DESTDIR=$(out)"
@@ -53,12 +64,12 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace 'chmod 04711' 'chmod 0711'
   '';
 
-  installTargets = [ "systemdinstall" ];
   preInstall = ''
     mkdir -p $out/bin
   '';
+
   postInstall = ''
-    # remove extra files we don't need
+    # Remove extra files we don't need
     rm -r $out/{var,etc} $out/bin/atop{sar,}-${version}
   '' + (if withAtopgpu then ''
     wrapPythonPrograms
@@ -70,9 +81,13 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ raskin ];
     description = "Console system performance monitor";
-
     longDescription = ''
-      Atop is an ASCII full-screen performance monitor that is capable of reporting the activity of all processes (even if processes have finished during the interval), daily logging of system and process activity for long-term analysis, highlighting overloaded system resources by using colors, etc. At regular intervals, it shows system-level activity related to the CPU, memory, swap, disks and network layers, and for every active process it shows the CPU utilization, memory growth, disk utilization, priority, username, state, and exit code.
+      Atop is an ASCII full-screen performance monitor that is capable of reporting the activity of
+      all processes (even if processes have finished during the interval), daily logging of system
+      and process activity for long-term analysis, highlighting overloaded system resources by using
+      colors, etc. At regular intervals, it shows system-level activity related to the CPU, memory,
+      swap, disks and network layers, and for every active process it shows the CPU utilization,
+      memory growth, disk utilization, priority, username, state, and exit code.
     '';
     license = licenses.gpl2Plus;
     downloadPage = "http://atoptool.nl/downloadatop.php";

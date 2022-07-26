@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dablin";
-  version = "1.13.0";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "Opendigitalradio";
     repo = "dablin";
     rev = version;
-    sha256 = "0143jnhwwh4din6mlrkbm8m2wm8vnrlk0yk9r5qcvj70r2314bgq";
+    sha256 = "02mhxaqpj0094sbb3c28r5xznw9z8ayvlkczknizlk75ag895zz2";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

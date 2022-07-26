@@ -14,20 +14,19 @@ let
   archive_fmt = if stdenv.isDarwin then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "049spg4c1arkw97mg0h046kiirmcrjj97sy4ldiblwldjn510acw";
-    x86_64-darwin = "0g6b1891ag4a6p7rlkfka5v4nbmpr4ckkmibhw8l3wa9zdzs77x6";
-    aarch64-linux = "1qvk6cn5v9bz4vl5ifpdgrba94v6a54xx8s3fxdkj3lqvq27kpd1";
-    aarch64-darwin = "1whgjkxy70ifx1vaddxr8f1xcg651fhca4x7rzidzbyyf3baghy0";
-    armv7l-linux = "1k45s81s4ispc0vz7i17a7gss05d82vpymxgangg6f1yxwz944r4";
+    x86_64-linux = "0jixjbj1h9l0zrkb8sc3p4x7kjh87dramaz6j8369vv6mc4h8ymr";
+    x86_64-darwin = "1lqxjzyzhr3dpvjpmmlvknaxjzryr6yz8rg1mh5p211wfi13rf1c";
+    aarch64-linux = "0y4q1kpwhz0hyipsc7hah6xgz9p3sn0ysaqzw32dl91hkr6d52mf";
+    aarch64-darwin = "1d89gr4aj0vl05rz9d5iv8kkgb8p5jbfc9b0hjj1cp0d276x6ipy";
+    armv7l-linux = "11cawg3ql9iq9z56i68h26cz7ydg0az298cbs2kpsz2lzkw97wbd";
   }.${system};
 in
   callPackage ./generic.nix rec {
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
-    version = "1.58.2";
+    version = "1.69.1";
     pname = "vscode";
 
-    sourceExecutableName = "code";
     executableName = "code" + lib.optionalString isInsiders "-insiders";
     longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
     shortName = "Code" + lib.optionalString isInsiders " - Insiders";
@@ -40,7 +39,7 @@ in
 
     sourceRoot = "";
 
-    updateScript = ./update-vscodium.sh;
+    updateScript = ./update-vscode.sh;
 
     meta = with lib; {
       description = ''
@@ -58,7 +57,7 @@ in
       homepage = "https://code.visualstudio.com/";
       downloadPage = "https://code.visualstudio.com/Updates";
       license = licenses.unfree;
-      maintainers = with maintainers; [ eadwu synthetica maxeaubrey ];
+      maintainers = with maintainers; [ eadwu synthetica maxeaubrey bobby285271 ];
       platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" "armv7l-linux" ];
     };
   }

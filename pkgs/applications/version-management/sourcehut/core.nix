@@ -1,5 +1,5 @@
 { lib
-, fetchgit
+, fetchFromSourcehut
 , fetchNodeModules
 , buildPythonPackage
 , pgpy
@@ -16,7 +16,7 @@
 , cryptography
 , beautifulsoup4
 , sqlalchemy-utils
-, prometheus_client
+, prometheus-client
 , celery
 , alembic
 , importlib-metadata
@@ -25,17 +25,17 @@
 , sassc
 , nodejs
 , redis
-, writeText
 }:
 
 buildPythonPackage rec {
   pname = "srht";
-  version = "0.67.4";
+  version = "0.69.0";
 
-  src = fetchgit {
-    url = "https://git.sr.ht/~sircmpwn/core.sr.ht";
+  src = fetchFromSourcehut {
+    owner = "~sircmpwn";
+    repo = "core.sr.ht";
     rev = version;
-    sha256 = "sha256-XvzFfcBK5Mq8p7xEBAF/eupUE1kkUBh5k+ByM/WA9bc=";
+    sha256 = "sha256-s/I0wxtPggjTkkTZnhm77PxdQjiT0Vq2MIk7JMvdupc=";
     fetchSubmodules = true;
   };
 
@@ -46,7 +46,10 @@ buildPythonPackage rec {
   };
 
   patches = [
+    # Disable check for npm
     ./disable-npm-install.patch
+    # Fix Unix socket support in RedisQueueCollector
+    patches/redis-socket/core/0001-Fix-Unix-socket-support-in-RedisQueueCollector.patch
   ];
 
   nativeBuildInputs = [
@@ -70,7 +73,7 @@ buildPythonPackage rec {
     cryptography
     beautifulsoup4
     sqlalchemy-utils
-    prometheus_client
+    prometheus-client
 
     # Unofficial runtime dependencies?
     celery
@@ -87,6 +90,7 @@ buildPythonPackage rec {
   '';
 
   dontUseSetuptoolsCheck = true;
+  pythonImportsCheck = [ "srht" ];
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/srht";

@@ -5,12 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.5";
+  version = "1.6";
   pname = "progress";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0wj3wvdgfmqj44n32wag3mzpp5fjqkkd321x67v1prxvs78yvv39";
+    sha256 = "c9c86e98b5c03fa1fe11e3b67c1feda4788b8d0fe7336c2ff7d5644ccfba34cd";
   };
 
   checkPhase = ''

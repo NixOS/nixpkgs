@@ -5,16 +5,16 @@
 }:
 
 let
-  release = builtins.fromJSON (builtins.readFile ./release-info/LanguageMachines-timblserver.json);
+  release = lib.importJSON ./release-info/LanguageMachines-timblserver.json;
 in
 
 stdenv.mkDerivation {
-  name = "timblserver-${release.version}";
+  pname = "timblserver";
   version = release.version;
   src = fetchurl { inherit (release) url sha256;
                    name = "timblserver-${release.version}.tar.gz"; };
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ automake autoconf bzip2 libtar libtool autoconf-archive
+  nativeBuildInputs = [ pkg-config automake autoconf ];
+  buildInputs = [ bzip2 libtar libtool autoconf-archive
                   libxml2
                   languageMachines.ticcutils
                   languageMachines.timbl

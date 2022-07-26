@@ -1,31 +1,50 @@
-{ stdenv, lib, fetchurl, autoreconfHook, pkg-config
-, libxslt, xz, elf-header
+{ stdenv, lib, fetchzip, autoconf, automake, docbook_xml_dtd_42
+, docbook_xml_dtd_43, docbook_xsl, gtk-doc, libtool, pkg-config
+, libxslt, xz, zstd, elf-header
+, withDevdoc ? stdenv.hostPlatform == stdenv.buildPlatform
 , withStatic ? stdenv.hostPlatform.isStatic
 }:
 
 let
-  systems = [ "/run/current-system/kernel-modules" "/run/booted-system/kernel-modules" "" ];
+  systems = [ "/run/booted-system/kernel-modules" "/run/current-system/kernel-modules" "" ];
   modulesDirs = lib.concatMapStringsSep ":" (x: "${x}/lib/modules") systems;
 
 in stdenv.mkDerivation rec {
   pname = "kmod";
-  version = "27";
+  version = "29";
 
-  src = fetchurl {
-    url = "mirror://kernel/linux/utils/kernel/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "035wzfzjx4nwidk747p8n085mgkvy531ppn16krrajx2dkqzply1";
+  # autogen.sh is missing from the release tarball,
+  # and we need to run it to regenerate gtk_doc.make,
+  # because the version in the release tarball is broken.
+  # Possibly this will be fixed in kmod 30?
+  # https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/commit/.gitignore?id=61a93a043aa52ad62a11ba940d4ba93cb3254e78
+  src = fetchzip {
+    url = "https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/snapshot/kmod-${version}.tar.gz";
+    sha256 = "sha256-7O5VdBd8rBZdIERPE+2zkjj5POvSurwlV2EpWmkFUD0=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config libxslt ];
-  buildInputs = [ xz ] ++ lib.optional stdenv.isDarwin elf-header;
+  outputs = [ "out" "dev" "lib" ] ++ lib.optional withDevdoc "devdoc";
+
+  nativeBuildInputs = [
+    autoconf automake docbook_xsl libtool libxslt pkg-config
+
+    docbook_xml_dtd_42 # for the man pages
+  ] ++ lib.optionals withDevdoc [ docbook_xml_dtd_43 gtk-doc ];
+  buildInputs = [ xz zstd ] ++ lib.optional stdenv.isDarwin elf-header;
+
+  preConfigure = ''
+    ./autogen.sh
+  '';
 
   configureFlags = [
     "--sysconfdir=/etc"
     "--with-xz"
+    "--with-zstd"
     "--with-modulesdirs=${modulesDirs}"
+    (lib.enableFeature withDevdoc "gtk-doc")
   ] ++ lib.optional withStatic "--enable-static";
 
-  patches = [ ./module-dir.patch ./no-name-field.patch ]
+  patches = [ ./module-dir.patch ]
     ++ lib.optional stdenv.isDarwin ./darwin.patch
     ++ lib.optional withStatic ./enable-static.patch;
 
@@ -49,7 +68,8 @@ in stdenv.mkDerivation rec {
     homepage = "https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/";
     downloadPage = "https://www.kernel.org/pub/linux/utils/kernel/kmod/";
     changelog = "https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/plain/NEWS?h=v${version}";
-    license = licenses.lgpl21;
+    license = with licenses; [ lgpl21Plus gpl2Plus ]; # GPLv2+ for tools
     platforms = platforms.unix;
+    maintainers = with maintainers; [ artturin ];
   };
 }

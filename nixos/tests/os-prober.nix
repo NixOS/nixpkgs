@@ -43,29 +43,29 @@ let
       # vda is a filesystem without partition table
       forceInstall = true;
     };
-    nix.binaryCaches = lib.mkForce [ ];
-    nix.extraOptions = ''
-      hashed-mirrors =
-      connect-timeout = 1
-    '';
+    nix.settings = {
+      substituters = lib.mkForce [];
+      hashed-mirrors = null;
+      connect-timeout = 1;
+    };
     # save some memory
     documentation.enable = false;
   };
   # /etc/nixos/configuration.nix for the vm
   configFile = pkgs.writeText "configuration.nix"  ''
-    {config, pkgs, ...}: ({
+    {config, pkgs, lib, ...}: ({
     imports =
           [ ./hardware-configuration.nix
             <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
           ];
-    } // (builtins.fromJSON (builtins.readFile ${
+    } // lib.importJSON ${
       pkgs.writeText "simpleConfig.json" (builtins.toJSON simpleConfig)
-    })))
+    })
   '';
 in {
   name = "os-prober";
 
-  machine = { config, pkgs, ... }: (simpleConfig // {
+  nodes.machine = { config, pkgs, ... }: (simpleConfig // {
       imports = [ ../modules/profiles/installation-device.nix
                   ../modules/profiles/base.nix ];
       virtualisation.memorySize = 1300;
@@ -75,21 +75,30 @@ in {
       # The test cannot access the network, so any packages
       # nixos-rebuild needs must be included in the VM.
       system.extraDependencies = with pkgs;
-        [ sudo
-          libxml2.bin
-          libxslt.bin
+        [
+          brotli
+          brotli.dev
+          brotli.lib
           desktop-file-utils
           docbook5
           docbook_xsl_ns
-          unionfs-fuse
-          ntp
-          nixos-artwork.wallpapers.simple-dark-gray-bottom
-          perlPackages.XMLLibXML
-          perlPackages.ListCompare
-          shared-mime-info
-          texinfo
-          xorg.lndir
           grub2
+          kmod.dev
+          libarchive
+          libarchive.dev
+          libxml2.bin
+          libxslt.bin
+          nixos-artwork.wallpapers.simple-dark-gray-bottom
+          ntp
+          perlPackages.ListCompare
+          perlPackages.XMLLibXML
+          python3Minimal
+          shared-mime-info
+          stdenv
+          sudo
+          texinfo
+          unionfs-fuse
+          xorg.lndir
 
           # add curl so that rather than seeing the test attempt to download
           # curl's tarball, we see what it's trying to download
@@ -114,7 +123,7 @@ in {
         "${configFile}",
         "/etc/nixos/configuration.nix",
     )
-    machine.succeed("nixos-rebuild boot >&2")
+    machine.succeed("nixos-rebuild boot --show-trace >&2")
 
     machine.succeed("egrep 'menuentry.*debian' /boot/grub/grub.cfg")
   '';

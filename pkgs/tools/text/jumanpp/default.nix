@@ -9,6 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ASdr6qbkSe71M7QmuuwidCa4xQhDVoXBJ2XqvSY53pQ=";
   };
 
+  patches = [ ./0001-Exclude-all-tests-from-the-build.patch ];
+  cmakeFlags = [ "-DJPP_ENABLE_TESTS=OFF" ];
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [ protobuf ]
     ++ lib.optional stdenv.isDarwin libiconv;

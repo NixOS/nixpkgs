@@ -1,8 +1,8 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkg-config, soapysdr, sdrplay }:
 
 stdenv.mkDerivation {
-  name = "soapysdr-sdrplay3";
-  version = "20210425";
+  pname = "soapysdr-sdrplay3";
+  version = "unstable-2021-04-25";
 
   src = fetchFromGitHub {
     owner = "pothosware";

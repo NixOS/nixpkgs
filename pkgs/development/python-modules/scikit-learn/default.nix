@@ -19,26 +19,16 @@
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "0.24.1";
+  version = "1.0.2";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "oDNKGALmTWVgIsO/q1anP71r9LEpg0PzaIryFRgQu98=";
+    sha256 = "sha256-tYcJWaVIS2FPJtMcpMF1JLGwMXUiGZ3JhcO0JW4DB2c=";
   };
-
-  patches = [
-    # This patch fixes compatibility with numpy 1.20. It was merged before 0.24.1 was released,
-    # but for some reason was not included in the 0.24.1 release tarball.
-    (fetchpatch {
-      url = "https://github.com/scikit-learn/scikit-learn/commit/e7ef22c3ba2334cb3b476e95d7c083cf6b48ce56.patch";
-      sha256 = "174554k1pbf92bj7wgq0xjj16bkib32ailyhwavdxaknh4bd9nmv";
-    })
-  ];
 
   buildInputs = [
     pillow
-    gfortran
     glibcLocales
   ] ++ lib.optionals stdenv.cc.isClang [
     llvmPackages.openmp
@@ -46,6 +36,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cython
+    gfortran
   ];
 
   propagatedBuildInputs = [
@@ -87,8 +78,6 @@ buildPythonPackage rec {
     # https://github.com/scikit-learn/scikit-learn/issues/17582
     # Since we are overriding '-k' we need to include the 'disabledTests' from above manually.
     "-k" "'not (NuSVC and memmap) ${toString (lib.forEach disabledTests (t: "and not ${t}"))}'"
-
-    "-n" "$NIX_BUILD_CORES"
   ];
 
   preCheck = ''

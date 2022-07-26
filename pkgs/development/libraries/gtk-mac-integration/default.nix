@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gtk-mac-integration";
-  version = "2.1.3";
+  version = "3.0.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "1w0agv4r0daklv5d2f3l0c10krravjq8bj9hsdsrpka48dbnqmap";
+    sha256 = "0sc0m3p8r5xfh5i4d7dg72kfixx9yi4f800y43bszyr88y52jkga";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config gtk-doc gobject-introspection ];

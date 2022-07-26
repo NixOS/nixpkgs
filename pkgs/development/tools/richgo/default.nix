@@ -2,20 +2,16 @@
 
 buildGoModule rec {
   pname = "richgo";
-  version = "0.3.6";
+  version = "0.3.10";
 
   src = fetchFromGitHub {
     owner = "kyoh86";
     repo = "richgo";
     rev = "v${version}";
-    sha256 = "sha256-ehhrJlB0XzLHkspvP6vL8MtrjE12baBFkbqWMD41/Sg=";
+    sha256 = "sha256-USHg1KXl0MOWifiVu+KdjvrbDlAh6T/ReKFKeIpVK0A=";
   };
 
-  vendorSha256 = "sha256-986Abeeb1MHB/0yN1oud6t8wHD5B5MisRHKZcwOq4tU=";
-
-  doCheck = false;
-
-  subPackages = [ "." ];
+  vendorSha256 = "sha256-O63QEo0/+m9cYktMg4+RloLuUfAlCG0eGkxpHPFg/Cw=";
 
   meta = with lib; {
     description = "Enrich `go test` outputs with text decorations";

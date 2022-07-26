@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
       raskin
     ];
     hydraPlatforms = [];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.free;
     platforms = with lib.platforms; unix;
   };

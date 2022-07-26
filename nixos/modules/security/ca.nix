@@ -8,12 +8,10 @@ let
 
   cacertPackage = pkgs.cacert.override {
     blacklist = cfg.caCertificateBlacklist;
+    extraCertificateFiles = cfg.certificateFiles;
+    extraCertificateStrings = cfg.certificates;
   };
-
-  caCertificates = pkgs.runCommand "ca-certificates.crt" {
-    files = cfg.certificateFiles ++ [ (builtins.toFile "extra.crt" (concatStringsSep "\n" cfg.certificates)) ];
-    preferLocalBuild = true;
-  } "awk 1 $files > $out";  # awk ensures a newline between each pair of consecutive files
+  caBundle = "${cacertPackage}/etc/ssl/certs/ca-bundle.crt";
 
 in
 
@@ -24,7 +22,7 @@ in
     security.pki.certificateFiles = mkOption {
       type = types.listOf types.path;
       default = [];
-      example = literalExample "[ \"\${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt\" ]";
+      example = literalExpression ''[ "''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt" ]'';
       description = ''
         A list of files containing trusted root certificates in PEM
         format. These are concatenated to form
@@ -37,7 +35,7 @@ in
     security.pki.certificates = mkOption {
       type = types.listOf types.str;
       default = [];
-      example = literalExample ''
+      example = literalExpression ''
         [ '''
             NixOS.org
             =========
@@ -74,16 +72,17 @@ in
 
   config = {
 
-    security.pki.certificateFiles = [ "${cacertPackage}/etc/ssl/certs/ca-bundle.crt" ];
-
     # NixOS canonical location + Debian/Ubuntu/Arch/Gentoo compatibility.
-    environment.etc."ssl/certs/ca-certificates.crt".source = caCertificates;
+    environment.etc."ssl/certs/ca-certificates.crt".source = caBundle;
 
     # Old NixOS compatibility.
-    environment.etc."ssl/certs/ca-bundle.crt".source = caCertificates;
+    environment.etc."ssl/certs/ca-bundle.crt".source = caBundle;
 
     # CentOS/Fedora compatibility.
-    environment.etc."pki/tls/certs/ca-bundle.crt".source = caCertificates;
+    environment.etc."pki/tls/certs/ca-bundle.crt".source = caBundle;
+
+    # P11-Kit trust source.
+    environment.etc."ssl/trust-source".source = "${cacertPackage.p11kit}/etc/ssl/trust-source";
 
   };
 

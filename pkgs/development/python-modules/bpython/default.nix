@@ -2,38 +2,48 @@
 , buildPythonPackage
 , fetchPypi
 , curtsies
+, cwcwidth
+, dataclasses
 , greenlet
 , jedi
 , pygments
+, pytestCheckHook
+, pythonOlder
+, pyperclip
 , pyxdg
 , requests
 , substituteAll
+, typing-extensions
 , urwid
 , watchdog
-, which
 }:
 
 buildPythonPackage rec {
   pname = "bpython";
-  version = "0.21";
+  version = "0.22.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "88aa9b89974f6a7726499a2608fa7ded216d84c69e78114ab2ef996a45709487";
+    hash = "sha256-H7HgpSMyV5/E49z3XiF5avZ6rivkYBeez8zpUwpJogA=";
   };
-
-  patches = [ (substituteAll {
-    src = ./clipboard-make-which-substitutable.patch;
-    which = "${which}/bin/which";
-  })];
 
   propagatedBuildInputs = [
     curtsies
+    cwcwidth
     greenlet
+    jedi
     pygments
+    pyperclip
     pyxdg
     requests
+    typing-extensions
     urwid
+    watchdog
+  ] ++ lib.optionals (pythonOlder "3.7") [
+    dataclasses
   ];
 
   postInstall = ''
@@ -41,13 +51,23 @@ buildPythonPackage rec {
       --replace "Exec=/usr/bin/bpython" "Exec=$out/bin/bpython"
   '';
 
-  checkInputs = [ jedi watchdog ];
-  pythonImportsCheck = [ "bpython" ];
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "bpython"
+  ];
+
+  disabledTests = [
+    # Check for syntax error ends with an AssertionError
+    "test_syntaxerror"
+  ];
 
   meta = with lib; {
     description = "A fancy curses interface to the Python interactive interpreter";
     homepage = "https://bpython-interpreter.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ flokli ];
+    maintainers = with maintainers; [ flokli dotlambda ];
   };
 }

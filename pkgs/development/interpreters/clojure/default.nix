@@ -1,13 +1,13 @@
-{ lib, stdenv, fetchurl, installShellFiles, jdk, rlwrap, makeWrapper }:
+{ lib, stdenv, fetchurl, installShellFiles, jdk, rlwrap, makeWrapper, writeScript }:
 
 stdenv.mkDerivation rec {
   pname = "clojure";
-  version = "1.10.3.933";
+  version = "1.11.1.1149";
 
   src = fetchurl {
     # https://clojure.org/releases/tools
     url = "https://download.clojure.org/install/clojure-tools-${version}.tar.gz";
-    sha256 = "sha256-xsm0/HNWr8a/7iLQVC9TbUkASWvw/EI3bD0dMDhLZXA=";
+    sha256 = "sha256-IIhonPSwpADNAuv9DQIKrdsJcGAlX+6uHe+jvA6i3KQ=";
   };
 
   nativeBuildInputs = [
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
       echo "Installing libs into $clojure_lib_dir"
       install -Dm644 deps.edn "$clojure_lib_dir/deps.edn"
       install -Dm644 example-deps.edn "$clojure_lib_dir/example-deps.edn"
+      install -Dm644 tools.edn "$clojure_lib_dir/tools.edn"
       install -Dm644 exec.jar "$clojure_lib_dir/libexec/exec.jar"
       install -Dm644 clojure-tools-${version}.jar "$clojure_lib_dir/libexec/clojure-tools-${version}.jar"
 
@@ -47,15 +48,33 @@ stdenv.mkDerivation rec {
     '';
 
   doInstallCheck = true;
+
   installCheckPhase = ''
-    CLJ_CONFIG=$out CLJ_CACHE=$out/libexec $out/bin/clojure \
+    CLJ_CONFIG=$TMPDIR CLJ_CACHE=$TMPDIR/.clj_cache $out/bin/clojure \
       -Spath \
       -Sverbose \
       -Scp $out/libexec/clojure-tools-${version}.jar
   '';
+
+  passthru.updateScript = writeScript "update-clojure" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl common-updater-scripts jq
+
+    set -euo pipefail
+
+    # `jq -r '.[0].name'` results in `v0.0`
+    readonly latest_version="$(curl \
+      ''${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
+      -s "https://api.github.com/repos/clojure/brew-install/tags" \
+      | jq -r '.[1].name')"
+
+    update-source-version clojure "$latest_version"
+  '';
+
   meta = with lib; {
     description = "A Lisp dialect for the JVM";
     homepage = "https://clojure.org/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.epl10;
     longDescription = ''
       Clojure is a dynamic programming language that targets the Java

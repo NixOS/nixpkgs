@@ -1,4 +1,5 @@
-{ mkXfceDerivation
+{ lib
+, mkXfceDerivation
 , automakeAddFlags
 , dbus-glib
 , dbus
@@ -43,7 +44,8 @@ mkXfceDerivation {
     xfconf
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Adjust the audio volume of the PulseAudio sound system";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

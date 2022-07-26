@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "cvxpy";
-  version = "1.1.13";
+  version = "1.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "012avhf0a8n9xyy4g3xcr5z8z2a3m6rnqic6gfs9fq6p9bkq3ix9";
+    sha256 = "sha256-bWdkJkPR3bLyr1m0Zrh9QsSi42eDGte0PDO1nu+ltQ4=";
   };
 
   propagatedBuildInputs = [
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   ];
 
   # Required flags from https://github.com/cvxgrp/cvxpy/releases/tag/v1.1.11
-  preBuild = lib.optional useOpenmp ''
+  preBuild = lib.optionalString useOpenmp ''
     export CFLAGS="-fopenmp"
     export LDFLAGS="-lgomp"
   '';

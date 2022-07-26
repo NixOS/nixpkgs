@@ -17,15 +17,15 @@
 
 buildPythonPackage rec {
   pname = "pygmt";
-  version = "0.3.1";
+  version = "0.7.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "GenericMappingTools";
     repo = "pygmt";
-    rev = "v${version}";
-    sha256 = "0v57n3by9dwckjfmrgf1km4y3gwzj2gk0s9ly64hlaf05zihqnvc";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-Z38fZvmeWDLZEIyH+UG6Nb6KNnjEuXIn3RRH4CPWz9A=";
   };
 
   postPatch = ''

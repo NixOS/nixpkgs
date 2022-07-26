@@ -1,13 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, python3, gtk3, pantheon, gnome-icon-theme, hicolor-icon-theme }:
+{ lib, stdenvNoCC, fetchFromGitHub, meson, ninja, python3, gtk3, pantheon, gnome-icon-theme, hicolor-icon-theme }:
 
-stdenv.mkDerivation rec {
-  name = "${package-name}-${version}";
-  package-name = "faba-icon-theme";
+stdenvNoCC.mkDerivation rec {
+  pname = "faba-icon-theme";
   version = "4.3";
 
   src = fetchFromGitHub {
     owner = "moka-project";
-    repo = package-name;
+    repo = "faba-icon-theme";
     rev = "v${version}";
     sha256 = "0xh6ppr73p76z60ym49b4d0liwdc96w41cc5p07d48hxjsa6qd6n";
   };

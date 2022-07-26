@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , nose
-, jupyter_client
+, jupyter-client
 , ipython
 , ipykernel
 , prompt-toolkit
@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "jupyter_console";
-  version = "6.4.0";
+  version = "6.4.3";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "242248e1685039cd8bff2c2ecb7ce6c1546eb50ee3b08519729e6e881aec19c7";
+    sha256 = "sha256-VfMmJrC+ZHqF4yF93Nsi22nvx56LQDuXceuezGlgGbU=";
   };
 
   propagatedBuildInputs = [
-    jupyter_client
+    jupyter-client
     ipython
     ipykernel
     prompt-toolkit

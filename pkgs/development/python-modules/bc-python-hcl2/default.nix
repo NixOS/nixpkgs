@@ -1,25 +1,21 @@
-{ lib, buildPythonPackage, fetchPypi, nose }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, lark
+, nose
+, pythonOlder
+}:
 
-let
-  lark-parser = buildPythonPackage rec {
-    pname = "lark-parser";
-    version = "0.7.8";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "JiFeuxV+b7LudDGapERbnzt+RW4mviFc4Z/aqpAcIKQ=";
-    };
-
-    doCheck = true;
-  };
-in
 buildPythonPackage rec {
   pname = "bc-python-hcl2";
-  version = "0.3.11";
+  version = "0.3.45";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "VZhI1oJ2EDZGyz3iI6/KYvJq4BGafzR+rcSgHqlUDrA=";
+    hash = "sha256-OmUN6wpsVP9/CS+JkEhirDBp1MqeA3oEcU77T5nJ9GU=";
   };
 
   # Nose is required during build process, so can not use `checkInputs`.
@@ -28,22 +24,26 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    lark-parser
+    lark
   ];
 
-  pythonImportsCheck = [ "hcl2" ];
+  # This fork of python-hcl2 doesn't ship tests
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "hcl2"
+  ];
 
   meta = with lib; {
-    description = "A parser for HCL2 written in Python using Lark";
+    description = "Parser for HCL2 written in Python using Lark";
     longDescription = ''
-    A parser for HCL2 written in Python using Lark.
-    This parser only supports HCL2 and isn't backwards compatible with HCL v1.
-    It can be used to parse any HCL2 config file such as Terraform.
+      This parser only supports HCL2 and isn't backwards compatible with HCL v1.
+      It can be used to parse any HCL2 config file such as Terraform.
     '';
     # Although this is the main homepage from PyPi but it is also a homepage
     # of another PyPi package (python-hcl2). But these two are different.
     homepage = "https://github.com/amplify-education/python-hcl2";
     license = licenses.mit;
-    maintainers = [ maintainers.anhdle14 ];
+    maintainers = with maintainers; [ anhdle14 ];
   };
 }

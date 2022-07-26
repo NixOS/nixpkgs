@@ -2,13 +2,13 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "mautrix-signal";
-  version = "unstable-2021-07-01";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
-    owner = "tulir";
-    repo = "mautrix-signal";
-    rev = "56eb24412fcafb4836f29375fba9cc6db1715d6f";
-    sha256 = "10nbfl48yb7h23znkxvkqh1dgp2xgldvxsigwfmwa1qbq0l4dljl";
+    owner = "mautrix";
+    repo = "signal";
+    rev = "v${version}";
+    sha256 = "sha256-khtvfZbqBRQyHteil+H/b3EktjRet6DRcKMHmCClNq0=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -19,12 +19,12 @@ python3.pkgs.buildPythonPackage rec {
     mautrix
     phonenumbers
     pillow
-    prometheus_client
+    prometheus-client
     pycryptodome
     python-olm
-    python_magic
+    python-magic
     qrcode
-    ruamel_yaml
+    ruamel-yaml
     unpaddedbase64
     yarl
   ];
@@ -46,7 +46,7 @@ python3.pkgs.buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/tulir/mautrix-signal";
+    homepage = "https://github.com/mautrix/signal";
     description = "A Matrix-Signal puppeting bridge";
     license = licenses.agpl3Plus;
     platforms = platforms.linux;

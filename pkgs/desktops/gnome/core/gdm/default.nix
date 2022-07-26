@@ -19,6 +19,7 @@
 , gtk3
 , libcanberra-gtk3
 , pam
+, libgudev
 , libselinux
 , keyutils
 , audit
@@ -26,6 +27,7 @@
 , plymouth
 , librsvg
 , coreutils
+, xorgserver
 , xwayland
 , dbus
 , nixos-icons
@@ -42,13 +44,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gdm";
-  version = "40.1";
+  version = "42.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdm/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "q7ih6mZISPLJD4SsqkLpTSVgVwNYgamPvUH7xdfRc/0=";
+    sha256 = "oyisl2k3vsF5lx/weCmhJGuYznJBgcEorjKguketOFU=";
   };
 
   mesonFlags = [
@@ -82,6 +84,7 @@ stdenv.mkDerivation rec {
     keyutils
     libX11
     libcanberra-gtk3
+    libgudev
     libselinux
     pam
     plymouth
@@ -102,7 +105,7 @@ stdenv.mkDerivation rec {
     # Change hardcoded paths to nix store paths.
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit coreutils plymouth xwayland dbus;
+      inherit coreutils plymouth xorgserver xwayland dbus;
     })
 
     # The following patches implement certain environment variables in GDM which are set by

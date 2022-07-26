@@ -1,27 +1,30 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , git
-, pythonOlder
 , pytestCheckHook
-, ruamel_yaml
+, pythonOlder
+, ruamel-yaml
 , toml
 }:
 
 buildPythonPackage rec {
   pname = "pre-commit-hooks";
-  version = "4.0.1";
-  disabled = pythonOlder "3.6";
+  version = "4.3.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-Rg2I79r0Pp3AUgT6mD+kEdm+5CEGgdmFn6G3xcU6fnk=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-qdsSM+7ScSfxhmLAqwi1iraGHrhb5NBee/j+TKr2WUA=";
   };
 
   propagatedBuildInputs = [
-    ruamel_yaml
+    ruamel-yaml
     toml
   ];
 
@@ -30,6 +33,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  # Note: this is not likely to ever work on Darwin
+  # https://github.com/pre-commit/pre-commit-hooks/pull/655
+  doCheck = !stdenv.isDarwin;
+
   # the tests require a functional git installation which requires a valid HOME
   # directory.
   preCheck = ''
@@ -37,9 +44,12 @@ buildPythonPackage rec {
 
     git config --global user.name "Nix Builder"
     git config --global user.email "nix-builder@nixos.org"
+    git init .
   '';
 
-  pythonImportsCheck = [ "pre_commit_hooks" ];
+  pythonImportsCheck = [
+    "pre_commit_hooks"
+  ];
 
   meta = with lib; {
     description = "Some out-of-the-box hooks for pre-commit";

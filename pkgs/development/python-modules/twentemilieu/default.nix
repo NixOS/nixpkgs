@@ -5,21 +5,34 @@
 , aiohttp
 , yarl
 , aresponses
+, poetry-core
 , pytest-asyncio
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "twentemilieu";
-  version = "0.3.0";
-  disabled = pythonOlder "3.7";
+  version = "0.6.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-twentemilieu";
     rev = "v${version}";
-    sha256 = "1ff35sh73m2s7fh4d8p2pjwdbfljswr8b8lpcjybz8nsh0286xph";
+    sha256 = "sha256-k2jdw2H/bNejNUjIEQlEA1KkHHpkyFlSDC1HKUoMIqQ=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "--cov" "" \
+      --replace '"0.0.0"' '"${version}"'
+  '';
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     aiohttp

@@ -27,6 +27,7 @@ buildGoModule rec {
     homepage = "https://trezor.io";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ canndrew jb55 prusnak mmahut _1000101 ];
+    mainProgram = "trezord-go";
     platforms = platforms.unix;
   };
 }

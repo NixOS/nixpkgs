@@ -1,22 +1,43 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, cmake, pkg-config, openssl, oniguruma, CoreServices, installShellFiles }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, cmake
+, pkg-config
+, openssl
+, oniguruma
+, CoreServices
+, installShellFiles
+, libsass
+, zola
+, testers
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "zola";
-  version = "unstable-2021-07-14";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "getzola";
-    repo = pname;
-    # unstable because the latest release fails to build
-    rev = "312ffcb04c06c5f157b9fd2b944b858703238592";
-    sha256 = "0i5zqs1gwxhvsynb540c3azfi4357igr4i5p0bi3h7ras2asas8w";
+    repo = "zola";
+    rev = "v${version}";
+    sha256 = "sha256-FrCpHavlHf4/g96G7cY0Rymxqi73XUCIAYp4cm//2Ic=";
   };
 
-  cargoSha256 = "0g5z0s837cfwzral2zz0avp0xywyaa3l1adxg520qrnga7z0kbh8";
+  cargoSha256 = "sha256-c6SbQasgpOyqVninAo104oYo1CXpiECZvsB1gxrD7wM=";
 
-  nativeBuildInputs = [ cmake pkg-config installShellFiles];
-  buildInputs = [ openssl oniguruma ]
-    ++ lib.optional stdenv.isDarwin CoreServices;
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    installShellFiles
+  ];
+  buildInputs = [
+    openssl
+    oniguruma
+    libsass
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreServices
+  ];
 
   RUSTONIG_SYSTEM_LIBONIG = true;
 
@@ -27,12 +48,13 @@ rustPlatform.buildRustPackage rec {
       --bash completions/zola.bash
   '';
 
+  passthru.tests.version = testers.testVersion { package = zola; };
+
   meta = with lib; {
     description = "A fast static site generator with everything built-in";
     homepage = "https://www.getzola.org/";
+    changelog = "https://github.com/getzola/zola/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ dandellion dywedir _0x4A6F ];
-    # set because of unstable-* version
-    mainProgram = "zola";
   };
 }

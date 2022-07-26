@@ -1,50 +1,46 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib) mkEnableOption mkIf mkOption optionalString types;
+
   dataDir = "/var/lib/squeezelite";
   cfg = config.services.squeezelite;
+  pkg = if cfg.pulseAudio then pkgs.squeezelite-pulse else pkgs.squeezelite;
+  bin = "${pkg}/bin/${pkg.pname}";
 
-in {
+in
+{
 
   ###### interface
 
-  options = {
+  options.services.squeezelite = {
+    enable = mkEnableOption "Squeezelite, a software Squeezebox emulator";
 
-    services.squeezelite= {
+    pulseAudio = mkEnableOption "pulseaudio support";
 
-      enable = mkEnableOption "Squeezelite, a software Squeezebox emulator";
-
-      extraArguments = mkOption {
-        default = "";
-        type = types.str;
-        description = ''
-          Additional command line arguments to pass to Squeezelite.
-        '';
-      };
-
+    extraArguments = mkOption {
+      default = "";
+      type = types.str;
+      description = ''
+        Additional command line arguments to pass to Squeezelite.
+      '';
     };
-
   };
 
 
   ###### implementation
 
   config = mkIf cfg.enable {
-
-    systemd.services.squeezelite= {
+    systemd.services.squeezelite = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" "sound.target" ];
       description = "Software Squeezebox emulator";
       serviceConfig = {
         DynamicUser = true;
-        ExecStart = "${pkgs.squeezelite}/bin/squeezelite -N ${dataDir}/player-name ${cfg.extraArguments}";
+        ExecStart = "${bin} -N ${dataDir}/player-name ${cfg.extraArguments}";
         StateDirectory = builtins.baseNameOf dataDir;
         SupplementaryGroups = "audio";
       };
     };
-
   };
-
 }

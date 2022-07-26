@@ -10,7 +10,8 @@ let
   };
 in
 stdenv.mkDerivation {
-  name = "vite-1.2pre${rev}";
+  pname = "vite";
+  version = "1.2pre${rev}";
 
   src = fetchsvn {
     url = "svn://scm.gforge.inria.fr/svn/vite/trunk";

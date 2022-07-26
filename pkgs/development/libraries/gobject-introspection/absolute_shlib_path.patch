@@ -1,3 +1,5 @@
+diff --git a/giscanner/scannermain.py b/giscanner/scannermain.py
+index 64575557..1eb0a2b4 100644
 --- a/giscanner/scannermain.py
 +++ b/giscanner/scannermain.py
 @@ -95,6 +95,39 @@ def get_windows_option_group(parser):
@@ -41,16 +43,18 @@
      parser = optparse.OptionParser('%prog [options] sources',
                                     version='%prog ' + giscanner.__version__)
 @@ -214,6 +247,10 @@ match the namespace prefix.""")
-     parser.add_option("", "--filelist",
-                       action="store", dest="filelist", default=[],
-                       help="file containing headers and sources to be scanned")
+     parser.add_option("", "--c-include",
+                       action="append", dest="c_includes", default=[],
+                       help="headers which should be included in C programs")
 +    parser.add_option("", "--fallback-library-path",
 +                      action="store", dest="fallback_libpath",
 +                      default=_get_default_fallback_libpath(),
 +                      help="Path to prepend to unknown shared libraries")
- 
-     group = get_preprocessor_option_group(parser)
-     parser.add_option_group(group)
+     parser.add_option("", "--filelist",
+                       action="store", dest="filelist", default=[],
+                       help="file containing headers and sources to be scanned")
+diff --git a/giscanner/shlibs.py b/giscanner/shlibs.py
+index 9f8ab5df..af325022 100644
 --- a/giscanner/shlibs.py
 +++ b/giscanner/shlibs.py
 @@ -57,6 +57,12 @@ def _ldd_library_pattern(library_name):
@@ -115,9 +119,11 @@
                  if m:
                      del patterns[library]
                      shlibs.append(m.group())
+diff --git a/giscanner/utils.py b/giscanner/utils.py
+index 31c7ea48..630002a8 100644
 --- a/giscanner/utils.py
 +++ b/giscanner/utils.py
-@@ -113,16 +113,11 @@ def extract_libtool_shlib(la_file):
+@@ -114,16 +114,11 @@ def extract_libtool_shlib(la_file):
      if dlname is None:
          return None
  
@@ -139,6 +145,8 @@
  
  
  # Returns arguments for invoking libtool, if applicable, otherwise None
+diff --git a/tests/scanner/test_shlibs.py b/tests/scanner/test_shlibs.py
+index a8337c60..72789d76 100644
 --- a/tests/scanner/test_shlibs.py
 +++ b/tests/scanner/test_shlibs.py
 @@ -7,6 +7,30 @@ from giscanner.shlibs import resolve_from_ldd_output, sanitize_shlib_path

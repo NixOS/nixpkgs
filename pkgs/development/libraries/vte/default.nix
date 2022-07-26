@@ -21,17 +21,19 @@
 , zlib
 , icu
 , systemd
+, systemdSupport ? stdenv.hostPlatform.isLinux
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "vte";
-  version = "0.64.1";
+  version = "0.68.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-EvtBqf+OA8XxcRtGVgkQpLmzECrsPp52Cc7vTfqYqio=";
+    sha256 = "sha256-E+fUeJyiFqM3gAMNJGybE92/0ECUxjFu6n/5IoTdF0k=";
   };
 
   patches = [
@@ -63,6 +65,7 @@ stdenv.mkDerivation rec {
     pcre2
     zlib
     icu
+  ] ++ lib.optionals systemdSupport [
     systemd
   ];
 
@@ -71,6 +74,10 @@ stdenv.mkDerivation rec {
     gtk3
     glib
     pango
+  ];
+
+  mesonFlags = lib.optionals (!systemdSupport) [
+    "-D_systemd=false"
   ];
 
   postPatch = ''
@@ -85,9 +92,13 @@ stdenv.mkDerivation rec {
       packageName = pname;
       versionPolicy = "odd-unstable";
     };
+    tests = {
+      inherit (nixosTests.terminal-emulators) gnome-terminal lxterminal mlterm roxterm sakura stupidterm terminator termite xfce4-terminal;
+    };
   };
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://www.gnome.org/";
     description = "A library implementing a terminal emulator widget for GTK";
     longDescription = ''

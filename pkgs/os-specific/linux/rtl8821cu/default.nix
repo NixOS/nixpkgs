@@ -2,19 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "rtl8821cu";
-  version = "${kernel.version}-unstable-2021-05-19";
+  version = "${kernel.version}-unstable-2022-05-07";
 
   src = fetchFromGitHub {
     owner = "morrownr";
-    repo = "8821cu";
-    rev = "2430c354c9b15fa6193a263c99ce57211d50c66f";
-    sha256 = "sha256-PkrpwebZYh/hBukqDQf6pxfbkVyA+CpYtte5pmzgLtw=";
+    repo = "8821cu-20210118";
+    rev = "e3cf788e1dddaba3273190755ce424f93fe593e4";
+    hash = "sha256-VUZU/oFSaxewy/BF/2k4OssAi4AWSWweqXYZPHmsQvY=";
   };
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = [ bc ];
-  buildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = [ bc ] ++ kernel.moduleBuildDependencies;
+  makeFlags = kernel.makeFlags;
 
   prePatch = ''
     substituteInPlace ./Makefile \
@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
   preInstall = ''
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Realtek rtl8821cu driver";

@@ -1,23 +1,24 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python
-, isPy3k
 , msrest
 , msrestazure
 , azure-common
-, azure-mgmt-nspkg
 , azure-mgmt-core
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-keyvault";
-  version = "9.0.0";
+  version = "10.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "2890c489289b8a0bf833852014f2f494eb96873834896910ddfa58cfa97b90da";
+    hash = "sha256-ALaVll2198a6DjOpzaHobE22N78Qe5koYYLxCtFiwaM=";
   };
 
   propagatedBuildInputs = [
@@ -25,10 +26,11 @@ buildPythonPackage rec {
     msrestazure
     azure-common
     azure-mgmt-core
-    azure-mgmt-nspkg
   ];
 
-  pythonNamespaces = [ "azure.mgmt" ];
+  pythonNamespaces = [
+    "azure.mgmt"
+  ];
 
   # has no tests
   doCheck = false;

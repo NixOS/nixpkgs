@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, curl, fribidi, rlwrap, gawk, groff, ncurses }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, curl, fribidi, rlwrap, gawk, groff, ncurses, hexdump }:
 
 stdenv.mkDerivation rec {
   pname = "translate-shell";
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
         rlwrap
         groff
         fribidi
+        hexdump
       ]}
   '';
 
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
     description = "Command-line translator using Google Translate, Bing Translator, Yandex.Translate, and Apertium";
     license = licenses.unlicense;
     maintainers = with maintainers; [ ebzzry infinisil ];
+    mainProgram = "trans";
     platforms = platforms.unix;
   };
 }

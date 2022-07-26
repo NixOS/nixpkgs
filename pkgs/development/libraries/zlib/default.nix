@@ -22,18 +22,16 @@ assert shared || static;
 assert splitStaticOutput -> static;
 
 stdenv.mkDerivation (rec {
-  name = "zlib-${version}";
-  version = "1.2.11";
+  pname = "zlib";
+  version = "1.2.12";
 
   src = fetchurl {
     urls =
-      [ "https://www.zlib.net/fossils/${name}.tar.gz"  # stable archive path
-        "mirror://sourceforge/libpng/zlib/${version}/${name}.tar.gz"
+      [ "https://www.zlib.net/fossils/zlib-${version}.tar.gz"  # stable archive path
+        "mirror://sourceforge/libpng/zlib/${version}/zlib-${version}.tar.gz"
       ];
-    sha256 = "c3e5e9fdd5004dcb542feda5ee4f0ff0744628baf8ed2dd5d66f8ca1197cb1a1";
+    sha256 = "91844808532e5ce316b3c010929493c0244f3d37593afd6de04f71821d5136d9";
   };
-
-  patches = lib.optional stdenv.hostPlatform.isCygwin ./disable-cygwin-widechar.patch;
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure \
@@ -42,6 +40,17 @@ stdenv.mkDerivation (rec {
       --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
   '';
 
+  patches = [
+    ./fix-configure-issue-cross.patch
+    # Starting zlib 1.2.12, zlib is stricter to incorrect CRC inputs
+    # with bits set above the low 32.
+    # see https://github.com/madler/zlib/issues/618
+    # TODO: remove the patch if upstream releases https://github.com/madler/zlib/commit/ec3df00224d4b396e2ac6586ab5d25f673caa4c2
+    # see https://github.com/NixOS/nixpkgs/issues/170539 for history.
+    ./comprehensive-crc-validation-for-wrong-implementations.patch
+  ];
+
+  strictDeps = true;
   outputs = [ "out" "dev" ]
     ++ lib.optional splitStaticOutput "static";
   setOutputFlags = false;
@@ -57,11 +66,13 @@ stdenv.mkDerivation (rec {
   # and giving nothing builds both.
   # So we have 3 possible ways to build both:
   # `--static --shared`, `--shared` and giving nothing.
-  # Of these, we choose `--shared`, only because that's
-  # what we did in the past and we can avoid mass rebuilds this way.
-  # As a result, we pass `--static` only when we want just static.
-  configureFlags = lib.optional (static && !shared) "--static"
+  # Of these, we choose `--static --shared`, for clarity and simpler
+  # conditions.
+  configureFlags = lib.optional static "--static"
                    ++ lib.optional shared "--shared";
+  # We do the right thing manually, above, so don't need these.
+  dontDisableStatic = true;
+  dontAddStaticConfigureFlags = true;
 
   # Note we don't need to set `dontDisableStatic`, because static-disabling
   # works by grepping for `enable-static` in the `./configure` script

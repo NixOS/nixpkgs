@@ -16,13 +16,18 @@ let
        - make it self-contained by including docker-compose
    */
   arion =
-    justStaticExecutables (
+    (justStaticExecutables (
       overrideCabal
-        arion-compose
         cabalOverrides
-      );
+        arion-compose
+      )
+    ).overrideAttrs (o: {
+      # Patch away the arion-compose name. Unlike the Haskell library, the program
+      # is called arion (arion was already taken on hackage).
+      pname = "arion";
+    });
 
-  inherit (haskell.lib) justStaticExecutables overrideCabal;
+  inherit (haskell.lib.compose) justStaticExecutables overrideCabal;
 
   inherit (haskellPackages) arion-compose;
 
@@ -31,9 +36,6 @@ let
     passthru = (o.passthru or {}) // {
       inherit eval build;
     };
-    # Patch away the arion-compose name. Unlike the Haskell library, the program
-    # is called arion (arion was already taken on hackage).
-    pname = "arion";
     src = arion-compose.src;
 
     # PYTHONPATH
@@ -51,7 +53,7 @@ let
       mv $out/bin/arion $out/libexec
       makeWrapper $out/libexec/arion $out/bin/arion \
         --unset PYTHONPATH \
-        --prefix PATH : ${lib.makeBinPath [ pkgs.docker-compose ]} \
+        --prefix PATH : ${lib.makeBinPath [ pkgs.docker-compose_1 ]} \
         ;
     '';
   };

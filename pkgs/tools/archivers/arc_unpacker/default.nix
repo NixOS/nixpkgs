@@ -1,26 +1,23 @@
 { lib, stdenv, fetchFromGitHub, cmake, makeWrapper, boost, libpng, libiconv
-, libjpeg, zlib, openssl, libwebp, catch }:
+, libjpeg, zlib, openssl, libwebp, catch2 }:
 
 stdenv.mkDerivation rec {
   pname = "arc_unpacker";
-  version = "unstable-2021-05-17";
+  version = "unstable-2021-08-06";
 
   src = fetchFromGitHub {
     owner = "vn-tools";
     repo = "arc_unpacker";
-    # Since the latest release (0.11) doesn't build, we've opened an upstream
-    # issue in https://github.com/vn-tools/arc_unpacker/issues/187 to ask if a
-    # a new release is upcoming
-    rev = "9c2781fcf3ead7641e873b65899f6abeeabb2fc8";
-    sha256 = "1xxrc9nww0rla3yh10z6glv05ax4rynwwbd0cdvkp7gyqzrv97xp";
+    rev = "456834ecf2e5686813802c37efd829310485c57d";
+    hash = "sha256-STbdWH7Mr3gpOrZvujblYrIIKEWBHzy1/BaNuh4teI8=";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper catch ];
+  nativeBuildInputs = [ cmake makeWrapper catch2 ];
   buildInputs = [ boost libpng libjpeg zlib openssl libwebp ]
     ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   postPatch = ''
-    cp ${catch}/include/catch/catch.hpp tests/test_support/catch.h
+    cp ${catch2}/include/catch2/catch.hpp tests/test_support/catch.h
   '';
 
   checkPhase = ''
@@ -45,8 +42,8 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  # A few tests fail on aarch64
-  doCheck = !stdenv.isAarch64;
+  # A few tests fail on aarch64-linux
+  doCheck = !(stdenv.isLinux && stdenv.isAarch64);
 
   meta = with lib; {
     description = "A tool to extract files from visual novel archives";

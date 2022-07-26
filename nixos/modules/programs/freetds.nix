@@ -17,7 +17,7 @@ in
     environment.freetds = mkOption {
       type = types.attrsOf types.str;
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         { MYDATABASE = '''
             host = 10.0.2.100
             port = 1433

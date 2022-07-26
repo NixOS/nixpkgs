@@ -2,22 +2,22 @@
 
 buildGoModule rec {
   pname = "editorconfig-checker";
-  version = "2.3.5";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "editorconfig-checker";
     repo = "editorconfig-checker";
     rev = version;
-    sha256 = "sha256-t1qvmTs6hOrAnq5hjU2Qjt33vdW9MuSOvWCCY82db+g=";
+    sha256 = "sha256-S/iIanLToWN4OsItvSLGSEhgoYRJgUt0w3QFp1+scfY=";
   };
 
-  vendorSha256 = "sha256-Rs7u/ZepnMNg5EZ/HWqSdO428KOkxpSbo7rl0treqUY=";
+  vendorSha256 = "sha256-ktyUuWW0xlhRLkertrc4/ZYCyDh/tfYBuHqIrdTkotQ=";
 
   doCheck = false;
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildFlagsArray = [ "-ldflags=-X main.version=${version}" ];
+  ldflags = [ "-X main.version=${version}" ];
 
   postInstall = ''
     installManPage docs/editorconfig-checker.1

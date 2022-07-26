@@ -38,7 +38,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.jackett;
-        defaultText = "pkgs.jackett";
+        defaultText = literalExpression "pkgs.jackett";
         description = "Jackett package to use.";
       };
     };

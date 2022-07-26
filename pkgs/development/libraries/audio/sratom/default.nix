@@ -11,12 +11,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config wafHook python3 ];
   buildInputs = [ lv2 serd sord ];
+  dontAddWafCrossFlags = true;
 
   meta = with lib; {
     homepage = "http://drobilla.net/software/sratom";
     description = "A library for serialising LV2 atoms to/from RDF";
     license = licenses.mit;
     maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

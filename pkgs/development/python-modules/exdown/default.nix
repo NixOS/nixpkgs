@@ -1,19 +1,29 @@
-{ lib, buildPythonPackage, isPy27, fetchPypi, pythonOlder
-, importlib-metadata }:
+{ lib
+, buildPythonPackage
+, isPy27
+, fetchPypi
+, pythonOlder
+, importlib-metadata
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "exdown";
-  version = "0.8.6";
+  version = "0.9.0";
   format = "pyproject";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-BCn+rkMxQSw/gO+dpzgpYSOqEiooWFzSh7LUYIFr6wE=";
+    sha256 = "sha256-r0SCigkUpOiba4MDf80+dLjOjjruVNILh/raWfvjXA0=";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "exdown" ];
 

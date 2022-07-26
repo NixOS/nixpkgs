@@ -22,6 +22,15 @@ let
   '' + concatStringsSep "\n" (mapAttrsToList
     (n: v: "${n}=${cfgToString v}") cfg.serverProperties));
 
+  stopScript = pkgs.writeShellScript "minecraft-server-stop" ''
+    echo stop > ${config.systemd.sockets.minecraft-server.socketConfig.ListenFIFO}
+
+    # Wait for the PID of the minecraft server to disappear before
+    # returning, so systemd doesn't attempt to SIGKILL it.
+    while kill -0 "$1" 2> /dev/null; do
+      sleep 1s
+    done
+  '';
 
   # To be able to open the firewall, we need to read out port values in the
   # server properties, but fall back to the defaults when those don't exist.
@@ -109,7 +118,7 @@ in {
           You can use <link xlink:href="https://mcuuid.net/"/> to get a
           Minecraft UUID for a username.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           {
             username1 = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx";
             username2 = "yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy";
@@ -120,7 +129,7 @@ in {
       serverProperties = mkOption {
         type = with types; attrsOf (oneOf [ bool int str ]);
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           {
             server-port = 43000;
             difficulty = 3;
@@ -144,8 +153,8 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.minecraft-server;
-        defaultText = "pkgs.minecraft-server";
-        example = literalExample "pkgs.minecraft-server_1_12_2";
+        defaultText = literalExpression "pkgs.minecraft-server";
+        example = literalExpression "pkgs.minecraft-server_1_12_2";
         description = "Version of minecraft-server to run.";
       };
 
@@ -153,7 +162,7 @@ in {
         type = types.separatedString " ";
         default = "-Xmx2048M -Xms2048M";
         # Example options from https://minecraft.gamepedia.com/Tutorials/Server_startup_script
-        example = "-Xmx2048M -Xms4092M -XX:+UseG1GC -XX:+CMSIncrementalPacing "
+        example = "-Xms4092M -Xmx4092M -XX:+UseG1GC -XX:+CMSIncrementalPacing "
           + "-XX:+CMSClassUnloadingEnabled -XX:ParallelGCThreads=2 "
           + "-XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10";
         description = "JVM options for the Minecraft server.";
@@ -167,19 +176,61 @@ in {
       description     = "Minecraft server service user";
       home            = cfg.dataDir;
       createHome      = true;
-      uid             = config.ids.uids.minecraft;
+      isSystemUser    = true;
+      group           = "minecraft";
+    };
+    users.groups.minecraft = {};
+
+    systemd.sockets.minecraft-server = {
+      bindsTo = [ "minecraft-server.service" ];
+      socketConfig = {
+        ListenFIFO = "/run/minecraft-server.stdin";
+        SocketMode = "0660";
+        SocketUser = "minecraft";
+        SocketGroup = "minecraft";
+        RemoveOnStop = true;
+        FlushPending = true;
+      };
     };
 
     systemd.services.minecraft-server = {
       description   = "Minecraft Server Service";
       wantedBy      = [ "multi-user.target" ];
-      after         = [ "network.target" ];
+      requires      = [ "minecraft-server.socket" ];
+      after         = [ "network.target" "minecraft-server.socket" ];
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/minecraft-server ${cfg.jvmOpts}";
+        ExecStop = "${stopScript} $MAINPID";
         Restart = "always";
         User = "minecraft";
         WorkingDirectory = cfg.dataDir;
+
+        StandardInput = "socket";
+        StandardOutput = "journal";
+        StandardError = "journal";
+
+        # Hardening
+        CapabilityBoundingSet = [ "" ];
+        DeviceAllow = [ "" ];
+        LockPersonality = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        UMask = "0077";
       };
 
       preStart = ''

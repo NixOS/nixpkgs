@@ -1,14 +1,19 @@
 <p align="center">
-  <a href="https://nixos.org/nixos"><img src="https://nixos.org/logo/nixos-hires.png" width="500px" alt="NixOS logo" /></a>
+  <a href="https://nixos.org#gh-light-mode-only">
+    <img src="https://raw.githubusercontent.com/NixOS/nixos-homepage/master/logo/nixos-hires.png" width="500px" alt="NixOS logo"/>
+  </a>
+  <a href="https://nixos.org#gh-dark-mode-only">
+    <img src="https://raw.githubusercontent.com/NixOS/nixos-artwork/master/logo/nixos-white.png" width="500px" alt="NixOS logo"/>
+  </a>
 </p>
 
 <p align="center">
-  <a href="https://www.codetriage.com/nixos/nixpkgs"><img src="https://www.codetriage.com/nixos/nixpkgs/badges/users.svg" alt="Code Triagers badge" /></a>
-  <a href="https://opencollective.com/nixos"><img src="https://opencollective.com/nixos/tiers/supporter/badge.svg?label=Supporter&color=brightgreen" alt="Open Collective supporters" /></a>
+  <a href="https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md"><img src="https://img.shields.io/github/contributors-anon/NixOS/nixpkgs" alt="Contributors badge" /></a>
+  <a href="https://opencollective.com/nixos"><img src="https://opencollective.com/nixos/tiers/supporter/badge.svg?label=supporters&color=brightgreen" alt="Open Collective supporters" /></a>
 </p>
 
 [Nixpkgs](https://github.com/nixos/nixpkgs) is a collection of over
-60,000 software packages that can be installed with the
+80,000 software packages that can be installed with the
 [Nix](https://nixos.org/nix/) package manager. It also implements
 [NixOS](https://nixos.org/nixos/), a purely-functional Linux distribution.
 
@@ -46,14 +51,14 @@ Nixpkgs and NixOS are built and tested by our continuous integration
 system, [Hydra](https://hydra.nixos.org/).
 
 * [Continuous package builds for unstable/master](https://hydra.nixos.org/jobset/nixos/trunk-combined)
-* [Continuous package builds for the NixOS 21.05 release](https://hydra.nixos.org/jobset/nixos/release-21.05)
+* [Continuous package builds for the NixOS 22.05 release](https://hydra.nixos.org/jobset/nixos/release-22.05)
 * [Tests for unstable/master](https://hydra.nixos.org/job/nixos/trunk-combined/tested#tabs-constituents)
-* [Tests for the NixOS 21.05 release](https://hydra.nixos.org/job/nixos/release-21.05/tested#tabs-constituents)
+* [Tests for the NixOS 22.05 release](https://hydra.nixos.org/job/nixos/release-22.05/tested#tabs-constituents)
 
 Artifacts successfully built with Hydra are published to cache at
 https://cache.nixos.org/. When successful build and test criteria are
 met, the Nixpkgs expressions are distributed via [Nix
-channels](https://nixos.org/nix/manual/#sec-channels).
+channels](https://nixos.org/manual/nix/stable/package-management/channels.html).
 
 # Contributing
 

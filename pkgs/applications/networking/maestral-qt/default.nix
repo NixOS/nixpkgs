@@ -2,19 +2,22 @@
 , fetchFromGitHub
 , python3
 , wrapQtAppsHook
+, nixosTests
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "maestral-qt";
-  version = "1.4.6";
+  version = "1.5.3";
   disabled = python3.pkgs.pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral-qt";
     rev = "v${version}";
-    sha256 = "sha256-Y4n67LJyNUsLmGMu7B73n888qmCQ9HjxCSM1MlfTbqQ=";
+    sha256 = "sha256-zaG9Zwz9S/SVb7xDa7eXkjLNt1BhA1cQ3I18rVt+8uQ=";
   };
+
+  format = "pyproject";
 
   propagatedBuildInputs = with python3.pkgs; [
     click
@@ -39,6 +42,10 @@ python3.pkgs.buildPythonApplication rec {
 
   # no tests
   doCheck = false;
+
+  pythonImportsCheck = [ "maestral_qt" ];
+
+  passthru.tests.maestral = nixosTests.maestral;
 
   meta = with lib; {
     description = "GUI front-end for maestral (an open-source Dropbox client) for Linux";

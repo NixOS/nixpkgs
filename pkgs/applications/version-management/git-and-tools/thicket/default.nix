@@ -1,20 +1,17 @@
 { lib
 , fetchFromGitHub
-, crystal_0_33
+, crystal
 }:
 
-let
-  crystal = crystal_0_33;
-
-in crystal.buildCrystalPackage rec {
+crystal.buildCrystalPackage rec {
   pname = "thicket";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "taylorthurlow";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-A89E0CbV7VFB7W4ycFcZloP0J/d42agEuD+hs9a6a6E=";
+    sha256 = "sha256-7X1RKj/FWgJdgA7P746hU0ndUM49fH79ZNRSkvNZYFg=";
   };
 
   format = "shards";

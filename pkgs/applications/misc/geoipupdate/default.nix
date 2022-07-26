@@ -2,16 +2,18 @@
 
 buildGoModule rec {
   pname = "geoipupdate";
-  version = "4.8.0";
+  version = "4.9.0";
 
   src = fetchFromGitHub {
     owner = "maxmind";
     repo = "geoipupdate";
     rev = "v${version}";
-    sha256 = "sha256-fcz1g17JR6jOpq5zOpCmnI00hyXSYYGHfoFRE8/c8dk=";
+    sha256 = "sha256-AqA0hzZGn5XU2Pyoj1vaP+ht7r3dpDhuang4KCXaSgs=";
   };
 
-  vendorSha256 = "sha256-YawWlPZV4bBOsOFDo2nIXKWwcxb5hWy5OiB99MG0HcY=";
+  vendorSha256 = "sha256-S+CnIPoyGM7dEQICOIlAWBIC24Fyt7q+OY382evDgQc=";
+
+  ldflags = [ "-X main.version=${version}" ];
 
   doCheck = false;
 

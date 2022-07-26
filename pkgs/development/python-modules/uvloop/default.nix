@@ -6,7 +6,7 @@
 , libuv
 , CoreServices
 , ApplicationServices
-# Check Inputs
+  # Check Inputs
 , aiohttp
 , psutil
 , pyopenssl
@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "uvloop";
-  version = "0.15.2";
+  version = "0.16.0";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2bb0624a8a70834e54dde8feed62ed63b50bad7a1265c40d6403a2ac447bce01";
+    sha256 = "f74bc20c7b67d1c27c72601c78cf95be99d5c2cdd4514502b4f3eb0933ff1228";
   };
 
   buildInputs = [
@@ -34,9 +34,10 @@ buildPythonPackage rec {
   checkInputs = [
     aiohttp
     pytestCheckHook
-    pyopenssl
     psutil
   ];
+
+  LIBUV_CONFIGURE_HOST = stdenv.hostPlatform.config;
 
   pytestFlagsArray = [
     # from pytest.ini, these are NECESSARY to prevent failures
@@ -44,13 +45,18 @@ buildPythonPackage rec {
     "--assert=plain"
     "--strict"
     "--tb=native"
-  ] ++ lib.optionals (stdenv.isAarch64) [
+    # Depend on pyopenssl
+    "--deselect tests/test_tcp.py::Test_UV_TCPSSL::test_flush_before_shutdown"
+    "--deselect tests/test_tcp.py::Test_UV_TCPSSL::test_renegotiation"
+  ] ++ lib.optionals (stdenv.isAarch32 || stdenv.isAarch64) [
     # test gets stuck in epoll_pwait on hydras aarch64 builders
     # https://github.com/MagicStack/uvloop/issues/412
-    "--deselect" "tests/test_tcp.py::Test_AIO_TCPSSL::test_remote_shutdown_receives_trailing_data"
+    "--deselect tests/test_tcp.py::Test_AIO_TCPSSL::test_remote_shutdown_receives_trailing_data"
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # Flaky test: https://github.com/MagicStack/uvloop/issues/412
-    "--deselect" "tests/test_tcp.py::Test_UV_TCPSSL::test_shutdown_timeout_handler_not_set"
+    "--deselect tests/test_tcp.py::Test_UV_TCPSSL::test_shutdown_timeout_handler_not_set"
+    # Broken: https://github.com/NixOS/nixpkgs/issues/160904
+    "--deselect tests/test_context.py::Test_UV_Context::test_create_ssl_server_manual_connection_lost"
   ];
 
   disabledTestPaths = [
@@ -58,8 +64,16 @@ buildPythonPackage rec {
     "tests/test_sourcecode.py"
   ];
 
-  # force using installed/compiled uvloop vs source by moving tests to temp dir
-  preCheck = ''
+  preCheck = lib.optionalString stdenv.isDarwin ''
+    # Work around "OSError: AF_UNIX path too long"
+    # https://github.com/MagicStack/uvloop/issues/463
+    export TMPDIR="/tmp"
+  '' + ''
+    # pyopenssl is not well supported by upstream
+    # https://github.com/NixOS/nixpkgs/issues/175875
+    substituteInPlace tests/test_tcp.py \
+      --replace "from OpenSSL import SSL as openssl_ssl" ""
+    # force using installed/compiled uvloop vs source by moving tests to temp dir
     export TEST_DIR=$(mktemp -d)
     cp -r tests $TEST_DIR
     pushd $TEST_DIR

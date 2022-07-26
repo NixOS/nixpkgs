@@ -14,23 +14,31 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "4.1.1";
   pname = "yara";
+  version = "4.2.2";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
-    repo = "yara";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "185j7firn7i5506rcp0va7sxdbminwrm06jsm4c70jf98qxmv522";
+    hash = "sha256-HWLyDhFQHHmXUaAKp7EZ3ZsXlbwCEoJj4Q0qAtxwN1Y=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
-  buildInputs = [ pcre protobufc ]
-    ++ lib.optionals withCrypto [ openssl ]
-    ++ lib.optionals enableMagic [ file ]
-    ++ lib.optionals enableCuckoo [ jansson ]
-  ;
+  buildInputs = [
+    pcre
+    protobufc
+  ] ++ lib.optionals withCrypto [
+    openssl
+  ] ++ lib.optionals enableMagic [
+    file
+  ] ++ lib.optionals enableCuckoo [
+    jansson
+  ];
 
   preConfigure = "./bootstrap.sh";
 

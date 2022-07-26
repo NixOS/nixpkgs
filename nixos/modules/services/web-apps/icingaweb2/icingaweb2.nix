@@ -59,7 +59,7 @@ in {
     modulePackages = mkOption {
       type = attrsOf package;
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           "snow" = icingaweb2Modules.theme-snow;
         }

@@ -1,21 +1,34 @@
 { stdenv, lib, fetchurl, makeWrapper, which, zlib, libGL, glib, xorg, libxkbcommon
-, xdg-utils
+, xdg-utils, libXrender, fontconfig, freetype, systemd, libpulseaudio
 # For glewinfo
 , libXmu, libXi, libXext }:
 
 let
   packages = [
-    stdenv.cc.cc zlib glib xorg.libX11 libxkbcommon libXmu libXi libXext libGL
+    stdenv.cc.cc
+    zlib
+    glib
+    xorg.libX11
+    libxkbcommon
+    libXmu
+    libXi
+    libXext
+    libGL
+    libXrender
+    fontconfig
+    freetype
+    systemd
+    libpulseaudio
   ];
   libPath = lib.makeLibraryPath packages;
 in
 stdenv.mkDerivation rec {
   pname = "genymotion";
-  version = "2.8.0";
+  version = "3.2.1";
   src = fetchurl {
     url = "https://dl.genymotion.com/releases/genymotion-${version}/genymotion-${version}-linux_x64.bin";
     name = "genymotion-${version}-linux_x64.bin";
-    sha256 = "0lvfdlpmmsyq2i9gs4mf6a8fxkfimdr4rhyihqnfhjij3fzxz4lk";
+    sha256 = "sha256-yCczUfiMcuu9OauMDmMdtnheDBXiC9tOEu0cWAW95FM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -48,7 +61,8 @@ stdenv.mkDerivation rec {
     patchExecutable() {
       patchInterpreter "$1"
       wrapProgram "$out/libexec/genymotion/$1" \
-        --set "LD_LIBRARY_PATH" "${libPath}"
+        --set "LD_LIBRARY_PATH" "${libPath}" \
+        --unset "QML2_IMPORT_PATH"
     }
 
     patchTool() {
@@ -75,6 +89,7 @@ stdenv.mkDerivation rec {
       suitable for application testing.
      '';
     homepage = "https://www.genymotion.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = ["x86_64-linux"];
     maintainers = [ maintainers.puffnfresh ];

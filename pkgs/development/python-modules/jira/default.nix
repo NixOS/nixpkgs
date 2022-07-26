@@ -1,34 +1,67 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, pytest, pytest-runner, pbr, glibcLocales , pytest-cov
-, requests, requests_oauthlib, requests-toolbelt, defusedxml
-, ipython
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, defusedxml
+, flaky
+, keyring
+, requests-mock
+, requests-oauthlib
+, requests-toolbelt
+, setuptools-scm
+, setuptools-scm-git-archive
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "jira";
-  version = "2.0.0";
+  version = "3.1.1";
+  format = "setuptools";
 
-  PBR_VERSION = version;
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "e2a94adff98e45b29ded030adc76103eab34fa7d4d57303f211f572bedba0e93";
+  src = fetchFromGitHub {
+    owner = "pycontribs";
+    repo = pname;
+    rev = version;
+    hash = "sha256-1g7yNKRR7Ua2rjfiE1c94LKAQGVCX0gSeqTc2Pn7QhM=";
   };
 
-  buildInputs = [ glibcLocales pytest pytest-cov pytest-runner pbr ];
-  propagatedBuildInputs = [ requests requests_oauthlib requests-toolbelt defusedxml pbr ipython ];
+  nativeBuildInputs = [
+    setuptools-scm
+    setuptools-scm-git-archive
+  ];
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  propagatedBuildInputs = [
+    defusedxml
+    keyring
+    requests-oauthlib
+    requests-toolbelt
+  ];
+
+  checkInputs = [
+    flaky
+    pytestCheckHook
+    requests-mock
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--cov-report=xml --cov jira" ""
+  '';
+
+  pythonImportsCheck = [
+    "jira"
+  ];
 
   # impure tests because of connectivity attempts to jira servers
   doCheck = false;
 
-  patches = [ ./sphinx-fix.patch ];
-
-  LC_ALL = "en_US.utf8";
-
-  disabled = !isPy3k;
-
   meta = with lib; {
-    description = "This library eases the use of the JIRA REST API from Python.";
+    description = "Library to interact with the JIRA REST API";
+    homepage = "https://github.com/pycontribs/jira";
     license = licenses.bsd2;
     maintainers = with maintainers; [ globin ];
   };

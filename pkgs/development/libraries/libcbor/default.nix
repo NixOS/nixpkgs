@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libcbor";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "PJK";
     repo = pname;
     rev = "v${version}";
-    sha256 = "01dv4vxcmbvpphqy16vqiwh25wx11x630js5wfnx7cryarsh9ld7";
+    sha256 = "sha256-Wp/48yQA17mf/dTgeMcMDvPpKOPkfLhQkCnzgGLpLtk=";
   };
 
   nativeBuildInputs = [ cmake ];

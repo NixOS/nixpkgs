@@ -1,9 +1,7 @@
-{ lib, pythonPackages, fetchurl, xpdf }:
-let
-  py = pythonPackages;
-in
-py.buildPythonApplication rec {
-  name = "pdfdiff-${version}";
+{ lib, python2Packages, fetchurl, xpdf }:
+
+python2Packages.buildPythonApplication rec {
+  pname = "pdfdiff";
   version = "0.92";
 
   src = fetchurl {
@@ -11,7 +9,7 @@ py.buildPythonApplication rec {
     sha256 = "0zxwjjbklz87wkbhkmsvhc7xmv5php7m2a9vm6ydhmhlxsybf836";
   };
 
-  buildInputs = [  pythonPackages.wrapPython ];
+  buildInputs = [  python2Packages.wrapPython ];
 
   dontConfigure = true;
   dontBuild = true;
@@ -29,7 +27,7 @@ py.buildPythonApplication rec {
     cp pdfdiff.py $out/bin/pdfdiff
     chmod +x $out/bin/pdfdiff
 
-    substituteInPlace $out/bin/pdfdiff --replace "#!/usr/bin/python" "#!${pythonPackages.python.interpreter}"
+    substituteInPlace $out/bin/pdfdiff --replace "#!/usr/bin/python" "#!${python2Packages.python.interpreter}"
     '';
 
   meta = with lib; {

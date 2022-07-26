@@ -1,0 +1,22 @@
+commit 77b5e54d33a66445f45ddc48577d835207be8cef
+Author: Stephen Dolan <stephen.dolan@cl.cam.ac.uk>
+Date:   Fri Jun 12 19:34:51 2020 +0100
+
+    Unbreak small example logic
+
+diff --git a/examples/pprint/test_pprint.ml b/examples/pprint/test_pprint.ml
+index 77789ef..44124e7 100644
+--- a/examples/pprint/test_pprint.ml
++++ b/examples/pprint/test_pprint.ml
+@@ -1,9 +1,9 @@
+-open Crowbar
+ open PPrint
++open Crowbar
+ type t = (string * PPrint.document)
+ let doc = fix (fun doc -> choose [
+   const ("", empty);
+-  const ("a", char 'a');
++  const ("a", PPrint.char 'a');
+   const ("123", string "123");
+   const ("Hello", string "Hello");
+   const ("awordwhichisalittlebittoolong",

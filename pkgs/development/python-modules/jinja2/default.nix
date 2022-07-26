@@ -3,23 +3,24 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
-, Babel
+, babel
 , markupsafe
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "Jinja2";
-  version = "3.0.1";
-  disabled = pythonOlder "3.6";
+  version = "3.1.2";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "197ms1wimxql650245v63wkv04n8bicj549wfhp51bx68x5lhgvh";
+    sha256 = "sha256-MTUacCpAip51laj8YVD8P0O7a/fjGXcMvA2535Q36FI=";
   };
 
   propagatedBuildInputs = [
-    Babel
+    babel
     markupsafe
   ];
 
@@ -31,8 +32,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    # Avoid failure due to deprecation warning
+    # Fixed in https://github.com/python/cpython/pull/28153
+    # Remove after cpython 3.9.8
+    "-p no:warnings"
+  ];
+
   meta = with lib; {
-    homepage = "http://jinja.pocoo.org/";
+    homepage = "https://jinja.palletsprojects.com/";
     description = "Stand-alone template engine";
     license = licenses.bsd3;
     longDescription = ''
@@ -41,6 +49,6 @@ buildPythonPackage rec {
       syntax. Then the template is passed data to render the final document.
       an optional sandboxed environment.
     '';
-    maintainers = with maintainers; [ pierron sjourdois ];
+    maintainers = with maintainers; [ pierron ];
   };
 }

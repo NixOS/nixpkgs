@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Analytics and time-series database";
     homepage    = "http://www.kx.com/";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license     = lib.licenses.unfree;
     platforms   = [ "i686-linux" ];
     maintainers = [ lib.maintainers.thoughtpolice ];

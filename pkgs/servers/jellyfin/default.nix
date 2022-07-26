@@ -1,12 +1,10 @@
 { lib
 , fetchFromGitHub
 , fetchurl
-, linkFarmFromDrvs
-, makeWrapper
 , nixosTests
 , stdenv
 , dotnetCorePackages
-, dotnetPackages
+, buildDotnetModule
 , ffmpeg
 , fontconfig
 , freetype
@@ -15,12 +13,6 @@
 }:
 
 let
-  runtimeDeps = [
-    ffmpeg
-    fontconfig
-    freetype
-  ];
-
   os = if stdenv.isDarwin then "osx" else "linux";
   arch =
     with stdenv.hostPlatform;
@@ -34,81 +26,45 @@ let
       "musl-");
   # https://docs.microsoft.com/en-us/dotnet/core/rid-catalog#using-rids
   runtimeId = "${os}-${musl}${arch}";
-
-  dotnet-sdk = dotnetCorePackages.sdk_5_0;
-  dotnet-net = dotnetCorePackages.net_5_0;
-  dotnet-aspnetcore = dotnetCorePackages.aspnetcore_5_0;
 in
-stdenv.mkDerivation rec {
+buildDotnetModule rec {
   pname = "jellyfin";
-  version = "10.7.6"; # ensure that jellyfin-web has matching version
+  version = "10.8.1"; # ensure that jellyfin-web has matching version
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin";
     rev = "v${version}";
-    sha256 = "3wXB9HrOaLgHJjWpwPWVtcy8xcYBgZoE29hWqf1On2Q=";
+    sha256 = "8XkE0rDvuBcNTsWFf+JtqRuhjhfkbNT8qPSdfuA9DXI=";
   };
 
-  nativeBuildInputs = [
-    dotnet-sdk
-    dotnetPackages.Nuget
-    makeWrapper
+  patches = [
+    # when building some warnings are reported as error and fail the build.
+    ./disable-warnings.patch
   ];
 
   propagatedBuildInputs = [
-    dotnet-aspnetcore
     sqlite
   ];
 
-  nugetDeps = linkFarmFromDrvs "${pname}-nuget-deps" (import ./nuget-deps.nix {
-    fetchNuGet = { name, version, sha256 }: fetchurl {
-      name = "nuget-${name}-${version}.nupkg";
-      url = "https://www.nuget.org/api/v2/package/${name}/${version}";
-      inherit sha256;
-    };
-  });
+  projectFile = "Jellyfin.Server/Jellyfin.Server.csproj";
+  executables = [ "jellyfin" ];
+  nugetDeps = ./nuget-deps.nix;
+  runtimeDeps = [
+    ffmpeg
+    fontconfig
+    freetype
+  ];
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
+  dotnetFlags = [ "--runtime=${runtimeId}" ];
+  dotnetBuildFlags = [ "--no-self-contained" ];
 
-  configurePhase = ''
-    runHook preConfigure
-
-    export HOME=$(mktemp -d)
-
-    export DOTNET_CLI_TELEMETRY_OPTOUT=1
-    export DOTNET_NOLOGO=1
-
-    nuget sources Add -Name nixos -Source "$PWD/nixos"
-    nuget init "$nugetDeps" "$PWD/nixos"
-
-    # FIXME: https://github.com/NuGet/Home/issues/4413
-    mkdir -p $HOME/.nuget/NuGet
-    cp $HOME/.config/NuGet/NuGet.Config $HOME/.nuget/NuGet
-
-    runHook postConfigure
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-
-    dotnet publish Jellyfin.Server \
-      --configuration Release \
-      --runtime ${runtimeId} \
-      --no-self-contained \
-      --output $out/opt/jellyfin
-
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    makeWrapper ${dotnet-aspnetcore}/bin/dotnet $out/bin/jellyfin \
-      --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}" \
-      --add-flags "$out/opt/jellyfin/jellyfin.dll" \
-      --add-flags "--ffmpeg ${ffmpeg}/bin/ffmpeg" \
+  preInstall = ''
+    makeWrapperArgs+=(
+      --add-flags "--ffmpeg ${ffmpeg}/bin/ffmpeg"
       --add-flags "--webdir ${jellyfin-web}/share/jellyfin-web"
-
-    runHook postInstall
+    )
   '';
 
   passthru.tests = {
@@ -123,5 +79,6 @@ stdenv.mkDerivation rec {
     # https://github.com/jellyfin/jellyfin/issues/610#issuecomment-537625510
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ nyanloutre minijackson purcell jojosch ];
+    platforms = dotnet-runtime.meta.platforms;
   };
 }

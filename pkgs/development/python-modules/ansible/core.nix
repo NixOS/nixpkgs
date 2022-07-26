@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchPypi
 , installShellFiles
+, ansible
 , cryptography
 , jinja2
 , junit-xml
@@ -21,19 +22,13 @@
 , xmltodict
 }:
 
-let
-  ansible-collections = callPackage ./collections.nix {
-    version = "4.2.0";
-    sha256 = "1l30j97q24klylchvbskdmp1xllswn9xskjvg4l0ra6pzfgq2zbk";
-  };
-in
 buildPythonPackage rec {
   pname = "ansible-core";
-  version = "2.11.3";
+  version = "2.13.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-DO0bT2cZftsntQk0yV1MtkTG1jXXLH+CbEQl3+RTdnQ=";
+    sha256 = "sha256-q9R4zv8aCrqV6UzquNyCD0B7zA8AM9xUaEDN3CmjaVg=";
   };
 
   # ansible_connection is already wrapped, so don't pass it through
@@ -42,9 +37,6 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace lib/ansible/executor/task_executor.py \
       --replace "[python," "["
-
-    substituteInPlace requirements.txt \
-      --replace "resolvelib >= 0.5.3, < 0.6.0" "resolvelib"
   '';
 
   nativeBuildInputs = [
@@ -52,14 +44,14 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    # depend on ansible-collections instead of the other way around
-    ansible-collections
+    # depend on ansible instead of the other way around
+    ansible
     # from requirements.txt
     cryptography
     jinja2
     packaging
     pyyaml
-    resolvelib
+    resolvelib # This library is a PITA, since ansible requires a very old version of it
     # optional dependencies
     junit-xml
     lxml
@@ -80,14 +72,11 @@ buildPythonPackage rec {
   # internal import errors, missing dependencies
   doCheck = false;
 
-  passthru = {
-    collections = ansible-collections;
-  };
-
   meta = with lib; {
+    changelog = "https://github.com/ansible/ansible/blob/v${version}/changelogs/CHANGELOG-v${lib.versions.majorMinor version}.rst";
     description = "Radically simple IT automation";
     homepage = "https://www.ansible.com";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

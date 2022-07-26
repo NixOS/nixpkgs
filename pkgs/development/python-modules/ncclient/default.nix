@@ -9,19 +9,18 @@
 
 buildPythonPackage rec {
   pname = "ncclient";
-  version = "0.6.12";
+  version = "0.6.13";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1sjvqaxb54nmqljiw5bg1423msa9rg015wiix9fsm6djk3wpklmk";
+    sha256 = "sha256-NrilXB1NFcqNCGrwshhuLdhQoeHJ12PSp4MBScT9kYc=";
   };
 
   propagatedBuildInputs = [
     paramiko
     lxml
-    selectors2
   ];
 
   checkInputs = [

@@ -1,4 +1,4 @@
-{ fetchzip, lib, stdenv, jdk8, runtimeShell }:
+{ fetchzip, lib, stdenv, jdk, runtimeShell }:
 
 stdenv.mkDerivation rec {
   version = "5.4.4";
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
     # Python on Darwin; just write our own start script to avoid unnecessary dependencies
     cat > $out/bin/keystore-explorer <<EOF
     #!${runtimeShell}
-    export JAVA_HOME=${jdk8.home}
-    exec ${jdk8}/bin/java -jar $out/share/keystore-explorer/kse.jar "\$@"
+    export JAVA_HOME=${jdk.home}
+    exec ${jdk}/bin/java -jar $out/share/keystore-explorer/kse.jar "\$@"
     EOF
     chmod +x $out/bin/keystore-explorer
 
@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Open source GUI replacement for the Java command-line utilities keytool and jarsigner";
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.numinit ];
     platforms = lib.platforms.unix;

@@ -1,25 +1,20 @@
-{ lib, stdenv, fetchurl }:
-let
-  # memstream — POSIX memory streams for BSD
-  memstream = fetchurl {
-    url = "https://piumarta.com/software/memstream/memstream-0.1.tar.gz";
-    sha256 = "0kvdb897g7nyviaz72arbqijk2g2wa61cmi3l5yh48rzr49r3a3a";
-  };
-in
+{ lib, stdenv, fetchurl, memstreamHook }:
+
 stdenv.mkDerivation rec {
   pname = "hyx";
-  version = "2020-06-09";
+  version = "2021.06.09";
 
   src = fetchurl {
     url = "https://yx7.cc/code/hyx/hyx-${lib.replaceStrings [ "-" ] [ "." ] version}.tar.xz";
-    sha256 = "1x8dmll93hrnj24kn5knpwj36y6r1v2ygwynpjwrg2hwd4c1a8hi";
+    sha256 = "sha256-jU8U5YWE1syPBOQ8o4BC7tIYiCo4kknCCwhnMCVtpes=";
   };
 
-  postUnpack = lib.optionalString stdenv.isDarwin ''
-    tar --strip=1 -C $sourceRoot -xf ${memstream} --wildcards "memstream-0.1/memstream.[hc]"
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Makefile \
+      --replace "-Wl,-z,relro,-z,now -fpic -pie" ""
   '';
 
-  patches = lib.optional stdenv.isDarwin ./memstream.patch;
+  buildInputs = lib.optional (stdenv.system == "x86_64-darwin") memstreamHook;
 
   installPhase = ''
     install -vD hyx $out/bin/hyx

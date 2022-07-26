@@ -1,32 +1,54 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27
+{ lib
+, buildPythonPackage
 , click
-, pytest
+, fetchFromGitHub
+, fetchpatch
+, pytestCheckHook
+, pythonOlder
 , six
 }:
 
 buildPythonPackage rec {
   pname = "xdis";
-  version = "5.0.10";
-  disabled = isPy27;
+  version = "6.0.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "rocky";
     repo = "python-xdis";
     rev = version;
-    sha256 = "sha256-/3qyMgliua7W4Va1HdRbHyiR/eBQzHK+GrZVAMvMhLA=";
+    hash = "sha256-CRZG898xCwukq+9YVkyXMP8HcuJ9GtvDhy96kxvRFks=";
   };
 
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [ six click ];
+  propagatedBuildInputs = [
+    click
+    six
+  ];
 
-  checkPhase = ''
-    make check
-  '';
-  pythonImportsCheck = [ "xdis" ];
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "xdis"
+  ];
+
+  disabledTestPaths = [
+    # Our Python release is not in the test matrix
+    "test_unit/test_disasm.py"
+  ];
+
+  disabledTests = [
+    "test_big_linenos"
+    "test_basic"
+  ];
 
   meta = with lib; {
     description = "Python cross-version byte-code disassembler and marshal routines";
-    homepage = "https://github.com/rocky/python-xdis/";
+    homepage = "https://github.com/rocky/python-xdis";
     license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ];
   };
 }

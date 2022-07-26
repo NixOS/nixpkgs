@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , mock
+, httpx
 , pytestCheckHook
 , pythonOlder
 , requests
@@ -13,18 +14,19 @@
 
 buildPythonPackage rec {
   pname = "amcrest";
-  version = "1.8.0";
+  version = "1.9.7";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "tchellomello";
     repo = "python-amcrest";
     rev = version;
-    sha256 = "180c0g840vh8dg4f08j0r29pdnhisav93d3axfvicd8fsb2cn36g";
+    sha256 = "sha256-An7MnGtZsmEZU/y6E0sivdexFD6HJRTB1juXqHfbDzE=";
   };
 
   propagatedBuildInputs = [
     argcomplete
+    httpx
     requests
     urllib3
     typing-extensions

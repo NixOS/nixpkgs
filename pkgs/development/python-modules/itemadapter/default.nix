@@ -1,24 +1,33 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27 }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "itemadapter";
-  version = "0.2.0";
+  version = "0.6.0";
+  format = "setuptools";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cb7aaa577fefe2aa6f229ccf4d058e05f44e0178a98c8fb70ee4d95acfabb423";
+    hash = "sha256-Px9g69bJGwAiKCDzi/USaqSaj7bkZ9NR8DZEIflToV0=";
   };
 
-  doCheck = false; # infinite recursion with Scrapy
+  # Infinite recursion with Scrapy
+  doCheck = false;
 
-  pythonImportsCheck = [ "itemadapter" ];
+  pythonImportsCheck = [
+    "itemadapter"
+  ];
 
   meta = with lib; {
     description = "Common interface for data container classes";
     homepage = "https://github.com/scrapy/itemadapter";
+    changelog = "https://github.com/scrapy/itemadapter/raw/v${version}/Changelog.md";
     license = licenses.bsd3;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ marsam ];
   };
 }

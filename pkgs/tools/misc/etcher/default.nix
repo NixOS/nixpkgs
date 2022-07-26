@@ -5,27 +5,29 @@
 , util-linux
 , bash
 , makeWrapper
-, electron_12
+, electron
 }:
 
 let
+  inherit (stdenv.hostPlatform) system;
+
+  throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
+
   sha256 = {
-    "x86_64-linux" = "sha256-FRZTUOlOK1bIbrHdR9yQv45zMhby3tWbMPpaPPq3L9s=";
-    "i686-linux" = "0z6y45sz086njpywg7f0jn6n02qynb1qbi889g2kcgwbfjvmcpm1";
-  }."${stdenv.system}";
+    "x86_64-linux" = "1rcidar97nnpjb163x9snnnhw1z1ld4asgbd5dxpzdh8hikh66ll";
+    "i686-linux" = "1jll4i0j9kh78kl10s596xxs60gy7cnlafgpk89861yihj0i73a5";
+  }."${system}" or throwSystem;
 
   arch = {
     "x86_64-linux" = "amd64";
     "i686-linux" = "i386";
-  }."${stdenv.system}";
-
-  electron = electron_12;
+  }."${system}" or throwSystem;
 
 in
 
 stdenv.mkDerivation rec {
   pname = "etcher";
-  version = "1.5.121";
+  version = "1.7.9";
 
   src = fetchurl {
     url = "https://github.com/balena-io/etcher/releases/download/v${version}/balena-etcher-electron_${version}_${arch}.deb";
@@ -59,6 +61,9 @@ stdenv.mkDerivation rec {
     cp -a usr/share/* $out/share
     cp -a opt/balenaEtcher/{locales,resources} $out/share/${pname}
 
+    substituteInPlace $out/share/applications/balena-etcher-electron.desktop \
+      --replace /opt/balenaEtcher/balena-etcher-electron ${pname}
+
     runHook postInstall
   '';
 
@@ -74,5 +79,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = [ maintainers.shou ];
     platforms = [ "i686-linux" "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

@@ -1,58 +1,71 @@
 { lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
 , anyio
+, buildPythonPackage
+, certifi
+, fetchFromGitHub
 , h11
 , h2
 , pproxy
 , pytest-asyncio
+, pytest-httpbin
+, pytest-trio
 , pytestCheckHook
-, pytest-cov
+, pythonOlder
 , sniffio
-, trio
-, trustme
-, uvicorn
+, socksio
 }:
 
 buildPythonPackage rec {
   pname = "httpcore";
-  version = "0.13.6";
-  disabled = pythonOlder "3.6";
+  version = "0.15.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "sha256-7G7jchOQTgcFSGZfoMPFm0NY9ofg5MM5Xn5lV+W9w8k=";
+    hash = "sha256-FF3Yzac9nkVcA5bHVOz2ymvOelSfJ0K6oU8UWpBDcmo=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "h11>=0.11,<0.13" "h11>=0.11,<0.14"
+  '';
 
   propagatedBuildInputs = [
     anyio
+    certifi
     h11
-    h2
     sniffio
   ];
+
+  passthru.optional-dependencies = {
+    http2 = [
+      h2
+    ];
+    socks = [
+      socksio
+    ];
+  };
 
   checkInputs = [
     pproxy
     pytest-asyncio
+    pytest-httpbin
+    pytest-trio
     pytestCheckHook
-    pytest-cov
-    trio
-    trustme
-    uvicorn
+  ] ++ passthru.optional-dependencies.http2
+    ++ passthru.optional-dependencies.socks;
+
+  pythonImportsCheck = [
+    "httpcore"
   ];
 
-  disabledTestPaths = [
-    # these tests fail during dns lookups: httpcore.ConnectError: [Errno -2] Name or service not known
-    "tests/test_threadsafety.py"
-    "tests/async_tests/"
-    "tests/sync_tests/test_interfaces.py"
-    "tests/sync_tests/test_retries.py"
+  pytestFlagsArray = [
+    "--asyncio-mode=strict"
   ];
-
-  pythonImportsCheck = [ "httpcore" ];
 
   meta = with lib; {
     description = "A minimal low-level HTTP client";

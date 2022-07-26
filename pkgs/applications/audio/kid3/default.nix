@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, automoc4
 , chromaprint
 , cmake
 , docbook_xml_dtd_45
@@ -28,11 +27,11 @@
 
 stdenv.mkDerivation rec {
   pname = "kid3";
-  version = "3.8.6";
+  version = "3.9.1";
 
   src = fetchurl {
     url = "https://download.kde.org/stable/${pname}/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-R4gAWlCw8RezhYbw1XDo+wdp797IbLoM3wqHwr+ul6k=";
+    sha256 = "sha256-N/HDwfJn7Py4y/GZcIDbeoMEqG+SuRGO23ITZMot8cc=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +43,6 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
   buildInputs = [
-    automoc4
     chromaprint
     ffmpeg
     flac

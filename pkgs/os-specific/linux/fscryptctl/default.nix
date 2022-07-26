@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       documentation for filesystem encryption before using fscryptctl.
     '';
     inherit (src.meta) homepage;
-    changelog = "https://github.com/google/fscryptctl/releases/tag/v{version}";
+    changelog = "https://github.com/google/fscryptctl/releases/tag/v${version}";
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];

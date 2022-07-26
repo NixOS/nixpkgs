@@ -4,20 +4,18 @@
 
 buildPythonPackage rec {
   pname = "bleak";
-  version = "0.12.1";
+  version = "0.14.3";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1va9138igcgbpsnzgr90qwprmhr9h8lryqslc22jxra4r56a502a";
+    sha256 = "sha256-dg5bsegECH92JXa5uVY9Y7R9UhsWUpiOKMPLXmS2GZA=";
   };
 
   postPatch = ''
-    # bleak checks BlueZ's version with a call to `bluetoothctl -v` twice
-    substituteInPlace bleak/__init__.py \
-      --replace \"bluetoothctl\" \"${bluez}/bin/bluetoothctl\"
-    substituteInPlace bleak/backends/bluezdbus/client.py \
+    # bleak checks BlueZ's version with a call to `bluetoothctl --version`
+    substituteInPlace bleak/backends/bluezdbus/__init__.py \
       --replace \"bluetoothctl\" \"${bluez}/bin/bluetoothctl\"
   '';
 

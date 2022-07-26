@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xsnow";
-  version = "3.3.0";
+  version = "3.4.4";
 
   src = fetchurl {
     url = "https://ratrabbit.nl/downloads/xsnow/xsnow-${version}.tar.gz";
-    sha256 = "1xnpqbamhglv7xsxzlrlpvsz6bbzlrvdpn5x2n9baww9kcrkbwjg";
+    sha256 = "sha256-fPMy5AxKspFkcWphf/IjMc/ZQtayljThKxbcMtvOjRc=";
   };
 
   nativeBuildInputs = [ pkg-config ];

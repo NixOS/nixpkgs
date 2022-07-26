@@ -8,7 +8,8 @@ let
 
   cfg = config.virtualisation.docker;
   proxy_env = config.networking.proxy.envVars;
-
+  settingsFormat = pkgs.formats.json {};
+  daemonSettingsFile = settingsFormat.generate "daemon.json" cfg.daemon.settings;
 in
 
 {
@@ -50,6 +51,20 @@ in
             <literal>--restart=always</literal> flag to work. If this option is
             disabled, docker might be started on demand by socket activation.
           '';
+      };
+
+    daemon.settings =
+      mkOption {
+        type = settingsFormat.type;
+        default = { };
+        example = {
+          ipv6 = true;
+          "fixed-cidr-v6" = "fd00::/80";
+        };
+        description = ''
+          Configuration for docker daemon. The attributes are serialized to JSON used as daemon.conf.
+          See https://docs.docker.com/engine/reference/commandline/dockerd/#daemon-configuration-file
+        '';
       };
 
     enableNvidia =
@@ -138,8 +153,8 @@ in
 
     package = mkOption {
       default = pkgs.docker;
+      defaultText = literalExpression "pkgs.docker";
       type = types.package;
-      example = pkgs.docker-edge;
       description = ''
         Docker package to be used in the module.
       '';
@@ -170,12 +185,7 @@ in
             ""
             ''
               ${cfg.package}/bin/dockerd \
-                --group=docker \
-                --host=fd:// \
-                --log-driver=${cfg.logDriver} \
-                ${optionalString (cfg.storageDriver != null) "--storage-driver=${cfg.storageDriver}"} \
-                ${optionalString cfg.liveRestore "--live-restore" } \
-                ${optionalString cfg.enableNvidia "--add-runtime nvidia=${pkgs.nvidia-docker}/bin/nvidia-container-runtime" } \
+                --config-file=${daemonSettingsFile} \
                 ${cfg.extraOptions}
             ''];
           ExecReload=[
@@ -218,6 +228,19 @@ in
         { assertion = cfg.enableNvidia -> config.hardware.opengl.driSupport32Bit or false;
           message = "Option enableNvidia requires 32bit support libraries";
         }];
+
+      virtualisation.docker.daemon.settings = {
+        group = "docker";
+        hosts = [ "fd://" ];
+        log-driver = mkDefault cfg.logDriver;
+        storage-driver = mkIf (cfg.storageDriver != null) (mkDefault cfg.storageDriver);
+        live-restore = mkDefault cfg.liveRestore;
+        runtimes = mkIf cfg.enableNvidia {
+          nvidia = {
+            path = "${pkgs.nvidia-docker}/bin/nvidia-container-runtime";
+          };
+        };
+      };
     }
   ]);
 

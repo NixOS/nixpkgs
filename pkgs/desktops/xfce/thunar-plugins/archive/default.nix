@@ -33,5 +33,6 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Thunar plugin providing file context menus for archives";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

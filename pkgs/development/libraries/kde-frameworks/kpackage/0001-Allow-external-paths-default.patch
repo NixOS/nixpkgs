@@ -11,10 +11,10 @@ diff --git a/src/kpackage/package.cpp b/src/kpackage/package.cpp
 index 36f5600..881f176 100644
 --- a/src/kpackage/package.cpp
 +++ b/src/kpackage/package.cpp
-@@ -858,7 +858,7 @@ PackagePrivate::PackagePrivate()
+@@ -866,7 +866,7 @@ PackagePrivate::PackagePrivate()
+ PackagePrivate::PackagePrivate()
      : QSharedData()
      , fallbackPackage(nullptr)
-     , metadata(nullptr)
 -    , externalPaths(false)
 +    , externalPaths(true)
      , valid(false)

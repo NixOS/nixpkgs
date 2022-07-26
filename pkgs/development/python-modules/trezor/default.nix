@@ -15,22 +15,22 @@
 , protobuf
 , pyblake2
 , requests
-, rlp
 , shamir-mnemonic
+, simple-rlp
 , typing-extensions
 , trezor-udev-rules
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "trezor";
-  version = "0.12.3";
+  version = "0.13.3";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02c39c333435b8f6dc62cc79bb5bf35fc7f0eb144a1a748be3b7c065ee3e85ae";
+    sha256 = "055d32174d4ecf2353f7622ee44b8e82e3bef78fe40ce5cdbeafc785b422a049";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -47,22 +47,23 @@ buildPythonPackage rec {
     protobuf
     pyblake2
     requests
-    rlp
     shamir-mnemonic
+    simple-rlp
     typing-extensions
   ] ++ lib.optionals stdenv.isLinux [
     trezor-udev-rules
   ];
 
-  checkInputs = [
-    pytest
+  checkInputs = [ pytestCheckHook ];
+
+  disabledTestPaths = [
+    "tests/test_stellar.py" # requires stellar-sdk
   ];
 
-  # disable test_tx_api.py as it requires being online
-  checkPhase = ''
-    runHook preCheck
-    pytest --pyargs tests --ignore tests/test_tx_api.py
-    runHook postCheck
+  pythonImportsCheck = [ "trezorlib" ];
+
+  postCheck = ''
+    $out/bin/trezorctl --version
   '';
 
   postFixup = ''

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, openssl, libcap, curl, which
-, eventlog, pkg-config, glib, python, systemd, perl
+, eventlog, pkg-config, glib, python3, systemd, perl
 , riemann_c_client, protobufc, pcre, libnet
 , json_c, libuuid, libivykis, mongoc, rabbitmq-c
 , libesmtp
@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "syslog-ng";
-  version = "3.28.1";
+  version = "3.36.1";
 
   src = fetchurl {
     url = "https://github.com/${pname}/${pname}/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "1s56q8k69sdrqsh3y9lr4di01fqw7xb49wr0dz75jmz084yg8kmg";
+    sha256 = "sha256-kKJcl2f+dJ21DxGN38kuxxOZdj0uzVrU8R/17qBJ5gs=";
   };
 
   nativeBuildInputs = [ pkg-config which ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     eventlog
     glib
     perl
-    python
+    python3
     systemd
     riemann_c_client
     protobufc
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.syslog-ng.com";
     description = "Next-generation syslogd with advanced networking and filtering capabilities";
-    license = licenses.gpl2;
+    license = with licenses; [ gpl2Plus lgpl21Plus ];
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.linux;
   };

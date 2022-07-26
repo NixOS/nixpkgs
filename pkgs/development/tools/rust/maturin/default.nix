@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "maturin";
-  version = "0.10.6";
+  version = "0.12.9";
 
   src = fetchFromGitHub {
     owner = "PyO3";
     repo = "maturin";
     rev = "v${version}";
-    hash = "sha256-qWDrdS1zxe5woQSKLHhDSGJ1KF4SHk1mhaQApJXCCO4=";
+    hash = "sha256-FskCBviLl1yafPOlsp/IjaEOlGUuWLcGlxDrNA/qf8k=";
   };
 
-  cargoHash = "sha256-NEXgb7yWQkqbbofd3oYQ5n+CmfaM2cWj8HwufrcRKkc=";
+  cargoHash = "sha256-zakSQptKK/X/8MDJxRUHTDIGPh77cq5PrOmPEneD0YM=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -44,6 +44,6 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/PyO3/maturin";
     license = licenses.asl20;
-    maintainers = [ maintainers.danieldk ];
+    maintainers = [ ];
   };
 }

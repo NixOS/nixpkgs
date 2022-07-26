@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub, fuse }:
 
 stdenv.mkDerivation {
-  name = "9pfs-20150918";
+  pname = "9pfs";
+  version = "unstable-2015-09-18";
 
   src = fetchFromGitHub {
     owner = "mischief";
@@ -22,6 +23,12 @@ stdenv.mkDerivation {
     '';
 
   buildInputs = [ fuse ];
+
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: lib/auth_rpc.o:/build/source/lib/../9pfs.h:35: multiple definition of
+  #     `logfile'; 9pfs.o:/build/source/9pfs.h:35: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
 
   enableParallelBuilding = true;
 

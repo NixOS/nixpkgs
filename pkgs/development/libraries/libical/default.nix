@@ -13,14 +13,14 @@
 , python3
 , tzdata
 , fixDarwinDylibNames
-, introspectionSupport ? stdenv.buildPlatform == stdenv.hostPlatform
+, withIntrospection ? stdenv.buildPlatform == stdenv.hostPlatform
 , gobject-introspection
 , vala
 }:
 
 stdenv.mkDerivation rec {
   pname = "libical";
-  version = "3.0.10";
+  version = "3.0.14";
 
   outputs = [ "out" "dev" ]; # "devdoc" ];
 
@@ -28,9 +28,10 @@ stdenv.mkDerivation rec {
     owner = "libical";
     repo = "libical";
     rev = "v${version}";
-    sha256 = "sha256-fLmEJlkZLYLcKZqZwitf8rH261QDPTJZf/+/+FMsGIg=";
+    sha256 = "sha256-gZ6IBjG5pNKJ+hWcTzXMP7yxL4he4LTklZGoC9vXra8=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [
     cmake
     ninja
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # provides ical-glib-src-generator that runs during build
     libical
-  ] ++ lib.optionals introspectionSupport [
+  ] ++ lib.optionals withIntrospection [
     gobject-introspection
     vala
   ] ++ lib.optionals stdenv.isDarwin [
@@ -60,13 +61,14 @@ stdenv.mkDerivation rec {
     glib
     libxml2
     icu
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
   ];
 
   cmakeFlags = [
     "-DENABLE_GTK_DOC=False"
-  ] ++ lib.optionals introspectionSupport [
-    "-DGOBJECT_INTROSPECTION=True"
-    "-DICAL_GLIB_VAPI=True"
+    "-DGOBJECT_INTROSPECTION=${if withIntrospection then "True" else "False"}"
+    "-DICAL_GLIB_VAPI=${if withIntrospection then "True" else "False"}"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-DIMPORT_ICAL_GLIB_SRC_GENERATOR=${lib.getDev buildPackages.libical}/lib/cmake/LibIcal/IcalGlibSrcGenerator.cmake"
   ];
@@ -79,7 +81,8 @@ stdenv.mkDerivation rec {
 
   # Using install check so we do not have to manually set
   # LD_LIBRARY_PATH and GI_TYPELIB_PATH variables
-  doInstallCheck = true;
+  # Musl does not support TZDIR.
+  doInstallCheck = !stdenv.hostPlatform.isMusl;
   enableParallelChecking = false;
   preInstallCheck = if stdenv.isDarwin then ''
     for testexe in $(find ./src/test -maxdepth 1 -type f -executable); do
@@ -98,6 +101,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://github.com/libical/libical";
     description = "An Open Source implementation of the iCalendar protocols";
     license = licenses.mpl20;

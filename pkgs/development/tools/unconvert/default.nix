@@ -1,31 +1,24 @@
+{ lib, buildGoModule, fetchFromGitHub }:
 
-{ buildGoPackage
-, lib
-, fetchFromGitHub
-}:
-
-buildGoPackage rec {
-  pname = "unconvert-unstable";
-  version = "2018-07-03";
-  rev = "1a9a0a0a3594e9363e49545fb6a4e24ac4c68b7b";
-
-  goPackagePath = "github.com/mdempsky/unconvert";
+buildGoModule rec {
+  pname = "unconvert";
+  version = "unstable-2020-02-28";
 
   src = fetchFromGitHub {
-    inherit rev;
-
     owner = "mdempsky";
     repo = "unconvert";
-    sha256 = "1ww5qk1cmdis4ig5mb0b0w7nzrf3734s51plmgdxqsr35y88q4p9";
+    rev = "95ecdbfc0b5f3e65790c43c77874ee5357ad8a8f";
+    sha256 = "sha256-jC2hbpGJeW9TBWIWdeLeGaoNdsm/gOKY4oaDsO5Fwlw=";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "sha256-HmksSYA4974w+J/7PkMKEkXEfIkldj+kVywvsfLgE38=";
+
+  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     description = "Remove unnecessary type conversions from Go source";
     homepage = "https://github.com/mdempsky/unconvert";
     license = licenses.bsd3;
     maintainers = with maintainers; [ kalbasit ];
-    platforms = platforms.linux ++ platforms.darwin;
   };
 }

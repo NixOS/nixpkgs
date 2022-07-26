@@ -19,15 +19,15 @@
 }:
 
 let
-  buildNum = "2021-06-30-819";
+  buildNum = "2022-04-20-920";
 in
 stdenv.mkDerivation rec {
   pname = "rgp";
-  version = "1.11";
+  version = "1.13";
 
   src = fetchurl {
     url = "https://gpuopen.com/download/radeon-developer-tool-suite/RadeonDeveloperToolSuite-${buildNum}.tgz";
-    sha256 = "ru+e/oY844x4nvSVRBrTGDdnzUOBhwkaIrnftBITyE8=";
+    hash = "sha256-/Z7mSZVAvaTAY9RU7suK/gA0RJIeeLdN6LWiseVq9Js=";
   };
 
   nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
@@ -69,6 +69,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A tool from AMD that allows for deep inspection of GPU workloads";
     homepage = "https://gpuopen.com/rgp/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ Flakebi ];

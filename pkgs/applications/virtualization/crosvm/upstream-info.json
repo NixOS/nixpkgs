@@ -1,23 +1,14 @@
 {
-  "version": "81.12871.0.0-rc1",
-  "components": {
-    "chromiumos/platform/crosvm": {
-      "url": "https://chromium.googlesource.com/chromiumos/platform/crosvm",
-      "rev": "8b8c01e1ad31718932491e4aee63f56109a138e2",
-      "date": "2020-01-25T02:28:10+00:00",
-      "sha256": "1qmf1k06pwynh15c3nr9m6v90z2pkk930xniwvlvbvnazrk4rllg",
-      "fetchSubmodules": false,
-      "deepClone": false,
-      "leaveDotGit": false
-    },
-    "chromiumos/third_party/adhd": {
-      "url": "https://chromium.googlesource.com/chromiumos/third_party/adhd",
-      "rev": "f361d5b02623274723bff251dafa1e2a2887b013",
-      "date": "2020-01-23T18:37:46+00:00",
-      "sha256": "1p8iwjwgmcgmzri03ik2jaid8l0ch0bzn6z9z64dix1hlrvrlliw",
-      "fetchSubmodules": false,
-      "deepClone": false,
-      "leaveDotGit": false
-    }
+  "version": "103.3",
+  "src": {
+    "url": "https://chromium.googlesource.com/crosvm/crosvm",
+    "rev": "e7db3a5cc78ca90ab06aadd5f08bb151090269b6",
+    "date": "2022-06-01T00:13:12+00:00",
+    "path": "/nix/store/r08jyffmjdq38f8yy57v8wgfjiil6586-crosvm",
+    "sha256": "0hyz0mg5fn6hi97awfpxfykgv68m935r037sdf85v3vcwjy5n5ki",
+    "fetchLFS": false,
+    "fetchSubmodules": true,
+    "deepClone": false,
+    "leaveDotGit": false
   }
 }

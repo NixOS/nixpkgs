@@ -53,6 +53,14 @@ in
         '';
       };
 
+      bind = mkOption {
+        type = types.str;
+        default = "0.0.0.0";
+        description = ''
+          The address to which the service should bind.
+        '';
+      };
+
       admins = mkOption {
         type = types.listOf types.str;
         default = [];
@@ -75,8 +83,20 @@ in
         description = ''
           The name of the savegame that will be used by the server.
 
-          When not present in ${stateDir}/saves, a new map with default
-          settings will be generated before starting the service.
+          When not present in /var/lib/''${config.services.factorio.stateDirName}/saves,
+          a new map with default settings will be generated before starting the service.
+        '';
+      };
+      loadLatestSave = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Load the latest savegame on startup. This overrides saveName, in that the latest
+          save will always be used even if a saved game of the given name exists. It still
+          controls the 'canonical' name of the savegame.
+
+          Set this to true to have the server automatically reload a recent autosave after
+          a crash or desync.
         '';
       };
       # TODO Add more individual settings as nixos-options?
@@ -86,7 +106,7 @@ in
       configFile = mkOption {
         type = types.path;
         default = configFile;
-        defaultText = "configFile";
+        defaultText = literalExpression "configFile";
         description = ''
           The server's configuration file.
 
@@ -162,8 +182,8 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.factorio-headless;
-        defaultText = "pkgs.factorio-headless";
-        example = "pkgs.factorio-headless-experimental";
+        defaultText = literalExpression "pkgs.factorio-headless";
+        example = literalExpression "pkgs.factorio-headless-experimental";
         description = ''
           Factorio version to use. This defaults to the stable channel.
         '';
@@ -241,8 +261,10 @@ in
           "${cfg.package}/bin/factorio"
           "--config=${cfg.configFile}"
           "--port=${toString cfg.port}"
-          "--start-server=${mkSavePath cfg.saveName}"
+          "--bind=${cfg.bind}"
+          (optionalString (!cfg.loadLatestSave) "--start-server=${mkSavePath cfg.saveName}")
           "--server-settings=${serverSettingsFile}"
+          (optionalString cfg.loadLatestSave "--start-server-load-latest")
           (optionalString (cfg.mods != []) "--mod-directory=${modDir}")
           (optionalString (cfg.admins != []) "--server-adminlist=${serverAdminsFile}")
         ];

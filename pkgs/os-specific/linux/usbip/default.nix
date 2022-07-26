@@ -1,4 +1,4 @@
-{ lib, stdenv, kernel, udev, autoconf, automake, libtool, hwdata, kernelOlder }:
+{ lib, stdenv, fetchpatch, kernel, udev, autoconf, automake, libtool, hwdata, kernelOlder }:
 
 stdenv.mkDerivation {
   name = "usbip-${kernel.name}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     ./fix-snprintf-truncation.patch
     # fixes build with gcc9
     ./fix-strncpy-truncation.patch
-  ];
+  ] ++ kernel.patches;
 
   nativeBuildInputs = [ autoconf automake libtool ];
   buildInputs = [ udev ];

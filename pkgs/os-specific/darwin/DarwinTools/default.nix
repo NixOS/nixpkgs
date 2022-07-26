@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "DarwinTools-1";
+  pname = "DarwinTools";
+  version = "1";
 
   src = fetchurl {
-    url = "https://opensource.apple.com/tarballs/DarwinTools/${name}.tar.gz";
+    url = "https://opensource.apple.com/tarballs/DarwinTools/DarwinTools-${version}.tar.gz";
     sha256 = "0hh4jl590jv3v830p77r3jcrnpndy7p2b8ajai3ldpnx2913jfhp";
   };
 

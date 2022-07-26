@@ -1,6 +1,7 @@
-{ lib, stdenv, llvm_meta, cmake, python3, src, libunwind, version
+{ lib, stdenv, llvm_meta, cmake, python3, src, cxx-headers, libunwind, version
 , enableShared ? !stdenv.hostPlatform.isStatic
-, libcxx
+, standalone ? stdenv.hostPlatform.useLLVM or false
+, withLibunwind ? !stdenv.isDarwin && !stdenv.isFreeBSD && !stdenv.hostPlatform.isWasm
 }:
 
 stdenv.mkDerivation rec {
@@ -14,8 +15,6 @@ stdenv.mkDerivation rec {
 
   postUnpack = lib.optionalString stdenv.isDarwin ''
     export TRIPLE=x86_64-apple-darwin
-  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
-    patch -p1 -d libcxx -i ${../../libcxx-0001-musl-hacks.patch}
   '' + lib.optionalString stdenv.hostPlatform.isWasm ''
     patch -p1 -d llvm -i ${./wasm.patch}
   '';
@@ -25,12 +24,13 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake python3 ];
-  buildInputs = lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD && !stdenv.hostPlatform.isWasm) libunwind;
+  buildInputs = lib.optional withLibunwind libunwind;
 
   cmakeFlags = [
-    "-DLIBCXXABI_LIBCXX_INCLUDES=${libcxx.dev}/include/c++/v1"
-  ] ++ lib.optionals (stdenv.hostPlatform.useLLVM or false) [
+    "-DLIBCXXABI_LIBCXX_INCLUDES=${cxx-headers}/include/c++/v1"
+  ] ++ lib.optionals standalone [
     "-DLLVM_ENABLE_LIBCXX=ON"
+  ] ++ lib.optionals (standalone && withLibunwind) [
     "-DLIBCXXABI_USE_LLVM_UNWINDER=ON"
   ] ++ lib.optionals stdenv.hostPlatform.isWasm [
     "-DLIBCXXABI_ENABLE_THREADS=OFF"

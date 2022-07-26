@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-FnhwNy4OHe8d5M6iYCClkxzcB/EHXg0veXwv43ZlxbA=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [ autoreconfHook ];
 
   patches = [
@@ -43,6 +44,10 @@ stdenv.mkDerivation rec {
     lib.optionals linkStatic [ "--enable-static" "--disable-shared" ];
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    ln -s $out/lib/libbz2.so.1.0.* $out/lib/libbz2.so.1.0
+  '';
 
   meta = with lib; {
     description = "High-quality data compression program";

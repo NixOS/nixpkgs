@@ -1,49 +1,63 @@
-{ stdenv, cmake, pkg-config, pandoc, libunistring, ncurses, ffmpeg, readline,
-  fetchFromGitHub, lib,
-  multimediaSupport ? true
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libdeflate
+, libunistring
+, ncurses
+, pandoc
+, pkg-config
+, zlib
+, multimediaSupport ? true, ffmpeg
+, qrcodegenSupport ? true, qrcodegen
 }:
-let
-  version = "2.3.8";
-in
-stdenv.mkDerivation {
+
+stdenv.mkDerivation rec {
   pname = "notcurses";
-  inherit version;
+  version = "3.0.8";
+
+  src = fetchFromGitHub {
+    owner = "dankamongmen";
+    repo = "notcurses";
+    rev = "v${version}";
+    sha256 = "sha256-5SNWk1iKDNbyoo413Qvzl2bGaR5Lb+q/UPbPQg7YvRU=";
+  };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ cmake pkg-config pandoc ];
+  nativeBuildInputs = [
+    cmake
+    pandoc
+    pkg-config
+  ];
 
-  buildInputs = [ libunistring ncurses readline ]
-    ++ lib.optional multimediaSupport ffmpeg;
+  buildInputs = [
+    libdeflate
+    libunistring
+    ncurses
+    zlib
+  ]
+  ++ lib.optional qrcodegenSupport qrcodegen
+  ++ lib.optional multimediaSupport ffmpeg;
 
   cmakeFlags =
-    [ "-DUSE_QRCODEGEN=OFF" ]
+    lib.optional (qrcodegenSupport) "-DUSE_QRCODEGEN=ON"
     ++ lib.optional (!multimediaSupport) "-DUSE_MULTIMEDIA=none";
 
-  src = fetchFromGitHub {
-    owner  = "dankamongmen";
-    repo   = "notcurses";
-    rev    = "v${version}";
-    sha256 = "sha256-CTMFXTmOnBUCm0KdVNBoDT08arr01XTHdELFiTayk3E=";
-  };
-
-  meta = {
-    description = "blingful TUIs and character graphics";
-
+  meta = with lib; {
+    homepage = "https://github.com/dankamongmen/notcurses";
+    description = "Blingful TUIs and character graphics";
     longDescription = ''
-      A library facilitating complex TUIs on modern terminal emulators,
-      supporting vivid colors, multimedia, and Unicode to the maximum degree
-      possible. Things can be done with Notcurses that simply can't be done
-      with NCURSES.
+      Notcurses is a library facilitating complex TUIs on modern terminal
+      emulators, supporting vivid colors, multimedia, and Unicode to the maximum
+      degree possible. Things can be done with Notcurses that simply can't be
+      done with NCURSES.
 
       It is not a source-compatible X/Open Curses implementation, nor a
       replacement for NCURSES on existing systems.
     '';
-
-    homepage = "https://github.com/dankamongmen/notcurses";
-
-    license = lib.licenses.asl20;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ jb55 ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ AndersonTorres ];
+    inherit (ncurses.meta) platforms;
   };
 }

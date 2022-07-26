@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "itsdangerous";
-  version = "2.0.1";
+  version = "2.1.2";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1w6gfb2zhbcmrfj6digwzw1z68w6zg1q87rm6la2m412zil4swly";
+    sha256 = "sha256-XbvGizF+XkLzJ/kCF2NUXcP8O/4i5t65aq8fw4h0FWo=";
   };
 
   checkInputs = [

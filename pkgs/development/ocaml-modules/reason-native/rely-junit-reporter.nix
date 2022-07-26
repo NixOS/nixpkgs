@@ -3,9 +3,12 @@
 {
   pname = "rely-junit-reporter";
 
+  nativeBuildInputs = [
+    reason
+  ];
+
   buildInputs = [
     atdgen
-    reason
   ];
 
   propagatedBuildInputs = [

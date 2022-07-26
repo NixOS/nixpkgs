@@ -1,0 +1,22 @@
+--- a/pass_secret_service/interfaces/session.py
++++ b/pass_secret_service/interfaces/session.py
+@@ -4,7 +4,6 @@
+ import os
+ import hmac
+ from hashlib import sha256
+-from cryptography.utils import int_from_bytes
+ from cryptography.hazmat.backends import default_backend
+ from cryptography.hazmat.primitives.ciphers import Cipher
+ from cryptography.hazmat.primitives.ciphers.modes import CBC
+@@ -27,9 +26,9 @@ class Session(ServiceInterface, SerialMixin):
+     @classmethod
+     @run_in_executor
+     def _create_dh(cls, input):
+-        priv_key = int_from_bytes(os.urandom(0x80), "big")
++        priv_key = int.from_bytes(os.urandom(0x80), "big")
+         pub_key = pow(2, priv_key, dh_prime)
+-        shared_secret = pow(int_from_bytes(input, "big"), priv_key, dh_prime)
++        shared_secret = pow(int.from_bytes(input, "big"), priv_key, dh_prime)
+         salt = b"\x00" * 0x20
+         shared_key = hmac.new(salt, shared_secret.to_bytes(0x80, "big"), sha256).digest()
+         aes_key = hmac.new(shared_key, b"\x01", sha256).digest()[:0x10]

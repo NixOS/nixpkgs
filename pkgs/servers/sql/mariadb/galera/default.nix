@@ -4,17 +4,19 @@
 
 stdenv.mkDerivation rec {
   pname = "mariadb-galera";
-  version = "26.4.8";
+  version = "26.4.12";
 
   src = fetchFromGitHub {
     owner = "codership";
     repo = "galera";
     rev = "release_${version}";
-    sha256 = "0rx710dfijiykpi41rhxx8vafk07bffv2nbl3d4ggc32rzv88369";
+    sha256 = "sha256-1Jw99Eo8xhCNLd2XHm9M6DatzBl0w5VvgUahvKs4glg=";
     fetchSubmodules = true;
   };
 
-  buildInputs = [ asio boost check openssl cmake ];
+  nativeBuildInputs = [ cmake ];
+
+  buildInputs = [ asio boost.dev check openssl ];
 
   preConfigure = ''
     # make sure bundled asio cannot be used, but leave behind license, because it gets installed

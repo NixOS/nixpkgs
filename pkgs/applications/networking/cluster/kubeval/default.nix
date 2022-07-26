@@ -1,17 +1,21 @@
-{ lib, fetchFromGitHub, buildGoModule, makeWrapper }:
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, makeWrapper
+}:
 
 buildGoModule rec {
   pname = "kubeval";
-  version = "0.16.0";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "instrumenta";
     repo = "kubeval";
-    rev = version;
-    sha256 = "sha256-c5UESyWK1rfnD0etOuIroBUSqZQuu57jio7/ArItMP0=";
+    rev = "v${version}";
+    sha256 = "sha256-pwJOV7V78H2XaMiiJvKMcx0dEwNDrhgFHmCRLAwMirg=";
   };
 
-  vendorSha256 = "sha256-SqYNAUYPUJYmHj4cFEYqQ8hEkYWmmpav9AGOSFDc/M4=";
+  vendorSha256 = "sha256-OAFxEb7IWhyRBEi8vgmekDSL/YpmD4EmUfildRaPR24=";
 
   doCheck = false;
 

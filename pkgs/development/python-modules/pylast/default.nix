@@ -1,29 +1,34 @@
 { lib
 , buildPythonPackage
-, certifi
 , fetchPypi
 , flaky
+, httpx
+, importlib-metadata
 , pytestCheckHook
 , pythonOlder
 , setuptools-scm
-, six
 }:
 
 buildPythonPackage rec {
   pname = "pylast";
-  version = "4.2.1";
-  disabled = pythonOlder "3.6";
+  version = "5.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-R1enQk6luuBiobMPDn5x1SXx7zUI/5c8dPtyWkmG/18=";
+    hash = "sha256-UBi2bCtGMtcavYEDtz5m5N0UxmCaj3un5aomxzbfLfg=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
-    certifi
-    six
+    httpx
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
   ];
 
   checkInputs = [
@@ -31,7 +36,9 @@ buildPythonPackage rec {
     flaky
   ];
 
-  pythonImportsCheck = [ "pylast" ];
+  pythonImportsCheck = [
+    "pylast"
+  ];
 
   meta = with lib; {
     description = "Python interface to last.fm (and compatibles)";

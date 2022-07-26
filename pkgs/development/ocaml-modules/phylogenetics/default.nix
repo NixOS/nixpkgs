@@ -1,31 +1,52 @@
-{ lib, buildDunePackage, fetchFromGitHub, ppx_deriving
-, alcotest, angstrom-unix, biocaml, gnuplot, gsl, lacaml, menhir, owl, printbox }:
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, ppx_deriving
+, bppsuite
+, alcotest
+, angstrom-unix
+, biocaml
+, core
+, gsl
+, lacaml
+, menhir
+, menhirLib
+, printbox-text
+}:
 
 buildDunePackage rec {
   pname = "phylogenetics";
-  version = "unstable-2020-11-23";
-
-  useDune2 = true;
+  version = "unstable-2022-05-06";
 
   src = fetchFromGitHub {
-    owner  = "biocaml";
-    repo   = pname;
-    rev    = "e6e10efa0a3a8fd61bf4ab69e91a09549cc1ded6";
-    sha256 = "0pmypzp0rvlpzm8zpbcfkphwnhrpyfwfv44kshvx2f8nslmksh8c";
+    owner = "biocaml";
+    repo = pname;
+    rev = "cd7c624d0f98e31b02933ca4511b9809b26d35b5";
+    sha256 = "sha256:0w0xyah3hj05hxg1rsa40hhma3dm1cyq0zvnjrihhf22laxap7ga";
   };
 
-  minimumOCamlVersion = "4.08";  # e.g., uses Float.min
+  minimalOCamlVersion = "4.08";
 
-  checkInputs = [ alcotest ];
+  checkInputs = [ alcotest bppsuite ];
   buildInputs = [ menhir ];
-  propagatedBuildInputs = [ angstrom-unix biocaml gnuplot gsl lacaml owl ppx_deriving printbox ];
+  propagatedBuildInputs = [
+    angstrom-unix
+    biocaml
+    core
+    gsl
+    lacaml
+    menhirLib
+    ppx_deriving
+    printbox-text
+  ];
 
-  doCheck = false;  # many tests require bppsuite
+  doCheck = true;
 
   meta = with lib; {
-    inherit (src.meta) homepage;
-    description = "Bioinformatics library for Ocaml";
-    maintainers = [ maintainers.bcdarwin ];
+    description = "Algorithms and datastructures for phylogenetics";
+    homepage = "https://github.com/biocaml/phylogenetics";
     license = licenses.cecill-b;
+    maintainers = [ maintainers.bcdarwin ];
+    mainProgram = "phylosim";
   };
 }

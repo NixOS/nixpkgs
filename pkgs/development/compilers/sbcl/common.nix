@@ -1,13 +1,15 @@
 { version, sha256 }:
 
-{ lib, stdenv, fetchurl, writeText, sbclBootstrap
+{ lib, stdenv, fetchurl, fetchpatch, writeText, sbclBootstrap, zstd
 , sbclBootstrapHost ? "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit"
-, threadSupport ? (stdenv.isi686 || stdenv.isx86_64 || "aarch64-linux" == stdenv.hostPlatform.system || "aarch64-darwin" == stdenv.hostPlatform.system)
+, threadSupport ? (stdenv.hostPlatform.isx86 || "aarch64-linux" == stdenv.hostPlatform.system || "aarch64-darwin" == stdenv.hostPlatform.system)
+, linkableRuntime ? stdenv.hostPlatform.isx86
 , disableImmobileSpace ? false
   # Meant for sbcl used for creating binaries portable to non-NixOS via save-lisp-and-die.
   # Note that the created binaries still need `patchelf --set-interpreter ...`
   # to get rid of ${glibc} dependency.
 , purgeNixReferences ? false
+, coreCompression ? lib.versionAtLeast version "2.2.6"
 , texinfo
 }:
 
@@ -20,7 +22,33 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  buildInputs = [texinfo];
+  nativeBuildInputs = [ texinfo ];
+  buildInputs = lib.optionals coreCompression [ zstd ];
+
+  patches = lib.optional
+    (lib.versionAtLeast version "2.1.2" && lib.versionOlder version "2.1.8")
+    (fetchpatch {
+      # Fix segfault on ARM when reading large core files
+      url = "https://github.com/sbcl/sbcl/commit/8fa3f76fba2e8572e86ac6fc5754e6b2954fc774.patch";
+      sha256 = "1ic531pjnws1k3xd03a5ixbq8cn10dlh2nfln59k0vbm0253g3lv";
+    })
+  ++ lib.optionals (lib.versionAtLeast version "2.1.10") [
+      # Fix pending upstream inclusion on -fno-common toolchains:
+      #   https://bugs.launchpad.net/sbcl/+bug/1980570
+      (fetchpatch {
+        name = "darwin-fno-common.patch";
+        url = "https://bugs.launchpad.net/sbcl/+bug/1980570/+attachment/5600916/+files/0001-src-runtime-fix-fno-common-build-on-darwin.patch";
+        sha256 = "0avpwgjdaxxdpq8pfvv9darfn4ql5dgqq7zaf3nmxnvhh86ngzij";
+      })
+  ] ++ lib.optionals (version == "2.2.6") [
+    # Take contrib blocklist into account for doc generation.  This fixes sbcl
+    # build on aarch64, because the docs Makefile tries to require sb-simd,
+    # which is blocked in that platform.
+    (fetchpatch {
+      url = "https://github.com/sbcl/sbcl/commit/f88989694200a5192fb68047d43d0500b2165f7b.patch";
+      sha256 = "sha256-MXEsK46RARPmB2WBPcrmZk6ArliU8DgHw73x9+/QAmk=";
+    })
+  ];
 
   postPatch = ''
     echo '"${version}.nixos"' > version.lisp-expr
@@ -66,6 +94,8 @@ stdenv.mkDerivation rec {
 
   enableFeatures = with lib;
     optional threadSupport "sb-thread" ++
+    optional linkableRuntime "sb-linkable-runtime" ++
+    optional coreCompression "sb-core-compression" ++
     optional stdenv.isAarch32 "arm";
 
   disableFeatures = with lib;
@@ -109,7 +139,5 @@ stdenv.mkDerivation rec {
     }
   '');
 
-  meta = sbclBootstrap.meta // {
-    updateWalker = true;
-  };
+  meta = sbclBootstrap.meta;
 }

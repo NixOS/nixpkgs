@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, python3
 , pkg-config
 , which
 , makeWrapper
@@ -12,19 +13,21 @@
 , vorbis-tools
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "uade123";
-  version = "unstable-2021-05-21";
+  version = "3.01";
 
   src = fetchFromGitLab {
     owner = "uade-music-player";
     repo = "uade";
-    rev = "7169a46e777d19957cd7ff8ac31843203e725ddc";
-    sha256 = "1dm7c924fy79y3wkb0qi71m1k6yw1x6j3whw7d0w4ka9hv6za03b";
+    rev = "uade-${version}";
+    sha256 = "0fam3g8mlzrirrac3iwcwsz9jmsqwdy7lkwwdr2q4pkq9cpmh8m5";
   };
 
   postPatch = ''
-    patchShebangs .
+    patchShebangs configure
+    substituteInPlace configure \
+      --replace 'PYTHON_SETUP_ARGS=""' 'PYTHON_SETUP_ARGS="--prefix=$out"'
     substituteInPlace src/frontends/mod2ogg/mod2ogg2.sh.in \
       --replace '-e stat' '-n stat' \
       --replace '/usr/local' "$out"
@@ -34,6 +37,7 @@ stdenv.mkDerivation {
     pkg-config
     which
     makeWrapper
+    python3
   ];
 
   buildInputs = [
@@ -43,6 +47,10 @@ stdenv.mkDerivation {
     lame
     flac
     vorbis-tools
+    (python3.withPackages (p: with p; [
+      pillow
+      tqdm
+    ]))
   ];
 
   configureFlags = [
@@ -58,6 +66,8 @@ stdenv.mkDerivation {
       --prefix PATH : $out/bin:${lib.makeBinPath [ sox lame flac vorbis-tools ]}
     # This is an old script, don't break expectations by renaming it
     ln -s $out/bin/mod2ogg2{.sh,}
+    wrapProgram $out/bin/generate_amiga_oscilloscope_view \
+      --prefix PYTHONPATH : "$PYTHONPATH:$out/${python3.sitePackages}"
   '';
 
   meta = with lib; {

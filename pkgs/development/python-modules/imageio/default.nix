@@ -1,23 +1,35 @@
 { lib
+, stdenv
 , buildPythonPackage
 , isPy27
 , fetchPypi
+, substituteAll
 , imageio-ffmpeg
 , numpy
 , pillow
 , psutil
 , pytestCheckHook
+, tifffile
+, fsspec
+, libGL
 }:
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.9.0";
+  version = "2.19.2";
   disabled = isPy27;
 
   src = fetchPypi {
-    sha256 = "52ddbaeca2dccf53ba2d6dec5676ca7bc3b2403ef8b37f7da78b7654bb3e10f0";
+    sha256 = "sha256-RuHnQSiDfSoevIdHa39zl4tpoSj6I4vJibYlqYGb2bM=";
     inherit pname version;
   };
+
+  patches = [
+    (substituteAll {
+      src = ./libgl-path.patch;
+      libgl = "${libGL.out}/lib/libGL${stdenv.hostPlatform.extensions.sharedLibrary}";
+    })
+  ];
 
   propagatedBuildInputs = [
     imageio-ffmpeg
@@ -26,19 +38,33 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    fsspec
     psutil
     pytestCheckHook
+    tifffile
+  ];
+
+  pytestFlagsArray = [
+    "-m 'not needs_internet'"
   ];
 
   preCheck = ''
     export IMAGEIO_USERDIR="$TMP"
-    export IMAGEIO_NO_INTERNET="true"
-    export HOME="$(mktemp -d)"
+    export HOME=$TMPDIR
   '';
+
+  disabledTestPaths = [
+    # tries to fetch fixtures over the network
+    "tests/test_freeimage.py"
+    "tests/test_pillow.py"
+    "tests/test_spe.py"
+    "tests/test_swf.py"
+  ];
 
   meta = with lib; {
     description = "Library for reading and writing a wide range of image, video, scientific, and volumetric data formats";
     homepage = "http://imageio.github.io/";
     license = licenses.bsd2;
+    maintainers = with maintainers; [ ];
   };
 }

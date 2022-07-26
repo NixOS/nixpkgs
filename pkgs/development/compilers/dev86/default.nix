@@ -13,9 +13,17 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
+  # Parallel builds are not supported due to build process structure:
+  # tools are built sequentially in submakefiles and are reusing the
+  # same targets as dependencies. Building dependencies in parallel
+  # from different submakes is not synchronized and fails:
+  #     make[3]: Entering directory '/build/dev86-0.16.21/libc'
+  #     Unable to execute as86.
+  enableParallelBuilding = false;
+
   meta = {
     description = "Linux 8086 development environment";
-    homepage = "http://v3.sk/~lkundrak/dev86/";
+    homepage = "https://github.com/lkundrak/dev86";
     platforms = lib.platforms.linux;
   };
 }

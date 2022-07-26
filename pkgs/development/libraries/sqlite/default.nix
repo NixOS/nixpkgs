@@ -1,8 +1,13 @@
-{ lib, stdenv, fetchurl, zlib, interactive ? false, readline ? null, ncurses ? null
-, python3Packages
-}:
+{ lib, stdenv, fetchurl, zlib, readline, ncurses
 
-assert interactive -> readline != null && ncurses != null;
+# for tests
+, python3Packages, sqldiff, sqlite-analyzer
+
+# uses readline & ncurses for a better interactive experience if set to true
+, interactive ? false
+# TODO: can be removed since 3.36 since it is the default now.
+, enableDeserialize ? false
+}:
 
 with lib;
 
@@ -11,13 +16,14 @@ let
 in
 
 stdenv.mkDerivation rec {
-  pname = "sqlite";
-  version = "3.35.5";
+  pname = "sqlite${optionalString interactive "-interactive"}";
+  version = "3.39.0";
 
+  # nixpkgs-update: no auto update
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
-    url = "https://sqlite.org/2021/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    sha256 = "9StypcMZw+UW7XqS4SMTmm6Hrwii3EPXdXck9hMubbA=";
+    url = "https://sqlite.org/2022/sqlite-autoconf-${archiveVersion version}.tar.gz";
+    sha256 = "sha256-6QvK723VgT/N7k6Gf2tl88m/0K7A8QF/nzu84eTtCeI=";
   };
 
   outputs = [ "bin" "dev" "out" ];
@@ -32,7 +38,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-threadsafe" ] ++ optional interactive "--enable-readline";
 
-  NIX_CFLAGS_COMPILE = toString [
+  NIX_CFLAGS_COMPILE = toString ([
     "-DSQLITE_ENABLE_COLUMN_METADATA"
     "-DSQLITE_ENABLE_DBSTAT_VTAB"
     "-DSQLITE_ENABLE_JSON1"
@@ -48,7 +54,10 @@ stdenv.mkDerivation rec {
     "-DSQLITE_SECURE_DELETE"
     "-DSQLITE_MAX_VARIABLE_NUMBER=250000"
     "-DSQLITE_MAX_EXPR_DEPTH=10000"
-  ];
+  ] ++ lib.optionals enableDeserialize [
+    # Can be removed in v3.36+, as this will become the default
+    "-DSQLITE_ENABLE_DESERIALIZE"
+  ]);
 
   # Test for features which may not be available at compile time
   preBuild = ''
@@ -82,6 +91,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     inherit (python3Packages) sqlalchemy;
+    inherit sqldiff sqlite-analyzer;
   };
 
   meta = {
@@ -89,6 +99,7 @@ stdenv.mkDerivation rec {
     downloadPage = "https://sqlite.org/download.html";
     homepage = "https://www.sqlite.org/";
     license = licenses.publicDomain;
+    mainProgram = "sqlite3";
     maintainers = with maintainers; [ eelco np ];
     platforms = platforms.unix ++ platforms.windows;
   };

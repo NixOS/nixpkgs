@@ -1,15 +1,15 @@
 { lib, stdenv, fetchurl, pkg-config, gnutls, liburcu, lmdb, libcap_ng, libidn2, libunistring
 , systemd, nettle, libedit, zlib, libiconv, libintl, libmaxminddb, libbpf, nghttp2, libmnl
-, autoreconfHook, nixosTests
+, autoreconfHook, nixosTests, knot-resolver
 }:
 
 stdenv.mkDerivation rec {
   pname = "knot-dns";
-  version = "3.1.0";
+  version = "3.1.8";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "54323712e3cbc3d4c70a15777818fd2ff0de30cebb6c22e2946372b15b2653ed";
+    sha256 = "767e458a56277a1270b359294c3be6c63fd734884d62a045e01756a46507aa94";
   };
 
   outputs = [ "bin" "out" "dev" ];
@@ -26,12 +26,6 @@ stdenv.mkDerivation rec {
     ./dont-create-run-time-dirs.patch
     ./runtime-deps.patch
   ];
-
-  # Disable knotd journal tests on platforms that don't use 4k sysconf(_SC_PAGESIZE).
-  # The journal most likely works fine, but some of the tests currently don't.
-  postPatch = lib.optionalString (doCheck && stdenv.isDarwin && stdenv.isAarch64) ''
-    sed '/^\tknot\/test_journal\>/d' -i tests/Makefile.am
-  '';
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [
@@ -59,7 +53,11 @@ stdenv.mkDerivation rec {
     rm -r "$out"/lib/*.la
   '';
 
-  passthru.tests = { inherit (nixosTests) knot; };
+  passthru.tests = {
+    inherit knot-resolver;
+  } // lib.optionalAttrs stdenv.isLinux {
+    inherit (nixosTests) knot;
+  };
 
   meta = with lib; {
     description = "Authoritative-only DNS server from .cz domain registry";

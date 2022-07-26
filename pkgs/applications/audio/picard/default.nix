@@ -18,13 +18,13 @@ let
 in
 pythonPackages.buildPythonApplication rec {
   pname = "picard";
-  version = "2.6.3";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "metabrainz";
     repo = pname;
-    rev = "release-${version}";
-    sha256 = "sha256-bSqGgRXqHGjT+OYCEafsT/btVe+n91+L0kB8fnrywss=";
+    rev = "refs/tags/release-${version}";
+    sha256 = "sha256-KEKOouTNmmZiPyKo8xCQv6Zkreidtz2DaEbHjuwJJvY=";
   };
 
   nativeBuildInputs = [ gettext qt5.wrapQtAppsHook qt5.qtbase ]
@@ -45,6 +45,9 @@ pythonPackages.buildPythonApplication rec {
     fasteners
     mutagen
     pyqt5
+    markdown
+    pyjwt
+    pyyaml
   ];
 
   # In order to spare double wrapping, we use:

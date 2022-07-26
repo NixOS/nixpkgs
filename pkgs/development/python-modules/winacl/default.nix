@@ -1,15 +1,19 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "winacl";
-  version = "0.1.1";
+  version = "0.1.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-V+W0WRtL4rJD1LeYgr0PtiKdWTDQYv2ulB1divaqKe4=";
+    hash = "sha256-G6xWep0hMACCqiJGuw+UpZH8qOIY4WO6sY3w4y7v6gY=";
   };
 
   # Project doesn't have tests

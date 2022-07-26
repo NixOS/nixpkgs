@@ -1,17 +1,17 @@
 { lib, buildPythonPackage, fetchPypi, isPy3k
 , six, jaraco_logging, jaraco_text, jaraco_stream, pytz, jaraco_itertools
-, setuptools-scm, jaraco_collections, importlib-metadata, toml
+, setuptools-scm, jaraco_collections, importlib-metadata
 }:
 
 buildPythonPackage rec {
   pname = "irc";
-  version = "19.0.1";
+  version = "20.0.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "99fd5d1fa1d054dee4fbb81e0d5193dc1e8200db751d5da9a97850a62162b9ab";
+    sha256 = "59acb8d69d61a0cbd290e77e6ff10a8c7f2201fb8c7b7d5a195b5883d0c40b0a";
   };
 
   doCheck = false;
@@ -28,7 +28,6 @@ buildPythonPackage rec {
     pytz
     jaraco_itertools
     jaraco_collections
-    toml
   ];
 
   meta = with lib; {

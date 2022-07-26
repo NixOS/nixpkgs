@@ -1,12 +1,27 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, dbus-glib, libXScrnSaver, libnotify, libxml2, pam, systemd, mate, wrapGAppsHook, mateUpdateScript }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, gtk3
+, dbus-glib
+, libXScrnSaver
+, libnotify
+, libxml2
+, pam
+, systemd
+, mate
+, wrapGAppsHook
+, mateUpdateScript
+}:
 
 stdenv.mkDerivation rec {
   pname = "mate-screensaver";
-  version = "1.24.2";
+  version = "1.26.1";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "18hxhglryfcbpbns9izigiws7lvdv5dnsaaz226ih3aar5db1ysy";
+    sha256 = "T72yHqSlnqjeM+qb93bYaXU+SSlWBGZMMOIg4JZZuLw=";
   };
 
   nativeBuildInputs = [
@@ -25,6 +40,7 @@ stdenv.mkDerivation rec {
     systemd
     mate.mate-desktop
     mate.mate-menus
+    mate.mate-panel
   ];
 
   configureFlags = [ "--without-console-kit" ];
@@ -40,6 +56,6 @@ stdenv.mkDerivation rec {
     homepage = "https://mate-desktop.org";
     license = with licenses; [ gpl2Plus lgpl2Plus ];
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.mate.members;
   };
 }

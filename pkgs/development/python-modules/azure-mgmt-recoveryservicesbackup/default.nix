@@ -5,17 +5,20 @@
 , msrestazure
 , azure-common
 , azure-mgmt-core
-, azure-mgmt-nspkg
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-recoveryservicesbackup";
-  version = "1.0.0";
+  version = "5.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "fd915aa6a76ef9e0e963615d4c909400c8d5646e26273ae25fa1418ce61e28d2";
+    hash = "sha256-BciA3sFyja5xo9yS3WVglC73y8gTfw8UejdEzbD4HYE=";
   };
 
   propagatedBuildInputs = [
@@ -23,11 +26,14 @@ buildPythonPackage rec {
     msrestazure
     azure-common
     azure-mgmt-core
-    azure-mgmt-nspkg
   ];
 
-  # has no tests
+  # Module has no tests
   doCheck = false;
+
+  pythonImportsCheck = [
+    "azure.mgmt.recoveryservicesbackup"
+  ];
 
   meta = with lib; {
     description = "This is the Microsoft Azure Recovery Services Backup Management Client Library";

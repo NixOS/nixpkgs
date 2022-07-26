@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "senpai";
-  version = "unstable-2021-05-27";
+  version = "unstable-2022-05-10";
 
   src = fetchFromSourcehut {
     owner = "~taiite";
     repo = "senpai";
-    rev = "6be718329175c6d11e359f1a366ab6ab22b101d2";
-    sha256 = "sha256-hW6DHJlDBYEqK8zj5PvGKU54sbeXjx1tdqwKXPXlKHc=";
+    rev = "7a9fe74fdfb3f334b97434df0aa74b2b32e3582e";
+    sha256 = "sha256-uagdJG+YVryzsaZfkg5W2F8mQSc1bpflL77tqMHp1Ck=";
   };
 
-  vendorSha256 = "sha256-OLi5y1hrYK6+l5WB1SX85QU4y3KjFyGaEzgbE6lnW2k=";
+  vendorSha256 = "sha256-hgojB1D0/SZWLEzJ48EBoT/InYYmqD/1qoTknfk/aTo=";
 
   subPackages = [
     "cmd/senpai"

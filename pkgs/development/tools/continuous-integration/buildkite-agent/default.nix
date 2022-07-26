@@ -2,17 +2,17 @@
   makeWrapper, coreutils, git, openssh, bash, gnused, gnugrep,
   nixosTests }:
 buildGoModule rec {
-  name = "buildkite-agent-${version}";
-  version = "3.32.0";
+  pname = "buildkite-agent";
+  version = "3.37.0";
 
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "agent";
     rev = "v${version}";
-    sha256 = "sha256-wgIqsOqdwnKL1mWD1CR1ru2erc9iSZoDXxeOtobeAQQ=";
+    sha256 = "sha256-fjPMf9upHksijVApXgXumxCueI7huWRqQsIyAx7BCpI=";
   };
 
-  vendorSha256 = "sha256-n3XRxpEKjHf7L7fcGscWTVKBtot9waZbLoS9cG0kHfI=";
+  vendorSha256 = "sha256-BV5GUqv3u3kE4qOkEBmc3mGFJHqrGRxwObEY4PzRboA=";
 
   postPatch = ''
     substituteInPlace bootstrap/shell/shell.go --replace /bin/bash ${bash}/bin/bash
@@ -46,7 +46,7 @@ buildGoModule rec {
     '';
     homepage = "https://buildkite.com/docs/agent";
     license = licenses.mit;
-    maintainers = with maintainers; [ pawelpacana zimbatm rvl ];
+    maintainers = with maintainers; [ pawelpacana zimbatm rvl techknowlogick ];
     platforms = with platforms; unix ++ darwin;
   };
 }

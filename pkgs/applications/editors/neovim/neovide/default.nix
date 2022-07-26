@@ -3,34 +3,38 @@
 , lib
 , fetchFromGitHub
 , fetchgit
+, fetchurl
 , makeWrapper
 , pkg-config
 , python2
-, expat
+, python3
 , openssl
 , SDL2
 , fontconfig
+, freetype
 , ninja
 , gn
 , llvmPackages
 , makeFontsConf
 , libglvnd
 , libxkbcommon
+, stdenv
+, enableWayland ? stdenv.isLinux
 , wayland
 , xorg
 }:
 rustPlatform.buildRustPackage rec {
   pname = "neovide";
-  version = "unstable-2021-06-21";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "Kethku";
     repo = "neovide";
-    rev = "4159c47ff4f30073b92b9d63fc6ab70e07b74b6d";
-    sha256 = "sha256-XwirJGXMGxc/NkpSeHBUc16ppvJ+H4ECnrOVu030Qfg=";
+    rev = version;
+    sha256 = "sha256-2fN05o8Zo1MGdIYUcsCgkiW/kG6DkY8uTnpw2XrKxrI=";
   };
 
-  cargoSha256 = "sha256-WCk9kt81DtBwpEEdKH9gKQSVxAvH+vkyP2y24tU+vzY=";
+  cargoSha256 = "sha256-eATUyczkcwHI8Y7Gl2ts4dRgiFUAL8yrWDNe4JzserE=";
 
   SKIA_SOURCE_DIR =
     let
@@ -38,11 +42,11 @@ rustPlatform.buildRustPackage rec {
         owner = "rust-skia";
         repo = "skia";
         # see rust-skia:skia-bindings/Cargo.toml#package.metadata skia
-        rev = "m90-0.38.3";
-        sha256 = "sha256-l8c4vfO1PELAT8bDyr/yQGZetZsaufAlJ6bBOXz7E1w=";
+        rev = "m100-0.48.7";
+        sha256 = "sha256-roZUv5YoLolRi0iWAB+5WlCFV+8GdzNzS+JINnEHaMs=";
       };
       # The externals for skia are taken from skia/DEPS
-      externals = lib.mapAttrs (n: v: fetchgit v) (lib.importJSON ./skia-externals.json);
+      externals = lib.mapAttrs (n: fetchgit) (lib.importJSON ./skia-externals.json);
     in
       runCommand "source" {} (
         ''
@@ -69,6 +73,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     makeWrapper
     python2 # skia-bindings
+    python3 # rust-xcb
     llvmPackages.clang # skia
   ];
 
@@ -79,15 +84,34 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   buildInputs = [
-    expat
     openssl
     SDL2
-    fontconfig
+    (fontconfig.overrideAttrs (old: {
+      propagatedBuildInputs = [
+        # skia is not compatible with freetype 2.11.0
+        (freetype.overrideAttrs (old: rec {
+          version = "2.10.4";
+          src = fetchurl {
+            url = "mirror://savannah/${old.pname}/${old.pname}-${version}.tar.xz";
+            sha256 = "112pyy215chg7f7fmp2l9374chhhpihbh8wgpj5nj6avj3c59a46";
+          };
+        }))
+      ];
+    }))
   ];
 
-  postFixup = ''
+  postFixup = let
+    libPath = lib.makeLibraryPath ([
+      libglvnd
+      libxkbcommon
+      xorg.libXcursor
+      xorg.libXext
+      xorg.libXrandr
+      xorg.libXi
+    ] ++ lib.optionals enableWayland [ wayland ]);
+  in ''
       wrapProgram $out/bin/neovide \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libglvnd libxkbcommon wayland xorg.libXcursor xorg.libXext xorg.libXrandr xorg.libXi ]}
+        --prefix LD_LIBRARY_PATH : ${libPath}
     '';
 
   postInstall = ''
@@ -105,5 +129,6 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ck3d ];
     platforms = platforms.linux;
+    mainProgram = "neovide";
   };
 }

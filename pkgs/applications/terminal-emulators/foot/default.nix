@@ -1,9 +1,8 @@
 { stdenv
 , lib
-, fetchzip
+, fetchFromGitea
 , fetchurl
-, fetchpatch
-, runCommandNoCC
+, runCommand
 , fcft
 , freetype
 , pixman
@@ -28,7 +27,7 @@
 }:
 
 let
-  version = "1.8.2";
+  version = "1.12.1";
 
   # build stimuli file for PGO build and the script to generate it
   # independently of the foot's build, so we can cache the result
@@ -37,8 +36,7 @@ let
   #
   # For every bump, make sure that the hash is still accurate.
   stimulusGenerator = stdenv.mkDerivation {
-    pname = "foot-generate-alt-random-writes";
-    inherit version;
+    name = "foot-generate-alt-random-writes";
 
     src = fetchurl {
       url = "https://codeberg.org/dnkl/foot/raw/tag/${version}/scripts/generate-alt-random-writes.py";
@@ -54,7 +52,7 @@ let
     '';
   };
 
-  stimuliFile = runCommandNoCC "pgo-stimulus-file" { } ''
+  stimuliFile = runCommand "pgo-stimulus-file" { } ''
     ${stimulusGenerator} \
       --rows=67 --cols=135 \
       --scroll --scroll-region \
@@ -89,24 +87,20 @@ let
   # using a compiler which foot's PGO build supports (clang or gcc)
   doPgo = allowPgo && (stdenv.hostPlatform == stdenv.buildPlatform)
     && compilerName != "unknown";
+
+  terminfoDir = "${placeholder "terminfo"}/share/terminfo";
 in
 stdenv.mkDerivation rec {
   pname = "foot";
   inherit version;
 
-  src = fetchzip {
-    url = "https://codeberg.org/dnkl/${pname}/archive/${version}.tar.gz";
-    sha256 = "1k0alz991cslls4926c5gq02pdq0vfw9jfpprh2a1vb59xgikv7h";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "dnkl";
+    repo = pname;
+    rev = version;
+    sha256 = "14jqs4sarxbrgi5pxz0afqa9jxq90cb5ayqd21qj2n65whqa5bpk";
   };
-
-  patches = [
-    # Fixes PGO builds with clang
-    (fetchpatch {
-      url = "https://codeberg.org/dnkl/foot/commit/2acd4b34c57659d86dca76c58e4363de9b0a1f17.patch";
-      sha256 = "13xi9ppaqx2p88cxbh6801ry9ral70ylh40agn6ij7pklybs4d7s";
-      includes = [ "pgo/pgo.c" ];
-    })
-  ];
 
   depsBuildBuild = [
     pkg-config
@@ -147,10 +141,19 @@ stdenv.mkDerivation rec {
     export AR="${ar}"
   '';
 
+  mesonBuildType = "release";
+
+  # See https://codeberg.org/dnkl/foot/src/tag/1.9.2/INSTALL.md#options
+  # TODO(@sternenseemann): install systemd user units
   mesonFlags = [
-    "--buildtype=release"
+    # Use lto
     "-Db_lto=true"
-    "-Dterminfo-install-location=${placeholder "terminfo"}/share/terminfo"
+    # “Build” and install terminfo db
+    "-Dterminfo=enabled"
+    # Ensure TERM=foot is used
+    "-Ddefault-terminfo=foot"
+    # Tell foot to set TERMINFO and where to install the terminfo files
+    "-Dcustom-terminfo-install-location=${terminfoDir}"
   ];
 
   # build and run binary generating PGO profiles,
@@ -161,6 +164,7 @@ stdenv.mkDerivation rec {
     # make sure there is _some_ profiling data on all binaries
     ./footclient --version
     ./foot --version
+    ./tests/test-config
     # generate pgo data of wayland independent code
     ./pgo ${stimuliFile} ${stimuliFile} ${stimuliFile}
     meson configure -Db_pgo=use
@@ -168,14 +172,13 @@ stdenv.mkDerivation rec {
     llvm-profdata merge default_*profraw --output=default.profdata
   '';
 
-  outputs = [ "out" "terminfo" ];
-
-  # make sure nix-env and buildEnv also include the
-  # terminfo output when the package is installed
+  # Install example themes which can be added to foot.ini via the include
+  # directive to a separate output to save a bit of space
   postInstall = ''
-    mkdir -p "$out/nix-support"
-    echo "$terminfo" >> "$out/nix-support/propagated-user-env-packages"
+    moveToOutput share/foot/themes "$themes"
   '';
+
+  outputs = [ "out" "terminfo" "themes" ];
 
   passthru.tests = {
     clang-default-compilation = foot.override {
@@ -185,6 +188,17 @@ stdenv.mkDerivation rec {
     clang-latest-compilation = foot.override {
       inherit (llvmPackages_latest) stdenv;
     };
+
+    noPgo = foot.override {
+      allowPgo = false;
+    };
+
+    # By changing name, this will get rebuilt everytime we change version,
+    # even if the hash stays the same. Consequently it'll fail if we introduce
+    # a hash mismatch when updating.
+    stimulus-script-is-current = stimulusGenerator.src.overrideAttrs (_: {
+      name = "generate-alt-random-writes-${version}.py";
+    });
   };
 
   meta = with lib; {
@@ -194,5 +208,18 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.sternenseemann ];
     platforms = platforms.linux;
+    # From (presumably) ncurses version 6.3, it will ship a foot
+    # terminfo file. This however won't include some non-standard
+    # capabilities foot's bundled terminfo file contains. Unless we
+    # want to have some features in e. g. vim or tmux stop working,
+    # we need to make sure that the foot terminfo overwrites ncurses'
+    # one. Due to <nixpkgs/nixos/modules/config/system-path.nix>
+    # ncurses is always added to environment.systemPackages on
+    # NixOS with its priority increased by 3, so we need to go
+    # one bigger.
+    # This doesn't matter a lot for local use since foot sets
+    # TERMINFO to a store path, but allows installing foot.terminfo
+    # on remote systems for proper foot terminfo support.
+    priority = (ncurses.meta.priority or 5) + 3 + 1;
   };
 }

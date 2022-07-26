@@ -1,10 +1,10 @@
 { lib, stdenv, fetchurl, jre_headless, makeWrapper }:
 stdenv.mkDerivation rec{
   pname = "flyway";
-  version = "7.5.4";
+  version = "8.5.13";
   src = fetchurl {
-    url = "https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/${version}/flyway-commandline-${version}.tar.gz";
-    sha256 = "sha256-WU8j1NSf2KfA/HJWFtMLOZ3t5nxW4sU713e6qEEhZ0I=";
+    url = "mirror://maven/org/flywaydb/flyway-commandline/${version}/flyway-commandline-${version}.tar.gz";
+    sha256 = "sha256-9MEsZ5lc9cF7MKD+dYdZGR9cnMHFxELACp4gsC0gzRc=";
   };
   nativeBuildInputs = [ makeWrapper ];
   dontBuild = true;
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec{
       This package is only the Community Edition of the Flyway command-line tool.
     '';
     homepage = "https://flywaydb.org/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = [ maintainers.cmcdragonkai ];

@@ -2,21 +2,30 @@
 , buildPythonPackage
 , fetchPypi
 , markupsafe
+, babel
+, pytestCheckHook
+, email-validator
 }:
 
 buildPythonPackage rec {
-  version = "2.3.3";
-  pname = "WTForms";
+  version = "3.0.1";
+  pname = "wtforms";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "81195de0ac94fbc8368abbaf9197b88c4f3ffd6c2719b5bf5fc9da744f3d829c";
+    pname = "WTForms";
+    inherit version;
+    sha256 = "1g654ghavds387hqxmhg9s8x222x89wbq1ggzxbsyn6x2axindbb";
   };
 
-  propagatedBuildInputs = [ markupsafe ];
+  propagatedBuildInputs = [ markupsafe babel ];
 
-  # Django tests are broken "django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet."
-  doCheck = false;
+
+  checkInputs = [
+    pytestCheckHook
+    email-validator
+  ];
+
+  pythonImportsCheck = [ "wtforms" ];
 
   meta = with lib; {
     description = "A flexible forms validation and rendering library for Python";

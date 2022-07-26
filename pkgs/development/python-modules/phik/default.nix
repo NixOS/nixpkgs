@@ -1,36 +1,41 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, cmake
+, fetchFromGitHub
 , isPy3k
-, pytest
-, pytest-pylint
+, pytestCheckHook
 , nbconvert
 , joblib
-, jupyter_client
+, jupyter
+, jupyter-client
 , numpy
 , scipy
 , pandas
 , matplotlib
+, ninja
 , numba
+, pybind11
+, scikit-build
 }:
 
 buildPythonPackage rec {
   pname = "phik";
-  version = "0.10.0";
-  format = "wheel";
+  version = "0.12.2";
   disabled = !isPy3k;
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version format;
-    python = "py3";
-    sha256 = "b745313c5ff9d6a3092eefa97f83fa4dbed178c9ce69161b655e95497cb2f38b";
+  src = fetchFromGitHub {
+    owner = "KaveIO";
+    repo = "PhiK";
+    rev = "v${version}";
+    hash = "sha256-nr3804MLIBPFw/PlJ9B8xKFFGI5LDp8m2gLtJB7YcEE=";
   };
 
   checkInputs = [
-    pytest
-    pytest-pylint
+    pytestCheckHook
     nbconvert
-    jupyter_client
+    jupyter
+    jupyter-client
   ];
 
   propagatedBuildInputs = [
@@ -40,16 +45,34 @@ buildPythonPackage rec {
     pandas
     matplotlib
     numba
+    pybind11
   ];
 
+  # uses setuptools to drive build process
+  dontUseCmakeConfigure = true;
+
+  nativeBuildInputs = [
+    cmake
+    ninja
+    scikit-build
+  ];
+
+  pythonImportsCheck = [ "phik" ];
+
   postInstall = ''
-  rm -r $out/bin
+    rm -r $out/bin
+  '';
+
+  preCheck = ''
+    # import from $out
+    rm -r phik
   '';
 
   meta = with lib; {
     description = "Phi_K correlation analyzer library";
     longDescription = "Phi_K is a new and practical correlation coefficient based on several refinements to Pearson’s hypothesis test of independence of two variables.";
     homepage = "https://phik.readthedocs.io/en/latest/";
+    changelog = "https://github.com/KaveIO/PhiK/blob/${src.rev}/CHANGES.rst";
     maintainers = with maintainers; [ melsigl ];
     license = licenses.asl20;
   };

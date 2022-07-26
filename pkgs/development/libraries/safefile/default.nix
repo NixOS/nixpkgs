@@ -8,20 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "1y0gikds2nr8jk8smhrl617njk23ymmpxyjb2j1xbj0k82xspv78";
   };
 
-  passthru = {
-    updateScript = ''
-      #!${runtimeShell}
-      cd ${toString ./.}
-      ${toString path}/pkgs/build-support/upstream-updater/update-walker.sh default.nix
-    '';
-  };
-
-  meta = {
+  meta = with lib; {
     description = "File open routines to safely open a file when in the presence of an attack";
-    license = lib.licenses.asl20 ;
-    maintainers = [lib.maintainers.raskin];
-    platforms = lib.platforms.all;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.all;
     homepage = "https://research.cs.wisc.edu/mist/safefile/";
-    updateWalker = true;
   };
 }

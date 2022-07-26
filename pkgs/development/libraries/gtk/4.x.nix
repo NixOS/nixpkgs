@@ -19,15 +19,14 @@
 , gdk-pixbuf
 , gobject-introspection
 , fribidi
+, harfbuzz
 , xorg
-, epoxy
-, json-glib
+, libepoxy
 , libxkbcommon
+, libpng
+, libtiff
+, libjpeg
 , libxml2
-, librest
-, libsoup
-, ffmpeg
-, gmp
 , gnome
 , gsettings-desktop-schemas
 , gst_all_1
@@ -37,6 +36,8 @@
 , x11Support ? stdenv.isLinux
 , waylandSupport ? stdenv.isLinux
 , libGL
+# experimental and can cause crashes in inspector
+, vulkanSupport ? false
 , vulkan-loader
 , vulkan-headers
 , wayland
@@ -61,7 +62,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gtk4";
-  version = "4.2.1";
+  version = "4.6.6";
 
   outputs = [ "out" "dev" ] ++ lib.optionals x11Support [ "devdoc" ];
   outputBin = "dev";
@@ -73,7 +74,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-    sha256 = "AjFpd13kPwof3gZvvBnXhUXqanViwZFavem4rkpzCeY=";
+    sha256 = "e7/k0TVp98KX7UmDSscmPjGLe/EC0ycctGbVlx9ZrnA=";
   };
 
   nativeBuildInputs = [
@@ -86,27 +87,28 @@ stdenv.mkDerivation rec {
     python3
     sassc
     gi-docgen
+    libxml2 # for xmllint
   ] ++ setupHooks;
 
   buildInputs = [
     libxkbcommon
-    epoxy
-    json-glib
+    libpng
+    libtiff
+    libjpeg
+    (libepoxy.override { inherit x11Support; })
     isocodes
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals vulkanSupport [
     vulkan-headers
   ] ++ [
-    librest
-    libsoup
-    ffmpeg
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-bad
     fribidi
+    harfbuzz
   ] ++ (with xorg; [
     libICE
     libSM
-    libXcomposite
     libXcursor
+    libXdamage
     libXi
     libXrandr
     libXrender
@@ -134,7 +136,9 @@ stdenv.mkDerivation rec {
     glib
     graphene
     pango
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals waylandSupport [
+    wayland
+  ] ++ lib.optionals vulkanSupport [
     vulkan-loader
   ] ++ [
     # Required for GSettings schemas at runtime.
@@ -148,10 +152,11 @@ stdenv.mkDerivation rec {
     "-Dbuild-tests=false"
     "-Dtracker=${if trackerSupport then "enabled" else "disabled"}"
     "-Dbroadway-backend=${lib.boolToString broadwaySupport}"
+  ] ++ lib.optionals vulkanSupport [
+    "-Dvulkan=enabled"
   ] ++ lib.optionals (!cupsSupport) [
     "-Dprint-cups=disabled"
   ] ++ lib.optionals stdenv.isDarwin [
-    "-Dvulkan=disabled"
     "-Dmedia-gstreamer=disabled" # requires gstreamer-gl
   ] ++ lib.optionals (!x11Support) [
     "-Dx11-backend=false"
@@ -168,6 +173,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     files=(
       build-aux/meson/post-install.py
+      build-aux/meson/gen-demo-header.py
       demos/gtk-demo/geninclude.py
       gdk/broadway/gen-c-array.py
       gdk/gen-gdk-gresources-xml.py
@@ -196,13 +202,9 @@ stdenv.mkDerivation rec {
     for f in $dev/bin/gtk4-encode-symbolic-svg; do
       wrapProgram $f --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     done
-
-  '' + lib.optionalString x11Support ''
-    # So that DevHelp can find this.
-    # TODO: Remove this with DevHelp 41.
-    mkdir -p "$devdoc/share/devhelp/books"
-    mv "$out/share/doc/"* "$devdoc/share/devhelp/books"
-    rmdir -p --ignore-fail-on-non-empty "$out/share/doc"
+  '' + lib.optionalString broadwaySupport ''
+    # Broadway daemon
+    moveToOutput bin/gtk4-broadwayd "$out"
   '';
 
   # Wrap demos
@@ -213,11 +215,15 @@ stdenv.mkDerivation rec {
       wrapProgram $dev/bin/$program \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${pname}-${version}"
     done
+  '' + lib.optionalString x11Support ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gtk";
+      versionPolicy = "odd-unstable";
       attrPath = "gtk4";
     };
   };

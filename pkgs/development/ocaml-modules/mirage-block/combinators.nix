@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "mirage-block-combinators";
-  inherit (mirage-block) version src useDune2;
+  inherit (mirage-block) version src;
 
   propagatedBuildInputs = [ mirage-block io-page logs ];
 

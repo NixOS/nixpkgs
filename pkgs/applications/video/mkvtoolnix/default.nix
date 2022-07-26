@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, mkDerivation
 , fetchFromGitLab
 , pkg-config
 , autoreconfHook
@@ -46,15 +45,15 @@ let
     '';
 
 in
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "mkvtoolnix";
-  version = "59.0.0";
+  version = "68.0.0";
 
   src = fetchFromGitLab {
     owner = "mbunkus";
     repo = "mkvtoolnix";
     rev = "release-${version}";
-    sha256 = "sha256-bPypOsveXrkz1V961b9GTJKFdgru/kcW15z/yik/4yQ=";
+    sha256 = "0m09r0w98dja9y1yp1vq5hdh46lw0k60aa0xfkdy5zlva568cb7c";
   };
 
   nativeBuildInputs = [
@@ -118,9 +117,6 @@ mkDerivation rec {
 
   checkPhase = phase "Check" "tests:run_unit";
 
-  CXXFLAGS = optional stdenv.cc.isClang "-std=c++17";
-  LDFLAGS = optional stdenv.cc.isClang "-lc++fs";
-
   dontWrapQtApps = true;
 
   postFixup = optionalString withGUI ''
@@ -132,7 +128,6 @@ mkDerivation rec {
     homepage = "https://mkvtoolnix.download/";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ codyopel rnhmjoj ];
-    platforms = platforms.linux
-      ++ optionals (!withGUI) platforms.darwin;
+    platforms = platforms.unix;
   };
 }

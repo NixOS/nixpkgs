@@ -1,0 +1,26 @@
+From 94c4768cd69b026e498d92133dd6c7d8589cf911 Mon Sep 17 00:00:00 2001
+From: Jiajie Chen <c@jia.je>
+Date: Sat, 25 Jun 2022 10:19:44 +0800
+Subject: [PATCH] Patch LDCXXSHARED for macOS along with LDSHARED
+
+In Nixpkgs, we patched distutils to respect LDCXXSHARED environment, so
+the replacement should be taken on LDCXXSHARED as well.
+---
+ cocotb_build_libs.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/cocotb_build_libs.py b/cocotb_build_libs.py
+index 66097ec2..d5555b36 100755
+--- a/cocotb_build_libs.py
++++ b/cocotb_build_libs.py
+@@ -583,6 +583,7 @@ def get_ext():
+ 
+     if sys.platform == "darwin":
+         cfg_vars["LDSHARED"] = cfg_vars["LDSHARED"].replace("-bundle", "-dynamiclib")
++        cfg_vars["LDCXXSHARED"] = cfg_vars["LDCXXSHARED"].replace("-bundle", "-dynamiclib")
+ 
+     share_lib_dir = os.path.relpath(os.path.join(cocotb_share_dir, "lib"))
+     include_dir = os.path.relpath(os.path.join(cocotb_share_dir, "include"))
+-- 
+2.36.1
+

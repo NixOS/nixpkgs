@@ -3,20 +3,22 @@
 , fetchPypi
 , asgiref
 , click
+, importlib-metadata
 , itsdangerous
 , jinja2
 , python-dotenv
 , werkzeug
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  version = "2.0.1";
+  version = "2.1.2";
   pname = "Flask";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0mcgwq7b4qd99mf5bsvs3wphchxarf8kgil4hwww3blj31xjak0w";
+    sha256 = "sha256-MV3tLd+KYoFWftsnOTAQ/jQGGIuvv+ZaMznVeH2J5Hc=";
   };
 
   propagatedBuildInputs = [
@@ -26,14 +28,14 @@ buildPythonPackage rec {
     itsdangerous
     jinja2
     werkzeug
-  ];
+  ] ++ lib.optional (pythonOlder "3.10") importlib-metadata;
 
   checkInputs = [
     pytestCheckHook
   ];
 
   meta = with lib; {
-    homepage = "http://flask.pocoo.org/";
+    homepage = "https://flask.palletsprojects.com/";
     description = "The Python micro framework for building web applications";
     longDescription = ''
       Flask is a lightweight WSGI web application framework. It is
@@ -43,5 +45,6 @@ buildPythonPackage rec {
       Python web application frameworks.
     '';
     license = licenses.bsd3;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

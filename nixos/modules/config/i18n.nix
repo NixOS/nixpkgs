@@ -14,7 +14,13 @@ with lib;
           allLocales = any (x: x == "all") config.i18n.supportedLocales;
           locales = config.i18n.supportedLocales;
         };
-        example = literalExample "pkgs.glibcLocales";
+        defaultText = literalExpression ''
+          pkgs.buildPackages.glibcLocales.override {
+            allLocales = any (x: x == "all") config.i18n.supportedLocales;
+            locales = config.i18n.supportedLocales;
+          }
+        '';
+        example = literalExpression "pkgs.glibcLocales";
         description = ''
           Customized pkg.glibcLocales package.
 
@@ -47,7 +53,23 @@ with lib;
 
       supportedLocales = mkOption {
         type = types.listOf types.str;
-        default = ["all"];
+        default = unique
+          (builtins.map (l: (replaceStrings [ "utf8" "utf-8" "UTF8" ] [ "UTF-8" "UTF-8" "UTF-8" ] l) + "/UTF-8") (
+            [
+              "C.UTF-8"
+              "en_US.UTF-8"
+              config.i18n.defaultLocale
+            ] ++ (attrValues (filterAttrs (n: v: n != "LANGUAGE") config.i18n.extraLocaleSettings))
+          ));
+        defaultText = literalExpression ''
+          unique
+            (builtins.map (l: (replaceStrings [ "utf8" "utf-8" "UTF8" ] [ "UTF-8" "UTF-8" "UTF-8" ] l) + "/UTF-8") (
+              [
+                "C.UTF-8"
+                config.i18n.defaultLocale
+              ] ++ (attrValues (filterAttrs (n: v: n != "LANGUAGE") config.i18n.extraLocaleSettings))
+            ))
+        '';
         example = ["en_US.UTF-8/UTF-8" "nl_NL.UTF-8/UTF-8" "nl_NL/ISO-8859-1"];
         description = ''
           List of locales that the system should support.  The value

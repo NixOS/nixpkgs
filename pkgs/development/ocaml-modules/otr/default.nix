@@ -1,24 +1,24 @@
 { lib, fetchurl, buildDunePackage
-, cstruct, sexplib0, rresult, mirage-crypto, mirage-crypto-pk, astring, base64
-, mirage-crypto-rng
+, cstruct, sexplib0, mirage-crypto, mirage-crypto-pk, astring, base64
 }:
 
 buildDunePackage rec {
   pname = "otr";
-  version = "0.3.8";
+  version = "0.3.10";
+
+  minimumOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/hannesm/ocaml-otr/releases/download/v${version}/otr-v${version}.tbz";
-    sha256 = "18hn9l8wznqnlh2jf1hpnp36f1cx80ncwiiivsbj34llhgp3893d";
+    sha256 = "0dssc7p6s7z53n0mddyipjghzr8ld8bb7alaxqrx9gdpspwab1gq";
   };
 
   useDune2 = true;
 
   propagatedBuildInputs = [ cstruct sexplib0 mirage-crypto mirage-crypto-pk
-                            astring rresult base64 ];
+                            astring base64 ];
 
   doCheck = true;
-  checkInputs = [ mirage-crypto-rng ];
 
   meta = with lib; {
     homepage = "https://github.com/hannesm/ocaml-otr";

@@ -1,4 +1,11 @@
-{ lib, buildPythonPackage, fetchFromGitHub, antlr4-python3-runtime, pygments, python-igraph }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, antlr4-python3-runtime
+, igraph
+, pygments
+}:
 
 buildPythonPackage rec {
   pname = "explorerscript";
@@ -11,7 +18,15 @@ buildPythonPackage rec {
     sha256 = "1vzyliiyrxx8l9sfbqcyr4xn5swd7znkxy69kn0vb5rban8hm9c1";
   };
 
-  propagatedBuildInputs = [ antlr4-python3-runtime python-igraph ];
+  patches = [
+    # https://github.com/SkyTemple/ExplorerScript/pull/17
+    (fetchpatch {
+      url = "https://github.com/SkyTemple/ExplorerScript/commit/47d8b3d246881d675a82b4049b87ed7d9a0e1b15.patch";
+      sha256 = "0sadw9l2nypl2s8lw526lvbdj4rzqdvrjncx4zxxgyp3x47csb48";
+    })
+  ];
+
+  propagatedBuildInputs = [ antlr4-python3-runtime igraph ];
   checkInputs = [ pygments ];
 
   meta = with lib; {

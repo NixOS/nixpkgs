@@ -1,0 +1,38 @@
+diff --git a/FEBioStudio/RepositoryPanel.cpp b/FEBioStudio/RepositoryPanel.cpp
+index 382db303..314cdc68 100644
+--- a/FEBioStudio/RepositoryPanel.cpp
++++ b/FEBioStudio/RepositoryPanel.cpp
+@@ -1364,10 +1364,10 @@ void CRepositoryPanel::loadingPageProgress(qint64 bytesSent, qint64 bytesTotal)
+ 
+ #else
+ 
+-CRepositoryPanel::CRepositoryPanel(CMainWindow* pwnd, QWidget* parent){}
++CRepositoryPanel::CRepositoryPanel(CMainWindow* pwnd, QDockWidget* parent){}
+ CRepositoryPanel::~CRepositoryPanel(){}
+ void CRepositoryPanel::OpenLink(const QString& link) {}
+-// void CRepositoryPanel::Raise() {}
++void CRepositoryPanel::Raise() {}
+ void CRepositoryPanel::SetModelList(){}
+ void CRepositoryPanel::ShowMessage(QString message) {}
+ void CRepositoryPanel::ShowWelcomeMessage(QByteArray messages) {}
+@@ -1396,6 +1396,7 @@ void CRepositoryPanel::on_actionSearch_triggered() {}
+ void CRepositoryPanel::on_actionClearSearch_triggered() {}
+ void CRepositoryPanel::on_actionDeleteRemote_triggered() {}
+ void CRepositoryPanel::on_actionModify_triggered() {}
++void CRepositoryPanel::on_actionCopyPermalink_triggered() {}
+ void CRepositoryPanel::on_treeWidget_itemSelectionChanged() {}
+ void CRepositoryPanel::on_treeWidget_customContextMenuRequested(const QPoint &pos) {}
+ void CRepositoryPanel::DownloadItem(CustomTreeWidgetItem *item) {}
+diff --git a/FEBioStudio/WzdUpload.cpp b/FEBioStudio/WzdUpload.cpp
+index 5ce74346..20062e06 100644
+--- a/FEBioStudio/WzdUpload.cpp
++++ b/FEBioStudio/WzdUpload.cpp
+@@ -1183,7 +1183,7 @@ void CWzdUpload::on_saveJson_triggered()
+ 		getProjectJson(&projectInfo);
+ 
+ 		QFile file(filedlg.selectedFiles()[0]);
+-		file.open(QIODeviceBase::WriteOnly);
++		file.open(QIODevice::WriteOnly);
+ 		file.write(projectInfo);
+ 		file.close();
+ 	}

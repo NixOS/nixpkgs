@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "visitors";
-  version = "20210316";
+  version = "20210608";
 
   useDune2 = true;
 
@@ -13,13 +13,14 @@ buildDunePackage rec {
     repo = pname;
     rev = version;
     domain = "gitlab.inria.fr";
-    sha256 = "12d45ncy3g9mpcs6n58aq6yzs5qz662msgcr7ccms9jhiq44m8f7";
+    sha256 = "1p75x5yqwbwv8yb2gz15rfl3znipy59r45d1f4vcjdghhjws6q2a";
   };
 
   propagatedBuildInputs = [ ppxlib ppx_deriving result ];
 
   meta = with lib; {
     homepage = "https://gitlab.inria.fr/fpottier/visitors";
+    changelog = "https://gitlab.inria.fr/fpottier/visitors/-/raw/${version}/CHANGES.md";
     license = licenses.lgpl21;
     description = "An OCaml syntax extension (technically, a ppx_deriving plugin) which generates object-oriented visitors for traversing and transforming data structures";
     maintainers = [ maintainers.marsam ];

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , meson
 , ninja
@@ -8,13 +9,12 @@
 , python3
 , wrapGAppsHook
 , libxml2
-, libgda
+, libgda6
 , libhandy
-, libsoup
+, libsoup_3
 , json-glib
 , gspell
 , glib
-, libdazzle
 , gtk3
 , gtksourceview4
 , gnome
@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gtranslator";
-  version = "40.0";
+  version = "42.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "0d48nc11z0m91scy21ah56ysxns82zvswx8lglvlkig1vqvblgpc";
+    sha256 = "Kme8v+ZDBhsGltiaEIR9UL81kF/zNhuYcTV9PjQi8Ts=";
   };
 
   nativeBuildInputs = [
@@ -44,11 +44,10 @@ stdenv.mkDerivation rec {
     libxml2
     glib
     gtk3
-    libdazzle
     gtksourceview4
-    libgda
+    libgda6
     libhandy
-    libsoup
+    libsoup_3
     json-glib
     gettext
     gspell

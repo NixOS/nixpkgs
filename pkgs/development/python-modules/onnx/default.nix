@@ -1,31 +1,33 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, pythonOlder
-, isPy27
+, bash
 , cmake
-, protobuf
-, numpy
-, six
-, typing-extensions
-, pytestCheckHook
+, fetchPypi
+, isPy27
 , nbval
+, numpy
+, protobuf
+, pytestCheckHook
+, six
 , tabulate
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "onnx";
-  version = "1.9.0";
+  version = "1.11.0";
+  format = "setuptools";
 
-  # Python 2 is not supported as of Onnx v1.8
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0yjv2axz2vc2ysniwislsp53fsb8f61y1warrr2ppn2d9ijml1d9";
+    sha256 = "sha256-7KIkx8LI7kByoHQ+SJioSpvfgpe15ZEKJjLkxBgv+yo=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+  ];
 
   propagatedBuildInputs = [
     protobuf
@@ -35,15 +37,16 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytestCheckHook
     nbval
+    pytestCheckHook
     tabulate
   ];
 
   postPatch = ''
     chmod +x tools/protoc-gen-mypy.sh.in
-    patchShebangs tools/protoc-gen-mypy.sh.in tools/protoc-gen-mypy.py
-
+    patchShebangs tools/protoc-gen-mypy.py
+    substituteInPlace tools/protoc-gen-mypy.sh.in \
+      --replace "/bin/bash" "${bash}/bin/bash"
     substituteInPlace setup.py \
       --replace "setup_requires.append('pytest-runner')" ""
   '';
@@ -51,6 +54,11 @@ buildPythonPackage rec {
   preBuild = ''
     export MAX_JOBS=$NIX_BUILD_CORES
   '';
+
+  disabledTestPaths = [
+    # Unexpected output fields from running code: {'stderr'}
+    "onnx/examples/np_array_tensorproto.ipynb"
+  ];
 
   # The executables are just utility scripts that aren't too important
   postInstall = ''
@@ -60,10 +68,14 @@ buildPythonPackage rec {
   # The setup.py does all the configuration
   dontUseCmakeConfigure = true;
 
-  meta = {
-    homepage    = "http://onnx.ai";
+  pythonImportsCheck = [
+    "onnx"
+  ];
+
+  meta = with lib; {
     description = "Open Neural Network Exchange";
-    license     = lib.licenses.mit;
-    maintainers = [ lib.maintainers.acairncross ];
+    homepage = "https://onnx.ai";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ acairncross ];
   };
 }

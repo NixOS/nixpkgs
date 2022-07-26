@@ -1,21 +1,23 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, gdk-pixbuf, gtk2 }:
 
 stdenv.mkDerivation rec {
-  name = "trayer-1.1.8";
-
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gdk-pixbuf gtk2 ];
+  pname = "trayer";
+  version = "1.1.8";
 
   src = fetchFromGitHub {
     owner = "sargon";
     repo = "trayer-srg";
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = "1mvhwaqa9bng9wh3jg3b7y8gl7nprbydmhg963xg0r076jyzv0cg";
   };
 
-  preConfigure = ''
+  postPatch = ''
     patchShebangs configure
   '';
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ gdk-pixbuf gtk2 ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 

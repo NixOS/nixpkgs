@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, flit-core
 , dufte
 , matplotlib
 , numpy
@@ -13,16 +14,20 @@
 
 buildPythonPackage rec {
   pname = "perfplot";
-  version = "0.9.6";
+  version = "0.10.1";
+  format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nschloe";
     repo = pname;
     rev = "v${version}";
-    sha256 = "11f31d6xqxp04693symc2dl8890gjaycrb2a35y5xy023abwir5b";
+    sha256 = "sha256-5qZolEJWjhqk1JakcGBWZ1hxeP1cLqcB7IZ3ufjOC/o=";
   };
-  format = "pyproject";
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     dufte
@@ -44,5 +49,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/nschloe/perfplot";
     license = licenses.mit;
     maintainers = with maintainers; [ costrouc ];
+    broken = true; # missing matplotx dependency
   };
 }

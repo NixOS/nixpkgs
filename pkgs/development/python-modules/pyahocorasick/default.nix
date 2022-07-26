@@ -1,24 +1,32 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyahocorasick";
-  version = "1.4.1";
+  version = "2.0.0b1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "WojciechMula";
     repo = pname;
     rev = version;
-    sha256 = "13x3718if28l50474xrz1b9709kvnvdg3nzm6y8bh7mc9a4zyss5";
+    hash = "sha256-APpL99kOwzIQjePvRDeJ0FDm1kjBi6083JMKuBqtaRk=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  pytestFlagsArray = [ "unittests.py" ];
-  pythonImportsCheck = [ "ahocorasick" ];
+  pythonImportsCheck = [
+    "ahocorasick"
+  ];
 
   meta = with lib; {
     description = "Python module implementing Aho-Corasick algorithm";

@@ -1,7 +1,7 @@
-{ lib, stdenv
-, runCommandNoCC
+{ lib
+, stdenv
+, runCommand
 , fetchurl
-, fetchpatch
 , perl
 , python3
 , ruby
@@ -15,13 +15,16 @@
 , libnotify
 , gnutls
 , libgcrypt
+, libgpg-error
 , gtk3
 , wayland
 , libwebp
+, libwpe
+, libwpe-fdo
 , enchant2
 , xorg
 , libxkbcommon
-, epoxy
+, libepoxy
 , at-spi2-core
 , libxml2
 , libsoup
@@ -36,14 +39,14 @@
 , libidn
 , libedit
 , readline
-, sdk
+, apple_sdk
 , libGL
 , libGLU
 , mesa
 , libintl
+, lcms2
 , libmanette
 , openjpeg
-, enableGeoLocation ? true
 , geoclue2
 , sqlite
 , enableGLES ? true
@@ -57,13 +60,14 @@
 , substituteAll
 , glib
 , addOpenGLRunpath
+, enableGeoLocation ? true
+, withLibsecret ? true
+, systemdSupport ? stdenv.isLinux
 }:
-
-assert enableGeoLocation -> geoclue2 != null;
 
 stdenv.mkDerivation rec {
   pname = "webkitgtk";
-  version = "2.32.3";
+  version = "2.36.4";
 
   outputs = [ "out" "dev" ];
 
@@ -71,7 +75,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "sha256-wfSW9axlTv5M72L71PL77u8mWgfF50GeXSkAv+6lLLw=";
+    sha256 = "sha256-tr6+H4WkedlowZ5EpHBGIu+M72FjatGyQGt30Wri4qg=";
   };
 
   patches = lib.optionals stdenv.isLinux [
@@ -80,32 +84,14 @@ stdenv.mkDerivation rec {
       inherit (builtins) storeDir;
       inherit (addOpenGLRunpath) driverLink;
     })
+
     ./libglvnd-headers.patch
-  ] ++ lib.optionals stdenv.isDarwin [
-    (fetchpatch {
-      url = "https://github.com/WebKit/WebKit/commit/94cdcd289b993ed4d39c17d4b8b90db7c81a9b10.diff";
-      sha256 = "sha256-ywrTEjf3ATqI0Vvs60TeAZ+m58kCibum4DamRWrQfaA=";
-      excludes = [ "Source/WebKit/ChangeLog" ];
-    })
 
-    # https://bugs.webkit.org/show_bug.cgi?id=225856
-    (fetchpatch {
-      url = "https://bug-225856-attachments.webkit.org/attachment.cgi?id=428797";
-      sha256 = "sha256-ffo5p2EyyjXe3DxdrvAcDKqxwnoqHtYBtWod+1fOjMU=";
-      excludes = [ "Source/WebCore/ChangeLog" ];
-    })
-
-    # https://bugs.webkit.org/show_bug.cgi?id=225850
-    ./428774.patch # https://bug-225850-attachments.webkit.org/attachment.cgi?id=428774
-    (fetchpatch {
-      url = "https://bug-225850-attachments.webkit.org/attachment.cgi?id=428776";
-      sha256 = "sha256-ryNRYMsk72SL0lNdh6eaAdDV3OT8KEqVq1H0j581jmQ=";
-      excludes = [ "Source/WTF/ChangeLog" ];
-    })
-    (fetchpatch {
-      url = "https://bug-225850-attachments.webkit.org/attachment.cgi?id=428778";
-      sha256 = "sha256-78iP+T2vaIufO8TmIPO/tNDgmBgzlDzalklrOPrtUeo=";
-      excludes = [ "Source/WebKit/ChangeLog" ];
+    # Hardcode path to WPE backend
+    # https://github.com/NixOS/nixpkgs/issues/110468
+    (substituteAll {
+      src = ./fdo-backend-path.patch;
+      wpebackend_fdo = libwpe-fdo;
     })
   ];
 
@@ -137,7 +123,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     at-spi2-core
     enchant2
-    epoxy
+    libepoxy
     gnutls
     gst-plugins-bad
     gst-plugins-base
@@ -146,14 +132,12 @@ stdenv.mkDerivation rec {
     libGLU
     mesa # for libEGL headers
     libgcrypt
+    libgpg-error
     libidn
     libintl
-  ] ++ lib.optionals stdenv.isLinux [
-    libmanette
-  ] ++ [
+    lcms2
     libnotify
     libpthreadstubs
-    libsecret
     libtasn1
     libwebp
     libxkbcommon
@@ -173,30 +157,43 @@ stdenv.mkDerivation rec {
   ]) ++ lib.optionals stdenv.isDarwin [
     libedit
     readline
+  ] ++ lib.optional (stdenv.isDarwin && !stdenv.isAarch64) (
     # Pull a header that contains a definition of proc_pid_rusage().
     # (We pick just that one because using the other headers from `sdk` is not
-    # compatible with our C++ standard library)
-    (runCommandNoCC "${pname}_headers" {} ''
-      install -Dm444 "${lib.getDev sdk}"/include/libproc.h "$out"/include/libproc.h
-    '')
-  ] ++ lib.optionals stdenv.isLinux [
+    # compatible with our C++ standard library. This header is already in
+    # the standard library on aarch64)
+    runCommand "${pname}_headers" { } ''
+      install -Dm444 "${lib.getDev apple_sdk.sdk}"/include/libproc.h "$out"/include/libproc.h
+    ''
+  ) ++ lib.optionals stdenv.isLinux [
     bubblewrap
     libseccomp
-    systemd
+    libmanette
     wayland
+    libwpe
+    libwpe-fdo
     xdg-dbus-proxy
-  ] ++ lib.optional enableGeoLocation geoclue2;
+  ] ++ lib.optionals systemdSupport [
+    systemd
+  ] ++ lib.optionals enableGeoLocation [
+    geoclue2
+  ] ++ lib.optionals withLibsecret [
+    libsecret
+  ];
 
   propagatedBuildInputs = [
     gtk3
     libsoup
   ];
 
-  cmakeFlags = [
+  cmakeFlags = let
+    cmakeBool = x: if x then "ON" else "OFF";
+  in [
     "-DENABLE_INTROSPECTION=ON"
     "-DPORT=GTK"
     "-DUSE_LIBHYPHEN=OFF"
-    "-DUSE_WPE_RENDERER=OFF"
+    "-DUSE_SOUP2=${cmakeBool (lib.versions.major libsoup.version == "2")}"
+    "-DUSE_LIBSECRET=${cmakeBool withLibsecret}"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DENABLE_GAMEPAD=OFF"
     "-DENABLE_GTKDOC=OFF"
@@ -209,9 +206,11 @@ stdenv.mkDerivation rec {
     "-DUSE_APPLE_ICU=OFF"
     "-DUSE_OPENGL_OR_ES=OFF"
     "-DUSE_SYSTEM_MALLOC=ON"
-  ] ++ lib.optionals (!stdenv.isLinux) [
+  ] ++ lib.optionals (!systemdSupport) [
     "-DUSE_SYSTEMD=OFF"
-  ] ++ lib.optional (stdenv.isLinux && enableGLES) "-DENABLE_GLES2=ON";
+  ] ++ lib.optionals (stdenv.isLinux && enableGLES) [
+    "-DENABLE_GLES2=ON"
+  ];
 
   postPatch = ''
     patchShebangs .
@@ -230,5 +229,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = teams.gnome.members;
+    broken = stdenv.isDarwin;
   };
 }

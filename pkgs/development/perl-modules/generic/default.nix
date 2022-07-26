@@ -1,46 +1,54 @@
 { lib, stdenv, perl, buildPerl, toPerlModule }:
 
-{ buildInputs ? [], nativeBuildInputs ? [], ... } @ attrs:
+{ buildInputs ? []
+, nativeBuildInputs ? []
+, outputs ? [ "out" "devdoc" ]
+, src ? null
 
-assert attrs?pname -> attrs?version;
-assert attrs?pname -> !(attrs?name);
+# enabling or disabling does nothing for perl packages so set it explicitly
+# to false to not change hashes when enableParallelBuildingByDefault is enabled
+, enableParallelBuilding ? false
 
-lib.warnIf (attrs ? name) "builtPerlPackage: `name' (\"${attrs.name}\") is deprecated, use `pname' and `version' instead"
+, doCheck ? true
+, checkTarget ? "test"
 
-toPerlModule(stdenv.mkDerivation (
-  (
-  lib.recursiveUpdate
-  {
-    outputs = [ "out" "devdoc" ];
+# Prevent CPAN downloads.
+, PERL_AUTOINSTALL ? "--skipdeps"
 
-    doCheck = true;
+# From http://wiki.cpantesters.org/wiki/CPANAuthorNotes: "allows
+# authors to skip certain tests (or include certain tests) when
+# the results are not being monitored by a human being."
+, AUTOMATED_TESTING ? true
 
-    checkTarget = "test";
+# current directory (".") is removed from @INC in Perl 5.26 but many old libs rely on it
+# https://metacpan.org/pod/release/XSAWYERX/perl-5.26.0/pod/perldelta.pod#Removal-of-the-current-directory-%28%22.%22%29-from-@INC
+, PERL_USE_UNSAFE_INC ? "1"
 
-    # Prevent CPAN downloads.
-    PERL_AUTOINSTALL = "--skipdeps";
+, ...
+}@attrs:
 
-    # From http://wiki.cpantesters.org/wiki/CPANAuthorNotes: "allows
-    # authors to skip certain tests (or include certain tests) when
-    # the results are not being monitored by a human being."
-    AUTOMATED_TESTING = true;
+lib.throwIf (attrs ? name) "buildPerlPackage: `name` (\"${attrs.name}\") is deprecated, use `pname` and `version` instead"
 
-    # current directory (".") is removed from @INC in Perl 5.26 but many old libs rely on it
-    # https://metacpan.org/pod/release/XSAWYERX/perl-5.26.0/pod/perldelta.pod#Removal-of-the-current-directory-%28%22.%22%29-from-@INC
-    PERL_USE_UNSAFE_INC = "1";
+(let
+  defaultMeta = {
+    homepage = "https://metacpan.org/dist/${attrs.pname}";
+    inherit (perl.meta) platforms;
+  };
 
-    meta.homepage = "https://metacpan.org/release/${lib.getName attrs}"; # TODO: phase-out `attrs.name`
-    meta.platforms = perl.meta.platforms;
-  }
-  attrs
-  )
-  //
-  {
-    pname = "perl${perl.version}-${lib.getName attrs}"; # TODO: phase-out `attrs.name`
-    version = lib.getVersion attrs;                     # TODO: phase-out `attrs.name`
+  package = stdenv.mkDerivation (attrs // {
+    name = "perl${perl.version}-${attrs.pname}-${attrs.version}";
+
     builder = ./builder.sh;
+
     buildInputs = buildInputs ++ [ perl ];
     nativeBuildInputs = nativeBuildInputs ++ [ (perl.mini or perl) ];
+
     fullperl = buildPerl;
-  }
-))
+
+    inherit outputs src doCheck checkTarget enableParallelBuilding;
+    inherit PERL_AUTOINSTALL AUTOMATED_TESTING PERL_USE_UNSAFE_INC;
+
+    meta = defaultMeta // (attrs.meta or { });
+  });
+
+in toPerlModule package)

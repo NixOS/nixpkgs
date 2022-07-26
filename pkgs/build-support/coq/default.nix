@@ -1,4 +1,4 @@
-{ lib, stdenv, coqPackages, coq, fetchzip }@args:
+{ lib, stdenv, coqPackages, coq, which, fetchzip }@args:
 let lib = import ./extra-lib.nix {inherit (args) lib;}; in
 with builtins; with lib;
 let
@@ -15,8 +15,13 @@ in
   releaseRev ? (v: v),
   displayVersion ? {},
   release ? {},
+  buildInputs ? [],
+  nativeBuildInputs ? [],
   extraBuildInputs ? [],
-  namePrefix ? [],
+  extraNativeBuildInputs ? [],
+  overrideBuildInputs ? [],
+  overrideNativeBuildInputs ? [],
+  namePrefix ? [ "coq" ],
   enableParallelBuilding ? true,
   extraInstallFlags ? [],
   setCOQBIN ? true,
@@ -27,14 +32,19 @@ in
   dropDerivationAttrs ? [],
   useDune2ifVersion ? (x: false),
   useDune2 ? false,
+  opam-name ? (concatStringsSep "-" (namePrefix ++ [ pname ])),
   ...
 }@args:
 let
   args-to-remove = foldl (flip remove) ([
     "version" "fetcher" "repo" "owner" "domain" "releaseRev"
     "displayVersion" "defaultVersion" "useMelquiondRemake"
-    "release" "extraBuildInputs" "extraPropagatedBuildInputs" "namePrefix"
-    "meta" "useDune2ifVersion" "useDune2"
+    "release"
+    "buildInputs" "nativeBuildInputs"
+    "extraBuildInputs" "extraNativeBuildInputs"
+    "overrideBuildInputs" "overrideNativeBuildInputs"
+    "namePrefix"
+    "meta" "useDune2ifVersion" "useDune2" "opam-name"
     "extraInstallFlags" "setCOQBIN" "mlPlugin"
     "dropAttrs" "dropDerivationAttrs" "keepAttrs" ] ++ dropAttrs) keepAttrs;
   fetch = import ../coq/meta-fetch/default.nix
@@ -43,7 +53,6 @@ let
       location = { inherit domain owner repo; };
     } // optionalAttrs (args?fetcher) {inherit fetcher;});
   fetched = fetch (if !isNull version then version else defaultVersion);
-  namePrefix = args.namePrefix or [ "coq" ];
   display-pkg = n: sep: v:
     let d = displayVersion.${n} or (if sep == "" then ".." else true); in
     n + optionalString (v != "" && v != null) (switch d [
@@ -56,8 +65,16 @@ let
     ] "") + optionalString (v == null) "-broken";
   append-version = p: n: p + display-pkg n "" coqPackages.${n}.version + "-";
   prefix-name = foldl append-version "" namePrefix;
-  var-coqlib-install = (optionalString (versions.isGe "8.7" coq.coq-version) "COQMF_") + "COQLIB";
   useDune2 = args.useDune2 or (useDune2ifVersion fetched.version);
+  coqlib-flags = switch coq.coq-version [
+    { case = v: versions.isLe "8.6" v && v != "dev" ;
+      out = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ]; }
+  ] [ "COQLIBINSTALL=$(out)/lib/coq/${coq.coq-version}/user-contrib"
+      "COQPLUGININSTALL=$(OCAMLFIND_DESTDIR)" ];
+  docdir-flags = switch coq.coq-version [
+    { case = v: versions.isLe "8.6" v && v != "dev";
+      out = [ "DOCDIR=$(out)/share/coq/${coq.coq-version}/" ]; }
+  ] [ "COQDOCINSTALL=$(out)/share/coq/${coq.coq-version}/user-contrib" ];
 in
 
 stdenv.mkDerivation (removeAttrs ({
@@ -66,10 +83,13 @@ stdenv.mkDerivation (removeAttrs ({
 
   inherit (fetched) version src;
 
-  buildInputs = [ coq ]
-    ++ optionals mlPlugin coq.ocamlBuildInputs
-    ++ optionals useDune2 [coq.ocaml coq.ocamlPackages.dune_2]
-    ++ extraBuildInputs;
+  nativeBuildInputs = args.overrideNativeBuildInputs
+    or ([ which coq.ocamlPackages.findlib ]
+        ++ optional useDune2 coq.ocamlPackages.dune_2
+        ++ optional (useDune2 || mlPlugin) coq.ocamlPackages.ocaml
+        ++ (args.nativeBuildInputs or []) ++ extraNativeBuildInputs);
+  buildInputs = args.overrideBuildInputs
+    or ([ coq ] ++ (args.buildInputs or []) ++ extraBuildInputs);
   inherit enableParallelBuilding;
 
   meta = ({ platforms = coq.meta.platforms; } //
@@ -84,15 +104,18 @@ stdenv.mkDerivation (removeAttrs ({
 // (optionalAttrs setCOQBIN { COQBIN = "${coq}/bin/"; })
 // (optionalAttrs (!args?installPhase && !args?useMelquiondRemake) {
   installFlags =
-    [ "${var-coqlib-install}=$(out)/lib/coq/${coq.coq-version}/" ] ++
-    optional (match ".*doc$" (args.installTargets or "") != null)
-      "DOCDIR=$(out)/share/coq/${coq.coq-version}/" ++
+    coqlib-flags ++ docdir-flags ++
     extraInstallFlags;
 })
 // (optionalAttrs useDune2 {
+  buildPhase = ''
+    runHook preBuild
+    dune build -p ${opam-name} ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
+    runHook postBuild
+  '';
   installPhase = ''
     runHook preInstall
-    dune install --prefix=$out
+    dune install ${opam-name} --prefix=$out
     mv $out/lib/coq $out/lib/TEMPORARY
     mkdir $out/lib/coq/
     mv $out/lib/TEMPORARY $out/lib/coq/${coq.coq-version}

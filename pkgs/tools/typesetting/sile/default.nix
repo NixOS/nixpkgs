@@ -3,9 +3,8 @@
 , fetchurl
 , makeWrapper
 , pkg-config
-, autoconf
-, automake
 , poppler_utils
+, gitMinimal
 , harfbuzz
 , icu
 , fontconfig
@@ -18,9 +17,11 @@
 let
   luaEnv = lua.withPackages(ps: with ps; [
     cassowary
+    cldr
     cosmo
-    compat53
+    fluent
     linenoise
+    loadkit
     lpeg
     lua-zlib
     lua_cliargs
@@ -34,16 +35,20 @@ let
     penlight
     stdlib
     vstruct
+  ] ++ lib.optionals (lib.versionOlder lua.luaversion "5.2") [
+    bit32
+  ] ++ lib.optionals (lib.versionOlder lua.luaversion "5.3") [
+    compat53
   ]);
 in
 
 stdenv.mkDerivation rec {
   pname = "sile";
-  version = "0.10.15";
+  version = "0.13.3";
 
   src = fetchurl {
     url = "https://github.com/sile-typesetter/sile/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "0p1w3s6j34qi93aycqmqggfm277n90z90nlmm1j3qizxxwq5gda9";
+    sha256 = "0x8w63xr3nd0is1pv55dlgnv7fkn8s5ny6453wn84h44i7qwdc8s";
   };
 
   configureFlags = [
@@ -52,25 +57,30 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    autoconf
-    automake
+    gitMinimal
     pkg-config
     makeWrapper
   ];
   buildInputs = [
+    luaEnv
     harfbuzz
     icu
     fontconfig
     libiconv
-    luaEnv
   ]
   ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.AppKit
   ;
   checkInputs = [
     poppler_utils
   ];
+  passthru = {
+    # So it will be easier to inspect this environment, in comparison to others
+    inherit luaEnv;
+  };
 
-  preConfigure = lib.optionalString stdenv.isDarwin ''
+  postPatch = ''
+    patchShebangs build-aux/*.sh
+  '' + lib.optionalString stdenv.isDarwin ''
     sed -i -e 's|@import AppKit;|#import <AppKit/AppKit.h>|' src/macfonts.m
   '';
 
@@ -97,6 +107,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "doc" "man" "dev" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A typesetting system";
     longDescription = ''
       SILE is a typesetting system; its job is to produce beautiful
@@ -108,9 +119,9 @@ stdenv.mkDerivation rec {
       technologies and borrowing some ideas from graphical systems
       such as InDesign.
     '';
-    homepage = "https://sile-typesetter.org/";
+    homepage = "https://sile-typesetter.org";
+    changelog = "https://github.com/sile-typesetter/sile/raw/v${version}/CHANGELOG.md";
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;   # https://github.com/NixOS/nixpkgs/issues/23018
     maintainers = with maintainers; [ doronbehar alerque ];
     license = licenses.mit;
   };

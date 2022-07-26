@@ -8,14 +8,14 @@
 , libxml2
 , python3
 , libnotify
-, wrapGAppsHook
+, wrapGAppsHook4
 , libmediaart
 , gobject-introspection
 , gnome-online-accounts
 , grilo
 , grilo-plugins
 , pkg-config
-, gtk3
+, gtk4
 , pango
 , glib
 , desktop-file-utils
@@ -23,20 +23,20 @@
 , itstool
 , gnome
 , gst_all_1
-, libdazzle
 , libsoup
+, libadwaita
 , gsettings-desktop-schemas
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gnome-music";
-  version = "40.1.1";
+  version = "42.1";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "IMtnPhHC8xQ9NYjPyrmhInkQgOun3GASypTBhglVjVE=";
+    sha256 = "x3R/pqhrVrGK1v+VD/kB5Z7n+sEcaLKmcnr4bq7tgnA=";
   };
 
   nativeBuildInputs = [
@@ -46,27 +46,26 @@ python3.pkgs.buildPythonApplication rec {
     itstool
     pkg-config
     libxml2
-    wrapGAppsHook
+    wrapGAppsHook4
     desktop-file-utils
     appstream-glib
     gobject-introspection
   ];
 
   buildInputs = [
-    gtk3
+    gtk4
     pango
     glib
     libmediaart
     gnome-online-accounts
     gobject-introspection
     gdk-pixbuf
-    gnome.adwaita-icon-theme
     python3
     grilo
     grilo-plugins
     libnotify
-    libdazzle
     libsoup
+    libadwaita
     gsettings-desktop-schemas
     tracker
   ] ++ (with gst_all_1; [
@@ -75,20 +74,20 @@ python3.pkgs.buildPythonApplication rec {
     gst-plugins-good
     gst-plugins-bad
     gst-plugins-ugly
+    gst-libav
   ]);
 
-  propagatedBuildInputs = with python3.pkgs; [
+  pythonPath = with python3.pkgs; [
     pycairo
     dbus-python
     pygobject3
   ];
 
+  # Prevent double wrapping, let the Python wrapper use the args in preFixup.
+  dontWrapGApps = true;
 
-  postPatch = ''
-    for f in meson_post_conf.py meson_post_install.py; do
-      chmod +x $f
-      patchShebangs $f
-    done
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   doCheck = false;

@@ -27,6 +27,7 @@
 , polkit
 , webkitgtk
 , systemd
+, libhandy
 , libnma
 , tzdata
 , libgnomekbd
@@ -35,11 +36,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-initial-setup";
-  version = "40.3";
+  version = "42.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "5QP9HUiFL112qr9iLR7ymWs4TYjaMf0WoQ1RPwmpDdc=";
+    sha256 = "TYPZiySavhW7Kz5+eurZxH+Ei8p7agkavJCLdlQavns=";
   };
 
   patches = [
@@ -72,6 +73,7 @@ stdenv.mkDerivation rec {
     json-glib
     krb5
     libgweather
+    libhandy
     libnma
     libpwquality
     librest

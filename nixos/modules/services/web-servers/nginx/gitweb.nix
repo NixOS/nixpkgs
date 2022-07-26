@@ -79,7 +79,7 @@ in
         };
         locations."${cfg.location}/" = {
           extraConfig = ''
-            include ${pkgs.nginx}/conf/fastcgi_params;
+            include ${config.services.nginx.package}/conf/fastcgi_params;
             fastcgi_param GITWEB_CONFIG ${gitwebConfig.gitwebConfigFile};
             fastcgi_pass unix:/run/gitweb/gitweb.sock;
           '';

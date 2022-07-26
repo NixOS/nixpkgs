@@ -8,24 +8,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "libreddit";
-  version = "0.10.1";
+  version = "0.22.9";
 
   src = fetchFromGitHub {
     owner = "spikecodes";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0f5xla6fgq4l9g95gwwvfxksaxj4zpayrsjacf53akjpxaqvqxdj";
+    sha256 = "sha256-xsWV3DWAFekWliFRdea2J+Mygl/58d92qTXJ7/4YVEg=";
   };
 
-  cargoSha256 = "039k6kncdgy6q2lbcssj5dm9npk0yss5m081ps4nmdj2vjrkphf0";
+  cargoSha256 = "sha256-eLfKfl7CYH2V9WJksLps6uAckQEPB5dFKBY2B6CMa/8=";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
-
-  cargoPatches = [
-    # Patch file to add/update Cargo.lock in the source code
-    # https://github.com/spikecodes/libreddit/issues/191
-    ./add-Cargo.lock.patch
-  ];
 
   passthru.tests = {
     inherit (nixosTests) libreddit;
@@ -35,6 +29,6 @@ rustPlatform.buildRustPackage rec {
     description = "Private front-end for Reddit";
     homepage = "https://github.com/spikecodes/libreddit";
     license = with licenses; [ agpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [ fab jojosch ];
   };
 }

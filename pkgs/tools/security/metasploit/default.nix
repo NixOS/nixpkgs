@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, ruby, bundlerEnv }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, ruby
+, bundlerEnv
+, python3
+}:
 
 let
   env = bundlerEnv {
@@ -8,16 +15,17 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "metasploit-framework";
-  version = "6.0.55";
+  version = "6.2.6";
 
   src = fetchFromGitHub {
     owner = "rapid7";
     repo = "metasploit-framework";
     rev = version;
-    sha256 = "sha256-Wf6Aj/mYHs7KdAYWjNzoD+Q5xK9DOsPiRTIEY7lac8M=";
+    sha256 = "sha256-GppCjA35d4cvCuGE29czAu4JVCq3l2CHIRFkKWNSNH0=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ (python3.withPackages (ps: [ ps.requests ])) ];
 
   dontPatchELF = true; # stay away from exploit executables
 
@@ -25,6 +33,8 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share/msf}
 
     cp -r * $out/share/msf
+
+    grep -rl "^#\!.*python2$" $out/share/msf | xargs -d '\n' rm
 
     (
       cd $out/share/msf/
@@ -34,6 +44,11 @@ in stdenv.mkDerivation rec {
       done
     )
 
+    makeWrapper ${env}/bin/bundle $out/bin/msf-pattern_create \
+      --add-flags "exec ${ruby}/bin/ruby $out/share/msf/tools/exploit/pattern_create.rb"
+
+    makeWrapper ${env}/bin/bundle $out/bin/msf-pattern_offset \
+      --add-flags "exec ${ruby}/bin/ruby $out/share/msf/tools/exploit/pattern_offset.rb"
   '';
 
   # run with: nix-shell maintainers/scripts/update.nix --argstr path metasploit
@@ -41,10 +56,10 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Metasploit Framework - a collection of exploits";
-    homepage = "https://github.com/rapid7/metasploit-framework/wiki";
+    homepage = "https://docs.metasploit.com/";
     platforms = platforms.unix;
     license = licenses.bsd3;
-    maintainers = [ maintainers.makefu ];
+    maintainers = with maintainers; [ fab makefu ];
     mainProgram = "msfconsole";
   };
 }

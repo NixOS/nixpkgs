@@ -1,9 +1,11 @@
 { fetchurl, lib, stdenv, makeWrapper, perl, perlPackages }:
 
 stdenv.mkDerivation rec {
-  name = "dirvish-1.2.1";
+  pname = "dirvish";
+  version = "1.2.1";
+
   src = fetchurl {
-    url = "http://dirvish.org/${name}.tgz";
+    url = "http://dirvish.org/dirvish${version}.tgz";
     sha256 = "6b7f29c3541448db3d317607bda3eb9bac9fb3c51f970611ffe27e9d63507dcd";
   };
 

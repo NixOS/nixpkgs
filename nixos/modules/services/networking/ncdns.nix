@@ -58,7 +58,7 @@ in
 
       address = mkOption {
         type = types.str;
-        default = "127.0.0.1";
+        default = "[::1]";
         description = ''
           The IP address the ncdns resolver will bind to.  Leave this unchanged
           if you do not wish to directly expose the resolver.
@@ -76,6 +76,7 @@ in
       identity.hostname = mkOption {
         type = types.str;
         default = config.networking.hostName;
+        defaultText = literalExpression "config.networking.hostName";
         example = "example.com";
         description = ''
           The hostname of this ncdns instance, which defaults to the machine
@@ -164,7 +165,7 @@ in
       settings = mkOption {
         type = configType;
         default = { };
-        example = literalExample ''
+        example = literalExpression ''
           { # enable webserver
             ncdns.httplistenaddr = ":8202";
 
@@ -201,7 +202,7 @@ in
   config = mkIf cfg.enable {
 
     services.pdns-recursor = mkIf cfgs.pdns-recursor.resolveNamecoin {
-      forwardZonesRecurse.bit = "127.0.0.1:${toString cfg.port}";
+      forwardZonesRecurse.bit = "${cfg.address}:${toString cfg.port}";
       luaConfig =
         if cfg.dnssec.enable
           then ''readTrustAnchorsFromFile("${cfg.dnssec.keys.public}")''
@@ -245,8 +246,10 @@ in
 
     users.users.ncdns = {
       isSystemUser = true;
+      group = "ncdns";
       description = "ncdns daemon user";
     };
+    users.groups.ncdns = {};
 
     systemd.services.ncdns = {
       description = "ncdns daemon";

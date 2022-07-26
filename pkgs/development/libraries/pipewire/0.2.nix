@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, doxygen, graphviz, valgrind
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, doxygen, graphviz
 , glib, dbus, gst_all_1, alsa-lib, ffmpeg_4, libjack2, udev, libva, xorg
 , sbc, SDL2, makeFontsConf
 }:
@@ -21,12 +21,17 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "lib" "dev" "doc" ];
 
   nativeBuildInputs = [
-    meson ninja pkg-config doxygen graphviz valgrind
+    meson ninja pkg-config doxygen graphviz
   ];
   buildInputs = [
     glib dbus gst_all_1.gst-plugins-base gst_all_1.gstreamer
     alsa-lib ffmpeg_4 libjack2 udev libva xorg.libX11 sbc SDL2
   ];
+
+  # Workaround build on gcc-10+ and clang11+:
+  #  spa/plugins/bluez5/libspa-bluez5.so.p/bluez5-monitor.c.o:(.bss+0x0):
+  #    multiple definition of `spa_a2dp_sink_factory'
+  NIX_CFLAGS_COMPILE = [ "-fcommon" ];
 
   mesonFlags = [
     "-Ddocs=true"

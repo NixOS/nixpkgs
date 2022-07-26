@@ -2,86 +2,128 @@
 , stdenv
 , bokeh
 , buildPythonPackage
-, fetchFromGitHub
-, fsspec
-, pytestCheckHook
-, pytest-rerunfailures
-, pythonOlder
 , cloudpickle
+, distributed
+, fastparquet
+, fetchFromGitHub
+, fetchpatch
+, fsspec
+, jinja2
 , numpy
-, toolz
-, dill
+, packaging
 , pandas
 , partd
+, pyarrow
+, pytest-rerunfailures
 , pytest-xdist
-, withExtraComplete ? false
-, distributed
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, scipy
+, toolz
+, zarr
 }:
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2021.06.2";
-  disabled = pythonOlder "3.5";
+  version = "2022.05.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = pname;
     rev = version;
-    sha256 = "sha256-qvfjdijzlqaJQrDztRAVr5PudTaVd3WOTBid2ElZQgg=";
+    hash = "sha256-8M70Pf31PhYnBPRhSG55eWg6gK0lxsIFKF+cRCsf0/U=";
   };
 
   propagatedBuildInputs = [
-    bokeh
     cloudpickle
-    dill
     fsspec
-    numpy
-    pandas
+    packaging
     partd
+    pyyaml
     toolz
-  ] ++ lib.optionals withExtraComplete [
-    distributed
   ];
 
-  doCheck = true;
+  passthru.optional-dependencies = {
+    array = [
+      numpy
+    ];
+    complete = [
+      distributed
+    ];
+    dataframe = [
+      numpy
+      pandas
+    ];
+    distributed = [
+      distributed
+    ];
+    diagnostics = [
+      bokeh
+      jinja2
+    ];
+  };
 
   checkInputs = [
+    fastparquet
+    pyarrow
     pytestCheckHook
     pytest-rerunfailures
     pytest-xdist
+    scipy
+    zarr
   ];
 
   dontUseSetuptoolsCheck = true;
 
   postPatch = ''
-    # versioneer hack to set version of github package
+    # versioneer hack to set version of GitHub package
     echo "def get_versions(): return {'dirty': False, 'error': None, 'full-revisionid': None, 'version': '${version}'}" > dask/_version.py
 
     substituteInPlace setup.py \
       --replace "version=versioneer.get_version()," "version='${version}'," \
       --replace "cmdclass=versioneer.get_cmdclass()," ""
+
+    substituteInPlace setup.cfg \
+      --replace " --durations=10" "" \
+      --replace " -v" ""
   '';
 
   pytestFlagsArray = [
-    "-n $NIX_BUILD_CORES"
+    # Rerun failed tests up to three times
+    "--reruns 3"
+    # Don't run tests that require network access
     "-m 'not network'"
+    # Ignore warning about pyarrow 5.0.0 feautres
+    "-W"
+    "ignore::FutureWarning"
   ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
-    # this test requires features of python3Packages.psutil that are
+    # Test requires features of python3Packages.psutil that are
     # blocked in sandboxed-builds
     "test_auto_blocksize_csv"
+    # AttributeError: 'str' object has no attribute 'decode'
+    "test_read_dir_nometa"
   ] ++ [
-    # A deprecation warning from newer sqlalchemy versions makes these tests
-    # to fail https://github.com/dask/dask/issues/7406
-    "test_sql"
-    # Test interrupt fails intermittently https://github.com/dask/dask/issues/2192
-    "test_interrupt"
+    "test_chunksize_files"
   ];
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [ "dask.dataframe" "dask" "dask.array" ];
+  pythonImportsCheck = [
+    "dask"
+    "dask.array"
+    "dask.bag"
+    "dask.bytes"
+    "dask.dataframe"
+    "dask.dataframe.io"
+    "dask.dataframe.tseries"
+    "dask.diagnostics"
+  ];
 
   meta = with lib; {
     description = "Minimal task scheduling abstraction";

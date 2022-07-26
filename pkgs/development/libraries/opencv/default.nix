@@ -1,6 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, unzip
 , zlib
-, enablePython ? false, pythonPackages
 , enableGtk2 ? false, gtk2
 , enableJPEG ? true, libjpeg
 , enablePNG ? true, libpng
@@ -9,6 +8,7 @@
 , enableFfmpeg ? false, ffmpeg
 , enableGStreamer ? false, gst_all_1
 , enableEigen ? true, eigen
+, enableUnfree ? false
 , Cocoa, QTKit
 }:
 
@@ -43,7 +43,6 @@ stdenv.mkDerivation rec {
 
   buildInputs =
        [ zlib ]
-    ++ lib.optional enablePython pythonPackages.python
     ++ lib.optional enableGtk2 gtk2
     ++ lib.optional enableJPEG libjpeg
     ++ lib.optional enablePNG libpng
@@ -55,8 +54,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isDarwin [ Cocoa QTKit ]
     ;
 
-  propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
-
   nativeBuildInputs = [ cmake pkg-config unzip ];
 
   NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
@@ -67,7 +64,7 @@ stdenv.mkDerivation rec {
     (opencvFlag "PNG" enablePNG)
     (opencvFlag "OPENEXR" enableEXR)
     (opencvFlag "GSTREAMER" enableGStreamer)
-  ];
+  ] ++ lib.optional (!enableUnfree) "-DBUILD_opencv_nonfree=OFF";
 
   hardeningDisable = [ "bindnow" "relro" ];
 
@@ -77,12 +74,10 @@ stdenv.mkDerivation rec {
     sed -i $dev/lib/pkgconfig/opencv.pc -e "s|includedir_new=.*|includedir_new=$dev/include|"
   '';
 
-  passthru = lib.optionalAttrs enablePython { pythonPath = []; };
-
   meta = with lib; {
     description = "Open Computer Vision Library with more than 500 algorithms";
     homepage = "https://opencv.org/";
-    license = licenses.bsd3;
+    license = if enableUnfree then licenses.unfree else licenses.bsd3;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };

@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchurl
-, fetchpatch
 , autoreconfHook
 , docbook_xml_dtd_45
 , docbook-xsl-nons
@@ -49,18 +48,19 @@
 , dconf
 , gsettings-desktop-schemas
 , librsvg
+, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
   pname = "flatpak";
-  version = "1.10.2";
+  version = "1.12.7";
 
   # TODO: split out lib once we figure out what to do with triggerdir
   outputs = [ "out" "dev" "man" "doc" "devdoc" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-2xUnOdBy+P8pnk6IjYljobRTjaexDguGUlvkOPLh3eQ=";
+    sha256 = "sha256-bbUqUxzieCgqx+v7mfZqC7PsyvROhkhEwslcHuW6kxY="; # Taken from https://github.com/flatpak/flatpak/releases/
   };
 
   patches = [
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     # Hardcode paths used by Flatpak itself.
     (substituteAll {
       src = ./fix-paths.patch;
-      p11kit = "${p11-kit.dev}/bin/p11-kit";
+      p11kit = "${p11-kit.bin}/bin/p11-kit";
     })
 
     # Adapt paths exposed to sandbox for NixOS.
@@ -89,19 +89,6 @@ stdenv.mkDerivation rec {
     # Allow gtk-doc to find schemas using XML_CATALOG_FILES environment variable.
     # Patch taken from gtk-doc expression.
     ./respect-xml-catalog-files-var.patch
-
-    # Don’t hardcode flatpak binary path in launchers stored under user’s profile otherwise they will break after Flatpak update.
-    # https://github.com/NixOS/nixpkgs/issues/43581
-    ./use-flatpak-from-path.patch
-
-    # Hardcode flatpak binary path for flatpak-spawn.
-    # When calling the portal’s Spawn command with FLATPAK_SPAWN_FLAGS_CLEAR_ENV flag,
-    # it will clear environment, including PATH, making the flatpak run fail.
-    # https://github.com/flatpak/flatpak/pull/4174
-    (fetchpatch {
-      url = "https://github.com/flatpak/flatpak/commit/495449daf6d3c072519a36c9e4bc6cc1da4d31db.patch";
-      sha256 = "gOX/sGupAE7Yg3MVrMhFXzWHpFn+izVyjtkuPzIckuY=";
-    })
 
     # Nix environment hacks should not leak into the apps.
     # https://github.com/NixOS/nixpkgs/issues/53441
@@ -189,7 +176,14 @@ stdenv.mkDerivation rec {
   in ''
     patchShebangs buildutil
     patchShebangs tests
-    PATH=${lib.makeBinPath [vsc-py]}:$PATH patchShebangs --build variant-schema-compiler/variant-schema-compiler
+    PATH=${lib.makeBinPath [vsc-py]}:$PATH patchShebangs --build subprojects/variant-schema-compiler/variant-schema-compiler
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # Use flatpak from PATH in exported assets (e.g. desktop files).
+      --set FLATPAK_BINARY flatpak
+    )
   '';
 
   passthru = {

@@ -1,7 +1,7 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
-, python
 , scikit-learn
 , scipy
 , pytest
@@ -32,6 +32,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "A Python implementation of global optimization with gaussian processes";
     homepage = "https://github.com/fmfn/BayesianOptimization";
     license = licenses.mit;

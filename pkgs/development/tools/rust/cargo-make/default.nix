@@ -13,11 +13,11 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-make";
-  version = "0.35.0";
+  version = "0.35.15";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-pC3iX5jAPBArxs+YECDyUW5+MP+/f2HMLZNjo+BoKOE=";
+    sha256 = "sha256-fHW3ypi/BlfDybhnHOmPoBlyMdf3ZK7pOnH35cvhhRU=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration libiconv ];
 
-  cargoSha256 = "sha256-Zp2LoeCnpYupi/QY3Ft1VQ+O/y3I96UaouEFs9QpbLg=";
+  cargoSha256 = "sha256-Az7A0VMlWv34uUeM0TH7tT5FPja/j0x6aoF7qDw8JCs=";
 
   # Some tests fail because they need network access.
   # However, Travis ensures a proper build.
@@ -37,6 +37,6 @@ rustPlatform.buildRustPackage rec {
     description = "A Rust task runner and build tool";
     homepage = "https://github.com/sagiegurari/cargo-make";
     license = licenses.asl20;
-    maintainers = with maintainers; [ xrelkd ma27 ];
+    maintainers = with maintainers; [ xrelkd ];
   };
 }

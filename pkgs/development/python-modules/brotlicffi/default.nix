@@ -22,6 +22,10 @@ buildPythonPackage rec {
     brotli
   ];
 
+  propagatedNativeBuildInputs = [
+    cffi
+  ];
+
   propagatedBuildInputs = [
     cffi
   ];
@@ -30,7 +34,7 @@ buildPythonPackage rec {
     export USE_SHARED_BROTLI=1
   '';
 
-  # Test data is not available, only when using libbortli git checkout
+  # Test data is not available, only when using libbrotli git checkout
   doCheck = false;
 
   pythonImportsCheck = [ "brotlicffi" ];

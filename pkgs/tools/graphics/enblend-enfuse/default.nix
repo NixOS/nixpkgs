@@ -1,25 +1,38 @@
-{ lib, stdenv, fetchurl
-, boost, freeglut, glew, gsl, lcms2, libpng, libtiff, libGLU, libGL, vigra
-, help2man, pkg-config, perl, texlive }:
+{ lib, stdenv, fetchzip
+, autoreconfHook
+, boost
+, freeglut
+, glew
+, gsl
+, lcms2
+, libpng
+, libtiff
+, libGLU
+, libGL
+, vigra
+, help2man
+, pkg-config
+, perl
+, texlive
+}:
 
 stdenv.mkDerivation rec {
   pname = "enblend-enfuse";
-  version = "4.2";
+  version = "unstable-2022-03-06";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/enblend/${pname}-${version}.tar.gz";
-    sha256 = "0j5x011ilalb47ssah50ag0a4phgh1b0wdgxdbbp1gcyjcjf60w7";
+  src = fetchzip {
+    url = "https://sourceforge.net/code-snapshots/hg/e/en/enblend/code/enblend-code-0f423c72e51872698fe2985ca3bd453961ffe4e0.zip";
+    sha256 = "sha256-0gCUSdg3HR3YeIbOByEBCZh2zGlYur6DeCOzUM53fdc=";
+    stripRoot = true;
   };
 
   buildInputs = [ boost freeglut glew gsl lcms2 libpng libtiff libGLU libGL vigra ];
 
-  nativeBuildInputs = [ help2man perl pkg-config texlive.combined.scheme-small ];
+  nativeBuildInputs = [ autoreconfHook help2man perl pkg-config texlive.combined.scheme-small ];
 
   preConfigure = ''
     patchShebangs src/embrace
   '';
-
-  enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = "http://enblend.sourceforge.net/";

@@ -1,7 +1,8 @@
 { lib, stdenv, fetchurl, pkg-config
 , ncurses, db , popt, libtool
+, libiconv, CoreServices
 # Sound sub-systems
-, alsaSupport ? true, alsa-lib
+, alsaSupport ? (!stdenv.isDarwin), alsa-lib
 , pulseSupport ? true, libpulseaudio, autoreconfHook
 , jackSupport ? true, libjack2
 , ossSupport ? true
@@ -23,11 +24,7 @@
 , withDebug ? false
 }:
 
-let
-  opt = lib.optional;
-  mkFlag = c: f: if c then "--with-${f}" else "--without-${f}";
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
 
   pname = "moc";
   version = "2.5.2";
@@ -38,55 +35,56 @@ in stdenv.mkDerivation rec {
   };
 
   patches = []
-    ++ opt ffmpegSupport ./moc-ffmpeg4.patch
-    ++ opt pulseSupport ./pulseaudio.patch;
+    ++ lib.optional ffmpegSupport ./moc-ffmpeg4.patch
+    ++ lib.optional pulseSupport ./pulseaudio.patch;
 
   nativeBuildInputs = [ pkg-config ]
-    ++ opt pulseSupport autoreconfHook;
+    ++ lib.optional pulseSupport autoreconfHook;
 
   buildInputs = [ ncurses db popt libtool ]
     # Sound sub-systems
-    ++ opt alsaSupport alsa-lib
-    ++ opt pulseSupport libpulseaudio
-    ++ opt jackSupport libjack2
+    ++ lib.optional alsaSupport alsa-lib
+    ++ lib.optional pulseSupport libpulseaudio
+    ++ lib.optional jackSupport libjack2
     # Audio formats
-    ++ opt (aacSupport || mp3Support) libid3tag
-    ++ opt aacSupport faad2
-    ++ opt flacSupport flac
-    ++ opt midiSupport timidity
-    ++ opt modplugSupport libmodplug
-    ++ opt mp3Support libmad
+    ++ lib.optional (aacSupport || mp3Support) libid3tag
+    ++ lib.optional aacSupport faad2
+    ++ lib.optional flacSupport flac
+    ++ lib.optional midiSupport timidity
+    ++ lib.optional modplugSupport libmodplug
+    ++ lib.optional mp3Support libmad
     ++ lib.optionals musepackSupport [ libmpc libmpcdec taglib ]
-    ++ opt vorbisSupport libvorbis
-    ++ opt speexSupport speex
-    ++ opt ffmpegSupport ffmpeg
-    ++ opt sndfileSupport libsndfile
-    ++ opt wavpackSupport wavpack
+    ++ lib.optional vorbisSupport libvorbis
+    ++ lib.optional speexSupport speex
+    ++ lib.optional ffmpegSupport ffmpeg
+    ++ lib.optional sndfileSupport libsndfile
+    ++ lib.optional wavpackSupport wavpack
     # Misc
-    ++ opt curlSupport curl
-    ++ opt samplerateSupport libsamplerate;
+    ++ lib.optional curlSupport curl
+    ++ lib.optional samplerateSupport libsamplerate
+    ++ lib.optionals stdenv.isDarwin [ libiconv CoreServices ];
 
   configureFlags = [
     # Sound sub-systems
-    (mkFlag alsaSupport "alsa")
-    (mkFlag pulseSupport "pulse")
-    (mkFlag jackSupport "jack")
-    (mkFlag ossSupport "oss")
+    (lib.withFeature alsaSupport "alsa")
+    (lib.withFeature pulseSupport "pulse")
+    (lib.withFeature jackSupport "jack")
+    (lib.withFeature ossSupport "oss")
     # Audio formats
-    (mkFlag aacSupport "aac")
-    (mkFlag flacSupport "flac")
-    (mkFlag midiSupport "timidity")
-    (mkFlag modplugSupport "modplug")
-    (mkFlag mp3Support "mp3")
-    (mkFlag musepackSupport "musepack")
-    (mkFlag vorbisSupport "vorbis")
-    (mkFlag speexSupport "speex")
-    (mkFlag ffmpegSupport "ffmpeg")
-    (mkFlag sndfileSupport "sndfile")
-    (mkFlag wavpackSupport "wavpack")
+    (lib.withFeature aacSupport "aac")
+    (lib.withFeature flacSupport "flac")
+    (lib.withFeature midiSupport "timidity")
+    (lib.withFeature modplugSupport "modplug")
+    (lib.withFeature mp3Support "mp3")
+    (lib.withFeature musepackSupport "musepack")
+    (lib.withFeature vorbisSupport "vorbis")
+    (lib.withFeature speexSupport "speex")
+    (lib.withFeature ffmpegSupport "ffmpeg")
+    (lib.withFeature sndfileSupport "sndfile")
+    (lib.withFeature wavpackSupport "wavpack")
     # Misc
-    (mkFlag curlSupport "curl")
-    (mkFlag samplerateSupport "samplerate")
+    (lib.withFeature curlSupport "curl")
+    (lib.withFeature samplerateSupport "samplerate")
     ("--enable-debug=" + (if withDebug then "yes" else "no"))
     "--disable-cache"
     "--without-rcc"
@@ -97,6 +95,6 @@ in stdenv.mkDerivation rec {
     homepage = "http://moc.daper.net/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ aethelz pSub jagajaga ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

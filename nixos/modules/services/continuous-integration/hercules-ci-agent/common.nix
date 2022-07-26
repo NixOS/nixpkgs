@@ -1,16 +1,17 @@
 /*
 
-This file is for options that NixOS and nix-darwin have in common.
+  This file is for options that NixOS and nix-darwin have in common.
 
-Platform-specific code is in the respective default.nix files.
+  Platform-specific code is in the respective default.nix files.
 
- */
+*/
 
 { config, lib, options, pkgs, ... }:
 let
   inherit (lib)
     filterAttrs
-    literalExample
+    literalDocBook
+    literalExpression
     mkIf
     mkOption
     mkRemovedOptionModule
@@ -26,6 +27,16 @@ let
   settingsModule = { config, ... }: {
     freeformType = format.type;
     options = {
+      apiBaseUrl = mkOption {
+        description = ''
+          API base URL that the agent will connect to.
+
+          When using Hercules CI Enterprise, set this to the URL where your
+          Hercules CI server is reachable.
+        '';
+        type = types.str;
+        default = "https://hercules-ci.com";
+      };
       baseDirectory = mkOption {
         type = types.path;
         default = "/var/lib/hercules-ci-agent";
@@ -54,43 +65,88 @@ let
         type = types.either types.ints.positive (types.enum [ "auto" ]);
         default = "auto";
       };
+      labels = mkOption {
+        description = ''
+          A key-value map of user data.
+
+          This data will be available to organization members in the dashboard and API.
+
+          The values can be of any TOML type that corresponds to a JSON type, but arrays
+          can not contain tables/objects due to limitations of the TOML library. Values
+          involving arrays of non-primitive types may not be representable currently.
+        '';
+        type = format.type;
+        defaultText = literalExpression ''
+          {
+            agent.source = "..."; # One of "nixpkgs", "flake", "override"
+            lib.version = "...";
+            pkgs.version = "...";
+          }
+        '';
+      };
       workDirectory = mkOption {
         description = ''
           The directory in which temporary subdirectories are created for task state. This includes sources for Nix evaluation.
         '';
         type = types.path;
         default = config.baseDirectory + "/work";
-        defaultText = literalExample ''baseDirectory + "/work"'';
+        defaultText = literalExpression ''baseDirectory + "/work"'';
       };
       staticSecretsDirectory = mkOption {
         description = ''
           This is the default directory to look for statically configured secrets like <literal>cluster-join-token.key</literal>.
+
+          See also <literal>clusterJoinTokenPath</literal> and <literal>binaryCachesPath</literal> for fine-grained configuration.
         '';
         type = types.path;
         default = config.baseDirectory + "/secrets";
-        defaultText = literalExample ''baseDirectory + "/secrets"'';
+        defaultText = literalExpression ''baseDirectory + "/secrets"'';
       };
       clusterJoinTokenPath = mkOption {
         description = ''
           Location of the cluster-join-token.key file.
+
+          You can retrieve the contents of the file when creating a new agent via
+          <link xlink:href="https://hercules-ci.com/dashboard">https://hercules-ci.com/dashboard</link>.
+
+          As this value is confidential, it should not be in the store, but
+          installed using other means, such as agenix, NixOps
+          <literal>deployment.keys</literal>, or manual installation.
+
+          The contents of the file are used for authentication between the agent and the API.
         '';
         type = types.path;
         default = config.staticSecretsDirectory + "/cluster-join-token.key";
-        defaultText = literalExample ''staticSecretsDirectory + "/cluster-join-token.key"'';
-        # internal: It's a bit too detailed to show by default in the docs,
-        # but useful to define explicitly to allow reuse by other modules.
-        internal = true;
+        defaultText = literalExpression ''staticSecretsDirectory + "/cluster-join-token.key"'';
       };
       binaryCachesPath = mkOption {
         description = ''
-          Location of the binary-caches.json file.
+          Path to a JSON file containing binary cache secret keys.
+
+          As these values are confidential, they should not be in the store, but
+          copied over using other means, such as agenix, NixOps
+          <literal>deployment.keys</literal>, or manual installation.
+
+          The format is described on <link xlink:href="https://docs.hercules-ci.com/hercules-ci-agent/binary-caches-json/">https://docs.hercules-ci.com/hercules-ci-agent/binary-caches-json/</link>.
         '';
         type = types.path;
         default = config.staticSecretsDirectory + "/binary-caches.json";
-        defaultText = literalExample ''staticSecretsDirectory + "/binary-caches.json"'';
-        # internal: It's a bit too detailed to show by default in the docs,
-        # but useful to define explicitly to allow reuse by other modules.
-        internal = true;
+        defaultText = literalExpression ''staticSecretsDirectory + "/binary-caches.json"'';
+      };
+      secretsJsonPath = mkOption {
+        description = ''
+          Path to a JSON file containing secrets for effects.
+
+          As these values are confidential, they should not be in the store, but
+          copied over using other means, such as agenix, NixOps
+          <literal>deployment.keys</literal>, or manual installation.
+
+          The format is described on <link xlink:href="https://docs.hercules-ci.com/hercules-ci-agent/secrets-json/">https://docs.hercules-ci.com/hercules-ci-agent/secrets-json/</link>.
+
+        '';
+        type = types.path;
+        default = config.staticSecretsDirectory + "/secrets.json";
+        defaultText = literalExpression ''staticSecretsDirectory + "/secrets.json"'';
       };
     };
   };
@@ -158,7 +214,7 @@ in
       '';
       type = types.package;
       default = pkgs.hercules-ci-agent;
-      defaultText = literalExample "pkgs.hercules-ci-agent";
+      defaultText = literalExpression "pkgs.hercules-ci-agent";
     };
     settings = mkOption {
       description = ''
@@ -176,11 +232,11 @@ in
 
       These are written as options instead of let binding to allow sharing with
       default.nix on both NixOS and nix-darwin.
-     */
+    */
     tomlFile = mkOption {
       type = types.path;
       internal = true;
-      defaultText = "generated hercules-ci-agent.toml";
+      defaultText = literalDocBook "generated <literal>hercules-ci-agent.toml</literal>";
       description = ''
         The fully assembled config file.
       '';

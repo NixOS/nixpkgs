@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ashuffle";
-  version = "3.10.1";
+  version = "3.12.5";
 
   src = fetchFromGitHub {
     owner = "joshkunz";
     repo = "ashuffle";
     rev = "v${version}";
-    sha256 = "103jhajqwryiaf52qqgshajcnsxsz4l8gn3sz6bxs7k0yq5x1knr";
+    sha256 = "sha256-dPgv6EzRxRdHkGvys601Bkg9Srd8oEjoE9jbAin74Vk=";
     fetchSubmodules = true;
   };
 

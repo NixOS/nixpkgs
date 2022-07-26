@@ -1,17 +1,18 @@
-{ lib
+{ stdenv
+, lib
 , buildGoModule
 , fetchFromGitHub
 }:
 
 buildGoModule rec {
   pname = "traitor";
-  version = "0.0.8";
+  version = "0.0.14";
 
   src = fetchFromGitHub {
     owner = "liamg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-eUeKkjSpKel6XH3/VVw/WPCG/Nq8BcZwMNFG9z9FUuU=";
+    sha256 = "sha256-LQfKdjZaTm5z8DUt6He/RJHbOUCUwP3CV3Fyt5rJIfU=";
   };
 
   vendorSha256 = null;
@@ -24,6 +25,7 @@ buildGoModule rec {
       (including most of GTFOBins) in order to pop a root shell.
     '';
     homepage = "https://github.com/liamg/traitor";
+    platforms = platforms.linux;
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

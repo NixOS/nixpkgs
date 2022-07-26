@@ -3,28 +3,28 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pytest-xdist
+, torchvision
 , pythonOlder
 , matplotlib
 , mock
 , pytorch
-, pynvml
 , scikit-learn
 , tqdm
 }:
 
 buildPythonPackage rec {
   pname = "ignite";
-  version = "0.4.5";
+  version = "0.4.8";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-FGFpaqq7InwRqFmQTmXGpJEjRUB69ZN/l20l42L2BAA=";
+    sha256 = "sha256-S4wL1RyQ6aDW16wbSl+86VhSJ2S9oanYhNtPQdBtdrA=";
   };
 
-  checkInputs = [ pytestCheckHook matplotlib mock pytest-xdist ];
-  propagatedBuildInputs = [ pytorch scikit-learn tqdm pynvml ];
+  checkInputs = [ pytestCheckHook matplotlib mock pytest-xdist torchvision ];
+  propagatedBuildInputs = [ pytorch scikit-learn tqdm ];
 
   # runs succesfully in 3.9, however, async isn't correctly closed so it will fail after test suite.
   doCheck = pythonOlder "3.9";
@@ -38,6 +38,7 @@ buildPythonPackage rec {
     "--ignore=tests/ignite/contrib/handlers/test_trains_logger.py"
     "--ignore=tests/ignite/metrics/nlp/test_bleu.py"
     "--ignore=tests/ignite/metrics/nlp/test_rouge.py"
+    "--ignore=tests/ignite/metrics/gan" # requires pytorch_fid; tries to download model to $HOME
     "--ignore=tests/ignite/metrics/test_dill.py"
     "--ignore=tests/ignite/metrics/test_psnr.py"
     "--ignore=tests/ignite/metrics/test_ssim.py"
@@ -49,6 +50,7 @@ buildPythonPackage rec {
     "idist"
     "mlflow"
     "tensorboard"
+    "test_gpu_info" # needs pynvml
     "test_integration"
     "test_output_handler" # needs mlflow
     "test_pbar" # slight output differences

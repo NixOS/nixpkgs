@@ -5,26 +5,28 @@
 , pytestCheckHook
 , pythonOlder
 , pyyaml
-, ruamel_yaml
+, ruamel-yaml
 , toml
 }:
 
 buildPythonPackage rec {
   pname = "python-box";
-  version = "5.3.0";
+  version = "6.0.2";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "cdgriffith";
     repo = "Box";
     rev = version;
-    sha256 = "0fhmkjdcacpwyg7fajqfvnv3n9xd9rxjdpvi8z3j73a1gls36gf4";
+    hash = "sha256-IE2qyRzvrOTymwga+hCwE785sAVTqQtcN1DL/uADpbQ=";
   };
 
   propagatedBuildInputs = [
     msgpack
     pyyaml
-    ruamel_yaml
+    ruamel-yaml
     toml
   ];
 
@@ -32,7 +34,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "box" ];
+  pythonImportsCheck = [
+    "box"
+  ];
 
   meta = with lib; {
     description = "Python dictionaries with advanced dot notation access";

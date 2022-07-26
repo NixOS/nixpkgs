@@ -1,19 +1,20 @@
-{ mkDerivation, lib, fetchFromGitLab, libarchive, xz, zlib, bzip2, cmake, ninja }:
+{ mkDerivation, lib, fetchFromGitLab, libarchive, xz, zlib, bzip2, meson, pkg-config, ninja }:
 
 mkDerivation rec {
   pname = "libarchive-qt";
-  version = "2.0.4";
+  version = "2.0.7";
 
   src = fetchFromGitLab {
     owner = "marcusbritanicus";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-onTV9dgk6Yl9H35EvA6/8vk1IrYH8vg9OQNVgzkt4q4";
+    sha256 = "sha256-KRywB+Op44N00q9tgO2WNCliRgUDRvrCms1O8JYt62o=";
   };
 
   nativeBuildInputs = [
-    cmake
+    meson
     ninja
+    pkg-config
   ];
 
   buildInputs = [

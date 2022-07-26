@@ -1,23 +1,19 @@
-{ lib, fetchFromGitHub }:
+{ lib, fetchzip }:
 
 let
-  version = "1.6";
-in fetchFromGitHub {
+  version = "2.010";
+in
+fetchzip {
   name = "work-sans-${version}";
 
-  owner = "weiweihuanghuang";
-  repo = "Work-Sans";
-  rev = "v${version}";
+  url = "https://github.com/weiweihuanghuang/Work-Sans/archive/refs/tags/v${version}.zip";
 
   postFetch = ''
-    tar xf $downloadedFile --strip=1
-    install -m444 -Dt $out/share/fonts/opentype/ fonts/desktop/*.otf
-    install -m444 -Dt $out/share/fonts/truetype/ fonts/webfonts/ttf/*.ttf
-    install -m444 -Dt $out/share/fonts/woff/     fonts/webfonts/woff/*.woff
-    install -m444 -Dt $out/share/fonts/woff2/    fonts/webfonts/woff2/*.woff2
+    mkdir -p $out/share/fonts
+    unzip -j $downloadedFile "*/fonts/*.ttf" -d $out/share/fonts/opentype
   '';
 
-  sha256 = "01kjidk6zv80rqxapcdwhd9wxzrjfc6lj4gkf6dwa4sskw5x3b8a";
+  sha256 = "sha256-S4O5EoKY4w/p+MHeHRCmPyQRAOUfEwNiETxMgNcsrws=";
 
   meta = with lib; {
     description = "A grotesque sans";

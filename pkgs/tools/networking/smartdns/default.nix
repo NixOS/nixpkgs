@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, openssl }:
+{ lib, stdenv, fetchFromGitHub, openssl, testers, smartdns }:
 
 stdenv.mkDerivation rec {
   pname = "smartdns";
-  version = "33";
+  version = "36.1";
 
   src = fetchFromGitHub {
     owner = "pymumu";
     repo = pname;
     rev = "Release${version}";
-    sha256 = "0cmzpm4y1yi96mg2cz2byqw6vl62dgnikldy08q43vi7jl3y0749";
+    sha256 = "sha256-5pAt7IjgbCCGaHeSoQvuoc6KPD9Yn5iXL1CAawgBeY0=";
   };
 
   buildInputs = [ openssl ];
@@ -17,9 +17,15 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
     "SYSTEMDSYSTEMUNITDIR=${placeholder "out"}/lib/systemd/system"
     "RUNSTATEDIR=/run"
+    # by default it is the build time... weird... https://github.com/pymumu/smartdns/search?q=ver
+    "VER=${version}"
   ];
 
   installFlags = [ "SYSCONFDIR=${placeholder "out"}/etc" ];
+
+  passthru.tests = {
+    version = testers.testVersion { package = smartdns; };
+  };
 
   meta = with lib; {
     description =

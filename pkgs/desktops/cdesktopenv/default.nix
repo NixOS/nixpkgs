@@ -1,7 +1,9 @@
-{ lib, stdenv, fetchurl, xorgproto, libX11, bison, ksh, perl, gnum4
+{ lib, stdenv, fetchurl
+, fetchpatch
+, xorgproto, libX11, bison, ksh, perl, gnum4
 , libXinerama, libXt, libXext, libtirpc, motif, libXft, xbitmaps
 , libjpeg, libXmu, libXdmcp, libXScrnSaver, symlinkJoin, bdftopcf
-, ncompress, mkfontdir, tcl, libXaw, gcc, glibcLocales, gawk
+, ncompress, mkfontdir, tcl, libXaw, gcc, glibcLocales
 , autoPatchelfHook, libredirect, makeWrapper, xset, xrdb, fakeroot
 , rpcsvc-proto }:
 
@@ -16,10 +18,10 @@ let
   };
 in stdenv.mkDerivation rec {
   version = "2.3.2";
-  name = "cde-${version}";
+  pname = "cde";
 
   src = fetchurl {
-    url = "mirror://sourceforge/cdesktopenv/${name}.tar.gz";
+    url = "mirror://sourceforge/cdesktopenv/cde-${version}.tar.gz";
     sha256 = "029rljhi5r483x8rzdpl8625z0wx8r7k2m0364nbw66h5pig9lbx";
   };
 
@@ -27,6 +29,13 @@ in stdenv.mkDerivation rec {
   patches = [
     ./2.3.2.patch
     ./0001-all-remove-deprecated-sys_errlist-and-replace-with-A.patch
+
+    (fetchpatch {
+      name = "binutils-2.36.patch";
+      url = "https://github.com/cdesktopenv/cde/commit/0b7849e210a99a413ddeb52a0eb5aef9a08504a0.patch";
+      sha256 = "0wlhs617hws3rwln9v74y1nw27n3pp7jkpnxlala7k5y64506ipj";
+      stripLen = 1;
+    })
   ];
 
   buildInputs = [
@@ -34,9 +43,16 @@ in stdenv.mkDerivation rec {
     libjpeg libXmu libXdmcp libXScrnSaver tcl libXaw ksh
   ];
   nativeBuildInputs = [
-    bison ncompress gawk autoPatchelfHook makeWrapper fakeroot
+    bison ncompress autoPatchelfHook makeWrapper fakeroot
     rpcsvc-proto
   ];
+  # build fails otherwise
+  enableParallelBuilding = false;
+
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: raima/startup.o:/build/cde-2.3.2/lib/DtSearch/raima/dbtype.h:408: multiple definition of
+  #     `__SK__'; raima/alloc.o:/build/cde-2.3.2/lib/DtSearch/raima/dbtype.h:408: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
 
   makeFlags = [
     "World"
@@ -44,6 +60,19 @@ in stdenv.mkDerivation rec {
     "IMAKECPP=cpp"
     "LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive"
   ];
+
+  preConfigure = ''
+    # binutils 2.37 fix
+    fixupList=(
+      "config/cf/Imake.tmpl"
+      "config/util/crayar.sh"
+      "config/util/crayar.sh"
+      "programs/dtwm/Makefile.tmpl"
+    )
+    for toFix in "''${fixupList[@]}"; do
+      substituteInPlace "$toFix" --replace "clq" "cq"
+    done
+  '';
 
   preBuild = ''
     while IFS= read -r -d ''$'\0' i; do

@@ -9,14 +9,16 @@
 
 buildPythonPackage rec {
   pname = "fpyutils";
-  version = "2.0.0";
+  version = "2.2.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "frnmst";
     repo = pname;
     rev = version;
-    sha256 = "1n15fvd6191ixxsza49fdd8j43hs0agagg8k9v6rc7by1ffqnl2b";
+    sha256 = "sha256-QnsLQq5u5Fhy9DJD/UE46NstSPvmHyDjS4WiubSTmSA=";
   };
 
   propagatedBuildInputs = [
@@ -28,14 +30,18 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "fpyutils/tests/*.py" ];
+  pytestFlagsArray = [
+    "fpyutils/tests/*.py"
+  ];
 
   disabledTests = [
     # Don't run test which requires bash
     "test_execute_command_live_output"
   ];
 
-  pythonImportsCheck = [ "fpyutils" ];
+  pythonImportsCheck = [
+    "fpyutils"
+  ];
 
   meta = with lib; {
     description = "Collection of useful non-standard Python functions";

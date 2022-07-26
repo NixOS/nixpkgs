@@ -6,6 +6,8 @@ let
 
   cfg = config.services.xserver.displayManager;
   gdm = pkgs.gnome.gdm;
+  settingsFormat = pkgs.formats.ini { };
+  configFile = settingsFormat.generate "custom.conf" cfg.gdm.settings;
 
   xSessionWrapper = if (cfg.setupCommands == "") then null else
     pkgs.writeScript "gdm-x-session-wrapper" ''
@@ -24,7 +26,6 @@ let
     load-module module-udev-detect
     load-module module-native-protocol-unix
     load-module module-default-device-restore
-    load-module module-rescue-streams
     load-module module-always-sink
     load-module module-intended-roles
     load-module module-suspend-on-idle
@@ -52,6 +53,8 @@ in
       "autoLogin"
       "user"
     ])
+
+    (mkRemovedOptionModule [ "services" "xserver" "displayManager" "gdm" "nvidiaWayland" ] "We defer to GDM whether Wayland should be enabled.")
   ];
 
   meta = {
@@ -82,17 +85,6 @@ in
         default = true;
         description = ''
           Allow GDM to run on Wayland instead of Xserver.
-          Note to enable Wayland with Nvidia you need to
-          enable the <option>nvidiaWayland</option>.
-        '';
-      };
-
-      nvidiaWayland = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to allow wayland to be used with the proprietary
-          NVidia graphics driver.
         '';
       };
 
@@ -103,6 +95,18 @@ in
           (Does not affect automatic suspend while logged in, or at lock screen.)
         '';
         type = types.bool;
+      };
+
+      settings = mkOption {
+        type = settingsFormat.type;
+        default = { };
+        example = {
+          debug.enable = true;
+        };
+        description = ''
+          Options passed to the gdm daemon.
+          See <link xlink:href="https://help.gnome.org/admin/gdm/stable/configuration.html.en#daemonconfig">here</link> for supported options.
+        '';
       };
 
     };
@@ -136,7 +140,13 @@ in
         environment = {
           GDM_X_SERVER_EXTRA_ARGS = toString
             (filter (arg: arg != "-terminate") cfg.xserverArgs);
-          XDG_DATA_DIRS = "${cfg.sessionData.desktops}/share/";
+          XDG_DATA_DIRS = lib.makeSearchPath "share" [
+            gdm # for gnome-login.session
+            cfg.sessionData.desktops
+            pkgs.gnome.gnome-control-center # for accessibility icon
+            pkgs.gnome.adwaita-icon-theme
+            pkgs.hicolor-icon-theme # empty icon theme as a base
+          ];
         } // optionalAttrs (xSessionWrapper != null) {
           # Make GDM use this wrapper before running the session, which runs the
           # configured setupCommands. This relies on a patched GDM which supports
@@ -164,14 +174,16 @@ in
     systemd.packages = with pkgs.gnome; [ gdm gnome-session gnome-shell ];
     environment.systemPackages = [ pkgs.gnome.adwaita-icon-theme ];
 
+    # We dont use the upstream gdm service
+    # it has to be disabled since the gdm package has it
+    # https://github.com/NixOS/nixpkgs/issues/108672
+    systemd.services.gdm.enable = false;
+
     systemd.services.display-manager.wants = [
       # Because sd_login_monitor_new requires /run/systemd/machines
       "systemd-machined.service"
       # setSessionScript wants AccountsService
       "accounts-daemon.service"
-      # Failed to open gpu '/dev/dri/card0': GDBus.Error:org.freedesktop.DBus.Error.AccessDenied: Operation not permitted
-      # https://github.com/NixOS/nixpkgs/pull/25311#issuecomment-609417621
-      "systemd-udev-settle.service"
     ];
 
     systemd.services.display-manager.after = [
@@ -181,7 +193,6 @@ in
       "getty@tty${gdm.initialVT}.service"
       "plymouth-quit.service"
       "plymouth-start.service"
-      "systemd-udev-settle.service"
     ];
     systemd.services.display-manager.conflicts = [
       "getty@tty${gdm.initialVT}.service"
@@ -215,19 +226,6 @@ in
     services.accounts-daemon.enable = true;
 
     services.dbus.packages = [ gdm ];
-
-    # We duplicate upstream's udev rules manually to make wayland with nvidia configurable
-    services.udev.extraRules = ''
-      # disable Wayland on Cirrus chipsets
-      ATTR{vendor}=="0x1013", ATTR{device}=="0x00b8", ATTR{subsystem_vendor}=="0x1af4", ATTR{subsystem_device}=="0x1100", RUN+="${gdm}/libexec/gdm-runtime-config set daemon WaylandEnable false"
-      # disable Wayland on Hi1710 chipsets
-      ATTR{vendor}=="0x19e5", ATTR{device}=="0x1711", RUN+="${gdm}/libexec/gdm-runtime-config set daemon WaylandEnable false"
-      ${optionalString (!cfg.gdm.nvidiaWayland) ''
-        DRIVER=="nvidia", RUN+="${gdm}/libexec/gdm-runtime-config set daemon WaylandEnable false"
-      ''}
-      # disable Wayland when modesetting is disabled
-      IMPORT{cmdline}="nomodeset", RUN+="${gdm}/libexec/gdm-runtime-config set daemon WaylandEnable false"
-    '';
 
     systemd.user.services.dbus.wantedBy = [ "default.target" ];
 
@@ -269,31 +267,26 @@ in
     # Use AutomaticLogin if delay is zero, because it's immediate.
     # Otherwise with TimedLogin with zero seconds the prompt is still
     # presented and there's a little delay.
-    environment.etc."gdm/custom.conf".text = ''
-      [daemon]
-      WaylandEnable=${boolToString cfg.gdm.wayland}
-      ${optionalString cfg.autoLogin.enable (
-        if cfg.gdm.autoLogin.delay > 0 then ''
-          TimedLoginEnable=true
-          TimedLogin=${cfg.autoLogin.user}
-          TimedLoginDelay=${toString cfg.gdm.autoLogin.delay}
-        '' else ''
-          AutomaticLoginEnable=true
-          AutomaticLogin=${cfg.autoLogin.user}
-        '')
-      }
+    services.xserver.displayManager.gdm.settings = {
+      daemon = mkMerge [
+        { WaylandEnable = cfg.gdm.wayland; }
+        # nested if else didn't work
+        (mkIf (cfg.autoLogin.enable && cfg.gdm.autoLogin.delay != 0 ) {
+          TimedLoginEnable = true;
+          TimedLogin = cfg.autoLogin.user;
+          TimedLoginDelay = cfg.gdm.autoLogin.delay;
+        })
+        (mkIf (cfg.autoLogin.enable && cfg.gdm.autoLogin.delay == 0 ) {
+          AutomaticLoginEnable = true;
+          AutomaticLogin = cfg.autoLogin.user;
+        })
+      ];
+      debug = mkIf cfg.gdm.debug {
+        Enable = true;
+      };
+    };
 
-      [security]
-
-      [xdmcp]
-
-      [greeter]
-
-      [chooser]
-
-      [debug]
-      ${optionalString cfg.gdm.debug "Enable=true"}
-    '';
+    environment.etc."gdm/custom.conf".source = configFile;
 
     environment.etc."gdm/Xsession".source = config.services.xserver.displayManager.sessionData.wrapper;
 
@@ -309,8 +302,8 @@ in
         password required       pam_deny.so
 
         session  required       pam_succeed_if.so audit quiet_success user = gdm
-        session  required       pam_env.so conffile=${config.system.build.pamEnvironment} readenv=0
-        session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
+        session  required       pam_env.so conffile=/etc/pam/environment readenv=0
+        session  optional       ${config.systemd.package}/lib/security/pam_systemd.so
         session  optional       pam_keyinit.so force revoke
         session  optional       pam_permit.so
       '';

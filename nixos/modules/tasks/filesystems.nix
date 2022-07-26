@@ -163,7 +163,7 @@ in
 
     fileSystems = mkOption {
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           "/".device = "/dev/hda1";
           "/data" = {
@@ -215,6 +215,35 @@ in
       '';
     };
 
+    boot.devSize = mkOption {
+      default = "5%";
+      example = "32m";
+      type = types.str;
+      description = ''
+        Size limit for the /dev tmpfs. Look at mount(8), tmpfs size option,
+        for the accepted syntax.
+      '';
+    };
+
+    boot.devShmSize = mkOption {
+      default = "50%";
+      example = "256m";
+      type = types.str;
+      description = ''
+        Size limit for the /dev/shm tmpfs. Look at mount(8), tmpfs size option,
+        for the accepted syntax.
+      '';
+    };
+
+    boot.runSize = mkOption {
+      default = "25%";
+      example = "256m";
+      type = types.str;
+      description = ''
+        Size limit for the /run tmpfs. Look at mount(8), tmpfs size option,
+        for the accepted syntax.
+      '';
+    };
   };
 
 
@@ -250,8 +279,9 @@ in
 
     environment.etc.fstab.text =
       let
-        fsToSkipCheck = [ "none" "bindfs" "btrfs" "zfs" "tmpfs" "nfs" "vboxsf" "glusterfs" ];
-        skipCheck = fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck;
+        fsToSkipCheck = [ "none" "bindfs" "btrfs" "zfs" "tmpfs" "nfs" "vboxsf" "glusterfs" "apfs" ];
+        isBindMount = fs: builtins.elem "bind" fs.options;
+        skipCheck = fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck || isBindMount fs;
         # https://wiki.archlinux.org/index.php/fstab#Filepath_spaces
         escape = string: builtins.replaceStrings [ " " "\t" ] [ "\\040" "\\011" ] string;
         swapOptions = sw: concatStringsSep "," (
@@ -264,6 +294,8 @@ in
         #
         # To make changes, edit the fileSystems and swapDevices NixOS options
         # in your /etc/nixos/configuration.nix file.
+        #
+        # <file system> <mount point>   <type>  <options>       <dump>  <pass>
 
         # Filesystems.
         ${concatMapStrings (fs:
@@ -321,7 +353,7 @@ in
             unitConfig.DefaultDependencies = false; # needed to prevent a cycle
             serviceConfig.Type = "oneshot";
           };
-      in listToAttrs (map formatDevice (filter (fs: fs.autoFormat) fileSystems)) // {
+      in listToAttrs (map formatDevice (filter (fs: fs.autoFormat && !(utils.fsNeededForBoot fs)) fileSystems)) // {
     # Mount /sys/fs/pstore for evacuating panic logs and crashdumps from persistent storage onto the disk using systemd-pstore.
     # This cannot be done with the other special filesystems because the pstore module (which creates the mount point) is not loaded then.
         "mount-pstore" = {

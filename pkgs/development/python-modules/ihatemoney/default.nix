@@ -1,20 +1,25 @@
-{ buildPythonPackage, lib, fetchFromGitHub, isPy27, nixosTests, fetchpatch, fetchPypi
+{ lib
+, buildPythonPackage
+, pythonOlder
+, nixosTests
+, fetchPypi
 , alembic
 , aniso8601
-, Babel
+, babel
 , blinker
+, cachetools
 , click
 , dnspython
-, email_validator
+, email-validator
 , flask
 , flask-babel
 , flask-cors
 , flask_mail
 , flask_migrate
 , flask-restful
-, flask_script
 , flask_sqlalchemy
-, flask_wtf
+, flask-talisman
+, flask-wtf
 , debts
 , idna
 , itsdangerous
@@ -23,104 +28,93 @@
 , markupsafe
 , python-dateutil
 , pytz
-, six
+, requests
 , sqlalchemy
+, sqlalchemy-utils
 , sqlalchemy-continuum
+, sqlalchemy-i18n
 , werkzeug
 , wtforms
 , psycopg2 # optional, for postgresql support
-, flask_testing
+, flask-testing
 , pytestCheckHook
 }:
 
-# ihatemoney is not really a library. It will only ever be imported
-# by the interpreter of uwsgi. So overrides for its depencies are fine.
-let
-  # https://github.com/spiral-project/ihatemoney/issues/567
-  pinned_wtforms = wtforms.overridePythonAttrs (old: rec {
-    pname = "WTForms";
-    version = "2.2.1";
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0q9vkcq6jnnn618h27lx9sas6s9qlg2mv8ja6dn0hy38gwzarnqc";
-    };
-  });
-  pinned_flask_wtf = flask_wtf.override { wtforms = pinned_wtforms; };
-in
-
 buildPythonPackage rec {
   pname = "ihatemoney";
-  version = "4.2";
+  version = "5.2.0";
+  format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "spiral-project";
-    repo = pname;
-    rev = version;
-    sha256 = "0d4vc6m0jkwlz9ly0hcjghccydvqbldh2jb8yzf94jrgkd5fd7k1";
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-uQgZBbpqqbZYHpR+GwHWX0c7di2rVvEz0jPRY6+BkkQ=";
   };
 
-  disabled = isPy27;
-
-  patches = [
-    # fix migration on postgresql
-    # remove on next release
-    (fetchpatch {
-      url = "https://github.com/spiral-project/ihatemoney/commit/6129191b26784b895e203fa3eafb89cee7d88b71.patch";
-      sha256 = "0yc24gsih9x3pnh2mhj4v5i71x02dq93a9jd2r8b1limhcl4p1sw";
-    })
-    (fetchpatch {
-      name = "CVE-2020-15120.patch";
-      url = "https://github.com/spiral-project/ihatemoney/commit/8d77cf5d5646e1d2d8ded13f0660638f57e98471.patch";
-      sha256 = "0y855sk3qsbpq7slj876k2ifa1lccc2dccag98pkyaadpz5gbabv";
-    })
-  ];
-
-  postPatch = ''
-    # remove draconian pinning
-    sed -i 's/==.*$//' setup.cfg
-  '';
-
   propagatedBuildInputs = [
-    alembic
     aniso8601
-    Babel
+    babel
     blinker
+    cachetools
     click
+    debts
     dnspython
-    email_validator
+    email-validator
     flask
-    flask-babel
-    flask-cors
     flask_mail
     flask_migrate
+    flask-wtf
+    flask-babel
+    flask-cors
     flask-restful
-    flask_script
-    flask_sqlalchemy
-    pinned_flask_wtf
+    flask-talisman
     idna
     itsdangerous
     jinja2
     Mako
     markupsafe
+    psycopg2
     python-dateutil
     pytz
-    six
+    requests
     sqlalchemy
     sqlalchemy-continuum
     werkzeug
-    pinned_wtforms
-    psycopg2
-    debts
+    wtforms
   ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "cachetools>=4.1,<5" "cachetools>=4.1" \
+      --replace "SQLAlchemy>=1.3.0,<1.4" "SQLAlchemy>=1.3.0,<1.5" \
+      --replace "WTForms>=2.3.1,<3.1" "WTForms"
+  '';
 
   checkInputs = [
-    flask_testing pytestCheckHook
+    flask-testing
+    pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--pyargs ihatemoney.tests.tests" ];
+  pythonImportsCheck = [
+    "ihatemoney"
+  ];
+
   disabledTests = [
-    "test_notifications"  # requires running service.
-    "test_invite"         # requires running service.
+    # Requires running service
+    "test_notifications"
+    "test_invite"
+    "test_access_other_projects"
+    "test_authentication"
+    "test_manage_bills"
+    "test_member_delete_method"
+    "test_membership"
+    "test_bill_add_remove_add"
+    "test_clear_ip_records"
+    "test_disable_clear_no_new_records"
+    "test_logs_for_common_actions"
+    # Requires DNS resolution
+    "test_invitation_email_failure"
   ];
 
   passthru.tests = {
@@ -128,11 +122,9 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
+    description = "Shared budget manager web application";
     homepage = "https://ihatemoney.org";
-    description = "A simple shared budget manager web application";
     license = licenses.beerware;
-    maintainers = [ maintainers.symphorien ];
+    maintainers = with maintainers; [ symphorien ];
   };
 }
-
-

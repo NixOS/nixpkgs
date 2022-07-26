@@ -1,47 +1,41 @@
 { lib
 , buildPythonPackage
-, isPy3k
+, pythonOlder
 , fetchFromGitHub
 , requests
 , matrix-client
 , distro
-, cryptography
-, pyopenssl
+, click
+, typing-extensions
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "zulip";
-  version = "0.8.0";
+  version = "0.8.2";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.6";
 
   # no sdist on PyPI
   src = fetchFromGitHub {
     owner = "zulip";
     repo = "python-zulip-api";
     rev = version;
-    sha256 = "sha256-gJ+YRJC6wmQzPakApOqytyPy34cS/jjzEZhRIvWUBIQ=";
+    hash = "sha256-Z5WrV/RDQwdKUBF86M5/xWhXn3fGNqJtqO5PTd7s5ME=";
   };
-  sourceRoot = "source/zulip";
+  sourceRoot = "${src.name}/zulip";
 
   propagatedBuildInputs = [
     requests
     matrix-client
     distro
-
-    # from requests[security]
-    cryptography
-    pyopenssl
+    click
+    typing-extensions
   ];
 
   checkInputs = [
     pytestCheckHook
   ];
-
-  preCheck = ''
-    export COLUMNS=80
-  '';
 
   pythonImportsCheck = [ "zulip" ];
 

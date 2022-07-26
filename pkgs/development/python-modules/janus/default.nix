@@ -1,15 +1,21 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, pythonOlder, pytest-asyncio }:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, pythonOlder, pytest-asyncio
+, typing-extensions
+}:
 
 buildPythonPackage rec {
   pname = "janus";
-  version = "0.6.1";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4712e0ef75711fe5947c2db855bc96221a9a03641b52e5ae8e25c2b705dd1d0c";
+    sha256 = "df976f2cdcfb034b147a2d51edfc34ff6bfb12d4e2643d3ad0e10de058cb1612";
   };
 
   disabled = pythonOlder "3.6";
+
+  propagatedBuildInputs = [
+    typing-extensions
+  ];
 
   checkInputs = [ pytest-asyncio pytestCheckHook ];
 

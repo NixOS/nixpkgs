@@ -72,7 +72,8 @@ stdenv.mkDerivation  {
     description = "Windows SPICE Drivers";
     homepage = "https://www.spice-space.org/";
     license = [ licenses.asl20 ]; # See https://github.com/vrozenfe/qxl-dod
-    maintainers = [ maintainers.tstrobel ];
+    maintainers = [ ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.linux;
   };
 }

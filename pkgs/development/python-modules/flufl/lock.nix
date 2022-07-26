@@ -1,16 +1,19 @@
 { lib, buildPythonPackage, fetchPypi, pytestCheckHook
 , atpublic, psutil, pytest-cov, sybil
+, pdm-pep517
 }:
 
 buildPythonPackage rec {
   pname = "flufl.lock";
-  version = "5.0.5";
+  version = "7.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bnapkg99r6mixn3kh314bqcfk8q54y0cvhjpj87j7dhjpsakfpz";
+    sha256 = "sha256-FBX30Z2N2WpYJC4O+5DOPLGHf7VFB0rYwcrky3GR/gE=";
   };
 
+  nativeBuildInputs = [ pdm-pep517 ];
   propagatedBuildInputs = [ atpublic psutil ];
   checkInputs = [ pytestCheckHook pytest-cov sybil ];
 

@@ -16,15 +16,16 @@
 , libsndfile
 , pango
 , perl
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "e16";
-  version = "1.0.23";
+  version = "1.0.25";
 
   src = fetchurl {
     url = "mirror://sourceforge/enlightenment/e16-${version}.tar.xz";
-    sha256 = "028rn1plggacsvdd035qnnph4xw8nya34mmjvvl7d4gqj9pj293f";
+    hash = "sha256-rUtDaBa4vvC3gO7QSkFrphWuVOmbtkH+pRujQDaUOek=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +52,12 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace scripts/e_gen_menu --replace "/usr/local:" "/run/current-system/sw:/usr/local:"
   '';
+
+  passthru.updateScript = gitUpdater {
+    inherit pname version;
+    url = "https://git.enlightenment.org/e16/e16";
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     homepage = "https://www.enlightenment.org/e16";

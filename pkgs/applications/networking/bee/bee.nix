@@ -1,4 +1,4 @@
-{ version ? "release", lib, fetchFromGitHub, buildGoModule, coreutils }:
+{ version ? "release", lib, fetchFromGitHub, buildGoModule }:
 
 let
 
@@ -39,13 +39,11 @@ buildGoModule {
     inherit (versionSpec) rev sha256;
   };
 
-  nativeBuildInputs = [ coreutils ];
-
   subPackages = [ "cmd/bee" ];
 
   # no symbol table, no debug info, and pass the commit for the version string
-  buildFlags = lib.optionalString ( lib.hasAttr "goVersionString" versionSpec)
-    "-ldflags -s -ldflags -w -ldflags -X=github.com/ethersphere/bee.commit=${versionSpec.goVersionString}";
+  ldflags = lib.optionals ( lib.hasAttr "goVersionString" versionSpec)
+    [ "-s" "-w" "-X=github.com/ethersphere/bee.commit=${versionSpec.goVersionString}" ];
 
   # Mimic the bee Makefile: without disabling CGO, two (transitive and
   # unused) dependencies would fail to compile.
@@ -62,7 +60,7 @@ buildGoModule {
   '';
 
   meta = with lib; {
-    homepage = "https://swarm.ethereum.org/";
+    homepage = "https://github.com/ethersphere/bee";
     description = "Ethereum Swarm Bee";
     longDescription = ''
       A decentralised storage and communication system for a sovereign digital society.

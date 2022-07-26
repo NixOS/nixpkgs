@@ -21,6 +21,7 @@
 , coreutils
 , cpio
 , curl
+, debugedit
 , elfutils
 , flatpak
 , gitMinimal
@@ -31,7 +32,6 @@
 , gnutar
 , json-glib
 , libcap
-, libdwarf
 , libsoup
 , libyaml
 , ostree
@@ -46,43 +46,14 @@ let
   installed_test_metadir = "${placeholder "installedTests"}/share/installed-tests/flatpak-builder";
 in stdenv.mkDerivation rec {
   pname = "flatpak-builder";
-  version = "1.0.14";
+  version = "1.2.2";
 
   outputs = [ "out" "doc" "man" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak-builder/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-abZa9PY4BBJ1GMVFGE+d/JqTWM3tqr7yseUGI64rjYs=";
+    sha256 = "sha256-if2mjlN8Hp3gI1JpC9icMhenKRZFWNNfNbCPea2E4D4=";
   };
-
-  nativeBuildInputs = [
-    autoreconfHook
-    docbook_xml_dtd_412
-    docbook_xml_dtd_42
-    docbook_xml_dtd_43
-    docbook_xsl
-    gettext
-    libxml2
-    libxslt
-    pkg-config
-    xmlto
-  ];
-
-  buildInputs = [
-    acl
-    bzip2
-    curl
-    elfutils
-    flatpak
-    glib
-    json-glib
-    libcap
-    libdwarf
-    libsoup
-    libxml2
-    libyaml
-    ostree
-  ];
 
   patches = [
     # patch taken from gtk_doc
@@ -113,8 +84,36 @@ in stdenv.mkDerivation rec {
     })
   ];
 
+  nativeBuildInputs = [
+    autoreconfHook
+    docbook_xml_dtd_43
+    docbook_xsl
+    gettext
+    libxml2
+    libxslt
+    pkg-config
+    xmlto
+  ];
+
+  buildInputs = [
+    acl
+    bzip2
+    curl
+    debugedit
+    elfutils
+    flatpak
+    glib
+    json-glib
+    libcap
+    libsoup
+    libxml2
+    libyaml
+    ostree
+  ];
+
   configureFlags = [
     "--enable-installed-tests"
+    "--with-system-debugedit"
   ];
 
   makeFlags = [
@@ -124,6 +123,8 @@ in stdenv.mkDerivation rec {
 
   # Some scripts used by tests  need to use shebangs that are available in Flatpak runtimes.
   dontPatchShebangs = true;
+
+  enableParallelBuilding = true;
 
   # Installed tests
   postFixup = ''

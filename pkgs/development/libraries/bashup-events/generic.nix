@@ -1,9 +1,8 @@
 {
   # general
   lib
-, resholvePackage
+, resholve
 , bash
-, shellcheck
 , doCheck ? true
 , doInstallCheck ? true
   # variant-specific
@@ -33,7 +32,7 @@ let
     '';
 
 in
-resholvePackage rec {
+resholve.mkDerivation rec {
   # bashup.events doesn't version yet but it has two variants with
   # differing features/performance characteristics:
   # - branch master: a variant for bash 3.2+
@@ -50,12 +49,10 @@ resholvePackage rec {
   '';
 
   inherit doCheck;
-  checkInputs = [ shellcheck bash ];
+  checkInputs = [ bash ];
 
-  # check based on https://github.com/bashup/events/blob/master/.dkrc
   checkPhase = ''
     runHook preCheck
-    SHELLCHECK_OPTS='-e SC2016,SC2145' ${shellcheck}/bin/shellcheck ./bashup.events
     ${bash}/bin/bash -n ./bashup.events
     ${bash}/bin/bash ./bashup.events
     runHook postCheck

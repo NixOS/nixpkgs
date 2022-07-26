@@ -1,10 +1,12 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
+, meson
+, ninja
 , pkg-config
 , libxml2
 , gnome
 , gtk3
-, yelp-tools
 , gettext
 , libX11
 , itstool
@@ -13,17 +15,18 @@
 
 stdenv.mkDerivation rec {
   pname = "zenity";
-  version = "3.32.0";
+  version = "3.43.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/zenity/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "15fdh8xfdhnwcynyh4byx3mrjxbyprqnwxzi7qn3g5wwaqryg1p7";
+    sha256 = "sNfKHgwYaPoY8FwhAmDYp74fCO4Tt/XP26ubYfoW+DM=";
   };
 
   nativeBuildInputs = [
+    meson
+    ninja
     pkg-config
     gettext
-    yelp-tools
     itstool
     libxml2
     wrapGAppsHook

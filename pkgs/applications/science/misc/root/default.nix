@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , makeWrapper
 , cmake
 , git
@@ -8,6 +9,7 @@
 , gl2ps
 , glew
 , gsl
+, lapack
 , libX11
 , libXpm
 , libXft
@@ -15,8 +17,10 @@
 , libGLU
 , libGL
 , libxml2
+, llvm_9
 , lz4
 , xz
+, openblas
 , pcre
 , nlohmann_json
 , pkg-config
@@ -29,19 +33,34 @@
 , libjpeg
 , libtiff
 , libpng
+, tbb
 , Cocoa
 , CoreSymbolication
 , OpenGL
 , noSplash ? false
 }:
 
+let
+
+  _llvm_9 = llvm_9.overrideAttrs (prev: {
+    patches = (prev.patches or []) ++ [
+      (fetchpatch {
+        url = "https://github.com/root-project/root/commit/a9c961cf4613ff1f0ea50f188e4a4b0eb749b17d.diff";
+        stripLen = 3;
+        hash = "sha256-LH2RipJICEDWOr7JzX5s0QiUhEwXNMFEJihYKy9qWpo=";
+      })
+    ];
+  });
+
+in
+
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.24.02";
+  version = "6.26.04";
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    sha256 = "sha256-BQfhCV4nnMxyQPZR0llmAkMlF5+oWhJZtpS1ZyOtfBw=";
+    hash = "sha256-onHPgngtbtLIfqXu9mgYA/LmnhezA2352GNjbpNYQh4=";
   };
 
   nativeBuildInputs = [ makeWrapper cmake pkg-config git ];
@@ -52,10 +71,13 @@ stdenv.mkDerivation rec {
     pcre
     zlib
     zstd
+    lapack
     libxml2
+    _llvm_9
     lz4
     xz
     gsl
+    openblas
     xxHash
     libAfterImage
     giflib
@@ -64,6 +86,7 @@ stdenv.mkDerivation rec {
     libpng
     nlohmann_json
     python.pkgs.numpy
+    tbb
   ]
   ++ lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext libGLU libGL ]
   ++ lib.optionals (stdenv.isDarwin) [ Cocoa CoreSymbolication OpenGL ]
@@ -72,6 +95,14 @@ stdenv.mkDerivation rec {
   patches = [
     ./sw_vers.patch
   ];
+
+  # Fix build against vanilla LLVM 9
+  postPatch = ''
+    sed \
+      -e '/#include "llvm.*RTDyldObjectLinkingLayer.h"/i#define private protected' \
+      -e '/#include "llvm.*RTDyldObjectLinkingLayer.h"/a#undef private' \
+      -i interpreter/cling/lib/Interpreter/IncrementalJIT.h
+  '';
 
   preConfigure = ''
     rm -rf builtins/*
@@ -83,7 +114,7 @@ stdenv.mkDerivation rec {
 
     # Hardcode path to fix use with cmake
     sed -i cmake/scripts/ROOTConfig.cmake.in \
-      -e 'iset(nlohmann_json_DIR "${nlohmann_json}/lib/cmake/nlohmann_json/")'
+      -e '1iset(nlohmann_json_DIR "${nlohmann_json}/lib/cmake/nlohmann_json/")'
 
     patchShebangs build/unix/
   '' + lib.optionalString noSplash ''
@@ -96,9 +127,10 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-Drpath=ON"
-    "-DCMAKE_CXX_STANDARD=17"
+    "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-Dbuiltin_llvm=OFF"
     "-Dbuiltin_nlohmannjson=OFF"
     "-Dbuiltin_openui5=OFF"
     "-Dalien=OFF"
@@ -112,7 +144,7 @@ stdenv.mkDerivation rec {
     "-Dfftw3=OFF"
     "-Dfitsio=OFF"
     "-Dfortran=OFF"
-    "-Dimt=OFF"
+    "-Dimt=ON"
     "-Dgfal=OFF"
     "-Dgviz=OFF"
     "-Dhdfs=OFF"
@@ -131,6 +163,7 @@ stdenv.mkDerivation rec {
     "-Droot7=OFF"
     "-Dsqlite=OFF"
     "-Dssl=OFF"
+    "-Dtmva=ON"
     "-Dvdt=OFF"
     "-Dwebgui=OFF"
     "-Dxml=ON"
@@ -149,7 +182,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     for prog in rootbrowse rootcp rooteventselector rootls rootmkdir rootmv rootprint rootrm rootslimtree; do
       wrapProgram "$out/bin/$prog" \
-        --prefix PYTHONPATH : "$out/lib"
+        --set PYTHONPATH "$out/lib" \
+        --set ${lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH "$out/lib"
     done
   '';
 

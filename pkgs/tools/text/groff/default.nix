@@ -5,6 +5,7 @@
 , autoreconfHook
 , pkg-config
 , texinfo
+, bash
 }:
 
 stdenv.mkDerivation rec {
@@ -18,6 +19,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" "doc" "info" "perl" ];
 
+  # Parallel build is failing for missing depends. Known upstream as:
+  #   https://savannah.gnu.org/bugs/?62084
   enableParallelBuilding = false;
 
   patches = [
@@ -31,7 +34,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = lib.optionalString (psutils != null) ''
+  postPatch = ''
+    # BASH_PROG gets replaced with a path to the build bash which doesn't get automatically patched by patchShebangs
+    substituteInPlace contrib/gdiffmk/gdiffmk.sh \
+      --replace "@BASH_PROG@" "/bin/sh"
+  '' + lib.optionalString (psutils != null) ''
     substituteInPlace src/preproc/html/pre-html.cpp \
       --replace "psselect" "${psutils}/bin/psselect"
   '' + lib.optionalString (netpbm != null) ''
@@ -45,7 +52,8 @@ stdenv.mkDerivation rec {
       --replace "@PNMTOPS_NOSETPAGE@" "${lib.getBin netpbm}/bin/pnmtops -nosetpage"
   '';
 
-  buildInputs = [ ghostscript psutils netpbm perl ];
+  strictDeps = true;
+  buildInputs = [ ghostscript psutils netpbm perl bash ];
   nativeBuildInputs = [ autoreconfHook pkg-config texinfo ];
 
   # Builds running without a chroot environment may detect the presence
@@ -55,10 +63,10 @@ stdenv.mkDerivation rec {
   # have to pass "--with-appresdir", too.
   configureFlags = [
     "--without-x"
+    "ac_cv_path_PERL=${buildPackages.perl}/bin/perl"
   ] ++ lib.optionals (ghostscript != null) [
     "--with-gs=${ghostscript}/bin/gs"
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "ac_cv_path_PERL=${buildPackages.perl}/bin/perl"
     "gl_cv_func_signbit=yes"
   ];
 
@@ -106,7 +114,6 @@ stdenv.mkDerivation rec {
     substituteInPlace $perl/bin/grog \
       --replace $out/lib/groff/grog $perl/lib/groff/grog
 
-  '' + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
     find $perl/ -type f -print0 | xargs --null sed -i 's|${buildPackages.perl}|${perl}|'
   '';
 

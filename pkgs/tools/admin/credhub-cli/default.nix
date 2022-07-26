@@ -2,22 +2,14 @@
 
 buildGoModule rec {
   pname = "credhub-cli";
-  version = "2.9.0";
+  version = "2.9.3";
 
   src = fetchFromGitHub {
     owner = "cloudfoundry-incubator";
     repo = "credhub-cli";
     rev = version;
-    sha256 = "1j0i0b79ph2i52cj0qln8wvp6gwhl73akkn026h27vvmlw9sndc2";
+    sha256 = "1wjj14gx2phpbxs1433k3jkkc0isx5mzbm62rpvxbfd8a7f6n1l5";
   };
-
-  patches = [
-    # Fix test with Go 1.15
-    (fetchpatch {
-        url = "https://github.com/cloudfoundry-incubator/credhub-cli/commit/4bd1accd513dc5e163e155c4b428878ca0bcedbc.patch";
-        sha256 = "180n3q3d19aw02q7xsn7dxck18jgndz5garj2mb056cwa7mmhw0j";
-    })
-  ];
 
   # these tests require network access that we're not going to give them
   postPatch = ''
@@ -28,8 +20,7 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  buildFlagsArray = [
-    "-ldflags="
+  ldflags = [
     "-s"
     "-w"
     "-X code.cloudfoundry.org/credhub-cli/version.Version=${version}"

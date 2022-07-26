@@ -1,104 +1,146 @@
 { lib
-, fetchPypi
-, buildPythonPackage
-, isPy3k
-, markupsafe
-, click
-, typecode
-, gemfileparser
-, pefile
-, fingerprints
-, spdx-tools
-, fasteners
-, pycryptodome
-, urlpy
-, dparse
-, jaraco_functools
-, pkginfo
-, debian-inspector
-, extractcode
-, ftfy
-, pyahocorasick
-, colorama
-, jsonstreams
-, packageurl-python
-, pymaven-patch
-, nltk
-, pygments
+, attrs
+, beautifulsoup4
 , bitarray
-, jinja2
-, javaproperties
 , boolean-py
-, license-expression
+, buildPythonPackage
+, chardet
+, click
+, colorama
+, commoncode
+, container-inspector
+, debian-inspector
+, dparse2
+, extractcode
 , extractcode-7z
 , extractcode-libarchive
-, typecode-libmagic
+, fasteners
+, fetchPypi
+, fingerprints
+, ftfy
+, gemfileparser
+, html5lib
+, importlib-metadata
+, intbitset
+, jaraco_functools
+, javaproperties
+, jinja2
+, jsonstreams
+, license-expression
+, lxml
+, markupsafe
+, packageurl-python
+, packaging
+, parameter-expansion-patched
+, pefile
+, pip-requirements-parser
+, pkginfo2
+, pluggy
+, plugincode
+, publicsuffix2
+, pyahocorasick
+, pycryptodome
+, pygmars
+, pygments
+, pymaven-patch
 , pytestCheckHook
+, pythonOlder
+, requests
+, saneyaml
+, spdx-tools
+, text-unidecode
+, toml
+, typecode
+, typecode-libmagic
+, typing
+, urlpy
+, xmltodict
+, zipp
 }:
+
 buildPythonPackage rec {
   pname = "scancode-toolkit";
-  version = "21.6.7";
-  disabled = !isPy3k;
+  version = "31.0.0b4";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "056923ce556cd6d402e5cc98567cb0331a1b6349d03ec565f8ce1c9c37f3a783";
+    hash = "sha256-sPFHaIbbWw/wk3Q1PBDj5O4il9ntigoyanecg938a9A=";
   };
 
   dontConfigure = true;
 
-  # https://github.com/nexB/scancode-toolkit/issues/2501
-  # * dparse2 is a "Temp fork for Python 2 support", but pdfminer requires
-  # Python 3, so it's "fine" to leave dparse2 unpackaged and use the "normal"
-  # version
-  # * ftfy was pinned for similar reasons (to support Python 2), but rather than
-  # packaging an older version, I figured it would be better to remove the
-  # erroneous (at least for our usage) version bound
-  # * bitarray's version bound appears to be unnecessary for similar reasons
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "dparse2" "dparse" \
-      --replace "ftfy <  5.0.0" "ftfy" \
-      --replace "bitarray >= 0.8.1, < 1.0.0" "bitarray"
-  '';
-
   propagatedBuildInputs = [
-    markupsafe
-    click
-    typecode
-    gemfileparser
-    pefile
-    fingerprints
-    spdx-tools
-    fasteners
-    pycryptodome
-    urlpy
-    dparse
-    jaraco_functools
-    pkginfo
-    debian-inspector
-    extractcode
-    ftfy
-    pyahocorasick
-    colorama
-    jsonstreams
-    packageurl-python
-    pymaven-patch
-    nltk
-    pygments
+    attrs
+    beautifulsoup4
     bitarray
-    jinja2
-    javaproperties
     boolean-py
-    license-expression
+    chardet
+    click
+    colorama
+    commoncode
+    container-inspector
+    debian-inspector
+    dparse2
+    extractcode
     extractcode-7z
     extractcode-libarchive
+    fasteners
+    fingerprints
+    ftfy
+    gemfileparser
+    html5lib
+    importlib-metadata
+    intbitset
+    jaraco_functools
+    javaproperties
+    jinja2
+    jsonstreams
+    license-expression
+    lxml
+    markupsafe
+    packageurl-python
+    packaging
+    parameter-expansion-patched
+    pefile
+    pip-requirements-parser
+    pkginfo2
+    pluggy
+    plugincode
+    publicsuffix2
+    pyahocorasick
+    pycryptodome
+    pygmars
+    pygments
+    pymaven-patch
+    requests
+    saneyaml
+    spdx-tools
+    text-unidecode
+    toml
+    typecode
     typecode-libmagic
+    urlpy
+    xmltodict
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    zipp
+  ] ++ lib.optionals (pythonOlder "3.7") [
+    typing
   ];
 
   checkInputs = [
     pytestCheckHook
   ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "pdfminer.six >= 20200101" "pdfminer.six" \
+      --replace "pluggy >= 0.12.0, < 1.0" "pluggy" \
+      --replace "pygmars >= 0.7.0" "pygmars" \
+      --replace "license_expression >= 21.6.14" "license_expression" \
+      --replace "intbitset >= 2.3.0,  < 3.0" "intbitset"
+  '';
 
   # Importing scancode needs a writeable home, and preCheck happens in between
   # pythonImportsCheckPhase and pytestCheckPhase.
@@ -114,7 +156,7 @@ buildPythonPackage rec {
   dontStrip = true;
 
   meta = with lib; {
-    description = "A tool to scan code for license, copyright, package and their documented dependencies and other interesting facts";
+    description = "Tool to scan code for license, copyright, package and their documented dependencies and other interesting facts";
     homepage = "https://github.com/nexB/scancode-toolkit";
     license = with licenses; [ asl20 cc-by-40 ];
     maintainers = teams.determinatesystems.members;

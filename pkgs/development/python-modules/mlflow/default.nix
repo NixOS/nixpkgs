@@ -1,72 +1,87 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib
 , alembic
+, buildPythonPackage
 , click
 , cloudpickle
-, requests
-, six
-, flask
-, numpy
-, pandas
-, python-dateutil
-, protobuf
-, GitPython
-, pyyaml
-, querystring_parser
-, simplejson
-, docker
 , databricks-cli
+, docker
 , entrypoints
-, sqlparse
-, sqlalchemy
+, fetchpatch
+, fetchPypi
+, flask
+, GitPython
 , gorilla
 , gunicorn
-, pytest
+, importlib-metadata
+, numpy
+, packaging
+, pandas
+, prometheus-flask-exporter
+, protobuf
+, python-dateutil
+, pythonOlder
+, pyyaml
+, querystring_parser
+, requests
+, scipy
+, simplejson
+, six
+, sqlalchemy
+, sqlparse
 }:
 
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "1.18.0";
-  disabled = isPy27;
+  version = "1.26.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8942089589d08c05c8a7fc66828c02a9233be462c421881b50bc2a0b183dfdbe";
+    hash = "sha256-VoBESElY6nG9MU7UICbP2V5kH+6+GFaKMuy/mv6bk9Q=";
   };
-
-  # run into https://stackoverflow.com/questions/51203641/attributeerror-module-alembic-context-has-no-attribute-config
-  # also, tests use conda so can't run on NixOS without buildFHSUserEnv
-  doCheck = false;
 
   propagatedBuildInputs = [
     alembic
     click
     cloudpickle
-    requests
-    six
-    flask
-    numpy
-    pandas
-    python-dateutil
-    protobuf
-    GitPython
-    pyyaml
-    querystring_parser
-    simplejson
-    docker
     databricks-cli
+    docker
     entrypoints
-    sqlparse
-    sqlalchemy
+    flask
+    GitPython
     gorilla
     gunicorn
+    importlib-metadata
+    numpy
+    packaging
+    pandas
+    prometheus-flask-exporter
+    protobuf
+    python-dateutil
+    pyyaml
+    querystring_parser
+    requests
+    scipy
+    simplejson
+    six
+    sqlalchemy
+    sqlparse
   ];
 
+  pythonImportsCheck = [
+    "mlflow"
+  ];
+
+  # run into https://stackoverflow.com/questions/51203641/attributeerror-module-alembic-context-has-no-attribute-config
+  # also, tests use conda so can't run on NixOS without buildFHSUserEnv
+  doCheck = false;
+
   meta = with lib; {
-    homepage = "https://github.com/mlflow/mlflow";
     description = "Open source platform for the machine learning lifecycle";
+    homepage = "https://github.com/mlflow/mlflow";
     license = licenses.asl20;
     maintainers = with maintainers; [ tbenst ];
-    # missing prometheus-flask-exporter, not packaged in nixpkgs
-    broken = true; # 2020-08-15
   };
 }

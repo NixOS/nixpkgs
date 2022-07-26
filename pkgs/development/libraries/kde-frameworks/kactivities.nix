@@ -5,7 +5,7 @@
 }:
 
 mkDerivation {
-  name = "kactivities";
+  pname = "kactivities";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     boost kconfig kcoreaddons kio kwindowsystem qtdeclarative

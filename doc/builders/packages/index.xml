@@ -17,6 +17,7 @@
  <xi:include href="kakoune.section.xml" />
  <xi:include href="linux.section.xml" />
  <xi:include href="locales.section.xml" />
+ <xi:include href="etc-files.section.xml" />
  <xi:include href="nginx.section.xml" />
  <xi:include href="opengl.section.xml" />
  <xi:include href="shell-helpers.section.xml" />

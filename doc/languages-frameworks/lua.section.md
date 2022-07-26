@@ -128,7 +128,7 @@ Let's present the luarocks way first and the manual one in a second time.
 
 ### Packaging a library on luarocks {#packaging-a-library-on-luarocks}
 
-[Luarocks.org](www.luarocks.org) is the main repository of lua packages.
+[Luarocks.org](https://luarocks.org/) is the main repository of lua packages.
 The site proposes two types of packages, the rockspec and the src.rock
 (equivalent of a [rockspec](https://github.com/luarocks/luarocks/wiki/Rockspec-format) but with the source).
 These packages can have different build types such as `cmake`, `builtin` etc .
@@ -139,11 +139,9 @@ the whitelist maintainers/scripts/luarocks-packages.csv and updated by running m
 [luarocks2nix](https://github.com/nix-community/luarocks) is a tool capable of generating nix derivations from both rockspec and src.rock (and favors the src.rock).
 The automation only goes so far though and some packages need to be customized.
 These customizations go in `pkgs/development/lua-modules/overrides.nix`.
-For instance if the rockspec defines `external_dependencies`, these need to be manually added in its rockspec file then it won't work.
+For instance if the rockspec defines `external_dependencies`, these need to be manually added to the overrides.nix.
 
 You can try converting luarocks packages to nix packages with the command `nix-shell -p luarocks-nix` and then `luarocks nix PKG_NAME`.
-Nix rely on luarocks to install lua packages, basically it runs:
-`luarocks make --deps-mode=none --tree $out`
 
 #### Packaging a library manually {#packaging-a-library-manually}
 
@@ -161,8 +159,8 @@ are not packaged for luarocks. You can see a few examples at `pkgs/top-level/lua
 
 ### Lua interpreters {#lua-interpreters}
 
-Versions 5.1, 5.2 and 5.3 of the lua interpreter are available as
-respectively `lua5_1`, `lua5_2` and `lua5_3`. Luajit is available too.
+Versions 5.1, 5.2, 5.3 and 5.4 of the lua interpreter are available as
+respectively `lua5_1`, `lua5_2`, `lua5_3` and `lua5_4`. Luajit is available too.
 The Nix expressions for the interpreters can be found in `pkgs/development/interpreters/lua-5`.
 
 #### Attributes on lua interpreters packages {#attributes-on-lua-interpreters-packages}

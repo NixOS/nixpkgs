@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "unionfs-fuse";
-  version = "2.1";
+  version = "2.2";
 
   src = fetchFromGitHub {
     owner = "rpodgorny";
     repo = "unionfs-fuse";
     rev = "v${version}";
-    sha256 = "0bwx70x834qgqh53vqp18bhbxbsny80hz922rbgj8k9wj7cbfilm";
+    sha256 = "sha256-EJryML6E0CW4kvsqMRqV3cq77j50HuylNzgaHD6CL/o=";
   };
 
   patches = [
@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "FUSE UnionFS implementation";
     homepage = "https://github.com/rpodgorny/unionfs-fuse";
     license = licenses.bsd3;

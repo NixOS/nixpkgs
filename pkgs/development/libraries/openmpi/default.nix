@@ -27,11 +27,11 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "openmpi";
-  version = "4.1.1";
+  version = "4.1.4";
 
   src = with lib.versions; fetchurl {
     url = "https://www.open-mpi.org/software/ompi/v${major version}.${minor version}/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "1nkwq123vvmggcay48snm9qqmrh0bdzpln0l1jnp26niidvplkz2";
+    sha256 = "03ckngrff1cl0l81vfvrfhp99rbgk7s0633kr1l468yibwbjx4cj";
   };
 
   postPatch = ''
@@ -46,14 +46,14 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ zlib ]
-    ++ lib.optionals fortranSupport [ gfortran ]
     ++ lib.optionals stdenv.isLinux [ libnl numactl pmix ucx ]
     ++ lib.optionals cudaSupport [ cudatoolkit ]
     ++ [ libevent hwloc ]
     ++ lib.optional (stdenv.isLinux || stdenv.isFreeBSD) rdma-core
     ++ lib.optional fabricSupport [ libpsm2 libfabric ];
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ perl ]
+    ++ lib.optionals fortranSupport [ gfortran ];
 
   configureFlags = lib.optional (!cudaSupport) "--disable-mca-dso"
     ++ lib.optional (!fortranSupport) "--disable-mpi-fortran"

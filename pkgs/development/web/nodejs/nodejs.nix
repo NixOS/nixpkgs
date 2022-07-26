@@ -1,5 +1,7 @@
 { lib, stdenv, fetchurl, openssl, python, zlib, libuv, util-linux, http-parser
-, pkg-config, which
+, pkg-config, which, buildPackages
+# for `.pkgs` attribute
+, callPackage
 # Updater dependencies
 , writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, nix, runtimeShell
 , gnupg
@@ -17,7 +19,7 @@ let
   majorVersion = versions.major version;
   minorVersion = versions.minor version;
 
-  baseName = if enableNpm then "nodejs" else "nodejs-slim";
+  pname = if enableNpm then "nodejs" else "nodejs-slim";
 
   useSharedHttpParser = !stdenv.isDarwin && versionOlder "${majorVersion}.${minorVersion}" "11.4";
 
@@ -40,23 +42,27 @@ let
       (builtins.attrNames sharedLibDeps);
 
   extraConfigFlags = optionals (!enableNpm) [ "--without-npm" ];
-in
-
-  stdenv.mkDerivation {
-    inherit version;
-
-    name = "${baseName}-${version}";
+  self = stdenv.mkDerivation {
+    inherit pname version;
 
     src = fetchurl {
       url = "https://nodejs.org/dist/v${version}/node-v${version}.tar.xz";
       inherit sha256;
     };
 
+    CC_host = "cc";
+    CXX_host = "c++";
+    depsBuildBuild = [ buildPackages.stdenv.cc openssl libuv zlib ];
+
     buildInputs = optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
       ++ [ zlib libuv openssl http-parser icu ];
 
     nativeBuildInputs = [ which pkg-config python ]
       ++ optionals stdenv.isDarwin [ xcbuild ];
+
+    outputs = [ "out" "libv8" ];
+    setOutputFlags = false;
+    moveToDev = false;
 
     configureFlags = let
       isCross = stdenv.hostPlatform != stdenv.buildPlatform;
@@ -67,12 +73,23 @@ in
       "--cross-compiling"
       "--without-intl"
       "--without-snapshot"
+      "--dest-cpu=${let platform = stdenv.hostPlatform; in
+                    if      platform.isAarch32 then "arm"
+                    else if platform.isAarch64 then "arm64"
+                    else if platform.isMips32 && platform.isLittleEndian then "mipsel"
+                    else if platform.isMips32 && !platform.isLittleEndian then "mips"
+                    else if platform.isMips64 && platform.isLittleEndian then "mips64el"
+                    else if platform.isPower && platform.is32bit then "ppc"
+                    else if platform.isPower && platform.is64bit then "ppc64"
+                    else if platform.isx86_64 then "x86_64"
+                    else if platform.isx86_32 then "x86"
+                    else if platform.isS390 && platform.is64bit then "s390x"
+                    else if platform.isRiscV && platform.is64bit then "riscv64"
+                    else throw "unsupported cpu ${stdenv.hostPlatform.uname.processor}"}"
     ]) ++ (optionals (isCross && isAarch32 && hasAttr "fpu" gcc) [
       "--with-arm-fpu=${gcc.fpu}"
     ]) ++ (optionals (isCross && isAarch32 && hasAttr "float-abi" gcc) [
       "--with-arm-float-abi=${gcc.float-abi}"
-    ]) ++ (optionals (isCross && isAarch32) [
-      "--dest-cpu=arm"
     ]) ++ extraConfigFlags;
 
     configurePlatforms = [];
@@ -82,6 +99,10 @@ in
     enableParallelBuilding = true;
 
     passthru.interpreterName = "nodejs";
+
+    passthru.pkgs = callPackage ../../node-packages/default.nix {
+      nodejs = self;
+    };
 
     setupHook = ./setup-hook.sh;
 
@@ -115,7 +136,7 @@ in
 
       ${optionalString (enableNpm && stdenv.hostPlatform == stdenv.buildPlatform) ''
         mkdir -p $out/share/bash-completion/completions/
-        $out/bin/npm completion > $out/share/bash-completion/completions/npm
+        HOME=$TMPDIR $out/bin/npm completion > $out/share/bash-completion/completions/npm
         for dir in "$out/lib/node_modules/npm/man/"*; do
           mkdir -p $out/share/man/$(basename "$dir")
           for page in "$dir"/*; do
@@ -126,6 +147,35 @@ in
 
       # install the missing headers for node-gyp
       cp -r ${concatStringsSep " " copyLibHeaders} $out/include/node
+
+      # assemble a static v8 library and put it in the 'libv8' output
+      mkdir -p $libv8/lib
+      pushd out/Release/obj.target
+      find . -path "./torque_*/**/*.o" -or -path "./v8*/**/*.o" | sort -u >files
+      ${if stdenv.buildPlatform.isGnu then ''
+        ar -cqs $libv8/lib/libv8.a @files
+      '' else ''
+        cat files | while read -r file; do
+          ar -cqS $libv8/lib/libv8.a $file
+        done
+      ''}
+      popd
+
+      # copy v8 headers
+      cp -r deps/v8/include $libv8/
+
+      # create a pkgconfig file for v8
+      major=$(grep V8_MAJOR_VERSION deps/v8/include/v8-version.h | cut -d ' ' -f 3)
+      minor=$(grep V8_MINOR_VERSION deps/v8/include/v8-version.h | cut -d ' ' -f 3)
+      patch=$(grep V8_PATCH_LEVEL deps/v8/include/v8-version.h | cut -d ' ' -f 3)
+      mkdir -p $libv8/lib/pkgconfig
+      cat > $libv8/lib/pkgconfig/v8.pc << EOF
+      Name: v8
+      Description: V8 JavaScript Engine
+      Version: $major.$minor.$patch
+      Libs: -L$libv8/lib -lv8 -pthread -licui18n
+      Cflags: -I$libv8/include
+      EOF
     '' + optionalString (stdenv.isDarwin && enableNpm) ''
       sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' $out/lib/node_modules/npm/node_modules/node-gyp/gyp/pylib/gyp/xcode_emulation.py
     '';
@@ -139,11 +189,14 @@ in
     meta = {
       description = "Event-driven I/O framework for the V8 JavaScript engine";
       homepage = "https://nodejs.org";
+      changelog = "https://github.com/nodejs/node/releases/tag/v${version}";
       license = licenses.mit;
       maintainers = with maintainers; [ goibhniu gilligan cko marsam ];
       platforms = platforms.linux ++ platforms.darwin;
       mainProgram = "node";
+      knownVulnerabilities = optional (versionOlder version "14") "This NodeJS release has reached its end of life. See https://nodejs.org/en/about/releases/.";
     };
 
     passthru.python = python; # to ensure nodeEnv uses the same version
-}
+  };
+in self

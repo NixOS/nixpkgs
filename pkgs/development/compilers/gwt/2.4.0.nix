@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, unzip }:
 
-stdenv.mkDerivation {
-  name = "gwt-java-2.4.0";
+stdenv.mkDerivation rec {
+  pname = "gwt-java";
+  version = "2.4.0";
 
   src = fetchurl {
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/google-web-toolkit/gwt-2.4.0.zip";
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/google-web-toolkit/gwt-${version}.zip";
     sha256 = "1gvyg00vx7fdqgfl2w7nhql78clg3abs6fxxy7m03pprdm5qmm17";
   };
 

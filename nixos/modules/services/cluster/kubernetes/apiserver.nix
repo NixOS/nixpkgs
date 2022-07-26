@@ -1,9 +1,10 @@
-  { config, lib, pkgs, ... }:
+  { config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   top = config.services.kubernetes;
+  otop = options.services.kubernetes;
   cfg = top.apiserver;
 
   isRBACEnabled = elem "RBAC" cfg.authorizationMode;
@@ -84,6 +85,7 @@ in
     clientCaFile = mkOption {
       description = "Kubernetes apiserver CA file for client auth.";
       default = top.caFile;
+      defaultText = literalExpression "config.${otop.caFile}";
       type = nullOr path;
     };
 
@@ -138,6 +140,7 @@ in
       caFile = mkOption {
         description = "Etcd ca file.";
         default = top.caFile;
+        defaultText = literalExpression "config.${otop.caFile}";
         type = types.nullOr types.path;
       };
     };
@@ -157,6 +160,7 @@ in
     featureGates = mkOption {
       description = "List set of feature gates";
       default = top.featureGates;
+      defaultText = literalExpression "config.${otop.featureGates}";
       type = listOf str;
     };
 
@@ -175,6 +179,7 @@ in
     kubeletClientCaFile = mkOption {
       description = "Path to a cert file for connecting to kubelet.";
       default = top.caFile;
+      defaultText = literalExpression "config.${otop.caFile}";
       type = nullOr path;
     };
 
@@ -188,12 +193,6 @@ in
       description = "Key to use for connections to kubelet.";
       default = null;
       type = nullOr path;
-    };
-
-    kubeletHttps = mkOption {
-      description = "Whether to use https for connections to kubelet.";
-      default = true;
-      type = bool;
     };
 
     preferredAddressTypes = mkOption {
@@ -365,7 +364,6 @@ in
                 "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"} \
               ${optionalString (cfg.basicAuthFile != null)
                 "--basic-auth-file=${cfg.basicAuthFile}"} \
-              --kubelet-https=${boolToString cfg.kubeletHttps} \
               ${optionalString (cfg.kubeletClientCaFile != null)
                 "--kubelet-certificate-authority=${cfg.kubeletClientCaFile}"} \
               ${optionalString (cfg.kubeletClientCertFile != null)
@@ -404,6 +402,10 @@ in
             AmbientCapabilities = "cap_net_bind_service";
             Restart = "on-failure";
             RestartSec = 5;
+          };
+
+          unitConfig = {
+            StartLimitIntervalSec = 0;
           };
         };
 
@@ -494,4 +496,5 @@ in
 
   ];
 
+  meta.buildDocsInSandbox = false;
 }

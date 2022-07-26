@@ -4,23 +4,23 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     maintainers = with lib.maintainers; [ aristid aszlig eelco kampfschlaefer ];
   };
 
-  machine =
+  nodes.machine =
     { config, pkgs, lib, ... }:
     { imports = [ ../modules/installer/cd-dvd/channel.nix ];
 
       # XXX: Sandbox setup fails while trying to hardlink files from the host's
       #      store file system into the prepared chroot directory.
-      nix.useSandbox = false;
-      nix.binaryCaches = []; # don't try to access cache.nixos.org
+      nix.settings.sandbox = false;
+      nix.settings.substituters = []; # don't try to access cache.nixos.org
 
       virtualisation.writableStore = true;
-      virtualisation.memorySize = 1024;
       # Make sure we always have all the required dependencies for creating a
       # container available within the VM, because we don't have network access.
-      virtualisation.pathsInNixDB = let
+      virtualisation.additionalPaths = let
         emptyContainer = import ../lib/eval-config.nix {
-          inherit (config.nixpkgs.localSystem) system;
           modules = lib.singleton {
+            nixpkgs = { inherit (config.nixpkgs) localSystem; };
+
             containers.foo.config = {
               system.stateVersion = "18.03";
             };
@@ -70,8 +70,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
       with subtest(f"Put the root of {id2} into a bind mount"):
           machine.succeed(
-              f"mv /var/lib/containers/{id2} /id2-bindmount",
-              f"mount --bind /id2-bindmount /var/lib/containers/{id1}",
+              f"mv /var/lib/nixos-containers/{id2} /id2-bindmount",
+              f"mount --bind /id2-bindmount /var/lib/nixos-containers/{id1}",
           )
 
           ip1 = machine.succeed(f"nixos-container show-ip {id1}").rstrip()
@@ -89,7 +89,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           "Create a directory with a dummy file and bind-mount it into both containers."
       ):
           for id in id1, id2:
-              important_path = f"/var/lib/containers/{id}/very/important/data"
+              important_path = f"/var/lib/nixos-containers/{id}/very/important/data"
               machine.succeed(
                   f"mkdir -p {important_path}",
                   f"mount --bind /nested-bindmount {important_path}",
@@ -119,7 +119,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
       with subtest("Stop a container early"):
           machine.succeed(f"nixos-container stop {id1}")
-          machine.succeed(f"nixos-container start {id1} &")
+          machine.succeed(f"nixos-container start {id1} >&2 &")
           machine.wait_for_console_text("Stage 2")
           machine.succeed(f"nixos-container stop {id1}")
           machine.wait_for_console_text(f"Container {id1} exited successfully")
@@ -155,13 +155,13 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           machine.succeed("grep -qF 'important data' /nested-bindmount/dummy")
 
       with subtest("Ensure that the container path is gone"):
-          print(machine.succeed("ls -lsa /var/lib/containers"))
-          machine.succeed(f"test ! -e /var/lib/containers/{id1}")
+          print(machine.succeed("ls -lsa /var/lib/nixos-containers"))
+          machine.succeed(f"test ! -e /var/lib/nixos-containers/{id1}")
 
       with subtest("Ensure that a failed container creation doesn'leave any state"):
           machine.fail(
               "nixos-container create b0rk --config-file ${brokenCfg}"
           )
-          machine.succeed("test ! -e /var/lib/containers/b0rk")
+          machine.succeed("test ! -e /var/lib/nixos-containers/b0rk")
     '';
 })

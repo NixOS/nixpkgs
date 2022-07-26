@@ -2,24 +2,24 @@
 
 stdenv.mkDerivation rec {
   pname = "mediawiki";
-  version = "1.36.1";
+  version = "1.38.1";
 
-  src = with lib; fetchurl {
-    url = "https://releases.wikimedia.org/mediawiki/${versions.majorMinor version}/${pname}-${version}.tar.gz";
-    sha256 = "0ymda3x58a7ic4bwhbkxc7rskkwn164nplxzq9g4w9qnmwcqnsg6";
+  src = fetchurl {
+    url = "https://releases.wikimedia.org/mediawiki/${lib.versions.majorMinor version}/mediawiki-${version}.tar.gz";
+    sha256 = "sha256-EXNlUloN7xsgnKUIV9ZXNrYlRbh3p1NIpXqF0SZDezE=";
   };
 
-  prePatch = ''
+  postPatch = ''
     sed -i 's|$vars = Installer::getExistingLocalSettings();|$vars = null;|' includes/installer/CliInstaller.php
   '';
 
-  phpConfig = writeText "LocalSettings.php" ''
-  <?php
-    return require(getenv('MEDIAWIKI_CONFIG'));
-  ?>
-  '';
-
-  installPhase = ''
+  installPhase = let
+    phpConfig = writeText "LocalSettings.php" ''
+      <?php
+        return require(getenv('MEDIAWIKI_CONFIG'));
+      ?>
+    '';
+  in ''
     runHook preInstall
 
     mkdir -p $out/share/mediawiki
@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     homepage = "https://www.mediawiki.org/";
     platforms = platforms.all;
-    maintainers = [ maintainers.redvers ];
+    maintainers = with maintainers; [ ] ++ teams.c3d2.members;
   };
 }

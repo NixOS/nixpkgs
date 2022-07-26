@@ -1,14 +1,30 @@
-{ lib, stdenv, fetchFromGitHub, gtk3, hicolor-icon-theme, jdupes }:
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, gitUpdater
+, gtk3
+, hicolor-icon-theme
+, jdupes
+, colorVariants ? [] # default is all
+, themeVariants ? [] # default is all
+}:
 
-stdenv.mkDerivation rec {
+let
   pname = "qogir-icon-theme";
-  version = "2021-07-14";
+
+in
+lib.checkListOfEnum "${pname}: color variants" [ "default" "dark" "all" ] colorVariants
+lib.checkListOfEnum "${pname}: theme variants" [ "default" "manjaro" "ubuntu" "all" ] themeVariants
+
+stdenvNoCC.mkDerivation rec {
+  inherit pname;
+  version = "2022-07-20";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "0anma2ss3yqr9njx4ay2nyxjkgnj7ky17c93ipwgrvgsv8jk5nn2";
+    sha256 = "sha256-I+eojCTR3fXcp7v5Bdie9vstmJja9HB71aQSF5jLDD4=";
   };
 
   nativeBuildInputs = [ gtk3 jdupes ];
@@ -21,14 +37,26 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
   dontRewriteSymlinks = true;
 
+  postPatch = ''
+    patchShebangs install.sh
+  '';
+
   installPhase = ''
     runHook preInstall
-    patchShebangs install.sh
+
     mkdir -p $out/share/icons
-    name= ./install.sh -d $out/share/icons
-    jdupes -l -r $out/share/icons
+
+    name= ./install.sh \
+      ${lib.optionalString (themeVariants != []) ("--theme " + builtins.toString themeVariants)} \
+      ${lib.optionalString (colorVariants != []) ("--color " + builtins.toString colorVariants)} \
+      --dest $out/share/icons
+
+    jdupes --quiet --link-soft --recurse $out/share
+
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater { inherit pname version; };
 
   meta = with lib; {
     description = "Flat colorful design icon theme";

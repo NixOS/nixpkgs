@@ -9,18 +9,18 @@ stdenv.mkDerivation rec {
     sha256 = "0baw6gcnrhxbb447msv34xg6rmlcj0gm3ahxwvdwfcvq4xmknz50";
   };
 
-  buildInputs = [ b43FirmwareCutter ];
+  nativeBuildInputs = [ b43FirmwareCutter ];
 
   sourceRoot = ".";
 
   installPhase = ''
-    mkdir $out
-    b43-fwcutter -w $out *.wl_apsta.o
+    mkdir -p $out/lib/firmware
+    b43-fwcutter -w $out/lib/firmware *.wl_apsta.o
   '';
 
   meta = with lib; {
     description = "Firmware for cards supported by the b43 kernel module";
-    homepage = "http://wireless.kernel.org/en/users/Drivers/b43";
+    homepage = "https://wireless.wiki.kernel.org/en/users/drivers/b43";
     downloadPage = "http://www.lwfinger.com/b43-firmware";
     license = licenses.unfree;
   };

@@ -1,61 +1,66 @@
 { type
 , version
-, sha512
+, srcs
+, icu #passing icu as an argument, because dotnet 3.1 has troubles with icu71
 }:
 
-assert builtins.elem type [ "aspnetcore" "netcore" "sdk"];
-{ lib, stdenv
+assert builtins.elem type [ "aspnetcore" "runtime" "sdk" ];
+
+{ lib
+, stdenv
 , fetchurl
+, writeText
+, autoPatchelfHook
+, makeWrapper
 , libunwind
 , openssl
-, icu
 , libuuid
 , zlib
 , curl
+, lttng-ust_2_12
 }:
 
 let
-  pname = if type == "aspnetcore" then
-    "aspnetcore-runtime"
-  else if type == "netcore" then
-    "dotnet-runtime"
-  else
-    "dotnet-sdk";
-  platform = if stdenv.isDarwin then "osx" else "linux";
-  suffix = {
-    x86_64-linux = "x64";
-    aarch64-linux = "arm64";
-    x86_64-darwin = "x64";
-  }."${stdenv.hostPlatform.system}" or (throw
-    "Unsupported system: ${stdenv.hostPlatform.system}");
-  urls = {
-    aspnetcore = "https://dotnetcli.azureedge.net/dotnet/aspnetcore/Runtime/${version}/${pname}-${version}-${platform}-${suffix}.tar.gz";
-    netcore = "https://dotnetcli.azureedge.net/dotnet/Runtime/${version}/${pname}-${version}-${platform}-${suffix}.tar.gz";
-    sdk = "https://dotnetcli.azureedge.net/dotnet/Sdk/${version}/${pname}-${version}-${platform}-${suffix}.tar.gz";
-  };
+  pname =
+    if type == "aspnetcore" then
+      "aspnetcore-runtime"
+    else if type == "runtime" then
+      "dotnet-runtime"
+    else
+      "dotnet-sdk";
+
   descriptions = {
-    aspnetcore = "ASP .NET Core runtime ${version}";
-    netcore = ".NET Core runtime ${version}";
+    aspnetcore = "ASP.NET Core Runtime ${version}";
+    runtime = ".NET Runtime ${version}";
     sdk = ".NET SDK ${version}";
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   inherit pname version;
 
-  rpath = lib.makeLibraryPath [
+  # Some of these dependencies are `dlopen()`ed.
+  rpath = lib.makeLibraryPath ([
+    stdenv.cc.cc
+    zlib
     curl
     icu
     libunwind
     libuuid
     openssl
+  ] ++ lib.optional stdenv.isLinux lttng-ust_2_12);
+
+  nativeBuildInputs = [
+    makeWrapper
+  ] ++ lib.optional stdenv.isLinux autoPatchelfHook;
+
+  buildInputs = [
     stdenv.cc.cc
-    zlib
   ];
 
-  src = fetchurl {
-    url = builtins.getAttr type urls;
-    sha512 = sha512."${stdenv.hostPlatform.system}" or (throw
-      "Missing hash for host system: ${stdenv.hostPlatform.system}");
-  };
+  src = fetchurl (
+    srcs."${stdenv.hostPlatform.system}" or (throw
+      "Missing source (url and hash) for host system: ${stdenv.hostPlatform.system}")
+  );
 
   sourceRoot = ".";
 
@@ -74,19 +79,40 @@ in stdenv.mkDerivation rec {
     patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" $out/dotnet
     patchelf --set-rpath "${rpath}" $out/dotnet
     find $out -type f -name "*.so" -exec patchelf --set-rpath '$ORIGIN:${rpath}' {} \;
-    find $out -type f -name "apphost" -exec patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" --set-rpath '$ORIGIN:${rpath}' {} \;
+    find $out -type f \( -name "apphost" -or -name "createdump" \) -exec patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" --set-rpath '$ORIGIN:${rpath}' {} \;
+
+    wrapProgram $out/bin/dotnet \
+      --prefix LD_LIBRARY_PATH : ${icu}/lib
   '';
 
   doInstallCheck = true;
   installCheckPhase = ''
+    # Fixes cross
+    export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
+
     $out/bin/dotnet --info
   '';
 
+  setupHook = writeText "dotnet-setup-hook" ''
+    if [ ! -w "$HOME" ]; then
+      export HOME=$(mktemp -d) # Dotnet expects a writable home directory for its configuration files
+    fi
+
+    export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 # Dont try to expand NuGetFallbackFolder to disk
+    export DOTNET_NOLOGO=1 # Disables the welcome message
+    export DOTNET_CLI_TELEMETRY_OPTOUT=1
+  '';
+
+  passthru = {
+    inherit icu;
+  };
+
   meta = with lib; {
-    homepage = "https://dotnet.github.io/";
     description = builtins.getAttr type descriptions;
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
-    maintainers = with maintainers; [ kuznero ];
+    homepage = "https://dotnet.github.io/";
     license = licenses.mit;
+    maintainers = with maintainers; [ kuznero mdarocha ];
+    mainProgram = "dotnet";
+    platforms = builtins.attrNames srcs;
   };
 }

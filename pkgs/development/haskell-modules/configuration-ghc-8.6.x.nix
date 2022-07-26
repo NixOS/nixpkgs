@@ -2,10 +2,13 @@
 
 with haskellLib;
 
+let
+  inherit (pkgs.stdenv.hostPlatform) isDarwin;
+in
+
 self: super: {
 
-  # This compiler version needs llvm 6.x.
-  llvmPackages = pkgs.lib.dontRecurseIntoAttrs pkgs.llvmPackages_6;
+  llvmPackages = pkgs.lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
 
   # Disable GHC 8.6.x core libraries.
   array = null;
@@ -34,12 +37,15 @@ self: super: {
   rts = null;
   stm = null;
   template-haskell = null;
-  terminfo = null;
+  # GHC only builds terminfo if it is a native compiler
+  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_5;
   text = null;
   time = null;
   transformers = null;
   unix = null;
-  xhtml = null;
+  # GHC only bundles the xhtml library if haddock is enabled, check if this is
+  # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
+  xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_2_2_1;
 
   # Needs Cabal 3.0.x.
   cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_3_2_1_0; });
@@ -82,21 +88,18 @@ self: super: {
   # cabal2spec needs a recent version of Cabal
   cabal2spec = super.cabal2spec.overrideScope (self: super: { Cabal = self.Cabal_3_2_1_0; });
 
-  # Builds only with ghc-8.8.x and beyond.
-  policeman = markBroken super.policeman;
-
   # https://github.com/pikajude/stylish-cabal/issues/12
   stylish-cabal = doDistribute (markUnbroken (super.stylish-cabal.override { haddock-library = self.haddock-library_1_7_0; }));
   haddock-library_1_7_0 = dontCheck super.haddock-library_1_7_0;
 
   # ghc versions prior to 8.8.x needs additional dependency to compile successfully.
-  ghc-lib-parser-ex = addBuildDepend super.ghc-lib-parser-ex self.ghc-lib-parser;
+  ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser super.ghc-lib-parser-ex;
 
   # This became a core library in ghc 8.10., so we don‘t have an "exception" attribute anymore.
   exceptions = super.exceptions_0_10_4;
 
   # Older compilers need the latest ghc-lib to build this package.
-  hls-hlint-plugin = addBuildDepend super.hls-hlint-plugin self.ghc-lib;
+  hls-hlint-plugin = addBuildDepend self.ghc-lib super.hls-hlint-plugin;
 
   # vector 0.12.2 indroduced doctest checks that don‘t work on older compilers
   vector = dontCheck super.vector;
@@ -106,4 +109,8 @@ self: super: {
   # https://github.com/haskellari/time-compat/issues/23
   time-compat = dontCheck super.time-compat;
 
+  mime-string = disableOptimization super.mime-string;
+
+  # https://github.com/fpco/inline-c/issues/127 (recommend to upgrade to Nixpkgs GHC >=9.0)
+  inline-c-cpp = (if isDarwin then dontCheck else x: x) super.inline-c-cpp;
 }

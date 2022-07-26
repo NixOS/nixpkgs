@@ -4,7 +4,7 @@
 , config
 , overlays
 , crossOverlays ? [ ]
-, bootstrapLlvmVersion ? if localSystem.isAarch64 then "11.1.0" else "7.1.0"
+, bootstrapLlvmVersion ? "11.1.0"
   # Allow passing in bootstrap files directly so we can test the stdenv bootstrap process when changing the bootstrap tools
 , bootstrapFiles ? if localSystem.isAarch64 then
     let
@@ -23,7 +23,7 @@
   else
     let
       fetch = { file, sha256, executable ? true }: import <nix/fetchurl.nix> {
-        url = "http://tarballs.nixos.org/stdenv-darwin/x86_64/05ef940b94fe76e7ac06ea45a625adc8e4be96f9/${file}";
+        url = "http://tarballs.nixos.org/stdenv-darwin/x86_64/c253216595572930316f2be737dc288a1da22558/${file}";
         inherit (localSystem) system;
         inherit sha256 executable;
       }; in
@@ -32,7 +32,7 @@
       bzip2 = fetch { file = "bzip2"; sha256 = "sha256-K3rhkJZipudT1Jgh+l41Y/fNsMkrPtiAsNRDha/lpZI="; };
       mkdir = fetch { file = "mkdir"; sha256 = "sha256-VddFELwLDJGNADKB1fWwWPBtIAlEUgJv2hXRmC4NEeM="; };
       cpio = fetch { file = "cpio"; sha256 = "sha256-SWkwvLaFyV44kLKL2nx720SvcL4ej/p2V/bX3uqAGO0="; };
-      tarball = fetch { file = "bootstrap-tools.cpio.bz2"; sha256 = "sha256-b65dXbIm6o6s6U8tAiGpR6SMfvfn/VFcZgTHBetJZis="; executable = false; };
+      tarball = fetch { file = "bootstrap-tools.cpio.bz2"; sha256 = "sha256-kRC/bhCmlD4L7KAvJQgcukk7AinkMz4IwmG1rqlh5tA="; executable = false; };
     }
 }:
 
@@ -62,9 +62,6 @@ rec {
     export NIX_IGNORE_LD_THROUGH_GCC=1
     unset SDKROOT
 
-    # Workaround for https://openradar.appspot.com/22671534 on 10.11.
-    export gl_cv_func_getcwd_abort_bug=no
-
     stripAllFlags=" " # the Darwin "strip" command doesn't know "-s"
   '';
 
@@ -78,7 +75,7 @@ rec {
     inherit (bootstrapFiles) mkdir bzip2 cpio tarball;
 
     __impureHostDeps = commonImpureHostDeps;
-  } // lib.optionalAttrs (config.contentAddressedByDefault or false) {
+  } // lib.optionalAttrs config.contentAddressedByDefault {
     __contentAddressed = true;
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
@@ -101,6 +98,7 @@ rec {
 
       doSign = localSystem.isAarch64 && last != null;
       doUpdateAutoTools = localSystem.isAarch64 && last != null;
+      inherit (last.pkgs) runCommandLocal;
 
       mkExtraBuildCommands = cc: ''
         rsrc="$out/resource-root"
@@ -226,23 +224,15 @@ rec {
         '';
       };
 
-      pbzx = stdenv.mkDerivation {
-        name = "bootstrap-stage0-pbzx";
-        phases = [ "installPhase" ];
-        installPhase = ''
-          mkdir -p $out/bin
-          ln -s ${bootstrapTools}/bin/pbzx $out/bin
-        '';
-      };
+      pbzx = self.runCommandLocal "bootstrap-stage0-pbzx" { } ''
+        mkdir -p $out/bin
+        ln -s ${bootstrapTools}/bin/pbzx $out/bin
+      '';
 
-      cpio = stdenv.mkDerivation {
-        name = "bootstrap-stage0-cpio";
-        phases = [ "installPhase" ];
-        installPhase = ''
-          mkdir -p $out/bin
-          ln -s ${bootstrapFiles.cpio} $out/bin/cpio
-        '';
-      };
+      cpio = self.runCommandLocal "bootstrap-stage0-cpio" { } ''
+        mkdir -p $out/bin
+        ln -s ${bootstrapFiles.cpio} $out/bin/cpio
+      '';
 
       darwin = super.darwin.overrideScope (selfDarwin: superDarwin: {
         darwin-stubs = superDarwin.darwin-stubs.override { inherit (self) stdenvNoCC fetchurl; };
@@ -256,37 +246,21 @@ rec {
           '';
         };
 
-        sigtool = stdenv.mkDerivation {
-          name = "bootstrap-stage0-sigtool";
-          phases = [ "installPhase" ];
-          installPhase = ''
-            mkdir -p $out/bin
-            ln -s ${bootstrapTools}/bin/sigtool $out/bin
+        sigtool = self.runCommandLocal "bootstrap-stage0-sigtool" { } ''
+           mkdir -p $out/bin
+           ln -s ${bootstrapTools}/bin/sigtool  $out/bin
+           ln -s ${bootstrapTools}/bin/codesign $out/bin
+        '';
 
-            # Rewrite nuked references
-            sed -e "s|[^( ]*\bsigtool\b|$out/bin/sigtool|g" \
-              ${bootstrapTools}/bin/codesign > $out/bin/codesign
-            chmod a+x $out/bin/codesign
-          '';
-        };
+        print-reexports = self.runCommandLocal "bootstrap-stage0-print-reexports" { } ''
+          mkdir -p $out/bin
+          ln -s ${bootstrapTools}/bin/print-reexports $out/bin
+        '';
 
-        print-reexports = stdenv.mkDerivation {
-          name = "bootstrap-stage0-print-reexports";
-          phases = [ "installPhase" ];
-          installPhase = ''
-            mkdir -p $out/bin
-            ln -s ${bootstrapTools}/bin/print-reexports $out/bin
-          '';
-        };
-
-        rewrite-tbd = stdenv.mkDerivation {
-          name = "bootstrap-stage0-rewrite-tbd";
-          phases = [ "installPhase" ];
-          installPhase = ''
-            mkdir -p $out/bin
-            ln -s ${bootstrapTools}/bin/rewrite-tbd $out/bin
-          '';
-        };
+        rewrite-tbd = self.runCommandLocal "bootstrap-stage0-rewrite-tbd" { } ''
+          mkdir -p $out/bin
+          ln -s ${bootstrapTools}/bin/rewrite-tbd $out/bin
+        '';
 
         binutils-unwrapped = { name = "bootstrap-stage0-binutils"; outPath = bootstrapTools; };
 
@@ -356,7 +330,7 @@ rec {
 
         libcxx = stdenv.mkDerivation {
           name = "bootstrap-stage0-libcxx";
-          phases = [ "installPhase" "fixupPhase" ];
+          dontUnpack = true;
           installPhase = ''
             mkdir -p $out/lib $out/include
             ln -s ${bootstrapTools}/lib/libc++.dylib $out/lib/libc++.dylib
@@ -395,6 +369,8 @@ rec {
     let
       persistent = self: super: with prevStage; {
         cmake = super.cmakeMinimal;
+
+        curl = super.curlMinimal;
 
         inherit pbzx cpio;
 
@@ -452,7 +428,7 @@ rec {
           libxml2 gettext sharutils gmp libarchive ncurses pkg-config libedit groff
           openssh sqlite sed serf openldap db cyrus-sasl expat apr-util subversion xz
           findfreetype libssh curl cmake autoconf automake libtool ed cpio coreutils
-          libssh2 nghttp2 libkrb5 ninja brotli;
+          libssh2 nghttp2 libkrb5 ninja brotli libiconv;
 
         "${finalLlvmPackages}" = super."${finalLlvmPackages}" // (
           let
@@ -466,7 +442,7 @@ rec {
               };
               libcxxabi = libSuper.libcxxabi.override ({
                 stdenv = overrideCC self.stdenv self.ccNoLibcxx;
-              } // lib.optionalAttrs (finalLlvmVersion == "7") {
+              } // lib.optionalAttrs (builtins.any (v: finalLlvmVersion == v) [ 7 11 12 13 ]) {
                 # TODO: the bootstrapping of llvm packages isn't consistent.
                 # `standalone` may be redundant if darwin behaves like useLLVM (or
                 # has useLLVM = true).
@@ -510,6 +486,7 @@ rec {
           gmp
           libiconv
           brotli.lib
+          file
         ] ++ lib.optional haveKRB5 libkrb5) ++
         (with pkgs."${finalLlvmPackages}"; [
           libcxx
@@ -585,6 +562,7 @@ rec {
           gmp
           libiconv
           brotli.lib
+          file
         ] ++ lib.optional haveKRB5 libkrb5) ++
         (with pkgs."${finalLlvmPackages}"; [
           libcxx
@@ -752,12 +730,16 @@ rec {
         darwin.binutils
         darwin.binutils.bintools
         curl.out
+        zstd.out
+        libidn2.out
+        libunistring.out
         openssl.out
         libssh2.out
         nghttp2.lib
         brotli.lib
         cc.expand-response-params
         libxml2.out
+        file
       ] ++ lib.optional haveKRB5 libkrb5
       ++ lib.optionals localSystem.isAarch64 [
         pkgs.updateAutotoolsGnuConfigScriptsHook

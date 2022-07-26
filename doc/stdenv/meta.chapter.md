@@ -114,6 +114,10 @@ For details, see [Licenses](#sec-meta-license).
 
 A list of the maintainers of this Nix expression. Maintainers are defined in [`nixpkgs/maintainers/maintainer-list.nix`](https://github.com/NixOS/nixpkgs/blob/master/maintainers/maintainer-list.nix). There is no restriction to becoming a maintainer, just add yourself to that list in a separate commit titled “maintainers: add alice”, and reference maintainers with `maintainers = with lib.maintainers; [ alice bob ]`.
 
+### `mainProgram` {#var-meta-mainProgram}
+
+The name of the main binary for the package. This effects the binary `nix run` executes and falls back to the name of the package. Example: `"rg"`
+
 ### `priority` {#var-meta-priority}
 
 The *priority* of the package, used by `nix-env` to resolve file name conflicts between packages. See the Nix manual page for `nix-env` for details. Example: `"10"` (a low-priority package).
@@ -134,7 +138,28 @@ Attribute Set `lib.platforms` defines [various common lists](https://github.com/
 This attribute is special in that it is not actually under the `meta` attribute set but rather under the `passthru` attribute set. This is due to how `meta` attributes work, and the fact that they are supposed to contain only metadata, not derivations.
 :::
 
-An attribute set with as values tests. A test is a derivation, which builds successfully when the test passes, and fails to build otherwise. A derivation that is a test needs to have `meta.timeout` defined.
+An attribute set with tests as values. A test is a derivation that builds when the test passes and fails to build otherwise.
+
+You can run these tests with:
+
+```ShellSession
+$ cd path/to/nixpkgs
+$ nix-build -A your-package.tests
+```
+
+#### Package tests
+
+Tests that are part of the source package are often executed in the `installCheckPhase`.
+
+Prefer `passthru.tests` for tests that are introduced in nixpkgs because:
+
+* `passthru.tests` tests the 'real' package, independently from the environment in which it was built
+* we can run `passthru.tests` independently
+* `installCheckPhase` adds overhead to each build
+
+For more on how to write and run package tests, see <xref linkend="sec-package-tests"/>.
+
+#### NixOS tests
 
 The NixOS tests are available as `nixosTests` in parameters of derivations. For instance, the OpenSMTPD derivation includes lines similar to:
 
@@ -147,6 +172,42 @@ The NixOS tests are available as `nixosTests` in parameters of derivations. For 
   };
 }
 ```
+
+NixOS tests run in a VM, so they are slower than regular package tests. For more information see [NixOS module tests](https://nixos.org/manual/nixos/stable/#sec-nixos-tests).
+
+Alternatively, you can specify other derivations as tests. You can make use of
+the optional parameter to inject the correct package without
+relying on non-local definitions, even in the presence of `overrideAttrs`.
+Here that's `finalAttrs.finalPackage`, but you could choose a different name if
+`finalAttrs` already exists in your scope.
+
+`(mypkg.overrideAttrs f).passthru.tests` will be as expected, as long as the
+definition of `tests` does not rely on the original `mypkg` or overrides it in
+all places.
+
+```nix
+# my-package/default.nix
+{ stdenv, callPackage }:
+stdenv.mkDerivation (finalAttrs: {
+  # ...
+  passthru.tests.example = callPackage ./example.nix { my-package = finalAttrs.finalPackage; };
+})
+```
+
+```nix
+# my-package/example.nix
+{ runCommand, lib, my-package, ... }:
+runCommand "my-package-test" {
+  nativeBuildInputs = [ my-package ];
+  src = lib.sources.sourcesByRegex ./. [ ".*.in" ".*.expected" ];
+} ''
+  my-package --help
+  my-package <example.in >example.actual
+  diff -U3 --color=auto example.expected example.actual
+  mkdir $out
+''
+```
+
 
 ### `timeout` {#var-meta-timeout}
 
@@ -164,10 +225,6 @@ meta.hydraPlatforms = [];
 ### `broken` {#var-meta-broken}
 
 If set to `true`, the package is marked as "broken", meaning that it won’t show up in `nix-env -qa`, and cannot be built or installed. Such packages should be removed from Nixpkgs eventually unless they are fixed.
-
-### `updateWalker` {#var-meta-updateWalker}
-
-If set to `true`, the package is tested to be updated correctly by the `update-walker.sh` script without additional settings. Such packages have `meta.version` set and their homepage (or the page specified by `meta.downloadPage`) contains a direct link to the package tarball.
 
 ## Licenses {#sec-meta-license}
 
@@ -192,3 +249,31 @@ Unfree package that cannot be redistributed. You can build it yourself, but you 
 ### `lib.licenses.unfreeRedistributableFirmware`, `"unfree-redistributable-firmware"` {#lib.licenses.unfreeredistributablefirmware-unfree-redistributable-firmware}
 
 This package supplies unfree, redistributable firmware. This is a separate value from `unfree-redistributable` because not everybody cares whether firmware is free.
+
+## Source provenance {#sec-meta-sourceProvenance}
+
+The value of a package's `meta.sourceProvenance` attribute specifies the provenance of the package's derivation outputs.
+
+If a package contains elements that are not built from the original source by a nixpkgs derivation, the `meta.sourceProvenance` attribute should be a list containing one or more value from `lib.sourceTypes` defined in [`nixpkgs/lib/source-types.nix`](https://github.com/NixOS/nixpkgs/blob/master/lib/source-types.nix).
+
+Adding this information helps users who have needs related to build transparency and supply-chain security to gain some visibility into their installed software or set policy to allow or disallow installation based on source provenance.
+
+The presence of a particular `sourceType` in a package's `meta.sourceProvenance` list indicates that the package contains some components falling into that category, though the *absence* of that `sourceType` does not *guarantee* the absence of that category of `sourceType` in the package's contents. A package with no `meta.sourceProvenance` set implies it has no *known* `sourceType`s other than `fromSource`.
+
+The meaning of the `meta.sourceProvenance` attribute does not depend on the value of the `meta.license` attribute.
+
+### `lib.sourceTypes.fromSource` {#lib.sourceTypes.fromSource}
+
+Package elements which are produced by a nixpkgs derivation which builds them from source code.
+
+### `lib.sourceTypes.binaryNativeCode` {#lib.sourceTypes.binaryNativeCode}
+
+Native code to be executed on the target system's CPU, built by a third party. This includes packages which wrap a downloaded AppImage or Debian package.
+
+### `lib.sourceTypes.binaryFirmware` {#lib.sourceTypes.binaryFirmware}
+
+Code to be executed on a peripheral device or embedded controller, built by a third party.
+
+### `lib.sourceTypes.binaryBytecode` {#lib.sourceTypes.binaryBytecode}
+
+Code to run on a VM interpreter or JIT compiled into bytecode by a third party. This includes packages which download Java `.jar` files from another source.

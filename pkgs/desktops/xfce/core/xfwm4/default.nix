@@ -1,4 +1,4 @@
-{ mkXfceDerivation, exo, librsvg, dbus-glib, epoxy, gtk3, libXdamage
+{ lib, mkXfceDerivation, exo, librsvg, dbus-glib, libepoxy, gtk3, libXdamage
 , libstartup_notification, libxfce4ui, libxfce4util, libwnck
 , libXpresent, xfconf }:
 
@@ -13,7 +13,7 @@ mkXfceDerivation {
 
   buildInputs = [
     dbus-glib
-    epoxy
+    libepoxy
     gtk3
     libXdamage
     libstartup_notification
@@ -24,7 +24,8 @@ mkXfceDerivation {
     xfconf
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Window manager for Xfce";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

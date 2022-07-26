@@ -2,12 +2,13 @@
 
 openjdk11.overrideAttrs (oldAttrs: rec {
   pname = "jetbrains-jdk";
-  version = "11_0_11-b1504.13";
+  version = "11_0_13-b1751.25";
+
   src = fetchFromGitHub {
     owner = "JetBrains";
     repo = "JetBrainsRuntime";
     rev = "jb${version}";
-    sha256 = "1xpgsgmmj5jp5qyw98hqmik6a7z3hfwmij023ij3qqymyj3nhm2i";
+    sha256 = "sha256-TPNYZUkAoiZfp7Ci3fslKnRNGY1lnyIhXYUt6J31lwI=";
   };
   patches = [];
   meta = with lib; {
@@ -25,7 +26,7 @@ openjdk11.overrideAttrs (oldAttrs: rec {
     '';
     homepage = "https://confluence.jetbrains.com/display/JBR/JetBrains+Runtime";
     inherit (openjdk11.meta) license platforms mainProgram;
-    maintainers = with maintainers; [ edwtjo petabyteboy ];
+    maintainers = with maintainers; [ edwtjo ];
   };
   passthru = oldAttrs.passthru // {
     home = "${jetbrains.jdk}/lib/openjdk";

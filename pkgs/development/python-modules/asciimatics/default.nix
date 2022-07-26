@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "asciimatics";
-  version = "1.13.0";
+  version = "1.14.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a041826ec5add03fb882d8981c1debf9b9e98274f4f2d52ec21ef30de70c2c6e";
+    sha256 = "sha256-FtIM5CIQtDTrBbpGns24KTrH7TwM4N1PcOMNctdgIic=";
   };
 
   nativeBuildInputs = [

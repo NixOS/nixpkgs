@@ -1,8 +1,11 @@
-{ lib, stdenv, fetchurl
+{ lib
+, stdenv
+, fetchurl
 }:
 
 stdenv.mkDerivation {
-  name = "libxpdf-3.02pl5";
+  pname = "libxpdf";
+  version = "3.02pl5";
 
   src = fetchurl {
     url = "https://dl.xpdfreader.com/old/xpdf-3.02.tar.gz";

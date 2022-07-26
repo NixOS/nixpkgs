@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   top = config.services.kubernetes;
+  otop = options.services.kubernetes;
   cfg = top.kubelet;
 
   cniConfig =
@@ -22,7 +23,11 @@ let
   infraContainer = pkgs.dockerTools.buildImage {
     name = "pause";
     tag = "latest";
-    contents = top.package.pause;
+    copyToRoot = pkgs.buildEnv {
+      name = "image-root";
+      pathsToLink = [ "/bin" ];
+      paths = [ top.package.pause ];
+    };
     config.Cmd = ["/bin/pause"];
   };
 
@@ -35,6 +40,7 @@ let
       key = mkOption {
         description = "Key of taint.";
         default = name;
+        defaultText = literalDocBook "Name of this submodule.";
         type = str;
       };
       value = mkOption {
@@ -76,12 +82,14 @@ in
     clusterDomain = mkOption {
       description = "Use alternative domain.";
       default = config.services.kubernetes.addons.dns.clusterDomain;
+      defaultText = literalExpression "config.${options.services.kubernetes.addons.dns.clusterDomain}";
       type = str;
     };
 
     clientCaFile = mkOption {
       description = "Kubernetes apiserver CA file for client authentication.";
       default = top.caFile;
+      defaultText = literalExpression "config.${otop.caFile}";
       type = nullOr path;
     };
 
@@ -96,7 +104,7 @@ in
         description = "Kubernetes CNI configuration.";
         type = listOf attrs;
         default = [];
-        example = literalExample ''
+        example = literalExpression ''
           [{
             "cniVersion": "0.3.1",
             "name": "mynet",
@@ -148,6 +156,7 @@ in
     featureGates = mkOption {
       description = "List set of feature gates";
       default = top.featureGates;
+      defaultText = literalExpression "config.${otop.featureGates}";
       type = listOf str;
     };
 
@@ -168,6 +177,7 @@ in
     hostname = mkOption {
       description = "Kubernetes kubelet hostname override.";
       default = config.networking.hostName;
+      defaultText = literalExpression "config.networking.hostName";
       type = str;
     };
 
@@ -337,10 +347,13 @@ in
           '';
           WorkingDirectory = top.dataDir;
         };
+        unitConfig = {
+          StartLimitIntervalSec = 0;
+        };
       };
 
       # Allways include cni plugins
-      services.kubernetes.kubelet.cni.packages = [pkgs.cni-plugins];
+      services.kubernetes.kubelet.cni.packages = [pkgs.cni-plugins pkgs.cni-plugin-flannel];
 
       boot.kernelModules = ["br_netfilter" "overlay"];
 
@@ -384,4 +397,6 @@ in
     })
 
   ];
+
+  meta.buildDocsInSandbox = false;
 }

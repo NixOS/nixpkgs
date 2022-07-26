@@ -5,10 +5,10 @@ with lib;
 {
   name = "yabar";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ ma27 ];
+    maintainers = [ ];
   };
 
-  machine = {
+  nodes.machine = {
     imports = [ ./common/x11.nix ./common/user-account.nix ];
 
     test-support.displayManager.auto.user = "bob";

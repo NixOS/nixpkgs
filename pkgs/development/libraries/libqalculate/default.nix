@@ -1,21 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, mpfr, libxml2, intltool, pkg-config, doxygen,
-  autoreconfHook, readline, libiconv, icu, curl, gnuplot, gettext }:
+{ lib, stdenv, fetchFromGitHub
+, mpfr, gnuplot
+, readline
+, libxml2, curl
+, intltool, libiconv, icu, gettext
+, pkg-config, doxygen, autoreconfHook, buildPackages
+}:
 
 stdenv.mkDerivation rec {
   pname = "libqalculate";
-  version = "3.19.0";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "libqalculate";
     rev = "v${version}";
-    sha256 = "1w44407wb552q21dz4m2nwwdi8b9hzjb2w1l3ffsikzqckc7wbyj";
+    sha256 = "sha256-mIzHizoDsdSVcepWACeVkCTgt4gxd99WKXrrGi+qASo=";
   };
 
   outputs = [ "out" "dev" "doc" ];
 
   nativeBuildInputs = [ intltool pkg-config autoreconfHook doxygen ];
   buildInputs = [ curl gettext libiconv readline ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   propagatedBuildInputs = [ libxml2 mpfr icu ];
   enableParallelBuilding = true;
 
@@ -41,8 +47,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "An advanced calculator library";
     homepage = "http://qalculate.github.io";
-    maintainers = with maintainers; [ gebner ];
     license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ gebner doronbehar ];
+    mainProgram = "qalc";
     platforms = platforms.all;
   };
 }

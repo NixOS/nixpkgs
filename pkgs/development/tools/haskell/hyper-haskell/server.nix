@@ -1,9 +1,10 @@
-{ stdenv, ghcWithPackages, makeWrapper, packages }:
+{ stdenv, ghcWithPackages, makeWrapper, packages, lib }:
 
 let
 hyperHaskellEnv = ghcWithPackages (self: [ self.hyper-haskell-server ] ++ packages self);
 in stdenv.mkDerivation {
-  name = "hyper-haskell-server-with-packages-${hyperHaskellEnv.version}";
+  pname = "hyper-haskell-server-with-packages";
+  version = hyperHaskellEnv.version;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -18,4 +19,11 @@ in stdenv.mkDerivation {
   # trivial derivation
   preferLocalBuild = true;
   allowSubstitutes = false;
+
+  meta = {
+    # Marked as broken because the underlying
+    # haskellPackages.hyper-haskell-server is marked as broken.
+    hydraPlatforms = lib.platforms.none;
+    broken = true;
+  };
 }

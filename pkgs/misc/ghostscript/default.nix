@@ -1,12 +1,9 @@
 { config, stdenv, lib, fetchurl, pkg-config, zlib, expat, openssl, autoconf
 , libjpeg, libpng, libtiff, freetype, fontconfig, libpaper, jbig2dec
-, libiconv, ijs, lcms2, fetchpatch
-, cupsSupport ? config.ghostscript.cups or (!stdenv.isDarwin), cups ? null
-, x11Support ? cupsSupport, xlibsWrapper ? null # with CUPS, X11 only adds very little
+, libiconv, ijs, lcms2, callPackage, bash, buildPackages, openjpeg
+, cupsSupport ? config.ghostscript.cups or (!stdenv.isDarwin), cups
+, x11Support ? cupsSupport, xlibsWrapper # with CUPS, X11 only adds very little
 }:
-
-assert x11Support -> xlibsWrapper != null;
-assert cupsSupport -> cups != null;
 
 let
   fonts = stdenv.mkDerivation {
@@ -32,19 +29,15 @@ let
 
 in
 stdenv.mkDerivation rec {
-  pname = "ghostscript";
-  version = "9.53.3";
+  pname = "ghostscript${lib.optionalString (x11Support) "-with-X"}";
+  version = "9.56.1";
 
   src = fetchurl {
-    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9${lib.versions.minor version}${lib.versions.patch version}/${pname}-${version}.tar.xz";
-    sha512 = "2vif3vgxa5wma16yxvhhkymk4p309y5204yykarq94r5rk890556d2lj5w7acnaa2ymkym6y0zd4vq9sy9ca2346igg2c6dxqkjr0zb";
+    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9${lib.versions.minor version}${lib.versions.patch version}/ghostscript-${version}.tar.xz";
+    sha512 = "22ysgdprh960rxmxyk2fy2my47cdrhfhbrwar1955hvad54iw79l916drp92wh3qzbxw6z40i70wk00vz8bn2ryig7qgpc1q01m2npy";
   };
 
   patches = [
-    (fetchpatch {
-      url = "https://github.com/ArtifexSoftware/ghostpdl/commit/41ef9a0bc36b9db7115fbe9623f989bfb47bbade.patch";
-      sha256 = "1qpc6q1fpxshqc0mqgg36kng47kgljk50bmr8p7wn21jgfkh7m8w";
-    })
     ./urw-font-files.patch
     ./doc-no-ref.diff
   ];
@@ -53,19 +46,28 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkg-config autoconf ];
-  buildInputs =
-    [ zlib expat openssl
-      libjpeg libpng libtiff freetype fontconfig libpaper jbig2dec
-      libiconv ijs lcms2
-    ]
-    ++ lib.optional x11Support xlibsWrapper
-    ++ lib.optional cupsSupport cups
-    ;
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+  ];
+
+  nativeBuildInputs = [ pkg-config autoconf zlib ]
+    ++ lib.optional cupsSupport cups;
+
+  buildInputs = [
+    zlib expat openssl
+    libjpeg libpng libtiff freetype fontconfig libpaper jbig2dec
+    libiconv ijs lcms2 bash openjpeg
+  ]
+  ++ lib.optional x11Support xlibsWrapper
+  ++ lib.optional cupsSupport cups
+  ;
 
   preConfigure = ''
-    # requires in-tree (heavily patched) openjpeg
-    rm -rf jpeg libpng zlib jasper expat tiff lcms2mt jbig2dec freetype cups/libs ijs
+    # https://ghostscript.com/doc/current/Make.htm
+    export CCAUX=$CC_FOR_BUILD
+    ${lib.optionalString cupsSupport ''export CUPSCONFIG="${cups.dev}/bin/cups-config"''}
+
+    rm -rf jpeg libpng zlib jasper expat tiff lcms2mt jbig2dec freetype cups/libs ijs openjpeg
 
     sed "s@if ( test -f \$(INCLUDE)[^ ]* )@if ( true )@; s@INCLUDE=/usr/include@INCLUDE=/no-such-path@" -i base/unix-aux.mak
     sed "s@^ZLIBDIR=.*@ZLIBDIR=${zlib.dev}/include@" -i configure.ac
@@ -76,16 +78,15 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-system-libtiff"
     "--enable-dynamic"
+    "--without-tesseract"
   ]
   ++ lib.optional x11Support "--with-x"
   ++ lib.optionals cupsSupport [
     "--enable-cups"
-    "--with-cups-serverbin=$(out)/lib/cups"
-    "--with-cups-serverroot=$(out)/etc/cups"
-    "--with-cups-datadir=$(out)/share/cups"
   ];
 
-  doCheck = true;
+  # make check does nothing useful
+  doCheck = false;
 
   # don't build/install statically linked bin/gs
   buildFlags = [ "so" ];
@@ -115,14 +116,28 @@ stdenv.mkDerivation rec {
     runHook preInstallCheck
 
     $out/bin/gs --version
+    pushd examples
+    for f in *.{ps,eps,pdf}; do
+      echo "Rendering $f"
+      $out/bin/gs \
+        -dNOPAUSE \
+        -dBATCH \
+        -sDEVICE=bitcmyk \
+        -sOutputFile=/dev/null \
+        -r600 \
+        -dBufferSpace=100000 \
+        $f
+    done
+    popd # examples
 
     runHook postInstallCheck
   '';
 
+  passthru.tests.test-corpus-render = callPackage ./test-corpus-render.nix {};
+
   meta = {
     homepage = "https://www.ghostscript.com/";
     description = "PostScript interpreter (mainline version)";
-
     longDescription = ''
       Ghostscript is the name of a set of tools that provides (i) an
       interpreter for the PostScript language and the PDF file format,
@@ -131,10 +146,9 @@ stdenv.mkDerivation rec {
       operations in the PostScript language, and (iii) a wide variety
       of output drivers for various file formats and printers.
     '';
-
     license = lib.licenses.agpl3;
-
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.viric ];
+    mainProgram = "gs";
   };
 }

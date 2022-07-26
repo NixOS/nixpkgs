@@ -1,14 +1,10 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , nix-update-script
 , appstream
-, appstream-glib
 , dbus
-, desktop-file-utils
-, elementary-gtk-theme
-, elementary-icon-theme
 , fetchFromGitHub
 , flatpak
-, gettext
 , glib
 , granite
 , gtk3
@@ -20,7 +16,6 @@
 , meson
 , ninja
 , packagekit
-, pantheon
 , pkg-config
 , python3
 , vala
@@ -30,26 +25,17 @@
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "3.6.0";
+  version = "3.10.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0kwqgilhyrj2nbvw5y34nzch5h9jnrg1a1n333qdsx4ax6yrxh4j";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-Y3ueicw6Hn6lw24hdPeJohGol6l7UlQFIefYsBVY6Hg=";
   };
 
   nativeBuildInputs = [
-    appstream-glib
     dbus # for pkg-config
-    desktop-file-utils
-    gettext
     meson
     ninja
     pkg-config
@@ -60,8 +46,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     appstream
-    elementary-gtk-theme
-    elementary-icon-theme
     flatpak
     glib
     granite
@@ -76,7 +60,6 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dhomepage=false"
     "-Dpayments=false"
     "-Dcurated=false"
   ];
@@ -86,11 +69,18 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
   meta = with lib; {
     homepage = "https://github.com/elementary/appcenter";
     description = "An open, pay-what-you-want app store for indie developers, designed for elementary OS";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.appcenter";
   };
 }

@@ -1,4 +1,4 @@
-{stdenv, lib, fetchurl, unzip, makeWrapper}:
+{ stdenv, lib, fetchurl, unzip, makeWrapper }:
 
 let
   # Gradle is a build system that bootstraps itself. This is what it actually
@@ -15,23 +15,23 @@ let
   proguardVersion = "5.3.3";
 
   proguardGradlePOM = fetchurl {
-    url = "https://repo1.maven.org/maven2/net/sf/proguard/proguard-gradle/${proguardVersion}/proguard-gradle-${proguardVersion}.pom";
+    url = "mirror://maven/net/sf/proguard/proguard-gradle/${proguardVersion}/proguard-gradle-${proguardVersion}.pom";
     sha256 = "03v9zm3ykfkyb5cs5ald07ph103fh68d5c33rv070r29p71dwszj";
   };
   proguardGradleJAR = fetchurl {
-    url = "https://repo1.maven.org/maven2/net/sf/proguard/proguard-gradle/${proguardVersion}/proguard-gradle-${proguardVersion}.jar";
+    url = "mirror://maven/net/sf/proguard/proguard-gradle/${proguardVersion}/proguard-gradle-${proguardVersion}.jar";
     sha256 = "0shhpsjfc5gam15jnv1hk718v5c7vi7dwdc3gvmnid6dc85kljzk";
   };
   proguardParentPOM = fetchurl {
-    url = "https://repo1.maven.org/maven2/net/sf/proguard/proguard-parent/${proguardVersion}/proguard-parent-${proguardVersion}.pom";
+    url = "mirror://maven/net/sf/proguard/proguard-parent/${proguardVersion}/proguard-parent-${proguardVersion}.pom";
     sha256 = "0mv0zbwyw8xa4mkc5kw69y5xqashkz9gp123akfvh9f6152l3202";
   };
   proguardBasePOM = fetchurl {
-    url = "https://repo1.maven.org/maven2/net/sf/proguard/proguard-base/${proguardVersion}/proguard-base-${proguardVersion}.pom";
+    url = "mirror://maven/net/sf/proguard/proguard-base/${proguardVersion}/proguard-base-${proguardVersion}.pom";
     sha256 = "1jnr6zsxfimb8wglqlwa6rrdc3g3nqf1dyw0k2dq9cj0q4pgn7p5";
   };
   proguardBaseJAR = fetchurl {
-    url = "https://repo1.maven.org/maven2/net/sf/proguard/proguard-base/${proguardVersion}/proguard-base-${proguardVersion}.jar";
+    url = "mirror://maven/net/sf/proguard/proguard-base/${proguardVersion}/proguard-base-${proguardVersion}.jar";
     sha256 = "11nwdb9y84cghcx319nsjjf9m035s4s1184zrhzpvaxq2wvqhbhx";
   };
 
@@ -53,16 +53,21 @@ let
   };
 in
 stdenv.mkDerivation {
-  name = "mobilesdk-8.3.2.GA";
-  src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") then fetchurl {
-    url = "https://builds.appcelerator.com/mobile/8_3_X/mobilesdk-8.3.2.v20200117111803-linux.zip";
-    sha256 = "04pfw21jrx9w259lphynwykqjk4c9hm0zix4d40s7mf8mmh3xdx9";
-  }
-  else if stdenv.system == "x86_64-darwin" then fetchurl {
-    url = "https://builds.appcelerator.com/mobile/8_3_X/mobilesdk-8.3.2.v20200117111803-osx.zip";
-    sha256 = "1zflq5hc96lrriw71ya623kkskkisi9yayg8qs03zimi0gksizxw";
-  }
-  else throw "Platform: ${stdenv.system} not supported!";
+  pname = "mobilesdk";
+  version = "8.3.2.GA";
+
+  src =
+    if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") then
+      fetchurl {
+        url = "https://builds.appcelerator.com/mobile/8_3_X/mobilesdk-8.3.2.v20200117111803-linux.zip";
+        sha256 = "04pfw21jrx9w259lphynwykqjk4c9hm0zix4d40s7mf8mmh3xdx9";
+      }
+    else if stdenv.system == "x86_64-darwin" then
+      fetchurl {
+        url = "https://builds.appcelerator.com/mobile/8_3_X/mobilesdk-8.3.2.v20200117111803-osx.zip";
+        sha256 = "1zflq5hc96lrriw71ya623kkskkisi9yayg8qs03zimi0gksizxw";
+      }
+    else throw "Platform: ${stdenv.system} not supported!";
 
   nativeBuildInputs = [ makeWrapper unzip ];
 

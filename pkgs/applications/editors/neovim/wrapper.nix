@@ -3,6 +3,7 @@
 , bundlerEnv, ruby
 , nodejs
 , nodePackages
+, python3
 , python3Packages
 , callPackage
 }:
@@ -17,7 +18,7 @@ let
     , wrapperArgs ? []
     , manifestRc ? null
     , withPython2 ? false
-    , withPython3 ? true,  python3Env ? null
+    , withPython3 ? true,  python3Env ? python3
     , withNodeJs ? false
     , rubyEnv ? null
     , vimAlias ? false
@@ -44,7 +45,7 @@ let
     finalMakeWrapperArgs =
       [ "${neovim}/bin/nvim" "${placeholder "out"}/bin/nvim" ]
       ++ [ "--set" "NVIM_SYSTEM_RPLUGIN_MANIFEST" "${placeholder "out"}/rplugin.vim" ]
-      ++ optionals wrapRc [ "--add-flags" "-u ${writeText "init.vim" neovimRcContent}" ]
+      ++ optionals wrapRc [ "--add-flags" "--clean" "--add-flags" "-u ${writeText "init.vim" neovimRcContent}" ]
       ;
   in
   assert withPython2 -> throw "Python2 support has been removed from the neovim wrapper, please remove withPython2 and python2Env.";
@@ -59,7 +60,7 @@ let
           --replace 'Name=Neovim' 'Name=WrappedNeovim'
       ''
       + optionalString withPython3 ''
-        makeWrapper ${python3Env}/bin/python3 $out/bin/nvim-python3 --unset PYTHONPATH
+        makeWrapper ${python3Env.interpreter} $out/bin/nvim-python3 --unset PYTHONPATH
       ''
       + optionalString (rubyEnv != null) ''
         ln -s ${rubyEnv}/bin/neovim-ruby-host $out/bin/nvim-ruby

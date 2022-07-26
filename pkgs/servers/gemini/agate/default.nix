@@ -1,17 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, libiconv, Security }:
+{ lib, stdenv, nixosTests, fetchFromGitHub, rustPlatform, libiconv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "agate";
-  version = "3.1.0";
+  version = "3.2.4";
 
   src = fetchFromGitHub {
     owner = "mbrubeck";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-miIMz4Lk4R5So96Ceqe1Fl5ozpf47qWq0GgtKFDDCCA=";
+    sha256 = "sha256-NyHs/9kRBGqmh44MSRzYb7CSvEB0RlmL9l5QpGEwDhY=";
   };
-
-  cargoSha256 = "sha256-NZpqCl37dZUvXmn4Q1Pvbz3LSxk1s0s5x1CBO0POA/4=";
+  cargoSha256 = "sha256-V0MLXOLLmKnk4Iyhbu+EomsxOX6RLYHIsi/IwWiqmcg=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
@@ -23,9 +22,11 @@ rustPlatform.buildRustPackage rec {
     runHook postInstallCheck
   '';
 
+  passthru.tests = { inherit (nixosTests) agate; };
+
   meta = with lib; {
-    homepage = "https://proxy.vulpes.one/gemini/qwertqwefsday.eu/agate.gmi";
-    changelog = "https://proxy.vulpes.one/gemini/qwertqwefsday.eu/agate.gmi";
+    homepage = "https://github.com/mbrubeck/agate";
+    changelog = "https://github.com/mbrubeck/agate/blob/master/CHANGELOG.md";
     description = "Very simple server for the Gemini hypertext protocol";
     longDescription = ''
       Agate is a server for the Gemini network protocol, built with the Rust

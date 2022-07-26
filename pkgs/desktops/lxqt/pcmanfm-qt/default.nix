@@ -3,10 +3,12 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
+, libexif
 , lxqt
 , qtbase
 , qttools
 , qtx11extras
+, qtimageformats
 , libfm-qt
 , menu-cache
 , lxmenu-data
@@ -15,13 +17,13 @@
 
 mkDerivation rec {
   pname = "pcmanfm-qt";
-  version = "0.17.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1awyncpypygsrg7d2nc6xh1l4xaln3ypdliy4xmq8bf94sh9rf0y";
+    sha256 = "AgNupKdjSigrgY2U9bnkQCV0BrRCw2X9WR4jUH6YmEU=";
   };
 
   nativeBuildInputs = [
@@ -31,9 +33,11 @@ mkDerivation rec {
   ];
 
   buildInputs = [
+    libexif
     qtbase
     qttools
     qtx11extras
+    qtimageformats # add-on module to support more image file formats
     libfm-qt
     libfm-qt
     menu-cache
@@ -51,6 +55,6 @@ mkDerivation rec {
     description = "File manager and desktop icon manager (Qt port of PCManFM and libfm)";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

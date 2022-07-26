@@ -11,6 +11,7 @@
 , kwindowsystem
 , liblxqt
 , libqtxdg
+, qtxdg-tools
 , procps
 , xorg
 , xdg-user-dirs
@@ -19,13 +20,13 @@
 
 mkDerivation rec {
   pname = "lxqt-session";
-  version = "0.17.1";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1nhw3y3dm4crawc1905l6drn0i79fs1dzs8iak0vmmplbiv3fvgg";
+    sha256 = "NOwuHz5SiygE/9cLrYPz24L5v8BE6Hwqp6uKD5SnOBU=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +43,7 @@ mkDerivation rec {
     kwindowsystem
     liblxqt
     libqtxdg
+    qtxdg-tools
     procps
     xorg.libpthreadstubs
     xorg.libXdmcp
@@ -55,6 +57,6 @@ mkDerivation rec {
     description = "An alternative session manager ported from the original razor-session";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

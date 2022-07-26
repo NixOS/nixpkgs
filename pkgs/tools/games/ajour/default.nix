@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , fetchFromGitHub
 , rustPlatform
 , autoPatchelfHook
@@ -11,6 +12,7 @@
 , kdialog
 , zenity
 , openssl
+, libglvnd
 , libX11
 , libxcb
 , libXcursor
@@ -23,6 +25,7 @@
 
 let
   rpathLibs = [
+    libglvnd
     libXcursor
     libXi
     libxkbcommon
@@ -34,16 +37,16 @@ let
 
 in rustPlatform.buildRustPackage rec {
   pname = "Ajour";
-  version = "1.2.5";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "casperstorm";
     repo = "ajour";
     rev = version;
-    sha256 = "sha256-Jn+CCUUGVa6YTD3af4bkY1wlJ4gAPOzxOwgfNx6VHL0=";
+    sha256 = "sha256-oVaNLclU0EVNtxAASE8plXcC+clkwhBeb9pz1vXufV0=";
   };
 
-  cargoSha256 = "sha256-7XMcZHezqk4g7FPgFCnMhbjJsJE8QkfzbtujUsV7GUw=";
+  cargoSha256 = "sha256-Q+wYBLsZN8YQtUJfrxmjImbnWRPmngJPB8sDG65LuJY=";
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -59,6 +62,7 @@ in rustPlatform.buildRustPackage rec {
     openssl
     libxcb
     libX11
+    libxkbcommon
   ];
 
   fixupPhase = ''
@@ -76,6 +80,7 @@ in rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/casperstorm/ajour";
     changelog = "https://github.com/casperstorm/ajour/blob/master/CHANGELOG.md";
     license = licenses.mit;
+    broken = stdenv.isDarwin;
     maintainers = with maintainers; [ hexa ];
   };
 }

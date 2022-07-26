@@ -1,24 +1,54 @@
-{ lib, stdenv, gettext, fetchurl, webkitgtk, pkg-config, gtk3, glib
-, gnome, sqlite
-, itstool, libxml2, libxslt, gst_all_1
-, wrapGAppsHook }:
+{ lib
+, stdenv
+, gettext
+, fetchurl
+, webkitgtk
+, pkg-config
+, gtk3
+, libhandy
+, glib
+, gnome
+, sqlite
+, itstool
+, libxml2
+, libxslt
+, gst_all_1
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "yelp";
-  version = "40.0";
+  version = "42.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/yelp/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-B3dfoGzSg2Xs2Cm7FqhaaCiXqyHYzONFlrvvXNRVquA=";
+    sha256 = "sha256-JbEUarhUmIilqNoGf2O0cLDw+AC2roicrNEU0B1xO0E=";
   };
 
-  nativeBuildInputs = [ pkg-config gettext itstool wrapGAppsHook ];
-  buildInputs = [
-    gtk3 glib webkitgtk sqlite
-    libxml2 libxslt gnome.yelp-xsl
-    gnome.adwaita-icon-theme
-    gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
+  nativeBuildInputs = [
+    pkg-config
+    gettext
+    itstool
+    wrapGAppsHook
   ];
+
+  buildInputs = [
+    gtk3
+    libhandy
+    glib
+    webkitgtk
+    sqlite
+    libxml2
+    libxslt
+    gnome.yelp-xsl
+    gnome.adwaita-icon-theme
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+  ];
+
+  # To reduce the GNOME ISO closure size.  Remove when other packages
+  # are using webkit2gtk_4_1.
+  configureFlags = ["--with-webkit2gtk-4-0"];
 
   passthru = {
     updateScript = gnome.updateScript {

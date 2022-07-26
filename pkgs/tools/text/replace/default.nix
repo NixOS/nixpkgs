@@ -11,7 +11,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ];
 
-  makeFlags = [ "TREE=\$(out)" "MANTREE=\$(TREE)/share/man" ];
+  makeFlags = [
+    "TREE=\$(out)"
+    "MANTREE=\$(TREE)/share/man"
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
 
   preBuild = ''
     sed -e "s@/bin/mv@$(type -P mv)@" -i replace.h
@@ -23,8 +27,9 @@ stdenv.mkDerivation rec {
   patches = [./malloc.patch];
 
   meta = {
-    homepage = "https://replace.richardlloyd.org.uk/";
     description = "A tool to replace verbatim strings";
+    homepage = "https://replace.richardlloyd.org.uk/";
+    mainProgram = "replace-literal";
     platforms = lib.platforms.unix;
   };
 }

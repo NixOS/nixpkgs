@@ -52,7 +52,7 @@ let
     *    testScript = ''
     *      <exporterName>.start()
     *      <exporterName>.wait_for_unit("prometheus-<exporterName>-exporter.service")
-    *      <exporterName>.wait_for_open_port("1234")
+    *      <exporterName>.wait_for_open_port(1234)
     *      <exporterName>.succeed("curl -sSf 'localhost:1234/metrics'")
     *      <exporterName>.shutdown()
     *    '';
@@ -259,6 +259,19 @@ let
       '';
     };
 
+    fastly = {
+      exporterConfig = {
+        enable = true;
+        tokenPath = pkgs.writeText "token" "abc123";
+      };
+
+      # noop: fastly's exporter can't start without first talking to fastly
+      # see: https://github.com/peterbourgon/fastly-exporter/issues/87
+      exporterTest = ''
+        succeed("true");
+      '';
+    };
+
     fritzbox = {
       # TODO add proper test case
       exporterConfig = {
@@ -280,6 +293,7 @@ let
       };
       exporterTest = ''
         wait_for_unit("prometheus-influxdb-exporter.service")
+        wait_for_open_port(9122)
         succeed(
           "curl -XPOST http://localhost:9122/write --data-binary 'influxdb_exporter,distro=nixos,added_in=21.09 value=1'"
         )
@@ -360,7 +374,6 @@ let
         systemd.services.prometheus-kea-exporter.after = [ "kea-dhcp6-server.service" ];
 
         services.kea = {
-          enable = true;
           dhcp6 = {
             enable = true;
             settings = {
@@ -464,7 +477,6 @@ let
         extraFlags = [ "--lnd.network=regtest" ];
       };
       metricProvider = {
-        virtualisation.memorySize = 1024;
         systemd.services.prometheus-lnd-exporter.serviceConfig.RestartSec = 15;
         systemd.services.prometheus-lnd-exporter.after = [ "lnd.service" ];
         services.bitcoind.regtest = {
@@ -545,17 +557,23 @@ let
         systemd.services.prometheus-mail-exporter = {
           after = [ "postfix.service" ];
           requires = [ "postfix.service" ];
-          preStart = ''
-            mkdir -p -m 0700 mail-exporter/new
-          '';
           serviceConfig = {
+            ExecStartPre = [
+              "${pkgs.writeShellScript "create-maildir" ''
+                mkdir -p -m 0700 mail-exporter/new
+              ''}"
+            ];
             ProtectHome = true;
             ReadOnlyPaths = "/";
             ReadWritePaths = "/var/spool/mail";
             WorkingDirectory = "/var/spool/mail";
           };
         };
-        users.users.mailexporter.isSystemUser = true;
+        users.users.mailexporter = {
+          isSystemUser = true;
+          group = "mailexporter";
+        };
+        users.groups.mailexporter = {};
       };
       exporterTest = ''
         wait_for_unit("postfix.service")
@@ -656,7 +674,7 @@ let
             basicAuth.nextcloud-exporter = "snakeoilpw";
             locations."/" = {
               root = "${pkgs.prometheus-nextcloud-exporter.src}/serverinfo/testdata";
-              tryFiles = "/negative-space.xml =404";
+              tryFiles = "/negative-space.json =404";
             };
           };
         };
@@ -858,6 +876,9 @@ let
         wait_for_unit("prometheus-postfix-exporter.service")
         wait_for_file("/var/lib/postfix/queue/public/showq")
         wait_for_open_port(9154)
+        wait_until_succeeds(
+            "curl -sSf http://localhost:9154/metrics | grep 'postfix_up{path=\"/var/lib/postfix/queue/public/showq\"} 1'"
+        )
         succeed(
             "curl -sSf http://localhost:9154/metrics | grep 'postfix_smtpd_connects_total 0'"
         )
@@ -914,6 +935,27 @@ let
       '';
     };
 
+    pve = let
+      pveExporterEnvFile = pkgs.writeTextFile {
+        name = "pve.env";
+        text = ''
+          PVE_USER="test_user@pam"
+          PVE_PASSWORD="hunter3"
+          PVE_VERIFY_SSL="false"
+        '';
+      };
+    in {
+      exporterConfig = {
+        enable = true;
+        environmentFile = pveExporterEnvFile;
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-pve-exporter.service")
+        wait_for_open_port(9221)
+        wait_until_succeeds("curl localhost:9221")
+      '';
+    };
+
     py-air-control = {
       nodeName = "py_air_control";
       exporterConfig = {
@@ -933,7 +975,7 @@ let
       exporterConfig = {
         enable = true;
       };
-      metricProvider.services.redis.enable = true;
+      metricProvider.services.redis.servers."".enable = true;
       exporterTest = ''
         wait_for_unit("redis.service")
         wait_for_unit("prometheus-redis-exporter.service")
@@ -949,7 +991,6 @@ let
       };
       metricProvider = {
         services.rspamd.enable = true;
-        virtualisation.memorySize = 1024;
       };
       exporterTest = ''
         wait_for_unit("rspamd.service")
@@ -1009,6 +1050,25 @@ let
             "curl -sSf 'localhost:9172/probe?name=success' | grep -q '{}'".format(
                 'script_success{script="success"} 1'
             )
+        )
+      '';
+    };
+
+    smartctl = {
+      exporterConfig = {
+        enable = true;
+        devices = [
+          "/dev/vda"
+        ];
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-smartctl-exporter.service")
+        wait_for_open_port("9633")
+        wait_until_succeeds(
+          "curl -sSf 'localhost:9633/metrics'"
+        )
+        wait_until_succeeds(
+            'journalctl -eu prometheus-smartctl-exporter.service -o cat | grep "/dev/vda: Unable to detect device type"'
         )
       '';
     };
@@ -1119,6 +1179,10 @@ let
     systemd = {
       exporterConfig = {
         enable = true;
+
+        extraFlags = [
+          "--collector.enable-restart-count"
+        ];
       };
       metricProvider = { };
       exporterTest = ''
@@ -1127,6 +1191,11 @@ let
         succeed(
             "curl -sSf localhost:9558/metrics | grep '{}'".format(
                 'systemd_unit_state{name="basic.target",state="active",type="target"} 1'
+            )
+        )
+        succeed(
+            "curl -sSf localhost:9558/metrics | grep '{}'".format(
+                'systemd_service_restart_total{state="prometheus-systemd-exporter.service"} 0'
             )
         )
       '';
@@ -1268,7 +1337,7 @@ mapAttrs
       '';
 
       meta = with maintainers; {
-        maintainers = [ willibutz elseym ];
+        maintainers = [ willibutz ];
       };
     }
   )))

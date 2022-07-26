@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , nose
-, python
 , pythonOlder
 }:
 

@@ -1,25 +1,34 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices, cmake
+{ lib
+, stdenv
+, callPackage
+, fetchFromGitHub
+, rustPlatform
+, CoreServices
+, cmake
 , libiconv
 , useMimalloc ? false
-# FIXME: Test doesn't pass under rustc 1.52.1 due to different escaping of `'` in string.
-, doCheck ? false
+, doCheck ? true
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-analyzer-unwrapped";
-  version = "2021-08-02";
-  cargoSha256 = "10mdkqf6fqbzx49gwc283ms56yvrcdlvyk4y98jf33b8g5jmr8j5";
+  version = "2022-07-11";
+  cargoSha256 = "sha256-XpLXx3f+BC8+O4Df/PJ4LWuLxX14e/ga+aFu/JxVdpg=";
 
   src = fetchFromGitHub {
-    owner = "rust-analyzer";
+    owner = "rust-lang";
     repo = "rust-analyzer";
     rev = version;
-    sha256 = "1nh1naaqc6f40raz31a0vwypaxm5drzdl2bwjfqx2gydy6051gcl";
+    sha256 = "sha256-HU1+Rql35ouZe0lx1ftCMDDwC9lqN3COudvMe+8XIx0=";
   };
 
-  buildAndTestSubdir = "crates/rust-analyzer";
+  patches = [
+    # Code format and git history check require more dependencies but don't really matter for packaging.
+    # So just ignore them.
+    ./ignore-git-and-rustfmt-tests.patch
+  ];
 
-  cargoBuildFlags = lib.optional useMimalloc "--features=mimalloc";
+  buildAndTestSubdir = "crates/rust-analyzer";
 
   nativeBuildInputs = lib.optional useMimalloc cmake;
 
@@ -28,7 +37,9 @@ rustPlatform.buildRustPackage rec {
     libiconv
   ];
 
-  RUST_ANALYZER_REV = version;
+  buildFeatures = lib.optional useMimalloc "mimalloc";
+
+  CFG_RELEASE = version;
 
   inherit doCheck;
   preCheck = lib.optionalString doCheck ''
@@ -44,12 +55,17 @@ rustPlatform.buildRustPackage rec {
     runHook postInstallCheck
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = ./update.sh;
+    # FIXME: Pass overrided `rust-analyzer` once `buildRustPackage` also implements #119942
+    tests.neovim-lsp = callPackage ./test-neovim-lsp.nix { };
+  };
 
   meta = with lib; {
-    description = "An experimental modular compiler frontend for the Rust language";
-    homepage = "https://github.com/rust-analyzer/rust-analyzer";
+    description = "A modular compiler frontend for the Rust language";
+    homepage = "https://rust-analyzer.github.io";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ oxalica ];
+    mainProgram = "rust-analyzer";
   };
 }

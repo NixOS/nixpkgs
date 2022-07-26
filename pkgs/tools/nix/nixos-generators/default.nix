@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "nixos-generators";
-  version = "1.3.0";
+  version = "1.6.0";
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nixos-generators";
     rev = version;
-    sha256 = "1gbj2jw7zv3mnq1lyj4q53jpfj642jy7lvg0kp060znvhws3370y";
+    sha256 = "sha256-dpim9Mtd57Yj6qt7p7UKwjWm6NnOU3S7jaEyEscSyPE=";
   };
   nativeBuildInputs = [ makeWrapper ];
   installFlags = [ "PREFIX=$(out)" ];
@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     homepage    = "https://github.com/nix-community/nixos-generators";
     license     = licenses.mit;
     maintainers = with maintainers; [ lassulus ];
+    mainProgram = "nixos-generate";
     platforms   = platforms.unix;
   };
 }

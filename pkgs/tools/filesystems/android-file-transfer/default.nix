@@ -29,9 +29,6 @@ mkDerivation rec {
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir $out/Applications
     mv $out/*.app $out/Applications
-    for f in $out/Applications/android-file-transfer.app/Contents/MacOS/*; do
-      wrapQtApp "$f"
-    done
   '';
 
   meta = with lib; {

@@ -1,17 +1,15 @@
-{ lib, buildDunePackage, fetchurl, ocaml_lwt, duration, mirage-runtime, io-page-unix }:
+{ lib, buildDunePackage, fetchurl, lwt, duration, mirage-runtime, io-page }:
 
 buildDunePackage rec {
   pname = "mirage-unix";
-  version = "4.0.0";
-
-  useDune2 = true;
+  version = "4.0.1";
 
   src = fetchurl {
     url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
-    sha256 = "0kyd83bkpjhn382b4mw3a4325xr8vms78znxqvifpcyfvfnlx7hj";
+    sha256 = "sha256-9ymVBb3dkhb+MN97/sXe/oQ36CVx0kruj3sd19LiFZ4=";
   };
 
-  propagatedBuildInputs = [ ocaml_lwt duration mirage-runtime io-page-unix ];
+  propagatedBuildInputs = [ lwt duration mirage-runtime io-page ];
   doCheck = true;
 
   meta = with lib; {

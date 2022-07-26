@@ -1,12 +1,31 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, glib, itstool, libxml2, mate-panel, libnotify, libcanberra-gtk3, dbus-glib, upower, gnome, gtk3, libtool, polkit, wrapGAppsHook, mateUpdateScript }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, glib
+, itstool
+, libxml2
+, mate-panel
+, libnotify
+, libcanberra-gtk3
+, libsecret
+, dbus-glib
+, upower
+, gtk3
+, libtool
+, polkit
+, wrapGAppsHook
+, mateUpdateScript
+}:
 
 stdenv.mkDerivation rec {
   pname = "mate-power-manager";
-  version = "1.24.3";
+  version = "1.26.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1rmcrpii3hl35qjznk6h5cq72n60cs12n294hjyakxr9kvgns7l6";
+    sha256 = "0ybvwv24g8awxjl2asgvx6l2ghn4limcm48ylha68dkpy3607di6";
   };
 
   nativeBuildInputs = [
@@ -17,17 +36,17 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-     glib
-     itstool
-     libxml2
-     libcanberra-gtk3
-     gtk3
-     gnome.libgnome-keyring
-     libnotify
-     dbus-glib
-     upower
-     polkit
-     mate-panel
+    glib
+    itstool
+    libxml2
+    libcanberra-gtk3
+    gtk3
+    libsecret
+    libnotify
+    dbus-glib
+    upower
+    polkit
+    mate-panel
   ];
 
   configureFlags = [ "--enable-applets" ];
@@ -41,6 +60,6 @@ stdenv.mkDerivation rec {
     homepage = "https://mate-desktop.org";
     license = with licenses; [ gpl2Plus fdl11Plus ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ romildo chpatrick ];
+    maintainers = teams.mate.members ++ (with maintainers; [ chpatrick ]);
   };
 }

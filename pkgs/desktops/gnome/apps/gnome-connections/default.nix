@@ -4,7 +4,7 @@
 , meson
 , ninja
 , pkg-config
-, vala
+, vala_0_56
 , gettext
 , itstool
 , python3
@@ -13,6 +13,8 @@
 , wrapGAppsHook
 , glib
 , gtk3
+, libhandy
+, libsecret
 , libxml2
 , gtk-vnc
 , gtk-frdp
@@ -21,18 +23,18 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-connections";
-  version = "40.0.1";
+  version = "42.1.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-vpvLoHzz+vWs4M5UzSL4YJtNx3ZuJe5f2cGAw5WbTRE=";
+    hash = "sha256-2ObnJ0EJHYkt/IQoH2JVUdBWjNSC1I21ik7bivoTd7Y=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    vala
+    vala_0_56
     gettext
     itstool
     python3
@@ -46,6 +48,8 @@ stdenv.mkDerivation rec {
     glib
     gtk-vnc
     gtk3
+    libhandy
+    libsecret
     libxml2
     gtk-frdp
   ];

@@ -14,7 +14,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-astring-${param.version}";
+  pname = "ocaml${ocaml.version}-astring";
   inherit (param) version;
 
   src = fetchurl {
@@ -22,7 +22,10 @@ stdenv.mkDerivation {
     inherit (param) sha256;
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
+  buildInputs = [ topkg ];
+
+  strictDeps = true;
 
   inherit (topkg) buildPhase installPhase;
 

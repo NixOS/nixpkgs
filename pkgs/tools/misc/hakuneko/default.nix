@@ -13,11 +13,10 @@ let
   desktopItem = makeDesktopItem {
     desktopName = "HakuNeko Desktop";
     genericName = "Manga & Anime Downloader";
-    categories = "Network;FileTransfer;";
+    categories = [ "Network" "FileTransfer" ];
     exec = "hakuneko";
     icon = "hakuneko-desktop";
     name = "hakuneko-desktop";
-    type = "Application";
   };
 in
 stdenv.mkDerivation rec {
@@ -73,6 +72,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Manga & Anime Downloader";
     homepage = "https://sourceforge.net/projects/hakuneko/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unlicense;
     maintainers = with maintainers; [
       nloomans

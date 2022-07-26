@@ -7,17 +7,19 @@
 
 buildPythonPackage rec {
   pname = "pyviz_comms";
-  version = "0.7.6";
+  version = "2.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-zZZJqeqd/LmzTXj5pk4YcKqLa5TeVG4smca7U9ZKtdE=";
+    sha256 = "sha256-uMncveAfOEeEP7TQTDs/TeeEkgxx5Eztnfu1YPbJIhg=";
   };
 
   propagatedBuildInputs = [ param ];
 
   # there are not tests with the package
   doCheck = false;
+
+  pythonImportsCheck = [ "pyviz_comms" ];
 
   passthru.tests = {
     inherit panel;

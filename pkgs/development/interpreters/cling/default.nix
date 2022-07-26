@@ -7,7 +7,6 @@
 , fetchgit
 , makeWrapper
 , runCommand
-, runCommandNoCC
 , llvmPackages_5
 , glibc
 , ncurses
@@ -85,7 +84,7 @@ let
   # https://github.com/root-project/cling/blob/v0.7/lib/Interpreter/CIFactory.cpp#L107:L111
   # Note: it would be nice to just put the compiler in Cling's PATH and let it do this by itself, but
   # unfortunately passing -nostdinc/-nostdinc++ disables Cling's autodetection logic.
-  compilerIncludeFlags = runCommandNoCC "compiler-include-flags.txt" {} ''
+  compilerIncludeFlags = runCommand "compiler-include-flags.txt" {} ''
     export LC_ALL=C
     ${stdenv.cc}/bin/c++ -xc++ -E -v /dev/null 2>&1 | sed -n -e '/^.include/,''${' -e '/^ \/.*++/p' -e '}' > tmp
     sed -e 's/^/-isystem /' -i tmp

@@ -1,21 +1,44 @@
-{ lib, buildPythonPackage, fetchPypi, tornado, paramiko }:
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, paramiko
+, pytestCheckHook
+, tornado
+}:
 
 buildPythonPackage rec {
   pname = "webssh";
-  version = "1.5.3";
+  version = "1.6.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Au6PE8jYm8LkEp0B1ymW//ZkrkcV0BauwufQmrHLEU4=";
+    hash = "sha256-yqjwahh2METXD83geTGt5sUL+vmxbrYxj4KtwTxbD94=";
   };
 
-  propagatedBuildInputs = [ tornado paramiko ];
+  propagatedBuildInputs = [
+    paramiko
+    tornado
+  ];
 
-  pythonImportsCheck = [ "webssh" ];
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "webssh"
+  ];
+
+  disabledTests = [
+    # Test fails with AttributeError (possibly related to paramiko update)
+    "test_app_with_bad_host_key"
+  ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
+    description = "Web based SSH client";
     homepage = "https://github.com/huashengdun/webssh/";
-    description = "Web based ssh client";
     license = licenses.mit;
     maintainers = with maintainers; [ davidtwco ];
   };

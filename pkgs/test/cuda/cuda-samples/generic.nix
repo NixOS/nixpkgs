@@ -1,15 +1,16 @@
-{ lib, stdenv, fetchFromGitHub
-, pkg-config, addOpenGLRunpath
-, sha256, cudatoolkit
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, addOpenGLRunpath
+, cudatoolkit
+, pkg-config
+, sha256
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "cuda-samples";
   version = lib.versions.majorMinor cudatoolkit.version;
-in
-
-stdenv.mkDerivation {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
@@ -21,6 +22,14 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config addOpenGLRunpath ];
 
   buildInputs = [ cudatoolkit ];
+
+  # See https://github.com/NVIDIA/cuda-samples/issues/75.
+  patches = lib.optionals (version == "11.3") [
+    (fetchpatch {
+      url = "https://github.com/NVIDIA/cuda-samples/commit/5c3ec60faeb7a3c4ad9372c99114d7bb922fda8d.patch";
+      sha256 = "sha256-0XxdmNK9MPpHwv8+qECJTvXGlFxc+fIbta4ynYprfpU=";
+    })
+  ];
 
   enableParallelBuilding = true;
 

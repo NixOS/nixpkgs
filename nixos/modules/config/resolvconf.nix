@@ -47,10 +47,23 @@ in
 
       enable = mkOption {
         type = types.bool;
-        default = false;
-        internal = true;
+        default = !(config.environment.etc ? "resolv.conf");
+        defaultText = literalExpression ''!(config.environment.etc ? "resolv.conf")'';
         description = ''
-          DNS configuration is managed by resolvconf.
+          Whether DNS configuration is managed by resolvconf.
+        '';
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.openresolv;
+        defaultText = literalExpression "pkgs.openresolv";
+        description = ''
+          The package that provides the system-wide resolvconf command. Defaults to <literal>openresolv</literal>
+          if this module is enabled. Otherwise, can be used by other modules (for example <option>services.resolved</option>) to
+          provide a compatibility layer.
+
+          This option generally shouldn't be set by the user.
         '';
       };
 
@@ -110,8 +123,6 @@ in
 
   config = mkMerge [
     {
-      networking.resolvconf.enable = !(config.environment.etc ? "resolv.conf");
-
       environment.etc."resolvconf.conf".text =
         if !cfg.enable then
           # Force-stop any attempts to use resolvconf
@@ -121,10 +132,12 @@ in
             exit 1
           ''
         else configText;
+
+      environment.systemPackages = [ cfg.package ];
     }
 
     (mkIf cfg.enable {
-      environment.systemPackages = [ pkgs.openresolv ];
+      networking.resolvconf.package = pkgs.openresolv;
 
       systemd.services.resolvconf = {
         description = "resolvconf update";
@@ -136,7 +149,7 @@ in
 
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = "${pkgs.openresolv}/bin/resolvconf -u";
+          ExecStart = "${cfg.package}/bin/resolvconf -u";
           RemainAfterExit = true;
         };
       };

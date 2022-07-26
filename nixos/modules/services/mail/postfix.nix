@@ -294,7 +294,7 @@ in
       };
 
       submissionOptions = mkOption {
-        type = types.attrs;
+        type = with types; attrsOf str;
         default = {
           smtpd_tls_security_level = "encrypt";
           smtpd_sasl_auth_enable = "yes";
@@ -312,7 +312,7 @@ in
       };
 
       submissionsOptions = mkOption {
-        type = types.attrs;
+        type = with types; attrsOf str;
         default = {
           smtpd_sasl_auth_enable = "yes";
           smtpd_client_restrictions = "permit_sasl_authenticated,reject";
@@ -505,6 +505,7 @@ in
       tlsTrustedAuthorities = mkOption {
         type = types.str;
         default = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+        defaultText = literalExpression ''"''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"'';
         description = ''
           File containing trusted certification authorities (CA) to verify certificates of mailservers contacted for mail delivery. This basically sets smtp_tls_CAfile and enables opportunistic tls. Defaults to NixOS trusted certification authorities.
         '';
@@ -544,7 +545,7 @@ in
         type = types.lines;
         default = "";
         description = "
-          Entries for the virtual alias map, cf. man-page virtual(8).
+          Entries for the virtual alias map, cf. man-page virtual(5).
         ";
       };
 
@@ -673,6 +674,7 @@ in
       services.mail.sendmailSetuidWrapper = mkIf config.services.postfix.setSendmail {
         program = "sendmail";
         source = "${pkgs.postfix}/bin/sendmail";
+        owner = "root";
         group = setgidGroup;
         setuid = false;
         setgid = true;
@@ -681,6 +683,7 @@ in
       security.wrappers.mailq = {
         program = "mailq";
         source = "${pkgs.postfix}/bin/mailq";
+        owner = "root";
         group = setgidGroup;
         setuid = false;
         setgid = true;
@@ -689,6 +692,7 @@ in
       security.wrappers.postqueue = {
         program = "postqueue";
         source = "${pkgs.postfix}/bin/postqueue";
+        owner = "root";
         group = setgidGroup;
         setuid = false;
         setgid = true;
@@ -697,6 +701,7 @@ in
       security.wrappers.postdrop = {
         program = "postdrop";
         source = "${pkgs.postfix}/bin/postdrop";
+        owner = "root";
         group = setgidGroup;
         setuid = false;
         setgid = true;
@@ -718,23 +723,11 @@ in
         { ${setgidGroup}.gid = config.ids.gids.postdrop;
         };
 
-      systemd.services.postfix =
-        { description = "Postfix mail server";
-
-          wantedBy = [ "multi-user.target" ];
-          after = [ "network.target" ];
-          path = [ pkgs.postfix ];
-
-          serviceConfig = {
-            Type = "forking";
-            Restart = "always";
-            PIDFile = "/var/lib/postfix/queue/pid/master.pid";
-            ExecStart = "${pkgs.postfix}/bin/postfix start";
-            ExecStop = "${pkgs.postfix}/bin/postfix stop";
-            ExecReload = "${pkgs.postfix}/bin/postfix reload";
-          };
-
-          preStart = ''
+      systemd.services.postfix-setup =
+        { description = "Setup for Postfix mail server";
+          serviceConfig.RemainAfterExit = true;
+          serviceConfig.Type = "oneshot";
+          script = ''
             # Backwards compatibility
             if [ ! -d /var/lib/postfix ] && [ -d /var/postfix ]; then
               mkdir -p /var/lib
@@ -770,6 +763,24 @@ in
             #Finally delegate to postfix checking remain directories in /var/lib/postfix and set permissions on them
             ${pkgs.postfix}/bin/postfix set-permissions config_directory=/var/lib/postfix/conf
           '';
+        };
+
+      systemd.services.postfix =
+        { description = "Postfix mail server";
+
+          wantedBy = [ "multi-user.target" ];
+          after = [ "network.target" "postfix-setup.service" ];
+          requires = [ "postfix-setup.service" ];
+          path = [ pkgs.postfix ];
+
+          serviceConfig = {
+            Type = "forking";
+            Restart = "always";
+            PIDFile = "/var/lib/postfix/queue/pid/master.pid";
+            ExecStart = "${pkgs.postfix}/bin/postfix start";
+            ExecStop = "${pkgs.postfix}/bin/postfix stop";
+            ExecReload = "${pkgs.postfix}/bin/postfix reload";
+          };
         };
 
       services.postfix.config = (mapAttrs (_: v: mkDefault v) {

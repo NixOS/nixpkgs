@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, python
 , fetchPypi
 , isPy27
 , pytestCheckHook
@@ -25,6 +24,11 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook ];
   buildInputs = [ cython ];
   propagatedBuildInputs = [ numpy scipy matplotlib networkx nibabel ];
+
+  disabledTests = [
+    # https://github.com/nipy/nitime/issues/197
+    "test_FilterAnalyzer"
+  ];
 
   meta = with lib; {
     homepage = "https://nipy.org/nitime";

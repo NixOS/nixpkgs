@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-interactive-rebase-tool";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "MitMaro";
     repo = pname;
     rev = version;
-    sha256 = "sha256-DYl/GUbeNtKmXoR3gq8mK8EfsZNVNlrdngAwfzG+epw=";
+    sha256 = "sha256-++KTMzTt84dowoZP+Bc9E/jUS21YN5ybKrlpQUKCir0=";
   };
 
-  cargoSha256 = "sha256-1joMWPfn0s+pLsO6NHMT6AoXZ33R8MY2AWSrROY2mw8=";
+  cargoSha256 = "sha256-OUaP/nDs589FYaGYcleRMTQNu3/q/2wBjHSv2q8OyjA=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
@@ -31,5 +31,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/MitMaro/git-interactive-rebase-tool/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ masaeedu SuperSandro2000 zowoq ];
+    mainProgram = "interactive-rebase-tool";
   };
 }

@@ -1,17 +1,32 @@
-{ fetchurl, stdenv, lib, buildFHSUserEnv, appimageTools, writeShellScript, anki, undmg }:
+{ fetchurl, stdenv, lib, buildFHSUserEnv, appimageTools, writeShellScript, anki, undmg, zstd }:
 
 let
   pname = "anki-bin";
   # Update hashes for both Linux and Darwin!
-  version = "2.1.44";
+  version = "2.1.54";
+
+  sources = {
+    linux = fetchurl {
+      url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-linux-qt6.tar.zst";
+      sha256 = "sha256-NFhgVd4ctEsh7iaSZ9v0OMszd81H41eq+y+FRIhcCtE=";
+    };
+
+    # For some reason anki distributes completely separate dmg-files for the aarch64 version and the x86_64 version
+    darwin-x86_64 = fetchurl {
+      url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac-intel-qt6.dmg";
+      sha256 = "sha256-kus59Z9Oe4sbAlF4szeg751hlSEUR0ijKz4rjfHEWgA=";
+    };
+    darwin-aarch64 = fetchurl {
+      url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac-apple-qt6.dmg";
+      sha256 = "sha256-ROIpGB3W21ttWj+cRkf0rpLFrO4LR6+ZyGRsalz5J+E=";
+    };
+  };
 
   unpacked = stdenv.mkDerivation {
     inherit pname version;
 
-    src = fetchurl {
-      url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-linux.tar.bz2";
-      sha256 = "01d5ll3vsd4v0ikxgamv47bkwmag15vnmsgpda5wivc3dyawc9j9";
-    };
+    nativeBuildInputs = [ zstd ];
+    src = sources.linux;
 
     installPhase = ''
       runHook preInstall
@@ -29,17 +44,20 @@ let
 
   meta = with lib; {
     inherit (anki.meta) license homepage description longDescription;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
     maintainers = with maintainers; [ atemu ];
   };
+
+  passthru = { inherit sources; };
 in
 
 if stdenv.isLinux then buildFHSUserEnv (appimageTools.defaultFhsEnvArgs // {
   name = "anki";
 
+  # Dependencies of anki
+  targetPkgs = pkgs: (with pkgs; [ xorg.libxkbfile krb5 ]);
+
   runScript = writeShellScript "anki-wrapper.sh" ''
-    # Wayland support is broken, disable via ENV variable
-    export QT_QPA_PLATFORM=xcb
     exec ${unpacked}/bin/anki
   '';
 
@@ -51,14 +69,11 @@ if stdenv.isLinux then buildFHSUserEnv (appimageTools.defaultFhsEnvArgs // {
       $out/share/
   '';
 
-  inherit meta;
+  inherit meta passthru;
 }) else stdenv.mkDerivation {
-  inherit pname version;
+  inherit pname version passthru;
 
-  src = fetchurl {
-    url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac.dmg";
-    sha256 = "1zrdih4rjsq30480sf200pw59r42p3nq2md56kj2l641kbc7ljka";
-  };
+  src = if stdenv.isAarch64 then sources.darwin-aarch64 else sources.darwin-x86_64;
 
   nativeBuildInputs = [ undmg ];
   sourceRoot = ".";

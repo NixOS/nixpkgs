@@ -1,42 +1,31 @@
 { lib
 , python3
 , fetchFromGitHub
-, wrapGAppsHook
-, gobject-introspection
-, libnotify
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "deltachat-cursed";
-  version = "0.2.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "adbenitez";
     repo = "deltachat-cursed";
     rev = "v${version}";
-    sha256 = "0kbb7lh17dbkd85mcqf438qwk5masz2fxsy8ljdh23kis55nksh8";
+    hash = "sha256-EA3yTP4j/jj26E8zdRwTIW+9FkI0ehK4Y8AqiCnF2xA=";
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    python3.pkgs.setuptools-scm
   ];
 
-  buildInputs = [
-    gobject-introspection
-    libnotify
-  ];
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   propagatedBuildInputs = with python3.pkgs; [
     deltachat
-    pygobject3
+    emoji
+    notify-py
     urwid-readline
   ];
-
-  dontWrapGApps = true;
-
-  preFixup = ''
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
-  '';
 
   doCheck = false; # no tests implemented
 

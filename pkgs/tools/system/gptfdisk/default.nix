@@ -11,6 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ldGYVvAE2rxLjDQrJhLo0KnuvdUgBClxiDafFS6dxt8=";
   };
 
+  patches = [
+    # fix build failure against ncurses-6.3 (pending upstream inclusion):
+    #  https://sourceforge.net/p/gptfdisk/mailman/message/37392412/
+    ./ncurses-6.3.patch
+  ];
+
   postPatch = ''
     patchShebangs gdisk_test.sh
   '' + lib.optionalString stdenv.isDarwin ''
@@ -42,6 +48,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Set of text-mode partitioning tools for Globally Unique Identifier (GUID) Partition Table (GPT) disks";
     license = licenses.gpl2;
     homepage = "https://www.rodsbooks.com/gdisk/";

@@ -1,17 +1,27 @@
-{ lib, jdk, buildPythonPackage, fetchPypi, six, py4j }:
+{ lib
+, jdk8
+, buildPythonPackage
+, fetchPypi
+, six
+, py4j
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "databricks-connect";
-  version = "8.1.6";
+  version = "9.1.17";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2d6989491a2a33853eb10500574eb62dbcb98ac691d7e98022c5f18e23ad18b2";
+    sha256 = "sha256-QBGeXZ8zvRRjmKGs0vyBWTvcug3PF/BFV2asYTqsScw=";
   };
 
   sourceRoot = ".";
 
-  propagatedBuildInputs = [ py4j six jdk ];
+  propagatedBuildInputs = [ py4j six jdk8 ];
 
   # requires network access
   doCheck = false;
@@ -31,6 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Client for connecting to remote Databricks clusters";
     homepage = "https://pypi.org/project/databricks-connect";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.databricks;
     maintainers = with maintainers; [ kfollesdal ];
   };

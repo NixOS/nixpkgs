@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, getopt, util-linux, gperf }:
+{ lib, stdenv, fetchurl, getopt, util-linuxMinimal, which, gperf, nix-update-script }:
 
 stdenv.mkDerivation rec {
   pname = "libseccomp";
-  version = "2.5.1";
+  version = "2.5.4";
 
   src = fetchurl {
     url = "https://github.com/seccomp/libseccomp/releases/download/v${version}/libseccomp-${version}.tar.gz";
-    sha256 = "0m8dlg1v7kflcxvajs4p76p275qwsm2abbf5mfapkakp7hw7wc7f";
+    sha256 = "sha256-2CkCQAQFzwBoV07z3B/l9ZJiB1Q7oa5vjnoVdjUdy9s=";
   };
 
   outputs = [ "out" "lib" "dev" "man" "pythonsrc" ];
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  checkInputs = [ util-linux ];
-  doCheck = false; # dependency cycle
+  checkInputs = [ util-linuxMinimal which ];
+  doCheck = true;
 
   # Hack to ensure that patchelf --shrink-rpath get rids of a $TMPDIR reference.
   preFixup = "rm -rfv src";
@@ -31,10 +31,16 @@ stdenv.mkDerivation rec {
     tar -zcf $pythonsrc --mtime="@$SOURCE_DATE_EPOCH" --sort=name --transform s/tmp-pythonsrc/python-foundationdb/ ./tmp-pythonsrc/
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
+
   meta = with lib; {
     description = "High level library for the Linux Kernel seccomp filter";
     homepage = "https://github.com/seccomp/libseccomp";
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Only;
     platforms = platforms.linux;
     badPlatforms = [
       "alpha-linux"

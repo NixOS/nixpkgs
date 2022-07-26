@@ -32,8 +32,7 @@
 , openssl
 , pango
 , procps
-, python37
-, python37Packages
+, python3
 , stdenv
 , systemd
 , xdg-utils
@@ -88,11 +87,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "appgate-sdp";
-  version = "5.4.2";
+  version = "5.5.5";
 
   src = fetchurl {
     url = "https://bin.appgate-sdp.com/${versions.majorMinor version}/client/appgate-sdp_${version}_amd64.deb";
-    sha256 = "sha256-wAhcTRO/Cd4MG1lfPNDq92yGcu3NOfymucddy92VaXo=";
+    sha256 = "sha256-eXcGHd3TGNFqjFQ+wSg4+1hF/6DJTPOs0ldjegFktGo=";
   };
 
   # just patch interpreter
@@ -101,8 +100,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   buildInputs = [
-    python37
-    python37Packages.dbus-python
+    python3
+    python3.pkgs.dbus-python
   ];
 
   nativeBuildInputs = [
@@ -152,9 +151,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Appgate SDP (Software Defined Perimeter) desktop client";
     homepage = "https://www.appgate.com/support/software-defined-perimeter-support";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ymatsiuk ];
   };
 }
-

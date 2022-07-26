@@ -4,6 +4,7 @@
 , fetchurl
 , lib
 , libsecret
+, libxshmfence
 , makeDesktopItem
 , makeWrapper
 , stdenv
@@ -11,78 +12,62 @@
 , wrapGAppsHook
 }:
 
-let
-  inherit (stdenv.hostPlatform) system;
-
+stdenv.mkDerivation rec {
   pname = "bitwarden";
+  version = "2022.5.1";
 
-  version = {
-    x86_64-linux = "1.27.1";
-  }.${system} or "";
+  src = fetchurl {
+    url = "https://github.com/bitwarden/clients/releases/download/desktop-v${version}/Bitwarden-${version}-amd64.deb";
+    sha256 = "sha256-L6Mow4wC5PlpR9IYXOztW4FyGDq9wWEuV2PvzQ7M/rU=";
+  };
 
-  sha256 = {
-    x86_64-linux = "sha256-CqyIARPHri018AOgI1rFJ9Td3K8OamXVgupAINME7BY=";
-  }.${system} or "";
+  desktopItem = makeDesktopItem {
+    name = "bitwarden";
+    exec = "bitwarden %U";
+    icon = "bitwarden";
+    comment = "A secure and free password manager for all of your devices";
+    desktopName = "Bitwarden";
+    categories = [ "Utility" ];
+  };
+
+  dontBuild = true;
+  dontConfigure = true;
+  dontPatchELF = true;
+  dontWrapGApps = true;
+
+  nativeBuildInputs = [ dpkg makeWrapper autoPatchelfHook wrapGAppsHook ];
+
+  buildInputs = [ libsecret libxshmfence ] ++ atomEnv.packages;
+
+  unpackPhase = "dpkg-deb -x $src .";
+
+  installPhase = ''
+    mkdir -p "$out/bin"
+    cp -R "opt" "$out"
+    cp -R "usr/share" "$out/share"
+    chmod -R g-w "$out"
+
+    # Desktop file
+    mkdir -p "$out/share/applications"
+    cp "${desktopItem}/share/applications/"* "$out/share/applications"
+  '';
+
+  runtimeDependencies = [
+    (lib.getLib udev)
+  ];
+
+  postFixup = ''
+    makeWrapper $out/opt/Bitwarden/bitwarden $out/bin/bitwarden \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libsecret stdenv.cc.cc ] }" \
+      "''${gappsWrapperArgs[@]}"
+  '';
 
   meta = with lib; {
     description = "A secure and free password manager for all of your devices";
     homepage = "https://bitwarden.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3;
     maintainers = with maintainers; [ kiwi ];
     platforms = [ "x86_64-linux" ];
   };
-
-  linux = stdenv.mkDerivation rec {
-    inherit pname version meta;
-
-    src = fetchurl {
-      url = "https://github.com/bitwarden/desktop/releases/download/"
-      + "v${version}/Bitwarden-${version}-amd64.deb";
-      inherit sha256;
-    };
-
-    desktopItem = makeDesktopItem {
-      name = "bitwarden";
-      exec = "bitwarden %U";
-      icon = "bitwarden";
-      comment = "A secure and free password manager for all of your devices";
-      desktopName = "Bitwarden";
-      categories = "Utility";
-    };
-
-    dontBuild = true;
-    dontConfigure = true;
-    dontPatchELF = true;
-    dontWrapGApps = true;
-
-    buildInputs = [ libsecret ] ++ atomEnv.packages;
-
-    nativeBuildInputs = [ dpkg makeWrapper autoPatchelfHook wrapGAppsHook ];
-
-    unpackPhase = "dpkg-deb -x $src .";
-
-    installPhase = ''
-      mkdir -p "$out/bin"
-      cp -R "opt" "$out"
-      cp -R "usr/share" "$out/share"
-      chmod -R g-w "$out"
-
-      # Desktop file
-      mkdir -p "$out/share/applications"
-      cp "${desktopItem}/share/applications/"* "$out/share/applications"
-    '';
-
-    runtimeDependencies = [
-      (lib.getLib udev)
-    ];
-
-    postFixup = ''
-      makeWrapper $out/opt/Bitwarden/bitwarden $out/bin/bitwarden \
-        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libsecret stdenv.cc.cc ] }" \
-        "''${gappsWrapperArgs[@]}"
-    '';
-  };
-
-in if stdenv.isDarwin
-then throw "Bitwarden has not been packaged for macOS yet"
-else linux
+}

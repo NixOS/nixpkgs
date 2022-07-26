@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "viewnior";
-  version = "1.7";
+  version = "1.8";
 
   src = fetchFromGitHub {
     owner = "hellosiyan";
     repo = "Viewnior";
     rev = "${pname}-${version}";
-    sha256 = "0y4hk3vq8psba5k615w18qj0kbdfp5w0lm98nv5apy6hmcpwfyig";
+    sha256 = "sha256-LTahMmcAqgqviUxR624kTozJGTniAAGWKo1ZqXjoG5M=";
   };
 
   nativeBuildInputs = [

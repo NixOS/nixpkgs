@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, opencl-headers, cmake, withTracing ? false }:
 
 stdenv.mkDerivation rec {
-  name = "khronos-ocl-icd-loader-${version}";
-  version = "2020.06.16";
+  pname = "khronos-ocl-icd-loader";
+  version = "2022.01.04";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "OpenCL-ICD-Loader";
     rev = "v${version}";
-    sha256 = "0v2yi6d3g5qshzy6pjic09c5irwgds106yvr93q62f32psfblnmy";
+    sha256 = "sha256-T2tBoN0yv41W+UksFABVjsetdkXlnEFUINfxumGgC04=";
   };
 
   patches = lib.optional withTracing ./tracing.patch;

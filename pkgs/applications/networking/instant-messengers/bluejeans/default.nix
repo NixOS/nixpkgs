@@ -44,11 +44,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "bluejeans";
-  version = "2.23.0.39";
+  version = "2.29.1.3";
 
   src = fetchurl {
     url = "https://swdl.bluejeans.com/desktop-app/linux/${getFirst 3 version}/BlueJeans_${version}.rpm";
-    sha256 = "sha256-LGg14KJ/hEnSaSrdTltY9YXv7Nekkfo66uLkxjMx8AI=";
+    sha256 = "sha256-vWViSJXRPZ4B40LNnoKRZNbxB1YKnaW2ay6GCjnFLGY=";
   };
 
   nativeBuildInputs = [ rpmextract makeWrapper ];
@@ -127,6 +127,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Video, audio, and web conferencing that works together with the collaboration tools you use every day";
     homepage = "https://www.bluejeans.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" ];

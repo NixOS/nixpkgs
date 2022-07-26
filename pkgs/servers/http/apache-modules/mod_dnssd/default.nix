@@ -20,8 +20,18 @@ stdenv.mkDerivation rec {
   }) ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/modules
     cp src/.libs/mod_dnssd.so $out/modules
+
+    runHook postInstall
+  '';
+
+  preFixup = ''
+    # TODO: Packages in non-standard directories not stripped.
+    # https://github.com/NixOS/nixpkgs/issues/141554
+    stripDebugList=modules
   '';
 
   meta = with lib; {

@@ -4,17 +4,15 @@
 , neovim
 }:
 
-with lib;
-
 with python3.pkgs; buildPythonApplication rec {
   pname = "neovim-remote";
-  version = "2.4.0";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "mhinz";
     repo = "neovim-remote";
     rev = "v${version}";
-    sha256 = "0jlw0qksak4bdzddpsj74pm2f2bgpj3cwrlspdjjy0j9qzg0mpl9";
+    sha256 = "0lbz4w8hgxsw4k1pxafrl3rhydrvi5jc6vnsmkvnhh6l6rxlmvmq";
   };
 
   propagatedBuildInputs = [
@@ -35,11 +33,14 @@ with python3.pkgs; buildPythonApplication rec {
     "test_escape_double_quotes_in_filenames"
   ];
 
-  meta = {
+  doCheck = !stdenv.isDarwin;
+
+  meta = with lib; {
     description = "A tool that helps controlling nvim processes from a terminal";
     homepage = "https://github.com/mhinz/neovim-remote/";
     license = licenses.mit;
     maintainers = with maintainers; [ edanaher ];
     platforms = platforms.unix;
+    mainProgram = "nvr";
   };
 }

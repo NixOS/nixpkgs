@@ -1,30 +1,54 @@
-{ lib, stdenv, fetchurl, intltool, pkg-config, networkmanager, strongswanNM
-, gtk3, gnome, libsecret, libnma }:
+{ stdenv
+, lib
+, fetchurl
+, intltool
+, pkg-config
+, networkmanager
+, strongswanNM
+, gtk3
+, gtk4
+, gnome
+, libsecret
+, libnma
+, libnma-gtk4
+}:
 
 stdenv.mkDerivation rec {
   pname = "NetworkManager-strongswan";
-  version = "1.5.2";
+  version = "1.6.0";
 
   src = fetchurl {
     url = "https://download.strongswan.org/NetworkManager/${pname}-${version}.tar.bz2";
-    sha256 = "0sc1yzlxjfvl58hjjw99bchqc4061i3apw254z61v22k4sajnif8";
+    sha256 = "bbyA9qCboM9hBKMXhJWXgEFN13Fl4pY6zWZXwowlRMI=";
   };
 
-  buildInputs = [ networkmanager strongswanNM libsecret gtk3 libnma ];
-
-  nativeBuildInputs = [ intltool pkg-config ];
-
-  # glib-2.62 deprecations
-  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
-
-  configureFlags = [
-    "--without-libnm-glib"
-    "--with-charon=${strongswanNM}/libexec/ipsec/charon-nm"
-    "--with-nm-libexecdir=$(out)/libexec"
-    "--with-nm-plugindir=$(out)/lib/NetworkManager"
+  nativeBuildInputs = [
+    intltool
+    pkg-config
   ];
 
-  PKG_CONFIG_LIBNM_VPNSERVICEDIR = "$(out)/lib/NetworkManager/VPN";
+  buildInputs = [
+    networkmanager
+    strongswanNM
+    libsecret
+    gtk3
+    gtk4
+    libnma
+    libnma-gtk4
+  ];
+
+  configureFlags = [
+    "--with-charon=${strongswanNM}/libexec/ipsec/charon-nm"
+    "--with-nm-libexecdir=${placeholder "out"}/libexec"
+    "--with-nm-plugindir=${placeholder "out"}/lib/NetworkManager"
+    "--with-gtk4"
+  ];
+
+  PKG_CONFIG_LIBNM_VPNSERVICEDIR = "${placeholder "out"}/lib/NetworkManager/VPN";
+
+  passthru = {
+    networkManagerPlugin = "VPN/nm-strongswan-service.name";
+  };
 
   meta = with lib; {
     description = "NetworkManager's strongswan plugin";

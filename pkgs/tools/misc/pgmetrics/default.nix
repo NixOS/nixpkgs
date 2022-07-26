@@ -2,20 +2,20 @@
 
 buildGoModule rec {
   pname = "pgmetrics";
-  version = "1.10.5";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
-    owner  = "rapidloop";
-    repo   = pname;
-    rev    = "v${version}";
-    sha256 = "sha256-rqaK94Rw0K1+r7+7jHI2bzBupCGTkokeC4heJ3Yu6pQ=";
+    owner = "rapidloop";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-VDobaU+zY1ubVBrb/pdKKfSWCYTRDz1ssqZ0Fsv0KBc=";
   };
 
-  vendorSha256 = "sha256-5f2hkOgAE4TrHNz7xx1RU9fozxjFZAl4HilhAqsbo5s=";
+  vendorSha256 = "sha256-aE/TZ0QlGYvuMVZDntXmYkUKos5NTI/ncRPp9A4CScY=";
 
   doCheck = false;
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   meta = with lib; {
     homepage = "https://pgmetrics.io/";

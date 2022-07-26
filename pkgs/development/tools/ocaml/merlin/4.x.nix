@@ -15,11 +15,13 @@
 }:
 
 let
-  merlinVersion = "4.1";
+  merlinVersion = "4.5";
 
   hashes = {
-    "4.1-411" = "9e2e6fc799c93ce1f2c7181645eafa37f64e43ace062b69218e1c29ac459937d";
-    "4.1-412" = "fb4caede73bdb8393bd60e31792af74b901ae2d319ac2f2a2252c694d2069d8d";
+    "4.5-411" = "sha256:05nz6y7r91rh0lj8b6xdv3s3yknmvjc7y60v17kszgqnr887bvpn";
+    "4.5-412" = "sha256:0i5c3rfzinmwdjya7gv94zyknsm32qx9dlg472xpfqivwvnnhf1z";
+    "4.5-413" = "sha256:1sphq9anfg1qzrvj7hdcqflj6cmc1qiyfkljhng9fxnnr0i7550s";
+    "4.5-414" = "sha256:13h588kwih05zd9p3p7q528q4zc0d1l983kkvbmkxgay5d17nn1i";
   };
 
   ocamlVersionShorthand = lib.concatStrings
@@ -37,7 +39,7 @@ buildDunePackage {
   inherit version;
 
   src = fetchurl {
-    url = "https://github.com/ocaml/merlin/releases/download/v${version}/merlin-v${version}.tbz";
+    url = "https://github.com/ocaml/merlin/releases/download/v${version}/merlin-${version}.tbz";
     sha256 = hashes."${version}";
   };
 
@@ -47,15 +49,26 @@ buildDunePackage {
       dot_merlin_reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
       dune = "${dune_2}/bin/dune";
     })
+  ] ++ lib.optional (lib.versionOlder ocaml.version "4.12")
+    # This fixes the test-suite on macOS
+    # See https://github.com/ocaml/merlin/pull/1399
+    # Fixed in 4.4 for OCaml ≥ 4.12
+    ./test.patch
+  ;
+
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    menhir
+    jq
   ];
-
-  useDune2 = true;
-
   buildInputs = [
     dot-merlin-reader
     yojson
     csexp
     result
+    menhirSdk
+    menhirLib
   ];
 
   doCheck = true;
@@ -65,12 +78,6 @@ buildDunePackage {
     dune runtest # filtering with -p disables tests
     runHook postCheck
   '';
-  checkInputs = [
-    jq
-    menhir
-    menhirLib
-    menhirSdk
-  ];
 
   meta = with lib; {
     description = "An editor-independent tool to ease the development of programs in OCaml";

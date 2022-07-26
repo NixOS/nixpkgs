@@ -11,10 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "1wdb0phqg9rj9g9ycqdya0m7lx24kzjlh25yw0ifp898ddxrrr0c";
   };
 
-  makeFlags = [ "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
+  makeFlags = kernel.makeFlags ++ [
+    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+  ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
-  INSTALL_MOD_PATH = placeholder "out";
   installFlags = [ "DEPMOD=true" ];
 
   meta = with lib; {
@@ -24,5 +26,6 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     maintainers = with maintainers; [ flokli hexa ];
     platforms = platforms.linux;
+    broken = kernel.kernelOlder "4.10" || kernel.kernelAtLeast "5.14";
   };
 }

@@ -7,14 +7,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname   = "mimalloc";
-  version = "2.0.2";
+  version = "2.0.6";
 
   src = fetchFromGitHub {
     owner  = "microsoft";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "sha256-n4FGld3bq6ZOSLTzXcVlucCGbQ5/eSFbijU0dfBD/T0=";
+    sha256 = "sha256-u2ITXABBN/dwU+mCIbL3tN1f4c17aBuSdNTV+Adtohc=";
   };
+
+  doCheck = true;
+  preCheck = let
+    ldLibraryPathEnv = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+  in ''
+    export ${ldLibraryPathEnv}="$(pwd)/build:''${${ldLibraryPathEnv}}"
+  '';
 
   nativeBuildInputs = [ cmake ninja ];
   cmakeFlags = [ "-DMI_INSTALL_TOPLEVEL=ON" ] ++ lib.optional secureBuild [ "-DMI_SECURE=ON" ];
@@ -25,10 +32,9 @@ stdenv.mkDerivation rec {
   in ''
     # first, move headers and cmake files, that's easy
     mkdir -p $dev/lib
-    mv $out/include $dev/include
-    mv $out/cmake $dev/lib/
+    mv $out/lib/cmake $dev/lib/
 
-    find $out/lib
+    find $dev $out -type f
   '' + (lib.optionalString secureBuild ''
     # pretend we're normal mimalloc
     ln -sfv $out/lib/libmimalloc-secure${suffix} $out/lib/libmimalloc${suffix}
@@ -44,6 +50,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://github.com/microsoft/mimalloc";
     license     = licenses.bsd2;
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with maintainers; [ kamadorueda thoughtpolice ];
   };
 }

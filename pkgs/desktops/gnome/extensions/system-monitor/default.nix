@@ -2,19 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-system-monitor";
-  version = "unstable-2021-06-19";
+  version = "unstable-2022-02-04";
 
   src = fetchFromGitHub {
     owner = "paradoxxxzero";
     repo = "gnome-shell-system-monitor-applet";
-    rev = "bece7be22352b81d3d81e64e18a385812851b8de";
-    sha256 = "08nnsg7z3cqk25hfgy4wm02hd2wpz13kig498kn4mf5f1q4hslmx";
+    rev = "2c6eb0a447bfc9f1a07c61956c92a55c874baf16";
+    hash = "sha256-JuRRlvqlqneqUdgezKGl2yg7wFYGCCo51q9CBwrxTBY=";
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
     glib
-    glib-networking
-    libgtop
+    gnome.gnome-shell
   ];
 
   patches = [
@@ -26,18 +25,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildPhase = ''
-    runHook preBuild
-    glib-compile-schemas --targetdir="system-monitor@paradoxxx.zero.gmail.com/schemas" "system-monitor@paradoxxx.zero.gmail.com/schemas"
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/share/gnome-shell/extensions
-    cp -r "system-monitor@paradoxxx.zero.gmail.com" $out/share/gnome-shell/extensions
-    runHook postInstall
-  '';
+  makeFlags = [
+    "VERSION=${version}"
+    "INSTALLBASE=$(out)/share/gnome-shell/extensions"
+    "SUDO="
+  ];
 
   passthru = {
     extensionUuid = "system-monitor@paradoxxx.zero.gmail.com";
@@ -47,7 +39,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Display system informations in gnome shell status bar";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ tiramiseb ];
+    maintainers = with maintainers; [ andersk ];
     homepage = "https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet";
   };
 }

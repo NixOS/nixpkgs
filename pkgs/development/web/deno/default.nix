@@ -2,9 +2,10 @@
 , lib
 , callPackage
 , fetchFromGitHub
-, rust
 , rustPlatform
 , installShellFiles
+, fetchpatch
+, tinycc
 , libiconv
 , libobjc
 , Security
@@ -15,44 +16,67 @@
 , librusty_v8 ? callPackage ./librusty_v8.nix { }
 }:
 
+let
+  libtcc = tinycc.overrideAttrs (oa: {
+    makeFlags = [ "libtcc.a" ];
+    # tests want tcc binary
+    doCheck = false;
+    outputs = [ "out" ];
+    installPhase = ''
+      mkdir -p $out/lib/
+      mv libtcc.a $out/lib/
+    '';
+  });
+in
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.12.2";
+  version = "1.23.4";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-xIFJv/roTD7sq7vCy4JDwe8gYDMuZd34vyjS08xeijI=";
+    sha256 = "sha256-nLQqfLRuh9mhZfjeiPaGpQbi5bXEg7HiGwrwDmaIRWM=";
   };
-  cargoSha256 = "sha256-aETAFh5yTE+ZonDC0ITdaZ2YN3/SpYROsXP47aNEICE=";
+  cargoSha256 = "sha256-l5Ce/ypYXZKEi859OFskwC/Unpo842ZPxIHvp6lCjQc=";
 
-  # Install completions post-install
+  patches = [
+    # remove after https://github.com/denoland/deno/pull/15193 is in a release
+    (fetchpatch {
+      name = "byo-tcc.patch";
+      url = "https://github.com/denoland/deno/pull/15193/commits/c43698b2b58af1ef69b1558d55c8ebea0268dfea.patch";
+      sha256 = "sha256-YE5mGHyEm20FjFhr8yveBRlrOVL3+qQYxz2xp/IfmJs=";
+    })
+  ];
+
+  postPatch = ''
+    # upstream uses lld on aarch64-darwin for faster builds
+    # within nix lld looks for CoreFoundation rather than CoreFoundation.tbd and fails
+    substituteInPlace .cargo/config.toml --replace '"-C", "link-arg=-fuse-ld=lld"' ""
+  '';
+
   nativeBuildInputs = [ installShellFiles ];
-
-  buildAndTestSubdir = "cli";
-
   buildInputs = lib.optionals stdenv.isDarwin
     [ libiconv libobjc Security CoreServices Metal Foundation QuartzCore ];
 
-  # The rusty_v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
-  # To avoid this we pre-download the file and place it in the locations it will require it in advance
-  preBuild =
-    let arch = rust.toRustTarget stdenv.hostPlatform; in
-    ''
-      _librusty_v8_setup() {
-        for v in "$@"; do
-          install -D ${librusty_v8} "target/$v/gn_out/obj/librusty_v8.a"
-        done
-      }
+  buildAndTestSubdir = "cli";
 
-      # Copy over the `librusty_v8.a` file inside target/XYZ/gn_out/obj, symlink not allowed
-      _librusty_v8_setup "debug" "release" "${arch}/release"
-    '';
+  # The v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
+  # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE
+  RUSTY_V8_ARCHIVE = librusty_v8;
+
+  # The deno_ffi package currently needs libtcc.a on linux and macos and will try to compile it at build time
+  # To avoid this we point it to our copy (dir)
+  # In the future tinycc will be replaced with asm
+  DENO_FFI_LIBTCC = "${libtcc}/lib";
 
   # Tests have some inconsistencies between runs with output integration tests
   # Skipping until resolved
   doCheck = false;
+
+  preInstall = ''
+    find ./target -name libswc_common${stdenv.hostPlatform.extensions.sharedLibrary} -delete
+  '';
 
   postInstall = ''
     installShellCompletion --cmd deno \

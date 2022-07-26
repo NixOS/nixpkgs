@@ -1,8 +1,9 @@
 { lib
 , appdirs
 , buildPythonPackage
+, certifi
 , fetchFromGitHub
-, fetchpatch
+, importlib-metadata
 , poetry-core
 , pyee
 , pytest-xdist
@@ -16,15 +17,16 @@
 
 buildPythonPackage rec {
   pname = "pyppeteer";
-  version = "0.2.5";
-  disabled = pythonOlder "3.6";
+  version = "1.0.2";
   format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "1hl4rw8j5yiak0d34vx1l1blr8125bscjd8m46a5m8xzm98csjc7";
+    sha256 = "sha256-izMaWtJdkLHMQbyq7o7n46xB8dOHXZ5uO0UXt+twjL4=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +35,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     appdirs
+    certifi
+    importlib-metadata
     pyee
     tqdm
     urllib3
@@ -45,19 +49,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  patches = [
-    # Switch to poetry-core, https://github.com/pyppeteer/pyppeteer/pull/262
-    (fetchpatch {
-      name = "switch-poetry-core.patch";
-      url = "https://github.com/pyppeteer/pyppeteer/commit/e248baebefcf262fd96f261d940e74ed49ba2df9.patch";
-      sha256 = "03g8n35kn2alqki37s0hf2231fk2zkr4nr1x1g2rfrhps9d6fyvw";
-    })
-  ];
-
   postPatch = ''
-    # https://github.com/pyppeteer/pyppeteer/pull/252
     substituteInPlace pyproject.toml \
-      --replace 'websockets = "^8.1"' 'websockets = "*"'
+      --replace 'pyee = "^8.1.0"' 'pyee = "*"' \
+      --replace 'websockets = "^9.1"' 'websockets = "*"'
   '';
 
   disabledTestPaths = [
@@ -87,12 +82,14 @@ buildPythonPackage rec {
     "TestPDF"
   ];
 
-  pythonImportsCheck = [ "pyppeteer" ];
+  pythonImportsCheck = [
+    "pyppeteer"
+  ];
 
-  meta = {
+  meta = with lib; {
     description = "Headless chrome/chromium automation library (unofficial port of puppeteer)";
     homepage = "https://github.com/pyppeteer/pyppeteer";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kmein ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ kmein ];
   };
 }

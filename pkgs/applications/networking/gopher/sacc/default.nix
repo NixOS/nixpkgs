@@ -1,19 +1,19 @@
-{ lib, stdenv, fetchurl, ncurses
+{ lib, stdenv, fetchurl, ncurses, libressl
 , patches ? [] # allow users to easily override config.def.h
 }:
 
 stdenv.mkDerivation rec {
   pname = "sacc";
-  version = "1.03";
+  version = "1.06";
 
   src = fetchurl {
-    url = "ftp://bitreich.org/releases/sacc/sacc-${version}.tgz";
-    sha512 = "sha512-vOjAGBM2+080JZv4C4b5dNRTTX45evWFEJfK1DRaWCYrHRCAe07QdEIrHhbaIxhSYfrBd3D1y75rmDnuPC4THA==";
+    url = "ftp://bitreich.org/releases/sacc/sacc-${version}.tar.gz";
+    sha512 = "7a895e432e1d28b7d9b2bb2a5326ca32350876a2c80d39dc6c19e75347d72a4847f1aa4ff11f07e8a9adea14ea71b84d70890dcc170ff6ce0b779e1d6586b4fa";
   };
 
   inherit patches;
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ ncurses libressl ];
 
   CFLAGS = lib.optionals stdenv.isDarwin [
     "-D_DARWIN_C_SOURCE"

@@ -1,10 +1,11 @@
 {lib, stdenv, fetchurl, unzip}:
 
-stdenv.mkDerivation {
-  name = "pgfplots-1.5.1";
+stdenv.mkDerivation rec {
+  pname = "pgfplots";
+  version = "1.5.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pgfplots/pgfplots_1.5.1.tds.zip";
+    url = "mirror://sourceforge/pgfplots/pgfplots_${version}.tds.zip";
     sha256 = "1xajrmq35i0qlsfwydy5zzg6f1jg88hqqh5b3xsmglzrarnllbdi";
   };
 

@@ -30,6 +30,21 @@ in
         '';
       };
 
+      useGenerationDeviceTree = mkOption {
+        default = true;
+        type = types.bool;
+        description = ''
+          Whether to generate Device Tree-related directives in the
+          extlinux configuration.
+
+          When enabled, the bootloader will attempt to load the device
+          tree binaries from the generation's kernel.
+
+          Note that this affects all generations, regardless of the
+          setting value used in their configurations.
+        '';
+      };
+
       configurationLimit = mkOption {
         default = 20;
         example = 10;
@@ -54,7 +69,9 @@ in
   };
 
   config = let
-    builderArgs = "-g ${toString cfg.configurationLimit} -t ${timeoutStr}" + lib.optionalString (dtCfg.name != null) " -n ${dtCfg.name}";
+    builderArgs = "-g ${toString cfg.configurationLimit} -t ${timeoutStr}"
+      + lib.optionalString (dtCfg.name != null) " -n ${dtCfg.name}"
+      + lib.optionalString (!cfg.useGenerationDeviceTree) " -r";
   in
     mkIf cfg.enable {
       system.build.installBootLoader = "${builder} ${builderArgs} -c";

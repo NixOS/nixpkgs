@@ -1,43 +1,78 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, ptable
 , click
-, requests
-, prompt-toolkit
-, pygments
-, urllib3
-, pytest
-, pytest-cov
+, fetchFromGitHub
 , mock
+, prompt-toolkit
+, ptable
+, pygments
+, pytestCheckHook
+, pythonOlder
+, requests
 , sphinx
 , testtools
+, tkinter
+, urllib3
+, prettytable
+, rich
+, zeep
 }:
 
 buildPythonPackage rec {
-  pname = "softlayer-python";
-  version = "5.8.4";
-  disabled = isPy27;
-
-  propagatedBuildInputs = [ ptable click requests prompt-toolkit pygments urllib3 ];
-
-  checkInputs = [ pytest pytest-cov mock sphinx testtools ];
-
-  checkPhase = ''
-    pytest
-  '';
+  pname = "softlayer";
+  version = "6.1.0";
+  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
-    owner = "softlayer";
-    repo = pname;
+    owner = pname;
+    repo = "softlayer-python";
     rev = "v${version}";
-    sha256 = "10kzi7kvvifr21a46q2xqsibs0bx5ys22nfym0bg605ka37vcz88";
+    sha256 = "sha256-T49KVAsgcAZySkaJi47IrFcMHGZvEkGDjPWsdMarzwM=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+        --replace 'rich == 12.3.0' 'rich >= 12.3.0'
+  '';
+
+  propagatedBuildInputs = [
+    click
+    prompt-toolkit
+    ptable
+    pygments
+    requests
+    urllib3
+    prettytable
+    rich
+  ];
+
+  checkInputs = [
+    mock
+    pytestCheckHook
+    sphinx
+    testtools
+    tkinter
+    zeep
+  ];
+
+  # Otherwise soap_tests.py will fail to create directory
+  # Permission denied: '/homeless-shelter'
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  disabledTestPaths = [
+    # Test fails with ConnectionError trying to connect to api.softlayer.com
+    "tests/transports/soap_tests.py"
+  ];
+
+  pythonImportsCheck = [ "SoftLayer" ];
+
   meta = with lib; {
-    description = "A set of Python libraries that assist in calling the SoftLayer API.";
+    description = "Python libraries that assist in calling the SoftLayer API";
     homepage = "https://github.com/softlayer/softlayer-python";
     license = licenses.mit;
+    maintainers = with maintainers; [ onny ];
   };
 }

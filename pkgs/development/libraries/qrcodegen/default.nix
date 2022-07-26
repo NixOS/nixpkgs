@@ -1,34 +1,41 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib
+, stdenv
+, fetchFromGitHub
+}:
+
 stdenv.mkDerivation rec {
   pname = "qrcodegen";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "nayuki";
     repo = "QR-Code-generator";
     rev = "v${version}";
-    sha256 = "0iq9sv9na0vg996aqrxrjn9rrbiyy7sc9vslw945p3ky22pw3lql";
+    sha256 = "sha256-WH6O3YE/+NNznzl52TXZYL+6O25GmKSnaFqDDhRl4As=";
   };
 
-  preBuild = "cd c";
+  preBuild = ''
+    cd c/
+  '';
+
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib $out/include/qrcodegen
     cp libqrcodegen.a $out/lib
     cp qrcodegen.h $out/include/qrcodegen/
+
+    runHook postInstall
   '';
 
-  meta = with lib;
-    {
-      description = "qrcode generator library in multiple languages";
-
-      longDescription = ''
-        This project aims to be the best, clearest library for generating QR Codes. My primary goals are flexible options and absolute correctness. Secondary goals are compact implementation size and good documentation comments.
-      '';
-
-      homepage = "https://github.com/nayuki/QR-Code-generator";
-
-      license = licenses.mit;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ mcbeth ];
-    };
+  meta = with lib; {
+    homepage = "https://www.nayuki.io/page/qr-code-generator-library";
+    description = "High-quality QR Code generator library in many languages";
+    license = licenses.mit;
+    maintainers = with maintainers; [ mcbeth AndersonTorres ];
+    platforms = platforms.unix;
+    broken = stdenv.isDarwin;
+  };
 }
+# TODO: build the other languages
+# TODO: multiple outputs

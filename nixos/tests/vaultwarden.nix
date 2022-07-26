@@ -113,7 +113,6 @@ let
                   driver.find_element_by_css_selector('input#masterPasswordRetype').send_keys(
                     '${userPassword}'
                   )
-                  driver.find_element_by_css_selector('input#acceptPolicies').click()
 
                   driver.find_element_by_xpath("//button[contains(., 'Submit')]").click()
 
@@ -140,7 +139,6 @@ let
               in
               [ pkgs.firefox-unwrapped pkgs.geckodriver testRunner ];
 
-            virtualisation.memorySize = 768;
           }
         ];
 

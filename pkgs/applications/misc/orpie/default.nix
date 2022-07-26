@@ -13,12 +13,10 @@ ocamlPackages.buildDunePackage rec {
     sha256 = "1rx2nl6cdv609pfymnbq53pi3ql5fr4kda8x10ycd9xq2gc4f21g";
   };
 
+  patches = [ ./prefix.patch ];
+
   preConfigure = ''
-    patchShebangs scripts
-    substituteInPlace scripts/compute_prefix \
-      --replace '"topfind"' \
-      '"${ocamlPackages.findlib}/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/topfind"'
-    export PREFIX=$out
+    substituteInPlace src/orpie/install.ml.in --replace '@prefix@' $out
   '';
 
   buildInputs = with ocamlPackages; [ curses camlp5 num gsl ];

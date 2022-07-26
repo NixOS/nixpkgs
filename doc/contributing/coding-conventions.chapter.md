@@ -181,6 +181,21 @@
   rev = "${version}";
   ```
 
+- Building lists conditionally _should_ be done with `lib.optional(s)` instead of using `if cond then [ ... ] else null` or `if cond then [ ... ] else [ ]`.
+
+  ```nix
+  buildInputs = lib.optional stdenv.isDarwin iconv;
+  ```
+
+  instead of
+
+  ```nix
+  buildInputs = if stdenv.isDarwin then [ iconv ] else null;
+  ```
+
+  As an exception, an explicit conditional expression with null can be used when fixing a important bug without triggering a mass rebuild.
+  If this is done a follow up pull request _should_ be created to change the code to `lib.optional(s)`.
+
 - Arguments should be listed in the order they are used, with the exception of `lib`, which always goes first.
 
 ## Package naming {#sec-package-naming}
@@ -199,17 +214,17 @@ Most of the time, these are the same. For instance, the package `e2fsprogs` has 
 
 There are a few naming guidelines:
 
-- The `name` attribute _should_ be identical to the upstream package name.
+- The `pname` attribute _should_ be identical to the upstream package name.
 
-- The `name` attribute _must not_ contain uppercase letters — e.g., `"mplayer-1.0rc2"` instead of `"MPlayer-1.0rc2"`.
+- The `pname` and the `version` attribute _must not_ contain uppercase letters — e.g., `"mplayer" instead of `"MPlayer"`.
 
-- The version part of the `name` attribute _must_ start with a digit (following a dash) — e.g., `"hello-0.3.1rc2"`.
+- The `version` attribute _must_ start with a digit e.g`"0.3.1rc2".
 
-- If a package is not a release but a commit from a repository, then the version part of the name _must_ be the date of that (fetched) commit. The date _must_ be in `"YYYY-MM-DD"` format. Also append `"unstable"` to the name - e.g., `"pkgname-unstable-2014-09-23"`.
+- If a package is not a release but a commit from a repository, then the `version` attribute _must_ be the date of that (fetched) commit. The date _must_ be in `"unstable-YYYY-MM-DD"` format.
 
-- Dashes in the package name _should_ be preserved in new variable names, rather than converted to underscores or camel cased — e.g., `http-parser` instead of `http_parser` or `httpParser`. The hyphenated style is preferred in all three package names.
+- Dashes in the package `pname` _should_ be preserved in new variable names, rather than converted to underscores or camel cased — e.g., `http-parser` instead of `http_parser` or `httpParser`. The hyphenated style is preferred in all three package names.
 
-- If there are multiple versions of a package, this _should_ be reflected in the variable names in `all-packages.nix`, e.g. `json-c-0-9` and `json-c-0-11`. If there is an obvious “default” version, make an attribute like `json-c = json-c-0-9;`. See also [](#sec-versioning)
+- If there are multiple versions of a package, this _should_ be reflected in the variable names in `all-packages.nix`, e.g. `json-c_0_9` and `json-c_0_11`. If there is an obvious “default” version, make an attribute like `json-c = json-c_0_9;`. See also [](#sec-versioning)
 
 ## File naming and organisation {#sec-organisation}
 
@@ -322,6 +337,10 @@ A (typically large) program with a distinct user interface, primarily used inter
 - **If it’s a _terminal emulator_:**
 
   - `applications/terminal-emulators` (e.g. `alacritty` or `rxvt` or `termite`)
+
+- **If it’s a _file manager_:**
+
+  - `applications/file-managers` (e.g. `mc` or `ranger` or `pcmanfm`)
 
 - **If it’s for _video playback / editing_:**
 
@@ -496,6 +515,8 @@ patches = [
 
 Otherwise, you can add a `.patch` file to the `nixpkgs` repository. In the interest of keeping our maintenance burden to a minimum, only patches that are unique to `nixpkgs` should be added in this way.
 
+If a patch is available online but does not cleanly apply, it can be modified in some fixed ways by using additional optional arguments for `fetchpatch`. Check [](#fetchpatch) for details.
+
 ```nix
 patches = [ ./0001-changes.patch ];
 ```
@@ -523,16 +544,6 @@ If you do need to do create this sort of patch file, one way to do so is with gi
     $ git diff -a > nixpkgs/pkgs/the/package/0001-changes.patch
     ```
 
-If a patch is available online but does not cleanly apply, it can be modified in some fixed ways by using additional optional arguments for `fetchpatch`:
-
-- `stripLen`: Remove the first `stripLen` components of pathnames in the patch.
-- `extraPrefix`: Prefix pathnames by this string.
-- `excludes`: Exclude files matching this pattern.
-- `includes`: Include only files matching this pattern.
-- `revert`: Revert the patch.
-
-Note that because the checksum is computed after applying these effects, using or modifying these arguments will have no effect unless the `sha256` argument is changed as well.
-
 ## Package tests {#sec-package-tests}
 
 Tests are important to ensure quality and make reviews and automatic updates easy.
@@ -545,7 +556,26 @@ The following types of tests exists:
 
 Here in the nixpkgs manual we describe mostly _package tests_; for _module tests_ head over to the corresponding [section in the NixOS manual](https://nixos.org/manual/nixos/stable/#sec-nixos-tests).
 
-### Writing package tests {#ssec-package-tests-writing}
+### Writing inline package tests {#ssec-inline-package-tests-writing}
+
+For very simple tests, they can be written inline:
+
+```nix
+{ …, yq-go }:
+
+buildGoModule rec {
+  …
+
+  passthru.tests = {
+    simple = runCommand "${pname}-test" {} ''
+      echo "test: 1" | ${yq-go}/bin/yq eval -j > $out
+      [ "$(cat $out | tr -d $'\n ')" = '{"test":1}' ]
+    '';
+  };
+}
+```
+
+### Writing larger package tests {#ssec-package-tests-writing}
 
 This is an example using the `phoronix-test-suite` package with the current best practices.
 

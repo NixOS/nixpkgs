@@ -17,17 +17,21 @@ let
 
 in
 
-stdenv.mkDerivation {
-  name = "kisslicer-1.6.3";
+stdenv.mkDerivation rec {
+  pname = "kisslicer";
+  version = "1.6.3";
 
   src = fetchzip {
-    url = "http://www.kisslicer.com/uploads/1/5/3/8/15381852/kisslicer_linux64_1.6.3_release.zip";
+    url = "https://www.kisslicer.com/uploads/1/5/3/8/15381852/kisslicer_linux64_${version}_release.zip";
     sha256 = "1xmywj5jrcsqv1d5x3mphhvafs4mfm9l12npkhk7l03qxbwg9j82";
     stripRoot = false;
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
     makeWrapper
+  ];
+
+  buildInputs = [
     libGLU libGL
     libX11
   ];
@@ -49,6 +53,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Convert STL files into Gcode";
     homepage = "http://www.kisslicer.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = [ maintainers.cransom ];
     platforms = [ "x86_64-linux" ];

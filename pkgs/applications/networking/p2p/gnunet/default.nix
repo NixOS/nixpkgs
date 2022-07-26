@@ -3,15 +3,15 @@
 , makeWrapper, ncurses, pkg-config, libxml2, sqlite, zlib
 , libpulseaudio, libopus, libogg, jansson, libsodium
 
-, postgresqlSupport ? false, postgresql }:
+, postgresqlSupport ? true, postgresql }:
 
 stdenv.mkDerivation rec {
   pname = "gnunet";
-  version = "0.14.1";
+  version = "0.17.2";
 
   src = fetchurl {
     url = "mirror://gnu/gnunet/${pname}-${version}.tar.gz";
-    sha256 = "1hhqv994akymf4s593mc1wpsjy6hccd0zbdim3qmc1y3f32hacja";
+    sha256 = "sha256-OLE7V44kkKmSInV8ZHJ965eTn995cQf5hih8KUTudUE=";
   };
 
   enableParallelBuilding = true;

@@ -71,8 +71,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A simple formatter designed for elementary OS";
     homepage = "https://github.com/Djaler/Formatter";
-    maintainers = with maintainers; [ xiorcale ] ++ pantheon.maintainers;
+    maintainers = with maintainers; [ xiorcale ] ++ teams.pantheon.members;
     platforms = platforms.linux;
     license = licenses.lgpl2Plus;
+    mainProgram = "com.github.djaler.formatter";
   };
 }

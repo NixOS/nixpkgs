@@ -1,26 +1,61 @@
 { lib
 , buildPythonPackage
-, isPy3k
+, cryptography
+, defusedxml
 , fetchFromGitHub
+, importlib-resources
+, mock
+, pyasn1
+, pymongo
+, pyopenssl
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, pytz
+, requests
+, responses
+, setuptools
+, six
 , substituteAll
+, xmlschema
 , xmlsec
-, cryptography, defusedxml, pyopenssl, python-dateutil, pytz, requests, six
-, mock, pyasn1, pymongo, pytest, responses, xmlschema, importlib-resources
 }:
 
 buildPythonPackage rec {
   pname = "pysaml2";
-  version = "6.5.2";
+  version = "7.1.2";
+  format = "setuptools";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.6";
 
-  # No tests in PyPI tarball
   src = fetchFromGitHub {
     owner = "IdentityPython";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1p0i88v2ng9fzs0fzjam1dc1idnihqc1wgagvnavqjrih721qcpi";
+    sha256 = "sha256-nyQcQ1OO9PuuQROg+km2vIRF1sZ22MZhiHpmVXWl+is=";
   };
+
+  propagatedBuildInputs = [
+    cryptography
+    defusedxml
+    pyopenssl
+    python-dateutil
+    pytz
+    requests
+    setuptools
+    six
+    xmlschema
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
+  ];
+
+  checkInputs = [
+    mock
+    pyasn1
+    pymongo
+    pytestCheckHook
+    responses
+  ];
 
   patches = [
     (substituteAll {
@@ -34,32 +69,22 @@ buildPythonPackage rec {
     sed -i 's/2999\(-.*T\)/2029\1/g' tests/*.xml
   '';
 
-  propagatedBuildInputs = [
-    cryptography
-    python-dateutil
-    defusedxml
-    importlib-resources
-    pyopenssl
-    pytz
-    requests
-    six
-    xmlschema
+  disabledTests = [
+    # Disabled tests try to access the network
+    "test_load_extern_incommon"
+    "test_load_remote_encoding"
+    "test_load_external"
+    "test_conf_syslog"
   ];
 
-  checkInputs = [ mock pyasn1 pymongo pytest responses ];
-
-  # Disabled tests try to access the network
-  checkPhase = ''
-    py.test -k "not test_load_extern_incommon \
-            and not test_load_remote_encoding \
-            and not test_load_external \
-            and not test_conf_syslog"
-  '';
+  pythonImportsCheck = [
+    "saml2"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/rohe/pysaml2";
     description = "Python implementation of SAML Version 2 Standard";
+    homepage = "https://github.com/IdentityPython/pysaml2";
     license = licenses.asl20;
+    maintainers = with maintainers; [ ];
   };
-
 }

@@ -8,18 +8,18 @@
 , nose
 , numpy
 , scipy
+, setuptools
 , six
 , libgpuarray
-, cudaSupport ? false, cudatoolkit
-, cudnnSupport ? false, cudnn
-, nvidia_x11
+, cudaSupport ? false, cudaPackages ? {}
+, cudnnSupport ? false
 }:
 
-assert cudnnSupport -> cudaSupport;
+let
+  inherit (cudaPackages) cudatoolkit cudnn;
+in
 
-assert cudaSupport -> nvidia_x11 != null
-                   && cudatoolkit != null
-                   && cudnn != null;
+assert cudnnSupport -> cudaSupport;
 
 let
   wrapped = command: buildTop: buildInputs:
@@ -43,7 +43,9 @@ let
     (    lib.optional cudaSupport libgpuarray_
       ++ lib.optional cudnnSupport cudnn );
 
-  libgpuarray_ = libgpuarray.override { inherit cudaSupport cudatoolkit; };
+  # We need to be careful with overriding Python packages within the package set
+  # as this can lead to collisions!
+  libgpuarray_ = libgpuarray.override { inherit cudaSupport cudaPackages; };
 
 in buildPythonPackage rec {
   pname = "Theano";
@@ -81,14 +83,22 @@ in buildPythonPackage rec {
 
   # keep Nose around since running the tests by hand is possible from Python or bash
   checkInputs = [ nose ];
-  propagatedBuildInputs = [ numpy numpy.blas scipy six libgpuarray_ ];
+  # setuptools needed for cuda support
+  propagatedBuildInputs = [
+    libgpuarray_
+    numpy
+    numpy.blas
+    scipy
+    setuptools
+    six
+  ];
 
   pythonImportsCheck = [ "theano" ];
 
   meta = with lib; {
-    homepage = "http://deeplearning.net/software/theano/";
+    homepage = "https://github.com/Theano/Theano";
     description = "A Python library for large-scale array computation";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ maintainers.bcdarwin ];
+    maintainers = [ ];
   };
 }

@@ -24,10 +24,10 @@ packages on macOS:
     checking for fuse.h... no
     configure: error: No fuse.h found.
 
-This happens on autoconf based projects that uses `AC_CHECK_HEADERS` or
+This happens on autoconf based projects that use `AC_CHECK_HEADERS` or
 `AC_CHECK_LIBS` to detect libfuse, and will occur even when the `fuse` package
 is included in `buildInputs`. It happens because libfuse headers throw an error
-on macOS if the `FUSE_USE_VERSION` macro is undefined. Many proejcts do define
+on macOS if the `FUSE_USE_VERSION` macro is undefined. Many projects do define
 `FUSE_USE_VERSION`, but only inside C source files. This results in the above
 error at configure time because the configure script would attempt to compile
 sample FUSE programs without defining `FUSE_USE_VERSION`.

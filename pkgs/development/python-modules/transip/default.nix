@@ -1,36 +1,46 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, isPy27
 , requests
 , cryptography
 , suds-jurko
-, pytest
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  pname = "transip-api";
+  pname = "transip";
   version = "2.0.0";
-  disabled = isPy27;
+  format = "setuptools";
+
+  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "benkonrath";
-    repo = pname;
+    repo = "transip-api";
     rev = "v${version}";
-    sha256 = "153x8ph7cp432flaqiy2zgp060ddychcqcrssxkcmjvbm86xrz17";
+    hash = "sha256-J/zcDapry8pm1zozzCDzrQED7vvCR6yoE4NcduBFfZQ=";
   };
 
-  checkInputs = [ pytest ];
+  propagatedBuildInputs = [
+    requests
+    cryptography
+    suds-jurko
+  ];
 
-  # Constructor Tests require network access
-  checkPhase = ''
-    pytest --deselect=tests/service_tests/test_domain.py::TestDomainService::test_constructor \
-           --deselect tests/service_tests/test_vps.py::TestVPSService::testConstructor \
-           --deselect tests/service_tests/test_webhosting.py::TestWebhostingService::testConstructor
-  '';
+  checkInputs = [
+    pytestCheckHook
+  ];
 
+  disabledTests = [
+    # Constructor tests require network access
+    "test_constructor"
+    "testConstructor"
+  ];
 
-  propagatedBuildInputs = [ requests cryptography suds-jurko ];
+  pythonImportsCheck = [
+    "transip"
+  ];
 
   meta = with lib; {
     description = "TransIP API Connector";

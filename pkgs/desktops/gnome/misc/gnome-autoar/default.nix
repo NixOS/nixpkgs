@@ -1,5 +1,8 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
+, meson
+, ninja
 , pkg-config
 , gnome
 , gtk3
@@ -11,21 +14,19 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-autoar";
-  version = "0.3.3";
+  version = "0.4.3";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-autoar/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "JyQA9zo3Wn6I/fHhJZG/uPPwPt8BeAytzXT3C2E+XAQ=";
-  };
-
-  passthru = {
-    updateScript = gnome.updateScript { packageName = "gnome-autoar"; attrPath = "gnome.gnome-autoar"; };
+    sha256 = "e98HiVU0lqvdw8ljsM5zY4BcDALAJf7d68qsx4cknog=";
   };
 
   nativeBuildInputs = [
     gobject-introspection
+    meson
+    ninja
     pkg-config
     vala
   ];
@@ -38,6 +39,17 @@ stdenv.mkDerivation rec {
     libarchive
     glib
   ];
+
+  mesonFlags = [
+    "-Dvapi=true"
+  ];
+
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = "gnome-autoar";
+      attrPath = "gnome.gnome-autoar";
+    };
+  };
 
   meta = with lib; {
     platforms = platforms.linux;

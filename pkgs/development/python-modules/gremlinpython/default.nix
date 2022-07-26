@@ -2,10 +2,11 @@
 , buildPythonPackage
 , fetchFromGitHub
 , aenum
+, aiohttp
 , importlib-metadata
 , isodate
+, nest-asyncio
 , six
-, tornado
 , pytestCheckHook
 , mock
 , pyhamcrest
@@ -14,25 +15,18 @@
 
 buildPythonPackage rec {
   pname = "gremlinpython";
-  version = "3.4.10";
+  version = "3.6.0";
 
   # pypi tarball doesn't include tests
   src = fetchFromGitHub {
     owner = "apache";
     repo = "tinkerpop";
     rev = version;
-    sha256 = "0i9lkrwbsmpx1h9480vf97pibm2v37sgw2qm2r1c0i8gg5bcmhj3";
+    sha256 = "0gyf3a0zbh1grc1vr9zzpqm5yfcjvn0f1akw9l1arq36isqwvydn";
   };
-  sourceRoot = "source/gremlin-python/src/main/jython";
+  sourceRoot = "source/gremlin-python/src/main/python";
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'aenum>=1.4.5,<3.0.0' 'aenum' \
-      --replace 'tornado>=4.4.1,<6.0' 'tornado' \
-      --replace 'PyHamcrest>=1.9.0,<2.0.0' 'PyHamcrest' \
-      --replace 'radish-bdd==0.8.6' 'radish-bdd' \
-      --replace 'mock>=3.0.5,<4.0.0' 'mock' \
-      --replace 'pytest>=4.6.4,<5.0.0' 'pytest' \
-      --replace 'importlib-metadata<3.0.0' 'importlib-metadata' \
       --replace 'pytest-runner==5.2' ' '
   '';
 
@@ -42,9 +36,10 @@ buildPythonPackage rec {
   ];
   propagatedBuildInputs = [
     aenum
+    aiohttp
     isodate
+    nest-asyncio
     six
-    tornado
   ];
 
   checkInputs = [
@@ -57,6 +52,7 @@ buildPythonPackage rec {
   # disable custom pytest report generation
   preCheck = ''
     substituteInPlace setup.cfg --replace 'addopts' '#addopts'
+    export TEST_TRANSACTIONS='false'
   '';
 
   # many tests expect a running tinkerpop server

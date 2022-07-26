@@ -2,11 +2,10 @@
 , runCommand
 , mutter
 , elementary-default-settings
-, nixos-artwork
 , glib
 , gala
 , epiphany
-, elementary-settings-daemon
+, gnome-settings-daemon
 , gtk3
 , elementary-dock
 , gsettings-desktop-schemas
@@ -18,7 +17,7 @@ let
 
   gsettingsOverridePackages = [
     elementary-dock
-    elementary-settings-daemon
+    gnome-settings-daemon
     epiphany
     gala
     gsettings-desktop-schemas

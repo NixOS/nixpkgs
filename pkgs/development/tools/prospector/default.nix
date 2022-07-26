@@ -1,55 +1,37 @@
 { lib
-, pkgs
-, python
+, fetchFromGitHub
+, python3
 }:
 
 let
-  py = python.override {
-    packageOverrides = self: super: {
-      pep8-naming = super.pep8-naming.overridePythonAttrs(oldAttrs: rec {
-        version = "0.4.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "0nhf8p37y008shd4f21bkj5pizv8q0l8cpagyyb8gr059d6gvvaf";
-        };
-      });
-    };
-  };
-  setoptconf = py.pkgs.callPackage ./setoptconf.nix { };
+  setoptconf-tmp = python3.pkgs.callPackage ./setoptconf.nix { };
 in
 
-with py.pkgs;
+with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "prospector";
-  version = "1.2.0";
-  disabled = isPy27;
+  version = "1.7.7";
+  format = "pyproject";
 
-  src = pkgs.fetchFromGitHub {
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
     owner = "PyCQA";
     repo = pname;
     rev = version;
-    sha256 = "07kb37zrrsriqzcmli0ghx7qb1iwkzh83qsiikl9jy50faby2sjg";
+    hash = "sha256-sbPZmVeJtNphtjuZEfKcUgty9bJ3E/2Ya9RuX3u/XEs=";
   };
 
-  checkInputs = [
-    pytest
+  nativeBuildInputs = [
+    poetry-core
   ];
 
-  checkPhase = ''
-    pytest
-  '';
-
-  patchPhase = ''
-    substituteInPlace setup.py \
-      --replace 'pycodestyle<=2.4.0' 'pycodestyle<=2.5.0'
-  '';
-
   propagatedBuildInputs = [
-    astroid
-    django
+    bandit
     dodgy
     mccabe
+    mypy
     pep8-naming
     pycodestyle
     pydocstyle
@@ -58,17 +40,35 @@ buildPythonApplication rec {
     pylint-celery
     pylint-django
     pylint-flask
+    pylint-plugin-utils
+    pyroma
     pyyaml
     requirements-detector
-    setoptconf
+    setoptconf-tmp
+    setuptools
+    toml
+    vulture
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'requirements-detector = "^0.7"' 'requirements-detector = "*"' \
+      --replace 'pep8-naming = ">=0.3.3,<=0.10.0"' 'pep8-naming = "*"' \
+      --replace 'mccabe = "^0.6.0"' 'mccabe = "*"'
+  '';
+
+  pythonImportsCheck = [
+    "prospector"
   ];
 
   meta = with lib; {
     description = "Tool to analyse Python code and output information about errors, potential problems, convention violations and complexity";
     homepage = "https://github.com/PyCQA/prospector";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [
-      kamadorueda
-    ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ kamadorueda ];
   };
 }

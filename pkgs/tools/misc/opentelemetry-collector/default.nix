@@ -1,30 +1,52 @@
 { buildGoModule
 , fetchFromGitHub
-, stdenv
 , lib
+, writeScript
 }:
 
+let
+  otelcontribcol = writeScript "otelcontribcol" ''
+    echo 'ERROR: otelcontribcol is now in `pkgs.opentelemetry-collector-contrib`, call the collector with `otelcorecol` or move to `pkgs.opentelemetry-collector-contrib`' >&2
+    exit 1
+  '';
+in
 buildGoModule rec {
   pname = "opentelemetry-collector";
-  version = "0.26.0";
+  version = "0.51.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
-    repo = "opentelemetry-collector-contrib";
+    repo = "opentelemetry-collector";
     rev = "v${version}";
-    sha256 = "03713b4bkhcz61maz0r5mkd36kv3rq8rji3qcpi9zf5bkkjs1yzb";
+    sha256 = "sha256-XCOyvFWvgGxjuOdyFk4Rh+HO8GBdRfWcR73h+7lF+8E=";
   };
+  # there is a nested go.mod
+  sourceRoot = "source/cmd/otelcorecol";
+  vendorSha256 = "sha256-BAcJpiO6jFKcjtbBA9LDad1ifDpb47nWOylH8dDBUN0=";
 
-  vendorSha256 = if stdenv.isDarwin
-    then "0anw3l6pq8yys2g2607ndhklb9m1i9krgjrw4wb99igavjzp3wpj"
-    else "04h463d2d7g6wqp5mzkqlszwzdbq0pix6j7n2s9s80lwg7nh8k3h";
+  preBuild = ''
+    # set the build version, can't be done via ldflags
+    sed -i -E 's/Version:(\s*)".*"/Version:\1"${version}"/' main.go
+  '';
 
-  subPackages = [ "cmd/otelcontribcol" ];
+  ldflags = [ "-s" "-w" ];
+
+  postInstall = ''
+    cp ${otelcontribcol} $out/bin/otelcontribcol
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/open-telemetry/opentelemetry-collector";
-    description = "OpenTelemetry Collector";
+    changelog = "https://github.com/open-telemetry/opentelemetry-collector/blob/v${version}/CHANGELOG.md";
+    description = "OpenTelemetry Collector offers a vendor-agnostic implementation on how to receive, process and export telemetry data";
+    longDescription = ''
+      The OpenTelemetry Collector offers a vendor-agnostic implementation on how
+      to receive, process and export telemetry data. In addition, it removes the
+      need to run, operate and maintain multiple agents/collectors in order to
+      support open-source telemetry data formats (e.g. Jaeger, Prometheus, etc.)
+      sending to multiple open-source or commercial back-ends.
+    '';
     license = licenses.asl20;
-    maintainers = [ maintainers.uri-canva ];
+    maintainers = with maintainers; [ uri-canva jk ];
   };
 }

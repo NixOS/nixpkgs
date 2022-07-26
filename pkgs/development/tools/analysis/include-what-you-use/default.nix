@@ -3,10 +3,10 @@
 stdenv.mkDerivation rec {
   pname = "include-what-you-use";
   # Also bump llvmPackages in all-packages.nix to the supported version!
-  version = "0.16";
+  version = "0.18";
 
   src = fetchurl {
-    sha256 = "sha256-jW/JslU0O8Hl7EWeOVEt8dUcYOA1YpheAHYDYRn/Whw=";
+    sha256 = "sha256-kQL8hBkpR1ffhqic5uwwX42QqBjR8lmKE50V6xiUuPM=";
     url = "${meta.homepage}/downloads/${pname}-${version}.src.tar.gz";
   };
 

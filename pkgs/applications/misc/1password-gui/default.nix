@@ -23,6 +23,8 @@
 , libxcb
 , libxkbcommon
 , libxshmfence
+, libappindicator-gtk3
+, libGL
 , mesa
 , nspr
 , nss
@@ -30,14 +32,23 @@
 , systemd
 , udev
 , xdg-utils
+
+  # The 1Password polkit file requires a list of users for whom polkit
+  # integrations should be enabled. This should be a list of strings that
+  # correspond to usernames.
+, polkitPolicyOwners ? []
 }:
-stdenv.mkDerivation rec {
+let
+  # Convert the polkitPolicyOwners variable to a polkit-compatible string for the polkit file.
+  policyOwners = lib.concatStringsSep " " (map (user: "unix-user:${user}") polkitPolicyOwners);
+
+in stdenv.mkDerivation rec {
   pname = "1password";
-  version = "8.1.1";
+  version = "8.7.3";
 
   src = fetchurl {
     url = "https://downloads.1password.com/linux/tar/stable/x86_64/1password-${version}.x64.tar.gz";
-    sha256 = "0y39sfhj9xrgprh01i9apzfkqzm6pdhjc8x59x5p5djjjvxbcwmy";
+    sha256 = "sha256-1JMSUKbeqcyz5SJLrPD9kaqSlPI0pZVMXFjRuMIvwqo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -69,6 +80,8 @@ stdenv.mkDerivation rec {
       libxcb
       libxkbcommon
       libxshmfence
+      libGL
+      libappindicator-gtk3
       mesa
       nspr
       nss
@@ -85,6 +98,13 @@ stdenv.mkDerivation rec {
       install -Dt $out/share/applications resources/${pname}.desktop
       substituteInPlace $out/share/applications/${pname}.desktop \
         --replace 'Exec=/opt/1Password/${pname}' 'Exec=${pname}'
+
+      '' + (lib.optionalString (polkitPolicyOwners != [ ])
+      ''
+      # Polkit file
+        mkdir -p $out/share/polkit-1/actions
+        substitute com.1password.1Password.policy.tpl $out/share/polkit-1/actions/com.1password.1Password.policy --replace "\''${POLICY_OWNERS}" "${policyOwners}"
+        '') + ''
 
       # Icons
       cp -a resources/icons $out/share
@@ -111,8 +131,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Multi-platform password manager";
     homepage = "https://1password.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ timstott savannidgerinel ];
+    maintainers = with maintainers; [ timstott savannidgerinel maxeaubrey sebtm ];
     platforms = [ "x86_64-linux" ];
   };
 }

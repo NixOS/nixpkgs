@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pycares";
-  version = "4.0.0";
+  version = "4.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-0BVPxXU7CIdY++ybwTfhsku4T8DGoJclyLrCWjQjEc0=";
+    sha256 = "sha256-c1tPdf0PWVxOkYTaGM2Hc39GvIGmTqQfTtzitraNRtI=";
   };
 
   buildInputs = [
@@ -22,6 +22,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cffi
     idna
+  ];
+
+  propagatedNativeBuildInputs = [
+    cffi
   ];
 
   # Requires network access

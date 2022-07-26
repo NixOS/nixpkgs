@@ -6,6 +6,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , pytest-aiohttp
 , pytest-asyncio
@@ -16,14 +17,16 @@
 
 buildPythonPackage rec {
   pname = "homematicip";
-  version = "1.0.0";
+  version = "1.0.6";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner = "coreGreenberet";
+    owner = "hahn-th";
     repo = "homematicip-rest-api";
-    rev = version;
-    sha256 = "0bgvrjcf10kiqqkbl56sxx3jydd722b08q2j9c8sxpk0qdrmrinv";
+    rev = "refs/tags/${version}";
+    hash = "sha256-z27VGApm5VsDm6VG0DaDOmhFrvRhLLINHtSM/cIiXyY=";
   };
 
   propagatedBuildInputs = [
@@ -53,6 +56,7 @@ buildPythonPackage rec {
     "test_pluggable_switch_measuring"
     "test_rotary_handle_sensor"
     "test_security_group"
+    "test_security_zone"
     "test_shutter_device"
     "test_smoke_detector"
     "test_switching_group"
@@ -64,13 +68,20 @@ buildPythonPackage rec {
     "test_home_unknown_types"
     # Requires network access
     "test_websocket"
+  ] ++ lib.optionals (pythonAtLeast "3.10") [
+    "test_connection_lost"
+    "test_user_disconnect_and_reconnect"
+    "test_ws_message"
+    "test_ws_no_pong"
   ];
 
-  pythonImportsCheck = [ "homematicip" ];
+  pythonImportsCheck = [
+    "homematicip"
+  ];
 
   meta = with lib; {
-    description = "Python module for the homematicIP REST API";
-    homepage = "https://github.com/coreGreenberet/homematicip-rest-api";
+    description = "Module for the homematicIP REST API";
+    homepage = "https://github.com/hahn-th/homematicip-rest-api";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];
   };

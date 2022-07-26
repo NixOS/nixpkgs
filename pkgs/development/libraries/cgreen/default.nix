@@ -2,14 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "cgreen";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "cgreen-devs";
     repo = "cgreen";
     rev = version;
-    sha256 = "JEpvkM0EZiiQUZRngICNxHbNqS/qjqkEdMPckGbdWac=";
+    sha256 = "sha256-aQrfsiPuNrEMscZrOoONiN665KlNmnOiYj9ZIyzW304=";
   };
+
+  postPatch = ''
+    for F in tools/discoverer_acceptance_tests.c tools/discoverer.c; do
+      substituteInPlace "$F" --replace "/usr/bin/nm" "nm"
+    done
+  '';
 
   nativeBuildInputs = [ cmake ];
 

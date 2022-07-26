@@ -2,15 +2,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = "lisp-namespace";
-  version = "20171130-git";
+  version = "20211020-git";
 
   description = "Provides LISP-N --- extensible namespaces in Common Lisp.";
 
   deps = [ args."alexandria" ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/lisp-namespace/2017-11-30/lisp-namespace-20171130-git.tgz";
-    sha256 = "0vxk06c5434kcjv9p414yk23gs4rkibfq695is9y7wglck31fz2j";
+    url = "http://beta.quicklisp.org/archive/lisp-namespace/2021-10-20/lisp-namespace-20211020-git.tgz";
+    sha256 = "1vw7zxzhlxqjnas3cxk0f58hxvlvki78vbqsabj6f3n1rq6yx7b7";
   };
 
   packageName = "lisp-namespace";
@@ -20,9 +20,9 @@ rec {
 }
 /* (SYSTEM lisp-namespace DESCRIPTION
     Provides LISP-N --- extensible namespaces in Common Lisp. SHA256
-    0vxk06c5434kcjv9p414yk23gs4rkibfq695is9y7wglck31fz2j URL
-    http://beta.quicklisp.org/archive/lisp-namespace/2017-11-30/lisp-namespace-20171130-git.tgz
-    MD5 d3052a13db167c6a53487f31753b7467 NAME lisp-namespace FILENAME
+    1vw7zxzhlxqjnas3cxk0f58hxvlvki78vbqsabj6f3n1rq6yx7b7 URL
+    http://beta.quicklisp.org/archive/lisp-namespace/2021-10-20/lisp-namespace-20211020-git.tgz
+    MD5 71d02a1704c93281028316e96ecaead2 NAME lisp-namespace FILENAME
     lisp-namespace DEPS ((NAME alexandria FILENAME alexandria)) DEPENDENCIES
-    (alexandria) VERSION 20171130-git SIBLINGS (lisp-namespace.test) PARASITES
+    (alexandria) VERSION 20211020-git SIBLINGS (lisp-namespace.test) PARASITES
     NIL) */

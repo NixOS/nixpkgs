@@ -12,17 +12,17 @@
 
 buildPythonPackage rec {
   pname = "llvmlite";
-  version = "0.36.0";
+  version = "0.38.0";
 
   disabled = isPyPy || !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "765128fdf5f149ed0b889ffbe2b05eb1717f8e20a5c87fa2b4018fbcce0fcfc9";
+    sha256 = "a99d166ccf3b116f3b9ed23b9b70ba2415640a9c978f3aaa13fad49c58f4965c";
   };
 
   nativeBuildInputs = [ llvm ];
-  propagatedBuildInputs = [ ] ++ lib.optional (pythonOlder "3.4") enum34;
+  propagatedBuildInputs = lib.optional (pythonOlder "3.4") enum34;
 
   # Disable static linking
   # https://github.com/numba/llvmlite/issues/93
@@ -31,10 +31,12 @@ buildPythonPackage rec {
 
     substituteInPlace llvmlite/tests/test_binding.py --replace "test_linux" "nope"
   '';
+
   # Set directory containing llvm-config binary
   preConfigure = ''
     export LLVM_CONFIG=${llvm.dev}/bin/llvm-config
   '';
+
   checkPhase = ''
     ${python.executable} runtests.py
   '';

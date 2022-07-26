@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
 
 
   meta = {
+    broken      = true;
     description = "A flexible memory management and garbage collection library";
     homepage    = "https://www.ravenbrook.com/project/mps";
     license     = lib.licenses.sleepycat;

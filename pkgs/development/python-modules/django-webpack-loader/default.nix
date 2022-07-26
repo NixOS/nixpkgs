@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "django-webpack-loader";
-  version = "0.7.0";
+  version = "1.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0izl6bibhz3v538ad5hl13lfr6kvprf62rcl77wq2i5538h8hg3s";
+    sha256 = "sha256-opQY/0FpADW+ENLJSgZV2rCZAJxouJiDmBPWoQmxTXE=";
   };
 
   # django.core.exceptions.ImproperlyConfigured (path issue with DJANGO_SETTINGS_MODULE?)

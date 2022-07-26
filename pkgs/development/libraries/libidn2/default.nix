@@ -9,16 +9,20 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "libidn2";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchurl {
     url = "mirror://gnu/gnu/libidn/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ivaElDg2uLU5ZdX1tnFO8TwmyR6qNs59JC49IfXUDy0=";
+    sha256 = "sha256-dpQM1Od46Ak1eanRlbJf/16Tbp3GJCBoUotDenZ2T5E=";
   };
 
+  strictDeps = true;
+  # Beware: non-bootstrap libidn2 is overridden by ./hack.nix
   outputs = [ "bin" "dev" "out" "info" "devdoc" ];
 
   patches = optional stdenv.isDarwin ./fix-error-darwin.patch;
+
+  enableParallelBuilding = true;
 
   # The above patch causes the documentation to be regenerated, so the
   # documentation tools are required.
@@ -39,7 +43,6 @@ stdenv.mkDerivation rec {
       detailed information.
     '';
 
-    repositories.git = "https://gitlab.com/jas/libidn2";
     license = with lib.licenses; [ lgpl3Plus gpl2Plus gpl3Plus ];
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ fpletz ];

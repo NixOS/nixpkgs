@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.1";
-  name = "ocaml${ocaml.version}-num-${version}";
+  pname = "ocaml${ocaml.version}-num";
   src = fetchFromGitHub {
     owner = "ocaml";
     repo = "num";
@@ -17,10 +17,10 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional withStatic ./enable-static.patch;
 
   nativeBuildInputs = [ ocaml findlib ];
-  buildInputs = [ ocaml findlib ];
+
+  strictDeps = true;
 
   createFindlibDestdir = true;
-
 
   meta = {
     description = "Legacy Num library for arbitrary-precision integer and rational arithmetic";

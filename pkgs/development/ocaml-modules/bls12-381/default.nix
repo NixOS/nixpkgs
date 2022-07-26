@@ -1,31 +1,24 @@
-{ lib, fetchFromGitLab, buildDunePackage, ff, zarith, ctypes, tezos-rust-libs, alcotest }:
+{ lib, buildDunePackage, fetchFromGitLab, ff-sig, zarith }:
 
 buildDunePackage rec {
   pname = "bls12-381";
-  version = "0.3.15";
+  version = "1.1.0";
 
   src = fetchFromGitLab {
     owner = "dannywillems";
     repo = "ocaml-bls12-381";
-    rev = version;
-    sha256 = "1s8n657fsl2gs01p7v2ffpcfzymavifhhpriyx1gq5qh4zvvw4vr";
+    rev = "22247018c0651ea62ae898c8ffcc388cc73f758f";
+    sha256 = "ku6Rc+/lwFDoHTZTxgkhiF+kLkagi7944ntcu9vXWgI=";
   };
+
   useDune2 = true;
 
   minimalOCamlVersion = "4.08";
+
   propagatedBuildInputs = [
-    ff
+    ff-sig
     zarith
-    ctypes
-    tezos-rust-libs
   ];
-
-  checkInputs = [
-    alcotest
-  ];
-
-  # This is a hack to work around the hack used in the dune files
-  OPAM_SWITCH_PREFIX = "${tezos-rust-libs}";
 
   doCheck = true;
 

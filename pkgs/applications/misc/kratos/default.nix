@@ -2,20 +2,20 @@
 
 buildGoModule rec {
   pname = "kratos";
-  version = "0.7.1-alpha.1";
+  version = "0.9.0-alpha.3";
 
   src = fetchFromGitHub {
     owner = "ory";
     repo = "kratos";
     rev = "v${version}";
-    sha256 = "0n0qjnwavr34g8b6vr000wgpbnmyq7n1grcy79cvzdrnc8jxkgxi";
+    sha256 = "1x6g5mbbz1nkqi814dcyvdn8dyizpilzsb9cqijw0kpw4y3px757";
   };
 
-  vendorSha256 = "14x2flimhvd2wdkajvsm5bqbqikgirynzxs27mzlx0bvhliv247s";
+  vendorSha256 = "1v29g302zqh7sc5s53dyz1mki0iijnr6nfj4fajayz2n7bfw3kh1";
 
   subPackages = [ "." ];
 
-  buildFlags = [ "-tags sqlite" ];
+  tags = [ "sqlite" ];
 
   doCheck = false;
 
@@ -25,7 +25,7 @@ buildGoModule rec {
        test/e2e/run.sh
        script/testenv.sh
        script/test-envs.sh
-       persistence/sql/migratest/update_fixtures.sh
+       script/debug-entrypoint.sh
     )
     patchShebangs "''${files[@]}"
 

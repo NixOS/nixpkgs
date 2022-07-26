@@ -2,7 +2,9 @@
 , fetchFromGitHub
 , lib
 , subproject ? "library" # one of "library", "reader" or  "writer"
-, zlib, libpng, libtiff
+, zlib
+, libpng
+, libtiff
 , jabcode
 }:
 let
@@ -11,14 +13,15 @@ let
     "reader" = "jabcodeReader";
     "writer" = "jabcodeWriter";
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "jabcode-${subproject}";
-  version = "git-2020-05-13";
+  version = "unstable-2021-02-16";
   src = fetchFromGitHub {
     repo = "jabcode";
     owner = "jabcode";
-    rev = "a7c25d4f248078f257b014e31c791bfcfcd083e1";
-    sha256 = "1c4cv9b0d7r4bxzkwzdv9h651ziq822iya6fbyizm57n1nzdkk4s";
+    rev = "e342b647525fa294127930d836b54a6b21957cdc";
+    sha256 = "04ngw5aa43q7kxfn1v8drmir2i2qakvq0ni0lgf0zw8150mww52x";
   };
 
   nativeBuildInputs =
@@ -27,13 +30,14 @@ in stdenv.mkDerivation rec {
 
   preConfigure = "cd src/${subdir}";
 
-  installPhase = if subproject == "library" then ''
-    mkdir -p $out/lib
-    cp build/* $out/lib
-  '' else ''
-    mkdir -p $out/bin
-    cp -RT bin $out/bin
-  '';
+  installPhase =
+    if subproject == "library" then ''
+      mkdir -p $out/lib
+      cp build/* $out/lib
+    '' else ''
+      mkdir -p $out/bin
+      cp -RT bin $out/bin
+    '';
 
   meta = with lib; {
     description = "A high-capacity 2D color bar code (${subproject})";
@@ -42,5 +46,6 @@ in stdenv.mkDerivation rec {
     license = licenses.lgpl21;
     maintainers = [ maintainers.xaverdh ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/jabcode.x86_64-darwin
   };
 }

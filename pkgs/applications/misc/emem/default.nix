@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "18x3s3jrph8k3pc75jgwkfqazygpsx93zjxx68zms58my17cybh1";
   };
 
-  phases = [ "buildPhase" "installPhase" ];
+  dontUnpack = true;
 
   buildPhase = ''
     mkdir -p $out/bin $out/share/java
@@ -31,6 +31,7 @@ EOF
   meta = with lib; {
     homepage = "https://github.com/ebzzry/emem";
     description = "A trivial Markdown to HTML converter";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.epl10;
     maintainers = [ maintainers.ebzzry ];
     platforms = platforms.unix;

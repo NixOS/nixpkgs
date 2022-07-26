@@ -1,23 +1,40 @@
-{ lib, buildPythonPackage, fetchPypi
-, google-auth, google-auth-httplib2, google-api-core
-, httplib2, six, uritemplate, oauth2client, setuptools }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, google-auth
+, google-auth-httplib2
+, google-api-core
+, httplib2
+, uritemplate
+, oauth2client
+, setuptools
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "google-api-python-client";
-  version = "2.9.0";
+  version = "2.42.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2b5274f06799d80222fd3f20fd4ebcd19f57c009703bd4cf7b00492e7e05e15a";
+    sha256 = "sha256-e/WLZltjXQattHeXqaT3NILnOeAu0DbNlg3HwYM2H2c=";
   };
+
+  propagatedBuildInputs = [
+    google-auth
+    google-auth-httplib2
+    google-api-core
+    httplib2
+    uritemplate
+    oauth2client
+    setuptools
+  ];
 
   # No tests included in archive
   doCheck = false;
-
-  propagatedBuildInputs = [
-    google-auth google-auth-httplib2 google-api-core
-    httplib2 six uritemplate oauth2client setuptools
-  ];
 
   pythonImportsCheck = [
     "googleapiclient"

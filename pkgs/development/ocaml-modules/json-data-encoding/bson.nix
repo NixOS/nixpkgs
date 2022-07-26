@@ -1,9 +1,9 @@
-{ lib, buildDunePackage, json-data-encoding, ocplib-endian, crowbar }:
+{ lib, buildDunePackage, json-data-encoding, ocplib-endian, crowbar, alcotest }:
 
 buildDunePackage {
   pname = "json-data-encoding-bson";
 
-  inherit (json-data-encoding) version src useDune2 doCheck;
+  inherit (json-data-encoding) version src doCheck;
 
   propagatedBuildInputs = [
     json-data-encoding
@@ -12,6 +12,7 @@ buildDunePackage {
 
   checkInputs = [
     crowbar
+    alcotest
   ];
 
   meta = json-data-encoding.meta // {

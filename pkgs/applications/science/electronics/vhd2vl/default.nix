@@ -4,6 +4,7 @@
 , bison
 , flex
 , verilog
+, which
 }:
 
 stdenv.mkDerivation rec {
@@ -29,15 +30,24 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     bison
     flex
+    which
   ];
 
   buildInputs = [
     verilog
   ];
 
+  # the "translate" target both (a) builds the software and (b) runs
+  # the tests (without validating the results)
+  buildTargets = [ "translate" ];
+
+  # the "diff" target examines the test results
+  checkTarget = "diff";
+
   installPhase = ''
-    mkdir -p $out/bin
-    cp src/vhd2vl $out/bin/
+    runHook preInstall
+    install -D -m755 src/vhd2vl $out/bin/vhd2vl
+    runHook postInstall
   '';
 
   meta = with lib; {

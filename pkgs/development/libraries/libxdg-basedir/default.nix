@@ -1,9 +1,11 @@
 {lib, stdenv, fetchurl, fetchpatch}:
 
 stdenv.mkDerivation rec {
-  name = "libxdg-basedir-1.2.0";
+  pname = "libxdg-basedir";
+  version = "1.2.0";
+
   src = fetchurl {
-    url = "https://nevill.ch/libxdg-basedir/downloads/${name}.tar.gz";
+    url = "https://nevill.ch/libxdg-basedir/downloads/libxdg-basedir-${version}.tar.gz";
     sha256 = "2757a949618742d80ac59ee2f0d946adc6e71576406cdf798e6ced507708cdf4";
   };
 

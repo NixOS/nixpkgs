@@ -1,10 +1,11 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
 
   cfg = config.services.picom;
+  opt = options.services.picom;
 
   pairOf = x: with types;
     addCheck (listOf x) (y: length y == 2)
@@ -50,6 +51,11 @@ in {
 
   imports = [
     (mkAliasOptionModule [ "services" "compton" ] [ "services" "picom" ])
+    (mkRemovedOptionModule [ "services" "picom" "refreshRate" ] ''
+      This option corresponds to `refresh-rate`, which has been unused
+      since picom v6 and was subsequently removed by upstream.
+      See https://github.com/yshui/picom/commit/bcbc410
+    '')
   ];
 
   options.services.picom = {
@@ -178,7 +184,16 @@ in {
 
     wintypes = mkOption {
       type = types.attrs;
-      default = { popup_menu = { opacity = cfg.menuOpacity; }; dropdown_menu = { opacity = cfg.menuOpacity; }; };
+      default = {
+        popup_menu = { opacity = cfg.menuOpacity; };
+        dropdown_menu = { opacity = cfg.menuOpacity; };
+      };
+      defaultText = literalExpression ''
+        {
+          popup_menu = { opacity = config.${opt.menuOpacity}; };
+          dropdown_menu = { opacity = config.${opt.menuOpacity}; };
+        }
+      '';
       example = {};
       description = ''
         Rules for specific window types.
@@ -225,15 +240,6 @@ in {
       '';
     };
 
-    refreshRate = mkOption {
-      type = types.ints.unsigned;
-      default = 0;
-      example = 60;
-      description = ''
-       Screen refresh rate (0 = automatically detect).
-      '';
-    };
-
     settings = with types;
     let
       scalar = oneOf [ bool int float str ]
@@ -254,7 +260,7 @@ in {
     in mkOption {
       type = topLevel;
       default = { };
-      example = literalExample ''
+      example = literalExpression ''
         blur =
           { method = "gaussian";
             size = 10;
@@ -296,7 +302,6 @@ in {
       # other options
       backend          = cfg.backend;
       vsync            = cfg.vSync;
-      refresh-rate     = cfg.refreshRate;
     };
 
     systemd.user.services.picom = {

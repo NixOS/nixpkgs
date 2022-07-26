@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sirula";
-  version = "unstable-2021-07-11";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "DorianRudolph";
-    repo = "sirula";
-    rev = "574725bc307fc704c42380cd0fa50b0b80c4764d";
-    sha256 = "1m58j1hymjw4l2z1jdfirw1vb3rblc1qffpvc2lqy99frfz0dlvp";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-C5mVO10+jD4TDg6R9rVJO6fdDiOD5tT+bEaI53WVdFA=";
   };
 
-  cargoSha256 = "0wk90p20qkbpr866h8cvdshr8cl2kmc3dh2zxws5mlsh3sx2ld4w";
+  cargoSha256 = "sha256-pxVEa3m7SWMwOAcR/jRKzEc6MH6YkNfTW0cm6Nid6Zo=";
 
   nativeBuildInputs = [ pkg-config ];
 

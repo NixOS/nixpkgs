@@ -1,77 +1,150 @@
-{ pkgs, lib, python3, fetchFromGitHub }:
-
+{ lib
+, fetchFromGitHub
+, python3
+}:
 let
+  py = python3.override {
+    packageOverrides = self: super: {
+
+      dpath = super.dpath.overridePythonAttrs (oldAttrs: rec {
+        version = "1.5.0";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "06rn91n2izw7czncgql71w7acsa8wwni51njw0c6s8w4xas1arj9";
+        };
+        doCheck = false;
+      });
+
+      jsonschema = super.jsonschema.overridePythonAttrs (oldAttrs: rec {
+        version = "3.2.0";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "sha256-yKhbKNN3zHc35G4tnytPRO48Dh3qxr9G3e/HGH0weXo=";
+        };
+        SETUPTOOLS_SCM_PRETEND_VERSION = version;
+        doCheck = false;
+      });
+
+    };
+  };
+in
+with py.pkgs;
+
+buildPythonApplication rec {
   pname = "checkov";
-  version = "1.0.674";
+  version = "2.1.20";
+  format = "setuptools";
+
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = pname;
     rev = version;
-    sha256 = "/S8ic5ZVxA2vd/rjRPX5gslbmnULL7BSx34vgWIsheQ=";
+    hash = "sha256-dXpgm9S++jtBhuzX9db8Pm5LF6Qb4isXx5uyOGdWGUc=";
   };
 
-  disabled = pkgs.python3Packages.pythonOlder "3.7";
-
-  # CheckOV only work with `dpath 1.5.0`
-  dpath = pkgs.python3Packages.buildPythonPackage rec {
-    pname = "dpath";
-    version = "1.5.0";
-
-    src = pkgs.python3Packages.fetchPypi {
-      inherit pname version;
-      sha256 = "SWYVtOqEI20Y4NKGEi3nSGmmDg+H4sfsZ4f/KGxINhs=";
-    };
-
-    doCheck = false;
-  };
-in
-python3.pkgs.buildPythonPackage rec {
-  inherit pname version disabled src;
-
-  nativeBuildInputs = with python3.pkgs; [ setuptools-scm ];
-
-  propagatedBuildInputs = with python3.pkgs; [
-    pytest
-    coverage
-    bandit
-    bc-python-hcl2
-    deep_merge
-    tabulate
-    colorama
-    termcolor
-    junit-xml
-    dpath
-    pyyaml
-    boto3
-    GitPython
-    six
-    jmespath
-    tqdm
-    update_checker
-    semantic-version
-    packaging
+  nativeBuildInputs = with py.pkgs; [
+    pythonRelaxDepsHook
+    setuptools-scm
   ];
 
-  # Both of these tests are pulling from external srouces (https://github.com/bridgecrewio/checkov/blob/f03a4204d291cf47e3753a02a9b8c8d805bbd1be/.github/workflows/build.yml)
+  propagatedBuildInputs = with py.pkgs; [
+    aiodns
+    aiohttp
+    aiomultiprocess
+    argcomplete
+    bc-python-hcl2
+    boto3
+    cachetools
+    charset-normalizer
+    cloudsplaining
+    colorama
+    configargparse
+    cyclonedx-python-lib
+    deep_merge
+    detect-secrets
+    docker
+    dockerfile-parse
+    dpath
+    flake8
+    GitPython
+    jmespath
+    jsonpath-ng
+    jsonschema
+    junit-xml
+    networkx
+    packaging
+    policyuniverse
+    prettytable
+    pycep-parser
+    pyyaml
+    semantic-version
+    tabulate
+    termcolor
+    tqdm
+    typing-extensions
+    update_checker
+  ];
+
+  checkInputs = with py.pkgs; [
+    aioresponses
+    mock
+    pytest-asyncio
+    pytest-mock
+    pytest-xdist
+    pytestCheckHook
+    responses
+  ];
+
+  pythonRelaxDeps = [
+    "bc-python-hcl2"
+    "pycep-parser"
+  ];
+
   preCheck = ''
-    rm -rf integration_tests/*
-    rm -rf tests/terraform/*
+    export HOME=$(mktemp -d);
   '';
 
-  # Wrap the executable so that the python packages are available
-  # it's just a shebang script which calls `python -m checkov "$@"`
-  postFixup = ''
-    wrapProgram $out/bin/checkov \
-      --set PYTHONPATH $PYTHONPATH
-  '';
+  disabledTests = [
+    # No API key available
+    "api_key"
+    # Requires network access
+    "TestSarifReport"
+    # Will probably be fixed in one of the next releases
+    "test_valid_cyclonedx_bom"
+    "test_record_relative_path_with"
+    "test_record_relative_path_with_relative_dir"
+    # Requires prettytable release which is only available in staging
+    "test_skipped_check_exists"
+    # AssertionError: 0 not greater than 0
+    "test_skip_mapping_default"
+    # Test is failing
+    "test_SQLServerAuditingEnabled"
+  ];
+
+  disabledTestPaths = [
+    # Tests are pulling from external sources
+    # https://github.com/bridgecrewio/checkov/blob/f03a4204d291cf47e3753a02a9b8c8d805bbd1be/.github/workflows/build.yml
+    "integration_tests/"
+    "tests/terraform/"
+    # Performance tests have no value for us
+    "performance_tests/test_checkov_performance.py"
+    # Requires prettytable release which is only available in staging
+    "tests/sca_package/"
+    "tests/test_runner_filter.py"
+  ];
+
+  pythonImportsCheck = [
+    "checkov"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/bridgecrewio/checkov";
     description = "Static code analysis tool for infrastructure-as-code";
+    homepage = "https://github.com/bridgecrewio/checkov";
     longDescription = ''
-    Prevent cloud misconfigurations during build-time for Terraform, Cloudformation, Kubernetes, Serverless framework and other infrastructure-as-code-languages with Checkov by Bridgecrew.
+      Prevent cloud misconfigurations during build-time for Terraform, Cloudformation,
+      Kubernetes, Serverless framework and other infrastructure-as-code-languages.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ anhdle14 ];
+    maintainers = with maintainers; [ anhdle14 fab ];
   };
 }

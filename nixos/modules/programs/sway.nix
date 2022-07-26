@@ -90,12 +90,12 @@ in {
     extraPackages = mkOption {
       type = with types; listOf package;
       default = with pkgs; [
-        swaylock swayidle alacritty dmenu
+        swaylock swayidle foot dmenu
       ];
-      defaultText = literalExample ''
-        with pkgs; [ swaylock swayidle alacritty dmenu ];
+      defaultText = literalExpression ''
+        with pkgs; [ swaylock swayidle foot dmenu ];
       '';
-      example = literalExample ''
+      example = literalExpression ''
         with pkgs; [
           i3status i3status-rust
           termite rofi light
@@ -123,6 +123,8 @@ in {
     ];
     environment = {
       systemPackages = [ swayPackage ] ++ cfg.extraPackages;
+      # Needed for the default wallpaper:
+      pathsToLink = [ "/share/backgrounds/sway" ];
       etc = {
         "sway/config".source = mkOptionDefault "${swayPackage}/etc/sway/config";
         "sway/config.d/nixos.conf".source = pkgs.writeText "nixos.conf" ''
@@ -132,6 +134,7 @@ in {
         '';
       };
     };
+    security.polkit.enable = true;
     security.pam.services.swaylock = {};
     hardware.opengl.enable = mkDefault true;
     fonts.enableDefaultFonts = mkDefault true;

@@ -1,29 +1,40 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchPypi
-, pytest
-, lib
+, pytestCheckHook
+, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "msgpack";
-  version = "1.0.2";
+  version = "1.0.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1109s2yynrahwi64ikax68hx0mbclz8p35afmpphw5dwynb49q7s";
+    hash = "sha256-9dhpwY8DAgLrQS8Iso0q/upVPWYTruieIA16yn7wH18=";
   };
 
-  checkPhase = ''
-    py.test
-  '';
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  meta = {
+  pythonImportsCheck = [
+    "msgpack"
+  ];
+
+  meta = with lib;  {
+    description = "MessagePack serializer implementation";
     homepage = "https://github.com/msgpack/msgpack-python";
-    description = "MessagePack serializer implementation for Python";
     changelog = "https://github.com/msgpack/msgpack-python/blob/master/ChangeLog.rst";
-    license = lib.licenses.asl20;
-    # maintainers =  ?? ;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

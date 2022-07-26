@@ -19,13 +19,13 @@
 
 mkDerivation rec {
   pname = "lxqt-policykit";
-  version = "0.17.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "15f0hnif8zs38qgckif63dds9zgpp3dmg9pg3ppgh664lkbxx7n7";
+    sha256 = "Fs3N9r8RkawbXnX8jv8Fx63ijwAfy+OfrCpjeHDjKio=";
   };
 
   nativeBuildInputs = [
@@ -54,6 +54,6 @@ mkDerivation rec {
     description = "The LXQt PolicyKit agent";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

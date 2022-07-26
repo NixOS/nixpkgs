@@ -10,16 +10,16 @@
 
 buildPythonPackage rec {
   pname = "zeroconf";
-  version = "0.33.2";
+  version = "0.38.7";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
-  # no tests in pypi sdist
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "jstasiak";
     repo = "python-zeroconf";
     rev = version;
-    sha256 = "0pcfglxvrd3n6b5hkn169p38flhqr7alj8ipxx1p7kphywywplif";
+    hash = "sha256-Q/rrN7xzbehwMa3yFVP5F9ztUcJCDsfBIGf0b/GPzLM=";
   };
 
   propagatedBuildInputs = [
@@ -39,6 +39,8 @@ buildPythonPackage rec {
     "test_launch_and_close_v4_v6"
     "test_launch_and_close_v6_only"
     "test_integration_with_listener_ipv6"
+    # Starting with 0.38.7: AssertionError: assert [('add', '_ht..._tcp.local.')]
+    "test_service_browser_expire_callbacks"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_lots_of_names"
   ];

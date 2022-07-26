@@ -43,7 +43,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.syslogng;
-        defaultText = "pkgs.syslogng";
+        defaultText = literalExpression "pkgs.syslogng";
         description = ''
           The package providing syslog-ng binaries.
         '';
@@ -51,9 +51,6 @@ in {
       extraModulePaths = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = literalExample ''
-          [ "''${pkgs.syslogng_incubator}/lib/syslog-ng" ]
-        '';
         description = ''
           A list of paths that should be included in syslog-ng's
           <literal>--module-path</literal> option. They should usually

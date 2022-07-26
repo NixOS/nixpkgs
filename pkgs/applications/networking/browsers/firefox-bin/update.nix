@@ -1,4 +1,4 @@
-{ name
+{ pname
 , channel
 , writeScript
 , xidel
@@ -17,7 +17,7 @@ let
   isBeta =
     channel != "release";
 
-in writeScript "update-${name}" ''
+in writeScript "update-${pname}" ''
   #!${runtimeShell}
   PATH=${coreutils}/bin:${gnused}/bin:${gnugrep}/bin:${xidel}/bin:${curl}/bin:${gnupg}/bin
   set -eux

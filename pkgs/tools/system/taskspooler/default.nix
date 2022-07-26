@@ -23,9 +23,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Simple single node task scheduler";
-    license = licenses.gpl2Plus;
     homepage = "https://vicerveza.homeunix.net/~viric/wsgi-bin/hgweb.wsgi/ts";
-    platforms = platforms.unix;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.sheepforce ];
+    mainProgram = "ts";
+    platforms = platforms.unix;
   };
 }

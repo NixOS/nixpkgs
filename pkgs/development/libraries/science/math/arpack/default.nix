@@ -22,9 +22,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake gfortran ];
   buildInputs = assert (blas.isILP64 == lapack.isILP64); [
-    gfortran
     blas
     lapack
     eigen
@@ -37,11 +36,7 @@ stdenv.mkDerivation rec {
     "-DINTERFACE64=${if blas.isILP64 then "1" else "0"}"
   ];
 
-  preCheck = if stdenv.isDarwin then ''
-    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}`pwd`/lib:${blas}/lib:${lapack}/lib
-  '' else ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}`pwd`/lib
-  '' + ''
+  preCheck = ''
     # Prevent tests from using all cores
     export OMP_NUM_THREADS=2
   '';
@@ -49,6 +44,10 @@ stdenv.mkDerivation rec {
   postFixup = lib.optionalString stdenv.isDarwin ''
     install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libarpack.dylib
   '';
+
+  # disable stackprotector on aarch64-darwin for now
+  # https://github.com/NixOS/nixpkgs/issues/127608
+  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
 
   meta = {
     homepage = "https://github.com/opencollab/arpack-ng";

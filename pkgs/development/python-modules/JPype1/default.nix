@@ -31,6 +31,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/originell/jpype/";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode
+    ];
     license = licenses.asl20;
     description = "A Python to Java bridge";
   };

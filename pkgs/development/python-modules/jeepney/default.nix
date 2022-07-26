@@ -2,6 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, flit-core
+, async-timeout
 , dbus
 , pytest
 , pytest-trio
@@ -12,16 +14,23 @@
 
 buildPythonPackage rec {
   pname = "jeepney";
-  version = "0.7.0";
+  version = "0.8.0";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
+
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1237cd64c8f7ac3aa4b3f332c4d0fb4a8216f39eaa662ec904302d4d77de5a54";
+    sha256 = "5efe48d255973902f6badc3ce55e2aa6c5c3b3bc642059ef3a91247bcfcc5806";
   };
 
+  nativeBuildInputs = [
+    flit-core
+  ];
+
   checkInputs = [
+    async-timeout
     dbus
     pytest
     pytest-trio

@@ -1,5 +1,5 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub, isPyPy, lib
-, defusedxml, future, psutil, setuptools
+{ stdenv, buildPythonApplication, fetchFromGitHub, fetchpatch, isPyPy, lib
+, defusedxml, future, packaging, psutil, setuptools
 # Optional dependencies:
 , bottle, pysnmp
 , hddtemp
@@ -9,18 +9,28 @@
 
 buildPythonApplication rec {
   pname = "glances";
-  version = "3.2.2";
+  version = "3.2.6.4";
   disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "glances";
     rev = "v${version}";
-    sha256 = "13w7bxfizsfi3xyhharnindyn3dv3p9p54a4xwyhnnhczs8kqa8s";
+    sha256 = "sha256-i88bz6AwfDbqC+7yvr7uDofAqBwQmnfoKbt3iJz4Ft8=";
   };
 
   # Some tests fail in the sandbox (they e.g. require access to /sys/class/power_supply):
-  patches = lib.optional (doCheck && stdenv.isLinux) ./skip-failing-tests.patch;
+  patches = lib.optional (doCheck && stdenv.isLinux) ./skip-failing-tests.patch
+    ++ lib.optional (doCheck && stdenv.isDarwin)
+    [
+      # Fix "TypeError: unsupported operand type(s) for +=: 'int' and 'NoneType'" on darwin
+      # https://github.com/nicolargo/glances/pull/2082
+      (fetchpatch {
+        name = "fix-typeerror-when-testing-on-darwin.patch";
+        url = "https://patch-diff.githubusercontent.com/raw/nicolargo/glances/pull/2082.patch";
+        sha256 = "sha256-MIePPywZ2dTTqXjf7EJiHlQ7eltiHzgocqrnLeLJwZ4=";
+      })
+    ];
 
   # On Darwin this package segfaults due to mismatch of pure and impure
   # CoreFoundation. This issues was solved for binaries but for interpreted
@@ -31,7 +41,7 @@ buildPythonApplication rec {
   ];
 
   doCheck = true;
-  preCheck = lib.optional stdenv.isDarwin ''
+  preCheck = lib.optionalString stdenv.isDarwin ''
     export DYLD_FRAMEWORK_PATH=/System/Library/Frameworks
   '';
 
@@ -40,6 +50,7 @@ buildPythonApplication rec {
     defusedxml
     future
     netifaces
+    packaging
     psutil
     pysnmp
     setuptools

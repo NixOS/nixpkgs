@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "-Werror" "-Werror -Wno-stringop-truncation"
   '';
 
-  postInstall = ''
-    cp src/proxychains.conf $out/etc
-  '';
+  installFlags = [
+    "install-config"
+  ];
 
   meta = with lib; {
     description = "Proxifier for SOCKS proxies";

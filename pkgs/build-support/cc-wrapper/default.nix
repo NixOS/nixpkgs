@@ -14,6 +14,7 @@
 , nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , propagateDoc ? cc != null && cc ? man
 , extraTools ? [], extraPackages ? [], extraBuildCommands ? ""
+, nixSupport ? {}
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
 , buildPackages ? {}
 , libcxx ? null
@@ -155,10 +156,13 @@ stdenv.mkDerivation {
             (setenv "NIX_CFLAGS_COMPILE_${suffixSalt}" (concat (getenv "NIX_CFLAGS_COMPILE_${suffixSalt}") " -isystem " arg "/include"))))
         '(${concatStringsSep " " (map (pkg: "\"${pkg}\"") pkgs)}))
     '';
+
+    inherit nixSupport;
   };
 
   dontBuild = true;
   dontConfigure = true;
+  enableParallelBuilding = true;
 
   unpackPhase = ''
     src=$PWD
@@ -291,14 +295,6 @@ stdenv.mkDerivation {
       if [[ -f "$bintools/nix-support/dynamic-linker-m32" ]]; then
         ln -s "$bintools/nix-support/dynamic-linker-m32" "$out/nix-support"
       fi
-    ''
-
-    ##
-    ## General Clang support
-    ##
-    + optionalString isClang ''
-
-      echo "-target ${targetPlatform.config}" >> $out/nix-support/cc-cflags
     ''
 
     ##
@@ -463,6 +459,9 @@ stdenv.mkDerivation {
     + optionalString (targetPlatform ? gcc.mode) ''
       echo "-mmode=${targetPlatform.gcc.mode}" >> $out/nix-support/cc-cflags-before
     ''
+    + optionalString (targetPlatform ? gcc.thumb) ''
+      echo "-m${if targetPlatform.gcc.thumb then "thumb" else "arm"}" >> $out/nix-support/cc-cflags-before
+    ''
     + optionalString (targetPlatform ? gcc.tune &&
                       isGccArchSupported targetPlatform.gcc.tune) ''
       echo "-mtune=${targetPlatform.gcc.tune}" >> $out/nix-support/cc-cflags-before
@@ -472,7 +471,7 @@ stdenv.mkDerivation {
     + optionalString hostPlatform.isCygwin ''
       hardening_unsupported_flags+=" pic"
     '' + optionalString targetPlatform.isMinGW ''
-      hardening_unsupported_flags+=" stackprotector"
+      hardening_unsupported_flags+=" stackprotector fortify"
     '' + optionalString targetPlatform.isAvr ''
       hardening_unsupported_flags+=" stackprotector pic"
     '' + optionalString (targetPlatform.libc == "newlib") ''
@@ -484,6 +483,8 @@ stdenv.mkDerivation {
     '' + optionalString cc.langAda or false ''
       hardening_unsupported_flags+=" format stackprotector strictoverflow"
     '' + optionalString cc.langD or false ''
+      hardening_unsupported_flags+=" format"
+    '' + optionalString cc.langFortran or false ''
       hardening_unsupported_flags+=" format"
     '' + optionalString targetPlatform.isWasm ''
       hardening_unsupported_flags+=" stackprotector fortify pie pic"
@@ -516,9 +517,22 @@ stdenv.mkDerivation {
     ''
 
     ##
+    ## General Clang support
+    ## Needs to go after ^ because the for loop eats \n and makes this file an invalid script
+    ##
+    + optionalString isClang ''
+      export defaultTarget=${targetPlatform.config}
+      substituteAll ${./add-clang-cc-cflags-before.sh} $out/nix-support/add-local-cc-cflags-before.sh
+    ''
+
+    ##
     ## Extra custom steps
     ##
-    + extraBuildCommands;
+    + extraBuildCommands
+    + lib.strings.concatStringsSep "; "
+      (lib.attrsets.mapAttrsToList
+        (name: value: "echo ${toString value} >> $out/nix-support/${name}")
+        nixSupport);
 
   inherit expand-response-params;
 

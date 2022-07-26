@@ -6,15 +6,9 @@
 }:
 
 mkDerivation {
-  name = "kwindowsystem";
+  pname = "kwindowsystem";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ libpthreadstubs libXdmcp qttools qtx11extras ];
   propagatedBuildInputs = [ qtbase ];
-  patches = [
-    ./0001-platform-plugins-path.patch
-  ];
-  preConfigure = ''
-    NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PATH=\"''${!outputBin}/$qtPluginPrefix\""
-  '';
   outputs = [ "out" "dev" ];
 }

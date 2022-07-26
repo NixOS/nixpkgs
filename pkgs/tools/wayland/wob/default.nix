@@ -13,15 +13,19 @@
 
 stdenv.mkDerivation rec {
   pname = "wob";
-  version = "0.11";
+  version = "0.13";
 
   src = fetchFromGitHub {
     owner = "francma";
     repo = pname;
     rev = version;
-    sha256 = "13mx6nzab6msp57s9mv9ambz53a4zkafms9v97xv5zvd6xarnrya";
+    sha256 = "sha256-CXRBNnnhNV5LBIasVtmGrRG4ZXFGC7qNInU7Y0QsHbs=";
   };
 
+  strictDeps = true;
+  depsBuildBuild = [
+    pkg-config
+  ];
   nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner ];
   buildInputs = [ wayland wayland-protocols ]
     ++ lib.optional stdenv.isLinux libseccomp;

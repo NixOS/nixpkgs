@@ -41,12 +41,17 @@ let
       pkgs.zstd
     ];
 
-    defaultPackages = map (pkg: setPrio ((pkg.meta.priority or 5) + 3) pkg)
-      [ pkgs.nano
-        pkgs.perl
-        pkgs.rsync
-        pkgs.strace
-      ];
+  defaultPackageNames =
+    [ "nano"
+      "perl"
+      "rsync"
+      "strace"
+    ];
+  defaultPackages =
+    map
+      (n: let pkg = pkgs.${n}; in setPrio ((pkg.meta.priority or 5) + 3) pkg)
+      defaultPackageNames;
+  defaultPackagesText = "[ ${concatMapStringsSep " " (n: "pkgs.${n}") defaultPackageNames } ]";
 
 in
 
@@ -58,7 +63,7 @@ in
       systemPackages = mkOption {
         type = types.listOf types.package;
         default = [];
-        example = literalExample "[ pkgs.firefox pkgs.thunderbird ]";
+        example = literalExpression "[ pkgs.firefox pkgs.thunderbird ]";
         description = ''
           The set of packages that appear in
           /run/current-system/sw.  These packages are
@@ -73,9 +78,14 @@ in
       defaultPackages = mkOption {
         type = types.listOf types.package;
         default = defaultPackages;
-        example = literalExample "[]";
+        defaultText = literalDocBook ''
+          these packages, with their <literal>meta.priority</literal> numerically increased
+          (thus lowering their installation priority):
+          <programlisting>${defaultPackagesText}</programlisting>
+        '';
+        example = [];
         description = ''
-          Set of default packages that aren't strictly neccessary
+          Set of default packages that aren't strictly necessary
           for a running system, entries can be removed for a more
           minimal NixOS installation.
 

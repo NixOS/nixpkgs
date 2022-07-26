@@ -4,11 +4,11 @@ cups, vivaldi-ffmpeg-codecs, libpulseaudio, at-spi2-core, libxkbcommon, mesa }:
 
 stdenv.mkDerivation rec {
   pname = "exodus";
-  version = "21.1.29";
+  version = "22.7.15";
 
   src = fetchurl {
     url = "https://downloads.exodus.io/releases/${pname}-linux-x64-${version}.zip";
-    sha256 = "sha256-Qdiyjutzt8r1tIfcW7/AtSuOpf1Un5TeHoeZx5uQthM=";
+    sha256 = "sha256-tQwxzhy+d2hA7VvZB9qSF7uaYIffAyX9ovZYQ8HDEB8=";
   };
 
   sourceRoot = ".";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     ln -s $out/bin/Exodus $out/bin/exodus
     ln -s $out/exodus.desktop $out/share/applications
     substituteInPlace $out/share/applications/exodus.desktop \
-          --replace 'Exec=bash -c "cd `dirname %k` && ./Exodus"' "Exec=Exodus"
+          --replace 'Exec=bash -c "cd \`dirname %k\` && ./Exodus %u"' "Exec=Exodus %u"
   '';
 
   dontPatchELF = true;
@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
       xorg.libXfixes
       xorg.libXi
       xorg.libXrender
+      xorg.libxshmfence
       xorg.libXtst
       xorg_sys_opengl
       util-linux
@@ -75,6 +76,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.exodus.io/";
     description = "Top-rated cryptocurrency wallet with Trezor integration and built-in Exchange";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mmahut rople380 ];

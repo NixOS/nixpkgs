@@ -1,0 +1,26 @@
+diff --git a/src/Views/InputMethod.vala b/src/Views/InputMethod.vala
+index 7f73c1e1..1f0d6400 100644
+--- a/src/Views/InputMethod.vala
++++ b/src/Views/InputMethod.vala
+@@ -328,7 +328,7 @@ public class Pantheon.Keyboard.InputMethodPage.Page : Gtk.Grid {
+     private void spawn_ibus_daemon () {
+         bool is_spawn_succeeded = false;
+         try {
+-            is_spawn_succeeded = Process.spawn_sync ("/", { "ibus-daemon", "-drx" }, Environ.get (), SpawnFlags.SEARCH_PATH, null);
++            is_spawn_succeeded = Process.spawn_sync ("/", { "@ibus@/bin/ibus-daemon", "-drx" }, Environ.get (), SpawnFlags.SEARCH_PATH, null);
+         } catch (GLib.SpawnError e) {
+             warning (e.message);
+             set_visible_view (e.message);
+diff --git a/src/Views/Layout.vala b/src/Views/Layout.vala
+index 75d2d805..b86252a4 100644
+--- a/src/Views/Layout.vala
++++ b/src/Views/Layout.vala
+@@ -219,7 +219,7 @@ namespace Pantheon.Keyboard {
+ 
+             onscreen_keyboard_settings.clicked.connect (() => {
+                 try {
+-                    var appinfo = AppInfo.create_from_commandline ("onboard-settings", null, AppInfoCreateFlags.NONE);
++                    var appinfo = AppInfo.create_from_commandline ("@onboard@/bin/onboard-settings", null, AppInfoCreateFlags.NONE);
+                     appinfo.launch (null, null);
+                 } catch (Error e) {
+                     warning ("Unable to launch onboard-settings: %s", e.message);

@@ -1,22 +1,33 @@
-{ lib, buildPythonPackage, fetchPypi
-, chardet, six}:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, chardet
+}:
 
 buildPythonPackage rec {
   pname = "python-debian";
-  version = "0.1.39";
+  version = "0.1.44";
+
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6cca96239b5981f5203216d2113fea522477628607ed0a8427e15094a792541c";
+    sha256 = "sha256-ZVkv47ZPbGyT2U4tJZnbXgwigx07z/B8t7ltOECxMz4=";
   };
 
-  propagatedBuildInputs = [ chardet six ];
+  propagatedBuildInputs = [ chardet ];
 
   # No tests in archive
   doCheck = false;
 
-  meta = {
+  pythonImportsCheck = [ "debian" ];
+
+  meta = with lib; {
     description = "Debian package related modules";
-    license = lib.licenses.gpl2;
+    homepage = "https://salsa.debian.org/python-debian-team/python-debian";
+    changelog = "https://salsa.debian.org/python-debian-team/python-debian/-/blob/master/debian/changelog";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

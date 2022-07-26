@@ -1,11 +1,12 @@
 let
   pkgs = import ../../../../.. { };
 
-  src = pkgs.fetchgit {
-    url = "https://github.com/nix-community/emacs2nix.git";
+  src = pkgs.fetchFromGitHub {
+    owner = "nix-community";
+    repo = "emacs2nix";
+    rev = "2e8d2c644397be57455ad32c2849f692eeac7797";
+    sha256 = "sha256-qnOYDYHAQ+r5eegKP9GqHz5R2ig96B2W7M+uYa1ti9M=";
     fetchSubmodules = true;
-    rev = "703b144eeb490e87133c777f82e198b4e515c312";
-    sha256 = "sha256-YBbRh/Cb8u9+Pn6/Bc0atI6knKVjr8jiTGgFkD2FNGI=";
   };
 in
 pkgs.mkShell {

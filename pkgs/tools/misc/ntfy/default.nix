@@ -1,8 +1,20 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{ lib
+, python39
+, fetchFromGitHub
+, fetchpatch
+}:
 
-python3Packages.buildPythonApplication rec {
+let
+  python = python39.override {
+    packageOverrides = self: super: {
+      ntfy-webpush = self.callPackage ./webpush.nix { };
+    };
+  };
+in python.pkgs.buildPythonApplication rec {
   pname = "ntfy";
   version = "2.7.0";
+
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dschep";
@@ -11,22 +23,33 @@ python3Packages.buildPythonApplication rec {
     sha256 = "09f02cn4i1l2aksb3azwfb70axqhn7d0d0vl2r6640hqr74nc1cv";
   };
 
-  checkInputs = with python3Packages; [
+  checkInputs = with python.pkgs; [
     mock
   ];
 
-  propagatedBuildInputs = with python3Packages; [
-    requests ruamel_yaml appdirs
+  propagatedBuildInputs = with python.pkgs; [
+    requests ruamel-yaml appdirs
     sleekxmpp dnspython
     emoji
     psutil
     matrix-client
     dbus-python
     ntfy-webpush
+    slack-sdk
+  ];
+
+  patches = [
+    # Fix Slack integration no longer working.
+    # From https://github.com/dschep/ntfy/pull/229 - "Swap Slacker for Slack SDK"
+    (fetchpatch {
+      name = "ntfy-Swap-Slacker-for-Slack-SDK.patch";
+      url = "https://github.com/dschep/ntfy/commit/2346e7cfdca84c8f1afc7462a92145c1789deb3e.patch";
+      sha256 = "13k7jbsdx0jx7l5s8whirric76hml5bznkfcxab5xdp88q52kpk7";
+    })
   ];
 
   checkPhase = ''
-    HOME=$(mktemp -d) ${python3Packages.python.interpreter} setup.py test
+    HOME=$(mktemp -d) ${python.interpreter} setup.py test
   '';
 
   meta = with lib; {

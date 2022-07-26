@@ -1,36 +1,63 @@
 { lib
 , attrs
 , buildPythonPackage
-, defusedxml
-, fetchPypi
+, fetchFromGitHub
 , hypothesis
-, isPy3k
+, pythonOlder
+, importlib-metadata
+, jbig2dec
+, deprecation
 , lxml
+, mupdf
+, packaging
 , pillow
 , psutil
 , pybind11
-, pytest-cov
-, pytest-helpers-namespace
-, pytest-timeout
 , pytest-xdist
 , pytestCheckHook
 , python-dateutil
 , python-xmp-toolkit
 , qpdf
-, setuptools
 , setuptools-scm
-, setuptools-scm-git-archive
+, substituteAll
 }:
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "2.16.1";
-  disabled = ! isPy3k;
+  version = "5.3.1";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-4k3/avMfHrcy/LXbRniDXR8xJkOZb9zZ2+uKylK8Dd4=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "pikepdf";
+    repo = "pikepdf";
+    rev = "v${version}";
+    # The content of .git_archival.txt is substituted upon tarball creation,
+    # which creates indeterminism if master no longer points to the tag.
+    # See https://github.com/jbarlow83/OCRmyPDF/issues/841
+    postFetch = ''
+      rm "$out/.git_archival.txt"
+    '';
+    hash = "sha256-QYSI0oWuDw19EF8pwh3t1+VOY3Xe/AZxL1uARufg/nE=";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./paths.patch;
+      jbig2dec = "${lib.getBin jbig2dec}/bin/jbig2dec";
+      mudraw = "${lib.getBin mupdf}/bin/mudraw";
+    })
+  ];
+
+  postPatch = ''
+    sed -i 's|\S*/opt/homebrew.*|pass|' setup.py
+
+    substituteInPlace setup.py \
+      --replace setuptools_scm_git_archive ""
+  '';
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   buildInputs = [
     pybind11
@@ -38,33 +65,27 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    setuptools-scm-git-archive
     setuptools-scm
   ];
 
   checkInputs = [
     attrs
     hypothesis
-    pytest-helpers-namespace
-    pytest-timeout
     pytest-xdist
     psutil
-    pytest-cov
     pytestCheckHook
     python-dateutil
     python-xmp-toolkit
   ];
 
   propagatedBuildInputs = [
-    defusedxml
+    deprecation
     lxml
+    packaging
     pillow
-    setuptools
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
   ];
-
-  preBuild = ''
-    HOME=$TMPDIR
-  '';
 
   pythonImportsCheck = [ "pikepdf" ];
 
@@ -72,7 +93,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/pikepdf/pikepdf";
     description = "Read and write PDFs with Python, powered by qpdf";
     license = licenses.mpl20;
-    maintainers = [ maintainers.kiwi ];
-    changelog = "https://github.com/pikepdf/pikepdf/blob/${version}/docs/release_notes.rst";
+    maintainers = with maintainers; [ kiwi dotlambda ];
+    changelog = "https://github.com/pikepdf/pikepdf/blob/${src.rev}/docs/releasenotes/version${lib.versions.major version}.rst";
   };
 }

@@ -36,4 +36,11 @@ mkDerivation {
     ''-DNIX_OUT=\"${placeholder "out"}\"''
     ''-I${lib.getDev kio}/include/KF5''  # Fixes: kio_version.h: No such file or directory
   ];
+
+  # compatibility symlinks for kmymoney, can probably be removed in next kde bump
+  postInstall = ''
+    ln -s $dev/include/KF5/AkonadiCore/Akonadi/Collection $dev/include/KF5/AkonadiCore/Collection
+    ln -s $dev/include/KF5/AkonadiCore/Akonadi/ItemFetchScope $dev/include/KF5/AkonadiCore/ItemFetchScope
+    ln -s $dev/include/KF5/AkonadiCore/Akonadi/RecursiveItemFetchJob $dev/include/KF5/AkonadiCore/RecursiveItemFetchJob
+  '';
 }

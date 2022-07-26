@@ -3,11 +3,11 @@
   extra-cmake-modules,
   kauth, kcompletion, kconfig, kconfigwidgets, kcoreaddons, ki18n, kiconthemes,
   knewstuff, kservice, kwidgetsaddons, kwindowsystem, plasma-framework,
-  qtbase, qtscript, qtwebengine, qtx11extras, libnl
+  qtbase, qtscript, qtwebengine, qtx11extras, libnl, libpcap, qtsensors, lm_sensors,
 }:
 
 mkDerivation {
-  name = "libksysguard";
+  pname = "libksysguard";
   patches = [
     ./0001-qdiriterator-follow-symlinks.patch
   ];
@@ -15,7 +15,7 @@ mkDerivation {
   buildInputs = [
     kauth kconfig ki18n kiconthemes kwindowsystem kcompletion kconfigwidgets
     kcoreaddons kservice kwidgetsaddons plasma-framework qtscript qtx11extras
-    qtwebengine knewstuff libnl
+    qtwebengine knewstuff libnl libpcap qtsensors lm_sensors
   ];
   outputs = [ "bin" "dev" "out" ];
 }

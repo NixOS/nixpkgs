@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     # files passed as arguments anyway, so this works well enough until the
     # issue is fixed.
     wrapProgram $out/bin/hivelytracker \
-      --run "cd $out/share/hivelytracker"
+      --chdir "$out/share/hivelytracker"
 
     # Also install the hvl2wav tool
     install -Dm755 hvl2wav/hvl2wav $out/bin/hvl2wav

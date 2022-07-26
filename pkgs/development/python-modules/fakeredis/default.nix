@@ -1,13 +1,13 @@
 { lib
 , aioredis
-, async_generator
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , hypothesis
 , lupa
+, poetry-core
 , pytest-asyncio
-, pytest-mock
 , pytestCheckHook
+, pytest-mock
 , pythonOlder
 , redis
 , six
@@ -16,35 +16,51 @@
 
 buildPythonPackage rec {
   pname = "fakeredis";
-  version = "1.5.2";
-  disabled = pythonOlder "3.5";
+  version = "1.8.2";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "18fc1808d2ce72169d3f11acdb524a00ef96bd29970c6d34cfeb2edb3fc0c020";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "dsoftwareinc";
+    repo = "fakeredis-py";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-T8A6vU1m7nlHpTMC62IpgsQGh3ksuBp1ty4GkjN+2T8=";
   };
 
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
   propagatedBuildInputs = [
-    aioredis
-    lupa
     redis
     six
     sortedcontainers
   ];
 
   checkInputs = [
-    async_generator
     hypothesis
     pytest-asyncio
     pytest-mock
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "fakeredis" ];
+  passthru.optional-dependencies = {
+    lua = [
+      lupa
+    ];
+    aioredis = [
+      aioredis
+    ];
+  };
+
+  pythonImportsCheck = [
+    "fakeredis"
+  ];
 
   meta = with lib; {
     description = "Fake implementation of Redis API";
-    homepage = "https://github.com/jamesls/fakeredis";
+    homepage = "https://github.com/dsoftwareinc/fakeredis-py";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

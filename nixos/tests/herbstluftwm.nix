@@ -3,10 +3,9 @@ import ./make-test-python.nix ({ lib, ...} : {
 
   meta = {
     maintainers = with lib.maintainers; [ thibautmarty ];
-    timeout = 30;
   };
 
-  machine = { pkgs, lib, ... }: {
+  nodes.machine = { pkgs, lib, ... }: {
     imports = [ ./common/x11.nix ./common/user-account.nix ];
     test-support.displayManager.auto.user = "alice";
     services.xserver.displayManager.defaultSession = lib.mkForce "none+herbstluftwm";

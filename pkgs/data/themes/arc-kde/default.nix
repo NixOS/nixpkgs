@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "arc-kde-theme";
-  version = "20180614";
+  version = "20220706";
 
   src = fetchFromGitHub {
     owner = "PapirusDevelopmentTeam";
     repo = "arc-kde";
     rev = version;
-    sha256 = "0wli16k9my7m8a9561545vjwfifmxm4w606z1h0j08msvlky40xw";
+    sha256 = "sha256-k/+VhqvOg3wkqal7q7nSVpubK/yHnNoTUUWhnxwcIjM=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

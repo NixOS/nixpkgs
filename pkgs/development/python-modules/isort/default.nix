@@ -6,17 +6,16 @@
 , pytestCheckHook
 }:
 
-let
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "isort";
-  version = "5.6.4";
+  version = "5.10.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "isort";
     rev = version;
-    sha256 = "1m7jpqssnbsn1ydrw1dn7nrcrggqcvj9v6mk5ampxmvk94xd2r2q";
+    sha256 = "09spgl2k9xrprr5gbpfc91a8p7mx7a0c64ydgc91b3jhrmnd9jg1";
   };
 
   nativeBuildInputs = [
@@ -46,12 +45,14 @@ in buildPythonPackage rec {
   '';
 
   pytestFlagsArray = [
+    "--ignore=tests/benchmark/" # requires pytest-benchmark
     "--ignore=tests/integration/" # pulls in 10 other packages
     "--ignore=tests/unit/profiles/test_black.py" # causes infinite recursion to include black
   ];
 
   disabledTests = [
     "test_run" # doesn't like paths in /build
+    "test_fuzz_show_unified_diff" # flakey
     "test_pyi_formatting_issue_942"
     "test_requirements_finder"
     "test_pipfile_finder"
@@ -63,6 +64,7 @@ in buildPythonPackage rec {
     # plugin not available
     "test_isort_literals_issue_1358"
     "test_isort_supports_formatting_plugins_issue_1353"
+    "test_sort_configurable_sort_issue_1732"
     "test_value_assignment_list"
     # profiles not available
     "test_isort_supports_shared_profiles_issue_970"

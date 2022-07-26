@@ -1,20 +1,24 @@
-{ lib
+{ stdenv
+, lib
 , rustPlatform
 , fetchFromGitHub
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "dotenv-linter";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "dotenv-linter";
     repo = "dotenv-linter";
     rev = "v${version}";
-    sha256 = "sha256-hhaMI2Z97aT/8FxxtWpn+o3BSo26iyBP+ucpO3x4AbQ=";
+    sha256 = "sha256-YWL1aPcMdU4lo7h/T2sdl2H6qnx3lfMtV39Ak4yP88w=";
   };
 
-  cargoSha256 = "sha256-F9Xyg8/qp0j0+jyd5EVe2idocubzu+Cj6yAwrHuabvM=";
+  cargoSha256 = "sha256-q59hpnXc00OzrJk1KOWbIPQYfIE+7ku9XtTDXHgwQBg=";
+
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
   meta = with lib; {
     description = "Lightning-fast linter for .env files. Written in Rust";

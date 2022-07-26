@@ -103,7 +103,7 @@ let
       pathContent = lib.attrByPath prefix null pkgs;
     in
       if pathContent == null then
-        builtins.throw "Attribute path `${path}` does not exists."
+        builtins.throw "Attribute path `${path}` does not exist."
       else
         packagesWithPath prefix (path: pkg: builtins.hasAttr "updateScript" pkg)
                        pathContent;
@@ -115,7 +115,7 @@ let
         package = lib.attrByPath (lib.splitString "." path) null pkgs;
     in
       if package == null then
-        builtins.throw "Package with an attribute name `${path}` does not exists."
+        builtins.throw "Package with an attribute name `${path}` does not exist."
       else if ! builtins.hasAttr "updateScript" package then
         builtins.throw "Package with an attribute name `${path}` does not have a `passthru.updateScript` attribute defined."
       else
@@ -147,7 +147,7 @@ let
 
     to run update script for specific package, or
 
-        % nix-shell maintainers/scripts/update.nix --arg predicate '(path: pkg: builtins.isList pkg.updateScript && builtins.length pkg.updateScript >= 1 && (let script = builtins.head pkg.updateScript; in builtins.isAttrs script && script.name == "gnome-update-script"))'
+        % nix-shell maintainers/scripts/update.nix --arg predicate '(path: pkg: pkg.updateScript.name or null == "gnome-update-script")'
 
     to run update script for all packages matching given predicate, or
 

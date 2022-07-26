@@ -4,25 +4,36 @@
 , django
 , flask
 , google-api-core
+, google-cloud-appengine-logging
+, google-cloud-audit-log
 , google-cloud-core
 , google-cloud-testutils
 , mock
 , proto-plus
 , pytestCheckHook
 , pytest-asyncio
-, webapp2
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-logging";
-  version = "2.5.0";
+  version = "3.2.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ab9d6ee1156cabe8c2483ca5a67bdf3a8582c596dd4e498a59781b6670b085f0";
+    hash = "sha256-oREcVPdcbbBFMQz55xLm8Q0bemTrVwsj+4ew73A11Kw=";
   };
 
-  propagatedBuildInputs = [ google-api-core google-cloud-core proto-plus ];
+  propagatedBuildInputs = [
+    google-api-core
+    google-cloud-appengine-logging
+    google-cloud-audit-log
+    google-cloud-core
+    proto-plus
+  ];
 
   checkInputs = [
     django
@@ -45,7 +56,7 @@ buildPythonPackage rec {
     rm tests/system/test_system.py tests/unit/test__gapic.py
   '';
 
-  pythonImortsCheck = [
+  pythonImportsCheck = [
     "google.cloud.logging"
     "google.cloud.logging_v2"
   ];

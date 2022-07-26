@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "respx";
-  version = "0.17.1";
+  version = "0.19.2";
 
   src = fetchFromGitHub {
     owner = "lundberg";
     repo = pname;
     rev = version;
-    sha256 = "0w8idh6l2iq04ydz7r2qisq9jsxq8wszkx97kx4g3yjwg4ypvc6k";
+    sha256 = "sha256-uNmSBJOQF4baq8AWzfwj0kinO19jr6Mp9Yblys/WmZs=";
   };
 
   propagatedBuildInputs = [

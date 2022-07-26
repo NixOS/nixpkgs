@@ -27,17 +27,13 @@ stdenv.mkDerivation rec {
     exo
   ];
 
-  passthru.updateScript = xfce.updateScript {
-    inherit pname version;
-    attrPath = "xfce.${pname}";
-    versionLister = xfce.archiveLister category pname;
-  };
+  passthru.updateScript = xfce.archiveUpdater { inherit category pname version; };
 
   meta = with lib; {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-mpc-plugin";
     description = "MPD plugin for Xfce panel";
     platforms = platforms.linux;
     license = licenses.bsd2;
-    maintainers = [ ];
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

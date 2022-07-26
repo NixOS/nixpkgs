@@ -9,21 +9,22 @@
 , shaderc
 , glslang
 , lcms2
-, epoxy
+, libepoxy
 , libGL
 , xorg
+, libunwind
 }:
 
 stdenv.mkDerivation rec {
   pname = "libplacebo";
-  version = "3.120.3";
+  version = "4.208.0";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "02hiyhnjdz3zqnzks9bi7my62a85k9k9vfgmh9fy19snsbkd6l80";
+    sha256 = "161dp5781s74ca3gglaxlmchx7glyshf0wg43w98pl22n1jcm5qk";
   };
 
   nativeBuildInputs = [
@@ -39,14 +40,18 @@ stdenv.mkDerivation rec {
     shaderc
     glslang
     lcms2
-    epoxy
+    libepoxy
     libGL
     xorg.libX11
+    libunwind
   ];
 
   mesonFlags = [
     "-Dvulkan-registry=${vulkan-headers}/share/vulkan/registry/vk.xml"
-    "-Ddemos=false"
+    "-Ddemos=false" # Don't build and install the demo programs
+    "-Dd3d11=disabled" # Disable the Direct3D 11 based renderer
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-Dunwind=disabled" # libplacebo doesn’t build with `darwin.libunwind`
   ];
 
   meta = with lib; {

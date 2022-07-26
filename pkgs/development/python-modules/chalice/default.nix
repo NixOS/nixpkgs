@@ -1,41 +1,42 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
 , attrs
 , botocore
+, buildPythonPackage
 , click
-, enum-compat
+, fetchFromGitHub
 , hypothesis
 , inquirer
 , jmespath
 , mock
 , mypy-extensions
 , pip
-, pytest
+, pytestCheckHook
+, pythonOlder
 , pyyaml
+, requests
 , setuptools
 , six
-, typing ? null
+, typing
 , watchdog
+, websocket-client
 , wheel
 }:
 
 buildPythonPackage rec {
   pname = "chalice";
-  version = "1.23.0";
+  version = "1.26.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "8e3b26f8ec15197d8c04cd1edb0d692a490cb5ec179560183a403de63f21c1d7";
+  src = fetchFromGitHub {
+    owner = "aws";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-6Y5pJg6N/F97zvkyo4r6MoThi79kI53AvlHNOmOCpFA=";
   };
 
-  checkInputs = [ watchdog pytest hypothesis mock ];
   propagatedBuildInputs = [
     attrs
     botocore
     click
-    enum-compat
     inquirer
     jmespath
     mypy-extensions
@@ -44,27 +45,58 @@ buildPythonPackage rec {
     setuptools
     six
     wheel
-  ] ++ lib.optionals (pythonOlder "3.5") [
+    watchdog
+  ] ++ lib.optionals (pythonOlder "3.7") [
     typing
   ];
 
-  # conftest.py not included with pypi release
-  doCheck = false;
+  checkInputs = [
+    hypothesis
+    mock
+    pytestCheckHook
+    requests
+    websocket-client
+  ];
 
   postPatch = ''
     sed -i setup.py -e "/pip>=/c\'pip',"
     substituteInPlace setup.py \
-      --replace 'typing==3.6.4' 'typing'
+      --replace "typing==3.6.4" "typing" \
+      --replace "jmespath>=0.9.3,<1.0.0" "jmespath>=0.9.3,<2.0.0"
   '';
 
-  checkPhase = ''
-    pytest tests
-  '';
+  disabledTestPaths = [
+    # Don't check the templates and the sample app
+    "chalice/templates"
+    "docs/source/samples/todo-app/code/tests/test_db.py"
+    # Requires credentials
+    "tests/aws/test_features.py"
+    # Requires network access
+    "tests/aws/test_websockets.py"
+    "tests/integration/test_package.py"
+  ];
+
+  disabledTests = [
+    # Requires network access
+    "test_update_domain_name_failed"
+    "test_can_reload_server"
+    # Content for the tests is missing
+    "test_can_import_env_vars"
+    "test_stack_trace_printed_on_error"
+    # Don't build
+    "test_can_generate_pipeline_for_all"
+    "test_build_wheel"
+    # https://github.com/aws/chalice/issues/1850
+    "test_resolve_endpoint"
+    "test_endpoint_from_arn"
+  ];
+
+  pythonImportsCheck = [ "chalice" ];
 
   meta = with lib; {
     description = "Python Serverless Microframework for AWS";
     homepage = "https://github.com/aws/chalice";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

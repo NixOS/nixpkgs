@@ -11,14 +11,16 @@
 
 buildPythonPackage rec {
   pname = "pylitterbot";
-  version = "2021.7.2";
+  version = "2022.7.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "natekspencer";
     repo = pname;
     rev = version;
-    sha256 = "0hnjqj9n2sq1jhiwdrw2aayhyz94cwjxniiak2h1nxh2q0nzigh3";
+    sha256 = "sha256-iniSlsZVWdDuwM/6asX4xyVrtrQvt7wEBwDVutjCogU=";
   };
 
   propagatedBuildInputs = [
@@ -32,7 +34,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "pylitterbot" ];
+  pythonImportsCheck = [
+    "pylitterbot"
+  ];
 
   meta = with lib; {
     description = "Python package for controlling a Litter-Robot";

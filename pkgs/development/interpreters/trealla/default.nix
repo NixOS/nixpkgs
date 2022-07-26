@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "trealla";
-  version = "1.9.37";
+  version = "1.20.31";
 
   src = fetchFromGitHub {
     owner = "infradig";
     repo = "trealla";
     rev = "v${version}";
-    sha256 = "sha256-0cj4FGaYKIKCgWwRyLUw1DcvNnioQPOtqZhSvWSaojU=";
+    sha256 = "sha256-Yol+bbxC5cCtCIZxP5Sa8R3ev1LAopc/oQa6Zd1nS8A=";
   };
 
   postPatch = ''
@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/infradig/trealla";
     license = licenses.mit;
     maintainers = with maintainers; [ siraben ];
+    mainProgram = "tpl";
     platforms = platforms.all;
   };
 }

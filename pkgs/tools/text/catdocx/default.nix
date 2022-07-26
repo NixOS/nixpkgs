@@ -1,7 +1,8 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, unzip, catdoc }:
 
 stdenv.mkDerivation {
-  name = "catdocx-20170102";
+  pname = "catdocx";
+  version = "unstable-2017-01-02";
 
   src = fetchFromGitHub {
     owner = "jncraton";

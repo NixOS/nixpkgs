@@ -1,41 +1,71 @@
-{ lib, stdenv, fetchurl, ffmpeg, ffmpegSupport ? true, makeWrapper }:
+{ callPackage
+, buildGoModule
+, fetchFromGitHub
+, lib
+, pkg-config
+, stdenv
+, ffmpeg
+, taglib
+, zlib
+, makeWrapper
+, nixosTests
+, ffmpegSupport ? true
+}:
 
-with lib;
+let
 
-stdenv.mkDerivation rec {
-  pname = "navidrome";
-  version = "0.43.0";
+  version = "0.47.5";
 
-  src = fetchurl {
-    url = "https://github.com/deluan/navidrome/releases/download/v${version}/navidrome_${version}_Linux_x86_64.tar.gz";
-    sha256 = "0y7a5n8phffxga1bjkaf7x5ijripqg1nfjljkrrj26778550vqb5";
+  src = fetchFromGitHub {
+    owner = "navidrome";
+    repo = "navidrome";
+    rev = "v${version}";
+    hash = "sha256-gTvJI+brdEpdpbEcdQycqw15seI+k5dMDVrjY3v6i14=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  ui = callPackage ./ui {
+    inherit src version;
+  };
 
-  unpackPhase = ''
-     tar xvf $src navidrome
+in
+
+buildGoModule {
+
+  pname = "navidrome";
+
+  inherit src version;
+
+  vendorSha256 = "sha256-xMAxGbq2VSXkF9R9hxB9EEk2CnqsRxg2Nmt7zyXohJI=";
+
+  nativeBuildInputs = [ makeWrapper pkg-config ];
+
+  buildInputs = [ taglib zlib ];
+
+  CGO_CFLAGS = [ "-Wno-return-local-addr" ];
+
+  prePatch = ''
+    cp -r ${ui}/* ui/build
   '';
 
-  installPhase = ''
-    runHook preInstall
-
-     mkdir -p $out/bin
-     cp navidrome $out/bin
-
-    runHook postInstall
-  '';
-
-  postFixup = ''
+  postFixup = lib.optionalString ffmpegSupport ''
     wrapProgram $out/bin/navidrome \
-      --prefix PATH : ${makeBinPath (optional ffmpegSupport ffmpeg)}
+      --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
   '';
+
+  doCheck = false;
+
+  passthru = {
+    inherit ui;
+    tests.navidrome = nixosTests.navidrome;
+    updateScript = callPackage ./update.nix {};
+  };
 
   meta = {
     description = "Navidrome Music Server and Streamer compatible with Subsonic/Airsonic";
     homepage = "https://www.navidrome.org/";
-    license = licenses.gpl3Only;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ aciceri ];
+    license = lib.licenses.gpl3Only;
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ aciceri squalus ];
   };
 }

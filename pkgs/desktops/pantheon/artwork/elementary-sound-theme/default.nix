@@ -1,7 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
-, pantheon
 , meson
 , ninja
 , pkg-config
@@ -11,11 +11,9 @@ stdenv.mkDerivation rec {
   pname = "elementary-sound-theme";
   version = "1.1.0";
 
-  repoName = "sound-theme";
-
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "sound-theme";
     rev = version;
     sha256 = "sha256-fR6gtKx9J6o2R1vQZ5yx4kEX3Ak+q8I6hRVMZzyB2E8=";
   };
@@ -37,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/sound-theme";
     license = licenses.unlicense;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

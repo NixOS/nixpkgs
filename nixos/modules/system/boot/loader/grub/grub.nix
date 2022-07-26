@@ -44,6 +44,8 @@ let
     { splashImage = f cfg.splashImage;
       splashMode = f cfg.splashMode;
       backgroundColor = f cfg.backgroundColor;
+      entryOptions = f cfg.entryOptions;
+      subEntryOptions = f cfg.subEntryOptions;
       grub = f grub;
       grubTarget = f (grub.grubTarget or "");
       shell = "${pkgs.runtimeShell}";
@@ -99,6 +101,7 @@ in
 
       enable = mkOption {
         default = !config.boot.isContainer;
+        defaultText = literalExpression "!config.boot.isContainer";
         type = types.bool;
         description = ''
           Whether to enable the GNU GRUB boot loader.
@@ -329,7 +332,7 @@ in
 
       extraInstallCommands = mkOption {
         default = "";
-        example = literalExample ''
+        example = ''
           # the example below generates detached signatures that GRUB can verify
           # https://www.gnu.org/software/grub/manual/grub/grub.html#Using-digital-signatures
           ''${pkgs.findutils}/bin/find /boot -not -path "/boot/efi/*" -type f -name '*.sig' -delete
@@ -392,7 +395,7 @@ in
       extraFiles = mkOption {
         type = types.attrsOf types.path;
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           { "memtest.bin" = "''${pkgs.memtest86plus}/memtest.bin"; }
         '';
         description = ''
@@ -413,7 +416,7 @@ in
 
       splashImage = mkOption {
         type = types.nullOr types.path;
-        example = literalExample "./my-background.png";
+        example = literalExpression "./my-background.png";
         description = ''
           Background image used for GRUB.
           Set to <literal>null</literal> to run GRUB in text mode.
@@ -447,9 +450,33 @@ in
         '';
       };
 
+      entryOptions = mkOption {
+        default = "--class nixos --unrestricted";
+        type = types.nullOr types.str;
+        description = ''
+          Options applied to the primary NixOS menu entry.
+
+          <note><para>
+          This options has no effect for GRUB 1.
+          </para></note>
+        '';
+      };
+
+      subEntryOptions = mkOption {
+        default = "--class nixos";
+        type = types.nullOr types.str;
+        description = ''
+          Options applied to the secondary NixOS submenu entry.
+
+          <note><para>
+          This options has no effect for GRUB 1.
+          </para></note>
+        '';
+      };
+
       theme = mkOption {
         type = types.nullOr types.path;
-        example = literalExample "pkgs.nixos-grub2-theme";
+        example = literalExpression "pkgs.nixos-grub2-theme";
         default = null;
         description = ''
           Grub theme to be used.
@@ -475,7 +502,7 @@ in
       font = mkOption {
         type = types.nullOr types.path;
         default = "${realGrub}/share/grub/unicode.pf2";
-        defaultText = ''"''${pkgs.grub2}/share/grub/unicode.pf2"'';
+        defaultText = literalExpression ''"''${pkgs.grub2}/share/grub/unicode.pf2"'';
         description = ''
           Path to a TrueType, OpenType, or pf2 font to be used by Grub.
         '';
@@ -483,7 +510,7 @@ in
 
       fontSize = mkOption {
         type = types.nullOr types.int;
-        example = literalExample 16;
+        example = 16;
         default = null;
         description = ''
           Font size for the grub menu. Ignored unless <literal>font</literal>
@@ -553,6 +580,8 @@ in
         apply = toString;
         description = ''
           Index of the default menu item to be booted.
+          Can also be set to "saved", which will make GRUB select
+          the menu item that was used at the last boot.
         '';
       };
 

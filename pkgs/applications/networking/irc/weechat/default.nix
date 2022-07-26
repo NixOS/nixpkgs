@@ -28,30 +28,21 @@ let
   in
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
-      version = "3.2";
+      version = "3.6";
       pname = "weechat";
 
       hardeningEnable = [ "pie" ];
 
       src = fetchurl {
         url = "https://weechat.org/files/src/weechat-${version}.tar.bz2";
-        sha256 = "0pck4lczkk52mgwa1n0habp1xqi9xsgsh5q6bbsjmdbandvy5vc8";
+        sha256 = "sha256-GkYN/Y4LQQr7GdSDu0ucXXM9wWPAqKD1txJXkOhJMDc=";
       };
-
-      patches = [
-        # weechat 3.2 fails to build on Darwin, but is fixed for the next release:
-        (fetchpatch {
-          url = "https://github.com/weechat/weechat/commit/0b7e4977bef763993e361c23db0f52117b799949.patch";
-          sha256 = "eVdrhr4mrqv+OkqYOv1E7mUkmzd5NC3LmZhbXJnCpFg=";
-          excludes = [ "ChangeLog.adoc" ];
-        })
-      ];
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
 
       cmakeFlags = with lib; [
         "-DENABLE_MAN=ON"
-        "-DENABLE_DOC=ON"
+        "-DENABLE_DOC=OFF"         # TODO: Documentation fails to build, was deactivated to push through security update
         "-DENABLE_JAVASCRIPT=OFF"  # Requires v8 <= 3.24.3, https://github.com/weechat/weechat/issues/360
         "-DENABLE_PHP=OFF"
       ]
@@ -94,7 +85,7 @@ let
           on https://nixos.org/nixpkgs/manual/#sec-weechat .
         '';
         license = lib.licenses.gpl3;
-        maintainers = with lib.maintainers; [ lovek323 lheckemann ];
+        maintainers = with lib.maintainers; [ lovek323 ];
         platforms = lib.platforms.unix;
       };
     }

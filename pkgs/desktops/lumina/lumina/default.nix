@@ -2,6 +2,7 @@
 , mkDerivation
 , fetchFromGitHub
 , fluxbox
+, hicolor-icon-theme
 , libarchive
 , numlockx
 , qmake
@@ -17,13 +18,13 @@
 
 mkDerivation rec {
   pname = "lumina";
-  version = "1.6.0";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "lumina-desktop";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0bvs12c9pkc6fnkfcr7rrxc8jfbzbslch4nlfjrzwi203fcv4avw";
+    sha256 = "1llr65gilcf0k88f9mbwzlalqwdnjy4nv2jq7w154z0xmd6iarfq";
   };
 
   nativeBuildInputs = [
@@ -34,6 +35,7 @@ mkDerivation rec {
 
   buildInputs = [
     fluxbox # window manager for Lumina DE
+    hicolor-icon-theme
     libarchive # make `bsdtar` available for lumina-archiver
     numlockx # required for changing state of numlock at login
     qtbase
@@ -48,8 +50,9 @@ mkDerivation rec {
     xscreensaver
   ];
 
+  dontDropIconThemeCache = true;
+
   patches = [
-    ./avoid-absolute-path-on-sessdir.patch
     ./LuminaOS-NixOS.cpp.patch
   ];
 
@@ -60,6 +63,10 @@ mkDerivation rec {
   '';
 
   postPatch = ''
+    # Avoid absolute path on sessdir
+    substituteInPlace src-qt5/OS-detect.pri \
+      --replace L_SESSDIR=/usr/share/xsessions '#L_SESSDIR=/usr/share/xsessions'
+
     # Fix plugin dir
     substituteInPlace src-qt5/core/lumina-theme-engine/lthemeengine.pri \
       --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
@@ -72,9 +79,14 @@ mkDerivation rec {
     substituteInPlace src-qt5/desktop-utils/lumina-archiver/TarBackend.cpp \
       --replace '"bsdtar"' '"${lib.getBin libarchive}/bin/bsdtar"'
 
-    # Fix desktop files
-    for i in $(grep -lir 'OnlyShowIn=Lumina' src-qt5); do
-      substituteInPlace $i --replace 'OnlyShowIn=Lumina' 'OnlyShowIn=X-Lumina'
+    # Fix installation path of lumina-sudo
+    substituteInPlace src-qt5/desktop-utils/lumina-sudo/lumina-sudo.pro \
+      --replace "/usr/bin" "$out/bin"
+  '';
+
+  postInstall = ''
+    for theme in lumina-icons material-design-{dark,light}; do
+      gtk-update-icon-cache $out/share/icons/$theme
     done
   '';
 
@@ -96,6 +108,6 @@ mkDerivation rec {
     homepage = "https://lumina-desktop.org";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.lumina.members;
   };
 }

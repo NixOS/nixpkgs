@@ -15,19 +15,21 @@
 
 buildPythonPackage rec {
   pname = "pyairvisual";
-  version = "5.0.9";
+  version = "2021.10.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "1jfbwnipklpgxjgsgsx4j53anbqyrbgvj0wb84fvsm32jq9m8avf";
+    sha256 = "sha256-Wj+ReRTYsP/XMrr74XPHrkHYT0sXfqcW/shbG3zNuH0=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -43,9 +45,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTestPaths = [ "examples/" ];
+  disabledTestPaths = [
+    # Ignore the examples directory as the files are prefixed with test_.
+    "examples/"
+  ];
 
-  pythonImportsCheck = [ "pyairvisual" ];
+  pythonImportsCheck = [
+    "pyairvisual"
+  ];
 
   meta = with lib; {
     description = "Python library for interacting with AirVisual";

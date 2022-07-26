@@ -13,7 +13,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  buildInputs = [
+  propagatedBuildInputs = [
     cudf
   ];
 
@@ -24,6 +24,6 @@ buildDunePackage rec {
     downloadPage = "https://github.com/AltGr/ocaml-mccs";
     homepage = "https://www.i3s.unice.fr/~cpjm/misc/";
     license = with licenses; [ lgpl21 gpl3 ];
-    maintainers = with maintainers; [ superherointj ];
+    maintainers = with maintainers; [ ];
   };
 }

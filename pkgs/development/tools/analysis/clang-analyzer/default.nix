@@ -12,9 +12,9 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/share/scan-view $out/bin
-    cp -R tools/scan-view/share/* $out/share/scan-view
-    cp -R tools/scan-view/bin/* $out/bin/scan-view
-    cp -R tools/scan-build/* $out
+    cp -R clang/tools/scan-view/share/* $out/share/scan-view
+    cp -R clang/tools/scan-view/bin/* $out/bin/scan-view
+    cp -R clang/tools/scan-build/* $out
 
     rm $out/bin/*.bat $out/libexec/*.bat $out/CMakeLists.txt
 
@@ -26,7 +26,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Clang Static Analyzer";
-    homepage    = "http://clang-analyzer.llvm.org";
+    longDescription = ''
+      The Clang Static Analyzer is a source code analysis tool that finds bugs
+      in C, C++, and Objective-C programs.
+    '';
+    homepage    = "https://clang-analyzer.llvm.org/";
     license     = lib.licenses.bsd3;
     platforms   = lib.platforms.unix;
     maintainers = [ lib.maintainers.thoughtpolice ];

@@ -3,11 +3,11 @@ let
   dovecotMajorMinor = lib.versions.majorMinor dovecot.version;
 in stdenv.mkDerivation rec {
   pname = "dovecot-pigeonhole";
-  version = "0.5.15";
+  version = "0.5.19";
 
   src = fetchurl {
     url = "https://pigeonhole.dovecot.org/releases/${dovecotMajorMinor}/dovecot-${dovecotMajorMinor}-pigeonhole-${version}.tar.gz";
-    sha256 = "1l2h0p8ddsl3ja2lnwk0mfqplqh8n0iw8k27awd3ak7prr88yjg1";
+    hash = "sha256:033kkhby9k9yrmgvlfmyzp8fccsw5bhq1dyvxj94sg3grkpj7f8h";
   };
 
   buildInputs = [ dovecot openssl ];
@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = "http://pigeonhole.dovecot.org/";
+    homepage = "https://pigeonhole.dovecot.org/";
     description = "A sieve plugin for the Dovecot IMAP server";
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ globin ajs124 ];

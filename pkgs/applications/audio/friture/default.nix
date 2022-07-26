@@ -1,22 +1,20 @@
 { lib, fetchFromGitHub, python3Packages, wrapQtAppsHook }:
 
-let
-  py = python3Packages;
-in py.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "friture";
-  version = "unstable-2020-02-16";
+  version = "0.49";
 
   src = fetchFromGitHub {
     owner = "tlecomte";
     repo = pname;
-    rev = "4460b4e72a9c55310d6438f294424b5be74fc0aa";
-    sha256 = "1pmxzq78ibifby3gbir1ah30mgsqv0y7zladf5qf3sl5r1as0yym";
+    rev = "v${version}";
+    sha256 = "sha256-xKgyBV/Qc+9PgXyxcT0xG1GXLC6KnjavJ/0SUE+9VSY=";
   };
 
-  nativeBuildInputs = (with py; [ numpy cython scipy ]) ++
+  nativeBuildInputs = (with python3Packages; [ numpy cython scipy ]) ++
     [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = with py; [
+  propagatedBuildInputs = with python3Packages; [
     sounddevice
     pyopengl
     pyopengl-accelerate
@@ -28,12 +26,25 @@ in py.buildPythonApplication rec {
     rtmixer
   ];
 
-  patches = [
-    ./unlock_constraints.patch
-  ];
+  postPatch = ''
+    # Remove version constraints from Python dependencies in setup.py
+    sed -i -E "s/\"([A-Za-z0-9]+)(=|>|<)=[0-9\.]+\"/\"\1\"/g" setup.py
+  '';
 
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
+
+  postInstall = ''
+    substituteInPlace $out/share/applications/friture.desktop --replace usr/bin/friture friture
+
+    for size in 16 32 128 256 512
+    do
+      mkdir -p $out/share/icons/hicolor/$size\x$size
+      cp $src/resources/images/friture.iconset/icon_$size\x$size.png $out/share/icons/hicolor/$size\x$size/friture.png
+    done
+    mkdir -p $out/share/icons/hicolor/scalable/apps/
+    cp $src/resources/images-src/window-icon.svg $out/share/icons/hicolor/scalable/apps/friture.svg
   '';
 
   meta = with lib; {
@@ -41,6 +52,6 @@ in py.buildPythonApplication rec {
     homepage = "https://friture.org/";
     license = licenses.gpl3;
     platforms = platforms.linux; # fails on Darwin
-    maintainers = [ maintainers.laikq ];
+    maintainers = with maintainers; [ laikq alyaeanyx ];
   };
 }

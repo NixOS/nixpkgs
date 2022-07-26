@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , google-api-core
-, grpc_google_iam_v1
+, grpc-google-iam-v1
 , mock
 , proto-plus
 , pytest-asyncio
@@ -12,16 +12,19 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-iam-logging";
-  version = "0.1.0";
+  version = "1.0.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "19a8s634w2m1b16zq8f185cpaw7k6d0c7c61g1vzm19jl213rhiw";
+    hash = "sha256-JUrzCSON1oMVH0U1d4tfl1nGDc+IyIMOSL4PxEflDAU=";
   };
 
   propagatedBuildInputs = [
     google-api-core
-    grpc_google_iam_v1
+    grpc-google-iam-v1
     proto-plus
   ];
 

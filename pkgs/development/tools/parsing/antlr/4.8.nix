@@ -22,6 +22,10 @@ let
       buildInputs = lib.optional stdenv.isLinux libuuid
         ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.CoreFoundation;
 
+      # Install CMake config files, used to locate the runtime from another
+      # CMake project, using the find_package function.
+      cmakeFlags = [ "-DANTLR4_INSTALL=ON" ];
+
       postUnpack = ''
         export sourceRoot=$sourceRoot/runtime/Cpp
       '';
@@ -77,6 +81,7 @@ let
         walk parse trees.
       '';
       homepage = "https://www.antlr.org/";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.bsd3;
       platforms = platforms.unix;
     };

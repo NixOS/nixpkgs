@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
@@ -26,7 +26,7 @@ in
       sessionPath = mkOption {
         default = [];
         type = types.listOf types.package;
-        example = literalExample "[ pkgs.gnome.gpaste ]";
+        example = literalExpression "[ pkgs.gnome.gpaste ]";
         description = ''
           Additional list of packages to be added to the session search path.
           Useful for GSettings-conditional autostart.
@@ -50,7 +50,7 @@ in
 
     environment.cinnamon.excludePackages = mkOption {
       default = [];
-      example = literalExample "[ pkgs.cinnamon.blueberry ]";
+      example = literalExpression "[ pkgs.cinnamon.blueberry ]";
       type = types.listOf types.package;
       description = "Which packages cinnamon should exclude from the default environment";
     };
@@ -136,7 +136,7 @@ in
         # session requirements
         cinnamon-screensaver
         # cinnamon-killer-daemon: provided by cinnamon-common
-        gnome.networkmanagerapplet # session requirement - also nm-applet not needed
+        networkmanagerapplet # session requirement - also nm-applet not needed
 
         # For a polkit authentication agent
         polkit_gnome
@@ -145,7 +145,7 @@ in
         nemo
         cinnamon-control-center
         cinnamon-settings-daemon
-        gnome.libgnomekbd
+        libgnomekbd
         orca
 
         # theme
@@ -196,16 +196,23 @@ in
       programs.evince.enable = mkDefault true;
       programs.file-roller.enable = mkDefault true;
 
-      environment.systemPackages = (with pkgs // pkgs.gnome // pkgs.cinnamon; pkgs.gnome.removePackagesByName [
+      environment.systemPackages = with pkgs // pkgs.gnome // pkgs.cinnamon; utils.removePackagesByName [
         # cinnamon team apps
         bulky
         blueberry
         warpinator
 
+        # cinnamon xapps
+        xviewer
+        xreader
+        xed
+        xplayer
+        pix
+
         # external apps shipped with linux-mint
         hexchat
         gnome-calculator
-      ] config.environment.cinnamon.excludePackages);
+      ] config.environment.cinnamon.excludePackages;
     })
   ];
 }

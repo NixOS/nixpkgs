@@ -1,19 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, pkgs }:
+{ lib, stdenv, fetchFromGitHub, bash }:
 
 # To make use of this derivation, use
 # `programs.zsh.interactiveShellInit = "source ${pkgs.zsh-nix-shell}/share/zsh-nix-shell/nix-shell.plugin.zsh";`
 
 stdenv.mkDerivation rec {
   pname = "zsh-nix-shell";
-  version = "0.1.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "chisui";
     repo = "zsh-nix-shell";
     rev = "v${version}";
-    sha256 = "0snhch9hfy83d4amkyxx33izvkhbwmindy0zjjk28hih1a9l2jmx";
+    sha256 = "sha256-719lVo6p55G1tt3+6nMhZ904nyvlq0Q5exb0il36/Aw=";
   };
 
+  strictDeps = true;
+  buildInputs = [ bash ];
   installPhase = ''
     install -D nix-shell.plugin.zsh --target-directory=$out/share/zsh-nix-shell
     install -D scripts/* --target-directory=$out/share/zsh-nix-shell/scripts

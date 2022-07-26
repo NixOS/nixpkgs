@@ -8,11 +8,11 @@ in
 
 stdenv.mkDerivation rec {
   pname  = "xfce4-sensors-plugin";
-  version = "1.3.95";
+  version = "1.4.3";
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-g8ZK5GGN1ZKXHPoLwoWptHr4AaPthWg1zbKkxTPHhGw=";
+    sha256 = "sha256-FxwCNfcMZfD/7lh+lg2dp5soSFXfIhMCOerCYnLsBsk=";
   };
 
   nativeBuildInputs = [
@@ -38,17 +38,13 @@ stdenv.mkDerivation rec {
     "--with-pathnetcat=${netcat-gnu}/bin/netcat"
   ];
 
-  passthru.updateScript = xfce.updateScript {
-    inherit pname version;
-    attrPath = "xfce.${pname}";
-    versionLister = xfce.archiveLister category pname;
-  };
+  passthru.updateScript = xfce.archiveUpdater { inherit category pname version; };
 
   meta = with lib; {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-sensors-plugin";
     description = "A panel plug-in for different sensors using acpi, lm_sensors and hddtemp";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

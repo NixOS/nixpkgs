@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libfyaml";
-  version = "0.7";
+  version = "0.7.12";
 
   src = fetchFromGitHub {
     owner = "pantoniou";
     repo = pname;
     rev = "v${version}";
-    sha256 = "10w1n4zzgw33j755pkv73fxdn93kwbzg486b5m9i0bh5d76jp4ax";
+    sha256 = "sha256-gmVjiwf8PsDYRt8jmXNrd+hJSL099hbLjq8Z0c1u2HE=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

@@ -1,24 +1,25 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchPypi
-, isPy3k
-, lib
+, pythonOlder
 
 # pythonPackages
 , azure-core
 , cryptography
 , msrest
-, futures ? null
 }:
 
 buildPythonPackage rec {
   pname = "azure-storage-file-share";
-  version = "12.5.0";
-  disabled = !isPy3k;
+  version = "12.9.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "ed82e9bf8d25d62e50996604fce701cec6a39ec0ceba6efbf8790f7f8b7746a8";
+    hash = "sha256-faowRP4H1/dQTLmhX5mhessoyAjtgzQWeL8t+TFfXCI=";
   };
 
   propagatedBuildInputs = [
@@ -29,6 +30,7 @@ buildPythonPackage rec {
 
   # requires checkout from monorepo
   doCheck = false;
+
   pythonImportsCheck = [
     "azure.core"
     "azure.storage"
@@ -38,8 +40,6 @@ buildPythonPackage rec {
     description = "Microsoft Azure File Share Storage Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [
-      kamadorueda
-    ];
+    maintainers = with maintainers; [ kamadorueda ];
   };
 }

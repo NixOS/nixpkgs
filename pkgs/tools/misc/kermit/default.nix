@@ -1,7 +1,8 @@
 { lib, stdenv, fetchurl, ncurses, glibc }:
 
 stdenv.mkDerivation {
-  name = "kermit-9.0.302";
+  pname = "kermit";
+  version = "9.0.302";
 
   src = fetchurl {
     url = "ftp://ftp.kermitproject.org/kermit/archives/cku302.tar.gz";

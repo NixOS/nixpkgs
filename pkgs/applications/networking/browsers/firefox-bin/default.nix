@@ -11,7 +11,6 @@
 , gdk-pixbuf
 , glib
 , glibc
-, gtk2
 , gtk3
 , libkrb5
 , libX11
@@ -25,10 +24,12 @@
 , libXi
 , libXinerama
 , libXrender
+, libXrandr
 , libXt
+, libXtst
 , libcanberra
 , libnotify
-, gnome
+, adwaita-icon-theme
 , libGLU, libGL
 , nspr
 , nss
@@ -50,7 +51,7 @@
 , ffmpeg
 , runtimeShell
 , mesa # firefox wants gbm for drm+dmabuf
-, systemLocale ? config.i18n.defaultLocale or "en-US"
+, systemLocale ? config.i18n.defaultLocale or "en_US"
 }:
 
 let
@@ -72,13 +73,18 @@ let
 
   policies = {
     DisableAppUpdate = true;
-  };
+  } // config.firefox.policies or {};
 
-  policiesJson = writeText "no-update-firefox-policy.json" (builtins.toJSON { inherit policies; });
+  policiesJson = writeText "firefox-policies.json" (builtins.toJSON { inherit policies; });
 
   defaultSource = lib.findFirst (sourceMatches "en-US") {} sources;
 
-  source = lib.findFirst (sourceMatches systemLocale) defaultSource sources;
+  mozLocale =
+    if systemLocale == "ca_ES@valencia"
+    then "ca-valencia"
+    else lib.replaceStrings ["_"] ["-"] systemLocale;
+
+  source = lib.findFirst (sourceMatches mozLocale) defaultSource sources;
 
   pname = "firefox-${channel}-bin-unwrapped";
 
@@ -103,7 +109,6 @@ stdenv.mkDerivation {
       gdk-pixbuf
       glib
       glibc
-      gtk2
       gtk3
       libkrb5
       mesa
@@ -118,7 +123,9 @@ stdenv.mkDerivation {
       libXi
       libXinerama
       libXrender
+      libXrandr
       libXt
+      libXtst
       libcanberra
       libnotify
       libGLU libGL
@@ -137,7 +144,7 @@ stdenv.mkDerivation {
 
   inherit gtk3;
 
-  buildInputs = [ wrapGAppsHook gtk3 gnome.adwaita-icon-theme ];
+  buildInputs = [ wrapGAppsHook gtk3 adwaita-icon-theme ];
 
   # "strip" after "patchelf" may break binaries.
   # See: https://github.com/NixOS/patchelf/issues/10
@@ -181,27 +188,27 @@ stdenv.mkDerivation {
       ln -s ${policiesJson} "$out/lib/firefox-bin-${version}/distribution/policies.json";
     '';
 
+  passthru.binaryName = "firefox";
+  passthru.libName = "firefox-bin-${version}";
   passthru.execdir = "/bin";
   passthru.ffmpegSupport = true;
   passthru.gssSupport = true;
   # update with:
   # $ nix-shell maintainers/scripts/update.nix --argstr package firefox-bin-unwrapped
   passthru.updateScript = import ./update.nix {
-    inherit pname version channel writeScript xidel coreutils gnused gnugrep gnupg curl runtimeShell;
+    inherit pname channel writeScript xidel coreutils gnused gnugrep gnupg curl runtimeShell;
     baseUrl =
       if channel == "devedition"
-        then "http://archive.mozilla.org/pub/devedition/releases/"
-        else "http://archive.mozilla.org/pub/firefox/releases/";
+        then "https://archive.mozilla.org/pub/devedition/releases/"
+        else "https://archive.mozilla.org/pub/firefox/releases/";
   };
   meta = with lib; {
     description = "Mozilla Firefox, free web browser (binary package)";
-    homepage = "http://www.mozilla.org/firefox/";
-    license = {
-      free = false;
-      url = "http://www.mozilla.org/en-US/foundation/trademarks/policy/";
-    };
+    homepage = "https://www.mozilla.org/firefox/";
+    license = licenses.mpl20;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = builtins.attrNames mozillaPlatforms;
-    timeout = 86400; # 24 hours (increased from the Hydra default of 10h, c.f. #129115)
+    hydraPlatforms = [];
     maintainers = with maintainers; [ taku0 lovesegfault ];
   };
 }

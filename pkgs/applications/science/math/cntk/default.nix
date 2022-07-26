@@ -1,9 +1,14 @@
-{ lib, stdenv, fetchgit, fetchFromGitHub, cmake
+{ lib, stdenv, fetchFromGitHub, cmake
+, fetchpatch
 , openblas, blas, lapack, opencv3, libzip, boost, protobuf, mpi
 , onebitSGDSupport ? false
-, cudaSupport ? false, addOpenGLRunpath, cudatoolkit, nvidia_x11
-, cudnnSupport ? cudaSupport, cudnn
+, cudaSupport ? false, cudaPackages ? {}, addOpenGLRunpath, cudatoolkit, nvidia_x11
+, cudnnSupport ? cudaSupport
 }:
+
+let
+  inherit (cudaPackages) cudatoolkit cudnn;
+in
 
 assert cudnnSupport -> cudaSupport;
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";
@@ -21,12 +26,33 @@ in stdenv.mkDerivation rec {
   pname = "CNTK";
   version = "2.7";
 
-  # Submodules
-  src = fetchgit {
-    url = "https://github.com/Microsoft/CNTK";
+  src = fetchFromGitHub {
+    owner = "Microsoft";
+    repo = "CNTK";
     rev = "v${version}";
-    sha256 = "18l9k7s966a26ywcf7flqyhm61788pcb9fj3wk61jrmgkhy2pcns";
+    sha256 = "sha256-2rIrPJyvZhnM5EO6tNhF6ARTocfUHce4N0IZk/SZiaI=";
+    fetchSubmodules = true;
   };
+
+  patches = [
+    # Fix build with protobuf 3.18+
+    # Remove with onnx submodule bump to 1.9+
+    (fetchpatch {
+      url = "https://github.com/onnx/onnx/commit/d3bc82770474761571f950347560d62a35d519d7.patch";
+      extraPrefix = "Source/CNTKv2LibraryDll/proto/onnx/onnx_repo/";
+      stripLen = 1;
+      sha256 = "00raqj8wx30b06ky6cdp5vvc1mrzs7hglyi6h58hchw5lhrwkzxp";
+    })
+  ];
+
+  postPatch = ''
+    # Fix build with protobuf 3.18+
+    substituteInPlace Source/CNTKv2LibraryDll/Serialization.cpp \
+      --replace 'SetTotalBytesLimit(INT_MAX, INT_MAX)' \
+                'SetTotalBytesLimit(INT_MAX)' \
+      --replace 'SetTotalBytesLimit(limit, limit)' \
+                'SetTotalBytesLimit(limit)'
+  '';
 
   nativeBuildInputs = [ cmake ] ++ lib.optional cudaSupport addOpenGLRunpath;
 

@@ -4,6 +4,7 @@ let
   json = pkgs.formats.json {};
 
   cfg = config.services.discourse;
+  opt = options.services.discourse;
 
   # Keep in sync with https://github.com/discourse/discourse_docker/blob/master/image/base/Dockerfile#L5
   upstreamPostgresqlVersion = lib.getVersion pkgs.postgresql_13;
@@ -33,7 +34,7 @@ in
         apply = p: p.override {
           plugins = lib.unique (p.enabledPlugins ++ cfg.plugins);
         };
-        defaultText = "pkgs.discourse";
+        defaultText = lib.literalExpression "pkgs.discourse";
         description = ''
           The discourse package to use.
         '';
@@ -45,7 +46,7 @@ in
                     config.networking.fqdn
                   else
                     config.networking.hostName;
-        defaultText = "config.networking.fqdn";
+        defaultText = lib.literalExpression "config.networking.fqdn";
         example = "discourse.example.com";
         description = ''
           The hostname to serve Discourse on.
@@ -99,7 +100,10 @@ in
       enableACME = lib.mkOption {
         type = lib.types.bool;
         default = cfg.sslCertificate == null && cfg.sslCertificateKey == null;
-        defaultText = "true, unless services.discourse.sslCertificate and services.discourse.sslCertificateKey are set.";
+        defaultText = lib.literalDocBook ''
+          <literal>true</literal>, unless <option>services.discourse.sslCertificate</option>
+          and <option>services.discourse.sslCertificateKey</option> are set.
+        '';
         description = ''
           Whether an ACME certificate should be used to secure
           connections to the server.
@@ -109,7 +113,7 @@ in
       backendSettings = lib.mkOption {
         type = with lib.types; attrsOf (nullOr (oneOf [ str int bool float ]));
         default = {};
-        example = lib.literalExample ''
+        example = lib.literalExpression ''
           {
             max_reqs_per_ip_per_minute = 300;
             max_reqs_per_ip_per_10_seconds = 60;
@@ -134,7 +138,7 @@ in
       siteSettings = lib.mkOption {
         type = json.type;
         default = {};
-        example = lib.literalExample ''
+        example = lib.literalExpression ''
           {
             required = {
               title = "My Cats";
@@ -172,6 +176,15 @@ in
       };
 
       admin = {
+        skipCreate = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = ''
+            Do not create the admin account, instead rely on other
+            existing admin accounts.
+          '';
+        };
+
         email = lib.mkOption {
           type = lib.types.str;
           example = "admin@example.com";
@@ -315,6 +328,7 @@ in
         useSSL = lib.mkOption {
           type = lib.types.bool;
           default = cfg.redis.host != "localhost";
+          defaultText = lib.literalExpression ''config.${opt.redis.host} != "localhost"'';
           description = ''
             Connect to Redis with SSL.
           '';
@@ -325,10 +339,8 @@ in
         notificationEmailAddress = lib.mkOption {
           type = lib.types.str;
           default = "${if cfg.mail.incoming.enable then "notifications" else "noreply"}@${cfg.hostname}";
-          defaultText = ''
-            "notifications@`config.services.discourse.hostname`" if
-            config.services.discourse.mail.incoming.enable is "true",
-            otherwise "noreply`config.services.discourse.hostname`"
+          defaultText = lib.literalExpression ''
+            "''${if config.services.discourse.mail.incoming.enable then "notifications" else "noreply"}@''${config.services.discourse.hostname}"
           '';
           description = ''
             The <literal>from:</literal> email address used when
@@ -389,6 +401,7 @@ in
           domain = lib.mkOption {
             type = lib.types.str;
             default = cfg.hostname;
+            defaultText = lib.literalExpression "config.${opt.hostname}";
             description = ''
               HELO domain to use for outgoing mail.
             '';
@@ -439,7 +452,7 @@ in
           replyEmailAddress = lib.mkOption {
             type = lib.types.str;
             default = "%{reply_key}@${cfg.hostname}";
-            defaultText = "%{reply_key}@`config.services.discourse.hostname`";
+            defaultText = lib.literalExpression ''"%{reply_key}@''${config.services.discourse.hostname}"'';
             description = ''
               Template for reply by email incoming email address, for
               example: %{reply_key}@reply.example.com or
@@ -450,7 +463,7 @@ in
           mailReceiverPackage = lib.mkOption {
             type = lib.types.package;
             default = pkgs.discourse-mail-receiver;
-            defaultText = "pkgs.discourse-mail-receiver";
+            defaultText = lib.literalExpression "pkgs.discourse-mail-receiver";
             description = ''
               The discourse-mail-receiver package to use.
             '';
@@ -475,7 +488,7 @@ in
       plugins = lib.mkOption {
         type = lib.types.listOf lib.types.package;
         default = [];
-        example = lib.literalExample ''
+        example = lib.literalExpression ''
           with config.services.discourse.package.plugins; [
             discourse-canned-replies
             discourse-github
@@ -596,6 +609,7 @@ in
       connection_reaper_interval = 30;
       relative_url_root = null;
       message_bus_max_backlog_size = 100;
+      message_bus_clear_every = 50;
       secret_key_base = cfg.secretKeyBaseFile;
       fallback_assets_path = null;
 
@@ -611,12 +625,13 @@ in
 
       max_user_api_reqs_per_minute = 20;
       max_user_api_reqs_per_day = 2880;
-      max_admin_api_reqs_per_key_per_minute = 60;
+      max_admin_api_reqs_per_minute = 60;
       max_reqs_per_ip_per_minute = 200;
       max_reqs_per_ip_per_10_seconds = 50;
       max_asset_reqs_per_ip_per_10_seconds = 200;
       max_reqs_per_ip_mode = "block";
       max_reqs_rate_limit_on_private = false;
+      skip_per_ip_rate_limit_trust_level = 1;
       force_anonymous_min_queue_seconds = 1;
       force_anonymous_min_per_10_seconds = 3;
       background_requests_max_queue_length = 0.5;
@@ -636,9 +651,17 @@ in
       enable_email_sync_demon = false;
       max_digests_enqueued_per_30_mins_per_site = 10000;
       cluster_name = null;
+      multisite_config_path = "config/multisite.yml";
+      enable_long_polling = null;
+      long_polling_interval = null;
     };
 
-    services.redis.enable = lib.mkDefault (cfg.redis.host == "localhost");
+    services.redis.servers.discourse =
+      lib.mkIf (lib.elem cfg.redis.host [ "localhost" "127.0.0.1" ]) {
+        enable = true;
+        bind = cfg.redis.host;
+        port = cfg.backendSettings.redis_port;
+      };
 
     services.postgresql = lib.mkIf databaseActuallyCreateLocally {
       enable = true;
@@ -679,12 +702,12 @@ in
     systemd.services.discourse = {
       wantedBy = [ "multi-user.target" ];
       after = [
-        "redis.service"
+        "redis-discourse.service"
         "postgresql.service"
         "discourse-postgresql.service"
       ];
       bindsTo = [
-        "redis.service"
+        "redis-discourse.service"
       ] ++ lib.optionals (cfg.database.host == null) [
         "postgresql.service"
         "discourse-postgresql.service"
@@ -721,11 +744,23 @@ in
             lib.optionalString (file != null) ''
               replace-secret '${file}' '${file}' /run/discourse/config/discourse.conf
             '';
+
+          mkAdmin = ''
+            export ADMIN_EMAIL="${cfg.admin.email}"
+            export ADMIN_NAME="${cfg.admin.fullName}"
+            export ADMIN_USERNAME="${cfg.admin.username}"
+            ADMIN_PASSWORD="$(<${cfg.admin.passwordFile})"
+            export ADMIN_PASSWORD
+            discourse-rake admin:create_noninteractively
+          '';
+
         in ''
           set -o errexit -o pipefail -o nounset -o errtrace
           shopt -s inherit_errexit
 
           umask u=rwx,g=rx,o=
+
+          rm -rf /var/lib/discourse/tmp/*
 
           cp -r ${cfg.package}/share/discourse/config.dist/* /run/discourse/config/
           cp -r ${cfg.package}/share/discourse/public.dist/* /run/discourse/public/
@@ -748,14 +783,9 @@ in
           )
 
           discourse-rake db:migrate >>/var/log/discourse/db_migration.log
-          chmod -R u+w /run/discourse/tmp/
+          chmod -R u+w /var/lib/discourse/tmp/
 
-          export ADMIN_EMAIL="${cfg.admin.email}"
-          export ADMIN_NAME="${cfg.admin.fullName}"
-          export ADMIN_USERNAME="${cfg.admin.username}"
-          ADMIN_PASSWORD="$(<${cfg.admin.passwordFile})"
-          export ADMIN_PASSWORD
-          discourse-rake admin:create_noninteractively
+          ${lib.optionalString (!cfg.admin.skipCreate) mkAdmin}
 
           discourse-rake themes:update
           discourse-rake uploads:regenerate_missing_optimized
@@ -768,16 +798,15 @@ in
         RuntimeDirectory = map (p: "discourse/" + p) [
           "config"
           "home"
-          "tmp"
           "assets/javascripts/plugins"
           "public"
-          "plugins"
           "sockets"
         ];
         RuntimeDirectoryMode = 0750;
         StateDirectory = map (p: "discourse/" + p) [
           "uploads"
           "backups"
+          "tmp"
         ];
         StateDirectoryMode = 0750;
         LogsDirectory = "discourse";
@@ -809,7 +838,7 @@ in
 
       appendHttpConfig = ''
         # inactive means we keep stuff around for 1440m minutes regardless of last access (1 week)
-        # levels means it is a 2 deep heirarchy cause we can have lots of files
+        # levels means it is a 2 deep hierarchy cause we can have lots of files
         # max_size limits the size of the cache
         proxy_cache_path /var/cache/nginx inactive=1440m levels=1:2 keys_zone=discourse:10m max_size=600m;
 
@@ -821,7 +850,7 @@ in
         inherit (cfg) sslCertificate sslCertificateKey enableACME;
         forceSSL = lib.mkDefault tlsEnabled;
 
-        root = "/run/discourse/public";
+        root = "${cfg.package}/share/discourse/public";
 
         locations =
           let
@@ -873,7 +902,7 @@ in
               "~ ^/uploads/" = proxy {
                 extraConfig = cache_1y + ''
                   proxy_set_header X-Sendfile-Type X-Accel-Redirect;
-                  proxy_set_header X-Accel-Mapping /run/discourse/public/=/downloads/;
+                  proxy_set_header X-Accel-Mapping ${cfg.package}/share/discourse/public/=/downloads/;
 
                   # custom CSS
                   location ~ /stylesheet-cache/ {
@@ -895,7 +924,7 @@ in
               "~ ^/admin/backups/" = proxy {
                 extraConfig = ''
                   proxy_set_header X-Sendfile-Type X-Accel-Redirect;
-                  proxy_set_header X-Accel-Mapping /run/discourse/public/=/downloads/;
+                  proxy_set_header X-Accel-Mapping ${cfg.package}/share/discourse/public/=/downloads/;
                 '';
               };
               "~ ^/(svg-sprite/|letter_avatar/|letter_avatar_proxy/|user_avatar|highlight-js|stylesheets|theme-javascripts|favicon/proxied|service-worker)" = proxy {
@@ -922,7 +951,7 @@ in
               };
               "/downloads/".extraConfig = ''
                 internal;
-                alias /run/discourse/public/;
+                alias ${cfg.package}/share/discourse/public/;
               '';
             };
       };

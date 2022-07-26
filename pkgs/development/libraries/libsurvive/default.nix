@@ -3,31 +3,35 @@
 , cmake
 , pkg-config
 , freeglut
-, liblapack
+, lapack
 , libusb1
-, openblas
+, blas
 , zlib
+, eigen
 }:
 
 stdenv.mkDerivation rec {
   pname = "libsurvive";
-  version = "0.3";
+  version = "1.0";
 
   src = fetchFromGitHub {
     owner = "cntools";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0m21fnq8pfw2pcvqfgjws531zmalda423q9i65v4qzm8sdb54hl4";
+    # Fixes 'Unknown CMake command "cnkalman_generate_code"'
+    fetchSubmodules = true;
+    sha256 = "sha256-I8Wx9avfMyDic+Bk/1IjzZiiHj+l3XqpRwxYbWlsG/Q=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
     freeglut
-    liblapack
+    lapack
     libusb1
-    openblas
+    blas
     zlib
+    eigen
   ];
 
   meta = with lib; {

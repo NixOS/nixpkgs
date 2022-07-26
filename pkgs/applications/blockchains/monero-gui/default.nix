@@ -5,22 +5,22 @@
 , qtmultimedia, qtxmlpatterns
 , qtquickcontrols, qtquickcontrols2
 , qtmacextras
-, monero, miniupnpc, unbound, readline
+, monero-cli, miniupnpc, unbound, readline
 , boost, libunwind, libsodium, pcsclite
-, randomx, zeromq, libgcrypt, libgpgerror
+, randomx, zeromq, libgcrypt, libgpg-error
 , hidapi, rapidjson, quirc
 , trezorSupport ? true, libusb1, protobuf, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "monero-gui";
-  version = "0.17.2.2";
+  version = "0.17.3.2";
 
   src = fetchFromGitHub {
     owner  = "monero-project";
     repo   = "monero-gui";
     rev    = "v${version}";
-    sha256 = "1k3grbd3wydy5gv6d8x35skv1v97lhh6awd9i87im9lz4kn8ywkd";
+    sha256 = "10gincmgc0qpsgm94m1fqfy9j8jn9g1gjk12lcqnf77kvcnz37hq";
   };
 
   nativeBuildInputs = [
@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
     qtbase qtdeclarative qtgraphicaleffects
     qtmultimedia qtquickcontrols qtquickcontrols2
     qtxmlpatterns
-    monero miniupnpc unbound readline
-    randomx libgcrypt libgpgerror
+    monero-cli miniupnpc unbound readline
+    randomx libgcrypt libgpg-error
     boost libunwind libsodium pcsclite
     zeromq hidapi rapidjson quirc
   ] ++ lib.optionals trezorSupport [ libusb1 protobuf python3 ]
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   postUnpack = ''
     # copy monero sources here
     # (needs to be writable)
-    cp -r ${monero.source}/* source/monero
+    cp -r ${monero-cli.source}/* source/monero
     chmod -R +w source/monero
   '';
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
     # use monerod from the monero package
     substituteInPlace src/daemon/DaemonManager.cpp \
-      --replace 'QApplication::applicationDirPath() + "' '"${monero}/bin'
+      --replace 'QApplication::applicationDirPath() + "' '"${monero-cli}/bin'
 
     # 1: only build external deps, *not* the full monero
     # 2: use nixpkgs libraries
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     icon = "monero";
     desktopName = "Monero";
     genericName = "Wallet";
-    categories  = "Network;Utility;";
+    categories  = [ "Network" "Utility" ];
   };
 
   postInstall = ''

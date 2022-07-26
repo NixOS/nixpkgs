@@ -1,32 +1,32 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, xdg-utils, installShellFiles, git }:
+{ lib, buildGoModule, fetchFromGitHub, makeBinaryWrapper, xdg-utils, installShellFiles, git }:
 
 buildGoModule rec {
   pname = "lab";
-  version = "0.22.0";
+  version = "0.25.1";
 
   src = fetchFromGitHub {
     owner = "zaquestion";
     repo = "lab";
     rev = "v${version}";
-    sha256 = "sha256-CyXEmlsc40JtwDjRYNWqN+3cuoG8K07jAQdd1rktvS8=";
+    sha256 = "sha256-VCvjP/bSd/0ywvNWPsseXn/SPkdp+BsXc/jTvB11EOk=";
   };
 
   subPackages = [ "." ];
 
-  vendorSha256 = "sha256-PSS7OPbM+XsylqDlWc4h+oZrOua2kSWKLEuyjqo/cxM=";
+  vendorSha256 = "sha256-ChysquNuUffcM3qaWUdqu3Av33gnKkdlotEoFKoedA0=";
 
   doCheck = false;
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  nativeBuildInputs = [ makeBinaryWrapper installShellFiles ];
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   postInstall = ''
     wrapProgram $out/bin/lab --prefix PATH ":" "${lib.makeBinPath [ git xdg-utils ]}";
-    for shell in bash fish zsh; do
-      $out/bin/lab completion $shell > lab.$shell
-      installShellCompletion lab.$shell
-    done
+    installShellCompletion --cmd lab \
+      --bash <($out/bin/lab completion bash) \
+      --fish <($out/bin/lab completion fish) \
+      --zsh <($out/bin/lab completion zsh)
   '';
 
   meta = with lib; {

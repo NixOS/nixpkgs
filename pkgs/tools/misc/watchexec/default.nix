@@ -1,21 +1,25 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, CoreServices, installShellFiles, libiconv }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, Cocoa, AppKit, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "watchexec";
-  version = "1.15.1";
+  version = "1.20.4";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "1xznhfljvsvc0ykv5h1wg31n93v96lvhbxfhavxivq3b0xh5vxrw";
+    rev = "cli-v${version}";
+    sha256 = "sha256-se3iqz+qjwf71wvHQhCWYryEdUc+kY0Q0ZTg4i1ayNI=";
   };
 
-  cargoSha256 = "00dampnsnpzmchjcn0j5zslx17i0qgrv99gq772n0683m1l2lfq3";
+  cargoSha256 = "sha256-YM+Zm3wFp3Lsx5LmyjGwZywV/SZjriL6JMDO1l0tNf4=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices libiconv ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Cocoa AppKit ];
+
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework AppKit";
+
+  checkFlags = [ "--skip=help" "--skip=help_short" ];
 
   postInstall = ''
     installManPage doc/watchexec.1
@@ -24,7 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Executes commands in response to file modifications";
-    homepage = "https://github.com/watchexec/watchexec";
+    homepage = "https://watchexec.github.io/";
     license = with licenses; [ asl20 ];
     maintainers = [ maintainers.michalrus ];
   };

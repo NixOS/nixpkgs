@@ -23,6 +23,7 @@ in
 
     servers = mkOption {
       default = config.services.ntp.servers;
+      defaultText = literalExpression "config.services.ntp.servers";
       type = types.listOf types.str;
       inherit (options.services.ntp.servers) description;
     };
@@ -61,10 +62,12 @@ in
     environment.etc."ntpd.conf".text = configFile;
 
     users.users.ntp = {
-      uid = config.ids.uids.ntp;
+      isSystemUser = true;
+      group = "ntp";
       description = "OpenNTP daemon user";
       home = "/var/empty";
     };
+    users.groups.ntp = {};
 
     systemd.services.openntpd = {
       description = "OpenNTP Server";

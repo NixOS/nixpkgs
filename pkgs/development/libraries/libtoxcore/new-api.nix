@@ -2,7 +2,8 @@
 , libvpx, check, libconfig, pkg-config }:
 
 stdenv.mkDerivation {
-  name = "tox-core-new-20160727";
+  pname = "tox-core-new";
+  version = "unstable-2016-07-27";
 
   src = fetchFromGitHub {
     owner  = "irungentoo";
@@ -48,6 +49,7 @@ stdenv.mkDerivation {
   doCheck = false;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "P2P FOSS instant messaging application aimed to replace Skype with crypto";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, utils, pkgs, ... }:
 
 with lib;
 
@@ -18,7 +18,7 @@ in
 
   meta = {
     doc = ./pantheon.xml;
-    maintainers = pkgs.pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 
   options = {
@@ -43,17 +43,13 @@ in
       sessionPath = mkOption {
         default = [];
         type = types.listOf types.package;
-        example = literalExample "[ pkgs.gnome.gpaste ]";
+        example = literalExpression "[ pkgs.gnome.gpaste ]";
         description = ''
           Additional list of packages to be added to the session search path.
           Useful for GSettings-conditional autostart.
 
           Note that this should be a last resort; patching the package is preferred (see GPaste).
         '';
-        apply = list: list ++
-        [
-          pkgs.pantheon.pantheon-agent-geoclue2
-        ];
       };
 
       extraWingpanelIndicators = mkOption {
@@ -86,7 +82,7 @@ in
 
     environment.pantheon.excludePackages = mkOption {
       default = [];
-      example = literalExample "[ pkgs.pantheon.elementary-camera ]";
+      example = literalExpression "[ pkgs.pantheon.elementary-camera ]";
       type = types.listOf types.package;
       description = "Which packages pantheon should exclude from the default environment";
     };
@@ -96,6 +92,9 @@ in
 
   config = mkMerge [
     (mkIf cfg.enable {
+      services.xserver.desktopManager.pantheon.sessionPath = utils.removePackagesByName [
+        pkgs.pantheon.pantheon-agent-geoclue2
+      ] config.environment.pantheon.excludePackages;
 
       services.xserver.displayManager.sessionPackages = [ pkgs.pantheon.elementary-session-settings ];
 
@@ -134,6 +133,11 @@ in
       services.accounts-daemon.enable = true;
       services.bamf.enable = true;
       services.colord.enable = mkDefault true;
+      services.fwupd.enable = mkDefault true;
+      services.packagekit.enable = mkDefault true;
+      services.power-profiles-daemon.enable = mkDefault true;
+      services.touchegg.enable = mkDefault true;
+      services.touchegg.package = pkgs.pantheon.touchegg;
       services.tumbler.enable = mkDefault true;
       services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
       services.dbus.packages = with pkgs.pantheon; [
@@ -162,31 +166,38 @@ in
         isAllowed = true;
         isSystem = true;
       };
-      # Use gnome-settings-daemon fork
       services.udev.packages = [
-        pkgs.pantheon.elementary-settings-daemon
+        pkgs.pantheon.gnome-settings-daemon
       ];
       systemd.packages = [
-        pkgs.pantheon.elementary-settings-daemon
+        pkgs.pantheon.gnome-settings-daemon
       ];
       programs.dconf.enable = true;
       networking.networkmanager.enable = mkDefault true;
 
       # Global environment
-      environment.systemPackages = with pkgs; [
+      environment.systemPackages = (with pkgs.pantheon; [
+        elementary-session-settings
+        elementary-settings-daemon
+        gala
+        gnome-settings-daemon
+        (switchboard-with-plugs.override {
+          plugs = cfg.extraSwitchboardPlugs;
+        })
+        (wingpanel-with-indicators.override {
+          indicators = cfg.extraWingpanelIndicators;
+        })
+      ]) ++ utils.removePackagesByName ((with pkgs; [
         desktop-file-utils
-        glib
+        glib # for gsettings program
         gnome-menus
         gnome.adwaita-icon-theme
-        gtk3.out
-        hicolor-icon-theme
-        lightlocker
+        gtk3.out # for gtk-launch program
         onboard
         qgnomeplatform
-        shared-mime-info
         sound-theme-freedesktop
-        xdg-user-dirs
-      ] ++ (with pkgs.pantheon; [
+        xdg-user-dirs # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
+      ]) ++ (with pkgs.pantheon; [
         # Artwork
         elementary-gtk-theme
         elementary-icon-theme
@@ -196,36 +207,27 @@ in
         # Desktop
         elementary-default-settings
         elementary-dock
-        elementary-session-settings
         elementary-shortcut-overlay
-        gala
-        (switchboard-with-plugs.override {
-          plugs = cfg.extraSwitchboardPlugs;
-        })
-        (wingpanel-with-indicators.override {
-          indicators = cfg.extraWingpanelIndicators;
-        })
 
         # Services
         elementary-capnet-assist
-        elementary-dpms-helper
         elementary-notifications
-        elementary-settings-daemon
         pantheon-agent-geoclue2
         pantheon-agent-polkit
-      ]) ++ (gnome.removePackagesByName [
-        gnome.geary
-        gnome.epiphany
-        gnome.gnome-font-viewer
-      ] config.environment.pantheon.excludePackages);
-
-      programs.evince.enable = mkDefault true;
-      programs.file-roller.enable = mkDefault true;
+      ])) config.environment.pantheon.excludePackages;
 
       # Settings from elementary-default-settings
-      environment.sessionVariables.GTK_CSD = "1";
-      environment.sessionVariables.GTK3_MODULES = [ "pantheon-filechooser-module" ];
       environment.etc."gtk-3.0/settings.ini".source = "${pkgs.pantheon.elementary-default-settings}/etc/gtk-3.0/settings.ini";
+
+      xdg.mime.enable = true;
+      xdg.icons.enable = true;
+
+      xdg.portal.enable = true;
+      xdg.portal.extraPortals = with pkgs.pantheon; [
+        elementary-files
+        elementary-settings-daemon
+        xdg-desktop-portal-pantheon
+      ];
 
       # Override GSettings schemas
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
@@ -254,40 +256,56 @@ in
 
       # Default Fonts
       fonts.fonts = with pkgs; [
+        inter
+        open-dyslexic
         open-sans
         roboto-mono
       ];
 
       fonts.fontconfig.defaultFonts = {
         monospace = [ "Roboto Mono" ];
-        sansSerif = [ "Open Sans" ];
+        sansSerif = [ "Inter" ];
       };
     })
 
     (mkIf serviceCfg.apps.enable {
-      environment.systemPackages = (with pkgs.pantheon; pkgs.gnome.removePackagesByName [
+      programs.evince.enable = mkDefault true;
+      programs.file-roller.enable = mkDefault true;
+
+      environment.systemPackages = utils.removePackagesByName ([
+        pkgs.gnome.gnome-font-viewer
+      ] ++ (with pkgs.pantheon; [
         elementary-calculator
         elementary-calendar
         elementary-camera
         elementary-code
         elementary-files
+        elementary-mail
         elementary-music
         elementary-photos
-        elementary-screenshot-tool
+        elementary-screenshot
+        elementary-tasks
         elementary-terminal
         elementary-videos
-      ] config.environment.pantheon.excludePackages);
+        epiphany
+      ] ++ lib.optionals config.services.flatpak.enable [
+        # Only install appcenter if flatpak is enabled before
+        # https://github.com/NixOS/nixpkgs/issues/15932 is resolved.
+        appcenter
+        sideload
+      ])) config.environment.pantheon.excludePackages;
 
-      # needed by screenshot-tool
+      # needed by screenshot
       fonts.fonts = [
         pkgs.pantheon.elementary-redacted-script
       ];
     })
 
     (mkIf serviceCfg.contractor.enable {
-      environment.systemPackages = with  pkgs.pantheon; [
+      environment.systemPackages = with pkgs.pantheon; [
         contractor
-        extra-elementary-contracts
+        file-roller-contract
+        gnome-bluetooth-contract
       ];
 
       environment.pathsToLink = [

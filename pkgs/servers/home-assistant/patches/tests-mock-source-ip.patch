@@ -1,0 +1,13 @@
+diff --git a/homeassistant/components/network/__init__.py b/homeassistant/components/network/__init__.py
+index b3ef88e7ab..b7a8471e1a 100644
+--- a/homeassistant/components/network/__init__.py
++++ b/homeassistant/components/network/__init__.py
+@@ -30,7 +30,7 @@ async def async_get_source_ip(
+ ) -> str:
+     """Get the source ip for a target ip."""
+     adapters = await async_get_adapters(hass)
+-    all_ipv4s = []
++    all_ipv4s = ["127.0.0.1"]
+     for adapter in adapters:
+         if adapter["enabled"] and (ipv4s := adapter["ipv4"]):
+             all_ipv4s.extend([ipv4["address"] for ipv4 in ipv4s])

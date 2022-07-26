@@ -5,18 +5,19 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "urlwatch";
-  version = "2.23";
+  version = "2.25";
 
   src = fetchFromGitHub {
     owner = "thp";
     repo = "urlwatch";
     rev = version;
-    sha256 = "1ryygy7lalmwnv9kc8q4920gkdx878izy33a5dgxb780sy2qq8pg";
+    hash = "sha256-+ayHMY0gEAVhOgDDh+RfRrUpV0tSX8mMmfPzyg+YSv4=";
   };
 
   propagatedBuildInputs = with python3Packages; [
     appdirs
     cssselect
+    jq
     keyring
     lxml
     markdown2

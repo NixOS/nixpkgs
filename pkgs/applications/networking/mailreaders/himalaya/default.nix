@@ -1,33 +1,29 @@
 { lib
-, stdenv
 , rustPlatform
 , fetchFromGitHub
-, openssl
-, pkg-config
-, installShellFiles
+, stdenv
 , enableCompletions ? stdenv.hostPlatform == stdenv.buildPlatform
+, installShellFiles
+, pkg-config
 , Security
 , libiconv
+, openssl
 }:
+
 rustPlatform.buildRustPackage rec {
   pname = "himalaya";
-  version = "0.4.0";
+  version = "0.5.10";
 
   src = fetchFromGitHub {
     owner = "soywod";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-6RgT/SxO4vsk8Yx2AbaNIFvnAvgDmeTXvb/v6nUJxhc=";
+    sha256 = "sha256-CXchZbXX7NH2ZXeAoPph3qxxdcAdDVZLBmOMwxFu+Yo=";
   };
 
-  cargoSha256 = "sha256-NEuIh7FwIdAWzlChna3+G0VukfV8nYZfVWa+3LxQCIA=";
+  cargoSha256 = "sha256-sSQX7DHDgh1eO1Dwn1f0m51Bl2ZG1daRtrnYvsvPOkg=";
 
-  # use --lib flag to avoid test with imap server
-  # https://github.com/soywod/himalaya/issues/145
-  cargoTestFlags = [ "--lib" ];
-
-  nativeBuildInputs = [ ]
-    ++ lib.optionals (enableCompletions) [ installShellFiles ]
+  nativeBuildInputs = lib.optionals enableCompletions [ installShellFiles ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkg-config ];
 
   buildInputs =
@@ -38,6 +34,10 @@ rustPlatform.buildRustPackage rec {
       openssl
     ];
 
+  # flag added because without end-to-end testing is ran which requires
+  # additional tooling and servers to test
+  cargoTestFlags = [ "--lib" ];
+
   postInstall = lib.optionalString enableCompletions ''
     # Install shell function
     installShellCompletion --cmd himalaya \
@@ -47,9 +47,10 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "CLI email client written in Rust";
+    description = "Command-line interface for email management";
     homepage = "https://github.com/soywod/himalaya";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ yanganto ];
+    changelog = "https://github.com/soywod/himalaya/blob/v${version}/CHANGELOG.md";
+    license = licenses.bsdOriginal;
+    maintainers = with maintainers; [ toastal yanganto ];
   };
 }

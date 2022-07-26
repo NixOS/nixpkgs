@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   top = config.services.kubernetes;
+  otop = options.services.kubernetes;
   cfg = top.scheduler;
 in
 {
@@ -27,6 +28,7 @@ in
     featureGates = mkOption {
       description = "List set of feature gates";
       default = top.featureGates;
+      defaultText = literalExpression "config.${otop.featureGates}";
       type = listOf str;
     };
 
@@ -64,12 +66,12 @@ in
       serviceConfig = {
         Slice = "kubernetes.slice";
         ExecStart = ''${top.package}/bin/kube-scheduler \
-          --address=${cfg.address} \
+          --bind-address=${cfg.address} \
           ${optionalString (cfg.featureGates != [])
             "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"} \
           --kubeconfig=${top.lib.mkKubeConfig "kube-scheduler" cfg.kubeconfig} \
           --leader-elect=${boolToString cfg.leaderElect} \
-          --port=${toString cfg.port} \
+          --secure-port=${toString cfg.port} \
           ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
           ${cfg.extraOpts}
         '';
@@ -78,6 +80,9 @@ in
         Group = "kubernetes";
         Restart = "on-failure";
         RestartSec = 5;
+      };
+      unitConfig = {
+        StartLimitIntervalSec = 0;
       };
     };
 
@@ -91,4 +96,6 @@ in
 
     services.kubernetes.scheduler.kubeconfig.server = mkDefault top.apiserverAddress;
   };
+
+  meta.buildDocsInSandbox = false;
 }

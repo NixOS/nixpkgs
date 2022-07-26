@@ -5,8 +5,8 @@ mkdir -p package/rime
 ln -sv ${fetchFromGitHub {
   owner = "rime";
   repo = "rime-array";
-  rev = "8514193da939bc8888ad6a744f5e5921d4baebc7";
-  sha256 = "1fy7pcq7d8m0wzkkhklmv6p370ms9lqc1zpndyy2xjamzrbb9l83";
+  rev = "d10f2f8b2aec7c7e736ace01e8a399e5ae5e7c3a";
+  sha256 = "sha256-4t6+gh2V57SueDp9Tn6vTuxQCZNGzjLdJEhzIEqRjdI=";
 }} package/rime/array
 ln -sv ${fetchFromGitHub {
   owner = "rime";

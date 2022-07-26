@@ -1,4 +1,4 @@
-{ mkDerivation
+{ stdenv
 , fetchFromGitHub
 , fetchpatch
 , qmake
@@ -13,7 +13,7 @@
 , lib
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qosmic";
   version = "1.6.0";
 
@@ -42,6 +42,13 @@ mkDerivation rec {
     })
   ];
 
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace qosmic.pro \
+      --replace "/share" "/Applications/qosmic.app/Contents/Resources" \
+      --replace "/qosmic/scripts" "/scripts" \
+      --replace "install_icons install_desktop" ""
+  '';
+
   nativeBuildInputs = [ qmake wrapQtAppsHook pkg-config ];
 
   buildInputs = [
@@ -55,16 +62,19 @@ mkDerivation rec {
 
   qmakeFlags = [
     # Use pkg-config to correctly locate library paths
-    "-config" "link_pkgconfig"
+    "CONFIG+=link_pkgconfig"
   ];
+
+  preInstall = lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications
+    mv qosmic.app $out/Applications
+  '';
 
   meta = with lib; {
     description = "A cosmic recursive flame fractal editor";
     homepage = "https://github.com/bitsed/qosmic";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.raboof ];
-    # It might be possible to make it work on OSX,
-    # but this has not been tested.
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -1,5 +1,7 @@
-{ stdenv, lib, rustPlatform, fetchgit, runCommand, symlinkJoin
-, pkg-config, minijail, dtc, libusb1, libcap, linux
+{ stdenv, lib, rustPlatform, fetchgit
+, pkg-config, wayland-scanner
+, libcap, libdrm, libepoxy, minijail, virglrenderer, wayland, wayland-protocols
+, linux
 }:
 
 let
@@ -7,19 +9,9 @@ let
   upstreamInfo = with builtins; fromJSON (readFile ./upstream-info.json);
 
   arch = with stdenv.hostPlatform;
-    if isAarch64 then "arm"
+    if isAarch64 then "aarch64"
     else if isx86_64 then "x86_64"
     else throw "no seccomp policy files available for host platform";
-
-  crosvmSrc = fetchgit {
-    inherit (upstreamInfo.components."chromiumos/platform/crosvm")
-      url rev sha256 fetchSubmodules;
-  };
-
-  adhdSrc = fetchgit {
-    inherit (upstreamInfo.components."chromiumos/third_party/adhd")
-      url rev sha256 fetchSubmodules;
-  };
 
 in
 
@@ -27,39 +19,24 @@ in
     pname = "crosvm";
     inherit (upstreamInfo) version;
 
-    unpackPhase = ''
-      runHook preUnpack
+    src = fetchgit (builtins.removeAttrs upstreamInfo.src [ "date" "path" ]);
 
-      mkdir -p chromiumos/platform chromiumos/third_party
-
-      pushd chromiumos/platform
-      unpackFile ${crosvmSrc}
-      mv ${crosvmSrc.name} crosvm
-      popd
-
-      pushd chromiumos/third_party
-      unpackFile ${adhdSrc}
-      mv ${adhdSrc.name} adhd
-      popd
-
-      chmod -R u+w -- "$sourceRoot"
-
-      runHook postUnpack
-    '';
-
-    sourceRoot = "chromiumos/platform/crosvm";
+    separateDebugInfo = true;
 
     patches = [
       ./default-seccomp-policy-dir.diff
     ];
 
-    cargoSha256 = "0aax0slg59afbyn3ygswwap2anv11k6sr9hfpysb4f8rvymvx7hd";
+    cargoLock.lockFile = ./Cargo.lock;
 
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [ pkg-config wayland-scanner ];
 
-    buildInputs = [ dtc libcap libusb1 minijail ];
+    buildInputs = [
+      libcap libdrm libepoxy minijail virglrenderer wayland wayland-protocols
+    ];
 
     postPatch = ''
+      cp ${./Cargo.lock} Cargo.lock
       sed -i "s|/usr/share/policy/crosvm/|$out/share/policy/|g" \
              seccomp/*/*.policy
     '';
@@ -67,6 +44,8 @@ in
     preBuild = ''
       export DEFAULT_SECCOMP_POLICY_DIR=$out/share/policy
     '';
+
+    buildFeatures = [ "default" "virgl_renderer" "virgl_renderer_next" ];
 
     postInstall = ''
       mkdir -p $out/share/policy/
@@ -77,15 +56,11 @@ in
       lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform)
         "${linux}/${stdenv.hostPlatform.linux-kernel.target}";
 
-    passthru = {
-      inherit adhdSrc;
-      src = crosvmSrc;
-      updateScript = ./update.py;
-    };
+    passthru.updateScript = ./update.py;
 
     meta = with lib; {
       description = "A secure virtual machine monitor for KVM";
-      homepage = "https://chromium.googlesource.com/chromiumos/platform/crosvm/";
+      homepage = "https://chromium.googlesource.com/crosvm/crosvm/";
       maintainers = with maintainers; [ qyliss ];
       license = licenses.bsd3;
       platforms = [ "aarch64-linux" "x86_64-linux" ];

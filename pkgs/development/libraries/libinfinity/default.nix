@@ -9,8 +9,6 @@ assert avahiSupport -> avahi != null;
 assert gtkWidgets -> gtk3 != null;
 
 let
-  mkFlag = flag: feature: (if flag then "--with-" else "--without-") + feature;
-
   self = stdenv.mkDerivation rec {
     pname = "libinfinity";
     version = "0.7.2";
@@ -29,13 +27,13 @@ let
     propagatedBuildInputs = [ gnutls ];
 
     configureFlags = [
-      "--enable-gtk-doc"
-      "--enable-introspection"
-      (mkFlag gtkWidgets "inftextgtk")
-      (mkFlag gtkWidgets "infgtk")
-      "--with-infinoted"
-      "--with-libdaemon"
-      (mkFlag avahiSupport "avahi")
+      (lib.enableFeature true "gtk-doc")
+      (lib.enableFeature true "introspection")
+      (lib.withFeature gtkWidgets "inftextgtk")
+      (lib.withFeature gtkWidgets "infgtk")
+      (lib.withFeature true "infinoted")
+      (lib.withFeature true "libdaemon")
+      (lib.withFeature avahiSupport "avahi")
     ];
 
     passthru = {
@@ -46,7 +44,7 @@ let
       homepage = "https://gobby.github.io/";
       description = "An implementation of the Infinote protocol written in GObject-based C";
       license = lib.licenses.lgpl2Plus;
-      maintainers = [ lib.maintainers.phreedom ];
+      maintainers = [ ];
       platforms = with lib.platforms; linux ++ darwin;
     };
   };

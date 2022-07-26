@@ -1,11 +1,8 @@
 { stdenv
-, fetchurl
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , python
-, wrapPython
-, unzip
-, callPackage
 , bootstrapped-pip
 , lib
 , pipInstallHook
@@ -14,7 +11,7 @@
 
 let
   pname = "setuptools";
-  version = "57.2.0";
+  version = "61.2.0";
 
   # Create an sdist of setuptools
   sdist = stdenv.mkDerivation rec {
@@ -24,12 +21,21 @@ let
       owner = "pypa";
       repo = pname;
       rev = "v${version}";
-      sha256 = "sha256-zFmndVoATNxfvDsacY+gj5bzIbbd/8ldbsJj4qOawTA=";
+      hash = "sha256-Cgz3uA8U7A1lOZNuj1EYZVViZ3aL6VjcAno8GYQUufk=";
       name = "${pname}-${version}-source";
     };
 
     patches = [
       ./tag-date.patch
+      ./setuptools-distutils-C++.patch
+      # Use sysconfigdata to find headers. Fixes cross-compilation of extension modules.
+      # https://github.com/pypa/distutils/pull/145
+      (fetchpatch {
+        url = "https://github.com/pypa/distutils/commit/aed7294b7b0c228cc0666a8b04f2959bf310ab57.patch";
+        hash = "sha256-/9+TKv0nllBfnj48zcXLrOgyBj52dBIVbrpnIaQ4O84=";
+        stripLen = 2;
+        extraPrefix = "setuptools/_distutils/";
+      })
     ];
 
     buildPhase = ''

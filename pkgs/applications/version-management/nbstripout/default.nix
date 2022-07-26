@@ -2,7 +2,7 @@
 
 with python.pkgs;
 buildPythonApplication rec {
-  version = "0.3.9";
+  version = "0.6.0";
   pname = "nbstripout";
 
   # Mercurial should be added as a build input but because it's a Python
@@ -14,7 +14,7 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b46dddbf78b8b137176bc72729124e378242ef9ce93af63f6e0a8c4850c972e7";
+    sha256 = "sha256-TWxDAhVqskaMyOcgLvKPNN2RhFFOIeRDQLzShpaMgss=";
   };
 
   # for some reason, darwin uses /bin/sh echo native instead of echo binary, so

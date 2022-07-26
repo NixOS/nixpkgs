@@ -5,16 +5,16 @@
 
 buildPythonPackage rec {
   pname = "tatsu";
-  version = "5.6.1";
+  version = "5.8.2";
+  # upstream only supports 3.10+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "neogeny";
     repo = "TatSu";
-    rev = "v${version}";
-    sha256 = "149ra1lwax5m1svlv4dwjfqw00lc5vwyfj6zw2v0ammmfm1b94x9";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-eJJ438zjXRZ7dk36RPkFvhcIA5RYo5MsjptZIpjCrVI=";
   };
-
-  disabled = pythonOlder "3.8";
 
   nativeBuildInputs = [ pytest-runner ];
   propagatedBuildInputs = [ colorama regex ];
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://tatsu.readthedocs.io/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
   };
 
 }

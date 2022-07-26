@@ -1,34 +1,55 @@
-{ lib, fetchurl, stdenv, cmake, boost, ogre, mygui, ois, SDL2, libvorbis, pkg-config
-, makeWrapper, enet, libXcursor, bullet, openal }:
+{ lib
+, fetchFromGitHub
+, stdenv
+, cmake
+, boost
+, ogre
+, mygui
+, ois
+, SDL2
+, libvorbis
+, pkg-config
+, makeWrapper
+, enet
+, libXcursor
+, bullet
+, openal
+}:
 
 stdenv.mkDerivation rec {
   pname = "stunt-rally";
-  version = "2.6.1";
+  version = "2.6.2";
 
-  src = fetchurl {
-    url = "https://github.com/stuntrally/stuntrally/archive/${version}.tar.gz";
-    sha256 = "1zxq3x2g9pzafa2awx9jzqd33z6gnqj231cs07paxzrm89y51w4v";
+  src = fetchFromGitHub {
+    owner = "stuntrally";
+    repo = "stuntrally";
+    rev = version;
+    hash = "sha256-9I6hXsosqx+yYiEOEnPXQJHZkGtSU+JqThorwjemlc0=";
   };
-
-  tracks = fetchurl {
-    url = "https://github.com/stuntrally/tracks/archive/${version}.tar.gz";
-    sha256 = "0x6lgpa4c2grl0vrhqrcs7jcysa3mmvpdl1v5xa0dsf6vkvfr0zs";
+  tracks = fetchFromGitHub {
+    owner = "stuntrally";
+    repo = "tracks";
+    rev = version;
+    hash = "sha256-eZJAvkKe3PrXDzxTa5WFBHfltB3jhQh8puzOFDO9lso=";
   };
-
-  # include/OGRE/OgreException.h:265:126: error: invalid conversion from
-  # 'int' to 'Ogre::Exception::ExceptionCodes' [-fpermissive]
-  NIX_CFLAGS_COMPILE="-fpermissive";
 
   preConfigure = ''
-    pushd data
-    tar xf ${tracks}
-    mv tracks-${version} tracks
-    popd
+    ln -s ${tracks} data/tracks
   '';
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ boost ogre mygui ois SDL2 libvorbis
-    makeWrapper enet libXcursor bullet openal
+  buildInputs = [
+    boost
+    ogre
+    mygui
+    ois
+    SDL2
+    libvorbis
+    makeWrapper
+    enet
+    libXcursor
+    bullet
+    openal
   ];
 
   meta = with lib; {

@@ -1,46 +1,19 @@
 # to run these tests (and the others)
 # nix-build nixpkgs/lib/tests/release.nix
 { # The pkgs used for dependencies for the testing itself
-  pkgs
-, lib
+  pkgs ? import ../.. {}
+, lib ? pkgs.lib
 }:
 
 let
   inherit (lib) types;
-
-  maintainerModule = { config, ... }: {
-    options = {
-      name = lib.mkOption {
-        type = types.str;
-      };
-      email = lib.mkOption {
-        type = types.str;
-      };
-      github = lib.mkOption {
-        type = types.nullOr types.str;
-        default = null;
-      };
-      githubId = lib.mkOption {
-        type = types.nullOr types.ints.unsigned;
-        default = null;
-      };
-      keys = lib.mkOption {
-        type = types.listOf (types.submodule {
-          options.longkeyid = lib.mkOption { type = types.str; };
-          options.fingerprint = lib.mkOption { type = types.str; };
-        });
-        default = [];
-      };
-    };
-  };
-
   checkMaintainer = handle: uncheckedAttrs:
   let
       prefix = [ "lib" "maintainers" handle ];
       checkedAttrs = (lib.modules.evalModules {
         inherit prefix;
         modules = [
-          maintainerModule
+          ./maintainer-module.nix
           {
             _file = toString ../../maintainers/maintainer-list.nix;
             config = uncheckedAttrs;
@@ -61,9 +34,9 @@ let
 
   missingGithubIds = lib.concatLists (lib.mapAttrsToList checkMaintainer lib.maintainers);
 
-  success = pkgs.runCommandNoCC "checked-maintainers-success" {} ">$out";
+  success = pkgs.runCommand "checked-maintainers-success" {} ">$out";
 
-  failure = pkgs.runCommandNoCC "checked-maintainers-failure" {
+  failure = pkgs.runCommand "checked-maintainers-failure" {
     nativeBuildInputs = [ pkgs.curl pkgs.jq ];
     outputHash = "sha256:${lib.fakeSha256}";
     outputHAlgo = "sha256";

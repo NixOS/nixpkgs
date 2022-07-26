@@ -1,16 +1,21 @@
 { lib, stdenv, fetchurl, libpng, perl, perlPackages, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "icoutils-0.32.3";
+  pname = "icoutils";
+  version = "0.32.3";
 
   src = fetchurl {
-    url = "mirror://savannah/icoutils/${name}.tar.bz2";
+    url = "mirror://savannah/icoutils/icoutils-${version}.tar.bz2";
     sha256 = "1q66cksms4l62y0wizb8vfavhmf7kyfgcfkynil3n99s0hny1aqp";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ libpng perl ];
   propagatedBuildInputs = [ perlPackages.LWP ];
+
+  # Fixes a build failure on aarch64-darwin. Define for all Darwin targets for when x86_64-darwin
+  # upgrades to a newer SDK.
+  NIX_CFLAGS_COMPILE = lib.optional stdenv.isDarwin "-DTARGET_OS_IPHONE=0";
 
   patchPhase = ''
     patchShebangs extresso/extresso

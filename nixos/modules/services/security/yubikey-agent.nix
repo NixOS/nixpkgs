@@ -13,7 +13,7 @@ in
 {
   ###### interface
 
-  meta.maintainers = with maintainers; [ philandstuff rawkode ];
+  meta.maintainers = with maintainers; [ philandstuff rawkode jwoudenberg ];
 
   options = {
 
@@ -33,7 +33,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.yubikey-agent;
-        defaultText = "pkgs.yubikey-agent";
+        defaultText = literalExpression "pkgs.yubikey-agent";
         description = ''
           The package used for the yubikey-agent daemon.
         '';
@@ -49,6 +49,12 @@ in
     # yubikey-agent package
     systemd.user.services.yubikey-agent = mkIf (pinentryFlavor != null) {
       path = [ pkgs.pinentry.${pinentryFlavor} ];
+      wantedBy = [
+        (if pinentryFlavor == "tty" || pinentryFlavor == "curses" then
+          "default.target"
+        else
+          "graphical-session.target")
+      ];
     };
 
     environment.extraInit = ''

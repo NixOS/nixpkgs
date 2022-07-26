@@ -1,17 +1,19 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, installShellFiles }:
+, installShellFiles
+, nixosTests
+}:
 
 buildGoModule rec {
   pname = "upterm";
-  version = "0.6.5";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "owenthereal";
     repo = "upterm";
     rev = "v${version}";
-    sha256 = "sha256-wzDK7iQN/z/M1mTKPCH3c+OjFsavplV/0oMiOe5thuI=";
+    hash = "sha256-JcUFsj7+Hu++izyxozttyxTGW51vBfgNSvAa/AIrsvs=";
   };
 
   vendorSha256 = null;
@@ -27,6 +29,8 @@ buildGoModule rec {
   '';
 
   doCheck = true;
+
+  passthru.tests = { inherit (nixosTests) uptermd; };
 
   __darwinAllowLocalNetworking = true;
 

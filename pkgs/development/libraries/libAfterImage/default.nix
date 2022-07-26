@@ -44,6 +44,16 @@ stdenv.mkDerivation {
       url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-libs/libafterimage/files/libafterimage-makefile.in.patch?id=4aa4fca00611b0b3a4007870da43cc5fd63f76c4";
       sha256 = "1n6fniz6dldms615046yhc4mlg9gb53y4yfia8wfz6szgq5zicj4";
     })
+
+    # Fix build failure against binutils-2.36:
+    #  https://sourceforge.net/p/afterstep/bugs/5/
+    (fetchpatch {
+      name = "binutils-2.36.patch";
+      url = "https://sourceforge.net/p/afterstep/bugs/5/attachment/libafterimage-binutils-2.36-support.patch";
+      sha256 = "1cfgm2ffwlsmhvvfmrxlglddaigr99k88d5xqva9pkl3mmzy3jym";
+      # workaround '-p0' patchflags below.
+      stripLen = 1;
+    })
   ];
   patchFlags = [ "-p0" ];
 

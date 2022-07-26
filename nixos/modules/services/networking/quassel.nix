@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.quassel;
+  opt = options.services.quassel;
   quassel = cfg.package;
   user = if cfg.user != null then cfg.user else "quassel";
 in
@@ -37,11 +38,10 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.quasselDaemon;
-        defaultText = "pkgs.quasselDaemon";
+        defaultText = literalExpression "pkgs.quasselDaemon";
         description = ''
           The package of the quassel daemon.
         '';
-        example = literalExample "pkgs.quasselDaemon";
       };
 
       interfaces = mkOption {
@@ -64,6 +64,9 @@ in
 
       dataDir = mkOption {
         default = "/home/${user}/.config/quassel-irc.org";
+        defaultText = literalExpression ''
+          "/home/''${config.${opt.user}}/.config/quassel-irc.org"
+        '';
         type = types.str;
         description = ''
           The directory holding configuration files, the SQlite database and the SSL Cert.

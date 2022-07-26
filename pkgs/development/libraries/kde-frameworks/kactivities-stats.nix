@@ -5,7 +5,7 @@
 }:
 
 mkDerivation {
-  name = "kactivities-stats";
+  pname = "kactivities-stats";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ boost kactivities kconfig ];
   propagatedBuildInputs = [ qtbase ];

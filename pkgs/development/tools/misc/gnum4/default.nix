@@ -7,32 +7,23 @@
 
 stdenv.mkDerivation rec {
   pname = "gnum4";
-  version = "1.4.18";
+  version = "1.4.19";
 
   src = fetchurl {
     url = "mirror://gnu/m4/m4-${version}.tar.bz2";
-    sha256 = "1xkwwq0sgv05cla0g0a01yzhk0wpsn9y40w9kh9miiiv0imxfh36";
+    sha256 = "sha256-swapHA/ZO8QoDPwumMt6s5gf91oYe+oyk4EfRSyJqMg=";
   };
+
+  strictDeps = true;
+  enableParallelBuilding = true;
 
   doCheck = false;
 
-  configureFlags = [ "--with-syscmd-shell=${stdenv.shell}" ];
-
-  # Upstream is aware of it; it may be in the next release.
-  patches =
-    [
-      ./s_isdir.patch
-      (fetchurl {
-        url = "https://sources.debian.org/data/main/m/m4/1.4.18-2/debian/patches/01-fix-ftbfs-with-glibc-2.28.patch";
-        sha256 = "12lmdnbml9lfvy0khpjc42riicddaz7li8wmbnsam7zsw6al11qk";
-      })
-    ]
-    ++ lib.optional stdenv.isDarwin ./darwin-secure-format.patch;
+  configureFlags = [ "--with-syscmd-shell=${stdenv.shell}" ]
+    ++ lib.optional stdenv.hostPlatform.isMinGW "CFLAGS=-fno-stack-protector";
 
   meta = {
-    homepage = "https://www.gnu.org/software/m4/";
     description = "GNU M4, a macro processor";
-
     longDescription = ''
       GNU M4 is an implementation of the traditional Unix macro
       processor.  It is mostly SVR4 compatible although it has some
@@ -49,8 +40,10 @@ stdenv.mkDerivation rec {
       recursion etc...  m4 can be used either as a front-end to a
       compiler or as a macro processor in its own right.
     '';
+    homepage = "https://www.gnu.org/software/m4/";
 
     license = lib.licenses.gpl3Plus;
+    mainProgram = "m4";
     platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 

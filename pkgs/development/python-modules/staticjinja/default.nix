@@ -1,37 +1,42 @@
 { lib
 , fetchFromGitHub
 , buildPythonPackage
-, poetry
-, docopt
+, poetry-core
+, docopt-ng
 , easywatch
 , jinja2
 , pytestCheckHook
 , pytest-check
+, pythonOlder
 , markdown
-, testVersion
+, testers
+, tomlkit
 , staticjinja
+, callPackage
 }:
 
 buildPythonPackage rec {
   pname = "staticjinja";
-  version = "3.0.1";
+  version = "4.1.3";
   format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   # No tests in pypi
   src = fetchFromGitHub {
     owner = "staticjinja";
     repo = pname;
     rev = version;
-    sha256 = "sha256-W4q0vG8Kl2gCmA8UnUbdiGRtghhdnWxIJXFIIa6BogA=";
+    sha256 = "sha256-w6ge5MQXNRHCM43jKnagTlbquJJys7mprgBOS2uuwHQ=";
   };
 
   nativeBuildInputs = [
-    poetry
+    poetry-core
   ];
 
   propagatedBuildInputs = [
     jinja2
-    docopt
+    docopt-ng
     easywatch
   ];
 
@@ -39,6 +44,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-check
     markdown
+    tomlkit
   ];
 
   # The tests need to find and call the installed staticjinja executable
@@ -46,8 +52,9 @@ buildPythonPackage rec {
     export PATH="$PATH:$out/bin";
   '';
 
-  passthru.tests.version = testVersion {
-    package = staticjinja;
+  passthru.tests = {
+    version = testers.testVersion { package = staticjinja; };
+    minimal-template = callPackage ./test-minimal-template {};
   };
 
   meta = with lib; {

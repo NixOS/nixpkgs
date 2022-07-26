@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "atanks";
-  version = "6.5";
+  version = "6.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/atanks/atanks/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "0bijsbd51j4wsnmdxj54r92m7h8zqnvh9z3qqdig6zx7a8kjn61j";
+    sha256 = "sha256-vGse/J/H52JPrR2DUtcuknvg+6IWC7Jbtri9bGNwv0M=";
   };
 
   buildInputs = [ allegro ];

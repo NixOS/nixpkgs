@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "poedit";
-  version = "2.4.3";
+  version = "3.1";
 
   src = fetchFromGitHub {
     owner = "vslavik";
     repo = "poedit";
     rev = "v${version}-oss";
-    sha256 = "02xf2w3d2lnr3vqmil9vvg9pir7d21x4zrj9xwpgb7dhs0gimj0x";
+    sha256 = "sha256-Wxj1xPbtupEnzuvf7JdUgdTxX2oAZDEYk6W4CjrmRRE=";
   };
 
   nativeBuildInputs = [ autoconf automake asciidoc wrapGAppsHook
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     "--without-cpprest"
     "--with-boost-libdir=${boost.out}/lib"
     "CPPFLAGS=-I${nlohmann_json}/include/nlohmann/"
+    "LDFLAGS=-llucene++"
   ];
 
   preFixup = ''

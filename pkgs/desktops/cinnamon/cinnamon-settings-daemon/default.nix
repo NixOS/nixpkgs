@@ -13,7 +13,8 @@
 , wrapGAppsHook
 , pkg-config
 , pulseaudio
-, lib, stdenv
+, lib
+, stdenv
 , systemd
 , upower
 , dconf
@@ -35,7 +36,7 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-settings-daemon";
-  version = "4.8.5";
+  version = "5.2.0";
 
   /* csd-power-manager.c:50:10: fatal error: csd-power-proxy.h: No such file or directory
    #include "csd-power-proxy.h"
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-PAWVTjGFs8yKXgNQ2ucDnEDS+n7bp2n3lhGl9gHXfdQ=";
+    hash = "sha256-6omif4UxMrXWxL+R9lQ8ogxotW+3E9Kp99toH3PJtaU=";
   };
 
   patches = [
@@ -121,6 +122,6 @@ stdenv.mkDerivation rec {
     description = "The settings daemon for the Cinnamon desktop";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.mkg20001 ];
+    maintainers = teams.cinnamon.members;
   };
 }

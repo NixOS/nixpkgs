@@ -1,10 +1,8 @@
 { lib, stdenv, fetchsvn, libxml2, gtk2, curl, pkg-config } :
 
-let
+stdenv.mkDerivation rec {
+  pname = "gosmore";
   version = "31801";
-in
-stdenv.mkDerivation {
-  name = "gosmore-r${version}";
   # the gosmore svn repository does not lock revision numbers of its externals
   # so we explicitly disable them to avoid breaking the hash
   # especially as the externals appear to be unused

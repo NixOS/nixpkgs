@@ -7,7 +7,7 @@
 }:
 
 mkDerivation {
-  name = "plasma-browser-integration";
+  pname = "plasma-browser-integration";
   nativeBuildInputs = [
     extra-cmake-modules
   ];

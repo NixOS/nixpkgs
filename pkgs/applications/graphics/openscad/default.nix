@@ -26,6 +26,9 @@
 , qtmacextras
 , qmake
 , spacenavSupport ? stdenv.isLinux, libspnav
+, wayland
+, wayland-protocols
+, qtwayland
 }:
 
 mkDerivation rec {
@@ -45,7 +48,7 @@ mkDerivation rec {
     eigen boost glew opencsg cgal mpfr gmp glib
     harfbuzz lib3mf libzip double-conversion freetype fontconfig
     qtbase qtmultimedia qscintilla
-  ] ++ lib.optionals stdenv.isLinux [ libGLU libGL ]
+  ] ++ lib.optionals stdenv.isLinux [ libGLU libGL wayland wayland-protocols qtwayland ]
     ++ lib.optional stdenv.isDarwin qtmacextras
     ++ lib.optional spacenavSupport libspnav
   ;
@@ -57,15 +60,16 @@ mkDerivation rec {
       "SPNAV_LIBPATH=${libspnav}/lib"
     ];
 
-  # src/lexer.l:36:10: fatal error: parser.hxx: No such file or directory
-  enableParallelBuilding = false; # true by default due to qmake
+  enableParallelBuilding = true;
+
+  preBuild = ''
+    make objects/parser.cxx
+  '';
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir $out/Applications
     mv $out/bin/*.app $out/Applications
     rmdir $out/bin || true
-
-    wrapQtApp "$out"/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD
 
     mv --target-directory=$out/Applications/OpenSCAD.app/Contents/Resources \
       $out/share/openscad/{examples,color-schemes,locale,libraries,fonts,templates}

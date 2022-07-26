@@ -2,15 +2,15 @@
 , libsoup, gnome }:
 
 stdenv.mkDerivation rec {
-  name = "homebank-5.5.2";
+  pname = "homebank";
+  version = "5.5.5";
   src = fetchurl {
-    url = "http://homebank.free.fr/public/${name}.tar.gz";
-    sha256 = "sha256-mJ7zeOTJ+CNLYruT1qSxS9TJjciJUZg426H0TxLFHtI=";
+    url = "http://homebank.free.fr/public/homebank-${version}.tar.gz";
+    sha256 = "sha256-vs4F7LUjkhR0JKoeWheTiXd7gr9Gir69c+twsq+cnmc=";
   };
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook ];
-  buildInputs = [ gtk libofx intltool libsoup
-    gnome.adwaita-icon-theme ];
+  buildInputs = [ gtk libofx intltool libsoup gnome.adwaita-icon-theme ];
 
   meta = with lib; {
     description = "Free, easy, personal accounting for everyone";

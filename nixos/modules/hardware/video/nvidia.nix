@@ -23,6 +23,8 @@ let
   offloadCfg = pCfg.offload;
   primeEnabled = syncCfg.enable || offloadCfg.enable;
   nvidiaPersistencedEnabled =  cfg.nvidiaPersistenced;
+  nvidiaSettings = cfg.nvidiaSettings;
+  busIDType = types.strMatching "([[:print:]]+[\:\@][0-9]{1,3}\:[0-9]{1,2}\:[0-9])?";
 in
 
 {
@@ -67,7 +69,7 @@ in
     };
 
     hardware.nvidia.prime.nvidiaBusId = mkOption {
-      type = types.str;
+      type = busIDType;
       default = "";
       example = "PCI:1:0:0";
       description = ''
@@ -77,7 +79,7 @@ in
     };
 
     hardware.nvidia.prime.intelBusId = mkOption {
-      type = types.str;
+      type = busIDType;
       default = "";
       example = "PCI:0:2:0";
       description = ''
@@ -87,7 +89,7 @@ in
     };
 
     hardware.nvidia.prime.amdgpuBusId = mkOption {
-      type = types.str;
+      type = busIDType;
       default = "";
       example = "PCI:4:0:0";
       description = ''
@@ -143,6 +145,15 @@ in
       '';
     };
 
+    hardware.nvidia.nvidiaSettings = mkOption {
+      default = true;
+      type = types.bool;
+      description = ''
+        Whether to add nvidia-settings, NVIDIA's GUI configuration tool, to
+        systemPackages.
+      '';
+    };
+
     hardware.nvidia.nvidiaPersistenced = mkOption {
       default = false;
       type = types.bool;
@@ -152,14 +163,33 @@ in
       '';
     };
 
+    hardware.nvidia.forceFullCompositionPipeline = lib.mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Whether to force-enable the full composition pipeline.
+        This sometimes fixes screen tearing issues.
+        This has been reported to reduce the performance of some OpenGL applications and may produce issues in WebGL.
+        It also drastically increases the time the driver needs to clock down after load.
+      '';
+    };
+
     hardware.nvidia.package = lib.mkOption {
-      type = lib.types.package;
+      type = types.package;
       default = config.boot.kernelPackages.nvidiaPackages.stable;
-      defaultText = "config.boot.kernelPackages.nvidiaPackages.stable";
+      defaultText = literalExpression "config.boot.kernelPackages.nvidiaPackages.stable";
       description = ''
         The NVIDIA X11 derivation to use.
       '';
-      example = "config.boot.kernelPackages.nvidiaPackages.legacy_340";
+      example = literalExpression "config.boot.kernelPackages.nvidiaPackages.legacy_340";
+    };
+
+    hardware.nvidia.open = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Whether to use the open source kernel module
+      '';
     };
   };
 
@@ -169,37 +199,50 @@ in
   in mkIf enabled {
     assertions = [
       {
-        assertion = with config.services.xserver.displayManager; gdm.nvidiaWayland -> cfg.modesetting.enable;
-        message = "You cannot use wayland with GDM without modesetting enabled for NVIDIA drivers, set `hardware.nvidia.modesetting.enable = true`";
-      }
-
-      {
         assertion = primeEnabled -> pCfg.intelBusId == "" || pCfg.amdgpuBusId == "";
         message = ''
           You cannot configure both an Intel iGPU and an AMD APU. Pick the one corresponding to your processor.
         '';
       }
+
       {
         assertion = primeEnabled -> pCfg.nvidiaBusId != "" && (pCfg.intelBusId != "" || pCfg.amdgpuBusId != "");
         message = ''
           When NVIDIA PRIME is enabled, the GPU bus IDs must configured.
         '';
       }
+
       {
         assertion = offloadCfg.enable -> versionAtLeast nvidia_x11.version "435.21";
         message = "NVIDIA PRIME render offload is currently only supported on versions >= 435.21.";
       }
+
       {
         assertion = !(syncCfg.enable && offloadCfg.enable);
         message = "Only one NVIDIA PRIME solution may be used at a time.";
       }
+
       {
         assertion = !(syncCfg.enable && cfg.powerManagement.finegrained);
         message = "Sync precludes powering down the NVIDIA GPU.";
       }
+
       {
-        assertion = cfg.powerManagement.enable -> offloadCfg.enable;
+        assertion = cfg.powerManagement.finegrained -> offloadCfg.enable;
         message = "Fine-grained power management requires offload to be enabled.";
+      }
+
+      {
+        assertion = cfg.powerManagement.enable -> (
+          builtins.pathExists (cfg.package.out + "/bin/nvidia-sleep.sh") &&
+          builtins.pathExists (cfg.package.out + "/lib/systemd/system-sleep/nvidia")
+        );
+        message = "Required files for driver based power management don't exist.";
+      }
+
+      {
+        assertion = cfg.open -> (cfg.package ? open && cfg.package ? firmware);
+        message = "This version of NVIDIA driver does not provide a corresponding opensource kernel driver";
       }
     ];
 
@@ -226,7 +269,7 @@ in
       modules = optional (igpuDriver == "amdgpu") [ pkgs.xorg.xf86videoamdgpu ];
       deviceSection = ''
         BusID "${igpuBusId}"
-        ${optionalString syncCfg.enable ''Option "AccelMethod" "none"''}
+        ${optionalString (syncCfg.enable && igpuDriver != "amdgpu") ''Option "AccelMethod" "none"''}
       '';
     } ++ singleton {
       name = "nvidia";
@@ -236,13 +279,18 @@ in
         ''
           BusID "${pCfg.nvidiaBusId}"
           ${optionalString syncCfg.allowExternalGpu "Option \"AllowExternalGpus\""}
-          ${optionalString cfg.powerManagement.finegrained "Option \"NVreg_DynamicPowerManagement=0x02\""}
         '';
       screenSection =
         ''
           Option "RandRRotation" "on"
-          ${optionalString syncCfg.enable "Option \"AllowEmptyInitialConfiguration\""}
-        '';
+        '' + optionalString syncCfg.enable ''
+          Option "AllowEmptyInitialConfiguration"
+        '' + optionalString cfg.forceFullCompositionPipeline ''
+          Option         "metamodes" "nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On}"
+          Option         "AllowIndirectGLXProtocol" "off"
+          Option         "TripleBuffer" "on"
+        ''
+        ;
     };
 
     services.xserver.serverLayoutSection = optionalString syncCfg.enable ''
@@ -251,9 +299,15 @@ in
       Option "AllowNVIDIAGPUScreens"
     '';
 
-    services.xserver.displayManager.setupCommands = optionalString syncCfg.enable ''
+    services.xserver.displayManager.setupCommands = let
+      sinkGpuProviderName = if igpuDriver == "amdgpu" then
+        # find the name of the provider if amdgpu
+        "`${pkgs.xorg.xrandr}/bin/xrandr --listproviders | ${pkgs.gnugrep}/bin/grep -i AMD | ${pkgs.gnused}/bin/sed -n 's/^.*name://p'`"
+      else
+        igpuDriver;
+    in optionalString syncCfg.enable ''
       # Added by nvidia configuration module for Optimus/PRIME.
-      ${pkgs.xorg.xrandr}/bin/xrandr --setprovideroutputsource ${igpuDriver} NVIDIA-0
+      ${pkgs.xorg.xrandr}/bin/xrandr --setprovideroutputsource "${sinkGpuProviderName}" NVIDIA-0
       ${pkgs.xorg.xrandr}/bin/xrandr --auto
     '';
 
@@ -261,12 +315,21 @@ in
       source = "${nvidia_x11.bin}/share/nvidia/nvidia-application-profiles-rc";
     };
 
-    hardware.opengl.package = mkIf (!offloadCfg.enable) nvidia_x11.out;
-    hardware.opengl.package32 = mkIf (!offloadCfg.enable) nvidia_x11.lib32;
-    hardware.opengl.extraPackages = optional offloadCfg.enable nvidia_x11.out;
-    hardware.opengl.extraPackages32 = optional offloadCfg.enable nvidia_x11.lib32;
+    # 'nvidia_x11' installs it's files to /run/opengl-driver/...
+    environment.etc."egl/egl_external_platform.d".source =
+      "/run/opengl-driver/share/egl/egl_external_platform.d/";
 
-    environment.systemPackages = [ nvidia_x11.bin nvidia_x11.settings ]
+    hardware.opengl.extraPackages = [
+      nvidia_x11.out
+      pkgs.nvidia-vaapi-driver
+    ];
+    hardware.opengl.extraPackages32 = [
+      nvidia_x11.lib32
+      pkgs.pkgsi686Linux.nvidia-vaapi-driver
+    ];
+
+    environment.systemPackages = [ nvidia_x11.bin ]
+      ++ optionals cfg.nvidiaSettings [ nvidia_x11.settings ]
       ++ optionals nvidiaPersistencedEnabled [ nvidia_x11.persistenced ];
 
     systemd.packages = optional cfg.powerManagement.enable nvidia_x11.out;
@@ -314,7 +377,8 @@ in
       ++ optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
         "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
 
-    boot.extraModulePackages = [ nvidia_x11.bin ];
+    boot.extraModulePackages = if cfg.open then [ nvidia_x11.open ] else [ nvidia_x11.bin ];
+    hardware.firmware = lib.optional cfg.open nvidia_x11.firmware;
 
     # nvidia-uvm is required by CUDA applications.
     boot.kernelModules = [ "nvidia-uvm" ] ++
@@ -322,17 +386,19 @@ in
 
     # If requested enable modesetting via kernel parameter.
     boot.kernelParams = optional (offloadCfg.enable || cfg.modesetting.enable) "nvidia-drm.modeset=1"
-      ++ optional cfg.powerManagement.enable "nvidia.NVreg_PreserveVideoMemoryAllocations=1";
+      ++ optional cfg.powerManagement.enable "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
+      ++ optional cfg.open "nvidia.NVreg_OpenRmEnableUnsupportedGpus=1";
 
     services.udev.extraRules =
       ''
         # Create /dev/nvidia-uvm when the nvidia-uvm module is loaded.
         KERNEL=="nvidia", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidiactl c $$(grep nvidia-frontend /proc/devices | cut -d \  -f 1) 255'"
+        KERNEL=="nvidia", RUN+="${pkgs.runtimeShell} -c 'for i in $$(cat /proc/driver/nvidia/gpus/*/information | grep Minor | cut -d \  -f 4); do mknod -m 666 /dev/nvidia$${i} c $$(grep nvidia-frontend /proc/devices | cut -d \  -f 1) $${i}; done'"
         KERNEL=="nvidia_modeset", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-modeset c $$(grep nvidia-frontend /proc/devices | cut -d \  -f 1) 254'"
-        KERNEL=="card*", SUBSYSTEM=="drm", DRIVERS=="nvidia", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia%n c $$(grep nvidia-frontend /proc/devices | cut -d \  -f 1) %n'"
         KERNEL=="nvidia_uvm", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-uvm c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 0'"
-        KERNEL=="nvidia_uvm", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-uvm-tools c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 0'"
-      '' + optionalString cfg.powerManagement.finegrained ''
+        KERNEL=="nvidia_uvm", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-uvm-tools c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 1'"
+      '' + optionalString cfg.powerManagement.finegrained (
+      optionalString (versionOlder config.boot.kernelPackages.kernel.version "5.5") ''
         # Remove NVIDIA USB xHCI Host Controller devices, if present
         ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c0330", ATTR{remove}="1"
 
@@ -341,7 +407,7 @@ in
 
         # Remove NVIDIA Audio devices, if present
         ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x040300", ATTR{remove}="1"
-
+      '' + ''
         # Enable runtime PM for NVIDIA VGA/3D controller devices on driver bind
         ACTION=="bind", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x030000", TEST=="power/control", ATTR{power/control}="auto"
         ACTION=="bind", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x030200", TEST=="power/control", ATTR{power/control}="auto"
@@ -349,7 +415,7 @@ in
         # Disable runtime PM for NVIDIA VGA/3D controller devices on driver unbind
         ACTION=="unbind", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x030000", TEST=="power/control", ATTR{power/control}="on"
         ACTION=="unbind", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x030200", TEST=="power/control", ATTR{power/control}="on"
-      '';
+      '');
 
     boot.extraModprobeConfig = mkIf cfg.powerManagement.finegrained ''
       options nvidia "NVreg_DynamicPowerManagement=0x02"

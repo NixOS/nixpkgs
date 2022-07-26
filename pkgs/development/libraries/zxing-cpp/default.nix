@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zxing-cpp";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "nu-book";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-N2FTzsjxm3EE5Wqz7xt+FS4zQ60Ow4WbdX6Eo08ktek=";
+    hash = "sha256-M565VNKhSmYFmCMEI9UFuHWNZWeHrf9qzZkMAw9LUr4=";
   };
 
   nativeBuildInputs = [
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_EXAMPLES=OFF"
+    "-DBUILD_BLACKBOX_TESTS=OFF"
   ];
 
   meta = with lib; {

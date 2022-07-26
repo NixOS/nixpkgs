@@ -1,8 +1,8 @@
-diff --git a/internal/buf/internal/buftesting/buftesting.go b/internal/buf/internal/buftesting/buftesting.go
-index dc8da0c..70ad299 100644
---- a/internal/buf/internal/buftesting/buftesting.go
-+++ b/internal/buf/internal/buftesting/buftesting.go
-@@ -100,6 +100,10 @@ func RunActualProtoc(
+diff --git a/private/bufpkg/buftesting/buftesting.go b/private/bufpkg/buftesting/buftesting.go
+index 82b3ec4..ef8263a 100644
+--- a/private/bufpkg/buftesting/buftesting.go
++++ b/private/bufpkg/buftesting/buftesting.go
+@@ -99,6 +99,10 @@ func RunActualProtoc(
  
  // GetGoogleapisDirPath gets the path to a clone of googleapis.
  func GetGoogleapisDirPath(t *testing.T, buftestingDirPath string) string {

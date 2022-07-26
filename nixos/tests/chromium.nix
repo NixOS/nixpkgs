@@ -15,25 +15,8 @@
 with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
 
-mapAttrs (channel: chromiumPkg: makeTest rec {
-  name = "chromium-${channel}";
-  meta = {
-    maintainers = with maintainers; [ aszlig primeos ];
-    # https://github.com/NixOS/hydra/issues/591#issuecomment-435125621
-    inherit (chromiumPkg.meta) timeout;
-  };
-
-  enableOCR = true;
-
+let
   user = "alice";
-
-  machine.imports = [ ./common/user-account.nix ./common/x11.nix ];
-  machine.virtualisation.memorySize = 2047;
-  machine.test-support.displayManager.auto.user = user;
-  machine.environment = {
-    systemPackages = [ chromiumPkg ];
-    variables."XAUTHORITY" = "/home/alice/.Xauthority";
-  };
 
   startupHTML = pkgs.writeText "chromium-startup.html" ''
     <!DOCTYPE html>
@@ -50,6 +33,27 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
     </body>
     </html>
   '';
+in
+
+mapAttrs (channel: chromiumPkg: makeTest {
+  name = "chromium-${channel}";
+  meta = {
+    maintainers = with maintainers; [ aszlig primeos ];
+    # https://github.com/NixOS/hydra/issues/591#issuecomment-435125621
+    inherit (chromiumPkg.meta) timeout;
+  };
+
+  enableOCR = true;
+
+  nodes.machine = { ... }: {
+    imports = [ ./common/user-account.nix ./common/x11.nix ];
+    virtualisation.memorySize = 2047;
+    test-support.displayManager.auto.user = user;
+    environment = {
+      systemPackages = [ chromiumPkg ];
+      variables."XAUTHORITY" = "/home/alice/.Xauthority";
+    };
+  };
 
   testScript = let
     xdo = name: text: let
@@ -80,9 +84,13 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
             binary = pname
         # Add optional CLI options:
         options = []
+        major_version = "${versions.major (getVersion chromiumPkg.name)}"
+        if major_version > "95" and not pname.startswith("google-chrome"):
+            # Workaround to avoid a GPU crash:
+            options.append("--use-gl=swiftshader")
         # Launch the process:
         options.append("file://${startupHTML}")
-        machine.succeed(ru(f'ulimit -c unlimited; {binary} {shlex.join(options)} & disown'))
+        machine.succeed(ru(f'ulimit -c unlimited; {binary} {shlex.join(options)} >&2 & disown'))
         if binary.startswith("google-chrome"):
             # Need to click away the first window:
             machine.wait_for_text("Make Google Chrome the default browser")
@@ -211,7 +219,7 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
 
         clipboard = machine.succeed(
             ru(
-                "echo void | ${pkgs.xclip}/bin/xclip -i"
+                "echo void | ${pkgs.xclip}/bin/xclip -i >&2"
             )
         )
         machine.succeed(

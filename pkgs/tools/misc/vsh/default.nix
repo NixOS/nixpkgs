@@ -2,20 +2,20 @@
 
 buildGoModule rec {
   pname = "vsh";
-  version = "0.12.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "fishi0x01";
     repo = "vsh";
     rev = "v${version}";
-    sha256 = "059zzsg94287sxlk5clz6in7jscqaq530c84xqgy537f6cq3vr2p";
+    sha256 = "0skd16j969mb2kgq503wskaw8clyhkw135ny2nsqv5j2zjpr71ap";
   };
 
   # vendor directory is part of repository
   vendorSha256 = null;
 
   # make sure version gets set at compile time
-  buildFlagsArray = [ "-ldflags=-s -w -X main.vshVersion=v${version}" ];
+  ldflags = [ "-s" "-w" "-X main.vshVersion=v${version}" ];
 
   meta = with lib; {
     description = "HashiCorp Vault interactive shell";

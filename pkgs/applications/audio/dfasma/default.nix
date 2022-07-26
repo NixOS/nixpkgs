@@ -57,7 +57,7 @@ in mkDerivation rec {
       there are basic functionalities to align the signals in time and
       amplitude, this software does not aim to be an audio editor.
     '';
-    homepage = "http://gillesdegottex.github.io/dfasma/";
+    homepage = "https://gillesdegottex.gitlab.io/dfasma-website/";
     license = [ licenses.gpl3Plus reaperFork.meta.license ];
     platforms = platforms.linux;
   };

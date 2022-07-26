@@ -2,32 +2,30 @@
 
 stdenv.mkDerivation rec {
   pname = "ocaml-findlib";
-  version = "1.9.1";
+  version = "1.9.3";
 
   src = fetchurl {
     url = "http://download.camlcity.org/download/findlib-${version}.tar.gz";
-    sha256 = "sha256-K0K4vVRIjWTEvzy3BUtLN70wwdwSvUMeoeTXrYqYD+I=";
+    sha256 = "sha256:0hfcwamcvinmww59b5i4yxbf0kxyzkp5qv3d1c7ybn9q52vgq463";
   };
 
-  buildInputs = [m4 ncurses ocaml];
+  nativeBuildInputs = [m4 ocaml];
+  buildInputs = [ ncurses ];
 
   patches = [ ./ldconf.patch ./install_topfind.patch ];
 
   dontAddPrefix=true;
+  dontAddStaticConfigureFlags = true;
+  configurePlatforms = [];
 
-  preConfigure=''
-    configureFlagsArray=(
-      -bindir $out/bin
-      -mandir $out/share/man
-      -sitelib $out/lib/ocaml/${ocaml.version}/site-lib
-      -config $out/etc/findlib.conf
-    )
-  '';
+  configureFlags = [
+      "-bindir" "${placeholder "out"}/bin"
+      "-mandir" "${placeholder "out"}/share/man"
+      "-sitelib" "${placeholder "out"}/lib/ocaml/${ocaml.version}/site-lib"
+      "-config" "${placeholder "out"}/etc/findlib.conf"
+  ];
 
-  buildPhase = ''
-    make all
-    make opt
-  '';
+  buildFlags = [ "all" "opt" ];
 
   setupHook = writeText "setupHook.sh" ''
     addOCamlPath () {
@@ -37,24 +35,31 @@ stdenv.mkDerivation rec {
         if test -d "''$1/lib/ocaml/${ocaml.version}/site-lib/stublibs"; then
             export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/stublibs"
         fi
+    }
+    exportOcamlDestDir () {
         export OCAMLFIND_DESTDIR="''$out/lib/ocaml/${ocaml.version}/site-lib/"
+    }
+    createOcamlDestDir () {
         if test -n "''${createFindlibDestdir-}"; then
           mkdir -p $OCAMLFIND_DESTDIR
         fi
     }
 
+    # run for every buildInput
     addEnvHooks "$targetOffset" addOCamlPath
+    # run before installPhase, even without buildInputs, and not in nix-shell
+    preInstallHooks+=(createOcamlDestDir)
+    # run even in nix-shell, and even without buildInputs
+    addEnvHooks "$hostOffset" exportOcamlDestDir
   '';
 
   meta = {
-    homepage = "http://projects.camlcity.org/projects/findlib.html";
     description = "O'Caml library manager";
+    homepage = "http://projects.camlcity.org/projects/findlib.html";
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ maggesi vbmithr ];
+    mainProgram = "ocamlfind";
     platforms = ocaml.meta.platforms or [];
-    maintainers = [
-      lib.maintainers.maggesi
-      lib.maintainers.vbmithr
-    ];
   };
 }
 

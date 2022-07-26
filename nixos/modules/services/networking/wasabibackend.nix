@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 let
   cfg = config.services.wasabibackend;
+  opt = options.services.wasabibackend;
 
-  inherit (lib) mkEnableOption mkIf mkOption optionalAttrs optionalString types;
+  inherit (lib) literalExpression mkEnableOption mkIf mkOption optionalAttrs optionalString types;
 
   confOptions = {
       BitcoinRpcConnectionString = "${cfg.rpc.user}:${cfg.rpc.password}";
@@ -103,6 +104,7 @@ in {
       group = mkOption {
         type = types.str;
         default = cfg.user;
+        defaultText = literalExpression "config.${opt.user}";
         description = "The group as which to run the wasabibackend node.";
       };
     };

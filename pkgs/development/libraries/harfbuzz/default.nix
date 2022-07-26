@@ -21,10 +21,16 @@
 , gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_43
+# for passthru.tests
+, gimp
+, gtk3
+, gtk4
+, mapnik
+, qt5
 }:
 
 let
-  version = "2.8.2";
+  version = "3.3.2";
   inherit (lib) optional optionals optionalString;
   mesonFeatureFlag = opt: b:
     "-D${opt}=${if b then "enabled" else "disabled"}";
@@ -32,18 +38,18 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "harfbuzz${optionalString withIcu "-icu"}-${version}";
+  pname = "harfbuzz${optionalString withIcu "-icu"}";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "harfbuzz";
     repo = "harfbuzz";
     rev = version;
-    sha256 = "sha256-uqcwfe5Oa3S0tyZDzqhIQfRFEv/HaiVWzVvwjqpLo5g=";
+    sha256 = "sha256-UbYqV7Ch9ugTIwSsCpjnS8H7tcv4P3OVpFDFDZtQCk0=";
   };
 
   postPatch = ''
-    patchShebangs src/*.py
-    patchShebangs test
+    patchShebangs src/*.py test
   '' + lib.optionalString stdenv.isDarwin ''
     # ApplicationServices.framework headers have cast-align warnings.
     substituteInPlace src/hb.hh \
@@ -98,6 +104,11 @@ stdenv.mkDerivation {
       ln -s {'${harfbuzz.out}',"$out"}/lib/libharfbuzz.0.dylib
     ''}
   '';
+
+  passthru.tests = {
+    inherit gimp gtk3 gtk4 mapnik;
+    inherit (qt5) qtbase;
+  };
 
   meta = with lib; {
     description = "An OpenType text shaping engine";

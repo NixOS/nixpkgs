@@ -3,19 +3,21 @@
 , click-default-group
 , incremental
 , jinja2
+, mock
 , pytestCheckHook
 , toml
 , twisted
+, setuptools
 , git # shells out to git
 }:
 
 buildPythonPackage rec {
   pname = "towncrier";
-  version = "19.9.0";
+  version = "21.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "19916889879353a8863f3de8cb1ef19b305a0b5cfd9d36159d76ca2fef08e9aa";
+    sha256 = "sha256-nLb0XBbhoe7J0OdlEWXnvmDNCrgdE6XJbKl6SYrof0g=";
   };
 
   propagatedBuildInputs = [
@@ -24,11 +26,23 @@ buildPythonPackage rec {
     incremental
     jinja2
     toml
+    setuptools
   ];
 
   # zope.interface collision
   doCheck = !isPy27;
-  checkInputs = [ git twisted pytestCheckHook ];
+
+  preCheck = ''
+    export PATH=$out/bin:$PATH
+  '';
+
+  checkInputs = [
+    git
+    mock
+    twisted
+    pytestCheckHook
+  ];
+
   pythonImportsCheck = [ "towncrier" ];
 
   meta = with lib; {

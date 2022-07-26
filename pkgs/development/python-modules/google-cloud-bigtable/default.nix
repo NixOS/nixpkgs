@@ -3,26 +3,30 @@
 , fetchPypi
 , google-api-core
 , google-cloud-core
-, grpc_google_iam_v1
+, grpc-google-iam-v1
 , libcst
 , mock
 , proto-plus
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-bigtable";
-  version = "2.2.0";
+  version = "2.10.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-89fXmr3jHTtp8QOMFeueJwslHJ7Q6srQ/Kxsp0mLlKU=";
+    hash = "sha256-f4wMYlmex0QrcJrl33VyOZgbURYnIjeWDR7rz4MzMJw=";
   };
 
   propagatedBuildInputs = [
     google-api-core
     google-cloud-core
-    grpc_google_iam_v1
+    grpc-google-iam-v1
     libcst
     proto-plus
   ];
@@ -51,6 +55,6 @@ buildPythonPackage rec {
     description = "Google Cloud Bigtable API client library";
     homepage = "https://github.com/googleapis/python-bigtable";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

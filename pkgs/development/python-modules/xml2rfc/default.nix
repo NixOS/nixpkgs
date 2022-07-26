@@ -1,16 +1,53 @@
-{ lib, fetchPypi, buildPythonPackage, pythonAtLeast, intervaltree, pyflakes, requests, lxml, google-i18n-address
-, pycountry, html5lib, six, kitchen, pypdf2, dict2xml, weasyprint, pyyaml, jinja2, configargparse, appdirs
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, intervaltree
+, pyflakes
+, requests
+, lxml
+, google-i18n-address
+, pycountry
+, html5lib
+, six
+, kitchen
+, pypdf2
+, dict2xml
+, weasyprint
+, pyyaml
+, jinja2
+, configargparse
+, appdirs
+, decorator
+, pycairo
+, pytestCheckHook
+, python-fontconfig
 }:
 
 buildPythonPackage rec {
   pname = "xml2rfc";
-  version = "3.8.0";
-  disabled = pythonAtLeast "3.9";
+  version = "3.12.4";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "8e25a9d73acf57ade798fc67841277dbbdb81ced390e6f84362370305b127426";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "ietf-tools";
+    repo = "xml2rfc";
+    rev = "v${version}";
+    sha256 = "sha256-TAu2Ls553t7wJ/Jhgu+Ff+H4P6az0Du8OL00JjZyCDs=";
   };
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "SHELL := /bin/bash" "SHELL := bash" \
+      --replace "test flaketest" "test" \
+      --replace "python setup.py --quiet install" ""
+    substituteInPlace setup.py \
+      --replace "'tox'," ""
+    substituteInPlace requirements.txt \
+      --replace "jinja2>=2.11,<3.0" "jinja2" \
+      --replace "markupsafe==2.0.1" "markupsafe"
+  '';
 
   propagatedBuildInputs = [
     intervaltree
@@ -31,17 +68,25 @@ buildPythonPackage rec {
     appdirs
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
+  checkInputs = [
+    decorator
+    pycairo
+    pytestCheckHook
+    python-fontconfig
+  ];
+
+   # requires Noto Serif and Roboto Mono font
+  doCheck = false;
+
+  checkPhase = ''
+    make tests-no-network
   '';
 
-  # lxml tries to fetch from the internet
-  doCheck = false;
   pythonImportsCheck = [ "xml2rfc" ];
 
   meta = with lib; {
     description = "Tool generating IETF RFCs and drafts from XML sources";
-    homepage = "https://tools.ietf.org/tools/xml2rfc/trac/";
+    homepage = "https://github.com/ietf-tools/xml2rfc";
     # Well, parts might be considered unfree, if being strict; see:
     # http://metadata.ftp-master.debian.org/changelogs/non-free/x/xml2rfc/xml2rfc_2.9.6-1_copyright
     license = licenses.bsd3;

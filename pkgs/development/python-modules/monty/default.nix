@@ -5,27 +5,32 @@
 , msgpack
 , pytestCheckHook
 , numpy
+, pandas
 , pydantic
 , pymongo
-, ruamel_yaml
+, ruamel-yaml
 , tqdm
 }:
 
 buildPythonPackage rec {
   pname = "monty";
-  version = "2021.6.10";
+  version = "2022.4.26";
   disabled = pythonOlder "3.5"; # uses type annotations
 
-  # No tests in Pypi
   src = fetchFromGitHub {
     owner = "materialsvirtuallab";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "01fhl4pl5gj4ahph4lxcm0fmglh0bjw6jz9ckmgzviasg4l1j6h4";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-SQku10nzTSuO5ISUDyDKAEoMhBBxPzyLNhoAyrlKH+E=";
   };
 
+  postPatch = ''
+    substituteInPlace tests/test_os.py \
+      --replace 'self.assertEqual("/usr/bin/find", which("/usr/bin/find"))' '#'
+  '';
+
   propagatedBuildInputs = [
-    ruamel_yaml
+    ruamel-yaml
     tqdm
     msgpack
   ];
@@ -33,14 +38,10 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
     numpy
+    pandas
     pydantic
     pymongo
   ];
-
-  preCheck = ''
-    substituteInPlace tests/test_os.py \
-      --replace 'self.assertEqual("/usr/bin/find", which("/usr/bin/find"))' '#'
-  '';
 
   meta = with lib; {
     description = "Serves as a complement to the Python standard library by providing a suite of tools to solve many common problems";

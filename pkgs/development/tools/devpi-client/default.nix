@@ -1,51 +1,70 @@
 { lib
+, argon2-cffi-bindings
 , buildPythonApplication
-, fetchPypi
-# buildInputs
-, glibcLocales
-, pkginfo
 , check-manifest
-# propagatedBuildInputs
-, py
 , devpi-common
-, pluggy
-, setuptools
-# CheckInputs
-, pytest
-, pytest-flake8
-, webtest
-, mock
 , devpi-server
-, tox
-, sphinx
-, wheel
+, fetchPypi
 , git
+, glibcLocales
 , mercurial
+, mock
+, pkginfo
+, pluggy
+, py
+, pytestCheckHook
+, pytest-flake8
+, setuptools
+, sphinx
+, tox
+, webtest
+, wheel
 }:
 
 buildPythonApplication rec {
   pname = "devpi-client";
-  version = "5.2.1";
+  version = "5.2.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "74ff365efeaa7b78c9eb7f6d7bd349ccd6252a6cdf879bcb4137ee5ff0fb127a";
+    hash = "sha256-Ni6ybpUTankkkYYcwnKNFKYwmp1MTxOnucPm/TneWOw=";
   };
 
-  buildInputs = [ glibcLocales ];
-
-  propagatedBuildInputs = [ py devpi-common pluggy setuptools check-manifest pkginfo ];
-
-  checkInputs = [
-    pytest pytest-flake8 webtest mock
-    devpi-server tox
-    sphinx wheel git mercurial
+  buildInputs = [
+    glibcLocales
   ];
 
-  # --fast skips tests which try to start a devpi-server improperly
-  checkPhase = ''
-    HOME=$TMPDIR py.test --fast
+  propagatedBuildInputs = [
+    argon2-cffi-bindings
+    check-manifest
+    devpi-common
+    pkginfo
+    pluggy
+    py
+    setuptools
+  ];
+
+  checkInputs = [
+    devpi-server
+    git
+    mercurial
+    mock
+    pytestCheckHook
+    pytest-flake8
+    sphinx
+    tox
+    webtest
+    wheel
+  ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d);
   '';
+
+  pytestFlagsArray = [
+    # --fast skips tests which try to start a devpi-server improperly
+    "--fast"
+  ];
 
   LC_ALL = "en_US.UTF-8";
 
@@ -57,5 +76,4 @@ buildPythonApplication rec {
     license = licenses.mit;
     maintainers = with maintainers; [ lewo makefu ];
   };
-
 }

@@ -1,12 +1,15 @@
 { lib, stdenv
 , fetchurl
 , addOpenGLRunpath
-, cudaSupport ? false, symlinkJoin, cudatoolkit, cudnn, nvidia_x11
+, cudaSupport ? false, cudaPackages ? {}
+, symlinkJoin
 }:
 
 with lib;
 let
   broken = !stdenv.isLinux && !stdenv.isDarwin;
+
+  inherit (cudaPackages) cudatoolkit cudnn;
 
   tfType = if cudaSupport then "gpu" else "cpu";
 
@@ -17,7 +20,7 @@ let
   platform =  "x86_64";
 
   rpath = makeLibraryPath ([stdenv.cc.libc stdenv.cc.cc.lib]
-                           ++ optionals cudaSupport [ cudatoolkit.out cudatoolkit.lib cudnn nvidia_x11 ]);
+                           ++ optionals cudaSupport [ cudatoolkit.out cudatoolkit.lib cudnn ]);
 
   packages = import ./binary-hashes.nix;
 
@@ -65,6 +68,7 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "C API for TensorFlow";
     homepage = "https://www.tensorflow.org/install/lang_c";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };

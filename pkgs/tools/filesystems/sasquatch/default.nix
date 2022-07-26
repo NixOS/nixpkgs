@@ -43,12 +43,26 @@ stdenv.mkDerivation rec {
   patchFlags = [ "-p0" ];
 
   postPatch = ''
+    # Drop blanket -Werror to avoid build failure on fresh toolchains
+    # like gcc-11.
+    substituteInPlace squashfs-tools/Makefile --replace ' -Werror' ' '
     cd squashfs-tools
   '';
 
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: unsquashfs_xattr.o:/build/squashfs4.4/squashfs-tools/error.h:34: multiple definition of
+  #     `verbose'; unsquashfs.o:/build/squashfs4.4/squashfs-tools/error.h:34: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   installFlags = [ "INSTALL_DIR=\${out}/bin" ];
 
-  makeFlags = [ "XZ_SUPPORT=1" ]
+  makeFlags = [
+    "XZ_SUPPORT=1"
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "CXX=${stdenv.cc.targetPrefix}c++"
+    "AR=${stdenv.cc.targetPrefix}ar"
+  ]
     ++ lib.optional lz4Support "LZ4_SUPPORT=1";
 
   meta = with lib; {

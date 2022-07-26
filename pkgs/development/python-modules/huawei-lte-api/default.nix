@@ -2,23 +2,23 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, dicttoxml
+, pycryptodomex
+, pytestCheckHook
 , requests
 , xmltodict
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "huawei-lte-api";
-  version = "1.4.18";
+  version = "1.6.1";
 
   disabled = pythonOlder "3.4";
 
   src = fetchFromGitHub {
     owner = "Salamek";
     repo = "huawei-lte-api";
-    rev = version;
-    sha256 = "1qaqxmh03j10wa9wqbwgc5r3ays8wfr7bldvsm45fycr3qfyn5fg";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ZjSD+/okbFF14YQgCzzH1+FDS+MZQZb1JUINOKdSshs=";
   };
 
   postPatch = ''
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    dicttoxml
+    pycryptodomex
     requests
     xmltodict
   ];

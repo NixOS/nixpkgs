@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, swig, wireshark, check, rsync, libpcap, gawk, libedit, pcre }:
+{ lib, stdenv, fetchurl, cmake, swig, wireshark, check, rsync, libpcap, gawk, libedit, pcre, nixosTests }:
 
 let version = "0.3.0"; in
 
@@ -23,6 +23,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ swig wireshark check rsync libpcap gawk libedit pcre ];
+
+  passthru.tests = { inherit (nixosTests) haka; };
 
   meta = {
     description = "A collection of tools that allows capturing TCP/IP packets and filtering them based on Lua policy files";

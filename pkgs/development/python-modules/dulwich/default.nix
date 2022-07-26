@@ -12,15 +12,20 @@
 , mock
 , pkgs
 , urllib3
+, paramiko
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  version = "0.20.24";
+  version = "0.20.44";
   pname = "dulwich";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1wacchqxxwbhwnfnnhlb40s66f92lkvz6423j4c1w6wb585aqqbb";
+    hash = "sha256-EOjXN2PdMMhqmaFa3ov886uP6WUyzfSX6MsdEYMjUrg=";
   };
 
   LC_ALL = "en_US.UTF-8";
@@ -39,11 +44,14 @@ buildPythonPackage rec {
     gpgme
     pkgs.gnupg
     mock
+    paramiko
   ];
 
   doCheck = !stdenv.isDarwin;
 
-  pythonImportsCheck = [ "dulwich" ];
+  pythonImportsCheck = [
+    "dulwich"
+  ];
 
   meta = with lib; {
     description = "Simple Python implementation of the Git file formats and protocols";

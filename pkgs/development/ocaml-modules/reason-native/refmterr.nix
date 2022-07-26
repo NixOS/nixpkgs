@@ -3,7 +3,7 @@
 {
   pname = "refmterr";
 
-  buildInputs = [
+  nativeBuildInputs = [
     reason
   ];
 

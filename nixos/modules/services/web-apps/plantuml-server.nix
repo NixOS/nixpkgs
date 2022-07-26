@@ -16,7 +16,23 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.plantuml-server;
+        defaultText = literalExpression "pkgs.plantuml-server";
         description = "PlantUML server package to use";
+      };
+
+      packages = {
+        jdk = mkOption {
+          type = types.package;
+          default = pkgs.jdk;
+          defaultText = literalExpression "pkgs.jdk";
+          description = "JDK package to use for the server";
+        };
+        jetty = mkOption {
+          type = types.package;
+          default = pkgs.jetty;
+          defaultText = literalExpression "pkgs.jetty";
+          description = "Jetty package to use for the server";
+        };
       };
 
       user = mkOption {
@@ -57,7 +73,8 @@ in
 
       graphvizPackage = mkOption {
         type = types.package;
-        default = pkgs.graphviz_2_32;
+        default = pkgs.graphviz;
+        defaultText = literalExpression "pkgs.graphviz";
         description = "Package containing the dot executable.";
       };
 
@@ -103,10 +120,10 @@ in
         ALLOW_PLANTUML_INCLUDE = if cfg.allowPlantumlInclude then "true" else "false";
       };
       script = ''
-      ${pkgs.jre}/bin/java \
-        -jar ${pkgs.jetty}/start.jar \
+      ${cfg.packages.jdk}/bin/java \
+        -jar ${cfg.packages.jetty}/start.jar \
           --module=deploy,http,jsp \
-          jetty.home=${pkgs.jetty} \
+          jetty.home=${cfg.packages.jetty} \
           jetty.base=${cfg.package} \
           jetty.http.host=${cfg.listenHost} \
           jetty.http.port=${builtins.toString cfg.listenPort}

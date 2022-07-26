@@ -110,10 +110,17 @@ in {
     package = mkOption {
       description = "The zookeeper package to use";
       default = pkgs.zookeeper;
-      defaultText = "pkgs.zookeeper";
+      defaultText = literalExpression "pkgs.zookeeper";
       type = types.package;
     };
 
+    jre = mkOption {
+      description = "The JRE with which to run Zookeeper";
+      default = cfg.package.jre;
+      defaultText = literalExpression "pkgs.zookeeper.jre";
+      example = literalExpression "pkgs.jre";
+      type = types.package;
+    };
   };
 
 
@@ -131,7 +138,7 @@ in {
       after = [ "network.target" ];
       serviceConfig = {
         ExecStart = ''
-          ${pkgs.jre}/bin/java \
+          ${cfg.jre}/bin/java \
             -cp "${cfg.package}/lib/*:${configDir}" \
             ${escapeShellArgs cfg.extraCmdLineOptions} \
             -Dzookeeper.datadir.autocreate=false \
@@ -148,9 +155,11 @@ in {
     };
 
     users.users.zookeeper = {
-      uid = config.ids.uids.zookeeper;
+      isSystemUser = true;
+      group = "zookeeper";
       description = "Zookeeper daemon user";
       home = cfg.dataDir;
     };
+    users.groups.zookeeper = {};
   };
 }

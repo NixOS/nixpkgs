@@ -19,6 +19,7 @@
 , protobuf
 , sqlite
 , taglib
+, libgpod
 , libpulseaudio
 , libselinux
 , libsepol
@@ -36,14 +37,20 @@
 
 mkDerivation rec {
   pname = "strawberry";
-  version = "0.9.3";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "jonaski";
     repo = pname;
     rev = version;
-    sha256 = "sha256-OOdHsii6O4okVHDhrqCNJ7WVB0VKPs8q0AhEY+IvflE=";
+    hash = "sha256-6d7oB54IPI+G5Mhkj+PdQQY93r1SBE2R06qSGIacj8Q=";
   };
+
+  # the big strawberry shown in the context menu is *very* much in your face, so use the grey version instead
+  postPatch = ''
+    substituteInPlace src/context/contextalbum.cpp \
+      --replace pictures/strawberry.png pictures/strawberry-grey.png
+  '';
 
   buildInputs = [
     alsa-lib
@@ -63,6 +70,7 @@ mkDerivation rec {
     qtbase
     qtx11extras
   ] ++ lib.optionals stdenv.isLinux [
+    libgpod
     libpulseaudio
     libselinux
     libsepol
@@ -70,8 +78,10 @@ mkDerivation rec {
   ] ++ lib.optionals withGstreamer (with gst_all_1; [
     glib-networking
     gstreamer
+    gst-libav
     gst-plugins-base
     gst-plugins-good
+    gst-plugins-bad
     gst-plugins-ugly
   ]) ++ lib.optional withVlc libvlc;
 

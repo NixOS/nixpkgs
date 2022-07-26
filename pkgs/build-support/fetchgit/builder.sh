@@ -11,6 +11,7 @@ $SHELL $fetcher --builder --url "$url" --out "$out" --rev "$rev" \
   ${fetchLFS:+--fetch-lfs} \
   ${deepClone:+--deepClone} \
   ${fetchSubmodules:+--fetch-submodules} \
+  ${sparseCheckout:+--sparse-checkout "$sparseCheckout"} \
   ${branchName:+--branch-name "$branchName"}
 
 runHook postFetch

@@ -1,29 +1,32 @@
 { stdenv, lib, fetchFromGitHub, ocaml, findlib, ocsigen-toolkit, pgocaml_ppx, safepass, yojson
-, cohttp-lwt-unix
+, cohttp-lwt-unix, eliom
 , resource-pooling
+, ocamlnet
+, ocsigen-ppx-rpc
 }:
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-ocsigen-start-${version}";
-  version = "2.18.0";
+  pname = "ocaml${ocaml.version}-ocsigen-start";
+  version = "6.0.1";
 
-  buildInputs = [ ocaml findlib ];
-  propagatedBuildInputs = [ pgocaml_ppx safepass ocsigen-toolkit yojson resource-pooling cohttp-lwt-unix ];
+  nativeBuildInputs = [ ocaml findlib eliom ];
+  buildInputs = [ ocsigen-ppx-rpc ];
+  propagatedBuildInputs = [ pgocaml_ppx safepass ocsigen-toolkit yojson resource-pooling cohttp-lwt-unix ocamlnet ];
+
+  strictDeps = true;
 
   patches = [ ./templates-dir.patch ];
-
-  postPatch = ''
-  substituteInPlace "src/os_db.ml" --replace "citext" "text"
-  '';
-
-  createFindlibDestdir = true;
 
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "ocsigen-start";
     rev = version;
-    sha256 = "0wvh4c26g6qd6i1fryilcqz9giz7v6pnhc90sknhxh6jmwrbjl50";
+    sha256 = "sha256:097bjaxvb1canilmqr8ay3ihig2msq7z8mi0g0rnbciikj1jsrym";
   };
+
+  preInstall = ''
+    mkdir -p $OCAMLFIND_DESTDIR
+  '';
 
   meta = {
     homepage = "http://ocsigen.org/ocsigen-start";
@@ -31,7 +34,7 @@ stdenv.mkDerivation rec {
     longDescription =''
      An Eliom application skeleton, ready to use to build your own application with users, (pre)registration, notifications, etc.
       '';
-    license = lib.licenses.lgpl21;
+    license = lib.licenses.lgpl21Only;
     inherit (ocaml.meta) platforms;
     maintainers = [ lib.maintainers.gal_bolle ];
   };

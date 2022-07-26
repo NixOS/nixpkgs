@@ -1,53 +1,50 @@
 { lib
-, fetchurl
+, fetchpatch
 , fetchFromGitLab
 , python3
 , appstream-glib
 , desktop-file-utils
 , glib
-, gtk3
 , libxml2
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook4
 , gobject-introspection
-, libhandy
+, libadwaita
 , librsvg
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "banking";
-  version = "0.3.0";
+  version = "0.5.1";
   format = "other";
 
   src = fetchFromGitLab {
     owner = "tabos";
     repo = "banking";
     rev = version;
-    sha256 = "1w5x9iczw5hb9bfdm1df37n8xhdrida1yfrd82k9l8hb1k4q3h9d";
+    sha256 = "sha256-tZlBpDcwQ/aWroP2sFQBZcvmBD26PiY7q/8xFA8GnVc=";
   };
 
   postPatch = ''
-    patchShebangs meson_post_install.py
+    patchShebangs meson_post_conf.py meson_post_install.py
   '';
 
   nativeBuildInputs = [
     appstream-glib # for appstream-util
     desktop-file-utils # for desktop-file-validate
     glib # for glib-compile-resources
-    gtk3 # for gtk-update-icon-cache
     libxml2 # for xmllint
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     gobject-introspection
-    gtk3
-    libhandy
+    libadwaita
     librsvg
   ];
 
@@ -56,12 +53,15 @@ python3.pkgs.buildPythonApplication rec {
     fints
     mt-940
     pygobject3
+    pysqlitecipher
+    schwifty
   ];
 
   meta = with lib; {
     description = "Banking application for small screens";
-    homepage = "https://tabos.gitlab.io/project/banking/";
+    homepage = "https://tabos.gitlab.io/projects/banking/";
     license = licenses.gpl3Plus;
+    mainProgram = "org.tabos.banking";
     maintainers = with maintainers; [ dotlambda ];
   };
 }

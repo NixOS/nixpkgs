@@ -1,18 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, cmake, openssl }:
+{ lib, stdenv, fetchFromGitHub, cmake, openssl, postgresql, zstd }:
 
 stdenv.mkDerivation rec {
   pname = "odyssey";
-  version = "1.0rc1";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "yandex";
     repo = pname;
     rev = version;
-    sha256 = "0p9zzazx3bhwz7sz8l757lwdj8qx0ij2k3g0d12prs0xfi1qhcmz";
+    sha256 = "sha256-1ALTKRjpKmmFcAuhmgpcbJBkNuUlTyau8xWDRHh7gf0=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl postgresql zstd ];
+  cmakeFlags = [ "-DPQ_LIBRARY=${postgresql.lib}/lib" ];
 
   installPhase = ''
     install -Dm755 -t $out/bin sources/odyssey

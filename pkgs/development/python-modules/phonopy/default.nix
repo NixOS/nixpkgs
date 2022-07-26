@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "phonopy";
-  version = "2.10.0";
+  version = "2.13.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "58485042ab7d88fc8b83744d18b2aefd677adb071c8a717ac3710458192743d7";
+    sha256 = "sha256-D7pBtcMbxMpt4XJVYDkslRDU4Uyk83AtbIIztUbji6A=";
   };
 
   propagatedBuildInputs = [

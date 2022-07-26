@@ -5,7 +5,6 @@
 , meson
 , ninja
 , gettext
-, gobject-introspection
 , python3
 , gstreamer
 , orc
@@ -37,23 +36,22 @@
 , enableCdparanoia ? (!stdenv.isDarwin)
 , cdparanoia
 , glib
+, withIntrospection ? stdenv.buildPlatform == stdenv.hostPlatform
+, gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-base";
-  version = "1.18.4";
+  version = "1.20.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "08w3ivbc6n4vdds2ap6q7l8zdk9if8417nznyqidf0adm0lk5r99";
+    sha256 = "0162ly7pscymq6bsf1d5fva2k9s16zvfwyi1q6z4yfd97d0sdn4n";
   };
 
-  patches = [
-    ./fix_pkgconfig_includedir.patch
-  ];
-
+  strictDeps = true;
   nativeBuildInputs = [
     meson
     ninja
@@ -62,10 +60,11 @@ stdenv.mkDerivation rec {
     gettext
     orc
     glib
-    gobject-introspection
-
+    gstreamer
     # docs
     # TODO add hotdoc here
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
   ] ++ lib.optional enableWayland wayland;
 
   buildInputs = [
@@ -92,6 +91,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals enableWayland [
     wayland
     wayland-protocols
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
   ] ++ lib.optional enableCocoa Cocoa
     ++ lib.optional enableCdparanoia cdparanoia;
 
@@ -105,8 +106,9 @@ stdenv.mkDerivation rec {
     "-Dgl-graphene=disabled" # not packaged in nixpkgs as of writing
     # See https://github.com/GStreamer/gst-plugins-base/blob/d64a4b7a69c3462851ff4dcfa97cc6f94cd64aef/meson_options.txt#L15 for a list of choices
     "-Dgl_winsys=${lib.concatStringsSep "," (lib.optional enableX11 "x11" ++ lib.optional enableWayland "wayland" ++ lib.optional enableCocoa "cocoa")}"
+    "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-Dintrospection=disabled"
+    "-Dtests=disabled"
   ]
   ++ lib.optional (!enableX11) "-Dx11=disabled"
   # TODO How to disable Wayland?
@@ -119,7 +121,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs \
-      common/scangobj-merge.py \
+      scripts/meson-pkg-config-file-fixup.py \
       scripts/extract-release-date-from-doap-file.py
   '';
 

@@ -18,13 +18,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meld";
-  version = "3.21.0";
+  version = "3.21.2";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "toARTVq3kzJFSf1Y9OsgLY4oDAYzoLdl7ebfs0FgqBs=";
+    sha256 = "IV+odABTZ5TFllddE6nIfijxjdNyW43/mG2y4pM6cU4=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +59,7 @@ python3.pkgs.buildPythonApplication rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
-      versionPolicy = "odd-unstable";
+      versionPolicy = "none"; # should be odd-unstable but we are tracking unstable versions for now
     };
   };
 

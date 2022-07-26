@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "A library of web-related functions";
     homepage = "https://github.com/scrapy/w3lib";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ drewkett ];
+    maintainers = with maintainers; [ ];
   };
 }

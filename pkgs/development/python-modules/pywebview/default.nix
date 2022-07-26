@@ -2,23 +2,29 @@
 , buildPythonPackage
 , fetchFromGitHub
 , importlib-resources
+, proxy_tools
+, pygobject3
 , pyqtwebengine
 , pytest
 , pythonOlder
 , qt5
+, qtpy
+, six
 , xvfb-run
 }:
 
 buildPythonPackage rec {
   pname = "pywebview";
-  version = "3.4";
+  version = "3.6.3";
+  format = "setuptools";
+
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "r0x0r";
     repo = "pywebview";
     rev = version;
-    sha256 = "sha256-3JHwtw8oReolEl4k8cdt7GCVGNkfWWJN6EnZYHxzDO8=";
+    hash = "sha256-qOLK4MHdpmcCazCNfojncD8XH7OJB2H/pIW5XAJAlDo=";
   };
 
   nativeBuildInputs = [
@@ -27,10 +33,16 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pyqtwebengine
-  ] ++ lib.optionals (pythonOlder "3.7") [ importlib-resources ];
+    proxy_tools
+    six
+  ] ++ lib.optionals (pythonOlder "3.7") [
+    importlib-resources
+  ];
 
   checkInputs = [
+    pygobject3
     pytest
+    qtpy
     xvfb-run
   ];
 
@@ -52,9 +64,13 @@ buildPythonPackage rec {
     popd
   '';
 
+  pythonImportsCheck = [
+    "webview"
+  ];
+
   meta = with lib; {
-    homepage = "https://github.com/r0x0r/pywebview";
     description = "Lightweight cross-platform wrapper around a webview";
+    homepage = "https://github.com/r0x0r/pywebview";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jojosch ];
   };

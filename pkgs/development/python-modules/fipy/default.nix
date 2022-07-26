@@ -39,6 +39,14 @@ buildPythonPackage rec {
   ] ++ lib.optionals isPy27 [ pysparse ]
   ++ lib.optionals (!stdenv.isDarwin) [ gmsh ];
 
+  # Reading version string from Gmsh is broken in latest release of FiPy
+  # This issue is repaired on master branch of FiPy
+  # Fixed with: https://github.com/usnistgov/fipy/pull/848/files
+  # Remove patch with next release.
+  patches = [ ./gmsh.patch ];
+
+  checkInputs = lib.optionals (!stdenv.isDarwin) [ gmsh ];
+
   checkPhase = ''
     export OMPI_MCA_plm_rsh_agent=${openssh}/bin/ssh
     ${python.interpreter} setup.py test --modules

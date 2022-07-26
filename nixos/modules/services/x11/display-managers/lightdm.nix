@@ -146,9 +146,9 @@ in
       };
 
       background = mkOption {
-        type = types.path;
+        type = types.either types.path (types.strMatching "^#[0-9]\{6\}$");
         # Manual cannot depend on packages, we are actually setting the default in config below.
-        defaultText = "pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom.gnomeFilePath";
+        defaultText = literalExpression "pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom.gnomeFilePath";
         description = ''
           The background image or color to use.
         '';
@@ -267,6 +267,8 @@ in
     # Enable the accounts daemon to find lightdm's dbus interface
     environment.systemPackages = [ lightdm ];
 
+    security.polkit.enable = true;
+
     security.pam.services.lightdm.text = ''
         auth      substack      login
         account   include       login
@@ -284,8 +286,8 @@ in
         password required       pam_deny.so
 
         session  required       pam_succeed_if.so audit quiet_success user = lightdm
-        session  required       pam_env.so conffile=${config.system.build.pamEnvironment} readenv=0
-        session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
+        session  required       pam_env.so conffile=/etc/pam/environment readenv=0
+        session  optional       ${config.systemd.package}/lib/security/pam_systemd.so
         session  optional       pam_keyinit.so force revoke
         session  optional       pam_permit.so
     '';
@@ -312,7 +314,7 @@ in
     };
 
     systemd.tmpfiles.rules = [
-      "d /run/lightdm 0711 lightdm lightdm 0"
+      "d /run/lightdm 0711 lightdm lightdm -"
       "d /var/cache/lightdm 0711 root lightdm -"
       "d /var/lib/lightdm 1770 lightdm lightdm -"
       "d /var/lib/lightdm-data 1775 lightdm lightdm -"

@@ -3,11 +3,15 @@
   pkgs ? import ../.. {} // { lib = throw "pkgs.lib accessed, but the lib tests should use nixpkgs' lib path directly!"; }
 }:
 
-pkgs.runCommandNoCC "nixpkgs-lib-tests" {
+pkgs.runCommand "nixpkgs-lib-tests" {
   buildInputs = [
     pkgs.nix
     (import ./check-eval.nix)
     (import ./maintainers.nix {
+      inherit pkgs;
+      lib = import ../.;
+    })
+    (import ./teams.nix {
       inherit pkgs;
       lib = import ../.;
     })
@@ -23,6 +27,10 @@ pkgs.runCommandNoCC "nixpkgs-lib-tests" {
     export NIX_STORE_DIR=$TEST_ROOT/store
     export PAGER=cat
     cacheDir=$TEST_ROOT/binary-cache
+
+    mkdir -p $NIX_CONF_DIR
+    echo "experimental-features = nix-command" >> $NIX_CONF_DIR/nix.conf
+
     nix-store --init
 
     cp -r ${../.} lib

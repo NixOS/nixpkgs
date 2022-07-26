@@ -1,18 +1,18 @@
-{ lib, stdenv, fetchurl, pkg-config, meson, ninja, python3, gtk3, glibmm, cairomm, pangomm, atkmm, epoxy, gnome }:
+{ lib, stdenv, fetchurl, pkg-config, meson, ninja, python3, gtk3, glibmm, cairomm, pangomm, atkmm, libepoxy, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "gtkmm";
-  version = "3.24.5";
+  version = "3.24.6";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1ri2msp3cmzi6r65ghwb8gfavfaxv0axpwi3q60nm7v8hvg36qw5";
+    sha256 = "Sz4ULpROFjO7oAiQBgXDQak8/XVaf6KgCwXQQTQfEdY=";
   };
 
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkg-config meson ninja python3 ];
-  buildInputs = [ epoxy ];
+  buildInputs = [ libepoxy ];
 
   propagatedBuildInputs = [ glibmm gtk3 atkmm cairomm pangomm ];
 
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
       packageName = pname;
       attrPath = "${pname}3";
       versionPolicy = "odd-unstable";
+      freeze = true;
     };
   };
 

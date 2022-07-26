@@ -2,17 +2,19 @@
 
 buildPythonPackage rec {
   pname = "pyodbc";
-  version = "4.0.30";
-  disabled = isPyPy;  # use pypypdbc instead
+  version = "4.0.34";
+  disabled = isPyPy; # use pypypdbc instead
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0skjpraar6hcwsy82612bpj8nw016ncyvvq88j5syrikxgp5saw5";
+    sha256 = "sha256-fqeGlTK5a41Smx8I6oV2X5TffkpY6Wiy+NRVNGoD5Fw=";
   };
 
   buildInputs = [ unixODBC ];
 
   doCheck = false; # tests require a database server
+
+  pythonImportsCheck = [ "pyodbc" ];
 
   meta = with lib; {
     description = "Python ODBC module to connect to almost any database";

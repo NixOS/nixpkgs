@@ -1,12 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, codecov
 , pyjwt
-, pylint
 , pytestCheckHook
-, pytest-cov
 , python-dateutil
+, pythonOlder
 , requests
 , responses
 , tox
@@ -14,21 +12,15 @@
 
 buildPythonPackage rec {
   pname = "ibm-cloud-sdk-core";
-  version = "3.10.0";
+  version = "3.15.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ab9520be99066ec41a24e31ac653c28953adc8fc349f0fa53a598e1802a79cd6";
+    hash = "sha256-CuVem9b7NhDsC2tXCg/+1DWZAqSHqJ0GuWZCmA/kesE=";
   };
-
-  checkInputs = [
-    codecov
-    pylint
-    pytestCheckHook
-    pytest-cov
-    responses
-    tox
-  ];
 
   propagatedBuildInputs = [
     pyjwt
@@ -36,8 +28,14 @@ buildPythonPackage rec {
     requests
   ];
 
-  # Various tests try to access credential files which are not included with the source distribution
+  checkInputs = [
+    pytestCheckHook
+    responses
+    tox
+  ];
+
   disabledTests = [
+    # Various tests try to access credential files which are not included with the source distribution
     "test_configure_service"
     "test_cp4d_authenticator"
     "test_cwd"
@@ -49,12 +47,18 @@ buildPythonPackage rec {
     "test_iam"
     "test_read_external_sources_2"
     "test_retry_config_external"
+    # assertion error due to requests brotli support
+    "test_http_client"
+  ];
+
+  disabledTestPaths = [
+    "test/test_container_token_manager.py"
   ];
 
   meta = with lib; {
     description = "Client library for the IBM Cloud services";
     homepage = "https://github.com/IBM/python-sdk-core";
     license = licenses.asl20;
-    maintainers = with maintainers; [ globin lheckemann ];
+    maintainers = with maintainers; [ globin ];
   };
 }

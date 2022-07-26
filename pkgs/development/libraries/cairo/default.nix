@@ -42,13 +42,31 @@ in stdenv.mkDerivation rec {
       url = "https://gitlab.freedesktop.org/cairo/cairo/commit/5e34c5a9640e49dcc29e6b954c4187cfc838dbd1.patch";
       sha256 = "yCwsDUY7efVvOZkA6a0bPS+RrVc8Yk9bfPwWHeOjq5o=";
     })
-  ] ++ optionals stdenv.hostPlatform.isDarwin [
+
+    # Fixes CVE-2020-35492; see https://github.com/NixOS/nixpkgs/issues/120364.
+    # CVE information: https://nvd.nist.gov/vuln/detail/CVE-2020-35492
+    # Upstream PR: https://gitlab.freedesktop.org/cairo/cairo/merge_requests/85
+    (fetchpatch {
+      name = "CVE-2020-35492.patch";
+      includes = [ "src/cairo-image-compositor.c" ];
+      url = "https://github.com/freedesktop/cairo/commit/78266cc8c0f7a595cfe8f3b694bfb9bcc3700b38.patch";
+      sha256 = "048nzfz7rkgqb9xs0dfs56qdw7ckkxr87nbj3p0qziqdq4nb6wki";
+    })
+
     # Workaround https://gitlab.freedesktop.org/cairo/cairo/-/issues/121
     ./skip-configure-stderr-check.patch
+
+    # Fixes cairo crash on macOS Big Sur
+    # Upstream PR: https://gitlab.freedesktop.org/cairo/cairo/-/issues/420
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/cairo/cairo/-/commit/e22d7212acb454daccc088619ee147af03883974.diff";
+      sha256 = "sha256-8G98nsPz3MLEWPDX9F0jKgXC4hC4NNdFQLSpmW3ay2s=";
+    })
   ];
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev"; # very small
+  separateDebugInfo = true;
 
   nativeBuildInputs = [
     pkg-config

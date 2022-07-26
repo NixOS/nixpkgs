@@ -68,7 +68,7 @@ in
       settings = mkOption {
         type = types.attrsOf settingType;
         default = { };
-        example = literalExample ''
+        example = literalExpression ''
           { server.port = 8080;
             server.bind_address = "0.0.0.0";
             server.secret_key = "@SEARX_SECRET_KEY@";
@@ -116,7 +116,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.searx;
-        defaultText = "pkgs.searx";
+        defaultText = literalExpression "pkgs.searx";
         description = "searx package to use.";
       };
 
@@ -138,11 +138,12 @@ in
       uwsgiConfig = mkOption {
         type = options.services.uwsgi.instance.type;
         default = { http = ":8080"; };
-        example = literalExample ''
+        example = literalExpression ''
           {
             disable-logging = true;
             http = ":8080";                   # serve via HTTP...
             socket = "/run/searx/searx.sock"; # ...or UNIX socket
+            chmod-socket = "660";             # allow the searx group to read/write to the socket
           }
         '';
         description = ''
@@ -220,7 +221,12 @@ in
         lazy-apps = true;
         enable-threads = true;
         module = "searx.webapp";
-        env = [ "SEARX_SETTINGS_PATH=${cfg.settingsFile}" ];
+        env = [
+          "SEARX_SETTINGS_PATH=${cfg.settingsFile}"
+          # searxng compatiblity https://github.com/searxng/searxng/issues/1519
+          "SEARXNG_SETTINGS_PATH=${cfg.settingsFile}"
+        ];
+        buffer-size = 32768;
         pythonPackages = self: [ cfg.package ];
       } // cfg.uwsgiConfig;
     };
@@ -228,5 +234,4 @@ in
   };
 
   meta.maintainers = with maintainers; [ rnhmjoj ];
-
 }

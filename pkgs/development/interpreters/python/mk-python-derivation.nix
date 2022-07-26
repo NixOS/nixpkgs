@@ -148,7 +148,12 @@ let
 
     buildInputs = buildInputs ++ pythonPath;
 
-    propagatedBuildInputs = propagatedBuildInputs ++ [ python ];
+    propagatedBuildInputs = propagatedBuildInputs ++ [
+      # we propagate python even for packages transformed with 'toPythonApplication'
+      # this pollutes the PATH but avoids rebuilds
+      # see https://github.com/NixOS/nixpkgs/issues/170887 for more context
+      python
+    ];
 
     inherit strictDeps;
 
@@ -176,8 +181,6 @@ let
       # default to python's platforms
       platforms = python.meta.platforms;
       isBuildPythonPackage = python.meta.platforms;
-    } // lib.optionalAttrs (attrs?pname) {
-      mainProgram = attrs.pname;
     } // meta;
   } // lib.optionalAttrs (attrs?checkPhase) {
     # If given use the specified checkPhase, otherwise use the setup hook.

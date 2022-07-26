@@ -10,19 +10,26 @@
 
 buildPythonPackage rec {
   pname = "pylsp-mypy";
-  version = "0.5.1";
+  version = "0.5.8";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Richardk2n";
     repo = "pylsp-mypy";
-    rev = version;
-    sha256 = "1d119csj1k5m9j0f7wdvpvnd02h548css6ybxqah92nk2v0rjscr";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-Yu1e/8gYFYEZ/IoFo8WnyRNYkCZ9i7NgjEjYBbagWMA=";
   };
+
+  disabledTests = [
+    "test_multiple_workspaces"
+    "test_option_overrides_dmypy"
+  ];
 
   checkInputs = [ pytestCheckHook mock ];
 
   propagatedBuildInputs = [ mypy python-lsp-server ];
+
+  pythonImportsCheck = [ "pylsp_mypy" ];
 
   meta = with lib; {
     homepage = "https://github.com/Richardk2n/pylsp-mypy";

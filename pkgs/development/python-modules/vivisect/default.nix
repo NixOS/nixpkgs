@@ -2,21 +2,40 @@
 , buildPythonPackage
 , isPy3k
 , fetchPypi
+, wrapQtAppsHook
+
+# propagates
 , pyasn1
 , pyasn1-modules
 , cxxfilt
 , msgpack
 , pycparser
+
+# extras: gui
+, pyqt5
+, pyqtwebengine
+
+# knobs
+, withGui ? false
 }:
+
 buildPythonPackage rec {
   pname = "vivisect";
-  version = "0.2.1";
-  disabled = isPy3k;
+  version = "1.0.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8fc4d2097a1d0d8d97aa8c540984cb52432df759f04f2281a21a4e1b7d1a95a7";
+    sha256 = "727a27ac1eb95d5a41f4430f6912e79940525551314fe68a2811fc9d51eaf2e9";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'cxxfilt>=0.2.1,<0.3.0' 'cxxfilt'
+  '';
+
+  nativeBuildInputs = [
+    wrapQtAppsHook
+  ];
 
   propagatedBuildInputs = [
     pyasn1
@@ -24,10 +43,15 @@ buildPythonPackage rec {
     cxxfilt
     msgpack
     pycparser
+  ] ++ lib.optionals (withGui) passthru.optional-dependencies.gui;
+
+  passthru.optional-dependencies.gui = [
+    pyqt5
+    pyqtwebengine
   ];
 
-  preBuild = ''
-    sed "s@==.*'@'@" -i setup.py
+  postFixup = ''
+    wrapQtApp $out/bin/vivbin
   '';
 
   # requires another repo for test files

@@ -14,12 +14,14 @@
 
 buildPythonPackage rec {
   pname = "oauthenticator";
-  version = "14.0.0";
+  version = "15.0.1";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1zfcl3dq9ladqg7fnpx6kgxf1ckjzlc8v3j6wa8w6iwglm40ax4r";
+    hash = "sha256-LjC/Ly3wQL55gjCyoWZikvK6ByiS1CEsZXK0/lmzmGA=";
   };
 
   propagatedBuildInputs = [
@@ -36,19 +38,15 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  postPatch = ''
-  # The constraint was removed. No longer needed for > 14.0.0
-  # https://github.com/jupyterhub/oauthenticator/pull/431
-    substituteInPlace test-requirements.txt --replace "pyjwt>=1.7,<2.0" "pyjwt"
-  '';
-
   disabledTests = [
-    # Test are outdated, https://github.com/jupyterhub/oauthenticator/issues/432
+    # Tests are outdated, https://github.com/jupyterhub/oauthenticator/issues/432
     "test_azuread"
     "test_mediawiki"
   ];
 
-  pythonImportsCheck = [ "oauthenticator" ];
+  pythonImportsCheck = [
+    "oauthenticator"
+  ];
 
   meta = with lib; {
     description = "Authenticate JupyterHub users with common OAuth providers, including GitHub, Bitbucket, and more.";

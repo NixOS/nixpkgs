@@ -1,7 +1,8 @@
 {lib, stdenv, fetchurl, unzip}:
 
 stdenv.mkDerivation {
-  name = "lkproof-3.1";
+  pname = "lkproof";
+  version = "3.1";
 
   src = fetchurl {
     url = "http://mirror.ctan.org/macros/latex/contrib/lkproof.zip";

@@ -5,6 +5,8 @@ buildPythonPackage {
   pname = "python-olm";
   inherit (olm) src version;
 
+  disabled = !isPy3k;
+
   sourceRoot = "source/python";
   buildInputs = [ olm ];
 
@@ -15,7 +17,12 @@ buildPythonPackage {
   propagatedBuildInputs = [
     cffi
     future
-  ] ++ lib.optionals (!isPy3k) [ typing ];
+    typing
+  ];
+
+  propagatedNativeBuildInputs = [
+    cffi
+  ];
 
   # Some required libraries for testing are not packaged yet.
   doCheck = false;

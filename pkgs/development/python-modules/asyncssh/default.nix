@@ -1,29 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, cryptography
+{ stdenv
+, lib
 , bcrypt
-, gssapi
+, buildPythonPackage
+, cryptography
+, fetchPypi
 , fido2
+, gssapi
 , libnacl
 , libsodium
 , nettle
-, python-pkcs11
-, pyopenssl
-, openssl
 , openssh
+, openssl
+, pyopenssl
 , pytestCheckHook
+, python-pkcs11
+, pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "asyncssh";
-  version = "2.7.0";
+  version = "2.11.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-GFAT2OZ3R8PA8BtyQWuL14QX2h30jHH3baU8YH71QbY=";
+    sha256 = "sha256-WcNs53up3ajdV62HV3bnEF3bH6hRvAObs66t6sT2e1Y=";
   };
 
   propagatedBuildInputs = [
@@ -34,8 +38,9 @@ buildPythonPackage rec {
     libnacl
     libsodium
     nettle
-    python-pkcs11
     pyopenssl
+    python-pkcs11
+    typing-extensions
   ];
 
   checkInputs = [
@@ -59,9 +64,21 @@ buildPythonPackage rec {
     "tests/sspi_stub.py"
   ];
 
-  pythonImportsCheck = [ "asyncssh" ];
+  disabledTests = [
+    # No PIN set
+    "TestSKAuthCTAP2"
+    # Requires network access
+    "test_connect_timeout_exceeded"
+    # Fails in the sandbox
+    "test_forward_remote"
+  ];
+
+  pythonImportsCheck = [
+    "asyncssh"
+  ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Asynchronous SSHv2 Python client and server library";
     homepage = "https://asyncssh.readthedocs.io/";
     license = licenses.epl20;

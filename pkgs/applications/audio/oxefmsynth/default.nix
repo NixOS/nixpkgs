@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1rk71ls33a38wx8i22plsi7d89cqqxrfxknq5i4f9igsw1ipm4gn";
   };
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=narrowing" ];
+  NIX_CFLAGS_COMPILE = [ "-Wno-narrowing" ];
 
   buildFlags = [ "VSTSDK_PATH=${vst-sdk}/VST2_SDK" ];
 

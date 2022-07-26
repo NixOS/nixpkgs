@@ -23,7 +23,7 @@ let
     "x86_64-linux" = "x64";
   }.${stdenv.hostPlatform.system};
 
-  libPath = lib.makeLibraryPath [ xorg.libX11 xorg.libXtst glib libglvnd openssl gtk3 cairo pango ];
+  libPath = lib.makeLibraryPath [ xorg.libX11 xorg.libXtst glib libglvnd openssl gtk3 cairo pango curl ];
 in let
   binaryPackage = stdenv.mkDerivation {
     pname = "${pname}-bin";
@@ -142,6 +142,7 @@ in stdenv.mkDerivation (rec {
     description = "Sophisticated text editor for code, markup and prose";
     homepage = "https://www.sublimetext.com/";
     maintainers = with maintainers; [ jtojnar wmertens demin-dmitriy zimbatm ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "aarch64-linux" "x86_64-linux" ];
   };

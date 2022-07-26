@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "docopts";
-  version = "0.6.3-rc2";
+  version = "0.6.4-with-no-mangle-double-dash";
 
   src = fetchFromGitHub {
     owner = "docopt";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-PmsTkPT/sf70MKYLhHvjCDb2o3VQ1k7d++RUW7rcoAg=";
+    sha256 = "0zxax0kl8wqpkzmw9ij4qgfhjbk4r7996pjyp9xf5icyk8knp00q";
   };
 
   goPackagePath = "github.com/docopt/${pname}";

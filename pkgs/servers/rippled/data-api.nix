@@ -1,4 +1,4 @@
-{ lib, fetchgit, nodePackages }:
+{ lib, fetchFromGitHub, nodePackages }:
 
 with lib;
 
@@ -6,13 +6,13 @@ let
   np = nodePackages.override { generated = ./package.nix; self = np; };
 in nodePackages.buildNodePackage rec {
   pname = "ripple-data-api";
-  version = lib.strings.substring 0 7 rev;
-  rev = "c56b860105f36c1c44ae011189d495272648c589";
+  version = "unstable-2015-03-26";
 
-  src = fetchgit {
-    url = "https://github.com/ripple/ripple-data-api.git";
-    inherit rev;
-    sha256 = "1iygp26ilradxj268g1l2y93cgrpchqwn71qdag67lv273dbq48m";
+  src = fetchFromGitHub {
+    owner = "ripple";
+    repo = "ripple-data-api";
+    rev = "c56b860105f36c1c44ae011189d495272648c589";
+    sha256 = "sha256-QEBdYdW55sAz6jshIAr2dSfXuqE/vqA2/kBeoxf75a8=";
   };
 
   deps = (filter (v: nixType v == "derivation") (attrValues np));

@@ -1,53 +1,60 @@
 { lib
 , buildPythonPackage
-, fetchPypi
 , click
 , cloudpickle
 , dask
+, fetchPypi
+, jinja2
+, locket
 , msgpack
+, packaging
 , psutil
+, pythonOlder
+, pyyaml
 , sortedcontainers
 , tblib
 , toolz
 , tornado
+, urllib3
 , zict
-, pyyaml
-, mpi4py
-, bokeh
-, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "2021.6.2";
-  disabled = pythonOlder "3.6";
+  version = "2022.5.2";
+  format = "setuptools";
 
-  # get full repository need conftest.py to run tests
+  disabled = pythonOlder "3.7";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-19ESqGqwSdzvo7If0brqQhKiwD0iwkvVWtONIaf10Ug=";
+    hash = "sha256-BEqsUfpk/Z4WsaLEMVIg0oHw5cwbBfTT03hSQm8efLY=";
   };
 
   propagatedBuildInputs = [
-    bokeh
     click
     cloudpickle
     dask
-    mpi4py
+    jinja2
+    locket
     msgpack
+    packaging
     psutil
     pyyaml
     sortedcontainers
     tblib
     toolz
     tornado
+    urllib3
     zict
   ];
 
-  # when tested random tests would fail and not repeatably
+  # When tested random tests would fail and not repeatably
   doCheck = false;
 
-  pythonImportsCheck = [ "distributed" ];
+  pythonImportsCheck = [
+    "distributed"
+  ];
 
   meta = with lib; {
     description = "Distributed computation in Python";

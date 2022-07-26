@@ -1,12 +1,18 @@
-{ lib, stdenv, fetchurl, fetchpatch }:
+{ lib, stdenv, fetchurl, fetchpatch, fetchzip }:
 
-stdenv.mkDerivation {
-  name = "figlet-2.2.5";
+stdenv.mkDerivation rec {
+  pname = "figlet";
+  version = "2.2.5";
 
   # some tools can be found here ftp://ftp.figlet.org/pub/figlet/util/
   src = fetchurl {
-    url = "ftp://ftp.figlet.org/pub/figlet/program/unix/figlet-2.2.5.tar.gz";
+    url = "ftp://ftp.figlet.org/pub/figlet/program/unix/figlet-${version}.tar.gz";
     sha256 = "0za1ax15x7myjl8jz271ybly8ln9kb9zhm1gf6rdlxzhs07w925z";
+  };
+
+  contributed = fetchzip {
+    url = "ftp://ftp.figlet.org/pub/figlet/fonts/contributed.tar.gz";
+    hash = "sha256-AyvAoc3IqJeKWgJftBahxb/KJjudeJIY4KD6mElNagQ=";
   };
 
   patches = [
@@ -19,12 +25,15 @@ stdenv.mkDerivation {
 
   makeFlags = [ "prefix=$(out)" "CC:=$(CC)" "LD:=$(CC)" ];
 
+  postInstall = "cp -ar ${contributed}/* $out/share/figlet/";
+
   doCheck = true;
 
   meta = {
     description = "Program for making large letters out of ordinary text";
     homepage = "http://www.figlet.org/";
     license = lib.licenses.afl21;
+    maintainers = with lib.maintainers; [ ehmry ];
     platforms = lib.platforms.unix;
   };
 }

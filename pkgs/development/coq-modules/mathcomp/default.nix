@@ -10,16 +10,18 @@
 # See the documentation at doc/languages-frameworks/coq.section.md.        #
 ############################################################################
 
-{ lib, ncurses, which, graphviz, lua, fetchzip,
+{ lib, ncurses, graphviz, lua, fetchzip,
   mkCoqDerivation, recurseIntoAttrs, withDoc ? false, single ? false,
-  coqPackages, coq, ocamlPackages, version ? null }@args:
+  coqPackages, coq, version ? null }@args:
 with builtins // lib;
 let
   repo  = "math-comp";
   owner = "math-comp";
   withDoc = single && (args.withDoc or false);
   defaultVersion = with versions; switch coq.coq-version [
-      { case = isGe  "8.13";        out = "1.12.0"; } # lower version of coq to 8.10 when all mathcomp packages are ported
+      { case = range "8.11" "8.15"; out = "1.14.0"; }
+      { case = range "8.11" "8.15"; out = "1.13.0"; }
+      { case = range "8.10" "8.13"; out = "1.12.0"; }
       { case = range "8.7"  "8.12"; out = "1.11.0"; }
       { case = range "8.7" "8.11";  out = "1.10.0"; }
       { case = range "8.7" "8.11";  out = "1.9.0";  }
@@ -28,6 +30,8 @@ let
       { case = range "8.5" "8.7";   out = "1.6.4";  }
     ] null;
   release = {
+    "1.14.0".sha256 = "07yamlp1c0g5nahkd2gpfhammcca74ga2s6qr7a3wm6y6j5pivk9";
+    "1.13.0".sha256 = "0j4cz2y1r1aw79snkcf1pmicgzf8swbaf9ippz0vg99a572zqzri";
     "1.12.0".sha256 = "1ccfny1vwgmdl91kz5xlmhq4wz078xm4z5wpd0jy5rn890dx03wp";
     "1.11.0".sha256 = "06a71d196wd5k4wg7khwqb7j7ifr7garhwkd54s86i0j7d6nhl3c";
     "1.10.0".sha256 = "1b9m6pwxxyivw7rgx82gn5kmgv2mfv3h3y0mmjcjfypi8ydkrlbv";
@@ -55,9 +59,9 @@ let
       derivation = mkCoqDerivation ({
         inherit version pname defaultVersion release releaseRev repo owner;
 
-        nativeBuildInputs = optionals withDoc [ graphviz lua ];
         mlPlugin = versions.isLe "8.6" coq.coq-version;
-        extraBuildInputs = [ ncurses which ];
+        nativeBuildInputs = optionals withDoc [ graphviz lua ];
+        buildInputs = [ ncurses ];
         propagatedBuildInputs = mathcomp-deps;
 
         buildFlags = optional withDoc "doc";

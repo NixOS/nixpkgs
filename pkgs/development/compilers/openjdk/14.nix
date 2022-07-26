@@ -78,6 +78,12 @@ let
       "-lgtk-3" "-lgio-2.0" "-lgnomevfs-2" "-lgconf-2"
     ]);
 
+    # -j flag is explicitly rejected by the build system:
+    #     Error: 'make -jN' is not supported, use 'make JOBS=N'
+    # Note: it does not make build sequential. Build system
+    # still runs in parallel.
+    enableParallelBuilding = false;
+
     buildFlags = [ "all" ];
 
     installPhase = ''
@@ -141,7 +147,7 @@ let
 
     disallowedReferences = [ openjdk14-bootstrap ];
 
-    meta = import ./meta.nix lib;
+    meta = import ./meta.nix lib version;
 
     passthru = {
       architecture = "";

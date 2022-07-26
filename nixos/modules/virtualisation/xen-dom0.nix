@@ -23,20 +23,20 @@ in
         default = false;
         type = types.bool;
         description =
-          ''
+          mdDoc ''
             Setting this option enables the Xen hypervisor, a
             virtualisation technology that allows multiple virtual
-            machines, known as <emphasis>domains</emphasis>, to run
+            machines, known as *domains*, to run
             concurrently on the physical machine.  NixOS runs as the
-            privileged <emphasis>Domain 0</emphasis>.  This option
+            privileged *Domain 0*.  This option
             requires a reboot to take effect.
           '';
       };
 
     virtualisation.xen.package = mkOption {
       type = types.package;
-      defaultText = "pkgs.xen";
-      example = literalExample "pkgs.xen-light";
+      defaultText = literalExpression "pkgs.xen";
+      example = literalExpression "pkgs.xen-light";
       description = ''
         The package used for Xen binary.
       '';
@@ -45,8 +45,8 @@ in
 
     virtualisation.xen.package-qemu = mkOption {
       type = types.package;
-      defaultText = "pkgs.xen";
-      example = literalExample "pkgs.qemu_xen-light";
+      defaultText = literalExpression "pkgs.xen";
+      example = literalExpression "pkgs.qemu_xen-light";
       description = ''
         The package with qemu binaries for dom0 qemu and xendomains.
       '';
@@ -450,5 +450,4 @@ in
     };
 
   };
-
 }

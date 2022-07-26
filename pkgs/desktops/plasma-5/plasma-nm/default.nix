@@ -11,7 +11,7 @@
 }:
 
 mkDerivation {
-  name = "plasma-nm";
+  pname = "plasma-nm";
   nativeBuildInputs = [ extra-cmake-modules kdoctools qttools ];
   buildInputs = [
     kdeclarative ki18n kio kwindowsystem plasma-framework kcompletion
@@ -24,10 +24,6 @@ mkDerivation {
     mobile-broadband-provider-info openconnect
   ];
   patches = [
-    (substituteAll {
-      src = ./0001-mobile-broadband-provider-info-path.patch;
-      mobile_broadband_provider_info = mobile-broadband-provider-info;
-    })
     (substituteAll {
       src = ./0002-openvpn-binary-path.patch;
       inherit openvpn;

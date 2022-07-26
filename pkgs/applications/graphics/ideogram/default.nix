@@ -61,8 +61,9 @@ stdenv.mkDerivation rec {
     description = "Insert emoji anywhere, even in non-native apps - designed for elementary OS";
     homepage = "https://github.com/cassidyjames/ideogram";
     license = licenses.gpl2Plus;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
     platforms = platforms.linux;
+    mainProgram = "com.github.cassidyjames.ideogram";
   };
 
 }

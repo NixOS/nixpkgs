@@ -65,21 +65,21 @@ let
     };
 
     # `llvm` historically had the binaries.  When choosing an output explicitly,
-    # we need to reintroduce `outputUnspecified` to get the expected behavior e.g. of lib.get*
-    llvm = tools.libllvm.out // { outputUnspecified = true; };
+    # we need to reintroduce `outputSpecified` to get the expected behavior e.g. of lib.get*
+    llvm = tools.libllvm.out // { outputSpecified = false; };
 
     libllvm-polly = callPackage ./llvm {
       inherit llvm_meta;
       enablePolly = true;
     };
 
-    llvm-polly = tools.libllvm-polly.lib // { outputUnspecified = true; };
+    llvm-polly = tools.libllvm-polly.lib // { outputSpecified = false; };
 
     libclang = callPackage ./clang {
       inherit clang-tools-extra_src llvm_meta;
     };
 
-    clang-unwrapped = tools.libclang.out // { outputUnspecified = true; };
+    clang-unwrapped = tools.libclang.out // { outputSpecified = false; };
 
     clang-polly-unwrapped = callPackage ./clang {
       inherit llvm_meta;
@@ -104,7 +104,11 @@ let
     #   python3 = pkgs.python3;  # don't use python-boot
     # });
 
-    clang = if stdenv.cc.isGNU then tools.libstdcxxClang else tools.libcxxClang;
+    # pick clang appropriate for package set we are targeting
+    clang =
+      /**/ if stdenv.targetPlatform.useLLVM or false then tools.clangUseLLVM
+      else if (pkgs.targetPackages.stdenv or stdenv).cc.isGNU then tools.libstdcxxClang
+      else tools.libcxxClang;
 
     libstdcxxClang = wrapCCWith rec {
       cc = tools.clang-unwrapped;
@@ -227,7 +231,7 @@ let
 
     compiler-rt-libc = callPackage ./compiler-rt {
       inherit llvm_meta;
-      stdenv = if (stdenv.hostPlatform.useLLVM or false) || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
+      stdenv = if (stdenv.hostPlatform.useLLVM or false) || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) || (stdenv.hostPlatform.isRiscV && stdenv.hostPlatform.is32bit)
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc
                else stdenv;
     };
@@ -240,7 +244,7 @@ let
     };
 
     # N.B. condition is safe because without useLLVM both are the same.
-    compiler-rt = if stdenv.hostPlatform.isAndroid || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
+    compiler-rt = if stdenv.hostPlatform.isAndroid || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) || (stdenv.hostPlatform.libc == "newlib")
       then libraries.compiler-rt-libc
       else libraries.compiler-rt-no-libc;
 
@@ -274,4 +278,4 @@ let
     };
   });
 
-in { inherit tools libraries; } // libraries // tools
+in { inherit tools libraries release_version; } // libraries // tools

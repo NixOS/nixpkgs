@@ -1,20 +1,46 @@
-{ lib, buildPythonPackage, fetchPypi, flask, ldapdomaindump, pycryptodomex, pyasn1, pyopenssl, chardet }:
+{ lib
+, buildPythonPackage
+, chardet
+, fetchPypi
+, flask
+, ldapdomaindump
+, pyasn1
+, pycryptodomex
+, pyopenssl
+, pythonOlder
+, setuptools
+, six
+}:
 
 buildPythonPackage rec {
   pname = "impacket";
-  version = "0.9.23";
+  version = "0.10.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1c1be8a50cdbe3cffc566ba64f552b1b28bcc79b7a406b833956b49c56d77184";
+    hash = "sha256-uOsCCiy7RxRmac/jHGS7Ln1kmdBJxJPWQYuXFvXHRYM=";
   };
 
-  propagatedBuildInputs = [ flask ldapdomaindump pycryptodomex pyasn1 pyopenssl chardet ];
+  propagatedBuildInputs = [
+    chardet
+    flask
+    ldapdomaindump
+    pyasn1
+    pycryptodomex
+    pyopenssl
+    setuptools
+    six
+  ];
 
-  # fail with:
   # RecursionError: maximum recursion depth exceeded
   doCheck = false;
-  pythonImportsCheck = [ "impacket" ];
+
+  pythonImportsCheck = [
+    "impacket"
+  ];
 
   meta = with lib; {
     description = "Network protocols Constructors and Dissectors";

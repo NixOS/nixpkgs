@@ -6,7 +6,6 @@
 , harfbuzz
 , libintl
 , libthai
-, gobject-introspection
 , darwin
 , fribidi
 , gnome
@@ -16,30 +15,40 @@
 , meson
 , ninja
 , glib
+, python3
 , x11Support? !stdenv.isDarwin, libXft
+, withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform)
+, gobject-introspection
+, withDocs ? (stdenv.buildPlatform == stdenv.hostPlatform)
 }:
 
-let
-  withDocs = stdenv.buildPlatform == stdenv.hostPlatform;
-in
 stdenv.mkDerivation rec {
   pname = "pango";
-  version = "1.48.5";
+  version = "1.50.7";
 
   outputs = [ "bin" "out" "dev" ]
     ++ lib.optionals withDocs [ "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0aivpd6l5687lj5293j859zd7vq97yxpzvad0b6jvh3kc54p87jh";
+    sha256 = "BHfzaaPUxpXfcpmmmJ3ABHVqf03ifuysQFxnkLfjrTM=";
   };
+
+  strictDeps = !withIntrospection;
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     meson ninja
     glib # for glib-mkenum
     pkg-config
+  ] ++ lib.optionals withIntrospection [
     gobject-introspection
+  ] ++ lib.optionals withDocs [
     gi-docgen
+    python3
   ];
 
   buildInputs = [
@@ -63,10 +72,9 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=${lib.boolToString withDocs}"
+    "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
   ] ++ lib.optionals (!x11Support) [
     "-Dxft=disabled" # only works with x11
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-Dintrospection=disabled"
   ];
 
   # Fontconfig error: Cannot load default config file
@@ -76,12 +84,9 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # test-font: FAIL
 
-  postInstall = lib.optionalString withDocs ''
-    # So that devhelp can find this.
-    # https://gitlab.gnome.org/GNOME/pango/merge_requests/293/diffs#note_1058448
-    mkdir -p "$devdoc/share/devhelp"
-    mv "$out/share/doc/pango/reference" "$devdoc/share/devhelp/books"
-    rmdir -p --ignore-fail-on-non-empty "$out/share/doc/pango"
+  postFixup = lib.optionalString withDocs ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {

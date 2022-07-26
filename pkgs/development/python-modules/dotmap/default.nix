@@ -2,24 +2,32 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "dotmap";
-  version = "1.3.24";
+  version = "1.3.30";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1mvkhkrhzzzng17j2yvwp4x1hj8wls3qw5lngqs777a2qc1mhg0r";
+    hash = "sha256-WCGnkz8HX7R1Y0F8DpLgt8AxFYtMmmp+VhY0ebZYs2g=";
   };
 
   checkInputs = [
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "dotmap/test.py" ];
+  pytestFlagsArray = [
+    "dotmap/test.py"
+  ];
 
-  pythonImportsCheck = [ "dotmap" ];
+  pythonImportsCheck = [
+    "dotmap"
+  ];
 
   meta = with lib; {
     description = "Python for dot-access dictionaries";

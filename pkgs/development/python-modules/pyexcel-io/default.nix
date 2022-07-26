@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "pyexcel-io";
-  version = "0.6.4";
+  version = "0.6.6";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00f15f4bae2947de49b3206f2600f78780008e044380f7aafe0ce52969cda4ca";
+    sha256 = "sha256-9ghL8a+l+/TGHPffRDcPpROCGvGIsC4+GbXvtm2Klp8=";
   };
 
   propagatedBuildInputs = [

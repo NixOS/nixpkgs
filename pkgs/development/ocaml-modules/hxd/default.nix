@@ -1,34 +1,24 @@
 { lib, buildDunePackage, fetchurl
-, ocaml, dune-configurator, cmdliner
-, lwt, withLwt ? lib.versionAtLeast ocaml.version "4.07"
+, dune-configurator, cmdliner
+, lwt, withLwt ? true
 }:
 
 buildDunePackage rec {
   pname = "hxd";
-  version = "0.3.1";
+  version = "0.3.2";
 
-  useDune2 = true;
-
-  minimumOCamlVersion = "4.06";
+  minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/dinosaure/hxd/releases/download/v${version}/hxd-v${version}.tbz";
-    sha256 = "1c226c91e17cd329dec0c287bfd20f36302aa533069ff9c6ced32721f96b29bc";
+    url = "https://github.com/dinosaure/hxd/releases/download/v${version}/hxd-${version}.tbz";
+    sha256 = "a00290abb8538e79b32ddc22ed9b301b9806bc4c03eb1e5105b14af47dabec9f";
   };
-
-  # ignore yes stderr output due to trapped SIGPIPE
-  postPatch = ''
-    sed -i 's|yes ".\+"|& 2> /dev/null|' test/*.t
-  '';
-
-  nativeBuildInputs = [
-    dune-configurator
-  ];
 
   propagatedBuildInputs = lib.optional withLwt lwt;
 
   buildInputs = [
     cmdliner
+    dune-configurator
   ];
 
   doCheck = true;
@@ -38,5 +28,6 @@ buildDunePackage rec {
     homepage = "https://github.com/dinosaure/hxd";
     license = licenses.mit;
     maintainers = [ maintainers.sternenseemann ];
+    mainProgram = "hxd.xxd";
   };
 }

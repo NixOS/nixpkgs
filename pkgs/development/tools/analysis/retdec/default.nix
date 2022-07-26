@@ -101,7 +101,7 @@ let
                                else "0ixv9qyqq40pzyqy6v9jf5rxrvivjb0z0zn260nbmb9gk765bacy";
     stripRoot = false;
     # Removing PE signatures reduces this from 3.8GB -> 642MB (uncompressed)
-    extraPostFetch = lib.optionalString (!withPEPatterns) ''
+    postFetch = lib.optionalString (!withPEPatterns) ''
       rm -r "$out/generic/yara_patterns/static-code/pe"
     '';
   } // {

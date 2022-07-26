@@ -18,7 +18,7 @@ in {
     settings = lib.mkOption {
       type = settingsFormat.type;
       default = { };
-      example = lib.literalExample ''
+      example = lib.literalExpression ''
         {
           hockeypuck = {
             loglevel = "INFO";
@@ -82,8 +82,10 @@ in {
 
     users.users.hockeypuck = {
       isSystemUser = true;
+      group = "hockeypuck";
       description = "Hockeypuck user";
     };
+    users.groups.hockeypuck = {};
 
     systemd.services.hockeypuck = {
       description = "Hockeypuck OpenPGP Key Server";

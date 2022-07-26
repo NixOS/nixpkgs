@@ -1,4 +1,4 @@
-{ system ? builtins.currentSystem, pkgs ? import <nixpkgs> { inherit system; } }:
+{ system ? builtins.currentSystem, pkgs ? import ../../.. { inherit system; } }:
 with import ./base.nix { inherit system; };
 let
   domain = "my.zyx";
@@ -33,7 +33,11 @@ let
   redisImage = pkgs.dockerTools.buildImage {
     name = "redis";
     tag = "latest";
-    contents = [ pkgs.redis pkgs.bind.host ];
+    copyToRoot = pkgs.buildEnv {
+      name = "image-root";
+      pathsToLink = [ "/bin" ];
+      paths = [ pkgs.redis pkgs.bind.host ];
+    };
     config.Entrypoint = ["/bin/redis-server"];
   };
 
@@ -54,7 +58,11 @@ let
   probeImage = pkgs.dockerTools.buildImage {
     name = "probe";
     tag = "latest";
-    contents = [ pkgs.bind.host pkgs.busybox ];
+    copyToRoot = pkgs.buildEnv {
+      name = "image-root";
+      pathsToLink = [ "/bin" ];
+      paths = [ pkgs.bind.host pkgs.busybox ];
+    };
     config.Entrypoint = ["/bin/tail"];
   };
 
@@ -100,7 +108,7 @@ let
       machine1.succeed("host redis.default.svc.cluster.local")
 
       # check dns inside the container
-      machine1.succeed("kubectl exec -ti probe -- /bin/host redis.default.svc.cluster.local")
+      machine1.succeed("kubectl exec probe -- /bin/host redis.default.svc.cluster.local")
     '';
   };
 
@@ -142,7 +150,7 @@ let
       machine2.succeed("host redis.default.svc.cluster.local")
 
       # check dns inside the container
-      machine1.succeed("kubectl exec -ti probe -- /bin/host redis.default.svc.cluster.local")
+      machine1.succeed("kubectl exec probe -- /bin/host redis.default.svc.cluster.local")
     '';
   };
 in {

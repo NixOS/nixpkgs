@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchFromGitHub
 , cmake
 , python3
@@ -65,7 +66,7 @@ stdenv.mkDerivation rec {
     description = "ROCm fork of the clang C/C++/Objective-C/Objective-C++ LLVM compiler frontend";
     homepage = "https://llvm.org/";
     license = with licenses; [ ncsa ];
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ acowley lovesegfault ];
     platforms = platforms.linux;
   };
 }

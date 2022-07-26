@@ -10,15 +10,13 @@
 
 buildGoModule rec {
   pname = "containerd";
-  version = "1.5.5";
-
-  outputs = [ "out" "man" ];
+  version = "1.6.6";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    sha256 = "sha256-6mDTTXHpXBcKOcT+VrGgt6HJzvTeKgJ0ItJ+IjCTJxk=";
+    sha256 = "sha256-cmarbad6VzcGTCHT/NtApkYsK/oo6WZQ//q8Fvh+ez8=";
   };
 
   vendorSha256 = null;
@@ -27,21 +25,18 @@ buildGoModule rec {
 
   buildInputs = [ btrfs-progs ];
 
-  buildFlags = [ "VERSION=v${version}" "REVISION=${src.rev}" ];
-
   BUILDTAGS = lib.optionals (btrfs-progs == null) [ "no_btrfs" ];
 
   buildPhase = ''
     runHook preBuild
     patchShebangs .
-    make binaries man $buildFlags
+    make binaries "VERSION=v${version}" "REVISION=${src.rev}"
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
     install -Dm555 bin/* -t $out/bin
-    installManPage man/*.[1-9]
     installShellCompletion --bash contrib/autocomplete/ctr
     installShellCompletion --zsh --name _ctr contrib/autocomplete/zsh_autocomplete
     runHook postInstall
@@ -53,7 +48,7 @@ buildGoModule rec {
     homepage = "https://containerd.io/";
     description = "A daemon to control runC";
     license = licenses.asl20;
-    maintainers = with maintainers; [ offline vdemeester ];
+    maintainers = with maintainers; [ offline vdemeester endocrimes zowoq ];
     platforms = platforms.linux;
   };
 }

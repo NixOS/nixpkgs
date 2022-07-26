@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  version = "3.0.25";
+  version = "3.0.33";
   pname = "swagger-codegen";
 
   jarfilename = "${pname}-cli-${version}.jar";
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://repo1.maven.org/maven2/io/swagger/codegen/v3/${pname}-cli/${version}/${jarfilename}";
-    sha256 = "1rdz45kmmg60fs7ddnla1xq30nah6s6rd18fqbjbjxng8r92brnd";
+    url = "mirror://maven/io/swagger/codegen/v3/${pname}-cli/${version}/${jarfilename}";
+    sha256 = "sha256-1oGir5F3wgwRQxz3eXI58wMIKYwvtHrRW4VJh0hIVyE=";
   };
 
   dontUnpack = true;
@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Allows generation of API client libraries (SDK generation), server stubs and documentation automatically given an OpenAPI Spec";
     homepage = "https://github.com/swagger-api/swagger-codegen/tree/3.0.0";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     maintainers = [ maintainers._1000101 ];
   };

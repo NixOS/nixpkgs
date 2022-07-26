@@ -1,20 +1,40 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{ config, lib, pkgs, utils, ... }:
 
 let
-
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.plasma5;
+
+  # Use only for **internal** options.
+  # This is not exactly user-friendly.
+  kdeConfigurationType = with types;
+    let
+      valueTypes = (oneOf [
+        bool
+        float
+        int
+        str
+      ]) // {
+        description = "KDE Configuration value";
+        emptyValue.value = "";
+      };
+      set = (nullOr (lazyAttrsOf valueTypes)) // {
+        description = "KDE Configuration set";
+        emptyValue.value = {};
+      };
+    in (lazyAttrsOf set) // {
+        description = "KDE Configuration file";
+        emptyValue.value = {};
+      };
 
   libsForQt5 = pkgs.plasma5Packages;
   inherit (libsForQt5) kdeGear kdeFrameworks plasma5;
   inherit (pkgs) writeText;
+  inherit (lib)
+    getBin optionalString literalExpression
+    mkRemovedOptionModule mkRenamedOptionModule
+    mkDefault mkIf mkMerge mkOption types;
 
-  pulseaudio = config.hardware.pulseaudio;
-  pactl = "${getBin pulseaudio.package}/bin/pactl";
-  startplasma-x11 = "${getBin plasma5.plasma-workspace}/bin/startplasma-x11";
-  sed = "${getBin pkgs.gnused}/bin/sed";
+  ini = pkgs.formats.ini { };
 
   gtkrc2 = writeText "gtkrc-2.0" ''
     # Default GTK+ 2 config for NixOS Plasma 5
@@ -34,23 +54,25 @@ let
     gtk-button-images=1
   '';
 
-  gtk3_settings = writeText "settings.ini" ''
-    [Settings]
-    gtk-font-name=Sans Serif Regular 10
-    gtk-theme-name=Breeze
-    gtk-icon-theme-name=breeze
-    gtk-fallback-icon-theme=hicolor
-    gtk-cursor-theme-name=breeze_cursors
-    gtk-toolbar-style=GTK_TOOLBAR_ICONS
-    gtk-menu-images=1
-    gtk-button-images=1
-  '';
+  gtk3_settings = ini.generate "settings.ini" {
+    Settings = {
+      gtk-font-name = "Sans Serif Regular 10";
+      gtk-theme-name = "Breeze";
+      gtk-icon-theme-name = "breeze";
+      gtk-fallback-icon-theme = "hicolor";
+      gtk-cursor-theme-name = "breeze_cursors";
+      gtk-toolbar-style = "GTK_TOOLBAR_ICONS";
+      gtk-menu-images = 1;
+      gtk-button-images = 1;
+    };
+  };
 
-  kcminputrc = writeText "kcminputrc" ''
-    [Mouse]
-    cursorTheme=breeze_cursors
-    cursorSize=0
-  '';
+  kcminputrc = ini.generate "kcminputrc" {
+    Mouse = {
+      cursorTheme = "breeze_cursors";
+      cursorSize = 0;
+    };
+  };
 
   activationScript = ''
     ${set_XDG_CONFIG_HOME}
@@ -76,7 +98,7 @@ let
     # Qt from doing this wackiness in the first place.
     trolltech_conf="''${XDG_CONFIG_HOME}/Trolltech.conf"
     if [ -e "$trolltech_conf" ]; then
-        ${sed} -i "$trolltech_conf" -e '/nix\\store\|nix\/store/ d'
+      ${getBin pkgs.gnused}/bin/sed -i "$trolltech_conf" -e '/nix\\store\|nix\/store/ d'
     fi
 
     # Remove the kbuildsyscoca5 cache. It will be regenerated
@@ -88,92 +110,125 @@ let
   '';
 
   set_XDG_CONFIG_HOME = ''
-      # Set the default XDG_CONFIG_HOME if it is unset.
-      # Per the XDG Base Directory Specification:
-      # https://specifications.freedesktop.org/basedir-spec/latest
-      # 1. Never export this variable! If it is unset, then child processes are
-      # expected to set the default themselves.
-      # 2. Contaminate / if $HOME is unset; do not check if $HOME is set.
-      XDG_CONFIG_HOME=''${XDG_CONFIG_HOME:-$HOME/.config}
+    # Set the default XDG_CONFIG_HOME if it is unset.
+    # Per the XDG Base Directory Specification:
+    # https://specifications.freedesktop.org/basedir-spec/latest
+    # 1. Never export this variable! If it is unset, then child processes are
+    # expected to set the default themselves.
+    # 2. Contaminate / if $HOME is unset; do not check if $HOME is set.
+    XDG_CONFIG_HOME=''${XDG_CONFIG_HOME:-$HOME/.config}
   '';
 
-  startplasma =
-    ''
-      ${set_XDG_CONFIG_HOME}
-      mkdir -p "''${XDG_CONFIG_HOME}"
+  startplasma = ''
+    ${set_XDG_CONFIG_HOME}
+    mkdir -p "''${XDG_CONFIG_HOME}"
+  '' + optionalString config.hardware.pulseaudio.enable ''
+    # Load PulseAudio module for routing support.
+    # See also: http://colin.guthr.ie/2009/10/so-how-does-the-kde-pulseaudio-support-work-anyway/
+      ${getBin config.hardware.pulseaudio.package}/bin/pactl load-module module-device-manager "do_routing=1"
+  '' + ''
+    ${activationScript}
 
-    ''
-    + optionalString pulseaudio.enable ''
-      # Load PulseAudio module for routing support.
-      # See also: http://colin.guthr.ie/2009/10/so-how-does-the-kde-pulseaudio-support-work-anyway/
-        ${pactl} load-module module-device-manager "do_routing=1"
-
-    ''
-    + ''
-      ${activationScript}
-
-      # Create default configurations if Plasma has never been started.
-      kdeglobals="''${XDG_CONFIG_HOME}/kdeglobals"
-      if ! [ -f "$kdeglobals" ]
-      then
-          kcminputrc="''${XDG_CONFIG_HOME}/kcminputrc"
-          if ! [ -f "$kcminputrc" ]
-          then
-              cat ${kcminputrc} >"$kcminputrc"
-          fi
-
-          gtkrc2="$HOME/.gtkrc-2.0"
-          if ! [ -f "$gtkrc2" ]
-          then
-              cat ${gtkrc2} >"$gtkrc2"
-          fi
-
-          gtk3_settings="''${XDG_CONFIG_HOME}/gtk-3.0/settings.ini"
-          if ! [ -f "$gtk3_settings" ]
-          then
-              mkdir -p "$(dirname "$gtk3_settings")"
-              cat ${gtk3_settings} >"$gtk3_settings"
-          fi
+    # Create default configurations if Plasma has never been started.
+    kdeglobals="''${XDG_CONFIG_HOME}/kdeglobals"
+    if ! [ -f "$kdeglobals" ]; then
+      kcminputrc="''${XDG_CONFIG_HOME}/kcminputrc"
+      if ! [ -f "$kcminputrc" ]; then
+          cat ${kcminputrc} >"$kcminputrc"
       fi
 
-    ''
-    + ''
-      exec "${startplasma-x11}"
-    '';
+      gtkrc2="$HOME/.gtkrc-2.0"
+      if ! [ -f "$gtkrc2" ]; then
+          cat ${gtkrc2} >"$gtkrc2"
+      fi
+
+      gtk3_settings="''${XDG_CONFIG_HOME}/gtk-3.0/settings.ini"
+      if ! [ -f "$gtk3_settings" ]; then
+          mkdir -p "$(dirname "$gtk3_settings")"
+          cat ${gtk3_settings} >"$gtk3_settings"
+      fi
+    fi
+  '';
 
 in
 
 {
-  options = {
-
-    services.xserver.desktopManager.plasma5 = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Enable the Plasma 5 (KDE 5) desktop environment.";
-      };
-
-      phononBackend = mkOption {
-        type = types.enum [ "gstreamer" "vlc" ];
-        default = "gstreamer";
-        example = "vlc";
-        description = "Phonon audio backend to install.";
-      };
-
-      supportDDC = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Support setting monitor brightness via DDC.
-          </para>
-          <para>
-          This is not needed for controlling brightness of the internal monitor
-          of a laptop and as it is considered experimental by upstream, it is
-          disabled by default.
-        '';
-      };
+  options.services.xserver.desktopManager.plasma5 = {
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Enable the Plasma 5 (KDE 5) desktop environment.";
     };
 
+    phononBackend = mkOption {
+      type = types.enum [ "gstreamer" "vlc" ];
+      default = "gstreamer";
+      example = "vlc";
+      description = "Phonon audio backend to install.";
+    };
+
+    supportDDC = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Support setting monitor brightness via DDC.
+        </para>
+        <para>
+        This is not needed for controlling brightness of the internal monitor
+        of a laptop and as it is considered experimental by upstream, it is
+        disabled by default.
+      '';
+    };
+
+    useQtScaling = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Enable HiDPI scaling in Qt.";
+    };
+
+    runUsingSystemd = mkOption {
+      description = "Use systemd to manage the Plasma session";
+      type = types.bool;
+      default = false;
+    };
+
+    excludePackages = mkOption {
+      description = "List of default packages to exclude from the configuration";
+      type = types.listOf types.package;
+      default = [];
+      example = literalExpression "[ pkgs.plasma5Packages.oxygen ]";
+    };
+
+    # Internally allows configuring kdeglobals globally
+    kdeglobals = mkOption {
+      internal = true;
+      default = {};
+      type = kdeConfigurationType;
+    };
+
+    # Internally allows configuring kwin globally
+    kwinrc = mkOption {
+      internal = true;
+      default = {};
+      type = kdeConfigurationType;
+    };
+
+    mobile.enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Enable support for running the Plasma Mobile shell.
+      '';
+    };
+
+    mobile.installRecommendedSoftware = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Installs software recommended for use with Plasma Mobile, but which
+        is not strictly required for Plasma Mobile to run.
+      '';
+    };
   };
 
   imports = [
@@ -182,26 +237,27 @@ in
   ];
 
   config = mkMerge [
-    (mkIf cfg.enable {
-      # Seed our configuration into nixos-generate-config
-      system.nixos-generate-config.desktopConfiguration = [''
-        # Enable the Plasma 5 Desktop Environment.
-        services.xserver.displayManager.sddm.enable = true;
-        services.xserver.desktopManager.plasma5.enable = true;
-      ''];
-
-      services.xserver.desktopManager.session = singleton {
-        name = "plasma5";
-        bgSupport = true;
-        start = startplasma;
-      };
+    # Common Plasma dependencies
+    (mkIf (cfg.enable || cfg.mobile.enable) {
 
       security.wrappers = {
-        kcheckpass.source = "${lib.getBin libsForQt5.kscreenlocker}/libexec/kcheckpass";
-        start_kdeinit.source = "${lib.getBin libsForQt5.kinit}/libexec/kf5/start_kdeinit";
+        kscreenlocker_greet = {
+          setuid = true;
+          owner = "root";
+          group = "root";
+          source = "${getBin libsForQt5.kscreenlocker}/libexec/kscreenlocker_greet";
+        };
+        start_kdeinit = {
+          setuid = true;
+          owner = "root";
+          group = "root";
+          source = "${getBin libsForQt5.kinit}/libexec/kf5/start_kdeinit";
+        };
         kwin_wayland = {
-          source = "${lib.getBin plasma5.kwin}/bin/kwin_wayland";
+          owner = "root";
+          group = "root";
           capabilities = "cap_sys_nice+ep";
+          source = "${getBin plasma5.kwin}/bin/kwin_wayland";
         };
       };
 
@@ -214,100 +270,95 @@ in
       environment.systemPackages =
         with libsForQt5;
         with plasma5; with kdeGear; with kdeFrameworks;
-        [
-          frameworkintegration
-          kactivities
-          kauth
-          kcmutils
-          kconfig
-          kconfigwidgets
-          kcoreaddons
-          kdoctools
-          kdbusaddons
-          kdeclarative
-          kded
-          kdesu
-          kdnssd
-          kemoticons
-          kfilemetadata
-          kglobalaccel
-          kguiaddons
-          kiconthemes
-          kidletime
-          kimageformats
-          kinit
-          kirigami2  # In system profile for SDDM theme. TODO: wrapper.
-          kio
-          kjobwidgets
-          knewstuff
-          knotifications
-          knotifyconfig
-          kpackage
-          kparts
-          kpeople
-          krunner
-          kservice
-          ktextwidgets
-          kwallet
-          kwallet-pam
-          kwalletmanager
-          kwayland
-          kwidgetsaddons
-          kxmlgui
-          kxmlrpcclient
-          plasma-framework
-          solid
-          sonnet
-          threadweaver
+        let
+          requiredPackages = [
+            frameworkintegration
+            kactivities
+            kauth
+            kcmutils
+            kconfig
+            kconfigwidgets
+            kcoreaddons
+            kdoctools
+            kdbusaddons
+            kdeclarative
+            kded
+            kdesu
+            kdnssd
+            kemoticons
+            kfilemetadata
+            kglobalaccel
+            kguiaddons
+            kiconthemes
+            kidletime
+            kimageformats
+            kinit
+            kirigami2 # In system profile for SDDM theme. TODO: wrapper.
+            kio
+            kjobwidgets
+            knewstuff
+            knotifications
+            knotifyconfig
+            kpackage
+            kparts
+            kpeople
+            krunner
+            kservice
+            ktextwidgets
+            kwallet
+            kwallet-pam
+            kwalletmanager
+            kwayland
+            kwayland-integration
+            kwidgetsaddons
+            kxmlgui
+            kxmlrpcclient
+            plasma-framework
+            solid
+            sonnet
+            threadweaver
 
-          breeze-qt5
-          kactivitymanagerd
-          kde-cli-tools
-          kdecoration
-          kdeplasma-addons
-          kgamma5
-          khotkeys
-          kinfocenter
-          kmenuedit
-          kscreen
-          kscreenlocker
-          ksystemstats
-          kwayland
-          kwin
-          kwrited
-          libkscreen
-          libksysguard
-          milou
-          plasma-systemmonitor
-          plasma-browser-integration
-          plasma-integration
-          polkit-kde-agent
-          spectacle
-          systemsettings
+            breeze-qt5
+            kactivitymanagerd
+            kde-cli-tools
+            kdecoration
+            kdeplasma-addons
+            kgamma5
+            khotkeys
+            kscreen
+            kscreenlocker
+            kwayland
+            kwin
+            kwrited
+            libkscreen
+            libksysguard
+            milou
+            plasma-integration
+            polkit-kde-agent
 
-          plasma-desktop
-          plasma-workspace
-          plasma-workspace-wallpapers
+            plasma-desktop
+            plasma-workspace
+            plasma-workspace-wallpapers
 
-          dolphin
-          dolphin-plugins
-          ffmpegthumbs
-          kdegraphics-thumbnailers
-          khelpcenter
-          kio-extras
-          konsole
-          oxygen
-          print-manager
+            breeze-icons
+            pkgs.hicolor-icon-theme
 
-          breeze-icons
-          pkgs.hicolor-icon-theme
+            kde-gtk-config
+            breeze-gtk
 
-          kde-gtk-config breeze-gtk
+            qtvirtualkeyboard
 
-          qtvirtualkeyboard
-
-          pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
-        ]
+            pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
+          ];
+          optionalPackages = [
+            plasma-browser-integration
+            konsole
+            oxygen
+            (lib.getBin qttools) # Expose qdbus in PATH
+          ];
+        in
+        requiredPackages
+        ++ utils.removePackagesByName optionalPackages cfg.excludePackages
 
         # Phonon audio backend
         ++ lib.optional (cfg.phononBackend == "gstreamer") libsForQt5.phonon-backend-gstreamer
@@ -320,6 +371,7 @@ in
         ++ lib.optional config.services.pipewire.pulse.enable plasma-pa
         ++ lib.optional config.powerManagement.enable powerdevil
         ++ lib.optional config.services.colord.enable pkgs.colord-kde
+        ++ lib.optional config.services.hardware.bolt.enable pkgs.plasma5Packages.plasma-thunderbolt
         ++ lib.optionals config.services.samba.enable [ kdenetwork-filesharing pkgs.samba ]
         ++ lib.optional config.services.xserver.wacom.enable pkgs.wacomtablet;
 
@@ -329,6 +381,8 @@ in
       ];
 
       environment.etc."X11/xkb".source = xcfg.xkbDir;
+
+      environment.sessionVariables.PLASMA_USE_QT_SCALING = mkIf cfg.useQtScaling "1";
 
       # Enable GTK applications to load SVG icons
       services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
@@ -343,14 +397,19 @@ in
       programs.ssh.askPassword = mkDefault "${plasma5.ksshaskpass.out}/bin/ksshaskpass";
 
       # Enable helpful DBus services.
+      services.accounts-daemon.enable = true;
+      # when changing an account picture the accounts-daemon reads a temporary file containing the image which systemsettings5 may place under /tmp
+      systemd.services.accounts-daemon.serviceConfig.PrivateTmp = false;
+      services.power-profiles-daemon.enable = mkDefault true;
+      services.system-config-printer.enable = mkIf config.services.printing.enable (mkDefault true);
       services.udisks2.enable = true;
       services.upower.enable = config.powerManagement.enable;
-      services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
       services.xserver.libinput.enable = mkDefault true;
 
       # Extra UDEV rules used by Solid
       services.udev.packages = [
-        pkgs.libmtp
+        # libmtp has "bin", "dev", "out" outputs. UDEV rules file is in "out".
+        pkgs.libmtp.out
         pkgs.media-player-info
       ];
 
@@ -367,14 +426,170 @@ in
       security.pam.services.lightdm.enableKwallet = true;
       security.pam.services.sddm.enableKwallet = true;
 
+      systemd.user.services = {
+        plasma-early-setup = mkIf cfg.runUsingSystemd {
+          description = "Early Plasma setup";
+          wantedBy = [ "graphical-session-pre.target" ];
+          serviceConfig.Type = "oneshot";
+          script = activationScript;
+        };
+      };
+
       xdg.portal.enable = true;
       xdg.portal.extraPortals = [ plasma5.xdg-desktop-portal-kde ];
 
       # Update the start menu for each user that is currently logged in
       system.userActivationScripts.plasmaSetup = activationScript;
+      services.xserver.displayManager.setupCommands = startplasma;
 
       nixpkgs.config.firefox.enablePlasmaBrowserIntegration = true;
+
+      environment.etc = {
+        "xdg/kwinrc".text     = lib.generators.toINI {} cfg.kwinrc;
+        "xdg/kdeglobals".text = lib.generators.toINI {} cfg.kdeglobals;
+      };
+    })
+
+    # Plasma Desktop
+    (mkIf cfg.enable {
+
+      # Seed our configuration into nixos-generate-config
+      system.nixos-generate-config.desktopConfiguration = [
+        ''
+          # Enable the Plasma 5 Desktop Environment.
+          services.xserver.displayManager.sddm.enable = true;
+          services.xserver.desktopManager.plasma5.enable = true;
+        ''
+      ];
+
+      services.xserver.displayManager.sessionPackages = [ pkgs.libsForQt5.plasma5.plasma-workspace ];
+      # Default to be `plasma` (X11) instead of `plasmawayland`, since plasma wayland currently has
+      # many tiny bugs.
+      # See: https://github.com/NixOS/nixpkgs/issues/143272
+      services.xserver.displayManager.defaultSession = mkDefault "plasma";
+
+      environment.systemPackages =
+        with libsForQt5;
+        with plasma5; with kdeGear; with kdeFrameworks;
+        let
+          requiredPackages = [
+            ksystemstats
+            kinfocenter
+            kmenuedit
+            plasma-systemmonitor
+            spectacle
+            systemsettings
+
+            dolphin
+            dolphin-plugins
+            ffmpegthumbs
+            kdegraphics-thumbnailers
+            kio-extras
+          ];
+          optionalPackages = [
+            elisa
+            gwenview
+            okular
+            khelpcenter
+            print-manager
+          ];
+      in requiredPackages ++ utils.removePackagesByName optionalPackages cfg.excludePackages;
+
+      systemd.user.services = {
+        plasma-run-with-systemd = {
+          description = "Run KDE Plasma via systemd";
+          wantedBy = [ "basic.target" ];
+          serviceConfig.Type = "oneshot";
+          script = ''
+            ${set_XDG_CONFIG_HOME}
+
+            ${kdeFrameworks.kconfig}/bin/kwriteconfig5 \
+              --file startkderc --group General --key systemdBoot ${lib.boolToString cfg.runUsingSystemd}
+          '';
+        };
+      };
+    })
+
+    # Plasma Mobile
+    (mkIf cfg.mobile.enable {
+      assertions = [
+        {
+          # The user interface breaks without NetworkManager
+          assertion = config.networking.networkmanager.enable;
+          message = "Plasma Mobile requires NetworkManager.";
+        }
+        {
+          # The user interface breaks without bluetooth
+          assertion = config.hardware.bluetooth.enable;
+          message = "Plasma Mobile requires Bluetooth.";
+        }
+        {
+          # The user interface breaks without pulse
+          assertion = config.hardware.pulseaudio.enable;
+          message = "Plasma Mobile requires pulseaudio.";
+        }
+      ];
+
+      environment.systemPackages =
+        with libsForQt5;
+        with plasma5; with kdeApplications; with kdeFrameworks;
+        [
+          # Basic packages without which Plasma Mobile fails to work properly.
+          plasma-mobile
+          plasma-nano
+          pkgs.maliit-framework
+          pkgs.maliit-keyboard
+        ]
+        ++ lib.optionals (cfg.mobile.installRecommendedSoftware) (with libsForQt5.plasmaMobileGear;[
+          # Additional software made for Plasma Mobile.
+          alligator
+          angelfish
+          audiotube
+          calindori
+          kalk
+          kasts
+          kclock
+          keysmith
+          koko
+          krecorder
+          ktrip
+          kweather
+          plasma-dialer
+          plasma-phonebook
+          plasma-settings
+          spacebar
+        ])
+      ;
+
+      # The following services are needed or the UI is broken.
+      hardware.bluetooth.enable = true;
+      hardware.pulseaudio.enable = true;
+      networking.networkmanager.enable = true;
+
+      # Recommendations can be found here:
+      #  - https://invent.kde.org/plasma-mobile/plasma-phone-settings/-/tree/master/etc/xdg
+      # This configuration is the minimum required for Plasma Mobile to *work*.
+      services.xserver.desktopManager.plasma5 = {
+        kdeglobals = {
+          KDE = {
+            # This forces a numeric PIN for the lockscreen, which is the
+            # recommendation from upstream.
+            LookAndFeelPackage = lib.mkDefault "org.kde.plasma.phone";
+          };
+        };
+        kwinrc = {
+          Windows = {
+            # Forces windows to be maximized
+            Placement = lib.mkDefault "Maximizing";
+          };
+          "org.kde.kdecoration2" = {
+            # No decorations (title bar)
+            NoPlugin = lib.mkDefault "true";
+          };
+        };
+      };
+
+      services.xserver.displayManager.sessionPackages = [ pkgs.libsForQt5.plasma5.plasma-mobile ];
     })
   ];
-
 }

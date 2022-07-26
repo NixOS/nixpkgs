@@ -1,10 +1,11 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , zetup
 , six
 , moretools
-, pathpy
+, path
 , pytestCheckHook
 }:
 
@@ -20,13 +21,14 @@ buildPythonPackage rec {
 
   buildInputs = [ zetup ];
 
-  propagatedBuildInputs = [ six moretools pathpy ];
+  propagatedBuildInputs = [ six moretools path ];
 
   checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "modeled" ];
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Universal data modeling for Python";
     homepage = "https://github.com/modeled/modeled";
     license = licenses.lgpl3Only;

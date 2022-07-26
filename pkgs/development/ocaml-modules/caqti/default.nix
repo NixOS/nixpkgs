@@ -1,8 +1,10 @@
-{ lib, fetchFromGitHub, buildDunePackage, cppo, logs, ptime, uri }:
+{ lib, fetchFromGitHub, buildDunePackage
+, cppo, logs, ptime, uri, bigstringaf
+, re, cmdliner, alcotest }:
 
 buildDunePackage rec {
   pname = "caqti";
-  version = "1.5.1";
+  version = "1.8.0";
   useDune2 = true;
 
   minimumOCamlVersion = "4.04";
@@ -11,11 +13,14 @@ buildDunePackage rec {
     owner = "paurkedal";
     repo = "ocaml-${pname}";
     rev = "v${version}";
-    sha256 = "1vl61kdyj89whc3mh4k9bis6rbj9x2scf6hnv9afyalp4j65sqx1";
+    sha256 = "sha256-8uKlrq9j1Z3QzkCyoRIn2j6wCdGyo7BY7XlbFHN1xVE=";
   };
 
-  buildInputs = [ cppo ];
-  propagatedBuildInputs = [ logs ptime uri ];
+  nativeBuildInputs = [ cppo ];
+  propagatedBuildInputs = [ logs ptime uri bigstringaf ];
+  checkInputs = [ re cmdliner alcotest ];
+
+  doCheck = true;
 
   meta = {
     description = "Unified interface to relational database libraries";

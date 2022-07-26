@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "graspologic";
-  version = "0.3";
+  version = "1.0.0";
 
   disabled = isPy27;
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "graspologic";
     rev = "v${version}";
-    sha256 = "0lab76qiryxvwl6zrcikhnxil1xywl0wkkm2vzi4v9mdzpa7w29r";
+    sha256 = "sha256-mzJ3eFo77gnOh/Vs9u68yFDZW3ilXtcCCwKahKyRRmc=";
   };
 
   propagatedBuildInputs = [
@@ -41,9 +41,11 @@ buildPythonPackage rec {
   disabledTests = [ "gridplot_outputs" ];
 
   meta = with lib; {
-    homepage = "https://graspy.neurodata.io";
+    homepage = "https://graspologic.readthedocs.io";
     description = "A package for graph statistical algorithms";
     license = licenses.asl20;  # changing to `licenses.mit` in next release
     maintainers = with maintainers; [ bcdarwin ];
+    # graspologic-native is not available
+    broken = true;
   };
 }

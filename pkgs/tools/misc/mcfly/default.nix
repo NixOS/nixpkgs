@@ -2,30 +2,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mcfly";
-  version = "0.5.6";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "cantino";
     repo = "mcfly";
     rev = "v${version}";
-    sha256 = "sha256-x2cED+WEc50RB8BxiDEm/XnauT1RqqGjSIdL5MMaFBY=";
+    sha256 = "sha256-k8Z/CS1vbnQvoddos7Y0KcM1zB8QDAbXaROjNCyPEN0=";
   };
 
-  postInstall = ''
-    substituteInPlace mcfly.bash --replace '$(which mcfly)' $out/bin/mcfly
-    substituteInPlace mcfly.zsh  --replace '$(which mcfly)' $out/bin/mcfly
-    substituteInPlace mcfly.fish --replace '(which mcfly)' $out/bin/mcfly
-    install -Dm644 -t $out/share/mcfly mcfly.bash
-    install -Dm644 -t $out/share/mcfly mcfly.zsh
-    install -Dm644 -t $out/share/mcfly mcfly.fish
+  postPatch = ''
+    substituteInPlace mcfly.bash --replace '$(command which mcfly)' '${placeholder "out"}/bin/mcfly'
+    substituteInPlace mcfly.zsh  --replace '$(command which mcfly)' '${placeholder "out"}/bin/mcfly'
+    substituteInPlace mcfly.fish --replace '(command which mcfly)'  '${placeholder "out"}/bin/mcfly'
   '';
 
-  cargoSha256 = "sha256-7RKewz5jBS2HhHvXHBUWaQQ/wq9nryS9E+DqzBOVjPs=";
+  cargoSha256 = "sha256-2SKgzVJdtzH9poHx/NJba6+lj/C0PBcEgI/2ITO18Bk=";
 
   meta = with lib; {
     homepage = "https://github.com/cantino/mcfly";
     description = "An upgraded ctrl-r for Bash whose history results make sense for what you're working on right now";
-    changelog = "https://github.com/cantino/mcfly/blob/v${version}/CHANGELOG.txt";
+    changelog = "https://github.com/cantino/mcfly/raw/v${version}/CHANGELOG.txt";
     license = licenses.mit;
     maintainers = [ maintainers.melkor333 ];
   };

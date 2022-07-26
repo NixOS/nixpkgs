@@ -23,6 +23,12 @@ stdenv.mkDerivation rec {
     [ ncurses zlib ]
     ++ optional sslSupport openssl;
 
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: world.o:/build/tf-50b8/src/socket.h:24: multiple definition of
+  #     `world_decl'; command.o:/build/tf-50b8/src/socket.h:24: first defined here
+  NIX_CFLAGS_COMPILE="-fcommon";
+
   meta = {
     homepage = "http://tinyfugue.sourceforge.net/";
     description = "A terminal UI, screen-oriented MUD client";

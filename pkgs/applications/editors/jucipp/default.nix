@@ -1,5 +1,5 @@
 { lib, stdenv, fetchgit, dconf, gtksourceview3, at-spi2-core, gtksourceviewmm,
-  boost, epoxy, cmake, aspell, llvmPackages, libgit2, pkg-config, pcre,
+  boost, libepoxy, cmake, aspell, llvmPackages, libgit2, pkg-config, pcre,
   libXdmcp, libxkbcommon, libpthreadstubs, wrapGAppsHook, aspellDicts, gtkmm3,
   coreutils, glibc, dbus, openssl, libxml2, gnumake, ctags }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     sha256 = "0xp6ijnrggskjrvscp204bmdpz48l5a8nxr9abp17wni6akb5wiq";
   };
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook cmake ];
   buildInputs = [
     dbus
     openssl
@@ -35,10 +35,9 @@ stdenv.mkDerivation rec {
     gtksourceview3
     at-spi2-core
     pcre
-    epoxy
+    libepoxy
     boost
     libXdmcp
-    cmake
     aspell
     libgit2
     libxkbcommon

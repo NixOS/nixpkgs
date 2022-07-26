@@ -1,4 +1,5 @@
-{ mkXfceDerivation
+{ lib
+, mkXfceDerivation
 , ffmpegthumbnailer
 , gdk-pixbuf
 , glib
@@ -32,7 +33,8 @@ mkXfceDerivation {
     wrapProgram $out/lib/tumbler-1/tumblerd "''${gappsWrapperArgs[@]}"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A D-Bus thumbnailer service";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub , gtk3, adwaita-icon-theme, breeze-icons, hicolor-icon-theme }:
+{ lib, stdenvNoCC, fetchFromGitHub , gtk3, adwaita-icon-theme, breeze-icons, hicolor-icon-theme }:
 
-stdenv.mkDerivation rec  {
+stdenvNoCC.mkDerivation rec  {
   pname = "kora-icon-theme";
-  version = "1.4.4";
+  version = "1.5.2";
 
   src = fetchFromGitHub  {
     owner = "bikass";
     repo = "kora";
     rev = "v${version}";
-    sha256 = "sha256-79C/M5WXQswA1xuA6pwVSRlDtQC9+EzkwSEV3SdPzBc=";
+    sha256 = "sha256-OwuePPn4seHbzv81pnTEP1Q0Tp1ywZIEmw+dx3bDoXw=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +41,6 @@ stdenv.mkDerivation rec  {
     homepage = "https://github.com/bikass/kora";
     license = with licenses; [ gpl3Only ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bloomvdomino ];
+    maintainers = with maintainers; [ ];
   };
 }

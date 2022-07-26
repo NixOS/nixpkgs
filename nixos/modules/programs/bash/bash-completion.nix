@@ -26,7 +26,7 @@ in
         shopt -s nullglob
         for p in $NIX_PROFILES; do
           for m in "$p/etc/bash_completion.d/"*; do
-            . $m
+            . "$m"
           done
         done
         eval "$nullglobStatus"

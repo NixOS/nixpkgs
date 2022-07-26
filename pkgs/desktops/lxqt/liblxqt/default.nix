@@ -15,13 +15,13 @@
 
 mkDerivation rec {
   pname = "liblxqt";
-  version = "0.17.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "0n0pjz5wihchfcji8qal0lw8kzvv3im50v1lbwww4ymrgacz9h4l";
+    sha256 = "vfqEB9Vh/BL47dlEvnyWwDBO0pRIUS1IuixW8A0PRds=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +57,6 @@ mkDerivation rec {
     homepage = "https://github.com/lxqt/liblxqt";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

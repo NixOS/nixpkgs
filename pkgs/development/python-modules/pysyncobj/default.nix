@@ -5,13 +5,13 @@
 
 buildPythonPackage rec {
   pname = "pysyncobj";
-  version = "0.3.8";
+  version = "0.3.11";
 
   src = fetchFromGitHub {
     owner = "bakwc";
     repo = "PySyncObj";
     rev = version;
-    sha256 = "sha256-T7ecy5/1eF0pYaOv74SBEp6V6Z23E2b9lo5Q/gig3Cw=";
+    sha256 = "sha256-MsyEDRla+okamffm78hoC2OwhjHLvCDQeZCzPZPbGy4=";
   };
 
   # Tests require network features

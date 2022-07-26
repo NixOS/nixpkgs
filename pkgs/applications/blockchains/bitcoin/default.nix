@@ -5,6 +5,7 @@
 , pkg-config
 , util-linux
 , hexdump
+, autoSignDarwinBinariesHook
 , wrapQtAppsHook ? null
 , boost
 , libevent
@@ -24,10 +25,10 @@
 
 with lib;
 let
-  version = "0.21.1";
-  majorMinorVersion = versions.majorMinor version;
+  version = "23.0";
+  majorVersion = versions.major version;
   desktop = fetchurl {
-    url = "https://raw.githubusercontent.com/bitcoin-core/packaging/${majorMinorVersion}/debian/bitcoin-qt.desktop";
+    url = "https://raw.githubusercontent.com/bitcoin-core/packaging/${majorVersion}.x/debian/bitcoin-qt.desktop";
     sha256 = "0cpna0nxcd1dw3nnzli36nf9zj28d2g9jf5y0zl9j18lvanvniha";
   };
 in
@@ -40,20 +41,21 @@ stdenv.mkDerivation rec {
       "https://bitcoincore.org/bin/bitcoin-core-${version}/bitcoin-${version}.tar.gz"
       "https://bitcoin.org/bin/bitcoin-core-${version}/bitcoin-${version}.tar.gz"
     ];
-    sha256 = "caff23449220cf45753f312cefede53a9eac64000bb300797916526236b6a1e0";
+    sha256 = "26748bf49d6d6b4014d0fedccac46bf2bcca42e9d34b3acfd9e3467c415acc05";
   };
 
   nativeBuildInputs =
     [ autoreconfHook pkg-config ]
     ++ optionals stdenv.isLinux [ util-linux ]
     ++ optionals stdenv.isDarwin [ hexdump ]
+    ++ optionals (stdenv.isDarwin && stdenv.isAarch64) [ autoSignDarwinBinariesHook ]
     ++ optionals withGui [ wrapQtAppsHook ];
 
   buildInputs = [ boost libevent miniupnpc zeromq zlib ]
     ++ optionals withWallet [ db48 sqlite ]
     ++ optionals withGui [ qrencode qtbase qttools ];
 
-  postInstall = optional withGui ''
+  postInstall = optionalString withGui ''
     install -Dm644 ${desktop} $out/share/applications/bitcoin-qt.desktop
     substituteInPlace $out/share/applications/bitcoin-qt.desktop --replace "Icon=bitcoin128" "Icon=bitcoin"
     install -Dm644 share/pixmaps/bitcoin256.png $out/share/pixmaps/bitcoin.png
@@ -72,12 +74,16 @@ stdenv.mkDerivation rec {
     "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
   ];
 
+  # fix "Killed: 9  test/test_bitcoin"
+  # https://github.com/NixOS/nixpkgs/issues/179474
+  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
+
   checkInputs = [ python3 ];
 
   doCheck = true;
 
   checkFlags =
-    [ "LC_ALL=C.UTF-8" ]
+    [ "LC_ALL=en_US.UTF-8" ]
     # QT_PLUGIN_PATH needs to be set when executing QT, which is needed when testing Bitcoin's GUI.
     # See also https://github.com/NixOS/nixpkgs/issues/24256
     ++ optional withGui "QT_PLUGIN_PATH=${qtbase}/${qtbase.qtPluginPrefix}";
@@ -96,7 +102,7 @@ stdenv.mkDerivation rec {
       parties. Users hold the crypto keys to their own money and transact directly
       with each other, with the help of a P2P network to check for double-spending.
     '';
-    homepage = "https://bitcoin.org/";
+    homepage = "https://bitcoin.org/en/";
     downloadPage = "https://bitcoincore.org/bin/bitcoin-core-${version}/";
     changelog = "https://bitcoincore.org/en/releases/${version}/";
     maintainers = with maintainers; [ prusnak roconnor ];

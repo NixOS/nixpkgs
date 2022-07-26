@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "coveralls";
-  version = "3.1.0";
+  version = "3.3.1";
   disabled = isPy27;
 
   # wanted by tests
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9b3236e086627340bf2c95f89f757d093cbed43d17179d3f4fb568c347e7d29a";
+    sha256 = "b32a8bb5d2df585207c119d6c01567b81fba690c9c10a753bfe27a335bfc43ea";
   };
 
   checkInputs = [

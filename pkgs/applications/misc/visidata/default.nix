@@ -9,11 +9,12 @@
 , openpyxl
 , xlrd
 , h5py
+, odfpy
 , psycopg2
 , pyshp
 , fonttools
 , pyyaml
-, pdfminer
+, pdfminer-six
 , vobject
 , tabulate
 , wcwidth
@@ -21,16 +22,17 @@
 , setuptools
 , git
 , withPcap ? true, dpkt, dnslib
+, withXclip ? stdenv.isLinux, xclip
 }:
 buildPythonApplication rec {
   pname = "visidata";
-  version = "2.5";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "saulpw";
     repo = "visidata";
     rev = "v${version}";
-    sha256 = "1iijggdgj36v7d2zm45c00nrbzxaaah2azflpca0f6fjaaxh3lr2";
+    hash = "sha256-PKj+imTSAGMpF1tkN0WmE3l/4FmWkm/ktIDzF2ku48s=";
   };
 
   propagatedBuildInputs = [
@@ -54,14 +56,16 @@ buildPythonApplication rec {
     pyyaml
     #namestand
     #datapackage
-    pdfminer
+    pdfminer-six
     #tabula
     vobject
     tabulate
     wcwidth
     zstandard
+    odfpy
     setuptools
-  ] ++ lib.optionals withPcap [ dpkt dnslib ];
+  ] ++ lib.optionals withPcap [ dpkt dnslib ]
+  ++ lib.optional withXclip xclip;
 
   checkInputs = [
     git
@@ -88,7 +92,7 @@ buildPythonApplication rec {
   meta = {
     description = "Interactive terminal multitool for tabular data";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.raskin ];
+    maintainers = with lib.maintainers; [ raskin markus1189 ];
     homepage = "http://visidata.org/";
     changelog = "https://github.com/saulpw/visidata/blob/v${version}/CHANGELOG.md";
   };

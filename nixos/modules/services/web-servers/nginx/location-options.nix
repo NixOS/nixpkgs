@@ -3,7 +3,7 @@
 # has additional options that affect the web server as a whole, like
 # the user/group to run under.)
 
-{ lib }:
+{ lib, config }:
 
 with lib;
 
@@ -12,7 +12,7 @@ with lib;
     basicAuth = mkOption {
       type = types.attrsOf types.str;
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           user = "password";
         };
@@ -102,7 +102,7 @@ with lib;
     };
 
     fastcgiParams = mkOption {
-      type = types.attrsOf types.str;
+      type = types.attrsOf (types.either types.str types.path);
       default = {};
       description = ''
         FastCGI parameters to override.  Unlike in the Nginx
@@ -126,6 +126,15 @@ with lib;
         Order of this location block in relation to the others in the vhost.
         The semantics are the same as with `lib.mkOrder`. Smaller values have
         a greater priority.
+      '';
+    };
+
+    recommendedProxySettings = mkOption {
+      type = types.bool;
+      default = config.services.nginx.recommendedProxySettings;
+      defaultText = literalExpression "config.services.nginx.recommendedProxySettings";
+      description = ''
+        Enable recommended proxy settings.
       '';
     };
   };

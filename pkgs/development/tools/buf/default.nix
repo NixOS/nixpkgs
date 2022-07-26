@@ -3,33 +3,43 @@
 , fetchFromGitHub
 , protobuf
 , git
+, testers
+, buf
+, installShellFiles
 }:
 
 buildGoModule rec {
   pname = "buf";
-  version = "0.46.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5mjk31HuPNO/RhmMhIm3dAZAED/Kk33ObjC8KbPKRxk=";
-    leaveDotGit = true; # Required by TestWorkspaceGit
+    sha256 = "sha256-sqByTrhtaytBMD8ULOP+xoacxMD6sw3n2XYVZ1hWIJ4=";
   };
-  vendorSha256 = "sha256-K8UZDEhAvD292RCEDKfY9PdZGS389vLF3oukcBndUF4=";
+
+  vendorSha256 = "sha256-H000xhqjSFXGW3Saa/ryYdVcDl2ieeSW3dq3DPVX+c0=";
 
   patches = [
     # Skip a test that requires networking to be available to work.
     ./skip_test_requiring_network.patch
+    # Skip TestWorkspaceGit which requires .git and commits.
+    ./skip_test_requiring_dotgit.patch
   ];
 
-  nativeBuildInputs = [ protobuf ];
-  checkInputs = [ git ];
+  nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [ "-s" "-w" ];
 
+  checkInputs = [
+    git # Required for TestGitCloner
+    protobuf # Required for buftesting.GetProtocFilePaths
+  ];
+
   preCheck = ''
-    export PATH=$PATH:$GOPATH/bin
+    # The tests need access to some of the built utilities
+    export PATH="$PATH:$GOPATH/bin"
     # To skip TestCloneBranchAndRefToBucket
     export CI=true
   '';
@@ -37,25 +47,32 @@ buildGoModule rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p "$out/bin"
-    dir="$GOPATH/bin"
+    # Binaries
     # Only install required binaries, don't install testing binaries
-    for file in \
-      "buf" \
-      "protoc-gen-buf-breaking" \
-      "protoc-gen-buf-lint" \
-      "protoc-gen-buf-check-breaking" \
-      "protoc-gen-buf-check-lint"; do
-      cp "$dir/$file" "$out/bin/"
+    for FILE in buf protoc-gen-buf-breaking protoc-gen-buf-lint; do
+      install -D -m 555 -t $out/bin $GOPATH/bin/$FILE
     done
+
+    # Completions
+    installShellCompletion --cmd buf \
+      --bash <($GOPATH/bin/buf completion bash) \
+      --fish <($GOPATH/bin/buf completion fish) \
+      --zsh <($GOPATH/bin/buf completion zsh)
+
+    # Man Pages
+    mkdir man && $GOPATH/bin/buf manpages man
+    installManPage man/*
 
     runHook postInstall
   '';
 
+  passthru.tests.version = testers.testVersion { package = buf; };
+
   meta = with lib; {
-    description = "Create consistent Protobuf APIs that preserve compatibility and comply with design best-practices";
     homepage = "https://buf.build";
+    changelog = "https://github.com/bufbuild/buf/releases/tag/v${version}";
+    description = "Create consistent Protobuf APIs that preserve compatibility and comply with design best-practices";
     license = licenses.asl20;
-    maintainers = with maintainers; [ raboof ];
+    maintainers = with maintainers; [ raboof jk lrewega ];
   };
 }

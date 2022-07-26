@@ -5,19 +5,20 @@
 , desktop-file-utils
 , glib
 , gobject-introspection
-, gtk3
-, libhandy
+, gtk4
+, itstool
+, libadwaita
 , librsvg
 , meson
 , ninja
 , pkg-config
 , poppler_gi
-, wrapGAppsHook
+, wrapGAppsHook4
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "metadata-cleaner";
-  version = "1.0.7";
+  version = "2.2.3";
 
   format = "other";
 
@@ -25,24 +26,25 @@ python3.pkgs.buildPythonApplication rec {
     owner = "rmnvgr";
     repo = "metadata-cleaner";
     rev = "v${version}";
-    sha256 = "sha256-HlP/QahVFCAct06pKanjozFqeyTdHoHanIemq5ID2CQ=";
+    hash = "sha256-ykJd1ZjAqT8OtJsZiSjbDdkN5fFlQcWtTO88x3zAfU8=";
   };
 
   nativeBuildInputs = [
     appstream
     desktop-file-utils
     glib
-    gtk3
+    gtk4
+    itstool
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     gobject-introspection
-    gtk3
-    libhandy
+    gtk4
+    libadwaita
     librsvg
     poppler_gi
   ];
@@ -55,6 +57,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Python GTK application to view and clean metadata in files, using mat2";
     homepage = "https://gitlab.com/rmnvgr/metadata-cleaner";
+    changelog = "https://gitlab.com/rmnvgr/metadata-cleaner/-/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ gpl3Plus cc-by-sa-40 ];
     maintainers = with maintainers; [ dotlambda ];
   };

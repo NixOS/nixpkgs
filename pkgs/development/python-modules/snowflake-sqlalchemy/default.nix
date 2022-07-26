@@ -1,22 +1,24 @@
 { buildPythonPackage
 , lib
 , fetchPypi
-, sqlalchemy
+, six
 , snowflake-connector-python
+, sqlalchemy
 }:
 
 buildPythonPackage rec {
   pname = "snowflake-sqlalchemy";
-  version = "1.2.4";
+  version = "1.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e79d83d4947a0945488699324802eda4ad4a63c7680ad5b2a42c71f4faa2cd8b";
+    sha256 = "sha256-9IooTfzXRmOE22huBSduM4kX8ltI6F50nvkUnXRkAFo=";
   };
 
   propagatedBuildInputs = [
-    sqlalchemy
+    six
     snowflake-connector-python
+    sqlalchemy
   ];
 
   # Pypi does not include tests

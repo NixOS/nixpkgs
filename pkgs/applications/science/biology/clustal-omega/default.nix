@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.clustal.org/omega/";
     license = licenses.gpl2;
     maintainers = [ maintainers.bzizou ];
+    mainProgram = "clustalo";
     platforms = platforms.unix;
   };
 }

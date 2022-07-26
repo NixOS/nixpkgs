@@ -12,7 +12,7 @@
   boot.loader.generic-extlinux-compatible.enable = true;
 
   boot.consoleLogLevel = lib.mkDefault 7;
-  boot.kernelPackages = pkgs.linuxPackages_rpi1;
+  boot.kernelPackages = pkgs.linuxKernel.packages.linux_rpi1;
 
   sdImage = {
     populateFirmwareCommands = let

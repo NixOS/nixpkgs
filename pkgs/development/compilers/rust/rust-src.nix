@@ -1,14 +1,21 @@
-{ stdenv, rustc, minimalContent ? true }:
+{ lib, runCommand, rustc, minimalContent ? true }:
 
-stdenv.mkDerivation {
-  name = "rust-src";
-  src = rustc.src;
-  phases = [ "unpackPhase" "installPhase" ];
-  installPhase = ''
-    mv src $out
-    rm -rf $out/{${if minimalContent
-      then "ci,doc,etc,grammar,llvm-project,llvm-emscripten,rtstartup,rustllvm,test,tools,vendor,stdarch"
-      else "ci,doc,etc,grammar,llvm-project,llvm-emscripten,rtstartup,rustllvm,test,vendor"
-    }}
-  '';
-}
+runCommand "rust-src" { } ''
+  tar -xzf ${rustc.src}
+  mv rustc-${rustc.version}-src $out
+  rm -rf $out/{${lib.concatStringsSep "," ([
+    "ci"
+    "doc"
+    "etc"
+    "grammar"
+    "llvm-project"
+    "llvm-emscripten"
+    "rtstartup"
+    "rustllvm"
+    "test"
+    "vendor"
+  ] ++ lib.optionals minimalContent [
+    "tools"
+    "stdarch"
+  ])}}
+''

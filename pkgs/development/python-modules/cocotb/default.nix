@@ -5,14 +5,14 @@
 , setuptools
 , setuptools-scm
 , cocotb-bus
-, pytest
+, pytestCheckHook
 , swig
 , verilog
 }:
 
 buildPythonPackage rec {
   pname = "cocotb";
-  version = "1.5.2";
+  version = "1.6.2";
 
   # - we need to use the tarball from PyPi
   #   or the full git checkout (with .git)
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   #   because it does not include required metadata
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9f4f3e6eb9caeb479e98d604770645b57469cd25b39e28df1916ffcd593efbe6";
+    sha256 = "sha256-SY+1727DbWMg6CnmHw8k/VP0dwBRYszn+YyyvZXgvUs=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -40,13 +40,21 @@ buildPythonPackage rec {
 
     # remove circular dependency cocotb-bus from setup.py
     substituteInPlace setup.py --replace "'cocotb-bus<1.0'" ""
+  '' + lib.optionalString stdenv.isDarwin ''
+    # disable lto on darwin
+    # https://github.com/NixOS/nixpkgs/issues/19098
+    substituteInPlace cocotb_build_libs.py --replace "-flto" ""
   '';
 
-  checkInputs = [ cocotb-bus pytest swig verilog ];
+  patches = [
+    # Fix "can't link with bundle (MH_BUNDLE) only dylibs (MH_DYLIB) file" error
+    ./0001-Patch-LDCXXSHARED-for-macOS-along-with-LDSHARED.patch
+  ];
+
+  checkInputs = [ cocotb-bus pytestCheckHook swig verilog ];
 
   checkPhase = ''
     export PATH=$out/bin:$PATH
-    make test
   '';
 
   meta = with lib; {
@@ -54,6 +62,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/cocotb/cocotb";
     license = licenses.bsd3;
     maintainers = with maintainers; [ matthuszagh ];
-    broken = stdenv.isDarwin;
   };
 }

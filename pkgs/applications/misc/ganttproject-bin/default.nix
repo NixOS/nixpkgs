@@ -15,8 +15,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jre ];
 
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
-
   installPhase = let
 
     desktopItem = makeDesktopItem {
@@ -26,7 +24,7 @@ stdenv.mkDerivation rec {
       desktopName = "GanttProject";
       genericName = "Shedule and manage projects";
       comment = meta.description;
-      categories = "Office;";
+      categories = [ "Office" ];
     };
 
     javaOptions = [

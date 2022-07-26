@@ -12,13 +12,15 @@
 
 mkDerivation rec {
   pname = "adwaita-qt";
-  version = "1.3.1";
+  version = "1.4.1";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "FedoraQt";
     repo = pname;
     rev = version;
-    sha256 = "sha256-3uHa7veLzaSIm9WSR/Z0X+aSdXziO1TnI/CQgccrKYg=";
+    sha256 = "sha256-t9vv1KcMUg8Qe7lhVMN4GO+VPoT7QzeoQ6hV4fesA8U=";
   };
 
   nativeBuildInputs = [
@@ -51,5 +53,6 @@ mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members ++ (with maintainers; [ ]);
     platforms = platforms.all;
+    broken = stdenv.isDarwin; # broken since 2021-12-05 on hydra, broken until qt515 will be used for darwin
   };
 }

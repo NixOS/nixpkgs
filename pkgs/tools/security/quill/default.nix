@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "quill";
-  version = "0.2.1";
+  version = "0.2.7";
 
   src = fetchFromGitHub {
     owner = "dfinity";
     repo = "quill";
     rev = "v${version}";
-    sha256 = "02ga2xkdxs36mfr4lv43cy6wkf27c28bdkzfkp3az5jvyk17mkfr";
+    sha256 = "sha256-3OlsCRpxRDKlfC0sa9MlFCupyRbDuqJQzDb9SQob1O0=";
   };
 
   ic = fetchFromGitHub {
@@ -27,10 +27,10 @@ rustPlatform.buildRustPackage rec {
     export IC_NNS_COMMON_PROTO_INCLUDES=${ic}/rs/nns/common/proto
     export PROTOC=${buildPackages.protobuf}/bin/protoc
     export OPENSSL_DIR=${openssl.dev}
-    export OPENSSL_LIB_DIR=${openssl.out}/lib
+    export OPENSSL_LIB_DIR=${lib.getLib openssl}/lib
   '';
 
-  cargoSha256 = "142pzhyi73ljlqas5vbhjhn4vmp9w9ps1mv8q7s3kzg0h7jcvm1k";
+  cargoSha256 = "sha256-YxuBABGaZ+ti31seEYR6bB+OMgrSvl1lZyu4bqdxPIk=";
 
   nativeBuildInputs = [ pkg-config protobuf ];
   buildInputs = [ openssl ]

@@ -2,4 +2,5 @@
 
 source "https://rubygems.org"
 
-gem 'rrule', '0.4.2', require: false
+# gem "rails"
+gem 'rrule', '0.4.4', require: false

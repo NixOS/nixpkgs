@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchFromGitLab
 , nix-update-script
 , pkg-config
@@ -9,7 +10,6 @@
 , librsvg
 , libxml2
 , desktop-file-utils
-, pysolfc
 , guile
 , libcanberra-gtk3
 , ninja
@@ -19,14 +19,14 @@
 
 stdenv.mkDerivation rec {
   pname = "aisleriot";
-  version = "3.22.17";
+  version = "3.22.24";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = pname;
     rev = version;
-    sha256 = "sha256-14z/EdEz1XFDrQZlpoeHW73G187XuZX/uQXp+bAUsmI=";
+    sha256 = "sha256-G3JSqrHc2ca32RZOO6gFY8iVlEFX+kukZDcTb8O5UHk=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +46,6 @@ stdenv.mkDerivation rec {
     librsvg
     guile
     libcanberra-gtk3
-    pysolfc
   ];
 
   prePatch = ''

@@ -26,6 +26,9 @@
 , vulkan-loader
 , shaderc
 
+, testers
+, warzone2100
+
 , withVideos ? false
 }:
 
@@ -39,11 +42,11 @@ in
 
 stdenv.mkDerivation rec {
   inherit pname;
-  version  = "4.1.1";
+  version  = "4.2.7";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/releases/${version}/${pname}_src.tar.xz";
-    sha256 = "sha256-CnMt3FytpTDAtibU3V24i6EvWRc9UkAuvC9ingphCM8=";
+    sha256 = "sha256-f1J84A7aRAmbGn48MD7eJ2+DX21q2UWwYAoXXdq7ALA=";
   };
 
   buildInputs = [
@@ -60,6 +63,7 @@ stdenv.mkDerivation rec {
     freetype
     harfbuzz
     sqlite
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     vulkan-headers
     vulkan-loader
   ];
@@ -93,11 +97,19 @@ stdenv.mkDerivation rec {
     #
     # Alternatively, we could have set CMAKE_INSTALL_BINDIR to "bin".
     "-DCMAKE_INSTALL_DATAROOTDIR=${placeholder "out"}/share"
-  ];
+  ] ++ lib.optional stdenv.isDarwin "-P../configure_mac.cmake";
 
   postInstall = lib.optionalString withVideos ''
     cp ${sequences_src} $out/share/warzone2100/sequences.wz
   '';
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = warzone2100;
+      # The command always exits with code 1
+      command = "(warzone2100 --version || [ $? -eq 1 ])";
+    };
+  };
 
   meta = with lib; {
     description = "A free RTS game, originally developed by Pumpkin Studios";
@@ -112,9 +124,12 @@ stdenv.mkDerivation rec {
       technologies, combined with the unit design system, allows for a wide
       variety of possible units and tactics.
     '';
-    homepage = "http://wz2100.net";
+    homepage = "https://wz2100.net";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ astsmtl fgaz ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
+    # configure_mac.cmake tries to download stuff
+    # https://github.com/Warzone2100/warzone2100/blob/master/macosx/README.md
+    broken = stdenv.isDarwin;
   };
 }

@@ -8,27 +8,28 @@ let
     icon = "trilium";
     comment = description;
     desktopName = "Trilium Notes";
-    categories = "Office";
+    categories = [ "Office" ];
   };
 
   meta = with lib; {
     inherit description;
     homepage = "https://github.com/zadam/trilium";
     license = licenses.agpl3Plus;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ fliegendewurst ];
   };
 
-  version = "0.47.5";
+  version = "0.51.2";
 
   desktopSource = {
     url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
-    sha256 = "16sm93vzlsqmrykbzdvgwszbhq79brd74zp9n9q5wrf4s44xizzv";
+    sha256 = "17bqcnpvflpi5dlz9m294diwd6as5wha5jcv9a3qvhh4pq0nyr4z";
   };
 
   serverSource = {
     url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz";
-    sha256 = "0jk9pf3ljzfdv7d91wxda8z9qz653qas58wsrx42gnf7zxn1l648";
+    sha256 = "0jjvg75a4va5d81x8dvpzmzax7p0bqd7psv0alkkl13m91gai6ig";
   };
 
 in {
@@ -39,15 +40,6 @@ in {
     inherit meta;
 
     src = fetchurl desktopSource;
-
-    # Fetch from source repo, no longer included in release.
-    # (they did special-case icon.png but we want the scalable svg)
-    # Use the version here to ensure we get any changes.
-    trilium_svg = fetchurl {
-      url = "https://raw.githubusercontent.com/zadam/trilium/v${version}/images/trilium.svg";
-      sha256 = "1rgj7pza20yndfp8n12k93jyprym02hqah36fkk2b3if3kcmwnfg";
-    };
-
 
     nativeBuildInputs = [
       autoPatchelfHook
@@ -61,12 +53,12 @@ in {
       runHook preInstall
       mkdir -p $out/bin
       mkdir -p $out/share/trilium
-      mkdir -p $out/share/{applications,icons/hicolor/scalable/apps}
+      mkdir -p $out/share/{applications,icons/hicolor/128x128/apps}
 
       cp -r ./* $out/share/trilium
       ln -s $out/share/trilium/trilium $out/bin/trilium
 
-      ln -s ${trilium_svg} $out/share/icons/hicolor/scalable/apps/trilium.svg
+      ln -s $out/share/trilium/icon.png $out/share/icons/hicolor/128x128/apps/trilium.png
       cp ${desktopItem}/share/applications/* $out/share/applications
       runHook postInstall
     '';

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rtl8821au";
-  version = "${kernel.version}-unstable-2021-05-18";
+  version = "${kernel.version}-unstable-2022-03-08";
 
   src = fetchFromGitHub {
     owner = "morrownr";
-    repo = "8821au";
-    rev = "6f6a9d5772bb2b75f18374c01c82c6b3e8e3244d";
-    sha256 = "sha256-RqtLR3sNcLXhUrNloSTRKubL1SVwzbVe73AsBYYSXNE=";
+    repo = "8821au-20210708";
+    rev = "2c0c6fef81c0c7dcf8fa06fc4ab72168abc4f7bb";
+    sha256 = "sha256-Hdzi3pGqH71O0Jenjd/myG4+rZDLC/CcWHkjDoXBxS0=";
   };
 
   nativeBuildInputs = [ bc nukeReferences ];
@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     nuke-refs $out/lib/modules/*/kernel/net/wireless/*.ko
   '';
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "rtl8821AU and rtl8812AU chipset driver with firmware";

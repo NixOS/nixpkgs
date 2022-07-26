@@ -3,15 +3,19 @@
 , fetchPypi
 , cryptography
 , deprecated
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "jwcrypto";
-  version = "0.9.1";
+  version = "1.3.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "63531529218ba9869e14ef8c9e7b516865ede3facf9b0ef3d3ba68014da211f9";
+    hash = "sha256-VLVRsRX/tNErHx7pO4uipxu4VWuj2F1i9wdUlhPah3w=";
   };
 
   propagatedBuildInputs = [
@@ -19,10 +23,14 @@ buildPythonPackage rec {
     deprecated
   ];
 
+  pythonImportsCheck = [
+    "jwcrypto"
+  ];
+
   meta = with lib; {
     description = "Implementation of JOSE Web standards";
     homepage = "https://github.com/latchset/jwcrypto";
     license = licenses.lgpl3Plus;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

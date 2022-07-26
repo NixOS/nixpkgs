@@ -14,16 +14,19 @@ let
     ''
       #! ${pkgs.runtimeShell} -e
       export DISPLAY="$(systemctl --user show-environment | ${pkgs.gnused}/bin/sed 's/^DISPLAY=\(.*\)/\1/; t; d')"
-      exec ${askPassword}
+      exec ${askPassword} "$@"
     '';
 
-  knownHosts = map (h: getAttr h cfg.knownHosts) (attrNames cfg.knownHosts);
+  knownHosts = attrValues cfg.knownHosts;
 
   knownHostsText = (flip (concatMapStringsSep "\n") knownHosts
     (h: assert h.hostNames != [];
       optionalString h.certAuthority "@cert-authority " + concatStringsSep "," h.hostNames + " "
       + (if h.publicKey != null then h.publicKey else readFile h.publicKeyFile)
     )) + "\n";
+
+  knownHostsFiles = [ "/etc/ssh/ssh_known_hosts" "/etc/ssh/ssh_known_hosts2" ]
+    ++ map pkgs.copyPathToStore cfg.knownHostsFiles;
 
 in
 {
@@ -33,9 +36,17 @@ in
 
     programs.ssh = {
 
+      enableAskPassword = mkOption {
+        type = types.bool;
+        default = config.services.xserver.enable;
+        defaultText = literalExpression "config.services.xserver.enable";
+        description = "Whether to configure SSH_ASKPASS in the environment.";
+      };
+
       askPassword = mkOption {
         type = types.str;
         default = "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass";
+        defaultText = literalExpression ''"''${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass"'';
         description = "Program used by SSH to ask for passwords.";
       };
 
@@ -113,7 +124,7 @@ in
       agentPKCS11Whitelist = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = "\${pkgs.opensc}/lib/opensc-pkcs11.so";
+        example = literalExpression ''"''${pkgs.opensc}/lib/opensc-pkcs11.so"'';
         description = ''
           A pattern-list of acceptable paths for PKCS#11 shared libraries
           that may be used with the -s option to ssh-add.
@@ -123,7 +134,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.openssh;
-        defaultText = "pkgs.openssh";
+        defaultText = literalExpression "pkgs.openssh";
         description = ''
           The package used for the openssh client and daemon.
         '';
@@ -131,7 +142,7 @@ in
 
       knownHosts = mkOption {
         default = {};
-        type = types.attrsOf (types.submodule ({ name, ... }: {
+        type = types.attrsOf (types.submodule ({ name, config, options, ... }: {
           options = {
             certAuthority = mkOption {
               type = types.bool;
@@ -143,10 +154,25 @@ in
             };
             hostNames = mkOption {
               type = types.listOf types.str;
-              default = [];
+              default = [ name ] ++ config.extraHostNames;
+              defaultText = literalExpression "[ ${name} ] ++ config.${options.extraHostNames}";
               description = ''
                 A list of host names and/or IP numbers used for accessing
-                the host's ssh service.
+                the host's ssh service. This list includes the name of the
+                containing <literal>knownHosts</literal> attribute by default
+                for convenience. If you wish to configure multiple host keys
+                for the same host use multiple <literal>knownHosts</literal>
+                entries with different attribute names and the same
+                <literal>hostNames</literal> list.
+              '';
+            };
+            extraHostNames = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              description = ''
+                A list of additional host names and/or IP numbers used for
+                accessing the host's ssh service. This list is ignored if
+                <literal>hostNames</literal> is set explicitly.
               '';
             };
             publicKey = mkOption {
@@ -169,28 +195,55 @@ in
                 You can fetch a public key file from a running SSH server
                 with the <command>ssh-keyscan</command> command. The content
                 of the file should follow the same format as described for
-                the <literal>publicKey</literal> option.
+                the <literal>publicKey</literal> option. Only a single key
+                is supported. If a host has multiple keys, use
+                <option>programs.ssh.knownHostsFiles</option> instead.
               '';
             };
           };
-          config = {
-            hostNames = mkDefault [ name ];
-          };
         }));
         description = ''
-          The set of system-wide known SSH hosts.
+          The set of system-wide known SSH hosts. To make simple setups more
+          convenient the name of an attribute in this set is used as a host name
+          for the entry. This behaviour can be disabled by setting
+          <literal>hostNames</literal> explicitly. You can use
+          <literal>extraHostNames</literal> to add additional host names without
+          disabling this default.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           {
             myhost = {
-              hostNames = [ "myhost" "myhost.mydomain.com" "10.10.1.4" ];
+              extraHostNames = [ "myhost.mydomain.com" "10.10.1.4" ];
               publicKeyFile = ./pubkeys/myhost_ssh_host_dsa_key.pub;
             };
-            myhost2 = {
-              hostNames = [ "myhost2" ];
+            "myhost2.net".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILIRuJ8p1Fi+m6WkHV0KWnRfpM1WxoW8XAS+XvsSKsTK";
+            "myhost2.net/dsa" = {
+              hostNames = [ "myhost2.net" ];
               publicKeyFile = ./pubkeys/myhost2_ssh_host_dsa_key.pub;
             };
           }
+        '';
+      };
+
+      knownHostsFiles = mkOption {
+        default = [];
+        type = with types; listOf path;
+        description = ''
+          Files containing SSH host keys to set as global known hosts.
+          <literal>/etc/ssh/ssh_known_hosts</literal> (which is
+          generated by <option>programs.ssh.knownHosts</option>) and
+          <literal>/etc/ssh/ssh_known_hosts2</literal> are always
+          included.
+        '';
+        example = literalExpression ''
+          [
+            ./known_hosts
+            (writeText "github.keys" '''
+              github.com ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
+              github.com ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBEmKSENjQEezOmxkZMy7opKgwFB9nkt5YRrYMjNuG5N87uRgg6CLrbo5wAdT/y6v0mKV0U2w0WZ2YB/++Tpockg=
+              github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl
+            ''')
+          ]
         '';
       };
 
@@ -250,6 +303,7 @@ in
         # Generated options from other settings
         Host *
         AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
+        GlobalKnownHostsFile ${concatStringsSep " " knownHostsFiles}
 
         ${optionalString cfg.setXAuthLocation ''
           XAuthLocation ${pkgs.xorg.xauth}/bin/xauth
@@ -286,7 +340,7 @@ in
         # Allow ssh-agent to ask for confirmation. This requires the
         # unit to know about the user's $DISPLAY (via ‘systemctl
         # import-environment’).
-        environment.SSH_ASKPASS = optionalString config.services.xserver.enable askPasswordWrapper;
+        environment.SSH_ASKPASS = optionalString cfg.enableAskPassword askPasswordWrapper;
         environment.DISPLAY = "fake"; # required to make ssh-agent start $SSH_ASKPASS
       };
 
@@ -297,7 +351,7 @@ in
         fi
       '';
 
-    environment.variables.SSH_ASKPASS = optionalString config.services.xserver.enable askPassword;
+    environment.variables.SSH_ASKPASS = optionalString cfg.enableAskPassword askPassword;
 
   };
 }

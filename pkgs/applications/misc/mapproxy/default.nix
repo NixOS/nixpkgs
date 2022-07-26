@@ -6,10 +6,10 @@
 with python3.pkgs;
 buildPythonApplication rec {
   pname = "MapProxy";
-  version = "1.13.0";
+  version = "1.15.1";
   src = fetchPypi {
   inherit pname version;
-  sha256 = "0qi63ap8yi5g2cas33jv4jsmdrl6yv3qp6bh0zxrfpkb704lcng4";
+  sha256 = "sha256-SVKZDLH8IfdND0/BFj/lrqp7BNanpzkjuTxlSMGjuiY=";
   };
   prePatch = ''
     substituteInPlace mapproxy/util/ext/serving.py --replace "args = [sys.executable] + sys.argv" "args = sys.argv"

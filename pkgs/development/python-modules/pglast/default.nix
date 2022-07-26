@@ -1,33 +1,38 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
-, isPy3k
+, fetchPypi
+, pythonOlder
 , setuptools
-, pytest-cov
 , pytest
 }:
 
 buildPythonPackage rec {
   pname = "pglast";
-  version = "3.3";
+  version = "3.13";
+  format = "setuptools";
 
-  # PyPI tarball does not include all the required files
-  src = fetchFromGitHub {
-    owner = "lelit";
-    repo = pname;
-    rev = "v${version}";
-    fetchSubmodules = true;
-    sha256 = "0l7nvbs1x1qil6mc0rxk7925i5xr3nbqnv0vakx3yv911kj3yhgv";
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-H1IVoXBanNlmjUMhBHRbnBsbeK9LuruqXJaVgSgCFPo=";
   };
 
-  disabled = !isPy3k;
+  propagatedBuildInputs = [
+    setuptools
+  ];
 
-  propagatedBuildInputs = [ setuptools ];
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--cov=pglast --cov-report term-missing" ""
+  '';
 
-  checkInputs = [ pytest pytest-cov ];
+  checkInputs = [
+    pytest
+  ];
 
-  pythonImportsCheck = [ "pglast" ];
-
+  # pytestCheckHook doesn't work
+  # ImportError: cannot import name 'parse_sql' from 'pglast'
   checkPhase = ''
     pytest
   '';
@@ -37,6 +42,6 @@ buildPythonPackage rec {
     description = "PostgreSQL Languages AST and statements prettifier";
     changelog = "https://github.com/lelit/pglast/raw/v${version}/CHANGES.rst";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ marsam ];
   };
 }

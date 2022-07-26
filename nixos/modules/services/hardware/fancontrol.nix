@@ -38,6 +38,7 @@ in
       after = [ "lm_sensors.service" ];
 
       serviceConfig = {
+        Restart = "on-failure";
         ExecStart = "${pkgs.lm_sensors}/sbin/fancontrol ${configFile}";
       };
     };

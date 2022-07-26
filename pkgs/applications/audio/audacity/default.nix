@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , fetchpatch
 , cmake
-, wxGTK
+, makeWrapper
 , pkg-config
 , python3
 , gettext
@@ -18,28 +18,45 @@
 , sqlite
 , sratom
 , suil
-, alsa-lib
 , libsndfile
 , soxr
 , flac
+, lame
 , twolame
 , expat
 , libid3tag
 , libopus
-, ffmpeg
+, libuuid
+, ffmpeg_4
 , soundtouch
-, pcre /*, portaudio - given up fighting their portaudio.patch */
+, pcre
+, portaudio # given up fighting their portaudio.patch?
+, portmidi
 , linuxHeaders
+, alsa-lib
 , at-spi2-core
 , dbus
-, epoxy
+, libepoxy
 , libXdmcp
 , libXtst
 , libpthreadstubs
+, libsbsms_2_3_0
 , libselinux
 , libsepol
 , libxkbcommon
 , util-linux
+, wxGTK
+, libpng
+, libjpeg
+, AppKit ? null
+, AudioToolbox ? null
+, AudioUnit ? null
+, Carbon ? null
+, Cocoa ? null
+, CoreAudio ? null
+, CoreAudioKit ? null
+, CoreServices ? null
+, wxmac
 }:
 
 # TODO
@@ -48,63 +65,40 @@
 
 let
   inherit (lib) optionals;
-
-  wxGTK' = wxGTK.overrideAttrs (oldAttrs: rec {
-    src = fetchFromGitHub {
-      owner = "audacity";
-      repo = "wxWidgets";
-      rev = "07e7d832c7a337aedba3537b90b2c98c4d8e2985";
-      sha256 = "1mawnkcrmqj98jp0jxlnh9xkc950ca033ccb51c7035pzmi9if9a";
-      fetchSubmodules = true;
-    };
-  });
-
-in
-stdenv.mkDerivation rec {
   pname = "audacity";
-  # nixpkgs-update: no auto update
-  # Humans too! Let's wait to see how the situation with
-  # https://github.com/audacity/audacity/issues/1213 develops before
-  # pulling any updates that are subject to this privacy policy. We
-  # may wish to switch to a fork, but at the time of writing
-  # (2021-07-05) it's too early to tell how well any of the forks will
-  # be maintained.
-  version = "3.0.2";
+  version = "3.1.3";
 
-  src = fetchFromGitHub {
-    owner = "audacity";
-    repo = "audacity";
-    rev = "Audacity-${version}";
-    sha256 = "035qq2ff16cdl2cb9iply2bfjmhfl1dpscg79x6c9l0i9m8k41zj";
+  wxWidgets_src = fetchFromGitHub {
+    owner = pname;
+    repo = "wxWidgets";
+    rev = "v${version}-${pname}";
+    sha256 = "sha256-KrmYYv23DHBYKIuxMYBioCQ2e4KWdgmuREnimtm0XNU=";
+    fetchSubmodules = true;
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/audacity/audacity/pull/831/commits/007852e51fcbb5f1f359d112f28b8984a604dac6.patch";
-      sha256 = "0zp2iydd46analda9cfnbmzdkjphz5m7dynrdj5qdnmq6j3px9fw";
-      name = "audacity_xdg_paths.patch";
-    })
-  ];
+  wxGTK' = wxGTK.overrideAttrs (oldAttrs: rec {
+    src = wxWidgets_src;
+  });
+
+  wxmac' = wxmac.overrideAttrs (oldAttrs: rec {
+    src = wxWidgets_src;
+  });
+in stdenv.mkDerivation rec {
+  inherit pname version;
+
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "Audacity-${version}";
+    sha256 = "sha256-sdI4paxIHDZgoWTCekjrkFR4JFpQC6OatcnJdVXCCZk=";
+  };
 
   postPatch = ''
-    touch src/RevisionIdent.h
-
-    substituteInPlace src/FileNames.cpp \
+    mkdir src/private
+  '' + lib.optionalString stdenv.isLinux ''
+    substituteInPlace libraries/lib-files/FileNames.cpp \
       --replace /usr/include/linux/magic.h ${linuxHeaders}/include/linux/magic.h
   '';
-
-  # audacity only looks for ffmpeg at runtime, so we need to link it in manually
-  NIX_LDFLAGS = toString [
-    "-lavcodec"
-    "-lavdevice"
-    "-lavfilter"
-    "-lavformat"
-    "-lavresample"
-    "-lavutil"
-    "-lpostproc"
-    "-lswresample"
-    "-lswscale"
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -113,23 +107,26 @@ stdenv.mkDerivation rec {
     python3
   ] ++ optionals stdenv.isLinux [
     linuxHeaders
+    makeWrapper
   ];
 
   buildInputs = [
-    alsa-lib
     expat
-    ffmpeg
+    ffmpeg_4
     file
     flac
+    lame
     libid3tag
     libjack2
     libmad
     libopus
+    libsbsms_2_3_0
     libsndfile
     libvorbis
     lilv
     lv2
     pcre
+    portmidi
     serd
     sord
     soundtouch
@@ -138,28 +135,74 @@ stdenv.mkDerivation rec {
     sratom
     suil
     twolame
-    wxGTK'
-    wxGTK'.gtk
+    portaudio
   ] ++ optionals stdenv.isLinux [
+    alsa-lib # for portaudio
     at-spi2-core
     dbus
-    epoxy
+    libepoxy
     libXdmcp
     libXtst
     libpthreadstubs
     libxkbcommon
     libselinux
     libsepol
+    libuuid
     util-linux
+    wxGTK'
+    wxGTK'.gtk
+  ] ++ optionals stdenv.isDarwin [
+    wxmac'
+    AppKit
+    Cocoa
+    CoreAudioKit
+    AudioUnit AudioToolbox CoreAudio CoreServices Carbon # for portaudio
+    libpng
+    libjpeg
+  ];
+
+  cmakeFlags = [
+    "-DAUDACITY_REV_LONG=nixpkgs"
+    "-DAUDACITY_REV_TIME=nixpkgs"
+    "-DDISABLE_DYNAMIC_LOADING_FFMPEG=ON"
+    "-Daudacity_conan_enabled=Off"
+    "-Daudacity_use_ffmpeg=loaded"
+
+    # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];
 
   doCheck = false; # Test fails
 
+  # Replace audacity's wrapper, to:
+  # - put it in the right place, it shouldn't be in "$out/audacity"
+  # - Add the ffmpeg dynamic dependency
+  postInstall = lib.optionalString stdenv.isLinux ''
+    rm "$out/audacity"
+    wrapProgram "$out/bin/audacity" \
+      --prefix LD_LIBRARY_PATH : "$out/lib/audacity":${lib.makeLibraryPath [ ffmpeg_4 ]} \
+      --suffix AUDACITY_MODULES_PATH : "$out/lib/audacity/modules" \
+      --suffix AUDACITY_PATH : "$out/share/audacity"
+  '';
+
   meta = with lib; {
     description = "Sound editor with graphical UI";
-    homepage = "https://www.audacityteam.org/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lheckemann ];
-    platforms = platforms.linux;
+    homepage = "https://www.audacityteam.org";
+    changelog = "https://github.com/audacity/audacity/releases";
+    license = with licenses; [
+      gpl2Plus
+      # Must be GPL3 when building with "technologies that require it,
+      # such as the VST3 audio plugin interface".
+      # https://github.com/audacity/audacity/discussions/2142.
+      gpl3
+      # Documentation.
+      cc-by-30
+    ];
+    maintainers = with maintainers; [ lheckemann veprbl ];
+    platforms = platforms.unix;
+    # darwin-aarch due to qtbase broken for it.
+    # darwin-x86_64 due to
+    # https://logs.nix.ci/?attempt_id=5cbc4581-09b4-4148-82fe-0326411a56b3&key=nixos%2Fnixpkgs.152273.
+    broken = stdenv.isDarwin;
   };
 }

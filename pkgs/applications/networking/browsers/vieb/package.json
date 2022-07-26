@@ -1,7 +1,7 @@
 {
   "name": "vieb",
   "productName": "Vieb",
-  "version": "5.3.0",
+  "version": "7.1.2",
   "description": "Vim Inspired Electron Browser",
   "main": "app/index.js",
   "scripts": {
@@ -14,7 +14,7 @@
     "fix": "eslint --fix app .eslintrc.js build.js",
     "lint": "eslint app .eslintrc.js build.js",
     "start": "electron app",
-    "test": "jest --testEnvironment jsdom --coverage --collectCoverageFrom 'app/**/*.js' -u && npm run lint && echo 'All good :)'"
+    "test": "TZ=UTC jest --testEnvironment jsdom --coverage --collectCoverageFrom 'app/**/*.js' -u && npm run lint && echo 'All good :)'"
   },
   "repository": "https://github.com/Jelmerro/Vieb",
   "homepage": "https://vieb.dev",
@@ -28,23 +28,18 @@
   "email": "Jelmerro@users.noreply.github.com",
   "license": "GPL-3.0-or-later",
   "devDependencies": {
-    "archiver": "5.3.0",
-    "electron": "13.1.4",
-    "electron-builder": "22.11.7",
-    "eslint": "7.29.0",
-    "eslint-plugin-compat": "3.9.0",
-    "eslint-plugin-sort-keys-fix": "1.1.1",
-    "jest": "27.0.6",
-    "jest-environment-jsdom": "27.0.6"
+    "electron": "17.0.1",
+    "electron-builder": "22.14.13",
+    "eslint": "8.9.0",
+    "eslint-plugin-sort-keys": "2.3.5",
+    "jest": "27.5.1",
+    "jest-environment-jsdom": "27.5.1"
   },
   "dependencies": {
     "7zip-bin": "5.1.1",
-    "@cliqz/adblocker-electron": "1.22.2",
-    "@cliqz/adblocker-electron-preload": "1.22.2",
-    "is-svg": "4.3.1",
+    "@cliqz/adblocker-electron": "1.23.6",
+    "@cliqz/adblocker-electron-preload": "1.23.6",
+    "is-svg": "4.3.2",
     "rimraf": "3.0.2"
-  },
-  "browserslist": [
-    "last 2 Chrome versions"
-  ]
+  }
 }

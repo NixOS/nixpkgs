@@ -3,7 +3,8 @@
 , ... }:
 
 tcl.mkTclDerivation {
-  name = "tk-${tcl.version}";
+  pname = "tk";
+  version = tcl.version;
 
   inherit src patches;
 
@@ -40,6 +41,8 @@ tcl.mkTclDerivation {
   buildInputs = lib.optional enableAqua (with darwin.apple_sdk.frameworks; [ Cocoa ]);
 
   propagatedBuildInputs = [ libXft ];
+
+  enableParallelBuilding = true;
 
   doCheck = false; # fails. can't find itself
 

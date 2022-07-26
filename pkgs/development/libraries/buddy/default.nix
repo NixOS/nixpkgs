@@ -21,6 +21,5 @@ stdenv.mkDerivation rec {
     license = "as-is";
 
     platforms = lib.platforms.unix; # Once had cygwin problems
-    maintainers = [ lib.maintainers.peti ];
   };
 }

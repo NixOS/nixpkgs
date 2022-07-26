@@ -1,16 +1,23 @@
-{ stdenv, lib, fetchFromGitHub, cmake, orcania, systemd, check, subunit
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, orcania
+, systemd
+, check
+, subunit
 , withSystemd ? stdenv.isLinux
 }:
-assert withSystemd -> systemd != null;
+
 stdenv.mkDerivation rec {
   pname = "yder";
-  version = "1.4.12";
+  version = "1.4.15";
 
   src = fetchFromGitHub {
     owner = "babelouest";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1cmla7rpwvsj1b3jhp9q8y3ni5n8rsqxib87yhh07b7xnlhy0gcj";
+    sha256 = "sha256-hPAL1UngodNbQCCdKulaF5faI0JOjmWdz3q8oyPH7C4=";
   };
 
   patches = [
@@ -21,7 +28,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ orcania ] ++ lib.optional withSystemd systemd;
+  buildInputs = [ orcania ]
+    ++ lib.optional withSystemd systemd;
 
   checkInputs = [ check subunit ];
 
@@ -30,11 +38,6 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional (!withSystemd) "-DWITH_JOURNALD=off";
 
   doCheck = true;
-
-  preCheck = ''
-    export LD_LIBRARY_PATH="$(pwd)''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
-    export DYLD_FALLBACK_LIBRARY_PATH="$(pwd):$DYLD_FALLBACK_LIBRARY_PATH"
-  '';
 
   meta = with lib; {
     description = "Logging library for C applications";

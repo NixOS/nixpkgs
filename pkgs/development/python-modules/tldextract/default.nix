@@ -14,15 +14,19 @@
 
 buildPythonPackage rec {
   pname   = "tldextract";
-  version = "3.1.0";
-  disabled = pythonOlder "3.6";
+  version = "3.3.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cfae9bc8bda37c3e8c7c8639711ad20e95dc85b207a256b60b0b23d7ff5540ea";
+    hash = "sha256-/hWsMgXlolthaJNp+Yy0XHd4qPKvET18EVWezlGV8tY=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     filelock
@@ -38,10 +42,13 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace pytest.ini --replace " --pylint" ""
+    substituteInPlace pytest.ini \
+      --replace " --pylint" ""
   '';
 
-  pythonImportsCheck = [ "tldextract" ];
+  pythonImportsCheck = [
+    "tldextract"
+  ];
 
   meta = with lib; {
     description = "Python module to accurately separate the TLD from the domain of an URL";

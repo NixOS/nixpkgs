@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "enrich";
-  version = "1.2.6";
+  version = "1.2.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Dpn/V9h/e13vDKeZF+iPuTUaoNUuIo7ji/982FgxX+Q=";
+    sha256 = "0a2ab0d2931dff8947012602d1234d2a3ee002d9a355b5d70be6bf5466008893";
   };
 
   buildInputs = [ setuptools-scm ];

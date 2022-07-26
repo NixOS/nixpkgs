@@ -25,11 +25,6 @@
 , zlib
 }:
 
-# We need multiple binaries as a given binary isn't always able to build
-# (even slightly) older or newer versions.
-# - 0.26.1 can build 0.25.x and 0.26.x but not 0.27.x
-# - 0.27.2 can build 0.27.x but not 0.25.x, 0.26.x and 0.29.x
-#
 # We need to keep around at least the latest version released with a stable
 # NixOS
 let
@@ -37,11 +32,20 @@ let
     x86_64-linux = "linux-x86_64";
     i686-linux = "linux-i686";
     x86_64-darwin = "darwin-x86_64";
+    aarch64-darwin = "darwin-universal";
+    aarch64-linux = "linux-aarch64";
   };
 
   arch = archs.${stdenv.system} or (throw "system ${stdenv.system} not supported");
+  isAarch64Darwin = stdenv.system == "aarch64-darwin";
 
   checkInputs = [ git gmp openssl readline libxml2 libyaml ];
+
+  binaryUrl = version: rel:
+    if arch == archs.aarch64-linux then
+      "https://dev.alpinelinux.org/archive/crystal/crystal-${version}-aarch64-alpine-linux-musl.tar.gz"
+    else
+      "https://github.com/crystal-lang/crystal/releases/download/${version}/crystal-${version}-${toString rel}-${arch}.tar.gz";
 
   genericBinary = { version, sha256s, rel ? 1 }:
     stdenv.mkDerivation rec {
@@ -49,14 +53,17 @@ let
       inherit version;
 
       src = fetchurl {
-        url = "https://github.com/crystal-lang/crystal/releases/download/${version}/crystal-${version}-${toString rel}-${arch}.tar.gz";
+        url = binaryUrl version rel;
         sha256 = sha256s.${stdenv.system};
       };
 
       buildCommand = ''
         mkdir -p $out
         tar --strip-components=1 -C $out -xf ${src}
+        patchShebangs $out/bin/crystal
       '';
+
+      meta.broken = lib.versionOlder version "1.2.0" && isAarch64Darwin;
     };
 
   commonBuildInputs = extraBuildInputs: [
@@ -93,6 +100,10 @@ let
       outputs = [ "out" "lib" "bin" ];
 
       postPatch = ''
+        export TMP=$(mktemp -d)
+        export HOME=$TMP
+        mkdir -p $HOME/test
+
         # Add dependency of crystal to docs to avoid issue on flag changes between releases
         # https://github.com/crystal-lang/crystal/pull/8792#issuecomment-614004782
         substituteInPlace Makefile \
@@ -103,44 +114,41 @@ let
 
         ln -sf spec/compiler spec/std
 
-        # Dirty fix for when no sandboxing is enabled
-        rm -rf /tmp/crystal
-        mkdir -p /tmp/crystal
+        mkdir -p $TMP/crystal
 
         substituteInPlace spec/std/file_spec.cr \
           --replace '/bin/ls' '${coreutils}/bin/ls' \
-          --replace '/usr/share' '/tmp/crystal' \
-          --replace '/usr' '/tmp'
+          --replace '/usr/share' "$TMP/crystal" \
+          --replace '/usr' "$TMP" \
+          --replace '/tmp' "$TMP"
 
         substituteInPlace spec/std/process_spec.cr \
           --replace '/bin/cat' '${coreutils}/bin/cat' \
           --replace '/bin/ls' '${coreutils}/bin/ls' \
           --replace '/usr/bin/env' '${coreutils}/bin/env' \
           --replace '"env"' '"${coreutils}/bin/env"' \
-          --replace '"/usr"' '"/tmp"'
-
-        substituteInPlace spec/std/socket/tcp_server_spec.cr \
-          --replace '{% if flag?(:gnu) %}"listen: "{% else %}"bind: "{% end %}' '"bind: "'
+          --replace '/usr' "$TMP" \
+          --replace '/tmp' "$TMP"
 
         substituteInPlace spec/std/system_spec.cr \
           --replace '`hostname`' '`${hostname}/bin/hostname`'
 
-        # See https://github.com/crystal-lang/crystal/pull/8640
-        substituteInPlace spec/std/http/cookie_spec.cr \
-          --replace '01 Jan 2020' '01 Jan #{Time.utc.year + 2}'
-
         # See https://github.com/crystal-lang/crystal/issues/8629
         substituteInPlace spec/std/socket/udp_socket_spec.cr \
           --replace 'it "joins and transmits to multicast groups"' 'pending "joins and transmits to multicast groups"'
-
-        # See https://github.com/crystal-lang/crystal/pull/8699
-        substituteInPlace spec/std/xml/xml_spec.cr \
-          --replace 'it "handles errors"' 'pending "handles errors"'
       '';
 
-      buildInputs = commonBuildInputs extraBuildInputs;
+      # Defaults are 4
+      preBuild = ''
+        export CRYSTAL_WORKERS=$NIX_BUILD_CORES
+        export threads=$NIX_BUILD_CORES
+        export CRYSTAL_CACHE_DIR=$TMP
+      '';
 
+
+      strictDeps = true;
       nativeBuildInputs = [ binary makeWrapper which pkg-config llvmPackages.llvm ];
+      buildInputs = commonBuildInputs extraBuildInputs;
 
       makeFlags = [
         "CRYSTAL_CONFIG_VERSION=${version}"
@@ -197,9 +205,6 @@ let
       checkTarget = "compiler_spec";
 
       preCheck = ''
-        export HOME=/tmp
-        mkdir -p $HOME/test
-
         export LIBRARY_PATH=${lib.makeLibraryPath checkInputs}:$LIBRARY_PATH
         export PATH=${lib.makeBinPath checkInputs}:$PATH
       '';
@@ -209,74 +214,53 @@ let
       };
 
       meta = with lib; {
+        broken = stdenv.isDarwin;
         description = "A compiled language with Ruby like syntax and type inference";
         homepage = "https://crystal-lang.org/";
         license = licenses.asl20;
-        maintainers = with maintainers; [ david50407 fabianhjr manveru peterhoeg ];
-        platforms = builtins.attrNames archs;
-        # Error running at_exit handler: Nil assertion failed
-        broken = lib.versions.minor version == "32" && stdenv.isDarwin;
+        maintainers = with maintainers; [ david50407 manveru peterhoeg ];
+        platforms = let archNames = builtins.attrNames archs; in
+          if (lib.versionOlder version "1.2.0") then remove "aarch64-darwin" archNames else archNames;
       };
     })
   );
 
 in
 rec {
-  binaryCrystal_0_31 = genericBinary {
-    version = "0.31.1";
+  binaryCrystal_1_0 = genericBinary {
+    version = "1.0.0";
     sha256s = {
-      x86_64-linux = "0r8salf572xrnr4m6ll9q5hz6jj8q7ff1rljlhmqb1r26a8mi2ih";
-      i686-linux = "0hridnis5vvrswflx0q67xfg5hryhz6ivlwrb9n4pryj5d1gwjrr";
-      x86_64-darwin = "1dgxgv0s3swkc5cwawzgpbc6bcd2nx4hjxc7iw2h907y1vgmbipz";
+      x86_64-linux = "1949argajiyqyq09824yj3wjyv88gd8wbf20xh895saqfykiq880";
+      i686-linux = "0w0f4fwr2ijhx59i7ppicbh05hfmq7vffmgl7lal6im945m29vch";
+      x86_64-darwin = "01n0rf8zh551vv8wq3h0ifnsai0fz9a77yq87xx81y9dscl9h099";
+      aarch64-linux = "0sns7l4q3z82qi3dc2r4p63f4s8hvifqzgq56ykwyrvawynjhd53";
     };
   };
 
-  crystal_0_31 = generic {
-    version = "0.31.1";
-    sha256 = "1dswxa32w16gnc6yjym12xj7ibg0g6zk3ngvl76lwdjqb1h6lwz8";
-    doCheck = false; # 5 checks are failing now
-    binary = binaryCrystal_0_31;
-  };
-
-  crystal_0_32 = generic {
-    version = "0.32.1";
-    sha256 = "120ndi3nhh2r52hjvhwfb49cdggr1bzdq6b8xg7irzavhjinfza6";
-    binary = crystal_0_31;
-  };
-
-  crystal_0_33 = generic {
-    version = "0.33.0";
-    sha256 = "1zg0qixcws81s083wrh54hp83ng2pa8iyyafaha55mzrh8293jbi";
-    binary = crystal_0_32;
-  };
-
-  crystal_0_34 = generic {
-    version = "0.34.0";
-    sha256 = "110lfpxk9jnqyznbfnilys65ixj5sdmy8pvvnlhqhc3ccvrlnmq4";
-    binary = crystal_0_33;
-  };
-
-  crystal_0_35 = generic {
-    version = "0.35.1";
-    sha256 = "0p51bjl1nsvwsm64lqq421dcsxa201w7wwq8plw4r8wqarpq0g69";
-    binary = crystal_0_34;
-    # Needs git to build as per https://github.com/crystal-lang/crystal/issues/9789
-    extraBuildInputs = [ git ];
-  };
-
-  crystal_0_36 = generic {
-    version = "0.36.1";
-    sha256 = "sha256-5rjrvwZKM4lHpmxLyUVbi0Zw98xT+iJKonxwfUwS/Wk=";
-    binary = crystal_0_35;
+  binaryCrystal_1_2 = genericBinary {
+    version = "1.2.0";
+    sha256s = {
+      aarch64-darwin = "1hrs8cpjxdkcf8mr9qgzilwbg6bakq87sd4yydfsk2f4pqd6g7nf";
+    };
   };
 
   crystal_1_0 = generic {
     version = "1.0.0";
     sha256 = "sha256-RI+a3w6Rr+uc5jRf7xw0tOenR+q6qii/ewWfID6dbQ8=";
-    binary = crystal_0_36;
+    binary = binaryCrystal_1_0;
   };
 
-  crystal = crystal_1_0;
+  crystal_1_1 = generic {
+    version = "1.1.1";
+    sha256 = "sha256-hhhT3reia8acZiPsflwfuD638Ll2JiXwMfES1TyGyNQ=";
+    binary = crystal_1_0;
+  };
 
-  crystal2nix = callPackage ./crystal2nix.nix { };
+  crystal_1_2 = generic {
+    version = "1.2.2";
+    sha256 = "sha256-nyOXhsutVBRdtJlJHe2dALl//BUXD1JeeQPgHU4SwiU=";
+    binary = if isAarch64Darwin then binaryCrystal_1_2 else crystal_1_1;
+  };
+
+  crystal = crystal_1_2;
 }

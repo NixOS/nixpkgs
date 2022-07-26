@@ -2,19 +2,18 @@
 
 buildGoModule rec {
   pname = "do-agent";
-  version = "3.10.0";
+  version = "3.13.0";
 
   src = fetchFromGitHub {
     owner = "digitalocean";
     repo = "do-agent";
     rev = version;
-    sha256 = "sha256-boEgCC3uWvJvb6VKpNhh6vHCfeE7oun5oneI2ITKh9g=";
+    sha256 = "sha256-GJwNJRH7Ib4b3ZP0JHDMZD6h/AZvpRpIaZUDtnLFVoc=";
   };
 
-  buildFlagsArray = ''
-    -ldflags=
-      -X main.version=${version}
-  '';
+  ldflags = [
+    "-X main.version=${version}"
+  ];
 
   vendorSha256 = null;
 

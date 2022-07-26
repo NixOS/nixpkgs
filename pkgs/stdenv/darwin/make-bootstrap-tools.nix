@@ -1,5 +1,7 @@
 { pkgspath ? ../../.., test-pkgspath ? pkgspath
-, system ? builtins.currentSystem, crossSystem ? null, bootstrapFiles ? null
+, localSystem ? { system = builtins.currentSystem; }
+, crossSystem ? null
+, bootstrapFiles ? null
 }:
 
 let cross = if crossSystem != null
@@ -11,7 +13,7 @@ let cross = if crossSystem != null
               in (import "${pkgspath}/pkgs/stdenv/darwin" args').stagesDarwin;
            }
       else {};
-in with import pkgspath ({ inherit system; } // cross // custom-bootstrap);
+in with import pkgspath ({ inherit localSystem; } // cross // custom-bootstrap);
 
 let
   llvmPackages = llvmPackages_11;
@@ -32,50 +34,6 @@ in rec {
   # Avoid messing with libkrb5 and libnghttp2.
   curl_ = curlMinimal.override (args: { gssSupport = false; http2Support = false; });
 
-  # Avoid stdenv rebuild.
-  Libsystem_ = (darwin.Libsystem.override (args:
-    { xnu = darwin.xnu.overrideAttrs (oldAttrs:
-      { patches = [ ./fixed-xnu-python3.patch ]; });
-    })).overrideAttrs (oldAttrs:
-    { installPhase = oldAttrs.installPhase + ''
-        cat <<EOF > $out/include/TargetConditionals.h
-        #ifndef __TARGETCONDITIONALS__
-        #define __TARGETCONDITIONALS__
-        #define TARGET_OS_MAC               1
-        #define TARGET_OS_WIN32             0
-        #define TARGET_OS_UNIX              0
-        #define TARGET_OS_OSX               1
-        #define TARGET_OS_IPHONE            0
-        #define TARGET_OS_IOS               0
-        #define TARGET_OS_WATCH             0
-        #define TARGET_OS_BRIDGE            0
-        #define TARGET_OS_TV                0
-        #define TARGET_OS_SIMULATOR         0
-        #define TARGET_OS_EMBEDDED          0
-        #define TARGET_OS_EMBEDDED_OTHER    0 /* Used in configd */
-        #define TARGET_IPHONE_SIMULATOR     TARGET_OS_SIMULATOR /* deprecated */
-        #define TARGET_OS_NANO              TARGET_OS_WATCH /* deprecated */
-
-        #define TARGET_CPU_PPC          0
-        #define TARGET_CPU_PPC64        0
-        #define TARGET_CPU_68K          0
-        #define TARGET_CPU_X86          0
-        #define TARGET_CPU_X86_64       1
-        #define TARGET_CPU_ARM          0
-        #define TARGET_CPU_ARM64        0
-        #define TARGET_CPU_MIPS         0
-        #define TARGET_CPU_SPARC        0
-        #define TARGET_CPU_ALPHA        0
-        #define TARGET_RT_MAC_CFM       0
-        #define TARGET_RT_MAC_MACHO     1
-        #define TARGET_RT_LITTLE_ENDIAN 1
-        #define TARGET_RT_BIG_ENDIAN    0
-        #define TARGET_RT_64_BIT        1
-        #endif  /* __TARGETCONDITIONALS__ */
-        EOF
-      '';
-    });
-
   build = stdenv.mkDerivation {
     name = "stdenv-bootstrap-tools";
 
@@ -87,12 +45,12 @@ in rec {
 
       ${lib.optionalString stdenv.targetPlatform.isx86_64 ''
         # Copy libSystem's .o files for various low-level boot stuff.
-        cp -d ${Libsystem_}/lib/*.o $out/lib
+        cp -d ${lib.getLib darwin.Libsystem}/lib/*.o $out/lib
 
         # Resolv is actually a link to another package, so let's copy it properly
-        cp -L ${Libsystem_}/lib/libresolv.9.dylib $out/lib
+        cp -L ${lib.getLib darwin.Libsystem}/lib/libresolv.9.dylib $out/lib
 
-        cp -rL ${Libsystem_}/include $out
+        cp -rL ${darwin.Libsystem}/include $out
         chmod -R u+w $out/include
         cp -rL ${darwin.ICU}/include*             $out/include
         cp -rL ${libiconv}/include/*       $out/include
@@ -124,25 +82,25 @@ in rec {
       cp ${curl_.bin}/bin/curl $out/bin
       cp -d ${curl_.out}/lib/libcurl*.dylib $out/lib
       cp -d ${libssh2.out}/lib/libssh*.dylib $out/lib
-      cp -d ${openssl.out}/lib/*.dylib $out/lib
+      cp -d ${lib.getLib openssl}/lib/*.dylib $out/lib
 
       cp -d ${gnugrep.pcre.out}/lib/libpcre*.dylib $out/lib
       cp -d ${lib.getLib libiconv}/lib/lib*.dylib $out/lib
-      cp -d ${gettext}/lib/libintl*.dylib $out/lib
+      cp -d ${lib.getLib gettext}/lib/libintl*.dylib $out/lib
       chmod +x $out/lib/libintl*.dylib
       cp -d ${ncurses.out}/lib/libncurses*.dylib $out/lib
       cp -d ${libxml2.out}/lib/libxml2*.dylib $out/lib
 
       # Copy what we need of clang
       cp -d ${llvmPackages.clang-unwrapped}/bin/clang* $out/bin
-      cp -rd ${llvmPackages.clang-unwrapped.lib}/lib/* $out/lib
+      cp -rd ${lib.getLib llvmPackages.clang-unwrapped}/lib/* $out/lib
 
-      cp -d ${llvmPackages.libcxx}/lib/libc++*.dylib $out/lib
-      cp -d ${llvmPackages.libcxxabi}/lib/libc++abi*.dylib $out/lib
-      cp -d ${llvmPackages.compiler-rt}/lib/darwin/libclang_rt* $out/lib/darwin
-      cp -d ${llvmPackages.compiler-rt}/lib/libclang_rt* $out/lib
-      cp -d ${llvmPackages.llvm.lib}/lib/libLLVM.dylib $out/lib
-      cp -d ${libffi}/lib/libffi*.dylib $out/lib
+      cp -d ${lib.getLib llvmPackages.libcxx}/lib/libc++*.dylib $out/lib
+      cp -d ${lib.getLib llvmPackages.libcxxabi}/lib/libc++abi*.dylib $out/lib
+      cp -d ${lib.getLib llvmPackages.compiler-rt}/lib/darwin/libclang_rt* $out/lib/darwin
+      cp -d ${lib.getLib llvmPackages.compiler-rt}/lib/libclang_rt* $out/lib
+      cp -d ${lib.getLib llvmPackages.llvm.lib}/lib/libLLVM.dylib $out/lib
+      cp -d ${lib.getLib libffi}/lib/libffi*.dylib $out/lib
 
       mkdir $out/include
       cp -rd ${llvmPackages.libcxx.dev}/include/c++     $out/include
@@ -150,11 +108,11 @@ in rec {
       ${lib.optionalString targetPlatform.isAarch64 ''
         # copy .tbd assembly utils
         cp -d ${pkgs.darwin.rewrite-tbd}/bin/rewrite-tbd $out/bin
-        cp -d ${pkgs.libyaml}/lib/libyaml*.dylib $out/lib
+        cp -d ${lib.getLib pkgs.libyaml}/lib/libyaml*.dylib $out/lib
 
         # copy package extraction tools
         cp -d ${pkgs.pbzx}/bin/pbzx $out/bin
-        cp -d ${pkgs.xar}/lib/libxar*.dylib $out/lib
+        cp -d ${lib.getLib pkgs.xar}/lib/libxar*.dylib $out/lib
         cp -d ${pkgs.bzip2.out}/lib/libbz2*.dylib $out/lib
 
         # copy sigtool
@@ -162,7 +120,7 @@ in rec {
         cp -d ${pkgs.darwin.sigtool}/bin/codesign $out/bin
       ''}
 
-      cp -d ${darwin.ICU}/lib/libicu*.dylib $out/lib
+      cp -d ${lib.getLib darwin.ICU}/lib/libicu*.dylib $out/lib
       cp -d ${zlib.out}/lib/libz.*       $out/lib
       cp -d ${gmpxx.out}/lib/libgmp*.*   $out/lib
       cp -d ${xz.out}/lib/liblzma*.*     $out/lib
@@ -172,7 +130,7 @@ in rec {
         cp ${cctools_}/bin/$i $out/bin
       done
 
-      cp -d ${darwin.libtapi}/lib/libtapi* $out/lib
+      cp -d ${lib.getLib darwin.libtapi}/lib/libtapi* $out/lib
 
       ${lib.optionalString targetPlatform.isx86_64 ''
         cp -rd ${pkgs.darwin.CF}/Library $out
@@ -206,7 +164,7 @@ in rec {
       done
 
       for i in $out/bin/*; do
-        if test -x "$i" -a ! -L "$i" -a "$(basename $i)" != codesign; then
+        if test -x "$i" -a ! -L "$i"; then
           echo "Adding @executable_path to rpath in $i"
           ${stdenv.cc.targetPrefix}install_name_tool -add_rpath '@executable_path/../lib' $i
         fi
@@ -395,7 +353,8 @@ in rec {
 
       tar xvf ${hello.src}
       cd hello-*
-      ./configure --prefix=$out
+      # stdenv bootstrap tools ship a broken libiconv.dylib https://github.com/NixOS/nixpkgs/issues/158331
+      am_cv_func_iconv=no ./configure --prefix=$out
       make
       make install
 
@@ -407,7 +366,7 @@ in rec {
   test-pkgs = import test-pkgspath {
     # if the bootstrap tools are for another platform, we should be testing
     # that platform.
-    system = if crossSystem != null then crossSystem else system;
+    localSystem = if crossSystem != null then crossSystem else localSystem;
 
     stdenvStages = args: let
         args' = args // { inherit bootstrapLlvmVersion bootstrapFiles; };

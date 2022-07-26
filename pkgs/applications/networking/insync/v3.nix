@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "insync";
-  version = "3.2.4.40856";
+  version = "3.3.5.40925";
 
   src = fetchurl {
     url = "http://s.insynchq.com/builds/${pname}_${version}-focal_amd64.deb";
-    sha256 = "1bvqbbrfn5784nmb2qaflm1rzczqhvghhb6y5zaxrapyhygxbcis";
+    sha256 = "sha256-lYlG/8d7teX98F5eDxm4EdBfFs7Sz3Td4kKLC6KZqnQ=";
   };
 
   postPatch = ''
@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     platforms = ["x86_64-linux"];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ benley ];
     homepage = "https://www.insynchq.com";

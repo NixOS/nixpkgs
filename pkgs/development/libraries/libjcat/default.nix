@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchFromGitHub
 , docbook_xml_dtd_43
 , docbook-xsl-nons
@@ -18,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libjcat";
-  version = "0.1.7";
+  version = "0.1.11";
 
   outputs = [ "bin" "out" "dev" "devdoc" "man" "installedTests" ];
 
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "hughsie";
     repo = "libjcat";
     rev = version;
-    sha256 = "sha256-WYCYRFjjy9nr1p1SqzBGCBZ5vkhFybddXpHUcwdEDIQ=";
+    sha256 = "2kdoOwgaLpo/Cp3wkCMgdyQ++BC3Cn7CRhXhVCHn/iM=";
   };
 
   patches = [
@@ -43,9 +44,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     vala
     gtk-doc
-    (python3.withPackages (pkgs: with pkgs; [
-      setuptools
-    ]))
+    python3
   ];
 
   buildInputs = [
@@ -59,10 +58,6 @@ stdenv.mkDerivation rec {
     "-Dgtkdoc=true"
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
   ];
-
-  postPatch = ''
-    patchShebangs contrib/generate-version-script.py
-  '';
 
   doCheck = true;
 

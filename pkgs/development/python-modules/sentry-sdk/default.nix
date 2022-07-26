@@ -1,67 +1,161 @@
-{ aiohttp
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+
+# runtime
+, certifi
+, urllib3
+
+# optionals
+, aiohttp
+, apache-beam
 , blinker
 , botocore
 , bottle
-, buildPythonPackage
 , celery
-, certifi
 , chalice
 , django
 , falcon
-, fetchPypi
 , flask
-, iana-etc
-, isPy3k
-, libredirect
+, flask_login
+, httpx
+, pure-eval
 , pyramid
+, pyspark
 , rq
 , sanic
 , sqlalchemy
-, lib
 , tornado
-, urllib3
 , trytond
 , werkzeug
-, executing
-, pure-eval
+
+# tests
 , asttokens
+, executing
+, gevent
+, jsonschema
+, mock
+, pyrsistent
+, pytest-forked
+, pytest-localserver
+, pytest-watch
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "1.3.1";
+  version = "1.8.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0v72zzghlk6kvjg7fg4c4mfr1kasnwlpjzk1wyqd864nz9293sgb";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "getsentry";
+    repo = "sentry-python";
+    rev = version;
+    hash = "sha256-PtGQJUZ6/u2exmg6P5VV2RoBKyuV3G2YuAWgA06oQKo=";
   };
 
-  checkInputs = [ blinker botocore chalice django flask tornado bottle rq falcon sqlalchemy werkzeug trytond
-    executing pure-eval asttokens ]
-  ++ lib.optionals isPy3k [ celery pyramid sanic aiohttp ];
+  propagatedBuildInputs = [
+    certifi
+    urllib3
+  ];
 
-  propagatedBuildInputs = [ urllib3 certifi ];
+  passthru.optional-dependencies = {
+    aiohttp = [
+      aiohttp
+    ];
+    beam = [
+      apache-beam
+    ];
+    bottle = [
+      bottle
+    ];
+    celery = [
+      celery
+    ];
+    chalice = [
+      chalice
+    ];
+    django = [
+      django
+    ];
+    falcon = [
+      falcon
+    ];
+    flask = [
+      flask
+      blinker
+    ];
+    httpx = [
+      httpx
+    ];
+    pyspark = [
+      pyspark
+    ];
+    pure_eval = [
+      asttokens
+      executing
+      pure-eval
+    ];
+    quart = [
+      # quart missing
+      blinker
+    ];
+    rq = [
+      rq
+    ];
+    sanic = [
+      sanic
+    ];
+    sqlalchemy = [
+      sqlalchemy
+    ];
+    tornado = [
+      tornado
+    ];
+  };
 
+  checkInputs = [
+    asttokens
+    executing
+    gevent
+    jsonschema
+    mock
+    pure-eval
+    pyrsistent
+    pytest-forked
+    pytest-localserver
+    pytest-watch
+    pytestCheckHook
+  ];
 
-  # The Sentry tests need access to `/etc/protocols` (the tests call
-  # `socket.getprotobyname('tcp')`, which reads from this file). Normally
-  # this path isn't available in the sandbox. Therefore, use libredirect
-  # to make on eavailable from `iana-etc`. This is a test-only operation.
-  preCheck = ''
-    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols
-    export LD_PRELOAD=${libredirect}/lib/libredirect.so
-  '';
+  doCheck = !stdenv.isDarwin;
 
-  postCheck = "unset NIX_REDIRECTS LD_PRELOAD";
+  disabledTests = [
+    # Issue with the asseration
+    "test_auto_enabling_integrations_catches_import_error"
+  ];
 
-  # no tests
-  doCheck = false;
-  pythonImportsCheck = [ "sentry_sdk" ];
+  disabledTestPaths = [
+    # Varius integration tests fail every once in a while when we
+    # upgrade depencies, so don't bother testing them.
+    "tests/integrations/"
+  ] ++ lib.optionals (stdenv.buildPlatform != "x86_64-linux") [
+    # test crashes on aarch64
+    "tests/test_transport.py"
+  ];
+
+  pythonImportsCheck = [
+    "sentry_sdk"
+  ];
 
   meta = with lib; {
+    description = "Python SDK for Sentry.io";
     homepage = "https://github.com/getsentry/sentry-python";
-    description = "New Python SDK for Sentry.io";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ fab gebner ];
   };
 }

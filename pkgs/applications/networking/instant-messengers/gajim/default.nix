@@ -1,7 +1,8 @@
-{ lib, fetchurl, gettext, wrapGAppsHook
+{ lib, fetchurl, fetchFromGitLab, gettext, wrapGAppsHook
 
 # Native dependencies
 , python3, gtk3, gobject-introspection, gnome
+, gtksourceview4
 , glib-networking
 
 # Test dependencies
@@ -15,25 +16,28 @@
 , enableSpelling ? true, gspell
 , enableUPnP ? true, gupnp-igd
 , enableOmemoPluginDependencies ? true
+, enableAppIndicator ? true, libappindicator-gtk3
 , extraPythonPackages ? ps: []
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gajim";
-  version = "1.3.2";
+  version = "1.4.6";
 
   src = fetchurl {
     url = "https://gajim.org/downloads/${lib.versions.majorMinor version}/gajim-${version}.tar.gz";
-    sha256 = "1vjzv8zg9s393xw81klcgbkn4h6j2blzla9iil5kqfrw7wmldskh";
+    sha256 = "sha256-iiZ2Nv6voq67+OJ26hk+3JQSKevx9ti8s6DreSAsQk8=";
   };
 
   buildInputs = [
     gobject-introspection gtk3 gnome.adwaita-icon-theme
+    gtksourceview4
     glib-networking
   ] ++ lib.optionals enableJingle [ farstream gstreamer gst-plugins-base gst-libav gst-plugins-good libnice ]
     ++ lib.optional enableSecrets libsecret
     ++ lib.optional enableSpelling gspell
-    ++ lib.optional enableUPnP gupnp-igd;
+    ++ lib.optional enableUPnP gupnp-igd
+    ++ lib.optional enableAppIndicator libappindicator-gtk3;
 
   nativeBuildInputs = [
     gettext wrapGAppsHook
@@ -46,7 +50,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = with python3.pkgs; [
-    nbxmpp pygobject3 dbus-python pillow css-parser precis-i18n keyring setuptools
+    nbxmpp pygobject3 dbus-python pillow css-parser precis-i18n keyring setuptools packaging gssapi
   ] ++ lib.optionals enableE2E [ pycrypto python-gnupg ]
     ++ lib.optional enableRST docutils
     ++ lib.optionals enableOmemoPluginDependencies [ python-axolotl qrcode ]
@@ -55,12 +59,10 @@ python3.pkgs.buildPythonApplication rec {
   checkInputs = [ xvfb-run dbus.daemon ];
 
   checkPhase = ''
-    # https://dev.gajim.org/gajim/gajim/-/issues/10478
-    rm test/lib/gajim_mocks.py test/unit/test_gui_interface.py
-
     xvfb-run dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
-      ${python3.interpreter} setup.py test
+      ${python3.interpreter} -m unittest discover -s test/gtk -v
+    ${python3.interpreter} -m unittest discover -s test/no_gui -v
   '';
 
   # necessary for wrapGAppsHook
@@ -71,8 +73,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "Jabber client written in PyGTK";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ raskin abbradar ];
-    downloadPage = "http://gajim.org/downloads.php";
-    updateWalker = true;
+    downloadPage = "http://gajim.org/download/";
     platforms = lib.platforms.linux;
   };
 }

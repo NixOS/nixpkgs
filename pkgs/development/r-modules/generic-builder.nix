@@ -10,6 +10,8 @@ stdenv.mkDerivation ({
   NIX_CFLAGS_COMPILE =
     lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
 
+  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
+
   configurePhase = ''
     runHook preConfigure
     export R_LIBS_SITE="$R_LIBS_SITE''${R_LIBS_SITE:+:}$out/library"
@@ -36,7 +38,7 @@ stdenv.mkDerivation ({
   installPhase = ''
     runHook preInstall
     mkdir -p $out/library
-    $rCommand CMD INSTALL $installFlags --configure-args="$configureFlags" -l $out/library .
+    $rCommand CMD INSTALL --built-timestamp='1970-01-01 00:00:00 UTC' $installFlags --configure-args="$configureFlags" -l $out/library .
     runHook postInstall
   '';
 

@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libevdev, udev }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libevdev, udev, acl }:
 
 stdenv.mkDerivation rec {
   pname = "joycond";
-  version = "unstable-2021-03-27";
+  version = "unstable-2021-07-30";
 
   src = fetchFromGitHub {
     owner = "DanielOgorchock";
     repo = "joycond";
-    rev = "2d3f553060291f1bfee2e49fc2ca4a768b289df8";
-    sha256 = "0dpmwspll9ar3pxg9rgnh224934par8h8bixdz9i2pqqbc3dqib7";
+    rev = "f9a66914622514c13997c2bf7ec20fa98e9dfc1d";
+    sha256 = "sha256-quw7yBHDDZk1+6uHthsfMCej7g5uP0nIAqzvI6436B8=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -25,6 +25,9 @@ stdenv.mkDerivation rec {
 
     substituteInPlace $out/etc/systemd/system/joycond.service --replace \
       "ExecStart=/usr/bin/joycond" "ExecStart=$out/bin/joycond"
+
+    substituteInPlace $out/etc/udev/rules.d/89-joycond.rules --replace \
+      "/bin/setfacl"  "${acl}/bin/setfacl"
   '';
 
   meta = with lib; {

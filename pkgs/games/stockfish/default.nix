@@ -11,23 +11,23 @@ let
            if stdenv.isAarch64 then "armv8" else
            "unknown";
 
-    nnueFile = "nn-3475407dc199.nnue";
+    nnueFile = "nn-6877cd24400e.nnue";
     nnue = fetchurl {
       name = nnueFile;
       url = "https://tests.stockfishchess.org/api/nn/${nnueFile}";
-      sha256 = "sha256-NHVAfcGZc+pERnZ4Y0zOAj1iDkGXcMERzIk3/maJ7Ic=";
+      sha256 = "sha256-aHfNJEAOAbGf8SrjBoriQhUoAr3TMOZve2cDhlJR1uM=";
     };
 in
 
 stdenv.mkDerivation rec {
   pname = "stockfish";
-  version = "14";
+  version = "15";
 
   src = fetchFromGitHub {
     owner = "official-stockfish";
     repo = "Stockfish";
     rev = "sf_${version}";
-    sha256 = "sha256-fX0Tr1yqjmNRSxmisFRKUY1E5//qF3zAfJ8innAeyxA=";
+    sha256 = "sha256-sK4Jw9BPGRvlm9oIcgGcmHe8G4GR4cEuD8MtDrHZKew=";
   };
 
   # This addresses a linker issue with Darwin
@@ -54,9 +54,9 @@ stdenv.mkDerivation rec {
       Stockfish is one of the strongest chess engines in the world. It is also
       much stronger than the best human chess grandmasters.
       '';
-    maintainers = with maintainers; [ luispedro peti siraben ];
+    maintainers = with maintainers; [ luispedro siraben ];
     platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux"];
-    license = licenses.gpl2;
+    license = licenses.gpl3Only;
   };
 
 }

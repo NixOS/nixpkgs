@@ -3,8 +3,14 @@
 with lib;
 let
   cfg = config.services.k3s;
+  removeOption = config: instruction:
+    lib.mkRemovedOptionModule ([ "services" "k3s" ] ++ config) instruction;
 in
 {
+  imports = [
+    (removeOption [ "docker" ] "k3s docker option is no longer supported.")
+  ];
+
   # interface
   options.services.k3s = {
     enable = mkEnableOption "k3s";
@@ -12,8 +18,7 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.k3s;
-      defaultText = "pkgs.k3s";
-      example = literalExample "pkgs.k3s";
+      defaultText = literalExpression "pkgs.k3s";
       description = "Package that should be used for k3s";
     };
 
@@ -47,12 +52,6 @@ in
       type = types.nullOr types.path;
       description = "File path containing k3s token to use when connecting to the server. This option only makes sense for an agent.";
       default = null;
-    };
-
-    docker = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Use docker to run containers rather than the built-in containerd.";
     };
 
     extraFlags = mkOption {
@@ -89,19 +88,11 @@ in
       }
     ];
 
-    virtualisation.docker = mkIf cfg.docker {
-      enable = mkDefault true;
-    };
-
-    # TODO: disable this once k3s supports cgroupsv2, either by docker
-    # supporting it, or their bundled containerd
-    systemd.enableUnifiedCgroupHierarchy = false;
-
     environment.systemPackages = [ config.services.k3s.package ];
 
     systemd.services.k3s = {
       description = "k3s service";
-      after = [ "network.service" "firewall.service" ] ++ (optional cfg.docker "docker.service");
+      after = [ "network.service" "firewall.service" ];
       wants = [ "network.service" "firewall.service" ];
       wantedBy = [ "multi-user.target" ];
       path = optional config.boot.zfs.enabled config.boot.zfs.package;
@@ -119,7 +110,7 @@ in
         ExecStart = concatStringsSep " \\\n " (
           [
             "${cfg.package}/bin/k3s ${cfg.role}"
-          ] ++ (optional cfg.docker "--docker")
+          ]
           ++ (optional cfg.disableAgent "--disable-agent")
           ++ (optional (cfg.serverAddr != "") "--server ${cfg.serverAddr}")
           ++ (optional (cfg.token != "") "--token ${cfg.token}")

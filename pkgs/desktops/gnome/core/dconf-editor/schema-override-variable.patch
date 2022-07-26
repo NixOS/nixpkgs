@@ -1,0 +1,14 @@
+diff --git a/editor/source-manager.vala b/editor/source-manager.vala
+index 27b2b17a..87f7ba86 100644
+--- a/editor/source-manager.vala
++++ b/editor/source-manager.vala
+@@ -121,6 +121,9 @@ private class SourceManager : Object
+             source = try_prepend_dir (source, Path.build_filename (system_data_dirs [i], "glib-2.0", "schemas"));
+         string user_data_dir = GLib.Environment.get_user_data_dir ();
+         source = try_prepend_dir (source, Path.build_filename (user_data_dir, "glib-2.0", "schemas"));
++        string? nix_var_schema_dir = GLib.Environment.get_variable ("NIX_GSETTINGS_OVERRIDES_DIR");
++        if (nix_var_schema_dir != null)
++            source = try_prepend_dir (source, (!) nix_var_schema_dir);
+         string? var_schema_dir = GLib.Environment.get_variable ("GSETTINGS_SCHEMA_DIR");
+         if (var_schema_dir != null)
+             source = try_prepend_dir (source, (!) var_schema_dir);

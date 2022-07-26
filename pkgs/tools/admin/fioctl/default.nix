@@ -1,26 +1,40 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, fioctl }:
 
 buildGoModule rec {
   pname = "fioctl";
-  version = "0.18";
+  version = "0.26";
 
   src = fetchFromGitHub {
     owner = "foundriesio";
     repo = "fioctl";
     rev = "v${version}";
-    sha256 = "sha256-uqJ08ftaU39gmhDtl+noVtGscu6utcl42rXz4XaGtWc=";
+    sha256 = "sha256-IrbzWQEtCEG2UUkExWgs7A81RiJLXDAOrr8q4mPwcOI=";
   };
 
-  vendorSha256 = "sha256-6a+JMj3hh6GPuqnLknv7/uR8vsUsOgsS+pdxHoMqH5w=";
+  vendorSha256 = "sha256-lstUcyxDVcUtgVY5y5EGgSFZgHbchQ9izf8sCq5vTVQ=";
 
-  runVend = true;
+  ldflags = [
+    "-s" "-w"
+    "-X github.com/foundriesio/fioctl/subcommands/version.Commit=${src.rev}"
+  ];
 
-  buildFlagsArray = ''
-    -ldflags=-s -w -X github.com/foundriesio/fioctl/subcommands/version.Commit=${src.rev}
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd fioctl \
+      --bash <($out/bin/fioctl completion bash) \
+      --fish <($out/bin/fioctl completion fish) \
+      --zsh <($out/bin/fioctl completion zsh)
   '';
 
+  passthru.tests.version = testers.testVersion {
+    package = fioctl;
+    command = "HOME=$(mktemp -d) fioctl version";
+    version = "v${version}";
+  };
+
   meta = with lib; {
-    description = "A simple CLI to manage your Foundries Factory ";
+    description = "A simple CLI to manage your Foundries Factory";
     homepage = "https://github.com/foundriesio/fioctl";
     license = licenses.asl20;
     maintainers = with maintainers; [ nixinator matthewcroughan ];

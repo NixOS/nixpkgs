@@ -1,21 +1,65 @@
-{ lib, stdenv, fetchurl, glib, gtk3, meson, ninja, pkg-config, gnome, gettext, itstool, libxml2, libarchive
-, file, json-glib, python3, wrapGAppsHook, desktop-file-utils, libnotify, nautilus, glibcLocales
-, unzip, cpio }:
+{ lib
+, stdenv
+, fetchurl
+, desktop-file-utils
+, gettext
+, glibcLocales
+, itstool
+, libxml2
+, meson
+, ninja
+, pkg-config
+, python3
+, wrapGAppsHook
+, cpio
+, file
+, glib
+, gnome
+, gtk3
+, libhandy
+, json-glib
+, libarchive
+, libnotify
+, nautilus
+, unzip
+}:
 
 stdenv.mkDerivation rec {
   pname = "file-roller";
-  version = "3.40.0";
+  version = "3.42.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "039w1dcpa5ypmv6sm634alk9vbcdkyvy595vkh5gn032jsiqca2a";
+    sha256 = "HEOObVPsEP9PLrWyLXu/KKfCqElXq2SnUcHN88UjAsc=";
   };
 
   LANG = "en_US.UTF-8"; # postinstall.py
 
-  nativeBuildInputs = [ meson ninja gettext itstool pkg-config libxml2 python3 wrapGAppsHook glibcLocales desktop-file-utils ];
+  nativeBuildInputs = [
+    desktop-file-utils
+    gettext
+    glibcLocales
+    itstool
+    libxml2
+    meson
+    ninja
+    pkg-config
+    python3
+    wrapGAppsHook
+  ];
 
-  buildInputs = [ glib gtk3 json-glib libarchive file gnome.adwaita-icon-theme libnotify nautilus cpio ];
+  buildInputs = [
+    cpio
+    file
+    glib
+    gnome.adwaita-icon-theme
+    gtk3
+    libhandy
+    json-glib
+    libarchive
+    libnotify
+    nautilus
+  ];
 
   PKG_CONFIG_LIBNAUTILUS_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/lib/nautilus/extensions-3.0";
 
@@ -25,10 +69,11 @@ stdenv.mkDerivation rec {
     patchShebangs data/set-mime-type-entry.py
   '';
 
-  postFixup = ''
+  preFixup = ''
     # Workaround because of https://gitlab.gnome.org/GNOME/file-roller/issues/40
-    wrapProgram "$out/bin/file-roller" \
+    gappsWrapperArgs+=(
       --prefix PATH : ${lib.makeBinPath [ unzip ]}
+    )
   '';
 
   passthru = {
@@ -43,6 +88,6 @@ stdenv.mkDerivation rec {
     description = "Archive manager for the GNOME desktop environment";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = teams.gnome.members;
+    maintainers = teams.gnome.members ++ teams.pantheon.members;
   };
 }

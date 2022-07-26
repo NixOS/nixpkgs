@@ -36,8 +36,6 @@ mkDerivation {
       -change libfive.dylib $out/lib/libfive.dylib \
       -change libfive-guile.dylib $out/lib/libfive-guile.dylib \
       $out/Applications/Studio.app/Contents/MacOS/Studio
-
-    wrapQtApp $out/Applications/Studio.app/Contents/MacOS/Studio
   '' else ''
     # Link "Studio" binary to "libfive-studio" to be more obvious:
     ln -s "$out/bin/Studio" "$out/bin/libfive-studio"
@@ -49,5 +47,6 @@ mkDerivation {
     maintainers = with maintainers; [ hodapp kovirobi ];
     license = with licenses; [ mpl20 gpl2Plus ];
     platforms = with platforms; linux ++ darwin;
+    broken = true;
   };
 }

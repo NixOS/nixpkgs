@@ -3,103 +3,91 @@
 , lib
 , fetchFromGitHub
 , ncurses
-, pkg-config
-, fontconfig
-, python3
-, openssl
 , perl
-, dbus
+, pkg-config
+, python3
+, fontconfig
+, openssl
+, libGL
 , libX11
-, xcbutil
 , libxcb
+, libxkbcommon
+, xcbutil
 , xcbutilimage
 , xcbutilkeysyms
-, xcbutilwm # contains xcb-ewmh among others
-, libxkbcommon
-, libglvnd # libEGL.so.1
-, egl-wayland
+, xcbutilwm
 , wayland
-, libGLU
-, libGL
-, freetype
 , zlib
-  # Apple frameworks
 , CoreGraphics
 , Cocoa
 , Foundation
 , libiconv
+, nixosTests
+, runCommand
 }:
-let
-  runtimeDeps = [
-    zlib
-    fontconfig
-    freetype
-  ] ++ lib.optionals stdenv.isLinux [
-    libX11
-    xcbutil
-    libxcb
-    xcbutilimage
-    xcbutilkeysyms
-    xcbutilwm
-    libxkbcommon
-    dbus
-    libglvnd
-    egl-wayland
-    wayland
-    libGLU
-    libGL
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    Foundation
-    CoreGraphics
-    Cocoa
-    libiconv
-  ];
-in
 
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "20210502-154244-3f7122cb";
+  version = "20220624-141144-bd1b7c5d";
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = pname;
     rev = version;
-    sha256 = "9HPhb7Vyy5DwBW1xeA6sEIBmmOXlky9lPShu6ZoixPw=";
     fetchSubmodules = true;
+    sha256 = "sha256-7VuNOJ4xqTxumLft7wRj4zdN8Y2ZSYtXr/KuqaLNOgw=";
   };
-
-  outputs = [ "out" "terminfo" ];
 
   postPatch = ''
     echo ${version} > .tag
+
+    # tests are failing with: Unable to exchange encryption keys
+    rm -r wezterm-ssh/tests
   '';
 
-  cargoSha256 = "sha256-cbZg2wc3G2ffMQBB6gd0vBbow5GRbXaj8Xh5ga1cMxU=";
+  cargoSha256 = "sha256-YvQ0APyPiYwISE/pDD2s+UgYFj4CKPdolb14FrNpocU=";
 
   nativeBuildInputs = [
     pkg-config
     python3
-    perl
-    ncurses
+    ncurses # tic for terminfo
+  ] ++ lib.optional stdenv.isDarwin perl;
+
+  buildInputs = [
+    fontconfig
+    zlib
+  ] ++ lib.optionals stdenv.isLinux [
+    libX11
+    libxcb
+    libxkbcommon
+    openssl
+    wayland
+    xcbutil
+    xcbutilimage
+    xcbutilkeysyms
+    xcbutilwm # contains xcb-ewmh among others
+  ] ++ lib.optionals stdenv.isDarwin [
+    Cocoa
+    CoreGraphics
+    Foundation
+    libiconv
   ];
 
-  buildInputs = runtimeDeps;
-
   postInstall = ''
-    mkdir -p $terminfo/share/terminfo/w $out/nix-support
-    tic -x -o $terminfo/share/terminfo termwiz/data/wezterm.terminfo
-    echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+    mkdir -p $out/nix-support
+    echo "${passthru.terminfo}" >> $out/nix-support/propagated-user-env-packages
 
+    # desktop icon
     install -Dm644 assets/icon/terminal.png $out/share/icons/hicolor/128x128/apps/org.wezfurlong.wezterm.png
     install -Dm644 assets/wezterm.desktop $out/share/applications/org.wezfurlong.wezterm.desktop
     install -Dm644 assets/wezterm.appdata.xml $out/share/metainfo/org.wezfurlong.wezterm.appdata.xml
+
+    # helper scripts
+    install -Dm644 assets/shell-integration/wezterm.sh -t $out/etc/profile.d
   '';
 
   preFixup = lib.optionalString stdenv.isLinux ''
-    for artifact in wezterm wezterm-gui wezterm-mux-server strip-ansi-escapes; do
-      patchelf --set-rpath "${lib.makeLibraryPath runtimeDeps}" $out/bin/$artifact
-    done
+    patchelf --add-needed "${libGL}/lib/libEGL.so.1" $out/bin/wezterm-gui
   '' + lib.optionalString stdenv.isDarwin ''
     mkdir -p "$out/Applications"
     OUT_APP="$out/Applications/WezTerm.app"
@@ -109,14 +97,29 @@ rustPlatform.buildRustPackage rec {
     ln -s $out/bin/{wezterm,wezterm-mux-server,wezterm-gui,strip-ansi-escapes} "$OUT_APP"
   '';
 
-  # prevent further changes to the RPATH
-  dontPatchELF = true;
+  passthru = {
+    tests = {
+      all-terminfo = nixosTests.allTerminfo;
+      terminal-emulators = nixosTests.terminal-emulators.wezterm;
+    };
+    terminfo = runCommand "wezterm-terminfo"
+      {
+        nativeBuildInputs = [
+          ncurses
+        ];
+      } ''
+      mkdir -p $out/share/terminfo $out/nix-support
+      tic -x -o $out/share/terminfo ${src}/termwiz/data/wezterm.terminfo
+    '';
+  };
 
   meta = with lib; {
     description = "A GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust";
     homepage = "https://wezfurlong.org/wezterm";
     license = licenses.mit;
-    maintainers = with maintainers; [ steveej SuperSandro2000 ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
     platforms = platforms.unix;
+    # Fails on missing UserNotifications framework while linking
+    broken = stdenv.isDarwin;
   };
 }

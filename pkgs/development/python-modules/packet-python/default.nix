@@ -12,10 +12,10 @@
 
 buildPythonPackage rec {
   pname = "packet-python";
-  version = "1.44.0";
+  version = "1.44.2";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4af12f2fbcc9713878ab4ed571e9fda028bc68add34cde0e7226af4d833a4d38";
+    sha256 = "4ce0827bc41d5bf5558284c18048344343f7c4c6e280b64bbe53fb51ab454892";
   };
   nativeBuildInputs = [ pytest-runner ];
   propagatedBuildInputs = [ requests ];

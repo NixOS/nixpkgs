@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.gitea;
+  opt = options.services.gitea;
   gitea = cfg.package;
   pg = config.services.postgresql;
   useMysql = cfg.database.type == "mysql";
@@ -32,7 +33,7 @@ in
       package = mkOption {
         default = pkgs.gitea;
         type = types.package;
-        defaultText = "pkgs.gitea";
+        defaultText = literalExpression "pkgs.gitea";
         description = "gitea derivation to use";
       };
 
@@ -51,11 +52,12 @@ in
       log = {
         rootPath = mkOption {
           default = "${cfg.stateDir}/log";
+          defaultText = literalExpression ''"''${config.${opt.stateDir}}/log"'';
           type = types.str;
           description = "Root path for log files.";
         };
         level = mkOption {
-          default = "Trace";
+          default = "Info";
           type = types.enum [ "Trace" "Debug" "Info" "Warn" "Error" "Critical" ];
           description = "General log level.";
         };
@@ -84,6 +86,11 @@ in
         port = mkOption {
           type = types.port;
           default = (if !usePostgresql then 3306 else pg.port);
+          defaultText = literalExpression ''
+            if config.${opt.database.type} != "postgresql"
+            then 3306
+            else config.${options.services.postgresql.port}
+          '';
           description = "Database host port.";
         };
 
@@ -122,7 +129,7 @@ in
         socket = mkOption {
           type = types.nullOr types.path;
           default = if (cfg.database.createDatabase && usePostgresql) then "/run/postgresql" else if (cfg.database.createDatabase && useMysql) then "/run/mysqld/mysqld.sock" else null;
-          defaultText = "null";
+          defaultText = literalExpression "null";
           example = "/run/mysqld/mysqld.sock";
           description = "Path to the unix socket file to use for authentication.";
         };
@@ -130,6 +137,7 @@ in
         path = mkOption {
           type = types.str;
           default = "${cfg.stateDir}/data/gitea.db";
+          defaultText = literalExpression ''"''${config.${opt.stateDir}}/data/gitea.db"'';
           description = "Path to the sqlite3 database file.";
         };
 
@@ -166,7 +174,21 @@ in
         backupDir = mkOption {
           type = types.str;
           default = "${cfg.stateDir}/dump";
+          defaultText = literalExpression ''"''${config.${opt.stateDir}}/dump"'';
           description = "Path to the dump files.";
+        };
+
+        type = mkOption {
+          type = types.enum [ "zip" "rar" "tar" "sz" "tar.gz" "tar.xz" "tar.bz2" "tar.br" "tar.lz4" ];
+          default = "zip";
+          description = "Archive format used to store the dump file.";
+        };
+
+        file = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = "Filename to be used for the dump. If `null` a default name is choosen by gitea.";
+          example = "gitea-dump";
         };
       };
 
@@ -199,6 +221,7 @@ in
         contentDir = mkOption {
           type = types.str;
           default = "${cfg.stateDir}/data/lfs";
+          defaultText = literalExpression ''"''${config.${opt.stateDir}}/data/lfs"'';
           description = "Where to store LFS files.";
         };
       };
@@ -212,6 +235,7 @@ in
       repositoryRoot = mkOption {
         type = types.str;
         default = "${cfg.stateDir}/repositories";
+        defaultText = literalExpression ''"''${config.${opt.stateDir}}/repositories"'';
         description = "Path to the git repositories.";
       };
 
@@ -255,8 +279,9 @@ in
       };
 
       staticRootPath = mkOption {
-        type = types.str;
-        default = "${gitea.data}";
+        type = types.either types.str types.path;
+        default = gitea.data;
+        defaultText = literalExpression "package.data";
         example = "/var/lib/gitea/data";
         description = "Upper level of template and static files path.";
       };
@@ -287,7 +312,7 @@ in
           Gitea configuration. Refer to <link xlink:href="https://docs.gitea.io/en-us/config-cheat-sheet/"/>
           for details on supported values.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           {
             "cron.sync_external_users" = {
               RUN_AT_START = true;
@@ -298,7 +323,7 @@ in
               ENABLED = true;
               MAILER_TYPE = "sendmail";
               FROM = "do-not-reply@example.org";
-              SENDMAIL_PATH = "${pkgs.system-sendmail}/bin/sendmail";
+              SENDMAIL_PATH = "''${pkgs.system-sendmail}/bin/sendmail";
             };
             other = {
               SHOW_FOOTER_VERSION = false;
@@ -348,7 +373,7 @@ in
       server = mkMerge [
         {
           DOMAIN = cfg.domain;
-          STATIC_ROOT_PATH = cfg.staticRootPath;
+          STATIC_ROOT_PATH = toString cfg.staticRootPath;
           LFS_JWT_SECRET = "#lfsjwtsecret#";
           ROOT_URL = cfg.rootUrl;
         }
@@ -474,6 +499,7 @@ in
         oldLfsJwtSecret = "${cfg.stateDir}/custom/conf/jwt_secret"; # old file for LFS_JWT_SECRET
         lfsJwtSecret = "${cfg.stateDir}/custom/conf/lfs_jwt_secret"; # new file for LFS_JWT_SECRET
         internalToken = "${cfg.stateDir}/custom/conf/internal_token";
+        replaceSecretBin = "${pkgs.replace-secret}/bin/replace-secret";
       in ''
         # copy custom configuration and generate a random secret key if needed
         ${optionalString (cfg.useWizard == false) ''
@@ -501,26 +527,23 @@ in
                 ${gitea}/bin/gitea generate secret INTERNAL_TOKEN > ${internalToken}
             fi
 
-            SECRETKEY="$(head -n1 ${secretKey})"
-            DBPASS="$(head -n1 ${cfg.database.passwordFile})"
-            OAUTH2JWTSECRET="$(head -n1 ${oauth2JwtSecret})"
-            LFSJWTSECRET="$(head -n1 ${lfsJwtSecret})"
-            INTERNALTOKEN="$(head -n1 ${internalToken})"
-            ${if (cfg.mailerPasswordFile == null) then ''
-              MAILERPASSWORD="#mailerpass#"
-            '' else ''
-              MAILERPASSWORD="$(head -n1 ${cfg.mailerPasswordFile} || :)"
+            chmod u+w '${runConfig}'
+            ${replaceSecretBin} '#secretkey#' '${secretKey}' '${runConfig}'
+            ${replaceSecretBin} '#dbpass#' '${cfg.database.passwordFile}' '${runConfig}'
+            ${replaceSecretBin} '#oauth2jwtsecret#' '${oauth2JwtSecret}' '${runConfig}'
+            ${replaceSecretBin} '#lfsjwtsecret#' '${lfsJwtSecret}' '${runConfig}'
+            ${replaceSecretBin} '#internaltoken#' '${internalToken}' '${runConfig}'
+
+            ${lib.optionalString (cfg.mailerPasswordFile != null) ''
+              ${replaceSecretBin} '#mailerpass#' '${cfg.mailerPasswordFile}' '${runConfig}'
             ''}
-            sed -e "s,#secretkey#,$SECRETKEY,g" \
-                -e "s,#dbpass#,$DBPASS,g" \
-                -e "s,#oauth2jwtsecret#,$OAUTH2JWTSECRET,g" \
-                -e "s,#lfsjwtsecret#,$LFSJWTSECRET,g" \
-                -e "s,#internaltoken#,$INTERNALTOKEN,g" \
-                -e "s,#mailerpass#,$MAILERPASSWORD,g" \
-                -i ${runConfig}
+            chmod u-w '${runConfig}'
           }
           (umask 027; gitea_setup)
         ''}
+
+        # run migrations/init the database
+        ${gitea}/bin/gitea migrate
 
         # update all hooks' binary paths
         ${gitea}/bin/gitea admin regenerate hooks
@@ -619,7 +642,7 @@ in
        serviceConfig = {
          Type = "oneshot";
          User = cfg.user;
-         ExecStart = "${gitea}/bin/gitea dump";
+         ExecStart = "${gitea}/bin/gitea dump --type ${cfg.dump.type}" + optionalString (cfg.dump.file != null) " --file ${cfg.dump.file}";
          WorkingDirectory = cfg.dump.backupDir;
        };
     };

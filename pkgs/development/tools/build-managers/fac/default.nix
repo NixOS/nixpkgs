@@ -1,20 +1,18 @@
-{ lib, git, fetchFromGitHub, rustPlatform }:
+{ lib, stdenv, rustPlatform, fetchCrate, git, CoreServices }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fac-build";
-  version = "0.5.3";
+  version = "0.5.4";
 
-  src = fetchFromGitHub {
-    owner = "droundy";
-    repo = "fac";
-    rev = version;
-    sha256 = "1gifrlb31jy8633rnhny58ccp3wlmd338129c6sh0h1a38vkmsxk";
+  src = fetchCrate {
+    inherit version;
+    crateName = "fac";
+    sha256 = "sha256-+JJVuKUdnjJoQJ4a2EE0O6jZdVoFxPwbPgfD2LfiDPI=";
   };
 
-  # workaround for missing Cargo.lock file
-  cargoPatches = [ ./cargo-lock.patch ];
 
-  cargoSha256 = "033wif3wwm3912ppw0gshsyjxipilg9hhvkijw29zmjfm6074b21";
+  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
+  cargoSha256 = "sha256-XT4FQVE+buORuZAFZK5Qnf/Fl3QSvw4SHUuCzWhxUdk=";
 
   # fac includes a unit test called ls_files_works which assumes it's
   # running in a git repo. Nix's sandbox runs cargo build outside git,
@@ -30,6 +28,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = ''
       A build system that uses ptrace to handle dependencies automatically
     '';
@@ -44,7 +43,8 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://physics.oregonstate.edu/~roundyd/fac";
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.dpercy ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ dpercy ];
+    mainProgram = "fac";
   };
 }

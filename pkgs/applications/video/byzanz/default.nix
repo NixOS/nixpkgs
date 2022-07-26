@@ -1,13 +1,26 @@
-{ lib, stdenv, fetchgit, wrapGAppsHook, which, gnome, glib, intltool, pkg-config, libtool, cairo, gtk3, gst_all_1, xorg }:
+{ lib, stdenv
+, fetchgit
+, wrapGAppsHook
+, cairo
+, glib
+, gnome
+, gst_all_1
+, gtk3
+, intltool
+, libtool
+, pkg-config
+, which
+, xorg
+}:
 
 stdenv.mkDerivation {
-  version = "0.2.3.alpha";
   pname = "byzanz";
+  version = "unstable-2016-03-12";
 
   src = fetchgit {
-    url = "git://github.com/GNOME/byzanz";
-    rev = "1875a7f6a3903b83f6b1d666965800f47db9286a";
-    sha256 = "0a72fw2mxl8vdcdnzy0bwis4jk28pd7nc8qgr4vhyw5pd48dynvh";
+    url = "https://gitlab.gnome.org/Archive/byzanz";
+    rev = "81235d235d12c9687897f7fc6ec0de1feaed6623";
+    hash = "sha256-3DUwXCPBAmeCRlDkiPUgwNyBa6bCvC/TLguMCK3bo4E=";
   };
 
   patches = [ ./add-amflags.patch ];
@@ -16,11 +29,31 @@ stdenv.mkDerivation {
     ./autogen.sh --prefix=$out
   '';
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  NIX_CFLAGS_COMPILE = builtins.concatStringsSep " " [
+    "-Wno-error=deprecated-declarations"
+    "-Wno-error=incompatible-pointer-types"
+  ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ which gnome.gnome-common glib intltool libtool cairo gtk3 xorg.xwininfo xorg.libXdamage ]
-  ++ (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-bad gst-plugins-good gst-plugins-ugly gst-libav wrapGAppsHook ]);
+  buildInputs = [
+    which
+    gnome.gnome-common
+    glib
+    intltool
+    libtool
+    cairo
+    gtk3
+    xorg.xwininfo
+    xorg.libXdamage
+  ] ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-bad
+    gst-plugins-good
+    gst-plugins-ugly
+    gst-libav
+    wrapGAppsHook
+  ]);
 
   meta = with lib; {
     description = "Tool to record a running X desktop to an animation suitable for presentation in a web browser";

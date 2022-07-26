@@ -1,40 +1,35 @@
-{ lib, fetchFromGitHub, pythonPackages, installShellFiles }:
+{ lib, fetchFromGitHub, python3, installShellFiles, fetchpatch }:
 
-with pythonPackages;
+with python3.pkgs;
 
-let
-  # Watson is currently not compatible with Click 8. See the following
-  # upstream issues / MRs:
-  #
-  # https://github.com/TailorDev/Watson/issues/430
-  # https://github.com/TailorDev/Watson/pull/432
-  #
-  # Workaround the issue by providing click 7 explicitly.
-  click7 = pythonPackages.callPackage ../../../development/python-modules/click/7.nix {};
-  click7-didyoumean = click-didyoumean.override {
-    click = click7;
-  };
-in buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "watson";
-
-  # When you update Watson, please check whether the Click 7
-  # workaround above can go away.
-  version = "2.0.1";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "TailorDev";
     repo = "Watson";
     rev = version;
-    sha256 = "0radf5afyphmzphfqb4kkixahds2559nr3yaqvni4xrisdaiaymz";
+    sha256 = "sha256-/AASYeMkt18KPJljAjNPRYOpg/T5xuM10LJq4LrFD0g=";
   };
+
+  patches = [
+    # https://github.com/TailorDev/Watson/pull/473
+    (fetchpatch {
+      name = "fix-completion.patch";
+      url = "https://github.com/TailorDev/Watson/commit/43ad061a981eb401c161266f497e34df891a5038.patch";
+      sha256 = "sha256-v8/asP1wooHKjyy9XXB4Rtf6x+qmGDHpRoHEne/ZCxc=";
+    })
+  ];
 
   postInstall = ''
     installShellCompletion --bash --name watson watson.completion
     installShellCompletion --zsh --name _watson watson.zsh-completion
+    installShellCompletion --fish watson.fish
   '';
 
   checkInputs = [ pytestCheckHook pytest-mock mock pytest-datafiles ];
-  propagatedBuildInputs = [ arrow click7 click7-didyoumean requests ];
+  propagatedBuildInputs = [ arrow click click-didyoumean requests ];
   nativeBuildInputs = [ installShellFiles ];
 
   meta = with lib; {

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, jansson, lib, libconfig, libevent, libgcrypt, lua, lua53Packages
+{ stdenv, fetchFromGitHub, fetchpatch, jansson, lib, libconfig, libevent, libgcrypt, lua, lua53Packages
 , makeWrapper, openssl, pkg-config, python3, readline, zlib
 }:
 
@@ -13,6 +13,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-wYBPr2b8IOycO9y/CNyGjnRsyGyYl3oiXYtTzwTurVA=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Pull patch pending upstream upstream inclusion for -fno-common toolchains:
+    #   https://github.com/kenorb-contrib/tg/pull/61
+    (fetchpatch {
+      name = "fno-common.patch";
+      url = "https://github.com/kenorb-contrib/tg/commit/aad2e644fffa16066b227741d54de31bddb04ff8.patch";
+      sha256 = "sha256-LAa5J4BVj3QCiDSs+p2bynDroMSIqCeexQvrgaDl6OE=";
+    })
+  ];
 
   buildInputs = [
     jansson
@@ -44,6 +54,6 @@ stdenv.mkDerivation rec {
     description = "Command-line interface for Telegram, that uses readline interface, it's a client implementation of TGL library";
     downloadPage = "https://github.com/kenorb-contrib/tg";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ superherointj ];
+    maintainers = with maintainers; [ ];
   };
 }

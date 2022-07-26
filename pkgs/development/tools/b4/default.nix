@@ -1,19 +1,13 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, patatt }:
 
 python3Packages.buildPythonApplication rec {
   pname = "b4";
-  version = "0.6.2";
+  version = "0.8.0";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "1j904dy9cwxl85k2ngc498q5cdnqwsmw3jibjr1m55w8aqdck68z";
+    sha256 = "sha256-fVHW27KIBT/GQ7hOx67qpVlOHLjHwdQcYl2XgCPTvoQ=";
   };
-
-  preConfigure = ''
-    substituteInPlace setup.py \
-      --replace 'requests~=2.24.0' 'requests~=2.25' \
-      --replace 'dnspython~=2.0.0' 'dnspython~=2.1'
-  '';
 
   # tests make dns requests and fails
   doCheck = false;
@@ -22,10 +16,7 @@ python3Packages.buildPythonApplication rec {
     requests
     dnspython
     dkimpy
-
-    # These may be required in the future for other patch attestation features
-    #pycryptodomex~=3.9.9
-    #PyNaCl
+    patatt
   ];
 
   meta = with lib; {

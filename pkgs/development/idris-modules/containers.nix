@@ -5,7 +5,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "containers";
+  pname = "containers";
   version = "2017-09-10";
 
   idrisDeps = [ effects test ];

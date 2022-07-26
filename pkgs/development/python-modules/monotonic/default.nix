@@ -5,18 +5,18 @@
 
 buildPythonPackage rec {
   pname = "monotonic";
-  version = "1.5";
+  version = "1.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "23953d55076df038541e648a53676fb24980f7a1be290cdda21300b3bc21dfb0";
+    sha256 = "3a55207bcfed53ddd5c5bae174524062935efed17792e9de2ad0205ce9ad63f7";
   };
 
   __propagatedImpureHostDeps = lib.optional stdenv.isDarwin "/usr/lib/libc.dylib";
 
   patchPhase = lib.optionalString stdenv.isLinux ''
     substituteInPlace monotonic.py --replace \
-      "ctypes.util.find_library('c')" "'${stdenv.glibc.out}/lib/libc.so.6'"
+      "ctypes.util.find_library('c')" "'${stdenv.cc.libc}/lib/libc.so'"
   '';
 
   meta = with lib; {

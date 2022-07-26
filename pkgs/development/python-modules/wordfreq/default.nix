@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "wordfreq";
-  version = "2.5";
+  version = "2.5.1";
   disabled = isPy27;
 
    src = fetchFromGitHub {
     owner = "LuminosoInsight";
     repo = "wordfreq";
     rev = "v${version}";
-    sha256 = "09wzraddbdw3781pk2sxlz8knax9jrcl24ymz54wx6sk0gvq95i7";
+    sha256 = "1lw7kbsydd89hybassnnhqnj9s5ch9wvgd6pla96198nrq9mj7fw";
    };
 
   propagatedBuildInputs = [

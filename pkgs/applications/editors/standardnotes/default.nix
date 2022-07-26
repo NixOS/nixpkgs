@@ -1,23 +1,24 @@
 { lib, stdenv, appimageTools, autoPatchelfHook, desktop-file-utils
-, fetchurl, libsecret, gtk3, gsettings-desktop-schemas }:
+, fetchurl, libsecret  }:
 
 let
-  version = "3.5.18";
+  version = "3.23.69";
   pname = "standardnotes";
   name = "${pname}-${version}";
+  throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   plat = {
-    i386-linux = "-i386";
+    i686-linux = "i386";
     x86_64-linux = "x86_64";
-  }.${stdenv.hostPlatform.system};
+  }.${stdenv.hostPlatform.system} or throwSystem;
 
   sha256 = {
-    i386-linux = "009fnnd7ysxkyykkbmhvr0vn13b21j1j5mzwdvqdkhm9v3c9rbgj";
-    x86_64-linux = "1zrnvvr9x0s2gp948iajsmgn38xm6x0g2dgxrfjis39rpplsrdww";
-  }.${stdenv.hostPlatform.system};
+    i686-linux = "sha256-/A2LjV8ky20bcKgs0ijwldryi5VkyROwz49vWYXYQus=";
+    x86_64-linux = "sha256-fA9WH9qUtvAHF9hTFRtxQdpz2dpK0joD0zX9VYBo10g=";
+  }.${stdenv.hostPlatform.system} or throwSystem;
 
   src = fetchurl {
-    url = "https://github.com/standardnotes/desktop/releases/download/v${version}/standard-notes-${version}-linux-${plat}.AppImage";
+    url = "https://github.com/standardnotes/app/releases/download/%40standardnotes%2Fdesktop%40${version}/standard-notes-${version}-linux-${plat}.AppImage";
     inherit sha256;
   };
 
@@ -30,26 +31,20 @@ let
 in appimageTools.wrapType2 rec {
   inherit name src;
 
-  profile = ''
-    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
-  '';
-
   extraPkgs = pkgs: with pkgs; [
     libsecret
   ];
 
   extraInstallCommands = ''
     # directory in /nix/store so readonly
-    cp -r  ${appimageContents}/* $out
     cd $out
     chmod -R +w $out
     mv $out/bin/${name} $out/bin/${pname}
 
     # fixup and install desktop file
     ${desktop-file-utils}/bin/desktop-file-install --dir $out/share/applications \
-      --set-key Exec --set-value ${pname} standard-notes.desktop
-
-    rm usr/lib/* AppRun standard-notes.desktop .so*
+      --set-key Exec --set-value ${pname} ${appimageContents}/standard-notes.desktop
+    ln -s ${appimageContents}/usr/share/icons share
   '';
 
   meta = with lib; {
@@ -60,7 +55,8 @@ in appimageTools.wrapType2 rec {
     '';
     homepage = "https://standardnotes.org";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ mgregoire ];
-    platforms = [ "i386-linux" "x86_64-linux" ];
+    maintainers = with maintainers; [ mgregoire chuangzhu ];
+    sourceProvenance = [ sourceTypes.binaryNativeCode ];
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

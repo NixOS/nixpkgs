@@ -50,6 +50,7 @@ in {
       defaultWwwUri = mkOption {
         type = types.str;
         default = "${pkgs.surf-display}/share/surf-display/empty-page.html";
+        defaultText = literalExpression ''"''${pkgs.surf-display}/share/surf-display/empty-page.html"'';
         example = "https://www.example.com/";
         description = "Default URI to display.";
       };
@@ -57,7 +58,7 @@ in {
       inactivityInterval = mkOption {
         type = types.int;
         default = 300;
-        example = "0";
+        example = 0;
         description = ''
           Setting for internal inactivity timer to restart surf-display if the
           user goes inactive/idle to get a fresh session for the next user of

@@ -11,7 +11,11 @@
 
 mkDerivation {
   pname = "kspaceduel";
-  meta.license = with lib.licenses; [ lgpl21 gpl3 ];
+  meta = {
+    homepage = "https://apps.kde.org/kspaceduel/";
+    description = "Space arcade game";
+    license = with lib.licenses; [ lgpl21 gpl3 ];
+  };
   outputs = [ "out" "dev" ];
   nativeBuildInputs = [
     cmake extra-cmake-modules

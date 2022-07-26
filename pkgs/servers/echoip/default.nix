@@ -13,8 +13,6 @@ buildGoModule {
 
   vendorSha256 = "0vvs717pl5gzggxpbn2vkyxmpiw5zjdfnpbh8i81xidbqvlnm22h";
 
-  doCheck = false;
-
   outputs = [ "out" "index" ];
 
   postInstall = ''

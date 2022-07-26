@@ -6,7 +6,7 @@ index 5f34d62..36999a3 100644
          FILE_RE = re.compile(r"^\s*File:.*$")
          DEVICE_RE = re.compile(r"Device: [0-9a-f]+h/[0-9]+d\s+")
          INODE_RE = re.compile(r"Inode: [0-9]+\s+")
-+        LINKS_RE = re.compile(r'Links: [0-9]+\s+')
++        LINKS_RE = re.compile(r"Links: [0-9]+\s+")
          ACCESS_TIME_RE = re.compile(r"^Access: [0-9]{4}-[0-9]{2}-[0-9]{2}.*$")
          CHANGE_TIME_RE = re.compile(r"^Change: [0-9]{4}-[0-9]{2}-[0-9]{2}.*$")
          BIRTH_TIME_RE = re.compile(r"^\s*Birth:.*$")

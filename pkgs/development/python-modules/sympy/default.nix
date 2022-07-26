@@ -1,18 +1,17 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , glibcLocales
 , mpmath
 }:
 
 buildPythonPackage rec {
   pname = "sympy";
-  version = "1.8";
+  version = "1.10.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ca588a9f6ce6a323c5592f9635159c2093572826668a1022c75c75bdf0297cb";
+    sha256 = "sha256-WTnu/9+eFSFyYBRjYmwCKiwn51z2J43o1AHVDJ1YeHs=";
   };
 
   checkInputs = [ glibcLocales ];

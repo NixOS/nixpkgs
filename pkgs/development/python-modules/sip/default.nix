@@ -2,13 +2,20 @@
 
 buildPythonPackage rec {
   pname = "sip";
-  version = "6.1.1";
+  version = "6.5.1";
 
   src = fetchPypi {
     pname = "sip";
     inherit version;
-    sha256 = "083ykzg7zbvrfrg3ram2vx93zrmhpm817kf9bkhw8r6pzkr5mljj";
+    sha256 = "sha256-IE8CQNuJmadJ1jiph7NRhhhD5pI5uBHsPRiBQSw3BqY=";
   };
+
+  patches = [
+    # on non-x86 Linux platforms, sip incorrectly detects the manylinux version
+    # and PIP will refuse to install the resulting wheel.
+    # remove once upstream fixes this, hopefully in 6.5.2
+    ./fix-manylinux-version.patch
+  ];
 
   propagatedBuildInputs = [ packaging toml ];
 
@@ -35,6 +42,6 @@ buildPythonPackage rec {
     description = "Creates C++ bindings for Python modules";
     homepage    = "https://riverbankcomputing.com/";
     license     = licenses.gpl3Only;
-    maintainers = with maintainers; [ eduardosm ];
+    maintainers = with maintainers; [ ];
   };
 }

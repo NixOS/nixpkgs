@@ -24,7 +24,7 @@
 , pyopenssl
 , pyparsing
 , pyperclip
-, ruamel_yaml
+, ruamel-yaml
 , setuptools
 , sortedcontainers
 , tornado
@@ -45,14 +45,14 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "6.0.2";
+  version = "8.1.1";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-FyIZKFQtf6qvwo4+NzPa/KOmBCcdGJ3jCqxz26+S2e4=";
+    sha256 = "sha256-nW/WfiY6uF67qNa95tvNvSv/alP2WmzTk34LEBma/04=";
   };
 
   propagatedBuildInputs = [
@@ -74,11 +74,10 @@ buildPythonPackage rec {
     passlib
     protobuf
     publicsuffix2
-    pyasn1
     pyopenssl
     pyparsing
     pyperclip
-    ruamel_yaml
+    ruamel-yaml
     sortedcontainers
     tornado
     urwid
@@ -87,8 +86,6 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    beautifulsoup4
-    glibcLocales
     hypothesis
     parver
     pytest-asyncio
@@ -97,8 +94,6 @@ buildPythonPackage rec {
     pytestCheckHook
     requests
   ];
-
-  doCheck = !stdenv.isDarwin;
 
   postPatch = ''
     # remove dependency constraints
@@ -112,7 +107,13 @@ buildPythonPackage rec {
   disabledTests = [
     # Tests require a git repository
     "test_get_version"
+    # https://github.com/mitmproxy/mitmproxy/commit/36ebf11916704b3cdaf4be840eaafa66a115ac03
+    # Tests require terminal
+    "test_integration"
+    "test_contentview_flowview"
+    "test_flowview"
   ];
+  dontUsePytestXdist = true;
 
   pythonImportsCheck = [ "mitmproxy" ];
 

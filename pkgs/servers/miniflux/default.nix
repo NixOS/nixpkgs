@@ -2,19 +2,19 @@
 
 let
   pname = "miniflux";
-  version = "2.0.31";
+  version = "2.0.37";
 
 in buildGoModule {
   inherit pname version;
 
   src = fetchFromGitHub {
     owner = pname;
-    repo = pname;
+    repo = "v2";
     rev = version;
-    sha256 = "sha256-01v5gwUv0SfX/9AJgo4HiBcmoCfQbnKIGcS26IebU2Q=";
+    sha256 = "sha256-cmzPm/kvl+eIQOhGFAqW7dyLcEi836ohJ7sbMNkdXCA=";
   };
 
-  vendorSha256 = "sha256-69iTdrjgBmJHeVa8Tq47clQR5Xhy4rWcp2OwS4nIw/c=";
+  vendorSha256 = "sha256-3VlyTYHE1ll2LwNTPKmpdNr1PKxzjhB2TWgr5Gl1RGE=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -22,9 +22,9 @@ in buildGoModule {
     go test $(go list ./... | grep -v client)
   ''; # skip client tests as they require network access
 
-  buildFlagsArray = ''
-    -ldflags=-s -w -X miniflux.app/version.Version=${version}
-  '';
+  ldflags = [
+    "-s" "-w" "-X miniflux.app/version.Version=${version}"
+  ];
 
   postInstall = ''
     mv $out/bin/miniflux.app $out/bin/miniflux

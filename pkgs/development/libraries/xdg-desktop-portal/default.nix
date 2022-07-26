@@ -1,26 +1,33 @@
-{ lib, stdenv
-, fetchFromGitHub
-, nixosTests
-, substituteAll
-, autoreconfHook
-, pkg-config
-, libxml2
-, glib
-, pipewire
-, flatpak
-, gsettings-desktop-schemas
+{ lib
 , acl
+, autoreconfHook
 , dbus
-, fuse
-, libportal
+, fetchFromGitHub
+, fetchpatch
+, flatpak
+, fuse3
+, systemdMinimal
 , geoclue2
+, glib
+, gsettings-desktop-schemas
 , json-glib
+, libportal
+, libxml2
+, nixosTests
+, pipewire
+, gdk-pixbuf
+, librsvg
+, python3
+, pkg-config
+, stdenv
+, substituteAll
 , wrapGAppsHook
+, enableGeoLocation ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal";
-  version = "1.8.1";
+  version = "1.14.5";
 
   outputs = [ "out" "installedTests" ];
 
@@ -28,39 +35,44 @@ stdenv.mkDerivation rec {
     owner = "flatpak";
     repo = pname;
     rev = version;
-    sha256 = "sha256-tuRKCBj9ELC7yFPs/Sut/EdO+L8nwW3S8NWU+XedAF8=";
+    sha256 = "sha256-leLCG+ZdQ4zB1LsTN8gZh7yhJ7EZCYYyxwE3hR9vIkM=";
   };
-
-  patches = [
-    # Hardcode paths used by x-d-p itself.
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit flatpak;
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook
-    pkg-config
     libxml2
+    pkg-config
     wrapGAppsHook
   ];
 
   buildInputs = [
-    glib
-    pipewire
-    flatpak
     acl
     dbus
-    geoclue2
-    fuse
-    libportal
+    flatpak
+    fuse3
+    systemdMinimal # libsystemd
+    glib
     gsettings-desktop-schemas
     json-glib
+    libportal
+    pipewire
+
+    # For icon validator
+    gdk-pixbuf
+    librsvg
+
+    # For document-fuse installed test.
+    (python3.withPackages (pp: with pp; [
+      pygobject3
+    ]))
+  ] ++ lib.optionals enableGeoLocation [
+    geoclue2
   ];
 
   configureFlags = [
     "--enable-installed-tests"
+  ] ++ lib.optionals (!enableGeoLocation) [
+    "--disable-geoclue"
   ];
 
   makeFlags = [
@@ -76,7 +88,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Desktop integration portals for sandboxed apps";
-    license = licenses.lgpl21;
+    license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
   };

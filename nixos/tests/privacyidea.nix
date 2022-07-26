@@ -6,9 +6,8 @@ import ./make-test-python.nix ({ pkgs, ...} : rec {
     maintainers = [ fpletz ];
   };
 
-  machine = { ... }: {
+  nodes.machine = { ... }: {
     virtualisation.cores = 2;
-    virtualisation.memorySize = 512;
 
     services.privacyidea = {
       enable = true;

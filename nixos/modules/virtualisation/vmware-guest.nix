@@ -23,10 +23,11 @@ in
 
   config = mkIf cfg.enable {
     assertions = [ {
-      assertion = pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64;
+      assertion = pkgs.stdenv.hostPlatform.isx86;
       message = "VMWare guest is not currently supported on ${pkgs.stdenv.hostPlatform.system}";
     } ];
 
+    boot.initrd.availableKernelModules = [ "mptspi" ];
     boot.initrd.kernelModules = [ "vmw_pvscsi" ];
 
     environment.systemPackages = [ open-vm-tools ];
@@ -34,13 +35,35 @@ in
     systemd.services.vmware =
       { description = "VMWare Guest Service";
         wantedBy = [ "multi-user.target" ];
+        after = [ "display-manager.service" ];
+        unitConfig.ConditionVirtualization = "vmware";
         serviceConfig.ExecStart = "${open-vm-tools}/bin/vmtoolsd";
+      };
+
+    # Mount the vmblock for drag-and-drop and copy-and-paste.
+    systemd.mounts = mkIf (!cfg.headless) [
+      {
+        description = "VMware vmblock fuse mount";
+        documentation = [ "https://github.com/vmware/open-vm-tools/blob/master/open-vm-tools/vmblock-fuse/design.txt" ];
+        unitConfig.ConditionVirtualization = "vmware";
+        what = "${open-vm-tools}/bin/vmware-vmblock-fuse";
+        where = "/run/vmblock-fuse";
+        type = "fuse";
+        options = "subtype=vmware-vmblock,default_permissions,allow_other";
+        wantedBy = [ "multi-user.target" ];
+      }
+    ];
+
+    security.wrappers.vmware-user-suid-wrapper = mkIf (!cfg.headless) {
+        setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${open-vm-tools}/bin/vmware-user-suid-wrapper";
       };
 
     environment.etc.vmware-tools.source = "${open-vm-tools}/etc/vmware-tools/*";
 
     services.xserver = mkIf (!cfg.headless) {
-      videoDrivers = mkOverride 50 [ "vmware" ];
       modules = [ xf86inputvmmouse ];
 
       config = ''

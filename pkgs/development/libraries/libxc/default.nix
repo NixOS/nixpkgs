@@ -2,27 +2,30 @@
 
 stdenv.mkDerivation rec {
   pname = "libxc";
-  version = "5.1.5";
+  version = "5.2.2";
 
   src = fetchFromGitLab {
     owner = "libxc";
     repo = "libxc";
     rev = version;
-    sha256 = "0cy3x2zn1bldc5i0rzislfbc8h4nqgds445jkfqjv0d1shvdy0zn";
+    sha256 = "113sk7hxjpfbz3nrgjsc7bi6zrlwb3qq5s6h0zh37hz9bd1brq54";
   };
 
-  buildInputs = [ gfortran ];
-  nativeBuildInputs = [ perl cmake ];
+  nativeBuildInputs = [ perl cmake gfortran ];
 
   preConfigure = ''
     patchShebangs ./
   '';
 
-  cmakeFlags = [ "-DENABLE_FORTRAN=ON" "-DBUILD_SHARED_LIBS=ON" ];
-
-  preCheck = ''
-    export LD_LIBRARY_PATH=$(pwd)
-  '';
+  cmakeFlags = [
+    "-DENABLE_FORTRAN=ON"
+    "-DBUILD_SHARED_LIBS=ON"
+    # Force compilation of higher derivatives
+    "-DDISABLE_VXC=0"
+    "-DDISABLE_FXC=0"
+    "-DDISABLE_KXC=0"
+    "-DDISABLE_LXC=0"
+  ];
 
   doCheck = true;
 
@@ -30,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "Library of exchange-correlation functionals for density-functional theory";
     homepage = "https://www.tddft.org/programs/Libxc/";
     license = licenses.mpl20;
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.unix;
     maintainers = with maintainers; [ markuskowa ];
   };
 }

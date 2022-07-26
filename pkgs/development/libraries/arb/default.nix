@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "arb";
-  version = "2.20.0";
+  version = "2.23.0";
 
   src = fetchFromGitHub {
     owner = "fredrik-johansson";
     repo = pname;
     rev = version;
-    sha256 = "sha256-HOIbdkVV7NKowIGhDdn/S8unIRV469OnRHiuiCGaWgk=";
+    sha256 = "sha256-dt9PZ3Xfn60rhmnxYo7CEzNTEUN/wMVAXe8U5PzUO9U=";
   };
 
   buildInputs = [ mpir gmp mpfr flint ];
@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     "--with-mpfr=${mpfr}"
     "--with-flint=${flint}"
   ];
+
+  enableParallelBuilding = true;
 
   doCheck = true;
 

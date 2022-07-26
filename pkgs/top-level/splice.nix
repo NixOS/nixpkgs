@@ -42,7 +42,7 @@ let
         valueBuildBuild = pkgsBuildBuild.${name} or {};
         valueBuildHost = pkgsBuildHost.${name} or {};
         valueBuildTarget = pkgsBuildTarget.${name} or {};
-        valueHostHost = throw "`valueHostHost` unimplemented: pass manually rather than relying on splice.";
+        valueHostHost = pkgsHostHost.${name} or {};
         valueHostTarget = pkgsHostTarget.${name} or {};
         valueTargetTarget = pkgsTargetTarget.${name} or {};
         augmentedValue = defaultValue
@@ -53,7 +53,7 @@ let
             __spliced =
                  (lib.optionalAttrs (pkgsBuildBuild ? ${name}) { buildBuild = valueBuildBuild; })
               // (lib.optionalAttrs (pkgsBuildTarget ? ${name}) { buildTarget = valueBuildTarget; })
-              // { hostHost = valueHostHost; }
+              // (lib.optionalAttrs (pkgsHostHost ? ${name}) { hostHost = valueHostHost; })
               // (lib.optionalAttrs (pkgsTargetTarget ? ${name}) { targetTarget = valueTargetTarget;
           });
         };
@@ -81,7 +81,7 @@ let
           pkgsBuildBuild = valueBuildBuild;
           pkgsBuildHost = valueBuildHost;
           pkgsBuildTarget = valueBuildTarget;
-          pkgsHostHost = {};
+          pkgsHostHost = valueHostHost;
           pkgsHostTarget = valueHostTarget;
           pkgsTargetTarget = valueTargetTarget;
         # Don't be fancy about non-derivations. But we could have used used

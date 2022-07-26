@@ -2,7 +2,8 @@
 , fetchFromGitHub, cmake
 , libusb-compat-0_1, pkg-config
 , usePython ? false
-, python, ncurses, swig2
+, python ? null
+, ncurses, swig2
 , extraPackages ? []
 } :
 
@@ -41,7 +42,7 @@ in stdenv.mkDerivation {
     done
     # Needed for at least the remote plugin server
     for file in $out/bin/*; do
-        wrapProgram "$file" --prefix SOAPY_SDR_PLUGIN_PATH : ${extraPackagesSearchPath}
+        wrapProgram "$file" --prefix SOAPY_SDR_PLUGIN_PATH : ${lib.escapeShellArg extraPackagesSearchPath}
     done
   '';
 
@@ -50,6 +51,7 @@ in stdenv.mkDerivation {
     description = "Vendor and platform neutral SDR support library";
     license = licenses.boost;
     maintainers = with maintainers; [ markuskowa ];
-    platforms = platforms.linux;
+    mainProgram = "SoapySDRUtil";
+    platforms = platforms.unix;
   };
 }

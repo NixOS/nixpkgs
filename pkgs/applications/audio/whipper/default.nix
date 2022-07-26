@@ -8,6 +8,8 @@
 , flac
 , sox
 , util-linux
+, testers
+, whipper
 }:
 
 let
@@ -42,9 +44,10 @@ in python3.pkgs.buildPythonApplication rec {
     mutagen
     pycdio
     pygobject3
-    ruamel_yaml
+    ruamel-yaml
     discid
     pillow
+    setuptools
   ];
 
   buildInputs = [ libsndfile ];
@@ -70,6 +73,11 @@ in python3.pkgs.buildPythonApplication rec {
     HOME=$TMPDIR ${python3.interpreter} -m unittest discover
     runHook postCheck
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = whipper;
+    command = "HOME=$TMPDIR whipper --version";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/whipper-team/whipper";

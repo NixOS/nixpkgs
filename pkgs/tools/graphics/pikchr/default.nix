@@ -5,11 +5,12 @@
 
 stdenv.mkDerivation {
   pname = "pikchr";
-  version = "unstable-2021-04-07";
+  # To update, use the last check-in in https://pikchr.org/home/timeline?r=trunk
+  version = "unstable-2022-06-20";
 
   src = fetchurl {
-    url = "https://pikchr.org/home/tarball/90b6d5b4a3834ff0/pikchr.tar.gz";
-    sha256 = "1cqpnljy12gl82rcbb7mwhgv9szcliwkbwwh67hzdv020h1scxym";
+    url = "https://pikchr.org/home/tarball/d9ee756594b6eb64/pikchr.tar.gz";
+    sha256 = "sha256-ML+gymFrBay1kly7NYsxo0I1qNMoZPzNI3ClBTrWlHw=";
   };
 
   # can't open generated html files

@@ -302,6 +302,7 @@ in {
 
       name = mkOption {
         default = "${config.networking.hostName}-fd";
+        defaultText = literalExpression ''"''${config.networking.hostName}-fd"'';
         type = types.str;
         description = ''
           The client name that must be used by the Director when connecting.
@@ -364,6 +365,7 @@ in {
 
       name = mkOption {
         default = "${config.networking.hostName}-sd";
+        defaultText = literalExpression ''"''${config.networking.hostName}-sd"'';
         type = types.str;
         description = ''
           Specifies the Name of the Storage daemon.
@@ -439,6 +441,7 @@ in {
 
       name = mkOption {
         default = "${config.networking.hostName}-dir";
+        defaultText = literalExpression ''"''${config.networking.hostName}-dir"'';
         type = types.str;
         description = ''
           The director name used by the system administrator. This directive is

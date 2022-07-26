@@ -4,7 +4,7 @@
 , curl
 }:
 let
-  version = "2020.3.8";
+  version = "2020.3.13";
   shortVersion = builtins.substring 0 6 version;
 in
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/flightgear/release-${shortVersion}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-UXcWV9MPu7c+QlFjrhxtQ6ruAcxuKtewwphu4tt5dWc=";
+    sha256 = "sha256-3AmQb9qLGBD+LLIrX1Fx0gi6kBxbnTkLrW0fP9ZsUeg=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Simulation construction toolkit";
-    homepage = "https://gitorious.org/fg/simgear";
+    homepage = "https://wiki.flightgear.org/SimGear";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     license = licenses.lgpl2;

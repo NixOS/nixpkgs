@@ -8,17 +8,27 @@ in
 
 {
   options = {
-    services.xserver.windowManager.clfswm.enable = mkEnableOption "clfswm";
+    services.xserver.windowManager.clfswm = {
+      enable = mkEnableOption "clfswm";
+      package = mkOption {
+        type        = types.package;
+        default     = pkgs.lispPackages.clfswm;
+        defaultText = literalExpression "pkgs.lispPackages.clfswm";
+        description = ''
+          clfswm package to use.
+        '';
+      };
+    };
   };
 
   config = mkIf cfg.enable {
     services.xserver.windowManager.session = singleton {
       name = "clfswm";
       start = ''
-        ${pkgs.lispPackages.clfswm}/bin/clfswm &
+        ${cfg.package}/bin/clfswm &
         waitPID=$!
       '';
     };
-    environment.systemPackages = [ pkgs.lispPackages.clfswm ];
+    environment.systemPackages = [ cfg.package ];
   };
 }

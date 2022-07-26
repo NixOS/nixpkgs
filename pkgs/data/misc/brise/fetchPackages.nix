@@ -4,8 +4,8 @@ fetchFromGitHub:
 ln -sv ${fetchFromGitHub {
   owner = "rime";
   repo = "rime-array";
-  rev = "9ca2b725ae52c9b3185213e3555df1f9d4f1c53f";
-  sha256 = "0x3sifdpdivr8ssynjhc4g1zfl6h9hm9nh9p9zb9wkh1ky9z7kha";
+  rev = "d10f2f8b2aec7c7e736ace01e8a399e5ae5e7c3a";
+  sha256 = "sha256-4t6+gh2V57SueDp9Tn6vTuxQCZNGzjLdJEhzIEqRjdI=";
 }} array
 ln -sv ${fetchFromGitHub {
   owner = "rime";

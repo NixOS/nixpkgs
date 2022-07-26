@@ -1,6 +1,7 @@
 { lib
 , mkDerivationWith
 , python3Packages
+, fetchFromGitHub
 , wrapQtAppsHook
 , ffmpeg
 , qtbase
@@ -8,35 +9,49 @@
 
 mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "corrscope";
-  version = "0.7.0";
+  version = "0.8.0";
+  format = "pyproject";
 
-  src = python3Packages.fetchPypi {
-    inherit pname version;
-    sha256 = "0m62p3jlbx5dlp3j8wn1ka1sqpffsxbpsgv2h5cvj1n1lsgbss2s";
+  src = fetchFromGitHub {
+    owner = "corrscope";
+    repo = "corrscope";
+    rev = version;
+    sha256 = "1wdla4ryif1ss37aqi61lcvzddvf568wyh5s3xv1lrryh4al9vpd";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'attrs>=18.2.0,<19.0.0' 'attrs>=18.2.0' \
-      --replace 'numpy>=1.15,<2.0,!=1.19.4' 'numpy>=1.15,<2.0'
-  '';
+  nativeBuildInputs = [
+    wrapQtAppsHook
+  ] ++ (with python3Packages; [
+    poetry-core
+  ]);
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
+  buildInputs = [
+    ffmpeg
+    qtbase
+  ];
 
-  buildInputs = [ ffmpeg qtbase ];
-
-  propagatedBuildInputs = with python3Packages; [ appdirs attrs click matplotlib numpy pyqt5 ruamel_yaml ];
+  propagatedBuildInputs = with python3Packages; [
+    appdirs
+    atomicwrites
+    attrs
+    click
+    matplotlib
+    numpy
+    packaging
+    qtpy
+    pyqt5
+    ruamel-yaml
+    colorspacious
+  ];
 
   dontWrapQtApps = true;
 
   preFixup = ''
     makeWrapperArgs+=(
-      --prefix PATH : ${ffmpeg}/bin
+      --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
       "''${qtWrapperArgs[@]}"
     )
   '';
-
-  preCheck = "export HOME=$TEMP";
 
   meta = with lib; {
     description = "Render wave files into oscilloscope views, featuring advanced correlation-based triggering algorithm";

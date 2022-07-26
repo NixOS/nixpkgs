@@ -1,7 +1,10 @@
+# shellcheck shell=bash
+__nixpkgs_setup_set_original=$-
 set -eu
 set -o pipefail
+shopt -s inherit_errexit
 
-if [ -n "${BASH_VERSINFO-}" ] && [ "${BASH_VERSINFO-}" -lt 4 ]; then
+if [[ -n "${BASH_VERSINFO-}" && "${BASH_VERSINFO-}" -lt 4 ]]; then
     echo "Detected Bash version that isn't supported by Nixpkgs (${BASH_VERSION})"
     echo "Please install Bash 4 or greater to continue."
     exit 1
@@ -121,14 +124,12 @@ exitHandler() {
     set +e
 
     if [ -n "${showBuildStats:-}" ]; then
-        times > "$NIX_BUILD_TOP/.times"
-        local -a times=($(cat "$NIX_BUILD_TOP/.times"))
-        # Print the following statistics:
-        # - user time for the shell
-        # - system time for the shell
-        # - user time for all child processes
-        # - system time for all child processes
-        echo "build time elapsed: " "${times[@]}"
+        read -r -d '' -a buildTimes < <(times)
+        echo "build times:"
+        echo "user time for the shell             ${buildTimes[0]}"
+        echo "system time for the shell           ${buildTimes[1]}"
+        echo "user time for all child processes   ${buildTimes[2]}"
+        echo "system time for all child processes ${buildTimes[3]}"
     fi
 
     if (( "$exitCode" != 0 )); then
@@ -142,14 +143,14 @@ exitHandler() {
             echo "build failed with exit code $exitCode (ignored)"
             mkdir -p "$out/nix-support"
             printf "%s" "$exitCode" > "$out/nix-support/failed"
-            exit 0
+            return 0
         fi
 
     else
         runHook exitHook
     fi
 
-    exit "$exitCode"
+    return "$exitCode"
 }
 
 trap "exitHandler" EXIT
@@ -197,6 +198,34 @@ isELF() {
     read -r -n 4 -u "$fd" magic
     exec {fd}<&-
     if [ "$magic" = $'\177ELF' ]; then return 0; else return 1; fi
+}
+
+# Return success if the specified file is a Mach-O object.
+isMachO() {
+    local fn="$1"
+    local fd
+    local magic
+    exec {fd}< "$fn"
+    read -r -n 4 -u "$fd" magic
+    exec {fd}<&-
+
+    # nix uses 'declare -F' in get-env.sh to retrieve the loaded functions.
+    # If we use the $'string' syntax instead of 'echo -ne' then 'declare' will print the raw characters and break nix.
+    # See https://github.com/NixOS/nixpkgs/pull/138334 and https://github.com/NixOS/nix/issues/5262.
+
+    # https://opensource.apple.com/source/lldb/lldb-310.2.36/examples/python/mach_o.py.auto.html
+    if [[ "$magic" = $(echo -ne "\xfe\xed\xfa\xcf") || "$magic" = $(echo -ne "\xcf\xfa\xed\xfe") ]]; then
+        # MH_MAGIC_64 || MH_CIGAM_64
+        return 0;
+    elif [[ "$magic" = $(echo -ne "\xfe\xed\xfa\xce") || "$magic" = $(echo -ne "\xce\xfa\xed\xfe") ]]; then
+        # MH_MAGIC || MH_CIGAM
+        return 0;
+    elif [[ "$magic" = $(echo -ne "\xca\xfe\xba\xbe") || "$magic" = $(echo -ne "\xbe\xba\xfe\xca") ]]; then
+        # FAT_MAGIC || FAT_CIGAM
+        return 0;
+    else
+        return 1;
+    fi
 }
 
 # Return success if the specified file is a script (i.e. starts with
@@ -306,6 +335,10 @@ declare -a pkgTargetHookVars=(envTargetTargetHook)
 
 declare -a pkgHookVarVars=(pkgBuildHookVars pkgHostHookVars pkgTargetHookVars)
 
+# those variables are declared here, since where and if they are used varies
+# shellcheck disable=SC2034
+declare -a preFixupHooks fixupOutputHooks preConfigureHooks postFixupHooks postUnpackHooks unpackCmdHooks
+
 # Add env hooks for all sorts of deps with the specified host offset.
 addEnvHooks() {
     local depHostOffset="$1"
@@ -347,14 +380,14 @@ declare -a allPlatOffsets=(-1 0 1)
 # implements.
 findInputs() {
     local -r pkg="$1"
-    local -ri hostOffset="$2"
-    local -ri targetOffset="$3"
+    local -r hostOffset="$2"
+    local -r targetOffset="$3"
 
     # Sanity check
-    (( "$hostOffset" <= "$targetOffset" )) || exit -1
+    (( hostOffset <= targetOffset )) || exit -1
 
-    local varVar="${pkgAccumVarVars[$hostOffset + 1]}"
-    local varRef="$varVar[\$targetOffset - \$hostOffset]"
+    local varVar="${pkgAccumVarVars[hostOffset + 1]}"
+    local varRef="$varVar[$((targetOffset - hostOffset))]"
     local var="${!varRef}"
     unset -v varVar varRef
 
@@ -379,36 +412,35 @@ findInputs() {
     # The current package's host and target offset together
     # provide a <=-preserving homomorphism from the relative
     # offsets to current offset
-    local -i mapOffsetResult
     function mapOffset() {
-        local -ri inputOffset="$1"
-        if (( "$inputOffset" <= 0 )); then
-            local -ri outputOffset="$inputOffset + $hostOffset"
+        local -r inputOffset="$1"
+        local -n outputOffset="$2"
+        if (( inputOffset <= 0 )); then
+            outputOffset=$((inputOffset + hostOffset))
         else
-            local -ri outputOffset="$inputOffset - 1 + $targetOffset"
+            outputOffset=$((inputOffset - 1 + targetOffset))
         fi
-        mapOffsetResult="$outputOffset"
     }
 
     # Host offset relative to that of the package whose immediate
     # dependencies we are currently exploring.
-    local -i relHostOffset
+    local relHostOffset
     for relHostOffset in "${allPlatOffsets[@]}"; do
         # `+ 1` so we start at 0 for valid index
-        local files="${propagatedDepFilesVars[$relHostOffset + 1]}"
+        local files="${propagatedDepFilesVars[relHostOffset + 1]}"
 
         # Host offset relative to the package currently being
         # built---as absolute an offset as will be used.
-        mapOffset relHostOffset
-        local -i hostOffsetNext="$mapOffsetResult"
+        local hostOffsetNext
+        mapOffset "$relHostOffset" hostOffsetNext
 
         # Ensure we're in bounds relative to the package currently
         # being built.
-        [[ "${allPlatOffsets[*]}" = *"$hostOffsetNext"*  ]] || continue
+        (( -1 <= hostOffsetNext && hostOffsetNext <= 1 )) || continue
 
         # Target offset relative to the *host* offset of the package
         # whose immediate dependencies we are currently exploring.
-        local -i relTargetOffset
+        local relTargetOffset
         for relTargetOffset in "${allPlatOffsets[@]}"; do
             (( "$relHostOffset" <= "$relTargetOffset" )) || continue
 
@@ -418,12 +450,12 @@ findInputs() {
 
             # Target offset relative to the package currently being
             # built.
-            mapOffset relTargetOffset
-            local -i targetOffsetNext="$mapOffsetResult"
+            local targetOffsetNext
+            mapOffset "$relTargetOffset" targetOffsetNext
 
             # Once again, ensure we're in bounds relative to the
             # package currently being built.
-            [[ "${allPlatOffsets[*]}" = *"$targetOffsetNext"* ]] || continue
+            (( -1 <= hostOffsetNext && hostOffsetNext <= 1 )) || continue
 
             [[ -f "$pkg/nix-support/$file" ]] || continue
 
@@ -473,11 +505,11 @@ done
 # Add package to the future PATH and run setup hooks
 activatePackage() {
     local pkg="$1"
-    local -ri hostOffset="$2"
-    local -ri targetOffset="$3"
+    local -r hostOffset="$2"
+    local -r targetOffset="$3"
 
     # Sanity check
-    (( "$hostOffset" <= "$targetOffset" )) || exit -1
+    (( hostOffset <= targetOffset )) || exit -1
 
     if [ -f "$pkg" ]; then
         source "$pkg"
@@ -494,7 +526,7 @@ activatePackage() {
         addToSearchPath _PATH "$pkg/bin"
     fi
 
-    if [[ "$hostOffset" -le -1 ]]; then
+    if (( hostOffset <= -1 )); then
         addToSearchPath _XDG_DATA_DIRS "$pkg/share"
     fi
 
@@ -508,13 +540,13 @@ activatePackage() {
 }
 
 _activatePkgs() {
-    local -i hostOffset targetOffset
+    local hostOffset targetOffset
     local pkg
 
     for hostOffset in "${allPlatOffsets[@]}"; do
-        local pkgsVar="${pkgAccumVarVars[$hostOffset + 1]}"
+        local pkgsVar="${pkgAccumVarVars[hostOffset + 1]}"
         for targetOffset in "${allPlatOffsets[@]}"; do
-            (( "$hostOffset" <= "$targetOffset" )) || continue
+            (( hostOffset <= targetOffset )) || continue
             local pkgsRef="${pkgsVar}[$targetOffset - $hostOffset]"
             local pkgsSlice="${!pkgsRef}[@]"
             for pkg in ${!pkgsSlice+"${!pkgsSlice}"}; do
@@ -536,14 +568,14 @@ _activatePkgs
 # with this information to the relevant env hook array, but bash
 # doesn't have closures, so it's easier to just pass this in.
 _addToEnv() {
-    local -i depHostOffset depTargetOffset
+    local depHostOffset depTargetOffset
     local pkg
 
     for depHostOffset in "${allPlatOffsets[@]}"; do
-        local hookVar="${pkgHookVarVars[$depHostOffset + 1]}"
-        local pkgsVar="${pkgAccumVarVars[$depHostOffset + 1]}"
+        local hookVar="${pkgHookVarVars[depHostOffset + 1]}"
+        local pkgsVar="${pkgAccumVarVars[depHostOffset + 1]}"
         for depTargetOffset in "${allPlatOffsets[@]}"; do
-            (( "$depHostOffset" <= "$depTargetOffset" )) || continue
+            (( depHostOffset <= depTargetOffset )) || continue
             local hookRef="${hookVar}[$depTargetOffset - $depHostOffset]"
             if [[ -z "${strictDeps-}" ]]; then
 
@@ -555,12 +587,12 @@ _addToEnv() {
                 #
                 # TODO(@Ericson2314): Don't special-case native compilation
                 for pkg in \
-                    ${pkgsBuildBuild+"${pkgsBuildBuild[@]}"} \
-                    ${pkgsBuildHost+"${pkgsBuildHost[@]}"} \
-                    ${pkgsBuildTarget+"${pkgsBuildTarget[@]}"} \
-                    ${pkgsHostHost+"${pkgsHostHost[@]}"} \
-                    ${pkgsHostTarget+"${pkgsHostTarget[@]}"} \
-                    ${pkgsTargetTarget+"${pkgsTargetTarget[@]}"}
+                    "${pkgsBuildBuild[@]}" \
+                    "${pkgsBuildHost[@]}" \
+                    "${pkgsBuildTarget[@]}" \
+                    "${pkgsHostHost[@]}" \
+                    "${pkgsHostTarget[@]}" \
+                    "${pkgsTargetTarget[@]}"
                 do
                     if [[ "$visitedPkgs" = *"$pkg"* ]]; then
                         continue
@@ -633,26 +665,21 @@ export NIX_INDENT_MAKE=1
 # means that we're supposed to try and auto-detect the number of
 # available CPU cores at run-time.
 
-if [ -z "${NIX_BUILD_CORES:-}" ]; then
-  NIX_BUILD_CORES="1"
-elif [ "$NIX_BUILD_CORES" -le 0 ]; then
-  NIX_BUILD_CORES=$(nproc 2>/dev/null || true)
-  if expr >/dev/null 2>&1 "$NIX_BUILD_CORES" : "^[0-9][0-9]*$"; then
-    :
-  else
-    NIX_BUILD_CORES="1"
-  fi
+NIX_BUILD_CORES="${NIX_BUILD_CORES:-1}"
+if ((NIX_BUILD_CORES <= 0)); then
+  guess=$(nproc 2>/dev/null || true)
+  ((NIX_BUILD_CORES = guess <= 0 ? 1 : guess))
 fi
 export NIX_BUILD_CORES
 
 
 # Prevent SSL libraries from using certificates in /etc/ssl, unless set explicitly.
 # Leave it in impure shells for convenience.
-if [ -z "${NIX_SSL_CERT_FILE:-}" ] && [ "${IN_NIX_SHELL:-}" != "impure" ]; then
+if [[ -z "${NIX_SSL_CERT_FILE:-}" && "${IN_NIX_SHELL:-}" != "impure" ]]; then
   export NIX_SSL_CERT_FILE=/no-cert-file.crt
 fi
 # Another variant left for compatibility.
-if [ -z "${SSL_CERT_FILE:-}" ] && [ "${IN_NIX_SHELL:-}" != "impure" ]; then
+if [[ -z "${SSL_CERT_FILE:-}" && "${IN_NIX_SHELL:-}" != "impure" ]]; then
   export SSL_CERT_FILE=/no-cert-file.crt
 fi
 
@@ -716,9 +743,11 @@ substituteStream() {
     printf "%s" "${!var}"
 }
 
+# put the content of a file in a variable
+# fail loudly if provided with a binary (containing null bytes)
 consumeEntire() {
     # read returns non-0 on EOF, so we want read to fail
-    if IFS='' read -r -N 0 $1; then
+    if IFS='' read -r -d '' $1 ; then
         echo "consumeEntire(): ERROR: Input null bytes, won't process" >&2
         return 1
     fi
@@ -832,12 +861,12 @@ _defaultUnpack() {
         case "$fn" in
             *.tar.xz | *.tar.lzma | *.txz)
                 # Don't rely on tar knowing about .xz.
-                xz -d < "$fn" | tar xf -
+                xz -d < "$fn" | tar xf - --warning=no-timestamp
                 ;;
             *.tar | *.tar.* | *.tgz | *.tbz2 | *.tbz)
                 # GNU tar can automatically select the decompression method
                 # (info "(tar) gzip").
-                tar xf "$fn"
+                tar xf "$fn" --warning=no-timestamp
                 ;;
             *)
                 return 1
@@ -959,7 +988,18 @@ patchPhase() {
 
 
 fixLibtool() {
-    sed -i -e 's^eval sys_lib_.*search_path=.*^^' "$1"
+    local search_path
+    for flag in $NIX_LDFLAGS; do
+        case $flag in
+            -L*)
+                search_path+=" ${flag#-L}"
+                ;;
+        esac
+    done
+
+    sed -i "$1" \
+        -e "s^eval \(sys_lib_search_path=\).*^\1'$search_path'^" \
+        -e 's^eval sys_lib_.+search_path=.*^^'
 }
 
 
@@ -975,28 +1015,46 @@ configurePhase() {
     fi
 
     if [ -z "${dontFixLibtool:-}" ]; then
+        export lt_cv_deplibs_check_method="${lt_cv_deplibs_check_method-pass_all}"
         local i
         find . -iname "ltmain.sh" -print0 | while IFS='' read -r -d '' i; do
             echo "fixing libtool script $i"
             fixLibtool "$i"
         done
+
+        # replace `/usr/bin/file` with `file` in any `configure`
+        # scripts with vendored libtool code.  Preserve mtimes to
+        # prevent some packages (e.g. libidn2) from spontaneously
+        # autoreconf'ing themselves
+        CONFIGURE_MTIME_REFERENCE=$(mktemp configure.mtime.reference.XXXXXX)
+        find . \
+          -executable \
+          -type f \
+          -name configure \
+          -exec grep -l 'GNU Libtool is free software; you can redistribute it and/or modify' {} \; \
+          -exec touch -r {} "$CONFIGURE_MTIME_REFERENCE" \; \
+          -exec sed -i s_/usr/bin/file_file_g {} \;    \
+          -exec touch -r "$CONFIGURE_MTIME_REFERENCE" {} \;
+        rm -f "$CONFIGURE_MTIME_REFERENCE"
     fi
 
     if [[ -z "${dontAddPrefix:-}" && -n "$prefix" ]]; then
         configureFlags="${prefixKey:---prefix=}$prefix $configureFlags"
     fi
 
-    # Add --disable-dependency-tracking to speed up some builds.
-    if [ -z "${dontAddDisableDepTrack:-}" ]; then
-        if [ -f "$configureScript" ] && grep -q dependency-tracking "$configureScript"; then
-            configureFlags="--disable-dependency-tracking $configureFlags"
+    if [[ -f "$configureScript" ]]; then
+        # Add --disable-dependency-tracking to speed up some builds.
+        if [ -z "${dontAddDisableDepTrack:-}" ]; then
+            if grep -q dependency-tracking "$configureScript"; then
+                configureFlags="--disable-dependency-tracking $configureFlags"
+            fi
         fi
-    fi
 
-    # By default, disable static builds.
-    if [ -z "${dontDisableStatic:-}" ]; then
-        if [ -f "$configureScript" ] && grep -q enable-static "$configureScript"; then
-            configureFlags="--disable-static $configureFlags"
+        # By default, disable static builds.
+        if [ -z "${dontDisableStatic:-}" ]; then
+            if grep -q enable-static "$configureScript"; then
+                configureFlags="--disable-static $configureFlags"
+            fi
         fi
     fi
 
@@ -1004,7 +1062,7 @@ configurePhase() {
         # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
-            $configureFlags ${configureFlagsArray+"${configureFlagsArray[@]}"}
+            $configureFlags "${configureFlagsArray[@]}"
         )
         echoCmd 'configure flags' "${flagsArray[@]}"
         # shellcheck disable=SC2086
@@ -1034,8 +1092,8 @@ buildPhase() {
         local flagsArray=(
             ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
             SHELL=$SHELL
-            $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-            $buildFlags ${buildFlagsArray+"${buildFlagsArray[@]}"}
+            $makeFlags "${makeFlagsArray[@]}"
+            $buildFlags "${buildFlagsArray[@]}"
         )
 
         echoCmd 'build flags' "${flagsArray[@]}"
@@ -1073,8 +1131,8 @@ checkPhase() {
         local flagsArray=(
             ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
             SHELL=$SHELL
-            $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-            ${checkFlags:-VERBOSE=y} ${checkFlagsArray+"${checkFlagsArray[@]}"}
+            $makeFlags "${makeFlagsArray[@]}"
+            ${checkFlags:-VERBOSE=y} "${checkFlagsArray[@]}"
             ${checkTarget}
         )
 
@@ -1099,8 +1157,8 @@ installPhase() {
     # shellcheck disable=SC2086
     local flagsArray=(
         SHELL=$SHELL
-        $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-        $installFlags ${installFlagsArray+"${installFlagsArray[@]}"}
+        $makeFlags "${makeFlagsArray[@]}"
+        $installFlags "${installFlagsArray[@]}"
         ${installTargets:-install}
     )
 
@@ -1207,8 +1265,8 @@ installCheckPhase() {
         local flagsArray=(
             ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
             SHELL=$SHELL
-            $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-            $installCheckFlags ${installCheckFlagsArray+"${installCheckFlagsArray[@]}"}
+            $makeFlags "${makeFlagsArray[@]}"
+            $installCheckFlags "${installCheckFlagsArray[@]}"
             ${installCheckTarget:-installcheck}
         )
 
@@ -1227,7 +1285,7 @@ distPhase() {
     # Old bash empty array hack
     # shellcheck disable=SC2086
     local flagsArray=(
-        $distFlags ${distFlagsArray+"${distFlagsArray[@]}"} ${distTarget:-dist}
+        $distFlags "${distFlagsArray[@]}" ${distTarget:-dist}
     )
 
     echo 'dist flags: %q' "${flagsArray[@]}"
@@ -1259,6 +1317,23 @@ showPhaseHeader() {
         installCheckPhase) header "running install tests";;
         *) header "$phase";;
     esac
+}
+
+
+showPhaseFooter() {
+    local phase="$1"
+    local startTime="$2"
+    local endTime="$3"
+    local delta=$(( endTime - startTime ))
+    (( $delta < 30 )) && return
+
+    local H=$((delta/3600))
+    local M=$((delta%3600/60))
+    local S=$((delta%60))
+    echo -n "$phase completed in "
+    (( $H > 0 )) && echo -n "$H hours "
+    (( $M > 0 )) && echo -n "$M minutes "
+    echo "$S seconds"
 }
 
 
@@ -1297,11 +1372,20 @@ genericBuild() {
         showPhaseHeader "$curPhase"
         dumpVars
 
+        local startTime=$(date +"%s")
+
         # Evaluate the variable named $curPhase if it exists, otherwise the
         # function named $curPhase.
         eval "${!curPhase:-$curPhase}"
 
+        local endTime=$(date +"%s")
+
+        showPhaseFooter "$curPhase" "$startTime" "$endTime"
+
         if [ "$curPhase" = unpackPhase ]; then
+            # make sure we can cd into the directory
+            [ -z "${sourceRoot}" ] || chmod +x "${sourceRoot}"
+
             cd "${sourceRoot:-.}"
         fi
     done
@@ -1320,5 +1404,7 @@ runHook userHook
 
 dumpVars
 
-# Disable nounset for nix-shell.
-set +u
+# Restore the original options for nix-shell
+[[ $__nixpkgs_setup_set_original == *e* ]] || set +e
+[[ $__nixpkgs_setup_set_original == *u* ]] || set +u
+unset -v __nixpkgs_setup_set_original

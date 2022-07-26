@@ -65,7 +65,7 @@ let
           ${fcBool cfg.hinting.autohint}
         </edit>
         <edit mode="append" name="hintstyle">
-          <const>hintslight</const>
+          <const>${cfg.hinting.style}</const>
         </edit>
         <edit mode="append" name="antialias">
           ${fcBool cfg.antialias}
@@ -77,14 +77,6 @@ let
           <const>lcd${cfg.subpixel.lcdfilter}</const>
         </edit>
       </match>
-
-      ${optionalString (cfg.dpi != 0) ''
-      <match target="pattern">
-        <edit name="dpi" mode="assign">
-          <double>${toString cfg.dpi}</double>
-        </edit>
-      </match>
-      ''}
 
     </fontconfig>
   '';
@@ -234,9 +226,9 @@ in
     (mkRenamedOptionModule [ "fonts" "fontconfig" "ultimate" "useEmbeddedBitmaps" ] [ "fonts" "fontconfig" "useEmbeddedBitmaps" ])
     (mkRenamedOptionModule [ "fonts" "fontconfig" "ultimate" "forceAutohint" ] [ "fonts" "fontconfig" "forceAutohint" ])
     (mkRenamedOptionModule [ "fonts" "fontconfig" "ultimate" "renderMonoTTFAsBitmap" ] [ "fonts" "fontconfig" "renderMonoTTFAsBitmap" ])
-    (mkRemovedOptionModule [ "fonts" "fontconfig" "hinting" "style" ] "")
     (mkRemovedOptionModule [ "fonts" "fontconfig" "forceAutohint" ] "")
     (mkRemovedOptionModule [ "fonts" "fontconfig" "renderMonoTTFAsBitmap" ] "")
+    (mkRemovedOptionModule [ "fonts" "fontconfig" "dpi" ] "Use display server-specific options")
   ] ++ lib.forEach [ "enable" "substitutions" "preset" ]
      (opt: lib.mkRemovedOptionModule [ "fonts" "fontconfig" "ultimate" "${opt}" ] ''
        The fonts.fontconfig.ultimate module and configuration is obsolete.
@@ -279,15 +271,6 @@ in
             Enable font antialiasing. At high resolution (> 200 DPI),
             antialiasing has no visible effect; users of such displays may want
             to disable this option.
-          '';
-        };
-
-        dpi = mkOption {
-          type = types.int;
-          default = 0;
-          description = ''
-            Force DPI setting. Setting to <literal>0</literal> disables DPI
-            forcing; the DPI detected for the display will be used.
           '';
         };
 
@@ -363,6 +346,20 @@ in
               Enable the autohinter in place of the default interpreter.
               The results are usually lower quality than correctly-hinted
               fonts, but better than unhinted fonts.
+            '';
+          };
+
+          style = mkOption {
+            type = types.enum [ "hintnone" "hintslight" "hintmedium" "hintfull" ];
+            default = "hintslight";
+            description = ''
+              Hintstyle is the amount of font reshaping done to line up
+              to the grid.
+
+              hintslight will make the font more fuzzy to line up to the grid
+              but will be better in retaining font shape, while hintfull will
+              be a crisp font that aligns well to the pixel grid but will lose
+              a greater amount of font shape.
             '';
           };
         };

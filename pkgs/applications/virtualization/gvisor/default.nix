@@ -43,7 +43,7 @@ let
     repo = "rules_proto";
     rev = "f7a30f6f80006b591fa7c437fe5a951eb10bcbcf";
     sha256 = "10bcw0ir0skk7h33lmqm38n9w4nfs24mwajnngkbs6jb5wsvkqv8";
-    extraPostFetch = ''
+    postFetch = ''
       sed -i 's|name = "protoc"|name = "_protoc_original"|' $out/proto/private/BUILD.release
       cat <<EOF >>$out/proto/private/BUILD.release
       alias(name = "protoc", actual = "@com_github_protocolbuffers_protobuf//:protoc", visibility = ["//visibility:public"])
@@ -52,7 +52,7 @@ let
   };
 
 in buildBazelPackage rec {
-  name = "gvisor-${version}";
+  pname = "gvisor";
   version = "20210518.0";
 
   src = fetchFromGitHub {
@@ -120,5 +120,8 @@ in buildBazelPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ andrew-d ];
     platforms = [ "x86_64-linux" ];
+    # The version we have right now does not compile with go 1.17
+    # See https://github.com/NixOS/nixpkgs/pull/174003 if you want to upgrade gvisor
+    broken = true;
   };
 }

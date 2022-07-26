@@ -5,10 +5,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "pciutils-3.7.0"; # with release-date database
+  pname = "pciutils";
+  version = "3.7.0"; # with release-date database
 
   src = fetchurl {
-    url = "mirror://kernel/software/utils/pciutils/${name}.tar.xz";
+    url = "mirror://kernel/software/utils/pciutils/pciutils-${version}.tar.xz";
     sha256 = "1ss0rnfsx8gvqjxaji4mvbhf9xyih4cadmgadbwwv8mnx1xvjh4x";
   };
 
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://mj.ucw.cz/pciutils.html";
+    homepage = "https://mj.ucw.cz/sw/pciutils/";
     description = "A collection of programs for inspecting and manipulating configuration of PCI devices";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "motion";
-  version = "4.3.2";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner  = "Motion-Project";
     repo   = "motion";
     rev    = "release-${version}";
-    sha256 = "09xs815jsivcilpmnrx2jkcxirj4lg5kp99fkr0p2sdxw03myi95";
+    sha256 = "sha256-srL9F99HHq5cw82rnQpywkTuY4s6hqIO64Pw5CnaG5Q=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ircd-hybrid";
-  version = "8.2.36";
+  version = "8.2.39";
 
   src = fetchurl {
     url = "mirror://sourceforge/ircd-hybrid/ircd-hybrid-${version}.tgz";
-    sha256 = "0sg4g0znl8ic8vklpy96z88gjksc165kl945a6fr1j4xc1bf8gcv";
+    sha256 = "sha256-A10nH2sN1FEVf4AUbRibwcm4TMm6G3rQb9cu5RCObk0=";
   };
 
   buildInputs = [ openssl zlib ];

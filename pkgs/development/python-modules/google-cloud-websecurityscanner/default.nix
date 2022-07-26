@@ -5,22 +5,36 @@
 , google-api-core
 , libcst
 , mock
+, protobuf
 , proto-plus
 , pytest-asyncio
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-websecurityscanner";
-  version = "1.3.0";
+  version = "1.8.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "632ac3c50eee704ed2a6e87d5a09379589841cf53459813c76f8bea01e77c49d";
+    hash = "sha256-sjw31xRPrLYF/kslmWn/UIYX95RZ+cSCz23AGToRbGc=";
   };
 
-  propagatedBuildInputs = [ google-api-core libcst proto-plus ];
+  propagatedBuildInputs = [
+    google-api-core
+    libcst
+    protobuf
+    proto-plus
+  ];
 
-  checkInputs = [ mock pytest-asyncio pytestCheckHook ];
+  checkInputs = [
+    mock
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "google.cloud.websecurityscanner_v1alpha"

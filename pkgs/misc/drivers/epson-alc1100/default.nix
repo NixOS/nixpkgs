@@ -4,7 +4,7 @@ let
   version = "1.2-0";
 
   libstdcpp5 = fetchurl {
-    url = "http://old-releases.ubuntu.com/ubuntu/pool/universe/g/gcc-3.3/libstdc++5_3.3.6-17ubuntu1_i386.deb";
+    url = "mirror://ubuntu/pool/universe/g/gcc-3.3/libstdc++5_3.3.6-17ubuntu1_i386.deb";
     sha256 = "10f8zcmqaa7skvg2bz94mnlgqpan4iscvi8913r6iawjh7hiisjy";
   };
 in
@@ -63,6 +63,7 @@ in
           };
       '';
 
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       license = with licenses; [ mit eapl ];
       maintainers = [ maintainers.eperuffo ];
       platforms = platforms.linux;

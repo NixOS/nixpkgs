@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   src = fetchzip {
-    url = "https://la.kyoceradocumentsolutions.com/content/dam/kdc/kdag/downloads/technical/executables/drivers/kyoceradocumentsolutions/lad/en/Kyocera_Linux_PPD_Ver_${version}.tar.gz";
+    url = "https://www.kyoceradocumentsolutions.us/content/download-center-americas/us/drivers/drivers/Kyocera_Linux_PPD_Ver_${lib.replaceChars ["."] ["_"] version}_tar_gz.download.gz";
     sha256 = "11znnlkfssakml7w80gxlz1k59f3nvhph91fkzzadnm9i7a8yjal";
   };
 
@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "CUPS drivers for several Kyocera printers";
     homepage = "https://www.kyoceradocumentsolutions.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = [ maintainers.steveej ];
     platforms = platforms.linux;

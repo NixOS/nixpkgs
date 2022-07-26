@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gzip";
-  version = "1.10";
+  version = "1.12";
 
   src = fetchurl {
     url = "mirror://gnu/gzip/${pname}-${version}.tar.xz";
-    sha256 = "1h6p374d3j8d4cdfydzls021xa2yby8myc0h8d6m8bc7k6ncq9c4";
+    sha256 = "sha256-zl4D5Rn2N+H4FAEazjXE+HszwLur7sNbr1+9NHnpGVY=";
   };
 
   outputs = [ "out" "man" "info" ];

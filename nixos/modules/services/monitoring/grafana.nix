@@ -6,12 +6,15 @@ let
   cfg = config.services.grafana;
   opt = options.services.grafana;
   declarativePlugins = pkgs.linkFarm "grafana-plugins" (builtins.map (pkg: { name = pkg.pname; path = pkg; }) cfg.declarativePlugins);
+  useMysql = cfg.database.type == "mysql";
+  usePostgresql = cfg.database.type == "postgres";
 
   envOptions = {
     PATHS_DATA = cfg.dataDir;
     PATHS_PLUGINS = if builtins.isNull cfg.declarativePlugins then "${cfg.dataDir}/plugins" else declarativePlugins;
     PATHS_LOGS = "${cfg.dataDir}/log";
 
+    SERVER_SERVE_FROM_SUBPATH = boolToString cfg.server.serveFromSubPath;
     SERVER_PROTOCOL = cfg.protocol;
     SERVER_HTTP_ADDR = cfg.addr;
     SERVER_HTTP_PORT = cfg.port;
@@ -39,9 +42,23 @@ let
     USERS_AUTO_ASSIGN_ORG = boolToString cfg.users.autoAssignOrg;
     USERS_AUTO_ASSIGN_ORG_ROLE = cfg.users.autoAssignOrgRole;
 
+    AUTH_DISABLE_LOGIN_FORM = boolToString cfg.auth.disableLoginForm;
+
     AUTH_ANONYMOUS_ENABLED = boolToString cfg.auth.anonymous.enable;
     AUTH_ANONYMOUS_ORG_NAME = cfg.auth.anonymous.org_name;
     AUTH_ANONYMOUS_ORG_ROLE = cfg.auth.anonymous.org_role;
+
+    AUTH_AZUREAD_NAME = "Azure AD";
+    AUTH_AZUREAD_ENABLED = boolToString cfg.auth.azuread.enable;
+    AUTH_AZUREAD_ALLOW_SIGN_UP = boolToString cfg.auth.azuread.allowSignUp;
+    AUTH_AZUREAD_CLIENT_ID = cfg.auth.azuread.clientId;
+    AUTH_AZUREAD_SCOPES = "openid email profile";
+    AUTH_AZUREAD_AUTH_URL = "https://login.microsoftonline.com/${cfg.auth.azuread.tenantId}/oauth2/v2.0/authorize";
+    AUTH_AZUREAD_TOKEN_URL = "https://login.microsoftonline.com/${cfg.auth.azuread.tenantId}/oauth2/v2.0/token";
+    AUTH_AZUREAD_ALLOWED_DOMAINS = cfg.auth.azuread.allowedDomains;
+    AUTH_AZUREAD_ALLOWED_GROUPS = cfg.auth.azuread.allowedGroups;
+    AUTH_AZUREAD_ROLE_ATTRIBUTE_STRICT = false;
+
     AUTH_GOOGLE_ENABLED = boolToString cfg.auth.google.enable;
     AUTH_GOOGLE_ALLOW_SIGN_UP = boolToString cfg.auth.google.allowSignUp;
     AUTH_GOOGLE_CLIENT_ID = cfg.auth.google.clientId;
@@ -106,6 +123,11 @@ let
         type = types.int;
         default = 1;
         description = "Org id. will default to orgId 1 if not specified.";
+      };
+      uid = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = "Custom UID which can be used to reference this datasource in other parts of the configuration, if not specified will be generated automatically.";
       };
       url = mkOption {
         type = types.str;
@@ -211,6 +233,11 @@ let
         path = mkOption {
           type = types.path;
           description = "Path grafana will watch for dashboards.";
+        };
+        foldersFromFilesStructure = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Use folder names from filesystem to create folders in Grafana.";
         };
       };
     };
@@ -328,13 +355,14 @@ in {
     staticRootPath = mkOption {
       description = "Root path for static assets.";
       default = "${cfg.package}/share/grafana/public";
+      defaultText = literalExpression ''"''${package}/share/grafana/public"'';
       type = types.str;
     };
 
     package = mkOption {
       description = "Package to use.";
       default = pkgs.grafana;
-      defaultText = "pkgs.grafana";
+      defaultText = literalExpression "pkgs.grafana";
       type = types.package;
     };
 
@@ -342,7 +370,7 @@ in {
       type = with types; nullOr (listOf path);
       default = null;
       description = "If non-null, then a list of packages containing Grafana plugins to install. If set, plugins cannot be manually installed.";
-      example = literalExample "with pkgs.grafanaPlugins; [ grafana-piechart-panel ]";
+      example = literalExpression "with pkgs.grafanaPlugins; [ grafana-piechart-panel ]";
       # Make sure each plugin is added only once; otherwise building
       # the link farm fails, since the same path is added multiple
       # times.
@@ -401,6 +429,7 @@ in {
       path = mkOption {
         description = "Database path.";
         default = "${cfg.dataDir}/data/grafana.db";
+        defaultText = literalExpression ''"''${config.${opt.dataDir}}/data/grafana.db"'';
         type = types.path;
       };
 
@@ -475,6 +504,14 @@ in {
       };
     };
 
+    server = {
+      serveFromSubPath = mkOption {
+        description = "Serve Grafana from subpath specified in rootUrl setting";
+        default = false;
+        type = types.bool;
+      };
+    };
+
     smtp = {
       enable = mkEnableOption "smtp";
       host = mkOption {
@@ -537,6 +574,12 @@ in {
     };
 
     auth = {
+      disableLoginForm = mkOption {
+        description = "Set to true to disable (hide) the login form, useful if you use OAuth";
+        default = false;
+        type = types.bool;
+      };
+
       anonymous = {
         enable = mkOption {
           description = "Whether to allow anonymous access.";
@@ -551,6 +594,53 @@ in {
         org_role = mkOption {
           description = "Which role anonymous users have in the organization.";
           default = "Viewer";
+          type = types.str;
+        };
+      };
+      azuread = {
+        enable = mkOption {
+          description = "Whether to allow Azure AD OAuth.";
+          default = false;
+          type = types.bool;
+        };
+        allowSignUp = mkOption {
+          description = "Whether to allow sign up with Azure AD OAuth.";
+          default = false;
+          type = types.bool;
+        };
+        clientId = mkOption {
+          description = "Azure AD OAuth client ID.";
+          default = "";
+          type = types.str;
+        };
+        clientSecretFile = mkOption {
+          description = "Azure AD OAuth client secret.";
+          default = null;
+          type = types.nullOr types.path;
+        };
+        tenantId = mkOption {
+          description = ''
+            Tenant id used to create auth and token url. Default to "common"
+            , let user sign in with any tenant.
+            '';
+          default = "common";
+          type = types.str;
+        };
+        allowedDomains = mkOption {
+          description = ''
+            To limit access to authenticated users who are members of one or more groups,
+            set allowedGroups to a comma- or space-separated list of group object IDs.
+            You can find object IDs for a specific group on the Azure portal.
+          '';
+          default = "";
+          type = types.str;
+        };
+        allowedGroups = mkOption {
+          description = ''
+            Limits access to users who belong to specific domains.
+            Separate domains with space or comma.
+          '';
+          default = "";
           type = types.str;
         };
       };
@@ -635,7 +725,7 @@ in {
     systemd.services.grafana = {
       description = "Grafana Service Daemon";
       wantedBy = ["multi-user.target"];
-      after = ["networking.target"];
+      after = ["networking.target"] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
       environment = {
         QT_QPA_PLATFORM = "offscreen";
       } // mapAttrs' (n: v: nameValuePair "GF_${n}" (toString v)) envOptions;
@@ -643,6 +733,10 @@ in {
         set -o errexit -o pipefail -o nounset -o errtrace
         shopt -s inherit_errexit
 
+        ${optionalString (cfg.auth.azuread.clientSecretFile != null) ''
+          GF_AUTH_AZUREAD_CLIENT_SECRET="$(<${escapeShellArg cfg.auth.azuread.clientSecretFile})"
+          export GF_AUTH_AZUREAD_CLIENT_SECRET
+        ''}
         ${optionalString (cfg.auth.google.clientSecretFile != null) ''
           GF_AUTH_GOOGLE_CLIENT_SECRET="$(<${escapeShellArg cfg.auth.google.clientSecretFile})"
           export GF_AUTH_GOOGLE_CLIENT_SECRET
@@ -673,6 +767,33 @@ in {
         User = "grafana";
         RuntimeDirectory = "grafana";
         RuntimeDirectoryMode = "0755";
+        # Hardening
+        AmbientCapabilities = lib.mkIf (cfg.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
+        CapabilityBoundingSet = if (cfg.port < 1024) then [ "CAP_NET_BIND_SERVICE" ] else [ "" ];
+        DeviceAllow = [ "" ];
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "full";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        # Upstream grafana is not setting SystemCallFilter for compatibility
+        # reasons, see https://github.com/grafana/grafana/pull/40176
+        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+        UMask = "0027";
       };
       preStart = ''
         ln -fs ${cfg.package}/share/grafana/conf ${cfg.dataDir}

@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "python-dotenv";
-  version = "0.17.1";
+  version = "0.20.0";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b1ae5e9643d5ed987fc57cc2583021e38db531946518130777734f9589b3141f";
+    sha256 = "sha256-t+OwSllpPELDb5qxzCrMRvpd+MeOF4/DOo1M0FyNSY8=";
   };
 
   propagatedBuildInputs = [ click ];
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Add .env support to your django/flask apps in development and deployments";
     homepage = "https://github.com/theskumar/python-dotenv";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ earvstedt ];
+    maintainers = with maintainers; [ erikarvstedt ];
   };
 }

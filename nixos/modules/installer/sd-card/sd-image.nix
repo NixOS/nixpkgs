@@ -18,7 +18,7 @@ with lib;
 let
   rootfsImage = pkgs.callPackage ../../../lib/make-ext4-fs.nix ({
     inherit (config.sdImage) storePaths;
-    compressImage = true;
+    compressImage = config.sdImage.compressImage;
     populateImageCommands = config.sdImage.populateRootCommands;
     volumeLabel = "NIXOS_SD";
   } // optionalAttrs (config.sdImage.rootPartitionUUID != null) {
@@ -49,7 +49,7 @@ in
 
     storePaths = mkOption {
       type = with types; listOf package;
-      example = literalExample "[ pkgs.stdenv ]";
+      example = literalExpression "[ pkgs.stdenv ]";
       description = ''
         Derivations to be included in the Nix store in the generated SD image.
       '';
@@ -107,7 +107,7 @@ in
     };
 
     populateFirmwareCommands = mkOption {
-      example = literalExample "'' cp \${pkgs.myBootLoader}/u-boot.bin firmware/ ''";
+      example = literalExpression "'' cp \${pkgs.myBootLoader}/u-boot.bin firmware/ ''";
       description = ''
         Shell commands to populate the ./firmware directory.
         All files in that directory are copied to the
@@ -116,7 +116,7 @@ in
     };
 
     populateRootCommands = mkOption {
-      example = literalExample "''\${config.boot.loader.generic-extlinux-compatible.populateCmd} -c \${config.system.build.toplevel} -d ./files/boot''";
+      example = literalExpression "''\${config.boot.loader.generic-extlinux-compatible.populateCmd} -c \${config.system.build.toplevel} -d ./files/boot''";
       description = ''
         Shell commands to populate the ./files directory.
         All files in that directory are copied to the
@@ -126,7 +126,7 @@ in
     };
 
     postBuildCommands = mkOption {
-      example = literalExample "'' dd if=\${pkgs.myBootLoader}/SPL of=$img bs=1024 seek=1 conv=notrunc ''";
+      example = literalExpression "'' dd if=\${pkgs.myBootLoader}/SPL of=$img bs=1024 seek=1 conv=notrunc ''";
       default = "";
       description = ''
         Shell commands to run after the image is built.
@@ -174,9 +174,10 @@ in
     mtools, libfaketime, util-linux, zstd }: stdenv.mkDerivation {
       name = config.sdImage.imageName;
 
-      nativeBuildInputs = [ dosfstools e2fsprogs mtools libfaketime util-linux zstd ];
+      nativeBuildInputs = [ dosfstools e2fsprogs libfaketime mtools util-linux ]
+      ++ lib.optional config.sdImage.compressImage zstd;
 
-      inherit (config.sdImage) compressImage;
+      inherit (config.sdImage) imageName compressImage;
 
       buildCommand = ''
         mkdir -p $out/nix-support $out/sd-image
@@ -189,14 +190,18 @@ in
           echo "file sd-image $img" >> $out/nix-support/hydra-build-products
         fi
 
+        root_fs=${rootfsImage}
+        ${lib.optionalString config.sdImage.compressImage ''
+        root_fs=./root-fs.img
         echo "Decompressing rootfs image"
-        zstd -d --no-progress "${rootfsImage}" -o ./root-fs.img
+        zstd -d --no-progress "${rootfsImage}" -o $root_fs
+        ''}
 
         # Gap in front of the first partition, in MiB
         gap=${toString config.sdImage.firmwarePartitionOffset}
 
         # Create the image file sized to fit /boot/firmware and /, plus slack for the gap.
-        rootSizeBlocks=$(du -B 512 --apparent-size ./root-fs.img | awk '{ print $1 }')
+        rootSizeBlocks=$(du -B 512 --apparent-size $root_fs | awk '{ print $1 }')
         firmwareSizeBlocks=$((${toString config.sdImage.firmwareSize} * 1024 * 1024 / 512))
         imageSize=$((rootSizeBlocks * 512 + firmwareSizeBlocks * 512 + gap * 1024 * 1024))
         truncate -s $imageSize $img
@@ -214,7 +219,7 @@ in
 
         # Copy the rootfs into the SD image
         eval $(partx $img -o START,SECTORS --nr 2 --pairs)
-        dd conv=notrunc if=./root-fs.img of=$img seek=$START count=$SECTORS
+        dd conv=notrunc if=$root_fs of=$img seek=$START count=$SECTORS
 
         # Create a FAT32 /boot/firmware partition of suitable size into firmware_part.img
         eval $(partx $img -o START,SECTORS --nr 1 --pairs)

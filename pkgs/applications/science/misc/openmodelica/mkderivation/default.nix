@@ -87,7 +87,7 @@ stdenv.mkDerivation (pkg // {
   inherit omtarget postPatch preAutoreconf configureFlags configurePhase preBuild makeFlags installFlags;
 
   src = fetchgit (import ./src-main.nix);
-  version = "1.17.0";
+  version = "1.18.0";
 
   nativeBuildInputs = getAttrDef "nativeBuildInputs" [ ] pkg
     ++ [ autoconf automake libtool cmake autoreconfHook ];

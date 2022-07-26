@@ -1,12 +1,15 @@
 { lib, stdenv, fetchurl, libgcrypt, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "libotr-4.1.1";
+  pname = "libotr";
+  version = "4.1.1";
 
   src = fetchurl {
-    url = "https://otr.cypherpunks.ca/${name}.tar.gz";
+    url = "https://otr.cypherpunks.ca/libotr-${version}.tar.gz";
     sha256 = "1x8rliydhbibmzwdbyr7pd7n87m2jmxnqkpvaalnf4154hj1hfwb";
   };
+
+  patches = [ ./fix-regtest-client.patch ];
 
   outputs = [ "bin" "out" "dev" ];
 
@@ -15,7 +18,6 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://www.cypherpunks.ca/otr/";
-    repositories.git = "git://git.code.sf.net/p/otr/libotr";
     license = licenses.lgpl21;
     description = "Library for Off-The-Record Messaging";
     platforms = platforms.unix;

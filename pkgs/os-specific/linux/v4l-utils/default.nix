@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, pkg-config, perl
-, libjpeg, udev
+, argp-standalone, libjpeg, udev
 , withUtils ? true
 , withGUI ? true, alsa-lib, libX11, qtbase, libGLU, wrapQtAppsHook
 }:
@@ -12,11 +12,11 @@ let
 # we need to use stdenv.mkDerivation in order not to pollute the libv4l’s closure with Qt
 in stdenv.mkDerivation rec {
   pname = "v4l-utils";
-  version = "1.20.0";
+  version = "1.22.1";
 
   src = fetchurl {
     url = "https://linuxtv.org/downloads/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "1xr66y6w422hil6s7n8d61a2vhwh4im8l267amf41jvw7xqihqcm";
+    hash = "sha256-Zcb76DCkTKEFxEOwJxgsGyyQU6kdHnKthJ36s4i5TjE=";
   };
 
   outputs = [ "out" ] ++ lib.optional withUtils "lib" ++ [ "dev" ];
@@ -35,19 +35,23 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config perl ] ++ lib.optional withQt wrapQtAppsHook;
 
-  buildInputs = [ udev ] ++ lib.optionals withQt [ alsa-lib libX11 qtbase libGLU ];
+  buildInputs = [ udev ]
+    ++ lib.optional (!stdenv.hostPlatform.isGnu) argp-standalone
+    ++ lib.optionals withQt [ alsa-lib libX11 qtbase libGLU ];
 
   propagatedBuildInputs = [ libjpeg ];
 
   postPatch = ''
-    patchShebangs utils/cec-ctl/msg2ctl.pl
-    patchShebangs utils/libcecutil/cec-gen.pl
+    patchShebangs utils/
   '';
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "V4L utils and libv4l, provide common image formats regardless of the v4l device";
     homepage = "https://linuxtv.org/projects.php";
-    license = licenses.lgpl21Plus;
+    changelog = "https://git.linuxtv.org/v4l-utils.git/plain/ChangeLog?h=v4l-utils-${version}";
+    license = with licenses; [ lgpl21Plus gpl2Plus ];
     maintainers = with maintainers; [ codyopel ];
     platforms = platforms.linux;
   };

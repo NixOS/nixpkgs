@@ -102,9 +102,7 @@ with lib;
         inherit lib;
       }));
       default = [];
-      example = literalExample ''
-        TODO: Example
-      '';
+      # TODO: example
       description = "Declarative vhost config";
     };
 

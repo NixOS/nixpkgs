@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "jitsi-meet";
-  version = "1.0.5056";
+  version = "1.0.6260";
 
   src = fetchurl {
     url = "https://download.jitsi.org/jitsi-meet/src/jitsi-meet-${version}.tar.bz2";
-    sha256 = "0vmxy22zpgmvmg84y6rf9s8y3ann1xzhpaipz7fk9z4ykmkj5knw";
+    sha256 = "Y1ELKdFdbnq20yUt4XoXmstJm8uI8EBGIFOvFWf+5Uw=";
   };
 
   dontBuild = true;
@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
   passthru.tests = {
     single-host-smoke-test = nixosTests.jitsi-meet;
   };
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Secure, Simple and Scalable Video Conferences";

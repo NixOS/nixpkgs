@@ -15,14 +15,17 @@
 }:
 
 let
-  enableValgrindTests = !stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind;
+  enableValgrindTests = !stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
+    # Apparently valgrind doesn't support some new ARM features on (some) Hydra machines:
+    #  VEX: Mismatch detected between RDMA and atomics features.
+    && !stdenv.isAarch64;
 in stdenv.mkDerivation rec {
   pname = "libpsl";
-  version = "0.21.0";
+  version = "0.21.1";
 
   src = fetchurl {
-    url = "https://github.com/rockdaboot/${pname}/releases/download/${pname}-${version}/${pname}-${version}.tar.lz";
-    sha256 = "183hadbira0d2zvv8272lspy31dgm9x26z35c61s5axcd5wd9g9i";
+    url = "https://github.com/rockdaboot/libpsl/releases/download/${version}/libpsl-${version}.tar.lz";
+    sha256 = "1a9kp2rj71jb9q030lmp3zhy33rqxscawbfzhp288fxvazapahv4";
   };
 
   nativeBuildInputs = [
@@ -82,7 +85,8 @@ in stdenv.mkDerivation rec {
     homepage = "https://rockdaboot.github.io/libpsl/";
     changelog = "https://raw.githubusercontent.com/rockdaboot/${pname}/${pname}-${version}/NEWS";
     license = licenses.mit;
-    platforms = platforms.unix;
     maintainers = [ maintainers.c0bw3b ];
+    mainProgram = "psl";
+    platforms = platforms.unix;
   };
 }

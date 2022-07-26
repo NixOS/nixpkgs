@@ -27,7 +27,9 @@ stdenv.mkDerivation rec {
     "--enable-shared"
   ] ++ lib.optionals stdenv.isLinux [ "--with-audio=alsa" ];
 
-  enableParallelBuilding = true;
+  # main/Makefile creates and removes 'flite_voice_list.c' from multiple targets:
+  # make[1]: *** No rule to make target 'flite_voice_list.c', needed by 'all'.  Stop
+  enableParallelBuilding = false;
 
   meta = with lib; {
     description = "A small, fast run-time speech synthesis engine";

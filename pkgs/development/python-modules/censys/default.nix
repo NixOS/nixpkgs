@@ -2,48 +2,62 @@
 , backoff
 , buildPythonPackage
 , fetchFromGitHub
+, importlib-metadata
 , parameterized
+, poetry-core
+, pytest-mock
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , requests
 , requests-mock
 , responses
 , rich
-, types-requests
 }:
 
 buildPythonPackage rec {
   pname = "censys";
-  version = "2.0.3";
-  disabled = pythonOlder "3.6";
+  version = "2.1.6";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "censys";
     repo = "censys-python";
     rev = "v${version}";
-    sha256 = "0ga5f6xv6rylfvalnl3cflr0w30r771gb05n5cjhxisb8an0qcb6";
+    hash = "sha256-jCQWjGx35erhkj1gjBjdGytvKNarrTODH6fJpFMQqLE=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+    pythonRelaxDepsHook
+  ];
 
   propagatedBuildInputs = [
     backoff
     requests
     rich
-    types-requests
+    importlib-metadata
   ];
 
   checkInputs = [
     parameterized
+    pytest-mock
     pytestCheckHook
     requests-mock
     responses
   ];
 
+  pythonRelaxDeps = [
+    "backoff"
+    "requests"
+    "rich"
+  ];
+
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "rich==10.3.0" "rich" \
-      --replace "types-requests==0.1.11" "types-requests"
-    substituteInPlace pytest.ini --replace \
-      " --cov -rs -p no:warnings" ""
+    substituteInPlace pytest.ini \
+      --replace "--cov" ""
   '';
 
   # The tests want to write a configuration file
@@ -52,7 +66,9 @@ buildPythonPackage rec {
     mkdir -p $HOME
   '';
 
-  pythonImportsCheck = [ "censys" ];
+  pythonImportsCheck = [
+    "censys"
+  ];
 
   meta = with lib; {
     description = "Python API wrapper for the Censys Search Engine (censys.io)";

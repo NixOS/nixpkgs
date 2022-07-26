@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkPhase = ''
-    export LD_LIBRARY_PATH=$PWD
     ./utest/utest --path ../examples/data/
   '';
 

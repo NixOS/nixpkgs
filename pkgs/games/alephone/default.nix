@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, boost, curl, ffmpeg, icoutils, libGLU, libmad, libogg
+{ lib, stdenv, fetchurl, boost, curl, ffmpeg_4, icoutils, libGLU, libmad, libogg
 , libpng, libsndfile, libvorbis, lua, pkg-config, SDL2, SDL2_image, SDL2_net
 , SDL2_ttf, smpeg, speex, zziplib, zlib, makeWrapper, makeDesktopItem, unzip
 , alephone }:
@@ -20,7 +20,7 @@ let
     buildInputs = [
       boost
       curl
-      ffmpeg
+      ffmpeg_4
       libGLU
       libmad
       libsndfile
@@ -72,7 +72,7 @@ in self // {
         name = desktopName;
         exec = pname;
         genericName = pname;
-        categories = "Game;";
+        categories = [ "Game" ];
         comment = meta.description;
         inherit desktopName icon;
       };
@@ -91,10 +91,10 @@ in self // {
         makeWrapper ${alephone}/bin/alephone $out/bin/$pname \
           --add-flags $out/data/$pname
       '';
-
+    } // extraArgs // {
       meta = alephone.meta // {
         license = lib.licenses.free;
         hydraPlatforms = [ ];
       } // meta;
-    } // extraArgs);
+    });
 }

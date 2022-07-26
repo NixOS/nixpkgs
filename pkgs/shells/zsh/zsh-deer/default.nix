@@ -1,10 +1,8 @@
 { lib, stdenv, fetchFromGitHub, perl }:
 
-let
+stdenv.mkDerivation rec {
+  pname = "deer";
   version = "1.4";
-  name = "deer-${version}";
-in stdenv.mkDerivation {
-  inherit name;
 
   src = fetchFromGitHub {
     owner = "Vifon";
@@ -12,6 +10,8 @@ in stdenv.mkDerivation {
     rev = "v${version}";
     sha256 = "1xnbnbi0zk2xsyn8dqsmyxqlfnl36pb1wwibnlp0dxixw6sfymyl";
   };
+
+  strictDeps = true;
 
   prePatch = ''
     substituteInPlace deer \

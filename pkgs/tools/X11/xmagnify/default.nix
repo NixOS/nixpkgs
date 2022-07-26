@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/amiloradovsky/magnify";
     license = licenses.mit;  # or GPL2+, optionally
     maintainers = with maintainers; [ amiloradovsky ];
+    mainProgram = "magnify";
     platforms = platforms.all;
   };
 }

@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, appimageTools, makeWrapper, electron }:
+{ lib, stdenv, fetchurl, appimageTools, makeWrapper, electron, git }:
 
 stdenv.mkDerivation rec {
   pname = "logseq";
-  version = "0.2.10";
+  version = "0.7.8";
 
   src = fetchurl {
     url = "https://github.com/logseq/logseq/releases/download/${version}/logseq-linux-x64-${version}.AppImage";
-    sha256 = "1YVOyaHDcv+GKx5nQq3cUrViKZ6CEuHQPiDvK0Jv+Qc=";
+    sha256 = "sha256-5NEx4OEISa7q0tp6v4AWK9eMn58dje7non653iJhipE=";
     name = "${pname}-${version}.AppImage";
   };
 
@@ -28,6 +28,12 @@ stdenv.mkDerivation rec {
     cp -a ${appimageContents}/{locales,resources} $out/share/${pname}
     cp -a ${appimageContents}/Logseq.desktop $out/share/applications/${pname}.desktop
 
+    # remove the `git` in `dugite` because we want the `git` in `nixpkgs`
+    chmod +w -R $out/share/${pname}/resources/app/node_modules/dugite/git
+    chmod +w $out/share/${pname}/resources/app/node_modules/dugite
+    rm -rf $out/share/${pname}/resources/app/node_modules/dugite/git
+    chmod -w $out/share/${pname}/resources/app/node_modules/dugite
+
     substituteInPlace $out/share/applications/${pname}.desktop \
       --replace Exec=Logseq Exec=${pname} \
       --replace Icon=Logseq Icon=$out/share/${pname}/resources/app/icons/logseq.png
@@ -36,7 +42,9 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
+    # set the env "LOCAL_GIT_DIRECTORY" for dugite so that we can use the git in nixpkgs
     makeWrapper ${electron}/bin/electron $out/bin/${pname} \
+      --set "LOCAL_GIT_DIRECTORY" ${git} \
       --add-flags $out/share/${pname}/resources/app
   '';
 

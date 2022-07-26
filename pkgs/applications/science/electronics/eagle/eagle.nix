@@ -27,7 +27,7 @@ let
       comment = "Schematic capture and PCB layout";
       desktopName = "Eagle";
       genericName = "Schematic editor";
-      categories = "Development;";
+      categories = [ "Development" ];
     };
 
     buildInputs =
@@ -66,15 +66,16 @@ let
       # Make desktop item
       mkdir -p "$out"/share/applications
       cp "$desktopItem"/share/applications/* "$out"/share/applications/
-      mkdir -p "$out"/share/icons
-      ln -s "$out/eagle-${version}/bin/eagle-logo.png" "$out"/share/icons/eagle.png
+      mkdir -p "$out"/share/pixmaps
+      ln -s "$out/eagle-${version}/bin/eagle-logo.png" "$out"/share/pixmaps/eagle.png
     '';
 
     meta = with lib; {
       description = "Schematic editor and PCB layout tool from Autodesk (formerly CadSoft)";
       homepage = "https://www.autodesk.com/products/eagle/overview";
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       license = licenses.unfree;
       platforms = [ "x86_64-linux" ];
-      maintainers = [ maintainers.rittelle ];
+      maintainers = [ ];
     };
   }

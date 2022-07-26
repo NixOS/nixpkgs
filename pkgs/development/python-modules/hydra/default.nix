@@ -1,26 +1,61 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27, pytest, omegaconf, pathlib2 }:
+{ stdenv
+, lib
+, antlr4_9-python3-runtime
+, buildPythonPackage
+, fetchFromGitHub
+, importlib-resources
+, jre_headless
+, omegaconf
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "hydra";
-  version = "0.11.3";
+  version = "1.2.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
     repo = pname;
-    rev = version;
-    sha256 = "0plbls65qfrvvigza3qvy0pwjzgkz8ylpgb1im14k3b125ny41ad";
+    rev = "v${version}";
+    sha256 = "sha256-4r0ZWW9SGl35Oupf0ejwL/s6Nas6RoSN2egiBrvFZIA=";
   };
 
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [ omegaconf ] ++ lib.optional isPy27 pathlib2;
+  nativeBuildInputs = [
+    jre_headless
+  ];
 
-  checkPhase = ''
-    runHook preCheck
-    pytest tests/
-    runHook postCheck
-  '';
+  propagatedBuildInputs = [
+    antlr4_9-python3-runtime
+    omegaconf
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  # Test environment setup broken under Nix for a few tests:
+  disabledTests = [
+    "test_bash_completion_with_dot_in_path"
+    "test_install_uninstall"
+    "test_config_search_path"
+  ];
+
+  disabledTestPaths = [
+    "tests/test_hydra.py"
+  ];
+
+  pythonImportsCheck = [
+    "hydra"
+  ];
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "A framework for configuring complex applications";
     homepage = "https://hydra.cc";
     license = licenses.mit;

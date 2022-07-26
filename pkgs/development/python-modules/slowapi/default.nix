@@ -2,12 +2,12 @@
 , buildPythonPackage
 , fastapi
 , fetchFromGitHub
-, fetchpatch
 , limits
 , mock
 , hiro
 , poetry-core
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , redis
 , starlette
@@ -15,15 +15,16 @@
 
 buildPythonPackage rec {
   pname = "slowapi";
-  version = "0.1.4";
+  version = "0.1.5";
   format = "pyproject";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "laurentS";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0bnnzgv2wy145sdab54hljwv1b5029ndrr0y9rc2q0mraz8lf8lm";
+    sha256 = "1wjnlhjfgil86h6i5yij723ncg18rqdprs1q6i68w4msaspwpxg9";
   };
 
   nativeBuildInputs = [
@@ -43,16 +44,23 @@ buildPythonPackage rec {
     starlette
   ];
 
-  patches = [
-    # Switch to poetry-core, https://github.com/laurentS/slowapi/pull/54
-    (fetchpatch {
-      name = "switch-to-poetry-core.patch";
-      url = "https://github.com/laurentS/slowapi/commit/fe165f2d479f4f8e4b7dd9cd88ec0ae847b490c5.patch";
-      sha256 = "16vjxdjjiyg8zjrgfyg9q2ym2lmnms2zy5d2cg3ccg51cfl715fi";
-    })
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'limits = "^1.5"' 'limits = "*"' \
+      --replace 'redis = "^3.4.1"' 'redis = "*"'
+  '';
+
+  disabledTests = [
+    # AssertionError: Regex pattern 'parameter `request` must be an instance of starlette.requests.Request' does not match 'This portal is not running'.
+    "test_endpoint_request_param_invalid"
+    "test_endpoint_response_param_invalid"
+  ] ++ lib.optionals (pythonAtLeast "3.10") [
+    "test_multiple_decorators"
   ];
 
-  pythonImportsCheck = [ "slowapi" ];
+  pythonImportsCheck = [
+    "slowapi"
+  ];
 
   meta = with lib; {
     description = "Python library for API rate limiting";

@@ -1,30 +1,60 @@
-{ lib, buildPythonPackage, fetchPypi, cmake, perl, stdenv, gcc10, darwin }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, cmake
+, perl
+, stdenv
+, gcc10
+, CoreFoundation
+, Security
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "awscrt";
-  version = "0.11.24";
+  version = "0.13.13";
+  format = "setuptools";
 
-  buildInputs = lib.optionals stdenv.isDarwin
-    (with darwin.apple_sdk.frameworks; [ CoreFoundation Security ]);
+  disabled = pythonOlder "3.6";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-4kCn5tydt56L22UvWQvhLcLVr31UH+oMfdjhtL9U/eI=";
+  };
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    CoreFoundation
+    Security
+  ];
 
   # Required to suppress -Werror
   # https://github.com/NixOS/nixpkgs/issues/39687
-  hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
+  hardeningDisable = lib.optionals stdenv.cc.isClang [
+    "strictoverflow"
+  ];
 
-  nativeBuildInputs = [ cmake ] ++
-    # gcc <10 is not supported, LLVM on darwin is just fine
-    lib.optionals (!stdenv.isDarwin && stdenv.isAarch64) [ gcc10 perl ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "extra_link_args += ['-Wl,-fatal_warnings']" ""
+  '';
+
+  # gcc <10 is not supported, LLVM on darwin is just fine
+  nativeBuildInputs = [
+    cmake
+  ] ++ lib.optionals (!stdenv.isDarwin && stdenv.isAarch64) [
+    gcc10
+    perl
+  ];
 
   dontUseCmakeConfigure = true;
+
+  pythonImportsCheck = [
+    "awscrt"
+  ];
 
   # Unable to import test module
   # https://github.com/awslabs/aws-crt-python/issues/281
   doCheck = false;
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "b8aa68bca404bf0085be0570eff5b542d01f7e8e3c0f9b0859abfe5e070162ff";
-  };
 
   meta = with lib; {
     homepage = "https://github.com/awslabs/aws-crt-python";

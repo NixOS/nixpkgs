@@ -1,5 +1,6 @@
-{ fetchurl
-, lib, stdenv
+{ stdenv
+, lib
+, fetchurl
 , pkg-config
 , meson
 , ninja
@@ -34,13 +35,13 @@
 
 stdenv.mkDerivation rec {
   pname = "folks";
-  version = "0.15.3";
+  version = "0.15.5";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Idc3+vCT9L4GVHPucMogiFuaLDaFlB26JMIjn9PFRKU=";
+    sha256 = "D/+KiWMwzYKu5FmDJPflQciE0DN1NiEnI7S+s4x1kIY=";
   };
 
   nativeBuildInputs = [

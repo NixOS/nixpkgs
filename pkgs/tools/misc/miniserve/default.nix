@@ -11,23 +11,37 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "miniserve";
-  version = "0.14.0";
+  version = "0.19.4";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "miniserve";
     rev = "v${version}";
-    sha256 = "sha256-Hv1aefuiu7pOlSMUjZLGY6bxVy+6myFH1afZZ5gtmi0=";
+    hash = "sha256-vpLa0ipRV+JZoRa7jKn9ZNITvoQ8ABG2Qw1SyMZayK0=";
   };
 
-  cargoSha256 = "sha256-CgiHluc9+5+hKwsC7UZimy1586QBUsj+TVlb2lQRXs0=";
+  cargoSha256 = "sha256-zBBU55VlXWYISMbKv07UfOPZ3vWRlpp4estuCcDBDDY=";
 
-  nativeBuildInputs = [ installShellFiles pkg-config zlib ];
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+    zlib
+  ];
 
-  checkFlags = [ "--skip=cant_navigate_up_the_root" ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    libiconv
+    Security
+  ];
+
+  checkFlags = [
+    "--skip=bind_ipv4_ipv6::case_2"
+    "--skip=cant_navigate_up_the_root"
+  ];
 
   postInstall = ''
+    $out/bin/miniserve --print-manpage >miniserve.1
+    installManPage miniserve.1
+
     installShellCompletion --cmd miniserve \
       --bash <($out/bin/miniserve --print-completions bash) \
       --fish <($out/bin/miniserve --print-completions fish) \
@@ -35,10 +49,12 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "For when you really just want to serve some files over HTTP right now!";
+    description = "CLI tool to serve files and directories over HTTP";
     homepage = "https://github.com/svenstaro/miniserve";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ zowoq ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
+    # https://hydra.nixos.org/build/162650896/nixlog/1
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

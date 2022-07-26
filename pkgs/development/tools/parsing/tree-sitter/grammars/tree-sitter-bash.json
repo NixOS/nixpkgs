@@ -4,6 +4,7 @@
   "date": "2021-03-04T14:15:26-08:00",
   "path": "/nix/store/nvlvdv02wdy4dq4w19bvzq6nlkgvpj20-tree-sitter-bash",
   "sha256": "18c030bb65r50i6z37iy7jb9z9i8i36y7b08dbc9bchdifqsijs5",
+  "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,
   "leaveDotGit": false

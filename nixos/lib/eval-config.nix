@@ -8,6 +8,7 @@
 # as subcomponents (e.g. the container feature, or nixops if network
 # expressions are ever made modular at the top level) can just use
 # types.submodule instead of using eval-config.nix
+evalConfigArgs@
 { # !!! system can be set modularly, would be nice to remove
   system ? builtins.currentSystem
 , # !!! is this argument needed any more? The pkgs argument can
@@ -20,6 +21,7 @@
 , # !!! See comment about args in lib/modules.nix
   specialArgs ? {}
 , modules
+, modulesLocation ? (builtins.unsafeGetAttrPos "modules" evalConfigArgs).file or null
 , # !!! See comment about check in lib/modules.nix
   check ? true
 , prefix ? []
@@ -28,10 +30,16 @@
                  in if e == "" then [] else [(import e)]
 }:
 
-let extraArgs_ = extraArgs; pkgs_ = pkgs;
+let pkgs_ = pkgs;
 in
 
 let
+  evalModulesMinimal = (import ./default.nix {
+    inherit lib;
+    # Implicit use of feature is noted in implementation.
+    featureFlags.minimalModules = { };
+  }).evalModules;
+
   pkgsModule = rec {
     _file = ./eval-config.nix;
     key = _file;
@@ -42,32 +50,57 @@ let
       # they way through, but has the last priority behind everything else.
       nixpkgs.system = lib.mkDefault system;
 
-      # Stash the value of the `system` argument. When using `nesting.children`
-      # we want to have the same default value behavior (immediately above)
-      # without any interference from the user's configuration.
-      nixpkgs.initialSystem = system;
-
       _module.args.pkgs = lib.mkIf (pkgs_ != null) (lib.mkForce pkgs_);
     };
   };
 
-in rec {
+  withWarnings = x:
+    lib.warnIf (evalConfigArgs?extraArgs) "The extraArgs argument to eval-config.nix is deprecated. Please set config._module.args instead."
+    lib.warnIf (evalConfigArgs?check) "The check argument to eval-config.nix is deprecated. Please set config._module.check instead."
+    x;
 
-  # Merge the option definitions in all modules, forming the full
-  # system configuration.
-  inherit (lib.evalModules {
-    inherit prefix check;
-    modules = baseModules ++ extraModules ++ [ pkgsModule ] ++ modules;
-    args = extraArgs;
-    specialArgs =
-      { modulesPath = builtins.toString ../modules; } // specialArgs;
-  }) config options _module;
+  legacyModules =
+    lib.optional (evalConfigArgs?extraArgs) {
+      config = {
+        _module.args = extraArgs;
+      };
+    }
+    ++ lib.optional (evalConfigArgs?check) {
+      config = {
+        _module.check = lib.mkDefault check;
+      };
+    };
 
-  # These are the extra arguments passed to every module.  In
-  # particular, Nixpkgs is passed through the "pkgs" argument.
-  extraArgs = extraArgs_ // {
-    inherit baseModules extraModules modules;
+  allUserModules =
+    let
+      # Add the invoking file (or specified modulesLocation) as error message location
+      # for modules that don't have their own locations; presumably inline modules.
+      locatedModules =
+        if modulesLocation == null then
+          modules
+        else
+          map (lib.setDefaultModuleLocation modulesLocation) modules;
+    in
+      locatedModules ++ legacyModules;
+
+  noUserModules = evalModulesMinimal ({
+    inherit prefix specialArgs;
+    modules = baseModules ++ extraModules ++ [ pkgsModule modulesModule ];
+  });
+
+  # Extra arguments that are useful for constructing a similar configuration.
+  modulesModule = {
+    config = {
+      _module.args = {
+        inherit noUserModules baseModules extraModules modules;
+      };
+    };
   };
 
-  inherit (_module.args) pkgs;
+  nixosWithUserModules = noUserModules.extendModules { modules = allUserModules; };
+
+in
+withWarnings nixosWithUserModules // {
+  inherit extraArgs;
+  inherit (nixosWithUserModules._module.args) pkgs;
 }

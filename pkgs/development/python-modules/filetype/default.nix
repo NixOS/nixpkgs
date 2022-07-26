@@ -1,21 +1,41 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "filetype";
-  version = "1.0.7";
+  version = "1.0.13";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "19vav4w8vvcnrps1mirjkrv4pr1khwn5ma6m5pgpxd4qip73wffs";
+    hash = "sha256-ahBHYv6T11XJYqqWyz2TCkj5GgdhBHEmxe6tIVPjOwM=";
   };
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover
-  '';
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "filetype"
+  ];
+
+  disabledTests = [
+    # https://github.com/h2non/filetype.py/issues/119
+    "test_guess_memoryview"
+    "test_guess_extension_memoryview"
+    "test_guess_mime_memoryview"
+  ];
+
+  disabledTestPaths = [
+    # We don't care about benchmarks
+    "tests/test_benchmark.py"
+  ];
 
   meta = with lib; {
     description = "Infer file type and MIME type of any file/buffer";

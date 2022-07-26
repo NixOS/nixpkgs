@@ -1,57 +1,41 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
-, pantheon
-, pkg-config
 , meson
 , ninja
-, vala
-, desktop-file-utils
-, libxml2
-, gtk3
+, pkg-config
 , python3
-, granite
+, vala
+, wrapGAppsHook4
+, granite7
+, gtk4
 , libgee
-, elementary-icon-theme
-, appstream
-, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-calculator";
-  version = "1.6.2";
-
-  repoName = "calculator";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "calculator";
     rev = version;
-    sha256 = "sha256-kOQr94PAfLPv4LjY2WDdTtlbf3/tYf+NUESZ94+L41M=";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-NE7x5vSfwakwJJe2VGRFiYc7GCB1M6xU5945EC6Em34=";
   };
 
   nativeBuildInputs = [
-    appstream
-    desktop-file-utils
-    libxml2
     meson
     ninja
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    elementary-icon-theme
-    granite
-    gtk3
+    granite7
+    gtk4
     libgee
   ];
 
@@ -60,11 +44,18 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
   meta = with lib; {
     homepage = "https://github.com/elementary/calculator";
     description = "Calculator app designed for elementary OS";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.calculator";
   };
 }

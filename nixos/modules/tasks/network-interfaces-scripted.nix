@@ -61,6 +61,8 @@ let
           MACAddress = i.macAddress;
         } // optionalAttrs (i.mtu != null) {
           MTUBytes = toString i.mtu;
+        } // optionalAttrs (i.wakeOnLan.enable == true) {
+          WakeOnLan = "magic";
         };
       };
     in listToAttrs (map createNetworkLink interfaces);
@@ -83,12 +85,14 @@ let
         hasDefaultGatewaySet = (cfg.defaultGateway != null && cfg.defaultGateway.address != "")
                             || (cfg.enableIPv6 && cfg.defaultGateway6 != null && cfg.defaultGateway6.address != "");
 
-        networkLocalCommands = {
+        needNetworkSetup = cfg.resolvconf.enable || cfg.defaultGateway != null || cfg.defaultGateway6 != null;
+
+        networkLocalCommands = lib.mkIf needNetworkSetup {
           after = [ "network-setup.service" ];
           bindsTo = [ "network-setup.service" ];
         };
 
-        networkSetup =
+        networkSetup = lib.mkIf needNetworkSetup
           { description = "Networking Setup";
 
             after = [ "network-pre.target" "systemd-udevd.service" "systemd-sysctl.service" ];
@@ -217,14 +221,15 @@ let
                     cidr = "${route.address}/${toString route.prefixLength}";
                     via = optionalString (route.via != null) ''via "${route.via}"'';
                     options = concatStrings (mapAttrsToList (name: val: "${name} ${val} ") route.options);
+                    type = toString route.type;
                   in
                   ''
                      echo "${cidr}" >> $state
                      echo -n "adding route ${cidr}... "
-                     if out=$(ip route add "${cidr}" ${options} ${via} dev "${i.name}" proto static 2>&1); then
+                     if out=$(ip route add ${type} "${cidr}" ${options} ${via} dev "${i.name}" proto static 2>&1); then
                        echo "done"
                      elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
-                       echo "'ip route add "${cidr}" ${options} ${via} dev "${i.name}"' failed: $out"
+                       echo "'ip route add ${type} "${cidr}" ${options} ${via} dev "${i.name}"' failed: $out"
                        exit 1
                      fi
                   ''
@@ -464,6 +469,39 @@ let
             '';
           });
 
+        createFouEncapsulation = n: v: nameValuePair "${n}-fou-encap"
+          (let
+            # if we have a device to bind to we can wait for its addresses to be
+            # configured, otherwise external sequencing is required.
+            deps = optionals (v.local != null && v.local.dev != null)
+              (deviceDependency v.local.dev ++ [ "network-addresses-${v.local.dev}.service" ]);
+            fouSpec = "port ${toString v.port} ${
+              if v.protocol != null then "ipproto ${toString v.protocol}" else "gue"
+            } ${
+              optionalString (v.local != null) "local ${escapeShellArg v.local.address} ${
+                optionalString (v.local.dev != null) "dev ${escapeShellArg v.local.dev}"
+              }"
+            }";
+          in
+          { description = "FOU endpoint ${n}";
+            wantedBy = [ "network-setup.service" (subsystemDevice n) ];
+            bindsTo = deps;
+            partOf = [ "network-setup.service" ];
+            after = [ "network-pre.target" ] ++ deps;
+            before = [ "network-setup.service" ];
+            serviceConfig.Type = "oneshot";
+            serviceConfig.RemainAfterExit = true;
+            path = [ pkgs.iproute2 ];
+            script = ''
+              # always remove previous incarnation since show can't filter
+              ip fou del ${fouSpec} >/dev/null 2>&1 || true
+              ip fou add ${fouSpec}
+            '';
+            postStop = ''
+              ip fou del ${fouSpec} || true
+            '';
+          });
+
         createSitDevice = n: v: nameValuePair "${n}-netdev"
           (let
             deps = deviceDependency v.dev;
@@ -484,6 +522,40 @@ let
                 ${optionalString (v.remote != null) "remote \"${v.remote}\""} \
                 ${optionalString (v.local != null) "local \"${v.local}\""} \
                 ${optionalString (v.ttl != null) "ttl ${toString v.ttl}"} \
+                ${optionalString (v.dev != null) "dev \"${v.dev}\""} \
+                ${optionalString (v.encapsulation != null)
+                  "encap ${v.encapsulation.type} encap-dport ${toString v.encapsulation.port} ${
+                    optionalString (v.encapsulation.sourcePort != null)
+                      "encap-sport ${toString v.encapsulation.sourcePort}"
+                  }"}
+              ip link set "${n}" up
+            '';
+            postStop = ''
+              ip link delete "${n}" || true
+            '';
+          });
+
+        createGreDevice = n: v: nameValuePair "${n}-netdev"
+          (let
+            deps = deviceDependency v.dev;
+            ttlarg = if lib.hasPrefix "ip6" v.type then "hoplimit" else "ttl";
+          in
+          { description = "GRE Tunnel Interface ${n}";
+            wantedBy = [ "network-setup.service" (subsystemDevice n) ];
+            bindsTo = deps;
+            partOf = [ "network-setup.service" ];
+            after = [ "network-pre.target" ] ++ deps;
+            before = [ "network-setup.service" ];
+            serviceConfig.Type = "oneshot";
+            serviceConfig.RemainAfterExit = true;
+            path = [ pkgs.iproute2 ];
+            script = ''
+              # Remove Dead Interfaces
+              ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
+              ip link add name "${n}" type ${v.type} \
+                ${optionalString (v.remote != null) "remote \"${v.remote}\""} \
+                ${optionalString (v.local != null) "local \"${v.local}\""} \
+                ${optionalString (v.ttl != null) "${ttlarg} ${toString v.ttl}"} \
                 ${optionalString (v.dev != null) "dev \"${v.dev}\""}
               ip link set "${n}" up
             '';
@@ -528,7 +600,9 @@ let
          // mapAttrs' createVswitchDevice cfg.vswitches
          // mapAttrs' createBondDevice cfg.bonds
          // mapAttrs' createMacvlanDevice cfg.macvlans
+         // mapAttrs' createFouEncapsulation cfg.fooOverUDP
          // mapAttrs' createSitDevice cfg.sits
+         // mapAttrs' createGreDevice cfg.greTunnels
          // mapAttrs' createVlanDevice cfg.vlans
          // {
            network-setup = networkSetup;

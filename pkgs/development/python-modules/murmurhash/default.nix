@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "murmurhash";
-  version = "1.0.5";
+  version = "1.0.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "98ec9d727bd998a35385abd56b062cf0cca216725ea7ec5068604ab566f7e97f";
+    sha256 = "sha256-Ywo5br0xykTYm07KNvp06oquckrfCvqi3naAw1Cyk28=";
   };
 
   postPatch = ''
@@ -32,6 +32,6 @@ buildPythonPackage rec {
     description = "Cython bindings for MurmurHash2";
     homepage = "https://github.com/explosion/murmurhash";
     license = licenses.mit;
-    maintainers = with maintainers; [ aborsu sdll ];
+    maintainers = with maintainers; [ aborsu ];
   };
 }

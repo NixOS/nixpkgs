@@ -40,18 +40,19 @@ stdenv.mkDerivation {
   buildInputs = [
     avahi
     libgphoto2
-    libieee1284
     libjpeg
     libpng
     libtiff
     libusb1
-    libv4l
-    net-snmp
     curl
-    systemd
     libxml2
     poppler
     gawk
+  ] ++ lib.optionals stdenv.isLinux [
+    libieee1284
+    libv4l
+    net-snmp
+    systemd
   ];
 
   enableParallelBuilding = true;
@@ -82,7 +83,7 @@ stdenv.mkDerivation {
 
   in ''
     mkdir -p $out/etc/udev/rules.d/
-    ./tools/sane-desc -m udev > $out/etc/udev/rules.d/49-libsane.rules || \
+    ./tools/sane-desc -m udev+hwdb -s doc/descriptions:doc/descriptions-external > $out/etc/udev/rules.d/49-libsane.rules || \
     cp tools/udev/libsane.rules $out/etc/udev/rules.d/49-libsane.rules
     # the created 49-libsane references /bin/sh
     substituteInPlace $out/etc/udev/rules.d/49-libsane.rules \
@@ -113,7 +114,6 @@ stdenv.mkDerivation {
     '';
     homepage = "http://www.sane-project.org/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ peti ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

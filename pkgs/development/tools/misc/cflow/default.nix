@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cflow";
-  version = "1.6";
+  version = "1.7";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "1mzd3yf0dfv8h2av5vsxxlhpk21nw064h91b2kgfrdz92r0pnj1l";
+    sha256 = "sha256-0BFGyvkAHiZhM0F8KoJYpktfwW/LCCoU9lKCBNDJcIY=";
   };
 
   patchPhase = ''

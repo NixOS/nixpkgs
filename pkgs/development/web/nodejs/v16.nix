@@ -8,14 +8,17 @@ let
 in
   buildNodejs {
     inherit enableNpm;
-    version = "16.5.0";
-    sha256 = "16dapj5pm2y1m3ldrjjlz8rq9axk85nn316iz02nk6qjs66y6drz";
+    version = "16.16.0";
+    sha256 = "sha256-FFFR7/Oyql6+czhACcUicag3QK5oepPJjGKM19UnNus=";
     patches = [
-      # Fix CVE-2021-22930 https://github.com/nodejs/node/pull/39423.
-      # It should be fixed by Node.js 16.6.0, but currently it fails to build on Darwin
+      ./disable-darwin-v8-system-instrumentation.patch
+      # Fix npm silently fail without a HOME directory https://github.com/npm/cli/issues/4996
       (fetchpatch {
-        url = "https://github.com/nodejs/node/commit/9d950a0956bf2c3dd87bacb56807f37e16a91db4.patch";
-        sha256 = "1narhk5dqdkbndh9hg0dn5ghhgrd6gsamjqszpivmp33nl5hgsx3";
+        url = "https://github.com/npm/cli/commit/9905d0e24c162c3f6cc006fa86b4c9d0205a4c6f.patch";
+        sha256 = "sha256-RlabXWtjzTZ5OgrGf4pFkolonvTDIPlzPY1QcYDd28E=";
+        includes = [ "deps/npm/lib/npm.js" "deps/npm/lib/utils/log-file.js" ];
+        stripLen = 1;
+        extraPrefix = "deps/npm/";
       })
     ];
   }

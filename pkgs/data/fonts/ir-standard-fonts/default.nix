@@ -21,6 +21,6 @@ in fetchFromGitHub {
     # License information is unavailable.
     license = licenses.unfree;
     platforms = platforms.all;
-    maintainers = [ maintainers.linarcx ];
+    maintainers = [ ];
   };
 }

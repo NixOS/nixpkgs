@@ -1,4 +1,4 @@
-{ coreutils, db, fetchurl, openssl, pcre, perl, pkg-config, lib, stdenv
+{ coreutils, db, fetchurl, openssl, pcre2, perl, pkg-config, lib, stdenv
 , enableLDAP ? false, openldap
 , enableMySQL ? false, libmysqlclient, zlib
 , enableAuthDovecot ? false, dovecot
@@ -10,15 +10,15 @@
 
 stdenv.mkDerivation rec {
   pname = "exim";
-  version = "4.94.2";
+  version = "4.96";
 
   src = fetchurl {
     url = "https://ftp.exim.org/pub/exim/exim4/${pname}-${version}.tar.xz";
-    sha256 = "0x4j698gsawm8a3bz531pf1k6izyxfvry4hj5wb0aqphi7y62605";
+    hash = "sha256-KZpWknsus0d9qv08W9oCvGflxOWJinrq8nQIdSeM8aM=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ coreutils db openssl perl pcre ]
+  buildInputs = [ coreutils db openssl perl pcre2 ]
     ++ lib.optional enableLDAP openldap
     ++ lib.optionals enableMySQL [ libmysqlclient zlib ]
     ++ lib.optional enableAuthDovecot dovecot

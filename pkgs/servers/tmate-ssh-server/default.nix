@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
     license     = licenses.mit;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ ];
+    knownVulnerabilities = [ "CVE-2021-44513" "CVE-2021-44512" ];
   };
 }
 

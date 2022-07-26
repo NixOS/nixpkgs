@@ -6,7 +6,7 @@ export PATH=/empty
 for i in @path@; do PATH=$PATH:$i/bin; done
 
 usage() {
-    echo "usage: $0 -t <timeout> -c <path-to-default-configuration> [-d <boot-dir>] [-g <num-generations>] [-n <dtbName>]" >&2
+    echo "usage: $0 -t <timeout> -c <path-to-default-configuration> [-d <boot-dir>] [-g <num-generations>] [-n <dtbName>] [-r]" >&2
     exit 1
 }
 
@@ -15,7 +15,7 @@ default=                # Default configuration
 target=/boot            # Target directory
 numGenerations=0        # Number of other generations to include in the menu
 
-while getopts "t:c:d:g:n:" opt; do
+while getopts "t:c:d:g:n:r" opt; do
     case "$opt" in
         t) # U-Boot interprets '0' as infinite and negative as instant boot
             if [ "$OPTARG" -lt 0 ]; then
@@ -30,6 +30,7 @@ while getopts "t:c:d:g:n:" opt; do
         d) target="$OPTARG" ;;
         g) numGenerations="$OPTARG" ;;
         n) dtbName="$OPTARG" ;;
+        r) noDeviceTree=1 ;;
         \?) usage ;;
     esac
 done
@@ -96,6 +97,12 @@ addEntry() {
     fi
     echo "  LINUX ../nixos/$(basename $kernel)"
     echo "  INITRD ../nixos/$(basename $initrd)"
+    echo "  APPEND init=$path/init $extraParams"
+
+    if [ -n "$noDeviceTree" ]; then
+        return
+    fi
+
     if [ -d "$dtbDir" ]; then
         # if a dtbName was specified explicitly, use that, else use FDTDIR
         if [ -n "$dtbName" ]; then
@@ -109,7 +116,6 @@ addEntry() {
             exit 1
         fi
     fi
-    echo "  APPEND init=$path/init $extraParams"
 }
 
 tmpFile="$target/extlinux/extlinux.conf.tmp.$$"

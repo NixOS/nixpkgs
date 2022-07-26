@@ -2,34 +2,34 @@
 , stdenv
 , fetchurl
 , pkg-config
-, writeText
-, libX11
-, ncurses
 , fontconfig
 , freetype
+, libX11
 , libXft
+, ncurses
+, writeText
 , conf ? null
 , patches ? [ ]
 , extraLibs ? [ ]
+, nixosTests
 }:
-
-with lib;
 
 stdenv.mkDerivation rec {
   pname = "st";
-  version = "0.8.4";
+  version = "0.8.5";
 
   src = fetchurl {
     url = "https://dl.suckless.org/st/${pname}-${version}.tar.gz";
-    sha256 = "19j66fhckihbg30ypngvqc9bcva47mp379ch5vinasjdxgn3qbfl";
+    hash = "sha256-6mgyID7QL/dBgry4raqexFTI+YnnkjLLhZZl4vVEqzc=";
   };
 
   inherit patches;
 
-  configFile = optionalString (conf != null) (writeText "config.def.h" conf);
+  configFile = lib.optionalString (conf != null)
+    (writeText "config.def.h" conf);
 
-  postPatch = optionalString (conf != null) "cp ${configFile} config.def.h"
-    + optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString (conf != null) "cp ${configFile} config.def.h"
+    + lib.optionalString stdenv.isDarwin ''
     substituteInPlace config.mk --replace "-lrt" ""
   '';
 
@@ -50,17 +50,19 @@ stdenv.mkDerivation rec {
     libXft
   ] ++ extraLibs;
 
-  installPhase = ''
-    runHook preInstall
-    TERMINFO=$out/share/terminfo make install PREFIX=$out
-    runHook postInstall
+  preInstall = ''
+    export TERMINFO=$out/share/terminfo
   '';
 
-  meta = {
+  installFlags = [ "PREFIX=$(out)" ];
+
+  passthru.tests.test = nixosTests.terminal-emulators.st;
+
+  meta = with lib; {
     homepage = "https://st.suckless.org/";
     description = "Simple Terminal for X from Suckless.org Community";
     license = licenses.mit;
     maintainers = with maintainers; [ andsild ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
   };
 }

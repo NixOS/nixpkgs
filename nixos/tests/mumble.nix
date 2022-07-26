@@ -38,8 +38,8 @@ in
     client1.wait_for_x()
     client2.wait_for_x()
 
-    client1.execute("mumble mumble://client1:testpassword\@server/test &")
-    client2.execute("mumble mumble://client2:testpassword\@server/test &")
+    client1.execute("mumble mumble://client1:testpassword\@server/test >&2 &")
+    client2.execute("mumble mumble://client2:testpassword\@server/test >&2 &")
 
     # cancel client audio configuration
     client1.wait_for_window(r"Audio Tuning Wizard")

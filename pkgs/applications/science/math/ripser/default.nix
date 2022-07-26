@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub
-, assembleReductionMatrix ? false
+{ lib, stdenv, fetchFromGitHub
 , useCoefficients ? false
 , indicateProgress ? false
 , useGoogleHashmap ? false, sparsehash ? null
@@ -14,7 +13,7 @@ assert useGoogleHashmap -> sparsehash != null;
 
 let
   inherit (lib) optional;
-  version = "1.0";
+  version = "1.2.1";
 in
 stdenv.mkDerivation {
   pname = "ripser";
@@ -23,25 +22,17 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "Ripser";
     repo = "ripser";
-    rev = "f69c6af6ca6883dd518c48faf41cf8901c379598";
-    sha256 = "1mw2898s7l29hgajsaf75bs9bjn2sn4g2mvmh41a602jpwp9r0rz";
+    rev = "v${version}";
+    sha256 = "sha256-BxmkPQ/nl5cF+xwQMTjXnLgkLgdmT/39y7Kzl2wDfpE=";
   };
-
-  #Patch from dev branch to make compilation work.
-  #Will be removed when it gets merged into master.
-  patches = [(fetchurl {
-    url = "https://github.com/Ripser/ripser/commit/dc78d8ce73ee35f3828f0aad67a4e53620277ebf.patch";
-    sha256 = "1y93aqpqz8fm1cxxrf90dhh67im3ndkr8dnxgbw5y96296n4r924";
-  })];
 
   buildInputs = optional useGoogleHashmap sparsehash;
 
   buildFlags = [
     "-std=c++11"
-    "-Ofast"
+    "-O3"
     "-D NDEBUG"
   ]
-  ++ optional assembleReductionMatrix "-D ASSEMBLE_REDUCTION_MATRIX"
   ++ optional useCoefficients "-D USE_COEFFICIENTS"
   ++ optional indicateProgress "-D INDICATE_PROGRESS"
   ++ optional useGoogleHashmap "-D USE_GOOGLE_HASHMAP"

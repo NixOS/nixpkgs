@@ -1,7 +1,7 @@
-{lib, stdenv, fetchurl, zlib, ncurses, fuse}:
+{lib, stdenv, fetchurl, fetchpatch, zlib, ncurses, fuse}:
 
 stdenv.mkDerivation rec {
-  name = "wiimms-iso-tools";
+  pname = "wiimms-iso-tools";
   version = "3.02a";
 
   src = fetchurl {
@@ -11,14 +11,27 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib ncurses fuse ];
 
-  patches = [ ./fix-paths.diff ];
+  patches = [
+    ./fix-paths.diff
+
+    # Pull pending upstream fix for ncurses-6.3:
+    #  https://github.com/Wiimm/wiimms-iso-tools/pull/14
+    (fetchpatch {
+      name = "ncurses-6.3.patch";
+      url = "https://github.com/Wiimm/wiimms-iso-tools/commit/3f1e84ec6915cc4f658092d33411985bd3eaf4e6.patch";
+      sha256 = "18cfri4y1082phg6fzh402gk5ri24wr8ff4zl8v5rlgjndh610im";
+      stripLen = 1;
+    })
+  ];
+
   postPatch = ''
     patchShebangs setup.sh
     patchShebangs gen-template.sh
     patchShebangs gen-text-file.sh
   '';
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
+  # Workaround build failure on -fno-common toolchains like upstream gcc-10.
+  NIX_CFLAGS_COMPILE = "-Wno-error=format-security -fcommon";
   INSTALL_PATH = "$out";
 
   installPhase = ''

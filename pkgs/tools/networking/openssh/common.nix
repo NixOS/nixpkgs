@@ -4,6 +4,7 @@
 , src
 , extraPatches ? []
 , extraNativeBuildInputs ? []
+, extraConfigureFlags ? []
 , extraMeta ? {}
 }:
 
@@ -18,10 +19,12 @@
 , libedit
 , pkg-config
 , pam
+, libredirect
 , etcDir ? null
 , withKerberos ? !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
 , libkrb5
 , libfido2
+, hostname
 , nixosTests
 , withFIDO ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isMusl
 , linkOpenssl ? true
@@ -33,6 +36,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./locale_archive.patch
+
+    (fetchurl {
+      url = "https://git.alpinelinux.org/aports/plain/main/openssh/gss-serv.c.patch?id=a7509603971ce2f3282486a43bb773b1b522af83";
+      sha256 = "sha256-eFFOd4B2nccRZAQWwdBPBoKWjfEdKEVGJvKZAzLu3HU=";
+    })
 
     # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
     ./dont_create_privsep_path.patch
@@ -60,22 +68,6 @@ stdenv.mkDerivation rec {
     # Setting LD causes `configure' and `make' to disagree about which linker
     # to use: `configure' wants `gcc', but `make' wants `ld'.
     unset LD
-  ''
-  # Upstream build system does not support static build, so we fall back
-  # on fragile patching of configure script.
-  #
-  # libedit is found by pkg-config, but without --static flag, required
-  # to get also transitive dependencies for static linkage, hence sed
-  # expression.
-  #
-  # Kerberos can be found either by krb5-config or by fall-back shell
-  # code in openssh's configure.ac. Neither of them support static
-  # build, but patching code for krb5-config is simpler, so to get it
-  # into PATH, libkrb5.dev is added into buildInputs.
-  + optionalString stdenv.hostPlatform.isStatic ''
-    sed -i "s,PKGCONFIG --libs,PKGCONFIG --libs --static,g" configure
-    sed -i 's#KRB5CONF --libs`#KRB5CONF --libs` -lkrb5support -lkeyutils#g' configure
-    sed -i 's#KRB5CONF --libs gssapi`#KRB5CONF --libs gssapi` -lkrb5support -lkeyutils#g' configure
   '';
 
   # I set --disable-strip because later we strip anyway. And it fails to strip
@@ -92,13 +84,70 @@ stdenv.mkDerivation rec {
     ++ optional withFIDO "--with-security-key-builtin=yes"
     ++ optional withKerberos (assert libkrb5 != null; "--with-kerberos5=${libkrb5}")
     ++ optional stdenv.isDarwin "--disable-libutil"
-    ++ optional (!linkOpenssl) "--without-openssl";
+    ++ optional (!linkOpenssl) "--without-openssl"
+    ++ extraConfigureFlags;
+
+  ${if stdenv.hostPlatform.isStatic then "NIX_LDFLAGS" else null}= [ "-laudit" ] ++ lib.optionals withKerberos [ "-lkeyutils" ];
 
   buildFlags = [ "SSH_KEYSIGN=ssh-keysign" ];
 
   enableParallelBuilding = true;
 
   hardeningEnable = [ "pie" ];
+
+  doCheck = true;
+  enableParallelChecking = false;
+  checkInputs = optional (!stdenv.isDarwin) hostname;
+  preCheck = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    # construct a dummy HOME
+    export HOME=$(realpath ../dummy-home)
+    mkdir -p ~/.ssh
+
+    # construct a dummy /etc/passwd file for the sshd under test
+    # to use to look up the connecting user
+    DUMMY_PASSWD=$(realpath ../dummy-passwd)
+    cat > $DUMMY_PASSWD <<EOF
+    $(whoami)::$(id -u):$(id -g)::$HOME:$SHELL
+    EOF
+
+    # we need to NIX_REDIRECTS /etc/passwd both for processes
+    # invoked directly and those invoked by the "remote" session
+    cat > ~/.ssh/environment.base <<EOF
+    NIX_REDIRECTS=/etc/passwd=$DUMMY_PASSWD
+    LD_PRELOAD=${libredirect}/lib/libredirect.so
+    EOF
+
+    # use an ssh environment file to ensure environment is set
+    # up appropriately for build environment even when no shell
+    # is invoked by the ssh session. otherwise the PATH will
+    # only contain default unix paths like /bin which we don't
+    # have in our build environment
+    cat - regress/test-exec.sh > regress/test-exec.sh.new <<EOF
+    cp $HOME/.ssh/environment.base $HOME/.ssh/environment
+    echo "PATH=\$PATH" >> $HOME/.ssh/environment
+    EOF
+    mv regress/test-exec.sh.new regress/test-exec.sh
+
+    # explicitly enable the PermitUserEnvironment feature
+    substituteInPlace regress/test-exec.sh \
+      --replace \
+        'cat << EOF > $OBJ/sshd_config' \
+        $'cat << EOF > $OBJ/sshd_config\n\tPermitUserEnvironment yes'
+
+    # some tests want to use files under /bin as example files
+    for f in regress/sftp-cmds.sh regress/forwarding.sh; do
+      substituteInPlace $f --replace '/bin' "$(dirname $(type -p ls))"
+    done
+
+    # set up NIX_REDIRECTS for direct invocations
+    set -a; source ~/.ssh/environment.base; set +a
+  '';
+  # integration tests hard to get working on darwin with its shaky
+  # sandbox
+  # t-exec tests fail on musl
+  checkTarget = optional (!stdenv.isDarwin && !stdenv.hostPlatform.isMusl) "t-exec"
+    # other tests are less demanding of the environment
+    ++ [ "unit" "file-tests" "interop-tests" ];
 
   postInstall = ''
     # Install ssh-copy-id, it's very useful.
@@ -122,6 +171,7 @@ stdenv.mkDerivation rec {
     changelog = "https://www.openssh.com/releasenotes.html";
     license = licenses.bsd2;
     platforms = platforms.unix ++ platforms.windows;
-    maintainers = with maintainers; [ eelco aneeshusa ];
+    maintainers = (extraMeta.maintainers or []) ++ (with maintainers; [ eelco aneeshusa ]);
+    mainProgram = "ssh";
   } // extraMeta;
 }

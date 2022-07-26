@@ -30,11 +30,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "tor";
-  version = "0.4.6.6";
+  version = "0.4.7.8";
 
   src = fetchurl {
     url = "https://dist.torproject.org/${pname}-${version}.tar.gz";
-    sha256 = "04ifi18cj4cw5lhfzgfrrc42j7qqdmbvxq24xlhj0dsmljdih8rl";
+    sha256 = "sha256-nppcZ60qzdXw+L4U7Vkf7QdrFwir+DRAZpkKD6Zv4ZU=";
   };
 
   outputs = [ "out" "geoip" ];
@@ -45,9 +45,13 @@ stdenv.mkDerivation rec {
 
   patches = [ ./disable-monotonic-timer-tests.patch ];
 
-  # cross compiles correctly but needs the following
-  configureFlags = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-    "--disable-tool-name-check";
+  configureFlags =
+    # cross compiles correctly but needs the following
+    lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--disable-tool-name-check" ]
+    ++
+    # sandbox is broken on aarch64-linux https://gitlab.torproject.org/tpo/core/tor/-/issues/40599
+    lib.optionals (stdenv.isLinux && stdenv.isAarch64) [ "--disable-seccomp" ]
+  ;
 
   NIX_CFLAGS_LINK = lib.optionalString stdenv.cc.isGNU "-lgcc_s";
 
@@ -61,7 +65,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  # disable tests on aarch64-darwin, the following tests fail there:
+  # oom/circbuf: [forking]
+  #   FAIL src/test/test_oom.c:187: assert(c1->marked_for_close)
+  #   [circbuf FAILED]
+  # oom/streambuf: [forking]
+  #   FAIL src/test/test_oom.c:287: assert(x_ OP_GE 500 - 5): 0 vs 495
+  #   [streambuf FAILED]
+  doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
 
   postInstall = ''
     mkdir -p $geoip/share/tor
@@ -90,7 +101,6 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.torproject.org/";
-    repositories.git = "https://git.torproject.org/git/tor";
     description = "Anonymizing overlay network";
 
     longDescription = ''
@@ -106,7 +116,7 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
 
     maintainers = with maintainers;
-      [ phreedom thoughtpolice joachifm prusnak ];
+      [ thoughtpolice joachifm prusnak ];
     platforms = platforms.unix;
   };
 }

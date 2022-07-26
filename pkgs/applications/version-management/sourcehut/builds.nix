@@ -1,7 +1,7 @@
 { lib
 , fetchFromSourcehut
-, buildPythonPackage
 , buildGoModule
+, buildPythonPackage
 , srht
 , redis
 , celery
@@ -9,27 +9,40 @@
 , markdown
 , ansi2html
 , python
+, unzip
 }:
 let
-  version = "0.66.7";
-
-  buildWorker = src: buildGoModule {
-    inherit src version;
-    pname = "builds-sr-ht-worker";
-
-    vendorSha256 = "sha256-giOaldV46aBqXyFH/cQVsbUr6Rb4VMhbBO86o48tRZY=";
-  };
-in
-buildPythonPackage rec {
-  inherit version;
-  pname = "buildsrht";
+  version = "0.81.0";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "builds.sr.ht";
     rev = version;
-    sha256 = "sha256-2MLs/DOXHjEYarXDVUcPZe3o0fmZbzVxn528SE72lhM=";
+    sha256 = "sha256-oUSzanRFZ2dQTgm/VuNhqUaUAPq7ffxR7OtBKtE61DE=";
   };
+
+  buildsrht-api = buildGoModule ({
+    inherit src version;
+    pname = "buildsrht-api";
+    modRoot = "api";
+    vendorSha256 = "sha256-roTwqtg4Y846PNtLdRN/LV3Jd0LVElqjFy3DJcrwoaI=";
+  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
+
+  buildsrht-worker = buildGoModule {
+    inherit src version;
+    sourceRoot = "source/worker";
+    pname = "buildsrht-worker";
+    vendorSha256 = "sha256-Pf1M9a43eK4jr6QMi6kRHA8DodXQU0pqq9ua5VC3ER0=";
+  };
+in
+buildPythonPackage rec {
+  inherit src version;
+  pname = "buildsrht";
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "all: api worker" ""
+  '';
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
@@ -53,13 +66,16 @@ buildPythonPackage rec {
 
     cp -r images $out/lib
     cp contrib/submit_image_build $out/bin/builds.sr.ht
-    cp ${buildWorker "${src}/worker"}/bin/worker $out/bin/builds.sr.ht-worker
+    ln -s ${buildsrht-api}/bin/api $out/bin/buildsrht-api
+    ln -s ${buildsrht-worker}/bin/worker $out/bin/buildsrht-worker
   '';
+
+  pythonImportsCheck = [ "buildsrht" ];
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/builds.sr.ht";
     description = "Continuous integration service for the sr.ht network";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ eadwu ];
   };
 }

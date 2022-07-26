@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
     maintainers = teams.gnome.members;
   };
 
-  machine = { nodes, ... }: let
+  nodes.machine = { nodes, ... }: let
     user = nodes.machine.config.users.users.alice;
   in
 
@@ -24,8 +24,23 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
       services.xserver.desktopManager.gnome.enable = true;
       services.xserver.desktopManager.gnome.debug = true;
       services.xserver.displayManager.defaultSession = "gnome-xorg";
+      programs.gnome-terminal.enable = true;
 
-      virtualisation.memorySize = 1024;
+      systemd.user.services = {
+        "org.gnome.Shell@x11" = {
+          serviceConfig = {
+            ExecStart = [
+              # Clear the list before overriding it.
+              ""
+              # Eval API is now internal so Shell needs to run in unsafe mode.
+              # TODO: improve test driver so that it supports openqa-like manipulation
+              # that would allow us to drop this mess.
+              "${pkgs.gnome.gnome-shell}/bin/gnome-shell --unsafe-mode"
+            ];
+          };
+        };
+      };
+
     };
 
   testScript = { nodes, ... }: let

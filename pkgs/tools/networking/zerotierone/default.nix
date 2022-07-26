@@ -1,15 +1,37 @@
-{ lib, stdenv, buildPackages, fetchFromGitHub, openssl, lzo, zlib, iproute2, ronn }:
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, fetchurl
 
-stdenv.mkDerivation rec {
+, buildPackages
+, iproute2
+, lzo
+, openssl
+, pkg-config
+, ronn
+, zlib
+}:
+
+let
   pname = "zerotierone";
-  version = "1.6.5";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "zerotier";
     repo = "ZeroTierOne";
     rev = version;
-    sha256 = "0dlnrb59vnxa3pjkgfqd5jil9kl6axh23v0bffi4kx8jwzpdwas8";
+    sha256 = "sha256-2lxXgQArHTFCuSBbKRSaLka42p2INLDg0z3TZ+J5msc=";
   };
+in stdenv.mkDerivation {
+  inherit pname version src;
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    src = "${src}/zeroidc";
+    name = "${pname}-${version}";
+    sha256 = "sha256-Q9uBUD5xxo5gcTQTedVqQv+Z7B1TTPWtaTSuWo7WEPM=";
+  };
+  postPatch = "cp ${src}/zeroidc/Cargo.lock Cargo.lock";
 
   preConfigure = ''
     patchShebangs ./doc/build.sh
@@ -17,12 +39,23 @@ stdenv.mkDerivation rec {
       --replace '/usr/bin/ronn' '${buildPackages.ronn}/bin/ronn' \
 
     substituteInPlace ./make-linux.mk \
-      --replace 'armv5' 'armv6'
+      --replace '-march=armv6zk' "" \
+      --replace '-mcpu=arm1176jzf-s' ""
   '';
 
-
-  nativeBuildInputs = [ ronn ];
-  buildInputs = [ openssl lzo zlib iproute2 ];
+  nativeBuildInputs = [
+    pkg-config
+    ronn
+    rustPlatform.cargoSetupHook
+    rustPlatform.rust.cargo
+    rustPlatform.rust.rustc
+  ];
+  buildInputs = [
+    iproute2
+    lzo
+    openssl
+    zlib
+  ];
 
   enableParallelBuilding = true;
 
@@ -30,18 +63,20 @@ stdenv.mkDerivation rec {
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
   checkPhase = ''
+    runHook preCheck
     ./zerotier-selftest
+    runHook postCheck
   '';
 
-  installPhase = ''
-    install -Dt "$out/bin/" zerotier-one
-    ln -s $out/bin/zerotier-one $out/bin/zerotier-idtool
-    ln -s $out/bin/zerotier-one $out/bin/zerotier-cli
+  installFlags = [ "DESTDIR=$$out/upstream" ];
 
-    mkdir -p $man/share/man/man8
-    for cmd in zerotier-one.8 zerotier-cli.1 zerotier-idtool.1; do
-      cat doc/$cmd | gzip -9n > $man/share/man/man8/$cmd.gz
-    done
+  postInstall = ''
+    mv $out/upstream/usr/sbin $out/bin
+
+    mkdir -p $man/share
+    mv $out/upstream/usr/share/man $man/share/man
+
+    rm -rf $out/upstream
   '';
 
   outputs = [ "out" "man" ];

@@ -31,6 +31,5 @@ stdenv.mkDerivation rec {
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.unix;
     homepage = "http://www.mathe2.uni-bayreuth.de/stoll/programs/";
-    updateWalker = true;
   };
 }

@@ -11,6 +11,14 @@ in
     services.radarr = {
       enable = mkEnableOption "Radarr";
 
+      package = mkOption {
+        description = "Radarr package to use";
+        default = pkgs.radarr;
+        defaultText = literalExpression "pkgs.radarr";
+        example = literalExpression "pkgs.radarr";
+        type = types.package;
+      };
+
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/radarr/.config/Radarr";
@@ -51,7 +59,7 @@ in
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${pkgs.radarr}/bin/Radarr -nobrowser -data='${cfg.dataDir}'";
+        ExecStart = "${cfg.package}/bin/Radarr -nobrowser -data='${cfg.dataDir}'";
         Restart = "on-failure";
       };
     };

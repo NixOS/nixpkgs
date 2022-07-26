@@ -8,10 +8,13 @@
 , wrapGAppsHook
 , libhandy
 , libxkbcommon
+, libgudev
+, callaudiod
 , pulseaudio
 , glib
 , gtk3
 , gnome
+, gnome-desktop
 , gcr
 , pam
 , systemd
@@ -24,27 +27,20 @@
 , networkmanager
 , polkit
 , libsecret
-, writeText
 }:
 
-let
-  gvc = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = "libgnome-volume-control";
-    rev = "ae1a34aafce7026b8c0f65a43c9192d756fe1057";
-    sha256 = "0a4qh5pgyjki904qf7qmvqz2ksxb0p8xhgl2aixfbhixn0pw6saw";
-  };
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "phosh";
-  version = "0.12.1";
+  version = "0.17.0";
 
   src = fetchFromGitLab {
-    domain = "source.puri.sm";
-    owner = "Librem5";
+    domain = "gitlab.gnome.org";
+    group = "World";
+    owner = "Phosh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "048g5sp9jgfiwq6n8my4msm7wy3pdhbg0wxqxvps4m8qf8wa7ffq";
+    fetchSubmodules = true; # including gvc and libcall-ui which are designated as subprojects
+    sha256 = "sha256-o/0NJZo1EPpXguN/tkUc+/9XaVTQWaLGe+2pU0B91Cg=";
   };
 
   nativeBuildInputs = [
@@ -60,13 +56,15 @@ in stdenv.mkDerivation rec {
     libhandy
     libsecret
     libxkbcommon
+    libgudev
+    callaudiod
     pulseaudio
     glib
     gcr
     networkmanager
     polkit
     gnome.gnome-control-center
-    gnome.gnome-desktop
+    gnome-desktop
     gnome.gnome-session
     gtk3
     pam
@@ -85,11 +83,6 @@ in stdenv.mkDerivation rec {
   doCheck = false;
 
   mesonFlags = [ "-Dsystemd=true" "-Dcompositor=${phoc}/bin/phoc" ];
-
-  postUnpack = ''
-    rmdir $sourceRoot/subprojects/gvc
-    ln -s ${gvc} $sourceRoot/subprojects/gvc
-  '';
 
   postPatch = ''
     chmod +x build-aux/post_install.py
@@ -116,8 +109,6 @@ in stdenv.mkDerivation rec {
   postFixup = ''
     mkdir -p $out/share/wayland-sessions
     ln -s $out/share/applications/sm.puri.Phosh.desktop $out/share/wayland-sessions/
-    # The OSK0.desktop points to a dummy stub that's not needed
-    rm $out/share/applications/sm.puri.OSK0.desktop
   '';
 
   passthru = {
@@ -128,9 +119,9 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A pure Wayland shell prototype for GNOME on mobile devices";
-    homepage = "https://source.puri.sm/Librem5/phosh";
+    homepage = "https://gitlab.gnome.org/World/Phosh/phosh";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ archseer jtojnar masipcat zhaofengli ];
+    maintainers = with maintainers; [ jtojnar masipcat zhaofengli ];
     platforms = platforms.linux;
   };
 }

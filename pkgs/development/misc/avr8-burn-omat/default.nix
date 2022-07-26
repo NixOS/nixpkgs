@@ -11,8 +11,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ unzip ];
 
-  phases = "unpackPhase installPhase";
-
   # move to nix-support to not create that many symlinks..
   # TODO burnomat tries to read /usr/local/etc/avrdude.conf (but you can edit it within the settings dialog)
   installPhase = ''
@@ -28,6 +26,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "GUI tool for avrdude";
     homepage = "http://avr8-burn-o-mat.aaabbb.de/avr8_burn_o_mat_avrdude_gui_en.html";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = lib.licenses.gpl3;
     platforms = platforms.all;
   };

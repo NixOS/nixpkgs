@@ -32,9 +32,9 @@ let
       description = "Bind address for ${name} endpoint.";
     };
     port = mkOption {
-      type = types.int;
+      type = types.port;
       default = port;
-      description = "Bind port for ${name} endoint.";
+      description = "Bind port for ${name} endpoint.";
     };
   };
 
@@ -158,6 +158,10 @@ let
       (sec "addressbook")
       (strOpt "defaulturl" cfg.addressbook.defaulturl)
     ] ++ (optionalEmptyList "subscriptions" cfg.addressbook.subscriptions)
+      ++ [
+      (sec "meshnets")
+      (boolOpt "yggdrasil" cfg.yggdrasil.enable)
+    ] ++ (optionalNullString "yggaddress" cfg.yggdrasil.address)
       ++ (flip map
       (collect (proto: proto ? port && proto ? address) cfg.proto)
       (proto: let protoOpts = [
@@ -222,14 +226,12 @@ let
         in concatStringsSep "\n" inTunOpts))];
     in pkgs.writeText "i2pd-tunnels.conf" opts;
 
-  i2pdSh = pkgs.writeScriptBin "i2pd" ''
-    #!/bin/sh
-    exec ${pkgs.i2pd}/bin/i2pd \
-      ${if cfg.address == null then "" else "--host="+cfg.address} \
-      --service \
-      --conf=${i2pdConf} \
-      --tunconf=${tunnelConf}
-  '';
+  i2pdFlags = concatStringsSep " " (
+    optional (cfg.address != null) ("--host=" + cfg.address) ++ [
+    "--service"
+    ("--conf=" + i2pdConf)
+    ("--tunconf=" + tunnelConf)
+  ]);
 
 in
 
@@ -250,6 +252,15 @@ in
           Enables I2Pd as a running service upon activation.
           Please read http://i2pd.readthedocs.io/en/latest/ for further
           configuration help.
+        '';
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.i2pd;
+        defaultText = literalExpression "pkgs.i2pd";
+        description = ''
+          i2pd package to use.
         '';
       };
 
@@ -481,7 +492,7 @@ in
       exploratory.inbound = i2cpOpts "exploratory";
       exploratory.outbound = i2cpOpts "exploratory";
 
-      ntcp2.enable = mkEnableTrueOption "NTCP2.";
+      ntcp2.enable = mkEnableTrueOption "NTCP2";
       ntcp2.published = mkEnableOption "NTCP2 publication";
       ntcp2.port = mkOption {
         type = types.int;
@@ -536,6 +547,17 @@ in
         default = 1;
         description = ''
           Maximum number of threads used by NTCP DH worker.
+        '';
+      };
+
+      yggdrasil.enable = mkEnableOption "Yggdrasil";
+
+      yggdrasil.address = mkOption {
+        type = with types; nullOr str;
+        default = null;
+        description = ''
+          Your local yggdrasil address. Specify it if you want to bind your router to a
+          particular address.
         '';
       };
 
@@ -677,7 +699,7 @@ in
         User = "i2pd";
         WorkingDirectory = homeDir;
         Restart = "on-abort";
-        ExecStart = "${i2pdSh}/bin/i2pd";
+        ExecStart = "${cfg.package}/bin/i2pd ${i2pdFlags}";
       };
     };
   };

@@ -1,8 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python
-, isPy3k
 , msrestazure
 , azure-common
 , azure-mgmt-core
@@ -11,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-consumption";
-  version = "8.0.0";
+  version = "9.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "b4cc167648634f864394066d5621afc137c1be795ee76f7539125f9538a2bf37";
+    sha256 = "76f9566390721226add96c9d3020ab986d3e5fd81e3143c098f57262c6ce4a51";
   };
 
   propagatedBuildInputs = [
@@ -25,6 +23,12 @@ buildPythonPackage rec {
     azure-mgmt-core
     azure-mgmt-nspkg
   ];
+
+  preBuild = ''
+    rm -f azure_bdist_wheel.py
+    substituteInPlace setup.cfg \
+      --replace "azure-namespace-package = azure-mgmt-nspkg" ""
+  '';
 
   pythonNamespaces = [ "azure.mgmt" ];
 

@@ -93,6 +93,7 @@ let
       # libsanitizer requires netrom/netrom.h which is not
       # available in uclibc.
       "--disable-libsanitizer"
+    ] ++ lib.optionals (targetPlatform.libc == "uclibc") [
       # In uclibc cases, libgomp needs an additional '-ldl'
       # and as I don't know how to pass it, I disable libgomp.
       "--disable-libgomp"
@@ -133,7 +134,7 @@ let
       "--with-system-zlib"
       "--enable-static"
       "--enable-languages=${
-        lib.concatStrings (lib.intersperse ","
+        lib.concatStringsSep ","
           (  lib.optional langC        "c"
           ++ lib.optional langCC       "c++"
           ++ lib.optional langD        "d"
@@ -146,7 +147,6 @@ let
           ++ lib.optionals crossDarwin [ "objc" "obj-c++" ]
           ++ lib.optional langJit      "jit"
           )
-        )
       }"
     ]
 
@@ -158,9 +158,15 @@ let
       (lib.enableFeature enablePlugin "plugin")
     ]
 
-    # Support -m32 on powerpc64le
+    # Support -m32 on powerpc64le/be
     ++ lib.optional (targetPlatform.system == "powerpc64le-linux")
       "--enable-targets=powerpcle-linux"
+    ++ lib.optional (targetPlatform.system == "powerpc64-linux")
+      "--enable-targets=powerpc-linux"
+
+    # Fix "unknown long double size, cannot define BFP_FMT"
+    ++ lib.optional (targetPlatform.isPower && targetPlatform.isMusl)
+      "--disable-decimal-float"
 
     # Optional features
     ++ lib.optional (isl != null) "--with-isl=${isl}"
@@ -189,7 +195,7 @@ let
     ++ lib.optional (langJava && javaAntlr != null) "--with-antlr-jar=${javaAntlr}"
 
     # TODO: aarch64-darwin has clang stdenv and its arch and cpu flag values are incompatible with gcc
-    ++ lib.optional (!(stdenv.isDarwin && stdenv.isAarch64)) (import ../common/platform-flags.nix { inherit (stdenv)  targetPlatform; inherit lib; })
+    ++ lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) (import ../common/platform-flags.nix { inherit (stdenv)  targetPlatform; inherit lib; })
     ++ lib.optionals (targetPlatform != hostPlatform) crossConfigureFlags
     ++ lib.optional (targetPlatform != hostPlatform) "--disable-bootstrap"
 
@@ -216,9 +222,6 @@ let
     ++ lib.optionals (langD) [
       "--with-target-system-zlib=yes"
     ]
-    # Make -fcommon default on gcc10
-    # TODO: fix all packages (probably 100+) and remove that
-    ++ lib.optional (version >= "10.1.0") "--with-specs=%{!fno-common:%{!fcommon:-fcommon}}"
   ;
 
 in configureFlags

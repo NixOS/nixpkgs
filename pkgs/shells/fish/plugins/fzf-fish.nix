@@ -1,17 +1,17 @@
-{ lib, buildFishPlugin, fetchFromGitHub, fzf, clownfish, fishtape_3 }:
+{ lib, stdenv, buildFishPlugin, fetchFromGitHub, fd, fzf, util-linux, clownfish, fishtape_3 }:
 
 buildFishPlugin rec {
   pname = "fzf.fish";
-  version = "5.6";
+  version = "9.0";
 
   src = fetchFromGitHub {
     owner = "PatrickF1";
     repo = "fzf.fish";
     rev = "v${version}";
-    sha256 = "1b280n8bh00n4vkm19zrn84km52296ljlm1zhz95jgaiwymf2x73";
+    sha256 = "sha256-0rnd8oJzLw8x/U7OLqoOMQpK81gRc7DTxZRSHxN9YlM=";
   };
 
-  checkInputs = [ fzf ];
+  checkInputs = [ fzf fd util-linux ];
   checkPlugins = [ clownfish fishtape_3 ];
   checkFunctionDirs = [ "./functions" ];
   checkPhase = ''
@@ -20,10 +20,16 @@ buildFishPlugin rec {
     rm -r tests/*git*
 
     # Disable tests that are failing, probably because of our wrappers
+    rm -r tests/configure_bindings
     rm -r tests/search_shell_variables
 
-    fishtape tests/*/*.fish
-  '';
+    # Disable tests that are failing, because there is not 'rev' command
+    rm tests/preview_file/custom_file_preview.fish
+
+  '' + (
+    if stdenv.isDarwin then ''script /dev/null fish -c "fishtape tests/*/*.fish"''
+    else ''script -c 'fish -c "fishtape tests/*/*.fish"' ''
+  );
 
   meta = with lib; {
     description = "Augment your fish command line with fzf key bindings";

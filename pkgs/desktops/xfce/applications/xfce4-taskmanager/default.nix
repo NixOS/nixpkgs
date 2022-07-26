@@ -1,4 +1,4 @@
-{ mkXfceDerivation, exo, gtk3, libwnck, libXmu }:
+{ lib, mkXfceDerivation, exo, gtk3, libwnck, libXmu }:
 
 mkXfceDerivation {
   category = "apps";
@@ -10,7 +10,8 @@ mkXfceDerivation {
   nativeBuildInputs = [ exo ];
   buildInputs = [ gtk3 libwnck libXmu ];
 
-  meta = {
+  meta = with lib; {
     description = "Easy to use task manager for Xfce";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

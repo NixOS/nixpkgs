@@ -59,6 +59,14 @@ in
         description = "If enabled, start the Murmur Mumble server.";
       };
 
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Open ports in the firewall for the Murmur Mumble server.
+        '';
+      };
+
       autobanAttempts = mkOption {
         type = types.int;
         default = 10;
@@ -112,7 +120,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.murmur;
-        defaultText = "pkgs.murmur";
+        defaultText = literalExpression "pkgs.murmur";
         description = "Overridable attribute of the murmur package to use.";
       };
 
@@ -291,10 +299,15 @@ in
       gid             = config.ids.gids.murmur;
     };
 
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [ cfg.port ];
+      allowedUDPPorts = [ cfg.port ];
+    };
+
     systemd.services.murmur = {
       description = "Murmur Chat Service";
       wantedBy    = [ "multi-user.target" ];
-      after       = [ "network-online.target "];
+      after       = [ "network-online.target" ];
       preStart    = ''
         ${pkgs.envsubst}/bin/envsubst \
           -o /run/murmur/murmurd.ini \
@@ -306,7 +319,7 @@ in
         Type = if forking then "forking" else "simple";
         PIDFile = mkIf forking "/run/murmur/murmurd.pid";
         EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
-        ExecStart = "${cfg.package}/bin/murmurd -ini /run/murmur/murmurd.ini";
+        ExecStart = "${cfg.package}/bin/mumble-server -ini /run/murmur/murmurd.ini";
         Restart = "always";
         RuntimeDirectory = "murmur";
         RuntimeDirectoryMode = "0700";

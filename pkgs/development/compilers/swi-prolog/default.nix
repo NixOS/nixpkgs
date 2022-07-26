@@ -34,7 +34,7 @@
 }:
 
 let
-  version = "8.3.9";
+  version = "8.3.29";
   packInstall = swiplPath: pack:
     ''${swiplPath}/bin/swipl -g "pack_install(${pack}, [package_directory(\"${swiplPath}/lib/swipl/pack\"), silent(true), interactive(false)])." -t "halt."
     '';
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
     owner = "SWI-Prolog";
     repo = "swipl-devel";
     rev = "V${version}";
-    sha256 = "0ixb8pc5s7q8q0njs8is1clpvik6jhhdcwnys7m9rpwdzgi10sjz";
+    sha256 = "sha256-2QYY3VDG3dhbv5gtSid4eMYMxhhpggCedJL+RhtbbaU=";
     fetchSubmodules = true;
   };
 
@@ -81,7 +81,7 @@ stdenv.mkDerivation {
     homepage = "https://www.swi-prolog.org";
     description = "A Prolog compiler and interpreter";
     license = lib.licenses.bsd2;
-
+    mainProgram = "swipl";
     platforms = lib.platforms.linux ++ lib.optionals (!withGui) lib.platforms.darwin;
     maintainers = [ lib.maintainers.meditans ];
   };

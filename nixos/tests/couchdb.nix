@@ -56,5 +56,8 @@ with lib;
     couchdb3.succeed(
         "${curlJqCheck testlogin "GET" "_all_dbs" ". | length" "0"}"
     )
+    couchdb3.succeed(
+        "${curlJqCheck testlogin "GET" "_node/couchdb@127.0.0.1" ".couchdb" "Welcome"}"
+    )
   '';
 })

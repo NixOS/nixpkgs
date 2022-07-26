@@ -1,37 +1,39 @@
-{ buildGoModule, fetchFromGitHub, stdenv, lib }:
+{ buildGoModule, fetchFromGitHub, stdenv, lib, installShellFiles }:
 
 buildGoModule rec {
   pname = "fly";
-  version = "7.4.0";
+  version = "7.8.2";
 
   src = fetchFromGitHub {
     owner = "concourse";
     repo = "concourse";
     rev = "v${version}";
-    sha256 = "sha256-UvEPTZtQWztl7ZC1XrBxE8+emlXQjMG4IJEti5vVxUM=";
+    sha256 = "sha256-Lgsn5k3ITJnRnOXXZjfjlEEG+OvTZjFq+LB3Us3DH8k=";
   };
 
-  vendorSha256 = "sha256-IY+HGgoKNS/j3FGCX3F3EK1GehBjs3Z1K8V3O7a3swk=";
-
-  doCheck = false;
+  vendorSha256 = "sha256-91N6AOxXFOI6AM28avlInseAeZkqE9IfybJAX31tPDg=";
 
   subPackages = [ "fly" ];
 
-  buildFlagsArray = ''
-    -ldflags=
-      -X github.com/concourse/concourse.Version=${version}
-  '';
+  ldflags = [
+    "-s" "-w" "-X github.com/concourse/concourse.Version=${version}"
+  ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  doCheck = false;
 
   postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
-    mkdir -p $out/share/{bash-completion/completions,zsh/site-functions}
-    $out/bin/fly completion --shell bash > $out/share/bash-completion/completions/fly
-    $out/bin/fly completion --shell zsh > $out/share/zsh/site-functions/_fly
+    installShellCompletion --cmd fly \
+      --bash <($out/bin/fly completion --shell bash) \
+      --fish <($out/bin/fly completion --shell fish) \
+      --zsh <($out/bin/fly completion --shell zsh)
   '';
 
   meta = with lib; {
-    description = "A command line interface to Concourse CI";
+    description = "Command line interface to Concourse CI";
     homepage = "https://concourse-ci.org";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ivanbrennan ];
+    maintainers = with maintainers; [ ivanbrennan SuperSandro2000 ];
   };
 }

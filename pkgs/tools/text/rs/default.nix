@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, libbsd }:
+{ lib
+, stdenv
+, fetchurl
+, installShellFiles
+, libbsd
+}:
 
 stdenv.mkDerivation rec {
   pname = "rs";
@@ -9,18 +14,29 @@ stdenv.mkDerivation rec {
     sha256 = "0gxwlfk7bzivpp2260w2r6gkyl7vdi05cggn1fijfnp8kzf1b4li";
   };
 
+  nativeBuildInputs = [ installShellFiles ];
+
   buildInputs = [ libbsd ];
 
   buildPhase = ''
+    runHook preBuild
+
     ${stdenv.cc}/bin/cc utf8.c rs.c -o rs -lbsd
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm 755 rs -t $out/bin
-    install -Dm 644 rs.1 -t $out/share/man/man1
+    installManPage rs.1
+
+    runHook postInstall
   '';
 
   meta = with lib; {
+    homepage = "http://www.mirbsd.org/htman/i386/man1/rs.htm";
     description = "Reshape a data array from standard input";
     longDescription = ''
       rs reads the standard input, interpreting each line as a row of blank-
@@ -43,8 +59,6 @@ stdenv.mkDerivation rec {
       to control presentation of the output columns, including transposition of
       the rows and columns.
     '';
-
-    homepage = "https://www.mirbsd.org/htman/i386/man1/rs.htm";
     license = licenses.bsd3;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;

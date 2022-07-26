@@ -26,7 +26,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.prometheus-pushgateway;
-        defaultText = "pkgs.prometheus-pushgateway";
+        defaultText = literalExpression "pkgs.prometheus-pushgateway";
         description = ''
           Package that should be used for the prometheus pushgateway.
         '';

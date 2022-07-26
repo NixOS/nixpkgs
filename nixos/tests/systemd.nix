@@ -1,11 +1,10 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "systemd";
 
-  machine = { lib, ... }: {
+  nodes.machine = { lib, ... }: {
     imports = [ common/user-account.nix common/x11.nix ];
 
     virtualisation.emptyDiskImages = [ 512 512 ];
-    virtualisation.memorySize = 1024;
 
     environment.systemPackages = [ pkgs.cryptsetup ];
 
@@ -31,6 +30,13 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       touch /tmp/shared/shutdown-test
       umount /tmp/shared
     '';
+
+    systemd.services.oncalendar-test = {
+      description = "calendar test";
+      # Japan does not have DST which makes the test a little bit simpler
+      startAt = "Wed 10:00 Asia/Tokyo";
+      script = "true";
+    };
 
     systemd.services.testservice1 = {
       description = "Test Service 1";
@@ -69,6 +75,11 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.wait_for_x()
     # wait for user services
     machine.wait_for_unit("default.target", "alice")
+
+    # Regression test for https://github.com/NixOS/nixpkgs/issues/105049
+    with subtest("systemd reads timezone database in /etc/zoneinfo"):
+        timer = machine.succeed("TZ=UTC systemctl show --property=TimersCalendar oncalendar-test.timer")
+        assert re.search("next_elapse=Wed ....-..-.. 01:00:00 UTC", timer), f"got {timer.strip()}"
 
     # Regression test for https://github.com/NixOS/nixpkgs/issues/35415
     with subtest("configuration files are recognized by systemd"):
@@ -181,5 +192,9 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     with subtest("systemd per-unit accounting works"):
         assert "IP traffic received: 84B" in output_ping
         assert "IP traffic sent: 84B" in output_ping
+
+    with subtest("systemd environment is properly set"):
+        machine.systemctl("daemon-reexec")  # Rewrites /proc/1/environ
+        machine.succeed("grep -q TZDIR=/etc/zoneinfo /proc/1/environ")
   '';
 })

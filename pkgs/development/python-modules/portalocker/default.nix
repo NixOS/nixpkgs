@@ -5,12 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.3.0";
+  version = "2.4.0";
   pname = "portalocker";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0k08c0qg21mwz3iqbd20ab22nq705q7cal4a1qr8qnd6ga03v4af";
+    sha256 = "sha256-pkitdhuOonNwy1kVNQEizYB7gg0hk+1cnMKPFj32N/Q=";
   };
 
   propagatedBuildInputs = [
@@ -20,6 +20,10 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
     pytest-mypy
+  ];
+
+  disabledTests = [
+    "test_combined" # no longer compatible with setuptools>=58
   ];
 
   meta = with lib; {

@@ -2,18 +2,15 @@
 , buildPythonPackage
 , fetchPypi
 , ipykernel
-, isPy27
-, mock
-, pytest
 }:
 
 buildPythonPackage rec {
   pname = "metakernel";
-  version = "0.27.5";
+  version = "0.29.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0aqq9zil6h7kxsg3v2008nr6lv47qvcsash8qzmi1xh6r4x606zy";
+    sha256 = "sha256-+B8ywp7q42g8H+BPFK+D1VyLfyqgnrYIN3ai/mdcwcA=";
   };
 
   propagatedBuildInputs = [ ipykernel ];

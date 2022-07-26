@@ -1,10 +1,8 @@
 { lib, stdenv, mkDerivation, fetchgit, zlib, libGLU, libX11, qtbase, qtwebkit, qtserialport, wrapQtAppsHook }:
 
-let
-  name = "sleepyhead-${version}";
+mkDerivation {
+  pname = "sleepyhead";
   version = "1.0.0-beta-git";
-in mkDerivation {
-  inherit name;
 
   src = fetchgit {
     url = "https://gitlab.com/sleepyhead/sleepyhead-code.git";
@@ -31,10 +29,6 @@ in mkDerivation {
   '' else ''
     mkdir -p $out/bin
     cp sleepyhead/SleepyHead $out/bin
-  '';
-
-  postFixup = lib.optionalString stdenv.isDarwin ''
-    wrapQtApp "$out/Applications/SleepyHead.app/Contents/MacOS/SleepyHead"
   '';
 
   meta = with lib; {

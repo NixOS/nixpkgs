@@ -17,8 +17,7 @@ buildGoModule rec {
     sha256 = "NuyQHEygy4LNqLtrpdwfCR+fNy3ZUxOClVdRen6AXMc=";
   };
 
-  vendorSha256 = "AVYG+aLpAXohUOORV/uPw7vro+Kg98+AmSmYGHtOals=";
-  runVend = true;
+  vendorSha256 = "sha256-HffgkuKmaOjTYi+jQ6vBlC50JqqbYiikURT6TCqL7e0=";
 
   meta = with lib; {
     description = "A tool to flash firmware to mechanical keyboards";

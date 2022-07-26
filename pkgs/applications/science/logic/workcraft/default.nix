@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "workcraft";
-  version = "3.3.2";
+  version = "3.3.6";
 
   src = fetchurl {
     url = "https://github.com/workcraft/workcraft/releases/download/v${version}/workcraft-v${version}-linux.tar.gz";
-    sha256 = "0v71x3fph2j3xrnysvkm7zsgnbxisfbdfgxzvzxxfdg59a6l3xid";
+    sha256 = "sha256-5J4HOTz92ALUcZZr15jJ6vplc3KDwbFCXqjEhlOV4kE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -20,6 +20,16 @@ in
 
       enable = mkEnableOption "heartbeat";
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.heartbeat;
+        defaultText = literalExpression "pkgs.heartbeat";
+        example = literalExpression "pkgs.heartbeat7";
+        description = ''
+          The heartbeat package to use.
+        '';
+      };
+
       name = mkOption {
         type = types.str;
         default = "heartbeat";
@@ -67,7 +77,7 @@ in
       serviceConfig = {
         User = "nobody";
         AmbientCapabilities = "cap_net_raw";
-        ExecStart = "${pkgs.heartbeat}/bin/heartbeat -c \"${heartbeatYml}\" -path.data \"${cfg.stateDir}/data\" -path.logs \"${cfg.stateDir}/logs\"";
+        ExecStart = "${cfg.package}/bin/heartbeat -c \"${heartbeatYml}\" -path.data \"${cfg.stateDir}/data\" -path.logs \"${cfg.stateDir}/logs\"";
       };
     };
   };

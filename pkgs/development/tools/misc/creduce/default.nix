@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "creduce";
-  version = "2.9.0";
+  version = "2.10.0";
 
   src = fetchurl {
     url = "https://embed.cs.utah.edu/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "1b833z0g1hich68kzbkpfc26xb8w2phfl5savy8c6ir9ihwy1a8w";
+    sha256 = "2xwPEjln8k1iCwQM69UwAb89zwPkAPeFVqL/LhH+oGM=";
   };
 
   nativeBuildInputs = [ cmake makeWrapper llvm.dev ];

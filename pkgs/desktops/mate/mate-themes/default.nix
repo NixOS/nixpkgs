@@ -1,20 +1,44 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, mate-icon-theme, gtk2, gtk3,
-  gtk_engines, gtk-engine-murrine, gdk-pixbuf, librsvg, mateUpdateScript }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, mate-icon-theme
+, gtk2
+, gtk3
+, gtk_engines
+, gtk-engine-murrine
+, gdk-pixbuf
+, librsvg
+, mateUpdateScript
+}:
 
 stdenv.mkDerivation rec {
   pname = "mate-themes";
-  version = "3.22.22";
+  version = "3.22.23";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/themes/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "18crdwfpfm3br4pv94wy7rpmzzb69im4j8dgq1b7c8gcbbzay05x";
+    sha256 = "1avgzccdmr7y18rnp3xrhwk82alv2dlig3wh7ivgahcqdiiavrb1";
   };
 
-  nativeBuildInputs = [ pkg-config gettext gtk3 ];
+  nativeBuildInputs = [
+    pkg-config
+    gettext
+    gtk3
+  ];
 
-  buildInputs = [ mate-icon-theme gtk2 gtk_engines gdk-pixbuf librsvg ];
+  buildInputs = [
+    mate-icon-theme
+    gtk2
+    gtk_engines
+    gdk-pixbuf
+    librsvg
+  ];
 
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
+  propagatedUserEnvPkgs = [
+    gtk-engine-murrine
+  ];
 
   dontDropIconThemeCache = true;
 
@@ -24,16 +48,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript {
-    inherit pname version;
-    url = "https://pub.mate-desktop.org/releases/themes";
-  };
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
 
   meta = with lib; {
     description = "A set of themes from MATE";
     homepage = "https://mate-desktop.org";
     license = with licenses; [ lgpl21Plus lgpl3Only gpl3Plus ];
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.mate.members;
   };
 }

@@ -1,16 +1,15 @@
 { lib, appimageTools, fetchurl, makeDesktopItem
-, gsettings-desktop-schemas, gtk3
 }:
 
 let
   pname = "MyCrypto";
-  version = "1.7.16";
-  hash = "sha256-fvV/dT9tj8/d/kjM0dVj3IC/O7Y/yG8fscDCzUBwHKI=";
+  version = "1.7.17";
+  sha256 = "20eb48989b5ae5e60e438eff6830ac79a0d89ac26dff058097260e747e866444"; # Taken from release's checksums.txt.gpg
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/mycryptohq/mycrypto/releases/download/${version}/linux-x86-64_${version}_MyCrypto.AppImage";
-    inherit hash;
+    inherit sha256;
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -23,15 +22,11 @@ let
     comment = "MyCrypto is a free, open-source interface for interacting with the blockchain";
     exec = pname;
     icon = "mycrypto";
-    categories = "Finance;";
+    categories = [ "Finance" ];
   };
 
 in appimageTools.wrapType2 rec {
   inherit name src;
-
-  profile = ''
-    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
-  '';
 
   multiPkgs = null; # no p32bit needed
   extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;

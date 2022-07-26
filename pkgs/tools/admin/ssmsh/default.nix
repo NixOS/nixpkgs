@@ -2,20 +2,20 @@
 
 buildGoModule rec {
   pname = "ssmsh";
-  version = "1.4.5";
+  version = "1.4.7";
 
   src = fetchFromGitHub {
     owner = "bwhaley";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-WZ2glv/f4LwTK/G8QdaVRIAHvgGLPLPL8xjAg/kUokQ=";
+    sha256 = "sha256-juyTCtcuFIlKyLxDrK5tRRzCMwoSXG4EUA32E/Z4y5c=";
   };
 
-  vendorSha256 = "sha256-17fmdsfOrOaySPsXofLzz0+vmiemg9MbnWhRoZ67EuQ=";
+  vendorSha256 = "sha256-dqUMwnHRsR8n4bHEKoePyuqr8sE4NWPpuYo5SwOw0Rw=";
 
   doCheck = true;
 
-  buildFlagsArray = [ "-ldflags=-w -s -X main.Version=${version}" ];
+  ldflags = [ "-w" "-s" "-X main.Version=${version}" ];
 
   meta = with lib; {
     homepage = "https://github.com/bwhaley/ssmsh";

@@ -2,7 +2,21 @@
 , python3
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      click = super.click.overrideAttrs (oldAttrs: rec {
+        version = "8.0.4";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "sha256-hFjXsSh8X7EoyQ4jOBz5nc3nS+r2x/9jhM6E1v4JCts=";
+        };
+      });
+    };
+  };
+in
+
+python.pkgs.buildPythonApplication rec {
   pname = "homeassistant-cli";
   version = "0.9.4";
 
@@ -16,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
     sed -i "s/'\(.*\)\(==\|>=\).*'/'\1'/g" setup.py
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python.pkgs; [
     aiohttp
     click
     click-log
@@ -38,7 +52,7 @@ python3.pkgs.buildPythonApplication rec {
   #  $out/bin/hass-cli completion zsh > "$out/share/zsh/site-functions/_hass-cli"
   #'';
 
-  checkInputs = with python3.pkgs; [
+  checkInputs = with python.pkgs; [
     pytestCheckHook
     requests-mock
   ];

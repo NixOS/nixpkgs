@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nms";
-  version = "0.3.3";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "bartobri";
     repo = "no-more-secrets";
     rev = "v${version}";
-    sha256 = "1zfv4qabikf8w9winsr4brxrdvs3f0d7xvydksyx8bydadsm2v2h";
+    sha256 = "sha256-QVCEpplsZCSQ+Fq1LBtCuPBvnzgLsmLcSrxR+e4nA5I=";
   };
 
   buildFlags = [ "nms" "sneakers" ];

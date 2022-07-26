@@ -12,7 +12,11 @@ in buildGoModule {
     sha256 = "0smaij3905fqgcjmnfs58r6silhp3hyv7ccshk7n13fmllmsm7v7";
   };
 
-  vendorSha256 = "0rmc31i5jra2qcqhw1azflmhawxasrq0d6qwd6qp250sj1jr6ahq";
+  patches = [
+    ./go.mod.patch
+  ];
+
+  vendorSha256 = "0jcm789las02prgl89va8xvvz98sjcyvzd9zqk3mwal656b5r3kz";
 
   doInstallCheck = true;
   installCheckPhase = ''

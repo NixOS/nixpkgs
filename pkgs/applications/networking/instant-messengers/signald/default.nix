@@ -1,36 +1,43 @@
-{ lib, stdenv, fetchurl, fetchgit, jre_headless, coreutils, gradle_6, git, perl
-, makeWrapper }:
+{ lib, stdenv, fetchurl, fetchFromGitLab, jdk17_headless, coreutils, gradle_6, git, perl
+, makeWrapper, fetchpatch, substituteAll, jre_minimal
+}:
 
 let
   pname = "signald";
+  version = "0.18.5";
 
-  version = "0.13.1";
-
-  # This package uses the .git directory
-  src = fetchgit {
-    url = "https://gitlab.com/signald/signald";
+  src = fetchFromGitLab {
+    owner = pname;
+    repo = pname;
     rev = version;
-    sha256 = "1ilmg0i1kw2yc7m3hxw1bqdpl3i9wwbj8623qmz9cxhhavbcd5i7";
-    leaveDotGit = true;
+    sha256 = "sha256-2cb1pyBOoOlFqJsNKXA0Q9x4wCE4yzzcfrDDtTp7HMk=";
   };
 
-  buildConfigJar = fetchurl {
-    url = "https://dl.bintray.com/mfuerstenau/maven/gradle/plugin/de/fuerstenau/BuildConfigPlugin/1.1.8/BuildConfigPlugin-1.1.8.jar";
-    sha256 = "0y1f42y7ilm3ykgnm6s3ks54d71n8lsy5649xgd9ahv28lj05x9f";
+  jre' = jre_minimal.override {
+    jdk = jdk17_headless;
+    # from https://gitlab.com/signald/signald/-/blob/0.18.5/build.gradle#L173
+    modules = [
+      "java.base"
+      "java.management"
+      "java.naming"
+      "java.sql"
+      "java.xml"
+      "jdk.crypto.ec"
+      "jdk.httpserver"
+
+      # for java/beans/PropertyChangeEvent
+      "java.desktop"
+      # for sun/misc/Unsafe
+      "jdk.unsupported"
+    ];
   };
-
-  patches = [ ./git-describe-always.patch ./gradle-plugin.patch ];
-
-  postPatch = ''
-    patchShebangs gradlew
-    sed -i -e 's|BuildConfig.jar|${buildConfigJar}|' build.gradle
-  '';
 
   # fake build to pre-download deps into fixed-output derivation
   deps = stdenv.mkDerivation {
-    name = "${pname}-deps";
-    inherit src version postPatch patches;
+    pname = "${pname}-deps";
+    inherit src version;
     nativeBuildInputs = [ gradle_6 perl ];
+    patches = [ ./0001-Fetch-buildconfig-during-gradle-build-inside-Nix-FOD.patch ];
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
       gradle --no-daemon build
@@ -38,26 +45,34 @@ let
     # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
     installPhase = ''
       find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
-        | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/''${\($5 =~ s/-jvm//r)}" #e' \
+        | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/''${\($5 =~ s/okio-jvm/okio/r)}" #e' \
         | sh
     '';
     # Don't move info to share/
     forceShare = [ "dummy" ];
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "0w8ixp1l0ch1jc2dqzxdx3ljlh17hpgns2ba7qvj43nr4prl71l7";
+    # Downloaded jars differ by platform
+    outputHash = {
+      x86_64-linux = "sha256-q1gzauIL7aKalvPSfiK5IvkNkidCh+6jp5bpwxR+PZ0=";
+      aarch64-linux = "sha256-cM+7MaV0/4yAzobXX9FSdl/ZfLddwySayao96UdDgzk=";
+    }.${stdenv.system} or (throw "Unsupported platform");
   };
 
 in stdenv.mkDerivation rec {
-  inherit pname src version postPatch patches;
+  inherit pname src version;
+
+  patches = [
+    (substituteAll {
+      src = ./0002-buildconfig-local-deps-fixes.patch;
+      inherit deps;
+    })
+  ];
 
   buildPhase = ''
     runHook preBuild
 
     export GRADLE_USER_HOME=$(mktemp -d)
-
-    # Use the local packages from -deps
-    sed -i -e 's|mavenCentral()|mavenLocal(); maven { url uri("${deps}") }|' build.gradle
 
     gradle --offline --no-daemon distTar
 
@@ -71,7 +86,7 @@ in stdenv.mkDerivation rec {
     tar xvf ./build/distributions/signald.tar --strip-components=1 --directory $out/
     wrapProgram $out/bin/signald \
       --prefix PATH : ${lib.makeBinPath [ coreutils ]} \
-      --set JAVA_HOME "${jre_headless}"
+      --set JAVA_HOME "${jre'}"
 
     runHook postInstall
   '';
@@ -88,8 +103,12 @@ in stdenv.mkDerivation rec {
       clients.
     '';
     homepage = "https://signald.org";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ expipiplus1 ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ expipiplus1 ma27 ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }

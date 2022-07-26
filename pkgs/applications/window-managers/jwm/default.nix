@@ -1,49 +1,83 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, automake, autoconf, libtool, gettext
-, which, xorg, libX11, libXext, libXinerama, libXpm, libXft, libXau, libXdmcp
-, libXmu, libpng, libjpeg, expat, xorgproto, librsvg, freetype, fontconfig }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, expat
+, fontconfig
+, freetype
+, gettext
+, libX11
+, libXau
+, libXdmcp
+, libXext
+, libXft
+, libXinerama
+, libXmu
+, libXpm
+, libjpeg
+, libpng
+, librsvg
+, pango
+, pkg-config
+, which
+, xorg
+, xorgproto
+, gitUpdater
+}:
 
 stdenv.mkDerivation rec {
   pname = "jwm";
-  version = "1685";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "joewing";
     repo = "jwm";
-    rev = "s${version}";
-    sha256 = "1kyvy022sij898g2hm5spy5vq0kw6aqd7fsnawl2xyh06gwh29wg";
+    rev = "v${version}";
+    sha256 = "sha256-rvuz2Pmon3XBqRMgDwZNrQlWDyLNSK30JPmmQTlN+Rs=";
   };
 
-  patches = [ ./0001-Fix-Gettext-Requirement.patch ];
-
-  nativeBuildInputs = [ pkg-config automake autoconf libtool gettext which ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    gettext
+    pkg-config
+    which
+  ];
 
   buildInputs = [
+    expat
+    fontconfig
+    freetype
     libX11
-    libXext
-    libXinerama
-    libXpm
-    libXft
-    xorg.libXrender
     libXau
     libXdmcp
+    libXext
+    libXft
+    libXinerama
     libXmu
-    libpng
+    libXpm
     libjpeg
-    expat
-    xorgproto
+    libpng
     librsvg
-    freetype
-    fontconfig
+    pango
+    xorg.libXrender
+    xorgproto
   ];
+
+  preConfigure = "NOCONFIGURE=1 ./autogen.sh";
 
   enableParallelBuilding = true;
 
-  preConfigure = "./autogen.sh";
+  passthru.updateScript = gitUpdater {
+    inherit pname version;
+    rev-prefix = "v";
+  };
 
   meta = {
     homepage = "http://joewing.net/projects/jwm/";
     description = "Joe's Window Manager is a light-weight X11 window manager";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.romildo ];
   };

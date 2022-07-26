@@ -12,10 +12,13 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
+  pythonImportsCheck = [ "colorama" ];
+
   meta = with lib; {
+    description = "Cross-platform colored terminal text";
     homepage = "https://github.com/tartley/colorama";
     license = licenses.bsd3;
-    description = "Cross-platform colored terminal text";
+    maintainers = with maintainers; [ ];
   };
 }
 

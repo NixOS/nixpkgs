@@ -1,4 +1,6 @@
-import ../make-test-python.nix ({ pkgs, ...}: let
+args@{ pkgs, nextcloudVersion ? 22, ... }:
+
+(import ../make-test-python.nix ({ pkgs, ...}: let
   adminpass = "hunter2";
   adminuser = "root";
 in {
@@ -18,35 +20,23 @@ in {
         enable = true;
         hostName = "nextcloud";
         https = true;
+        package = pkgs.${"nextcloud" + (toString nextcloudVersion)};
         caching = {
           apcu = true;
           redis = false;
           memcached = true;
         };
+        database.createLocally = true;
         config = {
           dbtype = "mysql";
           dbname = "nextcloud";
           dbuser = "nextcloud";
           dbhost = "127.0.0.1";
           dbport = 3306;
-          dbpass = "hunter2";
+          dbpassFile = "${pkgs.writeText "dbpass" "hunter2" }";
           # Don't inherit adminuser since "root" is supposed to be the default
-          inherit adminpass;
+          adminpassFile = "${pkgs.writeText "adminpass" adminpass}"; # Don't try this at home!
         };
-      };
-
-      services.mysql = {
-        enable = true;
-        bind = "127.0.0.1";
-        package = pkgs.mariadb;
-        initialScript = pkgs.writeText "mysql-init" ''
-          CREATE USER 'nextcloud'@'localhost' IDENTIFIED BY 'hunter2';
-          CREATE DATABASE IF NOT EXISTS nextcloud;
-          GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER,
-            CREATE TEMPORARY TABLES ON nextcloud.* TO 'nextcloud'@'localhost'
-            IDENTIFIED BY 'hunter2';
-          FLUSH privileges;
-        '';
       };
 
       systemd.services.nextcloud-setup= {
@@ -96,4 +86,4 @@ in {
         "${withRcloneEnv} ${diffSharedFile}"
     )
   '';
-})
+})) args

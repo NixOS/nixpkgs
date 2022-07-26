@@ -74,7 +74,7 @@ in {
       musicDirectory = mkOption {
         type = with types; either path (strMatching "(http|https|nfs|smb)://.+");
         default = "${cfg.dataDir}/music";
-        defaultText = "\${dataDir}/music";
+        defaultText = literalExpression ''"''${dataDir}/music"'';
         description = ''
           The directory or NFS/SMB network share where MPD reads music from. If left
           as the default value this directory will automatically be created before
@@ -86,7 +86,7 @@ in {
       playlistDirectory = mkOption {
         type = types.path;
         default = "${cfg.dataDir}/playlists";
-        defaultText = "\${dataDir}/playlists";
+        defaultText = literalExpression ''"''${dataDir}/playlists"'';
         description = ''
           The directory where MPD stores playlists. If left as the default value
           this directory will automatically be created before the MPD server starts,
@@ -155,7 +155,7 @@ in {
       dbFile = mkOption {
         type = types.nullOr types.str;
         default = "${cfg.dataDir}/tag_cache";
-        defaultText = "\${dataDir}/tag_cache";
+        defaultText = literalExpression ''"''${dataDir}/tag_cache"'';
         description = ''
           The path to MPD's database. If set to <literal>null</literal> the
           parameter is omitted from the configuration.
@@ -209,62 +209,43 @@ in {
 
   config = mkIf cfg.enable {
 
+    # install mpd units
+    systemd.packages = [ pkgs.mpd ];
+
     systemd.sockets.mpd = mkIf cfg.startWhenNeeded {
-      description = "Music Player Daemon Socket";
       wantedBy = [ "sockets.target" ];
       listenStreams = [
+        ""  # Note: this is needed to override the upstream unit
         (if pkgs.lib.hasPrefix "/" cfg.network.listenAddress
           then cfg.network.listenAddress
           else "${optionalString (cfg.network.listenAddress != "any") "${cfg.network.listenAddress}:"}${toString cfg.network.port}")
       ];
-      socketConfig = {
-        Backlog = 5;
-        KeepAlive = true;
-        PassCredentials = true;
-      };
     };
 
     systemd.services.mpd = {
-      after = [ "network.target" "sound.target" ];
-      description = "Music Player Daemon";
       wantedBy = optional (!cfg.startWhenNeeded) "multi-user.target";
 
-      serviceConfig = mkMerge [
+      preStart =
+        ''
+          set -euo pipefail
+          install -m 600 ${mpdConf} /run/mpd/mpd.conf
+        '' + optionalString (cfg.credentials != [])
+        (concatStringsSep "\n"
+          (imap0
+            (i: c: ''${pkgs.replace-secret}/bin/replace-secret '{{password-${toString i}}}' '${c.passwordFile}' /run/mpd/mpd.conf'')
+            cfg.credentials));
+
+      serviceConfig =
         {
           User = "${cfg.user}";
-          ExecStart = "${pkgs.mpd}/bin/mpd --no-daemon /run/mpd/mpd.conf";
-          ExecStartPre = pkgs.writeShellScript "mpd-start-pre" (''
-            set -euo pipefail
-            install -m 600 ${mpdConf} /run/mpd/mpd.conf
-          '' + optionalString (cfg.credentials != [])
-            (concatStringsSep "\n"
-              (imap0
-                (i: c: ''${pkgs.replace-secret}/bin/replace-secret '{{password-${toString i}}}' '${c.passwordFile}' /run/mpd/mpd.conf'')
-                cfg.credentials))
-          );
+          # Note: the first "" overrides the ExecStart from the upstream unit
+          ExecStart = [ "" "${pkgs.mpd}/bin/mpd --systemd /run/mpd/mpd.conf" ];
           RuntimeDirectory = "mpd";
-          Type = "notify";
-          LimitRTPRIO = 50;
-          LimitRTTIME = "infinity";
-          ProtectSystem = true;
-          NoNewPrivileges = true;
-          ProtectKernelTunables = true;
-          ProtectControlGroups = true;
-          ProtectKernelModules = true;
-          RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX AF_NETLINK";
-          RestrictNamespaces = true;
-          Restart = "always";
-        }
-        (mkIf (cfg.dataDir == "/var/lib/${name}") {
-          StateDirectory = [ name ];
-        })
-        (mkIf (cfg.playlistDirectory == "/var/lib/${name}/playlists") {
-          StateDirectory = [ name "${name}/playlists" ];
-        })
-        (mkIf (cfg.musicDirectory == "/var/lib/${name}/music") {
-          StateDirectory = [ name "${name}/music" ];
-        })
-      ];
+          StateDirectory = []
+            ++ optionals (cfg.dataDir == "/var/lib/${name}") [ name ]
+            ++ optionals (cfg.playlistDirectory == "/var/lib/${name}/playlists") [ name "${name}/playlists" ]
+            ++ optionals (cfg.musicDirectory == "/var/lib/${name}/music")        [ name "${name}/music" ];
+        };
     };
 
     users.users = optionalAttrs (cfg.user == name) {

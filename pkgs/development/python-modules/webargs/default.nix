@@ -4,20 +4,20 @@
 
 buildPythonPackage rec {
   pname = "webargs";
-  version = "8.0.0";
+  version = "8.2.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0xy6na8axc5wnp2wg3kvqbpl2iv0hx0rsnlrmrgkgp88znx6cmjn";
+    sha256 = "sha256-mdaJQMRS4HcmSFoV/vQ/EviubAxbORvLp2Bl1FJ/uF0=";
   };
 
   pythonImportsCheck = [
     "webargs"
   ];
 
-
   propagatedBuildInputs = [ marshmallow ];
+
   checkInputs = [
     pytestCheckHook
     pytest-aiohttp

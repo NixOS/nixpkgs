@@ -24,7 +24,7 @@
 , lrdf
 , lv2
 , pkg-config
-, python2
+, python3
 , sassc
 , serd
 , sord
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     hicolor-icon-theme
     intltool
     pkg-config
-    python2
+    python3
     wafHook
     wrapGAppsHook
   ];
@@ -107,6 +107,8 @@ stdenv.mkDerivation rec {
     "--enable-nls"
     "--install-roboto-font"
   ] ++ optional optimizationSupport "--optimization";
+
+  NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
 
   meta = with lib; {
     description = "A virtual guitar amplifier for Linux running with JACK";

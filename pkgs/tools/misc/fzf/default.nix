@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "fzf";
-  version = "0.27.2";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    sha256 = "sha256-JWTyZRZrW1mFy91D+eZL6iYV0CcNxJUT4JA0hrBKZZU=";
+    sha256 = "sha256-HKwf/ogNx+jCNSVHI8rt6WYRbuyT18V4nnMyZ6TmwVQ=";
   };
 
-  vendorSha256 = "sha256-FKDCIotyra/TZ48wbpzudJZ2aI2pn+ZR4EoZ+9+19Mw=";
+  vendorSha256 = "sha256-3ry93xV3KKtFoFGt2yxzMd4jx3QG2+8TBrEEywj7HPQ=";
 
   outputs = [ "out" "man" ];
 
@@ -19,8 +19,8 @@ buildGoModule rec {
 
   buildInputs = [ ncurses ];
 
-  buildFlagsArray = [
-    "-ldflags=-s -w -X main.version=${version} -X main.revision=${src.rev}"
+  ldflags = [
+    "-s" "-w" "-X main.version=${version} -X main.revision=${src.rev}"
   ];
 
   # The vim plugin expects a relative path to the binary; patch it to abspath.
@@ -34,8 +34,6 @@ buildGoModule rec {
 
     # Has a sneaky dependency on perl
     # Include first args to make sure we're patching the right thing
-    substituteInPlace shell/key-bindings.zsh \
-      --replace " perl -ne " " ${perl}/bin/perl -ne "
     substituteInPlace shell/key-bindings.bash \
       --replace " perl -n " " ${perl}/bin/perl -n "
   '';

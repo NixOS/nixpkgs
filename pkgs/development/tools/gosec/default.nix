@@ -1,23 +1,32 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
 buildGoModule rec {
   pname = "gosec";
-  version = "2.8.1";
-
-  subPackages = [ "cmd/gosec" ];
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "securego";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-AlADSEekcUH/pCGggKlkBDiIYMe1zsoe9hh6fVUwQVA=";
+    sha256 = "sha256-Y4QL6vYCTZUCh+HF86QI+ENel/pK16XpLd6CF4RWcK0=";
   };
 
-  vendorSha256 = "sha256-HBwIZfvkL9HSwkD1sZzBM7IJFAjLbCxyc95vqR5TFAg=";
+  vendorSha256 = "sha256-5rA2C3nyvSUiBQ/Nk5OJ9e9tf8CKHQB+6rLUJXESK/0=";
 
-  doCheck = false;
+  subPackages = [
+    "cmd/gosec"
+  ];
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.Version=${version} -X main.GitTag=${src.rev} -X main.BuildDate=unknown" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.Version=${version}"
+    "-X main.GitTag=${src.rev}"
+    "-X main.BuildDate=unknown"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/securego/gosec";
@@ -27,4 +36,3 @@ buildGoModule rec {
     platforms = platforms.linux ++ platforms.darwin;
   };
 }
-

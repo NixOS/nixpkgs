@@ -18,6 +18,14 @@ stdenv.mkDerivation rec {
     ./gnu-install-dirs.patch
   ];
 
+  # On Darwin the llvm-config is perhaps not working fine as the
+  # LLVM_MAIN_SRC_DIR is not getting set correctly, and the build fails as the
+  # include path is not correct.
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace MachO/CMakeLists.txt --replace \
+      '(''${LLVM_MAIN_SRC_DIR}/' '(../'
+  '';
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libllvm libxml2 ];
 
@@ -31,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = llvm_meta // {
     homepage = "https://lld.llvm.org/";
-    description = "The LLVM linker";
+    description = "The LLVM linker (unwrapped)";
     longDescription = ''
       LLD is a linker from the LLVM project that is a drop-in replacement for
       system linkers and runs much faster than them. It also provides features

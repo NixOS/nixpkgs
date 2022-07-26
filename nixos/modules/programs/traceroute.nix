@@ -19,8 +19,10 @@ in {
 
   config = mkIf cfg.enable {
     security.wrappers.traceroute = {
-      source = "${pkgs.traceroute}/bin/traceroute";
+      owner = "root";
+      group = "root";
       capabilities = "cap_net_raw+p";
+      source = "${pkgs.traceroute}/bin/traceroute";
     };
   };
 }

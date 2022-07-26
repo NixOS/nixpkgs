@@ -16,13 +16,21 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     make jam0
-    ./jam0 -j$NIX_BUILD_CORES -sBINDIR=$out/bin install
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
+    ./jam0 -j$NIX_BUILD_CORES -sBINDIR=$out/bin install
     mkdir -p $out/doc/jam
     cp *.html $out/doc/jam
+
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;

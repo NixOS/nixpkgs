@@ -1,18 +1,20 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , meson
 , fetchurl
 , python3
 , pkg-config
 , gtk3
+, gtk-mac-integration
 , glib
 , adwaita-icon-theme
 , libpeas
+, libxml2
 , gtksourceview4
 , gsettings-desktop-schemas
 , wrapGAppsHook
 , ninja
 , libsoup
-, tepl
 , gnome
 , gspell
 , perl
@@ -23,16 +25,23 @@
 
 stdenv.mkDerivation rec {
   pname = "gedit";
-  version = "40.1";
+  version = "42.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gedit/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "149ngl9qw6h59546lir1pa7hvw23ppsnqlj9mfqphmmn5jl99qsm";
+    sha256 = "fx/UPfURDUw33mVBmT9B8PvD78eQkA6SBTR5ugaZIOk=";
   };
+
+  patches = [
+    # We patch gobject-introspection and meson to store absolute paths to libraries in typelibs
+    # but that requires the install_dir is an absolute path.
+    ./correct-gir-lib-path.patch
+  ];
 
   nativeBuildInputs = [
     desktop-file-utils
     itstool
+    libxml2
     meson
     ninja
     perl
@@ -51,7 +60,8 @@ stdenv.mkDerivation rec {
     gtksourceview4
     libpeas
     libsoup
-    tepl
+  ] ++ lib.optionals stdenv.isDarwin [
+    gtk-mac-integration
   ];
 
   postPatch = ''
@@ -75,7 +85,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Apps/Gedit";
     description = "Official text editor of the GNOME desktop environment";
     maintainers = teams.gnome.members;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };
 }

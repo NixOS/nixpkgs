@@ -15,9 +15,12 @@ let
     mlgmpidl
     num
     ocamlgraph
+    ppx_deriving
+    ppx_import
     stdlib-shims
     why3
     re
+    result
     seq
     sexplib
     sexplib0
@@ -31,21 +34,24 @@ in
 
 stdenv.mkDerivation rec {
   pname = "frama-c";
-  version = "23.1";
-  slang   = "Vanadium";
+  version = "25.0";
+  slang   = "Manganese";
 
   src = fetchurl {
     url    = "https://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
-    sha256 = "1rgkq9sg436smw005ag0j6y3xryhjn18a07m5wjfrfp0s1438nnj";
+    sha256 = "sha256-Ii3O/NJyBTVAv1ts/zae/Ee4HCjzYOthZmnD8wqLwp8=";
   };
 
   preConfigure = lib.optionalString stdenv.cc.isClang "configureFlagsArray=(\"--with-cpp=clang -E -C\")";
 
+  postConfigure = "patchShebangs src/plugins/value/gen-api.sh";
+
   nativeBuildInputs = [ autoconf wrapGAppsHook ];
 
   buildInputs = with ocamlPackages; [
-    ncurses ocaml findlib ltl2ba ocamlgraph ocamlgraph_gtk yojson menhirLib camlzip
-    lablgtk coq graphviz zarith apron why3 mlgmpidl doxygen
+    ncurses ocaml findlib ltl2ba ocamlgraph yojson menhirLib camlzip
+    lablgtk3 lablgtk3-sourceview3 coq graphviz zarith apron why3 mlgmpidl doxygen
+    ppx_deriving ppx_import
     gdk-pixbuf
   ];
 

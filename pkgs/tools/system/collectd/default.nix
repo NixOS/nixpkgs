@@ -2,6 +2,7 @@
 , autoreconfHook
 , pkg-config
 , libtool
+, nixosTests
 , ...
 }@args:
 let
@@ -16,6 +17,15 @@ stdenv.mkDerivation rec {
     sha256 = "1mh97afgq6qgmpvpr84zngh58m0sl1b4wimqgvvk376188q09bjv";
   };
 
+  patches = [
+    # fix -t never printing syntax errors
+    # should be included in next release
+    (fetchpatch {
+      url = "https://github.com/collectd/collectd/commit/3f575419e7ccb37a3b10ecc82adb2e83ff2826e1.patch";
+      sha256 = "0jwjdlfl0dp7mlbwygp6h0rsbaqfbgfm5z07lr5l26z6hhng2h2y";
+    })
+  ];
+
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [
     libtool
@@ -26,7 +36,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--localstatedir=/var"
     "--disable-werror"
-  ] ++ plugins.configureFlags;
+  ] ++ plugins.configureFlags
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "--with-fp-layout=nothing" ];
 
   # do not create directories in /var during installPhase
   postConfigure = ''
@@ -40,6 +51,10 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.tests = {
+    inherit (nixosTests) collectd;
+  };
 
   meta = with lib; {
     description = "Daemon which collects system performance statistics periodically";

@@ -79,6 +79,7 @@ let
     if lib.strings.hasInfix "manylinux1" f then { pkg = [ ml.manylinux1 ]; str = "1"; }
     else if lib.strings.hasInfix "manylinux2010" f then { pkg = [ ml.manylinux2010 ]; str = "2010"; }
     else if lib.strings.hasInfix "manylinux2014" f then { pkg = [ ml.manylinux2014 ]; str = "2014"; }
+    else if lib.strings.hasInfix "manylinux_" f then { pkg = [ ml.manylinux2014 ]; str = "pep600"; }
     else { pkg = [ ]; str = null; };
 
   # Predict URL from the PyPI index.
@@ -110,8 +111,8 @@ let
     (pkgs.stdenvNoCC.mkDerivation {
       name = file;
       nativeBuildInputs = [
-        pkgs.curl
-        pkgs.jq
+        pkgs.buildPackages.curl
+        pkgs.buildPackages.jq
       ];
       isWheel = lib.strings.hasSuffix "whl" file;
       system = "builtin";
@@ -137,6 +138,13 @@ let
 
   fetchFromLegacy = lib.makeOverridable (
     { python, pname, url, file, hash }:
+    let
+      pathParts =
+        (builtins.filter
+          ({ prefix, path }: "NETRC" == prefix)
+          builtins.nixPath);
+      netrc_file = if (pathParts != [ ]) then (builtins.head pathParts).path else "";
+    in
     pkgs.runCommand file
       {
         nativeBuildInputs = [ python ];
@@ -144,6 +152,7 @@ let
         outputHashMode = "flat";
         outputHashAlgo = "sha256";
         outputHash = hash;
+        NETRC = netrc_file;
       } ''
       python ${./fetch_from_legacy.py} ${url} ${pname} ${file}
       mv ${file} $out
@@ -171,14 +180,14 @@ let
       hasGitIgnore = builtins.pathExists gitIgnore;
       gitIgnores = if hasGitIgnore then [ gitIgnore ] else [ ];
     in
-    lib.optionals (builtins.toString path != "/" && ! isGitRoot) (findGitIgnores parent) ++ gitIgnores;
+    lib.optionals (builtins.pathExists path && builtins.toString path != "/" && ! isGitRoot) (findGitIgnores parent) ++ gitIgnores;
 
   /*
-  Provides a source filtering mechanism that:
+    Provides a source filtering mechanism that:
 
-  - Filters gitignore's
-  - Filters pycache/pyc files
-  - Uses cleanSourceFilter to filter out .git/.hg, .o/.so, editor backup files & nix result symlinks
+    - Filters gitignore's
+    - Filters pycache/pyc files
+    - Uses cleanSourceFilter to filter out .git/.hg, .o/.so, editor backup files & nix result symlinks
   */
   cleanPythonSources = { src }:
     let
@@ -211,7 +220,8 @@ let
   };
 
   # Machine tag for our target platform (if available)
-  targetMachine = manyLinuxTargetMachines.${stdenv.targetPlatform.parsed.cpu.name} or null;
+  getTargetMachine = stdenv: manyLinuxTargetMachines.${stdenv.targetPlatform.parsed.cpu.name} or null;
+
 in
 {
   inherit
@@ -225,6 +235,6 @@ in
     cleanPythonSources
     moduleName
     getPythonVersion
-    targetMachine
+    getTargetMachine
     ;
 }

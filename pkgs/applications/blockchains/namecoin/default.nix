@@ -1,16 +1,15 @@
 { lib, stdenv, fetchFromGitHub, openssl, boost, libevent, autoreconfHook, db4, miniupnpc, eject, pkg-config, qt4, protobuf, qrencode, hexdump
 , withGui }:
 
-with lib;
 stdenv.mkDerivation rec {
-  version = "nc0.20.1";
-  name = "namecoin" + toString (optional (!withGui) "d") + "-" + version;
+  pname = "namecoin" + lib.optionalString (!withGui) "d";
+  version = "22.0";
 
   src = fetchFromGitHub {
     owner = "namecoin";
     repo = "namecoin-core";
-    rev = version;
-    sha256 = "1wpfp9y95lmfg2nk1xqzchwck1wk6gwkya1rj07mf5in9jngxk9z";
+    rev = "nc${version}";
+    sha256 = "sha256-Z3CLDe0c4IpFPPTie8yoh0kcuvGmiegSgl4ITNSDkgY=";
   };
 
   nativeBuildInputs = [
@@ -26,7 +25,7 @@ stdenv.mkDerivation rec {
     db4
     miniupnpc
     eject
-  ] ++ optionals withGui [
+  ] ++ lib.optionals withGui [
     qt4
     protobuf
     qrencode
@@ -38,7 +37,7 @@ stdenv.mkDerivation rec {
     "--with-boost-libdir=${boost.out}/lib"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Decentralized open source information registration and transfer system based on the Bitcoin cryptocurrency";
     homepage = "https://namecoin.org";
     license = licenses.mit;

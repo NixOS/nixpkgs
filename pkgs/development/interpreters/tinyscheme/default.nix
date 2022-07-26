@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Lightweight Scheme implementation";
     longDescription = ''
       TinyScheme is a lightweight Scheme interpreter that implements as large a
@@ -29,5 +30,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsdOriginal;
     maintainers = [ maintainers.ebzzry ];
     platforms = platforms.unix;
+    badPlatforms = [ "aarch64-darwin" ];
   };
 }

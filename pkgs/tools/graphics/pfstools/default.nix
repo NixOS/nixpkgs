@@ -1,15 +1,16 @@
 { lib, stdenv, mkDerivation, fetchurl, cmake, pkg-config, darwin
 , openexr, zlib, imagemagick6, libGLU, libGL, freeglut, fftwFloat
-, fftw, gsl, libexif, perl, opencv2, qtbase, netpbm
+, fftw, gsl, libexif, perl, qtbase, netpbm
+, enableUnfree ? false, opencv2
 }:
 
 mkDerivation rec {
   pname = "pfstools";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${version}/${pname}-${version}.tgz";
-    sha256 = "04rlb705gmdiphcybf9dyr0d5lla2cfs3c308zz37x0vwi445six";
+    sha256 = "sha256-m/aESYVmMibCGZjutDwmGsuOSziRuakbcpVUQGKJ18o=";
   };
 
   outputs = [ "out" "dev" "man"];
@@ -28,14 +29,14 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
     openexr zlib imagemagick6 fftwFloat
-    fftw gsl libexif perl opencv2 qtbase netpbm
+    fftw gsl libexif perl qtbase netpbm
   ] ++ (if stdenv.isDarwin then (with darwin.apple_sdk.frameworks; [
     OpenGL GLUT
   ]) else [
     libGLU libGL freeglut
-  ]);
+  ]) ++ lib.optional enableUnfree (opencv2.override { enableUnfree = true; });
 
-  patches = [ ./threads.patch ./pfstools.patch ./pfsalign.patch ];
+  patches = [ ./glut.patch ./threads.patch ./pfstools.patch ./pfsalign.patch ];
 
   meta = with lib; {
     homepage = "http://pfstools.sourceforge.net/";

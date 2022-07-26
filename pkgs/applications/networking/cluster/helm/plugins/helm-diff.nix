@@ -28,7 +28,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "A Helm plugin that shows a diff";
     inherit (src.meta) homepage;
-    license = licenses.apsl20;
+    license = licenses.asl20;
     maintainers = with maintainers; [ yurrriq ];
   };
 }

@@ -1,8 +1,9 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 with lib;
 let
   pkg = pkgs.moonraker;
   cfg = config.services.moonraker;
+  opt = options.services.moonraker;
   format = pkgs.formats.ini {
     # https://github.com/NixOS/nixpkgs/pull/121613#issuecomment-885241996
     listToValue = l:
@@ -18,6 +19,7 @@ in {
       klipperSocket = mkOption {
         type = types.path;
         default = config.services.klipper.apiSocket;
+        defaultText = literalExpression "config.services.klipper.apiSocket";
         description = "Path to Klipper's API socket.";
       };
 
@@ -30,6 +32,7 @@ in {
       configDir = mkOption {
         type = types.path;
         default = cfg.stateDir + "/config";
+        defaultText = literalExpression ''config.${opt.stateDir} + "/config"'';
         description = ''
           The directory containing client-writable configuration files.
 
@@ -76,12 +79,32 @@ in {
           for supported values.
         '';
       };
+
+      allowSystemControl = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to allow Moonraker to perform system-level operations.
+
+          Moonraker exposes APIs to perform system-level operations, such as
+          reboot, shutdown, and management of systemd units. See the
+          <link xlink:href="https://moonraker.readthedocs.io/en/latest/web_api/#machine-commands">documentation</link>
+          for details on what clients are able to do.
+        '';
+      };
     };
   };
 
   config = mkIf cfg.enable {
     warnings = optional (cfg.settings ? update_manager)
       ''Enabling update_manager is not supported on NixOS and will lead to non-removable warnings in some clients.'';
+
+    assertions = [
+      {
+        assertion = cfg.allowSystemControl -> config.security.polkit.enable;
+        message = "services.moonraker.allowSystemControl requires polkit to be enabled (security.polkit.enable).";
+      }
+    ];
 
     users.users = optionalAttrs (cfg.user == "moonraker") {
       moonraker = {
@@ -125,11 +148,31 @@ in {
         exec ${pkg}/bin/moonraker -c ${cfg.configDir}/moonraker-temp.cfg
       '';
 
+      # Needs `ip` command
+      path = [ pkgs.iproute2 ];
+
       serviceConfig = {
         WorkingDirectory = cfg.stateDir;
         Group = cfg.group;
         User = cfg.user;
       };
     };
+
+    security.polkit.extraConfig = lib.optionalString cfg.allowSystemControl ''
+      // nixos/moonraker: Allow Moonraker to perform system-level operations
+      //
+      // This was enabled via services.moonraker.allowSystemControl.
+      polkit.addRule(function(action, subject) {
+        if ((action.id == "org.freedesktop.systemd1.manage-units" ||
+             action.id == "org.freedesktop.login1.power-off" ||
+             action.id == "org.freedesktop.login1.power-off-multiple-sessions" ||
+             action.id == "org.freedesktop.login1.reboot" ||
+             action.id == "org.freedesktop.login1.reboot-multiple-sessions" ||
+             action.id.startsWith("org.freedesktop.packagekit.")) &&
+             subject.user == "${cfg.user}") {
+          return polkit.Result.YES;
+        }
+      });
+    '';
   };
 }

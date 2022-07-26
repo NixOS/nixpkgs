@@ -1,4 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
+, fetchPypi
+
+# extra: websocket
 , websocket-client
 }:
 
@@ -11,9 +15,12 @@ buildPythonPackage rec {
     sha256 = "0ipz3fd65rqkxlb02sql0awc3vnslrwb2pfrsnpfnf8bfgxpbh9g";
   };
 
-  propagatedBuildInputs = [
-    websocket-client
-  ];
+  passthru.optional-dependencies = {
+    websocket = [
+      websocket-client
+    ];
+    # interactive_ui requires curses package
+  };
 
   # no tests
   doCheck = false;

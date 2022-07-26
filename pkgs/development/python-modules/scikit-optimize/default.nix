@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "scikit-optimize";
-  version = "0.8.1";
+  version = "0.9.0";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "scikit-optimize";
     repo = "scikit-optimize";
     rev = "v${version}";
-    sha256 = "1bz8gxccx8n99abw49j8h5zf3i568g5hcf8nz1yinma8jqhxjkjh";
+    sha256 = "0hsq6pmryimxc275yrcy4bv217bx7ma6rz0q6m4138bv4zgq18d1";
   };
 
   propagatedBuildInputs = [

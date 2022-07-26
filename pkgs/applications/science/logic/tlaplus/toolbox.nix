@@ -1,5 +1,13 @@
-{ lib, fetchzip, makeWrapper, makeDesktopItem, stdenv
-, gtk3, libXtst, glib, zlib, wrapGAppsHook
+{ lib
+, fetchzip
+, makeShellWrapper
+, makeDesktopItem
+, stdenv
+, gtk3
+, libXtst
+, glib
+, zlib
+, wrapGAppsHook
 }:
 
 let
@@ -10,14 +18,13 @@ let
     comment = "IDE for TLA+";
     desktopName = name;
     genericName = comment;
-    categories = "Development";
-    extraEntries = ''
-      StartupWMClass=TLA+ Toolbox
-    '';
+    categories = [ "Development" ];
+    startupWMClass = "TLA+ Toolbox";
   };
 
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "tla-toolbox";
   version = "1.7.1";
   src = fetchzip {
@@ -27,11 +34,12 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ gtk3 ];
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [
+    makeShellWrapper
+    wrapGAppsHook
+  ];
 
   dontWrapGApps = true;
-
-  phases = [ "installPhase" ];
 
   installPhase = ''
     runHook preInstall
@@ -56,8 +64,8 @@ in stdenv.mkDerivation rec {
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       "$(find "$out/toolbox" -name jspawnhelper)"
 
-    makeWrapper $out/toolbox/toolbox $out/bin/tla-toolbox \
-      --run "set -x; cd $out/toolbox" \
+    makeShellWrapper $out/toolbox/toolbox $out/bin/tla-toolbox \
+      --chdir "$out/toolbox" \
       --add-flags "-data ~/.tla-toolbox" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ gtk3 libXtst glib zlib ]}"  \
       "''${gappsWrapperArgs[@]}"
@@ -89,6 +97,7 @@ in stdenv.mkDerivation rec {
     '';
     # http://lamport.azurewebsites.net/tla/license.html
     license = with lib.licenses; [ mit ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
     maintainers = [ ];
   };

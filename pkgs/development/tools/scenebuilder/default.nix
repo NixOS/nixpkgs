@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, jdk11, gradleGen, makeDesktopItem, copyDesktopItems, perl, writeText, runtimeShell, makeWrapper, glib, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitHub, jdk11, gradle_6, makeDesktopItem, copyDesktopItems, perl, writeText, runtimeShell, makeWrapper, glib, wrapGAppsHook }:
 let
-  gradle = (gradleGen.override (old: { java = jdk11; })).gradle_6_8;
+  gradle = gradle_6;
 
   pname = "scenebuilder";
   version = "15.0.1";
@@ -33,7 +33,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "0n93kb8pajlbidvdrsf3hwcwqzvgdm6dnly7wvk3vpargx6k7y1r";
+    outputHash = "01dkayad68g3zpzdnjwrc0h6s7s6n619y5b576snc35l8g2r5sgd";
   };
 
   # Point to our local deps repo
@@ -64,13 +64,13 @@ let
   '';
 
   desktopItem = makeDesktopItem {
-    name = "Scene Builder";
+    name = "scenebuilder";
     exec = "scenebuilder";
     icon = "scenebuilder";
     comment = "A visual, drag'n'drop, layout tool for designing JavaFX application user interfaces.";
-    desktopName = pname;
-    mimeType = "application/java;application/java-vm;application/java-archive";
-    categories = "Development";
+    desktopName = "Scene Builder";
+    mimeTypes = [ "application/java" "application/java-vm" "application/java-archive" ];
+    categories = [ "Development" ];
   };
 
 in stdenv.mkDerivation rec {
@@ -106,8 +106,13 @@ in stdenv.mkDerivation rec {
   desktopItems = [ desktopItem ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A visual, drag'n'drop, layout tool for designing JavaFX application user interfaces.";
     homepage = "https://gluonhq.com/products/scene-builder/";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = licenses.bsd3;
     maintainers = with maintainers; [ wirew0rm ];
     platforms = platforms.all;

@@ -4,19 +4,20 @@
 , writeText
 , libinput
 , libX11
+, wayland
 , conf ? null
 , patches ? [ ]
 }:
 
 stdenv.mkDerivation rec {
   pname = "lisgd";
-  version = "0.3.0";
+  version = "0.3.4";
 
   src = fetchFromSourcehut {
     owner = "~mil";
     repo = "lisgd";
     rev = version;
-    sha256 = "0g2pwff2c6ipxz83l26kx4rs3vah9qlm4h0n4x1k80mzqzf15hb6";
+    hash = "sha256-ZzPdIwN4/G5Te51gJpbNcHVkG4Rplcaa8yHDJr58oyk=";
   };
 
   inherit patches;
@@ -33,6 +34,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libinput
     libX11
+    wayland
   ];
 
   makeFlags = [

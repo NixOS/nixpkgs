@@ -45,7 +45,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.unbound-with-systemd;
-        defaultText = "pkgs.unbound-with-systemd";
+        defaultText = literalExpression "pkgs.unbound-with-systemd";
         description = "The unbound package to use";
       };
 
@@ -62,6 +62,7 @@ in {
       };
 
       stateDir = mkOption {
+        type = types.path;
         default = "/var/lib/unbound";
         description = "Directory holding all state for unbound to run.";
       };
@@ -128,7 +129,7 @@ in {
             };
           };
         };
-        example = literalExample ''
+        example = literalExpression ''
           {
             server = {
               interface = [ "127.0.0.1" ];

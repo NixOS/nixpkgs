@@ -58,6 +58,7 @@ in
         type = types.str;
         example = "Voltron";
         default = config.networking.hostName;
+        defaultText = literalExpression "config.networking.hostName";
         description = ''
           Name of the Resilio Sync device.
         '';

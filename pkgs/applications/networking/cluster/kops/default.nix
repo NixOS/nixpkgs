@@ -1,15 +1,11 @@
-{ lib, buildGoPackage, fetchFromGitHub, go-bindata, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 let
-  goPackagePath = "k8s.io/kops";
-
   generic = { version, sha256, rev ? version, ... }@attrs:
     let attrs' = builtins.removeAttrs attrs [ "version" "sha256" "rev" ]; in
-    buildGoPackage
+    buildGoModule
       {
         pname = "kops";
         inherit version;
-
-        inherit goPackagePath;
 
         src = fetchFromGitHub {
           rev = rev;
@@ -18,25 +14,26 @@ let
           inherit sha256;
         };
 
-        nativeBuildInputs = [ go-bindata installShellFiles ];
+        vendorSha256 = null;
+
+        nativeBuildInputs = [ installShellFiles ];
+
         subPackages = [ "cmd/kops" ];
 
-        buildFlagsArray = ''
-          -ldflags=
-              -X k8s.io/kops.Version=${version}
-              -X k8s.io/kops.GitVersion=${version}
-        '';
+        ldflags = [
+          "-s"
+          "-w"
+          "-X k8s.io/kops.Version=${version}"
+          "-X k8s.io/kops.GitVersion=${version}"
+        ];
 
-        preBuild = ''
-          (cd go/src/k8s.io/kops
-           go-bindata -o upup/models/bindata.go -pkg models -prefix upup/models/ upup/models/...)
-        '';
+        doCheck = false;
 
         postInstall = ''
-          for shell in bash zsh; do
-            $out/bin/kops completion $shell > kops.$shell
-            installShellCompletion kops.$shell
-          done
+          installShellCompletion --cmd kops \
+            --bash <($GOPATH/bin/kops completion bash) \
+            --fish <($GOPATH/bin/kops completion fish) \
+            --zsh <($GOPATH/bin/kops completion zsh)
         '';
 
         meta = with lib; {
@@ -44,30 +41,30 @@ let
           homepage = "https://github.com/kubernetes/kops";
           changelog = "https://github.com/kubernetes/kops/tree/master/docs/releases";
           license = licenses.asl20;
-          maintainers = with maintainers; [ offline zimbatm diegolelis ];
+          maintainers = with maintainers; [ offline zimbatm diegolelis yurrriq ];
           platforms = platforms.unix;
         };
       } // attrs';
 in
 rec {
-
   mkKops = generic;
 
-  kops_1_19 = mkKops rec {
-    version = "1.19.2";
-    sha256 = "15csxih1xy8myky37n5dyzp5mc31pc4bq9asaw6zz51mgw8ad5r9";
+  kops_1_22 = mkKops rec {
+    version = "1.22.4";
+    sha256 = "sha256-osU7yI77ZALGrAGuP8qAgv+ogDRn+BSVmcjPbi/WEKE=";
     rev = "v${version}";
   };
 
-  kops_1_20 = mkKops rec {
-    version = "1.20.2";
-    sha256 = "011ib3xkj6nn7qax8d0ns8y4jhkwwmry1qnzxklvzssaxhmzs557";
+  kops_1_23 = mkKops rec {
+    version = "1.23.2";
+    sha256 = "sha256-9GANjGRS9QaJw+CEeMv/f+rEu37QV2YxMvSRSH6+3PM=";
     rev = "v${version}";
   };
 
-  kops_1_21 = mkKops rec {
-    version = "1.21.0";
-    sha256 = "sha256-T2i3qpg3GC7yaYCGrN1V5XXrUyT+Ce9Q4aV00gQJ7gM=";
+  kops_1_24 = mkKops rec {
+    version = "1.24.0";
+    sha256 = "sha256-4vvmwqsRSu8hZZE7fZUTv9v19wRtJvA5IX5w9jr5pEI=";
     rev = "v${version}";
   };
+
 }

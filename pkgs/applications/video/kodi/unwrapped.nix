@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, makeWrapper
-, pkg-config, cmake, gnumake, yasm, python3Packages
-, libgcrypt, libgpgerror, libunistring
+, pkg-config, cmake, yasm, python3Packages
+, libgcrypt, libgpg-error, libunistring
 , boost, avahi, lame
 , gettext, pcre-cpp, yajl, fribidi, which
 , openssl, gperf, tinyxml2, taglib, libssh, swig, jre_headless
@@ -10,13 +10,13 @@
 , libjpeg, libpng, libtiff
 , libmpeg2, libsamplerate, libmad
 , libogg, libvorbis, flac, libxslt
-, lzo, libcdio, libmodplug, libass, libbluray
+, lzo, libcdio, libmodplug, libass, libbluray, libudfread
 , sqlite, libmysqlclient, nasm, gnutls, libva, libdrm
 , curl, bzip2, zip, unzip, glxinfo
 , libcec, libcec_platform, dcadec, libuuid
 , libcrossguid, libmicrohttpd
 , bluez, doxygen, giflib, glib, harfbuzz, lcms2, libidn, libpthreadstubs, libtasn1
-, libplist, p11-kit, zlib, flatbuffers, fmt, fstrcmp, rapidjson
+, libplist, p11-kit, zlib, flatbuffers, fstrcmp, rapidjson
 , lirc
 , x11Support ? true, libX11, xorgproto, libXt, libXmu, libXext, libXinerama, libXrandr, libXtst, libXfixes, xdpyinfo, libXdmcp
 , dbusSupport ? true, dbus
@@ -38,25 +38,25 @@ assert usbSupport -> !udevSupport; # libusb-compat-0_1 won't be used if udev is 
 assert gbmSupport || waylandSupport || x11Support;
 
 let
-  kodiReleaseDate = "20210508";
-  kodiVersion = "19.1";
+  kodiReleaseDate = "20220303";
+  kodiVersion = "19.4";
   rel = "Matrix";
 
   kodi_src = fetchFromGitHub {
     owner  = "xbmc";
     repo   = "xbmc";
     rev    = "${kodiVersion}-${rel}";
-    sha256 = "0jh67vw3983lnfgqzqfislawwbpq0vxxk1ljsg7mar06mlwfxb7h";
+    sha256 = "sha256-XDtmY3KthiD91kvueQRSamBcdM7fBpRntmZX6KRsCzE=";
   };
 
   ffmpeg = stdenv.mkDerivation rec {
     pname = "kodi-ffmpeg";
-    version = "4.3.1";
+    version = "4.3.2"; # see https://github.com/xbmc/xbmc/blob/${kodiVersion}-${rel}/tools/depends/target/ffmpeg/FFMPEG-VERSION
     src = fetchFromGitHub {
       owner   = "xbmc";
       repo    = "FFmpeg";
-      rev     = "${version}-${rel}-Beta1";
-      sha256  = "1c5rwlxn6xj501iw7masdv2p6wb9rkmd299lmlkx97sw1kvxvg2w";
+      rev     = "${version}-${rel}-19.2";
+      sha256  = "14s215sgc93ds1mrdbkgb7fvy94lpgv2ldricyxzis0gbzqfgs4f";
     };
     preConfigure = ''
       cp ${kodi_src}/tools/depends/target/ffmpeg/{CMakeLists.txt,*.cmake} .
@@ -79,21 +79,21 @@ let
   libdvdcss = fetchFromGitHub {
     owner = "xbmc";
     repo = "libdvdcss";
-    rev = "1.4.2-${rel}-Beta-5";
+    rev = "1.4.2-Leia-Beta-5";
     sha256 = "0j41ydzx0imaix069s3z07xqw9q95k7llh06fc27dcn6f7b8ydyl";
   };
 
   libdvdnav = fetchFromGitHub {
     owner = "xbmc";
     repo = "libdvdnav";
-    rev = "6.0.0-${rel}-Alpha-3";
+    rev = "6.0.0-Leia-Alpha-3";
     sha256 = "0qwlf4lgahxqxk1r2pzl866mi03pbp7l1fc0rk522sc0ak2s9jhb";
   };
 
   libdvdread = fetchFromGitHub {
     owner = "xbmc";
     repo = "libdvdread";
-    rev = "6.0.0-${rel}-Alpha-3";
+    rev = "6.0.0-Leia-Alpha-3";
     sha256 = "1xxn01mhkdnp10cqdr357wx77vyzfb5glqpqyg8m0skyi75aii59";
   };
 
@@ -107,6 +107,15 @@ in stdenv.mkDerivation {
 
     src = kodi_src;
 
+    # This is a backport of
+    # https://github.com/xbmc/xbmc/commit/a6dedce7ba1f03bdd83b019941d1e369a06f7888
+    # to Kodi 19.4 Matrix.
+    # This can be removed once a new release of Kodi comes out and we upgrade
+    # to it.
+    patches = [
+      ./add-KODI_WEBSERVER_EXTRA_WHITELIST.patch
+    ];
+
     buildInputs = [
       gnutls libidn libtasn1 nasm p11-kit
       libxml2 python3Packages.python
@@ -118,14 +127,14 @@ in stdenv.mkDerivation {
       libjpeg libpng libtiff
       libmpeg2 libsamplerate libmad
       libogg libvorbis flac libxslt systemd
-      lzo libcdio libmodplug libass libbluray
+      lzo libcdio libmodplug libass libbluray libudfread
       sqlite libmysqlclient avahi lame
       curl bzip2 zip unzip glxinfo
       libcec libcec_platform dcadec libuuid
-      libgcrypt libgpgerror libunistring
+      libgcrypt libgpg-error libunistring
       libcrossguid libplist
       bluez giflib glib harfbuzz lcms2 libpthreadstubs
-      ffmpeg flatbuffers fmt fstrcmp rapidjson
+      ffmpeg flatbuffers fstrcmp rapidjson
       lirc
       mesa # for libEGL
     ]
@@ -160,7 +169,7 @@ in stdenv.mkDerivation {
       doxygen
       makeWrapper
       which
-      pkg-config gnumake
+      pkg-config
       autoconf automake libtool # still needed for some components. Check if that is the case with 19.0
       jre_headless yasm gettext python3Packages.python flatbuffers
 
@@ -185,6 +194,12 @@ in stdenv.mkDerivation {
       "-DSWIG_EXECUTABLE=${buildPackages.swig}/bin/swig"
       "-DFLATBUFFERS_FLATC_EXECUTABLE=${buildPackages.flatbuffers}/bin/flatc"
       "-DPYTHON_EXECUTABLE=${buildPackages.python3Packages.python}/bin/python"
+      # When wrapped KODI_HOME will likely contain symlinks to static assets
+      # that Kodi's built in webserver will cautiously refuse to serve up
+      # (because their realpaths are outside of KODI_HOME and the other
+      # whitelisted directories). This adds the entire nix store to the Kodi
+      # webserver whitelist to avoid this problem.
+      "-DKODI_WEBSERVER_EXTRA_WHITELIST=${builtins.storeDir}"
     ] ++ lib.optional waylandSupport [
       "-DWAYLANDPP_SCANNER=${buildPackages.waylandpp}/bin/wayland-scanner++"
     ];
@@ -198,10 +213,10 @@ in stdenv.mkDerivation {
     '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
       # Need these tools on the build system when cross compiling,
       # hacky, but have found no other way.
-      CXX=${stdenv.cc.targetPrefix}c++ LD=ld make -C tools/depends/native/JsonSchemaBuilder
+      CXX=$CXX_FOR_BUILD LD=ld make -C tools/depends/native/JsonSchemaBuilder
       cmakeFlags+=" -DWITH_JSONSCHEMABUILDER=$PWD/tools/depends/native/JsonSchemaBuilder/bin"
 
-      CXX=${stdenv.cc.targetPrefix}c++ LD=ld make EXTRA_CONFIGURE= -C tools/depends/native/TexturePacker
+      CXX=$CXX_FOR_BUILD LD=ld make EXTRA_CONFIGURE= -C tools/depends/native/TexturePacker
       cmakeFlags+=" -DWITH_TEXTUREPACKER=$PWD/tools/depends/native/TexturePacker/bin"
     '';
 

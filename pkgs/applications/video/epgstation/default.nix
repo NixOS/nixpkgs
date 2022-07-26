@@ -1,8 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, common-updater-scripts
-, genericUpdater
+, gitUpdater
 , writers
 , makeWrapper
 , bash
@@ -10,44 +9,51 @@
 , nodePackages
 , gzip
 , jq
+, yq
 }:
 
 let
   # NOTE: use updateScript to bump the package version
   pname = "EPGStation";
-  version = "1.7.5";
+  version = "2.6.20";
   src = fetchFromGitHub {
     owner = "l3tnun";
     repo = "EPGStation";
     rev = "v${version}";
-    sha256 = "06yaf5yb5rp3q0kdhw33df7px7vyfby885ckb6bdzw3wnams5d8m";
+    sha256 = "K1cAvmqWEfS6EY4MKAtjXb388XLYHtouxNM70PWgFig=";
   };
 
-  workaround-opencollective-buildfailures = stdenv.mkDerivation {
-    # FIXME: This should be removed when a complete fix is available
-    # https://github.com/svanderburg/node2nix/issues/145
-    name = "workaround-opencollective-buildfailures";
-    dontUnpack = true;
-    installPhase = ''
-      mkdir -p $out/bin
-      touch $out/bin/opencollective-postinstall
-      chmod +x $out/bin/opencollective-postinstall
-    '';
-  };
+  client = nodePackages.epgstation-client.override (drv: {
+    # FIXME: remove this option if possible
+    #
+    # Unsetting this option resulted NPM attempting to re-download packages.
+    dontNpmInstall = true;
 
-  pkg = nodePackages.epgstation.override (drv: {
+    meta = drv.meta // {
+      inherit (nodejs.meta) platforms;
+    };
+  });
+
+  server = nodePackages.epgstation.override (drv: {
     inherit src;
 
-    buildInputs = [ bash ];
-    nativeBuildInputs = [
-      workaround-opencollective-buildfailures
+    # This is set to false to keep devDependencies at build time. Build time
+    # dependencies are pruned afterwards.
+    production = false;
+
+    buildInputs = (drv.buildInputs or [ ]) ++ [ bash ];
+    nativeBuildInputs = (drv.nativeBuildInputs or [ ]) ++ [
       makeWrapper
-      nodePackages.node-pre-gyp
     ];
 
     preRebuild = ''
       # Fix for not being able to connect to mysql using domain sockets.
-      patch -p1 ${./use-mysql-over-domain-socket.patch}
+      patch -p1 < ${./use-mysql-over-domain-socket.patch}
+
+      # Workaround for https://github.com/svanderburg/node2nix/issues/275
+      sed -i -e "s|#!/usr/bin/env node|#! ${nodejs}/bin/node|" node_modules/node-gyp-build/bin.js
+
+      find . -name package-lock.json -delete
     '';
 
     postInstall = let
@@ -56,12 +62,19 @@ let
     ''
       mkdir -p $out/{bin,libexec,share/doc/epgstation,share/man/man1}
 
-      pushd $out/lib/node_modules/EPGStation
+      pushd $out/lib/node_modules/epgstation
+
+      cp -r ${client}/lib/node_modules/epgstation-client/node_modules client/node_modules
+      chmod -R u+w client/node_modules
 
       npm run build
-      npm prune --production
 
-      mv config/{enc.sh,enc.js} $out/libexec
+      npm prune --production
+      pushd client
+      npm prune --production
+      popd
+
+      mv config/enc.js.template $out/libexec/enc.js
       mv LICENSE Readme.md $out/share/doc/epgstation
       mv doc/* $out/share/doc/epgstation
       sed 's/@DESCRIPTION@/${drv.meta.description}/g' ${./epgstation.1} \
@@ -82,8 +95,9 @@ let
       ln -sfT /var/lib/epgstation/thumbnail thumbnail
 
       makeWrapper ${nodejs}/bin/npm $out/bin/epgstation \
-       --run "cd $out/lib/node_modules/EPGStation" \
-       --prefix PATH : ${lib.makeBinPath runtimeDeps}
+       --chdir "$out/lib/node_modules/epgstation" \
+       --prefix PATH : ${lib.makeBinPath runtimeDeps} \
+       --set APP_ROOT_PATH "$out/lib/node_modules/epgstation"
 
       popd
     '';
@@ -96,25 +110,27 @@ let
       inherit
         pname
         version
-        common-updater-scripts
-        genericUpdater
+        gitUpdater
         writers
-        jq;
+        jq
+        yq;
     };
 
     # nodePackages.epgstation is a stub package to fetch npm dependencies and
-    # is marked as broken to prevent users from installing it directly. This
-    # technique ensures epgstation can share npm packages with the rest of
-    # nixpkgs while still allowing us to heavily customize the build. It also
-    # allows us to provide devDependencies for the epgstation build process
-    # without doing the same for all the other node packages.
-    meta = drv.meta // { broken = false; };
+    # its meta.platforms is made empty to prevent users from installing it
+    # directly. This technique ensures epgstation can share npm packages with
+    # the rest of nixpkgs while still allowing us to heavily customize the
+    # build. It also allows us to provide devDependencies for the epgstation
+    # build process without doing the same for all the other node packages.
+    meta = drv.meta // {
+      inherit (nodejs.meta) platforms;
+    };
   });
 in
-pkg // {
+server // {
   name = "${pname}-${version}";
 
-  meta = with lib; pkg.meta // {
+  meta = with lib; server.meta // {
     maintainers = with maintainers; [ midchildan ];
 
     # NOTE: updateScript relies on this being correct

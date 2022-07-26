@@ -1,29 +1,30 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, pythonOlder
 , dask
-, numpy, toolz # dask[array]
+, dask-glm
+, distributed
+, fetchPypi
+, multipledispatch
 , numba
+, numpy
+, packaging
 , pandas
+, pythonOlder
 , scikit-learn
 , scipy
-, dask-glm
-, six
-, multipledispatch
-, packaging
-, distributed
 , setuptools-scm
 }:
 
 buildPythonPackage rec {
-  version = "1.9.0";
   pname = "dask-ml";
-  disabled = pythonOlder "3.6"; # >= 3.6
+  version = "2022.5.27";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2f376a7114133b484a6d393f62298473116fc49c79ec7d50d5b031d752f54307";
+    hash = "sha256-Y2nTk0GSvMGSP87oTD+4+8zsoQITeQEHC6Px2eOGzOQ=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +32,6 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    dask
     dask-glm
     distributed
     multipledispatch
@@ -41,14 +41,12 @@ buildPythonPackage rec {
     pandas
     scikit-learn
     scipy
-    six
-    toolz
-  ];
+  ] ++ dask.optional-dependencies.array
+    ++ dask.optional-dependencies.dataframe;
 
   # has non-standard build from source, and pypi doesn't include tests
   doCheck = false;
 
-  # in lieu of proper tests
   pythonImportsCheck = [
     "dask_ml"
     "dask_ml.naive_bayes"
@@ -57,9 +55,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/dask/dask-ml";
     description = "Scalable Machine Learn with Dask";
+    homepage = "https://github.com/dask/dask-ml";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

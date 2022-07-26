@@ -1,35 +1,28 @@
-{ lib, fetchFromGitHub, stdenv, rustPlatform, coreutils, bash, installShellFiles, libiconv }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, coreutils
+, bash
+, installShellFiles
+, libiconv
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
-  version = "0.9.8";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = pname;
     rev = version;
-    sha256 = "sha256-WT3r6qw/lCZy6hdfAJmoAgUqjSLPVT8fKX4DnqDnhOs=";
+    sha256 = "sha256-b0a5TaB0muojqLCxTVvD95zgGp7gz72OvxfK+QtZV8k=";
   };
 
-  cargoSha256 = "sha256-0R/9VndP/Oh5/yP7NsBC25jiCSRVNEXhbVksElLXeEc=";
+  cargoSha256 = "sha256-ka5Np7YxfYRL42ipClD9xWTYA2vynDjQqy/6IsP5Ejs=";
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
-
-  postPatch = ''
-    # this hard codes the compiler, which breaks the aarch64 in particular
-    # we rather want to set the compiler ourself
-    rm .cargo/config
-  '';
-
-  postInstall = ''
-    installManPage man/just.1
-
-    installShellCompletion --cmd just \
-      --bash completions/just.bash \
-      --fish completions/just.fish \
-      --zsh  completions/just.zsh
-  '';
 
   checkInputs = [ coreutils bash ];
 
@@ -54,7 +47,17 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     "--skip=edit" # trying to run "vim" fails as there's no /usr/bin/env or which in the sandbox to find vim and the dependency is not easily patched
     "--skip=run_shebang" # test case very rarely fails with "Text file busy"
+    "--skip=invoke_error_function" # wants JUST_CHOOSER to be fzf
   ];
+
+  postInstall = ''
+    installManPage man/just.1
+
+    installShellCompletion --cmd just \
+      --bash completions/just.bash \
+      --fish completions/just.fish \
+      --zsh completions/just.zsh
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/casey/just";

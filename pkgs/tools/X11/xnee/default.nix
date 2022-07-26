@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, libX11, xorgproto, libXext, libXtst
+{ fetchurl, fetchpatch, lib, stdenv, libX11, xorgproto, libXext, libXtst
 , gtk2, libXi, pkg-config, texinfo }:
 
 stdenv.mkDerivation rec {
@@ -10,11 +10,27 @@ stdenv.mkDerivation rec {
     sha256 = "04n2lac0vgpv8zsn7nmb50hf3qb56pmj90dmwnivg09gyrf1x92j";
   };
 
-  patchPhase =
+  patches = [
+    # Pull fix pending upstream inclusion for -fno-common
+    # toolchain support: https://savannah.gnu.org/bugs/?58810
+    (fetchpatch {
+      name = "fno-common.patch";
+      url = "https://savannah.gnu.org/bugs/download.php?file_id=49534";
+      sha256 = "04j2cjy2yaiigg31a6k01vw0fq19yj3zpriikkjcz9q4ab4m5gh2";
+    })
+  ];
+
+  postPatch =
     '' for i in `find cnee/test -name \*.sh`
        do
          sed -i "$i" -e's|/bin/bash|${stdenv.shell}|g ; s|/usr/bin/env bash|${stdenv.shell}|g'
        done
+
+       # Fix for glibc-2.34. For some reason, `LIBSEMA="CCC"` is added
+       # if `sem_init` is part of libc which causes errors like
+       # `gcc: error: CCC: No such file or directory` during the build.
+       substituteInPlace configure \
+        --replace 'LIBSEMA="CCC"' 'LIBSEMA=""'
     '';
 
   buildInputs =

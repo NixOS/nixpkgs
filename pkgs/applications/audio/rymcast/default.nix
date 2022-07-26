@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Player for Mega Drive/Genesis VGM files";
     homepage = "https://www.inphonik.com/products/rymcast-genesis-vgm-player/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ astsmtl ];

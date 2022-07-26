@@ -1,5 +1,6 @@
 { lib
 , fetchPypi
+, fetchpatch
 , python
 , buildPythonPackage
 , gfortran
@@ -8,7 +9,6 @@
 , blas
 , lapack
 , writeTextFile
-, isPyPy
 , cython
 , setuptoolsBuildHook
 , pythonOlder
@@ -40,14 +40,19 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.20.3";
+
+  # Attention! v1.22.0 breaks scipy and by extension scikit-learn, so
+  # build both to verify they don't break.
+  # https://github.com/scipy/scipy/issues/15414
+  version = "1.21.6";
+
   format = "pyproject.toml";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "e55185e51b18d788e49fe8305fd73ef4470596b33fc2c1ceb304566b99c71a69";
+    sha256 = "sha256-7LVSUROXBmaf3sL/BzyY746ahEc+UecWIRtBqg8Y5lY=";
   };
 
   patches = lib.optionals python.hasDistutilsCxxPatch [

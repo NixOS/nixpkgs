@@ -1,43 +1,65 @@
-{ lib, stdenv, fetchFromGitHub, pantheon, vala, python3, python2, pkg-config, libxml2, meson, ninja, gtk3, glib, webkitgtk, libgee
-, gobject-introspection, sqlite, poppler, poppler_utils, html2text, curl, gnugrep, coreutils, bash, unzip, unar, wrapGAppsHook
-, appstream, desktop-file-utils }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, appstream
+, coreutils
+, curl
+, desktop-file-utils
+, glib
+, gnugrep
+, gobject-introspection
+, gtk3
+, html2text
+, libgee
+, libxml2
+, meson
+, ninja
+, pantheon
+, pkg-config
+, poppler
+, poppler_utils
+, python3
+, sqlite
+, unar
+, unzip
+, vala
+, webkitgtk
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "bookworm";
-  version = "1.1.2";
+  version = "unstable-2022-01-09";
 
   src = fetchFromGitHub {
     owner = "babluboy";
     repo = pname;
-    rev = version;
-    sha256 = "0w0rlyahpgx0l6inkbj106agbnr2czil0vdcy1zzv70apnjz488j";
+    rev = "f3df858ce748a6bbc43f03a6e261ff76a6d7d303";
+    hash = "sha256-mLyJfblF5WnWBV3rX1ZRupccou4t5mBpo3W7+ECNMVI=";
   };
 
   nativeBuildInputs = [
-    bash
-    gobject-introspection
-    libxml2
     meson
     ninja
     pkg-config
-    python3
     vala
     wrapGAppsHook
   ];
 
   buildInputs = [
-    pantheon.elementary-icon-theme
-    pantheon.granite
-    glib
-    libgee
-    gtk3
-    html2text
-    poppler
-    python2
-    sqlite
-    webkitgtk
     appstream
     desktop-file-utils
+    glib
+    gobject-introspection
+    gtk3
+    html2text
+    libgee
+    libxml2
+    pantheon.granite
+    poppler
+    python3
+    sqlite
+    webkitgtk
   ];
 
   postPatch = ''
@@ -58,13 +80,13 @@ stdenv.mkDerivation rec {
     patchShebangs $out/share/bookworm/scripts/tasks/*.sh
   '';
 
-   meta = with lib; {
-     description = "A simple, focused eBook reader";
-     longDescription = ''
-       Read the books you love without having to worry about different format complexities like epub, pdf, mobi, cbr, etc.
-     '';
-     homepage = "https://babluboy.github.io/bookworm/";
-     license = licenses.gpl3Plus;
-     platforms = platforms.linux;
-   };
- }
+  meta = with lib; {
+    description = "A simple, focused eBook reader";
+    longDescription = ''
+      Read the books you love without having to worry about different format complexities like epub, pdf, mobi, cbr, etc.
+    '';
+    homepage = "https://babluboy.github.io/bookworm/";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+  };
+}

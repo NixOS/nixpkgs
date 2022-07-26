@@ -1,19 +1,26 @@
-import ./make-test-python.nix ({ pkgs, esr ? false, ... }: {
-  name = "firefox";
+import ./make-test-python.nix ({ pkgs, firefoxPackage, ... }:
+let firefoxPackage' = firefoxPackage.override (args: {
+      extraPrefsFiles = (args.extraPrefsFiles or []) ++ [
+        # make sure that autoplay is enabled by default for the audio test
+        (builtins.toString (builtins.toFile "autoplay-pref.js" ''defaultPref("media.autoplay.default",0);''))
+      ];
+  });
+
+in
+{
+  name = firefoxPackage'.unwrapped.binaryName;
   meta = with pkgs.lib.maintainers; {
     maintainers = [ eelco shlevy ];
   };
 
-  machine =
+  nodes.machine =
     { pkgs, ... }:
 
     { imports = [ ./common/x11.nix ];
-      environment.systemPackages =
-        (if esr then [ pkgs.firefox-esr ] else [ pkgs.firefox ])
-        ++ [ pkgs.xdotool ];
-
-      # Need some more memory to record audio.
-      virtualisation.memorySize = "500";
+      environment.systemPackages = [
+        firefoxPackage'
+        pkgs.xdotool
+      ];
 
       # Create a virtual sound device, with mixing
       # and all, for recording audio.
@@ -56,7 +63,7 @@ import ./make-test-python.nix ({ pkgs, esr ? false, ... }: {
 
 
       @contextmanager
-      def audio_recording(machine: Machine) -> None:
+      def record_audio(machine: Machine):
           """
           Perform actions while recording the
           machine audio output.
@@ -66,7 +73,7 @@ import ./make-test-python.nix ({ pkgs, esr ? false, ... }: {
           machine.systemctl("stop audio-recorder")
 
 
-      def wait_for_sound(machine: Machine) -> None:
+      def wait_for_sound(machine: Machine):
           """
           Wait until any sound has been emitted.
           """
@@ -90,15 +97,15 @@ import ./make-test-python.nix ({ pkgs, esr ? false, ... }: {
 
       with subtest("Wait until Firefox has finished loading the Valgrind docs page"):
           machine.execute(
-              "xterm -e 'firefox file://${pkgs.valgrind.doc}/share/doc/valgrind/html/index.html' &"
+              "xterm -e '${firefoxPackage'.unwrapped.binaryName} file://${pkgs.valgrind.doc}/share/doc/valgrind/html/index.html' >&2 &"
           )
           machine.wait_for_window("Valgrind")
           machine.sleep(40)
 
       with subtest("Check whether Firefox can play sound"):
-          with audio_recording(machine):
+          with record_audio(machine):
               machine.succeed(
-                  "firefox file://${pkgs.sound-theme-freedesktop}/share/sounds/freedesktop/stereo/phone-incoming-call.oga &"
+                  "${firefoxPackage'.unwrapped.binaryName} file://${pkgs.sound-theme-freedesktop}/share/sounds/freedesktop/stereo/phone-incoming-call.oga >&2 &"
               )
               wait_for_sound(machine)
           machine.copy_from_vm("/tmp/record.wav")

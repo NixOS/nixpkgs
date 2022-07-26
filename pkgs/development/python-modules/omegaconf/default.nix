@@ -1,20 +1,28 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, pytest, pytest-runner, pyyaml, six, pathlib2, isPy27 }:
+{ lib, buildPythonPackage, fetchFromGitHub, pytest-mock, pytestCheckHook
+, pyyaml, pythonOlder, jre_minimal, antlr4_9-python3-runtime }:
 
 buildPythonPackage rec {
   pname = "omegaconf";
-  version = "1.4.1";
+  version = "2.2.2";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "omry";
     repo = pname;
-    rev = version;
-    sha256 = "1vpcdjlq54pm8xmkv2hqm2n1ysvz2a9iqgf55x0w6slrb4595cwb";
+    rev = "v${version}";
+    sha256 = "sha256-bUJ80sa2ot2JSkt29eFwSiKL6R1X1+VVeE9dFIy4Mg0=";
   };
 
-  checkInputs = [ pytest ];
-  buildInputs = [ pytest-runner ];
-  propagatedBuildInputs = [ pyyaml six ] ++ lib.optional isPy27 pathlib2;
+  postPatch = ''
+    substituteInPlace setup.py --replace 'setup_requires=["pytest-runner"]' 'setup_requires=[]'
+  '';
+
+  checkInputs = [ pytestCheckHook pytest-mock ];
+  nativeBuildInputs = [ jre_minimal ];
+  propagatedBuildInputs = [ antlr4_9-python3-runtime pyyaml ];
+
+  disabledTestPaths = [ "tests/test_pydev_resolver_plugin.py" ];  # needs pydevd - not in Nixpkgs
 
   meta = with lib; {
     description = "A framework for configuring complex applications";

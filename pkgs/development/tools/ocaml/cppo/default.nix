@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, ocaml, findlib, ocamlbuild
+{ lib, stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild
 , buildDunePackage
 }:
 
@@ -21,13 +21,15 @@ if lib.versionAtLeast ocaml.version "4.02" then
 
 buildDunePackage rec {
   inherit pname;
-  version = "1.6.7";
+  version = "1.6.9";
 
   useDune2 = true;
 
-  src = fetchurl {
-    url = "https://github.com/ocaml-community/cppo/releases/download/v${version}/cppo-v${version}.tbz";
-    sha256 = "17ajdzrnmnyfig3s6hinb56mcmhywbssxhsq32dz0v90dhz3wmfv";
+  src = fetchFromGitHub {
+    owner = "ocaml-community";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-NdN2QnVRfRq9hEcSAnO2Wha7icDlf2Zg4JQqoEWmErE=";
   };
 
   doCheck = true;
@@ -59,7 +61,7 @@ stdenv.mkDerivation {
   makeFlags = [ "PREFIX=$(out)" ];
 
   preBuild = ''
-    mkdir $out/bin
+    mkdir -p $out/bin
   '';
 
 }

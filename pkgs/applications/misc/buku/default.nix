@@ -1,4 +1,4 @@
-{ lib, python3, fetchFromGitHub }:
+{ lib, python3, fetchFromGitHub, withServer ? false }:
 
 let
   python3' = python3.override {
@@ -7,8 +7,9 @@ let
         version = "1.3.24";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "ebbb777cbf9312359b897bf81ba00dae0f5cb69fba2a18265dcc18a6f5ef7519";
+          hash = "sha256-67t3fL+TEjWbiXv4G6ANrg9ctp+6KhgmXcwYpvXvdRk=";
         };
+        doCheck = false;
       });
       sqlalchemy-utils = super.sqlalchemy-utils.overridePythonAttrs (oldAttrs: rec {
         version = "0.36.6";
@@ -19,53 +20,57 @@ let
       });
     };
   };
-in
-with python3'.pkgs; buildPythonApplication rec {
-  version = "4.6";
-  pname = "buku";
-
-  src = fetchFromGitHub {
-    owner = "jarun";
-    repo = "buku";
-    rev = "v${version}";
-    sha256 = "sha256-hr9qiP7SbloigDcs+6KVWu0SOlggMaBr7CCfY8zoJG0=";
-  };
-
-  checkInputs = [
-    pytest-cov
-    hypothesis
-    pytest
-    pytest-vcr
-    pylint
-    flake8
-    pyyaml
-    mypy-extensions
-  ];
-
-  propagatedBuildInputs = [
-    cryptography
-    beautifulsoup4
+  serverRequire = with python3'.pkgs; [
     requests
-    urllib3
     flask
     flask-admin
     flask-api
     flask-bootstrap
     flask-paginate
     flask-reverse-proxy-fix
-    flask_wtf
+    flask-wtf
     arrow
     werkzeug
     click
-    html5lib
     vcrpy
     toml
   ];
+in
+with python3'.pkgs; buildPythonApplication rec {
+  version = "4.7";
+  pname = "buku";
+
+  src = fetchFromGitHub {
+    owner = "jarun";
+    repo = "buku";
+    rev = "v${version}";
+    sha256 = "sha256-7piJK1hz9h6EWiU/q5MAS1PSvHFxnW7rZBKxq+wda1c=";
+  };
+
+  checkInputs = [
+    hypothesis
+    pytest
+    pytest-vcr
+    pyyaml
+    mypy-extensions
+    click
+  ];
+
+  propagatedBuildInputs = [
+    cryptography
+    beautifulsoup4
+    certifi
+    urllib3
+    html5lib
+  ] ++ lib.optionals withServer serverRequire;
 
   postPatch = ''
     # Jailbreak problematic dependencies
     sed -i \
       -e "s,'PyYAML.*','PyYAML',g" \
+      -e "/'pytest-cov/d" \
+      -e "/'pylint/d" \
+      -e "/'flake8/d" \
       setup.py
   '';
 
@@ -80,6 +85,8 @@ with python3'.pkgs; buildPythonApplication rec {
       --replace "self.assertEqual(url, \"https://www.google.com\")" ""
     substituteInPlace setup.py \
       --replace mypy-extensions==0.4.1 mypy-extensions>=0.4.1
+  '' + lib.optionalString (!withServer) ''
+    rm tests/test_{server,views}.py
   '';
 
   postInstall = ''
@@ -89,6 +96,8 @@ with python3'.pkgs; buildPythonApplication rec {
     cp auto-completion/zsh/* $out/share/zsh/site-functions
     cp auto-completion/bash/* $out/share/bash-completion/completions
     cp auto-completion/fish/* $out/share/fish/vendor_completions.d
+  '' + lib.optionalString (!withServer) ''
+    rm $out/bin/bukuserver
   '';
 
   meta = with lib; {
@@ -99,4 +108,3 @@ with python3'.pkgs; buildPythonApplication rec {
     maintainers = with maintainers; [ matthiasbeyer infinisil ma27 ];
   };
 }
-

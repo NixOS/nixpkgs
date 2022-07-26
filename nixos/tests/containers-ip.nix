@@ -17,17 +17,16 @@ in import ./make-test-python.nix ({ pkgs, lib, ... }: {
     maintainers = with lib.maintainers; [ aristid aszlig eelco kampfschlaefer ];
   };
 
-  machine =
+  nodes.machine =
     { pkgs, ... }: {
       imports = [ ../modules/installer/cd-dvd/channel.nix ];
       virtualisation = {
         writableStore = true;
-        memorySize = 768;
       };
 
       containers.webserver4 = webserverFor "10.231.136.1" "10.231.136.2";
       containers.webserver6 = webserverFor "fc00::2" "fc00::1";
-      virtualisation.pathsInNixDB = [ pkgs.stdenv ];
+      virtualisation.additionalPaths = [ pkgs.stdenv ];
     };
 
   testScript = { nodes, ... }: ''

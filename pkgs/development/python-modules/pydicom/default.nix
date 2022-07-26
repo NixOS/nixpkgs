@@ -2,41 +2,49 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, isPy27
-, pytest-runner
+, pythonOlder
 , pytestCheckHook
 , numpy
 , pillow
+, setuptools
 }:
 
 let
   pname = "pydicom";
-  version = "2.1.2";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
-    owner = "${pname}";
-    repo = "${pname}";
+    owner = "pydicom";
+    repo = "pydicom";
     rev = "v${version}";
-    sha256 = "sha256-iExy+mUs1uqs/u9N6btlqyP6/TvoPVsuOuzs56zZAS8=";
+    hash = "sha256-CAQWaBkzecJ1VXQ5BnAUjmBMjh0I8y+gT7I4P4o2gqI=";
   };
 
-  # Pydicom needs pydicom-data to run some tests. If these files are downloaded
+  # Pydicom needs pydicom-data to run some tests. If these files aren't downloaded
   # before the package creation, it'll try to download during the checkPhase.
   test_data = fetchFromGitHub {
-    owner = "${pname}";
-    repo = "${pname}-data";
+    owner = "pydicom";
+    repo = "pydicom-data";
     rev = "bbb723879690bb77e077a6d57657930998e92bd5";
-    sha256 = "sha256-dCI1temvpNWiWJYVfQZKy/YJ4ad5B0e9hEKHJnEeqzk=";
+    hash = "sha256-dCI1temvpNWiWJYVfQZKy/YJ4ad5B0e9hEKHJnEeqzk=";
   };
 
 in
 buildPythonPackage {
   inherit pname version src;
-  disabled = isPy27;
+  disabled = pythonOlder "3.6";
 
-  propagatedBuildInputs = [ numpy pillow ];
+  format = "setuptools";
 
-  checkInputs = [ pytest-runner pytestCheckHook ];
+  propagatedBuildInputs = [
+    numpy
+    pillow
+    setuptools
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   # Setting $HOME to prevent pytest to try to create a folder inside
   # /homeless-shelter which is read-only.
@@ -47,8 +55,8 @@ buildPythonPackage {
     ln -s ${test_data}/data_store/data $HOME/.pydicom/data
   '';
 
-  # This test try to remove a dicom inside $HOME/.pydicom/data/ and download it again.
   disabledTests = [
+    # tries to remove a dicom inside $HOME/.pydicom/data/ and download it again
     "test_fetch_data_files"
   ] ++ lib.optionals stdenv.isAarch64 [
     # https://github.com/pydicom/pydicom/issues/1386
@@ -58,9 +66,13 @@ buildPythonPackage {
     "test_time_check"
   ];
 
+  pythonImportsCheck = [
+    "pydicom"
+  ];
+
   meta = with lib; {
+    description = "Python package for working with DICOM files";
     homepage = "https://pydicom.github.io";
-    description = "Pure-Python package for working with DICOM files";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };

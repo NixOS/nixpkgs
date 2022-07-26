@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pythia";
-  version = "8.305";
+  version = "8.307";
 
   src = fetchurl {
-    url = "http://home.thep.lu.se/~torbjorn/pythia8/pythia${builtins.replaceStrings ["."] [""] version}.tgz";
-    sha256 = "03rpy2bmx67217fh1spfn36x9xrk0igcj56byki77lgj0y5mz21a";
+    url = "https://pythia.org/download/pythia83/pythia${builtins.replaceStrings ["."] [""] version}.tgz";
+    sha256 = "sha256-5bFNRKpZQzMuMt1d2poY/dGgCFxxmOKNhA4EFn+mAT0=";
   };
 
   nativeBuildInputs = [ rsync ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A program for the generation of high-energy physics events";
     license = licenses.gpl2Only;
-    homepage = "http://home.thep.lu.se/~torbjorn/Pythia.html";
+    homepage = "https://pythia.org";
     platforms = platforms.unix;
     maintainers = with maintainers; [ veprbl ];
   };

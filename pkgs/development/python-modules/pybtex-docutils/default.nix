@@ -1,16 +1,36 @@
-{ lib, buildPythonPackage, fetchPypi, docutils, pybtex, six }:
+{ lib
+, buildPythonPackage
+, docutils
+, fetchPypi
+, pybtex
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
-  version = "1.0.0";
   pname = "pybtex-docutils";
+  version = "1.0.2";
+  format = "setuptools";
 
-  doCheck = false;
-  buildInputs = [ docutils pybtex six ];
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cead6554b4af99c287dd29f38b1fa152c9542f56a51cb6cbc3997c95b2725b2e";
+    hash = "sha256-Q6o1O21Jj9WsMPAHOpjjMtBh00/mGdPVDRdh+P1KoBY=";
   };
+
+  buildInputs = [
+    docutils
+    pybtex
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "pybtex_docutils"
+  ];
 
   meta = with lib; {
     description = "A docutils backend for pybtex";

@@ -1,30 +1,38 @@
-{ lib, fetchFromGitHub, elk7Version, buildGoPackage, libpcap, nixosTests, systemd }:
+{ lib, fetchFromGitHub, elk7Version, buildGoModule, libpcap, nixosTests, systemd }:
 
-let beat = package : extraArgs : buildGoPackage (rec {
-      name = "${package}-${version}";
-      version = elk7Version;
+let beat = package: extraArgs: buildGoModule (rec {
+  pname = package;
+  version = elk7Version;
 
-      src = fetchFromGitHub {
-        owner = "elastic";
-        repo = "beats";
-        rev = "v${version}";
-        sha256 = "192ygz3ppfah8d2b811x67jfqhcr5ivz7qh4vwrd729rjfr0bbgb";
-      };
+  src = fetchFromGitHub {
+    owner = "elastic";
+    repo = "beats";
+    rev = "v${version}";
+    sha256 = "sha256-DE7XpzVBu9qL7fMXXYRYLdVXrr0WB0IL0KAG0Zc3TVo=";
+  };
 
-      goPackagePath = "github.com/elastic/beats";
+  vendorSha256 = "sha256-TQrXUcLv7rFo3PP3bVx0wEC1WbtkJDsCm+/izHAxqBc=";
 
-      subPackages = [ package ];
+  subPackages = [ package ];
 
-      meta = with lib; {
-        homepage = "https://www.elastic.co/products/beats";
-        license = licenses.asl20;
-        maintainers = with maintainers; [ fadenb basvandijk ];
-        platforms = platforms.linux;
-      };
-    } // extraArgs);
-in rec {
-  filebeat7   = beat "filebeat"   {meta.description = "Lightweight shipper for logfiles";};
-  heartbeat7  = beat "heartbeat"  {meta.description = "Lightweight shipper for uptime monitoring";};
+  meta = with lib; {
+    homepage = "https://www.elastic.co/products/beats";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fadenb basvandijk dfithian ];
+    platforms = platforms.linux;
+  };
+} // extraArgs);
+in
+rec {
+  filebeat7 = beat "filebeat" {
+    meta.description = "Lightweight shipper for logfiles";
+    buildInputs = [ systemd ];
+    tags = [ "withjournald" ];
+    postFixup = ''
+      patchelf --set-rpath ${lib.makeLibraryPath [ (lib.getLib systemd) ]} "$out/bin/filebeat"
+    '';
+  };
+  heartbeat7 = beat "heartbeat" { meta.description = "Lightweight shipper for uptime monitoring"; };
   metricbeat7 = beat "metricbeat" {
     meta.description = "Lightweight shipper for metrics";
     passthru.tests =
@@ -44,16 +52,6 @@ in rec {
       analytics features. The Packetbeat shippers sniff the traffic between
       your application processes, parse on the fly protocols like HTTP, MySQL,
       PostgreSQL, Redis or Thrift and correlate the messages into transactions.
-    '';
-  };
-  journalbeat7  = beat "journalbeat" {
-    meta.description = ''
-      Journalbeat is an open source data collector to read and forward
-      journal entries from Linuxes with systemd.
-    '';
-    buildInputs = [ systemd.dev ];
-    postFixup = let libPath = lib.makeLibraryPath [ (lib.getLib systemd) ]; in ''
-      patchelf --set-rpath ${libPath} "$out/bin/journalbeat"
     '';
   };
 }

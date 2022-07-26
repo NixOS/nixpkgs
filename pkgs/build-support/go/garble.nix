@@ -2,25 +2,25 @@
 , buildGoModule
 , fetchFromGitHub
 , lib
+, git
 }:
 buildGoModule rec {
   pname = "garble";
-  version = "20200107";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "burrowers";
     repo = pname;
-    rev = "835f4aadf321521acf06aac4d5068473dc4b2ac1";
-    sha256 = "sha256-NodsVHRll2YZoxrhmniJvelQOStG82u3kJyc0t8OXD8=";
+    rev = "v${version}";
+    sha256 = "sha256-VeqF1MB8knM+NtG9Y+x1g2OF7LFZRC8/c8jicGP3vpo=";
   };
 
-  vendorSha256 = "sha256-x2fk2QmZDK2yjyfYdK7x+sQjvt7tuggmm8ieVjsNKek=";
+  vendorSha256 = "sha256-FQMeA6VUDQa6wpvMoYsigkzukQ0dArAkysiksJWq+iY=";
 
-  preBuild = ''
-    # https://github.com/burrowers/garble/issues/184
-    substituteInPlace testdata/scripts/tiny.txt \
-      --replace "{6,8}" "{4,8}"
-  '' + lib.optionalString (!stdenv.isx86_64) ''
+  # Used for some of the tests.
+  checkInputs = [git];
+
+  preBuild = lib.optionalString (!stdenv.isx86_64) ''
     # The test assumex amd64 assembly
     rm testdata/scripts/asm.txt
   '';
@@ -30,5 +30,6 @@ buildGoModule rec {
     homepage = "https://github.com/burrowers/garble/";
     maintainers = with lib.maintainers; [ davhau ];
     license = lib.licenses.bsd3;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/garble.x86_64-darwin
   };
 }

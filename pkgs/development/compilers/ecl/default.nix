@@ -1,39 +1,48 @@
-{lib, stdenv, fetchurl, fetchpatch
-, libtool, autoconf, automake
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, libtool
+, autoconf
+, automake
 , texinfo
-, gmp, mpfr, libffi, makeWrapper
+, gmp
+, mpfr
+, libffi
+, makeWrapper
 , noUnicode ? false
 , gcc
 , threadSupport ? true
-, useBoehmgc ? false, boehmgc
+, useBoehmgc ? false
+, boehmgc
 }:
-let
-  s = # Generated upstream information
-  rec {
-    baseName="ecl";
-    version="21.2.1";
-    name="${baseName}-${version}";
-    url="https://common-lisp.net/project/ecl/static/files/release/${name}.tgz";
-    sha256="000906nnq25177bgsfndiw3iqqgrjc9spk10hzk653sbz3f7anmi";
+
+stdenv.mkDerivation rec {
+  pname = "ecl";
+  version = "21.2.1";
+
+  src = fetchurl {
+    url = "https://common-lisp.net/project/ecl/static/files/release/ecl-${version}.tgz";
+    sha256 = "sha256-sVp13PhLj2LmhyDMqxOT+WEcB4/NOv3WOaEIbK0BCQA=";
   };
-  buildInputs = [
-    libtool autoconf automake texinfo makeWrapper
+
+  nativeBuildInputs = [
+    libtool
+    autoconf
+    automake
+    texinfo
+    makeWrapper
   ];
   propagatedBuildInputs = [
-    libffi gmp mpfr gcc
+    libffi
+    gmp
+    mpfr
+    gcc
     # replaces ecl's own gc which other packages can depend on, thus propagated
   ] ++ lib.optionals useBoehmgc [
     # replaces ecl's own gc which other packages can depend on, thus propagated
     boehmgc
   ];
-in
-stdenv.mkDerivation {
-  inherit (s) name version;
-  inherit buildInputs propagatedBuildInputs;
-
-  src = fetchurl {
-    inherit (s) url sha256;
-  };
 
   patches = [
     # https://gitlab.com/embeddable-common-lisp/ecl/-/merge_requests/1
@@ -45,28 +54,33 @@ stdenv.mkDerivation {
 
   configureFlags = [
     (if threadSupport then "--enable-threads" else "--disable-threads")
-    "--with-gmp-prefix=${lib.getDev gmp}"
-    "--with-libffi-prefix=${lib.getDev libffi}"
-  ] ++ lib.optional useBoehmgc "--with-libgc-prefix=${lib.getDev boehmgc}"
-  ++ lib.optional (!noUnicode) "--enable-unicode";
+    "--with-gmp-incdir=${lib.getDev gmp}/include"
+    "--with-gmp-libdir=${lib.getLib gmp}/lib"
+    "--with-libffi-incdir=${lib.getDev libffi}/include"
+    "--with-libffi-libdir=${lib.getLib libffi}/lib"
+  ] ++ lib.optionals useBoehmgc [
+    "--with-libgc-incdir=${lib.getDev boehmgc}/include"
+    "--with-libgc-libdir=${lib.getLib boehmgc}/lib"
+  ] ++ lib.optional (!noUnicode) "--enable-unicode";
 
   hardeningDisable = [ "format" ];
 
-  postInstall = let
-    ldArgs = lib.strings.concatMapStringsSep " "
-      (l: ''--prefix NIX_LDFLAGS ' ' "-L${l.lib or l.out or l}/lib"'')
-      ([ gmp libffi ] ++ lib.optional useBoehmgc boehmgc);
-  in ''
+  postInstall = ''
     sed -e 's/@[-a-zA-Z_]*@//g' -i $out/bin/ecl-config
-    wrapProgram "$out/bin/ecl" --prefix PATH ':' "${gcc}/bin" ${ldArgs}
+    wrapProgram "$out/bin/ecl" --prefix PATH ':' "${
+      lib.makeBinPath [
+        gcc                   # for the C compiler
+        gcc.bintools.bintools # for ar
+      ]
+    }"
   '';
 
   meta = with lib; {
     description = "Lisp implementation aiming to be small, fast and easy to embed";
     homepage = "https://common-lisp.net/project/ecl/";
-    license = licenses.mit ;
-    maintainers = [ maintainers.raskin ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;
-    changelog = "https://gitlab.com/embeddable-common-lisp/ecl/-/raw/${s.version}/CHANGELOG";
+    changelog = "https://gitlab.com/embeddable-common-lisp/ecl/-/raw/${version}/CHANGELOG";
   };
 }

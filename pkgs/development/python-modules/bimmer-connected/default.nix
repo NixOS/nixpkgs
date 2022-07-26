@@ -3,21 +3,26 @@
 , pythonOlder
 , fetchFromGitHub
 , pbr
-, requests
+, httpx
+, pycryptodome
+, pyjwt
 , pytestCheckHook
+, respx
+, time-machine
 }:
 
 buildPythonPackage rec {
   pname = "bimmer-connected";
-  version = "0.7.15";
+  version = "0.10.0";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "bimmerconnected";
     repo = "bimmer_connected";
-    rev = version;
-    sha256 = "193m16rrq7mfvzjcq823icdr9fp3i8grqqn3ci8zhcsq6w3vnb90";
+    rev = "refs/tags/${version}";
+    hash = "sha256-R7QmxSUbVsvb+MRTYlihxuM05WLYASRSfUs09fl7l1k=";
   };
 
   nativeBuildInputs = [
@@ -27,11 +32,15 @@ buildPythonPackage rec {
   PBR_VERSION = version;
 
   propagatedBuildInputs = [
-    requests
+    httpx
+    pycryptodome
+    pyjwt
   ];
 
   checkInputs = [
     pytestCheckHook
+    respx
+    time-machine
   ];
 
   meta = with lib; {

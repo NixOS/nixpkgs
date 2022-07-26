@@ -12,22 +12,15 @@
 
 buildPythonPackage rec {
   pname = "pyflume";
-  version = "0.7.0";
+  version = "0.7.1";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ChrisMandich";
     repo = "PyFlume";
     rev = "v${version}";
-    sha256 = "129sz33a270v120bzl9l98nmvdzn7ns4cf9w2v18lmzlldbyz2vn";
+    sha256 = "sha256-Ka90n9Esv6tm310DjYeosBUhudeVoEJzt45L40+0GwQ=";
   };
-
-  prePatch = ''
-    substituteInPlace setup.py --replace 'pyjwt==2.0.1' 'pyjwt>=2.0.1'
-    substituteInPlace setup.py --replace 'ratelimit==2.2.1' 'ratelimit>=2.2.1'
-    substituteInPlace setup.py --replace 'pytz==2019.2' 'pytz>=2019.2'
-    substituteInPlace setup.py --replace 'requests==2.24.0' 'requests>=2.24.0'
-  '';
 
   propagatedBuildInputs = [
     pyjwt
@@ -40,15 +33,6 @@ buildPythonPackage rec {
     requests-mock
     pytestCheckHook
   ];
-
-  postPatch = ''
-    # https://github.com/ChrisMandich/PyFlume/issues/18
-    substituteInPlace setup.py \
-      --replace "pyjwt==2.0.1" "pyjwt>=2.0.1" \
-      --replace "ratelimit==2.2.1" "ratelimit>=2.2.1" \
-      --replace "pytz==2019.2" "pytz>=2019.2" \
-      --replace "requests==2.24.0" "requests>=2.24.0"
-  '';
 
   pythonImportsCheck = [ "pyflume" ];
 

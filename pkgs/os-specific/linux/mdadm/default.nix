@@ -1,10 +1,11 @@
 { lib, stdenv, util-linux, coreutils, fetchurl, groff, system-sendmail }:
 
 stdenv.mkDerivation rec {
-  name = "mdadm-4.1";
+  pname = "mdadm";
+  version = "4.1";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/raid/mdadm/${name}.tar.xz";
+    url = "mirror://kernel/linux/utils/raid/mdadm/mdadm-${version}.tar.xz";
     sha256 = "0jjgjgqijpdp7ijh8slzzjjw690kydb1jjadf0x5ilq85628hxmb";
   };
 

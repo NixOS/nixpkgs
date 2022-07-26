@@ -6,20 +6,21 @@
 , libiconv
 , Security
 , CoreServices
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "texlab";
-  version = "3.2.0";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "latex-lsp";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-iXsV7zt190GH0kTMpdmf8xHk4cqtCVwq6LDICmhe5qU=";
+    sha256 = "sha256-oYM+OAYjQ8aNAryg0Cthj14BsxMFnOtz38XdUQZZolk=";
   };
 
-  cargoHash = "sha256-Yqn6VpAKw93QvkxuwNcYvrQm0C4TfisRDcmFy95/yw8=";
+  cargoSha256 = "sha256-TDGiqC9eNIJfLTc1R3nvE84rAsVE8jtTaeQbVNMeVgg=";
 
   outputs = [ "out" "man" ];
 
@@ -30,13 +31,17 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     installManPage texlab.1
 
-    # Remove generated dylib of html2md dependency. TexLab statically
+    # Remove generated dylib of human_name dependency. TexLab statically
     # links to the generated rlib and doesn't reference the dylib. I
     # couldn't find any way to prevent building this by passing cargo flags.
-    # See https://gitlab.com/Kanedias/html2md/-/blob/0.2.10/Cargo.toml#L20
-    rm "$out/lib/libhtml2md${stdenv.hostPlatform.extensions.sharedLibrary}"
+    # See https://github.com/djudd/human-name/blob/master/Cargo.toml#L43
+    rm "$out/lib/libhuman_name${stdenv.hostPlatform.extensions.sharedLibrary}"
     rmdir "$out/lib"
   '';
+
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
 
   meta = with lib; {
     description = "An implementation of the Language Server Protocol for LaTeX";

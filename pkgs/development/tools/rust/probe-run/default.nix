@@ -1,18 +1,16 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, libusb1
+{ lib, stdenv, rustPlatform, fetchCrate, pkg-config, libusb1
 , libiconv, AppKit, IOKit }:
 
 rustPlatform.buildRustPackage rec {
   pname = "probe-run";
-  version = "0.2.5";
+  version = "0.3.3";
 
-  src = fetchFromGitHub {
-    owner = "knurling-rs";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0bj5arngc49mdz1i7bbg4l7rb741x7dhalpdxrn55vzlvgbig8fv";
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "sha256-7o0aRiCxWoDoMysXIPyiBqH/8TtFo87im6Y0OFL0cTA=";
   };
 
-  cargoSha256 = "1kqgl1f91aa7kz1yprpyf9pl1vp4ahhw8ka5hrvfvk5i5i54pigz";
+  cargoSha256 = "sha256-vREz3FTZXMrc18LXIycJXX6SgW6IKGIgL/+79dMfNjk=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libusb1 ]
@@ -21,7 +19,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Run embedded programs just like native ones.";
     homepage = "https://github.com/knurling-rs/probe-run";
+    changelog = "https://github.com/knurling-rs/probe-run/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ hoverbear ];
+    maintainers = with maintainers; [ hoverbear newam ];
   };
 }

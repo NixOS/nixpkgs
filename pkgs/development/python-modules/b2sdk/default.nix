@@ -3,7 +3,6 @@
 , buildPythonPackage
 , fetchPypi
 , importlib-metadata
-, isPy27
 , logfury
 , pytestCheckHook
 , pytest-lazy-fixture
@@ -16,12 +15,14 @@
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "1.9.0";
-  disabled = isPy27;
+  version = "1.14.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ff9c27c89f53583fd83c711d0a642d9b3bdbb8682c2e8e2315674b517cb441ec";
+    hash = "sha256-fYOeyhKm9mRT61NcQVaXFKeRC8AS9lfIZMO/s6iFaeg=";
   };
 
   nativeBuildInputs = [
@@ -54,13 +55,17 @@ buildPythonPackage rec {
     # Test requires an API key
     "test_raw_api"
     "test_files_headers"
+    "test_large_file"
   ];
 
-  pythonImportsCheck = [ "b2sdk" ];
+  pythonImportsCheck = [
+    "b2sdk"
+  ];
 
   meta = with lib; {
     description = "Client library and utilities for access to B2 Cloud Storage (backblaze)";
     homepage = "https://github.com/Backblaze/b2-sdk-python";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

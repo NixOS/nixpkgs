@@ -1,14 +1,27 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+
+# for passthru.tests
+, bazel
+, chromium
+, grpc
+, haskellPackages
+, mercurial
+, ninja
+, python3
+}:
 
 stdenv.mkDerivation rec {
   pname = "re2";
-  version = "2021-04-01";
+  version = "2022-06-01";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "re2";
     rev = version;
-    sha256 = "1iia0883lssj7ckbsr0n7yb3gdw24c8wnl2q5hhzlml23h4ipbh3";
+    sha256 = "sha256-UontAjOXpnPcOgoFHjf+1WSbCR7h58/U7nn4meT200Y=";
   };
 
   preConfigure = ''
@@ -19,6 +32,8 @@ stdenv.mkDerivation rec {
 
   buildFlags = lib.optionals stdenv.hostPlatform.isStatic [ "static" ];
 
+  enableParallelBuilding = true;
+
   preCheck = "patchShebangs runtests";
   doCheck = true;
   checkTarget = "test";
@@ -27,6 +42,22 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckTarget = "testinstall";
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+    tests = {
+      inherit
+        chromium
+        grpc
+        mercurial;
+      inherit (python3.pkgs)
+        fb-re2
+        google-re2;
+      haskellPackages-re2 = haskellPackages.re2;
+    };
+  };
 
   meta = {
     homepage = "https://github.com/google/re2";

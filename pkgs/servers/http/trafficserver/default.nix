@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchzip
 , fetchpatch
 , makeWrapper
 , nixosTests
@@ -13,6 +13,7 @@
 , python3
 , xz
 , zlib
+, catch2
 # recommended dependencies
 , withHwloc ? true
 , hwloc
@@ -49,11 +50,11 @@
 
 stdenv.mkDerivation rec {
   pname = "trafficserver";
-  version = "9.0.2";
+  version = "9.1.2";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "mirror://apache/trafficserver/trafficserver-${version}.tar.bz2";
-    sha256 = "0r05iqmnnjq259nsibncgfrfsr0l4h3hsafizvgfl9zgmrkm6izz";
+    sha256 = "sha256-eRpyTdwwO5EzrVpt9fF6VEYGZjHb905nQJd065wY5RU=";
   };
 
   patches = [
@@ -63,6 +64,8 @@ stdenv.mkDerivation rec {
       url = "https://github.com/apache/trafficserver/commit/19d3af481cf74c91fbf713fc9d2f8b138ed5fbaf.diff";
       sha256 = "0z1ikgpp00rzrrcqh97931586yn9wbksgai9xlkcjd5cg8gq0150";
     })
+
+    ./fix-catch2-version-incompatibility.patch
   ];
 
   # NOTE: The upstream README indicates that flex is needed for some features,
@@ -106,6 +109,10 @@ stdenv.mkDerivation rec {
       tools/check-unused-dependencies
 
     substituteInPlace configure --replace '/usr/bin/file' '${file}/bin/file'
+
+    # TODO: remove after the following change has been released
+    # https://github.com/apache/trafficserver/pull/8683
+    cp ${catch2}/include/catch2/catch.hpp tests/include/catch.hpp
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace configure \
       --replace '/usr/include/linux' '${linuxHeaders}/include/linux'

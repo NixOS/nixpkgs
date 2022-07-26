@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "thermald";
-  version = "2.4.3";
+  version = "2.4.9";
 
   outputs = [ "out" "devdoc" ];
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "intel";
     repo = "thermal_daemon";
     rev = "v${version}";
-    sha256 = "sha256-CPrk2r3C4WG+y3KzWf6xWhfNdDgEigki62iAXu+DccU=";
+    sha256 = "sha256-82O4vrUo3lMNzGOI5WyV1eponF0za0WM6mtd54xqUh8=";
   };
 
   nativeBuildInputs = [
@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
     "--enable-gtk-doc"
     "--with-dbus-sys-dir=${placeholder "out"}/share/dbus-1/system.d"
     "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+    "--disable-werror"
   ];
 
   preConfigure = "NO_CONFIGURE=1 ./autogen.sh";
@@ -65,7 +66,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Thermal Daemon";
-    homepage = "https://01.org/linux-thermal-daemon";
+    homepage = "https://github.com/intel/thermal_daemon";
     changelog = "https://github.com/intel/thermal_daemon/blob/master/README.txt";
     license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "i686-linux" ];

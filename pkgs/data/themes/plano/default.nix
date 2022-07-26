@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "plano-theme";
-  version = "3.38-1";
+  version = "4.0";
 
   src = fetchFromGitHub {
     owner = "lassekongo83";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0g2mwvzc04z3dsdfhwqgw9s7987406pv22s9rbazfvprk4ddc5b6";
+    sha256 = "sha256-slGr2nsdKng6zaVDeXWFAWKIxZbcnOLU6RH6wM0293E=";
   };
 
   nativeBuildInputs = [

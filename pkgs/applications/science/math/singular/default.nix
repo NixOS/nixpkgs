@@ -1,9 +1,10 @@
 { stdenv, fetchFromGitHub, gmp, bison, perl, ncurses, readline, coreutils, pkg-config
 , lib
-, fetchpatch
 , autoreconfHook
+, buildPackages
 , sharutils
 , file
+, getconf
 , flint
 , ntl
 , cddlib
@@ -11,6 +12,7 @@
 , lrcalc
 , doxygen
 , graphviz
+, latex2html
 # upstream generates docs with texinfo 4. later versions of texinfo
 # use letters instead of numbers for post-appendix chapters, and we
 # want it to match the upstream format because sage depends on it.
@@ -22,64 +24,23 @@
 
 stdenv.mkDerivation rec {
   pname = "singular";
-  version = "4.2.0p2";
+  version = "4.3.1";
 
-  # since the tarball does not contain tests or documentation (and
-  # there is no separate tests tarball for 4.2.0), we fetch from
-  # GitHub.
+  # since the tarball does not contain tests, we fetch from GitHub.
   src = fetchFromGitHub {
     owner = "Singular";
     repo = "Singular";
 
-    # 4.2.0p2 is not tagged, but the tarball matches the commit below.
-    rev = "6f68939ddf612d96e3caaaaa8275f77613ac1da8";
-    sha256 = "sha256-BJNzYylzDqD/5YjzjxPRb/c96tYiuGy9Y+A7qf3ZSG8=";
-
-    # if a release is tagged it will be in the format below.
-    # rev = "Release${lib.replaceStrings ["."] ["-"] version}";
+    # if a release is tagged (which sometimes does not happen), it will
+    # be in the format below.
+    rev = "Release-${lib.replaceStrings ["."] ["-"] version}";
+    sha256 = "sha256-3r3epwaVbyveyYtmfxuevO4Q52J6FbI6RRqiaHQGJIk=";
 
     # the repository's .gitattributes file contains the lines "/Tst/
     # export-ignore" and "/doc/ export-ignore" so some directories are
-    # not included in the tarball downloaded by fetchzip. setting
-    # fetchSubmodules works around this by using fetchgit instead of
-    # fetchzip.
-    fetchSubmodules = true;
+    # not included in the tarball downloaded by fetchzip.
+    forceFetchGit = true;
   };
-
-  patches = [
-    # add aarch64 support to cpu-check.m4. copied from redhat.
-    ./redhat-aarch64.patch
-
-    # vspace causes hangs in modstd and other libraries on aarch64
-    ./disable-vspace-on-aarch64.patch
-
-    # the newest version of ax-prog-cc-for-build.m4 seems to trigger
-    # linker errors. see
-    # https://github.com/alsa-project/alsa-firmware/issues/3 for a
-    # related issue.
-    ./use-older-ax-prog-cc-for-build.patch
-
-    # https://github.com/Singular/Singular/issues/1086
-    (fetchpatch {
-      name = "schubert-lib-fails-with-too-many-cpus.patch";
-      url = "https://github.com/Singular/Singular/commit/3cda50c00a849455efa2502e56596955491a353a.patch";
-      sha256 = "sha256-fgYd+2vT32w5Ki8kKx6PfZn2e4QSJcYWOwEFXtc+lSA=";
-    })
-  ] ++ lib.optionals enableDocs [
-    # singular supports building without 4ti2, bertini, normaliz or
-    # topcom just fine, but the docbuilding does not skip manual pages
-    # tagged as depending on those binaries (probably a bug in
-    # doc2tex.pl::HandleLib, since it seems to ignore "-exclude"
-    # argumens). skip them manually.
-    ./disable-docs-for-optional-unpackaged-deps.patch
-
-    # fix some non-ascii characters in doc/decodegb.doc
-    (fetchpatch {
-      name = "decodegb-ascii.patch";
-      url = "https://github.com/Singular/Singular/commit/36966d9009de572ee4dbc487f3e5744098fe91be.patch";
-      sha256 = "sha256-9WcEov/oOQRC584ag6WVHFwY2aCjbM75HWyvZoEwppw=";
-    })
-  ];
 
   configureFlags = [
     "--with-ntl=${ntl}"
@@ -113,6 +74,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals enableGfanlib [
     cddlib
   ];
+
   nativeBuildInputs = [
     bison
     perl
@@ -122,9 +84,11 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals enableDocs [
     doxygen
     graphviz
+    latex2html
     texinfo4
     texlive.combined.scheme-small
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ getconf ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   preAutoreconf = ''
     find . -type f -readable -writable -exec sed \
@@ -136,21 +100,14 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = lib.optional stdenv.isi686 "stackprotector";
 
-  # The Makefile actually defaults to `make install` anyway
-  buildPhase = ''
-    # do nothing
-  '';
-
   doCheck = true; # very basic checks, does not test any libraries
 
   installPhase = ''
-    mkdir -p "$out"
-    cp -r Singular/LIB "$out/lib"
     make install
   '' + lib.optionalString enableDocs ''
-    # Sage uses singular.hlp (which is not in the tarball)
+    # Sage uses singular.info, which is not installed by default
     mkdir -p $out/share/info
-    cp doc/singular.hlp $out/share/info
+    cp doc/singular.info $out/share/info
   '' + ''
     # Make sure patchelf picks up the right libraries
     rm -rf libpolys factory resources omalloc Singular
@@ -210,5 +167,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3; # Or GPLv2 at your option - but not GPLv4
     homepage = "http://www.singular.uni-kl.de";
     downloadPage = "http://www.mathematik.uni-kl.de/ftp/pub/Math/Singular/SOURCES/";
+    mainProgram = "Singular";
   };
 }

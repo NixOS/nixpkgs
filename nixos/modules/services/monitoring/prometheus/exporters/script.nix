@@ -30,7 +30,7 @@ in
           };
         };
       });
-      example = literalExample ''
+      example = literalExpression ''
         {
           scripts = [
             { name = "sleep"; script = "sleep 5"; }

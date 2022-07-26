@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, bison, flex, bluez, pkg-config, gtk2 }:
 
 stdenv.mkDerivation rec {
-  name = "cwiid-${version}-git";
-  version = "2010-02-21";
+  pname = "cwiid";
+  version = "unstable-2010-02-21";
 
   src = fetchFromGitHub {
     owner  = "abstrakraft";

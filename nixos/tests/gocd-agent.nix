@@ -36,7 +36,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
   testScript = ''
     start_all()
     agent.wait_for_unit("gocd-server")
-    agent.wait_for_open_port("8153")
+    agent.wait_for_open_port(8153)
     agent.wait_for_unit("gocd-agent")
     agent.wait_until_succeeds(
         "curl ${serverUrl} -H '${header}' | ${pkgs.jq}/bin/jq -e ._embedded.agents[0].uuid"

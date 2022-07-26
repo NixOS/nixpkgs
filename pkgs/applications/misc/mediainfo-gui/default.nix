@@ -1,17 +1,16 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libzen, libmediainfo, wxGTK30-gtk3
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libmediainfo, wxGTK30-gtk3
 , desktop-file-utils, libSM, imagemagick }:
 
 stdenv.mkDerivation rec {
-  version = "21.03";
+  version = "22.06";
   pname = "mediainfo-gui";
   src = fetchurl {
     url = "https://mediaarea.net/download/source/mediainfo/${version}/mediainfo_${version}.tar.xz";
-    sha256 = "07h2a1lbw5ak6c9bcn8qydchl0wpgk945rf9sfcqjyv05h5wll6y";
+    sha256 = "sha256-mGowC8wnNJij5dpOlwHX3m7uGZ7TbUInPdP+nsesi30=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libzen libmediainfo wxGTK30-gtk3 desktop-file-utils libSM
-                  imagemagick ];
+  buildInputs = [ libmediainfo wxGTK30-gtk3 desktop-file-utils libSM imagemagick ];
 
   sourceRoot = "./MediaInfo/Project/GNU/GUI/";
 

@@ -1,17 +1,17 @@
 { lib
 , fetchFromGitHub
 }: rec {
-  version = "3.0.1";
+  version = "3.3.0";
   src = fetchFromGitHub {
     owner = "openrazer";
     repo = "openrazer";
     rev = "v${version}";
-    sha256 = "sha256-ptB0jP0kp1Liynkfz0B0OMw6xNQG1s8IvxhgNAdEytM=";
+    sha256 = "1lw2cpj2xzwcsn5igrqj3f6m2v5n6zp1xa9vv3j9f9r2fbb48jcl";
   };
   meta = with lib; {
     homepage = "https://openrazer.github.io/";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ roelvandijk evanjs ];
+    maintainers = with maintainers; [ evanjs ] ++ teams.lumiguide.members;
     platforms = platforms.linux;
   };
 }

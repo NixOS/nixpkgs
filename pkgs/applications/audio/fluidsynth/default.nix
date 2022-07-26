@@ -1,39 +1,23 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config, cmake
+{ stdenv, lib, fetchFromGitHub, buildPackages, pkg-config, cmake
 , alsa-lib, glib, libjack2, libsndfile, libpulseaudio
 , AudioUnit, CoreAudio, CoreMIDI, CoreServices
-, version ? "2"
 }:
 
-let
-  versionMap = {
-    "1" = {
-      fluidsynthVersion = "1.1.11";
-      sha256 = "0n75jq3xgq46hfmjkaaxz3gic77shs4fzajq40c8gk043i84xbdh";
-    };
-    "2" = {
-      fluidsynthVersion = "2.0.6";
-      sha256 = "0nas9pp9r8rnziznxm65x2yzf1ryg98zr3946g0br3s38sjf8l3a";
-    };
-  };
-in
-
-with versionMap.${version};
-
-stdenv.mkDerivation  {
-  name = "fluidsynth-${fluidsynthVersion}";
-  version = fluidsynthVersion;
+stdenv.mkDerivation rec {
+  pname = "fluidsynth";
+  version = "2.2.5";
 
   src = fetchFromGitHub {
     owner = "FluidSynth";
     repo = "fluidsynth";
-    rev = "v${fluidsynthVersion}";
-    inherit sha256;
+    rev = "v${version}";
+    sha256 = "sha256-aR8TLxl6OziP+DMSNro0DB/UtvzXDeDYQ3o/iy70XD4=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake ];
+  nativeBuildInputs = [ buildPackages.stdenv.cc pkg-config cmake ];
 
-  buildInputs = [ glib libsndfile libpulseaudio libjack2 ]
-    ++ lib.optionals stdenv.isLinux [ alsa-lib ]
+  buildInputs = [ glib libsndfile libjack2 ]
+    ++ lib.optionals stdenv.isLinux [ alsa-lib libpulseaudio ]
     ++ lib.optionals stdenv.isDarwin [ AudioUnit CoreAudio CoreMIDI CoreServices ];
 
   cmakeFlags = [ "-Denable-framework=off" ];

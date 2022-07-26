@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "agebox";
-  version = "0.5.2";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "slok";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0zn7jibhw5jd9wp1alx9ahj4szaig4a54ci3676kk5zqxr2hjz0c";
+    sha256 = "1gi6lj3dpckhsx6hdpdnr8rclqgfkbdmkzx966nlxyi52bjfzbsv";
   };
-  vendorSha256 = "0bc2pwz3yhzwqi0bcwqkkkrglg473qxhmz5s5955fvgajvjk7drn";
+  vendorSha256 = "1jwzx6hp04y8hfpwfvf9zmhqjj3ghvr3gmgnllpcff1lai78vdrw";
 
   ldflags = [
     "-s" "-w"

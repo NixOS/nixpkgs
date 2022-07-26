@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchurl, coreutils, python2, duplicity, gawk, gnupg, bash
+{ lib, stdenv, fetchurl, coreutils, python3, duplicity, gawk, gnupg, bash
 , gnugrep, txt2man, makeWrapper, which
 }:
 
 stdenv.mkDerivation rec {
   pname = "duply";
-  version = "2.3.1";
+  version = "2.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/ftplicity/duply%20%28simple%20duplicity%29/2.3.x/duply_${version}.tgz";
-    sha256 = "149hb9bk7hm5h3aqf19k37d0i2jf0viaqmpq2997i48qp3agji7h";
+    url = "mirror://sourceforge/project/ftplicity/duply%20%28simple%20duplicity%29/2.4.x/duply_${version}.tgz";
+    hash = "sha256-DCrp3o/ukzkfnVaLbIK84bmYnXvqKsvlkGn3GJY3iNg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/share/man/man1"
     install -vD duply "$out/bin"
     wrapProgram "$out/bin/duply" --set PATH \
-        ${lib.makeBinPath [ coreutils python2 duplicity gawk gnupg bash gnugrep txt2man which ]}
+        ${lib.makeBinPath [ coreutils python3 duplicity gawk gnupg bash gnugrep txt2man which ]}
     "$out/bin/duply" txt2man > "$out/share/man/man1/duply.1"
   '';
 

@@ -12,10 +12,10 @@ with lib;
       implementation if you use Gnome.
     '';
     package = mkOption {
-      default = pkgs.kdeconnect;
-      defaultText = "pkgs.kdeconnect";
+      default = pkgs.plasma5Packages.kdeconnect-kde;
+      defaultText = literalExpression "pkgs.plasma5Packages.kdeconnect-kde";
       type = types.package;
-      example = literalExample "pkgs.gnomeExtensions.gsconnect";
+      example = literalExpression "pkgs.gnomeExtensions.gsconnect";
       description = ''
         The package providing the implementation for kdeconnect.
       '';

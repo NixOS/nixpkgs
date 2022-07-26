@@ -1,13 +1,12 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, nix-update-script
 , python3
 , meson
 , ninja
 , vala
 , pkg-config
 , libgee
-, pantheon
 , gtk3
 , glib
 , gettext
@@ -18,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "granite";
-  version = "6.1.0";
+  version = "6.2.0"; # nixpkgs-update: no auto update
 
   outputs = [ "out" "dev" ];
 
@@ -26,13 +25,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "02hn4abnsn6fm2m33pjmlnkj8dljsm292z62vn8ccvy7l8f9my6l";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-WM0Wo9giVP5pkMFaPCHsMfnAP6xD71zg6QLCYV6lmkY=";
   };
 
   nativeBuildInputs = [
@@ -46,14 +39,11 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     glib
+    gsettings-desktop-schemas # is_clock_format_12h uses "org.gnome.desktop.interface clock-format"
     gtk3
     libgee
-  ];
-
-  propagatedBuildInputs = [
-    gsettings-desktop-schemas # is_clock_format_12h uses "org.gnome.desktop.interface clock-format"
   ];
 
   postPatch = ''
@@ -70,6 +60,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/granite";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "granite-demo";
   };
 }

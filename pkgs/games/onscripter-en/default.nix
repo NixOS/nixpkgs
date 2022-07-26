@@ -4,7 +4,8 @@
 
 
 stdenv.mkDerivation {
-  name = "onscripter-en-20110930";
+  pname = "onscripter-en";
+  version = "20110930";
 
   src = fetchurl {
     # The website is not available now.
@@ -26,6 +27,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Japanese visual novel scripting engine";
     homepage = "http://unclemion.com/onscripter/";
     license = licenses.gpl2;

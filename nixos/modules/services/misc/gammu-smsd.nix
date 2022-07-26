@@ -202,8 +202,8 @@ in {
   config = mkIf cfg.enable {
     users.users.${cfg.user} = {
       description = "gammu-smsd user";
-      uid = config.ids.uids.gammu-smsd;
-      extraGroups = [ "${cfg.device.group}" ];
+      isSystemUser = true;
+      group = cfg.device.group;
     };
 
     environment.systemPackages = with cfg.backend; [ gammuPackage ]

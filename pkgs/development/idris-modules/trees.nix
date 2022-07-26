@@ -5,7 +5,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "trees";
+  pname = "trees";
   version = "2018-03-19";
 
   idrisDeps = [ contrib bi ];

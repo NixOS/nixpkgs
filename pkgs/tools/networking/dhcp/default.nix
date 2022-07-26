@@ -1,15 +1,19 @@
-{ stdenv, fetchurl, perl, file, nettools, iputils, iproute2, makeWrapper
+{ stdenv, fetchurl, fetchpatch, perl, file, nettools, iputils, iproute2, makeWrapper
 , coreutils, gnused, openldap ? null
 , buildPackages, lib
+
+# client and relay are end of life, remove after 4.4.3
+, withClient ? false
+, withRelay ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "dhcp";
-  version = "4.4.2-P1";
+  version = "4.4.3";
 
   src = fetchurl {
     url = "https://ftp.isc.org/isc/dhcp/${version}/${pname}-${version}.tar.gz";
-    sha256 = "06jsr0cg5rsmyibshrpcb9za0qgwvqccashdma7mlm1rflrh8pmh";
+    sha256 = "sha256-Dj7GtMKgXsAUiHS82ZmmbQVRg3jXdCH2B/sLydATWBg=";
   };
 
   patches =
@@ -37,7 +41,8 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
   ] ++ lib.optional stdenv.isLinux "--with-randomdev=/dev/random"
-    ++ lib.optionals (openldap != null) [ "--with-ldap" "--with-ldapcrypto" ];
+    ++ lib.optionals (openldap != null) [ "--with-ldap" "--with-ldapcrypto" ]
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "BUILD_CC=$(CC_FOR_BUILD)";
 
   NIX_CFLAGS_COMPILE = builtins.toString [
     "-Wno-error=pointer-compare"
@@ -62,6 +67,10 @@ stdenv.mkDerivation rec {
         --replace /sbin/ip ${iproute2}/sbin/ip
       wrapProgram "$out/sbin/dhclient-script" --prefix PATH : \
         "${nettools}/bin:${nettools}/sbin:${iputils}/bin:${coreutils}/bin:${gnused}/bin"
+    '' + lib.optionalString (!withClient) ''
+      rm $out/sbin/{dhclient,dhclient-script,.dhclient-script-wrapped}
+    '' + lib.optionalString (!withRelay) ''
+      rm $out/sbin/dhcrelay
     '';
 
   preConfigure =
@@ -72,6 +81,8 @@ stdenv.mkDerivation rec {
 
       export AR='${stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar'
     '';
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Dynamic Host Configuration Protocol (DHCP) tools";
@@ -86,5 +97,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.isc.org/dhcp/";
     license = licenses.mpl20;
     platforms = platforms.unix;
+    knownVulnerabilities = lib.optional (withClient || withRelay) "The client and relay component of the dhcp package have reached their end of life";
   };
 }

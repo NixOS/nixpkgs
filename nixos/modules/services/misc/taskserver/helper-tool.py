@@ -90,7 +90,7 @@ def certtool_cmd(*args, **kwargs):
     """
     return subprocess.check_output(
         [CERTTOOL_COMMAND] + list(args),
-        preexec_fn=lambda: os.umask(0077),
+        preexec_fn=lambda: os.umask(0o077),
         stderr=subprocess.STDOUT,
         **kwargs
     )
@@ -164,7 +164,7 @@ def generate_key(org, user):
     pubcert = os.path.join(basedir, "public.cert")
 
     try:
-        os.makedirs(basedir, mode=0700)
+        os.makedirs(basedir, mode=0o700)
 
         certtool_cmd("-p", "--bits", CERT_BITS, "--outfile", privkey)
 
@@ -301,7 +301,7 @@ class Organisation(object):
             return None
         if name not in self.users.keys():
             output = taskd_cmd("add", "user", self.name, name,
-                               capture_stdout=True)
+                               capture_stdout=True, encoding='utf-8')
             key = RE_USERKEY.search(output)
             if key is None:
                 msg = "Unable to find key while creating user {}."
@@ -412,9 +412,9 @@ class Manager(object):
         if org is not None:
             if self.ignore_imperative and is_imperative(name):
                 return
-            for user in org.users.keys():
+            for user in list(org.users.keys()):
                 org.del_user(user)
-            for group in org.groups.keys():
+            for group in list(org.groups.keys()):
                 org.del_group(group)
             taskd_cmd("remove", "org", name)
             del self._lazy_orgs[name]

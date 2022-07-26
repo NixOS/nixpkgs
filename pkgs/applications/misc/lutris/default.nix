@@ -4,6 +4,7 @@
 
   # build inputs
 , atk
+, file
 , gdk-pixbuf
 , glib-networking
 , gnome-desktop
@@ -15,6 +16,11 @@
 , webkitgtk
 , wrapGAppsHook
 
+  # check inputs
+, xvfb-run
+, nose2
+, flake8
+
   # python dependencies
 , dbus-python
 , distro
@@ -25,7 +31,7 @@
 , pyyaml
 , requests
 , keyring
-, python_magic
+, python-magic
 
   # commands that lutris needs
 , xrandr
@@ -46,7 +52,7 @@
 
 let
   # See lutris/util/linux.py
-  binPath = lib.makeBinPath [
+  requiredTools = [
     xrandr
     pciutils
     psmisc
@@ -64,6 +70,8 @@ let
     xorg.xkbcomp
   ];
 
+  binPath = lib.makeBinPath requiredTools;
+
   gstDeps = with gst_all_1; [
     gst-libav
     gst-plugins-bad
@@ -76,13 +84,13 @@ let
 in
 buildPythonApplication rec {
   pname = "lutris-original";
-  version = "0.5.8.4";
+  version = "0.5.10.1";
 
   src = fetchFromGitHub {
     owner = "lutris";
     repo = "lutris";
-    rev = "v${version}";
-    sha256 = "sha256-5ivXIgDyM9PRvuUhPFPgziXDvggcL+p65kI2yOaiS1M=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-Bf8UEGEM6M4PKoX/qKQNb9XxrxLcjKZD1vR3R2/PykI=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -96,6 +104,7 @@ buildPythonApplication rec {
     libnotify
     pango
     webkitgtk
+    python-magic
   ] ++ gstDeps;
 
   propagatedBuildInputs = [
@@ -108,8 +117,22 @@ buildPythonApplication rec {
     pillow
     dbus-python
     keyring
-    python_magic
+    python-magic
   ];
+
+  postPatch = ''
+    substituteInPlace lutris/util/magic.py \
+      --replace "'libmagic.so.1'" "'${lib.getLib file}/lib/libmagic.so.1'"
+  '';
+
+
+  checkInputs = [ xvfb-run nose2 flake8 ] ++ requiredTools;
+  preCheck = "export HOME=$PWD";
+  checkPhase = ''
+    runHook preCheck
+    xvfb-run -s '-screen 0 800x600x24' make test
+    runHook postCheck
+  '';
 
   # avoid double wrapping
   dontWrapGApps = true;
@@ -121,13 +144,11 @@ buildPythonApplication rec {
   # see https://github.com/NixOS/nixpkgs/issues/56943
   strictDeps = false;
 
-  preCheck = "export HOME=$PWD";
-
   meta = with lib; {
     homepage = "https://lutris.net";
     description = "Open Source gaming platform for GNU/Linux";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ chiiruno ];
+    maintainers = with maintainers; [ Madouura ];
     platforms = platforms.linux;
   };
 }

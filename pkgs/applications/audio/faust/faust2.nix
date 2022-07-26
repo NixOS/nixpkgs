@@ -20,13 +20,13 @@ with lib.strings;
 
 let
 
-  version = "2.30.5";
+  version = "2.41.1";
 
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faust";
     rev = version;
-    sha256 = "0cs52w4rwaj5d8pjak4cxsg02sxvx4y07592nc3ck81clqjmszmm";
+    sha256 = "sha256-x0nBWyILrNJijs7CIvRrgYG6vgB3UlxLj9i7E4cHr9I=";
     fetchSubmodules = true;
   };
 
@@ -58,9 +58,10 @@ let
       cd build
     '';
 
-    cmakeFlags = ''
-      -C ../backends/all.cmake -C  ../targets/all.cmake ..
-    '';
+    cmakeFlags = [
+      "-C../backends/all.cmake"
+      "-C../targets/all.cmake"
+    ];
 
     postInstall = ''
       # syntax error when eval'd directly

@@ -10,6 +10,7 @@
 , slurp
 , grim
 , jq
+, bash
 
 , python3Packages
 }:
@@ -27,8 +28,9 @@ grimshot = stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ];
 
+  strictDeps = true;
   nativeBuildInputs = [ makeWrapper installShellFiles ];
-
+  buildInputs = [ bash ];
   installPhase = ''
     installManPage contrib/grimshot.1
 
@@ -60,10 +62,7 @@ grimshot = stdenv.mkDerivation rec {
     homepage = "https://github.com/swaywm/sway/tree/master/contrib";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [
-      sway-unwrapped.meta.maintainers
-      evils
-    ];
+    maintainers = sway-unwrapped.meta.maintainers ++ (with maintainers; [ evils ]);
   };
 };
 

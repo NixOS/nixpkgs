@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tali";
-  version = "40.1";
+  version = "40.7";
 
   src = fetchurl {
     url = "mirror://gnome/sources/tali/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "1xhp30c70bi8p4sm6v8zmxi1p55fs56dqgfbhfnsda5g1cxwir7h";
+    sha256 = "cXqJfV0H4X4K89ZpI/USNhPEEPZSOdqX0JKeScf7C2c=";
   };
 
   nativeBuildInputs = [

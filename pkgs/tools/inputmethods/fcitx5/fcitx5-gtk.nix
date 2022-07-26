@@ -17,7 +17,7 @@
 , libdatrie
 , libXdmcp
 , libxkbcommon
-, epoxy
+, libepoxy
 , dbus
 , at-spi2-core
 , libXtst
@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-gtk";
-  version = "5.0.7";
+  version = "5.0.16";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    sha256 = "0vcikqrxv1xxcdaiz3axgm7rpab4w8aciw838sbpa9l20dp8cnyq";
+    sha256 = "sha256-gdYtQyCczJOGkCjl7fVCjcKkhEW3wDO5HDYNfMhnb1g=";
   };
 
   cmakeFlags = [
@@ -55,16 +55,11 @@ stdenv.mkDerivation rec {
     libdatrie
     libXdmcp
     libxkbcommon
-    epoxy
+    libepoxy
     dbus
     at-spi2-core
     libXtst
   ] ++ lib.optional withGTK2 gtk2;
-
-  NIX_CFLAGS_COMPILE = lib.concatMapStringsSep " " (s: "-isystem ${s}") [
-    "${glib.dev}/include/gio-unix-2.0"
-    "${glib.dev}/include/glib-2.0"
-  ];
 
   nativeBuildInputs = [
     cmake

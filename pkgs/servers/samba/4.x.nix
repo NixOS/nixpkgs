@@ -35,7 +35,7 @@
 , enableMDNS ? false, avahi
 , enableDomainController ? false, gpgme, lmdb
 , enableRegedit ? true, ncurses
-, enableCephFS ? false, libceph
+, enableCephFS ? false, ceph
 , enableGlusterFS ? false, glusterfs, libuuid
 , enableAcl ? (!stdenv.isDarwin), acl
 , enablePam ? (!stdenv.isDarwin), pam
@@ -45,11 +45,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "samba";
-  version = "4.14.4";
+  version = "4.15.5";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
-    sha256 = "1fc9ix91hb1f35j69sk7rsi9pky2p0vsmw47s973bx801cm0kbw9";
+    sha256 = "sha256-aRFeM4MZN7pRUb4CR5QxR3Za7OZYunQ/RHQWcq1o0X8=";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
     ++ optional enableMDNS avahi
     ++ optionals enableDomainController [ gpgme lmdb python3Packages.dnspython ]
     ++ optional enableRegedit ncurses
-    ++ optional (enableCephFS && stdenv.isLinux) libceph
+    ++ optional (enableCephFS && stdenv.isLinux) (lib.getDev ceph)
     ++ optionals (enableGlusterFS && stdenv.isLinux) [ glusterfs libuuid ]
     ++ optional enableAcl acl
     ++ optional enablePam pam;
@@ -139,6 +139,9 @@ stdenv.mkDerivation rec {
     ++ optional (!enablePam) "--without-pam"
     ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--bundled-libraries=!asn1_compile,!compile_et"
+  ] ++ optional stdenv.isAarch32 [
+    # https://bugs.gentoo.org/683148
+    "--jobs 1"
   ];
 
   # python-config from build Python gives incorrect values when cross-compiling.
@@ -156,7 +159,7 @@ stdenv.mkDerivation rec {
   # Use find -type f -executable -exec echo {} \; -exec sh -c 'ldd {} | grep "not found"' \;
   # Looks like a bug in installer scripts.
   postFixup = ''
-    export SAMBA_LIBS="$(find $out -type f -name \*.so -exec dirname {} \; | sort | uniq)"
+    export SAMBA_LIBS="$(find $out -type f -regex '.*\.so\(\..*\)?' -exec dirname {} \; | sort | uniq)"
     read -r -d "" SCRIPT << EOF || true
     [ -z "\$SAMBA_LIBS" ] && exit 1;
     BIN='{}';
@@ -165,7 +168,7 @@ stdenv.mkDerivation rec {
     patchelf --set-rpath "\$ALL_LIBS" "\$BIN" 2>/dev/null || exit $?;
     patchelf --shrink-rpath "\$BIN";
     EOF
-    find $out -type f -name \*.so -exec $SHELL -c "$SCRIPT" \;
+    find $out -type f -regex '.*\.so\(\..*\)?' -exec $SHELL -c "$SCRIPT" \;
 
     # Samba does its own shebang patching, but uses build Python
     find "$out/bin" -type f -executable -exec \

@@ -1,23 +1,25 @@
 { stdenv, lib, fetchFromGitHub
 , gettext, libpng, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, zlib
+
+# updater only
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "fheroes2";
-  version = "0.9.5";
+  version = "0.9.17";
 
   src = fetchFromGitHub {
     owner = "ihhub";
     repo = "fheroes2";
     rev = version;
-    sha256 = "sha256-fqV2u6vChzU8387aQGf3OKeiWX188GouYZr4ZUmXWxs=";
+    sha256 = "sha256-mitkB7BDqqDbWa+zhcg66dh/SQd6XuUjl/kLWob9zwI=";
   };
 
   buildInputs = [ gettext libpng SDL2 SDL2_image SDL2_mixer SDL2_ttf zlib ];
 
   makeFlags = [
     "FHEROES2_STRICT_COMPILATION=1"
-    "RELEASE=1"
   ];
 
   enableParallelBuilding = true;
@@ -29,6 +31,12 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/ihhub/fheroes2";

@@ -2,15 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pgpool-II";
-  version = "4.0.6";
+  version = "4.3.2";
 
   src = fetchurl {
     name = "${pname}-${version}.tar.gz";
     url = "http://www.pgpool.net/download.php?f=${pname}-${version}.tar.gz";
-    sha256 = "0blmbqczyrgzykby2z3xzmhzd8kgij9izxv50n5cjn5azf7dn8g5";
+    sha256 = "02jg0c6k259i0r927dng9h0y58q965swshg2c9mzqhazcdiga5ap";
   };
-
-  patches = [ ./pgpool.patch ];
 
   buildInputs = [ postgresql openssl pam libmemcached ];
 

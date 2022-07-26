@@ -1,11 +1,9 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, utils, ... }:
 
 let
   toplevelConfig = config;
   inherit (lib) types;
-  inherit (import ../system/boot/systemd-lib.nix {
-    inherit config pkgs lib;
-  }) mkPathSafeName;
+  inherit (utils.systemdUtils.lib) mkPathSafeName;
 in {
   options.systemd.services = lib.mkOption {
     type = types.attrsOf (types.submodule ({ name, config, ... }: {
@@ -24,16 +22,17 @@ in {
       options.confinement.fullUnit = lib.mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to include the full closure of the systemd unit file into the
           chroot, instead of just the dependencies for the executables.
 
-          <warning><para>While it may be tempting to just enable this option to
+          ::: {.warning}
+          While it may be tempting to just enable this option to
           make things work quickly, please be aware that this might add paths
           to the closure of the chroot that you didn't anticipate. It's better
-          to use <option>confinement.packages</option> to <emphasis
-          role="strong">explicitly</emphasis> add additional store paths to the
-          chroot.</para></warning>
+          to use {option}`confinement.packages` to **explicitly** add additional store paths to the
+          chroot.
+          :::
         '';
       };
 
@@ -62,8 +61,8 @@ in {
       options.confinement.binSh = lib.mkOption {
         type = types.nullOr types.path;
         default = toplevelConfig.environment.binsh;
-        defaultText = "config.environment.binsh";
-        example = lib.literalExample "\${pkgs.dash}/bin/dash";
+        defaultText = lib.literalExpression "config.environment.binsh";
+        example = lib.literalExpression ''"''${pkgs.dash}/bin/dash"'';
         description = ''
           The program to make available as <filename>/bin/sh</filename> inside
           the chroot. If this is set to <literal>null</literal>, no
@@ -177,8 +176,8 @@ in {
       serviceName = "${name}.service";
       excludedPath = rootPaths;
     } ''
-      mkdir -p "$out/lib/systemd/system"
-      serviceFile="$out/lib/systemd/system/$serviceName"
+      mkdir -p "$out/lib/systemd/system/$serviceName.d"
+      serviceFile="$out/lib/systemd/system/$serviceName.d/confinement.conf"
 
       echo '[Service]' > "$serviceFile"
 

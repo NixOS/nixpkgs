@@ -1,16 +1,27 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, llvmPackages, sqlite, installShellFiles, Security, libiconv }:
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, llvmPackages
+, sqlite
+, installShellFiles
+, Security
+, libiconv
+, innernet
+, testers
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "innernet";
-  version = "1.4.1";
+  version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "tonarino";
-    repo = pname;
+    repo = "innernet";
     rev = "v${version}";
-    sha256 = "sha256-ss3BtwRnRAUPfM6yjl14rQrYZ7PHAT3s/MEHnbV7IEU=";
+    sha256 = "sha256-CcZ4241EU+ktPbFsuR/sF4yP6xAOFg+oW8thtAQZr/4=";
   };
-  cargoSha256 = "sha256-hhsRLm8wsmvnu3wRK9s4Fjdy0bKLboAKw6qS2XQ1nsI=";
+  cargoSha256 = "sha256-7APUSDxw6X4KJnFvm6xhiHL1D4NTNS2pC/4UVGyjJYY=";
 
   nativeBuildInputs = with llvmPackages; [
     llvm
@@ -26,23 +37,15 @@ rustPlatform.buildRustPackage rec {
     installManPage doc/innernet.8.gz
     installShellCompletion doc/innernet.completions.{bash,fish,zsh}
     installShellCompletion doc/innernet-server.completions.{bash,fish,zsh}
-  '';
+  '' + (lib.optionalString stdenv.isLinux ''
+    find . -regex '.*\.\(target\|service\)' | xargs install -Dt $out/lib/systemd/system
+    find $out/lib/systemd/system -type f | xargs sed -i "s|/usr/bin/innernet|$out/bin/innernet|"
+  '');
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    if [[ "$("$out/bin/${pname}"-server --version)" == "${pname}-server ${version}" ]]; then
-      echo '${pname}-server smoke check passed'
-    else
-      echo '${pname}-server smoke check failed'
-      return 1
-    fi
-    if [[ "$("$out/bin/${pname}" --version)" == "${pname} ${version}" ]]; then
-      echo '${pname} smoke check passed'
-    else
-      echo '${pname} smoke check failed'
-      return 1
-    fi
-  '';
+  passthru.tests = {
+    serverVersion = testers.testVersion { package = innernet; command = "innernet-server --version"; };
+    version = testers.testVersion { package = innernet; command = "innernet --version"; };
+  };
 
   meta = with lib; {
     description = "A private network system that uses WireGuard under the hood";

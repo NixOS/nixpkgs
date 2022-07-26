@@ -7,15 +7,16 @@ let
 
   # Convert systemd-style address specification to kresd config line(s).
   # On Nix level we don't attempt to precisely validate the address specifications.
+  # The optional IPv6 scope spec comes *after* port, perhaps surprisingly.
   mkListen = kind: addr: let
-    al_v4 = builtins.match "([0-9.]+):([0-9]+)" addr;
-    al_v6 = builtins.match "\\[(.+)]:([0-9]+)" addr;
+    al_v4 = builtins.match "([0-9.]+):([0-9]+)($)" addr;
+    al_v6 = builtins.match "\\[(.+)]:([0-9]+)(%.*|$)" addr;
     al_portOnly = builtins.match "([0-9]+)" addr;
     al = findFirst (a: a != null)
       (throw "services.kresd.*: incorrect address specification '${addr}'")
       [ al_v4 al_v6 al_portOnly ];
-    port = last al;
-    addrSpec = if al_portOnly == null then "'${head al}'" else "{'::', '0.0.0.0'}";
+    port = elemAt al 1;
+    addrSpec = if al_portOnly == null then "'${head al}${elemAt al 2}'" else "{'::', '0.0.0.0'}";
     in # freebind is set for compatibility with earlier kresd services;
        # it could be configurable, for example.
       ''
@@ -62,8 +63,8 @@ in {
         knot-resolver package to use.
       ";
       default = pkgs.knot-resolver;
-      defaultText = "pkgs.knot-resolver";
-      example = literalExample "pkgs.knot-resolver.override { extraFeatures = true; }";
+      defaultText = literalExpression "pkgs.knot-resolver";
+      example = literalExpression "pkgs.knot-resolver.override { extraFeatures = true; }";
     };
     extraConfig = mkOption {
       type = types.lines;

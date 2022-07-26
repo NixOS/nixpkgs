@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/alexays/waybar";
+    homepage = "https://hg.sr.ht/~scoopta/rootbar";
     description = "A bar for Wayland WMs";
     longDescription = ''
       Root Bar is a bar for wlroots based wayland compositors such as sway and

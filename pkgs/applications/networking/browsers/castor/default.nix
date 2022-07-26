@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "castor";
-  version = "0.8.16";
+  version = "0.9.0";
 
   src = fetchFromSourcehut {
     owner = "~julienxx";
     repo = pname;
     rev = version;
-    sha256 = "0rwg1w7srjwa23mkypl8zk6674nhph4xsc6nc01f6g5k959szylr";
+    sha256 = "sha256-yYLDbxmUR86fdpbHQQTiHVUbicnOD75cl3Vhofw5qr0=";
   };
 
-  cargoSha256 = "0dm3walwi3vzpk69l7nz6yl6w49676x8pjnigpn67q4bn7lpaqb1";
+  cargoSha256 = "sha256-AHhKfy2AAcDBcknzNb8DAzm51RQqFQDuWN+Hp5731Yk=";
 
   nativeBuildInputs = [
     pkg-config

@@ -27,17 +27,13 @@ stdenv.mkDerivation rec {
     libgcrypt
   ];
 
-  passthru.updateScript = xfce.updateScript {
-    inherit pname version;
-    attrPath = "xfce.${pname}";
-    versionLister = xfce.archiveLister category pname;
-  };
+  passthru.updateScript = xfce.archiveUpdater { inherit category pname version; };
 
   meta = with lib; {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-mailwatch-plugin";
     description = "Mail watcher plugin for Xfce panel";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

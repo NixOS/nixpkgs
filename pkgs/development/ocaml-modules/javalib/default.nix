@@ -1,21 +1,31 @@
-{ lib, stdenv, fetchzip, which, ocaml, findlib
-, camlzip, extlib
+{ lib
+, stdenv
+, fetchFromGitHub
+, which
+, ocaml
+, findlib
+, camlzip
+, extlib
 }:
 
-if !lib.versionAtLeast ocaml.version "4.04"
+if lib.versionOlder ocaml.version "4.04"
 then throw "javalib is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-javalib-${version}";
+  pname = "ocaml${ocaml.version}-javalib";
   version = "3.2.1";
 
-  src = fetchzip {
-    url = "https://github.com/javalib-team/javalib/archive/v${version}.tar.gz";
-    sha256 = "1fkdaiiza145yv0r1cm0n2hsrr0rbn6b27vs66njgv405zwn3vbn";
+  src = fetchFromGitHub {
+    owner = "javalib-team";
+    repo = "javalib";
+    rev = "v${version}";
+    sha256 = "sha256-du1h+S+A7CetMXofsYxdGeSsobCgspDB9oUE9WNUbbo=";
   };
 
-  buildInputs = [ which ocaml findlib ];
+  nativeBuildInputs = [ which ocaml findlib ];
+
+  strictDeps = true;
 
   patches = [ ./configure.sh.patch ./Makefile.config.example.patch ];
 
@@ -25,6 +35,8 @@ stdenv.mkDerivation rec {
 
   configureScript = "./configure.sh";
   dontAddPrefix = "true";
+  dontAddStaticConfigureFlags = true;
+  configurePlatforms = [ ];
 
   propagatedBuildInputs = [ camlzip extlib ];
 

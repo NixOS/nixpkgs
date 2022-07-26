@@ -1,37 +1,61 @@
 { lib
-, fetchPypi
-, pythonOlder
+, stdenv
 , buildPythonPackage
-, pip
-, pytest
-, pytest-xdist
 , click
-, setuptools-scm
-, git
-, glibcLocales
-, mock
+, fetchPypi
 , pep517
+, pip
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, setuptools-scm
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "pip-tools";
-  version = "6.1.0";
+  version = "6.6.2";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-QAv3finMpIwxq8IQBCkyu1LcwTjvTqTVLF20KaqK5u4=";
+    hash = "sha256-9jhQOp932Y2afXJYSxUI0/gu0Bm4+rJPTlrQeMG4yV4=";
   };
 
-  LC_ALL = "en_US.UTF-8";
-  checkInputs = [ pytest git glibcLocales mock pytest-xdist ];
-  propagatedBuildInputs = [ pip click setuptools-scm pep517 ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  checkPhase = ''
-    export HOME=$(mktemp -d) VIRTUAL_ENV=1
-    py.test -m "not network"
+  propagatedBuildInputs = [
+    click
+    pep517
+    pip
+    setuptools
+    wheel
+  ];
+
+  checkInputs = [
+    pytest-xdist
+    pytestCheckHook
+  ];
+
+  preCheck = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    # https://github.com/python/cpython/issues/74570#issuecomment-1093748531
+    export no_proxy='*';
   '';
+
+  disabledTests = [
+    # Tests require network access
+    "network"
+    "test_direct_reference_with_extras"
+  ];
+
+  pythonImportsCheck = [
+    "piptools"
+  ];
 
   meta = with lib; {
     description = "Keeps your pinned dependencies fresh";

@@ -1,36 +1,48 @@
 { lib
 , buildPythonPackage
+, callPackage
 , fetchFromGitHub
 , flit-core
-, pytestCheckHook
-, python-dateutil
+, python
+
+# important downstream dependencies
+, flit
+, black
+, mypy
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "tomli";
-  version = "1.1.0";
+  version = "2.0.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "hukkin";
     repo = pname;
     rev = version;
-    sha256 = "1cj6iil9sii1zl0l4pw7h4alcnhwdbxinpph2f0rm5rghrp6prjm";
+    sha256 = "sha256-v0ZMrHIIaGeORwD4JiBeLthmnKZODK5odZVL0SY4etA=";
   };
 
   nativeBuildInputs = [ flit-core ];
 
-  checkInputs = [
-    pytestCheckHook
-    python-dateutil
-  ];
-
   pythonImportsCheck = [ "tomli" ];
+
+  checkPhase = ''
+    runHook preCheck
+    ${python.interpreter} -m unittest discover
+    runHook postCheck
+  '';
+
+  passthru.tests = {
+    # test downstream dependencies
+    inherit flit black mypy setuptools-scm;
+  };
 
   meta = with lib; {
     description = "A Python library for parsing TOML, fully compatible with TOML v1.0.0";
     homepage = "https://github.com/hukkin/tomli";
     license = licenses.mit;
-    maintainers = with maintainers; [ veehaitch ];
+    maintainers = with maintainers; [ veehaitch SuperSandro2000 ];
   };
 }

@@ -21,52 +21,25 @@ let newPython = python3.override {
         sha256 = "1dv6mjsm67l1razcgmq66riqmsb36wns17mnipqr610v0z0zf5j0";
       };
     });
-    urllib3 = super.urllib3.overridePythonAttrs (oldAttrs: rec {
-      version = "1.25.11";
+    distro = super.distro.overridePythonAttrs (oldAttrs: rec {
+      version = "1.5.0";
       src = oldAttrs.src.override {
         inherit version;
-        sha256 = "18hpzh1am1dqx81fypn57r2wk565fi4g14292qrc5jm1h9dalzld";
-      };
-    });
-    # https://github.com/conan-io/conan/issues/8876
-    pyjwt = super.pyjwt.overridePythonAttrs (oldAttrs: rec {
-      version = "1.7.1";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96";
-      };
-      disabledTests = [
-        "test_ec_verify_should_return_false_if_signature_invalid"
-      ];
-    });
-    # conan needs jinja2<3
-    jinja2 = super.jinja2.overridePythonAttrs (oldAttrs: rec {
-      version = "2.11.3";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "a6d58433de0ae800347cab1fa3043cebbabe8baa9d29e668f1c768cb87a333c6";
-      };
-    });
-    # old jinja2 needs old markupsafe
-    markupsafe = super.markupsafe.overridePythonAttrs (oldAttrs: rec {
-      version = "1.1.1";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "29872e92839765e546828bb7754a68c418d927cd064fd4708fab9fe9c8bb116b";
+        sha256 = "14nz51cqlnxmgfqqilxyvjwwa5xfivdvlm0d0b1qzgcgwdm7an0f";
       };
     });
   };
 };
 
 in newPython.pkgs.buildPythonApplication rec {
-  version = "1.35.0";
+  version = "1.49.0";
   pname = "conan";
 
   src = fetchFromGitHub {
     owner = "conan-io";
     repo = "conan";
     rev = version;
-    sha256 = "19rgylkjxvv47vz5vgh46rw108xskpv7lmax8y2fnm2wd1j3bq9c";
+    hash = "sha256-BJGstNAnAZtpwagsCY+4quTd0/79zL+v4ifKikS3vaw=";
   };
 
   propagatedBuildInputs = with newPython.pkgs; [
@@ -107,9 +80,7 @@ in newPython.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   postPatch = ''
-    substituteInPlace conans/requirements.txt \
-      --replace "deprecation>=2.0, <2.1" "deprecation" \
-      --replace "six>=1.10.0,<=1.15.0" "six>=1.10.0,<=1.16.0"
+    substituteInPlace conans/requirements.txt --replace 'PyYAML>=3.11, <6.0' 'PyYAML>=3.11'
   '';
 
   meta = with lib; {

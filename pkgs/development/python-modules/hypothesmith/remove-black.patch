@@ -1,0 +1,88 @@
+diff --git a/tests/test_cst.py b/tests/test_cst.py
+index c436183..bdba2d7 100644
+--- a/tests/test_cst.py
++++ b/tests/test_cst.py
+@@ -3,7 +3,6 @@ import ast
+ from inspect import isabstract
+ from operator import attrgetter
+ 
+-import black
+ import libcst
+ import parso
+ import pytest
+@@ -51,27 +50,6 @@ def test_ast_unparse_from_nodes(source_code):
+     assert ast.dump(first) == ast.dump(second)
+ 
+ 
+-@pytest.mark.xfail
+-@example("A\u2592", black.FileMode())
+-@given(
+-    source_code=hypothesmith.from_node(),
+-    mode=st.builds(
+-        black.FileMode,
+-        line_length=st.just(88) | st.integers(0, 200),
+-        string_normalization=st.booleans(),
+-        is_pyi=st.booleans(),
+-    ),
+-)
+-def test_black_autoformatter_from_nodes(source_code, mode):
+-    try:
+-        result = black.format_file_contents(source_code, fast=False, mode=mode)
+-    except black.NothingChanged:
+-        pass
+-    else:
+-        with pytest.raises(black.NothingChanged):
+-            black.format_file_contents(result, fast=False, mode=mode)
+-
+-
+ @given(source_code=hypothesmith.from_node())
+ def test_from_node_always_compilable(source_code):
+     compile(source_code, "<string>", "exec")
+diff --git a/tests/test_syntactic.py b/tests/test_syntactic.py
+index 7ea42e9..a77ac39 100644
+--- a/tests/test_syntactic.py
++++ b/tests/test_syntactic.py
+@@ -3,8 +3,6 @@ import ast
+ import io
+ import tokenize
+ 
+-import black
+-import blib2to3
+ import parso
+ import pytest
+ from hypothesis import example, given, reject, strategies as st
+@@ -58,34 +56,6 @@ def test_ast_unparse_from_grammar(source_code):
+     assert ast.dump(first) == ast.dump(second)
+ 
+ 
+-@example("\\", black.FileMode())
+-@example("A#\r#", black.FileMode())
+-@given(
+-    source_code=hypothesmith.from_grammar(),
+-    mode=st.builds(
+-        black.FileMode,
+-        line_length=st.just(88) | st.integers(0, 200),
+-        string_normalization=st.booleans(),
+-        is_pyi=st.booleans(),
+-    ),
+-)
+-def test_black_autoformatter_from_grammar(source_code, mode):
+-    try:
+-        result = black.format_file_contents(source_code, fast=False, mode=mode)
+-    except black.NothingChanged:
+-        pass
+-    except blib2to3.pgen2.tokenize.TokenError:
+-        # Fails to tokenise e.g. "\\", though compile("\\", "<string>", "exec") works.
+-        # See https://github.com/psf/black/issues/1012
+-        reject()
+-    except black.InvalidInput:
+-        # e.g. "A#\r#", see https://github.com/psf/black/issues/970
+-        reject()
+-    else:
+-        with pytest.raises(black.NothingChanged):
+-            black.format_file_contents(result, fast=False, mode=mode)
+-
+-
+ @given(source_code=hypothesmith.from_grammar("eval_input"))
+ def test_eval_input_generation(source_code):
+     compile(source_code, filename="<string>", mode="eval")

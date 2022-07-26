@@ -1,10 +1,11 @@
 {lib, stdenv, fetchurl, cmake, boost, zlib}:
 
 stdenv.mkDerivation rec {
-  name = "clucene-core-2.3.3.4";
+  pname = "clucene-core";
+  version = "2.3.3.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/clucene/${name}.tar.gz";
+    url = "mirror://sourceforge/clucene/clucene-core-${version}.tar.gz";
     sha256 = "1arffdwivig88kkx685pldr784njm0249k0rb1f1plwavlrw9zfx";
   };
 
@@ -19,11 +20,14 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-D_CL_HAVE_GCC_ATOMIC_FUNCTIONS=0"
     "-D_CL_HAVE_NAMESPACES_EXITCODE=0"
+    "-D_CL_HAVE_NAMESPACES_EXITCODE__TRYRUN_OUTPUT="
     "-D_CL_HAVE_NO_SNPRINTF_BUG_EXITCODE=0"
-    "-D_CL_HAVE_NO_SNWPRINTF_BUG_EXITCODE=0"
+    "-D_CL_HAVE_NO_SNPRINTF_BUG_EXITCODE__TRYRUN_OUTPUT="
     "-D_CL_HAVE_TRY_BLOCKS_EXITCODE=0"
+    "-D_CL_HAVE_TRY_BLOCKS_EXITCODE__TRYRUN_OUTPUT="
     "-D_CL_HAVE_PTHREAD_MUTEX_RECURSIVE=0"
     "-DLUCENE_STATIC_CONSTANT_SYNTAX_EXITCODE=0"
+    "-DLUCENE_STATIC_CONSTANT_SYNTAX_EXITCODE__TRYRUN_OUTPUT="
   ];
 
   patches = # From debian

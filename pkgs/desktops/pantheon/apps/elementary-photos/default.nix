@@ -1,14 +1,13 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
-, pantheon
 , meson
 , ninja
 , pkg-config
 , vala
 , desktop-file-utils
 , gtk3
-, libaccounts-glib
 , libexif
 , libgee
 , libhandy
@@ -24,32 +23,21 @@
 , libsoup
 , sqlite
 , python3
-, scour
 , webkitgtk
 , libwebp
 , appstream
-, libunity
 , wrapGAppsHook
-, elementary-icon-theme
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-photos";
-  version = "2.7.1";
-
-  repoName = "photos";
+  version = "2.7.5";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "photos";
     rev = version;
-    sha256 = "1dql14k43rv3in451amiwv4z71hz3ailx67hd8gw1ka3yw12128p";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-zM32+bva+QD1Z/0vUD7K0/tnSzo+7GGLjJ1ytr64c0I=";
   };
 
   nativeBuildInputs = [
@@ -63,19 +51,12 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  buildInputs = with gst_all_1; [
-    elementary-icon-theme
+  buildInputs = [
     geocode-glib
     gexiv2
     granite
-    gst-plugins-bad
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-ugly
-    gstreamer
     gtk3
     json-glib
-    libaccounts-glib
     libexif
     libgee
     libgphoto2
@@ -84,12 +65,16 @@ stdenv.mkDerivation rec {
     libraw
     librest
     libsoup
-    libunity
     libwebp
-    scour
     sqlite
     webkitgtk
-  ];
+  ] ++ (with gst_all_1; [
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
+    gstreamer
+  ]);
 
   mesonFlags = [
     "-Dplugins=false"
@@ -100,11 +85,18 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta =  with lib; {
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
+  meta = with lib; {
     description = "Photo viewer and organizer designed for elementary OS";
     homepage = "https://github.com/elementary/photos";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.photos";
   };
 }

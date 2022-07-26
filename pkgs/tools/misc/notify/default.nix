@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "notify";
-  version = "0.0.2";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1nlsl4himxs5jv0fcd48jkwjnmn1w3alp0dcm1awmp6702zrsgqj";
+    sha256 = "sha256-grTHSMN4PpsCo5mST6nXE5+u7DewMVJXI3hnNIJdhLs=";
   };
 
-  vendorSha256 = "13dz0sk3561hrixsl1ghr9y0pzap2a8zrlbzzb7zs7550snbdcyg";
+  vendorSha256 = "sha256-BbhDNy3FmnHzAfv3lxPwL2jhp8Opfo0WVFhncfTO/28=";
 
   modRoot = ".";
   subPackages = [

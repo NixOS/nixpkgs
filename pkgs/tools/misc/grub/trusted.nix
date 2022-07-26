@@ -1,5 +1,20 @@
-{ lib, stdenv, fetchurl, fetchgit, autogen, flex, bison, python, autoconf, automake
-, gettext, ncurses, libusb-compat-0_1, freetype, qemu, lvm2
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, fetchpatch
+, autogen
+, flex
+, bison
+, python2
+, autoconf
+, automake
+, gettext
+, ncurses
+, libusb-compat-0_1
+, freetype
+, qemu
+, lvm2
 , for_HP_laptop ? false
 }:
 
@@ -32,19 +47,17 @@ stdenv.mkDerivation rec {
   pname = "trustedGRUB2";
   inherit version;
 
-  src = if for_HP_laptop
-        then fetchgit {
-          url = "https://github.com/Sirrix-AG/TrustedGRUB2";
-          rev = "ab483d389bda3115ca0ae4202fd71f2e4a31ad41";
-          sha256 = "1760d9hsnqkdvlag9nn8f613mqhnsxmidgvdkpmb37b0yi7p6lhz";
-        }
-        else fetchgit {
-          url = "https://github.com/Sirrix-AG/TrustedGRUB2";
-          rev = "1ff54a5fbe02ea01df5a7de59b1e0201e08d4f76";
-          sha256 = "0yrfwx67gpg9gij5raq0cfbx3jj769lkg3diqgb7i9n86hgcdh4k";
-        };
+  src = fetchFromGitHub {
+    owner = "Sirrix-AG";
+    repo = "TrustedGRUB2";
+    rev = version;
+    sha256 =
+      if for_HP_laptop
+      then "sha256-H1JzT/RgnbHqnW2/FmvXFuI6gnHI2vQU3W1iq2FqwJw="
+      else "sha256-k8DGHjTIpnjWw7GNN2kyR8rRl2MAq1xkfOndd0znLns=";
+  };
 
-  nativeBuildInputs = [ autogen flex bison python autoconf automake ];
+  nativeBuildInputs = [ autogen flex bison python2 autoconf automake ];
   buildInputs = [ ncurses libusb-compat-0_1 freetype gettext lvm2 ]
     ++ optional doCheck qemu;
 
@@ -81,15 +94,25 @@ stdenv.mkDerivation rec {
            -e "s|/usr/src/unifont.bdf|$PWD/unifont.bdf|g"
     '';
 
-  patches = [ ./fix-bash-completion.patch ];
+  patches = [
+    ./fix-bash-completion.patch
+    (fetchpatch {
+      # glibc-2.26 and above needs '<sys/sysmacros.h>'
+      url = "https://github.com/Rohde-Schwarz/TrustedGRUB2/commit/7a5b301e3adb8e054288518a325135a1883c1c6c.patch";
+      sha256 = "1jfrrmcrd9a8w7n419kszxgbpshx7888wc05smg5q4jvc1ag3xm7";
+    })
+  ];
 
   # save target that grub is compiled for
-  grubTarget = if inPCSystems
-               then "${pcSystems.${stdenv.hostPlatform.system}.target}-pc"
-               else "";
+  grubTarget =
+    if inPCSystems
+    then "${pcSystems.${stdenv.hostPlatform.system}.target}-pc"
+    else "";
 
   doCheck = false;
-  enableParallelBuilding = true;
+  # On -j16 races with early header creation:
+  #  config.h:38:10: fatal error: ./config-util.h: No such file or directory
+  enableParallelBuilding = false;
 
   meta = with lib; {
     description = "GRUB 2.0 extended with TCG (TPM) support for integrity measured boot process (trusted boot)";

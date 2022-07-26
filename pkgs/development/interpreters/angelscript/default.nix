@@ -1,20 +1,17 @@
-{ lib, stdenv, fetchurl, unzip, cmake }:
-let
-  s = # Generated upstream information
-  rec {
-    baseName="angelscript";
-    version = "2.35.0";
-    name="${baseName}-${version}";
-    url="http://www.angelcode.com/angelscript/sdk/files/angelscript_${version}.zip";
-    sha256 = "sha256-AQ3UXiPnNNRvWJHXDiaGB6EsuasSUD3aQvhC2dt+iFc=";
-  };
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, cmake
+}:
 
-in
-stdenv.mkDerivation {
-  inherit (s) name version;
+stdenv.mkDerivation rec {
+  pname = "angelscript";
+  version = "2.35.1";
 
   src = fetchurl {
-    inherit (s) url sha256;
+    url = "https://www.angelcode.com/angelscript/sdk/files/angelscript_${version}.zip";
+    sha256 = "12x12fs2bjkbh73n2w84wnqhg6xn6mnp6g79gbkwfl6gssv9c42w";
   };
 
   nativeBuildInputs = [ unzip cmake ];
@@ -32,7 +29,6 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    inherit (s) version;
     description = "Light-weight scripting library";
     license = licenses.zlib;
     maintainers = with maintainers; [ raskin ];

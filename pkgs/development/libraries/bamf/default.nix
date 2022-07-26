@@ -1,8 +1,7 @@
-{ lib, stdenv
-, pantheon
-, autoconf
-, automake
-, libtool
+{ stdenv
+, lib
+, autoreconfHook
+, gitUpdater
 , gnome
 , which
 , fetchgit
@@ -23,26 +22,24 @@
 
 stdenv.mkDerivation rec {
   pname = "bamf";
-  version = "0.5.4";
+  version = "0.5.6";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchgit {
     url = "https://git.launchpad.net/~unity-team/bamf";
     rev = version;
-    sha256 = "1klvij1wyhdj5d8sr3b16pfixc1yk8ihglpjykg7zrr1f50jfgsz";
+    sha256 = "7U+2GcuDjPU8quZjkd8bLADGlG++tl6wSo0mUQkjAXQ=";
   };
 
   nativeBuildInputs = [
     (python3.withPackages (ps: with ps; [ lxml ])) # Tests
-    autoconf
-    automake
+    autoreconfHook
     dbus
     docbook_xsl
     gnome.gnome-common
     gobject-introspection
     gtk-doc
-    libtool
     pkg-config
     vala
     which
@@ -57,11 +54,6 @@ stdenv.mkDerivation rec {
     libwnck
   ];
 
-  patches = [
-    # Port tests and checks to python3 lxml.
-    ./gtester2xunit-python3.patch
-  ];
-
   # Fix hard-coded path
   # https://bugs.launchpad.net/bamf/+bug/1780557
   postPatch = ''
@@ -74,21 +66,22 @@ stdenv.mkDerivation rec {
     "--enable-headless-tests"
   ];
 
-  # fix paths
+  # Fix paths
   makeFlags = [
     "INTROSPECTION_GIRDIR=${placeholder "dev"}/share/gir-1.0/"
     "INTROSPECTION_TYPELIBDIR=${placeholder "out"}/lib/girepository-1.0"
   ];
 
-  preConfigure = ''
-    ./autogen.sh
-  '';
-
   # TODO: Requires /etc/machine-id
   doCheck = false;
 
-  # glib-2.62 deprecations
+  # Ignore deprecation errors
   NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
+
+  passthru.updateScript = gitUpdater {
+    inherit pname version;
+    ignoredVersions = ".ubuntu.*";
+  };
 
   meta = with lib; {
     description = "Application matching framework";
@@ -99,6 +92,6 @@ stdenv.mkDerivation rec {
     homepage = "https://launchpad.net/bamf";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ davidak ] ++ pantheon.maintainers;
+    maintainers = with maintainers; [ davidak ] ++ teams.pantheon.members;
   };
 }

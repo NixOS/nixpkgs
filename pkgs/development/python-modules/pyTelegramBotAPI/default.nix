@@ -1,20 +1,36 @@
-{ lib, buildPythonPackage, fetchPypi, requests }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, aiohttp
+, requests
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "pyTelegramBotAPI";
-  version = "3.7.9";
+  version = "4.6.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7774314ff429852d423d5dfebe8fc1011dca93a028f1ccb0c56db6817245b752";
+    hash = "sha256-sa6kw8hnWGt++qgNVNs7cQ9LJK64CVv871aP8n08pRA=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [
+    aiohttp
+    requests
+  ];
+
+  pythonImportsCheck = [
+    "telebot"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/eternnoir/pyTelegramBotAPI";
     description = "A simple, but extensible Python implementation for the Telegram Bot API";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ das_j ];
   };
 }

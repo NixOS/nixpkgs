@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "tkrzw";
-  version = "0.9.3";
+  version = "1.0.21";
   # TODO: defeat multi-output reference cycles
 
   src = fetchurl {
     url = "https://dbmx.net/tkrzw/pkg/tkrzw-${version}.tar.gz";
-    sha256 = "1ap93fsw7vhn329kvy8g20l8p4jdygfl8r8mrgsfcpa20a29fnwl";
+    hash = "sha256-1g3sIRXxYtD8XGVNpbn4HLTCi+xl2yfJklbUouMQcHs=";
   };
 
   enableParallelBuilding = true;
@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # memory intensive
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A set of implementations of DBM";
     homepage = "https://dbmx.net/tkrzw/";
     maintainers = with maintainers; [ ehmry ];

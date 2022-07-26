@@ -52,7 +52,7 @@ in
       systemCronJobs = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = literalExample ''
+        example = literalExpression ''
           [ "* * * * *  test   ls -l / > /tmp/cronout 2>&1"
             "* * * * *  eelco  echo Hello World > /home/eelco/cronout"
           ]
@@ -93,7 +93,12 @@ in
 
     { services.cron.enable = mkDefault (allFiles != []); }
     (mkIf (config.services.cron.enable) {
-      security.wrappers.crontab.source = "${cronNixosPkg}/bin/crontab";
+      security.wrappers.crontab =
+        { setuid = true;
+          owner = "root";
+          group = "root";
+          source = "${cronNixosPkg}/bin/crontab";
+        };
       environment.systemPackages = [ cronNixosPkg ];
       environment.etc.crontab =
         { source = pkgs.runCommand "crontabs" { inherit allFiles; preferLocalBuild = true; }

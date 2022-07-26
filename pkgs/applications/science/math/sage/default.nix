@@ -1,5 +1,7 @@
 { pkgs
 , withDoc ? false
+, requireSageTests ? true
+, extraPythonPackages ? ps: []
 }:
 
 # Here sage and its dependencies are put together. Some dependencies may be pinned
@@ -14,13 +16,17 @@ let
       # `sagelib`, i.e. all of sage except some wrappers and runtime dependencies
       sagelib = self.callPackage ./sagelib.nix {
         inherit flint arb;
-        inherit sage-src env-locations pynac singular;
-        ecl = maxima-ecl.ecl;
+        inherit sage-src env-locations singular;
+        inherit (maxima) lisp-compiler;
         linbox = pkgs.linbox.override { withSage = true; };
         pkg-config = pkgs.pkg-config; # not to confuse with pythonPackages.pkg-config
       };
 
-      sage_docbuild = self.callPackage ./sage_docbuild.nix {
+      sage-docbuild = self.callPackage ./python-modules/sage-docbuild.nix {
+        inherit sage-src;
+      };
+
+      sage-setup = self.callPackage ./python-modules/sage-setup.nix {
         inherit sage-src;
       };
     };
@@ -38,8 +44,14 @@ let
     ];
     language = "sagemath";
     # just one 16x16 logo is available
-    logo32 = "${sage-src}/doc/common/themes/sage/static/sageicon.png";
-    logo64 = "${sage-src}/doc/common/themes/sage/static/sageicon.png";
+    logo32 = "${sage-src}/src/doc/common/themes/sage/static/sageicon.png";
+    logo64 = "${sage-src}/src/doc/common/themes/sage/static/sageicon.png";
+  };
+
+  jupyter-kernel-specs = pkgs.jupyter-kernel.create {
+    definitions = pkgs.jupyter-kernel.default // {
+      sagemath = jupyter-kernel-definition;
+    };
   };
 
   three = callPackage ./threejs-sage.nix { };
@@ -48,9 +60,8 @@ let
   # the files its looking fore are located. Also see `sage-env`.
   env-locations = callPackage ./env-locations.nix {
     inherit pari_data;
-    inherit singular maxima-ecl;
+    inherit singular maxima;
     inherit three;
-    ecl = maxima-ecl.ecl;
     cysignals = python3.pkgs.cysignals;
     mathjax = nodePackages.mathjax;
   };
@@ -59,24 +70,22 @@ let
   # the env-locations file.
   sage-env = callPackage ./sage-env.nix {
     sagelib = python3.pkgs.sagelib;
-    sage_docbuild = python3.pkgs.sage_docbuild;
+    sage-docbuild = python3.pkgs.sage-docbuild;
     inherit env-locations;
-    inherit python3 singular palp flint pynac pythonEnv maxima-ecl;
-    ecl = maxima-ecl.ecl;
+    inherit python3 singular palp flint pythonEnv maxima;
     pkg-config = pkgs.pkg-config; # not to confuse with pythonPackages.pkg-config
   };
 
   # The documentation for sage, building it takes a lot of ram.
   sagedoc = callPackage ./sagedoc.nix {
-    inherit sage-with-env;
-    inherit python3 maxima-ecl;
+    inherit sage-with-env jupyter-kernel-specs;
   };
 
   # sagelib with added wrappers and a dependency on sage-tests to make sure thet tests were run.
   sage-with-env = callPackage ./sage-with-env.nix {
     inherit python3 pythonEnv;
     inherit sage-env;
-    inherit pynac singular maxima-ecl;
+    inherit singular maxima;
     inherit three;
     pkg-config = pkgs.pkg-config; # not to confuse with pythonPackages.pkg-config
   };
@@ -93,7 +102,7 @@ let
 
   pythonRuntimeDeps = with python3.pkgs; [
     sagelib
-    sage_docbuild
+    sage-docbuild
     cvxopt
     networkx
     service-identity
@@ -104,10 +113,11 @@ let
     tkinter # optional, as a matplotlib backend (use with `%matplotlib tk`)
     scipy
     ipywidgets
+    notebook # for "sage -n"
     rpy2
     sphinx
     pillow
-  ];
+  ] ++ extraPythonPackages python3.pkgs;
 
   pythonEnv = python3.buildEnv.override {
     extraLibs = pythonRuntimeDeps;
@@ -118,8 +128,8 @@ let
 
   singular = pkgs.singular.override { inherit flint; };
 
-  maxima-ecl = pkgs.maxima-ecl.override {
-    ecl = pkgs.ecl.override {
+  maxima = pkgs.maxima.override {
+    lisp-compiler = pkgs.ecl.override {
       # "echo syntax error | ecl > /dev/full 2>&1" segfaults in
       # ECL. We apply a patch to fix it (write_error.patch), but it
       # only works if threads are disabled.  sage 9.2 tests this
@@ -133,9 +143,6 @@ let
       useBoehmgc = true;
     };
   };
-
-  # *not* to confuse with the python package "pynac"
-  pynac = pkgs.pynac.override { inherit singular flint; };
 
   # With openblas (64 bit), the tests fail the same way as when sage is build with
   # openblas instead of openblasCompat. Apparently other packages somehow use flints
@@ -166,6 +173,6 @@ let
 in
 # A wrapper around sage that makes sure sage finds its docs (if they were build).
 callPackage ./sage.nix {
-  inherit sage-tests sage-with-env sagedoc jupyter-kernel-definition;
-  inherit withDoc;
+  inherit sage-tests sage-with-env sagedoc jupyter-kernel-definition jupyter-kernel-specs;
+  inherit withDoc requireSageTests;
 }

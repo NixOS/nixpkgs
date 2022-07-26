@@ -1,15 +1,19 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, libtool, curl
-, python3, munge, perl, pam, zlib, shadow, coreutils
+, python3, munge, perl, pam, shadow, coreutils, dbus, libbpf
 , ncurses, libmysqlclient, gtk2, lua, hwloc, numactl
 , readline, freeipmi, xorg, lz4, rdma-core, nixosTests
 , pmix
+, libjwt
+, libyaml
+, json_c
+, http-parser
 # enable internal X11 support via libssh2
 , enableX11 ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "slurm";
-  version = "20.11.8.1";
+  version = "22.05.2.1";
 
   # N.B. We use github release tags instead of https://www.schedmd.com/downloads.php
   # because the latter does not keep older releases.
@@ -18,7 +22,7 @@ stdenv.mkDerivation rec {
     repo = "slurm";
     # The release tags use - instead of .
     rev = "${pname}-${builtins.replaceStrings ["."] ["-"] version}";
-    sha256 = "0id2b01rvq81zd2p34il0gg880f94g9ip4gn1pyh20zz5bxlnbjc";
+    sha256 = "1zfv5n7cqqn3c78h2svjazbdkdchyrk54prn2bq5diw80wgcmyrc";
   };
 
   outputs = [ "out" "dev" ];
@@ -44,23 +48,28 @@ stdenv.mkDerivation rec {
   # this doesn't fix tests completely at least makes slurmd to launch
   hardeningDisable = [ "bindnow" ];
 
-  nativeBuildInputs = [ pkg-config libtool python3 ];
+  nativeBuildInputs = [ pkg-config libtool python3 perl ];
   buildInputs = [
-    curl python3 munge perl pam zlib
-      libmysqlclient ncurses gtk2 lz4 rdma-core
-      lua hwloc numactl readline freeipmi shadow.su
-      pmix
+    curl python3 munge pam
+    libmysqlclient ncurses gtk2 lz4 rdma-core
+    lua hwloc numactl readline freeipmi shadow.su
+    pmix json_c libjwt libyaml dbus libbpf
+    http-parser
   ] ++ lib.optionals enableX11 [ xorg.xauth ];
 
   configureFlags = with lib;
     [ "--with-freeipmi=${freeipmi}"
+      "--with-http-parser=${http-parser}"
       "--with-hwloc=${hwloc.dev}"
+      "--with-json=${json_c.dev}"
+      "--with-jwt=${libjwt}"
       "--with-lz4=${lz4.dev}"
       "--with-munge=${munge}"
-      "--with-zlib=${zlib}"
+      "--with-yaml=${libyaml}"
       "--with-ofed=${rdma-core}"
       "--sysconfdir=/etc/slurm"
       "--with-pmix=${pmix}"
+      "--with-bpf=${libbpf}"
     ] ++ (optional (gtk2 == null)  "--disable-gtktest")
       ++ (optional (!enableX11) "--disable-x11");
 

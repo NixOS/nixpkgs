@@ -1,10 +1,13 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , gtk3
 , meson
 , ninja
 , pkg-config
 , gobject-introspection
+, gtk-doc
+, docbook-xsl-nons
 , gnome
 , dbus
 , xvfb-run
@@ -12,11 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "amtk";
-  version = "5.3.1";
+  version = "5.5.1";
+
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "12v3nj1bb7507ndprjggq0hpz8k719b4bwvl8sm43p3ibmn27anm";
+    sha256 = "7Ilt0BfiwUNoUuXmCXD80IML0SFI1XzBvcDZOCa925w=";
   };
 
   nativeBuildInputs = [
@@ -25,6 +30,8 @@ stdenv.mkDerivation rec {
     pkg-config
     dbus
     gobject-introspection
+    gtk-doc
+    docbook-xsl-nons
   ];
 
   buildInputs = [

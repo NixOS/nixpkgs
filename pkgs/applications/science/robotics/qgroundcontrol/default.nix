@@ -6,7 +6,7 @@
 
 mkDerivation rec {
   pname = "qgroundcontrol";
-  version = "4.1.3";
+  version = "4.2.1";
 
   qtInputs = [
     qtbase qtcharts qtlocation qtserialport qtsvg qtquickcontrols2
@@ -29,6 +29,8 @@ mkDerivation rec {
     "CONFIG+=StableBuild"
     # Default install tries to copy Qt files into package
     "CONFIG+=QGC_DISABLE_BUILD_SETUP"
+    # Tries to download x86_64-only prebuilt binaries
+    "DEFINES+=DISABLE_AIRMAP"
     "../qgroundcontrol.pro"
   ];
 
@@ -62,13 +64,19 @@ mkDerivation rec {
     owner = "mavlink";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0fbf564vzckvy1dc8f6yd8vpnzwzsgynva13bl2ks06768rrq9fb";
+    sha256 = "sha256-7POrc6RUm3GVx3KuPUBNbKRUvUmA2UkEL7ezQVQt/yo=";
     fetchSubmodules = true;
   };
 
+  patches = [
+    # fix build problems caused by https://github.com/mavlink/qgroundcontrol/pull/10132
+    # remove once updated past 4.2.0
+    ./fix-10132.patch
+  ];
+
   meta = with lib; {
     description = "Provides full ground station support and configuration for the PX4 and APM Flight Stacks";
-    homepage = "http://qgroundcontrol.org/";
+    homepage = "http://qgroundcontrol.com/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ lopsided98 ];

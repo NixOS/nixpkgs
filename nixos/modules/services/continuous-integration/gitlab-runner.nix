@@ -36,12 +36,12 @@ let
 
       # register new services
       ${concatStringsSep "\n" (mapAttrsToList (name: service: ''
-        if echo "$NEW_SERVICES" | grep -xq ${name}; then
+        if echo "$NEW_SERVICES" | grep -xq "${name}"; then
           bash -c ${escapeShellArg (concatStringsSep " \\\n " ([
             "set -a && source ${service.registrationConfigFile} &&"
             "gitlab-runner register"
             "--non-interactive"
-            "--name ${name}"
+            (if service.description != null then "--description \"${service.description}\"" else "--name '${name}'")
             "--executor ${service.executor}"
             "--limit ${toString service.limit}"
             "--request-concurrency ${toString service.requestConcurrency}"
@@ -136,7 +136,7 @@ in
     checkInterval = mkOption {
       type = types.int;
       default = 0;
-      example = literalExample "with lib; (length (attrNames config.services.gitlab-runner.services)) * 3";
+      example = literalExpression "with lib; (length (attrNames config.services.gitlab-runner.services)) * 3";
       description = ''
         Defines the interval length, in seconds, between new jobs check.
         The default value is 3;
@@ -147,7 +147,7 @@ in
     concurrent = mkOption {
       type = types.int;
       default = 1;
-      example = literalExample "config.nix.maxJobs";
+      example = literalExpression "config.nix.settings.max-jobs";
       description = ''
         Limits how many jobs globally can be run concurrently.
         The most upper limit of jobs using all defined runners.
@@ -203,7 +203,7 @@ in
         };
       };
       default = { };
-      example = literalExample ''
+      example = literalExpression ''
         {
           listenAddress = "0.0.0.0:8093";
         }
@@ -234,8 +234,8 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.gitlab-runner;
-      defaultText = "pkgs.gitlab-runner";
-      example = literalExample "pkgs.gitlab-runner_1_11";
+      defaultText = literalExpression "pkgs.gitlab-runner";
+      example = literalExpression "pkgs.gitlab-runner_1_11";
       description = "Gitlab Runner package to use.";
     };
     extraPackages = mkOption {
@@ -248,7 +248,7 @@ in
     services = mkOption {
       description = "GitLab Runner services.";
       default = { };
-      example = literalExample ''
+      example = literalExpression ''
         {
           # runner for building in docker via host's nix-daemon
           # nix store will be readable in runner, might be insecure
@@ -363,6 +363,13 @@ in
               Custom environment variables injected to build environment.
               For secrets you can use <option>registrationConfigFile</option>
               with <literal>RUNNER_ENV</literal> variable set.
+            '';
+          };
+          description = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            description = ''
+              Name/description of the runner.
             '';
           };
           executor = mkOption {

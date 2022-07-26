@@ -1,18 +1,38 @@
-{ callPackage, wxGTK30, buildPackages, wxSupport ? true }:
+{ beam, callPackage, wxGTK30, buildPackages, stdenv
+, wxSupport ? true
+, systemdSupport ? stdenv.isLinux
+}:
 
-rec {
+with beam; {
   lib = callPackage ../development/beam-modules/lib.nix { };
 
-  # Each
-  interpreters = rec {
+  # R24 is the default version.
+  # The main switch to change default Erlang version.
+  defaultVersion = "erlangR24";
 
-    # R24 is the default version.
-    erlang = erlangR24; # The main switch to change default Erlang version.
-    erlang_odbc = erlangR24_odbc;
-    erlang_javac = erlangR24_javac;
-    erlang_odbc_javac = erlangR24_odbc_javac;
+  # Each
+  interpreters = with beam.interpreters; {
+
+    erlang = beam.interpreters.${defaultVersion};
+    erlang_odbc = beam.interpreters."${defaultVersion}_odbc";
+    erlang_javac = beam.interpreters."${defaultVersion}_javac";
+    erlang_odbc_javac = beam.interpreters."${defaultVersion}_odbc_javac";
 
     # Standard Erlang versions, using the generic builder.
+
+    # R25
+    erlangR25 = lib.callErlang ../development/interpreters/erlang/R25.nix {
+      wxGTK = wxGTK30;
+      parallelBuild = true;
+      autoconf = buildPackages.autoconf269;
+      inherit wxSupport systemdSupport;
+    };
+    erlangR25_odbc = erlangR25.override { odbcSupport = true; };
+    erlangR25_javac = erlangR25.override { javacSupport = true; };
+    erlangR25_odbc_javac = erlangR25.override {
+      javacSupport = true;
+      odbcSupport = true;
+    };
 
     # R24
     erlangR24 = lib.callErlang ../development/interpreters/erlang/R24.nix {
@@ -20,7 +40,7 @@ rec {
       # Can be enabled since the bug has been fixed in https://github.com/erlang/otp/pull/2508
       parallelBuild = true;
       autoconf = buildPackages.autoconf269;
-      inherit wxSupport;
+      inherit wxSupport systemdSupport;
     };
     erlangR24_odbc = erlangR24.override { odbcSupport = true; };
     erlangR24_javac = erlangR24.override { javacSupport = true; };
@@ -35,7 +55,7 @@ rec {
       # Can be enabled since the bug has been fixed in https://github.com/erlang/otp/pull/2508
       parallelBuild = true;
       autoconf = buildPackages.autoconf269;
-      inherit wxSupport;
+      inherit wxSupport systemdSupport;
     };
     erlangR23_odbc = erlangR23.override { odbcSupport = true; };
     erlangR23_javac = erlangR23.override { javacSupport = true; };
@@ -50,7 +70,7 @@ rec {
       # Can be enabled since the bug has been fixed in https://github.com/erlang/otp/pull/2508
       parallelBuild = true;
       autoconf = buildPackages.autoconf269;
-      inherit wxSupport;
+      inherit wxSupport systemdSupport;
     };
     erlangR22_odbc = erlangR22.override { odbcSupport = true; };
     erlangR22_javac = erlangR22.override { javacSupport = true; };
@@ -63,7 +83,7 @@ rec {
     erlangR21 = lib.callErlang ../development/interpreters/erlang/R21.nix {
       wxGTK = wxGTK30;
       autoconf = buildPackages.autoconf269;
-      inherit wxSupport;
+      inherit wxSupport systemdSupport;
     };
     erlangR21_odbc = erlangR21.override { odbcSupport = true; };
     erlangR21_javac = erlangR21.override { javacSupport = true; };
@@ -72,20 +92,11 @@ rec {
       odbcSupport = true;
     };
 
-    # Basho fork, using custom builder.
-    erlang_basho_R16B02 =
-      lib.callErlang ../development/interpreters/erlang/R16B02-basho.nix {
-        autoconf = buildPackages.autoconf269;
-        inherit wxSupport;
-      };
-    erlang_basho_R16B02_odbc =
-      erlang_basho_R16B02.override { odbcSupport = true; };
-
     # Other Beam languages. These are built with `beam.interpreters.erlang`. To
     # access for example elixir built with different version of Erlang, use
-    # `beam.packages.erlangR23.elixir`.
+    # `beam.packages.erlangR24.elixir`.
     inherit (packages.erlang)
-      elixir elixir_1_12 elixir_1_11 elixir_1_10 elixir_1_9 elixir_1_8 elixir_1_7 elixir_ls;
+      elixir elixir_1_13 elixir_1_12 elixir_1_11 elixir_1_10 elixir_1_9 elixir_ls;
 
     inherit (packages.erlang) lfe lfe_1_3;
   };
@@ -98,8 +109,9 @@ rec {
   # appropriate Erlang/OTP version.
   packages = {
     # Packages built with default Erlang version.
-    erlang = packagesWith interpreters.erlang;
+    erlang = packages.${defaultVersion};
 
+    erlangR25 = packagesWith interpreters.erlangR25;
     erlangR24 = packagesWith interpreters.erlangR24;
     erlangR23 = packagesWith interpreters.erlangR23;
     erlangR22 = packagesWith interpreters.erlangR22;

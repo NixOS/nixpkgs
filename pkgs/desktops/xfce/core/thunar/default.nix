@@ -21,9 +21,9 @@
 let unwrapped = mkXfceDerivation {
   category = "xfce";
   pname = "thunar";
-  version = "4.16.8";
+  version = "4.16.11";
 
-  sha256 = "sha256-KFx01vbVeGR+0U3DkUVRhO7pTv3R2h7qSe5VQE2b+OQ=";
+  sha256 = "sha256-xan0HuHYLVArx3dGzzxsCjQ8eWsXNk0LtZGAejA2iGI=";
 
   nativeBuildInputs = [
     docbook_xsl
@@ -58,8 +58,9 @@ let unwrapped = mkXfceDerivation {
     sed -i -e 's|thunar_dialogs_show_insecure_program (parent, _(".*"), file, exec)|1|' thunar/thunar-file.c
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Xfce file manager";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 };
 

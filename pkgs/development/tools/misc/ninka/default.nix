@@ -1,7 +1,5 @@
 { lib, stdenv, fetchFromGitHub, perl, perlPackages }:
 
-assert stdenv ? glibc;
-
 perlPackages.buildPerlPackage {
   pname = "ninka";
   version = "2.0-pre";

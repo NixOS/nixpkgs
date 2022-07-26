@@ -7,14 +7,14 @@
 
 with lib;
 stdenv.mkDerivation rec {
-  pname = "btcdeb-unstable";
-  version = "200806";
+  pname = "btcdeb";
+  version = "unstable-2022-04-03";
 
   src = fetchFromGitHub {
     owner = "bitcoin-core";
     repo = "btcdeb";
-    rev = "f6708c397c64894c9f9e31bea2d22285d9462de7";
-    sha256 = "0qkmf89z2n7s95vhw3n9vh9dbi14zy4vqw3ffdh1w911jwm5ry3z";
+    rev = "3ba1ec7f4d37f7d2ff0544403465004c6e12036e";
+    hash = "sha256-l/PGXXX288mnoSFZ32t2Xd13dC6JCU5wDHoDxb+fcp0=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Bitcoin Script Debugger";
-    homepage = "https://github.com/kallewoof/btcdeb";
+    homepage = "https://github.com/bitcoin-core/btcdeb";
     license = licenses.mit;
     maintainers = with maintainers; [ akru ];
     platforms = platforms.unix;

@@ -31,6 +31,9 @@ let
   # mounting `/`, like `/` on a loopback).
   fileSystems = filter utils.fsNeededForBoot config.system.build.fileSystems;
 
+  # Determine whether zfs-mount(8) is needed.
+  zfsRequiresMountHelper = any (fs: lib.elem "zfsutil" fs.options) fileSystems;
+
   # A utility for enumerating the shared-library dependencies of a program
   findLibs = pkgs.buildPackages.writeShellScriptBin "find-libs" ''
     set -euo pipefail
@@ -107,6 +110,22 @@ let
         copy_bin_and_libs $BIN
       done
 
+      ${optionalString zfsRequiresMountHelper ''
+        # Filesystems using the "zfsutil" option are mounted regardless of the
+        # mount.zfs(8) helper, but it is required to ensure that ZFS properties
+        # are used as mount options.
+        #
+        # BusyBox does not use the ZFS helper in the first place.
+        # util-linux searches /sbin/ as last path for helpers (stage-1-init.sh
+        # must symlink it to the store PATH).
+        # Without helper program, both `mount`s silently fails back to internal
+        # code, using default options and effectively ignore security relevant
+        # ZFS properties such as `setuid=off` and `exec=off` (unless manually
+        # duplicated in `fileSystems.*.options`, defeating "zfsutil"'s purpose).
+        copy_bin_and_libs ${pkgs.util-linux}/bin/mount
+        copy_bin_and_libs ${pkgs.zfs}/bin/mount.zfs
+      ''}
+
       # Copy some util-linux stuff.
       copy_bin_and_libs ${pkgs.util-linux}/sbin/blkid
 
@@ -131,10 +150,38 @@ let
       copy_bin_and_libs ${pkgs.kmod}/bin/kmod
       ln -sf kmod $out/bin/modprobe
 
+      # Dirty hack to make sure the kernel properly loads modules
+      # such as ext4 on demand (e.g. on a `mount(2)` syscall). This is necessary
+      # because `kmod` isn't linked against `libpthread.so.0` anymore (since
+      # it was merged into `libc.so.6` since version `2.34`), but still needs
+      # to access it for some reason. This is not an issue in stage-1 itself
+      # because of the `LD_LIBRARY_PATH`-variable and anytime later because the rpath of
+      # kmod/modprobe points to glibc's `$out/lib` where `libpthread.so.6` exists.
+      # However, this is a problem when the kernel calls `modprobe` inside
+      # the initial ramdisk because it doesn't know about the
+      # `LD_LIBRARY_PATH` and the rpath was nuked.
+      #
+      # Also, we can't use `makeWrapper` here because `kmod` only does
+      # `modprobe` functionality if `argv[0] == "modprobe"`.
+      cat >$out/bin/modprobe-kernel <<EOF
+      #!$out/bin/ash
+      export LD_LIBRARY_PATH=$out/lib
+      exec $out/bin/modprobe "\$@"
+      EOF
+      chmod +x $out/bin/modprobe-kernel
+
       # Copy resize2fs if any ext* filesystems are to be resized
       ${optionalString (any (fs: fs.autoResize && (lib.hasPrefix "ext" fs.fsType)) fileSystems) ''
         # We need mke2fs in the initrd.
         copy_bin_and_libs ${pkgs.e2fsprogs}/sbin/resize2fs
+      ''}
+
+      # Copy multipath.
+      ${optionalString config.services.multipath.enable ''
+        copy_bin_and_libs ${config.services.multipath.package}/bin/multipath
+        copy_bin_and_libs ${config.services.multipath.package}/bin/multipathd
+        # Copy lib/multipath manually.
+        cp -rpv ${config.services.multipath.package}/lib/multipath $out/lib
       ''}
 
       # Copy secrets if needed.
@@ -176,29 +223,38 @@ let
 
       # Run patchelf to make the programs refer to the copied libraries.
       find $out/bin $out/lib -type f | while read i; do
-        if ! test -L $i; then
-          nuke-refs -e $out $i
-        fi
+        nuke-refs -e $out $i
       done
 
       find $out/bin -type f | while read i; do
-        if ! test -L $i; then
-          echo "patching $i..."
-          patchelf --set-interpreter $out/lib/ld*.so.? --set-rpath $out/lib $i || true
-        fi
+        echo "patching $i..."
+        patchelf --set-interpreter $out/lib/ld*.so.? --set-rpath $out/lib $i || true
+      done
+
+      find $out/lib -type f \! -name 'ld*.so.?' | while read i; do
+        echo "patching $i..."
+        patchelf --set-rpath $out/lib $i
       done
 
       if [ -z "${toString (pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform)}" ]; then
       # Make sure that the patchelf'ed binaries still work.
       echo "testing patched programs..."
       $out/bin/ash -c 'echo hello world' | grep "hello world"
-      export LD_LIBRARY_PATH=$out/lib
-      $out/bin/mount --help 2>&1 | grep -q "BusyBox"
+      ${if zfsRequiresMountHelper then ''
+        $out/bin/mount -V 1>&1 | grep -q "mount from util-linux"
+        $out/bin/mount.zfs -h 2>&1 | grep -q "Usage: mount.zfs"
+      '' else ''
+        $out/bin/mount --help 2>&1 | grep -q "BusyBox"
+      ''}
       $out/bin/blkid -V 2>&1 | grep -q 'libblkid'
       $out/bin/udevadm --version
       $out/bin/dmsetup --version 2>&1 | tee -a log | grep -q "version:"
       LVM_SYSTEM_DIR=$out $out/bin/lvm version 2>&1 | tee -a log | grep -q "LVM"
       $out/bin/mdadm --version
+      ${optionalString config.services.multipath.enable ''
+        ($out/bin/multipath || true) 2>&1 | grep -q 'need to be root'
+        ($out/bin/multipathd || true) 2>&1 | grep -q 'need to be root'
+      ''}
 
       ${config.boot.initrd.extraUtilsCommandsTest}
       fi
@@ -227,8 +283,6 @@ let
       preferLocalBuild = true;
     } ''
       mkdir -p $out
-
-      echo 'ENV{LD_LIBRARY_PATH}="${extraUtils}/lib"' > $out/00-env.rules
 
       cp -v ${udev}/lib/udev/rules.d/60-cdrom_id.rules $out/
       cp -v ${udev}/lib/udev/rules.d/60-persistent-storage.rules $out/
@@ -323,7 +377,7 @@ let
       [ { object = bootStage1;
           symlink = "/init";
         }
-        { object = pkgs.writeText "mdadm.conf" config.boot.initrd.mdadmConf;
+        { object = pkgs.writeText "mdadm.conf" config.boot.initrd.services.swraid.mdadmConf;
           symlink = "/etc/mdadm.conf";
         }
         { object = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" {
@@ -335,10 +389,32 @@ let
             '';
           symlink = "/etc/modprobe.d/ubuntu.conf";
         }
+        { object = config.environment.etc."modprobe.d/nixos.conf".source;
+          symlink = "/etc/modprobe.d/nixos.conf";
+        }
         { object = pkgs.kmod-debian-aliases;
           symlink = "/etc/modprobe.d/debian.conf";
         }
-      ];
+      ] ++ lib.optionals config.services.multipath.enable [
+        { object = pkgs.runCommand "multipath.conf" {
+              src = config.environment.etc."multipath.conf".text;
+              preferLocalBuild = true;
+            } ''
+              target=$out
+              printf "$src" > $out
+              substituteInPlace $out \
+                --replace ${config.services.multipath.package}/lib ${extraUtils}/lib
+            '';
+          symlink = "/etc/multipath.conf";
+        }
+      ] ++ (lib.mapAttrsToList
+        (symlink: options:
+          {
+            inherit symlink;
+            object = options.source;
+          }
+        )
+        config.boot.initrd.extraFiles);
   };
 
   # Script to add secret files to the initrd at bootloader update time
@@ -366,7 +442,7 @@ let
         ${lib.optionalString (config.boot.initrd.secrets == {})
             "exit 0"}
 
-        export PATH=${pkgs.coreutils}/bin:${pkgs.cpio}/bin:${pkgs.gzip}/bin:${pkgs.findutils}/bin
+        export PATH=${pkgs.coreutils}/bin:${pkgs.libarchive}/bin:${pkgs.gzip}/bin:${pkgs.findutils}/bin
 
         function cleanup {
           if [ -n "$tmp" -a -d "$tmp" ]; then
@@ -375,18 +451,18 @@ let
         }
         trap cleanup EXIT
 
-        tmp=$(mktemp -d initrd-secrets.XXXXXXXXXX)
+        tmp=$(mktemp -d ''${TMPDIR:-/tmp}/initrd-secrets.XXXXXXXXXX)
 
         ${lib.concatStringsSep "\n" (mapAttrsToList (dest: source:
             let source' = if source == null then dest else toString source; in
               ''
-                mkdir -p $(dirname "$tmp/${dest}")
-                cp -a ${source'} "$tmp/${dest}"
+                mkdir -p $(dirname "$tmp/.initrd-secrets/${dest}")
+                cp -a ${source'} "$tmp/.initrd-secrets/${dest}"
               ''
           ) config.boot.initrd.secrets)
          }
 
-        (cd "$tmp" && find . -print0 | sort -z | cpio --quiet -o -H newc -R +0:+0 --reproducible --null) | \
+        (cd "$tmp" && find . -print0 | sort -z | bsdtar --uid 0 --gid 0 -cnf - -T - | bsdtar --null -cf - --format=newc @-) | \
           ${compressorExe} ${lib.escapeShellArgs initialRamdisk.compressorArgs} >> "$1"
       '';
 
@@ -411,11 +487,27 @@ in
     boot.initrd.enable = mkOption {
       type = types.bool;
       default = !config.boot.isContainer;
-      defaultText = "!config.boot.isContainer";
+      defaultText = literalExpression "!config.boot.isContainer";
       description = ''
         Whether to enable the NixOS initial RAM disk (initrd). This may be
         needed to perform some initialisation tasks (like mounting
         network/encrypted file systems) before continuing the boot process.
+      '';
+    };
+
+    boot.initrd.extraFiles = mkOption {
+      default = { };
+      type = types.attrsOf
+        (types.submodule {
+          options = {
+            source = mkOption {
+              type = types.package;
+              description = "The object to make available inside the initrd.";
+            };
+          };
+        });
+      description = ''
+        Extra files to link and copy in to the initrd.
       '';
     };
 
@@ -432,14 +524,6 @@ in
       type = types.bool;
       description = ''
         Whether to run <command>fsck</command> on journaling filesystems such as ext3.
-      '';
-    };
-
-    boot.initrd.mdadmConf = mkOption {
-      default = "";
-      type = types.lines;
-      description = ''
-        Contents of <filename>/etc/mdadm.conf</filename> in stage 1.
       '';
     };
 
@@ -527,8 +611,8 @@ in
         then "zstd"
         else "gzip"
       );
-      defaultText = "zstd if the kernel supports it (5.9+), gzip if not.";
-      type = types.unspecified; # We don't have a function type...
+      defaultText = literalDocBook "<literal>zstd</literal> if the kernel supports it (5.9+), <literal>gzip</literal> if not";
+      type = types.either types.str (types.functionTo types.str);
       description = ''
         The compressor to use on the initrd image. May be any of:
 
@@ -559,7 +643,7 @@ in
             is the path it should be copied from (or null for the same
             path inside and out).
           '';
-        example = literalExample
+        example = literalExpression
           ''
             { "/etc/dropbear/dropbear_rsa_host_key" =
                 ./secret-dropbear-key;
@@ -586,7 +670,7 @@ in
 
           <itemizedlist>
             <listitem><para><literal>boot.consoleLogLevel = 0;</literal></para></listitem>
-            <listitem><para><literal>boot.kernelParams = [ "quiet" "udev.log_priority=3" ];</literal></para></listitem>
+            <listitem><para><literal>boot.kernelParams = [ "quiet" "udev.log_level=3" ];</literal></para></listitem>
           </itemizedlist>
         '';
     };
@@ -653,8 +737,12 @@ in
       }
     ];
 
-    system.build =
-      { inherit bootStage1 initialRamdisk initialRamdiskSecretAppender extraUtils; };
+    system.build = mkMerge [
+      { inherit bootStage1 initialRamdiskSecretAppender extraUtils; }
+
+      # generated in nixos/modules/system/boot/systemd/initrd.nix
+      (mkIf (!config.boot.initrd.systemd.enable) { inherit initialRamdisk; })
+    ];
 
     system.requiredKernelConfig = with config.lib.kernelConfig; [
       (isYes "TMPFS")
@@ -662,6 +750,9 @@ in
     ];
 
     boot.initrd.supportedFilesystems = map (fs: fs.fsType) fileSystems;
-
   };
+
+  imports = [
+    (mkRenamedOptionModule [ "boot" "initrd" "mdadmConf" ] [ "boot" "initrd" "services" "swraid" "mdadmConf" ])
+  ];
 }

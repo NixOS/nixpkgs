@@ -1,8 +1,7 @@
-{ lib, stdenv, python, fetchPypi, makeWrapper, unzip, makeSetupHook
+{ lib, stdenv, python, makeWrapper, unzip
 , pipInstallHook
 , setuptoolsBuildHook
 , wheel, pip, setuptools
-, isPy27
 }:
 
 stdenv.mkDerivation rec {

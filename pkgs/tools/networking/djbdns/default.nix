@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, glibc, dns-root-data } :
+{ lib, stdenv, fetchurl, glibc, dns-root-data, nixosTests } :
 
 let
   version = "1.05";
@@ -19,7 +19,14 @@ stdenv.mkDerivation {
     sha256 = "0j3baf92vkczr5fxww7rp1b7gmczxmmgrqc8w2dy7kgk09m85k9w";
   };
 
-  patches = [ ./hier.patch ./fix-nix-usernamespace-build.patch ];
+  patches = [
+    ./hier.patch
+    ./fix-nix-usernamespace-build.patch
+
+    # To fix https://github.com/NixOS/nixpkgs/issues/119066.
+    # Note that the NixOS test <nixpkgs/nixos/tests/tinydns.nix> tests for this.
+    ./softlimit.patch
+  ];
 
   postPatch = ''
     echo gcc -O2 -include ${glibc.dev}/include/errno.h > conf-cc
@@ -40,6 +47,10 @@ stdenv.mkDerivation {
     done;
     rm -rv djbdns-man;
   '';
+
+  passthru.tests = {
+    tinydns = nixosTests.tinydns;
+  };
 
   meta = with lib; {
     description = "A collection of Domain Name System tools";

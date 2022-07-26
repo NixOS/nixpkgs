@@ -1,4 +1,4 @@
-From a1e54ae0097a3b6a0dabf4639fe8bc594c4f602d Mon Sep 17 00:00:00 2001
+From 2c563889fcad37df4ee4251bf0a63316d8b7b612 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Jos=C3=A9=20Romildo=20Malaquias?= <malaquias@gmail.com>
 Date: Thu, 14 May 2020 16:36:34 -0300
 Subject: [PATCH] wrapped setuid executables
@@ -11,9 +11,9 @@ instead.
  meson/meson_inst.sh           | 4 ++--
  src/bin/e_auth.c              | 6 ++----
  src/bin/e_fm/e_fm_main_eeze.c | 6 +++---
- src/bin/e_start_main.c        | 2 +-
+ src/bin/e_start_main.c        | 3 +--
  src/bin/e_system.c            | 2 +-
- 5 files changed, 9 insertions(+), 11 deletions(-)
+ 5 files changed, 9 insertions(+), 12 deletions(-)
 
 diff --git a/meson/meson_inst.sh b/meson/meson_inst.sh
 index 321143e40..cd2399306 100755
@@ -29,11 +29,11 @@ index 321143e40..cd2399306 100755
 +	echo TODO: chmod a=rx,u+xs "$DESTDIR/$x"
  done
 diff --git a/src/bin/e_auth.c b/src/bin/e_auth.c
-index 8b0aa6641..63c68c4bc 100644
+index 6d07a0ac3..d519f0649 100644
 --- a/src/bin/e_auth.c
 +++ b/src/bin/e_auth.c
-@@ -12,8 +12,7 @@ e_auth_begin(char *passwd)
-    if (pwlen == 0) goto out;
+@@ -38,8 +38,7 @@ e_auth_begin(char *passwd)
+    pwlen = strlen(passwd);
  
     snprintf(buf, sizeof(buf),
 -            "%s/enlightenment/utils/enlightenment_ckpasswd pw",
@@ -41,9 +41,9 @@ index 8b0aa6641..63c68c4bc 100644
 +            "/run/wrappers/bin/enlightenment_ckpasswd pw");
     exe = ecore_exe_pipe_run(buf, ECORE_EXE_PIPE_WRITE, NULL);
     if (!exe) goto out;
-    if (ecore_exe_send(exe, passwd, pwlen) != EINA_TRUE) goto out;
-@@ -47,8 +46,7 @@ e_auth_polkit_begin(char *passwd, const char *cookie, unsigned int uid)
-    if (pwlen == 0) goto out;
+    snprintf(buf, sizeof(buf), "pw %s", passwd);
+@@ -75,8 +74,7 @@ e_auth_polkit_begin(char *passwd, const char *cookie, unsigned int uid)
+    pwlen = strlen(passwd);
  
     snprintf(buf, sizeof(buf),
 -            "%s/enlightenment/utils/enlightenment_ckpasswd pk",
@@ -84,23 +84,24 @@ index 9b10b3117..0f0aa5b53 100644
       }
     v->guard = ecore_timer_loop_add(E_FM_MOUNT_TIMEOUT, (Ecore_Task_Cb)_e_fm_main_eeze_vol_mount_timeout, v);
 diff --git a/src/bin/e_start_main.c b/src/bin/e_start_main.c
-index 8534a7a8e..f0f0061a4 100644
+index 722063339..ee85aa9f1 100644
 --- a/src/bin/e_start_main.c
 +++ b/src/bin/e_start_main.c
-@@ -709,7 +709,7 @@ main(int argc, char **argv)
-             "E_ALERT_FONT_DIR=%s/data/fonts", eina_prefix_data_get(pfx));
+@@ -596,8 +596,7 @@ main(int argc, char **argv)
+               eina_prefix_data_get(pfx));
     putenv(buf2);
-    snprintf(buf3, sizeof(buf3),
--            "E_ALERT_SYSTEM_BIN=%s/enlightenment/utils/enlightenment_system", eina_prefix_lib_get(pfx));
-+            "E_ALERT_SYSTEM_BIN=/run/wrappers/bin/enlightenment_system");
+    myasprintf(&buf3,
+-              "E_ALERT_SYSTEM_BIN=%s/enlightenment/utils/enlightenment_system",
+-              eina_prefix_lib_get(pfx));
++              "E_ALERT_SYSTEM_BIN=/run/wrappers/bin/enlightenment_system");
     putenv(buf3);
  
-    if ((valgrind_mode || valgrind_tool) &&
+    home = getenv("HOME");
 diff --git a/src/bin/e_system.c b/src/bin/e_system.c
-index 1e7aabb64..5084933a1 100644
+index bfd43e7e2..6bf48e31f 100644
 --- a/src/bin/e_system.c
 +++ b/src/bin/e_system.c
-@@ -132,7 +132,7 @@ _system_spawn(void)
+@@ -133,7 +133,7 @@ _system_spawn(void)
     else _respawn_count = 0;
     if (_respawn_count > 5) return;
     snprintf(buf, sizeof(buf),
@@ -110,5 +111,5 @@ index 1e7aabb64..5084933a1 100644
       (buf, ECORE_EXE_NOT_LEADER | ECORE_EXE_TERM_WITH_PARENT |
        ECORE_EXE_PIPE_READ | ECORE_EXE_PIPE_WRITE, NULL);
 -- 
-2.26.2
+2.34.0
 

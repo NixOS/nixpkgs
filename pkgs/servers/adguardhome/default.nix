@@ -1,23 +1,30 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, fetchzip, nixosTests }:
+
+let
+  inherit (stdenv.hostPlatform) system;
+  sources = import ./bins.nix { inherit fetchurl fetchzip; };
+in
 
 stdenv.mkDerivation rec {
   pname = "adguardhome";
-  version = "0.106.3";
-
-  src = fetchurl {
-    url = "https://github.com/AdguardTeam/AdGuardHome/releases/download/v${version}/AdGuardHome_linux_amd64.tar.gz";
-    sha256 = "11p081dqilga61zfziw5w37k6v2r84qynhz2hr4gk8367jck54x8";
-  };
+  version = "0.107.8";
+  src = sources.${system} or (throw "Source for ${pname} is not available for ${system}");
 
   installPhase = ''
     install -m755 -D ./AdGuardHome $out/bin/adguardhome
   '';
 
+  passthru = {
+    updateScript = ./update.sh;
+    tests.adguardhome = nixosTests.adguardhome;
+  };
+
   meta = with lib; {
     homepage = "https://github.com/AdguardTeam/AdGuardHome";
     description = "Network-wide ads & trackers blocking DNS server";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ numkem ];
-    license = licenses.gpl3;
+    platforms = builtins.attrNames sources;
+    maintainers = with maintainers; [ numkem iagoq ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.gpl3Only;
   };
 }

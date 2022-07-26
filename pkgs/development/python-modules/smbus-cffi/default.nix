@@ -24,6 +24,8 @@ buildPythonPackage rec {
     })
   ];
 
+  propagatedNativeBuildInputs = [ cffi ];
+
   propagatedBuildInputs = [ cffi ];
 
   installCheckPhase = ''

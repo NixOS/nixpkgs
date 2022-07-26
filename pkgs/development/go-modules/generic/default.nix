@@ -1,4 +1,4 @@
-{ go, cacert, git, lib, stdenv, vend }:
+{ go, cacert, git, lib, stdenv }:
 
 { name ? "${args'.pname}-${args'.version}"
 , src
@@ -9,6 +9,9 @@
 
 # Go linker flags, passed to go via -ldflags
 , ldflags ? []
+
+# Go tags, passed to go via -tag
+, tags ? []
 
 # A function to override the go-modules derivation
 , overrideModAttrs ? (_oldAttrs : {})
@@ -23,9 +26,11 @@
 , vendorSha256
 # Whether to delete the vendor folder supplied with the source.
 , deleteVendor ? false
-# Whether to run the vend tool to regenerate the vendor directory.
-# This is useful if any dependency contain C files.
-, runVend ? false
+# Whether to fetch (go mod download) and proxy the vendor directory.
+# This is useful if your code depends on c code and go mod tidy does not
+# include the needed sources to build or if any dependency has case-insensitive
+# conflicts which will produce platform dependant `vendorSha256` checksums.
+, proxyVendor ? false
 
 # We want parallel builds by default
 , enableParallelBuilding ? true
@@ -34,10 +39,16 @@
 # IE: programs coupled with the compiler
 , allowGoReference ? false
 
+, CGO_ENABLED ? go.CGO_ENABLED
+
 , meta ? {}
 
 # Not needed with buildGoModule
 , goPackagePath ? ""
+
+# needed for buildFlags{,Array} warning
+, buildFlags ? ""
+, buildFlagsArray ? ""
 
 , ... }@args':
 
@@ -58,18 +69,18 @@ let
     inherit (go) GOOS GOARCH;
 
     patches = args.patches or [];
+    patchFlags = args.patchFlags or [];
     preBuild = args.preBuild or "";
     sourceRoot = args.sourceRoot or "";
 
     GO111MODULE = "on";
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
-      "GIT_PROXY_COMMAND" "SOCKS_SERVER"
+      "GIT_PROXY_COMMAND" "SOCKS_SERVER" "GOPROXY"
     ];
 
     configurePhase = args.modConfigurePhase or ''
       runHook preConfigure
-
       export GOCACHE=$TMPDIR/go-cache
       export GOPATH="$TMPDIR/go"
       cd "${modRoot}"
@@ -91,9 +102,9 @@ let
         exit 10
       fi
 
-    ${if runVend then ''
-      echo "running 'vend' to rewrite vendor folder"
-      ${vend}/bin/vend
+    ${if proxyVendor then ''
+      mkdir -p "''${GOPATH}/pkg/mod/cache/download"
+      go mod download
     '' else ''
       go mod vendor
     ''}
@@ -106,8 +117,12 @@ let
     installPhase = args.modInstallPhase or ''
       runHook preInstall
 
-      # remove cached lookup results and tiles
+    ${if proxyVendor then ''
+      rm -rf "''${GOPATH}/pkg/mod/cache/download/sumdb"
+      cp -r --reflink=auto "''${GOPATH}/pkg/mod/cache/download" $out
+    '' else ''
       cp -r --reflink=auto vendor $out
+    ''}
 
       runHook postInstall
     '';
@@ -127,19 +142,24 @@ let
     inherit (go) GOOS GOARCH;
 
     GO111MODULE = "on";
-    GOFLAGS = [ "-mod=vendor" ] ++ lib.optionals (!allowGoReference) [ "-trimpath" ];
+    GOFLAGS = lib.optionals (!proxyVendor) [ "-mod=vendor" ] ++ lib.optionals (!allowGoReference) [ "-trimpath" ];
+    inherit CGO_ENABLED;
 
     configurePhase = args.configurePhase or ''
       runHook preConfigure
 
       export GOCACHE=$TMPDIR/go-cache
       export GOPATH="$TMPDIR/go"
-      export GOSUMDB=off
       export GOPROXY=off
+      export GOSUMDB=off
       cd "$modRoot"
-    '' + lib.optionalString (go-modules != "") ''
-      rm -rf vendor
-      cp -r --reflink=auto ${go-modules} vendor
+    '' + lib.optionalString (vendorSha256 != null) ''
+      ${if proxyVendor then ''
+        export GOPROXY=file://${go-modules}
+      '' else ''
+        rm -rf vendor
+        cp -r --reflink=auto ${go-modules} vendor
+      ''}
     '' + ''
 
       runHook postConfigure
@@ -148,15 +168,32 @@ let
     buildPhase = args.buildPhase or ''
       runHook preBuild
 
+      exclude='\(/_\|examples\|Godeps\|testdata'
+      if [[ -n "$excludedPackages" ]]; then
+        IFS=' ' read -r -a excludedArr <<<$excludedPackages
+        printf -v excludedAlternates '%s\\|' "''${excludedArr[@]}"
+        excludedAlternates=''${excludedAlternates%\\|} # drop final \| added by printf
+        exclude+='\|'"$excludedAlternates"
+      fi
+      exclude+='\)'
+
       buildGoDir() {
-        local d; local cmd;
-        cmd="$1"
-        d="$2"
+        local cmd="$1" dir="$2"
+
         . $TMPDIR/buildFlagsArray
-        echo "$d" | grep -q "\(/_\|examples\|Godeps\|testdata\)" && return 0
-        [ -n "$excludedPackages" ] && echo "$d" | grep -q "$excludedPackages" && return 0
+
+        declare -a flags
+        flags+=($buildFlags "''${buildFlagsArray[@]}")
+        flags+=(''${tags:+-tags=${lib.concatStringsSep "," tags}})
+        flags+=(''${ldflags:+-ldflags="$ldflags"})
+        flags+=("-v" "-p" "$NIX_BUILD_CORES")
+
+        if [ "$cmd" = "test" ]; then
+          flags+=($checkFlags)
+        fi
+
         local OUT
-        if ! OUT="$(go $cmd $buildFlags "''${buildFlagsArray[@]}" ''${ldflags:+-ldflags="$ldflags"} -v -p $NIX_BUILD_CORES $d 2>&1)"; then
+        if ! OUT="$(go $cmd "''${flags[@]}" $dir 2>&1)"; then
           if ! echo "$OUT" | grep -qE '(no( buildable| non-test)?|build constraints exclude all) Go (source )?files'; then
             echo "$OUT" >&2
             return 1
@@ -174,7 +211,7 @@ let
         if [ -n "$subPackages" ]; then
           echo "$subPackages" | sed "s,\(^\| \),\1./,g"
         else
-          find . -type f -name \*$type.go -exec dirname {} \; | grep -v "/vendor/" | sort --unique
+          find . -type f -name \*$type.go -exec dirname {} \; | grep -v "/vendor/" | sort --unique | grep -v "$exclude"
         fi
       }
 
@@ -214,7 +251,7 @@ let
       runHook preCheck
 
       for pkg in $(getGoDirs test); do
-        buildGoDir test $checkFlags "$pkg"
+        buildGoDir test "$pkg"
       done
 
       runHook postCheck
@@ -241,11 +278,9 @@ let
     meta = {
       # Add default meta information
       platforms = go.meta.platforms or lib.platforms.all;
-    } // meta // {
-      # add an extra maintainer to every package
-      maintainers = (meta.maintainers or []) ++
-                    [ lib.maintainers.kalbasit ];
-    };
+    } // meta;
   });
 in
+lib.warnIf (buildFlags != "" || buildFlagsArray != "")
+  "Use the `ldflags` and/or `tags` attributes instead of `buildFlags`/`buildFlagsArray`"
   package

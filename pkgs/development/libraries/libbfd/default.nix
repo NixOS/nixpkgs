@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchpatch, gnu-config, autoreconfHook, bison, binutils-unwrapped
-, libiberty, zlib
+, libiberty, libintl, zlib
 }:
 
 stdenv.mkDerivation {
@@ -30,16 +30,16 @@ stdenv.mkDerivation {
   # We update these ourselves
   dontUpdateAutotoolsGnuConfigScripts = true;
 
+  strictDeps = true;
   nativeBuildInputs = [ autoreconfHook bison ];
-  buildInputs = [ libiberty zlib.dev ];
+  buildInputs = [ libiberty zlib ] ++ lib.optionals stdenv.isDarwin [ libintl ];
 
   configurePlatforms = [ "build" "host" ];
   configureFlags = [
     "--enable-targets=all" "--enable-64-bit-bfd"
     "--enable-install-libbfd"
-    "--enable-shared"
     "--with-system-zlib"
-  ];
+  ] ++ lib.optional (!stdenv.hostPlatform.isStatic) "--enable-shared";
 
   enableParallelBuilding = true;
 

@@ -1,56 +1,87 @@
-{ lib, stdenv, fetchFromGitHub, glfw, freetype, openssl, upx ? null }:
-
-assert stdenv.hostPlatform.isUnix -> upx != null;
+{ lib, stdenv, fetchFromGitHub, glfw, freetype, openssl, makeWrapper, upx }:
 
 stdenv.mkDerivation rec {
   pname = "vlang";
-  version = "weekly.2021.25";
+  version = "weekly.2022.20";
 
   src = fetchFromGitHub {
     owner = "vlang";
     repo = "v";
     rev = version;
-    sha256 = "0y4a5rmpcdqina32d6azbmsbi3zqqfl413sicg72x6a1pm2vg33j";
+    sha256 = "1isbyfs98bdbm2qjf7q4bqbpsmdiqlavn3gznwr12bkvhnsf4j3x";
   };
 
-  # V compiler source translated to C for bootstrap.
-  # Use matching v.c release commit for now, 0.1.21 release is not available.
+  # Required for bootstrap.
   vc = fetchFromGitHub {
     owner = "vlang";
     repo = "vc";
-    rev = "3201d2dd2faadfa370da0bad2a749a664ad5ade3";
-    sha256 = "0xzkjdph5wfjr3qfkihgc27vsbbjh2l31rp8z2avq9hc531hwvrz";
+    rev = "167f262866090493650f58832d62d910999dd5a4";
+    sha256 = "1xax8355qkrccjcmx24gcab88xnrqj15mhqy0bgp3v2rb1hw1n3a";
+  };
+
+  # Required for vdoc.
+  markdown = fetchFromGitHub {
+    owner = "vlang";
+    repo = "markdown";
+    rev = "bbbd324a361e404ce0682fc00666df3a7877b398";
+    sha256 = "0cawzizr3rjz81blpvxvxrcvcdai1adj66885ss390444qq1fnv7";
   };
 
   propagatedBuildInputs = [ glfw freetype openssl ]
     ++ lib.optional stdenv.hostPlatform.isUnix upx;
 
-  buildPhase = ''
-    runHook preBuild
-    cc -std=gnu11 $CFLAGS -w -o v $vc/v.c -lm $LDFLAGS
-    # vlang seems to want to write to $HOME/.vmodules,
-    # so lets give it a writable HOME
-    HOME=$PWD ./v -prod self
-    # Exclude thirdparty/vschannel as it is windows-specific.
-    find thirdparty -path thirdparty/vschannel -prune -o -type f -name "*.c" -execdir cc -std=gnu11 $CFLAGS -w -c {} $LDFLAGS ';'
-    runHook postBuild
+  nativeBuildInputs = [ makeWrapper ];
+
+  makeFlags = [
+    "local=1"
+    "VC=${vc}"
+  ];
+
+  preBuild = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  # vcreate_test.v requires git, so we must remove it when building the tools.
+  # vtest.v fails on Darwin, so let's just disable it for now.
+  preInstall = ''
+    mv cmd/tools/vcreate_test.v $HOME/vcreate_test.v
+  '' + lib.optionalString stdenv.isDarwin ''
+    mv cmd/tools/vtest.v $HOME/vtest.v
   '';
 
   installPhase = ''
     runHook preInstall
+
     mkdir -p $out/{bin,lib,share}
     cp -r examples $out/share
     cp -r {cmd,vlib,thirdparty} $out/lib
-    mv v $out/lib
+    cp v $out/lib
     ln -s $out/lib/v $out/bin/v
+    wrapProgram $out/bin/v --prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}
+
+    mkdir -p $HOME/.vmodules;
+    ln -sf ${markdown} $HOME/.vmodules/markdown
+    $out/lib/v -v build-tools
+    $out/lib/v -v $out/lib/cmd/tools/vdoc
+    $out/lib/v -v $out/lib/cmd/tools/vast
+    $out/lib/v -v $out/lib/cmd/tools/vvet
+
     runHook postInstall
+  '';
+
+  # Return vcreate_test.v and vtest.v, so the user can use it.
+  postInstall = ''
+    cp $HOME/vcreate_test.v $out/lib/cmd/tools/vcreate_test.v
+  '' + lib.optionalString stdenv.isDarwin ''
+    cp $HOME/vtest.v $out/lib/cmd/tools/vtest.v
   '';
 
   meta = with lib; {
     homepage = "https://vlang.io/";
     description = "Simple, fast, safe, compiled language for developing maintainable software";
     license = licenses.mit;
-    maintainers = with maintainers; [ chiiruno ];
+    maintainers = with maintainers; [ Madouura ];
+    mainProgram = "v";
     platforms = platforms.all;
   };
 }

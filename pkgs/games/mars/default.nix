@@ -1,27 +1,22 @@
 { lib, stdenv, fetchFromGitHub, cmake, libGLU, libGL, sfml, fribidi, taglib }:
 stdenv.mkDerivation rec {
   pname = "mars";
-  version = "0.7.5";
+  version = "unstable-17.10.2021";
 
   src = fetchFromGitHub {
     owner = "thelaui";
     repo = "M.A.R.S.";
-    rev = "c855d044094a1d92317e38935d81ba938946132e";
-    sha256 = "1r4c5gap1z2zsv4yjd34qriqkxaq4lb4rykapyzkkdf4g36lc3nh";
+    rev = "84664cda094efe6e49d9b1550e4f4f98c33eefa2";
+    sha256 = "sha256-SWLP926SyVTjn+UT1DCaJSo4Ue0RbyzImVnlNJQksS0=";
   };
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libGLU libGL sfml fribidi taglib ];
-  patches = [
-    ./unbind_fix.patch
-    ./fix-gluortho2d.patch
-  ];
   installPhase = ''
     cd ..
-    find -name '*.svn' -exec rm -rf {} \;
     mkdir -p "$out/share/mars/"
     mkdir -p "$out/bin/"
     cp -rv data resources credits.txt license.txt "$out/share/mars/"
-    cp -v mars "$out/bin/mars.bin"
+    cp -v marsshooter "$out/bin/mars.bin"
     cat << EOF > "$out/bin/mars"
     #! ${stdenv.shell}
     cd "$out/share/mars/"

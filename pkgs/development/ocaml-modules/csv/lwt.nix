@@ -1,6 +1,6 @@
 { lib, buildDunePackage, ocaml, csv, ocaml_lwt }:
 
-if !lib.versionAtLeast ocaml.version "4.02"
+if lib.versionOlder ocaml.version "4.02"
 then throw "csv-lwt is not available for OCaml ${ocaml.version}"
 else
 

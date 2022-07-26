@@ -7,7 +7,6 @@
 , openssl
 , nlohmann_json
 , gtest
-, fmt
 , spdlog
 , c-ares
 , abseil-cpp
@@ -18,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bear";
-  version = "3.0.13";
+  version = "3.0.20";
 
   src = fetchFromGitHub {
     owner = "rizsotto";
     repo = pname;
     rev = version;
-    sha256 = "sha256-oMrTH3GjxiLBKX0i3ZuV+bNqpA7PkoAQAb/08Q/uELs=";
+    sha256 = "sha256-8hA0Y/AGczFwggxkTG7PQKOVnr2Oizx4OH38nS5jCU0=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -35,7 +34,6 @@ stdenv.mkDerivation rec {
     openssl
     nlohmann_json
     gtest
-    fmt
     spdlog
     c-ares
     abseil-cpp
@@ -60,7 +58,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ babariviere qyliss ];
-    # ld: symbol(s) not found for architecture x86_64
-    broken = stdenv.isDarwin;
   };
 }

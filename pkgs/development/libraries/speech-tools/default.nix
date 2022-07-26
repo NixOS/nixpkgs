@@ -1,15 +1,20 @@
 { lib, stdenv, fetchurl, alsa-lib, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "speech_tools-${version}.0";
-  version = "2.5";
+  pname = "speech_tools";
+  version = "2.5.0";
 
   src = fetchurl {
-    url = "http://www.festvox.org/packed/festival/${version}/${name}-release.tar.gz";
+    url = "http://www.festvox.org/packed/festival/${lib.versions.majorMinor version}/speech_tools-${version}-release.tar.gz";
     sha256 = "1k2xh13miyv48gh06rgsq2vj25xwj7z6vwq9ilsn8i7ig3nrgzg4";
   };
 
   buildInputs = [ alsa-lib ncurses ];
+
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: libestools.a(editline.o):(.bss+0x28): multiple definition of
+  #     `editline_history_file'; libestools.a(siodeditline.o):(.data.rel.local+0x8): first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
 
   preConfigure = ''
     sed -e s@/usr/bin/@@g -i $( grep -rl '/usr/bin/' . )

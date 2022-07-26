@@ -6,7 +6,7 @@ curl https://raw.githubusercontent.com/dvallin/spacegun/f88cfd1cf653995a301ef4db
 curl https://raw.githubusercontent.com/dvallin/spacegun/f88cfd1cf653995a301ef4db4a1e387ef3ca01a1/package-lock.json -o package-lock.json
 
 node2nix \
-  --nodejs-10 \
+  --nodejs-16 \
   --node-env ../../../../development/node-packages/node-env.nix \
   --development \
   --input package.json \

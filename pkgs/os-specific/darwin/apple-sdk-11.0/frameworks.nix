@@ -89,6 +89,8 @@
   IOBluetooth                      = { inherit CoreBluetooth IOKit; };
   IOBluetoothUI                    = { inherit IOBluetooth; };
   IOKit                            = {};
+  # `IOSurface` should depend on `Libsystem` (in place of `xpc`) but this currently causes build
+  # issues due to incompatibility issues between `Libsystem` and `libcxx`.
   IOSurface                        = { inherit IOKit xpc; };
   IOUSBHost                        = {};
   IdentityLookup                   = {};

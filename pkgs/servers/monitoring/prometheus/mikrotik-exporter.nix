@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "mikrotik-exporter-unstable";
-  version = "2020-02-10";
+  version = "2021-08-10";
 
   src = fetchFromGitHub {
     owner = "nshttpd";
     repo = "mikrotik-exporter";
-    sha256 = "193zh06rqp9ybsnkxwmv7l4p2h2xisw4f01jjirshsb784j44bh6";
-    rev = "3b33400d24abcfdc07dc31c15ca5ba7b82de444f";
+    sha256 = "1vqn1f159g0l76021gifbxpjf7zjhrj807qqqn51h5413lbi6r66";
+    rev = "4bfa7adfef500ff621a677adfab1f7010af920d1";
   };
 
-  vendorSha256 = "0i5x4d3ra0s41knmybbg8gnjxgraxkid6y3gfkjwa65xcbp7hr7q";
+  vendorSha256 = "0b244z3hly5726vwkr7vhdzzm2fi38cv1qh7nvfp3vpsxnii04md";
 
   doCheck = false;
 

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "matterbridge";
-  version = "1.22.2";
+  version = "1.25.2";
 
   src = fetchFromGitHub {
     owner = "42wim";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-H6Cy6yvX57QLNfZPeansZv6IJ4uQVqr0h24QsAlrLx8=";
+    sha256 = "sha256-VqVrAmbKTfDhcvgayEE1wUeFBSTGczBrntIJQ5/uWzM=";
   };
 
   vendorSha256 = null;

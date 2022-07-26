@@ -1,6 +1,9 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchFromGitHub
+, writeScript
 , cmake
+, ninja
 , python3
 , libxml2
 , libffi
@@ -9,7 +12,7 @@
 , zlib
 , debugVersion ? false
 , enableManpages ? false
-, enableSharedLibraries ? !stdenv.hostPlatform.isStatic
+, enableSharedLibraries ? false
 
 , version
 , src
@@ -25,10 +28,12 @@ in stdenv.mkDerivation rec {
 
   pname = "rocm-llvm";
 
+  sourceRoot = "${src.name}/llvm";
+
   outputs = [ "out" "python" ]
     ++ lib.optional enableSharedLibraries "lib";
 
-  nativeBuildInputs = [ cmake python3 ];
+  nativeBuildInputs = [ cmake ninja python3 ];
 
   buildInputs = [ libxml2 libffi ];
 
@@ -57,6 +62,8 @@ in stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+    patchShebangs lib/OffloadArch/make_generated_offload_arch_h.sh
+  '' + lib.optionalString enableSharedLibraries ''
     substitute '${./outputs.patch}' ./outputs.patch --subst-var lib
     patch -p1 < ./outputs.patch
   '';
@@ -72,7 +79,7 @@ in stdenv.mkDerivation rec {
   '';
 
   preCheck = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/lib
   '';
 
   postInstall = ''
@@ -87,11 +94,28 @@ in stdenv.mkDerivation rec {
 
   passthru.src = src;
 
+  updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl jq common-updater-scripts nix-prefetch-github
+
+    version="$(curl -sL "https://api.github.com/repos/RadeonOpenCompute/llvm-project/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
+    current_version="$(grep "version =" pkgs/development/compilers/llvm/rocm/default.nix | cut -d'"' -f2)"
+    if [[ "$version" != "$current_version" ]]; then
+      tarball_meta="$(nix-prefetch-github RadeonOpenCompute llvm-project --rev "rocm-$version")"
+      tarball_hash="$(nix to-base64 sha256-$(jq -r '.sha256' <<< "$tarball_meta"))"
+      sed -i "pkgs/development/compilers/llvm/rocm/default.nix" \
+        -e 's,version = "\(.*\)",version = "'"$version"'",' \
+        -e 's,hash = "\(.*\)",hash = "sha256-'"$tarball_hash"'",'
+    else
+      echo rocm-llvm already up-to-date
+    fi
+  '';
+
   meta = with lib; {
     description = "ROCm fork of the LLVM compiler infrastructure";
     homepage = "https://github.com/RadeonOpenCompute/llvm-project";
     license = with licenses; [ ncsa ];
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ acowley lovesegfault ];
     platforms = platforms.linux;
   };
 }

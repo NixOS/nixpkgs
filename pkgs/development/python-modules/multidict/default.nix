@@ -1,22 +1,28 @@
 { lib
 , fetchPypi
 , buildPythonPackage
-, pytestCheckHook, pytest-runner, pytest-cov
-, isPy3k
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "multidict";
-  version = "5.1.0";
+  version = "6.0.2";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "25b4e5f22d3a37ddf3effc0710ba692cfc792c2b9edfb9c05aefe823256e84d5";
+    sha256 = "sha256-X/O9dfOOTEPx9HDy33pNQwuCHEziK+OE4UWctX1rsBM=";
   };
 
-  checkInputs = [ pytestCheckHook pytest-runner pytest-cov ];
+  postPatch = ''
+    sed -i '/^addopts/d' setup.cfg
+  '';
 
-  disabled = !isPy3k;
+  checkInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "multidict" ];
 
   meta = with lib; {
     description = "Multidict implementation";

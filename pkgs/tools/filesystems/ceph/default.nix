@@ -2,14 +2,14 @@
 , ensureNewerSourcesHook
 , cmake, pkg-config
 , which, git
-, boost
+, boost175
 , libxml2, zlib, lz4
 , openldap, lttng-ust
 , babeltrace, gperf
 , gtest
 , cunit, snappy
 , makeWrapper
-, leveldb, oathToolkit
+, leveldb, oath-toolkit
 , libnl, libcap_ng
 , rdkafka
 , nixosTests
@@ -21,7 +21,7 @@
 , doxygen
 , graphviz
 , fmt
-, python3
+, python39
 
 # Optional Dependencies
 , yasm ? null, fcgi ? null, expat ? null
@@ -85,7 +85,7 @@ let
   };
 
   getMeta = description: with lib; {
-     homepage = "https://ceph.com/";
+     homepage = "https://ceph.io/en/";
      inherit description;
      license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
      maintainers = with maintainers; [ adev ak johanot krav ];
@@ -104,20 +104,12 @@ let
     meta = getMeta "Ceph common module for code shared by manager modules";
   };
 
-  python = python3.override {
-    packageOverrides = self: super: {
-      # scipy > 1.3 breaks diskprediction_local, leading to mgr hang on startup
-      # Bump once these issues are resolved:
-      # https://tracker.ceph.com/issues/42764 https://tracker.ceph.com/issues/45147
-      scipy = super.scipy.overridePythonAttrs (oldAttrs: rec {
-        version = "1.3.3";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "02iqb7ws7fw5fd1a83hx705pzrw1imj7z0bphjsl4bfvw254xgv4";
-        };
-        doCheck = false;
-      });
-    };
+  # Boost 1.75 is not compatible with Python 3.10
+  python = python39;
+
+  boost = boost175.override {
+    enablePython = true;
+    inherit python;
   };
 
   ceph-python-env = python.withPackages (ps: [
@@ -146,10 +138,10 @@ let
   ]);
   sitePackages = ceph-python-env.python.sitePackages;
 
-  version = "16.2.4";
+  version = "16.2.9";
   src = fetchurl {
     url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-    sha256 = "sha256-J6FVK7feNN8cGO5BSDlfRGACAzchmRUSWR+a4ZgeWy0=";
+    sha256 = "sha256-CNj48myJvYwj8cWQRWrTSPiPHS+AFcXfqzd1ytMUxvk=";
   };
 in rec {
   ceph = stdenv.mkDerivation {
@@ -175,7 +167,7 @@ in rec {
     buildInputs = cryptoLibsMap.${cryptoStr} ++ [
       boost ceph-python-env libxml2 optYasm optLibatomic_ops optLibs3
       malloc zlib openldap lttng-ust babeltrace gperf gtest cunit
-      snappy lz4 oathToolkit leveldb libnl libcap_ng rdkafka
+      snappy lz4 oath-toolkit leveldb libnl libcap_ng rdkafka
       cryptsetup sqlite lua icu bzip2
     ] ++ lib.optionals stdenv.isLinux [
       linuxHeaders util-linux libuuid udev keyutils liburing optLibaio optLibxfs optZfs
@@ -192,8 +184,6 @@ in rec {
       substituteInPlace src/common/module.c --replace "/sbin/modprobe" "modprobe"
       substituteInPlace src/common/module.c --replace "/bin/grep" "grep"
 
-      # for pybind/rgw to find internal dep
-      export LD_LIBRARY_PATH="$PWD/build/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
       # install target needs to be in PYTHONPATH for "*.pth support" check to succeed
       # set PYTHONPATH, so the build system doesn't silently skip installing ceph-volume and others
       export PYTHONPATH=${ceph-python-env}/${sitePackages}:$lib/${sitePackages}:$out/${sitePackages}
@@ -239,13 +229,16 @@ in rec {
   };
 
   ceph-client = runCommand "ceph-client-${version}" {
-      meta = getMeta "Tools needed to mount Ceph's RADOS Block Devices";
+      meta = getMeta "Tools needed to mount Ceph's RADOS Block Devices/Cephfs";
     } ''
       mkdir -p $out/{bin,etc,${sitePackages},share/bash-completion/completions}
       cp -r ${ceph}/bin/{ceph,.ceph-wrapped,rados,rbd,rbdmap} $out/bin
       cp -r ${ceph}/bin/ceph-{authtool,conf,dencoder,rbdnamer,syn} $out/bin
       cp -r ${ceph}/bin/rbd-replay* $out/bin
-      cp -r ${ceph}/${sitePackages} $out/${sitePackages}
+      cp -r ${ceph}/sbin/mount.ceph $out/bin
+      cp -r ${ceph}/sbin/mount.fuse.ceph $out/bin
+      ln -s bin $out/sbin
+      cp -r ${ceph}/${sitePackages}/* $out/${sitePackages}
       cp -r ${ceph}/etc/bash_completion.d $out/share/bash-completion/completions
       # wrapPythonPrograms modifies .ceph-wrapped, so lets just update its paths
       substituteInPlace $out/bin/ceph          --replace ${ceph} $out

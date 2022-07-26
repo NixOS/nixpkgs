@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     # Make custom kernels avaible from qucs-s
-    gappsWrapperArgs+=(--prefix PATH ":" ${lib.makeBinPath kernels})
+    gappsWrapperArgs+=(--prefix PATH ":" ${lib.escapeShellArg (lib.makeBinPath kernels)})
   '';
 
   QTDIR=qt4;

@@ -44,7 +44,6 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF" # for tests
     "-D2GEOM_BUILD_SHARED=ON"
   ];
 

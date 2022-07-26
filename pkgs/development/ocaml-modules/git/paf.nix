@@ -3,8 +3,6 @@
 , mimic
 , paf
 , ca-certs-nss
-, cohttp
-, cohttp-lwt
 , fmt
 , ipaddr
 , logs
@@ -16,6 +14,12 @@
 , rresult
 , tls
 , uri
+, bigarray-compat
+, bigstringaf
+, domain-name
+, httpaf
+, mirage-flow
+, tls-mirage
 }:
 
 buildDunePackage {
@@ -28,8 +32,6 @@ buildDunePackage {
     mimic
     paf
     ca-certs-nss
-    cohttp
-    cohttp-lwt
     fmt
     lwt
     result
@@ -41,6 +43,12 @@ buildDunePackage {
     mirage-time
     tls
     uri
+    bigarray-compat
+    bigstringaf
+    domain-name
+    httpaf
+    mirage-flow
+    tls-mirage
   ];
 
   meta = git.meta // {

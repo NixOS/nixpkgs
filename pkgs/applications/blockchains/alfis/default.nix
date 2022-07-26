@@ -1,25 +1,29 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, pkg-config
-, withGui ? true, webkitgtk, Cocoa, WebKit
+{ stdenv
+, lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, makeWrapper
+, webkitgtk
+, zenity
+, Cocoa
+, Security
+, WebKit
+, withGui ? true
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "alfis";
-  version = "0.6.5";
+  version = "0.7.6";
 
   src = fetchFromGitHub {
     owner = "Revertron";
     repo = "Alfis";
     rev = "v${version}";
-    sha256 = "1g95yvkvlj78bqrk3p2xbhrmg1hrlgbyr1a4s7vg45y60zys2c2j";
+    sha256 = "sha256-g9oaUdmwHGU2EIqSYLGlSN8597ORTzm8XzTxBbiKUNA=";
   };
 
-  cargoSha256 = "1n7kb1lyghpkgdgd58pw8ldvfps30rnv5niwx35pkdg74h59hqgj";
-
-  cargoBuildFlags = [ "--no-default-features" ]
-    ++ lib.optional withGui "--features webgui";
-
-  cargoTestFlags = [ "--no-default-features" ]
-    ++ lib.optional withGui "--features webgui";
+  cargoSha256 = "sha256-SNROmuChSOHUMhMCTKPOOuoYOATx9JEwuVP0mtGZ/G8=";
 
   checkFlags = [
     # these want internet access, disable them
@@ -27,9 +31,20 @@ rustPlatform.buildRustPackage rec {
     "--skip=dns::client::tests::test_udp_client"
   ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = lib.optional (withGui && stdenv.isLinux) webkitgtk
+  nativeBuildInputs = [ pkg-config makeWrapper ];
+  buildInputs = lib.optional stdenv.isDarwin Security
+    ++ lib.optional (withGui && stdenv.isLinux) webkitgtk
     ++ lib.optionals (withGui && stdenv.isDarwin) [ Cocoa WebKit ];
+
+  buildNoDefaultFeatures = true;
+  buildFeatures = [
+    "doh"
+  ] ++ lib.optional withGui "webgui";
+
+  postInstall = lib.optionalString (withGui && stdenv.isLinux) ''
+    wrapProgram $out/bin/alfis \
+      --prefix PATH : ${lib.makeBinPath [ zenity ]}
+  '';
 
   meta = with lib; {
     description = "Alternative Free Identity System";

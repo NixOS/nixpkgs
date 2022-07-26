@@ -1,5 +1,7 @@
-{ lib, buildPythonPackage, fetchPypi
-, enum34
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cython
 , glibcLocales
 , matplotlib
 , monty
@@ -8,11 +10,12 @@
 , palettable
 , pandas
 , plotly
+, pybtex
 , pydispatcher
+, pythonOlder
 , requests
-, ruamel_yaml
+, ruamel-yaml
 , scipy
-, six
 , spglib
 , sympy
 , tabulate
@@ -21,17 +24,24 @@
 
 buildPythonPackage rec {
   pname = "pymatgen";
-  version = "2022.0.8";
+  version = "2022.3.29";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "4f12ac87657e8efe833087c575ec4430900dfcece890bb0486e07f034a2b34a0";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "materialsproject";
+    repo = "pymatgen";
+    rev= "v${version}";
+    hash = "sha256-B2piRWx9TfKlGTPOAAGsq2GxyfHIRBVFpk6dxES0WF0=";
   };
 
-  nativeBuildInputs = [ glibcLocales ];
+  nativeBuildInputs = [
+    cython
+    glibcLocales
+  ];
 
   propagatedBuildInputs = [
-    enum34
     matplotlib
     monty
     networkx
@@ -39,20 +49,23 @@ buildPythonPackage rec {
     palettable
     pandas
     plotly
+    pybtex
     pydispatcher
     requests
-    ruamel_yaml
+    ruamel-yaml
     scipy
-    six
     spglib
     sympy
     tabulate
     uncertainties
   ];
 
-  # No tests in pypi tarball.
+  # Tests are not detected by pytest
   doCheck = false;
-  pythonImportsCheck = [ "pymatgen" ];
+
+  pythonImportsCheck = [
+    "pymatgen"
+  ];
 
   meta = with lib; {
     description = "A robust materials analysis code that defines core object representations for structures and molecules";

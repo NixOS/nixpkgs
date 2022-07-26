@@ -1,11 +1,13 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, fetchpatch
 , autoreconfHook
-, pkg-config
 , bison
-, ncurses
 , libevent
+, ncurses
+, pkg-config
+, withSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isStatic, systemd
+, utf8proc
 }:
 
 let
@@ -21,7 +23,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "tmux";
-  version = "3.2a";
+  version = "3.3a";
 
   outputs = [ "out" "man" ];
 
@@ -29,16 +31,8 @@ stdenv.mkDerivation rec {
     owner = "tmux";
     repo = "tmux";
     rev = version;
-    sha256 = "0143ylfk7zsl3xmiasb768238gr582cfhsgv3p0h0f13bp8d6q09";
+    sha256 = "sha256-SygHxTe7N4y7SdzKixPFQvqRRL57Fm8zWYHfTpW+yVY=";
   };
-
-  patches = [
-    # See https://github.com/tmux/tmux/pull/2755
-    (fetchpatch {
-      url = "https://github.com/tmux/tmux/commit/d0a2683120ec5a33163a14b0e1b39d208745968f.patch";
-      sha256 = "070knpncxfxi6k4q64jwi14ns5vm3606cf402h1c11cwnaa84n1g";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -49,12 +43,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     libevent
-  ];
+  ] ++ lib.optionals withSystemd [ systemd ]
+  ++ lib.optionals stdenv.isDarwin [ utf8proc ];
 
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-  ];
+  ] ++ lib.optionals withSystemd [ "--enable-systemd" ]
+  ++ lib.optionals stdenv.isDarwin [ "--enable-utf8proc" ];
 
   enableParallelBuilding = true;
 
@@ -66,24 +62,21 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://tmux.github.io/";
     description = "Terminal multiplexer";
-
-    longDescription =
-      '' tmux is intended to be a modern, BSD-licensed alternative to programs such as GNU screen. Major features include:
-
-          * A powerful, consistent, well-documented and easily scriptable command interface.
-          * A window may be split horizontally and vertically into panes.
-          * Panes can be freely moved and resized, or arranged into preset layouts.
-          * Support for UTF-8 and 256-colour terminals.
-          * Copy and paste with multiple buffers.
-          * Interactive menus to select windows, sessions or clients.
-          * Change the current window by searching for text in the target.
-          * Terminal locking, manually or after a timeout.
-          * A clean, easily extended, BSD-licensed codebase, under active development.
-      '';
+    longDescription = ''
+      tmux is intended to be a modern, BSD-licensed alternative to programs such as GNU screen. Major features include:
+        * A powerful, consistent, well-documented and easily scriptable command interface.
+        * A window may be split horizontally and vertically into panes.
+        * Panes can be freely moved and resized, or arranged into preset layouts.
+        * Support for UTF-8 and 256-colour terminals.
+        * Copy and paste with multiple buffers.
+        * Interactive menus to select windows, sessions or clients.
+        * Change the current window by searching for text in the target.
+        * Terminal locking, manually or after a timeout.
+        * A clean, easily extended, BSD-licensed codebase, under active development.
+    '';
     changelog = "https://github.com/tmux/tmux/raw/${version}/CHANGES";
     license = lib.licenses.bsd3;
-
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ thammers fpletz ];
+    maintainers = with lib.maintainers; [ thammers fpletz SuperSandro2000 ];
   };
 }

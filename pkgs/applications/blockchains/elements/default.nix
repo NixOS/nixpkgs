@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
 , autoreconfHook
 , pkg-config
 , util-linux
@@ -17,7 +17,6 @@
 , qtbase ? null
 , qttools ? null
 , python3
-, openssl
 , withGui
 , withWallet ? true
 }:
@@ -25,11 +24,13 @@
 with lib;
 stdenv.mkDerivation rec {
   pname = if withGui then "elements" else "elementsd";
-  version = "0.18.1.12";
+  version = "0.21.0.2";
 
-  src = fetchurl {
-    url = "https://github.com/ElementsProject/elements/archive/elements-${version}.tar.gz";
-    sha256 = "84a51013596b09c62913649ac90373622185f779446ee7e65b4b258a2876609f";
+  src = fetchFromGitHub {
+    owner = "ElementsProject";
+    repo = "elements";
+    rev = "elements-${version}";
+    sha256 = "sha256-5b3wylp9Z2U0ueu2gI9jGeWiiJoddjcjQ/6zkFATyvA=";
   };
 
   nativeBuildInputs =
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
     ++ optionals stdenv.isDarwin [ hexdump ]
     ++ optionals withGui [ wrapQtAppsHook ];
 
-  buildInputs = [ boost libevent miniupnpc zeromq zlib openssl ]
+  buildInputs = [ boost libevent miniupnpc zeromq zlib ]
     ++ optionals withWallet [ db48 sqlite ]
     ++ optionals withGui [ qrencode qtbase qttools ];
 
@@ -79,8 +80,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ prusnak ];
     license = licenses.mit;
     platforms = platforms.unix;
-    # Qt GUI is currently broken in upstream
-    # No rule to make target 'qt/res/rendered_icons/about.png', needed by 'qt/qrc_bitcoin.cpp'.
-    broken = withGui;
   };
 }

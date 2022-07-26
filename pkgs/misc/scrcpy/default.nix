@@ -2,18 +2,19 @@
 , meson
 , ninja
 , pkg-config
-, fetchpatch
+, installShellFiles
 
 , platform-tools
 , ffmpeg
+, libusb1
 , SDL2
 }:
 
 let
-  version = "1.18";
+  version = "1.24";
   prebuilt_server = fetchurl {
     url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}";
-    sha256 = "18si7k9hyqa77yy9w747kl2x2pivyigny49dwzx9sfd9xmmmq734";
+    sha256 = "sha256-rnSoHqecDcclDlhmJ8J4wKmoxd5GyftcOMFn+xo28FY=";
   };
 in
 stdenv.mkDerivation rec {
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "Genymobile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "019948v63qhmp742hmar7a98ss673m0wdycpphjhfl1kg4iihiya";
+    sha256 = "sha256-mL0lSZUPMMcLGq4iPp/IgYZLaTeey9Nv9vVwY1gaIRk=";
   };
 
   # postPatch:
@@ -36,16 +37,15 @@ stdenv.mkDerivation rec {
       --replace "SDL_RENDERER_ACCELERATED" "SDL_RENDERER_ACCELERATED || SDL_RENDERER_SOFTWARE"
   '';
 
-  nativeBuildInputs = [ makeWrapper meson ninja pkg-config ];
+  nativeBuildInputs = [ makeWrapper meson ninja pkg-config installShellFiles ];
 
-  buildInputs = [ ffmpeg SDL2 ];
+  buildInputs = [ ffmpeg SDL2 libusb1 ];
 
   # Manually install the server jar to prevent Meson from "fixing" it
   preConfigure = ''
     echo -n > server/meson.build
   '';
 
-  mesonFlags = [ "-Doverride_server_path=${prebuilt_server}" ];
   postInstall = ''
     mkdir -p "$out/share/scrcpy"
     ln -s "${prebuilt_server}" "$out/share/scrcpy/scrcpy-server"
@@ -57,8 +57,12 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Display and control Android devices over USB or TCP/IP";
     homepage = "https://github.com/Genymobile/scrcpy";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # server
+    ];
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ deltaevo lukeadams ];
+    maintainers = with maintainers; [ deltaevo lukeadams msfjarvis ];
   };
 }

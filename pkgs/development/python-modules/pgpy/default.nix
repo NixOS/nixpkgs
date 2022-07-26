@@ -1,5 +1,5 @@
 { lib, pythonOlder, fetchFromGitHub, buildPythonPackage
-, six, enum34, pyasn1, cryptography, singledispatch ? null
+, six, enum34, pyasn1, cryptography
 , pytestCheckHook }:
 
 buildPythonPackage rec {
@@ -18,12 +18,16 @@ buildPythonPackage rec {
     pyasn1
     cryptography
   ] ++ lib.optionals (pythonOlder "3.4") [
-    singledispatch
     enum34
   ];
 
   checkInputs = [
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # assertions contains extra: IDEA has been deprecated
+    "test_encrypt_bad_cipher"
   ];
 
   meta = with lib; {

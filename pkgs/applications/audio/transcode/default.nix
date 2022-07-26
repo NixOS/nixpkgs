@@ -19,6 +19,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: tcextract-extract_pcm.o:/build/transcode-1.1.7/import/extract_pcm.c:36: multiple definition of
+  #     `audio'; tcextract-extract_ac3.o:/build/transcode-1.1.7/import/extract_ac3.c:337: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   meta = with lib; {
     description = "Suite of command line utilities for transcoding video and audio codecs, and for converting between different container formats";
     homepage = "http://www.transcoding.org/";

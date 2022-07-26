@@ -1,30 +1,63 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub, pcsclite, pkg-config, PCSC, pivKeySupport ? true }:
+{ stdenv, lib, buildGoModule, fetchFromGitHub, pcsclite, pkg-config, installShellFiles, PCSC, pivKeySupport ? true, pkcs11Support ? true }:
 
 buildGoModule rec {
   pname = "cosign";
-  version = "1.0.1";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-j1C4OGyVY41bG+rRr6chbii94H4yeRCum52A8XcnP6g=";
+    sha256 = "sha256-l+jM0GCjaqbaoIcjUgnIZJqSGIsirWMwJWPrilBdps8=";
   };
 
-  buildInputs =
-    lib.optional (stdenv.isLinux && pivKeySupport) (lib.getDev pcsclite)
+  buildInputs = lib.optional (stdenv.isLinux && pivKeySupport) (lib.getDev pcsclite)
     ++ lib.optionals (stdenv.isDarwin && pivKeySupport) [ PCSC ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config installShellFiles ];
 
-  vendorSha256 = "sha256-9/KrgokCqSWqC4nOgA1e9H0sOx6O/ZFGFEPxiPEKoNI=";
+  vendorSha256 = "sha256-mZeCQOnAVZrJmi9F+y7QPPXXl48f7HAjJCmri01hYew=";
 
-  excludedPackages = "\\(copasetic\\)";
+  subPackages = [
+    "cmd/cosign"
+    "cmd/cosign/webhook"
+    "cmd/sget"
+  ];
 
-  preBuild = ''
-    buildFlagsArray+=(${lib.optionalString pivKeySupport "-tags=pivkey"})
+  tags = [] ++ lib.optionals pivKeySupport [ "pivkey" ] ++ lib.optionals pkcs11Support [ "pkcs11key" ];
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X sigs.k8s.io/release-utils/version.gitVersion=v${version}"
+    "-X sigs.k8s.io/release-utils/version.gitTreeState=clean"
+  ];
+
+  postBuild = ''
+    # cmd/cosign/webhook should be called cosigned
+    mv $GOPATH/bin/{webhook,cosigned}
   '';
-  ldflags = [ "-s" "-w" "-X github.com/sigstore/cosign/cmd/cosign/cli.gitVersion=v${version}" ];
+
+  preCheck = ''
+    # test all paths
+    unset subPackages
+
+    rm cmd/cosign/cli/fulcio/fulcioroots/fulcioroots_test.go # Require network access
+    rm pkg/cosign/kubernetes/webhook/validator_test.go # Require network access
+    rm pkg/cosign/tlog_test.go # Require network access
+    rm pkg/cosign/tuf/client_test.go # Require network access
+  '';
+
+  postInstall = ''
+    installShellCompletion --cmd cosign \
+      --bash <($out/bin/cosign completion bash) \
+      --fish <($out/bin/cosign completion fish) \
+      --zsh <($out/bin/cosign completion zsh)
+    installShellCompletion --cmd sget \
+      --bash <($out/bin/sget completion bash) \
+      --fish <($out/bin/sget completion fish) \
+      --zsh <($out/bin/sget completion zsh)
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/sigstore/cosign";

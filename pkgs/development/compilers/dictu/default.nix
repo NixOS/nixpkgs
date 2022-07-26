@@ -13,13 +13,13 @@ assert enableLTO -> stdenv.cc.isGNU;
 
 stdenv.mkDerivation rec {
   pname = "dictu";
-  version = "0.19.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "dictu-lang";
     repo = pname;
     rev = "v${version}";
-    sha256 = "5Sfmzz4I0dhcbz14LmXx5cHELRFENunLbZmU93uSEJo=";
+    sha256 = "sha256-EYoLEyK8jh4z3/9aMuUBt0pCwks7NIevsK2mOh8x6bQ=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -80,5 +80,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ luc65r ];
     platforms = platforms.all;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/dictu.x86_64-darwin
   };
 }

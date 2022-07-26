@@ -20,13 +20,13 @@
 
 mkDerivation rec {
   pname = "lxqt-runner";
-  version = "0.17.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "167gzn6aqk7akzbmrnm7nmcpkl0nphr8axbfgwnw552dnk6v8gn0";
+    sha256 = "hnuzoHKXqM6xEzN0jvHVjVWUXRxuwdhD3BiBfFMmZSk=";
   };
 
   nativeBuildInputs = [
@@ -56,6 +56,6 @@ mkDerivation rec {
     description = "Tool used to launch programs quickly by typing their names";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

@@ -1,16 +1,15 @@
 { lib
 , fetchPypi
 , buildPythonPackage
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "spacy-legacy";
-  version = "3.0.5";
+  version = "3.0.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Uy94rjFllSj622RTzd6UJaQmIniCw4gpeq/X57QcIpA=";
+    sha256 = "sha256-T33LxObI6MtOrbsAn5wKGipnRC4AMsjWd2yUcMN1mQM=";
   };
 
   # checkInputs = [ pytestCheckHook spacy ];

@@ -11,7 +11,7 @@ in {
     package = mkOption {
       type = types.package;
       default = pkgs.libinfinity;
-      defaultText = "pkgs.libinfinity";
+      defaultText = literalExpression "pkgs.libinfinity";
       description = ''
         Package providing infinoted
       '';

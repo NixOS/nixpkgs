@@ -8,14 +8,16 @@
 
 buildPythonPackage rec {
   pname = "aiocoap";
-  version = "0.4.1";
+  version = "0.4.3";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "chrysn";
     repo = pname;
     rev = version;
-    sha256 = "0k7ii2l3n139f8712ja6w3z73xiwlfsjgdc4k5c514ni2w6w2yjc";
+    sha256 = "sha256-fTRDx9VEXDoMKM78YYL+mBEdvhbLtHiHdo66kwRnNhA=";
   };
 
   propagatedBuildInputs = [
@@ -38,7 +40,9 @@ buildPythonPackage rec {
     "test_uri_parser"
   ];
 
-  pythonImportsCheck = [ "aiocoap" ];
+  pythonImportsCheck = [
+    "aiocoap"
+  ];
 
   meta = with lib; {
     description = "Python CoAP library";

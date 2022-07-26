@@ -19,6 +19,7 @@
 <programlisting>
   services.prometheus.exporters.node = {
     enable = true;
+    port = 9100;
     enabledCollectors = [
       "logind"
       "systemd"
@@ -41,6 +42,26 @@
    the
    <link xlink:href="https://nixos.org/nixos/options.html#prometheus.exporters">available
    options</link>.
+  </para>
+
+  <para>
+    Prometheus can now be configured to consume the metrics produced by the exporter:
+    <programlisting>
+    services.prometheus = {
+      # ...
+
+      scrapeConfigs = [
+        {
+          job_name = "node";
+          static_configs = [{
+            targets = [ "localhost:${toString config.services.prometheus.exporters.node.port}" ];
+          }];
+        }
+      ];
+
+      # ...
+    }
+    </programlisting>
   </para>
  </section>
  <section xml:id="module-services-prometheus-exporters-new-exporter">

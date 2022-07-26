@@ -1,5 +1,5 @@
 { egl-wayland
-, epoxy
+, libepoxy
 , fetchurl
 , fontutil
 , lib
@@ -23,6 +23,7 @@
 , libxcb
 , libxkbfile
 , libxshmfence
+, libxcvt
 , mesa
 , meson
 , ninja
@@ -41,12 +42,12 @@
 , defaultFontPath ? "" }:
 
 stdenv.mkDerivation rec {
-
   pname = "xwayland";
-  version = "21.1.2";
+  version = "22.1.3";
+
   src = fetchurl {
     url = "mirror://xorg/individual/xserver/${pname}-${version}.tar.xz";
-    sha256 = "sha256-uBy91a1guLetjD7MfsKijJvwIUSGcHNc67UB8Ivr0Ys=";
+    sha256 = "sha256-pxLre84yzZNN82gUtd0EaqZwiZwW/pjyr7ADV4+GocU=";
   };
 
   depsBuildBuild = [
@@ -60,7 +61,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     egl-wayland
-    epoxy
+    libepoxy
     fontutil
     libGL
     libGLU
@@ -82,6 +83,7 @@ stdenv.mkDerivation rec {
     libxcb
     libxkbfile
     libxshmfence
+    libxcvt
     mesa
     openssl
     pixman

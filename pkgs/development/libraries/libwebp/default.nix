@@ -1,11 +1,10 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, libtool
 , threadingSupport ? true # multi-threading
-, openglSupport ? false, freeglut ? null, libGL ? null, libGLU ? null # OpenGL (required for vwebp)
-, pngSupport ? true, libpng ? null # PNG image format
-, jpegSupport ? true, libjpeg ? null # JPEG image format
-, tiffSupport ? true, libtiff ? null # TIFF image format
-, gifSupport ? true, giflib ? null # GIF image format
-#, wicSupport ? true # Windows Imaging Component
+, openglSupport ? false, freeglut, libGL, libGLU # OpenGL (required for vwebp)
+, pngSupport ? true, libpng # PNG image format
+, jpegSupport ? true, libjpeg # JPEG image format
+, tiffSupport ? true, libtiff # TIFF image format
+, gifSupport ? true, giflib # GIF image format
 , alignedSupport ? false # Force aligned memory operations
 , swap16bitcspSupport ? false # Byte swap for 16bit color spaces
 , experimentalSupport ? false # Experimental code
@@ -14,61 +13,49 @@
 , libwebpdecoderSupport ? true # Build libwebpdecoder
 }:
 
-assert openglSupport -> freeglut != null && libGL != null && libGLU != null;
-assert pngSupport -> (libpng != null);
-assert jpegSupport -> (libjpeg != null);
-assert tiffSupport -> (libtiff != null);
-assert gifSupport -> (giflib != null);
-
-let
-  mkFlag = optSet: flag: if optSet then "--enable-${flag}" else "--disable-${flag}";
-in
-
-with lib;
 stdenv.mkDerivation rec {
   pname = "libwebp";
-  version = "1.1.0";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner  = "webmproject";
     repo   = pname;
-    rev    = version;
-    sha256 = "1kl6qqa29ygqb2fpv140y59v539gdqx4vcf3mlaxhca2bks98qgm";
+    rev    = "v${version}";
+    hash   = "sha256-WF2HZPS7mbotk+d1oLM/JC5l/FWfkrk+T3Z6EW9oYEI=";
   };
 
   prePatch = "patchShebangs .";
 
   configureFlags = [
-    (mkFlag threadingSupport "threading")
-    (mkFlag openglSupport "gl")
-    (mkFlag pngSupport "png")
-    (mkFlag jpegSupport "jpeg")
-    (mkFlag tiffSupport "tiff")
-    (mkFlag gifSupport "gif")
-    #(mkFlag (wicSupport && stdenv.isCygwin) "wic")
-    (mkFlag alignedSupport "aligned")
-    (mkFlag swap16bitcspSupport "swap-16bit-csp")
-    (mkFlag experimentalSupport "experimental")
-    (mkFlag libwebpmuxSupport "libwebpmux")
-    (mkFlag libwebpdemuxSupport "libwebpdemux")
-    (mkFlag libwebpdecoderSupport "libwebpdecoder")
+    (lib.enableFeature threadingSupport "threading")
+    (lib.enableFeature openglSupport "gl")
+    (lib.enableFeature pngSupport "png")
+    (lib.enableFeature jpegSupport "jpeg")
+    (lib.enableFeature tiffSupport "tiff")
+    (lib.enableFeature gifSupport "gif")
+    (lib.enableFeature alignedSupport "aligned")
+    (lib.enableFeature swap16bitcspSupport "swap-16bit-csp")
+    (lib.enableFeature experimentalSupport "experimental")
+    (lib.enableFeature libwebpmuxSupport "libwebpmux")
+    (lib.enableFeature libwebpdemuxSupport "libwebpdemux")
+    (lib.enableFeature libwebpdecoderSupport "libwebpdecoder")
   ];
 
   nativeBuildInputs = [ autoreconfHook libtool ];
   buildInputs = [ ]
-    ++ optionals openglSupport [ freeglut libGL libGLU ]
-    ++ optional pngSupport libpng
-    ++ optional jpegSupport libjpeg
-    ++ optional tiffSupport libtiff
-    ++ optional gifSupport giflib;
+    ++ lib.optionals openglSupport [ freeglut libGL libGLU ]
+    ++ lib.optionals pngSupport [ libpng ]
+    ++ lib.optionals jpegSupport [ libjpeg ]
+    ++ lib.optionals tiffSupport [ libtiff ]
+    ++ lib.optionals gifSupport [ giflib ];
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Tools and library for the WebP image format";
     homepage = "https://developers.google.com/speed/webp/";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ codyopel ];
+    maintainers = with maintainers; [ ajs124 ];
   };
 }

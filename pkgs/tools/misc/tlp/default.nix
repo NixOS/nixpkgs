@@ -13,6 +13,7 @@
 , makeWrapper
 , pciutils
 , perl
+, perlcritic
 , shellcheck
 , smartmontools
 , systemd
@@ -23,20 +24,23 @@
 , networkmanager
 }: stdenv.mkDerivation rec {
   pname = "tlp";
-  version = "1.3.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "linrunner";
     repo = "TLP";
     rev = version;
-    sha256 = "14fcnaz9pw534v4d8dddqq4wcvpf1kghr8zlrk62r5lrl46sp1p5";
+    sha256 = "sha256-hHel3BVMzTYfE59kxxADnm8tqtUFntqS3RzmJSZlWjM=";
   };
 
   # XXX: See patch files for relevant explanations.
-  patches = [ ./patches/fix-makefile-sed.patch ./patches/tlp-sleep-service.patch ];
+  patches = [
+    ./patches/0001-makefile-correctly-sed-paths.patch
+    ./patches/0002-reintroduce-tlp-sleep-service.patch
+  ];
 
   buildInputs = [ perl ];
-  nativeBuildInputs = [ makeWrapper gnused ];
+  nativeBuildInputs = [ makeWrapper ];
 
   # XXX: While [1] states that DESTDIR should not be used, and that the correct
   # variable to set is, in fact, PREFIX, tlp thinks otherwise. The Makefile for
@@ -46,14 +50,15 @@
   # [1]: https://github.com/NixOS/nixpkgs/issues/65718
   # [2]: https://github.com/linrunner/TLP/blob/ab788abf4936dfb44fbb408afc34af834230a64d/Makefile#L4-L46
   makeFlags = [
-    "DESTDIR=${placeholder "out"}"
-
     "TLP_NO_INIT=1"
     "TLP_WITH_ELOGIND=0"
     "TLP_WITH_SYSTEMD=1"
 
+    "DESTDIR=${placeholder "out"}"
+    "TLP_BATD=/share/tlp/bat.d"
     "TLP_BIN=/bin"
     "TLP_CONFDEF=/share/tlp/defaults.conf"
+    "TLP_CONFREN=/share/tlp/rename.conf"
     "TLP_FLIB=/share/tlp/func.d"
     "TLP_MAN=/share/man"
     "TLP_META=/share/metainfo"
@@ -65,12 +70,11 @@
   installTargets = [ "install-tlp" "install-man" ]
   ++ lib.optionals enableRDW [ "install-rdw" "install-man-rdw" ];
 
-  # XXX: This is disabled because it's basically just noise since upstream
-  # itself does not seem to care about the zillion shellcheck errors.
-  doCheck = false;
-  checkInputs = [ checkbashisms shellcheck ];
+  doCheck = true;
+  checkInputs = [ checkbashisms perlcritic shellcheck ];
   checkTarget = [ "checkall" ];
 
+  # TODO: Consider using resholve here
   postInstall = let
     paths = lib.makeBinPath (
       [
@@ -107,12 +111,16 @@
         $out/etc/NetworkManager/dispatcher.d/*
         $out/lib/udev/tlp-*
         $out/sbin/*
+        $out/share/tlp/bat.d/*
         $out/share/tlp/func.d/*
         $out/share/tlp/tlp-func-base
       )
       for f in "''${fixup_bash[@]}"; do
         sed -i '2iexport PATH=${paths}:$PATH' "$f"
       done
+
+      rm -rf $out/var
+      rm -rf $out/share/metainfo
     '';
 
   meta = with lib; {

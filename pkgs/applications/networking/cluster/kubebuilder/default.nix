@@ -1,40 +1,40 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, installShellFiles
 , makeWrapper
 , git
 , go
+, gnumake
 }:
 
 buildGoModule rec {
   pname = "kubebuilder";
-  version = "3.1.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "kubebuilder";
     rev = "v${version}";
-    sha256 = "1726j2b5jyvllvnk60g6px3g2jyyphd9pc4vgid45mis9b60sh8a";
+    sha256 = "sha256-xLeS0vfYuLEdzuou67ViduaBf62+Yqk+scaCCK+Xetk=";
   };
-  vendorSha256 = "0zxyd950ksjswja64rfri5v2yaalfg6qmq8215ildgrcavl9974n";
+  vendorSha256 = "sha256-zE/y9FAoUZBmWiUMWbc66CwkK0h7SEXzfZY3KkjtQ0A=";
 
-  subPackages = ["cmd" "pkg/..."];
+  subPackages = ["cmd"];
 
-  preBuild = ''
-    export buildFlagsArray+=("-ldflags=-X main.kubeBuilderVersion=v${version} \
-        -X main.goos=$GOOS \
-        -X main.goarch=$GOARCH \
-        -X main.gitCommit=v${version} \
-        -X main.buildDate=v${version}")
-  '';
+  ldflags = [
+    "-X main.kubeBuilderVersion=v${version}"
+    "-X main.goos=${go.GOOS}"
+    "-X main.goarch=${go.GOARCH}"
+    "-X main.gitCommit=v${version}"
+    "-X main.buildDate=v${version}"
+  ];
 
   doCheck = true;
 
   postInstall = ''
     mv $out/bin/cmd $out/bin/kubebuilder
     wrapProgram $out/bin/kubebuilder \
-      --prefix PATH : ${lib.makeBinPath [ go ]}
+      --prefix PATH : ${lib.makeBinPath [ go gnumake ]}
   '';
 
   allowGoReference = true;

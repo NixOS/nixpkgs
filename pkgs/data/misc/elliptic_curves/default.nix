@@ -1,15 +1,15 @@
 { lib, stdenv
 , fetchurl
-, python2
+, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "elliptic_curves";
-  version = "0.8";
+  version = "0.8.1";
 
   src = fetchurl {
     url = "mirror://sageupstream/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "0pzaym44x88dn8rydiwqgm73yghzlgf7gqvd7qqsrsdl2vyp091w";
+    sha256 = "0l7xh4abw5sb4d37r0ylr3vwb88fpx2zrvfm5ql0c7yrv5q59fjz";
   };
 
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     export SAGE_SHARE="$out/share"
     export PYTHONPATH=$PWD
 
-    ${python2.interpreter} ${spkg-install}
+    ${python3.interpreter} ${spkg-install}
   '';
 
   meta = with lib; {

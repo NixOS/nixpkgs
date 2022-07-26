@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, perl, which
+{ lib, stdenv, fetchFromGitHub, perl, which
 # Most packages depending on openblas expect integer width to match
 # pointer width, but some expect to use 32-bit integers always
 # (for compatibility with reference BLAS).
@@ -129,7 +129,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openblas";
-  version = "0.3.15";
+  version = "0.3.20";
 
   outputs = [ "out" "dev" ];
 
@@ -137,22 +137,8 @@ stdenv.mkDerivation rec {
     owner = "xianyi";
     repo = "OpenBLAS";
     rev = "v${version}";
-    sha256 = "1qjr02cqncv20abdp1yzr55n7smhx6h9chqvb0xbp18byynvj87w";
+    sha256 = "sha256-FLPVcepf7tv/es+4kur9Op7o3iVAAayuYN4hY/P4mmQ=";
   };
-
-  # remove both patches when updating to 0.3.16
-  patches = [
-    (fetchpatch {
-      name = "riscv64-imin-fix-wrong-comparison.patch";
-      url = "https://github.com/xianyi/OpenBLAS/commit/1e0192a5ccac28fc0c749f49d36ec7eda9757428.patch";
-      sha256 = "0kjkmrj8023vcjxhgin5dqs5w3gf93hzhwdhg0vsjhdra2ghkwzj";
-    })
-    (fetchpatch {
-      name = "riscv64-generic-use-generic-kernel-for-dsdot.patch";
-      url = "https://github.com/xianyi/OpenBLAS/commit/3521cd48cbfb3d50f6ae9a10377382d37075c696.patch";
-      sha256 = "0ljwbldff4db377s8rzmqxrszilqdivy656yqvfq46x5338v3gi0";
-    })
-  ];
 
   inherit blas64;
 
@@ -222,15 +208,21 @@ EOF
     done
 
     # Setup symlinks for blas / lapack
+  '' + lib.optionalString enableShared ''
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/libblas${shlibExt}
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/libcblas${shlibExt}
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapack${shlibExt}
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapacke${shlibExt}
-  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
+  '' + lib.optionalString (stdenv.hostPlatform.isLinux && enableShared) ''
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/libblas${shlibExt}.3
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/libcblas${shlibExt}.3
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapack${shlibExt}.3
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapacke${shlibExt}.3
+  '' + lib.optionalString enableStatic ''
+    ln -s $out/lib/libopenblas.a $out/lib/libblas.a
+    ln -s $out/lib/libopenblas.a $out/lib/libcblas.a
+    ln -s $out/lib/libopenblas.a $out/lib/liblapack.a
+    ln -s $out/lib/libopenblas.a $out/lib/liblapacke.a
   '';
 
   meta = with lib; {

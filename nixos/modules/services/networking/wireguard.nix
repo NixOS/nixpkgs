@@ -1,10 +1,11 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
 
   cfg = config.networking.wireguard;
+  opt = options.networking.wireguard;
 
   kernel = config.boot.kernelPackages;
 
@@ -62,9 +63,7 @@ let
       };
 
       preSetup = mkOption {
-        example = literalExample ''
-          ${pkgs.iproute2}/bin/ip netns add foo
-        '';
+        example = literalExpression ''"''${pkgs.iproute2}/bin/ip netns add foo"'';
         default = "";
         type = with types; coercedTo (listOf str) (concatStringsSep "\n") lines;
         description = ''
@@ -73,8 +72,8 @@ let
       };
 
       postSetup = mkOption {
-        example = literalExample ''
-          printf "nameserver 10.200.100.1" | ${pkgs.openresolv}/bin/resolvconf -a wg0 -m 0
+        example = literalExpression ''
+          '''printf "nameserver 10.200.100.1" | ''${pkgs.openresolv}/bin/resolvconf -a wg0 -m 0'''
         '';
         default = "";
         type = with types; coercedTo (listOf str) (concatStringsSep "\n") lines;
@@ -82,7 +81,7 @@ let
       };
 
       postShutdown = mkOption {
-        example = literalExample "${pkgs.openresolv}/bin/resolvconf -d wg0";
+        example = literalExpression ''"''${pkgs.openresolv}/bin/resolvconf -d wg0"'';
         default = "";
         type = with types; coercedTo (listOf str) (concatStringsSep "\n") lines;
         description = "Commands called after shutting down the interface.";
@@ -302,8 +301,9 @@ let
       {
         description = "WireGuard Peer - ${interfaceName} - ${peer.publicKey}";
         requires = [ "wireguard-${interfaceName}.service" ];
-        after = [ "wireguard-${interfaceName}.service" ];
-        wantedBy = [ "multi-user.target" "wireguard-${interfaceName}.service" ];
+        wants = [ "network-online.target" ];
+        after = [ "wireguard-${interfaceName}.service" "network-online.target" ];
+        wantedBy = [ "wireguard-${interfaceName}.service" ];
         environment.DEVICE = interfaceName;
         environment.WG_ENDPOINT_RESOLUTION_RETRIES = "infinity";
         path = with pkgs; [ iproute2 wireguard-tools ];
@@ -380,8 +380,9 @@ let
     nameValuePair "wireguard-${name}"
       {
         description = "WireGuard Tunnel - ${name}";
-        requires = [ "network-online.target" ];
-        after = [ "network.target" "network-online.target" ];
+        after = [ "network-pre.target" ];
+        wants = [ "network.target" ];
+        before = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         environment.DEVICE = name;
         path = with pkgs; [ kmod iproute2 wireguard-tools ];
@@ -440,6 +441,7 @@ in
         type = types.bool;
         # 2019-05-25: Backwards compatibility.
         default = cfg.interfaces != {};
+        defaultText = literalExpression "config.${opt.interfaces} != { }";
         example = true;
       };
 

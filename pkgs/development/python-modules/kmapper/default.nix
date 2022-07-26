@@ -8,7 +8,7 @@
 , pytestCheckHook
 , networkx
 , matplotlib
-, python-igraph
+, igraph
 , plotly
 , ipywidgets
 }:
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     pytestCheckHook
     networkx
     matplotlib
-    python-igraph
+    igraph
     plotly
     ipywidgets
   ];

@@ -28,9 +28,18 @@ let
     })
   ];
 
+  # source behind __linux__ check assumes system is also x86 and
+  # tries to disable x86/x87-specific extended precision mode
+  # https://github.com/sambayless/monosat/issues/33
+  commonPostPatch = lib.optionalString (!stdenv.hostPlatform.isx86) ''
+    substituteInPlace src/monosat/Main.cc \
+      --replace 'defined(__linux__)' '0'
+  '';
+
   core = stdenv.mkDerivation {
     name = "${pname}-${version}";
     inherit src patches;
+    postPatch = commonPostPatch;
     nativeBuildInputs = [ cmake ];
     buildInputs = [ zlib gmp jdk8 ];
 
@@ -38,6 +47,9 @@ let
       "-DBUILD_STATIC=OFF"
       "-DJAVA=${boolToCmake includeJava}"
       "-DGPL=${boolToCmake includeGplCode}"
+
+      # file RPATH_CHANGE could not write new RPATH
+      "-DCMAKE_SKIP_BUILD_RPATH=ON"
     ];
 
     postInstall = optionalString includeJava ''
@@ -56,7 +68,7 @@ let
     };
   };
 
-  python = { buildPythonPackage, cython }: buildPythonPackage {
+  python = { buildPythonPackage, cython, pytestCheckHook }: buildPythonPackage {
     inherit pname version src patches;
 
     propagatedBuildInputs = [ core cython ];
@@ -66,7 +78,7 @@ let
 
     # After patching src, move to where the actually relevant source is. This could just be made
     # the sourceRoot if it weren't for the patch.
-    postPatch = ''
+    postPatch = commonPostPatch + ''
       cd src/monosat/api/python
     '' +
     # The relative paths here don't make sense for our Nix build
@@ -76,5 +88,12 @@ let
       substituteInPlace setup.py \
         --replace 'library_dir = "../../../../"' 'library_dir = "${core}/lib/"'
     '';
+
+    checkInputs = [ pytestCheckHook ];
+
+    disabledTests = [
+      "test_assertAtMostOne"
+      "test_assertEqual"
+    ];
   };
 in core

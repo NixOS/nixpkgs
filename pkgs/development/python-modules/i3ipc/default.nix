@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchFromGitHub
-, xorgserver, pytest, pytest-xvfb, i3, python, xlib, xdpyinfo
+, xorgserver, pytest, pytest-xvfb, i3, xlib, xdpyinfo
 , makeFontsConf, coreutils
 }:
 

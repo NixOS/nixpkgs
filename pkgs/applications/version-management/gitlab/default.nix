@@ -1,11 +1,11 @@
 { stdenv, lib, fetchurl, fetchpatch, fetchFromGitLab, bundlerEnv
 , ruby, tzdata, git, nettools, nixosTests, nodejs, openssl
 , gitlabEnterprise ? false, callPackage, yarn
-, fixup_yarn_lock, replace, file, cacert
+, fixup_yarn_lock, replace, file, cacert, fetchYarnDeps, makeWrapper
 }:
 
 let
-  data = (builtins.fromJSON (builtins.readFile ./data.json));
+  data = lib.importJSON ./data.json;
 
   version = data.version;
   src = fetchFromGitLab {
@@ -22,12 +22,6 @@ let
     gemset =
       let x = import (gemdir + "/gemset.nix");
       in x // {
-        # grpc expects the AR environment variable to contain `ar rpc`. See the
-        # discussion in nixpkgs #63056.
-        grpc = x.grpc // {
-          patches = [ ./fix-grpc-ar.patch ];
-          dontBuild = false;
-        };
         # the openssl needs the openssl include files
         openssl = x.openssl // {
           buildInputs = [ openssl ];
@@ -35,6 +29,15 @@ let
         ruby-magic = x.ruby-magic // {
           buildInputs = [ file ];
           buildFlags = [ "--enable-system-libraries" ];
+        };
+        # the included yarn rake task attaches the yarn:install task
+        # to assets:precompile, which is both unnecessary (since we
+        # run `yarn install` ourselves) and undoes the shebang patches
+        # in node_modules
+        railties = x.railties // {
+          dontBuild = false;
+          patches = [ ./railties-remove-yarn-install-enhancement.patch ];
+          patchFlags = "-p2";
         };
       };
     groups = [
@@ -45,7 +48,10 @@ let
     ignoreCollisions = true;
   };
 
-  yarnOfflineCache = (callPackage ./yarnPkgs.nix {}).offline_cache;
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = src + "/yarn.lock";
+    sha256 = data.yarn_hash;
+  };
 
   assets = stdenv.mkDerivation {
     pname = "gitlab-assets";
@@ -53,9 +59,17 @@ let
 
     nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git cacert ];
 
-    # Since version 12.6.0, the rake tasks need the location of git,
-    # so we have to apply the location patches here too.
-    patches = [ ./remove-hardcoded-locations.patch ];
+    patches = [
+      # Since version 12.6.0, the rake tasks need the location of git,
+      # so we have to apply the location patches here too.
+      ./remove-hardcoded-locations.patch
+
+      # Gitlab edited the default database config since [1] and the
+      # installer complains about valid keywords only being "main" and "ci".
+      #
+      # [1]: https://gitlab.com/gitlab-org/gitlab/-/commit/99c0fac52b10cd9df62bbe785db799352a2d9028
+      ./Remove-geo-from-database.yml.patch
+    ];
     # One of the patches uses this variable - if it's unset, execution
     # of rake tasks fails.
     GITLAB_LOG_PATH = "log";
@@ -68,7 +82,7 @@ let
       rm lib/tasks/yarn.rake
 
       # The rake tasks won't run without a basic configuration in place
-      mv config/database.yml.env config/database.yml
+      mv config/database.yml.postgresql config/database.yml
       mv config/gitlab.yml.example config/gitlab.yml
 
       # Yarn and bundler wants a real home directory to write cache, config, etc to
@@ -79,11 +93,6 @@ let
 
       # Fixup "resolved"-entries in yarn.lock to match our offline cache
       ${fixup_yarn_lock}/bin/fixup_yarn_lock yarn.lock
-
-      # fixup_yarn_lock currently doesn't correctly fix the dagre-d3
-      # url, so we have to do it manually
-      ${replace}/bin/replace-literal -f -e '"https://codeload.github.com/dagrejs/dagre-d3/tar.gz/e1a00e5cb518f5d2304a35647e024f31d178e55b"' \
-                                           '"https___codeload.github.com_dagrejs_dagre_d3_tar.gz_e1a00e5cb518f5d2304a35647e024f31d178e55b"' yarn.lock
 
       yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
 
@@ -119,7 +128,7 @@ stdenv.mkDerivation {
   inherit src;
 
   buildInputs = [
-    rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler tzdata git nettools
+    rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler tzdata git nettools makeWrapper
   ];
 
   patches = [
@@ -173,6 +182,9 @@ stdenv.mkDerivation {
     # rake tasks to mitigate CVE-2017-0882
     # see https://about.gitlab.com/2017/03/20/gitlab-8-dot-17-dot-4-security-release/
     cp ${./reset_token.rake} $out/share/gitlab/lib/tasks/reset_token.rake
+
+    # manually patch the shebang line in generate-loose-foreign-key
+    wrapProgram $out/share/gitlab/scripts/decomposition/generate-loose-foreign-key --set ENABLE_SPRING 0 --add-flags 'runner -e test'
   '';
 
   passthru = {
@@ -191,7 +203,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "http://www.gitlab.com/";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz globin krav talyz yuka ];
+    maintainers = with maintainers; [ fpletz globin krav talyz yayayayaka yuka ];
   } // (if gitlabEnterprise then
     {
       license = licenses.unfreeRedistributable; # https://gitlab.com/gitlab-org/gitlab-ee/raw/master/LICENSE

@@ -1,8 +1,9 @@
 { fetchurl, mkDerivation, fetchpatch, stdenv, lib, pkg-config, autoreconfHook, wrapGAppsHook
-, libgpgerror, libassuan, qtbase, wrapQtAppsHook
-, ncurses, gtk2, gcr
-, libcap ? null, libsecret ? null
-, enabledFlavors ? [ "curses" "tty" "gtk2" "qt" "emacs" ] ++ lib.optionals stdenv.isLinux [ "gnome3" ]
+, libgpg-error, libassuan, qtbase, wrapQtAppsHook
+, ncurses, gtk2, gcr, libcap, libsecret
+, enabledFlavors ? [ "curses" "tty" "gtk2" "emacs" ]
+  ++ lib.optionals stdenv.isLinux [ "gnome3" ]
+  ++ lib.optionals (!stdenv.isDarwin) [ "qt" ]
 }:
 
 with lib;
@@ -15,18 +16,13 @@ let
       then mkDerivation
       else stdenv.mkDerivation;
 
-  mkFlag = pfxTrue: pfxFalse: cond: name:
-    "--${if cond then pfxTrue else pfxFalse}-${name}";
-  mkEnable = mkFlag "enable" "disable";
-  mkWith = mkFlag "with" "without";
-
-  mkEnablePinentry = f:
+  enableFeaturePinentry = f:
     let
       info = flavorInfo.${f};
       flag = flavorInfo.${f}.flag or null;
     in
       optionalString (flag != null)
-        (mkEnable (elem f enabledFlavors) ("pinentry-" + flag));
+        (enableFeature (elem f enabledFlavors) ("pinentry-" + flag));
 
   flavorInfo = {
     curses = { bin = "curses"; flag = "curses"; buildInputs = [ ncurses ]; };
@@ -41,16 +37,17 @@ in
 
 pinentryMkDerivation rec {
   pname = "pinentry";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchurl {
     url = "mirror://gnupg/pinentry/${pname}-${version}.tar.bz2";
-    sha256 = "0w35ypl960pczg5kp6km3dyr000m1hf0vpwwlh72jjkjza36c1v8";
+    sha256 = "sha256-EAcgRaPgQ9BYH5HNVnb8rH/+6VehZjat7apPWDphZHA=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ]
     ++ concatMap(f: flavorInfo.${f}.nativeBuildInputs or []) enabledFlavors;
-  buildInputs = [ libgpgerror libassuan libcap libsecret ]
+  buildInputs = [ libgpg-error libassuan libsecret ]
+    ++ lib.optional (!stdenv.isDarwin) libcap
     ++ concatMap(f: flavorInfo.${f}.buildInputs or []) enabledFlavors;
 
   dontWrapGApps = true;
@@ -66,9 +63,9 @@ pinentryMkDerivation rec {
   ];
 
   configureFlags = [
-    (mkWith   (libcap != null)    "libcap")
-    (mkEnable (libsecret != null) "libsecret")
-  ] ++ (map mkEnablePinentry (attrNames flavorInfo));
+    (withFeature   (libcap != null)    "libcap")
+    (enableFeature (libsecret != null) "libsecret")
+  ] ++ (map enableFeaturePinentry (attrNames flavorInfo));
 
   postInstall =
     concatStrings (flip map enabledFlavors (f:

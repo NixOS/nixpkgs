@@ -1,25 +1,37 @@
-{ fetchFromGitHub, lib, rustPlatform }:
+{ fetchzip, lib, rustPlatform, makeWrapper }:
 
 rustPlatform.buildRustPackage rec {
   pname = "helix";
-  version = "0.3.0";
+  version = "22.05";
 
-  src = fetchFromGitHub {
-    owner = "helix-editor";
-    repo = pname;
-    rev = "v${version}";
-    fetchSubmodules = true;
-    sha256 = "sha256-dI5yIP5uUmM9pyMpvvdrk8/0jE/REkU/m9BF081LwMU=";
+  # This release tarball includes source code for the tree-sitter grammars,
+  # which is not ordinarily part of the repository.
+  src = fetchzip {
+    url = "https://github.com/helix-editor/helix/releases/download/${version}/helix-${version}-source.tar.xz";
+    sha256 = "sha256-MVHfj9iVC8rFGFU+kpRcH0qX9kQ+scFsRgSw7suC5RU=";
+    stripRoot = false;
   };
 
-  cargoSha256 = "sha256-l3Ikr4IyUsHItJIC4BaIZZb6vio3bchumbbPI+nxIjQ=";
+  cargoSha256 = "sha256-9jkSZ2yW0Pca1ats7Mgv7HprpjoZWLpsbuwMjYOKlmk=";
 
-  cargoBuildFlags = [ "--features embed_runtime" ];
+  nativeBuildInputs = [ makeWrapper ];
+
+  postInstall = ''
+    # not needed at runtime
+    rm -r runtime/grammars/sources
+
+    mkdir -p $out/lib
+    cp -r runtime $out/lib
+  '';
+  postFixup = ''
+    wrapProgram $out/bin/hx --set HELIX_RUNTIME $out/lib/runtime
+  '';
 
   meta = with lib; {
     description = "A post-modern modal text editor";
     homepage = "https://helix-editor.com";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ yusdacra ];
+    mainProgram = "hx";
+    maintainers = with maintainers; [ danth yusdacra ];
   };
 }

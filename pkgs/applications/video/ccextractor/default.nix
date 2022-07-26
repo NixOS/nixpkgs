@@ -14,16 +14,21 @@
 
 stdenv.mkDerivation rec {
   pname = "ccextractor";
-  version = "0.91";
+  version = "0.93";
 
   src = fetchFromGitHub {
     owner = "CCExtractor";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-VqJQaYzH8psQJfnDariV4q7SkDiXRz9byR51C8DzVEs=";
+    sha256 = "sha256-usVAKBkdd8uz9cD5eLd0hnwGonOJLscRdc+iWDlNXVc=";
   };
 
-  sourceRoot = "source/src";
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace src/CMakeLists.txt \
+    --replace 'add_definitions(-DGPAC_CONFIG_LINUX)' 'add_definitions(-DGPAC_CONFIG_DARWIN)'
+  '';
+
+  cmakeDir = "../src";
 
   nativeBuildInputs = [ pkg-config cmake makeWrapper ];
 
@@ -31,7 +36,10 @@ stdenv.mkDerivation rec {
     ++ lib.optional (!stdenv.isLinux) libiconv
     ++ lib.optionals enableOcr [ leptonica tesseract4 ffmpeg ];
 
-  cmakeFlags = lib.optionals enableOcr [ "-DWITH_OCR=on" "-DWITH_HARDSUBX=on" ];
+  cmakeFlags = [
+    # file RPATH_CHANGE could not write new RPATH:
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+  ] ++ lib.optionals enableOcr [ "-DWITH_OCR=on" "-DWITH_HARDSUBX=on" ];
 
   postInstall = lib.optionalString enableOcr ''
     wrapProgram "$out/bin/ccextractor" \

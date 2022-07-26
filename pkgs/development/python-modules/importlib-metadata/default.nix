@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, setuptools
 , setuptools-scm
 , typing-extensions
 , toml
@@ -10,16 +11,21 @@
 
 buildPythonPackage rec {
   pname = "importlib-metadata";
-  version = "4.0.1";
-  disabled = pythonOlder "3.6";
+  version = "4.11.3";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "importlib_metadata";
     inherit version;
-    sha256 = "sha256-jFARluSfud9d9DgzvbHkMo9khHdj7IpQcDFItzeE1YE=";
+    hash = "sha256-6kxZfr83FC+Ce485KZV54xaFwx06Q4tZ9GlAav0PJTk=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    setuptools # otherwise cross build fails
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     toml
@@ -30,7 +36,10 @@ buildPythonPackage rec {
 
   # Cyclic dependencies due to pyflakefs
   doCheck = false;
-  pythonImportsCheck = [ "importlib_metadata" ];
+
+  pythonImportsCheck = [
+    "importlib_metadata"
+  ];
 
   meta = with lib; {
     description = "Read metadata from Python packages";

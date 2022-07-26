@@ -1,51 +1,71 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
-, plotly
-, flask
-, flask-compress
-, future
+, celery
 , dash-core-components
-, dash-renderer
 , dash-html-components
 , dash-table
-, pytest
-, pytest-mock
+, diskcache
+, fetchFromGitHub
+, flask
+, flask-compress
 , mock
+, multiprocess
+, plotly
+, psutil
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, redis
 }:
 
 buildPythonPackage rec {
   pname = "dash";
-  version = "1.20.0";
+  version = "2.6.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1205xwi0w33g3c8gcba50fjj38dzgn7nhfk5w186kd6dwmvz02yg";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-pZax5qkQ73SVhIKVR+q6xAm6hp+v7jSu6b9HBk5Rr8w=";
   };
 
   propagatedBuildInputs = [
     plotly
     flask
     flask-compress
-    future
     dash-core-components
-    dash-renderer
     dash-html-components
     dash-table
   ];
 
+  passthru.optional-dependencies = {
+    celery = [
+      celery
+      redis
+    ];
+    diskcache = [
+      diskcache
+      multiprocess
+      psutil
+    ];
+  };
+
   checkInputs = [
-    pytest
+    pytestCheckHook
     pytest-mock
     mock
+    pyyaml
   ];
 
-  checkPhase = ''
-    pytest tests/unit/test_{configs,fingerprint,resources}.py \
-      tests/unit/dash/
-  '';
+  disabledTestPaths = [
+    "tests/unit/test_browser.py"
+    "tests/unit/test_app_runners.py" # Use selenium
+    "tests/integration"
+  ];
 
   pythonImportsCheck = [
     "dash"
@@ -55,6 +75,6 @@ buildPythonPackage rec {
     description = "Python framework for building analytical web applications";
     homepage = "https://dash.plot.ly/";
     license = licenses.mit;
-    maintainers = [ maintainers.antoinerg ];
+    maintainers = with maintainers; [ antoinerg ];
   };
 }

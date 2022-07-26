@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = "gst_all_1.gstreamermm";
+      attrPath = "gst_all_1.gstreamermm";
+      packageName = "gstreamermm";
       versionPolicy = "odd-unstable";
     };
   };

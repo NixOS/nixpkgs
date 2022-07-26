@@ -1,31 +1,32 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
-, fetchpatch
 , pkg-config
+, gi-docgen
 , meson
 , ninja
-, python3
 , gnome
 , desktop-file-utils
 , appstream-glib
 , gettext
 , itstool
 , libxml2
-, gtk3
+, gtk4
 , glib
 , atk
-, wrapGAppsHook
+, gobject-introspection
+, wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
   pname = "ghex";
-  version = "3.18.4";
+  version = "42.3";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/ghex/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1h1pjrr9wynclfykizqd78dbi785wjz6b63p31k87kjvzy8w3nf2";
+    url = "mirror://gnome/sources/ghex/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "rdQPirJJIdsw0nvljwAnMgGXfYf9yNeezq36iw41Te8=";
   };
 
   nativeBuildInputs = [
@@ -35,12 +36,13 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
-    wrapGAppsHook
+    gi-docgen
+    gobject-introspection
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    gtk3
+    gtk4
     atk
     glib
   ];
@@ -50,21 +52,16 @@ stdenv.mkDerivation rec {
     desktop-file-utils
   ];
 
-  patches = [
-    # Fixes for darwin. Drop in next release.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/ghex/commit/b0af26666cd990d99076c242b2abb3efc6e98671.patch";
-      sha256 = "1zwdkgr2nqrn9q3ydyvrrpn5x55cdi747fhbq6mh6blp9cbrk9b5";
-    })
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/ghex/commit/cc8ef9e67b23604c402460010dc0b5dccb85391b.patch";
-      sha256 = "0j2165rfhlbrlzhmcnirqd5m89ljpz0n3nz20sxbwlc8h42zv36s";
-    })
+  mesonFlags = [
+    "-Dgtk_doc=true"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # mremap does not exist on darwin
+    "-Dmmap-buffer-backend=false"
   ];
 
-  postPatch = ''
-     chmod +x meson_post_install.py
-     patchShebangs meson_post_install.py
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {

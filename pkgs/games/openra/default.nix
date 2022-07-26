@@ -43,7 +43,7 @@ let
   callWithName = name: value: if isFunction value then value name else value;
   buildOpenRASet = f: args: pkgs.recurseIntoAttrs (mapAttrs callWithName (f ({
     inherit (pkgs) fetchFromGitHub;
-    extraPostFetch = ''
+    postFetch = ''
       sed -i 's/curl/curl --insecure/g' $out/thirdparty/{fetch-thirdparty-deps,noget}.sh
       $out/thirdparty/fetch-thirdparty-deps.sh
     '';

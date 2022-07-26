@@ -2,7 +2,6 @@
 , lib
 , fetchurl
 # Build-time dependencies
-, mlterm
 , ncurses # >= 5
 , units
 }:
@@ -17,7 +16,6 @@ buildOctavePackage rec {
   };
 
   buildInputs = [
-    mlterm
     ncurses
   ];
 

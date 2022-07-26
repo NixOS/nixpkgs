@@ -3,16 +3,9 @@
 , buildPythonPackage
 , fetchPypi
 , python
-, isPy38
-, beautifulsoup4
-, bottleneck
 , cython
+, numpy
 , python-dateutil
-, html5lib
-, jinja2
-, lxml
-, numexpr
-, openpyxl
 , pytz
 , scipy
 , sqlalchemy
@@ -22,6 +15,7 @@
 # Test inputs
 , glibcLocales
 , hypothesis
+, jinja2
 , pytestCheckHook
 , pytest-xdist
 , pytest-asyncio
@@ -33,11 +27,12 @@
 
 buildPythonPackage rec {
   pname = "pandas";
-  version = "1.2.4";
+  version = "1.4.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "649ecab692fade3cbfcf967ff936496b0cfba0af00a55dfaacd82bdda5cb2279";
+    sha256 = "sha256-krwfxYXxRjyoJ7RVNZV4FbfeshjFSbfBhALDIsdUmhI=";
   };
 
   nativeBuildInputs = [ cython ];
@@ -45,19 +40,9 @@ buildPythonPackage rec {
   buildInputs = lib.optional stdenv.isDarwin libcxx;
 
   propagatedBuildInputs = [
-    beautifulsoup4
-    bottleneck
+    numpy
     python-dateutil
-    html5lib
-    numexpr
-    lxml
-    openpyxl
     pytz
-    scipy
-    sqlalchemy
-    tables
-    xlrd
-    xlwt
   ];
 
   checkInputs = [
@@ -74,22 +59,18 @@ buildPythonPackage rec {
   # https://github.com/NixOS/nixpkgs/issues/39687
   hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
 
-  # For OSX, we need to add a dependency on libcxx, which provides
-  # `complex.h` and other libraries that pandas depends on to build.
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    cpp_sdk="${lib.getDev libcxx}/include/c++/v1";
-    echo "Adding $cpp_sdk to the setup.py common_include variable"
-    substituteInPlace setup.py \
-      --replace "['pandas/src/klib', 'pandas/src']" \
-                "['pandas/src/klib', 'pandas/src', '$cpp_sdk']"
-  '';
+  doCheck = !stdenv.isAarch32 && !stdenv.isAarch64; # upstream doesn't test this architecture
 
-  doCheck = !stdenv.isAarch64; # upstream doesn't test this architecture
+  # don't max out build cores, it breaks tests
+  dontUsePytestXdist = true;
 
   pytestFlagsArray = [
+    # https://github.com/pandas-dev/pandas/blob/main/test_fast.sh
+    "--skip-db"
     "--skip-slow"
     "--skip-network"
-    "--numprocesses" "0"
+    "-m" "'not single_cpu'"
+    "--numprocesses" "4"
   ];
 
   disabledTests = [
@@ -105,9 +86,21 @@ buildPythonPackage rec {
     "test_missing_required_dependency"
     # AssertionError with 1.2.3
     "test_from_coo"
+    # AssertionError: No common DType exists for the given inputs
+    "test_comparison_invalid"
+    # AssertionError: Regex pattern '"quotechar" must be string, not int'
+    "python-kwargs2"
+    # Tests for rounding errors and fails if we have better precision
+    # than expected, e.g. on amd64 with FMA or on arm64
+    # https://github.com/pandas-dev/pandas/issues/38921
+    "test_rolling_var_numerical_issues"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_locale"
     "test_clipboard"
+    # ValueError: cannot reindex on an axis with duplicate labels
+    #
+    # Attempts to reproduce this problem outside of Hydra failed.
+    "test_reindex_timestamp_with_fold"
   ];
 
   # Tests have relative paths, and need to reference compiled C extensions
@@ -126,6 +119,8 @@ buildPythonPackage rec {
     chmod a+x pbcopy pbpaste
     export PATH=$(pwd):$PATH
   '';
+
+  enableParallelBuilding = true;
 
   pythonImportsCheck = [ "pandas" ];
 

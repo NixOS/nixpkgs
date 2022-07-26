@@ -1,6 +1,0 @@
-target clingo.nix
-attribute_name clingo
-url https://github.com/potassco/clingo/releases/
-ensure_choice
-version '.*/v([0-9.]+)[.]tar[.].*' '\1'
-minimize_overwrite

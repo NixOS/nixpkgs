@@ -30,7 +30,7 @@ let
 
     options.openssh.authorizedKeys = {
       keys = mkOption {
-        type = types.listOf types.str;
+        type = types.listOf types.singleLineStr;
         default = [];
         description = ''
           A list of verbatim OpenSSH public keys that should be added to the
@@ -81,6 +81,7 @@ in
   imports = [
     (mkAliasOptionModule [ "services" "sshd" "enable" ] [ "services" "openssh" "enable" ])
     (mkAliasOptionModule [ "services" "openssh" "knownHosts" ] [ "programs" "ssh" "knownHosts" ])
+    (mkRenamedOptionModule [ "services" "openssh" "challengeResponseAuthentication" ] [ "services" "openssh" "kbdInteractiveAuthentication" ])
   ];
 
   ###### interface
@@ -218,11 +219,11 @@ in
         '';
       };
 
-      challengeResponseAuthentication = mkOption {
+      kbdInteractiveAuthentication = mkOption {
         type = types.bool;
         default = true;
         description = ''
-          Specifies whether challenge/response authentication is allowed.
+          Specifies whether keyboard-interactive authentication is allowed.
         '';
       };
 
@@ -292,6 +293,7 @@ in
       kexAlgorithms = mkOption {
         type = types.listOf types.str;
         default = [
+          "sntrup761x25519-sha512@openssh.com"
           "curve25519-sha256"
           "curve25519-sha256@libssh.org"
           "diffie-hellman-group-exchange-sha256"
@@ -300,7 +302,7 @@ in
           Allowed key exchange algorithms
           </para>
           <para>
-          Defaults to recommended settings from both
+          Uses the lower bound recommended in both
           <link xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html" />
           and
           <link xlink:href="https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67" />
@@ -401,9 +403,12 @@ in
   config = mkIf cfg.enable {
 
     users.users.sshd =
-      { isSystemUser = true;
+      {
+        isSystemUser = true;
+        group = "sshd";
         description = "SSH privilege separation user";
       };
+    users.groups.sshd = {};
 
     services.openssh.moduliFile = mkDefault "${cfgc.package}/etc/ssh/moduli";
     services.openssh.sftpServerExecutable = mkDefault "${cfgc.package}/libexec/sftp-server";
@@ -436,7 +441,10 @@ in
                 mkdir -m 0755 -p /etc/ssh
 
                 ${flip concatMapStrings cfg.hostKeys (k: ''
-                  if ! [ -f "${k.path}" ]; then
+                  if ! [ -s "${k.path}" ]; then
+                      if ! [ -h "${k.path}" ]; then
+                          rm -f "${k.path}"
+                      fi
                       ssh-keygen \
                         -t "${k.type}" \
                         ${if k ? bits then "-b ${toString k.bits}" else ""} \
@@ -477,6 +485,8 @@ in
             else
               cfg.ports;
             socketConfig.Accept = true;
+            # Prevent brute-force attacks from shutting down socket
+            socketConfig.TriggerLimitIntervalSec = 0;
           };
 
         services."sshd@" = service;
@@ -520,11 +530,7 @@ in
             XAuthLocation ${pkgs.xorg.xauth}/bin/xauth
         ''}
 
-        ${if cfg.forwardX11 then ''
-          X11Forwarding yes
-        '' else ''
-          X11Forwarding no
-        ''}
+        X11Forwarding ${if cfg.forwardX11 then "yes" else "no"}
 
         ${optionalString cfg.allowSFTP ''
           Subsystem sftp ${cfg.sftpServerExecutable} ${concatStringsSep " " cfg.sftpFlags}
@@ -533,7 +539,7 @@ in
         PermitRootLogin ${cfg.permitRootLogin}
         GatewayPorts ${cfg.gatewayPorts}
         PasswordAuthentication ${if cfg.passwordAuthentication then "yes" else "no"}
-        ChallengeResponseAuthentication ${if cfg.challengeResponseAuthentication then "yes" else "no"}
+        KbdInteractiveAuthentication ${if cfg.kbdInteractiveAuthentication then "yes" else "no"}
 
         PrintMotd no # handled by pam_motd
 
@@ -553,11 +559,7 @@ in
 
         LogLevel ${cfg.logLevel}
 
-        ${if cfg.useDns then ''
-          UseDNS yes
-        '' else ''
-          UseDNS no
-        ''}
+        UseDNS ${if cfg.useDns then "yes" else "no"}
 
       '';
 

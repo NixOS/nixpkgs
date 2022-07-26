@@ -1,7 +1,7 @@
 import ./make-test-python.nix {
   name = "systemd-confinement";
 
-  machine = { pkgs, lib, ... }: let
+  nodes.machine = { pkgs, lib, ... }: let
     testServer = pkgs.writeScript "testserver.sh" ''
       #!${pkgs.runtimeShell}
       export PATH=${lib.escapeShellArg "${pkgs.coreutils}/bin"}
@@ -17,15 +17,19 @@ import ./make-test-python.nix {
       exit "''${ret:-1}"
     '';
 
-    mkTestStep = num: { config ? {}, testScript }: {
-      systemd.sockets."test${toString num}" = {
+    mkTestStep = num: {
+      testScript,
+      config ? {},
+      serviceName ? "test${toString num}",
+    }: {
+      systemd.sockets.${serviceName} = {
         description = "Socket for Test Service ${toString num}";
         wantedBy = [ "sockets.target" ];
         socketConfig.ListenStream = "/run/test${toString num}.sock";
         socketConfig.Accept = true;
       };
 
-      systemd.services."test${toString num}@" = {
+      systemd.services."${serviceName}@" = {
         description = "Confined Test Service ${toString num}";
         confinement = (config.confinement or {}) // { enable = true; };
         serviceConfig = (config.serviceConfig or {}) // {
@@ -44,30 +48,26 @@ import ./make-test-python.nix {
       { config.confinement.mode = "chroot-only";
         testScript = ''
           with subtest("chroot-only confinement"):
-              machine.succeed(
-                  'test "$(chroot-exec ls -1 / | paste -sd,)" = bin,nix',
-                  'test "$(chroot-exec id -u)" = 0',
-                  "chroot-exec chown 65534 /bin",
-              )
+              paths = machine.succeed('chroot-exec ls -1 / | paste -sd,').strip()
+              assert_eq(paths, "bin,nix,run")
+              uid = machine.succeed('chroot-exec id -u').strip()
+              assert_eq(uid, "0")
+              machine.succeed("chroot-exec chown 65534 /bin")
         '';
       }
       { testScript = ''
           with subtest("full confinement with APIVFS"):
-              machine.fail(
-                  "chroot-exec ls -l /etc",
-                  "chroot-exec ls -l /run",
-                  "chroot-exec chown 65534 /bin",
-              )
-              machine.succeed(
-                  'test "$(chroot-exec id -u)" = 0',
-                  "chroot-exec chown 0 /bin",
-              )
+              machine.fail("chroot-exec ls -l /etc")
+              machine.fail("chroot-exec chown 65534 /bin")
+              assert_eq(machine.succeed('chroot-exec id -u').strip(), "0")
+              machine.succeed("chroot-exec chown 0 /bin")
         '';
       }
       { config.serviceConfig.BindReadOnlyPaths = [ "/etc" ];
         testScript = ''
           with subtest("check existence of bind-mounted /etc"):
-              machine.succeed('test -n "$(chroot-exec cat /etc/passwd)"')
+              passwd = machine.succeed('chroot-exec cat /etc/passwd').strip()
+              assert len(passwd) > 0, "/etc/passwd must not be empty"
         '';
       }
       { config.serviceConfig.User = "chroot-testuser";
@@ -75,7 +75,8 @@ import ./make-test-python.nix {
         testScript = ''
           with subtest("check if User/Group really runs as non-root"):
               machine.succeed("chroot-exec ls -l /dev")
-              machine.succeed('test "$(chroot-exec id -u)" != 0')
+              uid = machine.succeed('chroot-exec id -u').strip()
+              assert uid != "0", "UID of chroot-testuser shouldn't be 0"
               machine.fail("chroot-exec touch /bin/test")
         '';
       }
@@ -88,10 +89,8 @@ import ./make-test-python.nix {
         testScript = ''
           with subtest("check if symlinks are properly bind-mounted"):
               machine.fail("chroot-exec test -e /etc")
-              machine.succeed(
-                  "chroot-exec cat ${symlink} >&2",
-                  'test "$(chroot-exec cat ${symlink})" = "got me"',
-              )
+              text = machine.succeed('chroot-exec cat ${symlink}').strip()
+              assert_eq(text, "got me")
         '';
       })
       { config.serviceConfig.User = "chroot-testuser";
@@ -140,6 +139,16 @@ import ./make-test-python.nix {
               machine.succeed('test "$(chroot-exec \'cat "$FOOBAR"\')" = eek')
         '';
       }
+      { serviceName = "shipped-unitfile";
+        config.confinement.mode = "chroot-only";
+        testScript = ''
+          with subtest("check if shipped unit file still works"):
+              machine.succeed(
+                  'chroot-exec \'kill -9 $$ 2>&1 || :\' | '
+                  'grep -q "Too many levels of symbolic links"'
+              )
+        '';
+      }
     ];
 
     options.__testSteps = lib.mkOption {
@@ -148,6 +157,15 @@ import ./make-test-python.nix {
     };
 
     config.environment.systemPackages = lib.singleton testClient;
+    config.systemd.packages = lib.singleton (pkgs.writeTextFile {
+      name = "shipped-unitfile";
+      destination = "/etc/systemd/system/shipped-unitfile@.service";
+      text = ''
+        [Service]
+        SystemCallFilter=~kill
+        SystemCallErrorNumber=ELOOP
+      '';
+    });
 
     config.users.groups.chroot-testgroup = {};
     config.users.users.chroot-testuser = {
@@ -158,6 +176,9 @@ import ./make-test-python.nix {
   };
 
   testScript = { nodes, ... }: ''
+    def assert_eq(a, b):
+        assert a == b, f"{a} != {b}"
+
     machine.wait_for_unit("multi-user.target")
   '' + nodes.machine.config.__testSteps;
 }

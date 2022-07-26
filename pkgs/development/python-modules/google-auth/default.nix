@@ -1,10 +1,10 @@
 { stdenv
 , lib
 , buildPythonPackage
-, fetchpatch
 , fetchPypi
 , pytestCheckHook
 , cachetools
+, cryptography
 , flask
 , freezegun
 , mock
@@ -14,29 +14,26 @@
 , pytest-localserver
 , responses
 , rsa
-, six
-, pyopenssl
 }:
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "1.31.0";
+  version = "2.6.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "154f7889c5d679a6f626f36adb12afbd4dbb0a9a04ec575d989d6ba79c4fd65e";
+    sha256 = "sha256-G6STjgMrc961HlnEZWoA4JOc8LERJXUJnxNrq7RWMxI=";
   };
 
   propagatedBuildInputs = [
     cachetools
     pyasn1-modules
     rsa
-    six
-    pyopenssl
     pyu2f
   ];
 
   checkInputs = [
+    cryptography
     flask
     freezegun
     mock
@@ -51,12 +48,11 @@ buildPythonPackage rec {
     "google.oauth2"
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
-    "test_request_with_timeout_success"
-    "test_request_with_timeout_failure"
-    "test_request_headers"
-    "test_request_error"
-    "test_request_basic"
+  disabledTestPaths = [
+    # Disable tests related to pyopenssl
+    "tests/transport/test__mtls_helper.py"
+    "tests/transport/test_requests.py"
+    "tests/transport/test_urllib3.py"
   ];
 
   meta = with lib; {

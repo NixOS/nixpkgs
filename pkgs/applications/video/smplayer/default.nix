@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
 , qmake
 , qtscript
 , wrapQtAppsHook
@@ -8,15 +8,23 @@
 
 stdenv.mkDerivation rec {
   pname = "smplayer";
-  version = "21.1.0";
+  version = "22.7.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
-    hash = "sha256-Y0uq32XoQ8fpIJDScRfA7p3RYd6x1PWZSsYyAYYKf/c=";
+  src = fetchFromGitHub {
+    owner = "smplayer-dev";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-vU+M5aCCGSA+IwJXTLMYvno/Qei+5Hwck3Q/Ah7N09s=";
   };
 
-  nativeBuildInputs = [ qmake wrapQtAppsHook ];
-  buildInputs = [ qtscript ];
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    qtscript
+  ];
 
   dontUseQmakeConfigure = true;
 

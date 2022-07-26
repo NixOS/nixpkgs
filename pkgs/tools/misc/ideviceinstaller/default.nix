@@ -1,17 +1,34 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, usbmuxd, libzip, libimobiledevice }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, usbmuxd
+, libimobiledevice
+, libzip
+}:
 
 stdenv.mkDerivation rec {
   pname = "ideviceinstaller";
-  version = "1.1.1";
+  version = "1.1.1+date=2022-05-09";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;
-    rev = version;
-    sha256 = "1xp0sjgfx2z19x9mxihn18ybsmrnrcfc55zbh5a44g3vrmagmlzz";
+    rev = "3909271599917bc4a3a996f99bdd3f88c49577fa";
+    hash = "sha256-dw3nda2PNddSFPzcx2lv0Nh1KLFXwPBbDBhhwEaB6d0=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config usbmuxd libimobiledevice libzip ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+
+  buildInputs = [
+    usbmuxd
+    libimobiledevice
+    libzip
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/libimobiledevice/ideviceinstaller";
@@ -21,8 +38,8 @@ stdenv.mkDerivation rec {
       of an iOS device allowing to install, upgrade, uninstall, archive, restore
       and enumerate installed or archived apps.
     '';
-    license = licenses.gpl2;
-    platforms = platforms.linux ++ platforms.darwin;
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ aristid infinisil ];
   };
 }

@@ -1,10 +1,10 @@
 diff --git a/libfwupdplugin/meson.build b/libfwupdplugin/meson.build
-index 0abcd45c..51cbc912 100644
+index 1afa28e1..3da81d30 100644
 --- a/libfwupdplugin/meson.build
 +++ b/libfwupdplugin/meson.build
-@@ -114,7 +114,8 @@
+@@ -220,7 +220,8 @@ fwupdplugin = library(
    ],
-   link_args : vflag,
+   link_args : cc.get_supported_link_arguments([vflag]),
    link_depends : fwupdplugin_mapfile,
 -  install : true
 +  install : true,
@@ -12,26 +12,26 @@ index 0abcd45c..51cbc912 100644
  )
  
  fwupdplugin_pkgg = import('pkgconfig')
-@@ -167,7 +168,8 @@
-       'GUsb-1.0',
+@@ -280,7 +281,8 @@ if introspection.allowed()
+       girtargets,
        fwupd_gir[0],
      ],
 -    install : true
 +    install : true,
 +    install_dir_typelib : bindir / '..' / 'lib' / 'girepository-1.0',
    )
-   gnome.generate_vapi('fwupdplugin',
-     sources : fwupd_gir[0],
+ 
+   # Verify the map file is correct -- note we can't actually use the generated
 diff --git a/meson.build b/meson.build
-index b1a523d2..00125997 100644
+index b91dd037..f97b4c26 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -389,7 +389,7 @@
+@@ -504,7 +504,7 @@ if build_standalone
  if host_machine.system() == 'windows'
-   plugin_dir = 'fwupd-plugins-3'
+   plugin_dir = 'fwupd-plugins-@0@'.format(libfwupdplugin_lt_current)
  else
--  plugin_dir = join_paths(libdir, 'fwupd-plugins-3')
-+  plugin_dir = join_paths(bindir, '..', 'lib', 'fwupd-plugins-3')
+-  plugin_dir = join_paths(libdir, 'fwupd-plugins-@0@'.format(libfwupdplugin_lt_current))
++  plugin_dir = join_paths(bindir, '..', 'lib', 'fwupd-plugins-@0@'.format(libfwupdplugin_lt_current))
  endif
  conf.set_quoted('FWUPD_PLUGINDIR', plugin_dir)
  endif

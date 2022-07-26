@@ -33,9 +33,9 @@ let
       ++ lib.optional (lib.any pkgNeedsRuby splitBin.wrong) ruby;
   };
 
-  uniqueStrings = list: lib.sort (a: b: a < b) (lib.unique list);
+  sortedUniqueStrings = list: lib.sort (a: b: a < b) (lib.unique list);
 
-  mkUniqueOutPaths = pkgs: uniqueStrings
+  mkUniqueOutPaths = pkgs: lib.unique
     (map (p: p.outPath) (builtins.filter lib.isDerivation pkgs));
 
 in (buildEnv {
@@ -124,9 +124,9 @@ in (buildEnv {
     # now filter hyphenation patterns and formats
   (let
     hyphens = lib.filter (p: p.hasHyphens or false && p.tlType == "run") pkgList.splitBin.wrong;
-    hyphenPNames = uniqueStrings (map (p: p.pname) hyphens);
+    hyphenPNames = sortedUniqueStrings (map (p: p.pname) hyphens);
     formats = lib.filter (p: p.hasFormats or false && p.tlType == "run") pkgList.splitBin.wrong;
-    formatPNames = uniqueStrings (map (p: p.pname) formats);
+    formatPNames = sortedUniqueStrings (map (p: p.pname) formats);
     # sed expression that prints the lines in /start/,/end/ except for /end/
     section = start: end: "/${start}/,/${end}/{ /${start}/p; /${end}/!p; };\n";
     script =
@@ -180,7 +180,7 @@ in (buildEnv {
       echo -n "Wrapping '$link'"
       rm "$link"
       makeWrapper "$target" "$link" \
-        --prefix PATH : "$out/bin:${perl}/bin" \
+        --prefix PATH : "${gnused}/bin:${gnugrep}/bin:${coreutils}/bin:$out/bin:${perl}/bin" \
         --prefix PERL5LIB : "$PERL5LIB" \
         --set-default TEXMFCNF "$TEXMFCNF"
 
@@ -223,17 +223,20 @@ in (buildEnv {
     sed "1s|$| -I $out/share/texmf/scripts/texlive|" -i "$out/bin/fmtutil"
     ln -sf fmtutil "$out/bin/mktexfmt"
 
-    perl `type -P mktexlsr.pl` ./share/texmf
-    ${bin.texlinks} "$out/bin" && wrapBin
-    perl `type -P fmtutil.pl` --sys --all | grep '^fmtutil' # too verbose
-    #${bin.texlinks} "$out/bin" && wrapBin # do we need to regenerate format links?
+    perl `type -P mktexlsr.pl` --sort ./share/texmf
+    ${bin.texlinks}/bin/texlinks "$out/bin" && wrapBin
+    FORCE_SOURCE_DATE=1 perl `type -P fmtutil.pl` --sys --all | grep '^fmtutil' # too verbose
+    #${bin.texlinks}/bin/texlinks "$out/bin" && wrapBin # do we need to regenerate format links?
 
     # Disable unavailable map files
     echo y | perl `type -P updmap.pl` --sys --syncwithtrees --force
     # Regenerate the map files (this is optional)
     perl `type -P updmap.pl` --sys --force
 
-    perl `type -P mktexlsr.pl` ./share/texmf-* # to make sure
+    # sort entries to improve reproducibility
+    [[ -f "$TEXMFSYSCONFIG"/web2c/updmap.cfg ]] && sort -o "$TEXMFSYSCONFIG"/web2c/updmap.cfg "$TEXMFSYSCONFIG"/web2c/updmap.cfg
+
+    perl `type -P mktexlsr.pl` --sort ./share/texmf-* # to make sure
   '' +
     # install (wrappers for) scripts, based on a list from upstream texlive
   ''
@@ -299,7 +302,12 @@ in (buildEnv {
       )
     fi
   ''
-    + bin.cleanBrokenLinks
+    + bin.cleanBrokenLinks +
+  # Get rid of all log files. They are not needed, but take up space
+  # and render the build unreproducible by their embedded timestamps.
+  ''
+    find $TEXMFSYSVAR/web2c -name '*.log' -delete
+  ''
   ;
 }).overrideAttrs (_: { allowSubstitutes = true; })
 # TODO: make TeX fonts visible by fontconfig: it should be enough to install an appropriate file

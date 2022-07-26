@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     ''; # */
 
   meta = {
-    homepage = "http://ant.apache.org/";
+    homepage = "https://ant.apache.org/";
     description = "A Java-based build tool";
 
     longDescription = ''
@@ -103,6 +103,7 @@ stdenv.mkDerivation rec {
       by an object that implements a particular Task interface.
     '';
 
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.eelco ];
     platforms = lib.platforms.all;

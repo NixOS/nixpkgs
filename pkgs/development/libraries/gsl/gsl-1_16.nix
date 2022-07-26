@@ -1,10 +1,11 @@
 { fetchurl, fetchpatch, lib, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "gsl-1.16";
+  pname = "gsl";
+  version = "1.16";
 
   src = fetchurl {
-    url = "mirror://gnu/gsl/${name}.tar.gz";
+    url = "mirror://gnu/gsl/gsl-${version}.tar.gz";
     sha256 = "0lrgipi0z6559jqh82yx8n4xgnxkhzj46v96dl77hahdp58jzg3k";
   };
 
@@ -17,8 +18,15 @@ stdenv.mkDerivation rec {
       url = "https://git.savannah.gnu.org/cgit/gsl.git/patch/?id=9cc12d";
       sha256 = "1bmrmihi28cly9g9pq54kkix2jy59y7cd7h5fw4v1c7h5rc2qvs8";
     })
+
+    (fetchpatch {
+      name = "fix-parallel-test.patch";
+      url = "https://git.savannah.gnu.org/cgit/gsl.git/patch/?id=12654373c3b60541230921aae81f93b484ec5eaf";
+      sha256 = "1flzpbsfj7gjywv6v9qvm8wpdrkbpj7shryinfdpb40y7si9njdw";
+    })
   ];
 
+  enableParallelBuilding = true;
   doCheck = true;
 
   meta = {

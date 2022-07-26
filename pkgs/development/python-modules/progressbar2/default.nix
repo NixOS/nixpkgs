@@ -7,18 +7,14 @@
 
 buildPythonPackage rec {
   pname = "progressbar2";
-  version = "3.53.1";
+  version = "4.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ef72be284e7f2b61ac0894b44165926f13f5d995b2bf3cd8a8dedc6224b255a7";
+    sha256 = "14d3165a1781d053ffaa117daf27cc706128d2ec1d2977fdb05b6bb079888013";
   };
 
   propagatedBuildInputs = [ python-utils ];
-
-  # depends on unmaintained pytest-pep8
-  # https://github.com/WoLpH/python-progressbar/issues/241
-  doCheck = false;
 
   pythonImportsCheck = [ "progressbar" ];
 

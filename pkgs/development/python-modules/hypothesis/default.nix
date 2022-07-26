@@ -8,24 +8,21 @@
 , pytestCheckHook
 , pytest-xdist
 , sortedcontainers
-, tzdata
+, pythonOlder
 }:
+
 buildPythonPackage rec {
-  # https://hypothesis.readthedocs.org/en/latest/packaging.html
-
-  # Hypothesis has optional dependencies on the following libraries
-  # pytz fake_factory django numpy pytest
-  # If you need these, you can just add them to your environment.
-
   pname = "hypothesis";
-  version = "6.14.0";
+  version = "6.46.10";
+  format = "setuptools";
 
-  # Use github tarballs that includes tests
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "HypothesisWorks";
-    repo = "hypothesis-python";
+    repo = "hypothesis";
     rev = "hypothesis-python-${version}";
-    sha256 = "0yns81j3fnpdfaphk722xcnidqhgy0kmd7ik6aw7l795l0wivhxj";
+    hash = "sha256-eQ7Ns0k1hOVw8/xiINMei6GbQqDHXrBl+1v8YQeFO9Q=";
   };
 
   postUnpack = "sourceRoot=$sourceRoot/hypothesis-python";
@@ -35,8 +32,11 @@ buildPythonPackage rec {
     sortedcontainers
   ];
 
-  checkInputs = [ pytestCheckHook pytest-xdist pexpect ]
-    ++ lib.optional (pythonAtLeast "3.9") tzdata;
+  checkInputs = [
+    pexpect
+    pytest-xdist
+    pytestCheckHook
+  ];
 
   inherit doCheck;
 
@@ -45,10 +45,16 @@ buildPythonPackage rec {
     rm tox.ini
   '';
 
-  pytestFlagsArray = [ "tests/cover" ];
+  pytestFlagsArray = [
+    "tests/cover"
+  ];
+
+  pythonImportsCheck = [
+    "hypothesis"
+  ];
 
   meta = with lib; {
-    description = "A Python library for property based testing";
+    description = "Library for property based testing";
     homepage = "https://github.com/HypothesisWorks/hypothesis";
     license = licenses.mpl20;
     maintainers = with maintainers; [ SuperSandro2000 ];

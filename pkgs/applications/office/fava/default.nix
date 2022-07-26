@@ -2,17 +2,18 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "fava";
-  version = "1.19";
+  version = "1.22.1";
+  format = "pyproject";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "def7c0210bf0ce8dfffdb46ce21b3efcf71eba5a4e903565258419e4c53c2d43";
+    sha256 = "sha256-gte1N43b9AokmEqONdvEcaGXDPIeGflsk+wuxDtTeR4=";
   };
 
   nativeBuildInputs = with python3.pkgs; [ setuptools-scm ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    Babel
+    babel
     beancount
     cheroot
     click

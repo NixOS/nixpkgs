@@ -3,25 +3,41 @@
 , fetchPypi
 , cffi
 , hypothesis
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "zstandard";
-  version = "0.15.2";
+  version = "0.17.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "52de08355fd5cfb3ef4533891092bb96229d43c2069703d4aff04fdbedf9c92f";
+    sha256 = "fa9194cb91441df7242aa3ddc4cb184be38876cb10dd973674887f334bafbfb6";
   };
 
-  propagatedBuildInputs = [ cffi ];
+  propagatedNativeBuildInputs = [
+    cffi
+  ];
 
-  checkInputs = [ hypothesis ];
+  propagatedBuildInputs = [
+    cffi
+  ];
+
+  checkInputs = [
+    hypothesis
+  ];
+
+  pythonImportsCheck = [
+    "zstandard"
+  ];
 
   meta = with lib; {
     description = "zstandard bindings for Python";
     homepage = "https://github.com/indygreg/python-zstandard";
     license = licenses.bsdOriginal;
-    maintainers = [ maintainers.arnoldfarkas ];
+    maintainers = with maintainers; [ arnoldfarkas ];
   };
 }

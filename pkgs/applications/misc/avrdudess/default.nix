@@ -1,16 +1,18 @@
 { lib, stdenv, runtimeShell, fetchurl, unzip, mono, avrdude, gtk2, xdg-utils }:
 
 stdenv.mkDerivation {
-  name = "avrdudess-2.2.20140102";
+  pname = "avrdudess";
+  version = "2.14";
 
   src = fetchurl {
-    url = "http://blog.zakkemble.co.uk/download/avrdudess_20140102.zip";
-    sha256 = "18llpvjsfhypzijrvfbzmcg3g141f307mzsrg11wcdxh9syxqak6";
+    url = "https://github.com/ZakKemble/AVRDUDESS/releases/download/v2.14/AVRDUDESS-2.14-portable.zip";
+    sha256 = "sha256-x3xcsJLBJVO8XdV4OUveZ4KLqN5z/z0FsNLbGHSNoHs=";
   };
 
   nativeBuildInputs = [ unzip ];
 
-  phases = [ "buildPhase" ];
+  dontUnpack = true;
+  dontInstall = true;
 
   buildPhase = ''
     mkdir -p "$out/avrdudess"
@@ -34,7 +36,8 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "GUI for AVRDUDE (AVR microcontroller programmer)";
-    homepage = "https://github.com/zkemble/AVRDUDESS";
+    homepage = "https://blog.zakkemble.net/avrdudess-a-gui-for-avrdude/";
+    changelog = "https://github.com/ZakKemble/AVRDUDESS/blob/v${version}/Changelog.txt";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

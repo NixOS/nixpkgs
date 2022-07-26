@@ -10,11 +10,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "zathura";
-  version = "0.4.7";
+  version = "0.4.9";
 
   src = fetchurl {
     url = "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
-    sha256 = "1rx1fk9s556fk59lmqgvhwrmv71ashh89bx9adjq46wq5gzdn4p0";
+    sha256 = "0msy7s57mlx0wya99qpia4fpcy40pbj253kmx2y97nb0sqnc8c7w";
   };
 
   outputs = [ "bin" "man" "dev" "out" ];

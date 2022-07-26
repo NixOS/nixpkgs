@@ -2,22 +2,26 @@
 , buildPythonPackage
 , fetchPypi
 , cryptography
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "broadlink";
-  version = "0.17.0";
+  version = "0.18.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bfd1ff007d0d1187c17ae52be938afc8137fbd1ed6a794426e975df10d167571";
+    hash = "sha256-2ktLSJ1Nsdry8dvWmY/BbhHApTYQMvSjCsNKX3PkocU=";
   };
 
   propagatedBuildInputs = [
     cryptography
   ];
 
-  # no tests available
+  # Module has no tests
   doCheck = false;
 
   pythonImportsCheck = [
@@ -28,5 +32,6 @@ buildPythonPackage rec {
     description = "Python API for controlling Broadlink IR controllers";
     homepage =  "https://github.com/mjg59/python-broadlink";
     license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
   };
 }

@@ -15,13 +15,13 @@
 
 mkDerivation rec {
   pname = "lxqt-admin";
-  version = "0.17.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1xi169gz1sarv7584kg33ymckqlx9ddci7r9m0dlm4a7mw7fm0lf";
+    sha256 = "A5dpw/vG92tC4W1q1wpDyMdRn1ScEH7m287MCEGOp9w=";
   };
 
   nativeBuildInputs = [
@@ -54,6 +54,6 @@ mkDerivation rec {
     description = "LXQt system administration tool";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

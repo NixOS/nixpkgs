@@ -15,13 +15,13 @@ assert withGtk3 -> gtk3 != null;
 
 stdenv.mkDerivation rec {
   pname = "carla";
-  version = "2.3.1";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "falkTX";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-LM7wRvUg2Q3f4qBZN1MPvsLkdl1ziArCfhdalyD1G3w=";
+    sha256 = "sha256-KcwEuiy58wjTr+RWPmpMaPgM0olzxiWp9MMYiKwmIcI=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +43,14 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   installFlags = [ "PREFIX=$(out)" ];
+
+  postPatch = ''
+    # --with-appname="$0" is evaluated with $0=.carla-wrapped instead of carla. Fix that.
+    for file in $(grep -rl -- '--with-appname="$0"'); do
+        filename="$(basename -- "$file")"
+        substituteInPlace "$file" --replace '--with-appname="$0"' "--with-appname=\"$filename\""
+    done
+  '';
 
   dontWrapQtApps = true;
   postFixup = ''
@@ -70,7 +78,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://kxstudio.sf.net/carla";
+    homepage = "https://kx.studio/Applications:Carla";
     description = "An audio plugin host";
     longDescription = ''
       It currently supports LADSPA (including LRDF), DSSI, LV2, VST2/3

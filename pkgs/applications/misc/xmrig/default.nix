@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xmrig";
-  version = "6.12.2";
+  version = "6.17.0";
 
   src = fetchFromGitHub {
     owner = "xmrig";
     repo = "xmrig";
     rev = "v${version}";
-    sha256 = "1gjwh509cxs8vqz72v97cir0aazcrd9y9l0k1q5ywbl5l3yf6ryf";
+    sha256 = "sha256-K8mN3Wzlay2Qgoo70mu3Bh4lXUXNDpXYt17aNnwWkIc=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Monero (XMR) CPU miner";
     homepage = "https://github.com/xmrig/xmrig";
     license = licenses.gpl3Plus;

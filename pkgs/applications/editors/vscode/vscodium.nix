@@ -7,31 +7,28 @@ let
     x86_64-linux = "linux-x64";
     x86_64-darwin = "darwin-x64";
     aarch64-linux = "linux-arm64";
+    aarch64-darwin = "darwin-arm64";
     armv7l-linux = "linux-armhf";
   }.${system};
 
-  archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
+  archive_fmt = if stdenv.isDarwin then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "11h4c5ghgn3qrg66jh2par3cl3fqzn9xb7gdniww4badnyajnij8";
-    x86_64-darwin = "0hd3qdxg4cknk3fxv509jlblwmfx65bm2a4arsg255224dpg64n2";
-    aarch64-linux = "0waakj413kqf68sawajd3n24qdbx6b2svyb4lgbn0sy1apc96s3c";
-    armv7l-linux = "1ij2bmsk601f1vjljj6gvxsxrcjqf2m74s9kc006hmcz7czjgk8f";
+    x86_64-linux = "0nsqrhijx5ic467fk2d803x93yazjkybg9cwmkk2l343fdg86kyq";
+    x86_64-darwin = "0hxafssjjx4gvbqpra517ar8dik5hkrnzx54v89g8p6s7kzkp1j0";
+    aarch64-linux = "1sl3w17a0j4b6rgl3xkna34i24s5ig8fs8kh2ysigb34h2izjdwi";
+    aarch64-darwin = "08wqiplyb16s7nvhlik7307jm3jznq7g611bp01q12bkxfa3bpp8";
+    armv7l-linux = "0vzl70545dplvd7nkl5g8x7mninjv3bkdp6d2ww6g2hdbdx0hlhr";
   }.${system};
 
-  sourceRoot = {
-    x86_64-linux = ".";
-    x86_64-darwin = "";
-    aarch64-linux = ".";
-    armv7l-linux = ".";
-  }.${system};
+  sourceRoot = if stdenv.isDarwin then "" else ".";
 in
   callPackage ./generic.nix rec {
     inherit sourceRoot;
 
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
-    version = "1.58.2";
+    version = "1.69.1";
     pname = "vscodium";
 
     executableName = "codium";
@@ -62,7 +59,9 @@ in
       homepage = "https://github.com/VSCodium/vscodium";
       downloadPage = "https://github.com/VSCodium/vscodium/releases";
       license = licenses.mit;
-      maintainers = with maintainers; [ synthetica turion ];
-      platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "armv7l-linux" ];
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+      maintainers = with maintainers; [ synthetica turion bobby285271 ];
+      mainProgram = "codium";
+      platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" "armv7l-linux" ];
     };
   }

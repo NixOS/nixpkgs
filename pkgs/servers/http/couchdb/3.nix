@@ -1,26 +1,26 @@
-{ lib, stdenv, fetchurl, erlang, icu, openssl, spidermonkey_68
-, coreutils, bash, makeWrapper, python3 }:
+{ lib, stdenv, fetchurl, erlang, icu, openssl, spidermonkey_91
+, coreutils, bash, makeWrapper, python3, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "couchdb";
-  version = "3.1.1";
+  version = "3.2.2";
 
 
   # when updating this, please consider bumping the erlang/OTP version
   # in all-packages.nix
   src = fetchurl {
     url = "mirror://apache/couchdb/source/${version}/apache-${pname}-${version}.tar.gz";
-    sha256 = "18wcqxrv2bz88xadkqpqznprrxmcmwr0g6k895xrm8rbp9mpdzlg";
+    sha256 = "sha256-acn9b4ATNVf2igLpLdpypP1kbWRvQp9Fu4Mpow+C8g4=";
   };
 
-  buildInputs = [ erlang icu openssl spidermonkey_68 (python3.withPackages(ps: with ps; [ requests ]))];
+  buildInputs = [ erlang icu openssl spidermonkey_91 (python3.withPackages(ps: with ps; [ requests ]))];
   postPatch = ''
-    substituteInPlace src/couch/rebar.config.script --replace '/usr/include/mozjs-68' "${spidermonkey_68.dev}/include/mozjs-68"
+    substituteInPlace src/couch/rebar.config.script --replace '/usr/include/mozjs-91' "${spidermonkey_91.dev}/include/mozjs-91"
     patchShebangs bin/rebar
   '';
 
   dontAddPrefix= "True";
-  configureFlags = ["--spidermonkey-version=68"];
+  configureFlags = ["--spidermonkey-version=91"];
   buildFlags = ["release"];
 
   installPhase = ''
@@ -28,9 +28,13 @@ stdenv.mkDerivation rec {
     cp -r rel/couchdb/* $out
   '';
 
+  passthru.tests = {
+    inherit (nixosTests) couchdb;
+  };
+
   meta = with lib; {
     description = "A database that uses JSON for documents, JavaScript for MapReduce queries, and regular HTTP for an API";
-    homepage = "http://couchdb.apache.org";
+    homepage = "https://couchdb.apache.org";
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ lostnet ];

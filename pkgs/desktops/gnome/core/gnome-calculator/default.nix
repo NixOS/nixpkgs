@@ -8,29 +8,28 @@
 , fetchurl
 , pkg-config
 , libxml2
-, gtk3
+, gtk4
 , glib
-, gtksourceview4
+, gtksourceview5
 , wrapGAppsHook
 , gobject-introspection
-, python3
 , gnome
 , mpfr
 , gmp
 , libsoup
 , libmpc
-, libhandy
+, libadwaita
 , gsettings-desktop-schemas
 , libgee
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-calculator";
-  version = "40.1";
+  version = "42.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-calculator/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "1xkazxbkpn1z5pfphhps7fc5q4yc8lp7f6b222n8bx5iyxhwbrkz";
+    sha256 = "M9qxvKQ2WNZlIJWLD2dMsK0xhc/TDBLkWef2lIHFxqA=";
   };
 
   nativeBuildInputs = [
@@ -41,31 +40,24 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     wrapGAppsHook
-    python3
     gobject-introspection # for finding vapi files
   ];
 
   buildInputs = [
-    gtk3
+    gtk4
     glib
     libxml2
-    gtksourceview4
+    gtksourceview5
     mpfr
     gmp
-    gnome.adwaita-icon-theme
     libgee
     gsettings-desktop-schemas
     libsoup
     libmpc
-    libhandy
+    libadwaita
   ];
 
   doCheck = true;
-
-  postPatch = ''
-    chmod +x meson_post_install.py # patchShebangs requires executable file
-    patchShebangs meson_post_install.py
-  '';
 
   preCheck = ''
     # Currency conversion test tries to store currency data in $HOME/.cache.

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gensio";
-  version = "2.2.8";
+  version = "2.3.7";
 
   src = fetchFromGitHub {
     owner = "cminyard";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-6+hYytLMg5E1KTBPWSteVu2VjF0APkcoOiigqzrBI+U=";
+    sha256 = "sha256-g1o/udsIFLJ+gunvI2QtsnksPaa946jWKkcdmdGmQ/k=";
   };
 
   passthru = {
@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/projects/ser2net/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ emantor ];
+    mainProgram = "gensiot";
     platforms = platforms.unix;
   };
 }

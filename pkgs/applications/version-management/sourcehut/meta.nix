@@ -14,29 +14,36 @@
 , dnspython
 , sshpubkeys
 , weasyprint
-, prometheus_client
+, prometheus-client
 , python
+, unzip
 }:
 let
-  version = "0.53.14";
+  version = "0.58.18";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "meta.sr.ht";
     rev = version;
-    sha256 = "sha256-/+r/XLDkcSTW647xPMh5bcJmR2xZNNH74AJ5jemna2k=";
+    sha256 = "sha256-OjbQHAzG2nZwpJUIvhKaCJWZbhZDC2R6C+SkbKUpk8o=";
   };
 
-  buildApi = src: buildGoModule {
+  metasrht-api = buildGoModule ({
     inherit src version;
     pname = "metasrht-api";
-    vendorSha256 = "sha256-eZyDrr2VcNMxI++18qUy7LA1Q1YDlWCoRtl00L8lfR4=";
-  };
+    modRoot = "api";
+    vendorSha256 = "sha256-kiEuEYZFbwJ6SbKFtxH4SiRaZmqYriRHPoHdTX28+d0=";
+  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
 in
 buildPythonPackage rec {
   pname = "metasrht";
   inherit version src;
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "all: api" ""
+  '';
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
@@ -52,7 +59,7 @@ buildPythonPackage rec {
     pystache
     sshpubkeys
     weasyprint
-    prometheus_client
+    prometheus-client
     dnspython
   ];
 
@@ -63,13 +70,15 @@ buildPythonPackage rec {
 
   postInstall = ''
     mkdir -p $out/bin
-    cp ${buildApi "${src}/api/"}/bin/api $out/bin/metasrht-api
+    ln -s ${metasrht-api}/bin/api $out/bin/metasrht-api
   '';
+
+  pythonImportsCheck = [ "metasrht" ];
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/meta.sr.ht";
     description = "Account management service for the sr.ht network";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ eadwu ];
   };
 }

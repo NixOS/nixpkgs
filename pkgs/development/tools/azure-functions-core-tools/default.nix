@@ -11,17 +11,16 @@
 , libuuid
 , dotnetbuildhelpers
 , dotnetCorePackages
-, coreclr
 , openssl
 }:
 
 stdenv.mkDerivation rec {
   pname = "azure-functions-core-tools";
-  version = "3.0.3568";
+  version = "3.0.3785";
 
   src = fetchurl {
     url = "https://github.com/Azure/${pname}/releases/download/${version}/Azure.Functions.Cli.linux-x64.${version}.zip";
-    sha256 = "0yxdqc5d1xsixjj2dlvs32d6fz4vh58ih2l00lc456fg15mfw3lg";
+    sha256 = "sha256-NdTEFQaG8eFengjzQr51ezehIHFvQZqmrjpjWk4vZKo=";
   };
 
   buildInputs = [
@@ -54,7 +53,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -prd * $out/bin
+    cp -prd *.dll *.so gozip func $out/bin
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${libPath}" "$out/bin/func"
@@ -67,6 +66,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/Azure/azure-functions-core-tools";
     description = "Command line tools for Azure Functions";
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
     license = licenses.mit;
     maintainers = with maintainers; [ jshcmpbll ];
     platforms = platforms.linux;

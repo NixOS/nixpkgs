@@ -1,10 +1,11 @@
 { lib, stdenv, fetchFromGitHub, ncurses, uthash, pkg-config }:
 
-stdenv.mkDerivation {
-  name = "logtop-0.7";
+stdenv.mkDerivation rec {
+  pname = "logtop";
+  version = "0.7";
 
   src = fetchFromGitHub {
-    rev = "a0935ab2e7056feb3e8a90f5129990c9b335a587";
+    rev = "logtop-${version}";
     owner = "JulienPalard";
     repo  ="logtop";
     sha256 = "1f8vk9gybldxvc0kwz38jxmwvzwangsvlfslpsx8zf04nvbkqi12";

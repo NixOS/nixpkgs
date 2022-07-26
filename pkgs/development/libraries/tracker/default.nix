@@ -1,6 +1,6 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
-, fetchpatch
 , gettext
 , meson
 , ninja
@@ -8,7 +8,6 @@
 , asciidoc
 , gobject-introspection
 , python3
-, gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_45
 , libxml2
@@ -22,40 +21,30 @@
 , icu
 , libuuid
 , libsoup
+, libsoup_3
 , json-glib
 , systemd
 , dbus
-, substituteAll
 }:
 
 stdenv.mkDerivation rec {
   pname = "tracker";
-  version = "3.1.1";
+  version = "3.3.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-Q3bi6YRUBm9E96JC5FuZs7/kwDtn+rGauw7Vhsp0iuc=";
+    sha256 = "Wtb1vJd4Hr9V7NaUfNSuf/QZJRZYDRC9g4Dx3UcZbtI=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit asciidoc;
-    })
-
-    # Add missing build target dependencies to fix parallel building of docs.
-    # TODO: Upstream this.
-    ./fix-docs.patch
-
-    # Fix 32bit datetime issue, use this upstream patch until 3.1.2 lands
-    # https://gitlab.gnome.org/GNOME/tracker/-/merge_requests/401
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/tracker/merge_requests/401.patch";
-      sha256 = "QEf+ciGkkCzanmtGO0aig6nAxd+NxjvuNi4RbNOwZEA=";
-    })
+    ./fix-test-order.patch
   ];
+
+  postPatch = ''
+    patchShebangs utils/data-generators/cc/generate
+  '';
 
   nativeBuildInputs = [
     meson
@@ -67,13 +56,13 @@ stdenv.mkDerivation rec {
     libxslt
     wrapGAppsNoGuiHook
     gobject-introspection
-    gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_45
     python3 # for data-generators
     systemd # used for checks to install systemd user service
     dbus # used for checks and pkg-config to install dbus service/s
-  ];
+  ] ++ checkInputs; # gi is in the main meson.build and checked regardless of
+                    # whether tests are enabled
 
   buildInputs = [
     glib
@@ -81,6 +70,7 @@ stdenv.mkDerivation rec {
     sqlite
     icu
     libsoup
+    libsoup_3
     libuuid
     json-glib
     libstemmer
@@ -88,7 +78,6 @@ stdenv.mkDerivation rec {
 
   checkInputs = with python3.pkgs; [
     pygobject3
-    tappy
   ];
 
   mesonFlags = [
@@ -96,14 +85,6 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-
-  postPatch = ''
-    patchShebangs utils/g-ir-merge/g-ir-merge
-    patchShebangs utils/data-generators/cc/generate
-    patchShebangs tests/functional-tests/test-runner.sh.in
-    patchShebangs tests/functional-tests/*.py
-    patchShebangs examples/python/endpoint.py
-  '';
 
   preCheck = ''
     # (tracker-store:6194): Tracker-CRITICAL **: 09:34:07.722: Cannot initialize database: Could not open sqlite3 database:'/homeless-shelter/.cache/tracker/meta.db': unable to open database file
@@ -122,7 +103,9 @@ stdenv.mkDerivation rec {
 
     dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
-      meson test --print-errorlogs
+      meson test \
+        --timeout-multiplier 2 \
+        --print-errorlogs
 
     runHook postCheck
   '';
@@ -135,7 +118,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
-      versionPolicy = "none";
     };
   };
 

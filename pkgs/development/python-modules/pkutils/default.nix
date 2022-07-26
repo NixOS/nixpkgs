@@ -1,35 +1,42 @@
 { lib
 , buildPythonPackage
-, isPy3k
 , fetchFromGitHub
-, semver
-  # Check Inputs
 , nose
+, pythonOlder
+, semver
 }:
 
 buildPythonPackage rec {
   pname = "pkutils";
-  version = "1.1.1";
-  disabled = !isPy3k; # some tests using semver fail due to unicode errors on Py2.7
+  version = "3.0.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "reubano";
     repo = "pkutils";
     rev = "v${version}";
-    sha256 = "01yaq9sz6vyxk8yiss6hsmy70qj642cr2ifk0sx1mlh488flcm62";
+    hash = "sha256-AK+xX+LPz6IVLZedsqMUm7G28ue0s3pXgIzxS4EHHLE=";
   };
 
-  propagatedBuildInputs = [ semver ];
+  propagatedBuildInputs = [
+    semver
+  ];
 
-  # Remove when https://github.com/reubano/pkutils/pull/4 merged
-  postPatch = ''
-    substituteInPlace requirements.txt --replace "semver>=2.2.1,<2.7.3" "semver"
+  checkInputs = [
+    nose
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+    nosetests
+    runHook postCheck
   '';
 
-  checkInputs = [ nose ];
-  pythonImportsCheck = [ "pkutils" ];
-
-  checkPhase = "nosetests";
+  pythonImportsCheck = [
+    "pkutils"
+  ];
 
   meta = with lib; {
     description = "A Python packaging utility library";

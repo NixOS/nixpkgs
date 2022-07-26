@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , mock
+, noiseprotocol
 , protobuf
 , pytest-asyncio
 , pytestCheckHook
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "5.1.1";
+  version = "10.11.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,11 +20,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "esphome";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "09hhkwkphyqa31yd1mmpz8xmyz6hav8vwf36v8xc4v6g1xm9l6f5";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-Wb46t+bdXGDYKzMr73YNWw1ULSLEV1xFcK16jHITnRg=";
   };
 
   propagatedBuildInputs = [
+    noiseprotocol
     protobuf
     zeroconf
   ];

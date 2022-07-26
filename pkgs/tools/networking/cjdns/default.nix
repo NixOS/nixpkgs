@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, nodejs, which, python27, util-linux, nixosTests }:
+{ lib, stdenv, fetchFromGitHub, nodejs, which, python3, util-linux, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "cjdns";
@@ -11,22 +11,26 @@ stdenv.mkDerivation rec {
     sha256 = "NOmk+vMZ8i0E2MjrUzksk+tkJ9XVVNEXlE5OOTNa+Y0=";
   };
 
-  buildInputs = [ which python27 nodejs ] ++
+  buildInputs = [ which python3 nodejs ] ++
     # for flock
     lib.optional stdenv.isLinux util-linux;
 
-  CFLAGS = "-O2 -Wno-error=stringop-truncation";
+  NIX_CFLAGS_COMPILE = [
+    "-O2"
+    "-Wno-error=array-bounds"
+    "-Wno-error=stringop-overflow"
+    "-Wno-error=stringop-truncation"
+  ] ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11") [
+    "-Wno-error=stringop-overread"
+  ];
+
   buildPhase =
     lib.optionalString stdenv.isAarch32 "Seccomp_NO=1 "
     + "bash do";
   installPhase = ''
     install -Dt "$out/bin/" cjdroute makekeys privatetopublic publictoip6
-    sed -i 's,/usr/bin/env node,'$(type -P node), \
-      $(find contrib -name "*.js")
-    sed -i 's,/usr/bin/env python,'$(type -P python), \
-      $(find contrib -type f)
     mkdir -p $out/share/cjdns
-    cp -R contrib tools node_build node_modules $out/share/cjdns/
+    cp -R tools node_build node_modules $out/share/cjdns/
   '';
 
   passthru.tests.basic = nixosTests.cjdns;

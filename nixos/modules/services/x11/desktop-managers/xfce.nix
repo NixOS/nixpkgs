@@ -4,12 +4,11 @@ with lib;
 
 let
   cfg = config.services.xserver.desktopManager.xfce;
+
 in
-
 {
-
   meta = {
-    maintainers = with maintainers; [ ];
+    maintainers = teams.xfce.members;
   };
 
   imports = [
@@ -36,6 +35,12 @@ in
       [ "services" "xserver" "desktopManager" "xfce" "extraSessionCommands" ]
       [ "services" "xserver" "displayManager" "sessionCommands" ])
     (mkRemovedOptionModule [ "services" "xserver" "desktopManager" "xfce" "screenLock" ] "")
+
+    # added 2022-06-26
+    # thunar has its own module
+    (mkRenamedOptionModule
+      [ "services" "xserver" "desktopManager" "xfce" "thunarPlugins" ]
+      [ "programs" "thunar" "plugins" ])
   ];
 
   options = {
@@ -44,15 +49,6 @@ in
         type = types.bool;
         default = false;
         description = "Enable the Xfce desktop environment.";
-      };
-
-      thunarPlugins = mkOption {
-        default = [];
-        type = types.listOf types.package;
-        example = literalExample "[ pkgs.xfce.thunar-archive-plugin ]";
-        description = ''
-          A list of plugin that should be installed with Thunar.
-        '';
       };
 
       noDesktop = mkOption {
@@ -65,6 +61,12 @@ in
         type = types.bool;
         default = true;
         description = "Enable the XFWM (default) window manager.";
+      };
+
+      enableScreensaver = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Enable the XFCE screensaver.";
       };
     };
   };
@@ -92,7 +94,6 @@ in
       exo
       garcon
       libxfce4ui
-      xfconf
 
       mousepad
       parole
@@ -104,8 +105,6 @@ in
       xfce4-settings
       xfce4-taskmanager
       xfce4-terminal
-
-      (thunar.override { thunarPlugins = cfg.thunarPlugins; })
     ] # TODO: NetworkManager doesn't belong here
       ++ optional config.networking.networkmanager.enable networkmanagerapplet
       ++ optional config.powerManagement.enable xfce4-power-manager
@@ -122,7 +121,10 @@ in
       ] ++ optionals (!cfg.noDesktop) [
         xfce4-panel
         xfdesktop
-      ];
+      ] ++ optional cfg.enableScreensaver xfce4-screensaver;
+
+    programs.xfconf.enable = true;
+    programs.thunar.enable = true;
 
     environment.pathsToLink = [
       "/share/xfce4"
@@ -164,9 +166,9 @@ in
 
     # Systemd services
     systemd.packages = with pkgs.xfce; [
-      (thunar.override { thunarPlugins = cfg.thunarPlugins; })
       xfce4-notifyd
     ];
 
+    security.pam.services.xfce4-screensaver.unixAuth = cfg.enableScreensaver;
   };
 }

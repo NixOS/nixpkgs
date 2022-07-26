@@ -1,28 +1,32 @@
 { lib
-, aiodns
 , asynctest
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, python-socks
 , pythonOlder
 , tldextract
+, whodap
 }:
 
 buildPythonPackage rec {
   pname = "asyncwhois";
-  version = "0.3.2";
+  version = "1.0.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pogzyb";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0cxmvxc82dxrg18kcc321hfmp877knl76pa6dpfhwphwfs2v02f1";
+    hash = "sha256-9tSGfF/Ezuya4pEyr1XolWXvSO/F/UrobRVlyHITNTU=";
   };
 
   propagatedBuildInputs = [
-    aiodns
+    python-socks
     tldextract
+    whodap
   ];
 
   checkInputs = [
@@ -30,8 +34,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Disable tests that require network access
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "python-socks[asyncio]" "python-socks"
+  '';
+
   disabledTests = [
+    # Tests require network access
     "test_pywhois_aio_get_hostname_from_ip"
     "test_pywhois_get_hostname_from_ip"
     "test_pywhois_aio_lookup_ipv4"
@@ -41,9 +50,13 @@ buildPythonPackage rec {
     "test_from_whois_cmd"
     "test_get_hostname_from_ip"
     "test_whois_query_run"
+    "test_whois_query_create_connection"
+    "test_whois_query_send_and_recv"
   ];
 
-  pythonImportsCheck = [ "asyncwhois" ];
+  pythonImportsCheck = [
+    "asyncwhois"
+  ];
 
   meta = with lib; {
     description = "Python module for retrieving WHOIS information";

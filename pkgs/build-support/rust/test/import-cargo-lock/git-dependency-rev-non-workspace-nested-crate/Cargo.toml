@@ -1,0 +1,8 @@
+[package]
+name = "git-dependency-rev-non-workspace-nested-crate"
+version = "0.1.0"
+authors = ["Stefan Junker <mail@stefanjunker.de>"]
+edition = "2018"
+
+[dependencies]
+cargo-test-support = { git = "https://github.com/rust-lang/cargo", branch = "rust-1.53.0" }

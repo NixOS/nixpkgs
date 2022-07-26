@@ -113,19 +113,16 @@ in
         type = types.nullOr (types.submodule {
           options = {
             tlsKeyPath = mkOption {
-              default = null;
               type = types.str;
               description = "Path to the private key used for TLS.";
             };
 
             tlsPem = mkOption {
-              default = null;
               type = types.path;
               description = "Path to the certificate used for TLS.";
             };
 
             caCert = mkOption {
-              default = null;
               type = types.path;
               description = "Path certificate authority used to sign the cluster certificates.";
             };
@@ -162,9 +159,10 @@ in
         install -m 0755 -d /var/log/glusterfs
       ''
       # The copying of hooks is due to upstream bug https://bugzilla.redhat.com/show_bug.cgi?id=1452761
+      # Excludes one hook due to missing SELinux binaries.
       + ''
         mkdir -p /var/lib/glusterd/hooks/
-        ${rsync}/bin/rsync -a ${glusterfs}/var/lib/glusterd/hooks/ /var/lib/glusterd/hooks/
+        ${rsync}/bin/rsync -a --exclude="S10selinux-label-brick.sh" ${glusterfs}/var/lib/glusterd/hooks/ /var/lib/glusterd/hooks/
 
         ${tlsCmd}
       ''
@@ -190,7 +188,7 @@ in
 
       wantedBy = [ "multi-user.target" ];
 
-      after = [ "syslog.target" "network.target" ];
+      after = [ "network.target" ];
 
       preStart = ''
         install -m 0755 -d /var/log/glusterfs

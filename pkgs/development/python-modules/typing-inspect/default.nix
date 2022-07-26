@@ -3,7 +3,7 @@
 , fetchPypi
 , typing-extensions
 , mypy-extensions
-, isPy39
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -19,6 +19,19 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     typing-extensions
     mypy-extensions
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # https://github.com/ilevkivskyi/typing_inspect/issues/84
+    "test_typed_dict_typing_extension"
+  ];
+
+  pythonImportsCheck = [
+    "typing_inspect"
   ];
 
   meta = with lib; {

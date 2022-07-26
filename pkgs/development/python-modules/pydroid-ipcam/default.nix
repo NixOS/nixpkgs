@@ -8,14 +8,16 @@
 
 buildPythonPackage rec {
   pname = "pydroid-ipcam";
-  version = "unstable-2021-06-01";
+  version = "1.3.1";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = pname;
     rev = "3ca14ff178f3506a6a91d8736deea8f06e9ad1c1";
-    sha256 = "0w81pl5fya17hg5xgba2vgxnylfd8jc70il575wdz2pw6z6ihj3s";
+    hash = "sha256-ekgYzTf8it94OYVGcJhEzVFv+9tCrdfLgyco7wq9AXE=";
   };
 
   propagatedBuildInputs = [
@@ -25,7 +27,10 @@ buildPythonPackage rec {
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "pydroid_ipcam" ];
+
+  pythonImportsCheck = [
+    "pydroid_ipcam"
+  ];
 
   meta = with lib; {
     description = "Python library for Android IP Webcam";

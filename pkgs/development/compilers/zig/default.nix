@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , cmake
 , llvmPackages
@@ -6,24 +7,22 @@
 , zlib
 }:
 
-let
-  inherit (llvmPackages) stdenv;
-in
 stdenv.mkDerivation rec {
   pname = "zig";
-  version = "0.8.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "ziglang";
     repo = pname;
     rev = version;
-    hash = "sha256-bILjcKX8jPl2n1HRYvYRb7jJkobwqmSJ+hHXSn9n2ag=";
+    hash = "sha256-x2c4c9RSrNWGqEngio4ArW7dJjW0gg+8nqBwPcR721k=";
   };
 
   nativeBuildInputs = [
     cmake
     llvmPackages.llvm.dev
   ];
+
   buildInputs = [
     libxml2
     zlib
@@ -37,6 +36,11 @@ stdenv.mkDerivation rec {
     export HOME=$TMPDIR;
   '';
 
+  cmakeFlags = [
+    # file RPATH_CHANGE could not write new RPATH
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+  ];
+
   doCheck = true;
   checkPhase = ''
     runHook preCheck
@@ -49,10 +53,7 @@ stdenv.mkDerivation rec {
     description =
       "General-purpose programming language and toolchain for maintaining robust, optimal, and reusable software";
     license = licenses.mit;
-    maintainers = with maintainers; [ andrewrk AndersonTorres ];
+    maintainers = with maintainers; [ aiotter andrewrk AndersonTorres ];
     platforms = platforms.unix;
-    # See https://github.com/NixOS/nixpkgs/issues/86299
-    broken = stdenv.isDarwin;
   };
 }
-

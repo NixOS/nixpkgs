@@ -25,7 +25,7 @@ in
 assert versionAtLeast (getVersion erlang) minimumOTPVersion;
 
 stdenv.mkDerivation ({
-  name = "${baseName}-${version}";
+  pname = "${baseName}";
 
   inherit src version debugInfo;
 

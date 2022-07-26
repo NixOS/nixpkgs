@@ -9,6 +9,7 @@
 , symlinkJoin
 , mygui
 , crudini
+, bullet
 }:
 
 # revisions are taken from https://github.com/GrimKriegor/TES3MP-deploy
@@ -70,7 +71,8 @@ let
 
     nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ makeWrapper ];
 
-    buildInputs = oldAttrs.buildInputs ++ [ luajit ];
+    buildInputs = (builtins.map (x: if x.pname or "" == "bullet" then bullet else x) oldAttrs.buildInputs)
+      ++ [ luajit ];
 
     cmakeFlags = oldAttrs.cmakeFlags ++ [
       "-DBUILD_OPENCS=OFF"
@@ -79,8 +81,13 @@ let
       "-DRakNet_LIBRARY_DEBUG=${raknet}/lib/libRakNetLibStatic.a"
     ];
 
+    prePatch = ''
+      substituteInPlace components/process/processinvoker.cpp \
+        --replace "\"./\"" "\"$out/bin/\""
+    '';
+
     # https://github.com/TES3MP/openmw-tes3mp/issues/552
-    patches = [ ./tes3mp.patch ];
+    patches = oldAttrs.patches ++ [ ./tes3mp.patch ];
 
     NIX_CFLAGS_COMPILE = "-fpermissive";
 
@@ -101,6 +108,7 @@ let
       license = licenses.gpl3Only;
       maintainers = with maintainers; [ peterhoeg ];
       platforms = [ "x86_64-linux" "i686-linux" ];
+      broken = true;
     };
   });
 
@@ -124,11 +132,11 @@ symlinkJoin rec {
     dir=\''${XDG_CONFIG_HOME:-\$HOME/.config}/openmw
 
     makeWrapper ${unwrapped}/libexec/tes3mp-browser $out/bin/tes3mp-browser \
-      --run "cd $out/bin"
+      --chdir "$out/bin"
 
     makeWrapper ${unwrapped}/libexec/tes3mp-server $out/bin/tes3mp-server \
       --run "mkdir -p $dir" \
       --run "${crudini}/bin/crudini --merge $dir/${cfgFile.name} < ${cfgFile}" \
-      --run "cd $out/bin"
+      --chdir "$out/bin"
   '';
 }

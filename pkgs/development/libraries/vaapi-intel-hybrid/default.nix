@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, cmrt, libdrm, libva, libX11, libGL, wayland }:
+{ lib, stdenv, fetchurl, fetchFromGitHub, autoreconfHook, pkg-config, cmrt, libdrm, libva, libX11, libGL, wayland }:
 
 stdenv.mkDerivation rec {
   pname = "intel-hybrid-driver";
   version = "1.0.2";
 
-  src = fetchurl {
-    url = "https://github.com/01org/intel-hybrid-driver/archive/${version}.tar.gz";
-    sha256 = "0ywdhbvzwzzrq4qhylnw1wc8l3j67h26l0cs1rncwhw05s3ndk8n";
+  src = fetchFromGitHub {
+    owner = "intel";
+    repo = "intel-hybrid-driver";
+    rev = version;
+    sha256 = "sha256-uYX7RoU1XVzcC2ea3z/VBjmT47xmzK67Y4LaiFXyJZ8=";
   };
 
   patches = [
@@ -22,6 +24,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmrt libdrm libva libX11 libGL wayland ];
 
   enableParallelBuilding = true;
+
+  # Workaround build failure on -fno-common toolchains like upstream gcc-10.
+  NIX_CFLAGS_COMPILE = "-fcommon";
 
   configureFlags = [
     "--enable-drm"

@@ -1,42 +1,47 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
 }:
-
-stdenv.mkDerivation rec {
+let
+  testData = fetchFromGitHub {
+    owner = "nlohmann";
+    repo = "json_test_data";
+    rev = "v3.0.0";
+    sha256 = "O6p2PFB7c2KE9VqWvmTaFywbW1hSzAP5V42EuemX+ls=";
+  };
+in stdenv.mkDerivation (finalAttrs: {
   pname = "nlohmann_json";
-  version = "3.9.1";
+  version = "3.10.5";
 
   src = fetchFromGitHub {
     owner = "nlohmann";
     repo = "json";
-    rev = "v${version}";
-    sha256 = "sha256-THordDPdH2qwk6lFTgeFmkl7iDuA/7YH71PTUe6vJCs=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "DTsZrdB9GcaNkx7ZKxcgCA3A9ShM5icSF0xyGguJNbk=";
   };
-
-  patches = [
-    # https://github.com/nlohmann/json/pull/2690
-    (fetchpatch {
-      url = "https://github.com/nlohmann/json/commit/53a9850eebb88c6ff95f6042d08d5c0cc9d18097.patch";
-      sha256 = "k+Og00nXNg5IsFQY5fWD3xVQQXUFFTie44UXole0S1M=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
-    "-DBuildTests=${if doCheck then "ON" else "OFF"}"
+    "-DBuildTests=${if finalAttrs.doCheck then "ON" else "OFF"}"
     "-DJSON_MultipleHeaders=ON"
-  ];
+  ] ++ lib.optional finalAttrs.doCheck "-DJSON_TestDataDirectory=${testData}";
 
-  # A test cause the build to timeout https://github.com/nlohmann/json/issues/1816
-  #doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
-  doCheck = false;
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+
+  # skip tests that require git or modify “installed files”
+  preCheck = ''
+    checkFlagsArray+=("ARGS=-LE 'not_reproducible|git_required'")
+  '';
 
   postInstall = "rm -rf $out/lib64";
 
   meta = with lib; {
-    description = "Header only C++ library for the JSON file format";
-    homepage = "https://github.com/nlohmann/json";
+    description = "JSON for Modern C++";
+    homepage = "https://json.nlohmann.me";
+    changelog = "https://github.com/nlohmann/json/blob/develop/ChangeLog.md";
     license = licenses.mit;
     platforms = platforms.all;
   };
-}
+})

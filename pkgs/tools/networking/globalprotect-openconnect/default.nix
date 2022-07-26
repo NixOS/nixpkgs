@@ -1,36 +1,32 @@
 { stdenv, lib, fetchFromGitHub
-, qmake, qtwebsockets, qtwebengine, wrapQtAppsHook, openconnect
+, cmake, qtwebsockets, qtwebengine, wrapQtAppsHook, openconnect
 }:
 
 stdenv.mkDerivation rec {
   pname = "globalprotect-openconnect";
-  version = "1.2.6";
+  version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "yuezk";
     repo = "GlobalProtect-openconnect";
-    rev = "c14a6ad1d2b62f8d297bc4cfbcb1dcea4d99112f";
     fetchSubmodules = true;
-    sha256 = "1zkc3vk1j31n2zs5ammzv23dah7x163gfrzz222ynbkvsccrhzrk";
+    rev = "v${version}";
+    sha256 = "sha256-9wRe7pJiosk2b0FKhHKpG6P2QPuBo8bVi6rnUMIkG6I=";
   };
 
-  nativeBuildInputs = [ qmake wrapQtAppsHook ];
+  nativeBuildInputs = [ cmake wrapQtAppsHook ];
 
   buildInputs = [ openconnect qtwebsockets qtwebengine ];
 
   patchPhase = ''
-    for f in GPClient/GPClient.pro \
-      GPClient/com.yuezk.qt.gpclient.desktop \
-      GPService/GPService.pro \
-      GPService/dbus/com.yuezk.qt.GPService.service \
-      GPService/systemd/gpservice.service; do
-        substituteInPlace $f \
-          --replace /usr $out \
-          --replace /etc $out/lib;
-    done;
-
     substituteInPlace GPService/gpservice.h \
       --replace /usr/local/bin/openconnect ${openconnect}/bin/openconnect;
+    substituteInPlace GPClient/settingsdialog.ui \
+      --replace /etc/gpservice/gp.conf $out/etc/gpservice/gp.conf;
+    substituteInPlace GPService/gpservice.cpp \
+      --replace /etc/gpservice/gp.conf $out/etc/gpservice/gp.conf;
+    substituteInPlace GPService/CMakeLists.txt \
+      --replace /etc/gpservice $out/etc/gpservice;
   '';
 
   meta = with lib; {

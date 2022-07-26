@@ -1,19 +1,19 @@
 { lib, mkDerivation, fetchFromGitHub, pkg-config, qmake
-, python, qtbase, qttools }:
+, python3, qtbase, qttools }:
 
 mkDerivation rec {
   pname = "tiled";
-  version = "1.7.0";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "bjorn";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-XVIkyf9cQZXjFuGGCliCSY22X8EkoPEl1EpGCrMTsgY=";
+    sha256 = "sha256-QYA2krbwH807BkzVST+/+sjSR6So/aGY/YenEjYxE48=";
   };
 
   nativeBuildInputs = [ pkg-config qmake ];
-  buildInputs = [ python qtbase qttools ];
+  buildInputs = [ python3 qtbase qttools ];
 
   meta = with lib; {
     description = "Free, easy to use and flexible tile map editor";

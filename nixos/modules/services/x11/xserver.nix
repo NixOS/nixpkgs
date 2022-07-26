@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, utils, pkgs, ... }:
 
 with lib;
 
@@ -181,6 +181,13 @@ in
         '';
       };
 
+      excludePackages = mkOption {
+        default = [];
+        example = literalExpression "[ pkgs.xterm ]";
+        type = types.listOf types.package;
+        description = "Which X11 packages to exclude from the default environment";
+      };
+
       exportConfiguration = mkOption {
         type = types.bool;
         default = false;
@@ -217,7 +224,7 @@ in
       inputClassSections = mkOption {
         type = types.listOf types.lines;
         default = [];
-        example = literalExample ''
+        example = literalExpression ''
           [ '''
               Identifier      "Trackpoint Wheel Emulation"
               MatchProduct    "ThinkPad USB Keyboard with TrackPoint"
@@ -233,7 +240,7 @@ in
       modules = mkOption {
         type = types.listOf types.path;
         default = [];
-        example = literalExample "[ pkgs.xf86_input_wacom ]";
+        example = literalExpression "[ pkgs.xf86_input_wacom ]";
         description = "Packages to be added to the module search path of the X server.";
       };
 
@@ -297,7 +304,11 @@ in
       dpi = mkOption {
         type = types.nullOr types.int;
         default = null;
-        description = "DPI resolution to use for X server.";
+        description = ''
+          Force global DPI resolution to use for X server. It's recommended to
+          use this only when DPI is detected incorrectly; also consider using
+          <literal>Monitor</literal> section in configuration file instead.
+        '';
       };
 
       updateDbusEnvironment = mkOption {
@@ -347,6 +358,7 @@ in
       xkbDir = mkOption {
         type = types.path;
         default = "${pkgs.xkeyboard_config}/etc/X11/xkb";
+        defaultText = literalExpression ''"''${pkgs.xkeyboard_config}/etc/X11/xkb"'';
         description = ''
           Path used for -xkbdir xserver parameter.
         '';
@@ -583,11 +595,22 @@ in
   config = mkIf cfg.enable {
 
     services.xserver.displayManager.lightdm.enable =
-      let dmconf = cfg.displayManager;
-          default = !(dmconf.gdm.enable
-                    || dmconf.sddm.enable
-                    || dmconf.xpra.enable );
-      in mkIf (default) true;
+      let dmConf = cfg.displayManager;
+          default = !(dmConf.gdm.enable
+                    || dmConf.sddm.enable
+                    || dmConf.xpra.enable
+                    || dmConf.sx.enable
+                    || dmConf.startx.enable);
+      in mkIf (default) (mkDefault true);
+
+    # so that the service won't be enabled when only startx is used
+    systemd.services.display-manager.enable  =
+      let dmConf = cfg.displayManager;
+          noDmUsed = !(dmConf.gdm.enable
+                    || dmConf.sddm.enable
+                    || dmConf.xpra.enable
+                    || dmConf.lightdm.enable);
+      in mkIf (noDmUsed) (mkDefault false);
 
     hardware.opengl.enable = mkDefault true;
 
@@ -604,9 +627,6 @@ in
       in optional (driver != null) ({ inherit name; modules = []; driverName = name; display = true; } // driver));
 
     assertions = [
-      { assertion = config.security.polkit.enable;
-        message = "X11 requires Polkit to be enabled (‘security.polkit.enable = true’).";
-      }
       (let primaryHeads = filter (x: x.primary) cfg.xrandrHeads; in {
         assertion = length primaryHeads < 2;
         message = "Only one head is allowed to be primary in "
@@ -642,7 +662,7 @@ in
           ${cfgPath}.source = xorg.xf86inputevdev.out + "/share" + cfgPath;
         });
 
-    environment.systemPackages =
+    environment.systemPackages = utils.removePackagesByName
       [ xorg.xorgserver.out
         xorg.xrandr
         xorg.xrdb
@@ -658,7 +678,7 @@ in
         pkgs.xdg-utils
         xorg.xf86inputevdev.out # get evdev.4 man page
         pkgs.nixos-icons # needed for gnome and pantheon about dialog, nixos-manual and maybe more
-      ]
+      ] config.services.xserver.excludePackages
       ++ optional (elem "virtualbox" cfg.videoDrivers) xorg.xrefresh;
 
     environment.pathsToLink = [ "/share/X11" ];
@@ -681,13 +701,13 @@ in
     systemd.services.display-manager =
       { description = "X11 Server";
 
-        after = [ "acpid.service" "systemd-logind.service" ];
+        after = [ "acpid.service" "systemd-logind.service" "systemd-user-sessions.service" ];
 
         restartIfChanged = false;
 
         environment =
           optionalAttrs config.hardware.opengl.setLdLibraryPath
-            { LD_LIBRARY_PATH = pkgs.addOpenGLRunpath.driverLink; }
+            { LD_LIBRARY_PATH = lib.makeLibraryPath [ pkgs.addOpenGLRunpath.driverLink ]; }
           // cfg.displayManager.job.environment;
 
         preStart =
@@ -697,7 +717,8 @@ in
             rm -f /tmp/.X0-lock
           '';
 
-        script = "${cfg.displayManager.job.execCmd}";
+        # TODO: move declaring the systemd service to its own mkIf
+        script = mkIf (config.systemd.services.display-manager.enable == true) "${cfg.displayManager.job.execCmd}";
 
         # Stop restarting if the display manager stops (crashes) 2 times
         # in one minute. Starting X typically takes 3-4s.
@@ -734,6 +755,9 @@ in
       nativeBuildInputs = with pkgs.buildPackages; [ xkbvalidate ];
       preferLocalBuild = true;
     } ''
+      ${optionalString (config.environment.sessionVariables ? XKB_CONFIG_ROOT)
+        "export XKB_CONFIG_ROOT=${config.environment.sessionVariables.XKB_CONFIG_ROOT}"
+      }
       xkbvalidate "$xkbModel" "$layout" "$xkbVariant" "$xkbOptions"
       touch "$out"
     '');
@@ -845,4 +869,6 @@ in
 
   };
 
+  # uses relatedPackages
+  meta.buildDocsInSandbox = false;
 }

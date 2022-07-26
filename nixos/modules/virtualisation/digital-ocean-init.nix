@@ -20,7 +20,7 @@ in {
   options.virtualisation.digitalOcean.defaultConfigFile = mkOption {
     type = types.path;
     default = defaultConfigFile;
-    defaultText = ''
+    defaultText = literalDocBook ''
       The default configuration imports user-data if applicable and
       <literal>(modulesPath + "/virtualisation/digital-ocean-config.nix")</literal>.
     '';
@@ -46,7 +46,7 @@ in {
         RemainAfterExit = true;
       };
       restartIfChanged = false;
-      path = [ pkgs.jq pkgs.gnused pkgs.gnugrep pkgs.systemd config.nix.package config.system.build.nixos-rebuild ];
+      path = [ pkgs.jq pkgs.gnused pkgs.gnugrep config.systemd.package config.nix.package config.system.build.nixos-rebuild ];
       environment = {
         HOME = "/root";
         NIX_PATH = concatStringsSep ":" [

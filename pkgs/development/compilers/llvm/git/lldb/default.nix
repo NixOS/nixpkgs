@@ -1,6 +1,6 @@
 { lib, stdenv, llvm_meta
 , runCommand
-, src
+, monorepoSrc
 , cmake
 , zlib
 , ncurses
@@ -19,6 +19,7 @@
 , Carbon
 , Cocoa
 , lit
+, makeWrapper
 , enableManpages ? false
 }:
 
@@ -26,8 +27,13 @@ stdenv.mkDerivation (rec {
   pname = "lldb";
   inherit version;
 
-  inherit src;
-  sourceRoot = "source/${pname}";
+  src = runCommand "${pname}-src-${version}" {} ''
+    mkdir -p "$out"
+    cp -r ${monorepoSrc}/cmake "$out"
+    cp -r ${monorepoSrc}/${pname} "$out"
+  '';
+
+  sourceRoot = "${src.name}/${pname}";
 
   patches = [
     ./procfs.patch
@@ -42,7 +48,7 @@ stdenv.mkDerivation (rec {
   outputs = [ "out" "lib" "dev" ];
 
   nativeBuildInputs = [
-    cmake python3 which swig lit
+    cmake python3 which swig lit makeWrapper
   ] ++ lib.optionals enableManpages [
     python3.pkgs.sphinx python3.pkgs.recommonmark
   ];
@@ -84,7 +90,15 @@ stdenv.mkDerivation (rec {
 
   doCheck = false;
 
+  installCheckPhase = ''
+    if [ ! -e "$lib/${python3.sitePackages}/lldb/_lldb.so" ] ; then
+        return 1;
+    fi
+  '';
+
   postInstall = ''
+    wrapProgram $out/bin/lldb --prefix PYTHONPATH : $lib/${python3.sitePackages}/
+
     # Editor support
     # vscode:
     install -D ../tools/lldb-vscode/package.json $out/share/vscode/extensions/llvm-org.lldb-vscode-0.1.0/package.json

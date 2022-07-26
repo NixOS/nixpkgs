@@ -1,7 +1,6 @@
 { pkgs
 , buildPythonPackage
 , fetchPypi
-, python
 , azure-common
 , cryptography
 , futures ? null

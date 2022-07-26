@@ -1,25 +1,26 @@
-{ fetchCrate, lib, openssl, pkg-config, rustPlatform, stdenv, Security }:
+{ lib, rustPlatform, fetchCrate, stdenv, pkg-config, openssl, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "taplo-cli";
-  version = "0.4.0";
+  version = "0.6.2";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "0hh9l83z7qymakyf7ka756gwxpzirgdhf6kpzh89bcmpdfz70005";
+    sha256 = "sha256-vz3ClC2PI0ti+cItuVdJgP8KLmR2C+uGUzl3DfVuTrY=";
   };
 
-  cargoSha256 = "0bkpcnbrrfv07czs1gy8r9q1cp6fdfz2vmlfk9lsg3iapvyi5s1c";
+  cargoSha256 = "sha256-m6wsca/muGPs58myQH7ZLPPM+eGP+GL2sC5suu+vWU0=";
 
-  nativeBuildInputs = lib.optional stdenv.isLinux pkg-config;
+  OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
+  OPENSSL_INCLUDE_DIR = "${openssl.dev}/include";
 
-  buildInputs = lib.optional stdenv.isLinux openssl
-    ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
   meta = with lib; {
     description = "A TOML toolkit written in Rust";
     homepage = "https://taplo.tamasfe.dev";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "taplo";
   };
 }

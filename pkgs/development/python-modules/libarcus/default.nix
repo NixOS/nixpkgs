@@ -1,19 +1,29 @@
 { lib, buildPythonPackage, python, fetchFromGitHub
+, fetchpatch
 , cmake, sip_4, protobuf, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "libarcus";
-  version = "4.10.0";
+  version = "4.12.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "libArcus";
     rev = version;
-    sha256 = "1ahka8s8fjwymyr7pca7i7h51ikfr35zy4nkzfcjn946x7p0dprf";
+    sha256 = "sha256-X33ptwYj9YkVWqUDPP+Ic+hoIb+rwsLdQXvHLA9z+3w=";
   };
 
-  disabled = pythonOlder "3.4.0";
+  patches = [
+    # Fix build against protobuf 3.18+
+    # https://github.com/Ultimaker/libArcus/issues/121
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/coryan/vcpkg/f69b85aa403b04e7d442c90db3418d484e44024f/ports/arcus/0001-fix-protobuf-deprecated.patch";
+      sha256 = "0bqj7pxzpwsamknd6gadj419x6mwx8wnlfzg4zqn6cax3cmasjb2";
+    })
+  ];
+
+  disabled = pythonOlder "3.4";
 
   propagatedBuildInputs = [ sip_4 ];
   nativeBuildInputs = [ cmake ];

@@ -1,5 +1,5 @@
 { lib, fetchPypi, buildPythonPackage
-, requests, fetchpatch, pythonOlder, typing
+, requests, pythonOlder, typing
 }:
 
 buildPythonPackage rec {
@@ -17,6 +17,6 @@ buildPythonPackage rec {
     description = "The official Todoist Python API library";
     homepage = "https://todoist-python.readthedocs.io/en/latest/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

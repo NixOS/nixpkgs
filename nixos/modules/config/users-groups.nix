@@ -6,12 +6,6 @@ let
   ids = config.ids;
   cfg = config.users;
 
-  isPasswdCompatible = str: !(hasInfix ":" str || hasInfix "\n" str);
-  passwdEntry = type: lib.types.addCheck type isPasswdCompatible // {
-    name = "passwdEntry ${type.name}";
-    description = "${type.description}, not containing newlines or colons";
-  };
-
   # Check whether a password hash will allow login.
   allowsLogin = hash:
     hash == "" # login without password
@@ -48,7 +42,7 @@ let
     services such as SSH, or indirectly via <command>su</command> or
     <command>sudo</command>). This should only be used for e.g. bootable
     live systems. Note: this is different from setting an empty password,
-    which ca be achieved using <option>users.users.&lt;name?&gt;.password</option>.
+    which can be achieved using <option>users.users.&lt;name?&gt;.password</option>.
 
     If set to <literal>null</literal> (default) this user will not
     be able to log in using a password (i.e. via <command>login</command>
@@ -60,7 +54,7 @@ let
     options = {
 
       name = mkOption {
-        type = passwdEntry types.str;
+        type = types.passwdEntry types.str;
         apply = x: assert (builtins.stringLength x < 32 || abort "Username '${x}' is longer than 31 characters which is not allowed!"); x;
         description = ''
           The name of the user account. If undefined, the name of the
@@ -69,7 +63,7 @@ let
       };
 
       description = mkOption {
-        type = passwdEntry types.str;
+        type = types.passwdEntry types.str;
         default = "";
         example = "Alice Q. User";
         description = ''
@@ -123,7 +117,7 @@ let
       group = mkOption {
         type = types.str;
         apply = x: assert (builtins.stringLength x < 32 || abort "Group name '${x}' is longer than 31 characters which is not allowed!"); x;
-        default = "nogroup";
+        default = "";
         description = "The user's primary group.";
       };
 
@@ -134,9 +128,15 @@ let
       };
 
       home = mkOption {
-        type = passwdEntry types.path;
+        type = types.passwdEntry types.path;
         default = "/var/empty";
         description = "The user's home directory.";
+      };
+
+      homeMode = mkOption {
+        type = types.strMatching "[0-7]{1,5}";
+        default = "700";
+        description = "The user's home directory mode in numeric format. See chmod(1). The mode is only applied if <option>users.users.&lt;name&gt;.createHome</option> is true.";
       };
 
       cryptHomeLuks = mkOption {
@@ -163,10 +163,10 @@ let
       };
 
       shell = mkOption {
-        type = types.nullOr (types.either types.shellPackage (passwdEntry types.path));
+        type = types.nullOr (types.either types.shellPackage (types.passwdEntry types.path));
         default = pkgs.shadow;
-        defaultText = "pkgs.shadow";
-        example = literalExample "pkgs.bashInteractive";
+        defaultText = literalExpression "pkgs.shadow";
+        example = literalExpression "pkgs.bashInteractive";
         description = ''
           The path to the user's shell. Can use shell derivations,
           like <literal>pkgs.bashInteractive</literal>. Don’t
@@ -201,6 +201,16 @@ let
           Subordinate group ids that user is allowed to use.
           They are set into <filename>/etc/subgid</filename> and are used
           by <literal>newgidmap</literal> for user namespaces.
+        '';
+      };
+
+      autoSubUidGidRange = mkOption {
+        type = types.bool;
+        default = false;
+        example = true;
+        description = ''
+          Automatically allocate subordinate user and group ids for this user.
+          Allocated range is currently always of size 65536.
         '';
       };
 
@@ -291,7 +301,7 @@ let
       packages = mkOption {
         type = types.listOf types.package;
         default = [];
-        example = literalExample "[ pkgs.firefox pkgs.thunderbird ]";
+        example = literalExpression "[ pkgs.firefox pkgs.thunderbird ]";
         description = ''
           The set of packages that should be made available to the user.
           This is in contrast to <option>environment.systemPackages</option>,
@@ -309,6 +319,7 @@ let
           group = mkDefault "users";
           createHome = mkDefault true;
           home = mkDefault "/home/${config.name}";
+          homeMode = mkDefault "700";
           useDefaultShell = mkDefault true;
           isSystemUser = mkDefault false;
         })
@@ -320,16 +331,19 @@ let
         (mkIf (!cfg.mutableUsers && config.initialHashedPassword != null) {
           hashedPassword = mkDefault config.initialHashedPassword;
         })
+        (mkIf (config.isNormalUser && config.subUidRanges == [] && config.subGidRanges == []) {
+          autoSubUidGidRange = mkDefault true;
+        })
       ];
 
   };
 
-  groupOpts = { name, ... }: {
+  groupOpts = { name, config, ... }: {
 
     options = {
 
       name = mkOption {
-        type = passwdEntry types.str;
+        type = types.passwdEntry types.str;
         description = ''
           The name of the group. If undefined, the name of the attribute set
           will be used.
@@ -358,6 +372,10 @@ let
 
     config = {
       name = mkDefault name;
+
+      members = mapAttrsToList (n: u: u.name) (
+        filterAttrs (n: u: elem config.name u.extraGroups) cfg.users
+      );
     };
 
   };
@@ -413,18 +431,13 @@ let
     inherit (cfg) mutableUsers;
     users = mapAttrsToList (_: u:
       { inherit (u)
-          name uid group description home createHome isSystemUser
+          name uid group description home homeMode createHome isSystemUser
           password passwordFile hashedPassword
-          isNormalUser subUidRanges subGidRanges
+          autoSubUidGidRange subUidRanges subGidRanges
           initialPassword initialHashedPassword;
         shell = utils.toShellPath u.shell;
       }) cfg.users;
-    groups = mapAttrsToList (n: g:
-      { inherit (g) name gid;
-        members = g.members ++ (mapAttrsToList (n: u: u.name) (
-          filterAttrs (n: u: elem g.name u.extraGroups) cfg.users
-        ));
-      }) cfg.groups;
+    groups = attrValues cfg.groups;
   });
 
   systemShells =
@@ -437,16 +450,10 @@ in {
   imports = [
     (mkAliasOptionModule [ "users" "extraUsers" ] [ "users" "users" ])
     (mkAliasOptionModule [ "users" "extraGroups" ] [ "users" "groups" ])
-    (mkChangedOptionModule
-      [ "security" "initialRootPassword" ]
-      [ "users" "users" "root" "initialHashedPassword" ]
-      (cfg: if cfg.security.initialRootPassword == "!"
-            then null
-            else cfg.security.initialRootPassword))
+    (mkRenamedOptionModule ["security" "initialRootPassword"] ["users" "users" "root" "initialHashedPassword"])
   ];
 
   ###### interface
-
   options = {
 
     users.mutableUsers = mkOption {
@@ -514,6 +521,17 @@ in {
       '';
     };
 
+
+    users.allowNoPasswordLogin = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Disable checking that at least the <literal>root</literal> user or a user in the <literal>wheel</literal> group can log in using
+        a password or an SSH key.
+
+        WARNING: enabling this can lock you out of your system. Enable this only if you know what are you doing.
+      '';
+    };
   };
 
 
@@ -528,6 +546,7 @@ in {
         home = "/root";
         shell = mkDefault cfg.defaultUserShell;
         group = "root";
+        initialHashedPassword = mkDefault "!";
       };
       nobody = {
         uid = ids.uids.nobody;
@@ -559,17 +578,20 @@ in {
       input.gid = ids.gids.input;
       kvm.gid = ids.gids.kvm;
       render.gid = ids.gids.render;
+      sgx.gid = ids.gids.sgx;
       shadow.gid = ids.gids.shadow;
     };
 
-    system.activationScripts.users = stringAfter [ "stdio" ]
-      ''
+    system.activationScripts.users = {
+      supportsDryActivation = true;
+      text = ''
         install -m 0700 -d /root
         install -m 0755 -d /home
 
         ${pkgs.perl.withPackages (p: [ p.FileSlurp p.JSON ])}/bin/perl \
         -w ${./update-users-groups.pl} ${spec}
       '';
+    };
 
     # for backwards compatibility
     system.activationScripts.groups = stringAfter [ "users" ] "";
@@ -601,9 +623,11 @@ in {
         # there is at least one "privileged" account that has a
         # password or an SSH authorized key. Privileged accounts are
         # root and users in the wheel group.
-        assertion = !cfg.mutableUsers ->
-          any id ((mapAttrsToList (_: cfg:
-            (cfg.name == "root"
+        # The check does not apply when users.disableLoginPossibilityAssertion
+        # The check does not apply when users.mutableUsers
+        assertion = !cfg.mutableUsers -> !cfg.allowNoPasswordLogin ->
+          any id (mapAttrsToList (name: cfg:
+            (name == "root"
              || cfg.group == "wheel"
              || elem "wheel" cfg.extraGroups)
             &&
@@ -612,12 +636,16 @@ in {
              || cfg.passwordFile != null
              || cfg.openssh.authorizedKeys.keys != []
              || cfg.openssh.authorizedKeys.keyFiles != [])
-          ) cfg.users) ++ [
+          ) cfg.users ++ [
             config.security.googleOsLogin.enable
           ]);
         message = ''
           Neither the root account nor any wheel user has a password or SSH authorized key.
-          You must set one to prevent being locked out of your system.'';
+          You must set one to prevent being locked out of your system.
+          If you really want to be locked out of your system, set users.allowNoPasswordLogin = true;
+          However you are most probably better off by setting users.mutableUsers = true; and
+          manually running passwd root to set the root password.
+          '';
       }
     ] ++ flatten (flip mapAttrsToList cfg.users (name: user:
       [
@@ -637,6 +665,16 @@ in {
             in xor isEffectivelySystemUser user.isNormalUser;
             message = ''
               Exactly one of users.users.${user.name}.isSystemUser and users.users.${user.name}.isNormalUser must be set.
+            '';
+          }
+          {
+            assertion = user.group != "";
+            message = ''
+              users.users.${user.name}.group is unset. This used to default to
+              nogroup, but this is unsafe. For example you can create a group
+              for this user with:
+              users.users.${user.name}.group = "${user.name}";
+              users.groups.${user.name} = {};
             '';
           }
         ]

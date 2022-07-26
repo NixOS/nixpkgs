@@ -3,15 +3,16 @@
 , coreutils
 , cppzmq
 , curl
-, epoxy
+, libepoxy
 , fetchFromGitHub
 , glm
 , gtkmm3
 , lib
+, libarchive
 , libgit2
 , librsvg
+, libspnav
 , libuuid
-, libzip
 , opencascade
 , pkg-config
 , podofo
@@ -23,25 +24,26 @@
 
 stdenv.mkDerivation rec {
   pname = "horizon-eda";
-  version = "2.0.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "horizon-eda";
     repo = "horizon";
     rev = "v${version}";
-    sha256 = "sha256-FS24B/ySKeF8r7Tro+mf5P0ALtlPwwJCU3YdDNYLe6o=";
+    sha256 = "1vvps44n9yrzdpircl98n4061lcmwksisnf3a8xkf3qbcnixnwlp";
   };
 
   buildInputs = [
     cppzmq
     curl
-    epoxy
+    libepoxy
     glm
     gtkmm3
+    libarchive
     libgit2
     librsvg
+    libspnav
     libuuid
-    libzip
     opencascade
     podofo
     python3

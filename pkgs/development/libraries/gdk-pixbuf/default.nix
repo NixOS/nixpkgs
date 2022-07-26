@@ -16,10 +16,11 @@
 , libjpeg
 , libpng
 , gnome
-, gobject-introspection
 , doCheck ? false
 , makeWrapper
 , lib
+, withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform)
+, gobject-introspection
 }:
 
 let
@@ -27,7 +28,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gdk-pixbuf";
-  version = "2.42.6";
+  version = "2.42.8";
 
   outputs = [ "out" "dev" "man" ]
     ++ lib.optional withGtkDoc "devdoc"
@@ -35,12 +36,19 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0zz7pmw2z46g7mr1yjxbsdldd5pd03xbjc58inj8rxfqgrdvg9n4";
+    sha256 = "hKzqOsskEbKRNLMgFaWxqqYoRLGcSx74uJccawdZ9MY=";
   };
 
   patches = [
     # Move installed tests to a separate output
     ./installed-tests-path.patch
+  ];
+
+  # gdk-pixbuf-thumbnailer is not wrapped therefore strictDeps will work
+  strictDeps = true;
+
+  depsBuildBuild = [
+    pkg-config
   ];
 
   nativeBuildInputs = [
@@ -49,7 +57,6 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     python3
-    gobject-introspection
     makeWrapper
     glib
     gi-docgen
@@ -58,7 +65,11 @@ stdenv.mkDerivation rec {
     libxslt
     docbook-xsl-nons
     docbook_xml_dtd_43
-  ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  ] ++ lib.optionals stdenv.isDarwin [
+    fixDarwinDylibNames
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
+  ];
 
   propagatedBuildInputs = [
     glib
@@ -69,7 +80,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=${lib.boolToString withGtkDoc}"
-    "-Dintrospection=${if (stdenv.buildPlatform == stdenv.hostPlatform) then "enabled" else "disabled"}"
+    "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
     "-Dgio_sniffing=false"
   ];
 
@@ -100,10 +111,6 @@ stdenv.mkDerivation rec {
     '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
       # We need to install 'loaders.cache' in lib/gdk-pixbuf-2.0/2.10.0/
       $dev/bin/gdk-pixbuf-query-loaders --update-cache
-    '' + lib.optionalString withGtkDoc ''
-      # So that devhelp can find this.
-      mkdir -p "$devdoc/share/devhelp"
-      mv "$out/share/doc" "$devdoc/share/devhelp/books"
     '';
 
   # The fixDarwinDylibNames hook doesn't patch binaries.
@@ -111,6 +118,11 @@ stdenv.mkDerivation rec {
     for f in $out/bin/* $dev/bin/*; do
         install_name_tool -change @rpath/libgdk_pixbuf-2.0.0.dylib $out/lib/libgdk_pixbuf-2.0.0.dylib $f
     done
+  '';
+
+  postFixup = lib.optionalString withGtkDoc ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   # The tests take an excessive amount of time (> 1.5 hours) and memory (> 6 GB).
@@ -137,8 +149,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A library for image loading and manipulation";
     homepage = "https://gitlab.gnome.org/GNOME/gdk-pixbuf";
-    maintainers = [ maintainers.eelco ] ++ teams.gnome.members;
     license = licenses.lgpl21Plus;
+    maintainers = [ maintainers.eelco ] ++ teams.gnome.members;
+    mainProgram = "gdk-pixbuf-thumbnailer";
     platforms = platforms.unix;
   };
 }

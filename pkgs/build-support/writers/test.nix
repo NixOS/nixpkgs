@@ -3,8 +3,9 @@
 , lib
 , nodePackages
 , perlPackages
-, python2Packages
+, pypy2Packages
 , python3Packages
+, pypy3Packages
 , runCommand
 , writers
 , writeText
@@ -15,14 +16,6 @@ let
   bin = {
     bash = writeBashBin "test-writers-bash-bin" ''
      if [[ "test" == "test" ]]; then echo "success"; fi
-    '';
-
-    c = writeCBin "test-writers-c" { libraries = [ ]; } ''
-      #include <stdio.h>
-      int main() {
-        printf("success\n");
-        return 0;
-      }
     '';
 
     dash = writeDashBin "test-writers-dash-bin" ''
@@ -62,7 +55,7 @@ let
       print "success\n" if true;
     '';
 
-    python2 = writePython2Bin "test-writers-python2-bin" { libraries = [ python2Packages.enum ]; } ''
+    pypy2 = writePyPy2Bin "test-writers-pypy2-bin" { libraries = [ pypy2Packages.enum ]; } ''
       from enum import Enum
 
 
@@ -81,29 +74,20 @@ let
       """)
       print(y[0]['test'])
     '';
+
+    pypy3 = writePyPy3Bin "test-writers-pypy3-bin" { libraries = [ pypy3Packages.pyyaml ]; } ''
+      import yaml
+
+      y = yaml.load("""
+        - test: success
+      """)
+      print(y[0]['test'])
+    '';
   };
 
   simple = {
     bash = writeBash "test-writers-bash" ''
      if [[ "test" == "test" ]]; then echo "success"; fi
-    '';
-
-    c = writeC "test-writers-c" { libraries = [ glib.dev ]; } ''
-      #include <gio/gio.h>
-      #include <stdio.h>
-      int main() {
-        GApplication *application = g_application_new ("hello.world", G_APPLICATION_FLAGS_NONE);
-        g_application_register (application, NULL, NULL);
-        GNotification *notification = g_notification_new ("Hello world!");
-        g_notification_set_body (notification, "This is an example notification.");
-        GIcon *icon = g_themed_icon_new ("dialog-information");
-        g_notification_set_icon (notification, icon);
-        g_object_unref (icon);
-        g_object_unref (notification);
-        g_object_unref (application);
-        printf("success\n");
-        return 0;
-      }
     '';
 
     dash = writeDash "test-writers-dash" ''
@@ -137,7 +121,7 @@ let
       print "success\n" if true;
     '';
 
-    python2 = writePython2 "test-writers-python2" { libraries = [ python2Packages.enum ]; } ''
+    pypy2 = writePyPy2 "test-writers-pypy2" { libraries = [ pypy2Packages.enum ]; } ''
       from enum import Enum
 
 
@@ -157,12 +141,52 @@ let
       print(y[0]['test'])
     '';
 
-    python2NoLibs = writePython2 "test-writers-python2-no-libs" {} ''
+    pypy3 = writePyPy3 "test-writers-pypy3" { libraries = [ pypy3Packages.pyyaml ]; } ''
+      import yaml
+
+      y = yaml.load("""
+        - test: success
+      """)
+      print(y[0]['test'])
+    '';
+
+    fsharp = makeFSharpWriter {
+      libraries = { fetchNuGet }: [
+        (fetchNuGet { pname = "FSharp.SystemTextJson"; version = "0.17.4"; sha256 = "1bplzc9ybdqspii4q28l8gmfvzpkmgq5l1hlsiyg2h46w881lwg2"; })
+      ];
+    } "test-writers-fsharp" ''
+      #r "nuget: FSharp.SystemTextJson, 0.17.4"
+
+      module Json =
+          open System.Text.Json
+          open System.Text.Json.Serialization
+          let options = JsonSerializerOptions()
+          options.Converters.Add(JsonFSharpConverter())
+          let serialize<'a> (o: 'a) = JsonSerializer.Serialize<'a>(o, options)
+          let deserialize<'a> (str: string) = JsonSerializer.Deserialize<'a>(str, options)
+
+      type Letter = A | B
+      let a = {| Hello = Some "World"; Letter = A |}
+      if a |> Json.serialize |> Json.deserialize |> (=) a
+      then "success"
+      else "failed"
+      |> printfn "%s"
+    '';
+
+    pypy2NoLibs = writePyPy2 "test-writers-pypy2-no-libs" {} ''
       print("success")
     '';
 
     python3NoLibs = writePython3 "test-writers-python3-no-libs" {} ''
       print("success")
+    '';
+
+    pypy3NoLibs = writePyPy3 "test-writers-pypy3-no-libs" {} ''
+      print("success")
+    '';
+
+    fsharpNoNugetDeps = writeFSharp "test-writers-fsharp-no-nuget-deps" ''
+      printfn "success"
     '';
   };
 

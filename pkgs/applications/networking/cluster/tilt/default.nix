@@ -1,23 +1,23 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ stdenv, lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "tilt";
   /* Do not use "dev" as a version. If you do, Tilt will consider itself
     running in development environment and try to serve assets from the
     source tree, which is not there once build completes.  */
-  version = "0.20.5";
+  version = "0.30.4";
 
   src = fetchFromGitHub {
     owner  = "tilt-dev";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "sha256-pUKKHrShED7yp5WSmHSbS+eiYs22Nm2/ouc2a8WYc38=";
+    sha256 = "sha256-AdT3qL0frsTi4R4AbmZlPDx0Q2RixC3e4AyEMgGgnlc=";
   };
   vendorSha256 = null;
 
   subPackages = [ "cmd/tilt" ];
 
-  buildFlagsArray = [ "-ldflags=-X main.version=${version}" ];
+  ldflags = [ "-X main.version=${version}" ];
 
   meta = with lib; {
     description = "Local development tool to manage your developer instance when your team deploys to Kubernetes in production";

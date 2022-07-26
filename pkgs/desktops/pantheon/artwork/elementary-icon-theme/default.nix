@@ -1,33 +1,25 @@
-{ lib, stdenv
+{ lib
+, stdenvNoCC
 , fetchFromGitHub
 , nix-update-script
-, pantheon
 , meson
 , python3
 , ninja
 , hicolor-icon-theme
 , gtk3
-, xorg
+, xcursorgen
 , librsvg
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "elementary-icon-theme";
-  version = "6.0.0";
-
-  repoName = "icons";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "icons";
     rev = version;
-    sha256 = "0k94zi8fzi0nf5q471fmrlz8jjkv8m6vav1spzv7ynkg2hik8d9b";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-tyhKhZPoZ8xVy1KVUWd8BK2meTT3Z6qM787spjE+NL8=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +28,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     python3
-    xorg.xcursorgen
+    xcursorgen
   ];
 
   propagatedBuildInputs = [
@@ -57,14 +49,20 @@ stdenv.mkDerivation rec {
 
   postFixup = "gtk-update-icon-cache $out/share/icons/elementary";
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
   meta = with lib; {
     description = "Named, vector icons for elementary OS";
     longDescription = ''
       An original set of vector icons designed specifically for elementary OS and its desktop environment: Pantheon.
     '';
     homepage = "https://github.com/elementary/icons";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

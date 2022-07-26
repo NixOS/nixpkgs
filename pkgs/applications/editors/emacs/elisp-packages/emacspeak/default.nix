@@ -1,16 +1,33 @@
-{ stdenv, fetchurl, makeWrapper, emacs, tcl, tclx, espeak-ng, lib }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, emacs
+, tcl
+, tclx
+, espeak-ng
+}:
 
 stdenv.mkDerivation rec {
   pname = "emacspeak";
   version = "54.0";
 
-  src = fetchurl {
-    url = "https://github.com/tvraman/emacspeak/releases/download/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-wsIqiW4UtgdAhqPqgCKgF37+hAtmAelAEnme1W9PKes=";
+  src = fetchFromGitHub {
+    owner = "tvraman";
+    repo = pname;
+    rev = version;
+    hash= "sha256-aOZ8PmkASJKETPhXhE9WQXyJS7SPe+d97fK/piqqzqc=";
   };
 
-  nativeBuildInputs = [ makeWrapper emacs ];
-  buildInputs = [ tcl tclx espeak-ng ];
+  nativeBuildInputs = [
+    emacs
+    makeWrapper
+  ];
+  buildInputs = [
+    espeak-ng
+    tcl
+    tclx
+  ];
 
   preConfigure = ''
     make config
@@ -28,15 +45,16 @@ stdenv.mkDerivation rec {
     find "$d" \( -type d -or \( -type f -executable \) \) -execdir chmod 755 {} +
     find "$d" -type f -not -executable -execdir chmod 644 {} +
     makeWrapper ${emacs}/bin/emacs $out/bin/emacspeak \
-        --set DTK_PROGRAM "${espeak-ng}/bin/espeak" \
+        --set DTK_PROGRAM "${placeholder "out"}/share/emacs/site-lisp/emacspeak/servers/espeak" \
+        --set TCLLIBPATH "${tclx}/lib" \
         --add-flags '-l "${placeholder "out"}/share/emacs/site-lisp/emacspeak/lisp/emacspeak-setup.elc"'
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/tvraman/emacspeak/";
     description = "Emacs extension that provides spoken output";
-    license = lib.licenses.gpl2;
-    maintainers = [ ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.AndersonTorres ];
+    platforms = platforms.linux;
   };
 }

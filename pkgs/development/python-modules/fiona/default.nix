@@ -1,17 +1,17 @@
 { stdenv, lib, buildPythonPackage, fetchPypi, isPy3k, pythonOlder
 , attrs, click, cligj, click-plugins, six, munch, enum34
 , pytestCheckHook, boto3, mock, giflib, pytz
-, gdal
-, certifi
+, gdal, certifi
 }:
 
 buildPythonPackage rec {
-  pname = "Fiona";
-  version = "1.8.20";
+  pname = "fiona";
+  version = "1.8.21";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "a70502d2857b82f749c09cb0dea3726787747933a2a1599b5ab787d74e3c143b";
+    pname = "Fiona";
+    inherit version;
+    sha256 = "sha256-Og7coqegcNtAXXEYchSkPSMzpXtAl1RKP8woIGali/w=";
   };
 
   CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
@@ -42,6 +42,8 @@ buildPythonPackage rec {
 
   preCheck = ''
     rm -r fiona # prevent importing local fiona
+    # disable gdal deprecation warnings
+    export GDAL_ENABLE_DEPRECATED_DRIVER_GTM=YES
   '';
 
   disabledTests = [

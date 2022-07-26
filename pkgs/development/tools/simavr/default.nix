@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "simavr";
-  version = "1.5";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "buserror";
     repo = "simavr";
-    rev = "e0d4de41a72520491a4076b3ed87beb997a395c0";
-    sha256 = "0b2lh6l2niv80dmbm9xkamvnivkbmqw6v97sy29afalrwfxylxla";
+    rev = "v${version}";
+    sha256 = "0njz03lkw5374x1lxrq08irz4b86lzj2hibx46ssp7zv712pq55q";
   };
 
   makeFlags = [
@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
   checkTarget = "-C tests run_tests";
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A lean and mean Atmel AVR simulator";
     homepage    = "https://github.com/buserror/simavr";
     license     = licenses.gpl3;

@@ -1,4 +1,8 @@
-{ buildPecl, lib, version, sha256, oracle-instantclient }:
+{ buildPecl, lib, oracle-instantclient }:
+let
+  version = "3.0.1";
+  sha256 = "108ds92620dih5768z19hi0jxfa7wfg5hdvyyvpapir87c0ap914";
+in
 buildPecl {
   pname = "oci8";
 

@@ -7,7 +7,7 @@
 }:
 
 mkDerivation {
-  name = "kscreenlocker";
+  pname = "kscreenlocker";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kcmutils kcrash kdeclarative kglobalaccel kidletime kwayland

@@ -4,13 +4,13 @@ with lib;
 
 buildGoModule rec {
   pname = "butane";
-  version = "0.13.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "coreos";
     repo = "butane";
     rev = "v${version}";
-    sha256 = "0z1cq43dnj73k0idjhc310h00a1mryk2297w3yy6k1sa95swlz9m";
+    sha256 = "sha256-Aa3IBLBJwSDaQ+BJakxBZB27yx0gelDoujWLaAaQ9VI=";
   };
 
   vendorSha256 = null;
@@ -19,9 +19,9 @@ buildGoModule rec {
 
   subPackages = [ "internal" ];
 
-  buildFlagsArray = ''
-    -ldflags=-X github.com/coreos/butane/internal/version.Raw=v${version}
-  '';
+  ldflags = [
+    "-X github.com/coreos/butane/internal/version.Raw=v${version}"
+  ];
 
   postInstall = ''
     mv $out/bin/{internal,butane}

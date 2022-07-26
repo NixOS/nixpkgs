@@ -4,12 +4,10 @@
 , fetchFromGitHub
 , asgiref
 , click
-, colorama
 , h11
 , httptools
 , python-dotenv
 , pyyaml
-, requests
 , typing-extensions
 , uvloop
 , watchgod
@@ -20,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "uvicorn";
-  version = "0.14.0";
+  version = "0.17.6";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "164x92k3rs47ihkmwq5av396576dxp4rzv6557pwgc1ign2ikqy1";
+    hash = "sha256-iJlAU7zZl9X3FcQlJoJ7KlETZOx6WsE9FcpCK4Cm/Fo=";
   };
 
   outputs = [
@@ -38,7 +36,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     asgiref
     click
-    colorama
     h11
     httptools
     python-dotenv
@@ -69,6 +66,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://www.uvicorn.org/";
+    changelog = "https://github.com/encode/uvicorn/blob/${src.rev}/CHANGELOG.md";
     description = "The lightning-fast ASGI server";
     license = licenses.bsd3;
     maintainers = with maintainers; [ wd15 ];

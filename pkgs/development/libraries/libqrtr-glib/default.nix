@@ -20,6 +20,12 @@ stdenv.mkDerivation rec {
     sha256 = "MNh5sq3m+PRh3vOmd3VdtcAji6v2iNXIPAOz5qvjXO4=";
   };
 
+  strictDeps = true;
+
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     pkg-config
     gobject-introspection
@@ -32,7 +38,7 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  configureFlags = [
+  configureFlags = lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
     "--enable-gtk-doc"
   ];
 

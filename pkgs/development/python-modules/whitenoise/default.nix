@@ -1,21 +1,57 @@
-{ lib, fetchPypi, buildPythonPackage, isPy27 }:
+{ lib
+, brotli
+, buildPythonPackage
+, django
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, requests
+}:
 
 buildPythonPackage rec {
   pname = "whitenoise";
-  version = "5.2.0";
-  disabled = isPy27;
+  version = "6.0.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "05ce0be39ad85740a78750c86a93485c40f08ad8c62a6006de0233765996e5c7";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "evansd";
+    repo = pname;
+    rev = version;
+    hash = "sha256-mUjyX4eQOiMweje6UPyfyJsiHwzF5OQ93KuxFedWxbQ=";
   };
 
-  # No tests
-  doCheck = false;
+  propagatedBuildInputs = [
+    brotli
+  ];
+
+  checkInputs = [
+    django
+    pytestCheckHook
+    requests
+  ];
+
+  disabledTestPaths = [
+    # Don't run Django tests
+    "tests/test_django_whitenoise.py"
+    "tests/test_runserver_nostatic.py"
+    "tests/test_storage.py"
+  ];
+
+  disabledTests = [
+    # Test fails with AssertionError
+    "test_modified"
+  ];
+
+  pythonImportsCheck = [
+    "whitenoise"
+  ];
 
   meta = with lib; {
     description = "Radically simplified static file serving for WSGI applications";
     homepage = "http://whitenoise.evans.io/";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

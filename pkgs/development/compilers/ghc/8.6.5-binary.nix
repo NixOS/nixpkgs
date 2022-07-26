@@ -2,6 +2,8 @@
 , fetchurl, perl, gcc
 , ncurses5, ncurses6, gmp, glibc, libiconv
 , llvmPackages
+, coreutils
+, targetPackages
 }:
 
 # Prebuilt only does native
@@ -10,7 +12,8 @@ assert stdenv.targetPlatform == stdenv.hostPlatform;
 let
   useLLVM = !stdenv.targetPlatform.isx86;
 
-  useNcurses6 = stdenv.hostPlatform.system == "x86_64-linux";
+  useNcurses6 = stdenv.hostPlatform.system == "x86_64-linux"
+                || (with stdenv.hostPlatform; isPower64 && isLittleEndian);
 
   ourNcurses = if useNcurses6 then ncurses6 else ncurses5;
 
@@ -30,12 +33,24 @@ let
 
   downloadsUrl = "https://downloads.haskell.org/ghc";
 
+  runtimeDeps = [
+    targetPackages.stdenv.cc
+    targetPackages.stdenv.cc.bintools
+    coreutils # for cat
+  ]
+  ++ lib.optionals useLLVM [
+    (lib.getBin llvmPackages.llvm)
+  ]
+  # On darwin, we need unwrapped bintools as well (for otool)
+  ++ lib.optionals (stdenv.targetPlatform.linker == "cctools") [
+    targetPackages.stdenv.cc.bintools.bintools
+  ];
+
 in
 
 stdenv.mkDerivation rec {
   version = "8.6.5";
-
-  name = "ghc-${version}-binary";
+  pname = "ghc-binary";
 
   # https://downloads.haskell.org/~ghc/8.6.5/
   src = fetchurl ({
@@ -59,11 +74,14 @@ stdenv.mkDerivation rec {
       url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
       sha256 = "0s9188vhhgf23q3rjarwhbr524z6h2qga5xaaa2pma03sfqvvhfz";
     };
+    powerpc64le-linux = {
+      url = "https://downloads.haskell.org/~ghc/${version}/ghc-${version}-powerpc64le-fedora29-linux.tar.xz";
+      sha256 = "sha256-tWSsJdPVrCiqDyIKzpBt5DaXb3b6j951tCya584kWs4=";
+    };
   }.${stdenv.hostPlatform.system}
     or (throw "cannot bootstrap GHC on this platform"));
 
   nativeBuildInputs = [ perl ];
-  propagatedBuildInputs = lib.optionals useLLVM [ llvmPackages.llvm ];
 
   # Cannot patchelf beforehand due to relative RPATHs that anticipate
   # the final install location/
@@ -131,6 +149,15 @@ stdenv.mkDerivation rec {
   # calls install-strip ...
   dontBuild = true;
 
+  # Patch scripts to include runtime dependencies in $PATH.
+  postInstall = ''
+    for i in "$out/bin/"*; do
+      test ! -h "$i" || continue
+      isScript "$i" || continue
+      sed -i -e '2i export PATH="${lib.makeBinPath runtimeDeps}:$PATH"' "$i"
+    done
+  '';
+
   # On Linux, use patchelf to modify the executables so that they can
   # find editline/gmp.
   postFixup = lib.optionalString stdenv.isLinux ''
@@ -164,7 +191,6 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    unset ${libEnvVar}
     # Sanity check, can ghc create executables?
     cd $TMP
     mkdir test-ghc; cd test-ghc
@@ -173,7 +199,7 @@ stdenv.mkDerivation rec {
       module Main where
       main = putStrLn \$([|"yes"|])
     EOF
-    $out/bin/ghc --make main.hs || exit 1
+    env -i $out/bin/ghc --make main.hs || exit 1
     echo compilation ok
     [ $(./main) == "yes" ]
   '';
@@ -182,15 +208,19 @@ stdenv.mkDerivation rec {
     targetPrefix = "";
     enableShared = true;
 
+    inherit llvmPackages;
+
     # Our Cabal compiler name
     haskellCompilerName = "ghc-${version}";
   };
 
   meta = rec {
     license = lib.licenses.bsd3;
-    platforms = ["x86_64-linux" "aarch64-linux" "i686-linux" "x86_64-darwin"];
-    hydraPlatforms = builtins.filter (p: p != "aarch64-linux") platforms;
+    platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin" "powerpc64le-linux" ];
     # build segfaults, use ghc8102Binary which has proper musl support instead
     broken = stdenv.hostPlatform.isMusl;
+    maintainers = with lib.maintainers; [
+      guibou
+    ] ++ lib.teams.haskell.members;
   };
 }

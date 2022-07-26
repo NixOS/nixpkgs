@@ -1,20 +1,32 @@
-{ lib, stdenv, fetchurl, pkg-config, zlib, shadow, libcap_ng
-, ncurses ? null, perl ? null, pam, systemd ? null, minimal ? false }:
+{ lib, stdenv, fetchurl, pkg-config, zlib, shadow
+, capabilitiesSupport ? true
+, libcap_ng
+, ncursesSupport ? true
+, ncurses
+, pamSupport ? true
+, pam
+, systemdSupport ? stdenv.isLinux && !stdenv.hostPlatform.isStatic
+, systemd
+, nlsSupport ? true
+, translateManpages ? true
+, po4a
+}:
 
 stdenv.mkDerivation rec {
-  pname = "util-linux";
-  version = "2.36.2";
+  pname = "util-linux" + lib.optionalString (!nlsSupport && !ncursesSupport && !systemdSupport) "-minimal";
+  version = "2.38";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0psc0asjp1rmfx1j7468zfnk9nphlphybw2n8dcl74v8v2lnnlgp";
+    url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/util-linux-${version}.tar.xz";
+    hash = "sha256-bREcvk1VszbbLx++/7xluJkIcEwBE2Nx0yqpvsNz62Q=";
   };
 
   patches = [
     ./rtcwake-search-PATH-for-shutdown.patch
   ];
 
-  outputs = [ "bin" "dev" "out" "man" ];
+  outputs = [ "bin" "dev" "out" "lib" "man" ];
+  separateDebugInfo = true;
 
   postPatch = ''
     patchShebangs tests/run.sh
@@ -30,36 +42,39 @@ stdenv.mkDerivation rec {
   # somewhat risky because we have to consider that mount can setuid
   # root...
   configureFlags = [
+    "--localstatedir=/var"
     "--enable-write"
-    "--enable-last"
-    "--enable-mesg"
     "--disable-use-tty-group"
     "--enable-fs-paths-default=/run/wrappers/bin:/run/current-system/sw/bin:/sbin"
     "--disable-makeinstall-setuid" "--disable-makeinstall-chown"
     "--disable-su" # provided by shadow
-    (lib.withFeature (ncurses != null) "ncursesw")
-    (lib.withFeature (systemd != null) "systemd")
-    (lib.withFeatureAs (systemd != null)
+    (lib.enableFeature nlsSupport "nls")
+    (lib.withFeature ncursesSupport "ncursesw")
+    (lib.withFeature systemdSupport "systemd")
+    (lib.withFeatureAs systemdSupport
        "systemdsystemunitdir" "${placeholder "bin"}/lib/systemd/system/")
+    (lib.enableFeature translateManpages "poman")
+    "SYSCONFSTATICDIR=${placeholder "lib"}/lib"
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
        "scanf_cv_type_modifier=ms"
   ;
 
   makeFlags = [
     "usrbin_execdir=${placeholder "bin"}/bin"
+    "usrlib_execdir=${placeholder "lib"}/lib"
     "usrsbin_execdir=${placeholder "bin"}/sbin"
   ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [ zlib pam libcap_ng ]
-    ++ lib.filter (p: p != null) [ ncurses systemd perl ];
+  nativeBuildInputs = [ pkg-config ]
+    ++ lib.optionals translateManpages [ po4a ];
+
+  buildInputs = [ zlib ]
+    ++ lib.optionals pamSupport [ pam ]
+    ++ lib.optionals capabilitiesSupport [ libcap_ng ]
+    ++ lib.optionals ncursesSupport [ ncurses ]
+    ++ lib.optionals systemdSupport [ systemd ];
 
   doCheck = false; # "For development purpose only. Don't execute on production system!"
-
-  postInstall = lib.optionalString minimal ''
-    rm -rf $out/share/{locale,doc,bash-completion}
-  '';
 
   enableParallelBuilding = true;
 

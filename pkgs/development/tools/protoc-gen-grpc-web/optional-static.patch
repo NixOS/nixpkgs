@@ -1,0 +1,19 @@
+--- a/Makefile
++++ b/Makefile
+@@ -18,12 +18,15 @@ CXXFLAGS += -std=c++11
+ LDFLAGS += -L/usr/local/lib -lprotoc -lprotobuf -lpthread -ldl
+ PREFIX ?= /usr/local
+ MIN_MACOS_VERSION := 10.7 # Supports OS X Lion
++STATIC ?= yes
+
+ UNAME_S := $(shell uname -s)
+ ifeq ($(UNAME_S),Darwin)
+   CXXFLAGS += -stdlib=libc++ -mmacosx-version-min=$(MIN_MACOS_VERSION)
+ else ifeq ($(UNAME_S),Linux)
+-  LDFLAGS += -static
++  ifeq ($(STATIC),yes)
++    LDFLAGS += -static
++  endif
+ endif
+
+ all: protoc-gen-grpc-web

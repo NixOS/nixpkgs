@@ -4,25 +4,31 @@
 , pytestCheckHook
 , google-api-core
 , google-cloud-testutils
-, grpc_google_iam_v1
+, grpc-google-iam-v1
+, grpcio-status
 , libcst
 , mock
 , proto-plus
 , pytest-asyncio
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-pubsub";
-  version = "2.5.0";
+  version = "2.13.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8706557b71532c76aec48409dcac189caac47cf2decb8850ae75694bf70326b2";
+    hash = "sha256-ZhcBynfvHc0nveZP9z0y2IJf44vTzy8xB3XV5iJOLu0=";
   };
 
   propagatedBuildInputs = [
-    grpc_google_iam_v1
+    grpc-google-iam-v1
     google-api-core
+    grpcio-status
     libcst
     proto-plus
   ];
@@ -44,7 +50,9 @@ buildPythonPackage rec {
     "tests/unit/pubsub_v1"
   ];
 
-  pythonImportsCheck = [ "google.cloud.pubsub" ];
+  pythonImportsCheck = [
+    "google.cloud.pubsub"
+  ];
 
   meta = with lib; {
     description = "Google Cloud Pub/Sub API client library";

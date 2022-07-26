@@ -19,6 +19,7 @@ rustPlatform.buildRustPackage rec {
     description = "Replacement for rm with focus on safety, ergonomics and performance";
     homepage = "https://github.com/nivekuil/rip";
     maintainers = with maintainers; [ nils-degroot ];
+    mainProgram = "rip";
     license = licenses.gpl3Plus;
   };
 }

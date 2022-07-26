@@ -5,7 +5,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "idrishighlighter";
+  pname = "idrishighlighter";
   version = "2018-02-22";
 
   ipkgName = "idris-code-highlighter";

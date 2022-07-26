@@ -21,17 +21,18 @@
 , shared-mime-info
 , wrapGAppsHook
 , xapps
-, yelp-tools }:
+, yelp-tools
+}:
 
 stdenv.mkDerivation rec {
   pname = "xviewer";
-  version = "2.8.3";
+  version = "3.2.4";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "0h3qgqaiz5swy09fr6z3ag2952hgzsk5d2fpwmwb78yjrzrhnzpy";
+    sha256 = "sha256-OyHSBXtJ/TExl06NLUAaIZq4u0+fI3YGQ37HRZeNP+0=";
   };
 
   nativeBuildInputs = [
@@ -65,6 +66,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxmint/xviewer";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tu-maurice ];
+    maintainers = with maintainers; [ tu-maurice ] ++ teams.cinnamon.members;
   };
 }

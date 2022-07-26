@@ -6,13 +6,13 @@
 
 mkDerivation rec {
   pname = "opentx";
-  version = "2.3.13";
+  version = "2.3.15";
 
   src = fetchFromGitHub {
     owner = "opentx";
     repo = "opentx";
     rev = "release/${version}";
-    sha256 = "sha256-Bi/Cz2T2NdtnJZHav8qvo+gErPsR8Ym7K3KcD5APt6Y=";
+    sha256 = "sha256-F3zykJhKuIpLQSTjn7mcdjEmgRAlwCZpkTaKQR9ve3g=";
   };
 
   nativeBuildInputs = [ cmake gcc-arm-embedded python3Packages.pillow ];
@@ -31,6 +31,9 @@ mkDerivation rec {
     # XXX I would prefer to include these here, though we will need to file a bug upstream to get that changed.
     #"-DDFU_UTIL_PATH=${dfu-util}/bin/dfu-util"
     #"-DAVRDUDE_PATH=${avrdude}/bin/avrdude"
+
+    # file RPATH_CHANGE could not write new RPATH
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];
 
   meta = with lib; {
@@ -41,7 +44,7 @@ mkDerivation rec {
       running radio simulators.
     '';
     homepage = "https://www.open-tx.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ elitak lopsided98 ];
   };

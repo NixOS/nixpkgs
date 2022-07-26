@@ -3,21 +3,23 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pygame
+, python-i18n
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pygame-gui";
-  version = "0.5.7";
+  version = "0.6.4";
+  # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "MyreMylar";
     repo = "pygame_gui";
     rev = "v_${lib.replaceStrings ["."] [""] version}";
-    sha256 = "4P2PT8/7oA5Q7H4+pm7BOET7w05pQYQltXVV3+YVrVE=";
+    sha256 = "13+fK1hYxiMh0T+xbbmHViZjyBoQfRyIDc05fIJ/46U=";
   };
 
-  propagatedBuildInputs = [ pygame ];
+  propagatedBuildInputs = [ pygame python-i18n ];
 
   postPatch = ''
     substituteInPlace pygame_gui/core/utility.py \
@@ -44,10 +46,14 @@ buildPythonPackage rec {
     "test_process_event_text_ctrl_x"
   ];
 
+  disabledTestPaths = [
+    "tests/test_performance/test_text_performance.py"
+  ];
+
   meta = with lib; {
     description = "A GUI system for pygame";
     homepage = "https://github.com/MyreMylar/pygame_gui";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ angustrau ];
+    maintainers = with maintainers; [ emilytrau ];
   };
 }

@@ -8,7 +8,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "recursion_schemes";
+  pname = "recursion_schemes";
   version = "2018-01-19";
 
   idrisDeps = [ free composition comonad bifunctors hezarfen ];

@@ -46,6 +46,7 @@
 , evolution-data-server
 , gtk3
 , gtk4
+, libadwaita
 , sassc
 , systemd
 , pipewire
@@ -55,7 +56,7 @@
 , gnome-clocks
 , gnome-settings-daemon
 , gnome-autoar
-, asciidoc-full
+, asciidoc
 , bash-completion
 , mesa
 }:
@@ -66,13 +67,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "40.3";
+  version = "42.3.1";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-erEMbulpmCjdch6/jOHeRk3KqpHUlYI79LhMiTmejCs=";
+    sha256 = "ffqzLfrDzWTUYSkYyph8+zMjjvoJJ5h1PIhF/xaTX30=";
   };
 
   patches = [
@@ -118,8 +119,7 @@ stdenv.mkDerivation rec {
     sassc
     desktop-file-utils
     libxslt.bin
-    python3
-    asciidoc-full
+    asciidoc
   ];
 
   buildInputs = [
@@ -142,6 +142,7 @@ stdenv.mkDerivation rec {
     libical
     gtk3
     gtk4
+    libadwaita
     gdm
     geoclue2
     adwaita-icon-theme
@@ -169,6 +170,9 @@ stdenv.mkDerivation rec {
     bash-completion
     gnome-autoar
     json-glib
+
+    # for tools
+    pythonEnv
   ];
 
   mesonFlags = [
@@ -177,11 +181,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs src/data-to-c.pl
-    chmod +x meson/postinstall.py
-    patchShebangs meson/postinstall.py
 
-    substituteInPlace src/gnome-shell-extension-tool.in --replace "@PYTHON@" "${pythonEnv}/bin/python"
-    substituteInPlace src/gnome-shell-perf-tool.in --replace "@PYTHON@" "${pythonEnv}/bin/python"
+    # We can generate it ourselves.
+    rm -f man/gnome-shell.1
   '';
 
   preFixup = ''

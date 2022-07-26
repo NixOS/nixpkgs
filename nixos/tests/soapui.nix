@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     maintainers = [ asbachb ];
   };
 
-  machine = { config, pkgs, ... }: {
+  nodes.machine = { config, pkgs, ... }: {
     imports = [
       ./common/x11.nix
     ];
@@ -16,7 +16,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
   testScript = ''
     machine.wait_for_x()
-    machine.succeed("soapui &")
+    machine.succeed("soapui >&2 &")
     machine.wait_for_window(r"SoapUI \d+\.\d+\.\d+")
     machine.sleep(1)
     machine.screenshot("soapui")

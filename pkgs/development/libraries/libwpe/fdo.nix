@@ -5,20 +5,22 @@
 , pkg-config
 , ninja
 , wayland
-, epoxy
+, libepoxy
 , glib
 , libwpe
 , libxkbcommon
 , libGL
-, libX11 }:
+, libX11
+, webkitgtk
+ }:
 
 stdenv.mkDerivation rec {
   pname = "wpebackend-fdo";
-  version = "1.7.1";
+  version = "1.12.0";
 
   src = fetchurl {
     url = "https://wpewebkit.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "1xf6akagvpyh0nyxkfijrx5avp6ravnivy28dhk64dsfx9rhm64v";
+    sha256 = "sha256-YjnJwVUjQQeY1mMV3mtJFxKrMACboYDz4N0HbZsAdKw=";
   };
 
   depsBuildBuild = [
@@ -34,7 +36,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     wayland
-    epoxy
+    libepoxy
     glib
     libwpe
     libxkbcommon
@@ -46,7 +48,7 @@ stdenv.mkDerivation rec {
     description = "Freedesktop.org backend for WPE WebKit";
     license = licenses.bsd2;
     homepage = "https://wpewebkit.org";
-    maintainers = with maintainers; [ matthewbauer ];
+    maintainers = webkitgtk.meta.maintainers ++ (with maintainers; [ matthewbauer ]);
     platforms = platforms.linux;
   };
 }

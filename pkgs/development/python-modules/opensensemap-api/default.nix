@@ -1,17 +1,21 @@
 { lib
-, buildPythonPackage
-, fetchPypi
 , aiohttp
 , async-timeout
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "opensensemap-api";
-  version = "0.1.6";
+  version = "0.2.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-e60aVIoKFqo++WJHUYGutugkjB8YgyNQgJbILgAyOOY=";
+    sha256 = "sha256-KSukSPpSbfbEEqTq4zqqo8OT7ptdPrGy2QyQYjErQWI=";
   };
 
   propagatedBuildInputs = [
@@ -22,7 +26,9 @@ buildPythonPackage rec {
   # no tests are present
   doCheck = false;
 
-  pythonImportsCheck = [ "opensensemap_api" ];
+  pythonImportsCheck = [
+    "opensensemap_api"
+  ];
 
   meta = with lib; {
     description = "OpenSenseMap API Python client";

@@ -11,10 +11,7 @@ stdenv.mkDerivation {
   inherit version;
 
   src = fetchurl {
-    urls = [
-      "https://downloads.mariadb.org/f/connector-c-${version}/mariadb-connector-c-${version}-src.tar.gz"
-      "https://downloads.mariadb.com/Connectors/c/connector-c-${version}/mariadb-connector-c-${version}-src.tar.gz"
-    ];
+    url = "https://downloads.mariadb.com/Connectors/c/connector-c-${version}/mariadb-connector-c-${version}-src.tar.gz";
     inherit sha256;
   };
 
@@ -31,6 +28,13 @@ stdenv.mkDerivation {
     substituteInPlace mariadb_config/mariadb_config.c.in \
       --replace '-I%s/@INSTALL_INCLUDEDIR@' "-I$dev/include" \
       --replace '-L%s/@INSTALL_LIBDIR@' "-L$out/lib/mariadb"
+  '' + lib.optionalString stdenv.hostPlatform.isStatic ''
+    # Disables all dynamic plugins
+    substituteInPlace cmake/plugins.cmake \
+      --replace 'if(''${CC_PLUGIN_DEFAULT} STREQUAL "DYNAMIC")' 'if(''${CC_PLUGIN_DEFAULT} STREQUAL "INVALID")'
+    # Force building static libraries
+    substituteInPlace libmariadb/CMakeLists.txt \
+      --replace 'libmariadb SHARED' 'libmariadb STATIC'
   '';
 
   # The cmake setup-hook uses $out/lib by default, this is not the case here.
@@ -52,6 +56,7 @@ stdenv.mkDerivation {
     ln -sv mariadb $dev/include/mysql
     ln -sv mariadb_version.h $dev/include/mariadb/mysql_version.h
     ln -sv libmariadb.pc $dev/lib/pkgconfig/mysqlclient.pc
+    install -Dm644 include/ma_config.h $dev/include/mariadb/my_config.h
   '';
 
   meta = {

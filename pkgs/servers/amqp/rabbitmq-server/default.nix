@@ -3,7 +3,7 @@
 , fetchurl
 , erlang
 , elixir
-, python
+, python3
 , libxml2
 , libxslt
 , xmlto
@@ -27,16 +27,16 @@
 
 stdenv.mkDerivation rec {
   pname = "rabbitmq-server";
-  version = "3.9.1";
+  version = "3.9.14";
 
   # when updating, consider bumping elixir version in all-packages.nix
   src = fetchurl {
     url = "https://github.com/rabbitmq/rabbitmq-server/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "1qba783ja0y5k1npxh9lprpxs0vx2i6aci5j78di91m60pgyf1hc";
+    sha256 = "sha256-c6GpB6CSCHiU9hTC9FkxyTc1UpNWxx5iP3y2dbTUfS0=";
   };
 
-  nativeBuildInputs = [ unzip xmlto docbook_xml_dtd_45 docbook_xsl zip rsync ];
-  buildInputs = [ erlang elixir python libxml2 libxslt glibcLocales ]
+  nativeBuildInputs = [ unzip xmlto docbook_xml_dtd_45 docbook_xsl zip rsync python3 ];
+  buildInputs = [ erlang elixir libxml2 libxslt glibcLocales ]
     ++ lib.optionals stdenv.isDarwin [ AppKit Carbon Cocoa ];
 
   outputs = [ "out" "man" "doc" ];
@@ -83,6 +83,6 @@ stdenv.mkDerivation rec {
     description = "An implementation of the AMQP messaging protocol";
     license = licenses.mpl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ Profpatsch ];
+    maintainers = with maintainers; [ turion ];
   };
 }

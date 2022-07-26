@@ -31,7 +31,14 @@ stdenv.mkDerivation rec {
     "-DLIBDIR=lib"
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${harfbuzz.dev}/include/harfbuzz" ];
+  NIX_CFLAGS_COMPILE = [
+    "-I${harfbuzz.dev}/include/harfbuzz"
+
+    # Workaround build failure on -fno-common toolchains:
+    #   ld: ryos_talk.c.o:(.bss+0x0): multiple definition of `RyosWriteCheckWait';
+    #     ryos_custom_lights.c.o:(.bss+0x0): first defined here
+    "-fcommon"
+  ];
 
   meta = {
     description = "Tools to configure ROCCAT devices";

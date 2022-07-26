@@ -1,13 +1,13 @@
-{ mkXfceDerivation, exo, garcon, gtk3, glib
+{ lib, mkXfceDerivation, exo, garcon, gtk3, glib
 , libnotify, libxfce4ui, libxfce4util, libxklavier
 , upower, xfconf, xf86inputlibinput }:
 
 mkXfceDerivation {
   category = "xfce";
   pname = "xfce4-settings";
-  version = "4.16.2";
+  version = "4.16.3";
 
-  sha256 = "sha256-DkybMfkgsC8fJuhOWLzKO5f2Y8YtqzUXMH/npTv21yY=";
+  sha256 = "sha256-Jd1PJrIqzsutParZu8rNMuzHnycjr3eeZGXWIG3PqZY=";
 
   postPatch = ''
     for f in xfsettingsd/pointers.c dialogs/mouse-settings/main.c; do
@@ -34,7 +34,8 @@ mkXfceDerivation {
     "--enable-sound-settings"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Settings manager for Xfce";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

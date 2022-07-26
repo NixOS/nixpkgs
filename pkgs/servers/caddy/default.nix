@@ -1,19 +1,34 @@
 { lib, buildGoModule, fetchFromGitHub, nixosTests }:
-
-buildGoModule rec {
+let
+  version = "2.5.2";
+  dist = fetchFromGitHub {
+    owner = "caddyserver";
+    repo = "dist";
+    rev = "v${version}";
+    sha256 = "sha256-EXs+LNb87RWkmSWvs8nZIVqRJMutn+ntR241gqI7CUg=";
+  };
+in
+buildGoModule {
   pname = "caddy";
-  version = "2.4.1";
+  inherit version;
 
   subPackages = [ "cmd/caddy" ];
 
   src = fetchFromGitHub {
     owner = "caddyserver";
-    repo = pname;
+    repo = "caddy";
     rev = "v${version}";
-    sha256 = "sha256-Wc7eNw5FZWoUT6IP84NhROC59bf4/RCw/gOWLuYI2dc=";
+    sha256 = "sha256-Z9A2DRdX0LWjIKdHAHk2IRxsUzvC90Gf5ohFLXNHcsw=";
   };
 
-  vendorSha256 = "sha256-ZOrhR03m+cs+mTQio3qEIf+1B0IP0i2+x+vcml5AMco=";
+  vendorSha256 = "sha256-aB95wEc69nhloF8qoBeIiiitSyiUTc2KpxyCEnge4rc=";
+
+  postInstall = ''
+    install -Dm644 ${dist}/init/caddy.service ${dist}/init/caddy-api.service -t $out/lib/systemd/system
+
+    substituteInPlace $out/lib/systemd/system/caddy.service --replace "/usr/bin/caddy" "$out/bin/caddy"
+    substituteInPlace $out/lib/systemd/system/caddy-api.service --replace "/usr/bin/caddy" "$out/bin/caddy"
+  '';
 
   passthru.tests = { inherit (nixosTests) caddy; };
 
@@ -21,6 +36,6 @@ buildGoModule rec {
     homepage = "https://caddyserver.com";
     description = "Fast, cross-platform HTTP/2 web server with automatic HTTPS";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    maintainers = with maintainers; [ Br1ght0ne techknowlogick ];
   };
 }

@@ -2,25 +2,28 @@
 , buildPythonPackage
 , fetchPypi
 , python
-, isPy27
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "regex";
-  version = "2021.4.4";
+  version = "2022.3.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Uro9P5uULEnX5LwQW7KFUcRAZfE5plBiq3kSvvEMmvs=";
+    hash = "sha256-eeWvH/JYvA/gvdb2m8SuM5NaiY48vvu8zyLoiif6BTs=";
   };
 
-  # Sources for different Python releases are located in same folder
   checkPhase = ''
-    rm -r ${if !isPy27 then "regex_2" else "regex_3"}
     ${python.interpreter} -m unittest
   '';
 
-  pythonImportsCheck = [ "regex" ];
+  pythonImportsCheck = [
+    "regex"
+  ];
 
   meta = with lib; {
     description = "Alternative regular expression module, to replace re";

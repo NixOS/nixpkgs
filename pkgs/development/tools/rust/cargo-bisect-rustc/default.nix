@@ -12,29 +12,30 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-bisect-rustc";
-  version = "0.6.0";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-LEmILWVU6hbh2FmdnQVV1Ob2MQvj+/lCr1hdRoTIOkI=";
+    hash = "sha256-TRcHeA4pOzODyzkQCGkdAWy3Bt2ltrOcpCMDu6n4k3k=";
   };
 
   patches =
     let
-      patchelfPatch = runCommand "0001-dynamically-patchelf-binaries.patch" {
-        CC = stdenv.cc;
-        patchelf = patchelf;
-        libPath = "$ORIGIN/../lib:${lib.makeLibraryPath [ zlib ]}";
-      }
-      ''
-        export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
-        substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
-          --subst-var patchelf \
-          --subst-var dynamicLinker \
-          --subst-var libPath
-      '';
+      patchelfPatch = runCommand "0001-dynamically-patchelf-binaries.patch"
+        {
+          CC = stdenv.cc;
+          patchelf = patchelf;
+          libPath = "$ORIGIN/../lib:${lib.makeLibraryPath [ zlib ]}";
+        }
+        ''
+          export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
+          substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
+            --subst-var patchelf \
+            --subst-var dynamicLinker \
+            --subst-var libPath
+        '';
     in
     lib.optionals stdenv.isLinux [ patchelfPatch ];
 
@@ -45,7 +46,7 @@ rustPlatform.buildRustPackage rec {
     Security
   ];
 
-  cargoSha256 = "Ls51DQ0yScRhpkuEInCfR45+/WeaUoG935w4BJvwSRk=";
+  cargoSha256 = "sha256-3I5V/JOxxy1+Cwkq9tuHMgHQ0eCfzAViJ4Gl+l8RHlE=";
 
   meta = with lib; {
     description = "Bisects rustc, either nightlies or CI artifacts";

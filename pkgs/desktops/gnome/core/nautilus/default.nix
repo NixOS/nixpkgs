@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , meson
 , ninja
@@ -10,7 +11,7 @@
 , wrapGAppsHook
 , gtk3
 , libhandy
-, libportal
+, libportal-gtk3
 , gnome
 , gnome-autoar
 , glib-networking
@@ -18,7 +19,6 @@
 , libnotify
 , libexif
 , libseccomp
-, exempi
 , librsvg
 , tracker
 , tracker-miners
@@ -34,11 +34,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nautilus";
-  version = "40.1";
+  version = "42.2";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "0cwxr7bfa19dvzra81s9wfshzv0zv7ycpfffn4amigd0fh0vkkwf";
+    sha256 = "mSEtLrdZlvGBcorQSi4thvJXewZOaKNMi4GnA330zLI=";
   };
 
   patches = [
@@ -65,7 +67,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    exempi
     gexiv2
     glib-networking
     gnome-desktop
@@ -74,7 +75,7 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-base
     gtk3
     libhandy
-    libportal
+    libportal-gtk3
     libexif
     libnotify
     libseccomp

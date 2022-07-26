@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-notificationhubs";
-  version = "7.0.0";
+  version = "8.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "92ffed71a2999ff5db41afd66c6ba5cfef9d467f732c7bb45b7c41db371c6e4a";
+    sha256 = "4dd924f4704993e3ebf1d42e2be1cbe0b0d908e695857fa08c4369ae11d0eb36";
   };
 
   propagatedBuildInputs = [

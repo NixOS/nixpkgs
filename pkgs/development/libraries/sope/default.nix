@@ -1,21 +1,21 @@
-{ gnustep, lib, fetchFromGitHub , libxml2, openssl_1_1
+{ gnustep, lib, fetchFromGitHub , libxml2, openssl
 , openldap, mariadb, libmysqlclient, postgresql }:
 with lib;
 
 gnustep.stdenv.mkDerivation rec {
   pname = "sope";
-  version = "5.1.1";
+  version = "5.5.1";
 
   src = fetchFromGitHub {
     owner = "inverse-inc";
     repo = pname;
     rev = "SOPE-${version}";
-    sha256 = "0pap7c38kgadyp1a6qkmf9xhk69ybpmhfd4kc2n5nafhdbvks985";
+    sha256 = "sha256-w78YO5EQWtEiySOm9NpPbaMChbJppNBoZNOBs9fibbM=";
   };
 
   hardeningDisable = [ "format" ];
   nativeBuildInputs = [ gnustep.make ];
-  buildInputs = flatten ([ gnustep.base libxml2 openssl_1_1 ]
+  buildInputs = flatten ([ gnustep.base libxml2 openssl ]
     ++ optional (openldap != null) openldap
     ++ optionals (mariadb != null) [ libmysqlclient mariadb ]
     ++ optional (postgresql != null) postgresql);

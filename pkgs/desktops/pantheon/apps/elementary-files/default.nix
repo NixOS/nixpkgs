@@ -1,11 +1,11 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
-, pantheon
 , pkg-config
 , meson
 , ninja
-, gettext
 , vala
 , python3
 , desktop-file-utils
@@ -13,47 +13,44 @@
 , gtk3
 , glib
 , libgee
+, libhandy
 , granite
 , libnotify
-, libunity
 , pango
 , elementary-dock
 , bamf
 , sqlite
-, libdbusmenu-gtk3
 , zeitgeist
-, glib-networking
-, elementary-icon-theme
 , libcloudproviders
 , libgit2-glib
 , wrapGAppsHook
+, systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "4.5.0";
-
-  repoName = "files";
+  version = "6.1.4";
 
   outputs = [ "out" "dev" ];
 
+  patches = [
+    # Fix terminal critical warnings and possible crash when removing bookmark
+    # https://github.com/elementary/files/pull/2062
+    (fetchpatch {
+      url = "https://github.com/elementary/files/commit/daa5ab244b45aafdd7be49eb0bd6f052ded5b5a7.patch";
+      sha256 = "sha256-crGvbo9Ye9656cOy6YqNreMLE2pEMO0Rg8oz81OfJkw=";
+    })
+  ];
+
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "files";
     rev = version;
-    sha256 = "sha256-wtQW1poX791DAlSFdVV9psnCfBDeVXI2fDZ2GcvvNn8=";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-3j0b+hExUe6OBmEHQVmd2uBkbOGxMdpgDmymuCiph80=";
   };
 
   nativeBuildInputs = [
     desktop-file-utils
-    gettext
-    glib-networking
     meson
     ninja
     pkg-config
@@ -65,38 +62,38 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bamf
     elementary-dock
-    elementary-icon-theme
+    glib
     granite
     gtk3
     libcanberra
     libcloudproviders
-    libdbusmenu-gtk3
     libgee
     libgit2-glib
+    libhandy
     libnotify
-    libunity
     pango
     sqlite
+    systemd
     zeitgeist
-  ];
-
-  patches = [
-    ./0001-filechooser-module-hardcode-gsettings-for-nixos.patch
   ];
 
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
-
-    substituteInPlace filechooser-module/FileChooserDialog.vala \
-      --subst-var-by ELEMENTARY_FILES_GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"}
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "File browser designed for elementary OS";
     homepage = "https://github.com/elementary/files";
-    license = licenses.lgpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.files";
   };
 }

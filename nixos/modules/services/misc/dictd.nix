@@ -25,8 +25,8 @@ in
       DBs = mkOption {
         type = types.listOf types.package;
         default = with pkgs.dictdDBs; [ wiktionary wordnet ];
-        defaultText = "with pkgs.dictdDBs; [ wiktionary wordnet ]";
-        example = literalExample "[ pkgs.dictdDBs.nld2eng ]";
+        defaultText = literalExpression "with pkgs.dictdDBs; [ wiktionary wordnet ]";
+        example = literalExpression "[ pkgs.dictdDBs.nld2eng ]";
         description = "List of databases to make available.";
       };
 
@@ -44,6 +44,10 @@ in
 
     # get the command line client on system path to make some use of the service
     environment.systemPackages = [ pkgs.dict ];
+
+    environment.etc."dict.conf".text = ''
+      server localhost
+    '';
 
     users.users.dictd =
       { group = "dictd";

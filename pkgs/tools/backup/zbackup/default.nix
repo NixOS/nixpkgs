@@ -1,13 +1,32 @@
-{ lib, stdenv, fetchurl, cmake, zlib, openssl, protobuf, protobufc, lzo, libunwind } :
-stdenv.mkDerivation {
+{ lib, stdenv, fetchFromGitHub, fetchpatch
+, cmake, protobufc
+, libunwind, lzo, openssl, protobuf, zlib
+}:
+
+stdenv.mkDerivation rec {
   pname = "zbackup";
   version = "1.4.4";
-  src = fetchurl {
-    url = "https://github.com/zbackup/zbackup/archive/1.4.4.tar.gz";
-    sha256 = "11csla7n44lg7x6yqg9frb21vnkr8cvnh6ardibr3nj5l39crk7g";
+
+  src = fetchFromGitHub {
+    owner = "zbackup";
+    repo = "zbackup";
+    rev = version;
+    hash = "sha256-9Fk4EhEeQ2J4Kirc7oad4CzmW70Mmza6uozd87qfgZI=";
   };
+
+  patches = [
+    # compare with https://github.com/zbackup/zbackup/pull/158;
+    # but that doesn't apply cleanly to this version
+    ./protobuf-api-change.patch
+  ];
+
+  # zbackup uses dynamic exception specifications which are not
+  # allowed in C++17
+  NIX_CFLAGS_COMPILE = [ "--std=c++14" ];
+
   buildInputs = [ zlib openssl protobuf lzo libunwind ];
   nativeBuildInputs = [ cmake protobufc ];
+
   meta = {
     description = "A versatile deduplicating backup tool";
     homepage = "http://zbackup.org/";

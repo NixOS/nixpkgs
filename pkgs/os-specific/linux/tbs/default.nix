@@ -18,7 +18,8 @@ let
   };
 
 in stdenv.mkDerivation {
-  name = "tbs-2018.04.18-${kernel.version}";
+  pname = "tbs";
+  version = "2018.04.18-${kernel.version}";
 
   srcs = [ media build ];
   sourceRoot = build.name;
@@ -58,6 +59,6 @@ in stdenv.mkDerivation {
     license = licenses.gpl2;
     maintainers = with maintainers; [ ck3d ];
     priority = -1;
-    broken = lib.versionAtLeast kernel.version "4.18";
+    broken = true;
   };
 }

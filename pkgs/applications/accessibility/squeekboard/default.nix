@@ -5,6 +5,7 @@
 , ninja
 , pkg-config
 , gnome
+, gnome-desktop
 , glib
 , gtk3
 , wayland
@@ -14,18 +15,20 @@
 , rustPlatform
 , feedbackd
 , wrapGAppsHook
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
   pname = "squeekboard";
-  version = "1.14.0";
+  version = "1.17.0";
 
   src = fetchFromGitLab {
-    domain = "source.puri.sm";
-    owner = "Librem5";
+    domain = "gitlab.gnome.org";
+    group = "World";
+    owner = "Phosh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ayap40pgzcpmfydk5pbf3gwhh26m3cmbk6lyly4jihr9qw7dgb0";
+    sha256 = "sha256-U46OQ0bXkXv6za8vUZxtbxJKqiF/X/xxJsqQGpnRIpg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
@@ -34,7 +37,7 @@ stdenv.mkDerivation rec {
       cat Cargo.toml.in Cargo.deps > Cargo.toml
     '';
     name = "${pname}-${version}";
-    sha256 = "0148ynzmapxfrlccikf20ikmi0ssbkn9fl5wi6nh6azflv50pzzn";
+    sha256 = "sha256-4q8MW1n/xu538+R5ZlA+p/hd6pOQPKj7jOFwnuMc7sk=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +55,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
-    gnome.gnome-desktop
+    gnome-desktop
     wayland
     wayland-protocols
     libxml2

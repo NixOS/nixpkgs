@@ -1,31 +1,26 @@
 { lib, hwdata, pkg-config, lxc, buildGoPackage, fetchurl
-, makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq
-, squashfsTools, iproute2, iptables, ebtables, iptables-nftables-compat, libcap
+, makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq, attr
+, squashfsTools, iproute2, iptables, libcap
 , dqlite, raft-canonical, sqlite-replication, udev
 , writeShellScriptBin, apparmor-profiles, apparmor-parser
 , criu
 , bash
 , installShellFiles
-, nftablesSupport ? false
 , nixosTests
 }:
 
-let
-  networkPkgs = if nftablesSupport then
-    [ iptables-nftables-compat ]
-  else
-    [ iptables ebtables ];
-
-in
 buildGoPackage rec {
   pname = "lxd";
-  version = "4.16";
+  version = "5.4";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
-    url = "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz";
-    sha256 = "1da9avmxs8sy92d9nrdgry2x685ral58zgf89yr88qxc0llbzq7r";
+    urls = [
+      "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz"
+      "https://github.com/lxc/lxd/releases/download/lxd-${version}/lxd-${version}.tar.gz"
+    ];
+    sha256 = "sha256-4jS2fFB30F4i+VjjJWvZHyYkUFRZk9Cq8bTOK9uZOTo=";
   };
 
   postPatch = ''
@@ -33,13 +28,9 @@ buildGoPackage rec {
       --replace "/usr/share/misc/usb.ids" "${hwdata}/share/hwdata/usb.ids"
   '';
 
-  preBuild = ''
-    # unpack vendor
-    pushd go/src/github.com/lxc/lxd
-    rm _dist/src/github.com/lxc/lxd
-    cp -r _dist/src/* ../../..
-    popd
+  excludedPackages = [ "test" "lxd/db/generate" ];
 
+  preBuild = ''
     # required for go-dqlite. See: https://github.com/lxc/lxd/pull/8939
     export CGO_LDFLAGS_ALLOW="(-Wl,-wrap,pthread_create)|(-Wl,-z,now)"
 
@@ -47,12 +38,9 @@ buildGoPackage rec {
   '';
 
   postInstall = ''
-    # test binaries, code generation
-    rm $out/bin/{deps,macaroon-identity,generate}
-
     wrapProgram $out/bin/lxd --prefix PATH : ${lib.makeBinPath (
-      networkPkgs
-      ++ [ acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute2 bash criu ]
+      [ iptables ]
+      ++ [ acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute2 bash criu attr ]
       ++ [ (writeShellScriptBin "apparmor_parser" ''
              exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
            '') ]
@@ -63,6 +51,7 @@ buildGoPackage rec {
   '';
 
   passthru.tests.lxd = nixosTests.lxd;
+  passthru.tests.lxd-nftables = nixosTests.lxd-nftables;
 
   nativeBuildInputs = [ installShellFiles pkg-config makeWrapper ];
   buildInputs = [ lxc acl libcap dqlite.dev raft-canonical.dev
@@ -71,8 +60,9 @@ buildGoPackage rec {
   meta = with lib; {
     description = "Daemon based on liblxc offering a REST API to manage containers";
     homepage = "https://linuxcontainers.org/lxd/";
+    changelog = "https://github.com/lxc/lxd/releases/tag/lxd-${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fpletz wucke13 ];
+    maintainers = with maintainers; [ fpletz marsam ];
     platforms = platforms.linux;
   };
 }

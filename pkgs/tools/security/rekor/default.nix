@@ -1,23 +1,53 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 let
   generic = { pname, packageToBuild, description }:
     buildGoModule rec {
       inherit pname;
-      version = "0.3.0";
+      version = "0.8.2";
 
       src = fetchFromGitHub {
         owner = "sigstore";
         repo = "rekor";
         rev = "v${version}";
-        sha256 = "sha256-FaVZm9C1pewJCZlYgNyD/ZYr/UIRvhqVTUhFTmysxeg=";
+        sha256 = "sha256-EaOLqStoZJMTSS6g56UhFQRhuwYBjh/XLRX6JjD17+g=";
+        # populate values that require us to use git. By doing this in postFetch we
+        # can delete .git afterwards and maintain better reproducibility of the src.
+        leaveDotGit = true;
+        postFetch = ''
+          cd "$out"
+          git rev-parse HEAD > $out/COMMIT
+          # '0000-00-00T00:00:00Z'
+          date -u -d "@$(git log -1 --pretty=%ct)" "+'%Y-%m-%dT%H:%M:%SZ'" > $out/SOURCE_DATE_EPOCH
+          find "$out" -name .git -print0 | xargs -0 rm -rf
+        '';
       };
 
-      vendorSha256 = "sha256-EBKj/+ruE88qvlbOme4GBfAqt3/1jHcqhY0IHxh6Y5U=";
+      vendorSha256 = "sha256-bvn5TKfTcB/0p47r5kW1P4OlnbWYQpESo9t8IC9f+fM=";
+
+      nativeBuildInputs = [ installShellFiles ];
 
       subPackages = [ packageToBuild ];
 
-      ldflags = [ "-s" "-w" "-X github.com/sigstore/rekor/${packageToBuild}/app.gitVersion=v${version}" ];
+      ldflags = [
+        "-s"
+        "-w"
+        "-X sigs.k8s.io/release-utils/version.gitVersion=v${version}"
+        "-X sigs.k8s.io/release-utils/version.gitTreeState=clean"
+      ];
+
+      # ldflags based on metadata from git and source
+      preBuild = ''
+        ldflags+=" -X sigs.k8s.io/release-utils/version.gitCommit=$(cat COMMIT)"
+        ldflags+=" -X sigs.k8s.io/release-utils/version.buildDate=$(cat SOURCE_DATE_EPOCH)"
+      '';
+
+      postInstall = ''
+        installShellCompletion --cmd ${pname} \
+          --bash <($out/bin/${pname} completion bash) \
+          --fish <($out/bin/${pname} completion fish) \
+          --zsh <($out/bin/${pname} completion zsh)
+      '';
 
       meta = with lib; {
         inherit description;

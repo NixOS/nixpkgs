@@ -5,10 +5,11 @@
 , meson
 , ninja
 , wayland-scanner
+, libGL
 , libX11
 , mesa
-, libGL
 , wayland
+, wayland-protocols
 }:
 
 let
@@ -41,7 +42,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "egl-wayland";
-  version = "1.1.7";
+  version = "1.1.10";
 
   outputs = [ "out" "dev" ];
 
@@ -49,7 +50,7 @@ in stdenv.mkDerivation rec {
     owner = "Nvidia";
     repo = pname;
     rev = version;
-    sha256 = "sha256-pqpJ6Uo50BouBU0wGaL21VH5rDiVHKAvJtfzL0YInXU=";
+    sha256 = "sha256-dbcEMtPnzF2t7O8YtKVUGSvJqb5WPMmmW+SyqOFnDY4=";
   };
 
   depsBuildBuild = [
@@ -65,10 +66,11 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     eglexternalplatform
+    libGL
     libX11
     mesa
-    libGL
     wayland
+    wayland-protocols
   ];
 
   postFixup = ''

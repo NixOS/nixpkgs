@@ -2,11 +2,11 @@
 , lib
 , docbook-xsl-nons
 , fetchurl
-, fetchpatch
 , glib
 , gobject-introspection
 , gtk-doc
 , libgudev
+, libpcap
 , meson
 , ninja
 , pkg-config
@@ -19,21 +19,19 @@
 
 stdenv.mkDerivation rec {
   pname = "umockdev";
-  version = "0.15.4";
+  version = "0.17.9";
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "https://github.com/martinpitt/umockdev/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "09k8jwvsphd97hcagf0zaf0hwzlzq2r8jfgbmvj55k7ylrg8hjxg";
+    sha256 = "sha256-FEmWjJVmKKckC30zULGI/mZ3VNtirnweZq2gKh/Y5VE=";
   };
 
   patches = [
-    # Fix build with Vala 0.52
-    (fetchpatch {
-      url = "https://github.com/martinpitt/umockdev/commit/a236f0b55fbb6ff50a6429da9d404703d6637d94.patch";
-      sha256 = "sZs9Ove1r7te/a9vmWUmFetLVhyzhHmx7ijhkK/2S5o=";
-    })
+    # Hardcode absolute paths to libraries so that consumers
+    # do not need to set LD_LIBRARY_PATH themselves.
+    ./hardcode-paths.patch
   ];
 
   nativeBuildInputs = [
@@ -50,6 +48,7 @@ stdenv.mkDerivation rec {
     glib
     systemd
     libgudev
+    libpcap
   ];
 
   checkInputs = [
@@ -63,6 +62,21 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
+
+  postPatch = ''
+    # Substitute the path to this derivation in the patch we apply.
+    substituteInPlace src/umockdev-wrapper \
+      --subst-var-by 'LIBDIR' "''${!outputLib}/lib"
+  '';
+
+  preCheck = ''
+    # Our patch makes the path to the `LD_PRELOAD`ed library absolute.
+    # When running tests, the library is not yet installed, though,
+    # so we need to replace the absolute path with a local one during build.
+    # We are using a symlink that will be overridden during installation.
+    mkdir -p "$out/lib"
+    ln -s "$PWD/libumockdev-preload.so.0" "$out/lib/libumockdev-preload.so.0"
+  '';
 
   meta = with lib; {
     description = "Mock hardware devices for creating unit tests";

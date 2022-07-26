@@ -6,6 +6,7 @@
 , zlib
 , openssl
 , readline
+, withInternalSqlite ? true
 , sqlite
 , ed
 , which
@@ -15,24 +16,25 @@
 
 stdenv.mkDerivation rec {
   pname = "fossil";
-  version = "2.15.1";
+  version = "2.18";
 
   src = fetchurl {
-    url = "https://www.fossil-scm.org/index.html/uv/fossil-src-${version}.tar.gz";
-    name = "${pname}-${version}.tar.gz";
-    sha256 = "sha256-gNJ5I8ZjsqLHEPiujNVJhi4E+MBChXBidMNK48jKF9E=";
+    url = "https://www.fossil-scm.org/home/tarball/version-${version}/fossil-${version}.tar.gz";
+    sha256 = "0iimdzfdl5687xyqxfadbn640x45n3933q1nfx7b32rl4v3vk778";
   };
 
   nativeBuildInputs = [ installShellFiles tcl tcllib ];
 
-  buildInputs = [ zlib openssl readline sqlite which ed ]
-    ++ lib.optional stdenv.isDarwin libiconv;
+  buildInputs = [ zlib openssl readline which ed ]
+    ++ lib.optional stdenv.isDarwin libiconv
+    ++ lib.optional (!withInternalSqlite) sqlite;
 
   enableParallelBuilding = true;
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 
-  configureFlags = [ "--disable-internal-sqlite" ]
+  configureFlags =
+    lib.optional (!withInternalSqlite) "--disable-internal-sqlite"
     ++ lib.optional withJson "--json";
 
   preBuild = ''

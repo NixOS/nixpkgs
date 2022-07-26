@@ -15,6 +15,7 @@
 , libGLU
 , libXmu
 , libf2c
+, libredwg
 , libspnav
 , matplotlib
 , medfile
@@ -41,19 +42,20 @@
 , swig
 , vtk
 , wrapQtAppsHook
+, wrapGAppsHook
 , xercesc
 , zlib
 }:
 
 mkDerivation rec {
   pname = "freecad";
-  version = "0.19.2";
+  version = "0.20";
 
   src = fetchFromGitHub {
     owner = "FreeCAD";
     repo = "FreeCAD";
     rev = version;
-    hash = "sha256-XZ+fRl3CPCIFu3nHeMTLibwwFBlG/cWpKJlI58hTAuU=";
+    hash = "sha256-Em4XVxDfvVG1Kf7q+6uHNA/VcMGLKMTv5TCh2XF/BtQ=";
   };
 
   nativeBuildInputs = [
@@ -61,7 +63,9 @@ mkDerivation rec {
     ninja
     pkg-config
     pyside2-tools
+    gfortran
     wrapQtAppsHook
+    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -69,7 +73,6 @@ mkDerivation rec {
     boost
     coin3d
     eigen
-    gfortran
     gts
     hdf5
     libGLU
@@ -131,6 +134,7 @@ mkDerivation rec {
 
   qtWrapperArgs = [
     "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
+    "--prefix PATH : ${libredwg}/bin"
   ];
 
   postFixup = ''

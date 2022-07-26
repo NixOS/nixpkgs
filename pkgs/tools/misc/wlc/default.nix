@@ -6,11 +6,11 @@ with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "wlc";
-  version = "1.11";
+  version = "1.13";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256:0ysx250v2qycy1m3jj0wxmyf2f5n8fxf6br69vcbyq2cnqw609nx";
+    sha256 = "sha256-MZ6avuMNT5HIIXW7ezukAJeO70o+SrgJnBnGjNy4tYE=";
   };
 
   propagatedBuildInputs = [
@@ -18,7 +18,6 @@ buildPythonPackage rec {
     python-dateutil
     requests
     pyxdg
-    pre-commit
     responses
     twine
   ];

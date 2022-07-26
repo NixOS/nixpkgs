@@ -27,7 +27,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.ckb-next;
-        defaultText = "pkgs.ckb-next";
+        defaultText = literalExpression "pkgs.ckb-next";
         description = ''
           The package implementing the Corsair keyboard/mouse driver.
         '';
@@ -48,6 +48,6 @@ in
     };
 
     meta = {
-      maintainers = with lib.maintainers; [ kierdavis ];
+      maintainers = with lib.maintainers; [ superherointj ];
     };
   }

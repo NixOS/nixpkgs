@@ -1,8 +1,15 @@
-{ lib, jdk11, fetchFromGitHub, buildPythonPackage, docopt, psutil, pythonOlder }:
+{ lib
+, buildPythonPackage
+, docopt
+, fetchFromGitHub
+, jdk11
+, psutil
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "adb-enhanced";
-  version = "2.5.11";
+  version = "2.5.14";
 
   disabled = pythonOlder "3.4";
 
@@ -10,24 +17,33 @@ buildPythonPackage rec {
     owner = "ashishb";
     repo = pname;
     rev = version;
-    sha256 = "sha256-jb5O7Qxk2xAX5sax6nqywcGBJao5Xfff9s1yvdfvDCs=";
+    sha256 = "sha256-GaPOYBQEGI40MutjjY8exABqGge2p/buk9v+NcZ5oJs=";
   };
+
+  propagatedBuildInputs = [
+    psutil
+    docopt
+  ];
 
   postPatch = ''
     substituteInPlace adbe/adb_enhanced.py \
       --replace "cmd = 'java" "cmd = '${jdk11}/bin/java"
   '';
 
-  propagatedBuildInputs = [ psutil docopt ];
-
-  # Disable tests because they require a dedicated android emulator
+  # Disable tests because they require a dedicated Android emulator
   doCheck = false;
 
-  pythonImportsCheck = [ "adbe" ];
+  pythonImportsCheck = [
+    "adbe"
+  ];
 
   meta = with lib; {
     description = "Tool for Android testing and development";
     homepage = "https://github.com/ashishb/adb-enhanced";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode
+    ];
     license = licenses.asl20;
     maintainers = with maintainers; [ vtuan10 ];
     mainProgram = "adbe";

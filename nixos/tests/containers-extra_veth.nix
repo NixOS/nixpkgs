@@ -4,11 +4,10 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     maintainers = with lib.maintainers; [ kampfschlaefer ];
   };
 
-  machine =
+  nodes.machine =
     { pkgs, ... }:
     { imports = [ ../modules/installer/cd-dvd/channel.nix ];
       virtualisation.writableStore = true;
-      virtualisation.memorySize = 768;
       virtualisation.vlans = [];
 
       networking.useDHCP = false;
@@ -45,7 +44,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
             };
         };
 
-      virtualisation.pathsInNixDB = [ pkgs.stdenv ];
+      virtualisation.additionalPaths = [ pkgs.stdenv ];
     };
 
   testScript =

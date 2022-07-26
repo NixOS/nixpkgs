@@ -1,47 +1,76 @@
 { cmake
 , pkg-config
-, alsa-lib
 , boost
 , curl
 , fetchFromGitHub
+, fetchpatch
 , ffmpeg
+, gnutls
 , lame
 , libev
 , libmicrohttpd
+, libopenmpt
+, mpg123
 , ncurses
-, pulseaudio
-, lib, stdenv
+, lib
+, stdenv
 , taglib
-, systemdSupport ? stdenv.isLinux, systemd
+# Linux Dependencies
+, alsa-lib
+, pulseaudio
+, systemdSupport ? stdenv.isLinux
+, systemd
+# Darwin Dependencies
+, Cocoa
+, SystemConfiguration
 }:
 
 stdenv.mkDerivation rec {
   pname = "musikcube";
-  version = "0.96.7";
+  version = "0.98.0";
 
   src = fetchFromGitHub {
     owner = "clangen";
     repo = pname;
     rev = version;
-    sha256 = "1y00vwn1h10cfflxrm5bk271ak9gilhjycgi44hlkkhmf5bdgn35";
+    sha256 = "sha256-bnwOxEcvRXWPuqtkv8YlpclvH/6ZtQvyvHy4mqJCwik=";
   };
+
+  patches = []
+    ++ lib.optionals stdenv.isDarwin [
+      # Fix pending upstream inclusion for Darwin nixpkgs builds:
+      # https://github.com/clangen/musikcube/pull/531
+      (fetchpatch {
+        name = "darwin-build.patch";
+        url = "https://github.com/clangen/musikcube/commit/9077bb9fa6ddfe93ebb14bb8feebc8a0ef9b7ee4.patch";
+        sha256 = "sha256-Am9AGKDGMN5z+JJFJKdsBLrHf2neHFovgF/8I5EXLDA=";
+      })
+    ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
+
   buildInputs = [
-    alsa-lib
     boost
     curl
     ffmpeg
+    gnutls
     lame
     libev
     libmicrohttpd
+    libopenmpt
+    mpg123
     ncurses
-    pulseaudio
     taglib
-  ] ++ lib.optional systemdSupport systemd;
+  ] ++ lib.optionals systemdSupport [
+    systemd
+  ] ++ lib.optionals stdenv.isLinux [
+    alsa-lib pulseaudio
+  ] ++ lib.optionals stdenv.isDarwin [
+    Cocoa SystemConfiguration
+  ];
 
   cmakeFlags = [
     "-DDISABLE_STRIP=true"

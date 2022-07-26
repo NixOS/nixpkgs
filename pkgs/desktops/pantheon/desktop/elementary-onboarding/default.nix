@@ -1,72 +1,50 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
-, pantheon
-, fetchpatch
-, pkg-config
 , meson
 , ninja
-, vala
+, pkg-config
 , python3
-, gtk3
+, vala
+, wrapGAppsHook4
+, appcenter
+, elementary-settings-daemon
 , glib
-, granite
+, granite7
+, gtk4
+, libadwaita
 , libgee
-, elementary-icon-theme
-, elementary-gtk-theme
-, gettext
-, libhandy
-, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-onboarding";
-  version = "1.2.1";
-
-  repoName = "onboarding";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "onboarding";
     rev = version;
-    sha256 = "sha256-tLTwXA2miHqYqCUbIiBjb2nQB+uN/WzuE4F9m3fVCbM=";
-  };
-
-  patches = [
-    # Port to Libhandy-1
-    (fetchpatch {
-      url = "https://github.com/elementary/onboarding/commit/8af6b7d9216f8cbf725f708b36ef4d4f6c400c78.patch";
-      sha256 = "cnSCSSFEQlNd9Ncw5VCJ32stZ8D4vhl3f+derAk/Cas=";
-      excludes = [
-        ".github/workflows/main.yml"
-      ];
-    })
-  ];
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-bxOy9VivpgL4xXJhDF7K/gpq9zcCFIJFfRpG7QC8svE=";
   };
 
   nativeBuildInputs = [
-    gettext
     meson
     ninja
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    elementary-gtk-theme
-    elementary-icon-theme
+    appcenter # settings schema
+    elementary-settings-daemon # settings schema
     glib
-    granite
-    gtk3
+    granite7
+    gtk4
+    libadwaita
     libgee
-    libhandy
   ];
 
   postPatch = ''
@@ -74,11 +52,18 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
   meta = with lib; {
     description = "Onboarding app for new users designed for elementary OS";
     homepage = "https://github.com/elementary/onboarding";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.onboarding";
   };
 }

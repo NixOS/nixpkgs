@@ -1,7 +1,8 @@
-{ lib, stdenv, fetchgit, makeWrapper,  coreutils, gawk, util-linux }:
+{ lib, stdenv, fetchgit, makeWrapper, coreutils, gawk, util-linux }:
 
 stdenv.mkDerivation {
-  name = "openvpn-learnaddress-19b03c3";
+  pname = "openvpn-learnaddress";
+  version = "unstable-2013-10-21";
 
   src = fetchgit {
     url = "https://gist.github.com/4058733.git";

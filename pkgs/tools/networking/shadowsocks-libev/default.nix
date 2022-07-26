@@ -20,7 +20,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake asciidoc xmlto docbook_xml_dtd_45
                         docbook_xsl libxslt ];
 
-  cmakeFlags = [ "-DWITH_STATIC=OFF"  "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON" ];
+  cmakeFlags = [ "-DWITH_STATIC=OFF"  "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
+    # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+  ];
 
   postInstall = ''
     cp lib/* $out/lib
@@ -34,7 +37,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/shadowsocks/shadowsocks-libev";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.nfjinjing ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

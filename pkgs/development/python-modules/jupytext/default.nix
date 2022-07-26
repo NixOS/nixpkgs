@@ -1,23 +1,25 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
 , GitPython
+, isort
+, jupyter-client
 , jupyter-packaging
-, jupyter_client
 , jupyterlab
 , markdown-it-py
 , mdit-py-plugins
 , nbformat
 , notebook
 , pytestCheckHook
+, pythonOlder
 , pyyaml
 , toml
 }:
 
 buildPythonPackage rec {
   pname = "jupytext";
-  version = "1.11.2";
+  version = "1.14.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -25,11 +27,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mwouts";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-S2SKAC2oT4VIVMMDbu/Puo87noAgnQs1hh88JphutA8=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-a/dvY7MLCjYGOvsCC5tiIIJpApNriRtBN63VK+McEVw=";
   };
 
-  buildInputs = [ jupyter-packaging jupyterlab ];
+  buildInputs = [
+    jupyter-packaging
+    jupyterlab
+  ];
+
   propagatedBuildInputs = [
     markdown-it-py
     mdit-py-plugins
@@ -39,16 +45,34 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytestCheckHook
     GitPython
-    jupyter_client
+    isort
+    jupyter-client
     notebook
+    pytestCheckHook
   ];
-  # Tests that use a Jupyter notebook require $HOME to be writable.
-  HOME = "$TMPDIR";
-  # Pre-commit tests expect the source directory to be a Git repository.
-  pytestFlagsArray = [ "--ignore-glob='tests/test_pre_commit_*.py'" ];
-  pythonImportsCheck = [ "jupytext" "jupytext.cli" ];
+
+  preCheck = ''
+    # Tests that use a Jupyter notebook require $HOME to be writable
+    export HOME=$(mktemp -d);
+  '';
+
+  pytestFlagsArray = [
+    # Pre-commit tests expect the source directory to be a Git repository
+    "--ignore-glob='tests/test_pre_commit_*.py'"
+  ];
+
+  disabledTests = [
+    "test_apply_black_through_jupytext" # we can't do anything about ill-formatted notebooks
+  ] ++ lib.optionals stdenv.isDarwin [
+    # requires access to trash
+    "test_load_save_rename"
+  ];
+
+  pythonImportsCheck = [
+    "jupytext"
+    "jupytext.cli"
+  ];
 
   meta = with lib; {
     description = "Jupyter notebooks as Markdown documents, Julia, Python or R scripts";

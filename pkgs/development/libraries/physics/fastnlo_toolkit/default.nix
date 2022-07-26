@@ -1,11 +1,11 @@
 { lib
 , stdenv
 , fetchurl
-, autoreconfHook
 , boost
 , gfortran
 , lhapdf
 , ncurses
+, perl
 , python ? null
 , swig
 , yoda
@@ -15,17 +15,12 @@
 
 stdenv.mkDerivation rec {
   pname = "fastnlo_toolkit";
-  version = "2.3.1pre-2411";
+  version = "2.5.0-2826";
 
   src = fetchurl {
-    urls = [
-      "https://fastnlo.hepforge.org/code/v23/${pname}-${version}.tar.gz"
-      "https://sid.ethz.ch/debian/fastnlo/${pname}-${version}.tar.gz"
-    ];
-    sha256 = "0fm9k732pmi3prbicj2yaq815nmcjll95fagjqzf542ng3swpqnb";
+    url = "https://fastnlo.hepforge.org/code/v25/fastnlo_toolkit-${version}.tar.gz";
+    sha256 = "sha256-7aIMYCOkHC/17CHYiEfrxvtSJxTDivrS7BQ32cGiEy0=";
   };
-
-  nativeBuildInputs = lib.optional withPython autoreconfHook;
 
   buildInputs = [
     boost
@@ -43,6 +38,10 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     substituteInPlace ./fastnlotoolkit/Makefile.in \
       --replace "-fext-numeric-literals" ""
+
+    # disable test that fails due to strict floating-point number comparison
+    echo "#!/usr/bin/env perl" > check/fnlo-tk-stattest.pl.in
+    chmod +x check/fnlo-tk-stattest.pl.in
   '';
 
   configureFlags = [
@@ -50,6 +49,16 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional withPython "--enable-pyext";
 
   enableParallelBuilding = true;
+
+  doCheck = true;
+  checkInputs = [
+    perl
+    lhapdf.pdf_sets.CT10nlo
+  ];
+  preCheck = ''
+    patchShebangs --build check
+  '';
+  enableParallelChecking = false;
 
   meta = with lib; {
     homepage = "http://fastnlo.hepforge.org";

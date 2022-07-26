@@ -1,16 +1,24 @@
 { lib
+, stdenv
+, buildPythonPackage
+, datasets
 , fetchFromGitHub
 , fetchurl
-, buildPythonPackage
-, rustPlatform
-, setuptools-rust
+, libiconv
 , numpy
-, datasets
+, openssl
+, pkg-config
 , pytestCheckHook
+, pythonOlder
 , requests
+, rustPlatform
+, Security
+, setuptools-rust
 }:
 
 let
+  # See https://github.com/huggingface/tokenizers/blob/main/bindings/python/tests/utils.py for details
+  # about URLs and file names
   robertaVocab = fetchurl {
     url = "https://s3.amazonaws.com/models.huggingface.co/bert/roberta-base-vocab.json";
     sha256 = "0m86wpkfb2gdh9x9i9ng2fvwk1rva4p0s98xw996nrjxs7166zwy";
@@ -47,30 +55,43 @@ let
     url = "https://s3.amazonaws.com/models.huggingface.co/bert/openai-gpt-merges.txt";
     sha256 = "09a754pm4djjglv3x5pkgwd6f79i2rq8ydg0f7c3q1wmwqdbba8f";
   };
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "tokenizers";
-  version = "0.10.3";
+  version = "0.12.1";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = "python-v${version}";
-    hash = "sha256-X7aUiJJjB2ZDlE8LbK7Pn/15SLTZbP8kb4l9ED7/xvU=";
+    hash = "sha256-XIXKgcqa6ToAH4OkyaaJALOS9F+sD8d5Z71RttRcIsw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src sourceRoot;
     name = "${pname}-${version}";
-    hash = "sha256-gRqxlL6q87sGC0birDhCmGF+CVbfxwOxW6Tl6+5mGoo=";
+    sha256 = "sha256-Euvf0LNMa2Od+6gY1Ldge/7VPrH5mJoZduRRsb+lM/E=";
   };
 
   sourceRoot = "source/bindings/python";
 
-  nativeBuildInputs = [ setuptools-rust ] ++ (with rustPlatform; [
+  nativeBuildInputs = [
+    pkg-config
+    setuptools-rust
+  ] ++ (with rustPlatform; [
     cargoSetupHook
     rust.cargo
     rust.rustc
   ]);
+
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    libiconv
+    Security
+  ];
 
   propagatedBuildInputs = [
     numpy
@@ -83,7 +104,7 @@ in buildPythonPackage rec {
   ];
 
   postUnpack = ''
-    # Add data files for tests, otherwise tests attempt network access.
+    # Add data files for tests, otherwise tests attempt network access
     mkdir $sourceRoot/tests/data
     ( cd $sourceRoot/tests/data
       ln -s ${robertaVocab} roberta-base-vocab.json
@@ -98,19 +119,27 @@ in buildPythonPackage rec {
   '';
 
   preCheck = ''
-    HOME=$TMPDIR
+    export HOME=$(mktemp -d);
   '';
 
+  pythonImportsCheck = [
+    "tokenizers"
+  ];
+
   disabledTests = [
-    # Downloads data using the datasets module.
+    # Downloads data using the datasets module
     "TestTrainFromIterators"
+    # Those tests require more data
+    "test_from_pretrained"
+    "test_from_pretrained_revision"
+    "test_continuing_prefix_trainer_mistmatch"
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/huggingface/tokenizers";
     description = "Fast State-of-the-Art Tokenizers optimized for Research and Production";
+    homepage = "https://github.com/huggingface/tokenizers";
     license = licenses.asl20;
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ danieldk ];
   };
 }

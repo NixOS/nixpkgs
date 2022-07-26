@@ -10,11 +10,30 @@ let
 
   interfaceOpts = { ... }: {
     options = {
+
+      configFile = mkOption {
+        example = "/secret/wg0.conf";
+        default = null;
+        type = with types; nullOr str;
+        description = ''
+          wg-quick .conf file, describing the interface.
+          This overrides any other configuration interface configuration options.
+          See wg-quick manpage for more details.
+        '';
+      };
+
       address = mkOption {
         example = [ "192.168.2.1/24" ];
         default = [];
         type = with types; listOf str;
         description = "The IP addresses of the interface.";
+      };
+
+      autostart = mkOption {
+        description = "Whether to bring up this interface automatically during boot.";
+        default = true;
+        example = false;
+        type = types.bool;
       };
 
       dns = mkOption {
@@ -56,9 +75,7 @@ let
       };
 
       preUp = mkOption {
-        example = literalExample ''
-          ${pkgs.iproute2}/bin/ip netns add foo
-        '';
+        example = literalExpression ''"''${pkgs.iproute2}/bin/ip netns add foo"'';
         default = "";
         type = with types; coercedTo (listOf str) (concatStringsSep "\n") lines;
         description = ''
@@ -67,9 +84,7 @@ let
       };
 
       preDown = mkOption {
-        example = literalExample ''
-          ${pkgs.iproute2}/bin/ip netns del foo
-        '';
+        example = literalExpression ''"''${pkgs.iproute2}/bin/ip netns del foo"'';
         default = "";
         type = with types; coercedTo (listOf str) (concatStringsSep "\n") lines;
         description = ''
@@ -78,9 +93,7 @@ let
       };
 
       postUp = mkOption {
-        example = literalExample ''
-          ${pkgs.iproute2}/bin/ip netns add foo
-        '';
+        example = literalExpression ''"''${pkgs.iproute2}/bin/ip netns add foo"'';
         default = "";
         type = with types; coercedTo (listOf str) (concatStringsSep "\n") lines;
         description = ''
@@ -89,9 +102,7 @@ let
       };
 
       postDown = mkOption {
-        example = literalExample ''
-          ${pkgs.iproute2}/bin/ip netns del foo
-        '';
+        example = literalExpression ''"''${pkgs.iproute2}/bin/ip netns del foo"'';
         default = "";
         type = with types; coercedTo (listOf str) (concatStringsSep "\n") lines;
         description = ''
@@ -206,13 +217,13 @@ let
   writeScriptFile = name: text: ((pkgs.writeShellScriptBin name text) + "/bin/${name}");
 
   generateUnit = name: values:
-    assert assertMsg ((values.privateKey != null) != (values.privateKeyFile != null)) "Only one of privateKey or privateKeyFile may be set";
+    assert assertMsg (values.configFile != null || ((values.privateKey != null) != (values.privateKeyFile != null))) "Only one of privateKey, configFile or privateKeyFile may be set";
     let
       preUpFile = if values.preUp != "" then writeScriptFile "preUp.sh" values.preUp else null;
       postUp =
             optional (values.privateKeyFile != null) "wg set ${name} private-key <(cat ${values.privateKeyFile})" ++
             (concatMap (peer: optional (peer.presharedKeyFile != null) "wg set ${name} peer ${peer.publicKey} preshared-key <(cat ${peer.presharedKeyFile})") values.peers) ++
-            optional (values.postUp != null) values.postUp;
+            optional (values.postUp != "") values.postUp;
       postUpFile = if postUp != [] then writeScriptFile "postUp.sh" (concatMapStringsSep "\n" (line: line) postUp) else null;
       preDownFile = if values.preDown != "" then writeScriptFile "preDown.sh" values.preDown else null;
       postDownFile = if values.postDown != "" then writeScriptFile "postDown.sh" values.postDown else null;
@@ -248,16 +259,21 @@ let
           optionalString (peer.allowedIPs != []) "AllowedIPs = ${concatStringsSep "," peer.allowedIPs}\n"
         ) values.peers;
       };
-      configPath = "${configDir}/${name}.conf";
+      configPath =
+        if values.configFile != null then
+          # This uses bind-mounted private tmp folder (/tmp/systemd-private-***)
+          "/tmp/${name}.conf"
+        else
+          "${configDir}/${name}.conf";
     in
     nameValuePair "wg-quick-${name}"
       {
         description = "wg-quick WireGuard Tunnel - ${name}";
         requires = [ "network-online.target" ];
         after = [ "network.target" "network-online.target" ];
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = optional values.autostart "multi-user.target";
         environment.DEVICE = name;
-        path = [ pkgs.kmod pkgs.wireguard-tools ];
+        path = [ pkgs.kmod pkgs.wireguard-tools config.networking.resolvconf.package ];
 
         serviceConfig = {
           Type = "oneshot";
@@ -266,8 +282,16 @@ let
 
         script = ''
           ${optionalString (!config.boot.isContainer) "modprobe wireguard"}
+          ${optionalString (values.configFile != null) ''
+            cp ${values.configFile} ${configPath}
+          ''}
           wg-quick up ${configPath}
         '';
+
+        serviceConfig = {
+          # Used to privately store renamed copies of external config files during activation
+          PrivateTmp = true;
+        };
 
         preStop = ''
           wg-quick down ${configPath}
@@ -308,5 +332,11 @@ in {
     # breaks the wg-quick routing because wireguard packets leave with a fwmark from wireguard.
     networking.firewall.checkReversePath = false;
     systemd.services = mapAttrs' generateUnit cfg.interfaces;
+
+    # Prevent networkd from clearing the rules set by wg-quick when restarted (e.g. when waking up from suspend).
+    systemd.network.config.networkConfig.ManageForeignRoutingPolicyRules = mkDefault false;
+
+    # WireGuard interfaces should be ignored in determining whether the network is online.
+    systemd.network.wait-online.ignoredInterfaces = builtins.attrNames cfg.interfaces;
   };
 }

@@ -1,43 +1,78 @@
-{ lib
+{ stdenv
+, lib
+, appdirs
 , buildPythonPackage
-, fetchPypi
-, six
+, cachelib
+, cssselect
+, fetchFromGitHub
+, keep
+, lxml
 , pygments
 , pyquery
-, cachelib
-, appdirs
-, keep
+, requests
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "howdoi";
-  version = "2.0.16";
+  version = "2.0.19";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0257fbb328eb3a15ed3acc498314902f00908b130209073509eec21cb7235b2b";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "gleitz";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-uLAc6E8+8uPpo070vsG6Od/855N3gTQMf5pSUvtlh0I=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py --replace 'cachelib==0.1' 'cachelib'
-  '';
+  propagatedBuildInputs = [
+    appdirs
+    cachelib
+    cssselect
+    keep
+    lxml
+    pygments
+    pyquery
+    requests
+  ];
 
-  propagatedBuildInputs = [ six pygments pyquery cachelib appdirs keep ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  # author hasn't included page_cache directory (which allows tests to run without
-  # external requests) in pypi tarball. github repo doesn't have release revisions
-  # clearly tagged. re-enable tests when either is sorted.
-  doCheck = false;
   preCheck = ''
-    mv howdoi _howdoi
     export HOME=$(mktemp -d)
   '';
-  pythonImportsCheck = [ "howdoi" ];
+
+  disabledTests = [
+    # AssertionError: "The...
+    "test_get_text_with_one_link"
+    "test_get_text_without_links"
+    # Those tests are failing in the sandbox
+    # OSError: [Errno 24] Too many open files
+    "test_answers"
+    "test_answers_bing"
+    "test_colorize"
+    "test_json_output"
+    "test_missing_pre_or_code_query"
+    "test_multiple_answers"
+    "test_position"
+    "test_unicode_answer"
+    "test_answer_links_using_l_option"
+  ];
+
+  pythonImportsCheck = [
+    "howdoi"
+  ];
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Instant coding answers via the command line";
-    homepage = "https://pypi.python.org/pypi/howdoi";
+    homepage = "https://github.com/gleitz/howdoi";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

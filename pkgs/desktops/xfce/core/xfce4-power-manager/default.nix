@@ -1,4 +1,4 @@
-{ mkXfceDerivation, automakeAddFlags, exo, gtk3, libnotify
+{ lib, mkXfceDerivation, automakeAddFlags, exo, gtk3, libnotify
 , libxfce4ui, libxfce4util, upower, xfconf, xfce4-panel }:
 
 mkXfceDerivation {
@@ -17,7 +17,8 @@ mkXfceDerivation {
     automakeAddFlags settings/Makefile.am xfce4_power_manager_settings_CFLAGS GIO_CFLAGS
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A power manager for the Xfce Desktop Environment";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

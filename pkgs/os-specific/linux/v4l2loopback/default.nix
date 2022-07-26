@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "v4l2loopback";
-  version = "unstable-2020-04-22-${kernel.version}";
+  version = "unstable-2021-07-13-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "umlaeute";
     repo = "v4l2loopback";
-    rev = "d26e624b4ead762d34152f9f825b3a51fb92fb9c";
-    sha256 = "sha256-OA45vmuVieoL7J83D3TD5qi3SBsiqi0kiQn4i1K6dVE=";
+    rev = "baf9de279afc7a7c7513e9c40a0c9ff88f456af4";
+    sha256 = "sha256-uglYTeqz81fgkKYYU9Cw8x9+S088jGxDEGkb3rmkhrw==";
   };
 
   hardeningDisable = [ "format" "pic" ];
@@ -16,14 +16,17 @@ stdenv.mkDerivation rec {
   preBuild = ''
     substituteInPlace Makefile --replace "modules_install" "INSTALL_MOD_PATH=$out modules_install"
     sed -i '/depmod/d' Makefile
-    export PATH=${kmod}/sbin:$PATH
   '';
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = [ kmod ] ++ kernel.moduleBuildDependencies;
 
-  buildInputs = [ kmod ];
+  postInstall = ''
+    make install-utils PREFIX=$bin
+  '';
 
-  makeFlags = [
+  outputs = [ "out" "bin" ];
+
+  makeFlags = kernel.makeFlags ++ [
     "KERNELRELEASE=${kernel.modDirVersion}"
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
@@ -34,5 +37,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ fortuneteller2k ];
     platforms = platforms.linux;
+    outputsToInstall = [ "out" ];
   };
 }

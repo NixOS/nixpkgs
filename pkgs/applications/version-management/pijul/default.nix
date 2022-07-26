@@ -13,16 +13,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pijul";
-  version = "1.0.0-alpha.52";
+  version = "1.0.0-beta.2";
 
   src = fetchCrate {
     inherit version pname;
-    sha256 = "0m759zfh40kxswsv40z1l332lc8lfqppyv8188y4i6biqmgbx8f1";
+    sha256 = "sha256-78nzCOR+AZuiAA1OpKKW4kfdUnlN8+qVaO3dknMck58=";
   };
 
-  cargoSha256 = "0f31hw2zjvhkhsb0ykvw4c3d0qy8zirgsaz7yr89hy01rs23bh8z";
-
-  cargoBuildFlags = lib.optional gitImportSupport "--features=git";
+  cargoSha256 = "sha256-IhjN0HjIIuP+P8yfZ3NmZpVZBAuetOr4OVZoI8Qfspo=";
 
   doCheck = false;
   nativeBuildInputs = [ pkg-config ];
@@ -31,6 +29,8 @@ rustPlatform.buildRustPackage rec {
     ++ (lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
       CoreServices Security SystemConfiguration
     ]));
+
+  buildFeatures = lib.optional gitImportSupport "git";
 
   meta = with lib; {
     description = "A distributed version control system";

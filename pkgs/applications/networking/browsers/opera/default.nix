@@ -11,8 +11,8 @@
 , freetype
 , gdk-pixbuf
 , glib
-, gnome2
 , gtk3
+, gtk4
 , lib
 , libX11
 , libxcb
@@ -50,11 +50,11 @@ let
 in stdenv.mkDerivation rec {
 
   pname = "opera";
-  version = "76.0.4017.94";
+  version = "84.0.4316.42";
 
   src = fetchurl {
     url = "${mirror}/${version}/linux/${pname}-stable_${version}_amd64.deb";
-    sha256 = "sha256-vjSfzkl1jIQ9P1ARDa0eOuD8CmKHIEZ+IwMB2wIVjE8=";
+    sha256 = "sha256-ZjVuw30YfHQ69BVxPvIde6VuOcqtnXrGwhZpA26vLpw=";
   };
 
   unpackCmd = "${dpkg}/bin/dpkg-deb -x $curSrc .";
@@ -78,7 +78,6 @@ in stdenv.mkDerivation rec {
     freetype
     gdk-pixbuf
     glib
-    gnome2.GConf
     gtk3
     libX11
     libXScrnSaver
@@ -111,12 +110,16 @@ in stdenv.mkDerivation rec {
     # brings up the crash report, which also crashes. `strace -f` hints at a
     # missing libudev.so.0.
     (lib.getLib systemd)
+
+    # Error at startup:
+    # "Illegal instruction (core dumped)"
+    gtk3
+    gtk4
   ];
 
   installPhase = ''
     mkdir -p $out
     cp -r . $out/
-    mv $out/lib/*/opera/*.so $out/lib/
   '';
 
   meta = with lib; {
@@ -124,5 +127,6 @@ in stdenv.mkDerivation rec {
     description = "Web browser";
     platforms = [ "x86_64-linux" ];
     license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

@@ -5,20 +5,20 @@
 
 buildGoModule rec {
   pname = "ticker";
-  version = "4.2.0";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "achannarasappa";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-FavbBGmChWQ3xySPHlw5HisZwVaNe/NaxA6+InN8fL8=";
+    sha256 = "sha256-LY9js3ckkSTsE5td3VV4DPXeoxhw9MjOa35SdxMlUqk=";
   };
 
-  vendorSha256 = "sha256-XBfTVd3X3IDxLCAaNnijf6E5bw+AZ94UdOG9w7BOdBU=";
+  vendorSha256 = "sha256-6bosJ2AlbLZ551tCNPmvNyyReFJG+iS3SYUFti2/CAw=";
 
-  preBuild = ''
-    buildFlagsArray+=("-ldflags" "-s -w -X github.com/achannarasappa/ticker/cmd.Version=v${version}")
-  '';
+  ldflags = [
+    "-s" "-w" "-X github.com/achannarasappa/ticker/cmd.Version=v${version}"
+  ];
 
   # Tests require internet
   doCheck = false;

@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "sphinx-material";
-  version = "0.0.32";
+  version = "0.0.35";
 
   src = fetchPypi {
     pname = "sphinx_material";
     inherit version;
-    sha256 = "ec02825a1bbe8b662fe624c11b87f1cd8d40875439b5b18c38649cf3366201fa";
+    sha256 = "27f0f1084aa0201b43879aef24a0521b78dc8df4942b003a4e7d79ab11515852";
   };
 
   propagatedBuildInputs = [

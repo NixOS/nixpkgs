@@ -3,44 +3,44 @@
 , fetchFromGitHub
 , appstream-glib
 , desktop-file-utils
-, epoxy
-, gettext
+, libepoxy
 , glib
-, gtk3
+, gtk4
+, wayland
 , meson
 , mpv
 , ninja
 , nix-update-script
 , pkg-config
 , python3
-, wrapGAppsHook
+, wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
   pname = "celluloid";
-  version = "0.21";
+  version = "0.23";
 
   src = fetchFromGitHub {
     owner = "celluloid-player";
     repo = "celluloid";
     rev = "v${version}";
-    hash = "sha256-1Jeg1uqWxURGKR/Xg4j4roZ9Pg5MR7geyttdzlOU+rA=";
+    hash = "sha256-YKDud/UJJx9ko5k+Oux8mUUme0MXaRMngESE14Hhxv8=";
   };
 
   nativeBuildInputs = [
     appstream-glib
     desktop-file-utils
-    gettext
     meson
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
   buildInputs = [
-    epoxy
+    libepoxy
     glib
-    gtk3
+    gtk4
+    wayland
     mpv
   ];
 

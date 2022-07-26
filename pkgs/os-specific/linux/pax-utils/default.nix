@@ -1,15 +1,25 @@
-{ stdenv, lib, fetchurl }:
+{ stdenv, lib, fetchurl, bash, gitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "pax-utils";
-  version = "1.2.8";
+  version = "1.3.4";
 
   src = fetchurl {
-    url = "http://distfiles.gentoo.org/distfiles/${pname}-${version}.tar.xz";
-    sha256 = "sha256-urTIhG4dLMNmnPqSMdIdszWEHX1Y+eGc0Jn+bOYmsVc=";
+    url = "mirror://gentoo/distfiles/${pname}-${version}.tar.xz";
+    sha256 = "sha256-i67S+cWujgzaG5x1mQhkEBr8ZPrQpGFuEPP/jviRBAs=";
   };
 
+  strictDeps = true;
+
+  buildInputs = [ bash ];
+
   makeFlags = [ "PREFIX=$(out)" ];
+
+  passthru.updateScript = gitUpdater {
+    inherit pname version;
+    url = "https://anongit.gentoo.org/git/proj/pax-utils.git";
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     description = "ELF utils that can check files for security relevant properties";
@@ -20,7 +30,7 @@ stdenv.mkDerivation rec {
       binary files.
     '';
     homepage = "https://wiki.gentoo.org/wiki/Hardened/PaX_Utilities";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice joachifm ];
   };

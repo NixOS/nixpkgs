@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Parameterized testing with any Python test framework";
     homepage = "https://github.com/wolever/parameterized";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -2,25 +2,26 @@
 , buildPythonPackage
 , fetchPypi
 , django
-, python
 , pillow
-, python_magic
+, python-magic
 }:
 
 buildPythonPackage rec {
   pname = "django-versatileimagefield";
-  version = "2.1";
+  version = "2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e98f7b0abfbf2559d55b08be40911dcc44b6f3437a6c40d81bf66b6914837fdf";
+    sha256 = "6569d5c3e13c69ab8912ba5100084aa5abcdcffb8d1f5abc085b226e7bbd65b3";
   };
-  propagatedBuildInputs = [ pillow python_magic ];
+  propagatedBuildInputs = [ pillow python-magic ];
 
   checkInputs = [ django ];
 
   # tests not included with pypi release
   doCheck = false;
+
+  pythonImportsCheck = [ "versatileimagefield" ];
 
   meta = with lib; {
     description = "Replaces django's ImageField with a more flexible interface";

@@ -15,6 +15,7 @@
 , hunspellWithDicts
 , intltool
 , isocodes
+, libappindicator-gtk3
 , libcanberra-gtk3
 , mousetweaks
 , udev
@@ -70,6 +71,7 @@ python3.pkgs.buildPythonApplication rec {
     gtk3
     hunspell
     isocodes
+    libappindicator-gtk3
     libcanberra-gtk3
     libxkbcommon
     mousetweaks
@@ -78,7 +80,7 @@ python3.pkgs.buildPythonApplication rec {
     xorg.libxkbfile
   ] ++ lib.optional atspiSupport at-spi2-core;
 
-  propagatedBuildInputs = with python3.pkgs; [
+  pythonPath = with python3.pkgs; [
     dbus-python
     distutils_extra
     pyatspi

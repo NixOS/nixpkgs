@@ -9,22 +9,27 @@
 , pytestCheckHook
 , python-box
 , python-dateutil
+, pythonOlder
 , requests
 , requests-pkcs12
 , responses
 , restfly
 , semver
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "pytenable";
-  version = "1.3.3";
+  version = "1.4.7";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tenable";
     repo = "pyTenable";
-    rev = version;
-    sha256 = "19vhy7mf972545abydywyig82gkxalp6sfwinvj71hzbihwwzjpq";
+    rev = "refs/tags/${version}";
+    hash = "sha256-w6IM82nxv6rg3XbrHZfoN517usOOo/ly1GGgjnIdcEw=";
   };
 
   propagatedBuildInputs = [
@@ -40,6 +45,7 @@ buildPythonPackage rec {
     requests
     requests-pkcs12
     restfly
+    typing-extensions
   ];
 
   checkInputs = [
@@ -57,7 +63,9 @@ buildPythonPackage rec {
     "test_uploads_docker_push_cs_tag_typeerror"
   ];
 
-  pythonImportsCheck = [ "tenable" ];
+  pythonImportsCheck = [
+    "tenable"
+  ];
 
   meta = with lib; {
     description = "Python library for the Tenable.io and TenableSC API";

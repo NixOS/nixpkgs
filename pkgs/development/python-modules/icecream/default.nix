@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "icecream";
-  version = "2.1.0";
+  version = "2.1.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c2e7b74c1c12caa2cfde050f2e636493ee77a9fb4a494b5593418ab359924a24";
+    sha256 = "sha256-CqSnwzdOw2FTodCPgeMIDoPYrB7v2X0vT+lUTo+bSd4=";
   };
 
   propagatedBuildInputs = [ asttokens colorama executing pygments ];

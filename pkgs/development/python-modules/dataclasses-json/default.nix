@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, stringcase
 , typing-inspect
 , marshmallow-enum
 , hypothesis
@@ -11,17 +10,16 @@
 
 buildPythonPackage rec {
   pname = "dataclasses-json";
-  version = "0.5.4";
+  version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "lidatong";
     repo = pname;
     rev = "v${version}";
-    sha256 = "193xklf1xrsin7fr24yqx5ckr4m5s9v1bdyr00qr51j74hiy8qsv";
+    sha256 = "1xv9br6mm5pcwfy10ykbc1c0n83fqyj1pa81z272kqww7wpkkp6j";
   };
 
   propagatedBuildInputs = [
-    stringcase
     typing-inspect
     marshmallow-enum
   ];
@@ -30,11 +28,6 @@ buildPythonPackage rec {
     hypothesis
     mypy
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    # AssertionError: Type annotations check failed
-    "test_type_hints"
   ];
 
   pythonImportsCheck = [ "dataclasses_json" ];

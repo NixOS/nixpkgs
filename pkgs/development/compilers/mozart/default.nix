@@ -4,7 +4,8 @@
 , cmake
 , unzip
 , makeWrapper
-, boost
+, boost169
+, pinnedBoost ? boost169
 , llvmPackages
 , llvmPackages_5
 , gmp
@@ -32,6 +33,8 @@ in stdenv.mkDerivation rec {
     url = "https://github.com/layus/mozart2/releases/download/v2.0.0-beta.1/bootcompiler.jar";
     sha256 = "1hgh1a8hgzgr6781as4c4rc52m2wbazdlw3646s57c719g5xphjz";
   };
+
+  patches = [ ./patch-limits.diff ];
 
   postConfigure = ''
     cp ${bootcompiler} bootcompiler/bootcompiler.jar
@@ -67,7 +70,7 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    boost
+    pinnedBoost
     llvmPackages_5.llvm
     llvmPackages_5.clang
     llvmPackages_5.clang-unwrapped

@@ -2,33 +2,40 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
-, xz
-, autoPatchelfHook }:
+, fetchurl
+}:
 
 let
-  assets = import ./assets.nix {
-    inherit lib stdenv fetchFromGitHub xz autoPatchelfHook;
+  nnueFile = "nn-13406b1dcbe0.nnue";
+  nnue = fetchurl {
+    url = "https://tests.stockfishchess.org/api/nn/${nnueFile}";
+    sha256 = "sha256-E0BrHcvgo238XgfaUdjbOLekXX2kMHjsJadiTCuDI28=";
   };
 in
 rustPlatform.buildRustPackage rec {
   pname = "fishnet";
-  version = "2.2.6";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "niklasf";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0dmc58wzv758b82pjpfzcfi0hr14hqcr61cd9v5xlgk5w78cisjq";
+    sha256 = "sha256-nVRG60sSpTqfqhCclvWoeyHR0+oO1Jn1PgftigDGq5c=";
+    fetchSubmodules = true;
   };
 
-  cargoSha256 = "1s37b0w1aav6gz399zncfp0zqh5sfy0zmabhl7n8p5cwlmlvnlsj";
-
-  preBuild = ''
-    rmdir ./assets
-    ln -snf ${assets}/${assets.relAssetsPath} ./assets
+  postPatch = ''
+    cp -v '${nnue}' 'Stockfish/src/${nnueFile}'
+    cp -v '${nnue}' 'Fairy-Stockfish/src/${nnueFile}'
   '';
 
-  passthru.assets = assets;
+  cargoSha256 = "sha256-BJK7M/pjHRj74xoeciavhkK2YRpeogkELIuXetX73so=";
+
+  # TODO: Cargo.lock is out of date, so fix it. Likely not necessary anymore in
+  # the next update.
+  cargoPatches = [
+    ./Cargo.lock.patch
+  ];
 
   meta = with lib; {
     description = "Distributed Stockfish analysis for lichess.org";

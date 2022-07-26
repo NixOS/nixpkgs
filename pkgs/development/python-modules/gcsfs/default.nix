@@ -5,6 +5,7 @@
 , pythonOlder
 , google-auth
 , google-auth-oauthlib
+, google-cloud-storage
 , requests
 , decorator
 , fsspec
@@ -17,14 +18,16 @@
 
 buildPythonPackage rec {
   pname = "gcsfs";
-  version = "2021.06.0";
-  disabled = pythonOlder "3.6";
+  version = "2022.5.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "dask";
+    owner = "fsspec";
     repo = pname;
     rev = version;
-    sha256 = "sha256-tJeCSGK24WC8E7NKupg6/Tv861idWg6WYir+ZXeU+e0=";
+    hash = "sha256-gIkK1VSg1h04+MQBoxFtXIdn80faJlgQ9ayqV5p0RMU=";
   };
 
   propagatedBuildInputs = [
@@ -34,6 +37,7 @@ buildPythonPackage rec {
     fsspec
     google-auth
     google-auth-oauthlib
+    google-cloud-storage
     requests
     ujson
   ];
@@ -44,17 +48,25 @@ buildPythonPackage rec {
     vcrpy
   ];
 
-  disabledTests = [
-    # Tests wants to communicate with the Link-local address
-    "test_GoogleCredentials_None"
+  disabledTestPaths = [
+    # Tests require a running Docker instance
+    "gcsfs/tests/test_core.py"
+    "gcsfs/tests/test_mapping.py"
+    "gcsfs/tests/test_retry.py"
   ];
 
-  pythonImportsCheck = [ "gcsfs" ];
+  pytestFlagsArray = [
+    "-x"
+  ];
+
+  pythonImportsCheck = [
+    "gcsfs"
+  ];
 
   meta = with lib; {
     description = "Convenient Filesystem interface over GCS";
-    homepage = "https://github.com/dask/gcsfs";
+    homepage = "https://github.com/fsspec/gcsfs";
     license = licenses.bsd3;
-    maintainers = [ maintainers.nbren12 ];
+    maintainers = with maintainers; [ nbren12 ];
   };
 }

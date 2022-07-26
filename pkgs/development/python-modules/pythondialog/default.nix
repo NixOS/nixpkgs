@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "pythondialog";
-  version = "3.5.1";
+  version = "3.5.3";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "34a0687290571f37d7d297514cc36bd4cd044a3a4355271549f91490d3e7ece8";
+    sha256 = "b2a34a8af0a6625ccbdf45cd343b854fc6c1a85231dadc80b8805db836756323";
   };
 
   patchPhase = ''
