@@ -31,11 +31,6 @@ let
     # See: https://gitlab.freedesktop.org/plymouth/plymouth/-/issues/95#note_813768
     mkdir -p $out/share/plymouth/themes/spinner
     ln -s $logo $out/share/plymouth/themes/spinner/watermark.png
-
-    # Logo for spinfinity theme
-    # See: https://gitlab.freedesktop.org/plymouth/plymouth/-/issues/106
-    mkdir -p $out/share/plymouth/themes/spinfinity
-    ln -s $logo $out/share/plymouth/themes/spinfinity/header-image.png
   '';
 
   themesEnv = pkgs.buildEnv {

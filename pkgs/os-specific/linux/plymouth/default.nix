@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation rec {
   pname = "plymouth";
-  version = "unstable-2021-10-18";
+  version = "22.02.122";
 
   outputs = [
     "out"
@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "plymouth";
     repo = "plymouth";
-    rev = "18363cd887dbfe7e82a2f4cc1a49ef9513919142";
-    sha256 = "sha256-+AP4ALOFdYFt/8MDXjMaHptkogCwK1iXKuza1zfMaws=";
+    rev = version;
+    sha256 = "sha256-0/2k1DtAnjnvF5LeHrbO6cHrFDyQ02AWUj1XgmOZ/wA=";
   };
 
   nativeBuildInputs = [
@@ -85,12 +85,6 @@ stdenv.mkDerivation rec {
     "plymouthd_defaultsdir=${placeholder "out"}/share/plymouth"
     "sysconfdir=${placeholder "out"}/etc"
   ];
-
-  postInstall = ''
-    # Makes a symlink to /usr/share/pixmaps/system-logo-white.png
-    # We'll handle it in the nixos module.
-    rm $out/share/plymouth/themes/spinfinity/header-image.png
-  '';
 
   meta = with lib; {
     homepage = "https://www.freedesktop.org/wiki/Software/Plymouth/";
