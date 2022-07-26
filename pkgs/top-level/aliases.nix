@@ -171,6 +171,7 @@ mapAliases ({
   cde-gtk-theme = throw "cde-gtk-theme has been removed from nixpkgs as it shipped with python2 scripts that didn't work anymore"; # Added 2022-01-12
   cgmanager = throw "cgmanager was deprecated by lxc and therefore removed from nixpkgs"; # Added 2020-06-05
   checkbashism = throw "'checkbashism' has been renamed to/replaced by 'checkbashisms'"; # Converted to throw 2022-02-22
+  chrome-gnome-shell = gnome-browser-connector;
   chronos = throw "chronos has been removed from nixpkgs, as it was unmaintained"; # Added 2020-08-15
   chunkwm = throw "chunkwm has been removed: abandoned by upstream"; # Added 2022-01-07
   cifs_utils = throw "'cifs_utils' has been renamed to/replaced by 'cifs-utils'"; # Converted to throw 2022-02-22
