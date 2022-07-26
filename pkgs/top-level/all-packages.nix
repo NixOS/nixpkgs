@@ -9885,6 +9885,8 @@ with pkgs;
 
   progress = callPackage ../tools/misc/progress { };
 
+  ps3iso-utils = callPackage ../tools/games/ps3iso-utils { };
+
   ps3netsrv = callPackage ../servers/ps3netsrv { };
 
   pscircle = callPackage ../os-specific/linux/pscircle { };
