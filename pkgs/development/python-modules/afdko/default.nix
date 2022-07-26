@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "afdko";
-  version = "3.9.0";
+  version = "3.9.1";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1fjsaz6bp028fbmry6fzfcih78mdzycqmky1wsz5y0bg4kfk4shh";
+    sha256 = "sha256-AtRNaZzn9BoNIjvKhS7rsYVfHw26JKKUFqO/6TcBIkw=";
   };
 
   format = "pyproject";
@@ -43,6 +43,9 @@ buildPythonPackage rec {
     # Use antlr4 runtime from nixpkgs and link it dynamically
     ./use-dynamic-system-antlr4-runtime.patch
 
+    # Force use of CMake-shipped FindLibXml2 module
+    # This is needed to work around a nixpkgs bug
+    # https://github.com/NixOS/nixpkgs/issues/125008
     ./libxml2-cmake-find-package.patch
   ];
 
@@ -69,13 +72,11 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [ pytestCheckHook ];
+
   preCheck = ''
     export PATH=$PATH:$out/bin
-
-    # Update tests to match ufinormalizer-0.6.1 expectations:
-    #   https://github.com/adobe-type-tools/afdko/issues/1418
-    find tests -name layerinfo.plist -delete
   '';
+
   disabledTests = lib.optionals (!runAllTests) [
     # Disable slow tests, reduces test time ~25 %
     "test_report"

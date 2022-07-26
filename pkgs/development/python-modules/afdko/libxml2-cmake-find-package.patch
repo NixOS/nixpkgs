@@ -1,22 +1,13 @@
-commit c423d1ddf0345aed7ecaf4c8b9e1fa5108aafc6f
-Author: sternenseemann <sternenseemann@systemli.org>
-Date:   Sat Jul 2 12:35:56 2022 +0200
-
-    Force use of CMake-shipped FindLibXml2 module
-    
-    This is needed to work around a nixpkgs bug:
-    https://github.com/NixOS/nixpkgs/issues/125008
-
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index a75b6fb1..c1408283 100644
+index a2423022..9a4f97a4 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -42,7 +42,7 @@ set(ANTLR4_TAG tags/4.9.3)
- find_path(ANTLR4_HEADER antlr4-runtime.h PATH_SUFFIXES antlr4-runtime)
- set(ANTLR4_INCLUDE_DIRS ${ANTLR4_HEADER})
+@@ -43,7 +43,7 @@ set(ANTLR4_TAG tags/4.9.3)
+ include(ExternalAntlr4Cpp)
+ 
  
 -FIND_PACKAGE(LibXml2)
 +FIND_PACKAGE(LibXml2 REQUIRED MODULE)
- IF (NOT ${LibXml2_FOUND})
-    MESSAGE(STATUS "Could not locate LibXml2, will install externally.")
+ IF ((NOT ${LibXml2_FOUND}) OR "${CMAKE_SYSTEM}" MATCHES "Linux")
+    MESSAGE(STATUS "Could not locate LibXml2 or system is Linux, will install externally & statically link")
     set(LIBXML2_TAG tags/v2.9.13)
