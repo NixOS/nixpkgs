@@ -457,8 +457,7 @@ in
   config = mkIf cfg.enable {
     warnings = (mapAttrsToList
       (n: v: "services.gitlab-runner.services.${n}.`registrationConfigFile` points to a file in Nix Store. You should use quoted absolute path to prevent this.")
-      (filterAttrs (n: v: isStorePath v.registrationConfigFile) cfg.services))
-    ++ optional (cfg.configFile != null) "services.gitlab-runner.`configFile` is deprecated, please use services.gitlab-runner.`services`.";
+      (filterAttrs (n: v: isStorePath v.registrationConfigFile) cfg.services));
 
     environment.systemPackages = [ cfg.package ];
     systemd.services.gitlab-runner = {
