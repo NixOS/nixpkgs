@@ -3,7 +3,6 @@
 , runCommand, makeWrapper
 , nix-prefetch-hg, nix-prefetch-git
 , fetchFromGitHub, runtimeShell
-, hasLuaModule
 , python3
 , callPackage, makeSetupHook
 }:
@@ -169,13 +168,6 @@ let
   # Generates a packpath folder as expected by vim
   packDir = packages:
   let
-    # dir is "start" or "opt"
-    linkLuaPlugin = plugin: packageName: dir: ''
-      mkdir -p $out/pack/${packageName}/${dir}/${plugin.pname}/lua
-      ln -sf ${plugin}/share/lua/5.1/* $out/pack/${packageName}/${dir}/${plugin.pname}/lua
-      ln -sf ${plugin}/${plugin.pname}-${plugin.version}-rocks/${plugin.pname}/${plugin.version}/* $out/pack/${packageName}/${dir}/${plugin.pname}/
-    '';
-
     linkVimlPlugin = plugin: packageName: dir: ''
       mkdir -p $out/pack/${packageName}/${dir}
       if test -e "$out/pack/${packageName}/${dir}/${lib.getName plugin}"; then
