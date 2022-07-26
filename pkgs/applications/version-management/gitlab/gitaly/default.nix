@@ -33,7 +33,7 @@ buildGoModule {
     inherit rubyEnv;
   };
 
-  ldflags = "-X ${gitaly_package}/internal/version.version=${version} -X ${gitaly_package}/internal/version.moduleVersion=${version}";
+  ldflags = [ "-X ${gitaly_package}/internal/version.version=${version}" "-X ${gitaly_package}/internal/version.moduleVersion=${version}" ];
 
   tags = [ "static,system_libgit2" ];
   nativeBuildInputs = [ pkg-config ];
