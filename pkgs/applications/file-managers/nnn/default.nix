@@ -20,13 +20,13 @@ assert withNerdIcons -> withIcons == false;
 
 stdenv.mkDerivation rec {
   pname = "nnn";
-  version = "4.5";
+  version = "4.6";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-uToAgWpGaTPTMYJh1D0xgvE23GSIshv1OBlWxXI07Mk=";
+    sha256 = "sha256-+EAKOXZp1kxA2X3e16ItjPT7Sa3WZuP2oxOdXkceTIY=";
   };
 
   configFile = lib.optionalString (conf != null) (builtins.toFile "nnn.h" conf);
