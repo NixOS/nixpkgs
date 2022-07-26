@@ -1,23 +1,24 @@
-{ lib, buildPythonPackage, fetchPypi
-, pytest, setuptools-scm, isPy3k }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytest
+, setuptools-scm
+, isPy3k
+, hatchling }:
 
 buildPythonPackage rec {
   pname = "apipkg";
-  version = "2.1.1";
+  version = "3.0.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-zKNAIkFKE5duM6HjjWoJBWfve2jQNy+SPGmaj4wIivw=";
+    sha256 = "sha256-+MAhra/JEyrC+6n9PFdoNl0KjBCqN1+xXjKfH86KXwE=";
   };
 
+  buildInputs = [ hatchling ];
   nativeBuildInputs = [ setuptools-scm ];
   checkInputs = [ pytest ];
-
-  # Fix pytest 4 support. See: https://github.com/pytest-dev/apipkg/issues/14
-  postPatch = ''
-    substituteInPlace "test_apipkg.py" \
-      --replace "py.test.ensuretemp('test_apipkg')" "py.path.local('test_apipkg')"
-  '';
 
   # Failing tests on Python 3
   # https://github.com/pytest-dev/apipkg/issues/17
