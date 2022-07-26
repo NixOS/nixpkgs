@@ -91,6 +91,7 @@ stdenv.mkDerivation rec {
       ehmry
       ftrvxmtrx
       kovirobi
+      ylh
     ];
     mainProgram = "9";
     platforms = platforms.unix;

@@ -14009,6 +14009,12 @@
     githubId = 5978566;
     name = "Yves-Stan Le Cornec";
   };
+  ylh = {
+    email = "nixpkgs@ylh.io";
+    github = "ylh";
+    githubId = 9125590;
+    name = "Yestin L. Harrison";
+  };
   ylwghst = {
     email = "ylwghst@onionmail.info";
     github = "ylwghst";
