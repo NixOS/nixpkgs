@@ -9986,6 +9986,8 @@ in {
 
   sortedcontainers = callPackage ../development/python-modules/sortedcontainers { };
 
+  soundcloud-v2 = callPackage ../development/python-modules/soundcloud-v2 { };
+
   sounddevice = callPackage ../development/python-modules/sounddevice { };
 
   soundfile = callPackage ../development/python-modules/soundfile { };
