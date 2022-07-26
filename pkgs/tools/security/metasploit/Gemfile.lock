@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: cb251272d8937b0b5bc92c5194a3617392b50625
-  ref: refs/tags/6.2.6
+  revision: 914d609369539c14bf24809ac55f21a24e2c987f
+  ref: refs/tags/6.2.8
   specs:
-    metasploit-framework (6.2.6)
+    metasploit-framework (6.2.8)
       actionpack (~> 6.0)
       activerecord (~> 6.0)
       activesupport (~> 6.0)
@@ -130,26 +130,26 @@ GEM
     arel-helpers (2.14.0)
       activerecord (>= 3.1.0, < 8)
     aws-eventstream (1.2.0)
-    aws-partitions (1.605.0)
-    aws-sdk-core (3.131.2)
+    aws-partitions (1.610.0)
+    aws-sdk-core (3.131.3)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1, >= 1.6.1)
-    aws-sdk-ec2 (1.321.0)
+    aws-sdk-ec2 (1.324.0)
       aws-sdk-core (~> 3, >= 3.127.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-iam (1.69.0)
       aws-sdk-core (~> 3, >= 3.127.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-kms (1.57.0)
+    aws-sdk-kms (1.58.0)
       aws-sdk-core (~> 3, >= 3.127.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-s3 (1.114.0)
       aws-sdk-core (~> 3, >= 3.127.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.4)
-    aws-sigv4 (1.5.0)
+    aws-sigv4 (1.5.1)
       aws-eventstream (~> 1, >= 1.0.2)
     bcrypt (3.1.18)
     bcrypt_pbkdf (1.1.0)
@@ -254,9 +254,9 @@ GEM
     mini_portile2 (2.8.0)
     minitest (5.16.2)
     mqtt (0.5.0)
-    msgpack (1.5.3)
+    msgpack (1.5.4)
     multi_json (1.15.0)
-    mustermann (1.1.1)
+    mustermann (2.0.2)
       ruby2_keywords (~> 0.0.1)
     nessus_rest (0.1.6)
     net-ldap (0.17.1)
@@ -270,7 +270,7 @@ GEM
     network_interface (0.0.2)
     nexpose (7.3.0)
     nio4r (2.5.8)
-    nokogiri (1.13.7)
+    nokogiri (1.13.8)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     nori (2.6.0)
@@ -296,7 +296,7 @@ GEM
       nio4r (~> 2.0)
     racc (1.6.0)
     rack (2.2.4)
-    rack-protection (2.2.0)
+    rack-protection (2.2.2)
       rack
     rack-test (2.0.2)
       rack (>= 1.3)
@@ -331,7 +331,7 @@ GEM
       metasm
       rex-arch
       rex-text
-    rex-exploitation (0.1.32)
+    rex-exploitation (0.1.35)
       jsobfu
       metasm
       rex-arch
@@ -384,10 +384,10 @@ GEM
       faraday (>= 0.17.3, < 3)
     simpleidn (0.2.1)
       unf (~> 0.1.4)
-    sinatra (2.2.0)
-      mustermann (~> 1.0)
+    sinatra (2.2.2)
+      mustermann (~> 2.0)
       rack (~> 2.2)
-      rack-protection (= 2.2.0)
+      rack-protection (= 2.2.2)
       tilt (~> 2.0)
     sqlite3 (1.4.4)
     sshkey (2.0.0)
@@ -397,10 +397,10 @@ GEM
       eventmachine (~> 1.0, >= 1.0.4)
       rack (>= 1, < 3)
     thor (1.2.1)
-    tilt (2.0.10)
+    tilt (2.0.11)
     timeout (0.3.0)
     ttfunk (1.7.0)
-    tzinfo (2.0.4)
+    tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
     tzinfo-data (1.2022.1)
       tzinfo (>= 1.0.0)
