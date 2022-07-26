@@ -2570,8 +2570,21 @@ self: super: {
   # https://github.com/klapaucius/vector-hashtables/issues/11
   vector-hashtables = doJailbreak super.vector-hashtables;
 
-  # doctests don‘t work.
+  # doctest-parallel is broken with v1-style cabal-install / Setup.hs
+  # https://github.com/martijnbastiaan/doctest-parallel/issues/22
   doctest-parallel = dontCheck super.doctest-parallel;
+  clash-prelude = dontCheck super.clash-prelude;
+
+  # Ships a broken Setup.hs
+  # https://github.com/lehins/conduit-aeson/issues/1
+  conduit-aeson = overrideCabal (drv: {
+    postPatch = ''
+      ${drv.postPatch or ""}
+      rm Setup.hs
+    '';
+    # doctest suite uses doctest-parallel which still doesn't work in nixpkgs
+    testTarget = "tests";
+  }) super.conduit-aeson;
 
   # Disabling doctests.
   regex-tdfa = overrideCabal {
@@ -2626,7 +2639,4 @@ in {
   purescript-ast = purescriptStOverride super.purescript-ast;
 
   purenix = purescriptStOverride super.purenix;
-
-  # tests use doctest-parallel which produces some errors during testing
-  clash-prelude = dontCheck super.clash-prelude;
 })
