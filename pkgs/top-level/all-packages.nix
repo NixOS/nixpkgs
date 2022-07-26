@@ -10441,6 +10441,8 @@ with pkgs;
 
   scanbd = callPackage ../tools/graphics/scanbd { };
 
+  scdl = callPackage ../tools/misc/scdl { };
+
   scdoc = callPackage ../tools/typesetting/scdoc { };
 
   scmpuff = callPackage ../applications/version-management/git-and-tools/scmpuff { };
