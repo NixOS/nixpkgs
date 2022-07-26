@@ -1033,7 +1033,6 @@ dont-distribute-packages:
  - condor
  - conductive-hsc3
  - conductive-song
- - conduit-aeson
  - conduit-throttle
  - conduit-vfs-zip
  - confcrypt
@@ -3311,7 +3310,6 @@ dont-distribute-packages:
  - regex-genex
  - regex-pcre-text
  - regex-pderiv
- - regex-tdfa_1_3_2
  - regex-xmlschema
  - regexchar
  - regexp-tries
@@ -3534,7 +3532,6 @@ dont-distribute-packages:
  - servant-streaming-server
  - servant-swagger-tags
  - servant-to-elm
- - servant-typescript
  - servant-util
  - servant-util-beam-pg
  - servant-waargonaut

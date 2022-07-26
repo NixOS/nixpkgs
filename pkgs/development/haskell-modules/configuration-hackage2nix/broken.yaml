@@ -94,7 +94,6 @@ broken-packages:
   - aeson-streams
   - aeson-t
   - aeson-toolkit
-  - aeson-typescript
   - aeson-utils
   - aeson-via
   - aeson-with
@@ -1177,7 +1176,6 @@ broken-packages:
   - dockerfile-creator
   - docrecords
   - doctest-discover-configurator
-  - doctest-parallel
   - doctest-prop
   - docusign-example
   - docvim
@@ -3860,6 +3858,7 @@ broken-packages:
   - persistent-odbc
   - persistent-protobuf
   - persistent-ratelimit
+  - persistent-stm
   - persistent-template-classy
   - persistent-typed-db
   - persistent-zookeeper
