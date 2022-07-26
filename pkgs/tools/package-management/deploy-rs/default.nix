@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ stdenv, lib, fetchFromGitHub, rustPlatform, CoreServices, SystemConfiguration }:
 
 rustPlatform.buildRustPackage rec {
   pname = "deploy-rs-unstable";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-Ocb1kwNDfODGceCaCJ16CTGGTxIQacgHQ3I6HIR/EUo=";
+
+  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices SystemConfiguration ];
 
   meta = with lib; {
     description = " A simple multi-profile Nix-flake deploy tool. ";
