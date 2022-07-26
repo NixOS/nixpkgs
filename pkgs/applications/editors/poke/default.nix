@@ -42,10 +42,13 @@ in stdenv.mkDerivation rec {
     help2man
     pkg-config
     texinfo
-  ] ++ lib.optional guiSupport makeWrapper;
+  ] ++ lib.optionals guiSupport [
+    makeWrapper
+    tcl.tclPackageHook
+  ];
 
   buildInputs = [ boehmgc readline ]
-  ++ lib.optionals guiSupport [ tk tcl.tclPackageHook tcllib ]
+  ++ lib.optionals guiSupport [ tcl tcllib tk ]
   ++ lib.optional miSupport json_c
   ++ lib.optional nbdSupport libnbd
   ++ lib.optional textStylingSupport gettext
@@ -56,6 +59,7 @@ in stdenv.mkDerivation rec {
     # $lib, and later move anything else it doesn't depend on to $out
     "--datadir=${placeholder "lib"}/share"
   ] ++ lib.optionals guiSupport [
+    "--enable-gui"
     "--with-tcl=${tcl}/lib"
     "--with-tk=${tk}/lib"
     "--with-tkinclude=${tk.dev}/include"
