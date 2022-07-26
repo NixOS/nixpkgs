@@ -3858,6 +3858,7 @@ broken-packages:
   - persistent-odbc
   - persistent-protobuf
   - persistent-ratelimit
+  - persistent-stm
   - persistent-template-classy
   - persistent-typed-db
   - persistent-zookeeper
