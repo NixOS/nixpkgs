@@ -19946,6 +19946,8 @@ with pkgs;
 
   libusbmuxd = callPackage ../development/libraries/libusbmuxd { };
 
+  libusbsio = callPackage ../development/libraries/libusbsio { };
+
   libutempter = callPackage ../development/libraries/libutempter { };
 
   libuldaq = callPackage ../development/libraries/libuldaq { };
