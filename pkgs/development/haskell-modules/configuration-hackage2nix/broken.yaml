@@ -1502,7 +1502,6 @@ broken-packages:
   - fix-symbols-gitit
   - fizzbuzz
   - fizzbuzz-as-a-service
-  - flac
   - flaccuraterip
   - flamethrower
   - flamingra
