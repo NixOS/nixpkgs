@@ -34679,6 +34679,8 @@ with pkgs;
 
   dell-530cdn = callPackage ../misc/drivers/dell-530cdn {};
 
+  deploy-rs = callPackage ../tools/package-management/deploy-rs {};
+
   dockutil = callPackage ../os-specific/darwin/dockutil { };
 
   eiciel = callPackage ../tools/filesystems/eiciel { };
