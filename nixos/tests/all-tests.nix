@@ -523,6 +523,7 @@ in {
   starship = handleTest ./starship.nix {};
   step-ca = handleTestOn ["x86_64-linux"] ./step-ca.nix {};
   strongswan-swanctl = handleTest ./strongswan-swanctl.nix {};
+  stunnel = handleTest ./stunnel.nix {};
   sudo = handleTest ./sudo.nix {};
   swap-partition = handleTest ./swap-partition.nix {};
   sway = handleTest ./sway.nix {};
