@@ -52,8 +52,6 @@ this to your .vimrc should make most plugins work:
   set rtp+=~/.nix-profile/share/vim-plugins/youcompleteme
   " or for p in ["youcompleteme"] | exec 'set rtp+=~/.nix-profile/share/vim-plugins/'.p | endfor
 
-which is what the [VAM]/pathogen solutions above basically do.
-
 Learn about about plugin Vim plugin mm managers at
 http://vim-wiki.mawercer.de/wiki/topic/vim%20plugin%20managment.html.
 
@@ -253,19 +251,6 @@ let
   }:
 
     let
-      /* pathogen mostly can set &rtp at startup time. Deprecated.
-      */
-      pathogenImpl = let
-        knownPlugins = pathogen.knownPlugins or vimPlugins;
-
-        plugins = findDependenciesRecursively (map (pluginToDrv knownPlugins) pathogen.pluginNames);
-
-        pathogenPackages.pathogen = {
-          start = plugins;
-        };
-      in
-        nativeImpl pathogenPackages;
-
       /* vim-plug is an extremely popular vim plugin manager.
       */
       plugImpl =
@@ -314,7 +299,7 @@ let
       ]
       ++ lib.optional (vam != null) (lib.warn "'vam' attribute is deprecated. Use 'packages' instead in your vim configuration" vamImpl)
       ++ lib.optional (packages != null && packages != []) (nativeImpl packages)
-      ++ lib.optional (pathogen != null) (lib.warn "'pathogen' attribute is deprecated. Use 'packages' instead in your vim configuration" pathogenImpl)
+      ++ lib.optional (pathogen != null) (throw "pathogen is now unsupported, replace `pathogen = {}` with `packages.home = { start = []; }`")
       ++ lib.optional (plug != null) plugImpl
       ++ [ customRC ];
 
@@ -455,10 +440,8 @@ rec {
                      if vam != null && vam ? knownPlugins then vam.knownPlugins else
                      if pathogen != null && pathogen ? knownPlugins then pathogen.knownPlugins else
                      vimPlugins;
-      pathogenPlugins = throw "pathogen is now unsupported, replace `pathogen = {}` with `packages.home = { start = []; }`";
       vamPlugins = findDependenciesRecursively (map (pluginToDrv knownPlugins) (lib.concatMap vamDictToNames vam.pluginDictionaries));
-      nonNativePlugins = (lib.optionals (pathogen != null) pathogenPlugins)
-                      ++ (lib.optionals (vam != null) vamPlugins)
+      nonNativePlugins = (lib.optionals (vam != null) vamPlugins)
                       ++ (lib.optionals (plug != null) plug.plugins);
       nativePluginsConfigs = lib.attrsets.attrValues packages;
       nativePlugins = lib.concatMap ({start?[], opt?[], knownPlugins?vimPlugins}: start++opt) nativePluginsConfigs;

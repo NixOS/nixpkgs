@@ -154,12 +154,6 @@ rec {
     configure.packages.foo.start = with vimPlugins; [ deoplete-nvim ];
   };
 
-  # only neovim makes use of `requiredPlugins`, test this here
-  test_nvim_with_vim_nix_using_pathogen = neovim.override {
-    extraName = "-pathogen";
-    configure.pathogen.pluginNames = [ "vim-nix" ];
-  };
-
   nvimWithLuaPackages = wrapNeovim2 "-with-lua-packages" (makeNeovimConfig {
     extraLuaPackages = ps: [ps.mpack];
     customRC = ''
