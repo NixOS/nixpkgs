@@ -21,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dconf-editor";
-  version = "3.38.3";
+  version = "43.alpha";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-Vxr0x9rU8Em1PmzXKLea3fCMJ92ra8V7OW0hGGbueeM=";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-9SyUJAXwzKAyZeF92NZjm9qzOpvu8XNJ5aC9DGAm40s=";
   };
 
   patches = [
