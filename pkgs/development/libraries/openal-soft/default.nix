@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openal-soft";
-  version = "1.22.0";
+  version = "1.22.2";
 
   src = fetchFromGitHub {
     owner = "kcat";
     repo = "openal-soft";
     rev = version;
-    sha256 = "sha256-Y2KhPkwtG6tBzUhSqwV2DVnOjZwxPihidLKahjaIvyU=";
+    sha256 = "sha256-MVM0qCZDWcO7/Hnco+0dBqzBLcWD279xjx0slxxlc4w=";
   };
 
   # this will make it find its own data files (e.g. HRTF profiles)
