@@ -7745,6 +7745,8 @@ in {
 
   pymongo = callPackage ../development/python-modules/pymongo { };
 
+  pymoo = callPackage ../development/python-modules/pymoo { };
+
   pymorphy2 = callPackage ../development/python-modules/pymorphy2 { };
 
   pymorphy2-dicts-ru = callPackage ../development/python-modules/pymorphy2/dicts-ru.nix { };
