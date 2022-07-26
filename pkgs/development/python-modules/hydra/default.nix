@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, antlr4-python3-runtime
+, antlr4_9-python3-runtime
 , buildPythonPackage
 , fetchFromGitHub
 , importlib-resources
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "facebookresearch";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-4r0ZWW9SGl35Oupf0ejwL/s6Nas6RoSN2egiBrvFZIA=";
+    hash = "sha256-4r0ZWW9SGl35Oupf0ejwL/s6Nas6RoSN2egiBrvFZIA=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    antlr4-python3-runtime
+    antlr4_9-python3-runtime
     omegaconf
   ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
