@@ -76,10 +76,10 @@ stdenv.mkDerivation rec {
     "-DDISABLE_STRIP=true"
   ];
 
-  postFixup = if stdenv.hostPlatform.isDarwin then ''
-    install_name_tool -add_rpath $out/share/${pname} $out/share//${pname}/${pname}
-    install_name_tool -add_rpath $out/share/${pname} $out/share//${pname}/${pname}d
-  '' else "";
+  postFixup = lib.optionals stdenv.isDarwin ''
+    install_name_tool -add_rpath $out/share/${pname} $out/share/${pname}/${pname}
+    install_name_tool -add_rpath $out/share/${pname} $out/share/${pname}/${pname}d
+  '';
 
   meta = with lib; {
     description = "A fully functional terminal-based music player, library, and streaming audio server";
