@@ -13,6 +13,8 @@
 # tests
 , mock
 , pytestCheckHook
+, lingua
+, chameleon
 }:
 
 buildPythonPackage rec {
@@ -37,8 +39,10 @@ buildPythonPackage rec {
   };
 
   checkInputs = [
-    pytestCheckHook
+    chameleon
+    lingua
     mock
+    pytestCheckHook
   ] ++ passthru.optional-dependencies.babel;
 
   disabledTests = lib.optionals isPyPy [
@@ -49,11 +53,6 @@ buildPythonPackage rec {
     "test_stdin_success"
     # fails on pypy2.7
     "test_bytestring_passthru"
-  ];
-
-  disabledTestPaths = [
-    # lingua dependency is not packaged
-    "test/ext/test_linguaplugin.py"
   ];
 
   meta = with lib; {
