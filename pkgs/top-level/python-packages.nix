@@ -559,9 +559,13 @@ in {
 
   ansiwrap = callPackage ../development/python-modules/ansiwrap { };
 
-  antlr4-python3-runtime = callPackage ../development/python-modules/antlr4-python3-runtime {
-    inherit (pkgs) antlr4;
+  antlr4_8-python3-runtime = callPackage ../development/python-modules/antlr4-python3-runtime {
+    antlr4 = pkgs.antlr4_8;
   };
+  antlr4_9-python3-runtime = callPackage ../development/python-modules/antlr4-python3-runtime {
+    antlr4 = pkgs.antlr4_9;
+  };
+  antlr4-python3-runtime = self.antlr4_8-python3-runtime;
 
   anyascii = callPackage ../development/python-modules/anyascii { };
 
