@@ -1400,11 +1400,9 @@ self: super: {
   # $PWD/dist/build/haskeline-examples-Test to $PATH.
   haskeline_0_8_2 = dontCheck super.haskeline_0_8_2;
 
-  # Tests for list-t, superbuffer, and stm-containers
-  # depend on HTF and it is broken, 2020-08-23
-  list-t = dontCheck super.list-t;
-  superbuffer = dontCheck super.superbuffer;
-  stm-containers = dontCheck super.stm-containers;
+  # Too strict upper bound on HTF
+  # https://github.com/nikita-volkov/stm-containers/issues/29
+  stm-containers = doJailbreak super.stm-containers;
 
   # https://github.com/agrafix/Spock/issues/180
   # Ignore Stackage LTS bound so we can compile Spock-core again. All other
