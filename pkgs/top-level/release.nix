@@ -30,7 +30,7 @@ let
     "aarch64"
   ] (arch: builtins.elem "${arch}-darwin" systemsWithAnySupport);
 
-  jobs =
+  nonPackageJobs =
     { tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease supportedSystems; };
 
       metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
@@ -200,7 +200,15 @@ let
             };
           };
 
-    } // (mapTestOn ((packagePlatforms pkgs) // {
+       };
+
+  # Do not allow attribute collision between jobs inserted in
+  # 'nonPackageAttrs' and jobs pulled in from 'pkgs'.
+  # Conflicts usually cause silent job drops like in
+  #   https://github.com/NixOS/nixpkgs/pull/182058
+  jobs = lib.attrsets.unionOfDisjoint
+    nonPackageJobs
+    (mapTestOn ((packagePlatforms pkgs) // {
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
       haskellPackages = packagePlatforms pkgs.haskellPackages;
       idrisPackages = packagePlatforms pkgs.idrisPackages;
