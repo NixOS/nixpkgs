@@ -3138,6 +3138,13 @@
     githubId = 1311761;
     name = "Didier J. Devroye";
   };
+  desttinghim = {
+    email = "opensource@louispearson.work";
+    matrix = "@desttinghim:matrix.org";
+    github = "desttinghim";
+    githubId = 10042482;
+    name = "Louis Pearson";
+  };
   devhell = {
     email = ''"^"@regexmail.net'';
     github = "devhell";

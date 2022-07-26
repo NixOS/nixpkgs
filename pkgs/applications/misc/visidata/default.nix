@@ -22,6 +22,7 @@
 , setuptools
 , git
 , withPcap ? true, dpkt, dnslib
+, withXclip ? stdenv.isLinux, xclip
 }:
 buildPythonApplication rec {
   pname = "visidata";
@@ -63,7 +64,8 @@ buildPythonApplication rec {
     zstandard
     odfpy
     setuptools
-  ] ++ lib.optionals withPcap [ dpkt dnslib ];
+  ] ++ lib.optionals withPcap [ dpkt dnslib ]
+  ++ lib.optional withXclip xclip;
 
   checkInputs = [
     git
