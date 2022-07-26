@@ -3,7 +3,6 @@
 , fetchPypi
 , isPy3k
 , pytestCheckHook
-, python
 }:
 
 buildPythonPackage rec {
@@ -35,8 +34,8 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/slezica/python-frozendict";
-    description = "An immutable dictionary";
-    license = licenses.mit;
+    homepage = "https://github.com/Marco-Sulla/python-frozendict";
+    description = "A simple immutable dictionary";
+    license = licenses.lgpl3Only;
   };
 }
