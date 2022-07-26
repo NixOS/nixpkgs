@@ -1307,6 +1307,8 @@ in {
 
   binaryornot = callPackage ../development/python-modules/binaryornot { };
 
+  bincopy = callPackage ../development/python-modules/bincopy { };
+
   binho-host-adapter = callPackage ../development/python-modules/binho-host-adapter { };
 
   binwalk = callPackage ../development/python-modules/binwalk { };
