@@ -139,4 +139,7 @@ self: super: {
   # Not possible to build in the main GHC 9.0 package set
   # https://github.com/awakesecurity/spectacle/issues/49
   spectacle = doDistribute (markUnbroken super.spectacle);
+
+  # doctest-parallel dependency requires newer Cabal
+  regex-tdfa = dontCheck super.regex-tdfa;
 }

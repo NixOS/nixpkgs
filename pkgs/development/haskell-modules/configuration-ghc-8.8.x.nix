@@ -167,4 +167,7 @@ self: super: {
 
   # Depends on OneTuple for GHC < 9.0
   universe-base = addBuildDepends [ self.OneTuple ] super.universe-base;
+
+  # doctest-parallel dependency requires newer Cabal
+  regex-tdfa = dontCheck super.regex-tdfa;
 }
