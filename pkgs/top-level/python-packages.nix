@@ -1886,6 +1886,10 @@ in {
     inherit (pkgs) cmigemo;
   };
 
+  cmsis-pack-manager = callPackage ../development/python-modules/cmsis-pack-manager {
+    inherit (pkgs.darwin.apple_sdk.frameworks) Security;
+  };
+
   cmsis-svd = callPackage ../development/python-modules/cmsis-svd { };
 
   cntk = callPackage ../development/python-modules/cntk { };
