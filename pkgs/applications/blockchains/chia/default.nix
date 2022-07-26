@@ -6,14 +6,14 @@
 
 let chia = python3Packages.buildPythonApplication rec {
   pname = "chia";
-  version = "1.3.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "Chia-Network";
     repo = "chia-blockchain";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-nH6rCzIQu5oWsdEHa+UkvbWeUGjrtpEKVEcLmSoor5k=";
+    hash = "sha256-OlaAnUy16QBff81XMoYQaZA0wKnsr+/3XEQLBP8IMug=";
   };
 
   postPatch = ''
@@ -39,10 +39,12 @@ let chia = python3Packages.buildPythonApplication rec {
     chiapos
     chiavdf
     chiabip158
+    chia-rs
     click
     clvm
     clvm-rs
     clvm-tools
+    clvm-tools-rs
     colorama
     colorlog
     concurrent-log-handler
@@ -87,7 +89,6 @@ let chia = python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://www.chia.net/";
     description = "Chia is a modern cryptocurrency built from scratch, designed to be efficient, decentralized, and secure.";
-    knownVulnerabilities = [ "CVE-2022-36447" ];
     license = with licenses; [ asl20 ];
     maintainers = teams.chia.members;
     platforms = platforms.all;
