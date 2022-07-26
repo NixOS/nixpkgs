@@ -5,10 +5,9 @@
 , help2man
 , pkg-config
 , texinfo
-, makeWrapper
 , boehmgc
 , readline
-, guiSupport ? false, tcl, tcllib, tk
+, guiSupport ? false, makeWrapper, tcl, tcllib, tk
 , miSupport ? true, json_c
 , nbdSupport ? !stdenv.isDarwin, libnbd
 , textStylingSupport ? true
@@ -73,6 +72,15 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     moveToOutput share/emacs "$out"
     moveToOutput share/vim "$out"
+  '';
+
+  postFixup = lib.optionalString guiSupport ''
+    wrapProgram "$out/bin/poke-gui" \
+      --prefix TCLLIBPATH ' ' "$TCLLIBPATH"
+
+    # Prevent tclPackageHook from auto-wrapping all binaries, we only
+    # need to wrap poke-gui
+    unset TCLLIBPATH
   '';
 
   passthru = {
