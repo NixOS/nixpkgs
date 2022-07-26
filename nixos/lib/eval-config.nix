@@ -10,7 +10,7 @@
 # types.submodule instead of using eval-config.nix
 evalConfigArgs@
 { # !!! system can be set modularly, would be nice to remove
-  system ? builtins.currentSystem
+  system ? pkgs.system or builtins.currentSystem
 , # !!! is this argument needed any more? The pkgs argument can
   # be set modularly anyway.
   pkgs ? null
