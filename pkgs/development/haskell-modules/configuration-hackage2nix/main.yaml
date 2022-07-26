@@ -89,6 +89,8 @@ default-package-overrides:
   - patch < 0.0.7
   - reflex < 0.8.2.1
   - reflex-dom-core < 0.7.0.2
+  # Downgrade hasql-dynamic-statements until hasql 1.6 is in Stackage
+  - hasql-dynamic-statements < 0.3.1.2
 
 extra-packages:
   - aeson < 2                           # required by pantry-0.5.2
