@@ -16,30 +16,18 @@ stdenv.mkDerivation rec {
   };
 
   buildPhase = ''
-    pushd makeps3iso
-    make
-    ls
-    popd
-
-    pushd extractps3iso
-    make
-    popd
-
-    pushd patchps3iso
-    make
-    popd
-
-    pushd splitps3iso
-    make
-    popd
+    make -C extractps3iso
+    make -C makeps3iso
+    make -C patchps3iso
+    make -C splitps3iso
   '';
 
   installPhase = ''
     mkdir -p $out/bin
-    install -m 0755 makeps3iso/makeps3iso $out/bin
-    install -m 0755 splitps3iso/splitps3iso $out/bin
     install -m 0755 extractps3iso/extractps3iso $out/bin
+    install -m 0755 makeps3iso/makeps3iso $out/bin
     install -m 0755 patchps3iso/patchps3iso $out/bin
+    install -m 0755 splitps3iso/splitps3iso $out/bin
   '';
 
 
