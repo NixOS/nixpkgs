@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pydeps";
-  version = "1.10.18";
+  version = "1.10.22";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "thebjorn";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-AKpaGXUaKCVk1C8GqtWayZEU2xbz3eqbUenjZCtsAUY=";
+    hash = "sha256-PA+TpPAuzyAQSlD08ZgmZAKgVEGoIUw/zq4QdTmU8HE=";
   };
 
   buildInputs = [

@@ -1,9 +1,9 @@
 { lib, buildPythonPackage, fetchFromGitHub, pytest-mock, pytestCheckHook
-, pyyaml, pythonOlder, jre_minimal, antlr4-python3-runtime }:
+, pyyaml, pythonOlder, jre_minimal, antlr4_9-python3-runtime }:
 
 buildPythonPackage rec {
   pname = "omegaconf";
-  version = "2.1.1";
+  version = "2.2.2";
 
   disabled = pythonOlder "3.6";
 
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     owner = "omry";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0hh6pk4q6nb94bz9rwa6cysf3nj50rmqkjh34pqkh28nzg44afjw";
+    sha256 = "sha256-bUJ80sa2ot2JSkt29eFwSiKL6R1X1+VVeE9dFIy4Mg0=";
   };
 
   postPatch = ''
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook pytest-mock ];
   nativeBuildInputs = [ jre_minimal ];
-  propagatedBuildInputs = [ antlr4-python3-runtime pyyaml ];
+  propagatedBuildInputs = [ antlr4_9-python3-runtime pyyaml ];
 
   disabledTestPaths = [ "tests/test_pydev_resolver_plugin.py" ];  # needs pydevd - not in Nixpkgs
 

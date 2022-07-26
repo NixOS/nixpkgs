@@ -13995,7 +13995,7 @@ with pkgs;
   inherit (callPackage ../development/tools/ocaml/ocamlformat { })
     ocamlformat # latest version
     ocamlformat_0_19_0 ocamlformat_0_20_0 ocamlformat_0_20_1 ocamlformat_0_21_0
-    ocamlformat_0_22_4 ocamlformat_0_23_0;
+    ocamlformat_0_22_4 ocamlformat_0_23_0 ocamlformat_0_24_0;
 
   orc = callPackage ../development/compilers/orc { };
 
@@ -23433,6 +23433,8 @@ with pkgs;
 
   bolt = callPackage ../os-specific/linux/bolt { };
 
+  bpf-linker = callPackage ../development/tools/bpf-linker { };
+
   bpfmon = callPackage ../os-specific/linux/bpfmon { };
 
   bridge-utils = callPackage ../os-specific/linux/bridge-utils { };
@@ -28886,6 +28888,7 @@ with pkgs;
 
   inherit (mopidyPackages)
     mopidy
+    mopidy-bandcamp
     mopidy-iris
     mopidy-jellyfin
     mopidy-local
