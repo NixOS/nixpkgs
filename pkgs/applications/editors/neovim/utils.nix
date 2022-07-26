@@ -102,12 +102,8 @@ let
         let
           binPath = lib.makeBinPath (lib.optionals withRuby [ rubyEnv ] ++ lib.optionals withNodeJs [ nodejs ]);
 
-          flags = lib.concatLists (lib.mapAttrsToList (
-              prog: withProg: [
-                "--cmd" (genProviderSettings prog withProg)
-              ]
-            )
-            hostprog_check_table);
+          # vim accepts a limited number of commands so we join them all
+          flags =  [ "--cmd" (lib.intersperse "|" (lib.mapAttrsToList genProviderSettings hostprog_check_table)) ];
         in
         [
           "--inherit-argv0" "--add-flags" (lib.escapeShellArgs flags)
