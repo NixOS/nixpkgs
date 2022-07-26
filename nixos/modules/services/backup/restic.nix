@@ -222,6 +222,13 @@ in
             A script that must run after finishing the backup process.
           '';
         };
+
+        package = mkOption {
+          default = pkgs.restic;
+          defaultText = literalExpression "pkgs.restic";
+          type = types.package;
+          description = "Restic package to use.";
+        };
       };
     }));
     default = { };
@@ -254,7 +261,7 @@ in
         (name: backup:
           let
             extraOptions = concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
-            resticCmd = "${pkgs.restic}/bin/restic${extraOptions}";
+            resticCmd = "${backup.package}/bin/restic${extraOptions}";
             filesFromTmpFile = "/run/restic-backups-${name}/includes";
             backupPaths =
               if (backup.dynamicFilesFrom == null)
