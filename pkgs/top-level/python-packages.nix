@@ -5128,6 +5128,10 @@ in {
     inherit (pkgs) libusb1;
   };
 
+  libusbsio = callPackage ../development/python-modules/libusbsio {
+    inherit (pkgs) libusbsio;
+  };
+
   libversion = callPackage ../development/python-modules/libversion {
     inherit (pkgs) libversion;
   };
