@@ -417,8 +417,8 @@ in
         ++ utils.removePackagesByName optionalPackages config.environment.gnome.excludePackages;
 
       services.colord.enable = mkDefault true;
-      services.gnome.chrome-gnome-shell.enable = mkDefault true;
       services.gnome.glib-networking.enable = true;
+      services.gnome.gnome-browser-connector.enable = mkDefault true;
       services.gnome.gnome-initial-setup.enable = mkDefault true;
       services.gnome.gnome-remote-desktop.enable = mkDefault true;
       services.gnome.gnome-settings-daemon.enable = true;
