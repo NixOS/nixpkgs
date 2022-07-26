@@ -1,7 +1,4 @@
-{ lib, stdenv, fetchurl
-, gnulib
-, runCommand
-, patchutils }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "libpipeline";
@@ -12,18 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-uLRRlJiQIqeewTF/ZKKnWxVRsqVb6gb2dwTLKi5GkLA=";
   };
 
-  patches = lib.optionals stdenv.isDarwin [
-    ./fix-on-osx.patch
-  ] ++ [
-    (runCommand "longdouble-redirect-patch-extraPrefix" {} ''
-      ${patchutils}/bin/filterdiff \
-        --strip=1 \
-        --addoldprefix=a/gl/ \
-        --addnewprefix=b/gl/ \
-        ${gnulib.passthru.longdouble-redirect-patch} \
-        > $out
-    '')
-  ];
+  patches = lib.optionals stdenv.isDarwin [ ./fix-on-osx.patch ];
 
   meta = with lib; {
     homepage = "http://libpipeline.nongnu.org";
