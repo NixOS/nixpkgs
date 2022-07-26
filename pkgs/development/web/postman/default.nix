@@ -9,7 +9,7 @@ let
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.postman;
     platforms = [ "x86_64-linux" "aarch64-darwin" "x86_64-darwin" ];
-    maintainers = with maintainers; [ johnrichardrinehart evanjs tricktron ];
+    maintainers = with maintainers; [ johnrichardrinehart evanjs tricktron Crafter ];
   };
 
 in
