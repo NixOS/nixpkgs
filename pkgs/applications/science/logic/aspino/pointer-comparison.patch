@@ -1,0 +1,13 @@
+diff --git a/src/MaxSatSolver.cc b/src/MaxSatSolver.cc
+index 9e32dac..261032d 100644
+--- a/src/MaxSatSolver.cc
++++ b/src/MaxSatSolver.cc
+@@ -277,7 +277,7 @@ void MaxSatSolver::bce() {
+                 else {
+                     for(int j = 0; j < softLiterals.size(); j++) {
+                         if(var(softLiterals[j]) == i) {
+-                            if(occ[i][sign(softLiterals[j])] > 0) {
++                            if(occ[i][sign(softLiterals[j])] > (unsigned int *)0) {
+ //                                cout << "Pure literal: " << mkLit(i, occ[i][1].size() == 0) << endl;
+                                 addClause(mkLit(i, occ[i][1].size() == 0));
+                                 weights[i] = 0;

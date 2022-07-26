@@ -20,6 +20,12 @@ stdenv.mkDerivation {
 
   buildInputs = [ zlib boost ];
 
+  patches = [
+    # Fixes the following error when built with Clang:
+    # error: ordered comparison between pointer and zero ('unsigned int *' and 'int')
+    ./pointer-comparison.patch
+  ];
+
   postPatch = ''
     substituteInPlace Makefile \
       --replace "GCC = g++" "GCC = c++"
@@ -47,7 +53,5 @@ stdenv.mkDerivation {
     homepage = "https://alviano.net/software/maxino/";
     # See pkgs/applications/science/logic/glucose/default.nix
     badPlatforms = [ "aarch64-linux" ];
-    # src/MaxSatSolver.cc:280:62: error: ordered comparison between pointer and zero ('unsigned int *' and 'int')
-    broken = (stdenv.isDarwin && stdenv.isx86_64); # broken since 2019-05-07 on hydra
   };
 }
