@@ -376,6 +376,12 @@
           dbus service.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          A module for monitoring containers was added under the name
+          <literal>programs.ctop</literal>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
