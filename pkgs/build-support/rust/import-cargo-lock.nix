@@ -33,7 +33,13 @@ let
     then builtins.readFile lockFile
     else args.lockFileContents;
 
-  packages = (builtins.fromTOML lockFileContents).package;
+  # we need to drop context from the file contents because dependencies of the
+  # surrounding repo are propagated through readFile, and fromTOML does not
+  # allow strings with references as input. we do not lose anything by doing so
+  # since a lock file cannot legally refer to store paths that are not referenced
+  # elsewhere already. setting lockFileContents directly is similar; we cannot add
+  # references to the contents that don't already exist in eg a patch file.
+  packages = (builtins.fromTOML (builtins.unsafeDiscardStringContext lockFileContents)).package;
 
   # There is no source attribute for the source package itself. But
   # since we do not want to vendor the source package anyway, we can
