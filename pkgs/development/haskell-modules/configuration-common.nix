@@ -1406,16 +1406,11 @@ self: super: {
   superbuffer = dontCheck super.superbuffer;
   stm-containers = dontCheck super.stm-containers;
 
-  # Fails with "supports custom headers"
-  # Patch for GHC 9.0 support
-  Spock-core = dontCheck (appendPatches [
-    (fetchpatch {
-      name = "Spock-core-GHC-9.0.patch";
-      url = "https://github.com/agrafix/Spock/commit/25c75961c4aaaa2e81c9e2afd3d758f2b643f9df.patch";
-      sha256 = "sha256-JlliIpVYh2CYjJF2I119ab4/1oh6uvxMbRoxlUkKiGw=";
-      relative = "Spock-core";
-    })
-  ] super.Spock-core);
+  # https://github.com/agrafix/Spock/issues/180
+  # Ignore Stackage LTS bound so we can compile Spock-core again. All other
+  # reverse dependencies of reroute are marked as broken in nixpkgs, so
+  # upgrading reroute is probably unproblematic.
+  reroute = doDistribute self.reroute_0_7_0_0;
 
   # Test suite fails to compile https://github.com/agrafix/Spock/issues/177
   Spock = dontCheck super.Spock;
