@@ -7501,6 +7501,16 @@
     githubId = 22085373;
     name = "Luis Hebendanz";
   };
+  luizribeiro = {
+    email = "nixpkgs@l9o.dev";
+    matrix = "@luizribeiro:matrix.org";
+    name = "Luiz Ribeiro";
+    github = "luizribeiro";
+    githubId = 112069;
+    keys = [{
+      fingerprint = "97A0 AE5E 03F3 499B 7D7A  65C6 76A4 1432 37EF 5817";
+    }];
+  };
   lunarequest = {
     email = "nullarequest@vivlaid.net";
     github = "Lunarequest";
@@ -9443,6 +9453,12 @@
     github = "nshalman";
     githubId = 20391;
     name = "Nahum Shalman";
+  };
+  nsnelson = {
+    email = "noah.snelson@protonmail.com";
+    github = "peeley";
+    githubId = 30942198;
+    name = "Noah Snelson";
   };
   nthorne = {
     email = "notrupertthorne@gmail.com";

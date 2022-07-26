@@ -374,6 +374,8 @@ in {
 
     rtl8189es = callPackage ../os-specific/linux/rtl8189es { };
 
+    rtl8189fs = callPackage ../os-specific/linux/rtl8189fs { };
+
     rtl8723bs = callPackage ../os-specific/linux/rtl8723bs { };
 
     rtl8812au = callPackage ../os-specific/linux/rtl8812au { };

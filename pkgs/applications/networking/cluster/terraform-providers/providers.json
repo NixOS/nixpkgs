@@ -1011,10 +1011,10 @@
     "owner": "scaleway",
     "provider-source-address": "registry.terraform.io/scaleway/scaleway",
     "repo": "terraform-provider-scaleway",
-    "rev": "v2.2.3",
-    "sha256": "sha256-XiGc6MU0TrpaZL0SRKez2IUFM7MZIu8tGMFIUQJzbv4=",
+    "rev": "v2.2.4",
+    "sha256": "sha256-tFU1OzixWipQvMHdwViOk8svlhqhPjOTPPkCpWam4DQ=",
     "vendorSha256": "sha256-pDDk4cGCZEotOfL1OLEVJVQ35lI/fdNh2NNjAkIHTZ0=",
-    "version": "2.2.3"
+    "version": "2.2.4"
   },
   "secret": {
     "owner": "numtide",
@@ -1092,10 +1092,10 @@
     "owner": "spotinst",
     "provider-source-address": "registry.terraform.io/spotinst/spotinst",
     "repo": "terraform-provider-spotinst",
-    "rev": "v1.79.0",
-    "sha256": "sha256-UOqXUUqbZ7qVlqFI1YABahfW4+ghyMS7n2Yc9Lfd6cc=",
-    "vendorSha256": "sha256-AJfQhIsh7a1WVQ//oT6P12H/sqmGtKD7jwW3JthvVNQ=",
-    "version": "1.79.0"
+    "rev": "v1.80.0",
+    "sha256": "sha256-3Wq3jKpSVm3sIUoumd7v26JsSWMdmzdhtUKq/ztrt9M=",
+    "vendorSha256": "sha256-NeXkvdO6ODAhNdVfP4laTht6oIrx2QYbhTILFXwPCbU=",
+    "version": "1.80.0"
   },
   "stackpath": {
     "owner": "stackpath",
@@ -1128,10 +1128,10 @@
     "owner": "tencentcloudstack",
     "provider-source-address": "registry.terraform.io/tencentcloudstack/tencentcloud",
     "repo": "terraform-provider-tencentcloud",
-    "rev": "v1.76.2",
-    "sha256": "sha256-dtymdUggjQk3v8FWWBktMe2kPoeEn3FBsXSZ12JneRw=",
+    "rev": "v1.76.3",
+    "sha256": "sha256-Tc6GfFWksxrr61rNFVZrHMHTeo4JsU8Gc1S7roMnj4Y=",
     "vendorSha256": null,
-    "version": "1.76.2"
+    "version": "1.76.3"
   },
   "tfe": {
     "owner": "hashicorp",

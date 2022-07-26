@@ -6,6 +6,7 @@
 
 , kcontacts
 , ki18n
+, kio
 , kirigami2
 , knotifications
 , kpeople
@@ -28,6 +29,7 @@ mkDerivation rec {
   buildInputs = [
     kcontacts
     ki18n
+    kio
     kirigami2
     knotifications
     kpeople
