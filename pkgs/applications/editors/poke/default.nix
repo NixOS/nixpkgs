@@ -52,6 +52,8 @@ in stdenv.mkDerivation rec {
   ++ lib.optional (!isCross) dejagnu;
 
   configureFlags = [
+    # libpoke depends on $datadir/poke, so we specify the datadir in
+    # $lib, and later move anything else it doesn't depend on to $out
     "--datadir=${placeholder "lib"}/share"
   ] ++ lib.optionals guiSupport [
     "--with-tcl=${tcl}/lib"
@@ -66,6 +68,7 @@ in stdenv.mkDerivation rec {
 
   postInstall = ''
     moveToOutput share/emacs "$out"
+    moveToOutput share/vim "$out"
   '';
 
   passthru = {
