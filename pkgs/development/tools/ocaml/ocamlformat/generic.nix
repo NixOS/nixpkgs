@@ -1,5 +1,5 @@
 { lib, fetchurl, fetchzip, ocaml-ng
-, version
+, version ? "0.24.0"
 , tarballName ? "ocamlformat-${version}.tbz",
 }:
 
@@ -13,6 +13,7 @@ let src =
       "0.21.0" = "sha256-KhgX9rxYH/DM6fCqloe4l7AnJuKrdXSe6Y1XY3BXMy0=";
       "0.22.4" = "sha256-61TeK4GsfMLmjYGn3ICzkagbc3/Po++Wnqkb2tbJwGA=";
       "0.23.0" = "sha256-m9Pjz7DaGy917M1GjyfqG5Lm5ne7YSlJF2SVcDHe3+0=";
+      "0.24.0" = "sha256-Zil0wceeXmq2xy0OVLxa/Ujl4Dtsmc4COyv6Jo7rVaM=";
     }."${version}";
   };
   ocamlPackages = ocaml-ng.ocamlPackages;
@@ -48,8 +49,10 @@ buildDunePackage {
     uutf
   ]
   ++ lib.optionals (lib.versionAtLeast version "0.20.0") [ ocaml-version either ]
-  ++ (if lib.versionAtLeast version "0.20.1"
-      then [ odoc-parser ]
+  ++ (if lib.versionAtLeast version "0.24.0"
+      then [ (odoc-parser.override { version = "2.0.0"; }) ]
+      else if lib.versionAtLeast version "0.20.1"
+      then [ (odoc-parser.override { version = "1.0.1"; }) ]
       else [ (odoc-parser.override { version = "0.9.0"; }) ])
   ++ (if lib.versionAtLeast version "0.21.0"
       then [ cmdliner_1_1 ]
