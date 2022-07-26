@@ -28,7 +28,10 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-hB4oWRfGc4zpgqaTDjDr6t7PsGVaedkYTxb4dqn+bkc=";
   };
 
-  outputs = [ "out" "dev" "info" "lib" "man" ];
+  outputs = [ "out" "dev" "info" "lib" ]
+  # help2man can't cross compile because it runs `poke --help` to
+  # generate the man page
+  ++ lib.optional (!isCross) "man";
 
   postPatch = ''
     patchShebangs .
@@ -38,9 +41,10 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     gettext
-    help2man
     pkg-config
     texinfo
+  ] ++ lib.optionals (!isCross) [
+    help2man
   ] ++ lib.optionals guiSupport [
     makeWrapper
     tcl.tclPackageHook
