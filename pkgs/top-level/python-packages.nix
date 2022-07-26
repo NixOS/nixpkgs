@@ -4089,6 +4089,8 @@ in {
 
   hexbytes = callPackage ../development/python-modules/hexbytes { };
 
+  hexdump = callPackage ../development/python-modules/hexdump { };
+
   hg-commitsigs = callPackage ../development/python-modules/hg-commitsigs { };
 
   hg-evolve = callPackage ../development/python-modules/hg-evolve { };
