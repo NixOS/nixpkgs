@@ -2615,6 +2615,8 @@ in {
 
   doit = callPackage ../development/python-modules/doit { };
 
+  doit-py = callPackage ../development/python-modules/doit-py { };
+
   dominate = callPackage ../development/python-modules/dominate { };
 
   doorbirdpy = callPackage ../development/python-modules/doorbirdpy { };
