@@ -2987,7 +2987,6 @@ broken-packages:
   - less-arbitrary
   - Level0
   - level-monad
-  - levenshtein
   - levmar
   - lfst
   - lhc

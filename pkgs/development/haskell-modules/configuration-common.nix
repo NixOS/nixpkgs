@@ -1786,6 +1786,10 @@ self: super: {
   vivid-osc = dontCheck super.vivid-osc;
   vivid-supercollider = dontCheck super.vivid-supercollider;
 
+  # Test suite fails with GHC 9.
+  # https://github.com/hapytex/levenshtein/issues/9
+  levenshtein = dontCheck super.levenshtein;
+
   # cabal-install switched to build type simple in 3.2.0.0
   # as a result, the cabal(1) man page is no longer installed
   # automatically. Instead we need to use the `cabal man`
