@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "alfaview";
-  version = "8.47.0";
+  version = "8.49.1";
 
   src = fetchurl {
     url = "https://production-alfaview-assets.alfaview.com/stable/linux/${pname}_${version}.deb";
-    sha256 = "sha256-KpFLKl5ifncO3lQbEowwLavsfvNcYyrlvNINqAvNWBY=";
+    sha256 = "sha256-A0kX6r5ubC764XJFinCq4/u9pA1AOP4fXUOFB4voeeE=";
   };
 
   nativeBuildInputs = [
