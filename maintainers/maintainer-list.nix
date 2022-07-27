@@ -14799,4 +14799,10 @@
     github = "nikstur";
     githubId = 61635709;
   };
+  yisuidenghua = {
+    email = "bileiner@gmail.com";
+    name = "Milena Yisui";
+    github = "yisuidenghua";
+    githubId = 102890144;
+  };
 }
