@@ -19,7 +19,6 @@
 let
   pinData = lib.importJSON ./pin.json;
   executableName = "schildichat-desktop";
-  electron_exec = if stdenv.isDarwin then "${electron}/Applications/Electron.app/Contents/MacOS/Electron" else "${electron}/bin/electron";
 in
 stdenv.mkDerivation rec {
   pname = "schildichat-desktop";
@@ -88,7 +87,7 @@ stdenv.mkDerivation rec {
     done
 
     # executable wrapper
-    makeWrapper '${electron_exec}' "$out/bin/${executableName}" \
+    makeWrapper '${electron}/bin/electron' "$out/bin/${executableName}" \
       --add-flags "$out/share/element/electron" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
 
