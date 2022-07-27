@@ -17,7 +17,7 @@
 , stdenv
 , systemd
 , wrapGAppsHook
-, xapps
+, xapp
 , xorg
 , libexecinfo
 , pango
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     pango
     xorg.libX11
     xorg.libXext
-    xapps
+    xapp
     xorg.libXau
     xorg.libXcomposite
 

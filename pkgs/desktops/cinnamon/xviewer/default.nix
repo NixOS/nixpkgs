@@ -21,7 +21,7 @@
 , pkg-config
 , python3
 , wrapGAppsHook
-, xapps
+, xapp
 , yelp-tools
 }:
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     libpeas
     librsvg
     libxml2
-    xapps
+    xapp
   ];
 
   meta = with lib; {

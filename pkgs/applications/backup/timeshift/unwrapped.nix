@@ -10,7 +10,7 @@
 , libgee
 , util-linux
 , vte
-, xapps
+, xapp
 }:
 
 stdenv.mkDerivation rec {
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     json-glib
     libgee
     vte
-    xapps
+    xapp
   ];
 
   preBuild = ''

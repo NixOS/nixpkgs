@@ -8,7 +8,7 @@
 , python3
 , cairo
 , gnome
-, xapps
+, xapp
 , keybinder3
 , upower
 , callPackage
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     gnome.caribou
     keybinder3
     upower
-    xapps
+    xapp
   ];
 
   mesonFlags = [

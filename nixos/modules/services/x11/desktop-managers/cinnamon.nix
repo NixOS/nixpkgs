@@ -92,7 +92,7 @@ in
         cinnamon-common
         cinnamon-screensaver
         nemo
-        xapps
+        xapp
       ];
       services.cinnamon.apps.enable = mkDefault true;
       services.gnome.glib-networking.enable = true;
@@ -202,7 +202,7 @@ in
         bulky
         warpinator
 
-        # cinnamon xapps
+        # cinnamon xapp
         xviewer
         xreader
         xed-editor

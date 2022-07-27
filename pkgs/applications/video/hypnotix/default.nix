@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   buildInputs = [
-    cinnamon.xapps
+    cinnamon.xapp
   ];
 
   pythonPath = with python3.pkgs; [

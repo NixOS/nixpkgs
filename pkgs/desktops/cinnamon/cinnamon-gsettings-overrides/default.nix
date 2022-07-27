@@ -10,7 +10,7 @@
 
 , muffin
 , nemo
-, xapps
+, xapp
 , cinnamon-desktop
 , cinnamon-session
 , cinnamon-settings-daemon
@@ -28,7 +28,7 @@ let
     bulky
     muffin
     nemo
-    xapps
+    xapp
     cinnamon-desktop
     cinnamon-session
     cinnamon-settings-daemon

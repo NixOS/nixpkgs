@@ -8,7 +8,7 @@
 , gtk3
 , wrapGAppsHook
 , libxml2
-, xapps
+, xapp
 , meson
 , pkg-config
 , cairo
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gtk3
-    xapps
+    xapp
     cairo
     libxml2
     libsecret

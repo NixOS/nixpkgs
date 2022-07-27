@@ -22,7 +22,7 @@
 , pkg-config
 , python3
 , wrapGAppsHook
-, xapps
+, xapp
 , yelp-tools }:
 
 let
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     libxml2
     libxplayer-plparser
     pythonenv
-    xapps
+    xapp
     # to satisfy configure script
     pythonenv.pkgs.pygobject3
   ];

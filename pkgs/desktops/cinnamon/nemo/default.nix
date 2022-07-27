@@ -12,7 +12,7 @@
 , gtk3
 , gvfs
 , cinnamon-desktop
-, xapps
+, xapp
 , libexif
 , exempi
 , intltool
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     gtk3
     cinnamon-desktop
     libxml2
-    xapps
+    xapp
     libexif
     exempi
     gvfs

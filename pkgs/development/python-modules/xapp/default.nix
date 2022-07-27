@@ -5,7 +5,7 @@
 , pygobject3
 , gtk3
 , gobject-introspection
-, xapps
+, xapp
 , polkit
 }:
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     pygobject3
     gtk3
     gobject-introspection
-    xapps
+    xapp
     polkit
   ];
 

@@ -7,7 +7,7 @@
 , gtk3
 , gtksourceview4
 , gspell
-, xapps
+, xapp
 , pkg-config
 , python3
 , meson
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     gtksourceview4
     libpeas
     gspell
-    xapps
+    xapp
   ];
 
   doInstallCheck = true;

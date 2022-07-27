@@ -16,7 +16,7 @@
 , pkg-config
 , shared-mime-info
 , wrapGAppsHook
-, xapps
+, xapp
 , yelp-tools
 , libsecret
 , webkitgtk
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gtk3
-    xapps
+    xapp
     libsecret
     webkitgtk
     libwebp
