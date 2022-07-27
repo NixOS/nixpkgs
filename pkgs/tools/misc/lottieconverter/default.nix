@@ -1,34 +1,42 @@
-{ lib, stdenv, fetchFromGitHub, libpng, rlottie, zlib }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libpng
+, rlottie
+, giflib
+}:
 
-stdenv.mkDerivation rec {
-  pname = "LottieConverter";
-  version = "0.1.1";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "lottieconverter";
+  version = "0.2";
 
   src = fetchFromGitHub {
     owner = "sot-tech";
-    repo = pname;
-    rev = "r${version}";
-    hash = "sha256-lAGzh6B2js2zDuN+1U8CZnse09RJGZRXbtmsheGKuYU=";
+    repo = finalAttrs.pname;
+    rev = "r${finalAttrs.version}";
+    hash = "sha256-oCFQsOQbWzmzClaTOeuEtGo7uXoKYtaJuSLLgqAQP1M=";
   };
 
-  buildInputs = [ libpng rlottie zlib ];
-  makeFlags = [ "CONF=Release" ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ libpng rlottie giflib ];
+
+  cmakeFlags = [
+    "-DSYSTEM_RL=1"
+    "-DSYSTEM_GL=1"
+  ];
 
   installPhase = ''
     runHook preInstall
-
-    mkdir -p $out/bin
-    cp -v dist/Release/GNU-Linux/lottieconverter $out/bin/
-
+    install -Dm755 lottieconverter "$out/bin/lottieconverter"
     runHook postInstall
   '';
 
   meta = with lib; {
     homepage = "https://github.com/sot-tech/LottieConverter/";
     description = "Lottie converter utility";
-    license = licenses.lgpl21Plus;
+    license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ CRTified ];
-    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/lottieconverter.x86_64-darwin
+    maintainers = with maintainers; [ CRTified nickcao ];
   };
-}
+})

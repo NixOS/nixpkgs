@@ -5667,6 +5667,8 @@ with pkgs;
     ssh = openssh;
   };
 
+  kics = callPackage ../tools/admin/kics { };
+
   kramdown-asciidoc = callPackage ../tools/typesetting/kramdown-asciidoc { };
 
   lychee = callPackage ../tools/networking/lychee { };
@@ -34667,6 +34669,10 @@ with pkgs;
   dbus-map = callPackage ../tools/misc/dbus-map { };
 
   dell-530cdn = callPackage ../misc/drivers/dell-530cdn {};
+
+  deploy-rs = callPackage ../tools/package-management/deploy-rs {
+    inherit (darwin.apple_sdk.frameworks) CoreServices SystemConfiguration;
+  };
 
   dockutil = callPackage ../os-specific/darwin/dockutil { };
 

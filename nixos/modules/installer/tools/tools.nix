@@ -75,15 +75,15 @@ in
     configuration = mkOption {
       internal = true;
       type = types.str;
-      description = ''
-        The NixOS module that <literal>nixos-generate-config</literal>
-        saves to <literal>/etc/nixos/configuration.nix</literal>.
+      description = lib.mdDoc ''
+        The NixOS module that `nixos-generate-config`
+        saves to `/etc/nixos/configuration.nix`.
 
         This is an internal option. No backward compatibility is guaranteed.
         Use at your own risk!
 
         Note that this string gets spliced into a Perl script. The perl
-        variable <literal>$bootLoaderConfig</literal> can be used to
+        variable `$bootLoaderConfig` can be used to
         splice in the boot loader configuration.
       '';
     };
@@ -92,15 +92,15 @@ in
       internal = true;
       type = types.listOf types.lines;
       default = [];
-      description = ''
-        Text to preseed the desktop configuration that <literal>nixos-generate-config</literal>
-        saves to <literal>/etc/nixos/configuration.nix</literal>.
+      description = lib.mdDoc ''
+        Text to preseed the desktop configuration that `nixos-generate-config`
+        saves to `/etc/nixos/configuration.nix`.
 
         This is an internal option. No backward compatibility is guaranteed.
         Use at your own risk!
 
         Note that this string gets spliced into a Perl script. The perl
-        variable <literal>$bootLoaderConfig</literal> can be used to
+        variable `$bootLoaderConfig` can be used to
         splice in the boot loader configuration.
       '';
     };
@@ -110,7 +110,7 @@ in
     internal = true;
     type = types.bool;
     default = false;
-    description = ''
+    description = lib.mdDoc ''
       Disable nixos-rebuild, nixos-generate-config, nixos-installer
       and other NixOS tools. This is useful to shrink embedded,
       read-only systems which are not expected to be rebuild or
