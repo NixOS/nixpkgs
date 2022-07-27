@@ -49,42 +49,42 @@ in
     nixos.version = mkOption {
       internal = true;
       type = types.str;
-      description = "The full NixOS version (e.g. <literal>16.03.1160.f2d4ee1</literal>).";
+      description = lib.mdDoc "The full NixOS version (e.g. `16.03.1160.f2d4ee1`).";
     };
 
     nixos.release = mkOption {
       readOnly = true;
       type = types.str;
       default = trivial.release;
-      description = "The NixOS release (e.g. <literal>16.03</literal>).";
+      description = lib.mdDoc "The NixOS release (e.g. `16.03`).";
     };
 
     nixos.versionSuffix = mkOption {
       internal = true;
       type = types.str;
       default = trivial.versionSuffix;
-      description = "The NixOS version suffix (e.g. <literal>1160.f2d4ee1</literal>).";
+      description = lib.mdDoc "The NixOS version suffix (e.g. `1160.f2d4ee1`).";
     };
 
     nixos.revision = mkOption {
       internal = true;
       type = types.nullOr types.str;
       default = trivial.revisionWithDefault null;
-      description = "The Git revision from which this NixOS configuration was built.";
+      description = lib.mdDoc "The Git revision from which this NixOS configuration was built.";
     };
 
     nixos.codeName = mkOption {
       readOnly = true;
       type = types.str;
       default = trivial.codeName;
-      description = "The NixOS release code name (e.g. <literal>Emu</literal>).";
+      description = lib.mdDoc "The NixOS release code name (e.g. `Emu`).";
     };
 
     stateVersion = mkOption {
       type = types.str;
       default = cfg.release;
       defaultText = literalExpression "config.${opt.release}";
-      description = ''
+      description = lib.mdDoc ''
         Every once in a while, a new NixOS release may change
         configuration defaults in a way incompatible with stateful
         data. For instance, if the default version of PostgreSQL
@@ -108,13 +108,13 @@ in
       internal = true;
       type = types.str;
       default = "https://nixos.org/channels/nixos-unstable";
-      description = "Default NixOS channel to which the root user is subscribed.";
+      description = lib.mdDoc "Default NixOS channel to which the root user is subscribed.";
     };
 
     configurationRevision = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = "The Git revision of the top-level flake from which this configuration was built.";
+      description = lib.mdDoc "The Git revision of the top-level flake from which this configuration was built.";
     };
 
   };
