@@ -76,6 +76,8 @@ buildPythonPackage rec {
     "tests/test_streaming.py"
     # testserver tests require being in a very specific working directory to make it work
     "tests/testserver_tests/"
+    # requires missing pytest plugin
+    "tests/async_tests/test_rest_asyncio_transport.py"
   ];
 
   meta = with lib; {

@@ -127,13 +127,13 @@ assert withCryptsetup -> (cryptsetup != null);
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "250.4";
+  version = "251.3";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
   #  $ curl -s https://api.github.com/repos/systemd/systemd/releases/latest | \
   #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
-  releaseTimestamp = "1640290180";
+  releaseTimestamp = "1653143108";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -144,7 +144,7 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    sha256 = "sha256-AdzPh7dGVrGbbjL9+PqytQOpRzNDUUEftmKZAbFH3L4=";
+    sha256 = "sha256-vcj+k/duRID2R+wGQIyq+dVRrFYNQTsjHya6k0hmZxk=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
@@ -163,28 +163,13 @@ stdenv.mkDerivation {
     ./0009-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
     ./0010-localectl-use-etc-X11-xkb-for-list-x11.patch
     ./0011-build-don-t-create-statedir-and-don-t-touch-prefixdi.patch
-    ./0012-inherit-systemd-environment-when-calling-generators.patch
-    ./0013-add-rootprefix-to-lookup-dir-paths.patch
-    ./0014-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
-    ./0015-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
-    ./0016-kmod-static-nodes.service-Update-ConditionFileNotEmp.patch
-    ./0017-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
-    ./0018-pkg-config-derive-prefix-from-prefix.patch
-
-    # In v248 or v249 we started to get in trouble due to our
-    # /etc/systemd/system being a symlink and thus being treated differently by
-    # systemd. With the below patch we mitigate that effect by special casing
-    # all our root unit dirs if they are symlinks. This does exactly what we
-    # need (AFAICT).
-    # See https://github.com/systemd/systemd/pull/20479 for upstream discussion.
-    ./0019-core-handle-lookup-paths-being-symlinks.patch
-
-    # fixes reproducability of dbus xml files
-    # Should no longer be necessary with v251.
-    (fetchpatch {
-      url = "https://github.com/systemd/systemd/pull/22174.patch";
-      sha256 = "sha256-RVhxUEUiISgRlIP/AhU+w1VHfDQw2W16cFl2TXXyxno=";
-    })
+    ./0012-add-rootprefix-to-lookup-dir-paths.patch
+    ./0013-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
+    ./0014-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
+    ./0015-kmod-static-nodes.service-Update-ConditionFileNotEmp.patch
+    ./0016-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
+    ./0017-pkg-config-derive-prefix-from-prefix.patch
+    ./0018-inherit-systemd-environment-when-calling-generators.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
@@ -226,8 +211,8 @@ stdenv.mkDerivation {
     substituteInPlace src/basic/path-util.h --replace "@defaultPathNormal@" "${placeholder "out"}/bin/"
     substituteInPlace src/boot/efi/meson.build \
       --replace \
-      "find_program('objcopy'" \
-      "find_program('${stdenv.cc.bintools.targetPrefix}objcopy'"
+      "run_command(cc.cmd_array(), '-print-prog-name=objcopy', check: true).stdout().strip()" \
+      "'${stdenv.cc.bintools.targetPrefix}objcopy'"
   '' + (
     let
       # The following patches references to dynamic libraries to ensure that
@@ -547,6 +532,7 @@ stdenv.mkDerivation {
             "src/analyze/test-verify.c"
             "src/test/test-env-file.c"
             "src/test/test-fileio.c"
+            "src/test/test-load-fragment.c"
           ];
         }
         {
@@ -573,29 +559,39 @@ stdenv.mkDerivation {
           replacement = "\\\"${gnutar}/bin/tar\\\"";
           where = [
             "src/import/export-tar.c"
-            "src/import/export.c"
             "src/import/import-common.c"
             "src/import/import-tar.c"
+          ];
+          ignore = [
+            # occurences here refer to the tar sub command
+            "src/sysupdate/sysupdate-resource.c"
+            "src/sysupdate/sysupdate-transfer.c"
+            "src/import/pull.c"
+            "src/import/export.c"
             "src/import/import.c"
             "src/import/importd.c"
+            # runs `tar` but also also creates a temporary directory with the string
             "src/import/pull-tar.c"
-            "src/import/pull.c"
           ];
         }
       ];
 
       # { replacement, search, where } -> List[str]
-      mkSubstitute = { replacement, search, where }:
+      mkSubstitute = { replacement, search, where, ignore ? [] }:
         map (path: "substituteInPlace ${path} --replace '${search}' \"${replacement}\"") where;
-      mkEnsureSubstituted = { replacement, search, where }:
-        ''
-          if [[ $(grep -r '${search}' | grep -v "${replacement}" | grep -Ev 'NEWS|^test/' | wc -l) -gt 0 ]]; then
-            echo "Not all references to '${search}' have been replaced. Found the following matches:"
-            grep '${search}' -r | grep -v "${replacement}" | grep -Ev 'NEWS|^test/'
-            exit 1
-          fi
-        '';
-
+      mkEnsureSubstituted = { replacement, search, where, ignore ? [] }:
+      let
+        ignore' = lib.concatStringsSep "|" (ignore ++ ["^test" "NEWS"]);
+      in ''
+        set +e
+        search=$(grep '${search}' -r | grep -v "${replacement}" | grep -Ev "${ignore'}")
+        set -e
+        if [[ -n "$search" ]]; then
+          echo "Not all references to '${search}' have been replaced. Found the following matches:"
+          echo "$search"
+          exit 1
+        fi
+      '';
     in
     ''
       mesonFlagsArray+=(-Dntp-servers="0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
@@ -606,6 +602,9 @@ stdenv.mkDerivation {
 
       substituteInPlace src/libsystemd/sd-journal/catalog.c \
         --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
+
+      substituteInPlace src/import/pull-tar.c \
+        --replace 'wait_for_terminate_and_check("tar"' 'wait_for_terminate_and_check("${gnutar}/bin/tar"'
     '';
 
   # These defines are overridden by CFLAGS and would trigger annoying

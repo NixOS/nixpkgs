@@ -69,7 +69,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.54";
+    version = "0.3.56";
 
     outputs = [
       "out"
@@ -87,7 +87,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-EFkx/K5v4f7clFguiU1xFt9VacSHeVksRye73rOjPPI=";
+      sha256 = "sha256-wbHHr7BW8Gdj9D1IjzOuD6VuXApJ5E0Zde2iKWImzxg=";
     };
 
     patches = [
@@ -150,6 +150,7 @@ let
       "-Dinstalled_test_prefix=${placeholder "installedTests"}"
       "-Dpipewire_pulse_prefix=${placeholder "pulse"}"
       "-Dlibjack-path=${placeholder "jack"}/lib"
+      "-Dlibv4l2-path=${placeholder "out"}/lib"
       "-Dlibcamera=${mesonEnableFeature libcameraSupport}"
       "-Droc=${mesonEnableFeature rocSupport}"
       "-Dlibpulse=${mesonEnableFeature pulseTunnelSupport}"

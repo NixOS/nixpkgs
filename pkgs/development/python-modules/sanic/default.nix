@@ -107,6 +107,9 @@ buildPythonPackage rec {
     "test_keep_alive_client_timeout"
     "test_keep_alive_server_timeout"
     "test_zero_downtime"
+    # broke with ujson 5.4 upgrade
+    # https://github.com/sanic-org/sanic/pull/2504
+    "test_json_response_json"
   ];
 
   disabledTestPaths = [

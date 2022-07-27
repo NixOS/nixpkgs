@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "pytomorrowio";
-  version = "0.3.3";
+  version = "0.3.4";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0d4f81dc90aefa26da18b927473cb7b08b093f7732301983ef5f0b1ca1181c62";
+    sha256 = "sha256-d4twa9bHaQ9XTHSb8pwJnnJ7tDH6vGpck3/8Y39tRaY=";
   };
 
   propagatedBuildInputs = [

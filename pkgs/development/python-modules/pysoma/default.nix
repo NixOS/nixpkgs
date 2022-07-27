@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "pysoma";
-  version = "0.0.10";
+  version = "0.0.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1q8afi6m3mfh0rfpghyvx6z76kgrpkbnlqzbs4p8ax13n0fnlkdi";
+    sha256 = "sha256-U/kLaO/GBpOa9mHHlYQiWSw7sVNPaMneDURoJBqqojo=";
   };
 
   # Project has no test

@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "imdbpy";
-  version = "2021.4.18";
+  version = "2022.7.9";
 
   src = fetchPypi {
     pname = "IMDbPY";
     inherit version;
-    sha256 = "af57f03638ba3b8ab3d696bfef0eeaf6414385c85f09260aba0a16b32174853f";
+    sha256 = "sha256-gKXt+KhxE/8ipE0A/XbUIsQs/uzU6oIL4zdTuPJL9OY=";
   };
 
   propagatedBuildInputs = [

@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "papis";
-  version = "0.11.1";
+  version = "0.12";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "papis";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-hlokGoXBhxkAMbqohztZEWlPBSSAUIAGuHtrF7iXcy0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-WKsU/5LXqXiFpWyTZGpvZn4lyANPosbvuhYH3opbBRs=";
   };
 
   propagatedBuildInputs = [

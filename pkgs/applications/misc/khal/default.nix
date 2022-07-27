@@ -27,11 +27,6 @@ with python3.pkgs; buildPythonApplication rec {
     freezegun
   ];
   nativeBuildInputs = [ setuptools-scm sphinx sphinxcontrib_newsfeed installShellFiles ];
-  checkInputs = [
-    glibcLocales
-    pytestCheckHook
-  ];
-  LC_ALL = "en_US.UTF-8";
 
   postInstall = ''
     # shell completions
@@ -50,6 +45,18 @@ with python3.pkgs; buildPythonApplication rec {
   '';
 
   doCheck = !stdenv.isAarch64;
+
+  checkInputs = [
+    glibcLocales
+    pytestCheckHook
+  ];
+
+  LC_ALL = "en_US.UTF-8";
+
+  disabledTests = [
+    # timing based
+    "test_etag"
+  ];
 
   meta = with lib; {
     broken = stdenv.isDarwin;

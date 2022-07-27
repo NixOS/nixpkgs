@@ -104,6 +104,9 @@ buildPythonPackage rec {
     # twisted.python.runtime.platform.supportsINotify() == False
     substituteInPlace src/twisted/python/_inotify.py --replace \
       "ctypes.util.find_library(\"c\")" "'${stdenv.cc.libc}/lib/libc.so.6'"
+  '' + lib.optionalString (stdenv.isAarch64 && stdenv.isDarwin) ''
+    echo 'AbortConnectionTests_AsyncioSelectorReactorTests.test_fullWriteBufferAfterByteExchange.skip = "Timeout after 120 seconds"' >> src/twisted/internet/test/test_tcp.py
+    echo 'AbortConnectionTests_AsyncioSelectorReactorTests.test_resumeProducingAbort.skip = "Timeout after 120 seconds"' >> src/twisted/internet/test/test_tcp.py
   '';
 
   # Generate Twisted's plug-in cache. Twisted users must do it as well. See

@@ -20,13 +20,13 @@
 
 buildPythonPackage rec {
   pname = "django-haystack";
-  version = "3.1.1";
+  version = "3.2.1";
   format = "setuptools";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6d05756b95d7d5ec1dbd4668eb999ced1504b47f588e2e54be53b1404c516a82";
+    sha256 = "sha256-l+MZeu/CJf5AW28XYAolNL+CfLTWdDEwwgvBoG9yk6Q=";
   };
 
   postPatch = ''

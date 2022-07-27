@@ -26,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-jcokiAZ2WwyIvsXNIUzvMIrRttR76RwDSE7gk0xHExc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-jcokiAZ2WwyIvsXNIUzvMIrRttR76RwDSE7gk0xHExc=";
   };
 
   patches = [

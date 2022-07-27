@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-boost=${boost.out}"
-    "--with-bash-completion=${placeholder "out"}/share/bash_completion.d"
+    "--with-bash-completion=${placeholder "out"}/share/bash-completion/completions"
   ];
 
   doCheck = true;

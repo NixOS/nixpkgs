@@ -46,7 +46,8 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "pyOpenSSL>=16.2.0,<23.0.0" "pyOpenSSL" \
-      --replace "cryptography>=3.1.0,<37.0.0" "cryptography"
+      --replace "cryptography>=3.1.0,<37.0.0" "cryptography" \
+      --replace "charset-normalizer~=2.0.0" "charset_normalizer>=2"
   '';
 
   # Tests require encrypted secrets, see

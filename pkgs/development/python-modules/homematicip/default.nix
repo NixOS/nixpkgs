@@ -45,6 +45,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
+  ];
+
   disabledTests = [
     # Assert issues with datetime
     "test_contact_interface_device"

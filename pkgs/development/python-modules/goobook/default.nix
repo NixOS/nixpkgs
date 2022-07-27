@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "goobook";
-  version = "3.5.1";
+  version = "3.5.2";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6e69aeaf69112d116302f0c42ca1904f3b6efd17f15cefc12c866206160293be";
+    sha256 = "sha256-i24Hh10iXFUiWVgokMs7f8ZpIVN/ZEF421tfa2ByQ4c=";
   };
 
   nativeBuildInputs = [ docutils installShellFiles ];

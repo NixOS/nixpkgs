@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
     pname = "django_compressor";
-    version = "3.1";
+    version = "4.0";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "c4a87bf65f9a534cfaf1c321a000a229c24e50c6d62ba6ab089482db42e819d9";
+      sha256 = "sha256-HbkbbQQpNjami9Eyjce7kNY2sClfZ7HMbU+hArn9JfY=";
     };
     postPatch = ''
       substituteInPlace setup.py \

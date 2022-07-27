@@ -10674,11 +10674,30 @@ let
 
   HTTPDaemon = buildPerlPackage {
     pname = "HTTP-Daemon";
-    version = "6.01";
+    version = "6.14";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GA/GAAS/HTTP-Daemon-6.01.tar.gz";
-      sha256 = "1hmd2isrkilf0q0nkxms1q64kikjmcw9imbvrjgky6kh89vqdza3";
+      url = "mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Daemon-6.14.tar.gz";
+      sha256 = "sha256-8HZ+fzy7gLITE8dh8HrY7SU7zp+i0LqAaz+3LTCbLh0=";
     };
+    patches = [
+      # Patches for CVE-2022-3108, from upstream pre 6.15
+      (fetchpatch {
+        url = "https://github.com/libwww-perl/HTTP-Daemon/commit/331d5c1d1f0e48e6b57ef738c2a8509b1eb53376.patch";
+        sha256 = "sha256-vRSyiO38jnsSeKeGbCnKi+VLaTqQSB349eybl1Wa8SQ=";
+        name = "HTTP-Daemon-CVE-2022-3108-pre.patch";
+      })
+      (fetchpatch {
+        url = "https://github.com/libwww-perl/HTTP-Daemon/commit/e84475de51d6fd7b29354a997413472a99db70b2.patch";
+        sha256 = "sha256-z8RXcbVEpjSZcm8dUZcDWYeQHtVZODOGCdcDTfXQpfA=";
+        name = "HTTP-Daemon-CVE-2022-3108-1.patch";
+      })
+      (fetchpatch {
+        url = "https://github.com/libwww-perl/HTTP-Daemon/commit/8dc5269d59e2d5d9eb1647d82c449ccd880f7fd0.patch";
+        sha256 = "sha256-e1lxt+AJGfbjNOZoKj696H2Ftkx9wlTF557WkZCLE5Q=";
+        name = "HTTP-Daemon-CVE-2022-3108-2.patch";
+      })
+    ];
+    buildInputs = [ ModuleBuildTiny TestNeeds ];
     propagatedBuildInputs = [ HTTPMessage ];
     meta = {
       description = "A simple http server class";

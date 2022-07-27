@@ -2,6 +2,7 @@
 , lib
 , buildPythonPackage
 , fetchPypi
+, hatchling
 , jsonschema
 , pythonOlder
 , requests
@@ -10,6 +11,7 @@
 , babel
 , jupyter_server
 , openapi-core
+, pytest-timeout
 , pytest-tornasync
 , ruamel-yaml
 , strict-rfc3339
@@ -17,12 +19,13 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab_server";
-  version = "2.12.0";
+  version = "2.15.0";
+  format = "pyproject";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-AOD0tMOZ9Vk4Mj6hDPktkVKI/hJ1PjXRBp9soItyq78=";
+    sha256 = "sha256-qRxRXg55caj3w8mDS3SIV/faxQL5NgS/KDmHmR/Zh+8=";
   };
 
   postPatch = ''
@@ -33,11 +36,16 @@ buildPythonPackage rec {
     rm -r tests/translations/
   '';
 
+  nativeBuildInputs = [
+    hatchling
+  ];
+
   propagatedBuildInputs = [ requests jsonschema pyjson5 babel jupyter_server ];
 
   checkInputs = [
     openapi-core
     pytestCheckHook
+    pytest-timeout
     pytest-tornasync
     ruamel-yaml
   ];
@@ -45,6 +53,11 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
+
+  pytestFlagsArray = [
+    # DeprecationWarning: The distutils package is deprecated and slated for removal in Python 3.12. Use setuptools or check PEP 632 for potential alternatives
+    "-W ignore::DeprecationWarning"
+  ];
 
   __darwinAllowLocalNetworking = true;
 

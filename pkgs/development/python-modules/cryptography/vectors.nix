@@ -8,7 +8,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "cryptography_vectors";
     inherit version;
-    sha256 = "sha256-fGXT3lF1b0GBQt9gVBfsLG6WHDZPcMyKEDAwiJ1aMhk=";
+    hash = "sha256-WmFABRDiiTelZUtAxupOPlk8Wq8MIIHFuRLw58+IPqg=";
   };
 
   # No tests included

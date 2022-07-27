@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "pymanopt";
-  version = "0.2.5";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "0zk775v281375sangc5qkwrkb8yc9wx1g8b1917s4s8wszzkp8k6";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-dqyduExNgXIbEFlgkckaPfhLFSVLqPgwAOyBUdowwiQ=";
   };
 
   propagatedBuildInputs = [ numpy scipy ];

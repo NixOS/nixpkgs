@@ -27,16 +27,15 @@
 let
   inherit (lib) optional optionals optionalString;
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "graphviz";
-  version = "3.0.0";
+  version = "5.0.0";
 
   src = fetchFromGitLab {
     owner = "graphviz";
     repo = "graphviz";
-    # use rev as tags have disappeared before
-    rev = "24cf7232bb8728823466e0ef536862013893e567";
-    sha256 = "sha256-qqrpCJ9WP8wadupp4YRJMMaSCeFIDuFDQvEOpbG/wGM=";
+    rev = version;
+    sha256 = "sha256-vDqVJJg2ezYGZPp7UtpvWfCypLBqRrr0aPMSyEN+IQo=";
   };
 
   nativeBuildInputs = [
@@ -88,7 +87,6 @@ stdenv.mkDerivation {
   preAutoreconf = "./autogen.sh";
 
   postFixup = optionalString withXorg ''
-    substituteInPlace $out/bin/dotty --replace '`which lefty`' $out/bin/lefty
     substituteInPlace $out/bin/vimdot \
       --replace '"/usr/bin/vi"' '"$(command -v vi)"' \
       --replace '"/usr/bin/vim"' '"$(command -v vim)"' \

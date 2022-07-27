@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "cypherpunkpay";
-  version = "1.0.15";
+  version = "1.0.16";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "CypherpunkPay";
     repo = "CypherpunkPay";
-    rev = "v${version}";
-    sha256 = "sha256-W2f4jtEqopDXiXx0pklZrjOmVhpx2kDdTJRPm2Ka0Cg=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-X0DB0PVwR0gRnt3jixFzglWAOPKBMvqTOG6pK6OJ03w=";
   };
 
   postPatch = ''

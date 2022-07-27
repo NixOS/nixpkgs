@@ -25,26 +25,27 @@
 , json-glib
 , systemd
 , dbus
+, writeText
 }:
 
 stdenv.mkDerivation rec {
   pname = "tracker";
-  version = "3.3.1";
+  version = "3.3.2";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Wtb1vJd4Hr9V7NaUfNSuf/QZJRZYDRC9g4Dx3UcZbtI=";
+    sha256 = "DtK5iRiVbW8WQpxgfdihTIT02gpIlw/S64yTq6PPmRM=";
   };
-
-  patches = [
-    ./fix-test-order.patch
-  ];
 
   postPatch = ''
     patchShebangs utils/data-generators/cc/generate
   '';
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     meson
@@ -58,13 +59,11 @@ stdenv.mkDerivation rec {
     gobject-introspection
     docbook-xsl-nons
     docbook_xml_dtd_45
-    python3 # for data-generators
-    systemd # used for checks to install systemd user service
-    dbus # used for checks and pkg-config to install dbus service/s
-  ] ++ checkInputs; # gi is in the main meson.build and checked regardless of
-                    # whether tests are enabled
+    (python3.pythonForBuild.withPackages (p: [ p.pygobject3 ]))
+  ];
 
   buildInputs = [
+    gobject-introspection
     glib
     libxml2
     sqlite
@@ -74,15 +73,24 @@ stdenv.mkDerivation rec {
     libuuid
     json-glib
     libstemmer
-  ];
-
-  checkInputs = with python3.pkgs; [
-    pygobject3
+    dbus
+    systemd
   ];
 
   mesonFlags = [
     "-Ddocs=true"
-  ];
+  ] ++ (
+    let
+      # https://gitlab.gnome.org/GNOME/tracker/-/blob/master/meson.build#L159
+      crossFile = writeText "cross-file.conf" ''
+        [properties]
+        sqlite3_has_fts5 = '${lib.boolToString (lib.hasInfix "-DSQLITE_ENABLE_FTS3" sqlite.NIX_CFLAGS_COMPILE)}'
+      '';
+    in
+    [
+      "--cross-file=${crossFile}"
+    ]
+  );
 
   doCheck = true;
 

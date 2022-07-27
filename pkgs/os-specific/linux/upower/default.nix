@@ -64,6 +64,8 @@ stdenv.mkDerivation rec {
     libusb1
     udev
     systemd
+    # Duplicate from checkInputs until https://github.com/NixOS/nixpkgs/issues/161570 is solved
+    umockdev
   ] ++ lib.optionals useIMobileDevice [
     libimobiledevice
   ];
