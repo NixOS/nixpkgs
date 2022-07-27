@@ -1,8 +1,11 @@
 { lib
 , stdenv
 , fetchurl
-, jre
+, autoPatchelfHook
 , makeWrapper
+, libclang
+, jre
+, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +33,10 @@ stdenv.mkDerivation rec {
       hash = getHash getArch;
     };
 
+  buildInputs = [ libclang stdenv.cc.cc.lib zlib ];
+
   nativeBuildInputs = [
+    autoPatchelfHook
     jre
     makeWrapper
   ];
@@ -38,9 +44,12 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out
+    mkdir -p $out/bin
+    mkdir -p $out/lib/kotlin-native
     rm bin/kotlinc
-    mv * $out
+    mv bin/* $out/bin/
+    rmdir bin
+    mv *     $out/lib/kotlin-native/
 
     runHook postInstall
   '';
