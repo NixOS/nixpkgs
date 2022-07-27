@@ -47,7 +47,7 @@ mkYarnPackage rec {
     done
     popd
 
-    makeWrapper ${electron}/bin/electron $out/bin/vieb \
+    makeWrapper ${electron.exec} $out/bin/vieb \
       --add-flags $out/libexec/vieb/node_modules/vieb/app
   '';
 
