@@ -224,10 +224,12 @@ in
         };
 
         package = mkOption {
+          type = types.package;
           default = pkgs.restic;
           defaultText = literalExpression "pkgs.restic";
-          type = types.package;
-          description = "Restic package to use.";
+          description = ''
+            Restic package to use.
+          '';
         };
       };
     }));
