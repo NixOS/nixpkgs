@@ -16,6 +16,11 @@ let chia = python3Packages.buildPythonApplication rec {
     hash = "sha256-OlaAnUy16QBff81XMoYQaZA0wKnsr+/3XEQLBP8IMug=";
   };
 
+  patches = [
+    # chia tries to put lock files in the python modules directory
+    ./dont_lock_in_store.patch
+  ];
+
   postPatch = ''
     substituteInPlace setup.py \
       --replace "==" ">="
