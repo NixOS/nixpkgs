@@ -39,7 +39,7 @@ in stdenvNoCC.mkDerivation rec {
     cat > $out/bin/hyper-haskell <<EOF
     #!${runtimeShell}
     export PATH="${binPath}:\$PATH"
-    exec ${electron}/bin/electron $out/app "\$@"
+    exec ${electron.exec} $out/app "\$@"
     EOF
     chmod 755 $out/bin/hyper-haskell
   '';
