@@ -13672,6 +13672,8 @@ with pkgs;
 
   oraclejdk14 = callPackage ../development/compilers/oraclejdk/jdk14-linux.nix { };
 
+  oraclejdk17 = callPackage ../development/compilers/oraclejdk/jdk17-linux.nix { };
+
   jasmin = callPackage ../development/compilers/jasmin { };
 
   java-service-wrapper = callPackage ../tools/system/java-service-wrapper {
