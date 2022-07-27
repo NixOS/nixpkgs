@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "vallox-websocket-api";
-  version = "2.11.0";
+  version = "2.12.0";
 
   disabled = pythonOlder "3.6";
 
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "yozik04";
     repo = "vallox_websocket_api";
-    rev = version;
-    hash = "sha256-wZiPrPl9ESp43PFdRPvqB2nOg+ogfaArunZOR3Q9cvs=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Ibp+oAd6q8Vu9V+TaLzlPbWIDheFUjCyW83Hg4Ztw20=";
   };
 
   propagatedBuildInputs = [
