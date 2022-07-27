@@ -948,6 +948,10 @@ self: super: builtins.intersectAttrs super {
     ] ++ (drv.patches or []);
   }) super.graphviz;
 
+  # Test suite requires AWS access which requires both a network
+  # connection and payment.
+  aws = dontCheck super.aws;
+
   # Test case tries to contact the network
   http-api-data-qq = overrideCabal (drv: {
     testFlags = [

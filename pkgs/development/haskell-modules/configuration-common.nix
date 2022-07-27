@@ -2404,23 +2404,6 @@ self: super: {
   # https://github.com/system-f/validation/issues/57
   validation = doJailbreak super.validation;
 
-  # aws upstream seems to lack the necessary maintenance at the moment, luckily
-  # Joey Hess seems to have already looked into building git-annex with aeson 2.0
-  # https://github.com/aristidb/aws/issues/275
-  aws = overrideCabal (drv: {
-    patches = drv.patches or [] ++ [
-      (fetchpatch {
-        name = "aws-aeson-2.0-compat.patch";
-        url = "https://github.com/aristidb/aws/pull/277/commits/7af7586c5d244d07f77d49e5fdc739e6e8e54816.patch";
-        sha256 = "1bsiyk1k671rwlyflka2whq972h72cwscrxkr9n2wzhxp70ap3g3";
-        excludes = [ "aws.cabal" ];
-      })
-    ];
-    # needs aws credentials, jailbreak for base16-bytestring
-    doCheck = false;
-    jailbreak = true;
-  }) super.aws;
-
   # 2022-03-16: strict upper bounds https://github.com/monadfix/shower/issues/18
   shower = doJailbreak (dontCheck super.shower);
 
