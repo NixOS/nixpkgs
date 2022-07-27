@@ -326,6 +326,7 @@ let
                 random
                 QuickCheck
                 cabal2nix
+                terminfo # isn't bundled for cross
                 xhtml # isn't bundled for cross
               ;
             };
@@ -337,6 +338,7 @@ let
                 random
                 QuickCheck
                 cabal2nix
+                terminfo # isn't bundled for cross
                 xhtml # isn't bundled for cross
               ;
             };

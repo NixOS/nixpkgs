@@ -489,6 +489,8 @@ in {
 
     xpadneo = callPackage ../os-specific/linux/xpadneo { };
 
+    ithc = callPackage ../os-specific/linux/ithc { };
+
     zenpower = callPackage ../os-specific/linux/zenpower { };
 
     inherit (callPackage ../os-specific/linux/zfs {
