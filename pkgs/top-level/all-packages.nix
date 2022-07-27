@@ -10032,6 +10032,8 @@ with pkgs;
 
   pympress = callPackage ../applications/office/pympress { };
 
+  pyocd = python3Packages.callPackage ../development/embedded/pyocd { };
+
   pyspread = libsForQt5.callPackage ../applications/office/pyspread { };
 
   teapot = callPackage ../applications/office/teapot { };
