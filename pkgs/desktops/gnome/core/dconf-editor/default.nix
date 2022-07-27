@@ -32,12 +32,6 @@ stdenv.mkDerivation rec {
     # Look for compiled schemas in NIX_GSETTINGS_OVERRIDES_DIR
     # environment variable, to match what we patched GLib to do.
     ./schema-override-variable.patch
-
-    # Fix build with Meson 0.61.0
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/dconf-editor/-/commit/56474378568e6ff4af8aa912810323e808c1d977.patch";
-      sha256 = "iFyJcskqcmvz7tp1Z9jM9f8WvAhD0L9Vx1hu2c402MA=";
-    })
   ];
 
   nativeBuildInputs = [
