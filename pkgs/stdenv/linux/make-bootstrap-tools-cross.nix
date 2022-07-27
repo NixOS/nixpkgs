@@ -23,6 +23,7 @@ in lib.mapAttrs (n: make) (with lib.systems.examples; {
   riscv64 = riscv64;
   mips64el-linux-gnuabin32 = mips64el-linux-gnuabin32;
   mips64el-linux-gnuabi64  = mips64el-linux-gnuabi64;
+  mipsel-linux-gnu         = mipsel-linux-gnu;
   powerpc64 = ppc64;
   powerpc64-musl = ppc64-musl;
   powerpc64le = powernv;
