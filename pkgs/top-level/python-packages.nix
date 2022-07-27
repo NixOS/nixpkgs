@@ -1914,6 +1914,8 @@ in {
 
   configargparse = callPackage ../development/python-modules/configargparse { };
 
+  configclass = callPackage ../development/python-modules/configclass { };
+
   configobj = callPackage ../development/python-modules/configobj { };
 
   configparser = callPackage ../development/python-modules/configparser { };
