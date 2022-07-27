@@ -72,7 +72,7 @@ let
     ++ optionals (versionAtLeast version "17.0.0") [ libglvnd ]
   );
 
-  linux = {
+  linux = finalAttrs: {
     buildInputs = [ glib gtk3 ];
 
     nativeBuildInputs = [
@@ -101,21 +101,23 @@ let
 
       wrapProgram $out/lib/electron/electron "''${gappsWrapperArgs[@]}"
     '';
+
+    passthru.exec = "${finalAttrs.finalPackage}/bin/electron";
   };
 
-  darwin = {
+  darwin = finalAttrs: {
     nativeBuildInputs = [ unzip ];
 
     buildCommand = ''
       mkdir -p $out/Applications
       unzip $src
       mv Electron.app $out/Applications
-      mkdir -p $out/bin
-      ln -s $out/Applications/Electron.app/Contents/MacOS/Electron $out/bin/electron
     '';
+
+    passthru.exec = "${finalAttrs.finalPackage}/Applications/Electron.app/Contents/MacOS/Electron";
   };
 in
-  stdenv.mkDerivation (
+  stdenv.mkDerivation (finalAttrs: (
     (common stdenv.hostPlatform) //
-    (if stdenv.isDarwin then darwin else linux)
-  )
+    (if stdenv.isDarwin then darwin else linux) finalAttrs
+  ))
