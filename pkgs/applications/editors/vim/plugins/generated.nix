@@ -7325,6 +7325,18 @@ final: prev:
     meta.homepage = "https://github.com/gbrlsnchs/telescope-lsp-handlers.nvim/";
   };
 
+  telescope-media-files-nvim = buildVimPluginFrom2Nix {
+    pname = "telescope-media-files.nvim";
+    version = "2021-10-21";
+    src = fetchFromGitHub {
+      owner = "nvim-telescope";
+      repo = "telescope-media-files.nvim";
+      rev = "513e4ee385edd72bf0b35a217b7e39f84b6fe93c";
+      sha256 = "1ap3ijh64ynyxzbc62ijfkbwasv506i17pc65bh3w4dfpzn6rlpy";
+    };
+    meta.homepage = "https://github.com/nvim-telescope/telescope-media-files.nvim/";
+  };
+
   telescope-project-nvim = buildVimPluginFrom2Nix {
     pname = "telescope-project.nvim";
     version = "2022-06-12";
