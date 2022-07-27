@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, openssl, libbsd, libuuid, libmd, zlib, ncurses }:
+{ lib, stdenv, fetchurl, pkg-config, openssl, libbsd, libuuid, libossp_uuid, libmd, zlib, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "got";
@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl libbsd libuuid libmd zlib ncurses ];
+  buildInputs = [ openssl libbsd libuuid libmd zlib ncurses ]
+  ++ lib.optionals stdenv.isDarwin [ libossp_uuid ];
 
   doInstallCheck = true;
 
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://gameoftrees.org";
     license = licenses.isc;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ abbe ];
   };
 }
