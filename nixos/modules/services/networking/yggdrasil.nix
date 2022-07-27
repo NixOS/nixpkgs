@@ -132,8 +132,9 @@ in {
 
     systemd.services.yggdrasil = {
       description = "Yggdrasil Network Service";
-      bindsTo = [ "network-online.target" ];
-      after = [ "network-online.target" ];
+      after = [ "network-pre.target" ];
+      wants = [ "network.target" ];
+      before = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
       preStart =
