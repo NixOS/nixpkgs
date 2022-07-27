@@ -67,7 +67,7 @@ import ./make-test-python.nix (
               inherit repository passwordFile paths;
               package = pkgs.writeShellScriptBin "restic" ''
                 echo "$@" >> /tmp/fake-restic.log;
-                '';
+              '';
             };
           };
 
