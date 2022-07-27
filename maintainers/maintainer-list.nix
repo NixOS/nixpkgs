@@ -9890,6 +9890,12 @@
       fingerprint = "196A BFEC 6A1D D1EC 7594  F8D1 F625 47D0 75E0 9767";
     }];
   };
+  patryk4815 = {
+    email = "patryk.sondej@gmail.com";
+    github = "patryk4815";
+    githubId = 3074260;
+    name = "Patryk Sondej";
+  };
   patternspandemic = {
     email = "patternspandemic@live.com";
     github = "patternspandemic";
@@ -12713,6 +12719,16 @@
     github = "teto";
     githubId = 886074;
     name = "Matthieu Coudron";
+  };
+  teutat3s = {
+    email = "teutates@mailbox.org";
+    matrix = "@teutat3s:pub.solar";
+    github = "teutat3s";
+    githubId = 10206665;
+    name = "teutat3s";
+    keys = [{
+      fingerprint = "81A1 1C61 F413 8C84 9139  A4FA 18DA E600 A6BB E705";
+    }];
   };
   tex = {
     email = "milan.svoboda@centrum.cz";

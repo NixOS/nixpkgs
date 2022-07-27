@@ -34,11 +34,16 @@ let
         mktplcRef = {
           publisher = "1Password";
           name = "op-vscode";
-          version = "1.0.0";
-          sha256 = "sha256-ZeKTP3WKjyuR/ryBdJRHXJT+l2gbY4QnWNTsN9+4nOA=";
+          version = "1.0.1";
+          sha256 = "sha256-0SsHf1zZgmrb7oIsRU6Xpa3AvR8bSfANz5ZlRogjiS0=";
         };
-        meta = {
-          license = lib.licenses.mit;
+        meta = with lib; {
+          changelog = "https://github.com/1Password/op-vscode/releases";
+          description = "A VSCode extension that integrates your development workflow with 1Password service";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=1Password.op-vscode";
+          homepage = "https://github.com/1Password/op-vscode";
+          license = licenses.mit;
+          maintainers = with maintainers; [ _2gn ];
         };
       };
 

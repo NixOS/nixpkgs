@@ -948,6 +948,10 @@ self: super: builtins.intersectAttrs super {
     ] ++ (drv.patches or []);
   }) super.graphviz;
 
+  # Test suite requires AWS access which requires both a network
+  # connection and payment.
+  aws = dontCheck super.aws;
+
   # Test case tries to contact the network
   http-api-data-qq = overrideCabal (drv: {
     testFlags = [
@@ -972,6 +976,13 @@ self: super: builtins.intersectAttrs super {
       install -Dm644 test/examples/*.jac -t "$docDir/examples"
     '';
   }) super.jacinda;
+
+  nfc = overrideCabal (drv: {
+    isExecutable = true;
+    executableHaskellDepends = with self; drv.executableHaskellDepends or [] ++ [ base base16-bytestring bytestring ];
+    configureFlags = drv.configureFlags or [] ++ [ "-fbuild-examples" ];
+    enableSeparateBinOutput = true;
+  }) super.nfc;
 
 # haskell-language-server plugins all use the same test harness so we give them what we want in this loop.
 } // pkgs.lib.mapAttrs

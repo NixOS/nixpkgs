@@ -543,6 +543,7 @@ broken-packages:
   - cabalgraph
   - cabal-graphdeps
   - cabal-helper
+  - cabal-hoogle
   - Cabal-ide-backend
   - cabal-info
   - cabal-install-bundle
@@ -1259,6 +1260,7 @@ broken-packages:
   - ebnf-bff
   - eccrypto
   - ecma262
+  - ecta
   - ecu
   - eddie
   - ede
@@ -1304,6 +1306,7 @@ broken-packages:
   - emailaddress
   - email-header
   - email-postmark
+  - embed-config
   - embla
   - emgm
   - Emping
@@ -1502,7 +1505,6 @@ broken-packages:
   - fix-symbols-gitit
   - fizzbuzz
   - fizzbuzz-as-a-service
-  - flac
   - flaccuraterip
   - flamethrower
   - flamingra
@@ -2867,6 +2869,7 @@ broken-packages:
   - koellner-phonetic
   - koneko
   - Konf
+  - konnakol
   - kontra-config
   - koofr-client
   - korea-holidays
@@ -3537,7 +3540,6 @@ broken-packages:
   - newtype-th
   - next-ref
   - nextstep-plist
-  - nfc
   - NGrams
   - niagra
   - nibblestring
@@ -4015,6 +4017,7 @@ broken-packages:
   - postgres-embedded
   - PostgreSQL
   - postgresql-lo-stream
+  - postgresql-ltree
   - postgresql-named
   - postgresql-query
   - postgresql-resilient
@@ -5492,6 +5495,7 @@ broken-packages:
   - validated-types
   - Validation
   - validations
+  - validity-network-uri
   - valid-names
   - value-supply
   - vampire
