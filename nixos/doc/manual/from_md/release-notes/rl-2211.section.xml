@@ -97,6 +97,11 @@
       </listitem>
       <listitem>
         <para>
+          Cinnamon has been updated to 5.4.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>hardware.nvidia</literal> has a new option
           <literal>open</literal> that can be used to opt in the
           opensource version of NVIDIA kernel driver. Note that the
