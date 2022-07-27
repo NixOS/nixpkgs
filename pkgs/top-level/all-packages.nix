@@ -25744,6 +25744,8 @@ with pkgs;
 
   fira-go = callPackage ../data/fonts/fira-go { };
 
+  fira-math = callPackage ../data/fonts/fira-math { };
+
   fira-mono = callPackage ../data/fonts/fira-mono { };
 
   flat-remix-icon-theme = callPackage ../data/icons/flat-remix-icon-theme {
