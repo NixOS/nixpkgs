@@ -4665,6 +4665,31 @@ final: prev:
     meta.homepage = "https://github.com/chentoast/marks.nvim/";
   };
 
+  mason-lspconfig-nvim = buildVimPluginFrom2Nix {
+    pname = "mason-lspconfig.nvim";
+    version = "2022-07-25";
+    src = fetchFromGitHub {
+      owner = "williamboman";
+      repo = "mason-lspconfig.nvim";
+      rev = "ad3b109cff22af979ab3d15564cd63dc3ae2f0f0";
+      sha256 = "0jvnc9zlr5cazdrhjm1v0bjkrz5lb2z8dzlkq59b433f52qv9zrf";
+    };
+    meta.homepage = "https://github.com/williamboman/mason-lspconfig.nvim/";
+  };
+
+  mason-tool-installer-nvim = buildVimPluginFrom2Nix {
+    pname = "mason-tool-installer.nvim";
+    version = "2022-07-26";
+    src = fetchFromGitHub {
+      owner = "WhoIsSethDaniel";
+      repo = "mason-tool-installer.nvim";
+      rev = "6d9276655c09ef2358ddb105cac4a34cfa8853c0";
+      sha256 = "0j5k9fhjffkx3b5asnwxzj22fvncs69vs0rkx13ii3gdvwczbc5w";
+    };
+    meta.homepage = "https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim/";
+  };
+
+
   mason-nvim = buildVimPluginFrom2Nix {
     pname = "mason.nvim";
     version = "2022-07-27";
