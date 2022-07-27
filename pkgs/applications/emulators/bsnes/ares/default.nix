@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ares";
-  version = "128";
+  version = "129";
 
   src = fetchFromGitHub {
     owner = "ares-emulator";
     repo = "ares";
     rev = "v${version}";
-    sha256 = "sha256-Ojf1kyColBK0S3DwXjGaAZSl0ljhgiXkfKC11BL2fEc=";
+    sha256 = "sha256-prfvoGtbnsl/1ahx98jBOgT64W566GoUtE8rIOF7lYc=";
   };
 
   patches = [
