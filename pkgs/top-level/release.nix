@@ -167,7 +167,9 @@ let
           (system: {
             inherit
               (import ../stdenv/linux/make-bootstrap-tools.nix {
-                localSystem = { inherit system; };
+                pkgs = import ../.. {
+                  localSystem = { inherit system; };
+                };
               })
               dist test;
           })
@@ -175,7 +177,9 @@ let
         // optionalAttrs supportDarwin.x86_64 {
           x86_64-darwin =
             let
-              bootstrap = import ../stdenv/darwin/make-bootstrap-tools.nix { system = "x86_64-darwin"; };
+              bootstrap = import ../stdenv/darwin/make-bootstrap-tools.nix {
+                localSystem = { system = "x86_64-darwin"; };
+              };
             in {
               # Lightweight distribution and test
               inherit (bootstrap) dist test;
@@ -186,7 +190,10 @@ let
           # Cross compiled bootstrap tools
           aarch64-darwin =
             let
-              bootstrap = import ../stdenv/darwin/make-bootstrap-tools.nix { system = "x86_64-darwin"; crossSystem = "aarch64-darwin"; };
+              bootstrap = import ../stdenv/darwin/make-bootstrap-tools.nix {
+                localSystem = { system = "x86_64-darwin"; };
+                crossSystem = { system = "aarch64-darwin"; };
+              };
             in {
               # Distribution only for now
               inherit (bootstrap) dist;
