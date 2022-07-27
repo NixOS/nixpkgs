@@ -1,4 +1,8 @@
 {
+    "TrueZen-nvim": {
+        "date": "2022-07-27",
+        "new": "true-zen-nvim"
+    },
     "compe-tmux": {
         "date": "2021-12-21",
         "new": "cmp-tmux"
