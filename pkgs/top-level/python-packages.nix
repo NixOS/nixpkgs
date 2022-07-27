@@ -5473,6 +5473,8 @@ in {
 
   mergedeep = callPackage ../development/python-modules/mergedeep { };
 
+  mergedict = callPackage ../development/python-modules/mergedict { };
+
   merkletools = callPackage ../development/python-modules/merkletools { };
 
   meross-iot = callPackage ../development/python-modules/meross-iot { };
