@@ -10293,6 +10293,8 @@ in {
 
   spotipy = callPackage ../development/python-modules/spotipy { };
 
+  spsdk = callPackage ../development/python-modules/spsdk { };
+
   spur = callPackage ../development/python-modules/spur { };
 
   spyder = callPackage ../development/python-modules/spyder { };
