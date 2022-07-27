@@ -4665,6 +4665,18 @@ final: prev:
     meta.homepage = "https://github.com/chentoast/marks.nvim/";
   };
 
+  mason-nvim = buildVimPluginFrom2Nix {
+    pname = "mason.nvim";
+    version = "2022-07-27";
+    src = fetchFromGitHub {
+      owner = "williamboman";
+      repo = "mason.nvim";
+      rev = "269ee222f76e705619da2c0130c0a06e76419b88";
+      sha256 = "1bngr68gfv33p989dqhz6xmhips7i2yjni96qgnqwhdjczfw865v";
+    };
+    meta.homepage = "https://github.com/williamboman/mason.nvim/";
+  };
+
   matchit-zip = buildVimPluginFrom2Nix {
     pname = "matchit.zip";
     version = "2010-10-18";
