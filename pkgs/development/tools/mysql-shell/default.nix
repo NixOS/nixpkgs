@@ -40,16 +40,16 @@ let
 in
 stdenv.mkDerivation rec{
   pname = "mysql-shell";
-  version = "8.0.29";
+  version = "8.0.30";
 
   srcs = [
     (fetchurl {
       url = "https://cdn.mysql.com//Downloads/MySQL-Shell/mysql-shell-${version}-src.tar.gz";
-      sha256 = "sha256-ijwyamQgMoUEcMNpIJjJxH/dRuRFpdcXGmQqpD+WrmA=";
+      sha256 = "sha256-/UJgcYkPG8RShZzybqdcMQDpNUTVWAfAa2p0Cm23fXA=";
     })
     (fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor version}/mysql-${version}.tar.gz";
-      sha256 = "sha256-USFw+m94ppTW8Y0ZfpmdJxbuaNxUHXZE3ZIqNmNAcmY=";
+      sha256 = "sha256-yYjVxrqaVmkqbNbpgTRltfyTaO1LRh35cFmi/BYMi4Q=";
     })
   ];
 
@@ -95,9 +95,6 @@ stdenv.mkDerivation rec{
       -DFORCE_UNSUPPORTED_COMPILER=1 -S ../mysql-${version} -B ../mysql-${version}/build
 
     cmake --build ../mysql-${version}/build --parallel ''${NIX_BUILD_CORES:-1} --target mysqlclient mysqlxclient
-
-    # Get libv8_monolith
-    mkdir -p ../v8/lib && ln -s ${v8}/lib/libv8.a ../v8/lib/libv8_monolith.a
   '';
 
   cmakeFlags = [
@@ -110,7 +107,7 @@ stdenv.mkDerivation rec{
     "-DWITH_PROTOBUF=${protobuf}"
     "-DHAVE_V8=1"
     "-DV8_INCLUDE_DIR=${v8}/include"
-    "-DV8_LIB_DIR=../v8/lib"
+    "-DV8_LIB_DIR=${v8}/lib"
     "-DHAVE_PYTHON=1"
   ];
 

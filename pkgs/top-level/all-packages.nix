@@ -691,7 +691,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     boost = boost177; # Configure checks for specific version.
     protobuf = protobuf3_19;
-    icu =  icu67;
+    icu =  icu69;
     v8 = v8_8_x;
   };
 
