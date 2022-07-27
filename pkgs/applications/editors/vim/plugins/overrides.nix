@@ -824,6 +824,10 @@ self: super: {
     meta.platforms = lib.platforms.all;
   });
 
+  telescope-media-files-nvim = super.telescope-media-files-nvim.overrideAttrs (old: {
+    dependencies = with self; [ telescope-nvim popup-nvim plenary-nvim ];
+  });
+
   telescope-nvim = super.telescope-nvim.overrideAttrs (old: {
     dependencies = with self; [ plenary-nvim ];
   });
