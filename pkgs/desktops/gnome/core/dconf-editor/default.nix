@@ -9,6 +9,7 @@
 , pkg-config
 , glib
 , gtk3
+, libhandy
 , gnome
 , python3
 , dconf
@@ -21,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dconf-editor";
-  version = "43.alpha";
+  version = "43.beta";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-9SyUJAXwzKAyZeF92NZjm9qzOpvu8XNJ5aC9DGAm40s=";
+    sha256 = "sha256-SNYG/ZZ20xX3ysml7kh/U8mDveX4jb09Qpd8qL6F+/s=";
   };
 
   patches = [
@@ -51,6 +52,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gtk3
+    libhandy
     dconf
   ];
 
