@@ -11,10 +11,6 @@
 }:
 let
   executableName = "micropad";
-  electron_exec =
-    if stdenv.isDarwin
-    then "${electron}/Applications/Electron.app/Contents/MacOS/Electron"
-    else "${electron}/bin/electron";
 in
   mkYarnPackage rec {
     pname = "micropad";
@@ -64,7 +60,7 @@ in
       done
 
       # executable wrapper
-      makeWrapper '${electron_exec}' "$out/bin/${executableName}" \
+      makeWrapper '${electron}/bin/electron' "$out/bin/${executableName}" \
         --add-flags "$out/share/micropad" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
 
