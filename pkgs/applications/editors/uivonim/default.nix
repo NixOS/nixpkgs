@@ -54,7 +54,7 @@ mkYarnPackage rec {
     # need to copy instead of symlink because
     # otherwise electron won't find the node_modules
     cp -ra ${build} $dir/build
-    makeWrapper ${electron}/bin/electron $out/bin/uivonim \
+    makeWrapper ${electron.exec} $out/bin/uivonim \
       --set NODE_ENV production \
       --add-flags $dir/build/main/main.js
   '';
