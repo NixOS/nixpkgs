@@ -157,7 +157,7 @@ stdenv.mkDerivation ({
     [ "-C"
       "--enable-add-ons"
       "--sysconfdir=/etc"
-      "--enable-stackguard-randomization"
+      "--enable-stack-protector=strong"
       "--enable-bind-now"
       (lib.withFeatureAs withLinuxHeaders "headers" "${linuxHeaders}/include")
       (lib.enableFeature profilingLibraries "profile")
@@ -167,6 +167,9 @@ stdenv.mkDerivation ({
       # and on aarch64 with binutils 2.30 or later.
       # https://sourceware.org/glibc/wiki/PortStatus
       "--enable-static-pie"
+    ] ++ lib.optionals stdenv.hostPlatform.isx86 [
+      # Enable Intel Control-flow Enforcement Technology (CET) support
+      "--enable-cet"
     ] ++ lib.optionals withLinuxHeaders [
       "--enable-kernel=3.2.0" # can't get below with glibc >= 2.26
     ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
