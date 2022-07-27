@@ -2407,6 +2407,10 @@ self: super: {
   # 2022-03-16: strict upper bounds https://github.com/monadfix/shower/issues/18
   shower = doJailbreak (dontCheck super.shower);
 
+  # Doesn't compile with HTF 0.15
+  # https://github.com/andrewufrank/uniform-error/issues/1
+  uniform-error = dontCheck super.uniform-error;
+
   # The shipped Setup.hs file is broken.
   csv = overrideCabal (drv: { preCompileBuildDriver = "rm Setup.hs"; }) super.csv;
 
