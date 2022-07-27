@@ -10,7 +10,7 @@
 , desktop-file-utils
 , gtk4
 , glib
-, libportal
+, libportal-gtk4
 , gnome-desktop
 , gnome-online-accounts
 , wrapGAppsHook
@@ -27,11 +27,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-contacts";
-  version = "42.0";
+  version = "43.alpha";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-contacts/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "iALDj9wj9SjawSj1O9zx9sow4OHGhIxCzWyEpeIsUhY=";
+    sha256 = "KnVZ8EO94HpdRtPQL+gUNoddrBr375efNJwsJrZkfeQ=";
   };
 
   propagatedUserEnvPkgs = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk4
     glib
-    libportal
+    libportal-gtk4
     evolution-data-server
     gsettings-desktop-schemas
     folks
