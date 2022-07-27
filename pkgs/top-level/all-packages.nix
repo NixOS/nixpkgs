@@ -3300,6 +3300,8 @@ with pkgs;
 
   wlogout = callPackage ../tools/wayland/wlogout { };
 
+  wlopm = callPackage ../tools/wayland/wlopm { };
+
   wlr-randr = callPackage ../tools/wayland/wlr-randr { };
 
   wlrctl = callPackage ../tools/wayland/wlrctl { };
@@ -6364,6 +6366,8 @@ with pkgs;
   galculator = callPackage ../applications/misc/galculator {
     gtk = gtk3;
   };
+
+  fornalder = callPackage ../applications/version-management/fornalder { };
 
   free42 = callPackage ../applications/misc/free42 { };
 
@@ -10415,6 +10419,8 @@ with pkgs;
 
   scanbd = callPackage ../tools/graphics/scanbd { };
 
+  scdl = callPackage ../tools/misc/scdl { };
+
   scdoc = callPackage ../tools/typesetting/scdoc { };
 
   scmpuff = callPackage ../applications/version-management/git-and-tools/scmpuff { };
@@ -11408,6 +11414,10 @@ with pkgs;
   ttygif = callPackage ../tools/misc/ttygif { };
 
   ttylog = callPackage ../tools/misc/ttylog { };
+
+  txtpbfmt = callPackage ../development/tools/txtpbfmt {
+    buildGoModule = buildGo118Module;
+  };
 
   ipbt = callPackage ../tools/misc/ipbt { };
 

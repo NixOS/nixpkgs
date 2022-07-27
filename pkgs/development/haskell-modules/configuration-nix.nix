@@ -858,6 +858,16 @@ self: super: builtins.intersectAttrs super {
     );
   hercules-ci-cnix-store = super.hercules-ci-cnix-store.override { nix = pkgs.nixVersions.nix_2_9; };
 
+  # the testsuite fails because of not finding tsc without some help
+  aeson-typescript = overrideCabal (drv: {
+    testToolDepends = drv.testToolDepends or [] ++ [ pkgs.nodePackages.typescript ];
+    # the testsuite assumes that tsc is in the PATH if it thinks it's in
+    # CI, otherwise trying to install it.
+    #
+    # https://github.com/codedownio/aeson-typescript/blob/ee1a87fcab8a548c69e46685ce91465a7462be89/test/Util.hs#L27-L33
+    preCheck = "export CI=true";
+  }) super.aeson-typescript;
+
   # Enable extra optimisations which increase build time, but also
   # later compiler performance, so we should do this for user's benefit.
   # Flag added in Agda 2.6.2
@@ -978,7 +988,6 @@ self: super: builtins.intersectAttrs super {
     hls-floskell-plugin
     hls-fourmolu-plugin
     hls-module-name-plugin
-    hls-ormolu-plugin
     hls-pragmas-plugin
     hls-splice-plugin;
   # Tests have file permissions expections that don‘t work with the nix store.
@@ -994,6 +1003,7 @@ self: super: builtins.intersectAttrs super {
   hls-tactics-plugin = dontCheck super.hls-tactics-plugin;
   hls-call-hierarchy-plugin = dontCheck super.hls-call-hierarchy-plugin;
   hls-selection-range-plugin = dontCheck super.hls-selection-range-plugin;
+  hls-ormolu-plugin = dontCheck super.hls-ormolu-plugin;
 
   # Wants to execute cabal-install to (re-)build itself
   hint = dontCheck super.hint;
