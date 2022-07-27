@@ -32,11 +32,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTestPaths = [
-    # Requries pipenv
-    "tests/test_parse.py"
-  ];
-
   pythonImportsCheck = [
     "dparse2"
   ];
