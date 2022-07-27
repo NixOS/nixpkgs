@@ -9890,6 +9890,12 @@
       fingerprint = "196A BFEC 6A1D D1EC 7594  F8D1 F625 47D0 75E0 9767";
     }];
   };
+  patryk4815 = {
+    email = "patryk.sondej@gmail.com";
+    github = "patryk4815";
+    githubId = 3074260;
+    name = "Patryk Sondej";
+  };
   patternspandemic = {
     email = "patternspandemic@live.com";
     github = "patternspandemic";

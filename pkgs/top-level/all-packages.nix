@@ -5696,6 +5696,8 @@ with pkgs;
     ssh = openssh;
   };
 
+  kics = callPackage ../tools/admin/kics { };
+
   kramdown-asciidoc = callPackage ../tools/typesetting/kramdown-asciidoc { };
 
   lychee = callPackage ../tools/networking/lychee { };
