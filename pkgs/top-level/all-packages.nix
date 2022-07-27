@@ -26895,6 +26895,8 @@ with pkgs;
 
   blackout = callPackage ../data/fonts/blackout { };
 
+  breath-theme = libsForQt5.callPackage ../data/themes/breath-theme { };
+
   brise = callPackage ../data/misc/brise { };
 
   cacert = callPackage ../data/misc/cacert { };
