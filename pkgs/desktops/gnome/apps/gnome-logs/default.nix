@@ -31,15 +31,11 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # meson: Remove redundant check for glib-mkenums
+    # Fix test with GLib 2.73
+    # https://gitlab.gnome.org/GNOME/gnome-logs/-/merge_requests/41
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-logs/-/commit/01386ce9a69652a00bdb163e569b51150ca8903e.diff";
-      sha256 = "sha256-tJJEai4Jw8aVcyhsFTYILiUV1xhsysX/rleeLP13DVM=";
-    })
-    # meson: remove redundant check for pkg-config
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-logs/-/commit/ad350729a8b81f2c8eb2122de0956bb2199b48da.patch";
-      sha256 = "sha256-5qGYyKM+B9XNZKytWH8K4QfSuBf7wpaPCWT6YIO5FGY=";
+      url = "https://gitlab.gnome.org/GNOME/gnome-logs/-/commit/724a1faedade8ec39effc86d0b52b96f351579c2.patch";
+      sha256 = "bOY9OQMuIV8QEaFQxfUJ+//m4qYZlxsKEF3bFANlmXo=";
     })
   ];
 
