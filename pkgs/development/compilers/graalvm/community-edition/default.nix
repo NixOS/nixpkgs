@@ -16,7 +16,7 @@ let
     Don't change these values! They will be updated by the update script, see ./update.nix.
   */
   graalvm11-ce-release-version = "22.1.0";
-  graalvm17-ce-release-version = "22.1.0";
+  graalvm17-ce-release-version = "22.2.0";
 
   products = [
     "graalvm-ce"
