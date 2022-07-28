@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -28,6 +29,15 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/gnome-logs/${lib.versions.major version}/${pname}-${version}.tar.xz";
     sha256 = "TV5FFp1r9DkC16npoHk8kW65LaumuoWzXI629nLNq9c=";
   };
+
+  patches = [
+    # Fix test with GLib 2.73
+    # https://gitlab.gnome.org/GNOME/gnome-logs/-/merge_requests/41
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-logs/-/commit/724a1faedade8ec39effc86d0b52b96f351579c2.patch";
+      sha256 = "bOY9OQMuIV8QEaFQxfUJ+//m4qYZlxsKEF3bFANlmXo=";
+    })
+  ];
 
   nativeBuildInputs = [
     python3
