@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "helm-docs";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "norwoodj";
     repo = "helm-docs";
     rev = "v${version}";
-    sha256 = "sha256-V7Qw20PPoAEXl/XAMj/WSM73fLdp/gH4G3ipx49p06o=";
+    sha256 = "sha256-476ZhjRwHlNJFkHzY8qQ7WbAUUpFNSoxXLGX9esDA/E=";
   };
 
-  vendorSha256 = "sha256-FpmeOQ8nV+sEVu2+nY9o9aFbCpwSShQUFOmyzwEQ9Pw=";
+  vendorSha256 = "sha256-xXwunk9rmzZEtqmSo8biuXnAjPp7fqWdQ+Kt9+Di9N8=";
 
   subPackages = [ "cmd/helm-docs" ];
   ldflags = [
