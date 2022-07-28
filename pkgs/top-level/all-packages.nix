@@ -20417,6 +20417,8 @@ with pkgs;
 
   place-cursor-at = haskell.lib.compose.justStaticExecutables haskellPackages.place-cursor-at;
 
+  platform-folders = callPackage ../development/libraries/platform-folders { };
+
   plib = callPackage ../development/libraries/plib { };
 
   poco = callPackage ../development/libraries/poco { };
