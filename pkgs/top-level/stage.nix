@@ -65,8 +65,11 @@
 
 let
   # This is a function from parsed platforms (like
-  # stdenv.hostPlatform.parsed) to parsed platforms.
-  makeMuslParsedPlatform = parsed:
+  # stdenv.hostPlatform.parsed) to parsed platforms.  The platform it
+  # returns should use musl libc, but otherwise be as similar to the
+  # argument as possible.  This is used to synthesize a hostPlatform
+  # for pkgsMusl and pkgsCross.
+  platformWithMuslLibc = parsed:
     # The following line guarantees that the output of this function
     # is a well-formed platform with no missing fields.  It will be
     # uncommented in a separate PR, in case it breaks the build.
@@ -214,7 +217,7 @@ let
       })] ++ overlays;
       ${if stdenv.hostPlatform == stdenv.buildPlatform
         then "localSystem" else "crossSystem"} = {
-        parsed = makeMuslParsedPlatform stdenv.hostPlatform.parsed;
+        parsed = platformWithMuslLibc stdenv.hostPlatform.parsed;
       };
     } else throw "Musl libc only supports Linux systems.";
 
@@ -258,7 +261,7 @@ let
     } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
       crossSystem = {
         isStatic = true;
-        parsed = makeMuslParsedPlatform stdenv.hostPlatform.parsed;
+        parsed = platformWithMuslLibc stdenv.hostPlatform.parsed;
       } // lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") {
         gcc.abi = "elfv2";
       };
