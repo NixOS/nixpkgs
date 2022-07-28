@@ -32,6 +32,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
+  ];
+
   pythonImportsCheck = [ "channels" ];
 
   meta = with lib; {

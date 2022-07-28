@@ -1715,9 +1715,7 @@ let
         };
       };
 
-      ms-python.python = callPackage ./python {
-        extractNuGet = callPackage ./python/extract-nuget.nix { };
-      };
+      ms-python.python = callPackage ./python { };
 
       msjsdiag.debugger-for-chrome = buildVscodeMarketplaceExtension {
         mktplcRef = {

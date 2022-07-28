@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "1.9.0";
+  version = "1.9.1";
 
   outputs = [
     "out"
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "samuelcolvin";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-C4WP8tiMRFmkDkQRrvP3yOSM2zN8pHJmX9cdANIckpM=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-jqTtNJQ9lRkxDYGG4vg91qH1jrxRU9orEeUofO+bBpA=";
   };
 
   postPatch = ''

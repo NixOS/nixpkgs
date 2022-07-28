@@ -10,8 +10,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "omry";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-bUJ80sa2ot2JSkt29eFwSiKL6R1X1+VVeE9dFIy4Mg0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-bUJ80sa2ot2JSkt29eFwSiKL6R1X1+VVeE9dFIy4Mg0=";
   };
 
   postPatch = ''

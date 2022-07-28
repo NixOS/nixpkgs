@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "facebookresearch";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-4r0ZWW9SGl35Oupf0ejwL/s6Nas6RoSN2egiBrvFZIA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4r0ZWW9SGl35Oupf0ejwL/s6Nas6RoSN2egiBrvFZIA=";
   };
 
   nativeBuildInputs = [

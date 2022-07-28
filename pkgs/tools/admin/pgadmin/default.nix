@@ -32,7 +32,7 @@ let
     flask_login
     flask_mail
     flask_migrate
-    flask_sqlalchemy
+    flask-sqlalchemy
     flask-wtf
     flask-compress
     passlib

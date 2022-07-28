@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "dask-jobqueue";
-  version = "0.7.3";
+  version = "0.7.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aC18wOazGbarg6eomGgMEunHfdx33zgLQAQSkPVdTnk=";
+    hash = "sha256-XoQwazgJuFvhoEezhhGu2YvIp+VFAe7dhGIEVnuQ5kM=";
   };
 
   propagatedBuildInputs = [

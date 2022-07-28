@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "zope.configuration";
-  version = "4.4.0";
+  version = "4.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e9f02bac44405ad1526399d6574b91d792f9694f9c67df8b64e91fe10fcddb3c";
+    sha256 = "sha256-giPqSvU5hmznqccwrH6xjlHRfrUVk6p3c7NZPI1tdgg=";
   };
 
   checkInputs = [ zope_testrunner manuel ];

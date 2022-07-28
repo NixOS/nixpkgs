@@ -1,13 +1,13 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, packaging, toml }:
+{ lib, stdenv, fetchPypi, buildPythonPackage, packaging, ply, toml }:
 
 buildPythonPackage rec {
   pname = "sip";
-  version = "6.5.1";
+  version = "6.6.2";
 
   src = fetchPypi {
     pname = "sip";
     inherit version;
-    sha256 = "sha256-IE8CQNuJmadJ1jiph7NRhhhD5pI5uBHsPRiBQSw3BqY=";
+    sha256 = "sha256-Dj76wcXf2OUlrlcUCSffJpk+E/WLidFXfDFPQQW/2Q0=";
   };
 
   patches = [
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     ./fix-manylinux-version.patch
   ];
 
-  propagatedBuildInputs = [ packaging toml ];
+  propagatedBuildInputs = [ packaging ply toml ];
 
   # There aren't tests
   doCheck = false;

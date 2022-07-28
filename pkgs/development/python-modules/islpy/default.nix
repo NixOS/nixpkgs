@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "islpy";
-  version = "2022.2";
+  version = "2022.2.1";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-a6fnFBt//yrkQkLoVBnxr7OkJTG7PJalz/CF7lhxVA8=";
+    sha256 = "07062ljvznm2dg3r9b3lq98qygxsha8ylxi4zs7hx49l0jw2vbjy";
   };
 
   postConfigure = ''

@@ -8,6 +8,7 @@
 , libgudev
 , libpcap
 , meson
+, mesonEmulatorHook
 , ninja
 , pkg-config
 , python3
@@ -19,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "umockdev";
-  version = "0.17.9";
+  version = "0.17.13";
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "https://github.com/martinpitt/umockdev/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-FEmWjJVmKKckC30zULGI/mZ3VNtirnweZq2gKh/Y5VE=";
+    sha256 = "sha256-bG6/bmIJtqSXRuDZGkSNAntUJxurgu1woTLs8pTKE88=";
   };
 
   patches = [
@@ -42,9 +43,12 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
+    gobject-introspection
     glib
     systemd
     libgudev

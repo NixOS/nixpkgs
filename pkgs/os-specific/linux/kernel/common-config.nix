@@ -917,7 +917,7 @@ let
 
       FSL_MC_UAPI_SUPPORT = mkIf (stdenv.hostPlatform.system == "aarch64-linux") (whenAtLeast "5.12" yes);
 
-      ASHMEM =                 { optional = true; tristate = whenAtLeast "5.0" "y";};
+      ASHMEM =                 { optional = true; tristate = whenBetween "5.0" "5.18" "y";};
       ANDROID =                { optional = true; tristate = whenAtLeast "5.0" "y";};
       ANDROID_BINDER_IPC =     { optional = true; tristate = whenAtLeast "5.0" "y";};
       ANDROID_BINDERFS =       { optional = true; tristate = whenAtLeast "5.0" "y";};

@@ -14,18 +14,18 @@
 , openssl
 , stdenv
 }:
-stdenv.mkDerivation rec {
+let
+  version = "1.8-1021";
+  urlVersion = builtins.replaceStrings [ "." "-" ] [ "00" "0" ] version;
+in
+stdenv.mkDerivation {
   pname = "roon-server";
-  version = "1.8-988";
+  inherit version;
 
-  src =
-    let
-      urlVersion = builtins.replaceStrings [ "." "-" ] [ "00" "00" ] version;
-    in
-    fetchurl {
-      url = "http://download.roonlabs.com/builds/RoonServer_linuxx64_${urlVersion}.tar.bz2";
-      hash = "sha256-e8hSvHKeyJOIp6EWy1JLOWnj6HE2McFk9bw5vVZ96/I=";
-    };
+  src = fetchurl {
+    url = "https://download.roonlabs.com/builds/RoonServer_linuxx64_${urlVersion}.tar.bz2";
+    hash = "sha256-obG6e/6AxNvUZkZzgS2QAxoSbJIM2pwuQDI0O2B90J8=";
+  };
 
   dontConfigure = true;
   dontBuild = true;

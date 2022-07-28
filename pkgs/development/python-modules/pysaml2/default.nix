@@ -3,6 +3,7 @@
 , cryptography
 , defusedxml
 , fetchFromGitHub
+, fetchPypi
 , importlib-resources
 , mock
 , pyasn1
@@ -21,7 +22,16 @@
 , xmlsec
 }:
 
-buildPythonPackage rec {
+let
+  pymongo3 = pymongo.overridePythonAttrs(old: rec {
+    version = "3.12.3";
+    src = fetchPypi {
+      pname = "pymongo";
+      inherit version;
+      sha256 = "sha256-ConK3ABipeU2ZN3gQ/bAlxcrjBxfAJRJAJUoL/mZWl8=";
+    };
+  });
+in buildPythonPackage rec {
   pname = "pysaml2";
   version = "7.1.2";
   format = "setuptools";
@@ -52,7 +62,7 @@ buildPythonPackage rec {
   checkInputs = [
     mock
     pyasn1
-    pymongo
+    pymongo3
     pytestCheckHook
     responses
   ];

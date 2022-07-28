@@ -67,6 +67,8 @@ stdenv.mkDerivation rec {
     glib
     polkit
     python3 # for cli tool
+    # Duplicate from checkInputs until https://github.com/NixOS/nixpkgs/issues/161570 is solved
+    umockdev
   ];
 
   strictDeps = true;

@@ -12720,6 +12720,16 @@
     githubId = 886074;
     name = "Matthieu Coudron";
   };
+  teutat3s = {
+    email = "teutates@mailbox.org";
+    matrix = "@teutat3s:pub.solar";
+    github = "teutat3s";
+    githubId = 10206665;
+    name = "teutat3s";
+    keys = [{
+      fingerprint = "81A1 1C61 F413 8C84 9139  A4FA 18DA E600 A6BB E705";
+    }];
+  };
   tex = {
     email = "milan.svoboda@centrum.cz";
     github = "tex";
@@ -14819,5 +14829,11 @@
     name = "nikstur";
     github = "nikstur";
     githubId = 61635709;
+  };
+  yisuidenghua = {
+    email = "bileiner@gmail.com";
+    name = "Milena Yisui";
+    github = "yisuidenghua";
+    githubId = 102890144;
   };
 }

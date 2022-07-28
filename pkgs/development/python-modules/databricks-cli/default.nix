@@ -1,5 +1,6 @@
 { lib, buildPythonPackage, fetchPypi
 , click
+, oauthlib
 , requests
 , tabulate
 , six
@@ -9,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "databricks-cli";
-  version = "0.16.4";
+  version = "0.17.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-GBiQaBg7YY31bJft0W8Iq7WXhX98wPgPFHdNwuZ7WQY=";
+    sha256 = "sha256-SvoX2nPG6TygnF/fJPo1UpZYVLu8PxQoz00n7bdRtyw=";
   };
 
   checkInputs = [
@@ -26,6 +27,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     click
+    oauthlib
     requests
     tabulate
     six

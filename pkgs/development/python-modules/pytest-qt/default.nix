@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-qt";
-  version = "4.0.2";
+  version = "4.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dfc5240dec7eb43b76bcb5f9a87eecae6ef83592af49f3af5f1d5d093acaa93e";
+    sha256 = "sha256-An89P13QSvBTDYRs9Q+4WPcZ9+h8LkocaGq9Tg9yFyo=";
   };
 
   nativeBuildInputs = [

@@ -691,7 +691,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     boost = boost177; # Configure checks for specific version.
     protobuf = protobuf3_19;
-    icu =  icu67;
+    icu =  icu69;
     v8 = v8_8_x;
   };
 
@@ -3486,6 +3486,8 @@ with pkgs;
 
   dbus-broker = callPackage ../os-specific/linux/dbus-broker { };
 
+  dbx = python3Packages.callPackage ../applications/misc/dbx { };
+
   ioport = callPackage ../os-specific/linux/ioport {};
 
   dgoss = callPackage ../tools/misc/dgoss { };
@@ -4185,7 +4187,7 @@ with pkgs;
   # example of an error which this fixes
   # [Errno 8] Exec format error: './gdk3-scan'
   mesonEmulatorHook =
-    if (stdenv.buildPlatform != stdenv.targetPlatform) then
+    if (!stdenv.buildPlatform.canExecute stdenv.targetPlatform) then
       makeSetupHook
         {
           name = "mesonEmulatorHook";
@@ -4196,7 +4198,7 @@ with pkgs;
             '';
           };
         } ../development/tools/build-managers/meson/emulator-hook.sh
-    else throw "mesonEmulatorHook has to be in a cross conditional i.e. (stdenv.buildPlatform != stdenv.hostPlatform)";
+    else throw "mesonEmulatorHook has to be in a conditional to check if the target binaries can be executed i.e. (!stdenv.buildPlatform.canExecute stdenv.hostPlatform)";
 
   meson-tools = callPackage ../misc/meson-tools { };
 
@@ -18050,7 +18052,7 @@ with pkgs;
   gns3-gui = gns3Packages.guiStable;
   gns3-server = gns3Packages.serverStable;
 
-  gobject-introspection = if (stdenv.hostPlatform != stdenv.targetPlatform)
+  gobject-introspection = if (!stdenv.hostPlatform.canExecute stdenv.targetPlatform)
     then callPackage ../development/libraries/gobject-introspection/wrapper.nix { } else gobject-introspection-unwrapped;
 
   gobject-introspection-unwrapped = callPackage ../development/libraries/gobject-introspection {
@@ -26125,7 +26127,9 @@ with pkgs;
 
   bonzomatic = callPackage ../applications/editors/bonzomatic { };
 
-  bottles = callPackage ../applications/misc/bottles { };
+  bottles = callPackage ../applications/misc/bottles {
+    wine = wineWowPackages.minimal;
+  };
 
   brave = callPackage ../applications/networking/browsers/brave { };
 
@@ -34699,6 +34703,10 @@ with pkgs;
 
   dell-530cdn = callPackage ../misc/drivers/dell-530cdn {};
 
+  deploy-rs = callPackage ../tools/package-management/deploy-rs {
+    inherit (darwin.apple_sdk.frameworks) CoreServices SystemConfiguration;
+  };
+
   dockutil = callPackage ../os-specific/darwin/dockutil { };
 
   eiciel = callPackage ../tools/filesystems/eiciel { };
@@ -34822,6 +34830,8 @@ with pkgs;
   hplip = callPackage ../misc/drivers/hplip { };
 
   hplipWithPlugin = hplip.override { withPlugin = true; };
+
+  hyfetch = callPackage ../tools/misc/hyfetch { };
 
   hyperfine = callPackage ../tools/misc/hyperfine {
     inherit (darwin.apple_sdk.frameworks) Security;

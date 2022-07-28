@@ -9,15 +9,15 @@
 
 buildPythonPackage rec {
   pname = "qnapstats";
-  version = "0.4.0";
+  version = "0.5.0";
 
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "colinodell";
     repo = "python-qnapstats";
-    rev = version;
-    hash = "sha256-Tzi2QG1Xw12fLVfV49SPJKdz5VdJ4hQMuCHH8gxcOBE=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-dpxl6a61h8zB7eS/2lxG+2//bOTzV6s4T1W+DVj0fnI=";
   };
 
   propagatedBuildInputs = [

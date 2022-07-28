@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pipx";
-  version = "1.0.0";
+  version = "1.1.0";
 
   disabled = pythonOlder "3.6";
 
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pipxproject";
     repo = pname;
-    rev = version;
-    sha256 = "1sgfrlhci2m83k436dfwfmqjpb8hij6yypm03pm3n8drmr2aaa4s";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-6cKKVOgHIoKNfGqvDWK5cwBGBDkgfyRuBRDV6fruBoA=";
   };
 
   propagatedBuildInputs = [

@@ -11,6 +11,7 @@ argsStdenv@{ name ? "stdenv", preHook ? "", initialPath
 
 , shell
 , allowedRequisites ? null, extraAttrs ? {}, overrides ? (self: super: {}), config
+, disallowedRequisites ? []
 
 , # The `fetchurl' to use for downloading curl and its dependencies
   # (see all-packages.nix).
@@ -97,6 +98,7 @@ let
     }
     // {
       inherit name;
+      inherit disallowedRequisites;
 
       # Nix itself uses the `system` field of a derivation to decide where to
       # build it. This is a bit confusing for cross compilation.

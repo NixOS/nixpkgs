@@ -34,7 +34,6 @@ let
   inherit (lib) optional optionals optionalString;
   mesonFeatureFlag = opt: b:
     "-D${opt}=${if b then "enabled" else "disabled"}";
-  isNativeCompilation = stdenv.buildPlatform == stdenv.hostPlatform;
 in
 
 stdenv.mkDerivation {
@@ -70,7 +69,10 @@ stdenv.mkDerivation {
     (mesonFeatureFlag "coretext" withCoreText)
     (mesonFeatureFlag "graphite" withGraphite2)
     (mesonFeatureFlag "icu" withIcu)
-    (mesonFeatureFlag "introspection" isNativeCompilation)
+  ];
+
+  depsBuildBuild = [
+    pkg-config
   ];
 
   nativeBuildInputs = [
@@ -85,9 +87,8 @@ stdenv.mkDerivation {
     docbook_xml_dtd_43
   ];
 
-  buildInputs = [ glib freetype ]
-    ++ lib.optionals withCoreText [ ApplicationServices CoreText ]
-    ++ lib.optionals isNativeCompilation [ gobject-introspection ];
+  buildInputs = [ glib freetype gobject-introspection ]
+    ++ lib.optionals withCoreText [ ApplicationServices CoreText ];
 
   propagatedBuildInputs = optional withGraphite2 graphite2
     ++ optionals withIcu [ icu harfbuzz ];

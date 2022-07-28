@@ -26,7 +26,12 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   checkInputs = [ pytestCheckHook numba ];
-  dontUseSetuptoolsCheck = true;
+
+  disabledTests = [
+    # incomatible with numpy 1.23
+    "test_numpyarray"
+  ];
+
   disabledTestPaths = [ "tests-cuda" ];
 
   pythonImportsCheck = [ "awkward" ];

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper
-, xorg, imlib2, libjpeg, libpng, fetchpatch
+, xorg, imlib2, libjpeg, libpng
 , curl, libexif, jpegexiforient, perl
 , enableAutoreload ? !stdenv.hostPlatform.isDarwin }:
 
@@ -14,13 +14,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-rgNC4M1TJ5EPeWmVHVzgaxTGLY7CYQf7uOsOn5bkwKE=";
   };
 
-  patches = [
-    # fix test failure when magic=0 is set
-    (fetchpatch {
-      url = "https://github.com/derf/feh/commit/3c1076b31e2e4e3429a5c3d334d555e549fb72d2.patch";
-      sha256 = "sha256-F9N+N/BAeclyPHQYlO9ZV1U8S1VWfHl/8dMKUqA7DF8=";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace test/feh.t \
+      --replace "WARNING:" "WARNING: While loading" \
+      --replace "Does not look like an image \(magic bytes missing\)" "Unknown error \(15\)"
+  '';
 
   outputs = [ "out" "man" "doc" ];
 

@@ -1,4 +1,4 @@
-{ lib, callPackage }:
+{ stdenv, lib, callPackage }:
 let
   common = arch: callPackage (
     { bison
@@ -22,14 +22,14 @@ let
       src = fetchgit {
         url = "https://review.coreboot.org/coreboot";
         rev = version;
-        sha256 = "073n8yid3v0l9wgwnrdqrlgzaj9mnhs33a007dgr7xq3z0iw3i52";
+        sha256 = "sha256-PCum+IvJ136eZQLovUi9u4xTLLs17MkMP5Oc0/2mMY4=";
         fetchSubmodules = false;
         leaveDotGit = true;
         postFetch = ''
-          patchShebangs $out/util/crossgcc/buildgcc
-          PATH=${lib.makeBinPath [ getopt ]}:$PATH $out/util/crossgcc/buildgcc -W > $out/.crossgcc_version
+          PATH=${lib.makeBinPath [ getopt ]}:$PATH ${stdenv.shell} $out/util/crossgcc/buildgcc -W > $out/.crossgcc_version
           rm -rf $out/.git
         '';
+        allowedRequisites = [ ];
       };
 
       nativeBuildInputs = [ bison curl git perl ];
@@ -40,6 +40,8 @@ let
       dontInstall = true;
 
       postPatch = ''
+        patchShebangs $out/util/crossgcc/buildgcc
+
         mkdir -p util/crossgcc/tarballs
 
         ${lib.concatMapStringsSep "\n" (

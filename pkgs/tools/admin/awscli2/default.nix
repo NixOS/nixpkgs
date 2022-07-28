@@ -22,6 +22,8 @@ let
           inherit version;
           sha256 = "sha256-uF0FZ7hmYUmpMXJxLmiSBzQzPAzn6Jt4s+mH9x5e1Pk=";
         };
+        # pypi missing test suite
+        doCheck = false;
       });
     };
   };
@@ -71,6 +73,7 @@ with py.pkgs; buildPythonApplication rec {
       --replace "docutils>=0.10,<0.16" "docutils" \
       --replace "ruamel.yaml>=0.15.0,<0.16.0" "ruamel.yaml" \
       --replace "wcwidth<0.2.0" "wcwidth" \
+      --replace "prompt-toolkit>=3.0.24,<3.0.29" "prompt-toolkit~=3.0" \
       --replace "distro>=1.5.0,<1.6.0" "distro"
   '';
 

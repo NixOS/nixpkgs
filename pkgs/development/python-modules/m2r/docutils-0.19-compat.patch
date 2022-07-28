@@ -1,0 +1,15 @@
+diff --git a/m2r.py b/m2r.py
+index a4e43c2..fb9e588 100644
+--- a/m2r.py
++++ b/m2r.py
+@@ -10,8 +10,8 @@ from argparse import ArgumentParser, Namespace
+ 
+ from docutils import statemachine, nodes, io, utils
+ from docutils.parsers import rst
+-from docutils.core import ErrorString
+-from docutils.utils import SafeString, column_width
++from docutils.utils.error_reporting import ErrorString, SafeString
++from docutils.utils import column_width
+ import mistune
+ 
+ if sys.version_info < (3, ):
