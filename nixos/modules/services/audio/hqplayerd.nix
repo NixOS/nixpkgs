@@ -133,7 +133,7 @@ in
     users.users = {
       hqplayer = {
         description = "hqplayer daemon user";
-        extraGroups = [ "audio" ];
+        extraGroups = [ "audio" "video" ];
         group = "hqplayer";
         uid = config.ids.uids.hqplayer;
       };
