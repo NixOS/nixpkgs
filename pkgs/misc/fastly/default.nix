@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, installShellFiles, buildGoModule }:
+{ lib, fetchFromGitHub, installShellFiles, buildGoModule, go }:
 
 buildGoModule rec {
   pname = "fastly";
@@ -34,10 +34,11 @@ buildGoModule rec {
     "-w"
     "-X github.com/fastly/cli/pkg/revision.AppVersion=v${version}"
     "-X github.com/fastly/cli/pkg/revision.Environment=release"
+    "-X github.com/fastly/cli/pkg/revision.GoHostOS=${go.GOHOSTOS}"
+    "-X github.com/fastly/cli/pkg/revision.GoHostArch=${go.GOHOSTARCH}"
   ];
   preBuild = ''
     ldflags+=" -X github.com/fastly/cli/pkg/revision.GitCommit=$(cat COMMIT)"
-    ldflags+=" -X 'github.com/fastly/cli/pkg/revision.GoVersion=$(go version)'"
   '';
 
   postInstall = ''
