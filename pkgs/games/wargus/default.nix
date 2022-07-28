@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "wargus";
     repo = "wargus";
     rev = "v${version}";
-    sha256 = "0dibm68jxaqzgzcyblfj2bmwyz9v5ax0njnnbvak7xjk1zlh11sx";
+    sha256 = "sha256-yJeMFxCD0ikwVPQApf+IBuMQ6eOjn1fVKNmqh6r760c=";
   };
 
   nativeBuildInputs = [ cmake pkg-config makeWrapper ];
