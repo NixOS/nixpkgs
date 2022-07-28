@@ -280,6 +280,7 @@ in
   libuiohook = handleTest ./libuiohook.nix {};
   lidarr = handleTest ./lidarr.nix {};
   lightdm = handleTest ./lightdm.nix {};
+  lighttpd = handleTest ./lighttpd.nix {};
   limesurvey = handleTest ./limesurvey.nix {};
   litestream = handleTest ./litestream.nix {};
   locate = handleTest ./locate.nix {};

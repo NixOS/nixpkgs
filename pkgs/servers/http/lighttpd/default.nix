@@ -10,6 +10,7 @@
 , enableWebDAV ? false, sqlite, libuuid
 , enableExtendedAttrs ? false, attr
 , perl
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -71,6 +72,10 @@ stdenv.mkDerivation rec {
     rm "$out/share/lighttpd/doc/config/conf.d/Makefile"*
     rm "$out/share/lighttpd/doc/config/vhosts.d/Makefile"*
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) lighttpd;
+  };
 
   meta = with lib; {
     description = "Lightweight high-performance web server";
