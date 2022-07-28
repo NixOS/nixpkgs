@@ -36,7 +36,6 @@ stdenvNoCC.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ gnugrep gnused curl openssl mpv aria2 gawk ffmpeg ]}
 
     runHook postInstall
-
   '';
 
   meta = with lib; {
