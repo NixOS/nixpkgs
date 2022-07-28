@@ -3,7 +3,9 @@
 {
   description = "A collection of packages for the Nix package manager";
 
-  outputs = { self }:
+  inputs.parameters.url = "github:NixOS/nixpkgs/default-parameters";
+
+  outputs = { self, parameters }:
     let
       jobs = import ./pkgs/top-level/release.nix {
         nixpkgs = self;
@@ -12,6 +14,8 @@
       lib = import ./lib;
 
       forAllSystems = f: lib.genAttrs lib.systems.flakeExposed (system: f system);
+
+      params = parameters.lib.pkgsParameters;
 
     in
     {
@@ -38,7 +42,17 @@
         }).nixos.manual.x86_64-linux;
       };
 
-      legacyPackages = forAllSystems (system: import ./. { inherit system; });
+      legacyPackages = forAllSystems (system:
+        let
+          systemParams =
+            if params.buildSystem == null
+            then { inherit system;  }
+            else { crossSystem = system; localSystem = params.buildSystem; };
+        in
+        import ./. (systemParams // {
+          inherit (params) config overlays;
+        })
+      );
 
       nixosModules = {
         notDetected = import ./nixos/modules/installer/scan/not-detected.nix;

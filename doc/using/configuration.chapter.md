@@ -14,15 +14,19 @@ Note that all this is checked during evaluation already, and the check includes 
 
 Each of these criteria can be altered in the nixpkgs configuration.
 
+## Configure Nixpkgs for NixOS {#sec-configure-nixpkgs-for-nixos}
+
 The nixpkgs configuration for a NixOS system is set in the `configuration.nix`, as in the following example:
 
 ```nix
 {
   nixpkgs.config = {
-    allowUnfree = true;
+    allowBroken = true;
   };
 }
 ```
+
+## Configure user-invoked Nixpkgs {#sec-configure-nixpkgs-for-user}
 
 However, this does not allow unfree software for individual users. Their configurations are managed separately.
 
@@ -30,11 +34,46 @@ A user's nixpkgs configuration is stored in a user-specific configuration file l
 
 ```nix
 {
-  allowUnfree = true;
+  allowBroken = true;
 }
 ```
 
-Note that we are not able to test or build unfree software on Hydra due to policy. Most unfree licenses prohibit us from either executing or distributing the software.
+## Configure with Flakes {#sec-configure-with-flakes}
+
+Users of the experimental Flakes feature, can set arguments using the `parameters` input. This is an input to the `nixpkgs` flake, which must provide the attribute `lib.pkgsParameters`.
+
+First, create a subflake; a flake in a subdirectory.
+
+```nix
+# ./nixpkgs-parameters/flake.nix
+{
+  description = "Parameters for Nixpkgs";
+  outputs = { self }: {
+    lib.pkgsParameters = {
+      overlays = [ ];
+      buildSystem = null; # same as host system
+      config = {
+        allowBroken = true;
+      };
+    };
+  };
+}
+```
+
+Then, inject it into nixpkgs with `follows`.
+
+```nix
+# ./flake.nix (section)
+{
+  inputs.nixpkgs.inputs.parameters.follows = "parameters";
+  inputs.parameters.url = "./nixpkgs-parameters";
+
+  outputs = { nixpkgs, ... }:
+    {
+      # ...
+    };
+}
+```
 
 ## Installing broken packages {#sec-allow-broken}
 
@@ -77,12 +116,22 @@ The difference between a package being unsupported on some system and being brok
 
 ## Installing unfree packages {#sec-allow-unfree}
 
+Note that we are not able to test or build unfree software on Hydra due to policy. Most unfree licenses prohibit us from either executing or distributing the software.
+
 There are several ways to tweak how Nix handles a package which has been marked as unfree.
 
 -   To temporarily allow all unfree packages, you can use an environment variable for a single invocation of the nix tools:
 
     ```ShellSession
     $ export NIXPKGS_ALLOW_UNFREE=1
+    ```
+
+-   To allow all unfree software to be used, add to the Nixpkgs configuration:
+
+     ```nix
+    {
+      allowUnfree = true;
+    }
     ```
 
 -   It is possible to permanently allow individual unfree packages, while still blocking unfree packages by default using the `allowUnfreePredicate` configuration option in the user configuration file.
