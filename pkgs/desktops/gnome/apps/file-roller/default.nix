@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , desktop-file-utils
 , gettext
 , glibcLocales
@@ -32,6 +33,18 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "HEOObVPsEP9PLrWyLXu/KKfCqElXq2SnUcHN88UjAsc=";
   };
+
+  patches = [
+    # Fix build with Nautilus 43.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/file-roller/-/commit/361219cd9e20530789417eeefd03c7cc4037b7d7.patch";
+      sha256 = "eP3BAa1SUS+EaV9UrlKnpoqJ78MhID863HPqsfFSTgM=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/file-roller/-/commit/d8461bbad8226d101beb02c2695a2f66cea675df.patch";
+      sha256 = "OKEZGijiIYDMiyuLqyHHrnTw88p+0hwkt6liufv3T74=";
+    })
+  ];
 
   LANG = "en_US.UTF-8"; # postinstall.py
 
