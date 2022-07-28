@@ -10,12 +10,12 @@
 stdenv.mkDerivation rec {
   pname = "authy";
   # curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/authy?channel=stable' | jq '.download_url,.version'
-  version = "2.2.0";
-  rev = "10";
+  version = "2.2.1";
+  rev = "11";
 
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/H8ZpNgIoPyvmkgxOWw5MSzsXK1wRZiHn_${rev}.snap";
-    sha256 = "sha256-sB9/fVV/qp+DfjxpvzIUHsLkeEu35i2rEv1/JYMytG8=";
+    sha256 = "sha256-/a0pMXVd7mEp7oaN2mBIJv5uOv1zQ3gvfgiz1XL9ZmM=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper squashfsTools ];
