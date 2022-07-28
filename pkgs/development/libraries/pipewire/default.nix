@@ -187,17 +187,13 @@ let
 
     postInstall = ''
       mkdir $out/nix-support
-      ${if (stdenv.hostPlatform == stdenv.buildPlatform) then ''
-        pushd $lib/share/pipewire
-        for f in *.conf; do
-          echo "Generating JSON from $f"
+      pushd $lib/share/pipewire
+      for f in *.conf; do
+        echo "Generating JSON from $f"
 
-          $out/bin/spa-json-dump "$f" > "$out/nix-support/$f.json"
-        done
-        popd
-      '' else ''
-        cp ${buildPackages.pipewire}/nix-support/*.json "$out/nix-support"
-      ''}
+        ${stdenv.targetPlatform.emulator buildPackages} $out/bin/spa-json-dump "$f" > "$out/nix-support/$f.json"
+      done
+      popd
 
       ${lib.optionalString enableSystemd ''
         moveToOutput "share/systemd/user/pipewire-pulse.*" "$pulse"
