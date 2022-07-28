@@ -506,24 +506,24 @@ in
           function gitea_setup {
             cp -f ${configFile} ${runConfig}
 
-            if [ ! -e ${secretKey} ]; then
+            if [ ! -s ${secretKey} ]; then
                 ${gitea}/bin/gitea generate secret SECRET_KEY > ${secretKey}
             fi
 
             # Migrate LFS_JWT_SECRET filename
-            if [[ -e ${oldLfsJwtSecret} && ! -e ${lfsJwtSecret} ]]; then
+            if [[ -s ${oldLfsJwtSecret} && ! -s ${lfsJwtSecret} ]]; then
                 mv ${oldLfsJwtSecret} ${lfsJwtSecret}
             fi
 
-            if [ ! -e ${oauth2JwtSecret} ]; then
+            if [ ! -s ${oauth2JwtSecret} ]; then
                 ${gitea}/bin/gitea generate secret JWT_SECRET > ${oauth2JwtSecret}
             fi
 
-            if [ ! -e ${lfsJwtSecret} ]; then
+            if [ ! -s ${lfsJwtSecret} ]; then
                 ${gitea}/bin/gitea generate secret LFS_JWT_SECRET > ${lfsJwtSecret}
             fi
 
-            if [ ! -e ${internalToken} ]; then
+            if [ ! -s ${internalToken} ]; then
                 ${gitea}/bin/gitea generate secret INTERNAL_TOKEN > ${internalToken}
             fi
 

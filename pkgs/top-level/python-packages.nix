@@ -5364,6 +5364,8 @@ in {
 
   mdurl = callPackage ../development/python-modules/mdurl { };
 
+  mdutils = callPackage ../development/python-modules/mdutils { };
+
   MDP = callPackage ../development/python-modules/mdp { };
 
   measurement = callPackage ../development/python-modules/measurement { };
