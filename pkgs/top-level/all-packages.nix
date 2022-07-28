@@ -26931,7 +26931,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreAudio CoreMIDI CoreServices Cocoa;
   };
 
-  fvwm = callPackage ../applications/window-managers/fvwm { };
+  fvwm = fvwm2;
+  fvwm2 = callPackage ../applications/window-managers/fvwm/2.6.nix { };
 
   ganttproject-bin = callPackage ../applications/misc/ganttproject-bin { };
 
