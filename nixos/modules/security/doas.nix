@@ -53,8 +53,8 @@ in
     enable = mkOption {
       type = with types; bool;
       default = false;
-      description = ''
-        Whether to enable the <command>doas</command> command, which allows
+      description = lib.mdDoc ''
+        Whether to enable the {command}`doas` command, which allows
         non-root users to execute commands as root.
       '';
     };
@@ -171,13 +171,13 @@ in
             users = mkOption {
               type = with types; listOf (either str int);
               default = [];
-              description = "The usernames / UIDs this rule should apply for.";
+              description = lib.mdDoc "The usernames / UIDs this rule should apply for.";
             };
 
             groups = mkOption {
               type = with types; listOf (either str int);
               default = [];
-              description = "The groups / GIDs this rule should apply for.";
+              description = lib.mdDoc "The groups / GIDs this rule should apply for.";
             };
 
             runAs = mkOption {
@@ -223,8 +223,8 @@ in
     extraConfig = mkOption {
       type = with types; lines;
       default = "";
-      description = ''
-        Extra configuration text appended to <filename>doas.conf</filename>.
+      description = lib.mdDoc ''
+        Extra configuration text appended to {file}`doas.conf`.
       '';
     };
   };

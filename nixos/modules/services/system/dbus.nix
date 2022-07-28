@@ -54,13 +54,13 @@ in
 
       apparmor = mkOption {
         type = types.enum [ "enabled" "disabled" "required" ];
-        description = ''
+        description = lib.mdDoc ''
           AppArmor mode for dbus.
 
-          <literal>enabled</literal> enables mediation when it's
-          supported in the kernel, <literal>disabled</literal>
+          `enabled` enables mediation when it's
+          supported in the kernel, `disabled`
           always disables AppArmor even with kernel support, and
-          <literal>required</literal> fails when AppArmor was not found
+          `required` fails when AppArmor was not found
           in the kernel.
         '';
         default = "disabled";

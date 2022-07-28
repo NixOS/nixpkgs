@@ -15,13 +15,13 @@ in
       package = mkOption {
         default = pkgs.influxdb2-server;
         defaultText = literalExpression "pkgs.influxdb2";
-        description = "influxdb2 derivation to use.";
+        description = lib.mdDoc "influxdb2 derivation to use.";
         type = types.package;
       };
 
       settings = mkOption {
         default = { };
-        description = ''configuration options for influxdb2, see <link xlink:href="https://docs.influxdata.com/influxdb/v2.0/reference/config-options"/> for details.'';
+        description = lib.mdDoc ''configuration options for influxdb2, see <https://docs.influxdata.com/influxdb/v2.0/reference/config-options> for details.'';
         type = format.type;
       };
     };

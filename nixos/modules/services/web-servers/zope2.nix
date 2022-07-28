@@ -12,31 +12,31 @@ let
       name = mkOption {
         default = "${name}";
         type = types.str;
-        description = "The name of the zope2 instance. If undefined, the name of the attribute set will be used.";
+        description = lib.mdDoc "The name of the zope2 instance. If undefined, the name of the attribute set will be used.";
       };
 
       threads = mkOption {
         default = 2;
         type = types.int;
-        description = "Specify the number of threads that Zope's ZServer web server will use to service requests. ";
+        description = lib.mdDoc "Specify the number of threads that Zope's ZServer web server will use to service requests. ";
       };
 
       http_address = mkOption {
         default = "localhost:8080";
         type = types.str;
-        description = "Give a port and address for the HTTP server.";
+        description = lib.mdDoc "Give a port and address for the HTTP server.";
       };
 
       user = mkOption {
         default = "zope2";
         type = types.str;
-        description = "The name of the effective user for the Zope process.";
+        description = lib.mdDoc "The name of the effective user for the Zope process.";
       };
 
       clientHome = mkOption {
         default = "/var/lib/zope2/${name}";
         type = types.path;
-        description = "Home directory of zope2 instance.";
+        description = lib.mdDoc "Home directory of zope2 instance.";
       };
       extra = mkOption {
         default =
@@ -53,12 +53,12 @@ let
           </zodb_db>
           '';
         type = types.lines;
-        description = "Extra zope.conf";
+        description = lib.mdDoc "Extra zope.conf";
       };
 
       packages = mkOption {
         type = types.listOf types.package;
-        description = "The list of packages you want to make available to the zope2 instance.";
+        description = lib.mdDoc "The list of packages you want to make available to the zope2 instance.";
       };
 
     };
@@ -95,7 +95,7 @@ in
           };
         }
       '';
-      description = "zope2 instances to be created automaticaly by the system.";
+      description = lib.mdDoc "zope2 instances to be created automaticaly by the system.";
     };
   };
 

@@ -84,17 +84,17 @@ in
       default = pkgs.epgstation;
       type = lib.types.package;
       defaultText = lib.literalExpression "pkgs.epgstation";
-      description = "epgstation package to use";
+      description = lib.mdDoc "epgstation package to use";
     };
 
     usePreconfiguredStreaming = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Use preconfigured default streaming options.
 
         Upstream defaults:
-        <link xlink:href="https://github.com/l3tnun/EPGStation/blob/master/config/config.yml.template"/>
+        <https://github.com/l3tnun/EPGStation/blob/master/config/config.yml.template>
       '';
     };
 
@@ -118,7 +118,7 @@ in
       name = lib.mkOption {
         type = lib.types.str;
         default = "epgstation";
-        description = ''
+        description = lib.mdDoc ''
           Name of the MySQL database that holds EPGStation's data.
         '';
       };
@@ -126,9 +126,9 @@ in
       passwordFile = lib.mkOption {
         type = lib.types.path;
         example = "/run/keys/epgstation-db-password";
-        description = ''
+        description = lib.mdDoc ''
           A file containing the password for the database named
-          <option>database.name</option>.
+          {option}`database.name`.
         '';
       };
     };
@@ -144,11 +144,11 @@ in
     # configure them according to their needs. In these cases, the value in the
     # upstream template configuration should serve as a "good enough" default.
     settings = lib.mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Options to add to config.yml.
 
         Documentation:
-        <link xlink:href="https://github.com/l3tnun/EPGStation/blob/master/doc/conf-manual.md"/>
+        <https://github.com/l3tnun/EPGStation/blob/master/doc/conf-manual.md>
       '';
 
       default = { };
@@ -163,7 +163,7 @@ in
         options.port = lib.mkOption {
           type = lib.types.port;
           default = 20772;
-          description = ''
+          description = lib.mdDoc ''
             HTTP port for EPGStation to listen on.
           '';
         };
@@ -172,9 +172,9 @@ in
           type = lib.types.port;
           default = cfg.settings.port + 1;
           defaultText = lib.literalExpression "config.${opt.settings}.port + 1";
-          description = ''
+          description = lib.mdDoc ''
             Socket.io port for EPGStation to listen on. It is valid to share
-            ports with <option>${opt.settings}.port</option>.
+            ports with {option}`${opt.settings}.port`.
           '';
         };
 
@@ -182,9 +182,9 @@ in
           type = lib.types.port;
           default = cfg.settings.socketioPort;
           defaultText = lib.literalExpression "config.${opt.settings}.socketioPort";
-          description = ''
+          description = lib.mdDoc ''
             Socket.io port that the web client is going to connect to. This may
-            be different from <option>${opt.settings}.socketioPort</option> if
+            be different from {option}`${opt.settings}.socketioPort` if
             EPGStation is hidden behind a reverse proxy.
           '';
         };
@@ -196,13 +196,13 @@ in
             "http+unix://''${lib.replaceStrings ["/"] ["%2F"] config.${option}}"
           '';
           example = "http://localhost:40772";
-          description = "URL to connect to Mirakurun.";
+          description = lib.mdDoc "URL to connect to Mirakurun.";
         };
 
         options.encodeProcessNum = lib.mkOption {
           type = lib.types.ints.positive;
           default = 4;
-          description = ''
+          description = lib.mdDoc ''
             The maximum number of processes that EPGStation would allow to run
             at the same time for encoding or streaming videos.
           '';
@@ -211,7 +211,7 @@ in
         options.concurrentEncodeNum = lib.mkOption {
           type = lib.types.ints.positive;
           default = 1;
-          description = ''
+          description = lib.mdDoc ''
             The maximum number of encoding jobs that EPGStation would run at the
             same time.
           '';
@@ -219,7 +219,7 @@ in
 
         options.encode = lib.mkOption {
           type = with lib.types; listOf attrs;
-          description = "Encoding presets for recorded videos.";
+          description = lib.mdDoc "Encoding presets for recorded videos.";
           default = [
             {
               name = "H.264";

@@ -34,12 +34,12 @@ in
         accessible to users in the "transmission" group'';
 
       settings = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Settings whose options overwrite fields in
-          <literal>.config/transmission-daemon/settings.json</literal>
+          `.config/transmission-daemon/settings.json`
           (each time the service starts).
 
-          See <link xlink:href="https://github.com/transmission/transmission/wiki/Editing-Configuration-Files">Transmission's Wiki</link>
+          See [Transmission's Wiki](https://github.com/transmission/transmission/wiki/Editing-Configuration-Files)
           for documentation of settings not explicitely covered by this module.
         '';
         default = {};
@@ -49,7 +49,7 @@ in
             type = types.path;
             default = "${cfg.home}/${downloadsDir}";
             defaultText = literalExpression ''"''${config.${opt.home}}/${downloadsDir}"'';
-            description = "Directory where to download torrents.";
+            description = lib.mdDoc "Directory where to download torrents.";
           };
           options.incomplete-dir = mkOption {
             type = types.path;
@@ -72,12 +72,12 @@ in
           options.message-level = mkOption {
             type = types.ints.between 0 3;
             default = 2;
-            description = "Set verbosity of transmission messages.";
+            description = lib.mdDoc "Set verbosity of transmission messages.";
           };
           options.peer-port = mkOption {
             type = types.port;
             default = 51413;
-            description = "The peer port to listen for incoming connections.";
+            description = lib.mdDoc "The peer port to listen for incoming connections.";
           };
           options.peer-port-random-high = mkOption {
             type = types.port;
@@ -98,7 +98,7 @@ in
           options.peer-port-random-on-start = mkOption {
             type = types.bool;
             default = false;
-            description = "Randomize the peer port.";
+            description = lib.mdDoc "Randomize the peer port.";
           };
           options.rpc-bind-address = mkOption {
             type = types.str;
@@ -112,7 +112,7 @@ in
           options.rpc-port = mkOption {
             type = types.port;
             default = 9091;
-            description = "The RPC port to listen to.";
+            description = lib.mdDoc "The RPC port to listen to.";
           };
           options.script-torrent-done-enabled = mkOption {
             type = types.bool;
@@ -126,12 +126,12 @@ in
           options.script-torrent-done-filename = mkOption {
             type = types.nullOr types.path;
             default = null;
-            description = "Executable to be run at torrent completion.";
+            description = lib.mdDoc "Executable to be run at torrent completion.";
           };
           options.umask = mkOption {
             type = types.int;
             default = 2;
-            description = ''
+            description = lib.mdDoc ''
               Sets transmission's file mode creation mask.
               See the umask(2) manpage for more information.
               Users who want their saved torrents to be world-writable
@@ -143,15 +143,15 @@ in
           options.utp-enabled = mkOption {
             type = types.bool;
             default = true;
-            description = ''
-              Whether to enable <link xlink:href="http://en.wikipedia.org/wiki/Micro_Transport_Protocol">Micro Transport Protocol (µTP)</link>.
+            description = lib.mdDoc ''
+              Whether to enable [Micro Transport Protocol (µTP)](http://en.wikipedia.org/wiki/Micro_Transport_Protocol).
             '';
           };
           options.watch-dir = mkOption {
             type = types.path;
             default = "${cfg.home}/${watchDir}";
             defaultText = literalExpression ''"''${config.${opt.home}}/${watchDir}"'';
-            description = "Watch a directory for torrent files and add them to transmission.";
+            description = lib.mdDoc "Watch a directory for torrent files and add them to transmission.";
           };
           options.watch-dir-enabled = mkOption {
             type = types.bool;
@@ -200,13 +200,13 @@ in
       user = mkOption {
         type = types.str;
         default = "transmission";
-        description = "User account under which Transmission runs.";
+        description = lib.mdDoc "User account under which Transmission runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "transmission";
-        description = "Group account under which Transmission runs.";
+        description = lib.mdDoc "Group account under which Transmission runs.";
       };
 
       credentialsFile = mkOption {
@@ -224,7 +224,7 @@ in
         type = types.listOf types.str;
         default = [];
         example = [ "--log-debug" ];
-        description = ''
+        description = lib.mdDoc ''
           Extra flags passed to the transmission command in the service definition.
         '';
       };

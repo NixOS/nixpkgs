@@ -14,7 +14,7 @@ let
       port = mkOption {
         type = types.port;
         default = 30303;
-        description = "Port number Go Ethereum will be listening on, both TCP and UDP.";
+        description = lib.mdDoc "Port number Go Ethereum will be listening on, both TCP and UDP.";
       };
 
       http = {
@@ -22,19 +22,19 @@ let
         address = mkOption {
           type = types.str;
           default = "127.0.0.1";
-          description = "Listen address of Go Ethereum HTTP API.";
+          description = lib.mdDoc "Listen address of Go Ethereum HTTP API.";
         };
 
         port = mkOption {
           type = types.port;
           default = 8545;
-          description = "Port number of Go Ethereum HTTP API.";
+          description = lib.mdDoc "Port number of Go Ethereum HTTP API.";
         };
 
         apis = mkOption {
           type = types.nullOr (types.listOf types.str);
           default = null;
-          description = "APIs to enable over WebSocket";
+          description = lib.mdDoc "APIs to enable over WebSocket";
           example = ["net" "eth"];
         };
       };
@@ -44,19 +44,19 @@ let
         address = mkOption {
           type = types.str;
           default = "127.0.0.1";
-          description = "Listen address of Go Ethereum WebSocket API.";
+          description = lib.mdDoc "Listen address of Go Ethereum WebSocket API.";
         };
 
         port = mkOption {
           type = types.port;
           default = 8546;
-          description = "Port number of Go Ethereum WebSocket API.";
+          description = lib.mdDoc "Port number of Go Ethereum WebSocket API.";
         };
 
         apis = mkOption {
           type = types.nullOr (types.listOf types.str);
           default = null;
-          description = "APIs to enable over WebSocket";
+          description = lib.mdDoc "APIs to enable over WebSocket";
           example = ["net" "eth"];
         };
       };
@@ -66,43 +66,43 @@ let
         address = mkOption {
           type = types.str;
           default = "127.0.0.1";
-          description = "Listen address of Go Ethereum metrics service.";
+          description = lib.mdDoc "Listen address of Go Ethereum metrics service.";
         };
 
         port = mkOption {
           type = types.port;
           default = 6060;
-          description = "Port number of Go Ethereum metrics service.";
+          description = lib.mdDoc "Port number of Go Ethereum metrics service.";
         };
       };
 
       network = mkOption {
         type = types.nullOr (types.enum [ "goerli" "rinkeby" "yolov2" "ropsten" ]);
         default = null;
-        description = "The network to connect to. Mainnet (null) is the default ethereum network.";
+        description = lib.mdDoc "The network to connect to. Mainnet (null) is the default ethereum network.";
       };
 
       syncmode = mkOption {
         type = types.enum [ "snap" "fast" "full" "light" ];
         default = "snap";
-        description = "Blockchain sync mode.";
+        description = lib.mdDoc "Blockchain sync mode.";
       };
 
       gcmode = mkOption {
         type = types.enum [ "full" "archive" ];
         default = "full";
-        description = "Blockchain garbage collection mode.";
+        description = lib.mdDoc "Blockchain garbage collection mode.";
       };
 
       maxpeers = mkOption {
         type = types.int;
         default = 50;
-        description = "Maximum peers to connect to.";
+        description = lib.mdDoc "Maximum peers to connect to.";
       };
 
       extraArgs = mkOption {
         type = types.listOf types.str;
-        description = "Additional arguments passed to Go Ethereum.";
+        description = lib.mdDoc "Additional arguments passed to Go Ethereum.";
         default = [];
       };
 
@@ -110,7 +110,7 @@ let
         default = pkgs.go-ethereum.geth;
         defaultText = literalExpression "pkgs.go-ethereum.geth";
         type = types.package;
-        description = "Package to use as Go Ethereum node.";
+        description = lib.mdDoc "Package to use as Go Ethereum node.";
       };
     };
   };
@@ -124,7 +124,7 @@ in
     services.geth = mkOption {
       type = types.attrsOf (types.submodule gethOpts);
       default = {};
-      description = "Specification of one or more geth instances.";
+      description = lib.mdDoc "Specification of one or more geth instances.";
     };
   };
 

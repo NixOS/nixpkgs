@@ -15,7 +15,7 @@ with lib;
       type = types.package;
       default = pkgs.joycond;
       defaultText = "pkgs.joycond";
-      description = ''
+      description = lib.mdDoc ''
         The joycond package to use.
       '';
     };

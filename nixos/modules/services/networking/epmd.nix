@@ -11,7 +11,7 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable socket activation for Erlang Port Mapper Daemon (epmd),
         which acts as a name server on all hosts involved in distributed
         Erlang computations.
@@ -21,7 +21,7 @@ in
       type = types.package;
       default = pkgs.erlang;
       defaultText = literalExpression "pkgs.erlang";
-      description = ''
+      description = lib.mdDoc ''
         The Erlang package to use to get epmd binary. That way you can re-use
         an Erlang runtime that is already installed for other purposes.
       '';
@@ -30,7 +30,7 @@ in
       {
         type = types.str;
         default = "[::]:4369";
-        description = ''
+        description = lib.mdDoc ''
           the listenStream used by the systemd socket.
           see https://www.freedesktop.org/software/systemd/man/systemd.socket.html#ListenStream= for more informations.
           use this to change the port epmd will run on.

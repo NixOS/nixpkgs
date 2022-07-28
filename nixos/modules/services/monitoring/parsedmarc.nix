@@ -40,7 +40,7 @@ in
         recipientName = lib.mkOption {
           type = lib.types.str;
           default = "dmarc";
-          description = ''
+          description = lib.mdDoc ''
             The DMARC mail recipient name, i.e. the name part of the
             email address which receives DMARC reports.
 
@@ -54,7 +54,7 @@ in
           default = config.networking.fqdn;
           defaultText = lib.literalExpression "config.networking.fqdn";
           example = "monitoring.example.com";
-          description = ''
+          description = lib.mdDoc ''
             The hostname to use when configuring Postfix.
 
             Should correspond to the host's fully qualified domain
@@ -84,7 +84,7 @@ in
       elasticsearch = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to set up and use a local instance of Elasticsearch.
         '';
       };
@@ -110,7 +110,7 @@ in
           type = lib.types.bool;
           default = config.services.grafana.enable;
           defaultText = lib.literalExpression "config.services.grafana.enable";
-          description = ''
+          description = lib.mdDoc ''
             Whether the official parsedmarc grafana dashboard should
             be provisioned to the local grafana instance.
           '';
@@ -134,20 +134,20 @@ in
           };
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Configuration parameters to set in
-        <filename>parsedmarc.ini</filename>. For a full list of
+        {file}`parsedmarc.ini`. For a full list of
         available parameters, see
-        <link xlink:href="https://domainaware.github.io/parsedmarc/#configuration-file" />.
+        <https://domainaware.github.io/parsedmarc/#configuration-file>.
 
         Settings containing secret data should be set to an attribute
-        set containing the attribute <literal>_secret</literal> - a
+        set containing the attribute `_secret` - a
         string pointing to a file containing the value the option
         should be set to. See the example to get a better picture of
-        this: in the resulting <filename>parsedmarc.ini</filename>
-        file, the <literal>splunk_hec.token</literal> key will be set
+        this: in the resulting {file}`parsedmarc.ini`
+        file, the `splunk_hec.token` key will be set
         to the contents of the
-        <filename>/run/keys/splunk_token</filename> file.
+        {file}`/run/keys/splunk_token` file.
       '';
 
       type = lib.types.submodule {
@@ -158,7 +158,7 @@ in
             save_aggregate = lib.mkOption {
               type = lib.types.bool;
               default = true;
-              description = ''
+              description = lib.mdDoc ''
                 Save aggregate report data to Elasticsearch and/or Splunk.
               '';
             };
@@ -166,7 +166,7 @@ in
             save_forensic = lib.mkOption {
               type = lib.types.bool;
               default = true;
-              description = ''
+              description = lib.mdDoc ''
                 Save forensic report data to Elasticsearch and/or Splunk.
               '';
             };
@@ -176,7 +176,7 @@ in
             host = lib.mkOption {
               type = lib.types.str;
               default = "localhost";
-              description = ''
+              description = lib.mdDoc ''
                 The IMAP server hostname or IP address.
               '';
             };
@@ -184,7 +184,7 @@ in
             port = lib.mkOption {
               type = lib.types.port;
               default = 993;
-              description = ''
+              description = lib.mdDoc ''
                 The IMAP server port.
               '';
             };
@@ -192,7 +192,7 @@ in
             ssl = lib.mkOption {
               type = lib.types.bool;
               default = true;
-              description = ''
+              description = lib.mdDoc ''
                 Use an encrypted SSL/TLS connection.
               '';
             };
@@ -200,7 +200,7 @@ in
             user = lib.mkOption {
               type = with lib.types; nullOr str;
               default = null;
-              description = ''
+              description = lib.mdDoc ''
                 The IMAP server username.
               '';
             };
@@ -223,7 +223,7 @@ in
             watch = lib.mkOption {
               type = lib.types.bool;
               default = true;
-              description = ''
+              description = lib.mdDoc ''
                 Use the IMAP IDLE command to process messages as they arrive.
               '';
             };
@@ -231,7 +231,7 @@ in
             delete = lib.mkOption {
               type = lib.types.bool;
               default = false;
-              description = ''
+              description = lib.mdDoc ''
                 Delete messages after processing them, instead of archiving them.
               '';
             };
@@ -241,7 +241,7 @@ in
             host = lib.mkOption {
               type = with lib.types; nullOr str;
               default = null;
-              description = ''
+              description = lib.mdDoc ''
                 The SMTP server hostname or IP address.
               '';
             };
@@ -249,7 +249,7 @@ in
             port = lib.mkOption {
               type = with lib.types; nullOr port;
               default = null;
-              description = ''
+              description = lib.mdDoc ''
                 The SMTP server port.
               '';
             };
@@ -257,7 +257,7 @@ in
             ssl = lib.mkOption {
               type = with lib.types; nullOr bool;
               default = null;
-              description = ''
+              description = lib.mdDoc ''
                 Use an encrypted SSL/TLS connection.
               '';
             };
@@ -265,7 +265,7 @@ in
             user = lib.mkOption {
               type = with lib.types; nullOr str;
               default = null;
-              description = ''
+              description = lib.mdDoc ''
                 The SMTP server username.
               '';
             };
@@ -288,8 +288,8 @@ in
             from = lib.mkOption {
               type = with lib.types; nullOr str;
               default = null;
-              description = ''
-                The <literal>From</literal> address to use for the
+              description = lib.mdDoc ''
+                The `From` address to use for the
                 outgoing mail.
               '';
             };
@@ -297,7 +297,7 @@ in
             to = lib.mkOption {
               type = with lib.types; nullOr (listOf str);
               default = null;
-              description = ''
+              description = lib.mdDoc ''
                 The addresses to send outgoing mail to.
               '';
             };
@@ -308,7 +308,7 @@ in
               default = [];
               type = with lib.types; listOf str;
               apply = x: if x == [] then null else lib.concatStringsSep "," x;
-              description = ''
+              description = lib.mdDoc ''
                 A list of Elasticsearch hosts to push parsed reports
                 to.
               '';
@@ -317,7 +317,7 @@ in
             user = lib.mkOption {
               type = with lib.types; nullOr str;
               default = null;
-              description = ''
+              description = lib.mdDoc ''
                 Username to use when connecting to Elasticsearch, if
                 required.
               '';
@@ -342,7 +342,7 @@ in
             ssl = lib.mkOption {
               type = lib.types.bool;
               default = false;
-              description = ''
+              description = lib.mdDoc ''
                 Whether to use an encrypted SSL/TLS connection.
               '';
             };
@@ -350,7 +350,7 @@ in
             cert_path = lib.mkOption {
               type = lib.types.path;
               default = "/etc/ssl/certs/ca-certificates.crt";
-              description = ''
+              description = lib.mdDoc ''
                 The path to a TLS certificate bundle used to verify
                 the server's certificate.
               '';

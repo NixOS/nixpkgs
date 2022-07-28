@@ -10,7 +10,7 @@ in {
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         If enabled, the Crossfire game server will be started at boot.
       '';
     };
@@ -19,7 +19,7 @@ in {
       type = types.package;
       default = pkgs.crossfire-server;
       defaultText = literalExpression "pkgs.crossfire-server";
-      description = ''
+      description = lib.mdDoc ''
         The package to use for the Crossfire server (and map/arch data, if you
         don't change dataDir).
       '';
@@ -29,7 +29,7 @@ in {
       type = types.str;
       default = "${cfg.package}/share/crossfire";
       defaultText = literalExpression ''"''${config.services.crossfire.package}/share/crossfire"'';
-      description = ''
+      description = lib.mdDoc ''
         Where to load readonly data from -- maps, archetypes, treasure tables,
         and the like. If you plan to edit the data on the live server (rather
         than overlaying the crossfire-maps and crossfire-arch packages and
@@ -54,7 +54,7 @@ in {
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to open ports in the firewall for the server.
       '';
     };

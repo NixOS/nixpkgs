@@ -16,7 +16,7 @@ in {
     group = mkOption {
       type = types.str;
       default = "uucp";
-      description = ''
+      description = lib.mdDoc ''
         The group under which NNCP files shall be owned.
         Any member of this group may access the secret keys
         of this NNCP node.
@@ -27,7 +27,7 @@ in {
       type = types.package;
       default = pkgs.nncp;
       defaultText = literalExpression "pkgs.nncp";
-      description = "The NNCP package to use system-wide.";
+      description = lib.mdDoc "The NNCP package to use system-wide.";
     };
 
     secrets = mkOption {

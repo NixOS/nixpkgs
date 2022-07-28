@@ -10,7 +10,7 @@ with lib;
     environment.noXlibs = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Switch off the options in the default configuration that
         require X11 libraries. This includes client-side font
         configuration and SSH forwarding of X11 authentication

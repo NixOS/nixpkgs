@@ -17,7 +17,7 @@ in
     enable = mkOption {
       default = false;
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         If true, enable gitweb in nginx.
       '';
     };
@@ -25,7 +25,7 @@ in
     location = mkOption {
       default = "/gitweb";
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Location to serve gitweb on.
       '';
     };
@@ -33,7 +33,7 @@ in
     user = mkOption {
       default = "nginx";
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Existing user that the CGI process will belong to. (Default almost surely will do.)
       '';
     };
@@ -41,15 +41,15 @@ in
     group = mkOption {
       default = "nginx";
       type = types.str;
-      description = ''
-        Group that the CGI process will belong to. (Set to <literal>config.services.gitolite.group</literal> if you are using gitolite.)
+      description = lib.mdDoc ''
+        Group that the CGI process will belong to. (Set to `config.services.gitolite.group` if you are using gitolite.)
       '';
     };
 
     virtualHost = mkOption {
       default = "_";
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         VirtualHost to serve gitweb on. Default is catch-all.
       '';
     };

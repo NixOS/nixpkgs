@@ -44,7 +44,7 @@ in {
     dbBackend = mkOption {
       type = enum [ "sqlite" "mysql" "postgresql" ];
       default = "sqlite";
-      description = ''
+      description = lib.mdDoc ''
         Which database backend vaultwarden will be using.
       '';
     };
@@ -52,7 +52,7 @@ in {
     backupDir = mkOption {
       type = nullOr str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         The directory under which vaultwarden will backup its persistent data.
       '';
     };
@@ -159,14 +159,14 @@ ADMIN_TOKEN=...copy-paste a unique generated secret token here...
       type = package;
       default = pkgs.vaultwarden;
       defaultText = literalExpression "pkgs.vaultwarden";
-      description = "Vaultwarden package to use.";
+      description = lib.mdDoc "Vaultwarden package to use.";
     };
 
     webVaultPackage = mkOption {
       type = package;
       default = pkgs.vaultwarden-vault;
       defaultText = literalExpression "pkgs.vaultwarden-vault";
-      description = "Web vault package to use.";
+      description = lib.mdDoc "Web vault package to use.";
     };
   };
 

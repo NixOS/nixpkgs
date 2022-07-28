@@ -15,7 +15,7 @@ in {
       port = mkOption {
         type = types.port;
         default = 548;
-        description = "TCP port to be used for AFP.";
+        description = lib.mdDoc "TCP port to be used for AFP.";
       };
 
       settings = mkOption {

@@ -14,7 +14,7 @@ in {
 
     chromium = mkOption {
       type = types.package;
-      description = ''
+      description = lib.mdDoc ''
         The chromium to use for image rendering.
       '';
     };
@@ -32,15 +32,15 @@ in {
             port = mkOption {
               type = types.port;
               default = 8081;
-              description = ''
+              description = lib.mdDoc ''
                 The TCP port to use for the rendering server.
               '';
             };
             logging.level = mkOption {
               type = types.enum [ "error" "warning" "info" "debug" ];
               default = "info";
-              description = ''
-                The log-level of the <filename>grafana-image-renderer.service</filename>-unit.
+              description = lib.mdDoc ''
+                The log-level of the {file}`grafana-image-renderer.service`-unit.
               '';
             };
           };
@@ -48,14 +48,14 @@ in {
             width = mkOption {
               default = 1000;
               type = types.ints.positive;
-              description = ''
+              description = lib.mdDoc ''
                 Width of the PNG used to display the alerting graph.
               '';
             };
             height = mkOption {
               default = 500;
               type = types.ints.positive;
-              description = ''
+              description = lib.mdDoc ''
                 Height of the PNG used to display the alerting graph.
               '';
             };

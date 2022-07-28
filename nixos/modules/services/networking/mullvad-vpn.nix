@@ -7,9 +7,9 @@ with lib;
   options.services.mullvad-vpn.enable = mkOption {
     type = types.bool;
     default = false;
-    description = ''
+    description = lib.mdDoc ''
       This option enables Mullvad VPN daemon.
-      This sets <option>networking.firewall.checkReversePath</option> to "loose", which might be undesirable for security.
+      This sets {option}`networking.firewall.checkReversePath` to "loose", which might be undesirable for security.
     '';
   };
 

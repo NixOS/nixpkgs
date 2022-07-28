@@ -10,7 +10,7 @@ in {
     confFile = mkOption {
       type = types.path;
       example = "/var/lib/3proxy/3proxy.conf";
-      description = ''
+      description = lib.mdDoc ''
         Ignore all other 3proxy options and load configuration from this file.
       '';
     };
@@ -90,7 +90,7 @@ in {
             type = types.str;
             default = "[::]";
             example = "127.0.0.1";
-            description = ''
+            description = lib.mdDoc ''
               Address used for service.
             '';
           };
@@ -98,7 +98,7 @@ in {
             type = types.nullOr types.int;
             default = null;
             example = 3128;
-            description = ''
+            description = lib.mdDoc ''
               Override default port used for service.
             '';
           };
@@ -106,7 +106,7 @@ in {
             type = types.int;
             default = 100;
             example = 1000;
-            description = ''
+            description = lib.mdDoc ''
               Maximum number of simulationeous connections to this service.
             '';
           };
@@ -171,7 +171,7 @@ in {
                   type = types.listOf types.str;
                   default = [ ];
                   example = [ "user1" "user2" "user3" ];
-                  description = ''
+                  description = lib.mdDoc ''
                     List of users, use empty list for any.
                   '';
                 };
@@ -179,7 +179,7 @@ in {
                   type = types.listOf types.str;
                   default = [ ];
                   example = [ "127.0.0.1" "192.168.1.0/24" ];
-                  description = ''
+                  description = lib.mdDoc ''
                     List of source IP range, use empty list for any.
                   '';
                 };
@@ -198,7 +198,7 @@ in {
                   type = types.listOf types.int;
                   default = [ ];
                   example = [ 80 443 ];
-                  description = ''
+                  description = lib.mdDoc ''
                     List of target ports, use empty list for any.
                   '';
                 };
@@ -220,7 +220,7 @@ in {
                 }
               ]
             '';
-            description = ''
+            description = lib.mdDoc ''
               Use this option to limit user access to resources.
             '';
           };
@@ -228,17 +228,17 @@ in {
             type = types.nullOr types.str;
             default = null;
             example = "-46";
-            description = ''
+            description = lib.mdDoc ''
               Extra arguments for service.
-              Consult "Options" section in <link xlink:href="https://github.com/z3APA3A/3proxy/wiki/3proxy.cfg">documentation</link> for available arguments.
+              Consult "Options" section in [documentation](https://github.com/z3APA3A/3proxy/wiki/3proxy.cfg) for available arguments.
             '';
           };
           extraConfig = mkOption {
             type = types.nullOr types.lines;
             default = null;
-            description = ''
+            description = lib.mdDoc ''
               Extra configuration for service. Use this to configure things like bandwidth limiter or ACL-based redirection.
-              Consult <link xlink:href="https://github.com/z3APA3A/3proxy/wiki/3proxy.cfg">documentation</link> for available options.
+              Consult [documentation](https://github.com/z3APA3A/3proxy/wiki/3proxy.cfg) for available options.
             '';
           };
         };
@@ -266,14 +266,14 @@ in {
           }
         ]
       '';
-      description = ''
+      description = lib.mdDoc ''
         Use this option to define 3proxy services.
       '';
     };
     denyPrivate = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether to deny access to private IP ranges including loopback.
       '';
     };
@@ -290,7 +290,7 @@ in {
         "::1"
         "fc00::/7"
       ];
-      description = ''
+      description = lib.mdDoc ''
         What IP ranges to deny access when denyPrivate is set tu true.
       '';
     };
@@ -301,7 +301,7 @@ in {
             type = types.listOf types.str;
             default = [ ];
             example = [ "127.0.0.53" "192.168.1.3:5353/tcp" ];
-            description = ''
+            description = lib.mdDoc ''
               List of nameservers to use.
 
               Up to 5 nservers may be specified. If no nserver is configured,
@@ -311,12 +311,12 @@ in {
           nscache = mkOption {
             type = types.int;
             default = 65535;
-            description = "Set name cache size for IPv4.";
+            description = lib.mdDoc "Set name cache size for IPv4.";
           };
           nscache6 = mkOption {
             type = types.int;
             default = 65535;
-            description = "Set name cache size for IPv6.";
+            description = lib.mdDoc "Set name cache size for IPv6.";
           };
           nsrecord = mkOption {
             type = types.attrsOf types.str;
@@ -327,21 +327,21 @@ in {
                 "site.local" = "192.168.1.43";
               }
             '';
-            description = "Adds static nsrecords.";
+            description = lib.mdDoc "Adds static nsrecords.";
           };
         };
       };
       default = { };
-      description = ''
+      description = lib.mdDoc ''
         Use this option to configure name resolution and DNS caching.
       '';
     };
     extraConfig = mkOption {
       type = types.nullOr types.lines;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Extra configuration, appended to the 3proxy configuration file.
-        Consult <link xlink:href="https://github.com/z3APA3A/3proxy/wiki/3proxy.cfg">documentation</link> for available options.
+        Consult [documentation](https://github.com/z3APA3A/3proxy/wiki/3proxy.cfg) for available options.
       '';
     };
   };

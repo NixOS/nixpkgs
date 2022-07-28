@@ -49,7 +49,7 @@ in {
       type = types.str;
       default = "0.0.0.0";
       example = "1.2.3.4";
-      description = ''
+      description = lib.mdDoc ''
         Address to be used for indexing DHT nodes.
       '';
     };
@@ -57,17 +57,17 @@ in {
     crawler.port = mkOption {
       type = types.port;
       default = 0;
-      description = ''
+      description = lib.mdDoc ''
         Port to be used for indexing DHT nodes.
         This port should be added to
-        <option>networking.firewall.allowedTCPPorts</option>.
+        {option}`networking.firewall.allowedTCPPorts`.
       '';
     };
 
     crawler.maxNeighbors = mkOption {
       type = types.ints.positive;
       default = 1000;
-      description = ''
+      description = lib.mdDoc ''
         Maximum number of simultaneous neighbors of an indexer.
         Be careful changing this number: high values can very
         easily cause your network to be congested or even crash
@@ -78,7 +78,7 @@ in {
     crawler.maxLeeches = mkOption {
       type = types.ints.positive;
       default = 200;
-      description = ''
+      description = lib.mdDoc ''
         Maximum number of simultaneous leeches.
       '';
     };
@@ -86,7 +86,7 @@ in {
     crawler.extraOptions = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         Extra command line arguments to pass to magneticod.
       '';
     };
@@ -95,7 +95,7 @@ in {
       type = types.str;
       default = "localhost";
       example = "1.2.3.4";
-      description = ''
+      description = lib.mdDoc ''
         Address the web interface will listen to.
       '';
     };
@@ -103,7 +103,7 @@ in {
     web.port = mkOption {
       type = types.port;
       default = 8080;
-      description = ''
+      description = lib.mdDoc ''
         Port the web interface will listen to.
       '';
     };
@@ -159,7 +159,7 @@ in {
     web.extraOptions = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         Extra command line arguments to pass to magneticow.
       '';
     };

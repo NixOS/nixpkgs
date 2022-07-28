@@ -10,7 +10,7 @@ in {
       collect-frequency = mkOption {
         type = types.str;
         default = "*:00/10";
-        description = ''
+        description = lib.mdDoc ''
           OnCalendar specification for sysstat-collect
         '';
       };
@@ -18,7 +18,7 @@ in {
       collect-args = mkOption {
         type = types.str;
         default = "1 1";
-        description = ''
+        description = lib.mdDoc ''
           Arguments to pass sa1 when collecting statistics
         '';
       };

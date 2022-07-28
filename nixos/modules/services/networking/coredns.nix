@@ -24,7 +24,7 @@ in {
       default = pkgs.coredns;
       defaultText = literalExpression "pkgs.coredns";
       type = types.package;
-      description = "Coredns package to use.";
+      description = lib.mdDoc "Coredns package to use.";
     };
   };
 

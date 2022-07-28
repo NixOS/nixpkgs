@@ -150,19 +150,19 @@ in
       type = types.package;
       default = pkgs.public-inbox;
       defaultText = literalExpression "pkgs.public-inbox";
-      description = "public-inbox package to use.";
+      description = lib.mdDoc "public-inbox package to use.";
     };
     path = mkOption {
       type = with types; listOf package;
       default = [];
       example = literalExpression "with pkgs; [ spamassassin ]";
-      description = ''
+      description = lib.mdDoc ''
         Additional packages to place in the path of public-inbox-mda,
         public-inbox-watch, etc.
       '';
     };
     inboxes = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Inboxes to configure, where attribute names are inbox names.
       '';
       default = {};
@@ -171,29 +171,29 @@ in
         options.inboxdir = mkOption {
           type = types.str;
           default = "${stateDir}/inboxes/${name}";
-          description = "The absolute path to the directory which hosts the public-inbox.";
+          description = lib.mdDoc "The absolute path to the directory which hosts the public-inbox.";
         };
         options.address = mkOption {
           type = with types; listOf str;
           example = "example-discuss@example.org";
-          description = "The email addresses of the public-inbox.";
+          description = lib.mdDoc "The email addresses of the public-inbox.";
         };
         options.url = mkOption {
           type = with types; nullOr str;
           default = null;
           example = "https://example.org/lists/example-discuss";
-          description = "URL where this inbox can be accessed over HTTP.";
+          description = lib.mdDoc "URL where this inbox can be accessed over HTTP.";
         };
         options.description = mkOption {
           type = types.str;
           example = "user/dev discussion of public-inbox itself";
-          description = "User-visible description for the repository.";
+          description = lib.mdDoc "User-visible description for the repository.";
           apply = pkgs.writeText "public-inbox-description-${name}";
         };
         options.newsgroup = mkOption {
           type = with types; nullOr str;
           default = null;
-          description = "NNTP group name for the inbox.";
+          description = lib.mdDoc "NNTP group name for the inbox.";
         };
         options.watch = mkOption {
           type = with types; listOf str;
@@ -215,7 +215,7 @@ in
             description = "list of coderepo names";
           };
           default = [];
-          description = "Nicknames of a 'coderepo' section associated with the inbox.";
+          description = lib.mdDoc "Nicknames of a 'coderepo' section associated with the inbox.";
         };
       }));
     };
@@ -228,7 +228,7 @@ in
         type = with types; listOf str;
         default = [ "/" ];
         example = [ "/lists/archives" ];
-        description = ''
+        description = lib.mdDoc ''
           Root paths or URLs that public-inbox will be served on.
           If domain parts are present, only requests to those
           domains will be accepted.
@@ -264,35 +264,35 @@ in
       type = with types; nullOr path;
       default = "${cfg.package.sa_config}/user/.spamassassin/user_prefs";
       defaultText = literalExpression "\${cfg.package.sa_config}/user/.spamassassin/user_prefs";
-      description = "SpamAssassin configuration specific to public-inbox.";
+      description = lib.mdDoc "SpamAssassin configuration specific to public-inbox.";
     };
     settings = mkOption {
-      description = ''
-        Settings for the <link xlink:href="https://public-inbox.org/public-inbox-config.html">public-inbox config file</link>.
+      description = lib.mdDoc ''
+        Settings for the [public-inbox config file](https://public-inbox.org/public-inbox-config.html).
       '';
       default = {};
       type = types.submodule {
         freeformType = gitIni.type;
         options.publicinbox = mkOption {
           default = {};
-          description = "public inboxes";
+          description = lib.mdDoc "public inboxes";
           type = types.submodule {
             freeformType = with types; /*inbox name*/attrsOf (/*inbox option name*/attrsOf /*inbox option value*/iniAtom);
             options.css = mkOption {
               type = with types; listOf str;
               default = [];
-              description = "The local path name of a CSS file for the PSGI web interface.";
+              description = lib.mdDoc "The local path name of a CSS file for the PSGI web interface.";
             };
             options.nntpserver = mkOption {
               type = with types; listOf str;
               default = [];
               example = [ "nntp://news.public-inbox.org" "nntps://news.public-inbox.org" ];
-              description = "NNTP URLs to this public-inbox instance";
+              description = lib.mdDoc "NNTP URLs to this public-inbox instance";
             };
             options.wwwlisting = mkOption {
               type = with types; enum [ "all" "404" "match=domain" ];
               default = "404";
-              description = ''
+              description = lib.mdDoc ''
                 Controls which lists (if any) are listed for when the root
                 public-inbox URL is accessed over HTTP.
               '';
@@ -319,23 +319,23 @@ in
           type = with types; nullOr str;
           default = null;
           example = "maildir:/path/to/spam";
-          description = ''
+          description = lib.mdDoc ''
             If set, mail in this maildir will be trained as spam and
             deleted from all watched inboxes
           '';
         };
         options.coderepo = mkOption {
           default = {};
-          description = "code repositories";
+          description = lib.mdDoc "code repositories";
           type = types.attrsOf (types.submodule {
             freeformType = types.attrsOf iniAtom;
             options.cgitUrl = mkOption {
               type = types.str;
-              description = "URL of a cgit instance";
+              description = lib.mdDoc "URL of a cgit instance";
             };
             options.dir = mkOption {
               type = types.str;
-              description = "Path to a git repository";
+              description = lib.mdDoc "Path to a git repository";
             };
           });
         };

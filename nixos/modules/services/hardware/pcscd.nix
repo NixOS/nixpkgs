@@ -23,7 +23,7 @@ in
       default = [ pkgs.ccid ];
       defaultText = literalExpression "[ pkgs.ccid ]";
       example = literalExpression "[ pkgs.pcsc-cyberjack ]";
-      description = "Plugin packages to be used for PCSC-Lite.";
+      description = lib.mdDoc "Plugin packages to be used for PCSC-Lite.";
     };
 
     readerConfig = mkOption {

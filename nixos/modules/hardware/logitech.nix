@@ -24,7 +24,7 @@ in
       startWhenNeeded = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Only run the service when an actual supported device is plugged.
         '';
       };
@@ -47,7 +47,7 @@ in
       enableGraphical = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable graphical support applications.";
+        description = lib.mdDoc "Enable graphical support applications.";
       };
     };
   };

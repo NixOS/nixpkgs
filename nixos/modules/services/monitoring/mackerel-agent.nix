@@ -29,11 +29,11 @@ in {
     };
 
     settings = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Options for mackerel-agent.conf.
 
         Documentation:
-        <link xlink:href="https://mackerel.io/docs/entry/spec/agent"/>
+        <https://mackerel.io/docs/entry/spec/agent>
       '';
 
       default = {};
@@ -48,12 +48,12 @@ in {
         options.host_status = {
           on_start = mkOption {
             type = types.enum [ "working" "standby" "maintenance" "poweroff" ];
-            description = "Host status after agent startup.";
+            description = lib.mdDoc "Host status after agent startup.";
             default = "working";
           };
           on_stop = mkOption {
             type = types.enum [ "working" "standby" "maintenance" "poweroff" ];
-            description = "Host status after agent shutdown.";
+            description = lib.mdDoc "Host status after agent shutdown.";
             default = "poweroff";
           };
         };

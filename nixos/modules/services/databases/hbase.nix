@@ -41,7 +41,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to run HBase.
         '';
       };
@@ -50,7 +50,7 @@ in {
         type = types.package;
         default = pkgs.hbase;
         defaultText = literalExpression "pkgs.hbase";
-        description = ''
+        description = lib.mdDoc ''
           HBase package to use.
         '';
       };
@@ -59,7 +59,7 @@ in {
       user = mkOption {
         type = types.str;
         default = "hbase";
-        description = ''
+        description = lib.mdDoc ''
           User account under which HBase runs.
         '';
       };
@@ -67,7 +67,7 @@ in {
       group = mkOption {
         type = types.str;
         default = "hbase";
-        description = ''
+        description = lib.mdDoc ''
           Group account under which HBase runs.
         '';
       };
@@ -75,7 +75,7 @@ in {
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/hbase";
-        description = ''
+        description = lib.mdDoc ''
           Specifies location of HBase database files. This location should be
           writable and readable for the user the HBase service runs as
           (hbase by default).
@@ -85,7 +85,7 @@ in {
       logDir = mkOption {
         type = types.path;
         default = "/var/log/hbase";
-        description = ''
+        description = lib.mdDoc ''
           Specifies the location of HBase log files.
         '';
       };
@@ -102,8 +102,8 @@ in {
             "hbase.zookeeper.property.dataDir" = "''${config.${opt.dataDir}}/zookeeper";
           }
         '';
-        description = ''
-          configurations in hbase-site.xml, see <link xlink:href="https://github.com/apache/hbase/blob/master/hbase-server/src/test/resources/hbase-site.xml"/> for details.
+        description = lib.mdDoc ''
+          configurations in hbase-site.xml, see <https://github.com/apache/hbase/blob/master/hbase-server/src/test/resources/hbase-site.xml> for details.
         '';
       };
 

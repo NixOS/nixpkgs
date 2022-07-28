@@ -51,7 +51,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           If enabled, periodically check the journal with journalwatch and report the results by mail.
         '';
       };
@@ -59,12 +59,12 @@ in {
       priority = mkOption {
         type = types.int;
         default = 6;
-        description = ''
+        description = lib.mdDoc ''
           Lowest priority of message to be considered.
           A value between 7 ("debug"), and 0 ("emerg"). Defaults to 6 ("info").
           If you don't care about anything with "info" priority, you can reduce
           this to e.g. 5 ("notice") to considerably reduce the amount of
-          messages without needing many <option>filterBlocks</option>.
+          messages without needing many {option}`filterBlocks`.
         '';
       };
 
@@ -75,7 +75,7 @@ in {
         type = types.str;
         default = "journalwatch@${config.networking.hostName}";
         defaultText = literalExpression ''"journalwatch@''${config.networking.hostName}"'';
-        description = ''
+        description = lib.mdDoc ''
           Mail address to send journalwatch reports from.
         '';
       };
@@ -83,7 +83,7 @@ in {
       mailTo = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Mail address to send journalwatch reports to.
         '';
       };
@@ -91,7 +91,7 @@ in {
       mailBinary = mkOption {
         type = types.path;
         default = "/run/wrappers/bin/sendmail";
-        description = ''
+        description = lib.mdDoc ''
           Sendmail-compatible binary to be used to send the messages.
         '';
       };
@@ -99,10 +99,10 @@ in {
       extraConfig = mkOption {
         type = types.str;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Extra lines to be added verbatim to the journalwatch/config configuration file.
           You can add any commandline argument to the config, without the '--'.
-          See <literal>journalwatch --help</literal> for all arguments and their description.
+          See `journalwatch --help` for all arguments and their description.
           '';
       };
 
@@ -112,12 +112,12 @@ in {
            match = mkOption {
               type = types.str;
               example = "SYSLOG_IDENTIFIER = systemd";
-              description = ''
-                Syntax: <literal>field = value</literal>
-                Specifies the log entry <literal>field</literal> this block should apply to.
-                If the <literal>field</literal> of a message matches this <literal>value</literal>,
-                this patternBlock's <option>filters</option> are applied.
-                If <literal>value</literal> starts and ends with a slash, it is interpreted as
+              description = lib.mdDoc ''
+                Syntax: `field = value`
+                Specifies the log entry `field` this block should apply to.
+                If the `field` of a message matches this `value`,
+                this patternBlock's {option}`filters` are applied.
+                If `value` starts and ends with a slash, it is interpreted as
                 an extended python regular expression, if not, it's an exact match.
                 The journal fields are explained in systemd.journal-fields(7).
               '';
@@ -129,8 +129,8 @@ in {
                 (Stopped|Stopping|Starting|Started) .*
                 (Reached target|Stopped target) .*
               '';
-              description = ''
-                The filters to apply on all messages which satisfy <option>match</option>.
+              description = lib.mdDoc ''
+                The filters to apply on all messages which satisfy {option}`match`.
                 Any of those messages that match any specified filter will be removed from journalwatch's output.
                 Each filter is an extended Python regular expression.
                 You can specify multiple filters and separate them by newlines.
@@ -175,7 +175,7 @@ in {
         ];
 
 
-        description = ''
+        description = lib.mdDoc ''
           filterBlocks can be defined to blacklist journal messages which are not errors.
           Each block matches on a log entry field, and the filters in that block then are matched
           against all messages with a matching log entry field.
@@ -191,7 +191,7 @@ in {
       interval = mkOption {
         type = types.str;
         default = "hourly";
-        description = ''
+        description = lib.mdDoc ''
           How often to run journalwatch.
 
           The format is described in systemd.time(7).
@@ -200,7 +200,7 @@ in {
       accuracy = mkOption {
         type = types.str;
         default = "10min";
-        description = ''
+        description = lib.mdDoc ''
           The time window around the interval in which the journalwatch run will be scheduled.
 
           The format is described in systemd.time(7).

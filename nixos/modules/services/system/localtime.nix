@@ -12,8 +12,8 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
-          Enable <literal>localtimed</literal>, a simple daemon for keeping the
+        description = lib.mdDoc ''
+          Enable `localtimed`, a simple daemon for keeping the
           system timezone up-to-date based on the current location. It uses
           geoclue2 to determine the current location.
         '';

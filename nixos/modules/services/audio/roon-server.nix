@@ -12,21 +12,21 @@ in {
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Open ports in the firewall for the server.
         '';
       };
       user = mkOption {
         type = types.str;
         default = "roon-server";
-        description = ''
+        description = lib.mdDoc ''
           User to run the Roon Server as.
         '';
       };
       group = mkOption {
         type = types.str;
         default = "roon-server";
-        description = ''
+        description = lib.mdDoc ''
           Group to run the Roon Server as.
         '';
       };

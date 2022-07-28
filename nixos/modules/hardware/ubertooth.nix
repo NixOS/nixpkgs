@@ -16,7 +16,7 @@ in {
       type = types.str;
       default = "ubertooth";
       example = "wheel";
-      description = "Group for Ubertooth's udev rules.";
+      description = lib.mdDoc "Group for Ubertooth's udev rules.";
     };
   };
 

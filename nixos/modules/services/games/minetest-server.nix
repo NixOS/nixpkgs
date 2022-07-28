@@ -19,7 +19,7 @@ in
       enable = mkOption {
         type        = types.bool;
         default     = false;
-        description = "If enabled, starts a Minetest Server.";
+        description = lib.mdDoc "If enabled, starts a Minetest Server.";
       };
 
       gameId = mkOption {
@@ -58,7 +58,7 @@ in
       logPath = mkOption {
         type        = types.nullOr types.path;
         default     = null;
-        description = ''
+        description = lib.mdDoc ''
           Path to logfile for logging.
 
           If set to null, logging will be output to stdout which means
@@ -69,7 +69,7 @@ in
       port = mkOption {
         type        = types.nullOr types.int;
         default     = null;
-        description = ''
+        description = lib.mdDoc ''
           Port number to bind to.
 
           If set to null, the default 30000 will be used.

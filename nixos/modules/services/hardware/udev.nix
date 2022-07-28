@@ -196,7 +196,7 @@ in
     boot.hardwareScan = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether to try to load kernel modules for all detected hardware.
         Usually this does a good job of providing you with the modules
         you need, but sometimes it can crash the system or cause other
@@ -234,9 +234,9 @@ in
           ENV{ID_VENDOR_ID}=="046d", ENV{ID_MODEL_ID}=="0825", ENV{PULSE_IGNORE}="1"
         '';
         type = types.lines;
-        description = ''
-          Additional <command>udev</command> rules. They'll be written
-          into file <filename>99-local.rules</filename>. Thus they are
+        description = lib.mdDoc ''
+          Additional {command}`udev` rules. They'll be written
+          into file {file}`99-local.rules`. Thus they are
           read and applied after all other rules.
         '';
       };
@@ -249,9 +249,9 @@ in
             KEYBOARD_KEY_700e2=leftctrl
         '';
         type = types.lines;
-        description = ''
-          Additional <command>hwdb</command> files. They'll be written
-          into file <filename>99-local.hwdb</filename>. Thus they are
+        description = lib.mdDoc ''
+          Additional {command}`hwdb` files. They'll be written
+          into file {file}`99-local.hwdb`. Thus they are
           read after all other files.
         '';
       };
@@ -261,7 +261,7 @@ in
     hardware.firmware = mkOption {
       type = types.listOf types.package;
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         List of packages containing firmware files.  Such files
         will be loaded automatically if the kernel asks for them
         (i.e., when it has detected specific hardware that requires
@@ -331,10 +331,10 @@ in
           SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="00:1D:60:B9:6D:4F", KERNEL=="eth*", NAME="my_fast_network_card"
         '';
         type = types.lines;
-        description = ''
-          <command>udev</command> rules to include in the initrd
-          <emphasis>only</emphasis>. They'll be written into file
-          <filename>99-local.rules</filename>. Thus they are read and applied
+        description = lib.mdDoc ''
+          {command}`udev` rules to include in the initrd
+          *only*. They'll be written into file
+          {file}`99-local.rules`. Thus they are read and applied
           after the essential initrd rules.
         '';
       };

@@ -16,7 +16,7 @@ in
       defaultNetwork.dnsname.enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable DNS resolution in the default podman network.
         '';
       };

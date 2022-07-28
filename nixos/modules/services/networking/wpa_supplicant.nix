@@ -183,7 +183,7 @@ in {
       driver = mkOption {
         type = types.str;
         default = "nl80211,wext";
-        description = "Force a specific wpa_supplicant driver.";
+        description = lib.mdDoc "Force a specific wpa_supplicant driver.";
       };
 
       allowAuxiliaryImperativeNetworks = mkEnableOption "support for imperative & declarative networks" // {
@@ -199,7 +199,7 @@ in {
       scanOnLowSignal = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to periodically scan for (better) networks when the signal of
           the current one is low. This will make roaming between access points
           faster, but will consume more power.
@@ -209,7 +209,7 @@ in {
       fallbackToWPA2 = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to fall back to WPA2 authentication protocols if WPA3 failed.
           This allows old wireless cards (that lack recent features required by
           WPA3) to connect to mixed WPA2/WPA3 access points.
@@ -331,9 +331,9 @@ in {
                 "OWE"
                 "DPP"
               ]);
-              description = ''
+              description = lib.mdDoc ''
                 The list of authentication protocols accepted by this network.
-                This corresponds to the <literal>key_mgmt</literal> option in wpa_supplicant.
+                This corresponds to the `key_mgmt` option in wpa_supplicant.
               '';
             };
 
@@ -369,8 +369,8 @@ in {
             hidden = mkOption {
               type = types.bool;
               default = false;
-              description = ''
-                Set this to <literal>true</literal> if the SSID of the network is hidden.
+              description = lib.mdDoc ''
+                Set this to `true` if the SSID of the network is hidden.
               '';
               example = literalExpression ''
                 { echelon = {
@@ -384,7 +384,7 @@ in {
             priority = mkOption {
               type = types.nullOr types.int;
               default = null;
-              description = ''
+              description = lib.mdDoc ''
                 By default, all networks will get same priority group (0). If some of the
                 networks are more desirable, this field can be used to change the order in
                 which wpa_supplicant goes through the networks when selecting a BSS. The
@@ -414,9 +414,9 @@ in {
 
           };
         });
-        description = ''
+        description = lib.mdDoc ''
           The network definitions to automatically connect to when
-           <command>wpa_supplicant</command> is running. If this
+           {command}`wpa_supplicant` is running. If this
            parameter is left empty wpa_supplicant will use
           /etc/wpa_supplicant.conf as the configuration file.
         '';
@@ -443,7 +443,7 @@ in {
         enable = mkOption {
           type = types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Allow normal users to control wpa_supplicant through wpa_gui or wpa_cli.
             This is useful for laptop users that switch networks a lot and don't want
             to depend on a large package such as NetworkManager just to pick nearby
@@ -458,7 +458,7 @@ in {
           type = types.str;
           default = "wheel";
           example = "network";
-          description = "Members of this group can control wpa_supplicant.";
+          description = lib.mdDoc "Members of this group can control wpa_supplicant.";
         };
       };
 
@@ -466,7 +466,7 @@ in {
         type = types.bool;
         default = lib.length cfg.interfaces < 2;
         defaultText = literalExpression "length config.${opt.interfaces} < 2";
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the DBus control interface.
           This is only needed when using NetworkManager or connman.
         '';

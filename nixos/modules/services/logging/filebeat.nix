@@ -25,7 +25,7 @@ in
         default = pkgs.filebeat;
         defaultText = literalExpression "pkgs.filebeat";
         example = literalExpression "pkgs.filebeat7";
-        description = ''
+        description = lib.mdDoc ''
           The filebeat package to use.
         '';
       };
@@ -53,12 +53,12 @@ in
             type = mkOption {
               type = types.str;
               default = name;
-              description = ''
+              description = lib.mdDoc ''
                 The input type.
 
-                Look for the value after <literal>type:</literal> on
+                Look for the value after `type:` on
                 the individual input pages linked from
-                <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/configuration-filebeat-options.html"/>.
+                <https://www.elastic.co/guide/en/beats/filebeat/current/configuration-filebeat-options.html>.
               '';
             };
           };
@@ -103,12 +103,12 @@ in
             module = mkOption {
               type = types.str;
               default = name;
-              description = ''
+              description = lib.mdDoc ''
                 The name of the module.
 
-                Look for the value after <literal>module:</literal> on
+                Look for the value after `module:` on
                 the individual input pages linked from
-                <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-modules.html"/>.
+                <https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-modules.html>.
               '';
             };
           };
@@ -139,7 +139,7 @@ in
               type = with types; listOf str;
               default = [ "127.0.0.1:9200" ];
               example = [ "myEShost:9200" ];
-              description = ''
+              description = lib.mdDoc ''
                 The list of Elasticsearch nodes to connect to.
 
                 The events are distributed to these nodes in round
@@ -147,10 +147,10 @@ in
                 event is automatically sent to another node. Each
                 Elasticsearch node can be defined as a URL or
                 IP:PORT. For example:
-                <literal>http://192.15.3.2</literal>,
-                <literal>https://es.found.io:9230</literal> or
-                <literal>192.24.3.2:9300</literal>. If no port is
-                specified, <literal>9200</literal> is used.
+                `http://192.15.3.2`,
+                `https://es.found.io:9230` or
+                `192.24.3.2:9300`. If no port is
+                specified, `9200` is used.
               '';
             };
 
@@ -200,20 +200,20 @@ in
           };
         '';
 
-        description = ''
+        description = lib.mdDoc ''
           Configuration for filebeat. See
-          <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-reference-yml.html"/>
+          <https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-reference-yml.html>
           for supported values.
 
           Options containing secret data should be set to an attribute
-          set containing the attribute <literal>_secret</literal> - a
+          set containing the attribute `_secret` - a
           string pointing to a file containing the value the option
           should be set to. See the example to get a better picture of
           this: in the resulting
-          <filename>filebeat.yml</filename> file, the
-          <literal>output.elasticsearch.password</literal>
+          {file}`filebeat.yml` file, the
+          `output.elasticsearch.password`
           key will be set to the contents of the
-          <filename>/var/keys/elasticsearch_password</filename> file.
+          {file}`/var/keys/elasticsearch_password` file.
         '';
       };
     };
