@@ -1,9 +1,11 @@
 { stdenv
 , lib
+, fetchpatch
 , substituteAll
 , fetchurl
 , pkg-config
 , which
+, autoreconfHook
 , gtk-doc
 , docbook_xsl
 , docbook_xml_dtd_412
@@ -33,11 +35,19 @@ stdenv.mkDerivation rec {
         python3.pkgs.pygobject3
       ];
     })
+
+    # Fix build with Nautilus 43.
+    # https://gitlab.gnome.org/GNOME/nautilus-python/-/merge_requests/9
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/nautilus-python/commit/1691b2eb88c8b9134c6fa06da0858f7b5bb74c72.patch";
+      sha256 = "dY9KrLorYlGTbKSLObRmffJwJfHwz48kCsInGGByIOI=";
+    })
   ];
 
   nativeBuildInputs = [
     pkg-config
     which
+    autoreconfHook
     gtk-doc
     docbook_xsl
     docbook_xml_dtd_412
