@@ -460,7 +460,7 @@ in
         default = 80;
         example = literalExpression ''80'';
         description = "
-          Default port for the server
+          Default HTTP port for the server
         ";
       };
 
