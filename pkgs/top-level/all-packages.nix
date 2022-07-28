@@ -7551,6 +7551,8 @@ with pkgs;
 
   pgf_graphics = callPackage ../tools/graphics/pgf { };
 
+  pgbackrest = callPackage ../tools/backup/pgbackrest { };
+
   pgformatter = callPackage ../development/tools/pgformatter { };
 
   pgloader = callPackage ../development/tools/pgloader { };
