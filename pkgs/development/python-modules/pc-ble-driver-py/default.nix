@@ -16,15 +16,15 @@
 
 buildPythonPackage rec {
   pname = "pc-ble-driver-py";
-  version = "0.16.3";
+  version = "0.17.0";
 
-  disabled = pythonOlder "3.7" || pythonAtLeast "3.10";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "NordicSemiconductor";
     repo = "pc-ble-driver-py";
     rev = "v${version}";
-    sha256 = "sha256-X21GQsyRZu1xdoTlD9DjceIWKpcuTLdIDf8UahntS3s=";
+    sha256 = "sha256-brC33ar2Jq3R2xdrklvVsQKf6pcnKwD25PO4TIvXgTg=";
   };
 
   nativeBuildInputs = [
