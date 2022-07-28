@@ -17262,6 +17262,8 @@ with pkgs;
 
   croaring = callPackage ../development/libraries/croaring { };
 
+  crossguid = callPackage ../development/libraries/crossguid { };
+
   cryptopp = callPackage ../development/libraries/crypto++ { };
 
   cryptominisat = callPackage ../applications/science/logic/cryptominisat { };
