@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     fribidi
+    gobject-introspection
     gnutls
     pcre2
     zlib
