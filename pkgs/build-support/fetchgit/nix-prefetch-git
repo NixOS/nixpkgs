@@ -116,7 +116,7 @@ init_remote(){
     clean_git remote add origin "$url"
     if [ -n "$sparseCheckout" ]; then
         git config remote.origin.partialclonefilter "blob:none"
-        echo "$sparseCheckout" | git sparse-checkout set --stdin
+        echo "$sparseCheckout" | git sparse-checkout set --stdin --no-cone
     fi
     ( [ -n "$http_proxy" ] && clean_git config http.proxy "$http_proxy" ) || true
 }
