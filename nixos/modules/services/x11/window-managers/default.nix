@@ -20,6 +20,7 @@ in
     ./exwm.nix
     ./fluxbox.nix
     ./fvwm2.nix
+    ./fvwm3.nix
     ./herbstluftwm.nix
     ./i3.nix
     ./jwm.nix
