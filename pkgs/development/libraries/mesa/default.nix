@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, buildPackages
+{ stdenv, lib, fetchurl, fetchpatch, buildPackages, writeText
 , meson, pkg-config, ninja
 , intltool, bison, flex, file, python3Packages, wayland-scanner
 , expat, libdrm, xorg, wayland, wayland-protocols, openssl
@@ -81,19 +81,11 @@ self = stdenv.mkDerivation {
   postPatch = ''
     patchShebangs .
 
-    substituteInPlace meson.build --replace \
-      "find_program('pkg-config')" \
-      "find_program('${buildPackages.pkg-config.targetPrefix}pkg-config')"
-
     # The drirc.d directory cannot be installed to $drivers as that would cause a cyclic dependency:
     substituteInPlace src/util/xmlconfig.c --replace \
       'DATADIR "/drirc.d"' '"${placeholder "out"}/share/drirc.d"'
     substituteInPlace src/util/meson.build --replace \
       "get_option('datadir')" "'${placeholder "out"}/share'"
-  '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-    substituteInPlace meson.build --replace \
-      "find_program('nm')" \
-      "find_program('${stdenv.cc.targetPrefix}nm')"
   '';
 
   outputs = [ "out" "dev" "drivers" ]
@@ -138,7 +130,19 @@ self = stdenv.mkDerivation {
   ] ++ optionals enableOpenCL [
     "-Dgallium-opencl=icd" # Enable the gallium OpenCL frontend
     "-Dclang-libdir=${llvmPackages.clang-unwrapped.lib}/lib"
-  ];
+  ] ++ lib.optionals (stdenv.cc.bintools.targetPrefix != "") (
+    let
+      crossFile = writeText "cross-file.conf" ''
+        [binaries]
+        objcopy = ${lib.escapeShellArg "${stdenv.cc.bintools.targetPrefix}objcopy"}
+        nm = ${lib.escapeShellArg "${stdenv.cc.bintools.targetPrefix}nm"}
+        pkg-config = ${lib.escapeShellArg "${buildPackages.pkg-config.targetPrefix}pkg-config"}
+      '';
+    in
+    [
+      "--cross-file=${crossFile}"
+    ]
+  );
 
   buildInputs = with xorg; [
     expat llvmPackages.libllvm libglvnd xorgproto
