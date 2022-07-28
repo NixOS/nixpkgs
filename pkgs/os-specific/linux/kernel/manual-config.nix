@@ -68,11 +68,6 @@ let
     cp -av $3 $4
   ''; };
 
-  commonMakeFlags = [
-    "O=$(buildRoot)"
-  ] ++ lib.optionals (stdenv.hostPlatform.linux-kernel ? makeFlags)
-    stdenv.hostPlatform.linux-kernel.makeFlags;
-
   drvAttrs = config_: kernelConf: kernelPatches: configfile:
     let
       config = let attrName = attr: "CONFIG_" + attr; in {
@@ -335,13 +330,15 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
   hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" "pie" ];
 
   # Absolute paths for compilers avoid any PATH-clobbering issues.
-  makeFlags = commonMakeFlags ++ [
+  makeFlags = [
+    "O=$(buildRoot)"
     "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
     "HOSTCC=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
     "ARCH=${stdenv.hostPlatform.linuxArch}"
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-  ] ++ extraMakeFlags;
+  ] ++ (stdenv.hostPlatform.linux-kernel.makeFlags or [])
+    ++ extraMakeFlags;
 
   karch = stdenv.hostPlatform.linuxArch;
 } // (optionalAttrs (pos != null) { inherit pos; }))
