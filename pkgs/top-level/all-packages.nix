@@ -3680,7 +3680,9 @@ with pkgs;
 
   extrude = callPackage ../tools/security/extrude { };
 
-  fastly = callPackage ../misc/fastly {};
+  fastly = callPackage ../misc/fastly {
+    # If buildGoModule is overriden, provide a matching version of the go attribute
+  };
 
   f2 = callPackage ../tools/misc/f2 {};
 
