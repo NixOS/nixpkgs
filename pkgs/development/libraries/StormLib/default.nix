@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "StormLib";
-  version = "9.22";
+  version = "9.23";
 
   src = fetchFromGitHub {
     owner = "ladislav-zezula";
     repo = "StormLib";
     rev = "v${version}";
-    sha256 = "1rcdl6ryrr8fss5z5qlpl4prrw8xpbcdgajg2hpp0i7fpk21ymcc";
+    sha256 = "sha256-8JDMqZ5BWslH4+Mfo5lnWTmD2QDaColwBOLzcuGZciY=";
   };
 
   cmakeFlags = [
