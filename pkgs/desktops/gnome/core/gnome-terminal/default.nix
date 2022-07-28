@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -10,6 +11,7 @@
 , dconf
 , nautilus
 , glib
+, gtk4
 , gtk3
 , gsettings-desktop-schemas
 , vte
@@ -35,6 +37,19 @@ stdenv.mkDerivation rec {
     sha256 = "+28g7h/yMamq7asT1dxuWmTJVXESJISLeQCG6IlZ03s=";
   };
 
+  patches = [
+    # Fix Nautilus extension in 43.
+    # https://gitlab.gnome.org/GNOME/gnome-terminal/-/issues/7911
+    (fetchurl {
+      url = "https://gitlab.gnome.org/GNOME/gnome-terminal/-/commit/e0999b42fb4954d3935f1705bea54b99a45734e5.patch";
+      sha256 = "2+25xXXiVtIeq/Djo/kvVHaSmYjgGYUqK6OMHU7kPKc=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-terminal/-/commit/17f4ad7909c819f0fe574d723de119dc10ec397f.patch";
+      sha256 = "6BIfp9qNecqJHify7qyjzgdfXrs8EvafeXiqHPL54Eg=";
+    })
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -55,6 +70,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
+    gtk4
     gtk3
     gsettings-desktop-schemas
     vte
