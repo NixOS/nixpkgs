@@ -35,6 +35,14 @@ stdenv.mkDerivation rec {
     sha256 = "+28g7h/yMamq7asT1dxuWmTJVXESJISLeQCG6IlZ03s=";
   };
 
+  patches = [
+    # https://gitlab.gnome.org/GNOME/gnome-terminal/-/issues/7911
+    (fetchurl {
+      url = "https://gitlab.gnome.org/GNOME/gnome-terminal/uploads/90524d805dadf10169f7de087ab765cf/0001-nautilus-Do-not-use-deprecated-symbols.patch";
+      sha256 = "9S9yZ7KuRv066In0IIgvde4R03JhcQm0gomKM5XGbk8=";
+    })
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
