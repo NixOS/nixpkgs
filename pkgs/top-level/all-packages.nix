@@ -15244,6 +15244,8 @@ with pkgs;
 
   anybadge = with python3Packages; toPythonApplication anybadge;
 
+  apkg = callPackage ../tools/package-management/apkg { };
+
   augeas = callPackage ../tools/system/augeas { };
 
   autoadb = callPackage ../misc/autoadb { };
