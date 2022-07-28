@@ -73,7 +73,7 @@ in {
         {
           dm_file = '''
             admin:secret_password:localhost
-            jane:xyzzy:*
+            alice:xyzzy:*
           ''';
           motd = "Welcome to Deliantra!";
           settings = '''
