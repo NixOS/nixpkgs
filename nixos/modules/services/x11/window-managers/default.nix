@@ -19,7 +19,7 @@ in
     ./evilwm.nix
     ./exwm.nix
     ./fluxbox.nix
-    ./fvwm.nix
+    ./fvwm2.nix
     ./herbstluftwm.nix
     ./i3.nix
     ./jwm.nix
