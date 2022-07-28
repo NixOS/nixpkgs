@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/sadko4u/${pname}/releases/download/${version}/${pname}-src-${version}.tar.gz";
-    sha256 = "0g1q31wkxb9w792ip9qlh0gvq8gz80c3ssi2zd3pzmp6ikk7k8wi";
+    sha256 = "sha256-qIakDWNs8fQmlw/VHwTET2LmIvI+6I6zK88bmsWF4VI=";
   };
 
   nativeBuildInputs = [ pkg-config php makeWrapper ];
