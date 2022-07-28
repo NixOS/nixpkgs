@@ -483,7 +483,7 @@ in {
 
     x86_energy_perf_policy = callPackage ../os-specific/linux/x86_energy_perf_policy { };
 
-    xmm7360-pci = callPackage ../os-specific/linux/xmm7360-pci { };
+    xmm7360-pci = throw "Support for 7360 was added to the iosm mainline kernel module";
 
     xone = if lib.versionAtLeast kernel.version "5.4" then callPackage ../os-specific/linux/xone { } else null;
 
