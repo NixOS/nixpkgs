@@ -10,6 +10,7 @@
 , systemd
 , coreutils
 , meson
+, mesonEmulatorHook
 , dbus
 , ninja
 , python3
@@ -47,7 +48,6 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    dbus
     gettext
     gobject-introspection
     meson
@@ -55,9 +55,14 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    #  meson.build:88:2: ERROR: Can not run test applications in this cross environment.
+    mesonEmulatorHook
   ];
 
   buildInputs = [
+    gobject-introspection
+    dbus
     glib
     polkit
     systemd
