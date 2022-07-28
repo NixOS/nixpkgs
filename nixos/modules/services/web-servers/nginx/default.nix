@@ -246,8 +246,8 @@ let
           if vhost.listen != [] then vhost.listen
           else
             let addrs = if vhost.listenAddresses != [] then vhost.listenAddresses else cfg.defaultListenAddresses;
-            in optionals (hasSSL || vhost.rejectSSL) (map (addr: { inherit addr; port = 443; ssl = true; }) addrs)
-              ++ optionals (!onlySSL) (map (addr: { inherit addr; port = 80; ssl = false; }) addrs);
+            in optionals (hasSSL || vhost.rejectSSL) (map (addr: { inherit addr; port = cfg.defaultSSLPort; ssl = true; }) addrs)
+              ++ optionals (!onlySSL) (map (addr: { inherit addr; port = cfg.defaultPort; ssl = false; }) addrs);
 
         hostListen =
           if vhost.forceSSL
@@ -443,6 +443,24 @@ in
         example = literalExpression ''[ "10.0.0.12" "[2002:a00:1::]" ]'';
         description = "
           If vhosts do not specify listenAddresses, use these addresses by default.
+        ";
+      };
+
+      defaultSSLPort = mkOption {
+        type = types.port;
+        default = 443;
+        example = literalExpression ''443'';
+        description = "
+          Default SSL port for the server
+        ";
+      };
+
+      defaultPort = mkOption {
+        type = types.port;
+        default = 80;
+        example = literalExpression ''80'';
+        description = "
+          Default port for the server
         ";
       };
 
