@@ -21537,8 +21537,16 @@ with pkgs;
   vsqlite = callPackage ../development/libraries/vsqlite { };
 
   vte = callPackage ../development/libraries/vte {
-    # Needs GCC ≥10 but aarch64 defaults to GCC 9.
-    stdenv = clangStdenv;
+    stdenv =
+      if stdenv.cc.isGNU && lib.versionOlder stdenv.cc.version "10" then
+        if stdenv.hostPlatform == stdenv.buildPlatform then
+          # Native builds on aarch64 fail with linker errors if GCC ≥10 is used.
+          clangStdenv
+        else
+          # Clang can't find headers when cross-compiling on Linux.
+          gcc11Stdenv
+      else
+        stdenv;
   };
 
   vte_290 = callPackage ../development/libraries/vte/2.90.nix { };
