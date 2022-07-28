@@ -1,4 +1,4 @@
-{lib, stdenv, fetchFromGitHub, openssl}:
+{ lib, stdenv, fetchFromGitHub, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "mktorrent";
@@ -19,10 +19,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl ];
 
-  meta = {
-    homepage = "https://github.com/pobrn/mktorrent/wiki";
-    license = lib.licenses.gpl2Plus;
+  meta = with lib; {
     description = "Command line utility to create BitTorrent metainfo files";
-    maintainers = with lib.maintainers; [Profpatsch];
+    homepage = "https://github.com/pobrn/mktorrent/wiki";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ Profpatsch winter ];
+    platforms = platforms.all;
   };
 }
