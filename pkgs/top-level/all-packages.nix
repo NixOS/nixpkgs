@@ -13001,9 +13001,9 @@ with pkgs;
   clangMultiStdenv = overrideCC stdenv buildPackages.clang_multi;
   multiStdenv = if stdenv.cc.isClang then clangMultiStdenv else gccMultiStdenv;
 
-  gcc_debug = lowPrio (wrapCC (gcc.cc.override {
-    stripped = false;
-  }));
+  gcc_debug = lowPrio (wrapCC (gcc.cc.overrideAttrs (_: {
+    dontStrip = true;
+  })));
 
   gccCrossLibcStdenv = overrideCC stdenv buildPackages.gccCrossStageStatic;
 

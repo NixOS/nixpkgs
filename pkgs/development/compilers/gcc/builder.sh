@@ -147,11 +147,6 @@ if test "$noSysDirs" = "1"; then
     fi
 fi
 
-if [ -n "${targetConfig-}" ]; then
-    # if stripping gcc, include target directory too
-    stripDebugList="${stripDebugList-lib lib32 lib64 libexec bin sbin} $targetConfig"
-fi
-
 eval "$oldOpts"
 
 providedPreConfigure="$preConfigure";
