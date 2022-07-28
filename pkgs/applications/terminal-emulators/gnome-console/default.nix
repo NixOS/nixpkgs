@@ -36,6 +36,13 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.gnome.org/GNOME/console/-/commit/0e29a417d52e27da62f5cac461400be6a764dc65.patch";
       sha256 = "sha256-5ORNZOxjC5dMk9VKaBcJu5OV1SEZo9SNUbN4Ob5hVJs=";
     })
+
+    # Fix Nautilus extension in 43.
+    # https://gitlab.gnome.org/GNOME/console/-/merge_requests/104
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/console/-/commit/e0131faeabdce95bfe1ea260b1ed439120abf1db.patch";
+      sha256 = "56lw/lTshVVda31ohcS8j38JL4UwyvtmSLEYkUMYylY=";
+    })
   ];
 
   buildInputs = [
