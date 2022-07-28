@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     homepage = "https://libosinfo.org/";
     changelog = "https://gitlab.com/libosinfo/osinfo-db-tools/-/blob/v${version}/NEWS";
     license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];
   };
 }
