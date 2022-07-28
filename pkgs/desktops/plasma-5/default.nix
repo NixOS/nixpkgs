@@ -131,6 +131,7 @@ let
       libksysguard = callPackage ./libksysguard {};
       milou = callPackage ./milou.nix {};
       oxygen = callPackage ./oxygen.nix {};
+      oxygen-sounds = callPackage ./oxygen-sounds.nix {};
       plasma-browser-integration = callPackage ./plasma-browser-integration.nix {};
       plasma-desktop = callPackage ./plasma-desktop {};
       plasma-disks = callPackage ./plasma-disks.nix {};
