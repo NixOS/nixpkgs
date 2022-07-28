@@ -29,6 +29,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  # tests/test_completion.py:206: AssertionError
+  # https://github.com/prompt-toolkit/python-prompt-toolkit/issues/1657
   disabledTests = [
     "test_pathcompleter_can_expanduser"
   ];
