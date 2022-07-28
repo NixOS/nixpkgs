@@ -20,8 +20,8 @@ mkDerivation rec {
 
   src = fetchurl {
     url =
-      "https://github.com/open-eid/DigiDoc4-Client/releases/download/v${version}/qdigidoc4_${version}.118-1804.tar.xz";
-    hash = "sha256-tdirhSEpBa1hnpau+bWP9Ioy44DLJHulSBx7xWl0hG4=";
+      "https://github.com/open-eid/DigiDoc4-Client/releases/download/v${version}/qdigidoc4-${version}.tar.gz";
+    hash = "sha256-6bso1qvhVhbBfrcTq4S+aHtHli7X2A926N4r45ztq4E=";
   };
 
   tsl = fetchurl {
