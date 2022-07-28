@@ -7218,6 +7218,8 @@ with pkgs;
 
   heaptrack = libsForQt5.callPackage ../development/tools/profiling/heaptrack {};
 
+  heatshrink = callPackage ../tools/compression/heatshrink { };
+
   heimdall = libsForQt5.callPackage ../tools/misc/heimdall { };
 
   heimdall-gui = heimdall.override { enableGUI = true; };
