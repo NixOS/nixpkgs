@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , gettext
 , gnome
 , libgtop
@@ -28,6 +29,15 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/gnome-console/${lib.versions.major version}/${pname}-${version}.tar.xz";
     sha256 = "fSbmwYdExXWnhykyY/YM7/YwEHCY6eWKd2WwCsdDcEk=";
   };
+
+  patches = [
+    # Fix Nautilus extension in 43.
+    # https://gitlab.gnome.org/GNOME/console/-/merge_requests/104
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/console/-/commit/e0131faeabdce95bfe1ea260b1ed439120abf1db.patch";
+      sha256 = "56lw/lTshVVda31ohcS8j38JL4UwyvtmSLEYkUMYylY=";
+    })
+  ];
 
   buildInputs = [
     gettext
