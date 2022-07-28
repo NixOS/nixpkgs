@@ -106,6 +106,10 @@ with lib;
         systemdStage1Network
       ];
 
+    boot.initrd.services = {
+      swraid.enable = true;
+    };
+
     # Show all debug messages from the kernel but don't log refused packets
     # because we have the firewall enabled. This makes installs from the
     # console less cumbersome if the machine has a public IP.
