@@ -8,22 +8,38 @@ let
 
   decisionModule = decision@{ name, ... }: {
     options = {
+      choice = mkOption {
+        type = types.lazyAttrsOf (types.submodule (choiceModule decision.name extendModules));
+        description = ''
+          An attribute set where each attribute name corresponds to a choice; a single outcome of a decision.
+
+          When you define `matrix.foo.choice.bar`, it creates a copy of the test configuration inside `matrix.foo.choice.bar.module`, where the module argument `foo` will be set to `bar`.
+
+          `runTest` will traverse all matrix choices, so that in all the final test configurations it returns, a choice for `foo` has been made.
+        '';
+      };
       after = mkOption {
         description = mdDoc ''
-          > You've already made the choice, now you have to understand it.
+          This option affects the order in which `runTest` decides which
+          decisions to make first.
 
-          Some choices depend on other choices.
+          Instead of reading for example
+          `matrix.bar.choice.qux.module.matrix.foo.choice.xyz`,
+          you can define
 
-          For example, we wouldn't be able to decide about the cookie before
-          we take the pill. Deciding the cookie is not possible without
-          crucial values set by the pill. To avoid an error like `The option
-          'pill' is used but not defined`, we force the ordering.
-
-          ```nix
-            matrix.cookie = {
-              after = ["pill"];
-            };
           ```
+            matrix.bar.after = ["foo"];
+          ```
+
+          so that `runTest` will read
+          `matrix.foo.choice.xyz.module.matrix.bar.choice.qux` instead.
+
+          This would usually amount to the same thing, unless you want the set
+          of `choice` attributes to be affected by the value of `foo`, which
+          isn't possible in the default ordering.
+
+          You'd typically use this with [`matrix.<name>.enable`](#test-opt-matrix._name_.enable)
+          to make sure that definitions from "earlier" decisions are taken into account.
         '';
         type = types.listOf types.str;
         default = [ ];
@@ -32,35 +48,35 @@ let
         type = types.bool;
         default = true;
         description = mdDoc ''
-          > But if you already know, how can I make a choice?
+          Allows a decision to be disabled. When set to `false`, none of the
+          choices will be applied, and the depth of the relevant subtree
+          returned by `runTest` will be reduced by one node.
 
-          > Because you didn't come here to make the choice, you've already made it. You're here to try to understand why you made it.
+          By avoiding useless test parameter combinations, you can reduce your testing workload,
+          and by avoiding nonsensical combinations, you can make all reasonable tests pass.
 
-          Some choices don't make sense, because of earlier choices you've made.
-
-          With this option, you can make Nix understand that, pruning nonsensical
-          decisions from the returned tree of tests, so that we don't need to
-          compute more than necessary.
+          Make sure that `runTest` doesn't inspect this
+          decision too soon, thereby ensuring that all required definitions
+          are available. A typical use may look as follows:
 
           ```nix
-          matrix.cookie = {
-            after = ["pill"];
-            enable = config.pill == "red";
-            # ...
+          # For this example, we suppose that our application has a backend
+          # selection option, which only allowed when dynamic linking is enabled.
+
+          { linking, ... }:
+          {
+            matrix.backend = {
+              after = ["linking"];
+              enable = linking != "static";
+
+              # Neither choice module will be applied when static linking is enabled.
+              # If static linking does need some extra settings, set them in
+              # `matrix.linking.choice.static.module` instead.
+              choice.rest.module = ...;
+              choice.smtp.module = ...;
+            };
+          }
           ```
-
-          If we chose the blue pill, we would never have to make a choice about
-          the cookie, so we skip this choice.
-        '';
-      };
-      choice = mkOption {
-        type = types.lazyAttrsOf (types.submodule (choiceModule decision.name extendModules));
-        description = ''
-          A attribute set where each attribute name corresponds to a choice; a single outcome of the decision.
-
-          When you define `matrix.foo.choice.bar`, it creates a copy of the test configuration inside `matrix.foo.choice.bar.module`, where the module argument `foo` will be set to `bar`.
-
-          `runTest` will traverse all matrix choices, so that in all the final test configurations it returns, a choice for `foo` has been made.
         '';
       };
     };
@@ -97,33 +113,22 @@ in
     matrix = mkOption {
       type = types.lazyAttrsOf (types.submodule decisionModule);
       description = mdDoc ''
-        Wake up, Neo...
+        The `matrix` options let you define parameterized tests, test scenarios
+        with conditional configuration, test cases that run separately in isolated builds, and arbitrary combinations of those.
 
-        Like every other test, it is born into a prison that it cannot smell or taste or touch. A prison for the mind... Unfortunately, no one can be told what the matrix option is. You have to see it for yourself. This is your last chance. After this, there is no turning back.
+        The commonality between these features is multiplicity, or equivalently from another perspective: choice.
 
-        You define
+        This option constructs a hierarchy of options, where each decision to be made is represented by `<...>.matrix.<name>`.
+        These options themselves contain `choice.<name>`, which represent the possible values for each decision.
 
-        ```nix
-          matrix.pill.choice.blue.module = { config, ... }: {
-            defaults.networking.domain = "bed.home.lan";
-          };
-        ```
+        The `module` submodule is special, because it duplicates and extends the entire test configuration that existed before making the decision.
+        When you define option values in it, those will only apply when `runTest` reads that specific choice.
 
-        and wake up in your bed and believe whatever you want to believe.
+        For a more hands-on introduction, see [Constructing a test matrix](#sec-nixos-test-matrix).
 
-        You define
-
-        ```nix
-          matrix.pill.choice.red.module = { config, ... }: {
-            defaults.networking.domain = "wonderland.example.com";
-          };
-        ```
-
-        you test in wonderland, and I show you how deep the rabbit hole goes...
-
-        Remember, all I'm offering is the multiverse... Follow me...
-
-
+        While it is possible to achieve the bare essence of the `matrix` options by applying functions such as `genAttrs` and `mapAttrs`,
+        the difference is that the `matrix` options make the intent and the structure of such code explicit and uniform.
+        The benefits include a general solution for the [disabling of version matrixes](https://nixos.org/manual/nixpkgs/unstable/#ssec-nixos-tests-linking), as required for package "passthru" tests.
       '';
       default = { };
     };
