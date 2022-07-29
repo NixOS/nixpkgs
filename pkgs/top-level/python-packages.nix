@@ -11353,6 +11353,8 @@ in {
 
   wget = callPackage ../development/python-modules/wget { };
 
+  whatthepatch = callPackage ../development/python-modules/whatthepatch { };
+
   wheel = callPackage ../development/python-modules/wheel { };
 
   wheel-filename = callPackage ../development/python-modules/wheel-filename { };
