@@ -37,6 +37,7 @@ buildPythonPackage rec {
   '';
 
   checkInputs = [ pytestCheckHook ];
+
   disabledTests = [
     # These languages require additional dictionaries that aren't packaged
     "test_languages"
