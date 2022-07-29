@@ -12089,6 +12089,13 @@
     githubId = 167881;
     name = "Michael Raitza";
   };
+  spacekitteh = {
+    email = "sophie@spacekitteh.moe";
+    github = "spacekitteh";
+    githubId = 1940652;
+    name = "Sophie Taylor";
+    matrix = "@spacekitteh:matrix.org";
+  };
   spacekookie = {
     email = "kookie@spacekookie.de";
     github = "spacekookie";
