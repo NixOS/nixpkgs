@@ -4,7 +4,7 @@
 , coreutils, bison, flex, gdb, gperf, lndir, perl, pkg-config, python3
 , which
   # darwin support
-, libiconv, libobjc, xcbuild, AGL, AppKit, ApplicationServices, Carbon, Cocoa, CoreAudio, CoreBluetooth
+, libiconv, libobjc, xcbuild, AGL, AppKit, ApplicationServices, AVFoundation, Carbon, Cocoa, CoreAudio, CoreBluetooth
 , CoreLocation, CoreServices, DiskArbitration, Foundation, OpenGL, MetalKit, IOKit
 
 , dbus, fontconfig, freetype, glib, harfbuzz, icu, libdrm, libX11, libXcomposite
@@ -52,7 +52,7 @@ stdenv.mkDerivation {
   ] ++ (
     if stdenv.isDarwin then [
       # TODO: move to buildInputs, this should not be propagated.
-      AGL AppKit ApplicationServices Carbon Cocoa CoreAudio CoreBluetooth
+      AGL AppKit ApplicationServices AVFoundation Carbon Cocoa CoreAudio CoreBluetooth
       CoreLocation CoreServices DiskArbitration Foundation OpenGL
       libobjc libiconv MetalKit IOKit
     ] else [
@@ -284,7 +284,6 @@ stdenv.mkDerivation {
   ] ++ lib.optional (compareVersion "5.15.0" < 0) "-v"
     ++ (
       if stdenv.isDarwin then [
-      "-platform macx-clang"
       "-no-fontconfig"
       "-qt-freetype"
       "-qt-libpng"
@@ -377,7 +376,7 @@ stdenv.mkDerivation {
     #   error: unknown target CPU 'armv8.3-a+crypto+sha2+aes+crc+fp16+lse+simd+ras+rdm+rcpc'
     #   note: valid target CPU values are: nocona, core2, penryn, ..., znver1, znver2, x86-64
     # it seems the qmake/cmake passes x86_64 as preferred architecture somewhere
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    broken = stdenv.isDarwin && stdenv.isAarch64 && (compareVersion "5.15.3" < 0);
   };
 
 }
