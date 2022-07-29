@@ -11,7 +11,6 @@
 , packagekit
 , ostree
 , glib
-, glib-testing
 , appstream
 , libsoup
 , libadwaita
@@ -25,7 +24,9 @@
 , gtk4
 , gsettings-desktop-schemas
 , gnome-desktop
+, libgudev
 , libxmlb
+, malcontent
 , json-glib
 , libsecret
 , valgrind-light
@@ -76,7 +77,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk4
     glib
-    glib-testing
     packagekit
     appstream
     libsoup
@@ -89,23 +89,22 @@ stdenv.mkDerivation rec {
     ostree
     polkit
     flatpak
+    libgudev
     libxmlb
+    malcontent
     libsysprof-capture
   ] ++ lib.optionals withFwupd [
     fwupd
   ];
 
   mesonFlags = [
-    "-Dgudev=false"
-    # FIXME: package malcontent parental controls
-    "-Dmalcontent=false"
     # Needs flatpak to upgrade
     "-Dsoup2=true"
+    # Requires /etc/machine-id, D-Bus system bus, etc.
+    "-Dtests=false"
   ] ++ lib.optionals (!withFwupd) [
     "-Dfwupd=false"
   ];
-
-  doCheck = true;
 
   passthru = {
     updateScript = gnome.updateScript {
