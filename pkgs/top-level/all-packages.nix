@@ -292,6 +292,8 @@ with pkgs;
 
   buf = callPackage ../development/tools/buf { };
 
+  cbfmt = callPackage ../development/tools/cbfmt { };
+
   cfn-nag = callPackage ../development/tools/cfn-nag { };
 
   cxx-rs = callPackage ../development/libraries/cxx-rs { };
@@ -10846,8 +10848,6 @@ with pkgs;
 
   squashfuse = callPackage ../tools/filesystems/squashfuse { };
 
-  srcml = callPackage ../applications/version-management/srcml { };
-
   srt-live-server = callPackage ../applications/video/srt-live-server { };
 
   srt-to-vtt-cl = callPackage ../tools/cd-dvd/srt-to-vtt-cl { };
@@ -20435,6 +20435,10 @@ with pkgs;
 
   openpa = callPackage ../development/libraries/openpa { };
 
+  openpgp-card-tools = callPackage ../tools/security/openpgp-card-tools {
+    inherit (darwin.apple_sdk.frameworks) PCSC;
+  };
+
   opensaml-cpp = callPackage ../development/libraries/opensaml-cpp { };
 
   openscenegraph = callPackage ../development/libraries/openscenegraph {
@@ -29267,6 +29271,8 @@ with pkgs;
   taxi = callPackage ../applications/networking/ftp/taxi { };
 
   taxi-cli = with python3Packages; toPythonApplication taxi;
+
+  tcping-go = callPackage ../applications/networking/tcping-go { };
 
   librep = callPackage ../development/libraries/librep { };
 

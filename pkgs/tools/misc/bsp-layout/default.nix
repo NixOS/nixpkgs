@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "phenax";
     repo = pname;
-    rev = "181d38443778e81df2d4bc3639063c3ae608f9c7";
-    sha256 = "sha256-4NKI+OnOTYGaJnaPvSoXGJdSSzMo9AjYRLOomp9onoo=";
+    rev = "9d60fc271454ea1bfca598575207a06d8d172d3e";
+    sha256 = "sha256-7bBVWJdgAnXLWzjQGZxVqhku2rsxX2kMxU4xkI9/DHE=";
   };
 
   nativeBuildInputs = [ makeWrapper git bc ];
