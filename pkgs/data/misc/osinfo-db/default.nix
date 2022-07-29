@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/libosinfo/osinfo-db/";
     changelog = "https://gitlab.com/libosinfo/osinfo-db/-/commits/v${version}";
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];
   };
 }

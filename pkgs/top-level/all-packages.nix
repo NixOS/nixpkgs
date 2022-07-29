@@ -13649,8 +13649,6 @@ with pkgs;
 
   oraclejdk11 = callPackage ../development/compilers/oraclejdk/jdk11-linux.nix { };
 
-  oraclejdk14 = callPackage ../development/compilers/oraclejdk/jdk14-linux.nix { };
-
   jasmin = callPackage ../development/compilers/jasmin { };
 
   java-service-wrapper = callPackage ../tools/system/java-service-wrapper {
@@ -15216,6 +15214,8 @@ with pkgs;
   ameba = callPackage ../development/tools/ameba { };
 
   anybadge = with python3Packages; toPythonApplication anybadge;
+
+  apkg = callPackage ../tools/package-management/apkg { };
 
   augeas = callPackage ../tools/system/augeas { };
 
