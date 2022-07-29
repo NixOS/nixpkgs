@@ -12,20 +12,14 @@ python3.pkgs.buildPythonApplication rec {
   # PyPI has old alpha version. Since then the project has switched from using a
   # seemingly abandoned D-Bus package pydbus and started using maintained
   # dbus-next. So let's use latest from GitHub.
-  version = "unstable-2022-03-21";
+  version = "unstable-2022-07-18";
 
   src = fetchFromGitHub {
     owner = "mdellweg";
     repo = "pass_secret_service";
-    rev = "149f8557e07098eee2f46561eea61e83255ac59b";
-    sha256 = "sha256-+/pFi6+K8rl0Ihm6cp/emUQVtau6+Apl8/VEr9AI0Xs=";
+    rev = "fadc09be718ae1e507eeb8719f3a2ea23edb6d7a";
+    hash = "sha256-lrNU5bkG4/fMu5rDywfiI8vNHyBsMf/fiWIeEHug03c=";
   };
-
-  patches = [
-    # Only needed until https://github.com/mdellweg/pass_secret_service/pull/30
-    # is merged.
-    ./int_from_bytes-deprecation-fix.patch
-  ];
 
   # Need to specify session.conf file for tests because it won't be found under
   # /etc/ in check phase.
