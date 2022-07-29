@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "cmdstan";
-  version = "2.30.0";
+  version = "2.30.1";
 
   # includes stanc binaries needed to build cmdstand
   src = fetchurl {
     url = "https://github.com/stan-dev/cmdstan/releases/download/v${version}/cmdstan-${version}.tar.gz";
-    sha256 = "sha256-AJwuoAQ6pKkcA6x4ky5k88/0+qPnNBOi4CadW+LY3mw=";
+    sha256 = "sha256-urdtzvp/TJVVlcC/BJZ3BQf8arDfWJboz4wtsKF+7bk=";
   };
 
   buildFlags = [ "build" ];
@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkInputs = [ python3 ];
+
+  CXXFLAGS = lib.optionalString stdenv.isDarwin "-D_BOOST_LGAMMA";
 
   postPatch = ''
     substituteInPlace stan/lib/stan_math/make/libraries \
@@ -42,7 +44,7 @@ stdenv.mkDerivation rec {
   preFixup = "rm -rf $(pwd)";
 
   meta = {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+    broken = stdenv.isLinux && stdenv.isAarch64;
     description = "Command-line interface to Stan";
     longDescription = ''
       Stan is a probabilistic programming language implementing full Bayesian

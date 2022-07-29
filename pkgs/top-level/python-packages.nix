@@ -1313,6 +1313,8 @@ in {
 
   bleak = callPackage ../development/python-modules/bleak { };
 
+  bleak-retry-connector = callPackage ../development/python-modules/bleak-retry-connector { };
+
   blebox-uniapi = callPackage ../development/python-modules/blebox-uniapi { };
 
   blessed = callPackage ../development/python-modules/blessed { };
@@ -1680,6 +1682,8 @@ in {
 
   chiavdf = callPackage ../development/python-modules/chiavdf { };
 
+  chia-rs = callPackage ../development/python-modules/chia-rs { };
+
   chirpstack-api = callPackage ../development/python-modules/chirpstack-api { };
 
   chispa = callPackage ../development/python-modules/chispa { };
@@ -1813,6 +1817,8 @@ in {
   clvm-rs = callPackage ../development/python-modules/clvm-rs { };
 
   clvm-tools = callPackage ../development/python-modules/clvm-tools { };
+
+  clvm-tools-rs = callPackage ../development/python-modules/clvm-tools-rs { };
 
   cma = callPackage ../development/python-modules/cma { };
 
@@ -5363,6 +5369,8 @@ in {
   mdit-py-plugins = callPackage ../development/python-modules/mdit-py-plugins { };
 
   mdurl = callPackage ../development/python-modules/mdurl { };
+
+  mdutils = callPackage ../development/python-modules/mdutils { };
 
   MDP = callPackage ../development/python-modules/mdp { };
 

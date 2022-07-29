@@ -1,5 +1,6 @@
 { lib
 , bleak
+, bleak-retry-connector
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
@@ -7,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyswitchbot";
-  version = "0.15.0";
+  version = "0.15.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,11 +17,12 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "pySwitchbot";
     rev = "refs/tags/${version}";
-    hash = "sha256-x1uRUr9mU510X2rSGBYBheB9rqsGBFr3SLnWcXiIBfk=";
+    hash = "sha256-JoHFDFJcltgNrP3faFfyTV7D15h8YTyojWEUcrREeGU=";
   };
 
   propagatedBuildInputs = [
     bleak
+    bleak-retry-connector
   ];
 
   # Project has no tests
