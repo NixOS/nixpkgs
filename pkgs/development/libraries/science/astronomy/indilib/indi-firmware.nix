@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     description = "Third party firmware for the INDI astronomical software suite";
     changelog = "https://github.com/indilib/indi-3rdparty/releases/tag/v${version}";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ hjones2199 ];
+    maintainers = with maintainers; [ hjones2199 spacekitteh ];
     platforms = platforms.linux;
   };
 }
