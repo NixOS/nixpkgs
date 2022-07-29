@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, pytestCheckHook
 , pythonOlder
 }:
 
@@ -11,13 +12,24 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-TK7IL9jdCW/rqCF4WAaLrLKjtZUPQ8BIxtwyo0idWvE=";
+  src = fetchFromGitHub {
+    owner = "GeospatialPython";
+    repo = pname;
+    rev = version;
+    hash = "sha256-yfxhgk8a1rdpGVkE1sjJqT6tiFLimhu2m2SjGxLI6wo=";
   };
+
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "shapefile"
+  ];
+
+  disabledTests = [
+    # Requires network access
+    "test_reader_url"
   ];
 
   meta = with lib; {
