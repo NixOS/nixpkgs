@@ -1,0 +1,182 @@
+diff --git a/Cabal/src/Distribution/Simple/Build/PathsModule.hs b/Cabal/src/Distribution/Simple/Build/PathsModule.hs
+index b2be7e1a8..bf218dbc1 100644
+--- a/libraries/Cabal/Cabal/src/Distribution/Simple/Build/PathsModule.hs
++++ b/libraries/Cabal/Cabal/src/Distribution/Simple/Build/PathsModule.hs
+@@ -25,16 +25,21 @@ import Distribution.Package
+ import Distribution.PackageDescription
+ import Distribution.Simple.Compiler
+ import Distribution.Simple.LocalBuildInfo
+-import Distribution.Simple.Utils          (shortRelativePath)
++import Distribution.Simple.Utils          (shortRelativePath, unintersperse)
+ import Distribution.System
+ import Distribution.Version
+ 
+ import qualified Distribution.Simple.Build.PathsModule.Z as Z
+ 
++import System.FilePath ( pathSeparator )
++
+ -- ------------------------------------------------------------
+ -- * Building Paths_<pkg>.hs
+ -- ------------------------------------------------------------
+ 
++splitPath :: FilePath -> [ String ]
++splitPath = unintersperse pathSeparator
++
+ generatePathsModule :: PackageDescription -> LocalBuildInfo -> ComponentLocalBuildInfo -> String
+ generatePathsModule pkg_descr lbi clbi = Z.render Z.Z
+     { Z.zPackageName                = packageName pkg_descr
+@@ -56,8 +61,41 @@ generatePathsModule pkg_descr lbi clbi = Z.render Z.Z
+     , Z.zDatadir    = zDatadir
+     , Z.zLibexecdir = zLibexecdir
+     , Z.zSysconfdir = zSysconfdir
++
++    , Z.zAbsBody = absBody
++    , Z.zWarnPragma = warnPragma
++    , Z.zImportList = importList
++    , Z.zShouldEmitDataDir = shouldEmitDataDir
+     }
+   where
++    dirs = [ (flat_libdir, "LibDir")
++           , (flat_dynlibdir, "DynLibDir")
++           , (flat_datadir, "DataDir")
++           , (flat_libexecdir, "LibexecDir")
++           , (flat_sysconfdir, "SysconfDir") ];
++    shouldEmitPath p
++      | (splitPath flat_prefix) `isPrefixOf` (splitPath flat_bindir) = True
++      | (splitPath flat_prefix) `isPrefixOf` (splitPath p) = False
++      | otherwise = True
++    shouldEmitDataDir = shouldEmitPath flat_datadir
++    nixEmitPathFn (path, name) = let
++      varName = toLower <$> name
++      fnName = "get"++name
++      in if shouldEmitPath path then
++           varName ++ " :: FilePath\n"++
++           varName ++ " = " ++ show path ++
++           "\n" ++ fnName ++ " :: IO FilePath" ++
++           "\n" ++ fnName ++ " = " ++ mkGetEnvOr varName ("return " ++ varName)++"\n"
++         else ""
++    mkGetEnvOr var expr = "catchIO (getEnv \""++var'++"\") (\\_ -> "++expr++")"
++        where var' = pkgPathEnvVar pkg_descr var
++    absBody = intercalate "\n" $ nixEmitPathFn <$> dirs
++    warnPragma = case filter (not . shouldEmitPath . fst) dirs of
++      [] -> ""
++      omittedDirs -> "{-# WARNING \"The functions: "++omittedFns++" Have been omitted by the Nix build system.\" #-}"
++        where omittedFns = intercalate ", " $ map snd omittedDirs
++    importList = intercalate ", " $ ("get" ++) . snd <$> filter (shouldEmitPath . fst) dirs
++
+     supports_cpp                 = supports_language_pragma
+     supports_rebindable_syntax   = ghc_newer_than (mkVersion [7,0,1])
+     supports_language_pragma     = ghc_newer_than (mkVersion [6,6,1])
+diff --git a/Cabal/src/Distribution/Simple/Build/PathsModule/Z.hs b/Cabal/src/Distribution/Simple/Build/PathsModule/Z.hs
+index 69efbda87..067287b1c 100644
+--- a/libraries/Cabal/Cabal/src/Distribution/Simple/Build/PathsModule/Z.hs
++++ b/libraries/Cabal/Cabal/src/Distribution/Simple/Build/PathsModule/Z.hs
+@@ -19,6 +19,10 @@ data Z
+          zLibexecdir :: FilePath,
+          zSysconfdir :: FilePath,
+          zNot :: (Bool -> Bool),
++         zAbsBody :: String,
++         zWarnPragma :: String,
++         zImportList :: String,
++         zShouldEmitDataDir :: Bool,
+          zManglePkgName :: (PackageName -> String)}
+     deriving Generic
+ render :: Z -> String
+@@ -45,10 +49,18 @@ render z_root = execWriter $ do
+   tell "{-# OPTIONS_GHC -w #-}\n"
+   tell "module Paths_"
+   tell (zManglePkgName z_root (zPackageName z_root))
++  tell " "
++  tell (zWarnPragma z_root)
+   tell " (\n"
+-  tell "    version,\n"
+-  tell "    getBinDir, getLibDir, getDynLibDir, getDataDir, getLibexecDir,\n"
+-  tell "    getDataFileName, getSysconfDir\n"
++  tell "    version, getBinDir,\n"
++  if (zShouldEmitDataDir z_root)
++  then do
++    tell "    getDataFileName, \n"
++    return ()
++  else do
++    tell "\n"
++    return ()
++  tell (zImportList z_root)
+   tell "  ) where\n"
+   tell "\n"
+   if (zNot z_root (zAbsolute z_root))
+@@ -97,16 +109,21 @@ render z_root = execWriter $ do
+   tell (zVersionDigits z_root)
+   tell " []\n"
+   tell "\n"
+-  tell "getDataFileName :: FilePath -> IO FilePath\n"
+-  tell "getDataFileName name = do\n"
+-  tell "  dir <- getDataDir\n"
+-  tell "  return (dir `joinFileName` name)\n"
+-  tell "\n"
+-  tell "getBinDir, getLibDir, getDynLibDir, getDataDir, getLibexecDir, getSysconfDir :: IO FilePath\n"
++  if (zShouldEmitDataDir z_root)
++  then do
++    tell "getDataFileName :: FilePath -> IO FilePath\n"
++    tell "getDataFileName name = do\n"
++    tell "  dir <- getDataDir\n"
++    tell "  return (dir `joinFileName` name)\n"
++    return ()
++  else do
++    return ()
+   tell "\n"
+   tell "\n"
+   if (zRelocatable z_root)
+   then do
++    tell "\n"
++    tell "getBinDir, getLibDir, getDynLibDir, getDataDir, getLibexecDir, getSysconfDir :: IO FilePath\n"
+     tell "\n"
+     tell "getPrefixDirReloc :: FilePath -> IO FilePath\n"
+     tell "getPrefixDirReloc dirRel = do\n"
+@@ -152,44 +169,16 @@ render z_root = execWriter $ do
+     if (zAbsolute z_root)
+     then do
+       tell "\n"
+-      tell "bindir, libdir, dynlibdir, datadir, libexecdir, sysconfdir :: FilePath\n"
++      tell "bindir :: FilePath\n"
+       tell "bindir     = "
+       tell (zBindir z_root)
+       tell "\n"
+-      tell "libdir     = "
+-      tell (zLibdir z_root)
+-      tell "\n"
+-      tell "dynlibdir  = "
+-      tell (zDynlibdir z_root)
+-      tell "\n"
+-      tell "datadir    = "
+-      tell (zDatadir z_root)
+-      tell "\n"
+-      tell "libexecdir = "
+-      tell (zLibexecdir z_root)
+-      tell "\n"
+-      tell "sysconfdir = "
+-      tell (zSysconfdir z_root)
+-      tell "\n"
+       tell "\n"
++      tell "getBinDir :: IO FilePath\n"
+       tell "getBinDir     = catchIO (getEnv \""
+       tell (zManglePkgName z_root (zPackageName z_root))
+       tell "_bindir\")     (\\_ -> return bindir)\n"
+-      tell "getLibDir     = catchIO (getEnv \""
+-      tell (zManglePkgName z_root (zPackageName z_root))
+-      tell "_libdir\")     (\\_ -> return libdir)\n"
+-      tell "getDynLibDir  = catchIO (getEnv \""
+-      tell (zManglePkgName z_root (zPackageName z_root))
+-      tell "_dynlibdir\")  (\\_ -> return dynlibdir)\n"
+-      tell "getDataDir    = catchIO (getEnv \""
+-      tell (zManglePkgName z_root (zPackageName z_root))
+-      tell "_datadir\")    (\\_ -> return datadir)\n"
+-      tell "getLibexecDir = catchIO (getEnv \""
+-      tell (zManglePkgName z_root (zPackageName z_root))
+-      tell "_libexecdir\") (\\_ -> return libexecdir)\n"
+-      tell "getSysconfDir = catchIO (getEnv \""
+-      tell (zManglePkgName z_root (zPackageName z_root))
+-      tell "_sysconfdir\") (\\_ -> return sysconfdir)\n"
++      tell (zAbsBody z_root)
+       tell "\n"
+       return ()
+     else do
