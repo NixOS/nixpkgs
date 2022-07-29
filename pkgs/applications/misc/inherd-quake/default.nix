@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "inherd-quake";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "phodal";
     repo = "quake";
     rev = "v${version}";
-    sha256 = "sha256-OkgrkjO6IS6P2ZyFFbOprROPzDfQcHYCwaTKFsjjVo8=";
+    sha256 = "sha256-HKAR4LJm0lrQgTOCqtYIRFbO3qHtPbr4Fpx2ek1oJ4Q=";
   };
 
-  cargoSha256 = "sha256-EMRaChFwjMYZKSX5OvXYLSiwWo1m1H/tHVqc8RXX52A=";
+  cargoSha256 = "sha256-svvtZyfN91OT3yqxH6TgFhGYg9drpXsts4p2WqSHG8w=";
 
   nativeBuildInputs = [ pkg-config ];
 
