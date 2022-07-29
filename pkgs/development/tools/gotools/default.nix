@@ -43,7 +43,7 @@ buildGoModule rec {
   # Set GOTOOLDIR for derivations adding this to buildInputs
   postInstall = ''
     mkdir -p $out/nix-support
-    substitute ${../../go-modules/tools/setup-hook.sh} $out/nix-support/setup-hook \
+    substitute ${./setup-hook.sh} $out/nix-support/setup-hook \
       --subst-var-by bin $out
   '';
 
