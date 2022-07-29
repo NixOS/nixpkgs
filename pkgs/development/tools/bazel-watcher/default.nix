@@ -29,13 +29,13 @@ let
 in
 buildBazelPackage rec {
   pname = "bazel-watcher";
-  version = "0.16.2";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-watcher";
     rev = "v${version}";
-    sha256 = "sha256-yRXta6pPhgIonTL0q9GSzNQg/jHMIeC7xvfVYrZMmnc=";
+    sha256 = "sha256-aK18Q2nYxYajk9f/EEmtV7YJ8cYqbamR7vh3BTgu53Q=";
   };
 
   nativeBuildInputs = [ go git python3 ];
@@ -81,7 +81,7 @@ buildBazelPackage rec {
       rm -rf $bazelOut/external/com_google_protobuf
     '';
 
-    sha256 = "sha256-QjMsWTIHCy6Mbbphk5eK2wIiw900AvmyA0ZV9Be7nPI=";
+    sha256 = "sha256-R+Hc9ldYcKgAXETKr2+Hk7IrjJ93WkrjyJ1SQRoM9V4=";
   };
 
   buildAttrs = {
