@@ -10875,8 +10875,6 @@ with pkgs;
 
   squashfuse = callPackage ../tools/filesystems/squashfuse { };
 
-  srcml = callPackage ../applications/version-management/srcml { };
-
   srt-live-server = callPackage ../applications/video/srt-live-server { };
 
   srt-to-vtt-cl = callPackage ../tools/cd-dvd/srt-to-vtt-cl { };
