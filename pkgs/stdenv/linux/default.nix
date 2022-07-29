@@ -397,7 +397,7 @@ in
       preHook = commonPreHook;
 
       initialPath =
-        ((import ../common-path.nix) {pkgs = prevStage;});
+        ((import ../generic/common-path.nix) {pkgs = prevStage;});
 
       extraNativeBuildInputs = [ prevStage.patchelf ] ++
         # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
