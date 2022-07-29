@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "proot";
-  version = "5.3.0";
+  version = "5.3.1";
 
   src = fetchFromGitHub {
     repo = "proot";
     owner = "proot-me";
     rev = "v${version}";
-    sha256 = "sha256-89d1a5QBusra0vd3Ph0lQalXrblBwogi6bNgvvpQL+Q=";
+    sha256 = "sha256-uN31wDJjuQmDWeHaZHHQpmXQeQ/TYeS9HNYWEC0shaA=";
   };
 
   postPatch = ''
