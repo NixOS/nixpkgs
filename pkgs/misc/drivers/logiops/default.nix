@@ -16,6 +16,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ udev libevdev libconfig ];
 
+  postInstall = ''
+    # Remove when upstream fixes their reload mechanism (added on v0.2.3)
+    sed -ie '/^ExecReload/d' $out/lib/systemd/system/logid.service
+  '';
+
   meta = with lib; {
     description = "Unofficial userspace driver for HID++ Logitech devices";
     homepage = "https://github.com/PixlOne/logiops";
