@@ -98,7 +98,14 @@ let
     # Qt from doing this wackiness in the first place.
     trolltech_conf="''${XDG_CONFIG_HOME}/Trolltech.conf"
     if [ -e "$trolltech_conf" ]; then
-      ${getBin pkgs.gnused}/bin/sed -i "$trolltech_conf" -e '/nix\\store\|nix\/store/ d'
+      # Don't modify the config in-place with sed -i because it could be bind-mounted
+      # and sed -i would fail because it tries to rename its own tmp file into the original one.
+      # Renaming into bind-mounted file may fail on some systems.
+      tmp_path=$(mktemp "''${trolltech_conf}XXXXX")
+      ${getBin pkgs.gnused}/bin/sed "$trolltech_conf" -e '/nix\\store\|nix\/store/ d' >"$tmp_path"
+      cp "$tmp_path" "$trolltech_conf"
+      rm "$tmp_path"
+      unset -v tmp_path
     fi
 
     # Remove the kbuildsyscoca5 cache. It will be regenerated
