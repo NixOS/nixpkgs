@@ -4,7 +4,6 @@
 , meson
 , ninja
 , fetchurl
-, fetchpatch
 , apacheHttpd
 , pkg-config
 , glib
