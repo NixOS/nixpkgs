@@ -23703,6 +23703,8 @@ with pkgs;
 
   pam_mount = callPackage ../os-specific/linux/pam_mount { };
 
+  pam_mysql = callPackage ../os-specific/linux/pam_mysql { };
+
   pam_p11 = callPackage ../os-specific/linux/pam_p11 { };
 
   pam_pgsql = callPackage ../os-specific/linux/pam_pgsql { };
