@@ -1,17 +1,11 @@
 { fetchurl, fetchpatch, lib, stdenv, pkg-config, libgcrypt, libassuan, libksba
 , libgpg-error, libiconv, npth, gettext, texinfo, buildPackages
-
-# Each of the dependencies below are optional.
-# Gnupg can be built without them at the cost of reduced functionality.
 , guiSupport ? stdenv.isDarwin, enableMinimal ? false
-, adns ? null, bzip2 ? null , gnutls ? null , libusb1 ? null , openldap ? null
-, tpm2-tss ? null
-, pcsclite ? null , pinentry ? null , readline ? null , sqlite ? null , zlib ? null
+, adns, bzip2, gnutls, libusb1, openldap
+, tpm2-tss, pcsclite, pinentry, readline, sqlite, zlib
 }:
 
-with lib;
-
-assert guiSupport -> pinentry != null && enableMinimal == false;
+assert guiSupport -> enableMinimal == false;
 
 stdenv.mkDerivation rec {
   pname = "gnupg";
@@ -26,8 +20,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config texinfo ];
   buildInputs = [
     libgcrypt libassuan libksba libiconv npth gettext
+  ] ++ lib.optionals (!enableMinimal) ([
     readline libusb1 gnutls adns openldap zlib bzip2 sqlite
-  ] ++ optional (!stdenv.isDarwin) tpm2-tss ;
+  ] ++ lib.optional (!stdenv.isDarwin) tpm2-tss);
 
   patches = [
     ./fix-libusb-include-path.patch
@@ -43,7 +38,7 @@ stdenv.mkDerivation rec {
   ];
   postPatch = ''
     sed -i 's,\(hkps\|https\)://keyserver.ubuntu.com,hkps://keys.openpgp.org,g' configure configure.ac doc/dirmngr.texi doc/gnupg.info-1
-  '' + lib.optionalString (stdenv.isLinux && pcsclite != null) ''
+  '' + lib.optionalString (stdenv.isLinux && (!enableMinimal)) ''
     sed -i 's,"libpcsclite\.so[^"]*","${lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
   '';
 
@@ -54,8 +49,8 @@ stdenv.mkDerivation rec {
     "--with-libassuan-prefix=${libassuan.dev}"
     "--with-ksba-prefix=${libksba.dev}"
     "--with-npth-prefix=${npth}"
-  ] ++ optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}"
-  ++ optional ( (!stdenv.isDarwin) && (tpm2-tss != null) ) "--with-tss=intel";
+  ] ++ lib.optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}"
+  ++ lib.optional ((!stdenv.isDarwin) && (!enableMinimal)) "--with-tss=intel";
   postInstall = if enableMinimal
   then ''
     rm -r $out/{libexec,sbin,share}
