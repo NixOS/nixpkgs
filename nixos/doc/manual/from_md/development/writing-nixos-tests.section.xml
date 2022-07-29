@@ -49,15 +49,11 @@
   <section xml:id="sec-calling-nixos-tests">
     <title>Calling a test</title>
     <para>
-      Tests are invoked a bit differently depending on whether the test
-      lives in NixOS or in another project.
+      Tests are invoked differently depending on whether the test is
+      part of NixOS or lives in a different project.
     </para>
     <section xml:id="sec-call-nixos-test-in-nixos">
       <title>Testing within NixOS</title>
-      <para>
-        Test modules can be instantiated into derivations in multiple
-        ways.
-      </para>
       <para>
         Tests that are part of NixOS are added to
         <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/all-tests.nix"><literal>nixos/tests/all-tests.nix</literal></link>.
@@ -70,22 +66,26 @@
         <literal>all-tests.nix</literal>.
       </para>
       <programlisting language="bash">
-  hostname = runTest { imports = [ ./hostname.nix ]; defaults.networking.firewall.enable = false; };
+  hostname = runTest {
+    imports = [ ./hostname.nix ];
+    defaults.networking.firewall.enable = false;
+  };
 </programlisting>
       <para>
-        You can run a test with attribute name <literal>mytest</literal>
-        in <literal>nixos/tests/all-tests.nix</literal> by invoking:
+        You can run a test with attribute name
+        <literal>hostname</literal> in
+        <literal>nixos/tests/all-tests.nix</literal> by invoking:
       </para>
       <programlisting>
 cd /my/git/clone/of/nixpkgs
-nix-build -A nixosTests.mytest
+nix-build -A nixosTests.hostname
 </programlisting>
     </section>
     <section xml:id="sec-call-nixos-test-outside-nixos">
       <title>Testing outside the NixOS project</title>
       <para>
         Outside the <literal>nixpkgs</literal> repository, you can
-        instantiate the test by first acquiring the NixOS library,
+        instantiate the test by first importing the NixOS library,
       </para>
       <programlisting language="bash">
 # regular nix
