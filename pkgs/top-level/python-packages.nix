@@ -6775,7 +6775,7 @@ in {
 
   plantuml = callPackage ../development/python-modules/plantuml { };
 
-  plantuml-markdown = callPackage ../development/python-modules/plantuml-markdown { 
+  plantuml-markdown = callPackage ../development/python-modules/plantuml-markdown {
     inherit (pkgs) plantuml;
   };
 
