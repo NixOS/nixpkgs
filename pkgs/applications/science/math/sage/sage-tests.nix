@@ -1,5 +1,7 @@
 { stdenv
 , lib
+, gdb
+, python3
 , sage-with-env
 , makeWrapper
 , files ? null # "null" means run all tests
@@ -47,6 +49,11 @@ stdenv.mkDerivation {
   '';
 
   doInstallCheck = true;
+
+  installCheckInputs = [
+    (gdb.override { python3 = python3.withPackages (ps: [ ps.cython ]); })
+  ];
+
   installCheckPhase = ''
     export HOME="$TMPDIR/sage-home"
     mkdir -p "$HOME"
@@ -55,7 +62,9 @@ stdenv.mkDerivation {
     # https://github.com/NixOS/nixpkgs/pull/65802
     export GLIBC_TUNABLES=glibc.malloc.arena_max=4
 
+    export NIX_DEBUG_INFO_DIRS=${python3.debug}/lib/debug
+
     echo "Running sage tests with arguments ${timeSpecifier} ${patienceSpecifier} ${testArgs}"
-    "sage" -t --timeout=0 --nthreads "$NIX_BUILD_CORES" --optional=sage ${timeSpecifier} ${patienceSpecifier} ${testArgs}
+    "sage" -t --timeout=900 --nthreads "$NIX_BUILD_CORES" --optional=sage ${timeSpecifier} ${patienceSpecifier} ${testArgs}
   '';
 }

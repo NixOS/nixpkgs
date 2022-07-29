@@ -205,9 +205,7 @@ buildPythonPackage rec {
     cd src
   '';
 
-  postInstall = ''
-    rm -r "$out/${python.sitePackages}/sage/cython_debug"
-  '';
+  dontStrip = true;
 
   doCheck = false; # we will run tests in sage-tests.nix
 }
