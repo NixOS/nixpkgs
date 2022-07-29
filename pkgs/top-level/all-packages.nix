@@ -17044,6 +17044,8 @@ with pkgs;
 
   arb = callPackage ../development/libraries/arb {};
 
+  argparse = callPackage ../development/libraries/argparse { };
+
   argp-standalone = callPackage ../development/libraries/argp-standalone {};
 
   aribb25 = callPackage ../development/libraries/aribb25 {
