@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-snCW7dC8JI/pg1+HLjX0JXsTzwa3akA6rLcSNgKLF0c=";
   };
 
-  buildInputs = [ pango wayland wayland-protocols ];
   nativeBuildInputs = [ meson ninja pkg-config ];
+  buildInputs = [ pango wayland wayland-protocols ];
 
   prePatch = ''
     cp ${configFile} src/config.hpp
