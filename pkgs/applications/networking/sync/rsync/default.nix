@@ -62,6 +62,8 @@ stdenv.mkDerivation rec {
   # https://github.com/WayneD/rsync/commit/b7fab6f285ff0ff3816b109a8c3131b6ded0b484
   ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--enable-simd=no";
 
+  enableParallelBuilding = true;
+
   passthru.tests = { inherit (nixosTests) rsyncd; };
 
   meta = with lib; {
