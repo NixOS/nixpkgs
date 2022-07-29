@@ -49,8 +49,8 @@ Tests that are part of NixOS are added to [`nixos/tests/all-tests.nix`](https://
   hostname = runTest ./hostname.nix;
 ```
 
-Overrides can be added by defining an anonymous module in `nixos/tests/all-tests.nix`.
-For the purpose of constructing a test matrix, [use the `matrix` options](#sec-nixos-test-matrix) instead.
+Overrides can be added by defining an anonymous module in `nixos/tests/all-tests.nix` and passing it to `runTest`..
+For the purpose of constructing a test matrix, use the [`matrix` options](#sec-nixos-test-matrix) instead.
 
 ```nix
   hostname = runTest {
@@ -521,21 +521,33 @@ A parameterized test may look as follows:
 
 It has picked up on the `matrix` and only returns the derivations constructed for each choice.
 
-The test related options such as `nodes` at the root of the test configuration still exist there, but are not demanded by `runTest`, so only their copies at each of the choices are evaluated. Hence, the "root" can see the consequences of the choices.
+The arguments to the test module, which is called by `runTest` to create each configuration in the matrix, are built up as follows:
+ - `<decision>` in `matrix.<decision>` corresponds to the argument name to the test module.
+ - `<choice>` in `choice.<choice>` corresponds to the named argument's value as a string. Non-string values can be set with `_module.args` or other options inside [`choice.<choice>.module`](#opt-matrix._name_.choice._name_.module).
+
+`runTest` works by invoking the module system to lazily produce all option values, and then extracts only specific values from it.
+This means that some options exist, but are never evaluated.
+For example, when `matrix` is set, `nodes.<name>` is ignored in favor of `matrix.<decision>.choice.<choice>.module.nodes.<name>`.
+
+Nonetheless, the definitions in `nodes.<name>` are useful, as they also contribute to `matrix.<decision>.choice.<choice>.module.nodes.<name>`.
+The `module` option always duplicates and extends the root of the test configuration.
 
 Some variations aren't simply parametric, but require specific configuration for some choices.
-These can be added in the `module` submodule:
+These can be added in the `module` submodule.
+
+The following example shows how tests in a test matrix can be quite different, while sharing common configuration.
 
 ```nix
 { lib, setup, ... }: {
-  matrix.backend.choice.smtp.module = { lib, setup, ... }: {
+  matrix.backend.choice.smtp.module = { lib, ... }: {
     defaults.services.foo.backend = "smtp";
     nodes.smtpserver = { … };
     _module.args.setup = "";
   };
-  matrix.backend.choice.rest.module = { lib, setup, ... }: {
+  matrix.backend.choice.rest.module = { lib, ... }: {
     _module.args.setup = ''
       # extra setup for the rest backend
+      # …
     '';
   };
 
