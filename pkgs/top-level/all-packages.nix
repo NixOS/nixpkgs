@@ -292,6 +292,8 @@ with pkgs;
 
   buf = callPackage ../development/tools/buf { };
 
+  cbfmt = callPackage ../development/tools/cbfmt { };
+
   cfn-nag = callPackage ../development/tools/cfn-nag { };
 
   cxx-rs = callPackage ../development/libraries/cxx-rs { };
