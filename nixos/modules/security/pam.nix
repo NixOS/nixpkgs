@@ -142,6 +142,16 @@ let
         '';
       };
 
+      mysqlAuth = mkOption {
+        default = config.users.mysql.enable;
+        defaultText = literalExpression "config.users.mysql.enable";
+        type = types.bool;
+        description = ''
+          If set, the <literal>pam_mysql</literal> module will be used to
+          authenticate users against a MySQL/MariaDB database.
+        '';
+      };
+
       fprintAuth = mkOption {
         default = config.services.fprintd.enable;
         defaultText = literalExpression "config.services.fprintd.enable";
@@ -447,6 +457,9 @@ let
           optionalString use_ldap ''
             account sufficient ${pam_ldap}/lib/security/pam_ldap.so
           '' +
+          optionalString cfg.mysqlAuth ''
+            account sufficient ${pkgs.pam_mysql}/lib/security/pam_mysql.so config_file=/etc/security/pam_mysql.conf
+          '' +
           optionalString (config.services.sssd.enable && cfg.sssdStrictAccess==false) ''
             account sufficient ${pkgs.sssd}/lib/security/pam_sss.so
           '' +
@@ -475,6 +488,9 @@ let
           '' +
           optionalString cfg.logFailures ''
             auth required pam_faillock.so
+          '' +
+          optionalString cfg.mysqlAuth ''
+            auth sufficient ${pkgs.pam_mysql}/lib/security/pam_mysql.so config_file=/etc/security/pam_mysql.conf
           '' +
           optionalString (config.security.pam.enableSSHAgentAuth && cfg.sshAgentAuth) ''
             auth sufficient ${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so file=${lib.concatStringsSep ":" config.services.openssh.authorizedKeysFiles}
@@ -572,6 +588,9 @@ let
           optionalString use_ldap ''
             password sufficient ${pam_ldap}/lib/security/pam_ldap.so
           '' +
+          optionalString cfg.mysqlAuth ''
+            password sufficient ${pkgs.pam_mysql}/lib/security/pam_mysql.so config_file=/etc/security/pam_mysql.conf
+          '' +
           optionalString config.services.sssd.enable ''
             password sufficient ${pkgs.sssd}/lib/security/pam_sss.so use_authtok
           '' +
@@ -615,6 +634,9 @@ let
           '' +
           optionalString use_ldap ''
             session optional ${pam_ldap}/lib/security/pam_ldap.so
+          '' +
+          optionalString cfg.mysqlAuth ''
+            session optional ${pkgs.pam_mysql}/lib/security/pam_mysql.so config_file=/etc/security/pam_mysql.conf
           '' +
           optionalString config.services.sssd.enable ''
             session optional ${pkgs.sssd}/lib/security/pam_sss.so
@@ -1222,6 +1244,9 @@ in
       '' +
       optionalString (isEnabled (cfg: cfg.oathAuth)) ''
         "mr ${pkgs.oath-toolkit}/lib/security/pam_oath.so,
+      '' +
+      optionalString (isEnabled (cfg: cfg.mysqlAuth)) ''
+        mr ${pkgs.pam_mysql}/lib/security/pam_mysql.so,
       '' +
       optionalString (isEnabled (cfg: cfg.yubicoAuth)) ''
         mr ${pkgs.yubico-pam}/lib/security/pam_yubico.so,

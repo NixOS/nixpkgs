@@ -92,6 +92,9 @@ in
           config.environment.etc.hosts.source
           config.environment.etc."nsswitch.conf".source
           config.environment.etc."nscd.conf".source
+        ] ++ optionals config.users.mysql.enable [
+          config.environment.etc."libnss-mysql.cfg".source
+          config.environment.etc."libnss-mysql-root.cfg".source
         ];
 
         # In some configurations, nscd needs to be started as root; it will
