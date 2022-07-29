@@ -19,6 +19,7 @@
 , pkg-config, glib, libsecret
 , gzip # needed at runtime by gitweb.cgi
 , withSsh ? false
+, doInstallCheck ? !stdenv.isDarwin  # extremely slow on darwin
 }:
 
 assert osxkeychainSupport -> stdenv.isDarwin;
@@ -31,7 +32,7 @@ let
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "git"
     + lib.optionalString svnSupport "-with-svn"
     + lib.optionalString (!svnSupport && !guiSupport && !sendEmailSupport && !withManual && !pythonSupport && !withpcre2) "-minimal";
@@ -280,7 +281,7 @@ stdenv.mkDerivation {
   ## InstallCheck
 
   doCheck = false;
-  doInstallCheck = true;
+  inherit doInstallCheck;
 
   installCheckTarget = "test";
 
@@ -369,6 +370,9 @@ stdenv.mkDerivation {
   passthru = {
     shellPath = "/bin/git-shell";
     tests = {
+      withInstallCheck = finalAttrs.finalPackage.overrideAttrs (_: {
+        doInstallCheck = true;
+      });
       buildbot-integration = nixosTests.buildbot;
     };
   };
@@ -387,4 +391,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ primeos wmertens globin ];
   };
-}
+})

@@ -26,6 +26,8 @@
 , enableEXR ? !stdenv.isDarwin
 , openexr
 , ilmbase
+, enableJPEG2000 ? true
+, openjpeg
 , enableEigen ? true
 , eigen
 , enableOpenblas ? true
@@ -256,6 +258,7 @@ stdenv.mkDerivation {
     ++ lib.optional enableTIFF libtiff
     ++ lib.optional enableWebP libwebp
     ++ lib.optionals enableEXR [ openexr ilmbase ]
+    ++ lib.optional enableJPEG2000 openjpeg
     ++ lib.optional enableFfmpeg ffmpeg
     ++ lib.optionals (enableFfmpeg && stdenv.isDarwin)
       [ VideoDecodeAcceleration bzip2 ]
@@ -307,6 +310,8 @@ stdenv.mkDerivation {
     (opencvFlag "JPEG" enableJPEG)
     (opencvFlag "PNG" enablePNG)
     (opencvFlag "OPENEXR" enableEXR)
+    (opencvFlag "OPENJPEG" enableJPEG2000)
+    "-DWITH_JASPER=OFF" # OpenCV falls back to a vendored copy of Jasper when OpenJPEG is disabled
     (opencvFlag "CUDA" enableCuda)
     (opencvFlag "CUBLAS" enableCuda)
     (opencvFlag "TBB" enableTbb)

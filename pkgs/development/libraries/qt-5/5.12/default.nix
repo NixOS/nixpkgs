@@ -164,7 +164,7 @@ let
         inherit bison cups harfbuzz libGL;
         withGtk3 = !stdenv.isDarwin; inherit dconf gtk3;
         inherit debug developerBuild decryptSslTraffic;
-        inherit (darwin.apple_sdk.frameworks) AGL AppKit ApplicationServices Carbon Cocoa CoreAudio CoreBluetooth
+        inherit (darwin.apple_sdk.frameworks) AGL AppKit ApplicationServices AVFoundation Carbon Cocoa CoreAudio CoreBluetooth
           CoreLocation CoreServices DiskArbitration Foundation OpenGL MetalKit IOKit;
         inherit (darwin) libobjc;
       };

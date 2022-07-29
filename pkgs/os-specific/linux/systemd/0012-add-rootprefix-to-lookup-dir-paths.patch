@@ -1,7 +1,7 @@
-From 201b588b4b30fb53aefaed43e5d434373a076cb0 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Andreas Rammhold <andreas@rammhold.de>
 Date: Thu, 9 May 2019 11:15:22 +0200
-Subject: [PATCH 12/18] add rootprefix to lookup dir paths
+Subject: [PATCH] add rootprefix to lookup dir paths
 
 systemd does not longer use the UDEVLIBEXEC directory as root for
 discovery default udev rules. By adding `$out/lib` to the lookup paths
@@ -33,6 +33,3 @@ index 0a1ae023a3..cc00ff6c68 100644
  
  #define CONF_PATHS(n)                           \
          CONF_PATHS_USR(n)                       \
--- 
-2.36.1
-

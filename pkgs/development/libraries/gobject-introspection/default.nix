@@ -90,7 +90,13 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dcairo=disabled"
     "-Dgtk_doc=${lib.boolToString (stdenv.hostPlatform == stdenv.buildPlatform)}"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "-Dgi_cross_ldd_wrapper=${buildPackages.prelink}/bin/prelink-rtld"
+    "-Dgi_cross_ldd_wrapper=${substituteAll {
+      name = "g-ir-scanner-lddwrapper";
+      isExecutable = true;
+      src = ./wrappers/g-ir-scanner-lddwrapper.sh;
+      inherit (buildPackages) bash;
+      buildobjdump = "${buildPackages.stdenv.cc.bintools}/bin/objdump";
+    }}"
     "-Dgi_cross_use_prebuilt_gi=true"
     "-Dgi_cross_binary_wrapper=${stdenv.hostPlatform.emulator buildPackages}"
   ];
