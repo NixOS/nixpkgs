@@ -13544,20 +13544,6 @@ with pkgs;
 
   glslang = callPackage ../development/compilers/glslang { };
 
-  go_1_17 = callPackage ../development/compilers/go/1.17.nix ({
-    inherit (darwin.apple_sdk.frameworks) Security Foundation;
-  } // lib.optionalAttrs (stdenv.cc.isGNU && stdenv.isAarch64) {
-    stdenv = gcc8Stdenv;
-    buildPackages = buildPackages // { stdenv = buildPackages.gcc8Stdenv; };
-  });
-
-  # go 1.18 requires a newer Apple SDK to be build. See commit message for more details.
-  go_1_18 = darwin.apple_sdk_11_0.callPackage ../development/compilers/go/1.18.nix {
-    inherit (darwin.apple_sdk_11_0.frameworks) Security Foundation;
-  };
-
-  go = go_1_18;
-
   go-junit-report = callPackage ../development/tools/go-junit-report { };
 
   gobang = callPackage ../development/tools/database/gobang {
@@ -21927,29 +21913,36 @@ with pkgs;
 
   buildBowerComponents = callPackage ../development/bower-modules/generic { };
 
-  ### DEVELOPMENT / GO MODULES
+  ### DEVELOPMENT / GO
 
+  # the unversioned attributes should always point to the same go version
+  go = go_1_18;
+  buildGoModule = buildGo118Module;
+  buildGoPackage = buildGo118Package;
+
+  go_1_17 = callPackage ../development/compilers/go/1.17.nix ({
+    inherit (darwin.apple_sdk.frameworks) Foundation Security;
+  } // lib.optionalAttrs (stdenv.cc.isGNU && stdenv.isAarch64) {
+    stdenv = gcc8Stdenv;
+    buildPackages = buildPackages // { stdenv = buildPackages.gcc8Stdenv; };
+  });
+  buildGo117Module = callPackage ../development/go-modules/generic {
+    go = buildPackages.go_1_17;
+  };
   buildGo117Package = callPackage ../development/go-packages/generic {
     go = buildPackages.go_1_17;
   };
 
-  # go 1.18 requires a newer Apple SDK to be build. See commit message for more details.
-  buildGo118Package = darwin.apple_sdk_11_0.callPackage ../development/go-packages/generic {
-    go = buildPackages.go_1_18;
+  # requires a newer Apple SDK
+  go_1_18 = darwin.apple_sdk_11_0.callPackage ../development/compilers/go/1.18.nix {
+    inherit (darwin.apple_sdk_11_0.frameworks) Foundation Security;
   };
-
-  buildGoPackage = buildGo118Package;
-
-  buildGo117Module = callPackage ../development/go-modules/generic {
-    go = buildPackages.go_1_17;
-  };
-
-  # go 1.18 requires a newer Apple SDK to be build. See commit message for more details.
   buildGo118Module = darwin.apple_sdk_11_0.callPackage ../development/go-modules/generic {
     go = buildPackages.go_1_18;
   };
-
-  buildGoModule = buildGo118Module;
+  buildGo118Package = darwin.apple_sdk_11_0.callPackage ../development/go-packages/generic {
+    go = buildPackages.go_1_18;
+  };
 
   go2nix = callPackage ../development/tools/go2nix { };
 
