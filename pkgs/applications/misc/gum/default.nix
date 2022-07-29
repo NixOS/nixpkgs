@@ -30,7 +30,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Tasty Bubble Gum for your shell";
-    homepage = "https://github.com/charmbracelet/charm";
+    homepage = "https://github.com/charmbracelet/gum";
     changelog = "https://github.com/charmbracelet/gum/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ maaslalani ];
