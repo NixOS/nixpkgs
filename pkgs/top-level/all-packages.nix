@@ -29296,6 +29296,8 @@ with pkgs;
 
   taxi-cli = with python3Packages; toPythonApplication taxi;
 
+  tcping-go = callPackage ../applications/networking/tcping-go { };
+
   librep = callPackage ../development/libraries/librep { };
 
   rep-gtk = callPackage ../development/libraries/rep-gtk { };
