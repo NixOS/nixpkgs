@@ -3859,6 +3859,8 @@ with pkgs;
 
   libndtypes = callPackage ../development/libraries/libndtypes { };
 
+  libnss-mysql = callPackage ../os-specific/linux/libnss-mysql { };
+
   libxnd = callPackage ../development/libraries/libxnd { };
 
   lifeograph = callPackage ../applications/editors/lifeograph { };
