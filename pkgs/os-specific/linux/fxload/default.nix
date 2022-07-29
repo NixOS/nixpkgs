@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     description = "Tool to upload firmware to Cypress EZ-USB microcontrollers";
     license = licenses.gpl2;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ spacekitteh ];
   };
 }
