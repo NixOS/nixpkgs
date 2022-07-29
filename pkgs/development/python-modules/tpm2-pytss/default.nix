@@ -30,7 +30,6 @@ buildPythonPackage rec {
     cffi
     pkgconfig # this is the python module
     pkg-config # this is the actual pkg-config tool
-    setuptools-scm
   ];
 
   buildInputs = [
@@ -42,6 +41,7 @@ buildPythonPackage rec {
     asn1crypto
     cryptography
     pyyaml
+    setuptools-scm
   ];
 
   # https://github.com/tpm2-software/tpm2-pytss/issues/341
