@@ -1,4 +1,5 @@
 { lib
+, applyLibideFix ? false
 , fetchFromGitLab
 , fetchpatch
 , meson
@@ -20,7 +21,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "35pL/2TQRVgPfAcfOGCLlSP1LIh4r95mFC+UoXQEEHo=";
   };
 
-  patches = [
+  patches = lib.optionals applyLibideFix [
     # Fix gnome-builder build
     # https://gitlab.gnome.org/GNOME/gi-docgen/-/merge_requests/161
     (fetchpatch {

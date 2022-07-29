@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     desktop-file-utils
-    gi-docgen
+    (gi-docgen.override { applyLibideFix = true; })
     gobject-introspection
     meson
     ninja
