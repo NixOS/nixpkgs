@@ -24401,16 +24401,6 @@ with pkgs;
     gnupg = callPackage ../tools/security/gnupg/23.nix {
       enableMinimal = true;
       guiSupport = false;
-      pcsclite = null;
-      sqlite = null;
-      pinentry = null;
-      adns = null;
-      gnutls = null;
-      libusb1 = null;
-      openldap = null;
-      readline = null;
-      zlib = null;
-      bzip2 = null;
     };
   };
   systemdMinimal = systemd.override {
