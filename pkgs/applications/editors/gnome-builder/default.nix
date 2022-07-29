@@ -49,6 +49,20 @@ stdenv.mkDerivation rec {
     sha256 = "SSjohWD2mn6riFR8CBeHzadbzi85XMWivgj4K8b5ujY=";
   };
 
+  patches = [
+    # The test environment hardcodes `GI_TYPELIB_PATH` environment variable to direct dependencies of libide & co.
+    # https://gitlab.gnome.org/GNOME/gnome-builder/-/commit/2ce510b0ec0518c29427a29b386bb2ac1a121edf
+    # https://gitlab.gnome.org/GNOME/gnome-builder/-/commit/2964f7c2a0729f2f456cdca29a0f5b7525baf7c1
+    #
+    # But Nix does not have a fallback path for typelibs like /usr/lib on FHS distros and relies solely
+    # on `GI_TYPELIB_PATH` environment variable. So, when Ide started to depend on Vte, which
+    # depends on Pango, among others, GIrepository was unable to find these indirect dependencies
+    # and crashed with:
+    #
+    #     Typelib file for namespace 'Pango', version '1.0' not found (g-irepository-error-quark, 0)
+    ./fix-finding-test-typelibs.patch
+  ];
+
   nativeBuildInputs = [
     desktop-file-utils
     (gi-docgen.override { applyLibideFix = true; })
@@ -109,7 +123,10 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   postPatch = ''
+    # Drop after https://gitlab.gnome.org/GNOME/gnome-builder/-/merge_requests/609
     patchShebangs build-aux/meson/post_install.py
+    substituteInPlace build-aux/meson/post_install.py \
+      --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
   '';
 
   checkPhase = ''
