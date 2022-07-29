@@ -2,12 +2,12 @@
 , setuptools }:
 
 buildPythonPackage rec {
-  version = "2.3.0";
+  version = "2.3.1";
   pname = "pyshp";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-glBk6kA6zxNehGz4sJJEmUMOa+HNN6DzS+cTCQZhfTw=";
+    sha256 = "sha256-TK7IL9jdCW/rqCF4WAaLrLKjtZUPQ8BIxtwyo0idWvE=";
   };
 
   pythonImportsCheck = [ "shapefile" ];
