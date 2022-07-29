@@ -1,12 +1,10 @@
 { buildPythonPackage
 , fetchFromGitHub
 , lib
-  # Runtime dependencies
-, pkgs # for pkgs.plantuml
+, plantuml
 , markdown
 , requests
 , six
-  # Test dependencies
 , runCommand
 , writeText
 , plantuml-markdown
@@ -26,14 +24,13 @@ buildPythonPackage {
   };
 
   propagatedBuildInputs = [
-    pkgs.plantuml
+    plantuml
     markdown
     requests
     six
   ];
 
   # The package uses a custom script that downloads a certain version of plantuml for testing.
-  # It also uses the unittest module so failing tests cannot be easily disabled.
   doCheck = false;
 
   pythonImportsCheck = [ "plantuml_markdown" ];
