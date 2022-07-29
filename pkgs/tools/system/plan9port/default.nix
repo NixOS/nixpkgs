@@ -17,24 +17,8 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    #hardcoded path
-    substituteInPlace src/cmd/acme/acme.c \
-      --replace /lib/font/bit $out/plan9/font
-
-    #deprecated flags
-    find . -type f \
-      -exec sed -i -e 's/_SVID_SOURCE/_DEFAULT_SOURCE/g' {} \; \
-      -exec sed -i -e 's/_BSD_SOURCE/_DEFAULT_SOURCE/g' {} \;
-
     substituteInPlace bin/9c \
       --replace 'which uniq' '${which}/bin/which uniq'
-  '' + lib.optionalString (!stdenv.isDarwin) ''
-    #add missing ctrl+c\z\x\v keybind for non-Darwin
-    substituteInPlace src/cmd/acme/text.c \
-      --replace "case Kcmd+'c':" "case 0x03: case Kcmd+'c':" \
-      --replace "case Kcmd+'z':" "case 0x1a: case Kcmd+'z':" \
-      --replace "case Kcmd+'x':" "case 0x18: case Kcmd+'x':" \
-      --replace "case Kcmd+'v':" "case 0x16: case Kcmd+'v':"
   '';
 
   buildInputs = [ perl ] ++ (if !stdenv.isDarwin then [
