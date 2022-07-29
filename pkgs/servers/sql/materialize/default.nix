@@ -91,7 +91,6 @@ rustPlatform.buildRustPackage rec {
     homepage    = "https://materialize.com";
     description = "A streaming SQL materialized view engine for real-time applications";
     license     = licenses.bsl11;
-    platforms   = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
     maintainers = [ maintainers.petrosagg ];
   };
 }
