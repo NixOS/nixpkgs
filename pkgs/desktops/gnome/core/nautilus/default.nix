@@ -7,7 +7,6 @@
 , gettext
 , libxml2
 , desktop-file-utils
-, python3
 , wrapGAppsHook
 , gtk4
 , libadwaita
@@ -62,7 +61,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     wrapGAppsHook
   ];
 
@@ -97,10 +95,6 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     )
-  '';
-
-  postPatch = ''
-    patchShebangs build-aux/meson/postinstall.py
   '';
 
   passthru = {
