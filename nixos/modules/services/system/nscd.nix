@@ -27,6 +27,22 @@ in
         '';
       };
 
+      user = mkOption {
+        type = types.str;
+        default = "nscd";
+        description = ''
+          User account under which nscd runs.
+        '';
+      };
+
+      group = mkOption {
+        type = types.str;
+        default = "nscd";
+        description = ''
+          User group under which nscd runs.
+        '';
+      };
+
       config = mkOption {
         type = types.lines;
         default = builtins.readFile ./nscd.conf;
@@ -56,6 +72,13 @@ in
   config = mkIf cfg.enable {
     environment.etc."nscd.conf".text = cfg.config;
 
+    users.users.${cfg.user} = {
+      isSystemUser = true;
+      group = cfg.group;
+    };
+
+    users.groups.${cfg.group} = {};
+
     systemd.services.nscd =
       { description = "Name Service Cache Daemon";
 
@@ -71,16 +94,24 @@ in
           config.environment.etc."nscd.conf".source
         ];
 
-        # We use DynamicUser because in default configurations nscd doesn't
-        # create any files that need to survive restarts. However, in some
-        # configurations, nscd needs to be started as root; it will drop
-        # privileges after all the NSS modules have read their configuration
-        # files. So prefix the ExecStart command with "!" to prevent systemd
-        # from dropping privileges early. See ExecStart in systemd.service(5).
+        # In some configurations, nscd needs to be started as root; it will
+        # drop privileges after all the NSS modules have read their
+        # configuration files. So prefix the ExecStart command with "!" to
+        # prevent systemd from dropping privileges early. See ExecStart in
+        # systemd.service(5). We use a static user, because some NSS modules
+        # sill want to read their configuration files after the privilege drop
+        # and so users can set the owner of those files to the nscd user.
         serviceConfig =
           { ExecStart = "!@${cfg.package}/bin/nscd nscd";
             Type = "forking";
-            DynamicUser = true;
+            User = cfg.user;
+            Group = cfg.group;
+            RemoveIPC = true;
+            PrivateTmp = true;
+            NoNewPrivileges = true;
+            RestrictSUIDSGID = true;
+            ProtectSystem = "strict";
+            ProtectHome = "read-only";
             RuntimeDirectory = "nscd";
             PIDFile = "/run/nscd/nscd.pid";
             Restart = "always";
