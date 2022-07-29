@@ -99,8 +99,8 @@ stdenv.mkDerivation rec {
     sqlite
     libkrb5
     openldap
-    webkitgtk_4_1
-    webkitgtk_5_0
+    webkitgtk_4_1 # For GTK 3 library
+    webkitgtk_5_0 # For GTK 4 library
     glib-networking
     libcanberra-gtk3
     pcre
