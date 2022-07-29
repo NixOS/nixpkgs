@@ -4,7 +4,6 @@
 , substituteAll
 , intltool
 , pkg-config
-, fetchpatch
 , dbus
 , gnome
 , systemd
