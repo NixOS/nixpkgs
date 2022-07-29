@@ -6659,6 +6659,8 @@ in {
 
   psrpcore = callPackage ../development/python-modules/psrpcore { };
 
+  pypemicro = callPackage ../development/python-modules/pypemicro { };
+
   pyprecice = callPackage ../development/python-modules/pyprecice { };
 
   pypsrp = callPackage ../development/python-modules/pypsrp { };
