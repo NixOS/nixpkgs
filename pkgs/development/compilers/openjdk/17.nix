@@ -41,6 +41,7 @@ let
       ./currency-date-range-jdk10.patch
       ./increase-javadoc-heap-jdk13.patch
       ./ignore-LegalNoticeFilePlugin.patch
+      ./fix-library-path-jdk17.patch
 
       # -Wformat etc. are stricter in newer gccs, per
       # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79677
