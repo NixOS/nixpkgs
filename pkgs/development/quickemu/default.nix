@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     owner = "quickemu-project";
     repo = "quickemu";
     rev = version;
-    sha256="sha256-vzgCPpr0ThDXOkvaOcbyvNkJvvoFpDnx68f1Y8sWUcc=";
+    sha256 = "sha256-vzgCPpr0ThDXOkvaOcbyvNkJvvoFpDnx68f1Y8sWUcc=";
   };
 
   patches = [
