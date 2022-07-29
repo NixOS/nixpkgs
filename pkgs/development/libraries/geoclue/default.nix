@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.isDarwin && withDemoAgent;
     description = "Geolocation framework and some data providers";
     homepage = "https://gitlab.freedesktop.org/geoclue/geoclue/wikis/home";
     maintainers = with maintainers; [ raskin ];

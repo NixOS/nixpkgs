@@ -447,6 +447,7 @@
   ./services/hardware/interception-tools.nix
   ./services/hardware/irqbalance.nix
   ./services/hardware/joycond.nix
+  ./services/hardware/kanata.nix
   ./services/hardware/lcd.nix
   ./services/hardware/lirc.nix
   ./services/hardware/nvidia-optimus.nix
