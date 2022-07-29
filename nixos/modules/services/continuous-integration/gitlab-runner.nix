@@ -4,14 +4,76 @@ with lib;
 let
   cfg = config.services.gitlab-runner;
   hasDocker = config.virtualisation.docker.enable;
-  hashedServices = mapAttrs'
-    (name: service: nameValuePair
-      "${name}_${config.networking.hostName}_${
-        substring 0 12
-        (hashString "md5" (unsafeDiscardStringContext (toJSON service)))}"
-      service)
-    cfg.services;
+  hashedServices = mapAttrsToList
+    (name: service: "${name}:${hashString "md5" (unsafeDiscardStringContext (toJSON service))}")
+     cfg.services;
   configPath = "$HOME/.gitlab-runner/config.toml";
+  getRunnerServices = (pkgs.writers.writePython3 "get-runner-services" {
+    libraries = with pkgs.python3Packages; [ click ];
+  } ''
+    import click
+
+
+    def get_bare_name(name):
+        return name.rsplit(':', 1)[0]
+
+
+    def get_bare_names(items):
+        return set(map(get_bare_name, items))
+
+
+    def get_register(current, desired, registered):
+        registered = set(registered)
+        current = set(filter(
+          lambda name: get_bare_name(name) in registered,
+          current))
+        return get_bare_names(desired - current)
+
+
+    def get_unregister(current, desired, registered):
+        result = get_bare_names((current or set(registered)) - desired)
+        result = result | (set(registered) - (get_bare_names(desired) | result))
+        for name in registered:
+            if name in result:
+                yield name
+
+
+    @click.group()
+    def cli():
+        pass
+
+
+    @cli.command()
+    @click.option('--current', required=True)
+    @click.option('--desired', required=True)
+    @click.option('--registered', required=True)
+    def register(current, desired, registered):
+        current, desired, registered = map(
+            lambda x: x and x.split() or [],
+            map(
+                lambda x: x.strip(),
+                (current, desired, registered)))
+        click.echo('\n'.join(
+            get_register(set(current), set(desired), registered)))
+
+
+    @cli.command()
+    @click.option('--current', required=True)
+    @click.option('--desired', required=True)
+    @click.option('--registered', required=True)
+    def unregister(current, desired, registered):
+        current, desired, registered = map(
+            lambda x: x and x.split() or [],
+            map(
+                lambda x: x.strip(),
+                (current, desired, registered)))
+        click.echo('\n'.join(
+            get_unregister(set(current), set(desired), registered)))
+
+
+    if __name__ == '__main__':
+        cli()
+  '');
   configureScript = pkgs.writeShellScriptBin "gitlab-runner-configure" (
     if (cfg.configFile != null) then ''
       mkdir -p $(dirname ${configPath})
@@ -20,6 +82,8 @@ let
       chown -R --reference=$HOME $(dirname ${configPath})
     '' else ''
       export CONFIG_FILE=${configPath}
+
+      REGISTERED_STATE_FILE=$(dirname ${configPath})/registered
 
       mkdir -p $(dirname ${configPath})
       touch ${configPath}
@@ -35,12 +99,20 @@ let
       gitlab-runner verify --delete
 
       # current and desired state
-      NEEDED_SERVICES=$(echo ${concatStringsSep " " (attrNames hashedServices)} | tr " " "\n")
+      CURRENT_SERVICES=$(cat $REGISTERED_STATE_FILE || true)
+      DESIRED_SERVICES=$(echo ${escapeShellArg (concatStringsSep "\n" hashedServices)})
       REGISTERED_SERVICES=$(gitlab-runner list 2>&1 | grep 'Executor' | awk '{ print $1 }')
 
       # difference between current and desired state
-      NEW_SERVICES=$(grep -vxF -f <(echo "$REGISTERED_SERVICES") <(echo "$NEEDED_SERVICES") || true)
-      OLD_SERVICES=$(grep -vxF -f <(echo "$NEEDED_SERVICES") <(echo "$REGISTERED_SERVICES") || true)
+      NEW_SERVICES=$(${getRunnerServices} register --current "$CURRENT_SERVICES" --desired "$DESIRED_SERVICES" --registered "$REGISTERED_SERVICES")
+      OLD_SERVICES=$(${getRunnerServices} unregister --current "$CURRENT_SERVICES" --desired "$DESIRED_SERVICES" --registered "$REGISTERED_SERVICES")
+
+      # unregister old services
+      for NAME in $(echo "$OLD_SERVICES")
+      do
+        [ ! -z "$NAME" ] && gitlab-runner unregister \
+          --name "$NAME" && sleep 1
+      done
 
       # register new services
       ${concatStringsSep "\n" (mapAttrsToList (name: service: ''
@@ -49,7 +121,7 @@ let
             "set -a && source ${service.registrationConfigFile} &&"
             "gitlab-runner register"
             "--non-interactive"
-            (if service.description != null then "--description \"${service.description}\"" else "--name '${name}'")
+            (if service.description != null then "--description ${escapeShellArg service.description}" else "--name ${escapeShellArg name}")
             "--executor ${service.executor}"
             "--limit ${toString service.limit}"
             "--request-concurrency ${toString service.requestConcurrency}"
@@ -90,14 +162,9 @@ let
             )
           ))} && sleep 1 || exit 1
         fi
-      '') hashedServices)}
+      '') cfg.services)}
 
-      # unregister old services
-      for NAME in $(echo "$OLD_SERVICES")
-      do
-        [ ! -z "$NAME" ] && gitlab-runner unregister \
-          --name "$NAME" && sleep 1
-      done
+      echo "$DESIRED_SERVICES" > $REGISTERED_STATE_FILE
 
       # make config file readable by service
       chown -R --reference=$HOME $(dirname ${configPath})
