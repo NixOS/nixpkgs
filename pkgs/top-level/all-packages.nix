@@ -1263,6 +1263,8 @@ with pkgs;
 
   redfang = callPackage ../tools/networking/redfang { };
 
+  scarab = callPackage ../tools/games/scarab { };
+
   sdbus-cpp = callPackage ../development/libraries/sdbus-cpp { };
 
   sdlookup = callPackage ../tools/security/sdlookup { };
