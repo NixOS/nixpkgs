@@ -6,7 +6,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
-    repo = "gum";
+    repo = pname;
     rev = "v${version}";
     sha256 = "sha256-od0jJPfvczlru9hhO8ravGou6yYP91L2k37NYm2hD+k=";
   };
