@@ -27783,6 +27783,9 @@ with pkgs;
   leftwm = callPackage ../applications/window-managers/leftwm { };
 
   levant = callPackage ../applications/networking/cluster/levant { };
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
+    buildGoModule = buildGo117Module;
+  };
 
   lwm = callPackage ../applications/window-managers/lwm { };
 
