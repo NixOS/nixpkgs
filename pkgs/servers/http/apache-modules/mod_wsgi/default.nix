@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mod_wsgi";
-  version = "4.9.0";
+  version = "4.9.3";
 
   src = fetchFromGitHub {
     owner = "GrahamDumpleton";
     repo = "mod_wsgi";
     rev = version;
-    hash = "sha256-gaWA6m4ENYtm88hCaoqrcIooA0TBI7Kj6fU6pPShoo4=";
+    hash = "sha256-P/mx0JxlJGpel0zBFIe8r313VkwPEK2LP0kiUIwKZAM=";
   };
 
   buildInputs = [ apacheHttpd python ncurses ];
