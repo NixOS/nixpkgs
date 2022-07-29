@@ -21478,7 +21478,7 @@ with pkgs;
   };
 
   vte-gtk4 = vte.override {
-    gtk3 = gtk4;
+    gtkVersion = "4";
   };
 
   vte_290 = callPackage ../development/libraries/vte/2.90.nix { };

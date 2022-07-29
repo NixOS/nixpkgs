@@ -9,6 +9,8 @@
 , gnome
 , glib
 , gtk3
+, gtk4
+, gtkVersion ? "3"
 , gobject-introspection
 , vala
 , python3
@@ -69,16 +71,16 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = assert (gtkVersion == "3" || gtkVersion == "4"); [
     # Required by vte-2.91.pc.
-    gtk3
+    (if gtkVersion == "3" then gtk3 else gtk4)
     glib
     pango
   ];
 
   mesonFlags = lib.optionals (!systemdSupport) [
     "-D_systemd=false"
-  ] ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
+  ] ++ lib.optionals (gtkVersion == "4") [
     "-Dgtk3=false"
     "-Dgtk4=true"
   ];
