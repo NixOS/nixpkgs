@@ -2,7 +2,6 @@
 , beautifulsoup4
 , buildPythonPackage
 , click
-, dataclasses
 , dataclasses-json
 , fetchFromGitHub
 , htmlmin
@@ -22,7 +21,7 @@ buildPythonPackage rec {
   version = "0.41.6";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "coveooss";
@@ -50,8 +49,6 @@ buildPythonPackage rec {
     pytz
     pyyaml
     requests
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
   ];
 
   checkInputs = [
