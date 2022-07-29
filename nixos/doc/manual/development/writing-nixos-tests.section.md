@@ -39,11 +39,9 @@ It uses two client nodes to test correct locking across server crashes.
 
 ## Calling a test {#sec-calling-nixos-tests}
 
-Tests are invoked a bit differently depending on whether the test lives in NixOS or in another project.
+Tests are invoked differently depending on whether the test is part of NixOS or lives in a different project.
 
 ### Testing within NixOS {#sec-call-nixos-test-in-nixos}
-
-Test modules can be instantiated into derivations in multiple ways.
 
 Tests that are part of NixOS are added to [`nixos/tests/all-tests.nix`](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/all-tests.nix).
 
@@ -54,19 +52,22 @@ Tests that are part of NixOS are added to [`nixos/tests/all-tests.nix`](https://
 Overrides can be added by defining an anonymous module in `all-tests.nix`.
 
 ```nix
-  hostname = runTest { imports = [ ./hostname.nix ]; defaults.networking.firewall.enable = false; };
+  hostname = runTest {
+    imports = [ ./hostname.nix ];
+    defaults.networking.firewall.enable = false;
+  };
 ```
 
-You can run a test with attribute name `mytest` in `nixos/tests/all-tests.nix` by invoking:
+You can run a test with attribute name `hostname` in `nixos/tests/all-tests.nix` by invoking:
 
 ```shell
 cd /my/git/clone/of/nixpkgs
-nix-build -A nixosTests.mytest
+nix-build -A nixosTests.hostname
 ```
 
 ### Testing outside the NixOS project {#sec-call-nixos-test-outside-nixos}
 
-Outside the `nixpkgs` repository, you can instantiate the test by first acquiring the NixOS library,
+Outside the `nixpkgs` repository, you can instantiate the test by first importing the NixOS library,
 
 ```nix
 # regular nix
