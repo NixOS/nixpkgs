@@ -1,6 +1,5 @@
 { lib, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
 , libelf, cpio, elfutils, zstd, python3Minimal, zlib, pahole
-, writeTextFile
 }:
 
 let
@@ -61,12 +60,12 @@ let
     ++ optional (lib.versionAtLeast version "5.13") zstd;
 
 
-  installkernel = writeTextFile { name = "installkernel"; executable=true; text = ''
-    #!${stdenv.shell} -e
+  installkernel = buildPackages.writeShellScript "installkernel" ''
+    set -e
     mkdir -p $4
     cp -av $2 $4
     cp -av $3 $4
-  ''; };
+  '';
 
   drvAttrs = config_: kernelConf: kernelPatches: configfile:
     let
