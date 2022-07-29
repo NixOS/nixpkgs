@@ -2562,12 +2562,12 @@ self: super: {
   shower = doJailbreak (dontCheck super.shower);
 
   cachix = overrideCabal (drv: {
-    version = "0.8.0";
+    version = "0.8.1";
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
-      rev = "v0.8.0";
-      sha256 = "sha256-Dt8CtBh077c7fqCySASr3vR2cmVr3EZWJhibZkfZqRk=";
+      rev = "v0.8.1";
+      sha256 = "sha256-s9JoWsDUVGWhPWLNsvrYK7OlcPZhLO63fo4gN/r4uwU=";
     };
     postUnpack = "sourceRoot=$sourceRoot/cachix";
   }) super.cachix;
