@@ -6775,6 +6775,8 @@ in {
 
   plantuml = callPackage ../development/python-modules/plantuml { };
 
+  plantuml-markdown = callPackage ../development/python-modules/plantuml-markdown { };
+
   plaster = callPackage ../development/python-modules/plaster { };
 
   plaster-pastedeploy = callPackage ../development/python-modules/plaster-pastedeploy { };

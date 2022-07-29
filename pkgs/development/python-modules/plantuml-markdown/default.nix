@@ -1,0 +1,68 @@
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+  # Runtime dependencies
+, pkgs # for pkgs.plantuml
+, markdown
+, requests
+, six
+  # Test dependencies
+, runCommand
+, writeText
+, plantuml-markdown
+}:
+let
+  pname = "plantuml-markdown";
+  version = "3.6.2";
+in
+buildPythonPackage {
+  inherit pname version;
+
+  src = fetchFromGitHub {
+    owner = "mikitex70";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-IADKU4EQHLLH5uD5iBAUiumFp5nyTNGt1LWoWdfbvJM=";
+  };
+
+  propagatedBuildInputs = [
+    pkgs.plantuml
+    markdown
+    requests
+    six
+  ];
+
+  # The package uses a custom script that downloads a certain version of plantuml for testing.
+  # It also uses the unittest module so failing tests cannot be easily disabled.
+  doCheck = false;
+
+  pythonImportsCheck = [ "plantuml_markdown" ];
+
+  passthru.tests.example-doc =
+    let
+      exampleDoc = writeText "plantuml-markdown-example-doc.md" ''
+        ```plantuml
+          Bob -> Alice: Hello
+        ```
+      '';
+    in
+    runCommand "plantuml-markdown-example-doc"
+      {
+        nativeBuildInputs = [ plantuml-markdown ];
+      } ''
+      markdown_py -x plantuml_markdown ${exampleDoc} > $out
+
+      ! grep -q "Error" $out
+    '';
+
+  meta = with lib; {
+    description = "PlantUML plugin for Python-Markdown";
+    longDescription = ''
+      This plugin implements a block extension which can be used to specify a PlantUML
+      diagram which will be converted into an image and inserted in the document.
+    '';
+    homepage = "https://github.com/mikitex70/plantuml-markdown";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ nikstur ];
+  };
+}
