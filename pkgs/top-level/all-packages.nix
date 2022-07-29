@@ -24056,6 +24056,8 @@ with pkgs;
 
   inherit (callPackages ../servers/firebird { }) firebird_4 firebird_3 firebird_2_5 firebird;
 
+  firefly-iii = callPackage ../servers/web-apps/firefly-iii { };
+
   freeradius = callPackage ../servers/freeradius {
     openssl = openssl_1_1;
   };
