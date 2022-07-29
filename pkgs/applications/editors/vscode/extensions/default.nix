@@ -958,6 +958,23 @@ let
         };
       };
 
+      firefox-devtools.vscode-firefox-debug = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-firefox-debug";
+          publisher = "firefox-devtools";
+          version = "2.9.8";
+          sha256 = "sha256-MCL562FPgEfhUM1KH5LMl7BblbjIkQ4UEwB67RlO5Mk=";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/firefox-devtools.vscode-firefox-debug/changelog";
+          description = "A Visual Studio Code extension for debugging web applications and browser extensions in Firefox";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=firefox-devtools.vscode-firefox-debug";
+          homepage = "https://github.com/firefox-devtools/vscode-firefox-debug";
+          license = licenses.mit;
+          maintainers = with maintainers; [ felschr ];
+        };
+      };
+
       foam.foam-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "foam-vscode";
