@@ -6012,6 +6012,8 @@ with pkgs;
 
   expect = callPackage ../tools/misc/expect { };
 
+  exportarr = callPackage ../servers/monitoring/exportarr { };
+
   expliot = callPackage ../tools/security/expliot { };
 
   f2fs-tools = callPackage ../tools/filesystems/f2fs-tools { };
