@@ -20464,6 +20464,10 @@ with pkgs;
 
   openpa = callPackage ../development/libraries/openpa { };
 
+  openpgp-card-tools = callPackage ../tools/security/openpgp-card-tools {
+    inherit (darwin.apple_sdk.frameworks) PCSC;
+  };
+
   opensaml-cpp = callPackage ../development/libraries/opensaml-cpp { };
 
   openscenegraph = callPackage ../development/libraries/openscenegraph {
