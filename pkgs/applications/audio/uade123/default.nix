@@ -6,7 +6,7 @@
 , which
 , makeWrapper
 , libao
-, libbencodetools
+, bencodetools
 , sox
 , lame
 , flac
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libao
-    libbencodetools
+    bencodetools
     sox
     lame
     flac
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--bencode-tools-prefix=${libbencodetools}"
+    "--bencode-tools-prefix=${bencodetools}"
   ];
 
   enableParallelBuilding = true;
