@@ -2,19 +2,19 @@
 , ppx_sexp_conv, ppx_cstruct
 , mirage-crypto, mirage-crypto-ec, mirage-crypto-rng, mirage-crypto-pk
 , x509, cstruct, cstruct-unix, cstruct-sexp, sexplib, eqaf
-, rresult, mtime, logs, fmt, cmdliner, base64
+, rresult, mtime, logs, fmt, cmdliner_1_1, base64
 , zarith
 }:
 
 buildDunePackage rec {
   pname = "awa";
-  version = "0.1.0";
+  version = "0.1.1";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/mirage/awa-ssh/releases/download/v${version}/awa-${version}.tbz";
-    sha256 = "sha256-aPnFDp52oYVHr/56lFw0gtVJ0KvHawyM5FGtpHPOVY8=";
+    sha256 = "sha256-ae1gTx3Emmkof/2Gnhq0d5RyfkFx21hHkVEVgyPdXuo=";
   };
 
   nativeBuildInputs = [ ppx_cstruct ];
@@ -27,7 +27,7 @@ buildDunePackage rec {
   ];
 
   doCheck = true;
-  checkInputs = [ cstruct-unix cmdliner fmt ];
+  checkInputs = [ cstruct-unix cmdliner_1_1 fmt ];
 
   meta = with lib; {
     description = "SSH implementation in OCaml";
