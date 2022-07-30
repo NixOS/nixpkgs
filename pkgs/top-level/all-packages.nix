@@ -7173,7 +7173,13 @@ with pkgs;
 
   ipfetch = callPackage ../tools/networking/ipfetch { };
 
-  ipfs = callPackage ../applications/networking/ipfs { };
+  ipfs = ipfs_0_12;
+  ipfs_latest = ipfs_0_14;
+  ipfs_0_12 = callPackage ../applications/networking/ipfs/0.12.nix { };
+  ipfs_0_14 = callPackage ../applications/networking/ipfs/0.14.nix {
+    buildGoModule = buildGo118Module;
+  };
+
   ipfs-cluster = callPackage ../applications/networking/ipfs-cluster { };
 
   ipfs-migrator-all-fs-repo-migrations = callPackage ../applications/networking/ipfs-migrator/all-migrations.nix { };
