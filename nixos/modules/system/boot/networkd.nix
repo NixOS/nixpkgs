@@ -1397,7 +1397,7 @@ let
 
     ipv6Prefixes = mkOption {
       default = [];
-      example = [ { AddressAutoconfiguration = true; OnLink = true; } ];
+      example = [ { ipv6PrefixConfig = { AddressAutoconfiguration = true; OnLink = true; }; } ];
       type = with types; listOf (submodule ipv6PrefixOptions);
       description = ''
         A list of ipv6Prefix sections to be added to the unit.  See
