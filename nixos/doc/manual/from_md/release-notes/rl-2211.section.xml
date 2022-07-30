@@ -241,6 +241,12 @@
       </listitem>
       <listitem>
         <para>
+          The option <literal>services.thelounge.users</literal> has
+          been added to allow managing users within The Lounge.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The Barco ClickShare driver/client package
           <literal>pkgs.clickshare-csc1</literal> and the option
           <literal>programs.clickshare-csc1.enable</literal> have been
