@@ -1,8 +1,10 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
 , openssl
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,7 +22,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ Security ];
 
   # Disabled because they currently fail
   doCheck = false;
@@ -30,6 +33,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/lycheeverse/lychee";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ tuxinaut ];
-    platforms = platforms.linux;
   };
 }

@@ -57,7 +57,7 @@ in
 
       # Hyper-V support.
       "hv_storvsc"
-    ] ++ lib.optionals (pkgs.stdenv.isAarch32 || pkgs.stdenv.isAarch64) [
+    ] ++ lib.optionals pkgs.stdenv.hostPlatform.isAarch [
       # Most of the following falls into two categories:
       #  - early KMS / early display
       #  - early storage (e.g. USB) support
