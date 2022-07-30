@@ -5,16 +5,52 @@ with lib;
 let
   cfg = config.services.minio;
 
-  legacyCredentials = cfg: pkgs.writeText "minio-legacy-credentials" ''
-    MINIO_ROOT_USER=${cfg.accessKey}
-    MINIO_ROOT_PASSWORD=${cfg.secretKey}
-  '';
-in
-{
+  legacyCredentials = cfg:
+    pkgs.writeText "minio-legacy-credentials" ''
+      MINIO_ROOT_USER=${cfg.accessKey}
+      MINIO_ROOT_PASSWORD=${cfg.secretKey}
+    '';
+in {
   meta.maintainers = [ maintainers.bachp ];
 
   options.services.minio = {
     enable = mkEnableOption "Minio Object Storage";
+
+    ensureUsers = mkOption {
+      # TODO type should be more specific
+      type = types.attrs;
+      default = { };
+      description = ''
+        Ensure users exist
+      '';
+    };
+
+    ensurePolicies = mkOption {
+      # TODO type should be more specific
+      type = types.attrs;
+      default = { };
+      description = ''
+        Ensure Policies exist
+      '';
+    };
+
+    ensureBuckets = mkOption {
+      # TODO type should be more specific
+      type = types.attrs;
+      default = { };
+      description = ''
+        Ensure Buckets exist
+      '';
+    };
+
+    ensureGroups = mkOption {
+      # TODO type should be more specific
+      type = types.attrs;
+      default = { };
+      description = ''
+        Ensure groups exist
+      '';
+    };
 
     listenAddress = mkOption {
       default = ":9000";
@@ -31,13 +67,15 @@ in
     dataDir = mkOption {
       default = [ "/var/lib/minio/data" ];
       type = types.listOf types.path;
-      description = "The list of data directories for storing the objects. Use one path for regular operation and the minimum of 4 endpoints for Erasure Code mode.";
+      description =
+        "The list of data directories for storing the objects. Use one path for regular operation and the minimum of 4 endpoints for Erasure Code mode.";
     };
 
     configDir = mkOption {
       default = "/var/lib/minio/config";
       type = types.path;
-      description = "The config directory, for the access keys and other settings.";
+      description =
+        "The config directory, for the access keys and other settings.";
     };
 
     accessKey = mkOption {
@@ -60,7 +98,7 @@ in
       '';
     };
 
-    rootCredentialsFile = mkOption  {
+    rootCredentialsFile = mkOption {
       type = types.nullOr types.path;
       default = null;
       description = ''
@@ -110,9 +148,12 @@ in
         User = "minio";
         Group = "minio";
         LimitNOFILE = 65536;
-        EnvironmentFile = if (cfg.rootCredentialsFile != null) then cfg.rootCredentialsFile
-                          else if ((cfg.accessKey != "") || (cfg.secretKey != "")) then (legacyCredentials cfg)
-                          else null;
+        EnvironmentFile = if (cfg.rootCredentialsFile != null) then
+          cfg.rootCredentialsFile
+        else if ((cfg.accessKey != "") || (cfg.secretKey != "")) then
+          (legacyCredentials cfg)
+        else
+          null;
       };
       environment = {
         MINIO_REGION = "${cfg.region}";
@@ -126,5 +167,121 @@ in
     };
 
     users.groups.minio.gid = config.ids.uids.minio;
+
+    systemd.targets = {
+      minio-users = { after = [ "minio-policies.target" ]; };
+      minio-policies = { before = [ "minio-users.target" ]; };
+      minio-buckets = { };
+    };
+
+    systemd.services = mapAttrs' (name: value:
+      lib.attrsets.nameValuePair ("minio-bucket-" + name) (
+
+        {
+          enable = true;
+          path = [ pkgs.minio pkgs.minio-client ];
+          requiredBy = [ "multi-user.target" ];
+          after = [ "minio.service" ];
+          partOf = [ "minio-buckets.target" ];
+          serviceConfig = {
+            Type = "simple";
+            User = "minio";
+            Group = "minio";
+            RuntimeDirectory = "minio-bucket-${name}";
+            EnvironmentFile = config.services.minio.rootCredentialsFile;
+          };
+          script = ''
+            set -e
+            CONFIG_DIR=$RUNTIME_DIRECTORY
+            mc --config-dir "$CONFIG_DIR" config host add minio http://localhost:9000 "$MINIO_ROOT_USER" "$MINIO_ROOT_PASSWORD"
+            mc --config-dir "$CONFIG_DIR" mb --ignore-existing minio/${name}
+            mc --config-dir "$CONFIG_DIR" policy set-json ${value.policyPath} minio/${name}
+          '';
+        })) cfg.ensureBuckets //
+
+
+      mapAttrs' (name: value:
+        lib.attrsets.nameValuePair ("minio-group-" + name) ({
+
+          enable = true;
+          path = [ pkgs.minio pkgs.minio-client ];
+          requiredBy = [ "multi-groups.target" ];
+          after =
+            [ "minio.service" "minio-policies.target" ]; # ++ policy-units;
+          partOf = [ "minio-groups.target" ];
+          serviceConfig = {
+            Type = "simple";
+            User = "minio";
+            Group = "minio";
+            RuntimeDirectory = "minio-group-${name}";
+            EnvironmentFile = config.services.minio.rootCredentialsFile;
+          };
+
+          script = ''
+            set -e
+            CONFIG_DIR=$RUNTIME_DIRECTORY
+            mc --config-dir "$CONFIG_DIR" config host add minio http://localhost:9000 "$MINIO_ROOT_USER" "$MINIO_ROOT_PASSWORD"
+            mc --config-dir "$CONFIG_DIR" admin group add minio "${name}" ${toString value.members}
+          '';
+
+        })) cfg.ensureGroups //
+
+      mapAttrs' (name: value:
+        lib.attrsets.nameValuePair ("minio-user-" + name) ({
+
+          enable = true;
+          path = [ pkgs.minio pkgs.minio-client ];
+          requiredBy = [ "multi-user.target" ];
+          after =
+            [ "minio.service" "minio-policies.target" ]; # ++ policy-units;
+          partOf = [ "minio-users.target" ];
+          serviceConfig = {
+            Type = "simple";
+            User = "minio";
+            Group = "minio";
+            RuntimeDirectory = "minio-user-${name}";
+            EnvironmentFile = config.services.minio.rootCredentialsFile;
+          };
+
+          environment = {
+            USER_SECRET_KEY_PATH = value.secret-key-path;
+            POLICY_NAME = value.policy;
+          };
+          script = ''
+            set -e
+            CONFIG_DIR=$RUNTIME_DIRECTORY
+            export USER_SECRET_KEY=$(<"$USER_SECRET_KEY_PATH")
+            mc --config-dir "$CONFIG_DIR" config host add minio http://localhost:9000 "$MINIO_ROOT_USER" "$MINIO_ROOT_PASSWORD"
+            mc --config-dir "$CONFIG_DIR" admin user add minio "${name}" "$USER_SECRET_KEY"
+            mc --config-dir "$CONFIG_DIR" admin policy set minio "$POLICY_NAME" user="${name}"
+          '';
+        })) cfg.ensureUsers //
+
+      mapAttrs' (name: value:
+        lib.attrsets.nameValuePair ("minio-policy-" + name) ({
+
+          enable = true;
+          path = [ pkgs.minio pkgs.minio-client ];
+          requiredBy = [ "multi-user.target" "minio-policies.target" ];
+          after = [ "minio.service" ];
+          partOf = [ "minio-policies.target" ];
+          serviceConfig = {
+            Type = "simple";
+            User = "minio";
+            Group = "minio";
+            RuntimeDirectory = "minio-policy-${name}";
+            EnvironmentFile = config.services.minio.rootCredentialsFile;
+          };
+
+          environment = { POLICY_PATH = value; };
+
+          script = ''
+            set -e
+            CONFIG_DIR=$RUNTIME_DIRECTORY
+            mc --config-dir "$CONFIG_DIR" config host add minio http://localhost:9000 "$MINIO_ROOT_USER" "$MINIO_ROOT_PASSWORD"
+            mc --config-dir "$CONFIG_DIR" admin policy add minio "${name}" "$POLICY_PATH"
+          '';
+        })) cfg.ensurePolicies;
+
   };
 }
