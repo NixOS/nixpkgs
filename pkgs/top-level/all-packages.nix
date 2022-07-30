@@ -17408,6 +17408,8 @@ with pkgs;
 
   croaring = callPackage ../development/libraries/croaring { };
 
+  crossguid = callPackage ../development/libraries/crossguid { };
+
   cryptopp = callPackage ../development/libraries/crypto++ { };
 
   cryptominisat = callPackage ../applications/science/logic/cryptominisat { };
@@ -18038,6 +18040,8 @@ with pkgs;
 
   # A GMP fork
   mpir = callPackage ../development/libraries/mpir {};
+
+  gl3w = callPackage ../development/libraries/gl3w { };
 
   gnatcoll-core = callPackage ../development/libraries/ada/gnatcoll/core.nix { };
 
@@ -20581,6 +20585,8 @@ with pkgs;
 
   place-cursor-at = haskell.lib.compose.justStaticExecutables haskellPackages.place-cursor-at;
 
+  platform-folders = callPackage ../development/libraries/platform-folders { };
+
   plib = callPackage ../development/libraries/plib { };
 
   poco = callPackage ../development/libraries/poco { };
@@ -20860,6 +20866,9 @@ with pkgs;
   rtrlib = callPackage ../development/libraries/rtrlib { };
 
   kissfft = callPackage ../development/libraries/kissfft { };
+  kissfftFloat = kissfft.override {
+    datatype = "float";
+  };
 
   lambdabot = callPackage ../development/tools/haskell/lambdabot {
     haskellLib = haskell.lib.compose;
