@@ -25,8 +25,6 @@ stdenv.mkDerivation rec {
   patches = [
     # Fixes missing target SPIRV-Tools-opt
     ./cmakelists.patch
-    # Load models from $out/share/models instead of $out/bin
-    ./models_path.patch
   ];
 
   cmakeFlags = [
@@ -41,9 +39,12 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin $out/share
-    install -Dm555 waifu2x-ncnn-vulkan $out/bin/
+    # The models are expected to be next to the executable, so symlink the binary as to not pollute `$out/bin`.
+    mkdir -p $out/bin $out/share $out/opt
+    install -Dm755 waifu2x-ncnn-vulkan $out/opt
+    ln -s $out/opt/waifu2x-ncnn-vulkan $out/bin
     cp -r ${src}/models $out/share
+    ln -s $out/share/models/* $out/opt
     runHook postInstall
   '';
 
