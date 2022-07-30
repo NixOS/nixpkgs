@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, meson, ninja, glib, check, python3, vala, gtk-doc, glibcLocales
+{ lib, stdenv, fetchFromGitLab, meson, mesonEmulatorHook, ninja, glib, check, python3, vala, gtk-doc, glibcLocales
 , libxml2, libxslt, pkg-config, sqlite, docbook_xsl, docbook_xml_dtd_43, gobject-introspection }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,6 @@ stdenv.mkDerivation rec {
   patches = [ ./py-override.patch ];
 
   nativeBuildInputs = [
-    check
     docbook_xml_dtd_43
     docbook_xsl
     glibcLocales
@@ -28,9 +27,13 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
+    check
+    gobject-introspection
     glib
     libxml2
     libxslt
