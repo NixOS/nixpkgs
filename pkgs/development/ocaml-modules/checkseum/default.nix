@@ -6,7 +6,7 @@
 }:
 
 buildDunePackage rec {
-  version = "0.3.2";
+  version = "0.3.4";
   pname = "checkseum";
 
   useDune2 = true;
@@ -14,8 +14,8 @@ buildDunePackage rec {
   minimumOCamlVersion = "4.07";
 
   src = fetchurl {
-    url = "https://github.com/mirage/checkseum/releases/download/v${version}/checkseum-v${version}.tbz";
-    sha256 = "9cdd282ea1cfc424095d7284e39e4d0ad091de3c3f2580539d03f6966d45ccd5";
+    url = "https://github.com/mirage/checkseum/releases/download/v${version}/checkseum-${version}.tbz";
+    sha256 = "0f6p7rpankr13m56j9kxn7qndss9s44f3np673j1lfap1hxh3gh4";
   };
 
   buildInputs = [ dune-configurator ];
