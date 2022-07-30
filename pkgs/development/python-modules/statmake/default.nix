@@ -58,13 +58,6 @@ buildPythonPackage rec {
       --replace 'cattrs = "^1.1"' 'cattrs = ">= 1.1"'
   '';
 
-  disabledTests = [
-    # cattrs.errors.IterableValidationError: While structuring typing.List[statmake.classes.Axis]
-    # https://github.com/daltonmaag/statmake/issues/42
-    "test_load_stylespace_broken_range"
-    "test_load_stylespace_broken_multilingual_no_en"
-  ];
-
   pythonImportsCheck = [
     "statmake"
   ];
