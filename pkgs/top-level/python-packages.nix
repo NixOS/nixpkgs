@@ -5368,6 +5368,8 @@ in {
 
   mediafile = callPackage ../development/python-modules/mediafile { };
 
+  mediapy = callPackage ../development/python-modules/mediapy { };
+
   meilisearch = callPackage ../development/python-modules/meilisearch { };
 
   meinheld = callPackage ../development/python-modules/meinheld { };
