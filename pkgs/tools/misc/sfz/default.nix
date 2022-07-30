@@ -17,9 +17,9 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A simple static file serving command-line tool written in Rust";
+    description = "Simple static file serving command-line tool written in Rust";
     homepage = "https://github.com/weihanglo/sfz";
-    license = with licenses; [asl20 /* or */ mit];
+    license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ dit7ya ];
   };
 }
