@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "bigstringaf";
-  version = "0.7.0";
+  version = "0.9.0";
 
   useDune2 = true;
 
@@ -12,7 +12,7 @@ buildDunePackage rec {
     owner = "inhabitedtype";
     repo = pname;
     rev = version;
-    sha256 = "1q1sqxzdnlrpl95ccrhl7lwy3zswgd9rbn19ildclh0lyi2vazbj";
+    sha256 = "188j9awxg99vrp2l3rqfmdxdazq5xrjmg1wf62vfqsks9sff6wqx";
   };
 
   # This currently fails with dune
