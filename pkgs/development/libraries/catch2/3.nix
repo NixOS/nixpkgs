@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "catch2";
-  version = "3.0.1";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "catchorg";
     repo = "Catch2";
     rev = "v${version}";
-    hash = "sha256-GcMkAgSfQnWs8wQeQD4ZMxJZED8V7FWBU04qMCutlPo=";
+    hash = "sha256-bp/KLTr754txVUTAauJFrsxGKgZicUEe40CZBDkxRwk=";
   };
 
   nativeBuildInputs = [
