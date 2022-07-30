@@ -85,7 +85,7 @@ buildPythonPackage rec {
     "test_filename_without_dir"
     "test_overwrite"
     "test_options"
-  ] ++ lib.optionals (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isRiscV) [
     # unknown reason so far
     # https://github.com/adobe-type-tools/afdko/issues/1425
     "test_spec"

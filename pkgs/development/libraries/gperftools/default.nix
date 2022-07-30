@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   # tcmalloc uses libunwind in a way that works correctly only on non-ARM linux
-  buildInputs = lib.optional (stdenv.isLinux && !(stdenv.isAarch64 || stdenv.isAarch32)) libunwind;
+  buildInputs = lib.optional (stdenv.isLinux && !stdenv.hostPlatform.isAarch) libunwind;
 
   # Disable general dynamic TLS on AArch to support dlopen()'ing the library:
   # https://bugzilla.redhat.com/show_bug.cgi?id=1483558
-  configureFlags = lib.optional (stdenv.isAarch32 || stdenv.isAarch64)
+  configureFlags = lib.optional stdenv.hostPlatform.isAarch
     "--disable-general-dynamic-tls";
 
   prePatch = lib.optionalString stdenv.isDarwin ''
