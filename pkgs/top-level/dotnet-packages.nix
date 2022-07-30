@@ -2,6 +2,7 @@
 , lib
 , pkgs
 , buildDotnetPackage
+, buildDotnetModule
 , fetchurl
 , fetchFromGitHub
 , fetchNuGet
@@ -124,32 +125,19 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   # SOURCE PACKAGES
 
-  Boogie = buildDotnetPackage rec {
+  Boogie = buildDotnetModule rec {
     pname = "Boogie";
-    version = "2.4.1";
+    version = "2.15.7";
 
-    src = fetchFromGitHub {
+    src = pkgs.fetchFromGitHub {
       owner = "boogie-org";
       repo = "boogie";
       rev = "v${version}";
-      sha256 = "13f6ifkh6gpy4bvx5zhgwmk3wd5rfxzl9wxwfhcj1c90fdrhwh1b";
+      sha256 = "16kdvkbx2zwj7m43cra12vhczbpj23wyrdnj0ygxf7np7c2aassp";
     };
 
-    # emulate `nuget restore Source/Boogie.sln`
-    # which installs in $srcdir/Source/packages
-    preBuild = ''
-      mkdir -p Source/packages/NUnit.2.6.3
-      ln -sn ${dotnetPackages.NUnit}/lib/dotnet/NUnit Source/packages/NUnit.2.6.3/lib
-    '';
-
-    buildInputs = [
-      dotnetPackages.NUnit
-      dotnetPackages.NUnitRunners
-    ];
-
-    xBuildFiles = [ "Source/Boogie.sln" ];
-
-    outputFiles = [ "Binaries/*" ];
+    projectFile = [ "Source/Boogie.sln" ];
+    nugetDeps = ../development/dotnet-modules/boogie-deps.nix;
 
     postInstall = ''
         mkdir -pv "$out/lib/dotnet/${pname}"
@@ -160,6 +148,10 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
         install -Dt $vimdir/syntax/ Util/vim/syntax/boogie.vim
         mkdir $vimdir/ftdetect
         echo 'au BufRead,BufNewFile *.bpl set filetype=boogie' > $vimdir/ftdetect/bpl.vim
+    '';
+
+    postFixup = ''
+        ln -s "$out/bin/BoogieDriver" "$out/bin/boogie"
     '';
 
     meta = with lib; {
