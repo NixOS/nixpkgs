@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -32,7 +31,7 @@
 
 stdenv.mkDerivation rec {
   pname = "phosh";
-  version = "0.17.0";
+  version = "0.20.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -41,7 +40,7 @@ stdenv.mkDerivation rec {
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true; # including gvc and libcall-ui which are designated as subprojects
-    sha256 = "sha256-o/0NJZo1EPpXguN/tkUc+/9XaVTQWaLGe+2pU0B91Cg=";
+    sha256 = "sha256-oC0qW64VA8EDzFUfac3I4N11SJPs2R0B5TjcvNhruzQ=";
   };
 
   nativeBuildInputs = [
@@ -84,19 +83,6 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   mesonFlags = [ "-Dsystemd=true" "-Dcompositor=${phoc}/bin/phoc" ];
-
-  patches = [
-    # build: Adjust to polkit version changes
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/World/Phosh/phosh/-/commit/16b46e295b86cbf1beaccf8218cf65ebb4b7a6f1.patch";
-      sha256 = "sha256-Db1OEdiI1QBHGEBs1Coi7LTF9bCScdDgxmovpBdIY/g=";
-    })
-    # polkit-auth-agent: Scope cleanup function for PolkitAgentListener
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/World/Phosh/phosh/-/commit/b864653df50bfd8f34766fc6b37a3bf32cfbdfa4.patch";
-      sha256 = "sha256-YCw3tGk94NAa6PPTmA1lCJVzzi9GC74BmvtTcvuHPh0=";
-    })
-  ];
 
   postPatch = ''
     chmod +x build-aux/post_install.py
