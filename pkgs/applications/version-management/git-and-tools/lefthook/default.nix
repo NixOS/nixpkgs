@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "lefthook";
@@ -13,7 +13,18 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-LCBQyVSkUywceIlioYRNuRc6FrbPKuhgfw5OocR3NvI=";
 
+  nativeBuildInputs = [ installShellFiles ];
+
+  ldflags = [ "-s" "-w" ];
+
   doCheck = false;
+
+  postInstall = ''
+    installShellCompletion --cmd lefthook \
+      --bash <($out/bin/lefthook completion bash) \
+      --fish <($out/bin/lefthook completion fish) \
+      --zsh <($out/bin/lefthook completion zsh)
+  '';
 
   meta = with lib; {
     description = "Fast and powerful Git hooks manager for any type of projects";
