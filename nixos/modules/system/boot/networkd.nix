@@ -1386,7 +1386,7 @@ let
 
     dhcpServerStaticLeases = mkOption {
       default = [];
-      example = [ { MACAddress = "65:43:4a:5b:d8:5f"; Address = "192.168.1.42"; } ];
+      example = [ { dhcpServerStaticLeaseConfig = { MACAddress = "65:43:4a:5b:d8:5f"; Address = "192.168.1.42"; }; } ];
       type = with types; listOf (submodule dhcpServerStaticLeaseOptions);
       description = ''
         A list of DHCPServerStaticLease sections to be added to the unit.  See
