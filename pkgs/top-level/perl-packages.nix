@@ -16772,6 +16772,19 @@ let
     };
   };
 
+  NetMQTTSimple = buildPerlPackage {
+    pname = "Net-MQTT-Simple";
+    version = "1.26";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JU/JUERD/Net-MQTT-Simple-1.26.tar.gz";
+      sha256 = "sha256-ERxNNnu1AgXci8AjFfDGuw3mDRwwfQLnUuQuwRtPiLQ=";
+    };
+    meta = {
+      description = "Minimal MQTT version 3 interface";
+      license = with lib.licenses; [ free ];
+    };
+  };
+
   NetOAuth = buildPerlModule {
     pname = "Net-OAuth";
     version = "0.28";
