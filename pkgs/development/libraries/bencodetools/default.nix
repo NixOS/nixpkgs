@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "libbencodetools";
+  pname = "bencodetools";
   version = "unstable-2022-05-11";
 
   src = fetchFromGitLab {
@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     python3
   ];
+
+  # installCheck instead of check due to -install_name'd library on Darwin
+  doInstallCheck = stdenv.buildPlatform == stdenv.hostPlatform;
+  installCheckTarget = "check";
 
   meta = with lib; {
     description = "Collection of tools for manipulating bencoded data";
