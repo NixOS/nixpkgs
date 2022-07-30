@@ -231,7 +231,7 @@ in {
     })
 
 
-    (mkIf (all (el: el == "master") cfg.roles) {
+    (mkIf (cfg.roles == ["master"]) {
       # if this node is only a master make it unschedulable by default
       services.kubernetes.kubelet.unschedulable = mkDefault true;
     })
