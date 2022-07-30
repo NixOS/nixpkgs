@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    gobject-introspection
     glib
     pcre2
     pango

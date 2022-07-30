@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    gobject-introspection
     atk
     cairo
     glib
