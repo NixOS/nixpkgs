@@ -7,12 +7,12 @@
 
 coq.ocamlPackages.buildDunePackage rec {
   pname = "ligo";
-  version = "0.36.0";
+  version = "0.47.0";
   src = fetchFromGitLab {
     owner = "ligolang";
     repo = "ligo";
     rev = version;
-    sha256 = "0zx8ai79ha3npm3aybzgisil27v9i052cqdllfri0fsc67dig78b";
+    sha256 = "0vaa4fbci5wdfkqvh68vyqg00s36h2sdajiahrbndxixl2j396sl";
     fetchSubmodules = true;
   };
 
@@ -49,6 +49,10 @@ coq.ocamlPackages.buildDunePackage rec {
     core_unix
     pprint
     linenoise
+    dune-configurator
+    ocaml-crunch
+    zarith_stubs_js
+    pure-splitmix
 
     # Test helpers deps
     qcheck
@@ -84,7 +88,6 @@ coq.ocamlPackages.buildDunePackage rec {
 
   doCheck = false; # Tests fail, but could not determine the reason
 
-  patches = [ ./ligo.patch ]; # fix for core >= 0.15.0
 
   meta = with lib; {
     homepage = "https://ligolang.org/";
@@ -93,5 +96,6 @@ coq.ocamlPackages.buildDunePackage rec {
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ ulrikstrid ];
+    broken = true;
   };
 }
