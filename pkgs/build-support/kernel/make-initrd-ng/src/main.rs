@@ -3,7 +3,7 @@ use std::env;
 use std::ffi::OsStr;
 use std::fs;
 use std::hash::Hash;
-use std::io::{BufReader, BufRead, Error, ErrorKind};
+use std::io::{BufRead, BufReader, Error, ErrorKind};
 use std::os::unix;
 use std::path::{Component, Path, PathBuf};
 use std::process::Command;
@@ -39,14 +39,18 @@ impl<T: Clone + Eq + Hash> NonRepeatingQueue<T> {
 }
 
 fn patch_elf<S: AsRef<OsStr>, P: AsRef<OsStr>>(mode: S, path: P) -> Result<String, Error> {
-    let output = Command::new("patchelf")
-        .arg(&mode)
-        .arg(&path)
-        .output()?;
+    let output = Command::new("patchelf").arg(&mode).arg(&path).output()?;
     if output.status.success() {
         Ok(String::from_utf8(output.stdout).expect("Failed to parse output"))
     } else {
-        Err(Error::new(ErrorKind::Other, format!("failed: patchelf {:?} {:?}", OsStr::new(&mode), OsStr::new(&path))))
+        Err(Error::new(
+            ErrorKind::Other,
+            format!(
+                "failed: patchelf {:?} {:?}",
+                OsStr::new(&mode),
+                OsStr::new(&path)
+            ),
+        ))
     }
 }
 
@@ -69,7 +73,11 @@ fn copy_file<P: AsRef<Path> + AsRef<OsStr>, S: AsRef<Path> + AsRef<OsStr>>(
         queue.push_back(Box::from(Path::new(&interpreter_string.trim())));
     }
 
-    let rpath = rpath_string.trim().split(":").map(|p| Box::<Path>::from(Path::new(p))).collect::<Vec<_>>();
+    let rpath = rpath_string
+        .trim()
+        .split(":")
+        .map(|p| Box::<Path>::from(Path::new(p)))
+        .collect::<Vec<_>>();
 
     for line in needed_string.lines() {
         let mut found = false;
@@ -85,7 +93,11 @@ fn copy_file<P: AsRef<Path> + AsRef<OsStr>, S: AsRef<Path> + AsRef<OsStr>>(
         if !found {
             // glibc makes it tricky to make this an error because
             // none of the files have a useful rpath.
-            println!("Warning: Couldn't satisfy dependency {} for {:?}", line, OsStr::new(&source));
+            println!(
+                "Warning: Couldn't satisfy dependency {} for {:?}",
+                line,
+                OsStr::new(&source)
+            );
         }
     }
 
@@ -95,10 +107,15 @@ fn copy_file<P: AsRef<Path> + AsRef<OsStr>, S: AsRef<Path> + AsRef<OsStr>>(
     fs::set_permissions(&target, permissions)?;
 
     // Strip further than normal
-    if !Command::new("strip").arg("--strip-all").arg(OsStr::new(&target)).output()?.status.success() {
+    if !Command::new("strip")
+        .arg("--strip-all")
+        .arg(OsStr::new(&target))
+        .output()?
+        .status
+        .success()
+    {
         println!("{:?} was not successfully stripped.", OsStr::new(&target));
     }
-
 
     Ok(())
 }
