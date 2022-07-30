@@ -22,7 +22,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to simplify working with jsonlines and ndjson data";
     homepage = "https://github.com/wbolster/jsonlines";
-    maintainers = with maintainers; [ sondr3 ];
+    maintainers = with maintainers; [ ];
     license = licenses.bsd3;
   };
 }
