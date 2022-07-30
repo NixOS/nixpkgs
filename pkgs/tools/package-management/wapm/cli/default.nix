@@ -1,12 +1,12 @@
-{ darwin
+{ lib
 , fetchFromGitHub
-, lib
 , libiconv
 , openssl
 , rustPlatform
 , Security
 , stdenv
-, SystemConfiguration }:
+, SystemConfiguration
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "wapm-cli";
