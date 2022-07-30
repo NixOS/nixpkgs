@@ -5,6 +5,7 @@
 , nix-update-script
 , pkg-config
 , meson
+, mesonEmulatorHook
 , ninja
 , python3
 , mutest
@@ -21,8 +22,7 @@ stdenv.mkDerivation rec {
   pname = "graphene";
   version = "1.10.8";
 
-  outputs = [ "out" ]
-    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" "installedTests" ];
+  outputs = [ "out" "dev" "devdoc" "installedTests" ];
 
   src = fetchFromGitHub {
     owner = "ebassi";
@@ -59,9 +59,12 @@ stdenv.mkDerivation rec {
     gobject-introspection
     python3
     makeWrapper
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
+    gobject-introspection
     glib
   ];
 
@@ -70,8 +73,8 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
-    "-Dintrospection=${if (stdenv.buildPlatform == stdenv.hostPlatform) then "enabled" else "disabled"}"
+    "-Dgtk_doc=true"
+    "-Dintrospection=enabled"
     "-Dinstalled_test_datadir=${placeholder "installedTests"}/share"
     "-Dinstalled_test_bindir=${placeholder "installedTests"}/libexec"
   ];
@@ -79,8 +82,9 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   postPatch = ''
+    substituteInPlace tests/meson.build \
+      --replace 'and not meson.is_cross_build()' ""
     patchShebangs tests/gen-installed-test.py
-  '' + lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform) ''
     PATH=${python3.withPackages (pp: [ pp.pygobject3 pp.tappy ])}/bin:$PATH patchShebangs tests/introspection.py
   '';
 
