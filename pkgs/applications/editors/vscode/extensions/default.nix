@@ -47,6 +47,22 @@ let
         };
       };
 
+      _2gua.rainbow-brackets = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "2gua"
+          name = "Rainbow Brackets";
+          version = "0.0.6";
+          sha256 = "3svGVbaxUh/60NywMdWFsL3fSv+kPgt39bGmPVIu6sI="
+        };
+        meta = {
+          description = "Provide rainbow colors for the round brackets, the square brackets and the squiggly brackets. This is particularly useful for Lisp or Clojure programmers, and of course, JavaScript, and other programmer";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=2gua.rainbow-brackets";
+          homepage = "https://github.com/lcultx/rainbow-brackets";
+          license = licenses.mit;
+          maintainers = with maintainers; [ CompEng0001 ];
+        };
+      };
+      
       _4ops.terraform = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "4ops";
