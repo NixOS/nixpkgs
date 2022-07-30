@@ -15109,6 +15109,10 @@ with pkgs;
 
   trealla = callPackage ../development/interpreters/trealla { };
 
+  wapm-cli = callPackage ../tools/package-management/wapm/cli {
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+  };
+
   wasm = ocamlPackages.wasm;
 
   wasm3 = callPackage ../development/interpreters/wasm3 { };
