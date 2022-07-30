@@ -6775,6 +6775,10 @@ in {
 
   plantuml = callPackage ../development/python-modules/plantuml { };
 
+  plantuml-markdown = callPackage ../development/python-modules/plantuml-markdown {
+    inherit (pkgs) plantuml;
+  };
+
   plaster = callPackage ../development/python-modules/plaster { };
 
   plaster-pastedeploy = callPackage ../development/python-modules/plaster-pastedeploy { };

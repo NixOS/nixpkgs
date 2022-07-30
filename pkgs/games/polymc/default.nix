@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "polymc";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "PolyMC";
     repo = "PolyMC";
     rev = version;
-    sha256 = "sha256-gaPqCAC/tE6nUONgWSrVm3oBzSnOhZ5xiAJ+QyX+8rA=";
+    sha256 = "sha256-Pu2Eb3g6gwCZjJN0N6S/N82eBMLduQQUzXo8nMmtE+Y=";
     fetchSubmodules = true;
   };
 

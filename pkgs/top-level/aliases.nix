@@ -1338,6 +1338,7 @@ mapAliases ({
   sqlite3_analyzer = throw "'sqlite3_analyzer' has been renamed to/replaced by 'sqlite-analyzer'"; # Converted to throw 2022-02-22
   sqliteInteractive = throw "'sqliteInteractive' has been renamed to/replaced by 'sqlite-interactive'"; # Converted to throw 2022-02-22
   squid4 = squid;  # added 2019-08-22
+  srcml = throw "'srcml' has been removed: abandoned by upstream"; # Added 2022-07-21
   sshfsFuse = throw "'sshfsFuse' has been renamed to/replaced by 'sshfs-fuse'"; # Converted to throw 2022-02-22
   ssmtp = throw "'ssmtp' has been removed due to the software being unmaintained. 'msmtp' can be used as a replacement"; # Added 2022-04-17
   stanchion = throw "Stanchion was part of riak-cs which is not maintained anymore"; # added 2020-10-14

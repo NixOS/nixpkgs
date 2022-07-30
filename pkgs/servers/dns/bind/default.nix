@@ -52,7 +52,12 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # requires root and the net
 
-  passthru.tests = { inherit (nixosTests) bind; };
+  passthru.tests = {
+    inherit (nixosTests) bind;
+    prometheus-exporter = nixosTests.prometheus-exporters.bind;
+    kubernetes-dns-single-node = nixosTests.kubernetes.dns-single-node;
+    kubernetes-dns-multi-node = nixosTests.kubernetes.dns-multi-node;
+  };
 
   meta = with lib; {
     homepage = "https://www.isc.org/bind/";
