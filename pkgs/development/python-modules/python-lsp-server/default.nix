@@ -24,6 +24,7 @@
 , stdenv
 , ujson
 , yapf
+, whatthepatch
 , withAutopep8 ? true
 , withFlake8 ? true
 , withMccabe ? true
@@ -45,12 +46,12 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    rev = "v${version}";
     sha256 = "sha256-tW2w94HI6iy8vcDb5pIL79bAO6BJp9q6SMAXgiVobm0=";
   };
 
   postPatch = ''
-    substituteInPlace setup.cfg \
+    substituteInPlace pyproject.toml \
       --replace "--cov-report html --cov-report term --junitxml=pytest.xml" "" \
       --replace "--cov pylsp --cov test" "" \
       --replace "mccabe>=0.6.0,<0.7.0" "mccabe"
@@ -75,7 +76,7 @@ buildPythonPackage rec {
   ++ lib.optional withPyflakes pyflakes
   ++ lib.optional withPylint pylint
   ++ lib.optional withRope rope
-  ++ lib.optional withYapf yapf;
+  ++ lib.optionals withYapf [ yapf whatthepatch ];
 
   checkInputs = [
     flaky
@@ -87,7 +88,11 @@ buildPythonPackage rec {
   # pyqt5 is broken on aarch64-darwin
   ++ lib.optionals (!stdenv.isDarwin || !stdenv.isAarch64) [ pyqt5 ];
 
-  disabledTests = lib.optional (!withPycodestyle) "test_workspace_loads_pycodestyle_config"
+  disabledTests = [
+    # Test currently broken due to https://github.com/davidhalter/jedi/issues/1864
+    "test_numpy_completion"
+  ]
+  ++ lib.optional (!withPycodestyle) "test_workspace_loads_pycodestyle_config"
   # pyqt5 is broken on aarch64-darwin
   ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) "test_pyqt_completion";
 
