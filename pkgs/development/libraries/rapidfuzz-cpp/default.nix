@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rapidfuzz-cpp";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "rapidfuzz-cpp";
     rev = "v${version}";
-    hash = "sha256-ltxOn8thAiYgi5rG6xYFSnPl20Uyf4mWs1Rcv3lP++E=";
+    hash = "sha256-ogj8eFkiDtjFcBb3Yip909gKBIeALsoH3LnRIjQmLMA=";
   };
 
   patches = [
