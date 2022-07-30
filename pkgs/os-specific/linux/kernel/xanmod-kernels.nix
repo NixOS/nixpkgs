@@ -2,8 +2,8 @@
 
 let
   ltsVariant = {
-    version = "5.15.54";
-    hash = "sha256-0Odo+ZrQok3MMPl/512F8kIQ31mGZH6e9FyVVpXrYf0=";
+    version = "5.15.58";
+    hash = "sha256-ToTAqBac/hKUKlnEq49MVGqVUQH3iRm/90e/G2MAxpE=";
   };
 
   edgeVariant = {
