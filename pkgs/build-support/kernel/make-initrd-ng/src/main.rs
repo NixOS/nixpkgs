@@ -104,14 +104,16 @@ fn copy_file<P: AsRef<Path> + AsRef<OsStr>, S: AsRef<Path> + AsRef<OsStr>>(
         fs::set_permissions(&target, permissions)?;
 
         // Strip further than normal
-        if !Command::new("strip")
-            .arg("--strip-all")
-            .arg(OsStr::new(&target))
-            .output()?
-            .status
-            .success()
-        {
-            println!("{:?} was not successfully stripped.", OsStr::new(&target));
+        if let Ok(strip) = env::var("STRIP") {
+            if !Command::new(strip)
+                .arg("--strip-all")
+                .arg(OsStr::new(&target))
+                .output()?
+                .status
+                .success()
+            {
+                println!("{:?} was not successfully stripped.", OsStr::new(&target));
+            }
         }
     };
 

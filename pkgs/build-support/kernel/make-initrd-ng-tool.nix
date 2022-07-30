@@ -6,11 +6,4 @@ rustPlatform.buildRustPackage {
 
   src = ./make-initrd-ng;
   cargoLock.lockFile = ./make-initrd-ng/Cargo.lock;
-
-  nativeBuildInputs = [ makeWrapper ];
-
-  postInstall = ''
-    wrapProgram $out/bin/make-initrd-ng \
-      --prefix PATH : ${lib.makeBinPath [ patchelf glibc binutils ]}
-  '';
 }
