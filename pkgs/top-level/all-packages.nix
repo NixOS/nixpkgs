@@ -15044,6 +15044,8 @@ with pkgs;
   swiftPackages = recurseIntoAttrs (callPackage ../development/compilers/swift { });
   inherit (swiftPackages) swift;
 
+  swiftpm2nix = callPackage ../development/tools/swiftpm2nix { };
+
   swiProlog = callPackage ../development/compilers/swi-prolog {
     openssl = openssl_1_1;
     inherit (darwin.apple_sdk.frameworks) Security;
