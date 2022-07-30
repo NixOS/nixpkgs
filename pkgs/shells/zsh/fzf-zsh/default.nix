@@ -24,8 +24,11 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
+  outputs = [ "out" "interactiveShellInit_zsh"];
+
   installPhase = ''
     install -Dm0644 fzf-zsh.plugin.zsh $out/share/zsh/plugins/fzf-zsh/fzf-zsh.plugin.zsh
+    install -Dm0644 fzf-zsh.plugin.zsh $interactiveShellInit_zsh
   '';
 
   meta = with lib; {

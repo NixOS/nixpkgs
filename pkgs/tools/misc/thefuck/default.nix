@@ -1,16 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, buildPythonApplication
-, colorama, decorator, psutil, pyte, six
-, go, mock, pytestCheckHook, pytest-mock
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPythonApplication
+, colorama
+, decorator
+, psutil
+, pyte
+, six
+, go
+, mock
+, pytestCheckHook
+, pytest-mock
+, runCommandLocal
 }:
 
-buildPythonApplication rec {
+let self = buildPythonApplication rec {
   pname = "thefuck";
   version = "3.32";
 
   src = fetchFromGitHub {
     owner = "nvbn";
-    repo = pname;
-    rev = version;
+    repo = self.pname;
+    rev = self.version;
     sha256 = "sha256-bRCy95owBJaxoyCNQF6gEENoxCkmorhyKzZgU1dQN6I=";
   };
 
@@ -35,10 +46,30 @@ buildPythonApplication rec {
     "test_when_successfully_configured"
   ];
 
+  passthru.mkShellPkg =
+    { alias ? "fuck"
+    , instantMode ? false
+    , noConfirm ? false
+    , recursive ? false
+    }: runCommandLocal "thefuck-shellPkgs-${version}"
+      {
+        outputs = map (sh: "interactiveShellInit_${sh}")
+          ([ "bash" "zsh" ] ++ lib.optional (!instantMode) "fish"); # instant mode does not support fish
+      } ''
+      ${self}/bin/thefuck --alias ${alias} \
+        ${lib.optionalString instantMode "--enable-experimental-instant-mode"} \
+        ${lib.optionalString recursive "-r"} \
+        ${lib.optionalString noConfirm "--yes"} > out.sh
+      for o in $outputs
+      do
+        cp out.sh ''${!o}
+      done
+    '';
+
   meta = with lib; {
     homepage = "https://github.com/nvbn/thefuck";
     description = "Magnificent app which corrects your previous console command";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
-}
+}; in self

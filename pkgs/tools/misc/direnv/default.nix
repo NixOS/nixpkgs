@@ -1,5 +1,4 @@
 { lib, stdenv, fetchFromGitHub, buildGoModule, bash, fish, zsh }:
-
 buildGoModule rec {
   pname = "direnv";
   version = "2.32.1";
@@ -16,15 +15,25 @@ buildGoModule rec {
   # we have no bash at the moment for windows
   BASH_PATH =
     lib.optionalString (!stdenv.hostPlatform.isWindows)
-    "${bash}/bin/bash";
+      "${bash}/bin/bash";
 
   # replace the build phase to use the GNUMakefile instead
   buildPhase = ''
     make BASH_PATH=$BASH_PATH
   '';
 
+  outputs = [ "out" ] ++ map (sh: "interactiveShellInit_${sh}");
+  shells = [ "bash" "fish" "zsh" ];
+
   installPhase = ''
-    make install PREFIX=$out
+        make install PREFIX=$out
+        ${lib.concatMapStrings
+    (
+        sh: ''
+          $out/bin/direnv hook ${sh} > ''$interactiveShellInit_${sh}
+        ''
+      )
+    shells}
   '';
 
   checkInputs = [ fish zsh ];

@@ -9,7 +9,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0yvjzmz2vqc63l8911jflqf5aww7wxsav2yal5wg9ci9hzq6dl7j";
   };
 
-  outputs = [ "out" "vim" ];
+  shells = [ "bash" "fish" "zsh" ];
+  outputs = [ "out" "vim" ] ++ (map (sh:"interactiveShellInit_${sh}") shells);
 
   cargoSha256 = "1jk2vcm2z6r1xd6md98jzpcy7kdwp5p2fzxvvaz9qscyfnx28x17";
 
@@ -30,6 +31,21 @@ rustPlatform.buildRustPackage rec {
     echo $out/share/skim
     SCRIPT
     chmod +x $out/bin/sk-share
+
+    (
+      echo 'if [[ :$SHELLOPTS: =~ :(vi|emacs): ]]; then'
+      cat $out/share/skim/{completion,key-bindings}.bash
+      echo fi
+    ) > $interactiveShellInit_bash
+    (
+      echo 'if [[ $options[zle] = on ]]; then'
+      cat $out/share/skim/{completion,key-bindings}.zsh
+      echo fi
+    ) > $interactiveShellInit_zsh
+    (
+      cat $out/share/skim/key-bindings.fish
+      echo skim_key_bindings
+    ) > $interactiveShellInit_fish
   '';
 
   # https://github.com/lotabout/skim/issues/440

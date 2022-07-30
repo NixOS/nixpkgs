@@ -36,7 +36,10 @@ rustPlatform.buildRustPackage rec {
       --bash contrib/completions/zoxide.bash \
       --fish contrib/completions/zoxide.fish \
       --zsh contrib/completions/_zoxide
+    ${lib.concatMapStrings (sh:"$out/bin/zoxide init ${sh} > $interactiveShellInit_${sh};") shells}
   '';
+  shells = ["bash" "fish" "zsh"];
+  outputs = ["out"] ++ (map (sh:"interactiveShellInit_${sh}") shells);
 
   meta = with lib; {
     description = "A fast cd command that learns your habits";

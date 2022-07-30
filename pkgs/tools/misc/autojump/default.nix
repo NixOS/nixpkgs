@@ -21,7 +21,11 @@ stdenv.mkDerivation rec {
     install -Dt "$out/share/bash-completion/completions/" -m444 "$out/share/autojump/autojump.bash"
     install -Dt "$out/share/fish/vendor_conf.d/" -m444 "$out/share/autojump/autojump.fish"
     install -Dt "$out/share/zsh/site-functions/" -m444 "$out/share/autojump/autojump.zsh"
+    ${lib.concatMapStrings (sh:"install -m444 $out/share/autojump/autojump.${sh} $interactiveShellInit_${sh};") shells}
   '';
+
+  outputs = ["out"] ++ (map (sh:"interactiveShellInit_${sh}")shells);
+  shells = [ "bash" "fish" "zsh" ];
 
   meta = with lib; {
     description = "A `cd' command that learns";

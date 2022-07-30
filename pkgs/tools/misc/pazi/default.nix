@@ -13,6 +13,10 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
+  shells = ["bash" "fish" "zsh"];
+  outputs = ["out"] ++ (map (sh:"interactiveShellInit_${sh}") shells);
+  postInstall = lib.concatMapStrings (sh:"$out/bin/pazi init ${sh} > $interactiveShellInit_${sh};") shells;
+
   cargoSha256 = "1iamlp5519h8mmgd4964cvyp7mmnqdg2d3qj5v7yzilyp4nz15jc";
 
   meta = with lib; {

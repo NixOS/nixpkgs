@@ -30,6 +30,7 @@
   ./config/qt5.nix
   ./config/resolvconf.nix
   ./config/shells-environment.nix
+  ./config/shells-pkgs.nix
   ./config/swap.nix
   ./config/sysctl.nix
   ./config/system-environment.nix

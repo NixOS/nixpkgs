@@ -27,14 +27,17 @@ in
             The default value is `fuck`, but you can use anything else as well.
           '';
         };
+        recursive = mkEnableOption "recursively applying rules until the command runs";
+        noConfirm = mkEnableOption "applying rules automatically, without any user confirmation";
+        instantMode = mkEnableOption ''
+          the experimental instant mode, that reduces evaluation times by logging shell output
+          instead of re-running the command itself
+        '';
       };
     };
 
     config = mkIf cfg.enable {
       environment.systemPackages = with pkgs; [ thefuck ];
-
-      programs.bash.interactiveShellInit = bashAndZshInitScript;
-      programs.zsh.interactiveShellInit = mkIf prg.zsh.enable bashAndZshInitScript;
-      programs.fish.interactiveShellInit = mkIf prg.fish.enable fishInitScript;
+      environment.shellPkgs = [(pkgs.thefuck.mkShellPkg cfg)];
     };
   }
