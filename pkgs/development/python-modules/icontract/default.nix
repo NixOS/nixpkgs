@@ -15,19 +15,23 @@
 , astor
 , numpy
 , asyncstdlib
+, fetchpatch
+, deal
+, pythonAtLeast
 }:
 
 buildPythonPackage rec {
   pname = "icontract";
-  version = "2.6.1";
+  version = "2.6.2";
   format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Parquery";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-QyuegyjVyRLQS0DjBJXpTDNeBM7LigGJ5cztVOO7e3Y=";
+    hash = "sha256-NUgMt/o9EpSQyOiAhYBVJtQKJn0Pd2lI45bKlo2z7mk=";
   };
 
   preCheck = ''
@@ -37,33 +41,35 @@ buildPythonPackage rec {
     export ICONTRACT_SLOW=1
   '';
 
-
   propagatedBuildInputs = [
     asttokens
     typing-extensions
   ];
 
   checkInputs = [
-    pytestCheckHook
-    yapf
-    docutils
-    pygments
-    dpcontracts
-    tabulate
-    py-cpuinfo
-    typeguard
     astor
-    numpy
     asyncstdlib
+    docutils
+    dpcontracts
+    numpy
+    pytestCheckHook
+    py-cpuinfo
+    pygments
+    tabulate
+    typeguard
+    yapf
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    deal
   ];
 
   disabledTestPaths = [
-    # needs an old version of deal to comply with the tests
-    # see https://github.com/Parquery/icontract/issues/244
-    "tests_with_others/test_deal.py"
     # mypy decorator checks don't pass. For some reaseon mypy
     # doesn't check the python file provided in the test.
     "tests/test_mypy_decorators.py"
+  ] ++ lib.optionals (pythonAtLeast "3.10") [
+    # test requires deal which is not compatible with python 3.10 due to
+    # pyschemes dependency
+    "tests_with_others/test_deal.py"
   ];
 
   pythonImportsCheck = [ "icontract" ];
