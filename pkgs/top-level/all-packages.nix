@@ -26471,6 +26471,8 @@ with pkgs;
     plugins = [];
   };
 
+  decentr = callPackage ../applications/networking/browsers/decentr { };
+
   dfasma = libsForQt5.callPackage ../applications/audio/dfasma { };
 
   dht = callPackage ../applications/networking/p2p/dht { };
