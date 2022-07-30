@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    gobject-introspection
     gnutls
     cairo
     gdk-pixbuf
