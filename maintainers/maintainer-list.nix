@@ -9626,6 +9626,12 @@
     githubId = 1237862;
     name = "Ollie Bunting";
   };
+  oluceps = {
+    name = "oluceps";
+    email = "mn1.674927211@gmail.com";
+    github = "oluceps";
+    githubId = 466340;
+  };
   olynch = {
     email = "owen@olynch.me";
     github = "olynch";
