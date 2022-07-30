@@ -1,6 +1,6 @@
 { lib, buildDunePackage, fetchurl, ocaml
 , angstrom, ipaddr, base64, pecu, uutf
-, alcotest, cmdliner
+, alcotest, cmdliner_1_1
 }:
 
 buildDunePackage rec {
@@ -14,7 +14,7 @@ buildDunePackage rec {
     sha256 = "0r1141makr0b900aby1gn0fccjv1qcqgyxib3bzq8fxmjqwjan8p";
   };
 
-  buildInputs = [ cmdliner ];
+  buildInputs = [ cmdliner_1_1 ];
 
   propagatedBuildInputs = [
     angstrom

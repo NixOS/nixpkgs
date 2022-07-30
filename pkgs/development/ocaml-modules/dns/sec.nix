@@ -1,6 +1,6 @@
-{ buildDunePackage, dns, dns-server, dns-mirage, lru, duration, base64, cstruct
+{ lib, buildDunePackage, dns, dns-server, dns-mirage, lru, duration, base64, cstruct
 , randomconv, lwt, mirage-crypto, mirage-crypto-pk, mirage-crypto-ec
-, tcpip, tls, tls-mirage, domain-name
+, tcpip, tls, tls-mirage, domain-name, logs, cmdliner_1_1, cmdliner
 , alcotest, callPackage
 }:
 
@@ -14,7 +14,9 @@ buildDunePackage {
     mirage-crypto
     mirage-crypto-pk
     mirage-crypto-ec
-    (callPackage ./logs.nix {} )
+    (logs.overrideAttrs (old: {
+      buildInputs = [cmdliner_1_1] ++ lib.lists.remove cmdliner old.buildInputs;
+    }))
     dns
     domain-name
   ];
@@ -25,7 +27,7 @@ buildDunePackage {
     dns
     mirage-crypto-pk
     base64
-    (callPackage ./logs.nix {} )
+    logs
   ];
 
   meta = dns.meta // {

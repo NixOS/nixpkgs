@@ -1,4 +1,4 @@
-{ buildDunePackage, dns, dns-client, dns-mirage, dns-resolver, dns-tsig
+{ buildDunePackage, dns, dns-client, dns-mirage, dns-resolver, dns-tsig, dnssec
 , dns-server, duration, randomconv, lwt, mirage-time, mirage-clock
 , mirage-random, tcpip, metrics
 }:
@@ -15,6 +15,7 @@ buildDunePackage {
     dns-resolver
     dns-tsig
     dns-server
+    dnssec
     duration
     randomconv
     lwt

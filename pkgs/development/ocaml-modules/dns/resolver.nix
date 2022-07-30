@@ -1,4 +1,4 @@
-{ buildDunePackage, dns, dns-server, dns-mirage, lru, duration
+{ buildDunePackage, dns, dns-server, dns-mirage, dnssec, lru, duration
 , randomconv, lwt, mirage-time, mirage-clock, mirage-random
 , tcpip, tls, tls-mirage
 , alcotest
@@ -23,6 +23,7 @@ buildDunePackage {
     tcpip
     tls
     tls-mirage
+    dnssec
   ];
 
   doCheck = true;

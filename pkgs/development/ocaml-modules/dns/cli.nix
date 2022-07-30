@@ -1,9 +1,8 @@
 { buildDunePackage, dns, dns-tsig, dns-client, dns-server, dns-certify, dnssec
-, cmdliner_1_1, fpath, x509, mirage-crypto, mirage-crypto-pk
-, mirage-crypto-rng, hex, ptime, mtime, ipaddr, lwt
-, randomconv, alcotest, callPackage
+, cmdliner_1_1, cmdliner, fpath, x509, mirage-crypto, mirage-crypto-pk
+, mirage-crypto-rng, hex, ptime, mtime, ipaddr, lwt, bos, logs, fmt
+, randomconv, alcotest, lib
 }:
-
 buildDunePackage {
   pname = "dns-cli";
 
@@ -20,19 +19,18 @@ buildDunePackage {
     dns-client
     dns-server
     dns-certify
-    # using call package as outlined in https://nixos.wiki/wiki/Nixpkgs/Modifying_Packages
-    (callPackage ./bos.nix {} )
+    bos
     cmdliner_1_1
     fpath
     x509
     mirage-crypto
     mirage-crypto-pk
     mirage-crypto-rng
+    fmt
+    logs
     hex
     ptime
     mtime
-    (callPackage ./logs.nix {})
-    (callPackage ./fmt.nix {})
     ipaddr
     lwt
     randomconv

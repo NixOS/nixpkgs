@@ -1,6 +1,7 @@
-{ lib, buildDunePackage, fetchurl, alcotest
+{ lib, buildDunePackage, fetchurl, alcotest, logs, fmt, cmdliner_1_1, cmdliner
 , cstruct, domain-name, duration, gmap, ipaddr, lru, metrics, ptime, base64, callPackage
 }:
+
 
 buildDunePackage rec {
   pname = "dns";
@@ -13,7 +14,19 @@ buildDunePackage rec {
     sha256 = "sha256-U4QkRq+suFJRoaRkP6dOGFZx0Pjq87wAgOhfOqzJwn8=";
   };
 
-  propagatedBuildInputs = [ (callPackage ./fmt.nix {}) (callPackage ./logs.nix {}) ptime domain-name gmap cstruct ipaddr lru duration metrics base64 ];
+  propagatedBuildInputs = [
+    logs
+    fmt
+    ptime
+    domain-name
+    gmap
+    cstruct
+    ipaddr
+    lru
+    duration
+    metrics
+    base64
+  ];
 
   doCheck = true;
   checkInputs = [ alcotest ];

@@ -1,6 +1,6 @@
-{ buildDunePackage, dns, dns-tsig, dns-mirage, randomconv, x509
+{ lib, buildDunePackage, dns, dns-tsig, dns-mirage, randomconv, x509
 , mirage-random, mirage-time, mirage-clock
-, mirage-crypto-pk, mirage-crypto-rng, mirage-crypto-ec, lwt
+, mirage-crypto-pk, mirage-crypto-rng, mirage-crypto-ec, lwt, logs, cmdliner_1_1, cmdliner
 , tcpip, callPackage
 }:
 
@@ -18,7 +18,7 @@ buildDunePackage {
     mirage-random
     mirage-time
     mirage-clock
-    (callPackage ./logs.nix {  })
+    logs
     mirage-crypto-pk
     mirage-crypto-rng
     mirage-crypto-ec

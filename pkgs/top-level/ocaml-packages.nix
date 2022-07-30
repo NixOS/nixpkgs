@@ -511,6 +511,10 @@ let
 
     happy-eyeballs = callPackage ../development/ocaml-modules/happy-eyeballs { };
 
+    happy-eyeballs-lwt = callPackage ../development/ocaml-modules/happy-eyeballs/lwt.nix { };
+
+    happy-eyeballs-mirage = callPackage ../development/ocaml-modules/happy-eyeballs/mirage.nix {  };
+
     hashcons = callPackage ../development/ocaml-modules/hashcons { };
 
     herelib = callPackage ../development/ocaml-modules/herelib { };
@@ -563,15 +567,13 @@ let
       git-binary = pkgs.git;
     };
 
-    git-cohttp = callPackage ../development/ocaml-modules/git/cohttp.nix { };
-
-    git-cohttp-unix = callPackage ../development/ocaml-modules/git/cohttp-unix.nix { };
-
     git-paf = callPackage ../development/ocaml-modules/git/paf.nix { };
 
     git-unix = callPackage ../development/ocaml-modules/git/unix.nix {
       git-binary = pkgs.git;
     };
+
+    git-mirage = callPackage ../development/ocaml-modules/git/mirage.nix { };
 
     gmetadom = callPackage ../development/ocaml-modules/gmetadom { };
 
@@ -614,8 +616,6 @@ let
 
     irmin-http = callPackage ../development/ocaml-modules/irmin/http.nix { };
 
-    irmin-layers = callPackage ../development/ocaml-modules/irmin/layers.nix { };
-
     irmin-mirage = callPackage ../development/ocaml-modules/irmin/mirage.nix { };
 
     irmin-mirage-git = callPackage ../development/ocaml-modules/irmin/mirage-git.nix { };
@@ -627,6 +627,8 @@ let
     irmin-test = callPackage ../development/ocaml-modules/irmin/test.nix { };
 
     irmin-unix = callPackage ../development/ocaml-modules/irmin/unix.nix { };
+
+    irmin-tezos = callPackage ../development/ocaml-modules/irmin/tezos.nix { };
 
     irmin-watcher = callPackage ../development/ocaml-modules/irmin-watcher { };
 
@@ -817,6 +819,8 @@ let
 
     mimic = callPackage ../development/ocaml-modules/mimic { };
 
+    mimic-happy-eyeballs = callPackage ../development/ocaml-modules/mimic/happy-eyeballs.nix { };
+
     minisat = callPackage ../development/ocaml-modules/minisat { };
 
     mirage = callPackage ../development/ocaml-modules/mirage { };
@@ -837,7 +841,7 @@ let
 
     mirage-clock = callPackage ../development/ocaml-modules/mirage-clock { };
 
-    mirage-clock-freestanding = callPackage ../development/ocaml-modules/mirage-clock/freestanding.nix { };
+    mirage-clock-solo5 = callPackage ../development/ocaml-modules/mirage-clock/solo5.nix { };
 
     mirage-clock-unix = callPackage ../development/ocaml-modules/mirage-clock/unix.nix { };
 
@@ -1412,6 +1416,8 @@ let
     terminal_size = callPackage ../development/ocaml-modules/terminal_size { };
 
     theora = callPackage ../development/ocaml-modules/theora { };
+
+    tezos-base58 = callPackage ../development/ocaml-modules/tezos-base58 { };
 
     toml = callPackage ../development/ocaml-modules/toml { };
 
