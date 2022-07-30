@@ -108,7 +108,7 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres kira-bruneau ];
     platforms = platforms.unix;
-    badPlatforms = [ "aarch64-darwin" ]; # Undefined symbols for architecture arm64
+    broken = stdenv.isDarwin && stdenv.isAarch64; # Undefined symbols for architecture arm64
   };
 }
 
