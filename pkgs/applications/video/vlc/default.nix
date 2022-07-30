@@ -31,6 +31,7 @@
 , libkate
 , libmad
 , libmatroska
+, libmodplug
 , libmtp
 , liboggz
 , libopus
@@ -122,6 +123,7 @@ stdenv.mkDerivation rec {
     libmad
     libmatroska
     libmtp
+    libmodplug
     liboggz
     libopus
     libplacebo
