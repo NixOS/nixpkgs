@@ -27,20 +27,21 @@
 , networkmanager
 , polkit
 , libsecret
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
   pname = "phosh";
-  version = "0.17.0";
+  version = "0.20.0_beta2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     group = "World";
     owner = "Phosh";
     repo = pname;
-    rev = "v${version}";
+    rev = "96163fd6ae8aae3fbb7377528d857b5b14581f31";
     fetchSubmodules = true; # including gvc and libcall-ui which are designated as subprojects
-    sha256 = "sha256-o/0NJZo1EPpXguN/tkUc+/9XaVTQWaLGe+2pU0B91Cg=";
+    sha256 = "sha256-NTDxba93mkidGOpLyhblnNkA9kFssSvI2m6GsBi3j+Y=";
   };
 
   nativeBuildInputs = [
