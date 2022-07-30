@@ -10,7 +10,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.0.1";
+  version = "3.2.0";
   pname = "liblarch";
   disabled = pythonOlder "3.5.0";
 
@@ -18,13 +18,15 @@ buildPythonPackage rec {
     owner = "getting-things-gnome";
     repo = "liblarch";
     rev = "v${version}";
-    sha256 = "0xv2mfvyzipbny3iz8vll77wsqxfwh28xj6bj1ff0l452waph45m";
+    sha256 = "sha256-A2qChe2z6rAhjRVX5VoHQitebf/nMATdVZQgtlquuYg=";
   };
 
   checkInputs = [
     gobject-introspection # for setup hook
     gtk3
   ];
+
+  buildInputs = [ gtk3 ];
 
   propagatedBuildInputs = [
     pygobject3
