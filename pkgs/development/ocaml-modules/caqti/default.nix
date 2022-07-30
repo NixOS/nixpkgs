@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub, buildDunePackage
 , cppo, logs, ptime, uri, bigstringaf
-, re, cmdliner, alcotest }:
+, re, cmdliner_1_1, alcotest }:
 
 buildDunePackage rec {
   pname = "caqti";
@@ -18,7 +18,7 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ cppo ];
   propagatedBuildInputs = [ logs ptime uri bigstringaf ];
-  checkInputs = [ re cmdliner alcotest ];
+  checkInputs = [ re cmdliner_1_1 alcotest ];
 
   doCheck = true;
 
