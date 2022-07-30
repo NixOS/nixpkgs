@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    gobject-introspection
     gdk-pixbuf
     glib
     sqlite
