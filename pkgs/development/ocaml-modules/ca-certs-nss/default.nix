@@ -8,19 +8,19 @@
 , fmt
 , bos
 , astring
-, cmdliner
+, cmdliner_1_1
 , alcotest
 }:
 
 buildDunePackage rec {
   pname = "ca-certs-nss";
-  version = "3.74";
+  version = "3.80";
 
   minimumOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/mirage/ca-certs-nss/releases/download/v${version}/ca-certs-nss-${version}.tbz";
-    sha256 = "c95f5b2e36a0564e6f65421e0e197d7cfe600d19eb492f8f27c4841cbe68b231";
+    sha256 = "1hdjsfk1hky43l0bxahj81l5dg8bzqdz1fw5n0jsmgm4dj09qqk5";
   };
 
   useDune2 = true;
@@ -36,7 +36,7 @@ buildDunePackage rec {
     fmt
     bos
     astring
-    cmdliner
+    cmdliner_1_1
   ];
 
   doCheck = true;
