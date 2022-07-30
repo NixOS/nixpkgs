@@ -88,6 +88,10 @@ let
       swift = swift-unwrapped;
     };
 
+    sourcekit-lsp = callPackage ./sourcekit-lsp {
+      inherit (apple_sdk.frameworks) CryptoKit LocalAuthentication;
+    };
+
   };
 
 in self

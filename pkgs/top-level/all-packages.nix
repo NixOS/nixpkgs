@@ -15042,7 +15042,7 @@ with pkgs;
   svdtools = callPackage ../development/embedded/svdtools { };
 
   swiftPackages = recurseIntoAttrs (callPackage ../development/compilers/swift { });
-  inherit (swiftPackages) swift swiftpm;
+  inherit (swiftPackages) swift swiftpm sourcekit-lsp;
 
   swiftpm2nix = callPackage ../development/tools/swiftpm2nix { };
 
