@@ -5087,6 +5087,8 @@ in {
 
   line_profiler = callPackage ../development/python-modules/line_profiler { };
 
+  linkedin-messaging = callPackage ../development/python-modules/linkedin-messaging { };
+
   linkify-it-py = callPackage ../development/python-modules/linkify-it-py { };
 
   linode-api = callPackage ../development/python-modules/linode-api { };
