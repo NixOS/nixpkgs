@@ -29744,6 +29744,8 @@ with pkgs;
 
   purple-plugin-pack = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-plugin-pack { };
 
+  purple-signald = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-signald { };
+
   purple-slack = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-slack { };
 
   purple-vk-plugin = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-vk-plugin { };

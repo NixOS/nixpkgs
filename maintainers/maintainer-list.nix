@@ -5312,6 +5312,12 @@
     githubId = 39689;
     name = "Hugo Tavares Reis";
   };
+  hufman = {
+    email = "hufman@gmail.com";
+    github = "hufman";
+    githubId = 1592375;
+    name = "Walter Huf";
+  };
   hugolgst = {
     email = "hugo.lageneste@pm.me";
     github = "hugolgst";
