@@ -14367,6 +14367,10 @@ with pkgs;
     gputils = null;
   };
 
+  sea-orm-cli = callPackage ../development/tools/rust/sea-orm-cli {
+    inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
+  };
+
   seren = callPackage ../applications/networking/instant-messengers/seren { };
 
   serialdv = callPackage ../development/libraries/serialdv {  };
