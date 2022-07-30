@@ -294,68 +294,19 @@ in
 {
   options = {
     services.znapzend = {
-      enable = mkEnableOption "ZnapZend ZFS backup daemon";
-
-      logLevel = mkOption {
-        default = "debug";
-        example = "warning";
-        type = enum ["debug" "info" "warning" "err" "alert"];
-        description = ''
-          The log level when logging to file. Any of debug, info, warning, err,
-          alert. Default in daemonized form is debug.
-        '';
-      };
-
-      logTo = mkOption {
-        type = str;
-        default = "syslog::daemon";
-        example = "/var/log/znapzend.log";
-        description = ''
-          Where to log to (syslog::&lt;facility&gt; or &lt;filepath&gt;).
-        '';
-      };
-
-      noDestroy = mkOption {
-        type = bool;
-        default = false;
-        description = "Does all changes to the filesystem except destroy.";
-      };
-
       autoCreation = mkOption {
         type = bool;
         default = false;
         description = "Automatically create the destination dataset if it does not exist.";
       };
 
-      zetup = mkOption {
-        type = attrsOf srcType;
-        description = "Znapzend configuration.";
-        default = {};
-        example = literalExpression ''
-          {
-            "tank/home" = {
-              # Make snapshots of tank/home every hour, keep those for 1 day,
-              # keep every days snapshot for 1 month, etc.
-              plan = "1d=>1h,1m=>1d,1y=>1m";
-              recursive = true;
-              # Send all those snapshots to john@example.com:rtank/john as well
-              destinations.remote = {
-                host = "john@example.com";
-                dataset = "rtank/john";
-              };
-            };
-          };
-        '';
-      };
+      enable = mkEnableOption "ZnapZend ZFS backup daemon";
 
-      pure = mkOption {
-        type = bool;
-        description = ''
-          Do not persist any stateful znapzend setups. If this option is
-          enabled, your previously set znapzend setups will be cleared and only
-          the ones defined with this module will be applied.
-        '';
-        default = false;
+      extraFlags = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = "Extra flags passed to the znapzend daemon.";
+        example = literalExpression ''[ "--rootexec=sudo" ]'';
       };
 
       features.oracleMode = mkEnableOption ''
@@ -414,6 +365,67 @@ in
         that dataset tree... and a decent backup plan will ensure you have a lot
         of those), so you would benefit from requesting this feature.
       '';
+
+      logLevel = mkOption {
+        default = "debug";
+        example = "warning";
+        type = enum ["debug" "info" "warning" "err" "alert"];
+        description = ''
+          The log level when logging to file. Any of debug, info, warning, err,
+          alert. Default in daemonized form is debug.
+        '';
+      };
+
+      logTo = mkOption {
+        type = str;
+        default = "syslog::daemon";
+        example = "/var/log/znapzend.log";
+        description = ''
+          Where to log to (syslog::&lt;facility&gt; or &lt;filepath&gt;).
+        '';
+      };
+
+      noDestroy = mkOption {
+        type = bool;
+        default = false;
+        description = "Does all changes to the filesystem except destroy.";
+      };
+
+      pure = mkOption {
+        type = bool;
+        description = ''
+          Do not persist any stateful znapzend setups. If this option is
+          enabled, your previously set znapzend setups will be cleared and only
+          the ones defined with this module will be applied.
+        '';
+        default = false;
+      };
+
+      rootSudo = mkEnableOption ''
+        Executes commands that require root privilege on all configured remotes with the sudo command.
+        Please ensure that the /etc/sudoers file on the remote host is properly configured.
+      '';
+
+      zetup = mkOption {
+        type = attrsOf srcType;
+        description = "Znapzend configuration.";
+        default = {};
+        example = literalExpression ''
+          {
+            "tank/home" = {
+              # Make snapshots of tank/home every hour, keep those for 1 day,
+              # keep every days snapshot for 1 month, etc.
+              plan = "1d=>1h,1m=>1d,1y=>1m";
+              recursive = true;
+              # Send all those snapshots to john@example.com:rtank/john as well
+              destinations.remote = {
+                host = "john@example.com";
+                dataset = "rtank/john";
+              };
+            };
+          };
+        '';
+      };
     };
   };
 
@@ -426,7 +438,10 @@ in
         wantedBy    = [ "zfs.target" ];
         after       = [ "zfs.target" ];
 
-        path = with pkgs; [ zfs mbuffer openssh ];
+        # sudo is only added if rootSudo is configured
+        # note that this is required by znapzend itself as there is no finer grain control over where it uses the sudo command
+        # (i.e it will also run local superuser commands with sudo)
+        path = with pkgs; [ zfs mbuffer openssh ] ++ optional cfg.rootSudo sudo;
 
         preStart = optionalString cfg.pure ''
           echo Resetting znapzend zetups
@@ -448,15 +463,18 @@ in
           # make the service fail in that case.
           TimeoutStartSec = 180;
           # Needs to have write access to ZFS
+          # Currently only supports root but could theoretically support any user with the --rootExec=sudo flag
           User = "root";
           ExecStart = let
             args = concatStringsSep " " [
-              "--logto=${cfg.logTo}"
-              "--loglevel=${cfg.logLevel}"
-              (optionalString cfg.noDestroy "--nodestroy")
               (optionalString cfg.autoCreation "--autoCreation")
               (optionalString (enabledFeatures != [])
                 "--features=${concatStringsSep "," enabledFeatures}")
+              "--logto=${cfg.logTo}"
+              "--loglevel=${cfg.logLevel}"
+              (optionalString cfg.noDestroy "--nodestroy")
+              (optionalString cfg.rootSudo "--rootExec=sudo")
+              "${toString cfg.extraFlags}"
             ]; in "${pkgs.znapzend}/bin/znapzend ${args}";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           Restart = "on-failure";
