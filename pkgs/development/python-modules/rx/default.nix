@@ -1,31 +1,17 @@
-{ lib, fetchFromGitHub, buildPythonPackage
-, pythonOlder
-, poetry-core
-, nose
-, typing-extensions
-}:
+{ lib, fetchFromGitHub, buildPythonPackage, pythonOlder, nose }:
 
 buildPythonPackage rec {
   pname = "rx";
-  version = "4.0.4";
+  version = "3.2.0";
   disabled = pythonOlder "3.6";
-  format = "pyproject";
 
   # There are no tests on the pypi source
   src = fetchFromGitHub {
     owner = "ReactiveX";
     repo = "rxpy";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-W1qYNbYV6Roz1GJtP/vpoPD6KigWaaQOWe1R5DZHlUw=";
+    rev = "v${version}";
+    sha256 = "159ln0c721rrdz0mqyl3zvv6qsry7ql7ddlpwpnxs9q15ik15mnj";
   };
-
-  nativeBuildInputs = [
-    poetry-core
-  ];
-
-  propagatedBuildInputs = [
-    typing-extensions
-  ];
 
   checkInputs = [ nose ];
 
