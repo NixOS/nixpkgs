@@ -1,4 +1,4 @@
-{ buildVersion, sha256, dev ? false }:
+{ buildVersion, hashes, dev ? false }:
 
 { fetchurl, lib, stdenv, xorg, glib, libGL, glibcLocales, gtk3, cairo, pango, libredirect, makeWrapper, wrapGAppsHook
 , pkexecPath ? "/run/wrappers/bin/pkexec"
@@ -11,12 +11,13 @@ let
   binaries = [ "sublime_merge" "crash_reporter" "git-credential-sublime" "ssh-askpass-sublime" ];
   primaryBinary = "sublime_merge";
   primaryBinaryAliases = [ "smerge" ];
-  downloadUrl = "https://download.sublimetext.com/sublime_merge_build_${buildVersion}_${arch}.tar.xz";
+  archCode = {
+    "x86_64-linux" = "x64";
+    "aarch64-linux" = "arm64";
+  }.${stdenv.hostPlatform.system};
+  downloadUrl = "https://download.sublimetext.com/sublime_merge_build_${buildVersion}_${archCode}.tar.xz";
   versionUrl = "https://www.sublimemerge.com/${if dev then "dev" else "download"}";
   versionFile = builtins.toString ./default.nix;
-  archSha256 = sha256;
-  arch = "x64";
-
   libPath = lib.makeLibraryPath [ xorg.libX11 glib gtk3 cairo pango curl ];
   redirects = [ "/usr/bin/pkexec=${pkexecPath}" "/bin/true=${coreutils}/bin/true" ];
 in let
@@ -26,7 +27,7 @@ in let
 
     src = fetchurl {
       url = downloadUrl;
-      sha256 = archSha256;
+      sha256 = hashes.${stdenv.hostPlatform.system};
     };
 
     dontStrip = true;
@@ -123,6 +124,6 @@ in stdenv.mkDerivation (rec {
     maintainers = with maintainers; [ zookatron ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 })
