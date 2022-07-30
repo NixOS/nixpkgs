@@ -129,7 +129,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     pname = "Boogie";
     version = "2.15.7";
 
-    src = pkgs.fetchFromGitHub {
+    src = fetchFromGitHub {
       owner = "boogie-org";
       repo = "boogie";
       rev = "v${version}";
