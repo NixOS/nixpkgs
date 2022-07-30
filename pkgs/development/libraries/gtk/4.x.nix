@@ -42,6 +42,7 @@
 , vulkan-headers
 , wayland
 , wayland-protocols
+, wayland-scanner
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux
 , cups
@@ -77,6 +78,10 @@ stdenv.mkDerivation rec {
     sha256 = "e7/k0TVp98KX7UmDSscmPjGLe/EC0ycctGbVlx9ZrnA=";
   };
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     gettext
     gobject-introspection
@@ -88,9 +93,11 @@ stdenv.mkDerivation rec {
     sassc
     gi-docgen
     libxml2 # for xmllint
+    wayland-scanner
   ] ++ setupHooks;
 
   buildInputs = [
+    gobject-introspection
     libxkbcommon
     libpng
     libtiff
@@ -183,6 +190,14 @@ stdenv.mkDerivation rec {
 
     chmod +x ''${files[@]}
     patchShebangs ''${files[@]}
+
+  '' +
+  # Run-time dependency gi-docgen found: NO (tried pkgconfig and cmake)
+  # it should be a build-time dep for build
+  # TODO: send upstream
+  ''
+    substituteInPlace meson.build \
+      --replace "'gi-docgen', ver" "'gi-docgen', native:true, ver"
   '';
 
   preInstall = ''
