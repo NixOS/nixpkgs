@@ -38,8 +38,11 @@ let
           daemon reads in addition to the the user's authorized_keys file.
           You can combine the <literal>keys</literal> and
           <literal>keyFiles</literal> options.
-          Warning: If you are using <literal>NixOps</literal> then don't use this
-          option since it will replace the key required for deployment via ssh.
+          Warning: If you are using <literal>NixOps</literal> with
+          <literal>deployment.provisionSSHKey</literal> set to
+          <literal>true</literal> (the default) then don't use this option for
+          user root, since it will replace the key required for deployment via
+          ssh.
         '';
         example = [
           "ssh-rsa AAAAB3NzaC1yc2etc/etc/etcjwrsh8e596z6J0l7 example@host"
