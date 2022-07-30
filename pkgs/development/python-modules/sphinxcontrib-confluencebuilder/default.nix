@@ -23,7 +23,7 @@ buildPythonPackage rec {
     jinja2
   ];
 
-  # Something about the way the unit tests are structured in this project is causing them to fail
+  # Tests are disabled due to a circular dependency on Sphinx
   doCheck = false;
 
   pythonImportsCheck = [
