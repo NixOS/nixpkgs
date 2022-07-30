@@ -1,6 +1,6 @@
 { lib, buildDunePackage, cohttp-lwt
 , conduit-lwt-unix, conduit-lwt, ppx_sexp_conv
-, cmdliner, fmt, logs, magic-mime
+, cmdliner_1_1, fmt, logs, magic-mime
 , ounit
 , cacert
 }:
@@ -9,7 +9,7 @@ buildDunePackage {
   pname = "cohttp-lwt-unix";
   inherit (cohttp-lwt) version src;
 
-  buildInputs = [ cmdliner ppx_sexp_conv ];
+  buildInputs = [ cmdliner_1_1 ppx_sexp_conv ];
 
   propagatedBuildInputs = [
     cohttp-lwt conduit-lwt conduit-lwt-unix fmt logs magic-mime
