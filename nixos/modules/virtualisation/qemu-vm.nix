@@ -870,7 +870,7 @@ in
       (mkIf pkgs.stdenv.hostPlatform.isx86 [
         "-usb" "-device usb-tablet,bus=usb-bus.0"
       ])
-      (mkIf (pkgs.stdenv.isAarch32 || pkgs.stdenv.isAarch64) [
+      (mkIf pkgs.stdenv.hostPlatform.isAarch [
         "-device virtio-gpu-pci" "-device usb-ehci,id=usb0" "-device usb-kbd" "-device usb-tablet"
       ])
       (let

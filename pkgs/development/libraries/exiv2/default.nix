@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     patchShebangs ../test/
     mkdir ../test/tmp
 
-    ${lib.optionalString (stdenv.isAarch64 || stdenv.isAarch32) ''
+    ${lib.optionalString stdenv.hostPlatform.isAarch ''
       # Fix tests on arm
       # https://github.com/Exiv2/exiv2/issues/933
       rm -f ../tests/bugfixes/github/test_CVE_2018_12265.py
