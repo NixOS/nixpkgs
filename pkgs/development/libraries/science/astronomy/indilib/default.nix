@@ -11,6 +11,8 @@
 , libjpeg
 , gsl
 , fftw
+, libev
+, bash
 }:
 
 stdenv.mkDerivation rec {
@@ -23,6 +25,18 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-HyV7JzDzYO80fgZFpIvIumYbC2yaT8C8UikxFrP6kzo=";
   };
+
+  postPatch = ''
+    for f in drivers/*/*.rules;
+    do
+      substituteInPlace $f \
+        --replace "/lib/udev/rules.d" "lib/udev/rules.d" \
+        --replace "/etc/udev/rules.d" "lib/udev/rules.d" \
+        --replace "/lib/firmware" "lib/firmware" \
+        --replace "/bin/sh" "${bash}/bin/sh"
+    done
+  '';
+
 
   nativeBuildInputs = [
     cmake
@@ -38,6 +52,7 @@ stdenv.mkDerivation rec {
     libjpeg
     gsl
     fftw
+    libev
   ];
 
   cmakeFlags = [

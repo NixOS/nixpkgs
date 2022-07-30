@@ -17,7 +17,9 @@
 , libdc1394
 , gpsd
 , fxload
+, coreutils
 , ffmpeg
+, bash
 , version
 , src
 }:
@@ -46,9 +48,19 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    for f in libfishcamp/CMakeLists.txt libsbig/CMakeLists.txt
+    for f in \
+     */CMakeLists.txt \
+     */*.rules;
     do
-      substituteInPlace $f --replace "/lib/firmware" "lib/firmware"
+      substituteInPlace $f \
+        --replace "/lib/udev/rules.d" "lib/udev/rules.d" \
+        --replace "/etc/udev/rules.d" "lib/udev/rules.d" \
+        --replace "/lib/firmware" "$out/lib/firmware" \
+        --replace "/sbin/fxload" "${fxload}/bin/fxload" \
+        --replace "/bin/sleep" "${coreutils}/bin/sleep" \
+        --replace "/bin/sh" "${bash}/bin/sh" \
+        --replace "/bin/echo" "echo" \
+        --replace "lib/firmware/qhy" "lib/firmware"
     done
   '';
 

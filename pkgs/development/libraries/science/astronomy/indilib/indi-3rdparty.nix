@@ -17,6 +17,7 @@
 , libdc1394
 , gpsd
 , ffmpeg
+, fxload
 , version
 , src
 , withFirmware ? false
@@ -38,18 +39,17 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    for f in indi-qsi/CMakeLists.txt \
-             indi-dsi/CMakeLists.txt \
-             indi-armadillo-platypus/CMakeLists.txt \
-             indi-orion-ssg3/CMakeLists.txt
+    for f in */CMakeLists.txt \
+             */*.rules;
     do
       substituteInPlace $f \
         --replace "/lib/udev/rules.d" "lib/udev/rules.d" \
         --replace "/etc/udev/rules.d" "lib/udev/rules.d" \
-        --replace "/lib/firmware" "lib/firmware"
+        --replace "/lib/firmware" "lib/firmware" \
+        --replace "/sbin/fxload" "${fxload}/bin/fxload"
     done
-  '';
 
+  '';
   cmakeFlags = [
     "-DINDI_DATA_DIR=share/indi"
     "-DCMAKE_INSTALL_LIBDIR=lib"
