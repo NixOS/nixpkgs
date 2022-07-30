@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "git-delete-merged-branches";
-  version = "6.4.0";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "hartwork";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-swAc8ObZY78nVQyjTrVG81xBqTYnWHVDFpiUApbowqU=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-CPJhd3QXXNm4RGBEDnNOohVOYKVI6I8uc3cDiTrXKvc=";
   };
 
   propagatedBuildInputs = with python3Packages; [
