@@ -26199,6 +26199,8 @@ with pkgs;
 
   perkeep = callPackage ../applications/misc/perkeep { };
 
+  cameracontroller = callPackage ../applications/video/cameracontroller { };
+
   canto-curses = callPackage ../applications/networking/feedreaders/canto-curses { };
 
   canto-daemon = callPackage ../applications/networking/feedreaders/canto-daemon { };
