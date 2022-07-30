@@ -12077,9 +12077,7 @@ with pkgs;
 
   webalizer = callPackage ../tools/networking/webalizer { };
 
-  wget = callPackage ../tools/networking/wget {
-    libpsl = null;
-  };
+  wget = callPackage ../tools/networking/wget { };
 
   wget2 = callPackage ../tools/networking/wget2 {
     # update breaks grub2
