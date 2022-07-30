@@ -178,7 +178,7 @@ let
                             # Except when:
                             #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.
                             #    - static armv7l, where compilation fails.
-                            !((stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32) && stdenv.hostPlatform.isStatic)
+                            !(stdenv.hostPlatform.isAarch && stdenv.hostPlatform.isStatic)
                           then supportedHardeningFlags
                           else lib.remove "pie" supportedHardeningFlags;
   enabledHardeningOptions =

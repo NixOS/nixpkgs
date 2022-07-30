@@ -476,9 +476,9 @@ in
 
     isoImage.squashfsCompression = mkOption {
       default = with pkgs.stdenv.targetPlatform; "xz -Xdict-size 100% "
-                + lib.optionalString (isx86_32 || isx86_64) "-Xbcj x86"
+                + lib.optionalString isx86 "-Xbcj x86"
                 # Untested but should also reduce size for these platforms
-                + lib.optionalString (isAarch32 || isAarch64) "-Xbcj arm"
+                + lib.optionalString isAarch "-Xbcj arm"
                 + lib.optionalString (isPower && is32bit && isBigEndian) "-Xbcj powerpc"
                 + lib.optionalString (isSparc) "-Xbcj sparc";
       description = ''

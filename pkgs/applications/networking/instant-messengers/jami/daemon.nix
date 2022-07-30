@@ -48,7 +48,7 @@ let
       configureFlags = old.configureFlags
         ++ (readLinesToList ./config/ffmpeg_args_common)
         ++ lib.optionals stdenv.isLinux (readLinesToList ./config/ffmpeg_args_linux)
-        ++ lib.optionals (stdenv.isx86_32 || stdenv.isx86_64) (readLinesToList ./config/ffmpeg_args_x86);
+        ++ lib.optionals stdenv.hostPlatform.isx86 (readLinesToList ./config/ffmpeg_args_x86);
       outputs = [ "out" "doc" ];
       meta = old.meta // {
         # undefined reference to `ff_nlmeans_init_aarch64'
