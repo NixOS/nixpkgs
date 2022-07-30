@@ -14720,4 +14720,10 @@
     github = "dfithian";
     githubId = 8409320;
   };
+  bezmuth = {
+    email = "benkel97@protonmail.com";
+    name = "Ben Kelly";
+    github = "bezmuth";
+    githubId = 31394095;
+  };
 }
