@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
     bubblewrap
     wayland
     libseccomp
+    gobject-introspection
     systemd
   ];
 
