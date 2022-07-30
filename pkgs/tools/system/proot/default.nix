@@ -1,7 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , talloc
 , pkg-config
-, libarchive
 , git
 , ncurses
 , docutils, swig, python3, coreutils, enablePython ? true }:
@@ -24,7 +23,7 @@ stdenv.mkDerivation rec {
     sed -i /CROSS_COMPILE/d src/GNUmakefile
   '';
 
-  buildInputs = [ ncurses libarchive talloc ] ++ lib.optional enablePython python3;
+  buildInputs = [ ncurses talloc ] ++ lib.optional enablePython python3;
   nativeBuildInputs = [ pkg-config docutils ] ++ lib.optional enablePython swig;
 
   enableParallelBuilding = true;
