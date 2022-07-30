@@ -59,7 +59,6 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=2gua.rainbow-brackets";
           homepage = "https://github.com/lcultx/rainbow-brackets";
           license = licenses.mit;
-          maintainers = with maintainers; [ CompEng0001 ];
         };
       };
 
