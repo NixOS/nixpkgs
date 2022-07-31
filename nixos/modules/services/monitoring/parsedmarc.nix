@@ -123,7 +123,10 @@ in
             host = "imap.example.com";
             user = "alice@example.com";
             password = { _secret = "/run/keys/imap_password" };
+          };
+          mailbox = {
             watch = true;
+            batch_size = 30;
           };
           splunk_hec = {
             url = "https://splunkhec.example.com";
@@ -166,6 +169,24 @@ in
               default = true;
               description = lib.mdDoc ''
                 Save forensic report data to Elasticsearch and/or Splunk.
+              '';
+            };
+          };
+
+          mailbox = {
+            watch = lib.mkOption {
+              type = lib.types.bool;
+              default = true;
+              description = lib.mdDoc ''
+                Use the IMAP IDLE command to process messages as they arrive.
+              '';
+            };
+
+            delete = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+              description = lib.mdDoc ''
+                Delete messages after processing them, instead of archiving them.
               '';
             };
           };
@@ -215,22 +236,6 @@ in
                 details).
               '';
               apply = x: if isAttrs x || x == null then x else { _secret = x; };
-            };
-
-            watch = lib.mkOption {
-              type = lib.types.bool;
-              default = true;
-              description = lib.mdDoc ''
-                Use the IMAP IDLE command to process messages as they arrive.
-              '';
-            };
-
-            delete = lib.mkOption {
-              type = lib.types.bool;
-              default = false;
-              description = lib.mdDoc ''
-                Delete messages after processing them, instead of archiving them.
-              '';
             };
           };
 
@@ -360,6 +365,13 @@ in
 
   config = lib.mkIf cfg.enable {
 
+    warnings = let
+      deprecationWarning = optname: "Starting in 8.0.0, the `${optname}` option has been moved from the `services.parsedmarc.settings.imap`"
+        + "configuration section to the `services.parsedmarc.settings.mailbox` configuration section.";
+      hasImapOpt = lib.flip builtins.hasAttr cfg.settings.imap;
+      movedOptions = [ "reports_folder" "archive_folder" "watch" "delete" "test" "batch_size" ];
+    in builtins.map deprecationWarning (builtins.filter hasImapOpt movedOptions);
+
     services.elasticsearch.enable = lib.mkDefault cfg.provision.elasticsearch;
 
     services.geoipupdate = lib.mkIf cfg.provision.geoIp {
@@ -444,6 +456,8 @@ in
           ssl = false;
           user = cfg.provision.localMail.recipientName;
           password = "${pkgs.writeText "imap-password" "@imap-password@"}";
+        };
+        mailbox = {
           watch = true;
         };
       })
