@@ -4369,6 +4369,8 @@ self: super: with self; {
 
   idasen = callPackage ../development/python-modules/idasen { };
 
+  icoextract = callPackage ../development/python-modules/icoextract { };
+
   icontract = callPackage ../development/python-modules/icontract { };
 
   identify = callPackage ../development/python-modules/identify { };
