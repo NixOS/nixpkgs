@@ -73,6 +73,7 @@
   ./hardware/ksm.nix
   ./hardware/ledger.nix
   ./hardware/logitech.nix
+  ./hardware/logiops
   ./hardware/mcelog.nix
   ./hardware/network/ath-user-regd.nix
   ./hardware/network/b43.nix
