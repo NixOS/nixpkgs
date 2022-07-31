@@ -484,6 +484,8 @@ with pkgs;
 
   protoc-gen-rust = callPackage ../development/tools/protoc-gen-rust { };
 
+  protoc-gen-rust-grpc = callPackage ../development/tools/protoc-gen-rust-grpc { };
+
   protoc-gen-twirp = callPackage ../development/tools/protoc-gen-twirp { };
 
   protoc-gen-twirp_php = callPackage ../development/tools/protoc-gen-twirp_php { };
