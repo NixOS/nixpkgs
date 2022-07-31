@@ -3,6 +3,7 @@
 , fetchurl
 , ninja
 , meson
+, mesonEmulatorHook
 , pkg-config
 , vala
 , gobject-introspection
@@ -42,9 +43,12 @@ stdenv.mkDerivation rec {
     dbus
     xvfb-run
     glib
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
+    gobject-introspection
     glib
     gtk3
   ];
