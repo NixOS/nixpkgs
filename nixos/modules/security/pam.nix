@@ -452,7 +452,6 @@ let
         (
           ''
             # Account management.
-            account required pam_unix.so
           '' +
           optionalString use_ldap ''
             account sufficient ${pam_ldap}/lib/security/pam_ldap.so
@@ -473,7 +472,11 @@ let
             account [success=ok ignore=ignore default=die] ${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_login.so
             account [success=ok default=ignore] ${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_admin.so
           '' +
+          # The required pam_unix.so module has to come after all the sufficient modules
+          # because otherwise, the account lookup will fail if the user does not exist
+          # locally, for example with MySQL- or LDAP-auth.
           ''
+            account required pam_unix.so
 
             # Authentication management.
           '' +
