@@ -1,8 +1,44 @@
-{ lib, stdenv, fetchFromGitHub, cmake, irrlichtmt, libpng, bzip2, curl, libogg, jsoncpp
-, libjpeg, libXxf86vm, libGLU, libGL, openal, libvorbis, sqlite, luajit
-, freetype, gettext, doxygen, ncurses, graphviz, xorg, gmp, libspatialindex
-, leveldb, postgresql, hiredis, libiconv, zlib, libXrandr, libX11, ninja, prometheus-cpp
-, OpenGL, OpenAL ? openal, Carbon, Cocoa, withTouchSupport ? false
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, irrlichtmt
+, coreutils
+, libpng
+, bzip2
+, curl
+, libogg
+, jsoncpp
+, libjpeg
+, libXxf86vm
+, libGLU
+, libGL
+, openal
+, libvorbis
+, sqlite
+, luajit
+, freetype
+, gettext
+, doxygen
+, ncurses
+, graphviz
+, xorg
+, gmp
+, libspatialindex
+, leveldb
+, postgresql
+, hiredis
+, libiconv
+, zlib
+, libXrandr
+, libX11
+, ninja
+, prometheus-cpp
+, OpenGL
+, OpenAL ? openal
+, Carbon
+, Cocoa
+, withTouchSupport ? false
 }:
 
 with lib;
@@ -72,9 +108,14 @@ let
       leveldb postgresql hiredis prometheus-cpp
     ];
 
+    postPatch = ''
+      substituteInPlace src/filesys.cpp --replace "/bin/rm" "${coreutils}/bin/rm"
+    '';
+
     postInstall = ''
       mkdir -pv $out/share/minetest/games/minetest_game/
       cp -rv ${sources.data}/* $out/share/minetest/games/minetest_game/
+      patchShebangs $out
     '';
 
     meta = with lib; {
