@@ -4,7 +4,7 @@
 }:
 
 let
-  pythonEnv = python3.withPackages(ps: with ps; [
+  pythonEnv = python3.pythonForBuild.withPackages(ps: with ps; [
     setuptools
   ]);
 in
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     gtk-doc docbook_xsl docbook_xml_dtd_412 docbook_xml_dtd_44
     gobject-introspection vala
   ];
-  buildInputs = [ systemd glib ];
+  buildInputs = [ systemd glib gobject-introspection ];
 
   propagatedBuildInputs = [ libusb1 ];
 
