@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mdds";
-  version = "2.0.2";
+  version = "2.0.3";
 
   src = fetchurl {
     url = "https://kohei.us/files/${pname}/src/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-EyEfLy44fvO3TXOh3O5Soa1c4G34+OZkdnnfknijEWo=";
+    sha256 = "sha256-l3H+QuEzRDwTyhhyU3Y+F8i8lqGgKuyeHoiTNn/6nOU=";
   };
 
   postInstall = ''
