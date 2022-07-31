@@ -18,7 +18,7 @@
 let
   # the GLES backend on rpi is untested as I don't have the hardware
   backend =
-    if (stdenv.isx86_32 || stdenv.isx86_64) then "OpenGL" else "GLES";
+    if stdenv.hostPlatform.isx86 then "OpenGL" else "GLES";
 
   withVLC = stdenv.isDarwin;
 

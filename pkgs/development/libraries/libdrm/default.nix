@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     "-Dnm-path=${stdenv.cc.targetPrefix}nm"
     "-Dinstall-test-programs=true"
     "-Domap=true"
-  ] ++ lib.optionals (stdenv.isAarch32 || stdenv.isAarch64) [
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch [
     "-Dtegra=true"
     "-Detnaviv=true"
   ];

@@ -1,5 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ... }:
-
+import ../make-test-python.nix ({ pkgs, ... }:
   let
     imageEnv = pkgs.buildEnv {
       name = "k3s-pause-image-env";
@@ -11,20 +10,12 @@ import ./make-test-python.nix ({ pkgs, ... }:
       contents = imageEnv;
       config.Entrypoint = [ "/bin/tini" "--" "/bin/sleep" "inf" ];
     };
-    # Don't use the default service account because there's a race where it may
-    # not be created yet; make our own instead.
     testPodYaml = pkgs.writeText "test.yml" ''
-      apiVersion: v1
-      kind: ServiceAccount
-      metadata:
-        name: test
-      ---
       apiVersion: v1
       kind: Pod
       metadata:
         name: test
       spec:
-        serviceAccountName: test
         containers:
         - name: test
           image: test.local/pause:local
@@ -66,13 +57,14 @@ import ./make-test-python.nix ({ pkgs, ... }:
       machine.wait_for_unit("k3s")
       machine.succeed("k3s kubectl cluster-info")
       machine.fail("sudo -u noprivs k3s kubectl cluster-info")
-      # FIXME: this fails with the current nixos kernel config; once it passes, we should uncomment it
-      # machine.succeed("k3s check-config")
+      machine.succeed("k3s check-config")
 
       machine.succeed(
           "${pauseImage} | k3s ctr image import -"
       )
 
+      # Also wait for our service account to show up; it takes a sec
+      machine.wait_until_succeeds("k3s kubectl get serviceaccount default")
       machine.succeed("k3s kubectl apply -f ${testPodYaml}")
       machine.succeed("k3s kubectl wait --for 'condition=Ready' pod/test")
       machine.succeed("k3s kubectl delete -f ${testPodYaml}")

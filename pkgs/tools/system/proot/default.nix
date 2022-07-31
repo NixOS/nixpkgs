@@ -1,20 +1,19 @@
 { lib, stdenv, fetchFromGitHub
 , talloc
 , pkg-config
-, libarchive
 , git
 , ncurses
 , docutils, swig, python3, coreutils, enablePython ? true }:
 
 stdenv.mkDerivation rec {
   pname = "proot";
-  version = "5.3.0";
+  version = "5.3.1";
 
   src = fetchFromGitHub {
     repo = "proot";
     owner = "proot-me";
     rev = "v${version}";
-    sha256 = "sha256-89d1a5QBusra0vd3Ph0lQalXrblBwogi6bNgvvpQL+Q=";
+    sha256 = "sha256-uN31wDJjuQmDWeHaZHHQpmXQeQ/TYeS9HNYWEC0shaA=";
   };
 
   postPatch = ''
@@ -24,7 +23,7 @@ stdenv.mkDerivation rec {
     sed -i /CROSS_COMPILE/d src/GNUmakefile
   '';
 
-  buildInputs = [ ncurses libarchive talloc ] ++ lib.optional enablePython python3;
+  buildInputs = [ ncurses talloc ] ++ lib.optional enablePython python3;
   nativeBuildInputs = [ pkg-config docutils ] ++ lib.optional enablePython swig;
 
   enableParallelBuilding = true;

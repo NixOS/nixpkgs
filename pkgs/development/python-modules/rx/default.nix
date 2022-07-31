@@ -1,31 +1,17 @@
-{ lib, fetchFromGitHub, buildPythonPackage
-, pythonOlder
-, poetry-core
-, nose
-, typing-extensions
-}:
+{ lib, fetchPypi, buildPythonPackage, pythonOlder, nose }:
 
 buildPythonPackage rec {
   pname = "rx";
-  version = "4.0.4";
+  version = "3.2.0";
   disabled = pythonOlder "3.6";
-  format = "pyproject";
 
-  # There are no tests on the pypi source
-  src = fetchFromGitHub {
-    owner = "ReactiveX";
-    repo = "rxpy";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-W1qYNbYV6Roz1GJtP/vpoPD6KigWaaQOWe1R5DZHlUw=";
+  # Use fetchPypi to avoid the updater script to migrate it to `reactivex` which
+  # is being developed in the same repository
+  src = fetchPypi {
+    inherit version;
+    pname = "Rx";
+    sha256 = "b657ca2b45aa485da2f7dcfd09fac2e554f7ac51ff3c2f8f2ff962ecd963d91c";
   };
-
-  nativeBuildInputs = [
-    poetry-core
-  ];
-
-  propagatedBuildInputs = [
-    typing-extensions
-  ];
 
   checkInputs = [ nose ];
 
@@ -33,6 +19,8 @@ buildPythonPackage rec {
   # test_timeout_schedule_action_cancel: https://hydra.nixos.org/build/74954646
   # test_new_thread_scheduler_timeout: https://hydra.nixos.org/build/74949851
   doCheck = false;
+
+  pythonImportsCheck = [ "rx" ];
 
   meta = {
     homepage = "https://github.com/ReactiveX/RxPY";
