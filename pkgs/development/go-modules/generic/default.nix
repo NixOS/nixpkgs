@@ -106,7 +106,10 @@ let
       mkdir -p "''${GOPATH}/pkg/mod/cache/download"
       go mod download
     '' else ''
-      go mod vendor
+      if (( "''${NIX_DEBUG:-0}" >= 1 )); then
+        goModVendorFlags+=(-v)
+      fi
+      go mod vendor "''${goModVendorFlags[@]}"
     ''}
 
       mkdir -p vendor
