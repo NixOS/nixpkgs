@@ -63,13 +63,6 @@ in
         PrivateNetwork = !cfg.public;
         RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
       };
-      confinement = {
-        enable = true;
-        # besides the config argument, the config file can refer to other
-        # files in some keys, including arbitrary spellcheck dicrtionaries
-        # with the lang-xx-dictPath (eg: lang-tr-dictPath=/path/to/tr.dic)
-        fullUnit = true;
-      };
     };
     users.users.langtool = {
       isSystemUser = true;
