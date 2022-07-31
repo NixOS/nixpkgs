@@ -858,6 +858,15 @@ let
         (assertValueOneOf "OnLink" boolValues)
       ];
 
+      sectionIPv6RoutePrefix = checkUnitConfig "IPv6RoutePrefix" [
+        (assertOnlyFields [
+          "Route"
+          "LifetimeSec"
+        ])
+        (assertHasField "Route")
+        (assertInt "LifetimeSec")
+      ];
+
       sectionDHCPServerStaticLease = checkUnitConfig "DHCPServerStaticLease" [
         (assertOnlyFields [
           "MACAddress"
@@ -1246,6 +1255,22 @@ let
     };
   };
 
+  ipv6RoutePrefixOptions = {
+    options = {
+      ipv6RoutePrefixConfig = mkOption {
+        default = {};
+        example = { Route = "fd00::/64"; };
+        type = types.addCheck (types.attrsOf unitOption) check.network.sectionIPv6RoutePrefix;
+        description = ''
+          Each attribute in this set specifies an option in the
+          <literal>[IPv6RoutePrefix]</literal> section of the unit.  See
+          <citerefentry><refentrytitle>systemd.network</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> for details.
+        '';
+      };
+    };
+  };
+
   dhcpServerStaticLeaseOptions = {
     options = {
       dhcpServerStaticLeaseConfig = mkOption {
@@ -1394,6 +1419,17 @@ let
       type = with types; listOf (submodule ipv6PrefixOptions);
       description = ''
         A list of ipv6Prefix sections to be added to the unit.  See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    ipv6RoutePrefixes = mkOption {
+      default = [];
+      example = [ { Route = "fd00::/64"; LifetimeSec = 3600; } ];
+      type = with types; listOf (submodule ipv6RoutePrefixOptions);
+      description = ''
+        A list of ipv6RoutePrefix sections to be added to the unit.  See
         <citerefentry><refentrytitle>systemd.network</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
       '';
@@ -1805,6 +1841,10 @@ let
         + flip concatMapStrings def.ipv6Prefixes (x: ''
           [IPv6Prefix]
           ${attrsToSection x.ipv6PrefixConfig}
+        '')
+        + flip concatMapStrings def.ipv6RoutePrefixes (x: ''
+          [IPv6RoutePrefix]
+          ${attrsToSection x.ipv6RoutePrefixConfig}
         '')
         + flip concatMapStrings def.dhcpServerStaticLeases (x: ''
           [DHCPServerStaticLease]
