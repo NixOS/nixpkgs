@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    gobject-introspection
     libxml2
     gst_all_1.gst-plugins-base
   ];
