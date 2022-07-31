@@ -179,8 +179,8 @@ in
         description = ''
           ncdns settings. Use this option to configure ncds
           settings not exposed in a NixOS option or to bypass one.
-          See the example ncdns.conf file at <link xlink:href="
-          https://git.io/JfX7g"/> for the available options.
+          See the example ncdns.conf file at <link xlink:href="https://github.com/namecoin/ncdns/blob/master/_doc/ncdns.conf.example"/>
+          for the available options.
         '';
       };
 
