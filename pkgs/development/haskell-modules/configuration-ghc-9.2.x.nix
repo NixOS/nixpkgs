@@ -3,7 +3,7 @@
 with haskellLib;
 
 let
-  inherit (pkgs.stdenv.hostPlatform) isDarwin;
+  inherit (pkgs.stdenv.hostPlatform) isAarch64 isDarwin;
 in
 
 self: super: {
@@ -91,7 +91,9 @@ self: super: {
   bsb-http-chunked = dontCheck super.bsb-http-chunked;
 
   # need bytestring >= 0.11 which is only bundled with GHC >= 9.2
-  regex-rure = doDistribute (markUnbroken super.regex-rure);
+  # broken on aarch64-darwin, failing with this error message:
+  # https://github.com/haskell/c2hs/issues/33
+  regex-rure = doDistribute ((if isDarwin && isAarch64 then x: x else markUnbroken) super.regex-rure);
   jacinda = doDistribute super.jacinda;
 
   # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
