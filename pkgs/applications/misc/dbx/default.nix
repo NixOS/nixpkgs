@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , databricks-cli
 , scipy
-, pathpy
+, path
 , pathspec
 , pydantic
 , protobuf
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     databricks-cli
     scipy
-    pathpy
+    path
     pathspec
     pydantic
     protobuf

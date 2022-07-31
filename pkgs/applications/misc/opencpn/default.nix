@@ -21,7 +21,7 @@
 , libsndfile
 , libthai
 , libunarr
-, libusb
+, libusb1
 , libvorbis
 , libxkbcommon
 , lsb-release
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     libsndfile
     libthai
     libunarr
-    libusb
+    libusb1
     libvorbis
     libxkbcommon
     lz4
