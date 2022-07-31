@@ -4919,6 +4919,8 @@ with pkgs;
   libceph = ceph.lib;
   inherit (callPackages ../tools/filesystems/ceph {
     lua = lua5_4;
+    # needs to be the same openssl version as python/pyopenssl
+    curl = (curl.override { openssl = openssl_1_1; });
   })
     ceph
     ceph-client;
