@@ -98,6 +98,7 @@ in
   gnome-photos = callInstalledTest ./gnome-photos.nix {};
   graphene = callInstalledTest ./graphene.nix {};
   gsconnect = callInstalledTest ./gsconnect.nix {};
+  json-glib = callInstalledTest ./json-glib.nix {};
   ibus = callInstalledTest ./ibus.nix {};
   libgdata = callInstalledTest ./libgdata.nix {};
   librsvg = callInstalledTest ./librsvg.nix {};
