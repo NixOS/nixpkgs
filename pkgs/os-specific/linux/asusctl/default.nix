@@ -1,6 +1,6 @@
 { lib, fetchFromGitLab, rustPlatform
 , pkg-config
-, udev
+, udev, e2fsprogs
 }:
 
 with rustPlatform;
@@ -15,6 +15,19 @@ buildRustPackage rec {
     rev = version;
     hash = "sha256-s0y5oK079Mwg9RTbSbcW1jGjhRH0X/GnSPI1e/G8m1c=";
   };
+
+  prePatch = ''
+    for file in \
+      daemon-user/src/user_config.rs \
+      daemon/src/ctrl_anime/config.rs
+    do
+      substituteInPlace $file \
+        --replace /usr/share/ $out/share/
+    done
+
+    substituteInPlace daemon/src/ctrl_rog_bios.rs \
+      --replace /usr/bin/chattr ${e2fsprogs}/bin/chattr
+  '';
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ udev ];
