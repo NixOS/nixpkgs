@@ -5,7 +5,7 @@ buildGoModule rec {
   version = "0.12.2"; # When updating, also check if the repo version changed and adjust repoVersion below
   rev = "v${version}";
 
-  repoVersion = "12"; # Also update ipfs-migrator when changing the repo version
+  passthru.repoVersion = "12"; # Also update ipfs-migrator when changing the repo version
 
   # go-ipfs makes changes to it's source tarball that don't match the git source.
   src = fetchurl {
