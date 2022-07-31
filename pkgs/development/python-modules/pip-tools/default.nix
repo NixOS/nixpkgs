@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
+, build
 , click
 , fetchPypi
 , pep517
@@ -25,11 +26,14 @@ buildPythonPackage rec {
     hash = "sha256-Oeiu5GVEbgInjYDb69QyXR3YYzJI9DITxzol9Y59ilU=";
   };
 
+  patches = [ ./fix-setup-py-bad-syntax-detection.patch ];
+
   nativeBuildInputs = [
     setuptools-scm
   ];
 
   propagatedBuildInputs = [
+    build
     click
     pep517
     pip
@@ -51,6 +55,7 @@ buildPythonPackage rec {
     # Tests require network access
     "network"
     "test_direct_reference_with_extras"
+    "test_local_duplicate_subdependency_combined"
   ];
 
   pythonImportsCheck = [
