@@ -16295,6 +16295,8 @@ with pkgs;
       stdenv = overrideCC stdenv llvmPackages_9.clang;
     });
 
+  lurk = callPackage ../development/tools/lurk { };
+
   malt = callPackage ../development/tools/profiling/malt {};
 
   massif-visualizer = libsForQt5.callPackage ../development/tools/analysis/massif-visualizer { };
