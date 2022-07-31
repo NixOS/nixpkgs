@@ -1,10 +1,17 @@
-{ pkgs, stdenv, lib, fetchFromGitHub }:
+{ pkgs, stdenv, lib, fetchFromGitHub,
+  dataDir ? "/var/lib/firefly-iii" }:
 
 let
   package = (import ./composition.nix {
     inherit pkgs;
     inherit (stdenv.hostPlatform) system;
     noDev = true;
+  }).overrideAttrs (attrs : {
+    installPhase = attrs.installPhase + ''
+      rm -R $out/storage
+      ln -s ${dataDir}/storage $out/storage
+      ln -s ${dataDir}/.env $out/.env
+    '';
   });
 in
   package.override rec {

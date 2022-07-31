@@ -212,6 +212,7 @@ in {
   fcitx = handleTest ./fcitx {};
   fenics = handleTest ./fenics.nix {};
   ferm = handleTest ./ferm.nix {};
+  firefly-iii = handleTest ./web-apps/firefly-iii.nix {};
   firefox = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox; };
   firefox-esr    = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox-esr; }; # used in `tested` job
   firefox-esr-102 = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox-esr-102; };
