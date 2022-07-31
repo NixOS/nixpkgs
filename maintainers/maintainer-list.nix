@@ -3904,6 +3904,12 @@
     githubId = 418227;
     name = "Jean-Philippe Braun";
   };
+  epetousis = {
+    email = "evan@petousis.net";
+    github = "epetousis";
+    githubId = 853461;
+    name = "Evangelos Petousis";
+  };
   eperuffo = {
     email = "info@emanueleperuffo.com";
     github = "emanueleperuffo";
