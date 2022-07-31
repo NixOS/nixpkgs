@@ -93,6 +93,11 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.com/libtiff/libtiff/-/commit/c1ae29f9ebacd29b7c3e0c7db671af7db3584bc2.patch";
       sha256 = "1y75c72s41pl39d5zr5pmkiyfrancllv8fbl10zvc67pg3qjq4v8";
     })
+    (fetchpatch {
+      name = "CVE-2022-34526.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/275735d0354e39c0ac1dc3c0db2120d6f31d1990.patch";
+      sha256 = "sha256-faKsdJjvQwNdkAKjYm4vubvZvnULt9zz4l53zBFr67s=";
+    })
   ];
 
   postPatch = ''
