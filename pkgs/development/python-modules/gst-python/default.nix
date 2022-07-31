@@ -8,7 +8,7 @@
 , python
 , pygobject3
 , gobject-introspection
-, gst-plugins-base
+, gst_all_1
 , isPy3k
 }:
 
@@ -28,22 +28,29 @@ buildPythonPackage rec {
   # Python 2.x is not supported.
   disabled = !isPy3k;
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    python
     gobject-introspection
-    gst-plugins-base
+    gst_all_1.gst-plugins-base
   ];
 
   propagatedBuildInputs = [
-    gst-plugins-base
+    gst_all_1.gst-plugins-base
     pygobject3
   ];
 
   mesonFlags = [
     "-Dpygi-overrides-dir=${placeholder "out"}/${python.sitePackages}/gi/overrides"
+    # This is only used for figuring out what version of Python is in
+    # use, and related stuff like figuring out what the install prefix
+    # should be, but it does need to be able to execute Python code.
+    "-Dpython=${python.pythonForBuild.interpreter}"
   ];
 
   doCheck = true;
