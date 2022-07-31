@@ -2,6 +2,7 @@
 , lib
 , stdenv
 , meson
+, mesonEmulatorHook
 , ninja
 , pkg-config
 , gnome
@@ -55,6 +56,10 @@ in stdenv.mkDerivation rec {
     makeWrapper
     which # for locale detection
     libxml2 # for xml-stripblanks
+    dbus # for dbus-run-session
+    gobject-introspection
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
@@ -63,7 +68,6 @@ in stdenv.mkDerivation rec {
     readline
     libsysprof-capture
     spidermonkey_91
-    dbus # for dbus-run-session
   ];
 
   checkInputs = [
