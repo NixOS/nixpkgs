@@ -27,13 +27,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "wl-mirror";
-  version = "0.11.2";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "Ferdi265";
     repo = "wl-mirror";
     rev = "v${version}";
-    hash = "sha256-D5uUKaepcSW9v2x6uBeLGXAyuLorlt4Lb6lZD/prfp8=";
+    hash = "sha256-XuwHHJfUKYugx0CKxkloJnpm6s5rHetinsZCSlLJ0Zg=";
   };
 
   strictDeps = true;
