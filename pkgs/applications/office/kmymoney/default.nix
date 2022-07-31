@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "kmymoney";
-  version = "5.1.1";
+  version = "5.1.3";
 
   src = fetchurl {
     url = "mirror://kde/stable/kmymoney/${version}/src/${pname}-${version}.tar.xz";
-    sha256 = "sha256-33ufeOhZb5nSgpXKc4cI8GVe4Fd4nf2SHHsbq5ZXgpg=";
+    sha256 = "sha256-OTi4B4tzkboy4Su0I5di+uE0aDoMLsGnUQXDAso+Xj8=";
   };
 
   # Hidden dependency that wasn't included in CMakeLists.txt:
@@ -38,20 +38,20 @@ stdenv.mkDerivation rec {
 
     # Put it into buildInputs so that CMake can find it, even though we patch
     # it into the interface later.
-    python3Packages.weboob
+    python3Packages.woob
   ];
 
-  weboobPythonPath = [ python3Packages.weboob ];
+  woobPythonPath = [ python3Packages.woob ];
 
-  postInstall = ''
-    buildPythonPath "$weboobPythonPath"
-    patchPythonScript "$out/share/kmymoney/weboob/kmymoneyweboob.py"
+  postPatch = ''
+    buildPythonPath "$woobPythonPath"
+    patchPythonScript "kmymoney/plugins/woob/interface/kmymoneywoob.py"
 
     # Within the embedded Python interpreter, sys.argv is unavailable, so let's
     # assign it to a dummy value so that the assignment of sys.argv[0] injected
     # by patchPythonScript doesn't fail:
     sed -i -e '1i import sys; sys.argv = [""]' \
-      "$out/share/kmymoney/weboob/kmymoneyweboob.py"
+      "kmymoney/plugins/woob/interface/kmymoneywoob.py"
   '';
 
   doInstallCheck = stdenv.hostPlatform == stdenv.buildPlatform;
