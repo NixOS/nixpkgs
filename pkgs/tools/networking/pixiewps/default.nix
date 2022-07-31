@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   pname = "pixiewps";
   version = "1.2.2";
   src = fetchFromGitHub {
-    owner = "wiire";
+    owner = "wiire-a";
     repo = "pixiewps";
     rev = "v${version}";
     sha256 = "09znnj7p8cks7zxzklkdm4zy2qnp92vhngm9r0zfgawnl2b4r2aw";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An offline WPS bruteforce utility";
-    homepage = "https://github.com/wiire/pixiewps";
+    homepage = "https://github.com/wiire-a/pixiewps";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.nico202 ];
     platforms = lib.platforms.all;
