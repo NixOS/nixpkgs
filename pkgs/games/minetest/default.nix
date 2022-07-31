@@ -91,9 +91,9 @@ let
   };
 
   v5 = {
-    version = "5.5.0";
-    sha256 = "sha256-V+ggqvZibSQrJbrtNCEkmRYHhgSKTQsdBh3c8+t6WeA=";
-    dataSha256 = "sha256-6ZS3EET3nm09eL0czCGadwzon35/EBfAg2KjPX3ZP/0=";
+    version = "5.5.1";
+    sha256 = "sha256-ssaDy6tYxhXGZ1+05J5DwoKYnfhKIKtZj66DOV84WxA=";
+    dataSha256 = "sha256-SI6I1wXbB0CgTmIemm3VY9DNnWMoI5bt/hqRwHlUl4k=";
   };
 
 in {
