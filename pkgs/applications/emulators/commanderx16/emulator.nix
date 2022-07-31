@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "x16-emulator";
-  version = "40";
+  version = "41";
 
   src = fetchFromGitHub {
     owner = "commanderx16";
     repo = pname;
     rev = "r${version}";
-    hash = "sha256-7ZzVd2NJCFNAFrS2cj6bxcq/AzO5VakoFX9o1Ac9egg=";
+    hash = "sha256-pnWqtSXQzUfQ8ADIXL9r2YjuBwHDQ2NAffAEFCN5Qzw=";
   };
 
   dontConfigure = true;
