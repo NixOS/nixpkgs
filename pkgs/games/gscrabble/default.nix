@@ -4,13 +4,13 @@
 
 buildPythonApplication {
   pname = "gscrabble";
-  version = "unstable-2019-03-11";
+  version = "unstable-2020-04-21";
 
   src = fetchFromGitHub {
     owner = "RaaH";
     repo = "gscrabble";
-    rev = "4b6e4e151a4cd4a4f66a5be2c8616becac3f2a29";
-    sha256 = "0a89kqh04x52q7qyv1rfa7xif0pdw3zc0dw5a24msala919g90q2";
+    rev = "aba37f062a6b183dcc084c453f395af1dc437ec8";
+    sha256 = "sha256-rYpPHgOlPRnlA+Nkvo/J+/8/vl24/Ssk55fTq9oNCz4=";
   };
 
   doCheck = false;
@@ -31,10 +31,14 @@ buildPythonApplication {
   '';
 
   meta = with lib; {
+    # Fails to build, propably incompatible with latest Python
+    # error: Multiple top-level packages discovered in a flat-layout
+    # https://github.com/RaaH/gscrabble/issues/13
+    broken = true;
     description = "Golden Scrabble crossword puzzle game";
     homepage = "https://github.com/RaaH/gscrabble/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = with maintainers; [ onny ];
   };
 }
