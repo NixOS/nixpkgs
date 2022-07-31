@@ -21263,6 +21263,8 @@ with pkgs;
 
   stb = callPackage ../development/libraries/stb { };
 
+  stegsolve = callPackage ../tools/graphics/stegsolve { };
+
   StormLib = callPackage ../development/libraries/StormLib { };
 
   stxxl = callPackage ../development/libraries/stxxl { };
