@@ -2,7 +2,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "unifi-protect-backup";
-  version = "0.7.1";
+  version = "0.7.3";
 
   format = "pyproject";
 
@@ -10,7 +10,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "ep1cman";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-HAiyNFWLs1McrlAB48me/iI15LssO8ec7BiWuJbRlbs=";
+    hash = "sha256-DBdAqHRTMrY40PhiKkvoiOGu4C/2bMBwG8AgWjRM4RU=";
   };
 
   preBuild = ''
