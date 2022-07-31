@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-Dkud3ZA9m/UVbPugbQztUJXFpkQYTWjK2mamxfto9JA=";
   };
 
+  postPatch = ''
+    echo "${version}" > .tarball-version
+  '';
+
   propagatedBuildInputs = [
     talloc
   ];
