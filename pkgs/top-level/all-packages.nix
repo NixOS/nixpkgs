@@ -16749,11 +16749,7 @@ with pkgs;
 
   szyszka = callPackage ../tools/misc/szyszka { };
 
-  taplo-cli = callPackage ../development/tools/taplo-cli {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
-  taplo-lsp = callPackage ../development/tools/taplo-lsp {
+  taplo = callPackage ../development/tools/taplo {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 

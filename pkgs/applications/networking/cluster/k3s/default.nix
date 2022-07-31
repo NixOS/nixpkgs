@@ -323,7 +323,7 @@ buildGoModule rec {
 
   passthru.updateScript = ./update.sh;
 
-  passthru.tests = { inherit (nixosTests) k3s-single-node; };
+  passthru.tests = nixosTests.k3s;
 
   meta = baseMeta;
 }
