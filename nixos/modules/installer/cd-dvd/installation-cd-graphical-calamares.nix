@@ -16,5 +16,10 @@ in
     calamares-nixos-extensions
     # Needed for calamares QML module packagechooserq
     libsForQt5.full
+    # Get list of locales
+    glibcLocales
   ];
+
+  # Support choosing from any locale
+  i18n.supportedLocales = [ "all" ];
 }
