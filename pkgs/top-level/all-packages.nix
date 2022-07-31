@@ -22360,6 +22360,8 @@ with pkgs;
 
   graph-cli = callPackage ../tools/graphics/graph-cli { };
 
+  guacamole = callPackage ../servers/guacamole { };
+
   h2o = callPackage ../servers/http/h2o { };
 
   haka = callPackage ../tools/security/haka { };
