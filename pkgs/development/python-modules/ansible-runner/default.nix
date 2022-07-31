@@ -53,6 +53,8 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$(mktemp -d)
     export PATH="$PATH:$out/bin";
+    # avoid coverage flags
+    rm pytest.ini
   '';
 
   disabledTests = [
