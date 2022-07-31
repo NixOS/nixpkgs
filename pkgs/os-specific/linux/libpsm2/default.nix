@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libpsm2";
-  version = "11.2.206";
+  version = "11.2.229";
 
   preConfigure= ''
     export UDEVDIR=$out/etc/udev
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "intel";
     repo = "opa-psm2";
     rev = "PSM2_${version}";
-    sha256 = "sha256-HsM2OaoX+SdbIednX1MWw1M4kkkPwUs5Dm32q2H7Mg4=";
+    sha256 = "sha256-t3tZCxGmGMscDmeyCATLbHxU7jEJqAzxwPV0Z8pl2ko=";
   };
 
   postInstall = ''
