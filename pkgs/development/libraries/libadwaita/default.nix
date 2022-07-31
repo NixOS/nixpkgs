@@ -36,6 +36,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-Mjv4Z9YaIT9atD8ekepBAA1ZV30kWnMnV8+kOuGULnw=";
   };
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
+
   nativeBuildInputs = [
     docbook-xsl-nons
     gi-docgen
@@ -46,6 +51,7 @@ stdenv.mkDerivation rec {
     pkg-config
     sassc
     vala
+    gobject-introspection
   ];
 
   mesonFlags = [
