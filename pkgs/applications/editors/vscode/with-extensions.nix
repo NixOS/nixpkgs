@@ -4,50 +4,50 @@
 , vscode
 , runtimeShell
 , vscodeExtensions ? [ ]
-# TODO:change defaults when one of those issues is resolved:
-# https://github.com/rpodgorny/unionfs-fuse/issues/101
-# https://github.com/trapexit/mergerfs/issues/115
-, mountPosition ? if stdenvNoCC.isDarwin then "none" else "above"
+  # TODO:change defaults when one of those issues is resolved:
+  # https://github.com/rpodgorny/unionfs-fuse/issues/101
+  # https://github.com/trapexit/mergerfs/issues/115
+, mountPosition ? "none"
 , mergerfs ? null
 }:
 /*
   `vscodeExtensions`
-   :  A set of vscode extensions to be installed alongside the editor. Here's a an
-      example:
+  :  A set of vscode extensions to be installed alongside the editor. Here's a an
+  example:
 
-      ~~~
-      vscode-with-extensions.override {
+  ~~~
+  vscode-with-extensions.override {
 
-        # When the extension is already available in the default extensions set.
-        vscodeExtensions = with vscode-extensions; [
-          bbenoist.nix
-        ]
+  # When the extension is already available in the default extensions set.
+  vscodeExtensions = with vscode-extensions; [
+  bbenoist.nix
+  ]
 
-        # Concise version from the vscode market place when not available in the default set.
-        ++ vscode-utils.extensionsFromVscodeMarketplace [
-          {
-            name = "code-runner";
-            publisher = "formulahendry";
-            version = "0.6.33";
-            sha256 = "166ia73vrcl5c9hm4q1a73qdn56m0jc7flfsk5p5q41na9f10lb0";
-          }
-        ];
-      }
-      ~~~
+  # Concise version from the vscode market place when not available in the default set.
+  ++ vscode-utils.extensionsFromVscodeMarketplace [
+  {
+  name = "code-runner";
+  publisher = "formulahendry";
+  version = "0.6.33";
+  sha256 = "166ia73vrcl5c9hm4q1a73qdn56m0jc7flfsk5p5q41na9f10lb0";
+  }
+  ];
+  }
+  ~~~
 
-      This expression should fetch
-       -  the *nix* vscode extension from whatever source defined in the
-          default nixpkgs extensions set `vscodeExtensions`.
+  This expression should fetch
+  -  the *nix* vscode extension from whatever source defined in the
+  default nixpkgs extensions set `vscodeExtensions`.
 
-       -  the *code-runner* vscode extension from the marketplace using the
-          following url:
+  -  the *code-runner* vscode extension from the marketplace using the
+  following url:
 
-          ~~~
-          https://bbenoist.gallery.vsassets.io/_apis/public/gallery/publisher/bbenoist/extension/nix/1.0.1/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage
-          ~~~
+  ~~~
+  https://bbenoist.gallery.vsassets.io/_apis/public/gallery/publisher/bbenoist/extension/nix/1.0.1/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage
+  ~~~
 
-      The original `code` executable will be wrapped so that it uses the set of pre-installed / unpacked
-      extensions as its `--extensions-dir`.
+  The original `code` executable will be wrapped so that it uses the set of pre-installed / unpacked
+  extensions as its `--extensions-dir`.
 */
 
 assert lib.assertOneOf "mountPosition" mountPosition [ "above" "below" "none" ];
