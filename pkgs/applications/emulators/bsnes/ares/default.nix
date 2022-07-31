@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ares";
-  version = "128";
+  version = "129";
 
   src = fetchFromGitHub {
     owner = "ares-emulator";
     repo = "ares";
     rev = "v${version}";
-    sha256 = "sha256-Ojf1kyColBK0S3DwXjGaAZSl0ljhgiXkfKC11BL2fEc=";
+    hash = "sha256-prfvoGtbnsl/1ahx98jBOgT64W566GoUtE8rIOF7lYc=";
   };
 
   patches = [
@@ -56,18 +56,18 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   makeFlags = [
-    "-C desktop-ui"
+    "hiro=gtk3"
     "local=false"
     "openmp=true"
-    "hiro=gtk3"
     "prefix=$(out)"
+    "-C desktop-ui"
   ];
 
   meta = with lib; {
     homepage = "https://ares.dev";
     description = "Open-source multi-system emulator with a focus on accuracy and preservation";
     license = licenses.isc;
-    maintainers = with maintainers; [ Madouura ];
+    maintainers = with maintainers; [ Madouura AndersonTorres ];
     platforms = platforms.linux;
   };
 }
