@@ -36,6 +36,6 @@ buildRustPackage rec {
     homepage = https://gitlab.com/asus-linux/asusctl;
     license = with licenses; [ mpl20 ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bobvanderlinden  ];
+    maintainers = with maintainers; [ bobvanderlinden kravemir ];
   };
 }
