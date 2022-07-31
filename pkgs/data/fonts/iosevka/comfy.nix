@@ -2,12 +2,12 @@
 
 let
   sets = [ "comfy" "comfy-fixed" "comfy-duo" "comfy-wide" "comfy-wide-fixed" ];
-  version = "0.2.1";
+  version = "0.3.1";
   src = fetchFromGitHub {
     owner = "protesilaos";
     repo = "iosevka-comfy";
     rev = version;
-    sha256 = "sha256-Ki3/8REmVb1XtvchdLZJ9Zc+EoP3LP9tvruuP/K1Xpo=";
+    sha256 = "sha256-SMy3Kqve65ZU13lf1vZQR61mH7gcl1DvIZt3yD6tIf4=";
   };
   privateBuildPlan = src.outPath + "/private-build-plans.toml";
   overrideAttrs = (attrs: {
