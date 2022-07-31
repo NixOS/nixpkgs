@@ -23813,7 +23813,9 @@ with pkgs;
 
   fwupd-efi = callPackage ../os-specific/linux/firmware/fwupd-efi { };
 
-  firmware-manager = callPackage ../os-specific/linux/firmware/firmware-manager { };
+  firmware-manager = callPackage ../os-specific/linux/firmware/firmware-manager {
+    openssl = openssl_1_1;
+  };
 
   firmware-updater = callPackage ../os-specific/linux/firmware/firmware-updater { };
 
