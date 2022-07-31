@@ -20,7 +20,7 @@
 , pipewire
 , # options
   enableDocs ? true
-, enableGI ? stdenv.hostPlatform == stdenv.buildPlatform
+, enableGI ? true
 }:
 let
   mesonEnableFeature = b: if b then "enabled" else "disabled";
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ] ++ lib.optionals (enableDocs || enableGI) [
     doxygen
-    (python3.withPackages (ps: with ps;
+    (python3.pythonForBuild.withPackages (ps: with ps;
     lib.optionals enableDocs [ sphinx sphinx-rtd-theme breathe ] ++
       lib.optionals enableGI [ lxml ]
     ))
@@ -69,6 +69,8 @@ stdenv.mkDerivation rec {
     systemd
     lua5_4
     pipewire
+  ] ++ lib.optionals enableGI [
+    gobject-introspection
   ];
 
   mesonFlags = [
