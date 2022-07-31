@@ -23409,7 +23409,10 @@ with pkgs;
 
   spring-boot-cli = callPackage ../development/tools/spring-boot-cli { };
 
-  squid = callPackage ../servers/squid { };
+  squid = callPackage ../servers/squid {
+    # https://bugs.squid-cache.org/show_bug.cgi?id=5133
+    openssl = openssl_1_1;
+  };
 
   duckling-proxy = callPackage ../servers/duckling-proxy { };
 
