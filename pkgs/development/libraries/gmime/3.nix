@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-introspection=yes"
     "--enable-vala=yes"
+    "--with-libiconv"
+    #"ac_cv_have_iconv_detect_h=yes"
   ];
 
   postPatch = ''

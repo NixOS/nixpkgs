@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkg-config libintl automake autoconf ];
+  nativeBuildInputs = [ pkg-config libintl automake autoconf gobject-introspection ];
 
   configureFlags = [
     "--enable-introspection"

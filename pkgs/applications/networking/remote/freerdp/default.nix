@@ -22,6 +22,7 @@
 , libxkbcommon
 , libxkbfile
 , wayland
+, wayland-scanner
 , gstreamer
 , gst-plugins-base
 , gst-plugins-good
@@ -115,7 +116,7 @@ stdenv.mkDerivation rec {
     zlib
   ] ++ lib.optional stdenv.isLinux systemd;
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config wayland-scanner ];
 
   doCheck = true;
 

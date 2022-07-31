@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     "INTROSPECTION_TYPELIBDIR=${placeholder "out"}/lib/girepository-1.0"
   ];
 
-  nativeBuildInputs = [ pkg-config gettext ];
+  nativeBuildInputs = [ pkg-config gettext gobject-introspection ];
   buildInputs = [ glib gobject-introspection ];
 
   passthru = {

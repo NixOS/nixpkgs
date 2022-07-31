@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ vala pkg-config intltool gobject-introspection ];
 
   buildInputs = [
-    glib dbus-glib json-glib
+    glib dbus-glib json-glib gobject-introspection
   ] ++ optional (gtkVersion != null) (if gtkVersion == "2" then gtk2 else gtk3);
 
   postPatch = ''

@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    glib
     file
     intltool
     pkg-config

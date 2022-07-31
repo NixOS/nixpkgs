@@ -15,9 +15,11 @@ stdenv.mkDerivation rec {
     cmake
     gtest
     pkg-config
+    protobuf
   ];
 
   buildInputs = [
+    gtest
     boost
     protobuf
     icu
