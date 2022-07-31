@@ -2407,8 +2407,9 @@ self: super: {
   # 2022-03-16: strict upper bounds https://github.com/monadfix/shower/issues/18
   shower = doJailbreak (dontCheck super.shower);
 
-  # Doesn't compile with HTF 0.15
-  # https://github.com/andrewufrank/uniform-error/issues/1
+  # Test suite isn't supposed to succeed yet, apparently…
+  # https://github.com/andrewufrank/uniform-error/blob/f40629ad119e90f8dae85e65e93d7eb149bddd53/test/Uniform/Error_test.hs#L124
+  # https://github.com/andrewufrank/uniform-error/issues/2
   uniform-error = dontCheck super.uniform-error;
 
   # The shipped Setup.hs file is broken.
