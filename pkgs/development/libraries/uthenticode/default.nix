@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "uthenticode";
-  version = "1.0.8";
+  version = "1.0.9";
 
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "uthenticode";
     rev = "v${version}";
-    hash = "sha256-H4fAHZM+vYaUkXZE4f7r2bxw9dno7O+lYrqQ9/6YPWA=";
+    hash = "sha256-MEpbvt03L501BP42j6S7rXE9j1d8j6D2Y5kgPNlbHzc=";
   };
 
   cmakeFlags = [ "-DBUILD_TESTS=1" "-DUSE_EXTERNAL_GTEST=1" ];
