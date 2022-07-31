@@ -56,6 +56,7 @@ jruby = stdenv.mkDerivation rec {
     license = with licenses; [ cpl10 gpl2 lgpl21 ];
     platforms = platforms.unix;
     maintainers = [ maintainers.fzakaria ];
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
   };
 };
 in jruby.overrideAttrs (oldAttrs: {
