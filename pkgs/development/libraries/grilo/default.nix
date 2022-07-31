@@ -2,6 +2,7 @@
 , lib
 , fetchurl
 , meson
+, mesonEmulatorHook
 , ninja
 , pkg-config
 , gettext
@@ -47,9 +48,12 @@ stdenv.mkDerivation rec {
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
+    gobject-introspection
     glib
     liboauth
     gtk3
