@@ -189,7 +189,7 @@ in
     runUsingSystemd = mkOption {
       description = "Use systemd to manage the Plasma session";
       type = types.bool;
-      default = false;
+      default = true;
     };
 
     excludePackages = mkOption {
