@@ -18,6 +18,8 @@ stdenv.mkDerivation {
   pname = "sane-backends";
   version = "1.0.32";
 
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isRiscV "-DHAVE_MMAP=0";
+
   src = fetchurl {
     # raw checkouts of the repo do not work because, the configure script is
     # only functional in manually uploaded release tarballs.
