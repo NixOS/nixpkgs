@@ -5847,6 +5847,8 @@ with pkgs;
 
   soupault = callPackage ../tools/typesetting/soupault { };
 
+  stratisd = callPackage ../tools/filesystems/stratisd { };
+
   strawberry = libsForQt5.callPackage ../applications/audio/strawberry { };
 
   schildichat-desktop = callPackage ../applications/networking/instant-messengers/schildichat/schildichat-desktop.nix {
