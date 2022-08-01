@@ -34445,6 +34445,8 @@ with pkgs;
     enableJupyter = false;
   };
 
+  yafu = callPackage ../applications/science/math/yafu { };
+
   speedcrunch = libsForQt5.callPackage ../applications/science/math/speedcrunch { };
 
   ### SCIENCE / MISC
