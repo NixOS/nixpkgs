@@ -17,7 +17,7 @@
 , dune_3
 , csexp
 , pp
-, cmdliner
+, cmdliner_1_1
 , ordering
 , ocamlformat-rpc-lib
 }:
@@ -50,7 +50,7 @@ buildDunePackage rec {
         dune-build-info
         dune-rpc
         omd
-        cmdliner
+        cmdliner_1_1
         ocamlformat-rpc-lib
         dyn
         stdune
@@ -65,13 +65,13 @@ buildDunePackage rec {
         dune-build-info
         dune-rpc
         omd
-        cmdliner
+        cmdliner_1_1
         ocamlformat-rpc-lib
         dyn
         stdune
       ]
     else if lib.versionAtLeast version "1.7.0" then
-      [ pp re ppx_yojson_conv_lib octavius dune-build-info omd cmdliner ocamlformat-rpc-lib ]
+      [ pp re ppx_yojson_conv_lib octavius dune-build-info omd cmdliner_1_1 ocamlformat-rpc-lib ]
     else
       [
         cppo
@@ -80,7 +80,7 @@ buildDunePackage rec {
         octavius
         dune-build-info
         omd
-        cmdliner
+        cmdliner_1_1
       ];
 
   propagatedBuildInputs = [
