@@ -29210,6 +29210,8 @@ with pkgs;
 
   imgp = python3Packages.callPackage ../applications/graphics/imgp { };
 
+  imhex = callPackage ../applications/editors/imhex { };
+
   inkcut = libsForQt5.callPackage ../applications/misc/inkcut { };
 
   inklingreader = callPackage ../tools/misc/inklingreader { };
