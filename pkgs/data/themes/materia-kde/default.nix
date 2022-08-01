@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "materia-kde-theme";
-  version = "20220607";
+  version = "20220714";
 
   src = fetchFromGitHub {
     owner = "PapirusDevelopmentTeam";
     repo = "materia-kde";
     rev = version;
-    sha256 = "sha256-xshkp1Y5V8A3Fj4HCkmFpWcw3xEuNyRJqOLBkIKhwpQ=";
+    sha256 = "sha256-/LA+H2ekxuO1RpfaPJruRGeWPVopA0rZUxU4Mh7YQ0s=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
