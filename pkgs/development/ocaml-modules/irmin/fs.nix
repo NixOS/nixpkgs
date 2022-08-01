@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, irmin, irmin-test }:
+{ lib, buildDunePackage, irmin, irmin-test, astring, logs, lwt }:
 
 buildDunePackage rec {
 
@@ -6,7 +6,7 @@ buildDunePackage rec {
 
   inherit (irmin) version src;
 
-  propagatedBuildInputs = [ irmin ];
+  propagatedBuildInputs = [ irmin astring logs lwt];
 
   useDune2 = true;
 

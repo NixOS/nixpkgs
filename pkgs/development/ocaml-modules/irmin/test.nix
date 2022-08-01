@@ -1,5 +1,5 @@
 { buildDunePackage
-, alcotest, cmdliner, irmin, metrics-unix, mtime, irmin-layers
+, alcotest, cmdliner_1_1, irmin, metrics-unix, mtime
 }:
 
 buildDunePackage {
@@ -11,7 +11,7 @@ buildDunePackage {
   useDune2 = true;
 
   propagatedBuildInputs = [
-    alcotest cmdliner irmin metrics-unix mtime irmin-layers
+    alcotest cmdliner_1_1 irmin metrics-unix mtime
   ];
 
   meta = irmin.meta // {

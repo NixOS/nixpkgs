@@ -1,6 +1,6 @@
-{ lib, buildDunePackage, cohttp-lwt, irmin, webmachine
-, checkseum, git-unix, irmin-git, irmin-test, digestif, git-cohttp-unix
-, cacert
+{ lib, buildDunePackage, cohttp-lwt, cohttp-lwt-unix, irmin, webmachine
+, checkseum, git-unix, irmin-git, irmin-test, digestif, astring
+, cohttp, fmt, jsonm, logs, lwt, uri, cacert
 }:
 
 buildDunePackage rec {
@@ -11,10 +11,22 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  propagatedBuildInputs = [ cohttp-lwt irmin webmachine ];
+  propagatedBuildInputs = [
+    cohttp-lwt
+    irmin
+    webmachine
+    astring
+    cohttp
+    fmt
+    jsonm
+    logs
+    lwt
+    uri
+    cacert
+  ];
 
   checkInputs = [
-    digestif checkseum git-cohttp-unix git-unix irmin-git irmin-test cacert
+    irmin-git irmin-test git-unix digestif cohttp-lwt-unix
   ];
 
   doCheck = true;

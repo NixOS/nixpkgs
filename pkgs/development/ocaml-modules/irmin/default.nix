@@ -1,6 +1,6 @@
 { lib, buildDunePackage
-, astring, digestif, fmt, jsonm, logs, ocaml_lwt, ocamlgraph, uri
-, repr, ppx_irmin, bheap, uutf
+, astring, digestif, fmt, jsonm, logs, lwt, ocamlgraph, uri
+, repr, ppx_irmin, bheap, uutf, mtime, bigstringaf, hex
 }:
 
 buildDunePackage {
@@ -17,13 +17,15 @@ buildDunePackage {
     fmt
     jsonm
     logs
-    ocaml_lwt
+    lwt
     ocamlgraph
     uri
     repr
     bheap
     ppx_irmin
     uutf
+    mtime
+    bigstringaf
   ];
 
   # circular dependency on irmin-mem
