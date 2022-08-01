@@ -7476,6 +7476,8 @@ with pkgs;
 
   idle3tools = callPackage ../tools/system/idle3tools { };
 
+  ifakelocation = callPackage ../tools/misc/ifakelocation { };
+
   ifcopenshell = with python3Packages; toPythonApplication ifcopenshell;
 
   iftop = callPackage ../tools/networking/iftop { };
