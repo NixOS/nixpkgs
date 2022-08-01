@@ -1533,10 +1533,10 @@ let
 
   BKeywords = buildPerlPackage rec {
     pname = "B-Keywords";
-    version = "1.22";
+    version = "1.24";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RU/RURBAN/B-Keywords-${version}.tar.gz";
-      sha256 = "0i2ksp0w9wv1qc22hrdl3k48cww64syhmv8zf6x0kgyd4081hr56";
+      url = "mirror://cpan/authors/id/R/RU/RURBAN/B-Keywords-1.24.tar.gz";
+      sha256 = "sha256-pc9rsoXQbRfO4id4O3I7snQhP9QVOl3uMR0kDhFpYG4=";
     };
     meta = {
       description = "Lists of reserved barewords and symbol names";
