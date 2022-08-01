@@ -2,7 +2,7 @@
 , buildDunePackage
 , fetchFromGitHub
 , alcotest
-, cmdliner
+, cmdliner_1_1
 , ppx_deriving
 , ppxlib
 }:
@@ -22,7 +22,7 @@ buildDunePackage rec {
   };
 
   propagatedBuildInputs = [
-    cmdliner
+    cmdliner_1_1
     ppx_deriving
     ppxlib
   ];
