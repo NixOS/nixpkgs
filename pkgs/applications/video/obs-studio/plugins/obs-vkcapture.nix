@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-vkcapture";
-  version = "1.1.4";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "nowrep";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-jY78+sfAd62YnCssosLOLfxmdL6zkTEoeE58bQpswG4=";
+    hash = "sha256-eZbZBff/M0S9VASiKoGJAqZ6NMADH7uH8J0m6XGY3jY=";
   };
 
   nativeBuildInputs = [ cmake ninja ];
