@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pouf";
-  version = "0.4.3";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "mothsart";
     repo = pname;
     rev = version;
-    sha256 = "1dgk2g13hz64vdx9sqkixl0321cnfnhrm7hxp68vwfcfx3gvfjv8";
+    sha256 = "1zz91r37d6nqvdy29syq853krqdkigiqihwz7ww9kvagfvzvdh13";
   };
 
-  cargoSha256 = "0ipyc9l9kr7izh3dmvczq1i7al56yiaz20yaarz8bpsfcrmgwy3s";
+  cargoSha256 = "1ikm9fqi37jznln2xsyzfm625lv8kwjzanpm3wglx2s1k1jkmcy9";
 
   postInstall = "make PREFIX=$out copy-data";
 
