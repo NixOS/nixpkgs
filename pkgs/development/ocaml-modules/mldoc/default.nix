@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , fetchpatch
 , angstrom
-, cmdliner
+, cmdliner_1_1
 , core
 , core_bench
 , js_of_ocaml
@@ -40,7 +40,7 @@ buildDunePackage rec {
   };
 
   buildInputs = [
-    cmdliner
+    cmdliner_1_1
     core
     core_bench
     js_of_ocaml
