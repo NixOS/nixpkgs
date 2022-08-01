@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uucp, uutf, cmdliner }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uucp, uutf, cmdliner_1_1 }:
 
 let
   pname = "uuseg";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
-  buildInputs = [  topkg cmdliner  uutf ];
+  buildInputs = [  topkg cmdliner_1_1  uutf ];
   propagatedBuildInputs = [ uucp ];
 
   strictDeps = true;
