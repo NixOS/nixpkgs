@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pytest-httpserver";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchPypi {
     pname = "pytest_httpserver";
     inherit version;
-    sha256 = "6de464ba5f74628d6182ebbdcb56783edf2c9b0caf598dc35c11f014f24a3f0d";
+    sha256 = "sha256-rjKWYm0KEOg1qfQjxhtFQFR9WCQivgVMP8wIYmuqECQ=";
   };
 
   propagatedBuildInputs = [ werkzeug ];
