@@ -1,5 +1,5 @@
 { lib, fetchurl, buildDunePackage, ocaml
-, astring, cmdliner, cppo, fpath, result, tyxml
+, astring, cmdliner_1_1, cppo, fpath, result, tyxml
 , markup, yojson, sexplib0, jq
 , odoc-parser, ppx_expect, bash, fmt
 }:
@@ -16,7 +16,7 @@ buildDunePackage rec {
   # dune 3 is required for tests to pass
   duneVersion = if doCheck then "3" else "2";
 
-  buildInputs = [ astring cmdliner cppo fpath result tyxml odoc-parser fmt ];
+  buildInputs = [ astring cmdliner_1_1 cppo fpath result tyxml odoc-parser fmt ];
 
   checkInputs = [ markup yojson sexplib0 jq ppx_expect bash ];
   doCheck = lib.versionAtLeast ocaml.version "4.08";
