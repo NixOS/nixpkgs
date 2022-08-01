@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-gstreamer";
-  version = "0.3.3";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "fzwoch";
     repo = "obs-gstreamer";
     rev = "v${version}";
-    hash = "sha256-KhSBZcV2yILTf5+aNoYWDfNwPiJoyYPeIOQMDFvOusg=";
+    hash = "sha256-CDtWe4bx1M06nfqvVmIZaLQoKAsXFnG0Xy/mhiSbMgU=";
   };
 
   nativeBuildInputs = [ pkg-config meson ninja ];
