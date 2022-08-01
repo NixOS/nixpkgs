@@ -1,4 +1,5 @@
 { buildBazelPackage
+, bazel_5
 , fetchFromGitHub
 , git
 , go
@@ -10,28 +11,49 @@ let
   patches = [
     ./use-go-in-path.patch
   ];
+
+  # Patch the protoc alias so that it always builds from source.
+  rulesProto = fetchFromGitHub {
+    owner = "bazelbuild";
+    repo = "rules_proto";
+    rev = "4.0.0-3.19.2";
+    sha256 = "sha256-wdmp+Tmf63PPr7G4X5F7rDas45WEETU3eKb47PFVI6o=";
+    postFetch = ''
+      sed -i 's|name = "protoc"|name = "_protoc_original"|' $out/proto/private/BUILD.release
+      cat <<EOF >>$out/proto/private/BUILD.release
+      alias(name = "protoc", actual = "@com_github_protocolbuffers_protobuf//:protoc", visibility = ["//visibility:public"])
+      EOF
+    '';
+  };
+
 in
 buildBazelPackage rec {
   pname = "bazel-watcher";
-  version = "0.14.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-watcher";
     rev = "v${version}";
-    sha256 = "0gigl1lg8sb4bj5crvj54329ws4yirldbncs15f96db6vhp0ig7r";
+    sha256 = "sha256-aK18Q2nYxYajk9f/EEmtV7YJ8cYqbamR7vh3BTgu53Q=";
   };
 
   nativeBuildInputs = [ go git python3 ];
   removeRulesCC = false;
 
+  bazel = bazel_5;
+  bazelFlags = [ "--override_repository=rules_proto=${rulesProto}" ];
+  bazelBuildFlags = lib.optionals stdenv.cc.isClang [ "--cxxopt=-x" "--cxxopt=c++" "--host_cxxopt=-x" "--host_cxxopt=c++" ];
   bazelTarget = "//ibazel";
 
+  fetchConfigured = false; # we want to fetch all dependencies, regardless of the current system
   fetchAttrs = {
     inherit patches;
 
     preBuild = ''
       patchShebangs .
+
+      echo ${bazel_5.version} > .bazelversion
     '';
 
     preInstall = ''
@@ -54,9 +76,12 @@ buildBazelPackage rec {
       # should be equivalent.
       rm -rf $bazelOut/external/{bazel_gazelle_go_repository_tools,\@bazel_gazelle_go_repository_tools.marker}
       sed -e '/^FILE:@bazel_gazelle_go_repository_tools.*/d' -i $bazelOut/external/\@*.marker
+
+      # remove com_google_protobuf because it had files with different permissions on linux and darwin
+      rm -rf $bazelOut/external/com_google_protobuf
     '';
 
-    sha256 = "1j175z3d4fbi4pl35py7yjq7ywrvwin6id131jv32hx0ck4g1m46";
+    sha256 = "sha256-R+Hc9ldYcKgAXETKr2+Hk7IrjJ93WkrjyJ1SQRoM9V4=";
   };
 
   buildAttrs = {
@@ -66,10 +91,11 @@ buildBazelPackage rec {
       patchShebangs .
 
       substituteInPlace ibazel/BUILD --replace '{STABLE_GIT_VERSION}' ${version}
+      echo ${bazel_5.version} > .bazelversion
     '';
 
     installPhase = ''
-      install -Dm755 bazel-bin/ibazel/*_pure_stripped/ibazel $out/bin/ibazel
+      install -Dm755 bazel-bin/ibazel/ibazel_/ibazel $out/bin/ibazel
     '';
   };
 
@@ -78,8 +104,7 @@ buildBazelPackage rec {
     description = "Tools for building Bazel targets when source files change";
     license = licenses.asl20;
     maintainers = with maintainers; [ kalbasit ];
+    mainProgram = "ibazel";
     platforms = platforms.all;
-    # broken on darwin, see https://github.com/NixOS/nixpkgs/issues/105573
-    broken = stdenv.isDarwin;
   };
 }
