@@ -43,7 +43,7 @@ pythonPackages.buildPythonPackage rec {
     librsvg
   ];
 
-  nativeBuildInputs = [ intltool wrapGAppsHook glib ];
+  nativeBuildInputs = [ gobject-introspection intltool wrapGAppsHook glib ];
 
   checkInputs = with pythonPackages; [
     pytestCheckHook
