@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildDunePackage, io-page, mirage-block }:
+{ lib, fetchurl, buildDunePackage, io-page, mirage-block}:
 
 buildDunePackage rec {
   pname = "mirage-block-ramdisk";
@@ -21,5 +21,9 @@ buildDunePackage rec {
     homepage = "https://github.com/mirage/mirage-block-ramdisk";
     license = licenses.isc;
     maintainers = with maintainers; [ ehmry ];
+    # mirage-block-ramdisk uses an incompatable version of cstruct (<6.1.0) and
+    # is only dependen on by other broken packages. No update has been pushed
+    # since 2022-07-06, so might be abandoned?
+    broken = true;
   };
 }
