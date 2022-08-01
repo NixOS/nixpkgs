@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "ogg";
-  version = "0.7.1";
+  version = "0.7.2";
 
   useDune2 = true;
 
@@ -10,7 +10,7 @@ buildDunePackage rec {
     owner = "savonet";
     repo = "ocaml-ogg";
     rev = "v${version}";
-    sha256 = "0z3z0816rxq8wdjw51plzn8lmilic621ilk4x9wpnr0axmnl3wqb";
+    sha256 = "sha256-EY1iVtB5M8//KJPT9FMDYVeBrE/lT30fCqTjjKKnWZU=";
   };
 
   buildInputs = [ dune-configurator ];
