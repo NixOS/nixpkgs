@@ -2299,6 +2299,8 @@ in {
     inherit (pkgs) dbus;
   };
 
+  dbus-signature-pyparsing = callPackage ../development/python-modules/dbus-signature-pyparsing { };
+
   dbutils = callPackage ../development/python-modules/dbutils { };
 
   db-dtypes = callPackage ../development/python-modules/db-dtypes { };
