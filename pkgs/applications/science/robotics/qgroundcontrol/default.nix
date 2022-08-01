@@ -14,7 +14,12 @@ mkDerivation rec {
   ];
 
   gstInputs = with gst_all_1; [
-    gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad wayland
+    gstreamer
+    gst-plugins-base
+    (gst-plugins-good.override { qt5Support = true; })
+    gst-plugins-bad
+    gst-libav
+    wayland
   ];
 
   buildInputs = [ SDL2 ] ++ gstInputs ++ qtInputs;
