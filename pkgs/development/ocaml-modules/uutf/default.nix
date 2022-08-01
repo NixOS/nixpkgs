@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, cmdliner , topkg, uchar }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, cmdliner_1_1 , topkg, uchar }:
 let
   pname = "uutf";
 in
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ ocaml ocamlbuild findlib topkg ];
-  buildInputs = [ topkg cmdliner ];
+  buildInputs = [ topkg cmdliner_1_1 ];
   propagatedBuildInputs = [ uchar ];
 
   strictDeps = true;
