@@ -4073,6 +4073,12 @@ with pkgs;
 
   klipper = callPackage ../servers/klipper { };
 
+  klipper-firmware = callPackage ../servers/klipper/klipper-firmware.nix { };
+
+  klipper-flash = callPackage ../servers/klipper/klipper-flash.nix { };
+
+  klipper-genconf = callPackage ../servers/klipper/klipper-genconf.nix { };
+
   klog = qt5.callPackage ../applications/radio/klog { };
 
   krapslog = callPackage ../tools/misc/krapslog { };
