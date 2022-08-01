@@ -73,6 +73,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mmahut rople380 ];
+    maintainers = with maintainers; [ mmahut rople380 Crafter ];
   };
 }
