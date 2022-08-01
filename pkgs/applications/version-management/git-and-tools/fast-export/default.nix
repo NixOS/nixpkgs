@@ -1,4 +1,4 @@
-{lib, stdenv, fetchFromGitHub, git, mercurial, makeWrapper}:
+{ lib, stdenv, fetchFromGitHub, git, mercurial, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "fast-export";
@@ -12,24 +12,28 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [mercurial.python mercurial];
+  buildInputs = [ mercurial.python mercurial ];
+
+  checkInputs = [
+    git
+    mercurial
+  ];
 
   installPhase = ''
-    binPath=$out/bin
-    libexecPath=$out/libexec/${pname}
+    libexecPath=$out/libexec/fast-export
     sitepackagesPath=$out/${mercurial.python.sitePackages}
-    mkdir -p $binPath $libexecPath $sitepackagesPath
+    mkdir -p $out/bin $libexecPath $sitepackagesPath
 
     # Patch shell scripts so they can execute the Python scripts
     sed -i "s|ROOT=.*|ROOT=$libexecPath|" *.sh
 
-    mv hg-fast-export.sh hg-reset.sh $binPath
+    mv hg-fast-export.sh hg-reset.sh $out/bin
     mv hg-fast-export.py hg-reset.py $libexecPath
     mv hg2git.py pluginloader plugins $sitepackagesPath
 
     for script in $out/bin/*.sh; do
       wrapProgram $script \
-        --prefix PATH : "${git}/bin":"${mercurial.python}/bin":$libexec \
+        --prefix PATH : "${lib.makeBinPath [ git ]mercurial.python }:$libexec \
         --prefix PYTHONPATH : "${mercurial}/${mercurial.python.sitePackages}":$sitepackagesPath
     done
   '';
@@ -40,19 +44,19 @@ stdenv.mkDerivation rec {
   installCheckPhase = ''
     mkdir repo-hg
     pushd repo-hg
-    ${mercurial}/bin/hg init
+    hg init
     echo foo > bar
-    ${mercurial}/bin/hg add bar
-    ${mercurial}/bin/hg commit --message "baz"
+    hg add bar
+    hg commit --message "baz"
     popd
 
     mkdir repo-git
     pushd repo-git
-    ${git}/bin/git init
-    ${git}/bin/git config core.ignoreCase false  # for darwin
+    git init
+    git config core.ignoreCase false  # for darwin
     $out/bin/hg-fast-export.sh -r ../repo-hg/ --hg-hash
     for s in "foo" "bar" "baz" ; do
-      (${git}/bin/git show | grep $s > /dev/null) && echo $s found
+      (git show | grep $s > /dev/null) && echo $s found
     done
     popd
   '';
