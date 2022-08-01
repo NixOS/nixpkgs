@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, linkFarmFromDrvs, callPackage, nuget-to-nix, writeScript, makeWrapper, fetchurl, xml2, dotnetCorePackages, dotnetPackages, mkNugetSource, mkNugetDeps, cacert, srcOnly, symlinkJoin }:
+{ lib, stdenvNoCC, linkFarmFromDrvs, callPackage, nuget-to-nix, writeScript, makeWrapper, fetchurl, xml2, dotnetCorePackages, dotnetPackages, mkNugetSource, mkNugetDeps, cacert, srcOnly, symlinkJoin, coreutils }:
 
 { name ? "${args.pname}-${args.version}"
 , pname ? name
@@ -138,23 +138,23 @@ in stdenvNoCC.mkDerivation (args // {
       exclusions = dotnet-sdk.passthru.packages { fetchNuGet = attrs: attrs.pname; };
     in writeScript "fetch-${pname}-deps" ''
       set -euo pipefail
-      cd "$(dirname "''${BASH_SOURCE[0]}")"
+      cd "$(${coreutils}/bin/dirname "''${BASH_SOURCE[0]}")"
 
-      export HOME=$(mktemp -d)
+      export HOME=$(${coreutils}/bin/mktemp -d)
       deps_file="/tmp/${pname}-deps.nix"
 
       store_src="${srcOnly args}"
-      src="$(mktemp -d /tmp/${pname}.XXX)"
-      cp -r "$store_src/." "$src"
-      chmod -R +w "$src"
+      src="$(${coreutils}/bin/mktemp -d /tmp/${pname}.XXX)"
+      ${coreutils}/bin/cp -rT "$store_src" "$src"
+      ${coreutils}/bin/chmod -R +w "$src"
 
-      trap "rm -rf $src $HOME" EXIT
+      trap "${coreutils}/bin/rm -rf $src $HOME" EXIT
       pushd "$src"
 
       export DOTNET_NOLOGO=1
       export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
-      mkdir -p "$HOME/nuget_pkgs"
+      ${coreutils}/bin/mkdir -p "$HOME/nuget_pkgs"
 
       for project in "${lib.concatStringsSep "\" \"" ((lib.toList projectFile) ++ lib.optionals (testProjectFile != "") (lib.toList testProjectFile))}"; do
         ${dotnet-sdk}/bin/dotnet restore "$project" \
@@ -166,11 +166,11 @@ in stdenvNoCC.mkDerivation (args // {
           ${lib.optionalString (dotnetFlags != []) (builtins.toString dotnetFlags)}
       done
 
-      echo "${lib.concatStringsSep "\n" exclusions}" > "$HOME/package_exclusions"
+      ${coreutils}/bin/echo "${lib.concatStringsSep "\n" exclusions}" > "$HOME/package_exclusions"
 
-      echo "Writing lockfile..."
+      ${coreutils}/bin/echo "Writing lockfile..."
       ${nuget-to-nix}/bin/nuget-to-nix "$HOME/nuget_pkgs" "$HOME/package_exclusions" > "$deps_file"
-      echo "Succesfully wrote lockfile to: $deps_file"
+      ${coreutils}/bin/echo "Succesfully wrote lockfile to: $deps_file"
     '';
   } // args.passthru or {};
 })
