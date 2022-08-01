@@ -2750,6 +2750,8 @@ in {
 
   effect = callPackage ../development/python-modules/effect { };
 
+  egcd = callPackage ../development/python-modules/egcd { };
+
   eggdeps = callPackage ../development/python-modules/eggdeps { };
 
   einops = callPackage ../development/python-modules/einops { };
