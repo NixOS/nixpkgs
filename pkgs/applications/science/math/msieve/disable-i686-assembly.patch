@@ -1,0 +1,25 @@
+diff --git a/include/util.h b/include/util.h
+index 5ab7003..3125286 100644
+--- a/include/util.h
++++ b/include/util.h
+@@ -320,10 +320,6 @@ enum cpu_type get_cpu_type(void);
+ 			#define GCC_ASM64A
+ 			#define GCC_ASM64X
+ 			#define MSC_ASM64X
+-		#elif defined(__i386__)
+-			#define GCC_ASM32A
+-			#define GCC_ASM32X
+-			#define MSC_ASM32X
+ 		#endif
+ 	#endif
+ 
+@@ -348,9 +344,6 @@ enum cpu_type get_cpu_type(void);
+ 	#if defined(__x86_64__) 
+ 		#define GCC_ASM64A
+ 		#define GCC_ASM64X
+-	#elif defined(__i386__)
+-		#define GCC_ASM32A
+-		#define GCC_ASM32X
+ 	#endif
+ 
+ #elif defined(_MSC_VER)
