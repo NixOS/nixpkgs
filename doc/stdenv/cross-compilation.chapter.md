@@ -48,7 +48,7 @@ The exact schema these fields follow is a bit ill-defined due to a long and conv
 
 In the 5-part form, this corresponds to `[cpu]-[vendor]-[os]-[libc][abi]`; note that there is no hyphen separating the `[libc]` field from the `[abi]` field. This format is strictly more informative than the "Nix system double", the format used by the nix interpreter.  This needs a better name than `config`!
 
-This field should be *canonicalized*.  The rules for canonicalizing a tuple are kept in the `config.sub` file in the source code for `autoconf`. The script is also available via the `gnu-config` package in nixpkgs.
+This field should be *canonicalized*.  The rules for canonicalizing a tuple are kept in the `config.sub` file in the source code for `gnu-config`.
 
 `parsed`
 
