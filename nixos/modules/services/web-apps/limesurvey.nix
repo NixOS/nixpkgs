@@ -12,7 +12,7 @@ let
   group = config.services.httpd.group;
   stateDir = "/var/lib/limesurvey";
 
-  pkg = pkgs.limesurvey;
+  pkg = config.services.limesurvey.package;
 
   configType = with types; oneOf [ (attrsOf configType) str int bool ] // {
     description = "limesurvey config type (str, int, bool or attribute set thereof)";
@@ -34,6 +34,25 @@ in
   options.services.limesurvey = {
     enable = mkEnableOption "Limesurvey web application.";
 
+    package = mkOption{
+      type = types.package;
+      default = pkgs.limesurvey;
+      defaultText = literalExpression "pkgs.limesurvey";
+      description = "The Limesurvey Package to Use";
+    };
+
+    encryptionKey = mkOption{
+      type = types.str;
+      default = "E17687FC77CEE247F0E22BB3ECF27FDE8BEC310A892347EC13013ABA11AA7EB5";
+      description = "CHANGE THIS! 32 Byte long key as used to encrypt Values in the database";
+    };
+
+    encryptionNonce = mkOption{
+      type = types.str;
+      default = "1ACC8555619929DB91310BE848025A427B0F364A884FFA77";
+      description = "CHANGE THIS! 24 Byte long nonce as used to encrypt Values in the database";
+    };
+
     database = {
       type = mkOption {
         type = types.enum [ "mysql" "pgsql" "odbc" "mssql" ];
@@ -53,6 +72,12 @@ in
         default = if cfg.database.type == "pgsql" then 5442 else 3306;
         defaultText = literalExpression "3306";
         description = "Database host port.";
+      };
+
+       mysqlEngine = mkOption{
+        type = types.enum [ "MyISAM" "InnoDB"];
+        default = "InnoDB";
+        description = "mysql Storage Engine to Use";
       };
 
       name = mkOption {
@@ -161,29 +186,32 @@ in
       }
     ];
 
-    services.limesurvey.config = mapAttrs (name: mkDefault) {
-      runtimePath = "${stateDir}/tmp/runtime";
+    services.limesurvey.config = {
+      runtimePath = mkDefault "${stateDir}/tmp/runtime";
       components = {
         db = {
-          connectionString = "${cfg.database.type}:dbname=${cfg.database.name};host=${if pgsqlLocal then cfg.database.socket else cfg.database.host};port=${toString cfg.database.port}" +
-            optionalString mysqlLocal ";socket=${cfg.database.socket}";
-          username = cfg.database.user;
-          password = mkIf (cfg.database.passwordFile != null) "file_get_contents(\"${toString cfg.database.passwordFile}\");";
+          connectionString = mkDefault ("${cfg.database.type}:dbname=${cfg.database.name};host=${if pgsqlLocal then cfg.database.socket else cfg.database.host};port=${toString cfg.database.port}" +
+                                        optionalString mysqlLocal ";socket=${cfg.database.socket}");
+          username = mkDefault cfg.database.user;
+          password = mkIf (cfg.database.passwordFile != null) (mkDefault "file_get_contents(\"${toString cfg.database.passwordFile}\");");
           tablePrefix = "limesurvey_";
         };
-        assetManager.basePath = "${stateDir}/tmp/assets";
+        assetManager.basePath = mkDefault "${stateDir}/tmp/assets";
         urlManager = {
-          urlFormat = "path";
-          showScriptName = false;
+          urlFormat = mkDefault "path";
+          showScriptName = mkDefault false;
         };
       };
       config = {
-        tempdir = "${stateDir}/tmp";
-        uploaddir = "${stateDir}/upload";
-        force_ssl = mkIf (cfg.virtualHost.addSSL || cfg.virtualHost.forceSSL || cfg.virtualHost.onlySSL) "on";
-        config.defaultlang = "en";
+        tempdir = mkDefault "${stateDir}/tmp";
+        uploaddir = mkDefault "${stateDir}/upload";
+        encryptionnonce = mkDefault cfg.encryptionNonce;
+        encryptionsecretboxkey = mkDefault cfg.encryptionKey ;
+        force_ssl = mkIf (cfg.virtualHost.addSSL || cfg.virtualHost.forceSSL || cfg.virtualHost.onlySSL) (mkDefault "on");
+        config.defaultlang = mkDefault "en";
       };
     };
+
 
     services.mysql = mkIf mysqlLocal {
       enable = true;
@@ -200,6 +228,7 @@ in
 
     services.phpfpm.pools.limesurvey = {
       inherit user group;
+      phpEnv.DBENGINE="${cfg.database.mysqlEngine}";
       phpEnv.LIMESURVEY_CONFIG = "${limesurveyConfig}";
       settings = {
         "listen.owner" = config.services.httpd.user;
@@ -256,6 +285,7 @@ in
       wantedBy = [ "multi-user.target" ];
       before = [ "phpfpm-limesurvey.service" ];
       after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
+      environment.DBENGINE="${cfg.database.mysqlEngine}";
       environment.LIMESURVEY_CONFIG = limesurveyConfig;
       script = ''
         # update or install the database as required
