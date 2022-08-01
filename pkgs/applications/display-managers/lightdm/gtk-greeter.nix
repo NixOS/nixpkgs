@@ -6,17 +6,12 @@
 , intltool
 , linkFarm
 , wrapGAppsHook
-, useGTK2 ? false
-, gtk2
-, gtk3 # gtk3 seems better supported
+, gtk3
 , xfce4-dev-tools
 , at-spi2-core
 , librsvg
 , hicolor-icon-theme
 }:
-
-#ToDo: bad icons with gtk2;
-#  avatar icon is missing in standard hicolor theme, I don't know where gtk3 takes it from
 
 let
   ver_branch = "2.0";
@@ -32,15 +27,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config intltool xfce4-dev-tools wrapGAppsHook ];
-  buildInputs = [ lightdm librsvg hicolor-icon-theme ]
-    ++ (if useGTK2 then [ gtk2 ] else [ gtk3 ]);
+  buildInputs = [ lightdm librsvg hicolor-icon-theme gtk3 ];
 
   configureFlags = [
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--disable-indicator-services-command"
     "--sbindir=${placeholder "out"}/bin" # for wrapGAppsHook to wrap automatically
-  ] ++ lib.optional useGTK2 "--with-gtk2";
+  ];
 
   postPatch = ''
     # exo-csource has been dropped from exo, and replaced by xdt-csource from xfce4-dev-tools
