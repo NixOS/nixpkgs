@@ -7291,6 +7291,13 @@
     githubId = 4158274;
     name = "Michiel Leenaars";
   };
+  logo = {
+    email = "logo4poop@protonmail.com";
+    matrix = "@logo4poop:matrix.org";
+    github = "logo4poop";
+    githubId = 24994565;
+    name = "Isaac Silverstein";
+  };
   lom = {
     email = "legendofmiracles@protonmail.com";
     matrix = "@legendofmiracles:matrix.org";

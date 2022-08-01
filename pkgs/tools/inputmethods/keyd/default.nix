@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "keyd";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "rvaiya";
     repo = "keyd";
     rev = "v" + version;
-    hash = "sha256-p0f8iGT4QtyWAnlcG4SfOhD94ySNNkQrnVjnGCmQwAk=";
+    hash = "sha256-QWr+xog16MmybhQlEWbskYa/dypb9Ld54MOdobTbyMo=";
   };
 
   postPatch = ''
