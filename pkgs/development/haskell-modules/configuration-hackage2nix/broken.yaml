@@ -1041,6 +1041,7 @@ broken-packages:
   - dbmigrations-mysql
   - dbmigrations-postgresql
   - dbmigrations-sqlite
+  - dbmonitor
   - d-bus
   - DBus
   - dbus-core
@@ -1741,6 +1742,7 @@ broken-packages:
   - ginger
   - gingersnap
   - ginsu
+  - gi-pangocairo
   - giphy-api
   - gi-rsvg
   - gist
@@ -3005,6 +3007,7 @@ broken-packages:
   - libpafe
   - libpq
   - librandomorg
+  - librarian
   - libsecp256k1
   - libsystemd-daemon
   - libsystemd-journal
@@ -4718,6 +4721,7 @@ broken-packages:
   - skemmtun
   - skulk
   - skylighting-extensions
+  - skylighting-format-ansi
   - skylighting-lucid
   - skype4hs
   - slack
