@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, cmdliner }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, cmdliner_1_1 }:
 
 stdenv.mkDerivation rec {
   version = "0.9.7";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
   configurePlatforms = [];
-  buildInputs = [ topkg cmdliner ];
+  buildInputs = [ topkg cmdliner_1_1 ];
 
   inherit (topkg) buildPhase installPhase;
 
