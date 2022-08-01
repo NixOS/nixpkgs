@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , lightdm-gtk-greeter
 , fetchurl
 , lightdm
@@ -13,21 +14,29 @@
 , hicolor-icon-theme
 }:
 
-let
-  ver_branch = "2.0";
-  version = "2.0.7";
-in
 stdenv.mkDerivation rec {
   pname = "lightdm-gtk-greeter";
-  inherit version;
+  version = "2.0.7";
 
   src = fetchurl {
-    url = "${meta.homepage}/${ver_branch}/${version}/+download/${pname}-${version}.tar.gz";
+    # Release tarball differs from source tarball.
+    url = "https://github.com/Xubuntu/lightdm-gtk-greeter/releases/download/lightdm-gtk-greeter-${version}/lightdm-gtk-greeter-${version}.tar.gz";
     sha256 = "1g7wc3d3vqfa7mrdhx1w9ywydgjbffla6rbrxq9k3sc62br97qms";
   };
 
-  nativeBuildInputs = [ pkg-config intltool xfce4-dev-tools wrapGAppsHook ];
-  buildInputs = [ lightdm librsvg hicolor-icon-theme gtk3 ];
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+    xfce4-dev-tools
+    wrapGAppsHook
+  ];
+
+  buildInputs = [
+    lightdm
+    librsvg
+    hicolor-icon-theme
+    gtk3
+  ];
 
   configureFlags = [
     "--localstatedir=/var"
@@ -65,9 +74,10 @@ stdenv.mkDerivation rec {
   }];
 
   meta = with lib; {
-    homepage = "https://launchpad.net/lightdm-gtk-greeter";
+    homepage = "https://github.com/Xubuntu/lightdm-gtk-greeter";
+    description = "A GTK greeter for LightDM";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ bobby285271 ];
   };
 }
