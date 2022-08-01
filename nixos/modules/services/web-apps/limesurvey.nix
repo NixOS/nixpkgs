@@ -12,7 +12,7 @@ let
   group = config.services.httpd.group;
   stateDir = "/var/lib/limesurvey";
 
-  pkg = config.services.limesurvey.package;
+  pkg = pkgs.limesurvey;
 
   configType = with types; oneOf [ (attrsOf configType) str int bool ] // {
     description = "limesurvey config type (str, int, bool or attribute set thereof)";
@@ -34,23 +34,16 @@ in
   options.services.limesurvey = {
     enable = mkEnableOption "Limesurvey web application.";
 
-    package = mkOption{
-      type = types.package;
-      default = pkgs.limesurvey;
-      defaultText = literalExpression "pkgs.limesurvey";
-      description = "The Limesurvey Package to Use";
-    };
-
     encryptionKey = mkOption{
       type = types.str;
       default = "E17687FC77CEE247F0E22BB3ECF27FDE8BEC310A892347EC13013ABA11AA7EB5";
-      description = "CHANGE THIS! 32 Byte long key as used to encrypt Values in the database";
+      description = "CHANGE THIS! 32 Byte long key used to encrypt Values in the database";
     };
 
     encryptionNonce = mkOption{
       type = types.str;
       default = "1ACC8555619929DB91310BE848025A427B0F364A884FFA77";
-      description = "CHANGE THIS! 24 Byte long nonce as used to encrypt Values in the database";
+      description = "CHANGE THIS! 24 Byte long nonce used to encrypt Values in the database";
     };
 
     database = {
