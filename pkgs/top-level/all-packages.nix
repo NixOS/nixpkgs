@@ -20864,6 +20864,10 @@ with pkgs;
 
   randomx = callPackage ../development/libraries/randomx { };
 
+  remodel = callPackage ../development/tools/remodel {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   retro-gtk = callPackage ../development/libraries/retro-gtk { };
 
   resolv_wrapper = callPackage ../development/libraries/resolv_wrapper { };
@@ -31883,7 +31887,7 @@ with pkgs;
     boost = boost170;
   };
 
-  dogecoin  = callPackage ../applications/blockchains/dogecoin {
+  dogecoin  = libsForQt5.callPackage ../applications/blockchains/dogecoin {
     boost = boost165;
     withGui = true;
   };

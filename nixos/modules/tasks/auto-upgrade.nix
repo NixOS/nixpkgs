@@ -21,6 +21,17 @@ in {
         '';
       };
 
+      operation = mkOption {
+        type = types.enum ["switch" "boot"];
+        default = "switch";
+        example = "boot";
+        description = ''
+          Whether to run
+          <literal>nixos-rebuild switch --upgrade</literal> or run
+          <literal>nixos-rebuild boot --upgrade</literal>
+        '';
+      };
+
       flake = mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -223,7 +234,7 @@ in {
         ''}
 
         if [ "''${booted}" = "''${built}" ]; then
-          ${nixos-rebuild} switch ${toString cfg.flags}
+          ${nixos-rebuild} ${cfg.operation} ${toString cfg.flags}
         ${optionalString (cfg.rebootWindow != null) ''
           elif [ "''${do_reboot}" != true ]; then
             echo "Outside of configured reboot window, skipping."
@@ -232,7 +243,7 @@ in {
           ${shutdown} -r +1
         fi
       '' else ''
-        ${nixos-rebuild} switch ${toString (cfg.flags ++ upgradeFlag)}
+        ${nixos-rebuild} ${cfg.operation} ${toString (cfg.flags ++ upgradeFlag)}
       '';
 
       startAt = cfg.dates;
