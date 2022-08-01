@@ -2299,6 +2299,8 @@ in {
     inherit (pkgs) dbus;
   };
 
+  dbus-python-client-gen = callPackage ../development/python-modules/dbus-python-client-gen { };
+
   dbus-signature-pyparsing = callPackage ../development/python-modules/dbus-signature-pyparsing { };
 
   dbutils = callPackage ../development/python-modules/dbutils { };
