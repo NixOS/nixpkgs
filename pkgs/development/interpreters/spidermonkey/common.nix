@@ -7,6 +7,7 @@
 , fetchpatch
 
 # build time
+, bash
 , buildPackages
 , cargo
 , m4
@@ -66,12 +67,11 @@ stdenv.mkDerivation (finalAttrs: rec {
   setOutputFlags = false; # Configure script only understands --includedir
 
   nativeBuildInputs = [
+    bash
     cargo
     m4
     perl
     pkg-config
-    # 78 requires python up to 3.9
-    (if lib.versionOlder version "91" then python39 else python3)
     rustc
     rustc.llvmPackages.llvm # for llvm-objdump
     which
@@ -79,6 +79,9 @@ stdenv.mkDerivation (finalAttrs: rec {
   ] ++ lib.optionals (lib.versionOlder version "91") [
     autoconf213
     yasm # to buid icu? seems weird
+    python39 # 78 requires python up to 3.9
+  ] ++ lib.optionals (lib.versionAtLeast version "91") [
+    python3
   ] ++ lib.optionals stdenv.isDarwin [
     xcbuild
     libobjc
@@ -86,35 +89,36 @@ stdenv.mkDerivation (finalAttrs: rec {
   ];
 
   buildInputs = [
-    (if lib.versionOlder version "91" then icu67 else icu)
+    libiconv
     nspr
     readline
     zlib
+  ] ++ lib.optionals (lib.versionOlder version "91") [
+    icu67
+  ] ++ lib.optionals (lib.versionAtLeast version "91") [
+    icu
   ];
 
-  preConfigure = ''
-    ${lib.optionalString (lib.versionOlder version "91") ''
+  preConfigure = lib.optionalString (lib.versionOlder version "91") ''
     export CXXFLAGS="-fpermissive"
-    ''}
+  '' + ''
     export LIBXUL_DIST=$out
     export PYTHON="${buildPackages.python3.interpreter}"
-
-    ${lib.optionalString (lib.versionAtLeast version "91") ''
+  '' + lib.optionalString (lib.versionAtLeast version "91") ''
     export M4=m4
     export AWK=awk
     export AS=$CC
     export AC_MACRODIR=$PWD/build/autoconf/
 
     pushd js/src
-    sh ../../build/autoconf/autoconf.sh --localdir=$PWD configure.in > configure
+    ${bash}/bin/bash ../../build/autoconf/autoconf.sh --localdir=$PWD configure.in > configure
     chmod +x configure
     popd
-    ''}
-
+  '' + ''
     # We can't build in js/src/, so create a build dir
     mkdir obj
     cd obj/
-    configureScript=../js/src/configure
+    export configureScript=../js/src/configure
   '';
 
   configureFlags = [
