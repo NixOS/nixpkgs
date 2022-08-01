@@ -36,11 +36,6 @@ buildPythonApplication rec {
       -e '/asyncio/d' \
       -e '/datetime/d' \
       setup.cfg requirements.txt
-
-    # Dependencies not correctly detected
-    sed -i \
-      -e '/dbus-python/d' \
-      setup.cfg requirements.txt
   '';
 
   propagatedBuildInputs = [
