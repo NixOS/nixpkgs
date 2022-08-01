@@ -1994,7 +1994,7 @@ let
           version = "2.3.0";
           shar256 = "DaI1/6IMQ44HrBM9tc04DGZmdlLdk1lVVMkMCa6cMHA=";
         };
-        meta = {
+        meta = with lib; {
           changelog = "https://github.com/RandomFractals/vscode-data-preview/blob/master/CHANGELOG.md";
           description = "Data Preview u7533 extension for importing outbox_tray viewing mag_right slicing hocho dicing game_die charting bar_chart & exporting inbox_tray large .json array .arrow .avro .parquet data files, .config .env .properties .ini .yml configurations files, .csv/.tsv & .xlsx/.xlsb Excel files and .md markdown tables with Perspective - streaming data analytics WebAssembly library.";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=RandomFractalsInc.vscode-data-preview";
