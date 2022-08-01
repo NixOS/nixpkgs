@@ -244,6 +244,14 @@ in
       defaultText = literalExpression
         ''(import "''${nixos}/../lib").lib.systems.examples.aarch64-multiplatform'';
       description = ''
+        Systems with a recently generated <literal>hardware-configuration.nix</literal>
+        do not need to specify this option, unless cross-compiling, in which case
+        you should set <emphasis>only</emphasis> <option>nixpkgs.buildPlatform</option>.
+
+        If this is somehow not feasible, you may fall back to removing the
+        <option>nixpkgs.hostPlatform</option> line from the generated config and
+        use the old options.
+
         Specifies the platform on which NixOS should be built. When
         <code>nixpkgs.crossSystem</code> is unset, it also specifies
         the platform <emphasis>for</emphasis> which NixOS should be
@@ -265,6 +273,10 @@ in
       default = null;
       example = { system = "aarch64-linux"; config = "aarch64-unknown-linux-gnu"; };
       description = ''
+        Systems with a recently generated <literal>hardware-configuration.nix</literal>
+        may instead specify <emphasis>only</emphasis> <option>nixpkgs.buildPlatform</option>,
+        or fall back to removing the <option>nixpkgs.hostPlatform</option> line from the generated config.
+
         Specifies the platform for which NixOS should be
         built. Specify this only if it is different from
         <code>nixpkgs.localSystem</code>, the platform
@@ -280,7 +292,29 @@ in
     system = mkOption {
       type = types.str;
       example = "i686-linux";
+      default =
+        if opt.hostPlatform.isDefined
+        then
+          throw ''
+            Neither ${opt.system} nor any other option in nixpkgs.* is meant
+            to be read by modules and configurations.
+            Use pkgs.stdenv.hostPlatform instead.
+          ''
+        else
+          throw ''
+            Neither ${opt.hostPlatform} nor or the legacy option ${opt.system} has been set.
+            You can set ${opt.hostPlatform} in hardware-configuration.nix by re-running
+            a recent version of nixos-generate-config.
+            The option ${opt.system} is still fully supported for NixOS 22.05 interoperability,
+            but will be deprecated in the future, so we recommend to set ${opt.hostPlatform}.
+          '';
+      defaultText = lib.literalMD ''
+        Traditionally `builtins.currentSystem`, but unset when invoking NixOS through `lib.nixosSystem`.
+      '';
       description = ''
+        This option does not need to be specified for NixOS configurations
+        with a recently generated <literal>hardware-configuration.nix</literal>.
+
         Specifies the Nix platform type on which NixOS should be built.
         It is better to specify <code>nixpkgs.localSystem</code> instead.
         <programlisting>

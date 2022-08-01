@@ -132,7 +132,7 @@ let
 
       # If the host is 64-bit and the container is 32-bit, add a
       # --personality flag.
-      ${optionalString (config.nixpkgs.localSystem.system == "x86_64-linux") ''
+      ${optionalString (pkgs.stdenv.hostPlatform.system == "x86_64-linux") ''
         if [ "$(< ''${SYSTEM_PATH:-/nix/var/nix/profiles/per-container/$INSTANCE/system}/system)" = i686-linux ]; then
           extraFlags+=" --personality=x86"
         fi
