@@ -8,6 +8,8 @@ let
 
   jsonFormat = pkgs.formats.json {};
 
+  fqdn = if config.networking.domain != null then config.networking.fqdn else config.networking.hostName;
+
   inherit (cfg) datadir;
 
   phpPackage = cfg.phpPackage.buildEnv {
@@ -83,6 +85,13 @@ in {
     hostName = mkOption {
       type = types.str;
       description = "FQDN for the nextcloud instance.";
+      default = "nextcloud.${fqdn}";
+      defaultText = literalExpression ''
+        if config.${options.networking.domain} != null
+        then "nextcloud.''${config.${options.networking.fqdn}}"
+        else "nextcloud.''${config.${options.networking.hostName}}"
+      '';
+      example = "nextcloud.yourdomain.org";
     };
     home = mkOption {
       type = types.str;
