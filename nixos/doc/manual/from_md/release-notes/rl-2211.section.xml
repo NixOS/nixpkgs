@@ -1131,6 +1131,13 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>tt-rss</literal> service performs two database
+          migrations when you first use its web UI after upgrade.
+          Consider backing up its database before updating.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>pass-secret-service</literal> package now
           includes systemd units from upstream, so adding it to the
           NixOS <literal>services.dbus.packages</literal> option will
