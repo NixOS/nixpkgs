@@ -100,6 +100,8 @@ in
         options = {
           enable = mkEnableOption (mdDoc "cgit");
 
+          package = mkPackageOptionMD pkgs "cgit" {};
+
           nginx.virtualHost = mkOption {
             description = mdDoc "VirtualHost to serve cgit on, defaults to the attribute name.";
             type = types.str;
@@ -172,7 +174,7 @@ in
             [ "cgit.css" "cgit.png" "favicon.ico" "robots.txt" ]
             (name: nameValuePair "= ${stripLocation cfg}/${name}" {
               extraConfig = ''
-                alias ${pkgs.cgit}/cgit/${name};
+                alias ${cfg.package}/cgit/${name};
               '';
             })
         ) // {
@@ -187,7 +189,7 @@ in
           };
           "${stripLocation cfg}/" = {
             fastcgiParams = {
-              SCRIPT_FILENAME = "${pkgs.cgit}/cgit/cgit.cgi";
+              SCRIPT_FILENAME = "${cfg.package}/cgit/cgit.cgi";
               QUERY_STRING = "$args";
               HTTP_HOST = "$server_name";
               CGIT_CONFIG = mkCgitrc cfg;

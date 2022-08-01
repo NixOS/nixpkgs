@@ -1,4 +1,10 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }:
+let
+  robotsTxt = pkgs.writeText "cgit-robots.txt" ''
+    User-agent: *
+    Disallow: /
+  '';
+in {
   name = "cgit";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ schnusch ];
@@ -8,6 +14,12 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     server = { ... }: {
       services.cgit."localhost" = {
         enable = true;
+        package = pkgs.cgit.overrideAttrs ({ postInstall, ... }: {
+          postInstall = ''
+            ${postInstall}
+            cp ${robotsTxt} "$out/cgit/robots.txt"
+          '';
+        });
         nginx.location = "/(c)git/";
         repos = {
           some-repo = {
@@ -28,7 +40,9 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     server.wait_for_unit("network.target")
     server.wait_for_open_port(80)
 
-    server.succeed("curl -fsS http://localhost/%28c%29git/robots.txt")
+    server.succeed("curl -fsS http://localhost/%28c%29git/cgit.css")
+
+    server.succeed("curl -fsS http://localhost/%28c%29git/robots.txt | diff -u - ${robotsTxt}")
 
     server.succeed(
         "curl -fsS http://localhost/%28c%29git/ | grep -F 'some-repo description'"
