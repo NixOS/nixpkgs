@@ -13714,7 +13714,10 @@ with pkgs;
 
   julia-lts-bin = julia_16-bin;
   julia-stable-bin = julia_17-bin;
+
   julia-bin = julia-stable-bin;
+
+  juliaup = callPackage ../development/tools/juliaup { };
 
   jwasm =  callPackage ../development/compilers/jwasm { };
 
