@@ -1,6 +1,6 @@
 { lib, fetchurl, buildDunePackage
 , alcotest
-, base64, cmdliner, rresult, xmlm, yojson
+, base64, cmdliner_1_1, rresult, xmlm, yojson
 }:
 
 buildDunePackage rec {
@@ -14,7 +14,7 @@ buildDunePackage rec {
     sha256 = "0fbajg8wq8hjhkvvfnq68br0m0pa8zf2qzadhfgi2nnr9713rada";
   };
 
-  buildInputs = [ cmdliner yojson ];
+  buildInputs = [ cmdliner_1_1 yojson ];
   propagatedBuildInputs = [ base64 rresult xmlm ];
   checkInputs = [ alcotest ];
 
