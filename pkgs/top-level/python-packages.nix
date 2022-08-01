@@ -4524,6 +4524,8 @@ in {
 
   intervaltree = callPackage ../development/python-modules/intervaltree { };
 
+  into-dbus-python = callPackage ../development/python-modules/into-dbus-python { };
+
   intreehooks = callPackage ../development/python-modules/intreehooks { };
 
   invocations = callPackage ../development/python-modules/invocations { };
