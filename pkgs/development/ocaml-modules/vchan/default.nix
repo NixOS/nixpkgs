@@ -1,7 +1,7 @@
 { lib, buildDunePackage, fetchurl
 , ppx_cstruct, ppx_sexp_conv, ounit
 , lwt, cstruct, io-page, mirage-flow, xenstore, xenstore_transport
-, sexplib, cmdliner
+, sexplib, cmdliner_1_1
 }:
 
 buildDunePackage rec {
@@ -32,7 +32,7 @@ buildDunePackage rec {
 
   doCheck = true;
   checkInputs = [
-    cmdliner
+    cmdliner_1_1
     ounit
   ];
 
