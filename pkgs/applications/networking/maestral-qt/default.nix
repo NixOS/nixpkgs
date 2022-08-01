@@ -70,7 +70,7 @@ pypkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "GUI front-end for maestral (an open-source Dropbox client) for Linux";
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg sfrijters ];
     platforms = platforms.linux;
     homepage = "https://maestral.app";
   };
