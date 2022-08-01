@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uchar, uutf, cmdliner }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uchar, uutf, cmdliner_1_1 }:
 let
   pname = "uunf";
   webpage = "https://erratique.ch/software/${pname}";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
-  buildInputs = [ topkg uutf cmdliner ];
+  buildInputs = [ topkg uutf cmdliner_1_1 ];
 
   propagatedBuildInputs = [ uchar ];
 
