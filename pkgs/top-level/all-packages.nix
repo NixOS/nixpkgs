@@ -8174,6 +8174,8 @@ with pkgs;
 
   nodenv = callPackage ../development/tools/nodenv { };
 
+  nocodb = callPackage ../servers/web-apps/nocodb { };
+
   nodejs = hiPrio nodejs-16_x;
 
   nodejs-slim = nodejs-slim-16_x;
