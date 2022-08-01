@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "witness";
-  version = "0.1.10";
+  version = "0.1.11";
 
   src = fetchFromGitHub {
     owner = "testifysec";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-BRYp8gp3TNZrl6fRNHOIgdhCVCN+N2lReFk+0FxCUxY=";
+    sha256 = "sha256-/v6dltF4oCIOtN6Fcpf+VvT+c3vTB1q/IgGUqZzbcVk=";
   };
-  vendorSha256 = "sha256-/NniYty50dO44VUTfVq9b8dbT3le4uZ2ZoDN4IjLBto=";
+  vendorSha256 = "sha256-UP68YNLX+fuCvd+e3rER1icha9bS3MemJLwJOMMOVfg=";
 
   nativeBuildInputs = [ installShellFiles ];
 
