@@ -6956,11 +6956,7 @@ with pkgs;
 
   grive2 = callPackage ../tools/filesystems/grive2 { };
 
-  groff = callPackage ../tools/text/groff {
-    ghostscript = null;
-    psutils = null;
-    netpbm = null;
-  };
+  groff = callPackage ../tools/text/groff { };
 
   gromit-mpx = callPackage ../tools/graphics/gromit-mpx {
     gtk = gtk3;
