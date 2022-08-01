@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation rec {
   pname = "iaito";
-  version = "5.7.0";
+  version = "5.7.2";
 
   src = fetchFromGitHub {
     owner = "radareorg";
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-qEJTsS669eEwo2iiuybN72O5oopCaGEkju8+ekjw2zk=";
+    sha256 = "sha256-Pum0+QfTHwZ24XzbFARl77QIPqPhhEFF9VoZDRV0f24=";
   };
 
   nativeBuildInputs = [ pkg-config qttools wrapQtAppsHook zip ];
