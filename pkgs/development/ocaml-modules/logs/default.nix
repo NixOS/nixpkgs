@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild
-, topkg, result, lwt, cmdliner, fmt
+, topkg, result, lwt, cmdliner_1_1, fmt
 , js_of_ocaml
 , jsooSupport ? true
 }:
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
-  buildInputs = [ fmt cmdliner lwt topkg ]
+  buildInputs = [ fmt cmdliner_1_1 lwt topkg ]
     ++ lib.optional jsooSupport js_of_ocaml;
   propagatedBuildInputs = [ result ];
 
