@@ -1,0 +1,33 @@
+{ lib
+, buildPythonPackage
+, fetchPypi
+, python
+, hypothesis
+}:
+
+buildPythonPackage rec {
+  pname = "hs-dbus-signature";
+  version = "0.7";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-NNnTcSX+K8zU+sj1QBd13h7aEXN9VqltJMNWCuhgZ6I=";
+  };
+
+  checkInputs = [ hypothesis ];
+
+  checkPhase = ''
+    runHook preCheck
+    ${python.interpreter} -m unittest discover
+    runHook postCheck
+  '';
+
+  pythonImportsCheck = [ "hs_dbus_signature" ];
+
+  meta = with lib; {
+    description = "A Hypothesis Strategy for Generating Arbitrary DBus Signatures";
+    homepage = "https://github.com/stratis-storage/hs-dbus-signature";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ nickcao ];
+  };
+}
