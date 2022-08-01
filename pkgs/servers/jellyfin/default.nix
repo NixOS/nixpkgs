@@ -29,13 +29,13 @@ let
 in
 buildDotnetModule rec {
   pname = "jellyfin";
-  version = "10.8.1"; # ensure that jellyfin-web has matching version
+  version = "10.8.2"; # ensure that jellyfin-web has matching version
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin";
     rev = "v${version}";
-    sha256 = "8XkE0rDvuBcNTsWFf+JtqRuhjhfkbNT8qPSdfuA9DXI=";
+    sha256 = "f5iwNoGxyFTRp8F17iM1kA/FtV9NSczEk36VJub6Lww=";
   };
 
   patches = [
