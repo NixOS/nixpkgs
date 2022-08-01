@@ -8,13 +8,13 @@ let inherit (lib) optional versionOlder; in
 
 buildDunePackage rec {
   pname = "lwt";
-  version = "5.5.0";
+  version = "5.6.1";
 
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "lwt";
     rev = version;
-    sha256 = "sha256:1jbjz2rsz3j56k8vh5qlmm87hhkr250bs2m3dvpy9vsri8rkzj9z";
+    sha256 = "sha256-XstKs0tMwliCyXnP0Vzi5WC27HKJGnATUYtbbQmH1TE=";
   };
 
   strictDeps = true;
