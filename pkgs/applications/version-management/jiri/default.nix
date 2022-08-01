@@ -4,36 +4,30 @@
 , fetchzip
 , unzip
 , autoPatchelfHook
-, version ? "unstable-2021-06-15"
-, sources ?
-  let
-    base = "https://chrome-infra-packages.appspot.com/dl/fuchsia/tools/jiri";
-    x86_64 = "amd64";
-    revision = "fcdfde57a8309823f6899264dd9c009a2e6fb01e";
-    version = "unstable-2021-06-15";
-  in
-  {
-    "${version}-x86_64-linux" = fetchurl {
-      name= "git_revision-${revision}.zip";
-      url = "${base}/linux-${x86_64}/+/git_revision:${revision}";
-      sha256 = "11f35gni1dzb5lvdy1dcx9zk0m5jb2bb9jmq2c8kx2brrhcdlzdv";
-    };
-    "${version}-x86_64-darwin" = fetchurl {
-      name= "git_revision-${revision}.zip";
-      url = "${base}/mac-${x86_64}/+/git_revision:${revision}";
-      sha256 = "c9dd2d345e91418a904094b4f0d64a0e872635c1aef6ed030c345632cf1cc626";
-    };
-  }
 }:
-
-assert version != null && version != "";
-assert sources != null && (builtins.isAttrs sources);
 
 stdenv.mkDerivation {
   pname = "jiri";
-  inherit version;
+  version = "unstable-2022-07-26";
 
-  src = sources."${version}-${stdenv.hostPlatform.system}" or (throw "unsupported version/system: ${version}/${stdenv.hostPlatform.system}");
+  src =
+    let
+      base = "https://chrome-infra-packages.appspot.com/dl/fuchsia/tools/jiri";
+      x86_64 = "amd64";
+      revision = "398e3ee5d9e738eee58ea6ef3bf7d43fbe8c3f12";
+    in
+    {
+      "x86_64-linux" = fetchurl {
+        name = "git_revision-${revision}.zip";
+        url = "${base}/linux-${x86_64}/+/git_revision:${revision}";
+        sha256 = "0bzixfrvbyfzy7ps0avkdclg5r69r7jrq4jl3knrflb96qjw2gvi";
+      };
+      "x86_64-darwin" = fetchurl {
+        name = "git_revision-${revision}.zip";
+        url = "${base}/mac-${x86_64}/+/git_revision:${revision}";
+        sha256 = "157iard65cwmdj600zsq5l2q17mdx4clylc41p1i0ryd656fr37x";
+      };
+    }."${stdenv.hostPlatform.system}";
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -41,20 +35,15 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
-    mkdir -p $out
-    cp -R * $out/
-    chmod +x $out/jiri
+    mkdir -p $out/bin
+    cp jiri $out/bin/
+    cp -r .cipdpkg $out/bin/
+    chmod +x $out/bin/jiri
   '';
 
-  unpackPhase = ''
-    mkdir -p $out
-    unzip -d $out $src
-  '';
-
-
-  libPath = lib.makeLibraryPath [ stdenv.cc.cc ];
-
-  dontStrip = true;
+  # Work around the "unpacker appears to have produced no directories"
+  # case that happens when the archive doesn't have a subdirectory.
+  setSourceRoot = "sourceRoot=`pwd`";
 
   meta = with lib; {
     homepage = "https://fuchsia.googlesource.com/jiri";
