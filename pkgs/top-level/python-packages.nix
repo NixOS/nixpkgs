@@ -2184,6 +2184,8 @@ in {
 
   dbfread = callPackage ../development/python-modules/dbfread { };
 
+  dbus-client-gen = callPackage ../development/python-modules/dbus-client-gen { };
+
   dbus-next = callPackage ../development/python-modules/dbus-next { };
 
   dbus-python = callPackage ../development/python-modules/dbus {
