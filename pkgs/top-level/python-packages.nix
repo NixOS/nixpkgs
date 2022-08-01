@@ -2184,6 +2184,8 @@ in {
 
   dbfread = callPackage ../development/python-modules/dbfread { };
 
+  dbus-client-gen = callPackage ../development/python-modules/dbus-client-gen { };
+
   dbus-next = callPackage ../development/python-modules/dbus-next { };
 
   dbus-python = callPackage ../development/python-modules/dbus {
@@ -4704,6 +4706,10 @@ in {
   jupytext = callPackage ../development/python-modules/jupytext { };
 
   justbackoff = callPackage ../development/python-modules/justbackoff { };
+
+  justbases = callPackage ../development/python-modules/justbases { };
+
+  justbytes = callPackage ../development/python-modules/justbytes { };
 
   jwcrypto = callPackage ../development/python-modules/jwcrypto { };
 

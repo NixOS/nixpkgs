@@ -175,6 +175,13 @@ in {
       ];
     };
 
+    linux_5_19 = callPackage ../os-specific/linux/kernel/linux-5.19.nix {
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+      ];
+    };
+
     linux_testing = let
       testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
         kernelPatches = [
@@ -483,8 +490,6 @@ in {
 
     x86_energy_perf_policy = callPackage ../os-specific/linux/x86_energy_perf_policy { };
 
-    xmm7360-pci = throw "Support for the XMM7360 WWAN card was added to the iosm kmod in mainline kernel version 5.18";
-
     xone = if lib.versionAtLeast kernel.version "5.4" then callPackage ../os-specific/linux/xone { } else null;
 
     xpadneo = callPackage ../os-specific/linux/xpadneo { };
@@ -507,6 +512,7 @@ in {
 
   } // lib.optionalAttrs config.allowAliases {
     ati_drivers_x11 = throw "ati drivers are no longer supported by any kernel >=4.1"; # added 2021-05-18;
+    xmm7360-pci = throw "Support for the XMM7360 WWAN card was added to the iosm kmod in mainline kernel version 5.18";
   });
 
   hardenedPackagesFor = kernel: overrides: packagesFor (hardenedKernelFor kernel overrides);
@@ -523,6 +529,7 @@ in {
     linux_5_16 = throw "linux 5.16 was removed because it reached its end of life upstream"; # Added 2022-04-23
     linux_5_17 = throw "linux 5.17 was removed because it reached its end of life upstream"; # Added 2022-06-23
     linux_5_18 = recurseIntoAttrs (packagesFor kernels.linux_5_18);
+    linux_5_19 = recurseIntoAttrs (packagesFor kernels.linux_5_19);
   };
 
   rtPackages = {
@@ -579,7 +586,7 @@ in {
   packageAliases = {
     linux_default = packages.linux_5_15;
     # Update this when adding the newest kernel major version!
-    linux_latest = packages.linux_5_18;
+    linux_latest = packages.linux_5_19;
     linux_mptcp = packages.linux_mptcp_95;
     linux_rt_default = packages.linux_rt_5_4;
     linux_rt_latest = packages.linux_rt_5_10;

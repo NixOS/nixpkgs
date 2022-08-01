@@ -2275,8 +2275,6 @@ with pkgs;
 
   cosign = callPackage ../tools/security/cosign {
     inherit (darwin.apple_sdk.frameworks) PCSC;
-    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
-    buildGoModule = buildGo117Module;
   };
 
   cozy = callPackage ../applications/audio/cozy { };
@@ -36176,7 +36174,7 @@ with pkgs;
     udev = systemdMinimal;
     jack = libjack2;
   };
-  inherit (jami) jami-daemon jami-libclient jami-client-qt;
+  inherit (jami) jami-daemon jami-client-qt;
 
   jitsi-meet-electron = callPackage ../applications/networking/instant-messengers/jitsi-meet-electron {
     electron = electron_17;

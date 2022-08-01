@@ -453,7 +453,7 @@ let
           optionalString (config.services.sssd.enable && cfg.sssdStrictAccess) ''
             account [default=bad success=ok user_unknown=ignore] ${pkgs.sssd}/lib/security/pam_sss.so
           '' +
-          optionalString config.krb5.enable ''
+          optionalString config.security.pam.krb5.enable ''
             account sufficient ${pam_krb5}/lib/security/pam_krb5.so
           '' +
           optionalString cfg.googleOsLoginAccountVerification ''
@@ -553,7 +553,7 @@ let
           optionalString config.services.sssd.enable ''
             auth sufficient ${pkgs.sssd}/lib/security/pam_sss.so use_first_pass
           '' +
-          optionalString config.krb5.enable ''
+          optionalString config.security.pam.krb5.enable ''
             auth [default=ignore success=1 service_err=reset] ${pam_krb5}/lib/security/pam_krb5.so use_first_pass
             auth [default=die success=done] ${pam_ccreds}/lib/security/pam_ccreds.so action=validate use_first_pass
             auth sufficient ${pam_ccreds}/lib/security/pam_ccreds.so action=store use_first_pass
@@ -576,7 +576,7 @@ let
           optionalString config.services.sssd.enable ''
             password sufficient ${pkgs.sssd}/lib/security/pam_sss.so use_authtok
           '' +
-          optionalString config.krb5.enable ''
+          optionalString config.security.pam.krb5.enable ''
             password sufficient ${pam_krb5}/lib/security/pam_krb5.so use_first_pass
           '' +
           optionalString cfg.enableGnomeKeyring ''
@@ -619,7 +619,7 @@ let
           optionalString config.services.sssd.enable ''
             session optional ${pkgs.sssd}/lib/security/pam_sss.so
           '' +
-          optionalString config.krb5.enable ''
+          optionalString config.security.pam.krb5.enable ''
             session optional ${pam_krb5}/lib/security/pam_krb5.so
           '' +
           optionalString cfg.otpwAuth ''
@@ -801,6 +801,26 @@ in
     };
 
     security.pam.enableOTPW = mkEnableOption "the OTPW (one-time password) PAM module";
+
+    security.pam.krb5 = {
+      enable = mkOption {
+        default = config.krb5.enable;
+        defaultText = literalExpression "config.krb5.enable";
+        type = types.bool;
+        description = ''
+          Enables Kerberos PAM modules (<literal>pam-krb5</literal>,
+          <literal>pam-ccreds</literal>).
+
+          If set, users can authenticate with their Kerberos password.
+          This requires a valid Kerberos configuration
+          (<literal>config.krb5.enable</literal> should be set to
+          <literal>true</literal>).
+
+          Note that the Kerberos PAM modules are not necessary when using SSS
+          to handle Kerberos authentication.
+        '';
+      };
+    };
 
     security.pam.p11 = {
       enable = mkOption {
@@ -1147,7 +1167,7 @@ in
       [ pkgs.pam ]
       ++ optional config.users.ldap.enable pam_ldap
       ++ optional config.services.sssd.enable pkgs.sssd
-      ++ optionals config.krb5.enable [pam_krb5 pam_ccreds]
+      ++ optionals config.security.pam.krb5.enable [pam_krb5 pam_ccreds]
       ++ optionals config.security.pam.enableOTPW [ pkgs.otpw ]
       ++ optionals config.security.pam.oath.enable [ pkgs.oath-toolkit ]
       ++ optionals config.security.pam.p11.enable [ pkgs.pam_p11 ]
@@ -1211,7 +1231,7 @@ in
       optionalString config.services.sssd.enable ''
         mr ${pkgs.sssd}/lib/security/pam_sss.so,
       '' +
-      optionalString config.krb5.enable ''
+      optionalString config.security.pam.krb5.enable ''
         mr ${pam_krb5}/lib/security/pam_krb5.so,
         mr ${pam_ccreds}/lib/security/pam_ccreds.so,
       '' +

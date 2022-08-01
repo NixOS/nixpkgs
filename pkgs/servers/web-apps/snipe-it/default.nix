@@ -18,13 +18,13 @@ let
 
 in package.override rec {
   pname = "snipe-it";
-  version = "6.0.7";
+  version = "6.0.8";
 
   src = fetchFromGitHub {
     owner = "snipe";
     repo = pname;
     rev = "v${version}";
-    sha256 = "09jvkz7j2qb79mjnyrz75015xpgf8l483yha3ma14pzk4pibn620";
+    sha256 = "01pjrx1x4xy05k292mx3w0vw9q565jg2n80hma2ajw3iknmyk91k";
   };
 
   meta = with lib; {
