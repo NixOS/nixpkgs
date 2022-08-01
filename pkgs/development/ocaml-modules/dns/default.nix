@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, fetchurl, alcotest, logs, fmt, cmdliner_1_1, cmdliner
+{ lib, buildDunePackage, fetchurl, alcotest, logs, fmt, cmdliner_1_1
 , cstruct, domain-name, duration, gmap, ipaddr, lru, metrics, ptime, base64, callPackage
 }:
 
