@@ -16881,6 +16881,9 @@ with pkgs;
   jprofiler = callPackage ../development/tools/java/jprofiler {
     jdk = jdk11;
   };
+  jprofiler-agent = jprofiler.override {
+    component = "agent";
+  };
 
   jhiccup = callPackage ../development/tools/java/jhiccup { };
 
