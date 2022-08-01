@@ -4707,6 +4707,8 @@ in {
 
   justbases = callPackage ../development/python-modules/justbases { };
 
+  justbytes = callPackage ../development/python-modules/justbytes { };
+
   jwcrypto = callPackage ../development/python-modules/jwcrypto { };
 
   jxmlease = callPackage ../development/python-modules/jxmlease { };
