@@ -1,13 +1,13 @@
 { buildDunePackage, git
 , mmap, rresult, result, bigstringaf
-, fmt, bos, fpath, uri, digestif, logs, lwt, git-cohttp-unix
-, mirage-clock, mirage-clock-unix, astring, awa, cmdliner
-, cohttp-lwt-unix, decompress, domain-name, ipaddr, mtime
+, fmt, bos, fpath, uri, digestif, logs, lwt
+, mirage-clock, mirage-clock-unix, astring, awa, cmdliner_1_1
+, cohttp-lwt-unix, decompress, domain-name, ipaddr, mtime, happy-eyeballs-lwt, mirage-unix
 , tcpip, awa-mirage, mirage-flow
 , alcotest, alcotest-lwt, base64, cstruct
 , ke, mirage-crypto-rng, ocurl, git-binary
-, ptime, mimic, ca-certs-nss, tls, tls-mirage
-, cacert
+, ptime, mimic, mimic-happy-eyeballs, ca-certs-nss, tls, tls-mirage
+, cacert, git-mirage, hex, git-paf, mirage-time
 }:
 
 buildDunePackage {
@@ -16,17 +16,15 @@ buildDunePackage {
 
   useDune2 = true;
 
-  buildInputs = [
-    awa awa-mirage cmdliner git-cohttp-unix
-    mirage-clock mirage-clock-unix tcpip
-  ];
   propagatedBuildInputs = [
-    mmap rresult result bigstringaf
+    rresult result bigstringaf
     fmt bos fpath uri digestif logs lwt
-    astring cohttp-lwt-unix decompress
+    astring decompress
     domain-name ipaddr mtime mirage-flow
-    cstruct ptime mimic ca-certs-nss
-    tls tls-mirage
+    cstruct ptime mimic mimic-happy-eyeballs ca-certs-nss
+    tls tls-mirage git-mirage hex git-paf mirage-time
+    happy-eyeballs-lwt  mirage-unix awa awa-mirage cmdliner_1_1 git
+    mirage-clock mirage-clock-unix tcpip
   ];
   checkInputs = [
     alcotest alcotest-lwt base64 ke
