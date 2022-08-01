@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg
-, astring, bos, cmdliner, rresult
+, astring, bos, cmdliner_1_1, rresult
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
   buildInputs = [ topkg ];
-  propagatedBuildInputs = [ astring bos cmdliner rresult ];
+  propagatedBuildInputs = [ astring bos cmdliner_1_1 rresult ];
 
   strictDeps = true;
 
