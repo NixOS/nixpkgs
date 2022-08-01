@@ -1,21 +1,21 @@
-{ lib, fetchurl, buildDunePackage, alcotest, cmdliner
+{ lib, fetchurl, buildDunePackage, alcotest, cmdliner_1_1
 , rresult, astring, fmt, ocamlgraph, logs, bos, fpath, ptime
 }:
 
 buildDunePackage rec {
   pname   = "functoria";
-  version = "3.1.1";
+  version = "3.1.2";
 
   useDune2 = true;
 
   minimumOCamlVersion = "4.04";
 
   src = fetchurl {
-    url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
-    sha256 = "0bihxbq16zwsi7frk4b8wz8993mvy2ym3n6288jhv0n0gb7c2f7m";
+    url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-${version}.tbz";
+    sha256 = "1yh0gkf6f2g960mcnrpilhj3xrszr98hy4zkav078f6amxcmwyl4";
   };
 
-  propagatedBuildInputs = [ cmdliner rresult astring fmt ocamlgraph logs bos fpath ptime ];
+  propagatedBuildInputs = [ cmdliner_1_1 rresult astring fmt ocamlgraph logs bos fpath ptime ];
   checkInputs = [ alcotest ];
 
   doCheck = true;
