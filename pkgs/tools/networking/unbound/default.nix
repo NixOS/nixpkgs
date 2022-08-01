@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , openssl
 , nettle
 , expat
@@ -106,6 +107,16 @@ stdenv.mkDerivation rec {
   checkInputs = [ bison ];
 
   doCheck = true;
+
+  patches = [
+    # Fix CVE-2022-30698 and CVE-2022-30699
+    (fetchpatch {
+      url = "https://github.com/NLnetLabs/unbound/commit/f6753a0f1018133df552347a199e0362fc1dac68.patch";
+      name = "CVE-2022-30698.CVE-2022-30699.patch";
+      hash = "sha256-tLHkQoAbtYqLr3ASYfYX6pGtjD2TWT4B5NUubT4EN90=";
+      excludes = [ "doc/Changelog" ];
+    })
+  ];
 
   postPatch = lib.optionalString withPythonModule ''
     substituteInPlace Makefile.in \
