@@ -7,10 +7,22 @@
 let
   python = python39.override {
     packageOverrides = self: super: {
+      # emoji 2.0.0 has breaking changes
+      emoji = super.emoji.overridePythonAttrs (_: rec {
+        version = "1.7.0";
+        src = super.fetchPypi {
+          pname = "emoji";
+          inherit version;
+          hash = "sha256-ZcVFM+o8ePMNBykoiZhxX0GNdGfeiewlijHAzoZgodE=";
+        };
+      });
+
       ntfy-webpush = self.callPackage ./webpush.nix { };
     };
   };
-in python.pkgs.buildPythonApplication rec {
+
+in
+python.pkgs.buildPythonApplication rec {
   pname = "ntfy";
   version = "2.7.0";
 
@@ -28,8 +40,11 @@ in python.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python.pkgs; [
-    requests ruamel-yaml appdirs
-    sleekxmpp dnspython
+    requests
+    ruamel-yaml
+    appdirs
+    sleekxmpp
+    dnspython
     emoji
     psutil
     matrix-client
