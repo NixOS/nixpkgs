@@ -148,7 +148,7 @@ stdenv.mkDerivation rec {
     description = "Validating, recursive, and caching DNS resolver";
     license = licenses.bsd3;
     homepage = "https://www.unbound.net";
-    maintainers = with maintainers; [ fpletz globin ];
+    maintainers = with maintainers; [ ajs124 ];
     platforms = platforms.unix;
   };
 }
