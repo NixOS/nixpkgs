@@ -25,6 +25,8 @@ let
     x86_64-linux.target = "x86_64";
     armv7l-linux.target = "arm";
     aarch64-linux.target = "aarch64";
+    riscv32-linux.target = "riscv32";
+    riscv64-linux.target = "riscv64";
   };
 
   # For aarch64, we need to use '--target=aarch64-efi' when building,
@@ -34,6 +36,8 @@ let
     x86_64-linux.target = "x86_64";
     armv7l-linux.target = "arm";
     aarch64-linux.target = "arm64";
+    riscv32-linux.target = "riscv32";
+    riscv64-linux.target = "riscv64";
   };
 
   canEfi = any (system: stdenv.hostPlatform.system == system) (mapAttrsToList (name: _: name) efiSystemsBuild);
