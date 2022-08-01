@@ -752,6 +752,7 @@ mapAliases ({
   libva-full = throw "'libva-full' has been renamed to/replaced by 'libva'"; # Converted to throw 2022-02-22
   libva1-full = throw "'libva1-full' has been renamed to/replaced by 'libva1'"; # Converted to throw 2022-02-22
   libwnck3 = libwnck;
+  lightdm_gtk_greeter = lightdm-gtk-greeter; # Added 2022-08-01
   lighthouse = throw "lighthouse has been removed: abandoned by upstream"; # Added 2022-04-24
   lighttable = throw "'lighttable' crashes (SIGSEGV) on startup, has not been updated in years and depends on deprecated GTK2"; # Added 2022-06-15
   lilypond-unstable = lilypond; # Added 2021-03-11

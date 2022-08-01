@@ -1,5 +1,5 @@
 { lib, stdenv
-, lightdm_gtk_greeter
+, lightdm-gtk-greeter
 , fetchurl
 , lightdm
 , pkg-config
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.xgreeters = linkFarm "lightdm-gtk-greeter-xgreeters" [{
-    path = "${lightdm_gtk_greeter}/share/xgreeters/lightdm-gtk-greeter.desktop";
+    path = "${lightdm-gtk-greeter}/share/xgreeters/lightdm-gtk-greeter.desktop";
     name = "lightdm-gtk-greeter.desktop";
   }];
 
