@@ -5,6 +5,8 @@ with lib;
 let
   cfg = config.services.prometheus.exporters.mail;
 
+  configFile = if cfg.configuration != null then configurationFile else (escapeShellArg cfg.configFile);
+
   configurationFile = pkgs.writeText "prometheus-mail-exporter.conf" (builtins.toJSON (
     # removes the _module attribute, null values and converts attrNames to lowercase
     mapAttrs' (name: value:
@@ -137,6 +139,13 @@ in
 {
   port = 9225;
   extraOpts = {
+    environmentFile = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = ''
+        File containing env-vars to be substituted into the exporter's config.
+      '';
+    };
     configFile = mkOption {
       type = types.nullOr types.path;
       default = null;
@@ -162,13 +171,19 @@ in
   serviceOpts = {
     serviceConfig = {
       DynamicUser = false;
+      EnvironmentFile = mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
+      RuntimeDirectory = "prometheus-mail-exporter";
+      ExecStartPre = [
+        "${pkgs.writeShellScript "subst-secrets-mail-exporter" ''
+          umask 0077
+          ${pkgs.envsubst}/bin/envsubst -i ${configFile} -o ''${RUNTIME_DIRECTORY}/mail-exporter.json
+        ''}"
+      ];
       ExecStart = ''
         ${pkgs.prometheus-mail-exporter}/bin/mailexporter \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           --web.telemetry-path ${cfg.telemetryPath} \
-          --config.file ${
-            if cfg.configuration != null then configurationFile else (escapeShellArg cfg.configFile)
-          } \
+          --config.file ''${RUNTIME_DIRECTORY}/mail-exporter.json \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
     };

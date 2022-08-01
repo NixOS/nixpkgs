@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "polylith";
-  version = "0.2.13-alpha";
+  version = "0.2.14-alpha";
 
   src = fetchurl {
     url = "https://github.com/polyfy/polylith/releases/download/v${version}/poly-${version}.jar";
-    sha256 = "sha256-iLN92qurc8+D0pt7Hwag+TFGoeFl9DvEeS67sKmmoSI=";
+    sha256 = "sha256-0yJLSveKd49nBnCtBVfwcACXfIH43ZgqTLoo2aLPE2g=";
   };
 
   dontUnpack = true;

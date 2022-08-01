@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "skeema";
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "skeema";
     repo = "skeema";
     rev = "v${version}";
-    sha256 = "sha256-hO8F3J8obi99dCT6L9OcbyVhch3z6JLeJHIvrNJemAE=";
+    sha256 = "sha256-1XK4eXRVUkCPx5MULmHx5mwQ5P1aqZNtHNEqCBMK8NE=";
   };
 
   vendorSha256 = null;
@@ -39,8 +39,6 @@ buildGoModule rec {
     substituteInPlace internal/util/shellout_unix_test.go \
       --replace /bin/echo "${coreutils}/bin/echo"
   '';
-
-  checkFlags = [ "-short" ];
 
   meta = with lib; {
     description = "Declarative pure-SQL schema management for MySQL and MariaDB";

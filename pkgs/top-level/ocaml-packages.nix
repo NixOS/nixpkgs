@@ -805,7 +805,7 @@ let
 
     metrics-lwt = callPackage ../development/ocaml-modules/metrics/lwt.nix { };
 
-    metrics-mirage = callPackage ../development/ocaml-modules/metrics/mirage.nix { };
+    metrics-rusage = callPackage ../development/ocaml-modules/metrics/rusage.nix { };
 
     metrics-unix = callPackage ../development/ocaml-modules/metrics/unix.nix {
       inherit (pkgs) gnuplot;
@@ -1555,7 +1555,7 @@ let
     if lib.versionOlder "4.10.2" ocaml.version
     then import ../development/ocaml-modules/janestreet/0.15.nix {
       inherit self;
-      inherit (pkgs) fetchpatch lib openssl patdiff zstd;
+      inherit (pkgs) fetchpatch lib openssl zstd;
     }
     else if lib.versionOlder "4.08" ocaml.version
     then import ../development/ocaml-modules/janestreet/0.14.nix {

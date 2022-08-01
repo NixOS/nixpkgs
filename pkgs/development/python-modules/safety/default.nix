@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-28Xf+i5H2nbMQ9/oy7v8qZ0pEY0MbFTfz6EcK9NJ3/Y=";
+    hash = "sha256-28Xf+i5H2nbMQ9/oy7v8qZ0pEY0MbFTfz6EcK9NJ3/Y=";
   };
 
   postPatch = ''
@@ -53,6 +53,9 @@ buildPythonPackage rec {
     "test_announcements_if_is_not_tty"
     "test_check_live"
     "test_check_live_cached"
+    "test_check_vulnerabilities"
+    "test_license"
+    "test_chained_review"
   ];
 
   preCheck = ''

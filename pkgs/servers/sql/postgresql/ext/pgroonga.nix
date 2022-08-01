@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pgroonga";
-  version = "2.3.6";
+  version = "2.3.7";
 
   src = fetchurl {
     url = "https://packages.groonga.org/source/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-/GimaiFuMEuw4u9if3Z//1KPT78rvaJ+jNjbG3ugkLA=";
+    sha256 = "sha256-EodqpYF3wJJdgzHZHqmY0tsrF2YnGirnQWCWaDZ9v8E=";
   };
 
   nativeBuildInputs = [ pkg-config ];

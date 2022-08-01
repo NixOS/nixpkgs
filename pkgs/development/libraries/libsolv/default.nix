@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, ninja, pkg-config
-, zlib, lzma, bzip2, zchunk, zstd
+, zlib, xz, bzip2, zchunk, zstd
 , expat, rpm, db }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake ninja pkg-config ];
-  buildInputs = [ zlib lzma bzip2 zchunk zstd expat rpm db ];
+  buildInputs = [ zlib xz bzip2 zchunk zstd expat rpm db ];
 
   meta = with lib; {
     description = "A free package dependency solver";

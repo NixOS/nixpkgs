@@ -38,7 +38,8 @@ self: super: {
   rts = null;
   stm = null;
   template-haskell = null;
-  terminfo = null;
+  # GHC only builds terminfo if it is a native compiler
+  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_5;
   text = null;
   time = null;
   transformers = null;
@@ -139,4 +140,7 @@ self: super: {
   # Not possible to build in the main GHC 9.0 package set
   # https://github.com/awakesecurity/spectacle/issues/49
   spectacle = doDistribute (markUnbroken super.spectacle);
+
+  # doctest-parallel dependency requires newer Cabal
+  regex-tdfa = dontCheck super.regex-tdfa;
 }

@@ -31,6 +31,18 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
+      backoff = super.backoff.overridePythonAttrs (oldAttrs: rec {
+        version = "1.11.1";
+        src = fetchFromGitHub {
+          owner = "litl";
+          repo = "backoff";
+          rev = "v${version}";
+          hash = "sha256-87IMcLaoCn0Vns8Ub/AFmv0gXtS0aPZX0cSt7+lOPm4=";
+        };
+      });
+    })
+
+    (self: super: {
       bsblan = super.bsblan.overridePythonAttrs (oldAttrs: rec {
         version = "0.5.0";
         postPatch = null;
@@ -177,7 +189,7 @@ let
   extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2022.7.4";
+  hassVersion = "2022.7.5";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -195,7 +207,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    hash = "sha256-TQsIChMoIlTd8+gN4bxiWFId6V2wB1j3XfhXYpYMw9M=";
+    hash = "sha256-fUKT9ZSu8dhwapvdjq50t5kh6ZwGsMteuvCjYpPQNx0=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -214,6 +226,7 @@ in python.pkgs.buildPythonApplication rec {
       "bcrypt"
       "cryptography"
       "httpx"
+      "ifaddr"
       "orjson"
       "PyJWT"
       "requests"

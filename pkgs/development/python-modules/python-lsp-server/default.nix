@@ -37,7 +37,7 @@
 
 buildPythonPackage rec {
   pname = "python-lsp-server";
-  version = "1.4.1";
+  version = "1.5.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-rEfjxHw2NIVIa8RepxLPiXkRFhcGWLzm6w43n60zkFE=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-tW2w94HI6iy8vcDb5pIL79bAO6BJp9q6SMAXgiVobm0=";
   };
 
   postPatch = ''

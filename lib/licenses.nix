@@ -520,6 +520,13 @@ in mkLicense lset) ({
     free = false;
   };
 
+  databricks-dbx = {
+    fullName = "DataBricks eXtensions aka dbx License";
+    url = "https://github.com/databrickslabs/dbx/blob/743b579a4ac44531f764c6e522dbe5a81a7dc0e4/LICENSE";
+    free = false;
+    redistributable = false;
+  };
+
   issl = {
     fullName = "Intel Simplified Software License";
     url = "https://software.intel.com/en-us/license/intel-simplified-software-license";

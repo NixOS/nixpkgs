@@ -2,11 +2,11 @@
 
 buildPythonApplication rec {
   pname = "dcnnt";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-LP3tOInpqVpO/BWla7/gZCGUUZ/1J8dHegGa0hRiRDQ=";
+    sha256 = "sha256-vKCQgg0m58hoN79WcZ4mM6bjCJOPxhAT4ifZ3b/5bkA=";
   };
 
   propagatedBuildInputs = [

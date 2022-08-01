@@ -43,6 +43,8 @@ buildPythonPackage rec {
     # AssertionError
     "test_write_bigtiff"
     "test_write_imagej_raw"
+    # https://github.com/cgohlke/tifffile/issues/142
+    "test_func_bitorder_decode"
   ];
 
   pythonImportsCheck = [

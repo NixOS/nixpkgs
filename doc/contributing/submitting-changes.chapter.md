@@ -167,24 +167,30 @@ Packages with automated tests are much more likely to be merged in a timely fash
 
 ### Tested compilation of all pkgs that depend on this change using `nixpkgs-review` {#submitting-changes-tested-compilation}
 
-If you are updating a package’s version, you can use nixpkgs-review to make sure all packages that depend on the updated package still compile correctly. The `nixpkgs-review` utility can look for and build all dependencies either based on uncommited changes with the `wip` option or specifying a github pull request number.
+If you are updating a package’s version, you can use `nixpkgs-review` to make sure all packages that depend on the updated package still compile correctly. The `nixpkgs-review` utility can look for and build all dependencies either based on uncommitted changes with the `wip` option or specifying a GitHub pull request number.
 
-review changes from pull request number 12345:
+Review changes from pull request number 12345:
 
 ```ShellSession
-nix run nixpkgs.nixpkgs-review -c nixpkgs-review pr 12345
+nix-shell -p nixpkgs-review --run "nixpkgs-review pr 12345"
 ```
 
-review uncommitted changes:
+Alternatively, with flakes (and analogously for the other commands below):
 
 ```ShellSession
-nix run nixpkgs.nixpkgs-review -c nixpkgs-review wip
+nix run nixpkgs#nixpkgs-review -- pr 12345
 ```
 
-review changes from last commit:
+Review uncommitted changes:
 
 ```ShellSession
-nix run nixpkgs.nixpkgs-review -c nixpkgs-review rev HEAD
+nix-shell -p nixpkgs-review --run "nixpkgs-review wip"
+```
+
+Review changes from last commit:
+
+```ShellSession
+nix-shell -p nixpkgs-review --run "nixpkgs-review rev HEAD"
 ```
 
 ### Tested execution of all binary files (usually in `./result/bin/`) {#submitting-changes-tested-execution}

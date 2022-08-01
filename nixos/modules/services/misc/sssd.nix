@@ -38,6 +38,15 @@ in {
           For this to work, the <literal>ssh</literal> SSS service must be enabled in the sssd configuration.
         '';
       };
+
+      kcm = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to use SSS as a Kerberos Cache Manager (KCM).
+          Kerberos will be configured to cache credentials in SSS.
+        '';
+      };
     };
   };
   config = mkMerge [
@@ -77,6 +86,28 @@ in {
         shadow = [ "sss" ];
       };
       services.dbus.packages = [ pkgs.sssd ];
+    })
+
+    (mkIf cfg.kcm {
+      systemd.services.sssd-kcm = {
+        description = "SSSD Kerberos Cache Manager";
+        requires = [ "sssd-kcm.socket" ];
+        serviceConfig = {
+          ExecStartPre = "-${pkgs.sssd}/bin/sssd --genconf-section=kcm";
+          ExecStart = "${pkgs.sssd}/libexec/sssd/sssd_kcm --uid 0 --gid 0";
+        };
+        restartTriggers = [
+          config.environment.etc."sssd/sssd.conf".source
+        ];
+      };
+      systemd.sockets.sssd-kcm = {
+        description = "SSSD Kerberos Cache Manager responder socket";
+        wantedBy = [ "sockets.target" ];
+        # Matches the default in MIT krb5 and Heimdal:
+        # https://github.com/krb5/krb5/blob/krb5-1.19.3-final/src/include/kcm.h#L43
+        listenStreams = [ "/var/run/.heim_org.h5l.kcm-socket" ];
+      };
+      krb5.libdefaults.default_ccache_name = "KCM:";
     })
 
     (mkIf cfg.sshAuthorizedKeysIntegration {

@@ -5,21 +5,22 @@
 , installShellFiles
 , btrfs-progs
 , glibc
-, gitUpdater
+, testers
+, werf
 }:
 
 buildGoModule rec {
   pname = "werf";
-  version = "1.2.128";
+  version = "1.2.144";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "werf";
     rev = "v${version}";
-    sha256 = "sha256-H1GzIxj6ZrlcNM4Y0oKYoVBsMFj4wYP9XYicAmIpaik=";
+    sha256 = "sha256-5hfXHoU7hmiuLaS9nS6MAS6tJAmTwxE9VqBZ29hv56A=";
   };
 
-  vendorSha256 = "sha256-78V+cw0A3Q3Gagl4KrserFXvV17MSqhpaFG38VKwhKg=";
+  vendorSha256 = "sha256-m+qt+pqLzQyzQkKzEbBkzgTlRjpaqJNF8tcirBx4Htc=";
 
   proxyVendor = true;
 
@@ -58,10 +59,10 @@ buildGoModule rec {
       --zsh <($out/bin/werf completion --shell=zsh)
   '';
 
-  passthru.updateScript = gitUpdater {
-    inherit pname version;
-    ignoredVersions = "1\.[3-9].*";
-    rev-prefix = "v";
+  passthru.tests.version = testers.testVersion {
+    package = werf;
+    command = "werf version";
+    version = "v${version}";
   };
 
   meta = with lib; {

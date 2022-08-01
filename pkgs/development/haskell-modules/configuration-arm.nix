@@ -1,8 +1,8 @@
 # ARM-SPECIFIC OVERRIDES FOR THE HASKELL PACKAGE SET IN NIXPKGS
 #
-# This extension is applied to all haskell package sets in nixpkgs
-# if `stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64`
-# to apply arm specific workarounds or fixes.
+# This extension is applied to all haskell package sets in nixpkgs if
+# `stdenv.hostPlatform.isAarch` to apply arm specific workarounds or
+# fixes.
 #
 # The file is split into three parts:
 #
@@ -116,4 +116,7 @@ self: super: {
 } // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch32 {
   # AARCH32-SPECIFIC OVERRIDES
 
+  # KAT/ECB/D2 test segfaults on armv7l
+  # https://github.com/haskell-crypto/cryptonite/issues/367
+  cryptonite = dontCheck super.cryptonite;
 }

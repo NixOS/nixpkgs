@@ -1,5 +1,6 @@
 { lib, stdenv
 , buildPythonPackage
+, fetchpatch
 , grpc
 , six
 , protobuf
@@ -16,6 +17,15 @@
 buildPythonPackage rec {
   inherit (grpc) src version;
   pname = "grpcio";
+
+  patches = [
+    # Fix build on armv6l
+    # https://github.com/grpc/grpc/pull/30401
+    (fetchpatch {
+      url = "https://github.com/grpc/grpc/commit/65dc9f3edeee4c2d0e9b30d5a3ee63175437bea3.patch";
+      hash = "sha256-pS4FsCcSjmjSs3J5Y96UonkxqPwfpkyhrEM0t6HaMd0=";
+    })
+  ];
 
   outputs = [ "out" "dev" ];
 

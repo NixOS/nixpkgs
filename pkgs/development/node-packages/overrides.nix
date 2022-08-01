@@ -85,6 +85,16 @@ final: prev: {
     meta = oldAttrs.meta // { platforms = lib.platforms.linux; };
   });
 
+  balanceofsatoshis = prev.balanceofsatoshis.override {
+    nativeBuildInputs = [ pkgs.installShellFiles ];
+    postInstall = ''
+      installShellCompletion --cmd bos\
+        --bash <($out/bin/bos completion bash)\
+        --zsh <($out/bin/bos completion zsh)\
+        --fish <($out/bin/bos completion fish)
+    '';
+  };
+
   bitwarden-cli = prev."@bitwarden/cli".override {
     name = "bitwarden-cli";
   };

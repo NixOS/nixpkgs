@@ -4,7 +4,7 @@ sqlite, gtk2, patchelf, libXScrnSaver, libnotify, libX11, libxcb }:
 
 let
   majorVersion = "7.20";
-  minorVersion = "1";
+  minorVersion = "2";
 in
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "BOINC";
     repo = "boinc";
     rev = "client_release/${majorVersion}/${version}";
-    sha256 = "sha256-FRU5s/nvT3VKU78AXYlbzeru7XQwNSqDNMGrdQ3jd1w=";
+    sha256 = "sha256-vMb5Vq/6I6lniG396wd7+FfslsByedMRPIpiItp1d1s=";
   };
 
   nativeBuildInputs = [ libtool automake autoconf m4 pkg-config ];

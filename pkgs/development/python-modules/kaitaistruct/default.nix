@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , fetchFromGitHub
+, brotli
 , lz4
 }:
 
@@ -9,25 +10,26 @@ let
   kaitai_compress = fetchFromGitHub {
     owner = "kaitai-io";
     repo = "kaitai_compress";
-    rev = "434fb42220ff58778bb9fbadb6152cad7e4f5dd0";
-    sha256 = "zVnkVl3amUDOB+pnw5SkMGSrVL/dTQ82E8IWfJvKC4Q=";
+    rev = "12f4cffb45d95b17033ee4f6679987656c6719cc";
+    sha256 = "sha256-l3rGbblUgxO6Y7grlsMEiT3nRIgUZV1VqTyjIgIDtyA=";
   };
 in
 buildPythonPackage rec {
   pname = "kaitaistruct";
-  version = "0.9";
+  version = "0.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3d5845817ec8a4d5504379cc11bd570b038850ee49c4580bc0998c8fb1d327ad";
+    sha256 = "sha256-oETe4pFz1q+6zye8rDna+JtlTdQYz6AJq4LZF4qa5So=";
   };
 
   preBuild = ''
     ln -s ${kaitai_compress}/python/kaitai kaitai
-    sed '28ipackages = kaitai/compress' -i setup.cfg
+    sed '32ipackages = kaitai/compress' -i setup.cfg
   '';
 
   propagatedBuildInputs = [
+    brotli
     lz4
   ];
 

@@ -12,7 +12,7 @@
 , flask_mail
 
 # extras: fsqla
-, flask_sqlalchemy
+, flask-sqlalchemy
 , sqlalchemy
 , sqlalchemy-utils
 
@@ -74,7 +74,7 @@ buildPythonPackage rec {
       flask_mail
     ];
     fsqla = [
-      flask_sqlalchemy
+      flask-sqlalchemy
       sqlalchemy
       sqlalchemy-utils
     ];

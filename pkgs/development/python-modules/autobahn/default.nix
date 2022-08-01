@@ -48,14 +48,14 @@
 
 buildPythonPackage rec {
   pname = "autobahn";
-  version = "22.5.1";
+  version = "22.6.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-NKpVabC0QZ+MJ3eSxgDcJRjEkwkox04iee+LiNi4o+o=";
+    sha256 = "sha256-+2PpRtXC3Q32gIUehOZWJKSUzofJmfKklE5PLYG/RJg=";
   };
 
   postPatch = ''

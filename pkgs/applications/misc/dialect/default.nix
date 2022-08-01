@@ -18,7 +18,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dialect";
-  version = "2.0.1";
+  version = "2.0.2";
 
   format = "other";
 
@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-Ke23QnvKpmyuaqkiBQL1cUa0T7lSfYPLFi6wa9G8LYk=";
+    hash = "sha256-55vqxS0ySV8lItxLl1J+wLvPtmR87HzGfAiOKuhigFA=";
   };
 
   nativeBuildInputs = [

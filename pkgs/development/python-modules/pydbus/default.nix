@@ -11,6 +11,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pygobject3 ];
 
+  pythonImportsCheck = [ "pydbus" ];
+
   meta = {
     homepage = "https://github.com/LEW21/pydbus";
     description = "Pythonic DBus library";

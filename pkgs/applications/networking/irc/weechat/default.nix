@@ -85,7 +85,7 @@ let
           on https://nixos.org/nixpkgs/manual/#sec-weechat .
         '';
         license = lib.licenses.gpl3;
-        maintainers = with lib.maintainers; [ lovek323 lheckemann ];
+        maintainers = with lib.maintainers; [ lovek323 ];
         platforms = lib.platforms.unix;
       };
     }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, which, bison, nixosTests, linuxHeaders }:
+{ lib, stdenv, fetchurl, pkg-config, glib, which, bison, nixosTests, linuxHeaders, gnutls }:
 
 stdenv.mkDerivation rec {
   pname = "nbd";
@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-aHcVbSOnsz917uidL1wskcVCr8PNy2Nt6lqIU5pY0Qw=";
   };
 
-  buildInputs = [ glib linuxHeaders ];
+  buildInputs = [ glib gnutls ]
+    ++ lib.optionals stdenv.isLinux [ linuxHeaders ];
 
   nativeBuildInputs = [ pkg-config which bison ];
 
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
     cp README.md "$out/share/doc/nbd-${version}/"
   '';
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   passthru.tests = {
     test = nixosTests.nbd;
@@ -30,9 +31,9 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = lib.optionalString stdenv.isLinux "-lrt -lpthread";
 
   meta = {
-    homepage = "http://nbd.sourceforge.net";
+    homepage = "https://nbd.sourceforge.io/";
     description = "Map arbitrary files as block devices over the network";
     license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

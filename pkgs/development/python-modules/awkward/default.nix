@@ -7,6 +7,7 @@
 , pytestCheckHook
 , pyyaml
 , rapidjson
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -20,13 +21,20 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ pyyaml rapidjson ];
-  propagatedBuildInputs = [ numpy ];
+  propagatedBuildInputs = [ numpy setuptools ]; # https://github.com/scikit-hep/awkward/blob/main/requirements.txt
 
   dontUseCmakeConfigure = true;
 
   checkInputs = [ pytestCheckHook numba ];
-  dontUseSetuptoolsCheck = true;
+
+  disabledTests = [
+    # incomatible with numpy 1.23
+    "test_numpyarray"
+  ];
+
   disabledTestPaths = [ "tests-cuda" ];
+
+  pythonImportsCheck = [ "awkward" ];
 
   meta = with lib; {
     description = "Manipulate JSON-like data with NumPy-like idioms";

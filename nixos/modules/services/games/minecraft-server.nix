@@ -22,6 +22,15 @@ let
   '' + concatStringsSep "\n" (mapAttrsToList
     (n: v: "${n}=${cfgToString v}") cfg.serverProperties));
 
+  stopScript = pkgs.writeShellScript "minecraft-server-stop" ''
+    echo stop > ${config.systemd.sockets.minecraft-server.socketConfig.ListenFIFO}
+
+    # Wait for the PID of the minecraft server to disappear before
+    # returning, so systemd doesn't attempt to SIGKILL it.
+    while kill -0 "$1" 2> /dev/null; do
+      sleep 1s
+    done
+  '';
 
   # To be able to open the firewall, we need to read out port values in the
   # server properties, but fall back to the defaults when those don't exist.
@@ -172,16 +181,35 @@ in {
     };
     users.groups.minecraft = {};
 
+    systemd.sockets.minecraft-server = {
+      bindsTo = [ "minecraft-server.service" ];
+      socketConfig = {
+        ListenFIFO = "/run/minecraft-server.stdin";
+        SocketMode = "0660";
+        SocketUser = "minecraft";
+        SocketGroup = "minecraft";
+        RemoveOnStop = true;
+        FlushPending = true;
+      };
+    };
+
     systemd.services.minecraft-server = {
       description   = "Minecraft Server Service";
       wantedBy      = [ "multi-user.target" ];
-      after         = [ "network.target" ];
+      requires      = [ "minecraft-server.socket" ];
+      after         = [ "network.target" "minecraft-server.socket" ];
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/minecraft-server ${cfg.jvmOpts}";
+        ExecStop = "${stopScript} $MAINPID";
         Restart = "always";
         User = "minecraft";
         WorkingDirectory = cfg.dataDir;
+
+        StandardInput = "socket";
+        StandardOutput = "journal";
+        StandardError = "journal";
+
         # Hardening
         CapabilityBoundingSet = [ "" ];
         DeviceAllow = [ "" ];

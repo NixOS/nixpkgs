@@ -25,18 +25,18 @@ checksum = "2fff2a6927b3bb87f9595d67196a70493f627687a71d87a0d692242c33f58c11"
 
 [[package]]
 name = "codegen-luajit"
-version = "0.11.0"
+version = "0.12.0"
 dependencies = [
  "wasm-ast",
- "wasmparser",
+ "wasmparser 0.86.0",
 ]
 
 [[package]]
 name = "codegen-luau"
-version = "0.11.0"
+version = "0.12.0"
 dependencies = [
  "wasm-ast",
- "wasmparser",
+ "wasmparser 0.86.0",
 ]
 
 [[package]]
@@ -52,7 +52,7 @@ dependencies = [
 
 [[package]]
 name = "dev-test"
-version = "0.11.0"
+version = "0.12.0"
 dependencies = [
  "codegen-luajit",
  "codegen-luau",
@@ -77,9 +77,9 @@ checksum = "9b919933a397b79c37e33b77bb2aa3dc8eb6e165ad809e58ff75bc7db2e34574"
 
 [[package]]
 name = "hashbrown"
-version = "0.12.1"
+version = "0.12.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "db0d4cf898abf0081f964436dc980e96670a0f36863e4b83aaacdb65c9d7ccc3"
+checksum = "8a9ee70c43aaf417c914396645a0fa852624801b24ebb7ae78fe8272889ac888"
 
 [[package]]
 name = "indexmap"
@@ -116,9 +116,9 @@ checksum = "2dffe52ecf27772e601905b7522cb4ef790d2cc203488bbd0e2fe85fcb74566d"
 
 [[package]]
 name = "once_cell"
-version = "1.12.0"
+version = "1.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7709cef83f0c1f58f666e746a08b21e0085f7440fa6a29cc194d68aac97a4225"
+checksum = "18a6dbe30758c9f83eb00cbea4ac95966305f5a7772f3f42ebfc7fc7eddbd8e1"
 
 [[package]]
 name = "proc-macro2"
@@ -192,9 +192,9 @@ dependencies = [
 
 [[package]]
 name = "unicode-ident"
-version = "1.0.1"
+version = "1.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5bd2fe26506023ed7b5e1e315add59d6f584c621d037f9368fea9cfb988f368c"
+checksum = "15c61ba63f9235225a22310255a29b806b907c9b8c964bcbd0a2c70f3f2deea7"
 
 [[package]]
 name = "unicode-width"
@@ -210,9 +210,9 @@ checksum = "fc72304796d0818e357ead4e000d19c9c174ab23dc11093ac919054d20a6a7fc"
 
 [[package]]
 name = "wasm-ast"
-version = "0.11.0"
+version = "0.12.0"
 dependencies = [
- "wasmparser",
+ "wasmparser 0.86.0",
 ]
 
 [[package]]
@@ -225,17 +225,26 @@ dependencies = [
 ]
 
 [[package]]
-name = "wasm-smith"
-version = "0.11.1"
+name = "wasm-encoder"
+version = "0.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c85cf25be85aac46356216b4662eb5768347046449a45c938ae1443b788665bb"
+checksum = "f76068e87fe9b837a6bc2ccded66784173eadb828c4168643e9fddf6f9ed2e61"
+dependencies = [
+ "leb128",
+]
+
+[[package]]
+name = "wasm-smith"
+version = "0.11.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b73250e61e41d0e467b78559c7d761841005d724384bb0b78d52ff974acf5520"
 dependencies = [
  "arbitrary",
  "flagset",
  "indexmap",
  "leb128",
- "wasm-encoder",
- "wasmparser",
+ "wasm-encoder 0.14.0",
+ "wasmparser 0.87.0",
 ]
 
 [[package]]
@@ -243,6 +252,15 @@ name = "wasmparser"
 version = "0.86.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4bcbfe95447da2aa7ff171857fc8427513eb57c75a729bb190e974dc695e8f5c"
+dependencies = [
+ "indexmap",
+]
+
+[[package]]
+name = "wasmparser"
+version = "0.87.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5c04e207cd2e8ecb6f9bd28a2cf3119b4c6bfeee6fe3a25cc1daf8041d00a875"
 dependencies = [
  "indexmap",
 ]
@@ -256,5 +274,5 @@ dependencies = [
  "leb128",
  "memchr",
  "unicode-width",
- "wasm-encoder",
+ "wasm-encoder 0.13.0",
 ]

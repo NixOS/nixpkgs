@@ -27,7 +27,7 @@
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal";
-  version = "1.14.4";
+  version = "1.14.5";
 
   outputs = [ "out" "installedTests" ];
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     owner = "flatpak";
     repo = pname;
     rev = version;
-    sha256 = "///X0inMi9Znuhjn9n0HlVLa5/kFWpKorKS8RY9WeYM=";
+    sha256 = "sha256-leLCG+ZdQ4zB1LsTN8gZh7yhJ7EZCYYyxwE3hR9vIkM=";
   };
 
   nativeBuildInputs = [

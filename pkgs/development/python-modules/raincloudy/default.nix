@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "raincloudy";
-  version = "1.1.1";
+  version = "1.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vanstinator";
     repo = pname;
-    rev = version;
-    hash = "sha256-c6tux0DZY56a4BpuiMXtaqm8+JKNDiyMxrFUju3cp2Y=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-qCkBVirM09iA1sXiOB9FJns8bHjQq7rRk8XbRWrtBDI=";
   };
 
   propagatedBuildInputs = [

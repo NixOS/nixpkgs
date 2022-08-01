@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "dnsmonster";
-  version = "0.9.3";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "mosajjal";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-1tYC76g3GOqMaosAYYXOrOKTdW7muPTaeeLzGUsjogE=";
+    hash = "sha256-5+ivBnpE4odmm7N1FVJcKw5VlEkPiGOadsFy4Vq6gVo=";
   };
 
-  vendorSha256 = "sha256-2gWifzBjAx+c/if6ZZQ/s73oPPTY9eJfHYL4F/058h0=";
+  vendorSha256 = "sha256-WCgaf34l+4dq79STBtUp1wX02ldKuTYvB+op/UTAtNQ=";
 
   buildInputs = [
     libpcap

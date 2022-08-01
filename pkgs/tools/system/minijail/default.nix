@@ -11,24 +11,24 @@ in
 
 stdenv.mkDerivation rec {
   pname = "minijail";
-  version = "17";
+  version = "18";
 
   src = fetchFromGitiles {
     url = "https://android.googlesource.com/platform/external/minijail";
     rev = "linux-v${version}";
-    sha256 = "1j65h50wa39m6qvgnh1pf59fv9jdsdbc6a6c1na7y0rgljxhmdzv";
+    sha256 = "sha256-OpwzISZ5iZNQvJAX7UJJ4gELEaVfcQgY9cqMM0YvBzc=";
   };
 
   nativeBuildInputs =
     lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) qemu;
   buildInputs = [ libcap ];
 
-  makeFlags = [ "LIBDIR=$(out)/lib" ];
+  makeFlags = [ "ECHO=echo" "LIBDIR=$(out)/lib" ];
   dumpConstantsFlags = lib.optional (stdenv.hostPlatform.libc == "glibc")
     "LDFLAGS=-L${glibc.static}/lib";
 
   postPatch = ''
-    substituteInPlace common.mk --replace /bin/echo echo
+    substituteInPlace Makefile --replace /bin/echo echo
     patchShebangs platform2_preinstall.sh
   '';
 
@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://android.googlesource.com/platform/external/minijail/";
     description = "Sandboxing library and application using Linux namespaces and capabilities";
+    changelog = "https://android.googlesource.com/platform/external/minijail/+/refs/tags/linux-v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ pcarrier qyliss ];
     platforms = platforms.linux;

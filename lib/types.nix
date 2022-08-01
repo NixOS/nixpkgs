@@ -55,6 +55,7 @@ let
     concatMapStringsSep
     concatStringsSep
     escapeNixString
+    hasInfix
     isCoercibleToString
     ;
   inherit (lib.trivial)
@@ -358,6 +359,11 @@ rec {
     string = separatedString "" // {
       name = "string";
       deprecationMessage = "See https://github.com/NixOS/nixpkgs/pull/66346 for better alternative types.";
+    };
+
+    passwdEntry = entryType: addCheck entryType (str: !(hasInfix ":" str || hasInfix "\n" str)) // {
+      name = "passwdEntry ${entryType.name}";
+      description = "${entryType.description}, not containing newlines or colons";
     };
 
     attrs = mkOptionType {

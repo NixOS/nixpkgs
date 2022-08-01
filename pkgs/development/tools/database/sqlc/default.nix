@@ -1,7 +1,7 @@
 { lib, buildGoModule, fetchFromGitHub }:
 
 let
-  version = "1.13.0";
+  version = "1.14.0";
 in
 buildGoModule {
   pname = "sqlc";
@@ -11,11 +11,11 @@ buildGoModule {
     owner = "kyleconroy";
     repo = "sqlc";
     rev    = "v${version}";
-    sha256 = "sha256-HPCt47tctVV8Oz9/7AoVMezIAv6wEsaB7B4rgo9/fNU=";
+    sha256 = "sha256-+JkNuN5Hv1g1+UpJEBZpf7QV/3A85IVzMa5cfeRSQRo=";
   };
 
   proxyVendor = true;
-  vendorSha256 = "sha256-miyNIF6RNOuvNEA9Hf+hOyRJG+5IcXU4Vo4Fzn+nIb4=";
+  vendorSha256 = "sha256-QG/pIsK8krBaO5IDgln10jpCnlw3XC8sIYyzuwYjTs0=";
 
   subPackages = [ "cmd/sqlc" ];
 

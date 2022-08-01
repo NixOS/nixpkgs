@@ -4,7 +4,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dmarc-metrics-exporter";
-  version = "0.6.0";
+  version = "0.6.1";
 
   disabled = python3.pythonOlder "3.7";
 
@@ -12,11 +12,12 @@ python3.pkgs.buildPythonApplication rec {
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "70f39b373ead42acb8caf56040f7ebf13ab67aea505511025c09ecf4560f8b1b";
+    hash = "sha256-VYmSHDde3zLq7NcsX7xp1JYe6x6RKFEravpakIzW390=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace 'uvicorn = {extras = ["standard"], version = "^0.15.0"}' 'uvicorn = {version = "^0.15.0"}' \
       --replace '"^' '">='
   '';
 
@@ -31,7 +32,8 @@ python3.pkgs.buildPythonApplication rec {
     typing-extensions
     uvicorn
     xsdata
-  ];
+  ]
+  ++ uvicorn.optional-dependencies.standard;
 
   checkInputs = with python3.pkgs; [
     aiohttp

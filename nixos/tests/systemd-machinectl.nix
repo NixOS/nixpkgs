@@ -32,7 +32,6 @@ import ./make-test-python.nix (
       # use networkd to obtain systemd network setup
       networking.useNetworkd = true;
       networking.useDHCP = false;
-      services.resolved.enable = false;
 
       # open DHCP server on interface to container
       networking.firewall.trustedInterfaces = [ "ve-+" ];
@@ -64,7 +63,7 @@ import ./make-test-python.nix (
       machine.succeed("ping -n -c 1 ${containerName}");
 
       # Test systemd-nspawn uses a user namespace
-      machine.succeed("test `stat ${containerRoot}/var/empty -c %u%g` != 00");
+      machine.succeed("test $(machinectl status ${containerName} | grep 'UID Shift: ' | wc -l) = 1")
 
       # Test systemd-nspawn reboot
       machine.succeed("machinectl shell ${containerName} /run/current-system/sw/bin/reboot");
@@ -76,6 +75,7 @@ import ./make-test-python.nix (
 
       # Test machinectl stop
       machine.succeed("machinectl stop ${containerName}");
+      machine.wait_until_succeeds("test $(systemctl is-active systemd-nspawn@${containerName}) = inactive");
 
       # Show to to delete the container
       machine.succeed("chattr -i ${containerRoot}/var/empty");

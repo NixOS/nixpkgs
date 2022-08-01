@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , fetchurl
 , substituteAll
 , coreutils
@@ -27,7 +28,12 @@
 , libXNVCtrl
 , wayland
 , spdlog
+, glew
+, glfw
+, nlohmann_json
+, xorg
 , addOpenGLRunpath
+, gamescopeSupport ? true # build mangoapp and mangohudctl
 }:
 
 let
@@ -86,6 +92,12 @@ in stdenv.mkDerivation rec {
       libdbus = dbus.lib;
       inherit hwdata libX11;
     })
+
+    (fetchpatch {
+      name = "allow-system-nlohmann-json.patch";
+      url = "https://github.com/flightlessmango/MangoHud/commit/e1ffa0f85820abea44639438fca2152290c87ee8.patch";
+      sha256 = "sha256-CaJb0RpXmNGCBidMXM39VJVLIXb6NbN5HXWkH/5Sfvo=";
+    })
   ] ++ lib.optional (stdenv.hostPlatform.system == "x86_64-linux") [
     # Support 32bit OpenGL applications by appending the mangohud32
     # lib path to LD_LIBRARY_PATH.
@@ -105,6 +117,10 @@ in stdenv.mkDerivation rec {
     "-Dvulkan_datadir=${vulkan-headers}/share"
     "-Dwith_wayland=enabled"
     "-Duse_system_spdlog=enabled"
+  ] ++ lib.optionals gamescopeSupport [
+    "-Dmangoapp_layer=true"
+    "-Dmangoapp=true"
+    "-Dmangohudctl=true"
   ];
 
   nativeBuildInputs = [
@@ -125,6 +141,12 @@ in stdenv.mkDerivation rec {
     libXNVCtrl
     wayland
     spdlog
+  ] ++ lib.optionals gamescopeSupport [
+    glew
+    glfw
+    nlohmann_json
+    vulkan-headers
+    xorg.libXrandr
   ];
 
   # Support 32bit Vulkan applications by linking in 32bit Vulkan layer
@@ -140,6 +162,12 @@ in stdenv.mkDerivation rec {
     wrapProgram "$out/bin/mangohud" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ addOpenGLRunpath.driverLink ]} \
       --prefix XDG_DATA_DIRS : "$out/share"
+  '' + lib.optionalString (gamescopeSupport) ''
+    if [[ -e "$out/bin/mangoapp" ]]; then
+      wrapProgram "$out/bin/mangoapp" \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ addOpenGLRunpath.driverLink ]} \
+        --prefix XDG_DATA_DIRS : "$out/share"
+    fi
   '';
 
   meta = with lib; {

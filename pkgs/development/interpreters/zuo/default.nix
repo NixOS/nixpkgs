@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zuo";
-  version = "unstable-2022-04-23";
+  version = "unstable-2022-07-25";
 
   src = fetchFromGitHub {
     owner = "racket";
     repo = "zuo";
-    rev = "2f3e23bd374f9a6504de6000989ebf2adf67c80c";
-    sha256 = "sha256-TxX3iinfL1hXFlQlGQ7x52O6zvYoJYXrMfEfSL4Axig=";
+    rev = "18778d759e7af1d9c4b6ce7649a3aa4a49a2aa7f";
+    sha256 = "sha256-Y5+C1UdaeweYaGqomC1dFmTF8qGDquuP42Bn6QbZ9nk=";
   };
 
   doCheck = true;

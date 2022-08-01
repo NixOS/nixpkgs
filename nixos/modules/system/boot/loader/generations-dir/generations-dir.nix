@@ -22,11 +22,11 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Whether to create symlinks to the system generations under
-          <literal>/boot</literal>.  When enabled,
-          <literal>/boot/default/kernel</literal>,
-          <literal>/boot/default/initrd</literal>, etc., are updated to
+          `/boot`.  When enabled,
+          `/boot/default/kernel`,
+          `/boot/default/initrd`, etc., are updated to
           point to the current generation's kernel image, initial RAM
           disk, and other bootstrap files.
 
@@ -41,7 +41,7 @@ in
       copyKernels = mkOption {
         default = false;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Whether copy the necessary boot files into /boot, so
           /nix/store is not needed by the boot loader.
         '';

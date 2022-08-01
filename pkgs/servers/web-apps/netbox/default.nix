@@ -17,13 +17,13 @@ let
 in
 py.pkgs.buildPythonApplication rec {
     pname = "netbox";
-    version = "3.2.3";
+    version = "3.2.7";
 
     src = fetchFromGitHub {
       owner = "netbox-community";
       repo = pname;
       rev = "refs/tags/v${version}";
-      sha256 = "sha256-mMTZKlGVjFPGJI4Ky+V3lPuMYS7tJb+zeDEzMeXdGoU=";
+      sha256 = "sha256-NIyAZZrq/Io8VyEG0TE5C3ugq+MPraJ45hi0Vx/b1OQ=";
     };
 
     format = "other";
@@ -35,6 +35,7 @@ py.pkgs.buildPythonApplication rec {
     ];
 
     propagatedBuildInputs = with py.pkgs; [
+      bleach
       django_4
       django-cors-headers
       django-debug-toolbar
@@ -55,17 +56,33 @@ py.pkgs.buildPythonApplication rec {
       jinja2
       markdown
       markdown-include
-      mkdocs-material
       netaddr
       pillow
       psycopg2
       pyyaml
+      sentry-sdk
       social-auth-core
       social-auth-app-django
       svgwrite
       tablib
       jsonschema
     ] ++ extraBuildInputs;
+
+    buildInputs = with py.pkgs; [
+      mkdocs-material
+      mkdocs-material-extensions
+      mkdocstrings
+      mkdocstrings-python
+    ];
+
+    nativeBuildInputs = [
+      py.pkgs.mkdocs
+    ];
+
+    postBuild = ''
+      PYTHONPATH=$PYTHONPATH:netbox/
+      python -m mkdocs build
+    '';
 
     installPhase = ''
       mkdir -p $out/opt/netbox

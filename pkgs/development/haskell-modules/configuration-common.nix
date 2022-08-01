@@ -99,7 +99,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "0pr2fnaq3fa6lcly39xssl89v65h0wa26ikv5g30fm8y6z5rkqqd";
+      sha256 = "0p9qd7yasdji5kwxn4d0hrv9hnxbzfsczknldh8jav3ynhg8k6c9";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
       # during the build process, we can delete it to prevent a hash
@@ -1400,22 +1400,15 @@ self: super: {
   # $PWD/dist/build/haskeline-examples-Test to $PATH.
   haskeline_0_8_2 = dontCheck super.haskeline_0_8_2;
 
-  # Tests for list-t, superbuffer, and stm-containers
-  # depend on HTF and it is broken, 2020-08-23
-  list-t = dontCheck super.list-t;
-  superbuffer = dontCheck super.superbuffer;
-  stm-containers = dontCheck super.stm-containers;
+  # Too strict upper bound on HTF
+  # https://github.com/nikita-volkov/stm-containers/issues/29
+  stm-containers = doJailbreak super.stm-containers;
 
-  # Fails with "supports custom headers"
-  # Patch for GHC 9.0 support
-  Spock-core = dontCheck (appendPatches [
-    (fetchpatch {
-      name = "Spock-core-GHC-9.0.patch";
-      url = "https://github.com/agrafix/Spock/commit/25c75961c4aaaa2e81c9e2afd3d758f2b643f9df.patch";
-      sha256 = "sha256-JlliIpVYh2CYjJF2I119ab4/1oh6uvxMbRoxlUkKiGw=";
-      relative = "Spock-core";
-    })
-  ] super.Spock-core);
+  # https://github.com/agrafix/Spock/issues/180
+  # Ignore Stackage LTS bound so we can compile Spock-core again. All other
+  # reverse dependencies of reroute are marked as broken in nixpkgs, so
+  # upgrading reroute is probably unproblematic.
+  reroute = doDistribute self.reroute_0_7_0_0;
 
   # Test suite fails to compile https://github.com/agrafix/Spock/issues/177
   Spock = dontCheck super.Spock;
@@ -2411,25 +2404,12 @@ self: super: {
   # https://github.com/system-f/validation/issues/57
   validation = doJailbreak super.validation;
 
-  # aws upstream seems to lack the necessary maintenance at the moment, luckily
-  # Joey Hess seems to have already looked into building git-annex with aeson 2.0
-  # https://github.com/aristidb/aws/issues/275
-  aws = overrideCabal (drv: {
-    patches = drv.patches or [] ++ [
-      (fetchpatch {
-        name = "aws-aeson-2.0-compat.patch";
-        url = "https://github.com/aristidb/aws/pull/277/commits/7af7586c5d244d07f77d49e5fdc739e6e8e54816.patch";
-        sha256 = "1bsiyk1k671rwlyflka2whq972h72cwscrxkr9n2wzhxp70ap3g3";
-        excludes = [ "aws.cabal" ];
-      })
-    ];
-    # needs aws credentials, jailbreak for base16-bytestring
-    doCheck = false;
-    jailbreak = true;
-  }) super.aws;
-
   # 2022-03-16: strict upper bounds https://github.com/monadfix/shower/issues/18
   shower = doJailbreak (dontCheck super.shower);
+
+  # Doesn't compile with HTF 0.15
+  # https://github.com/andrewufrank/uniform-error/issues/1
+  uniform-error = dontCheck super.uniform-error;
 
   # The shipped Setup.hs file is broken.
   csv = overrideCabal (drv: { preCompileBuildDriver = "rm Setup.hs"; }) super.csv;
@@ -2553,15 +2533,6 @@ self: super: {
   })
   super.polynomial);
 
-  fast-tags = appendPatches [
-    (fetchpatch {
-      name = "fast-tags-ghc-9.0-fix-test-nondeterminism.patch";
-      url = "https://github.com/elaforge/fast-tags/commit/af861acc2dd239fedd8b169ddc5e3fa694e7af57.patch";
-      sha256 = "0ml678q1n29daqnxsb5p94s5lf7a6dk4lqbbgmiayxrbyxnlbi4f";
-      excludes = [ ".github/**" ];
-    })
-  ] super.fast-tags;
-
   # lucid-htmx has restrictive upper bounds on lucid and servant:
   #
   #   Setup: Encountered missing or private dependencies:
@@ -2585,6 +2556,27 @@ self: super: {
   # Too strict bounds on hspec
   # https://github.com/klapaucius/vector-hashtables/issues/11
   vector-hashtables = doJailbreak super.vector-hashtables;
+
+  # doctest-parallel is broken with v1-style cabal-install / Setup.hs
+  # https://github.com/martijnbastiaan/doctest-parallel/issues/22
+  doctest-parallel = dontCheck super.doctest-parallel;
+  clash-prelude = dontCheck super.clash-prelude;
+
+  # Ships a broken Setup.hs
+  # https://github.com/lehins/conduit-aeson/issues/1
+  conduit-aeson = overrideCabal (drv: {
+    postPatch = ''
+      ${drv.postPatch or ""}
+      rm Setup.hs
+    '';
+    # doctest suite uses doctest-parallel which still doesn't work in nixpkgs
+    testTarget = "tests";
+  }) super.conduit-aeson;
+
+  # Disabling doctests.
+  regex-tdfa = overrideCabal {
+    testTarget = "regex-tdfa-unittest";
+  } super.regex-tdfa;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super // (let
   # We need to build purescript with these dependencies and thus also its reverse
@@ -2634,7 +2626,4 @@ in {
   purescript-ast = purescriptStOverride super.purescript-ast;
 
   purenix = purescriptStOverride super.purenix;
-
-  # tests use doctest-parallel which produces some errors during testing
-  clash-prelude = dontCheck super.clash-prelude;
 })

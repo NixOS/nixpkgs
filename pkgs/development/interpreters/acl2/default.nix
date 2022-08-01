@@ -17,13 +17,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "acl2";
-  version = "8.4";
+  version = "8.5";
 
   src = fetchFromGitHub {
     owner = "acl2-devel";
     repo = "acl2-devel";
     rev = version;
-    sha256 = "16rr9zqmd3y1sd6zxff2f9gdd84l99pr7mdp1sjwmh427h661c68";
+    sha256 = "12cv5ms1j3vfrq066km020nwxb6x2dzh12g8nz6xxyxysn44wzzi";
   };
 
   # You can swap this out with any other IPASIR implementation at

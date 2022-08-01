@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "snowflake-sqlalchemy";
-  version = "1.3.4";
+  version = "1.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-nXTPnWChj/rIMmPoVZr1AhY7tHVRygmpNmh1oGR6W4A=";
+    sha256 = "sha256-9IooTfzXRmOE22huBSduM4kX8ltI6F50nvkUnXRkAFo=";
   };
 
   propagatedBuildInputs = [

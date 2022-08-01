@@ -30,15 +30,22 @@ let
   updateConfig = pkgs.writers.writeDash "merge-syncthing-config" ''
     set -efu
 
+    # be careful not to leak secrets in the filesystem or in process listings
+
+    umask 0077
+
     # get the api key by parsing the config.xml
     while
-        ! api_key=$(${pkgs.libxml2}/bin/xmllint \
+        ! ${pkgs.libxml2}/bin/xmllint \
             --xpath 'string(configuration/gui/apikey)' \
-            ${cfg.configDir}/config.xml)
+            ${cfg.configDir}/config.xml \
+            >"$RUNTIME_DIRECTORY/api_key"
     do sleep 1; done
 
+    (printf "X-API-Key: "; cat "$RUNTIME_DIRECTORY/api_key") >"$RUNTIME_DIRECTORY/headers"
+
     curl() {
-        ${pkgs.curl}/bin/curl -sSLk -H "X-API-Key: $api_key" \
+        ${pkgs.curl}/bin/curl -sSLk -H "@$RUNTIME_DIRECTORY/headers" \
             --retry 1000 --retry-delay 1 --retry-all-errors \
             "$@"
     }
@@ -576,6 +583,7 @@ in {
         serviceConfig = {
           User = cfg.user;
           RemainAfterExit = true;
+          RuntimeDirectory = "syncthing-init";
           Type = "oneshot";
           ExecStart = updateConfig;
         };

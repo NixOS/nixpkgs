@@ -16,12 +16,14 @@ let
     "native-bignum"
     "ghc902"
     "ghc923"
+    "ghc941"
     "ghcHEAD"
   ];
 
   nativeBignumIncludes = [
     "ghc902"
     "ghc923"
+    "ghc941"
     "ghcHEAD"
   ];
 
@@ -106,7 +108,7 @@ in {
         # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
         # the oldest ghc with aarch64-darwin support is 8.10.5
         # Musl bindists do not exist for ghc 8.6.5, so we use 8.10.* for them
-        if stdenv.isAarch64 || stdenv.isAarch32 then
+        if stdenv.hostPlatform.isAarch then
           packages.ghc8107BinaryMinimal
         else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
           # to my (@a-m-joseph) knowledge there are no newer official binaries for this platform
@@ -125,7 +127,7 @@ in {
       bootPkgs =
         # aarch64 ghc8107Binary exceeds max output size on hydra
         # the oldest ghc with aarch64-darwin support is 8.10.5
-        if stdenv.isAarch64 || stdenv.isAarch32 then
+        if stdenv.hostPlatform.isAarch then
           packages.ghc8107BinaryMinimal
         else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
           packages.ghc8107
@@ -139,7 +141,7 @@ in {
     ghc923 = callPackage ../development/compilers/ghc/9.2.3.nix {
       bootPkgs =
         # aarch64 ghc8107Binary exceeds max output size on hydra
-        if stdenv.isAarch64 || stdenv.isAarch32 then
+        if stdenv.hostPlatform.isAarch then
           packages.ghc8107BinaryMinimal
         else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
           packages.ghc8107
@@ -150,6 +152,21 @@ in {
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
       inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
+      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
+      llvmPackages = pkgs.llvmPackages_12;
+    };
+    ghc941 = callPackage ../development/compilers/ghc/9.4.1.nix {
+      bootPkgs =
+        # TODO(@sternenseemann): Package 9.0.2 bindist or wait for upstream fix
+        # Need to use 902 due to
+        # https://gitlab.haskell.org/ghc/ghc/-/issues/21914
+          packages.ghc902;
+      inherit (buildPackages.python3Packages) sphinx;
+      # Need to use apple's patched xattr until
+      # https://github.com/xattr/xattr/issues/44 and
+      # https://github.com/xattr/xattr/issues/55 are solved.
+      inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
+      # Support range >= 10 && < 14
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
       llvmPackages = pkgs.llvmPackages_12;
     };
@@ -264,6 +281,11 @@ in {
       buildHaskellPackages = bh.packages.ghc923;
       ghc = bh.compiler.ghc923;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
+    };
+    ghc941 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc941;
+      ghc = bh.compiler.ghc941;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.4.x.nix { };
     };
     ghcHEAD = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghcHEAD;

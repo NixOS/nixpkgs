@@ -1,18 +1,17 @@
 { lib
 , python3
-, python3Packages
 , fetchFromGitHub
 }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "searxng";
-  version = "unstable-2022-06-29";
+  version = "unstable-2022-07-15";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "107006515ee9fe9cad9a6f6387db658953d32486";
-    sha256 = "sha256-uV5XiOVuES9wuBx9S8WhM8jhuxRHlSMvW5Ki8WlDwfM=";
+    rev = "7bf4e8d12d1d0ee53bf71f7c3a4010ef936f25d9";
+    sha256 = "sha256-Fuv9AoV9WnI6qMgj4Ve016RF8gaLXYgw89jRROcm/A8=";
   };
 
   postPatch = ''
@@ -23,7 +22,7 @@ python3Packages.buildPythonApplication rec {
     export SEARX_DEBUG="true";
   '';
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python3.pkgs; [
     babel
     certifi
     python-dateutil
@@ -33,7 +32,6 @@ python3Packages.buildPythonApplication rec {
     jinja2
     langdetect
     lxml
-    h2
     pygments
     pyyaml
     redis
@@ -42,7 +40,8 @@ python3Packages.buildPythonApplication rec {
     httpx
     httpx-socks
     markdown-it-py
-  ];
+  ] ++ httpx.optional-dependencies.http2
+  ++ httpx-socks.optional-dependencies.asyncio;
 
   # tests try to connect to network
   doCheck = false;

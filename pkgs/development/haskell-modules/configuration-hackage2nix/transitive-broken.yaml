@@ -304,6 +304,7 @@ dont-distribute-packages:
  - PlslTools
  - Printf-TH
  - ProbabilityMonads
+ - PropaFP
  - Pugs
  - Pup-Events
  - Pup-Events-Demo
@@ -830,6 +831,7 @@ dont-distribute-packages:
  - bond
  - bond-haskell
  - bond-haskell-compiler
+ - bookhound-format
  - bookkeeper-permissions
  - boomslang
  - boopadoop
@@ -843,6 +845,7 @@ dont-distribute-packages:
  - bricks-rendering
  - bricks-syntax
  - bronyradiogermany-streaming
+ - btc-lsp
  - btree
  - buchhaltung
  - buildbox-tools
@@ -1032,7 +1035,6 @@ dont-distribute-packages:
  - condor
  - conductive-hsc3
  - conductive-song
- - conduit-aeson
  - conduit-throttle
  - conduit-vfs-zip
  - confcrypt
@@ -1316,6 +1318,7 @@ dont-distribute-packages:
  - ekg-carbon
  - ekg-cloudwatch
  - ekg-wai
+ - electrs-client
  - elerea-examples
  - elliptic-curve
  - elsa
@@ -1452,7 +1455,6 @@ dont-distribute-packages:
  - fixed-point-vector-space
  - fixed-precision
  - fixhs
- - flac-picture
  - flashblast
  - flatbuffers
  - flexiwrap
@@ -1550,6 +1552,7 @@ dont-distribute-packages:
  - geniconvert
  - geniserver
  - genvalidity-mergeful
+ - genvalidity-network-uri
  - genvalidity-sydtest
  - genvalidity-sydtest-aeson
  - genvalidity-sydtest-hashable
@@ -3120,6 +3123,7 @@ dont-distribute-packages:
  - poseidon
  - poseidon-postgis
  - postgresql-pure
+ - postgresql-simple-ltree
  - postgresql-simple-queue
  - postgresql-simple-typed
  - postgresql-tx-query
@@ -3194,6 +3198,7 @@ dont-distribute-packages:
  - pvd
  - qd-vec
  - qhs
+ - qhull
  - qr-imager
  - qr-repa
  - qtah-examples
@@ -3518,6 +3523,8 @@ dont-distribute-packages:
  - servant-jsonrpc-client
  - servant-jsonrpc-server
  - servant-matrix-param
+ - servant-oauth2
+ - servant-oauth2-examples
  - servant-polysemy
  - servant-postgresql
  - servant-pushbullet-client
@@ -3530,7 +3537,6 @@ dont-distribute-packages:
  - servant-streaming-server
  - servant-swagger-tags
  - servant-to-elm
- - servant-typescript
  - servant-util
  - servant-util-beam-pg
  - servant-waargonaut

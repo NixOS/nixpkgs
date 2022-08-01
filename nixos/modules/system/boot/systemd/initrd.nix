@@ -150,7 +150,7 @@ in {
     };
 
     contents = mkOption {
-      description = "Set of files that have to be linked into the initrd";
+      description = lib.mdDoc "Set of files that have to be linked into the initrd";
       example = literalExpression ''
         {
           "/etc/hostname".text = "mymachine";
@@ -162,7 +162,7 @@ in {
     };
 
     storePaths = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Store paths to copy into the initrd as well.
       '';
       type = with types; listOf (oneOf [ singleLineStr package ]);
@@ -170,7 +170,7 @@ in {
     };
 
     extraBin = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Tools to add to /bin
       '';
       example = literalExpression ''
@@ -183,7 +183,7 @@ in {
     };
 
     suppressedStorePaths = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Store paths specified in the storePaths option that
         should not be copied.
       '';
@@ -192,9 +192,9 @@ in {
     };
 
     emergencyAccess = mkOption {
-      type = with types; oneOf [ bool singleLineStr ];
+      type = with types; oneOf [ bool (nullOr (passwdEntry str)) ];
       visible = false;
-      description = ''
+      description = lib.mdDoc ''
         Set to true for unauthenticated emergency access, and false for
         no emergency access.
 
@@ -208,7 +208,7 @@ in {
       type = types.listOf types.package;
       default = [];
       visible = false;
-      description = ''
+      description = lib.mdDoc ''
         Packages to include in /bin for the stage 1 emergency shell.
       '';
     };
@@ -218,7 +218,7 @@ in {
       type = types.listOf types.str;
       visible = false;
       example = [ "debug-shell.service" "systemd-quotacheck.service" ];
-      description = ''
+      description = lib.mdDoc ''
         Additional units shipped with systemd that shall be enabled.
       '';
     };
@@ -228,17 +228,17 @@ in {
       type = types.listOf types.str;
       example = [ "systemd-backlight@.service" ];
       visible = false;
-      description = ''
+      description = lib.mdDoc ''
         A list of units to skip when generating system systemd configuration directory. This has
-        priority over upstream units, <option>boot.initrd.systemd.units</option>, and
-        <option>boot.initrd.systemd.additionalUpstreamUnits</option>. The main purpose of this is to
+        priority over upstream units, {option}`boot.initrd.systemd.units`, and
+        {option}`boot.initrd.systemd.additionalUpstreamUnits`. The main purpose of this is to
         prevent a upstream systemd unit from being added to the initrd with any modifications made to it
         by other NixOS modules.
       '';
     };
 
     units = mkOption {
-      description = "Definition of systemd units.";
+      description = lib.mdDoc "Definition of systemd units.";
       default = {};
       visible = false;
       type = systemdUtils.types.units;
@@ -249,49 +249,49 @@ in {
       visible = false;
       type = types.listOf types.package;
       example = literalExpression "[ pkgs.systemd-cryptsetup-generator ]";
-      description = "Packages providing systemd units and hooks.";
+      description = lib.mdDoc "Packages providing systemd units and hooks.";
     };
 
     targets = mkOption {
       default = {};
       visible = false;
       type = systemdUtils.types.initrdTargets;
-      description = "Definition of systemd target units.";
+      description = lib.mdDoc "Definition of systemd target units.";
     };
 
     services = mkOption {
       default = {};
       type = systemdUtils.types.initrdServices;
       visible = false;
-      description = "Definition of systemd service units.";
+      description = lib.mdDoc "Definition of systemd service units.";
     };
 
     sockets = mkOption {
       default = {};
       type = systemdUtils.types.initrdSockets;
       visible = false;
-      description = "Definition of systemd socket units.";
+      description = lib.mdDoc "Definition of systemd socket units.";
     };
 
     timers = mkOption {
       default = {};
       type = systemdUtils.types.initrdTimers;
       visible = false;
-      description = "Definition of systemd timer units.";
+      description = lib.mdDoc "Definition of systemd timer units.";
     };
 
     paths = mkOption {
       default = {};
       type = systemdUtils.types.initrdPaths;
       visible = false;
-      description = "Definition of systemd path units.";
+      description = lib.mdDoc "Definition of systemd path units.";
     };
 
     mounts = mkOption {
       default = [];
       type = systemdUtils.types.initrdMounts;
       visible = false;
-      description = ''
+      description = lib.mdDoc ''
         Definition of systemd mount units.
         This is a list instead of an attrSet, because systemd mandates the names to be derived from
         the 'where' attribute.
@@ -302,7 +302,7 @@ in {
       default = [];
       type = systemdUtils.types.automounts;
       visible = false;
-      description = ''
+      description = lib.mdDoc ''
         Definition of systemd automount units.
         This is a list instead of an attrSet, because systemd mandates the names to be derived from
         the 'where' attribute.
@@ -313,7 +313,7 @@ in {
       default = {};
       type = systemdUtils.types.slices;
       visible = false;
-      description = "Definition of slice configurations.";
+      description = lib.mdDoc "Definition of slice configurations.";
     };
   };
 

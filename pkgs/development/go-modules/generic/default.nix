@@ -106,7 +106,10 @@ let
       mkdir -p "''${GOPATH}/pkg/mod/cache/download"
       go mod download
     '' else ''
-      go mod vendor
+      if (( "''${NIX_DEBUG:-0}" >= 1 )); then
+        goModVendorFlags+=(-v)
+      fi
+      go mod vendor "''${goModVendorFlags[@]}"
     ''}
 
       mkdir -p vendor
@@ -278,11 +281,7 @@ let
     meta = {
       # Add default meta information
       platforms = go.meta.platforms or lib.platforms.all;
-    } // meta // {
-      # add an extra maintainer to every package
-      maintainers = (meta.maintainers or []) ++
-                    [ lib.maintainers.kalbasit ];
-    };
+    } // meta;
   });
 in
 lib.warnIf (buildFlags != "" || buildFlagsArray != "")

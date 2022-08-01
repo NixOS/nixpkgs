@@ -1,6 +1,4 @@
 { lib
-, fetchpatch
-, fetchurl
 , buildDunePackage
 , ppx_sexp_conv
 , base

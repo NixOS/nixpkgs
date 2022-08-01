@@ -32,7 +32,7 @@ let
     flask_login
     flask_mail
     flask_migrate
-    flask_sqlalchemy
+    flask-sqlalchemy
     flask-wtf
     flask-compress
     passlib
@@ -110,17 +110,7 @@ pythonPackages.buildPythonApplication rec {
     patchShebangs .
 
     # relax dependencies
-    substituteInPlace requirements.txt \
-      --replace "eventlet==0.33.0" "eventlet>=0.33.0" \
-      --replace "psycopg2==2.9.*" "psycopg2>=2.9" \
-      --replace "cryptography==3.*" "cryptography>=3.0" \
-      --replace "requests==2.25.*" "requests>=2.25.0" \
-      --replace "boto3==1.20.*" "boto3>=1.20" \
-      --replace "botocore==1.23.*" "botocore>=1.23" \
-      --replace "pytz==2021.*" "pytz" \
-      --replace "Werkzeug==2.0.3" "werkzeug>=2.*" \
-      --replace "azure-identity==1.9.0" "azure-identity==1.*" \
-      --replace "azure-mgmt-resource==21.0.0" "azure-mgmt-resource==21.*"
+    sed 's|==|>=|g' -i requirements.txt
     # don't use Server Mode (can be overridden later)
     substituteInPlace pkg/pip/setup_pip.py \
       --replace "req = req.replace('psycopg2', 'psycopg2-binary')" "req = req" \

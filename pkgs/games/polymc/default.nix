@@ -16,21 +16,22 @@
 , openal
 , msaClientID ? ""
 , jdks ? [ jdk jdk8 ]
+, extra-cmake-modules
 }:
 
 stdenv.mkDerivation rec {
   pname = "polymc";
-  version = "1.3.2";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "PolyMC";
     repo = "PolyMC";
     rev = version;
-    sha256 = "sha256-hqsyS82UzgCUZ9HjoPKjOLE49fwLntRAh3mVrTsmi3o=";
+    sha256 = "sha256-Pu2Eb3g6gwCZjJN0N6S/N82eBMLduQQUzXo8nMmtE+Y=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake file jdk wrapQtAppsHook ];
+  nativeBuildInputs = [ extra-cmake-modules cmake file jdk wrapQtAppsHook ];
   buildInputs = [ qtbase zlib quazip ];
 
   cmakeFlags = lib.optionals (msaClientID != "") [ "-DLauncher_MSA_CLIENT_ID=${msaClientID}" ];
@@ -68,7 +69,7 @@ stdenv.mkDerivation rec {
     '';
     platforms = platforms.linux;
     changelog = "https://github.com/PolyMC/PolyMC/releases/tag/${version}";
-    license = licenses.gpl3Plus;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ cleverca22 starcraft66 ];
   };
 }

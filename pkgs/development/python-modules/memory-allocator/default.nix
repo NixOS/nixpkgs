@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "memory-allocator";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchPypi {
     inherit version;
     pname = "memory_allocator";
-    sha256 = "ddf42a2dcc678062f30c63c868335204d46a4ecdf4db0dc43ed4529f1d0ffab9";
+    sha256 = "sha256-E4BcKuHAG3SJ+rXo6sk2FmK08sAkEuNlLuzkj/aVMWI=";
   };
 
   propagatedBuildInputs = [ cython ];

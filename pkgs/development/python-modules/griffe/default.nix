@@ -11,7 +11,7 @@
 
 buildPythonApplication rec {
   pname = "griffe";
-  version = "0.21.0";
+  version = "0.22.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonApplication rec {
     owner = "mkdocstrings";
     repo = pname;
     rev = version;
-    hash = "sha256-yhhEcPwh1AjMtDlPZVDR69WX/728wuKqdJdc+yv/o4c=";
+    hash = "sha256-GqPXVi+SsfO0ufUJzEZ5eUzwJmM/wylLA1KMv+WaIsU=";
   };
 
   nativeBuildInputs = [

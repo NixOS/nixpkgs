@@ -1,4 +1,11 @@
-{ stdenv, rustPlatform, fetchFromGitHub, lib, ruby, which}:
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, fetchpatch
+, ruby
+, which
+}:
 rustPlatform.buildRustPackage rec {
   pname = "rbspy";
   version = "0.12.1";
@@ -12,6 +19,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "98vmUoWSehX/9rMlHNSvKHJvJxW99pOhS08FI3OeLGo=";
   doCheck = true;
+
+  patches = [
+    # Backport rust 1.62 support. Should be removed in the next rbspy release.
+    (fetchpatch {
+      name = "rust-1.62.patch";
+      url = "https://github.com/rbspy/rbspy/commit/f5a8eecfbf2ad0b3ff9105115988478fb760d54d.patch";
+      sha256 = "sha256-+04rvEXU7/lx5IQkk3Bhe+KLN8PwxZ0j4nH5ySnS154=";
+    })
+  ];
 
   # Tests in initialize.rs rely on specific PIDs being queried and attaching
   # tracing to forked processes, which don't work well with the isolated build.

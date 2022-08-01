@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, cmake, fmt_8 }:
+{ lib, stdenv, fetchFromGitHub, cmake, fmt_8
+, staticBuild ? stdenv.hostPlatform.isStatic
+}:
 
 let
   generic = { version, sha256 }:
@@ -18,8 +20,8 @@ let
       propagatedBuildInputs = lib.optional (lib.versionAtLeast version "1.3") fmt_8;
 
       cmakeFlags = [
-        "-DSPDLOG_BUILD_SHARED=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
-        "-DSPDLOG_BUILD_STATIC=${if stdenv.hostPlatform.isStatic then "ON" else "OFF"}"
+        "-DSPDLOG_BUILD_SHARED=${if staticBuild then "OFF" else "ON"}"
+        "-DSPDLOG_BUILD_STATIC=${if staticBuild then "ON" else "OFF"}"
         "-DSPDLOG_BUILD_EXAMPLE=OFF"
         "-DSPDLOG_BUILD_BENCH=OFF"
         "-DSPDLOG_BUILD_TESTS=ON"

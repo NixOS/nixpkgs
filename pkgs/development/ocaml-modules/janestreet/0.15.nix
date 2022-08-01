@@ -2,7 +2,6 @@
 , fetchpatch
 , lib
 , openssl
-, patdiff
 , zstd
 }:
 
@@ -132,6 +131,7 @@ with self;
   async_smtp = janePackage {
     pname = "async_smtp";
     hash = "1m00j7wcb0blipnc1m6by70gd96a1k621b4dgvgffp8as04a461r";
+    minimumOCamlVersion = "4.12";
     meta.description = "SMTP client and server";
     propagatedBuildInputs = [ async_extra async_inotify async_sendfile async_shell async_ssl email_message resource_cache re2_stable sexp_macro ];
   };
@@ -437,7 +437,8 @@ with self;
   ocaml_intrinsics = janePackage {
     pname = "ocaml_intrinsics";
     minimumOCamlVersion = "4.08";
-    hash = "1fdfl78b8br0j9w4046i0fmmaqn4cgl06q94rsniyagx9747pnsr";
+    version = "0.15.2";
+    hash = "sha256-f5zqrKaokj1aEvbu7lOuK0RoWSklFr6QFpV+oWbIX9U=";
     meta.description = "Intrinsics";
     buildInputs = [ dune-configurator ];
     doCheck = false; # test rules broken
@@ -449,6 +450,15 @@ with self;
     minimumOCamlVersion = "4.04.2";
     meta.description = "S-expression parsing library";
     propagatedBuildInputs = [ base sexplib0 ];
+  };
+
+  patdiff = janePackage {
+    pname = "patdiff";
+    hash = "0623a7n5r659rkxbp96g361mvxkcgc6x9lcbkm3glnppplk5kxr9";
+    propagatedBuildInputs = [ core_unix patience_diff ocaml_pcre ];
+    meta = {
+      description = "File Diff using the Patience Diff algorithm";
+    };
   };
 
   patience_diff = janePackage {

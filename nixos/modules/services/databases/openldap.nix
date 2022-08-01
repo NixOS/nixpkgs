@@ -245,7 +245,7 @@ in {
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ mic92 kwohlfahrt ];
+  meta.maintainers = with lib.maintainers; [ kwohlfahrt ];
 
   config = mkIf cfg.enable {
     assertions = map (opt: {

@@ -43,13 +43,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "quickemu";
-  version = "3.15";
+  version = "3.16";
 
   src = fetchFromGitHub {
     owner = "quickemu-project";
     repo = "quickemu";
     rev = version;
-    sha256="sha256-ako/eh8cMWKvdrgm9VTgSH67nA2igKUlJZtBeH1bu4Y=";
+    sha256 = "sha256-vzgCPpr0ThDXOkvaOcbyvNkJvvoFpDnx68f1Y8sWUcc=";
   };
 
   patches = [

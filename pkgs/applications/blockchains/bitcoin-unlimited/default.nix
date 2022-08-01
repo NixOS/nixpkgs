@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, openssl, db48, boost
+{ lib, stdenv, fetchFromGitLab, pkg-config, autoreconfHook, openssl, db48, boost
 , zlib, miniupnpc, util-linux, protobuf, qrencode, libevent, python3
 , withGui, wrapQtAppsHook ? null, qtbase ? null, qttools ? null
 , Foundation, ApplicationServices, AppKit }:
@@ -7,13 +7,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "bitcoin" + optionalString (!withGui) "d" + "-unlimited";
-  version = "1.9.2.0";
+  version = "1.10.0.0";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitLab {
     owner = "bitcoinunlimited";
-    repo = "bitcoinunlimited";
+    repo = "BCHUnlimited";
     rev = "BCHunlimited${version}";
-    sha256 = "sha256-qUf/GWZHpI57ATTlvRhjDtAjRa8a4uvUb0G9Xcf0j7w=";
+    sha256 = "sha256-d+giTXq/6HpysRAPT7yOl/B1x4zie9irs4O7cJsBqHg=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook python3 ]

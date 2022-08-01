@@ -1,9 +1,7 @@
-{ pkgs, newScope }:
+{ pkgs, lib }:
 
 let
-  callPackage = newScope self;
-
-  self = rec {
+  packages = self: with self; {
 
     # Update script tailored to mate packages from git repository
     mateUpdateScript = { pname, version, odd-unstable ? true, rev-prefix ? "v", url ? null }:
@@ -101,4 +99,4 @@ let
 
   };
 
-in self
+in lib.makeScope pkgs.newScope packages

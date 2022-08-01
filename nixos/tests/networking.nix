@@ -682,6 +682,46 @@ let
               client2.succeed("ip addr show dev vlan >&2")
         '';
     };
+    vlan-ping = let
+        baseIP = number: "10.10.10.${number}";
+        vlanIP = number: "10.1.1.${number}";
+        baseInterface = "eth1";
+        vlanInterface = "vlan42";
+        node = number: {pkgs, ... }: with pkgs.lib; {
+          virtualisation.vlans = [ 1 ];
+          networking = {
+            #useNetworkd = networkd;
+            useDHCP = false;
+            vlans.${vlanInterface} = { id = 42; interface = baseInterface; };
+            interfaces.${baseInterface}.ipv4.addresses = mkOverride 0 [{ address = baseIP number; prefixLength = 24; }];
+            interfaces.${vlanInterface}.ipv4.addresses = mkOverride 0 [{ address = vlanIP number; prefixLength = 24; }];
+          };
+        };
+
+        serverNodeNum = "1";
+        clientNodeNum = "2";
+
+    in {
+      name = "vlan-ping";
+      nodes.server = node serverNodeNum;
+      nodes.client = node clientNodeNum;
+      testScript = { ... }:
+        ''
+          start_all()
+
+          with subtest("Wait for networking to be configured"):
+              server.wait_for_unit("network.target")
+              client.wait_for_unit("network.target")
+
+          with subtest("Test ping on base interface in setup"):
+              client.succeed("ping -I ${baseInterface} -c 1 ${baseIP serverNodeNum}")
+              server.succeed("ping -I ${baseInterface} -c 1 ${baseIP clientNodeNum}")
+
+          with subtest("Test ping on vlan subinterface in setup"):
+              client.succeed("ping -I ${vlanInterface} -c 1 ${vlanIP serverNodeNum}")
+              server.succeed("ping -I ${vlanInterface} -c 1 ${vlanIP clientNodeNum}")
+        '';
+    };
     virtual = {
       name = "Virtual";
       nodes.machine = {
