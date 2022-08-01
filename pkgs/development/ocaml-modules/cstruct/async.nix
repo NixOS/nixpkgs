@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, cstruct, async_unix }:
+{ lib, buildDunePackage, cstruct, async_unix, async }:
 
 buildDunePackage rec {
   pname = "cstruct-async";
@@ -7,5 +7,6 @@ buildDunePackage rec {
   propagatedBuildInputs = [
     async_unix
     cstruct
+    async
   ];
 }
