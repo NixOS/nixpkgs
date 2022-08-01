@@ -16,12 +16,12 @@
 
 stdenv.mkDerivation rec {
   pname = "lightdm-gtk-greeter";
-  version = "2.0.7";
+  version = "2.0.8";
 
   src = fetchurl {
     # Release tarball differs from source tarball.
     url = "https://github.com/Xubuntu/lightdm-gtk-greeter/releases/download/lightdm-gtk-greeter-${version}/lightdm-gtk-greeter-${version}.tar.gz";
-    sha256 = "1g7wc3d3vqfa7mrdhx1w9ywydgjbffla6rbrxq9k3sc62br97qms";
+    sha256 = "vvuzAMezT/IYZf28iBIB9zD8fFYOngHRfomelHcVBhM=";
   };
 
   nativeBuildInputs = [
@@ -45,18 +45,9 @@ stdenv.mkDerivation rec {
     "--sbindir=${placeholder "out"}/bin" # for wrapGAppsHook to wrap automatically
   ];
 
-  postPatch = ''
-    # exo-csource has been dropped from exo, and replaced by xdt-csource from xfce4-dev-tools
-    for f in configure.ac src/Makefile.am; do
-      substituteInPlace $f --replace exo-csource xdt-csource
-    done
-  '';
-
   preConfigure = ''
     configureFlagsArray+=( --enable-at-spi-command="${at-spi2-core}/libexec/at-spi-bus-launcher --launch-immediately" )
   '';
-
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   installFlags = [
     "localstatedir=\${TMPDIR}"
