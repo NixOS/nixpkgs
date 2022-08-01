@@ -236,7 +236,7 @@ let
    */
   vimrcContent = {
     packages ? null,
-    vam ? null,
+    vam ? null, # deprecated
     pathogen ? null, # deprecated
     plug ? null,
     beforePlugins ? ''
