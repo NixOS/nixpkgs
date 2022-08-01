@@ -103,6 +103,7 @@
 , golint
 , gomodifytags
 , gopls
+, gotags
 , gotools
 , iferr
 , impl
@@ -1045,7 +1046,7 @@ self: super: {
         gomodifytags
         gopls
         # gorename
-        # gotags
+        gotags
         gotools
         # guru
         iferr
