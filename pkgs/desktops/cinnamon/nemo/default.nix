@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation rec {
   pname = "nemo";
-  version = "5.2.4";
+  version = "5.4.2";
 
   # TODO: add plugins support (see https://github.com/NixOS/nixpkgs/issues/78327)
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-v63dFiBKtLCmRnwJ6u814lSv+tfPG+IIJtcWCnOEZjk=";
+    sha256 = "sha256-Xn9CgGe7j2APaJRLvx58z2w+sN7ZeDScQz53ZBBnsQs=";
   };
 
   outputs = [ "out" "dev" ];
