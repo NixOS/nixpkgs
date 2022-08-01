@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Add option for changing installation path of installed tests.
-    ./0001-meson-add-options-for-tests-installation-dirs.patch
+    ./meson-add-installed-tests-prefix-option.patch
   ];
 
   strictDeps = true;
@@ -56,8 +56,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dinstalled_test_bindir=${placeholder "installedTests"}/libexec"
-    "-Dinstalled_test_datadir=${placeholder "installedTests"}/share"
+    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
   ];
 
   # Run-time dependency gi-docgen found: NO (tried pkgconfig and cmake)
