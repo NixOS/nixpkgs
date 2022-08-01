@@ -1,7 +1,7 @@
 { buildDunePackage
 , kafka
 , lwt
-, cmdliner
+, cmdliner_1_1
 }:
 
 buildDunePackage rec {
@@ -9,7 +9,7 @@ buildDunePackage rec {
 
   inherit (kafka) version useDune2 src;
 
-  buildInputs = [ cmdliner ];
+  buildInputs = [ cmdliner_1_1 ];
 
   propagatedBuildInputs = [ kafka lwt ];
 
