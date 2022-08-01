@@ -3,7 +3,7 @@
 , ppx_sexp_conv
 , ppx_fields_conv
 
-, cmdliner
+, cmdliner_1_1
 , cohttp-lwt-unix
 , logs
 , magic-mime
@@ -27,6 +27,6 @@ buildDunePackage {
   ];
 
   propagatedBuildInputs = [
-    opium_kernel cmdliner cohttp-lwt-unix magic-mime logs stringext
+    opium_kernel cmdliner_1_1 cohttp-lwt-unix magic-mime logs stringext
   ];
 }
