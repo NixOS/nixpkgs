@@ -6,7 +6,7 @@
 , logs
 , fmt
 , cstruct
-, cmdliner
+, cmdliner_1_1
 , alcotest-lwt
 }:
 
@@ -31,7 +31,7 @@ buildDunePackage rec {
   ];
 
   buildInputs = [
-    cmdliner
+    cmdliner_1_1
     xmlm
   ];
 
