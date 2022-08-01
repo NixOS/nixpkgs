@@ -38,7 +38,7 @@ let
     , plugins ? []
     # forwarded to configure.customRC
     , customRC ? ""
-    # same values as in vimUtils.vimrcContent
+    # same values as in vimUtils.vimrcContent (deprecated)
     , configure ? { }
 
     # for forward compability, when adding new environments, haskell etc.
