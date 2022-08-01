@@ -36202,7 +36202,7 @@ with pkgs;
     udev = systemdMinimal;
     jack = libjack2;
   };
-  inherit (jami) jami-daemon jami-libclient jami-client-qt;
+  inherit (jami) jami-daemon jami-client-qt;
 
   jitsi-meet-electron = callPackage ../applications/networking/instant-messengers/jitsi-meet-electron {
     electron = electron_17;
