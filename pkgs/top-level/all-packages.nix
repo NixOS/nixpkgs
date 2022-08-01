@@ -35751,6 +35751,8 @@ with pkgs;
 
   with-shell = callPackage ../applications/misc/with-shell { };
 
+  wizer = darwin.apple_sdk_11_0.callPackage ../development/tools/wizer {};
+
   wmutils-core = callPackage ../tools/X11/wmutils-core { };
 
   wmutils-libwm = callPackage ../tools/X11/wmutils-libwm { };
