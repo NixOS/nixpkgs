@@ -33,15 +33,15 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "lightdm";
-  version = "1.30.0";
+  version = "1.32.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
-    owner = "CanonicalLtd";
+    owner = "canonical";
     repo = pname;
     rev = version;
-    sha256 = "0i1yygmjbkdjnqdl9jn8zsa1mfs2l19qc4k2capd8q1ndhnjm2dx";
+    sha256 = "sha256-ttNlhWD0Ran4d3QvZ+PxbFbSUGMkfrRm+hJdQxIDJvM=";
   };
 
   nativeBuildInputs = [
@@ -75,18 +75,6 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://src.fedoraproject.org/rpms/lightdm/raw/4cf0d2bed8d1c68970b0322ccd5dbbbb7a0b12bc/f/lightdm-1.25.1-disable_dmrc.patch";
       sha256 = "06f7iabagrsiws2l75sx2jyljknr9js7ydn151p3qfi104d1541n";
-    })
-
-    # Don't use etc/dbus-1/system.d
-    (fetchpatch {
-      url = "https://github.com/canonical/lightdm/commit/a99376f5f51aa147aaf81287d7ce70db76022c47.patch";
-      sha256 = "1zyx1qqajrmqcf9hbsapd39gmdanswd9l78rq7q6rdy4692il3yn";
-    })
-
-    # https://github.com/canonical/lightdm/pull/104
-    (fetchpatch {
-      url = "https://github.com/canonical/lightdm/commit/03f218981733e50d810767f9d04e42ee156f7feb.patch";
-      sha256 = "07w18m2gpk29z6ym4y3lzsmg5dk3ffn39sq6lac26ap7narf4ma7";
     })
 
     # Hardcode plymouth to fix transitions.
@@ -134,7 +122,7 @@ stdenv.mkDerivation rec {
 
 
   meta = {
-    homepage = "https://github.com/CanonicalLtd/lightdm";
+    homepage = "https://github.com/canonical/lightdm";
     description = "A cross-desktop display manager";
     platforms = platforms.linux;
     license = licenses.gpl3;
