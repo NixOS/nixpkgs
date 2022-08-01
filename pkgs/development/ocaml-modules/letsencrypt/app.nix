@@ -2,7 +2,7 @@
 , buildDunePackage
 , letsencrypt
 , letsencrypt-dns
-, cmdliner
+, cmdliner_1_1
 , cohttp-lwt-unix
 , logs
 , fmt
@@ -28,7 +28,7 @@ buildDunePackage {
   buildInputs = [
     letsencrypt
     letsencrypt-dns
-    cmdliner
+    cmdliner_1_1
     cohttp-lwt-unix
     logs
     fmt
