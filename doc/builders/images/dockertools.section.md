@@ -326,8 +326,8 @@ Creating base files like `/etc/passwd` or `/etc/login.defs` is necessary for sha
 
 If your primary goal is providing a basic skeleton for user lookups to work,
 and/or a lesser privileged user, adding `pkgs.fakeNss` to
-`build*Image.contents` might be the better choice than a custom script running
-`useradd` and friends.
+the container image root might be the better choice than a custom script
+running `useradd` and friends.
 
 It provides a `/etc/passwd` and `/etc/group`, containing `root` and `nobody`
 users and groups.
@@ -343,9 +343,10 @@ to `bashInteractive` (as `/bin/sh` is configured as a shell).
 buildImage {
   name = "shadow-basic";
 
-  contents = [
-    binSh
-    fakeNss
-  ]
+  copyToRoot = pkgs.buildEnv {
+    name = "image-root";
+    paths = [ binSh pkgs.fakeNss ];
+    pathsToLink = [ "/bin" "/etc" "/var" ];
+  };
 }
 ```
