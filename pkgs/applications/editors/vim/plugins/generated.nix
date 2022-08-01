@@ -3346,6 +3346,17 @@ final: prev:
     meta.homepage = "https://github.com/junegunn/gv.vim/";
   };
 
+  hare-vim = buildVimPluginFrom2Nix {
+    pname = "hare.vim";
+    version = "2022-07-02";
+    src = fetchgit {
+            url = "https://git.sr.ht/~sircmpwn/hare.vim";
+            rev = "5c758cdbbabd6e4ba92bced9428cd1fa4212f003";
+            sha256 = "0l1q9x1n30h32zfnd2krg3frywydfmb8ic05619pylamnyh4w918";
+        };
+    meta.homepage = "https://git.sr.ht/~sircmpwn/hare.vim";
+  };
+
   harpoon = buildVimPluginFrom2Nix {
     pname = "harpoon";
     version = "2022-05-08";

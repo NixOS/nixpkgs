@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "z88dk";
-  version = "2.1";
+  version = "2.2";
 
   src = fetchFromGitHub {
     owner = "z88dk";
     repo = "z88dk";
     rev = "v${version}";
-    sha256 = "sha256-NgO8rbM31IX4nrJRU0p1DUafHPagMQepKLLoOLuGlT8=";
+    sha256 = "sha256-vf/hEmcl6R3nsc66G6eETNeW0SV/odk14XIpEPPAbKo=";
     fetchSubmodules = true;
   };
 

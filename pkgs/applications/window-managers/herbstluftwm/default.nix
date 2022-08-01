@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "herbstluftwm";
-  version = "0.9.4";
+  version = "0.9.5";
 
   src = fetchurl {
     url = "https://herbstluftwm.org/tarballs/herbstluftwm-${version}.tar.gz";
-    sha256 = "1k03rdr6irsgnjl4w0vac0kk9nsz46qhy74iflmaycxgfv8fxy7f";
+    sha256 = "sha256-stRgCQnlvs5a1jgY37MLsZ/SrJ9ShHsaenStQEBxgQU=";
   };
 
   outputs = [
