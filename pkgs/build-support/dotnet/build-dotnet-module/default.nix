@@ -145,7 +145,7 @@ in stdenvNoCC.mkDerivation (args // {
 
       store_src="${srcOnly args}"
       src="$(mktemp -d /tmp/${pname}.XXX)"
-      cp -rT "$store_src" "$src"
+      cp -r "$store_src/." "$src"
       chmod -R +w "$src"
 
       trap "rm -rf $src $HOME" EXIT
