@@ -135,6 +135,7 @@ let
       # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
       # for a comprehensive list of configuration options.
       ++ lib.optional (lib.versionAtLeast version "1.1.0" && static) "no-shared"
+      ++ lib.optional (lib.versionAtLeast version "3.0.0" && static) "no-module"
       # This introduces a reference to the CTLOG_FILE which is undesired when
       # trying to build binaries statically.
       ++ lib.optional static "no-ct"
