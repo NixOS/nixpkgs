@@ -17,6 +17,10 @@
     sha256 = "sha256-zr1WuTkOBAVk7JkpDT52rfGGOaXEqiPFIGmJUDPhI/w=";
   };
 
+  configureFlags = old.configureFlags ++ [
+    "--disable-ptx-compression" # https://github.com/jellyfin/jellyfin/issues/7944#issuecomment-1156880067
+  ];
+
   postPatch = ''
     for file in $(cat debian/patches/series); do
       patch -p1 < debian/patches/$file
