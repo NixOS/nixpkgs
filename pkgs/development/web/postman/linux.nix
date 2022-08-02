@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://dl.pstmn.io/download/version/${version}/linux64";
-    sha256 = "cfb85d7ae366ee1487ce1b2dab1c19ffa25c214af5c083a09447ed488493b115";
+    sha256 = "118da102904cd7b04c50d3e2c2daac3fc1228f05e541eacef55e8ecbf73d3896";
     name = "${pname}.tar.gz";
   };
 
