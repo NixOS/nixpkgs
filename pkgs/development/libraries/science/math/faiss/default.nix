@@ -109,7 +109,7 @@ stdenv.mkDerivation {
           demo_ivfpq_indexing && touch $out
         '';
     } // lib.optionalAttrs pythonSupport {
-      pytest = pythonPackages.callPackage ./pytest-suite.nix { };
+      pytest = pythonPackages.callPackage ./tests.nix { };
     };
   };
 
