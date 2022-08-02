@@ -39,7 +39,11 @@ fetchurl {
 
 Use the resulting error message to determine the correct hash.
 
-<error message here>
+```
+error: hash mismatch in fixed-output derivation '/path/to/my.drv':
+         specified: sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+            got:    sha256-RApQUm78dswhBLC/rfU9y0u6pSAzHceIJqgmetRD24E=
+```
 
 A similar problem arises while testing changes to a fetcher's implementation. If the output of the derivation already exists in the Nix store, test failures can go undetected. The [`invalidateFetcherByDrvHash`](#tester-invalidateFetcherByDrvHash) function helps prevent reusing cached derivations.
 
