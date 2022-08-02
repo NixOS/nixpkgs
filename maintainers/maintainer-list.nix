@@ -6697,6 +6697,15 @@
     githubId = 37185887;
     name = "Calvin Kim";
   };
+  keksbg = {
+    email = "keksbg@riseup.net";
+    name = "Stella";
+    github = "keksbg";
+    githubId = 10682187;
+    keys = [{
+      fingerprint = "AB42 1F18 5A19 A160 AD77  9885 3D6D CA5B 6F2C 2A7A";
+    }];
+  };
   keldu = {
     email = "mail@keldu.de";
     github = "keldu";
