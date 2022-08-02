@@ -25,7 +25,7 @@ in
         type = types.listOf types.package;
         default = [];
         example = literalExpression "[ pkgs.modem-manager-gui ]";
-        description = ''
+        description = lib.mdDoc ''
           The list of plugins to install.
         '';
       };

@@ -39,7 +39,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable syslogd.  Note that systemd also logs
           syslog messages, so you normally don't need to run syslogd.
         '';
@@ -69,8 +69,8 @@ in
         type = types.listOf types.str;
         default = [ ];
         example = [ "-m 0" ];
-        description = ''
-          Additional parameters passed to <command>rsyslogd</command>.
+        description = lib.mdDoc ''
+          Additional parameters passed to {command}`rsyslogd`.
         '';
       };
 

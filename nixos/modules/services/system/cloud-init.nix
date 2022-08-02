@@ -20,7 +20,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable the cloud-init service. This services reads
           configuration metadata in a cloud environment and configures
           the machine according to this metadata.
@@ -55,7 +55,7 @@ in
       network.enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Allow the cloud-init service to configure network interfaces
           through systemd-networkd.
         '';
@@ -109,7 +109,7 @@ in
            - final-message
            - power-state-change
           '';
-        description = "cloud-init configuration.";
+        description = lib.mdDoc "cloud-init configuration.";
       };
 
     };

@@ -41,21 +41,21 @@ in
             server = mkOption {
               type = types.str;
               default = "";
-              description = "IP address of server running hans";
+              description = lib.mdDoc "IP address of server running hans";
               example = "192.0.2.1";
             };
 
             extraConfig = mkOption {
               type = types.str;
               default = "";
-              description = "Additional command line parameters";
+              description = lib.mdDoc "Additional command line parameters";
               example = "-v";
             };
 
             passwordFile = mkOption {
               type = types.str;
               default = "";
-              description = "File that containts password";
+              description = lib.mdDoc "File that containts password";
             };
 
           };
@@ -66,33 +66,33 @@ in
         enable = mkOption {
           type = types.bool;
           default = false;
-          description = "enable hans server";
+          description = lib.mdDoc "enable hans server";
         };
 
         ip = mkOption {
           type = types.str;
           default = "";
-          description = "The assigned ip range";
+          description = lib.mdDoc "The assigned ip range";
           example = "198.51.100.0";
         };
 
         respondToSystemPings = mkOption {
           type = types.bool;
           default = false;
-          description = "Force hans respond to ordinary pings";
+          description = lib.mdDoc "Force hans respond to ordinary pings";
         };
 
         extraConfig = mkOption {
           type = types.str;
           default = "";
-          description = "Additional command line parameters";
+          description = lib.mdDoc "Additional command line parameters";
           example = "-v";
         };
 
         passwordFile = mkOption {
           type = types.str;
           default = "";
-          description = "File that containts password";
+          description = lib.mdDoc "File that containts password";
         };
       };
 

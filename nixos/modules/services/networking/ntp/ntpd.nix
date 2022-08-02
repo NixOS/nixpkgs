@@ -79,7 +79,7 @@ in
         default = config.networking.timeServers;
         defaultText = literalExpression "config.networking.timeServers";
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           The set of NTP servers from which to synchronise.
         '';
       };
@@ -90,14 +90,14 @@ in
         example = ''
           fudge 127.127.1.0 stratum 10
         '';
-        description = ''
-          Additional text appended to <filename>ntp.conf</filename>.
+        description = lib.mdDoc ''
+          Additional text appended to {file}`ntp.conf`.
         '';
       };
 
       extraFlags = mkOption {
         type = types.listOf types.str;
-        description = "Extra flags passed to the ntpd command.";
+        description = lib.mdDoc "Extra flags passed to the ntpd command.";
         example = literalExpression ''[ "--interface=eth0" ]'';
         default = [];
       };

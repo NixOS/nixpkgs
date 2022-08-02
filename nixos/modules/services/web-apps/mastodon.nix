@@ -148,7 +148,7 @@ in {
       };
 
       group = lib.mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Group under which mastodon runs.
         '';
         type = lib.types.str;
@@ -156,12 +156,12 @@ in {
       };
 
       streamingPort = lib.mkOption {
-        description = "TCP port used by the mastodon-streaming service.";
+        description = lib.mdDoc "TCP port used by the mastodon-streaming service.";
         type = lib.types.port;
         default = 55000;
       };
       streamingProcesses = lib.mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Processes used by the mastodon-streaming service.
           Defaults to the number of CPU cores minus one.
         '';
@@ -170,28 +170,28 @@ in {
       };
 
       webPort = lib.mkOption {
-        description = "TCP port used by the mastodon-web service.";
+        description = lib.mdDoc "TCP port used by the mastodon-web service.";
         type = lib.types.port;
         default = 55001;
       };
       webProcesses = lib.mkOption {
-        description = "Processes used by the mastodon-web service.";
+        description = lib.mdDoc "Processes used by the mastodon-web service.";
         type = lib.types.int;
         default = 2;
       };
       webThreads = lib.mkOption {
-        description = "Threads per process used by the mastodon-web service.";
+        description = lib.mdDoc "Threads per process used by the mastodon-web service.";
         type = lib.types.int;
         default = 5;
       };
 
       sidekiqPort = lib.mkOption {
-        description = "TCP port used by the mastodon-sidekiq service.";
+        description = lib.mdDoc "TCP port used by the mastodon-sidekiq service.";
         type = lib.types.port;
         default = 55002;
       };
       sidekiqThreads = lib.mkOption {
-        description = "Worker threads used by the mastodon-sidekiq service.";
+        description = lib.mdDoc "Worker threads used by the mastodon-sidekiq service.";
         type = lib.types.int;
         default = 25;
       };
@@ -212,7 +212,7 @@ in {
       };
 
       localDomain = lib.mkOption {
-        description = "The domain serving your Mastodon instance.";
+        description = lib.mdDoc "The domain serving your Mastodon instance.";
         example = "social.example.org";
         type = lib.types.str;
       };
@@ -259,7 +259,7 @@ in {
       };
 
       trustedProxy = lib.mkOption {
-        description = ''
+        description = lib.mdDoc ''
           You need to set it to the IP from which your reverse proxy sends requests to Mastodon's web process,
           otherwise Mastodon will record the reverse proxy's own IP as the IP of all requests, which would be
           bad because IP addresses are used for important rate limits and security functions.
@@ -269,7 +269,7 @@ in {
       };
 
       enableUnixSocket = lib.mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Instead of binding to an IP address like 127.0.0.1, you may bind to a Unix socket. This variable
           is process-specific, e.g. you need different values for every process, and it works for both web (Puma)
           processes and streaming API (Node.js) processes.
@@ -280,19 +280,19 @@ in {
 
       redis = {
         createLocally = lib.mkOption {
-          description = "Configure local Redis server for Mastodon.";
+          description = lib.mdDoc "Configure local Redis server for Mastodon.";
           type = lib.types.bool;
           default = true;
         };
 
         host = lib.mkOption {
-          description = "Redis host.";
+          description = lib.mdDoc "Redis host.";
           type = lib.types.str;
           default = "127.0.0.1";
         };
 
         port = lib.mkOption {
-          description = "Redis port.";
+          description = lib.mdDoc "Redis port.";
           type = lib.types.port;
           default = 31637;
         };
@@ -300,7 +300,7 @@ in {
 
       database = {
         createLocally = lib.mkOption {
-          description = "Configure local PostgreSQL database server for Mastodon.";
+          description = lib.mdDoc "Configure local PostgreSQL database server for Mastodon.";
           type = lib.types.bool;
           default = true;
         };
@@ -309,75 +309,75 @@ in {
           type = lib.types.str;
           default = "/run/postgresql";
           example = "192.168.23.42";
-          description = "Database host address or unix socket.";
+          description = lib.mdDoc "Database host address or unix socket.";
         };
 
         port = lib.mkOption {
           type = lib.types.int;
           default = 5432;
-          description = "Database host port.";
+          description = lib.mdDoc "Database host port.";
         };
 
         name = lib.mkOption {
           type = lib.types.str;
           default = "mastodon";
-          description = "Database name.";
+          description = lib.mdDoc "Database name.";
         };
 
         user = lib.mkOption {
           type = lib.types.str;
           default = "mastodon";
-          description = "Database user.";
+          description = lib.mdDoc "Database user.";
         };
 
         passwordFile = lib.mkOption {
           type = lib.types.nullOr lib.types.path;
           default = "/var/lib/mastodon/secrets/db-password";
           example = "/run/keys/mastodon-db-password";
-          description = ''
+          description = lib.mdDoc ''
             A file containing the password corresponding to
-            <option>database.user</option>.
+            {option}`database.user`.
           '';
         };
       };
 
       smtp = {
         createLocally = lib.mkOption {
-          description = "Configure local Postfix SMTP server for Mastodon.";
+          description = lib.mdDoc "Configure local Postfix SMTP server for Mastodon.";
           type = lib.types.bool;
           default = true;
         };
 
         authenticate = lib.mkOption {
-          description = "Authenticate with the SMTP server using username and password.";
+          description = lib.mdDoc "Authenticate with the SMTP server using username and password.";
           type = lib.types.bool;
           default = false;
         };
 
         host = lib.mkOption {
-          description = "SMTP host used when sending emails to users.";
+          description = lib.mdDoc "SMTP host used when sending emails to users.";
           type = lib.types.str;
           default = "127.0.0.1";
         };
 
         port = lib.mkOption {
-          description = "SMTP port used when sending emails to users.";
+          description = lib.mdDoc "SMTP port used when sending emails to users.";
           type = lib.types.port;
           default = 25;
         };
 
         fromAddress = lib.mkOption {
-          description = ''"From" address used when sending Emails to users.'';
+          description = lib.mdDoc ''"From" address used when sending Emails to users.'';
           type = lib.types.str;
         };
 
         user = lib.mkOption {
-          description = "SMTP login name.";
+          description = lib.mdDoc "SMTP login name.";
           type = lib.types.str;
         };
 
         passwordFile = lib.mkOption {
-          description = ''
+          description = lib.mdDoc ''
             Path to file containing the SMTP password.
           '';
           default = "/var/lib/mastodon/secrets/smtp-password";
@@ -388,7 +388,7 @@ in {
 
       elasticsearch = {
         host = lib.mkOption {
-          description = ''
+          description = lib.mdDoc ''
             Elasticsearch host.
             If it is not null, Elasticsearch full text search will be enabled.
           '';
@@ -397,7 +397,7 @@ in {
         };
 
         port = lib.mkOption {
-          description = "Elasticsearch port.";
+          description = lib.mdDoc "Elasticsearch port.";
           type = lib.types.port;
           default = 9200;
         };
@@ -407,13 +407,13 @@ in {
         type = lib.types.package;
         default = pkgs.mastodon;
         defaultText = lib.literalExpression "pkgs.mastodon";
-        description = "Mastodon package to use.";
+        description = lib.mdDoc "Mastodon package to use.";
       };
 
       extraConfig = lib.mkOption {
         type = lib.types.attrs;
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           Extra environment variables to pass to all mastodon services.
         '';
       };
@@ -421,7 +421,7 @@ in {
       automaticMigrations = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Do automatic database migrations.
         '';
       };

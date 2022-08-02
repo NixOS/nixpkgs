@@ -19,7 +19,7 @@ in
         type = types.bool;
         default = false;
         description =
-          ''
+          lib.mdDoc ''
             This enables Linux Containers (LXC), which provides tools
             for creating and managing system or application containers
             on Linux.

@@ -33,7 +33,7 @@ in
       defaultText = literalDocBook ''
         <literal>config.${options.services.collectd.package}</literal> configured for lighttpd
       '';
-      description = ''
+      description = lib.mdDoc ''
         Path to collection.cgi script from (collectd sources)/contrib/collection.cgi
         This option allows to use a customized version
       '';

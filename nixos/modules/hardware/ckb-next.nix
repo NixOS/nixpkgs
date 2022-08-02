@@ -19,7 +19,7 @@ in
         type = types.nullOr types.int;
         default = null;
         example = 100;
-        description = ''
+        description = lib.mdDoc ''
           Limit access to the ckb daemon to a particular group.
         '';
       };
@@ -28,7 +28,7 @@ in
         type = types.package;
         default = pkgs.ckb-next;
         defaultText = literalExpression "pkgs.ckb-next";
-        description = ''
+        description = lib.mdDoc ''
           The package implementing the Corsair keyboard/mouse driver.
         '';
       };

@@ -22,7 +22,7 @@ in
         type = types.listOf types.str;
         default = [ ];
         example = literalExpression ''["user1" "user2" "user3"]'';
-        description = ''
+        description = lib.mdDoc ''
           A list of users who should be able to integrate 1Password with polkit-based authentication mechanisms.
         '';
       };

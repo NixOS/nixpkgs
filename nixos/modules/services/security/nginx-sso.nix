@@ -14,7 +14,7 @@ in {
       type = types.package;
       default = pkgs.nginx-sso;
       defaultText = literalExpression "pkgs.nginx-sso";
-      description = ''
+      description = lib.mdDoc ''
         The nginx-sso package that should be used.
       '';
     };
@@ -40,9 +40,9 @@ in {
           };
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         nginx-sso configuration
-        (<link xlink:href="https://github.com/Luzifer/nginx-sso/wiki/Main-Configuration">documentation</link>)
+        ([documentation](https://github.com/Luzifer/nginx-sso/wiki/Main-Configuration))
         as a Nix attribute set.
       '';
     };

@@ -29,14 +29,14 @@ in
         default = pkgs.dwm-status;
         defaultText = literalExpression "pkgs.dwm-status";
         example = literalExpression "pkgs.dwm-status.override { enableAlsaUtils = false; }";
-        description = ''
+        description = lib.mdDoc ''
           Which dwm-status package to use.
         '';
       };
 
       order = mkOption {
         type = types.listOf (types.enum [ "audio" "backlight" "battery" "cpu_load" "network" "time" ]);
-        description = ''
+        description = lib.mdDoc ''
           List of enabled features in order.
         '';
       };
@@ -44,7 +44,7 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Extra config in TOML format.
         '';
       };

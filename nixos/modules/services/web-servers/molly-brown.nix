@@ -15,7 +15,7 @@ in {
     port = mkOption {
       default = 1965;
       type = types.port;
-      description = ''
+      description = lib.mdDoc ''
         TCP port for molly-brown to bind to.
       '';
     };
@@ -24,7 +24,7 @@ in {
       type = types.str;
       default = config.networking.hostName;
       defaultText = literalExpression "config.networking.hostName";
-      description = ''
+      description = lib.mdDoc ''
         The hostname to respond to requests for. Requests for URLs with
         other hosts will result in a status 53 (PROXY REQUEST REFUSED)
         response.
@@ -50,21 +50,21 @@ in {
     keyPath = mkOption {
       type = types.path;
       example = "/var/lib/acme/example.com/key.pem";
-      description = "Path to TLS key. See <option>CertPath</option>.";
+      description = lib.mdDoc "Path to TLS key. See {option}`CertPath`.";
     };
 
     docBase = mkOption {
       type = types.path;
       example = "/var/lib/molly-brown";
-      description = "Base directory for Gemini content.";
+      description = lib.mdDoc "Base directory for Gemini content.";
     };
 
     settings = mkOption {
       inherit (settingsFormat) type;
       default = { };
-      description = ''
+      description = lib.mdDoc ''
         molly-brown configuration. Refer to
-        <link xlink:href="https://tildegit.org/solderpunk/molly-brown/src/branch/master/example.conf"/>
+        <https://tildegit.org/solderpunk/molly-brown/src/branch/master/example.conf>
         for details on supported values.
       '';
     };

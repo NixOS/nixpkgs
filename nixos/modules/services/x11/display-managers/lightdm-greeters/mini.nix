@@ -67,7 +67,7 @@ in
       user = mkOption {
         type = types.str;
         default = "root";
-        description = ''
+        description = lib.mdDoc ''
           The user to login as.
         '';
       };
@@ -75,7 +75,7 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Extra configuration that should be put in the lightdm-mini-greeter.conf
           configuration file.
         '';

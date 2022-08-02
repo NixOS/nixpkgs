@@ -98,7 +98,7 @@ in
         type = bool;
         default = false;
         example = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the Keycloak identity and access management
           server.
         '';
@@ -109,7 +109,7 @@ in
         default = null;
         example = "/run/keys/ssl_cert";
         apply = assertStringPath "sslCertificate";
-        description = ''
+        description = lib.mdDoc ''
           The path to a PEM formatted certificate to use for TLS/SSL
           connections.
         '';
@@ -120,7 +120,7 @@ in
         default = null;
         example = "/run/keys/ssl_key";
         apply = assertStringPath "sslCertificateKey";
-        description = ''
+        description = lib.mdDoc ''
           The path to a PEM formatted private key to use for TLS/SSL
           connections.
         '';
@@ -129,10 +129,10 @@ in
       plugins = lib.mkOption {
         type = lib.types.listOf lib.types.path;
         default = [ ];
-        description = ''
+        description = lib.mdDoc ''
           Keycloak plugin jar, ear files or derivations containing
           them. Packaged plugins are available through
-          <literal>pkgs.keycloak.plugins</literal>.
+          `pkgs.keycloak.plugins`.
         '';
       };
 
@@ -141,7 +141,7 @@ in
           type = enum [ "mysql" "mariadb" "postgresql" ];
           default = "postgresql";
           example = "mariadb";
-          description = ''
+          description = lib.mdDoc ''
             The type of database Keycloak should connect to.
           '';
         };
@@ -149,7 +149,7 @@ in
         host = mkOption {
           type = str;
           default = "localhost";
-          description = ''
+          description = lib.mdDoc ''
             Hostname of the database to connect to.
           '';
         };
@@ -166,7 +166,7 @@ in
             type = port;
             default = dbPorts.${cfg.database.type};
             defaultText = literalDocBook "default port of selected database";
-            description = ''
+            description = lib.mdDoc ''
               Port of the database to connect to.
             '';
           };
@@ -175,7 +175,7 @@ in
           type = bool;
           default = cfg.database.host != "localhost";
           defaultText = literalExpression ''config.${opt.database.host} != "localhost"'';
-          description = ''
+          description = lib.mdDoc ''
             Whether the database connection should be secured by SSL /
             TLS.
           '';
@@ -184,13 +184,13 @@ in
         caCert = mkOption {
           type = nullOr path;
           default = null;
-          description = ''
+          description = lib.mdDoc ''
             The SSL / TLS CA certificate that verifies the identity of the
             database server.
 
             Required when PostgreSQL is used and SSL is turned on.
 
-            For MySQL, if left at <literal>null</literal>, the default
+            For MySQL, if left at `null`, the default
             Java keystore is used, which should suffice if the server
             certificate is issued by an official CA.
           '';
@@ -199,7 +199,7 @@ in
         createLocally = mkOption {
           type = bool;
           default = true;
-          description = ''
+          description = lib.mdDoc ''
             Whether a database should be automatically created on the
             local host. Set this to false if you plan on provisioning a
             local database yourself. This has no effect if
@@ -241,7 +241,7 @@ in
           type = path;
           example = "/run/keys/db_password";
           apply = assertStringPath "passwordFile";
-          description = ''
+          description = lib.mdDoc ''
             The path to a file containing the database password.
           '';
         };
@@ -251,7 +251,7 @@ in
         type = package;
         default = pkgs.keycloak;
         defaultText = literalExpression "pkgs.keycloak";
-        description = ''
+        description = lib.mdDoc ''
           Keycloak package to use.
         '';
       };
@@ -259,8 +259,8 @@ in
       initialAdminPassword = mkOption {
         type = str;
         default = "changeme";
-        description = ''
-          Initial password set for the <literal>admin</literal>
+        description = lib.mdDoc ''
+          Initial password set for the `admin`
           user. The password is not stored safely and should be changed
           immediately in the admin panel.
         '';
@@ -269,13 +269,13 @@ in
       themes = mkOption {
         type = attrsOf package;
         default = { };
-        description = ''
+        description = lib.mdDoc ''
           Additional theme packages for Keycloak. Each theme is linked into
           subdirectory with a corresponding attribute name.
 
           Theme packages consist of several subdirectories which provide
-          different theme types: for example, <literal>account</literal>,
-          <literal>login</literal> etc. After adding a theme to this option you
+          different theme types: for example, `account`,
+          `login` etc. After adding a theme to this option you
           can select it by its name in Keycloak administration console.
         '';
       };
@@ -289,7 +289,7 @@ in
               type = str;
               default = "0.0.0.0";
               example = "127.0.0.1";
-              description = ''
+              description = lib.mdDoc ''
                 On which address Keycloak should accept new connections.
               '';
             };
@@ -298,7 +298,7 @@ in
               type = port;
               default = 80;
               example = 8080;
-              description = ''
+              description = lib.mdDoc ''
                 On which port Keycloak should listen for new HTTP connections.
               '';
             };
@@ -307,7 +307,7 @@ in
               type = port;
               default = 443;
               example = 8443;
-              description = ''
+              description = lib.mdDoc ''
                 On which port Keycloak should listen for new HTTPS connections.
               '';
             };
@@ -341,11 +341,11 @@ in
             hostname = mkOption {
               type = str;
               example = "keycloak.example.com";
-              description = ''
+              description = lib.mdDoc ''
                 The hostname part of the public URL used as base for
                 all frontend requests.
 
-                See <link xlink:href="https://www.keycloak.org/server/hostname" />
+                See <https://www.keycloak.org/server/hostname>
                 for more information about hostname configuration.
               '';
             };
@@ -354,14 +354,14 @@ in
               type = bool;
               default = false;
               example = true;
-              description = ''
+              description = lib.mdDoc ''
                 Whether Keycloak should force all requests to go
                 through the frontend URL. By default, Keycloak allows
                 backend requests to instead use its local hostname or
                 IP address and may also advertise it to clients
                 through its OpenID Connect Discovery endpoint.
 
-                See <link xlink:href="https://www.keycloak.org/server/hostname" />
+                See <https://www.keycloak.org/server/hostname>
                 for more information about hostname configuration.
               '';
             };

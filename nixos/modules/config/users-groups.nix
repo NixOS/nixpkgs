@@ -56,7 +56,7 @@ let
       name = mkOption {
         type = types.passwdEntry types.str;
         apply = x: assert (builtins.stringLength x < 32 || abort "Username '${x}' is longer than 31 characters which is not allowed!"); x;
-        description = ''
+        description = lib.mdDoc ''
           The name of the user account. If undefined, the name of the
           attribute set will be used.
         '';
@@ -66,17 +66,17 @@ let
         type = types.passwdEntry types.str;
         default = "";
         example = "Alice Q. User";
-        description = ''
+        description = lib.mdDoc ''
           A short description of the user account, typically the
           user's full name.  This is actually the “GECOS” or “comment”
-          field in <filename>/etc/passwd</filename>.
+          field in {file}`/etc/passwd`.
         '';
       };
 
       uid = mkOption {
         type = with types; nullOr int;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           The account UID. If the UID is null, a free UID is picked on
           activation.
         '';
@@ -85,15 +85,15 @@ let
       isSystemUser = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Indicates if the user is a system user or not. This option
-          only has an effect if <option>uid</option> is
-          <option>null</option>, in which case it determines whether
+          only has an effect if {option}`uid` is
+          {option}`null`, in which case it determines whether
           the user's UID is allocated in the range for system users
           (below 500) or in the range for normal users (starting at
           1000).
-          Exactly one of <literal>isNormalUser</literal> and
-          <literal>isSystemUser</literal> must be true.
+          Exactly one of `isNormalUser` and
+          `isSystemUser` must be true.
         '';
       };
 
@@ -118,31 +118,31 @@ let
         type = types.str;
         apply = x: assert (builtins.stringLength x < 32 || abort "Group name '${x}' is longer than 31 characters which is not allowed!"); x;
         default = "";
-        description = "The user's primary group.";
+        description = lib.mdDoc "The user's primary group.";
       };
 
       extraGroups = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = "The user's auxiliary groups.";
+        description = lib.mdDoc "The user's auxiliary groups.";
       };
 
       home = mkOption {
         type = types.passwdEntry types.path;
         default = "/var/empty";
-        description = "The user's home directory.";
+        description = lib.mdDoc "The user's home directory.";
       };
 
       homeMode = mkOption {
         type = types.strMatching "[0-7]{1,5}";
         default = "700";
-        description = "The user's home directory mode in numeric format. See chmod(1). The mode is only applied if <option>users.users.&lt;name&gt;.createHome</option> is true.";
+        description = lib.mdDoc "The user's home directory mode in numeric format. See chmod(1). The mode is only applied if {option}`users.users.<name>.createHome` is true.";
       };
 
       cryptHomeLuks = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Path to encrypted luks device that contains
           the user's home directory.
         '';
@@ -183,10 +183,10 @@ let
           { startUid = 1000; count = 1; }
           { startUid = 100001; count = 65534; }
         ];
-        description = ''
+        description = lib.mdDoc ''
           Subordinate user ids that user is allowed to use.
-          They are set into <filename>/etc/subuid</filename> and are used
-          by <literal>newuidmap</literal> for user namespaces.
+          They are set into {file}`/etc/subuid` and are used
+          by `newuidmap` for user namespaces.
         '';
       };
 
@@ -197,10 +197,10 @@ let
           { startGid = 100; count = 1; }
           { startGid = 1001; count = 999; }
         ];
-        description = ''
+        description = lib.mdDoc ''
           Subordinate group ids that user is allowed to use.
-          They are set into <filename>/etc/subgid</filename> and are used
-          by <literal>newgidmap</literal> for user namespaces.
+          They are set into {file}`/etc/subgid` and are used
+          by `newgidmap` for user namespaces.
         '';
       };
 
@@ -208,7 +208,7 @@ let
         type = types.bool;
         default = false;
         example = true;
-        description = ''
+        description = lib.mdDoc ''
           Automatically allocate subordinate user and group ids for this user.
           Allocated range is currently always of size 65536.
         '';
@@ -217,7 +217,7 @@ let
       createHome = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to create the home directory and ensure ownership as well as
           permissions to match the user.
         '';
@@ -226,9 +226,9 @@ let
       useDefaultShell = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           If true, the user's shell will be set to
-          <option>users.defaultUserShell</option>.
+          {option}`users.defaultUserShell`.
         '';
       };
 
@@ -284,13 +284,13 @@ let
       initialPassword = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Specifies the initial password for the user, i.e. the
           password assigned if the user does not already exist. If
-          <option>users.mutableUsers</option> is true, the password
+          {option}`users.mutableUsers` is true, the password
           can be changed subsequently using the
-          <command>passwd</command> command. Otherwise, it's
-          equivalent to setting the <option>password</option>
+          {command}`passwd` command. Otherwise, it's
+          equivalent to setting the {option}`password`
           option. The same caveat applies: the password specified here
           is world-readable in the Nix store, so it should only be
           used for guest accounts or passwords that will be changed
@@ -302,9 +302,9 @@ let
         type = types.listOf types.package;
         default = [];
         example = literalExpression "[ pkgs.firefox pkgs.thunderbird ]";
-        description = ''
+        description = lib.mdDoc ''
           The set of packages that should be made available to the user.
-          This is in contrast to <option>environment.systemPackages</option>,
+          This is in contrast to {option}`environment.systemPackages`,
           which adds packages to all users.
         '';
       };
@@ -344,7 +344,7 @@ let
 
       name = mkOption {
         type = types.passwdEntry types.str;
-        description = ''
+        description = lib.mdDoc ''
           The name of the group. If undefined, the name of the attribute set
           will be used.
         '';
@@ -353,7 +353,7 @@ let
       gid = mkOption {
         type = with types; nullOr int;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           The group GID. If the GID is null, a free GID is picked on
           activation.
         '';
@@ -362,9 +362,9 @@ let
       members = mkOption {
         type = with types; listOf (passwdEntry str);
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           The user names of the group members, added to the
-          <literal>/etc/group</literal> file.
+          `/etc/group` file.
         '';
       };
 
@@ -384,7 +384,7 @@ let
     options = {
       startUid = mkOption {
         type = types.int;
-        description = ''
+        description = lib.mdDoc ''
           Start of the range of subordinate user ids that user is
           allowed to use.
         '';
@@ -392,7 +392,7 @@ let
       count = mkOption {
         type = types.int;
         default = 1;
-        description = "Count of subordinate user ids";
+        description = lib.mdDoc "Count of subordinate user ids";
       };
     };
   };
@@ -401,7 +401,7 @@ let
     options = {
       startGid = mkOption {
         type = types.int;
-        description = ''
+        description = lib.mdDoc ''
           Start of the range of subordinate group ids that user is
           allowed to use.
         '';
@@ -409,7 +409,7 @@ let
       count = mkOption {
         type = types.int;
         default = 1;
-        description = "Count of subordinate group ids";
+        description = lib.mdDoc "Count of subordinate group ids";
       };
     };
   };
@@ -484,7 +484,7 @@ in {
     users.enforceIdUniqueness = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether to require that no two users/groups share the same uid/gid.
       '';
     };
@@ -503,7 +503,7 @@ in {
           shell = "/bin/sh";
         };
       };
-      description = ''
+      description = lib.mdDoc ''
         Additional user accounts to be created automatically by the system.
         This can also be used to set options for root.
       '';
@@ -516,7 +516,7 @@ in {
           hackers = { };
         };
       type = with types; attrsOf (submodule groupOpts);
-      description = ''
+      description = lib.mdDoc ''
         Additional groups to be created automatically by the system.
       '';
     };
@@ -525,8 +525,8 @@ in {
     users.allowNoPasswordLogin = mkOption {
       type = types.bool;
       default = false;
-      description = ''
-        Disable checking that at least the <literal>root</literal> user or a user in the <literal>wheel</literal> group can log in using
+      description = lib.mdDoc ''
+        Disable checking that at least the `root` user or a user in the `wheel` group can log in using
         a password or an SSH key.
 
         WARNING: enabling this can lock you out of your system. Enable this only if you know what are you doing.

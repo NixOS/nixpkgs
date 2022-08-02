@@ -65,7 +65,7 @@ in
 
             AccountID = lib.mkOption {
               type = lib.types.int;
-              description = ''
+              description = lib.mdDoc ''
                 Your MaxMind account ID.
               '';
             };
@@ -77,10 +77,10 @@ in
                 "GeoLite2-City"
                 "GeoLite2-Country"
               ];
-              description = ''
+              description = lib.mdDoc ''
                 List of database edition IDs. This includes new string
-                IDs like <literal>GeoIP2-City</literal> and old
-                numeric IDs like <literal>106</literal>.
+                IDs like `GeoIP2-City` and old
+                numeric IDs like `106`.
               '';
             };
 
@@ -103,10 +103,10 @@ in
               type = lib.types.path;
               default = "/var/lib/GeoIP";
               example = "/run/GeoIP";
-              description = ''
+              description = lib.mdDoc ''
                 The directory to store the database files in. The
                 directory will be automatically created, the owner
-                changed to <literal>geoip</literal> and permissions
+                changed to `geoip` and permissions
                 set to world readable. This applies if the directory
                 already exists as well, so don't use a directory with
                 sensitive contents.

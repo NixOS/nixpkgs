@@ -35,7 +35,7 @@ in
 
     adminPassword = mkOption {
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Initial admin password with which the database will be seeded.
       '';
     };
@@ -43,7 +43,7 @@ in
     httpSocket = mkOption {
       type = types.str;
       default = "localhost:3000";
-      description = ''
+      description = lib.mdDoc ''
         IP and/or port to which to bind the http socket.
       '';
     };

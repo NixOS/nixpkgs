@@ -15,7 +15,7 @@ with lib;
     security.allowUserNamespaces = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether to allow creation of user namespaces.
 
         The motivation for disabling user namespaces is the potential
@@ -34,7 +34,7 @@ with lib;
     security.unprivilegedUsernsClone = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         When disabled, unprivileged users will not be able to create new namespaces.
         By default unprivileged user namespaces are disabled.
         This option only works in a hardened profile.
@@ -44,7 +44,7 @@ with lib;
     security.protectKernelImage = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to prevent replacing the running kernel image.
       '';
     };
@@ -71,7 +71,7 @@ with lib;
     security.forcePageTableIsolation = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to force-enable the Page Table Isolation (PTI) Linux kernel
         feature even on CPU models that claim to be safe from Meltdown.
 

@@ -18,7 +18,7 @@ in {
 
               Address = mkOption {
                 type = types.str;
-                description = ''
+                description = lib.mdDoc ''
                   Unix socket path (unix:///tmp/osui.sock, the "unix:///" part is
                   mandatory) or TCP socket (192.168.1.100:50051).
                 '';
@@ -26,7 +26,7 @@ in {
 
               LogFile = mkOption {
                 type = types.path;
-                description = ''
+                description = lib.mdDoc ''
                   File to write logs to (use /dev/stdout to write logs to standard
                   output).
                 '';
@@ -36,7 +36,7 @@ in {
 
             DefaultAction = mkOption {
               type = types.enum [ "allow" "deny" ];
-              description = ''
+              description = lib.mdDoc ''
                 Default action whether to block or allow application internet
                 access.
               '';
@@ -46,28 +46,28 @@ in {
               type = types.enum [
                 "once" "always" "until restart" "30s" "5m" "15m" "30m" "1h"
               ];
-              description = ''
+              description = lib.mdDoc ''
                 Default duration of firewall rule.
               '';
             };
 
             InterceptUnknown = mkOption {
               type = types.bool;
-              description = ''
+              description = lib.mdDoc ''
                 Wheter to intercept spare connections.
               '';
             };
 
             ProcMonitorMethod = mkOption {
               type = types.enum [ "ebpf" "proc" "ftrace" "audit" ];
-              description = ''
+              description = lib.mdDoc ''
                 Which process monitoring method to use.
               '';
             };
 
             LogLevel = mkOption {
               type = types.enum [ 0 1 2 3 4 ];
-              description = ''
+              description = lib.mdDoc ''
                 Default log level from 0 to 4 (debug, info, important, warning,
                 error).
               '';
@@ -75,7 +75,7 @@ in {
 
             Firewall = mkOption {
               type = types.enum [ "iptables" "nftables" ];
-              description = ''
+              description = lib.mdDoc ''
                 Which firewall backend to use.
               '';
             };
@@ -84,14 +84,14 @@ in {
 
               MaxEvents = mkOption {
                 type = types.int;
-                description = ''
+                description = lib.mdDoc ''
                   Max events to send to the GUI.
                 '';
               };
 
               MaxStats = mkOption {
                 type = types.int;
-                description = ''
+                description = lib.mdDoc ''
                   Max stats per item to keep in backlog.
                 '';
               };
@@ -99,9 +99,9 @@ in {
             };
           };
         };
-        description = ''
+        description = lib.mdDoc ''
           opensnitchd configuration. Refer to
-          <link xlink:href="https://github.com/evilsocket/opensnitch/wiki/Configurations"/>
+          <https://github.com/evilsocket/opensnitch/wiki/Configurations>
           for details on supported values.
         '';
       };

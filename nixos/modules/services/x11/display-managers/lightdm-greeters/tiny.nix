@@ -30,7 +30,7 @@ in
         user = mkOption {
           type = types.str;
           default = "Username";
-          description = ''
+          description = lib.mdDoc ''
             The string to represent the user_text label.
           '';
         };
@@ -38,7 +38,7 @@ in
         pass = mkOption {
           type = types.str;
           default = "Password";
-          description = ''
+          description = lib.mdDoc ''
             The string to represent the pass_text label.
           '';
         };
@@ -48,7 +48,7 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Section to describe style and ui.
         '';
       };

@@ -123,7 +123,7 @@ in {
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable Neo4j Community Edition.
       '';
     };
@@ -131,7 +131,7 @@ in {
     allowUpgrade = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Allow upgrade of Neo4j database files from an older version.
       '';
     };
@@ -170,9 +170,9 @@ in {
     extraServerConfig = mkOption {
       type = types.lines;
       default = "";
-      description = ''
+      description = lib.mdDoc ''
         Extra configuration for Neo4j Community server. Refer to the
-        <link xlink:href="https://neo4j.com/docs/operations-manual/current/reference/configuration-settings/">complete reference</link>
+        [complete reference](https://neo4j.com/docs/operations-manual/current/reference/configuration-settings/)
         of Neo4j configuration settings.
       '';
     };
@@ -181,7 +181,7 @@ in {
       type = types.package;
       default = pkgs.neo4j;
       defaultText = literalExpression "pkgs.neo4j";
-      description = ''
+      description = lib.mdDoc ''
         Neo4j package to use.
       '';
     };
@@ -189,7 +189,7 @@ in {
     readOnly = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Only allow read operations from this Neo4j instance.
       '';
     };
@@ -197,9 +197,9 @@ in {
     workerCount = mkOption {
       type = types.ints.between 0 44738;
       default = 0;
-      description = ''
+      description = lib.mdDoc ''
         Number of Neo4j worker threads, where the default of
-        <literal>0</literal> indicates a worker count equal to the number of
+        `0` indicates a worker count equal to the number of
         available processors.
       '';
     };
@@ -208,9 +208,9 @@ in {
       enable = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Enable the BOLT connector for Neo4j. Setting this option to
-          <literal>false</literal> will stop Neo4j from listening for incoming
+          `false` will stop Neo4j from listening for incoming
           connections on the BOLT port (7687 by default).
         '';
       };
@@ -218,9 +218,9 @@ in {
       listenAddress = mkOption {
         type = types.str;
         default = ":7687";
-        description = ''
+        description = lib.mdDoc ''
           Neo4j listen address for BOLT traffic. The listen address is
-          expressed in the format <literal>&lt;ip-address&gt;:&lt;port-number&gt;</literal>.
+          expressed in the format `<ip-address>:<port-number>`.
         '';
       };
 
@@ -247,7 +247,7 @@ in {
       tlsLevel = mkOption {
         type = types.enum [ "REQUIRED" "OPTIONAL" "DISABLED" ];
         default = "OPTIONAL";
-        description = ''
+        description = lib.mdDoc ''
           SSL/TSL requirement level for BOLT traffic.
         '';
       };
@@ -297,11 +297,11 @@ in {
       home = mkOption {
         type = types.path;
         default = "/var/lib/neo4j";
-        description = ''
+        description = lib.mdDoc ''
           Path of the Neo4j home directory. Other default directories are
           subdirectories of this path. This directory will be created if
-          non-existent, and its ownership will be <command>chown</command> to
-          the Neo4j daemon user <literal>neo4j</literal>.
+          non-existent, and its ownership will be {command}`chown` to
+          the Neo4j daemon user `neo4j`.
         '';
       };
 
@@ -343,10 +343,10 @@ in {
       enable = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           The HTTP connector is required for Neo4j, and cannot be disabled.
-          Setting this option to <literal>false</literal> will force the HTTP
-          connector's <option>listenAddress</option> to the loopback
+          Setting this option to `false` will force the HTTP
+          connector's {option}`listenAddress` to the loopback
           interface to prevent connection of remote clients. To prevent all
           clients from connecting, block the HTTP port (7474 by default) by
           firewall.
@@ -356,9 +356,9 @@ in {
       listenAddress = mkOption {
         type = types.str;
         default = ":7474";
-        description = ''
+        description = lib.mdDoc ''
           Neo4j listen address for HTTP traffic. The listen address is
-          expressed in the format <literal>&lt;ip-address&gt;:&lt;port-number&gt;</literal>.
+          expressed in the format `<ip-address>:<port-number>`.
         '';
       };
     };
@@ -367,9 +367,9 @@ in {
       enable = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Enable the HTTPS connector for Neo4j. Setting this option to
-          <literal>false</literal> will stop Neo4j from listening for incoming
+          `false` will stop Neo4j from listening for incoming
           connections on the HTTPS port (7473 by default).
         '';
       };
@@ -377,9 +377,9 @@ in {
       listenAddress = mkOption {
         type = types.str;
         default = ":7473";
-        description = ''
+        description = lib.mdDoc ''
           Neo4j listen address for HTTPS traffic. The listen address is
-          expressed in the format <literal>&lt;ip-address&gt;:&lt;port-number&gt;</literal>.
+          expressed in the format `<ip-address>:<port-number>`.
         '';
       };
 
@@ -403,9 +403,9 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable a remote shell server which Neo4j Shell clients can log in to.
-          Only applicable to <command>neo4j-shell</command>.
+          Only applicable to {command}`neo4j-shell`.
         '';
       };
     };
@@ -456,7 +456,7 @@ in {
           ciphers = mkOption {
             type = types.nullOr (types.listOf types.str);
             default = null;
-            description = ''
+            description = lib.mdDoc ''
               Restrict the allowed ciphers of this policy to those defined
               here. The default ciphers are those of the JVM platform.
             '';
@@ -465,7 +465,7 @@ in {
           clientAuth = mkOption {
             type = types.enum [ "NONE" "OPTIONAL" "REQUIRE" ];
             default = "REQUIRE";
-            description = ''
+            description = lib.mdDoc ''
               The client authentication stance for this policy.
             '';
           };
@@ -473,9 +473,9 @@ in {
           privateKey = mkOption {
             type = types.str;
             default = "private.key";
-            description = ''
+            description = lib.mdDoc ''
               The name of private PKCS #8 key file for this policy to be found
-              in the <option>baseDirectory</option>, or the absolute path to
+              in the {option}`baseDirectory`, or the absolute path to
               the key file. It is mandatory that a key can be found or generated.
             '';
           };
@@ -500,22 +500,22 @@ in {
             type = types.path;
             default = "${config.baseDirectory}/revoked";
             defaultText = literalExpression ''"''${config.${options.baseDirectory}}/revoked"'';
-            description = ''
+            description = lib.mdDoc ''
               Path to directory of CRLs (Certificate Revocation Lists) in
               PEM format. Must be an absolute path. The existence of this
               directory is mandatory and will need to be created manually when:
               setting this option to something other than its default; setting
-              either this policy's <option>baseDirectory</option> or
-              <option>directories.certificates</option> to something other than
+              either this policy's {option}`baseDirectory` or
+              {option}`directories.certificates` to something other than
               their default. Ensure read/write permissions are given to the
-              Neo4j daemon user <literal>neo4j</literal>.
+              Neo4j daemon user `neo4j`.
             '';
           };
 
           tlsVersions = mkOption {
             type = types.listOf types.str;
             default = [ "TLSv1.2" ];
-            description = ''
+            description = lib.mdDoc ''
               Restrict the TLS protocol versions of this policy to those
               defined here.
             '';
@@ -524,7 +524,7 @@ in {
           trustAll = mkOption {
             type = types.bool;
             default = false;
-            description = ''
+            description = lib.mdDoc ''
               Makes this policy trust all remote parties. Enabling this is not
               recommended and the policy's trusted directory will be ignored.
               Use of this mode is discouraged. It would offer encryption but
@@ -573,12 +573,12 @@ in {
 
       }));
       default = {};
-      description = ''
+      description = lib.mdDoc ''
         Defines the SSL policies for use with Neo4j connectors. Each attribute
         of this set defines a policy, with the attribute name defining the name
         of the policy and its namespace. Refer to the operations manual section
         on Neo4j's
-        <link xlink:href="https://neo4j.com/docs/operations-manual/current/security/ssl-framework/">SSL Framework</link>
+        [SSL Framework](https://neo4j.com/docs/operations-manual/current/security/ssl-framework/)
         for further details.
       '';
     };
@@ -587,10 +587,10 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable the Usage Data Collector which Neo4j uses to collect usage
           data. Refer to the operations manual section on the
-          <link xlink:href="https://neo4j.com/docs/operations-manual/current/configuration/usage-data-collector/">Usage Data Collector</link>
+          [Usage Data Collector](https://neo4j.com/docs/operations-manual/current/configuration/usage-data-collector/)
           for more information.
         '';
       };

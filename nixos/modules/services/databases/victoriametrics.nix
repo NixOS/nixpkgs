@@ -7,21 +7,21 @@ let cfg = config.services.victoriametrics; in
       type = types.package;
       default = pkgs.victoriametrics;
       defaultText = literalExpression "pkgs.victoriametrics";
-      description = ''
+      description = lib.mdDoc ''
         The VictoriaMetrics distribution to use.
       '';
     };
     listenAddress = mkOption {
       default = ":8428";
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         The listen address for the http interface.
       '';
     };
     retentionPeriod = mkOption {
       type = types.int;
       default = 1;
-      description = ''
+      description = lib.mdDoc ''
         Retention period in months.
       '';
     };

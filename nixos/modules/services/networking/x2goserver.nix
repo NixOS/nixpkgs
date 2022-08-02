@@ -42,7 +42,7 @@ in {
     nxagentDefaultOptions = mkOption {
       type = types.listOf types.str;
       default = [ "-extension GLX" "-nolisten tcp" ];
-      description = ''
+      description = lib.mdDoc ''
         List of default nx agent options.
       '';
     };

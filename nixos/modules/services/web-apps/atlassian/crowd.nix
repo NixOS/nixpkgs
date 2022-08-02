@@ -39,50 +39,50 @@ in
       user = mkOption {
         type = types.str;
         default = "crowd";
-        description = "User which runs Crowd.";
+        description = lib.mdDoc "User which runs Crowd.";
       };
 
       group = mkOption {
         type = types.str;
         default = "crowd";
-        description = "Group which runs Crowd.";
+        description = lib.mdDoc "Group which runs Crowd.";
       };
 
       home = mkOption {
         type = types.str;
         default = "/var/lib/crowd";
-        description = "Home directory of the Crowd instance.";
+        description = lib.mdDoc "Home directory of the Crowd instance.";
       };
 
       listenAddress = mkOption {
         type = types.str;
         default = "127.0.0.1";
-        description = "Address to listen on.";
+        description = lib.mdDoc "Address to listen on.";
       };
 
       listenPort = mkOption {
         type = types.int;
         default = 8092;
-        description = "Port to listen on.";
+        description = lib.mdDoc "Port to listen on.";
       };
 
       openidPassword = mkOption {
         type = types.str;
         default = "WILL_NEVER_BE_SET";
-        description = "Application password for OpenID server.";
+        description = lib.mdDoc "Application password for OpenID server.";
       };
 
       openidPasswordFile = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = "Path to the file containing the application password for OpenID server.";
+        description = lib.mdDoc "Path to the file containing the application password for OpenID server.";
       };
 
       catalinaOptions = mkOption {
         type = types.listOf types.str;
         default = [];
         example = [ "-Xms1024m" "-Xmx2048m" ];
-        description = "Java options to pass to catalina/tomcat.";
+        description = lib.mdDoc "Java options to pass to catalina/tomcat.";
       };
 
       proxy = {
@@ -91,27 +91,27 @@ in
         name = mkOption {
           type = types.str;
           example = "crowd.example.com";
-          description = "Virtual hostname at the proxy";
+          description = lib.mdDoc "Virtual hostname at the proxy";
         };
 
         port = mkOption {
           type = types.int;
           default = 443;
           example = 80;
-          description = "Port used at the proxy";
+          description = lib.mdDoc "Port used at the proxy";
         };
 
         scheme = mkOption {
           type = types.str;
           default = "https";
           example = "http";
-          description = "Protocol used at the proxy.";
+          description = lib.mdDoc "Protocol used at the proxy.";
         };
 
         secure = mkOption {
           type = types.bool;
           default = true;
-          description = "Whether the connections to the proxy should be considered secure.";
+          description = lib.mdDoc "Whether the connections to the proxy should be considered secure.";
         };
       };
 
@@ -119,14 +119,14 @@ in
         type = types.package;
         default = pkgs.atlassian-crowd;
         defaultText = literalExpression "pkgs.atlassian-crowd";
-        description = "Atlassian Crowd package to use.";
+        description = lib.mdDoc "Atlassian Crowd package to use.";
       };
 
       jrePackage = mkOption {
         type = types.package;
         default = pkgs.oraclejre8;
         defaultText = literalExpression "pkgs.oraclejre8";
-        description = "Note that Atlassian only support the Oracle JRE (JRASERVER-46152).";
+        description = lib.mdDoc "Note that Atlassian only support the Oracle JRE (JRASERVER-46152).";
       };
     };
   };

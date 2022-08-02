@@ -94,14 +94,14 @@ in {
       environmentFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           File containing environment variables to be passed to the mautrix-telegram service,
           in which secret tokens can be specified securely by defining values for
-          <literal>MAUTRIX_TELEGRAM_APPSERVICE_AS_TOKEN</literal>,
-          <literal>MAUTRIX_TELEGRAM_APPSERVICE_HS_TOKEN</literal>,
-          <literal>MAUTRIX_TELEGRAM_TELEGRAM_API_ID</literal>,
-          <literal>MAUTRIX_TELEGRAM_TELEGRAM_API_HASH</literal> and optionally
-          <literal>MAUTRIX_TELEGRAM_TELEGRAM_BOT_TOKEN</literal>.
+          `MAUTRIX_TELEGRAM_APPSERVICE_AS_TOKEN`,
+          `MAUTRIX_TELEGRAM_APPSERVICE_HS_TOKEN`,
+          `MAUTRIX_TELEGRAM_TELEGRAM_API_ID`,
+          `MAUTRIX_TELEGRAM_TELEGRAM_API_HASH` and optionally
+          `MAUTRIX_TELEGRAM_TELEGRAM_BOT_TOKEN`.
         '';
       };
 
@@ -111,7 +111,7 @@ in {
         defaultText = literalExpression ''
           optional config.services.matrix-synapse.enable "matrix-synapse.service"
         '';
-        description = ''
+        description = lib.mdDoc ''
           List of Systemd services to require and wait for when starting the application service.
         '';
       };

@@ -58,7 +58,7 @@ in
     apiKeyFile = mkOption {
       type = types.path;
       example = "/root/baget.key";
-      description = ''
+      description = lib.mdDoc ''
         Private API key for BaGet.
       '';
     };
@@ -112,8 +112,8 @@ in
           };
         }
       '';
-      description = ''
-        Extra configuration options for BaGet. Refer to <link xlink:href="https://loic-sharma.github.io/BaGet/configuration/"/> for details.
+      description = lib.mdDoc ''
+        Extra configuration options for BaGet. Refer to <https://loic-sharma.github.io/BaGet/configuration/> for details.
         Default value is merged with values from here.
       '';
     };

@@ -42,7 +42,7 @@ in {
       port = mkOption {
         type = types.port;
         default = 27960;
-        description = ''
+        description = lib.mdDoc ''
           UDP Port the server should listen on.
         '';
       };
@@ -50,7 +50,7 @@ in {
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Open the firewall.
         '';
       };
@@ -62,7 +62,7 @@ in {
           seta rconPassword "superSecret"      // sets RCON password for remote console
           seta sv_hostname "My Quake 3 server"      // name that appears in server list
         '';
-        description = ''
+        description = lib.mdDoc ''
           Extra configuration options. Note that options changed via RCON will not be persisted. To list all possible
           options, use "cvarlist 1" via RCON.
         '';
@@ -73,7 +73,7 @@ in {
         default = defaultBaseq3;
         defaultText = literalDocBook "Manually downloaded Quake 3 installation directory.";
         example = "/var/lib/q3ds";
-        description = ''
+        description = lib.mdDoc ''
           Path to the baseq3 files (pak*.pk3). If this is on the nix store (type = package) all .pk3 files should be saved
           in the top-level directory. If this is on another filesystem (e.g /var/lib/baseq3) the .pk3 files are searched in
           $baseq3/.q3a/baseq3/

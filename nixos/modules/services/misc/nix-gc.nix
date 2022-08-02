@@ -17,7 +17,7 @@ in
       automatic = mkOption {
         default = false;
         type = types.bool;
-        description = "Automatically run the garbage collector at a specific time.";
+        description = lib.mdDoc "Automatically run the garbage collector at a specific time.";
       };
 
       dates = mkOption {
@@ -51,7 +51,7 @@ in
         default = true;
         type = types.bool;
         example = false;
-        description = ''
+        description = lib.mdDoc ''
           Takes a boolean argument. If true, the time when the service
           unit was last triggered is stored on disk. When the timer is
           activated, the service unit is triggered immediately if it
@@ -67,8 +67,8 @@ in
         default = "";
         example = "--max-freed $((64 * 1024**3))";
         type = types.str;
-        description = ''
-          Options given to <filename>nix-collect-garbage</filename> when the
+        description = lib.mdDoc ''
+          Options given to {file}`nix-collect-garbage` when the
           garbage collector is run automatically.
         '';
       };

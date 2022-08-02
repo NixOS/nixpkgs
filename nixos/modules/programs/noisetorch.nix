@@ -11,7 +11,7 @@ in {
       type = types.package;
       default = pkgs.noisetorch;
       defaultText = literalExpression "pkgs.noisetorch";
-      description = ''
+      description = lib.mdDoc ''
         The noisetorch package to use.
       '';
     };

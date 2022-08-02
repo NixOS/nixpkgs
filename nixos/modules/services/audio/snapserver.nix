@@ -12,7 +12,7 @@ let
   sampleFormat = mkOption {
     type = with types; nullOr str;
     default = null;
-    description = ''
+    description = lib.mdDoc ''
       Default sample format.
     '';
     example = "48000:16:2";
@@ -21,7 +21,7 @@ let
   codec = mkOption {
     type = with types; nullOr str;
     default = null;
-    description = ''
+    description = lib.mdDoc ''
       Default audio compression method.
     '';
     example = "flac";
@@ -77,7 +77,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable snapserver.
         '';
       };
@@ -86,7 +86,7 @@ in {
         type = types.str;
         default = "::";
         example = "0.0.0.0";
-        description = ''
+        description = lib.mdDoc ''
           The address where snapclients can connect.
         '';
       };
@@ -94,7 +94,7 @@ in {
       port = mkOption {
         type = types.port;
         default = 1704;
-        description = ''
+        description = lib.mdDoc ''
           The port that snapclients can connect to.
         '';
       };
@@ -104,7 +104,7 @@ in {
         # Make the behavior consistent with other services. Set the default to
         # false and remove the accompanying warning after NixOS 22.05 is released.
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to automatically open the specified ports in the firewall.
         '';
       };
@@ -115,7 +115,7 @@ in {
       streamBuffer = mkOption {
         type = with types; nullOr int;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Stream read (input) buffer in ms.
         '';
         example = 20;
@@ -124,7 +124,7 @@ in {
       buffer = mkOption {
         type = with types; nullOr int;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Network buffer in ms.
         '';
         example = 1000;
@@ -133,7 +133,7 @@ in {
       sendToMuted = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Send audio to muted clients.
         '';
       };
@@ -141,7 +141,7 @@ in {
       tcp.enable = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the JSON-RPC via TCP.
         '';
       };
@@ -150,7 +150,7 @@ in {
         type = types.str;
         default = "::";
         example = "0.0.0.0";
-        description = ''
+        description = lib.mdDoc ''
           The address where the TCP JSON-RPC listens on.
         '';
       };
@@ -158,7 +158,7 @@ in {
       tcp.port = mkOption {
         type = types.port;
         default = 1705;
-        description = ''
+        description = lib.mdDoc ''
           The port where the TCP JSON-RPC listens on.
         '';
       };
@@ -166,7 +166,7 @@ in {
       http.enable = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the JSON-RPC via HTTP.
         '';
       };
@@ -175,7 +175,7 @@ in {
         type = types.str;
         default = "::";
         example = "0.0.0.0";
-        description = ''
+        description = lib.mdDoc ''
           The address where the HTTP JSON-RPC listens on.
         '';
       };
@@ -183,7 +183,7 @@ in {
       http.port = mkOption {
         type = types.port;
         default = 1780;
-        description = ''
+        description = lib.mdDoc ''
           The port where the HTTP JSON-RPC listens on.
         '';
       };
@@ -191,7 +191,7 @@ in {
       http.docRoot = mkOption {
         type = with types; nullOr path;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Path to serve from the HTTP servers root.
         '';
       };
@@ -201,12 +201,12 @@ in {
           options = {
             location = mkOption {
               type = types.oneOf [ types.path types.str ];
-              description = ''
-                For type <literal>pipe</literal> or <literal>file</literal>, the path to the pipe or file.
-                For type <literal>librespot</literal>, <literal>airplay</literal> or <literal>process</literal>, the path to the corresponding binary.
-                For type <literal>tcp</literal>, the <literal>host:port</literal> address to connect to or listen on.
-                For type <literal>meta</literal>, a list of stream names in the form <literal>/one/two/...</literal>. Don't forget the leading slash.
-                For type <literal>alsa</literal>, use an empty string.
+              description = lib.mdDoc ''
+                For type `pipe` or `file`, the path to the pipe or file.
+                For type `librespot`, `airplay` or `process`, the path to the corresponding binary.
+                For type `tcp`, the `host:port` address to connect to or listen on.
+                For type `meta`, a list of stream names in the form `/one/two/...`. Don't forget the leading slash.
+                For type `alsa`, use an empty string.
               '';
               example = literalExpression ''
                 "/path/to/pipe"
@@ -218,14 +218,14 @@ in {
             type = mkOption {
               type = types.enum [ "pipe" "librespot" "airplay" "file" "process" "tcp" "alsa" "spotify" "meta" ];
               default = "pipe";
-              description = ''
+              description = lib.mdDoc ''
                 The type of input stream.
               '';
             };
             query = mkOption {
               type = attrsOf str;
               default = {};
-              description = ''
+              description = lib.mdDoc ''
                 Key-value pairs that convey additional parameters about a stream.
               '';
               example = literalExpression ''
@@ -253,7 +253,7 @@ in {
           };
         });
         default = { default = {}; };
-        description = ''
+        description = lib.mdDoc ''
           The definition for an input source.
         '';
         example = literalExpression ''

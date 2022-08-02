@@ -16,13 +16,13 @@ in {
       package = mkOption {
         default = pkgs.code-server;
         defaultText = "pkgs.code-server";
-        description = "Which code-server derivation to use.";
+        description = lib.mdDoc "Which code-server derivation to use.";
         type = types.package;
       };
 
       extraPackages = mkOption {
         default = [ ];
-        description = "Packages that are available in the PATH of code-server.";
+        description = lib.mdDoc "Packages that are available in the PATH of code-server.";
         example = "[ pkgs.go ]";
         type = types.listOf types.package;
       };
@@ -30,49 +30,49 @@ in {
       extraEnvironment = mkOption {
         type = types.attrsOf types.str;
         description =
-          "Additional environment variables to passed to code-server.";
+          lib.mdDoc "Additional environment variables to passed to code-server.";
         default = { };
         example = { PKG_CONFIG_PATH = "/run/current-system/sw/lib/pkgconfig"; };
       };
 
       extraArguments = mkOption {
         default = [ "--disable-telemetry" ];
-        description = "Additional arguments that passed to code-server";
+        description = lib.mdDoc "Additional arguments that passed to code-server";
         example = ''[ "--verbose" ]'';
         type = types.listOf types.str;
       };
 
       host = mkOption {
         default = "127.0.0.1";
-        description = "The host-ip to bind to.";
+        description = lib.mdDoc "The host-ip to bind to.";
         type = types.str;
       };
 
       port = mkOption {
         default = 4444;
-        description = "The port where code-server runs.";
+        description = lib.mdDoc "The port where code-server runs.";
         type = types.port;
       };
 
       auth = mkOption {
         default = "password";
-        description = "The type of authentication to use.";
+        description = lib.mdDoc "The type of authentication to use.";
         type = types.enum [ "none" "password" ];
       };
 
       hashedPassword = mkOption {
         default = "";
         description =
-          "Create the password with: 'echo -n 'thisismypassword' | npx argon2-cli -e'.";
+          lib.mdDoc "Create the password with: 'echo -n 'thisismypassword' | npx argon2-cli -e'.";
         type = types.str;
       };
 
       user = mkOption {
         default = defaultUser;
         example = "yourUser";
-        description = ''
+        description = lib.mdDoc ''
           The user to run code-server as.
-          By default, a user named <literal>${defaultUser}</literal> will be created.
+          By default, a user named `${defaultUser}` will be created.
         '';
         type = types.str;
       };
@@ -80,9 +80,9 @@ in {
       group = mkOption {
         default = defaultGroup;
         example = "yourGroup";
-        description = ''
+        description = lib.mdDoc ''
           The group to run code-server under.
-          By default, a group named <literal>${defaultGroup}</literal> will be created.
+          By default, a group named `${defaultGroup}` will be created.
         '';
         type = types.str;
       };
@@ -90,7 +90,7 @@ in {
       extraGroups = mkOption {
         default = [ ];
         description =
-          "An array of additional groups for the <literal>${defaultUser}</literal> user.";
+          lib.mdDoc "An array of additional groups for the `${defaultUser}` user.";
         example = [ "docker" ];
         type = types.listOf types.str;
       };

@@ -13,20 +13,20 @@ in
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/lidarr/.config/Lidarr";
-        description = "The directory where Lidarr stores its data files.";
+        description = lib.mdDoc "The directory where Lidarr stores its data files.";
       };
 
       package = mkOption {
         type = types.package;
         default = pkgs.lidarr;
         defaultText = literalExpression "pkgs.lidarr";
-        description = "The Lidarr package to use";
+        description = lib.mdDoc "The Lidarr package to use";
       };
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Open ports in the firewall for Lidarr
         '';
       };
@@ -34,7 +34,7 @@ in
       user = mkOption {
         type = types.str;
         default = "lidarr";
-        description = ''
+        description = lib.mdDoc ''
           User account under which Lidarr runs.
         '';
       };
@@ -42,7 +42,7 @@ in
       group = mkOption {
         type = types.str;
         default = "lidarr";
-        description = ''
+        description = lib.mdDoc ''
           Group under which Lidarr runs.
         '';
       };
