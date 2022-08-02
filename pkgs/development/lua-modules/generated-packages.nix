@@ -1190,6 +1190,7 @@ buildLuarocksPackage {
   meta = {
     homepage = "https://github.com/starwing/lua-protobuf";
     description = "protobuf data support for Lua";
+    maintainers = with lib.maintainers; [ lockejan ];
     license.fullName = "MIT";
   };
 }) {};
