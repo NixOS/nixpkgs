@@ -21695,6 +21695,8 @@ with pkgs;
 
   orcania = callPackage ../development/libraries/orcania { };
 
+  osk-sdl = callPackage ../tools/misc/osk-sdl { };
+
   osm-gps-map = callPackage ../development/libraries/osm-gps-map { };
 
   osmid = callPackage ../applications/audio/osmid {};
