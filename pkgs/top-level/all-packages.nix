@@ -7395,6 +7395,8 @@ with pkgs;
 
   bc-decaf = callPackage ../development/libraries/bc-decaf { };
 
+  deckmaster = callPackage ../applications/misc/deckmaster { };
+
   deco = callPackage ../applications/misc/deco { };
 
   decoder = callPackage ../tools/security/decoder { };
