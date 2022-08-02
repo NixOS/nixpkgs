@@ -1,6 +1,7 @@
 # Fetchers {#chap-pkgs-fetchers}
 
-Nixpkgs provides fetchers for different protocols and services. Fetchers are functions that simplify downloading files.
+Building software with Nix often requires downloading source code and other files from the internet.
+`nixpkgs` provides *fetchers* for different protocols and services. Fetchers are functions that simplify downloading files.
 
 ## Caveats
 
