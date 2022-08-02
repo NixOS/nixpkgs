@@ -62,6 +62,8 @@ with self; with super; {
 
   numpy = callPackage ../development/python2-modules/numpy { };
 
+  openpyxl = callPackage ../development/python2-modules/openpyxl { };
+
   packaging = callPackage ../development/python2-modules/packaging { };
 
   pillow = callPackage ../development/python2-modules/pillow {
