@@ -202,7 +202,7 @@ let
 in
 
 buildStdenv.mkDerivation ({
-  name = "${pname}-unwrapped-${version}";
+  pname = "${pname}-unwrapped";
   inherit version;
 
   inherit src unpackPhase meta;
