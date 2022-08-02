@@ -71,6 +71,6 @@ stdenv.mkDerivation rec {
     homepage = "https://te4.org/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
-    platforms = with platforms; [ "i686-linux" "x86_64-linux" ];
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

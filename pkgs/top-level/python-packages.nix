@@ -1235,6 +1235,8 @@ in {
 
   beautifultable = callPackage ../development/python-modules/beautifultable { };
 
+  bech32 = callPackage ../development/python-modules/bech32 { };
+
   bedup = callPackage ../development/python-modules/bedup { };
 
   behave = callPackage ../development/python-modules/behave { };

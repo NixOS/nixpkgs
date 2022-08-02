@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://upc.lbl.gov/";
     license = licenses.mit;
-    platforms = with platforms; [ linux ];
+    platforms = platforms.linux;
     maintainers = with maintainers; [ zimbatm ];
   };
 }
