@@ -63,6 +63,11 @@ python3Packages.buildPythonApplication rec {
     unidecode
   ] ++ (concatMap (p: p.propagatedBuildInputs) (attrValues enabledPlugins));
 
+  # see: https://github.com/NixOS/nixpkgs/issues/56943#issuecomment-1131643663
+  nativeBuildInputs = [
+    gobject-introspection
+  ];
+
   buildInputs = [
   ] ++ (with gst_all_1; [
     gst-plugins-base
