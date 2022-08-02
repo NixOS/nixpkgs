@@ -6339,6 +6339,12 @@
     github = "JoshuaFern";
     githubId = 4300747;
   };
+  joshvanl = {
+    email = " me@joshvanl.dev ";
+    github = "joshvanl";
+    githubId = 15893072;
+    name = "Josh van Leeuwen";
+  };
   jpas = {
     name = "Jarrod Pas";
     email = "jarrod@jarrodpas.com";
