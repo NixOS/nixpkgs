@@ -31,7 +31,7 @@ let
         attrs = mkOption {
           type = types.attrsOf ldapValueType;
           default = {};
-          description = "Attributes of the parent entry.";
+          description = lib.mdDoc "Attributes of the parent entry.";
         };
         children = mkOption {
           # Hide the child attributes, to avoid infinite recursion in e.g. documentation
@@ -40,7 +40,7 @@ let
             hiddenOptions = lib.mapAttrs (name: attr: attr // { visible = false; }) options;
           in types.attrsOf (types.submodule { options = hiddenOptions; });
           default = {};
-          description = "Child entries of the current entry, with recursively the same structure.";
+          description = lib.mdDoc "Child entries of the current entry, with recursively the same structure.";
           example = lib.literalExpression ''
             {
                 "cn=schema" = {
@@ -59,7 +59,7 @@ let
         includes = mkOption {
           type = types.listOf types.path;
           default = [];
-          description = ''
+          description = lib.mdDoc ''
             LDIF files to include after the parent's attributes but before its children.
           '';
         };
@@ -95,7 +95,7 @@ in {
         type = types.package;
         default = pkgs.openldap;
         defaultText = literalExpression "pkgs.openldap";
-        description = ''
+        description = lib.mdDoc ''
           OpenLDAP package to use.
 
           This can be used to, for example, set an OpenLDAP package
@@ -107,25 +107,25 @@ in {
       user = mkOption {
         type = types.str;
         default = "openldap";
-        description = "User account under which slapd runs.";
+        description = lib.mdDoc "User account under which slapd runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "openldap";
-        description = "Group account under which slapd runs.";
+        description = lib.mdDoc "Group account under which slapd runs.";
       };
 
       urlList = mkOption {
         type = types.listOf types.str;
         default = [ "ldap:///" ];
-        description = "URL list slapd should listen on.";
+        description = lib.mdDoc "URL list slapd should listen on.";
         example = [ "ldaps:///" ];
       };
 
       settings = mkOption {
         type = ldapAttrsType;
-        description = "Configuration for OpenLDAP, in OLC format";
+        description = lib.mdDoc "Configuration for OpenLDAP, in OLC format";
         example = lib.literalExpression ''
           {
             attrs.olcLogLevel = [ "stats" ];
@@ -194,7 +194,7 @@ in {
       declarativeContents = mkOption {
         type = with types; attrsOf lines;
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           Declarative contents for the LDAP database, in LDIF format by suffix.
 
           All data will be erased when starting the LDAP server. Modifications

@@ -123,12 +123,12 @@ in
         }
       '';
 
-      description = ''
+      description = lib.mdDoc ''
         A set of shell script fragments that are executed when a NixOS
         system configuration is activated.  Examples are updating
         /etc, creating accounts, and so on.  Since these are executed
         every time you boot the system or run
-        <command>nixos-rebuild</command>, it's important that they are
+        {command}`nixos-rebuild`, it's important that they are
         idempotent and fast.
       '';
 
@@ -159,12 +159,12 @@ in
         }
       '';
 
-      description = ''
+      description = lib.mdDoc ''
         A set of shell script fragments that are executed by a systemd user
         service when a NixOS system configuration is activated. Examples are
         rebuilding the .desktop file cache for showing applications in the menu.
         Since these are executed every time you run
-        <command>nixos-rebuild</command>, it's important that they are
+        {command}`nixos-rebuild`, it's important that they are
         idempotent and fast.
       '';
 

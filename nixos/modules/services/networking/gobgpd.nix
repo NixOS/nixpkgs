@@ -13,9 +13,9 @@ in {
     settings = mkOption {
       type = format.type;
       default = { };
-      description = ''
+      description = lib.mdDoc ''
         GoBGP configuration. Refer to
-        <link xlink:href="https://github.com/osrg/gobgp#documentation"/>
+        <https://github.com/osrg/gobgp#documentation>
         for details on supported values.
       '';
       example = literalExpression ''

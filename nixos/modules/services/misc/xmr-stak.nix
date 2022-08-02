@@ -23,7 +23,7 @@ in
         type = types.listOf types.str;
         default = [];
         example = [ "--noCPU" "--currency monero" ];
-        description = "List of parameters to pass to xmr-stak.";
+        description = lib.mdDoc "List of parameters to pass to xmr-stak.";
       };
 
       configFiles = mkOption {
@@ -52,7 +52,7 @@ in
             ''';
           }
         '';
-        description = ''
+        description = lib.mdDoc ''
           Content of config files like config.txt, pools.txt or cpu.txt.
         '';
       };

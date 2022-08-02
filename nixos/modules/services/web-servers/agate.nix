@@ -14,13 +14,13 @@ in
         type = types.package;
         default = pkgs.agate;
         defaultText = literalExpression "pkgs.agate";
-        description = "The package to use";
+        description = lib.mdDoc "The package to use";
       };
 
       addresses = mkOption {
         type = types.listOf types.str;
         default = [ "0.0.0.0:1965" ];
-        description = ''
+        description = lib.mdDoc ''
           Addresses to listen on, IP:PORT, if you haven't disabled forwarding
           only set IPv4.
         '';
@@ -29,19 +29,19 @@ in
       contentDir = mkOption {
         default = "/var/lib/agate/content";
         type = types.path;
-        description = "Root of the content directory.";
+        description = lib.mdDoc "Root of the content directory.";
       };
 
       certificatesDir = mkOption {
         default = "/var/lib/agate/certificates";
         type = types.path;
-        description = "Root of the certificate directory.";
+        description = lib.mdDoc "Root of the certificate directory.";
       };
 
       hostnames = mkOption {
         default = [ ];
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           Domain name of this Gemini server, enables checking hostname and port
           in requests. (multiple occurences means basic vhosts)
         '';
@@ -50,20 +50,20 @@ in
       language = mkOption {
         default = null;
         type = types.nullOr types.str;
-        description = "RFC 4646 Language code for text/gemini documents.";
+        description = lib.mdDoc "RFC 4646 Language code for text/gemini documents.";
       };
 
       onlyTls_1_3 = mkOption {
         default = false;
         type = types.bool;
-        description = "Only use TLSv1.3 (default also allows TLSv1.2).";
+        description = lib.mdDoc "Only use TLSv1.3 (default also allows TLSv1.2).";
       };
 
       extraArgs = mkOption {
         type = types.listOf types.str;
         default = [ "" ];
         example = [ "--log-ip" ];
-        description = "Extra arguments to use running agate.";
+        description = lib.mdDoc "Extra arguments to use running agate.";
       };
     };
   };

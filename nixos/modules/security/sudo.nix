@@ -36,8 +36,8 @@ in
       type = types.bool;
       default = true;
       description =
-        ''
-          Whether to enable the <command>sudo</command> command, which
+        lib.mdDoc ''
+          Whether to enable the {command}`sudo` command, which
           allows non-root users to execute commands as root.
         '';
     };
@@ -77,15 +77,15 @@ in
       # Note: if syntax errors are detected in this file, the NixOS
       # configuration will fail to build.
       description =
-        ''
+        lib.mdDoc ''
           This string contains the contents of the
-          <filename>sudoers</filename> file.
+          {file}`sudoers` file.
         '';
     };
 
     security.sudo.extraRules = mkOption {
-      description = ''
-        Define specific rules to be in the <filename>sudoers</filename> file.
+      description = lib.mdDoc ''
+        Define specific rules to be in the {file}`sudoers` file.
         More specific rules should come after more general ones in order to
         yield the expected behavior. You can use mkBefore/mkAfter to ensure
         this is the case when configuration options are merged.
@@ -114,7 +114,7 @@ in
         options = {
           users = mkOption {
             type = with types; listOf (either str int);
-            description = ''
+            description = lib.mdDoc ''
               The usernames / UIDs this rule should apply for.
             '';
             default = [];
@@ -122,7 +122,7 @@ in
 
           groups = mkOption {
             type = with types; listOf (either str int);
-            description = ''
+            description = lib.mdDoc ''
               The groups / GIDs this rule should apply for.
             '';
             default = [];
@@ -131,7 +131,7 @@ in
           host = mkOption {
             type = types.str;
             default = "ALL";
-            description = ''
+            description = lib.mdDoc ''
               For what host this rule should apply.
             '';
           };
@@ -149,7 +149,7 @@ in
           };
 
           commands = mkOption {
-            description = ''
+            description = lib.mdDoc ''
               The commands for which the rule should apply.
             '';
             type = with types; listOf (either str (submodule {
@@ -182,8 +182,8 @@ in
     security.sudo.extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = ''
-        Extra configuration text appended to <filename>sudoers</filename>.
+      description = lib.mdDoc ''
+        Extra configuration text appended to {file}`sudoers`.
       '';
     };
   };

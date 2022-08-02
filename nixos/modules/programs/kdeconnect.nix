@@ -16,7 +16,7 @@ with lib;
       defaultText = literalExpression "pkgs.plasma5Packages.kdeconnect-kde";
       type = types.package;
       example = literalExpression "pkgs.gnomeExtensions.gsconnect";
-      description = ''
+      description = lib.mdDoc ''
         The package providing the implementation for kdeconnect.
       '';
     };

@@ -12,7 +12,7 @@ in
     user = mkOption {
       type = types.str;
       default = "oxidized";
-      description = ''
+      description = lib.mdDoc ''
         User under which the oxidized service runs.
       '';
     };
@@ -20,7 +20,7 @@ in
     group = mkOption {
       type = types.str;
       default = "oxidized";
-      description = ''
+      description = lib.mdDoc ''
         Group under which the oxidized service runs.
       '';
     };
@@ -28,7 +28,7 @@ in
     dataDir = mkOption {
       type = types.path;
       default = "/var/lib/oxidized";
-      description = "State directory for the oxidized service.";
+      description = lib.mdDoc "State directory for the oxidized service.";
     };
 
     configFile = mkOption {
@@ -62,7 +62,7 @@ in
           # ... additional config
         ''';
       '';
-      description = ''
+      description = lib.mdDoc ''
         Path to the oxidized configuration file.
       '';
     };
@@ -76,7 +76,7 @@ in
           # ... additional hosts
         '''
       '';
-      description = ''
+      description = lib.mdDoc ''
         Path to the file/database which contains the targets for oxidized.
       '';
     };

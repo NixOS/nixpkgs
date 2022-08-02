@@ -32459,7 +32459,7 @@ with pkgs;
 
   fishfight = callPackage ../games/fishfight {
     inherit (xorg) libX11 libXi;
-    inherit (darwin.apple_sdk.frameworks) AudioToolbox Cocoa CoreAudio OpenGL;
+    inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
   };
 
   flightgear = libsForQt5.callPackage ../games/flightgear { };
@@ -35714,6 +35714,8 @@ with pkgs;
   wishbone-tool = callPackage ../development/tools/misc/wishbone-tool { };
 
   with-shell = callPackage ../applications/misc/with-shell { };
+
+  wizer = darwin.apple_sdk_11_0.callPackage ../development/tools/wizer {};
 
   wmutils-core = callPackage ../tools/X11/wmutils-core { };
 

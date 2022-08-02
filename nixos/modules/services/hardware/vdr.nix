@@ -19,19 +19,19 @@ in {
         default = pkgs.vdr;
         defaultText = literalExpression "pkgs.vdr";
         example = literalExpression "pkgs.wrapVdr.override { plugins = with pkgs.vdrPlugins; [ hello ]; }";
-        description = "Package to use.";
+        description = lib.mdDoc "Package to use.";
       };
 
       videoDir = mkOption {
         type = types.path;
         default = "/srv/vdr/video";
-        description = "Recording directory";
+        description = lib.mdDoc "Recording directory";
       };
 
       extraArguments = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = "Additional command line arguments to pass to VDR.";
+        description = lib.mdDoc "Additional command line arguments to pass to VDR.";
       };
 
       enableLirc = mkEnableOption "LIRC";

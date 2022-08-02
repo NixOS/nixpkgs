@@ -184,7 +184,7 @@ let
     options = {
       username = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           HTTP username
         '';
       };
@@ -257,7 +257,7 @@ let
       };
       job_name = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The job name assigned to scraped metrics by default.
         '';
       };
@@ -513,7 +513,7 @@ let
 
       subscription_id = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The subscription ID.
         '';
       };
@@ -618,7 +618,7 @@ let
   mkDockerSdConfigModule = extraOptions: mkSdConfigModule ({
     host = mkOption {
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Address of the Docker daemon.
       '';
     };
@@ -675,7 +675,7 @@ let
     options = {
       names = mkOption {
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           A list of DNS SRV record names to be queried.
         '';
       };
@@ -698,7 +698,7 @@ let
     options = {
       region = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The AWS Region. If blank, the region from the instance metadata is used.
         '';
       };
@@ -762,7 +762,7 @@ let
   promTypes.eureka_sd_config = mkSdConfigModule {
     server = mkOption {
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         The URL to connect to the Eureka server.
       '';
     };
@@ -772,7 +772,7 @@ let
     options = {
       files = mkOption {
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           Patterns for files from which target groups are extracted. Refer
           to the Prometheus documentation for permitted filename patterns
           and formats.
@@ -791,14 +791,14 @@ let
       # required configuration values for `gce_sd_config`.
       project = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The GCP Project.
         '';
       };
 
       zone = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The zone of the scrape targets. If you need multiple zones use multiple
           gce_sd_configs.
         '';
@@ -833,9 +833,9 @@ let
   promTypes.hetzner_sd_config = mkSdConfigModule {
     role = mkOption {
       type = types.enum [ "robot" "hcloud" ];
-      description = ''
+      description = lib.mdDoc ''
         The Hetzner role of entities that should be discovered.
-        One of <literal>robot</literal> or <literal>hcloud</literal>.
+        One of `robot` or `hcloud`.
       '';
     };
 
@@ -852,7 +852,7 @@ let
     options = {
       url = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           URL from which the targets are fetched.
         '';
       };
@@ -889,7 +889,7 @@ let
 
     role = mkOption {
       type = types.enum [ "endpoints" "service" "pod" "node" "ingress" ];
-      description = ''
+      description = lib.mdDoc ''
         The Kubernetes role of entities that should be discovered.
         One of endpoints, service, pod, node, or ingress.
       '';
@@ -954,7 +954,7 @@ let
   promTypes.kuma_sd_config = mkSdConfigModule {
     server = mkOption {
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Address of the Kuma Control Plane's MADS xDS server.
       '';
     };
@@ -1022,7 +1022,7 @@ let
   promTypes.marathon_sd_config = mkSdConfigModule {
     servers = mkOption {
       type = types.listOf types.str;
-      description = ''
+      description = lib.mdDoc ''
         List of URLs to be used to contact Marathon servers. You need to provide at least one server URL.
       '';
     };
@@ -1048,14 +1048,14 @@ let
     options = {
       servers = mkOption {
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           The Zookeeper servers.
         '';
       };
 
       paths = mkOption {
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           Paths can point to a single service, or the root of a tree of services.
         '';
       };
@@ -1097,14 +1097,14 @@ let
       {
         role = mkOption {
           type = types.str;
-          description = ''
+          description = lib.mdDoc ''
             The OpenStack role of entities that should be discovered.
           '';
         };
 
         region = mkOption {
           type = types.str;
-          description = ''
+          description = lib.mdDoc ''
             The OpenStack Region.
           '';
         };
@@ -1165,14 +1165,14 @@ let
   promTypes.puppetdb_sd_config = mkSdConfigModule {
     url = mkOption {
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         The URL of the PuppetDB root query endpoint.
       '';
     };
 
     query = mkOption {
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Puppet Query Language (PQL) query. Only resources are supported.
         https://puppet.com/docs/puppetdb/latest/api/query/v4/pql.html
       '';
@@ -1201,7 +1201,7 @@ let
     options = {
       access_key = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Access key to use. https://console.scaleway.com/project/credentials
         '';
       };
@@ -1218,7 +1218,7 @@ let
 
       project_id = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Project ID of the targets.
         '';
       };
@@ -1275,7 +1275,7 @@ let
     options = {
       account = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The account to use for discovering new targets.
         '';
       };
@@ -1288,15 +1288,15 @@ let
 
       dns_suffix = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The DNS suffix which should be applied to target.
         '';
       };
 
       endpoint = mkOption {
         type = types.str;
-        description = ''
-          The Triton discovery endpoint (e.g. <literal>cmon.us-east-3b.triton.zone</literal>). This is
+        description = lib.mdDoc ''
+          The Triton discovery endpoint (e.g. `cmon.us-east-3b.triton.zone`). This is
           often the same value as dns_suffix.
         '';
       };
@@ -1327,21 +1327,21 @@ let
   promTypes.uyuni_sd_config = mkSdConfigModule {
     server = mkOption {
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         The URL to connect to the Uyuni server.
       '';
     };
 
     username = mkOption {
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Credentials are used to authenticate the requests to Uyuni API.
       '';
     };
 
     password = mkOption {
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Credentials are used to authenticate the requests to Uyuni API.
       '';
     };
@@ -1363,14 +1363,14 @@ let
     options = {
       targets = mkOption {
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           The targets specified by the target group.
         '';
       };
       labels = mkOption {
         type = types.attrsOf types.str;
         default = { };
-        description = ''
+        description = lib.mdDoc ''
           Labels assigned to all metrics scraped from the targets.
         '';
       };
@@ -1426,7 +1426,7 @@ let
     options = {
       url = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           ServerName extension to indicate the name of the server.
           http://tools.ietf.org/html/rfc4366#section-3.1
         '';
@@ -1512,7 +1512,7 @@ let
     options = {
       url = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           ServerName extension to indicate the name of the server.
           http://tools.ietf.org/html/rfc4366#section-3.1
         '';
@@ -1569,7 +1569,7 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enable the Prometheus monitoring daemon.
       '';
     };
@@ -1578,7 +1578,7 @@ in
       type = types.package;
       default = pkgs.prometheus;
       defaultText = literalExpression "pkgs.prometheus";
-      description = ''
+      description = lib.mdDoc ''
         The prometheus package that should be used.
       '';
     };
@@ -1586,7 +1586,7 @@ in
     port = mkOption {
       type = types.port;
       default = 9090;
-      description = ''
+      description = lib.mdDoc ''
         Port to listen on.
       '';
     };
@@ -1594,7 +1594,7 @@ in
     listenAddress = mkOption {
       type = types.str;
       default = "0.0.0.0";
-      description = ''
+      description = lib.mdDoc ''
         Address to listen on for the web interface, API, and telemetry.
       '';
     };
@@ -1602,8 +1602,8 @@ in
     stateDir = mkOption {
       type = types.str;
       default = "prometheus2";
-      description = ''
-        Directory below <literal>/var/lib</literal> to store Prometheus metrics data.
+      description = lib.mdDoc ''
+        Directory below `/var/lib` to store Prometheus metrics data.
         This directory will be created automatically using systemd's StateDirectory mechanism.
       '';
     };
@@ -1611,7 +1611,7 @@ in
     extraFlags = mkOption {
       type = types.listOf types.str;
       default = [ ];
-      description = ''
+      description = lib.mdDoc ''
         Extra commandline options when launching Prometheus.
       '';
     };
@@ -1619,11 +1619,11 @@ in
     enableReload = mkOption {
       default = false;
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         Reload prometheus when configuration file changes (instead of restart).
 
         The following property holds: switching to a configuration
-        (<literal>switch-to-configuration</literal>) that changes the prometheus
+        (`switch-to-configuration`) that changes the prometheus
         configuration only finishes successully when prometheus has finished
         loading the new configuration.
       '';
@@ -1632,7 +1632,7 @@ in
     configText = mkOption {
       type = types.nullOr types.lines;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         If non-null, this option defines the text that is written to
         prometheus.yml. If null, the contents of prometheus.yml is generated
         from the structured config options.
@@ -1642,7 +1642,7 @@ in
     globalConfig = mkOption {
       type = promTypes.globalConfig;
       default = { };
-      description = ''
+      description = lib.mdDoc ''
         Parameters that are valid in all  configuration contexts. They
         also serve as defaults for other configuration sections
       '';
@@ -1651,25 +1651,25 @@ in
     remoteRead = mkOption {
       type = types.listOf promTypes.remote_read;
       default = [ ];
-      description = ''
+      description = lib.mdDoc ''
         Parameters of the endpoints to query from.
-        See <link xlink:href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_read">the official documentation</link> for more information.
+        See [the official documentation](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_read) for more information.
       '';
     };
 
     remoteWrite = mkOption {
       type = types.listOf promTypes.remote_write;
       default = [ ];
-      description = ''
+      description = lib.mdDoc ''
         Parameters of the endpoints to send samples to.
-        See <link xlink:href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_write">the official documentation</link> for more information.
+        See [the official documentation](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_write) for more information.
       '';
     };
 
     rules = mkOption {
       type = types.listOf types.str;
       default = [ ];
-      description = ''
+      description = lib.mdDoc ''
         Alerting and/or Recording rules to evaluate at runtime.
       '';
     };
@@ -1677,7 +1677,7 @@ in
     ruleFiles = mkOption {
       type = types.listOf types.path;
       default = [ ];
-      description = ''
+      description = lib.mdDoc ''
         Any additional rules files to include in this configuration.
       '';
     };
@@ -1685,7 +1685,7 @@ in
     scrapeConfigs = mkOption {
       type = types.listOf promTypes.scrape_config;
       default = [ ];
-      description = ''
+      description = lib.mdDoc ''
         A list of scrape configurations.
       '';
     };
@@ -1704,16 +1704,16 @@ in
         } ]
       '';
       default = [ ];
-      description = ''
+      description = lib.mdDoc ''
         A list of alertmanagers to send alerts to.
-        See <link xlink:href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#alertmanager_config">the official documentation</link> for more information.
+        See [the official documentation](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#alertmanager_config) for more information.
       '';
     };
 
     alertmanagerNotificationQueueCapacity = mkOption {
       type = types.int;
       default = 10000;
-      description = ''
+      description = lib.mdDoc ''
         The capacity of the queue for pending alert manager notifications.
       '';
     };
@@ -1722,7 +1722,7 @@ in
       type = types.nullOr types.str;
       default = null;
       example = "https://example.com/";
-      description = ''
+      description = lib.mdDoc ''
         The URL under which Prometheus is externally reachable (for example,
         if Prometheus is served via a reverse proxy).
       '';
@@ -1750,7 +1750,7 @@ in
       type = types.nullOr types.str;
       default = null;
       example = "15d";
-      description = ''
+      description = lib.mdDoc ''
         How long to retain samples in storage.
       '';
     };

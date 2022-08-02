@@ -10,7 +10,7 @@ in
       type = with types; nullOr str;
       default = null;
       example = "/run/secrets/password.env";
-      description = ''
+      description = lib.mdDoc ''
         The path to a file containing the PASSWORD environment variable
         definition for Podgrab's authentification.
       '';
@@ -20,7 +20,7 @@ in
       type = types.port;
       default = 8080;
       example = 4242;
-      description = "The port on which Podgrab will listen for incoming HTTP traffic.";
+      description = lib.mdDoc "The port on which Podgrab will listen for incoming HTTP traffic.";
     };
   };
 

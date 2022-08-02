@@ -59,7 +59,7 @@ in
       address = mkOption {
         type = types.str;
         default = "[::1]";
-        description = ''
+        description = lib.mdDoc ''
           The IP address the ncdns resolver will bind to.  Leave this unchanged
           if you do not wish to directly expose the resolver.
         '';
@@ -68,7 +68,7 @@ in
       port = mkOption {
         type = types.port;
         default = 5333;
-        description = ''
+        description = lib.mdDoc ''
           The port the ncdns resolver will bind to.
         '';
       };
@@ -96,7 +96,7 @@ in
         type = types.str;
         default = "";
         example = "root@example.com";
-        description = ''
+        description = lib.mdDoc ''
           An email address for the SOA record at the bit zone.
           If you are only using ncdns locally you can ignore this.
         '';
@@ -105,9 +105,9 @@ in
       identity.address = mkOption {
         type = types.str;
         default = "127.127.127.127";
-        description = ''
+        description = lib.mdDoc ''
           The IP address the hostname specified in
-          <option>services.ncdns.identity.hostname</option> should resolve to.
+          {option}`services.ncdns.identity.hostname` should resolve to.
           If you are only using ncdns locally you can ignore this.
         '';
       };
@@ -136,7 +136,7 @@ in
       dnssec.keys.private = mkOption {
         type = types.path;
         default = defaultFiles.private;
-        description = ''
+        description = lib.mdDoc ''
           Path to the file containing the KSK private key.
         '';
       };
@@ -157,7 +157,7 @@ in
       dnssec.keys.zonePrivate = mkOption {
         type = types.path;
         default = defaultFiles.zonePrivate;
-        description = ''
+        description = lib.mdDoc ''
           Path to the file containing the ZSK private key.
         '';
       };
@@ -189,8 +189,8 @@ in
     services.pdns-recursor.resolveNamecoin = mkOption {
       type = types.bool;
       default = false;
-      description = ''
-        Resolve <literal>.bit</literal> top-level domains using ncdns and namecoin.
+      description = lib.mdDoc ''
+        Resolve `.bit` top-level domains using ncdns and namecoin.
       '';
     };
 

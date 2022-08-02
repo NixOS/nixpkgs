@@ -36,24 +36,24 @@ in
       ssh.enable = mkOption {
         type = types.bool;
         default = false;
-        description = "If enabled, protect SSH logins with Duo Security.";
+        description = lib.mdDoc "If enabled, protect SSH logins with Duo Security.";
       };
 
       pam.enable = mkOption {
         type = types.bool;
         default = false;
-        description = "If enabled, protect logins with Duo Security using PAM support.";
+        description = lib.mdDoc "If enabled, protect logins with Duo Security using PAM support.";
       };
 
       integrationKey = mkOption {
         type = types.str;
-        description = "Integration key.";
+        description = lib.mdDoc "Integration key.";
       };
 
       secretKeyFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           A file containing your secret key. The security of your Duo application is tied to the security of your secret key.
         '';
         example = "/run/keys/duo-skey";
@@ -61,25 +61,25 @@ in
 
       host = mkOption {
         type = types.str;
-        description = "Duo API hostname.";
+        description = lib.mdDoc "Duo API hostname.";
       };
 
       groups = mkOption {
         type = types.str;
         default = "";
         example = "users,!wheel,!*admin guests";
-        description = ''
+        description = lib.mdDoc ''
           If specified, Duo authentication is required only for users
           whose primary group or supplementary group list matches one
           of the space-separated pattern lists. Refer to
-          <link xlink:href="https://duo.com/docs/duounix"/> for details.
+          <https://duo.com/docs/duounix> for details.
         '';
       };
 
       failmode = mkOption {
         type = types.enum [ "safe" "secure" ];
         default = "safe";
-        description = ''
+        description = lib.mdDoc ''
           On service or configuration errors that prevent Duo
           authentication, fail "safe" (allow access) or "secure" (deny
           access). The default is "safe".
@@ -89,7 +89,7 @@ in
       pushinfo = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Include information such as the command to be executed in
           the Duo Push message.
         '';
@@ -98,22 +98,22 @@ in
       autopush = mkOption {
         type = types.bool;
         default = false;
-        description = ''
-          If <literal>true</literal>, Duo Unix will automatically send
+        description = lib.mdDoc ''
+          If `true`, Duo Unix will automatically send
           a push login request to the user’s phone, falling back on a
           phone call if push is unavailable. If
-          <literal>false</literal>, the user will be prompted to
+          `false`, the user will be prompted to
           choose an authentication method. When configured with
-          <literal>autopush = yes</literal>, we recommend setting
-          <literal>prompts = 1</literal>.
+          `autopush = yes`, we recommend setting
+          `prompts = 1`.
         '';
       };
 
       motd = mkOption {
         type = types.bool;
         default = false;
-        description = ''
-          Print the contents of <literal>/etc/motd</literal> to screen
+        description = lib.mdDoc ''
+          Print the contents of `/etc/motd` to screen
           after a successful login.
         '';
       };
@@ -121,30 +121,30 @@ in
       prompts = mkOption {
         type = types.enum [ 1 2 3 ];
         default = 3;
-        description = ''
+        description = lib.mdDoc ''
           If a user fails to authenticate with a second factor, Duo
           Unix will prompt the user to authenticate again. This option
           sets the maximum number of prompts that Duo Unix will
           display before denying access. Must be 1, 2, or 3. Default
           is 3.
 
-          For example, when <literal>prompts = 1</literal>, the user
+          For example, when `prompts = 1`, the user
           will have to successfully authenticate on the first prompt,
-          whereas if <literal>prompts = 2</literal>, if the user
+          whereas if `prompts = 2`, if the user
           enters incorrect information at the initial prompt, he/she
           will be prompted to authenticate again.
 
-          When configured with <literal>autopush = true</literal>, we
-          recommend setting <literal>prompts = 1</literal>.
+          When configured with `autopush = true`, we
+          recommend setting `prompts = 1`.
         '';
       };
 
       acceptEnvFactor = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Look for factor selection or passcode in the
-          <literal>$DUO_PASSCODE</literal> environment variable before
+          `$DUO_PASSCODE` environment variable before
           prompting the user for input.
 
           When $DUO_PASSCODE is non-empty, it will override
@@ -157,11 +157,11 @@ in
       fallbackLocalIP = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Duo Unix reports the IP address of the authorizing user, for
           the purposes of authorization and whitelisting. If Duo Unix
           cannot detect the IP address of the client, setting
-          <literal>fallbackLocalIP = yes</literal> will cause Duo Unix
+          `fallbackLocalIP = yes` will cause Duo Unix
           to send the IP address of the server it is running on.
 
           If you are using IP whitelisting, enabling this option could
@@ -173,7 +173,7 @@ in
       allowTcpForwarding = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           By default, when SSH forwarding, enabling Duo Security will
           disable TCP forwarding. By enabling this, you potentially
           undermine some of the SSH based login security. Note this is

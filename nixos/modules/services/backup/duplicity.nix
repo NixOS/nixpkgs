@@ -18,7 +18,7 @@ in
     root = mkOption {
       type = types.path;
       default = "/";
-      description = ''
+      description = lib.mdDoc ''
         Root directory to backup.
       '';
     };
@@ -96,10 +96,10 @@ in
       type = types.str;
       default = "never";
       example = "1M";
-      description = ''
-        If <literal>"never"</literal> (the default) always do incremental
+      description = lib.mdDoc ''
+        If `"never"` (the default) always do incremental
         backups (the first backup will be a full backup, of course).  If
-        <literal>"always"</literal> always do full backups.  Otherwise, this
+        `"always"` always do full backups.  Otherwise, this
         must be a string representing a duration. Full backups will be made
         when the latest full backup is older than this duration. If this is not
         the case, an incremental backup is performed.
@@ -111,7 +111,7 @@ in
         type = types.nullOr types.str;
         default = null;
         example = "6M";
-        description = ''
+        description = lib.mdDoc ''
           If non-null, delete all backup sets older than the given time.  Old backup sets
           will not be deleted if backup sets newer than time depend on them.
         '';
@@ -120,7 +120,7 @@ in
         type = types.nullOr types.int;
         default = null;
         example = 2;
-        description = ''
+        description = lib.mdDoc ''
           If non-null, delete all backups sets that are older than the count:th last full
           backup (in other words, keep the last count full backups and
           associated incremental sets).
@@ -130,7 +130,7 @@ in
         type = types.nullOr types.int;
         default = null;
         example = 1;
-        description = ''
+        description = lib.mdDoc ''
           If non-null, delete incremental sets of all backups sets that are
           older than the count:th last full backup (in other words, keep only
           old full backups and not their increments).

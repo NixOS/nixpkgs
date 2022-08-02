@@ -54,9 +54,9 @@ in {
         type = nullOr path;
         default = null;
         example = "/run/keys/yggdrasil.conf";
-        description = ''
+        description = lib.mdDoc ''
           A file which contains JSON configuration for yggdrasil.
-          See the <option>config</option> option for more information.
+          See the {option}`config` option for more information.
         '';
       };
 
@@ -86,7 +86,7 @@ in {
         type = listOf str;
         default = [];
         example = [ "tap*" ];
-        description = ''
+        description = lib.mdDoc ''
           Disable the DHCP client for any interface whose name matches
           any of the shell glob patterns in this list.  Use this
           option to prevent the DHCP client from broadcasting requests
@@ -100,7 +100,7 @@ in {
         type = package;
         default = pkgs.yggdrasil;
         defaultText = literalExpression "pkgs.yggdrasil";
-        description = "Yggdrasil package to use.";
+        description = lib.mdDoc "Yggdrasil package to use.";
       };
 
       persistentKeys = mkEnableOption ''

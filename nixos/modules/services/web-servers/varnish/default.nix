@@ -19,7 +19,7 @@ in
         type = types.package;
         default = pkgs.varnish;
         defaultText = literalExpression "pkgs.varnish";
-        description = ''
+        description = lib.mdDoc ''
           The package to use
         '';
       };

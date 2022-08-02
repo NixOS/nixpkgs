@@ -35,7 +35,7 @@ in
       calendar = mkOption {
         type = types.str;
         default = "01:15:00";
-        description = ''
+        description = lib.mdDoc ''
           Configured when to run the backup service systemd unit (DayOfWeek Year-Month-Day Hour:Minute:Second).
         '';
       };
@@ -43,9 +43,9 @@ in
       config = mkOption {
         type = with types; attrsOf (oneOf [ str int bool (listOf str) ]);
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           automysqlbackup configuration. Refer to
-          <filename>''${pkgs.automysqlbackup}/etc/automysqlbackup.conf</filename>
+          {file}`''${pkgs.automysqlbackup}/etc/automysqlbackup.conf`
           for details on supported values.
         '';
         example = literalExpression ''

@@ -17,7 +17,7 @@ in {
       type = types.package;
       default = pkgs.touchegg;
       defaultText = literalExpression "pkgs.touchegg";
-      description = "touchegg derivation to use.";
+      description = lib.mdDoc "touchegg derivation to use.";
     };
   };
 

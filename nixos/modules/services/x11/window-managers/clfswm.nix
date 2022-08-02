@@ -14,7 +14,7 @@ in
         type        = types.package;
         default     = pkgs.lispPackages.clfswm;
         defaultText = literalExpression "pkgs.lispPackages.clfswm";
-        description = ''
+        description = lib.mdDoc ''
           clfswm package to use.
         '';
       };

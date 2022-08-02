@@ -17,8 +17,8 @@ in {
     stateDirectoryName = mkOption {
       type = types.str;
       default = "documize";
-      description = ''
-        The name of the directory below <filename>/var/lib/private</filename>
+      description = lib.mdDoc ''
+        The name of the directory below {file}`/var/lib/private`
         where documize runs in and stores, for example, backups.
       '';
     };
@@ -27,7 +27,7 @@ in {
       type = types.package;
       default = pkgs.documize-community;
       defaultText = literalExpression "pkgs.documize-community";
-      description = ''
+      description = lib.mdDoc ''
         Which package to use for documize.
       '';
     };
@@ -36,7 +36,7 @@ in {
       type = types.nullOr types.str;
       default = null;
       example = "3edIYV6c8B28b19fh";
-      description = ''
+      description = lib.mdDoc ''
         The salt string used to encode JWT tokens, if not set a random value will be generated.
       '';
     };
@@ -44,23 +44,23 @@ in {
     cert = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = ''
-        The <filename>cert.pem</filename> file used for https.
+      description = lib.mdDoc ''
+        The {file}`cert.pem` file used for https.
       '';
     };
 
     key = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = ''
-        The <filename>key.pem</filename> file used for https.
+      description = lib.mdDoc ''
+        The {file}`key.pem` file used for https.
       '';
     };
 
     port = mkOption {
       type = types.port;
       default = 5001;
-      description = ''
+      description = lib.mdDoc ''
         The http/https port number.
       '';
     };
@@ -68,7 +68,7 @@ in {
     forcesslport = mkOption {
       type = types.nullOr types.port;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Redirect given http port number to TLS.
       '';
     };
@@ -76,8 +76,8 @@ in {
     offline = mkOption {
       type = types.bool;
       default = false;
-      description = ''
-        Set <literal>true</literal> for offline mode.
+      description = lib.mdDoc ''
+        Set `true` for offline mode.
       '';
       apply = v: if true == v then 1 else 0;
     };
@@ -122,7 +122,7 @@ in {
     location = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         reserved
       '';
     };

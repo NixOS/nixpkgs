@@ -31,7 +31,7 @@ with lib;
       plugins = mkOption {
         type = types.listOf types.package;
         default = [ ];
-        description = "Plugins for Evolution Data Server.";
+        description = lib.mdDoc "Plugins for Evolution Data Server.";
       };
     };
     programs.evolution = {
@@ -40,7 +40,7 @@ with lib;
         type = types.listOf types.package;
         default = [ ];
         example = literalExpression "[ pkgs.evolution-ews ]";
-        description = "Plugins for Evolution.";
+        description = lib.mdDoc "Plugins for Evolution.";
       };
 
     };

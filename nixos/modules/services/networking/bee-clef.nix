@@ -19,7 +19,7 @@ in {
       dataDir = mkOption {
         type = types.nullOr types.str;
         default = "/var/lib/bee-clef";
-        description = ''
+        description = lib.mdDoc ''
           Data dir for bee-clef. Beware that some helper scripts may not work when changed!
           The service itself should work fine, though.
         '';
@@ -28,13 +28,13 @@ in {
       passwordFile = mkOption {
         type = types.nullOr types.str;
         default = "/var/lib/bee-clef/password";
-        description = "Password file for bee-clef.";
+        description = lib.mdDoc "Password file for bee-clef.";
       };
 
       user = mkOption {
         type = types.str;
         default = "bee-clef";
-        description = ''
+        description = lib.mdDoc ''
           User the bee-clef daemon should execute under.
         '';
       };
@@ -42,7 +42,7 @@ in {
       group = mkOption {
         type = types.str;
         default = "bee-clef";
-        description = ''
+        description = lib.mdDoc ''
           Group the bee-clef daemon should execute under.
         '';
       };

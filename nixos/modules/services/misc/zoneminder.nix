@@ -93,7 +93,7 @@ in {
       hostname = mkOption {
         type = types.str;
         default = "localhost";
-        description = ''
+        description = lib.mdDoc ''
           The hostname on which to listen.
         '';
       };
@@ -101,7 +101,7 @@ in {
       port = mkOption {
         type = types.int;
         default = 8095;
-        description = ''
+        description = lib.mdDoc ''
           The port on which to listen.
         '';
       };
@@ -109,7 +109,7 @@ in {
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Open the firewall port(s).
         '';
       };
@@ -118,7 +118,7 @@ in {
         createLocally = mkOption {
           type = types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Create the database and database user locally.
           '';
         };
@@ -126,7 +126,7 @@ in {
         host = mkOption {
           type = types.str;
           default = "localhost";
-          description = ''
+          description = lib.mdDoc ''
             Hostname hosting the database.
           '';
         };
@@ -134,7 +134,7 @@ in {
         name = mkOption {
           type = types.str;
           default = "zm";
-          description = ''
+          description = lib.mdDoc ''
             Name of database.
           '';
         };
@@ -142,7 +142,7 @@ in {
         username = mkOption {
           type = types.str;
           default = "zmuser";
-          description = ''
+          description = lib.mdDoc ''
             Username for accessing the database.
           '';
         };
@@ -150,9 +150,9 @@ in {
         password = mkOption {
           type = types.str;
           default = "zmpass";
-          description = ''
+          description = lib.mdDoc ''
             Username for accessing the database.
-            Not used if <literal>createLocally</literal> is set.
+            Not used if `createLocally` is set.
           '';
         };
       };
@@ -160,7 +160,7 @@ in {
       cameras = mkOption {
         type = types.int;
         default = 1;
-        description = ''
+        description = lib.mdDoc ''
           Set this to the number of cameras you expect to support.
         '';
       };
@@ -169,7 +169,7 @@ in {
         type = types.nullOr types.str;
         default = null;
         example = "/storage/tank";
-        description = ''
+        description = lib.mdDoc ''
           ZoneMinder can generate quite a lot of data, so in case you don't want
           to use the default ${defaultDir}, you can override the path here.
         '';
@@ -178,7 +178,7 @@ in {
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Additional configuration added verbatim to the configuration file.
         '';
       };

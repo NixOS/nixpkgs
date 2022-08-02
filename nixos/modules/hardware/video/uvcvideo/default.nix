@@ -22,12 +22,12 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
-          Whether to enable <command>uvcvideo</command> dynamic controls.
+        description = lib.mdDoc ''
+          Whether to enable {command}`uvcvideo` dynamic controls.
 
-          Note that enabling this brings the <command>uvcdynctrl</command> tool
+          Note that enabling this brings the {command}`uvcdynctrl` tool
           into your environment and register all dynamic controls from
-          specified <command>packages</command> to the <command>uvcvideo</command> driver.
+          specified {command}`packages` to the {command}`uvcvideo` driver.
         '';
       };
 

@@ -69,7 +69,7 @@ in
     boot.initrd.network.flushBeforeStage2 = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether to clear the configuration of the interfaces that were set up in
         the initrd right before stage 2 takes over. Stage 2 will do the regular network
         configuration based on the NixOS networking options.
@@ -79,9 +79,9 @@ in
     boot.initrd.network.udhcpc.extraArgs = mkOption {
       default = [];
       type = types.listOf types.str;
-      description = ''
+      description = lib.mdDoc ''
         Additional command-line arguments passed verbatim to udhcpc if
-        <option>boot.initrd.network.enable</option> and <option>networking.useDHCP</option>
+        {option}`boot.initrd.network.enable` and {option}`networking.useDHCP`
         are enabled.
       '';
     };
@@ -89,7 +89,7 @@ in
     boot.initrd.network.postCommands = mkOption {
       default = "";
       type = types.lines;
-      description = ''
+      description = lib.mdDoc ''
         Shell commands to be executed after stage 1 of the
         boot has initialised the network.
       '';

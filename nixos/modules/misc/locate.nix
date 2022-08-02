@@ -19,9 +19,9 @@ in
     enable = mkOption {
       type = bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         If enabled, NixOS will periodically update the database of
-        files used by the <command>locate</command> command.
+        files used by the {command}`locate` command.
       '';
     };
 
@@ -30,7 +30,7 @@ in
       default = pkgs.findutils.locate;
       defaultText = literalExpression "pkgs.findutils";
       example = literalExpression "pkgs.mlocate";
-      description = ''
+      description = lib.mdDoc ''
         The locate implementation to use
       '';
     };
@@ -55,15 +55,15 @@ in
     extraFlags = mkOption {
       type = listOf str;
       default = [ ];
-      description = ''
-        Extra flags to pass to <command>updatedb</command>.
+      description = lib.mdDoc ''
+        Extra flags to pass to {command}`updatedb`.
       '';
     };
 
     output = mkOption {
       type = path;
       default = "/var/cache/locatedb";
-      description = ''
+      description = lib.mdDoc ''
         The database file to build.
       '';
     };
@@ -71,9 +71,9 @@ in
     localuser = mkOption {
       type = nullOr str;
       default = "nobody";
-      description = ''
+      description = lib.mdDoc ''
         The user to search non-network directories as, using
-        <command>su</command>.
+        {command}`su`.
       '';
     };
 
@@ -159,7 +159,7 @@ in
         "vboxsf"
         "vperfctrfs"
       ];
-      description = ''
+      description = lib.mdDoc ''
         Which filesystem types to exclude from indexing
       '';
     };
@@ -176,7 +176,7 @@ in
         "/nix/store"
         "/nix/var/log/nix"
       ];
-      description = ''
+      description = lib.mdDoc ''
         Which paths to exclude from indexing
       '';
     };
@@ -188,7 +188,7 @@ in
         <literal>[ ".bzr" ".cache" ".git" ".hg" ".svn" ]</literal>, if
         supported by the locate implementation (i.e. mlocate or plocate).
       '';
-      description = ''
+      description = lib.mdDoc ''
         Directory components which should exclude paths containing them from indexing
       '';
     };
@@ -196,7 +196,7 @@ in
     pruneBindMounts = mkOption {
       type = bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether not to index bind mounts
       '';
     };

@@ -157,14 +157,14 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = "Enable the Plasma 5 (KDE 5) desktop environment.";
+      description = lib.mdDoc "Enable the Plasma 5 (KDE 5) desktop environment.";
     };
 
     phononBackend = mkOption {
       type = types.enum [ "gstreamer" "vlc" ];
       default = "gstreamer";
       example = "vlc";
-      description = "Phonon audio backend to install.";
+      description = lib.mdDoc "Phonon audio backend to install.";
     };
 
     supportDDC = mkOption {
@@ -183,17 +183,17 @@ in
     useQtScaling = mkOption {
       type = types.bool;
       default = false;
-      description = "Enable HiDPI scaling in Qt.";
+      description = lib.mdDoc "Enable HiDPI scaling in Qt.";
     };
 
     runUsingSystemd = mkOption {
-      description = "Use systemd to manage the Plasma session";
+      description = lib.mdDoc "Use systemd to manage the Plasma session";
       type = types.bool;
       default = false;
     };
 
     excludePackages = mkOption {
-      description = "List of default packages to exclude from the configuration";
+      description = lib.mdDoc "List of default packages to exclude from the configuration";
       type = types.listOf types.package;
       default = [];
       example = literalExpression "[ pkgs.plasma5Packages.oxygen ]";
@@ -216,7 +216,7 @@ in
     mobile.enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enable support for running the Plasma Mobile shell.
       '';
     };
@@ -224,7 +224,7 @@ in
     mobile.installRecommendedSoftware = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Installs software recommended for use with Plasma Mobile, but which
         is not strictly required for Plasma Mobile to run.
       '';

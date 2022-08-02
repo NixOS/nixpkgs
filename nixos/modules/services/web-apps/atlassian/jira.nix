@@ -34,38 +34,38 @@ in
       user = mkOption {
         type = types.str;
         default = "jira";
-        description = "User which runs JIRA.";
+        description = lib.mdDoc "User which runs JIRA.";
       };
 
       group = mkOption {
         type = types.str;
         default = "jira";
-        description = "Group which runs JIRA.";
+        description = lib.mdDoc "Group which runs JIRA.";
       };
 
       home = mkOption {
         type = types.str;
         default = "/var/lib/jira";
-        description = "Home directory of the JIRA instance.";
+        description = lib.mdDoc "Home directory of the JIRA instance.";
       };
 
       listenAddress = mkOption {
         type = types.str;
         default = "127.0.0.1";
-        description = "Address to listen on.";
+        description = lib.mdDoc "Address to listen on.";
       };
 
       listenPort = mkOption {
         type = types.int;
         default = 8091;
-        description = "Port to listen on.";
+        description = lib.mdDoc "Port to listen on.";
       };
 
       catalinaOptions = mkOption {
         type = types.listOf types.str;
         default = [];
         example = [ "-Xms1024m" "-Xmx2048m" ];
-        description = "Java options to pass to catalina/tomcat.";
+        description = lib.mdDoc "Java options to pass to catalina/tomcat.";
       };
 
       proxy = {
@@ -74,27 +74,27 @@ in
         name = mkOption {
           type = types.str;
           example = "jira.example.com";
-          description = "Virtual hostname at the proxy";
+          description = lib.mdDoc "Virtual hostname at the proxy";
         };
 
         port = mkOption {
           type = types.int;
           default = 443;
           example = 80;
-          description = "Port used at the proxy";
+          description = lib.mdDoc "Port used at the proxy";
         };
 
         scheme = mkOption {
           type = types.str;
           default = "https";
           example = "http";
-          description = "Protocol used at the proxy.";
+          description = lib.mdDoc "Protocol used at the proxy.";
         };
 
         secure = mkOption {
           type = types.bool;
           default = true;
-          description = "Whether the connections to the proxy should be considered secure.";
+          description = lib.mdDoc "Whether the connections to the proxy should be considered secure.";
         };
       };
 
@@ -104,25 +104,25 @@ in
         crowd = mkOption {
           type = types.str;
           example = "http://localhost:8095/crowd";
-          description = "Crowd Base URL without trailing slash";
+          description = lib.mdDoc "Crowd Base URL without trailing slash";
         };
 
         applicationName = mkOption {
           type = types.str;
           example = "jira";
-          description = "Exact name of this JIRA instance in Crowd";
+          description = lib.mdDoc "Exact name of this JIRA instance in Crowd";
         };
 
         applicationPasswordFile = mkOption {
           type = types.str;
-          description = "Path to the file containing the application password of this JIRA instance in Crowd";
+          description = lib.mdDoc "Path to the file containing the application password of this JIRA instance in Crowd";
         };
 
         validationInterval = mkOption {
           type = types.int;
           default = 2;
           example = 0;
-          description = ''
+          description = lib.mdDoc ''
             Set to 0, if you want authentication checks to occur on each
             request. Otherwise set to the number of minutes between request
             to validate if the user is logged in or out of the Crowd SSO
@@ -136,14 +136,14 @@ in
         type = types.package;
         default = pkgs.atlassian-jira;
         defaultText = literalExpression "pkgs.atlassian-jira";
-        description = "Atlassian JIRA package to use.";
+        description = lib.mdDoc "Atlassian JIRA package to use.";
       };
 
       jrePackage = mkOption {
         type = types.package;
         default = pkgs.oraclejre8;
         defaultText = literalExpression "pkgs.oraclejre8";
-        description = "Note that Atlassian only support the Oracle JRE (JRASERVER-46152).";
+        description = lib.mdDoc "Note that Atlassian only support the Oracle JRE (JRASERVER-46152).";
       };
     };
   };

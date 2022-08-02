@@ -15,19 +15,19 @@ in {
 
       listenAddress = mkOption {
         type = types.str;
-        description = "Listen IP Address";
+        description = lib.mdDoc "Listen IP Address";
         default = "0.0.0.0";
       };
       listenPort = mkOption {
         type = types.int;
-        description = "Listen port";
+        description = lib.mdDoc "Listen port";
         default = 53;
       };
 
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Extra lines to be added verbatim to dnsdist.conf.
         '';
       };

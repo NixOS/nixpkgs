@@ -32,13 +32,13 @@ let
       keys = mkOption {
         type = types.listOf types.singleLineStr;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           A list of verbatim OpenSSH public keys that should be added to the
           user's authorized keys. The keys are added to a file that the SSH
           daemon reads in addition to the the user's authorized_keys file.
-          You can combine the <literal>keys</literal> and
-          <literal>keyFiles</literal> options.
-          Warning: If you are using <literal>NixOps</literal> then don't use this
+          You can combine the `keys` and
+          `keyFiles` options.
+          Warning: If you are using `NixOps` then don't use this
           option since it will replace the key required for deployment via ssh.
         '';
         example = [
@@ -50,12 +50,12 @@ let
       keyFiles = mkOption {
         type = types.listOf types.path;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           A list of files each containing one OpenSSH public key that should be
           added to the user's authorized keys. The contents of the files are
           read at build time and added to a file that the SSH daemon reads in
           addition to the the user's authorized_keys file. You can combine the
-          <literal>keyFiles</literal> and <literal>keys</literal> options.
+          `keyFiles` and `keys` options.
         '';
       };
     };
@@ -93,7 +93,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the OpenSSH secure shell daemon, which
           allows secure remote logins.
         '';
@@ -102,8 +102,8 @@ in
       startWhenNeeded = mkOption {
         type = types.bool;
         default = false;
-        description = ''
-          If set, <command>sshd</command> is socket-activated; that
+        description = lib.mdDoc ''
+          If set, {command}`sshd` is socket-activated; that
           is, instead of having it permanently running as a daemon,
           systemd will start an instance for each incoming connection.
         '';
@@ -112,7 +112,7 @@ in
       forwardX11 = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to allow X11 connections to be forwarded.
         '';
       };
@@ -120,17 +120,17 @@ in
       allowSFTP = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the SFTP subsystem in the SSH daemon.  This
-          enables the use of commands such as <command>sftp</command> and
-          <command>sshfs</command>.
+          enables the use of commands such as {command}`sftp` and
+          {command}`sshfs`.
         '';
       };
 
       sftpServerExecutable = mkOption {
         type = types.str;
         example = "internal-sftp";
-        description = ''
+        description = lib.mdDoc ''
           The sftp server executable.  Can be a path or "internal-sftp" to use
           the sftp server built into the sshd binary.
         '';
@@ -140,7 +140,7 @@ in
         type = with types; listOf str;
         default = [];
         example = [ "-f AUTHPRIV" "-l INFO" ];
-        description = ''
+        description = lib.mdDoc ''
           Commandline flags to add to sftp-server.
         '';
       };
@@ -148,7 +148,7 @@ in
       permitRootLogin = mkOption {
         default = "prohibit-password";
         type = types.enum ["yes" "without-password" "prohibit-password" "forced-commands-only" "no"];
-        description = ''
+        description = lib.mdDoc ''
           Whether the root user can login using ssh.
         '';
       };
@@ -167,7 +167,7 @@ in
       ports = mkOption {
         type = types.listOf types.port;
         default = [22];
-        description = ''
+        description = lib.mdDoc ''
           Specifies on which ports the SSH daemon listens.
         '';
       };
@@ -175,7 +175,7 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to automatically open the specified ports in the firewall.
         '';
       };
@@ -186,14 +186,14 @@ in
             addr = mkOption {
               type = types.nullOr types.str;
               default = null;
-              description = ''
+              description = lib.mdDoc ''
                 Host, IPv4 or IPv6 address to listen to.
               '';
             };
             port = mkOption {
               type = types.nullOr types.int;
               default = null;
-              description = ''
+              description = lib.mdDoc ''
                 Port to listen to.
               '';
             };
@@ -201,10 +201,10 @@ in
         });
         default = [];
         example = [ { addr = "192.168.3.1"; port = 22; } { addr = "0.0.0.0"; port = 64022; } ];
-        description = ''
+        description = lib.mdDoc ''
           List of addresses and ports to listen on (ListenAddress directive
           in config). If port is not specified for address sshd will listen
-          on all ports specified by <literal>ports</literal> option.
+          on all ports specified by `ports` option.
           NOTE: this will override default listening on all local addresses and port 22.
           NOTE: setting this option won't automatically enable given ports
           in firewall configuration.
@@ -214,7 +214,7 @@ in
       passwordAuthentication = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Specifies whether password authentication is allowed.
         '';
       };
@@ -222,7 +222,7 @@ in
       kbdInteractiveAuthentication = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Specifies whether keyboard-interactive authentication is allowed.
         '';
       };
@@ -249,7 +249,7 @@ in
       banner = mkOption {
         type = types.nullOr types.lines;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Message to display to the remote user before authentication is allowed.
         '';
       };
@@ -273,7 +273,7 @@ in
       authorizedKeysCommand = mkOption {
         type = types.str;
         default = "none";
-        description = ''
+        description = lib.mdDoc ''
           Specifies a program to be used to look up the user's public
           keys. The program must be owned by root, not writable by group
           or others and specified by an absolute path.
@@ -283,7 +283,7 @@ in
       authorizedKeysCommandUser = mkOption {
         type = types.str;
         default = "nobody";
-        description = ''
+        description = lib.mdDoc ''
           Specifies the user under whose account the AuthorizedKeysCommand
           is run. It is recommended to use a dedicated user that has no
           other role on the host than running authorized keys commands.
@@ -354,7 +354,7 @@ in
       logLevel = mkOption {
         type = types.enum [ "QUIET" "FATAL" "ERROR" "INFO" "VERBOSE" "DEBUG" "DEBUG1" "DEBUG2" "DEBUG3" ];
         default = "INFO"; # upstream default
-        description = ''
+        description = lib.mdDoc ''
           Gives the verbosity level that is used when logging messages from sshd(8). The possible values are:
           QUIET, FATAL, ERROR, INFO, VERBOSE, DEBUG, DEBUG1, DEBUG2, and DEBUG3. The default is INFO. DEBUG and DEBUG1
           are equivalent. DEBUG2 and DEBUG3 each specify higher levels of debugging output. Logging with a DEBUG level
@@ -365,7 +365,7 @@ in
       useDns = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Specifies whether sshd(8) should look up the remote host name, and to check that the resolved host name for
           the remote IP address maps back to the very same IP address.
           If this option is set to no (the default) then only addresses and not host names may be used in
@@ -376,16 +376,16 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = "Verbatim contents of <filename>sshd_config</filename>.";
+        description = lib.mdDoc "Verbatim contents of {file}`sshd_config`.";
       };
 
       moduliFile = mkOption {
         example = "/etc/my-local-ssh-moduli;";
         type = types.path;
-        description = ''
-          Path to <literal>moduli</literal> file to install in
-          <literal>/etc/ssh/moduli</literal>. If this option is unset, then
-          the <literal>moduli</literal> file shipped with OpenSSH will be used.
+        description = lib.mdDoc ''
+          Path to `moduli` file to install in
+          `/etc/ssh/moduli`. If this option is unset, then
+          the `moduli` file shipped with OpenSSH will be used.
         '';
       };
 

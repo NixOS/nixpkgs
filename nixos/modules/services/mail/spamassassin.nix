@@ -17,7 +17,7 @@ in
       debug = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to run the SpamAssassin daemon in debug mode";
+        description = lib.mdDoc "Whether to run the SpamAssassin daemon in debug mode";
       };
 
       config = mkOption {
@@ -54,7 +54,7 @@ in
 
       initPreConf = mkOption {
         type = with types; either str path;
-        description = "The SpamAssassin init.pre config.";
+        description = lib.mdDoc "The SpamAssassin init.pre config.";
         apply = val: if builtins.isPath val then val else pkgs.writeText "init.pre" val;
         default =
         ''

@@ -13,25 +13,25 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = "Open ports in the firewall for the bazarr web interface.";
+        description = lib.mdDoc "Open ports in the firewall for the bazarr web interface.";
       };
 
       listenPort = mkOption {
         type = types.port;
         default = 6767;
-        description = "Port on which the bazarr web interface should listen";
+        description = lib.mdDoc "Port on which the bazarr web interface should listen";
       };
 
       user = mkOption {
         type = types.str;
         default = "bazarr";
-        description = "User account under which bazarr runs.";
+        description = lib.mdDoc "User account under which bazarr runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "bazarr";
-        description = "Group under which bazarr runs.";
+        description = lib.mdDoc "Group under which bazarr runs.";
       };
     };
   };
