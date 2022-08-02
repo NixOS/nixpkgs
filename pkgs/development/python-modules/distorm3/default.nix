@@ -10,8 +10,6 @@ buildPythonPackage rec {
   pname = "distorm3";
   version = "3.5.2";
 
-  disabled = pythonOlder "3.5";
-
   src = fetchFromGitHub {
     owner = "gdabah";
     repo = "distorm";
@@ -35,6 +33,6 @@ buildPythonPackage rec {
     description = "Disassembler library for x86/AMD64";
     homepage = "https://github.com/gdabah/distorm";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [ fab emilytrau ];
   };
 }
