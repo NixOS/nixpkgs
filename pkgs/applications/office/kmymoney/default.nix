@@ -11,7 +11,7 @@
 # Needed for running tests:
 , qtbase, xvfb-run
 
-, python2, python3Packages
+, python3Packages
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-I${kitemmodels.dev}/include/KF5";
 
   nativeBuildInputs = [
-    doxygen extra-cmake-modules graphviz kdoctools python2
+    doxygen extra-cmake-modules graphviz kdoctools
     python3Packages.wrapPython wrapQtAppsHook autoPatchelfHook
   ];
 
