@@ -204,9 +204,9 @@ in {
           especially with large databases.
 
           Note that the root of the DB must be defined in
-          <code>services.openldap.settings</code> and the
-          <code>olcDbDirectory</code> must begin with
-          <literal>"/var/lib/openldap"</literal>.
+          `services.openldap.settings` and the
+          `olcDbDirectory` must begin with
+          `"/var/lib/openldap"`.
         '';
         example = lib.literalExpression ''
           {
