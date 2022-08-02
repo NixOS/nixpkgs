@@ -171,6 +171,8 @@ in {
 
   adafruit-io = callPackage ../development/python-modules/adafruit-io { };
 
+  adafruit-nrfutil = callPackage ../development/python-modules/adafruit-nrfutil { };
+
   adafruit-platformdetect = callPackage ../development/python-modules/adafruit-platformdetect { };
 
   adafruit-pureio = callPackage ../development/python-modules/adafruit-pureio { };
@@ -10768,6 +10770,8 @@ in {
   transmission-rpc = callPackage ../development/python-modules/transmission-rpc { };
 
   transmissionrpc = callPackage ../development/python-modules/transmissionrpc { };
+
+  trectools = callPackage ../development/python-modules/trectools { };
 
   treelog = callPackage ../development/python-modules/treelog { };
 

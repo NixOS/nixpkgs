@@ -386,6 +386,8 @@ with pkgs;
 
   coordgenlibs  = callPackage ../development/libraries/coordgenlibs { };
 
+  copilot-cli = callPackage ../tools/admin/copilot-cli { };
+
   cp437 = callPackage ../tools/misc/cp437 { };
 
   cpm = callPackage ../development/tools/cpm { };
@@ -4043,6 +4045,12 @@ with pkgs;
   klaus = with python3Packages; toPythonApplication klaus;
 
   klipper = callPackage ../servers/klipper { };
+
+  klipper-firmware = callPackage ../servers/klipper/klipper-firmware.nix { };
+
+  klipper-flash = callPackage ../servers/klipper/klipper-flash.nix { };
+
+  klipper-genconf = callPackage ../servers/klipper/klipper-genconf.nix { };
 
   klog = qt5.callPackage ../applications/radio/klog { };
 
@@ -10499,7 +10507,9 @@ with pkgs;
 
   secp256k1 = callPackage ../tools/security/secp256k1 { };
 
-  securefs = callPackage ../tools/filesystems/securefs { };
+  securefs = callPackage ../tools/filesystems/securefs {
+    stdenv = clangStdenv;
+  };
 
   seehecht = callPackage ../tools/text/seehecht { };
 
@@ -17005,6 +17015,8 @@ with pkgs;
   aravis = callPackage ../development/libraries/aravis { };
 
   arb = callPackage ../development/libraries/arb {};
+
+  argparse = callPackage ../development/libraries/argparse { };
 
   argp-standalone = callPackage ../development/libraries/argp-standalone {};
 
@@ -26827,10 +26839,6 @@ with pkgs;
 
   fbpanel = callPackage ../applications/window-managers/fbpanel { };
 
-  fbreader = callPackage ../applications/misc/fbreader {
-    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
-  };
-
   fdr = libsForQt5.callPackage ../applications/science/programming/fdr { };
 
   feedbackd = callPackage ../applications/misc/feedbackd { };
@@ -35760,8 +35768,6 @@ with pkgs;
   xortool = python3Packages.callPackage ../tools/security/xortool { };
 
   xorex = callPackage ../tools/security/xorex { };
-
-  xow = callPackage ../misc/drivers/xow { };
 
   xbps = callPackage ../tools/package-management/xbps { };
 
