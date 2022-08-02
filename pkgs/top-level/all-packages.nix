@@ -22681,7 +22681,7 @@ with pkgs;
   hsphfpd = callPackage ../servers/pulseaudio/hsphfpd.nix { };
 
   pulseaudio = callPackage ../servers/pulseaudio {
-    inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
+    inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa CoreAudio;
   };
 
   qpaeq = libsForQt5.callPackage ../servers/pulseaudio/qpaeq.nix { };
