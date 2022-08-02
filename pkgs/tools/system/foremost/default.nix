@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   #   ld: api.o:(.bss+0xbdba0): multiple definition of `wildcard'; main.o:(.bss+0xbd760): first defined here
   NIX_CFLAGS_COMPILE = "-fcommon";
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [ "PREFIX=$(out)" ] ++ lib.optionals stdenv.isDarwin [ "mac" ];
 
   enableParallelBuilding = true;
 
@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://foremost.sourceforge.net/";
     license = licenses.publicDomain;
-    platforms = platforms.linux;
+    maintainers = [ maintainers.jiegec ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }
