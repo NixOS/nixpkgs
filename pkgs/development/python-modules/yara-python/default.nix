@@ -11,8 +11,6 @@ buildPythonPackage rec {
   version = "4.2.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara-python";
@@ -44,6 +42,6 @@ buildPythonPackage rec {
     description = "Python interface for YARA";
     homepage = "https://github.com/VirusTotal/yara-python";
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [ fab emilytrau ];
   };
 }
