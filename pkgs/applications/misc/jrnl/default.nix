@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "jrnl";
-  version = "2.8.4";
+  version = "3.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jrnl-org";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Edu+GW/D+R5r0R750Z1f8YUVPMYbm9PK4D73sTDzDEc=";
+    sha256 = "sha256-wyN7dlAbQwqvES8qEJ4Zo+fDMM/Lh9tNjf215Ywop10=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -31,12 +31,22 @@ python3.pkgs.buildPythonApplication rec {
     pyxdg
     pyyaml
     tzlocal
+    ruamel-yaml
+    rich
   ];
 
   checkInputs = with python3.pkgs; [
     pytest-bdd
+    pytest-xdist
     pytestCheckHook
     toml
+  ];
+
+  # Upstream expects a old pytest-bdd version
+  # Once it changes we should update here too
+  # https://github.com/jrnl-org/jrnl/blob/develop/poetry.lock#L732
+  disabledTests = [
+    "bdd"
   ];
 
   postPatch = ''
