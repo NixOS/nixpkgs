@@ -2172,6 +2172,32 @@ buildLuarocksPackage {
   };
 }) {};
 
+luaunit = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
+, fetchurl, lua
+}:
+buildLuarocksPackage {
+  pname = "luaunit";
+  version = "3.4-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/luaunit-3.4-1.rockspec";
+    sha256 = "111435fa8p2819vcvg76qmknj0wqk01gy9d1nh55c36616xnj54n";
+  }).outPath;
+  src = fetchurl {
+    url    = "https://github.com/bluebird75/luaunit/releases/download/LUAUNIT_V3_4/rock-luaunit-3.4.zip";
+    sha256 = "1v8nkiwz2nr242h5cl4af6vmn5gxmn94skps1qhb55ak60j20nvr";
+  };
+
+  disabled = with lua; (luaOlder "5.1") || (luaAtLeast "5.5");
+  propagatedBuildInputs = [ lua lua ];
+
+  meta = {
+    homepage = "http://github.com/bluebird75/luaunit";
+    description = "A unit testing framework for Lua";
+    maintainers = with lib.maintainers; [ lockejan ];
+    license.fullName = "BSD";
+  };
+}) {};
+
 luautf8 = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
 , fetchurl, lua
 }:
