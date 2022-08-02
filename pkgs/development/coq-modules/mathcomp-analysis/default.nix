@@ -1,11 +1,11 @@
-{ coq, mkCoqDerivation, mathcomp, mathcomp-finmap, mathcomp-bigenough, mathcomp-real-closed,
-  hierarchy-builder, lib, version ? null }:
-
-with lib;
-let mca = mkCoqDerivation {
-
-  namePrefix = [ "coq" "mathcomp" ];
-  pname = "analysis";
+{ lib,
+  mkCoqDerivation, recurseIntoAttrs,
+  mathcomp, mathcomp-finmap, mathcomp-bigenough, mathcomp-real-closed,
+  hierarchy-builder,
+  coqPackages, coq, version ? null }@args:
+with builtins // lib;
+let
+  repo  = "math-comp";
   owner = "math-comp";
 
   release."0.5.3".sha256 = "sha256-1NjFsi5TITF8ZWx1NyppRmi8g6YaoUtTdS9bU/sUe5k=";
@@ -20,7 +20,6 @@ let mca = mkCoqDerivation {
   release."0.3.1".sha256 = "1iad288yvrjv8ahl9v18vfblgqb1l5z6ax644w49w9hwxs93f2k8";
   release."0.2.3".sha256 = "0p9mr8g1qma6h10qf7014dv98ln90dfkwn76ynagpww7qap8s966";
 
-  inherit version;
   defaultVersion = with versions; switch [ coq.version mathcomp.version ]  [
       { cases = [ (isGe "8.14") (isGe "1.13.0") ];               out = "0.5.3"; }
       { cases = [ (isGe "8.14") (range "1.13" "1.15") ];         out = "0.5.2"; }
@@ -33,21 +32,55 @@ let mca = mkCoqDerivation {
       { cases = [ (range "8.8"  "8.11") (range "1.8" "1.10") ];  out = "0.2.3"; }
     ] null;
 
-  propagatedBuildInputs =
-    [ mathcomp.ssreflect mathcomp.field
-      mathcomp-finmap mathcomp-bigenough mathcomp-real-closed ];
+  # list of analysis packages sorted by dependency order
+  packages = [ "classical" "analysis" ];
 
-  meta = {
-    description = "Analysis library compatible with Mathematical Components";
-    maintainers = [ maintainers.cohencyril ];
-    license = licenses.cecill-c;
-  };
-}; in
-mca.overrideAttrs (o:
-  let ext = { propagatedBuildInputs = o.propagatedBuildInputs
-                                      ++ [ hierarchy-builder ]; };
-  in with versions; switch o.version [
-    {case = "dev";        out = ext;}
-    {case = isGe "0.3.4"; out = ext;}
-  ] {}
-)
+  mathcomp_ = package: let
+      analysis-deps = map mathcomp_ (head (splitList (pred.equal package) packages));
+      pkgpath = if package == "analysis" then "theories" else "${package}";
+      pname = "mathcomp-${package}";
+      derivation = mkCoqDerivation ({
+        inherit version pname defaultVersion release repo owner;
+
+        namePrefix = [ "coq" "mathcomp" ];
+
+        propagatedBuildInputs =
+          (if package == "classical" then
+             [ mathcomp.ssreflect mathcomp.algebra mathcomp-finmap ]
+           else
+             [ mathcomp.field mathcomp-bigenough mathcomp-real-closed ])
+          ++ [ analysis-deps ];
+
+        preBuild = ''
+          cd ${pkgpath}
+        '';
+
+        meta = {
+          description = "Analysis library compatible with Mathematical Components";
+          maintainers = [ maintainers.cohencyril ];
+          license     = licenses.cecill-c;
+        };
+
+        passthru = genAttrs packages mathcomp_;
+      });
+    # split packages didn't exist before 0.6, so bulding nothing in that case
+    patched-derivation1 = derivation.overrideAttrs (o:
+      optionalAttrs (o.pname != null && o.pname != "mathcomp-analysis" &&
+         o.version != null && o.version != "dev" && versions.isLt "0.6" o.version)
+      { preBuild = ""; buildPhase = "echo doing nothing"; installPhase = "echo doing nothing"; }
+    );
+    patched-derivation2 = patched-derivation1.overrideAttrs (o:
+      optionalAttrs (o.pname != null && o.pname == "mathcomp-analysis" &&
+         o.version != null && o.version != "dev" && versions.isLt "0.6" o.version)
+      { preBuild = ""; }
+    );
+    patched-derivation = patched-derivation2.overrideAttrs (o:
+      optionalAttrs (o.version != null
+        && (o.version == "dev" || versions.isGe "0.3.4" o.version))
+      {
+        propagatedBuildInputs = o.propagatedBuildInputs ++ [ hierarchy-builder ];
+      }
+    );
+    in patched-derivation;
+in
+mathcomp_ "analysis"
