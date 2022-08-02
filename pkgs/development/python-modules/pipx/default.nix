@@ -7,6 +7,7 @@
 , packaging
 , importlib-metadata
 , pytestCheckHook
+, python
 }:
 
 buildPythonPackage rec {
@@ -14,6 +15,7 @@ buildPythonPackage rec {
   version = "1.1.0";
 
   disabled = pythonOlder "3.6";
+  format = "pyproject";
 
   # no tests in the pypi tarball, so we directly fetch from github
   src = fetchFromGitHub {
@@ -27,6 +29,7 @@ buildPythonPackage rec {
     userpath
     argcomplete
     packaging
+    python.pkgs.hatchling
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
@@ -61,6 +64,7 @@ buildPythonPackage rec {
     "legacy_venv"
     "determination"
     "json"
+    "test_list_short"
   ];
 
   meta = with lib; {
