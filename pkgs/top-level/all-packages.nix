@@ -6010,6 +6010,8 @@ with pkgs;
 
   edk2 = callPackage ../development/compilers/edk2 { };
 
+  edk2-uefi-shell = callPackage ../tools/misc/edk2-uefi-shell { };
+
   eff = callPackage ../development/interpreters/eff { };
 
   eflite = callPackage ../applications/audio/eflite {};
