@@ -135,6 +135,7 @@ stdenv.mkDerivation rec {
     sed -i '0,/qemuxml2argvtest/{/qemuxml2argvtest/d;}' tests/meson.build
   '' + optionalString isDarwin ''
     sed -i '/qemucapabilitiestest/d' tests/meson.build
+    sed -i '/vircryptotest/d' tests/meson.build
   '';
 
 
@@ -222,7 +223,7 @@ stdenv.mkDerivation rec {
         --replace "ggrep" "grep"
 
       substituteInPlace src/util/virpolkit.h \
-        --replace '"/usr/bin/pkttyagent"' '"${polkit.bin}/bin/pkttyagent"'
+        --replace '"/usr/bin/pkttyagent"' '"${if isLinux then polkit.bin else "/usr"}/bin/pkttyagent"'
 
       patchShebangs .
     ''
@@ -268,7 +269,7 @@ stdenv.mkDerivation rec {
       (feat "numactl" isLinux)
       (feat "numad" isLinux)
       (feat "pciaccess" isLinux)
-      (feat "polkit" true)
+      (feat "polkit" isLinux)
       (feat "readline" true)
       (feat "secdriver_apparmor" isLinux)
       (feat "tests" true)
