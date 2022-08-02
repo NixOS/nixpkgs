@@ -35543,8 +35543,6 @@ with pkgs;
     ;
 
   terraform = terraform_1;
-  # deprecated
-  terraform-full = terraform.full;
 
   terraform-providers = recurseIntoAttrs (
     callPackage ../applications/networking/cluster/terraform-providers { }
