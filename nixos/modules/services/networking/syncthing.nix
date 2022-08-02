@@ -126,7 +126,7 @@ in {
             name = mkOption {
               type = types.str;
               default = name;
-              description = ''
+              description = lib.mdDoc ''
                 The name of the device.
               '';
             };
@@ -134,7 +134,7 @@ in {
             addresses = mkOption {
               type = types.listOf types.str;
               default = [];
-              description = ''
+              description = lib.mdDoc ''
                 The addresses used to connect to the device.
                 If this is left empty, dynamic configuration is attempted.
               '';
@@ -204,7 +204,7 @@ in {
             enable = mkOption {
               type = types.bool;
               default = true;
-              description = ''
+              description = lib.mdDoc ''
                 Whether to share this folder.
                 This option is useful when you want to define all folders
                 in one place, but not every machine should share all folders.
@@ -214,7 +214,7 @@ in {
             path = mkOption {
               type = types.str;
               default = name;
-              description = ''
+              description = lib.mdDoc ''
                 The path to the folder which should be shared.
               '';
             };
@@ -222,7 +222,7 @@ in {
             id = mkOption {
               type = types.str;
               default = name;
-              description = ''
+              description = lib.mdDoc ''
                 The ID of the folder. Must be the same on all devices.
               '';
             };
@@ -230,7 +230,7 @@ in {
             label = mkOption {
               type = types.str;
               default = name;
-              description = ''
+              description = lib.mdDoc ''
                 The label of the folder.
               '';
             };
@@ -311,7 +311,7 @@ in {
             rescanInterval = mkOption {
               type = types.int;
               default = 3600;
-              description = ''
+              description = lib.mdDoc ''
                 How often the folder should be rescanned for changes.
               '';
             };
@@ -319,7 +319,7 @@ in {
             type = mkOption {
               type = types.enum [ "sendreceive" "sendonly" "receiveonly" ];
               default = "sendreceive";
-              description = ''
+              description = lib.mdDoc ''
                 Whether to only send changes for this folder, only receive them
                 or both.
               '';
@@ -328,7 +328,7 @@ in {
             watch = mkOption {
               type = types.bool;
               default = true;
-              description = ''
+              description = lib.mdDoc ''
                 Whether the folder should be watched for changes by inotify.
               '';
             };
@@ -336,7 +336,7 @@ in {
             watchDelay = mkOption {
               type = types.int;
               default = 10;
-              description = ''
+              description = lib.mdDoc ''
                 The delay after an inotify event is triggered.
               '';
             };
@@ -344,7 +344,7 @@ in {
             ignorePerms = mkOption {
               type = types.bool;
               default = true;
-              description = ''
+              description = lib.mdDoc ''
                 Whether to ignore permission changes.
               '';
             };
@@ -377,7 +377,7 @@ in {
       guiAddress = mkOption {
         type = types.str;
         default = "127.0.0.1:8384";
-        description = ''
+        description = lib.mdDoc ''
           The address to serve the web interface at.
         '';
       };
@@ -385,7 +385,7 @@ in {
       systemService = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to auto-launch Syncthing as a system service.
         '';
       };
@@ -426,7 +426,7 @@ in {
         type = types.path;
         default = "/var/lib/syncthing";
         example = "/home/yourUser";
-        description = ''
+        description = lib.mdDoc ''
           The path where synchronised directories will exist.
         '';
       };
@@ -435,7 +435,7 @@ in {
         cond = versionAtLeast config.system.stateVersion "19.03";
       in mkOption {
         type = types.path;
-        description = ''
+        description = lib.mdDoc ''
           The path where the settings and keys will exist.
         '';
         default = cfg.dataDir + optionalString cond "/.config/syncthing";
@@ -453,7 +453,7 @@ in {
         type = types.listOf types.str;
         default = [];
         example = [ "--reset-deltas" ];
-        description = ''
+        description = lib.mdDoc ''
           Extra flags passed to the syncthing command in the service definition.
         '';
       };
@@ -462,7 +462,7 @@ in {
         type = types.bool;
         default = false;
         example = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to open the default ports in the firewall: TCP/UDP 22000 for transfers
           and UDP 21027 for discovery.
 
@@ -477,7 +477,7 @@ in {
         type = types.package;
         default = pkgs.syncthing;
         defaultText = literalExpression "pkgs.syncthing";
-        description = ''
+        description = lib.mdDoc ''
           The Syncthing package to use.
         '';
       };

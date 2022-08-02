@@ -14,22 +14,22 @@ in
         type = lib.types.package;
         default = pkgs.step-ca;
         defaultText = lib.literalExpression "pkgs.step-ca";
-        description = "Which step-ca package to use.";
+        description = lib.mdDoc "Which step-ca package to use.";
       };
       address = lib.mkOption {
         type = lib.types.str;
         example = "127.0.0.1";
-        description = ''
+        description = lib.mdDoc ''
           The address (without port) the certificate authority should listen at.
-          This combined with <option>services.step-ca.port</option> overrides <option>services.step-ca.settings.address</option>.
+          This combined with {option}`services.step-ca.port` overrides {option}`services.step-ca.settings.address`.
         '';
       };
       port = lib.mkOption {
         type = lib.types.port;
         example = 8443;
-        description = ''
+        description = lib.mdDoc ''
           The port the certificate authority should listen on.
-          This combined with <option>services.step-ca.address</option> overrides <option>services.step-ca.settings.address</option>.
+          This combined with {option}`services.step-ca.address` overrides {option}`services.step-ca.settings.address`.
         '';
       };
       settings = lib.mkOption {

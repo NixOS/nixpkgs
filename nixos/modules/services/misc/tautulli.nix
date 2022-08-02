@@ -17,38 +17,38 @@ in
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/plexpy";
-        description = "The directory where Tautulli stores its data files.";
+        description = lib.mdDoc "The directory where Tautulli stores its data files.";
       };
 
       configFile = mkOption {
         type = types.str;
         default = "/var/lib/plexpy/config.ini";
-        description = "The location of Tautulli's config file.";
+        description = lib.mdDoc "The location of Tautulli's config file.";
       };
 
       port = mkOption {
         type = types.int;
         default = 8181;
-        description = "TCP port where Tautulli listens.";
+        description = lib.mdDoc "TCP port where Tautulli listens.";
       };
 
       user = mkOption {
         type = types.str;
         default = "plexpy";
-        description = "User account under which Tautulli runs.";
+        description = lib.mdDoc "User account under which Tautulli runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "nogroup";
-        description = "Group under which Tautulli runs.";
+        description = lib.mdDoc "Group under which Tautulli runs.";
       };
 
       package = mkOption {
         type = types.package;
         default = pkgs.tautulli;
         defaultText = literalExpression "pkgs.tautulli";
-        description = ''
+        description = lib.mdDoc ''
           The Tautulli package to use.
         '';
       };

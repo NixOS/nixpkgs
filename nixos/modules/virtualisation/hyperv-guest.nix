@@ -14,7 +14,7 @@ in {
         type = types.str;
         default = "1152x864";
         example = "1024x768";
-        description = ''
+        description = lib.mdDoc ''
           Resolution at which to initialize the video adapter.
 
           Supports screen resolution up to Full HD 1920x1080 with 32 bit color

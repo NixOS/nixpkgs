@@ -10,26 +10,26 @@ in {
         type = types.package;
         default = pkgs.pleroma;
         defaultText = literalExpression "pkgs.pleroma";
-        description = "Pleroma package to use.";
+        description = lib.mdDoc "Pleroma package to use.";
       };
 
       user = mkOption {
         type = types.str;
         default = "pleroma";
-        description = "User account under which pleroma runs.";
+        description = lib.mdDoc "User account under which pleroma runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "pleroma";
-        description = "Group account under which pleroma runs.";
+        description = lib.mdDoc "Group account under which pleroma runs.";
       };
 
       stateDir = mkOption {
         type = types.str;
         default = "/var/lib/pleroma";
         readOnly = true;
-        description = "Directory where the pleroma service will save the uploads and static files.";
+        description = lib.mdDoc "Directory where the pleroma service will save the uploads and static files.";
       };
 
       configs = mkOption {
@@ -59,11 +59,11 @@ in {
       secretConfigFile = mkOption {
         type = types.str;
         default = "/var/lib/pleroma/secrets.exs";
-        description = ''
+        description = lib.mdDoc ''
           Path to the file containing your secret pleroma configuration.
 
-          <emphasis>DO NOT POINT THIS OPTION TO THE NIX
-          STORE</emphasis>, the store being world-readable, it'll
+          *DO NOT POINT THIS OPTION TO THE NIX
+          STORE*, the store being world-readable, it'll
           compromise all your secrets.
         '';
       };

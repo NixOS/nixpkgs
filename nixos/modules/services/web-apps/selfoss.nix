@@ -35,7 +35,7 @@ in
         user = mkOption {
           type = types.str;
           default = "nginx";
-          description = ''
+          description = lib.mdDoc ''
             User account under which both the service and the web-application run.
           '';
         };
@@ -43,7 +43,7 @@ in
         pool = mkOption {
           type = types.str;
           default = "${poolName}";
-          description = ''
+          description = lib.mdDoc ''
             Name of existing phpfpm pool that is used to run web-application.
             If not specified a pool will be created automatically with
             default values.
@@ -54,7 +54,7 @@ in
         type = mkOption {
           type = types.enum ["pgsql" "mysql" "sqlite"];
           default = "sqlite";
-          description = ''
+          description = lib.mdDoc ''
             Database to store feeds. Supported are sqlite, pgsql and mysql.
           '';
         };
@@ -62,7 +62,7 @@ in
         host = mkOption {
           type = types.str;
           default = "localhost";
-          description = ''
+          description = lib.mdDoc ''
             Host of the database (has no effect if type is "sqlite").
           '';
         };
@@ -70,7 +70,7 @@ in
         name = mkOption {
           type = types.str;
           default = "tt_rss";
-          description = ''
+          description = lib.mdDoc ''
             Name of the existing database (has no effect if type is "sqlite").
           '';
         };
@@ -78,7 +78,7 @@ in
         user = mkOption {
           type = types.str;
           default = "tt_rss";
-          description = ''
+          description = lib.mdDoc ''
             The database user. The user must exist and has access to
             the specified database (has no effect if type is "sqlite").
           '';
@@ -87,7 +87,7 @@ in
         password = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = ''
+          description = lib.mdDoc ''
             The database user's password (has no effect if type is "sqlite").
           '';
         };
@@ -95,7 +95,7 @@ in
         port = mkOption {
           type = types.nullOr types.int;
           default = null;
-          description = ''
+          description = lib.mdDoc ''
             The database's port. If not set, the default ports will be
             provided (5432 and 3306 for pgsql and mysql respectively)
             (has no effect if type is "sqlite").
@@ -105,7 +105,7 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Extra configuration added to config.ini
         '';
       };

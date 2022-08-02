@@ -30,17 +30,17 @@ in {
       ensureDefaultPrinter = mkOption {
         type = types.nullOr printerName;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Ensures the named printer is the default CUPS printer / printer queue.
         '';
       };
       ensurePrinters = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Will regularly ensure that the given CUPS printers are configured as declared here.
           If a printer's options are manually changed afterwards, they will be overwritten eventually.
           This option will never delete any printer, even if removed from this list.
-          You can check existing printers with <command>lpstat -s</command>
-          and remove printers with <command>lpadmin -x &lt;printer-name&gt;</command>.
+          You can check existing printers with {command}`lpstat -s`
+          and remove printers with {command}`lpadmin -x <printer-name>`.
           Printers not listed here can still be manually configured.
         '';
         default = [];
@@ -49,7 +49,7 @@ in {
             name = mkOption {
               type = printerName;
               example = "BrotherHL_Workroom";
-              description = ''
+              description = lib.mdDoc ''
                 Name of the printer / printer queue.
                 May contain any printable characters except "/", "#", and space.
               '';
@@ -58,7 +58,7 @@ in {
               type = types.nullOr types.str;
               default = null;
               example = "Workroom";
-              description = ''
+              description = lib.mdDoc ''
                 Optional human-readable location.
               '';
             };
@@ -66,7 +66,7 @@ in {
               type = types.nullOr types.str;
               default = null;
               example = "Brother HL-5140";
-              description = ''
+              description = lib.mdDoc ''
                 Optional human-readable description.
               '';
             };
@@ -76,9 +76,9 @@ in {
                 "ipp://printserver.local/printers/BrotherHL_Workroom"
                 "usb://HP/DESKJET%20940C?serial=CN16E6C364BH"
               '';
-              description = ''
+              description = lib.mdDoc ''
                 How to reach the printer.
-                <command>lpinfo -v</command> shows a list of supported device URIs and schemes.
+                {command}`lpinfo -v` shows a list of supported device URIs and schemes.
               '';
             };
             model = mkOption {
@@ -86,9 +86,9 @@ in {
               example = literalExpression ''
                 "gutenprint.''${lib.versions.majorMinor (lib.getVersion pkgs.gutenprint)}://brother-hl-5140/expert"
               '';
-              description = ''
+              description = lib.mdDoc ''
                 Location of the ppd driver file for the printer.
-                <command>lpinfo -m</command> shows a list of supported models.
+                {command}`lpinfo -m` shows a list of supported models.
               '';
             };
             ppdOptions = mkOption {
@@ -98,9 +98,9 @@ in {
                 Duplex = "DuplexNoTumble";
               };
               default = {};
-              description = ''
+              description = lib.mdDoc ''
                 Sets PPD options for the printer.
-                <command>lpoptions [-p printername] -l</command> shows suported PPD options for the given printer.
+                {command}`lpoptions [-p printername] -l` shows suported PPD options for the given printer.
               '';
             };
           };

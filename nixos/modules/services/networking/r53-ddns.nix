@@ -15,22 +15,22 @@ in
       interval = mkOption {
         type = types.str;
         default = "15min";
-        description = "How often to update the entry";
+        description = lib.mdDoc "How often to update the entry";
       };
 
       zoneID = mkOption {
         type = types.str;
-        description = "The ID of your zone in Route53";
+        description = lib.mdDoc "The ID of your zone in Route53";
       };
 
       domain = mkOption {
         type = types.str;
-        description = "The name of your domain in Route53";
+        description = lib.mdDoc "The name of your domain in Route53";
       };
 
       hostname = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Manually specify the hostname. Otherwise the tool will try to use the name
           returned by the OS (Call to gethostname)
         '';
@@ -38,7 +38,7 @@ in
 
       environmentFile = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           File containing the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
           in the format of an EnvironmentFile as described by systemd.exec(5)
         '';

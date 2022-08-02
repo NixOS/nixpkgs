@@ -44,25 +44,25 @@ in
       type = types.str;
       default = config.networking.hostName;
       defaultText = literalExpression "config.networking.hostName";
-      description = "Server hostname.";
+      description = lib.mdDoc "Server hostname.";
     };
 
     tlsCertificate = mkOption {
       type = types.nullOr types.path;
       example = "/var/host.cert";
-      description = "Path to server TLS certificate.";
+      description = lib.mdDoc "Path to server TLS certificate.";
     };
 
     tlsCertificateKey = mkOption {
       type = types.nullOr types.path;
       example = "/var/host.key";
-      description = "Path to server TLS certificate key.";
+      description = lib.mdDoc "Path to server TLS certificate key.";
     };
 
     enableMessageLogging = mkOption {
       type = types.bool;
       default = true;
-      description = "Whether to enable message logging.";
+      description = lib.mdDoc "Whether to enable message logging.";
     };
 
     httpOrigins = mkOption {
@@ -90,7 +90,7 @@ in
     extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = "Lines added verbatim to the configuration file.";
+      description = lib.mdDoc "Lines added verbatim to the configuration file.";
     };
   };
 

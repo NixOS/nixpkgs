@@ -36,13 +36,13 @@ let
 
       config = mkOption {
         type = types.attrsOf configModule;
-        description = "Per output profile configuration.";
+        description = lib.mdDoc "Per output profile configuration.";
         default = { };
       };
 
       hooks = mkOption {
         type = hooksModule;
-        description = "Profile hook scripts.";
+        description = lib.mdDoc "Profile hook scripts.";
         default = { };
       };
     };
@@ -52,54 +52,54 @@ let
     options = {
       enable = mkOption {
         type = types.bool;
-        description = "Whether to enable the output.";
+        description = lib.mdDoc "Whether to enable the output.";
         default = true;
       };
 
       crtc = mkOption {
         type = types.nullOr types.ints.unsigned;
-        description = "Output video display controller.";
+        description = lib.mdDoc "Output video display controller.";
         default = null;
         example = 0;
       };
 
       primary = mkOption {
         type = types.bool;
-        description = "Whether output should be marked as primary";
+        description = lib.mdDoc "Whether output should be marked as primary";
         default = false;
       };
 
       position = mkOption {
         type = types.str;
-        description = "Output position";
+        description = lib.mdDoc "Output position";
         default = "";
         example = "5760x0";
       };
 
       mode = mkOption {
         type = types.str;
-        description = "Output resolution.";
+        description = lib.mdDoc "Output resolution.";
         default = "";
         example = "3840x2160";
       };
 
       rate = mkOption {
         type = types.str;
-        description = "Output framerate.";
+        description = lib.mdDoc "Output framerate.";
         default = "";
         example = "60.00";
       };
 
       gamma = mkOption {
         type = types.str;
-        description = "Output gamma configuration.";
+        description = lib.mdDoc "Output gamma configuration.";
         default = "";
         example = "1.0:0.909:0.833";
       };
 
       rotate = mkOption {
         type = types.nullOr (types.enum [ "normal" "left" "right" "inverted" ]);
-        description = "Output rotate configuration.";
+        description = lib.mdDoc "Output rotate configuration.";
         default = null;
         example = "left";
       };
@@ -126,7 +126,7 @@ let
 
       dpi = mkOption {
         type = types.nullOr types.ints.positive;
-        description = "Output DPI configuration.";
+        description = lib.mdDoc "Output DPI configuration.";
         default = null;
         example = 96;
       };
@@ -136,19 +136,19 @@ let
           options = {
             method = mkOption {
               type = types.enum [ "factor" "pixel" ];
-              description = "Output scaling method.";
+              description = lib.mdDoc "Output scaling method.";
               default = "factor";
               example = "pixel";
             };
 
             x = mkOption {
               type = types.either types.float types.ints.positive;
-              description = "Horizontal scaling factor/pixels.";
+              description = lib.mdDoc "Horizontal scaling factor/pixels.";
             };
 
             y = mkOption {
               type = types.either types.float types.ints.positive;
-              description = "Vertical scaling factor/pixels.";
+              description = lib.mdDoc "Vertical scaling factor/pixels.";
             };
           };
         });
@@ -184,19 +184,19 @@ let
     options = {
       postswitch = mkOption {
         type = types.attrsOf hookType;
-        description = "Postswitch hook executed after mode switch.";
+        description = lib.mdDoc "Postswitch hook executed after mode switch.";
         default = { };
       };
 
       preswitch = mkOption {
         type = types.attrsOf hookType;
-        description = "Preswitch hook executed before mode switch.";
+        description = lib.mdDoc "Preswitch hook executed before mode switch.";
         default = { };
       };
 
       predetect = mkOption {
         type = types.attrsOf hookType;
-        description = ''
+        description = lib.mdDoc ''
           Predetect hook executed before autorandr attempts to run xrandr.
         '';
         default = { };
@@ -253,7 +253,7 @@ in {
       defaultTarget = mkOption {
         default = "default";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Fallback if no monitor layout can be detected. See the docs
           (https://github.com/phillipberndt/autorandr/blob/v1.0/README.md#how-to-use)
           for further reference.
@@ -262,7 +262,7 @@ in {
 
       hooks = mkOption {
         type = hooksModule;
-        description = "Global hook scripts";
+        description = lib.mdDoc "Global hook scripts";
         default = { };
         example = ''
           {
@@ -292,7 +292,7 @@ in {
       };
       profiles = mkOption {
         type = types.attrsOf profileModule;
-        description = "Autorandr profiles specification.";
+        description = lib.mdDoc "Autorandr profiles specification.";
         default = { };
         example = literalExpression ''
           {

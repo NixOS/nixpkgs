@@ -10,7 +10,7 @@ in
 {
   options.programs.mosh = {
     enable = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable mosh. Note, this will open ports in your firewall!
       '';
       default = false;

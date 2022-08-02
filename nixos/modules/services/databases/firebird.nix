@@ -56,7 +56,7 @@ in
       port = mkOption {
         default = 3050;
         type = types.port;
-        description = ''
+        description = lib.mdDoc ''
           Port Firebird uses.
         '';
       };
@@ -64,7 +64,7 @@ in
       user = mkOption {
         default = "firebird";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           User account under which firebird runs.
         '';
       };
@@ -72,7 +72,7 @@ in
       baseDir = mkOption {
         default = "/var/lib/firebird";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Location containing data/ and system/ directories.
           data/ stores the databases, system/ stores the password database security2.fdb.
         '';

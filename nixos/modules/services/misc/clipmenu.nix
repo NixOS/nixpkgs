@@ -13,7 +13,7 @@ in {
       type = types.package;
       default = pkgs.clipmenu;
       defaultText = literalExpression "pkgs.clipmenu";
-      description = "clipmenu derivation to use.";
+      description = lib.mdDoc "clipmenu derivation to use.";
     };
   };
 

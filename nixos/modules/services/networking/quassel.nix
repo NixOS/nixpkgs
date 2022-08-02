@@ -22,7 +22,7 @@ in
       certificateFile = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Path to the certificate used for SSL connections with clients.
         '';
       };
@@ -30,7 +30,7 @@ in
       requireSSL = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Require SSL for connections from clients.
         '';
       };
@@ -39,7 +39,7 @@ in
         type = types.package;
         default = pkgs.quasselDaemon;
         defaultText = literalExpression "pkgs.quasselDaemon";
-        description = ''
+        description = lib.mdDoc ''
           The package of the quassel daemon.
         '';
       };
@@ -57,7 +57,7 @@ in
       portNumber = mkOption {
         type = types.port;
         default = 4242;
-        description = ''
+        description = lib.mdDoc ''
           The port number the Quassel daemon will be listening to.
         '';
       };
@@ -68,7 +68,7 @@ in
           "/home/''${config.${opt.user}}/.config/quassel-irc.org"
         '';
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The directory holding configuration files, the SQlite database and the SSL Cert.
         '';
       };
@@ -76,7 +76,7 @@ in
       user = mkOption {
         default = null;
         type = types.nullOr types.str;
-        description = ''
+        description = lib.mdDoc ''
           The existing user the Quassel daemon should run as. If left empty, a default "quassel" user will be created.
         '';
       };

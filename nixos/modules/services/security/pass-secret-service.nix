@@ -13,7 +13,7 @@ in
       type = types.package;
       default = pkgs.pass-secret-service;
       defaultText = literalExpression "pkgs.pass-secret-service";
-      description = "Which pass-secret-service package to use.";
+      description = lib.mdDoc "Which pass-secret-service package to use.";
       example = literalExpression "pkgs.pass-secret-service.override { python3 = pkgs.python310 }";
     };
   };

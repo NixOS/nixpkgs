@@ -12,13 +12,13 @@ in
     configFile = mkOption {
       type = with types; nullOr path;
       default = null;
-      description = "Path to Pomerium config YAML. If set, overrides services.pomerium.settings.";
+      description = lib.mdDoc "Path to Pomerium config YAML. If set, overrides services.pomerium.settings.";
     };
 
     useACMEHost = mkOption {
       type = with types; nullOr str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         If set, use a NixOS-generated ACME certificate with the specified name.
 
         Note that this will require you to use a non-HTTP-based challenge, or
@@ -32,13 +32,13 @@ in
     };
 
     settings = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         The contents of Pomerium's config.yaml, in Nix expressions.
 
         Specifying configFile will override this in its entirety.
 
-        See <link xlink:href="https://pomerium.io/reference/">the Pomerium
-        configuration reference</link> for more information about what to put
+        See [the Pomerium
+        configuration reference](https://pomerium.io/reference/) for more information about what to put
         here.
       '';
       default = {};
@@ -48,7 +48,7 @@ in
     secretsFile = mkOption {
       type = with types; nullOr path;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Path to file containing secrets for Pomerium, in systemd
         EnvironmentFile format. See the systemd.exec(5) man page.
       '';

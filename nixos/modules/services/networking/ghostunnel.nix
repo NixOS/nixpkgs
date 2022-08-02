@@ -23,14 +23,14 @@ let
       options = {
 
         listen = mkOption {
-          description = ''
+          description = lib.mdDoc ''
             Address and port to listen on (can be HOST:PORT, unix:PATH).
           '';
           type = types.str;
         };
 
         target = mkOption {
-          description = ''
+          description = lib.mdDoc ''
             Address to forward connections to (can be HOST:PORT or unix:PATH).
           '';
           type = types.str;
@@ -76,7 +76,7 @@ let
         };
 
         disableAuthentication = mkOption {
-          description = ''
+          description = lib.mdDoc ''
             Disable client authentication, no client certificate will be required.
           '';
           type = types.bool;
@@ -84,7 +84,7 @@ let
         };
 
         allowAll = mkOption {
-          description = ''
+          description = lib.mdDoc ''
             If true, allow all clients, do not check client cert subject.
           '';
           type = types.bool;
@@ -92,7 +92,7 @@ let
         };
 
         allowCN = mkOption {
-          description = ''
+          description = lib.mdDoc ''
             Allow client if common name appears in the list.
           '';
           type = types.listOf types.str;
@@ -100,7 +100,7 @@ let
         };
 
         allowOU = mkOption {
-          description = ''
+          description = lib.mdDoc ''
             Allow client if organizational unit name appears in the list.
           '';
           type = types.listOf types.str;
@@ -108,7 +108,7 @@ let
         };
 
         allowDNS = mkOption {
-          description = ''
+          description = lib.mdDoc ''
             Allow client if DNS subject alternative name appears in the list.
           '';
           type = types.listOf types.str;
@@ -116,7 +116,7 @@ let
         };
 
         allowURI = mkOption {
-          description = ''
+          description = lib.mdDoc ''
             Allow client if URI subject alternative name appears in the list.
           '';
           type = types.listOf types.str;
@@ -130,7 +130,7 @@ let
         };
 
         unsafeTarget = mkOption {
-          description = ''
+          description = lib.mdDoc ''
             If set, does not limit target to localhost, 127.0.0.1, [::1], or UNIX sockets.
 
             This is meant to protect against accidental unencrypted traffic on
@@ -216,14 +216,14 @@ in
     services.ghostunnel.enable = mkEnableOption "ghostunnel";
 
     services.ghostunnel.package = mkOption {
-      description = "The ghostunnel package to use.";
+      description = lib.mdDoc "The ghostunnel package to use.";
       type = types.package;
       default = pkgs.ghostunnel;
       defaultText = literalExpression "pkgs.ghostunnel";
     };
 
     services.ghostunnel.servers = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Server mode ghostunnels (TLS listener -> plain TCP/UNIX target)
       '';
       type = types.attrsOf (types.submodule module);

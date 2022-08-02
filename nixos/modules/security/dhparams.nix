@@ -15,7 +15,7 @@ let
       type = bitType;
       default = cfg.defaultBitSize;
       defaultText = literalExpression "config.${opt.defaultBitSize}";
-      description = ''
+      description = lib.mdDoc ''
         The bit size for the prime that is used during a Diffie-Hellman
         key exchange.
       '';
@@ -24,11 +24,11 @@ let
     options.path = mkOption {
       type = types.path;
       readOnly = true;
-      description = ''
+      description = lib.mdDoc ''
         The resulting path of the generated Diffie-Hellman parameters
         file for other services to reference. This could be either a
         store path or a file inside the directory specified by
-        <option>security.dhparams.path</option>.
+        {option}`security.dhparams.path`.
       '';
     };
 
@@ -45,7 +45,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to generate new DH params and clean up old DH params.
         '';
       };
@@ -101,21 +101,21 @@ in {
       defaultBitSize = mkOption {
         type = bitType;
         default = 2048;
-        description = ''
+        description = lib.mdDoc ''
           This allows to override the default bit size for all of the
           Diffie-Hellman parameters set in
-          <option>security.dhparams.params</option>.
+          {option}`security.dhparams.params`.
         '';
       };
 
       path = mkOption {
         type = types.str;
         default = "/var/lib/dhparams";
-        description = ''
+        description = lib.mdDoc ''
           Path to the directory in which Diffie-Hellman parameters will be
           stored. This only is relevant if
-          <option>security.dhparams.stateful</option> is
-          <literal>true</literal>.
+          {option}`security.dhparams.stateful` is
+          `true`.
         '';
       };
     };

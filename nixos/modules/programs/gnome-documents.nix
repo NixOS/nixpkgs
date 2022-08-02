@@ -26,7 +26,7 @@ with lib;
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable GNOME Documents, a document
           manager application for GNOME.
         '';

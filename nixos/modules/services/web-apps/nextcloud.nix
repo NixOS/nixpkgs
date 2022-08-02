@@ -82,12 +82,12 @@ in {
     enable = mkEnableOption "nextcloud";
     hostName = mkOption {
       type = types.str;
-      description = "FQDN for the nextcloud instance.";
+      description = lib.mdDoc "FQDN for the nextcloud instance.";
     };
     home = mkOption {
       type = types.str;
       default = "/var/lib/nextcloud";
-      description = "Storage path of nextcloud.";
+      description = lib.mdDoc "Storage path of nextcloud.";
     };
     datadir = mkOption {
       type = types.str;
@@ -146,23 +146,23 @@ in {
     logLevel = mkOption {
       type = types.ints.between 0 4;
       default = 2;
-      description = "Log level value between 0 (DEBUG) and 4 (FATAL).";
+      description = lib.mdDoc "Log level value between 0 (DEBUG) and 4 (FATAL).";
     };
     https = mkOption {
       type = types.bool;
       default = false;
-      description = "Use https for generated links.";
+      description = lib.mdDoc "Use https for generated links.";
     };
     package = mkOption {
       type = types.package;
-      description = "Which package to use for the Nextcloud instance.";
+      description = lib.mdDoc "Which package to use for the Nextcloud instance.";
       relatedPackages = [ "nextcloud23" "nextcloud24" ];
     };
     phpPackage = mkOption {
       type = types.package;
       relatedPackages = [ "php80" "php81" ];
       defaultText = "pkgs.php";
-      description = ''
+      description = lib.mdDoc ''
         PHP package to use for Nextcloud.
       '';
     };
@@ -170,7 +170,7 @@ in {
     maxUploadSize = mkOption {
       default = "512M";
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Defines the upload limit for files. This changes the relevant options
         in php.ini and nginx if enabled.
       '';
@@ -179,7 +179,7 @@ in {
     skeletonDirectory = mkOption {
       default = "";
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         The directory where the skeleton files are located. These files will be
         copied to the data directory of new users. Leave empty to not copy any
         skeleton files.
@@ -189,7 +189,7 @@ in {
     webfinger = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enable this option if you plan on using the webfinger plugin.
         The appropriate nginx rewrite rules will be added to your configuration.
       '';
@@ -199,7 +199,7 @@ in {
       type = with types; functionTo (listOf package);
       default = all: [];
       defaultText = literalExpression "all: []";
-      description = ''
+      description = lib.mdDoc ''
         Additional PHP extensions to use for nextcloud.
         By default, only extensions necessary for a vanilla nextcloud installation are enabled,
         but you may choose from the list of available extensions and add further ones.
@@ -226,7 +226,7 @@ in {
         "openssl.cafile" = "/etc/ssl/certs/ca-certificates.crt";
         catch_workers_output = "yes";
       };
-      description = ''
+      description = lib.mdDoc ''
         Options for PHP's php.ini file for nextcloud.
       '';
     };
@@ -241,16 +241,16 @@ in {
         "pm.max_spare_servers" = "4";
         "pm.max_requests" = "500";
       };
-      description = ''
-        Options for nextcloud's PHP pool. See the documentation on <literal>php-fpm.conf</literal> for details on configuration directives.
+      description = lib.mdDoc ''
+        Options for nextcloud's PHP pool. See the documentation on `php-fpm.conf` for details on configuration directives.
       '';
     };
 
     poolConfig = mkOption {
       type = types.nullOr types.lines;
       default = null;
-      description = ''
-        Options for nextcloud's PHP pool. See the documentation on <literal>php-fpm.conf</literal> for details on configuration directives.
+      description = lib.mdDoc ''
+        Options for nextcloud's PHP pool. See the documentation on `php-fpm.conf` for details on configuration directives.
       '';
     };
 
@@ -259,7 +259,7 @@ in {
       createLocally = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Create the database and database user locally. Only available for
           mysql database.
           Note that this option will use the latest version of MariaDB which
@@ -275,72 +275,72 @@ in {
       dbtype = mkOption {
         type = types.enum [ "sqlite" "pgsql" "mysql" ];
         default = "sqlite";
-        description = "Database type.";
+        description = lib.mdDoc "Database type.";
       };
       dbname = mkOption {
         type = types.nullOr types.str;
         default = "nextcloud";
-        description = "Database name.";
+        description = lib.mdDoc "Database name.";
       };
       dbuser = mkOption {
         type = types.nullOr types.str;
         default = "nextcloud";
-        description = "Database user.";
+        description = lib.mdDoc "Database user.";
       };
       dbpassFile = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           The full path to a file that contains the database password.
         '';
       };
       dbhost = mkOption {
         type = types.nullOr types.str;
         default = "localhost";
-        description = ''
+        description = lib.mdDoc ''
           Database host.
 
           Note: for using Unix authentication with PostgreSQL, this should be
-          set to <literal>/run/postgresql</literal>.
+          set to `/run/postgresql`.
         '';
       };
       dbport = mkOption {
         type = with types; nullOr (either int str);
         default = null;
-        description = "Database port.";
+        description = lib.mdDoc "Database port.";
       };
       dbtableprefix = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = "Table prefix in Nextcloud database.";
+        description = lib.mdDoc "Table prefix in Nextcloud database.";
       };
       adminuser = mkOption {
         type = types.str;
         default = "root";
-        description = "Admin username.";
+        description = lib.mdDoc "Admin username.";
       };
       adminpassFile = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The full path to a file that contains the admin's password. Must be
-          readable by user <literal>nextcloud</literal>.
+          readable by user `nextcloud`.
         '';
       };
 
       extraTrustedDomains = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           Trusted domains, from which the nextcloud installation will be
           acessible.  You don't need to add
-          <literal>services.nextcloud.hostname</literal> here.
+          `services.nextcloud.hostname` here.
         '';
       };
 
       trustedProxies = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           Trusted proxies, to provide if the nextcloud installation is being
           proxied to secure against e.g. spoofing.
         '';
@@ -351,10 +351,10 @@ in {
         default = null;
         example = "https";
 
-        description = ''
+        description = lib.mdDoc ''
           Force Nextcloud to always use HTTPS i.e. for link generation. Nextcloud
           uses the currently used protocol by default, but when behind a reverse-proxy,
-          it may use <literal>http</literal> for everything although Nextcloud
+          it may use `http` for everything although Nextcloud
           may be served via HTTPS.
         '';
       };
@@ -391,50 +391,50 @@ in {
           bucket = mkOption {
             type = types.str;
             example = "nextcloud";
-            description = ''
+            description = lib.mdDoc ''
               The name of the S3 bucket.
             '';
           };
           autocreate = mkOption {
             type = types.bool;
-            description = ''
+            description = lib.mdDoc ''
               Create the objectstore if it does not exist.
             '';
           };
           key = mkOption {
             type = types.str;
             example = "EJ39ITYZEUH5BGWDRUFY";
-            description = ''
+            description = lib.mdDoc ''
               The access key for the S3 bucket.
             '';
           };
           secretFile = mkOption {
             type = types.str;
             example = "/var/nextcloud-objectstore-s3-secret";
-            description = ''
+            description = lib.mdDoc ''
               The full path to a file that contains the access secret. Must be
-              readable by user <literal>nextcloud</literal>.
+              readable by user `nextcloud`.
             '';
           };
           hostname = mkOption {
             type = types.nullOr types.str;
             default = null;
             example = "example.com";
-            description = ''
+            description = lib.mdDoc ''
               Required for some non-Amazon implementations.
             '';
           };
           port = mkOption {
             type = types.nullOr types.port;
             default = null;
-            description = ''
+            description = lib.mdDoc ''
               Required for some non-Amazon implementations.
             '';
           };
           useSsl = mkOption {
             type = types.bool;
             default = true;
-            description = ''
+            description = lib.mdDoc ''
               Use SSL for objectstore access.
             '';
           };
@@ -442,20 +442,20 @@ in {
             type = types.nullOr types.str;
             default = null;
             example = "REGION";
-            description = ''
+            description = lib.mdDoc ''
               Required for some non-Amazon implementations.
             '';
           };
           usePathStyle = mkOption {
             type = types.bool;
             default = false;
-            description = ''
+            description = lib.mdDoc ''
               Required for some non-Amazon S3 implementations.
 
               Ordinarily, requests will be made with
-              <literal>http://bucket.hostname.domain/</literal>, but with path style
+              `http://bucket.hostname.domain/`, but with path style
               enabled requests are made with
-              <literal>http://hostname.domain/bucket</literal> instead.
+              `http://hostname.domain/bucket` instead.
             '';
           };
         };
@@ -476,14 +476,14 @@ in {
       apcu = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to load the APCu module into PHP.
         '';
       };
       redis = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to load the Redis module into PHP.
           You still need to enable Redis in your config.php.
           See https://docs.nextcloud.com/server/14/admin_manual/configuration_server/caching_configuration.html
@@ -492,7 +492,7 @@ in {
       memcached = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to load the Memcached module into PHP.
           You still need to enable Memcached in your config.php.
           See https://docs.nextcloud.com/server/14/admin_manual/configuration_server/caching_configuration.html
@@ -503,7 +503,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Run regular auto update of all apps installed from the nextcloud app store.
         '';
       };
@@ -552,7 +552,7 @@ in {
     extraOptions = mkOption {
       type = jsonFormat.type;
       default = {};
-      description = ''
+      description = lib.mdDoc ''
         Extra options which should be appended to nextcloud's config.php file.
       '';
       example = literalExpression '' {
@@ -580,7 +580,7 @@ in {
       recommendedHttpHeaders = mkOption {
         type = types.bool;
         default = true;
-        description = "Enable additional recommended HTTP response headers";
+        description = lib.mdDoc "Enable additional recommended HTTP response headers";
       };
       hstsMaxAge = mkOption {
         type = types.ints.positive;

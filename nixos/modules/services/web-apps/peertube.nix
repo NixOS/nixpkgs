@@ -73,51 +73,51 @@ in {
     user = lib.mkOption {
       type = lib.types.str;
       default = "peertube";
-      description = "User account under which Peertube runs.";
+      description = lib.mdDoc "User account under which Peertube runs.";
     };
 
     group = lib.mkOption {
       type = lib.types.str;
       default = "peertube";
-      description = "Group under which Peertube runs.";
+      description = lib.mdDoc "Group under which Peertube runs.";
     };
 
     localDomain = lib.mkOption {
       type = lib.types.str;
       example = "peertube.example.com";
-      description = "The domain serving your PeerTube instance.";
+      description = lib.mdDoc "The domain serving your PeerTube instance.";
     };
 
     listenHttp = lib.mkOption {
       type = lib.types.int;
       default = 9000;
-      description = "listen port for HTTP server.";
+      description = lib.mdDoc "listen port for HTTP server.";
     };
 
     listenWeb = lib.mkOption {
       type = lib.types.int;
       default = 9000;
-      description = "listen port for WEB server.";
+      description = lib.mdDoc "listen port for WEB server.";
     };
 
     enableWebHttps = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = "Enable or disable HTTPS protocol.";
+      description = lib.mdDoc "Enable or disable HTTPS protocol.";
     };
 
     dataDirs = lib.mkOption {
       type = lib.types.listOf lib.types.path;
       default = [ ];
       example = [ "/opt/peertube/storage" "/var/cache/peertube" ];
-      description = "Allow access to custom data locations.";
+      description = lib.mdDoc "Allow access to custom data locations.";
     };
 
     serviceEnvironmentFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       default = null;
       example = "/run/keys/peertube/password-init-root";
-      description = ''
+      description = lib.mdDoc ''
         Set environment variables for the service. Mainly useful for setting the initial root password.
         For example write to file:
         PT_INITIAL_ROOT_PASSWORD=changeme
@@ -141,14 +141,14 @@ in {
           };
         }
       '';
-      description = "Configuration for peertube.";
+      description = lib.mdDoc "Configuration for peertube.";
     };
 
     database = {
       createLocally = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = "Configure local PostgreSQL database server for PeerTube.";
+        description = lib.mdDoc "Configure local PostgreSQL database server for PeerTube.";
       };
 
       host = lib.mkOption {
@@ -160,32 +160,32 @@ in {
           else null
         '';
         example = "192.168.15.47";
-        description = "Database host address or unix socket.";
+        description = lib.mdDoc "Database host address or unix socket.";
       };
 
       port = lib.mkOption {
         type = lib.types.int;
         default = 5432;
-        description = "Database host port.";
+        description = lib.mdDoc "Database host port.";
       };
 
       name = lib.mkOption {
         type = lib.types.str;
         default = "peertube";
-        description = "Database name.";
+        description = lib.mdDoc "Database name.";
       };
 
       user = lib.mkOption {
         type = lib.types.str;
         default = "peertube";
-        description = "Database user.";
+        description = lib.mdDoc "Database user.";
       };
 
       passwordFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/run/keys/peertube/password-posgressql-db";
-        description = "Password for PostgreSQL database.";
+        description = lib.mdDoc "Password for PostgreSQL database.";
       };
     };
 
@@ -193,7 +193,7 @@ in {
       createLocally = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = "Configure local Redis server for PeerTube.";
+        description = lib.mdDoc "Configure local Redis server for PeerTube.";
       };
 
       host = lib.mkOption {
@@ -204,7 +204,7 @@ in {
           then "127.0.0.1"
           else null
         '';
-        description = "Redis host.";
+        description = lib.mdDoc "Redis host.";
       };
 
       port = lib.mkOption {
@@ -215,21 +215,21 @@ in {
           then null
           else 6379
         '';
-        description = "Redis port.";
+        description = lib.mdDoc "Redis port.";
       };
 
       passwordFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/run/keys/peertube/password-redis-db";
-        description = "Password for redis database.";
+        description = lib.mdDoc "Password for redis database.";
       };
 
       enableUnixSocket = lib.mkOption {
         type = lib.types.bool;
         default = cfg.redis.createLocally;
         defaultText = lib.literalExpression "config.${opt.redis.createLocally}";
-        description = "Use Unix socket.";
+        description = lib.mdDoc "Use Unix socket.";
       };
     };
 
@@ -237,14 +237,14 @@ in {
       createLocally = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = "Configure local Postfix SMTP server for PeerTube.";
+        description = lib.mdDoc "Configure local Postfix SMTP server for PeerTube.";
       };
 
       passwordFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/run/keys/peertube/password-smtp";
-        description = "Password for smtp server.";
+        description = lib.mdDoc "Password for smtp server.";
       };
     };
 
@@ -252,7 +252,7 @@ in {
       type = lib.types.package;
       default = pkgs.peertube;
       defaultText = lib.literalExpression "pkgs.peertube";
-      description = "Peertube package to use.";
+      description = lib.mdDoc "Peertube package to use.";
     };
   };
 

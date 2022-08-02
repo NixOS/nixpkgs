@@ -16,13 +16,13 @@ in {
       enable = mkOption {
         type = types.bool;
         default = true;
-        description = "Whether to regularly log uptime to detect bad shutdowns.";
+        description = lib.mdDoc "Whether to regularly log uptime to detect bad shutdowns.";
       };
 
       period = mkOption {
         type = types.str;
         default = "*:0/5";
-        description = "systemd calendar event";
+        description = lib.mdDoc "systemd calendar event";
       };
     };
   };

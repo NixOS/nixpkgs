@@ -86,11 +86,11 @@ let
     defaultText = literalDocBook ''
       calculated from <literal>config.services.thanos.${cmd}</literal>
     '';
-    description = ''
-      Arguments to the <literal>thanos ${cmd}</literal> command.
+    description = lib.mdDoc ''
+      Arguments to the `thanos ${cmd}` command.
 
       Defaults to a list of arguments formed by converting the structured
-      options of <option>services.thanos.${cmd}</option> to a list of arguments.
+      options of {option}`services.thanos.${cmd}` to a list of arguments.
 
       Overriding this option will cause none of the structured options to have
       any effect. So only set this if you know what you're doing!
@@ -127,10 +127,10 @@ let
             if config.services.thanos.<cmd>.tracing.config == null then null
             else toString (toYAML "tracing.yaml" config.services.thanos.<cmd>.tracing.config);
           '';
-          description = ''
+          description = lib.mdDoc ''
             Path to YAML file that contains tracing configuration.
 
-            See format details: <link xlink:href="https://thanos.io/tracing.md/#configuration"/>
+            See format details: <https://thanos.io/tracing.md/#configuration>
           '';
         };
       };
@@ -192,10 +192,10 @@ let
             if config.services.thanos.<cmd>.objstore.config == null then null
             else toString (toYAML "objstore.yaml" config.services.thanos.<cmd>.objstore.config);
           '';
-          description = ''
+          description = lib.mdDoc ''
             Path to YAML file that contains object store configuration.
 
-            See format details: <link xlink:href="https://thanos.io/storage.md/#configuration"/>
+            See format details: <https://thanos.io/storage.md/#configuration>
           '';
         };
       };
@@ -231,7 +231,7 @@ let
           type = types.str;
           default = "/var/lib/${config.services.prometheus.stateDir}/data";
           defaultText = literalExpression ''"/var/lib/''${config.services.prometheus.stateDir}/data"'';
-          description = ''
+          description = lib.mdDoc ''
             Data directory of TSDB.
           '';
         };
@@ -660,7 +660,7 @@ in {
       type = types.package;
       default = pkgs.thanos;
       defaultText = literalExpression "pkgs.thanos";
-      description = ''
+      description = lib.mdDoc ''
         The thanos package that should be used.
       '';
     };

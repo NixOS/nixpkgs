@@ -18,7 +18,7 @@ in {
       package = lib.mkOption {
         default = pkgs.lorri;
         type = lib.types.package;
-        description = ''
+        description = lib.mdDoc ''
           The lorri package to use.
         '';
         defaultText = lib.literalExpression "pkgs.lorri";

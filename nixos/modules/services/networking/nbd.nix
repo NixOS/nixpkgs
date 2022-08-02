@@ -48,7 +48,7 @@ in
         listenPort = mkOption {
           type = types.port;
           default = 10809;
-          description = "Port to listen on. The port is NOT automatically opened in the firewall.";
+          description = lib.mdDoc "Port to listen on. The port is NOT automatically opened in the firewall.";
         };
 
         extraOptions = mkOption {
@@ -64,14 +64,14 @@ in
         };
 
         exports = mkOption {
-          description = "Files or block devices to make available over the network.";
+          description = lib.mdDoc "Files or block devices to make available over the network.";
           default = { };
           type = with types; attrsOf
             (submodule {
               options = {
                 path = mkOption {
                   type = str;
-                  description = "File or block device to export.";
+                  description = lib.mdDoc "File or block device to export.";
                   example = "/dev/sdb1";
                 };
 
@@ -79,7 +79,7 @@ in
                   type = nullOr (listOf str);
                   default = null;
                   example = [ "10.10.0.0/24" "127.0.0.1" ];
-                  description = "IPs and subnets that are authorized to connect for this device. If not specified, the server will allow all connections.";
+                  description = lib.mdDoc "IPs and subnets that are authorized to connect for this device. If not specified, the server will allow all connections.";
                 };
 
                 extraOptions = mkOption {
@@ -100,7 +100,7 @@ in
 
         listenAddress = mkOption {
           type = with types; nullOr str;
-          description = "Address to listen on. If not specified, the server will listen on all interfaces.";
+          description = lib.mdDoc "Address to listen on. If not specified, the server will listen on all interfaces.";
           default = null;
           example = "10.10.0.1";
         };
