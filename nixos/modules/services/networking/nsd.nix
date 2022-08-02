@@ -393,7 +393,7 @@ let
         type = types.listOf types.str;
         default = [];
         description = ''
-          Format: <code>[AXFR|UDP] &lt;ip-address&gt; &lt;key-name | NOKEY&gt;</code>
+          Format: <literal>[AXFR|UDP] &lt;ip-address&gt; &lt;key-name | NOKEY&gt;</literal>
         '';
       };
 

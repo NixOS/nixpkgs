@@ -15,7 +15,7 @@ with lib;
           Whether to configure system to use gphoto2.
           To grant digital camera access to a user, the user must
           be part of the camera group:
-          <code>users.users.alice.extraGroups = ["camera"];</code>
+          <literal>users.users.alice.extraGroups = ["camera"];</literal>
         '';
       };
     };

@@ -46,7 +46,7 @@ in {
       description = ''
         A file containing the Laravel APP_KEY - a 32 character long,
         base64 encoded key used for encryption where needed. Can be
-        generated with <code>head -c 32 /dev/urandom | base64</code>.
+        generated with <literal>head -c 32 /dev/urandom | base64</literal>.
       '';
       example = "/run/keys/snipe-it/appkey";
       type = types.path;
@@ -69,7 +69,7 @@ in {
       description = ''
         The root URL that you want to host Snipe-IT on. All URLs in Snipe-IT will be generated using this value.
         If you change this in the future you may need to run a command to update stored URLs in the database.
-        Command example: <code>snipe-it snipe-it:update-url https://old.example.com https://new.example.com</code>
+        Command example: <literal>snipe-it snipe-it:update-url https://old.example.com https://new.example.com</literal>
       '';
       default = "http${lib.optionalString tlsEnabled "s"}://${cfg.hostName}";
       defaultText = ''

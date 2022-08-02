@@ -63,7 +63,7 @@ in
       type = with types; bool;
       default = true;
       description = ''
-        Whether users of the <code>wheel</code> group must provide a password to
+        Whether users of the <literal>wheel</literal> group must provide a password to
         run commands as super user via <command>doas</command>.
       '';
     };
@@ -74,7 +74,7 @@ in
         Define specific rules to be set in the
         <filename>/etc/doas.conf</filename> file. More specific rules should
         come after more general ones in order to yield the expected behavior.
-        You can use <code>mkBefore</code> and/or <code>mkAfter</code> to ensure
+        You can use <literal>mkBefore</literal> and/or <literal>mkAfter</literal> to ensure
         this is the case when configuration options are merged.
       '';
       example = literalExpression ''
@@ -114,7 +114,7 @@ in
               type = with types; bool;
               default = false;
               description = ''
-                If <code>true</code>, the user is not required to enter a
+                If <literal>true</literal>, the user is not required to enter a
                 password.
               '';
             };
@@ -123,7 +123,7 @@ in
               type = with types; bool;
               default = false;
               description = ''
-                If <code>true</code>, successful executions will not be logged
+                If <literal>true</literal>, successful executions will not be logged
                 to
                 <citerefentry><refentrytitle>syslogd</refentrytitle><manvolnum>8</manvolnum></citerefentry>.
               '';
@@ -133,7 +133,7 @@ in
               type = with types; bool;
               default = false;
               description = ''
-                If <code>true</code>, do not ask for a password again for some
+                If <literal>true</literal>, do not ask for a password again for some
                 time after the user successfully authenticates.
               '';
             };
@@ -142,7 +142,7 @@ in
               type = with types; bool;
               default = false;
               description = ''
-                If <code>true</code>, environment variables other than those
+                If <literal>true</literal>, environment variables other than those
                 listed in
                 <citerefentry><refentrytitle>doas</refentrytitle><manvolnum>1</manvolnum></citerefentry>
                 are kept when creating the environment for the new process.
@@ -155,15 +155,15 @@ in
               description = ''
                 Keep or set the specified variables. Variables may also be
                 removed with a leading '-' or set using
-                <code>variable=value</code>. If the first character of
-                <code>value</code> is a '$', the value to be set is taken from
+                <literal>variable=value</literal>. If the first character of
+                <literal>value</literal> is a '$', the value to be set is taken from
                 the existing environment variable of the indicated name. This
                 option is processed after the default environment has been
                 created.
 
-                NOTE: All rules have <code>setenv { SSH_AUTH_SOCK }</code> by
-                default. To prevent <code>SSH_AUTH_SOCK</code> from being
-                inherited, add <code>"-SSH_AUTH_SOCK"</code> anywhere in this
+                NOTE: All rules have <literal>setenv { SSH_AUTH_SOCK }</literal> by
+                default. To prevent <literal>SSH_AUTH_SOCK</literal> from being
+                inherited, add <literal>"-SSH_AUTH_SOCK"</literal> anywhere in this
                 list.
               '';
             };
@@ -185,12 +185,12 @@ in
               default = null;
               description = ''
                 Which user or group the specified command is allowed to run as.
-                When set to <code>null</code> (the default), all users are
+                When set to <literal>null</literal> (the default), all users are
                 allowed.
 
                 A user can be specified using just the username:
-                <code>"foo"</code>. It is also possible to only allow running as
-                a specific group with <code>":bar"</code>.
+                <literal>"foo"</literal>. It is also possible to only allow running as
+                a specific group with <literal>":bar"</literal>.
               '';
             };
 
@@ -199,7 +199,7 @@ in
               default = null;
               description = ''
                 The command the user is allowed to run. When set to
-                <code>null</code> (the default), all commands are allowed.
+                <literal>null</literal> (the default), all commands are allowed.
 
                 NOTE: It is best practice to specify absolute paths. If a
                 relative path is specified, only a restricted PATH will be
@@ -212,7 +212,7 @@ in
               default = null;
               description = ''
                 Arguments that must be provided to the command. When set to
-                <code>[]</code>, the command must be run without any arguments.
+                <literal>[]</literal>, the command must be run without any arguments.
               '';
             };
           };

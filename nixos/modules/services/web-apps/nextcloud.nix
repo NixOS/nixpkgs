@@ -586,8 +586,8 @@ in {
         type = types.ints.positive;
         default = 15552000;
         description = ''
-          Value for the <code>max-age</code> directive of the HTTP
-          <code>Strict-Transport-Security</code> header.
+          Value for the <literal>max-age</literal> directive of the HTTP
+          <literal>Strict-Transport-Security</literal> header.
 
           See section 6.1.1 of IETF RFC 6797 for detailed information on this
           directive and header.

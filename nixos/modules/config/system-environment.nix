@@ -30,7 +30,7 @@ in
         Also, these variables are merged into
         <xref linkend="opt-environment.variables"/> and it is
         therefore not possible to use PAM style variables such as
-        <code>@{HOME}</code>.
+        <literal>@{HOME}</literal>.
       '';
       type = with types; attrsOf (either str (listOf str));
       apply = mapAttrs (n: v: if isList v then concatStringsSep ":" v else v);
@@ -58,7 +58,7 @@ in
         Also, these variables are merged into
         <xref linkend="opt-environment.profileRelativeEnvVars"/> and it is
         therefore not possible to use PAM style variables such as
-        <code>@{HOME}</code>.
+        <literal>@{HOME}</literal>.
       '';
     };
 

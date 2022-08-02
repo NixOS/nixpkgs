@@ -154,8 +154,8 @@ let
         description = ''
           Attributes for user's entry in
           <filename>pam_mount.conf.xml</filename>.
-          Useful attributes might include <code>path</code>,
-          <code>options</code>, <code>fstype</code>, and <code>server</code>.
+          Useful attributes might include <literal>path</literal>,
+          <literal>options</literal>, <literal>fstype</literal>, and <literal>server</literal>.
           See <link
           xlink:href="http://pam-mount.sourceforge.net/pam_mount.conf.5.html" />
           for more information.
@@ -172,7 +172,7 @@ let
           like <literal>pkgs.bashInteractive</literal>. Don’t
           forget to enable your shell in
           <literal>programs</literal> if necessary,
-          like <code>programs.zsh.enable = true;</code>.
+          like <literal>programs.zsh.enable = true;</literal>.
         '';
       };
 

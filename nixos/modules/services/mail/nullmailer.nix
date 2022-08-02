@@ -39,10 +39,10 @@ with lib;
         type = types.nullOr types.str;
         default = null;
         description = ''
-          Path to the <code>remotes</code> control file. This file contains a
+          Path to the <literal>remotes</literal> control file. This file contains a
           list of remote servers to which to send each message.
 
-          See <code>man 8 nullmailer-send</code> for syntax and available
+          See <literal>man 8 nullmailer-send</literal> for syntax and available
           options.
         '';
       };
@@ -158,12 +158,12 @@ with lib;
             contains a remote host name or address followed by an optional
             protocol string, separated by white space.
 
-            See <code>man 8 nullmailer-send</code> for syntax and available
+            See <literal>man 8 nullmailer-send</literal> for syntax and available
             options.
 
             WARNING: This is stored world-readable in the nix store. If you need
             to specify any secret credentials here, consider using the
-            <code>remotesFile</code> option instead.
+            <literal>remotesFile</literal> option instead.
           '';
         };
 

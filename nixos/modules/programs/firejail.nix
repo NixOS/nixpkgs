@@ -74,7 +74,7 @@ in {
 
         You will get file collisions if you put the actual application binary in
         the global environment (such as by adding the application package to
-        <code>environment.systemPackages</code>), and applications started via
+        <literal>environment.systemPackages</literal>), and applications started via
         .desktop files are not wrapped if they specify the absolute path to the
         binary.
       '';

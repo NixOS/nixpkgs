@@ -74,7 +74,7 @@ in
 
         Podman implements the Docker API.
 
-        Users must be in the <code>podman</code> group in order to connect. As
+        Users must be in the <literal>podman</literal> group in order to connect. As
         with Docker, members of this group can gain root access.
       '';
     };

@@ -26,7 +26,7 @@ let
       description = ''
         Listening port.
         Beware that public-inbox uses well-known ports number to decide whether to enable TLS or not.
-        Set to null and use <code>systemd.sockets.public-inbox-${proto}d.listenStreams</code>
+        Set to null and use <literal>systemd.sockets.public-inbox-${proto}d.listenStreams</literal>
         if you need a more advanced listening.
       '';
     };
@@ -242,8 +242,8 @@ in
         description = ''
           Listening port or systemd's ListenStream= entry
           to be used as a reverse proxy, eg. in nginx:
-          <code>locations."/inbox".proxyPass = "http://unix:''${config.services.public-inbox.http.port}:/inbox";</code>
-          Set to null and use <code>systemd.sockets.public-inbox-httpd.listenStreams</code>
+          <literal>locations."/inbox".proxyPass = "http://unix:''${config.services.public-inbox.http.port}:/inbox";</literal>
+          Set to null and use <literal>systemd.sockets.public-inbox-httpd.listenStreams</literal>
           if you need a more advanced listening.
         '';
       };

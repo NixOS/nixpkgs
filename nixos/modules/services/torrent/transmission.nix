@@ -175,7 +175,7 @@ in
         default = null;
         example = "770";
         description = ''
-          If not <code>null</code>, is used as the permissions
+          If not <literal>null</literal>, is used as the permissions
           set by <literal>systemd.activationScripts.transmission-daemon</literal>
           on the directories <xref linkend="opt-services.transmission.settings.download-dir"/>,
           <xref linkend="opt-services.transmission.settings.incomplete-dir"/>.
@@ -214,7 +214,7 @@ in
         description = ''
           Path to a JSON file to be merged with the settings.
           Useful to merge a file which is better kept out of the Nix store
-          to set secret config parameters like <code>rpc-password</code>.
+          to set secret config parameters like <literal>rpc-password</literal>.
         '';
         default = "/dev/null";
         example = "/var/lib/secrets/transmission/settings.json";
@@ -237,7 +237,7 @@ in
         to open many more connections at the same time.
 
         Note that you may also want to increase
-        <code>peer-limit-global"</code>.
+        <literal>peer-limit-global"</literal>.
         And be aware that these settings are quite aggressive
         and might not suite your regular desktop use.
         For instance, SSH sessions may time out more easily'';

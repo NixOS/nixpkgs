@@ -505,7 +505,7 @@ let
         type = types.listOf types.str;
         inherit (defaultAndText "reloadServices" []) default defaultText;
         description = ''
-          The list of systemd services to call <code>systemctl try-reload-or-restart</code>
+          The list of systemd services to call <literal>systemctl try-reload-or-restart</literal>
           on.
         '';
       };

@@ -29,7 +29,7 @@ let
         type = types.attrsOf types.str;
         description = ''
           Output name to EDID mapping.
-          Use <code>autorandr --fingerprint</code> to get current setup values.
+          Use <literal>autorandr --fingerprint</literal> to get current setup values.
         '';
         default = { };
       };

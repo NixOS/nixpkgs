@@ -84,8 +84,8 @@ in
         type = types.bool;
         default = true;
         description = ''
-          Enable the <code>edns0</code> option in <filename>resolv.conf</filename>. With
-          that option set, <code>glibc</code> supports use of the extension mechanisms for
+          Enable the <literal>edns0</literal> option in <filename>resolv.conf</filename>. With
+          that option set, <literal>glibc</literal> supports use of the extension mechanisms for
           DNS (EDNS) specified in RFC 2671. The most popular user of that feature is DNSSEC,
           which does not work without it.
         '';

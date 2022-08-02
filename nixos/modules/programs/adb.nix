@@ -14,7 +14,7 @@ with lib;
         description = ''
           Whether to configure system to use Android Debug Bridge (adb).
           To grant access to a user, it must be part of adbusers group:
-          <code>users.users.alice.extraGroups = ["adbusers"];</code>
+          <literal>users.users.alice.extraGroups = ["adbusers"];</literal>
         '';
       };
     };

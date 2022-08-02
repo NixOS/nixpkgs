@@ -40,8 +40,8 @@ let
       passwordFile = mkOption {
         description = ''
           File containing the password to authenticate with. This
-          is passed to <code>openconnect</code> via the
-          <code>--passwd-on-stdin</code> option.
+          is passed to <literal>openconnect</literal> via the
+          <literal>--passwd-on-stdin</literal> option.
         '';
         default = null;
         example = "/var/lib/secrets/openconnect-passwd";
@@ -66,10 +66,10 @@ let
         description = ''
           Extra config to be appended to the interface config. It should
           contain long-format options as would be accepted on the command
-          line by <code>openconnect</code>
+          line by <literal>openconnect</literal>
           (see https://www.infradead.org/openconnect/manual.html).
-          Non-key-value options like <code>deflate</code> can be used by
-          declaring them as booleans, i. e. <code>deflate = true;</code>.
+          Non-key-value options like <literal>deflate</literal> can be used by
+          declaring them as booleans, i. e. <literal>deflate = true;</literal>.
         '';
         default = { };
         example = {

@@ -22,7 +22,7 @@ in
           This will enable <option>hardware.opengl.enable</option> so that OpenGL
           programs can find Mesa's llvmpipe drivers.
 
-          Setting this option to <code>false</code> does not mean that software
+          Setting this option to <literal>false</literal> does not mean that software
           OpenGL won't work; it may still work depending on your system
           configuration.
 

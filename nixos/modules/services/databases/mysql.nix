@@ -211,7 +211,7 @@ in
                 For more information on how to specify the target
                 and on which privileges exist, see the
                 <link xlink:href="https://mariadb.com/kb/en/library/grant/">GRANT syntax</link>.
-                The attributes are used as <code>GRANT ''${attrName} ON ''${attrValue}</code>.
+                The attributes are used as <literal>GRANT ''${attrName} ON ''${attrValue}</literal>.
               '';
               example = literalExpression ''
                 {
