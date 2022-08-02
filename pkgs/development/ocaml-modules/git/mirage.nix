@@ -18,9 +18,6 @@ buildDunePackage {
 
   ];
 
-  propagatedBuildInputs = [
-  ];
-
   checkInputs = [
     alcotest alcotest-lwt ke bigstringaf cstruct logs
   ];
