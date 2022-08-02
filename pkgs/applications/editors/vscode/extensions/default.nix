@@ -2556,8 +2556,8 @@ let
         mktplcRef = {
           name = "viml";
           publisher = "xadillax";
-          version = "1.0.1";
-          sha256 = "sha256-mzf2PBSbvmgPjchyKmTaf3nASUi5/S9Djpoeh0y8gH0=";
+          version = "2.1.2";
+          sha256 = "sha256-n91Rj1Rpp7j7gndkt0bV+jT1nRMv7+coVoSL5c7Ii3A=";
         };
         meta = with lib; {
           license = licenses.mit;
