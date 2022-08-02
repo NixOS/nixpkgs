@@ -1,5 +1,6 @@
 { stdenv, lib, fetchurl, doxygen, extra-cmake-modules, graphviz, kdoctools
 , wrapQtAppsHook
+, autoPatchelfHook
 
 , akonadi, alkimia, aqbanking, gmp, gwenhywfar, kactivities, karchive
 , kcmutils, kcontacts, kdewebkit, kdiagram, kholidays, kidentitymanagement
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     doxygen extra-cmake-modules graphviz kdoctools python2
-    python3Packages.wrapPython wrapQtAppsHook
+    python3Packages.wrapPython wrapQtAppsHook autoPatchelfHook
   ];
 
   buildInputs = [
@@ -61,6 +62,13 @@ stdenv.mkDerivation rec {
       xvfb-run -s '-screen 0 1024x768x24' make test \
         ARGS="-E '(reports-chart-test)'" # Test fails, so exclude it for now.
     '';
+
+  # libpython is required by the python interpreter embedded in kmymoney, so we
+  # need to explicitly tell autoPatchelf about it.
+  postFixup = ''
+    patchelf --debug --add-needed libpython3.10.so \
+      "$out/bin/.kmymoney-wrapped"
+  '';
 
   meta = {
     description = "Personal finance manager for KDE";
