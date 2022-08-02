@@ -35615,6 +35615,8 @@ with pkgs;
 
   tvheadend = callPackage ../servers/tvheadend { };
 
+  twiggy = callPackage ../development/tools/twiggy { };
+
   uacme = callPackage ../tools/admin/uacme { };
 
   ums = callPackage ../servers/ums { };
