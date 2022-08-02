@@ -169,6 +169,59 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     };
   };
 
+  Boogie_2_4_1 = buildDotnetPackage rec {
+    pname = "Boogie";
+    version = "2.4.1";
+
+    src = fetchFromGitHub {
+      owner = "boogie-org";
+      repo = "boogie";
+      rev = "v${version}";
+      sha256 = "13f6ifkh6gpy4bvx5zhgwmk3wd5rfxzl9wxwfhcj1c90fdrhwh1b";
+    };
+
+    # emulate `nuget restore Source/Boogie.sln`
+    # which installs in $srcdir/Source/packages
+    preBuild = ''
+      mkdir -p Source/packages/NUnit.2.6.3
+      ln -sn ${dotnetPackages.NUnit}/lib/dotnet/NUnit Source/packages/NUnit.2.6.3/lib
+    '';
+
+    buildInputs = [
+      dotnetPackages.NUnit
+      dotnetPackages.NUnitRunners
+    ];
+
+    xBuildFiles = [ "Source/Boogie.sln" ];
+
+    outputFiles = [ "Binaries/*" ];
+
+    postInstall = ''
+        mkdir -pv "$out/lib/dotnet/${pname}"
+        ln -sv "${pkgs.z3}/bin/z3" "$out/lib/dotnet/${pname}/z3.exe"
+
+        # so that this derivation can be used as a vim plugin to install syntax highlighting
+        vimdir=$out/share/vim-plugins/boogie
+        install -Dt $vimdir/syntax/ Util/vim/syntax/boogie.vim
+        mkdir $vimdir/ftdetect
+        echo 'au BufRead,BufNewFile *.bpl set filetype=boogie' > $vimdir/ftdetect/bpl.vim
+    '';
+
+    meta = with lib; {
+      description = "An intermediate verification language";
+      homepage = "https://github.com/boogie-org/boogie";
+      longDescription = ''
+        Boogie is an intermediate verification language (IVL), intended as a
+        layer on which to build program verifiers for other languages.
+
+        This derivation may be used as a vim plugin to provide syntax highlighting.
+      '';
+      license = licenses.mspl;
+      maintainers = [ maintainers.taktoa ];
+      platforms = with platforms; (linux ++ darwin);
+    };
+  };
+
   Dafny = let
     z3 = pkgs.z3.overrideAttrs (oldAttrs: rec {
       version = "4.8.4";
@@ -184,7 +237,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     self' = pkgs.dotnetPackages.override ({
       pkgs = pkgs // { inherit z3; };
     });
-    Boogie = assert self'.Boogie.version == "2.4.1"; self'.Boogie;
+    Boogie = assert self'.Boogie_2_4_1.version == "2.4.1"; self'.Boogie_2_4_1;
   in buildDotnetPackage rec {
     pname = "Dafny";
     version = "2.3.0";
