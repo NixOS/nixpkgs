@@ -488,6 +488,7 @@ in {
   pgadmin4-standalone = handleTest ./pgadmin4-standalone.nix {};
   pgjwt = handleTest ./pgjwt.nix {};
   pgmanage = handleTest ./pgmanage.nix {};
+  phosh = handleTest ./phosh.nix {};
   php = handleTest ./php {};
   php80 = handleTest ./php { php = pkgs.php80; };
   php81 = handleTest ./php { php = pkgs.php81; };
