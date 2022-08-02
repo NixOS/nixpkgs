@@ -7765,6 +7765,8 @@ with pkgs;
 
   kdigger = callPackage ../tools/security/kdigger { };
 
+  kdiskmark = libsForQt5.callPackage ../tools/filesystems/kdiskmark { };
+
   keepalived = callPackage ../tools/networking/keepalived { };
 
   kexec-tools = callPackage ../os-specific/linux/kexec-tools { };
