@@ -8,14 +8,23 @@ let
 
   makeColor = i: concatMapStringsSep "," (x: "0x" + substring (2*i) 2 x);
 
-  isUnicode = hasSuffix "UTF-8" (toUpper config.i18n.defaultLocale);
+  isUnicode = '' \
+    LOCALE_ARCHIVE=${config.i18n.glibcLocales}/lib/locale/locale-archive \
+    LANG=${config.i18n.defaultLocale} \
+    LC_IDENTIFICATION=${config.i18n.defaultLocale} \
+    locale -k identification-codeset | grep -i UTF-8 \
+  '';
 
   optimizedKeymap = pkgs.runCommand "keymap" {
-    nativeBuildInputs = [ pkgs.buildPackages.kbd ];
+    nativeBuildInputs = with pkgs.buildPackages; [ kbd locale ];
     LOADKEYS_KEYMAP_PATH = "${consoleEnv pkgs.kbd}/share/keymaps/**";
     preferLocalBuild = true;
   } ''
-    loadkeys -b ${optionalString isUnicode "-u"} "${cfg.keyMap}" > $out
+    if ${isUnicode} ; then
+      loadkeys -b -u "${cfg.keyMap}" > $out
+    else
+      loadkeys -b "${cfg.keyMap}" > $out
+    fi
   '';
 
   # Sadly, systemd-vconsole-setup doesn't support binary keymaps.
@@ -130,7 +139,7 @@ in
     })
 
     (mkIf setVconsole (mkMerge [
-      { environment.systemPackages = [ pkgs.kbd ];
+      { environment.systemPackages = with pkgs; [ kbd locale ];
 
         # Let systemd-vconsole-setup.service do the work of setting up the
         # virtual consoles.
@@ -139,8 +148,13 @@ in
         environment.etc.kbd.source = "${consoleEnv pkgs.kbd}/share";
 
         boot.initrd.preLVMCommands = mkIf (!config.boot.initrd.systemd.enable) (mkBefore ''
-          kbd_mode ${if isUnicode then "-u" else "-a"} -C /dev/console
-          printf "\033%%${if isUnicode then "G" else "@"}" >> /dev/console
+          if ${isUnicode} ; then
+            kbd_mode -u -C /dev/console
+            printf "\033%%G" >> /dev/console
+          else
+            kbd_mode -a -C /dev/console
+            printf "\033%%@" >> /dev/console
+          fi
           loadkmap < ${optimizedKeymap}
 
           ${optionalString cfg.earlySetup ''
