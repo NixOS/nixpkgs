@@ -2508,8 +2508,8 @@ let
         mktplcRef = {
           name = "vim";
           publisher = "vscodevim";
-          version = "1.23.1";
-          sha256 = "sha256-k3z3n+29vqvC/FqjrHUBnYIVcKuJpiT+nITbqVm0Low=";
+          version = "1.23.2";
+          sha256 = "sha256-QC+5FJYjWsEaao1ifgMTJyg7vZ5JUbNNJiV+OuiIaM0=";
         };
         meta = {
           license = lib.licenses.mit;
