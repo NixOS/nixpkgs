@@ -30,7 +30,7 @@ let
         install -D ${xmonadEnv}/share/man/man1/xmonad.1.gz $out/share/man/man1/xmonad.1.gz
         makeWrapper ${configured}/bin/xmonad $out/bin/xmonad \
       '' + optionalString cfg.enableConfiguredRecompile ''
-          --set NIX_GHC "${xmonadEnv}/bin/ghc" \
+          --set XMONAD_GHC "${xmonadEnv}/bin/ghc" \
       '' + ''
           --set XMONAD_XMESSAGE "${pkgs.xorg.xmessage}/bin/xmessage"
       '');
