@@ -3,7 +3,6 @@
 
 assert backend == "mcode" || backend == "llvm";
 
-let gnat = gnat11; in  # ghdl-1.0.0 does not build with gnat12
 stdenv.mkDerivation rec {
   pname = "ghdl-${backend}";
   version = "1.0.0";
