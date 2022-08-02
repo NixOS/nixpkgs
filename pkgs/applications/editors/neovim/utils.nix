@@ -160,6 +160,7 @@ let
     , viAlias ? false
     , configure ? {}
     , extraName ? ""
+    , wrapRc ? true
   }:
     let
       /* for compatibility with passing extraPythonPackages as a list; added 2018-07-11 */
@@ -171,9 +172,7 @@ let
         inherit withPython3;
         extraPython3Packages = compatFun extraPython3Packages;
         inherit extraLuaPackages;
-        inherit withNodeJs withRuby viAlias vimAlias;
-        inherit configure;
-        inherit extraName;
+        inherit withNodeJs withRuby viAlias vimAlias configure extraName wrapRc;
       };
     in
     assert withPython -> throw "Python2 support has been removed from neovim, please remove withPython and extraPythonPackages.";
