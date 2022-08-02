@@ -34,9 +34,8 @@ let
 
       inherit postInstall;
 
-      passthru.tests = with nixosTests; {
-        init = syncthing-init;
-        relay = syncthing-relay;
+      passthru.tests = {
+        inherit (nixosTests) syncthing syncthing-init syncthing-relay;
       };
 
       meta = with lib; {
