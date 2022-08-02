@@ -2,16 +2,19 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, hatchling
 , userpath
 , argcomplete
 , packaging
 , importlib-metadata
+, pip
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pipx";
   version = "1.1.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
@@ -23,6 +26,10 @@ buildPythonPackage rec {
     sha256 = "sha256-6cKKVOgHIoKNfGqvDWK5cwBGBDkgfyRuBRDV6fruBoA=";
   };
 
+  nativeBuildInputs = [
+    hatchling
+  ];
+
   propagatedBuildInputs = [
     userpath
     argcomplete
@@ -31,7 +38,9 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -61,6 +70,7 @@ buildPythonPackage rec {
     "legacy_venv"
     "determination"
     "json"
+    "test_list_short"
   ];
 
   meta = with lib; {

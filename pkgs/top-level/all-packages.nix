@@ -1195,6 +1195,8 @@ with pkgs;
 
   davinci-resolve = callPackage ../applications/video/davinci-resolve { };
 
+  dwarfs = callPackage ../tools/filesystems/dwarfs { };
+
   gamemode = callPackage ../tools/games/gamemode {
     libgamemode32 = pkgsi686Linux.gamemode.lib;
   };
@@ -34391,6 +34393,8 @@ with pkgs;
 
   pynac = callPackage ../applications/science/math/pynac { };
 
+  scalp = callPackage ../applications/science/math/scalp { };
+
   singular = callPackage ../applications/science/math/singular { };
 
   scilab-bin = callPackage ../applications/science/math/scilab-bin {};
@@ -35495,8 +35499,6 @@ with pkgs;
     ;
 
   terraform = terraform_1;
-  # deprecated
-  terraform-full = terraform.full;
 
   terraform-providers = recurseIntoAttrs (
     callPackage ../applications/networking/cluster/terraform-providers { }
@@ -35568,6 +35570,8 @@ with pkgs;
   tvbrowser-bin = callPackage ../applications/misc/tvbrowser/bin.nix { };
 
   tvheadend = callPackage ../servers/tvheadend { };
+
+  twiggy = callPackage ../development/tools/twiggy { };
 
   uacme = callPackage ../tools/admin/uacme { };
 
