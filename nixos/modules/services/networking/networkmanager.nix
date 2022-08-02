@@ -329,8 +329,7 @@ in {
         default = "default";
         description = ''
           Set the DNS (<literal>resolv.conf</literal>) processing mode.
-          </para>
-          <para>
+
           A description of these modes can be found in the main section of
           <link xlink:href="https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html">
             https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html
@@ -390,7 +389,7 @@ in {
         default = false;
         description = ''
           Enable the StrongSwan plugin.
-          </para><para>
+
           If you enable this option the
           <literal>networkmanager_strongswan</literal> plugin will be added to
           the <option>networking.networkmanager.plugins</option> option

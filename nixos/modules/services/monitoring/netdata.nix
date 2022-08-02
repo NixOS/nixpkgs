@@ -118,10 +118,10 @@ in {
           Extra paths to add to the netdata global "plugins directory"
           option.  Useful for when you want to include your own
           collection scripts.
-          </para><para>
+
           Details about writing a custom netdata plugin are available at:
           <link xlink:href="https://docs.netdata.cloud/collectors/plugins.d/"/>
-          </para><para>
+
           Cannot be combined with configText.
         '';
       };

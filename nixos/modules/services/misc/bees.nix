@@ -17,8 +17,7 @@ let
         not configure multiple instances for subvolumes of the same filesystem
         (or block devices which are part of the same filesystem), but only for
         completely independent btrfs filesystems.
-        </para>
-        <para>
+
         This must be in a format usable by findmnt; that could be a key=value
         pair, or a bare path to a mount point.
         Using bare paths will allow systemd to start the beesd service only
@@ -31,12 +30,10 @@ let
       default = 1024; # 1GB; default from upstream beesd script
       description = ''
         Hash table size in MB; must be a multiple of 16.
-        </para>
-        <para>
+
         A larger ratio of index size to storage size means smaller blocks of
         duplicate content are recognized.
-        </para>
-        <para>
+
         If you have 1TB of data, a 4GB hash table (which is to say, a value of
         4096) will permit 4KB extents (the smallest possible size) to be
         recognized, whereas a value of 1024 -- creating a 1GB hash table --

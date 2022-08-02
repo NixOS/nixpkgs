@@ -172,8 +172,7 @@ in
       default = false;
       description = ''
         Support setting monitor brightness via DDC.
-        </para>
-        <para>
+
         This is not needed for controlling brightness of the internal monitor
         of a laptop and as it is considered experimental by upstream, it is
         disabled by default.

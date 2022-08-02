@@ -145,8 +145,7 @@ in {
         <option>directories.imports</option>. It restricts
         access to only those files within that directory and its
         subdirectories.
-        </para>
-        <para>
+
         Setting this option to <literal>false</literal> introduces
         possible security problems.
       '';
@@ -158,8 +157,7 @@ in {
       description = ''
         Default network interface to listen for incoming connections. To
         listen for connections on all interfaces, use "0.0.0.0".
-        </para>
-        <para>
+
         Specifies the default IP address and address part of connector
         specific <option>listenAddress</option> options. To bind specific
         connectors to a specific network interfaces, specify the entire
@@ -229,15 +227,13 @@ in {
         default = "legacy";
         description = ''
           Neo4j SSL policy for BOLT traffic.
-          </para>
-          <para>
+
           The legacy policy is a special policy which is not defined in
           the policy configuration section, but rather derives from
           <option>directories.certificates</option> and
           associated files (by default: <filename>neo4j.key</filename> and
           <filename>neo4j.cert</filename>). Its use will be deprecated.
-          </para>
-          <para>
+
           Note: This connector must be configured to support/require
           SSL/TLS for the legacy policy to actually be utilized. See
           <option>bolt.tlsLevel</option>.
@@ -261,13 +257,11 @@ in {
         description = ''
           Directory for storing certificates to be used by Neo4j for
           TLS connections.
-          </para>
-          <para>
+
           When setting this directory to something other than its default,
           ensure the directory's existence, and that read/write permissions are
           given to the Neo4j daemon user <literal>neo4j</literal>.
-          </para>
-          <para>
+
           Note that changing this directory from its default will prevent
           the directory structure required for each SSL policy from being
           automatically generated. A policy's directory structure as defined by
@@ -286,8 +280,7 @@ in {
         description = ''
           Path of the data directory. You must not configure more than one
           Neo4j installation to use the same data directory.
-          </para>
-          <para>
+
           When setting this directory to something other than its default,
           ensure the directory's existence, and that read/write permissions are
           given to the Neo4j daemon user <literal>neo4j</literal>.
@@ -314,8 +307,7 @@ in {
           <literal>LOAD CSV</literal> clause. Only meaningful when
           <option>constrainLoadCvs</option> is set to
           <literal>true</literal>.
-          </para>
-          <para>
+
           When setting this directory to something other than its default,
           ensure the directory's existence, and that read permission is
           given to the Neo4j daemon user <literal>neo4j</literal>.
@@ -330,8 +322,7 @@ in {
           Path of the database plugin directory. Compiled Java JAR files that
           contain database procedures will be loaded if they are placed in
           this directory.
-          </para>
-          <para>
+
           When setting this directory to something other than its default,
           ensure the directory's existence, and that read permission is
           given to the Neo4j daemon user <literal>neo4j</literal>.
@@ -388,8 +379,7 @@ in {
         default = "legacy";
         description = ''
           Neo4j SSL policy for HTTPS traffic.
-          </para>
-          <para>
+
           The legacy policy is a special policy which is not defined in the
           policy configuration section, but rather derives from
           <option>directories.certificates</option> and
@@ -422,13 +412,11 @@ in {
               certificate. Only performed when both objects cannot be found for
               this policy. It is recommended to turn this off again after keys
               have been generated.
-              </para>
-              <para>
+
               The public certificate is required to be duplicated to the
               directory holding trusted certificates as defined by the
               <option>trustedDir</option> option.
-              </para>
-              <para>
+
               Keys should in general be generated and distributed offline by a
               trusted certificate authority and not by utilizing this mode.
             '';
@@ -444,8 +432,7 @@ in {
               option as well as <option>directories.certificates</option> are
               left at their default. Ensure read/write permissions are given
               to the Neo4j daemon user <literal>neo4j</literal>.
-              </para>
-              <para>
+
               It is also possible to override each individual
               configuration with absolute paths. See the
               <option>privateKey</option> and <option>publicCertificate</option>
@@ -488,8 +475,7 @@ in {
               for this policy to be found in the <option>baseDirectory</option>,
               or the absolute path to the certificate file. It is mandatory
               that a certificate can be found or generated.
-              </para>
-              <para>
+
               The public certificate is required to be duplicated to the
               directory holding trusted certificates as defined by the
               <option>trustedDir</option> option.
@@ -545,8 +531,7 @@ in {
               <option>directories.certificates</option> to something other than
               their default. Ensure read/write permissions are given to the
               Neo4j daemon user <literal>neo4j</literal>.
-              </para>
-              <para>
+
               The public certificate as defined by
               <option>publicCertificate</option> is required to be duplicated
               to this directory.

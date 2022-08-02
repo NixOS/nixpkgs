@@ -43,8 +43,7 @@ in
         description = ''
           Whether to synchronise your machine's time using ntpd, as a peer in
           the NTP network.
-          </para>
-          <para>
+
           Disables <literal>systemd.timesyncd</literal> if enabled.
         '';
       };
@@ -53,8 +52,7 @@ in
         type = types.listOf types.str;
         description = ''
           The restriction flags to be set by default.
-          </para>
-          <para>
+
           The default flags prevent external hosts from using ntpd as a DDoS
           reflector, setting system time, and querying OS/ntpd version. As
           recommended in section 6.5.1.1.3, answer "No" of
@@ -67,8 +65,7 @@ in
         type = types.listOf types.str;
         description = ''
           The restriction flags to be set on source.
-          </para>
-          <para>
+
           The default flags allow peers to be added by ntpd from configured
           pool(s), but not by other means.
         '';

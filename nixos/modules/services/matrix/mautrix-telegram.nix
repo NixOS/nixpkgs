@@ -83,9 +83,7 @@ in {
           Configuration options should match those described in
           <link xlink:href="https://github.com/tulir/mautrix-telegram/blob/master/example-config.yaml">
           example-config.yaml</link>.
-          </para>
 
-          <para>
           Secret tokens should be specified using <option>environmentFile</option>
           instead of this world-readable attribute set.
         '';

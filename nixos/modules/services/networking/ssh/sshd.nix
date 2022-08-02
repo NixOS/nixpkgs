@@ -300,8 +300,7 @@ in
         ];
         description = ''
           Allowed key exchange algorithms
-          </para>
-          <para>
+
           Uses the lower bound recommended in both
           <link xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html" />
           and
@@ -321,8 +320,7 @@ in
         ];
         description = ''
           Allowed ciphers
-          </para>
-          <para>
+
           Defaults to recommended settings from both
           <link xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html" />
           and
@@ -342,8 +340,7 @@ in
         ];
         description = ''
           Allowed MACs
-          </para>
-          <para>
+
           Defaults to recommended settings from both
           <link xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html" />
           and
