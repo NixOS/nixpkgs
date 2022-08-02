@@ -27,5 +27,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/bytecodealliance/wizer";
     license = licenses.asl20;
     maintainers = with maintainers; [ lucperkins ];
+    broken = stdenv.isx86_64 && stdenv.isDarwin;
   };
 }
