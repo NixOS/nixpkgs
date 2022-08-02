@@ -1,0 +1,13 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index bc6251d..39d6686 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -19,7 +19,7 @@ classifiers = [
+ 
+ [tool.poetry.dependencies]
+ python = "^3.6"
+-pygls = "^0.11"
++pygls = "^0.12"
+ pyparsing = "^2.4"
+ importlib-metadata = {version = "^4.8", python = "<3.8"}
+ 

@@ -24,6 +24,9 @@ buildPythonApplication rec {
   patches = [
     # Test timeouts occasionally cause the build to fail
     ./disable-test-timeouts.patch
+
+    # cmake-language-server depends on pygls 0.11, but still works with 0.12
+    ./use-latest-pygls.patch
   ];
 
   postPatch = ''
