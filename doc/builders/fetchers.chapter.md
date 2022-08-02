@@ -14,7 +14,7 @@ For example, consider the following fetcher:
 ```nix
 fetchurl {
   url = "http://www.example.org/hello-1.0.tar.gz";
-  sha256 = "1111111111111111111111111111111111111111111111111111";
+  sha256 = "0v6r3wwnsk5pdjr188nip3pjgn1jrn5pc5ajpcfy6had6b3v4dwm";
 };
 ```
 
@@ -23,7 +23,7 @@ A common mistake is to update a fetcher’s URL, or a version parameter, without
 ```nix
 fetchurl {
   url = "http://www.example.org/hello-1.1.tar.gz";
-  sha256 = "1111111111111111111111111111111111111111111111111111";
+  sha256 = "0v6r3wwnsk5pdjr188nip3pjgn1jrn5pc5ajpcfy6had6b3v4dwm";
 };
 ```
 
