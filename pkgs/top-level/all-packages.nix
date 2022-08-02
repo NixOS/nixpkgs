@@ -34435,6 +34435,8 @@ with pkgs;
 
   pynac = callPackage ../applications/science/math/pynac { };
 
+  scalp = callPackage ../applications/science/math/scalp { };
+
   singular = callPackage ../applications/science/math/singular { };
 
   scilab-bin = callPackage ../applications/science/math/scilab-bin {};
