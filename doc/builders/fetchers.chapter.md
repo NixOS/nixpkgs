@@ -5,7 +5,11 @@ Building software with Nix often requires downloading source code and other file
 
 ## Caveats
 
-Fetchers create [_fixed output derivations_](https://nixos.org/manual/nix/stable/#fixed-output-drvs) that downloaded files. Later, Nix can reuse the downloaded files via their hash. While the caching improves performance, it can lead to some confusion. For example, consider the following fetcher:
+Fetchers create [fixed output derivations](https://nixos.org/manual/nix/stable/#fixed-output-drvs) from downloaded files.
+Nix can reuse the downloaded files via the hash of the resulting derivation.
+
+The fact that the hash belongs to the Nix derivation output and not the file itself can lead to confusion.
+For example, consider the following fetcher:
 
 ```nix
 fetchurl {
