@@ -12,7 +12,6 @@
 , qtbase, xvfb-run
 
 , python3
-, python3Packages
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +28,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     doxygen extra-cmake-modules graphviz kdoctools
-    python3Packages.wrapPython wrapQtAppsHook autoPatchelfHook
+    python3.pkgs.wrapPython wrapQtAppsHook autoPatchelfHook
   ];
 
   buildInputs = [
@@ -40,10 +39,10 @@ stdenv.mkDerivation rec {
 
     # Put it into buildInputs so that CMake can find it, even though we patch
     # it into the interface later.
-    python3Packages.woob
+    python3.pkgs.woob
   ];
 
-  woobPythonPath = [ python3Packages.woob ];
+  woobPythonPath = [ python3.pkgs.woob ];
 
   postPatch = ''
     buildPythonPath "$woobPythonPath"
