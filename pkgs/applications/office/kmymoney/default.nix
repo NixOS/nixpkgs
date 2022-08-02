@@ -11,6 +11,7 @@
 # Needed for running tests:
 , qtbase, xvfb-run
 
+, python3
 , python3Packages
 }:
 
@@ -66,7 +67,7 @@ stdenv.mkDerivation rec {
   # libpython is required by the python interpreter embedded in kmymoney, so we
   # need to explicitly tell autoPatchelf about it.
   postFixup = ''
-    patchelf --debug --add-needed libpython3.10.so \
+    patchelf --debug --add-needed libpython${python3.pythonVersion}.so \
       "$out/bin/.kmymoney-wrapped"
   '';
 
