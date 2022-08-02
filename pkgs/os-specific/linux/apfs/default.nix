@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/linux-apfs/linux-apfs-rw";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    broken = kernel.kernelOlder "4.9";
+    broken = kernel.kernelOlder "4.9" || kernel.kernelAtLeast "5.19";
     maintainers = with maintainers; [ Luflosi ];
   };
 }
