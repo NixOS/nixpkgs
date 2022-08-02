@@ -23,7 +23,8 @@ fetchurl {
 };
 ```
 
-**This will reuse the old contents**. Remember to invalidate the hash argument by setting the sha256 to an empty string.
+**This will reuse the old contents**.
+Remember to invalidate the hash argument, in this case by setting the `sha256` attribute to an empty string.
 
 ```nix
 fetchurl {
