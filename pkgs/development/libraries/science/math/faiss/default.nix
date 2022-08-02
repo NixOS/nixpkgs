@@ -117,7 +117,7 @@ stdenv.mkDerivation {
     description = "A library for efficient similarity search and clustering of dense vectors by Facebook Research";
     homepage = "https://github.com/facebookresearch/faiss";
     license = licenses.mit;
-    platforms = platforms.unix; # Never tested windows
+    platforms = platforms.unix;
     maintainers = with maintainers; [ SomeoneSerge ];
   };
 }
