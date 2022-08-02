@@ -34,7 +34,7 @@ fetchurl {
 
 Hash mismatches generate an error message containing the correct sha256.
 
-A similar problem arises while testing changes to a fetcher's implementation. If the output of the derivation already exists in the nix store or cache, test failures can go undetected. The [`invalidateFetcherByDrvHash`](#tester-invalidateFetcherByDrvHash) function helps prevent reusing cached derivations.
+A similar problem arises while testing changes to a fetcher's implementation. If the output of the derivation already exists in the Nix store, test failures can go undetected. The [`invalidateFetcherByDrvHash`](#tester-invalidateFetcherByDrvHash) function helps prevent reusing cached derivations.
 
 ## `fetchurl` and `fetchzip` {#fetchurl}
 
