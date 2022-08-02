@@ -16,7 +16,7 @@
     url =
       "https://github.com/orbitalquark/scinterm/archive/475d8d43f3418590c28bd2fb07ee9229d1fa2d07.zip";
     sha256 = "sha256-lNMK0RFcOLg9RRE5a6VelhSzUYVl5TiAiXcje2JOedE=";
-  };  
+  };
   "lua-5.4.4.tar.gz" = {
     url = "http://www.lua.org/ftp/lua-5.4.4.tar.gz";
     sha256 = "sha256-Fkx4SWU7gK5nvsS3RzuIS/XMjS3KBWU0dewu0nuev2E=";
