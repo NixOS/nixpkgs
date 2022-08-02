@@ -672,6 +672,11 @@ if ((NIX_BUILD_CORES <= 0)); then
 fi
 export NIX_BUILD_CORES
 
+# If NIX_LOAD_LIMIT is unset, set it to NIX_BUILD_CORES. If the value is 0,
+# it means that make's -l flag is not to be used.
+NIX_LOAD_LIMIT="${NIX_LOAD_LIMIT:-$NIX_BUILD_CORES}"
+export NIX_LOAD_LIMIT
+
 
 # Prevent SSL libraries from using certificates in /etc/ssl, unless set explicitly.
 # Leave it in impure shells for convenience.
@@ -1099,11 +1104,15 @@ buildPhase() {
         # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
-            ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+            ${enableParallelBuilding:+-j${NIX_BUILD_CORES}}
             SHELL=$SHELL
             $makeFlags "${makeFlagsArray[@]}"
             $buildFlags "${buildFlagsArray[@]}"
         )
+
+        if ((NIX_LOAD_LIMIT > 0)); then
+            flagsArray+=("-l${NIX_LOAD_LIMIT}")
+        fi
 
         echoCmd 'build flags' "${flagsArray[@]}"
         make ${makefile:+-f $makefile} "${flagsArray[@]}"
@@ -1138,12 +1147,16 @@ checkPhase() {
         # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
-            ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+            ${enableParallelChecking:+-j${NIX_BUILD_CORES}}
             SHELL=$SHELL
             $makeFlags "${makeFlagsArray[@]}"
             ${checkFlags:-VERBOSE=y} "${checkFlagsArray[@]}"
             ${checkTarget}
         )
+
+        if ((NIX_LOAD_LIMIT > 0)); then
+            flagsArray+=("-l${NIX_LOAD_LIMIT}")
+        fi
 
         echoCmd 'check flags' "${flagsArray[@]}"
         make ${makefile:+-f $makefile} "${flagsArray[@]}"
@@ -1272,12 +1285,16 @@ installCheckPhase() {
         # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
-            ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+            ${enableParallelChecking:+-j${NIX_BUILD_CORES}}
             SHELL=$SHELL
             $makeFlags "${makeFlagsArray[@]}"
             $installCheckFlags "${installCheckFlagsArray[@]}"
             ${installCheckTarget:-installcheck}
         )
+
+        if ((NIX_LOAD_LIMIT > 0)); then
+            flagsArray+=("-l${NIX_LOAD_LIMIT}")
+        fi
 
         echoCmd 'installcheck flags' "${flagsArray[@]}"
         make ${makefile:+-f $makefile} "${flagsArray[@]}"
