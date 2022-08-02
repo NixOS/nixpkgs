@@ -116,7 +116,7 @@ in stdenv.mkDerivation (finalAttrs: rec {
         mkdir -p $out/Applications
         ln -s $out/bin/${pname}.app $out/Applications/${nameApp}.app
         ln -s ${jdk.home} $out/.install4j/jre
-      '';
+      '' + ''
 
     runHook postInstall
   '';
