@@ -8,8 +8,8 @@ let
   };
 
   edgeVariant = {
-    version = "5.18.15";
-    hash = "sha256-1h5S6ox6v44CK1pSm42HHXHqR7Y0GM+JdcgNC/w5TB4=";
+    version = "5.19.0";
+    hash = "sha256-cudv8Bf58VceZ+zet5XBrTwq0GzYBWX3Od6dtsc5GKU=";
   };
 
   ttVariant = {
