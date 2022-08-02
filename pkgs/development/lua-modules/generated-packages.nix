@@ -2546,6 +2546,39 @@ buildLuarocksPackage {
   };
 }) {};
 
+serpent = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
+, fetchgit, lua
+}:
+buildLuarocksPackage {
+  pname = "serpent";
+  version = "0.30-2";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/serpent-0.30-2.rockspec";
+    sha256 = "0v83lr9ars1n0djbh7np8jjqdhhaw0pdy2nkcqzqrhv27rzv494n";
+  }).outPath;
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "https://github.com/pkulchenko/serpent",
+  "rev": "d78683597606c6e13a1fed039bc91d86eb8f600f",
+  "date": "2017-09-01T21:35:14-07:00",
+  "path": "/nix/store/z6df44n3p07n4bia7s514vgngbkbpnap-serpent",
+  "sha256": "0q80yfrgqgr01qprf0hrp284ngb7fbcq1v9rbzmdkhbm9lpgy8v8",
+  "fetchLFS": false,
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path"]) ;
+
+  disabled = with lua; (luaOlder "5.1") || (luaAtLeast "5.5");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "https://github.com/pkulchenko/serpent";
+    description = "Lua serializer and pretty printer";
+    license.fullName = "MIT";
+  };
+}) {};
+
 sqlite = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
 , fetchgit, luv
 }:
