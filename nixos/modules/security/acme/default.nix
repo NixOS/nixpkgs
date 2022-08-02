@@ -453,8 +453,7 @@ let
         inherit (defaultAndText "renewInterval" "daily") default defaultText;
         description = ''
           Systemd calendar expression when to check for renewal. See
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>.
+          <citerefentry><refentrytitle>systemd.time</refentrytitle><manvolnum>7</manvolnum></citerefentry>.
         '';
       };
 

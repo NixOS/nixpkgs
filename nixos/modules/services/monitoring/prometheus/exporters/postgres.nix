@@ -37,9 +37,7 @@ in
       default = null;
       example = "/root/prometheus-postgres-exporter.env";
       description = ''
-        Environment file as defined in <citerefentry>
-        <refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum>
-        </citerefentry>.
+        Environment file as defined in <citerefentry><refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
 
         Secrets may be passed to the service without adding them to the
         world-readable Nix store, by specifying placeholder variables as

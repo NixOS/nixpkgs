@@ -93,8 +93,7 @@ in
         Run syncoid at this interval. The default is to run hourly.
 
         The format is described in
-        <citerefentry><refentrytitle>systemd.time</refentrytitle>
-        <manvolnum>7</manvolnum></citerefentry>.
+        <citerefentry><refentrytitle>systemd.time</refentrytitle><manvolnum>7</manvolnum></citerefentry>.
       '';
     };
 

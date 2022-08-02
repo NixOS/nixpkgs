@@ -21,8 +21,7 @@ in with lib; {
         How often we run hydron import and possibly fetch tags. Runs by default every week.
 
         The format is described in
-        <citerefentry><refentrytitle>systemd.time</refentrytitle>
-        <manvolnum>7</manvolnum></citerefentry>.
+        <citerefentry><refentrytitle>systemd.time</refentrytitle><manvolnum>7</manvolnum></citerefentry>.
       '';
     };
 

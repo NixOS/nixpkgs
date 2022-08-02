@@ -68,9 +68,7 @@ in
         type = types.nullOr types.path;
         default = null;
         description = ''
-          Environment file as defined in <citerefentry>
-          <refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum>
-          </citerefentry>.
+          Environment file as defined in <citerefentry><refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
         '';
       };
     };

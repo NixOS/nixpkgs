@@ -123,9 +123,7 @@ in
       example = "hourly";
       description = ''
         Specification of the time at which awstats will get updated.
-        (in the format described by <citerefentry>
-          <refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>)
+        (in the format described by <citerefentry><refentrytitle>systemd.time</refentrytitle><manvolnum>7</manvolnum></citerefentry>)
       '';
     };
   };

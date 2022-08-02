@@ -632,8 +632,7 @@ in
               description = ''
                 Time for the container to start. In case of a timeout,
                 the container processes get killed.
-                See <citerefentry><refentrytitle>systemd.time</refentrytitle>
-                <manvolnum>7</manvolnum></citerefentry>
+                See <citerefentry><refentrytitle>systemd.time</refentrytitle><manvolnum>7</manvolnum></citerefentry>
                 for more information about the format.
                '';
             };

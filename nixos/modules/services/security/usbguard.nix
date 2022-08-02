@@ -69,9 +69,7 @@ in
           Running <literal>usbguard generate-policy</literal> as root will
           generate a config for your currently plugged in devices.
 
-          For more details see <citerefentry>
-          <refentrytitle>usbguard-rules.conf</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>.
+          For more details see <citerefentry><refentrytitle>usbguard-rules.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
         '';
       };
 

@@ -34,8 +34,7 @@ in {
         };
         description = ''
           Configuration for Netatalk. See
-          <citerefentry><refentrytitle>afp.conf</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>.
+          <citerefentry><refentrytitle>afp.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
         '';
       };
 
@@ -44,8 +43,7 @@ in {
         default = "";
         description = ''
           File name extension mappings.
-          See <citerefentry><refentrytitle>extmap.conf</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>. for more information.
+          See <citerefentry><refentrytitle>extmap.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>. for more information.
         '';
       };
 

@@ -25,8 +25,7 @@ in
         type = types.listOf types.str;
         description = ''
           Specification (in the format described by
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>) of the time at
+          <citerefentry><refentrytitle>systemd.time</refentrytitle><manvolnum>7</manvolnum></citerefentry>) of the time at
           which the optimiser will run.
         '';
       };

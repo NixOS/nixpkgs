@@ -39,11 +39,9 @@ in
         description = ''
           Systemd calendar expression for when to scrub btrfs filesystems.
           The recommended period is a month but could be less
-          (<citerefentry><refentrytitle>btrfs-scrub</refentrytitle>
-          <manvolnum>8</manvolnum></citerefentry>).
+          (<citerefentry><refentrytitle>btrfs-scrub</refentrytitle><manvolnum>8</manvolnum></citerefentry>).
           See
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>
+          <citerefentry><refentrytitle>systemd.time</refentrytitle><manvolnum>7</manvolnum></citerefentry>
           for more information on the syntax.
         '';
       };

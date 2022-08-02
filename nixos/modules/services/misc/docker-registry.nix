@@ -105,8 +105,7 @@ in {
       type = types.str;
       description = ''
         Specification (in the format described by
-        <citerefentry><refentrytitle>systemd.time</refentrytitle>
-        <manvolnum>7</manvolnum></citerefentry>) of the time at
+        <citerefentry><refentrytitle>systemd.time</refentrytitle><manvolnum>7</manvolnum></citerefentry>) of the time at
         which the garbage collect will occur.
       '';
     };

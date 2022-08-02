@@ -28,8 +28,7 @@ in
       type = types.attrsOf sysctlOption;
       description = ''
         Runtime parameters of the Linux kernel, as set by
-        <citerefentry><refentrytitle>sysctl</refentrytitle>
-        <manvolnum>8</manvolnum></citerefentry>.  Note that sysctl
+        <citerefentry><refentrytitle>sysctl</refentrytitle><manvolnum>8</manvolnum></citerefentry>.  Note that sysctl
         parameters names must be enclosed in quotes
         (e.g. <literal>"vm.swappiness"</literal> instead of
         <literal>vm.swappiness</literal>).  The value of each

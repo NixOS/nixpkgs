@@ -29,8 +29,7 @@ in
       example = [ "/home" ];
       description = ''
         List of paths to include into the backups. See the FILE SELECTION
-        section in <citerefentry><refentrytitle>duplicity</refentrytitle>
-        <manvolnum>1</manvolnum></citerefentry> for details on the syntax.
+        section in <citerefentry><refentrytitle>duplicity</refentrytitle><manvolnum>1</manvolnum></citerefentry> for details on the syntax.
       '';
     };
 
@@ -39,8 +38,7 @@ in
       default = [ ];
       description = ''
         List of paths to exclude from backups. See the FILE SELECTION section in
-        <citerefentry><refentrytitle>duplicity</refentrytitle>
-        <manvolnum>1</manvolnum></citerefentry> for details on the syntax.
+        <citerefentry><refentrytitle>duplicity</refentrytitle><manvolnum>1</manvolnum></citerefentry> for details on the syntax.
       '';
     };
 
@@ -49,8 +47,7 @@ in
       example = "s3://host:port/prefix";
       description = ''
         Target url to backup to. See the URL FORMAT section in
-        <citerefentry><refentrytitle>duplicity</refentrytitle>
-        <manvolnum>1</manvolnum></citerefentry> for supported urls.
+        <citerefentry><refentrytitle>duplicity</refentrytitle><manvolnum>1</manvolnum></citerefentry> for supported urls.
       '';
     };
 
@@ -60,8 +57,7 @@ in
       description = ''
         Path of a file containing secrets (gpg passphrase, access key...) in
         the format of EnvironmentFile as described by
-        <citerefentry><refentrytitle>systemd.exec</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry>. For example:
+        <citerefentry><refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum></citerefentry>. For example:
         <programlisting>
         PASSPHRASE=«...»
         AWS_ACCESS_KEY_ID=«...»
@@ -75,8 +71,7 @@ in
       default = "daily";
       description = ''
         Run duplicity with the given frequency (see
-        <citerefentry><refentrytitle>systemd.time</refentrytitle>
-        <manvolnum>7</manvolnum></citerefentry> for the format).
+        <citerefentry><refentrytitle>systemd.time</refentrytitle><manvolnum>7</manvolnum></citerefentry> for the format).
         If null, do not run automatically.
       '';
     };
@@ -87,8 +82,7 @@ in
       example = [ "--backend-retry-delay" "100" ];
       description = ''
         Extra command-line flags passed to duplicity. See
-        <citerefentry><refentrytitle>duplicity</refentrytitle>
-        <manvolnum>1</manvolnum></citerefentry>.
+        <citerefentry><refentrytitle>duplicity</refentrytitle><manvolnum>1</manvolnum></citerefentry>.
       '';
     };
 

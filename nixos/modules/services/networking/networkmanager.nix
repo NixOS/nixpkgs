@@ -180,10 +180,7 @@ in {
             https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html#id-1.2.3.11
           </link>
           or
-          <citerefentry>
-            <refentrytitle>NetworkManager.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>
+          <citerefentry><refentrytitle>NetworkManager.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>
           for more information.
         '';
       };
@@ -198,10 +195,7 @@ in {
             https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html
           </link>
           or
-          <citerefentry>
-            <refentrytitle>NetworkManager.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>
+          <citerefentry><refentrytitle>NetworkManager.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>
           for more information.
         '';
       };
@@ -217,10 +211,7 @@ in {
             https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html#device-spec
           </link>
           or the "Device List Format" Appendix of
-          <citerefentry>
-            <refentrytitle>NetworkManager.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>.
+          <citerefentry><refentrytitle>NetworkManager.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
         '';
       };
 
@@ -335,10 +326,7 @@ in {
             https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html
           </link>
           or in
-          <citerefentry>
-            <refentrytitle>NetworkManager.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>.
+          <citerefentry><refentrytitle>NetworkManager.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
         '';
       };
 

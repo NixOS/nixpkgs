@@ -88,8 +88,7 @@ in
         default = "20min";
         description = ''
           Time interval between mlmmj-maintd runs, see
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry> for format information.
+          <citerefentry><refentrytitle>systemd.time</refentrytitle><manvolnum>7</manvolnum></citerefentry> for format information.
         '';
       };
 

@@ -152,8 +152,7 @@ in {
         '';
         description = ''
           Declarative Unbound configuration
-          See the <citerefentry><refentrytitle>unbound.conf</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> manpage for a list of
+          See the <citerefentry><refentrytitle>unbound.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry> manpage for a list of
           available options.
         '';
       };

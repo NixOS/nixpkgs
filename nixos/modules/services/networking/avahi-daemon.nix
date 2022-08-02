@@ -152,8 +152,7 @@ in
       '';
       description = ''
         Specify custom service definitions which are placed in the avahi service directory.
-        See the <citerefentry><refentrytitle>avahi.service</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> manpage for detailed information.
+        See the <citerefentry><refentrytitle>avahi.service</refentrytitle><manvolnum>5</manvolnum></citerefentry> manpage for detailed information.
       '';
     };
 

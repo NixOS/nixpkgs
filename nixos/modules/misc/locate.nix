@@ -44,8 +44,7 @@ in
         default at 2:15 AM every day.
 
         The format is described in
-        <citerefentry><refentrytitle>systemd.time</refentrytitle>
-        <manvolnum>7</manvolnum></citerefentry>.
+        <citerefentry><refentrytitle>systemd.time</refentrytitle><manvolnum>7</manvolnum></citerefentry>.
 
         To disable automatic updates, set to <literal>"never"</literal>
         and run <command>updatedb</command> manually.

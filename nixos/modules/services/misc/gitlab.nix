@@ -322,8 +322,7 @@ in {
         description = ''
           The time(s) to run automatic backup of GitLab
           state. Specified in systemd's time format; see
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>.
+          <citerefentry><refentrytitle>systemd.time</refentrytitle><manvolnum>7</manvolnum></citerefentry>.
         '';
       };
 

@@ -111,8 +111,7 @@ in
           default = "";
           description = ''
             Extra configuration for <literal>slurmdbd.conf</literal> See also:
-            <citerefentry><refentrytitle>slurmdbd.conf</refentrytitle>
-            <manvolnum>8</manvolnum></citerefentry>.
+            <citerefentry><refentrytitle>slurmdbd.conf</refentrytitle><manvolnum>8</manvolnum></citerefentry>.
           '';
         };
       };

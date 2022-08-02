@@ -314,8 +314,7 @@ let
           Attribute set describing resource limits.  Defaults to the
           value of <option>security.pam.loginLimits</option>.
           The meaning of the values is explained in <citerefentry>
-          <refentrytitle>limits.conf</refentrytitle><manvolnum>5</manvolnum>
-          </citerefentry>.
+          <refentrytitle>limits.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
         '';
       };
 
@@ -756,8 +755,7 @@ in
           <varname>domain</varname>, <varname>type</varname>,
           <varname>item</varname>, and <varname>value</varname>
           attribute.  The syntax and semantics of these attributes
-          must be that described in <citerefentry><refentrytitle>limits.conf</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>.
+          must be that described in <citerefentry><refentrytitle>limits.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
 
           Note that these limits do not apply to systemd services,
           whose limits can be changed via <option>systemd.extraConfig</option>
@@ -845,10 +843,7 @@ in
           use "sufficient".
 
           Read
-          <citerefentry>
-            <refentrytitle>pam.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>
+          <citerefentry><refentrytitle>pam.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>
           for better understanding of this option.
         '';
       };
@@ -935,10 +930,7 @@ in
           If you want to use U2F device instead of regular password, use "sufficient".
 
           Read
-          <citerefentry>
-            <refentrytitle>pam.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>
+          <citerefentry><refentrytitle>pam.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>
           for better understanding of this option.
         '';
       };
@@ -1054,10 +1046,7 @@ in
           use "sufficient".
 
           Read
-          <citerefentry>
-            <refentrytitle>pam.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>
+          <citerefentry><refentrytitle>pam.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>
           for better understanding of this option.
         '';
       };
@@ -1088,10 +1077,7 @@ in
           If you want to use Yubikey instead of regular password, use "sufficient".
 
           Read
-          <citerefentry>
-            <refentrytitle>pam.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>
+          <citerefentry><refentrytitle>pam.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>
           for better understanding of this option.
         '';
       };

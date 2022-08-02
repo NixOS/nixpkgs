@@ -12,10 +12,8 @@ in {
         default = false;
         description = ''
           If set, all the required runtime store paths for this service are
-          bind-mounted into a <literal>tmpfs</literal>-based <citerefentry>
-            <refentrytitle>chroot</refentrytitle>
-            <manvolnum>2</manvolnum>
-          </citerefentry>.
+          bind-mounted into a <literal>tmpfs</literal>-based
+          <citerefentry><refentrytitle>chroot</refentrytitle><manvolnum>2</manvolnum></citerefentry>.
         '';
       };
 
@@ -69,10 +67,7 @@ in {
           <filename>/bin/sh</filename> is provided at all.
 
           This is useful for some applications, which for example use the
-          <citerefentry>
-            <refentrytitle>system</refentrytitle>
-            <manvolnum>3</manvolnum>
-          </citerefentry> library function to execute commands.
+          <citerefentry><refentrytitle>system</refentrytitle><manvolnum>3</manvolnum></citerefentry> library function to execute commands.
         '';
       };
 
@@ -88,10 +83,8 @@ in {
           name space.
 
           If this is set to <literal>chroot-only</literal>, only the file
-          system name space is set up along with the call to <citerefentry>
-            <refentrytitle>chroot</refentrytitle>
-            <manvolnum>2</manvolnum>
-          </citerefentry>.
+          system name space is set up along with the call to
+          <citerefentry><refentrytitle>chroot</refentrytitle><manvolnum>2</manvolnum></citerefentry>.
 
           <note><para>This doesn't cover network namespaces and is solely for
           file system level isolation.</para></note>

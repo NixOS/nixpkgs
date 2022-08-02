@@ -54,10 +54,7 @@ let
         description = ''
           A comma-separated list of capabilities to be given to the wrapper
           program. For capabilities supported by the system check the
-          <citerefentry>
-            <refentrytitle>capabilities</refentrytitle>
-            <manvolnum>7</manvolnum>
-          </citerefentry>
+          <citerefentry><refentrytitle>capabilities</refentrytitle><manvolnum>7</manvolnum></citerefentry>
           manual page.
 
           <note><para>

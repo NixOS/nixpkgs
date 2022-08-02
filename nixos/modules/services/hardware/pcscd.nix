@@ -38,8 +38,7 @@ in
       description = ''
         Configuration for devices that aren't hotpluggable.
 
-        See <citerefentry><refentrytitle>reader.conf</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for valid options.
+        See <citerefentry><refentrytitle>reader.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry> for valid options.
       '';
     };
   };

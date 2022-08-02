@@ -54,11 +54,9 @@ in
         default = null;
         description = ''
           Template for arguments to be passed to
-          <citerefentry><refentrytitle>login</refentrytitle>
-          <manvolnum>1</manvolnum></citerefentry>.
+          <citerefentry><refentrytitle>login</refentrytitle><manvolnum>1</manvolnum></citerefentry>.
 
-          See <citerefentry><refentrytitle>agetty</refentrytitle>
-          <manvolnum>1</manvolnum></citerefentry> for details,
+          See <citerefentry><refentrytitle>agetty</refentrytitle><manvolnum>1</manvolnum></citerefentry> for details,
           including security considerations.  If unspecified, agetty
           will not be invoked with a <option>--login-options</option>
           option.

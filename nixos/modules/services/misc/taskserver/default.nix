@@ -228,10 +228,7 @@ in {
         type = types.int;
         default = 10;
         description = ''
-          Size of the connection backlog, see <citerefentry>
-            <refentrytitle>listen</refentrytitle>
-            <manvolnum>2</manvolnum>
-          </citerefentry>.
+          Size of the connection backlog, see <citerefentry><refentrytitle>listen</refentrytitle><manvolnum>2</manvolnum></citerefentry>.
         '';
       };
 
@@ -327,10 +324,8 @@ in {
         description = ''
           Configuration options to pass to Taskserver.
 
-          The options here are the same as described in <citerefentry>
-            <refentrytitle>taskdrc</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>, but with one difference:
+          The options here are the same as described in
+          <citerefentry><refentrytitle>taskdrc</refentrytitle><manvolnum>5</manvolnum></citerefentry>, but with one difference:
 
           The <literal>server</literal> option is
           <literal>server.listen</literal> here, because the

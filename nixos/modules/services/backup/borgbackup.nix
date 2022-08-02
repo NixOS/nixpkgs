@@ -323,8 +323,7 @@ in {
             description = ''
               When or how often the backup should run.
               Must be in the format described in
-              <citerefentry><refentrytitle>systemd.time</refentrytitle>
-              <manvolnum>7</manvolnum></citerefentry>.
+              <citerefentry><refentrytitle>systemd.time</refentrytitle><manvolnum>7</manvolnum></citerefentry>.
               If you do not want the backup to start
               automatically, use <literal>[ ]</literal>.
               It will generate a systemd service borgbackup-job-NAME.
@@ -338,8 +337,7 @@ in {
             example = true;
             description = ''
               Set the <literal>persistentTimer</literal> option for the
-              <citerefentry><refentrytitle>systemd.timer</refentrytitle>
-              <manvolnum>5</manvolnum></citerefentry>
+              <citerefentry><refentrytitle>systemd.timer</refentrytitle><manvolnum>5</manvolnum></citerefentry>
               which triggers the backup immediately if the last trigger
               was missed (e.g. if the system was powered down).
             '';

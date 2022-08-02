@@ -44,8 +44,7 @@ in
           default = "";
           description = ''
             Contents of the /etc/exports file.  See
-            <citerefentry><refentrytitle>exports</refentrytitle>
-            <manvolnum>5</manvolnum></citerefentry> for the format.
+            <citerefentry><refentrytitle>exports</refentrytitle><manvolnum>5</manvolnum></citerefentry> for the format.
           '';
         };
 
@@ -55,8 +54,7 @@ in
           description = ''
             Hostname or address on which NFS requests will be accepted.
             Default is all.  See the <option>-H</option> option in
-            <citerefentry><refentrytitle>nfsd</refentrytitle>
-            <manvolnum>8</manvolnum></citerefentry>.
+            <citerefentry><refentrytitle>nfsd</refentrytitle><manvolnum>8</manvolnum></citerefentry>.
           '';
         };
 

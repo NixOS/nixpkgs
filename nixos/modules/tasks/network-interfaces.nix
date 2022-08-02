@@ -878,8 +878,7 @@ in
         };
       description = ''
         This option allows you to configure Foo Over UDP and Generic UDP Encapsulation
-        endpoints. See <citerefentry><refentrytitle>ip-fou</refentrytitle>
-        <manvolnum>8</manvolnum></citerefentry> for details.
+        endpoints. See <citerefentry><refentrytitle>ip-fou</refentrytitle><manvolnum>8</manvolnum></citerefentry> for details.
       '';
       type = with types; attrsOf (submodule {
         options = {
@@ -1000,8 +999,7 @@ in
                   type = enum [ "fou" "gue" ];
                   description = ''
                     Selects encapsulation type. See
-                    <citerefentry><refentrytitle>ip-link</refentrytitle>
-                    <manvolnum>8</manvolnum></citerefentry> for details.
+                    <citerefentry><refentrytitle>ip-link</refentrytitle><manvolnum>8</manvolnum></citerefentry> for details.
                   '';
                 };
 

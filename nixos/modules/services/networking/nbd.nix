@@ -58,8 +58,7 @@ in
           };
           description = ''
             Extra options for the server. See
-            <citerefentry><refentrytitle>nbd-server</refentrytitle>
-            <manvolnum>5</manvolnum></citerefentry>.
+            <citerefentry><refentrytitle>nbd-server</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
           '';
         };
 
@@ -90,8 +89,7 @@ in
                   };
                   description = ''
                     Extra options for this export. See
-                    <citerefentry><refentrytitle>nbd-server</refentrytitle>
-                    <manvolnum>5</manvolnum></citerefentry>.
+                    <citerefentry><refentrytitle>nbd-server</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
                   '';
                 };
               };

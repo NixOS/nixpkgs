@@ -29,8 +29,7 @@ in
           a sufficient garbage collection is once a week.
 
           The format is described in
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>.
+          <citerefentry><refentrytitle>systemd.time</refentrytitle><manvolnum>7</manvolnum></citerefentry>.
         '';
       };
 
@@ -42,8 +41,7 @@ in
           Add a randomized delay before each garbage collection.
           The delay will be chosen between zero and this value.
           This value must be a time span in the format specified by
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>
+          <citerefentry><refentrytitle>systemd.time</refentrytitle><manvolnum>7</manvolnum></citerefentry>
         '';
       };
 

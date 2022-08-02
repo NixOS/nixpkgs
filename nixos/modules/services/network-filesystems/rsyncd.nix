@@ -41,8 +41,7 @@ in {
         };
         description = ''
           Configuration for rsyncd. See
-          <citerefentry><refentrytitle>rsyncd.conf</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>.
+          <citerefentry><refentrytitle>rsyncd.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
         '';
       };
 

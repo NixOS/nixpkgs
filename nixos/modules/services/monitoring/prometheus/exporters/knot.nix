@@ -20,8 +20,7 @@ in {
       type = types.str;
       default = "/run/knot/knot.sock";
       description = ''
-        Socket path of <citerefentry><refentrytitle>knotd</refentrytitle>
-        <manvolnum>8</manvolnum></citerefentry>.
+        Socket path of <citerefentry><refentrytitle>knotd</refentrytitle><manvolnum>8</manvolnum></citerefentry>.
       '';
     };
 

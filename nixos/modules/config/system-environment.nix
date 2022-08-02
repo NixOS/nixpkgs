@@ -45,10 +45,7 @@ in
         login process.
 
         Variable substitution is available as described in
-        <citerefentry>
-          <refentrytitle>pam_env.conf</refentrytitle>
-          <manvolnum>5</manvolnum>
-        </citerefentry>.
+        <citerefentry><refentrytitle>pam_env.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
 
         Each attribute maps to a list of relative paths. Each relative
         path is appended to the each profile of

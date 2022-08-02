@@ -919,8 +919,7 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[Network]</literal> section of the networkd config.
-        See <citerefentry><refentrytitle>networkd.conf</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        See <citerefentry><refentrytitle>networkd.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -931,8 +930,7 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[DHCPv4]</literal> section of the networkd config.
-        See <citerefentry><refentrytitle>networkd.conf</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        See <citerefentry><refentrytitle>networkd.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -943,8 +941,7 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[DHCPv6]</literal> section of the networkd config.
-        See <citerefentry><refentrytitle>networkd.conf</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        See <citerefentry><refentrytitle>networkd.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
   };
@@ -966,8 +963,7 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[Link]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.link</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        <citerefentry><refentrytitle>systemd.link</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -981,8 +977,7 @@ let
         description = ''
           Each attribute in this set specifies an option in the
           <literal>[WireGuardPeer]</literal> section of the unit.  See
-          <citerefentry><refentrytitle>systemd.network</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> for details.
+          <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
         '';
       };
     };
@@ -996,8 +991,7 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[Netdev]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1008,8 +1002,7 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[VLAN]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1020,8 +1013,7 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[MACVLAN]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1031,8 +1023,7 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[VXLAN]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1043,8 +1034,7 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[Tunnel]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1055,8 +1045,7 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[FooOverUDP]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1067,8 +1056,7 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[Peer]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1079,8 +1067,7 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[Tun]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1091,8 +1078,7 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[Tap]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1107,8 +1093,7 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[WireGuard]</literal> section of the unit. See
-        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
         Use <literal>PrivateKeyFile</literal> instead of
         <literal>PrivateKey</literal>: the nix store is
         world-readable.
@@ -1128,8 +1113,7 @@ let
       description = ''
         Each item in this array specifies an option in the
         <literal>[WireGuardPeer]</literal> section of the unit. See
-        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
         Use <literal>PresharedKeyFile</literal> instead of
         <literal>PresharedKey</literal>: the nix store is
         world-readable.
@@ -1143,8 +1127,7 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[Bond]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1155,8 +1138,7 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[Xfrm]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1167,8 +1149,7 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[VRF]</literal> section of the unit. See
-        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
         A detailed explanation about how VRFs work can be found in the
         <link xlink:href="https://www.kernel.org/doc/Documentation/networking/vrf.txt">kernel docs</link>.
       '';
@@ -1184,8 +1165,7 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[BatmanAdvanced]</literal> section of the unit. See
-        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1199,8 +1179,7 @@ let
         description = ''
           Each attribute in this set specifies an option in the
           <literal>[Address]</literal> section of the unit.  See
-          <citerefentry><refentrytitle>systemd.network</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> for details.
+          <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
         '';
       };
     };
@@ -1215,8 +1194,7 @@ let
         description = ''
           Each attribute in this set specifies an option in the
           <literal>[RoutingPolicyRule]</literal> section of the unit.  See
-          <citerefentry><refentrytitle>systemd.network</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> for details.
+          <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
         '';
       };
     };
@@ -1231,8 +1209,7 @@ let
         description = ''
           Each attribute in this set specifies an option in the
           <literal>[Route]</literal> section of the unit.  See
-          <citerefentry><refentrytitle>systemd.network</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> for details.
+          <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
         '';
       };
     };
@@ -1247,8 +1224,7 @@ let
         description = ''
           Each attribute in this set specifies an option in the
           <literal>[IPv6Prefix]</literal> section of the unit.  See
-          <citerefentry><refentrytitle>systemd.network</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> for details.
+          <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
         '';
       };
     };
@@ -1263,8 +1239,7 @@ let
         description = ''
           Each attribute in this set specifies an option in the
           <literal>[DHCPServerStaticLease]</literal> section of the unit.  See
-          <citerefentry><refentrytitle>systemd.network</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> for details.
+          <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
 
           Make sure to configure the corresponding client interface to use
           <literal>ClientIdentifier=mac</literal>.
@@ -1282,8 +1257,7 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[Link]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1294,8 +1268,7 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[Network]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1313,8 +1286,7 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[DHCPv4]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1325,8 +1297,7 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[DHCPv6]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1337,8 +1308,7 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[DHCPv6PrefixDelegation]</literal> section of the unit. See
-        <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1349,8 +1319,7 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[IPv6AcceptRA]</literal> section of the unit. See
-        <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1361,8 +1330,7 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[DHCPServer]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1380,8 +1348,7 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[IPv6SendRA]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1391,8 +1358,7 @@ let
       type = with types; listOf (submodule dhcpServerStaticLeaseOptions);
       description = ''
         A list of DHCPServerStaticLease sections to be added to the unit.  See
-        <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1402,8 +1368,7 @@ let
       type = with types; listOf (submodule ipv6PrefixOptions);
       description = ''
         A list of ipv6Prefix sections to be added to the unit.  See
-        <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1436,8 +1401,7 @@ let
       type = types.listOf types.str;
       description = ''
         A list of addresses to be added to the network section of the
-        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1446,8 +1410,7 @@ let
       type = types.listOf types.str;
       description = ''
         A list of gateways to be added to the network section of the
-        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1456,8 +1419,7 @@ let
       type = types.listOf types.str;
       description = ''
         A list of dns servers to be added to the network section of the
-        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1466,8 +1428,7 @@ let
       type = types.listOf types.str;
       description = ''
         A list of ntp servers to be added to the network section of the
-        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1476,8 +1437,7 @@ let
       type = types.listOf types.str;
       description = ''
         A list of bridge interfaces to be added to the network section of the
-        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1486,8 +1446,7 @@ let
       type = types.listOf types.str;
       description = ''
         A list of bond interfaces to be added to the network section of the
-        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1496,8 +1455,7 @@ let
       type = types.listOf types.str;
       description = ''
         A list of vrf interfaces to be added to the network section of the
-        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1506,8 +1464,7 @@ let
       type = types.listOf types.str;
       description = ''
         A list of vlan interfaces to be added to the network section of the
-        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1516,8 +1473,7 @@ let
       type = types.listOf types.str;
       description = ''
         A list of macvlan interfaces to be added to the network section of the
-        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1526,8 +1482,7 @@ let
       type = types.listOf types.str;
       description = ''
         A list of vxlan interfaces to be added to the network section of the
-        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1536,8 +1491,7 @@ let
       type = types.listOf types.str;
       description = ''
         A list of tunnel interfaces to be added to the network section of the
-        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1546,8 +1500,7 @@ let
       type = types.listOf types.str;
       description = ''
         A list of xfrm interfaces to be added to the network section of the
-        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1556,8 +1509,7 @@ let
       type = with types; listOf (submodule addressOptions);
       description = ''
         A list of address sections to be added to the unit.  See
-        <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1566,8 +1518,7 @@ let
       type = with types; listOf (submodule routingPolicyRulesOptions);
       description = ''
         A list of routing policy rules sections to be added to the unit.  See
-        <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1576,8 +1527,7 @@ let
       type = with types; listOf (submodule routeOptions);
       description = ''
         A list of route sections to be added to the unit.  See
-        <citerefentry><refentrytitle>systemd.network</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
@@ -1604,8 +1554,7 @@ let
         type = with types; attrsOf int;
         description = ''
           Defines route table names as an attrset of name to number.
-          See <citerefentry><refentrytitle>networkd.conf</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> for details.
+          See <citerefentry><refentrytitle>networkd.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
         '';
       };
 

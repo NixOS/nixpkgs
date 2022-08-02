@@ -227,8 +227,7 @@ in
           Whether to install NixOS's own documentation.
           <itemizedlist>
           <listitem><para>This includes man pages like
-                    <citerefentry><refentrytitle>configuration.nix</refentrytitle>
-                    <manvolnum>5</manvolnum></citerefentry> if <option>documentation.man.enable</option> is
+                    <citerefentry><refentrytitle>configuration.nix</refentrytitle><manvolnum>5</manvolnum></citerefentry> if <option>documentation.man.enable</option> is
                     set.</para></listitem>
           <listitem><para>This includes the HTML manual and the <command>nixos-help</command> command if
                     <option>documentation.doc.enable</option> is set.</para></listitem>

@@ -38,10 +38,8 @@ let
       type = types.str;
       example = "DVI-0";
       description = ''
-        The output name of the monitor, as shown by <citerefentry>
-          <refentrytitle>xrandr</refentrytitle>
-          <manvolnum>1</manvolnum>
-        </citerefentry> invoked without arguments.
+        The output name of the monitor, as shown by
+        <citerefentry><refentrytitle>xrandr</refentrytitle><manvolnum>1</manvolnum></citerefentry> invoked without arguments.
       '';
     };
 
@@ -63,8 +61,7 @@ let
       description = ''
         Extra lines to append to the <literal>Monitor</literal> section
         verbatim. Available options are documented in the MONITOR section in
-        <citerefentry><refentrytitle>xorg.conf</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry>.
+        <citerefentry><refentrytitle>xorg.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
       '';
     };
   };

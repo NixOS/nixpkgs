@@ -159,8 +159,7 @@ in
         description = ''
           Specifies whether remote hosts are allowed to connect to
           ports forwarded for the client.  See
-          <citerefentry><refentrytitle>sshd_config</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>.
+          <citerefentry><refentrytitle>sshd_config</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
         '';
       };
 
@@ -240,8 +239,7 @@ in
         description = ''
           NixOS can automatically generate SSH host keys.  This option
           specifies the path, type and size of each key.  See
-          <citerefentry><refentrytitle>ssh-keygen</refentrytitle>
-          <manvolnum>1</manvolnum></citerefentry> for supported types
+          <citerefentry><refentrytitle>ssh-keygen</refentrytitle><manvolnum>1</manvolnum></citerefentry> for supported types
           and sizes.
         '';
       };

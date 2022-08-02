@@ -536,8 +536,7 @@ in
         type = types.lines;
         default = "";
         description = ''
-          Entries for the <citerefentry><refentrytitle>canonical</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> table.
+          Entries for the <citerefentry><refentrytitle>canonical</refentrytitle><manvolnum>5</manvolnum></citerefentry> table.
         '';
       };
 

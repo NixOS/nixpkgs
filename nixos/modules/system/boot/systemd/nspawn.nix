@@ -53,8 +53,7 @@ let
         description = ''
           Each attribute in this set specifies an option in the
           <literal>[Exec]</literal> section of this unit. See
-          <citerefentry><refentrytitle>systemd.nspawn</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> for details.
+          <citerefentry><refentrytitle>systemd.nspawn</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
         '';
       };
 
@@ -65,8 +64,7 @@ let
         description = ''
           Each attribute in this set specifies an option in the
           <literal>[Files]</literal> section of this unit. See
-          <citerefentry><refentrytitle>systemd.nspawn</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> for details.
+          <citerefentry><refentrytitle>systemd.nspawn</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
         '';
       };
 
@@ -77,8 +75,7 @@ let
         description = ''
           Each attribute in this set specifies an option in the
           <literal>[Network]</literal> section of this unit. See
-          <citerefentry><refentrytitle>systemd.nspawn</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> for details.
+          <citerefentry><refentrytitle>systemd.nspawn</refentrytitle><manvolnum>5</manvolnum></citerefentry> for details.
         '';
       };
     };

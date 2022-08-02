@@ -35,8 +35,7 @@ in
       description = ''
         Where soju should listen for incoming connections. See the
         <literal>listen</literal> directive in
-        <citerefentry><refentrytitle>soju</refentrytitle>
-        <manvolnum>1</manvolnum></citerefentry>.
+        <citerefentry><refentrytitle>soju</refentrytitle><manvolnum>1</manvolnum></citerefentry>.
       '';
     };
 
@@ -73,8 +72,7 @@ in
       description = ''
         List of allowed HTTP origins for WebSocket listeners. The parameters are
         interpreted as shell patterns, see
-        <citerefentry><refentrytitle>glob</refentrytitle>
-        <manvolnum>7</manvolnum></citerefentry>.
+        <citerefentry><refentrytitle>glob</refentrytitle><manvolnum>7</manvolnum></citerefentry>.
       '';
     };
 

@@ -116,10 +116,7 @@ let
         '';
         description = ''
           Refer to
-          <citerefentry>
-            <refentrytitle>xrandr</refentrytitle>
-            <manvolnum>1</manvolnum>
-          </citerefentry>
+          <citerefentry><refentrytitle>xrandr</refentrytitle><manvolnum>1</manvolnum></citerefentry>
           for the documentation of the transform matrix.
         '';
       };
@@ -156,10 +153,7 @@ let
           Output scale configuration.
 
           Either configure by pixels or a scaling factor. When using pixel method the
-          <citerefentry>
-            <refentrytitle>xrandr</refentrytitle>
-            <manvolnum>1</manvolnum>
-          </citerefentry>
+          <citerefentry><refentrytitle>xrandr</refentrytitle><manvolnum>1</manvolnum></citerefentry>
           option
           <parameter class="command">--scale-from</parameter>
           will be used; when using factor method the option

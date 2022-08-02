@@ -176,8 +176,7 @@ in
           <literal>batch</literal> policy instead.
 
           For more fine-grained resource control, please refer to
-          <citerefentry><refentrytitle>systemd.resource-control
-          </refentrytitle><manvolnum>5</manvolnum></citerefentry> and adjust
+          <citerefentry><refentrytitle>systemd.resource-control</refentrytitle><manvolnum>5</manvolnum></citerefentry> and adjust
           <option>systemd.services.nix-daemon</option> directly.
       '';
       };
@@ -631,10 +630,7 @@ in
         description = ''
           Configuration for Nix, see
           <link xlink:href="https://nixos.org/manual/nix/stable/#sec-conf-file"/> or
-          <citerefentry>
-            <refentrytitle>nix.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry> for avalaible options.
+          <citerefentry><refentrytitle>nix.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry> for avalaible options.
           The value declared here will be translated directly to the key-value pairs Nix expects.
 
           You can use <command>nix-instantiate --eval --strict '&lt;nixpkgs/nixos&gt;' -A config.nix.settings</command>

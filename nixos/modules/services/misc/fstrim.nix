@@ -21,8 +21,7 @@ in {
           a sufficient trimming frequency is once a week.
 
           The format is described in
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>.
+          <citerefentry><refentrytitle>systemd.time</refentrytitle><manvolnum>7</manvolnum></citerefentry>.
         '';
       };
     };
