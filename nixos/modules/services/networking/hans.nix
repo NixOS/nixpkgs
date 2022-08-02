@@ -23,8 +23,8 @@ in
           Each attribute of this option defines a systemd service that
           runs hans. Many or none may be defined.
           The name of each service is
-          <literal>hans-<replaceable>name</replaceable></literal>
-          where <replaceable>name</replaceable> is the name of the
+          <literal>hans-«name»</literal>
+          where «name» is the name of the
           corresponding attribute name.
         '';
         example = literalExpression ''

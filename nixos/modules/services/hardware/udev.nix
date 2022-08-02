@@ -212,8 +212,8 @@ in
         description = ''
           List of packages containing <command>udev</command> rules.
           All files found in
-          <filename><replaceable>pkg</replaceable>/etc/udev/rules.d</filename> and
-          <filename><replaceable>pkg</replaceable>/lib/udev/rules.d</filename>
+          <filename>«pkg»/etc/udev/rules.d</filename> and
+          <filename>«pkg»/lib/udev/rules.d</filename>
           will be included.
         '';
         apply = map getBin;
@@ -306,8 +306,8 @@ in
 
           List of packages containing <command>udev</command> rules that will be copied to stage 1.
           All files found in
-          <filename><replaceable>pkg</replaceable>/etc/udev/rules.d</filename> and
-          <filename><replaceable>pkg</replaceable>/lib/udev/rules.d</filename>
+          <filename>«pkg»/etc/udev/rules.d</filename> and
+          <filename>«pkg»/lib/udev/rules.d</filename>
           will be included.
         '';
       };

@@ -194,8 +194,8 @@ in
             example = "user@server:pool/dataset";
             description = ''
               Target ZFS dataset. Can be either local
-              (<replaceable>pool/dataset</replaceable>) or remote
-              (<replaceable>user@server:pool/dataset</replaceable>).
+              («pool/dataset») or remote
+              («user@server:pool/dataset»).
             '';
           };
 

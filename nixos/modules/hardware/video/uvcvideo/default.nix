@@ -37,7 +37,7 @@ in
         description = ''
           List of packages containing <command>uvcvideo</command> dynamic controls
           rules. All files found in
-          <filename><replaceable>pkg</replaceable>/share/uvcdynctrl/data</filename>
+          <filename>«pkg»/share/uvcdynctrl/data</filename>
           will be included.
 
           Note that these will serve as input to the <command>libwebcam</command>

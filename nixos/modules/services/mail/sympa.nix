@@ -242,7 +242,7 @@ in
         description = ''
           The webserver used for the Sympa web interface. Set it to `none` if you want to configure it yourself.
           Further nginx configuration can be done by adapting
-          <option>services.nginx.virtualHosts.<replaceable>name</replaceable></option>.
+          <option>services.nginx.virtualHosts.«name»</option>.
         '';
       };
 

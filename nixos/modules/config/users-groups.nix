@@ -105,7 +105,7 @@ let
           automatically sets <option>group</option> to
           <literal>users</literal>, <option>createHome</option> to
           <literal>true</literal>, <option>home</option> to
-          <filename>/home/<replaceable>username</replaceable></filename>,
+          <filename>/home/«username»</filename>,
           <option>useDefaultShell</option> to <literal>true</literal>,
           and <option>isSystemUser</option> to
           <literal>false</literal>.

@@ -552,7 +552,7 @@ in
         The encrypted disk that should be opened before the root
         filesystem is mounted. Both LVM-over-LUKS and LUKS-over-LVM
         setups are supported. The unencrypted devices can be accessed as
-        <filename>/dev/mapper/<replaceable>name</replaceable></filename>.
+        <filename>/dev/mapper/«name»</filename>.
       '';
 
       type = with types; attrsOf (submodule (

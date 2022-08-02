@@ -63,9 +63,9 @@ in
         <citerefentry><refentrytitle>systemd.exec</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry>. For example:
         <programlisting>
-        PASSPHRASE=<replaceable>...</replaceable>
-        AWS_ACCESS_KEY_ID=<replaceable>...</replaceable>
-        AWS_SECRET_ACCESS_KEY=<replaceable>...</replaceable>
+        PASSPHRASE=«...»
+        AWS_ACCESS_KEY_ID=«...»
+        AWS_SECRET_ACCESS_KEY=«...»
         </programlisting>
       '';
     };

@@ -119,8 +119,8 @@ in
         Each attribute of this option defines a systemd service that
         runs an OpenVPN instance.  These can be OpenVPN servers or
         clients.  The name of each systemd service is
-        <literal>openvpn-<replaceable>name</replaceable>.service</literal>,
-        where <replaceable>name</replaceable> is the corresponding
+        <literal>openvpn-«name».service</literal>,
+        where «name» is the corresponding
         attribute name.
       '';
 

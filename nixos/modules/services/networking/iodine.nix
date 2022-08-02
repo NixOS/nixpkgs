@@ -32,8 +32,8 @@ in
           Each attribute of this option defines a systemd service that
           runs iodine. Many or none may be defined.
           The name of each service is
-          <literal>iodine-<replaceable>name</replaceable></literal>
-          where <replaceable>name</replaceable> is the name of the
+          <literal>iodine-«name»</literal>
+          where «name» is the name of the
           corresponding attribute name.
         '';
         example = literalExpression ''

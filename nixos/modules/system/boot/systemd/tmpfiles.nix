@@ -29,7 +29,7 @@ in
         List of packages containing <command>systemd-tmpfiles</command> rules.
 
         All files ending in .conf found in
-        <filename><replaceable>pkg</replaceable>/lib/tmpfiles.d</filename>
+        <filename>«pkg»/lib/tmpfiles.d</filename>
         will be included.
         If this folder does not exist or does not contain any files an error will be returned instead.
 

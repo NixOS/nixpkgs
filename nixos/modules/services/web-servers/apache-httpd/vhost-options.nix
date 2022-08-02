@@ -233,7 +233,7 @@ in
       default = false;
       description = ''
         Whether to enable serving <filename>~/public_html</filename> as
-        <literal>/~<replaceable>username</replaceable></literal>.
+        <literal>/~«username»</literal>.
       '';
     };
 
