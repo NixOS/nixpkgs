@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zchunk";
-  version = "1.2.0";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "zchunk";
     repo = pname;
     rev = version;
-    hash = "sha256-7H1WF5VkpA65xCdEa0Sw4r4jj+kGhDVCMr5AeE+3Ii4=";
+    hash = "sha256-/gtkw020pybUDUeYydXgJ4PLvdOqZ0RbrLOfNMDaCmA=";
   };
 
   # unbreak on darwin by finding argp-standalone, based on the patch from
