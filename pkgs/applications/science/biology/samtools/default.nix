@@ -18,6 +18,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # tests require `bgzip` from the htslib package
+  checkInputs = [ htslib ];
+
   nativeBuildInputs = [ perl ];
 
   buildInputs = [ zlib ncurses htslib ];
