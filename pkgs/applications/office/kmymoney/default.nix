@@ -42,10 +42,8 @@ stdenv.mkDerivation rec {
     python3.pkgs.woob
   ];
 
-  woobPythonPath = [ python3.pkgs.woob ];
-
   postPatch = ''
-    buildPythonPath "$woobPythonPath"
+    buildPythonPath "${python3.pkgs.woob}"
     patchPythonScript "kmymoney/plugins/woob/interface/kmymoneywoob.py"
 
     # Within the embedded Python interpreter, sys.argv is unavailable, so let's
