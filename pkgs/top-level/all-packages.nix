@@ -13193,6 +13193,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   };
 
+  go_1_19 = callPackage ../development/compilers/go/1.19.nix {
+    inherit (darwin.apple_sdk.frameworks) Security Foundation;
+  };
+
   go = go_1_17;
 
   go-repo-root = callPackage ../development/tools/go-repo-root { };
@@ -21473,6 +21477,9 @@ with pkgs;
   buildGo118Package = callPackage ../development/go-packages/generic {
     go = buildPackages.go_1_18;
   };
+  buildGo119Module = callPackage ../development/go-modules/generic {
+    go = buildPackages.go_1_19;
+  };
 
   buildGoPackage = buildGo117Package;
 
@@ -21481,6 +21488,9 @@ with pkgs;
   };
   buildGo118Module = callPackage ../development/go-modules/generic {
     go = buildPackages.go_1_18;
+  };
+  buildGo119Package = callPackage ../development/go-packages/generic {
+    go = buildPackages.go_1_19;
   };
 
   buildGoModule = buildGo117Module;
