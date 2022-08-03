@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.squid-cache.org";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz raskin ];
+    maintainers = with maintainers; [ raskin ];
   };
 }

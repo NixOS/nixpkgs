@@ -3,7 +3,7 @@
 import ./make-test-python.nix ({ pkgs, ...} : rec {
   name = "privacyidea";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ fpletz ];
+    maintainers = [ ];
   };
 
   nodes.machine = { ... }: {

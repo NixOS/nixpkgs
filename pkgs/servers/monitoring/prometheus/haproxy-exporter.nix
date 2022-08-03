@@ -19,7 +19,7 @@ buildGoModule rec {
     description = "HAProxy Exporter for the Prometheus monitoring system";
     homepage = "https://github.com/prometheus/haproxy_exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ benley fpletz ];
+    maintainers = with maintainers; [ benley ];
     platforms = platforms.unix;
   };
 }

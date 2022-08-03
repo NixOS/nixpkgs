@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "C-language implementation of Javascript Object Signing and Encryption";
     homepage = "https://github.com/latchset/jose";
-    maintainers = with lib.maintainers; [ fpletz ];
+    maintainers = with lib.maintainers; [ ];
     license = lib.licenses.asl20;
   };
 }
