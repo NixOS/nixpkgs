@@ -31,13 +31,13 @@ python3Packages.buildPythonApplication rec  {
     gobject-introspection
     desktop-file-utils
     glib
-    gtk3
     wrapGAppsHook
   ];
 
   buildInputs = [
     cairo
     gettext
+    gtk3
   ];
 
   propagatedBuildInputs = with python3Packages; [
