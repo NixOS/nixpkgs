@@ -1,4 +1,5 @@
 { lib, callPackage, stdenv, makeWrapper, fetchurl, ocaml, findlib, dune_2
+, ncurses
 , fix, menhir, menhirLib, menhirSdk, merlin-extend, ppxlib, utop, cppo, ppx_derivers
 }:
 
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
     ocaml
     ppxlib
     utop
-  ];
+  ] ++ lib.optional (lib.versionOlder ocaml.version "4.07") ncurses;
 
   propagatedBuildInputs = [
     menhirLib
