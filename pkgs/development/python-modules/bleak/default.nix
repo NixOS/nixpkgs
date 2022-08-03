@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "bleak";
-  version = "0.14.3";
+  version = "0.15.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dg5bsegECH92JXa5uVY9Y7R9UhsWUpiOKMPLXmS2GZA=";
+    hash = "sha256-qth0iBPbY7tgSCD/0rU3CgbJwCckoN7Fb7g1EAdPzjk=";
   };
 
   propagatedBuildInputs = [
