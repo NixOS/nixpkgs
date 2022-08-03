@@ -85,9 +85,8 @@ let
 
 in
 stdenvNoCC.mkDerivation rec {
-  pname = "open-watcom-bin";
+  pname = "${passthru.prettyName}-unwrapped";
   version = "1.9";
-  name = "${pname}-unwrapped-${version}";
 
   src = fetchurl {
     url = "http://ftp.openwatcom.org/install/open-watcom-c-linux-${version}";
@@ -112,6 +111,8 @@ stdenvNoCC.mkDerivation rec {
       wrapInPlace "$e"
     done
   '';
+
+  passthru.prettyName = "open-watcom-bin";
 
   meta = with lib; {
     description = "A project to maintain and enhance the Watcom C, C++, and Fortran cross compilers and tools";
