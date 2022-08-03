@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "gum";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-od0jJPfvczlru9hhO8ravGou6yYP91L2k37NYm2hD+k=";
+    sha256 = "sha256-LP/vUfmUja3y7t6gT/YLt08mV+owp5cWolkiw8kfn78=";
   };
 
   vendorSha256 = "sha256-uX0CQRqrM0/fj14owcUUpYph2j5ZwJITG53na31N6kg=";
