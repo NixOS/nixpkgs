@@ -90,7 +90,6 @@ let
 
     bls12-381 = callPackage ../development/ocaml-modules/bls12-381 { };
     bls12-381-gen = callPackage ../development/ocaml-modules/bls12-381/gen.nix { };
-    bls12-381-unix = callPackage ../development/ocaml-modules/bls12-381/unix.nix { };
     bls12-381-legacy = callPackage ../development/ocaml-modules/bls12-381/legacy.nix { };
 
     bos = callPackage ../development/ocaml-modules/bos { };
@@ -273,6 +272,8 @@ let
     curses = callPackage ../development/ocaml-modules/curses { };
 
     ctypes = callPackage ../development/ocaml-modules/ctypes { };
+
+    ctypes_stubs_js = callPackage ../development/ocaml-modules/ctypes_stubs_js {  };
 
     dap =  callPackage ../development/ocaml-modules/dap { };
 
@@ -538,6 +539,8 @@ let
     inotify = callPackage ../development/ocaml-modules/inotify { };
 
     integers = callPackage ../development/ocaml-modules/integers { };
+
+    integers_stubs_js = callPackage ../development/ocaml-modules/integers_stubs_js {  };
 
     io-page = callPackage ../development/ocaml-modules/io-page { };
 
