@@ -500,6 +500,8 @@ with pkgs;
 
   ptags = callPackage ../development/tools/misc/ptags { };
 
+  resolve-march-native = callPackage ../development/tools/resolve-march-native { };
+
   ptouch-print = callPackage ../misc/ptouch-print { };
 
   demoit = callPackage ../servers/demoit { };
