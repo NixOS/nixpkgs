@@ -23,6 +23,10 @@
 , version
 , pluginOverrides ? { }
 , disableAllPlugins ? false
+
+  # tests
+, runCommand
+, beets
 }@inputs:
 let
   inherit (lib) attrNames attrValues concatMap;
@@ -142,7 +146,25 @@ python3Packages.buildPythonApplication rec {
     runHook postCheck
   '';
 
+
   passthru.plugins = allPlugins;
+
+  passthru.tests.gstreamer = runCommand "beets-gstreamer-test" {
+    meta.timeout = 60;
+  }
+  ''
+  set -euo pipefail
+  export HOME=$(mktemp -d)
+  mkdir $out
+
+  cat << EOF > $out/config.yaml
+replaygain:
+  backend: gstreamer
+EOF
+
+  echo $out/config.yaml
+  ${beets}/bin/beet -c $out/config.yaml > /dev/null
+  '';
 
   meta = with lib; {
     description = "Music tagger and library organizer";
