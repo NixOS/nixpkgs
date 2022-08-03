@@ -72,7 +72,10 @@ class Renderer(mistune.renderers.BaseRenderer):
         info = f" language={quoteattr(info)}" if info is not None else ""
         return f"<programlisting{info}>\n{escape(text)}</programlisting>"
     def link(self, link, text=None, title=None):
+        tag = "link"
         if link[0:1] == '#':
+            if text == "":
+                tag = "xref"
             attr = "linkend"
             link = quoteattr(link[1:])
         else:
@@ -82,7 +85,7 @@ class Renderer(mistune.renderers.BaseRenderer):
                 text = ""
             attr = "xlink:href"
             link = quoteattr(link)
-        return f"<link {attr}={link}>{text}</link>"
+        return f"<{tag} {attr}={link}>{text}</{tag}>"
     def list(self, text, ordered, level, start=None):
         if ordered:
             raise NotImplementedError("ordered lists not supported yet")
