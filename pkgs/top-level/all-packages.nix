@@ -7654,6 +7654,8 @@ with pkgs;
 
   john = callPackage ../tools/security/john { };
 
+  joomscan = callPackage ../tools/security/joomscan { };
+
   joplin = nodePackages.joplin;
 
   joplin-desktop = callPackage ../applications/misc/joplin-desktop { };
