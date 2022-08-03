@@ -12,20 +12,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-analyzer-unwrapped";
-  version = "2022-07-11";
-  cargoSha256 = "sha256-XpLXx3f+BC8+O4Df/PJ4LWuLxX14e/ga+aFu/JxVdpg=";
+  version = "2022-08-01";
+  cargoSha256 = "sha256-7ZYrIFSIOlL1JojtaQBIvvlfvjZGlR40PKVjmEtMBMo=";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rust-analyzer";
     rev = version;
-    sha256 = "sha256-HU1+Rql35ouZe0lx1ftCMDDwC9lqN3COudvMe+8XIx0=";
+    sha256 = "sha256-OUezy1BkIoqpkTE5wOtsjJ/Gy48Ql8EL1/t6MZzRkWw=";
   };
 
   patches = [
-    # Code format and git history check require more dependencies but don't really matter for packaging.
-    # So just ignore them.
-    ./ignore-git-and-rustfmt-tests.patch
+    # Code format check requires more dependencies but don't really matter for packaging.
+    # So just ignore it.
+    ./ignore-rustfmt-test.patch
   ];
 
   buildAndTestSubdir = "crates/rust-analyzer";
