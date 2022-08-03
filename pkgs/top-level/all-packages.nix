@@ -11776,6 +11776,10 @@ with pkgs;
     nodejs = nodejs_latest;
   };
 
+  wasmedge = callPackage ../development/tools/wasmedge {
+    llvmPackages = llvmPackages_12;
+  };
+
   welkin = callPackage ../tools/graphics/welkin {};
 
   wemux = callPackage ../tools/misc/wemux { };
