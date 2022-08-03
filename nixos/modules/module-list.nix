@@ -796,6 +796,7 @@
   ./services/networking/git-daemon.nix
   ./services/networking/globalprotect-vpn.nix
   ./services/networking/gnunet.nix
+  ./services/networking/go-autoconfig.nix
   ./services/networking/go-neb.nix
   ./services/networking/go-shadowsocks2.nix
   ./services/networking/gobgpd.nix
