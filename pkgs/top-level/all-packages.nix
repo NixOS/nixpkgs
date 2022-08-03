@@ -17399,8 +17399,6 @@ with pkgs;
 
   cutee = callPackage ../development/libraries/cutee { };
 
-  cutelyst = libsForQt5.callPackage ../development/libraries/cutelyst { };
-
   cxxtools = callPackage ../development/libraries/cxxtools { stdenv = gcc10StdenvCompat; };
 
   cwiid = callPackage ../development/libraries/cwiid { };
