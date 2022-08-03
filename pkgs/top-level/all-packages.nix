@@ -10686,6 +10686,8 @@ with pkgs;
 
   skippy-xd = callPackage ../tools/X11/skippy-xd {};
 
+  skipfish = callPackage ../tools/security/skipfish { };
+
   sks = callPackage ../servers/sks {
     ocamlPackages = ocaml-ng.ocamlPackages_4_12;
   };
