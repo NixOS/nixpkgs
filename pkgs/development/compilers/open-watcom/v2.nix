@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation rec {
   pname = "open-watcom-v2";
-  version = "unstable-2022-05-04";
+  version = "unstable-2022-08-02";
   name = "${pname}-unwrapped-${version}";
 
   src = fetchFromGitHub {
     owner = "open-watcom";
     repo = "open-watcom-v2";
-    rev = "01662ab4eb50c0757969fa53bd4270dbbba45dc5";
-    sha256 = "Nl5mcPDCr08XkVMWqkbbgTP/YjpfwMOo2GVu43FQQ3Y=";
+    rev = "4bdb73995b871982dd106838296903701ded29c2";
+    sha256 = "sha256-Ay/f+gnj8EklN8T/uP0a+Zji6HEHAoPLdkrSTQaC9Rs=";
   };
 
   postPatch = ''
