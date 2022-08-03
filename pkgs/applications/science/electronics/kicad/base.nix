@@ -20,6 +20,7 @@
 , libpthreadstubs
 , libXdmcp
 , lndir
+, unixODBC
 
 , util-linux
 , libselinux
@@ -32,7 +33,7 @@
 , at-spi2-core
 , libXtst
 
-, swig
+, swig4
 , python
 , wxPython
 , opencascade-occt
@@ -68,10 +69,11 @@ stdenv.mkDerivation rec {
   # tagged releases don't have "unknown"
   # kicad nightlies use git describe --dirty
   # nix removes .git, so its approximated here
-  postPatch = ''
-    substituteInPlace CMakeModules/KiCadVersion.cmake \
-      --replace "unknown" "${builtins.substring 0 10 src.rev}" \
-  '';
+  postPatch = if (!stable) then ''
+    substituteInPlace cmake/KiCadVersion.cmake \
+      --replace "unknown" "${builtins.substring 0 10 src.rev}"
+  ''
+  else "";
 
   makeFlags = optionals (debug) [ "CFLAGS+=-Og" "CFLAGS+=-ggdb" ];
 
@@ -151,14 +153,18 @@ stdenv.mkDerivation rec {
     curl
     openssl
     boost
-    swig
+    swig4
     python
   ]
+  ++ optional (!stable) unixODBC
   ++ optional (withScripting) wxPython
   ++ optional (withNgspice) libngspice
   ++ optional (withOCC) opencascade-occt
   ++ optional (debug) valgrind
   ;
+
+  # started becoming necessary halfway into 2022, not sure what changed to break a test...
+  preInstallCheck = optionals (withNgspice) [ "export LD_LIBRARY_PATH=${libngspice}/lib" ];
 
   # debug builds fail all but the python test
   # stable release doesn't have the fix for upstream issue 9888 yet
