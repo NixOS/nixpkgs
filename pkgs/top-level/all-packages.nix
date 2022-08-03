@@ -983,6 +983,10 @@ with pkgs;
   octant-desktop = callPackage ../applications/networking/cluster/octant/desktop.nix { };
   starboard-octant-plugin = callPackage ../applications/networking/cluster/octant/plugins/starboard-octant-plugin.nix { };
 
+  inherit (
+    callPackages ../build-support/setup-hooks/patch-rc-path-hooks { }
+  ) patchRcPathBash patchRcPathCsh patchRcPathFish patchRcPathPosix;
+
   pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
 
   pruneLibtoolFiles = makeSetupHook { name = "prune-libtool-files"; }

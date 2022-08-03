@@ -22,6 +22,7 @@
  <xi:include href="./libxml2.section.xml" />
  <xi:include href="./meson.section.xml" />
  <xi:include href="./ninja.section.xml" />
+ <xi:include href="./patch-rc-path-hooks.section.xml" />
  <xi:include href="./perl.section.xml" />
  <xi:include href="./pkg-config.section.xml" />
  <xi:include href="./postgresql-test-hook.section.xml" />
