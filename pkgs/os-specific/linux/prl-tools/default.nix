@@ -1,7 +1,24 @@
-{ stdenv, lib, makeWrapper, p7zip
-, gawk, util-linux, xorg, glib, dbus-glib, zlib, bbe, bash, timetrap, netcat, cups
-, kernel ? null, libsOnly ? false
-, fetchurl, undmg, perl, autoPatchelfHook
+{ stdenv
+, lib
+, makeWrapper
+, p7zip
+, gawk
+, util-linux
+, xorg
+, glib
+, dbus-glib
+, zlib
+, bbe
+, bash
+, timetrap
+, netcat
+, cups
+, kernel ? null
+, libsOnly ? false
+, fetchurl
+, undmg
+, perl
+, autoPatchelfHook
 }:
 
 assert (!libsOnly) -> kernel != null;
@@ -14,7 +31,7 @@ stdenv.mkDerivation rec {
   # We download the full distribution to extract prl-tools-lin.iso from
   # => ${dmg}/Parallels\ Desktop.app/Contents/Resources/Tools/prl-tools-lin.iso
   src = fetchurl {
-    url =  "https://download.parallels.com/desktop/v${lib.versions.major version}/${version}/ParallelsDesktop-${version}.dmg";
+    url = "https://download.parallels.com/desktop/v${lib.versions.major version}/${version}/ParallelsDesktop-${version}.dmg";
     sha256 = "sha256-gjLxQOTFuVghv1Bj+zfbNW97q1IN2rurSnPQi13gzRA=";
   };
 
@@ -39,7 +56,8 @@ stdenv.mkDerivation rec {
     fi
   '';
 
-  patches = lib.optionals (lib.versionAtLeast kernel.version "5.18") [ ./prl-tools.patch ];
+  patches = lib.optional (lib.versionAtLeast kernel.version "5.18") ./prl-tools-5.18.patch
+    ++ lib.optional (lib.versionAtLeast kernel.version "5.19") ./prl-tools-5.19.patch;
 
   kernelVersion = lib.optionalString (!libsOnly) kernel.modDirVersion;
   kernelDir = lib.optionalString (!libsOnly) "${kernel.dev}/lib/modules/${kernelVersion}";
