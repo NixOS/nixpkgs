@@ -4355,6 +4355,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  inherit (ocamlPackages) patdiff;
+
   patool = with python3Packages; toPythonApplication patool;
 
   pbgopy = callPackage ../tools/text/pbgopy { };
