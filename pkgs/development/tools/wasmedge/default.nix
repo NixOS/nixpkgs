@@ -1,12 +1,12 @@
 { lib
 , fetchFromGitHub
-, llvmPackages_12
+, llvmPackages
 , boost
 , cmake
 , gtest
 , spdlog
 }:
-llvmPackages_12.stdenv.mkDerivation rec {
+llvmPackages.stdenv.mkDerivation rec {
   pname = "wasmedge";
   version = "0.10.1";
 
@@ -20,10 +20,10 @@ llvmPackages_12.stdenv.mkDerivation rec {
   buildInputs = [
     boost
     spdlog
-    llvmPackages_12.llvm
+    llvmPackages.llvm
   ];
 
-  nativeBuildInputs = [ cmake llvmPackages_12.lld ];
+  nativeBuildInputs = [ cmake llvmPackages.lld ];
 
   checkInputs = [ gtest ];
 
