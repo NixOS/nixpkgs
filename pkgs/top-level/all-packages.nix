@@ -4379,6 +4379,8 @@ with pkgs;
 
   piglit = callPackage ../tools/graphics/piglit { };
 
+  pika = callPackage ../applications/graphics/pika { };
+
   playerctl = callPackage ../tools/audio/playerctl { };
 
   pn = callPackage ../tools/text/pn { };
