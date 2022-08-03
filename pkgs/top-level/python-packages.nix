@@ -10146,7 +10146,7 @@ in {
 
   sphinx_pypi_upload = callPackage ../development/python-modules/sphinx_pypi_upload { };
 
-  sphinx_rtd_theme = callPackage ../development/python-modules/sphinx_rtd_theme { };
+  sphinx-rtd-theme = callPackage ../development/python-modules/sphinx-rtd-theme { };
 
   sphinx-serve = callPackage ../development/python-modules/sphinx-serve { };
 
