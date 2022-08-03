@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, callPackage, gnat, zlib, llvm, lib
+{ stdenv, fetchFromGitHub, fetchpatch, callPackage, gnat11, zlib, llvm, lib
 , backend ? "mcode" }:
 
 assert backend == "mcode" || backend == "llvm";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   LIBRARY_PATH = "${stdenv.cc.libc}/lib";
 
-  buildInputs = [ gnat zlib ] ++ lib.optional (backend == "llvm") [ llvm ];
+  buildInputs = [ gnat11 zlib ] ++ lib.optional (backend == "llvm") [ llvm ];
   propagatedBuildInputs = lib.optionals (backend == "llvm") [ zlib ];
 
   preConfigure = ''

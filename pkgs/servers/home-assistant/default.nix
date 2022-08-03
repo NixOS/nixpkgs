@@ -31,6 +31,29 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
+      advantage-air = super.advantage-air.overridePythonAttrs (oldAttrs: rec {
+        version = "0.3.1";
+        src = super.fetchPypi {
+          pname = "advantage_air";
+          inherit version;
+          hash = "sha256-C+cB6oHmbr9mHZKnbls42yenQy3+L8huLk9wKazIWfU=";
+        };
+      });
+    })
+
+    (self: super: {
+      aiohomekit = super.aiohomekit.overridePythonAttrs (oldAttrs: rec {
+        version = "0.7.20";
+        src = fetchFromGitHub {
+          owner = "Jc2k";
+          repo = "aiohomekit";
+          rev = "refs/tags/${version}";
+          hash = "sha256-g7N+CIBJCMnW4FjN502SahhSpPS1p7AXZvduteHu+Z4=";
+        };
+      });
+    })
+
+    (self: super: {
       backoff = super.backoff.overridePythonAttrs (oldAttrs: rec {
         version = "1.11.1";
         src = fetchFromGitHub {
@@ -52,6 +75,30 @@ let
           repo = "python-bsblan";
           rev = "v.${version}";
           hash = "sha256-yzlHcIb5QlG+jAgEtKlAcY7rESiUY7nD1YwqK63wgcg=";
+        };
+      });
+    })
+
+    (self: super: {
+      gridnet = super.gridnet.overridePythonAttrs (oldAttrs: rec {
+        version = "4.0.0";
+        src = fetchFromGitHub {
+          owner = "klaasnicolaas";
+          repo = "python-gridnet";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-Ihs8qUx50tAUcRBsVArRhzoLcQUi1vbYh8sPyK75AEk=";
+        };
+      });
+    })
+
+    (self: super: {
+      p1monitor = super.p1monitor.overridePythonAttrs (oldAttrs: rec {
+        version = "1.0.1";
+        src = fetchFromGitHub {
+          owner = "klaasnicolaas";
+          repo = "python-p1monitor";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-g3isA2gF2AD+VVzTqpnD+YiJQ9Kcl0VKvwd5l5Yx/Uo=";
         };
       });
     })
@@ -114,12 +161,96 @@ let
     })
 
     (self: super: {
+      pyatmo = super.pyatmo.overridePythonAttrs (oldAttrs: rec {
+        version = "6.2.4";
+        src = fetchFromGitHub {
+          owner = "jabesq";
+          repo = "pyatmo";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-VXkQByaNA02fwBO2yuf7w1ZF/oJwd/h21de1EQlCu2U=";
+        };
+        checkInputs = [ super.freezegun ];
+      });
+    })
+
+    (self: super: {
+      python-homewizard-energy = super.python-homewizard-energy.overridePythonAttrs (oldAttrs: rec {
+        version = "1.0.3";
+        src = fetchFromGitHub {
+          owner = "DCSBL";
+          repo = "python-homewizard-energy";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-ioISqRFZZCojTJ/KYS8QUtoEpBNOPqY9lC9NFbZyh5A=";
+        };
+      });
+    })
+
+    # pyunifiprotect excludes pydantic==1.9.1
+    (self: super: {
+      pydantic = super.pydantic.overridePythonAttrs (oldAttrs: rec {
+        version = "1.9.0";
+        src = fetchFromGitHub {
+          owner = "samuelcolvin";
+          repo = "pydantic";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-C4WP8tiMRFmkDkQRrvP3yOSM2zN8pHJmX9cdANIckpM=";
+        };
+      });
+    })
+
+    (self: super: {
+      pydeconz = super.pydeconz.overridePythonAttrs (oldAttrs: rec {
+        version = "98";
+        src = fetchFromGitHub {
+          owner = "Kane610";
+          repo = "deconz";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-hCJRoyDWDxrBrxs2g6mVh7MOe6UMd+S8+ftfWyzWgH8=";
+        };
+      });
+    })
+
+    (self: super: {
       python-slugify = super.python-slugify.overridePythonAttrs (oldAttrs: rec {
         pname = "python-slugify";
         version = "4.0.1";
         src = super.fetchPypi {
           inherit pname version;
           hash = "sha256-aaUXdm4AwSaOW7/A0BCgqFCN4LGNMK1aH/NX+K5yQnA=";
+        };
+      });
+    })
+
+    (self: super: {
+      pytradfri = super.pytradfri.overridePythonAttrs (oldAttrs: rec {
+        version = "9.0.0";
+        src = fetchFromGitHub {
+          owner = "home-assistant-libs";
+          repo = "pytradfri";
+          rev = "refs/tags/${version}";
+          hash = "sha256-12ol+2CnoPfkxmDGJJAkoafHGpQuWC4lh0N7lSvx2DE=";
+        };
+      });
+    })
+
+    (self: super: {
+      solax = super.solax.overridePythonAttrs (oldAttrs: rec {
+        version = "0.2.9";
+        src = super.fetchPypi {
+          pname = "solax";
+          inherit version;
+          hash = "sha256-5m2wxdTshAsEfldPAyXqAYYtH1VjqERRBUGzX6pV85I=";
+        };
+      });
+    })
+
+    (self: super: {
+      pysoma = super.pysoma.overridePythonAttrs (oldAttrs: rec {
+        version = "0.0.10";
+        src = super.fetchPypi {
+          pname = "pysoma";
+          inherit version;
+          hash = "sha256-sU1qHbAjdIUu0etjate8+U1zvunbw3ddBtDVUU10CuE=";
         };
       });
     })
@@ -146,6 +277,18 @@ let
           repo = "python-vultr";
           rev = "v${version}";
           sha256 = "1qjvvr2v9gfnwskdl0ayazpcmiyw9zlgnijnhgq9mcri5gq9jw5h";
+        };
+      });
+    })
+
+    (self: super: {
+      wled = super.wled.overridePythonAttrs (oldAttrs: rec {
+        version = "0.13.2";
+        src = fetchFromGitHub {
+          owner = "frenck";
+          repo = "python-wled";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-Rv0jaKkN6jQ7oiv1cBYx4HAr7IqPm57jZFykXayp0T0=";
         };
       });
     })
@@ -189,7 +332,7 @@ let
   extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2022.7.5";
+  hassVersion = "2022.7.7";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -207,7 +350,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    hash = "sha256-fUKT9ZSu8dhwapvdjq50t5kh6ZwGsMteuvCjYpPQNx0=";
+    hash = "sha256-OU6tPTBC53ogkynH6NrYiQCerPo8Fu0ZLHhNsY0emGs=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
