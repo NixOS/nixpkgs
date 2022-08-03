@@ -114,7 +114,8 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A C/C++ Compiler (binary distribution)";
+    description = "A project to maintain and enhance the Watcom C, C++, and Fortran cross compilers and tools";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     homepage = "http://www.openwatcom.org/";
     license = licenses.watcom;
     platforms = [ "x86_64-linux" "i686-linux" ];
