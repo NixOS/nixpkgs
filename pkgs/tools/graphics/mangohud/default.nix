@@ -1,28 +1,26 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , fetchurl
 , substituteAll
 , coreutils
 , curl
-, gawk
 , glxinfo
 , gnugrep
 , gnused
-, lsof
 , xdg-utils
 , dbus
 , hwdata
 , libX11
 , mangohud32
 , vulkan-headers
+, appstream
 , glslang
 , makeWrapper
+, Mako
 , meson
 , ninja
 , pkg-config
-, python3Packages
 , unzip
 , vulkan-loader
 , libXNVCtrl
@@ -43,24 +41,24 @@ let
     src = fetchFromGitHub {
       owner = "ocornut";
       repo = "imgui";
-      rev = "v${version}";
-      hash = "sha256-rRkayXk3xz758v6vlMSaUu5fui6NR8Md3njhDB0gJ18=";
+      rev = "refs/tags/v${version}";
+      sha256 = "sha256-rRkayXk3xz758v6vlMSaUu5fui6NR8Md3njhDB0gJ18=";
     };
     patch = fetchurl {
       url = "https://wrapdb.mesonbuild.com/v2/imgui_${version}-1/get_patch";
-      hash = "sha256-bQC0QmkLalxdj4mDEdqvvOFtNwz2T1MpTDuMXGYeQ18=";
+      sha256 = "sha256-bQC0QmkLalxdj4mDEdqvvOFtNwz2T1MpTDuMXGYeQ18=";
     };
   };
 in stdenv.mkDerivation rec {
   pname = "mangohud";
-  version = "0.6.7-1";
+  version = "0.6.8";
 
   src = fetchFromGitHub {
     owner = "flightlessmango";
     repo = "MangoHud";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-60cZYo+d679KRggLBGbpLYM5Iu1XySEEGp+MxZs6wF0=";
+    sha256 = "sha256-jfmgN90kViHa7vMOjo2x4bNY2QbLk93uYEvaA4DxYvg=";
   };
 
   outputs = [ "out" "doc" "man" ];
@@ -81,22 +79,14 @@ in stdenv.mkDerivation rec {
       path = lib.makeBinPath [
         coreutils
         curl
-        gawk
         glxinfo
         gnugrep
         gnused
-        lsof
         xdg-utils
       ];
 
       libdbus = dbus.lib;
       inherit hwdata libX11;
-    })
-
-    (fetchpatch {
-      name = "allow-system-nlohmann-json.patch";
-      url = "https://github.com/flightlessmango/MangoHud/commit/e1ffa0f85820abea44639438fca2152290c87ee8.patch";
-      sha256 = "sha256-CaJb0RpXmNGCBidMXM39VJVLIXb6NbN5HXWkH/5Sfvo=";
     })
   ] ++ lib.optional (stdenv.hostPlatform.system == "x86_64-linux") [
     # Support 32bit OpenGL applications by appending the mangohud32
@@ -124,13 +114,13 @@ in stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    appstream
     glslang
     makeWrapper
+    Mako
     meson
     ninja
     pkg-config
-    python3Packages.Mako
-    python3Packages.python
     unzip
     vulkan-loader
   ];
