@@ -33571,6 +33571,8 @@ with pkgs;
 
   dalfox = callPackage ../tools/security/dalfox { };
 
+  davtest = callPackage ../tools/security/davtest { };
+
   dcm2niix = callPackage ../applications/science/biology/dcm2niix { };
 
   deepdiff = with python3Packages; toPythonApplication deepdiff;
