@@ -13,7 +13,7 @@ in {
       type = types.package;
       default = pkgs.haskellPackages.greenclip;
       defaultText = literalExpression "pkgs.haskellPackages.greenclip";
-      description = "greenclip derivation to use.";
+      description = lib.mdDoc "greenclip derivation to use.";
     };
   };
 

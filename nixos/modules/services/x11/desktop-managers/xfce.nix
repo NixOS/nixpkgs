@@ -48,25 +48,25 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable the Xfce desktop environment.";
+        description = lib.mdDoc "Enable the Xfce desktop environment.";
       };
 
       noDesktop = mkOption {
         type = types.bool;
         default = false;
-        description = "Don't install XFCE desktop components (xfdesktop and panel).";
+        description = lib.mdDoc "Don't install XFCE desktop components (xfdesktop and panel).";
       };
 
       enableXfwm = mkOption {
         type = types.bool;
         default = true;
-        description = "Enable the XFWM (default) window manager.";
+        description = lib.mdDoc "Enable the XFWM (default) window manager.";
       };
 
       enableScreensaver = mkOption {
         type = types.bool;
         default = true;
-        description = "Enable the XFCE screensaver.";
+        description = lib.mdDoc "Enable the XFCE screensaver.";
       };
     };
   };

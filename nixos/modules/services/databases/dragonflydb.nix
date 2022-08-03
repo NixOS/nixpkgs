@@ -30,55 +30,55 @@ in
       user = mkOption {
         type = types.str;
         default = "dragonfly";
-        description = "The user to run DragonflyDB as";
+        description = lib.mdDoc "The user to run DragonflyDB as";
       };
 
       port = mkOption {
         type = types.port;
         default = 6379;
-        description = "The TCP port to accept connections.";
+        description = lib.mdDoc "The TCP port to accept connections.";
       };
 
       bind = mkOption {
         type = with types; nullOr str;
         default = "127.0.0.1";
-        description = ''
+        description = lib.mdDoc ''
           The IP interface to bind to.
-          <literal>null</literal> means "all interfaces".
+          `null` means "all interfaces".
         '';
       };
 
       requirePass = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = "Password for database";
+        description = lib.mdDoc "Password for database";
         example = "letmein!";
       };
 
       maxMemory = mkOption {
         type = with types; nullOr ints.unsigned;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           The maximum amount of memory to use for storage (in bytes).
-          <literal>null</literal> means this will be automatically set.
+          `null` means this will be automatically set.
         '';
       };
 
       memcachePort = mkOption {
         type = with types; nullOr port;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           To enable memcached compatible API on this port.
-          <literal>null</literal> means disabled.
+          `null` means disabled.
         '';
       };
 
       keysOutputLimit = mkOption {
         type = types.ints.unsigned;
         default = 8192;
-        description = ''
+        description = lib.mdDoc ''
           Maximum number of returned keys in keys command.
-          <literal>keys</literal> is a dangerous command.
+          `keys` is a dangerous command.
           We truncate its result to avoid blowup in memory when fetching too many keys.
         '';
       };
@@ -86,13 +86,13 @@ in
       dbNum = mkOption {
         type = with types; nullOr ints.unsigned;
         default = null;
-        description = "Maximum number of supported databases for <literal>select</literal>";
+        description = lib.mdDoc "Maximum number of supported databases for `select`";
       };
 
       cacheMode = mkOption {
         type = with types; nullOr bool;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Once this mode is on, Dragonfly will evict items least likely to be stumbled
           upon in the future but only when it is near maxmemory limit.
         '';

@@ -7,52 +7,52 @@ let
     port = mkOption {
       type        = types.ints.u16;
       default     = 5201;
-      description = "Server port to listen on for iperf3 client requsts.";
+      description = lib.mdDoc "Server port to listen on for iperf3 client requsts.";
     };
     affinity = mkOption {
       type        = types.nullOr types.ints.unsigned;
       default     = null;
-      description = "CPU affinity for the process.";
+      description = lib.mdDoc "CPU affinity for the process.";
     };
     bind = mkOption {
       type        = types.nullOr types.str;
       default     = null;
-      description = "Bind to the specific interface associated with the given address.";
+      description = lib.mdDoc "Bind to the specific interface associated with the given address.";
     };
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = "Open ports in the firewall for iperf3.";
+      description = lib.mdDoc "Open ports in the firewall for iperf3.";
     };
     verbose = mkOption {
       type        = types.bool;
       default     = false;
-      description = "Give more detailed output.";
+      description = lib.mdDoc "Give more detailed output.";
     };
     forceFlush = mkOption {
       type        = types.bool;
       default     = false;
-      description = "Force flushing output at every interval.";
+      description = lib.mdDoc "Force flushing output at every interval.";
     };
     debug = mkOption {
       type        = types.bool;
       default     = false;
-      description = "Emit debugging output.";
+      description = lib.mdDoc "Emit debugging output.";
     };
     rsaPrivateKey = mkOption {
       type        = types.nullOr types.path;
       default     = null;
-      description = "Path to the RSA private key (not password-protected) used to decrypt authentication credentials from the client.";
+      description = lib.mdDoc "Path to the RSA private key (not password-protected) used to decrypt authentication credentials from the client.";
     };
     authorizedUsersFile = mkOption {
       type        = types.nullOr types.path;
       default     = null;
-      description = "Path to the configuration file containing authorized users credentials to run iperf tests.";
+      description = lib.mdDoc "Path to the configuration file containing authorized users credentials to run iperf tests.";
     };
     extraFlags = mkOption {
       type        = types.listOf types.str;
       default     = [ ];
-      description = "Extra flags to pass to iperf3(1).";
+      description = lib.mdDoc "Extra flags to pass to iperf3(1).";
     };
   };
 

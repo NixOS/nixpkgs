@@ -16,7 +16,7 @@ in {
       type = types.nullOr types.path;
       default = null;
       example = "/root/wiki-js.env";
-      description = ''
+      description = lib.mdDoc ''
         Environment fiel to inject e.g. secrets into the configuration.
       '';
     };
@@ -24,8 +24,8 @@ in {
     stateDirectoryName = mkOption {
       default = "wiki-js";
       type = types.str;
-      description = ''
-        Name of the directory in <filename>/var/lib</filename>.
+      description = lib.mdDoc ''
+        Name of the directory in {file}`/var/lib`.
       '';
     };
 
@@ -37,7 +37,7 @@ in {
           port = mkOption {
             type = types.port;
             default = 3000;
-            description = ''
+            description = lib.mdDoc ''
               TCP port the process should listen to.
             '';
           };
@@ -45,7 +45,7 @@ in {
           bindIP = mkOption {
             default = "0.0.0.0";
             type = types.str;
-            description = ''
+            description = lib.mdDoc ''
               IPs the service should listen to.
             '';
           };
@@ -64,14 +64,14 @@ in {
             host = mkOption {
               type = types.str;
               example = "/run/postgresql";
-              description = ''
+              description = lib.mdDoc ''
                 Hostname or socket-path to connect to.
               '';
             };
             db = mkOption {
               default = "wiki";
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Name of the database to use.
               '';
             };
@@ -80,7 +80,7 @@ in {
           logLevel = mkOption {
             default = "info";
             type = types.enum [ "error" "warn" "info" "verbose" "debug" "silly" ];
-            description = ''
+            description = lib.mdDoc ''
               Define how much detail is supposed to be logged at runtime.
             '';
           };

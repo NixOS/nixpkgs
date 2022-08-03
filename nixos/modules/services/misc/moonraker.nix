@@ -20,20 +20,20 @@ in {
         type = types.path;
         default = config.services.klipper.apiSocket;
         defaultText = literalExpression "config.services.klipper.apiSocket";
-        description = "Path to Klipper's API socket.";
+        description = lib.mdDoc "Path to Klipper's API socket.";
       };
 
       stateDir = mkOption {
         type = types.path;
         default = "/var/lib/moonraker";
-        description = "The directory containing the Moonraker databases.";
+        description = lib.mdDoc "The directory containing the Moonraker databases.";
       };
 
       configDir = mkOption {
         type = types.path;
         default = cfg.stateDir + "/config";
         defaultText = literalExpression ''config.${opt.stateDir} + "/config"'';
-        description = ''
+        description = lib.mdDoc ''
           The directory containing client-writable configuration files.
 
           Clients will be able to edit files in this directory via the API. This directory must be writable.
@@ -43,26 +43,26 @@ in {
       user = mkOption {
         type = types.str;
         default = "moonraker";
-        description = "User account under which Moonraker runs.";
+        description = lib.mdDoc "User account under which Moonraker runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "moonraker";
-        description = "Group account under which Moonraker runs.";
+        description = lib.mdDoc "Group account under which Moonraker runs.";
       };
 
       address = mkOption {
         type = types.str;
         default = "127.0.0.1";
         example = "0.0.0.0";
-        description = "The IP or host to listen on.";
+        description = lib.mdDoc "The IP or host to listen on.";
       };
 
       port = mkOption {
         type = types.ints.unsigned;
         default = 7125;
-        description = "The port to listen on.";
+        description = lib.mdDoc "The port to listen on.";
       };
 
       settings = mkOption {
@@ -74,8 +74,8 @@ in {
             cors_domains = [ "https://app.fluidd.xyz" ];
           };
         };
-        description = ''
-          Configuration for Moonraker. See the <link xlink:href="https://moonraker.readthedocs.io/en/latest/configuration/">documentation</link>
+        description = lib.mdDoc ''
+          Configuration for Moonraker. See the [documentation](https://moonraker.readthedocs.io/en/latest/configuration/)
           for supported values.
         '';
       };
@@ -83,12 +83,12 @@ in {
       allowSystemControl = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to allow Moonraker to perform system-level operations.
 
           Moonraker exposes APIs to perform system-level operations, such as
           reboot, shutdown, and management of systemd units. See the
-          <link xlink:href="https://moonraker.readthedocs.io/en/latest/web_api/#machine-commands">documentation</link>
+          [documentation](https://moonraker.readthedocs.io/en/latest/web_api/#machine-commands)
           for details on what clients are able to do.
         '';
       };

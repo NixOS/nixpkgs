@@ -54,6 +54,6 @@ stdenv.mkDerivation rec {
     homepage = "https://proj.org/";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ vbgl dotlambda ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

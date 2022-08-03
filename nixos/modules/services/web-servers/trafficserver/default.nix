@@ -39,11 +39,11 @@ in
       type = types.lines;
       default = "";
       example = "dest_domain=example.com suffix=js action=never-cache";
-      description = ''
+      description = lib.mdDoc ''
         Caching rules that overrule the origin's caching policy.
 
-        Consult the <link xlink:href="${getManualUrl "cache.config"}">upstream
-        documentation</link> for more details.
+        Consult the [upstream
+        documentation](${getManualUrl "cache.config"}) for more details.
       '';
     };
 
@@ -51,11 +51,11 @@ in
       type = types.lines;
       default = "";
       example = "domain=example.com volume=1";
-      description = ''
+      description = lib.mdDoc ''
         Partition the cache according to origin server or domain
 
-        Consult the <link xlink:href="${getManualUrl "hosting.config"}">
-        upstream documentation</link> for more details.
+        Consult the [
+        upstream documentation](${getManualUrl "hosting.config"}) for more details.
       '';
     };
 
@@ -73,12 +73,12 @@ in
           }];
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Control client access to Traffic Server and Traffic Server connections
         to upstream servers.
 
-        Consult the <link xlink:href="${getManualUrl "ip_allow.yaml"}">upstream
-        documentation</link> for more details.
+        Consult the [upstream
+        documentation](${getManualUrl "ip_allow.yaml"}) for more details.
       '';
     };
 
@@ -87,11 +87,11 @@ in
       default = lib.importJSON ./logging.json;
       defaultText = literalDocBook "upstream defaults";
       example = { };
-      description = ''
+      description = lib.mdDoc ''
         Configure logs.
 
-        Consult the <link xlink:href="${getManualUrl "logging.yaml"}">upstream
-        documentation</link> for more details.
+        Consult the [upstream
+        documentation](${getManualUrl "logging.yaml"}) for more details.
       '';
     };
 
@@ -101,23 +101,23 @@ in
       example = ''
         dest_domain=. method=get parent="p1.example:8080; p2.example:8080" round_robin=true
       '';
-      description = ''
+      description = lib.mdDoc ''
         Identify the parent proxies used in an cache hierarchy.
 
-        Consult the <link xlink:href="${getManualUrl "parent.config"}">upstream
-        documentation</link> for more details.
+        Consult the [upstream
+        documentation](${getManualUrl "parent.config"}) for more details.
       '';
     };
 
     plugins = mkOption {
       default = [ ];
 
-      description = ''
+      description = lib.mdDoc ''
         Controls run-time loadable plugins available to Traffic Server, as
         well as their configuration.
 
-        Consult the <link xlink:href="${getManualUrl "plugin.config"}">upstream
-        documentation</link> for more details.
+        Consult the [upstream
+        documentation](${getManualUrl "plugin.config"}) for more details.
       '';
 
       type = with types;
@@ -125,7 +125,7 @@ in
           options.path = mkOption {
             type = str;
             example = "xdebug.so";
-            description = ''
+            description = lib.mdDoc ''
               Path to plugin. The path can either be absolute, or relative to
               the plugin directory.
             '';
@@ -134,7 +134,7 @@ in
             type = str;
             default = "";
             example = "--header=ATS-My-Debug";
-            description = "arguments to pass to the plugin";
+            description = lib.mdDoc "arguments to pass to the plugin";
           };
         });
     };
@@ -148,11 +148,11 @@ in
         valueType;
       default = { };
       example = { proxy.config.proxy_name = "my_server"; };
-      description = ''
+      description = lib.mdDoc ''
         List of configurable variables used by Traffic Server.
 
-        Consult the <link xlink:href="${getManualUrl "records.config"}">
-        upstream documentation</link> for more details.
+        Consult the [
+        upstream documentation](${getManualUrl "records.config"}) for more details.
       '';
     };
 
@@ -160,11 +160,11 @@ in
       type = types.lines;
       default = "";
       example = "map http://from.example http://origin.example";
-      description = ''
+      description = lib.mdDoc ''
         URL remapping rules used by Traffic Server.
 
-        Consult the <link xlink:href="${getManualUrl "remap.config"}">
-        upstream documentation</link> for more details.
+        Consult the [
+        upstream documentation](${getManualUrl "remap.config"}) for more details.
       '';
     };
 
@@ -175,12 +175,12 @@ in
         dest_domain=internal.corp.example named="255.255.255.255:212 255.255.255.254" def_domain=corp.example search_list="corp.example corp1.example"
         dest_domain=!internal.corp.example named=255.255.255.253
       '';
-      description = ''
+      description = lib.mdDoc ''
         Specify the DNS server that Traffic Server should use under specific
         conditions.
 
-        Consult the <link xlink:href="${getManualUrl "splitdns.config"}">
-        upstream documentation</link> for more details.
+        Consult the [
+        upstream documentation](${getManualUrl "splitdns.config"}) for more details.
       '';
     };
 
@@ -188,11 +188,11 @@ in
       type = types.lines;
       default = "";
       example = "dest_ip=* ssl_cert_name=default.pem";
-      description = ''
+      description = lib.mdDoc ''
         Configure SSL server certificates to terminate the SSL sessions.
 
-        Consult the <link xlink:href="${getManualUrl "ssl_multicert.config"}">
-        upstream documentation</link> for more details.
+        Consult the [
+        upstream documentation](${getManualUrl "ssl_multicert.config"}) for more details.
       '';
     };
 
@@ -207,12 +207,12 @@ in
           }];
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Configure aspects of TLS connection handling for both inbound and
         outbound connections.
 
-        Consult the <link xlink:href="${getManualUrl "sni.yaml"}">upstream
-        documentation</link> for more details.
+        Consult the [upstream
+        documentation](${getManualUrl "sni.yaml"}) for more details.
       '';
     };
 
@@ -220,23 +220,23 @@ in
       type = types.lines;
       default = "/var/cache/trafficserver 256M";
       example = "/dev/disk/by-id/XXXXX volume=1";
-      description = ''
+      description = lib.mdDoc ''
         List all the storage that make up the Traffic Server cache.
 
-        Consult the <link xlink:href="${getManualUrl "storage.config"}">
-        upstream documentation</link> for more details.
+        Consult the [
+        upstream documentation](${getManualUrl "storage.config"}) for more details.
       '';
     };
 
     strategies = mkOption {
       type = types.nullOr yaml.type;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Specify the next hop proxies used in an cache hierarchy and the
         algorithms used to select the next proxy.
 
-        Consult the <link xlink:href="${getManualUrl "strategies.yaml"}">
-        upstream documentation</link> for more details.
+        Consult the [
+        upstream documentation](${getManualUrl "strategies.yaml"}) for more details.
       '';
     };
 
@@ -244,12 +244,12 @@ in
       type = types.nullOr yaml.type;
       default = "";
       example = "volume=1 scheme=http size=20%";
-      description = ''
+      description = lib.mdDoc ''
         Manage cache space more efficiently and restrict disk usage by
         creating cache volumes of different sizes.
 
-        Consult the <link xlink:href="${getManualUrl "volume.config"}">
-        upstream documentation</link> for more details.
+        Consult the [
+        upstream documentation](${getManualUrl "volume.config"}) for more details.
       '';
     };
   };

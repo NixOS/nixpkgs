@@ -108,90 +108,90 @@ let
     options = {
       name = mkOption {
         type = types.str;
-        description = "Name of the datasource. Required.";
+        description = lib.mdDoc "Name of the datasource. Required.";
       };
       type = mkOption {
         type = types.str;
-        description = "Datasource type. Required.";
+        description = lib.mdDoc "Datasource type. Required.";
       };
       access = mkOption {
         type = types.enum ["proxy" "direct"];
         default = "proxy";
-        description = "Access mode. proxy or direct (Server or Browser in the UI). Required.";
+        description = lib.mdDoc "Access mode. proxy or direct (Server or Browser in the UI). Required.";
       };
       orgId = mkOption {
         type = types.int;
         default = 1;
-        description = "Org id. will default to orgId 1 if not specified.";
+        description = lib.mdDoc "Org id. will default to orgId 1 if not specified.";
       };
       uid = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = "Custom UID which can be used to reference this datasource in other parts of the configuration, if not specified will be generated automatically.";
+        description = lib.mdDoc "Custom UID which can be used to reference this datasource in other parts of the configuration, if not specified will be generated automatically.";
       };
       url = mkOption {
         type = types.str;
-        description = "Url of the datasource.";
+        description = lib.mdDoc "Url of the datasource.";
       };
       password = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = "Database password, if used.";
+        description = lib.mdDoc "Database password, if used.";
       };
       user = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = "Database user, if used.";
+        description = lib.mdDoc "Database user, if used.";
       };
       database = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = "Database name, if used.";
+        description = lib.mdDoc "Database name, if used.";
       };
       basicAuth = mkOption {
         type = types.nullOr types.bool;
         default = null;
-        description = "Enable/disable basic auth.";
+        description = lib.mdDoc "Enable/disable basic auth.";
       };
       basicAuthUser = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = "Basic auth username.";
+        description = lib.mdDoc "Basic auth username.";
       };
       basicAuthPassword = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = "Basic auth password.";
+        description = lib.mdDoc "Basic auth password.";
       };
       withCredentials = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable/disable with credentials headers.";
+        description = lib.mdDoc "Enable/disable with credentials headers.";
       };
       isDefault = mkOption {
         type = types.bool;
         default = false;
-        description = "Mark as default datasource. Max one per org.";
+        description = lib.mdDoc "Mark as default datasource. Max one per org.";
       };
       jsonData = mkOption {
         type = types.nullOr types.attrs;
         default = null;
-        description = "Datasource specific configuration.";
+        description = lib.mdDoc "Datasource specific configuration.";
       };
       secureJsonData = mkOption {
         type = types.nullOr types.attrs;
         default = null;
-        description = "Datasource specific secure configuration.";
+        description = lib.mdDoc "Datasource specific secure configuration.";
       };
       version = mkOption {
         type = types.int;
         default = 1;
-        description = "Version.";
+        description = lib.mdDoc "Version.";
       };
       editable = mkOption {
         type = types.bool;
         default = false;
-        description = "Allow users to edit datasources from the UI.";
+        description = lib.mdDoc "Allow users to edit datasources from the UI.";
       };
     };
   };
@@ -202,42 +202,42 @@ let
       name = mkOption {
         type = types.str;
         default = "default";
-        description = "Provider name.";
+        description = lib.mdDoc "Provider name.";
       };
       orgId = mkOption {
         type = types.int;
         default = 1;
-        description = "Organization ID.";
+        description = lib.mdDoc "Organization ID.";
       };
       folder = mkOption {
         type = types.str;
         default = "";
-        description = "Add dashboards to the specified folder.";
+        description = lib.mdDoc "Add dashboards to the specified folder.";
       };
       type = mkOption {
         type = types.str;
         default = "file";
-        description = "Dashboard provider type.";
+        description = lib.mdDoc "Dashboard provider type.";
       };
       disableDeletion = mkOption {
         type = types.bool;
         default = false;
-        description = "Disable deletion when JSON file is removed.";
+        description = lib.mdDoc "Disable deletion when JSON file is removed.";
       };
       updateIntervalSeconds = mkOption {
         type = types.int;
         default = 10;
-        description = "How often Grafana will scan for changed dashboards.";
+        description = lib.mdDoc "How often Grafana will scan for changed dashboards.";
       };
       options = {
         path = mkOption {
           type = types.path;
-          description = "Path grafana will watch for dashboards.";
+          description = lib.mdDoc "Path grafana will watch for dashboards.";
         };
         foldersFromFilesStructure = mkOption {
           type = types.bool;
           default = false;
-          description = "Use folder names from filesystem to create folders in Grafana.";
+          description = lib.mdDoc "Use folder names from filesystem to create folders in Grafana.";
         };
       };
     };
@@ -248,55 +248,55 @@ let
       name = mkOption {
         type = types.str;
         default = "default";
-        description = "Notifier name.";
+        description = lib.mdDoc "Notifier name.";
       };
       type = mkOption {
         type = types.enum ["dingding" "discord" "email" "googlechat" "hipchat" "kafka" "line" "teams" "opsgenie" "pagerduty" "prometheus-alertmanager" "pushover" "sensu" "sensugo" "slack" "telegram" "threema" "victorops" "webhook"];
-        description = "Notifier type.";
+        description = lib.mdDoc "Notifier type.";
       };
       uid = mkOption {
         type = types.str;
-        description = "Unique notifier identifier.";
+        description = lib.mdDoc "Unique notifier identifier.";
       };
       org_id = mkOption {
         type = types.int;
         default = 1;
-        description = "Organization ID.";
+        description = lib.mdDoc "Organization ID.";
       };
       org_name = mkOption {
         type = types.str;
         default = "Main Org.";
-        description = "Organization name.";
+        description = lib.mdDoc "Organization name.";
       };
       is_default = mkOption {
         type = types.bool;
-        description = "Is the default notifier.";
+        description = lib.mdDoc "Is the default notifier.";
         default = false;
       };
       send_reminder = mkOption {
         type = types.bool;
         default = true;
-        description = "Should the notifier be sent reminder notifications while alerts continue to fire.";
+        description = lib.mdDoc "Should the notifier be sent reminder notifications while alerts continue to fire.";
       };
       frequency = mkOption {
         type = types.str;
         default = "5m";
-        description = "How frequently should the notifier be sent reminders.";
+        description = lib.mdDoc "How frequently should the notifier be sent reminders.";
       };
       disable_resolve_message = mkOption {
         type = types.bool;
         default = false;
-        description = "Turn off the message that sends when an alert returns to OK.";
+        description = lib.mdDoc "Turn off the message that sends when an alert returns to OK.";
       };
       settings = mkOption {
         type = types.nullOr types.attrs;
         default = null;
-        description = "Settings for the notifier type.";
+        description = lib.mdDoc "Settings for the notifier type.";
       };
       secure_settings = mkOption {
         type = types.nullOr types.attrs;
         default = null;
-        description = "Secure settings for the notifier type.";
+        description = lib.mdDoc "Secure settings for the notifier type.";
       };
     };
   };
@@ -305,62 +305,62 @@ in {
     enable = mkEnableOption "grafana";
 
     protocol = mkOption {
-      description = "Which protocol to listen.";
+      description = lib.mdDoc "Which protocol to listen.";
       default = "http";
       type = types.enum ["http" "https" "socket"];
     };
 
     addr = mkOption {
-      description = "Listening address.";
+      description = lib.mdDoc "Listening address.";
       default = "127.0.0.1";
       type = types.str;
     };
 
     port = mkOption {
-      description = "Listening port.";
+      description = lib.mdDoc "Listening port.";
       default = 3000;
       type = types.port;
     };
 
     socket = mkOption {
-      description = "Listening socket.";
+      description = lib.mdDoc "Listening socket.";
       default = "/run/grafana/grafana.sock";
       type = types.str;
     };
 
     domain = mkOption {
-      description = "The public facing domain name used to access grafana from a browser.";
+      description = lib.mdDoc "The public facing domain name used to access grafana from a browser.";
       default = "localhost";
       type = types.str;
     };
 
     rootUrl = mkOption {
-      description = "Full public facing url.";
+      description = lib.mdDoc "Full public facing url.";
       default = "%(protocol)s://%(domain)s:%(http_port)s/";
       type = types.str;
     };
 
     certFile = mkOption {
-      description = "Cert file for ssl.";
+      description = lib.mdDoc "Cert file for ssl.";
       default = "";
       type = types.str;
     };
 
     certKey = mkOption {
-      description = "Cert key for ssl.";
+      description = lib.mdDoc "Cert key for ssl.";
       default = "";
       type = types.str;
     };
 
     staticRootPath = mkOption {
-      description = "Root path for static assets.";
+      description = lib.mdDoc "Root path for static assets.";
       default = "${cfg.package}/share/grafana/public";
       defaultText = literalExpression ''"''${package}/share/grafana/public"'';
       type = types.str;
     };
 
     package = mkOption {
-      description = "Package to use.";
+      description = lib.mdDoc "Package to use.";
       default = pkgs.grafana;
       defaultText = literalExpression "pkgs.grafana";
       type = types.package;
@@ -369,7 +369,7 @@ in {
     declarativePlugins = mkOption {
       type = with types; nullOr (listOf path);
       default = null;
-      description = "If non-null, then a list of packages containing Grafana plugins to install. If set, plugins cannot be manually installed.";
+      description = lib.mdDoc "If non-null, then a list of packages containing Grafana plugins to install. If set, plugins cannot be manually installed.";
       example = literalExpression "with pkgs.grafanaPlugins; [ grafana-piechart-panel ]";
       # Make sure each plugin is added only once; otherwise building
       # the link farm fails, since the same path is added multiple
@@ -378,38 +378,38 @@ in {
     };
 
     dataDir = mkOption {
-      description = "Data directory.";
+      description = lib.mdDoc "Data directory.";
       default = "/var/lib/grafana";
       type = types.path;
     };
 
     database = {
       type = mkOption {
-        description = "Database type.";
+        description = lib.mdDoc "Database type.";
         default = "sqlite3";
         type = types.enum ["mysql" "sqlite3" "postgres"];
       };
 
       host = mkOption {
-        description = "Database host.";
+        description = lib.mdDoc "Database host.";
         default = "127.0.0.1:3306";
         type = types.str;
       };
 
       name = mkOption {
-        description = "Database name.";
+        description = lib.mdDoc "Database name.";
         default = "grafana";
         type = types.str;
       };
 
       user = mkOption {
-        description = "Database user.";
+        description = lib.mdDoc "Database user.";
         default = "root";
         type = types.str;
       };
 
       password = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Database password.
           This option is mutual exclusive with the passwordFile option.
         '';
@@ -418,7 +418,7 @@ in {
       };
 
       passwordFile = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           File that containts the database password.
           This option is mutual exclusive with the password option.
         '';
@@ -427,14 +427,14 @@ in {
       };
 
       path = mkOption {
-        description = "Database path.";
+        description = lib.mdDoc "Database path.";
         default = "${cfg.dataDir}/data/grafana.db";
         defaultText = literalExpression ''"''${config.${opt.dataDir}}/data/grafana.db"'';
         type = types.path;
       };
 
       connMaxLifetime = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Sets the maximum amount of time (in seconds) a connection may be reused.
           For MySQL this setting should be shorter than the `wait_timeout' variable.
         '';
@@ -447,19 +447,19 @@ in {
     provision = {
       enable = mkEnableOption "provision";
       datasources = mkOption {
-        description = "Grafana datasources configuration.";
+        description = lib.mdDoc "Grafana datasources configuration.";
         default = [];
         type = types.listOf grafanaTypes.datasourceConfig;
         apply = x: map _filter x;
       };
       dashboards = mkOption {
-        description = "Grafana dashboard configuration.";
+        description = lib.mdDoc "Grafana dashboard configuration.";
         default = [];
         type = types.listOf grafanaTypes.dashboardConfig;
         apply = x: map _filter x;
       };
       notifiers = mkOption {
-        description = "Grafana notifier configuration.";
+        description = lib.mdDoc "Grafana notifier configuration.";
         default = [];
         type = types.listOf grafanaTypes.notifierConfig;
         apply = x: map _filter x;
@@ -468,13 +468,13 @@ in {
 
     security = {
       adminUser = mkOption {
-        description = "Default admin username.";
+        description = lib.mdDoc "Default admin username.";
         default = "admin";
         type = types.str;
       };
 
       adminPassword = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Default admin password.
           This option is mutual exclusive with the adminPasswordFile option.
         '';
@@ -483,22 +483,22 @@ in {
       };
 
       adminPasswordFile = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Default admin password.
-          This option is mutual exclusive with the <literal>adminPassword</literal> option.
+          This option is mutual exclusive with the `adminPassword` option.
         '';
         default = null;
         type = types.nullOr types.path;
       };
 
       secretKey = mkOption {
-        description = "Secret key used for signing.";
+        description = lib.mdDoc "Secret key used for signing.";
         default = "SW2YcwTIb9zpOOhoPsMm";
         type = types.str;
       };
 
       secretKeyFile = mkOption {
-        description = "Secret key used for signing.";
+        description = lib.mdDoc "Secret key used for signing.";
         default = null;
         type = types.nullOr types.path;
       };
@@ -506,7 +506,7 @@ in {
 
     server = {
       serveFromSubPath = mkOption {
-        description = "Serve Grafana from subpath specified in rootUrl setting";
+        description = lib.mdDoc "Serve Grafana from subpath specified in rootUrl setting";
         default = false;
         type = types.bool;
       };
@@ -515,17 +515,17 @@ in {
     smtp = {
       enable = mkEnableOption "smtp";
       host = mkOption {
-        description = "Host to connect to.";
+        description = lib.mdDoc "Host to connect to.";
         default = "localhost:25";
         type = types.str;
       };
       user = mkOption {
-        description = "User used for authentication.";
+        description = lib.mdDoc "User used for authentication.";
         default = "";
         type = types.str;
       };
       password = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Password used for authentication.
           This option is mutual exclusive with the passwordFile option.
         '';
@@ -533,7 +533,7 @@ in {
         type = types.str;
       };
       passwordFile = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Password used for authentication.
           This option is mutual exclusive with the password option.
         '';
@@ -541,7 +541,7 @@ in {
         type = types.nullOr types.path;
       };
       fromAddress = mkOption {
-        description = "Email address used for sending.";
+        description = lib.mdDoc "Email address used for sending.";
         default = "admin@grafana.localhost";
         type = types.str;
       };
@@ -549,25 +549,25 @@ in {
 
     users = {
       allowSignUp = mkOption {
-        description = "Disable user signup / registration.";
+        description = lib.mdDoc "Disable user signup / registration.";
         default = false;
         type = types.bool;
       };
 
       allowOrgCreate = mkOption {
-        description = "Whether user is allowed to create organizations.";
+        description = lib.mdDoc "Whether user is allowed to create organizations.";
         default = false;
         type = types.bool;
       };
 
       autoAssignOrg = mkOption {
-        description = "Whether to automatically assign new users to default org.";
+        description = lib.mdDoc "Whether to automatically assign new users to default org.";
         default = true;
         type = types.bool;
       };
 
       autoAssignOrgRole = mkOption {
-        description = "Default role new users will be auto assigned.";
+        description = lib.mdDoc "Default role new users will be auto assigned.";
         default = "Viewer";
         type = types.enum ["Viewer" "Editor"];
       };
@@ -575,51 +575,51 @@ in {
 
     auth = {
       disableLoginForm = mkOption {
-        description = "Set to true to disable (hide) the login form, useful if you use OAuth";
+        description = lib.mdDoc "Set to true to disable (hide) the login form, useful if you use OAuth";
         default = false;
         type = types.bool;
       };
 
       anonymous = {
         enable = mkOption {
-          description = "Whether to allow anonymous access.";
+          description = lib.mdDoc "Whether to allow anonymous access.";
           default = false;
           type = types.bool;
         };
         org_name = mkOption {
-          description = "Which organization to allow anonymous access to.";
+          description = lib.mdDoc "Which organization to allow anonymous access to.";
           default = "Main Org.";
           type = types.str;
         };
         org_role = mkOption {
-          description = "Which role anonymous users have in the organization.";
+          description = lib.mdDoc "Which role anonymous users have in the organization.";
           default = "Viewer";
           type = types.str;
         };
       };
       azuread = {
         enable = mkOption {
-          description = "Whether to allow Azure AD OAuth.";
+          description = lib.mdDoc "Whether to allow Azure AD OAuth.";
           default = false;
           type = types.bool;
         };
         allowSignUp = mkOption {
-          description = "Whether to allow sign up with Azure AD OAuth.";
+          description = lib.mdDoc "Whether to allow sign up with Azure AD OAuth.";
           default = false;
           type = types.bool;
         };
         clientId = mkOption {
-          description = "Azure AD OAuth client ID.";
+          description = lib.mdDoc "Azure AD OAuth client ID.";
           default = "";
           type = types.str;
         };
         clientSecretFile = mkOption {
-          description = "Azure AD OAuth client secret.";
+          description = lib.mdDoc "Azure AD OAuth client secret.";
           default = null;
           type = types.nullOr types.path;
         };
         tenantId = mkOption {
-          description = ''
+          description = lib.mdDoc ''
             Tenant id used to create auth and token url. Default to "common"
             , let user sign in with any tenant.
             '';
@@ -627,7 +627,7 @@ in {
           type = types.str;
         };
         allowedDomains = mkOption {
-          description = ''
+          description = lib.mdDoc ''
             To limit access to authenticated users who are members of one or more groups,
             set allowedGroups to a comma- or space-separated list of group object IDs.
             You can find object IDs for a specific group on the Azure portal.
@@ -636,7 +636,7 @@ in {
           type = types.str;
         };
         allowedGroups = mkOption {
-          description = ''
+          description = lib.mdDoc ''
             Limits access to users who belong to specific domains.
             Separate domains with space or comma.
           '';
@@ -646,22 +646,22 @@ in {
       };
       google = {
         enable = mkOption {
-          description = "Whether to allow Google OAuth2.";
+          description = lib.mdDoc "Whether to allow Google OAuth2.";
           default = false;
           type = types.bool;
         };
         allowSignUp = mkOption {
-          description = "Whether to allow sign up with Google OAuth2.";
+          description = lib.mdDoc "Whether to allow sign up with Google OAuth2.";
           default = false;
           type = types.bool;
         };
         clientId = mkOption {
-          description = "Google OAuth2 client ID.";
+          description = lib.mdDoc "Google OAuth2 client ID.";
           default = "";
           type = types.str;
         };
         clientSecretFile = mkOption {
-          description = "Google OAuth2 client secret.";
+          description = lib.mdDoc "Google OAuth2 client secret.";
           default = null;
           type = types.nullOr types.path;
         };
@@ -670,16 +670,16 @@ in {
 
     analytics.reporting = {
       enable = mkOption {
-        description = "Whether to allow anonymous usage reporting to stats.grafana.net.";
+        description = lib.mdDoc "Whether to allow anonymous usage reporting to stats.grafana.net.";
         default = true;
         type = types.bool;
       };
     };
 
     extraOptions = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Extra configuration options passed as env variables as specified in
-        <link xlink:href="http://docs.grafana.org/installation/configuration/">documentation</link>,
+        [documentation](http://docs.grafana.org/installation/configuration/),
         but without GF_ prefix
       '';
       default = {};

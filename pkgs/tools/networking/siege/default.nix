@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "siege";
-  version = "4.1.3";
+  version = "4.1.4";
 
   src = fetchurl {
     url = "http://download.joedog.org/siege/${pname}-${version}.tar.gz";
-    hash = "sha256-IlC8qPylOfGk5Mvluomv0yxHObL7xgx8phaNmngveQo=";
+    hash = "sha256-zkPfnH9rCBqE52CxaEMlGUebrrRXtHTAl6/6W0UqRcs=";
   };
 
   NIX_LDFLAGS = lib.optionalString stdenv.isLinux [

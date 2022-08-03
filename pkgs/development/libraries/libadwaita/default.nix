@@ -17,6 +17,8 @@
 , gnome
 , gsettings-desktop-schemas
 , xvfb-run
+, AppKit
+, Foundation
 }:
 
 stdenv.mkDerivation rec {
@@ -48,11 +50,16 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=true"
+  ] ++ lib.optionals (!doCheck) [
+    "-Dtests=false"
   ];
 
   buildInputs = [
     fribidi
     gobject-introspection
+  ] ++ lib.optionals stdenv.isDarwin [
+    AppKit
+    Foundation
   ];
 
   propagatedBuildInputs = [
@@ -61,10 +68,15 @@ stdenv.mkDerivation rec {
 
   checkInputs = [
     gnome.adwaita-icon-theme
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     xvfb-run
   ];
 
-  doCheck = true;
+  # Tests had to be disabled on Darwin because they fail with the same error as https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=264947 on Hydra:
+  #
+  # In file included from ../tests/test-style-manager.c:10:
+  # ../src/adw-settings-private.h:16:10: fatal error: 'adw-enums-private.h' file not found
+  doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
     runHook preCheck
@@ -81,7 +93,7 @@ stdenv.mkDerivation rec {
       # Tests need a cache directory
       "HOME=$TMPDIR"
     )
-    env "''${testEnvironment[@]}" xvfb-run \
+    env "''${testEnvironment[@]}" ${lib.optionalString (!stdenv.isDarwin) "xvfb-run"} \
       meson test --print-errorlogs
 
     runHook postCheck
@@ -102,6 +114,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/libadwaita";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members ++ (with maintainers; [ dotlambda ]);
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

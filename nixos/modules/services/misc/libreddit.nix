@@ -19,20 +19,20 @@ in
         default = "0.0.0.0";
         example = "127.0.0.1";
         type =  types.str;
-        description = "The address to listen on";
+        description = lib.mdDoc "The address to listen on";
       };
 
       port = mkOption {
         default = 8080;
         example = 8000;
         type = types.port;
-        description = "The port to listen on";
+        description = lib.mdDoc "The port to listen on";
       };
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = "Open ports in the firewall for the libreddit web interface";
+        description = lib.mdDoc "Open ports in the firewall for the libreddit web interface";
       };
 
     };

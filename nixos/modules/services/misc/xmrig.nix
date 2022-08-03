@@ -20,7 +20,7 @@ with lib;
         default = pkgs.xmrig;
         defaultText = literalExpression "pkgs.xmrig";
         example = literalExpression "pkgs.xmrig-mo";
-        description = "XMRig package to use.";
+        description = lib.mdDoc "XMRig package to use.";
       };
 
       settings = mkOption {
@@ -42,9 +42,9 @@ with lib;
             ]
           }
         '';
-        description = ''
+        description = lib.mdDoc ''
           XMRig configuration. Refer to
-          <link xlink:href="https://xmrig.com/docs/miner/config"/>
+          <https://xmrig.com/docs/miner/config>
           for details on supported values.
         '';
       };

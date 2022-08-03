@@ -107,7 +107,7 @@ in {
     systemd.nspawn = mkOption {
       default = {};
       type = with types; attrsOf (submodule instanceOptions);
-      description = "Definition of systemd-nspawn configurations.";
+      description = lib.mdDoc "Definition of systemd-nspawn configurations.";
     };
 
   };

@@ -34,9 +34,9 @@ in {
         default = "${config.services.freeswitch.package}/share/freeswitch/conf/vanilla";
         defaultText = literalExpression ''"''${config.services.freeswitch.package}/share/freeswitch/conf/vanilla"'';
         example = literalExpression ''"''${config.services.freeswitch.package}/share/freeswitch/conf/minimal"'';
-        description = ''
+        description = lib.mdDoc ''
           Configuration template to use.
-          See available templates in <link xlink:href="https://github.com/signalwire/freeswitch/tree/master/conf">FreeSWITCH repository</link>.
+          See available templates in [FreeSWITCH repository](https://github.com/signalwire/freeswitch/tree/master/conf).
           You can also set your own configuration directory.
         '';
       };
@@ -51,18 +51,18 @@ in {
             ''';
           }
         '';
-        description = ''
+        description = lib.mdDoc ''
           Override file in FreeSWITCH config template directory.
           Each top-level attribute denotes a file path in the configuration directory, its value is the file path.
-          See <link xlink:href="https://freeswitch.org/confluence/display/FREESWITCH/Default+Configuration">FreeSWITCH documentation</link> for more info.
-          Also check available templates in <link xlink:href="https://github.com/signalwire/freeswitch/tree/master/conf">FreeSWITCH repository</link>.
+          See [FreeSWITCH documentation](https://freeswitch.org/confluence/display/FREESWITCH/Default+Configuration) for more info.
+          Also check available templates in [FreeSWITCH repository](https://github.com/signalwire/freeswitch/tree/master/conf).
         '';
       };
       package = mkOption {
         type = types.package;
         default = pkgs.freeswitch;
         defaultText = literalExpression "pkgs.freeswitch";
-        description = ''
+        description = lib.mdDoc ''
           FreeSWITCH package.
         '';
       };

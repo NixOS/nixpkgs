@@ -52,7 +52,7 @@ let
 
       label = mkOption {
         type = str;
-        description = "Label for this destination. Defaults to the attribute name.";
+        description = lib.mdDoc "Label for this destination. Defaults to the attribute name.";
       };
 
       plan = mkOption {
@@ -63,15 +63,15 @@ let
 
       dataset = mkOption {
         type = str;
-        description = "Dataset name to send snapshots to.";
+        description = lib.mdDoc "Dataset name to send snapshots to.";
         example = "tank/main";
       };
 
       host = mkOption {
         type = nullOr str;
-        description = ''
+        description = lib.mdDoc ''
           Host to use for the destination dataset. Can be prefixed with
-          <literal>user@</literal> to specify the ssh user.
+          `user@` to specify the ssh user.
         '';
         default = null;
         example = "john@example.com";
@@ -79,11 +79,11 @@ let
 
       presend = mkOption {
         type = nullOr str;
-        description = ''
+        description = lib.mdDoc ''
           Command to run before sending the snapshot to the destination.
-          Intended to run a remote script via <command>ssh</command> on the
+          Intended to run a remote script via {command}`ssh` on the
           destination, e.g. to bring up a backup disk or server or to put a
-          zpool online/offline. See also <option>postsend</option>.
+          zpool online/offline. See also {option}`postsend`.
         '';
         default = null;
         example = "ssh root@bserv zpool import -Nf tank";
@@ -91,11 +91,11 @@ let
 
       postsend = mkOption {
         type = nullOr str;
-        description = ''
+        description = lib.mdDoc ''
           Command to run after sending the snapshot to the destination.
-          Intended to run a remote script via <command>ssh</command> on the
+          Intended to run a remote script via {command}`ssh` on the
           destination, e.g. to bring up a backup disk or server or to put a
-          zpool online/offline. See also <option>presend</option>.
+          zpool online/offline. See also {option}`presend`.
         '';
         default = null;
         example = "ssh root@bserv zpool export tank";
@@ -115,32 +115,32 @@ let
 
       enable = mkOption {
         type = bool;
-        description = "Whether to enable this source.";
+        description = lib.mdDoc "Whether to enable this source.";
         default = true;
       };
 
       recursive = mkOption {
         type = bool;
-        description = "Whether to do recursive snapshots.";
+        description = lib.mdDoc "Whether to do recursive snapshots.";
         default = false;
       };
 
       mbuffer = {
         enable = mkOption {
           type = bool;
-          description = "Whether to use <command>mbuffer</command>.";
+          description = lib.mdDoc "Whether to use {command}`mbuffer`.";
           default = false;
         };
 
         port = mkOption {
           type = nullOr ints.u16;
-          description = ''
-              Port to use for <command>mbuffer</command>.
+          description = lib.mdDoc ''
+              Port to use for {command}`mbuffer`.
 
-              If this is null, it will run <command>mbuffer</command> through
+              If this is null, it will run {command}`mbuffer` through
               ssh.
 
-              If this is not null, it will run <command>mbuffer</command>
+              If this is not null, it will run {command}`mbuffer`
               directly through TCP, which is not encrypted but faster. In that
               case the given port needs to be open on the destination host.
           '';
@@ -149,8 +149,8 @@ let
 
         size = mkOption {
           type = mbufferSizeType;
-          description = ''
-            The size for <command>mbuffer</command>.
+          description = lib.mdDoc ''
+            The size for {command}`mbuffer`.
             Supports the units b, k, M, G.
           '';
           default = "1G";
@@ -160,10 +160,10 @@ let
 
       presnap = mkOption {
         type = nullOr str;
-        description = ''
+        description = lib.mdDoc ''
           Command to run before snapshots are taken on the source dataset,
           e.g. for database locking/flushing. See also
-          <option>postsnap</option>.
+          {option}`postsnap`.
         '';
         default = null;
         example = literalExpression ''
@@ -173,9 +173,9 @@ let
 
       postsnap = mkOption {
         type = nullOr str;
-        description = ''
+        description = lib.mdDoc ''
           Command to run after snapshots are taken on the source dataset,
-          e.g. for database unlocking. See also <option>presnap</option>.
+          e.g. for database unlocking. See also {option}`presnap`.
         '';
         default = null;
         example = literalExpression ''
@@ -185,13 +185,13 @@ let
 
       timestampFormat = mkOption {
         type = timestampType;
-        description = ''
+        description = lib.mdDoc ''
           The timestamp format to use for constructing snapshot names.
-          The syntax is <literal>strftime</literal>-like. The string must
-          consist of the mandatory <literal>%Y %m %d %H %M %S</literal>.
-          Optionally  <literal>- _ . :</literal>  characters as well as any
+          The syntax is `strftime`-like. The string must
+          consist of the mandatory `%Y %m %d %H %M %S`.
+          Optionally  `- _ . :`  characters as well as any
           alphanumeric character are allowed. If suffixed by a
-          <literal>Z</literal>, times will be in UTC.
+          `Z`, times will be in UTC.
         '';
         default = "%Y-%m-%d-%H%M%S";
         example = "znapzend-%m.%d.%Y-%H%M%SZ";
@@ -199,7 +199,7 @@ let
 
       sendDelay = mkOption {
         type = int;
-        description = ''
+        description = lib.mdDoc ''
           Specify delay (in seconds) before sending snaps to the destination.
           May be useful if you want to control sending time.
         '';
@@ -215,13 +215,13 @@ let
 
       dataset = mkOption {
         type = str;
-        description = "The dataset to use for this source.";
+        description = lib.mdDoc "The dataset to use for this source.";
         example = "tank/home";
       };
 
       destinations = mkOption {
         type = attrsOf (destType config);
-        description = "Additional destinations.";
+        description = lib.mdDoc "Additional destinations.";
         default = {};
         example = literalExpression ''
           {
@@ -300,7 +300,7 @@ in
         default = "debug";
         example = "warning";
         type = enum ["debug" "info" "warning" "err" "alert"];
-        description = ''
+        description = lib.mdDoc ''
           The log level when logging to file. Any of debug, info, warning, err,
           alert. Default in daemonized form is debug.
         '';
@@ -318,18 +318,18 @@ in
       noDestroy = mkOption {
         type = bool;
         default = false;
-        description = "Does all changes to the filesystem except destroy.";
+        description = lib.mdDoc "Does all changes to the filesystem except destroy.";
       };
 
       autoCreation = mkOption {
         type = bool;
         default = false;
-        description = "Automatically create the destination dataset if it does not exist.";
+        description = lib.mdDoc "Automatically create the destination dataset if it does not exist.";
       };
 
       zetup = mkOption {
         type = attrsOf srcType;
-        description = "Znapzend configuration.";
+        description = lib.mdDoc "Znapzend configuration.";
         default = {};
         example = literalExpression ''
           {
@@ -350,7 +350,7 @@ in
 
       pure = mkOption {
         type = bool;
-        description = ''
+        description = lib.mdDoc ''
           Do not persist any stateful znapzend setups. If this option is
           enabled, your previously set znapzend setups will be cleared and only
           the ones defined with this module will be applied.

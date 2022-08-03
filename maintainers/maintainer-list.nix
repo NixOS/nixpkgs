@@ -6339,6 +6339,12 @@
     github = "JoshuaFern";
     githubId = 4300747;
   };
+  joshvanl = {
+    email = " me@joshvanl.dev ";
+    github = "joshvanl";
+    githubId = 15893072;
+    name = "Josh van Leeuwen";
+  };
   jpas = {
     name = "Jarrod Pas";
     email = "jarrod@jarrodpas.com";
@@ -6690,6 +6696,15 @@
     github = "kcalvinalvin";
     githubId = 37185887;
     name = "Calvin Kim";
+  };
+  keksbg = {
+    email = "keksbg@riseup.net";
+    name = "Stella";
+    github = "keksbg";
+    githubId = 10682187;
+    keys = [{
+      fingerprint = "AB42 1F18 5A19 A160 AD77  9885 3D6D CA5B 6F2C 2A7A";
+    }];
   };
   keldu = {
     email = "mail@keldu.de";
@@ -13093,6 +13108,12 @@
     github = "tomfitzhenry";
     githubId = 61303;
     name = "Tom Fitzhenry";
+  };
+  tomhoule = {
+    email = "secondary+nixpkgs@tomhoule.com";
+    github = "tomhoule";
+    githubId = 13155277;
+    name = "Tom Houle";
   };
   tomsmeets = {
     email = "tom.tsmeets@gmail.com";

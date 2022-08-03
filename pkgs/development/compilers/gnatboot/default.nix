@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/gnat";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ethindp ];
-    platforms = with platforms; [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
   };
 }

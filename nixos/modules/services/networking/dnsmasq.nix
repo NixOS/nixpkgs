@@ -32,7 +32,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to run dnsmasq.
         '';
       };
@@ -40,7 +40,7 @@ in
       resolveLocalQueries = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether dnsmasq should resolve local queries (i.e. add 127.0.0.1 to
           /etc/resolv.conf).
         '';
@@ -50,7 +50,7 @@ in
         type = types.listOf types.str;
         default = [];
         example = [ "8.8.8.8" "8.8.4.4" ];
-        description = ''
+        description = lib.mdDoc ''
           The DNS servers which dnsmasq should query.
         '';
       };
@@ -58,7 +58,7 @@ in
       alwaysKeepRunning = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           If enabled, systemd will always respawn dnsmasq even if shut down manually. The default, disabled, will only restart it on error.
         '';
       };
@@ -66,9 +66,9 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Extra configuration directives that should be added to
-          <literal>dnsmasq.conf</literal>.
+          `dnsmasq.conf`.
         '';
       };
 

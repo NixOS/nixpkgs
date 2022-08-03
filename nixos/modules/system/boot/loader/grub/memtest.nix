@@ -18,12 +18,12 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Make Memtest86+ (or MemTest86 if EFI support is enabled),
           a memory testing program, available from the
           GRUB boot menu. MemTest86 is an unfree program, so
-          this requires <literal>allowUnfree</literal> to be set to
-          <literal>true</literal>.
+          this requires `allowUnfree` to be set to
+          `true`.
         '';
       };
 

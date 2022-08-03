@@ -17,7 +17,7 @@ in
         type = types.package;
         default = pkgs.zrepl;
         defaultText = literalExpression "pkgs.zrepl";
-        description = "Which package to use for zrepl";
+        description = lib.mdDoc "Which package to use for zrepl";
       };
 
       settings = mkOption {

@@ -286,8 +286,8 @@ let
         mktplcRef = {
           name = "vscode-neovim";
           publisher = "asvetliakov";
-          version = "0.0.86";
-          sha256 = "sha256-XZd2xTcTqT6LytVwN+CybaFT71nwdobgZQQddMFdjU4=";
+          version = "0.0.89";
+          sha256 = "sha256-4cCaMw7joaXeq+dk5cPZz6/zXDlxWeP/3IjkgSmmRvs=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1680,6 +1680,22 @@ let
 
       ms-vscode.cpptools = callPackage ./cpptools { };
 
+      ms-vscode.PowerShell = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "PowerShell";
+          publisher = "ms-vscode";
+          version = "2022.7.2";
+          sha256 = "sha256-YL90dRmOvfbizT+hfkNu267JtG122LTMS9MHCfaMzkk=";
+        };
+        meta = with lib; {
+          description = "A Visual Studio Code extension for PowerShell language support";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell";
+          homepage = "https://github.com/PowerShell/vscode-powershell";
+          license = licenses.mit;
+          maintainers = with maintainers; [ rhoriguchi ];
+        };
+      };
+
       ms-vscode-remote.remote-ssh = callPackage ./remote-ssh { };
 
       ms-vscode.theme-tomorrowkit = buildVscodeMarketplaceExtension {
@@ -2508,8 +2524,8 @@ let
         mktplcRef = {
           name = "vim";
           publisher = "vscodevim";
-          version = "1.23.1";
-          sha256 = "sha256-k3z3n+29vqvC/FqjrHUBnYIVcKuJpiT+nITbqVm0Low=";
+          version = "1.23.2";
+          sha256 = "sha256-QC+5FJYjWsEaao1ifgMTJyg7vZ5JUbNNJiV+OuiIaM0=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -2556,8 +2572,8 @@ let
         mktplcRef = {
           name = "viml";
           publisher = "xadillax";
-          version = "1.0.1";
-          sha256 = "sha256-mzf2PBSbvmgPjchyKmTaf3nASUi5/S9Djpoeh0y8gH0=";
+          version = "2.1.2";
+          sha256 = "sha256-n91Rj1Rpp7j7gndkt0bV+jT1nRMv7+coVoSL5c7Ii3A=";
         };
         meta = with lib; {
           license = licenses.mit;

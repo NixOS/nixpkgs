@@ -34,7 +34,7 @@ in
       autologinUser = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Username of the account that will be automatically logged in at the console.
           If unspecified, a login prompt is shown as usual.
         '';
@@ -44,7 +44,7 @@ in
         type = types.path;
         default = "${pkgs.shadow}/bin/login";
         defaultText = literalExpression ''"''${pkgs.shadow}/bin/login"'';
-        description = ''
+        description = lib.mdDoc ''
           Path to the login binary executed by agetty.
         '';
       };
@@ -69,7 +69,7 @@ in
       extraArgs = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        description = ''
+        description = lib.mdDoc ''
           Additional arguments passed to agetty.
         '';
         example = [ "--nohostname" ];
@@ -77,7 +77,7 @@ in
 
       greetingLine = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Welcome line printed by agetty.
           The default shows current NixOS version label, machine type and tty.
         '';
@@ -86,7 +86,7 @@ in
       helpLine = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Help line printed by agetty below the welcome line.
           Used by the installation CD to give some hints on
           how to proceed.

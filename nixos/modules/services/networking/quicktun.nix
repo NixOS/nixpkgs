@@ -13,7 +13,7 @@ with lib;
 
     services.quicktun = mkOption {
       default = { };
-      description = "QuickTun tunnels";
+      description = lib.mdDoc "QuickTun tunnels";
       type = types.attrsOf (types.submodule {
         options = {
           tunMode = mkOption {

@@ -47,12 +47,12 @@ let
       type = types.enum (attrNames logLevels ++ attrValues logLevels);
       apply = v: if isString v then logLevels.${v} else v;
       default = "info";
-      description = "Log verbosity (syslog keyword/level).";
+      description = lib.mdDoc "Log verbosity (syslog keyword/level).";
     };
     options.workDir = mkOption {
       type = str;
       default = ".beeshome";
-      description = ''
+      description = lib.mdDoc ''
         Name (relative to the root of the filesystem) of the subvolume where
         the hash table will be stored.
       '';
@@ -60,7 +60,7 @@ let
     options.extraOptions = mkOption {
       type = listOf str;
       default = [ ];
-      description = ''
+      description = lib.mdDoc ''
         Extra command-line options passed to the daemon. See upstream bees documentation.
       '';
       example = literalExpression ''
@@ -75,7 +75,7 @@ in
   options.services.beesd = {
     filesystems = mkOption {
       type = with types; attrsOf (submodule fsOptions);
-      description = "BTRFS filesystems to run block-level deduplication on.";
+      description = lib.mdDoc "BTRFS filesystems to run block-level deduplication on.";
       default = { };
       example = literalExpression ''
         {

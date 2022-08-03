@@ -11,14 +11,14 @@ in
     httpPort = lib.mkOption {
       type = lib.types.nullOr lib.types.port;
       default = 8008;
-      description = ''
+      description = lib.mdDoc ''
         The port to listen for HTTP requests on.
       '';
     };
     httpsPort = lib.mkOption {
       type = lib.types.nullOr lib.types.port;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         The port to listen for HTTPS requests on.
       '';
     };
@@ -78,11 +78,11 @@ in
       type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [ "private_key:/path/to/my_private_key" ];
-      description = ''
+      description = lib.mdDoc ''
         This can be used to pass secrets to the systemd service without adding them to
         the nix store.
         To use the example setting, see the example of
-        <option>services.dendrite.settings.global.private_key</option>.
+        {option}`services.dendrite.settings.global.private_key`.
         See the LoadCredential section of systemd.exec manual for more information.
       '';
     };
@@ -93,7 +93,7 @@ in
           server_name = lib.mkOption {
             type = lib.types.str;
             example = "example.com";
-            description = ''
+            description = lib.mdDoc ''
               The domain name of the server, with optional explicit port.
               This is used by remote servers to connect to this server.
               This is also the last part of your UserID.
@@ -117,7 +117,7 @@ in
             type = lib.types.listOf lib.types.str;
             example = [ "matrix.org" ];
             default = [ "matrix.org" "vector.im" ];
-            description = ''
+            description = lib.mdDoc ''
               Lists of domains that the server will trust as identity
               servers to verify third party identifiers such as phone
               numbers and email addresses
@@ -128,7 +128,7 @@ in
           connection_string = lib.mkOption {
             type = lib.types.str;
             default = "file:federationapi.db";
-            description = ''
+            description = lib.mdDoc ''
               Database for the Appservice API.
             '';
           };
@@ -137,7 +137,7 @@ in
           registration_disabled = lib.mkOption {
             type = lib.types.bool;
             default = true;
-            description = ''
+            description = lib.mdDoc ''
               Whether to disable user registration to the server
               without the shared secret.
             '';
@@ -147,7 +147,7 @@ in
           connection_string = lib.mkOption {
             type = lib.types.str;
             default = "file:federationapi.db";
-            description = ''
+            description = lib.mdDoc ''
               Database for the Federation API.
             '';
           };
@@ -156,7 +156,7 @@ in
           connection_string = lib.mkOption {
             type = lib.types.str;
             default = "file:keyserver.db";
-            description = ''
+            description = lib.mdDoc ''
               Database for the Key Server (for end-to-end encryption).
             '';
           };
@@ -166,7 +166,7 @@ in
             connection_string = lib.mkOption {
               type = lib.types.str;
               default = "file:mediaapi.db";
-              description = ''
+              description = lib.mdDoc ''
                 Database for the Media API.
               '';
             };
@@ -174,7 +174,7 @@ in
           base_path = lib.mkOption {
             type = lib.types.str;
             default = "${workingDir}/media_store";
-            description = ''
+            description = lib.mdDoc ''
               Storage path for uploaded media.
             '';
           };
@@ -183,7 +183,7 @@ in
           connection_string = lib.mkOption {
             type = lib.types.str;
             default = "file:roomserver.db";
-            description = ''
+            description = lib.mdDoc ''
               Database for the Room Server.
             '';
           };
@@ -192,7 +192,7 @@ in
           connection_string = lib.mkOption {
             type = lib.types.str;
             default = "file:syncserver.db";
-            description = ''
+            description = lib.mdDoc ''
               Database for the Sync API.
             '';
           };
@@ -202,7 +202,7 @@ in
             connection_string = lib.mkOption {
               type = lib.types.str;
               default = "file:userapi_accounts.db";
-              description = ''
+              description = lib.mdDoc ''
                 Database for the User API, accounts.
               '';
             };
@@ -211,7 +211,7 @@ in
             connection_string = lib.mkOption {
               type = lib.types.str;
               default = "file:userapi_devices.db";
-              description = ''
+              description = lib.mdDoc ''
                 Database for the User API, devices.
               '';
             };
@@ -222,7 +222,7 @@ in
             connection_string = lib.mkOption {
               type = lib.types.str;
               default = "file:mscs.db";
-              description = ''
+              description = lib.mdDoc ''
                 Database for exerimental MSC's.
               '';
             };
@@ -230,16 +230,16 @@ in
         };
       };
       default = { };
-      description = ''
+      description = lib.mdDoc ''
         Configuration for dendrite, see:
-        <link xlink:href="https://github.com/matrix-org/dendrite/blob/master/dendrite-config.yaml"/>
+        <https://github.com/matrix-org/dendrite/blob/master/dendrite-config.yaml>
         for available options with which to populate settings.
       '';
     };
     openRegistration = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Allow open registration without secondary verification (reCAPTCHA).
       '';
     };

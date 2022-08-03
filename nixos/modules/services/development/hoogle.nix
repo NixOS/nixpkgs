@@ -19,7 +19,7 @@ in {
     port = mkOption {
       type = types.port;
       default = 8080;
-      description = ''
+      description = lib.mdDoc ''
         Port number Hoogle will be listening to.
       '';
     };
@@ -39,7 +39,7 @@ in {
     };
 
     haskellPackages = mkOption {
-      description = "Which haskell package set to use.";
+      description = lib.mdDoc "Which haskell package set to use.";
       type = types.attrs;
       default = pkgs.haskellPackages;
       defaultText = literalExpression "pkgs.haskellPackages";
@@ -47,13 +47,13 @@ in {
 
     home = mkOption {
       type = types.str;
-      description = "Url for hoogle logo";
+      description = lib.mdDoc "Url for hoogle logo";
       default = "https://hoogle.haskell.org";
     };
 
     host = mkOption {
       type = types.str;
-      description = "Set the host to bind on.";
+      description = lib.mdDoc "Set the host to bind on.";
       default = "127.0.0.1";
     };
   };

@@ -35,7 +35,7 @@ in
 {
   options.services.kea = with types; {
     ctrl-agent = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Kea Control Agent configuration
       '';
       default = {};
@@ -46,7 +46,7 @@ in
           extraArgs = mkOption {
             type = listOf str;
             default = [];
-            description = ''
+            description = lib.mdDoc ''
               List of additonal arguments to pass to the daemon.
             '';
           };
@@ -65,8 +65,8 @@ in
           settings = mkOption {
             type = format.type;
             default = null;
-            description = ''
-              Kea Control Agent configuration as an attribute set, see <link xlink:href="https://kea.readthedocs.io/en/kea-${package.version}/arm/agent.html"/>.
+            description = lib.mdDoc ''
+              Kea Control Agent configuration as an attribute set, see <https://kea.readthedocs.io/en/kea-${package.version}/arm/agent.html>.
             '';
           };
         };
@@ -74,7 +74,7 @@ in
     };
 
     dhcp4 = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         DHCP4 Server configuration
       '';
       default = {};
@@ -85,7 +85,7 @@ in
           extraArgs = mkOption {
             type = listOf str;
             default = [];
-            description = ''
+            description = lib.mdDoc ''
               List of additonal arguments to pass to the daemon.
             '';
           };
@@ -125,8 +125,8 @@ in
                 } ];
               } ];
             };
-            description = ''
-              Kea DHCP4 configuration as an attribute set, see <link xlink:href="https://kea.readthedocs.io/en/kea-${package.version}/arm/dhcp4-srv.html"/>.
+            description = lib.mdDoc ''
+              Kea DHCP4 configuration as an attribute set, see <https://kea.readthedocs.io/en/kea-${package.version}/arm/dhcp4-srv.html>.
             '';
           };
         };
@@ -134,7 +134,7 @@ in
     };
 
     dhcp6 = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         DHCP6 Server configuration
       '';
       default = {};
@@ -145,7 +145,7 @@ in
           extraArgs = mkOption {
             type = listOf str;
             default = [];
-            description = ''
+            description = lib.mdDoc ''
               List of additonal arguments to pass to the daemon.
             '';
           };
@@ -186,8 +186,8 @@ in
                 } ];
               } ];
             };
-            description = ''
-              Kea DHCP6 configuration as an attribute set, see <link xlink:href="https://kea.readthedocs.io/en/kea-${package.version}/arm/dhcp6-srv.html"/>.
+            description = lib.mdDoc ''
+              Kea DHCP6 configuration as an attribute set, see <https://kea.readthedocs.io/en/kea-${package.version}/arm/dhcp6-srv.html>.
             '';
           };
         };
@@ -195,7 +195,7 @@ in
     };
 
     dhcp-ddns = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Kea DHCP-DDNS configuration
       '';
       default = {};
@@ -206,7 +206,7 @@ in
           extraArgs = mkOption {
             type = listOf str;
             default = [];
-            description = ''
+            description = lib.mdDoc ''
               List of additonal arguments to pass to the daemon.
             '';
           };
@@ -239,8 +239,8 @@ in
                 ddns-domains = [ ];
               };
             };
-            description = ''
-              Kea DHCP-DDNS configuration as an attribute set, see <link xlink:href="https://kea.readthedocs.io/en/kea-${package.version}/arm/ddns.html"/>.
+            description = lib.mdDoc ''
+              Kea DHCP-DDNS configuration as an attribute set, see <https://kea.readthedocs.io/en/kea-${package.version}/arm/ddns.html>.
             '';
           };
         };

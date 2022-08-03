@@ -6,6 +6,7 @@
 , arpa2cm
 , doxygen
 , e2fsprogs
+, graphviz
 , lmdb
 , openssl
 , pkg-config
@@ -14,19 +15,20 @@
 
 stdenv.mkDerivation rec {
   pname = "arpa2common";
-  version = "2.2.14";
+  version = "2.2.18";
 
   src = fetchFromGitLab {
     owner = "arpa2";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-LWsWoHRdLWRSF9JaEwrw+CXm5Azgh7zNeq0a8Z/hijQ=";
+    sha256 = "sha256-UpAVyDXCe07ZwjD307t6G9f/Nny4QYXxGxft1KsiYYg=";
   };
 
   nativeBuildInputs = [
     cmake
     arpa2cm
     doxygen
+    graphviz
     pkg-config
   ];
 

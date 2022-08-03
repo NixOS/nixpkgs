@@ -16,7 +16,7 @@ let
       # /nix/store/nut/share/driver.list
       driver = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Specify the program to run to talk to this UPS.  apcsmart,
           bestups, and sec are some examples.
         '';
@@ -24,7 +24,7 @@ let
 
       port = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The serial port to which your UPS is connected.  /dev/ttyS0 is
           usually the first port on Linux boxes, for example.
         '';
@@ -33,7 +33,7 @@ let
       shutdownOrder = mkOption {
         default = 0;
         type = types.int;
-        description = ''
+        description = lib.mdDoc ''
           When you have multiple UPSes on your system, you usually need to
           turn them off in a certain order.  upsdrvctl shuts down all the
           0s, then the 1s, 2s, and so on.  To exclude a UPS from the
@@ -44,7 +44,7 @@ let
       maxStartDelay = mkOption {
         default = null;
         type = types.uniq (types.nullOr types.int);
-        description = ''
+        description = lib.mdDoc ''
           This can be set as a global variable above your first UPS
           definition and it can also be set in a UPS section.  This value
           controls how long upsdrvctl will wait for the driver to finish
@@ -56,7 +56,7 @@ let
       description = mkOption {
         default = "";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Description of the UPS.
         '';
       };
@@ -64,7 +64,7 @@ let
       directives = mkOption {
         default = [];
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           List of configuration directives for this UPS.
         '';
       };
@@ -72,7 +72,7 @@ let
       summary = mkOption {
         default = "";
         type = types.lines;
-        description = ''
+        description = lib.mdDoc ''
           Lines which would be added inside ups.conf for handling this UPS.
         '';
       };
@@ -106,7 +106,7 @@ in
       enable = mkOption {
         default = false;
         type = with types; bool;
-        description = ''
+        description = lib.mdDoc ''
           Enables support for Power Devices, such as Uninterruptible Power
           Supplies, Power Distribution Units and Solar Controllers.
         '';
@@ -143,7 +143,7 @@ in
       schedulerRules = mkOption {
         example = "/etc/nixos/upssched.conf";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           File which contains the rules to handle UPS events.
         '';
       };
@@ -152,7 +152,7 @@ in
       maxStartDelay = mkOption {
         default = 45;
         type = types.int;
-        description = ''
+        description = lib.mdDoc ''
           This can be set as a global variable above your first UPS
           definition and it can also be set in a UPS section.  This value
           controls how long upsdrvctl will wait for the driver to finish
@@ -164,7 +164,7 @@ in
       ups = mkOption {
         default = {};
         # see nut/etc/ups.conf.sample
-        description = ''
+        description = lib.mdDoc ''
           This is where you configure all the UPSes that this system will be
           monitoring directly.  These are usually attached to serial ports,
           but USB devices are also supported.

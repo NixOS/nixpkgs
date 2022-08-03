@@ -25,7 +25,7 @@ in
         default = pkgs.heartbeat;
         defaultText = literalExpression "pkgs.heartbeat";
         example = literalExpression "pkgs.heartbeat7";
-        description = ''
+        description = lib.mdDoc ''
           The heartbeat package to use.
         '';
       };
@@ -33,19 +33,19 @@ in
       name = mkOption {
         type = types.str;
         default = "heartbeat";
-        description = "Name of the beat";
+        description = lib.mdDoc "Name of the beat";
       };
 
       tags = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = "Tags to place on the shipped log messages";
+        description = lib.mdDoc "Tags to place on the shipped log messages";
       };
 
       stateDir = mkOption {
         type = types.str;
         default = "/var/lib/heartbeat";
-        description = "The state directory. heartbeat's own logs and other data are stored here.";
+        description = lib.mdDoc "The state directory. heartbeat's own logs and other data are stored here.";
       };
 
       extraConfig = mkOption {
@@ -56,7 +56,7 @@ in
             urls: ["http://localhost:9200"]
             schedule: '@every 10s'
         '';
-        description = "Any other configuration options you want to add";
+        description = lib.mdDoc "Any other configuration options you want to add";
       };
 
     };

@@ -10,7 +10,7 @@ in {
 
       config = mkOption {
         type = types.lines;
-        description = "Contents of <filename>sssd.conf</filename>.";
+        description = lib.mdDoc "Contents of {file}`sssd.conf`.";
         default = ''
           [sssd]
           config_file_version = 2
@@ -33,9 +33,9 @@ in {
       sshAuthorizedKeysIntegration = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to make sshd look up authorized keys from SSS.
-          For this to work, the <literal>ssh</literal> SSS service must be enabled in the sssd configuration.
+          For this to work, the `ssh` SSS service must be enabled in the sssd configuration.
         '';
       };
 

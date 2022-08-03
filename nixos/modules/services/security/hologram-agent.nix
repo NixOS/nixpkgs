@@ -14,19 +14,19 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable the Hologram agent for AWS instance credentials";
+        description = lib.mdDoc "Whether to enable the Hologram agent for AWS instance credentials";
       };
 
       dialAddress = mkOption {
         type        = types.str;
         default     = "localhost:3100";
-        description = "Hologram server and port.";
+        description = lib.mdDoc "Hologram server and port.";
       };
 
       httpPort = mkOption {
         type        = types.str;
         default     = "80";
-        description = "Port for metadata service to listen on.";
+        description = lib.mdDoc "Port for metadata service to listen on.";
       };
 
     };

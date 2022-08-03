@@ -14,7 +14,7 @@ in {
     dataDir = mkOption {
       type = types.str;
       default = "/var/lib/rtorrent";
-      description = ''
+      description = lib.mdDoc ''
         The directory where rtorrent stores its data files.
       '';
     };
@@ -23,7 +23,7 @@ in {
       type = types.str;
       default = "${cfg.dataDir}/download";
       defaultText = literalExpression ''"''${config.${opt.dataDir}}/download"'';
-      description = ''
+      description = lib.mdDoc ''
         Where to put downloaded files.
       '';
     };
@@ -31,7 +31,7 @@ in {
     user = mkOption {
       type = types.str;
       default = "rtorrent";
-      description = ''
+      description = lib.mdDoc ''
         User account under which rtorrent runs.
       '';
     };
@@ -39,7 +39,7 @@ in {
     group = mkOption {
       type = types.str;
       default = "rtorrent";
-      description = ''
+      description = lib.mdDoc ''
         Group under which rtorrent runs.
       '';
     };
@@ -48,7 +48,7 @@ in {
       type = types.package;
       default = pkgs.rtorrent;
       defaultText = literalExpression "pkgs.rtorrent";
-      description = ''
+      description = lib.mdDoc ''
         The rtorrent package to use.
       '';
     };
@@ -56,7 +56,7 @@ in {
     port = mkOption {
       type = types.port;
       default = 50000;
-      description = ''
+      description = lib.mdDoc ''
         The rtorrent port.
       '';
     };
@@ -64,8 +64,8 @@ in {
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = ''
-        Whether to open the firewall for the port in <option>services.rtorrent.port</option>.
+      description = lib.mdDoc ''
+        Whether to open the firewall for the port in {option}`services.rtorrent.port`.
       '';
     };
 
@@ -73,7 +73,7 @@ in {
       type = types.str;
       readOnly = true;
       default = "/run/rtorrent/rpc.sock";
-      description = ''
+      description = lib.mdDoc ''
         RPC socket path.
       '';
     };
@@ -81,8 +81,8 @@ in {
     configText = mkOption {
       type = types.lines;
       default = "";
-      description = ''
-        The content of <filename>rtorrent.rc</filename>. The <link xlink:href="https://rtorrent-docs.readthedocs.io/en/latest/cookbook.html#modernized-configuration-template">modernized configuration template</link> with the values specified in this module will be prepended using mkBefore. You can use mkForce to overwrite the config completly.
+      description = lib.mdDoc ''
+        The content of {file}`rtorrent.rc`. The [modernized configuration template](https://rtorrent-docs.readthedocs.io/en/latest/cookbook.html#modernized-configuration-template) with the values specified in this module will be prepended using mkBefore. You can use mkForce to overwrite the config completly.
       '';
     };
   };

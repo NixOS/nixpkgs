@@ -25,13 +25,13 @@ in
       openPorts = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to open firewall ports for Teeworlds";
+        description = lib.mdDoc "Whether to open firewall ports for Teeworlds";
       };
 
       name = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Name of the server. Defaults to 'unnamed server'.
         '';
       };
@@ -40,7 +40,7 @@ in
         type = types.bool;
         example = true;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether the server registers as public server in the global server list. This is disabled by default because of privacy.
         '';
       };
@@ -48,7 +48,7 @@ in
       motd = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Set the server message of the day text.
         '';
       };
@@ -56,7 +56,7 @@ in
       password = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Password to connect to the server.
         '';
       };
@@ -64,7 +64,7 @@ in
       rconPassword = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Password to access the remote console. If not set, a randomly generated one is displayed in the server log.
         '';
       };
@@ -72,7 +72,7 @@ in
       port = mkOption {
         type = types.int;
         default = 8303;
-        description = ''
+        description = lib.mdDoc ''
           Port the server will listen on.
         '';
       };

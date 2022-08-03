@@ -53,12 +53,14 @@ def convertMD(options: Dict[str, Any]) -> str:
         '.note': 'note'
     }
     class Renderer(mistune.renderers.BaseRenderer):
+        def __init__(self, path):
+            self.path = path
         def _get_method(self, name):
             try:
                 return super(Renderer, self)._get_method(name)
             except AttributeError:
                 def not_supported(*args, **kwargs):
-                    raise NotImplementedError("md node not supported yet", name, args, **kwargs)
+                    raise NotImplementedError("md node not supported yet", self.path, name, args, **kwargs)
                 return not_supported
 
         def text(self, text):
@@ -166,8 +168,8 @@ def convertMD(options: Dict[str, Any]) -> str:
         md.block.rules.append('admonition')
     plugins.append(admonition)
 
-    def convertString(text: str) -> str:
-        rendered = mistune.markdown(text, renderer=Renderer(), plugins=plugins)
+    def convertString(path: str, text: str) -> str:
+        rendered = mistune.markdown(text, renderer=Renderer(path), plugins=plugins)
         # keep trailing spaces so we can diff the generated XML to check for conversion bugs.
         return rendered.rstrip() + text[len(text.rstrip()):]
 
@@ -179,12 +181,12 @@ def convertMD(options: Dict[str, Any]) -> str:
 
     for (name, option) in options.items():
         if optionIs(option, 'description', 'mdDoc'):
-            option['description'] = convertString(option['description']['text'])
+            option['description'] = convertString(name, option['description']['text'])
         if optionIs(option, 'example', 'literalMD'):
-            docbook = convertString(option['example']['text'])
+            docbook = convertString(name, option['example']['text'])
             option['example'] = { '_type': 'literalDocBook', 'text': docbook }
         if optionIs(option, 'default', 'literalMD'):
-            docbook = convertString(option['default']['text'])
+            docbook = convertString(name, option['default']['text'])
             option['default'] = { '_type': 'literalDocBook', 'text': docbook }
 
     return options

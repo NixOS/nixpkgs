@@ -19,7 +19,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to run the Teamspeak3 voice communication server daemon.
         '';
       };
@@ -27,7 +27,7 @@ in
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/teamspeak3-server";
-        description = ''
+        description = lib.mdDoc ''
           Directory to store TS3 database and other state/data files.
         '';
       };
@@ -35,7 +35,7 @@ in
       logPath = mkOption {
         type = types.path;
         default = "/var/log/teamspeak3-server/";
-        description = ''
+        description = lib.mdDoc ''
           Directory to store log files in.
         '';
       };
@@ -44,7 +44,7 @@ in
         type = types.nullOr types.str;
         default = null;
         example = "[::]";
-        description = ''
+        description = lib.mdDoc ''
           IP on which the server instance will listen for incoming voice connections. Defaults to any IP.
         '';
       };
@@ -52,7 +52,7 @@ in
       defaultVoicePort = mkOption {
         type = types.int;
         default = 9987;
-        description = ''
+        description = lib.mdDoc ''
           Default UDP port for clients to connect to virtual servers - used for first virtual server, subsequent ones will open on incrementing port numbers by default.
         '';
       };
@@ -61,7 +61,7 @@ in
         type = types.nullOr types.str;
         default = null;
         example = "[::]";
-        description = ''
+        description = lib.mdDoc ''
           IP on which the server instance will listen for incoming file transfer connections. Defaults to any IP.
         '';
       };
@@ -69,7 +69,7 @@ in
       fileTransferPort = mkOption {
         type = types.int;
         default = 30033;
-        description = ''
+        description = lib.mdDoc ''
           TCP port opened for file transfers.
         '';
       };
@@ -78,7 +78,7 @@ in
         type = types.nullOr types.str;
         default = null;
         example = "0.0.0.0";
-        description = ''
+        description = lib.mdDoc ''
           IP on which the server instance will listen for incoming ServerQuery connections. Defaults to any IP.
         '';
       };
@@ -86,7 +86,7 @@ in
       queryPort = mkOption {
         type = types.int;
         default = 10011;
-        description = ''
+        description = lib.mdDoc ''
           TCP port opened for ServerQuery connections.
         '';
       };
@@ -94,13 +94,13 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = "Open ports in the firewall for the TeamSpeak3 server.";
+        description = lib.mdDoc "Open ports in the firewall for the TeamSpeak3 server.";
       };
 
       openFirewallServerQuery = mkOption {
         type = types.bool;
         default = false;
-        description = "Open ports in the firewall for the TeamSpeak3 serverquery (administration) system. Requires openFirewall.";
+        description = lib.mdDoc "Open ports in the firewall for the TeamSpeak3 serverquery (administration) system. Requires openFirewall.";
       };
 
     };

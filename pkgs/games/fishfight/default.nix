@@ -2,54 +2,53 @@
 , rustPlatform
 , fetchFromGitHub
 , stdenv
-, SDL2
+, pkg-config
 , alsa-lib
 , libGL
 , libX11
 , libXi
-, AudioToolbox
+, udev
 , Cocoa
-, CoreAudio
 , OpenGL
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fishfight";
-  version = "0.3";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "fishfight";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-kLdk7zTICZ8iawNttTsWUVKGvh2zykXVsMqUyYoGrBs=";
+    sha256 = "sha256-q1Hh4P/huoFuW/+Mb9yKUMKaky1RshGpjrObBHRCk+8=";
   };
 
-  # use system sdl2 instead of bundled sdl2
-  cargoPatches = [ ./use-system-sdl2.patch ];
+  cargoSha256 = "sha256-PEGK95eXIHv2sxSwUU4345KtxDyRJn/+aEiJIDmkq6Y=";
 
-  cargoSha256 = "sha256-KQiqUzdsVMIjDmmreihekrrFoXeyNzd6ZbqApwH8B4Q=";
+  nativeBuildInputs = lib.optionals stdenv.isLinux [
+    pkg-config
+  ];
 
-  buildInputs =  [
-    SDL2
-  ] ++ lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.isLinux [
     alsa-lib
     libGL
     libX11
     libXi
+    udev
   ] ++ lib.optionals stdenv.isDarwin [
-    AudioToolbox
     Cocoa
-    CoreAudio
     OpenGL
   ];
 
   postPatch = ''
-    substituteInPlace src/main.rs --replace ./assets $out/share/assets
+    substituteInPlace src/main.rs \
+      --replace ./assets $out/share/assets \
+      --replace ./mods $out/share/mods
   '';
 
   postInstall = ''
     mkdir $out/share
-    cp -r assets $out/share
+    cp -r assets mods $out/share
   '';
 
   meta = with lib; {

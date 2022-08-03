@@ -9,7 +9,7 @@ in {
 
     listenAddress = mkOption {
       type = types.str;
-      description = "Server listen address or URL";
+      description = lib.mdDoc "Server listen address or URL";
       example = "ss://AEAD_CHACHA20_POLY1305:your-password@:8488";
     };
   };

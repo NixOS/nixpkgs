@@ -1195,6 +1195,8 @@ with pkgs;
 
   davinci-resolve = callPackage ../applications/video/davinci-resolve { };
 
+  dwarfs = callPackage ../tools/filesystems/dwarfs { };
+
   gamemode = callPackage ../tools/games/gamemode {
     libgamemode32 = pkgsi686Linux.gamemode.lib;
   };
@@ -7762,6 +7764,8 @@ with pkgs;
   kdbplus = pkgsi686Linux.callPackage ../applications/misc/kdbplus { };
 
   kdigger = callPackage ../tools/security/kdigger { };
+
+  kdiskmark = libsForQt5.callPackage ../tools/filesystems/kdiskmark { };
 
   keepalived = callPackage ../tools/networking/keepalived { };
 
@@ -18663,7 +18667,9 @@ with pkgs;
 
   libad9361 = callPackage ../development/libraries/libad9361 { };
 
-  libadwaita = callPackage ../development/libraries/libadwaita { };
+  libadwaita = callPackage ../development/libraries/libadwaita {
+    inherit (pkgs.darwin.apple_sdk.frameworks) AppKit Foundation;
+  };
 
   libaec = callPackage ../development/libraries/libaec { };
 
@@ -20812,6 +20818,8 @@ with pkgs;
   quesoglc = callPackage ../development/libraries/quesoglc { };
 
   quickder = callPackage ../development/libraries/quickder {};
+
+  quickmem = callPackage ../development/libraries/quickmem {};
 
   quicksynergy = callPackage ../applications/misc/quicksynergy { };
 
@@ -32503,7 +32511,7 @@ with pkgs;
 
   fishfight = callPackage ../games/fishfight {
     inherit (xorg) libX11 libXi;
-    inherit (darwin.apple_sdk.frameworks) AudioToolbox Cocoa CoreAudio OpenGL;
+    inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
   };
 
   flightgear = libsForQt5.callPackage ../games/flightgear { };
@@ -34433,6 +34441,8 @@ with pkgs;
 
   pynac = callPackage ../applications/science/math/pynac { };
 
+  scalp = callPackage ../applications/science/math/scalp { };
+
   singular = callPackage ../applications/science/math/singular { };
 
   scilab-bin = callPackage ../applications/science/math/scilab-bin {};
@@ -34872,7 +34882,7 @@ with pkgs;
 
   hplipWithPlugin = hplip.override { withPlugin = true; };
 
-  hyfetch = callPackage ../tools/misc/hyfetch { };
+  hyfetch = python3Packages.callPackage ../tools/misc/hyfetch { };
 
   hyperfine = callPackage ../tools/misc/hyperfine {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -35537,8 +35547,6 @@ with pkgs;
     ;
 
   terraform = terraform_1;
-  # deprecated
-  terraform-full = terraform.full;
 
   terraform-providers = recurseIntoAttrs (
     callPackage ../applications/networking/cluster/terraform-providers { }
@@ -35610,6 +35618,8 @@ with pkgs;
   tvbrowser-bin = callPackage ../applications/misc/tvbrowser/bin.nix { };
 
   tvheadend = callPackage ../servers/tvheadend { };
+
+  twiggy = callPackage ../development/tools/twiggy { };
 
   uacme = callPackage ../tools/admin/uacme { };
 
@@ -35758,6 +35768,8 @@ with pkgs;
   wishbone-tool = callPackage ../development/tools/misc/wishbone-tool { };
 
   with-shell = callPackage ../applications/misc/with-shell { };
+
+  wizer = darwin.apple_sdk_11_0.callPackage ../development/tools/wizer {};
 
   wmutils-core = callPackage ../tools/X11/wmutils-core { };
 
