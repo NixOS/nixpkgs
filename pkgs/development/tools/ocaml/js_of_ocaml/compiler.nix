@@ -1,5 +1,5 @@
 { lib, fetchurl, buildDunePackage
-, cmdliner, yojson, ppxlib
+, cmdliner_1_1, yojson, ppxlib
 , menhir, menhirLib
 }:
 
@@ -14,7 +14,7 @@ buildDunePackage rec {
   };
 
   nativeBuildInputs = [ menhir ];
-  buildInputs = [ cmdliner ppxlib ];
+  buildInputs = [ cmdliner_1_1 ppxlib ];
 
   configurePlatforms = [];
   propagatedBuildInputs = [ menhirLib yojson ];
