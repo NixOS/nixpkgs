@@ -42,10 +42,4 @@ done
 (cd root && find * .[^.*] -exec touch -h -d '@1' '{}' +)
 (cd root && find * .[^.*] -print0 | sort -z | bsdtar --uid 0 --gid 0 -cnf - -T - | bsdtar --null -cf - --format=newc @- | eval -- $compress >> "$out/initrd")
 
-if [ -n "$makeUInitrd" ]; then
-    mkimage -A "$uInitrdArch" -O linux -T ramdisk -C "$uInitrdCompression" -d "$out/initrd" $out/initrd.img
-    # Compatibility symlink
-    ln -sf "initrd.img" "$out/initrd"
-else
-    ln -s "initrd" "$out/initrd$extension"
-fi
+ln -s "initrd" "$out/initrd$extension"

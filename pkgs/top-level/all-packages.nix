@@ -857,6 +857,8 @@ with pkgs;
   makeInitrdNG = callPackage ../build-support/kernel/make-initrd-ng.nix;
   makeInitrdNGTool = callPackage ../build-support/kernel/make-initrd-ng-tool.nix {};
 
+  wrapInitrd = callPackage ../build-support/kernel/wrap-initrd.nix;
+
   makeWrapper = makeShellWrapper;
 
   makeShellWrapper = makeSetupHook
