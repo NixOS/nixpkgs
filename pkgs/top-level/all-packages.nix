@@ -8430,6 +8430,8 @@ with pkgs;
 
   limesurvey = callPackage ../servers/limesurvey { };
 
+  linux-exploit-suggester = callPackage ../tools/security/linux-exploit-suggester { };
+
   linuxquota = callPackage ../tools/misc/linuxquota { };
 
   liquidctl = with python3Packages; toPythonApplication liquidctl;
