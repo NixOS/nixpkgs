@@ -11689,7 +11689,7 @@ with pkgs;
     nodejs = nodejs_latest;
   };
 
-  wasmedge = callPackage ../development/tools/wasmedge { 
+  wasmedge = callPackage ../development/tools/wasmedge {
     llvmPackages = llvmPackages_12;
   };
 
