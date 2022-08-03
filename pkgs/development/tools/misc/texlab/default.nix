@@ -2,6 +2,7 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
+, help2man
 , installShellFiles
 , libiconv
 , Security
@@ -11,24 +12,34 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "texlab";
-  version = "4.2.0";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "latex-lsp";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-oYM+OAYjQ8aNAryg0Cthj14BsxMFnOtz38XdUQZZolk=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-za3TauhNoxGDphpY615EnTt46HpMgS+sYpBln/twefw=";
   };
 
-  cargoSha256 = "sha256-TDGiqC9eNIJfLTc1R3nvE84rAsVE8jtTaeQbVNMeVgg=";
+  cargoSha256 = "sha256-wppaa3IGOqkFu/1CAp8g+PlPtMWm/7qNpPu0k4/mL3A=";
 
   outputs = [ "out" "man" ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    help2man
+    installShellFiles
+  ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security CoreServices ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    libiconv
+    Security
+    CoreServices
+  ];
 
   postInstall = ''
+    # TexLab builds man page separately in CI:
+    # https://github.com/latex-lsp/texlab/blob/v4.2.1/.github/workflows/publish.yml#L131-L135
+    help2man --no-info "$out/bin/texlab" > texlab.1
     installManPage texlab.1
 
     # Remove generated dylib of human_name dependency. TexLab statically
