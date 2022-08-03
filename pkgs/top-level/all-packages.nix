@@ -16863,6 +16863,10 @@ with pkgs;
 
   uncrustify = callPackage ../development/tools/misc/uncrustify { };
 
+  uniscan = (callPackage ../tools/security/uniscan { }).uniscan;
+
+  uniscan-gui = (callPackage ../tools/security/uniscan { }).uniscan-gui;
+
   universal-ctags = callPackage ../development/tools/misc/universal-ctags { };
 
   unused = callPackage ../development/tools/misc/unused { };
