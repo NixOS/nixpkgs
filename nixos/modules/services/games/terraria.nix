@@ -134,11 +134,11 @@ in
       home        = cfg.dataDir;
       createHome  = true;
       uid         = config.ids.uids.terraria;
+      group       = "terraria";
     };
 
     users.groups.terraria = {
       gid = config.ids.gids.terraria;
-      members = [ "terraria" ];
     };
 
     systemd.services.terraria = {
