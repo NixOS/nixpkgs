@@ -281,6 +281,12 @@
       </listitem>
       <listitem>
         <para>
+          virtlyst package and <literal>services.virtlyst</literal>
+          module removed, due to lack of maintainers.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>services.graphite.api</literal> and
           <literal>services.graphite.beacon</literal> NixOS options, and
           the <literal>python3.pkgs.graphite_api</literal>,

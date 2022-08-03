@@ -23266,8 +23266,6 @@ with pkgs;
 
   virtiofsd = callPackage ../servers/misc/virtiofsd { };
 
-  virtlyst = libsForQt5.callPackage ../servers/web-apps/virtlyst { };
-
   virtualenv = with python3Packages; toPythonApplication virtualenv;
 
   virtualenv-clone = with python3Packages; toPythonApplication virtualenv-clone;
