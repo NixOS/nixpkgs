@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vtm";
-  version = "0.7.6";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "netxs-group";
     repo = "vtm";
     rev = "v${version}";
-    sha256 = "sha256-YAS/HcgtA4Ms8EB7RRCg6ElBL4aI/FqXjqymHy/voRs=";
+    sha256 = "sha256-Ty7DC4ap2F+mPzr1xaL8XeLSjQaQQVX0oGAcPpkoag4=";
   };
 
   nativeBuildInputs = [ cmake ];
