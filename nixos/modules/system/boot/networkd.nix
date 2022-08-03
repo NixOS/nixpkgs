@@ -454,12 +454,14 @@ let
           "RequiredForOnline"
           "RequiredFamilyForOnline"
           "ActivationPolicy"
+          "Promiscuous"
         ])
         (assertMacAddress "MACAddress")
         (assertByteFormat "MTUBytes")
         (assertValueOneOf "ARP" boolValues)
         (assertValueOneOf "Multicast" boolValues)
         (assertValueOneOf "AllMulticast" boolValues)
+        (assertValueOneOf "Promiscuous" boolValues)
         (assertValueOneOf "Unmanaged" boolValues)
         (assertValueOneOf "RequiredForOnline" (boolValues ++ [
           "missing"

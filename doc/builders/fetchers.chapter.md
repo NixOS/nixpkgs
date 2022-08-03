@@ -1,12 +1,51 @@
 # Fetchers {#chap-pkgs-fetchers}
 
-When using Nix, you will frequently need to download source code and other files from the internet. For this purpose, Nix provides the [_fixed output derivation_](https://nixos.org/manual/nix/stable/#fixed-output-drvs) feature and Nixpkgs provides various functions that implement the actual fetching from various protocols and services.
+Building software with Nix often requires downloading source code and other files from the internet.
+`nixpkgs` provides *fetchers* for different protocols and services. Fetchers are functions that simplify downloading files.
 
 ## Caveats
 
-Because fixed output derivations are _identified_ by their hash, a common mistake is to update a fetcher's URL or a version parameter, without updating the hash. **This will cause the old contents to be used.** So remember to always invalidate the hash argument.
+Fetchers create [fixed output derivations](https://nixos.org/manual/nix/stable/#fixed-output-drvs) from downloaded files.
+Nix can reuse the downloaded files via the hash of the resulting derivation.
 
-For those who develop and maintain fetchers, a similar problem arises with changes to the implementation of a fetcher. These may cause a fixed output derivation to fail, but won't normally be caught by tests because the supposed output is already in the store or cache. For the purpose of testing, you can use a trick that is embodied by the [`invalidateFetcherByDrvHash`](#tester-invalidateFetcherByDrvHash) function. It uses the derivation `name` to create a unique output path per fetcher implementation, defeating the caching precisely where it would be harmful.
+The fact that the hash belongs to the Nix derivation output and not the file itself can lead to confusion.
+For example, consider the following fetcher:
+
+```nix
+fetchurl {
+  url = "http://www.example.org/hello-1.0.tar.gz";
+  sha256 = "0v6r3wwnsk5pdjr188nip3pjgn1jrn5pc5ajpcfy6had6b3v4dwm";
+};
+```
+
+A common mistake is to update a fetcher’s URL, or a version parameter, without updating the hash.
+
+```nix
+fetchurl {
+  url = "http://www.example.org/hello-1.1.tar.gz";
+  sha256 = "0v6r3wwnsk5pdjr188nip3pjgn1jrn5pc5ajpcfy6had6b3v4dwm";
+};
+```
+
+**This will reuse the old contents**.
+Remember to invalidate the hash argument, in this case by setting the `sha256` attribute to an empty string.
+
+```nix
+fetchurl {
+  url = "http://www.example.org/hello-1.1.tar.gz";
+  sha256 = "";
+};
+```
+
+Use the resulting error message to determine the correct hash.
+
+```
+error: hash mismatch in fixed-output derivation '/path/to/my.drv':
+         specified: sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+            got:    sha256-RApQUm78dswhBLC/rfU9y0u6pSAzHceIJqgmetRD24E=
+```
+
+A similar problem arises while testing changes to a fetcher's implementation. If the output of the derivation already exists in the Nix store, test failures can go undetected. The [`invalidateFetcherByDrvHash`](#tester-invalidateFetcherByDrvHash) function helps prevent reusing cached derivations.
 
 ## `fetchurl` and `fetchzip` {#fetchurl}
 

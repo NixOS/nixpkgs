@@ -317,7 +317,7 @@ The script will be usually run from the root of the Nixpkgs repository but you s
 
 For information about how to run the updates, execute `nix-shell maintainers/scripts/update.nix`.
 
-### Recursive attributes in `mkDerivation`
+### Recursive attributes in `mkDerivation` {#mkderivation-recursive-attributes}
 
 If you pass a function to `mkDerivation`, it will receive as its argument the final arguments, including the overrides when reinvoked via `overrideAttrs`. For example:
 
