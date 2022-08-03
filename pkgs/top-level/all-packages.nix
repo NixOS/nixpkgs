@@ -27448,7 +27448,10 @@ with pkgs;
     vmopts = config.jetbrains.vmopts or null;
     jdk = jetbrains.jdk;
   }) // {
-    jdk = callPackage ../development/compilers/jetbrains-jdk {  };
+    jdk = if stdenv.isDarwin then
+      callPackage ../development/compilers/jetbrains-jdk/darwin.nix {  }
+    else
+      callPackage ../development/compilers/jetbrains-jdk {  };
   });
 
   jmusicbot = callPackage ../applications/audio/jmusicbot { };
