@@ -20543,6 +20543,8 @@ with pkgs;
 
   paperkey = callPackage ../tools/security/paperkey { };
 
+  parsero = callPackage ../tools/security/parsero { };
+
   pcaudiolib = callPackage ../development/libraries/pcaudiolib { };
 
   pcg_c = callPackage ../development/libraries/pcg-c { };
