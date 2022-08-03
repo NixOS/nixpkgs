@@ -28,30 +28,37 @@ in {
     };
   };
 
-  config = {
-    systemd.additionalUpstreamSystemUnits = [
-      "systemd-coredump.socket"
-      "systemd-coredump@.service"
-    ];
+  config = mkMerge [
 
-    environment.etc = {
-      "systemd/coredump.conf".text =
-      ''
-        [Coredump]
-        ${cfg.extraConfig}
-      '';
+    (mkIf cfg.enable {
+      systemd.additionalUpstreamSystemUnits = [
+        "systemd-coredump.socket"
+        "systemd-coredump@.service"
+      ];
 
-      # install provided sysctl snippets
-      "sysctl.d/50-coredump.conf".source = "${systemd}/example/sysctl.d/50-coredump.conf";
-      "sysctl.d/50-default.conf".source = "${systemd}/example/sysctl.d/50-default.conf";
-    };
+      environment.etc = {
+        "systemd/coredump.conf".text =
+        ''
+          [Coredump]
+          ${cfg.extraConfig}
+        '';
 
-    users.users.systemd-coredump = {
-      uid = config.ids.uids.systemd-coredump;
-      group = "systemd-coredump";
-    };
-    users.groups.systemd-coredump = {};
+        # install provided sysctl snippets
+        "sysctl.d/50-coredump.conf".source = "${systemd}/example/sysctl.d/50-coredump.conf";
+        "sysctl.d/50-default.conf".source = "${systemd}/example/sysctl.d/50-default.conf";
+      };
 
-    boot.kernel.sysctl."kernel.core_pattern" = mkIf (!cfg.enable) "core";
-  };
+      users.users.systemd-coredump = {
+        uid = config.ids.uids.systemd-coredump;
+        group = "systemd-coredump";
+      };
+      users.groups.systemd-coredump = {};
+    })
+
+    (mkIf (!cfg.enable) {
+     boot.kernel.sysctl."kernel.core_pattern" = mkDefault "core";
+    })
+
+  ];
+
 }
