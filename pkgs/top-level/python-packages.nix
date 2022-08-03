@@ -8638,8 +8638,6 @@ in {
 
   python_keyczar = callPackage ../development/python-modules/python_keyczar { };
 
-  python-language-server = callPackage ../development/python-modules/python-language-server { };
-
   python-ldap-test = callPackage ../development/python-modules/python-ldap-test { };
 
   python-Levenshtein = callPackage ../development/python-modules/python-levenshtein { };
