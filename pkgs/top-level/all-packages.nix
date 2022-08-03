@@ -3493,6 +3493,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  refinery-cli = callPackage ../development/tools/refinery-cli { };
+
   digitemp = callPackage ../tools/misc/digitemp { };
 
   dijo = callPackage ../tools/misc/dijo {
