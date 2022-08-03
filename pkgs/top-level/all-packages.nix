@@ -7736,6 +7736,8 @@ with pkgs;
 
   kdigger = callPackage ../tools/security/kdigger { };
 
+  kdiskmark = libsForQt5.callPackage ../tools/filesystems/kdiskmark { };
+
   keepalived = callPackage ../tools/networking/keepalived { };
 
   kexec-tools = callPackage ../os-specific/linux/kexec-tools { };
@@ -18636,7 +18638,9 @@ with pkgs;
 
   libad9361 = callPackage ../development/libraries/libad9361 { };
 
-  libadwaita = callPackage ../development/libraries/libadwaita { };
+  libadwaita = callPackage ../development/libraries/libadwaita {
+    inherit (pkgs.darwin.apple_sdk.frameworks) AppKit Foundation;
+  };
 
   libaec = callPackage ../development/libraries/libaec { };
 

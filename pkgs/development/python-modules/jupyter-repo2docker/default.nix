@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, chardet
 , docker
 , entrypoints
 , escapism
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    chardet
     docker
     entrypoints
     escapism

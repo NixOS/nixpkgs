@@ -5,6 +5,7 @@
 , gumbo
 , harfbuzz
 , jbig2dec
+, mujs
 , mupdf
 , openjpeg
 , qt3d
@@ -15,28 +16,24 @@
 
 stdenv.mkDerivation rec {
   pname = "sioyek";
-  version = "1.2.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "ahrm";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-G4iZi6xTJjWZN0T3lO0jPquxJ3p8Mc0ewmjJEKcGJ34=";
+    sha256 = "sha256-F71JXgYaWAye+nlSrZvGjJ4ucvHTx3tPZHRC5QI4QiU=";
   };
 
-  buildInputs = [ gumbo harfbuzz jbig2dec mupdf openjpeg qt3d qtbase ];
+  buildInputs = [ gumbo harfbuzz jbig2dec mupdf mujs openjpeg qt3d qtbase ];
 
   nativeBuildInputs = [ installShellFiles wrapQtAppsHook qmake ];
 
   postPatch = ''
-    substituteInPlace pdf_viewer_build_config.pro \
-      --replace "-lmupdf-threads" "-lfreetype -lgumbo -ljbig2dec -lopenjp2 -ljpeg"
     substituteInPlace pdf_viewer/main.cpp \
       --replace "/usr/share/sioyek" "$out/share" \
       --replace "/etc/sioyek" "$out/etc"
   '';
-
-  qmakeFlags = "DEFINES+=\"LINUX_STANDARD_PATHS\" pdf_viewer_build_config.pro";
 
   postInstall = ''
     install -Dm644 tutorial.pdf $out/share/tutorial.pdf
