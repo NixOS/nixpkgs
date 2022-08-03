@@ -1,14 +1,17 @@
-{stdenv, lib, nodejs, nodePackages, remarshal, ttfautohint-nox, fetchurl}:
+{ callPackage, lib, fetchFromGitHub }:
 
 let
   sets = [ "comfy" "comfy-fixed" "comfy-duo" "comfy-wide" "comfy-wide-fixed" ];
-  privateBuildPlan = builtins.readFile ./comfy-private-build-plans.toml;
+  version = "0.3.1";
+  src = fetchFromGitHub {
+    owner = "protesilaos";
+    repo = "iosevka-comfy";
+    rev = version;
+    sha256 = "sha256-SMy3Kqve65ZU13lf1vZQR61mH7gcl1DvIZt3yD6tIf4=";
+  };
+  privateBuildPlan = src.outPath + "/private-build-plans.toml";
   overrideAttrs = (attrs: {
-    version = "0.2.1";
-
-    passthru = {
-      updateScript = ./update-comfy.sh;
-    };
+    inherit version;
 
     meta = with lib; {
       homepage = "https://github.com/protesilaos/iosevka-comfy";
@@ -22,8 +25,8 @@ let
       maintainers = [ maintainers.DamienCassou ];
     };
   });
-  makeIosevkaFont = set: (import ./default.nix {
-    inherit stdenv lib nodejs nodePackages remarshal ttfautohint-nox set privateBuildPlan;
+  makeIosevkaFont = set: (callPackage ./. {
+    inherit set privateBuildPlan;
   }).overrideAttrs overrideAttrs;
 in
 builtins.listToAttrs (builtins.map (set: {name=set; value=makeIosevkaFont set;}) sets)
