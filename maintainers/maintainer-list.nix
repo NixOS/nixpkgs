@@ -8083,6 +8083,12 @@
     githubId = 1711539;
     name = "matklad";
   };
+  matrss = {
+    name = "Matthias Riße";
+    email = "matthias.risze@t-online.de";
+    github = "matrss";
+    githubId = 9308656;
+  };
   matt-snider = {
     email = "matt.snider@protonmail.com";
     github = "matt-snider";
