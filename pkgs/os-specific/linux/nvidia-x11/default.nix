@@ -68,9 +68,9 @@ rec {
     sha256_64bit = "sha256-9EICgMVSEJZMAI1bck8mFYRdR61MnAXY7SamL8YzH3w=";
     settingsSha256 = "sha256-iNT6//EvtasivDfXPY6j6OrpymbslO/q45uKd5smFUw=";
     persistencedSha256 = "sha256-y+MkudjQBkuVzHrY/rh7IGRN8VjLsJQ3a+fYDXdrzzk=";
-    
+
     broken = kernel.kernelAtLeast "5.18";
-    
+
     patches =
       let patch390 = o:
         (lib.optional ((lib.versions.majorMinor kernel.modDirVersion) == o.version) (fetchpatch {
