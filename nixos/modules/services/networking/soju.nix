@@ -49,12 +49,14 @@ in
 
     tlsCertificate = mkOption {
       type = types.nullOr types.path;
+      default = null;
       example = "/var/host.cert";
       description = "Path to server TLS certificate.";
     };
 
     tlsCertificateKey = mkOption {
       type = types.nullOr types.path;
+      default = null;
       example = "/var/host.key";
       description = "Path to server TLS certificate key.";
     };
@@ -97,6 +99,16 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = (cfg.tlsCertificate != null) == (cfg.tlsCertificateKey != null);
+        message = ''
+          services.soju.tlsCertificate and services.soju.tlsCertificateKey
+          must both be specified to enable TLS.
+        '';
+      }
+    ];
+
     systemd.services.soju = {
       description = "soju IRC bouncer";
       wantedBy = [ "multi-user.target" ];
