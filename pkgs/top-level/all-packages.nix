@@ -21198,6 +21198,8 @@ with pkgs;
 
   soapyuhd = callPackage ../applications/radio/soapyuhd { };
 
+  social-engineer-toolkit = callPackage ../tools/security/social-engineer-toolkit { };
+
   socket_wrapper = callPackage ../development/libraries/socket_wrapper { };
 
   soco-cli = callPackage ../tools/audio/soco-cli { };
