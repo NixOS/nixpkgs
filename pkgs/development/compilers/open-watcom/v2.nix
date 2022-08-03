@@ -11,9 +11,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "open-watcom-v2";
+  pname = "${passthru.prettyName}-unwrapped";
   version = "unstable-2022-08-02";
-  name = "${pname}-unwrapped-${version}";
 
   src = fetchFromGitHub {
     owner = "open-watcom";
@@ -82,8 +81,11 @@ stdenv.mkDerivation rec {
   # Stripping breaks many tools
   dontStrip = true;
 
-  passthru.updateScript = unstableGitUpdater {
-    url = "https://github.com/open-watcom/open-watcom-v2.git";
+  passthru = {
+    prettyName = "open-watcom-v2";
+    updateScript = unstableGitUpdater {
+      url = "https://github.com/open-watcom/open-watcom-v2.git";
+    };
   };
 
   meta = with lib; {
