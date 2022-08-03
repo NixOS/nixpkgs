@@ -2,6 +2,7 @@
 , buildPythonApplication
 , fetchFromGitHub
 , poetry
+, cmake-format
 , pygls
 , pyparsing
 , cmake
@@ -11,14 +12,14 @@
 
 buildPythonApplication rec {
   pname = "cmake-language-server";
-  version = "0.1.4";
+  version = "0.1.5";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "regen100";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-FOyyXSgoFpX4mOHFyZtVW618M1Xs7k+IioJzm1sdkKY=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-4GchuxArSJKnl28ckefJgbqxyf1fOU0DUj8R50upTcQ=";
   };
 
   patches = [
@@ -34,10 +35,23 @@ buildPythonApplication rec {
       --replace 'pyparsing = "^2.4"' 'pyparsing = "^3.0.6"'
   '';
 
-  nativeBuildInputs = [ poetry ];
-  propagatedBuildInputs = [ pygls pyparsing ];
+  nativeBuildInputs = [
+    poetry
+  ];
 
-  checkInputs = [ cmake pytest-datadir pytestCheckHook ];
+  propagatedBuildInputs = [
+    cmake-format
+    pygls
+    pyparsing
+  ];
+
+  checkInputs = [
+    cmake
+    cmake-format
+    pytest-datadir
+    pytestCheckHook
+  ];
+
   dontUseCmakeConfigure = true;
   pythonImportsCheck = [ "cmake_language_server" ];
 
