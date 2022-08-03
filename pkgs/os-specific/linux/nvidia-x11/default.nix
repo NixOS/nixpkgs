@@ -63,11 +63,14 @@ rec {
 
   # Last one supporting x86
   legacy_390 = generic {
-    version = "390.151";
-    sha256_32bit = "sha256-lOOZtFllnBKxNE6Mj09e7h7VkV/0WfyLuDHJ4dRGd9s=";
-    sha256_64bit = "sha256-UibkhCBEz/2Qlt6tr2iTTBM9p04FuAzNISNlhLOvsfw=";
-    settingsSha256 = "sha256-teXQa0pQctQl1dvddVJtI7U/vVuMu6ER1Xd99Jprpvw=";
-    persistencedSha256 = "sha256-FxiTXYABplKFcBXr4orhYWiJq4zVePpplMbg2kvEuXk=";
+    version = "390.154";
+    sha256_32bit = "sha256-XuhxuEvZ8o4iW3o+Xxvh+eLQBn83uNa40MJRcC8G0+c=";
+    sha256_64bit = "sha256-9EICgMVSEJZMAI1bck8mFYRdR61MnAXY7SamL8YzH3w=";
+    settingsSha256 = "sha256-iNT6//EvtasivDfXPY6j6OrpymbslO/q45uKd5smFUw=";
+    persistencedSha256 = "sha256-y+MkudjQBkuVzHrY/rh7IGRN8VjLsJQ3a+fYDXdrzzk=";
+    
+    broken = kernel.kernelAtLeast "5.18";
+    
     patches =
       let patch390 = o:
         (lib.optional ((lib.versions.majorMinor kernel.modDirVersion) == o.version) (fetchpatch {
