@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "usql";
-  version = "0.9.3";
+  version = "0.11.9";
 
   src = fetchFromGitHub {
     owner = "xo";
     repo = "usql";
     rev = "v${version}";
-    sha256 = "sha256-NHeJSWrcX4hYBJpZu/UjQ1ZWfcUnWFCV0Meo+XveDOw=";
+    sha256 = "sha256-Y3zEknasmIpfuNoUodJ7TVDfB3Z3eUqoa7FZkUWN2ks=";
   };
 
-  vendorSha256 = "sha256-EsLLBhyOcupx5LrJyWWMu4RAGWDKo3keflyZOASKldE=";
+  vendorSha256 = "sha256-Ov3a9XMPNpPFN/rpjVbIMvgbV/gOqzpQW5B+V1Ub+F0=";
 
   buildInputs = [ unixODBC icu ];
 
