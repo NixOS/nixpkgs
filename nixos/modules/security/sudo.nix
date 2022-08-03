@@ -55,19 +55,19 @@ in
       type = types.bool;
       default = true;
       description =
-        ''
-          Whether users of the <literal>wheel</literal> group must
-          provide a password to run commands as super user via <command>sudo</command>.
+        lib.mdDoc ''
+          Whether users of the `wheel` group must
+          provide a password to run commands as super user via {command}`sudo`.
         '';
       };
 
     security.sudo.execWheelOnly = mkOption {
       type = types.bool;
       default = false;
-      description = ''
-        Only allow members of the <literal>wheel</literal> group to execute sudo by
+      description = lib.mdDoc ''
+        Only allow members of the `wheel` group to execute sudo by
         setting the executable's permissions accordingly.
-        This prevents users that are not members of <literal>wheel</literal> from
+        This prevents users that are not members of `wheel` from
         exploiting vulnerabilities in sudo such as CVE-2021-3156.
       '';
     };
@@ -139,12 +139,12 @@ in
           runAs = mkOption {
             type = with types; str;
             default = "ALL:ALL";
-            description = ''
+            description = lib.mdDoc ''
               Under which user/group the specified command is allowed to run.
 
-              A user can be specified using just the username: <literal>"foo"</literal>.
-              It is also possible to specify a user/group combination using <literal>"foo:bar"</literal>
-              or to only allow running as a specific group with <literal>":bar"</literal>.
+              A user can be specified using just the username: `"foo"`.
+              It is also possible to specify a user/group combination using `"foo:bar"`
+              or to only allow running as a specific group with `":bar"`.
             '';
           };
 

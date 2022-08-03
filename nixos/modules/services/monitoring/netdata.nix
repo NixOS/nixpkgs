@@ -114,13 +114,13 @@ in {
         example = literalExpression ''
           [ "/path/to/plugins.d" ]
         '';
-        description = ''
+        description = lib.mdDoc ''
           Extra paths to add to the netdata global "plugins directory"
           option.  Useful for when you want to include your own
           collection scripts.
 
           Details about writing a custom netdata plugin are available at:
-          <link xlink:href="https://docs.netdata.cloud/collectors/plugins.d/"/>
+          <https://docs.netdata.cloud/collectors/plugins.d/>
 
           Cannot be combined with configText.
         '';

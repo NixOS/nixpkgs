@@ -115,11 +115,11 @@ in
         }
       '';
 
-      description = ''
+      description = lib.mdDoc ''
         Each attribute of this option defines a systemd service that
         runs an OpenVPN instance.  These can be OpenVPN servers or
         clients.  The name of each systemd service is
-        <literal>openvpn-«name».service</literal>,
+        `openvpn-«name».service`,
         where «name» is the corresponding
         attribute name.
       '';

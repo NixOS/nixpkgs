@@ -83,13 +83,13 @@ in
           };
           options.password = mkOption {
             type = with types; nullOr str;
-            description = ''
+            description = lib.mdDoc ''
               The password used to authenticate the XMPP component to your XMPP server.
               This password must be configured in the XMPP server,
               associated with the external component on
-              <link linkend="opt-services.biboumi.settings.hostname">hostname</link>.
+              [hostname](#opt-services.biboumi.settings.hostname).
 
-              Set it to null and use <link linkend="opt-services.biboumi.credentialsFile">credentialsFile</link>
+              Set it to null and use [credentialsFile](#opt-services.biboumi.credentialsFile)
               if you do not want this password to go into the Nix store.
             '';
           };
@@ -155,12 +155,12 @@ in
 
       credentialsFile = mkOption {
         type = types.path;
-        description = ''
+        description = lib.mdDoc ''
           Path to a configuration file to be merged with the settings.
           Beware not to surround "=" with spaces when setting biboumi's options in this file.
           Useful to merge a file which is better kept out of the Nix store
           because it contains sensible data like
-          <link linkend="opt-services.biboumi.settings.password">password</link>.
+          [password](#opt-services.biboumi.settings.password).
         '';
         default = "/dev/null";
         example = "/run/keys/biboumi.cfg";

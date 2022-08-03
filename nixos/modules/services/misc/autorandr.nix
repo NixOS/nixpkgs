@@ -27,9 +27,9 @@ let
     options = {
       fingerprint = mkOption {
         type = types.attrsOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           Output name to EDID mapping.
-          Use <literal>autorandr --fingerprint</literal> to get current setup values.
+          Use `autorandr --fingerprint` to get current setup values.
         '';
         default = { };
       };

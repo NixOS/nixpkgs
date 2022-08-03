@@ -116,13 +116,13 @@ in
       storageConfig = mkOption {
         type = types.nullOr types.lines;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           HCL configuration to insert in the storageBackend section.
 
           Confidential values should not be specified here because this option's
           value is written to the Nix store, which is publicly readable.
           Provide credentials and such in a separate file using
-          <xref linkend="opt-services.vault.extraSettingsPaths"/>.
+          [](#opt-services.vault.extraSettingsPaths).
         '';
       };
 

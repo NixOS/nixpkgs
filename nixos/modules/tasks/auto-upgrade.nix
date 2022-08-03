@@ -25,10 +25,10 @@ in {
         type = types.enum ["switch" "boot"];
         default = "switch";
         example = "boot";
-        description = ''
+        description = lib.mdDoc ''
           Whether to run
-          <literal>nixos-rebuild switch --upgrade</literal> or run
-          <literal>nixos-rebuild boot --upgrade</literal>
+          `nixos-rebuild switch --upgrade` or run
+          `nixos-rebuild boot --upgrade`
         '';
       };
 

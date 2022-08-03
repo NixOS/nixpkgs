@@ -1904,11 +1904,11 @@ in
       };
 
       extraArgs = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Extra command-line arguments to pass to systemd-networkd-wait-online.
-          These also affect per-interface <literal>systemd-network-wait-online@</literal> services.
+          These also affect per-interface `systemd-network-wait-online@` services.
 
-          See <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd-networkd-wait-online.service.html"><citerefentry><refentrytitle>systemd-networkd-wait-online.service</refentrytitle><manvolnum>8</manvolnum></citerefentry></link> for all available options.
+          See [{manpage}`systemd-networkd-wait-online.service(8)`](https://www.freedesktop.org/software/systemd/man/systemd-networkd-wait-online.service.html) for all available options.
         '';
         type = with types; listOf str;
         default = [];

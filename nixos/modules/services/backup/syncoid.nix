@@ -192,7 +192,7 @@ in
           target = mkOption {
             type = types.str;
             example = "user@server:pool/dataset";
-            description = ''
+            description = lib.mdDoc ''
               Target ZFS dataset. Can be either local
               («pool/dataset») or remote
               («user@server:pool/dataset»).

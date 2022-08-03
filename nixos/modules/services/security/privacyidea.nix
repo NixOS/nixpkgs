@@ -215,9 +215,9 @@ in
         environmentFile = mkOption {
           default = null;
           type = types.nullOr types.str;
-          description = ''
+          description = lib.mdDoc ''
             Environment file containing secrets to be substituted into
-            <xref linkend="opt-services.privacyidea.ldap-proxy.settings"/>.
+            [](#opt-services.privacyidea.ldap-proxy.settings).
           '';
         };
       };

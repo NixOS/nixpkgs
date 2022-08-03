@@ -14,12 +14,12 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable roundcube.
 
         Also enables nginx virtual host management.
-        Further nginx configuration can be done by adapting <literal>services.nginx.virtualHosts.&lt;name&gt;</literal>.
-        See <xref linkend="opt-services.nginx.virtualHosts"/> for further information.
+        Further nginx configuration can be done by adapting `services.nginx.virtualHosts.<name>`.
+        See [](#opt-services.nginx.virtualHosts) for further information.
       '';
     };
 
@@ -99,11 +99,11 @@ in
     maxAttachmentSize = mkOption {
       type = types.int;
       default = 18;
-      description = ''
+      description = lib.mdDoc ''
         The maximum attachment size in MB.
 
         Note: Since roundcube only uses 70% of max upload values configured in php
-        30% is added automatically to <xref linkend="opt-services.roundcube.maxAttachmentSize"/>.
+        30% is added automatically to [](#opt-services.roundcube.maxAttachmentSize).
       '';
       apply = configuredMaxAttachmentSize: "${toString (configuredMaxAttachmentSize * 1.3)}M";
     };

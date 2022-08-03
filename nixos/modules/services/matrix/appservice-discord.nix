@@ -40,16 +40,16 @@ in {
             };
           }
         '';
-        description = ''
-          <filename>config.yaml</filename> configuration as a Nix attribute set.
+        description = lib.mdDoc ''
+          {file}`config.yaml` configuration as a Nix attribute set.
 
           Configuration options should match those described in
-          <link xlink:href="https://github.com/Half-Shot/matrix-appservice-discord/blob/master/config/config.sample.yaml">config.sample.yaml</link>.
+          [config.sample.yaml](https://github.com/Half-Shot/matrix-appservice-discord/blob/master/config/config.sample.yaml).
 
-          <option>config.bridge.domain</option> and <option>config.bridge.homeserverUrl</option>
+          {option}`config.bridge.domain` and {option}`config.bridge.homeserverUrl`
           should be set to match the public host name of the Matrix homeserver for webhooks and avatars to work.
 
-          Secret tokens should be specified using <option>environmentFile</option>
+          Secret tokens should be specified using {option}`environmentFile`
           instead of this world-readable attribute set.
         '';
       };

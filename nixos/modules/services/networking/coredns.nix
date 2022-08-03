@@ -17,9 +17,9 @@ in {
         }
       '';
       type = types.lines;
-      description = ''
+      description = lib.mdDoc ''
         Verbatim Corefile to use.
-        See <link xlink:href="https://coredns.io/manual/toc/#configuration"/> for details.
+        See <https://coredns.io/manual/toc/#configuration> for details.
       '';
     };
 

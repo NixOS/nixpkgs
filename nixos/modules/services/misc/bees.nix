@@ -11,7 +11,7 @@ let
   fsOptions = with types; {
     options.spec = mkOption {
       type = str;
-      description = ''
+      description = lib.mdDoc ''
         Description of how to identify the filesystem to be duplicated by this
         instance of bees. Note that deduplication crosses subvolumes; one must
         not configure multiple instances for subvolumes of the same filesystem
@@ -28,7 +28,7 @@ let
     options.hashTableSizeMB = mkOption {
       type = types.addCheck types.int (n: mod n 16 == 0);
       default = 1024; # 1GB; default from upstream beesd script
-      description = ''
+      description = lib.mdDoc ''
         Hash table size in MB; must be a multiple of 16.
 
         A larger ratio of index size to storage size means smaller blocks of

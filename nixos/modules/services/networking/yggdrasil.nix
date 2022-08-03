@@ -64,21 +64,21 @@ in {
         type = types.nullOr types.str;
         default = null;
         example = "wheel";
-        description = "Group to grant access to the Yggdrasil control socket. If <literal>null</literal>, only root can access the socket.";
+        description = lib.mdDoc "Group to grant access to the Yggdrasil control socket. If `null`, only root can access the socket.";
       };
 
       openMulticastPort = mkOption {
         type = bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to open the UDP port used for multicast peer
           discovery. The NixOS firewall blocks link-local
           communication, so in order to make local peering work you
-          will also need to set <literal>LinkLocalTCPPort</literal> in your
-          yggdrasil configuration (<option>config</option> or
-          <option>configFile</option>) to a port number other than 0,
+          will also need to set `LinkLocalTCPPort` in your
+          yggdrasil configuration ({option}`config` or
+          {option}`configFile`) to a port number other than 0,
           and then add that port to
-          <option>networking.firewall.allowedTCPPorts</option>.
+          {option}`networking.firewall.allowedTCPPorts`.
         '';
       };
 

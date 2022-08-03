@@ -49,28 +49,28 @@ let
         };
 
         cert = mkOption {
-          description = ''
+          description = lib.mdDoc ''
             Path to certificate (PEM with certificate chain).
 
-            Not required if <literal>keystore</literal> is set.
+            Not required if `keystore` is set.
           '';
           type = types.nullOr types.str;
           default = null;
         };
 
         key = mkOption {
-          description = ''
+          description = lib.mdDoc ''
             Path to certificate private key (PEM with private key).
 
-            Not required if <literal>keystore</literal> is set.
+            Not required if `keystore` is set.
           '';
           type = types.nullOr types.str;
           default = null;
         };
 
         cacert = mkOption {
-          description = ''
-            Path to CA bundle file (PEM/X509). Uses system trust store if <literal>null</literal>.
+          description = lib.mdDoc ''
+            Path to CA bundle file (PEM/X509). Uses system trust store if `null`.
           '';
           type = types.nullOr types.str;
         };
@@ -124,7 +124,7 @@ let
         };
 
         extraArguments = mkOption {
-          description = "Extra arguments to pass to <literal>ghostunnel server</literal>";
+          description = lib.mdDoc "Extra arguments to pass to `ghostunnel server`";
           type = types.separatedString " ";
           default = "";
         };

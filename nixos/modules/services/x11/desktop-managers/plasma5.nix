@@ -170,7 +170,7 @@ in
     supportDDC = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Support setting monitor brightness via DDC.
 
         This is not needed for controlling brightness of the internal monitor

@@ -504,8 +504,8 @@ let
       reloadServices = mkOption {
         type = types.listOf types.str;
         inherit (defaultAndText "reloadServices" []) default defaultText;
-        description = ''
-          The list of systemd services to call <literal>systemctl try-reload-or-restart</literal>
+        description = lib.mdDoc ''
+          The list of systemd services to call `systemctl try-reload-or-restart`
           on.
         '';
       };

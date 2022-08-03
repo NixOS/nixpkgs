@@ -387,12 +387,12 @@ in {
       enableStrongSwan = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable the StrongSwan plugin.
 
           If you enable this option the
-          <literal>networkmanager_strongswan</literal> plugin will be added to
-          the <option>networking.networkmanager.plugins</option> option
+          `networkmanager_strongswan` plugin will be added to
+          the {option}`networking.networkmanager.plugins` option
           so you don't need to to that yourself.
         '';
       };

@@ -38,11 +38,11 @@ with lib;
       remotesFile = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
-          Path to the <literal>remotes</literal> control file. This file contains a
+        description = lib.mdDoc ''
+          Path to the `remotes` control file. This file contains a
           list of remote servers to which to send each message.
 
-          See <literal>man 8 nullmailer-send</literal> for syntax and available
+          See `man 8 nullmailer-send` for syntax and available
           options.
         '';
       };
@@ -153,17 +153,17 @@ with lib;
         remotes = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = ''
+          description = lib.mdDoc ''
             A list of remote servers to which to send each message. Each line
             contains a remote host name or address followed by an optional
             protocol string, separated by white space.
 
-            See <literal>man 8 nullmailer-send</literal> for syntax and available
+            See `man 8 nullmailer-send` for syntax and available
             options.
 
             WARNING: This is stored world-readable in the nix store. If you need
             to specify any secret credentials here, consider using the
-            <literal>remotesFile</literal> option instead.
+            `remotesFile` option instead.
           '';
         };
 

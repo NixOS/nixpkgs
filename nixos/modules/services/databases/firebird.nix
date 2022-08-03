@@ -47,9 +47,9 @@ in
         defaultText = literalExpression "pkgs.firebird";
         type = types.package;
         example = literalExpression "pkgs.firebird_3";
-        description = ''
-          Which Firebird package to be installed: <literal>pkgs.firebird_3</literal>
-          For SuperServer use override: <literal>pkgs.firebird_3.override { superServer = true; };</literal>
+        description = lib.mdDoc ''
+          Which Firebird package to be installed: `pkgs.firebird_3`
+          For SuperServer use override: `pkgs.firebird_3.override { superServer = true; };`
         '';
       };
 

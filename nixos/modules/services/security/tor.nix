@@ -476,11 +476,11 @@ in
                   };
                   clientNames = mkOption {
                     type = with types; nonEmptyListOf (strMatching "[A-Za-z0-9+-_]+");
-                    description = ''
+                    description = lib.mdDoc ''
                       Only clients that are listed here are authorized to access the hidden service.
-                      Generated authorization data can be found in <filename>${stateDir}/onion/$name/hostname</filename>.
+                      Generated authorization data can be found in {file}`${stateDir}/onion/$name/hostname`.
                       Clients need to put this authorization data in their configuration file using
-                      <xref linkend="opt-services.tor.settings.HidServAuth"/>.
+                      [](#opt-services.tor.settings.HidServAuth).
                     '';
                   };
                 };

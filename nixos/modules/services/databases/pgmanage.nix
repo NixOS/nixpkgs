@@ -62,11 +62,11 @@ in {
         nuc-server  = "hostaddr=192.168.0.100 port=5432 dbname=postgres";
         mini-server = "hostaddr=127.0.0.1 port=5432 dbname=postgres sslmode=require";
       };
-      description = ''
+      description = lib.mdDoc ''
         pgmanage requires at least one PostgreSQL server be defined.
 
         Detailed information about PostgreSQL connection strings is available at:
-        <link xlink:href="http://www.postgresql.org/docs/current/static/libpq-connect.html"/>
+        <http://www.postgresql.org/docs/current/static/libpq-connect.html>
 
         Note that you should not specify your user name or password. That
         information will be entered on the login screen. If you specify a

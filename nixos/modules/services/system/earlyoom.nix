@@ -32,32 +32,32 @@ in
     freeMemKillThreshold = mkOption {
       type = types.nullOr (types.ints.between 1 100);
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Minimum available memory (in percent) before sending SIGKILL.
-        If unset, this defaults to half of <option>freeMemThreshold</option>.
+        If unset, this defaults to half of {option}`freeMemThreshold`.
 
-        See the description of <xref linkend="opt-services.earlyoom.freeMemThreshold"/>.
+        See the description of [](#opt-services.earlyoom.freeMemThreshold).
       '';
     };
 
     freeSwapThreshold = mkOption {
       type = types.ints.between 1 100;
       default = 10;
-      description = ''
+      description = lib.mdDoc ''
         Minimum free swap space (in percent) before sending SIGTERM.
 
-        See the description of <xref linkend="opt-services.earlyoom.freeMemThreshold"/>.
+        See the description of [](#opt-services.earlyoom.freeMemThreshold).
       '';
     };
 
     freeSwapKillThreshold = mkOption {
       type = types.nullOr (types.ints.between 1 100);
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Minimum free swap space (in percent) before sending SIGKILL.
-        If unset, this defaults to half of <option>freeSwapThreshold</option>.
+        If unset, this defaults to half of {option}`freeSwapThreshold`.
 
-        See the description of <xref linkend="opt-services.earlyoom.freeMemThreshold"/>.
+        See the description of [](#opt-services.earlyoom.freeMemThreshold).
       '';
     };
 
