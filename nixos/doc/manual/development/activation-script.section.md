@@ -57,7 +57,8 @@ There are some snippets NixOS enables by default because disabling them would
 most likely break your system. This section lists a few of them and what they
 do:
 
-- `binsh` creates `/bin/sh` which points to the runtime shell
+- `usrbin` creates `/usr/bin/env` and `/bin/sh` (which points to the runtime
+  shell), with `/bin` being a symbolic link to `/usr/bin`
 - `etc` sets up the contents of `/etc`, this includes systemd units and
   excludes `/etc/passwd`, `/etc/group`, and `/etc/shadow` (which are managed by
   the `users` snippet)
@@ -67,6 +68,5 @@ do:
 - `specialfs` is responsible for mounting filesystems like `/proc` and `sys`
 - `users` creates and removes users and groups by managing `/etc/passwd`,
   `/etc/group` and `/etc/shadow`. This also creates home directories
-- `usrbinenv` creates `/usr/bin/env`
 - `var` creates some directories in `/var` that are not service-specific
 - `wrappers` creates setuid wrappers like `ping` and `sudo`

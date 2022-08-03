@@ -112,13 +112,13 @@ in
       default = {};
 
       example = literalExpression ''
-        { stdio.text =
-          '''
-            # Needed by some programs.
-            ln -sfn /proc/self/fd /dev/fd
-            ln -sfn /proc/self/fd/0 /dev/stdin
-            ln -sfn /proc/self/fd/1 /dev/stdout
-            ln -sfn /proc/self/fd/2 /dev/stderr
+        {
+          example1 = '''
+            # Commands to be run on activation.
+          ''';
+
+          example2 = stringAfter [ "users" ] '''
+            # Commands to be run after users are set up.
           ''';
         }
       '';
@@ -211,8 +211,6 @@ in
 
   config = {
 
-    system.activationScripts.stdio = ""; # obsolete
-
     system.activationScripts.var =
       ''
         # Various log/runtime directories.
@@ -229,16 +227,42 @@ in
         ${pkgs.e2fsprogs}/bin/chattr -f +i /var/empty || true
       '';
 
-    system.activationScripts.usrbinenv = if config.environment.usrbinenv != null
-      then ''
-        mkdir -m 0755 -p /usr/bin
-        ln -sfn ${config.environment.usrbinenv} /usr/bin/.env.tmp
+    # Since programs in NixOS live in the Nix store, there is theoretically
+    # no need for a /usr directory. However, we still need a few paths for
+    # compatibility:
+    # * /usr/bin/env for shebangs
+    # * /bin/sh so that e.g. the system(3) function works
+    # For the latter, we align with the "merged /usr" convention and make
+    # /bin a symbolic link to /usr/bin.
+    system.activationScripts.usrbin = ''
+      mkdir -m 0755 -p /usr/bin
+
+      if [[ ! -L /bin && -d /bin ]]; then
+        # Migrate from the old layout: if /bin is a non-link directory, check
+        # that it only contains /bin/sh and remove it.
+        # TODO: remove this after a few release cycles
+        for f in /bin/*; do
+          if [[ -e $f && $f != /bin/sh ]]; then
+            echo "error: /bin contains files not installed by NixOS"
+            exit 1
+          fi
+        done
+        rm -r /bin
+      fi
+      ln -sfT /usr/bin /bin
+
+      # Create /usr/bin/env
+      ${if config.environment.usrbinenv != null then ''
+        ln -sfT ${config.environment.usrbinenv} /usr/bin/.env.tmp
         mv /usr/bin/.env.tmp /usr/bin/env # atomically replace /usr/bin/env
-      ''
-      else ''
+      '' else ''
         rm -f /usr/bin/env
-        rmdir --ignore-fail-on-non-empty /usr/bin /usr
-      '';
+      ''}
+
+      # Create (/usr)/bin/sh
+      ln -sfT ${config.environment.binsh} /bin/.sh.tmp
+      mv /bin/.sh.tmp /bin/sh # atomically replace /bin/sh
+    '';
 
     system.activationScripts.specialfs =
       ''

@@ -79,8 +79,11 @@ system.activationScripts.my-activation-script = {
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          <literal>binsh</literal> creates <literal>/bin/sh</literal>
-          which points to the runtime shell
+          <literal>usrbin</literal> creates
+          <literal>/usr/bin/env</literal> and <literal>/bin/sh</literal>
+          (which points to the runtime shell), with
+          <literal>/bin</literal> being a symbolic link to
+          <literal>/usr/bin</literal>
         </para>
       </listitem>
       <listitem>
@@ -125,12 +128,6 @@ system.activationScripts.my-activation-script = {
           <literal>/etc/group</literal> and
           <literal>/etc/shadow</literal>. This also creates home
           directories
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <literal>usrbinenv</literal> creates
-          <literal>/usr/bin/env</literal>
         </para>
       </listitem>
       <listitem>
