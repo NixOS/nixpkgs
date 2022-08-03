@@ -87,6 +87,8 @@ stdenv.mkDerivation rec {
       substituteInPlace  ../tests/bash_tests/testcases.py \
         --replace "def io_test(self):" "def io_disabled(self):"
      ''}
+  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    export LC_ALL=C
   '';
 
   # With CMake we have to enable samples or there won't be
@@ -120,6 +122,6 @@ stdenv.mkDerivation rec {
     description = "A library and command-line utility to manage image metadata";
     platforms = platforms.all;
     license = licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = with maintainers; [ wegank ];
   };
 }
