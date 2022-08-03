@@ -9325,6 +9325,8 @@ with pkgs;
 
   tinystatus = callPackage ../tools/networking/tinystatus { };
 
+  tuc = callPackage ../tools/text/tuc { };
+
   opensshPackages = dontRecurseIntoAttrs (callPackage ../tools/networking/openssh {});
 
   openssh = opensshPackages.openssh.override {
