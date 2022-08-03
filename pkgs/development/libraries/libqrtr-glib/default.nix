@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitLab
 , meson
+, mesonEmulatorHook
 , ninja
 , pkg-config
 , gobject-introspection
@@ -39,14 +40,13 @@ stdenv.mkDerivation rec {
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
+    gobject-introspection
     glib
-  ];
-
-  mesonFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-Dgtk_doc=false"
   ];
 
   meta = with lib; {
