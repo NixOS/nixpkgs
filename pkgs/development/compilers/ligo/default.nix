@@ -3,6 +3,7 @@
 , git
 , coq
 , cacert
+, ocaml-crunch
 }:
 
 coq.ocamlPackages.buildDunePackage rec {
@@ -24,6 +25,7 @@ coq.ocamlPackages.buildDunePackage rec {
   strictDeps = true;
 
   nativeBuildInputs = [
+    ocaml-crunch
     git
     coq
     coq.ocamlPackages.menhir
@@ -50,7 +52,8 @@ coq.ocamlPackages.buildDunePackage rec {
     pprint
     linenoise
     dune-configurator
-    ocaml-crunch
+    ctypes_stubs_js
+    crunch
     zarith_stubs_js
     pure-splitmix
 
@@ -65,7 +68,7 @@ coq.ocamlPackages.buildDunePackage rec {
     hacl-star-raw
     lwt-canceler
     ipaddr
-    bls12-381-unix
+    bls12-381
     bls12-381-legacy
     ptime
     mtime
@@ -88,6 +91,7 @@ coq.ocamlPackages.buildDunePackage rec {
 
   doCheck = false; # Tests fail, but could not determine the reason
 
+  patches = [ ./ligo.patch ];
 
   meta = with lib; {
     homepage = "https://ligolang.org/";
@@ -96,6 +100,5 @@ coq.ocamlPackages.buildDunePackage rec {
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ ulrikstrid ];
-    broken = true;
   };
 }
