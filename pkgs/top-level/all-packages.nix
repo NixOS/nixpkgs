@@ -9531,6 +9531,8 @@ with pkgs;
 
   pell = callPackage ../applications/misc/pell { };
 
+  perccli = callPackage ../tools/misc/perccli { };
+
   perceptualdiff = callPackage ../tools/graphics/perceptualdiff { };
 
   percona-xtrabackup = percona-xtrabackup_8_0;
