@@ -1347,6 +1347,8 @@ in {
 
   bluepy-devices = callPackage ../development/python-modules/bluepy-devices { };
 
+  bluetooth-adapters = callPackage ../development/python-modules/bluetooth-adapters { };
+
   blurhash = callPackage ../development/python-modules/blurhash { };
 
   bme280spi = callPackage ../development/python-modules/bme280spi { };
