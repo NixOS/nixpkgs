@@ -136,9 +136,9 @@ in
         extraArgs = mkOption {
           type = types.lines;
           default = "";
-          description = "
-            Extra parameters documented <link xlink:href=\"https://github.com/xddxdd/bird-lg-go#frontend\">here</link>.
-          ";
+          description = ''
+            Extra parameters documented <link xlink:href="https://github.com/xddxdd/bird-lg-go#frontend">here</link>.
+          '';
         };
       };
 
@@ -183,9 +183,9 @@ in
         extraArgs = mkOption {
           type = types.lines;
           default = "";
-          description = "
-            Extra parameters documented <link xlink:href=\"https://github.com/xddxdd/bird-lg-go#proxy\">here</link>.
-          ";
+          description = ''
+            Extra parameters documented <link xlink:href="https://github.com/xddxdd/bird-lg-go#proxy">here</link>.
+          '';
         };
       };
     };

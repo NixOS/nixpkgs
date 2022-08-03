@@ -831,8 +831,7 @@ in
 
           If set, users can log in with SSH keys and PKCS#11 tokens.
 
-          More information can be found <link
-          xlink:href="https://github.com/OpenSC/pam_p11">here</link>.
+          More information can be found <link xlink:href="https://github.com/OpenSC/pam_p11">here</link>.
         '';
       };
 
@@ -872,8 +871,7 @@ in
           <literal>username:first_keyHandle,first_public_key: second_keyHandle,second_public_key</literal>
           This file can be generated using <command>pamu2fcfg</command> command.
 
-          More information can be found <link
-          xlink:href="https://developers.yubico.com/pam-u2f/">here</link>.
+          More information can be found <link xlink:href="https://developers.yubico.com/pam-u2f/">here</link>.
         '';
       };
 
@@ -894,8 +892,7 @@ in
           <literal>username:first_keyHandle,first_public_key: second_keyHandle,second_public_key</literal>
           This file can be generated using <command>pamu2fcfg</command> command.
 
-          More information can be found <link
-          xlink:href="https://developers.yubico.com/pam-u2f/">here</link>.
+          More information can be found <link xlink:href="https://developers.yubico.com/pam-u2f/">here</link>.
         '';
       };
 
@@ -909,9 +906,7 @@ in
             When using <command>pamu2fcfg</command>, you can specify your
             application ID with the <literal>-i</literal> flag.
 
-            More information can be found <link
-            xlink:href="https://developers.yubico.com/pam-u2f/Manuals/pam_u2f.8.html">
-            here</link>
+            More information can be found <link xlink:href="https://developers.yubico.com/pam-u2f/Manuals/pam_u2f.8.html">here</link>
         '';
       };
 
@@ -927,9 +922,7 @@ in
             When using <command>pamu2fcfg</command>, you can specify your
             application ID with the <literal>-o</literal> flag.
 
-            More information can be found <link
-            xlink:href="https://developers.yubico.com/pam-u2f/Manuals/pam_u2f.8.html">
-            here</link>
+            More information can be found <link xlink:href="https://developers.yubico.com/pam-u2f/Manuals/pam_u2f.8.html">here</link>
         '';
       };
 
@@ -995,8 +988,7 @@ in
           Note that this module must both be enabled using this option and on a
           per-PAM-service level as well (using <literal>usshAuth</literal>).
 
-          More information can be found <link
-          xlink:href="https://github.com/uber/pam-ussh">here</link>.
+          More information can be found <link xlink:href="https://github.com/uber/pam-ussh">here</link>.
         '';
       };
 
@@ -1084,8 +1076,7 @@ in
 
           The file must have only one line:
           <literal>username:yubikey_token_id1:yubikey_token_id2</literal>
-          More information can be found <link
-          xlink:href="https://developers.yubico.com/yubico-pam/">here</link>.
+          More information can be found <link xlink:href="https://developers.yubico.com/yubico-pam/">here</link>.
         '';
       };
       control = mkOption {
@@ -1130,8 +1121,7 @@ in
           Challenge-Response configurations. See the man-page ykpamcfg(1) for further
           details on how to configure offline Challenge-Response validation.
 
-          More information can be found <link
-          xlink:href="https://developers.yubico.com/yubico-pam/Authentication_Using_Challenge-Response.html">here</link>.
+          More information can be found <link xlink:href="https://developers.yubico.com/yubico-pam/Authentication_Using_Challenge-Response.html">here</link>.
         '';
       };
       challengeResponsePath = mkOption {
@@ -1140,8 +1130,7 @@ in
         description = ''
           If not null, set the path used by yubico pam module where the challenge expected response is stored.
 
-          More information can be found <link
-          xlink:href="https://developers.yubico.com/yubico-pam/Authentication_Using_Challenge-Response.html">here</link>.
+          More information can be found <link xlink:href="https://developers.yubico.com/yubico-pam/Authentication_Using_Challenge-Response.html">here</link>.
         '';
       };
     };

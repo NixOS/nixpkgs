@@ -1170,8 +1170,7 @@ let
         <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
         A detailed explanation about how VRFs work can be found in the
-        <link xlink:href="https://www.kernel.org/doc/Documentation/networking/vrf.txt">kernel
-        docs</link>.
+        <link xlink:href="https://www.kernel.org/doc/Documentation/networking/vrf.txt">kernel docs</link>.
       '';
     };
 
@@ -1909,9 +1908,7 @@ in
           Extra command-line arguments to pass to systemd-networkd-wait-online.
           These also affect per-interface <literal>systemd-network-wait-online@</literal> services.
 
-          See <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd-networkd-wait-online.service.html">
-          <citerefentry><refentrytitle>systemd-networkd-wait-online.service</refentrytitle><manvolnum>8</manvolnum>
-          </citerefentry></link> for all available options.
+          See <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd-networkd-wait-online.service.html"><citerefentry><refentrytitle>systemd-networkd-wait-online.service</refentrytitle><manvolnum>8</manvolnum></citerefentry></link> for all available options.
         '';
         type = with types; listOf str;
         default = [];

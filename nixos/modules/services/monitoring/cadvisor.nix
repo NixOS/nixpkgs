@@ -75,7 +75,7 @@ in {
           world-readable Nix store that contains the value of <option>storageDriverPassword</option>.
 
           It's recommended to override this with a path not in the Nix store.
-          Tip: use <link xlink:href='https://nixos.org/nixops/manual/#idm140737318306400'>nixops key management</link>
+          Tip: use <link xlink:href="https://nixos.org/nixops/manual/#idm140737318306400">nixops key management</link>
         '';
       };
 
@@ -91,7 +91,7 @@ in {
         description = ''
           Additional cadvisor options.
 
-          See <link xlink:href='https://github.com/google/cadvisor/blob/master/docs/runtime_options.md'/> for available options.
+          See <link xlink:href="https://github.com/google/cadvisor/blob/master/docs/runtime_options.md"/> for available options.
         '';
       };
     };

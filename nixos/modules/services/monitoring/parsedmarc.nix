@@ -69,14 +69,12 @@ in
         type = lib.types.bool;
         default = true;
         description = ''
-          Whether to enable and configure the <link
-          linkend="opt-services.geoipupdate.enable">geoipupdate</link>
+          Whether to enable and configure the <link linkend="opt-services.geoipupdate.enable">geoipupdate</link>
           service to automatically fetch GeoIP databases. Not crucial,
           but recommended for full functionality.
 
-          To finish the setup, you need to manually set the <xref
-          linkend="opt-services.geoipupdate.settings.AccountID" /> and
-          <xref linkend="opt-services.geoipupdate.settings.LicenseKey" />
+          To finish the setup, you need to manually set the <xref linkend="opt-services.geoipupdate.settings.AccountID"/> and
+          <xref linkend="opt-services.geoipupdate.settings.LicenseKey"/>
           options.
         '';
       };
@@ -101,7 +99,7 @@ in
             Whether the automatically provisioned Elasticsearch
             instance should be added as a grafana datasource. Has no
             effect unless
-            <xref linkend="opt-services.parsedmarc.provision.elasticsearch" />
+            <xref linkend="opt-services.parsedmarc.provision.elasticsearch"/>
             is also enabled.
           '';
         };
@@ -213,8 +211,7 @@ in
 
                 Always handled as a secret whether the value is
                 wrapped in a <literal>{ _secret = ...; }</literal>
-                attrset or not (refer to <xref
-                linkend="opt-services.parsedmarc.settings" /> for
+                attrset or not (refer to <xref linkend="opt-services.parsedmarc.settings"/> for
                 details).
               '';
               apply = x: if isAttrs x || x == null then x else { _secret = x; };
@@ -278,8 +275,7 @@ in
 
                 Always handled as a secret whether the value is
                 wrapped in a <literal>{ _secret = ...; }</literal>
-                attrset or not (refer to <xref
-                linkend="opt-services.parsedmarc.settings" /> for
+                attrset or not (refer to <xref linkend="opt-services.parsedmarc.settings"/> for
                 details).
               '';
               apply = x: if isAttrs x || x == null then x else { _secret = x; };
@@ -332,8 +328,7 @@ in
 
                 Always handled as a secret whether the value is
                 wrapped in a <literal>{ _secret = ...; }</literal>
-                attrset or not (refer to <xref
-                linkend="opt-services.parsedmarc.settings" /> for
+                attrset or not (refer to <xref linkend="opt-services.parsedmarc.settings"/> for
                 details).
               '';
               apply = x: if isAttrs x || x == null then x else { _secret = x; };

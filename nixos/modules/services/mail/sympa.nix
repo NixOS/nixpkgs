@@ -88,7 +88,7 @@ in
       example = "cs";
       description = ''
         Default Sympa language.
-        See <link xlink:href='https://github.com/sympa-community/sympa/tree/sympa-6.2/po/sympa' />
+        See <link xlink:href="https://github.com/sympa-community/sympa/tree/sympa-6.2/po/sympa"/>
         for available options.
       '';
     };
@@ -138,7 +138,7 @@ in
             };
             description = ''
               The <filename>robot.conf</filename> configuration file as key value set.
-              See <link xlink:href='https://sympa-community.github.io/gpldoc/man/sympa.conf.5.html' />
+              See <link xlink:href="https://sympa-community.github.io/gpldoc/man/sympa.conf.5.html"/>
               for list of configuration parameters.
             '';
           };
@@ -287,7 +287,7 @@ in
       '';
       description = ''
         The <filename>sympa.conf</filename> configuration file as key value set.
-        See <link xlink:href='https://sympa-community.github.io/gpldoc/man/sympa.conf.5.html' />
+        See <link xlink:href="https://sympa-community.github.io/gpldoc/man/sympa.conf.5.html"/>
         for list of configuration parameters.
       '';
     };

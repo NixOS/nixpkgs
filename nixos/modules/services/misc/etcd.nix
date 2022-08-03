@@ -127,7 +127,7 @@ in {
     extraConf = mkOption {
       description = ''
         Etcd extra configuration. See
-        <link xlink:href='https://github.com/coreos/etcd/blob/master/Documentation/op-guide/configuration.md#configuration-flags' />
+        <link xlink:href="https://github.com/coreos/etcd/blob/master/Documentation/op-guide/configuration.md#configuration-flags"/>
       '';
       type = types.attrsOf types.str;
       default = {};

@@ -31,8 +31,7 @@ in
         when the user logs out.  If true, the scope unit corresponding
         to the session and all processes inside that scope will be
         terminated.  If false, the scope is "abandoned" (see
-        <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.scope.html#">
-        systemd.scope(5)</link>), and processes are not killed.
+        <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.scope.html#">systemd.scope(5)</link>), and processes are not killed.
 
         See <link xlink:href="https://www.freedesktop.org/software/systemd/man/logind.conf.html#KillUserProcesses=">logind.conf(5)</link>
         for more details.

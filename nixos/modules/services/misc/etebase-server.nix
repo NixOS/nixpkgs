@@ -135,8 +135,8 @@ in
         default = {};
         description = ''
           Configuration for <package>etebase-server</package>. Refer to
-          <link xlink:href="https://github.com/etesync/server/blob/master/etebase-server.ini.example" />
-          and <link xlink:href="https://github.com/etesync/server/wiki" />
+          <link xlink:href="https://github.com/etesync/server/blob/master/etebase-server.ini.example"/>
+          and <link xlink:href="https://github.com/etesync/server/wiki"/>
           for details on supported values.
         '';
         example = {

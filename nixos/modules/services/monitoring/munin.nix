@@ -142,7 +142,7 @@ in
           Enable Munin Node agent. Munin node listens on 0.0.0.0 and
           by default accepts connections only from 127.0.0.1 for security reasons.
 
-          See <link xlink:href='http://guide.munin-monitoring.org/en/latest/architecture/index.html' />.
+          See <link xlink:href="http://guide.munin-monitoring.org/en/latest/architecture/index.html"/>.
         '';
       };
 
@@ -151,7 +151,7 @@ in
         type = types.lines;
         description = ''
           <filename>munin-node.conf</filename> extra configuration. See
-          <link xlink:href='http://guide.munin-monitoring.org/en/latest/reference/munin-node.conf.html' />
+          <link xlink:href="http://guide.munin-monitoring.org/en/latest/reference/munin-node.conf.html"/>
         '';
       };
 
@@ -160,7 +160,7 @@ in
         type = types.lines;
         description = ''
           <filename>plugin-conf.d</filename> extra plugin configuration. See
-          <link xlink:href='http://guide.munin-monitoring.org/en/latest/plugin/use.html' />
+          <link xlink:href="http://guide.munin-monitoring.org/en/latest/plugin/use.html"/>
         '';
         example = ''
           [fail2ban_*]
@@ -268,9 +268,9 @@ in
         type = types.lines;
         description = ''
           <filename>munin.conf</filename> extra global configuration.
-          See <link xlink:href='http://guide.munin-monitoring.org/en/latest/reference/munin.conf.html' />.
+          See <link xlink:href="http://guide.munin-monitoring.org/en/latest/reference/munin.conf.html"/>.
           Useful to setup notifications, see
-          <link xlink:href='http://guide.munin-monitoring.org/en/latest/tutorial/alert.html' />
+          <link xlink:href="http://guide.munin-monitoring.org/en/latest/tutorial/alert.html"/>
         '';
         example = ''
           contact.email.command mail -s "Munin notification for ''${var:host}" someone@example.com
@@ -283,7 +283,7 @@ in
         description = ''
           Definitions of hosts of nodes to collect data from. Needs at least one
           host for cron to succeed. See
-          <link xlink:href='http://guide.munin-monitoring.org/en/latest/reference/munin.conf.html' />
+          <link xlink:href="http://guide.munin-monitoring.org/en/latest/reference/munin.conf.html"/>
         '';
         example = literalExpression ''
           '''

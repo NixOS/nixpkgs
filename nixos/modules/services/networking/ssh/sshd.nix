@@ -302,9 +302,9 @@ in
           Allowed key exchange algorithms
 
           Uses the lower bound recommended in both
-          <link xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html" />
+          <link xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html"/>
           and
-          <link xlink:href="https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67" />
+          <link xlink:href="https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67"/>
         '';
       };
 
@@ -322,9 +322,9 @@ in
           Allowed ciphers
 
           Defaults to recommended settings from both
-          <link xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html" />
+          <link xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html"/>
           and
-          <link xlink:href="https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67" />
+          <link xlink:href="https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67"/>
         '';
       };
 
@@ -342,9 +342,9 @@ in
           Allowed MACs
 
           Defaults to recommended settings from both
-          <link xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html" />
+          <link xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html"/>
           and
-          <link xlink:href="https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67" />
+          <link xlink:href="https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67"/>
         '';
       };
 

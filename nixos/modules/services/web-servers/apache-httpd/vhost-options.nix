@@ -261,8 +261,7 @@ in
       default = "";
       example = "Disallow: /foo/";
       description = ''
-        Specification of pages to be ignored by web crawlers. See <link
-        xlink:href='http://www.robotstxt.org/'/> for details.
+        Specification of pages to be ignored by web crawlers. See <link xlink:href="http://www.robotstxt.org/"/> for details.
       '';
     };
 
@@ -280,8 +279,7 @@ in
         };
       '';
       description = ''
-        Declarative location config. See <link
-        xlink:href="https://httpd.apache.org/docs/2.4/mod/core.html#location"/> for details.
+        Declarative location config. See <link xlink:href="https://httpd.apache.org/docs/2.4/mod/core.html#location"/> for details.
       '';
     };
 

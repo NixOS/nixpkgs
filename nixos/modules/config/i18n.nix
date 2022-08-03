@@ -75,8 +75,7 @@ with lib;
           List of locales that the system should support.  The value
           <literal>"all"</literal> means that all locales supported by
           Glibc will be installed.  A full list of supported locales
-          can be found at <link
-          xlink:href="https://sourceware.org/git/?p=glibc.git;a=blob;f=localedata/SUPPORTED"/>.
+          can be found at <link xlink:href="https://sourceware.org/git/?p=glibc.git;a=blob;f=localedata/SUPPORTED"/>.
         '';
       };
 

@@ -161,8 +161,7 @@ in
                 internal = true;
                 description = ''
                   Inputs specify how Filebeat locates and processes
-                  input data. Use <xref
-                  linkend="opt-services.filebeat.inputs"/> instead.
+                  input data. Use <xref linkend="opt-services.filebeat.inputs"/> instead.
 
                   See <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/configuration-filebeat-options.html"/>.
                 '';

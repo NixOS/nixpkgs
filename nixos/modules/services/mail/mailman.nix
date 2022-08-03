@@ -114,7 +114,7 @@ in {
           example = "/run/secrets/ldap-bind";
           description = ''
             Path to the file containing the bind password of the servie account
-            defined by <xref linkend="opt-services.mailman.ldap.bindDn" />.
+            defined by <xref linkend="opt-services.mailman.ldap.bindDn"/>.
           '';
         };
         superUserGroup = mkOption {

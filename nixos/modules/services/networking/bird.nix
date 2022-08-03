@@ -15,7 +15,7 @@ in
         type = types.lines;
         description = ''
           BIRD Internet Routing Daemon configuration file.
-          <link xlink:href='http://bird.network.cz/'/>
+          <link xlink:href="http://bird.network.cz/"/>
         '';
       };
       checkConfig = mkOption {

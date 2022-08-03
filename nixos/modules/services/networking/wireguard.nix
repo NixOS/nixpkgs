@@ -122,8 +122,7 @@ let
         WireGuard interface is created, and which retains the socket even if the
         interface is moved via <option>interfaceNamespace</option>. When
         <literal>null</literal>, the interface is created in the init namespace.
-        See <link
-        xlink:href="https://www.wireguard.com/netns/">documentation</link>.
+        See <link xlink:href="https://www.wireguard.com/netns/">documentation</link>.
         '';
       };
 
@@ -135,8 +134,7 @@ let
         interface is moved to. The special value <literal>init</literal> means
         the init namespace. When <literal>null</literal>, the interface is not
         moved.
-        See <link
-        xlink:href="https://www.wireguard.com/netns/">documentation</link>.
+        See <link xlink:href="https://www.wireguard.com/netns/">documentation</link>.
         '';
       };
     };

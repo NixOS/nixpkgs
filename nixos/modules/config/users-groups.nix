@@ -156,8 +156,7 @@ let
           <filename>pam_mount.conf.xml</filename>.
           Useful attributes might include <literal>path</literal>,
           <literal>options</literal>, <literal>fstype</literal>, and <literal>server</literal>.
-          See <link
-          xlink:href="http://pam-mount.sourceforge.net/pam_mount.conf.5.html" />
+          See <link xlink:href="http://pam-mount.sourceforge.net/pam_mount.conf.5.html"/>
           for more information.
         '';
       };

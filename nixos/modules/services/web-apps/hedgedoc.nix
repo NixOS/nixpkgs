@@ -152,8 +152,7 @@ in
         '';
         description = ''
           Specify the Content Security Policy which is passed to Helmet.
-          For configuration details see <link xlink:href="https://helmetjs.github.io/docs/csp/"
-          >https://helmetjs.github.io/docs/csp/</link>.
+          For configuration details see <link xlink:href="https://helmetjs.github.io/docs/csp/"/>.
         '';
       };
       protocolUseSSL = mkOption {

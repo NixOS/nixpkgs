@@ -29,8 +29,8 @@ let cfg = config.services.victoriametrics; in
       type = types.listOf types.str;
       default = [];
       description = ''
-        Extra options to pass to VictoriaMetrics. See the README: <link
-        xlink:href="https://github.com/VictoriaMetrics/VictoriaMetrics/blob/master/README.md" />
+        Extra options to pass to VictoriaMetrics. See the README:
+        <link xlink:href="https://github.com/VictoriaMetrics/VictoriaMetrics/blob/master/README.md"/>
         or <command>victoriametrics -help</command> for more
         information.
       '';

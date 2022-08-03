@@ -253,7 +253,7 @@ in {
         default = {};
         description = ''
           Extra seyren configuration. See
-          <link xlink:href='https://github.com/scobal/seyren#config' />
+          <link xlink:href="https://github.com/scobal/seyren#config"/>
         '';
         type = types.attrsOf types.str;
         example = literalExpression ''

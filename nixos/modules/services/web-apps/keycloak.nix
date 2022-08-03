@@ -215,8 +215,7 @@ in
             manually provisioned database; has no effect when a local
             database is automatically provisioned.
 
-            To use this with a local database, set <xref
-            linkend="opt-services.keycloak.database.createLocally" /> to
+            To use this with a local database, set <xref linkend="opt-services.keycloak.database.createLocally"/> to
             <literal>false</literal> and create the database and user
             manually.
           '';
@@ -230,8 +229,7 @@ in
             provisioned database; has no effect when a local database is
             automatically provisioned.
 
-            To use this with a local database, set <xref
-            linkend="opt-services.keycloak.database.createLocally" /> to
+            To use this with a local database, set <xref linkend="opt-services.keycloak.database.createLocally"/> to
             <literal>false</literal> and create the database and user
             manually.
           '';
@@ -329,10 +327,8 @@ in
                     want to set this to <literal>/auth</literal> to
                     keep compatibility with your clients.
 
-                    See <link
-                    xlink:href="https://www.keycloak.org/migration/migrating-to-quarkus"
-                    /> for more information on migrating from Wildfly
-                    to Quarkus.
+                    See <link xlink:href="https://www.keycloak.org/migration/migrating-to-quarkus"/>
+                    for more information on migrating from Wildfly to Quarkus.
                   </para>
                 </note>
               '';
@@ -404,9 +400,7 @@ in
                   </varlistentry>
                 </variablelist>
 
-                See <link
-                xlink:href="https://www.keycloak.org/server/reverseproxy"
-                /> for more information.
+                See <link xlink:href="https://www.keycloak.org/server/reverseproxy"/> for more information.
               '';
             };
           };
@@ -425,8 +419,7 @@ in
           Configuration options corresponding to parameters set in
           <filename>conf/keycloak.conf</filename>.
 
-          Most available options are documented at <link
-          xlink:href="https://www.keycloak.org/server/all-config" />.
+          Most available options are documented at <link xlink:href="https://www.keycloak.org/server/all-config"/>.
 
           Options containing secret data should be set to an attribute
           set containing the attribute <literal>_secret</literal> - a

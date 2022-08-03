@@ -282,9 +282,8 @@ in
       default = true;
       type = types.bool;
       description = ''
-        Whether to assign <link
-        xlink:href='http://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames'>predictable
-        names to network interfaces</link>.  If enabled, interfaces
+        Whether to assign <link xlink:href="http://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames">predictable names to network interfaces</link>.
+        If enabled, interfaces
         are assigned names that contain topology information
         (e.g. <literal>wlp3s0</literal>) and thus should be stable
         across reboots.  If disabled, names depend on the order in

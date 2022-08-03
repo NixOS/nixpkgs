@@ -53,9 +53,8 @@ in
       description = ''
         Add network connectivity support to initrd. The network may be
         configured using the <literal>ip</literal> kernel parameter,
-        as described in <link
-        xlink:href="https://www.kernel.org/doc/Documentation/filesystems/nfs/nfsroot.txt">the
-        kernel documentation</link>.  Otherwise, if
+        as described in <link xlink:href="https://www.kernel.org/doc/Documentation/filesystems/nfs/nfsroot.txt">the kernel documentation</link>.
+        Otherwise, if
         <option>networking.useDHCP</option> is enabled, an IP address
         is acquired using DHCP.
 

@@ -49,8 +49,7 @@ in
       defaultText = literalExpression ''"''${package}/lib/node_modules/node-red/settings.js"'';
       description = ''
         Path to the JavaScript configuration file.
-        See <link
-        xlink:href="https://github.com/node-red/node-red/blob/master/packages/node_modules/node-red/settings.js"/>
+        See <link xlink:href="https://github.com/node-red/node-red/blob/master/packages/node_modules/node-red/settings.js"/>
         for a configuration example.
       '';
     };

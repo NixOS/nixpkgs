@@ -287,7 +287,7 @@ in
       relay = {
         enable = mkEnableOption ''relaying of Tor traffic for others.
 
-          See <link xlink:href="https://www.torproject.org/docs/tor-doc-relay" />
+          See <link xlink:href="https://www.torproject.org/docs/tor-doc-relay"/>
           for details.
 
           Setting this to true requires setting
@@ -348,7 +348,7 @@ in
 
                 <para>
                   See
-                  <link xlink:href="https://www.torproject.org/docs/tor-doc-relay.html.en" />
+                  <link xlink:href="https://www.torproject.org/docs/tor-doc-relay.html.en"/>
                   for more info.
                 </para>
               </listitem>
@@ -366,7 +366,7 @@ in
                 <para>
                   Using this option will make Tor advertise your bridge
                   to users through various mechanisms like
-                  <link xlink:href="https://bridges.torproject.org/" />, though.
+                  <link xlink:href="https://bridges.torproject.org/"/>, though.
                 </para>
 
                 <important>
@@ -384,7 +384,7 @@ in
                 </important>
 
                 <para>
-                  See <link xlink:href="https://www.torproject.org/docs/bridges.html.en" />
+                  See <link xlink:href="https://www.torproject.org/docs/bridges.html.en"/>
                   for more info.
                 </para>
               </listitem>
@@ -419,7 +419,7 @@ in
                 </para>
 
                 <para>
-                  See <link xlink:href="https://www.torproject.org/docs/bridges.html.en" />
+                  See <link xlink:href="https://www.torproject.org/docs/bridges.html.en"/>
                   for more info.
                 </para>
               </listitem>
