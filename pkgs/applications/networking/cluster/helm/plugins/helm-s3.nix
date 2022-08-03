@@ -30,7 +30,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A Helm plugin that shows a diff";
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/hypnoglow/helm-s3";
     license = licenses.mit;
     maintainers = with maintainers; [ yurrriq ];
   };
