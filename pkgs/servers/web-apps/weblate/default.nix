@@ -4,8 +4,8 @@
   src = fetchFromGitHub {
     owner = "WeblateOrg";
     repo = "weblate";
-    rev = "weblate-4.12";
-    sha256 = "sha256-8SVwbwxXZX7HCers7kgjXplPirNHeC4Zkhm6IDYA2sA=";
+    rev = "weblate-4.13.1";
+    sha256 = "sha256-N5q0Tzrxd90mLI5wLFh83DiaUwLK1pAPNjTeAq3loC8=";
   };
   pyproject = ./pyproject.toml;
   poetrylock = ./poetry.lock;
@@ -44,7 +44,13 @@
       pillow = super.pillow.overridePythonAttrs (old: {
         buildInputs = (old.buildInputs or [ ]) ++ [ xorg.libxcb ];
       });
-
+      ua-parser = super.ua-parser.overridePythonAttrs (old: {
+        nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ self.pyyaml ];
+        postPatch = ''
+          substituteInPlace setup.py \
+            --replace "pyyaml ~= 5.4.0" "pyyaml~=6.0"
+        '';
+      });
     }
   );
 }).dependencyEnv
