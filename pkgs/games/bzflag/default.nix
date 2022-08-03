@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     homepage = "https://bzflag.org/";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ ];
   };
 }

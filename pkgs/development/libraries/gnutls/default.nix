@@ -124,7 +124,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://gnutls.org/";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ eelco fpletz ];
+    maintainers = with maintainers; [ eelco ];
     platforms = platforms.all;
   };
 }

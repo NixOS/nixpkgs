@@ -121,6 +121,6 @@ buildPythonPackage rec {
     description = "Man-in-the-middle proxy";
     homepage = "https://mitmproxy.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ fpletz kamilchm ];
+    maintainers = with maintainers; [ kamilchm SuperSandro2000 ];
   };
 }
