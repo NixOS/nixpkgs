@@ -6,6 +6,7 @@
   offpunk,
   python3,
   stdenv,
+  testVersion,
   timg,
   xdg-utils,
   xsel,
@@ -53,6 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
 
    runHook postInstall
   '';
+
+  passthru.tests.version = testVersion { package = offpunk; };
 
   meta = with lib; {
     description = "An Offline-First browser for the smolnet ";
