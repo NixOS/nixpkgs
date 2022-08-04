@@ -21,7 +21,10 @@ let
 
   # Wrap the original `mkDerivation` providing extra args to it.
   extendMkDerivationArgs = old: f: withOldMkDerivation old (_: mkDerivationSuper: args:
-    (mkDerivationSuper args).overrideAttrs f);
+    let args' = if builtins.isFunction args
+       then (rec { final = (args final) // f (args final); }).final
+       else (args // (f args)); in
+    (mkDerivationSuper args').overrideAttrs f);
 
   # Wrap the original `mkDerivation` transforming the result.
   overrideMkDerivationResult = old: f: withOldMkDerivation old (_: mkDerivationSuper: args:
