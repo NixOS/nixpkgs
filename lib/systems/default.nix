@@ -16,9 +16,6 @@ rec {
   */
   flakeExposed = import ./flake-systems.nix { };
 
-  # TODO(@sternenseemann): remove before 21.11
-  supported = throw "2022-05-23: Use lib.systems.flakeExposed instead of lib.systems.supported.hydra, as lib.systems.supported has been removed";
-
   # Elaborate a `localSystem` or `crossSystem` so that it contains everything
   # necessary.
   #
