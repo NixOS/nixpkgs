@@ -154,6 +154,7 @@
 , "graphqurl"
 , "grunt-cli"
 , "makam"
+, "md-to-pdf"
 , "meshcommander"
 , "gqlint"
 , "gtop"
