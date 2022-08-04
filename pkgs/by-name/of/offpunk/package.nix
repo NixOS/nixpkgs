@@ -52,6 +52,8 @@ python3Packages.buildPythonPackage rec {
     installManPage man/*.1
   '';
 
+  passthru.tests.version = testers.testVersion { package = offpunk; };
+
   meta = with lib; {
     description = "An Offline-First browser for the smolnet ";
     homepage = src.meta.homepage;
