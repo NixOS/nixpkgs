@@ -5,7 +5,7 @@
   "@antfu/ni" = "ni";
   "@electron-forge/cli" = "electron-forge";
   "@squoosh/cli" = "squoosh-cli";
-  "@webassemblyjs/cli" = "wasm2wast";
+  "@webassemblyjs/cli-1.11.1" = "wasm2wast";
   coffee-script = "coffee";
   typescript = "tsc";
   vue-cli = "vue";
@@ -28,10 +28,10 @@
   "@tailwindcss/language-server" = "tailwindcss-language-server";
   "@uppy/companion" = "companion";
   "@vue/cli" = "vue";
-  "@webassemblyjs/repl" = "wasm";
+  "@webassemblyjs/repl-1.11.1" = "wasm";
   "@webassemblyjs/wasm-strip" = "wasm-strip";
-  "@webassemblyjs/wasm-text-gen" = "wasmgen";
-  "@webassemblyjs/wast-refmt" = "wast-refmt";
+  "@webassemblyjs/wasm-text-gen-1.11.1" = "wasmgen";
+  "@webassemblyjs/wast-refmt-1.11.1" = "wast-refmt";
   aws-cdk = "cdk";
   balanceofsatoshis = "bos";
   carbon-now-cli = "carbon-now";
