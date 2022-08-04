@@ -18,7 +18,6 @@
 , google-cloud-cpp
 , grpc
 , gtest
-, jemalloc
 , libbacktrace
 , lz4
 , minio
