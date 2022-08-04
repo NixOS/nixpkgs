@@ -2879,7 +2879,7 @@
   danth = {
     name = "Daniel Thwaites";
     email = "danthwaites30@btinternet.com";
-    matrix = "@danth:matrix.org";
+    matrix = "@danth:pwak.org";
     github = "danth";
     githubId = 28959268;
     keys = [{
