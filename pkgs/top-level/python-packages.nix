@@ -1347,6 +1347,8 @@ in {
 
   bluepy-devices = callPackage ../development/python-modules/bluepy-devices { };
 
+  bluetooth-adapters = callPackage ../development/python-modules/bluetooth-adapters { };
+
   blurhash = callPackage ../development/python-modules/blurhash { };
 
   bme280spi = callPackage ../development/python-modules/bme280spi { };
@@ -4055,6 +4057,8 @@ in {
   holidays = callPackage ../development/python-modules/holidays { };
 
   holoviews = callPackage ../development/python-modules/holoviews { };
+
+  home-assistant-bluetooth = callPackage ../development/python-modules/home-assistant-bluetooth { };
 
   homeassistant-pyozw = callPackage ../development/python-modules/homeassistant-pyozw { };
 
@@ -7151,6 +7155,8 @@ in {
 
   pyarlo = callPackage ../development/python-modules/pyarlo { };
 
+  pyarr = callPackage ../development/python-modules/pyarr { };
+
   pyarrow = callPackage ../development/python-modules/pyarrow {
     inherit (pkgs) arrow-cpp cmake;
   };
@@ -10146,7 +10152,7 @@ in {
 
   sphinx_pypi_upload = callPackage ../development/python-modules/sphinx_pypi_upload { };
 
-  sphinx_rtd_theme = callPackage ../development/python-modules/sphinx_rtd_theme { };
+  sphinx-rtd-theme = callPackage ../development/python-modules/sphinx-rtd-theme { };
 
   sphinx-serve = callPackage ../development/python-modules/sphinx-serve { };
 
