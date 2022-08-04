@@ -22,9 +22,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ libcbor openssl zlib ]
+  buildInputs = [ libcbor zlib ]
     ++ lib.optionals stdenv.isDarwin [ hidapi ]
     ++ lib.optionals stdenv.isLinux [ udev ];
+
+  propagatedBuildInputs = [ openssl ];
 
   cmakeFlags = [
     "-DUDEV_RULES_DIR=${placeholder "out"}/etc/udev/rules.d"
