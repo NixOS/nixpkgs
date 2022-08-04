@@ -132,6 +132,18 @@ let
       });
     })
 
+    (self: super: {
+      plugwise = super.plugwise.overridePythonAttrs (oldAttrs: rec {
+        version = "0.20.1";
+        src = fetchFromGitHub {
+          owner = "plugwise";
+          repo = "python-plugwise";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-Sk7L0JPwn7IXVl5GeERxrG/vrHXeNwUjW1mgm4g40Ng=";
+        };
+      });
+    })
+
     # Pinned due to API changes in 0.1.0
     (mkOverride "poolsense" "0.0.8" "sha256-17MHrYRmqkH+1QLtgq2d6zaRtqvb9ju9dvPt9gB2xCc=")
 
