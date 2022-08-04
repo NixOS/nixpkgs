@@ -103,7 +103,8 @@ let
   fstab = pkgs.writeText "initrd-fstab" (lib.concatMapStringsSep "\n"
     ({ fsType, mountPoint, device, options, autoFormat, autoResize, ... }@fs: let
         opts = options ++ optional autoFormat "x-systemd.makefs" ++ optional autoResize "x-systemd.growfs";
-      in "${device} /sysroot${mountPoint} ${fsType} ${lib.concatStringsSep "," opts}") fileSystems);
+        finalDevice = if (lib.elem "bind" options) then "/sysroot${device}" else device;
+      in "${finalDevice} /sysroot${mountPoint} ${fsType} ${lib.concatStringsSep "," opts}") fileSystems);
 
   needMakefs = lib.any (fs: fs.autoFormat) fileSystems;
   needGrowfs = lib.any (fs: fs.autoResize) fileSystems;
