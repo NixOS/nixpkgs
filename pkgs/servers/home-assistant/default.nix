@@ -42,18 +42,6 @@ let
     })
 
     (self: super: {
-      aiohomekit = super.aiohomekit.overridePythonAttrs (oldAttrs: rec {
-        version = "0.7.20";
-        src = fetchFromGitHub {
-          owner = "Jc2k";
-          repo = "aiohomekit";
-          rev = "refs/tags/${version}";
-          hash = "sha256-g7N+CIBJCMnW4FjN502SahhSpPS1p7AXZvduteHu+Z4=";
-        };
-      });
-    })
-
-    (self: super: {
       backoff = super.backoff.overridePythonAttrs (oldAttrs: rec {
         version = "1.11.1";
         src = fetchFromGitHub {
@@ -144,6 +132,18 @@ let
       });
     })
 
+    (self: super: {
+      plugwise = super.plugwise.overridePythonAttrs (oldAttrs: rec {
+        version = "0.20.1";
+        src = fetchFromGitHub {
+          owner = "plugwise";
+          repo = "python-plugwise";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-Sk7L0JPwn7IXVl5GeERxrG/vrHXeNwUjW1mgm4g40Ng=";
+        };
+      });
+    })
+
     # Pinned due to API changes in 0.1.0
     (mkOverride "poolsense" "0.0.8" "sha256-17MHrYRmqkH+1QLtgq2d6zaRtqvb9ju9dvPt9gB2xCc=")
 
@@ -173,18 +173,6 @@ let
       });
     })
 
-    (self: super: {
-      python-homewizard-energy = super.python-homewizard-energy.overridePythonAttrs (oldAttrs: rec {
-        version = "1.0.3";
-        src = fetchFromGitHub {
-          owner = "DCSBL";
-          repo = "python-homewizard-energy";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-ioISqRFZZCojTJ/KYS8QUtoEpBNOPqY9lC9NFbZyh5A=";
-        };
-      });
-    })
-
     # pyunifiprotect excludes pydantic==1.9.1
     (self: super: {
       pydantic = super.pydantic.overridePythonAttrs (oldAttrs: rec {
@@ -194,18 +182,6 @@ let
           repo = "pydantic";
           rev = "refs/tags/v${version}";
           hash = "sha256-C4WP8tiMRFmkDkQRrvP3yOSM2zN8pHJmX9cdANIckpM=";
-        };
-      });
-    })
-
-    (self: super: {
-      pydeconz = super.pydeconz.overridePythonAttrs (oldAttrs: rec {
-        version = "98";
-        src = fetchFromGitHub {
-          owner = "Kane610";
-          repo = "deconz";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-hCJRoyDWDxrBrxs2g6mVh7MOe6UMd+S8+ftfWyzWgH8=";
         };
       });
     })
@@ -281,18 +257,6 @@ let
       });
     })
 
-    (self: super: {
-      wled = super.wled.overridePythonAttrs (oldAttrs: rec {
-        version = "0.13.2";
-        src = fetchFromGitHub {
-          owner = "frenck";
-          repo = "python-wled";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-Rv0jaKkN6jQ7oiv1cBYx4HAr7IqPm57jZFykXayp0T0=";
-        };
-      });
-    })
-
     # home-assistant-frontend does not exist in python3.pkgs
     (self: super: {
       home-assistant-frontend = self.callPackage ./frontend.nix { };
@@ -332,7 +296,7 @@ let
   extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2022.7.7";
+  hassVersion = "2022.8.0";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -350,7 +314,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    hash = "sha256-OU6tPTBC53ogkynH6NrYiQCerPo8Fu0ZLHhNsY0emGs=";
+    hash = "sha256-nxSOl4K8XZWesv6o6O+YuJFrza0sEz9atiw+ZP9A5ww=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -368,6 +332,7 @@ in python.pkgs.buildPythonApplication rec {
       "awesomeversion"
       "bcrypt"
       "cryptography"
+      "home-assistant-bluetooth"
       "httpx"
       "ifaddr"
       "orjson"
@@ -396,6 +361,7 @@ in python.pkgs.buildPythonApplication rec {
     ciso8601
     cryptography
     httpx
+    home-assistant-bluetooth
     ifaddr
     jinja2
     lru-dict

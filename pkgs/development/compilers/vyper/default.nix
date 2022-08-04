@@ -9,7 +9,7 @@
 , recommonmark
 , semantic-version
 , sphinx
-, sphinx_rtd_theme
+, sphinx-rtd-theme
 , pytest-runner
 , setuptools-scm
 , git
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     # docs
     recommonmark
     sphinx
-    sphinx_rtd_theme
+    sphinx-rtd-theme
   ];
 
   checkPhase = ''

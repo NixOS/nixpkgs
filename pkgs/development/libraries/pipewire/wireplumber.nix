@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (enableDocs || enableGI) [
     doxygen
     (python3.withPackages (ps: with ps;
-    lib.optionals enableDocs [ sphinx sphinx_rtd_theme breathe ] ++
+    lib.optionals enableDocs [ sphinx sphinx-rtd-theme breathe ] ++
       lib.optionals enableGI [ lxml ]
     ))
   ];
