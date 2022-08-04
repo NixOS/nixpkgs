@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , asciidoctor, autoreconfHook, pkg-config
-, boost, libctemplate, libmaxminddb, libpcap, libtins, openssl, protobuf, xz, zlib, catch2
+, boost, libctemplate, libmaxminddb, libpcap, libtins, openssl, protobuf, xz, zlib, catch2_2
 , cbor-diag, cddl, diffutils, file, mktemp, netcat, tcpdump, wireshark-cli
 }:
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs test-scripts/
-    cp ${catch2}/include/catch2/catch.hpp tests/catch.hpp
+    cp ${catch2_2}/include/catch2/catch.hpp tests/catch.hpp
   '';
 
   preConfigure = ''

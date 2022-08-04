@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , boost
-, catch2
+, catch2_2
 , cmake
 , gtest
 , python3
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  checkInputs = [ boost python3 catch2 ];
+  checkInputs = [ boost python3 catch2_2 ];
 
   doCheck = true;
 

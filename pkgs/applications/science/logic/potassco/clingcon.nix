@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , cmake
 , clingo
-, catch2
+, catch2_2
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    cp ${catch2}/include/catch2/catch.hpp libclingcon/tests/catch.hpp
+    cp ${catch2_2}/include/catch2/catch.hpp libclingcon/tests/catch.hpp
   '';
 
   nativeBuildInputs = [ cmake clingo ];

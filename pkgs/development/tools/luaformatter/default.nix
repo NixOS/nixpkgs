@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, antlr4, libargs, catch2, cmake, libyamlcpp }:
+{ lib, stdenv, fetchFromGitHub, substituteAll, antlr4, libargs, catch2_2, cmake, libyamlcpp }:
 
 stdenv.mkDerivation rec {
   pname = "luaformatter";
@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-lib-paths.patch;
       antlr4RuntimeCpp = antlr4.runtime.cpp.dev;
-      inherit libargs catch2 libyamlcpp;
+      catch2 = catch2_2;
+      inherit libargs libyamlcpp;
     })
   ];
 

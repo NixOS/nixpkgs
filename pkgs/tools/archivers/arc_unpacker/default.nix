@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, makeWrapper, boost, libpng, libiconv
-, libjpeg, zlib, openssl, libwebp, catch2 }:
+, libjpeg, zlib, openssl, libwebp, catch2_2 }:
 
 stdenv.mkDerivation rec {
   pname = "arc_unpacker";
@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-STbdWH7Mr3gpOrZvujblYrIIKEWBHzy1/BaNuh4teI8=";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper catch2 ];
+  nativeBuildInputs = [ cmake makeWrapper catch2_2 ];
   buildInputs = [ boost libpng libjpeg zlib openssl libwebp ]
     ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   postPatch = ''
-    cp ${catch2}/include/catch2/catch.hpp tests/test_support/catch.h
+    cp ${catch2_2}/include/catch2/catch.hpp tests/test_support/catch.h
   '';
 
   checkPhase = ''

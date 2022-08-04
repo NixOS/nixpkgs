@@ -3120,9 +3120,10 @@ with pkgs;
 
   catch = callPackage ../development/libraries/catch { };
 
-  catch2 = callPackage ../development/libraries/catch2 { };
+  catch2_2 = callPackage ../development/libraries/catch2 { };
 
   catch2_3 = callPackage ../development/libraries/catch2/3.nix { };
+  catch2 = catch2_3;
 
   catdoc = callPackage ../tools/text/catdoc { };
 

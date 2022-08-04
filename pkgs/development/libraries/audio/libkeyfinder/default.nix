@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, fftw, catch2 }:
+{ lib, stdenv, fetchFromGitHub, cmake, fftw, catch2_2 }:
 
 stdenv.mkDerivation rec {
   pname = "libkeyfinder";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ fftw ];
 
-  checkInputs = [ catch2 ];
+  checkInputs = [ catch2_2 ];
 
   doCheck = true;
 

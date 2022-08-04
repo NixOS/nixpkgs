@@ -4,7 +4,7 @@
 , fetchzip
 , cmake
 , boost
-, catch2
+, catch2_2
 , inchi
 , cairo
 , eigen
@@ -74,7 +74,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     boost
-    catch2
+    catch2_2
     inchi
     eigen
     cairo
@@ -106,7 +106,7 @@ buildPythonPackage rec {
   '';
 
   cmakeFlags = [
-    "-DCATCH_DIR=${catch2}/include/catch2"
+    "-DCATCH_DIR=${catch2_2}/include/catch2"
     "-DINCHI_LIBRARY=${inchi}/lib/libinchi.so"
     "-DINCHI_LIBRARIES=${inchi}/lib/libinchi.so"
     "-DINCHI_INCLUDE_DIR=${inchi}/include/inchi"

@@ -13,7 +13,7 @@
 , python3
 , xz
 , zlib
-, catch2
+, catch2_2
 # recommended dependencies
 , withHwloc ? true
 , hwloc
@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
 
     # TODO: remove after the following change has been released
     # https://github.com/apache/trafficserver/pull/8683
-    cp ${catch2}/include/catch2/catch.hpp tests/include/catch.hpp
+    cp ${catch2_2}/include/catch2/catch.hpp tests/include/catch.hpp
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace configure \
       --replace '/usr/include/linux' '${linuxHeaders}/include/linux'
