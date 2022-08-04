@@ -4154,6 +4154,8 @@ with pkgs;
 
   lynis = callPackage ../tools/security/lynis { };
 
+  machin = callPackage ../tools/misc/machin { };
+
   maigret = callPackage ../tools/security/maigret { };
 
   maliit-framework = libsForQt5.callPackage ../applications/misc/maliit-framework { };
