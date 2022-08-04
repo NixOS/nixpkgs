@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation rec {
     sparseCheckout = ''
       BeautyLine-V3
     '';
-    sha256 = "sha256-IkkypAj250+OXbf19TampCnqYsSbJVIjeYlxJoyhpzk=";
+    sha256 = "sha256-VEQWMY77cVz6UDn7FeMYYyYgXmXl1lLYs8MlFUuGRZE=";
   };
 
   sourceRoot = "${src.name}/BeautyLine-V3";
