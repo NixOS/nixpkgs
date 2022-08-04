@@ -5447,6 +5447,8 @@ in {
 
   markdown-macros = callPackage ../development/python-modules/markdown-macros { };
 
+  markdownify  = callPackage ../development/python-modules/markdownify { };
+
   markdownsuperscript = callPackage ../development/python-modules/markdownsuperscript { };
 
   markerlib = callPackage ../development/python-modules/markerlib { };
