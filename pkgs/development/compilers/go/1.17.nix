@@ -3,7 +3,6 @@
 , fetchurl
 , tzdata
 , iana-etc
-, runCommand
 , perl
 , which
 , pkg-config
@@ -21,15 +20,7 @@
 }:
 
 let
-  go_bootstrap = buildPackages.callPackage ./bootstrap116.nix { };
-
-  goBootstrap = runCommand "go-bootstrap" { } ''
-    mkdir $out
-    cp -rf ${go_bootstrap}/* $out/
-    chmod -R u+w $out
-    find $out -name "*.c" -delete
-    cp -rf $out/bin/* $out/share/go/bin/
-  '';
+  goBootstrap = buildPackages.callPackage ./bootstrap116.nix { };
 
   goarch = platform: {
     "aarch64" = "arm64";
@@ -276,6 +267,10 @@ stdenv.mkDerivation rec {
   '';
 
   disallowedReferences = [ goBootstrap ];
+
+  passthru = {
+    inherit goBootstrap;
+  };
 
   meta = with lib; {
     description = "The Go Programming language";
