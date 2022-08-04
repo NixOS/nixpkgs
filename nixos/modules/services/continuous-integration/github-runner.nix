@@ -174,7 +174,7 @@ in
       ] ++ cfg.extraPackages;
 
       serviceConfig = rec {
-        ExecStart = "${cfg.package}/bin/runsvc.sh";
+        ExecStart = "${cfg.package}/bin/Runner.Listener run --startuptype service";
 
         # Does the following, sequentially:
         # - If the module configuration or the token has changed, purge the state directory,
@@ -315,8 +315,7 @@ in
         # By default, use a dynamically allocated user
         DynamicUser = true;
 
-        KillMode = "process";
-        KillSignal = "SIGTERM";
+        KillSignal = "SIGINT";
 
         # Hardening (may overlap with DynamicUser=)
         # The following options are only for optimizing:
