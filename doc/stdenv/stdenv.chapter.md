@@ -317,7 +317,7 @@ The script will be usually run from the root of the Nixpkgs repository but you s
 
 For information about how to run the updates, execute `nix-shell maintainers/scripts/update.nix`.
 
-### Recursive attributes in `mkDerivation`
+### Recursive attributes in `mkDerivation` {#mkderivation-recursive-attributes}
 
 If you pass a function to `mkDerivation`, it will receive as its argument the final arguments, including the overrides when reinvoked via `overrideAttrs`. For example:
 
@@ -731,6 +731,10 @@ If set, files in `$out/sbin` are not moved to `$out/bin`. By default, they are.
 
 List of directories to search for libraries and executables from which *all* symbols should be stripped. By default, it’s empty. Stripping all symbols is risky, since it may remove not just debug symbols but also ELF information necessary for normal execution.
 
+##### `stripAllListTarget` {#var-stdenv-stripAllListTarget}
+
+Like `stripAllList`, but only applies to packages’ target platform. By default, it’s empty. Useful when supporting cross compilation.
+
 ##### `stripAllFlags` {#var-stdenv-stripAllFlags}
 
 Flags passed to the `strip` command applied to the files in the directories listed in `stripAllList`. Defaults to `-s` (i.e. `--strip-all`).
@@ -738,6 +742,10 @@ Flags passed to the `strip` command applied to the files in the directories list
 ##### `stripDebugList` {#var-stdenv-stripDebugList}
 
 List of directories to search for libraries and executables from which only debugging-related symbols should be stripped. It defaults to `lib lib32 lib64 libexec bin sbin`.
+
+##### `stripDebugListTarget` {#var-stdenv-stripDebugListTarget}
+
+Like `stripDebugList`, but only applies to packages’ target platform. By default, it’s empty. Useful when supporting cross compilation.
 
 ##### `stripDebugFlags` {#var-stdenv-stripDebugFlags}
 
@@ -913,9 +921,9 @@ substitute ./foo.in ./foo.out \
     --subst-var someVar
 ```
 
-### `substituteInPlace` \<file\> \<subs\> {#fun-substituteInPlace}
+### `substituteInPlace` \<multiple files\> \<subs\> {#fun-substituteInPlace}
 
-Like `substitute`, but performs the substitutions in place on the file \<file\>.
+Like `substitute`, but performs the substitutions in place on the files passed.
 
 ### `substituteAll` \<infile\> \<outfile\> {#fun-substituteAll}
 

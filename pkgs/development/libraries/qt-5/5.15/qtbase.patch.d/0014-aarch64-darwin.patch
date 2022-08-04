@@ -1,0 +1,287 @@
+From abc52460201bc5c7603505bb187138b0c59291aa Mon Sep 17 00:00:00 2001
+From: Mushroom <mushroom@watchingyour.tv>
+Date: Sun, 20 Dec 2020 00:11:41 +0000
+Subject: [PATCH] [QtBase] Split macOS platforms by architecture
+
+Currently macOS only has one platform, which forces the default arch to
+x86_64. This patch splits the platforms by architecture, and defaults to
+the same as the host.
+
+This stops M1-based macs from compiling x64 binaries by default,
+instead making them compile native binaries.
+
+[ChangeLog][QtBase][Platform Specific Changes][OS X] Split macOS
+platforms so it doesn't default to the x64 architecture every time
+
+Change-Id: I34891b107bb24f68371df1c8f087eb0ad5b5dd95
+---
+ configure                                     |  9 +++-
+ .../clang-macx-desktop.conf}                  |  8 ++--
+ mkspecs/common/macx.conf                      |  1 -
+ .../Info.plist.app                            |  0
+ .../Info.plist.dSYM.in                        |  0
+ .../Info.plist.disable_highdpi                |  0
+ .../Info.plist.lib                            |  0
+ mkspecs/macx-clang-arm64/qmake.conf           |  7 ++++
+ .../qplatformdefs.h                           |  0
+ mkspecs/macx-clang-x64/Info.plist.app         | 24 +++++++++++
+ mkspecs/macx-clang-x64/Info.plist.dSYM.in     | 18 ++++++++
+ .../macx-clang-x64/Info.plist.disable_highdpi |  8 ++++
+ mkspecs/macx-clang-x64/Info.plist.lib         | 20 +++++++++
+ mkspecs/macx-clang-x64/qmake.conf             |  7 ++++
+ mkspecs/macx-clang-x64/qplatformdefs.h        | 41 +++++++++++++++++++
+ 15 files changed, 137 insertions(+), 6 deletions(-)
+ rename mkspecs/{macx-clang/qmake.conf => common/clang-macx-desktop.conf} (83%)
+ rename mkspecs/{macx-clang => macx-clang-arm64}/Info.plist.app (100%)
+ rename mkspecs/{macx-clang => macx-clang-arm64}/Info.plist.dSYM.in (100%)
+ rename mkspecs/{macx-clang => macx-clang-arm64}/Info.plist.disable_highdpi (100%)
+ rename mkspecs/{macx-clang => macx-clang-arm64}/Info.plist.lib (100%)
+ create mode 100644 mkspecs/macx-clang-arm64/qmake.conf
+ rename mkspecs/{macx-clang => macx-clang-arm64}/qplatformdefs.h (100%)
+ create mode 100644 mkspecs/macx-clang-x64/Info.plist.app
+ create mode 100644 mkspecs/macx-clang-x64/Info.plist.dSYM.in
+ create mode 100644 mkspecs/macx-clang-x64/Info.plist.disable_highdpi
+ create mode 100644 mkspecs/macx-clang-x64/Info.plist.lib
+ create mode 100644 mkspecs/macx-clang-x64/qmake.conf
+ create mode 100644 mkspecs/macx-clang-x64/qplatformdefs.h
+
+diff --git a/configure b/configure
+index b6c9b462f24..a86f2ceaa5b 100755
+--- a/configure
++++ b/configure
+@@ -556,7 +556,14 @@ PLATFORM_NOTES=
+ if [ -z "$PLATFORM" ]; then
+     case "$UNAME_SYSTEM:$UNAME_RELEASE" in
+      Darwin:*)
+-        PLATFORM=macx-clang
++        case "$UNAME_MACHINE" in
++            arm64)
++                PLATFORM=macx-clang-arm64
++                ;;
++            *)
++                PLATFORM=macx-clang-x64
++                ;;
++        esac
+         ;;
+      AIX:*)
+         #PLATFORM=aix-g++
+diff --git a/mkspecs/macx-clang/qmake.conf b/mkspecs/common/clang-macx-desktop.conf
+similarity index 83%
+rename from mkspecs/macx-clang/qmake.conf
+rename to mkspecs/common/clang-macx-desktop.conf
+index 0cf1f31b60d..042319a2aa3 100644
+--- a/mkspecs/macx-clang/qmake.conf
++++ b/mkspecs/common/clang-macx-desktop.conf
+@@ -24,9 +24,9 @@ QMAKE_LIBS_X11 = -lX11 -lXext -lm
+ QMAKE_LIBDIR_X11 = /opt/X11/lib
+ QMAKE_INCDIR_X11 = /opt/X11/include
+ 
+-include(../common/macx.conf)
+-include(../common/gcc-base-mac.conf)
+-include(../common/clang.conf)
+-include(../common/clang-mac.conf)
++include(macx.conf)
++include(gcc-base-mac.conf)
++include(clang.conf)
++include(clang-mac.conf)
+ 
+ load(qt_config)
+diff --git a/mkspecs/common/macx.conf b/mkspecs/common/macx.conf
+index d16b77acb8e..4ba0a8eaa36 100644
+--- a/mkspecs/common/macx.conf
++++ b/mkspecs/common/macx.conf
+@@ -6,7 +6,6 @@ QMAKE_PLATFORM         += macos osx macx
+ QMAKE_MAC_SDK           = macosx
+ 
+ QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.13
+-QMAKE_APPLE_DEVICE_ARCHS = x86_64
+ 
+ # Should be 10.15, but as long as the CI builds with
+ # older SDKs we have to keep this.
+diff --git a/mkspecs/macx-clang/Info.plist.app b/mkspecs/macx-clang-arm64/Info.plist.app
+similarity index 100%
+rename from mkspecs/macx-clang/Info.plist.app
+rename to mkspecs/macx-clang-arm64/Info.plist.app
+diff --git a/mkspecs/macx-clang/Info.plist.dSYM.in b/mkspecs/macx-clang-arm64/Info.plist.dSYM.in
+similarity index 100%
+rename from mkspecs/macx-clang/Info.plist.dSYM.in
+rename to mkspecs/macx-clang-arm64/Info.plist.dSYM.in
+diff --git a/mkspecs/macx-clang/Info.plist.disable_highdpi b/mkspecs/macx-clang-arm64/Info.plist.disable_highdpi
+similarity index 100%
+rename from mkspecs/macx-clang/Info.plist.disable_highdpi
+rename to mkspecs/macx-clang-arm64/Info.plist.disable_highdpi
+diff --git a/mkspecs/macx-clang/Info.plist.lib b/mkspecs/macx-clang-arm64/Info.plist.lib
+similarity index 100%
+rename from mkspecs/macx-clang/Info.plist.lib
+rename to mkspecs/macx-clang-arm64/Info.plist.lib
+diff --git a/mkspecs/macx-clang-arm64/qmake.conf b/mkspecs/macx-clang-arm64/qmake.conf
+new file mode 100644
+index 00000000000..0cc2361e696
+--- /dev/null
++++ b/mkspecs/macx-clang-arm64/qmake.conf
+@@ -0,0 +1,7 @@
++#
++# qmake configuration for Clang on OS X (arm64)
++#
++
++QMAKE_APPLE_DEVICE_ARCHS=arm64
++
++include(../common/clang-macx-desktop.conf)
+diff --git a/mkspecs/macx-clang/qplatformdefs.h b/mkspecs/macx-clang-arm64/qplatformdefs.h
+similarity index 100%
+rename from mkspecs/macx-clang/qplatformdefs.h
+rename to mkspecs/macx-clang-arm64/qplatformdefs.h
+diff --git a/mkspecs/macx-clang-x64/Info.plist.app b/mkspecs/macx-clang-x64/Info.plist.app
+new file mode 100644
+index 00000000000..fa592af0897
+--- /dev/null
++++ b/mkspecs/macx-clang-x64/Info.plist.app
+@@ -0,0 +1,24 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
++<plist version="1.0">
++<dict>
++	<key>CFBundleExecutable</key>
++	<string>${EXECUTABLE_NAME}</string>
++	<key>CFBundleIconFile</key>
++	<string>${ASSETCATALOG_COMPILER_APPICON_NAME}</string>
++	<key>CFBundleIdentifier</key>
++	<string>${PRODUCT_BUNDLE_IDENTIFIER}</string>
++	<key>CFBundlePackageType</key>
++	<string>APPL</string>
++	<key>CFBundleSignature</key>
++	<string>${QMAKE_PKGINFO_TYPEINFO}</string>
++	<key>LSMinimumSystemVersion</key>
++	<string>${MACOSX_DEPLOYMENT_TARGET}</string>
++	<key>NOTE</key>
++	<string>This file was generated by Qt/QMake.</string>
++	<key>NSPrincipalClass</key>
++	<string>NSApplication</string>
++	<key>NSSupportsAutomaticGraphicsSwitching</key>
++	<true/>
++</dict>
++</plist>
+diff --git a/mkspecs/macx-clang-x64/Info.plist.dSYM.in b/mkspecs/macx-clang-x64/Info.plist.dSYM.in
+new file mode 100644
+index 00000000000..a8c8d0d4fb5
+--- /dev/null
++++ b/mkspecs/macx-clang-x64/Info.plist.dSYM.in
+@@ -0,0 +1,18 @@
++<?xml version=\"1.0\" encoding=\"UTF-8\"?>
++<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
++<plist version=\"1.0\">
++	<dict>
++		<key>CFBundleIdentifier</key>
++		<string>com.apple.xcode.dsym.$${BUNDLEIDENTIFIER}</string>
++		<key>CFBundlePackageType</key>
++		<string>dSYM</string>
++		<key>CFBundleSignature</key>
++		<string>????</string>
++!!IF !isEmpty(VERSION)
++		<key>CFBundleShortVersionString</key>
++		<string>$${VER_MAJ}.$${VER_MIN}</string>
++		<key>CFBundleVersion</key>
++		<string>$${VER_MAJ}.$${VER_MIN}.$${VER_PAT}</string>
++!!ENDIF
++	</dict>
++</plist>
+diff --git a/mkspecs/macx-clang-x64/Info.plist.disable_highdpi b/mkspecs/macx-clang-x64/Info.plist.disable_highdpi
+new file mode 100644
+index 00000000000..a9b89888ad4
+--- /dev/null
++++ b/mkspecs/macx-clang-x64/Info.plist.disable_highdpi
+@@ -0,0 +1,8 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
++<plist version="1.0">
++<dict>
++	<key>NSHighResolutionCapable</key>
++	<string>NO</string>
++</dict>
++</plist>
+diff --git a/mkspecs/macx-clang-x64/Info.plist.lib b/mkspecs/macx-clang-x64/Info.plist.lib
+new file mode 100644
+index 00000000000..34752ec40d9
+--- /dev/null
++++ b/mkspecs/macx-clang-x64/Info.plist.lib
+@@ -0,0 +1,20 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
++<plist version="1.0">
++<dict>
++	<key>CFBundleExecutable</key>
++	<string>${EXECUTABLE_NAME}</string>
++	<key>CFBundleIdentifier</key>
++	<string>${PRODUCT_BUNDLE_IDENTIFIER}</string>
++	<key>CFBundlePackageType</key>
++	<string>FMWK</string>
++	<key>CFBundleShortVersionString</key>
++	<string>${QMAKE_SHORT_VERSION}</string>
++	<key>CFBundleSignature</key>
++	<string>${QMAKE_PKGINFO_TYPEINFO}</string>
++	<key>CFBundleVersion</key>
++	<string>${QMAKE_FULL_VERSION}</string>
++	<key>NOTE</key>
++	<string>Please, do NOT change this file -- It was generated by Qt/QMake.</string>
++</dict>
++</plist>
+diff --git a/mkspecs/macx-clang-x64/qmake.conf b/mkspecs/macx-clang-x64/qmake.conf
+new file mode 100644
+index 00000000000..1ac373b53b4
+--- /dev/null
++++ b/mkspecs/macx-clang-x64/qmake.conf
+@@ -0,0 +1,7 @@
++#
++# qmake configuration for Clang on OS X (arm64)
++#
++
++QMAKE_APPLE_DEVICE_ARCHS=x86_64
++
++include(../common/clang-macx-desktop.conf)
+diff --git a/mkspecs/macx-clang-x64/qplatformdefs.h b/mkspecs/macx-clang-x64/qplatformdefs.h
+new file mode 100644
+index 00000000000..063491dd900
+--- /dev/null
++++ b/mkspecs/macx-clang-x64/qplatformdefs.h
+@@ -0,0 +1,41 @@
++/****************************************************************************
++**
++** Copyright (C) 2016 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the qmake spec of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 3 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL3 included in the
++** packaging of this file. Please review the following information to
++** ensure the GNU Lesser General Public License version 3 requirements
++** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 2.0 or (at your option) the GNU General
++** Public license version 3 or any later version approved by the KDE Free
++** Qt Foundation. The licenses are as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL2 and LICENSE.GPL3
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-2.0.html and
++** https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#include "../common/mac/qplatformdefs.h"
++

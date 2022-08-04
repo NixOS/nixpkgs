@@ -1,7 +1,7 @@
-From eb3ff76f95bfe248f517e029ea1b152f4983370a Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Wed, 16 Apr 2014 10:59:28 +0200
-Subject: [PATCH 03/18] Fix NixOS containers
+Subject: [PATCH] Fix NixOS containers
 
 In NixOS containers, the init script is bind-mounted into the
 container, so checking early whether it exists will fail.
@@ -10,7 +10,7 @@ container, so checking early whether it exists will fail.
  1 file changed, 2 insertions(+)
 
 diff --git a/src/nspawn/nspawn.c b/src/nspawn/nspawn.c
-index c5fd978395..0fa415f5b5 100644
+index 4ce80bba70..bb149192bd 100644
 --- a/src/nspawn/nspawn.c
 +++ b/src/nspawn/nspawn.c
 @@ -5651,6 +5651,7 @@ static int run(int argc, char *argv[]) {
@@ -29,6 +29,3 @@ index c5fd978395..0fa415f5b5 100644
                  }
  
          } else {
--- 
-2.36.1
-

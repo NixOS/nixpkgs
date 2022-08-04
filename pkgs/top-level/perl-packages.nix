@@ -9248,10 +9248,10 @@ let
 
   Future = buildPerlModule {
     pname = "Future";
-    version = "0.47";
+    version = "0.48";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-0.47.tar.gz";
-      sha256 = "1pmhkhrmvaf8c3jbrfqqhmxjrzcsxdn2q7apj033gwxggland88h";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-0.48.tar.gz";
+      sha256 = "sha256-D+ixXBQvKjBKMXGKIKEFA6m0TMASw69eN7i34koHUqM=";
     };
     buildInputs = [ TestFatal TestIdentity TestRefcount ];
     meta = {
@@ -9262,12 +9262,12 @@ let
 
   FutureAsyncAwait = buildPerlModule rec {
     pname = "Future-AsyncAwait";
-    version = "0.52";
+    version = "0.58";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-AsyncAwait-${version}.tar.gz";
-      sha256 = "0dwij2r51vij91hx808zc2l5q38h55jahzrh73h4rn816jv597yx";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-AsyncAwait-0.58.tar.gz";
+      sha256 = "sha256-OLtJ9jabBUrAUuaNomR/4i0Io605rgNuJ6KRELtOQi4=";
     };
-    buildInputs = [ TestRefcount ];
+    buildInputs = [ TestRefcount TestFatal ];
     propagatedBuildInputs = [ Future XSParseKeyword XSParseSublike ];
     perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
     meta = {
@@ -13030,12 +13030,12 @@ let
 
   LWP = buildPerlPackage {
     pname = "libwww-perl";
-    version = "6.49";
+    version = "6.67";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OA/OALDERS/libwww-perl-6.49.tar.gz";
-      sha256 = "19k0cg4j4qz005a4ngy48z4r8dc99dxlpq8kvj7qnk15mvgd1r63";
+      url = "mirror://cpan/authors/id/O/OA/OALDERS/libwww-perl-6.67.tar.gz";
+      sha256 = "sha256-lu7ECj/QqhvYNBF75eshxDj3MJTYYaGn5XdPCxImtyM=";
     };
-    propagatedBuildInputs = [ FileListing HTMLParser HTTPCookies HTTPDaemon HTTPNegotiate NetHTTP TryTiny WWWRobotRules ];
+    propagatedBuildInputs = [ FileListing HTMLParser HTTPCookies HTTPNegotiate NetHTTP TryTiny WWWRobotRules ];
     # support cross-compilation by avoiding using `has_module` which does not work in miniperl (it requires B native module)
     postPatch = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
       substituteInPlace Makefile.PL --replace 'if has_module' 'if 0; #'
@@ -13045,7 +13045,7 @@ let
       description = "The World-Wide Web library for Perl";
       license = with licenses; [ artistic1 gpl1Plus ];
     };
-    buildInputs = [ TestFatal TestNeeds TestRequiresInternet ];
+    checkInputs = [ HTTPDaemon TestFatal TestNeeds TestRequiresInternet ];
   };
 
   LWPAuthenOAuth = buildPerlPackage {
@@ -16772,6 +16772,19 @@ let
     };
   };
 
+  NetMQTTSimple = buildPerlPackage {
+    pname = "Net-MQTT-Simple";
+    version = "1.26";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JU/JUERD/Net-MQTT-Simple-1.26.tar.gz";
+      sha256 = "sha256-ERxNNnu1AgXci8AjFfDGuw3mDRwwfQLnUuQuwRtPiLQ=";
+    };
+    meta = {
+      description = "Minimal MQTT version 3 interface";
+      license = with lib.licenses; [ free ];
+    };
+  };
+
   NetOAuth = buildPerlModule {
     pname = "Net-OAuth";
     version = "0.28";
@@ -20028,6 +20041,7 @@ let
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
     buildInputs = [ TestWarn XMLParserLite ];
+    checkInputs = [ HTTPDaemon ];
   };
 
   Socket6 = buildPerlPackage {
@@ -21101,10 +21115,10 @@ let
 
   SyntaxKeywordTry = buildPerlModule {
     pname = "Syntax-Keyword-Try";
-    version = "0.25";
+    version = "0.27";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Syntax-Keyword-Try-0.25.tar.gz";
-      sha256 = "0xd82gcpcrnmwxsbk7x0ainmyybdc087g6j69hrpy80j0asnq2f5";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Syntax-Keyword-Try-0.27.tar.gz";
+      sha256 = "sha256-JG4bAz4/8i/VQgVQ1Lbg1WtDjNy7nTXL6LG1uhV03iM=";
     };
     propagatedBuildInputs = [ XSParseKeyword ];
     perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
@@ -24473,6 +24487,7 @@ let
       IPCShareLite
       JSON
       LWP
+      HTTPDaemon
       pkgs.cairo
       pkgs.mapnik
       pkgs.zlib
@@ -25794,10 +25809,10 @@ let
 
   XSParseKeyword = buildPerlModule {
     pname = "XS-Parse-Keyword";
-    version = "0.12";
+    version = "0.25";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Keyword-0.12.tar.gz";
-      sha256 = "0crwhcw9ciqndvwvhycd93m6jgyhi77yyj4vi9xfyglpv84p3y68";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Keyword-0.25.tar.gz";
+      sha256 = "sha256-9e2zDPfH8iDQxsMdwetVQDKECpnHwpgxT1zD/vZscsc=";
     };
     buildInputs = [ ExtUtilsCChecker ];
     perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
@@ -25810,10 +25825,10 @@ let
 
   XSParseSublike = buildPerlModule {
     pname = "XS-Parse-Sublike";
-    version = "0.12";
+    version = "0.16";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Sublike-0.12.tar.gz";
-      sha256 = "08kpia48f1rqc44rvbns97h3jyy2y5c8qlkh4a95v1m0yr5cb22s";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Sublike-0.16.tar.gz";
+      sha256 = "sha256-IV5AmzmFgdJfDv8DeFBjvCUTu4YbrL6Z/m1VNTRvZt8=";
     };
     buildInputs = [ TestFatal ];
     perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, isPy3k
+, pythonOlder
 , fetchFromGitHub
 , setuptools-scm
 , pydantic
@@ -13,15 +13,16 @@
 
 buildPythonPackage rec {
   pname = "pygls";
-  version = "0.12";
+  version = "0.12.1";
   format = "setuptools";
-  disabled = !isPy3k;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "openlawlibrary";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-PEfGxOUsiZ5WLmoQkOP2RRWJlIKi+42lOu55C3C+k8A=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-L2KTNiI+I+r2fF88B1NSunowokrDzGCw3PXbxekg/oE=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -32,12 +33,6 @@ buildPythonPackage rec {
     toml
     typeguard
   ];
-  # We don't know why an early version of pydantic is required, see:
-  # https://github.com/openlawlibrary/pygls/issues/221
-  preBuild = ''
-    substituteInPlace setup.cfg \
-      --replace "pydantic>=1.7,<1.9" "pydantic"
-  '';
 
   checkInputs = [
     mock

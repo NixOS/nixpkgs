@@ -5097,6 +5097,8 @@ in {
 
   line_profiler = callPackage ../development/python-modules/line_profiler { };
 
+  lingua = callPackage ../development/python-modules/lingua { };
+
   linkify-it-py = callPackage ../development/python-modules/linkify-it-py { };
 
   linode-api = callPackage ../development/python-modules/linode-api { };
@@ -8638,8 +8640,6 @@ in {
 
   python_keyczar = callPackage ../development/python-modules/python_keyczar { };
 
-  python-language-server = callPackage ../development/python-modules/python-language-server { };
-
   python-ldap-test = callPackage ../development/python-modules/python-ldap-test { };
 
   python-Levenshtein = callPackage ../development/python-modules/python-levenshtein { };
@@ -11368,6 +11368,8 @@ in {
   wfuzz = callPackage ../development/python-modules/wfuzz { };
 
   wget = callPackage ../development/python-modules/wget { };
+
+  whatthepatch = callPackage ../development/python-modules/whatthepatch { };
 
   wheel = callPackage ../development/python-modules/wheel { };
 

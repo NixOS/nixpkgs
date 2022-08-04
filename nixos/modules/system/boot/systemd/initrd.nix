@@ -129,6 +129,7 @@ let
   initialRamdisk = pkgs.makeInitrdNG {
     name = "initrd-${kernel-name}";
     inherit (config.boot.initrd) compressor compressorArgs prepend;
+    inherit (cfg) strip;
 
     contents = map (path: { object = path; symlink = ""; }) (subtractLists cfg.suppressedStorePaths cfg.storePaths)
       ++ mapAttrsToList (_: v: { object = v.source; symlink = v.target; }) (filterAttrs (_: v: v.enable) cfg.contents);
@@ -167,6 +168,19 @@ in {
       '';
       type = with types; listOf (oneOf [ singleLineStr package ]);
       default = [];
+    };
+
+    strip = mkOption {
+      description = lib.mdDoc ''
+        Whether to completely strip executables and libraries copied to the initramfs.
+
+        Setting this to false may save on the order of 30MiB on the
+        machine building the system (by avoiding a binutils
+        reference), at the cost of ~1MiB of initramfs size. This puts
+        this option firmly in the territory of micro-optimisation.
+      '';
+      type = types.bool;
+      default = true;
     };
 
     extraBin = mkOption {
@@ -419,6 +433,9 @@ in {
       '')];
       services."systemd-makefs@" = lib.mkIf needMakefs { unitConfig.IgnoreOnIsolate = true; };
       services."systemd-growfs@" = lib.mkIf needGrowfs { unitConfig.IgnoreOnIsolate = true; };
+
+      # make sure all the /dev nodes are set up
+      services.systemd-tmpfiles-setup-dev.wantedBy = ["sysinit.target"];
 
       services.initrd-nixos-activation = {
         after = [ "initrd-fs.target" ];

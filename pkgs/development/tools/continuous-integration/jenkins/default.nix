@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     homepage = "https://jenkins-ci.org";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
-    maintainers = with maintainers; [ coconnor fpletz earldouglas nequissimus ];
+    maintainers = with maintainers; [ coconnor earldouglas nequissimus ];
     mainProgram = "jenkins-cli";
     platforms = platforms.all;
   };

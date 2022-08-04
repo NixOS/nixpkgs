@@ -500,6 +500,8 @@ with pkgs;
 
   ptags = callPackage ../development/tools/misc/ptags { };
 
+  resolve-march-native = callPackage ../development/tools/resolve-march-native { };
+
   ptouch-print = callPackage ../misc/ptouch-print { };
 
   demoit = callPackage ../servers/demoit { };
@@ -2611,44 +2613,15 @@ with pkgs;
 
   go-audit = callPackage ../tools/system/go-audit { };
 
-  gopass = callPackage ../tools/security/gopass {
-    buildGoModule = __buildGo118ModuleCL417615;
-  };
+  gopass = callPackage ../tools/security/gopass { };
 
-  gopass-hibp = callPackage ../tools/security/gopass/hibp.nix {
-    buildGoModule = __buildGo118ModuleCL417615;
-  };
+  gopass-hibp = callPackage ../tools/security/gopass/hibp.nix { };
 
-  gopass-jsonapi = callPackage ../tools/security/gopass/jsonapi.nix {
-    buildGoModule = __buildGo118ModuleCL417615;
-  };
+  gopass-jsonapi = callPackage ../tools/security/gopass/jsonapi.nix { };
 
-  git-credential-gopass = callPackage ../tools/security/gopass/git-credential.nix {
-    buildGoModule = __buildGo118ModuleCL417615;
-  };
+  git-credential-gopass = callPackage ../tools/security/gopass/git-credential.nix { };
 
-  gopass-summon-provider = callPackage ../tools/security/gopass/summon.nix {
-    buildGoModule = __buildGo118ModuleCL417615;
-  };
-
-  # custom override for go 1.18 including the revert of CL411617, CL417615.
-  # Can be dropped if/once go 1.18.5 is released with CL417615.
-  # or when staging go 1.18.4 includes the revert.
-  __buildGo118ModuleCL417615 = let
-    fetchBase64Patch = args: (fetchpatch args).overrideAttrs (o: {
-      postFetch = "mv $out p; base64 -d p > $out; " + o.postFetch;
-    });
-  in darwin.apple_sdk_11_0.callPackage ../development/go-modules/generic {
-    go = buildPackages.go_1_18.overrideAttrs (oldAttrs: rec {
-      patches = oldAttrs.patches or [] ++ [
-        # https://go-review.googlesource.com/c/go/+/417615/
-        (fetchBase64Patch {
-          url = "https://go-review.googlesource.com/changes/go~417615/revisions/3/patch";
-          sha256 = "sha256-Gu5eZUwGGch7et75A/BNynbs4VlQUBClVUxjxPkdjOs=";
-        })
-      ];
-    });
-  };
+  gopass-summon-provider = callPackage ../tools/security/gopass/summon.nix { };
 
   gosh = callPackage ../tools/security/gosh { };
 
@@ -3520,6 +3493,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  refinery-cli = callPackage ../development/tools/refinery-cli { };
+
   digitemp = callPackage ../tools/misc/digitemp { };
 
   dijo = callPackage ../tools/misc/dijo {
@@ -4382,6 +4357,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  inherit (ocamlPackages) patdiff;
+
   patool = with python3Packages; toPythonApplication patool;
 
   pbgopy = callPackage ../tools/text/pbgopy { };
@@ -4403,6 +4380,8 @@ with pkgs;
   photon = callPackage ../tools/networking/photon { };
 
   piglit = callPackage ../tools/graphics/piglit { };
+
+  pika = callPackage ../applications/graphics/pika { };
 
   playerctl = callPackage ../tools/audio/playerctl { };
 
@@ -6491,6 +6470,8 @@ with pkgs;
 
   getopt = callPackage ../tools/misc/getopt { };
 
+  getoptions = callPackage ../tools/misc/getoptions { };
+
   gexiv2 = callPackage ../development/libraries/gexiv2 { };
 
   gftp = callPackage ../applications/networking/ftp/gftp {
@@ -8430,6 +8411,8 @@ with pkgs;
 
   limesurvey = callPackage ../servers/limesurvey { };
 
+  linux-exploit-suggester = callPackage ../tools/security/linux-exploit-suggester { };
+
   linuxquota = callPackage ../tools/misc/linuxquota { };
 
   liquidctl = with python3Packages; toPythonApplication liquidctl;
@@ -9349,6 +9332,8 @@ with pkgs;
   tinyssh = callPackage ../tools/networking/tinyssh { };
 
   tinystatus = callPackage ../tools/networking/tinystatus { };
+
+  tuc = callPackage ../tools/text/tuc { };
 
   opensshPackages = dontRecurseIntoAttrs (callPackage ../tools/networking/openssh {});
 
@@ -11791,6 +11776,10 @@ with pkgs;
     nodejs = nodejs_latest;
   };
 
+  wasmedge = callPackage ../development/tools/wasmedge {
+    llvmPackages = llvmPackages_12;
+  };
+
   welkin = callPackage ../tools/graphics/welkin {};
 
   wemux = callPackage ../tools/misc/wemux { };
@@ -13052,9 +13041,9 @@ with pkgs;
   clangMultiStdenv = overrideCC stdenv buildPackages.clang_multi;
   multiStdenv = if stdenv.cc.isClang then clangMultiStdenv else gccMultiStdenv;
 
-  gcc_debug = lowPrio (wrapCC (gcc.cc.override {
-    stripped = false;
-  }));
+  gcc_debug = lowPrio (wrapCC (gcc.cc.overrideAttrs (_: {
+    dontStrip = true;
+  })));
 
   gccCrossLibcStdenv = overrideCC stdenv buildPackages.gccCrossStageStatic;
 
@@ -15700,8 +15689,8 @@ with pkgs;
 
   cmake-format = python3Packages.callPackage ../development/tools/cmake-format { };
 
-  cmake-language-server = python3Packages.callPackage ../development/tools/cmake-language-server {
-    inherit cmake;
+  cmake-language-server = python3Packages.callPackage ../development/tools/misc/cmake-language-server {
+    inherit cmake cmake-format;
   };
 
   # Does not actually depend on Qt 5
@@ -20549,6 +20538,8 @@ with pkgs;
 
   paperkey = callPackage ../tools/security/paperkey { };
 
+  parsero = callPackage ../tools/security/parsero { };
+
   pcaudiolib = callPackage ../development/libraries/pcaudiolib { };
 
   pcg_c = callPackage ../development/libraries/pcg-c { };
@@ -21976,6 +21967,17 @@ with pkgs;
   };
   buildGo118Package = darwin.apple_sdk_11_0.callPackage ../development/go-packages/generic {
     go = buildPackages.go_1_18;
+  };
+
+  # requires a newer Apple SDK
+  go_1_19 = darwin.apple_sdk_11_0.callPackage ../development/compilers/go/1.19.nix {
+    inherit (darwin.apple_sdk_11_0.frameworks) Foundation Security;
+  };
+  buildGo119Module = darwin.apple_sdk_11_0.callPackage ../development/go-modules/generic {
+    go = buildPackages.go_1_19;
+  };
+  buildGo119Package = darwin.apple_sdk_11_0.callPackage ../development/go-packages/generic {
+    go = buildPackages.go_1_19;
   };
 
   go2nix = callPackage ../development/tools/go2nix { };
@@ -27430,6 +27432,7 @@ with pkgs;
   gitMinimal = git.override {
     withManual = false;
     pythonSupport = false;
+    perlSupport = false;
     withpcre2 = false;
   };
 
@@ -33138,7 +33141,7 @@ with pkgs;
 
   tibia = pkgsi686Linux.callPackage ../games/tibia { };
 
-  tintin = throw "tintin has been removed due to lack of maintainers";
+  tintin = callPackage ../games/tintin { };
 
   tinyfugue = callPackage ../games/tinyfugue { };
 

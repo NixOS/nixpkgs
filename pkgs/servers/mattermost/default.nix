@@ -45,6 +45,6 @@ buildGoModule rec {
     description = "Mattermost is an open source platform for secure collaboration across the entire software development lifecycle";
     homepage = "https://www.mattermost.org";
     license = with licenses; [ agpl3 asl20 ];
-    maintainers = with maintainers; [ fpletz ryantm numinit kranzes ];
+    maintainers = with maintainers; [ ryantm numinit kranzes ];
   };
 }

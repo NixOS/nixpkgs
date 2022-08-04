@@ -3,7 +3,8 @@
 with lib;
 
 let cfg = config.programs.noisetorch;
-in {
+in
+{
   options.programs.noisetorch = {
     enable = mkEnableOption "noisetorch + setcap wrapper";
 
@@ -24,5 +25,6 @@ in {
       capabilities = "cap_sys_resource=+ep";
       source = "${cfg.package}/bin/noisetorch";
     };
+    environment.systemPackages = [ cfg.package ];
   };
 }

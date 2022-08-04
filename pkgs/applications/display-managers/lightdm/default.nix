@@ -1,4 +1,5 @@
 { lib, stdenv
+, buildPackages
 , fetchFromGitHub
 , nix-update-script
 , substituteAll
@@ -120,7 +121,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substituteInPlace autogen.sh \
-      --replace "which" "${busybox}/bin/which"
+      --replace "which" "${buildPackages.busybox}/bin/which"
 
     substituteInPlace src/shared-data-manager.c \
       --replace /bin/rm ${busybox}/bin/rm
