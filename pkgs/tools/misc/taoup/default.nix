@@ -4,13 +4,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "taoup";
-  version = "1.1.16";
+  version = "1.1.17";
 
   src = fetchFromGitHub {
     owner = "globalcitizen";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-LNS4m7Er4dQKYDuHMF/5mAi4yGcYzppxfqVKFOT6I/s=";
+    hash = "sha256-awVom/X9R//w8yYaIwjm5RFYsptySl+PkArF1wP/LAc=";
   };
 
   buildInputs = [ rubyEnv bash ncurses ];
