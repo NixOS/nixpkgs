@@ -25,6 +25,7 @@ in
     (
       export bash="${buildPackages.bash}"
       export emulator=${lib.escapeShellArg (stdenv.targetPlatform.emulator buildPackages)}
+      export emulatorwrapper="$dev/bin/g-ir-scanner-qemuwrapper"
       export buildobjdump="${buildPackages.stdenv.cc.bintools}/bin/objdump"
 
       export targetgir="${lib.getDev (targetPackages.gobject-introspection-unwrapped.override argsForTarget)}"
@@ -32,9 +33,8 @@ in
       substituteAll "${./wrappers/g-ir-compiler.sh}" "$dev/bin/g-ir-compiler"
       substituteAll "${./wrappers/g-ir-scanner.sh}" "$dev/bin/g-ir-scanner"
       substituteAll "${./wrappers/g-ir-scanner-lddwrapper.sh}" "$dev/bin/g-ir-scanner-lddwrapper"
-      chmod +x "$dev/bin/g-ir-compiler"
-      chmod +x "$dev/bin/g-ir-scanner"
-      chmod +x "$dev/bin/g-ir-scanner-lddwrapper"
+      substituteAll "${./wrappers/g-ir-scanner-qemuwrapper.sh}" "$dev/bin/g-ir-scanner-qemuwrapper"
+      chmod +x $dev/bin/g-ir-*
     )
   ''
   # when cross-compiling and using the wrapper then when a package looks up the g_ir_X
