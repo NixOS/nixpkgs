@@ -5916,6 +5916,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit CoreGraphics CoreServices Foundation OpenGL;
   };
 
+  emulsion-palette = callPackage ../applications/graphics/emulsion-palette { };
+
   emv = callPackage ../tools/misc/emv { };
 
   enblend-enfuse = callPackage ../tools/graphics/enblend-enfuse {
