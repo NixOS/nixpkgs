@@ -115,11 +115,9 @@ in stdenv.mkDerivation rec {
   # When building with zest GUI, patch plugins
   # and standalone executable to properly locate zest
   postFixup = lib.optionalString (guiModule == "zest") ''
-    patchelf --set-rpath "${mruby-zest}:$(patchelf --print-rpath "$out/lib/lv2/ZynAddSubFX.lv2/ZynAddSubFX_ui.so")" \
-      "$out/lib/lv2/ZynAddSubFX.lv2/ZynAddSubFX_ui.so"
-
-    patchelf --set-rpath "${mruby-zest}:$(patchelf --print-rpath "$out/lib/vst/ZynAddSubFX.so")" \
-      "$out/lib/vst/ZynAddSubFX.so"
+    for lib in "$out/lib/lv2/ZynAddSubFX.lv2/ZynAddSubFX_ui.so" "$out/lib/vst/ZynAddSubFX.so"; do
+      patchelf --set-rpath "${mruby-zest}:$(patchelf --print-rpath "$lib")" "$lib"
+    done
 
     wrapProgram "$out/bin/zynaddsubfx" \
       --prefix PATH : ${mruby-zest} \
