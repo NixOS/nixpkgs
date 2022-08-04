@@ -17,11 +17,11 @@ rec {
   # Policy: use the highest stable version as the default (on our master).
   stable = if stdenv.hostPlatform.system == "x86_64-linux"
     then generic {
-      version = "515.57";
-      sha256_64bit = "sha256-hB1p/hQmiDZHESuwcP4vKaH4ScZKyAqNYccJcNjT1SI=";
-      openSha256 = "sha256-D8fXlmuGEHkFAT2aSAj7hXpndi2bfOd6vQAcKfsQx4U=";
-      settingsSha256 = "sha256-M9AVeMsHSQv+zhIdBtXm+QRXf7NcZpLfCDmKMUjBl1U=";
-      persistencedSha256 = "sha256-joKUuP4PgQxu4kOxy8SkHORPkEmuYfk3b+7svAyMQ1Q=";
+      version = "515.65.01";
+      sha256_64bit = "sha256-BJLdxbXmWqAMvHYujWaAIFyNCOEDtxMQh6FRJq7klek=";
+      openSha256 = "sha256-GCCDnaDsbXTmbCYZBCM3fpHmOSWti/DkBJwYrRGAMPI=";
+      settingsSha256 = "sha256-kBELMJCIWD9peZba14wfCoxsi3UXO3ehFYcVh4nvzVg=";
+      persistencedSha256 = "sha256-P8oT7g944HvNk2Ot/0T0sJM7dZs+e0d+KwbwRrmsuDY=";
     }
     else legacy_390;
 
@@ -55,19 +55,22 @@ rec {
 
   # Last one supporting Kepler architecture
   legacy_470 = generic {
-      version = "470.129.06";
-      sha256_64bit = "sha256-QQkQtwBuFzBjMnaDKfS1PW+ekcxVXCiJkXWOKo8IqZg=";
-      settingsSha256 = "sha256-vUS4O/c4IrbC8offzUFGLlMdP/Tlz1GwQIV2geRfj/o=";
-      persistencedSha256 = "sha256-jCcYUsbhQ77IOQquXqbTZfh1N0IvKQOWrIMU9rEwSW0=";
+      version = "470.141.03";
+      sha256_64bit = "sha256-vpjSR6Q9dJGmW/3Jl/tlMeFZQ0brEqD6qgRGcs21cJ8=";
+      settingsSha256 = "sha256-OWSUmUBqAxsR3e6EPzcIotpd6nm4Le8hIj4pzJ5WnhE=";
+      persistencedSha256 = "sha256-XsGYGgucDhvPpqtM9IBLfo3tbn7sIobpo5JW/XqOkTo=";
   };
 
   # Last one supporting x86
   legacy_390 = generic {
-    version = "390.151";
-    sha256_32bit = "sha256-lOOZtFllnBKxNE6Mj09e7h7VkV/0WfyLuDHJ4dRGd9s=";
-    sha256_64bit = "sha256-UibkhCBEz/2Qlt6tr2iTTBM9p04FuAzNISNlhLOvsfw=";
-    settingsSha256 = "sha256-teXQa0pQctQl1dvddVJtI7U/vVuMu6ER1Xd99Jprpvw=";
-    persistencedSha256 = "sha256-FxiTXYABplKFcBXr4orhYWiJq4zVePpplMbg2kvEuXk=";
+    version = "390.154";
+    sha256_32bit = "sha256-XuhxuEvZ8o4iW3o+Xxvh+eLQBn83uNa40MJRcC8G0+c=";
+    sha256_64bit = "sha256-9EICgMVSEJZMAI1bck8mFYRdR61MnAXY7SamL8YzH3w=";
+    settingsSha256 = "sha256-iNT6//EvtasivDfXPY6j6OrpymbslO/q45uKd5smFUw=";
+    persistencedSha256 = "sha256-y+MkudjQBkuVzHrY/rh7IGRN8VjLsJQ3a+fYDXdrzzk=";
+
+    broken = kernel.kernelAtLeast "5.18";
+
     patches =
       let patch390 = o:
         (lib.optional ((lib.versions.majorMinor kernel.modDirVersion) == o.version) (fetchpatch {

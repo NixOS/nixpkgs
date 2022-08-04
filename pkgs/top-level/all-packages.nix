@@ -16289,6 +16289,8 @@ with pkgs;
       stdenv = overrideCC stdenv llvmPackages_9.clang;
     });
 
+  lurk = callPackage ../development/tools/lurk { };
+
   malt = callPackage ../development/tools/profiling/malt {};
 
   massif-visualizer = libsForQt5.callPackage ../development/tools/analysis/massif-visualizer { };
@@ -22673,7 +22675,6 @@ with pkgs;
   openbgpd = callPackage ../servers/openbgpd { };
 
   openafs_1_8 = callPackage ../servers/openafs/1.8 { tsmbac = null; ncurses = null; };
-  openafs_1_9 = callPackage ../servers/openafs/1.9 { tsmbac = null; ncurses = null; };
   # Current stable release; don't backport release updates!
   openafs = openafs_1_8;
 

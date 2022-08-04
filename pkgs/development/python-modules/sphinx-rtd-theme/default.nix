@@ -8,11 +8,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "sphinx_rtd_theme";
+  pname = "sphinx-rtd-theme";
   version = "1.0.0";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "sphinx_rtd_theme";
+    inherit version;
     sha256 = "0p3abj91c3l72ajj5jwblscsdf1jflrnn0djx2h5y6f2wjbx9ipf";
   };
 
