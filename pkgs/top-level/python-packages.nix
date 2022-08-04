@@ -12802,6 +12802,8 @@ self: super: with self; {
 
   volvooncall = callPackage ../development/python-modules/volvooncall { };
 
+  vosk-python = callPackage ../development/python-modules/vosk-python { };
+
   vowpalwabbit = callPackage ../development/python-modules/vowpalwabbit { };
 
   vpk = callPackage ../development/python-modules/vpk { };
