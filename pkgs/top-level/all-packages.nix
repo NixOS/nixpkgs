@@ -975,6 +975,8 @@ with pkgs;
 
   wrapGAppsNoGuiHook = wrapGAppsHook.override { isGraphical = false; };
 
+  wrapJavaJar = callPackage ../build-support/java/wrap-jar.nix { };
+
   separateDebugInfo = makeSetupHook { } ../build-support/setup-hooks/separate-debug-info.sh;
 
   setupDebugInfoDirs = makeSetupHook { } ../build-support/setup-hooks/setup-debug-info-dirs.sh;

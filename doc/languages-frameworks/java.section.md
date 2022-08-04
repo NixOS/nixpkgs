@@ -36,7 +36,23 @@ Private JARs should be installed in a location like
 `$out/share/package-name`.
 
 If your Java package provides a program, you need to generate a wrapper
-script to run it using a JRE. You can use `makeWrapper` for this:
+script to run it using a JRE. A function named `wrapJavaJar` can be used
+to do this automatically. Any attributes given will be passed to
+`mkDerivation`. It also accepts the following optional attributes:
+
+* `javaExecutable`. This refers to the path of the java executable to
+create the wrapper with. By default, `${jre}/bin/java` is used.
+* `makeWrapperArgs`. Pass extra flags to `makeWrapper`.
+
+```nix
+wrapJavaJar {
+  name = "foo";
+  src = fetchurl { ... };
+}
+```
+
+This will copy `src` to `share/java/foo.jar`, and a wrapper to it will
+be created at `bin/foo`. You can also use `makeWrapper` to do it manually:
 
 ```nix
 nativeBuildInputs = [ makeWrapper ];
