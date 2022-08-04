@@ -121,7 +121,7 @@ rec {
      Example:
        mkPackageOption pkgs "GHC" {
          default = [ "ghc" ];
-         example = "pkgs.haskell.package.ghc923.ghc.withPackages (hkgs: [ hkgs.primes ])";
+         example = "pkgs.haskell.packages.ghc924.ghc.withPackages (hkgs: [ hkgs.primes ])";
        }
        => { _type = "option"; default = «derivation /nix/store/jxx55cxsjrf8kyh3fp2ya17q99w7541r-ghc-8.10.7.drv»; defaultText = { ... }; description = "The GHC package to use."; example = { ... }; type = { ... }; }
   */

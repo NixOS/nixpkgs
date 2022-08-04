@@ -6,8 +6,6 @@
 , xattr, autoSignDarwinBinariesHook
 , bash
 
-, autoreconfHook # GHC 9.2.3 tarballs don't have autoconf run on them
-
 , libiconv ? null, ncurses
 , glibcLocales ? null
 
@@ -176,12 +174,12 @@ assert buildTargetLlvmPackages.llvm == llvmPackages.llvm;
 assert stdenv.targetPlatform.isDarwin -> buildTargetLlvmPackages.clang == llvmPackages.clang;
 
 stdenv.mkDerivation (rec {
-  version = "9.2.3";
+  version = "9.2.4";
   pname = "${targetPrefix}ghc${variantSuffix}";
 
   src = fetchurl {
     url = "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz";
-    sha256 = "50ecdc2bef013e518f9a62a15245d7db0e4409d737c43b1cea7306fd82e1669e";
+    sha256 = "15213888064a0ec4e7723d075f31b87a678ce0851773d58b44ef7aa3de996458";
   };
 
   enableParallelBuilding = true;
@@ -231,12 +229,7 @@ stdenv.mkDerivation (rec {
     # LLVM backend on Darwin needs clang: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
     export CLANG="${buildTargetLlvmPackages.clang}/bin/${buildTargetLlvmPackages.clang.targetPrefix}clang"
   '' + ''
-
     echo -n "${buildMK}" > mk/build.mk
-    # GHC 9.2.3 tarball is not properly prepared
-    ./boot
-
-    sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '' + lib.optionalString (stdenv.isLinux && hostPlatform.libc == "glibc") ''
     export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"
   '' + lib.optionalString (!stdenv.isDarwin) ''
@@ -301,7 +294,6 @@ stdenv.mkDerivation (rec {
   dontAddExtraLibs = true;
 
   nativeBuildInputs = [
-    autoreconfHook # GHC 9.2.3 tarball hasn't autoconf run on it
     perl autoconf automake m4 python3
     ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [

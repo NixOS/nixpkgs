@@ -543,7 +543,6 @@ broken-packages:
   - cabalgraph
   - cabal-graphdeps
   - cabal-helper
-  - cabal-hoogle
   - Cabal-ide-backend
   - cabal-info
   - cabal-install-bundle
@@ -1042,6 +1041,7 @@ broken-packages:
   - dbmigrations-mysql
   - dbmigrations-postgresql
   - dbmigrations-sqlite
+  - dbmonitor
   - d-bus
   - DBus
   - dbus-core
@@ -1742,6 +1742,7 @@ broken-packages:
   - ginger
   - gingersnap
   - ginsu
+  - gi-pangocairo
   - giphy-api
   - gi-rsvg
   - gist
@@ -2987,7 +2988,6 @@ broken-packages:
   - less-arbitrary
   - Level0
   - level-monad
-  - levenshtein
   - levmar
   - lfst
   - lhc
@@ -3007,6 +3007,7 @@ broken-packages:
   - libpafe
   - libpq
   - librandomorg
+  - librarian
   - libsecp256k1
   - libsystemd-daemon
   - libsystemd-journal
@@ -4720,6 +4721,7 @@ broken-packages:
   - skemmtun
   - skulk
   - skylighting-extensions
+  - skylighting-format-ansi
   - skylighting-lucid
   - skype4hs
   - slack
