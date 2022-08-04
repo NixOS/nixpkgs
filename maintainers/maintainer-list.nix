@@ -12170,6 +12170,12 @@
     githubId = 36899624;
     name = "squalus";
   };
+  squarepear = {
+    email = "contact@jeffreyharmon.dev";
+    github = "SquarePear";
+    githubId = 16364318;
+    name = "Jeffrey Harmon";
+  };
   srapenne = {
     email = "solene@perso.pw";
     github = "rapenne-s";
