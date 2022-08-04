@@ -977,6 +977,9 @@ self: super: builtins.intersectAttrs super {
     '';
   }) super.jacinda;
 
+  # Tests assume dist-newstyle build directory is present
+  cabal-hoogle = dontCheck super.cabal-hoogle;
+
   nfc = overrideCabal (drv: {
     isExecutable = true;
     executableHaskellDepends = with self; drv.executableHaskellDepends or [] ++ [ base base16-bytestring bytestring ];

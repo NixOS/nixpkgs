@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, supportedGhcVersions ? [ "884" "8107" "902" "923" ]
+, supportedGhcVersions ? [ "884" "8107" "902" "924" ]
 , dynamic ? false
 , haskellPackages
 , haskell

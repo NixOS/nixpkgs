@@ -411,12 +411,12 @@ in {
       ;
       serviceConfig = let
         # List of capabilities to equip home-assistant with, depending on configured components
-        capabilities = [
+        capabilities = lib.unique ([
           # Empty string first, so we will never accidentally have an empty capability bounding set
           # https://github.com/NixOS/nixpkgs/issues/120617#issuecomment-830685115
           ""
-        ] ++ (unique (optionals (useComponent "bluetooth_tracker" || useComponent "bluetooth_le_tracker") [
-          # Required for interaction with hci devices and bluetooth sockets
+        ] ++ lib.optionals (builtins.any useComponent [ "bluetooth" "bluetooth_le_tracker" "bluetooth_tracker" "eq3btsmart" "fjaraskupan" "govee_ble" "homekit_controller" "inkbird" "moat" "sensorpush" "switchbot" "xiaomi_ble" ]) [
+          # Required for interaction with hci devices and bluetooth sockets, identified by bluetooth-adapters dependency
           # https://www.home-assistant.io/integrations/bluetooth_le_tracker/#rootless-setup-on-core-installs
           "CAP_NET_ADMIN"
           "CAP_NET_RAW"
@@ -429,7 +429,7 @@ in {
           "CAP_NET_ADMIN"
           "CAP_NET_BIND_SERVICE"
           "CAP_NET_RAW"
-        ]));
+        ]);
         componentsUsingBluetooth = [
           # Components that require the AF_BLUETOOTH address family
           "bluetooth_tracker"

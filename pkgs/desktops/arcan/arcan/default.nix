@@ -52,14 +52,14 @@
 , useStaticSqlite ? false
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "arcan" + lib.optionalString useStaticOpenAL "-static-openal";
   version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "letoram";
     repo = "arcan";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Qwyt927eLqaCqJ4Lo4J1lQX2A24ke+AH52rmSCTnpO0=";
   };
 
@@ -156,8 +156,8 @@ stdenv.mkDerivation rec {
     substituteInPlace ./src/CMakeLists.txt --replace "SETUID" "# SETUID"
   '';
 
-  # INFO: According to the source code, the manpages need to be generated before
-  # the configure phase
+  # INFO: Arcan build scripts require the manpages to be generated
+  # before the configure phase
   preConfigure = lib.optionalString buildManPages ''
     pushd doc
     ruby docgen.rb mangen
@@ -168,7 +168,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_PRESET=everything"
     # The upstream project recommends tagging the distribution
     "-DDISTR_TAG=Nixpkgs"
-    "-DENGINE_BUILDTAG=${version}"
+    "-DENGINE_BUILDTAG=${finalAttrs.version}"
     "-DHYBRID_SDL=on"
     "-DBUILTIN_LUA=${if useBuiltinLua then "on" else "off"}"
     "-DDISABLE_JIT=${if useBuiltinLua then "on" else "off"}"
@@ -196,4 +196,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
   };
-}
+})

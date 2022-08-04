@@ -2145,16 +2145,16 @@ self: super: {
 
   # 2022-03-21: Newest stylish-haskell needs ghc-lib-parser-9_2
   stylish-haskell = (super.stylish-haskell.override {
-    ghc-lib-parser = super.ghc-lib-parser_9_2_3_20220709;
-    ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_1_0;
+    ghc-lib-parser = super.ghc-lib-parser_9_2_4_20220729;
+    ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_1_1;
   });
 
-  ghc-lib-parser-ex_9_2_1_0 = super.ghc-lib-parser-ex_9_2_1_0.override {
-    ghc-lib-parser = super.ghc-lib-parser_9_2_3_20220709;
+  ghc-lib-parser-ex_9_2_1_1 = super.ghc-lib-parser-ex_9_2_1_1.override {
+    ghc-lib-parser = super.ghc-lib-parser_9_2_4_20220729;
   };
 
   ghc-lib-parser-ex_9_2_0_4 = super.ghc-lib-parser-ex_9_2_0_4.override {
-    ghc-lib-parser = super.ghc-lib-parser_9_2_3_20220709;
+    ghc-lib-parser = super.ghc-lib-parser_9_2_4_20220729;
   };
 
   hlint_3_4_1 = doDistribute (super.hlint_3_4_1.override {
@@ -2407,9 +2407,12 @@ self: super: {
   # 2022-03-16: strict upper bounds https://github.com/monadfix/shower/issues/18
   shower = doJailbreak (dontCheck super.shower);
 
-  # Doesn't compile with HTF 0.15
-  # https://github.com/andrewufrank/uniform-error/issues/1
+  # Test suite isn't supposed to succeed yet, apparently…
+  # https://github.com/andrewufrank/uniform-error/blob/f40629ad119e90f8dae85e65e93d7eb149bddd53/test/Uniform/Error_test.hs#L124
+  # https://github.com/andrewufrank/uniform-error/issues/2
   uniform-error = dontCheck super.uniform-error;
+  # https://github.com/andrewufrank/uniform-fileio/issues/2
+  uniform-fileio = dontCheck super.uniform-fileio;
 
   # The shipped Setup.hs file is broken.
   csv = overrideCabal (drv: { preCompileBuildDriver = "rm Setup.hs"; }) super.csv;
@@ -2502,13 +2505,6 @@ self: super: {
   # https://github.com/haskell-servant/servant-cassava/commit/66617547851d38d48f5f1d1b786db1286bdafa9d
   servant-cassava = assert super.servant-cassava.version == "0.10.1";
     doJailbreak super.servant-cassava;
-
-  # Fix tests failure for ghc 9 (https://github.com/clinty/debian-haskell/pull/3)
-  debian = appendPatch (fetchpatch {
-    name = "debian-haskell.3.patch";
-    url = "https://github.com/clinty/debian-haskell/pull/3/commits/47441c8e4a7a00a3c8825eec98bf7a823594f9be.patch";
-    sha256 = "0wxpqazjnal9naibapg63nm7x6qz0lklcfw2m5mzjrh2q9x2cvnd";
-  }) super.debian;
 
   # Test data missing from sdist
   # https://github.com/ngless-toolkit/ngless/issues/152

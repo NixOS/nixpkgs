@@ -321,3 +321,32 @@ buildImage {
 ```
 
 Creating base files like `/etc/passwd` or `/etc/login.defs` is necessary for shadow-utils to manipulate users and groups.
+
+## fakeNss {#ssec-pkgs-dockerTools-fakeNss}
+
+If your primary goal is providing a basic skeleton for user lookups to work,
+and/or a lesser privileged user, adding `pkgs.fakeNss` to
+the container image root might be the better choice than a custom script
+running `useradd` and friends.
+
+It provides a `/etc/passwd` and `/etc/group`, containing `root` and `nobody`
+users and groups.
+
+It also provides a `/etc/nsswitch.conf`, configuring NSS host resolution to
+first check `/etc/hosts`, before checking DNS, as the default in the absence of
+a config file (`dns [!UNAVAIL=return] files`) is quite unexpected.
+
+You can pair it with `binSh`, which provides `bin/sh` as a symlink
+to `bashInteractive` (as `/bin/sh` is configured as a shell).
+
+```nix
+buildImage {
+  name = "shadow-basic";
+
+  copyToRoot = pkgs.buildEnv {
+    name = "image-root";
+    paths = [ binSh pkgs.fakeNss ];
+    pathsToLink = [ "/bin" "/etc" "/var" ];
+  };
+}
+```

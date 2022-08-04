@@ -2426,6 +2426,7 @@ dont-distribute-packages:
  - json-togo
  - json-tokens
  - json2-hdbc
+ - json2sg
  - jsonlogic-aeson
  - jsons-to-schema
  - jspath
@@ -3594,6 +3595,7 @@ dont-distribute-packages:
  - skeletons
  - sketch-frp-copilot
  - skylark-client
+ - skylighting_0_13
  - slate
  - slidemews
  - slip32
@@ -3728,6 +3730,7 @@ dont-distribute-packages:
  - subG-instances
  - subhask
  - substring-parser
+ - sugar-data
  - sugar-json
  - sugar-scheme
  - summoner-tui
@@ -3848,6 +3851,7 @@ dont-distribute-packages:
  - timeprint
  - timeseries
  - timezone-unix
+ - tinkoff-invest-sdk
  - tinyMesh
  - tip-haskell-frontend
  - tip-lib
