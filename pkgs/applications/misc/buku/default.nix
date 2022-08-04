@@ -35,6 +35,10 @@ with python3.pkgs; buildPythonApplication rec {
     pyyaml
     mypy-extensions
     click
+    pylint
+    flake8
+    pytest-cov
+    pyyaml
   ];
 
   propagatedBuildInputs = [
@@ -45,20 +49,7 @@ with python3.pkgs; buildPythonApplication rec {
     html5lib
   ] ++ lib.optionals withServer serverRequire;
 
-  postPatch = ''
-    # Jailbreak problematic dependencies
-    sed -i \
-      -e "s,'PyYAML.*','PyYAML',g" \
-      -e "/'pytest-cov/d" \
-      -e "/'pylint/d" \
-      -e "/'flake8/d" \
-      setup.py
-  '';
-
   preCheck = ''
-    # Fixes two tests for wrong encoding
-    export PYTHONIOENCODING=utf-8
-
     # Disables a test which requires internet
     substituteInPlace tests/test_bukuDb.py \
       --replace "@pytest.mark.slowtest" "@unittest.skip('skipping')" \
