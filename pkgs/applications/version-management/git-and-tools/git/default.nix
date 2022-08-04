@@ -20,6 +20,7 @@
 , gzip # needed at runtime by gitweb.cgi
 , withSsh ? false
 , doInstallCheck ? !stdenv.isDarwin  # extremely slow on darwin
+, tests
 }:
 
 assert osxkeychainSupport -> stdenv.isDarwin;
@@ -374,6 +375,7 @@ stdenv.mkDerivation (finalAttrs: {
         doInstallCheck = true;
       });
       buildbot-integration = nixosTests.buildbot;
+      inherit (tests) fetchgit;
     };
   };
 
