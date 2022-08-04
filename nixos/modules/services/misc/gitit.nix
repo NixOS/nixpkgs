@@ -689,14 +689,14 @@ in
           ''
           if [ ! -d _darcs ]
           then
-            ${pkgs.darcs}/bin/darcs initialize
+            darcs initialize
             echo "${gm}" > _darcs/prefs/email
           ''
           else if repositoryType == "mercurial" then
           ''
           if [ ! -d .hg ]
           then
-            ${pkgs.mercurial}/bin/hg init
+            hg init
             cat >> .hg/hgrc <<NAMED
 [ui]
 username = gitit ${gm}
@@ -706,9 +706,9 @@ NAMED
           ''
           if [ ! -d  .git ]
           then
-            ${pkgs.git}/bin/git init
-            ${pkgs.git}/bin/git config user.email "${gm}"
-            ${pkgs.git}/bin/git config user.name "gitit"
+            git init
+            git config user.email "${gm}"
+            git config user.name "gitit"
           ''}
           chown ${uid}:${gid} -R ${repositoryPath}
           fi
