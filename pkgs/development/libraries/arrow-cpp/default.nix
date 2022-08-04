@@ -78,13 +78,16 @@ stdenv.mkDerivation rec {
   sourceRoot = "apache-arrow-${version}/cpp";
 
   # versions are all taken from
-  # https://github.com/apache/arrow/blob/apache-arrow-8.0.0/cpp/thirdparty/versions.txt
+  # https://github.com/apache/arrow/blob/apache-arrow-${version}/cpp/thirdparty/versions.txt
 
+  # jemalloc: arrow uses a custom prefix to prevent default allocator symbol
+  # collisions as well as custom build flags
   ${if enableJemalloc then "ARROW_JEMALLOC_URL" else null} = fetchurl {
     url = "https://github.com/jemalloc/jemalloc/releases/download/5.3.0/jemalloc-5.3.0.tar.bz2";
     hash = "sha256-LbgtHnEZ3z5xt2QCGbbf6EeJvAU3mDw7esT3GJrs/qo=";
   };
 
+  # mimalloc: arrow uses custom build flags for mimalloc
   ARROW_MIMALLOC_URL = fetchFromGitHub {
     owner = "microsoft";
     repo = "mimalloc";
