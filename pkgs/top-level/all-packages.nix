@@ -8459,7 +8459,9 @@ with pkgs;
 
   lshw = callPackage ../tools/system/lshw { };
 
-  lunatic = callPackage ../development/interpreters/lunatic { };
+  lunatic = callPackage ../development/interpreters/lunatic {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   lv = callPackage ../tools/text/lv { };
 
