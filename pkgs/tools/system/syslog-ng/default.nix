@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.syslog-ng.com";
     description = "Next-generation syslogd with advanced networking and filtering capabilities";
     license = with licenses; [ gpl2Plus lgpl21Plus ];
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

@@ -3493,6 +3493,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  refinery-cli = callPackage ../development/tools/refinery-cli { };
+
   digitemp = callPackage ../tools/misc/digitemp { };
 
   dijo = callPackage ../tools/misc/dijo {
@@ -4378,6 +4380,8 @@ with pkgs;
   photon = callPackage ../tools/networking/photon { };
 
   piglit = callPackage ../tools/graphics/piglit { };
+
+  pika = callPackage ../applications/graphics/pika { };
 
   playerctl = callPackage ../tools/audio/playerctl { };
 
@@ -6466,6 +6470,8 @@ with pkgs;
 
   getopt = callPackage ../tools/misc/getopt { };
 
+  getoptions = callPackage ../tools/misc/getoptions { };
+
   gexiv2 = callPackage ../development/libraries/gexiv2 { };
 
   gftp = callPackage ../applications/networking/ftp/gftp {
@@ -8404,6 +8410,8 @@ with pkgs;
   limesuite = callPackage ../applications/radio/limesuite { };
 
   limesurvey = callPackage ../servers/limesurvey { };
+
+  linux-exploit-suggester = callPackage ../tools/security/linux-exploit-suggester { };
 
   linuxquota = callPackage ../tools/misc/linuxquota { };
 
@@ -11766,6 +11774,10 @@ with pkgs;
   wasm-bindgen-cli = callPackage ../development/tools/wasm-bindgen-cli {
     inherit (darwin.apple_sdk.frameworks) Security;
     nodejs = nodejs_latest;
+  };
+
+  wasmedge = callPackage ../development/tools/wasmedge {
+    llvmPackages = llvmPackages_12;
   };
 
   welkin = callPackage ../tools/graphics/welkin {};
@@ -15677,8 +15689,8 @@ with pkgs;
 
   cmake-format = python3Packages.callPackage ../development/tools/cmake-format { };
 
-  cmake-language-server = python3Packages.callPackage ../development/tools/cmake-language-server {
-    inherit cmake;
+  cmake-language-server = python3Packages.callPackage ../development/tools/misc/cmake-language-server {
+    inherit cmake cmake-format;
   };
 
   # Does not actually depend on Qt 5
@@ -20525,6 +20537,8 @@ with pkgs;
   p11-kit = callPackage ../development/libraries/p11-kit { };
 
   paperkey = callPackage ../tools/security/paperkey { };
+
+  parsero = callPackage ../tools/security/parsero { };
 
   pcaudiolib = callPackage ../development/libraries/pcaudiolib { };
 
@@ -33127,7 +33141,7 @@ with pkgs;
 
   tibia = pkgsi686Linux.callPackage ../games/tibia { };
 
-  tintin = throw "tintin has been removed due to lack of maintainers";
+  tintin = callPackage ../games/tintin { };
 
   tinyfugue = callPackage ../games/tinyfugue { };
 
