@@ -18170,6 +18170,8 @@ with pkgs;
 
   gom = callPackage ../development/libraries/gom { };
 
+  langkit_support = callPackage ../development/libraries/ada/langkit_support { };
+
   ace = callPackage ../development/libraries/ace { };
 
   atk = callPackage ../development/libraries/atk { };
