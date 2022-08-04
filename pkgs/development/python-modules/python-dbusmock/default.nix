@@ -21,11 +21,6 @@ buildPythonPackage rec {
     sha256 = "sha256-gsGg9zHVyDTCVZmFUI8qqXDt0ui+o3hPwjRlsYUmShg=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '"dbus-python"' ""
-  '';
-
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
