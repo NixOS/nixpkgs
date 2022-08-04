@@ -10365,6 +10365,8 @@ with pkgs;
 
   nerdfonts = callPackage ../data/fonts/nerdfonts { };
 
+  nerd-dictation = callPackage ../applications/accessibility/nerd-dictation { };
+
   netatalk = callPackage ../tools/filesystems/netatalk { };
 
   netavark = callPackage ../tools/networking/netavark { };

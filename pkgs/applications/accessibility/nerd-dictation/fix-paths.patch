@@ -1,0 +1,31 @@
+diff --git a/nerd-dictation b/nerd-dictation
+index 9f4d1ad..f972c4f 100755
+--- a/nerd-dictation
++++ b/nerd-dictation
+@@ -138,7 +138,7 @@ def execfile(filepath: str, mod: Optional[ModuleType] = None) -> Optional[Module
+ # Simulate Input: XDOTOOL
+ #
+ def simulate_typing_with_xdotool(delete_prev_chars: int, text: str) -> None:
+-    cmd = "xdotool"
++    cmd = "@xdotool@"
+ 
+     # No setup/tear-down.
+     if delete_prev_chars == SIMULATE_INPUT_CODE_COMMAND:
+@@ -169,7 +169,7 @@ def simulate_typing_with_xdotool(delete_prev_chars: int, text: str) -> None:
+ # Simulate Input: YDOTOOL
+ #
+ def simulate_typing_with_ydotool(delete_prev_chars: int, text: str) -> None:
+-    cmd = "ydotool"
++    cmd = "@ydotool@"
+ 
+     # No setup/tear-down.
+     if delete_prev_chars == SIMULATE_INPUT_CODE_COMMAND:
+@@ -873,7 +873,7 @@ def recording_proc_with_non_blocking_stdout(
+ ) -> "Tuple[subprocess.Popen[bytes], IO[bytes]]":
+     if input_method == "PAREC":
+         cmd = (
+-            "parec",
++            "@parec@",
+             "--record",
+             "--rate=%d" % sample_rate,
+             "--channels=1",
