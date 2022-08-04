@@ -55,7 +55,8 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace "dill>=0.3.1.1,<0.3.2" "dill" \
-      --replace "pyarrow>=0.15.1,<8.0.0" "pyarrow"
+      --replace "pyarrow>=0.15.1,<8.0.0" "pyarrow" \
+      --replace "numpy>=1.14.3,<1.23.0" "numpy"
   '';
 
   sourceRoot = "source/sdks/python";
