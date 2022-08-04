@@ -9607,6 +9607,8 @@ in {
 
   ropper = callPackage ../development/python-modules/ropper { };
 
+  roundrobin = callPackage ../development/python-modules/roundrobin { };
+
   routes = callPackage ../development/python-modules/routes { };
 
   rova = callPackage ../development/python-modules/rova { };
