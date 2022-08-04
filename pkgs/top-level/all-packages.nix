@@ -11765,11 +11765,11 @@ with pkgs;
 
   wbox = callPackage ../tools/networking/wbox {};
 
-  webassemblyjs-cli = nodePackages."@webassemblyjs/cli";
-  webassemblyjs-repl = nodePackages."@webassemblyjs/repl";
+  webassemblyjs-cli = nodePackages."@webassemblyjs/cli-1.11.1";
+  webassemblyjs-repl = nodePackages."@webassemblyjs/repl-1.11.1";
   wasm-strip = nodePackages."@webassemblyjs/wasm-strip";
-  wasm-text-gen = nodePackages."@webassemblyjs/wasm-text-gen";
-  wast-refmt = nodePackages."@webassemblyjs/wast-refmt";
+  wasm-text-gen = nodePackages."@webassemblyjs/wasm-text-gen-1.11.1";
+  wast-refmt = nodePackages."@webassemblyjs/wast-refmt-1.11.1";
 
   wasm-bindgen-cli = callPackage ../development/tools/wasm-bindgen-cli {
     inherit (darwin.apple_sdk.frameworks) Security;
