@@ -9663,6 +9663,8 @@ in {
 
   rsa = callPackage ../development/python-modules/rsa { };
 
+  rsskey = callPackage ../development/python-modules/rsskey { };
+
   rst2ansi = callPackage ../development/python-modules/rst2ansi { };
 
   rstcheck = callPackage ../development/python-modules/rstcheck { };
