@@ -36,7 +36,16 @@ stdenv.mkDerivation rec {
     cp -v ${driverdb} drivedb.h
   '';
 
-  configureFlags = lib.optional enableMail "--with-scriptpath=${lib.makeBinPath [ inetutils mailutils ]}";
+  configureFlags =
+    let
+      scriptPath =
+        if enableMail then
+          "${lib.makeBinPath [ inetutils mailutils ]}"
+        else
+          "no";
+    in [
+      "--with-scriptpath=${scriptPath}"
+    ];
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = lib.optionals stdenv.isDarwin [ IOKit ApplicationServices ];
