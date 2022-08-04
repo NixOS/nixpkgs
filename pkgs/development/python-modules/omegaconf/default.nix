@@ -1,5 +1,13 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytest-mock, pytestCheckHook
-, pyyaml, pythonOlder, jre_minimal, antlr4_9-python3-runtime }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytest-mock
+, pytestCheckHook
+, pyyaml
+, pythonOlder
+, jre_minimal
+, antlr4_9-python3-runtime
+, pydevd }:
 
 buildPythonPackage rec {
   pname = "omegaconf";
@@ -18,11 +26,22 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace 'setup_requires=["pytest-runner"]' 'setup_requires=[]'
   '';
 
-  checkInputs = [ pytestCheckHook pytest-mock ];
-  nativeBuildInputs = [ jre_minimal ];
-  propagatedBuildInputs = [ antlr4_9-python3-runtime pyyaml ];
+  nativeBuildInputs = [
+    jre_minimal
+  ];
 
-  disabledTestPaths = [ "tests/test_pydev_resolver_plugin.py" ];  # needs pydevd - not in Nixpkgs
+  propagatedBuildInputs = [
+    antlr4_9-python3-runtime
+    pyyaml
+  ];
+
+  checkInputs = [
+    pydevd
+    pytestCheckHook
+    pytest-mock
+  ];
+
+  pythonImportsCheck = [ "omegaconf" ];
 
   meta = with lib; {
     description = "A framework for configuring complex applications";

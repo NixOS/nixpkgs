@@ -197,6 +197,12 @@ stdenv.mkDerivation (rec {
       extraPrefix = "utils/haddock/";
       stripLen = 1;
     })
+    # fix race condition in make build system
+    (fetchpatch {
+      name = "ghc-hs-boot-copying-fix.patch";
+      url = "https://gitlab.haskell.org/ghc/ghc/-/commit/4f17eff0cbd125eca55b68f4927befdd45008eb6.diff";
+      sha256 = "0anq3w9z9mhxb0wx6rvxac3n7rl3apcma9zk3r9zz9hj9v7vkqzx";
+    })
   ];
 
   postPatch = "patchShebangs .";

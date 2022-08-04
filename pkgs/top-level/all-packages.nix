@@ -1277,6 +1277,8 @@ with pkgs;
 
   redfang = callPackage ../tools/networking/redfang { };
 
+  scarab = callPackage ../tools/games/scarab { };
+
   sdbus-cpp = callPackage ../development/libraries/sdbus-cpp { };
 
   sdlookup = callPackage ../tools/security/sdlookup { };
@@ -5913,6 +5915,8 @@ with pkgs;
   emulsion = callPackage ../applications/graphics/emulsion {
     inherit (darwin.apple_sdk.frameworks) AppKit CoreGraphics CoreServices Foundation OpenGL;
   };
+
+  emulsion-palette = callPackage ../applications/graphics/emulsion-palette { };
 
   emv = callPackage ../tools/misc/emv { };
 
@@ -11765,11 +11769,11 @@ with pkgs;
 
   wbox = callPackage ../tools/networking/wbox {};
 
-  webassemblyjs-cli = nodePackages."@webassemblyjs/cli";
-  webassemblyjs-repl = nodePackages."@webassemblyjs/repl";
+  webassemblyjs-cli = nodePackages."@webassemblyjs/cli-1.11.1";
+  webassemblyjs-repl = nodePackages."@webassemblyjs/repl-1.11.1";
   wasm-strip = nodePackages."@webassemblyjs/wasm-strip";
-  wasm-text-gen = nodePackages."@webassemblyjs/wasm-text-gen";
-  wast-refmt = nodePackages."@webassemblyjs/wast-refmt";
+  wasm-text-gen = nodePackages."@webassemblyjs/wasm-text-gen-1.11.1";
+  wast-refmt = nodePackages."@webassemblyjs/wast-refmt-1.11.1";
 
   wasm-bindgen-cli = callPackage ../development/tools/wasm-bindgen-cli {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -14707,7 +14711,7 @@ with pkgs;
     stdenv = clangStdenv;
   };
 
-  jacinda = haskell.lib.compose.justStaticExecutables haskell.packages.ghc923.jacinda;
+  jacinda = haskell.lib.compose.justStaticExecutables haskell.packages.ghc924.jacinda;
 
   janet = callPackage ../development/interpreters/janet {};
 
@@ -23213,7 +23217,7 @@ with pkgs;
 
   switcheroo-control = callPackage ../os-specific/linux/switcheroo-control { };
 
-  slurm = callPackage ../servers/computing/slurm { gtk2 = null; };
+  slurm = callPackage ../servers/computing/slurm { };
 
   slurm-spank-stunnel = callPackage ../servers/computing/slurm-spank-stunnel { };
 
@@ -30403,7 +30407,7 @@ with pkgs;
     inherit (xorg) libX11 libXdmcp libpthreadstubs;
   };
 
-  lightdm_gtk_greeter = callPackage ../applications/display-managers/lightdm/gtk-greeter.nix {
+  lightdm-gtk-greeter = callPackage ../applications/display-managers/lightdm/gtk-greeter.nix {
     inherit (xfce) xfce4-dev-tools;
   };
 
@@ -33088,6 +33092,8 @@ with pkgs;
   };
 
   protonup = with python3Packages; toPythonApplication protonup;
+
+  steam-rom-manager = callPackage ../tools/games/steam-rom-manager {};
 
   sdlpop = callPackage ../games/sdlpop { };
 

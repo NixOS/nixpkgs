@@ -30,7 +30,7 @@ let
         install -D ${xmonadEnv}/share/man/man1/xmonad.1.gz $out/share/man/man1/xmonad.1.gz
         makeWrapper ${configured}/bin/xmonad $out/bin/xmonad \
       '' + optionalString cfg.enableConfiguredRecompile ''
-          --set NIX_GHC "${xmonadEnv}/bin/ghc" \
+          --set XMONAD_GHC "${xmonadEnv}/bin/ghc" \
       '' + ''
           --set XMONAD_XMESSAGE "${pkgs.xorg.xmessage}/bin/xmessage"
       '');
@@ -46,7 +46,7 @@ in {
       haskellPackages = mkOption {
         default = pkgs.haskellPackages;
         defaultText = literalExpression "pkgs.haskellPackages";
-        example = literalExpression "pkgs.haskell.packages.ghc784";
+        example = literalExpression "pkgs.haskell.packages.ghc8107";
         type = types.attrs;
         description = ''
           haskellPackages used to build Xmonad and other packages.
