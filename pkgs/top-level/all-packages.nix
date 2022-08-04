@@ -22519,6 +22519,8 @@ with pkgs;
 
   maker-panel = callPackage ../tools/misc/maker-panel { };
 
+  marksman = callPackage ../servers/marksman { };
+
   mastodon = callPackage ../servers/mastodon { };
 
   materialize = callPackage ../servers/sql/materialize {
