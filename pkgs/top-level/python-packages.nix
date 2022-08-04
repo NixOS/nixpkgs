@@ -7355,6 +7355,8 @@ in {
 
   pydevccu = callPackage ../development/python-modules/pydevccu { };
 
+  pydevd = callPackage ../development/python-modules/pydevd { };
+
   pydexcom = callPackage ../development/python-modules/pydexcom { };
 
   pydicom = callPackage ../development/python-modules/pydicom { };
