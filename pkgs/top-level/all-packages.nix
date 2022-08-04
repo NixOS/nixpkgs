@@ -1778,6 +1778,8 @@ with pkgs;
 
   vopono = callPackage ../tools/networking/vopono { };
 
+  vosk-api = callPackage ../tools/audio/vosk-api { };
+
   winbox = callPackage ../tools/admin/winbox {
     wine = wineWowPackages.staging;
   };
