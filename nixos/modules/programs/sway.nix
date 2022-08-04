@@ -26,7 +26,7 @@ let
     };
   };
 
-  swayPackage = pkgs.sway.override {
+  swayPackage = cfg.package.override {
     extraSessionCommands = cfg.extraSessionCommands;
     extraOptions = cfg.extraOptions;
     withBaseWrapper = cfg.wrapperFeatures.base;
@@ -41,6 +41,15 @@ in {
       ~/.config/sway/config to modify the default configuration. See
       <link xlink:href="https://github.com/swaywm/sway/wiki" /> and
       "man 5 sway" for more information'';
+
+    package = mkOption {
+      type = types.package;
+      defaultText = literalExpression "pkgs.sway";
+      default = pkgs.sway;
+      description = lib.mdDoc ''
+        Package to use for Sway.
+      '';
+    };
 
     wrapperFeatures = mkOption {
       type = wrapperOptions;
