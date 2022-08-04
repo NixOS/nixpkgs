@@ -4,7 +4,6 @@
 , poetry
 , cmake-format
 , pygls
-, pyparsing
 , cmake
 , pytest-datadir
 , pytestCheckHook
@@ -30,11 +29,6 @@ buildPythonApplication rec {
     ./use-latest-pygls.patch
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'pyparsing = "^2.4"' 'pyparsing = "^3.0.6"'
-  '';
-
   nativeBuildInputs = [
     poetry
   ];
@@ -42,7 +36,6 @@ buildPythonApplication rec {
   propagatedBuildInputs = [
     cmake-format
     pygls
-    pyparsing
   ];
 
   checkInputs = [
