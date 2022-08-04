@@ -27452,7 +27452,7 @@ with pkgs;
     ghostscript = null;
   });
 
-  imagemagickBig = lowPrio (callPackage ../applications/graphics/ImageMagick/7.0.nix {
+  imagemagickBig = lowPrio (callPackage ../applications/graphics/ImageMagick {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Foundation;
   });
 
