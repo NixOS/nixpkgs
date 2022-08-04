@@ -30403,7 +30403,7 @@ with pkgs;
     inherit (xorg) libX11 libXdmcp libpthreadstubs;
   };
 
-  lightdm_gtk_greeter = callPackage ../applications/display-managers/lightdm/gtk-greeter.nix {
+  lightdm-gtk-greeter = callPackage ../applications/display-managers/lightdm/gtk-greeter.nix {
     inherit (xfce) xfce4-dev-tools;
   };
 

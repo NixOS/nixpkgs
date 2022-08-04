@@ -158,7 +158,7 @@ in
   config = mkIf (ldmcfg.enable && cfg.enable) {
 
     services.xserver.displayManager.lightdm.greeter = mkDefault {
-      package = pkgs.lightdm_gtk_greeter.xgreeters;
+      package = pkgs.lightdm-gtk-greeter.xgreeters;
       name = "lightdm-gtk-greeter";
     };
 
