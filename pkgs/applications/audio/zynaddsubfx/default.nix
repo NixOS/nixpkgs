@@ -63,6 +63,8 @@ in stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  outputs = [ "out" "doc" ];
+
   postPatch = ''
     substituteInPlace src/Misc/Config.cpp --replace /usr $out
   '';
