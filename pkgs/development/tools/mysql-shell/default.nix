@@ -32,6 +32,7 @@
 , developer_cmds
 , DarwinTools
 , makeWrapper
+, glibcLocales
 }:
 
 let
@@ -114,7 +115,9 @@ stdenv.mkDerivation rec{
   CXXFLAGS = [ "-DV8_COMPRESS_POINTERS=1" "-DV8_31BIT_SMIS_ON_64BIT_ARCH=1" ];
 
   postFixup = ''
-    wrapProgram $out/bin/mysqlsh --set PYTHONPATH "${pythonPath}"
+    wrapProgram $out/bin/mysqlsh \
+      --set PYTHONPATH "${pythonPath}" \
+      --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive"
   '';
 
   meta = with lib; {
