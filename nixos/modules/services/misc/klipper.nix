@@ -71,7 +71,7 @@ in
       };
 
       firmwares = mkOption {
-        description = "Firmwares klipper should manage";
+        description = lib.mdDoc "Firmwares klipper should manage";
         default = { };
         type = with types; attrsOf
           (submodule {

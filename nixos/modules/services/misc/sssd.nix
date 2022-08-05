@@ -42,7 +42,7 @@ in {
       kcm = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to use SSS as a Kerberos Cache Manager (KCM).
           Kerberos will be configured to cache credentials in SSS.
         '';

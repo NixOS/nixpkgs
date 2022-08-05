@@ -36,8 +36,8 @@ in
         type = with lib.types; attrsOf anything;
         description = ''
           Settings that go into <filename>ca.json</filename>. See
-          <link xlink:href="https://smallstep.com/docs/step-ca/configuration">
-          the step-ca manual</link> for more information. The easiest way to
+          <link xlink:href="https://smallstep.com/docs/step-ca/configuration">the step-ca manual</link>
+          for more information. The easiest way to
           configure this module would be to run <literal>step ca init</literal>
           to generate <filename>ca.json</filename> and then import it using
           <literal>builtins.fromJSON</literal>.

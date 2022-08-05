@@ -179,8 +179,7 @@ in {
             <para>
               When in Emperor mode, any capability to be inherited by a vassal must
               be specified again in the vassal configuration using <literal>cap</literal>.
-              See the uWSGI <link
-              xlink:href="https://uwsgi-docs.readthedocs.io/en/latest/Capabilities.html">docs</link>
+              See the uWSGI <link xlink:href="https://uwsgi-docs.readthedocs.io/en/latest/Capabilities.html">docs</link>
               for more information.
             </para>
           </note>

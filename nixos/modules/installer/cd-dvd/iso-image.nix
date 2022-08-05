@@ -618,7 +618,7 @@ in
         This will be directly appended (without whitespace) to the NixOS version
         string, like for example if it is set to <literal>XXX</literal>:
 
-        <para><literal>NixOS 99.99-pre666XXX</literal></para>
+        <literal>NixOS 99.99-pre666XXX</literal>
       '';
     };
 

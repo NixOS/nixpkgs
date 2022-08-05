@@ -75,15 +75,12 @@ in {
             };
           }
         '';
-        description = ''
-          <filename>config.yaml</filename> configuration as a Nix attribute set.
+        description = lib.mdDoc ''
+          {file}`config.yaml` configuration as a Nix attribute set.
           Configuration options should match those described in
-          <link xlink:href="https://github.com/mautrix/facebook/blob/master/mautrix_facebook/example-config.yaml">
-          example-config.yaml</link>.
-          </para>
+          [example-config.yaml](https://github.com/mautrix/facebook/blob/master/mautrix_facebook/example-config.yaml).
 
-          <para>
-          Secret tokens should be specified using <option>environmentFile</option>
+          Secret tokens should be specified using {option}`environmentFile`
           instead of this world-readable attribute set.
         '';
       };

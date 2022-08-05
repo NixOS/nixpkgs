@@ -22,8 +22,8 @@ in
         Physical devices should already exist in <filename class="devicefile">/dev/input/by-id/</filename>.
         Proxy devices will be automatically given a <literal>uinput-</literal> prefix.
 
-        See the <link xlink:href="https://github.com/aiberia/persistent-evdev#example-usage-with-libvirt">
-        project page</link> for example configuration of virtual devices with libvirt
+        See the <link xlink:href="https://github.com/aiberia/persistent-evdev#example-usage-with-libvirt">project page</link>
+        for example configuration of virtual devices with libvirt
         and remember to add <literal>uinput-*</literal> devices to the qemu
         <literal>cgroup_device_acl</literal> list (see <xref linkend="opt-virtualisation.libvirtd.qemu.verbatimConfig"/>).
       '';

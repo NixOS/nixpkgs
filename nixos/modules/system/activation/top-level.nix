@@ -335,7 +335,7 @@ in
       '';
       description = ''
         The name of the system used in the <option>system.build.toplevel</option> derivation.
-        </para><para>
+
         That derivation has the following name:
         <literal>"nixos-system-''${config.system.name}-''${config.system.nixos.label}"</literal>
       '';

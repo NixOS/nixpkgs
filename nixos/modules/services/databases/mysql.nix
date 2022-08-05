@@ -201,7 +201,7 @@ in
             ensurePermissions = mkOption {
               type = types.attrsOf types.str;
               default = {};
-              description = ''
+              description = lib.mdDoc ''
                 Permissions to ensure for the user, specified as attribute set.
                 The attribute names specify the database and tables to grant the permissions for,
                 separated by a dot. You may use wildcards here.
@@ -210,8 +210,8 @@ in
 
                 For more information on how to specify the target
                 and on which privileges exist, see the
-                <link xlink:href="https://mariadb.com/kb/en/library/grant/">GRANT syntax</link>.
-                The attributes are used as <code>GRANT ''${attrName} ON ''${attrValue}</code>.
+                [GRANT syntax](https://mariadb.com/kb/en/library/grant/).
+                The attributes are used as `GRANT ''${attrName} ON ''${attrValue}`.
               '';
               example = literalExpression ''
                 {

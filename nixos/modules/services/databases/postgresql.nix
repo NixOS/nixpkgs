@@ -81,8 +81,7 @@ in
         default = "";
         description = ''
           Defines how users authenticate themselves to the server. See the
-          <link xlink:href="https://www.postgresql.org/docs/current/auth-pg-hba-conf.html">
-          PostgreSQL documentation for pg_hba.conf</link>
+          <link xlink:href="https://www.postgresql.org/docs/current/auth-pg-hba-conf.html">PostgreSQL documentation for pg_hba.conf</link>
           for details on the expected format of this option. By default,
           peer based authentication will be used for users connecting
           via the Unix socket, and md5 password authentication will be
@@ -150,7 +149,7 @@ in
             ensurePermissions = mkOption {
               type = types.attrsOf types.str;
               default = {};
-              description = ''
+              description = lib.mdDoc ''
                 Permissions to ensure for the user, specified as an attribute set.
                 The attribute names specify the database and tables to grant the permissions for.
                 The attribute values specify the permissions to grant. You may specify one or
@@ -158,8 +157,8 @@ in
 
                 For more information on how to specify the target
                 and on which privileges exist, see the
-                <link xlink:href="https://www.postgresql.org/docs/current/sql-grant.html">GRANT syntax</link>.
-                The attributes are used as <code>GRANT ''${attrValue} ON ''${attrName}</code>.
+                [GRANT syntax](https://www.postgresql.org/docs/current/sql-grant.html).
+                The attributes are used as `GRANT ''${attrValue} ON ''${attrName}`.
               '';
               example = literalExpression ''
                 {

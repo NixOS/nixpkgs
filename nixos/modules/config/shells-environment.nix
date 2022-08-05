@@ -109,11 +109,11 @@ in
 
     environment.shellAliases = mkOption {
       example = { l = null; ll = "ls -l"; };
-      description = ''
+      description = lib.mdDoc ''
         An attribute set that maps aliases (the top level attribute names in
         this option) to command strings or directly to build outputs. The
         aliases are added to all users' shells.
-        Aliases mapped to <code>null</code> are ignored.
+        Aliases mapped to `null` are ignored.
       '';
       type = with types; attrsOf (nullOr (either str path));
     };

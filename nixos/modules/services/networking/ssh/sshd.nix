@@ -257,12 +257,12 @@ in
       authorizedKeysFiles = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           Specify the rules for which files to read on the host.
 
           This is an advanced option. If you're looking to configure user
-          keys, you can generally use <xref linkend="opt-users.users._name_.openssh.authorizedKeys.keys"/>
-          or <xref linkend="opt-users.users._name_.openssh.authorizedKeys.keyFiles"/>.
+          keys, you can generally use [](#opt-users.users._name_.openssh.authorizedKeys.keys)
+          or [](#opt-users.users._name_.openssh.authorizedKeys.keyFiles).
 
           These are paths relative to the host root file system or home
           directories and they are subject to certain token expansion rules.
@@ -298,14 +298,13 @@ in
           "curve25519-sha256@libssh.org"
           "diffie-hellman-group-exchange-sha256"
         ];
-        description = ''
+        description = lib.mdDoc ''
           Allowed key exchange algorithms
-          </para>
-          <para>
+
           Uses the lower bound recommended in both
-          <link xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html" />
+          <https://stribika.github.io/2015/01/04/secure-secure-shell.html>
           and
-          <link xlink:href="https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67" />
+          <https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67>
         '';
       };
 
@@ -319,14 +318,13 @@ in
           "aes192-ctr"
           "aes128-ctr"
         ];
-        description = ''
+        description = lib.mdDoc ''
           Allowed ciphers
-          </para>
-          <para>
+
           Defaults to recommended settings from both
-          <link xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html" />
+          <https://stribika.github.io/2015/01/04/secure-secure-shell.html>
           and
-          <link xlink:href="https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67" />
+          <https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67>
         '';
       };
 
@@ -340,14 +338,13 @@ in
           "hmac-sha2-256"
           "umac-128@openssh.com"
         ];
-        description = ''
+        description = lib.mdDoc ''
           Allowed MACs
-          </para>
-          <para>
+
           Defaults to recommended settings from both
-          <link xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html" />
+          <https://stribika.github.io/2015/01/04/secure-secure-shell.html>
           and
-          <link xlink:href="https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67" />
+          <https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67>
         '';
       };
 

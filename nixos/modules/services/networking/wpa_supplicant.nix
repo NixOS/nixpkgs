@@ -190,7 +190,7 @@ in {
         description = ''
           Whether to allow configuring networks "imperatively" (e.g. via
           <package>wpa_supplicant_gui</package>) and declaratively via
-          <xref linkend="opt-networking.wireless.networks" />.
+          <xref linkend="opt-networking.wireless.networks"/>.
 
           Please note that this adds a custom patch to <package>wpa_supplicant</package>.
         '';

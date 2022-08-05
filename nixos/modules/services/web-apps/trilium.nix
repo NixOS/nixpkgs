@@ -53,7 +53,7 @@ in
     noAuthentication = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         If set to true, no password is required to access the web frontend.
       '';
     };

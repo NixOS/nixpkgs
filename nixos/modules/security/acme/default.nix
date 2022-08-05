@@ -504,8 +504,8 @@ let
       reloadServices = mkOption {
         type = types.listOf types.str;
         inherit (defaultAndText "reloadServices" []) default defaultText;
-        description = ''
-          The list of systemd services to call <code>systemctl try-reload-or-restart</code>
+        description = lib.mdDoc ''
+          The list of systemd services to call `systemctl try-reload-or-restart`
           on.
         '';
       };
@@ -581,8 +581,8 @@ let
           Turns on the OCSP Must-Staple TLS extension.
           Make sure you know what you're doing! See:
           <itemizedlist>
-            <listitem><para><link xlink:href="https://blog.apnic.net/2019/01/15/is-the-web-ready-for-ocsp-must-staple/" /></para></listitem>
-            <listitem><para><link xlink:href="https://blog.hboeck.de/archives/886-The-Problem-with-OCSP-Stapling-and-Must-Staple-and-why-Certificate-Revocation-is-still-broken.html" /></para></listitem>
+            <listitem><para><link xlink:href="https://blog.apnic.net/2019/01/15/is-the-web-ready-for-ocsp-must-staple/"/></para></listitem>
+            <listitem><para><link xlink:href="https://blog.hboeck.de/archives/886-The-Problem-with-OCSP-Stapling-and-Must-Staple-and-why-Certificate-Revocation-is-still-broken.html"/></para></listitem>
           </itemizedlist>
         '';
       };

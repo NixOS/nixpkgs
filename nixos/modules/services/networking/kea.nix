@@ -54,11 +54,11 @@ in
           configFile = mkOption {
             type = nullOr path;
             default = null;
-            description = ''
-              Kea Control Agent configuration as a path, see <link xlink:href="https://kea.readthedocs.io/en/kea-${package.version}/arm/agent.html"/>.
+            description = lib.mdDoc ''
+              Kea Control Agent configuration as a path, see <https://kea.readthedocs.io/en/kea-${package.version}/arm/agent.html>.
 
-              Takes preference over <link linkend="opt-services.kea.ctrl-agent.settings">settings</link>.
-              Most users should prefer using <link linkend="opt-services.kea.ctrl-agent.settings">settings</link> instead.
+              Takes preference over [settings](#opt-services.kea.ctrl-agent.settings).
+              Most users should prefer using [settings](#opt-services.kea.ctrl-agent.settings) instead.
             '';
           };
 
@@ -93,11 +93,11 @@ in
           configFile = mkOption {
             type = nullOr path;
             default = null;
-            description = ''
-              Kea DHCP4 configuration as a path, see <link xlink:href="https://kea.readthedocs.io/en/kea-${package.version}/arm/dhcp4-srv.html"/>.
+            description = lib.mdDoc ''
+              Kea DHCP4 configuration as a path, see <https://kea.readthedocs.io/en/kea-${package.version}/arm/dhcp4-srv.html>.
 
-              Takes preference over <link linkend="opt-services.kea.dhcp4.settings">settings</link>.
-              Most users should prefer using <link linkend="opt-services.kea.dhcp4.settings">settings</link> instead.
+              Takes preference over [settings](#opt-services.kea.dhcp4.settings).
+              Most users should prefer using [settings](#opt-services.kea.dhcp4.settings) instead.
             '';
           };
 
@@ -153,11 +153,11 @@ in
           configFile = mkOption {
             type = nullOr path;
             default = null;
-            description = ''
-              Kea DHCP6 configuration as a path, see <link xlink:href="https://kea.readthedocs.io/en/kea-${package.version}/arm/dhcp6-srv.html"/>.
+            description = lib.mdDoc ''
+              Kea DHCP6 configuration as a path, see <https://kea.readthedocs.io/en/kea-${package.version}/arm/dhcp6-srv.html>.
 
-              Takes preference over <link linkend="opt-services.kea.dhcp6.settings">settings</link>.
-              Most users should prefer using <link linkend="opt-services.kea.dhcp6.settings">settings</link> instead.
+              Takes preference over [settings](#opt-services.kea.dhcp6.settings).
+              Most users should prefer using [settings](#opt-services.kea.dhcp6.settings) instead.
             '';
           };
 
@@ -214,11 +214,11 @@ in
           configFile = mkOption {
             type = nullOr path;
             default = null;
-            description = ''
-              Kea DHCP-DDNS configuration as a path, see <link xlink:href="https://kea.readthedocs.io/en/kea-${package.version}/arm/ddns.html"/>.
+            description = lib.mdDoc ''
+              Kea DHCP-DDNS configuration as a path, see <https://kea.readthedocs.io/en/kea-${package.version}/arm/ddns.html>.
 
-              Takes preference over <link linkend="opt-services.kea.dhcp-ddns.settings">settings</link>.
-              Most users should prefer using <link linkend="opt-services.kea.dhcp-ddns.settings">settings</link> instead.
+              Takes preference over [settings](#opt-services.kea.dhcp-ddns.settings).
+              Most users should prefer using [settings](#opt-services.kea.dhcp-ddns.settings) instead.
             '';
           };
 

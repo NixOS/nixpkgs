@@ -9547,6 +9547,8 @@ with pkgs;
 
   pell = callPackage ../applications/misc/pell { };
 
+  perccli = callPackage ../tools/misc/perccli { };
+
   perceptualdiff = callPackage ../tools/graphics/perceptualdiff { };
 
   percona-xtrabackup = percona-xtrabackup_8_0;
@@ -10844,6 +10846,8 @@ with pkgs;
   stenc = callPackage ../tools/backup/stenc { };
 
   stm32loader = with python3Packages; toPythonApplication stm32loader;
+
+  storcli = callPackage ../tools/misc/storcli { };
 
   stremio = qt5.callPackage ../applications/video/stremio { };
 
@@ -16605,6 +16609,8 @@ with pkgs;
   sawjap = callPackage ../development/tools/java/sawjap { };
 
   sd-local = callPackage ../development/tools/sd-local { };
+
+  seer = libsForQt5.callPackage ../development/tools/misc/seer { };
 
   selenium-server-standalone = callPackage ../development/tools/selenium/server { };
 
@@ -32503,7 +32509,7 @@ with pkgs;
 
   fish-fillets-ng = callPackage ../games/fish-fillets-ng { };
 
-  fishfight = callPackage ../games/fishfight {
+  jumpy = callPackage ../games/jumpy {
     inherit (xorg) libX11 libXi;
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
   };

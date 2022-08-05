@@ -22,9 +22,8 @@ in
 
       settings = mkOption {
         default = { };
-        description = ''
-          Configuration for zrepl. See <link
-          xlink:href="https://zrepl.github.io/configuration.html"/>
+        description = lib.mdDoc ''
+          Configuration for zrepl. See <https://zrepl.github.io/configuration.html>
           for more information.
         '';
         type = types.submodule {

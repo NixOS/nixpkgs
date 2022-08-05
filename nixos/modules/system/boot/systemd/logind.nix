@@ -26,17 +26,14 @@ in
     services.logind.killUserProcesses = mkOption {
       default = false;
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         Specifies whether the processes of a user should be killed
         when the user logs out.  If true, the scope unit corresponding
         to the session and all processes inside that scope will be
         terminated.  If false, the scope is "abandoned" (see
-        <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.scope.html#">
-        systemd.scope(5)</link>), and processes are not killed.
-        </para>
+        [systemd.scope(5)](https://www.freedesktop.org/software/systemd/man/systemd.scope.html#)), and processes are not killed.
 
-        <para>
-        See <link xlink:href="https://www.freedesktop.org/software/systemd/man/logind.conf.html#KillUserProcesses=">logind.conf(5)</link>
+        See [logind.conf(5)](https://www.freedesktop.org/software/systemd/man/logind.conf.html#KillUserProcesses=)
         for more details.
       '';
     };
