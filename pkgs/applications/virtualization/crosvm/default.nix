@@ -15,59 +15,59 @@ let
 
 in
 
-  rustPlatform.buildRustPackage rec {
-    pname = "crosvm";
-    inherit (upstreamInfo) version;
+rustPlatform.buildRustPackage rec {
+  pname = "crosvm";
+  inherit (upstreamInfo) version;
 
-    src = fetchgit (builtins.removeAttrs upstreamInfo.src [ "date" "path" ]);
+  src = fetchgit (builtins.removeAttrs upstreamInfo.src [ "date" "path" ]);
 
-    separateDebugInfo = true;
+  separateDebugInfo = true;
 
-    patches = [
-      ./default-seccomp-policy-dir.diff
-    ];
+  patches = [
+    ./default-seccomp-policy-dir.diff
+  ];
 
-    cargoLock.lockFile = ./Cargo.lock;
+  cargoLock.lockFile = ./Cargo.lock;
 
-    nativeBuildInputs = [ minijail-tools pkg-config wayland-scanner ];
+  nativeBuildInputs = [ minijail-tools pkg-config wayland-scanner ];
 
-    buildInputs = [
-      libcap libdrm libepoxy minijail virglrenderer wayland wayland-protocols
-    ];
+  buildInputs = [
+    libcap libdrm libepoxy minijail virglrenderer wayland wayland-protocols
+  ];
 
-    postPatch = ''
-      cp ${./Cargo.lock} Cargo.lock
-      sed -i "s|/usr/share/policy/crosvm/|$PWD/seccomp/${arch}/|g" \
-          seccomp/${arch}/*.policy
-    '';
+  postPatch = ''
+    cp ${./Cargo.lock} Cargo.lock
+    sed -i "s|/usr/share/policy/crosvm/|$PWD/seccomp/${arch}/|g" \
+        seccomp/${arch}/*.policy
+  '';
 
-    preBuild = ''
-      export DEFAULT_SECCOMP_POLICY_DIR=$out/share/policy
+  preBuild = ''
+    export DEFAULT_SECCOMP_POLICY_DIR=$out/share/policy
 
-      for policy in seccomp/${arch}/*.policy; do
-          compile_seccomp_policy \
-              --default-action trap $policy ''${policy%.policy}.bpf
-      done
-    '';
+    for policy in seccomp/${arch}/*.policy; do
+        compile_seccomp_policy \
+            --default-action trap $policy ''${policy%.policy}.bpf
+    done
+  '';
 
-    buildFeatures = [ "default" "virgl_renderer" "virgl_renderer_next" ];
+  buildFeatures = [ "default" "virgl_renderer" "virgl_renderer_next" ];
 
-    postInstall = ''
-      mkdir -p $out/share/policy/
-      cp -v seccomp/${arch}/*.bpf $out/share/policy/
-    '';
+  postInstall = ''
+    mkdir -p $out/share/policy/
+    cp -v seccomp/${arch}/*.bpf $out/share/policy/
+  '';
 
-    CROSVM_CARGO_TEST_KERNEL_BINARY =
-      lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform)
-        "${linux}/${stdenv.hostPlatform.linux-kernel.target}";
+  CROSVM_CARGO_TEST_KERNEL_BINARY =
+    lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform)
+      "${linux}/${stdenv.hostPlatform.linux-kernel.target}";
 
-    passthru.updateScript = ./update.py;
+  passthru.updateScript = ./update.py;
 
-    meta = with lib; {
-      description = "A secure virtual machine monitor for KVM";
-      homepage = "https://chromium.googlesource.com/crosvm/crosvm/";
-      maintainers = with maintainers; [ qyliss ];
-      license = licenses.bsd3;
-      platforms = [ "aarch64-linux" "x86_64-linux" ];
-    };
-  }
+  meta = with lib; {
+    description = "A secure virtual machine monitor for KVM";
+    homepage = "https://chromium.googlesource.com/crosvm/crosvm/";
+    maintainers = with maintainers; [ qyliss ];
+    license = licenses.bsd3;
+    platforms = [ "aarch64-linux" "x86_64-linux" ];
+  };
+}
