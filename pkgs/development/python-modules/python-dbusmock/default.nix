@@ -8,9 +8,17 @@
 , bluez
 , networkmanager
 , setuptools-scm
+, runCommand
 }:
 
-buildPythonPackage rec {
+let
+  # Cannot just add it to path in preCheck since that attribute will be passed to
+  # mkDerivation even with doCheck = false, causing a dependency cycle.
+  pbap-client = runCommand "pbap-client" { } ''
+    mkdir -p "$out/bin"
+    ln -s "${bluez.test}/test/pbap-client" "$out/bin/pbap-client"
+  '';
+in buildPythonPackage rec {
   pname = "python-dbusmock";
   version = "0.28.4";
 
@@ -35,7 +43,7 @@ buildPythonPackage rec {
     dbus
     pygobject3
     bluez
-    (lib.getOutput "test" bluez)
+    pbap-client
     networkmanager
     nose
   ];
@@ -62,7 +70,6 @@ buildPythonPackage rec {
     # Very slow, consider disabling?
     # "test_networkmanager"
   ];
-
 
   checkPhase = ''
     runHook preCheck
