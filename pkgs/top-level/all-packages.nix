@@ -10050,7 +10050,7 @@ with pkgs;
 
   qosmic = libsForQt5.callPackage ../applications/graphics/qosmic { };
 
-  qownnotes = libsForQt514.callPackage ../applications/office/qownnotes { };
+  qownnotes = libsForQt5.callPackage ../applications/office/qownnotes { };
 
   qpdf = callPackage ../development/libraries/qpdf { };
 
