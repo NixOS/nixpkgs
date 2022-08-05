@@ -35,7 +35,7 @@ let
     *      };
     *      exporterTest = ''
     *        wait_for_unit("prometheus-<exporterName>-exporter.service")
-    *        wait_for_open_port("1234")
+    *        wait_for_open_port(1234)
     *        succeed("curl -sSf 'localhost:1234/metrics'")
     *      '';
     *    };
@@ -1063,7 +1063,7 @@ let
       };
       exporterTest = ''
         wait_for_unit("prometheus-smartctl-exporter.service")
-        wait_for_open_port("9633")
+        wait_for_open_port(9633)
         wait_until_succeeds(
           "curl -sSf 'localhost:9633/metrics'"
         )
