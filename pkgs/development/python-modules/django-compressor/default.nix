@@ -2,7 +2,7 @@
   rcssmin, rjsmin, django-appconf }:
 
 buildPythonPackage rec {
-    pname = "django_compressor";
+    pname = "django-compressor";
     version = "4.0";
 
     src = fetchPypi {
