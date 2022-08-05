@@ -116,6 +116,8 @@ in {
   };
 
   config = mkIf cfg.enable {
+    users.groups.mautrix-facebook = {};
+
     users.users.mautrix-facebook = {
       group = "mautrix-facebook";
       isSystemUser = true;
