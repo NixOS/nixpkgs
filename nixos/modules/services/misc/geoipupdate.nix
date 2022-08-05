@@ -40,7 +40,7 @@ in
         description = ''
           <productname>geoipupdate</productname> configuration
           options. See
-          <link xlink:href="https://github.com/maxmind/geoipupdate/blob/main/doc/GeoIP.conf.md" />
+          <link xlink:href="https://github.com/maxmind/geoipupdate/blob/main/doc/GeoIP.conf.md"/>
           for a full list of available options.
 
           Settings containing secret data should be set to an
@@ -92,8 +92,7 @@ in
 
                 Always handled as a secret whether the value is
                 wrapped in a <literal>{ _secret = ...; }</literal>
-                attrset or not (refer to <xref
-                linkend="opt-services.geoipupdate.settings" /> for
+                attrset or not (refer to <xref linkend="opt-services.geoipupdate.settings"/> for
                 details).
               '';
               apply = x: if isAttrs x then x else { _secret = x; };

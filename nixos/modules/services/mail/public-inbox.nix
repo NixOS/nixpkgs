@@ -23,10 +23,10 @@ let
     port = mkOption {
       type = with types; nullOr (either str port);
       default = defaultPort;
-      description = ''
+      description = lib.mdDoc ''
         Listening port.
         Beware that public-inbox uses well-known ports number to decide whether to enable TLS or not.
-        Set to null and use <code>systemd.sockets.public-inbox-${proto}d.listenStreams</code>
+        Set to null and use `systemd.sockets.public-inbox-${proto}d.listenStreams`
         if you need a more advanced listening.
       '';
     };
@@ -239,11 +239,11 @@ in
         type = with types; nullOr (either str port);
         default = 80;
         example = "/run/public-inbox-httpd.sock";
-        description = ''
+        description = lib.mdDoc ''
           Listening port or systemd's ListenStream= entry
           to be used as a reverse proxy, eg. in nginx:
-          <code>locations."/inbox".proxyPass = "http://unix:''${config.services.public-inbox.http.port}:/inbox";</code>
-          Set to null and use <code>systemd.sockets.public-inbox-httpd.listenStreams</code>
+          `locations."/inbox".proxyPass = "http://unix:''${config.services.public-inbox.http.port}:/inbox";`
+          Set to null and use `systemd.sockets.public-inbox-httpd.listenStreams`
           if you need a more advanced listening.
         '';
       };

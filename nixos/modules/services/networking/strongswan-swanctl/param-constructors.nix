@@ -59,7 +59,8 @@ rec {
     if strongswanDefault == null
     then description
     else description + ''
-      </para><para>
+
+
       StrongSwan default: <literal><![CDATA[${builtins.toJSON strongswanDefault}]]></literal>
     '';
 

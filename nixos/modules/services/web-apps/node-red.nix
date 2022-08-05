@@ -47,10 +47,9 @@ in
       type = types.path;
       default = "${cfg.package}/lib/node_modules/node-red/settings.js";
       defaultText = literalExpression ''"''${package}/lib/node_modules/node-red/settings.js"'';
-      description = ''
+      description = lib.mdDoc ''
         Path to the JavaScript configuration file.
-        See <link
-        xlink:href="https://github.com/node-red/node-red/blob/master/packages/node_modules/node-red/settings.js"/>
+        See <https://github.com/node-red/node-red/blob/master/packages/node_modules/node-red/settings.js>
         for a configuration example.
       '';
     };

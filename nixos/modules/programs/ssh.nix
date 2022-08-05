@@ -95,7 +95,7 @@ in
         default = "";
         description = ''
           Extra configuration text prepended to <filename>ssh_config</filename>. Other generated
-          options will be added after a <code>Host *</code> pattern.
+          options will be added after a <literal>Host *</literal> pattern.
           See <citerefentry><refentrytitle>ssh_config</refentrytitle><manvolnum>5</manvolnum></citerefentry>
           for help.
         '';

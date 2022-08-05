@@ -139,15 +139,14 @@ in {
     constrainLoadCsv = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Sets the root directory for file URLs used with the Cypher
-        <literal>LOAD CSV</literal> clause to be that defined by
-        <option>directories.imports</option>. It restricts
+        `LOAD CSV` clause to be that defined by
+        {option}`directories.imports`. It restricts
         access to only those files within that directory and its
         subdirectories.
-        </para>
-        <para>
-        Setting this option to <literal>false</literal> introduces
+
+        Setting this option to `false` introduces
         possible security problems.
       '';
     };
@@ -155,15 +154,14 @@ in {
     defaultListenAddress = mkOption {
       type = types.str;
       default = "127.0.0.1";
-      description = ''
+      description = lib.mdDoc ''
         Default network interface to listen for incoming connections. To
         listen for connections on all interfaces, use "0.0.0.0".
-        </para>
-        <para>
+
         Specifies the default IP address and address part of connector
-        specific <option>listenAddress</option> options. To bind specific
+        specific {option}`listenAddress` options. To bind specific
         connectors to a specific network interfaces, specify the entire
-        <option>listenAddress</option> option for that connector.
+        {option}`listenAddress` option for that connector.
       '';
     };
 
@@ -227,20 +225,18 @@ in {
       sslPolicy = mkOption {
         type = types.str;
         default = "legacy";
-        description = ''
+        description = lib.mdDoc ''
           Neo4j SSL policy for BOLT traffic.
-          </para>
-          <para>
+
           The legacy policy is a special policy which is not defined in
           the policy configuration section, but rather derives from
-          <option>directories.certificates</option> and
-          associated files (by default: <filename>neo4j.key</filename> and
-          <filename>neo4j.cert</filename>). Its use will be deprecated.
-          </para>
-          <para>
+          {option}`directories.certificates` and
+          associated files (by default: {file}`neo4j.key` and
+          {file}`neo4j.cert`). Its use will be deprecated.
+
           Note: This connector must be configured to support/require
           SSL/TLS for the legacy policy to actually be utilized. See
-          <option>bolt.tlsLevel</option>.
+          {option}`bolt.tlsLevel`.
         '';
       };
 
@@ -258,21 +254,19 @@ in {
         type = types.path;
         default = "${cfg.directories.home}/certificates";
         defaultText = literalExpression ''"''${config.${opt.directories.home}}/certificates"'';
-        description = ''
+        description = lib.mdDoc ''
           Directory for storing certificates to be used by Neo4j for
           TLS connections.
-          </para>
-          <para>
+
           When setting this directory to something other than its default,
           ensure the directory's existence, and that read/write permissions are
-          given to the Neo4j daemon user <literal>neo4j</literal>.
-          </para>
-          <para>
+          given to the Neo4j daemon user `neo4j`.
+
           Note that changing this directory from its default will prevent
           the directory structure required for each SSL policy from being
           automatically generated. A policy's directory structure as defined by
-          its <option>baseDirectory</option>,<option>revokedDir</option> and
-          <option>trustedDir</option> must then be setup manually. The
+          its {option}`baseDirectory`,{option}`revokedDir` and
+          {option}`trustedDir` must then be setup manually. The
           existence of these directories is mandatory, as well as the presence
           of the certificate file and the private key. Ensure the correct
           permissions are set on these directories and files.
@@ -283,14 +277,13 @@ in {
         type = types.path;
         default = "${cfg.directories.home}/data";
         defaultText = literalExpression ''"''${config.${opt.directories.home}}/data"'';
-        description = ''
+        description = lib.mdDoc ''
           Path of the data directory. You must not configure more than one
           Neo4j installation to use the same data directory.
-          </para>
-          <para>
+
           When setting this directory to something other than its default,
           ensure the directory's existence, and that read/write permissions are
-          given to the Neo4j daemon user <literal>neo4j</literal>.
+          given to the Neo4j daemon user `neo4j`.
         '';
       };
 
@@ -309,16 +302,15 @@ in {
         type = types.path;
         default = "${cfg.directories.home}/import";
         defaultText = literalExpression ''"''${config.${opt.directories.home}}/import"'';
-        description = ''
+        description = lib.mdDoc ''
           The root directory for file URLs used with the Cypher
-          <literal>LOAD CSV</literal> clause. Only meaningful when
-          <option>constrainLoadCvs</option> is set to
-          <literal>true</literal>.
-          </para>
-          <para>
+          `LOAD CSV` clause. Only meaningful when
+          {option}`constrainLoadCvs` is set to
+          `true`.
+
           When setting this directory to something other than its default,
           ensure the directory's existence, and that read permission is
-          given to the Neo4j daemon user <literal>neo4j</literal>.
+          given to the Neo4j daemon user `neo4j`.
         '';
       };
 
@@ -326,15 +318,14 @@ in {
         type = types.path;
         default = "${cfg.directories.home}/plugins";
         defaultText = literalExpression ''"''${config.${opt.directories.home}}/plugins"'';
-        description = ''
+        description = lib.mdDoc ''
           Path of the database plugin directory. Compiled Java JAR files that
           contain database procedures will be loaded if they are placed in
           this directory.
-          </para>
-          <para>
+
           When setting this directory to something other than its default,
           ensure the directory's existence, and that read permission is
-          given to the Neo4j daemon user <literal>neo4j</literal>.
+          given to the Neo4j daemon user `neo4j`.
         '';
       };
     };
@@ -386,15 +377,14 @@ in {
       sslPolicy = mkOption {
         type = types.str;
         default = "legacy";
-        description = ''
+        description = lib.mdDoc ''
           Neo4j SSL policy for HTTPS traffic.
-          </para>
-          <para>
+
           The legacy policy is a special policy which is not defined in the
           policy configuration section, but rather derives from
-          <option>directories.certificates</option> and
-          associated files (by default: <filename>neo4j.key</filename> and
-          <filename>neo4j.cert</filename>). Its use will be deprecated.
+          {option}`directories.certificates` and
+          associated files (by default: {file}`neo4j.key` and
+          {file}`neo4j.cert`). Its use will be deprecated.
         '';
       };
     };
@@ -417,18 +407,16 @@ in {
           allowKeyGeneration = mkOption {
             type = types.bool;
             default = false;
-            description = ''
+            description = lib.mdDoc ''
               Allows the generation of a private key and associated self-signed
               certificate. Only performed when both objects cannot be found for
               this policy. It is recommended to turn this off again after keys
               have been generated.
-              </para>
-              <para>
+
               The public certificate is required to be duplicated to the
               directory holding trusted certificates as defined by the
-              <option>trustedDir</option> option.
-              </para>
-              <para>
+              {option}`trustedDir` option.
+
               Keys should in general be generated and distributed offline by a
               trusted certificate authority and not by utilizing this mode.
             '';
@@ -438,17 +426,16 @@ in {
             type = types.path;
             default = "${cfg.directories.certificates}/${name}";
             defaultText = literalExpression ''"''${config.${opt.directories.certificates}}/''${name}"'';
-            description = ''
+            description = lib.mdDoc ''
               The mandatory base directory for cryptographic objects of this
               policy. This path is only automatically generated when this
-              option as well as <option>directories.certificates</option> are
+              option as well as {option}`directories.certificates` are
               left at their default. Ensure read/write permissions are given
-              to the Neo4j daemon user <literal>neo4j</literal>.
-              </para>
-              <para>
+              to the Neo4j daemon user `neo4j`.
+
               It is also possible to override each individual
               configuration with absolute paths. See the
-              <option>privateKey</option> and <option>publicCertificate</option>
+              {option}`privateKey` and {option}`publicCertificate`
               policy options.
             '';
           };
@@ -483,16 +470,15 @@ in {
           publicCertificate = mkOption {
             type = types.str;
             default = "public.crt";
-            description = ''
+            description = lib.mdDoc ''
               The name of public X.509 certificate (chain) file in PEM format
-              for this policy to be found in the <option>baseDirectory</option>,
+              for this policy to be found in the {option}`baseDirectory`,
               or the absolute path to the certificate file. It is mandatory
               that a certificate can be found or generated.
-              </para>
-              <para>
+
               The public certificate is required to be duplicated to the
               directory holding trusted certificates as defined by the
-              <option>trustedDir</option> option.
+              {option}`trustedDir` option.
             '';
           };
 
@@ -536,19 +522,18 @@ in {
             type = types.path;
             default = "${config.baseDirectory}/trusted";
             defaultText = literalExpression ''"''${config.${options.baseDirectory}}/trusted"'';
-            description = ''
+            description = lib.mdDoc ''
               Path to directory of X.509 certificates in PEM format for
               trusted parties. Must be an absolute path. The existence of this
               directory is mandatory and will need to be created manually when:
               setting this option to something other than its default; setting
-              either this policy's <option>baseDirectory</option> or
-              <option>directories.certificates</option> to something other than
+              either this policy's {option}`baseDirectory` or
+              {option}`directories.certificates` to something other than
               their default. Ensure read/write permissions are given to the
-              Neo4j daemon user <literal>neo4j</literal>.
-              </para>
-              <para>
+              Neo4j daemon user `neo4j`.
+
               The public certificate as defined by
-              <option>publicCertificate</option> is required to be duplicated
+              {option}`publicCertificate` is required to be duplicated
               to this directory.
             '';
           };

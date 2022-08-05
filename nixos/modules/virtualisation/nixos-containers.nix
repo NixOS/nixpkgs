@@ -579,11 +579,11 @@ in
             privateNetwork = mkOption {
               type = types.bool;
               default = false;
-              description = ''
+              description = lib.mdDoc ''
                 Whether to give the container its own private virtual
                 Ethernet interface.  The interface is called
-                <literal>eth0</literal>, and is hooked up to the interface
-                <literal>ve-<replaceable>container-name</replaceable></literal>
+                `eth0`, and is hooked up to the interface
+                `ve-«container-name»`
                 on the host.  If this option is not set, then the
                 container shares the network interfaces of the host,
                 and can bind to any port on any interface.
@@ -728,12 +728,12 @@ in
               };
           }
         '';
-      description = ''
+      description = lib.mdDoc ''
         A set of NixOS system configurations to be run as lightweight
         containers.  Each container appears as a service
-        <literal>container-<replaceable>name</replaceable></literal>
+        `container-«name»`
         on the host system, allowing it to be started and stopped via
-        <command>systemctl</command>.
+        {command}`systemctl`.
       '';
     };
 

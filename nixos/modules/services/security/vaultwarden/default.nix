@@ -116,7 +116,7 @@ in {
         The available configuration options can be found in
         <link xlink:href="https://github.com/dani-garcia/vaultwarden/blob/${vaultwarden.version}/.env.template">the environment template file</link>.
 
-        See <xref linkend="opt-services.vaultwarden.environmentFile" /> for how
+        See <xref linkend="opt-services.vaultwarden.environmentFile"/> for how
         to set up access to the Admin UI to invite initial users.
       '';
     };

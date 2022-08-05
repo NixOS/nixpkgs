@@ -31,20 +31,20 @@ in
       };
 
       inputs = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Inputs specify how Filebeat locates and processes input data.
 
-          This is like <literal>services.filebeat.settings.filebeat.inputs</literal>,
+          This is like `services.filebeat.settings.filebeat.inputs`,
           but structured as an attribute set. This has the benefit
           that multiple NixOS modules can contribute settings to a
           single filebeat input.
 
           An input type can be specified multiple times by choosing a
-          different <literal>&lt;name></literal> for each, but setting
-          <xref linkend="opt-services.filebeat.inputs._name_.type"/>
+          different `<name>` for each, but setting
+          [](#opt-services.filebeat.inputs._name_.type)
           to the same value.
 
-          See <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/configuration-filebeat-options.html"/>.
+          See <https://www.elastic.co/guide/en/beats/filebeat/current/configuration-filebeat-options.html>.
         '';
         default = {};
         type = types.attrsOf (types.submodule ({ name, ... }: {
@@ -77,24 +77,24 @@ in
       };
 
       modules = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Filebeat modules provide a quick way to get started
           processing common log formats. They contain default
           configurations, Elasticsearch ingest pipeline definitions,
           and Kibana dashboards to help you implement and deploy a log
           monitoring solution.
 
-          This is like <literal>services.filebeat.settings.filebeat.modules</literal>,
+          This is like `services.filebeat.settings.filebeat.modules`,
           but structured as an attribute set. This has the benefit
           that multiple NixOS modules can contribute settings to a
           single filebeat module.
 
           A module can be specified multiple times by choosing a
-          different <literal>&lt;name></literal> for each, but setting
-          <xref linkend="opt-services.filebeat.modules._name_.module"/>
+          different `<name>` for each, but setting
+          [](#opt-services.filebeat.modules._name_.module)
           to the same value.
 
-          See <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-modules.html"/>.
+          See <https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-modules.html>.
         '';
         default = {};
         type = types.attrsOf (types.submodule ({ name, ... }: {
@@ -161,8 +161,7 @@ in
                 internal = true;
                 description = ''
                   Inputs specify how Filebeat locates and processes
-                  input data. Use <xref
-                  linkend="opt-services.filebeat.inputs"/> instead.
+                  input data. Use <xref linkend="opt-services.filebeat.inputs"/> instead.
 
                   See <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/configuration-filebeat-options.html"/>.
                 '';

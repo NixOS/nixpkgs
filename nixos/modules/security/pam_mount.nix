@@ -31,10 +31,9 @@ in
       extraVolumes = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           List of volume definitions for pam_mount.
-          For more information, visit <link
-          xlink:href="http://pam-mount.sourceforge.net/pam_mount.conf.5.html" />.
+          For more information, visit <http://pam-mount.sourceforge.net/pam_mount.conf.5.html>.
         '';
       };
 
@@ -64,22 +63,20 @@ in
         type = types.int;
         default = 0;
         example = 1;
-        description = ''
+        description = lib.mdDoc ''
           Sets the Debug-Level. 0 disables debugging, 1 enables pam_mount tracing,
           and 2 additionally enables tracing in mount.crypt. The default is 0.
-          For more information, visit <link
-          xlink:href="http://pam-mount.sourceforge.net/pam_mount.conf.5.html" />.
+          For more information, visit <http://pam-mount.sourceforge.net/pam_mount.conf.5.html>.
         '';
       };
 
       logoutWait = mkOption {
         type = types.int;
         default = 0;
-        description = ''
+        description = lib.mdDoc ''
           Amount of microseconds to wait until killing remaining processes after
           final logout.
-          For more information, visit <link
-          xlink:href="http://pam-mount.sourceforge.net/pam_mount.conf.5.html" />.
+          For more information, visit <http://pam-mount.sourceforge.net/pam_mount.conf.5.html>.
         '';
       };
 

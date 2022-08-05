@@ -32,10 +32,9 @@ in
       devices = mkOption {
         type = types.listOf types.str;
         default = [ "0a07" "c222" "c225" "c227" "c251" ];
-        description = ''
+        description = lib.mdDoc ''
           List of USB device ids supported by g15daemon.
-          </para>
-          <para>
+
           You most likely do not need to change this.
         '';
       };

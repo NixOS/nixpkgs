@@ -392,8 +392,8 @@ let
       requestXFR = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = ''
-          Format: <code>[AXFR|UDP] &lt;ip-address&gt; &lt;key-name | NOKEY&gt;</code>
+        description = lib.mdDoc ''
+          Format: `[AXFR|UDP] <ip-address> <key-name | NOKEY>`
         '';
       };
 

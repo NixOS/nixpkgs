@@ -119,11 +119,11 @@ in
       example = literalExpression "import <nixpkgs> {}";
       description = ''
         If set, the pkgs argument to all NixOS modules is the value of
-        this option, extended with <code>nixpkgs.overlays</code>, if
-        that is also set. Either <code>nixpkgs.crossSystem</code> or
-        <code>nixpkgs.localSystem</code> will be used in an assertion
+        this option, extended with <literal>nixpkgs.overlays</literal>, if
+        that is also set. Either <literal>nixpkgs.crossSystem</literal> or
+        <literal>nixpkgs.localSystem</literal> will be used in an assertion
         to check that the NixOS and Nixpkgs architectures match. Any
-        other options in <code>nixpkgs.*</code>, notably <code>config</code>,
+        other options in <literal>nixpkgs.*</literal>, notably <literal>config</literal>,
         will be ignored.
 
         If unset, the pkgs argument to all NixOS modules is determined
@@ -132,18 +132,18 @@ in
         The default value imports the Nixpkgs source files
         relative to the location of this NixOS module, because
         NixOS and Nixpkgs are distributed together for consistency,
-        so the <code>nixos</code> in the default value is in fact a
-        relative path. The <code>config</code>, <code>overlays</code>,
-        <code>localSystem</code>, and <code>crossSystem</code> come
+        so the <literal>nixos</literal> in the default value is in fact a
+        relative path. The <literal>config</literal>, <literal>overlays</literal>,
+        <literal>localSystem</literal>, and <literal>crossSystem</literal> come
         from this option's siblings.
 
         This option can be used by applications like NixOps to increase
         the performance of evaluation, or to create packages that depend
         on a container that should be built with the exact same evaluation
         of Nixpkgs, for example. Applications like this should set
-        their default value using <code>lib.mkDefault</code>, so
+        their default value using <literal>lib.mkDefault</literal>, so
         user-provided configuration can override it without using
-        <code>lib</code>.
+        <literal>lib</literal>.
 
         Note that using a distinct version of Nixpkgs with NixOS may
         be an unexpected source of problems. Use this option with care.
@@ -162,7 +162,7 @@ in
         details, see the Nixpkgs documentation.)  It allows you to set
         package configuration options.
 
-        Ignored when <code>nixpkgs.pkgs</code> is set.
+        Ignored when <literal>nixpkgs.pkgs</literal> is set.
       '';
     };
 
@@ -188,9 +188,9 @@ in
         The first argument should be used for finding dependencies, and
         the second should be used for overriding recipes.
 
-        If <code>nixpkgs.pkgs</code> is set, overlays specified here
+        If <literal>nixpkgs.pkgs</literal> is set, overlays specified here
         will be applied after the overlays that were already present
-        in <code>nixpkgs.pkgs</code>.
+        in <literal>nixpkgs.pkgs</literal>.
       '';
     };
 
@@ -205,9 +205,9 @@ in
       description = ''
         Specifies the platform where the NixOS configuration will run.
 
-        To cross-compile, set also <code>nixpkgs.buildPlatform</code>.
+        To cross-compile, set also <literal>nixpkgs.buildPlatform</literal>.
 
-        Ignored when <code>nixpkgs.pkgs</code> is set.
+        Ignored when <literal>nixpkgs.pkgs</literal> is set.
       '';
     };
 
@@ -230,7 +230,7 @@ in
         or if you're building machines, you can set this to match your
         development system and/or build farm.
 
-        Ignored when <code>nixpkgs.pkgs</code> is set.
+        Ignored when <literal>nixpkgs.pkgs</literal> is set.
       '';
     };
 
@@ -253,7 +253,7 @@ in
         use the old options.
 
         Specifies the platform on which NixOS should be built. When
-        <code>nixpkgs.crossSystem</code> is unset, it also specifies
+        <literal>nixpkgs.crossSystem</literal> is unset, it also specifies
         the platform <emphasis>for</emphasis> which NixOS should be
         built.  If this option is unset, it defaults to the platform
         type of the machine where evaluation happens. Specifying this
@@ -261,7 +261,7 @@ in
         deployment, or when building virtual machines. See its
         description in the Nixpkgs manual for more details.
 
-        Ignored when <code>nixpkgs.pkgs</code> or <code>hostPlatform</code> is set.
+        Ignored when <literal>nixpkgs.pkgs</literal> or <literal>hostPlatform</literal> is set.
       '';
     };
 
@@ -279,13 +279,13 @@ in
 
         Specifies the platform for which NixOS should be
         built. Specify this only if it is different from
-        <code>nixpkgs.localSystem</code>, the platform
+        <literal>nixpkgs.localSystem</literal>, the platform
         <emphasis>on</emphasis> which NixOS should be built. In other
         words, specify this to cross-compile NixOS. Otherwise it
         should be set as null, the default. See its description in the
         Nixpkgs manual for more details.
 
-        Ignored when <code>nixpkgs.pkgs</code> or <code>hostPlatform</code> is set.
+        Ignored when <literal>nixpkgs.pkgs</literal> or <literal>hostPlatform</literal> is set.
       '';
     };
 
@@ -316,7 +316,7 @@ in
         with a recently generated <literal>hardware-configuration.nix</literal>.
 
         Specifies the Nix platform type on which NixOS should be built.
-        It is better to specify <code>nixpkgs.localSystem</code> instead.
+        It is better to specify <literal>nixpkgs.localSystem</literal> instead.
         <programlisting>
         {
           nixpkgs.system = ..;
@@ -328,9 +328,9 @@ in
           nixpkgs.localSystem.system = ..;
         }
         </programlisting>
-        See <code>nixpkgs.localSystem</code> for more information.
+        See <literal>nixpkgs.localSystem</literal> for more information.
 
-        Ignored when <code>nixpkgs.pkgs</code>, <code>nixpkgs.localSystem</code> or <code>nixpkgs.hostPlatform</code> is set.
+        Ignored when <literal>nixpkgs.pkgs</literal>, <literal>nixpkgs.localSystem</literal> or <literal>nixpkgs.hostPlatform</literal> is set.
       '';
     };
   };

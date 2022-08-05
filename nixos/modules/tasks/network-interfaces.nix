@@ -1292,7 +1292,7 @@ in
       description = ''
         Whether to enable IPv6 Privacy Extensions for interfaces not
         configured explicitly in
-        <xref linkend="opt-networking.interfaces._name_.tempAddress" />.
+        <xref linkend="opt-networking.interfaces._name_.tempAddress"/>.
 
         This sets the ipv6.conf.*.use_tempaddr sysctl for all
         interfaces. Possible values are:

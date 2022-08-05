@@ -100,17 +100,17 @@ let
       isNormalUser = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Indicates whether this is an account for a “real” user. This
-          automatically sets <option>group</option> to
-          <literal>users</literal>, <option>createHome</option> to
-          <literal>true</literal>, <option>home</option> to
-          <filename>/home/<replaceable>username</replaceable></filename>,
-          <option>useDefaultShell</option> to <literal>true</literal>,
-          and <option>isSystemUser</option> to
-          <literal>false</literal>.
-          Exactly one of <literal>isNormalUser</literal> and
-          <literal>isSystemUser</literal> must be true.
+          automatically sets {option}`group` to
+          `users`, {option}`createHome` to
+          `true`, {option}`home` to
+          {file}`/home/«username»`,
+          {option}`useDefaultShell` to `true`,
+          and {option}`isSystemUser` to
+          `false`.
+          Exactly one of `isNormalUser` and
+          `isSystemUser` must be true.
         '';
       };
 
@@ -151,13 +151,12 @@ let
       pamMount = mkOption {
         type = with types; attrsOf str;
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           Attributes for user's entry in
-          <filename>pam_mount.conf.xml</filename>.
-          Useful attributes might include <code>path</code>,
-          <code>options</code>, <code>fstype</code>, and <code>server</code>.
-          See <link
-          xlink:href="http://pam-mount.sourceforge.net/pam_mount.conf.5.html" />
+          {file}`pam_mount.conf.xml`.
+          Useful attributes might include `path`,
+          `options`, `fstype`, and `server`.
+          See <http://pam-mount.sourceforge.net/pam_mount.conf.5.html>
           for more information.
         '';
       };
@@ -167,12 +166,12 @@ let
         default = pkgs.shadow;
         defaultText = literalExpression "pkgs.shadow";
         example = literalExpression "pkgs.bashInteractive";
-        description = ''
+        description = lib.mdDoc ''
           The path to the user's shell. Can use shell derivations,
-          like <literal>pkgs.bashInteractive</literal>. Don’t
+          like `pkgs.bashInteractive`. Don’t
           forget to enable your shell in
-          <literal>programs</literal> if necessary,
-          like <code>programs.zsh.enable = true;</code>.
+          `programs` if necessary,
+          like `programs.zsh.enable = true;`.
         '';
       };
 

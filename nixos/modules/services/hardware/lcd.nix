@@ -63,8 +63,7 @@ in with lib; {
           default = false;
           description = ''
             Set group-write permissions on a USB device.
-            </para>
-            <para>
+
             A USB connected LCD panel will most likely require having its
             permissions modified for lcdd to write to it. Enabling this option
             sets group-write permissions on the device identified by
@@ -72,13 +71,11 @@ in with lib; {
             <option>services.hardware.lcd.usbPid</option>. In order to find the
             values, you can run the <command>lsusb</command> command. Example
             output:
-            </para>
-            <para>
+
             <literal>
             Bus 005 Device 002: ID 0403:c630 Future Technology Devices International, Ltd lcd2usb interface
             </literal>
-            </para>
-            <para>
+
             In this case the vendor id is 0403 and the product id is c630.
           '';
         };

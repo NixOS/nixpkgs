@@ -61,7 +61,7 @@ in {
 
           The value is the size (in bits) of the DH params to generate. The
           generated DH params path can be found in
-          <literal>config.security.dhparams.params.<replaceable>name</replaceable>.path</literal>.
+          <literal>config.security.dhparams.params.«name».path</literal>.
 
           <note><para>The name of the DH params is taken as being the name of
           the service it serves and the params will be generated before the

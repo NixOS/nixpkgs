@@ -17,7 +17,10 @@ in {
         }
       '';
       type = types.lines;
-      description = "Verbatim Corefile to use. See <link xlink:href=\"https://coredns.io/manual/toc/#configuration\"/> for details.";
+      description = lib.mdDoc ''
+        Verbatim Corefile to use.
+        See <https://coredns.io/manual/toc/#configuration> for details.
+      '';
     };
 
     package = mkOption {

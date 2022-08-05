@@ -176,10 +176,10 @@ in
             certstore.nssdbdir = "../../home/alice/.pki/nssdb";
           }
         '';
-        description = ''
+        description = lib.mdDoc ''
           ncdns settings. Use this option to configure ncds
           settings not exposed in a NixOS option or to bypass one.
-          See the example ncdns.conf file at <link xlink:href="https://github.com/namecoin/ncdns/blob/master/_doc/ncdns.conf.example"/>
+          See the example ncdns.conf file at <https://github.com/namecoin/ncdns/blob/master/_doc/ncdns.conf.example>
           for the available options.
         '';
       };

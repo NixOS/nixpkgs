@@ -22,7 +22,7 @@ in
         with TLS client certificate authentication.
 
         This allows Docker clients to connect with the equivalents of the Docker
-        CLI <code>-H</code> and <code>--tls*</code> family of options.
+        CLI <literal>-H</literal> and <literal>--tls*</literal> family of options.
 
         For certificate setup, see https://docs.docker.com/engine/security/protect-access/
 
