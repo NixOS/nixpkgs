@@ -943,9 +943,9 @@ in
             [ "trans=virtio" "version=9p2000.L"  "msize=${toString cfg.msize}" ]
             ++ lib.optional (tag == "nix-store") "cache=loose";
         };
-      legacy = builtins.isBool config.tmpOnTmpfs;
-      tmpOnTmpfs = if legacy then config.tmpOnTmpfs else config.tmpOnTmpfs.enable;
-      tmpOnTmpfsSize = if legacy then config.tmpOnTmpfsSize else config.tmpOnTmpfs.size;
+      legacy = builtins.isBool config.boot.tmpOnTmpfs;
+      tmpOnTmpfs = if legacy then config.boot.tmpOnTmpfs else config.boot.tmpOnTmpfs.enable;
+      tmpOnTmpfsSize = if legacy then config.boot.tmpOnTmpfsSize else config.boot.tmpOnTmpfs.size;
     in
       mkVMOverride (cfg.fileSystems //
       optionalAttrs cfg.useDefaultFilesystems {
