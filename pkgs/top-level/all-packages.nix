@@ -5508,6 +5508,8 @@ with pkgs;
     tk = tk-8_5;
   };
 
+  dwdiff = callPackage ../applications/misc/dwdiff { };
+
   picoscope = callPackage ../applications/science/electronics/picoscope { };
 
   picotts = callPackage ../tools/audio/picotts { };
@@ -7377,6 +7379,8 @@ with pkgs;
   darkice = callPackage ../tools/audio/darkice { };
 
   bc-decaf = callPackage ../development/libraries/bc-decaf { };
+
+  deckmaster = callPackage ../applications/misc/deckmaster { };
 
   deco = callPackage ../applications/misc/deco { };
 
@@ -17419,8 +17423,6 @@ with pkgs;
 
   cutee = callPackage ../development/libraries/cutee { };
 
-  cutelyst = libsForQt5.callPackage ../development/libraries/cutelyst { };
-
   cxxtools = callPackage ../development/libraries/cxxtools { stdenv = gcc10StdenvCompat; };
 
   cwiid = callPackage ../development/libraries/cwiid { };
@@ -23286,8 +23288,6 @@ with pkgs;
   victoriametrics = callPackage ../servers/nosql/victoriametrics { };
 
   virtiofsd = callPackage ../servers/misc/virtiofsd { };
-
-  virtlyst = libsForQt5.callPackage ../servers/web-apps/virtlyst { };
 
   virtualenv = with python3Packages; toPythonApplication virtualenv;
 

@@ -20,6 +20,17 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-d1Tjqomr8Lcf+X+LZgi0wHlxXBUqHq/nAzDBbrxHAl4=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "grandalf==0.6" "grandalf" \
+      --replace "scmrepo==0.0.25" "scmrepo" \
+      --replace "dvc-data==0.0.16" "dvc-data" \
+      --replace "dvc-render==0.0.6" "dvc-render" \
+      --replace "setuptools_scm_git_archive==1.1" "setuptools_scm_git_archive"
+    substituteInPlace dvc/daemon.py \
+      --subst-var-by dvc "$out/bin/dcv"
+  '';
+
   nativeBuildInputs = with python3.pkgs; [
     setuptools-scm
     setuptools-scm-git-archive
@@ -82,16 +93,6 @@ python3.pkgs.buildPythonApplication rec {
     importlib-resources
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "grandalf==0.6" "grandalf" \
-      --replace "scmrepo==0.0.25" "scmrepo" \
-      --replace "dvc-data==0.0.16" "dvc-data" \
-      --replace "dvc-render==0.0.6" "dvc-render"
-    substituteInPlace dvc/daemon.py \
-      --subst-var-by dvc "$out/bin/dcv"
-  '';
-
   # Tests require access to real cloud services
   doCheck = false;
 
@@ -100,5 +101,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://dvc.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ cmcdragonkai fab ];
+    # ImportError: cannot import name 'GDriveAuthError' from 'dvc_objects.fs.implementations.gdrive'
+    broken = true;
   };
 }

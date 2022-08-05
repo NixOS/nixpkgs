@@ -10520,6 +10520,8 @@ in {
 
   tensorly = callPackage ../development/python-modules/tensorly { };
 
+  tensorrt = callPackage ../development/python-modules/tensorrt { };
+
   tellduslive = callPackage ../development/python-modules/tellduslive { };
 
   termcolor = callPackage ../development/python-modules/termcolor { };

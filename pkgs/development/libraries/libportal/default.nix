@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -28,6 +29,14 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-wDDE43UC6FBgPYLS+WWExeheURCH/3fCKu5oJg7GM+A=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-build-on-darwin.patch";
+      url = "https://github.com/flatpak/libportal/pull/106/commits/73f63ee57669c4fa604a7772484cd235d4fb612c.patch";
+      sha256 = "sha256-c9WUQPhn4IA3X1ie7SwnxuZXdvpPkpGdU4xgDwKN/L0=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
@@ -65,6 +74,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/flatpak/libportal";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
