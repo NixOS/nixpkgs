@@ -37875,6 +37875,10 @@ with pkgs;
 
   pspp = callPackage ../applications/science/math/pspp { };
 
+  raspa = callPackage ../applications/science/molecular-dynamics/raspa { };
+
+  raspa-data = callPackage ../applications/science/molecular-dynamics/raspa/data.nix { };
+
   ssw = callPackage ../applications/misc/ssw { };
 
   pynac = callPackage ../applications/science/math/pynac { };
