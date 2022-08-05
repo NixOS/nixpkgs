@@ -7171,6 +7171,8 @@ with pkgs;
 
   haste-server = callPackage ../servers/haste-server { };
 
+  hatch = python3Packages.callPackage ../development/tools/hatch { };
+
   hal-hardware-analyzer = libsForQt5.callPackage ../applications/science/electronics/hal-hardware-analyzer { };
 
   half = callPackage ../development/libraries/half { };
