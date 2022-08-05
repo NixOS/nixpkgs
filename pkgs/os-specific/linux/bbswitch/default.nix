@@ -2,7 +2,7 @@
 
 let
   baseName = "bbswitch";
-  version = "0.8";
+  version = "unstable-2021-11-29";
   name = "${baseName}-${version}-${kernel.version}";
 
 in
@@ -13,18 +13,15 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "Bumblebee-Project";
     repo = "bbswitch";
-    rev = "v${version}";
-    hash = "sha256-FHC8myKnouNDERVds2QCJj1ZstjHrOzFpb+FDiSBjL4=";
+    # https://github.com/Bumblebee-Project/bbswitch/tree/develop
+    rev = "23891174a80ea79c7720bcc7048a5c2bfcde5cd9";
+    hash = "sha256-50v1Jxem5kaI1dHOKmgBbPLxI82QeYxiaRHhrHpWRzU=";
   };
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/Bumblebee-Project/bbswitch/pull/102.patch";
-      sha256 = "1lbr6pyyby4k9rn2ry5qc38kc738d0442jhhq57vmdjb6hxjya7m";
-    })
-    (fetchpatch {
-      url = "https://github.com/Bumblebee-Project/bbswitch/pull/196.patch";
-      sha256 = "02ihy3piws7783qbm9q0mb9s18ipn5ckdy1iar74xn31qjrsn99n";
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-community/0bd986055ba52887b81048de5c61e618eec06eb0/trunk/0003-kernel-5.18.patch";
+      sha256 = "sha256-va62/bR1qyBBMPg0lUwCH7slGG0XijxVCsFa4FCoHEQ=";
     })
   ];
 
@@ -64,6 +61,5 @@ stdenv.mkDerivation {
     homepage = "https://github.com/Bumblebee-Project/bbswitch";
     maintainers = with maintainers; [ abbradar ];
     license = licenses.gpl2Plus;
-    broken = kernel.kernelAtLeast "5.18";
   };
 }
