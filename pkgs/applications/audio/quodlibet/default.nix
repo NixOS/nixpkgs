@@ -1,4 +1,4 @@
-{ lib, fetchurl, python3, wrapGAppsHook, gettext, libsoup, gnome, gtk3, gdk-pixbuf, librsvg,
+{ lib, fetchurl, fetchpatch, python3, wrapGAppsHook, gettext, libsoup, gnome, gtk3, gdk-pixbuf, librsvg,
   tag ? "", xvfb-run, dbus, glibcLocales, glib, glib-networking, gobject-introspection, hicolor-icon-theme,
   gst_all_1, withGstPlugins ? true,
   xineBackend ? false, xine-lib,
@@ -16,11 +16,19 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-MBYVgp9lLLr+2zVTkjcWKli8HucaVn0kn3eJ2SaCRbw=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook gettext ];
+  patches = [
+    (fetchpatch {
+      # Fixes cover globbing under python 3.10.5+
+      url = "https://github.com/quodlibet/quodlibet/commit/5eb7c30766e1dcb30663907664855ee94a3accc0.patch";
+      hash = "sha256-bDyEOE7Vs4df4BeN4QMvt6niisVEpvc1onmX5rtoAWc=";
+    })
+  ];
+
+  nativeBuildInputs = [ wrapGAppsHook gettext gobject-introspection ];
 
   checkInputs = [ gdk-pixbuf hicolor-icon-theme ] ++ (with python3.pkgs; [ pytest pytest-xdist polib xvfb-run dbus.daemon glibcLocales ]);
 
-  buildInputs = [ gnome.adwaita-icon-theme libsoup glib glib-networking gtk3 webkitgtk gdk-pixbuf keybinder3 gtksourceview libmodplug libappindicator-gtk3 kakasi gobject-introspection ]
+  buildInputs = [ gnome.adwaita-icon-theme libsoup glib glib-networking gtk3 webkitgtk gdk-pixbuf keybinder3 gtksourceview libmodplug libappindicator-gtk3 kakasi ]
     ++ (if xineBackend then [ xine-lib ] else with gst_all_1;
     [ gstreamer gst-plugins-base ] ++ optionals withGstPlugins [ gst-plugins-good gst-plugins-ugly gst-plugins-bad ]);
 
