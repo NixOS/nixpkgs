@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , pkg-config
 , meson
@@ -10,7 +11,7 @@
 , gtk3
 , libxml2
 , libhandy
-, webkitgtk
+, webkitgtk_4_1
 , folks
 , libgdata
 , sqlite
@@ -32,6 +33,21 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-DO3nybH7tb/ISrSQ3+Oj612m64Ov6X0GAWePMbKjCc4=";
   };
 
+  patches = [
+    # build: fix documentation build
+    # https://github.com/elementary/mail/pull/795
+    (fetchpatch {
+      url = "https://github.com/elementary/mail/commit/52a422cb1c5f061d8a683005e44da0a1c2195096.patch";
+      sha256 = "sha256-ndcIZXvmQbM/31Wtm6OSCnXdMYx+OlJrqV+baq6m+KY=";
+    })
+    # build: support webkit2gtk-4.1
+    # https://github.com/elementary/mail/pull/794
+    (fetchpatch {
+      url = "https://github.com/elementary/mail/commit/7d4878543b27251664852c708d54abc1e4580eab.patch";
+      sha256 = "sha256-yl6Bzjinp+ti/aX+t22GibGeQFtharZNk3MmbuJm0Tk=";
+    })
+  ];
+
   nativeBuildInputs = [
     libxml2
     meson
@@ -52,7 +68,7 @@ stdenv.mkDerivation rec {
     libgee
     libhandy
     sqlite
-    webkitgtk
+    webkitgtk_4_1
   ];
 
   postPatch = ''
