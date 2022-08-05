@@ -1,3 +1,11 @@
+################################################################################
+# WARNING: Changes made to this file MUST go through the usual PR review process
+#          and MUST be approved by a member of `meta.maintainers` before
+#          merging. Commits attempting to circumvent the PR review process -- as
+#          part of python-updates or otheriwse -- will be reverted without
+#          notice.
+################################################################################
+
 # For the moment we only support the CPU and GPU backends of jaxlib. The TPU
 # backend will require some additional work. Those wheels are located here:
 # https://storage.googleapis.com/jax-releases/libtpu_releases.html.

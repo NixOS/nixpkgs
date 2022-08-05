@@ -1,3 +1,10 @@
+################################################################################
+# WARNING: Changes made to this file MUST go through the usual PR review process
+#          and MUST be approved by a member of `meta.maintainers` before
+#          merging. Commits attempting to circumvent the PR review process -- as
+#          part of python-updates or otheriwse -- will be reverted without
+#          notice.
+################################################################################
 { buildPythonPackage
 , expecttest
 , fetchFromGitHub
