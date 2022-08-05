@@ -3,15 +3,16 @@
 , libcap, libdrm, libepoxy, minijail, virglrenderer, wayland, wayland-protocols
 }:
 
-let
-  upstreamInfo = with builtins; fromJSON (readFile ./upstream-info.json);
-in
-
 rustPlatform.buildRustPackage rec {
   pname = "crosvm";
-  inherit (upstreamInfo) version;
+  version = "103.3";
 
-  src = fetchgit (builtins.removeAttrs upstreamInfo.src [ "date" "path" ]);
+  src = fetchgit {
+    url = "https://chromium.googlesource.com/crosvm/crosvm";
+    rev = "e7db3a5cc78ca90ab06aadd5f08bb151090269b6";
+    sha256 = "0hyz0mg5fn6hi97awfpxfykgv68m935r037sdf85v3vcwjy5n5ki";
+    fetchSubmodules = true;
+  };
 
   separateDebugInfo = true;
 
