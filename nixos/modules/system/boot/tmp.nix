@@ -4,6 +4,18 @@ with lib;
 
 let
   cfg = config.boot;
+  
+  tmpOnTmpfsOptions = {
+    enable = mkEnableOption "mounting a tmpfs on {file}`/tmp` during boot.";
+    size = mkOption {
+      type = types.either types.str types.types.ints.positive;
+      default = "50%";
+      description = lib.mdDoc ''
+        Size of tmpfs in percentage.
+        Percentage is defined by systemd.
+      '';
+    };
+  };
 in
 {
 
@@ -20,8 +32,11 @@ in
     };
 
     boot.tmpOnTmpfs = mkOption {
-      type = types.bool;
-      default = false;
+      type = types.either types.bool ( types.submodule { options = tmpOnTmpfsOptions; } );
+      default = {
+        enable = false;
+        size = "50%";
+      };
       description = lib.mdDoc ''
          Whether to mount a tmpfs on {file}`/tmp` during boot.
       '';
@@ -40,10 +55,16 @@ in
 
   ###### implementation
 
-  config = {
+  config = let
+    legacy = builtins.isBool cfg.tmpOnTmpfs;
+    tmpOnTmpfs = if legacy then cfg.tmpOnTmpfs else cfg.tmpOnTmpfs.enable;
+    tmpOnTmpfsSize = if legacy then cfg.tmpOnTmpfsSize else cfg.tmpOnTmpfs.size;
+  in {
+    warnings = 
+      optional legacy "Deprecated: boot = { tmpOnTmpfs = …; tmpOnTmpfsSize = …; } should be replaced by boot.tmpOnTmpfs = { enable = …; size = …; }.";
 
     # When changing remember to update /tmp mount in virtualisation/qemu-vm.nix
-    systemd.mounts = mkIf cfg.tmpOnTmpfs [
+    systemd.mounts = mkIf tmpOnTmpfs [
       {
         what = "tmpfs";
         where = "/tmp";
@@ -53,7 +74,7 @@ in
                                                      "rw"
                                                      "nosuid"
                                                      "nodev"
-                                                     "size=${toString cfg.tmpOnTmpfsSize}" ];
+                                                     "size=${toString tmpOnTmpfsSize}" ];
       }
     ];
 
