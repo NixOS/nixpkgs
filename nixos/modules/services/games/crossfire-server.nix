@@ -76,7 +76,7 @@ in {
         {
           dm_file = '''
             admin:secret_password:localhost
-            jane:xyzzy:*
+            alice:xyzzy:*
           ''';
           ban_file = '''
             # Bob is a jerk
