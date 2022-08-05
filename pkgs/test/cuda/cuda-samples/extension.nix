@@ -11,9 +11,6 @@ final: prev: let
     "11.4" = "082dkk5y34wyvjgj2p5j1d00rk8xaxb9z0mhvz16bd469r1bw2qk";
     "11.5" = "sha256-AKRZbke0K59lakhTi8dX2cR2aBuWPZkiQxyKaZTvHrI=";
     "11.6" = "sha256-AsLNmAplfuQbXg9zt09tXAuFJ524EtTYsQuUlV1tPkE=";
-    # the tag 11.7 does not exists: see https://github.com/NVIDIA/cuda-samples/issues/128
-    # maybe fixed by https://github.com/NVIDIA/cuda-samples/pull/133
-    "11.7" = prev.lib.fakeSha256;
   }.${prev.cudaVersion};
 
 in {
