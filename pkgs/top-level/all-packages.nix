@@ -5029,6 +5029,8 @@ with pkgs;
 
   keyd = callPackage ../tools/inputmethods/keyd { };
 
+  twitch-tui = callPackage ../applications/networking/instant-messengers/twitch-tui { };
+
   gebaar-libinput = callPackage ../tools/inputmethods/gebaar-libinput { stdenv = gcc10StdenvCompat; };
 
   kime = callPackage ../tools/inputmethods/kime { };
@@ -32920,7 +32922,9 @@ with pkgs;
   quakespasm = callPackage ../games/quakespasm {
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreAudio CoreFoundation IOKit OpenGL;
   };
-  vkquake = callPackage ../games/quakespasm/vulkan.nix { };
+  vkquake = callPackage ../games/quakespasm/vulkan.nix {
+    inherit (darwin) moltenvk;
+  };
 
   ioquake3 = callPackage ../games/quake3/ioquake { };
   quake3e = callPackage ../games/quake3/quake3e { };
