@@ -16610,6 +16610,8 @@ with pkgs;
 
   sd-local = callPackage ../development/tools/sd-local { };
 
+  seer = libsForQt5.callPackage ../development/tools/misc/seer { };
+
   selenium-server-standalone = callPackage ../development/tools/selenium/server { };
 
   selendroid = callPackage ../development/tools/selenium/selendroid { };
