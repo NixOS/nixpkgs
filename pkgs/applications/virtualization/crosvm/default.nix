@@ -1,7 +1,6 @@
 { stdenv, lib, rustPlatform, fetchgit
 , minijail-tools, pkg-config, wayland-scanner
 , libcap, libdrm, libepoxy, minijail, virglrenderer, wayland, wayland-protocols
-, linux
 }:
 
 let
@@ -51,10 +50,6 @@ rustPlatform.buildRustPackage rec {
     mkdir -p $out/share/policy/
     cp -v seccomp/$arch/*.bpf $out/share/policy/
   '';
-
-  CROSVM_CARGO_TEST_KERNEL_BINARY =
-    lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform)
-      "${linux}/${stdenv.hostPlatform.linux-kernel.target}";
 
   passthru.updateScript = ./update.py;
 
