@@ -40,7 +40,7 @@ in buildPythonApplication rec {
     sha256 = "sha256-umIjXJ0et6Pi5Ejj96Q+ZhiKS+yj7bsgb4uQW6Ym6rU=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook glib setuptools-scm ];
+  nativeBuildInputs = [ wrapGAppsHook glib gobject-introspection setuptools-scm ];
 
   buildInputs = [
     libappindicator-gtk3
