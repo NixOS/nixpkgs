@@ -44,6 +44,12 @@ in {
             encryption = {
               allow = true;
               default = true;
+
+              verification_levels = {
+                receive = "cross-signed-tofu";
+                send = "cross-signed-tofu";
+                share = "cross-signed-tofu";
+              };
             };
             username_template = "facebook_{userid}";
           };
