@@ -17,8 +17,9 @@ stdenv.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/share/themes/${themeName}
-    cp -a {assets,gnome-shell,gtk-2.0,gtk-3.0,gtk-3.20,index.theme,metacity-1,unity,xfwm4} $out/share/themes/${themeName}
+
+    mkdir -p $out/share/themes/Omni
+    cp -a {assets,gnome-shell,gtk-2.0,gtk-3.0,gtk-3.20,index.theme,metacity-1,unity,xfwm4} $out/share/themes/Omni
 
     runHook postInstall
   '';
