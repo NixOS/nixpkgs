@@ -1,4 +1,4 @@
-{ lib 
+{ lib
 , stdenv
 , rustPlatform
 , fetchFromGitHub
@@ -8,13 +8,13 @@
 , openssl
 , xorg
 , libGL
-, gui ? false # build GUI version
+, withGui ? false # build GUI version
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rusty-psn";
   version = "0.1.2";
-  
+
   src = fetchFromGitHub {
     owner = "RainbowCookie32";
     repo = "rusty-psn";
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     copyDesktopItems
   ];
 
-  dependencies = if gui then [
+  buildInputs = if withGui then [
     openssl
     xorg.libxcb
     xorg.libX11
@@ -40,19 +40,19 @@ rustPlatform.buildRustPackage rec {
     libGL
     libGL.dev
   ] else [
-  	openssl
+    openssl
   ];
-  buildInputs = dependencies;
 
   buildNoDefaultFeatures = true;
-  buildFeatures = [ (if gui then "egui" else "cli") ];
+  buildFeatures = [ (if withGui then "egui" else "cli") ];
 
   postFixup = ''
-    patchelf --set-rpath "${lib.makeLibraryPath dependencies}" $out/bin/rusty-psn
-    ${if gui then "mv $out/bin/rusty-psn $out/bin/rusty-psn-gui" else ""}
+    patchelf --set-rpath "${lib.makeLibraryPath buildInputs}" $out/bin/rusty-psn
+  '' + lib.optionalString withGui ''
+    mv $out/bin/rusty-psn $out/bin/rusty-psn-gui
   '';
 
-  desktopItem = if gui then makeDesktopItem {
+  desktopItem = lib.optionalString withGui (makeDesktopItem {
     name = "rusty-psn";
     desktopName = "rusty-psn";
     exec = "rusty-psn-gui";
@@ -67,14 +67,14 @@ rustPlatform.buildRustPackage rec {
       "playstation"
       "update"
     ];
-  } else "";
-  desktopItems = if gui then [ desktopItem ] else [];
+  });
+  desktopItems = lib.optionals withGui [ desktopItem ];
 
   meta = with lib; {
-    description = "A simple tool to grab updates for PS3 games, directly from Sony's servers using their updates API";
-    homepage = "";
+    description = "Simple tool to grab updates for PS3 games, directly from Sony's servers using their updates API";
+    homepage = "https://github.com/RainbowCookie32/rusty-psn/";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ AngryAnt ];
+    maintainers = with maintainers; [ AngryAnt ];
   };
 }

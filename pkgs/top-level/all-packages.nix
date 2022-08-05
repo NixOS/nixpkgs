@@ -30214,7 +30214,7 @@ with pkgs;
 
   rusty-psn = callPackage ../applications/misc/rusty-psn {};
 
-  rusty-psn-gui = rusty-psn.override { gui = true; };
+  rusty-psn-gui = rusty-psn.override { withGui = true; };
 
   rymcast = callPackage ../applications/audio/rymcast {
     inherit (gnome) zenity;
