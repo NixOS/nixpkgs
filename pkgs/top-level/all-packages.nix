@@ -32519,7 +32519,7 @@ with pkgs;
 
   fish-fillets-ng = callPackage ../games/fish-fillets-ng { };
 
-  fishfight = callPackage ../games/fishfight {
+  jumpy = callPackage ../games/jumpy {
     inherit (xorg) libX11 libXi;
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
   };
