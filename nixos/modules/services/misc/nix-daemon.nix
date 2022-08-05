@@ -155,29 +155,29 @@ in
         type = types.enum [ "other" "batch" "idle" ];
         default = "other";
         example = "batch";
-        description = ''
+        description = lib.mdDoc ''
           Nix daemon process CPU scheduling policy. This policy propagates to
-          build processes. <literal>other</literal> is the default scheduling
-          policy for regular tasks. The <literal>batch</literal> policy is
-          similar to <literal>other</literal>, but optimised for
-          non-interactive tasks. <literal>idle</literal> is for extremely
+          build processes. `other` is the default scheduling
+          policy for regular tasks. The `batch` policy is
+          similar to `other`, but optimised for
+          non-interactive tasks. `idle` is for extremely
           low-priority tasks that should only be run when no other task
           requires CPU time.
 
-          Please note that while using the <literal>idle</literal> policy may
+          Please note that while using the `idle` policy may
           greatly improve responsiveness of a system performing expensive
           builds, it may also slow down and potentially starve crucial
           configuration updates during load.
 
-          <literal>idle</literal> may therefore be a sensible policy for
+          `idle` may therefore be a sensible policy for
           systems that experience only intermittent phases of high CPU load,
           such as desktop or portable computers used interactively. Other
-          systems should use the <literal>other</literal> or
-          <literal>batch</literal> policy instead.
+          systems should use the `other` or
+          `batch` policy instead.
 
           For more fine-grained resource control, please refer to
-          <citerefentry><refentrytitle>systemd.resource-control</refentrytitle><manvolnum>5</manvolnum></citerefentry> and adjust
-          <option>systemd.services.nix-daemon</option> directly.
+          {manpage}`systemd.resource-control(5)` and adjust
+          {option}`systemd.services.nix-daemon` directly.
       '';
       };
 

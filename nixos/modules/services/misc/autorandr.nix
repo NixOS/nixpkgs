@@ -114,9 +114,9 @@ let
             [ 0.0 0.0 1.0 ]
           ]
         '';
-        description = ''
+        description = lib.mdDoc ''
           Refer to
-          <citerefentry><refentrytitle>xrandr</refentrytitle><manvolnum>1</manvolnum></citerefentry>
+          {manpage}`xrandr(1)`
           for the documentation of the transform matrix.
         '';
       };

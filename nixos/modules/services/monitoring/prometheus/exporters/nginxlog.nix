@@ -24,7 +24,7 @@ in {
     metricsEndpoint = mkOption {
       type = types.str;
       default = "/metrics";
-      description = ''
+      description = lib.mdDoc ''
         Path under which to expose metrics.
       '';
     };

@@ -396,10 +396,10 @@ in {
               example = ''
                 bssid_blacklist=02:11:22:33:44:55 02:22:aa:44:55:66
               '';
-              description = ''
+              description = lib.mdDoc ''
                 Extra configuration lines appended to the network block.
                 See
-                <citerefentry><refentrytitle>wpa_supplicant.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>
+                {manpage}`wpa_supplicant.conf(5)`
                 for available options.
               '';
             };
@@ -470,10 +470,10 @@ in {
         example = ''
           p2p_disabled=1
         '';
-        description = ''
+        description = lib.mdDoc ''
           Extra lines appended to the configuration file.
           See
-          <citerefentry><refentrytitle>wpa_supplicant.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>
+          {manpage}`wpa_supplicant.conf(5)`
           for available options.
         '';
       };

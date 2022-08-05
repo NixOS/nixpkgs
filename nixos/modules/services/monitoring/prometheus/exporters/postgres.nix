@@ -11,7 +11,7 @@ in
     telemetryPath = mkOption {
       type = types.str;
       default = "/metrics";
-      description = ''
+      description = lib.mdDoc ''
         Path under which to expose metrics.
       '';
     };
@@ -19,14 +19,14 @@ in
       type = types.str;
       default = "user=postgres database=postgres host=/run/postgresql sslmode=disable";
       example = "postgresql://username:password@localhost:5432/postgres?sslmode=disable";
-      description = ''
+      description = lib.mdDoc ''
         Accepts PostgreSQL URI form and key=value form arguments.
       '';
     };
     runAsLocalSuperUser = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to run the exporter as the local 'postgres' super user.
       '';
     };

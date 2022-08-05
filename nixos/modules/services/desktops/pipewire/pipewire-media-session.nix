@@ -39,14 +39,14 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable the deprecated example Pipewire session manager";
+        description = lib.mdDoc "Whether to enable the deprecated example Pipewire session manager";
       };
 
       package = mkOption {
         type = types.package;
         default = pkgs.pipewire-media-session;
         defaultText = literalExpression "pkgs.pipewire-media-session";
-        description = ''
+        description = lib.mdDoc ''
           The pipewire-media-session derivation to use.
         '';
       };
@@ -54,7 +54,7 @@ in {
       config = {
         media-session = mkOption {
           type = json.type;
-          description = ''
+          description = lib.mdDoc ''
             Configuration for the media session core. For details see
             https://gitlab.freedesktop.org/pipewire/media-session/-/blob/${cfg.package.version}/src/daemon/media-session.d/media-session.conf
           '';
@@ -63,7 +63,7 @@ in {
 
         alsa-monitor = mkOption {
           type = json.type;
-          description = ''
+          description = lib.mdDoc ''
             Configuration for the alsa monitor. For details see
             https://gitlab.freedesktop.org/pipewire/media-session/-/blob/${cfg.package.version}/src/daemon/media-session.d/alsa-monitor.conf
           '';
@@ -72,7 +72,7 @@ in {
 
         bluez-monitor = mkOption {
           type = json.type;
-          description = ''
+          description = lib.mdDoc ''
             Configuration for the bluez5 monitor. For details see
             https://gitlab.freedesktop.org/pipewire/media-session/-/blob/${cfg.package.version}/src/daemon/media-session.d/bluez-monitor.conf
           '';
@@ -81,7 +81,7 @@ in {
 
         v4l2-monitor = mkOption {
           type = json.type;
-          description = ''
+          description = lib.mdDoc ''
             Configuration for the V4L2 monitor. For details see
             https://gitlab.freedesktop.org/pipewire/media-session/-/blob/${cfg.package.version}/src/daemon/media-session.d/v4l2-monitor.conf
           '';

@@ -27,27 +27,27 @@ in
       type = types.listOf types.str;
       default = [ ];
       example = [ "/home" ];
-      description = ''
+      description = lib.mdDoc ''
         List of paths to include into the backups. See the FILE SELECTION
-        section in <citerefentry><refentrytitle>duplicity</refentrytitle><manvolnum>1</manvolnum></citerefentry> for details on the syntax.
+        section in {manpage}`duplicity(1)` for details on the syntax.
       '';
     };
 
     exclude = mkOption {
       type = types.listOf types.str;
       default = [ ];
-      description = ''
+      description = lib.mdDoc ''
         List of paths to exclude from backups. See the FILE SELECTION section in
-        <citerefentry><refentrytitle>duplicity</refentrytitle><manvolnum>1</manvolnum></citerefentry> for details on the syntax.
+        {manpage}`duplicity(1)` for details on the syntax.
       '';
     };
 
     targetUrl = mkOption {
       type = types.str;
       example = "s3://host:port/prefix";
-      description = ''
+      description = lib.mdDoc ''
         Target url to backup to. See the URL FORMAT section in
-        <citerefentry><refentrytitle>duplicity</refentrytitle><manvolnum>1</manvolnum></citerefentry> for supported urls.
+        {manpage}`duplicity(1)` for supported urls.
       '';
     };
 
@@ -69,9 +69,9 @@ in
     frequency = mkOption {
       type = types.nullOr types.str;
       default = "daily";
-      description = ''
+      description = lib.mdDoc ''
         Run duplicity with the given frequency (see
-        <citerefentry><refentrytitle>systemd.time</refentrytitle><manvolnum>7</manvolnum></citerefentry> for the format).
+        {manpage}`systemd.time(7)` for the format).
         If null, do not run automatically.
       '';
     };
@@ -80,9 +80,9 @@ in
       type = types.listOf types.str;
       default = [ ];
       example = [ "--backend-retry-delay" "100" ];
-      description = ''
+      description = lib.mdDoc ''
         Extra command-line flags passed to duplicity. See
-        <citerefentry><refentrytitle>duplicity</refentrytitle><manvolnum>1</manvolnum></citerefentry>.
+        {manpage}`duplicity(1)`.
       '';
     };
 

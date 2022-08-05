@@ -31,9 +31,9 @@ in
         type = types.lines;
         default = "";
         description =
-          ''
+          lib.mdDoc ''
             This is the system-wide LXC config. See
-            <citerefentry><refentrytitle>lxc.system.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
+            {manpage}`lxc.system.conf(5)`.
           '';
       };
 
@@ -42,9 +42,9 @@ in
         type = types.lines;
         default = "";
         description =
-          ''
+          lib.mdDoc ''
             Default config (default.conf) for new containers, i.e. for
-            network config. See <citerefentry><refentrytitle>lxc.container.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
+            network config. See {manpage}`lxc.container.conf(5)`.
           '';
       };
 
