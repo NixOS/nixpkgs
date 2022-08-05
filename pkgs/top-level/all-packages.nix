@@ -30541,6 +30541,8 @@ with pkgs;
 
   stretchly = callPackage ../applications/misc/stretchly { };
 
+  stuffbin = callPackage ../tools/filesystems/stuffbin { };
+
   stumpish = callPackage ../applications/window-managers/stumpish {};
 
   stumpwm = lispPackages.stumpwm;
