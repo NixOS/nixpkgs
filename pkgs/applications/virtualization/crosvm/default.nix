@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
   arch = stdenv.hostPlatform.parsed.cpu.name;
 
   postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
+    cp ${cargoLock.lockFile} Cargo.lock
     sed -i "s|/usr/share/policy/crosvm/|$PWD/seccomp/$arch/|g" \
         seccomp/$arch/*.policy
   '';
