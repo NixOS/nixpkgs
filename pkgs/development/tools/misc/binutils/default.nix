@@ -32,12 +32,12 @@ assert enableGold -> execFormatIsELF stdenv.targetPlatform;
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
-  version = "2.38";
+  version = "2.39";
 
   srcs = {
     normal = fetchurl {
       url = "mirror://gnu/binutils/binutils-${version}.tar.bz2";
-      sha256 = "sha256-Bw7HHPB3pqWOC5WfBaCaNQFTeMLYpR6Q866r/jBZDvg=";
+      sha256 = "sha256-2iSoT+8iAQLdJAQt8G/eqFHCYUpTd/hu/6KPM7exYUg=";
     };
     vc4-none = fetchFromGitHub {
       owner = "itszor";
@@ -68,10 +68,6 @@ stdenv.mkDerivation {
     # Make binutils output deterministic by default.
     ./deterministic.patch
 
-
-    # Breaks nm BSD flag detection
-    ./0001-Revert-libtool.m4-fix-nm-BSD-flag-detection.patch
-
     # Required for newer macos versions
     ./0001-libtool.m4-update-macos-version-detection-block.patch
 
@@ -83,11 +79,12 @@ stdenv.mkDerivation {
     # cross-compiling.
     ./always-search-rpath.patch
 
-    # Fixed in 2.39
-    # https://sourceware.org/bugzilla/show_bug.cgi?id=28885
-    # https://sourceware.org/git/?p=binutils-gdb.git;a=patch;h=99852365513266afdd793289813e8e565186c9e6
-    # https://github.com/NixOS/nixpkgs/issues/170946
-    ./deterministic-temp-prefixes.patch
+    # Upstream backport of https://sourceware.org/PR29451:
+    # Don't emit 0-sized debug entries for objects without size.
+    # Without the change elfutils on i686-linux fail dwarf validity test:
+    #    https://sourceware.org/PR29450
+    # Remove once 2.40 releases.
+    ./gas-dwarf-zero-PR29451.patch
   ]
   ++ lib.optional targetPlatform.isiOS ./support-ios.patch
   # This patch was suggested by Nick Clifton to fix
@@ -105,17 +102,6 @@ stdenv.mkDerivation {
      (if stdenv.targetPlatform.isMusl
       then substitute { src = ./mips64-default-n64.patch; replacements = [ "--replace" "gnuabi64" "muslabi64" ]; }
       else ./mips64-default-n64.patch)
-  # On PowerPC, when generating assembly code, GCC generates a `.machine`
-  # custom instruction which instructs the assembler to generate code for this
-  # machine. However, some GCC versions generate the wrong one, or make it
-  # too strict, which leads to some confusing "unrecognized opcode: wrtee"
-  # or "unrecognized opcode: eieio" errors.
-  #
-  # To remove when binutils 2.39 is released.
-  #
-  # Upstream commit:
-  # https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=cebc89b9328eab994f6b0314c263f94e7949a553
-  ++ lib.optional stdenv.targetPlatform.isPower ./ppc-make-machine-less-strict.patch
   ;
 
   outputs = [ "out" "info" "man" ];
@@ -190,6 +176,11 @@ stdenv.mkDerivation {
     # for us to do is not leave it to chance, and force the program prefix to be
     # what we want it to be.
     "--program-prefix=${targetPrefix}"
+
+    # Unconditionally disable:
+    # - musl target needs porting: https://sourceware.org/PR29477
+    # - all targets rely on javac: https://sourceware.org/PR29479
+    "--disable-gprofng"
   ]
   ++ lib.optionals withAllTargets [ "--enable-targets=all" ]
   ++ lib.optionals enableGold [ "--enable-gold" "--enable-plugins" ]
@@ -200,10 +191,6 @@ stdenv.mkDerivation {
 
   # Fails
   doCheck = false;
-
-  # Remove on next bump. It's a vestige of past conditional. Stays here to avoid
-  # mass rebuild.
-  postFixup = "";
 
   # Break dependency on pkgsBuildBuild.gcc when building a cross-binutils
   stripDebugList = if stdenv.hostPlatform != stdenv.targetPlatform then "bin lib ${stdenv.hostPlatform.config}" else null;
