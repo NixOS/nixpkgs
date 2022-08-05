@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
   ./signal-protocol-vala-test
   TEST2=$?
   set +x
-  if [ $TEST1 != 0 ] && [ $TEST2 != 0 ]; then
+  if [ $TEST1 != 0 ] || [ $TEST2 != 0 ]; then
     echo "tests failed"
     exit 1;
   else
