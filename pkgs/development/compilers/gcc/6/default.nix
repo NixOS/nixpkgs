@@ -227,7 +227,7 @@ stdenv.mkDerivation ({
 
   preConfigure = import ../common/pre-configure.nix {
     inherit lib;
-    inherit version targetPlatform hostPlatform gnatboot langJava langAda langGo crossStageStatic;
+    inherit version targetPlatform hostPlatform gnatboot langJava langAda langGo crossStageStatic enableMultilib;
   };
 
   dontDisableStatic = true;
@@ -321,8 +321,6 @@ stdenv.mkDerivation ({
 
   enableParallelBuilding = true;
   inherit enableShared enableMultilib;
-
-  is64bit = stdenv.is64bit && !stdenv.hostPlatform.isMips64n32;
 
   meta = {
     homepage = "https://gcc.gnu.org/";

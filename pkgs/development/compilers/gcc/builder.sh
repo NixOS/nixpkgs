@@ -193,7 +193,7 @@ preInstall() {
     mkdir -p "$out/${targetConfig}/lib"
     mkdir -p "${!outputLib}/${targetConfig}/lib"
     # Make ‘lib64’ symlinks to ‘lib’.
-    if [ -n "$is64bit" -a -z "$enableMultilib" ]; then
+    if [ -n "$linkLib64toLib" ]; then
         ln -s lib "$out/${targetConfig}/lib64"
         ln -s lib "${!outputLib}/${targetConfig}/lib64"
     fi
