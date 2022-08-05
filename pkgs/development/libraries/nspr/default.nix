@@ -3,6 +3,7 @@
 , fetchurl
 , CoreServices
 , buildPackages
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -43,6 +44,10 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
   enableParallelBuilding = true;
+
+  passthru.tests = {
+    inherit (nixosTests) firefox firefox-esr-91 firefox-esr-102;
+  };
 
   meta = with lib; {
     homepage = "https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/Reference/NSPR_functions";
