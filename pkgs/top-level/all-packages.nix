@@ -9551,6 +9551,8 @@ with pkgs;
 
   pell = callPackage ../applications/misc/pell { };
 
+  perccli = callPackage ../tools/misc/perccli { };
+
   perceptualdiff = callPackage ../tools/graphics/perceptualdiff { };
 
   percona-xtrabackup = percona-xtrabackup_8_0;
@@ -10848,6 +10850,8 @@ with pkgs;
   stenc = callPackage ../tools/backup/stenc { };
 
   stm32loader = with python3Packages; toPythonApplication stm32loader;
+
+  storcli = callPackage ../tools/misc/storcli { };
 
   stremio = qt5.callPackage ../applications/video/stremio { };
 
