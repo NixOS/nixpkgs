@@ -27,7 +27,7 @@
 
 stdenv.mkDerivation rec {
   pname = "librsvg";
-  version = "2.54.4";
+  version = "2.55.0";
 
   outputs = [ "out" "dev" "installedTests" ] ++ lib.optionals withIntrospection [
     "devdoc"
@@ -35,10 +35,16 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "6hUqJD9qQ8DgNqKMcN4/y83qVmTGgRx4WSvCKezCSDM=";
+    sha256 = "bmJsVk41S82MOEuQ+OTzCzA6+mweDLXMVroUkAxdtzA=";
   };
 
-  cargoVendorDir = "vendor";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-tvfdRGyrEkEh6sb69f0ugfzR2bgGdWa05pSyovpXAF8=";
+    # TODO: move this to fetchCargoTarball
+    dontConfigure = true;
+  };
 
   strictDeps = true;
 
