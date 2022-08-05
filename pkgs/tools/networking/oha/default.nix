@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "oha";
-  version = "0.5.0";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "hatoo";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-wCoBlbi4/EiTAA1xiZ/taVrokE0ECf8STAlA1sk/pm0=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-P21rANxgreXu8vA1vsFCSkh1Irs67r3s33XT1dMFD7I=";
   };
 
-  cargoSha256 = "sha256-tcORdyxGViUhKbtxVJaZ1G3uUpyr1pRLu5j8v52lMg8=";
+  cargoSha256 = "sha256-l6xQbZVrWF8Uw27datqvv9B3LoPtoaCnumo0gIjKdaA=";
 
   nativeBuildInputs = lib.optional stdenv.isLinux pkg-config;
 
@@ -24,6 +24,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "HTTP load generator inspired by rakyll/hey with tui animation";
     homepage = "https://github.com/hatoo/oha";
+    changelog = "https://github.com/hatoo/oha/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
   };
