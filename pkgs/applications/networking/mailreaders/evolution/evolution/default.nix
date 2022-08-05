@@ -22,7 +22,7 @@
 , shared-mime-info
 , libical
 , db
-, gcr
+, gcr_4
 , sqlite
 , gnome
 , gnome-desktop
@@ -45,11 +45,11 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution";
-  version = "3.45.1";
+  version = "3.45.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "/iRZq5DdZ86JdtWuu6ekP69gqvBJMeTWnxxG10ensW4=";
+    sha256 = "QjAM2fyIpmwra+8CHoqXaQvAOuvV+P4s9U4qyBys78g=";
   };
 
   nativeBuildInputs = [
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     bogofilter
     db
     evolution-data-server
-    gcr
+    gcr_4
     gdk-pixbuf
     glib
     glib-networking
@@ -125,6 +125,7 @@ stdenv.mkDerivation rec {
     };
   };
 
+  PKG_CONFIG_CAMEL_1_2_CAMEL_PROVIDERDIR = "${placeholder "out"}/lib/evolution-data-server/camel-providers";
   PKG_CONFIG_LIBEDATASERVERUI_1_2_UIMODULEDIR = "${placeholder "out"}/lib/evolution-data-server/ui-modules";
 
   meta = with lib; {
