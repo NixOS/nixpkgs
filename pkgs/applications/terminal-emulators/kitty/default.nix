@@ -21,21 +21,20 @@
 , bashInteractive
 , zsh
 , fish
-, fetchpatch
 , nixosTests
 }:
 
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.25.1";
+  version = "0.25.2";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "sha256-wL631cbA6ffXZomi6iDHk7XerRlpIL6T2qlEiQvFSJY=";
+    sha256 = "sha256-o/vVz1lPfsgkzbYjYhIrScCAROmVdiPsNwjW/m5n7Us=";
   };
 
   buildInputs = [
@@ -78,42 +77,12 @@ buildPythonApplication rec {
   outputs = [ "out" "terminfo" "shell_integration" ];
 
   patches = [
-    # Fix to ensure that files in tar files used by SSH kitten have write permissions.
-    (fetchpatch {
-      name = "fix-tarball-file-permissions.patch";
-      url = "https://github.com/kovidgoyal/kitty/commit/8540ca399053e8d42df27283bb5dd4af562ed29b.patch";
-      sha256 = "sha256-y5w+ritkR+ZEfNSRDQW9r3BU2qt98UNK7vdEX/X+mKU=";
-    })
-
-    # Remove upon next release. Needed because of a missing #define.
-    (fetchpatch {
-      name = "fontconfig-1.patch";
-      url = "https://github.com/kovidgoyal/kitty/commit/bec620a8d30c36453e471b140b07483c7f875bf4.patch";
-      sha256 = "sha256-r1OTcXdO+RUAXmmIqI07m+z0zXq8DXCzgBRXPpnkGGM=";
-    })
-    (fetchpatch {
-      name = "fontconfig-2.patch";
-      url = "https://github.com/kovidgoyal/kitty/commit/1283a2b7e552d30cabce9345e5c13e5f9079183d.patch";
-      sha256 = "sha256-UM/OsumnfVHuHTahpRwyWZOeu6L8WOwbBf3lcjwdTj8=";
-    })
-    (fetchpatch {
-      name = "fontconfig-3.patch";
-      url = "https://github.com/kovidgoyal/kitty/commit/5c4abe749b1f50ae556a711d24ac7f3e384fac4e.patch";
-      sha256 = "sha256-amvyv5cZxHGPg7dZv649WjH4MNloFbmz5D4rhjKNzYA=";
-    })
-
     # Needed on darwin
 
     # Gets `test_ssh_shell_integration` to pass for `zsh` when `compinit` complains about
     # permissions.
     ./zsh-compinit.patch
 
-    # Skip login shell detection when login shell is set to nologin
-    (fetchpatch {
-      name = "skip-login-shell-detection-for-nologin.patch";
-      url = "https://github.com/kovidgoyal/kitty/commit/27906ea853ce7862bcb83e324ef80f6337b5d846.patch";
-      sha256 = "sha256-Zg6uWkiWvb45i4xcp9k6jy0R2IQMT4PXr7BenzZ/md8=";
-    })
     # Skip `test_ssh_bootstrap_with_different_launchers` when launcher is `zsh` since it causes:
     # OSError: master_fd is in error condition
     ./disable-test_ssh_bootstrap_with_different_launchers.patch
