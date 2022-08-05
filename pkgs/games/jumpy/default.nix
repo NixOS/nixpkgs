@@ -13,17 +13,17 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "fishfight";
-  version = "0.4.2";
+  pname = "jumpy";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
-    owner = "fishfight";
+    owner = "fishfolks";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-q1Hh4P/huoFuW/+Mb9yKUMKaky1RshGpjrObBHRCk+8=";
+    sha256 = "sha256-01zhiQi6v/8ZajsdBU+4hKUCj+PRJ/vUHluOIzy/Gi8=";
   };
 
-  cargoSha256 = "sha256-PEGK95eXIHv2sxSwUU4345KtxDyRJn/+aEiJIDmkq6Y=";
+  cargoSha256 = "sha256-AXaGuRqSFiq+Uiy+UaqPdPVyDhCogC64KZZ0Ah1Yo7A=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [
     pkg-config

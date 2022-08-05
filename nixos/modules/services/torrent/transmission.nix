@@ -55,13 +55,13 @@ in
             type = types.path;
             default = "${cfg.home}/${incompleteDir}";
             defaultText = literalExpression ''"''${config.${opt.home}}/${incompleteDir}"'';
-            description = ''
+            description = lib.mdDoc ''
               When enabled with
               services.transmission.home
-              <xref linkend="opt-services.transmission.settings.incomplete-dir-enabled"/>,
+              [](#opt-services.transmission.settings.incomplete-dir-enabled),
               new torrents will download the files to this directory.
               When complete, the files will be moved to download-dir
-              <xref linkend="opt-services.transmission.settings.download-dir"/>.
+              [](#opt-services.transmission.settings.download-dir).
             '';
           };
           options.incomplete-dir-enabled = mkOption {
@@ -82,17 +82,17 @@ in
           options.peer-port-random-high = mkOption {
             type = types.port;
             default = 65535;
-            description = ''
+            description = lib.mdDoc ''
               The maximum peer port to listen to for incoming connections
-              when <xref linkend="opt-services.transmission.settings.peer-port-random-on-start"/> is enabled.
+              when [](#opt-services.transmission.settings.peer-port-random-on-start) is enabled.
             '';
           };
           options.peer-port-random-low = mkOption {
             type = types.port;
             default = 65535;
-            description = ''
+            description = lib.mdDoc ''
               The minimal peer port to listen to for incoming connections
-              when <xref linkend="opt-services.transmission.settings.peer-port-random-on-start"/> is enabled.
+              when [](#opt-services.transmission.settings.peer-port-random-on-start) is enabled.
             '';
           };
           options.peer-port-random-on-start = mkOption {
@@ -117,9 +117,9 @@ in
           options.script-torrent-done-enabled = mkOption {
             type = types.bool;
             default = false;
-            description = ''
+            description = lib.mdDoc ''
               Whether to run
-              <xref linkend="opt-services.transmission.settings.script-torrent-done-filename"/>
+              [](#opt-services.transmission.settings.script-torrent-done-filename)
               at torrent completion.
             '';
           };
@@ -156,15 +156,15 @@ in
           options.watch-dir-enabled = mkOption {
             type = types.bool;
             default = false;
-            description = ''Whether to enable the
-              <xref linkend="opt-services.transmission.settings.watch-dir"/>.
+            description = lib.mdDoc ''Whether to enable the
+              [](#opt-services.transmission.settings.watch-dir).
             '';
           };
           options.trash-original-torrent-files = mkOption {
             type = types.bool;
             default = false;
-            description = ''Whether to delete torrents added from the
-              <xref linkend="opt-services.transmission.settings.watch-dir"/>.
+            description = lib.mdDoc ''Whether to delete torrents added from the
+              [](#opt-services.transmission.settings.watch-dir).
             '';
           };
         };
@@ -174,26 +174,26 @@ in
         type = with types; nullOr str;
         default = null;
         example = "770";
-        description = ''
-          If not <code>null</code>, is used as the permissions
-          set by <literal>systemd.activationScripts.transmission-daemon</literal>
-          on the directories <xref linkend="opt-services.transmission.settings.download-dir"/>,
-          <xref linkend="opt-services.transmission.settings.incomplete-dir"/>.
-          and <xref linkend="opt-services.transmission.settings.watch-dir"/>.
+        description = lib.mdDoc ''
+          If not `null`, is used as the permissions
+          set by `systemd.activationScripts.transmission-daemon`
+          on the directories [](#opt-services.transmission.settings.download-dir),
+          [](#opt-services.transmission.settings.incomplete-dir).
+          and [](#opt-services.transmission.settings.watch-dir).
           Note that you may also want to change
-          <xref linkend="opt-services.transmission.settings.umask"/>.
+          [](#opt-services.transmission.settings.umask).
         '';
       };
 
       home = mkOption {
         type = types.path;
         default = "/var/lib/transmission";
-        description = ''
-          The directory where Transmission will create <literal>${settingsDir}</literal>.
-          as well as <literal>${downloadsDir}/</literal> unless
-          <xref linkend="opt-services.transmission.settings.download-dir"/> is changed,
-          and <literal>${incompleteDir}/</literal> unless
-          <xref linkend="opt-services.transmission.settings.incomplete-dir"/> is changed.
+        description = lib.mdDoc ''
+          The directory where Transmission will create `${settingsDir}`.
+          as well as `${downloadsDir}/` unless
+          [](#opt-services.transmission.settings.download-dir) is changed,
+          and `${incompleteDir}/` unless
+          [](#opt-services.transmission.settings.incomplete-dir) is changed.
         '';
       };
 
@@ -211,10 +211,10 @@ in
 
       credentialsFile = mkOption {
         type = types.path;
-        description = ''
+        description = lib.mdDoc ''
           Path to a JSON file to be merged with the settings.
           Useful to merge a file which is better kept out of the Nix store
-          to set secret config parameters like <code>rpc-password</code>.
+          to set secret config parameters like `rpc-password`.
         '';
         default = "/dev/null";
         example = "/var/lib/secrets/transmission/settings.json";
@@ -237,7 +237,7 @@ in
         to open many more connections at the same time.
 
         Note that you may also want to increase
-        <code>peer-limit-global"</code>.
+        <literal>peer-limit-global"</literal>.
         And be aware that these settings are quite aggressive
         and might not suite your regular desktop use.
         For instance, SSH sessions may time out more easily'';

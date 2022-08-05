@@ -379,9 +379,8 @@ let
       gce_sd_configs = mkOpt (types.listOf promTypes.gce_sd_config) ''
         List of Google Compute Engine service discovery configurations.
 
-        See <link
-        xlink:href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#gce_sd_config">the
-        relevant Prometheus configuration docs</link> for more detail.
+        See <link xlink:href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#gce_sd_config">the relevant Prometheus configuration docs</link>
+        for more detail.
       '';
 
       hetzner_sd_configs = mkOpt (types.listOf promTypes.hetzner_sd_config) ''
@@ -807,9 +806,7 @@ let
       filter = mkOpt types.str ''
         Filter can be used optionally to filter the instance list by other
         criteria Syntax of this filter string is described here in the filter
-        query parameter section: <link
-        xlink:href="https://cloud.google.com/compute/docs/reference/latest/instances/list"
-        />.
+        query parameter section: <link xlink:href="https://cloud.google.com/compute/docs/reference/latest/instances/list"/>.
       '';
 
       refresh_interval = mkDefOpt types.str "60s" ''
@@ -825,7 +822,7 @@ let
         The tag separator used to separate concatenated GCE instance network tags.
 
         See the GCP documentation on network tags for more information:
-        <link xlink:href="https://cloud.google.com/vpc/docs/add-remove-network-tags" />
+        <link xlink:href="https://cloud.google.com/vpc/docs/add-remove-network-tags"/>
       '';
     };
   };
@@ -1033,13 +1030,13 @@ let
 
     auth_token = mkOpt types.str ''
       Optional authentication information for token-based authentication:
-      <link xlink:href="https://docs.mesosphere.com/1.11/security/ent/iam-api/#passing-an-authentication-token" />
+      <link xlink:href="https://docs.mesosphere.com/1.11/security/ent/iam-api/#passing-an-authentication-token"/>
       It is mutually exclusive with <literal>auth_token_file</literal> and other authentication mechanisms.
     '';
 
     auth_token_file = mkOpt types.str ''
       Optional authentication information for token-based authentication:
-      <link xlink:href="https://docs.mesosphere.com/1.11/security/ent/iam-api/#passing-an-authentication-token" />
+      <link xlink:href="https://docs.mesosphere.com/1.11/security/ent/iam-api/#passing-an-authentication-token"/>
       It is mutually exclusive with <literal>auth_token</literal> and other authentication mechanisms.
     '';
   };

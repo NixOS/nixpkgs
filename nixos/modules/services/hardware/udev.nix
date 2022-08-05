@@ -209,11 +209,11 @@ in
       packages = mkOption {
         type = types.listOf types.path;
         default = [];
-        description = ''
-          List of packages containing <command>udev</command> rules.
+        description = lib.mdDoc ''
+          List of packages containing {command}`udev` rules.
           All files found in
-          <filename><replaceable>pkg</replaceable>/etc/udev/rules.d</filename> and
-          <filename><replaceable>pkg</replaceable>/lib/udev/rules.d</filename>
+          {file}`«pkg»/etc/udev/rules.d` and
+          {file}`«pkg»/lib/udev/rules.d`
           will be included.
         '';
         apply = map getBin;
@@ -281,16 +281,15 @@ in
     networking.usePredictableInterfaceNames = mkOption {
       default = true;
       type = types.bool;
-      description = ''
-        Whether to assign <link
-        xlink:href='http://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames'>predictable
-        names to network interfaces</link>.  If enabled, interfaces
+      description = lib.mdDoc ''
+        Whether to assign [predictable names to network interfaces](http://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames).
+        If enabled, interfaces
         are assigned names that contain topology information
-        (e.g. <literal>wlp3s0</literal>) and thus should be stable
+        (e.g. `wlp3s0`) and thus should be stable
         across reboots.  If disabled, names depend on the order in
         which interfaces are discovered by the kernel, which may
         change randomly across reboots; for instance, you may find
-        <literal>eth0</literal> and <literal>eth1</literal> flipping
+        `eth0` and `eth1` flipping
         unpredictably.
       '';
     };
@@ -306,8 +305,8 @@ in
 
           List of packages containing <command>udev</command> rules that will be copied to stage 1.
           All files found in
-          <filename><replaceable>pkg</replaceable>/etc/udev/rules.d</filename> and
-          <filename><replaceable>pkg</replaceable>/lib/udev/rules.d</filename>
+          <filename>«pkg»/etc/udev/rules.d</filename> and
+          <filename>«pkg»/lib/udev/rules.d</filename>
           will be included.
         '';
       };

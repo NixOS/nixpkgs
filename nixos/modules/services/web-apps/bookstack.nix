@@ -52,7 +52,7 @@ in {
       description = ''
         A file containing the Laravel APP_KEY - a 32 character long,
         base64 encoded key used for encryption where needed. Can be
-        generated with <code>head -c 32 /dev/urandom | base64</code>.
+        generated with <literal>head -c 32 /dev/urandom | base64</literal>.
       '';
       example = "/run/keys/bookstack-appkey";
       type = types.path;
@@ -74,7 +74,7 @@ in {
     appURL = mkOption {
       description = ''
         The root URL that you want to host BookStack on. All URLs in BookStack will be generated using this value.
-        If you change this in the future you may need to run a command to update stored URLs in the database. Command example: <code>php artisan bookstack:update-url https://old.example.com https://new.example.com</code>
+        If you change this in the future you may need to run a command to update stored URLs in the database. Command example: <literal>php artisan bookstack:update-url https://old.example.com https://new.example.com</literal>
       '';
       default = "http${lib.optionalString tlsEnabled "s"}://${cfg.hostname}";
       defaultText = ''http''${lib.optionalString tlsEnabled "s"}://''${cfg.hostname}'';

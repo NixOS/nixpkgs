@@ -78,7 +78,7 @@ in
           using <package>envsubst</package> which is helpful for specifying
           secrets:
           <programlisting>
-          { <xref linkend="opt-services.privacyidea.secretKey" /> = "$SECRET"; }
+          { <xref linkend="opt-services.privacyidea.secretKey"/> = "$SECRET"; }
           </programlisting>
 
           The environment-file can now specify the actual secret key:
@@ -207,7 +207,7 @@ in
           description = ''
             Attribute-set containing the settings for <package>privacyidea-ldap-proxy</package>.
             It's possible to pass secrets using env-vars as substitutes and
-            use the option <xref linkend="opt-services.privacyidea.ldap-proxy.environmentFile" />
+            use the option <xref linkend="opt-services.privacyidea.ldap-proxy.environmentFile"/>
             to inject them via <package>envsubst</package>.
           '';
         };
@@ -215,9 +215,9 @@ in
         environmentFile = mkOption {
           default = null;
           type = types.nullOr types.str;
-          description = ''
+          description = lib.mdDoc ''
             Environment file containing secrets to be substituted into
-            <xref linkend="opt-services.privacyidea.ldap-proxy.settings" />.
+            [](#opt-services.privacyidea.ldap-proxy.settings).
           '';
         };
       };

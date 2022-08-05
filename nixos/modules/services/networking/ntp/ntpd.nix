@@ -40,21 +40,19 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to synchronise your machine's time using ntpd, as a peer in
           the NTP network.
-          </para>
-          <para>
-          Disables <literal>systemd.timesyncd</literal> if enabled.
+
+          Disables `systemd.timesyncd` if enabled.
         '';
       };
 
       restrictDefault = mkOption {
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           The restriction flags to be set by default.
-          </para>
-          <para>
+
           The default flags prevent external hosts from using ntpd as a DDoS
           reflector, setting system time, and querying OS/ntpd version. As
           recommended in section 6.5.1.1.3, answer "No" of
@@ -65,10 +63,9 @@ in
 
       restrictSource = mkOption {
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           The restriction flags to be set on source.
-          </para>
-          <para>
+
           The default flags allow peers to be added by ntpd from configured
           pool(s), but not by other means.
         '';

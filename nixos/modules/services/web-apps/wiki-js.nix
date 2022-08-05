@@ -95,12 +95,11 @@ in {
       };
       description = ''
         Settings to configure <package>wiki-js</package>. This directly
-        corresponds to <link xlink:href="https://docs.requarks.io/install/config">the upstream
-        configuration options</link>.
+        corresponds to <link xlink:href="https://docs.requarks.io/install/config">the upstream configuration options</link>.
 
         Secrets can be injected via the environment by
         <itemizedlist>
-          <listitem><para>specifying <xref linkend="opt-services.wiki-js.environmentFile" />
+          <listitem><para>specifying <xref linkend="opt-services.wiki-js.environmentFile"/>
           to contain secrets</para></listitem>
           <listitem><para>and setting sensitive values to <literal>$(ENVIRONMENT_VAR)</literal>
           with this value defined in the environment-file.</para></listitem>

@@ -480,7 +480,7 @@ in
         if you want to resume from file. If left empty, the swap partitions are used.
         Specify here the device where the file resides.
         You should also use <varname>boot.kernelParams</varname> to specify
-        <literal><replaceable>resume_offset</replaceable></literal>.
+        <literal>«resume_offset»</literal>.
       '';
     };
 

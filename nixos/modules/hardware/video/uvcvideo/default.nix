@@ -34,15 +34,15 @@ in
       packages = mkOption {
         type = types.listOf types.path;
         example = literalExpression "[ pkgs.tiscamera ]";
-        description = ''
-          List of packages containing <command>uvcvideo</command> dynamic controls
+        description = lib.mdDoc ''
+          List of packages containing {command}`uvcvideo` dynamic controls
           rules. All files found in
-          <filename><replaceable>pkg</replaceable>/share/uvcdynctrl/data</filename>
+          {file}`«pkg»/share/uvcdynctrl/data`
           will be included.
 
-          Note that these will serve as input to the <command>libwebcam</command>
-          package which through its own <command>udev</command> rule will register
-          the dynamic controls from specified packages to the <command>uvcvideo</command>
+          Note that these will serve as input to the {command}`libwebcam`
+          package which through its own {command}`udev` rule will register
+          the dynamic controls from specified packages to the {command}`uvcvideo`
           driver.
         '';
         apply = map getBin;

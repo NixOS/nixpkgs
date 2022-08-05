@@ -68,7 +68,7 @@ in {
     services.zoneminder = with lib; {
       enable = lib.mkEnableOption ''
         ZoneMinder
-        </para><para>
+
         If you intend to run the database locally, you should set
         `config.services.zoneminder.database.createLocally` to true. Otherwise,
         when set to `false` (the default), you will have to create the database
@@ -82,8 +82,6 @@ in {
         default = "nginx";
         description = ''
           The webserver to configure for the PHP frontend.
-          </para>
-          <para>
 
           Set it to `none` if you want to configure it yourself. PRs are welcome
           for support for other web servers.

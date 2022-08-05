@@ -287,7 +287,7 @@ in
       relay = {
         enable = mkEnableOption ''relaying of Tor traffic for others.
 
-          See <link xlink:href="https://www.torproject.org/docs/tor-doc-relay" />
+          See <link xlink:href="https://www.torproject.org/docs/tor-doc-relay"/>
           for details.
 
           Setting this to true requires setting
@@ -348,7 +348,7 @@ in
 
                 <para>
                   See
-                  <link xlink:href="https://www.torproject.org/docs/tor-doc-relay.html.en" />
+                  <link xlink:href="https://www.torproject.org/docs/tor-doc-relay.html.en"/>
                   for more info.
                 </para>
               </listitem>
@@ -366,7 +366,7 @@ in
                 <para>
                   Using this option will make Tor advertise your bridge
                   to users through various mechanisms like
-                  <link xlink:href="https://bridges.torproject.org/" />, though.
+                  <link xlink:href="https://bridges.torproject.org/"/>, though.
                 </para>
 
                 <important>
@@ -384,7 +384,7 @@ in
                 </important>
 
                 <para>
-                  See <link xlink:href="https://www.torproject.org/docs/bridges.html.en" />
+                  See <link xlink:href="https://www.torproject.org/docs/bridges.html.en"/>
                   for more info.
                 </para>
               </listitem>
@@ -419,7 +419,7 @@ in
                 </para>
 
                 <para>
-                  See <link xlink:href="https://www.torproject.org/docs/bridges.html.en" />
+                  See <link xlink:href="https://www.torproject.org/docs/bridges.html.en"/>
                   for more info.
                 </para>
               </listitem>
@@ -476,11 +476,11 @@ in
                   };
                   clientNames = mkOption {
                     type = with types; nonEmptyListOf (strMatching "[A-Za-z0-9+-_]+");
-                    description = ''
+                    description = lib.mdDoc ''
                       Only clients that are listed here are authorized to access the hidden service.
-                      Generated authorization data can be found in <filename>${stateDir}/onion/$name/hostname</filename>.
+                      Generated authorization data can be found in {file}`${stateDir}/onion/$name/hostname`.
                       Clients need to put this authorization data in their configuration file using
-                      <xref linkend="opt-services.tor.settings.HidServAuth"/>.
+                      [](#opt-services.tor.settings.HidServAuth).
                     '';
                   };
                 };

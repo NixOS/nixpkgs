@@ -13,18 +13,18 @@ in
       enable = mkEnableOption "BIRD Internet Routing Daemon";
       config = mkOption {
         type = types.lines;
-        description = ''
+        description = lib.mdDoc ''
           BIRD Internet Routing Daemon configuration file.
-          <link xlink:href='http://bird.network.cz/'/>
+          <http://bird.network.cz/>
         '';
       };
       checkConfig = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether the config should be checked at build time.
           When the config can't be checked during build time, for example when it includes
-          other files, either disable this option or use <code>preCheckConfig</code> to create
+          other files, either disable this option or use `preCheckConfig` to create
           the included files before checking.
         '';
       };
@@ -34,9 +34,9 @@ in
         example = ''
           echo "cost 100;" > include.conf
         '';
-        description = ''
+        description = lib.mdDoc ''
           Commands to execute before the config file check. The file to be checked will be
-          available as <code>bird2.conf</code> in the current directory.
+          available as `bird2.conf` in the current directory.
 
           Files created with this option will not be available at service runtime, only during
           build time checking.

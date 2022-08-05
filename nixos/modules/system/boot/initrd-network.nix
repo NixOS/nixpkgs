@@ -50,18 +50,17 @@ in
     boot.initrd.network.enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Add network connectivity support to initrd. The network may be
-        configured using the <literal>ip</literal> kernel parameter,
-        as described in <link
-        xlink:href="https://www.kernel.org/doc/Documentation/filesystems/nfs/nfsroot.txt">the
-        kernel documentation</link>.  Otherwise, if
-        <option>networking.useDHCP</option> is enabled, an IP address
+        configured using the `ip` kernel parameter,
+        as described in [the kernel documentation](https://www.kernel.org/doc/Documentation/filesystems/nfs/nfsroot.txt).
+        Otherwise, if
+        {option}`networking.useDHCP` is enabled, an IP address
         is acquired using DHCP.
 
         You should add the module(s) required for your network card to
         boot.initrd.availableKernelModules.
-        <literal>lspci -v | grep -iA8 'network\|ethernet'</literal>
+        `lspci -v | grep -iA8 'network\|ethernet'`
         will tell you which.
       '';
     };

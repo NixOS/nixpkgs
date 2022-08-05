@@ -40,37 +40,37 @@ let
           description = ''
             Path to keystore (combined PEM with cert/key, or PKCS12 keystore).
 
-            NB: storepass is not supported because it would expose credentials via <code>/proc/*/cmdline</code>.
+            NB: storepass is not supported because it would expose credentials via <literal>/proc/*/cmdline</literal>.
 
-            Specify this or <code>cert</code> and <code>key</code>.
+            Specify this or <literal>cert</literal> and <literal>key</literal>.
           '';
           type = types.nullOr types.str;
           default = null;
         };
 
         cert = mkOption {
-          description = ''
+          description = lib.mdDoc ''
             Path to certificate (PEM with certificate chain).
 
-            Not required if <code>keystore</code> is set.
+            Not required if `keystore` is set.
           '';
           type = types.nullOr types.str;
           default = null;
         };
 
         key = mkOption {
-          description = ''
+          description = lib.mdDoc ''
             Path to certificate private key (PEM with private key).
 
-            Not required if <code>keystore</code> is set.
+            Not required if `keystore` is set.
           '';
           type = types.nullOr types.str;
           default = null;
         };
 
         cacert = mkOption {
-          description = ''
-            Path to CA bundle file (PEM/X509). Uses system trust store if <code>null</code>.
+          description = lib.mdDoc ''
+            Path to CA bundle file (PEM/X509). Uses system trust store if `null`.
           '';
           type = types.nullOr types.str;
         };
@@ -124,7 +124,7 @@ let
         };
 
         extraArguments = mkOption {
-          description = "Extra arguments to pass to <code>ghostunnel server</code>";
+          description = lib.mdDoc "Extra arguments to pass to `ghostunnel server`";
           type = types.separatedString " ";
           default = "";
         };

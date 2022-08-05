@@ -19,12 +19,12 @@ in
     services.hans = {
       clients = mkOption {
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           Each attribute of this option defines a systemd service that
           runs hans. Many or none may be defined.
           The name of each service is
-          <literal>hans-<replaceable>name</replaceable></literal>
-          where <replaceable>name</replaceable> is the name of the
+          `hans-«name»`
+          where «name» is the name of the
           corresponding attribute name.
         '';
         example = literalExpression ''

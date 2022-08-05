@@ -106,8 +106,7 @@ in
           <option>services.znc.confOptions.*</option> options.
           You can use <command>nix-instantiate --eval --strict '&lt;nixpkgs/nixos&gt;' -A config.services.znc.config</command>
           to view the current value of the config.
-          </para>
-          <para>
+
           In any case, if you need more flexibility,
           <option>services.znc.config</option> can be used to override/add to
           all of the legacy options.

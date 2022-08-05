@@ -156,7 +156,7 @@ in
       owner = mkOption {
         type = types.str;
         default = "nobody";
-        example = "Joe Admin";
+        example = "Bob Foobawr";
         description = lib.mdDoc "Real name of the owner of the instance";
       };
       ownerEmail = mkOption {

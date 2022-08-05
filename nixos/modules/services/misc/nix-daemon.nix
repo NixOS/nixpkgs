@@ -636,12 +636,10 @@ in
             <manvolnum>5</manvolnum>
           </citerefentry> for avalaible options.
           The value declared here will be translated directly to the key-value pairs Nix expects.
-          </para>
-          <para>
+
           You can use <command>nix-instantiate --eval --strict '&lt;nixpkgs/nixos&gt;' -A config.nix.settings</command>
           to view the current value. By default it is empty.
-          </para>
-          <para>
+
           Nix configurations defined under <option>nix.*</option> will be translated and applied to this
           option. In addition, configuration specified in <option>nix.extraOptions</option> which will be appended
           verbatim to the resulting config file.

@@ -807,14 +807,14 @@ in
         default = config.krb5.enable;
         defaultText = literalExpression "config.krb5.enable";
         type = types.bool;
-        description = ''
-          Enables Kerberos PAM modules (<literal>pam-krb5</literal>,
-          <literal>pam-ccreds</literal>).
+        description = lib.mdDoc ''
+          Enables Kerberos PAM modules (`pam-krb5`,
+          `pam-ccreds`).
 
           If set, users can authenticate with their Kerberos password.
           This requires a valid Kerberos configuration
-          (<literal>config.krb5.enable</literal> should be set to
-          <literal>true</literal>).
+          (`config.krb5.enable` should be set to
+          `true`).
 
           Note that the Kerberos PAM modules are not necessary when using SSS
           to handle Kerberos authentication.
@@ -826,13 +826,12 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = ''
-          Enables P11 PAM (<literal>pam_p11</literal>) module.
+        description = lib.mdDoc ''
+          Enables P11 PAM (`pam_p11`) module.
 
           If set, users can log in with SSH keys and PKCS#11 tokens.
 
-          More information can be found <link
-          xlink:href="https://github.com/OpenSC/pam_p11">here</link>.
+          More information can be found [here](https://github.com/OpenSC/pam_p11).
         '';
       };
 
@@ -859,77 +858,71 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = ''
-          Enables U2F PAM (<literal>pam-u2f</literal>) module.
+        description = lib.mdDoc ''
+          Enables U2F PAM (`pam-u2f`) module.
 
           If set, users listed in
-          <filename>$XDG_CONFIG_HOME/Yubico/u2f_keys</filename> (or
-          <filename>$HOME/.config/Yubico/u2f_keys</filename> if XDG variable is
+          {file}`$XDG_CONFIG_HOME/Yubico/u2f_keys` (or
+          {file}`$HOME/.config/Yubico/u2f_keys` if XDG variable is
           not set) are able to log in with the associated U2F key. The path can
-          be changed using <option>security.pam.u2f.authFile</option> option.
+          be changed using {option}`security.pam.u2f.authFile` option.
 
           File format is:
-          <literal>username:first_keyHandle,first_public_key: second_keyHandle,second_public_key</literal>
-          This file can be generated using <command>pamu2fcfg</command> command.
+          `username:first_keyHandle,first_public_key: second_keyHandle,second_public_key`
+          This file can be generated using {command}`pamu2fcfg` command.
 
-          More information can be found <link
-          xlink:href="https://developers.yubico.com/pam-u2f/">here</link>.
+          More information can be found [here](https://developers.yubico.com/pam-u2f/).
         '';
       };
 
       authFile = mkOption {
         default = null;
         type = with types; nullOr path;
-        description = ''
-          By default <literal>pam-u2f</literal> module reads the keys from
-          <filename>$XDG_CONFIG_HOME/Yubico/u2f_keys</filename> (or
-          <filename>$HOME/.config/Yubico/u2f_keys</filename> if XDG variable is
+        description = lib.mdDoc ''
+          By default `pam-u2f` module reads the keys from
+          {file}`$XDG_CONFIG_HOME/Yubico/u2f_keys` (or
+          {file}`$HOME/.config/Yubico/u2f_keys` if XDG variable is
           not set).
 
           If you want to change auth file locations or centralize database (for
-          example use <filename>/etc/u2f-mappings</filename>) you can set this
+          example use {file}`/etc/u2f-mappings`) you can set this
           option.
 
           File format is:
-          <literal>username:first_keyHandle,first_public_key: second_keyHandle,second_public_key</literal>
-          This file can be generated using <command>pamu2fcfg</command> command.
+          `username:first_keyHandle,first_public_key: second_keyHandle,second_public_key`
+          This file can be generated using {command}`pamu2fcfg` command.
 
-          More information can be found <link
-          xlink:href="https://developers.yubico.com/pam-u2f/">here</link>.
+          More information can be found [here](https://developers.yubico.com/pam-u2f/).
         '';
       };
 
       appId = mkOption {
         default = null;
         type = with types; nullOr str;
-        description = ''
-            By default <literal>pam-u2f</literal> module sets the application
-            ID to <literal>pam://$HOSTNAME</literal>.
+        description = lib.mdDoc ''
+            By default `pam-u2f` module sets the application
+            ID to `pam://$HOSTNAME`.
 
-            When using <command>pamu2fcfg</command>, you can specify your
-            application ID with the <literal>-i</literal> flag.
+            When using {command}`pamu2fcfg`, you can specify your
+            application ID with the `-i` flag.
 
-            More information can be found <link
-            xlink:href="https://developers.yubico.com/pam-u2f/Manuals/pam_u2f.8.html">
-            here</link>
+            More information can be found [here](https://developers.yubico.com/pam-u2f/Manuals/pam_u2f.8.html)
         '';
       };
 
       origin = mkOption {
         default = null;
         type = with types; nullOr str;
-        description = ''
-            By default <literal>pam-u2f</literal> module sets the origin
-            to <literal>pam://$HOSTNAME</literal>.
+        description = lib.mdDoc ''
+            By default `pam-u2f` module sets the origin
+            to `pam://$HOSTNAME`.
             Setting origin to an host independent value will allow you to
             reuse credentials across machines
 
-            When using <command>pamu2fcfg</command>, you can specify your
-            application ID with the <literal>-o</literal> flag.
+            When using {command}`pamu2fcfg`, you can specify your
+            application ID with the `-o` flag.
 
-            More information can be found <link
-            xlink:href="https://developers.yubico.com/pam-u2f/Manuals/pam_u2f.8.html">
-            here</link>
+            More information can be found [here](https://developers.yubico.com/pam-u2f/Manuals/pam_u2f.8.html)
         '';
       };
 
@@ -985,18 +978,17 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = ''
-          Enables Uber's USSH PAM (<literal>pam-ussh</literal>) module.
+        description = lib.mdDoc ''
+          Enables Uber's USSH PAM (`pam-ussh`) module.
 
-          This is similar to <literal>pam-ssh-agent</literal>, except that
+          This is similar to `pam-ssh-agent`, except that
           the presence of a CA-signed SSH key with a valid principal is checked
           instead.
 
           Note that this module must both be enabled using this option and on a
-          per-PAM-service level as well (using <literal>usshAuth</literal>).
+          per-PAM-service level as well (using `usshAuth`).
 
-          More information can be found <link
-          xlink:href="https://github.com/uber/pam-ussh">here</link>.
+          More information can be found [here](https://github.com/uber/pam-ussh).
         '';
       };
 
@@ -1075,17 +1067,16 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = ''
-          Enables Yubico PAM (<literal>yubico-pam</literal>) module.
+        description = lib.mdDoc ''
+          Enables Yubico PAM (`yubico-pam`) module.
 
           If set, users listed in
-          <filename>~/.yubico/authorized_yubikeys</filename>
+          {file}`~/.yubico/authorized_yubikeys`
           are able to log in with the associated Yubikey tokens.
 
           The file must have only one line:
-          <literal>username:yubikey_token_id1:yubikey_token_id2</literal>
-          More information can be found <link
-          xlink:href="https://developers.yubico.com/yubico-pam/">here</link>.
+          `username:yubikey_token_id1:yubikey_token_id2`
+          More information can be found [here](https://developers.yubico.com/yubico-pam/).
         '';
       };
       control = mkOption {
@@ -1120,7 +1111,7 @@ in
       mode = mkOption {
         default = "client";
         type = types.enum [ "client" "challenge-response" ];
-        description = ''
+        description = lib.mdDoc ''
           Mode of operation.
 
           Use "client" for online validation with a YubiKey validation service such as
@@ -1130,18 +1121,16 @@ in
           Challenge-Response configurations. See the man-page ykpamcfg(1) for further
           details on how to configure offline Challenge-Response validation.
 
-          More information can be found <link
-          xlink:href="https://developers.yubico.com/yubico-pam/Authentication_Using_Challenge-Response.html">here</link>.
+          More information can be found [here](https://developers.yubico.com/yubico-pam/Authentication_Using_Challenge-Response.html).
         '';
       };
       challengeResponsePath = mkOption {
         default = null;
         type = types.nullOr types.path;
-        description = ''
+        description = lib.mdDoc ''
           If not null, set the path used by yubico pam module where the challenge expected response is stored.
 
-          More information can be found <link
-          xlink:href="https://developers.yubico.com/yubico-pam/Authentication_Using_Challenge-Response.html">here</link>.
+          More information can be found [here](https://developers.yubico.com/yubico-pam/Authentication_Using_Challenge-Response.html).
         '';
       };
     };

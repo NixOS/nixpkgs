@@ -227,7 +227,7 @@ in
           type = types.package;
           default = pkgs.restic;
           defaultText = literalExpression "pkgs.restic";
-          description = ''
+          description = lib.mdDoc ''
             Restic package to use.
           '';
         };

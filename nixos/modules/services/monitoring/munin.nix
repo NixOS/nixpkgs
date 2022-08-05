@@ -138,29 +138,29 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Enable Munin Node agent. Munin node listens on 0.0.0.0 and
           by default accepts connections only from 127.0.0.1 for security reasons.
 
-          See <link xlink:href='http://guide.munin-monitoring.org/en/latest/architecture/index.html' />.
+          See <http://guide.munin-monitoring.org/en/latest/architecture/index.html>.
         '';
       };
 
       extraConfig = mkOption {
         default = "";
         type = types.lines;
-        description = ''
-          <filename>munin-node.conf</filename> extra configuration. See
-          <link xlink:href='http://guide.munin-monitoring.org/en/latest/reference/munin-node.conf.html' />
+        description = lib.mdDoc ''
+          {file}`munin-node.conf` extra configuration. See
+          <http://guide.munin-monitoring.org/en/latest/reference/munin-node.conf.html>
         '';
       };
 
       extraPluginConfig = mkOption {
         default = "";
         type = types.lines;
-        description = ''
-          <filename>plugin-conf.d</filename> extra plugin configuration. See
-          <link xlink:href='http://guide.munin-monitoring.org/en/latest/plugin/use.html' />
+        description = lib.mdDoc ''
+          {file}`plugin-conf.d` extra plugin configuration. See
+          <http://guide.munin-monitoring.org/en/latest/plugin/use.html>
         '';
         example = ''
           [fail2ban_*]
@@ -266,11 +266,11 @@ in
       extraGlobalConfig = mkOption {
         default = "";
         type = types.lines;
-        description = ''
-          <filename>munin.conf</filename> extra global configuration.
-          See <link xlink:href='http://guide.munin-monitoring.org/en/latest/reference/munin.conf.html' />.
+        description = lib.mdDoc ''
+          {file}`munin.conf` extra global configuration.
+          See <http://guide.munin-monitoring.org/en/latest/reference/munin.conf.html>.
           Useful to setup notifications, see
-          <link xlink:href='http://guide.munin-monitoring.org/en/latest/tutorial/alert.html' />
+          <http://guide.munin-monitoring.org/en/latest/tutorial/alert.html>
         '';
         example = ''
           contact.email.command mail -s "Munin notification for ''${var:host}" someone@example.com
@@ -280,10 +280,10 @@ in
       hosts = mkOption {
         default = "";
         type = types.lines;
-        description = ''
+        description = lib.mdDoc ''
           Definitions of hosts of nodes to collect data from. Needs at least one
           host for cron to succeed. See
-          <link xlink:href='http://guide.munin-monitoring.org/en/latest/reference/munin.conf.html' />
+          <http://guide.munin-monitoring.org/en/latest/reference/munin.conf.html>
         '';
         example = literalExpression ''
           '''
