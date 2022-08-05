@@ -13,6 +13,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "Bumblebee-Project";
     repo = "bbswitch";
+    # https://github.com/Bumblebee-Project/bbswitch/tree/develop
     rev = "23891174a80ea79c7720bcc7048a5c2bfcde5cd9";
     hash = "sha256-50v1Jxem5kaI1dHOKmgBbPLxI82QeYxiaRHhrHpWRzU=";
   };
