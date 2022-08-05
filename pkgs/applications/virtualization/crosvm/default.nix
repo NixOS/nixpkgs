@@ -5,14 +5,7 @@
 }:
 
 let
-
   upstreamInfo = with builtins; fromJSON (readFile ./upstream-info.json);
-
-  arch = with stdenv.hostPlatform;
-    if isAarch64 then "aarch64"
-    else if isx86_64 then "x86_64"
-    else throw "no seccomp policy files available for host platform";
-
 in
 
 rustPlatform.buildRustPackage rec {
@@ -35,16 +28,18 @@ rustPlatform.buildRustPackage rec {
     libcap libdrm libepoxy minijail virglrenderer wayland wayland-protocols
   ];
 
+  arch = stdenv.hostPlatform.parsed.cpu.name;
+
   postPatch = ''
     cp ${./Cargo.lock} Cargo.lock
-    sed -i "s|/usr/share/policy/crosvm/|$PWD/seccomp/${arch}/|g" \
-        seccomp/${arch}/*.policy
+    sed -i "s|/usr/share/policy/crosvm/|$PWD/seccomp/$arch/|g" \
+        seccomp/$arch/*.policy
   '';
 
   preBuild = ''
     export DEFAULT_SECCOMP_POLICY_DIR=$out/share/policy
 
-    for policy in seccomp/${arch}/*.policy; do
+    for policy in seccomp/$arch/*.policy; do
         compile_seccomp_policy \
             --default-action trap $policy ''${policy%.policy}.bpf
     done
@@ -54,7 +49,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     mkdir -p $out/share/policy/
-    cp -v seccomp/${arch}/*.bpf $out/share/policy/
+    cp -v seccomp/$arch/*.bpf $out/share/policy/
   '';
 
   CROSVM_CARGO_TEST_KERNEL_BINARY =
