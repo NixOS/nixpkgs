@@ -271,7 +271,7 @@ stdenv.mkDerivation ({
   enableParallelBuilding = true;
   inherit enableShared enableMultilib;
 
-  inherit (stdenv) is64bit;
+  is64bit = stdenv.is64bit && !stdenv.hostPlatform.isMips64n32;
 
   meta = {
     homepage = "https://gcc.gnu.org/";
