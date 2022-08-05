@@ -73,6 +73,26 @@ stdenv.mkDerivation rec {
     libxkbcommon
   ];
 
+  cmakeFlags = ["-DBUILD_TESTS=yes"];
+
+  doCheck = true;
+  checkPhase = ''
+  echo "================= Running built tests ================="
+  set -x
+  ./xmpp-vala-test
+  TEST1=$?
+  ./signal-protocol-vala-test
+  TEST2=$?
+  set +x
+  if [ $TEST1 != 0 ] && [ $TEST2 != 0 ]; then
+    echo "tests failed"
+    exit 1;
+  else
+    echo "tests succeeded"
+  fi
+  echo "================= /Running built tests ================="
+  '';
+
   # Dino looks for plugins with a .so filename extension, even on macOS where
   # .dylib is appropriate, and despite the fact that it builds said plugins with
   # that as their filename extension
