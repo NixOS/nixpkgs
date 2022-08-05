@@ -324,7 +324,7 @@ index e61160c..ec7378f 100644
  		G_CALLBACK (mi_user_headers_settings_changed_cb), NULL);
  	G_UNLOCK (mi_user_headers);
 diff --git a/src/camel/providers/imapx/camel-imapx-server.c b/src/camel/providers/imapx/camel-imapx-server.c
-index 1eeff8d..d818fb7 100644
+index 2ed68cf..0787cf4 100644
 --- a/src/camel/providers/imapx/camel-imapx-server.c
 +++ b/src/camel/providers/imapx/camel-imapx-server.c
 @@ -5573,7 +5573,20 @@ camel_imapx_server_skip_old_flags_update (CamelStore *store)
@@ -480,7 +480,7 @@ index 8e4ee81..3c8afbb 100644
  		g_object_unref (settings);
  
 diff --git a/src/libedataserver/e-oauth2-service.c b/src/libedataserver/e-oauth2-service.c
-index 290534d..ce41867 100644
+index 5a21872..c0dfdc4 100644
 --- a/src/libedataserver/e-oauth2-service.c
 +++ b/src/libedataserver/e-oauth2-service.c
 @@ -90,7 +90,20 @@ eos_default_guess_can_process (EOAuth2Service *service,
@@ -533,10 +533,10 @@ index 6701a3a..d122a37 100644
  	g_signal_connect (
  		registry->priv->settings, "changed",
 diff --git a/src/libedataserverui/e-reminders-widget.c b/src/libedataserverui/e-reminders-widget.c
-index c0c1aea..3ab5cb1 100644
+index 14b6481..1812088 100644
 --- a/src/libedataserverui/e-reminders-widget.c
 +++ b/src/libedataserverui/e-reminders-widget.c
-@@ -1956,7 +1956,21 @@ static void
+@@ -1986,7 +1986,21 @@ static void
  e_reminders_widget_init (ERemindersWidget *reminders)
  {
  	reminders->priv = e_reminders_widget_get_instance_private (reminders);
