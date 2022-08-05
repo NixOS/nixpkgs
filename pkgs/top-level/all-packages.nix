@@ -2639,6 +2639,14 @@ with pkgs;
 
   goku = callPackage ../os-specific/darwin/goku { };
 
+  kerf   = kerf_1; /* kerf2 is WIP */
+  kerf_1 = callPackage ../development/interpreters/kerf {
+    stdenv = clangStdenv;
+    inherit (darwin.apple_sdk.frameworks)
+      Accelerate CoreGraphics CoreVideo
+    ;
+  };
+
   kwakd = callPackage ../servers/kwakd { };
 
   kwm = callPackage ../os-specific/darwin/kwm { };
