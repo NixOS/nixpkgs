@@ -1,6 +1,7 @@
 { lib
 , fetchFromGitHub
 , buildPythonPackage
+, python
 , geckodriver
 , pytestCheckHook
 , pythonOlder
@@ -29,6 +30,11 @@ buildPythonPackage rec {
 
   preConfigure = ''
     cd py
+  '';
+
+  postInstall = ''
+    install -Dm 755 ../rb/lib/selenium/webdriver/atoms/getAttribute.js $out/${python.sitePackages}/selenium/webdriver/remote/getAttribute.js
+    install -Dm 755 ../rb/lib/selenium/webdriver/atoms/isDisplayed.js $out/${python.sitePackages}/selenium/webdriver/remote/isDisplayed.js
   '';
 
   propagatedBuildInputs = [
