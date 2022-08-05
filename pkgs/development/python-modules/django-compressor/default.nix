@@ -1,29 +1,55 @@
-{ lib, buildPythonPackage, fetchPypi,
-  rcssmin, rjsmin, django-appconf }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, rcssmin
+, rjsmin
+, django-appconf
+, beautifulsoup4
+, brotli
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
-    pname = "django-compressor";
-    version = "4.0";
+  pname = "django-compressor";
+  version = "4.1";
+  format = "setuptools";
 
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "sha256-HbkbbQQpNjami9Eyjce7kNY2sClfZ7HMbU+hArn9JfY=";
-    };
-    postPatch = ''
-      substituteInPlace setup.py \
-        --replace 'rcssmin == 1.0.6' 'rcssmin' \
-        --replace 'rjsmin == 1.1.0' 'rjsmin'
-    '';
+  src = fetchPypi {
+    pname = "django_compressor";
+    inherit version;
+    hash = "sha256-js5iHSqY9sZjVIDLizcB24kKmfeT+VyiDLAKvBlNMx0=";
+  };
 
-    # requires django-sekizai, which we don't have packaged yet
-    doCheck = false;
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "rcssmin == 1.1.0" "rcssmin>=1.1.0" \
+      --replace "rjsmin == 1.2.0" "rjsmin>=1.2.0"
+  '';
 
-    propagatedBuildInputs = [ rcssmin rjsmin django-appconf ];
+  propagatedBuildInputs = [
+    rcssmin
+    rjsmin
+    django-appconf
+  ];
 
-    meta = with lib; {
-      description = "Compresses linked and inline JavaScript or CSS into single cached files";
-      homepage = "https://django-compressor.readthedocs.org/en/latest/";
-      license = licenses.mit;
-      maintainers = with maintainers; [ desiderius ];
-    };
+  pythonImportsCheck = [
+    "compressor"
+  ];
+
+  doCheck = false; # missing package django-sekizai
+
+  checkInputs = [
+    beautifulsoup4
+    brotli
+    pytestCheckHook
+  ];
+
+  DJANGO_SETTINGS_MODULE = "compressor.test_settings";
+
+  meta = with lib; {
+    description = "Compresses linked and inline JavaScript or CSS into single cached files";
+    homepage = "https://django-compressor.readthedocs.org/en/latest/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ desiderius ];
+  };
 }
