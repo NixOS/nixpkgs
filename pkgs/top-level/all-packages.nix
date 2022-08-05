@@ -31813,6 +31813,8 @@ with pkgs;
 
   zim = callPackage ../applications/office/zim { };
 
+  zine = callPackage ../applications/misc/zine { };
+
   zita-ajbridge = callPackage ../applications/audio/zita-ajbridge { };
 
   zita-at1 = callPackage ../applications/audio/zita-at1 { };
