@@ -1,8 +1,5 @@
 { lib, stdenv, fetchFromGitHub, gtk-engine-murrine }:
 
-let
-  themeName = "Omni";
-in
 stdenv.mkDerivation {
   pname = "omni-gtk-theme";
   version = "unstable-2021-03-30";
