@@ -184,7 +184,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     };
 
     preBuild = ''
-      ln -s ${z3} Binaries/z3
+      ln -s ${pkgs.z3} Binaries/z3
     '';
 
     buildInputs = [ Boogie pkgs.jdk11 ];
@@ -205,7 +205,8 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
       rm -f "$out/bin"/System.* "$out/bin"/Microsoft.*
       rm -f "$out/bin"/NUnit3.* "$out/bin"/coverlet.*
-      rm -f "$out/bin"/*.Test
+      rm -f "$out/bin"/ThirdPartyNotices.txt
+      rm -f "$out/bin"/XUnitExtensions
     '';
 
     meta = with lib; {
