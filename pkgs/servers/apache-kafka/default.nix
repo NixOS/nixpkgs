@@ -1,15 +1,27 @@
-{ lib, stdenv, fetchurl, jdk8_headless, jdk11_headless, makeWrapper, bash, coreutils, gnugrep, gnused, ps,
+{ lib, stdenv, fetchurl, jdk17_headless, jdk11_headless, makeWrapper, bash, coreutils, gnugrep, gnused, ps,
   majorVersion ? "1.0" }:
 
 let
-  jre8 = jdk8_headless;
   jre11 = jdk11_headless;
+  jre   = jdk17_headless;
   versionMap = {
-    "2.7" = {
-      kafkaVersion = "2.7.1";
+    "3.2" = {
+      kafkaVersion = "3.2.1";
       scalaVersion = "2.13";
-      sha256 = "1qv6blf99211bc80xnd4k42r9v9c5vilyqkplyhsa6hqymg32gfa";
-      jre = jre11;
+      sha256 = "440fe73d73ebb78ee0d7accbfd69f53e2281544cf18ea6672c85ef4f6734170b";
+      jre = jre;
+    };
+    "3.1" = {
+      kafkaVersion = "3.1.1";
+      scalaVersion = "2.13";
+      sha256 = "e91e50b0aaa499795a51d984a9d00953f9a2781c51314f47ae4df8b2db1a6c9a";
+      jre = jre;
+    };
+    "3.0" = {
+      kafkaVersion = "3.0.1";
+      scalaVersion = "2.13";
+      sha256 = "1a95abe81dc18eafee65f5bc440ff21ba0c49bd2c6d36bf7878ee8a2e2536097";
+      jre = jre;
     };
     "2.8" = {
       kafkaVersion = "2.8.2";
@@ -17,6 +29,7 @@ let
       sha256 = "sha256-inZXZJSs8ivtEqF6E/ApoyUHn8vg38wUG3KhowP8mfQ=";
       jre = jre11;
     };
+
   };
 in
 
