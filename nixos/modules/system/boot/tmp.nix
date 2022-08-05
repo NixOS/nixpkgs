@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.boot;
-  
+
   tmpOnTmpfsOptions = {
     enable = mkEnableOption "mounting a tmpfs on {file}`/tmp` during boot.";
     size = mkOption {
@@ -32,13 +32,13 @@ in
     };
 
     boot.tmpOnTmpfs = mkOption {
-      type = types.either types.bool ( types.submodule { options = tmpOnTmpfsOptions; } );
+      type = types.either types.bool (types.submodule { options = tmpOnTmpfsOptions; });
       default = {
         enable = false;
         size = "50%";
       };
       description = lib.mdDoc ''
-         Whether to mount a tmpfs on {file}`/tmp` during boot.
+        Whether to mount a tmpfs on {file}`/tmp` during boot.
       '';
     };
 
@@ -55,31 +55,35 @@ in
 
   ###### implementation
 
-  config = let
-    legacy = builtins.isBool cfg.tmpOnTmpfs;
-    tmpOnTmpfs = if legacy then cfg.tmpOnTmpfs else cfg.tmpOnTmpfs.enable;
-    tmpOnTmpfsSize = if legacy then cfg.tmpOnTmpfsSize else cfg.tmpOnTmpfs.size;
-  in {
-    warnings = 
-      optional legacy "Deprecated: boot = { tmpOnTmpfs = …; tmpOnTmpfsSize = …; } should be replaced by boot.tmpOnTmpfs = { enable = …; size = …; }.";
+  config =
+    let
+      legacy = builtins.isBool cfg.tmpOnTmpfs;
+      tmpOnTmpfs = if legacy then cfg.tmpOnTmpfs else cfg.tmpOnTmpfs.enable;
+      tmpOnTmpfsSize = if legacy then cfg.tmpOnTmpfsSize else cfg.tmpOnTmpfs.size;
+    in
+    {
+      warnings =
+        optional legacy "Deprecated: boot = { tmpOnTmpfs = …; tmpOnTmpfsSize = …; } should be replaced by boot.tmpOnTmpfs = { enable = …; size = …; }.";
 
-    # When changing remember to update /tmp mount in virtualisation/qemu-vm.nix
-    systemd.mounts = mkIf tmpOnTmpfs [
-      {
-        what = "tmpfs";
-        where = "/tmp";
-        type = "tmpfs";
-        mountConfig.Options = concatStringsSep "," [ "mode=1777"
-                                                     "strictatime"
-                                                     "rw"
-                                                     "nosuid"
-                                                     "nodev"
-                                                     "size=${toString tmpOnTmpfsSize}" ];
-      }
-    ];
+      # When changing remember to update /tmp mount in virtualisation/qemu-vm.nix
+      systemd.mounts = mkIf tmpOnTmpfs [
+        {
+          what = "tmpfs";
+          where = "/tmp";
+          type = "tmpfs";
+          mountConfig.Options = concatStringsSep "," [
+            "mode=1777"
+            "strictatime"
+            "rw"
+            "nosuid"
+            "nodev"
+            "size=${toString tmpOnTmpfsSize}"
+          ];
+        }
+      ];
 
-    systemd.tmpfiles.rules = optional config.boot.cleanTmpDir "D! /tmp 1777 root root";
+      systemd.tmpfiles.rules = optional config.boot.cleanTmpDir "D! /tmp 1777 root root";
 
-  };
+    };
 
 }
