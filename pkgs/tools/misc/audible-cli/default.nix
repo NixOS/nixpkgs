@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "audible-cli";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "mkb79";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1dalil8aaywdshf48d45ap4mgzxbyzhklr8nga7qhpwi22w84cgz";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-KPuAY/QMO2029tD4DMGCwmKuqpnxXAALYT+wE1ApfsI=";
   };
 
   propagatedBuildInputs = with python3Packages; [ aiofiles audible click httpx pillow tabulate toml tqdm packaging setuptools questionary ];

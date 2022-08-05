@@ -1388,7 +1388,7 @@ let
 
     dhcpServerStaticLeases = mkOption {
       default = [];
-      example = [ { MACAddress = "65:43:4a:5b:d8:5f"; Address = "192.168.1.42"; } ];
+      example = [ { dhcpServerStaticLeaseConfig = { MACAddress = "65:43:4a:5b:d8:5f"; Address = "192.168.1.42"; }; } ];
       type = with types; listOf (submodule dhcpServerStaticLeaseOptions);
       description = ''
         A list of DHCPServerStaticLease sections to be added to the unit.  See
@@ -1399,7 +1399,7 @@ let
 
     ipv6Prefixes = mkOption {
       default = [];
-      example = [ { AddressAutoconfiguration = true; OnLink = true; } ];
+      example = [ { ipv6PrefixConfig = { AddressAutoconfiguration = true; OnLink = true; }; } ];
       type = with types; listOf (submodule ipv6PrefixOptions);
       description = ''
         A list of ipv6Prefix sections to be added to the unit.  See

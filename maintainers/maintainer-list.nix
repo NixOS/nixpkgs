@@ -5224,6 +5224,16 @@
     githubId = 6074754;
     name = "Hlodver Sigurdsson";
   };
+  huantian = {
+    name = "David Li";
+    email = "davidtianli@gmail.com";
+    matrix = "@huantian:huantian.dev";
+    github = "huantianad";
+    githubId = 20760920;
+    keys = [{
+      fingerprint = "731A 7A05 AD8B 3AE5 956A  C227 4A03 18E0 4E55 5DE5";
+    }];
+  };
   hugoreeves = {
     email = "hugo@hugoreeves.com";
     github = "HugoReeves";
@@ -12159,6 +12169,12 @@
     github = "squalus";
     githubId = 36899624;
     name = "squalus";
+  };
+  squarepear = {
+    email = "contact@jeffreyharmon.dev";
+    github = "SquarePear";
+    githubId = 16364318;
+    name = "Jeffrey Harmon";
   };
   srapenne = {
     email = "solene@perso.pw";

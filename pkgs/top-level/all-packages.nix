@@ -1277,6 +1277,8 @@ with pkgs;
 
   redfang = callPackage ../tools/networking/redfang { };
 
+  scarab = callPackage ../tools/games/scarab { };
+
   sdbus-cpp = callPackage ../development/libraries/sdbus-cpp { };
 
   sdlookup = callPackage ../tools/security/sdlookup { };
@@ -5914,6 +5916,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit CoreGraphics CoreServices Foundation OpenGL;
   };
 
+  emulsion-palette = callPackage ../applications/graphics/emulsion-palette { };
+
   emv = callPackage ../tools/misc/emv { };
 
   enblend-enfuse = callPackage ../tools/graphics/enblend-enfuse {
@@ -10050,7 +10054,7 @@ with pkgs;
 
   qosmic = libsForQt5.callPackage ../applications/graphics/qosmic { };
 
-  qownnotes = libsForQt514.callPackage ../applications/office/qownnotes { };
+  qownnotes = libsForQt5.callPackage ../applications/office/qownnotes { };
 
   qpdf = callPackage ../development/libraries/qpdf { };
 
@@ -23213,7 +23217,7 @@ with pkgs;
 
   switcheroo-control = callPackage ../os-specific/linux/switcheroo-control { };
 
-  slurm = callPackage ../servers/computing/slurm { gtk2 = null; };
+  slurm = callPackage ../servers/computing/slurm { };
 
   slurm-spank-stunnel = callPackage ../servers/computing/slurm-spank-stunnel { };
 
@@ -33088,6 +33092,8 @@ with pkgs;
   };
 
   protonup = with python3Packages; toPythonApplication protonup;
+
+  steam-rom-manager = callPackage ../tools/games/steam-rom-manager {};
 
   sdlpop = callPackage ../games/sdlpop { };
 
