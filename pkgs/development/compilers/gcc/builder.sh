@@ -197,6 +197,11 @@ preInstall() {
         ln -s lib "$out/${targetConfig}/lib64"
         ln -s lib "${!outputLib}/${targetConfig}/lib64"
     fi
+    # Make ‘lib32’ symlinks to ‘lib’.
+    if [ -n "$linkLib32toLib" ]; then
+        ln -s lib "$out/${targetConfig}/lib32"
+        ln -s lib "${!outputLib}/${targetConfig}/lib32"
+    fi
 }
 
 

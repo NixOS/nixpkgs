@@ -78,3 +78,13 @@ in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 + lib.optionalString (targetPlatform != hostPlatform && crossStageStatic) ''
   export inhibit_libc=true
 ''
+
+# On mips platforms, gcc follows the IRIX naming convention:
+#
+#  $PREFIX/lib   = mips32
+#  $PREFIX/lib32 = mips64n32
+#  $PREFIX/lib64 = mips64
+#
++ lib.optionalString (targetPlatform.isMips64n32) ''
+  export linkLib32toLib=1
+''
