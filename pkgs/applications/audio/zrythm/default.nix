@@ -56,19 +56,21 @@
 , xxHash
 , vamp-plugin-sdk
 , zstd
-, libadwaita
+, libadwaita-beta
 , sassc
+, libpanel
+, boost
 }:
 
 stdenv.mkDerivation rec {
   pname = "zrythm";
-  version = "1.0.0-alpha.28.1.3";
+  version = "1.0.0-beta.3.0.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ERE7I6E3+RmmpnZEtcJL/1v9a37IwFauVsbJvI9gsRQ=";
+    sha256 = "sha256-KnRF+U1Wt1HT8X8OYnoGRkD3B3H3b43dMJG04coEs7U=";
   };
 
   nativeBuildInputs = [
@@ -130,8 +132,10 @@ stdenv.mkDerivation rec {
     xdg-utils
     xxHash
     zstd
-    libadwaita
+    libadwaita-beta
     sassc
+    libpanel
+    boost
   ];
 
   mesonFlags = [
