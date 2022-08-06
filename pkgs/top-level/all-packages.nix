@@ -8772,6 +8772,8 @@ with pkgs;
 
   mscgen = callPackage ../tools/graphics/mscgen { };
 
+  msfpc = callPackage ../tools/security/msfpc { };
+
   melt = callPackage ../tools/security/melt { };
 
   metabigor = callPackage ../tools/security/metabigor { };
