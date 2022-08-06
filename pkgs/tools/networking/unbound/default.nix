@@ -39,6 +39,9 @@
 , withSlimLib ? stdenv.isLinux && !stdenv.hostPlatform.isMusl && !withDNSTAP
 , withPythonModule ? false
 , libnghttp2
+
+# for passthru.tests
+, gnutls
 }:
 
 stdenv.mkDerivation rec {
@@ -142,7 +145,10 @@ stdenv.mkDerivation rec {
     (pkg: lib.optionalString (pkg ? dev) " --replace '-L${pkg.dev}/lib' '-L${pkg.out}/lib' --replace '-R${pkg.dev}/lib' '-R${pkg.out}/lib'")
     (builtins.filter (p: p != null) buildInputs);
 
-  passthru.tests = nixosTests.unbound;
+  passthru.tests = {
+    inherit gnutls;
+    nixos-test = nixosTests.unbound;
+  };
 
   meta = with lib; {
     description = "Validating, recursive, and caching DNS resolver";
