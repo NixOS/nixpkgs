@@ -170,6 +170,14 @@ stdenv.mkDerivation {
     ./0015-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
     ./0016-pkg-config-derive-prefix-from-prefix.patch
     ./0017-inherit-systemd-environment-when-calling-generators.patch
+
+    # Pull pending backport for binutils-2.39 support:
+    #   https://github.com/systemd/systemd-stable/pull/214
+    (fetchpatch {
+      name = "binutils-2.39";
+      url = "https://github.com/systemd/systemd-stable/commit/90649cc6c6fcee8ba9be1ed6ad7e0387afc555ae.patch";
+      sha256 = "0w1fa7as9az6adbrpcdwix9zp951692r7ffk6442ngbqslf1qn4n";
+    })
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
