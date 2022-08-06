@@ -1,4 +1,5 @@
 { fetchFromGitHub
+, fetchpatch
 , lib
 , libevdev
 , pkg-config
@@ -8,16 +9,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kanata";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "jtroo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-sL9hP+222i8y0sK3ZEx66yXBTgZp5ewoPUlZS4XnphY=";
+    sha256 = "sha256-0S27dOwtHxQi5ERno040RWZNo5+ao0ULFwHKJz27wWw=";
   };
 
-  cargoHash = "sha256-uhN1UdwtU0C0/lpxUYoCcMLABFTPNO5wKsIGOBnFpzw=";
+  cargoHash = "sha256-Ge9CiYIl6R8cjfUAY4B9ggjNZv5vpjmQKMPv93wGJwc=";
+
+  cargoPatches = [
+    (fetchpatch {
+      name = "update-cargo.lock-for-1.0.6.patch";
+      url = "https://github.com/jtroo/kanata/commit/29a7669ac230571c30c9113e5c82e8440c8b89af.patch";
+      sha256 = "sha256-s4R7vUFlrL1XTNpgXRyIpIq4rDuM5A85ECzbMUX4MAw=";
+    })
+  ];
 
   buildFeatures = lib.optional withCmd "cmd";
 
