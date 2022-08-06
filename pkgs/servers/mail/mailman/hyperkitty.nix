@@ -46,7 +46,7 @@ buildPythonPackage rec {
     django-haystack
     django-mailman3
     django-q
-    django_compressor
+    django-compressor
     django-extensions
     djangorestframework
     flufl_lock
