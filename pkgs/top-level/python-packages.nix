@@ -4010,8 +4010,8 @@ in {
   };
 
   gst-python = callPackage ../development/python-modules/gst-python {
-    inherit (pkgs) meson;
-    inherit (pkgs.gst_all_1) gst-plugins-base;
+    # inherit (pkgs) meson won't work because it won't be spliced
+    inherit (pkgs.buildPackages) meson;
   };
 
   gtfs-realtime-bindings = callPackage ../development/python-modules/gtfs-realtime-bindings { };

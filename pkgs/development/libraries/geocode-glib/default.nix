@@ -3,6 +3,7 @@
 , fetchurl
 , fetchpatch
 , meson
+, mesonEmulatorHook
 , ninja
 , pkg-config
 , gettext
@@ -53,6 +54,8 @@ stdenv.mkDerivation rec {
     gtk-doc
     docbook-xsl-nons
     gobject-introspection
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [

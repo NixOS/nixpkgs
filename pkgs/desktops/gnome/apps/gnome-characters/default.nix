@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -28,6 +29,13 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/gnome-characters/${lib.versions.major version}/${pname}-${version}.tar.xz";
     sha256 = "XaD/uBb4prRPMDdEyoJ6NAgBGMHJONjXmvF7f+Z5gPg=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-characters/-/commit/3e28a6ad668e2239b14f2e05bc477ec1bfb210ba.patch";
+      sha256 = "sha256-2N4eewknhOXBABs6BPA5/YuqZMT8dyXW857iamrrtuA=";
+    })
+  ];
 
   nativeBuildInputs = [
     gettext

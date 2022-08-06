@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     gettext
     wrapGAppsHook4
     libxml2
+    glib
   ];
 
   buildInputs = [

@@ -43,10 +43,10 @@ stdenv.mkDerivation rec {
     shared-mime-info
     wrapGAppsHook
     gnome.adwaita-icon-theme
+    glib
   ];
 
   buildInputs = [
-    glib
     gtk3
     json-glib
     pango
