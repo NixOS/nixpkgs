@@ -456,11 +456,6 @@ unsupported-platforms:
   Jazzkell:                                     [ platforms.darwin ] # depends on Euterpea
   jsaddle-hello:                                [ platforms.darwin ] # depends on jsaddle-webkit2gtk
   jsaddle-webkit2gtk:                           [ platforms.darwin ]
-  keid-core:                                    [ aarch64-linux ]
-  keid-geometry:                                [ aarch64-linux ]
-  keid-render-basic:                            [ aarch64-linux ]
-  keid-sound-openal:                            [ aarch64-linux ]
-  keid-ui-dearimgui:                            [ aarch64-linux ]
   Kulitta:                                      [ platforms.darwin ] # depends on Euterpea
   LambdaHack:                                   [ platforms.darwin ]
   large-hashable:                               [ aarch64-linux ] # https://github.com/factisresearch/large-hashable/issues/17
@@ -543,6 +538,11 @@ supported-platforms:
   HQu:                                          [ platforms.x86 ] # vendored C++ library needs i686/x86_64
   hw-prim-bits:                                 [ platforms.x86 ] # x86 assembler
   inline-asm:                                   [ platforms.x86 ] # x86 assembler
+  keid-core:                                    [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
+  keid-geometry:                                [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
+  keid-render-basic:                            [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
+  keid-sound-openal:                            [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
+  keid-ui-dearimgui:                            [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
   kqueue:                                       [ platforms.netbsd, platforms.freebsd, platforms.openbsd, platforms.darwin ]
   linux-evdev:                                  [ platforms.linux ]
   linux-file-extents:                           [ platforms.linux ]
