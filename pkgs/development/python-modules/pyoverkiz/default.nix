@@ -45,6 +45,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'backoff = "^1.10.0"' 'backoff = "*"'
+  '';
+
   pythonImportsCheck = [
     "pyoverkiz"
   ];
