@@ -113,7 +113,7 @@ self: super: {
   lifted-async = doJailbreak super.lifted-async;
   lukko = doJailbreak super.lukko;
   lzma-conduit = doJailbreak super.lzma-conduit;
-  ormolu = self.ormolu_0_5_0_0;
+  ormolu = self.ormolu_0_5_0_1;
   parallel = doJailbreak super.parallel;
   path = doJailbreak super.path;
   polyparse = overrideCabal (drv: { postPatch = "sed -i -e 's, <0.11, <0.12,' polyparse.cabal"; }) (doJailbreak super.polyparse);
