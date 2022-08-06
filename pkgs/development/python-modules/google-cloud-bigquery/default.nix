@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'pyarrow >= 3.0.0, < 8.0dev' 'pyarrow >= 3.0.0, < 9.0dev'
+      --replace 'pyarrow >= 3.0.0, < 8.0dev' 'pyarrow >= 3.0.0, < 10.0dev'
   '';
 
   propagatedBuildInputs = [
