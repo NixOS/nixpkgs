@@ -27,14 +27,14 @@ let
 in
 buildPythonPackage rec {
   pname = "vyper";
-  version = "0.3.3";
+  version = "0.3.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-BAnNj27B1HAb9VVDA69bFGbQjeOpl0g5EB2juajqBAw=";
+    sha256 = "sha256-ldNuADfWy1OWTPD7pTcpU5dX/mX2pV/QqSjJxkc5S28=";
   };
 
   nativeBuildInputs = [
@@ -69,8 +69,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/vyperlang/vyper";
     license = licenses.asl20;
     maintainers = with maintainers; [ siraben ];
-    knownVulnerabilities = [
-      "CVE-2022-29255"
-    ];
   };
 }

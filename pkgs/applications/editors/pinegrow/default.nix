@@ -14,7 +14,9 @@
 
 stdenv.mkDerivation rec {
   pname = "pinegrow";
-  version = "6.6";
+  # deactivate auto update, because an old 6.21 version is getting mixed up
+  # see e.g. https://github.com/NixOS/nixpkgs/pull/184460
+  version = "6.6"; # nixpkgs-update: no auto update
 
   src = fetchurl {
     url = "https://download.pinegrow.com/PinegrowLinux64.${version}.zip";
