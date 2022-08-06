@@ -12,21 +12,21 @@ index bf25cdaeb..bff7016cc 100644
  )
    # Provide tools for others when we're a subproject and they use the Meson GNOME module
 diff --git a/gio/meson.build b/gio/meson.build
-index ca969309a..68a072714 100644
+index 69bb0603e..839b1cfb4 100644
 --- a/gio/meson.build
 +++ b/gio/meson.build
-@@ -844,14 +844,15 @@ pkg.generate(libgio,
+@@ -858,14 +858,15 @@ pkg.generate(libgio,
    variables : ['datadir=' + join_paths('${prefix}', get_option('datadir')),
                 'schemasdir=' + join_paths('${datadir}', schemas_subdir),
                 'bindir=' + join_paths('${prefix}', get_option('bindir')),
 +               'devbindir=' + get_option('devbindir'),
                 'giomoduledir=' + pkgconfig_giomodulesdir,
                 'gio=' + join_paths('${bindir}', 'gio'),
--               'gio_querymodules=' + join_paths('${bindir}', 'gio-querymodules'),
--               'glib_compile_schemas=' + join_paths('${bindir}', 'glib-compile-schemas'),
+-               'gio_querymodules=@0@'.format(pkgconfig_multiarch_bindir / 'gio-querymodules'),
+-               'glib_compile_schemas=@0@'.format(pkgconfig_multiarch_bindir / 'glib-compile-schemas'),
 -               'glib_compile_resources=' + join_paths('${bindir}', 'glib-compile-resources'),
-+               'gio_querymodules=' + join_paths('${devbindir}', 'gio-querymodules'),
-+               'glib_compile_schemas=' + join_paths('${devbindir}', 'glib-compile-schemas'),
++               'gio_querymodules=@0@'.format('${devbindir}' / 'gio-querymodules'),
++               'glib_compile_schemas=@0@'.format('${devbindir}' / 'glib-compile-schemas'),
 +               'glib_compile_resources=' + join_paths('${devbindir}', 'glib-compile-resources'),
                 'gdbus=' + join_paths('${bindir}', 'gdbus'),
 -               'gdbus_codegen=' + join_paths('${bindir}', 'gdbus-codegen'),
@@ -36,7 +36,7 @@ index ca969309a..68a072714 100644
                 'gsettings=' + join_paths('${bindir}', 'gsettings')],
    version : glib_version,
    install_dir : glib_pkgconfigreldir,
-@@ -952,12 +953,14 @@ executable('gio', gio_tool_sources,
+@@ -966,13 +967,14 @@ executable('gio', gio_tool_sources,
  
  executable('gresource', 'gresource-tool.c',
    install : true,
@@ -47,19 +47,21 @@ index ca969309a..68a072714 100644
  
  gio_querymodules = executable('gio-querymodules', 'gio-querymodules.c', 'giomodule-priv.c',
    install : true,
+-  install_dir : multiarch_bindir,
 +  install_dir : get_option('devbindir'),
    c_args : gio_c_args,
    # intl.lib is not compatible with SAFESEH
    link_args : noseh_link_args,
-@@ -966,6 +969,7 @@ gio_querymodules = executable('gio-querymodules', 'gio-querymodules.c', 'giomodu
+@@ -981,7 +983,7 @@ gio_querymodules = executable('gio-querymodules', 'gio-querymodules.c', 'giomodu
  glib_compile_schemas = executable('glib-compile-schemas',
    ['glib-compile-schemas.c'],
    install : true,
+-  install_dir : multiarch_bindir,
 +  install_dir : get_option('devbindir'),
    # intl.lib is not compatible with SAFESEH
    link_args : noseh_link_args,
    dependencies : [libgio_dep, libgobject_dep, libgmodule_dep, libglib_dep, gvdb_dep])
-@@ -973,6 +977,7 @@ glib_compile_schemas = executable('glib-compile-schemas',
+@@ -989,6 +991,7 @@ glib_compile_schemas = executable('glib-compile-schemas',
  glib_compile_resources = executable('glib-compile-resources',
    [gconstructor_as_data_h, 'glib-compile-resources.c'],
    install : true,
@@ -68,10 +70,10 @@ index ca969309a..68a072714 100644
    # intl.lib is not compatible with SAFESEH
    link_args : noseh_link_args,
 diff --git a/glib/meson.build b/glib/meson.build
-index 6062c11a1..ce242629a 100644
+index bcfcba94f..162fc86f2 100644
 --- a/glib/meson.build
 +++ b/glib/meson.build
-@@ -392,9 +392,10 @@ pkg.generate(libglib,
+@@ -396,9 +396,10 @@ pkg.generate(libglib,
    subdirs : ['glib-2.0'],
    extra_cflags : ['-I${libdir}/glib-2.0/include'] + win32_cflags,
    variables : ['bindir=' + join_paths('${prefix}', get_option('bindir')),
@@ -85,7 +87,7 @@ index 6062c11a1..ce242629a 100644
    version : glib_version,
    install_dir : glib_pkgconfigreldir,
    filebase : 'glib-2.0',
-@@ -431,6 +432,7 @@ if host_system == 'windows'
+@@ -435,6 +436,7 @@ if host_system == 'windows'
  else
    gtester = executable('gtester', 'gtester.c',
      install : true,
@@ -93,7 +95,7 @@ index 6062c11a1..ce242629a 100644
      c_args : ['-UG_DISABLE_ASSERT'],
      include_directories : configinc,
      dependencies : [libglib_dep])
-@@ -442,7 +444,7 @@ report_conf.set('PYTHON', python_name)
+@@ -446,7 +448,7 @@ report_conf.set('PYTHON', python_name)
  configure_file(
    input: 'gtester-report.in',
    output: 'gtester-report',
@@ -124,7 +126,7 @@ index 07d096f36..865891e8c 100644
  
  install_data('gobject_gdb.py', install_dir : join_paths(glib_pkgdatadir, 'gdb'))
 diff --git a/meson_options.txt b/meson_options.txt
-index a52eed9d2..b70b69e35 100644
+index f13cbfdd5..f218db581 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
 @@ -3,6 +3,11 @@ option('runtime_libdir',
