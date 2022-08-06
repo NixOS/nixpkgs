@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
+    "-Dagent=false"
     "-Dsysprofd=none"
     "-Dgtk=false"
     "-Dlibsysprof=false"
