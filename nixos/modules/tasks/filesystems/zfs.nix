@@ -713,7 +713,7 @@ in
             Type = "oneshot";
             RemainAfterExit = true;
           };
-          
+
           path = lib.optionals (cfgExpandOnBoot == "all") [ cfgZfs.package ];
 
           script = ''
