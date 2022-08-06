@@ -11685,6 +11685,8 @@ in {
     inherit python;
   })).python;
 
+  zadnegoale = callPackage ../development/python-modules/zadnegoale { };
+
   zake = callPackage ../development/python-modules/zake { };
 
   zarr = callPackage ../development/python-modules/zarr { };
