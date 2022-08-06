@@ -25,12 +25,19 @@ python3Packages.buildPythonApplication rec {
 
   outputs = [ "out" "udev" ];
 
-  nativeBuildInputs = [ wrapGAppsHook gdk-pixbuf ];
-  buildInputs = [ libappindicator librsvg ];
+  nativeBuildInputs = [
+    gdk-pixbuf
+    gobject-introspection
+    wrapGAppsHook
+  ];
+
+  buildInputs = [
+    libappindicator
+    librsvg
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     evdev
-    gobject-introspection
     gtk3
     psutil
     pygobject3
@@ -46,6 +53,17 @@ python3Packages.buildPythonApplication rec {
 
     install -Dm444 -t $udev/etc/udev/rules.d rules.d-uinput/*.rules
   '';
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
+  # no tests
+  doCheck = false;
+
+  pythonImportsCheck = [ "solaar" ];
 
   meta = with lib; {
     description = "Linux devices manager for the Logitech Unifying Receiver";
