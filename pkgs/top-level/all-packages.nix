@@ -19626,6 +19626,8 @@ with pkgs;
 
   libpostal = callPackage ../development/libraries/libpostal { };
 
+  libpanel = callPackage ../development/libraries/libpanel { };
+
   libpaper = callPackage ../development/libraries/libpaper { };
 
   libpfm = callPackage ../development/libraries/libpfm { };
