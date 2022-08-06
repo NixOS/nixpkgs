@@ -18692,6 +18692,10 @@ with pkgs;
     inherit (pkgs.darwin.apple_sdk.frameworks) AppKit Foundation;
   };
 
+  libadwaita-beta = callPackage ../development/libraries/libadwaita/beta.nix {
+    inherit (pkgs.darwin.apple_sdk.frameworks) AppKit Foundation;
+  };
+
   libaec = callPackage ../development/libraries/libaec { };
 
   libagar = callPackage ../development/libraries/libagar { };
