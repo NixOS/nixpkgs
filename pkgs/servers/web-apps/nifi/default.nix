@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.16.1";
 
   src = fetchurl {
-    url = "https://dlcdn.apache.org/nifi/${version}/nifi-${version}-bin.tar.gz";
+    url = "https://archive.apache.org/dist/nifi/${version}/nifi-${version}-bin.tar.gz";
     sha256 = "sha256-wC+oKq8QGEKuD6B22Ny92NK0z3SBKmRoTEit3vAXJQs=";
   };
 
