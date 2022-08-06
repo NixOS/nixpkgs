@@ -1,5 +1,12 @@
 { lib, buildPythonPackage, fetchPypi
 , django
+
+, azure-storage-blob
+, boto3
+, dropbox
+, google-cloud-storage
+, libcloud
+, paramiko
 }:
 
 buildPythonPackage rec {
@@ -13,8 +20,23 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ django ];
 
-  # django.core.exceptions.ImproperlyConfigured: Requested setting DEFAULT_INDEX_TABLESPACE, but settings are not configured. You must either define the environment variable DJANGO_SETTINGS_MODULE or call settings.configure() before accessing settings.
-  doCheck = false;
+  preCheck = ''
+    export DJANGO_SETTINGS_MODULE=tests.settings
+    # timezone issues https://github.com/jschneier/django-storages/issues/1171
+    substituteInPlace tests/test_sftp.py \
+      --replace 'test_accessed_time' 'dont_test_accessed_time' \
+      --replace 'test_modified_time' 'dont_test_modified_time'
+  '';
+  checkInputs = [
+    azure-storage-blob
+    boto3
+    dropbox
+    google-cloud-storage
+    libcloud
+    paramiko
+  ];
+
+  pythonImportsCheck = [ "storages" ];
 
   meta = with lib; {
     description = "Collection of custom storage backends for Django";
