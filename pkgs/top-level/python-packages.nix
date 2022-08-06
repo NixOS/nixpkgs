@@ -2701,6 +2701,8 @@ in {
 
   dvc-render = callPackage ../development/python-modules/dvc-render {  };
 
+  dvc-task = callPackage ../development/python-modules/dvc-task {  };
+
   dvclive = callPackage ../development/python-modules/dvclive {  };
 
   dwdwfsapi = callPackage ../development/python-modules/dwdwfsapi { };
