@@ -485,8 +485,6 @@ unsupported-platforms:
   oculus:                                       [ platforms.darwin ]
   pam:                                          [ platforms.darwin ]
   parport:                                      [ platforms.darwin ]
-  password:                                     [ aarch64-linux, armv7l-linux ] # uses scrypt, which requries x86
-  password-instances:                           [ aarch64-linux, armv7l-linux ] # uses scrypt, which requries x86
   persist-state:                                [ aarch64-linux, armv7l-linux ] # https://github.com/minad/persist-state/blob/6fd68c0b8b93dec78218f6d5a1f4fa06ced4e896/src/Data/PersistState.hs#L122-L128
   piyo:                                         [ platforms.darwin ]
   PortMidi-simple:                              [ platforms.darwin ]
@@ -499,8 +497,6 @@ unsupported-platforms:
   reflex-localize-dom:                          [ platforms.darwin, aarch64-linux ]
   rtlsdr:                                       [ platforms.darwin ]
   rubberband:                                   [ platforms.darwin ]
-  scat:                                         [ aarch64-linux, armv7l-linux ] # uses scrypt, which requries x86
-  scrypt:                                       [ aarch64-linux, armv7l-linux ] # https://github.com/informatikr/scrypt/issues/8
   sdl2-mixer:                                   [ platforms.darwin ]
   sdl2-ttf:                                     [ platforms.darwin ]
   sensei:                                       [ platforms.darwin ]
@@ -555,7 +551,11 @@ supported-platforms:
   linux-namespaces:                             [ platforms.linux ]
   lxc:                                          [ platforms.linux ]
   midi-alsa:                                    [ platforms.linux ]
+  password:                                     [ platforms.x86 ] # uses scrypt, which requries x86
+  password-instances:                           [ platforms.x86 ] # uses scrypt, which requries x86
   reactivity:                                   [ platforms.windows ]
+  scat:                                         [ platforms.x86 ] # uses scrypt, which requries x86
+  scrypt:                                       [ platforms.x86 ] # https://github.com/informatikr/scrypt/issues/8
   seqalign:                                     [ platforms.x86 ] # x86 intrinsics
   udev:                                         [ platforms.linux ]
   Win32-console:                                [ platforms.windows ]
@@ -569,6 +569,7 @@ supported-platforms:
   Win32-services:                               [ platforms.windows ]
   Win32-services-wrapper:                       [ platforms.windows ]
   XInput:                                       [ platforms.windows ]
+  yesod-auth-simple:                            [ platforms.x86 ] # requires scrypt which only supports x86
 
 dont-distribute-packages:
   # Depends on shine, which is a ghcjs project.
