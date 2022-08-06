@@ -52,11 +52,9 @@ buildPythonApplication rec {
   # will fail without pre-seeded config files
   doCheck = false;
 
-  checkInputs = [ mock ];
+  checkInputs = [ unittestCheckHook mock ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover -s tests -v
-  '';
+  unittestFlagsArray = [ "-s" "tests" "-v" ];
 
   meta = with lib; {
     homepage = "https://github.com/donnemartin/haxor-news";

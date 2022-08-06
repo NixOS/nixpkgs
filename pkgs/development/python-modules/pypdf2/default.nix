@@ -4,7 +4,7 @@
 , pythonOlder
 , glibcLocales
 , typing-extensions
-, python
+, unittestCheckHook
 , isPy3k
 }:
 
@@ -24,12 +24,10 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover
-  '';
-
   # Tests broken on Python 3.x
   #doCheck = !(isPy3k);
+
+  checkInputs = [ unittestCheckHook ];
 
   meta = with lib; {
     description = "A Pure-Python library built as a PDF toolkit";

@@ -1,4 +1,4 @@
-{ lib, python3Packages, fetchFromGitHub, glibcLocales }:
+{ lib, python3Packages, fetchFromGitHub, glibcLocales, unittestCheckHook }:
 
 with python3Packages;
 
@@ -22,16 +22,15 @@ buildPythonApplication rec {
     watchdog
   ];
 
-  checkInputs = [ mock freezegun pylint ];
+  checkInputs = [ unittestCheckHook mock freezegun pylint ];
 
   # Skip test that has been reported multiple times upstream without result:
   # bram85/topydo#271, bram85/topydo#274.
-  checkPhase = ''
+  preCheck = ''
     substituteInPlace test/test_revert_command.py --replace 'test_revert_ls' 'dont_test_revert_ls'
-    python -m unittest discover
   '';
 
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
   meta = with lib; {
     description = "A cli todo application compatible with the todo.txt format";

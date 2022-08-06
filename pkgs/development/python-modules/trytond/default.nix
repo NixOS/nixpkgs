@@ -18,8 +18,9 @@
 , weasyprint
 , gevent
 , pillow
-, withPostgresql ? true, psycopg2
-, python
+, withPostgresql ? true
+, psycopg2
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -54,20 +55,19 @@ buildPythonPackage rec {
     gevent
     pillow
   ] ++ relatorio.optional-dependencies.fodt
-    ++ passlib.optional-dependencies.bcrypt
-    ++ passlib.optional-dependencies.argon2
-    ++ lib.optional withPostgresql psycopg2;
+  ++ passlib.optional-dependencies.bcrypt
+  ++ passlib.optional-dependencies.argon2
+  ++ lib.optional withPostgresql psycopg2;
 
-  checkPhase = ''
-    runHook preCheck
+  checkInputs = [ unittestCheckHook ];
 
+  preCheck = ''
     export HOME=$(mktemp -d)
     export TRYTOND_DATABASE_URI="sqlite://"
     export DB_NAME=":memory:";
-    ${python.interpreter} -m unittest discover -s trytond.tests
-
-    runHook postCheck
   '';
+
+  unittestFlagsArray = [ "-s" "trytond.tests" ];
 
   meta = with lib; {
     description = "The server of the Tryton application platform";

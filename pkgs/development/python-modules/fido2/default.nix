@@ -5,6 +5,7 @@
 , cryptography
 , mock
 , pyfakefs
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -18,17 +19,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six cryptography ];
 
-  checkInputs = [ mock pyfakefs ];
+  checkInputs = [ unittestCheckHook mock pyfakefs ];
 
-  # Testing with `python setup.py test` doesn't work:
-  # https://github.com/Yubico/python-fido2/issues/108#issuecomment-763513576
-  checkPhase = ''
-    runHook preCheck
-
-    python -m unittest discover -v
-
-    runHook postCheck
-  '';
+  unittestFlagsArray = [ "-v" ];
 
   pythonImportsCheck = [ "fido2" ];
 

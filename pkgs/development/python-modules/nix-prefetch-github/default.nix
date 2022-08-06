@@ -4,6 +4,7 @@
 , git
 , which
 , pythonOlder
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -19,11 +20,8 @@ buildPythonPackage rec {
     sha256 = "GHUH3Oog800qrdgXs5AEa4O6ovZ1LT0k3P4YwEHfwlY=";
   };
 
-  checkInputs = [ git which ];
+  checkInputs = [ unittestCheckHook git which ];
 
-  checkPhase = ''
-    python -m unittest discover
-  '';
   # ignore tests which are impure
   DISABLED_TESTS = "network requires_nix_build";
 

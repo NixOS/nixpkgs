@@ -2,7 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, python
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -22,16 +22,12 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "license=license" "license='MIT'"
   '';
 
+  checkInputs = [ unittestCheckHook ];
+
   pythonImportsCheck = [
     "maxcube"
     "maxcube.cube"
   ];
-
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} -m unittest discover
-    runHook postCheck
-  '';
 
   meta = with lib; {
     description = "eQ-3/ELV MAX! Cube Python API";
