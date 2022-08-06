@@ -32122,6 +32122,8 @@ with pkgs;
     stdenv = if stdenv.isDarwin then stdenv else llvmPackages_13.stdenv;
   };
 
+  zecwallet-lite = callPackage ../applications/blockchains/zecwallet-lite { };
+
   lightwalletd = callPackage ../applications/blockchains/lightwalletd { };
 
   openethereum = callPackage ../applications/blockchains/openethereum { };
