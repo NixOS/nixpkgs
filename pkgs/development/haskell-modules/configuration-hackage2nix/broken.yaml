@@ -3525,7 +3525,6 @@ broken-packages:
   - numhask-histogram
   - numhask-prelude
   - Nutri
-  - nvim-hs-contrib
   - NXTDSL
   - nyan-interpolation-core
   - nylas
