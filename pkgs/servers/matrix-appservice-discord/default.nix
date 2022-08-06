@@ -1,6 +1,6 @@
 { lib, mkYarnPackage, fetchFromGitHub, runCommand, makeWrapper, python3, nodejs }:
 
-assert lib.versionAtLeast nodejs.version "12.0.0";
+assert lib.versionAtLeast nodejs.version "14.0.0";
 
 let
   nodeSources = runCommand "node-sources" {} ''
@@ -12,13 +12,13 @@ in mkYarnPackage rec {
   pname = "matrix-appservice-discord";
 
   # when updating, run `./generate.sh <git release tag>`
-  version = "1.0.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
-    owner = "Half-Shot";
+    owner = "matrix-org";
     repo = "matrix-appservice-discord";
     rev = "v${version}";
-    sha256 = "0pca4jxxl4b8irvb1bacsrzjg8m7frq9dnx1knnd2n6ia3f3x545";
+    sha256 = "sha256-RbyVtI33ofeQ195JOO8TutrgZ3hzLlP30Xvevd0MwdE=";
   };
 
   packageJSON = ./package.json;
