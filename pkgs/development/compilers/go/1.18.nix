@@ -90,7 +90,6 @@ stdenv.mkDerivation rec {
       inherit tzdata;
     })
     ./remove-tools-1.11.patch
-    ./ssl-cert-file-1.16.patch
     ./go_no_vendor_checks-1.16.patch
   ];
 
