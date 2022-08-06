@@ -102,7 +102,9 @@ let
 , depsTargetTargetPropagated  ? [] #  1 ->  1
 
 , checkInputs                 ? []
+, checkNativeInputs           ? []
 , installCheckInputs          ? []
+, nativeInstallCheckInputs    ? []
 
 # Configure Phase
 , configureFlags ? []
@@ -212,13 +214,15 @@ else let
       (map (drv: drv.nativeDrv or drv) (checkDependencyList "nativeBuildInputs" nativeBuildInputs
          ++ lib.optional separateDebugInfo' ../../build-support/setup-hooks/separate-debug-info.sh
          ++ lib.optional stdenv.hostPlatform.isWindows ../../build-support/setup-hooks/win-dll-link.sh
-         ++ lib.optionals doCheck checkInputs
-         ++ lib.optionals doInstallCheck' installCheckInputs))
+         ++ lib.optionals doCheck checkNativeInputs
+         ++ lib.optionals doInstallCheck' nativeInstallCheckInputs))
       (map (drv: drv.__spliced.buildTarget or drv) (checkDependencyList "depsBuildTarget" depsBuildTarget))
     ]
     [
       (map (drv: drv.__spliced.hostHost or drv) (checkDependencyList "depsHostHost" depsHostHost))
-      (map (drv: drv.crossDrv or drv) (checkDependencyList "buildInputs" buildInputs))
+      (map (drv: drv.crossDrv or drv) (checkDependencyList "buildInputs" buildInputs
+        ++ lib.optionals doCheck checkInputs
+        ++ lib.optionals doInstallCheck' installCheckInputs))
     ]
     [
       (map (drv: drv.__spliced.targetTarget or drv) (checkDependencyList "depsTargetTarget" depsTargetTarget))
