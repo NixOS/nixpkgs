@@ -4826,10 +4826,10 @@ let
 
   CryptOpenSSLGuess = buildPerlPackage {
     pname = "Crypt-OpenSSL-Guess";
-    version = "0.11";
+    version = "0.15";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AK/AKIYM/Crypt-OpenSSL-Guess-0.11.tar.gz";
-      sha256 = "0rvi9l4ljcbhwwvspq019nfq2h2v746dk355h2nwnlmqikiihsxa";
+      url = "mirror://cpan/authors/id/A/AK/AKIYM/Crypt-OpenSSL-Guess-0.15.tar.gz";
+      sha256 = "1c5033381819fdb4c9087dd291b90ec70e7810d31d57eade9b388eccfd70386d";
     };
     meta = {
       description = "Guess OpenSSL include path";
