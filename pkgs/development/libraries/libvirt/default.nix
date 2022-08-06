@@ -136,8 +136,11 @@ stdenv.mkDerivation rec {
   '' + optionalString isDarwin ''
     sed -i '/qemucapabilitiestest/d' tests/meson.build
     sed -i '/vircryptotest/d' tests/meson.build
+  '' + optionalString (isDarwin && isx86_64) ''
+    sed -i '/qemucaps2xmltest/d' tests/meson.build
+    sed -i '/qemuhotplugtest/d' tests/meson.build
+    sed -i '/virnetdaemontest/d' tests/meson.build
   '';
-
 
   nativeBuildInputs = [
     meson
