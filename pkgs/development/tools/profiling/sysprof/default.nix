@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sysprof";
-  version = "3.45.0";
+  version = "3.45.1";
 
   outputs = [ "out" "lib" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "dpAWjFpDJ9++7b1fD+td79Z2zR1hN8Pn14/Inz1lXy8=";
+    sha256 = "ZAKg8WrnCWfI+Yo+cf7hVhwbzzLyoyI5pF7oo3HI1Zo=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +57,8 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dsystemdunitdir=lib/systemd/system"
+    # In a separate libsysprof-capture package
+    "-Dinstall-static=false"
   ];
 
   passthru = {
