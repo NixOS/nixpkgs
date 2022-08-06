@@ -4869,13 +4869,15 @@ let
 
   CryptOpenSSLX509 = buildPerlPackage rec {
     pname = "Crypt-OpenSSL-X509";
-    version = "1.813";
+    version = "1.914";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JO/JONASBN/Crypt-OpenSSL-X509-1.813.tar.gz";
-      sha256 = "684bd888d2ed4c748f8f6dd8e87c14afa2974b12ee01faa082ad9cfa1e321e62";
+      url = "mirror://cpan/authors/id/J/JO/JONASBN/Crypt-OpenSSL-X509-1.914.tar.gz";
+      sha256 = "49c575257e6408ad5a89011e5b5800d598f9ccafdf42e71004ed81cb2f44ee7a";
     };
     NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
     NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
+    buildInputs = [ CryptOpenSSLGuess ];
+    propagatedBuildInputs = [ ConvertASN1 ];
     meta = {
       homepage = "https://github.com/dsully/perl-crypt-openssl-x509";
       description = "Perl extension to OpenSSL's X509 API";
