@@ -409,24 +409,19 @@ rec {
   # used to figure out which python dependencies etc. neovim needs
   requiredPlugins = {
     packages ? {},
-    givenKnownPlugins ? null,
-    vam ? null,
-    pathogen ? null,
     plug ? null, ...
   }:
     let
-      # This is probably overcomplicated, but I don't understand this well enough to know what's necessary.
-      knownPlugins = if givenKnownPlugins != null then givenKnownPlugins else
-                     if vam != null && vam ? knownPlugins then vam.knownPlugins else
-                     if pathogen != null && pathogen ? knownPlugins then pathogen.knownPlugins else
-                     vimPlugins;
-      vamPlugins = findDependenciesRecursively (map (pluginToDrv knownPlugins) (lib.concatMap vamDictToNames vam.pluginDictionaries));
-      nonNativePlugins = (lib.optionals (vam != null) vamPlugins)
-                      ++ (lib.optionals (plug != null) plug.plugins);
       nativePluginsConfigs = lib.attrsets.attrValues packages;
-      nativePlugins = lib.concatMap ({start?[], opt?[], knownPlugins?vimPlugins}: start++opt) nativePluginsConfigs;
+      nonNativePlugins = (lib.optionals (plug != null) plug.plugins);
+      nativePlugins = lib.concatMap (requiredPluginsForPackage) nativePluginsConfigs;
     in
       nativePlugins ++ nonNativePlugins;
+
+
+  # figures out which python dependencies etc. is needed for one vim package
+  requiredPluginsForPackage = { start ? [], opt ? []}:
+    start ++ opt;
 
   toVimPlugin = drv:
     drv.overrideAttrs(oldAttrs: {
