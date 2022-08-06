@@ -2307,6 +2307,8 @@ with pkgs;
 
   cue = callPackage ../development/tools/cue { };
 
+  cuelsp = callPackage ../development/tools/cuelsp {};
+
   cyclone-scheme = callPackage ../development/interpreters/cyclone { };
 
   cyclonedx-python = callPackage ../tools/misc/cyclonedx-python { };
@@ -10666,6 +10668,8 @@ with pkgs;
   simpleproxy = callPackage ../tools/networking/simpleproxy { };
 
   simplescreenrecorder = libsForQt5.callPackage ../applications/video/simplescreenrecorder { };
+
+  sipexer = callPackage ../tools/networking/sipexer { };
 
   sipsak = callPackage ../tools/networking/sipsak { };
 
@@ -31812,6 +31816,8 @@ with pkgs;
   };
 
   zim = callPackage ../applications/office/zim { };
+
+  zine = callPackage ../applications/misc/zine { };
 
   zita-ajbridge = callPackage ../applications/audio/zita-ajbridge { };
 
