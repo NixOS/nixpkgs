@@ -44,7 +44,7 @@ stripDirs() {
 
     local d
     for d in ${dirs}; do
-        if [ -d "$prefix/$d" ]; then
+        if [ -e "$prefix/$d" ]; then
             dirsNew="${dirsNew} $prefix/$d "
         fi
     done
