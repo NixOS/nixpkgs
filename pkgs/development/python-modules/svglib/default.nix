@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "svglib";
-  version = "1.3.0";
+  version = "1.4.1";
 
   disabled = pythonOlder "3.7";
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-o4mYuV0buZVk3J3/rxXk6UU3YfJ5DS3UFHpK1fusEHg=";
+    sha256 = "sha256-SMJHBsI7tCYhc7b6Seq7EK+hW4QS8UKDEgVJUXzPoxQ=";
   };
 
   propagatedBuildInputs = [
