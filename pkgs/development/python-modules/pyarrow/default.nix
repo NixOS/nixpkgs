@@ -79,6 +79,8 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
+  __darwinAllowLocalNetworking = true;
+
   preBuild = ''
     export PYARROW_PARALLEL=$NIX_BUILD_CORES
   '';
