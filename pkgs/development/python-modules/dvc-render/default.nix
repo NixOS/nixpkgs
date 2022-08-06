@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "dvc-render";
-  version = "0.0.8";
+  version = "0.0.9";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-pn1dmCyDxbMgXwUj9o//X3FZ/x0jz5ZKdTcEuKkeJ1s=";
+    hash = "sha256-ZUIyNg+PTj5CWC65RqB1whnB+pUp1yNJQj43iSBcyvU=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -58,6 +58,6 @@ buildPythonPackage rec {
     description = "Library for rendering DVC plots";
     homepage = "https://github.com/iterative/dvc-render";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [ fab anthonyroussel ];
   };
 }
