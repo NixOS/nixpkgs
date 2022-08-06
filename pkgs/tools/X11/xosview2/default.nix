@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xosview2";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/xosview/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ex1GDBgx9Zzx5tOkZ2IRYskmBh/bUYpRTXHWRoE30vA=";
+    hash = "sha256-kEp6n9KmZ+6sTFyJr1V8Ssq9aZuh69c4U1YIiqvxIxw=";
   };
 
   buildInputs = [ libX11 ];
