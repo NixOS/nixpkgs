@@ -36,19 +36,18 @@
 , libtirpc
 , appliance ? null
 , javaSupport ? false
-, jdk ? null
+, jdk
 }:
 
 assert appliance == null || lib.isDerivation appliance;
-assert javaSupport -> jdk != null;
 
 stdenv.mkDerivation rec {
   pname = "libguestfs";
-  version = "1.48.0";
+  version = "1.48.4";
 
   src = fetchurl {
     url = "https://libguestfs.org/download/${lib.versions.majorMinor version}-stable/${pname}-${version}.tar.gz";
-    sha256 = "sha256-FoH93t/PSEym3uxUIwMwoy3vvTDCqx+BeI4lLLXQSCk=";
+    sha256 = "sha256-ncIrbFpF8ZwsupEaN7Oo2G9idEUhsQ61PD05B+UIAxI=";
   };
 
   strictDeps = true;
@@ -63,7 +62,7 @@ stdenv.mkDerivation rec {
     makeWrapper
     pkg-config
     qemu
-  ] ++ (with perlPackages; [ perl libintl-perl GetoptLong SysVirt ])
+  ] ++ (with perlPackages; [ perl libintl-perl GetoptLong ModuleBuild ])
   ++ (with ocamlPackages; [ ocaml findlib ]);
   buildInputs = [
     ncurses
@@ -112,10 +111,14 @@ stdenv.mkDerivation rec {
   patches = [
     ./libguestfs-syms.patch
   ];
+
+  createFindlibDestdir = true;
+
   installFlags = [ "REALLY_INSTALL=yes" ];
   enableParallelBuilding = true;
 
   postInstall = ''
+    mv "$out/lib/ocaml/guestfs" "$OCAMLFIND_DESTDIR/guestfs"
     for bin in $out/bin/*; do
       wrapProgram "$bin" \
         --prefix PATH     : "$out/bin:${hivex}/bin:${qemu}/bin" \
