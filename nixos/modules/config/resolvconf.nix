@@ -83,9 +83,9 @@ in
       dnsExtensionMechanism = mkOption {
         type = types.bool;
         default = true;
-        description = ''
-          Enable the <code>edns0</code> option in <filename>resolv.conf</filename>. With
-          that option set, <code>glibc</code> supports use of the extension mechanisms for
+        description = lib.mdDoc ''
+          Enable the `edns0` option in {file}`resolv.conf`. With
+          that option set, `glibc` supports use of the extension mechanisms for
           DNS (EDNS) specified in RFC 2671. The most popular user of that feature is DNSSEC,
           which does not work without it.
         '';

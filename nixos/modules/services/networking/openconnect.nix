@@ -38,10 +38,10 @@ let
       # set an authentication cookie, because they have to be requested
       # for every new connection and would only work once.
       passwordFile = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           File containing the password to authenticate with. This
-          is passed to <code>openconnect</code> via the
-          <code>--passwd-on-stdin</code> option.
+          is passed to `openconnect` via the
+          `--passwd-on-stdin` option.
         '';
         default = null;
         example = "/var/lib/secrets/openconnect-passwd";
@@ -63,13 +63,13 @@ let
       };
 
       extraOptions = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Extra config to be appended to the interface config. It should
           contain long-format options as would be accepted on the command
-          line by <code>openconnect</code>
+          line by `openconnect`
           (see https://www.infradead.org/openconnect/manual.html).
-          Non-key-value options like <code>deflate</code> can be used by
-          declaring them as booleans, i. e. <code>deflate = true;</code>.
+          Non-key-value options like `deflate` can be used by
+          declaring them as booleans, i. e. `deflate = true;`.
         '';
         default = { };
         example = {

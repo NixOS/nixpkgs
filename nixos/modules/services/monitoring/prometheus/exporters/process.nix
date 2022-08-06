@@ -22,7 +22,7 @@ in
         All settings expressed as an Nix attrset.
 
         Check the official documentation for the corresponding YAML
-        settings that can all be used here: <link xlink:href="https://github.com/ncabatoff/process-exporter" />
+        settings that can all be used here: <link xlink:href="https://github.com/ncabatoff/process-exporter"/>
       '';
     };
   };

@@ -504,16 +504,16 @@ in
           This is mutually exclusive to any other config option for
           <filename>nginx.conf</filename> except for
           <itemizedlist>
-          <listitem><para><xref linkend="opt-services.nginx.appendConfig" />
+          <listitem><para><xref linkend="opt-services.nginx.appendConfig"/>
           </para></listitem>
-          <listitem><para><xref linkend="opt-services.nginx.httpConfig" />
+          <listitem><para><xref linkend="opt-services.nginx.httpConfig"/>
           </para></listitem>
-          <listitem><para><xref linkend="opt-services.nginx.logError" />
+          <listitem><para><xref linkend="opt-services.nginx.logError"/>
           </para></listitem>
           </itemizedlist>
 
           If additional verbatim config in addition to other options is needed,
-          <xref linkend="opt-services.nginx.appendConfig" /> should be used instead.
+          <xref linkend="opt-services.nginx.appendConfig"/> should be used instead.
         '';
       };
 

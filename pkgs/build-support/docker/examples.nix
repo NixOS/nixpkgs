@@ -584,8 +584,8 @@ rec {
       pkgs.pkgsStatic.busybox
     ];
     fakeRootCommands = ''
-      mkdir -p ./home/jane
-      chown 1000 ./home/jane
+      mkdir -p ./home/alice
+      chown 1000 ./home/alice
       ln -s ${pkgs.hello.overrideAttrs (o: {
         # A unique `hello` to make sure that it isn't included via another mechanism by accident.
         configureFlags = o.configureFlags or [] ++ [ " --program-prefix=layeredImageWithFakeRootCommands-" ];
@@ -607,7 +607,7 @@ rec {
   ];
 
   # tarball consisting of bash and layered image with different owner of the
-  # /home/jane directory
+  # /home/alice directory
   mergedBashFakeRoot = pkgs.dockerTools.mergeImages [
     bash
     layeredImageWithFakeRootCommands

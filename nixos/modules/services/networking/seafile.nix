@@ -133,7 +133,7 @@ in {
       type = types.lines;
       description = ''
         Extra config to append to `seahub_settings.py` file.
-        Refer to <link xlink:href="https://manual.seafile.com/config/seahub_settings_py/" />
+        Refer to <link xlink:href="https://manual.seafile.com/config/seahub_settings_py/"/>
         for all available options.
       '';
     };

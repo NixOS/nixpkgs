@@ -92,7 +92,7 @@ in {
       description = ''
         Configuration attributes for <package>grafana-image-renderer</package>.
 
-        See <link xlink:href="https://github.com/grafana/grafana-image-renderer/blob/ce1f81438e5f69c7fd7c73ce08bab624c4c92e25/default.json" />
+        See <link xlink:href="https://github.com/grafana/grafana-image-renderer/blob/ce1f81438e5f69c7fd7c73ce08bab624c4c92e25/default.json"/>
         for supported values.
       '';
     };

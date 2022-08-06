@@ -10,7 +10,7 @@ let
       device = mkOption {
         type = types.str;
         example = "/dev/input/by-id/usb-0000_0000-event-kbd";
-        description = "Path to the keyboard device.";
+        description = lib.mdDoc "Path to the keyboard device.";
       };
       config = mkOption {
         type = types.lines;
@@ -33,18 +33,18 @@ let
             ;; tap within 100ms for capslk, hold more than 100ms for lctl
             cap (tap-hold 100 100 caps lctl))
         '';
-        description = ''
+        description = lib.mdDoc ''
           Configuration other than defcfg.
-          See <link xlink:href="https://github.com/jtroo/kanata"/> for more information.
+          See <https://github.com/jtroo/kanata> for more information.
         '';
       };
       extraDefCfg = mkOption {
         type = types.lines;
         default = "";
         example = "danger-enable-cmd yes";
-        description = ''
+        description = lib.mdDoc ''
           Configuration of defcfg other than linux-dev.
-          See <link xlink:href="https://github.com/jtroo/kanata"/> for more information.
+          See <https://github.com/jtroo/kanata> for more information.
         '';
       };
     };
@@ -131,7 +131,7 @@ in
       default = pkgs.kanata;
       defaultText = lib.literalExpression "pkgs.kanata";
       example = lib.literalExpression "pkgs.kanata-with-cmd";
-      description = ''
+      description = lib.mdDoc ''
         kanata package to use.
         If you enable danger-enable-cmd, pkgs.kanata-with-cmd should be used.
       '';
@@ -139,7 +139,7 @@ in
     keyboards = mkOption {
       type = types.attrsOf (types.submodule keyboard);
       default = { };
-      description = "Keyboard configurations.";
+      description = lib.mdDoc "Keyboard configurations.";
     };
   };
 

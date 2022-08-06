@@ -139,7 +139,7 @@ in
           '';
           description = ''
             The <filename>database.yml</filename> configuration file as key value set.
-            See <link xlink:href='TODO' />
+            See <link xlink:href="TODO"/>
             for list of configuration parameters.
           '';
         };

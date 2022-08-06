@@ -86,9 +86,9 @@ in
       type = str;
       default = "en_US";
       example = "cs";
-      description = ''
+      description = lib.mdDoc ''
         Default Sympa language.
-        See <link xlink:href='https://github.com/sympa-community/sympa/tree/sympa-6.2/po/sympa' />
+        See <https://github.com/sympa-community/sympa/tree/sympa-6.2/po/sympa>
         for available options.
       '';
     };
@@ -136,9 +136,9 @@ in
             example = {
               default_max_list_members = 3;
             };
-            description = ''
-              The <filename>robot.conf</filename> configuration file as key value set.
-              See <link xlink:href='https://sympa-community.github.io/gpldoc/man/sympa.conf.5.html' />
+            description = lib.mdDoc ''
+              The {file}`robot.conf` configuration file as key value set.
+              See <https://sympa-community.github.io/gpldoc/man/sympa.conf.5.html>
               for list of configuration parameters.
             '';
           };
@@ -242,7 +242,7 @@ in
         description = ''
           The webserver used for the Sympa web interface. Set it to `none` if you want to configure it yourself.
           Further nginx configuration can be done by adapting
-          <option>services.nginx.virtualHosts.<replaceable>name</replaceable></option>.
+          <option>services.nginx.virtualHosts.«name»</option>.
         '';
       };
 
@@ -285,9 +285,9 @@ in
           viewlogs_page_size = 50;
         }
       '';
-      description = ''
-        The <filename>sympa.conf</filename> configuration file as key value set.
-        See <link xlink:href='https://sympa-community.github.io/gpldoc/man/sympa.conf.5.html' />
+      description = lib.mdDoc ''
+        The {file}`sympa.conf` configuration file as key value set.
+        See <https://sympa-community.github.io/gpldoc/man/sympa.conf.5.html>
         for list of configuration parameters.
       '';
     };

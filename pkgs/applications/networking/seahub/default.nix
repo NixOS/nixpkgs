@@ -40,6 +40,7 @@ python.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python.pkgs; [
     django
     future
+    django-compressor
     django-statici18n
     django-webpack-loader
     django-simple-captcha
@@ -48,7 +49,6 @@ python.pkgs.buildPythonApplication rec {
     mysqlclient
     pillow
     python-dateutil
-    django_compressor
     djangorestframework
     openpyxl
     requests

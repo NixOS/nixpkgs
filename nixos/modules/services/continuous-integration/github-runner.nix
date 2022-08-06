@@ -18,12 +18,11 @@ in
     enable = mkOption {
       default = false;
       example = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable GitHub Actions runner.
 
         Note: GitHub recommends using self-hosted runners with private repositories only. Learn more here:
-        <link xlink:href="https://docs.github.com/en/actions/hosting-your-own-runners/about-self-hosted-runners"
-        >About self-hosted runners</link>.
+        [About self-hosted runners](https://docs.github.com/en/actions/hosting-your-own-runners/about-self-hosted-runners).
       '';
       type = lib.types.bool;
     };

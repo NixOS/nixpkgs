@@ -29,11 +29,11 @@ in
         enable = lib.mkOption {
           type = lib.types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Whether Postfix and Dovecot should be set up to receive
             mail locally. parsedmarc will be configured to watch the
             local inbox as the automatically created user specified in
-            <xref linkend="opt-services.parsedmarc.provision.localMail.recipientName" />
+            [](#opt-services.parsedmarc.provision.localMail.recipientName)
           '';
         };
 
@@ -68,15 +68,13 @@ in
       geoIp = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = ''
-          Whether to enable and configure the <link
-          linkend="opt-services.geoipupdate.enable">geoipupdate</link>
+        description = lib.mdDoc ''
+          Whether to enable and configure the [geoipupdate](#opt-services.geoipupdate.enable)
           service to automatically fetch GeoIP databases. Not crucial,
           but recommended for full functionality.
 
-          To finish the setup, you need to manually set the <xref
-          linkend="opt-services.geoipupdate.settings.AccountID" /> and
-          <xref linkend="opt-services.geoipupdate.settings.LicenseKey" />
+          To finish the setup, you need to manually set the [](#opt-services.geoipupdate.settings.AccountID) and
+          [](#opt-services.geoipupdate.settings.LicenseKey)
           options.
         '';
       };
@@ -97,11 +95,11 @@ in
             config.${opt.provision.elasticsearch} && config.${options.services.grafana.enable}
           '';
           apply = x: x && cfg.provision.elasticsearch;
-          description = ''
+          description = lib.mdDoc ''
             Whether the automatically provisioned Elasticsearch
             instance should be added as a grafana datasource. Has no
             effect unless
-            <xref linkend="opt-services.parsedmarc.provision.elasticsearch" />
+            [](#opt-services.parsedmarc.provision.elasticsearch)
             is also enabled.
           '';
         };
@@ -208,13 +206,12 @@ in
             password = lib.mkOption {
               type = with lib.types; nullOr (either path (attrsOf path));
               default = null;
-              description = ''
+              description = lib.mdDoc ''
                 The IMAP server password.
 
                 Always handled as a secret whether the value is
-                wrapped in a <literal>{ _secret = ...; }</literal>
-                attrset or not (refer to <xref
-                linkend="opt-services.parsedmarc.settings" /> for
+                wrapped in a `{ _secret = ...; }`
+                attrset or not (refer to [](#opt-services.parsedmarc.settings) for
                 details).
               '';
               apply = x: if isAttrs x || x == null then x else { _secret = x; };
@@ -273,13 +270,12 @@ in
             password = lib.mkOption {
               type = with lib.types; nullOr (either path (attrsOf path));
               default = null;
-              description = ''
+              description = lib.mdDoc ''
                 The SMTP server password.
 
                 Always handled as a secret whether the value is
-                wrapped in a <literal>{ _secret = ...; }</literal>
-                attrset or not (refer to <xref
-                linkend="opt-services.parsedmarc.settings" /> for
+                wrapped in a `{ _secret = ...; }`
+                attrset or not (refer to [](#opt-services.parsedmarc.settings) for
                 details).
               '';
               apply = x: if isAttrs x || x == null then x else { _secret = x; };
@@ -326,14 +322,13 @@ in
             password = lib.mkOption {
               type = with lib.types; nullOr (either path (attrsOf path));
               default = null;
-              description = ''
+              description = lib.mdDoc ''
                 The password to use when connecting to Elasticsearch,
                 if required.
 
                 Always handled as a secret whether the value is
-                wrapped in a <literal>{ _secret = ...; }</literal>
-                attrset or not (refer to <xref
-                linkend="opt-services.parsedmarc.settings" /> for
+                wrapped in a `{ _secret = ...; }`
+                attrset or not (refer to [](#opt-services.parsedmarc.settings) for
                 details).
               '';
               apply = x: if isAttrs x || x == null then x else { _secret = x; };

@@ -156,22 +156,18 @@ in
           format ZNC expects. This is much more flexible than the legacy options
           under <option>services.znc.confOptions.*</option>, but also can't do
           any type checking.
-          </para>
-          <para>
+
           You can use <command>nix-instantiate --eval --strict '&lt;nixpkgs/nixos&gt;' -A config.services.znc.config</command>
           to view the current value. By default it contains a listener for port
           5000 with SSL enabled.
-          </para>
-          <para>
+
           Nix attributes called <literal>extraConfig</literal> will be inserted
           verbatim into the resulting config file.
-          </para>
-          <para>
+
           If <option>services.znc.useLegacyConfig</option> is turned on, the
           option values in <option>services.znc.confOptions.*</option> will be
           gracefully be applied to this option.
-          </para>
-          <para>
+
           If you intend to update the configuration through this option, be sure
           to enable <option>services.znc.mutable</option>, otherwise none of the
           changes here will be applied after the initial deploy.
@@ -184,8 +180,7 @@ in
         description = ''
           Configuration file for ZNC. It is recommended to use the
           <option>config</option> option instead.
-          </para>
-          <para>
+
           Setting this option will override any auto-generated config file
           through the <option>confOptions</option> or <option>config</option>
           options.
@@ -208,13 +203,11 @@ in
           Indicates whether to allow the contents of the
           <literal>dataDir</literal> directory to be changed by the user at
           run-time.
-          </para>
-          <para>
+
           If enabled, modifications to the ZNC configuration after its initial
           creation are not overwritten by a NixOS rebuild. If disabled, the
           ZNC configuration is rebuilt on every NixOS rebuild.
-          </para>
-          <para>
+
           If the user wants to manage the ZNC service using the web admin
           interface, this option should be enabled.
         '';

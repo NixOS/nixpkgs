@@ -71,12 +71,11 @@ with lib;
             ))
         '';
         example = ["en_US.UTF-8/UTF-8" "nl_NL.UTF-8/UTF-8" "nl_NL/ISO-8859-1"];
-        description = ''
+        description = lib.mdDoc ''
           List of locales that the system should support.  The value
-          <literal>"all"</literal> means that all locales supported by
+          `"all"` means that all locales supported by
           Glibc will be installed.  A full list of supported locales
-          can be found at <link
-          xlink:href="https://sourceware.org/git/?p=glibc.git;a=blob;f=localedata/SUPPORTED"/>.
+          can be found at <https://sourceware.org/git/?p=glibc.git;a=blob;f=localedata/SUPPORTED>.
         '';
       };
 

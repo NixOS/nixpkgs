@@ -112,9 +112,9 @@ in {
         bindPasswordFile = mkOption {
           type = types.str;
           example = "/run/secrets/ldap-bind";
-          description = ''
+          description = lib.mdDoc ''
             Path to the file containing the bind password of the servie account
-            defined by <xref linkend="opt-services.mailman.ldap.bindDn" />.
+            defined by [](#opt-services.mailman.ldap.bindDn).
           '';
         };
         superUserGroup = mkOption {

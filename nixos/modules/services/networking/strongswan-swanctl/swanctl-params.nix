@@ -15,14 +15,14 @@ let
     file = mkOptionalStrParam ''
       Absolute path to the certificate to load. Passed as-is to the daemon, so
       it must be readable by it.
-      </para><para>
+
       Configure either this or <option>handle</option>, but not both, in one section.
     '';
 
     handle = mkOptionalHexParam ''
       Hex-encoded CKA_ID or handle of the certificate on a token or TPM,
       respectively.
-      </para><para>
+
       Configure either this or <option>file</option>, but not both, in one section.
     '';
 
@@ -40,7 +40,7 @@ in {
     cacert = mkOptionalStrParam ''
       The certificates may use a relative path from the swanctl
       <literal>x509ca</literal> directory or an absolute path.
-      </para><para>
+
       Configure one of <option>cacert</option>,
       <option>file</option>, or
       <option>handle</option> per section.
@@ -82,11 +82,11 @@ in {
     local_addrs	= mkCommaSepListParam [] ''
       Local address(es) to use for IKE communication. Takes
       single IPv4/IPv6 addresses, DNS names, CIDR subnets or IP address ranges.
-      </para><para>
+
       As initiator, the first non-range/non-subnet is used to initiate the
       connection from. As responder, the local destination address must match at
       least to one of the specified addresses, subnets or ranges.
-      </para><para>
+
       If FQDNs are assigned they are resolved every time a configuration lookup
       is done. If DNS resolution times out, the lookup is delayed for that time.
     '';
@@ -94,11 +94,11 @@ in {
     remote_addrs = mkCommaSepListParam [] ''
       Remote address(es) to use for IKE communication. Takes
       single IPv4/IPv6 addresses, DNS names, CIDR subnets or IP address ranges.
-      </para><para>
+
       As initiator, the first non-range/non-subnet is used to initiate the
       connection to. As responder, the initiator source address must match at
       least to one of the specified addresses, subnets or ranges.
-      </para><para>
+
       If FQDNs are assigned they are resolved every time a configuration lookup
       is done. If DNS resolution times out, the lookup is delayed for that time.
       To initiate a connection, at least one specific address or DNS name must
@@ -110,7 +110,7 @@ in {
       backend is used, which is usually <literal>500</literal>. If port
       <literal>500</literal> is used, automatic IKE port floating to port
       <literal>4500</literal> is used to work around NAT issues.
-      </para><para>
+
       Using a non-default local IKE port requires support from the socket
       backend in use (socket-dynamic).
     '';
@@ -126,13 +126,13 @@ in {
       for IKE an encryption algorithm, an integrity algorithm, a pseudo random
       function and a Diffie-Hellman group. For AEAD algorithms, instead of
       encryption and integrity algorithms, a combined algorithm is used.
-      </para><para>
+
       In IKEv2, multiple algorithms of the same kind can be specified in a
       single proposal, from which one gets selected. In IKEv1, only one
       algorithm per kind is allowed per proposal, more algorithms get implicitly
       stripped. Use multiple proposals to offer different algorithms
       combinations in IKEv1.
-      </para><para>
+
       Algorithm keywords get separated using dashes. Multiple proposals may be
       specified in a list. The special value <literal>default</literal> forms a
       default proposal of supported algorithms considered safe, and is usually a
@@ -159,7 +159,7 @@ in {
       If the default of yes is used, Mode Config works in pull mode, where the
       initiator actively requests a virtual IP. With no, push mode is used,
       where the responder pushes down a virtual IP to the initiating peer.
-      </para><para>
+
       Push mode is currently supported for IKEv1, but not in IKEv2. It is used
       by a few implementations only, pull mode is recommended.
     '';
@@ -174,7 +174,7 @@ in {
       To enforce UDP encapsulation of ESP packets, the IKE daemon can fake the
       NAT detection payloads. This makes the peer believe that NAT takes place
       on the path, forcing it to encapsulate ESP packets in UDP.
-      </para><para>
+
       Usually this is not required, but it can help to work around connectivity
       issues with too restrictive intermediary firewalls.
     '';
@@ -183,7 +183,7 @@ in {
       Enables MOBIKE on IKEv2 connections. MOBIKE is enabled by default on IKEv2
       connections, and allows mobility of clients and multi-homing on servers by
       migrating active IPsec tunnels.
-      </para><para>
+
       Usually keeping MOBIKE enabled is unproblematic, as it is not used if the
       peer does not indicate support for it. However, due to the design of
       MOBIKE, IKEv2 always floats to port 4500 starting from the second
@@ -222,7 +222,7 @@ in {
       <listitem><para>Finally, setting the option to <literal>no</literal> will disable announcing
       support for this feature.</para></listitem>
       </itemizedlist>
-      </para><para>
+
       Note that fragmented IKE messages sent by a peer are always processed
       irrespective of the value of this option (even when set to no).
     '';
@@ -284,7 +284,7 @@ in {
     unique = mkEnumParam ["no" "never" "keep" "replace"] "no" ''
       Connection uniqueness policy to enforce. To avoid multiple connections
       from the same user, a uniqueness policy can be enforced.
-      </para><para>
+
       <itemizedlist>
       <listitem><para>
       The value <literal>never</literal> does never enforce such a policy, even
@@ -306,7 +306,7 @@ in {
       To compare connections for uniqueness, the remote IKE identity is used. If
       EAP or XAuth authentication is involved, the EAP-Identity or XAuth
       username is used to enforce the uniqueness policy instead.
-      </para><para>
+
       On initiators this setting specifies whether an INITIAL_CONTACT notify is
       sent during IKE_AUTH if no existing connection is found with the remote
       peer (determined by the identities of the first authentication
@@ -320,7 +320,7 @@ in {
       possible to actively reauthenticate as responder. The IKEv2
       reauthentication lifetime negotiation can instruct the client to perform
       reauthentication.
-      </para><para>
+
       Reauthentication is disabled by default. Enabling it usually may lead to
       small connection interruptions, as strongSwan uses a break-before-make
       policy with IKEv2 to avoid any conflicts with associated tunnel resources.
@@ -330,7 +330,7 @@ in {
       IKE rekeying refreshes key material using a Diffie-Hellman exchange, but
       does not re-check associated credentials. It is supported in IKEv2 only,
       IKEv1 performs a reauthentication procedure instead.
-      </para><para>
+
       With the default value IKE rekeying is scheduled every 4 hours, minus the
       configured rand_time. If a reauth_time is configured, rekey_time defaults
       to zero, disabling rekeying; explicitly set both to enforce rekeying and
@@ -343,10 +343,10 @@ in {
       perpetually, a maximum hard lifetime may be specified. If the IKE_SA fails
       to rekey or reauthenticate within the specified time, the IKE_SA gets
       closed.
-      </para><para>
+
       In contrast to CHILD_SA rekeying, over_time is relative in time to the
       rekey_time and reauth_time values, as it applies to both.
-      </para><para>
+
       The default is 10% of the longer of <option>rekey_time</option> and
       <option>reauth_time</option>.
     '';
@@ -356,7 +356,7 @@ in {
       rekey/reauth times. To avoid having both peers initiating the rekey/reauth
       procedure simultaneously, a random time gets subtracted from the
       rekey/reauth times.
-      </para><para>
+
       The default is equal to the configured <option>over_time</option>.
     '';
 
@@ -410,7 +410,7 @@ in {
         List of certificate candidates to use for
         authentication. The certificates may use a relative path from the
         swanctl <literal>x509</literal> directory or an absolute path.
-        </para><para>
+
         The certificate used for authentication is selected based on the
         received certificate request payloads. If no appropriate CA can be
         located, the first certificate is used.
@@ -426,7 +426,7 @@ in {
         List of raw public key candidates to use for
         authentication. The public keys may use a relative path from the swanctl
         <literal>pubkey</literal> directory or an absolute path.
-        </para><para>
+
         Even though multiple local public keys could be defined in principle,
         only the first public key in the list is used for authentication.
       '';
@@ -504,7 +504,7 @@ in {
         authentication. This identity may differ from the IKE identity,
         especially when EAP authentication is delegated from the IKE responder
         to an AAA backend.
-        </para><para>
+
         For EAP-(T)TLS, this defines the identity for which the server must
         provide a certificate in the TLS exchange.
       '';
@@ -518,7 +518,7 @@ in {
       defines the rules how authentication is performed for the local
       peer. Multiple rounds may be defined to use IKEv2 RFC 4739 Multiple
       Authentication or IKEv1 XAuth.
-      </para><para>
+
       Each round is defined in a section having <literal>local</literal> as
       prefix, and an optional unique suffix. To define a single authentication
       round, the suffix may be omitted.
@@ -620,7 +620,7 @@ in {
         Authentication to expect from remote. See the <option>local</option>
         section's <option>auth</option> keyword description about the details of
         supported mechanisms.
-        </para><para>
+
         Since 5.4.0, to require a trustchain public key strength for the remote
         side, specify the key type followed by the minimum strength in bits (for
         example <literal>ecdsa-384</literal> or
@@ -641,7 +641,7 @@ in {
         <literal>pubkey</literal> or <literal>rsa</literal> constraints are
         configured RSASSA-PSS signatures will only be accepted if enabled in
         <literal>strongswan.conf</literal>(5).
-        </para><para>
+
         To specify trust chain constraints for EAP-(T)TLS, append a colon to the
         EAP method, followed by the key type/size and hash algorithm as
         discussed above (e.g. <literal>eap-tls:ecdsa-384-sha384</literal>).
@@ -652,7 +652,7 @@ in {
       defines the constraints how the peers must authenticate to use this
       connection. Multiple rounds may be defined to use IKEv2 RFC 4739 Multiple
       Authentication or IKEv1 XAuth.
-      </para><para>
+
       Each round is defined in a section having <literal>remote</literal> as
       prefix, and an optional unique suffix. To define a single authentication
       round, the suffix may be omitted.
@@ -665,13 +665,13 @@ in {
         Diffie-Hellman group. If a DH group is specified, CHILD_SA/Quick Mode
         rekeying and initial negotiation uses a separate Diffie-Hellman exchange
         using the specified group (refer to esp_proposals for details).
-        </para><para>
+
         In IKEv2, multiple algorithms of the same kind can be specified in a
         single proposal, from which one gets selected. In IKEv1, only one
         algorithm per kind is allowed per proposal, more algorithms get
         implicitly stripped. Use multiple proposals to offer different algorithms
         combinations in IKEv1.
-        </para><para>
+
         Algorithm keywords get separated using dashes. Multiple proposals may be
         specified in a list. The special value <literal>default</literal> forms
         a default proposal of supported algorithms considered safe, and is
@@ -686,7 +686,7 @@ in {
         an optional Extended Sequence Number Mode indicator. For AEAD proposals,
         a combined mode algorithm is used instead of the separate
         encryption/integrity algorithms.
-        </para><para>
+
         If a DH group is specified, CHILD_SA/Quick Mode rekeying and initial
         negotiation use a separate Diffie-Hellman exchange using the specified
         group. However, for IKEv2, the keys of the CHILD_SA created implicitly
@@ -695,18 +695,18 @@ in {
         rekeyed or is created with a separate CREATE_CHILD_SA exchange. A
         proposal mismatch might, therefore, not immediately be noticed when the
         SA is established, but may later cause rekeying to fail.
-        </para><para>
+
         Extended Sequence Number support may be indicated with the
         <literal>esn</literal> and <literal>noesn</literal> values, both may be
         included to indicate support for both modes. If omitted,
         <literal>noesn</literal> is assumed.
-        </para><para>
+
         In IKEv2, multiple algorithms of the same kind can be specified in a
         single proposal, from which one gets selected. In IKEv1, only one
         algorithm per kind is allowed per proposal, more algorithms get
         implicitly stripped. Use multiple proposals to offer different algorithms
         combinations in IKEv1.
-        </para><para>
+
         Algorithm keywords get separated using dashes. Multiple proposals may be
         specified as a list. The special value <literal>default</literal> forms
         a default proposal of supported algorithms considered safe, and is
@@ -729,7 +729,7 @@ in {
         selector. The special value <literal>dynamic</literal> may be used
         instead of a subnet definition, which gets replaced by the tunnel outer
         address or the virtual IP, if negotiated. This is the default.
-        </para><para>
+
         A protocol/port selector is surrounded by opening and closing square
         brackets. Between these brackets, a numeric or getservent(3) protocol
         name may be specified. After the optional protocol restriction, an
@@ -738,7 +738,7 @@ in {
         special value <literal>opaque</literal> for RFC 4301 OPAQUE
         selectors. Port ranges may be specified as well, none of the kernel
         backends currently support port ranges, though.
-        </para><para>
+
         When IKEv1 is used only the first selector is interpreted, except if the
         Cisco Unity extension plugin is used. This is due to a limitation of the
         IKEv1 protocol, which only allows a single pair of selectors per
@@ -761,7 +761,7 @@ in {
         specified in the proposal.  To avoid rekey collisions initiated by both
         ends simultaneously, a value in the range of <option>rand_time</option>
         gets subtracted to form the effective soft lifetime.
-        </para><para>
+
         By default CHILD_SA rekeying is scheduled every hour, minus
         <option>rand_time</option>.
       '';
@@ -783,11 +783,11 @@ in {
         Number of bytes processed before initiating CHILD_SA rekeying. CHILD_SA
         rekeying refreshes key material, optionally using a Diffie-Hellman
         exchange if a group is specified in the proposal.
-        </para><para>
+
         To avoid rekey collisions initiated by both ends simultaneously, a value
         in the range of <option>rand_bytes</option> gets subtracted to form the
         effective soft volume limit.
-        </para><para>
+
         Volume based CHILD_SA rekeying is disabled by default.
       '';
 
@@ -808,11 +808,11 @@ in {
         Number of packets processed before initiating CHILD_SA rekeying. CHILD_SA
         rekeying refreshes key material, optionally using a Diffie-Hellman
         exchange if a group is specified in the proposal.
-        </para><para>
+
         To avoid rekey collisions initiated by both ends simultaneously, a value
         in the range of <option>rand_packets</option> gets subtracted to form
         the effective soft packet count limit.
-        </para><para>
+
         Packet count based CHILD_SA rekeying is disabled by default.
       '';
 
@@ -821,7 +821,7 @@ in {
         this hard packets limit is never reached, because the CHILD_SA gets
         rekeyed before. If that fails for whatever reason, this limit closes the
         CHILD_SA.
-        </para><para>
+
         The default is 10% more than <option>rekey_bytes</option>.
       '';
 
@@ -936,7 +936,7 @@ in {
         <literal>%unique</literal> sets a unique mark on each CHILD_SA instance,
         beyond that the value <literal>%unique-dir</literal> assigns a different
         unique mark for each
-        </para><para>
+
         An additional mask may be appended to the mark, separated by
         <literal>/</literal>. The default mask if omitted is
         <literal>0xffffffff</literal>.
@@ -960,7 +960,7 @@ in {
         value <literal>%unique</literal> sets a unique mark on each CHILD_SA
         instance, beyond that the value <literal>%unique-dir</literal> assigns a
         different unique mark for each CHILD_SA direction (in/out).
-        </para><para>
+
         An additional mask may be appended to the mark, separated by
         <literal>/</literal>. The default mask if omitted is
         <literal>0xffffffff</literal>.
@@ -1102,7 +1102,7 @@ in {
         <literal>start</literal> tries to re-create the CHILD_SA.
         </para></listitem>
         </itemizedlist>
-        </para><para>
+
         <option>close_action</option> does not provide any guarantee that the
         CHILD_SA is kept alive. It acts on explicit close messages only, but not
         on negotiation failures. Use trap policies to reliably re-create failed

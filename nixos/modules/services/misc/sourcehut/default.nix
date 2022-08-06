@@ -180,7 +180,7 @@ in
           network-key = mkOption {
             description = ''
               An absolute file path (which should be outside the Nix-store)
-              to a secret key to encrypt internal messages with. Use <code>srht-keygen network</code> to
+              to a secret key to encrypt internal messages with. Use <literal>srht-keygen network</literal> to
               generate this key. It must be consistent between all services and nodes.
             '';
             type = types.path;
@@ -209,7 +209,7 @@ in
           service-key = mkOption {
             description = ''
               An absolute file path (which should be outside the Nix-store)
-              to a key used for encrypting session cookies. Use <code>srht-keygen service</code> to
+              to a key used for encrypting session cookies. Use <literal>srht-keygen service</literal> to
               generate the service key. This must be shared between each node of the same
               service (e.g. git1.sr.ht and git2.sr.ht), but different services may use
               different keys. If you configure all of your services with the same
@@ -252,8 +252,8 @@ in
 
               Your PGP key information (DO NOT mix up pub and priv here)
               You must remove the password from your secret key, if present.
-              You can do this with <code>gpg --edit-key [key-id]</code>,
-              then use the <code>passwd</code> command and do not enter a new password.
+              You can do this with <literal>gpg --edit-key [key-id]</literal>,
+              then use the <literal>passwd</literal> command and do not enter a new password.
             '';
           };
           pgp-pubkey = mkOption {
@@ -294,7 +294,7 @@ in
               This should be consistent for all *.sr.ht sites,
               as this key will be used to verify signatures
               from other sites in your network.
-              Use the <code>srht-keygen webhook</code> command to generate a key.
+              Use the <literal>srht-keygen webhook</literal> command to generate a key.
             '';
             type = types.path;
             apply = s: "<" + toString s;

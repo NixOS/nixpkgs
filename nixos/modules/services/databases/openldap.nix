@@ -88,7 +88,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable the ldap server.";
+        description = lib.mdDoc "Whether to enable the ldap server.";
       };
 
       package = mkOption {
@@ -173,9 +173,9 @@ in {
       configDir = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Use this config directory instead of generating one from the
-          <literal>settings</literal> option. Overrides all NixOS settings.
+          `settings` option. Overrides all NixOS settings.
         '';
         example = "/var/lib/openldap/slapd.d";
       };
@@ -183,9 +183,9 @@ in {
       mutableConfig = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to allow writable on-line configuration. If
-          <literal>true</literal>, the NixOS settings will only be used to
+          `true`, the NixOS settings will only be used to
           initialize the OpenLDAP configuration if it does not exist, and are
           subsequently ignored.
         '';

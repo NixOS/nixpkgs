@@ -251,9 +251,9 @@ in {
 
       extraConfig = mkOption {
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           Extra seyren configuration. See
-          <link xlink:href='https://github.com/scobal/seyren#config' />
+          <https://github.com/scobal/seyren#config>
         '';
         type = types.attrsOf types.str;
         example = literalExpression ''

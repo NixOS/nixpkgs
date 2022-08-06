@@ -136,7 +136,9 @@ in
           };
           settings = mkOption {
             type = types.attrs;
-            description = "Additional settings that are documented <link xlink:href=\"https://github.com/JustArchiNET/ArchiSteamFarm/wiki/Configuration#bot-config\">here</link>.";
+            description = lib.mdDoc ''
+              Additional settings that are documented [here](https://github.com/JustArchiNET/ArchiSteamFarm/wiki/Configuration#bot-config).
+            '';
             default = { };
           };
         };
