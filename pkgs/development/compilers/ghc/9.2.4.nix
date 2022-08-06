@@ -211,7 +211,7 @@ stdenv.mkDerivation (rec {
     # These cause problems as they're not eliminated by GHC's dead code
     # elimination on aarch64-darwin. (see
     # https://github.com/NixOS/nixpkgs/issues/140774 for details).
-    ./cabal-paths-9.2.3.patch
+    ./cabal-paths-9.2.x.patch
   ];
 
   postPatch = "patchShebangs .";
