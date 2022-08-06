@@ -217,7 +217,7 @@ in {
     ncurses = null;
     gdbm = null;
     sqlite = null;
-    configd = null;
+    inherit (darwin) configd;
     tzdata = null;
     libffi = pkgs.libffiBoot; # without test suite
     stripConfig = true;
