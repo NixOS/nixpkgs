@@ -451,7 +451,6 @@ unsupported-platforms:
   hidapi:                                       [ platforms.darwin ]
   hinotify-bytestring:                          [ platforms.darwin ]
   honk:                                         [ platforms.darwin ]
-  HQu:                                          [ aarch64-linux, armv7l-linux ] # unsupported by vendored C++ library, TODO: explicitly list supported platforms
   HSoM:                                         [ platforms.darwin ]
   iwlib:                                        [ platforms.darwin ]
   Jazzkell:                                     [ platforms.darwin ] # depends on Euterpea
@@ -541,6 +540,7 @@ supported-platforms:
   hpapi:                                        [ platforms.linux ] # limited by pkgs.papi
   hsignal:                                      [ platforms.x86 ] # -msse2
   HFuse:                                        [ platforms.linux ]
+  HQu:                                          [ platforms.x86 ] # vendored C++ library needs i686/x86_64
   hw-prim-bits:                                 [ platforms.x86 ] # x86 assembler
   inline-asm:                                   [ platforms.x86 ] # x86 assembler
   kqueue:                                       [ platforms.netbsd, platforms.freebsd, platforms.openbsd, platforms.darwin ]
