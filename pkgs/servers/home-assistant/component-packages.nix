@@ -1818,7 +1818,8 @@
       nextcloudmonitor
     ];
     "nextdns" = ps: with ps; [
-    ]; # missing inputs: nextdns
+      nextdns
+    ];
     "nfandroidtv" = ps: with ps; [
     ]; # missing inputs: notifications-android-tv
     "nightscout" = ps: with ps; [
@@ -3617,6 +3618,7 @@
     "network"
     "nexia"
     "nextbus"
+    "nextdns"
     "nightscout"
     "nina"
     "no_ip"
