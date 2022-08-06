@@ -7,56 +7,58 @@
 , pkg-config
 , gnome
 , glib
-, gtk3
-, wrapGAppsHook
+, gtk4
+, desktop-file-utils
+, wrapGAppsHook4
 , gettext
 , itstool
-, libhandy
+, libadwaita
 , libxml2
 , libxslt
-, docbook_xsl
+, docbook-xsl-nons
 , docbook_xml_dtd_43
 , systemd
-, python3
 , gsettings-desktop-schemas
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-logs";
-  version = "42.0";
+  version = "43.beta";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-logs/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "TV5FFp1r9DkC16npoHk8kW65LaumuoWzXI629nLNq9c=";
+    sha256 = "naBuiFhl7dG/vPILLU6HwVAGUXKdZW//E77pNlCTldQ=";
   };
 
   patches = [
-    # Fix test with GLib 2.73
-    # https://gitlab.gnome.org/GNOME/gnome-logs/-/merge_requests/41
+    # Remove GTK 3 depndency
+    # https://gitlab.gnome.org/GNOME/gnome-logs/-/merge_requests/46
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-logs/-/commit/724a1faedade8ec39effc86d0b52b96f351579c2.patch";
-      sha256 = "bOY9OQMuIV8QEaFQxfUJ+//m4qYZlxsKEF3bFANlmXo=";
+      url = "https://gitlab.gnome.org/GNOME/gnome-logs/-/commit/f7fe4b6ff9f5ab70919b6747f95e38d0d48685b8.patch";
+      sha256 = "yZY7qYWkJrArqeu1E2xxbJnPggaxOG3sk7212PqMcpo=";
     })
   ];
 
   nativeBuildInputs = [
-    python3
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
     gettext
     itstool
     libxml2
     libxslt
-    docbook_xsl
+    docbook-xsl-nons
     docbook_xml_dtd_43
+    glib
+    gtk4
+    desktop-file-utils
   ];
 
   buildInputs = [
     glib
-    gtk3
-    libhandy
+    gtk4
+    libadwaita
     systemd
     gsettings-desktop-schemas
   ];
@@ -64,11 +66,6 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dman=true"
   ];
-
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-  '';
 
   doCheck = true;
 
