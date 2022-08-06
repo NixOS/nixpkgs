@@ -17546,10 +17546,10 @@ let
 
   ParallelPipes = buildPerlModule {
     pname = "Parallel-Pipes";
-    version = "0.005";
+    version = "0.102";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SK/SKAJI/Parallel-Pipes-0.005.tar.gz";
-      sha256 = "44bd9e2be33d7b314f81c9b886a95d53514689090635f9fad53181f2d3051fd5";
+      url = "mirror://cpan/authors/id/S/SK/SKAJI/Parallel-Pipes-0.102.tar.gz";
+      sha256 = "sha256-JjZfgQXcYGsUC9HUX41w1cMFQ5D3Xk/bdISj5ZHL+pc=";
     };
     buildInputs = [ ModuleBuildTiny ];
     meta = {
