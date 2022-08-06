@@ -4483,6 +4483,8 @@ with pkgs;
 
   shellhub-agent = callPackage ../applications/networking/shellhub-agent { };
 
+  shellnoob = callPackage ../tools/security/shellnoob { };
+
   sheesy-cli = callPackage ../tools/security/sheesy-cli {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
