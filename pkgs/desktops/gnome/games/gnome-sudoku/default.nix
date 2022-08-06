@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-sudoku";
-  version = "43.alpha";
+  version = "43.beta";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-sudoku/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "obATI8CvAcf48ujT4+wEDPkl35ypH671Rr7dSEmXivQ=";
+    sha256 = "hybZ0Dmtee250tDztEu+Dm+K08ycSylBzHh3t1wCgpU=";
   };
 
   nativeBuildInputs = [ meson ninja vala pkg-config gobject-introspection gettext itstool libxml2 python3 desktop-file-utils wrapGAppsHook ];
