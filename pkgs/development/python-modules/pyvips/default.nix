@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "A python wrapper for libvips";
     homepage = "https://github.com/libvips/pyvips";
     license = licenses.mit;
-    maintainers = with maintainers; [ ccellado ];
+    maintainers = with maintainers; [ ccellado anthonyroussel ];
   };
 }
