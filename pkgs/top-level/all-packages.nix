@@ -25341,6 +25341,8 @@ with pkgs;
 
   oldsindhi = callPackage ../data/fonts/oldsindhi { };
 
+  omni-gtk-theme = callPackage ../data/themes/omni-gtk-theme { };
+
   onestepback = callPackage ../data/themes/onestepback { };
 
   open-dyslexic = callPackage ../data/fonts/open-dyslexic { };
