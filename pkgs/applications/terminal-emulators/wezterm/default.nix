@@ -22,6 +22,7 @@
 , Cocoa
 , Foundation
 , libiconv
+, UserNotifications
 , nixosTests
 , runCommand
 }:
@@ -71,6 +72,7 @@ rustPlatform.buildRustPackage rec {
     CoreGraphics
     Foundation
     libiconv
+    UserNotifications
   ];
 
   postInstall = ''
@@ -119,7 +121,5 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
     platforms = platforms.unix;
-    # Fails on missing UserNotifications framework while linking
-    broken = stdenv.isDarwin;
   };
 }

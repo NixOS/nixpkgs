@@ -1788,8 +1788,8 @@ with pkgs;
 
   wayst = callPackage ../applications/terminal-emulators/wayst { };
 
-  wezterm = callPackage ../applications/terminal-emulators/wezterm {
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics Foundation;
+  wezterm = darwin.apple_sdk_11_0.callPackage ../applications/terminal-emulators/wezterm {
+    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa CoreGraphics Foundation UserNotifications;
   };
 
   x3270 = callPackage ../applications/terminal-emulators/x3270 { };
@@ -2638,6 +2638,14 @@ with pkgs;
   oracle-instantclient = callPackage ../development/libraries/oracle-instantclient { };
 
   goku = callPackage ../os-specific/darwin/goku { };
+
+  kerf   = kerf_1; /* kerf2 is WIP */
+  kerf_1 = callPackage ../development/interpreters/kerf {
+    stdenv = clangStdenv;
+    inherit (darwin.apple_sdk.frameworks)
+      Accelerate CoreGraphics CoreVideo
+    ;
+  };
 
   kwakd = callPackage ../servers/kwakd { };
 
@@ -14916,6 +14924,8 @@ with pkgs;
   pythonInterpreters = callPackage ./../development/interpreters/python { };
   inherit (pythonInterpreters) python27 python37 python38 python39 python310 python311 python3Minimal pypy27 pypy38 pypy37 rustpython;
 
+  # List of extensions with overrides to apply to all Python package sets.
+  pythonPackagesExtensions = [ ];
   # Python package sets.
   python27Packages = python27.pkgs;
   python37Packages = python37.pkgs;
@@ -30322,6 +30332,8 @@ with pkgs;
 
   snixembed = callPackage ../applications/misc/snixembed { };
 
+  sommelier = callPackage ../applications/window-managers/sommelier { };
+
   sooperlooper = callPackage ../applications/audio/sooperlooper { };
 
   sops = callPackage ../tools/security/sops { };
@@ -32109,6 +32121,8 @@ with pkgs;
   zcash = callPackage ../applications/blockchains/zcash {
     stdenv = if stdenv.isDarwin then stdenv else llvmPackages_13.stdenv;
   };
+
+  zecwallet-lite = callPackage ../applications/blockchains/zecwallet-lite { };
 
   lightwalletd = callPackage ../applications/blockchains/lightwalletd { };
 
