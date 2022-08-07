@@ -14,7 +14,7 @@ with pkgs.lib;
       openFirewall = true;
     };
     zookeeperQuorum = "zookeeper";
-    in {
+  in {
     zookeeper = { ... }: {
       services.zookeeper.enable = true;
       networking.firewall.allowedTCPPorts = [ 2181 ];
