@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , python
+, nodejs
 , notebook
 , pythonOlder
 , jupyter_server
@@ -22,6 +23,7 @@ buildPythonPackage rec {
     sha256 = "sha256-5sof5EOqzK7kNHSXp7eJl3ZagZRWF74e08ahqJId2Z8=";
   };
 
+  nativeBuildInputs = [ nodejs ];
   propagatedBuildInputs = [ jupyter_server notebook ];
 
   preCheck = ''
