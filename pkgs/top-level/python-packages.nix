@@ -5431,6 +5431,8 @@ in {
 
   meteoalertapi = callPackage ../development/python-modules/meteoalertapi { };
 
+  meteocalc = callPackage ../development/python-modules/meteocalc { };
+
   meteofrance-api = callPackage ../development/python-modules/meteofrance-api { };
 
   mezzanine = callPackage ../development/python-modules/mezzanine { };
