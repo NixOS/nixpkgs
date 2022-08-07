@@ -80,11 +80,6 @@ stdenv.mkDerivation rec {
     # prepend the nix path to the zoneinfo files but also leave the original value for static binaries
     # that run outside a nix server
     sed -i 's,\"/usr/share/zoneinfo/,"${tzdata}/share/zoneinfo/\"\,\n\t&,' src/time/zoneinfo_unix.go
-
-  '' + lib.optionalString stdenv.isDarwin ''
-    sed -i 's,strings.Contains(.*sysctl.*,true {,' src/cmd/dist/util.go
-
-    sed -i 's/unrecognized/unknown/' src/cmd/link/internal/ld/lib.go
   '';
 
   patches = [
