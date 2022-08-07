@@ -5882,6 +5882,8 @@ in {
 
   nextcord = callPackage ../development/python-modules/nextcord { };
 
+  nextdns = callPackage ../development/python-modules/nextdns { };
+
   nftables = toPythonModule (pkgs.nftables.override {
     python3 = python;
     withPython = true;

@@ -11007,10 +11007,10 @@ let
 
   Imager = buildPerlPackage {
     pname = "Imager";
-    version = "1.012";
+    version = "1.019";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TONYC/Imager-1.012.tar.gz";
-      sha256 = "a321c728e3277fd15de842351e69bbef0e2a5a608a31d089e5029b8381e23f21";
+      url = "mirror://cpan/authors/id/T/TO/TONYC/Imager-1.019.tar.gz";
+      sha256 = "sha256-dNRNcBwfFPxLmE+toelVcmtQTC2LBtJl56hh+llDy0g=";
     };
     buildInputs = [ pkgs.freetype pkgs.fontconfig pkgs.libjpeg pkgs.libpng ];
     makeMakerFlags = "--incpath ${pkgs.libjpeg.dev}/include --libpath ${pkgs.libjpeg.out}/lib --incpath ${pkgs.libpng.dev}/include --libpath ${pkgs.libpng.out}/lib";
@@ -11223,10 +11223,10 @@ let
 
   IOAsyncSSL = buildPerlModule {
     pname = "IO-Async-SSL";
-    version = "0.22";
+    version = "0.23";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/IO-Async-SSL-0.22.tar.gz";
-      sha256 = "0c7363a7f1a08805bd1b2cf2b1a42a950ca71914c2aedbdd985970e011331a21";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/IO-Async-SSL-0.23.tar.gz";
+      sha256 = "sha256-0vyuFuJ+F6yjkDpK1aK/L7wmjQZRzn8ARabQVG9YTy4=";
     };
     buildInputs = [ TestIdentity ];
     propagatedBuildInputs = [ Future IOAsync IOSocketSSL ];

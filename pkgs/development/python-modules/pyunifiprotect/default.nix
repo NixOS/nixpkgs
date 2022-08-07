@@ -71,6 +71,8 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "--cov=pyunifiprotect --cov-append" ""
+    substituteInPlace setup.cfg \
+      --replace "pydantic!=1.9.1" "pydantic"
   '';
 
   pythonImportsCheck = [
