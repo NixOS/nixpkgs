@@ -1,5 +1,5 @@
 { config, lib, stdenv, fetchurl, gettext, meson, ninja, pkg-config, perl, python3
-, libiconv, zlib, libffi, pcre, libelf, gnome, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45
+, libiconv, zlib, libffi, pcre, libelf, gnome, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45, libxslt
 # use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
 , util-linuxMinimal ? null
 , buildPackages
@@ -124,7 +124,7 @@ stdenv.mkDerivation rec {
     (buildPackages.meson.override {
       withDarwinFrameworksGtkDocPatch = stdenv.isDarwin;
     })
-    ninja pkg-config perl python3 gettext gtk-doc docbook_xsl docbook_xml_dtd_45 libxml2
+    ninja pkg-config perl python3 gettext gtk-doc docbook_xsl docbook_xml_dtd_45 libxml2 libxslt
   ];
 
   propagatedBuildInputs = [ zlib libffi gettext libiconv ];
@@ -135,6 +135,8 @@ stdenv.mkDerivation rec {
     "-Dgtk_doc=${boolToString (stdenv.hostPlatform == stdenv.buildPlatform)}"
     "-Dnls=enabled"
     "-Ddevbindir=${placeholder "dev"}/bin"
+  ] ++ optionals (!stdenv.isDarwin) [
+    "-Dman=true"                # broken on Darwin
   ];
 
   NIX_CFLAGS_COMPILE = toString [
@@ -167,8 +169,23 @@ stdenv.mkDerivation rec {
     # This file is *included* in gtk3 and would introduce runtime reference via __FILE__.
     sed '1i#line 1 "${pname}-${version}/include/glib-2.0/gobject/gobjectnotifyqueue.c"' \
       -i "$dev"/include/glib-2.0/gobject/gobjectnotifyqueue.c
+    for i in $bin/bin/*; do
+      moveToOutput "share/bash-completion/completions/''${i##*/}" "$bin"
+    done
+    for i in $dev/bin/*; do
+      moveToOutput "share/bash-completion/completions/''${i##*/}" "$dev"
+    done
   '' + optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     cp -r ${buildPackages.glib.devdoc} $devdoc
+  '';
+
+  # Move man pages to the same output as their binaries (needs to be
+  # done after preFixupHooks which moves man pages too - in
+  # _multioutDocs)
+  postFixup = ''
+    for i in $dev/bin/*; do
+      moveToOutput "share/man/man1/''${i##*/}.1.*" "$dev"
+    done
   '';
 
   checkInputs = [ tzdata desktop-file-utils shared-mime-info ];
