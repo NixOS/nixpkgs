@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "mint-y-icons";
-  version = "1.5.8";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     # they don't exactly do tags, it's just a named commit
-    rev = "9489bd161e9503d071227dd36057386a34cfc0a3";
-    hash = "sha256-53yTCWNSJjCpVvrxLfsiaCPNDEZWxJgGVAmVNMNql2M=";
+    rev = "6294c4538a08a2a6c5fd68e223472d9c144ff8b0";
+    hash = "sha256-6tR3OFvU1ID61n4gr0R6pJyo3CjKvu8mgtXzMOINgq0=";
   };
 
   propagatedBuildInputs = [
