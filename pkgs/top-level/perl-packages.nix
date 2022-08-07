@@ -11231,14 +11231,14 @@ let
 
   IOAsync = buildPerlModule {
     pname = "IO-Async";
-    version = "0.78";
+    version = "0.801";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/IO-Async-0.78.tar.gz";
-      sha256 = "sha256-P7UYhZd7hiGKiepC84yvvOWCO/SPqqLRhaGGwqNYNmw=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/IO-Async-0.801.tar.gz";
+      sha256 = "sha256-ieRZuhe3alcrsbS7EgMBVB6MyTJCQXFmI2tsbbDhybk=";
     };
     preCheck = "rm t/50resolver.t"; # this test fails with "Temporary failure in name resolution" in sandbox
     propagatedBuildInputs = [ Future StructDumb ];
-    buildInputs = [ TestFatal TestIdentity TestMetricsAny TestRefcount ];
+    buildInputs = [ FutureIO TestFatal TestIdentity TestMetricsAny TestRefcount ];
     meta = {
       description = "Asynchronous event-driven programming";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
