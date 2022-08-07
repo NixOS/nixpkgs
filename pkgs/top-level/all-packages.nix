@@ -8772,6 +8772,8 @@ with pkgs;
 
   mscgen = callPackage ../tools/graphics/mscgen { };
 
+  msfpc = callPackage ../tools/security/msfpc { };
+
   melt = callPackage ../tools/security/melt { };
 
   metabigor = callPackage ../tools/security/metabigor { };
@@ -13535,6 +13537,9 @@ with pkgs;
   remarkable-toolchain = callPackage ../development/tools/misc/remarkable/remarkable-toolchain { };
 
   remarkable2-toolchain = callPackage ../development/tools/misc/remarkable/remarkable2-toolchain { };
+
+  spicedb     = callPackage ../servers/spicedb { };
+  spicedb-zed = callPackage ../servers/spicedb/zed.nix { };
 
   tacacsplus = callPackage ../servers/tacacsplus { };
 
@@ -25341,6 +25346,8 @@ with pkgs;
 
   oldsindhi = callPackage ../data/fonts/oldsindhi { };
 
+  omni-gtk-theme = callPackage ../data/themes/omni-gtk-theme { };
+
   onestepback = callPackage ../data/themes/onestepback { };
 
   open-dyslexic = callPackage ../data/fonts/open-dyslexic { };
@@ -30229,6 +30236,10 @@ with pkgs;
   };
 
   runc = callPackage ../applications/virtualization/runc {};
+
+  rusty-psn = callPackage ../applications/misc/rusty-psn {};
+
+  rusty-psn-gui = rusty-psn.override { withGui = true; };
 
   rymcast = callPackage ../applications/audio/rymcast {
     inherit (gnome) zenity;
