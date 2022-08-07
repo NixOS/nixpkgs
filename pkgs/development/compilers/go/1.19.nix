@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "all" ];
 
-  prePatch = ''
+  postPatch = ''
     patchShebangs ./ # replace /bin/bash
 
     # Patch the mimetype database location which is missing on NixOS.
@@ -92,10 +92,6 @@ stdenv.mkDerivation rec {
     ./ssl-cert-file-1.16.patch
     ./go_no_vendor_checks-1.16.patch
   ];
-
-  postPatch = ''
-    find . -name '*.orig' -exec rm {} ';'
-  '';
 
   GOOS = stdenv.targetPlatform.parsed.kernel.name;
   GOARCH = goarch stdenv.targetPlatform;
