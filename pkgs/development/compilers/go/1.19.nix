@@ -116,7 +116,8 @@ stdenv.mkDerivation rec {
 
   GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
 
-  postConfigure = ''
+  buildPhase = ''
+    runHook preBuild
     export GOCACHE=$TMPDIR/go-cache
     # this is compiled into the binary
     export GOROOT_FINAL=$out/share/go
@@ -129,10 +130,11 @@ stdenv.mkDerivation rec {
     export CC=${buildPackages.stdenv.cc}/bin/cc
     ''}
     ulimit -a
-  '';
 
-  postBuild = ''
-    (cd src && ./make.bash)
+    pushd src
+    ./make.bash
+    popd
+    runHook postBuild
   '';
 
   preInstall = ''
