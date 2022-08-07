@@ -8,12 +8,12 @@
 , pkgsMusl # for passthru.tests
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bmake";
   version = "20220208";
 
   src = fetchurl {
-    url = "http://www.crufty.net/ftp/pub/sjg/${pname}-${version}.tar.gz";
+    url = "http://www.crufty.net/ftp/pub/sjg/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     hash = "sha256-ewDB4UYrLh5Upk2ND88n/HfursPxOSDv+NlST/BZ1to=";
   };
 
@@ -109,5 +109,5 @@ stdenv.mkDerivation rec {
   };
 
   passthru.tests.bmakeMusl = pkgsMusl.bmake;
-}
+})
 # TODO: report the quirks and patches to bmake devteam (especially the Musl one)
