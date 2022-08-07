@@ -3758,7 +3758,9 @@ with pkgs;
 
   fits-cloudctl = callPackage ../tools/admin/fits-cloudctl { };
 
-  flitter = callPackage ../tools/misc/flitter { };
+  flitter = callPackage ../tools/misc/flitter {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_13;
+  };
 
   frangipanni = callPackage ../tools/text/frangipanni { };
 
