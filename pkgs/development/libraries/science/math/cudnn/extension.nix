@@ -94,7 +94,23 @@ final: prev: let
         fullVersion = "8.3.2.44";
         hash = "sha256-VQCVPAjF5dHd3P2iNPnvvdzb5DpTsm3AqCxyP6FwxFc=";
         url = "${urlPrefix}/v${majorMinorPatch fullVersion}/local_installers/${fileVersion}/cudnn-linux-x86_64-${fullVersion}_cuda${fileVersion}-archive.tar.xz";
-        supportedCudaVersions = [ "11.0" "11.1" "11.2" "11.3" "11.4" "11.4" "11.5" "11.6" ];
+        supportedCudaVersions = [ "11.0" "11.1" "11.2" "11.3" "11.4" "11.5" "11.6" "11.7" ];
+      }
+    ];
+    "8.4.0" = [
+      rec {
+        fileVersion = "10.2";
+        fullVersion = "8.4.0.27";
+        hash = "sha256-FMXjykJYJxmW0f2VnELRfFgs5Nmv9FH4RSRGnnhP0VQ=";
+        url = "${urlPrefix}/v${majorMinorPatch fullVersion}/local_installers/${fileVersion}/cudnn-linux-x86_64-${fullVersion}_cuda${fileVersion}-archive.tar.xz";
+        supportedCudaVersions = [ "10.2" ];
+      }
+      rec {
+        fileVersion = "11.6";
+        fullVersion = "8.4.0.27";
+        hash = "sha256-0Zva/ZgAx50p5vb/+p+eLBDREy1sL/ELFZPgV+dN0FA=";
+        url = "${urlPrefix}/v${majorMinorPatch fullVersion}/local_installers/${fileVersion}/cudnn-linux-x86_64-${fullVersion}_cuda${fileVersion}-archive.tar.xz";
+        supportedCudaVersions = [ "11.0" "11.1" "11.2" "11.3" "11.4" "11.5" "11.6" "11.7" ];
       }
     ];
   };
@@ -111,6 +127,7 @@ final: prev: let
     "11.4" = "8.3.2";
     "11.5" = "8.3.2";
     "11.6" = "8.3.2";
+    "11.7" = "8.4.0";
   }.${cudaVersion} or "8.3.2";
 
 in cuDnnPackages
