@@ -1,4 +1,4 @@
-{ stdenv, lib, callPackage, fetchurl, isInsiders ? false }:
+{ stdenv, lib, callPackage, fetchurl, fetchzip, isInsiders ? false }:
 
 let
   inherit (stdenv.hostPlatform) system;
@@ -21,6 +21,11 @@ let
     aarch64-darwin = "1zhvbn6kmp99a5p0299256fm08y67rfzz03zygif7y20zrmr27ka";
     armv7l-linux = "0jn2li0j1cmk5m61ha6m4lskc80q1j7mfmgidc3x9x9yiv6yacr7";
   }.${system} or throwSystem;
+
+  icons = fetchzip {
+    url = "https://vscodeassets.azureedge.net/public/visual-studio-code-icons.zip";
+    sha256 = "sha256-ePUcc/ePGJeMw1U3LVuPDx0XDgb4PIkfCJM3zSO9gsk=";
+  };
 in
   callPackage ./generic.nix rec {
     # Please backport all compatible updates to the stable release.
@@ -41,6 +46,10 @@ in
     sourceRoot = "";
 
     updateScript = ./update-vscode.sh;
+
+    postInstall = lib.optionalString (!stdenv.isDarwin && !isInsiders) ''
+      install -Dm644 ${icons}/vscode.svg $out/share/icons/hicolor/scalable/apps/code.svg
+    '';
 
     meta = with lib; {
       description = ''
