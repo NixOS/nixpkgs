@@ -25,15 +25,6 @@ index 1b39fc6..4baa19b 100755
  ## ======================================================================================
  
  ## msmtpq can use the following environment variables :
-@@ -108,7 +111,7 @@ LOG=~/log/msmtp.queue.log
- ##
- #EMAIL_CONN_NOTEST=y                 # deprecated ; use below var
- #EMAIL_CONN_TEST={x| |p|P|n|s}       # see settings above for EMAIL_CONN_TEST
--EMAIL_CONN_TEST=n
-+EMAIL_CONN_TEST=${MSMTP_CONN_TEST:-n}
- #EMAIL_QUEUE_QUIET=t
- ## ======================================================================================
- 
 @@ -138,6 +141,7 @@ on_exit() {                          # unlock the queue on exit if the lock was
  ## display msg to user, as well
  ##
