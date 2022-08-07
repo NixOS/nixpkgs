@@ -3,22 +3,24 @@
 , fetchFromGitHub
 , poetry-core
 , pysigma
+, pysigma-backend-elasticsearch
 , pytestCheckHook
 , pythonOlder
+, requests
 }:
 
 buildPythonPackage rec {
-  pname = "pysigma-pipeline-sysmon";
-  version = "1.0.0";
+  pname = "pysigma-backend-opensearch";
+  version = "0.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
-    repo = "pySigma-pipeline-sysmon";
+    repo = "pySigma-backend-opensearch";
     rev = "v${version}";
-    hash = "sha256-OwWUt1O8436kmuaqv8Ec6485NLkVztLjGIWF2SPRtKA=";
+    hash = "sha256-5+/LOi7GHu8h9WhjpZ7bBc4aM41NiXrSrdGhbXdYMvw=";
   };
 
   nativeBuildInputs = [
@@ -27,19 +29,26 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pysigma
+    pysigma-backend-elasticsearch
   ];
 
   checkInputs = [
     pytestCheckHook
+    requests
   ];
 
   pythonImportsCheck = [
-    "sigma.pipelines.sysmon"
+    "sigma.backends.opensearch"
+  ];
+
+  disabledTests = [
+    # Tests requires network access
+    "test_connect_lucene"
   ];
 
   meta = with lib; {
-    description = "Library to support Sysmon pipeline for pySigma";
-    homepage = "https://github.com/SigmaHQ/pySigma-pipeline-sysmon";
+    description = "Library to support OpenSearch for pySigma";
+    homepage = "https://github.com/SigmaHQ/pySigma-backend-opensearch";
     license = with licenses; [ lgpl21Only ];
     maintainers = with maintainers; [ fab ];
   };

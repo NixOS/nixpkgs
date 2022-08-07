@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sigma-cli";
-  version = "0.4.3";
+  version = "0.5.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-3LFakeS3aQaacm7HqeAJPMJhi3Wf8zbJc//SEWUA1Rg=";
+    hash = "sha256-i0rin4TLoqo+F2nWG4kcFp3x/cRtkMzAo5Ldyo0Si5w=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -23,8 +23,11 @@ python3.pkgs.buildPythonApplication rec {
     click
     prettytable
     pysigma
-    pysigma-backend-splunk
+    pysigma-backend-elasticsearch
     pysigma-backend-insightidr
+    pysigma-backend-opensearch
+    pysigma-backend-qradar
+    pysigma-backend-splunk
     pysigma-pipeline-crowdstrike
     pysigma-pipeline-sysmon
     pysigma-pipeline-windows
@@ -37,7 +40,7 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace 'prettytable = "^3.1.1"' 'prettytable = "*"' \
-      --replace 'pysigma = "^0.5.0"' 'pysigma = "*"'
+      --replace 'pysigma = "^0.7.2"' 'pysigma = "*"'
   '';
 
   pythonImportsCheck = [
