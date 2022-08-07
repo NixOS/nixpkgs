@@ -23,23 +23,25 @@
 , tracker-miners
 , gexiv2
 , libselinux
+, libcloudproviders
 , gdk-pixbuf
 , substituteAll
 , gnome-desktop
 , gst_all_1
 , gsettings-desktop-schemas
+, gnome-user-share
 , gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
   pname = "nautilus";
-  version = "43.alpha";
+  version = "43.beta";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "hjVoot3dHPgTNmbDe4Cwf4AN6Wbomh0l4QM0mP+iw5k=";
+    sha256 = "5SEptSc/ZBb///prJr00pWrLfUXltuCVU1UpOhZXkfU=";
   };
 
   patches = [
@@ -70,6 +72,7 @@ stdenv.mkDerivation rec {
     gnome-desktop
     gnome.adwaita-icon-theme
     gsettings-desktop-schemas
+    gnome-user-share
     gst_all_1.gst-plugins-base
     gtk4
     libadwaita
@@ -78,6 +81,8 @@ stdenv.mkDerivation rec {
     libnotify
     libseccomp
     libselinux
+    gdk-pixbuf
+    libcloudproviders
     shared-mime-info
     tracker
     tracker-miners
