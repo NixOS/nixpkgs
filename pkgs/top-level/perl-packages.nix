@@ -9270,6 +9270,23 @@ let
     };
   };
 
+  FutureIO = buildPerlModule {
+    pname = "Future-IO";
+    version = "0.11";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-IO-0.11.tar.gz";
+      sha256 = "sha256-dVM2JvgfdoxfIxyXAhBsJbV3KotplcqixYvMSsyRB8k=";
+    };
+    buildInputs = [ TestIdentity ];
+    propagatedBuildInputs = [ Future StructDumb ];
+    preCheck = "rm t/06connect.t"; # this test fails in sandbox
+    meta = {
+      description = "Future-returning IO methods";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.zakame ];
+    };
+  };
+
   GamesSolitaireVerify = buildPerlModule {
     pname = "Games-Solitaire-Verify";
     version = "0.2403";
