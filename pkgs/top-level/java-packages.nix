@@ -27,6 +27,19 @@ in {
       headless = true;
     };
 
+    mkSemeru = path-linux: path-darwin: let
+      package-linux  = import path-linux { inherit lib; };
+      package-darwin = import path-darwin { inherit lib; };
+      package = if stdenv.isLinux
+        then package-linux
+        else package-darwin;
+    in rec {
+      inherit package-linux package-darwin;
+
+      jdk-openj9  = callPackage package.jdk-openj9  {};
+      jre-openj9  = callPackage package.jre-openj9  {};
+    };
+
     mkAdoptopenjdk = path-linux: path-darwin: let
       package-linux  = import path-linux { inherit lib; };
       package-darwin = import path-darwin { inherit lib; };
@@ -65,6 +78,22 @@ in {
       abort "OpenJDK ${builtins.toString version} is currently not supported on Darwin by nixpkgs.";
 
   in rec {
+
+    semeru8 = mkSemeru
+      ../development/compilers/semeru-bin/jdk8-linux.nix
+      ../development/compilers/semeru-bin/jdk8-darwin.nix;
+
+    semeru11 = mkSemeru
+      ../development/compilers/semeru-bin/jdk11-linux.nix
+      ../development/compilers/semeru-bin/jdk11-darwin.nix;
+
+    semeru17 = mkSemeru
+      ../development/compilers/semeru-bin/jdk17-linux.nix
+      ../development/compilers/semeru-bin/jdk17-darwin.nix;
+
+    semeru18 = mkSemeru
+      ../development/compilers/semeru-bin/jdk18-linux.nix
+      ../development/compilers/semeru-bin/jdk18-darwin.nix;
 
     adoptopenjdk-8 = mkAdoptopenjdk
       ../development/compilers/adoptopenjdk-bin/jdk8-linux.nix
