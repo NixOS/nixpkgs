@@ -1,4 +1,5 @@
 { fetchFromGitHub
+, fetchpatch
 , glib
 , gobject-introspection
 , gtk3
@@ -21,22 +22,26 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "xapps";
-  version = "2.2.8";
+  pname = "xapp";
+  version = "2.2.14";
 
   outputs = [ "out" "dev" ];
+
+  patches = [
+    # Add missing gio-unix-2.0 dependency, can be removed on next update
+    # https://github.com/linuxmint/xapp/pull/156
+    (fetchpatch {
+      url = "https://github.com/linuxmint/xapp/commit/052081f75d1c1212aeb6a913772723c81607bcb3.patch";
+      sha256 = "sha256-VL70Y1FIa7lQ/zKjEx0GhaU1QRu4z6Yu400/bDbgZgM=";
+    })
+  ];
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-70troRGklu5xGjBIrGvshcOX/UT96hIEFXyo4yj2GT4=";
+    hash = "sha256-BebsS7y/hRQSc4rYOIWJ+sSJ5fLZaCpNAE48JnviUUc=";
   };
-
-  # TODO: https://github.com/NixOS/nixpkgs/issues/36468
-  NIX_CFLAGS_COMPILE = [
-    "-I${glib.dev}/include/gio-unix-2.0"
-  ];
 
   nativeBuildInputs = [
     meson
@@ -91,7 +96,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/linuxmint/xapps";
+    homepage = "https://github.com/linuxmint/xapp";
     description = "Cross-desktop libraries and common resources";
     license = licenses.lgpl3;
     platforms = platforms.linux;

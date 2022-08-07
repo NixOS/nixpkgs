@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , pkg-config
 , glib
 , gettext
@@ -14,7 +15,6 @@
 , polkit
 , libxkbfile
 , cinnamon-menus
-, dbus-glib
 , libgnomekbd
 , libxklavier
 , networkmanager
@@ -31,17 +31,27 @@
 , ninja
 , cinnamon-translations
 , python3
+, upower
 }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-control-center";
-  version = "5.2.0";
+  version = "5.4.4";
+
+  patches = [
+    # Add missing gio-unix-2.0 dependency, can be removed on next update
+    # https://github.com/linuxmint/cinnamon-control-center/pull/294
+    (fetchpatch {
+      url = "https://github.com/linuxmint/cinnamon-control-center/commit/7f5ba6e7a691547840f8482445c09c729e10a397.patch";
+      sha256 = "sha256-xcf/O/DfhOvCpWJl0XZD+xAwWs4STAeCaFMZ9Lftv2w=";
+    })
+  ];
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-j7+2uLcHr7bO7i8OGqkw3ifawZULNyihhJ+h2D5gx/k=";
+    hash = "sha256-c2JbRAMcTnqaqt8MXQl4AxnENVmfYyHcCteWBWQUSO0=";
   };
 
   buildInputs = [
@@ -51,7 +61,6 @@ stdenv.mkDerivation rec {
     libnotify
     cinnamon-menus
     libxml2
-    dbus-glib
     polkit
     libgnomekbd
     libxklavier
@@ -66,6 +75,7 @@ stdenv.mkDerivation rec {
     xorg.libXxf86misc
     xorg.libxkbfile
     gdk-pixbuf
+    upower
   ];
 
   /* ./panels/datetime/test-timezone.c:4:#define TZ_DIR "/usr/share/zoneinfo/"
@@ -88,8 +98,6 @@ stdenv.mkDerivation rec {
   '';
 
   mesonFlags = [
-    # TODO: https://github.com/NixOS/nixpkgs/issues/36468
-    "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
     # use locales from cinnamon-translations
     "--localedir=${cinnamon-translations}/share/locale"
   ];
