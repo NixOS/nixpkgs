@@ -2029,6 +2029,10 @@ in {
     inherit (pkgs.darwin.apple_sdk.frameworks) Security;
   };
 
+  cryptolyzer = callPackage ../development/python-modules/cryptolyzer { };
+
+  cryptoparser = callPackage ../development/python-modules/cryptoparser { };
+
   crytic-compile = callPackage ../development/python-modules/crytic-compile { };
 
   csrmesh  = callPackage ../development/python-modules/csrmesh { };
@@ -2700,6 +2704,8 @@ in {
   dvc-objects = callPackage ../development/python-modules/dvc-objects {  };
 
   dvc-render = callPackage ../development/python-modules/dvc-render {  };
+
+  dvc-task = callPackage ../development/python-modules/dvc-task {  };
 
   dvclive = callPackage ../development/python-modules/dvclive {  };
 
@@ -7114,6 +7120,8 @@ in {
   py-sneakers = callPackage ../development/python-modules/py-sneakers { };
 
   py-tes = callPackage ../development/python-modules/py-tes { };
+
+  py-tree-sitter = callPackage ../development/python-modules/py-tree-sitter { };
 
   py-ubjson = callPackage ../development/python-modules/py-ubjson { };
 

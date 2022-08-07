@@ -40,9 +40,8 @@
 
 "6.topic: golang":
   - doc/languages-frameworks/go.section.md
+  - pkgs/build-support/go/**/*
   - pkgs/development/compilers/go/**/*
-  - pkgs/development/go-modules/**/*
-  - pkgs/development/go-packages/**/*
 
 "6.topic: haskell":
   - doc/languages-frameworks/haskell.section.md

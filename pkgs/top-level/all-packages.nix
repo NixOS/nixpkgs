@@ -17797,7 +17797,7 @@ with pkgs;
 
   ganv = callPackage ../development/libraries/ganv { };
 
-  garble = callPackage ../build-support/go/garble.nix {
+  garble = callPackage ../development/tools/garble {
     # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
@@ -21980,10 +21980,10 @@ with pkgs;
     stdenv = gcc8Stdenv;
     buildPackages = buildPackages // { stdenv = buildPackages.gcc8Stdenv; };
   });
-  buildGo117Module = callPackage ../development/go-modules/generic {
+  buildGo117Module = callPackage ../build-support/go/module.nix {
     go = buildPackages.go_1_17;
   };
-  buildGo117Package = callPackage ../development/go-packages/generic {
+  buildGo117Package = callPackage ../build-support/go/package.nix {
     go = buildPackages.go_1_17;
   };
 
@@ -21991,10 +21991,10 @@ with pkgs;
   go_1_18 = darwin.apple_sdk_11_0.callPackage ../development/compilers/go/1.18.nix {
     inherit (darwin.apple_sdk_11_0.frameworks) Foundation Security;
   };
-  buildGo118Module = darwin.apple_sdk_11_0.callPackage ../development/go-modules/generic {
+  buildGo118Module = darwin.apple_sdk_11_0.callPackage ../build-support/go/module.nix {
     go = buildPackages.go_1_18;
   };
-  buildGo118Package = darwin.apple_sdk_11_0.callPackage ../development/go-packages/generic {
+  buildGo118Package = darwin.apple_sdk_11_0.callPackage ../build-support/go/package.nix{
     go = buildPackages.go_1_18;
   };
 
@@ -22002,10 +22002,10 @@ with pkgs;
   go_1_19 = darwin.apple_sdk_11_0.callPackage ../development/compilers/go/1.19.nix {
     inherit (darwin.apple_sdk_11_0.frameworks) Foundation Security;
   };
-  buildGo119Module = darwin.apple_sdk_11_0.callPackage ../development/go-modules/generic {
+  buildGo119Module = darwin.apple_sdk_11_0.callPackage ../build-support/go/module.nix {
     go = buildPackages.go_1_19;
   };
-  buildGo119Package = darwin.apple_sdk_11_0.callPackage ../development/go-packages/generic {
+  buildGo119Package = darwin.apple_sdk_11_0.callPackage ../build-support/go/package.nix {
     go = buildPackages.go_1_19;
   };
 
@@ -33605,6 +33605,8 @@ with pkgs;
   conglomerate = callPackage ../applications/science/biology/conglomerate { };
 
   dalfox = callPackage ../tools/security/dalfox { };
+
+  davtest = callPackage ../tools/security/davtest { };
 
   dcm2niix = callPackage ../applications/science/biology/dcm2niix { };
 
