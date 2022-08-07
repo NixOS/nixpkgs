@@ -15,6 +15,7 @@
 , # allow FIPS mode. Note that this makes the output non-reproducible.
   # https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_Tech_Notes/nss_tech_note6
   enableFIPS ? false
+, nixosTests
 }:
 
 let
@@ -185,6 +186,12 @@ stdenv.mkDerivation rec {
     '';
 
   passthru.updateScript = ./update.sh;
+
+  passthru.tests = lib.optionalAttrs (lib.versionOlder version "3.69") {
+    inherit (nixosTests) firefox-esr-91;
+  } // lib.optionalAttrs (lib.versionAtLeast version "3.69") {
+    inherit (nixosTests) firefox firefox-esr-102;
+  };
 
   meta = with lib; {
     homepage = "https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS";
