@@ -58,9 +58,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isLinux [ stdenv.cc.libc.out ]
     ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
 
-  propagatedBuildInputs = lib.optionals stdenv.isDarwin [ xcbuild ];
-
-  depsTargetTargetPropagated = lib.optionals stdenv.isDarwin [ Security Foundation ];
+  depsTargetTargetPropagated = lib.optionals stdenv.isDarwin [ Foundation Security xcbuild ];
 
   depsBuildTarget = lib.optional isCross targetCC;
 
