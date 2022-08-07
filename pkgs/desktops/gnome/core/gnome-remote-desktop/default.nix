@@ -13,12 +13,13 @@
 , nv-codec-headers-11
 , pipewire
 , systemd
-, libvncserver
 , libsecret
 , libnotify
 , libxkbcommon
 , gdk-pixbuf
 , freerdp
+, fdk_aac
+, tpm2-tss
 , fuse3
 , mesa
 , libgudev
@@ -29,11 +30,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-remote-desktop";
-  version = "43.alpha";
+  version = "43.beta";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-MGLnrsKcyQYoPZ0hY0q3cv8NGVxS8n4aLFzMdtehKXE=";
+    hash = "sha256-th1u0ih9pV/Om1meTCsNBvuVEsvmkSYxu6cbfViVq+c=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +49,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cairo
     freerdp
+    fdk_aac
+    tpm2-tss
     fuse3
     gdk-pixbuf # For libnotify
     glib
@@ -56,7 +59,6 @@ stdenv.mkDerivation rec {
     nv-codec-headers-11
     libnotify
     libsecret
-    libvncserver
     libxkbcommon
     pipewire
     systemd
