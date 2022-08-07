@@ -1,11 +1,12 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , substituteAll
 , gettext
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook4
 , gnome
 , accountsservice
 , fontconfig
@@ -16,6 +17,7 @@
 , gnome-desktop
 , gnome-online-accounts
 , gtk3
+, gtk4
 , libgweather
 , json-glib
 , krb5
@@ -25,10 +27,10 @@
 , networkmanager
 , pango
 , polkit
-, webkitgtk_4_1
+, webkitgtk_5_0
 , systemd
-, libhandy
-, libnma
+, libadwaita
+, libnma-gtk4
 , tzdata
 , libgnomekbd
 , gsettings-desktop-schemas
@@ -36,11 +38,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-initial-setup";
-  version = "43.alpha.1";
+  version = "43.beta";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "40CMKAVdMET/bnDcecI35i6b9lTYh9h7v6Ewo9NHPS8=";
+    sha256 = "1TiUryxad8/IMfeKK7jaTr34VL+0NYviWXDmZ7eIXro=";
   };
 
   patches = [
@@ -56,7 +58,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     systemd
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -70,26 +72,28 @@ stdenv.mkDerivation rec {
     gnome-online-accounts
     gsettings-desktop-schemas
     gtk3
+    gtk4
     json-glib
     krb5
     libgweather
-    libhandy
-    libnma
+    libadwaita
+    libnma-gtk4
     libpwquality
     librest_1_0
     libsecret
     networkmanager
     pango
     polkit
-    webkitgtk_4_1
+    webkitgtk_5_0
   ];
 
   mesonFlags = [
-    "-Dcheese=disabled"
     "-Dibus=disabled"
     "-Dparental_controls=disabled"
     "-Dvendor-conf-file=${./vendor.conf}"
   ];
+
+  PKG_CONFIG_SYSTEMD_SYSUSERSDIR = "${placeholder "out"}/lib/sysusers.d";
 
   passthru = {
     updateScript = gnome.updateScript {
