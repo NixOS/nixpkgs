@@ -9380,6 +9380,8 @@ in {
 
   requests-unixsocket = callPackage ../development/python-modules/requests-unixsocket { };
 
+  requests-wsgi-adapter = callPackage ../development/python-modules/requests-wsgi-adapter { };
+
   requirements-detector = callPackage ../development/python-modules/requirements-detector { };
 
   requirements-parser = callPackage ../development/python-modules/requirements-parser { };
