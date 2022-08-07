@@ -8196,6 +8196,8 @@ in {
 
   pysigma = callPackage ../development/python-modules/pysigma { };
 
+  pysigma-backend-elasticsearch = callPackage ../development/python-modules/pysigma-backend-elasticsearch { };
+
   pysigma-backend-splunk = callPackage ../development/python-modules/pysigma-backend-splunk { };
 
   pysigma-backend-insightidr = callPackage ../development/python-modules/pysigma-backend-insightidr { };
