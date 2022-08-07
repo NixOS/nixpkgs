@@ -49,6 +49,6 @@ buildPythonPackage rec {
     description = "Pixel-level image comparison library";
     homepage = "https://github.com/whtsky/pixelmatch-py";
     license = licenses.isc;
-    maintainers = with maintainers; [ petabyteboy ];
+    maintainers = with maintainers; [ ];
   };
 }

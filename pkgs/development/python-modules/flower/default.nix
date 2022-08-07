@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "flower";
-  version = "1.0.0";
+  version = "1.1.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1gcczr04g7wx99h7pxxx1p9n50sbyi0zxrzy7f7m0sf5apxw85rf";
+    sha256 = "sha256-+SDKKQLXU5/BgKsV5R8dkYNV5cwj2oVP+dWcbloXJbY=";
   };
 
   postPatch = ''
@@ -54,5 +54,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/mher/flower";
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ arnoldfarkas ];
+    knownVulnerabilities = [
+      "CVE-2022-30034"
+    ];
   };
 }

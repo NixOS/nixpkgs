@@ -84,6 +84,10 @@ stdenv.mkDerivation rec {
     homepage = "https://www.sleuthkit.org/";
     maintainers = with maintainers; [ raskin gfrascadorio ];
     platforms = platforms.linux;
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # dependencies
+    ];
     license = licenses.ipl10;
   };
 }

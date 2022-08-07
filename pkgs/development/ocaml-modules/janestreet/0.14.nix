@@ -313,6 +313,7 @@ with self;
     meta.description = "A library for building dynamic webapps, using Js_of_ocaml";
     buildInputs = [ js_of_ocaml-ppx ];
     propagatedBuildInputs = [ async_js incr_map incr_select virtual_dom ];
+    patches = [ ./incr_dom_jsoo_4_0.patch ];
   };
 
   incr_map = janePackage {
@@ -353,9 +354,9 @@ with self;
 
   ocaml-compiler-libs = janePackage {
     pname = "ocaml-compiler-libs";
-    version = "0.12.3";
+    version = "0.12.4";
     minimumOCamlVersion = "4.04.1";
-    hash = "00nrar7h2pyflbdiq6wwwrb4k5jh9iff0jllihzm6ms8d5pspsg5";
+    hash = "sha256-W+KUguz55yYAriHRMcQy8gRPzh2TZSJnexG1JI8TLgI=";
     meta.description = "OCaml compiler libraries repackaged";
   };
 
@@ -404,7 +405,10 @@ with self;
     pname = "ppx_base";
     hash = "1wv3q0qyghm0c5izq03y97lv3czqk116059mg62wx6valn22a000";
     minimumOCamlVersion = "4.04.2";
-    meta.description = "Base set of ppx rewriters";
+    meta = {
+      description = "Base set of ppx rewriters";
+      mainProgram = "ppx-base";
+    };
     propagatedBuildInputs = [ ppx_cold ppx_enumerate ppx_hash ppx_js_style ];
   };
 
@@ -518,7 +522,10 @@ with self;
     pname = "ppx_jane";
     hash = "1kk238fvrcylymwm7xwc7llbyspmx1y662ypq00vy70g112rir7j";
     minimumOCamlVersion = "4.04.2";
-    meta.description = "Standard Jane Street ppx rewriters";
+    meta = {
+      description = "Standard Jane Street ppx rewriters";
+      mainProgram = "ppx-jane";
+    };
     propagatedBuildInputs = [ base_quickcheck ppx_bin_prot ppx_expect ppx_fixed_literal ppx_module_timer ppx_optcomp ppx_optional ppx_pipebang ppx_stable ppx_string ppx_typerep_conv ppx_variants_conv ];
   };
 

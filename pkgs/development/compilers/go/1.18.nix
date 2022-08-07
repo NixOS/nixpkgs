@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, fetchpatch
 , fetchurl
 , tzdata
 , iana-etc
@@ -18,7 +19,11 @@
 , buildPackages
 , pkgsBuildTarget
 , callPackage
+, threadsCross ? null # for MinGW
 }:
+
+# threadsCross is just for MinGW
+assert threadsCross != null -> stdenv.targetPlatform.isWindows;
 
 let
   go_bootstrap = buildPackages.callPackage ./bootstrap.nix { };
@@ -50,17 +55,20 @@ let
   # We need a target compiler which is still runnable at build time,
   # to handle the cross-building case where build != host == target
   targetCC = pkgsBuildTarget.targetPackages.stdenv.cc;
+
+  isCross = stdenv.buildPlatform != stdenv.targetPlatform;
 in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.18.1";
+  version = "1.18.4";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${version}.src.tar.gz";
-    sha256 = "sha256-79Q+DxQC4IO3OgPURLe2V2u0xTmsRiCLY6kWtprKQIg=";
+    sha256 = "sha256-RSWqaw487LV4RfQGCnB1qvyat1K7e2tM+KIS1DB44eQ=";
   };
 
+  strictDeps = true;
   # perl is used for testing go vet
   nativeBuildInputs = [ perl which pkg-config procps ];
   buildInputs = [ cacert pcre ]
@@ -70,6 +78,10 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = lib.optionals stdenv.isDarwin [ xcbuild ];
 
   depsTargetTargetPropagated = lib.optionals stdenv.isDarwin [ Security Foundation ];
+
+  depsBuildTarget = lib.optional isCross targetCC;
+
+  depsTargetTarget = lib.optional (threadsCross != null) threadsCross;
 
   hardeningDisable = [ "all" ];
 
@@ -161,7 +173,11 @@ stdenv.mkDerivation rec {
     touch $TMPDIR/group $TMPDIR/hosts $TMPDIR/passwd
   '';
 
-  patches = [
+  patches = let
+    fetchBase64Patch = args: (fetchpatch args).overrideAttrs (o: {
+      postFetch = "mv $out p; base64 -d p > $out; " + o.postFetch;
+    });
+  in [
     ./remove-tools-1.11.patch
     ./ssl-cert-file-1.16.patch
     ./remove-test-pie-1.15.patch
@@ -171,6 +187,12 @@ stdenv.mkDerivation rec {
     ./skip-nohup-tests.patch
     ./skip-cgo-tests-1.15.patch
     ./go_no_vendor_checks-1.16.patch
+
+    # https://go-review.googlesource.com/c/go/+/417615/
+    (fetchBase64Patch {
+      url = "https://go-review.googlesource.com/changes/go~417615/revisions/3/patch";
+      sha256 = "sha256-Gu5eZUwGGch7et75A/BNynbs4VlQUBClVUxjxPkdjOs=";
+    })
   ];
 
   postPatch = ''
@@ -188,12 +210,12 @@ stdenv.mkDerivation rec {
   # {CC,CXX}_FOR_TARGET must be only set for cross compilation case as go expect those
   # to be different from CC/CXX
   CC_FOR_TARGET =
-    if (stdenv.buildPlatform != stdenv.targetPlatform) then
+    if isCross then
       "${targetCC}/bin/${targetCC.targetPrefix}cc"
     else
       null;
   CXX_FOR_TARGET =
-    if (stdenv.buildPlatform != stdenv.targetPlatform) then
+    if isCross then
       "${targetCC}/bin/${targetCC.targetPrefix}c++"
     else
       null;
@@ -217,7 +239,7 @@ stdenv.mkDerivation rec {
 
     export PATH=$(pwd)/bin:$PATH
 
-    ${lib.optionalString (stdenv.buildPlatform != stdenv.targetPlatform) ''
+    ${lib.optionalString isCross ''
     # Independent from host/target, CC should produce code for the building system.
     # We only set it when cross-compiling.
     export CC=${buildPackages.stdenv.cc}/bin/cc

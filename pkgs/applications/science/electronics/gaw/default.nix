@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "http://gaw.tuxfamily.org";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ fbeffa ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }

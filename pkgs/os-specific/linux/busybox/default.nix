@@ -75,6 +75,11 @@ stdenv.mkDerivation rec {
       url = "https://git.alpinelinux.org/aports/plain/main/busybox/0002-nslookup-sanitize-all-printed-strings-with-printable.patch?id=ed92963eb55bbc8d938097b9ccb3e221a94653f4";
       sha256 = "sha256-vl1wPbsHtXY9naajjnTicQ7Uj3N+EQ8pRNnrdsiow+w=";
     })
+    (fetchurl {
+      name = "CVE-2022-30065.patch";
+      url = "https://git.alpinelinux.org/aports/plain/main/busybox/CVE-2022-30065.patch?id=4ffd996b3f8298c7dd424b912c245864c816e354";
+      sha256 = "sha256-+WSYxI6eF8S0tya/S62f9Nc6jVMnHO0q1OyM69GlNTY=";
+    })
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
 
   separateDebugInfo = true;

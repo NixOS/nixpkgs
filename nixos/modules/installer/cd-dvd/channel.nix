@@ -39,7 +39,8 @@ in
         echo "unpacking the NixOS/Nixpkgs sources..."
         mkdir -p /nix/var/nix/profiles/per-user/root
         ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/per-user/root/channels \
-          -i ${channelSources} --quiet --option build-use-substitutes false
+          -i ${channelSources} --quiet --option build-use-substitutes false \
+          ${optionalString config.boot.initrd.systemd.enable "--option sandbox false"} # There's an issue with pivot_root
         mkdir -m 0700 -p /root/.nix-defexpr
         ln -s /nix/var/nix/profiles/per-user/root/channels /root/.nix-defexpr/channels
         mkdir -m 0755 -p /var/lib/nixos

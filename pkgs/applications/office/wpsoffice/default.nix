@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.wps.com/";
     platforms = [ "x86_64-linux" ];
     hydraPlatforms = [];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ mlatus th0rgal ];
   };

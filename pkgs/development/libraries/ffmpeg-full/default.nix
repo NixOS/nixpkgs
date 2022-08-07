@@ -49,8 +49,11 @@
 , alsa-lib ? null # Alsa in/output support
 #, avisynth ? null # Support for reading AviSynth scripts
 , bzip2 ? null
+, clang ? null
 , celt ? null # CELT decoder
 #, crystalhd ? null # Broadcom CrystalHD hardware acceleration
+, cuda ? !stdenv.isDarwin && !stdenv.isAarch64 # Dynamically linked CUDA
+, cuda-llvm ? !stdenv.isDarwin && !stdenv.isAarch64 # LLVM-based CUDA compilation
 , dav1d ? null # AV1 decoder (focused on speed and correctness)
 #, decklinkExtlib ? false, blackmagic-design-desktop-video ? null # Blackmagic Design DeckLink I/O support
 , fdkaacExtlib ? false, fdk_aac ? null # Fraunhofer FDK AAC de/encoder
@@ -101,9 +104,12 @@
 , libXext ? null # Xlib support
 , libxml2 ? null # libxml2 support, for IMF and DASH demuxers
 , xz ? null # xz-utils
-, nvenc ? !stdenv.isDarwin && !stdenv.isAarch64, nv-codec-headers ? null # NVIDIA NVENC support
+, nv-codec-headers ? null
+, nvdec ? !stdenv.isDarwin && !stdenv.isAarch64 # NVIDIA NVDEC support
+, nvenc ? !stdenv.isDarwin && !stdenv.isAarch64 # NVIDIA NVENC support
 , openal ? null # OpenAL 1.1 capture support
-#, opencl ? null # OpenCL code
+, ocl-icd ? null # OpenCL ICD
+, opencl-headers ? null # OpenCL headers
 , opencore-amr ? null # AMR-NB de/encoder & AMR-WB decoder
 #, opencv ? null # Video filtering
 , openglExtlib ? false, libGL ? null, libGLU ? null # OpenGL rendering
@@ -164,7 +170,7 @@
  *
  * Not packaged:
  *   aacplus avisynth cdio-paranoia crystalhd libavc1394 libiec61883
- *   libnut libquvi nvenc opencl oss shine twolame
+ *   libnut libquvi nvenc oss shine twolame
  *   utvideo vo-aacenc vo-amrwbenc xvmc zvbi blackmagic-design-desktop-video
  *
  * Need fixes to support Darwin:
@@ -255,6 +261,10 @@ stdenv.mkDerivation rec {
       --replace /usr/local/lib/frei0r-1 ${frei0r}/lib/frei0r-1
     substituteInPlace doc/filters.texi \
       --replace /usr/local/lib/frei0r-1 ${frei0r}/lib/frei0r-1
+  '' +
+  # ffmpeg 5.1 https://trac.ffmpeg.org/ticket/9841
+  ''
+    substituteInPlace tests/Makefile --replace 'include $(SRC_PATH)/tests/fate/imf.mak' ""
   '';
 
   configurePlatforms = [];
@@ -324,6 +334,8 @@ stdenv.mkDerivation rec {
     #(enableFeature avisynth "avisynth")
     (enableFeature (bzip2 != null) "bzlib")
     (enableFeature (celt != null) "libcelt")
+    (enableFeature cuda "cuda")
+    (enableFeature (clang != null && cuda-llvm) "cuda-llvm")
     #(enableFeature crystalhd "crystalhd")
     (enableFeature (dav1d != null) "libdav1d")
     #(enableFeature decklinkExtlib "decklink")
@@ -375,9 +387,11 @@ stdenv.mkDerivation rec {
     (enableFeature libxcbshapeExtlib "libxcb-shape")
     (enableFeature (libxml2 != null) "libxml2")
     (enableFeature (xz != null) "lzma")
+    (enableFeature nvdec "cuvid")
+    (enableFeature nvdec "nvdec")
     (enableFeature nvenc "nvenc")
     (enableFeature (openal != null) "openal")
-    #(enableFeature opencl "opencl")
+    (enableFeature (ocl-icd != null && opencl-headers != null) "opencl")
     (enableFeature (opencore-amr != null && version3Licensing) "libopencore-amrnb")
     #(enableFeature (opencv != null) "libopencv")
     (enableFeature openglExtlib "opengl")
@@ -431,7 +445,7 @@ stdenv.mkDerivation rec {
     bzip2 celt dav1d fontconfig freetype frei0r fribidi game-music-emu gnutls gsm
     libjack2 ladspaH lame libaom libass libbluray libbs2b libcaca libdc1394 libmodplug libmysofa
     libogg libopus librsvg libssh libtheora libvdpau libvorbis libvpx libwebp libX11
-    libxcb libXv libXext libxml2 xz openal openjpeg libpulseaudio rav1e svt-av1 rtmpdump opencore-amr
+    libxcb libXv libXext libxml2 xz openal ocl-icd opencl-headers openjpeg libpulseaudio rav1e svt-av1 rtmpdump opencore-amr
     samba SDL2 soxr speex srt vid-stab vo-amrwbenc x264 x265 xavs xvidcore
     zeromq4 zimg zlib openh264
   ] ++ optionals openglExtlib [ libGL libGLU ]
@@ -441,7 +455,8 @@ stdenv.mkDerivation rec {
     ++ optional (!isAarch64 && libvmaf != null && version3Licensing) libvmaf
     ++ optionals isLinux [ alsa-lib libraw1394 libv4l vulkan-loader glslang ]
     ++ optional (isLinux && !isAarch64 && libmfx != null) libmfx
-    ++ optional nvenc nv-codec-headers
+    ++ optional (nvdec || nvenc) nv-codec-headers
+    ++ optional cuda-llvm clang
     ++ optionals stdenv.isDarwin [ Cocoa CoreServices CoreAudio AVFoundation
                                    MediaToolbox VideoDecodeAcceleration
                                    libiconv ];

@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Confluent CLI";
     homepage = "https://docs.confluent.io/confluent-cli/current/overview.html";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ rguevara84 ];
 

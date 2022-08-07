@@ -1,18 +1,29 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "pure-pcapy3";
   version = "1.0.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "14panfklap6wwi9avw46gvd7wg9mkv9xbixvbvmi1m2adpqlb7mr";
+    hash = "sha256-uZ5F8W1K1BDrXrvH1dOeNT1+2n6G8K1S5NxcRaez6pI=";
   };
 
+  pythonImportsCheck = [
+    "pure_pcapy"
+  ];
+
   meta = with lib; {
-    description = "Pure Python reimplementation of pcapy. This package is API compatible and a drop-in replacement.";
-    homepage = "https://bitbucket.org/viraptor/pure-pcapy";
+    description = "Reimplementation of pcapy";
+    homepage = "https://github.com/rcloran/pure-pcapy-3";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ etu ];
+    maintainers = with maintainers; [ ];
   };
 }

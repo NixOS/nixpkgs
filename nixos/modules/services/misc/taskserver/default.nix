@@ -89,7 +89,7 @@ let
       type = types.uniq (types.listOf types.str);
       default = [];
       example = [ "alice" "bob" ];
-      description = ''
+      description = lib.mdDoc ''
         A list of user names that belong to the organization.
       '';
     };
@@ -98,7 +98,7 @@ let
       type = types.listOf types.str;
       default = [];
       example = [ "workers" "slackers" ];
-      description = ''
+      description = lib.mdDoc ''
         A list of group names that belong to the organization.
       '';
     };
@@ -151,19 +151,19 @@ in {
       user = mkOption {
         type = types.str;
         default = "taskd";
-        description = "User for Taskserver.";
+        description = lib.mdDoc "User for Taskserver.";
       };
 
       group = mkOption {
         type = types.str;
         default = "taskd";
-        description = "Group for Taskserver.";
+        description = lib.mdDoc "Group for Taskserver.";
       };
 
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/taskserver";
-        description = "Data directory for Taskserver.";
+        description = lib.mdDoc "Data directory for Taskserver.";
       };
 
       ciphers = mkOption {
@@ -184,17 +184,17 @@ in {
         example.myShinyOrganisation.users = [ "alice" "bob" ];
         example.myShinyOrganisation.groups = [ "staff" "outsiders" ];
         example.yetAnotherOrganisation.users = [ "foo" "bar" ];
-        description = ''
+        description = lib.mdDoc ''
           An attribute set where the keys name the organisation and the values
-          are a set of lists of <option>users</option> and
-          <option>groups</option>.
+          are a set of lists of {option}`users` and
+          {option}`groups`.
         '';
       };
 
       confirmation = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Determines whether certain commands are confirmed.
         '';
       };
@@ -202,7 +202,7 @@ in {
       debug = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Logs debugging information.
         '';
       };
@@ -210,7 +210,7 @@ in {
       extensions = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Fully qualified path of the Taskserver extension scripts.
           Currently there are none.
         '';
@@ -219,7 +219,7 @@ in {
       ipLog = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Logs the IP addresses of incoming requests.
         '';
       };
@@ -238,7 +238,7 @@ in {
       requestLimit = mkOption {
         type = types.int;
         default = 1048576;
-        description = ''
+        description = lib.mdDoc ''
           Size limit of incoming requests, in bytes.
         '';
       };
@@ -247,13 +247,13 @@ in {
         type = with types; either str (listOf str);
         default = [];
         example = [ "[Tt]ask [2-9]+" ];
-        description = ''
+        description = lib.mdDoc ''
           A list of regular expressions that are matched against the reported
-          client id (such as <literal>task 2.3.0</literal>).
+          client id (such as `task 2.3.0`).
 
-          The values <literal>all</literal> or <literal>none</literal> have
+          The values `all` or `none` have
           special meaning. Overidden by any entry in the option
-          <option>services.taskserver.disallowedClientIDs</option>.
+          {option}`services.taskserver.disallowedClientIDs`.
         '';
       };
 
@@ -261,13 +261,13 @@ in {
         type = with types; either str (listOf str);
         default = [];
         example = [ "[Tt]ask [2-9]+" ];
-        description = ''
+        description = lib.mdDoc ''
           A list of regular expressions that are matched against the reported
-          client id (such as <literal>task 2.3.0</literal>).
+          client id (such as `task 2.3.0`).
 
-          The values <literal>all</literal> or <literal>none</literal> have
+          The values `all` or `none` have
           special meaning. Any entry here overrides those in
-          <option>services.taskserver.allowedClientIDs</option>.
+          {option}`services.taskserver.allowedClientIDs`.
         '';
       };
 
@@ -275,7 +275,7 @@ in {
         type = types.str;
         default = "localhost";
         example = "::";
-        description = ''
+        description = lib.mdDoc ''
           The address (IPv4, IPv6 or DNS) to listen on.
         '';
       };
@@ -283,7 +283,7 @@ in {
       listenPort = mkOption {
         type = types.int;
         default = 53589;
-        description = ''
+        description = lib.mdDoc ''
           Port number of the Taskserver.
         '';
       };
@@ -291,7 +291,7 @@ in {
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to open the firewall for the specified Taskserver port.
         '';
       };
@@ -299,7 +299,7 @@ in {
       fqdn = mkOption {
         type = types.str;
         default = "localhost";
-        description = ''
+        description = lib.mdDoc ''
           The fully qualified domain name of this server, which is also used
           as the common name in the certificates.
         '';
@@ -308,12 +308,12 @@ in {
       trust = mkOption {
         type = types.enum [ "allow all" "strict" ];
         default = "strict";
-        description = ''
+        description = lib.mdDoc ''
           Determines how client certificates are validated.
 
-          The value <literal>allow all</literal> performs no client
+          The value `allow all` performs no client
           certificate validation. This is not recommended. The value
-          <literal>strict</literal> causes the client certificate to be
+          `strict` causes the client certificate to be
           validated against a CA.
         '';
       };

@@ -1,22 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, gettext, pkg-config, wxGTK31-gtk3,
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, gettext, pkg-config, wxGTK30-gtk3,
   boost, icu, lucenepp, asciidoc, libxslt, xmlto, gtk3, gtkspell3, pugixml,
   nlohmann_json, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "poedit";
-  version = "3.0.1";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "vslavik";
     repo = "poedit";
     rev = "v${version}-oss";
-    sha256 = "sha256-PBAOCAO3OrBE7lOho7nJNEpqwds7XiblN/f+GonrXHA=";
+    sha256 = "sha256-kun1x1ql8KLS1+nh5+iItxYZnfvFcrx62cvX4OEczG4=";
   };
 
   nativeBuildInputs = [ autoconf automake asciidoc wrapGAppsHook
     libxslt xmlto boost libtool pkg-config ];
 
-  buildInputs = [ lucenepp nlohmann_json wxGTK31-gtk3 icu pugixml gtk3 gtkspell3 hicolor-icon-theme ];
+  buildInputs = [ lucenepp nlohmann_json wxGTK30-gtk3 icu pugixml gtk3 gtkspell3 hicolor-icon-theme ];
 
   propagatedBuildInputs = [ gettext ];
 

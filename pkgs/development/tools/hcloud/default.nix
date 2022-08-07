@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "hcloud";
-  version = "1.29.5";
+  version = "1.30.1";
 
   src = fetchFromGitHub {
     owner = "hetznercloud";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-a+AXWr/60VFdNk+UkDYRXo5ib8LvaCVpjNi1GFrRVho=";
+    sha256 = "sha256-0zVbk8NuPGYyEcYV1F1if8VdKa4MnW2v+VQcvgM9bZ8=";
   };
 
-  vendorSha256 = "sha256-iJnjmfP9BcT+OXotbS2+OSWGxQaMXwdlR1WTi04FesM=";
+  vendorSha256 = "sha256-++uvg/vXRX2lPU4CmqAcLWbsWBXZHXaXO4qXEaq90T4=";
 
   ldflags = [
     "-s" "-w"
@@ -21,7 +21,7 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
-    for shell in bash zsh; do
+    for shell in bash fish zsh; do
       $out/bin/hcloud completion $shell > hcloud.$shell
       installShellCompletion hcloud.$shell
     done

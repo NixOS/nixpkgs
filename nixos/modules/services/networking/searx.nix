@@ -51,14 +51,14 @@ in
         type = types.bool;
         default = false;
         relatedPackages = [ "searx" ];
-        description = "Whether to enable Searx, the meta search engine.";
+        description = lib.mdDoc "Whether to enable Searx, the meta search engine.";
       };
 
       environmentFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = ''
-          Environment file (see <literal>systemd.exec(5)</literal>
+        description = lib.mdDoc ''
+          Environment file (see `systemd.exec(5)`
           "EnvironmentFile=" section for the syntax) to define variables for
           Searx. This option can be used to safely include secret keys into the
           Searx configuration.
@@ -117,7 +117,7 @@ in
         type = types.package;
         default = pkgs.searx;
         defaultText = literalExpression "pkgs.searx";
-        description = "searx package to use.";
+        description = lib.mdDoc "searx package to use.";
       };
 
       runInUwsgi = mkOption {
@@ -143,9 +143,10 @@ in
             disable-logging = true;
             http = ":8080";                   # serve via HTTP...
             socket = "/run/searx/searx.sock"; # ...or UNIX socket
+            chmod-socket = "660";             # allow the searx group to read/write to the socket
           }
         '';
-        description = ''
+        description = lib.mdDoc ''
           Additional configuration of the uWSGI vassal running searx. It
           should notably specify on which interfaces and ports the vassal
           should listen.
@@ -220,7 +221,12 @@ in
         lazy-apps = true;
         enable-threads = true;
         module = "searx.webapp";
-        env = [ "SEARX_SETTINGS_PATH=${cfg.settingsFile}" ];
+        env = [
+          "SEARX_SETTINGS_PATH=${cfg.settingsFile}"
+          # searxng compatiblity https://github.com/searxng/searxng/issues/1519
+          "SEARXNG_SETTINGS_PATH=${cfg.settingsFile}"
+        ];
+        buffer-size = 32768;
         pythonPackages = self: [ cfg.package ];
       } // cfg.uwsgiConfig;
     };

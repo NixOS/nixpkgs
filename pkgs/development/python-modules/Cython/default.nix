@@ -4,7 +4,6 @@
 , fetchPypi
 , fetchpatch
 , python
-, glibcLocales
 , pkg-config
 , gdb
 , numpy
@@ -24,12 +23,13 @@ let
   ;
 
 in buildPythonPackage rec {
-  pname = "Cython";
-  version = "0.29.28";
+  pname = "cython";
+  version = "0.29.30";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-1vrCNCgCww5RQmgo/ghP9N6xszhzZ8+Yl2uy5ktvjkU=";
+    pname = "Cython";
+    inherit version;
+    sha256 = "sha256-IjW2Laj+b6i5lCLI5YPy+5XhQ4Z9M3tcdeS5oahl+eM=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,6 @@ in buildPythonPackage rec {
     gdb numpy ncurses
   ];
 
-  buildInputs = [ glibcLocales ];
   LC_ALL = "en_US.UTF-8";
 
   patches = [

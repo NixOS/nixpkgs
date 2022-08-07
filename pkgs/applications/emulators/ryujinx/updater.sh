@@ -60,14 +60,18 @@ OLD_VERSION="$(sed -nE 's/\s*version = "(.*)".*/\1/p' ./default.nix)"
 
 echo "comparing versions $OLD_VERSION -> $NEW_VERSION"
 if [[ "$OLD_VERSION" == "$NEW_VERSION" ]]; then
-    echo "Already up to date! Doing nothing"
-    exit 0
+    echo "Already up to date!"
+    if [[ "${1-default}" != "--deps-only" ]]; then
+      exit 0
+    fi
 fi
 
-SHA="$(nix-prefetch-git https://github.com/ryujinx/ryujinx --rev "$COMMIT" --quiet | jq -r '.sha256')"
-
 cd ../../../..
-update-source-version ryujinx "$NEW_VERSION" "$SHA" --rev="$COMMIT"
+
+if [[ "${1-default}" != "--deps-only" ]]; then
+    SHA="$(nix-prefetch-git https://github.com/ryujinx/ryujinx --rev "$COMMIT" --quiet | jq -r '.sha256')"
+    update-source-version ryujinx "$NEW_VERSION" "$SHA" --rev="$COMMIT"
+fi
 
 echo "building Nuget lockfile"
 

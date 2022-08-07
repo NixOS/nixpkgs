@@ -97,9 +97,7 @@ stdenv.mkDerivation rec {
       substituteInPlace "$f" \
         --replace pkg-config "$PKG_CONFIG"
     done
-    ${lib.optionalString (lib.versionAtLeast php.version "8") ''
-        sed -e "s/ + php_version//" -i plugins/php/uwsgiplugin.py
-    ''}
+    sed -e "s/ + php_version//" -i plugins/php/uwsgiplugin.py
   '';
 
   configurePhase = ''

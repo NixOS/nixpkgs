@@ -25,7 +25,7 @@ gsmakeDerivation rec {
     cups
     gmp gnutls
     libffi binutils-unwrapped
-    libjpeg libtiff libpng giflib giflib
+    libjpeg libtiff libpng giflib
     libxml2 libxslt libiconv
     libobjc libgcrypt
     icu

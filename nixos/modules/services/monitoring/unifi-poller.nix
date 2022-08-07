@@ -17,7 +17,7 @@ in {
       debug = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Turns on line numbers, microsecond logging, and a per-device log.
           This may be noisy if you have a lot of devices. It adds one line per device.
         '';
@@ -25,14 +25,14 @@ in {
       quiet = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Turns off per-interval logs. Only startup and error logs will be emitted.
         '';
       };
       plugins = mkOption {
         type = with types; listOf str;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           Load additional plugins.
         '';
       };
@@ -42,21 +42,21 @@ in {
       disable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to disable the prometheus ouput plugin.
         '';
       };
       http_listen = mkOption {
         type = types.str;
         default = "[::]:9130";
-        description = ''
+        description = lib.mdDoc ''
           Bind the prometheus exporter to this IP or hostname.
         '';
       };
       report_errors = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to report errors.
         '';
       };
@@ -66,21 +66,21 @@ in {
       disable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to disable the influxdb ouput plugin.
         '';
       };
       url = mkOption {
         type = types.str;
         default = "http://127.0.0.1:8086";
-        description = ''
+        description = lib.mdDoc ''
           URL of the influxdb host.
         '';
       };
       user = mkOption {
         type = types.str;
         default = "unifipoller";
-        description = ''
+        description = lib.mdDoc ''
           Username for the influxdb.
         '';
       };
@@ -88,7 +88,7 @@ in {
         type = types.path;
         default = pkgs.writeText "unifi-poller-influxdb-default.password" "unifipoller";
         defaultText = literalExpression "unifi-poller-influxdb-default.password";
-        description = ''
+        description = lib.mdDoc ''
           Path of a file containing the password for influxdb.
           This file needs to be readable by the unifi-poller user.
         '';
@@ -97,21 +97,21 @@ in {
       db = mkOption {
         type = types.str;
         default = "unifi";
-        description = ''
+        description = lib.mdDoc ''
           Database name. Database should exist.
         '';
       };
       verify_ssl = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Verify the influxdb's certificate.
         '';
       };
       interval = mkOption {
         type = types.str;
         default = "30s";
-        description = ''
+        description = lib.mdDoc ''
           Setting this lower than the Unifi controller's refresh
           interval may lead to zeroes in your database.
         '';
@@ -122,14 +122,14 @@ in {
       url = mkOption {
         type = types.str;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           URL of the Loki host.
         '';
       };
       user = mkOption {
         type = types.str;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Username for Loki.
         '';
       };
@@ -137,7 +137,7 @@ in {
         type = types.path;
         default = pkgs.writeText "unifi-poller-loki-default.password" "";
         defaultText = "unifi-poller-influxdb-default.password";
-        description = ''
+        description = lib.mdDoc ''
           Path of a file containing the password for Loki.
           This file needs to be readable by the unifi-poller user.
         '';
@@ -146,28 +146,28 @@ in {
       verify_ssl = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Verify Loki's certificate.
         '';
       };
       tenant_id = mkOption {
         type = types.str;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Tenant ID to use in Loki.
         '';
       };
       interval = mkOption {
         type = types.str;
         default = "2m";
-        description = ''
+        description = lib.mdDoc ''
           How often the events are polled and pushed to Loki.
         '';
       };
       timeout = mkOption {
         type = types.str;
         default = "10s";
-        description = ''
+        description = lib.mdDoc ''
           Should be increased in case of timeout errors.
         '';
       };
@@ -178,7 +178,7 @@ in {
         user = mkOption {
           type = types.str;
           default = "unifi";
-          description = ''
+          description = lib.mdDoc ''
             Unifi service user name.
           '';
         };
@@ -186,7 +186,7 @@ in {
           type = types.path;
           default = pkgs.writeText "unifi-poller-unifi-default.password" "unifi";
           defaultText = literalExpression "unifi-poller-unifi-default.password";
-          description = ''
+          description = lib.mdDoc ''
             Path of a file containing the password for the unifi service user.
             This file needs to be readable by the unifi-poller user.
           '';
@@ -195,14 +195,14 @@ in {
         url = mkOption {
           type = types.str;
           default = "https://unifi:8443";
-          description = ''
+          description = lib.mdDoc ''
             URL of the Unifi controller.
           '';
         };
         sites = mkOption {
           type = with types; either (enum [ "default" "all" ]) (listOf str);
           default = "all";
-          description = ''
+          description = lib.mdDoc ''
             List of site names for which statistics should be exported.
             Or the string "default" for the default site or the string "all" for all sites.
           '';
@@ -211,35 +211,35 @@ in {
         save_ids = mkOption {
           type = types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Collect and save data from the intrusion detection system to influxdb and Loki.
           '';
         };
         save_events = mkOption {
           type = types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Collect and save data from UniFi events to influxdb and Loki.
           '';
         };
         save_alarms = mkOption {
           type = types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Collect and save data from UniFi alarms to influxdb and Loki.
           '';
         };
         save_anomalies = mkOption {
           type = types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Collect and save data from UniFi anomalies to influxdb and Loki.
           '';
         };
         save_dpi = mkOption {
           type = types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Collect and save data from deep packet inspection.
             Adds around 150 data points and impacts performance.
           '';
@@ -247,14 +247,14 @@ in {
         save_sites = mkOption {
           type = types.bool;
           default = true;
-          description = ''
+          description = lib.mdDoc ''
             Collect and save site data.
           '';
         };
         hash_pii = mkOption {
           type = types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Hash, with md5, client names and MAC addresses. This attempts
             to protect personally identifiable information.
           '';
@@ -262,7 +262,7 @@ in {
         verify_ssl = mkOption {
           type = types.bool;
           default = true;
-          description = ''
+          description = lib.mdDoc ''
             Verify the Unifi controller's certificate.
           '';
         };
@@ -272,7 +272,7 @@ in {
       dynamic = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Let prometheus select which controller to poll when scraping.
           Use with default credentials. See unifi-poller wiki for more.
         '';
@@ -283,7 +283,7 @@ in {
       controllers = mkOption {
         type = with types; listOf (submodule { options = controllerOptions; });
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           List of Unifi controllers to poll. Use defaults if empty.
         '';
         apply = map (flip removeAttrs [ "_module" ]);

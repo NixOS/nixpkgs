@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "pyxiaomigateway";
-  version = "0.13.4";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "PyXiaomiGateway";
     rev = version;
-    sha256 = "1xg89sdds04wgil88ihs84cjr3df6lajjbkyb1aymj638ibdyqns";
+    sha256 = "sha256-e/FqqUl90VFDJD6ZFbFqXKH3s2sBaDjSFEvaKJhDlGg=";
   };
 
   propagatedBuildInputs = [ cryptography ];

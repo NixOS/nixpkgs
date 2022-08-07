@@ -35,7 +35,7 @@ mkDerivation rec {
     '';
     homepage = "http://www.solarus-games.org";
     license = licenses.gpl3;
-    maintainers = [ maintainers.Nate-Devv ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 

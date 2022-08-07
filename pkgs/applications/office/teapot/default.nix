@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchzip
+, fetchFromGitHub
 , cmake
 , libtirpc
 , ncurses
@@ -10,11 +10,17 @@ stdenv.mkDerivation rec {
   pname = "teapot";
   version = "2.3.0";
 
-  src = fetchzip {
+  src = fetchFromGitHub {
     name = "${pname}-${version}";
-    url = "https://www.syntax-k.de/projekte/teapot/${pname}-${version}.tar.gz";
-    sha256 = "sha256-wzAwZwOMeTsuR5LhfjspGdejT6X1V8YJ8B7v9pcbxaY=";
+    owner = "museoa";
+    repo = pname;
+    rev = version;
+    hash = "sha256-38XFjRzOGasr030f+mRYT+ptlabpnVJfa+1s7ZAjS+k=";
   };
+
+  prePatch = ''
+    cd src
+  '';
 
   patches = [
     # include a local file in order to make cc happy
@@ -41,8 +47,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "https://www.syntax-k.de/projekte/teapot/";
-    description = "Table Editor And Planner, Or: Teapot!";
+    inherit (src.meta) homepage;
+    description = "Table Editor And Planner, Or: Teapot";
     longDescription = ''
       Teapot is a compact spreadsheet software originally written by Michael
       Haardt. It features a (n)curses-based text terminal interface, and
@@ -70,4 +76,4 @@ stdenv.mkDerivation rec {
   };
 }
 # TODO: patch/fix FLTK building
-# TODO: add documentation from
+# TODO: add documentation

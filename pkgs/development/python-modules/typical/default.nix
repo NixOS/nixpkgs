@@ -14,7 +14,7 @@
 , pytestCheckHook
 , pythonOlder
 , sqlalchemy
-, typing-extensions
+, ujson
 }:
 
 buildPythonPackage rec {
@@ -22,7 +22,8 @@ buildPythonPackage rec {
   version = "2.8.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  # Support for typing-extensions >= 4.0.0 on Python < 3.10 is missing
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "seandstewart";
@@ -36,13 +37,12 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    inflection
-    pendulum
     fastjsonschema
-    orjson
     future-typing
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    typing-extensions
+    inflection
+    orjson
+    pendulum
+    ujson
   ];
 
   checkInputs = [
@@ -63,13 +63,14 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # We use orjson
-    "test_ujson"
     # ConstraintValueError: Given value <{'key...
     "test_tagged_union_validate"
+    # TypeError: 'NoneType' object cannot be interpreted as an integer
+    "test_ujson"
   ];
 
   disabledTestPaths = [
+    # We don't care about benchmarks
     "benchmark/"
     # Tests are failing on Hydra
     "tests/mypy/test_mypy.py"

@@ -1,8 +1,35 @@
-{ lib, stdenv, fetchzip, fetchFromGitHub, buildFHSUserEnv, makeDesktopItem
-, copyDesktopItems, gcc, cmake, gmp , libGL, zlib, ncurses, geoip, lua5
-, nettle, curl, SDL2, freetype, glew , openal, libopus, opusfile, libogg
-, libvorbis, libjpeg, libwebp, libpng
-, cacert, aria2 # to download assets
+{ lib
+, stdenv
+, fetchzip
+, fetchFromGitHub
+, fetchpatch
+, SDL2
+, buildFHSUserEnv
+, cmake
+, copyDesktopItems
+, curl
+, freetype
+, gcc
+, geoip
+, glew
+, gmp
+, libGL
+, libjpeg
+, libogg
+, libopus
+, libpng
+, libvorbis
+, libwebp
+, lua5
+, makeDesktopItem
+, ncurses
+, nettle
+, openal
+, opusfile
+, zlib
+# to download assets
+, aria2
+, cacert
 }:
 
 let
@@ -14,18 +41,21 @@ let
     repo = "Unvanquished";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "1fiqn9f6nsh4cfjy7gfsv950hphwi9ca0ddgsjvn77g7yc0arp6c";
+    sha256 = "sha256-zNysAPPnnWO31K81oFiKHF4IStraveOlYwRqa1yyOLo=";
   };
 
   unvanquished-binary-deps = stdenv.mkDerivation rec {
     # DISCLAIMER: this is selected binary crap from the NaCl SDK
     name = "unvanquished-binary-deps";
     version = binary-deps-version;
+
     src = fetchzip {
       url = "https://dl.unvanquished.net/deps/linux64-${version}.tar.bz2";
-      sha256 = "08bpyavbh5lmyprvqqi59gnm8s1fjmlk9f1785wlv7f52d9f9z1p";
+      sha256 = "sha256-N/zkUhPFnU15QSe4NGmVLmhU7UslYrzz9ZUWuLbydyE=";
     };
+
     dontPatchELF = true;
+
     preFixup = ''
       # We are not using the autoPatchelfHook, because it would make
       # nacl_bootstrap_helper unable to load nacl_loader:
@@ -38,7 +68,12 @@ let
         fi
       done
     '';
-    preCheck = "pnacl/bin/clang -v"; # check it links correctly
+
+    preCheck = ''
+      # check it links correctly
+      pnacl/bin/clang -v
+    '';
+
     installPhase = ''
       runHook preInstall
 
@@ -51,15 +86,18 @@ let
 
   libstdcpp-preload-for-unvanquished-nacl = stdenv.mkDerivation {
     name = "libstdcpp-preload-for-unvanquished-nacl";
+
+    propagatedBuildInputs = [ gcc.cc.lib ];
+
     buildCommand = ''
       mkdir $out/etc -p
       echo ${gcc.cc.lib}/lib/libstdc++.so.6 > $out/etc/ld-nix.so.preload
     '';
-    propagatedBuildInputs = [ gcc.cc.lib ];
   };
 
   fhsEnv = buildFHSUserEnv {
     name = "unvanquished-fhs-wrapper";
+
     targetPkgs = pkgs: [ libstdcpp-preload-for-unvanquished-nacl ];
   };
 
@@ -81,10 +119,14 @@ let
     pname = "unvanquished-assets";
     inherit version src;
 
-    outputHash = "sha256:084jdisb48xyk9agjifn0nlnsdnjgg32si8zd1khsywd0kffplzx";
+    outputHash = "sha256-/dPr3ASNew1naB9FLcZ70jZtqQXWRflUmr4jsnRskiA=";
     outputHashMode = "recursive";
+
     nativeBuildInputs = [ aria2 cacert ];
-    buildCommand = "bash $src/download-paks --cache=$(pwd) --version=${version} $out";
+
+    buildCommand = ''
+      bash $src/download-paks --cache=$(pwd) --version=${version} $out
+    '';
   };
 
 # this really is the daemon game engine, the game itself is in the assets
@@ -98,7 +140,30 @@ in stdenv.mkDerivation rec {
     chmod +w -R daemon/external_deps/linux64-${binary-deps-version}/
   '';
 
-  nativeBuildInputs = [ cmake unvanquished-binary-deps copyDesktopItems ];
+  patches = [
+    (fetchpatch {
+      name = "fix-sdl-eventqueue-part1.patch";
+      url = "https://github.com/DaemonEngine/Daemon/commit/3a978c485f2a7e02c0bc5aeed2c7c4378026cb33.patch";
+      sha256 = "sha256-wVDscGf5zOOmivItNK913l0cfNFR6RpApewrxbmfG8s=";
+      stripLen = 1;
+      extraPrefix = "daemon/";
+    })
+    (fetchpatch {
+      name = "fix-sdl-eventqueue-part2.patch";
+      url = "https://github.com/DaemonEngine/Daemon/commit/54f98909c8871a57efb40263b215b81f22010b22.patch";
+      sha256 = "sha256-9qlyJnUEyZgFaclpXthKHm3qq+cW4E4LMOpLukcwBCU=";
+      stripLen = 1;
+      extraPrefix = "daemon/";
+      excludes = [ "*/CMakeLists.txt" ];
+    })
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    unvanquished-binary-deps
+    copyDesktopItems
+  ];
+
   buildInputs = [
     gmp
     libGL
@@ -168,17 +233,22 @@ in stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
   meta = {
-    platforms = [ "x86_64-linux" ];
     homepage = "https://unvanquished.net/";
     downloadPage = "https://unvanquished.net/download/";
     description = "A fast paced, first person strategy game";
-    maintainers = with lib.maintainers; [ afontain ];
     # don't replace the following lib.licenses.zlib with just "zlib",
     # or you would end up with the package instead
     license = with lib.licenses; [
       mit gpl3Plus lib.licenses.zlib bsd3 # engine
       cc-by-sa-25 cc-by-sa-30 cc-by-30 cc-by-sa-40 cc0 # assets
     ];
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryNativeCode  # unvanquished-binary-deps
+    ];
+    maintainers = with lib.maintainers; [ afontain ];
+    platforms = [ "x86_64-linux" ];
   };
 }

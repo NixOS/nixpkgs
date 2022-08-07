@@ -15,7 +15,7 @@ in {
       port = mkOption {
         default = 873;
         type = types.port;
-        description = "TCP port the daemon will listen on.";
+        description = lib.mdDoc "TCP port the daemon will listen on.";
       };
 
       settings = mkOption {
@@ -50,7 +50,7 @@ in {
         default = false;
         type = types.bool;
         description =
-          "If enabled Rsync will be socket-activated rather than run persistently.";
+          lib.mdDoc "If enabled Rsync will be socket-activated rather than run persistently.";
       };
 
     };

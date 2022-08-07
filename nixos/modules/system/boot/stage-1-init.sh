@@ -14,6 +14,8 @@ extraUtils="@extraUtils@"
 export LD_LIBRARY_PATH=@extraUtils@/lib
 export PATH=@extraUtils@/bin
 ln -s @extraUtils@/bin /bin
+# hardcoded in util-linux's mount helper search path `/run/wrappers/bin:/run/current-system/sw/bin:/sbin`
+ln -s @extraUtils@/bin /sbin
 
 # Copy the secrets to their needed location
 if [ -d "@extraUtils@/secrets" ]; then
@@ -318,11 +320,7 @@ checkFS() {
 
     echo "checking $device..."
 
-    fsckFlags=
-    if test "$fsType" != "btrfs"; then
-        fsckFlags="-V -a"
-    fi
-    fsck $fsckFlags "$device"
+    fsck -V -a "$device"
     fsckResult=$?
 
     if test $(($fsckResult | 2)) = $fsckResult; then

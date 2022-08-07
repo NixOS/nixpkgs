@@ -23,4 +23,12 @@ jobs:
     - name: Check DocBook files generated from Markdown are consistent
       run: |
         nixos/doc/manual/md-to-db.sh
-        git diff --exit-code
+        git diff --exit-code || {
+          echo
+          echo 'Generated manual files are out of date.'
+          echo 'Please run'
+          echo
+          echo '    nixos/doc/manual/md-to-db.sh'
+          echo
+          exit 1
+        }

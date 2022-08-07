@@ -13,7 +13,7 @@ in
       extraFlags = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = ''Extra flags passed to the <command>robustirc-bridge</command> command. See <link xlink:href="https://robustirc.net/docs/adminguide.html#_bridge">RobustIRC Documentation</link> or robustirc-bridge(1) for details.'';
+        description = lib.mdDoc ''Extra flags passed to the {command}`robustirc-bridge` command. See [RobustIRC Documentation](https://robustirc.net/docs/adminguide.html#_bridge) or robustirc-bridge(1) for details.'';
         example = [
           "-network robustirc.net"
         ];

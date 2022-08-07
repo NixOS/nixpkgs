@@ -44,6 +44,6 @@ stdenv.mkDerivation {
     homepage = "http://sawja.inria.fr/";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.vbgl ];
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
   };
 }

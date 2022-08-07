@@ -25,6 +25,11 @@ stdenv.mkDerivation rec {
 
   patches = extraPatches;
 
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: xbstream.c.o:(.bss+0x0): multiple definition of
+  #      `datasink_buffer'; ds_buffer.c.o:(.data.rel.local+0x0): first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   cmakeFlags = [
     "-DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock"
     "-DBUILD_CONFIG=xtrabackup_release"
@@ -40,7 +45,6 @@ stdenv.mkDerivation rec {
     "-DWITH_ZLIB=system"
     "-DWITH_VALGRIND=ON"
     "-DWITH_MAN_PAGES=OFF"
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF" # To run libmysql/libmysql_api_test during build.
   ];
 
   postInstall = ''

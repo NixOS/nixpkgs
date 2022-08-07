@@ -4,7 +4,8 @@
 , avahi, libjack2, libasyncns, lirc, dbus
 , sbc, bluez5, udev, openssl, fftwFloat
 , soxr, speexdsp, systemd, webrtc-audio-processing
-, check, meson, ninja, m4
+, gst_all_1
+, check, libintl, meson, ninja, m4, wrapGAppsHook
 
 , x11Support ? false
 
@@ -19,6 +20,7 @@
 , airtunesSupport ? false
 
 , bluetoothSupport ? true
+, advancedBluetoothCodecs ? false
 
 , remoteControlSupport ? false
 
@@ -43,12 +45,26 @@ stdenv.mkDerivation rec {
     # Install sysconfdir files inside of the nix store,
     # but use a conventional runtime sysconfdir outside the store
     ./add-option-for-installation-sysconfdir.patch
+  ] ++ lib.optionals stdenv.isDarwin [
+    # https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/merge_requests/654
+    ./0001-Make-gio-2.0-optional-when-gsettings-is-disabled.patch
+
+    # TODO (not sent upstream)
+    ./0002-Ignore-SCM_CREDS-on-macOS.patch
+    ./0003-Disable-z-nodelete-on-darwin.patch
+    ./0004-Prefer-clock_gettime.patch
+    ./0005-Include-poll-posix.c-on-darwin.patch
+    ./0006-Only-use-version-script-on-GNU-ish-linkers.patch
+    ./0007-Adapt-undefined-link-args-per-linker.patch
+    ./0008-Use-correct-semaphore-on-darwin.patch
   ];
 
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkg-config meson ninja makeWrapper perlPackages.perl perlPackages.XMLParser m4 ]
-    ++ lib.optionals stdenv.isLinux [ glib ];
+    ++ lib.optionals stdenv.isLinux [ glib ]
+    # gstreamer plugin discovery requires wrapping
+    ++ lib.optional (bluetoothSupport && advancedBluetoothCodecs) wrapGAppsHook;
 
   propagatedBuildInputs =
     lib.optionals stdenv.isLinux [ libcap ];
@@ -56,7 +72,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ libtool libsndfile soxr speexdsp fftwFloat check ]
     ++ lib.optionals stdenv.isLinux [ glib dbus ]
-    ++ lib.optionals stdenv.isDarwin [ AudioUnit Cocoa CoreServices ]
+    ++ lib.optionals stdenv.isDarwin [ AudioUnit Cocoa CoreServices libintl ]
     ++ lib.optionals (!libOnly) (
       [ libasyncns webrtc-audio-processing ]
       ++ lib.optional jackaudioSupport libjack2
@@ -65,6 +81,8 @@ stdenv.mkDerivation rec {
       ++ lib.optionals stdenv.isLinux [ alsa-lib udev ]
       ++ lib.optional airtunesSupport openssl
       ++ lib.optionals bluetoothSupport [ bluez5 sbc ]
+      # aptX and LDAC codecs are in gst-plugins-bad so far, rtpldacpay is in -good
+      ++ lib.optionals (bluetoothSupport && advancedBluetoothCodecs) (builtins.attrValues { inherit (gst_all_1) gst-plugins-bad gst-plugins-good gst-plugins-base gstreamer; })
       ++ lib.optional remoteControlSupport lirc
       ++ lib.optional zeroconfSupport  avahi
   );
@@ -73,13 +91,14 @@ stdenv.mkDerivation rec {
     "-Dalsa=${if !libOnly then "enabled" else "disabled"}"
     "-Dasyncns=${if !libOnly then "enabled" else "disabled"}"
     "-Davahi=${if zeroconfSupport then "enabled" else "disabled"}"
-    "-Dbluez5=${if !libOnly then "enabled" else "disabled"}"
-    "-Dbluez5-gstreamer=disabled"
+    "-Dbluez5=${if !libOnly && bluetoothSupport then "enabled" else "disabled"}"
+    # advanced bluetooth audio codecs are provided by gstreamer
+    "-Dbluez5-gstreamer=${if (!libOnly && bluetoothSupport && advancedBluetoothCodecs) then "enabled" else "disabled"}"
     "-Ddatabase=simple"
     "-Ddoxygen=false"
     "-Delogind=disabled"
     # gsettings does not support cross-compilation
-    "-Dgsettings=${if stdenv.buildPlatform == stdenv.hostPlatform then "enabled" else "disabled"}"
+    "-Dgsettings=${if stdenv.isLinux && (stdenv.buildPlatform == stdenv.hostPlatform) then "enabled" else "disabled"}"
     "-Dgstreamer=disabled"
     "-Dgtk=disabled"
     "-Djack=${if jackaudioSupport && !libOnly then "enabled" else "disabled"}"
@@ -98,16 +117,23 @@ stdenv.mkDerivation rec {
     "-Dsysconfdir_install=${placeholder "out"}/etc"
     "-Dudevrulesdir=${placeholder "out"}/lib/udev/rules.d"
   ]
-    ++ lib.optional (stdenv.isLinux && useSystemd) "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
-    ;
+  ++ lib.optional (stdenv.isLinux && useSystemd) "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
+  ++ lib.optionals (stdenv.isDarwin) [
+    "-Ddbus=disabled"
+    "-Dglib=disabled"
+    "-Doss-output=disabled"
+  ];
 
-  doCheck = true;
+  # tests fail on Darwin because of timeouts
+  doCheck = !stdenv.isDarwin;
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
   postInstall = lib.optionalString libOnly ''
-    rm -rf $out/{bin,share,etc,lib/{pulse-*,systemd}}
+    find $out/share -maxdepth 1 -mindepth 1 ! -name "vala" -prune -exec rm -r {} \;
+    find $out/share/vala -maxdepth 1 -mindepth 1 ! -name "vapi" -prune -exec rm -r {} \;
+    rm -r $out/{bin,etc,lib/pulse-*}
   ''
     + ''
     moveToOutput lib/cmake "$dev"

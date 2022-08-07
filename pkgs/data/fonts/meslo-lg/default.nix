@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     description = "A customized version of Apple’s Menlo-Regular font";
     homepage = "https://github.com/andreberg/Meslo-Font/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ balajisivaraman ];
+    maintainers = with lib.maintainers; [ ];
     platforms = with lib.platforms; all;
   };
 }

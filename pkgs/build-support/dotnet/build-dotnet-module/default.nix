@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, linkFarmFromDrvs, callPackage, nuget-to-nix, writeScript, makeWrapper, fetchurl, xml2, dotnetCorePackages, dotnetPackages, mkNugetSource, mkNugetDeps, cacert }:
+{ lib, stdenvNoCC, linkFarmFromDrvs, callPackage, nuget-to-nix, writeScript, makeWrapper, fetchurl, xml2, dotnetCorePackages, dotnetPackages, mkNugetSource, mkNugetDeps, cacert, srcOnly }:
 
 { name ? "${args.pname}-${args.version}"
 , pname ? name
@@ -55,10 +55,12 @@
 
 # The type of build to perform. This is passed to `dotnet` with the `--configuration` flag. Possible values are `Release`, `Debug`, etc.
 , buildType ? "Release"
+# If set to true, builds the application as a self-contained - removing the runtime dependency on dotnet
+, selfContainedBuild ? false
 # The dotnet SDK to use.
-, dotnet-sdk ? dotnetCorePackages.sdk_5_0
+, dotnet-sdk ? dotnetCorePackages.sdk_6_0
 # The dotnet runtime to use.
-, dotnet-runtime ? dotnetCorePackages.runtime_5_0
+, dotnet-runtime ? dotnetCorePackages.runtime_6_0
 # The dotnet SDK to run tests against. This can differentiate from the SDK compiled against.
 , dotnet-test-sdk ? dotnet-sdk
 , ... } @ args:
@@ -74,13 +76,18 @@ let
     inherit dotnet-sdk dotnet-test-sdk disabledTests nuget-source dotnet-runtime runtimeDeps buildType;
   }) dotnetConfigureHook dotnetBuildHook dotnetCheckHook dotnetInstallHook dotnetFixupHook;
 
-  _nugetDeps = mkNugetDeps { name = "${name}-nuget-deps"; nugetDeps = import nugetDeps; };
-  _localDeps = linkFarmFromDrvs "${name}-local-nuget-deps" projectReferences;
+  localDeps = if (projectReferences != [])
+    then linkFarmFromDrvs "${name}-project-references" projectReferences
+    else null;
+
+  _nugetDeps = if lib.isDerivation nugetDeps
+    then nugetDeps
+    else mkNugetDeps { inherit name; nugetDeps = import nugetDeps; };
 
   nuget-source = mkNugetSource {
-    name = "${args.pname}-nuget-source";
-    description = "A Nuget source with the dependencies for ${args.pname}";
-    deps = [ _nugetDeps _localDeps ];
+    name = "${name}-nuget-source";
+    description = "A Nuget source with the dependencies for ${name}";
+    deps = [ _nugetDeps ] ++ lib.optional (localDeps != null) localDeps;
   };
 
 in stdenvNoCC.mkDerivation (args // {
@@ -91,9 +98,13 @@ in stdenvNoCC.mkDerivation (args // {
     dotnetInstallHook
     dotnetFixupHook
 
-    dotnet-sdk
     cacert
     makeWrapper
+    dotnet-sdk
+  ];
+
+  makeWrapperArgs = args.makeWrapperArgs or [ ] ++ [
+    "--prefix LD_LIBRARY_PATH : ${dotnet-sdk.icu}/lib"
   ];
 
   # Stripping breaks the executable
@@ -103,6 +114,8 @@ in stdenvNoCC.mkDerivation (args // {
   dontWrapGApps = args.dontWrapGApps or true;
 
   passthru = {
+    inherit nuget-source;
+
     fetch-deps = writeScript "fetch-${pname}-deps" ''
       set -euo pipefail
       cd "$(dirname "''${BASH_SOURCE[0]}")"
@@ -110,7 +123,7 @@ in stdenvNoCC.mkDerivation (args // {
       export HOME=$(mktemp -d)
       deps_file="/tmp/${pname}-deps.nix"
 
-      store_src="${args.src}"
+      store_src="${srcOnly args}"
       src="$(mktemp -d /tmp/${pname}.XXX)"
       cp -rT "$store_src" "$src"
       chmod -R +w "$src"

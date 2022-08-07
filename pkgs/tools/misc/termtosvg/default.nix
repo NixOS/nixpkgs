@@ -15,6 +15,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://nbedos.github.io/termtosvg/";
     description = "Record terminal sessions as SVG animations";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

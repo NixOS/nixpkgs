@@ -20,7 +20,7 @@ in
       password = mkOption {
         default = "/etc/munge/munge.key";
         type = types.path;
-        description = ''
+        description = lib.mdDoc ''
           The path to a daemon's secret key.
         '';
       };

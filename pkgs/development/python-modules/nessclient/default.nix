@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "nessclient";
-  version = "0.9.16b2";
+  version = "0.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nickw444";
     repo = pname;
-    rev = version;
-    sha256 = "1g3q9bv1nn1b8n6bklc05k8pac4cndzfxfr7liky0gnnbri15k81";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-zjUYdSHIMCB4cCAsOOQZ9YgmFTskzlTUs5z/xPFt01Q=";
   };
 
   propagatedBuildInputs = [

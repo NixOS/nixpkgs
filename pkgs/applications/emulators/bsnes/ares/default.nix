@@ -2,83 +2,74 @@
 , stdenv
 , fetchFromGitHub
 , pkg-config
-, alsa-lib
-, gtksourceview3
-, libXv
-, openal
-, libpulseaudio
-, libao
-, udev
+, wrapGAppsHook
 , SDL2
+, alsa-lib
+, gtk3
+, gtksourceview3
+, libGL
+, libGLU
+, libX11
+, libXv
+, libao
+, libpulseaudio
+, openal
+, udev
 }:
 
 stdenv.mkDerivation rec {
   pname = "ares";
-  version = "126";
+  version = "129";
 
   src = fetchFromGitHub {
     owner = "ares-emulator";
     repo = "ares";
     rev = "v${version}";
-    sha256 = "1rj4vmz8lvpmfc6wni7222kagnw9f6jda9rcb6qky2kpizlp2d24";
-  };
-
-  parallel-rdp = fetchFromGitHub {
-    owner = "Themaister";
-    repo = "parallel-rdp-standalone";
-    rev = "0dcebe11ee79288441e40e145c8f340d81f52316";
-    sha256 = "1avp4wyfkhk5yfjqx5w3jbqghn2mq5la7k9248kjmnp9n9lip6w9";
+    hash = "sha256-prfvoGtbnsl/1ahx98jBOgT64W566GoUtE8rIOF7lYc=";
   };
 
   patches = [
+    ./dont-rebuild-on-install.patch
     ./fix-ruby.patch
   ];
 
-  enableParallelBuilding = true;
-  dontConfigure = true;
-
   nativeBuildInputs = [
     pkg-config
+    wrapGAppsHook
   ];
 
   buildInputs = [
-    alsa-lib
-    gtksourceview3
-    libXv
-    openal
-    libpulseaudio
-    libao
-    udev
     SDL2
+    alsa-lib
+    gtk3
+    gtksourceview3
+    libGL
+    libGLU
+    libX11
+    libXv
+    libao
+    libpulseaudio
+    openal
+    udev
   ];
 
-  buildPhase = ''
-    runHook preBuild
+  enableParallelBuilding = true;
 
-    rm -rf ares/n64/vulkan/parallel-rdp
-    ln -sf ${parallel-rdp} ares/n64/vulkan/parallel-rdp
-    make -C desktop-ui -j $NIX_BUILD_CORES openmp=true vulkan=true local=false hiro=gtk3
-
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/{bin,share/{applications,ares,pixmaps}}
-    cp desktop-ui/out/ares $out/bin
-    cp desktop-ui/resource/ares.desktop $out/share/applications
-    cp desktop-ui/resource/{ares{.ico,.png},font.png} $out/share/pixmaps
-    cp -r ares/{Shaders,System} $out/share/ares
-
-    runHook postInstall
-  '';
+  makeFlags = [
+    "hiro=gtk3"
+    "local=false"
+    "openmp=true"
+    "prefix=$(out)"
+    "-C desktop-ui"
+  ];
 
   meta = with lib; {
     homepage = "https://ares.dev";
     description = "Open-source multi-system emulator with a focus on accuracy and preservation";
     license = licenses.isc;
-    maintainers = with maintainers; [ Madouura ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ Madouura AndersonTorres ];
+    platforms = platforms.linux;
   };
 }
+# TODO: select between Qt, GTK2 and GTK3
+# TODO: support Darwin

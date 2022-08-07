@@ -1,11 +1,12 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , invoke
 , mock
 , pytestCheckHook
 , pythonOlder
-, sphinx_rtd_theme
+, sphinx-rtd-theme
 }:
 
 buildPythonPackage rec {
@@ -25,7 +26,7 @@ buildPythonPackage rec {
   checkInputs = [
     invoke
     mock
-    sphinx_rtd_theme
+    sphinx-rtd-theme
     pytestCheckHook
   ];
 
@@ -39,6 +40,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Python utility libraries for doing stuff in a functional way";
     homepage = "https://pydash.readthedocs.io";
     license = licenses.mit;

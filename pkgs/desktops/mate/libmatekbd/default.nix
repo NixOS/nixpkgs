@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, libxklavier, mateUpdateScript }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, gtk3
+, libxklavier
+, mateUpdateScript
+}:
 
 stdenv.mkDerivation rec {
   pname = "libmatekbd";
@@ -9,9 +17,15 @@ stdenv.mkDerivation rec {
     sha256 = "1b8iv2hmy8z2zzdsx8j5g583ddxh178bq8dnlqng9ifbn35fh3i2";
   };
 
-  nativeBuildInputs = [ pkg-config gettext ];
+  nativeBuildInputs = [
+    pkg-config
+    gettext
+  ];
 
-  buildInputs = [ gtk3 libxklavier ];
+  buildInputs = [
+    gtk3
+    libxklavier
+  ];
 
   enableParallelBuilding = true;
 

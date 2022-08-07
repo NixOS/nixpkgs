@@ -13,10 +13,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF" # for tests
-  ];
-
   doCheck = !stdenv.isi686; # tests fail on i686
 
   meta = with lib; {

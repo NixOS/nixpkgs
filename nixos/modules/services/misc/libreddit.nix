@@ -2,14 +2,13 @@
 
 with lib;
 
-  let
-    cfg = config.services.libreddit;
+let
+  cfg = config.services.libreddit;
 
-    args = concatStringsSep " " ([
-      "--port ${toString cfg.port}"
-      "--address ${cfg.address}"
-    ] ++ optional cfg.redirect "--redirect-https");
-
+  args = concatStringsSep " " ([
+    "--port ${toString cfg.port}"
+    "--address ${cfg.address}"
+  ]);
 in
 {
   options = {
@@ -20,26 +19,20 @@ in
         default = "0.0.0.0";
         example = "127.0.0.1";
         type =  types.str;
-        description = "The address to listen on";
+        description = lib.mdDoc "The address to listen on";
       };
 
       port = mkOption {
         default = 8080;
         example = 8000;
         type = types.port;
-        description = "The port to listen on";
-      };
-
-      redirect = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Enable the redirecting to HTTPS";
+        description = lib.mdDoc "The port to listen on";
       };
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = "Open ports in the firewall for the libreddit web interface";
+        description = lib.mdDoc "Open ports in the firewall for the libreddit web interface";
       };
 
     };
@@ -56,6 +49,31 @@ in
           AmbientCapabilities = lib.mkIf (cfg.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
           Restart = "on-failure";
           RestartSec = "2s";
+          # Hardening
+          CapabilityBoundingSet = if (cfg.port < 1024) then [ "CAP_NET_BIND_SERVICE" ] else [ "" ];
+          DeviceAllow = [ "" ];
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          PrivateDevices = true;
+          # A private user cannot have process capabilities on the host's user
+          # namespace and thus CAP_NET_BIND_SERVICE has no effect.
+          PrivateUsers = (cfg.port >= 1024);
+          ProcSubset = "pid";
+          ProtectClock = true;
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectProc = "invisible";
+          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+          UMask = "0077";
         };
     };
 

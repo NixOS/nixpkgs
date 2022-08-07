@@ -1,0 +1,159 @@
+diff --git a/setup.py b/setup.py
+index 072dfc8..64732bb 100644
+--- a/setup.py
++++ b/setup.py
+@@ -39,7 +39,7 @@ _apple_devices = ('appletv', 'iphone', 'ipod', 'ipad', 'watch')
+ is_macos = sys.platform == 'darwin' and not machine().lower().startswith(_apple_devices)
+ 
+ ext_modules = []
+-if is_macos or os.getenv('FORCE_MACOS_MACHINE', '0') == '1':
++if False:
+     ext_modules = [
+         Extension(
+             name='_watchdog_fsevents',
+diff --git a/tests/test_emitter.py b/tests/test_emitter.py
+index bec052c..242fbea 100644
+--- a/tests/test_emitter.py
++++ b/tests/test_emitter.py
+@@ -42,13 +42,11 @@ if platform.is_linux():
+         InotifyEmitter as Emitter,
+         InotifyFullEmitter,
+     )
+-elif platform.is_darwin():
+-    from watchdog.observers.fsevents import FSEventsEmitter as Emitter
+ elif platform.is_windows():
+     from watchdog.observers.read_directory_changes import (
+         WindowsApiEmitter as Emitter
+     )
+-elif platform.is_bsd():
++elif platform.is_bsd() or platform.is_darwin():
+     from watchdog.observers.kqueue import (
+         KqueueEmitter as Emitter
+     )
+@@ -57,12 +55,6 @@ logging.basicConfig(level=logging.DEBUG)
+ logger = logging.getLogger(__name__)
+ 
+ 
+-if platform.is_darwin():
+-    # enable more verbose logs
+-    fsevents_logger = logging.getLogger("fsevents")
+-    fsevents_logger.setLevel(logging.DEBUG)
+-
+-
+ @pytest.fixture(autouse=True)
+ def setup_teardown(tmpdir):
+     global p, emitter, event_queue
+@@ -85,9 +77,6 @@ def start_watching(path=None, use_full_emitter=False, recursive=True):
+     else:
+         emitter = Emitter(event_queue, ObservedWatch(path, recursive=recursive))
+ 
+-    if platform.is_darwin():
+-        emitter.suppress_history = True
+-
+     emitter.start()
+ 
+ 
+@@ -345,7 +334,7 @@ def test_separate_consecutive_moves():
+     if platform.is_windows():
+         expected_events = [a_deleted, d_created]
+ 
+-    if platform.is_bsd():
++    if platform.is_bsd() or platform.is_darwin():
+         # Due to the way kqueue works, we can't really order
+         # 'Created' and 'Deleted' events in time, so creation queues first
+         expected_events = [d_created, a_deleted, dir_modif, dir_modif]
+@@ -355,7 +344,7 @@ def test_separate_consecutive_moves():
+ 
+ 
+ @pytest.mark.flaky(max_runs=5, min_passes=1, rerun_filter=rerun_filter)
+-@pytest.mark.skipif(platform.is_bsd(), reason="BSD create another set of events for this test")
++@pytest.mark.skipif(platform.is_bsd() or platform.is_darwin(), reason="BSD create another set of events for this test")
+ def test_delete_self():
+     mkdir(p('dir1'))
+     start_watching(p('dir1'))
+@@ -365,7 +354,7 @@ def test_delete_self():
+     assert not emitter.is_alive()
+ 
+ 
+-@pytest.mark.skipif(platform.is_windows() or platform.is_bsd(),
++@pytest.mark.skipif(platform.is_windows() or platform.is_bsd() or platform.is_darwin(),
+                     reason="Windows|BSD create another set of events for this test")
+ def test_fast_subdirectory_creation_deletion():
+     root_dir = p('dir1')
+@@ -429,7 +418,7 @@ def test_recursive_on():
+         assert event.src_path == p('dir1', 'dir2', 'dir3')
+         assert isinstance(event, DirModifiedEvent)
+ 
+-        if not platform.is_bsd():
++        if not (platform.is_bsd() or platform.is_darwin()):
+             event = event_queue.get(timeout=5)[0]
+             assert event.src_path == p('dir1', 'dir2', 'dir3', 'a')
+             assert isinstance(event, FileModifiedEvent)
+@@ -452,26 +441,6 @@ def test_recursive_off():
+         if platform.is_linux():
+             expect_event(FileClosedEvent(p('b')))
+ 
+-    # currently limiting these additional events to macOS only, see https://github.com/gorakhargosh/watchdog/pull/779
+-    if platform.is_darwin():
+-        mkdir(p('dir1', 'dir2'))
+-        with pytest.raises(Empty):
+-            event_queue.get(timeout=5)
+-        mkfile(p('dir1', 'dir2', 'somefile'))
+-        with pytest.raises(Empty):
+-            event_queue.get(timeout=5)
+-
+-        mkdir(p('dir3'))
+-        expect_event(DirModifiedEvent(p()))  # the contents of the parent directory changed
+-
+-        mv(p('dir1', 'dir2', 'somefile'), p('somefile'))
+-        expect_event(FileMovedEvent(p('dir1', 'dir2', 'somefile'), p('somefile')))
+-        expect_event(DirModifiedEvent(p()))
+-
+-        mv(p('dir1', 'dir2'), p('dir2'))
+-        expect_event(DirMovedEvent(p('dir1', 'dir2'), p('dir2')))
+-        expect_event(DirModifiedEvent(p()))
+-
+ 
+ @pytest.mark.skipif(platform.is_windows(),
+                     reason="Windows create another set of events for this test")
+@@ -493,7 +462,7 @@ def test_renaming_top_level_directory():
+ 
+     expect_event(DirMovedEvent(p('a', 'b'), p('a2', 'b')))
+ 
+-    if platform.is_bsd():
++    if platform.is_bsd() or platform.is_darwin():
+         expect_event(DirModifiedEvent(p()))
+ 
+     open(p('a2', 'b', 'c'), 'a').close()
+@@ -584,7 +553,7 @@ def test_move_nested_subdirectories():
+     expect_event(DirMovedEvent(p('dir1', 'dir2', 'dir3'), p('dir2', 'dir3')))
+     expect_event(FileMovedEvent(p('dir1', 'dir2', 'dir3', 'a'), p('dir2', 'dir3', 'a')))
+ 
+-    if platform.is_bsd():
++    if platform.is_bsd() or platform.is_darwin():
+         event = event_queue.get(timeout=5)[0]
+         assert p(event.src_path) == p()
+         assert isinstance(event, DirModifiedEvent)
+@@ -643,7 +612,7 @@ def test_move_nested_subdirectories_on_windows():
+ 
+ 
+ @pytest.mark.flaky(max_runs=5, min_passes=1, rerun_filter=rerun_filter)
+-@pytest.mark.skipif(platform.is_bsd(), reason="BSD create another set of events for this test")
++@pytest.mark.skipif(platform.is_bsd() or platform.is_darwin(), reason="BSD create another set of events for this test")
+ def test_file_lifecyle():
+     start_watching()
+ 
+diff --git a/tests/test_fsevents.py b/tests/test_fsevents.py
+index 4a4fabf..49886a1 100644
+--- a/tests/test_fsevents.py
++++ b/tests/test_fsevents.py
+@@ -3,8 +3,7 @@
+ import pytest
+ from watchdog.utils import platform
+ 
+-if not platform.is_darwin():  # noqa
+-    pytest.skip("macOS only.", allow_module_level=True)
++pytest.skip("doesn't work with Nix yet", allow_module_level=True)
+ 
+ import logging
+ import os

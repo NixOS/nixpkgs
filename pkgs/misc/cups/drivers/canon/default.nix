@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, stdenv_32bit
 , fetchurl
 , unzip
 , autoconf
@@ -28,7 +27,6 @@
 }:
 
 let
-
   i686_NIX_GCC = pkgsi686Linux.callPackage ({ gcc }: gcc) { };
   ld32 =
     if stdenv.hostPlatform.system == "x86_64-linux" then "${stdenv.cc}/nix-support/dynamic-linker-m32"
@@ -47,31 +45,31 @@ let
   };
 
   buildInputs = [ cups zlib jbigkit glib gtk3 pkg-config gnome2.libglade libxml2 gdk-pixbuf pango cairo atk ];
-
 in
-
-
 stdenv.mkDerivation rec {
   pname = "canon-cups-ufr2";
   inherit version;
   src = src_canon;
 
   postUnpack = ''
-    (cd $sourceRoot; tar -xzf Sources/cnrdrvcups-lb-${version}-1.tar.gz)
-    (cd $sourceRoot; sed -ie "s@_prefix=/usr@_prefix=$out@" cnrdrvcups-common-${version}/allgen.sh)
-    (cd $sourceRoot; sed -ie "s@_libdir=/usr/lib@_libdir=$out/lib@" cnrdrvcups-common-${version}/allgen.sh)
-    (cd $sourceRoot; sed -ie "s@_bindir=/usr/bin@_libdir=$out/bin@" cnrdrvcups-common-${version}/allgen.sh)
-    (cd $sourceRoot; sed -ie "s@etc/cngplp@$out/etc/cngplp@" cnrdrvcups-common-${version}/cngplp/Makefile.am)
-    (cd $sourceRoot; sed -ie "s@usr/share/cngplp@$out/usr/share/cngplp@" cnrdrvcups-common-${version}/cngplp/src/Makefile.am)
-    (cd $sourceRoot; patchShebangs cnrdrvcups-common-${version})
+    (
+      cd $sourceRoot
+      tar -xzf Sources/cnrdrvcups-lb-${version}-1.tar.gz
+      sed -ie "s@_prefix=/usr@_prefix=$out@" cnrdrvcups-common-${version}/allgen.sh
+      sed -ie "s@_libdir=/usr/lib@_libdir=$out/lib@" cnrdrvcups-common-${version}/allgen.sh
+      sed -ie "s@_bindir=/usr/bin@_bindir=$out/bin@" cnrdrvcups-common-${version}/allgen.sh
+      sed -ie "s@etc/cngplp@$out/etc/cngplp@" cnrdrvcups-common-${version}/cngplp/Makefile.am
+      sed -ie "s@usr/share/cngplp@$out/usr/share/cngplp@" cnrdrvcups-common-${version}/cngplp/src/Makefile.am
+      patchShebangs cnrdrvcups-common-${version}
 
-    (cd $sourceRoot; sed -ie "s@_prefix=/usr@_prefix=$out@" cnrdrvcups-lb-${version}/allgen.sh)
-    (cd $sourceRoot; sed -ie "s@_libdir=/usr/lib@_libdir=$out/lib@" cnrdrvcups-lb-${version}/allgen.sh)
-    (cd $sourceRoot; sed -ie "s@_bindir=/usr/bin@_libdir=$out/bin@" cnrdrvcups-lb-${version}/allgen.sh)
-    (cd $sourceRoot; sed -ie '/^cd \.\.\/cngplp/,/^cd files/{/^cd files/!{d}}' cnrdrvcups-lb-${version}/allgen.sh)
-    (cd $sourceRoot; sed -ie "s@cd \.\./pdftocpca@cd pdftocpca@" cnrdrvcups-lb-${version}/allgen.sh)
-    (cd $sourceRoot; sed -i "/CNGPLPDIR/d" cnrdrvcups-lb-${version}/Makefile)
-    (cd $sourceRoot; patchShebangs cnrdrvcups-lb-${version})
+      sed -ie "s@_prefix=/usr@_prefix=$out@" cnrdrvcups-lb-${version}/allgen.sh
+      sed -ie "s@_libdir=/usr/lib@_libdir=$out/lib@" cnrdrvcups-lb-${version}/allgen.sh
+      sed -ie "s@_bindir=/usr/bin@_bindir=$out/bin@" cnrdrvcups-lb-${version}/allgen.sh
+      sed -ie '/^cd \.\.\/cngplp/,/^cd files/{/^cd files/!{d}}' cnrdrvcups-lb-${version}/allgen.sh
+      sed -ie "s@cd \.\./pdftocpca@cd pdftocpca@" cnrdrvcups-lb-${version}/allgen.sh
+      sed -i "/CNGPLPDIR/d" cnrdrvcups-lb-${version}/Makefile
+      patchShebangs cnrdrvcups-lb-${version}
+    )
   '';
 
   nativeBuildInputs = [ makeWrapper unzip autoconf automake libtool_1_5 ];
@@ -151,9 +149,9 @@ stdenv.mkDerivation rec {
       ln -sf libufr2filterr.so.1.0.0 libufr2filterr.so
       ln -sf libufr2filterr.so.1.0.0 libufr2filterr.so.1
 
-      patchelf --set-rpath "$(cat ${i686_NIX_GCC}/nix-support/orig-cc)/lib:${libs pkgsi686Linux}:${stdenv_32bit.glibc.out}/lib:${pkgsi686Linux.libxml2.out}/lib:$out/lib32" libcanonufr2r.so.1.0.0
-      patchelf --set-rpath "$(cat ${i686_NIX_GCC}/nix-support/orig-cc)/lib:${libs pkgsi686Linux}:${stdenv_32bit.glibc.out}/lib" libcaepcmufr2.so.1.0
-      patchelf --set-rpath "$(cat ${i686_NIX_GCC}/nix-support/orig-cc)/lib:${libs pkgsi686Linux}:${stdenv_32bit.glibc.out}/lib" libColorGearCufr2.so.2.0.0
+      patchelf --set-rpath "$(cat ${i686_NIX_GCC}/nix-support/orig-cc)/lib:${libs pkgsi686Linux}:${pkgsi686Linux.stdenv.cc.libc}/lib:${pkgsi686Linux.libxml2.out}/lib:$out/lib32" libcanonufr2r.so.1.0.0
+      patchelf --set-rpath "$(cat ${i686_NIX_GCC}/nix-support/orig-cc)/lib:${libs pkgsi686Linux}:${pkgsi686Linux.stdenv.cc.libc}/lib" libcaepcmufr2.so.1.0
+      patchelf --set-rpath "$(cat ${i686_NIX_GCC}/nix-support/orig-cc)/lib:${libs pkgsi686Linux}:${pkgsi686Linux.stdenv.cc.libc}/lib" libColorGearCufr2.so.2.0.0
     )
 
     (
@@ -167,17 +165,17 @@ stdenv.mkDerivation rec {
       ln -sf libufr2filterr.so.1.0.0 libufr2filterr.so
       ln -sf libufr2filterr.so.1.0.0 libufr2filterr.so.1
 
-      patchelf --set-rpath "$(cat $NIX_CC/nix-support/orig-cc)/lib:${libs pkgs}:${stdenv.cc.cc.lib}/lib64:${stdenv.glibc.out}/lib64:$out/lib" libcanonufr2r.so.1.0.0
-      patchelf --set-rpath "$(cat $NIX_CC/nix-support/orig-cc)/lib:${libs pkgs}:${stdenv.cc.cc.lib}/lib64:${stdenv.glibc.out}/lib64" libcaepcmufr2.so.1.0
-      patchelf --set-rpath "$(cat $NIX_CC/nix-support/orig-cc)/lib:${libs pkgs}:${stdenv.cc.cc.lib}/lib64:${stdenv.glibc.out}/lib64" libColorGearCufr2.so.2.0.0
+      patchelf --set-rpath "$(cat $NIX_CC/nix-support/orig-cc)/lib:${libs pkgs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64:$out/lib" libcanonufr2r.so.1.0.0
+      patchelf --set-rpath "$(cat $NIX_CC/nix-support/orig-cc)/lib:${libs pkgs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64" libcaepcmufr2.so.1.0
+      patchelf --set-rpath "$(cat $NIX_CC/nix-support/orig-cc)/lib:${libs pkgs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64" libColorGearCufr2.so.2.0.0
     )
 
     (
       cd $out/bin
-      patchelf --set-interpreter "$(cat ${ld64})" --set-rpath "${lib.makeLibraryPath buildInputs}:${stdenv.cc.cc.lib}/lib64:${stdenv.glibc.out}/lib64" cnsetuputil2
-      patchelf --set-interpreter "$(cat ${ld64})" --set-rpath "${lib.makeLibraryPath buildInputs}:${stdenv.cc.cc.lib}/lib64:${stdenv.glibc.out}/lib64" cnpdfdrv
-      patchelf --set-interpreter "$(cat ${ld64})" --set-rpath "${lib.makeLibraryPath buildInputs}:${stdenv.cc.cc.lib}/lib64:${stdenv.glibc.out}/lib64:$out/lib" cnpkbidir
-      patchelf --set-interpreter "$(cat ${ld64})" --set-rpath "${lib.makeLibraryPath buildInputs}:${stdenv.cc.cc.lib}/lib64:${stdenv.glibc.out}/lib64:$out/lib" cnrsdrvufr2
+      patchelf --set-interpreter "$(cat ${ld64})" --set-rpath "${lib.makeLibraryPath buildInputs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64" cnsetuputil2
+      patchelf --set-interpreter "$(cat ${ld64})" --set-rpath "${lib.makeLibraryPath buildInputs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64" cnpdfdrv
+      patchelf --set-interpreter "$(cat ${ld64})" --set-rpath "${lib.makeLibraryPath buildInputs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64:$out/lib" cnpkbidir
+      patchelf --set-interpreter "$(cat ${ld64})" --set-rpath "${lib.makeLibraryPath buildInputs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64:$out/lib" cnrsdrvufr2
 
       mv cnsetuputil2 cnsetuputil2.wrapped
       echo "#!${runtimeShell} -e" > cnsetuputil2
@@ -210,6 +208,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "CUPS Linux drivers for Canon printers";
     homepage = "http://www.canon.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [
       # please consider maintaining if you are updating this package

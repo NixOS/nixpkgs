@@ -2,22 +2,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "psst";
-  version = "unstable-2022-01-25";
+  version = "unstable-2022-05-19";
 
   src = fetchFromGitHub {
     owner = "jpochyla";
     repo = pname;
-    rev = "1627cd4a301dd51e9ee3034294cd7b0d94d02ddc";
-    sha256 = "sha256-kepvYhmieXx6Hj79aqaA7tYUnueaBsNx0U4lV7K6LuU=";
+    rev = "e403609e0916fe664fb1f28c7a259d01fa69b0e9";
+    sha256 = "sha256-hpAP/m9aJsfh9FtwLqaKFZllnCQn9OSYLWuNZakZJnk=";
   };
 
-  cargoSha256 = "sha256-DcdlQudGyWUUAacV7pAOLDvhd1fgAkEesdxDkHSYm4M=";
+  cargoSha256 = "sha256-gQ0iI2wTS5n5pItmQCmFXDs5L8nA2w5ZrZyZtpMlUro=";
   # specify the subdirectory of the binary crate to build from the workspace
   buildAndTestSubdir = "psst-gui";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     alsa-lib
@@ -30,10 +28,14 @@ rustPlatform.buildRustPackage rec {
     pango
   ];
 
+  postInstall = ''
+    install -Dm444 psst-gui/assets/logo_512.png $out/share/icons/${pname}.png
+  '';
+
   meta = with lib; {
     description = "Fast and multi-platform Spotify client with native GUI";
     homepage = "https://github.com/jpochyla/psst";
     license = licenses.mit;
-    maintainers = [ maintainers.vbrandl ];
+    maintainers = with maintainers; [ vbrandl peterhoeg ];
   };
 }

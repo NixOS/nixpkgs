@@ -516,12 +516,12 @@ in
         description =
           ''
             Virtual networks to which the VM is connected.  Each
-            number <replaceable>N</replaceable> in this list causes
+            number «N» in this list causes
             the VM to have a virtual Ethernet interface attached to a
             separate virtual network on which it will be assigned IP
             address
-            <literal>192.168.<replaceable>N</replaceable>.<replaceable>M</replaceable></literal>,
-            where <replaceable>M</replaceable> is the index of this VM
+            <literal>192.168.«N».«M»</literal>,
+            where «M» is the index of this VM
             in the list of VMs.
           '';
       };
@@ -684,6 +684,21 @@ in
           '';
       };
 
+    virtualisation.useDefaultFilesystems =
+      mkOption {
+        type = types.bool;
+        default = true;
+        description =
+          ''
+            If enabled, the boot disk of the virtual machine will be
+            formatted and mounted with the default filesystems for
+            testing. Swap devices and LUKS will be disabled.
+
+            If disabled, a root filesystem has to be specified and
+            formatted (for example in the initial ramdisk).
+          '';
+      };
+
     virtualisation.efiVars =
       mkOption {
         type = types.str;
@@ -754,13 +769,13 @@ in
     );
     boot.loader.grub.gfxmodeBios = with cfg.resolution; "${toString x}x${toString y}";
 
-    boot.initrd.extraUtilsCommands =
+    boot.initrd.extraUtilsCommands = lib.mkIf (cfg.useDefaultFilesystems && !config.boot.initrd.systemd.enable)
       ''
         # We need mke2fs in the initrd.
         copy_bin_and_libs ${pkgs.e2fsprogs}/bin/mke2fs
       '';
 
-    boot.initrd.postDeviceCommands =
+    boot.initrd.postDeviceCommands = lib.mkIf (cfg.useDefaultFilesystems && !config.boot.initrd.systemd.enable)
       ''
         # If the disk image appears to be empty, run mke2fs to
         # initialise.
@@ -770,7 +785,7 @@ in
         fi
       '';
 
-    boot.initrd.postMountCommands =
+    boot.initrd.postMountCommands = lib.mkIf (!config.boot.initrd.systemd.enable)
       ''
         # Mark this as a NixOS machine.
         mkdir -p $targetRoot/etc
@@ -788,6 +803,11 @@ in
             -o lowerdir=$targetRoot/nix/.ro-store,upperdir=$targetRoot/nix/.rw-store/store,workdir=$targetRoot/nix/.rw-store/work || fail
         ''}
       '';
+
+    systemd.tmpfiles.rules = lib.mkIf config.boot.initrd.systemd.enable [
+      "f /etc/NIXOS 0644 root root -"
+      "d /boot 0644 root root -"
+    ];
 
     # After booting, register the closure of the paths in
     # `virtualisation.additionalPaths' in the Nix database in the VM.  This
@@ -850,7 +870,7 @@ in
       (mkIf pkgs.stdenv.hostPlatform.isx86 [
         "-usb" "-device usb-tablet,bus=usb-bus.0"
       ])
-      (mkIf (pkgs.stdenv.isAarch32 || pkgs.stdenv.isAarch64) [
+      (mkIf pkgs.stdenv.hostPlatform.isAarch [
         "-device virtio-gpu-pci" "-device usb-ehci,id=usb0" "-device usb-kbd" "-device usb-tablet"
       ])
       (let
@@ -925,38 +945,41 @@ in
         };
     in
       mkVMOverride (cfg.fileSystems //
-      {
+      optionalAttrs cfg.useDefaultFilesystems {
         "/".device = cfg.bootDevice;
         "/".fsType = "ext4";
         "/".autoFormat = true;
-
-        "/tmp" = mkIf config.boot.tmpOnTmpfs
-          { device = "tmpfs";
-            fsType = "tmpfs";
-            neededForBoot = true;
-            # Sync with systemd's tmp.mount;
-            options = [ "mode=1777" "strictatime" "nosuid" "nodev" "size=${toString config.boot.tmpOnTmpfsSize}" ];
-          };
-
-        "/nix/${if cfg.writableStore then ".ro-store" else "store"}" =
-          mkIf cfg.useNixStoreImage
-            { device = "${lookupDriveDeviceName "nix-store" cfg.qemu.drives}";
-              neededForBoot = true;
-              options = [ "ro" ];
-            };
-
-        "/nix/.rw-store" = mkIf (cfg.writableStore && cfg.writableStoreUseTmpfs)
-          { fsType = "tmpfs";
-            options = [ "mode=0755" ];
-            neededForBoot = true;
-          };
-
-        "/boot" = mkIf cfg.useBootLoader
-          # see note [Disk layout with `useBootLoader`]
-          { device = "${lookupDriveDeviceName "boot" cfg.qemu.drives}2"; # 2 for e.g. `vdb2`, as created in `bootDisk`
-            fsType = "vfat";
-            noCheck = true; # fsck fails on a r/o filesystem
-          };
+      } //
+      optionalAttrs config.boot.tmpOnTmpfs {
+        "/tmp" = {
+          device = "tmpfs";
+          fsType = "tmpfs";
+          neededForBoot = true;
+          # Sync with systemd's tmp.mount;
+          options = [ "mode=1777" "strictatime" "nosuid" "nodev" "size=${toString config.boot.tmpOnTmpfsSize}" ];
+        };
+      } //
+      optionalAttrs cfg.useNixStoreImage {
+        "/nix/${if cfg.writableStore then ".ro-store" else "store"}" = {
+          device = "${lookupDriveDeviceName "nix-store" cfg.qemu.drives}";
+          neededForBoot = true;
+          options = [ "ro" ];
+        };
+      } //
+      optionalAttrs (cfg.writableStore && cfg.writableStoreUseTmpfs) {
+        "/nix/.rw-store" = {
+          fsType = "tmpfs";
+          options = [ "mode=0755" ];
+          neededForBoot = true;
+        };
+      } //
+      optionalAttrs cfg.useBootLoader {
+        # see note [Disk layout with `useBootLoader`]
+        "/boot" = {
+          device = "${lookupDriveDeviceName "boot" cfg.qemu.drives}2"; # 2 for e.g. `vdb2`, as created in `bootDisk`
+          fsType = "vfat";
+          noCheck = true; # fsck fails on a r/o filesystem
+        };
       } // lib.mapAttrs' mkSharedDir cfg.sharedDirectories);
 
     boot.initrd.systemd = lib.mkIf (config.boot.initrd.systemd.enable && cfg.writableStore) {
@@ -981,8 +1004,8 @@ in
       };
     };
 
-    swapDevices = mkVMOverride [ ];
-    boot.initrd.luks.devices = mkVMOverride {};
+    swapDevices = (if cfg.useDefaultFilesystems then mkVMOverride else mkDefault) [ ];
+    boot.initrd.luks.devices = (if cfg.useDefaultFilesystems then mkVMOverride else mkDefault) {};
 
     # Don't run ntpd in the guest.  It should get the correct time from KVM.
     services.timesyncd.enable = false;

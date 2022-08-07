@@ -55,6 +55,12 @@ in mkLicense lset) ({
     fullName = "GNU Affero General Public License v3.0 or later";
   };
 
+  aladdin = {
+    spdxId = "Aladdin";
+    fullName = "Aladdin Free Public License";
+    free = false;
+  };
+
   amazonsl = {
     fullName = "Amazon Software License";
     url = "https://aws.amazon.com/asl/";
@@ -285,6 +291,11 @@ in mkLicense lset) ({
     fullName = "DOC License";
   };
 
+  drl10 = {
+    spdxId = "DRL-1.0";
+    fullName = "Detection Rule License 1.0";
+  };
+
   eapl = {
     fullName = "EPSON AVASYS PUBLIC LICENSE";
     url = "https://avasys.jp/hp/menu000000700/hpg000000603.htm";
@@ -507,6 +518,13 @@ in mkLicense lset) ({
     fullName = "Databricks Proprietary License";
     url = "https://pypi.org/project/databricks-connect";
     free = false;
+  };
+
+  databricks-dbx = {
+    fullName = "DataBricks eXtensions aka dbx License";
+    url = "https://github.com/databrickslabs/dbx/blob/743b579a4ac44531f764c6e522dbe5a81a7dc0e4/LICENSE";
+    free = false;
+    redistributable = false;
   };
 
   issl = {

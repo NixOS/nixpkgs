@@ -21,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "zeek";
-  version = "4.2.1";
+  version = "4.2.2";
 
   src = fetchurl {
     url = "https://download.zeek.org/zeek-${version}.tar.gz";
-    sha256 = "sha256-axNImzBJTHxd2kU/xQmB5ZQ9ZxW2ybW3qFq7gLvm0RY=";
+    sha256 = "sha256-9Q3X24uAmnSnLUAklK+gC0Mu8eh81ZE2h/7uIVc8cAw=";
   };
 
   nativeBuildInputs = [

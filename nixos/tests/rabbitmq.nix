@@ -22,6 +22,6 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.wait_until_succeeds(
         'su -s ${pkgs.runtimeShell} rabbitmq -c "rabbitmqctl status"'
     )
-    machine.wait_for_open_port("15672")
+    machine.wait_for_open_port(15672)
   '';
 })

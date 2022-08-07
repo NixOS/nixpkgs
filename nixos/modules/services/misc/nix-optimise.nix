@@ -17,7 +17,7 @@ in
       automatic = mkOption {
         default = false;
         type = types.bool;
-        description = "Automatically run the nix store optimiser at a specific time.";
+        description = lib.mdDoc "Automatically run the nix store optimiser at a specific time.";
       };
 
       dates = mkOption {

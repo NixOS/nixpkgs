@@ -16,7 +16,7 @@ in
 
     environment.sessionVariables = mkOption {
       default = {};
-      description = ''
+      description = lib.mdDoc ''
         A set of environment variables used in the global environment.
         These variables will be set by PAM early in the login process.
 
@@ -25,12 +25,12 @@ in
         colon characters.
 
         Note, due to limitations in the PAM format values may not
-        contain the <literal>"</literal> character.
+        contain the `"` character.
 
         Also, these variables are merged into
-        <xref linkend="opt-environment.variables"/> and it is
+        [](#opt-environment.variables) and it is
         therefore not possible to use PAM style variables such as
-        <code>@{HOME}</code>.
+        `@{HOME}`.
       '';
       type = with types; attrsOf (either str (listOf str));
       apply = mapAttrs (n: v: if isList v then concatStringsSep ":" v else v);
@@ -58,7 +58,7 @@ in
         Also, these variables are merged into
         <xref linkend="opt-environment.profileRelativeEnvVars"/> and it is
         therefore not possible to use PAM style variables such as
-        <code>@{HOME}</code>.
+        <literal>@{HOME}</literal>.
       '';
     };
 

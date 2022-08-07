@@ -2,13 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "communi";
-  version = "3.5.0";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "communi";
     repo = "communi-desktop";
-    rev = "v${version}";
-    sha256 = "sha256-Ua5uXs2mEDrljvtIcdn1Kb+l5NJtRpB0AAbBz+DU+YE=";
+    # Without https://github.com/communi/communi-desktop/pull/146 fetching fails with
+    #     fatal: unable to connect to github.com:
+    #     github.com[0: 140.82.112.3]: errno=Connection timed out
+    rev = "5d813dc6e64a623cd5d78f024c8a0720a5155a28";
+    hash = "sha256-ci91Bf0EkhlPDO+NcpnMmT/vE41i5RD2mXbRAnMB++M=";
     fetchSubmodules = true;
   };
 
@@ -53,6 +56,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/communi/communi-desktop";
     license = licenses.bsd3;
     maintainers = with maintainers; [ hrdinka ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }

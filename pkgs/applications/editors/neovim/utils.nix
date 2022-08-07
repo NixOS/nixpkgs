@@ -1,4 +1,6 @@
 { lib
+, buildLuarocksPackage
+, callPackage
 , vimUtils
 , nodejs
 , neovim-unwrapped
@@ -108,7 +110,7 @@ let
             hostprog_check_table);
         in
         [
-          "--argv0" "$0" "--add-flags" (lib.escapeShellArgs flags)
+          "--inherit-argv0" "--add-flags" (lib.escapeShellArgs flags)
         ] ++ lib.optionals withRuby [
           "--set" "GEM_HOME" "${rubyEnv}/${rubyEnv.ruby.gemPath}"
         ] ++ lib.optionals (binPath != "") [
@@ -184,4 +186,9 @@ in
 {
   inherit makeNeovimConfig;
   inherit legacyWrapper;
+
+  buildNeovimPluginFrom2Nix = callPackage ./build-neovim-plugin.nix {
+    inherit (vimUtils) buildVimPluginFrom2Nix toVimPlugin;
+    inherit buildLuarocksPackage;
+  };
 }

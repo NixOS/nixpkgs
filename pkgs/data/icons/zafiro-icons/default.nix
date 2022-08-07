@@ -1,18 +1,30 @@
-{ lib, stdenv, fetchFromGitHub, gtk3, breeze-icons, gnome-icon-theme, numix-icon-theme, numix-icon-theme-circle, hicolor-icon-theme }:
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, gtk3
+, breeze-icons
+, gnome-icon-theme
+, numix-icon-theme
+, numix-icon-theme-circle
+, hicolor-icon-theme
+, jdupes
+, gitUpdater
+}:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "zafiro-icons";
-  version = "1.1";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "zayronxio";
     repo = pname;
     rev = version;
-    sha256 = "05h8qm9izjbp8pnl9jpbw3y9sddhp0zmg94fm1k4d4hhdqnakqhv";
+    sha256 = "sha256-IbFnlUOSADYMNMfvRuRPndxcQbnV12BqMDb9bJRjnoU=";
   };
 
   nativeBuildInputs = [
     gtk3
+    jdupes
   ];
 
   propagatedBuildInputs = [
@@ -26,11 +38,33 @@ stdenv.mkDerivation rec {
 
   dontDropIconThemeCache = true;
 
+  dontPatchELF = true;
+  dontRewriteSymlinks = true;
+
   installPhase = ''
-    mkdir -p $out/share/icons/Zafiro-icons
-    cp -a * $out/share/icons/Zafiro-icons
-    gtk-update-icon-cache "$out"/share/icons/Zafiro-icons
+    runHook preInstall
+
+    mkdir -p $out/share/icons
+
+    for theme in Dark Light; do
+      cp -a $theme $out/share/icons/Zafiro-icons-$theme
+
+      # remove unneeded files
+      rm $out/share/icons/Zafiro-icons-$theme/_config.yml
+
+      # remove files with non-ascii characters in name
+      # https://github.com/zayronxio/Zafiro-icons/issues/111
+      rm $out/share/icons/Zafiro-icons-$theme/apps/scalable/βTORRENT.svg
+
+      gtk-update-icon-cache $out/share/icons/Zafiro-icons-$theme
+    done
+
+    jdupes --link-soft --recurse $out/share
+
+    runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater { inherit pname version; };
 
   meta = with lib; {
     description = "Icon pack flat with light colors";

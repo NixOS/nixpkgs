@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nickel";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src  = fetchFromGitHub {
     owner = "tweag";
     repo = pname;
     rev = "refs/tags/${version}"; # because pure ${version} doesn't work
-    hash = "sha256-St8oK9vP2cAhsNindkebtAMeRPwYggP9E4CciSZc7oA=";
+    hash = "sha256-Bh83qn+ECZnlCH/A34G5G5MdcAHPow24RMCVQXR5Awg=";
   };
 
-  cargoSha256 = "sha256-VsyK/api8acIpADpXQ8RdbRLiZwHFSDH0vwQrZQ8zp4=";
+  cargoSha256 = "sha256-vI+SaVyRJjLNqenUsYtaSTyOZRT0zZJ1OZHekcb5LjY=";
 
   meta = with lib; {
     homepage = "https://nickel-lang.org/";

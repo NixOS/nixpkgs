@@ -14,14 +14,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-swapHA/ZO8QoDPwumMt6s5gf91oYe+oyk4EfRSyJqMg=";
   };
 
+  strictDeps = true;
+  enableParallelBuilding = true;
+
   doCheck = false;
 
-  configureFlags = [ "--with-syscmd-shell=${stdenv.shell}" ];
+  configureFlags = [ "--with-syscmd-shell=${stdenv.shell}" ]
+    ++ lib.optional stdenv.hostPlatform.isMinGW "CFLAGS=-fno-stack-protector";
 
   meta = {
-    homepage = "https://www.gnu.org/software/m4/";
     description = "GNU M4, a macro processor";
-
     longDescription = ''
       GNU M4 is an implementation of the traditional Unix macro
       processor.  It is mostly SVR4 compatible although it has some
@@ -38,8 +40,10 @@ stdenv.mkDerivation rec {
       recursion etc...  m4 can be used either as a front-end to a
       compiler or as a macro processor in its own right.
     '';
+    homepage = "https://www.gnu.org/software/m4/";
 
     license = lib.licenses.gpl3Plus;
+    mainProgram = "m4";
     platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 

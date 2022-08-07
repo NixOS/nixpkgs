@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "fontParts";
-  version = "0.10.4";
+  version = "0.10.7";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ic453q86s5hsw8mxnclk1vr4qp69fd67gywhv23zqwz9a7kb7lh";
+    sha256 = "sha256-u0hKI2LLWAUGIVRECk6b5y7UKgJHUx2I8R5Q+qkKxcg=";
     extension = "zip";
   };
 
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "An API for interacting with the parts of fonts during the font development process.";
     homepage = "https://github.com/robotools/fontParts";
-    changelog = "https://github.com/robotools/fontParts/releases/tag/v${version}";
+    changelog = "https://github.com/robotools/fontParts/releases/tag/${version}";
     license = licenses.mit;
     maintainers = [ maintainers.sternenseemann ];
   };

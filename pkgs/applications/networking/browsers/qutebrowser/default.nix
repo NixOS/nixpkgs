@@ -14,12 +14,11 @@ assert withMediaPlayback -> gst_all_1 != null;
 let
   python3Packages = python3.pkgs;
   pdfjs = let
-    version = "2.8.335";
+    version = "2.14.305";
   in
   fetchzip rec {
-    name = "pdfjs-${version}";
-    url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/${name}-dist.zip";
-    sha256 = "1zschfpxnhdinn9nasl5in4s62ad0h1g369cglamjgxx36x27zly";
+    url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/pdfjs-${version}-dist.zip";
+    hash = "sha256-E7t+0AUndrgi4zfJth0w28RmWLqLyXMUCnueNf/gNi4=";
     stripRoot = false;
   };
 
@@ -33,12 +32,12 @@ let
 
 in mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "qutebrowser";
-  version = "2.5.0";
+  version = "2.5.2";
 
   # the release tarballs are different from the git checkout!
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "1zai8ivc9cqax2idspwvyp24dkis0x6sv29fia8ja3sp62i45171";
+    hash = "sha256-qb/OFN3EA94N6y7t+YPCMc4APgdZmV7H706jTkl06Qg=";
   };
 
   # Needs tox
@@ -61,7 +60,7 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
     pyyaml backendPackage jinja2 pygments
     # scripts and userscripts libs
     tldextract beautifulsoup4
-    pyreadability pykeepass stem
+    readability-lxml pykeepass stem
     pynacl
     # extensive ad blocking
     adblock
@@ -132,5 +131,6 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
     description = "Keyboard-focused browser with a minimal GUI";
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ jagajaga rnhmjoj ebzzry dotlambda ];
+    inherit (backendPackage.meta) platforms;
   };
 }

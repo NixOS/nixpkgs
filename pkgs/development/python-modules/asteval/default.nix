@@ -8,14 +8,16 @@
 
 buildPythonPackage rec {
   pname = "asteval";
-  version = "0.9.26";
-  disabled = pythonOlder "3.6";
+  version = "0.9.27";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "newville";
     repo = pname;
     rev = version;
-    sha256 = "0l2iv51yclqn52w3yvyz3brpbca076ivv70h4gd6bkhwjbax1i2b";
+    hash = "sha256-FxWs4l9bqZoqdyhpVRys8Mo9Wdtn1fm5XonisPscWEs=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -28,7 +30,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "asteval" ];
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace " --cov=asteval --cov-report xml" ""
+  '';
+
+  pythonImportsCheck = [
+    "asteval"
+  ];
 
   meta = with lib; {
     description = "AST evaluator of Python expression using ast module";

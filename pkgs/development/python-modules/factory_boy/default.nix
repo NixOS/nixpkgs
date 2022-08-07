@@ -4,7 +4,7 @@
 , faker
 , fetchPypi
 , flask
-, flask_sqlalchemy
+, flask-sqlalchemy
 , mongoengine
 , pytestCheckHook
 , sqlalchemy
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   checkInputs = [
     django
     flask
-    flask_sqlalchemy
+    flask-sqlalchemy
     mongoengine
     pytestCheckHook
     sqlalchemy

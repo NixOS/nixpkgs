@@ -88,7 +88,7 @@ in
 
   options = {
     services.nagios = {
-      enable = mkEnableOption "<link xlink:href='http://www.nagios.org/'>Nagios</link> to monitor your system or network.";
+      enable = mkEnableOption ''<link xlink:href="http://www.nagios.org/">Nagios</link> to monitor your system or network.'';
 
       objectDefs = mkOption {
         description = "

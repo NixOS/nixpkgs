@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "hound";
-  version = "0.4.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "hound-search";
     repo = "hound";
     rev = "v${version}";
-    sha256 = "0p5w54fr5xz19ff8k5xkyq3iqhjki8wc0hj2x1pnmk6hzrz6hf65";
+    sha256 = "sha256-1URhb+ZrtP5eGS2o7lBxvAxQJR/J6oE+pCbJ7sQb0X4=";
   };
 
-  vendorSha256 = "0x1nhhhvqmz3qssd2d44zaxbahj8lh9r4m5jxdvzqk6m3ly7y0b6";
+  vendorSha256 = "sha256-ZgF/PB3VTPx367JUkhOkSEK1uvqENNG0xuNXvCGENnQ=";
 
   nativeBuildInputs = [ makeWrapper ];
 

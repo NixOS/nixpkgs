@@ -13,25 +13,25 @@ in
       tvheadendUrl = mkOption {
         type        = types.str;
         default     = "http://localhost:9981";
-        description = "URL of Tvheadend.";
+        description = lib.mdDoc "URL of Tvheadend.";
       };
 
       antennasUrl = mkOption {
         type        = types.str;
         default     = "http://127.0.0.1:5004";
-        description = "URL of Antennas.";
+        description = lib.mdDoc "URL of Antennas.";
       };
 
       tunerCount = mkOption {
         type        = types.int;
         default     = 6;
-        description = "Numbers of tuners in tvheadend.";
+        description = lib.mdDoc "Numbers of tuners in tvheadend.";
       };
 
       deviceUUID = mkOption {
         type        = types.str;
         default     = "2f70c0d7-90a3-4429-8275-cbeeee9cd605";
-        description = "Device tuner UUID. Change this if you are running multiple instances.";
+        description = lib.mdDoc "Device tuner UUID. Change this if you are running multiple instances.";
       };
     };
   };

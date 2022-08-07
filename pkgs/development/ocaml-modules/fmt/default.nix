@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
-  buildInputs = [ topkg ];
-  propagatedBuildInputs = [ cmdliner seq stdlib-shims ];
+  buildInputs = [ cmdliner topkg ];
+  propagatedBuildInputs = [ seq stdlib-shims ];
 
   strictDeps = true;
 

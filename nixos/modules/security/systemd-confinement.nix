@@ -22,16 +22,17 @@ in {
       options.confinement.fullUnit = lib.mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to include the full closure of the systemd unit file into the
           chroot, instead of just the dependencies for the executables.
 
-          <warning><para>While it may be tempting to just enable this option to
+          ::: {.warning}
+          While it may be tempting to just enable this option to
           make things work quickly, please be aware that this might add paths
           to the closure of the chroot that you didn't anticipate. It's better
-          to use <option>confinement.packages</option> to <emphasis
-          role="strong">explicitly</emphasis> add additional store paths to the
-          chroot.</para></warning>
+          to use {option}`confinement.packages` to **explicitly** add additional store paths to the
+          chroot.
+          :::
         '';
       };
 

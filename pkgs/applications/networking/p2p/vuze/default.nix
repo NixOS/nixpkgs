@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.vuze.com";
     license = licenses.unfree;
     platforms = platforms.all;
-    maintainers = with maintainers; [ volth ];
+    maintainers = with maintainers; [ ];
   };
 }

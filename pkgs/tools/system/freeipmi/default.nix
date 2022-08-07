@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, libgcrypt, readline, libgpg-error }:
+{ buildPackages, fetchurl, lib, stdenv, libgcrypt, readline, libgpg-error }:
 
 stdenv.mkDerivation rec {
   version = "1.6.9";
@@ -9,7 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-8l4cNfPQ8bWpnMMezCNTyoPtRqFRY4QvuocBJ9ycggY=";
   };
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
   buildInputs = [ libgcrypt readline libgpg-error ];
+
+  configureFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
+    [ "ac_cv_file__dev_urandom=true" "ac_cv_file__dev_random=true" ];
 
   doCheck = true;
 

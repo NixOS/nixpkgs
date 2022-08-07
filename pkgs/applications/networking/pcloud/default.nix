@@ -26,13 +26,12 @@
 
 let
   pname = "pcloud";
-  version = "1.9.7";
-  code = "XZ0FAtXZNxFJbda6KhLejU9tKAg4N0TEqx3V";
-
-  # Archive link's code thanks to: https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=pcloud-drive
+  version = "1.9.9";
+  code = "XZWTVkVZQM0GNXA4hrFGPkefzUUWVLKOpPIX";
+  # Archive link's codes: https://www.pcloud.com/release-notes/linux.html
   src = fetchzip {
     url = "https://api.pcloud.com/getpubzip?code=${code}&filename=${pname}-${version}.zip";
-    hash = "sha256-6eMRFuZOLcoZd2hGw7QV+kAmzE5lK8uK6ZpGs4n7/zw=";
+    hash = "sha256-8566vKrE3/QCm4qW9KxEAO+r+YfMRYOhV2Da7qic48M=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -104,6 +103,7 @@ in stdenv.mkDerivation {
   meta = with lib; {
     description = "Secure and simple to use cloud storage for your files; pCloud Drive, Electron Edition";
     homepage = "https://www.pcloud.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ patryk27 ];
     platforms = [ "x86_64-linux" ];

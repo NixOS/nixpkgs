@@ -47,6 +47,9 @@ let
       "-DBUILD_STATIC=OFF"
       "-DJAVA=${boolToCmake includeJava}"
       "-DGPL=${boolToCmake includeGplCode}"
+
+      # file RPATH_CHANGE could not write new RPATH
+      "-DCMAKE_SKIP_BUILD_RPATH=ON"
     ];
 
     postInstall = optionalString includeJava ''
@@ -65,7 +68,7 @@ let
     };
   };
 
-  python = { buildPythonPackage, cython }: buildPythonPackage {
+  python = { buildPythonPackage, cython, pytestCheckHook }: buildPythonPackage {
     inherit pname version src patches;
 
     propagatedBuildInputs = [ core cython ];
@@ -85,5 +88,12 @@ let
       substituteInPlace setup.py \
         --replace 'library_dir = "../../../../"' 'library_dir = "${core}/lib/"'
     '';
+
+    checkInputs = [ pytestCheckHook ];
+
+    disabledTests = [
+      "test_assertAtMostOne"
+      "test_assertEqual"
+    ];
   };
 in core

@@ -57,7 +57,7 @@ let
         type = types.nullOr types.path;
         default = null;
         example = "/etc/frr/${daemonName service}.conf";
-        description = ''
+        description = lib.mdDoc ''
           Configuration file to use for FRR ${daemonName service}.
           By default the NixOS generated files are used.
         '';
@@ -86,7 +86,7 @@ let
             };
           in
             examples.${service} or "";
-        description = ''
+        description = lib.mdDoc ''
           ${daemonName service} configuration statements.
         '';
       };
@@ -94,7 +94,7 @@ let
       vtyListenAddress = mkOption {
         type = types.str;
         default = "localhost";
-        description = ''
+        description = lib.mdDoc ''
           Address to bind to for the VTY interface.
         '';
       };
@@ -102,8 +102,16 @@ let
       vtyListenPort = mkOption {
         type = types.nullOr types.int;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           TCP Port to bind to for the VTY interface.
+        '';
+      };
+
+      extraOptions = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = lib.mdDoc ''
+          Extra options for the daemon.
         '';
       };
     };
@@ -120,7 +128,7 @@ in
           enable = mkOption {
             type = types.bool;
             default = any isEnabled services;
-            description = ''
+            description = lib.mdDoc ''
               Whether to enable the Zebra routing manager.
 
               The Zebra routing manager is automatically enabled
@@ -196,7 +204,8 @@ in
                 PIDFile = "frr/${daemon}.pid";
                 ExecStart = "${pkgs.frr}/libexec/frr/${daemon} -f /etc/frr/${service}.conf"
                   + optionalString (scfg.vtyListenAddress != "") " -A ${scfg.vtyListenAddress}"
-                  + optionalString (scfg.vtyListenPort != null) " -P ${toString scfg.vtyListenPort}";
+                  + optionalString (scfg.vtyListenPort != null) " -P ${toString scfg.vtyListenPort}"
+                  + " " + (concatStringsSep " " scfg.extraOptions);
                 ExecReload = "${pkgs.python3.interpreter} ${pkgs.frr}/libexec/frr/frr-reload.py --reload --daemon ${daemonName service} --bindir ${pkgs.frr}/bin --rundir /run/frr /etc/frr/${service}.conf";
                 Restart = "on-abnormal";
               };

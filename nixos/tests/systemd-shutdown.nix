@@ -1,4 +1,6 @@
-import ./make-test-python.nix ({ pkgs, systemdStage1 ? false, ...} : {
+import ./make-test-python.nix ({ pkgs, systemdStage1 ? false, ...} : let
+  msg = "Shutting down NixOS";
+in {
   name = "systemd-shutdown";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ das_j ];
@@ -6,7 +8,9 @@ import ./make-test-python.nix ({ pkgs, systemdStage1 ? false, ...} : {
 
   nodes.machine = {
     imports = [ ../modules/profiles/minimal.nix ];
-    boot.initrd.systemd.enable = systemdStage1;
+    systemd.shutdownRamfs.contents."/etc/systemd/system-shutdown/shutdown-message".source = pkgs.writeShellScript "shutdown-message" ''
+      echo "${msg}"
+    '';
   };
 
   testScript = ''
@@ -14,7 +18,8 @@ import ./make-test-python.nix ({ pkgs, systemdStage1 ? false, ...} : {
     # .shutdown() would wait for the machine to power off
     machine.succeed("systemctl poweroff")
     # Message printed by systemd-shutdown
-    machine.wait_for_console_text("All filesystems, swaps, loop devices, MD devices and DM devices detached.")
+    machine.wait_for_console_text("Unmounting '/oldroot'")
+    machine.wait_for_console_text("${msg}")
     # Don't try to sync filesystems
     machine.booted = False
   '';

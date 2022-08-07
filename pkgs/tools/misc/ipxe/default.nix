@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, unstableGitUpdater
+{ stdenv, lib, fetchFromGitHub, unstableGitUpdater, buildPackages
 , gnu-efi, mtools, openssl, perl, xorriso, xz
 , syslinux ? null
 , embedScript ? null
@@ -32,6 +32,9 @@ stdenv.mkDerivation rec {
   version = "unstable-2022-04-06";
 
   nativeBuildInputs = [ gnu-efi mtools openssl perl xorriso xz ] ++ lib.optional stdenv.hostPlatform.isx86 syslinux;
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "ipxe";
@@ -40,6 +43,10 @@ stdenv.mkDerivation rec {
     sha256 = "SrTNEYk13JXAcJuogm9fZ7CrzJIDRc0aziGdjRNv96I=";
   };
 
+  postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
+    substituteInPlace src/util/genfsimg --replace "	syslinux " "	true "
+  ''; # calling syslinux on a FAT image isn't going to work
+
   # not possible due to assembler code
   hardeningDisable = [ "pic" "stackprotector" ];
 
@@ -47,6 +54,7 @@ stdenv.mkDerivation rec {
 
   makeFlags =
     [ "ECHO_E_BIN_ECHO=echo" "ECHO_E_BIN_ECHO_E=echo" # No /bin/echo here.
+      "CROSS=${stdenv.cc.targetPrefix}"
     ] ++ lib.optional (embedScript != null) "EMBED=${embedScript}";
 
 

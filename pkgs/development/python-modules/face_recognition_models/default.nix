@@ -17,7 +17,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/ageitgey/face_recognition_models";
     license = licenses.cc0;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
     description = "Trained models for the face_recognition python library";
   };
 }

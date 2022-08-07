@@ -1,7 +1,6 @@
 { config, options, lib, pkgs, stdenv, ... }:
 let
   cfg = config.services.pleroma;
-  cookieFile = "/var/lib/pleroma/.cookie";
 in {
   options = {
     services.pleroma = with lib; {
@@ -9,33 +8,33 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = pkgs.pleroma.override { inherit cookieFile; };
+        default = pkgs.pleroma;
         defaultText = literalExpression "pkgs.pleroma";
-        description = "Pleroma package to use.";
+        description = lib.mdDoc "Pleroma package to use.";
       };
 
       user = mkOption {
         type = types.str;
         default = "pleroma";
-        description = "User account under which pleroma runs.";
+        description = lib.mdDoc "User account under which pleroma runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "pleroma";
-        description = "Group account under which pleroma runs.";
+        description = lib.mdDoc "Group account under which pleroma runs.";
       };
 
       stateDir = mkOption {
         type = types.str;
         default = "/var/lib/pleroma";
         readOnly = true;
-        description = "Directory where the pleroma service will save the uploads and static files.";
+        description = lib.mdDoc "Directory where the pleroma service will save the uploads and static files.";
       };
 
       configs = mkOption {
         type = with types; listOf str;
-        description = ''
+        description = lib.mdDoc ''
           Pleroma public configuration.
 
           This list gets appended from left to
@@ -43,9 +42,9 @@ in {
           configuration imperatively, meaning you can override a
           setting by appending a new str to this NixOS option list.
 
-          <emphasis>DO NOT STORE ANY PLEROMA SECRET
-          HERE</emphasis>, use
-          <link linkend="opt-services.pleroma.secretConfigFile">services.pleroma.secretConfigFile</link>
+          *DO NOT STORE ANY PLEROMA SECRET
+          HERE*, use
+          [services.pleroma.secretConfigFile](#opt-services.pleroma.secretConfigFile)
           instead.
 
           This setting is going to be stored in a file part of
@@ -60,11 +59,11 @@ in {
       secretConfigFile = mkOption {
         type = types.str;
         default = "/var/lib/pleroma/secrets.exs";
-        description = ''
+        description = lib.mdDoc ''
           Path to the file containing your secret pleroma configuration.
 
-          <emphasis>DO NOT POINT THIS OPTION TO THE NIX
-          STORE</emphasis>, the store being world-readable, it'll
+          *DO NOT POINT THIS OPTION TO THE NIX
+          STORE*, the store being world-readable, it'll
           compromise all your secrets.
         '';
       };
@@ -101,6 +100,7 @@ in {
       after = [ "network-online.target" "postgresql.service" ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."/pleroma/config.exs".source ];
+      environment.RELEASE_COOKIE = "/var/lib/pleroma/.cookie";
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
@@ -118,10 +118,10 @@ in {
         # Better be safe than sorry migration-wise.
         ExecStartPre =
           let preScript = pkgs.writers.writeBashBin "pleromaStartPre" ''
-            if [ ! -f "${cookieFile}" ] || [ ! -s "${cookieFile}" ]
+            if [ ! -f /var/lib/pleroma/.cookie ]
             then
               echo "Creating cookie file"
-              dd if=/dev/urandom bs=1 count=16 | ${pkgs.hexdump}/bin/hexdump -e '16/1 "%02x"' > "${cookieFile}"
+              dd if=/dev/urandom bs=1 count=16 | hexdump -e '16/1 "%02x"' > /var/lib/pleroma/.cookie
             fi
             ${cfg.package}/bin/pleroma_ctl migrate
           '';

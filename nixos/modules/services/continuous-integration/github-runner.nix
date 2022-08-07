@@ -18,29 +18,28 @@ in
     enable = mkOption {
       default = false;
       example = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable GitHub Actions runner.
 
         Note: GitHub recommends using self-hosted runners with private repositories only. Learn more here:
-        <link xlink:href="https://docs.github.com/en/actions/hosting-your-own-runners/about-self-hosted-runners"
-        >About self-hosted runners</link>.
+        [About self-hosted runners](https://docs.github.com/en/actions/hosting-your-own-runners/about-self-hosted-runners).
       '';
       type = lib.types.bool;
     };
 
     url = mkOption {
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Repository to add the runner to.
 
         Changing this option triggers a new runner registration.
 
         IMPORTANT: If your token is org-wide (not per repository), you need to
         provide a github org link, not a single repository, so do it like this
-        <literal>https://github.com/nixos</literal>, not like this
-        <literal>https://github.com/nixos/nixpkgs</literal>.
-        Otherwise, you are going to get a <literal>404 NotFound</literal>
-        from <literal>POST https://api.github.com/actions/runner-registration</literal>
+        `https://github.com/nixos`, not like this
+        `https://github.com/nixos/nixpkgs`.
+        Otherwise, you are going to get a `404 NotFound`
+        from `POST https://api.github.com/actions/runner-registration`
         in the configure script.
       '';
       example = "https://github.com/nixos/nixpkgs";
@@ -48,7 +47,7 @@ in
 
     tokenFile = mkOption {
       type = types.path;
-      description = ''
+      description = lib.mdDoc ''
         The full path to a file which contains the runner registration token.
         The file should contain exactly one line with the token without any newline.
         The token can be used to re-register a runner of the same name but is time-limited.
@@ -61,7 +60,7 @@ in
     name = mkOption {
       # Same pattern as for `networking.hostName`
       type = types.strMatching "^$|^[[:alnum:]]([[:alnum:]_-]{0,61}[[:alnum:]])?$";
-      description = ''
+      description = lib.mdDoc ''
         Name of the runner to configure. Defaults to the hostname.
 
         Changing this option triggers a new runner registration.
@@ -73,7 +72,7 @@ in
 
     runnerGroup = mkOption {
       type = types.nullOr types.str;
-      description = ''
+      description = lib.mdDoc ''
         Name of the runner group to add this runner to (defaults to the default runner group).
 
         Changing this option triggers a new runner registration.
@@ -83,8 +82,8 @@ in
 
     extraLabels = mkOption {
       type = types.listOf types.str;
-      description = ''
-        Extra labels in addition to the default (<literal>["self-hosted", "Linux", "X64"]</literal>).
+      description = lib.mdDoc ''
+        Extra labels in addition to the default (`["self-hosted", "Linux", "X64"]`).
 
         Changing this option triggers a new runner registration.
       '';
@@ -94,7 +93,7 @@ in
 
     replace = mkOption {
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         Replace any existing runner with the same name.
 
         Without this flag, registering a new runner with the same name fails.
@@ -104,15 +103,15 @@ in
 
     extraPackages = mkOption {
       type = types.listOf types.package;
-      description = ''
-        Extra packages to add to <literal>PATH</literal> of the service to make them available to workflows.
+      description = lib.mdDoc ''
+        Extra packages to add to `PATH` of the service to make them available to workflows.
       '';
       default = [ ];
     };
 
     package = mkOption {
       type = types.package;
-      description = ''
+      description = lib.mdDoc ''
         Which github-runner derivation to use.
       '';
       default = pkgs.github-runner;
@@ -280,7 +279,6 @@ in
         CapabilityBoundingSet = "";
         # ProtectClock= adds DeviceAllow=char-rtc r
         DeviceAllow = "";
-        LockPersonality = true;
         NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateMounts = true;
@@ -300,13 +298,17 @@ in
         RestrictSUIDSGID = true;
         UMask = "0066";
         ProtectProc = "invisible";
-        ProcSubset = "pid";
         SystemCallFilter = [
-          "~@debug"
-          "~@mount"
-          "~@privileged"
+          "~@clock"
           "~@cpu-emulation"
+          "~@module"
+          "~@mount"
           "~@obsolete"
+          "~@raw-io"
+          "~@reboot"
+          "~capset"
+          "~setdomainname"
+          "~sethostname"
         ];
         RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" "AF_NETLINK" ];
 
@@ -314,6 +316,17 @@ in
         PrivateNetwork = false;
         # Cannot be true due to Node
         MemoryDenyWriteExecute = false;
+
+        # The more restrictive "pid" option makes `nix` commands in CI emit
+        # "GC Warning: Couldn't read /proc/stat"
+        # You may want to set this to "pid" if not using `nix` commands
+        ProcSubset = "all";
+        # Coverage programs for compiled code such as `cargo-tarpaulin` disable
+        # ASLR (address space layout randomization) which requires the
+        # `personality` syscall
+        # You may want to set this to `true` if not using coverage tooling on
+        # compiled code
+        LockPersonality = false;
       };
     };
   };

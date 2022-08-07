@@ -13,19 +13,19 @@ in {
         default = pkgs.whitebophir;
         defaultText = literalExpression "pkgs.whitebophir";
         type = types.package;
-        description = "Whitebophir package to use.";
+        description = lib.mdDoc "Whitebophir package to use.";
       };
 
       listenAddress = mkOption {
         type = types.str;
         default = "0.0.0.0";
-        description = "Address to listen on (use 0.0.0.0 to allow access from any address).";
+        description = lib.mdDoc "Address to listen on (use 0.0.0.0 to allow access from any address).";
       };
 
       port = mkOption {
         type = types.port;
         default = 5001;
-        description = "Port to bind to.";
+        description = lib.mdDoc "Port to bind to.";
       };
     };
   };

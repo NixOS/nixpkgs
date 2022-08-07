@@ -6,17 +6,17 @@
 
 buildGoModule rec {
   pname = "opentelemetry-collector-contrib";
-  version = "0.47.0";
+  version = "0.57.2";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector-contrib";
     rev = "v${version}";
-    sha256 = "sha256-IbpQd01uU6/Ihli+gVDjTB8T8cj//XHoZYcDjXD635Q=";
+    sha256 = "sha256-g0NnEo1M3PtQH2n0UcECC7l9laLx3UrduR4X4aZvnuA=";
   };
   # proxy vendor to avoid hash missmatches between linux and macOS
   proxyVendor = true;
-  vendorSha256 = "sha256-1svBCXfutjXfXfVqVHUTAt9T1ON/qbiS+VCt5kP/YIc=";
+  vendorSha256 = "sha256-fq85frUmZxH8ekFuxyTjnY22Sb1Ts7nahcgI6ArGY4A=";
 
   subPackages = [ "cmd/otelcontribcol" ];
 
@@ -31,8 +31,6 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/open-telemetry/opentelemetry-collector-contrib";
-    changelog = "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/v${version}/CHANGELOG.md";
     description = "OpenTelemetry Collector superset with additional community collectors";
     longDescription = ''
       The OpenTelemetry Collector offers a vendor-agnostic implementation on how
@@ -44,7 +42,10 @@ buildGoModule rec {
       components that are only useful to a relatively small number of users and
       is multiple times larger as a result.
     '';
+    homepage = "https://github.com/open-telemetry/opentelemetry-collector-contrib";
+    changelog = "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ uri-canva jk ];
+    mainProgram = "otelcontribcol";
   };
 }

@@ -87,7 +87,7 @@ let
   fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "11.0.10";
+  version = "11.5.1";
 
   lang = "en-US";
 
@@ -98,7 +98,7 @@ let
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
       ];
-      sha256 = "1j39v01bb97hkhkfvz7xyfmv6y0sjjcymvn3sa9ahz2av1xlrplp";
+      sha256 = "sha256-LgzvptQoTHGngW4xDZNfm5teSjpAjcUzMKDbBHRInoo=";
     };
 
     i686-linux = fetchurl {
@@ -107,7 +107,7 @@ let
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
       ];
-      sha256 = "0vh913z828ncb8pwz461xx61ylxqp44rf9iah7n6lzda7hcw79r3";
+      sha256 = "sha256-J/ka/Qvu2UC5KTfatkWq0jc6bHTazA20vL9tz1sK/Rg=";
     };
   };
 in
@@ -357,7 +357,7 @@ stdenv.mkDerivation rec {
       TMPDIR="\''${TMPDIR:-/tmp}" \
       HOME="\$HOME" \
       XAUTHORITY="\''${XAUTHORITY:-\$HOME/.Xauthority}" \
-      DISPLAY="\$DISPLAY" \
+      DISPLAY="\''${DISPLAY:-}" \
       DBUS_SESSION_BUS_ADDRESS="\''${DBUS_SESSION_BUS_ADDRESS:-unix:path=\$XDG_RUNTIME_DIR/bus}" \\
       \
       XDG_DATA_HOME="\$HOME/.local/share" \
@@ -365,6 +365,11 @@ stdenv.mkDerivation rec {
       \
       PULSE_SERVER="\''${PULSE_SERVER:-}" \
       PULSE_COOKIE="\''${PULSE_COOKIE:-}" \
+      \
+      MOZ_ENABLE_WAYLAND="\''${MOZ_ENABLE_WAYLAND:-}" \
+      WAYLAND_DISPLAY="\''${WAYLAND_DISPLAY:-}" \
+      XDG_RUNTIME_DIR="\''${XDG_RUNTIME_DIR:-}" \
+      XCURSOR_PATH="\''${XCURSOR_PATH:-}" \
       \
       APULSE_PLAYBACK_DEVICE="\''${APULSE_PLAYBACK_DEVICE:-plug:dmix}" \
       \
@@ -404,7 +409,7 @@ stdenv.mkDerivation rec {
     LD_LIBRARY_PATH=$libPath $TBB_IN_STORE/TorBrowser/Tor/tor --version >/dev/null
 
     echo "Checking tor-browser wrapper ..."
-    DISPLAY="" XAUTHORITY="" DBUS_SESSION_BUS_ADDRESS="" TBB_HOME=$(mktemp -d) \
+      TBB_HOME=$(mktemp -d) \
       $out/bin/tor-browser --version >/dev/null
   '';
 
@@ -429,5 +434,6 @@ stdenv.mkDerivation rec {
     # the compound is "libre" in a strict sense (some components place certain
     # restrictions on redistribution), it's free enough for our purposes.
     license = licenses.free;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

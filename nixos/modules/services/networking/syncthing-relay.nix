@@ -28,7 +28,7 @@ in {
       type = types.str;
       default = "";
       example = "1.2.3.4";
-      description = ''
+      description = lib.mdDoc ''
         Address to listen on for relay traffic.
       '';
     };
@@ -36,9 +36,9 @@ in {
     port = mkOption {
       type = types.port;
       default = 22067;
-      description = ''
+      description = lib.mdDoc ''
         Port to listen on for relay traffic. This port should be added to
-        <literal>networking.firewall.allowedTCPPorts</literal>.
+        `networking.firewall.allowedTCPPorts`.
       '';
     };
 
@@ -46,7 +46,7 @@ in {
       type = types.str;
       default = "";
       example = "1.2.3.4";
-      description = ''
+      description = lib.mdDoc ''
         Address to listen on for serving the relay status API.
       '';
     };
@@ -54,16 +54,16 @@ in {
     statusPort = mkOption {
       type = types.port;
       default = 22070;
-      description = ''
+      description = lib.mdDoc ''
         Port to listen on for serving the relay status API. This port should be
-        added to <literal>networking.firewall.allowedTCPPorts</literal>.
+        added to `networking.firewall.allowedTCPPorts`.
       '';
     };
 
     pools = mkOption {
       type = types.nullOr (types.listOf types.str);
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Relay pools to join. If null, uses the default global pool.
       '';
     };
@@ -71,7 +71,7 @@ in {
     providedBy = mkOption {
       type = types.str;
       default = "";
-      description = ''
+      description = lib.mdDoc ''
         Human-readable description of the provider of the relay (you).
       '';
     };
@@ -79,7 +79,7 @@ in {
     globalRateBps = mkOption {
       type = types.nullOr types.ints.positive;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Global bandwidth rate limit in bytes per second.
       '';
     };
@@ -87,7 +87,7 @@ in {
     perSessionRateBps = mkOption {
       type = types.nullOr types.ints.positive;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Per session bandwidth rate limit in bytes per second.
       '';
     };
@@ -95,7 +95,7 @@ in {
     extraOptions = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         Extra command line arguments to pass to strelaysrv.
       '';
     };

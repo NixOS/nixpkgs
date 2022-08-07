@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-AqZ7tsNZw2Djgyo1JBJbT/c3eQVyEn6r3CT6DQLD/B8=";
   };
 
-  nativeBuildInputs = [ autoreconfHook cmake pkg-config ];
+  nativeBuildInputs = [ cmake ];
   buildInputs = [ mediastreamer openh264 ];
 
   # Do not build static libraries

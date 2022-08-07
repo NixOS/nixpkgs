@@ -19,7 +19,7 @@ in
       settings = mkOption {
         type = settingsFormat.type;
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           System-wide configuration for GameMode (/etc/gamemode.ini).
           See gamemoded(8) man page for available settings.
         '';

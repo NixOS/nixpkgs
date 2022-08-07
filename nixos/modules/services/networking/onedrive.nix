@@ -29,14 +29,14 @@ in {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = "Enable OneDrive service";
+      description = lib.mdDoc "Enable OneDrive service";
     };
 
      package = lib.mkOption {
        type = lib.types.package;
        default = pkgs.onedrive;
        defaultText = lib.literalExpression "pkgs.onedrive";
-       description = ''
+       description = lib.mdDoc ''
          OneDrive package to use.
        '';
      };

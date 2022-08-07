@@ -44,6 +44,10 @@ stdenv.mkDerivation rec {
       COOJA, MiXiM, and ONE.
     '';
     homepage = "https://sys.cs.uos.de/bonnmotion/";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # source bundles dependency jars
+    ];
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ oxzi ];
   };

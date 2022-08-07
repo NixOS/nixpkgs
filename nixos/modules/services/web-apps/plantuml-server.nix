@@ -17,7 +17,7 @@ in
         type = types.package;
         default = pkgs.plantuml-server;
         defaultText = literalExpression "pkgs.plantuml-server";
-        description = "PlantUML server package to use";
+        description = lib.mdDoc "PlantUML server package to use";
       };
 
       packages = {
@@ -25,75 +25,75 @@ in
           type = types.package;
           default = pkgs.jdk;
           defaultText = literalExpression "pkgs.jdk";
-          description = "JDK package to use for the server";
+          description = lib.mdDoc "JDK package to use for the server";
         };
         jetty = mkOption {
           type = types.package;
           default = pkgs.jetty;
           defaultText = literalExpression "pkgs.jetty";
-          description = "Jetty package to use for the server";
+          description = lib.mdDoc "Jetty package to use for the server";
         };
       };
 
       user = mkOption {
         type = types.str;
         default = "plantuml";
-        description = "User which runs PlantUML server.";
+        description = lib.mdDoc "User which runs PlantUML server.";
       };
 
       group = mkOption {
         type = types.str;
         default = "plantuml";
-        description = "Group which runs PlantUML server.";
+        description = lib.mdDoc "Group which runs PlantUML server.";
       };
 
       home = mkOption {
         type = types.str;
         default = "/var/lib/plantuml";
-        description = "Home directory of the PlantUML server instance.";
+        description = lib.mdDoc "Home directory of the PlantUML server instance.";
       };
 
       listenHost = mkOption {
         type = types.str;
         default = "127.0.0.1";
-        description = "Host to listen on.";
+        description = lib.mdDoc "Host to listen on.";
       };
 
       listenPort = mkOption {
         type = types.int;
         default = 8080;
-        description = "Port to listen on.";
+        description = lib.mdDoc "Port to listen on.";
       };
 
       plantumlLimitSize = mkOption {
         type = types.int;
         default = 4096;
-        description = "Limits image width and height.";
+        description = lib.mdDoc "Limits image width and height.";
       };
 
       graphvizPackage = mkOption {
         type = types.package;
         default = pkgs.graphviz;
         defaultText = literalExpression "pkgs.graphviz";
-        description = "Package containing the dot executable.";
+        description = lib.mdDoc "Package containing the dot executable.";
       };
 
       plantumlStats = mkOption {
         type = types.bool;
         default = false;
-        description = "Set it to on to enable statistics report (https://plantuml.com/statistics-report).";
+        description = lib.mdDoc "Set it to on to enable statistics report (https://plantuml.com/statistics-report).";
       };
 
       httpAuthorization = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = "When calling the proxy endpoint, the value of HTTP_AUTHORIZATION will be used to set the HTTP Authorization header.";
+        description = lib.mdDoc "When calling the proxy endpoint, the value of HTTP_AUTHORIZATION will be used to set the HTTP Authorization header.";
       };
 
       allowPlantumlInclude = mkOption {
         type = types.bool;
         default = false;
-        description = "Enables !include processing which can read files from the server into diagrams. Files are read relative to the current working directory.";
+        description = lib.mdDoc "Enables !include processing which can read files from the server into diagrams. Files are read relative to the current working directory.";
       };
     };
   };

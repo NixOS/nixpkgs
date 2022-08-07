@@ -26,7 +26,7 @@ in
         enable = mkOption {
           type = types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Whether to enable the kernel's NFS server.
           '';
         };
@@ -34,7 +34,7 @@ in
         extraNfsdConfig = mkOption {
           type = types.str;
           default = "";
-          description = ''
+          description = lib.mdDoc ''
             Extra configuration options for the [nfsd] section of /etc/nfs.conf.
           '';
         };
@@ -63,7 +63,7 @@ in
         nproc = mkOption {
           type = types.int;
           default = 8;
-          description = ''
+          description = lib.mdDoc ''
             Number of NFS server threads.  Defaults to the recommended value of 8.
           '';
         };
@@ -71,14 +71,14 @@ in
         createMountPoints = mkOption {
           type = types.bool;
           default = false;
-          description = "Whether to create the mount points in the exports file at startup time.";
+          description = lib.mdDoc "Whether to create the mount points in the exports file at startup time.";
         };
 
         mountdPort = mkOption {
           type = types.nullOr types.int;
           default = null;
           example = 4002;
-          description = ''
+          description = lib.mdDoc ''
             Use fixed port for rpc.mountd, useful if server is behind firewall.
           '';
         };
@@ -87,9 +87,9 @@ in
           type = types.nullOr types.int;
           default = null;
           example = 4001;
-          description = ''
+          description = lib.mdDoc ''
             Use a fixed port for the NFS lock manager kernel module
-            (<literal>lockd/nlockmgr</literal>).  This is useful if the
+            (`lockd/nlockmgr`).  This is useful if the
             NFS server is behind a firewall.
           '';
         };
@@ -98,8 +98,8 @@ in
           type = types.nullOr types.int;
           default = null;
           example = 4000;
-          description = ''
-            Use a fixed port for <command>rpc.statd</command>. This is
+          description = lib.mdDoc ''
+            Use a fixed port for {command}`rpc.statd`. This is
             useful if the NFS server is behind a firewall.
           '';
         };

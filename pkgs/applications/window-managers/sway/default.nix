@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
     ./sway-config-nixos-paths.patch
   ];
 
+  strictDeps = true;
   depsBuildBuild = [
     pkg-config
   ];
@@ -89,6 +90,6 @@ stdenv.mkDerivation rec {
     changelog   = "https://github.com/swaywm/sway/releases/tag/${version}";
     license     = licenses.mit;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ primeos synthetica ma27 ];
+    maintainers = with maintainers; [ primeos synthetica ];
   };
 }

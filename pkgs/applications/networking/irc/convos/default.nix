@@ -6,13 +6,13 @@ with lib;
 
 perlPackages.buildPerlPackage rec {
   pname = "convos";
-  version = "6.42";
+  version = "7.02";
 
   src = fetchFromGitHub {
     owner = "convos-chat";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-W7ZVZUCNllpFIQpNz2m/8VFOXDZfuppB+g3qibY6wt8=";
+    sha256 = "sha256-i8lDK5/Whi5uo2/Qqh5jgJGLuuHn7kdrfvr+9Ktzp/8=";
   };
 
   nativeBuildInputs = [ makeWrapper ]
@@ -20,7 +20,7 @@ perlPackages.buildPerlPackage rec {
 
   buildInputs = with perlPackages; [
     CryptPassphrase CryptPassphraseArgon2 CryptPassphraseBcrypt
-    FileHomeDir FileReadBackwards HTTPAcceptLanguage
+    FileHomeDir FileReadBackwards HTTPAcceptLanguage SyntaxKeywordTry FutureAsyncAwait
     IOSocketSSL IRCUtils JSONValidator LinkEmbedder ModuleInstall
     Mojolicious MojoliciousPluginOpenAPI MojoliciousPluginSyslog MojoliciousPluginWebpack
     ParseIRC TextMarkdownHoedown TimePiece UnicodeUTF8
@@ -36,6 +36,10 @@ perlPackages.buildPerlPackage rec {
   '';
 
   preCheck = ''
+    # Remove unstable test (PR #176640)
+    #
+    rm t/plugin-auth-header.t
+
     # Remove online test
     #
     rm t/web-pwa.t

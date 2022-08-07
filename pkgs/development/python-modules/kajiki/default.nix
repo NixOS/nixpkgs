@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, Babel
+, babel
 , pytz
 , nine
 , pytestCheckHook
@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "kajiki";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f0d6dfa27eb2b6c0d2a28ae21d69dceb5363cc0432f4045bcc98aac42a662ccb";
+    sha256 = "sha256-Qe/FTQ6YrHiVklP3HFG9HsT7Yny6we2+Ithcj2UFdp4=";
   };
 
-  propagatedBuildInputs = [ Babel pytz nine ];
+  propagatedBuildInputs = [ babel pytz nine ];
   checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {

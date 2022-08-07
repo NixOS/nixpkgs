@@ -1,4 +1,23 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, glib, itstool, libxml2, mate-panel, libnotify, libcanberra-gtk3, libsecret, dbus-glib, upower, gtk3, libtool, polkit, wrapGAppsHook, mateUpdateScript }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, glib
+, itstool
+, libxml2
+, mate-panel
+, libnotify
+, libcanberra-gtk3
+, libsecret
+, dbus-glib
+, upower
+, gtk3
+, libtool
+, polkit
+, wrapGAppsHook
+, mateUpdateScript
+}:
 
 stdenv.mkDerivation rec {
   pname = "mate-power-manager";
@@ -17,17 +36,17 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-     glib
-     itstool
-     libxml2
-     libcanberra-gtk3
-     gtk3
-     libsecret
-     libnotify
-     dbus-glib
-     upower
-     polkit
-     mate-panel
+    glib
+    itstool
+    libxml2
+    libcanberra-gtk3
+    gtk3
+    libsecret
+    libnotify
+    dbus-glib
+    upower
+    polkit
+    mate-panel
   ];
 
   configureFlags = [ "--enable-applets" ];

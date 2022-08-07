@@ -10,13 +10,13 @@ with lib;
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable nullmailer daemon.";
+        description = lib.mdDoc "Whether to enable nullmailer daemon.";
       };
 
       user = mkOption {
         type = types.str;
         default = "nullmailer";
-        description = ''
+        description = lib.mdDoc ''
           User to use to run nullmailer-send.
         '';
       };
@@ -24,7 +24,7 @@ with lib;
       group = mkOption {
         type = types.str;
         default = "nullmailer";
-        description = ''
+        description = lib.mdDoc ''
           Group to use to run nullmailer-send.
         '';
       };
@@ -32,17 +32,17 @@ with lib;
       setSendmail = mkOption {
         type = types.bool;
         default = true;
-        description = "Whether to set the system sendmail to nullmailer's.";
+        description = lib.mdDoc "Whether to set the system sendmail to nullmailer's.";
       };
 
       remotesFile = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
-          Path to the <code>remotes</code> control file. This file contains a
+        description = lib.mdDoc ''
+          Path to the `remotes` control file. This file contains a
           list of remote servers to which to send each message.
 
-          See <code>man 8 nullmailer-send</code> for syntax and available
+          See `man 8 nullmailer-send` for syntax and available
           options.
         '';
       };
@@ -51,7 +51,7 @@ with lib;
         adminaddr = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = ''
+          description = lib.mdDoc ''
             If set, all recipients to users at either "localhost" (the literal string)
             or the canonical host name (from the me control attribute) are remapped to this address.
             This is provided to allow local daemons to be able to send email to
@@ -64,7 +64,7 @@ with lib;
         allmailfrom = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = ''
+          description = lib.mdDoc ''
             If set, content will override the envelope sender on all messages.
           '';
         };
@@ -72,7 +72,7 @@ with lib;
         defaultdomain = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = ''
+          description = lib.mdDoc ''
              The content of this attribute is appended to any host name that
              does not contain a period (except localhost), including defaulthost
              and idhost. Defaults to the value of the me attribute, if it exists,
@@ -83,7 +83,7 @@ with lib;
         defaulthost = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = ''
+          description = lib.mdDoc ''
              The content of this attribute is appended to any address that
              is missing a host name. Defaults to the value of the me control
              attribute, if it exists, otherwise the literal name defaulthost.
@@ -93,7 +93,7 @@ with lib;
         doublebounceto = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = ''
+          description = lib.mdDoc ''
             If the original sender was empty (the original message was a
             delivery status or disposition notification), the double bounce
             is sent to the address in this attribute.
@@ -103,7 +103,7 @@ with lib;
         helohost = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = ''
+          description = lib.mdDoc ''
             Sets  the  environment variable $HELOHOST which is used by the
             SMTP protocol module to set the parameter given to the HELO command.
             Defaults to the value of the me configuration attribute.
@@ -113,7 +113,7 @@ with lib;
         idhost = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = ''
+          description = lib.mdDoc ''
             The content of this attribute is used when building the message-id
             string for the message. Defaults to the canonicalized value of defaulthost.
           '';
@@ -122,7 +122,7 @@ with lib;
         maxpause = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = ''
+          description = lib.mdDoc ''
              The maximum time to pause between successive queue runs, in seconds.
              Defaults to 24 hours (86400).
           '';
@@ -131,7 +131,7 @@ with lib;
         me = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = ''
+          description = lib.mdDoc ''
              The fully-qualifiled host name of the computer running nullmailer.
              Defaults to the literal name me.
           '';
@@ -140,7 +140,7 @@ with lib;
         pausetime = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = ''
+          description = lib.mdDoc ''
             The minimum time to pause between successive queue runs when there
             are messages in the queue, in seconds. Defaults to 1 minute (60).
             Each time this timeout is reached, the timeout is doubled to a
@@ -153,24 +153,24 @@ with lib;
         remotes = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = ''
+          description = lib.mdDoc ''
             A list of remote servers to which to send each message. Each line
             contains a remote host name or address followed by an optional
             protocol string, separated by white space.
 
-            See <code>man 8 nullmailer-send</code> for syntax and available
+            See `man 8 nullmailer-send` for syntax and available
             options.
 
             WARNING: This is stored world-readable in the nix store. If you need
             to specify any secret credentials here, consider using the
-            <code>remotesFile</code> option instead.
+            `remotesFile` option instead.
           '';
         };
 
         sendtimeout = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = ''
+          description = lib.mdDoc ''
             The  time to wait for a remote module listed above to complete sending
             a message before killing it and trying again, in seconds.
             Defaults to 1 hour (3600).  If this is set to 0, nullmailer-send

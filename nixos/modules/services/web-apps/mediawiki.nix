@@ -280,7 +280,7 @@ in
             one version of MediaWiki, or have other applications that also use the
             database, you can give the table names a unique prefix to stop any naming
             conflicts or confusion.
-            See <link xlink:href='https://www.mediawiki.org/wiki/Manual:$wgDBprefix'/>.
+            See <link xlink:href="https://www.mediawiki.org/wiki/Manual:$wgDBprefix"/>.
           '';
         };
 

@@ -25,7 +25,7 @@ in buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
-    Babel
+    babel
     psutil
     xlib
     pygobject3

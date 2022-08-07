@@ -40,6 +40,10 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Tool for Android testing and development";
     homepage = "https://github.com/ashishb/adb-enhanced";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode
+    ];
     license = licenses.asl20;
     maintainers = with maintainers; [ vtuan10 ];
     mainProgram = "adbe";

@@ -63,7 +63,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional (!withGTK) "-DENABLE_X11=ON"
     ++ lib.optional withExtras "-DENABLE_FONTFORGE_EXTRAS=ON";
 
-  # work-around: git isn't really used, but configuration fails without it
   preConfigure = ''
     # The way $version propagates to $version of .pe-scripts (https://github.com/dejavu-fonts/dejavu-fonts/blob/358190f/scripts/generate.pe#L19)
     export SOURCE_DATE_EPOCH=$(date -d ${version} +%s)

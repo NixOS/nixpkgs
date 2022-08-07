@@ -46,6 +46,10 @@ stdenv.mkDerivation rec {
     # for downloads and call it the "project site".
     homepage = "https://www.thaiopensource.com/relaxng/trang.html";
     platforms = platforms.unix;
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # source bundles dependencies as jars
+    ];
     maintainers = [ maintainers.bjornfor ];
   };
 }

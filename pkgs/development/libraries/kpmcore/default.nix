@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, extra-cmake-modules
+{ stdenv, lib, fetchurl, extra-cmake-modules
 , qca-qt5, kauth, kio, polkit-qt, qtbase
 , util-linux
 }:
@@ -6,25 +6,14 @@
 stdenv.mkDerivation rec {
   pname = "kpmcore";
   # NOTE: When changing this version, also change the version of `partition-manager`.
-  version = "4.2.0";
+  version = "22.04.3";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/src/${pname}-${version}.tar.xz";
-    hash = "sha256-MvW0CqvFZtzcJlya6DIpzorPbKJai6fxt7nKsKpJn54=";
+    url = "mirror://kde/stable/release-service/${version}/src/${pname}-${version}.tar.xz";
+    hash = "sha256-LmKglUgXhLOBLSpzfXvK/UXFqY3L+p/EoHbZTSKlGhM=";
   };
 
-  patches = [
-    # Fix build with `kcoreaddons` >= 5.77.0
-    (fetchpatch {
-      url = "https://github.com/KDE/kpmcore/commit/07e5a3ac2858e6d38cc698e0f740e7a693e9f302.patch";
-      sha256 = "sha256-LYzea888euo2HXM+acWaylSw28iwzOdZBvPBt/gjP1s=";
-    })
-    # Fix crash when `fstab` omits mount options.
-    (fetchpatch {
-      url = "https://github.com/KDE/kpmcore/commit/eea84fb60525803a789e55bb168afb968464c130.patch";
-      sha256 = "sha256-NJ3PvyRC6SKNSOlhJPrDDjepuw7IlAoufPgvml3fap0=";
-    })
-  ];
+  nativeBuildInputs = [ extra-cmake-modules ];
 
   buildInputs = [
     qca-qt5
@@ -35,9 +24,12 @@ stdenv.mkDerivation rec {
     util-linux # Needs blkid in configure script (note that this is not provided by util-linux-compat)
   ];
 
-  nativeBuildInputs = [ extra-cmake-modules ];
-
   dontWrapQtApps = true;
+
+  preConfigure = ''
+    substituteInPlace src/util/CMakeLists.txt \
+      --replace \$\{POLKITQT-1_POLICY_FILES_INSTALL_DIR\} $out/share/polkit-1/actions
+  '';
 
   meta = with lib; {
     description = "KDE Partition Manager core library";

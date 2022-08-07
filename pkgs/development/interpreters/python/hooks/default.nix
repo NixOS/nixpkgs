@@ -124,6 +124,15 @@ in rec {
       };
     } ./python-recompile-bytecode-hook.sh ) {};
 
+  pythonRelaxDepsHook = callPackage ({ wheel }:
+    makeSetupHook {
+      name = "python-relax-deps-hook";
+      deps = [ wheel ];
+      substitutions = {
+        inherit pythonInterpreter;
+      };
+    } ./python-relax-deps-hook.sh) {};
+
   pythonRemoveBinBytecodeHook = callPackage ({ }:
     makeSetupHook {
       name = "python-remove-bin-bytecode-hook";
@@ -161,12 +170,18 @@ in rec {
       deps = [ ensureNewerSourcesForZipFilesHook ];
       substitutions = {
         inherit pythonInterpreter;
-    };
-  } ./venv-shell-hook.sh) {});
+      };
+    } ./venv-shell-hook.sh) {});
 
   wheelUnpackHook = callPackage ({ wheel }:
     makeSetupHook {
       name = "wheel-unpack-hook.sh";
       deps = [ wheel ];
     } ./wheel-unpack-hook.sh) {};
+
+  sphinxHook = callPackage ({ sphinx }:
+    makeSetupHook {
+      name = "python${python.pythonVersion}-sphinx-hook";
+      deps = [ sphinx ];
+    } ./sphinx-hook.sh) {};
 }

@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "d324d2d09d8dd00b1eb3ef3d80ab2e1726998421d13adc0d2a90e05d355aaa5c";
+    sha256 = "c987cdc8c08c579f56d921c85269aeeac3faf636babd01d9461ce579c9362cdd";
   };
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
@@ -45,26 +45,15 @@ in stdenv.mkDerivation rec {
   patchFlags = [ "-p1" "-d" "src/vboxguest-${version}" ];
 
   unpackPhase = ''
-    ${if stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux" then ''
-        isoinfo -J -i $src -x /VBoxLinuxAdditions.run > ./VBoxLinuxAdditions.run
-        chmod 755 ./VBoxLinuxAdditions.run
-        # An overflow leads the is-there-enough-space check to fail when there's too much space available, so fake how much space there is
-        sed -i 's/\$leftspace/16383/' VBoxLinuxAdditions.run
-        ./VBoxLinuxAdditions.run --noexec --keep
-      ''
-      else throw ("Architecture: "+stdenv.hostPlatform.system+" not supported for VirtualBox guest additions")
-    }
+    isoinfo -J -i $src -x /VBoxLinuxAdditions.run > ./VBoxLinuxAdditions.run
+    chmod 755 ./VBoxLinuxAdditions.run
+    # An overflow leads the is-there-enough-space check to fail when there's too much space available, so fake how much space there is
+    sed -i 's/\$leftspace/16383/' VBoxLinuxAdditions.run
+    ./VBoxLinuxAdditions.run --noexec --keep
 
     # Unpack files
     cd install
-    ${if stdenv.hostPlatform.system == "i686-linux" then ''
-        tar xfvj VBoxGuestAdditions-x86.tar.bz2
-      ''
-      else if stdenv.hostPlatform.system == "x86_64-linux" then ''
-        tar xfvj VBoxGuestAdditions-amd64.tar.bz2
-      ''
-      else throw ("Architecture: "+stdenv.hostPlatform.system+" not supported for VirtualBox guest additions")
-    }
+    tar xfvj VBoxGuestAdditions-${if stdenv.hostPlatform.is32bit then "x86" else "amd64"}.tar.bz2
   '';
 
   buildPhase = ''
@@ -155,9 +144,10 @@ in stdenv.mkDerivation rec {
       This add-on provides support for dynamic resizing of the X Display, shared
       host/guest clipboard support and guest OpenGL support.
     '';
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = "GPL";
     maintainers = [ lib.maintainers.sander ];
-    platforms = lib.platforms.linux;
-    broken = kernel.kernelAtLeast "5.17";
+    platforms = [ "i686-linux" "x86_64-linux" ];
+    broken = stdenv.hostPlatform.is32bit && (kernel.kernelAtLeast "5.10");
   };
 }

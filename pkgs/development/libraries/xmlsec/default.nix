@@ -4,11 +4,11 @@
 lib.fix (self:
 stdenv.mkDerivation rec {
   pname = "xmlsec";
-  version = "1.2.33";
+  version = "1.2.34";
 
   src = fetchurl {
     url = "https://www.aleksey.com/xmlsec/download/xmlsec1-${version}.tar.gz";
-    sha256 = "sha256-JgQdNaIKJF7Vovue4HXxCCVmTSdCIMtRkDQPqHpNCTE=";
+    sha256 = "sha256-Us7UlD81vX0IGKOCmMFSjKSsilRED9cRNKB9LRNwomI=";
   };
 
   patches = [
@@ -68,10 +68,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
+    description = "XML Security Library in C based on libxml2";
     homepage = "http://www.aleksey.com/xmlsec";
     downloadPage = "https://www.aleksey.com/xmlsec/download.html";
-    description = "XML Security Library in C based on libxml2";
     license = lib.licenses.mit;
+    mainProgram = "xmlsec1";
     platforms = with lib.platforms; linux ++ darwin;
   };
 }

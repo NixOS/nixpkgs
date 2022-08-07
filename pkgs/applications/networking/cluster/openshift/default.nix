@@ -60,9 +60,10 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Build, deploy, and manage your applications with Docker and Kubernetes";
-    license = licenses.asl20;
     homepage = "http://www.openshift.org";
+    license = licenses.asl20;
     maintainers = with maintainers; [ offline bachp moretea stehessel ];
+    mainProgram = "oc";
     platforms = platforms.unix;
   };
 }

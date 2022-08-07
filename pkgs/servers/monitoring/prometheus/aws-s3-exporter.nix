@@ -1,19 +1,19 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "aws-s3-exporter";
-  version = "0.4.1";
-
-  goPackagePath = "github.com/ribbybibby/s3_exporter";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "ribbybibby";
     repo = "s3_exporter";
     rev = "v${version}";
-    sha256 = "01g4k5wrbc2ggxkn4yqd2v0amw8yl5dbcfwi4jm3kqkihrf0rbiq";
+    sha256 = "sha256-dYkMCCAIlFDFOFUNJd4NvtAeJDTsHeJoH90b5pSGlQE=";
   };
 
-  doCheck = true;
+  vendorSha256 = null;
+
+  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     description = "Exports Prometheus metrics about S3 buckets and objects";

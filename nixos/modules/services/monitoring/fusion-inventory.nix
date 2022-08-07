@@ -26,7 +26,7 @@ in {
 
       servers = mkOption {
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           The urls of the OCS/GLPI servers to connect to.
         '';
       };
@@ -34,7 +34,7 @@ in {
       extraConfig = mkOption {
         default = "";
         type = types.lines;
-        description = ''
+        description = lib.mdDoc ''
           Configuration that is injected verbatim into the configuration file.
         '';
       };

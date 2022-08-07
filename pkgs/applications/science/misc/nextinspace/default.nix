@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "nextinspace";
-  version = "2.0.3";
+  version = "2.0.5";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "not-stirred";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-Macx2pQglB95Bhc939TFVCHd1qvqJsco91EXKCIQLgg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-CrhzCvIA3YAFsWvdemvK1RLMacsM5RtgMjLeiqz5MwY=";
   };
 
   nativeBuildInputs = with python3.pkgs; [

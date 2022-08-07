@@ -78,13 +78,8 @@ in stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
-    pushd matrix-react-sdk
-    ../element-web/node_modules/.bin/reskindex -h ../element-web/src/header
-    popd
-
     pushd element-web
     node scripts/copy-res.js
-    node_modules/.bin/reskindex -h ../element-web/src/header
     node_modules/.bin/webpack --progress --mode production
     popd
 

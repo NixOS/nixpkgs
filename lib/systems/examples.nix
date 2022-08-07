@@ -57,29 +57,27 @@ rec {
   armv7a-android-prebuilt = {
     config = "armv7a-unknown-linux-androideabi";
     rustc.config = "armv7-linux-androideabi";
-    sdkVer = "29";
-    ndkVer = "21";
+    sdkVer = "28";
+    ndkVer = "24";
     useAndroidPrebuilt = true;
   } // platforms.armv7a-android;
 
   aarch64-android-prebuilt = {
     config = "aarch64-unknown-linux-android";
     rustc.config = "aarch64-linux-android";
-    sdkVer = "29";
-    ndkVer = "21";
+    sdkVer = "28";
+    ndkVer = "24";
     useAndroidPrebuilt = true;
   };
 
   aarch64-android = {
     config = "aarch64-unknown-linux-android";
     sdkVer = "30";
-    ndkVer = "21";
+    ndkVer = "24";
     libc = "bionic";
     useAndroidPrebuilt = false;
     useLLVM = true;
   };
-
-  scaleway-c1 = armv7l-hf-multiplatform // platforms.scaleway-c1;
 
   pogoplug4 = {
     config = "armv5tel-unknown-linux-gnueabi";
@@ -93,25 +91,23 @@ rec {
     config = "mipsel-unknown-linux-gnu";
   } // platforms.fuloong2f_n32;
 
-  # MIPS ABI table transcribed from here: https://wiki.debian.org/Multiarch/Tuples
-
   # can execute on 32bit chip
-  mips-linux-gnu                = { config = "mips-linux-gnu";                } // platforms.gcc_mips32r2_o32;
-  mipsel-linux-gnu              = { config = "mipsel-linux-gnu";              } // platforms.gcc_mips32r2_o32;
-  mipsisa32r6-linux-gnu         = { config = "mipsisa32r6-linux-gnu";         } // platforms.gcc_mips32r6_o32;
-  mipsisa32r6el-linux-gnu       = { config = "mipsisa32r6el-linux-gnu";       } // platforms.gcc_mips32r6_o32;
+  mips-linux-gnu                = { config = "mips-unknown-linux-gnu";                } // platforms.gcc_mips32r2_o32;
+  mipsel-linux-gnu              = { config = "mipsel-unknown-linux-gnu";              } // platforms.gcc_mips32r2_o32;
+  mipsisa32r6-linux-gnu         = { config = "mipsisa32r6-unknown-linux-gnu";         } // platforms.gcc_mips32r6_o32;
+  mipsisa32r6el-linux-gnu       = { config = "mipsisa32r6el-unknown-linux-gnu";       } // platforms.gcc_mips32r6_o32;
 
   # require 64bit chip (for more registers, 64-bit floating point, 64-bit "long long") but use 32bit pointers
-  mips64-linux-gnuabin32        = { config = "mips64-linux-gnuabin32";        } // platforms.gcc_mips64r2_n32;
-  mips64el-linux-gnuabin32      = { config = "mips64el-linux-gnuabin32";      } // platforms.gcc_mips64r2_n32;
-  mipsisa64r6-linux-gnuabin32   = { config = "mipsisa64r6-linux-gnuabin32";   } // platforms.gcc_mips64r6_n32;
-  mipsisa64r6el-linux-gnuabin32 = { config = "mipsisa64r6el-linux-gnuabin32"; } // platforms.gcc_mips64r6_n32;
+  mips64-linux-gnuabin32        = { config = "mips64-unknown-linux-gnuabin32";        } // platforms.gcc_mips64r2_n32;
+  mips64el-linux-gnuabin32      = { config = "mips64el-unknown-linux-gnuabin32";      } // platforms.gcc_mips64r2_n32;
+  mipsisa64r6-linux-gnuabin32   = { config = "mipsisa64r6-unknown-linux-gnuabin32";   } // platforms.gcc_mips64r6_n32;
+  mipsisa64r6el-linux-gnuabin32 = { config = "mipsisa64r6el-unknown-linux-gnuabin32"; } // platforms.gcc_mips64r6_n32;
 
   # 64bit pointers
-  mips64-linux-gnuabi64         = { config = "mips64-linux-gnuabi64";         } // platforms.gcc_mips64r2_64;
-  mips64el-linux-gnuabi64       = { config = "mips64el-linux-gnuabi64";       } // platforms.gcc_mips64r2_64;
-  mipsisa64r6-linux-gnuabi64    = { config = "mipsisa64r6-linux-gnuabi64";    } // platforms.gcc_mips64r6_64;
-  mipsisa64r6el-linux-gnuabi64  = { config = "mipsisa64r6el-linux-gnuabi64";  } // platforms.gcc_mips64r6_64;
+  mips64-linux-gnuabi64         = { config = "mips64-unknown-linux-gnuabi64";         } // platforms.gcc_mips64r2_64;
+  mips64el-linux-gnuabi64       = { config = "mips64el-unknown-linux-gnuabi64";       } // platforms.gcc_mips64r2_64;
+  mipsisa64r6-linux-gnuabi64    = { config = "mipsisa64r6-unknown-linux-gnuabi64";    } // platforms.gcc_mips64r6_64;
+  mipsisa64r6el-linux-gnuabi64  = { config = "mipsisa64r6el-unknown-linux-gnuabi64";  } // platforms.gcc_mips64r6_64;
 
   muslpi = raspberryPi // {
     config = "armv6l-unknown-linux-musleabihf";
@@ -142,6 +138,11 @@ rec {
 
   mmix = {
     config = "mmix-unknown-mmixware";
+    libc = "newlib";
+  };
+
+  rx-embedded = {
+    config = "rx-none-elf";
     libc = "newlib";
   };
 
@@ -302,8 +303,6 @@ rec {
   };
 
   # BSDs
-
-  amd64-netbsd = lib.warn "The amd64-netbsd system example is deprecated. Use x86_64-netbsd instead." x86_64-netbsd;
 
   x86_64-netbsd = {
     config = "x86_64-unknown-netbsd";

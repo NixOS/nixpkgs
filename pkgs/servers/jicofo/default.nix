@@ -2,10 +2,10 @@
 
 let
   pname = "jicofo";
-  version = "1.0-832";
+  version = "1.0-900";
   src = fetchurl {
     url = "https://download.jitsi.org/stable/${pname}_${version}-1_all.deb";
-    sha256 = "ZSzxD4RCsIkNtB4agBRZkzbJOi6ttzlc4Qw5n0t5syc=";
+    sha256 = "tAuWhu1DdasOuLIz9/Ox1n1XcFWm5qnTVr6FpdKpwbE=";
   };
 in
 stdenv.mkDerivation {

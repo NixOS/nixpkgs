@@ -33,7 +33,12 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
-  patchPhase = ''
+  # fixes build against xfsprogs >= 5.18
+  # taken from https://lore.kernel.org/linux-xfs/20220203174540.GT8313@magnolia/
+  # should be included upsteam next release
+  patches = [ ./remove-dmapapi.patch ];
+
+  postPatch = ''
     substituteInPlace Makefile \
       --replace "cp include/install-sh ." "cp -f include/install-sh ."
   '';

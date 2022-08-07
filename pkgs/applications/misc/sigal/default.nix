@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , python3
 , ffmpeg
 }:
@@ -27,6 +28,8 @@ python3.pkgs.buildPythonApplication rec {
     feedgenerator
     zopfli
     cryptography
+
+    setuptools # needs pkg_resources
   ];
 
   checkInputs = [
@@ -34,6 +37,10 @@ python3.pkgs.buildPythonApplication rec {
   ] ++ (with python3.pkgs; [
     pytestCheckHook
   ]);
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "test_nonmedia_files"
+  ];
 
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath [ ffmpeg ]}"

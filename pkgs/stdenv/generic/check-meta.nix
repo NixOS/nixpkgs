@@ -7,14 +7,21 @@ let
   # If we're in hydra, we can dispense with the more verbose error
   # messages and make problems easier to spot.
   inHydra = config.inHydra or false;
+  # Allow the user to opt-into additional warnings, e.g.
+  # import <nixpkgs> { config = { showDerivationWarnings = [ "maintainerless" ]; }; }
+  showWarnings = config.showDerivationWarnings;
+
   getName = attrs: attrs.name or ("${attrs.pname or "«name-missing»"}-${attrs.version or "«version-missing»"}");
 
   # See discussion at https://github.com/NixOS/nixpkgs/pull/25304#issuecomment-298385426
   # for why this defaults to false, but I (@copumpkin) want to default it to true soon.
   shouldCheckMeta = config.checkMeta or false;
 
-  allowUnfree = config.allowUnfree or false
+  allowUnfree = config.allowUnfree
     || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
+
+  allowNonSource = config.allowNonSource or true
+    && builtins.getEnv "NIXPKGS_ALLOW_NONSOURCE" != "0";
 
   allowlist = config.allowlistedLicenses or config.whitelistedLicenses or [];
   blocklist = config.blocklistedLicenses or config.blacklistedLicenses or [];
@@ -34,10 +41,10 @@ let
   hasBlocklistedLicense = assert areLicenseListsValid; attrs:
     hasLicense attrs && lib.lists.any (l: builtins.elem l blocklist) (lib.lists.toList attrs.meta.license);
 
-  allowBroken = config.allowBroken or false
+  allowBroken = config.allowBroken
     || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
 
-  allowUnsupportedSystem = config.allowUnsupportedSystem or false
+  allowUnsupportedSystem = config.allowUnsupportedSystem
     || builtins.getEnv "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM" == "1";
 
   isUnfree = licenses: lib.lists.any (l: !l.free or true) licenses;
@@ -45,6 +52,9 @@ let
   hasUnfreeLicense = attrs:
     hasLicense attrs &&
     isUnfree (lib.lists.toList attrs.meta.license);
+
+  hasNoMaintainers = attrs:
+    attrs ? meta.maintainers && (lib.length attrs.meta.maintainers) == 0;
 
   isMarkedBroken = attrs: attrs.meta.broken or false;
 
@@ -79,34 +89,64 @@ let
     allowInsecurePredicate attrs ||
     builtins.getEnv "NIXPKGS_ALLOW_INSECURE" == "1";
 
-  showLicense = license: toString (map (l: l.shortName or "unknown") (lib.lists.toList license));
+
+  isNonSource = sourceTypes: lib.lists.any (t: !t.isSource) sourceTypes;
+
+  hasNonSourceProvenance = attrs:
+    (attrs ? meta.sourceProvenance) &&
+    isNonSource (lib.lists.toList attrs.meta.sourceProvenance);
+
+  # Allow granular checks to allow only some non-source-built packages
+  # Example:
+  # { pkgs, ... }:
+  # {
+  #   allowNonSource = false;
+  #   allowNonSourcePredicate = with pkgs.lib.lists; pkg: !(any (p: !p.isSource && p != lib.sourceTypes.binaryFirmware) (toList pkg.meta.sourceProvenance));
+  # }
+  allowNonSourcePredicate = config.allowNonSourcePredicate or (x: false);
+
+  # Check whether non-source packages are allowed and if not, whether the
+  # package has non-source provenance and is not explicitly allowed by the
+  # `allowNonSourcePredicate` function.
+  hasDeniedNonSourceProvenance = attrs:
+    hasNonSourceProvenance attrs &&
+    !allowNonSource &&
+    !allowNonSourcePredicate attrs;
+
+  showLicenseOrSourceType = value: toString (map (v: v.shortName or "unknown") (lib.lists.toList value));
+  showLicense = showLicenseOrSourceType;
+  showSourceType = showLicenseOrSourceType;
 
   pos_str = meta: meta.position or "«unknown-file»";
 
   remediation = {
-    unfree = remediate_allowlist "Unfree" remediate_unfree_predicate;
+    unfree = remediate_allowlist "Unfree" (remediate_predicate "allowUnfreePredicate");
+    non-source = remediate_allowlist "NonSource" (remediate_predicate "allowNonSourcePredicate");
     broken = remediate_allowlist "Broken" (x: "");
     unsupported = remediate_allowlist "UnsupportedSystem" (x: "");
     blocklisted = x: "";
     insecure = remediate_insecure;
     broken-outputs = remediateOutputsToInstall;
     unknown-meta = x: "";
+    maintainerless = x: "";
   };
   remediation_env_var = allow_attr: {
     Unfree = "NIXPKGS_ALLOW_UNFREE";
     Broken = "NIXPKGS_ALLOW_BROKEN";
     UnsupportedSystem = "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM";
+    NonSource = "NIXPKGS_ALLOW_NONSOURCE";
   }.${allow_attr};
   remediation_phrase = allow_attr: {
     Unfree = "unfree packages";
     Broken = "broken packages";
     UnsupportedSystem = "packages that are unsupported for this system";
+    NonSource = "packages not built from source";
   }.${allow_attr};
-  remediate_unfree_predicate = attrs:
+  remediate_predicate = predicateConfigAttr: attrs:
     ''
 
       Alternatively you can configure a predicate to allow specific packages:
-        { nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+        { nixpkgs.config.${predicateConfigAttr} = pkg: builtins.elem (lib.getName pkg) [
             "${lib.getName attrs}"
           ];
         }
@@ -199,6 +239,14 @@ let
         else throw;
     in handler msg;
 
+  handleEvalWarning = { meta, attrs }: { reason , errormsg ? "" }:
+    let
+      remediationMsg = (builtins.getAttr reason remediation) attrs;
+      msg = if inHydra then "Warning while evaluating ${getName attrs}: «${reason}»: ${errormsg}"
+        else "Package ${getName attrs} in ${pos_str meta} ${errormsg}, continuing anyway."
+             + (if remediationMsg != "" then "\n${remediationMsg}" else "");
+      isEnabled = lib.findFirst (x: x == reason) null showWarnings;
+    in if isEnabled != null then builtins.trace msg true else true;
 
   metaTypes = with lib.types; rec {
     # These keys are documented
@@ -210,6 +258,7 @@ let
     downloadPage = str;
     changelog = either (listOf str) str;
     license = either (listOf lib.types.attrs) (either lib.types.attrs str);
+    sourceProvenance = either (listOf lib.types.attrs) lib.types.attrs;
     maintainers = listOf (attrsOf str);
     priority = int;
     platforms = listOf str;
@@ -272,33 +321,45 @@ let
   checkValidity = attrs:
     {
       unfree = hasUnfreeLicense attrs;
+      nonSource = hasNonSourceProvenance attrs;
       broken = isMarkedBroken attrs;
       unsupported = hasUnsupportedPlatform attrs;
       insecure = isMarkedInsecure attrs;
     }
     // (if hasDeniedUnfreeLicense attrs && !(hasAllowlistedLicense attrs) then
-      { valid = false; reason = "unfree"; errormsg = "has an unfree license (‘${showLicense attrs.meta.license}’)"; }
+      { valid = "no"; reason = "unfree"; errormsg = "has an unfree license (‘${showLicense attrs.meta.license}’)"; }
     else if hasBlocklistedLicense attrs then
-      { valid = false; reason = "blocklisted"; errormsg = "has a blocklisted license (‘${showLicense attrs.meta.license}’)"; }
+      { valid = "no"; reason = "blocklisted"; errormsg = "has a blocklisted license (‘${showLicense attrs.meta.license}’)"; }
+    else if hasDeniedNonSourceProvenance attrs then
+      { valid = "no"; reason = "non-source"; errormsg = "contains elements not built from source (‘${showSourceType attrs.meta.sourceProvenance}’)"; }
     else if !allowBroken && attrs.meta.broken or false then
-      { valid = false; reason = "broken"; errormsg = "is marked as broken"; }
+      { valid = "no"; reason = "broken"; errormsg = "is marked as broken"; }
     else if !allowUnsupportedSystem && hasUnsupportedPlatform attrs then
-      { valid = false; reason = "unsupported"; errormsg = "is not supported on ‘${hostPlatform.system}’"; }
+      { valid = "no"; reason = "unsupported"; errormsg = "is not supported on ‘${hostPlatform.system}’"; }
     else if !(hasAllowedInsecure attrs) then
-      { valid = false; reason = "insecure"; errormsg = "is marked as insecure"; }
+      { valid = "no"; reason = "insecure"; errormsg = "is marked as insecure"; }
     else if checkOutputsToInstall attrs then
-      { valid = false; reason = "broken-outputs"; errormsg = "has invalid meta.outputsToInstall"; }
+      { valid = "no"; reason = "broken-outputs"; errormsg = "has invalid meta.outputsToInstall"; }
     else let res = checkMeta (attrs.meta or {}); in if res != [] then
-      { valid = false; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${lib.concatMapStrings (x: "\n\t - " + x) res}"; }
-    else { valid = true; });
+      { valid = "no"; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${lib.concatMapStrings (x: "\n\t - " + x) res}"; }
+    # --- warnings ---
+    # Please also update the type in /pkgs/top-level/config.nix alongside this.
+    else if hasNoMaintainers attrs then
+      { valid = "warn"; reason = "maintainerless"; errormsg = "has no maintainers"; }
+    # -----
+    else { valid = "yes"; });
 
   assertValidity = { meta, attrs }: let
       validity = checkValidity attrs;
     in validity // {
-      # Throw an error if trying to evaluate an non-valid derivation
-      handled = if !validity.valid
-        then handleEvalIssue { inherit meta attrs; } { inherit (validity) reason errormsg; }
-        else true;
+      # Throw an error if trying to evaluate a non-valid derivation
+      # or, alternatively, just output a warning message.
+      handled =
+        {
+          no = handleEvalIssue { inherit meta attrs; } { inherit (validity) reason errormsg; };
+          warn = handleEvalWarning { inherit meta attrs; } { inherit (validity) reason errormsg; };
+          yes = true;
+        }.${validity.valid};
   };
 
 in assertValidity

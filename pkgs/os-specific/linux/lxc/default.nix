@@ -94,6 +94,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ ];
   };
 }

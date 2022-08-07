@@ -30,6 +30,13 @@ buildPythonPackage rec {
     pytest-trio
   ];
 
+  disabledTests = [
+    # network access
+    "test_connection_direct_success"
+    "test_connection_socks_success"
+    "test_connection_socks_failed"
+  ];
+
   disabledTestPaths = [
     # Timeout on Hydra
     "tests/test_trio.py"

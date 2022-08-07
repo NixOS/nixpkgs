@@ -19,7 +19,7 @@ in {
         ip = mkOption {
           type = types.str;
           default = "0.0.0.0";
-          description = ''
+          description = lib.mdDoc ''
             IP address that Metabase should listen on.
           '';
         };
@@ -27,7 +27,7 @@ in {
         port = mkOption {
           type = types.port;
           default = 3000;
-          description = ''
+          description = lib.mdDoc ''
             Listen port for Metabase.
           '';
         };
@@ -37,7 +37,7 @@ in {
         enable = mkOption {
           type = types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Whether to enable SSL (https) support.
           '';
         };
@@ -45,7 +45,7 @@ in {
         port = mkOption {
           type = types.port;
           default = 8443;
-          description = ''
+          description = lib.mdDoc ''
             Listen port over SSL (https) for Metabase.
           '';
         };
@@ -54,8 +54,8 @@ in {
           type = types.nullOr types.path;
           default = "${dataDir}/metabase.jks";
           example = "/etc/secrets/keystore.jks";
-          description = ''
-            <link xlink:href="https://www.digitalocean.com/community/tutorials/java-keytool-essentials-working-with-java-keystores">Java KeyStore</link> file containing the certificates.
+          description = lib.mdDoc ''
+            [Java KeyStore](https://www.digitalocean.com/community/tutorials/java-keytool-essentials-working-with-java-keystores) file containing the certificates.
           '';
         };
 
@@ -64,7 +64,7 @@ in {
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Open ports in the firewall for Metabase.
         '';
       };

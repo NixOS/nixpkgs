@@ -131,6 +131,9 @@ let
 
     patches = [ ./fix-stonesense.patch ];
 
+    # gcc 11 fix
+    NIX_CFLAGS_COMPILE = "-fpermissive";
+
     # As of
     # https://github.com/DFHack/dfhack/commit/56e43a0dde023c5a4595a22b29d800153b31e3c4,
     # dfhack gets its goodies from the directory above the Dwarf_Fortress
@@ -152,10 +155,6 @@ let
       # Trick build system into believing we have .git
       mkdir -p .git/modules/library/xml
       touch .git/index .git/modules/library/xml/index
-    '';
-
-    preBuild = ''
-      export LD_LIBRARY_PATH="$PWD/depends/protobuf''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     '';
 
     cmakeFlags = [ "-DDFHACK_BUILD_ARCH=${arch}" "-DDOWNLOAD_RUBY=OFF" ]

@@ -124,7 +124,6 @@ let
       ksystemstats = callPackage ./ksystemstats.nix {};
       kwallet-pam = callPackage ./kwallet-pam.nix {};
       kwayland-integration = callPackage ./kwayland-integration.nix {};
-      kwayland-server = callPackage ./kwayland-server {};
       kwin = callPackage ./kwin {};
       kwrited = callPackage ./kwrited.nix {};
       layer-shell-qt = callPackage ./layer-shell-qt.nix {};

@@ -77,6 +77,7 @@ let
     meta = with lib; {
       description = "Launcher for RuneScape 3, the current main RuneScape";
       homepage = "https://www.runescape.com/";
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       license = licenses.unfree;
       maintainers = with maintainers; [ grburst ];
       platforms = [ "x86_64-linux" ];

@@ -2,13 +2,13 @@
 
 let
   pname = "jadx";
-  version = "1.3.4";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "skylot";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-G2BgGhWk0Prbjni6HPZ/0+bWiC9uI2O13Q1SDCE5mBE=";
+    hash = "sha256-5Cx5rwXUNnVSbLjkpB6qeudRHI4RVzl6T4zo7Dg9geo=";
   };
 
   deps = stdenv.mkDerivation {
@@ -40,7 +40,7 @@ let
     '';
 
     outputHashMode = "recursive";
-    outputHash = "sha256-QZClHuj7oCUYX3I8B3A90m4zK7+FP24C19RIzYyPC1w=";
+    outputHash = "sha256-Q7eGZQJZObLyZlp8JyodA3gEAgfh7ub+BNQh/LEm2Nk=";
   };
 in stdenv.mkDerivation {
   inherit pname version src;
@@ -103,6 +103,10 @@ in stdenv.mkDerivation {
       Command line and GUI tools for produce Java source code from Android Dex
       and Apk files.
     '';
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ delroth ];

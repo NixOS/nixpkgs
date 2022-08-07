@@ -4,14 +4,13 @@ let
       # dependencies
       { stdenv, lib, fetchurl, makeWrapper
       , glibc, zlib, readline, openssl, icu, lz4, systemd, libossp_uuid
-      , pkg-config, libxml2, tzdata
+      , pkg-config, libxml2, tzdata, libkrb5
 
       # This is important to obtain a version of `libpq` that does not depend on systemd.
-      , enableSystemd ? (lib.versionAtLeast version "9.6" && !stdenv.isDarwin)
-      , gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic, libkrb5
+      , enableSystemd ? (lib.versionAtLeast version "9.6" && !stdenv.isDarwin && !stdenv.hostPlatform.isStatic)
+      , gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic
 
-
-      # for postgreql.pkgs
+      # for postgresql.pkgs
       , this, self, newScope, buildEnv
 
       # source specification
@@ -202,9 +201,9 @@ let
 in self: {
 
   postgresql_10 = self.callPackage generic {
-    version = "10.20";
+    version = "10.21";
     psqlSchema = "10.0"; # should be 10, but changing it is invasive
-    sha256 = "sha256-h94W1ZvP5C+mBcMSxZvl4pToo+astlXdetR8u5MKZZ8=";
+    sha256 = "sha256-0yGYhW1Sqab11QZC74ZoesBYvW78pcntV754CElvRdE=";
     this = self.postgresql_10;
     thisAttr = "postgresql_10";
     inherit self;
@@ -212,36 +211,36 @@ in self: {
   };
 
   postgresql_11 = self.callPackage generic {
-    version = "11.15";
+    version = "11.16";
     psqlSchema = "11.1"; # should be 11, but changing it is invasive
-    sha256 = "sha256-yPWOjr1PRWf0+boQMus+meAlHYfL4+VktIVZDjeoeeM=";
+    sha256 = "sha256-LdnhEfCllJ7nyswGXOoPshCSkpuuMQzgW/AbT/xRA6U=";
     this = self.postgresql_11;
     thisAttr = "postgresql_11";
     inherit self;
   };
 
   postgresql_12 = self.callPackage generic {
-    version = "12.10";
+    version = "12.11";
     psqlSchema = "12";
-    sha256 = "sha256-g90ZLmA0lRGSuahtwZzzcXqLghIOLxGgo2cjyCDSslc=";
+    sha256 = "sha256-ECYkil/Svur0PkxyNqyBflbVi2gaM1hWRl37x1s+gwI=";
     this = self.postgresql_12;
     thisAttr = "postgresql_12";
     inherit self;
   };
 
   postgresql_13 = self.callPackage generic {
-    version = "13.6";
+    version = "13.7";
     psqlSchema = "13";
-    sha256 = "sha256-uvx/o9nU2o/nG4TGO6i9/oCSk1wwwKqFwkssCFCPZ/w=";
+    sha256 = "sha256-G5Bb9PPYNhSjk7PFH9NFkQ/SYeT1Ekpo2aH906KkY5k=";
     this = self.postgresql_13;
     thisAttr = "postgresql_13";
     inherit self;
   };
 
   postgresql_14 = self.callPackage generic {
-    version = "14.2";
+    version = "14.4";
     psqlSchema = "14";
-    sha256 = "sha256-LPeLLkaJEvgQHWldtTQM8xPC6faKYS+3FCdSToyal3o=";
+    sha256 = "sha256-wjtiN8UjHHkVEb3HkJhhfWhS6eO982Dv2LXRWho9j2o=";
     this = self.postgresql_14;
     thisAttr = "postgresql_14";
     inherit self;

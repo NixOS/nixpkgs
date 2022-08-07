@@ -40,6 +40,6 @@ buildGoModule rec {
     downloadPage = "https://github.com/loft-sh/vcluster";
     homepage = "https://www.vcluster.com/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ peterromfeldhk ];
+    maintainers = with maintainers; [ peterromfeldhk berryp ];
   };
 }

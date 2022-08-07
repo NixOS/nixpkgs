@@ -48,6 +48,7 @@
 /pkgs/build-support/writers @lassulus @Profpatsch
 
 # Nixpkgs documentation
+/doc @fricklerhandwerk
 /maintainers/scripts/db-to-md.sh @jtojnar @ryantm
 /maintainers/scripts/doc @jtojnar @ryantm
 /doc/build-aux/pandoc-filters @jtojnar
@@ -98,13 +99,13 @@
 /pkgs/development/interpreters/python/hooks                 @FRidh @jonringer
 
 # Haskell
-/doc/languages-frameworks/haskell.section.md  @cdepillabout @sternenseemann @maralorn @expipiplus1
-/maintainers/scripts/haskell                  @cdepillabout @sternenseemann @maralorn @expipiplus1
-/pkgs/development/compilers/ghc               @cdepillabout @sternenseemann @maralorn @expipiplus1
-/pkgs/development/haskell-modules             @cdepillabout @sternenseemann @maralorn @expipiplus1
-/pkgs/test/haskell                            @cdepillabout @sternenseemann @maralorn @expipiplus1
-/pkgs/top-level/release-haskell.nix           @cdepillabout @sternenseemann @maralorn @expipiplus1
-/pkgs/top-level/haskell-packages.nix          @cdepillabout @sternenseemann @maralorn @expipiplus1
+/doc/languages-frameworks/haskell.section.md  @cdepillabout @sternenseemann @maralorn
+/maintainers/scripts/haskell                  @cdepillabout @sternenseemann @maralorn
+/pkgs/development/compilers/ghc               @cdepillabout @sternenseemann @maralorn
+/pkgs/development/haskell-modules             @cdepillabout @sternenseemann @maralorn
+/pkgs/test/haskell                            @cdepillabout @sternenseemann @maralorn
+/pkgs/top-level/release-haskell.nix           @cdepillabout @sternenseemann @maralorn
+/pkgs/top-level/haskell-packages.nix          @cdepillabout @sternenseemann @maralorn
 
 # Perl
 /pkgs/development/interpreters/perl @stigtsp @zakame
@@ -192,8 +193,8 @@
 /nixos/tests/knot.nix @mweinelt
 
 # Dhall
-/pkgs/development/dhall-modules      @Gabriel439 @Profpatsch @ehmry
-/pkgs/development/interpreters/dhall @Gabriel439 @Profpatsch @ehmry
+/pkgs/development/dhall-modules      @Gabriella439 @Profpatsch @ehmry
+/pkgs/development/interpreters/dhall @Gabriella439 @Profpatsch @ehmry
 
 # Idris
 /pkgs/development/idris-modules @Infinisil
@@ -251,13 +252,12 @@
 
 # Go
 /doc/languages-frameworks/go.section.md @kalbasit @Mic92 @zowoq
+/pkgs/build-support/go @kalbasit @Mic92 @zowoq
 /pkgs/development/compilers/go @kalbasit @Mic92 @zowoq
-/pkgs/development/go-modules   @kalbasit @Mic92 @zowoq
-/pkgs/development/go-packages  @kalbasit @Mic92 @zowoq
 
 # GNOME
-/pkgs/desktops/gnome                              @jtojnar @hedning
-/pkgs/desktops/gnome/extensions       @piegamesde @jtojnar @hedning
+/pkgs/desktops/gnome                              @jtojnar
+/pkgs/desktops/gnome/extensions       @piegamesde @jtojnar
 
 # Cinnamon
 /pkgs/desktops/cinnamon @mkg20001

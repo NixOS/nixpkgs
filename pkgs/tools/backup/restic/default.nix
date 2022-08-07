@@ -3,13 +3,13 @@
 
 buildGoModule rec {
   pname = "restic";
-  version = "0.13.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "restic";
     repo = "restic";
     rev = "v${version}";
-    sha256 = "sha256-pbCN262gyS5BSUTN9QU+x2Nnrc8mmCSQH6Inng4OS8c=";
+    sha256 = "sha256-jQgUPZumcIDkZ4s7R8o5F/p/b4ilPJGMPFKvUU30WaY=";
   };
 
   patches = [
@@ -42,9 +42,10 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://restic.net";
+    changelog = "https://github.com/restic/restic/blob/${src.rev}/CHANGELOG.md";
     description = "A backup program that is fast, efficient and secure";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.bsd2;
-    maintainers = [ maintainers.mbrgm ];
+    maintainers = [ maintainers.mbrgm maintainers.dotlambda ];
   };
 }

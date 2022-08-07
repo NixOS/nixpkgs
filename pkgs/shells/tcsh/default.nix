@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-YL4sUEvY8fpuQksZVkldfnztUqKslNtf0n9La/yPdPA=";
   };
 
+  strictDeps = true;
   buildInputs = [
     ncurses
   ];

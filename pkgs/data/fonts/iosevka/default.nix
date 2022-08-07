@@ -80,15 +80,22 @@ stdenv.mkDerivation rec {
     else privateBuildPlan;
 
   inherit extraParameters;
-  passAsFile = [ "buildPlan" "extraParameters" ];
+  passAsFile = [
+    "extraParameters"
+  ] ++ lib.optional (! (builtins.isString privateBuildPlan && lib.hasPrefix builtins.storeDir privateBuildPlan)) [
+    "buildPlan"
+  ];
 
   configurePhase = ''
     runHook preConfigure
     ${lib.optionalString (builtins.isAttrs privateBuildPlan) ''
       remarshal -i "$buildPlanPath" -o private-build-plans.toml -if json -of toml
     ''}
-    ${lib.optionalString (builtins.isString privateBuildPlan) ''
+    ${lib.optionalString (builtins.isString privateBuildPlan && (!lib.hasPrefix builtins.storeDir privateBuildPlan)) ''
       cp "$buildPlanPath" private-build-plans.toml
+    ''}
+    ${lib.optionalString (builtins.isString privateBuildPlan && (lib.hasPrefix builtins.storeDir privateBuildPlan)) ''
+      cp "$buildPlan" private-build-plans.toml
     ''}
     ${lib.optionalString (extraParameters != null) ''
       echo -e "\n" >> params/parameters.toml
@@ -99,6 +106,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
+    export HOME=$TMPDIR
     runHook preBuild
     npm run build --no-update-notifier -- --jCmd=$NIX_BUILD_CORES ttf::$pname >/dev/null
     runHook postBuild

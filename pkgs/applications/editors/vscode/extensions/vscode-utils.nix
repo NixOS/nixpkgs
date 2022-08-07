@@ -43,7 +43,7 @@ let
   });
 
   fetchVsixFromVscodeMarketplace = mktplcExtRef:
-    fetchurl((import ./mktplcExtRefToFetchArgs.nix mktplcExtRef));
+    fetchurl (import ./mktplcExtRefToFetchArgs.nix mktplcExtRef);
 
   buildVscodeMarketplaceExtension = a@{
     name ? "",
@@ -65,11 +65,12 @@ let
     "publisher"
     "version"
     "sha256"
+    "arch"
   ];
 
   mktplcExtRefToExtDrv = ext:
-    buildVscodeMarketplaceExtension ((removeAttrs ext mktplcRefAttrList) // {
-      mktplcRef = ext;
+    buildVscodeMarketplaceExtension (removeAttrs ext mktplcRefAttrList // {
+      mktplcRef = builtins.intersectAttrs (lib.genAttrs mktplcRefAttrList (_: null)) ext;
     });
 
   extensionFromVscodeMarketplace = mktplcExtRefToExtDrv;

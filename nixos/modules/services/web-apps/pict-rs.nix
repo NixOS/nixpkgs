@@ -14,21 +14,21 @@ in
     dataDir = mkOption {
       type = types.path;
       default = "/var/lib/pict-rs";
-      description = ''
+      description = lib.mdDoc ''
         The directory where to store the uploaded images.
       '';
     };
     address = mkOption {
       type = types.str;
       default = "127.0.0.1";
-      description = ''
+      description = lib.mdDoc ''
         The IPv4 address to deploy the service to.
       '';
     };
     port = mkOption {
       type = types.port;
       default = 8080;
-      description = ''
+      description = lib.mdDoc ''
         The port which to bind the service to.
       '';
     };

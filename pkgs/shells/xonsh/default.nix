@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "xonsh";
-  version = "0.11.0";
+  version = "0.13.0";
 
   # fetch from github because the pypi package ships incomplete tests
   src = fetchFromGitHub {
     owner = "xonsh";
     repo = "xonsh";
     rev = version;
-    sha256 = "sha256-jfxQMEVABTOhx679V0iGVX9RisuY42lSdztYXMLwdcw=";
+    sha256 = "sha256-8X/+mQrwJ0yaUHRKdoY3G0P8kq22hYfRK+7WRl/zamc=";
   };
 
   LC_ALL = "en_US.UTF-8";
@@ -40,7 +40,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postInstall = ''
-    wrapProgram $out/bin/xon.sh \
+    wrapProgram $out/bin/xonsh \
       $makeWrapperArgs
   '';
 
@@ -49,6 +49,8 @@ python3Packages.buildPythonApplication rec {
     "test_colorize_file"
     "test_loading_correctly"
     "test_no_command_path_completion"
+    "test_bsd_man_page_completions"
+    "test_xonsh_activator"
     # fails on non-interactive shells
     "test_capture_always"
     "test_casting"
@@ -56,9 +58,14 @@ python3Packages.buildPythonApplication rec {
     "test_dirty_working_directory"
     "test_man_completion"
     "test_vc_get_branch"
+    "test_bash_and_is_alias_is_only_functional_alias"
   ];
 
   disabledTestPaths = [
+    # fails on sandbox
+    "tests/completers/test_command_completers.py"
+    "tests/test_ptk_highlight.py"
+    "tests/test_ptk_shell.py"
     # fails on non-interactive shells
     "tests/prompt/test_gitstatus.py"
     "tests/completers/test_bash_completer.py"

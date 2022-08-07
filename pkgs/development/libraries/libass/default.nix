@@ -8,10 +8,6 @@
 
 assert fontconfigSupport -> fontconfig != null;
 
-let
-  mkFlag = optSet: flag: if optSet then "--enable-${flag}" else "--disable-${flag}";
-in
-
 with lib;
 stdenv.mkDerivation rec {
   pname = "libass";
@@ -23,9 +19,9 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = [
-    (mkFlag fontconfigSupport "fontconfig")
-    (mkFlag rasterizerSupport "rasterizer")
-    (mkFlag largeTilesSupport "large-tiles")
+    (enableFeature fontconfigSupport "fontconfig")
+    (enableFeature rasterizerSupport "rasterizer")
+    (enableFeature largeTilesSupport "large-tiles")
   ];
 
   nativeBuildInputs = [ pkg-config yasm ];

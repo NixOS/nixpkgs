@@ -1,14 +1,14 @@
 { stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, pkg-config, ApplicationServices, CoreServices }:
 
 stdenv.mkDerivation rec {
-  version = "1.44.1";
+  version = "1.44.2";
   pname = "libuv";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-12uveSEavRxQW4xVrB4Rkkj+eHZ71Qy8dRG+95ldz50=";
+    sha256 = "sha256-K6v+00basjI32ON27ZjC5spQi/zWCcslDwQwyosq2iY=";
   };
 
   postPatch = let
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     homepage    = "https://libuv.org/";
     changelog   = "https://github.com/libuv/libuv/blob/v${version}/ChangeLog";
     maintainers = with maintainers; [ cstrahan ];
-    platforms   = with platforms; linux ++ darwin;
+    platforms   = platforms.all;
     license     = with licenses; [ mit isc bsd2 bsd3 cc-by-40 ];
   };
 

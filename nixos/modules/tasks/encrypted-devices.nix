@@ -16,33 +16,33 @@ let
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = "The block device is backed by an encrypted one, adds this device as a initrd luks entry.";
+        description = lib.mdDoc "The block device is backed by an encrypted one, adds this device as a initrd luks entry.";
       };
 
       blkDev = mkOption {
         default = null;
         example = "/dev/sda1";
         type = types.nullOr types.str;
-        description = "Location of the backing encrypted device.";
+        description = lib.mdDoc "Location of the backing encrypted device.";
       };
 
       label = mkOption {
         default = null;
         example = "rootfs";
         type = types.nullOr types.str;
-        description = "Label of the unlocked encrypted device. Set <literal>fileSystems.&lt;name?&gt;.device</literal> to <literal>/dev/mapper/&lt;label&gt;</literal> to mount the unlocked device.";
+        description = lib.mdDoc "Label of the unlocked encrypted device. Set `fileSystems.<name?>.device` to `/dev/mapper/<label>` to mount the unlocked device.";
       };
 
       keyFile = mkOption {
         default = null;
         example = "/mnt-root/root/.swapkey";
         type = types.nullOr types.str;
-        description = ''
+        description = lib.mdDoc ''
           Path to a keyfile used to unlock the backing encrypted
           device. At the time this keyfile is accessed, the
-          <literal>neededForBoot</literal> filesystems (see
-          <literal>fileSystems.&lt;name?&gt;.neededForBoot</literal>)
-          will have been mounted under <literal>/mnt-root</literal>,
+          `neededForBoot` filesystems (see
+          `fileSystems.<name?>.neededForBoot`)
+          will have been mounted under `/mnt-root`,
           so the keyfile path should usually start with "/mnt-root/".
         '';
       };

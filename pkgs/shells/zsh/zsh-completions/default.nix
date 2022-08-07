@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0vs14n29wvkai84fvz3dz2kqznwsq2i5fzbwpv8nsfk1126ql13i";
   };
 
+  strictDeps = true;
   installPhase= ''
     install -D --target-directory=$out/share/zsh/site-functions src/*
   '';

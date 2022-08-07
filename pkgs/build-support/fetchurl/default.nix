@@ -14,6 +14,7 @@ let
   mirrorsFile =
     buildPackages.stdenvNoCC.mkDerivation ({
       name = "mirrors-list";
+      strictDeps = true;
       builder = ./write-mirror-list.sh;
       preferLocalBuild = true;
     } // mirrors);
@@ -45,7 +46,12 @@ in
   urls ? []
 
 , # Additional curl options needed for the download to succeed.
+  # Warning: Each space (no matter the escaping) will start a new argument.
+  # If you wish to pass arguments with spaces, use `curlOptsList`
   curlOpts ? ""
+
+, # Additional curl options needed for the download to succeed.
+  curlOptsList ? []
 
 , # Name of the file.  If empty, use the basename of `url' (or of the
   # first element of `urls').
@@ -146,7 +152,14 @@ stdenvNoCC.mkDerivation {
 
   outputHashMode = if (recursiveHash || executable) then "recursive" else "flat";
 
-  inherit curlOpts showURLs mirrorsFile postFetch downloadToTemp executable;
+  curlOpts = lib.warnIf (lib.isList curlOpts) ''
+    fetchurl for ${toString (builtins.head urls_)}: curlOpts is a list (${lib.generators.toPretty { multiline = false; } curlOpts}), which is not supported anymore.
+    - If you wish to get the same effect as before, for elements with spaces (even if escaped) to expand to multiple curl arguments, use a string argument instead:
+      curlOpts = ${lib.strings.escapeNixString (toString curlOpts)};
+    - If you wish for each list element to be passed as a separate curl argument, allowing arguments to contain spaces, use curlOptsList instead:
+      curlOptsList = [ ${lib.concatMapStringsSep " " lib.strings.escapeNixString curlOpts} ];'' curlOpts;
+  curlOptsList = lib.escapeShellArgs curlOptsList;
+  inherit showURLs mirrorsFile postFetch downloadToTemp executable;
 
   impureEnvVars = impureEnvVars ++ netrcImpureEnvVars;
 

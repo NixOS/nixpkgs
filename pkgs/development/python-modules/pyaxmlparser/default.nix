@@ -1,14 +1,14 @@
 { buildPythonPackage, lib, lxml, click, fetchFromGitHub, pytestCheckHook, asn1crypto }:
 
 buildPythonPackage rec {
-  version = "0.3.26";
+  version = "0.3.27";
   pname = "pyaxmlparser";
 
   src = fetchFromGitHub {
     owner = "appknox";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-wD0rN00q4ipKnKubptrgrjNwkBpqsA+ix2xedOOr8Yg=";
+    sha256 = "sha256-NtAsO/I1jDEv676yhAgLguQnB/kHdAqPoLt2QFWbvmw=";
   };
 
   propagatedBuildInputs = [ asn1crypto click lxml ];

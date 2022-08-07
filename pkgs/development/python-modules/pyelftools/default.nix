@@ -1,19 +1,23 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , python
-, stdenv
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyelftools";
-  version = "0.27";
+  version = "0.28";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "eliben";
     repo = pname;
     rev = "v${version}";
-    sha256 = "09igdym2qj2fvfcazbz25qybmgz7ccrn25xn3havfkdkka0z0i3p";
+    hash = "sha256-+T5C0ah2oj5E8fWaQbuzYRVgD5bSiUbaArrlxNLojvw=";
   };
 
   doCheck = stdenv.hostPlatform.system == "x86_64-linux";
@@ -23,7 +27,9 @@ buildPythonPackage rec {
     ${python.interpreter} test/all_tests.py
   '';
 
-  pythonImportsCheck = [ "elftools" ];
+  pythonImportsCheck = [
+    "elftools"
+  ];
 
   meta = with lib; {
     description = "Python library for analyzing ELF files and DWARF debugging information";

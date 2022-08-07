@@ -15,16 +15,16 @@
 
 buildGoModule rec {
   pname = "wails";
-  version = "2.0.0-beta.34";
+  version = "2.0.0-beta.42";
 
   src = fetchFromGitHub {
     owner = "wailsapp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-dsDruZSmr8qSNpX8L27tLpNxvdSkc2mfNQLRxN9AnCg=";
+    sha256 = "sha256-ZfzaDUUM3W2ZvmLJufeVZ3eK/grvSxbKbsReV7BmcGA=";
   } + "/v2";
 
-  vendorSha256 = "sha256-OaSPpCb2VxMGlkUIg3fyEJhjz256amEfXBX+5WMY3a0=";
+  vendorSha256 = "sha256-qmj7pZV9VaxWcC7EgbKZOjlDj6/66Qf5d222aj4TViw=";
 
   proxyVendor = true;
 
@@ -65,8 +65,6 @@ buildGoModule rec {
       --set PKG_CONFIG_PATH "$PKG_CONFIG_PATH" \
       --set CGO_LDFLAGS "-L${lib.makeLibraryPath [ zlib ]}"
   '';
-
-  doCheck = true;
 
   meta = with lib; {
     description = "Build applications using Go + HTML + CSS + JS";

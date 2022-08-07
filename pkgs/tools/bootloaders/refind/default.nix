@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gnu-efi }:
+{ lib, stdenv, fetchurl, fetchpatch, gnu-efi, nixosTests }:
 
 let
   archids = {
@@ -14,16 +14,23 @@ in
 
 stdenv.mkDerivation rec {
   pname = "refind";
-  version = "0.13.2";
+  version = "0.13.3.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/refind/${version}/${pname}-src-${version}.tar.gz";
-    sha256 = "0w6990ggns4xsdmgj3aq527q15frrxfmxwa3m6igabd4ai498n6x";
+    sha256 = "1lfgqqiyl6isy25wrxzyi3s334ii057g88714igyjjmxh47kygks";
   };
 
   patches = [
     # Removes hardcoded toolchain for aarch64, allowing successful aarch64 builds.
     ./0001-toolchain.patch
+
+    # Fixes issue with null dereference in ReadHiddenTags
+    # Upstream: https://sourceforge.net/p/refind/code/merge-requests/45/
+    (fetchpatch {
+      url = "https://github.com/samueldr/rEFInd/commit/29cd79dedabf84d5ddfe686f5692278cae6cc4d6.patch";
+      sha256 = "sha256-/jAmOwvMmFWazyukN+ru1tQDiIBtgGk/e/pczsl1Xc8=";
+    })
   ];
 
   buildInputs = [ gnu-efi ];
@@ -106,6 +113,10 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    uefiCdrom = nixosTests.boot.uefiCdrom;
+  };
 
   meta = with lib; {
     description = "A graphical {,U}EFI boot manager";

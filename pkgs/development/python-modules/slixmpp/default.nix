@@ -39,6 +39,8 @@ buildPythonPackage rec {
       src = ./hardcode-gnupg-path.patch;
       inherit gnupg;
     })
+    # Upstream MR: https://lab.louiz.org/poezio/slixmpp/-/merge_requests/198
+    ./0001-xep_0030-allow-extra-args-in-get_info_from_domain.patch
   ];
 
   disabledTestPaths = [

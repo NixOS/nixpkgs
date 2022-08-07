@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "atomicwrites";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ae70396ad1a434f9c7046fd2dd196fc04b12f9e91ffb859164193be8b6168a7a";
+    sha256 = "sha256-gbLJBxpJNnp/dwFw5e7Iy2ZWfPu8jHPSDOXKSo1xzxE=";
   };
 
   # Tests depend on pytest but atomicwrites is a dependency of pytest

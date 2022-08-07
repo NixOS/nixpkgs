@@ -104,6 +104,8 @@ in stdenv.mkDerivation (rec {
     rm test/DebugInfo/X86/convert-inlined.ll
     rm test/DebugInfo/X86/convert-linked.ll
     rm test/tools/dsymutil/X86/op-convert.test
+    rm test/tools/gold/X86/split-dwarf.ll
+    rm test/tools/llvm-objcopy/MachO/universal-object.test
   '' + optionalString (stdenv.hostPlatform.system == "armv6l-linux") ''
     # Seems to require certain floating point hardware (NEON?)
     rm test/ExecutionEngine/frem.ll
@@ -241,12 +243,6 @@ in stdenv.mkDerivation (rec {
   + optionalString (stdenv.isDarwin && enableSharedLibraries) ''
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${shortVersion}.dylib
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${release_version}.dylib
-  ''
-  + optionalString enableSharedLibraries ''
-    mkdir -p $dev/lib
-    mv $lib/lib/*.a $dev/lib
-    sed -i -E "s|$lib/lib/(.*)\.a|$dev/lib/\1\.a|" \
-      "$dev/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake"
   ''
   + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
     cp NATIVE/bin/llvm-config $dev/bin/llvm-config-native

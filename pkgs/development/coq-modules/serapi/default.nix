@@ -27,6 +27,8 @@ in
 
   useDune2 = true;
 
+  patches = [ ./janestreet-0.15.patch ];
+
   propagatedBuildInputs =
     with coq.ocamlPackages; [
       cmdliner
@@ -76,5 +78,7 @@ in
     then [
       ./8.12.0+0.12.1.patch
     ]
-    else [];
+    else [
+      ./janestreet-0.15.patch
+    ];
 })

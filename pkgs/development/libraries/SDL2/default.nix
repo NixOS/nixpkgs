@@ -22,13 +22,14 @@
 , waylandSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
 , wayland
 , wayland-protocols
+, wayland-scanner
 , drmSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
 , libdrm
 , mesa
 , libxkbcommon
 , dbusSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
 , dbus
-, udevSupport ? false
+, udevSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
 , udev
 , ibusSupport ? false
 , ibus
@@ -58,11 +59,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "SDL2";
-  version = "2.0.20";
+  version = "2.0.22";
 
   src = fetchurl {
     url = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
-    sha256 = "sha256-xWq6HXtbDn6Znkp2mMcLY6M5T/lwS19uHFfgwW8E3QY=";
+    sha256 = "sha256-/ny/MSeILj/HJZp1oMtYViAnLFF0XThSq53YeWBpfy4=";
   };
   dontDisableStatic = withStatic;
   outputs = [ "out" "dev" ];
@@ -76,9 +77,18 @@ stdenv.mkDerivation rec {
     ./find-headers.patch
   ];
 
+  postPatch = ''
+    # Fix running wayland-scanner for the build platform when cross-compiling.
+    # See comment here: https://github.com/libsdl-org/SDL/issues/4860#issuecomment-1119003545
+    substituteInPlace configure \
+      --replace '$(WAYLAND_SCANNER)' 'wayland-scanner'
+  '';
+
+  strictDeps = true;
+
   depsBuildBuild = [ pkg-config ];
 
-  nativeBuildInputs = [ pkg-config ] ++ optionals waylandSupport [ wayland ];
+  nativeBuildInputs = [ pkg-config ] ++ optionals waylandSupport [ wayland wayland-scanner ];
 
   propagatedBuildInputs = dlopenPropagatedBuildInputs;
 

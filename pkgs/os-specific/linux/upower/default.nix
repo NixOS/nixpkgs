@@ -1,12 +1,16 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch
 , pkg-config
 , rsync
 , libxslt
 , meson
 , ninja
 , python3
+, dbus
+, umockdev
+, libeatmydata
 , gtk-doc
 , docbook-xsl-nons
 , udev
@@ -23,7 +27,7 @@
 
 stdenv.mkDerivation rec {
   pname = "upower";
-  version = "0.99.17";
+  version = "1.90.0";
 
   outputs = [ "out" "dev" ]
     ++ lib.optionals withDocs [ "devdoc" ];
@@ -33,7 +37,7 @@ stdenv.mkDerivation rec {
     owner = "upower";
     repo = "upower";
     rev = "v${version}";
-    sha256 = "xvvqzGxgkuGcvnO12jnLURNJUoSlnMw2g/mnII+i6Bs=";
+    hash = "sha256-+C/4dDg6WTLpBgkpNyxjthSdqYdaTLC8vG6jG1LNJ7w=";
   };
 
   strictDeps = true;
@@ -60,8 +64,20 @@ stdenv.mkDerivation rec {
     libusb1
     udev
     systemd
+    # Duplicate from checkInputs until https://github.com/NixOS/nixpkgs/issues/161570 is solved
+    umockdev
   ] ++ lib.optionals useIMobileDevice [
     libimobiledevice
+  ];
+
+  checkInputs = [
+    python3.pkgs.dbus-python
+    python3.pkgs.python-dbusmock
+    python3.pkgs.pygobject3
+    dbus
+    umockdev
+    libeatmydata
+    python3.pkgs.packaging
   ];
 
   propagatedBuildInputs = [
@@ -74,14 +90,35 @@ stdenv.mkDerivation rec {
     "-Dos_backend=linux"
     "-Dsystemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
     "-Dudevrulesdir=${placeholder "out"}/lib/udev/rules.d"
+    "-Dudevhwdbdir=${placeholder "out"}/lib/udev/hwdb.d"
     "-Dintrospection=${if (stdenv.buildPlatform == stdenv.hostPlatform) then "auto" else "disabled"}"
     "-Dgtk-doc=${lib.boolToString withDocs}"
   ];
 
-  doCheck = false; # fails with "env: './linux/integration-test': No such file or directory"
+  doCheck = true;
 
   postPatch = ''
+    patchShebangs src/linux/integration-test.py
     patchShebangs src/linux/unittest_inspector.py
+  '';
+
+  preCheck = ''
+    # Our gobject-introspection patches make the shared library paths absolute
+    # in the GIR files. When running tests, the library is not yet installed,
+    # though, so we need to replace the absolute path with a local one during build.
+    # We are using a symlink that will be overwitten during installation.
+    mkdir -p "$out/lib"
+    ln -s "$PWD/libupower-glib/libupower-glib.so" "$out/lib/libupower-glib.so.3"
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+
+    # Slow fsync calls can make self-test fail:
+    # https://gitlab.freedesktop.org/upower/upower/-/issues/195
+    eatmydata meson test --print-errorlogs
+
+    runHook postCheck
   '';
 
   postInstall = ''

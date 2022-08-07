@@ -60,7 +60,7 @@ commonOptions = packageSettings: rec { # attributes common to both builds
 
   cmakeFlags = [
     "-DBUILD_CONFIG=mysql_release"
-    "-DMANUFACTURER=NixOS.org"
+    "-DMANUFACTURER=nixos.org"
     "-DDEFAULT_CHARSET=utf8mb4"
     "-DDEFAULT_COLLATION=utf8mb4_unicode_ci"
     "-DSECURITY_HARDENED=ON"
@@ -238,27 +238,27 @@ in stdenv.mkDerivation (common // {
 in {
   mariadb_104 = mariadbPackage {
     # Supported until 2024-06-18
-    version = "10.4.24";
-    sha256 = "0ipqilri8isn0mfvwg8imwf36zm3jsw0wf2yx905c2bznd8mb5zy";
+    version = "10.4.25";
+    sha256 = "1y3ym8pb0pyra3dwy8sbzc4656c4y7g1savgyrsvf1mw2573r5pz";
   };
   mariadb_105 = mariadbPackage {
     # Supported until 2025-06-24
-    version = "10.5.15";
-    sha256 = "0nfvyxb157qsbl0d1i5gfzr2hb1nm0iv58f7qcbk5kkhz0vyv049";
+    version = "10.5.16";
+    sha256 = "19nj7ilk1aqs9zvvzhx4619pgfqjp7ac90ffr3fdaw4viljqfgn1";
   };
   mariadb_106 = mariadbPackage {
     # Supported until 2026-07
-    version = "10.6.7";
-    sha256 = "1idjnkjfkjvyr6r899xbiwq9wwbs84cm85mbc725yxjshqghzvkm";
+    version = "10.6.8";
+    sha256 = "0f6lkvv0dbq64y7zpks7nvhy1n08gad0i0dp0s2zpgfcb62liaap";
   };
   mariadb_107 = mariadbPackage {
     # Supported until 2023-02
-    version = "10.7.3";
-    sha256 = "1m2wa67vvdm61ap8spl18b9vqkmsnq4rfd0248l17jf9zwcnja6s";
+    version = "10.7.4";
+    sha256 = "0ws17azsw3f26pkphjkyxmmi9qbv9gwidvz0ll6g482m6afrrpbk";
   };
   mariadb_108 = mariadbPackage {
     # Supported until 2023-05
-    version = "10.8.2";
-    sha256 = "0v4mms3mihylnqlc0ifvwzykah6lkdd39lmxbv5vnhbsh7wggq0l";
+    version = "10.8.3";
+    sha256 = "14h80lfb9b3rv3fd8nkljbqhx6dmwjnqkz6c3ynixb3na72sszl8";
   };
 }

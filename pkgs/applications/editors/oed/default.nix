@@ -24,9 +24,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/ibara/oed";
     description = "Portable ed editor from OpenBSD";
+    homepage = "https://github.com/ibara/oed";
     license = with licenses; [ bsd2 ];
+    mainProgram = "ed";
     platforms = platforms.unix;
   };
 }

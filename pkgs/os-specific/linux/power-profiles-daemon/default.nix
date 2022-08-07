@@ -8,6 +8,7 @@
 , libgudev
 , glib
 , polkit
+, dbus
 , gobject-introspection
 , gettext
 , gtk-doc
@@ -29,33 +30,20 @@ let
     dbus-python
     python-dbusmock
   ];
-  testTypelibPath = lib.makeSearchPathOutput "lib" "lib/girepository-1.0" [ umockdev ];
 in
 stdenv.mkDerivation rec {
   pname = "power-profiles-daemon";
-  version = "0.10.1";
+  version = "0.12";
 
-  outputs = [ "out" "devdoc" "installedTests" ];
+  outputs = [ "out" "devdoc" ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "hadess";
     repo = "power-profiles-daemon";
     rev = version;
-    sha256 = "sha256-sQWiCHc0kEELdmPq9Qdk7OKDUgbM5R44639feC7gjJc=";
+    sha256 = "sha256-2eMFPGVLwTBIlaB1zM3BzHrhydgBEm+kvx+VIZdUDPM=";
   };
-
-  patches = [
-    # Enable installed tests.
-    # https://gitlab.freedesktop.org/hadess/power-profiles-daemon/-/merge_requests/92
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/hadess/power-profiles-daemon/-/commit/3c64d9e1732eb6425e33013c452f1c4aa7a26f7e.patch";
-      sha256 = "din5VuZZwARNDInHtl44yJK8pLmlxr5eoD4iMT4a8HA=";
-    })
-
-    # Install installed tests to separate output.
-    ./installed-tests-path.patch
-  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -70,9 +58,6 @@ stdenv.mkDerivation rec {
     gobject-introspection
     wrapGAppsNoGuiHook
     python3.pkgs.wrapPython
-
-    # For finding tests.
-    (python3.withPackages testPythonPkgs)
   ];
 
   buildInputs = [
@@ -82,6 +67,8 @@ stdenv.mkDerivation rec {
     glib
     polkit
     python3 # for cli tool
+    # Duplicate from checkInputs until https://github.com/NixOS/nixpkgs/issues/161570 is solved
+    umockdev
   ];
 
   strictDeps = true;
@@ -91,11 +78,19 @@ stdenv.mkDerivation rec {
     python3.pkgs.pygobject3
   ];
 
+  checkInputs = [
+    umockdev
+    dbus
+    (python3.withPackages testPythonPkgs)
+  ];
+
   mesonFlags = [
-    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
     "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "-Dgtk_doc=true"
+    "-Dtests=true"
   ];
+
+  doCheck = true;
 
   PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
 
@@ -103,19 +98,9 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   postPatch = ''
-    patchShebangs tests/unittest_inspector.py
-  '';
-
-  preConfigure = ''
-    # For finding tests.
-    GI_TYPELIB_PATH_original=$GI_TYPELIB_PATH
-    addToSearchPath GI_TYPELIB_PATH "${testTypelibPath}"
-  '';
-
-  postConfigure = ''
-    # Restore the original value to prevent the program from depending on umockdev.
-    export GI_TYPELIB_PATH=$GI_TYPELIB_PATH_original
-    unset GI_TYPELIB_PATH_original
+    patchShebangs --build \
+      tests/integration-test.py \
+      tests/unittest_inspector.py
   '';
 
   preInstall = ''
@@ -128,33 +113,22 @@ stdenv.mkDerivation rec {
     export PKEXEC_UID=-1
   '';
 
+  postCheck = ''
+    # Do not contaminate the wrapper with test dependencies.
+    unset GI_TYPELIB_PATH
+    unset XDG_DATA_DIRS
+  '';
+
   postFixup = ''
     # Avoid double wrapping
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
     # Make Python libraries available
     wrapPythonProgramsIn "$out/bin" "$pythonPath"
-
-    # Make Python libraries available for installed tests
-    makeWrapperArgs+=(
-      --prefix GI_TYPELIB_PATH : "${testTypelibPath}"
-      --prefix PATH : "${lib.makeBinPath [ umockdev ]}"
-      # Vala does not use absolute paths in typelibs
-      # https://github.com/NixOS/nixpkgs/issues/47226
-      # Also umockdev binaries use relative paths for LD_PRELOAD.
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ umockdev ]}"
-      # dbusmock calls its templates using exec so our regular patching of Python scripts
-      # to add package directories to site will not carry over.
-      # https://github.com/martinpitt/python-dbusmock/blob/2254e69279a02fb3027b500ed7288b77c7a80f2a/dbusmock/mockobject.py#L51
-      # https://github.com/martinpitt/python-dbusmock/blob/2254e69279a02fb3027b500ed7288b77c7a80f2a/dbusmock/__main__.py#L60-L62
-      --prefix PYTHONPATH : "${lib.makeSearchPath python3.sitePackages (testPythonPkgs python3.pkgs)}"
-    )
-    wrapPythonProgramsIn "$installedTests/libexec/installed-tests" "$pythonPath ${lib.concatStringsSep " " (testPythonPkgs python3.pkgs)}"
   '';
 
   passthru = {
     tests = {
       nixos = nixosTests.power-profiles-daemon;
-      installed-tests = nixosTests.installed-tests.power-profiles-daemon;
     };
   };
 

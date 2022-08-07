@@ -1,5 +1,5 @@
 { lib
-, Babel
+, babel
 , buildPythonPackage
 , click
 , exifread
@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "lektor";
-  version = "3.3.3";
+  version = "3.3.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -36,11 +36,11 @@ buildPythonPackage rec {
     owner = "lektor";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-3jPN4VQdIUVjSSGJxPek2RrnXzCwkDxoEBqk4vuL+nc=";
+    hash = "sha256-i3SuvRREuq0EENDtXjQegdmz30RmH1HVqBwdjq/mkTM=";
   };
 
   propagatedBuildInputs = [
-    Babel
+    babel
     click
     exifread
     filetype
@@ -62,7 +62,6 @@ buildPythonPackage rec {
   checkInputs = [
     pytest-click
     pytest-mock
-    pytest-pylint
     pytestCheckHook
   ];
 

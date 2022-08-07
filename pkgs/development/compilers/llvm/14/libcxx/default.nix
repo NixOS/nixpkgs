@@ -62,15 +62,6 @@ stdenv.mkDerivation rec {
   buildFlags = lib.optional headersOnly "generate-cxx-headers";
   installTargets = lib.optional headersOnly "install-cxx-headers";
 
-  # At this point, cxxabi headers would be installed in the dev output, which
-  # prevents moveToOutput from doing its job later in the build process.
-  postInstall = lib.optionalString (!headersOnly) ''
-    mv "$dev/include/c++/v1/"* "$out/include/c++/v1/"
-    pushd "$dev"
-    rmdir -p include/c++/v1
-    popd
-  '';
-
   passthru = {
     isLLVM = true;
   };

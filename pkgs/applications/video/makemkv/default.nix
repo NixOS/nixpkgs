@@ -55,7 +55,7 @@ in mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    install -Dm555 -t $out/bin                              out/makemkv ../makemkv-bin-${version}/bin/amd64/makemkvcon
+    install -Dm555 -t $out/bin                              out/makemkv out/mmccextr ../makemkv-bin-${version}/bin/amd64/makemkvcon
     install -D     -t $out/lib                              out/lib{driveio,makemkv,mmbd}.so.*
     install -D     -t $out/share/MakeMKV                    ../makemkv-bin-${version}/src/share/*
     install -Dm444 -t $out/share/applications               ../makemkv-oss-${version}/makemkvgui/share/makemkv.desktop
@@ -79,6 +79,7 @@ in mkDerivation {
       can always download the latest version from makemkv.com that will reset the
       expiration date.
     '';
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     homepage = "http://makemkv.com";
     platforms = [ "x86_64-linux" ];

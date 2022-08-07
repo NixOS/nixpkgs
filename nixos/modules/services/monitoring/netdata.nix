@@ -55,24 +55,24 @@ in {
         type = types.package;
         default = pkgs.netdata;
         defaultText = literalExpression "pkgs.netdata";
-        description = "Netdata package to use.";
+        description = lib.mdDoc "Netdata package to use.";
       };
 
       user = mkOption {
         type = types.str;
         default = "netdata";
-        description = "User account under which netdata runs.";
+        description = lib.mdDoc "User account under which netdata runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "netdata";
-        description = "Group under which netdata runs.";
+        description = lib.mdDoc "Group under which netdata runs.";
       };
 
       configText = mkOption {
         type = types.nullOr types.lines;
-        description = "Verbatim netdata.conf, cannot be combined with config.";
+        description = lib.mdDoc "Verbatim netdata.conf, cannot be combined with config.";
         default = null;
         example = ''
           [global]
@@ -86,7 +86,7 @@ in {
         enable = mkOption {
           type = types.bool;
           default = true;
-          description = ''
+          description = lib.mdDoc ''
             Whether to enable python-based plugins
           '';
         };
@@ -101,7 +101,7 @@ in {
               ps.dnspython
             ]
           '';
-          description = ''
+          description = lib.mdDoc ''
             Extra python packages available at runtime
             to enable additional python plugins.
           '';
@@ -114,14 +114,14 @@ in {
         example = literalExpression ''
           [ "/path/to/plugins.d" ]
         '';
-        description = ''
+        description = lib.mdDoc ''
           Extra paths to add to the netdata global "plugins directory"
           option.  Useful for when you want to include your own
           collection scripts.
-          </para><para>
+
           Details about writing a custom netdata plugin are available at:
-          <link xlink:href="https://docs.netdata.cloud/collectors/plugins.d/"/>
-          </para><para>
+          <https://docs.netdata.cloud/collectors/plugins.d/>
+
           Cannot be combined with configText.
         '';
       };
@@ -129,7 +129,7 @@ in {
       config = mkOption {
         type = types.attrsOf types.attrs;
         default = {};
-        description = "netdata.conf configuration as nix attributes. cannot be combined with configText.";
+        description = lib.mdDoc "netdata.conf configuration as nix attributes. cannot be combined with configText.";
         example = literalExpression ''
           global = {
             "debug log" = "syslog";
@@ -142,7 +142,7 @@ in {
       configDir = mkOption {
         type = types.attrsOf types.path;
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           Complete netdata config directory except netdata.conf.
           The default configuration is merged with changes
           defined in this option.
@@ -162,11 +162,11 @@ in {
       enableAnalyticsReporting = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable reporting of anonymous usage statistics to Netdata Inc. via either
           Google Analytics (in versions prior to 1.29.4), or Netdata Inc.'s
           self-hosted PostHog (in versions 1.29.4 and later).
-          See: <link xlink:href="https://learn.netdata.cloud/docs/agent/anonymous-statistics"/>
+          See: <https://learn.netdata.cloud/docs/agent/anonymous-statistics>
         '';
       };
     };
@@ -186,7 +186,7 @@ in {
       description = "Real time performance monitoring";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = (with pkgs; [ curl gawk iproute2 which procps ])
+      path = (with pkgs; [ curl gawk iproute2 which procps bash ])
         ++ lib.optional cfg.python.enable (pkgs.python3.withPackages cfg.python.extraPackages)
         ++ lib.optional config.virtualisation.libvirtd.enable (config.virtualisation.libvirtd.package);
       environment = {
@@ -201,6 +201,10 @@ in {
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/netdata -P /run/netdata/netdata.pid -D -c /etc/netdata/netdata.conf";
         ExecReload = "${pkgs.util-linux}/bin/kill -s HUP -s USR1 -s USR2 $MAINPID";
+        ExecStartPost = pkgs.writeShellScript "wait-for-netdata-up" ''
+          while [ "$(${pkgs.netdata}/bin/netdatacli ping)" != pong ]; do sleep 0.5; done
+        '';
+
         TimeoutStopSec = 60;
         Restart = "on-failure";
         # User and group

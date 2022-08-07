@@ -18,7 +18,7 @@
 , autoPatchelfHook
 , buildPythonPackage
 , config
-, cudnn
+, cudnn ? cudaPackages.cudnn
 , fetchurl
 , flatbuffers
 , isPy39
@@ -139,6 +139,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "XLA library for JAX";
     homepage = "https://github.com/google/jax";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
     maintainers = with maintainers; [ samuela ];
     platforms = [ "x86_64-linux" ];

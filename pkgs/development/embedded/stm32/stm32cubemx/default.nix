@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
       step-by-step process.
     '';
     homepage = "https://www.st.com/en/development-tools/stm32cubemx.html";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ wucke13 ];
     platforms = platforms.all;

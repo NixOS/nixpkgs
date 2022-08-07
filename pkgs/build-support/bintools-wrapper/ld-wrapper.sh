@@ -50,6 +50,11 @@ if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "${NIX_STORE:-}"
             n+=1; skip "$p2"
         elif [ "$p" = -dynamic-linker ] && badPath "$p2"; then
             n+=1; skip "$p2"
+        elif [ "$p" = -syslibroot ] && [ $p2 == // ]; then
+            # When gcc is built on darwin --with-build-sysroot=/
+            # produces '-syslibroot //' linker flag. It's a no-op,
+            # which does not introduce impurities.
+            n+=1; skip "$p2"
         elif [ "${p:0:1}" = / ] && badPath "$p"; then
             # We cannot skip this; barf.
             echo "impure path \`$p' used in link" >&2
@@ -92,11 +97,6 @@ if [ -e @out@/nix-support/add-local-ldflags-before.sh ]; then
     source @out@/nix-support/add-local-ldflags-before.sh
 fi
 
-
-# Specify the target emulation if nothing is passed in ("-m" overrides this
-# environment variable). Ensures we never blindly fallback on targeting the host
-# platform.
-: ${LDEMULATION:=@emulation@}
 
 # Three tasks:
 #

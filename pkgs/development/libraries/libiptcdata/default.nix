@@ -1,8 +1,12 @@
-{lib, stdenv, fetchurl}:
+{ lib, stdenv, fetchurl, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "libiptcdata";
   version = "1.0.4";
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    libiconv
+  ];
 
   src = fetchurl {
     url = "mirror://sourceforge/libiptcdata/${pname}-${version}.tar.gz";
@@ -14,5 +18,6 @@ stdenv.mkDerivation rec {
     homepage = "http://libiptcdata.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ wegank ];
   };
 }

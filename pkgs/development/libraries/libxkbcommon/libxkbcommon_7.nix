@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     homepage = "https://xkbcommon.org";
     license = licenses.mit;
     maintainers = with maintainers; [ ttuegel ];
+    mainProgram = "xkbcli";
     platforms = with platforms; unix;
   };
 }

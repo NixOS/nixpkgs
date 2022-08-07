@@ -12,20 +12,20 @@
 , shared-memory-ring
 , sexplib
 , logs
-, rresult
+, macaddr
+, lwt-dllist
+, result
 }:
 
 buildDunePackage rec {
   pname = "netchannel";
-  version = "2.0.0";
+  version = "2.1.1";
 
-  useDune2 = true;
-
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/mirage/mirage-net-xen/releases/download/v${version}/mirage-net-xen-v${version}.tbz";
-    sha256 = "ec3906ef1804ef6a9e36b91f4ae73ce4849e9e0d1d36a80fe66b5f905fab93ad";
+    url = "https://github.com/mirage/mirage-net-xen/releases/download/v${version}/mirage-net-xen-${version}.tbz";
+    sha256 = "sha256-kYsAf6ntwWKUp26dMcp5BScdUOaGpM46050jVZe6gfs=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,9 @@ buildDunePackage rec {
     shared-memory-ring
     sexplib
     logs
-    rresult
+    macaddr
+    lwt-dllist
+    result
   ];
 
   meta = with lib; {

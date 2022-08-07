@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xf86-input-wacom";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "linuxwacom";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-WitvT1y9KpXJriMr6Z9CrmAQdKPBZ5g9fP2nIgzJzAc=";
+    sha256 = "sha256-AYjO7B0Z6G1JqpLdvm9LS+ujz7iUp8UwZ9X1WQ/dGk0=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

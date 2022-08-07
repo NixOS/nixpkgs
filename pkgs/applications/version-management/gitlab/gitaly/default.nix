@@ -11,8 +11,9 @@ let
     gemdir = ./.;
   };
 
-  version = "14.9.3";
-  gitaly_package = "gitlab.com/gitlab-org/gitaly/v${lib.versions.major version}";
+  version = "15.1.4";
+  package_version = "v${lib.versions.major version}";
+  gitaly_package = "gitlab.com/gitlab-org/gitaly/${package_version}";
 in
 
 buildGoModule {
@@ -23,16 +24,16 @@ buildGoModule {
     owner = "gitlab-org";
     repo = "gitaly";
     rev = "v${version}";
-    sha256 = "sha256-D4Dgw2vqX5464ciYvTqagQG/uXt0Wm15ztdwbyJp1HM=";
+    sha256 = "sha256-7bsbmC+a+Qk0MevAJvbQoRfvd3G7+q2zY6Gsb5yP44U=";
   };
 
-  vendorSha256 = "sha256-kEjgWA/Task23PScPYrqdDu3vdVR/FJl7OilUug/Bds=";
+  vendorSha256 = "sha256-0JWJ2mpf79gJdnNRdlQLi0oDvnj6VmibkW2XcPnaCww=";
 
   passthru = {
     inherit rubyEnv;
   };
 
-  ldflags = "-X ${gitaly_package}/internal/version.version=${version} -X ${gitaly_package}/internal/version.moduleVersion=${version}";
+  ldflags = [ "-X ${gitaly_package}/internal/version.version=${version}" "-X ${gitaly_package}/internal/version.moduleVersion=${version}" ];
 
   tags = [ "static,system_libgit2" ];
   nativeBuildInputs = [ pkg-config ];
@@ -42,7 +43,7 @@ buildGoModule {
   postInstall = ''
     mkdir -p $ruby
     cp -rv $src/ruby/{bin,lib,proto} $ruby
-    mv $out/bin/gitaly-git2go $out/bin/gitaly-git2go-${version}
+    mv $out/bin/gitaly-git2go-${package_version} $out/bin/gitaly-git2go-${version}
   '';
 
   outputs = [ "out" "ruby" ];
@@ -51,7 +52,7 @@ buildGoModule {
     homepage = "https://gitlab.com/gitlab-org/gitaly";
     description = "A Git RPC service for handling all the git calls made by GitLab";
     platforms = platforms.linux ++ [ "x86_64-darwin" ];
-    maintainers = with maintainers; [ roblabla globin fpletz talyz yayayayaka ];
+    maintainers = with maintainers; [ roblabla globin talyz yayayayaka ];
     license = licenses.mit;
   };
 }

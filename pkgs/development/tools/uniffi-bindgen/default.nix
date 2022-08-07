@@ -11,17 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "uniffi-bindgen";
-  version = "0.17.0";
+  version = "0.19.3";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "uniffi-rs";
     rev = "v${version}";
-    hash = "sha256-EGyJrW0U/dnKT7OWgd8LehCyvj6mxud3QWbBVyhoK4Y=";
+    hash = "sha256-A6Zd1jfhoR4yW2lT5qYE3vJTpiJc94pK/XQmfE2QLFc=";
   };
 
-  cargoLock.lockFileContents = builtins.readFile ./Cargo.lock;
-  cargoHash = "sha256-Fw+yCAI32NdFKJGPuNU6t0FiEfohoVD3VQfInNJuooI=";
+  cargoLock.lockFile = ./Cargo.lock;
 
   cargoBuildFlags = [ "-p uniffi_bindgen" ];
   cargoTestFlags = [ "-p uniffi_bindgen" ];
@@ -35,6 +34,8 @@ rustPlatform.buildRustPackage rec {
     wrapProgram "$out/bin/uniffi-bindgen" \
       --suffix PATH : ${lib.strings.makeBinPath [ rustfmt ktlint yapf rubocop ] }
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Toolkit for building cross-platform software components in Rust";

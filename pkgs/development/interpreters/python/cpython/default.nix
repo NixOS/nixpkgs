@@ -63,9 +63,6 @@ assert x11Support -> tcl != null
 
 assert bluezSupport -> bluez != null;
 
-assert lib.assertMsg (enableOptimizations -> (!stdenv.cc.isClang))
-  "Optimizations with clang are not supported. configure: error: llvm-profdata is required for a --enable-optimizations build but could not be found.";
-
 assert lib.assertMsg (reproducibleBuild -> stripBytecode)
   "Deterministic builds require stripping bytecode.";
 
@@ -85,7 +82,7 @@ let
 
   passthru = let
     # When we override the interpreter we also need to override the spliced versions of the interpreter
-    inputs' = lib.filterAttrs (_: v: ! lib.isDerivation v) inputs;
+    inputs' = lib.filterAttrs (n: v: ! lib.isDerivation v && n != "passthruFun") inputs;
     override = attr: let python = attr.override (inputs' // { self = python; }); in python;
   in passthruFun rec {
     inherit self sourceVersion packageOverrides;
@@ -94,7 +91,7 @@ let
     executable = libPrefix;
     pythonVersion = with sourceVersion; "${major}.${minor}";
     sitePackages = "lib/${libPrefix}/site-packages";
-    inherit hasDistutilsCxxPatch;
+    inherit hasDistutilsCxxPatch pythonAttr;
     pythonOnBuildForBuild = override pkgsBuildBuild.${pythonAttr};
     pythonOnBuildForHost = override pkgsBuildHost.${pythonAttr};
     pythonOnBuildForTarget = override pkgsBuildTarget.${pythonAttr};
@@ -103,8 +100,6 @@ let
   };
 
   version = with sourceVersion; "${major}.${minor}.${patch}${suffix}";
-
-  strictDeps = true;
 
   nativeBuildInputs = optionals (!stdenv.isDarwin) [
     autoreconfHook
@@ -115,7 +110,7 @@ let
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     buildPackages.stdenv.cc
     pythonForBuild
-  ] ++ optionals (stdenv.cc.isClang && enableLTO) [
+  ] ++ optionals (stdenv.cc.isClang && (enableLTO || enableOptimizations)) [
     stdenv.cc.cc.libllvm.out
   ];
 
@@ -149,7 +144,19 @@ let
     # The configure script uses "arm" as the CPU name for all 32-bit ARM
     # variants when cross-compiling, but native builds include the version
     # suffix, so we do the same.
-    pythonHostPlatform = "${parsed.kernel.name}-${parsed.cpu.name}";
+    pythonHostPlatform = let
+      cpu = {
+        # According to PEP600, Python's name for the Power PC
+        # architecture is "ppc", not "powerpc".  Without the Rosetta
+        # Stone below, the PEP600 requirement that "${ARCH} matches
+        # the return value from distutils.util.get_platform()" fails.
+        # https://peps.python.org/pep-0600/
+        powerpc = "ppc";
+        powerpcle = "ppcle";
+        powerpc64 = "ppc64";
+        powerpc64le = "ppc64le";
+      }.${parsed.cpu.name} or parsed.cpu.name;
+    in "${parsed.kernel.name}-${cpu}";
 
     # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L724
     multiarchCpu =
@@ -186,7 +193,8 @@ in with passthru; stdenv.mkDerivation {
   pname = "python3";
   inherit version;
 
-  inherit buildInputs nativeBuildInputs;
+  inherit nativeBuildInputs;
+  buildInputs = [ bash ] ++ buildInputs; # bash is only for patchShebangs
 
   src = fetchurl {
     url = with sourceVersion; "https://www.python.org/ftp/python/${major}.${minor}.${patch}/Python-${version}.tar.xz";
@@ -229,9 +237,11 @@ in with passthru; stdenv.mkDerivation {
     # * https://bugs.python.org/issue35523
     # * https://github.com/python/cpython/commit/e6b247c8e524
     ./3.7/no-win64-workaround.patch
-  ] ++ optionals (pythonAtLeast "3.7") [
+  ] ++ optionals (pythonAtLeast "3.7" && pythonOlder "3.11") [
     # Fix darwin build https://bugs.python.org/issue34027
     ./3.7/darwin-libutil.patch
+  ] ++ optionals (pythonAtLeast "3.11") [
+    ./3.11/darwin-libutil.patch
   ] ++ optionals (pythonOlder "3.8") [
     # Backport from CPython 3.8 of a good list of tests to run for PGO.
     (
@@ -289,7 +299,7 @@ in with passthru; stdenv.mkDerivation {
   CPPFLAGS = concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs);
   LDFLAGS = concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs);
   LIBS = "${optionalString (!stdenv.isDarwin) "-lcrypt"}";
-  NIX_LDFLAGS = lib.optionalString stdenv.cc.isGNU ({
+  NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) ({
     "glibc" = "-lgcc_s";
     "musl" = "-lgcc_eh";
   }."${stdenv.hostPlatform.libc}" or "");
@@ -465,7 +475,7 @@ in with passthru; stdenv.mkDerivation {
 
   preFixup = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     # Ensure patch-shebangs uses shebangs of host interpreter.
-    export PATH=${lib.makeBinPath [ "$out" bash ]}:$PATH
+    export PATH=${lib.makeBinPath [ "$out" ]}:$PATH
   '';
 
   # Add CPython specific setup-hook that configures distutils.sysconfig to

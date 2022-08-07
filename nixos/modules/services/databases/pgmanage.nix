@@ -50,7 +50,7 @@ in {
       type = types.package;
       default = pkgs.pgmanage;
       defaultText = literalExpression "pkgs.pgmanage";
-      description = ''
+      description = lib.mdDoc ''
         The pgmanage package to use.
       '';
     };
@@ -62,12 +62,12 @@ in {
         nuc-server  = "hostaddr=192.168.0.100 port=5432 dbname=postgres";
         mini-server = "hostaddr=127.0.0.1 port=5432 dbname=postgres sslmode=require";
       };
-      description = ''
+      description = lib.mdDoc ''
         pgmanage requires at least one PostgreSQL server be defined.
-        </para><para>
+
         Detailed information about PostgreSQL connection strings is available at:
-        <link xlink:href="http://www.postgresql.org/docs/current/static/libpq-connect.html"/>
-        </para><para>
+        <http://www.postgresql.org/docs/current/static/libpq-connect.html>
+
         Note that you should not specify your user name or password. That
         information will be entered on the login screen. If you specify a
         username or password, it will be removed by pgmanage before attempting to
@@ -78,7 +78,7 @@ in {
     allowCustomConnections = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         This tells pgmanage whether or not to allow anyone to use a custom
         connection from the login screen.
       '';
@@ -87,7 +87,7 @@ in {
     port = mkOption {
       type = types.int;
       default = 8080;
-      description = ''
+      description = lib.mdDoc ''
         This tells pgmanage what port to listen on for browser requests.
       '';
     };
@@ -95,7 +95,7 @@ in {
     localOnly = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         This tells pgmanage whether or not to set the listening socket to local
         addresses only.
       '';
@@ -104,7 +104,7 @@ in {
     superOnly = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         This tells pgmanage whether or not to only allow super users to
         login. The recommended value is true and will restrict users who are not
         super users from logging in to any PostgreSQL instance through
@@ -116,7 +116,7 @@ in {
     loginGroup = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         This tells pgmanage to only allow users in a certain PostgreSQL group to
         login to pgmanage. Note that a connection will be made to PostgreSQL in
         order to test if the user is a member of the login group.
@@ -126,7 +126,7 @@ in {
     loginTimeout = mkOption {
       type = types.int;
       default = 3600;
-      description = ''
+      description = lib.mdDoc ''
         Number of seconds of inactivity before user is automatically logged
         out.
       '';
@@ -135,7 +135,7 @@ in {
     sqlRoot = mkOption {
       type = types.str;
       default = "/var/lib/pgmanage";
-      description = ''
+      description = lib.mdDoc ''
         This tells pgmanage where to put the SQL file history. All tabs are saved
         to this location so that if you get disconnected from pgmanage you
         don't lose your work.
@@ -147,16 +147,16 @@ in {
         options = {
           cert = mkOption {
             type = types.str;
-            description = "TLS certificate";
+            description = lib.mdDoc "TLS certificate";
           };
           key = mkOption {
             type = types.str;
-            description = "TLS key";
+            description = lib.mdDoc "TLS key";
           };
         };
       });
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         These options tell pgmanage where the TLS Certificate and Key files
         reside. If you use these options then you'll only be able to access
         pgmanage through a secure TLS connection. These options are only
@@ -165,14 +165,14 @@ in {
         configuration. This allows your web server to terminate the secure
         connection and pass on the request to pgmanage. You can find help to set
         up this configuration in:
-        <link xlink:href="https://github.com/pgManage/pgManage/blob/master/INSTALL_NGINX.md"/>
+        <https://github.com/pgManage/pgManage/blob/master/INSTALL_NGINX.md>
       '';
     };
 
     logLevel = mkOption {
       type = types.enum ["error" "warn" "notice" "info"];
       default = "error";
-      description = ''
+      description = lib.mdDoc ''
         Verbosity of logs
       '';
     };

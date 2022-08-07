@@ -44,7 +44,7 @@ in
       type = types.package;
       default = pkgs.virtualbox;
       defaultText = literalExpression "pkgs.virtualbox";
-      description = ''
+      description = lib.mdDoc ''
         Which VirtualBox package to use.
       '';
     };
@@ -52,7 +52,7 @@ in
     addNetworkInterface = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Automatically set up a vboxnet0 host-only network interface.
       '';
     };
@@ -75,7 +75,7 @@ in
     headless = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Use VirtualBox installation without GUI and Qt dependency. Useful to enable on servers
         and when virtual machines are controlled only via SSH.
       '';
@@ -84,7 +84,7 @@ in
     enableWebService = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Build VirtualBox web service tool (vboxwebsrv) to allow managing VMs via other webpage frontend tools. Useful for headless servers.
       '';
     };

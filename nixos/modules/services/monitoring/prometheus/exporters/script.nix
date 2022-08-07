@@ -41,7 +41,7 @@ in
         All settings expressed as an Nix attrset.
 
         Check the official documentation for the corresponding YAML
-        settings that can all be used here: <link xlink:href="https://github.com/adhocteam/script_exporter#sample-configuration" />
+        settings that can all be used here: <link xlink:href="https://github.com/adhocteam/script_exporter#sample-configuration"/>
       '';
     };
   };

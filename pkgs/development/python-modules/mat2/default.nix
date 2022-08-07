@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "mat2";
-  version = "0.12.3";
+  version = "0.13.0";
 
   disabled = pythonOlder "3.5";
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "jvoisin";
     repo = "mat2";
     rev = version;
-    hash = "sha256-TW+FwlZ+J1tanPL5WuwXtZJmtYB9LaimeIaPlN/jzqo=";
+    hash = "sha256-H3l8w2F+ZcJ1P/Dg0ZVBJPUK0itLocL7a0jeSrG3Ws8=";
   };
 
   patches = [
@@ -66,12 +66,12 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
+    gobject-introspection
     wrapGAppsHook
   ];
 
   buildInputs = [
     gdk-pixbuf
-    gobject-introspection
     librsvg
     poppler_gi
   ];

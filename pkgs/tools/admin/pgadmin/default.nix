@@ -1,21 +1,20 @@
-{ stdenv
-, lib
+{ lib
 , python3
 , fetchurl
 , zlib
 , mkYarnModules
 , sphinx
 , nixosTests
+, pkgs
 }:
 
 let
-
   pname = "pgadmin";
-  version = "6.7";
+  version = "6.12";
 
   src = fetchurl {
     url = "https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v${version}/source/pgadmin4-${version}.tar.gz";
-    sha256 = "1g2yxwgj9fp1fkn8j2jrdhmr2b2s6y8sgv4jq55aaxm4hfkkqh6d";
+    sha256 = "sha256-cO7GdZDfJ0pq1jpMyrVy0UM49WhrKOIJOmMJauSkbyo=";
   };
 
   yarnDeps = mkYarnModules {
@@ -25,9 +24,68 @@ let
     yarnLock = ./yarn.lock;
     yarnNix = ./yarn.nix;
   };
+
+  # move buildDeps here to easily pass to test suite
+  buildDeps = with pythonPackages; [
+    flask
+    flask-gravatar
+    flask_login
+    flask_mail
+    flask_migrate
+    flask-sqlalchemy
+    flask-wtf
+    flask-compress
+    passlib
+    pytz
+    simplejson
+    six
+    sqlparse
+    wtforms
+    flask-paranoid
+    psutil
+    psycopg2
+    python-dateutil
+    sqlalchemy
+    itsdangerous
+    flask-security-too
+    bcrypt
+    cryptography
+    sshtunnel
+    ldap3
+    flask-babelex
+    flask-babel
+    gssapi
+    flask-socketio
+    eventlet
+    httpagentparser
+    user-agents
+    wheel
+    authlib
+    qrcode
+    pillow
+    pyotp
+    botocore
+    boto3
+    azure-mgmt-subscription
+    azure-mgmt-rdbms
+    azure-mgmt-resource
+    azure-identity
+  ];
+
+  # override necessary on pgadmin4 6.12
+  pythonPackages = python3.pkgs.overrideScope (final: prev: rec {
+    werkzeug = prev.werkzeug.overridePythonAttrs (oldAttrs: rec {
+      version = "2.0.3";
+      src = oldAttrs.src.override {
+        inherit version;
+        sha256 = "sha256-uGP4/wV8UiFktgZ8niiwQRYbS+W6TQ2s7qpQoWOCLTw=";
+      };
+    });
+  });
+
 in
 
-python3.pkgs.buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   inherit pname version src;
 
   # from Dockerfile
@@ -43,19 +101,16 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     # patching Makefile, so it doesn't try to build sphinx documentation here
     # (will do so later)
-    substituteInPlace Makefile --replace "LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 $(MAKE) -C docs/en_US -f Makefile.sphinx html" "true"
+    substituteInPlace Makefile \
+      --replace 'LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 $(MAKE) -C docs/en_US -f Makefile.sphinx html' "true"
+
     # fix document which refers a non-existing document and fails
-    substituteInPlace docs/en_US/contributions.rst --replace "code_snippets" ""
+    substituteInPlace docs/en_US/contributions.rst \
+      --replace "code_snippets" ""
     patchShebangs .
+
     # relax dependencies
-    substituteInPlace requirements.txt \
-      --replace "Pillow==8.3.*" "Pillow>=8.3.0" \
-      --replace "psycopg2==2.9.*" "psycopg2>=2.9" \
-      --replace "cryptography==3.*" "cryptography>=3.0" \
-      --replace "requests==2.25.*" "requests>=2.25.0" \
-      --replace "boto3==1.20.*" "boto3>=1.20" \
-      --replace "botocore==1.23.*" "botocore>=1.23" \
-      --replace "pytz==2021.*" "pytz"
+    sed 's|==|>=|g' -i requirements.txt
     # don't use Server Mode (can be overridden later)
     substituteInPlace pkg/pip/setup_pip.py \
       --replace "req = req.replace('psycopg2', 'psycopg2-binary')" "req = req" \
@@ -101,10 +156,10 @@ python3.pkgs.buildPythonApplication rec {
     cp -v ../pkg/pip/setup_pip.py setup.py
   '';
 
-  nativeBuildInputs = [ python3 python3.pkgs.cython python3.pkgs.pip ];
+  nativeBuildInputs = with pythonPackages; [ cython pip ];
   buildInputs = [
     zlib
-    python3.pkgs.wheel
+    pythonPackages.wheel
   ];
 
   # tests need an own data, log directory
@@ -112,57 +167,22 @@ python3.pkgs.buildPythonApplication rec {
   # checks will be run through nixos/tests
   doCheck = false;
 
-  propagatedBuildInputs = with python3.pkgs; [
-    flask
-    flask-gravatar
-    flask_login
-    flask_mail
-    flask_migrate
-    flask_sqlalchemy
-    flask_wtf
-    flask-compress
-    passlib
-    pytz
-    simplejson
-    six
-    speaklater3
-    sqlparse
-    wtforms
-    flask-paranoid
-    psutil
-    psycopg2
-    python-dateutil
-    sqlalchemy
-    itsdangerous
-    flask-security-too
-    bcrypt
-    cryptography
-    sshtunnel
-    ldap3
-    flask-babelex
-    flask-babel
-    gssapi
-    flask-socketio
-    eventlet
-    httpagentparser
-    user-agents
-    wheel
-    authlib
-    qrcode
-    pillow
-    pyotp
-    botocore
-    boto3
-  ];
+  # speaklater3 is seperate because when passing buildDeps
+  # to the test, it fails there due to a collision with speaklater
+  propagatedBuildInputs = buildDeps ++ [ pythonPackages.speaklater3 ];
 
-  passthru = {
-    tests = { inherit (nixosTests) pgadmin4 pgadmin4-standalone; };
+  passthru.tests = {
+    standalone = nixosTests.pgadmin4-standalone;
+    # regression and function tests of the package itself
+    package = import ../../../../nixos/tests/pgadmin4.nix { inherit pkgs buildDeps; pythonEnv = pythonPackages; };
   };
 
   meta = with lib; {
     description = "Administration and development platform for PostgreSQL";
     homepage = "https://www.pgadmin.org/";
     license = licenses.mit;
+    changelog = "https://www.pgadmin.org/docs/pgadmin4/latest/release_notes_${lib.versions.major version}_${lib.versions.minor version}.html";
     maintainers = with maintainers; [ gador ];
+    mainProgram = "pgadmin4";
   };
 }

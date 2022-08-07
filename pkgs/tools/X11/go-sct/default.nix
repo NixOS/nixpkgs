@@ -1,27 +1,32 @@
-{ lib, xorg, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, xorg, wayland }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "go-sct";
-  version = "20180605-${lib.strings.substring 0 7 rev}";
-  rev = "eb1e851f2d5017038d2b8e3653645c36d3a279f4";
-
-  goPackagePath = "github.com/d4l3k/go-sct";
+  version = "unstable-2022-01-32";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "d4l3k";
     repo = "go-sct";
-    sha256 = "16z2ml9x424cnliazyxlw7pm7q64pppjam3dnmq2xab0wlbbm3nm";
+    rev = "4ae88a6bf50e0b917541ddbcec1ff10ab77a0b15";
+    sha256 = "sha256-/0ilM1g3CNaseqV9i+cKWyzxvWnj+TFqazt+aYDtNVs=";
   };
 
-  goDeps = ./deps.nix;
+  postPatch = ''
+    # Disable tests require network access
+    rm -f geoip/geoip_test.go
+  '';
 
-  buildInputs = [ xorg.libX11 xorg.libXrandr ];
+  vendorSha256 = "sha256-Rx5/oORink2QtRcD+JqbyFroWYhuYmuYDzZ391R4Jsw=";
+
+  buildInputs = [ xorg.libX11 xorg.libXrandr wayland.dev ];
+
+  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     description = "Color temperature setting library and CLI that operates in a similar way to f.lux and Redshift";
+    homepage = "https://github.com/d4l3k/go-sct";
     license = licenses.mit;
     maintainers = with maintainers; [ cstrahan ];
-    platforms = platforms.linux ++ platforms.windows;
+    mainProgram = "sct";
   };
 }

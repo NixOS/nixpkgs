@@ -1,27 +1,50 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
 , six
 }:
 
 buildPythonPackage rec {
   pname = "headerparser";
   version = "0.4.0";
+  format = "pyproject";
 
-  src = fetchPypi{
-    inherit pname;
-    inherit version;
-    sha256 = "b8ceae4c5e6133fda666d022684e93f9b3d45815c2c7881018123c71ff28c5cc";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "jwodder";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-KJJt85iC/4oBoIelB2zUJVyHSppFem/22v6F30P5nYM=";
   };
 
-  buildInputs = [
+  propagatedBuildInputs = [
     six
   ];
 
+  checkInputs = [
+    pytest-mock
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace tox.ini \
+      --replace "--cov=headerparser" "" \
+      --replace "--no-cov-on-fail" "" \
+      --replace "--flakes" ""
+  '';
+
+  pythonImportsCheck = [
+    "headerparser"
+  ];
+
   meta = with lib; {
+    description = "Module to parse key-value pairs in the style of RFC 822 (e-mail) headers";
     homepage = "https://github.com/jwodder/headerparser";
-    description = "argparse for mail-style headers";
     license = with licenses; [ mit ];
-    maintainers = with lib.maintainers; [ ayazhafiz ];
+    maintainers = with maintainers; [ ayazhafiz ];
   };
 }

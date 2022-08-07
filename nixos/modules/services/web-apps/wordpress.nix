@@ -192,7 +192,7 @@ let
               prefix. Typically this is changed if you are installing multiple WordPress blogs
               in the same database.
 
-              See <link xlink:href='https://codex.wordpress.org/Editing_wp-config.php#table_prefix'/>.
+              See <link xlink:href="https://codex.wordpress.org/Editing_wp-config.php#table_prefix"/>.
             '';
           };
 
@@ -246,7 +246,7 @@ let
           description = ''
             Any additional text to be appended to the wp-config.php
             configuration file. This is a PHP script. For configuration
-            settings, see <link xlink:href='https://codex.wordpress.org/Editing_wp-config.php'/>.
+            settings, see <link xlink:href="https://codex.wordpress.org/Editing_wp-config.php"/>.
           '';
           example = ''
             define( 'AUTOSAVE_INTERVAL', 60 ); // Seconds

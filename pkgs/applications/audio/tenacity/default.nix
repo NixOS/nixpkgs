@@ -138,6 +138,11 @@ stdenv.mkDerivation rec {
     util-linux
   ];
 
+  cmakeFlags = [
+    # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+  ];
+
   meta = with lib; {
     description = "Sound editor with graphical UI";
     homepage = "https://tenacityaudio.org/";

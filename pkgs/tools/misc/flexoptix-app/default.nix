@@ -6,12 +6,12 @@
   src = fetchurl {
     name = "${name}.AppImage";
     url = "https://flexbox.reconfigure.me/download/electron/linux/x64/FLEXOPTIX%20App.${version}.AppImage";
-    sha256 = "sha256:1hzdb2fbkwpsf0d3ws4z32blk6549jwhf1lrlqmcxhzqfvkr4gin";
+    hash = "sha256-Nj6S53b4w84qppkGB7lMpJhJlxifaD4acPryuZxY7cM=";
   };
 
   udevRules = fetchurl {
     url = "https://www.flexoptix.net/skin/udev_rules/99-tprogrammer.rules";
-    sha256 = "0mr1bhgvavq1ax4206z1vr2y64s3r676w9jjl9ysziklbrsvk5rr";
+    hash = "sha256-OZe5dV50xq99olImbo7JQxPjRd7hGyBIVwFvtR9cIVc=";
   };
 
   appimageContents = (appimageTools.extract { inherit name src; }).overrideAttrs (oA: {

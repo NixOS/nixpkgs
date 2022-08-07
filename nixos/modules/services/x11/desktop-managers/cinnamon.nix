@@ -27,7 +27,7 @@ in
         default = [];
         type = types.listOf types.package;
         example = literalExpression "[ pkgs.gnome.gpaste ]";
-        description = ''
+        description = lib.mdDoc ''
           Additional list of packages to be added to the session search path.
           Useful for GSettings-conditional autostart.
 
@@ -38,13 +38,13 @@ in
       extraGSettingsOverrides = mkOption {
         default = "";
         type = types.lines;
-        description = "Additional gsettings overrides.";
+        description = lib.mdDoc "Additional gsettings overrides.";
       };
 
       extraGSettingsOverridePackages = mkOption {
         default = [];
         type = types.listOf types.path;
-        description = "List of packages for which gsettings are overridden.";
+        description = lib.mdDoc "List of packages for which gsettings are overridden.";
       };
     };
 
@@ -52,7 +52,7 @@ in
       default = [];
       example = literalExpression "[ pkgs.cinnamon.blueberry ]";
       type = types.listOf types.package;
-      description = "Which packages cinnamon should exclude from the default environment";
+      description = lib.mdDoc "Which packages cinnamon should exclude from the default environment";
     };
 
   };
@@ -82,6 +82,7 @@ in
       '';
 
       # Default services
+      services.blueman.enable = mkDefault true;
       hardware.bluetooth.enable = mkDefault true;
       hardware.pulseaudio.enable = mkDefault true;
       security.polkit.enable = true;
@@ -91,7 +92,7 @@ in
         cinnamon-common
         cinnamon-screensaver
         nemo
-        xapps
+        xapp
       ];
       services.cinnamon.apps.enable = mkDefault true;
       services.gnome.glib-networking.enable = true;
@@ -199,13 +200,12 @@ in
       environment.systemPackages = with pkgs // pkgs.gnome // pkgs.cinnamon; utils.removePackagesByName [
         # cinnamon team apps
         bulky
-        blueberry
         warpinator
 
-        # cinnamon xapps
+        # cinnamon xapp
         xviewer
         xreader
-        xed
+        xed-editor
         xplayer
         pix
 

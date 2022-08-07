@@ -21,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mailspring";
-  version = "1.10.2";
+  version = "1.10.3";
 
   src = fetchurl {
     url = "https://github.com/Foundry376/Mailspring/releases/download/${version}/mailspring-${version}-amd64.deb";
-    sha256 = "sha256-6KHhkmHWhj/AgECYqNuJ0iSPEYyuBDac/3fW6J0fgTg=";
+    sha256 = "sha256-+H2KeaRBApveUG6Vz+Z8LWpmNpZ4lwyeX1LK0AKx/bw=";
   };
 
   nativeBuildInputs = [
@@ -91,6 +91,7 @@ stdenv.mkDerivation rec {
       Mailspring is an open-source mail client forked from Nylas Mail and built with Electron.
       Mailspring's sync engine runs locally, but its source is not open.
     '';
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ toschmidt doronbehar ];
     homepage = "https://getmailspring.com";

@@ -12,7 +12,7 @@ in {
     port = lib.mkOption {
       default = 11371;
       type = lib.types.port;
-      description = "HKP port to listen on.";
+      description = lib.mdDoc "HKP port to listen on.";
     };
 
     settings = lib.mkOption {

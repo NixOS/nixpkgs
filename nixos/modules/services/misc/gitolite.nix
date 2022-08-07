@@ -26,7 +26,7 @@ in
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/gitolite";
-        description = ''
+        description = lib.mdDoc ''
           The gitolite home directory used to store all repositories. If left as the default value
           this directory will automatically be created before the gitolite server starts, otherwise
           the sysadmin is responsible for ensuring the directory exists with appropriate ownership
@@ -36,7 +36,7 @@ in
 
       adminPubkey = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Initial administrative public key for Gitolite. This should
           be an SSH Public Key. Note that this key will only be used
           once, upon the first initialization of the Gitolite user.
@@ -47,8 +47,8 @@ in
       enableGitAnnex = mkOption {
         type = types.bool;
         default = false;
-        description = ''
-          Enable git-annex support. Uses the <literal>extraGitoliteRc</literal> option
+        description = lib.mdDoc ''
+          Enable git-annex support. Uses the `extraGitoliteRc` option
           to apply the necessary configuration.
         '';
       };
@@ -56,8 +56,8 @@ in
       commonHooks = mkOption {
         type = types.listOf types.path;
         default = [];
-        description = ''
-          A list of custom git hooks that get copied to <literal>~/.gitolite/hooks/common</literal>.
+        description = lib.mdDoc ''
+          A list of custom git hooks that get copied to `~/.gitolite/hooks/common`.
         '';
       };
 
@@ -97,7 +97,7 @@ in
       user = mkOption {
         type = types.str;
         default = "gitolite";
-        description = ''
+        description = lib.mdDoc ''
           Gitolite user account. This is the username of the gitolite endpoint.
         '';
       };
@@ -105,7 +105,7 @@ in
       group = mkOption {
         type = types.str;
         default = "gitolite";
-        description = ''
+        description = lib.mdDoc ''
           Primary group of the Gitolite user account.
         '';
       };

@@ -84,6 +84,15 @@ sub debug {
 }
 
 
+# nixpkgs.system
+my ($status, @systemLines) = runCommand("@nixInstantiate@ --impure --eval --expr builtins.currentSystem");
+if ($status != 0 || join("", @systemLines) =~ /error/) {
+    die "Failed to retrieve current system type from nix.\n";
+}
+chomp(my $system = @systemLines[0]);
+push @attrs, "nixpkgs.hostPlatform = lib.mkDefault $system;";
+
+
 my $cpuinfo = read_file "/proc/cpuinfo";
 
 
@@ -291,6 +300,12 @@ if ($virt eq "oracle") {
     push @attrs, "virtualisation.virtualbox.guest.enable = true;"
 }
 
+# Check if we're a Parallels guest. If so, enable the guest additions.
+# It is blocked by https://github.com/systemd/systemd/pull/23859
+if ($virt eq "parallels") {
+    push @attrs, "hardware.parallels.enable = true;";
+    push @attrs, "nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ \"prl-tools\" ];";
+}
 
 # Likewise for QEMU.
 if ($virt eq "qemu" || $virt eq "kvm" || $virt eq "bochs") {
@@ -581,17 +596,19 @@ ${\join "", (map { "  $_\n" } (uniq @attrs))}}
 EOF
 
 sub generateNetworkingDhcpConfig {
+    # FIXME disable networking.useDHCP by default when switching to networkd.
     my $config = <<EOF;
-  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-  # Per-interface useDHCP will be mandatory in the future, so this generated config
-  # replicates the default behaviour.
-  networking.useDHCP = lib.mkDefault false;
+  # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
+  # (the default) this is the recommended approach. When using systemd-networkd it's
+  # still possible to use this option, but it's recommended to use it in conjunction
+  # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
+  networking.useDHCP = lib.mkDefault true;
 EOF
 
     foreach my $path (glob "/sys/class/net/*") {
         my $dev = basename($path);
         if ($dev ne "lo") {
-            $config .= "  networking.interfaces.$dev.useDHCP = lib.mkDefault true;\n";
+            $config .= "  # networking.interfaces.$dev.useDHCP = lib.mkDefault true;\n";
         }
     }
 

@@ -86,6 +86,7 @@ let
       You can then merge the changes, synchronize your files, and generate reports for your records.
     '';
     homepage = "https://www.scootersoftware.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ ktor arkivm ];
     platforms = builtins.attrNames srcs;

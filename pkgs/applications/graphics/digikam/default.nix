@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchurl, fetchpatch, cmake, doxygen, extra-cmake-modules, wrapGAppsHook
+{ mkDerivation, lib, fetchurl, cmake, doxygen, extra-cmake-modules, wrapGAppsHook
 
 # For `digitaglinktree`
 , perl, sqlite
@@ -56,20 +56,12 @@
 
 mkDerivation rec {
   pname   = "digikam";
-  version = "7.6.0";
+  version = "7.7.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/digiKam-${version}.tar.xz";
-    sha256 = "sha256-2OHucyHT/DE5FvUVdW4wKaxBh9xFO2kzhI1N5TFLZkE=";
+    sha256 = "sha256-wMbdLqigdRSsvyRi86VFGOfoCZszN/iBM2Foz/Y9dxw=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "akonadi-22.04.patch";
-      url = "https://github.com/archlinux/svntogit-packages/raw/1b3c76a4482055524120f598325d90545ff9c020/trunk/akonadi-22.04.patch";
-      sha256 = "sha256-ittgkl2t/nAD0ci2fNYoAd4E2M6Gg0vqqjxqZugBuko=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake doxygen extra-cmake-modules kdoctools wrapGAppsHook ];
 

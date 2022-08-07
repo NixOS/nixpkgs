@@ -24,7 +24,7 @@ in
       configuration = mkOption {
         type = types.attrs;
         default = {};
-        description = "Salt master configuration as Nix attribute set.";
+        description = lib.mdDoc "Salt master configuration as Nix attribute set.";
       };
     };
   };

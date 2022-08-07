@@ -1,16 +1,35 @@
 { lib, stdenv, fetchurl, fetchFromGitLab, jdk17_headless, coreutils, gradle_6, git, perl
-, makeWrapper, fetchpatch, substituteAll
+, makeWrapper, fetchpatch, substituteAll, jre_minimal
 }:
 
 let
   pname = "signald";
-  version = "0.17.0";
+  version = "0.19.1";
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-eN6lEs6PuRczbzQZmGlNf6Ahp4FbWpA3EArlATEiZHU=";
+    sha256 = "sha256-Ma6kIKRVM8UUU/TvfVp2RVl/FLxFgBQU3mEypnujJ+c=";
+  };
+
+  jre' = jre_minimal.override {
+    jdk = jdk17_headless;
+    # from https://gitlab.com/signald/signald/-/blob/0.19.1/build.gradle#L173
+    modules = [
+      "java.base"
+      "java.management"
+      "java.naming"
+      "java.sql"
+      "java.xml"
+      "jdk.crypto.ec"
+      "jdk.httpserver"
+
+      # for java/beans/PropertyChangeEvent
+      "java.desktop"
+      # for sun/misc/Unsafe
+      "jdk.unsupported"
+    ];
   };
 
   # fake build to pre-download deps into fixed-output derivation
@@ -35,8 +54,8 @@ let
     outputHashMode = "recursive";
     # Downloaded jars differ by platform
     outputHash = {
-      x86_64-linux = "sha256-kZ25p+lIkOqNoFFBgJRYFcvKJenKICVa1PasaaEHmRA=";
-      aarch64-linux = "sha256-CbFNigp3R7ETX0uXv6PNuhDpmPc4sowbWmwZ+5txXQs=";
+      x86_64-linux = "sha256-q1gzauIL7aKalvPSfiK5IvkNkidCh+6jp5bpwxR+PZ0=";
+      aarch64-linux = "sha256-cM+7MaV0/4yAzobXX9FSdl/ZfLddwySayao96UdDgzk=";
     }.${stdenv.system} or (throw "Unsupported platform");
   };
 
@@ -67,7 +86,7 @@ in stdenv.mkDerivation rec {
     tar xvf ./build/distributions/signald.tar --strip-components=1 --directory $out/
     wrapProgram $out/bin/signald \
       --prefix PATH : ${lib.makeBinPath [ coreutils ]} \
-      --set JAVA_HOME "${jdk17_headless}"
+      --set JAVA_HOME "${jre'}"
 
     runHook postInstall
   '';
@@ -84,6 +103,10 @@ in stdenv.mkDerivation rec {
       clients.
     '';
     homepage = "https://signald.org";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ expipiplus1 ma27 ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];

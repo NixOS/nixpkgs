@@ -20,7 +20,7 @@ in
         type = types.package;
         default = pkgs.atop;
         defaultText = literalExpression "pkgs.atop";
-        description = ''
+        description = lib.mdDoc ''
           Which package to use for Atop.
         '';
       };
@@ -29,7 +29,7 @@ in
         enable = mkOption {
           type = types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Whether to install and enable the netatop kernel module.
             Note: this sets the kernel taint flag "O" for loading out-of-tree modules.
           '';
@@ -38,7 +38,7 @@ in
           type = types.package;
           default = config.boot.kernelPackages.netatop;
           defaultText = literalExpression "config.boot.kernelPackages.netatop";
-          description = ''
+          description = lib.mdDoc ''
             Which package to use for netatop.
           '';
         };
@@ -47,7 +47,7 @@ in
       atopgpu.enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to install and enable the atopgpud daemon to get information about
           NVIDIA gpus.
         '';
@@ -56,7 +56,7 @@ in
       setuidWrapper.enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to install a setuid wrapper for Atop. This is required to use some of
           the features as non-root user (e.g.: ipc information, netatop, atopgpu).
           Atop tries to drop the root privileges shortly after starting.
@@ -66,7 +66,7 @@ in
       atopService.enable = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the atop service responsible for storing statistics for
           long-term analysis.
         '';
@@ -74,7 +74,7 @@ in
       atopRotateTimer.enable = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the atop-rotate timer, which restarts the atop service
           daily to make sure the data files are rotate.
         '';
@@ -82,7 +82,7 @@ in
       atopacctService.enable = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the atopacct service which manages process accounting.
           This allows Atop to gather data about processes that disappeared in between
           two refresh intervals.
@@ -95,8 +95,8 @@ in
           flags = "a1f";
           interval = 5;
         };
-        description = ''
-          Parameters to be written to <filename>/etc/atoprc</filename>.
+        description = lib.mdDoc ''
+          Parameters to be written to {file}`/etc/atoprc`.
         '';
       };
     };
@@ -136,6 +136,24 @@ in
           packages = [ atop (lib.mkIf cfg.netatop.enable cfg.netatop.package) ];
           services =
             mkService cfg.atopService.enable "atop" [ atop ]
+            // lib.mkIf cfg.atopService.enable {
+              # always convert logs to newer version first
+              # XXX might trigger TimeoutStart but restarting atop.service will
+              # convert remainings logs and start eventually
+              atop.serviceConfig.ExecStartPre = pkgs.writeShellScript "atop-update-log-format" ''
+                set -e -u
+                for logfile in "$LOGPATH"/atop_*
+                do
+                  ${atop}/bin/atopconvert "$logfile" "$logfile".new
+                  # only replace old file if version was upgraded to avoid
+                  # false positives for atop-rotate.service
+                  if ! ${pkgs.diffutils}/bin/cmp -s "$logfile" "$logfile".new
+                  then
+                    ${pkgs.coreutils}/bin/mv -v -f "$logfile".new "$logfile"
+                  fi
+                done
+              '';
+            }
             // mkService cfg.atopacctService.enable "atopacct" [ atop ]
             // mkService cfg.netatop.enable "netatop" [ cfg.netatop.package ]
             // mkService cfg.atopgpu.enable "atopgpu" [ atop ];

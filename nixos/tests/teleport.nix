@@ -72,9 +72,9 @@ in
     nodes = { inherit minimal; };
 
     testScript = ''
-      minimal.wait_for_open_port("3025")
-      minimal.wait_for_open_port("3080")
-      minimal.wait_for_open_port("3022")
+      minimal.wait_for_open_port(3025)
+      minimal.wait_for_open_port(3080)
+      minimal.wait_for_open_port(3022)
     '';
   };
 
@@ -86,12 +86,12 @@ in
 
     testScript = ''
       with subtest("teleport ready"):
-          server.wait_for_open_port("3025")
-          client.wait_for_open_port("3022")
+          server.wait_for_open_port(3025)
+          client.wait_for_open_port(3022)
 
       with subtest("check applied configuration"):
           server.wait_until_succeeds("tctl get nodes --format=json | ${pkgs.jq}/bin/jq -e '.[] | select(.spec.hostname==\"client\") | .metadata.labels.role==\"client\"'")
-          server.wait_for_open_port("3000")
+          server.wait_for_open_port(3000)
           client.succeed("journalctl -u teleport.service --grep='DEBU'")
           server.succeed("journalctl -u teleport.service --grep='Starting teleport in insecure mode.'")
     '';

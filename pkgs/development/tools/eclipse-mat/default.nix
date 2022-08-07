@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     mv mat $out
 
     # Patch binaries.
-    interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
+    interpreter=$(echo ${stdenv.cc.libc}/lib/ld-linux*.so.2)
     libCairo=$out/eclipse/libcairo-swt.so
     patchelf --set-interpreter $interpreter $out/mat/MemoryAnalyzer
     [ -f $libCairo ] && patchelf --set-rpath ${
@@ -110,6 +110,7 @@ stdenv.mkDerivation rec {
       run a report to automatically extract leak suspects.
     '';
     homepage = "https://www.eclipse.org/mat";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.epl20;
     maintainers = [ maintainers.ktor ];
     platforms = [ "x86_64-linux" ];

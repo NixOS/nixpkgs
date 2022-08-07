@@ -18,12 +18,12 @@ in
         default = pkgs.ppp;
         defaultText = literalExpression "pkgs.ppp";
         type = types.package;
-        description = "pppd package to use.";
+        description = lib.mdDoc "pppd package to use.";
       };
 
       peers = mkOption {
         default = {};
-        description = "pppd peers.";
+        description = lib.mdDoc "pppd peers.";
         type = types.attrsOf (types.submodule (
           { name, ... }:
           {
@@ -32,27 +32,27 @@ in
                 type = types.str;
                 default = name;
                 example = "dialup";
-                description = "Name of the PPP peer.";
+                description = lib.mdDoc "Name of the PPP peer.";
               };
 
               enable = mkOption {
                 type = types.bool;
                 default = true;
                 example = false;
-                description = "Whether to enable this PPP peer.";
+                description = lib.mdDoc "Whether to enable this PPP peer.";
               };
 
               autostart = mkOption {
                 type = types.bool;
                 default = true;
                 example = false;
-                description = "Whether the PPP session is automatically started at boot time.";
+                description = lib.mdDoc "Whether the PPP session is automatically started at boot time.";
               };
 
               config = mkOption {
                 type = types.lines;
                 default = "";
-                description = "pppd configuration for this peer, see the pppd(8) man page.";
+                description = lib.mdDoc "pppd configuration for this peer, see the pppd(8) man page.";
               };
             };
           }));

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "QtPy";
-  version = "2.0.1";
+  version = "2.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "13zbhnl2rm30xafwrzfwdb4mjp7gk4s9h2xagbf83pnjzczhgzdd";
+    sha256 = "sha256-yozUIXF1GGNEKZ7kwPfnrc82LHCFK6NbJVpTQHcCXAY=";
   };
 
   propagatedBuildInputs = [

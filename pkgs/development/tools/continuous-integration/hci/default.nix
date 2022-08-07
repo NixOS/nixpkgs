@@ -12,7 +12,7 @@ let
           ${o.postInstall or ""}
           mkdir -p $out/libexec
           mv $out/bin/hci $out/libexec
-          makeWrapper $out/libexec/hci $out/bin/hci --prefix PATH : ${makeBinPath bundledBins}
+          makeWrapper $out/libexec/hci $out/bin/hci --prefix PATH : ${lib.escapeShellArg (makeBinPath bundledBins)}
         '';
       })
       (addBuildDepends [ makeWrapper ] (justStaticExecutables haskellPackages.hercules-ci-cli));

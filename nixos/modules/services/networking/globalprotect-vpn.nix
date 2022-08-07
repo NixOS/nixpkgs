@@ -16,9 +16,9 @@ in
     enable = mkEnableOption "globalprotect";
 
     csdWrapper = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         A script that will produce a Host Integrity Protection (HIP) report,
-        as described at <link xlink:href="https://www.infradead.org/openconnect/hip.html" />
+        as described at <https://www.infradead.org/openconnect/hip.html>
       '';
       default = null;
       example = literalExpression ''"''${pkgs.openconnect}/libexec/openconnect/hipreport.sh"'';

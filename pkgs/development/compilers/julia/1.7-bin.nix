@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "julia-bin";
-  version = "1.7.2";
+  version = "1.7.3";
 
   src = {
     x86_64-linux = fetchurl {
       url = "https://julialang-s3.julialang.org/bin/linux/x64/${lib.versions.majorMinor version}/julia-${version}-linux-x86_64.tar.gz";
-      sha256 = "15dsfdcxvx0wizkkn85ldz0mg0h7cjziz1lw4kky0b9v9xr48lm7";
+      sha256 = "0ff7ypr76xf99h3dmy1xdnkq2xn432qnzihxs72xrd4j5nhlybwv";
     };
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
@@ -67,5 +67,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ ninjin raskin ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "julia";
   };
 }

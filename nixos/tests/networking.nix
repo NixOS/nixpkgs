@@ -77,12 +77,14 @@ let
   testCases = {
     loopback = {
       name = "Loopback";
-      machine.networking.useDHCP = false;
-      machine.networking.useNetworkd = networkd;
+      nodes.client = { pkgs, ... }: with pkgs.lib; {
+        networking.useDHCP = false;
+        networking.useNetworkd = networkd;
+      };
       testScript = ''
         start_all()
-        machine.wait_for_unit("network.target")
-        loopback_addresses = machine.succeed("ip addr show lo")
+        client.wait_for_unit("network.target")
+        loopback_addresses = client.succeed("ip addr show lo")
         assert "inet 127.0.0.1/8" in loopback_addresses
         assert "inet6 ::1/128" in loopback_addresses
       '';
@@ -96,6 +98,7 @@ let
           useNetworkd = networkd;
           useDHCP = false;
           defaultGateway = "192.168.1.1";
+          defaultGateway6 = "fd00:1234:5678:1::1";
           interfaces.eth1.ipv4.addresses = mkOverride 0 [
             { address = "192.168.1.2"; prefixLength = 24; }
             { address = "192.168.1.3"; prefixLength = 32; }
@@ -137,7 +140,48 @@ let
           with subtest("Test default gateway"):
               router.wait_until_succeeds("ping -c 1 192.168.3.1")
               client.wait_until_succeeds("ping -c 1 192.168.3.1")
+              router.wait_until_succeeds("ping -c 1 fd00:1234:5678:3::1")
+              client.wait_until_succeeds("ping -c 1 fd00:1234:5678:3::1")
         '';
+    };
+    routeType = {
+      name = "RouteType";
+      nodes.client = { pkgs, ... }: with pkgs.lib; {
+        networking = {
+          useDHCP = false;
+          useNetworkd = networkd;
+          interfaces.eth1.ipv4.routes = [{
+            address = "192.168.1.127";
+            prefixLength = 32;
+            type = "local";
+          }];
+        };
+      };
+      testScript = ''
+        start_all()
+        client.wait_for_unit("network.target")
+        client.succeed("ip -4 route list table local | grep 'local 192.168.1.127'")
+      '';
+    };
+    dhcpDefault = {
+      name = "useDHCP-by-default";
+      nodes.router = router;
+      nodes.client = { lib, ... }: {
+        # Disable test driver default config
+        networking.interfaces = lib.mkForce {};
+        networking.useNetworkd = networkd;
+        virtualisation.vlans = [ 1 ];
+      };
+      testScript = ''
+        start_all()
+        client.wait_for_unit("multi-user.target")
+        client.wait_until_succeeds("ip addr show dev eth1 | grep '192.168.1'")
+        client.shell_interact()
+        client.succeed("ping -c 1 192.168.1.1")
+        router.succeed("ping -c 1 192.168.1.1")
+        router.succeed("ping -c 1 192.168.1.2")
+        client.succeed("ping -c 1 192.168.1.2")
+      '';
     };
     dhcpSimple = {
       name = "SimpleDHCP";
@@ -636,6 +680,46 @@ let
           with subtest("Test vlan is setup"):
               client1.succeed("ip addr show dev vlan >&2")
               client2.succeed("ip addr show dev vlan >&2")
+        '';
+    };
+    vlan-ping = let
+        baseIP = number: "10.10.10.${number}";
+        vlanIP = number: "10.1.1.${number}";
+        baseInterface = "eth1";
+        vlanInterface = "vlan42";
+        node = number: {pkgs, ... }: with pkgs.lib; {
+          virtualisation.vlans = [ 1 ];
+          networking = {
+            #useNetworkd = networkd;
+            useDHCP = false;
+            vlans.${vlanInterface} = { id = 42; interface = baseInterface; };
+            interfaces.${baseInterface}.ipv4.addresses = mkOverride 0 [{ address = baseIP number; prefixLength = 24; }];
+            interfaces.${vlanInterface}.ipv4.addresses = mkOverride 0 [{ address = vlanIP number; prefixLength = 24; }];
+          };
+        };
+
+        serverNodeNum = "1";
+        clientNodeNum = "2";
+
+    in {
+      name = "vlan-ping";
+      nodes.server = node serverNodeNum;
+      nodes.client = node clientNodeNum;
+      testScript = { ... }:
+        ''
+          start_all()
+
+          with subtest("Wait for networking to be configured"):
+              server.wait_for_unit("network.target")
+              client.wait_for_unit("network.target")
+
+          with subtest("Test ping on base interface in setup"):
+              client.succeed("ping -I ${baseInterface} -c 1 ${baseIP serverNodeNum}")
+              server.succeed("ping -I ${baseInterface} -c 1 ${baseIP clientNodeNum}")
+
+          with subtest("Test ping on vlan subinterface in setup"):
+              client.succeed("ping -I ${vlanInterface} -c 1 ${vlanIP serverNodeNum}")
+              server.succeed("ping -I ${vlanInterface} -c 1 ${vlanIP clientNodeNum}")
         '';
     };
     virtual = {

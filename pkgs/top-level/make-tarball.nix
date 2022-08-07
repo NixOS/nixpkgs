@@ -81,6 +81,6 @@ pkgs.releaseTools.sourceTarball {
   '';
 
   meta = {
-    maintainers = [ pkgs.lib.maintainers.all ];
+    maintainers = [ ];
   };
 }

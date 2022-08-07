@@ -16,31 +16,31 @@ in {
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/ombi";
-        description = "The directory where Ombi stores its data files.";
+        description = lib.mdDoc "The directory where Ombi stores its data files.";
       };
 
       port = mkOption {
         type = types.port;
         default = 5000;
-        description = "The port for the Ombi web interface.";
+        description = lib.mdDoc "The port for the Ombi web interface.";
       };
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = "Open ports in the firewall for the Ombi web interface.";
+        description = lib.mdDoc "Open ports in the firewall for the Ombi web interface.";
       };
 
       user = mkOption {
         type = types.str;
         default = "ombi";
-        description = "User account under which Ombi runs.";
+        description = lib.mdDoc "User account under which Ombi runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "ombi";
-        description = "Group under which Ombi runs.";
+        description = lib.mdDoc "Group under which Ombi runs.";
       };
     };
   };

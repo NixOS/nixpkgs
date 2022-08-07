@@ -17,7 +17,7 @@ with lib;
         type = types.package;
         default = pkgs.clickhouse;
         defaultText = "pkgs.clickhouse";
-        description = ''
+        description = lib.mdDoc ''
           ClickHouse package to use.
         '';
       };

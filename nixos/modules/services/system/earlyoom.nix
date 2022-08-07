@@ -16,55 +16,55 @@ in
     freeMemThreshold = mkOption {
       type = types.ints.between 1 100;
       default = 10;
-      description = ''
+      description = lib.mdDoc ''
         Minimum available memory (in percent).
 
         If the available memory falls below this threshold (and the analog is true for
-        <option>freeSwapThreshold</option>) the killing begins.
+        {option}`freeSwapThreshold`) the killing begins.
         SIGTERM is sent first to the process that uses the most memory; then, if the available
-        memory falls below <option>freeMemKillThreshold</option> (and the analog is true for
-        <option>freeSwapKillThreshold</option>), SIGKILL is sent.
+        memory falls below {option}`freeMemKillThreshold` (and the analog is true for
+        {option}`freeSwapKillThreshold`), SIGKILL is sent.
 
-        See <link xlink:href="https://github.com/rfjakob/earlyoom#command-line-options">README</link> for details.
+        See [README](https://github.com/rfjakob/earlyoom#command-line-options) for details.
       '';
     };
 
     freeMemKillThreshold = mkOption {
       type = types.nullOr (types.ints.between 1 100);
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Minimum available memory (in percent) before sending SIGKILL.
-        If unset, this defaults to half of <option>freeMemThreshold</option>.
+        If unset, this defaults to half of {option}`freeMemThreshold`.
 
-        See the description of <xref linkend="opt-services.earlyoom.freeMemThreshold"/>.
+        See the description of [](#opt-services.earlyoom.freeMemThreshold).
       '';
     };
 
     freeSwapThreshold = mkOption {
       type = types.ints.between 1 100;
       default = 10;
-      description = ''
+      description = lib.mdDoc ''
         Minimum free swap space (in percent) before sending SIGTERM.
 
-        See the description of <xref linkend="opt-services.earlyoom.freeMemThreshold"/>.
+        See the description of [](#opt-services.earlyoom.freeMemThreshold).
       '';
     };
 
     freeSwapKillThreshold = mkOption {
       type = types.nullOr (types.ints.between 1 100);
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Minimum free swap space (in percent) before sending SIGKILL.
-        If unset, this defaults to half of <option>freeSwapThreshold</option>.
+        If unset, this defaults to half of {option}`freeSwapThreshold`.
 
-        See the description of <xref linkend="opt-services.earlyoom.freeMemThreshold"/>.
+        See the description of [](#opt-services.earlyoom.freeMemThreshold).
       '';
     };
 
     enableDebugInfo = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enable debugging messages.
       '';
     };
@@ -95,11 +95,11 @@ in
           echo "Process $EARLYOOM_NAME ($EARLYOOM_PID) was killed" >> /path/to/log
         '''
       '';
-      description = ''
+      description = lib.mdDoc ''
         An absolute path to an executable to be run for each process killed.
         Some environment variables are available, see
-        <link xlink:href="https://github.com/rfjakob/earlyoom#notifications">README</link> and
-        <link xlink:href="https://github.com/rfjakob/earlyoom/blob/master/MANPAGE.md#-n-pathtoscript">the man page</link>
+        [README](https://github.com/rfjakob/earlyoom#notifications) and
+        [the man page](https://github.com/rfjakob/earlyoom/blob/master/MANPAGE.md#-n-pathtoscript)
         for details.
       '';
     };
@@ -108,14 +108,14 @@ in
       type = types.int;
       default = 3600;
       example = 0;
-      description = "Interval (in seconds) at which a memory report is printed (set to 0 to disable).";
+      description = lib.mdDoc "Interval (in seconds) at which a memory report is printed (set to 0 to disable).";
     };
 
     extraArgs = mkOption {
       type = types.listOf types.str;
       default = [];
       example = [ "-g" "--prefer '(^|/)(java|chromium)$'" ];
-      description = "Extra command-line arguments to be passed to earlyoom.";
+      description = lib.mdDoc "Extra command-line arguments to be passed to earlyoom.";
     };
   };
 

@@ -16,14 +16,14 @@
 
 mkDerivation rec {
   pname = "ppsspp";
-  version = "1.12.3";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "hrydgard";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-S16rTB0svksW5MwrPV/+qpTK4uKZ7mFcmbOyEmMmzhY=";
+    sha256 = "sha256-WsFy2aSOmkII2Lte5et4W6qj0AXUKWWkYe88T0OQP08=";
   };
 
   postPatch = ''

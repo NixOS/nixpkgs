@@ -14,7 +14,7 @@ mkYarnPackage rec {
   packageJSON = ./package.json;
   yarnLock = ./yarn.lock;
   yarnNix = ./yarn.nix;
-  yarnFlags = [ "--production" "--offline" ];
+  yarnFlags = [ "--production" ];
 
   nativeBuildInputs = [ makeWrapper ];
 

@@ -10,34 +10,23 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dvc";
-  version = "2.9.5";
+  version = "2.12.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "iterative";
     repo = pname;
     rev = version;
-    hash = "sha256-MviiA0ja1IaxMPlqu2dhIGBcdEXiEvBYnK9731dihMg=";
+    hash = "sha256-d1Tjqomr8Lcf+X+LZgi0wHlxXBUqHq/nAzDBbrxHAl4=";
   };
-
-  # make the patch apply
-  prePatch = ''
-    substituteInPlace setup.cfg \
-      --replace "scmrepo==0.0.7" "scmrepo==0.0.10"
-  '';
-
-  patches = [
-    ./dvc-daemon.patch
-    (fetchpatch {
-      url = "https://github.com/iterative/dvc/commit/ab54b5bdfcef3576b455a17670b8df27beb504ce.patch";
-      sha256 = "sha256-wzMK6Br7/+d3EEGpfPuQ6Trj8IPfehdUvOvX3HZlS+o=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "grandalf==0.6" "grandalf>=0.6" \
-      --replace "scmrepo==0.0.13" "scmrepo"
+      --replace "grandalf==0.6" "grandalf" \
+      --replace "scmrepo==0.0.25" "scmrepo" \
+      --replace "dvc-data==0.0.16" "dvc-data" \
+      --replace "dvc-render==0.0.6" "dvc-render" \
+      --replace "setuptools_scm_git_archive==1.1" "setuptools_scm_git_archive"
     substituteInPlace dvc/daemon.py \
       --subst-var-by dvc "$out/bin/dcv"
   '';
@@ -48,8 +37,8 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    appdirs
     aiohttp-retry
+    appdirs
     colorama
     configobj
     configobj
@@ -57,12 +46,16 @@ python3.pkgs.buildPythonApplication rec {
     diskcache
     distro
     dpath
+    dvclive
+    dvc-data
+    dvc-render
     flatten-dict
     flufl_lock
     funcy
     grandalf
     nanotime
     networkx
+    packaging
     pathspec
     ply
     psutil
@@ -83,13 +76,17 @@ python3.pkgs.buildPythonApplication rec {
     voluptuous
     zc_lockfile
   ] ++ lib.optional enableGoogle [
+    gcsfs
     google-cloud-storage
   ] ++ lib.optional enableAWS [
+    aiobotocore
     boto3
+    s3fs
   ] ++ lib.optional enableAzure [
-    azure-storage-blob
+    azure-identity
+    knack
   ] ++ lib.optional enableSSH [
-    paramiko
+    bcrypt
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ] ++ lib.optionals (pythonOlder "3.9") [
@@ -104,5 +101,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://dvc.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ cmcdragonkai fab ];
+    # ImportError: cannot import name 'GDriveAuthError' from 'dvc_objects.fs.implementations.gdrive'
+    broken = true;
   };
 }

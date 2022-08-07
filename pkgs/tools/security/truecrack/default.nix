@@ -27,6 +27,14 @@ gccStdenv.mkDerivation rec {
     cudatoolkit
   ];
 
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: CpuAes.o:/build/source/src/Crypto/CpuAes.h:1233: multiple definition of
+  #     `t_rc'; CpuCore.o:/build/source/src/Crypto/CpuAes.h:1237: first defined here
+  # TODO: remove on upstream fixes it:
+  #   https://gitlab.com/kalilinux/packages/truecrack/-/issues/1
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   installFlags = [ "prefix=$(out)" ];
   enableParallelBuilding = true;
 

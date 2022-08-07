@@ -43,6 +43,9 @@ stdenv.mkDerivation rec {
     rm src/mkjs
     substituteInPlace src/Makefile.am --replace "g++ mkjs.cc" \
       "${buildPackages.stdenv.cc.targetPrefix}c++ mkjs.cc"
+
+    # to open help
+    substituteInPlace src/global.cc --replace 'browser="mozilla"' 'browser="xdg-open"'
   '';
 
   nativeBuildInputs = [

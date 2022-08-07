@@ -2,7 +2,7 @@
 , buildPythonApplication
 , fetchPypi
 , pbr
-, Babel
+, babel
 , cliff
 , iso8601
 , osc-lib
@@ -22,16 +22,16 @@
 
 buildPythonApplication rec {
   pname = "python-heatclient";
-  version = "2.5.1";
+  version = "3.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-3l7XyxKm18BAM1DhNsCmRwcZR224+8m/jQ1YHrwLHCs=";
+    sha256 = "sha256-5OLysKbM2GbjMT8lshWDLMtqOrHq2DhhWvbw1oNBNZs=";
   };
 
   propagatedBuildInputs = [
     pbr
-    Babel
+    babel
     cliff
     iso8601
     osc-lib

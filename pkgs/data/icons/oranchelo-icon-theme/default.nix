@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, gtk3, plasma5Packages, hicolor-icon-theme }:
+{ lib, stdenvNoCC, fetchFromGitHub, gtk3, plasma5Packages, hicolor-icon-theme }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "oranchelo-icon-theme";
   version = "0.8.0.1";
 

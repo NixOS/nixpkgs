@@ -13,21 +13,40 @@
 , Security
 , nghttp2
 , libgit2
+, cargo-edit
 , withExtraFeatures ? true
+, testers
+, nushell
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nushell";
-  version = "0.61.0";
+  version = "0.65.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-1wTMXlFViJh/x+W7WqZ9uf1SV6X4er6SWO6qTjf9C94=";
+    sha256 = "sha256-KgXhmAOJaAvmNuDqSaW+h6GF5rWYgj8/wn+vz9V9S7M=";
   };
 
-  cargoSha256 = "sha256-aG5otxeVGBAi8uZd7xRnvwapfKT3kToBiYhFUTYIgHM=";
+  cargoSha256 = "sha256-YqtM/1p6oP0+E0rYSFPeCbof06E81eC2PZIwkU7J0I4=";
+  # Since 0.34, nu has an indirect dependency on `zstd-sys` (via `polars` and
+  # `parquet`, for dataframe support), which by default has an impure build
+  # (git submodule for the `zstd` C library). The `pkg-config` feature flag
+  # fixes this, but it's hard to invoke this in the right place, because of
+  # the indirect dependencies. So add a direct dependency on `zstd-sys` here
+  # at the top level, along with this feature flag, to ensure that when
+  # `zstd-sys` is transitively invoked, it triggers a pure build using the
+  # system `zstd` library provided above.
+  depsExtraArgs = { nativeBuildInputs = [ cargo-edit ]; };
+  # cargo add has been merged in to cargo so the above can be removed once 1.62.0 is available in nixpkgs
+  # https://github.com/rust-lang/cargo/pull/10472
+  cargoUpdateHook = ''
+    cargo add zstd-sys --features pkg-config --offline
+    # write the change to the lockfile
+    cargo update --package zstd-sys --offline
+  '';
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optionals (withExtraFeatures && stdenv.isLinux) [ python3 ];
@@ -38,19 +57,6 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals (withExtraFeatures && stdenv.isDarwin) [ AppKit nghttp2 libgit2 ];
 
   buildFeatures = lib.optional withExtraFeatures "extra";
-
-  # Since 0.34, nu has an indirect dependency on `zstd-sys` (via `polars` and
-  # `parquet`, for dataframe support), which by default has an impure build
-  # (git submodule for the `zstd` C library). The `pkg-config` feature flag
-  # fixes this, but it's hard to invoke this in the right place, because of
-  # the indirect dependencies. So add a direct dependency on `zstd-sys` here
-  # at the top level, along with this feature flag, to ensure that when
-  # `zstd-sys` is transitively invoked, it triggers a pure build using the
-  # system `zstd` library provided above.
-  #
-  # (If this patch needs updating, in a nushell repo add the zstd-sys line to
-  # Cargo.toml, then `cargo update --package zstd-sys` to update Cargo.lock.)
-  cargoPatches = [ ./use-system-zstd-lib.diff ];
 
   # TODO investigate why tests are broken on darwin
   # failures show that tests try to write to paths
@@ -74,5 +80,8 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     shellPath = "/bin/nu";
+    tests.version = testers.testVersion {
+      package = nushell;
+    };
   };
 }

@@ -1,6 +1,21 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, xtrans, dbus-glib, systemd,
-  libSM, libXtst, gtk3, libepoxy, polkit, hicolor-icon-theme, mate,
-  wrapGAppsHook, fetchpatch, mateUpdateScript
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, xtrans
+, dbus-glib
+, systemd
+, libSM
+, libXtst
+, gtk3
+, libepoxy
+, polkit
+, hicolor-icon-theme
+, mate
+, wrapGAppsHook
+, fetchpatch
+, mateUpdateScript
 }:
 
 stdenv.mkDerivation rec {

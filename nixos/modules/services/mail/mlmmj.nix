@@ -56,31 +56,31 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable mlmmj";
+        description = lib.mdDoc "Enable mlmmj";
       };
 
       user = mkOption {
         type = types.str;
         default = "mlmmj";
-        description = "mailinglist local user";
+        description = lib.mdDoc "mailinglist local user";
       };
 
       group = mkOption {
         type = types.str;
         default = "mlmmj";
-        description = "mailinglist local group";
+        description = lib.mdDoc "mailinglist local group";
       };
 
       listDomain = mkOption {
         type = types.str;
         default = "localhost";
-        description = "Set the mailing list domain";
+        description = lib.mdDoc "Set the mailing list domain";
       };
 
       mailLists = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = "The collection of hosted maillists";
+        description = lib.mdDoc "The collection of hosted maillists";
       };
 
       maintInterval = mkOption {

@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "VNC remote desktop client software by RealVNC";
     homepage = "https://www.realvnc.com/en/connect/download/viewer/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = {
       fullName = "VNC Connect End User License Agreement";
       url = "https://static.realvnc.com/media/documents/LICENSE-4.0a_en.pdf";

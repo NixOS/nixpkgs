@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchurl, zlib, gmp, ncurses5, lib }:
+{ stdenv, pkgs, fetchurl, zlib, gmp, lib }:
 
 # from justinwoo/easy-purescript-nix
 # https://github.com/justinwoo/easy-purescript-nix/blob/d383972c82620a712ead4033db14110497bc2c9c/purs.nix
@@ -18,7 +18,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "purescript";
-  version = "0.14.7";
+  version = "0.15.4";
 
   # These hashes can be updated automatically by running the ./update.sh script.
   src =
@@ -26,18 +26,16 @@ in stdenv.mkDerivation rec {
     then
     fetchurl {
       url = "https://github.com/${pname}/${pname}/releases/download/v${version}/macos.tar.gz";
-      sha256 = "0pc07xv5h7jgiy04rcrnsjb97nk5zs7jrvcsqggn0izlnrcyi8rc";
+      sha256 = "0rksc6c98pp48lcavair6apjpgq3s1zz0lhkc59vbz67c8zxc26d";
     }
     else
     fetchurl {
       url = "https://github.com/${pname}/${pname}/releases/download/v${version}/linux64.tar.gz";
-      sha256 = "0vcjxb1v76wg4hmisnw0pp6wl0pwp4fa19cw08zdhgy62w06mqfa";
+      sha256 = "13p6qsba6kmcsppc3z6vcm3v5c7jxhp10nyvxry4nmj9mkdmjaiy";
     };
 
 
-  buildInputs = [ zlib
-                  gmp
-                  ncurses5 ];
+  buildInputs = [ zlib gmp ];
   libPath = lib.makeLibraryPath buildInputs;
   dontStrip = true;
 
@@ -63,6 +61,7 @@ in stdenv.mkDerivation rec {
     description = "A strongly-typed functional programming language that compiles to JavaScript";
     homepage = "https://www.purescript.org/";
     license = licenses.bsd3;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ justinwoo mbbx6spp cdepillabout ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     mainProgram = "purs";

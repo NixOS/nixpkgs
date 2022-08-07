@@ -1,22 +1,14 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -p nix-prefetch-git "python3.withPackages (ps: with ps; [ lxml ])"
+#! nix-shell -p nix-prefetch-git python3
 #! nix-shell -i python
 
-import base64
+import csv
 import json
 import re
 import shlex
 import subprocess
-from codecs import iterdecode
 from os.path import abspath, dirname, splitext
-from lxml import etree
-from lxml.etree import HTMLParser
 from urllib.request import urlopen
-
-git_path = 'chromiumos/platform/crosvm'
-git_root = 'https://chromium.googlesource.com/'
-manifest_versions = f'{git_root}chromiumos/manifest-versions'
-buildspecs_url = f'{manifest_versions}/+/refs/heads/master/full/buildspecs/'
 
 # CrOS version numbers look like this:
 # [<chrome-major-version>.]<tip-build>.<branch-build>.<branch-branch-build>
@@ -26,50 +18,37 @@ buildspecs_url = f'{manifest_versions}/+/refs/heads/master/full/buildspecs/'
 # branch branches are used for fixes for specific devices.  So for
 # Chromium OS they will always be 0.  This is a best guess, and is not
 # documented.
-with urlopen('https://cros-updates-serving.appspot.com/') as resp:
-    document = etree.parse(resp, HTMLParser())
-    # bgcolor="lightgreen" is set on the most up-to-date version for
-    # each channel, so find a lightgreen cell in the "Stable" column.
-    (platform_version, chrome_version) = document.xpath("""
-        (//table[@id="cros-updates"]/tr/td[1 + count(
-            //table[@id="cros-updates"]/thead/tr[1]/th[text() = "Stable"]
-            /preceding-sibling::*)
-        ][@bgcolor="lightgreen"])[1]/text()
-    """)
+with urlopen('https://chromiumdash.appspot.com/cros/download_serving_builds_csv?deviceCategory=ChromeOS') as resp:
+    reader = csv.reader(map(bytes.decode, resp))
+    header = reader.__next__()
+    cr_stable_index = header.index('cr_stable')
+    cros_stable_index = header.index('cros_stable')
+    chrome_version = []
+    platform_version = []
 
-chrome_major_version = re.match(r'\d+', chrome_version)[0]
-chromeos_tip_build = re.match(r'\d+', platform_version)[0]
+    for line in reader:
+        this_chrome_version = list(map(int, line[cr_stable_index].split('.')))
+        this_platform_version = list(map(int, line[cros_stable_index].split('.')))
+        chrome_version = max(chrome_version, this_chrome_version)
+        platform_version = max(platform_version, this_platform_version)
 
-# Find the most recent buildspec for the stable Chrome version and
-# Chromium OS build number.  Its branch build and branch branch build
-# numbers will (almost?) certainly be 0.  It will then end with an rc
-# number -- presumably these are release candidates, one of which
-# becomes the final release.  Presumably the one with the highest rc
-# number.
-with urlopen(f'{buildspecs_url}{chrome_major_version}/?format=TEXT') as resp:
-    listing = base64.decodebytes(resp.read()).decode('utf-8')
-    buildspecs = [(line.split('\t', 1)[1]) for line in listing.splitlines()]
-    buildspecs = [s for s in buildspecs if s.startswith(chromeos_tip_build)]
-    buildspecs.sort(reverse=True)
-    buildspec = splitext(buildspecs[0])[0]
+chrome_major_version = chrome_version[0]
+chromeos_tip_build = platform_version[0]
+release_branch = f'release-R{chrome_major_version}-{chromeos_tip_build}.B-chromeos'
 
-# Read the buildspec, and extract the git revision.
-with urlopen(f'{buildspecs_url}{chrome_major_version}/{buildspec}.xml?format=TEXT') as resp:
-    xml = base64.decodebytes(resp.read())
-    root = etree.fromstring(xml)
-    revision = root.find(f'./project[@name="{git_path}"]').get('revision')
-
-# Initialize the data that will be output from this script.  Leave the
-# rc number in buildspec so nobody else is subject to the same level
-# of confusion I have been.
-data = {'version': f'{chrome_major_version}.{buildspec}'}
+# Determine the patch version by counting the commits that have been
+# added to the release branch since it forked off the chromeos branch.
+with urlopen(f'https://chromium.googlesource.com/chromiumos/platform/crosvm/+log/refs/heads/chromeos..refs/heads/{release_branch}?format=JSON') as resp:
+    resp.readline() # Remove )]}' header
+    branch_commits = json.load(resp)['log']
+    data = {'version': f'{chrome_major_version}.{len(branch_commits)}'}
 
 # Fill in the 'src' key with the output from nix-prefetch-git, which
 # can be passed straight to fetchGit when imported by Nix.
 argv = ['nix-prefetch-git',
         '--fetch-submodules',
-        '--url', git_root + git_path,
-        '--rev', revision]
+        '--url', 'https://chromium.googlesource.com/crosvm/crosvm',
+        '--rev', f'refs/heads/{release_branch}']
 output = subprocess.check_output(argv)
 data['src'] = json.loads(output.decode('utf-8'))
 

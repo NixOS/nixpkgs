@@ -26,7 +26,7 @@ let
     options = {
       interface = mkOption {
         type = types.nullOr types.str;
-        description = ''
+        description = lib.mdDoc ''
           Listen for any Neighbor Solicitation messages on this interface,
           and respond to them according to a set of rules.
           Defaults to the name of the attrset.
@@ -35,14 +35,14 @@ let
       };
       router = mkOption {
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Turns on or off the router flag for Neighbor Advertisement Messages.
         '';
         default = true;
       };
       timeout = mkOption {
         type = types.int;
-        description = ''
+        description = lib.mdDoc ''
           Controls how long to wait for a Neighbor Advertisment Message before
           invalidating the entry, in milliseconds.
         '';
@@ -50,7 +50,7 @@ let
       };
       ttl = mkOption {
         type = types.int;
-        description = ''
+        description = lib.mdDoc ''
           Controls how long a valid or invalid entry remains in the cache, in
           milliseconds.
         '';
@@ -58,7 +58,7 @@ let
       };
       rules = mkOption {
         type = types.attrsOf rule;
-        description = ''
+        description = lib.mdDoc ''
           This is a rule that the target address is to match against. If no netmask
           is provided, /128 is assumed. You may have several rule sections, and the
           addresses may or may not overlap.
@@ -72,7 +72,7 @@ let
     options = {
       network = mkOption {
         type = types.nullOr types.str;
-        description = ''
+        description = lib.mdDoc ''
           This is the target address is to match against. If no netmask
           is provided, /128 is assumed. The addresses of serveral rules
           may or may not overlap.
@@ -82,7 +82,7 @@ let
       };
       method = mkOption {
         type = types.enum [ "static" "iface" "auto" ];
-        description = ''
+        description = lib.mdDoc ''
           static: Immediately answer any Neighbor Solicitation Messages
             (if they match the IP rule).
           iface: Forward the Neighbor Solicitation Message through the specified
@@ -95,7 +95,7 @@ let
       };
       interface = mkOption {
         type = types.nullOr types.str;
-        description = "Interface to use when method is iface.";
+        description = lib.mdDoc "Interface to use when method is iface.";
         default = null;
       };
     };
@@ -124,12 +124,12 @@ in {
     };
     configFile = mkOption {
       type = types.nullOr types.path;
-      description = "Path to configuration file.";
+      description = lib.mdDoc "Path to configuration file.";
       default = null;
     };
     routeTTL = mkOption {
       type = types.int;
-      description = ''
+      description = lib.mdDoc ''
         This tells 'ndppd' how often to reload the route file /proc/net/ipv6_route,
         in milliseconds.
       '';
@@ -137,7 +137,7 @@ in {
     };
     proxies = mkOption {
       type = types.attrsOf proxy;
-      description = ''
+      description = lib.mdDoc ''
         This sets up a listener, that will listen for any Neighbor Solicitation
         messages, and respond to them according to a set of rules.
       '';

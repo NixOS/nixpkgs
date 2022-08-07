@@ -1,9 +1,10 @@
 { lib, stdenv, fetchFromGitHub
 , pkg-config
+, wrapGAppsHook
 , libX11, libXv
 , udev
 , SDL2
-, gtk2, gtksourceview
+, gtk3, gtksourceview3
 , alsa-lib, libao, openal, libpulseaudio
 , libicns, Cocoa, OpenAL
 }:
@@ -34,16 +35,23 @@ stdenv.mkDerivation {
     ./macos-copy-app-to-prefix.patch
   ];
 
-  nativeBuildInputs = [ pkg-config ]
+  nativeBuildInputs = [ pkg-config wrapGAppsHook ]
     ++ lib.optionals stdenv.isDarwin [ libicns ];
 
   buildInputs = [ SDL2 libao ]
-    ++ lib.optionals stdenv.isLinux [ libX11 libXv udev gtk2 gtksourceview alsa-lib openal libpulseaudio ]
+    ++ lib.optionals stdenv.isLinux [ libX11 libXv udev gtk3 gtksourceview3 alsa-lib openal libpulseaudio ]
     ++ lib.optionals stdenv.isDarwin [ Cocoa OpenAL ];
 
   enableParallelBuilding = true;
 
-  makeFlags = [ "-C" "bsnes" "prefix=$(out)" ];
+  makeFlags = [ "-C" "bsnes" "hiro=gtk3" "prefix=$(out)" ];
+
+  # https://github.com/bsnes-emu/bsnes/issues/107
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix GDK_BACKEND : x11
+    )
+  '';
 
   meta = with lib; {
     description = "A fork of bsnes that adds HD video features";
@@ -51,5 +59,9 @@ stdenv.mkDerivation {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ stevebob ];
     platforms = platforms.unix;
+    # ../nall/traits.hpp:19:14: error: no member named 'is_floating_point_v' in namespace 'std'; did you mean 'is_floating_point'?
+    #   using std::is_floating_point_v;
+    broken = (stdenv.isDarwin && stdenv.isx86_64);
+    mainProgram = "bsnes";
   };
 }

@@ -54,6 +54,7 @@ buildGoModule rec {
     homepage = "https://gotify.net";
     license = licenses.mit;
     maintainers = with maintainers; [ doronbehar ];
+    mainProgram = "server";
   };
 
 }

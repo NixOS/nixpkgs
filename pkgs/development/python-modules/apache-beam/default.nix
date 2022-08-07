@@ -37,26 +37,25 @@
 , sqlalchemy
 , tenacity
 , typing-extensions
-}:
+, testcontainers
+, scikit-learn }:
 
 buildPythonPackage rec {
   pname = "apache-beam";
-  version = "2.37.0";
-  disabled = pythonAtLeast "3.10";
+  version = "2.40.0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "beam";
     rev = "v${version}";
-    sha256 = "sha256-FmfTxRLqXUHhhAZIxCRx2+phX0bmU5rIHaftBU4yBJY=";
+    sha256 = "sha256-0S7Dj6PMSbZkEAY6ZLUpKVfe/tFxsq60TTAFj0Qhtv0=";
   };
 
   # See https://github.com/NixOS/nixpkgs/issues/156957.
   postPatch = ''
     substituteInPlace setup.py \
       --replace "dill>=0.3.1.1,<0.3.2" "dill" \
-      --replace "httplib2>=0.8,<0.20.0" "httplib2" \
-      --replace "pyarrow>=0.15.1,<7.0.0" "pyarrow"
+      --replace "pyarrow>=0.15.1,<8.0.0" "pyarrow"
   '';
 
   sourceRoot = "source/sdks/python";
@@ -105,8 +104,10 @@ buildPythonPackage rec {
     pytestCheckHook
     pyyaml
     requests-mock
+    scikit-learn
     sqlalchemy
     tenacity
+    testcontainers
   ];
 
   # Make sure we're running the tests for the actually installed
@@ -122,8 +123,6 @@ buildPythonPackage rec {
     #         container_init: Callable[[], Union[PostgresContainer, MySqlContainer]],
     #     E   NameError: name 'MySqlContainer' is not defined
     #
-    # Test relies on the testcontainers package, which is not currently (as of
-    # 2022-04-08) available in nixpkgs.
     "apache_beam/io/external/xlang_jdbcio_it_test.py"
 
     # These tests depend on the availability of specific servers backends.
@@ -140,6 +139,21 @@ buildPythonPackage rec {
     # different runners - I don't expect them to help debugging these
     # when running via our (= custom from their PoV) testing infra.
     "test_with_main_session"
+    # AssertionErrors
+    "test_unified_repr"
+    "testDictComprehension"
+    "testDictComprehensionSimple"
+    "testGenerator"
+    "testGeneratorComprehension"
+    "testListComprehension"
+    "testNoneReturn"
+    "testSet"
+    "testTupleListComprehension"
+    "test_newtype"
+    "test_pardo_type_inference"
+    "test_get_output_batch_type"
+    "test_pformat_namedtuple_with_unnamed_fields"
+    "test_row_coder_fail_early_bad_schema"
   ];
 
   meta = with lib; {

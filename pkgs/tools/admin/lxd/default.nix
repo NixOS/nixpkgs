@@ -1,4 +1,4 @@
-{ lib, hwdata, pkg-config, lxc, buildGo118Package, fetchurl, fetchpatch
+{ lib, hwdata, pkg-config, lxc, buildGoPackage, fetchurl
 , makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq, attr
 , squashfsTools, iproute2, iptables, libcap
 , dqlite, raft-canonical, sqlite-replication, udev
@@ -9,21 +9,26 @@
 , nixosTests
 }:
 
-buildGo118Package rec {
+buildGoPackage rec {
   pname = "lxd";
-  version = "5.0.0";
+  version = "5.4";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
-    url = "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz";
-    sha256 = "sha256-qZt+37UsgZWy3kmIhE0y1zvmQm9s/yhAglBReyOP3vk=";
+    urls = [
+      "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz"
+      "https://github.com/lxc/lxd/releases/download/lxd-${version}/lxd-${version}.tar.gz"
+    ];
+    sha256 = "sha256-4jS2fFB30F4i+VjjJWvZHyYkUFRZk9Cq8bTOK9uZOTo=";
   };
 
   postPatch = ''
     substituteInPlace shared/usbid/load.go \
       --replace "/usr/share/misc/usb.ids" "${hwdata}/share/hwdata/usb.ids"
   '';
+
+  excludedPackages = [ "test" "lxd/db/generate" ];
 
   preBuild = ''
     # required for go-dqlite. See: https://github.com/lxc/lxd/pull/8939
@@ -33,9 +38,6 @@ buildGo118Package rec {
   '';
 
   postInstall = ''
-    # test binaries, code generation
-    rm $out/bin/{deps,macaroon-identity,generate}
-
     wrapProgram $out/bin/lxd --prefix PATH : ${lib.makeBinPath (
       [ iptables ]
       ++ [ acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute2 bash criu attr ]
@@ -49,6 +51,7 @@ buildGo118Package rec {
   '';
 
   passthru.tests.lxd = nixosTests.lxd;
+  passthru.tests.lxd-nftables = nixosTests.lxd-nftables;
 
   nativeBuildInputs = [ installShellFiles pkg-config makeWrapper ];
   buildInputs = [ lxc acl libcap dqlite.dev raft-canonical.dev
@@ -57,8 +60,9 @@ buildGo118Package rec {
   meta = with lib; {
     description = "Daemon based on liblxc offering a REST API to manage containers";
     homepage = "https://linuxcontainers.org/lxd/";
+    changelog = "https://github.com/lxc/lxd/releases/tag/lxd-${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fpletz marsam ];
+    maintainers = with maintainers; [ marsam ];
     platforms = platforms.linux;
   };
 }

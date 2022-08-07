@@ -13,7 +13,7 @@ rec {
       , stdenv, fetchFromGitHub, fetchpatch, buildGoPackage
       , makeWrapper, installShellFiles, pkg-config, glibc
       , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
-      , sqlite, iproute2, lvm2, systemd, docker-buildx, docker-compose_2
+      , sqlite, iproute2, lvm2, systemd, docker-buildx, docker-compose
       , btrfs-progs, iptables, e2fsprogs, xz, util-linux, xfsprogs, git
       , procps, libseccomp, rootlesskit, slirp4netns, fuse-overlayfs
       , nixosTests
@@ -136,7 +136,7 @@ rec {
     });
 
     plugins = optionals buildxSupport [ docker-buildx ]
-      ++ optionals composeSupport [ docker-compose_2 ];
+      ++ optionals composeSupport [ docker-compose ];
     pluginsRef = symlinkJoin { name = "docker-plugins"; paths = plugins; };
   in
     buildGoPackage ((optionalAttrs (!clientOnly) {
@@ -186,7 +186,7 @@ rec {
       export BUILDTIME="1970-01-01T00:00:00Z"
       source ./scripts/build/.variables
       export CGO_ENABLED=1
-      go build -tags pkcs11 --ldflags "$LDFLAGS" github.com/docker/cli/cmd/docker
+      go build -tags pkcs11 --ldflags "$GO_LDFLAGS" github.com/docker/cli/cmd/docker
       cd -
     '';
 
@@ -243,19 +243,19 @@ rec {
   # Get revisions from
   # https://github.com/moby/moby/tree/${version}/hack/dockerfile/install/*
   docker_20_10 = callPackage dockerGen rec {
-    version = "20.10.14";
+    version = "20.10.17";
     rev = "v${version}";
-    sha256 = "sha256-eDwgqFx4io++SMOjhxMxVzqzcOgOnv6Xe/qmmPCvZts=";
+    sha256 = "sha256-YCuohqtE4rbGyboVRyxvpqs93IS1k7aUTPdtHIlkUU8=";
     moby-src = fetchFromGitHub {
       owner = "moby";
       repo = "moby";
       rev = "v${version}";
-      sha256 = "sha256-I5oxpFLH789I2Sb29OXDaM4fCbQT/KvPq0DYcAVp0aI=";
+      sha256 = "sha256-7SQubrbMvXSN3blcCW47F9OnjuKZxdXM5O/lE85zx0I=";
     };
-    runcRev = "v1.0.3";
-    runcSha256 = "sha256-Tl/JKbIpao+FCjngPzaVkxse50zo3XQ9Mg/AdkblMcI=";
-    containerdRev = "v1.5.11";
-    containerdSha256 = "sha256-YzFtv6DIjImSK0SywxhZrEeEmCnHTceAi3pfwnPubKg=";
+    runcRev = "v1.1.2";
+    runcSha256 = "sha256-tMneqB81w8lQp5RWWCjALyKbOY3xog+oqb6cYKasG/8=";
+    containerdRev = "v1.6.6";
+    containerdSha256 = "sha256-cmarbad6VzcGTCHT/NtApkYsK/oo6WZQ//q8Fvh+ez8=";
     tiniRev = "v0.19.0";
     tiniSha256 = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
   };

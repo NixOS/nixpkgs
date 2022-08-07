@@ -36,16 +36,16 @@ in
       enable = mkOption {
         type        = types.bool;
         default     = false;
-        description = ''
-          If enabled, starts a Terraria server. The server can be connected to via <literal>tmux -S ''${config.${opt.dataDir}}/terraria.sock attach</literal>
-          for administration by users who are a part of the <literal>terraria</literal> group (use <literal>C-b d</literal> shortcut to detach again).
+        description = lib.mdDoc ''
+          If enabled, starts a Terraria server. The server can be connected to via `tmux -S ''${config.${opt.dataDir}}/terraria.sock attach`
+          for administration by users who are a part of the `terraria` group (use `C-b d` shortcut to detach again).
         '';
       };
 
       port = mkOption {
         type        = types.port;
         default     = 7777;
-        description = ''
+        description = lib.mdDoc ''
           Specifies the port to listen on.
         '';
       };
@@ -53,7 +53,7 @@ in
       maxPlayers = mkOption {
         type        = types.ints.u8;
         default     = 255;
-        description = ''
+        description = lib.mdDoc ''
           Sets the max number of players (between 1 and 255).
         '';
       };
@@ -61,15 +61,15 @@ in
       password = mkOption {
         type        = types.nullOr types.str;
         default     = null;
-        description = ''
-          Sets the server password. Leave <literal>null</literal> for no password.
+        description = lib.mdDoc ''
+          Sets the server password. Leave `null` for no password.
         '';
       };
 
       messageOfTheDay = mkOption {
         type        = types.nullOr types.str;
         default     = null;
-        description = ''
+        description = lib.mdDoc ''
           Set the server message of the day text.
         '';
       };
@@ -77,18 +77,18 @@ in
       worldPath = mkOption {
         type        = types.nullOr types.path;
         default     = null;
-        description = ''
-          The path to the world file (<literal>.wld</literal>) which should be loaded.
+        description = lib.mdDoc ''
+          The path to the world file (`.wld`) which should be loaded.
           If no world exists at this path, one will be created with the size
-          specified by <literal>autoCreatedWorldSize</literal>.
+          specified by `autoCreatedWorldSize`.
         '';
       };
 
       autoCreatedWorldSize = mkOption {
         type        = types.enum [ "small" "medium" "large" ];
         default     = "medium";
-        description = ''
-          Specifies the size of the auto-created world if <literal>worldPath</literal> does not
+        description = lib.mdDoc ''
+          Specifies the size of the auto-created world if `worldPath` does not
           point to an existing world.
         '';
       };
@@ -96,7 +96,7 @@ in
       banListPath = mkOption {
         type        = types.nullOr types.path;
         default     = null;
-        description = ''
+        description = lib.mdDoc ''
           The path to the ban list.
         '';
       };
@@ -104,26 +104,26 @@ in
       secure = mkOption {
         type        = types.bool;
         default     = false;
-        description = "Adds additional cheat protection to the server.";
+        description = lib.mdDoc "Adds additional cheat protection to the server.";
       };
 
       noUPnP = mkOption {
         type        = types.bool;
         default     = false;
-        description = "Disables automatic Universal Plug and Play.";
+        description = lib.mdDoc "Disables automatic Universal Plug and Play.";
       };
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = "Wheter to open ports in the firewall";
+        description = lib.mdDoc "Wheter to open ports in the firewall";
       };
 
       dataDir = mkOption {
         type        = types.str;
         default     = "/var/lib/terraria";
         example     = "/srv/terraria";
-        description = "Path to variable state data directory for terraria.";
+        description = lib.mdDoc "Path to variable state data directory for terraria.";
       };
     };
   };

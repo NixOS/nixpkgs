@@ -19,6 +19,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/qnikst/kbdd";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.wedens ];
+    maintainers = [ ];
   };
 }

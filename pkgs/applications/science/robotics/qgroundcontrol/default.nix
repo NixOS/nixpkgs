@@ -6,7 +6,7 @@
 
 mkDerivation rec {
   pname = "qgroundcontrol";
-  version = "4.2.0";
+  version = "4.2.3";
 
   qtInputs = [
     qtbase qtcharts qtlocation qtserialport qtsvg qtquickcontrols2
@@ -14,7 +14,12 @@ mkDerivation rec {
   ];
 
   gstInputs = with gst_all_1; [
-    gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad wayland
+    gstreamer
+    gst-plugins-base
+    (gst-plugins-good.override { qt5Support = true; })
+    gst-plugins-bad
+    gst-libav
+    wayland
   ];
 
   buildInputs = [ SDL2 ] ++ gstInputs ++ qtInputs;
@@ -64,9 +69,15 @@ mkDerivation rec {
     owner = "mavlink";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-TBnJQKO9cwxP9q+bIB1CaGnm9npymJ3iEAD9kPJi9JA=";
+    sha256 = "sha256-xa4c0ggQKqt4OfwVehjkhXYXY1TYVEoubuRH3Zsv0Ac=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # fix build problems caused by https://github.com/mavlink/qgroundcontrol/pull/10132
+    # remove once updated past 4.2.0
+    ./fix-10132.patch
+  ];
 
   meta = with lib; {
     description = "Provides full ground station support and configuration for the PX4 and APM Flight Stacks";

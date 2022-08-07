@@ -21,25 +21,25 @@ in
         type = types.package;
         default = pkgs.sabnzbd;
         defaultText = "pkgs.sabnzbd";
-        description = "The sabnzbd executable package run by the service.";
+        description = lib.mdDoc "The sabnzbd executable package run by the service.";
       };
 
       configFile = mkOption {
         type = types.path;
         default = "/var/lib/sabnzbd/sabnzbd.ini";
-        description = "Path to config file.";
+        description = lib.mdDoc "Path to config file.";
       };
 
       user = mkOption {
         default = "sabnzbd";
         type = types.str;
-        description = "User to run the service as";
+        description = lib.mdDoc "User to run the service as";
       };
 
       group = mkOption {
         type = types.str;
         default = "sabnzbd";
-        description = "Group to run the service as";
+        description = lib.mdDoc "Group to run the service as";
       };
     };
   };

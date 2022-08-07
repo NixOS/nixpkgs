@@ -23,7 +23,7 @@ in
 
       config = mkOption {
         type        = types.lines;
-        description = ''
+        description = lib.mdDoc ''
           Contents of Dante's configuration file.
           NOTE: user.privileged, user.unprivileged and logoutput are set by the service.
         '';

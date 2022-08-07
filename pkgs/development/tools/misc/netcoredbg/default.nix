@@ -1,7 +1,7 @@
 { lib, clangStdenv, stdenvNoCC, cmake, fetchFromGitHub, dotnetCorePackages, buildDotnetModule }:
 let
   pname = "netcoredbg";
-  version = "1.2.0-825";
+  version = "2.0.0-895";
 
   # according to CMakeLists.txt, this should be 3.1 even when building for .NET 5
   coreclr-version = "3.1.19";
@@ -12,24 +12,27 @@ let
     sha256 = "o1KafmXqNjX9axr6sSxPKrfUX0e+b/4ANiVQt4T2ybw=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_5_0;
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
 
   src = fetchFromGitHub {
     owner = "Samsung";
     repo = pname;
     rev = version;
-    sha256 = "JQhDI1+bVbOIFNkXixZnFB/5+dzqCbInR0zJvykcFCg=";
+    sha256 = "sha256-zOfChuNjD6py6KD1AmN5DgCGxD2YNH9gTyageoiN8PU=";
   };
 
   unmanaged = clangStdenv.mkDerivation rec {
     inherit src pname version;
 
+    patches = [ ./limits.patch ];
     nativeBuildInputs = [ cmake dotnet-sdk ];
 
     hardeningDisable = [ "strictoverflow" ];
 
     preConfigure = ''
+      export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
       dotnetVersion="$(${dotnet-sdk}/bin/dotnet --list-runtimes | grep -Po '^Microsoft.NETCore.App \K.*?(?= )')"
+
       cmakeFlagsArray+=(
         "-DDBGSHIM_RUNTIME_DIR=${dotnet-sdk}/shared/Microsoft.NETCore.App/$dotnetVersion"
       )

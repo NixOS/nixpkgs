@@ -1,29 +1,64 @@
-{ lib, buildPythonPackage, fetchPypi, python
-, attrs, enum34, hyperlink, incremental, six, twisted, typing, tubes, werkzeug, zope_interface
-, hypothesis, treq
+{ lib
+, stdenv
+, attrs
+, buildPythonPackage
+, fetchFromGitHub
+, hyperlink
+, hypothesis
+, incremental
+, python
+, pythonOlder
+, treq
+, tubes
+, twisted
+, typing-extensions
+, werkzeug
+, zope_interface
 }:
 
 buildPythonPackage rec {
   pname = "klein";
-  version = "21.8.0";
+  version = "unstable-2022-06-26";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1mpydmz90d0n9dwa7mr6pgj5v0kczfs05ykssrasdq368dssw7ch";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "twisted";
+    repo = pname;
+    rev = "d8c2b92a3c77aa64c596696fb6f07172ecf94a74";
+    hash = "sha256-RDZqavkteUbARV78OctZtLIrE4RoYDVAanjwE5i/ZeM=";
   };
 
-  propagatedBuildInputs = [ attrs enum34 hyperlink incremental six twisted typing tubes werkzeug zope_interface ];
+  propagatedBuildInputs = [
+    attrs
+    hyperlink
+    incremental
+    twisted
+    tubes
+    werkzeug
+    zope_interface
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+  ];
 
-  checkInputs = [ hypothesis treq ];
+  checkInputs = [
+    hypothesis
+    treq
+  ];
 
   checkPhase = ''
     ${python.interpreter} -m twisted.trial -j $NIX_BUILD_CORES klein
   '';
 
+  pythonImportsCheck = [
+    "klein"
+  ];
+
   meta = with lib; {
     description = "Klein Web Micro-Framework";
-    homepage    = "https://github.com/twisted/klein";
-    license     = licenses.mit;
+    homepage = "https://github.com/twisted/klein";
+    license = licenses.mit;
     maintainers = with maintainers; [ exarkun ];
   };
 }

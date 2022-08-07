@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
     homepage = "https://cryptowat.ch";
     description = "Application for visualising real-time cryptocurrency market data";
     platforms = platforms.linux;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ livnev ];
   };

@@ -1,56 +1,78 @@
 { lib
-, async_generator
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
+, brotli
 , brotlicffi
+, buildPythonPackage
 , certifi
-, charset-normalizer
+, chardet
+, click
+, fetchFromGitHub
+, h2
 , httpcore
-, rfc3986
-, sniffio
+, isPyPy
+, pygments
 , python
+, pythonOlder
+, rfc3986
+, rich
+, sniffio
+, socksio
 , pytestCheckHook
 , pytest-asyncio
 , pytest-trio
-, typing-extensions
 , trustme
 , uvicorn
 }:
 
 buildPythonPackage rec {
   pname = "httpx";
-  version = "0.22.0";
+  version = "0.23.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "sha256-hQmQodGpVG23IZSsWV7rB1iB6QAudDao/8YshIgpmas=";
+    hash = "sha256-s11Yeizm3y3w5D6ACQ2wp/KJ0+1ALY/R71IlTP2pMC4=";
   };
 
   propagatedBuildInputs = [
-    brotlicffi
     certifi
-    charset-normalizer
     httpcore
     rfc3986
     sniffio
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    async_generator
   ];
 
+  passthru.optional-dependencies = {
+    http2 = [
+      h2
+    ];
+    socks = [
+      socksio
+    ];
+    brotli = if isPyPy then [
+      brotlicffi
+    ] else [
+      brotli
+    ];
+    cli = [
+      click
+      rich
+      pygments
+    ];
+  };
+
   checkInputs = [
+    chardet
     pytestCheckHook
     pytest-asyncio
     pytest-trio
     trustme
-    typing-extensions
     uvicorn
-  ];
+  ] ++ passthru.optional-dependencies.http2
+    ++ passthru.optional-dependencies.brotli
+    ++ passthru.optional-dependencies.socks;
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -73,9 +95,6 @@ buildPythonPackage rec {
     # httpcore.ConnectError: [Errno -2] Name or service not known
     "test_async_proxy_close"
     "test_sync_proxy_close"
-    # sensitive to charset_normalizer output
-    "iso-8859-1"
-    "test_response_no_charset_with_iso_8859_1_content"
   ];
 
   disabledTestPaths = [

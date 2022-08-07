@@ -46,6 +46,6 @@ mkDerivation rec {
     description = "LXQt service for global keyboard shortcuts registration";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

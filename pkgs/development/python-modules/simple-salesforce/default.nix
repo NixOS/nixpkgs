@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "simple-salesforce";
-  version = "1.11.6";
+  version = "1.12.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-/uaFEQnilcelHKjbmrnyLm5Mzj2V8P4oEH+cgJn+KvI=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-eDaqL4CsP5wOqfwrkeWJdg+rlcMnFT3l7A9xgVnhx0w=";
   };
 
   propagatedBuildInputs = [

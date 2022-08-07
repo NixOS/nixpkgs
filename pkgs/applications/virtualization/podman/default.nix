@@ -17,13 +17,13 @@
 
 buildGoModule rec {
   pname = "podman";
-  version = "4.0.3";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    sha256 = "sha256-o/CIs+3LnbaUUpOQI1hijrxH7f1qBnrQw56TJ18jKQw=";
+    sha256 = "sha256-+lwq4WTPeELjugTg9l1wvoe0VTqRK2lC1jaFIwXMrL0=";
   };
 
   vendorSha256 = null;
@@ -88,6 +88,7 @@ buildGoModule rec {
       podman-tls-ghostunnel
       podman-dnsname
       ;
+    oci-containers-podman = nixosTests.oci-containers.podman;
   };
 
   meta = with lib; {

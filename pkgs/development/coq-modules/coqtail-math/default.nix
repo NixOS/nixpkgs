@@ -14,9 +14,7 @@ mkCoqDerivation {
   release."8.14".sha256 = "sha256:1k8f8idjnx0mf4z479vcx55iz42rjxrbplbznv80m2famxakq03c";
   release."20201124".rev    = "5c22c3d7dcd8cf4c47cf84a281780f5915488e9e";
   release."20201124".sha256 = "sha256-wd+Lh7dpAD4zfpyKuztDmSFEZo5ZiFrR8ti2jUCVvoQ=";
-
-  extraNativeBuildInputs = with coq.ocamlPackages; [ ocaml findlib ];
-
+  mlPlugin = true;
   meta = {
     license = licenses.lgpl3Only;
     maintainers = [ maintainers.siraben ];

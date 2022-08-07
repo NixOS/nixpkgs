@@ -15,18 +15,18 @@
 
 let
   pname = "rust-analyzer";
-  publisher = "matklad";
+  publisher = "rust-lang";
 
   # Use the plugin version as in vscode marketplace, updated by update script.
   inherit (vsix) version;
 
-  releaseTag = "2022-03-07";
+  releaseTag = "2022-05-17";
 
   src = fetchFromGitHub {
-    owner = "rust-analyzer";
+    owner = "rust-lang";
     repo = "rust-analyzer";
     rev = releaseTag;
-    sha256 = "sha256-/qKh4utesAjlyG8A3hEmSx+HBgh48Uje6ZRtUGz5f0g=";
+    sha256 = "sha256-vrVpgQYUuJPgK1NMb1nxlCdxjoYo40YkUbZpH2Z2mwM=";
   };
 
   build-deps = nodePackages."rust-analyzer-build-deps-../../applications/editors/vscode/extensions/rust-analyzer/build-deps";
@@ -47,7 +47,7 @@ let
       darwin.apple_sdk.frameworks.Security
     ];
 
-    # Follows https://github.com/rust-analyzer/rust-analyzer/blob/41949748a6123fd6061eb984a47f4fe780525e63/xtask/src/dist.rs#L39-L65
+    # Follows https://github.com/rust-lang/rust-analyzer/blob/41949748a6123fd6061eb984a47f4fe780525e63/xtask/src/dist.rs#L39-L65
     postInstall = ''
       jq '
         .version = $ENV.version |
@@ -58,7 +58,7 @@ let
 
       mkdir -p $vsix
       # vsce ask for continue due to missing LICENSE.md
-      # Should be removed after https://github.com/rust-analyzer/rust-analyzer/commit/acd5c1f19bf7246107aaae7b6fe3f676a516c6d2
+      # Should be removed after https://github.com/rust-lang/rust-analyzer/commit/acd5c1f19bf7246107aaae7b6fe3f676a516c6d2
       echo y | npx vsce package -o $vsix/${pname}.zip
     '';
   };
@@ -80,7 +80,7 @@ vscode-utils.buildVscodeExtension {
 
   meta = with lib; {
     description = "An alternative rust language server to the RLS";
-    homepage = "https://github.com/rust-analyzer/rust-analyzer";
+    homepage = "https://github.com/rust-lang/rust-analyzer";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ ];
     platforms = platforms.all;

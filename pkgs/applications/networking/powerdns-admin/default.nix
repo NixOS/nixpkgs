@@ -1,32 +1,39 @@
 { lib, stdenv, fetchFromGitHub, mkYarnPackage, nixosTests, writeText, python3 }:
 
 let
-  version = "0.2.4";
+  version = "0.3.0";
   src = fetchFromGitHub {
     owner = "ngoduykhanh";
     repo = "PowerDNS-Admin";
     rev = "v${version}";
-    sha256 = "sha256-xJ0NNnDVwGl+t9q1INPhCxcTmQayYBYdjEG0PbPCI9E=";
+    hash = "sha256-e11u0jdJr+2TDXvBAPlDfnuuDwSfBq+JtvnDUTNKp/c=";
   };
 
   python = python3.override {
     packageOverrides = self: super: {
-      dnspython = super.dnspython.overridePythonAttrs (oldAttrs: rec {
-        version = "1.16.0";
+      # The bravado-core dependency is incompatible with jschonschema 4.0:
+      # https://github.com/Yelp/bravado-core/pull/385
+      jsonschema = super.jsonschema.overridePythonAttrs (oldAttrs: rec {
+        version = "3.2.0";
+
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "36c5e8e38d4369a08b6780b7f27d790a292b2b08eea01607865bf0936c558e01";
+          hash = "sha256-yKhbKNN3zHc35G4tnytPRO48Dh3qxr9G3e/HGH0weXo=";
         };
+
+        SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+        doCheck = false;
       });
     };
   };
 
   pythonDeps = with python.pkgs; [
-    flask flask_assets flask_login flask_sqlalchemy flask_migrate flask-seasurf flask_mail flask-session flask-sslify
+    flask flask_assets flask_login flask-sqlalchemy flask_migrate flask-seasurf flask_mail flask-session flask-sslify
     mysqlclient psycopg2 sqlalchemy
     cffi configobj cryptography bcrypt requests ldap pyotp qrcode dnspython
-    gunicorn python3-saml pyopenssl pytz cssmin jsmin authlib bravado-core
-    lima pytimeparse pyyaml
+    gunicorn python3-saml pytz cssmin rjsmin authlib bravado-core
+    lima pytimeparse pyyaml jinja2 itsdangerous werkzeug
   ];
 
   assets = mkYarnPackage {

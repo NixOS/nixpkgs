@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , karton-core
 , pytestCheckHook
-, python_magic
+, python-magic
 , pythonOlder
 }:
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     chardet
     karton-core
-    python_magic
+    python-magic
   ];
 
   postPatch = ''

@@ -46,6 +46,6 @@ mkDerivation rec {
     description = "The LXQt notification daemon";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

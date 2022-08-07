@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config, makeWrapper, vulkan-loader }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, makeWrapper, vulkan-loader, QuartzCore }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wgpu-utils";
@@ -17,6 +17,8 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     makeWrapper
   ];
+
+  buildInputs = lib.optional stdenv.isDarwin QuartzCore;
 
   # Tests fail, as the Nix sandbox doesn't provide an appropriate adapter (e.g. Vulkan).
   doCheck = false;

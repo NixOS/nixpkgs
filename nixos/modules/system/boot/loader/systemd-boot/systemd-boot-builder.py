@@ -204,7 +204,6 @@ def get_profiles() -> List[str]:
     else:
         return []
 
-
 def main() -> None:
     parser = argparse.ArgumentParser(description='Update NixOS-related systemd-boot files')
     parser.add_argument('default_config', metavar='DEFAULT-CONFIG', help='The default NixOS config to boot')
@@ -244,26 +243,26 @@ def main() -> None:
         subprocess.check_call(["@systemd@/bin/bootctl", "--path=@efiSysMountPoint@"] + flags + ["install"])
     else:
         # Update bootloader to latest if needed
-        systemd_version = subprocess.check_output(["@systemd@/bin/bootctl", "--version"], universal_newlines=True).split()[2]
-        sdboot_status = subprocess.check_output(["@systemd@/bin/bootctl", "--path=@efiSysMountPoint@", "status"], universal_newlines=True)
+        available_out = subprocess.check_output(["@systemd@/bin/bootctl", "--version"], universal_newlines=True).split()[2]
+        installed_out = subprocess.check_output(["@systemd@/bin/bootctl", "--path=@efiSysMountPoint@", "status"], universal_newlines=True)
 
         # See status_binaries() in systemd bootctl.c for code which generates this
-        m = re.search("^\W+File:.*/EFI/(BOOT|systemd)/.*\.efi \(systemd-boot ([\d.]+[^)]*)\)$",
-                      sdboot_status, re.IGNORECASE | re.MULTILINE)
+        installed_match = re.search(r"^\W+File:.*/EFI/(?:BOOT|systemd)/.*\.efi \(systemd-boot ([\d.]+[^)]*)\)$",
+                      installed_out, re.IGNORECASE | re.MULTILINE)
 
-        needs_install = False
+        available_match = re.search(r"^\((.*)\)$", available_out)
 
-        if m is None:
-            print("could not find any previously installed systemd-boot, installing.")
-            # Let systemd-boot attempt an installation if a previous one wasn't found
-            needs_install = True
-        else:
-            sdboot_version = f'({m.group(2)})'
-            if systemd_version != sdboot_version:
-                print("updating systemd-boot from %s to %s" % (sdboot_version, systemd_version))
-                needs_install = True
+        if installed_match is None:
+            raise Exception("could not find any previously installed systemd-boot")
 
-        if needs_install:
+        if available_match is None:
+            raise Exception("could not determine systemd-boot version")
+
+        installed_version = installed_match.group(1)
+        available_version = available_match.group(1)
+
+        if installed_version < available_version:
+            print("updating systemd-boot from %s to %s" % (installed_version, available_version))
             subprocess.check_call(["@systemd@/bin/bootctl", "--path=@efiSysMountPoint@", "update"])
 
     mkdir_p("@efiSysMountPoint@/efi/nixos")

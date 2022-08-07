@@ -12,6 +12,7 @@ Check for any minor version changes.
 , bison, cups ? null, harfbuzz, libGL, perl
 , gstreamer, gst-plugins-base, gtk3, dconf
 , darwin
+, buildPackages
 
   # options
 , developerBuild ? false
@@ -42,6 +43,8 @@ let
       # Patch framework detection to support X.framework/X.tbd,
       # extending the current support for X.framework/X.
       ./qtbase.patch.d/0012-qtbase-tbd-frameworks.patch
+
+      ./qtbase.patch.d/0014-aarch64-darwin.patch
     ] ++ [
       ./qtbase.patch.d/0003-qtbase-mkspecs.patch
       ./qtbase.patch.d/0004-qtbase-replace-libdir.patch
@@ -118,7 +121,7 @@ let
         inherit bison cups harfbuzz libGL;
         withGtk3 = !stdenv.isDarwin; inherit dconf gtk3;
         inherit developerBuild decryptSslTraffic;
-        inherit (darwin.apple_sdk.frameworks) AGL AppKit ApplicationServices Carbon Cocoa CoreAudio CoreBluetooth
+        inherit (darwin.apple_sdk.frameworks) AGL AppKit ApplicationServices AVFoundation Carbon Cocoa CoreAudio CoreBluetooth
           CoreLocation CoreServices DiskArbitration Foundation OpenGL MetalKit IOKit;
         inherit (darwin) libobjc;
       };
@@ -134,6 +137,7 @@ let
       qtgraphicaleffects = callPackage ../modules/qtgraphicaleffects.nix {};
       qtimageformats = callPackage ../modules/qtimageformats.nix {};
       qtlocation = callPackage ../modules/qtlocation.nix {};
+      qtlottie = callPackage ../modules/qtlottie.nix {};
       qtmacextras = callPackage ../modules/qtmacextras.nix {};
       qtmultimedia = callPackage ../modules/qtmultimedia.nix {
         inherit gstreamer gst-plugins-base;
@@ -179,7 +183,7 @@ let
         qtimageformats qtlocation qtmultimedia qtquickcontrols qtquickcontrols2
         qtscript qtsensors qtserialport qtsvg qttools qttranslations
         qtvirtualkeyboard qtwebchannel qtwebengine qtwebkit qtwebsockets
-        qtwebview qtx11extras qtxmlpatterns
+        qtwebview qtx11extras qtxmlpatterns qtlottie
       ] ++ lib.optional (!stdenv.isDarwin) qtwayland
         ++ lib.optional (stdenv.isDarwin) qtmacextras);
 
@@ -192,7 +196,7 @@ let
       } ../hooks/qmake-hook.sh;
 
       wrapQtAppsHook = makeSetupHook {
-        deps = [ self.qtbase.dev makeWrapper ]
+        deps = [ self.qtbase.dev buildPackages.makeWrapper ]
           ++ lib.optional stdenv.isLinux self.qtwayland.dev;
       } ../hooks/wrap-qt-apps-hook.sh;
     };

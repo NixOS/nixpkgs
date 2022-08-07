@@ -10,7 +10,7 @@ in {
     enable = mkEnableOption "xbanish";
 
     arguments = mkOption {
-      description = "Arguments to pass to xbanish command";
+      description = lib.mdDoc "Arguments to pass to xbanish command";
       default = "";
       example = "-d -i shift";
       type = types.str;

@@ -28,6 +28,21 @@ stdenv.mkDerivation rec {
       url = "https://github.com/openembedded/meta-openembedded/raw/39185eb1d1615e919e3ae14ae63b8ed7d3e5d83f/meta-oe/recipes-support/tbb/tbb/0001-mallinfo-is-glibc-specific-API-mark-it-so.patch";
       sha256 = "fhorfqO1hHKZ61uq+yTR7eQ8KYdyLwpM3K7WpwJpV74=";
     })
+
+    # Fixes build with upcoming gcc-13:
+    #  https://github.com/oneapi-src/oneTBB/pull/833
+    (fetchurl {
+      name = "gcc-13.patch";
+      url = "https://github.com/oneapi-src/oneTBB/pull/833/commits/c18342ba667d1f33f5e9a773aa86b091a9694b97.patch";
+      sha256 = "ZUExE3nsW80Z5GPWZnDNuDiHHaD1EF7qNl/G5M+Wcxg=";
+    })
+
+    # Fixes build for aarch64-darwin
+    (fetchurl {
+      name = "aarch64-darwin.patch";
+      url = "https://github.com/oneapi-src/oneTBB/pull/258/commits/86f6dcdc17a8f5ef2382faaef860cfa5243984fe.patch";
+      sha256 = "sha256-JXqrFPCb3q1vfxk752tQu7HhApCB4YH2LoVnGRwmspk=";
+    })
   ];
 
   nativeBuildInputs = lib.optionals stdenv.isDarwin [

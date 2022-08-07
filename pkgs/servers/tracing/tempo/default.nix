@@ -1,17 +1,27 @@
 { lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
-  version = "1.1.0";
   pname = "tempo";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
     owner = "grafana";
     repo = "tempo";
-    sha256 = "sha256-qKsgcc62HTwl7Usmp8zk4vKDo4XEJnwL+A3hoLhgBkk=";
+    rev = "v${version}";
+    fetchSubmodules = true;
+    sha256 = "sha256-kxR+xwhthsK3gThs0jPJfWlsRG35kCuWvKH3Wr7ENTs=";
   };
 
   vendorSha256 = null;
+
+  subPackages = [
+    "cmd/tempo-cli"
+    "cmd/tempo-query"
+    # FIXME: build is broken upstream, enable for next release
+    # "cmd/tempo-serverless"
+    "cmd/tempo-vulture"
+    "cmd/tempo"
+  ];
 
   # tests use docker
   doCheck = false;

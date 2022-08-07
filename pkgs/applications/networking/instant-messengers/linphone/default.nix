@@ -1,52 +1,18 @@
-{ bcg729
-, bctoolbox
-, bcunit
+{ bctoolbox
 , belcard
 , belle-sip
 , belr
-, bzrtp
-, cairo
 , cmake
-, cyrus_sasl
 , fetchFromGitLab
-, fetchurl
-, ffmpeg
-, gdk-pixbuf
-, glib
-, gnused
-, graphviz
-, gtk2
-, intltool
 , lib
-, libexosip
 , liblinphone
-, libmatroska
-, libnotify
-, libosip
-, libsoup
-, libupnp
-, libX11
-, libxml2
-, makeWrapper
-, mbedtls
 , mediastreamer
 , mediastreamer-openh264
 , minizip2
 , mkDerivation
-, openldap
-, ortp
-, pango
-, pkg-config
-, qtbase
 , qtgraphicaleffects
 , qtquickcontrols2
 , qttranslations
-, readline
-, speex
-, sqlite
-
-, udev
-, zlib
 }:
 
 # How to update Linphone? (The Qt desktop app)
@@ -96,63 +62,30 @@ mkDerivation rec {
   # linphone-desktop.
   buildInputs = [
     # Made by BC
-    bcg729
     bctoolbox
     belcard
     belle-sip
     belr
-    bzrtp
     liblinphone
     mediastreamer
     mediastreamer-openh264
-    ortp
 
-    # Vendored by BC but we use upstream, might cause problems
-    libmatroska
-
-    cairo
-    cyrus_sasl
-    ffmpeg
-    gdk-pixbuf
-    glib
-    gtk2
-    libX11
-    libexosip
-    libnotify
-    libosip
-    libsoup
-    libupnp
-    libxml2
-    mbedtls
     minizip2
-    openldap
-    pango
-    qtbase
     qtgraphicaleffects
     qtquickcontrols2
     qttranslations
-    readline
-    speex
-    sqlite
-    udev
-    zlib
   ];
 
   nativeBuildInputs = [
-    # Made by BC
-    bcunit
-
     cmake
-    gnused
-    graphviz
-    intltool
-    makeWrapper
-    pkg-config
   ];
 
   cmakeFlags = [
     "-DMINIZIP_INCLUDE_DIRS=${minizip2}/include"
     "-DMINIZIP_LIBRARIES=minizip"
+
+    # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];
 
   # The default install phase fails because the paths are somehow messed up in

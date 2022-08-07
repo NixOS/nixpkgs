@@ -1,6 +1,6 @@
 { version, sha256, patches ? [] }:
 
-{ lib, stdenv, buildPackages, fetchurl, perl, xz, gettext
+{ lib, stdenv, buildPackages, fetchurl, perl, xz, libintl, bash
 
 # we are a dependency of gcc, this simplifies bootstraping
 , interactive ? false, ncurses, procps
@@ -33,16 +33,20 @@ stdenv.mkDerivation {
   NATIVE_TOOLS_CFLAGS = if crossBuildTools then "-I${getDev buildPackages.ncurses}/include" else null;
   NATIVE_TOOLS_LDFLAGS = if crossBuildTools then "-L${getLib buildPackages.ncurses}/lib" else null;
 
-  # We need a native compiler to build perl XS extensions
-  # when cross-compiling.
+  strictDeps = true;
+  enableParallelBuilding = true;
+
+  # A native compiler is needed to build tools needed at build time
   depsBuildBuild = [ buildPackages.stdenv.cc perl ];
 
-  buildInputs = [ xz.bin ]
+  buildInputs = [ xz.bin bash libintl ]
     ++ optionals stdenv.isSunOS [ libiconv gawk ]
-    ++ optionals stdenv.isDarwin [ gettext ]
     ++ optional interactive ncurses;
 
   configureFlags = [ "PERL=${buildPackages.perl}/bin/perl" ]
+    # Perl XS modules are difficult to cross-compile and texinfo has pure Perl
+    # fallbacks.
+    ++ optional crossBuildTools "--enable-perl-xs=no"
     ++ lib.optional stdenv.isSunOS "AWK=${gawk}/bin/awk";
 
   installFlags = [ "TEXMF=$(out)/texmf-dist" ];
@@ -59,6 +63,13 @@ stdenv.mkDerivation {
     #   https://lists.gnu.org/r/bug-texinfo/2021-07/msg00012.html
     "XFAIL_TESTS=test_scripts/layout_formatting_fr_icons.sh"
   ];
+
+  postFixup = optionalString crossBuildTools ''
+    for f in "$out"/bin/{pod2texi,texi2any}; do
+      substituteInPlace "$f" \
+        --replace ${buildPackages.perl}/bin/perl ${perl}/bin/perl
+    done
+  '';
 
   meta = {
     homepage = "https://www.gnu.org/software/texinfo/";

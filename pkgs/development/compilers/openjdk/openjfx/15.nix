@@ -31,8 +31,15 @@ let
       JDK_HOME = ${openjdk11_headless.home}
     '' + args.gradleProperties or "");
 
-    #avoids errors about deprecation of GTypeDebugFlags, GTimeVal, etc.
-    NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
+    NIX_CFLAGS_COMPILE = [
+      #avoids errors about deprecation of GTypeDebugFlags, GTimeVal, etc.
+      "-DGLIB_DISABLE_DEPRECATION_WARNINGS"
+
+      # gstreamer workaround for -fno-common toolchains:
+      #   ld: gsttypefindelement.o:(.bss._gst_disable_registry_cache+0x0): multiple definition of
+      #     `_gst_disable_registry_cache'; gst.o:(.bss._gst_disable_registry_cache+0x0): first defined here
+      "-fcommon"
+    ];
 
     buildPhase = ''
       runHook preBuild
@@ -89,7 +96,10 @@ in makePackage {
   '';
 
   # glib-2.62 deprecations
-  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
+  # -fcommon: gstreamer workaround for -fno-common toolchains:
+  #   ld: gsttypefindelement.o:(.bss._gst_disable_registry_cache+0x0): multiple definition of
+  #     `_gst_disable_registry_cache'; gst.o:(.bss._gst_disable_registry_cache+0x0): first defined here
+  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS -fcommon";
 
   stripDebugList = [ "." ];
 

@@ -142,6 +142,7 @@ in stdenv.mkDerivation {
   meta = with lib; {
     description = "GUI for managing Windows programs under linux";
     homepage = "https://www.playonlinux.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3;
     maintainers = [ maintainers.pasqui23 ];
     platforms = [ "x86_64-linux" "i686-linux" ];

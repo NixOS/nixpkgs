@@ -136,7 +136,7 @@ let
 
       ${optionalString (enableNpm && stdenv.hostPlatform == stdenv.buildPlatform) ''
         mkdir -p $out/share/bash-completion/completions/
-        $out/bin/npm completion > $out/share/bash-completion/completions/npm || :
+        HOME=$TMPDIR $out/bin/npm completion > $out/share/bash-completion/completions/npm
         for dir in "$out/lib/node_modules/npm/man/"*; do
           mkdir -p $out/share/man/$(basename "$dir")
           for page in "$dir"/*; do
@@ -194,7 +194,7 @@ let
       maintainers = with maintainers; [ goibhniu gilligan cko marsam ];
       platforms = platforms.linux ++ platforms.darwin;
       mainProgram = "node";
-      knownVulnerabilities = optional (versionOlder version "12") "This NodeJS release has reached its end of life. See https://nodejs.org/en/about/releases/.";
+      knownVulnerabilities = optional (versionOlder version "14") "This NodeJS release has reached its end of life. See https://nodejs.org/en/about/releases/.";
     };
 
     passthru.python = python; # to ensure nodeEnv uses the same version

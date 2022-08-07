@@ -4,8 +4,13 @@ on:
     branches:
      - master
      - release-**
+permissions:
+  contents: read
+
 jobs:
   build:
+    permissions:
+      contents: write  # for peter-evans/commit-comment to comment on commit
     runs-on: ubuntu-latest
     if: github.repository_owner == 'NixOS'
     env:

@@ -1,10 +1,7 @@
 { stdenv, lib, fetchFromGitHub
 , fetchpatch
-, asciidoc
 , brotli
 , cmake
-, graphviz
-, doxygen
 , giflib
 , gperftools
 , gtest
@@ -14,8 +11,12 @@
 , libwebp
 , openexr
 , pkg-config
-, python3
 , zlib
+, buildDocs ? true
+, asciidoc
+, graphviz
+, doxygen
+, python3
 }:
 
 stdenv.mkDerivation rec {
@@ -47,16 +48,28 @@ stdenv.mkDerivation rec {
       url = "https://github.com/libjxl/libjxl/commit/204f87a5e4d684544b13900109abf040dc0b402b.patch";
       sha256 = "sha256-DoAaYWLmQ+R9GZbHMTYGe0gBL9ZesgtB+2WhmbARna8=";
     })
+
+    # fix build with asciidoc wrapped in shell script
+    (fetchpatch {
+      url = "https://github.com/libjxl/libjxl/commit/b8ec58c58c6281987f42ebec892f513824c0cc0e.patch";
+      hash = "sha256-g8U+YVhLfgSHJ+PWJgvVOI66+FElJSC8IgSRodNnsMw=";
+    })
+    (fetchpatch {
+      url = "https://github.com/libjxl/libjxl/commit/ca8e276aacf63a752346a6a44ba673b0af993237.patch";
+      excludes = [ "AUTHORS" ];
+      hash = "sha256-9VXy1LdJ0JhYbCGPNMySpnGLBxUrr8BYzE+oU3LnUGw=";
+    })
   ];
 
   nativeBuildInputs = [
-    asciidoc # for docs
     cmake
-    graphviz # for docs via doxygen component `dot`
-    doxygen # for docs
     gtest
     pkg-config
-    python3 # for docs
+  ] ++ lib.optionals buildDocs [
+    asciidoc
+    graphviz
+    doxygen
+    python3
   ];
 
   # Functionality not currently provided by this package
@@ -76,15 +89,18 @@ stdenv.mkDerivation rec {
   # conclusively in its README or otherwise; they can best be determined
   # by checking the CMake output for "Could NOT find".
   buildInputs = [
-    brotli
     giflib
     gperftools # provides `libtcmalloc`
-    libhwy
     libjpeg
     libpng
     libwebp
     openexr
     zlib
+  ];
+
+  propagatedBuildInputs = [
+    brotli
+    libhwy
   ];
 
   cmakeFlags = [
@@ -112,16 +128,6 @@ stdenv.mkDerivation rec {
   LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
 
   doCheck = !stdenv.hostPlatform.isi686;
-
-  # The test driver runs a test `LibraryCLinkageTest` which without
-  # LD_LIBRARY_PATH setting errors with:
-  #     /build/source/build/tools/tests/libjxl_test: error while loading shared libraries: libjxl.so.0
-  # The required file is in the build directory (`$PWD`).
-  preCheck = if stdenv.isDarwin then ''
-    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD
-  '' else ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/libjxl/libjxl";

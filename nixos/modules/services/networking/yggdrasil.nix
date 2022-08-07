@@ -44,8 +44,8 @@ in {
           are supplied, they will be combined, with values from
           <option>configFile</option> taking precedence.
 
-          You can use the command <code>nix-shell -p yggdrasil --run
-          "yggdrasil -genconf"</code> to generate default
+          You can use the command <literal>nix-shell -p yggdrasil --run
+          "yggdrasil -genconf"</literal> to generate default
           configuration values with documentation.
         '';
       };
@@ -54,31 +54,31 @@ in {
         type = nullOr path;
         default = null;
         example = "/run/keys/yggdrasil.conf";
-        description = ''
+        description = lib.mdDoc ''
           A file which contains JSON configuration for yggdrasil.
-          See the <option>config</option> option for more information.
+          See the {option}`config` option for more information.
         '';
       };
 
       group = mkOption {
-        type = types.str;
-        default = "root";
+        type = types.nullOr types.str;
+        default = null;
         example = "wheel";
-        description = "Group to grant access to the Yggdrasil control socket.";
+        description = lib.mdDoc "Group to grant access to the Yggdrasil control socket. If `null`, only root can access the socket.";
       };
 
       openMulticastPort = mkOption {
         type = bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to open the UDP port used for multicast peer
           discovery. The NixOS firewall blocks link-local
           communication, so in order to make local peering work you
-          will also need to set <code>LinkLocalTCPPort</code> in your
-          yggdrasil configuration (<option>config</option> or
-          <option>configFile</option>) to a port number other than 0,
+          will also need to set `LinkLocalTCPPort` in your
+          yggdrasil configuration ({option}`config` or
+          {option}`configFile`) to a port number other than 0,
           and then add that port to
-          <option>networking.firewall.allowedTCPPorts</option>.
+          {option}`networking.firewall.allowedTCPPorts`.
         '';
       };
 
@@ -86,7 +86,7 @@ in {
         type = listOf str;
         default = [];
         example = [ "tap*" ];
-        description = ''
+        description = lib.mdDoc ''
           Disable the DHCP client for any interface whose name matches
           any of the shell glob patterns in this list.  Use this
           option to prevent the DHCP client from broadcasting requests
@@ -100,7 +100,7 @@ in {
         type = package;
         default = pkgs.yggdrasil;
         defaultText = literalExpression "pkgs.yggdrasil";
-        description = "Yggdrasil package to use.";
+        description = lib.mdDoc "Yggdrasil package to use.";
       };
 
       persistentKeys = mkEnableOption ''
@@ -132,8 +132,9 @@ in {
 
     systemd.services.yggdrasil = {
       description = "Yggdrasil Network Service";
-      bindsTo = [ "network-online.target" ];
-      after = [ "network-online.target" ];
+      after = [ "network-pre.target" ];
+      wants = [ "network.target" ];
+      before = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
       preStart =
@@ -154,27 +155,16 @@ in {
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "always";
 
-        Group = cfg.group;
+        DynamicUser = true;
+        StateDirectory = "yggdrasil";
         RuntimeDirectory = "yggdrasil";
         RuntimeDirectoryMode = "0750";
         BindReadOnlyPaths = lib.optional configFileProvided cfg.configFile
           ++ lib.optional cfg.persistentKeys keysPath;
+        ReadWritePaths = "/run/yggdrasil";
 
-        # TODO: as of yggdrasil 0.3.8 and systemd 243, yggdrasil fails
-        # to set up the network adapter when DynamicUser is set.  See
-        # github.com/yggdrasil-network/yggdrasil-go/issues/557.  The
-        # following options are implied by DynamicUser according to
-        # the systemd.exec documentation, and can be removed if the
-        # upstream issue is fixed and DynamicUser is set to true:
-        PrivateTmp = true;
-        RemoveIPC = true;
-        NoNewPrivileges = true;
-        ProtectSystem = "strict";
-        RestrictSUIDSGID = true;
-        # End of list of options implied by DynamicUser.
-
-        AmbientCapabilities = "CAP_NET_ADMIN";
-        CapabilityBoundingSet = "CAP_NET_ADMIN";
+        AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
+        CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
         MemoryDenyWriteExecute = true;
         ProtectControlGroups = true;
         ProtectHome = "tmpfs";
@@ -185,7 +175,9 @@ in {
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
         SystemCallFilter = "~@clock @cpu-emulation @debug @keyring @module @mount @obsolete @raw-io @resources";
-      };
+      } // (if (cfg.group != null) then {
+        Group = cfg.group;
+      } else {});
     };
 
     networking.dhcpcd.denyInterfaces = cfg.denyDhcpcdInterfaces;

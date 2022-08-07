@@ -35,6 +35,7 @@
 , stdenv
 , xhtml1
 , yajl
+, writeScript
 
   # Linux
 , acl ? null
@@ -96,6 +97,8 @@ let
   ] ++ optionals enableIscsi [
     libiscsi
     openiscsi
+  ] ++ optionals enableZfs [
+    zfs
   ]);
 in
 
@@ -110,28 +113,18 @@ stdenv.mkDerivation rec {
   # NOTE: You must also bump:
   # <nixpkgs/pkgs/development/python-modules/libvirt/default.nix>
   # SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
-  version = "8.1.0";
+  version = "8.5.0";
 
-  src =
-    if isDarwin then
-      fetchurl
-        {
-          url = "https://libvirt.org/sources/${pname}-${version}.tar.xz";
-          sha256 = "sha256-PGxDvs/+s0o/OXxhYgaqaaiT/4v16CCDk8hOjnU1KTQ=";
-        }
-    else
-      fetchFromGitLab
-        {
-          owner = pname;
-          repo = pname;
-          rev = "v${version}";
-          sha256 = "sha256-nk8pBlss+g4EMy+RnAOyz6YlGGvlBvl5aBpcytsK1wY=";
-          fetchSubmodules = true;
-        };
+  src = fetchFromGitLab {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-x6TnMFYjcUSdQZd9ctN2hITCAl9TGVb7/qAObGb9xMk=";
+    fetchSubmodules = true;
+  };
 
   patches = [
     ./0001-meson-patch-in-an-install-prefix-for-building-on-nix.patch
-    ./0001-qemu-segmentation-fault-in-virtqemud-executing-qemuD.patch
   ];
 
   # remove some broken tests
@@ -142,8 +135,12 @@ stdenv.mkDerivation rec {
     sed -i '0,/qemuxml2argvtest/{/qemuxml2argvtest/d;}' tests/meson.build
   '' + optionalString isDarwin ''
     sed -i '/qemucapabilitiestest/d' tests/meson.build
+    sed -i '/vircryptotest/d' tests/meson.build
+  '' + optionalString (isDarwin && isx86_64) ''
+    sed -i '/qemucaps2xmltest/d' tests/meson.build
+    sed -i '/qemuhotplugtest/d' tests/meson.build
+    sed -i '/virnetdaemontest/d' tests/meson.build
   '';
-
 
   nativeBuildInputs = [
     meson
@@ -229,7 +226,7 @@ stdenv.mkDerivation rec {
         --replace "ggrep" "grep"
 
       substituteInPlace src/util/virpolkit.h \
-        --replace '"/usr/bin/pkttyagent"' '"${polkit.bin}/bin/pkttyagent"'
+        --replace '"/usr/bin/pkttyagent"' '"${if isLinux then polkit.bin else "/usr"}/bin/pkttyagent"'
 
       patchShebangs .
     ''
@@ -275,7 +272,7 @@ stdenv.mkDerivation rec {
       (feat "numactl" isLinux)
       (feat "numad" isLinux)
       (feat "pciaccess" isLinux)
-      (feat "polkit" true)
+      (feat "polkit" isLinux)
       (feat "readline" true)
       (feat "secdriver_apparmor" isLinux)
       (feat "tests" true)
@@ -333,6 +330,19 @@ stdenv.mkDerivation rec {
     rm $out/lib/systemd/system/{virtlockd,virtlogd}.*
     wrapProgram $out/sbin/libvirtd \
       --prefix PATH : /run/libvirt/nix-emulators:${binPath}
+  '';
+
+  passthru.updateScript = writeScript "update-libvirt" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl jq common-updater-scripts
+
+    set -eu -o pipefail
+
+    libvirtVersion=$(curl https://gitlab.com/api/v4/projects/192693/repository/tags | jq -r '.[].name|select(. | contains("rc") | not)' | head -n1 | sed "s/v//g")
+    sysvirtVersion=$(curl https://gitlab.com/api/v4/projects/192677/repository/tags | jq -r '.[].name|select(. | contains("rc") | not)' | head -n1 | sed "s/v//g")
+    update-source-version ${pname} "$libvirtVersion"
+    update-source-version python3Packages.${pname} "$libvirtVersion"
+    update-source-version perlPackages.SysVirt "$sysvirtVersion" --file="pkgs/top-level/perl-packages.nix"
   '';
 
   meta = {

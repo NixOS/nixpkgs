@@ -7,6 +7,7 @@
 , wl-clipboard
 , imagemagick
 , makeWrapper
+, bash
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +21,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-lvhpXy4Sd1boYNGhbPoZTJlBhlW5obltDOrEzB1Gq0A=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ bash ];
 
   patchPhase = ''
     substituteInPlace Makefile \

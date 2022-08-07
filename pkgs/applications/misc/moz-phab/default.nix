@@ -5,6 +5,7 @@
 # build inputs
 , distro
 , glean-sdk
+, pip
 , python-hglib
 , sentry-sdk
 , setuptools
@@ -30,6 +31,7 @@ buildPythonApplication rec {
   propagatedBuildInputs = [
     distro
     glean-sdk
+    pip
     python-hglib
     sentry-sdk
     setuptools
@@ -51,7 +53,7 @@ buildPythonApplication rec {
     '';
     homepage = "https://moz-conduit.readthedocs.io/en/latest/phabricator-user.html";
     license = licenses.mpl20;
-    maintainers = [ maintainers.kvark ];
+    maintainers = [];
     platforms = platforms.unix;
   };
 }

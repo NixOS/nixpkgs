@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, kompose }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, kompose, git }:
 
 buildGoModule rec {
   pname = "kompose";
@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-OR5U2PnebO0a+lwU09Dveh0Yxk91cmSRorTxQIO5lHc=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ installShellFiles git ];
 
   ldflags = [ "-s" "-w" ];
 

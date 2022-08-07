@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule, alsa-lib }:
+{ stdenv, lib, fetchFromGitHub, buildGoModule, alsa-lib }:
 
 buildGoModule rec {
   pname = "jellycli";
@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "1awzcxnf175a794rhzbmqxxjss77mfa1yrr0wgdxaivrlkibxjys";
   };
 
-  vendorSha256 = "02fwsnrhj09m0aa199plpqlsjrwpmrk4c80fszzm07s5vmjqvnfy";
+  vendorHash = "sha256-3tmNZd1FH1D/1w4gRmaul2epKb70phSUAjUBCbPV3Ak=";
 
   patches = [
     # Fixes log file path for tests.
@@ -21,6 +21,7 @@ buildGoModule rec {
   buildInputs = [ alsa-lib ];
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Jellyfin terminal client";
     longDescription = ''
       Terminal music player, works with Jellyfin (>= 10.6) , Emby (>= 4.4), and

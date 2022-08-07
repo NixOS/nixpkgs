@@ -9,7 +9,6 @@
 , aiohttp-cors
 , click
 , colorama
-, dataclasses
 , mypy-extensions
 , pathspec
 , parameterized
@@ -23,13 +22,13 @@
 
 buildPythonPackage rec {
   pname = "black";
-  version = "22.3.0";
+  version = "22.6.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NQILiIbAIs7ZKCtRtah1ttGrDDh7MaBluE23wzCFynk=";
+    hash = "sha256-bG054ortN5rsQNocZUNMd9deZbtZoeHCg95UX7Tnxsk=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -61,6 +60,8 @@ buildPythonPackage rec {
     "test_bpo_2142_workaround"
     "test_skip_magic_trailing_comma"
   ];
+  # multiple tests exceed max open files on hydra builders
+  doCheck = !(stdenv.isLinux && stdenv.isAarch64);
 
   propagatedBuildInputs = [
     aiohttp

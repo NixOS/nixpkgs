@@ -18,12 +18,20 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0hrpg7yiv50xmbajfy0zdilsyhbj5iv0qnlrgkfv99q1dvd5qy56";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "support-for-pykeepass-4.0.3.patch";
+      url = "https://github.com/roddhjav/pass-import/commit/f1b167578916d971ee4f99be99ba0e86ef49015e.patch";
+      hash = "sha256-u6bJbV3/QTfRaPauKSyCWNodpy6CKsreMXUZWKRbee0=";
+    })
+  ];
+
   propagatedBuildInputs = with python3Packages; [
     cryptography
     defusedxml
     pyaml
     pykeepass
-    python_magic # similar API to "file-magic", but already in nixpkgs.
+    python-magic # similar API to "file-magic", but already in nixpkgs.
     secretstorage
   ];
 

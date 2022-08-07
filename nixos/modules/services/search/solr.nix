@@ -17,37 +17,37 @@ in
         type = types.package;
         default = pkgs.solr;
         defaultText = literalExpression "pkgs.solr";
-        description = "Which Solr package to use.";
+        description = lib.mdDoc "Which Solr package to use.";
       };
 
       port = mkOption {
         type = types.int;
         default = 8983;
-        description = "Port on which Solr is ran.";
+        description = lib.mdDoc "Port on which Solr is ran.";
       };
 
       stateDir = mkOption {
         type = types.path;
         default = "/var/lib/solr";
-        description = "The solr home directory containing config, data, and logging files.";
+        description = lib.mdDoc "The solr home directory containing config, data, and logging files.";
       };
 
       extraJavaOptions = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = "Extra command line options given to the java process running Solr.";
+        description = lib.mdDoc "Extra command line options given to the java process running Solr.";
       };
 
       user = mkOption {
         type = types.str;
         default = "solr";
-        description = "User under which Solr is ran.";
+        description = lib.mdDoc "User under which Solr is ran.";
       };
 
       group = mkOption {
         type = types.str;
         default = "solr";
-        description = "Group under which Solr is ran.";
+        description = lib.mdDoc "Group under which Solr is ran.";
       };
     };
   };

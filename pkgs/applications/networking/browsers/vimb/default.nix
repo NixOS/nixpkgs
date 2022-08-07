@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vimb";
-  version = "3.3.0";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "fanglingsu";
     repo = "vimb";
     rev = version;
-    sha256 = "1qg18z2gnsli9qgrqfhqfrsi6g9mcgr90w8yab28nxrq4aha6brf";
+    sha256 = "sha256-Eq4riJSznKpkW9JJDnTCLxZ9oMJTmWkIoGphOiCcSAg=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook pkg-config ];

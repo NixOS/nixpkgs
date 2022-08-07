@@ -8,7 +8,7 @@
 buildDunePackage {
   pname = "cohttp-mirage";
 
-  inherit (cohttp) version src minimumOCamlVersion useDune2;
+  inherit (cohttp) version src;
 
   nativeBuildInputs = [ ppx_sexp_conv ];
 

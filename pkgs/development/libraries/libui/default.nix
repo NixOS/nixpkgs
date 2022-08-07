@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/libui.so.0 $out/lib/libui.so
   '' + lib.optionalString stdenv.isDarwin ''
     mv ./out/libui.A.dylib $out/lib/
-    ln -s $out/lib/lubui.A.dylib $out/lib/libui.dylib
+    ln -s $out/lib/libui.A.dylib $out/lib/libui.dylib
   '' + ''
     cp $src/ui.h $out/include
     cp $src/ui_${backend}.h $out/include

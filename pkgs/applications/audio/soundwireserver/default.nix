@@ -35,6 +35,7 @@ qt5.mkDerivation {
     homepage = "https://georgielabs.net/";
     maintainers = with maintainers; [ mkg20001 ];
     platforms = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
   };
 }

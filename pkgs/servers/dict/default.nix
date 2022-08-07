@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
   patchPhase = "patch -p0 < ${./buildfix.diff}";
 
   configureFlags = [
-    "--enable-dictorg"
     "--datadir=/run/current-system/sw/share/dictd"
     "--sysconfdir=/etc"
   ];

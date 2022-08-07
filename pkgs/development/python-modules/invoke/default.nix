@@ -7,17 +7,15 @@
 
 buildPythonPackage rec {
   pname = "invoke";
-  version = "1.7.0";
+  version = "1.7.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4zLkneQEY/IBYxX1HfQjE4VXcr6GQ1aGFWvBj0W1zGw=";
+    hash = "sha256-e23q9YXu4KhIIF0LjAAUub9vKHqOt5iBimQt/x3xSxk=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     sed -e 's|/bin/bash|${bash}/bin/bash|g' -i invoke/config.py
   '';
 

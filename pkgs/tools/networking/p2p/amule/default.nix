@@ -80,6 +80,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;
     # cmake fails: Cannot specify link libraries for target "wxWidgets::ADV" which is not built by this project.
-    broken = enableDaemon;
+    broken = enableDaemon || stdenv.isDarwin;
   };
 }

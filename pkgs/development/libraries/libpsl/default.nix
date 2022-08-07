@@ -85,7 +85,8 @@ in stdenv.mkDerivation rec {
     homepage = "https://rockdaboot.github.io/libpsl/";
     changelog = "https://raw.githubusercontent.com/rockdaboot/${pname}/${pname}-${version}/NEWS";
     license = licenses.mit;
-    platforms = platforms.unix;
     maintainers = [ maintainers.c0bw3b ];
+    mainProgram = "psl";
+    platforms = platforms.unix;
   };
 }

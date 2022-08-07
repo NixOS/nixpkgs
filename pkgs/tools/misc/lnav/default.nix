@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, pcre-cpp, sqlite, ncurses
-, readline, zlib, bzip2, autoconf, automake, curl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pcre-cpp
+, sqlite
+, ncurses
+, readline
+, zlib
+, bzip2
+, autoconf
+, automake
+, curl
+, buildPackages
+}:
 
 stdenv.mkDerivation rec {
   pname = "lnav";
@@ -20,9 +32,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoconf automake ];
-  buildInputs = [
+  strictDeps = true;
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [
+    autoconf
+    automake
     zlib
+  ];
+  buildInputs = [
     bzip2
     ncurses
     pcre-cpp

@@ -48,9 +48,9 @@ mkYarnPackage rec {
     runHook preBuild
     export HOME=$(mktemp -d)
     pushd deps/element-desktop/
-    npx tsc
+    yarn run build:ts
     yarn run i18n
-    node ./scripts/copy-res.js
+    yarn run build:res
     popd
     rm -rf node_modules/matrix-seshat node_modules/keytar
     ${lib.optionalString useKeytar "ln -s ${keytar} node_modules/keytar"}
@@ -91,11 +91,8 @@ mkYarnPackage rec {
     runHook postInstall
   '';
 
-  # Do not attempt generating a tarball for element-web again.
-  # note: `doDist = false;` does not work.
-  distPhase = ''
-    true
-  '';
+  # Do not attempt generating a tarball for element-desktop again.
+  doDist = false;
 
   # The desktop item properties should be kept in sync with data from upstream:
   # https://github.com/vector-im/element-desktop/blob/develop/package.json

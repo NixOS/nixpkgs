@@ -20,25 +20,25 @@ let
 
       keys = mkOption {
         type = types.listOf types.int;
-        description = "List of keycodes to match.";
+        description = lib.mdDoc "List of keycodes to match.";
       };
 
       events = mkOption {
         type = types.listOf (types.enum ["key" "rep" "rel"]);
         default = [ "key" ];
-        description = "List of events to match.";
+        description = lib.mdDoc "List of events to match.";
       };
 
       attributes = mkOption {
         type = types.listOf types.str;
         default = [ "exec" ];
-        description = "List of attributes.";
+        description = lib.mdDoc "List of attributes.";
       };
 
       command = mkOption {
         type = types.str;
         default = "";
-        description = "What to run.";
+        description = lib.mdDoc "What to run.";
       };
 
     };
@@ -78,19 +78,19 @@ in
           [ { keys = [ 113 ]; events = [ "key" ]; command = "''${pkgs.alsa-utils}/bin/amixer -q set Master toggle"; }
           ]
         '';
-        description = ''
-          Key bindings for <command>actkbd</command>.
+        description = lib.mdDoc ''
+          Key bindings for {command}`actkbd`.
 
-          See <command>actkbd</command> <filename>README</filename> for documentation.
+          See {command}`actkbd` {file}`README` for documentation.
 
-          The example shows a piece of what <option>sound.mediaKeys.enable</option> does when enabled.
+          The example shows a piece of what {option}`sound.mediaKeys.enable` does when enabled.
         '';
       };
 
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Literal contents to append to the end of actkbd configuration file.
         '';
       };

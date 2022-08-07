@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fastjet-contrib";
-  version = "1.048";
+  version = "1.049";
 
   src = fetchurl {
     url = "https://fastjet.hepforge.org/contrib/downloads/fjcontrib-${version}.tar.gz";
-    sha256 = "sha256-+ZidO2rrIoSLz5EJXDBgfwJ9PvJ3pPD3BKjw/C52aYE=";
+    sha256 = "sha256-ri7WIGvGJ4tl6ZpPeN8O6ykR8wGij7V7UMVzwNWGmYc=";
   };
 
   buildInputs = [ fastjet ];
@@ -17,6 +17,11 @@ stdenv.mkDerivation rec {
     done
     patchShebangs ./configure ./utils/check.sh ./utils/install-sh
   '';
+
+  # Written in shell manually, does not support autoconf-style
+  # --build=/--host= options:
+  #   Error: --build=x86_64-unknown-linux-gnu: unrecognised argument
+  configurePlatforms = [ ];
 
   enableParallelBuilding = true;
 

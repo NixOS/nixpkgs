@@ -8,7 +8,13 @@ rec {
   platforms = import ./platforms.nix { inherit lib; };
   examples = import ./examples.nix { inherit lib; };
   architectures = import ./architectures.nix { inherit lib; };
-  supported = import ./supported.nix { inherit lib; };
+
+  /* List of all Nix system doubles the nixpkgs flake will expose the package set
+     for. All systems listed here must be supported by nixpkgs as `localSystem`.
+
+     **Warning**: This attribute is considered experimental and is subject to change.
+  */
+  flakeExposed = import ./flake-systems.nix { };
 
   # Elaborate a `localSystem` or `crossSystem` so that it contains everything
   # necessary.
@@ -25,8 +31,12 @@ rec {
       # Either of these can be losslessly-extracted from `parsed` iff parsing succeeds.
       system = parse.doubleFromSystem final.parsed;
       config = parse.tripleFromSystem final.parsed;
-      # Determine whether we are compatible with the provided CPU
-      isCompatible = platform: parse.isCompatible final.parsed.cpu platform.parsed.cpu;
+      # Determine whether we can execute binaries built for the provided platform.
+      canExecute = platform:
+        final.isAndroid == platform.isAndroid &&
+        parse.isCompatible final.parsed.cpu platform.parsed.cpu
+        && final.parsed.kernel == platform.parsed.kernel;
+      isCompatible = _: throw "2022-05-23: isCompatible has been removed in favor of canExecute, refer to the 22.11 changelog for details";
       # Derived meta-data
       libc =
         /**/ if final.isDarwin              then "libSystem"
@@ -159,7 +169,7 @@ rec {
         wine = (pkgs.winePackagesFor wine-name).minimal;
       in
         if final.parsed.kernel.name == pkgs.stdenv.hostPlatform.parsed.kernel.name &&
-           pkgs.stdenv.hostPlatform.isCompatible final
+           pkgs.stdenv.hostPlatform.canExecute final
         then "${pkgs.runtimeShell} -c '\"$@\"' --"
         else if final.isWindows
         then "${wine}/bin/${wine-name}"

@@ -2,22 +2,16 @@
 
 buildGoModule rec {
   pname = "miller";
-  version = "6.2.0";
+  version = "6.3.0";
 
   src = fetchFromGitHub {
     owner = "johnkerl";
     repo = "miller";
-    # NOTE: The tag v6.2.0 has still old version number, as reported by
-    #       `mlr --version`. This is the current head of the 6.2.0 branch, with
-    #       the correct version number.
-    #
-    #       For future releases please check if we can use
-    #       `rev = "v${version}"` again.
-    rev = "a6dc231eefc209eb66b50b0773542c2e63501bba";
-    sha256 = "sha256-hMWcf43o1wiVjHsgH+ZDBny5vlZQkKyoJN5np4gUy4w=";
+    rev = "v${version}";
+    sha256 = "sha256-5lDoJo5v6L4nkaCSyeViOeCN6cn4lBIwHYc0Jx70FFk=";
   };
 
-  vendorSha256 = "sha256-2tl/twzkvWB1lnvi3fIptM77zi0lmAn7Pzoe0/lW6o4=";
+  vendorSha256 = "sha256-MUffv6dRvtc4pC1vErGgUMh6B8bbVaP0avAKNamRErI=";
 
   subPackages = [ "cmd/mlr" ];
 

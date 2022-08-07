@@ -8,6 +8,7 @@
 , stevedore
 , pbr
 , debian-inspector
+, license-expression
 , regex
 , GitPython
 , prettytable
@@ -17,11 +18,11 @@
 
 buildPythonPackage rec {
   pname = "tern";
-  version = "2.9.1";
+  version = "2.10.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c7ce55a500061e1160b040e75dc38d0eccc790a2b70fa3b7ad1b4fb715c18fc9";
+    sha256 = "sha256-MMsq8/Obe3ogQSjiP8EebYseUJGcchMOczUrxE9jht4=";
   };
 
   preBuild = ''
@@ -36,6 +37,7 @@ buildPythonPackage rec {
     pyyaml
     docker
     dockerfile-parse
+    license-expression
     requests
     stevedore
     debian-inspector

@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dolphin-emu";
-  version = "5.0-16101";
+  version = "5.0-16380";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "8ecfa537a242de74d2e372e30d9d79b14584b2fb";
-    sha256 = "3jLGVzTDzEtHWvIb9DFTbJiA9dE9Pm14vYER998Zln0=";
+    rev = "8335ec70e5fe253eb21509408ca6b5736ed57dfc";
+    sha256 = "sha256-WRQ3WfMTlIPoYrEFWLHL9KSfhzQl24AlkbWjh3a4fPE=";
     fetchSubmodules = true;
   };
 
@@ -81,9 +81,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ MP2E ashkitten xfix ];
     branch = "master";
-    # x86_32 is an unsupported platform.
-    # Enable generic build if you really want a JIT-less binary.
     broken = stdenv.isDarwin;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = platforms.unix;
   };
 }

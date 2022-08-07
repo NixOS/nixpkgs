@@ -1,0 +1,90 @@
+From 8db45c6a0c1a4dbbd492ac7fb59c1bca9460fe3e Mon Sep 17 00:00:00 2001
+From: Adam Joseph <adam@westernsemico.com>
+Date: Sat, 18 Jun 2022 21:45:22 -0700
+Subject: [PATCH 1/3] elf.h: resynchronize with glibc elf.h
+
+This commit adds two symbols (SHT_MIPS_XHASH and DT_MIPS_XHASH) found
+in glibc, and updates the value of DT_MIPS_NUM.  These changes were
+made to glibc in 23c1c256ae7b0f010d0fcaff60682b620887b164 on
+29-Aug-2019.
+---
+ src/elf.h | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/src/elf.h b/src/elf.h
+index b3e567c3..702f2e60 100644
+--- a/src/elf.h
++++ b/src/elf.h
+@@ -1400,6 +1400,7 @@ typedef struct
+ #define SHT_MIPS_EH_REGION	0x70000027
+ #define SHT_MIPS_XLATE_OLD	0x70000028
+ #define SHT_MIPS_PDR_EXCEPTION	0x70000029
++#define SHT_MIPS_XHASH          0x7000002b
+ 
+ /* Legal values for sh_flags field of Elf32_Shdr.  */
+ 
+@@ -1647,7 +1648,9 @@ typedef struct
+    in a PIE as it stores a relative offset from the address of the tag
+    rather than an absolute address.  */
+ #define DT_MIPS_RLD_MAP_REL  0x70000035
+-#define DT_MIPS_NUM          0x36
++/* GNU-style hash table with xlat.  */
++#define DT_MIPS_XHASH        0x70000036
++#define DT_MIPS_NUM          0x37
+ 
+ /* Legal values for DT_MIPS_FLAGS Elf32_Dyn entry.  */
+ 
+
+From 820da7be8d1e1a49c4831dcb3800ed3b9f11e8a6 Mon Sep 17 00:00:00 2001
+From: Adam Joseph <adam@westernsemico.com>
+Date: Sat, 18 Jun 2022 21:49:14 -0700
+Subject: [PATCH 2/3] patchelf.cc: handle DT_MIPS_XHASH and .MIPS.xhash
+
+glibc changed their ABI in commit
+23c1c256ae7b0f010d0fcaff60682b620887b164 on 2019-Aug-29, by changing
+the structure of the .gnu.hash data on MIPS and moving it to a
+different section.  We need to adapt to this change by glibc.
+
+Closes #368
+---
+ src/patchelf.cc | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/patchelf.cc b/src/patchelf.cc
+index 6882b288..08585139 100644
+--- a/src/patchelf.cc
++++ b/src/patchelf.cc
+@@ -990,6 +990,10 @@ void ElfFile<ElfFileParamNames>::rewriteHeaders(Elf_Addr phdrAddress)
+                 // some binaries might this section stripped
+                 // in which case we just ignore the value.
+                 if (shdr) dyn->d_un.d_ptr = (*shdr).get().sh_addr;
++	    } else if (d_tag == DT_MIPS_XHASH) {
++                // the .MIPS.xhash section was added to the glibc-ABI
++                // in commit 23c1c256ae7b0f010d0fcaff60682b620887b164
++                dyn->d_un.d_ptr = findSectionHeader(".MIPS.xhash").sh_addr;
+             } else if (d_tag == DT_JMPREL) {
+                 auto shdr = tryFindSectionHeader(".rel.plt");
+                 if (!shdr) shdr = tryFindSectionHeader(".rela.plt");
+
+From 7b155fda3105ceca5643cacbdd4207c4c4c59cf5 Mon Sep 17 00:00:00 2001
+From: Adam Joseph <adam@westernsemico.com>
+Date: Sat, 18 Jun 2022 22:44:04 -0700
+Subject: [PATCH 3/3] formatting: fix incorrect indentation in previous commit
+
+---
+ src/patchelf.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/patchelf.cc b/src/patchelf.cc
+index 08585139..402b2bed 100644
+--- a/src/patchelf.cc
++++ b/src/patchelf.cc
+@@ -990,7 +990,7 @@ void ElfFile<ElfFileParamNames>::rewriteHeaders(Elf_Addr phdrAddress)
+                 // some binaries might this section stripped
+                 // in which case we just ignore the value.
+                 if (shdr) dyn->d_un.d_ptr = (*shdr).get().sh_addr;
+-	    } else if (d_tag == DT_MIPS_XHASH) {
++            } else if (d_tag == DT_MIPS_XHASH) {
+                 // the .MIPS.xhash section was added to the glibc-ABI
+                 // in commit 23c1c256ae7b0f010d0fcaff60682b620887b164
+                 dyn->d_un.d_ptr = findSectionHeader(".MIPS.xhash").sh_addr;

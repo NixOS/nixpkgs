@@ -22,6 +22,6 @@ tcl.mkTclDerivation rec {
     description = "High-level widget set for Tcl/Tk";
     maintainers = with lib.maintainers; [ agbrooks ];
     license = lib.licenses.tcltk;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

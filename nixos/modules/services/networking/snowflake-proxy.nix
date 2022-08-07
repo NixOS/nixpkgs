@@ -11,25 +11,25 @@ in
       enable = mkEnableOption "System to defeat internet censorship";
 
       broker = mkOption {
-        description = "Broker URL (default \"https://snowflake-broker.torproject.net/\")";
+        description = lib.mdDoc "Broker URL (default \"https://snowflake-broker.torproject.net/\")";
         type = with types; nullOr str;
         default = null;
       };
 
       capacity = mkOption {
-        description = "Limits the amount of maximum concurrent clients allowed.";
+        description = lib.mdDoc "Limits the amount of maximum concurrent clients allowed.";
         type = with types; nullOr int;
         default = null;
       };
 
       relay = mkOption {
-        description = "websocket relay URL (default \"wss://snowflake.bamsoftware.com/\")";
+        description = lib.mdDoc "websocket relay URL (default \"wss://snowflake.bamsoftware.com/\")";
         type = with types; nullOr str;
         default = null;
       };
 
       stun = mkOption {
-        description = "STUN broker URL (default \"stun:stun.stunprotocol.org:3478\")";
+        description = lib.mdDoc "STUN broker URL (default \"stun:stun.stunprotocol.org:3478\")";
         type = with types; nullOr str;
         default = null;
       };

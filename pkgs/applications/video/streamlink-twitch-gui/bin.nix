@@ -124,6 +124,7 @@ stdenv.mkDerivation rec {
     longDescription = "Browse Twitch.tv and watch streams in your videoplayer of choice";
     homepage = "https://streamlink.github.io/streamlink-twitch-gui/";
     downloadPage = "https://github.com/streamlink/streamlink-twitch-gui/releases";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     maintainers = with maintainers; [ rileyinman ];
     platforms = [ "x86_64-linux" "i686-linux" ];

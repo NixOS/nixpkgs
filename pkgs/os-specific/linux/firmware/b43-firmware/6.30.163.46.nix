@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   sourceRoot = ".";
 
   installPhase = ''
-    mkdir $out
-    b43-fwcutter -w $out *.wl_apsta.o
+    mkdir -p $out/lib/firmware
+    b43-fwcutter -w $out/lib/firmware *.wl_apsta.o
   '';
 
   meta = with lib; {

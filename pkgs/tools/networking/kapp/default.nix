@@ -1,13 +1,13 @@
 { lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 buildGoModule rec {
   pname = "kapp";
-  version = "0.46.0";
+  version = "0.51.0";
 
   src = fetchFromGitHub {
     owner = "vmware-tanzu";
     repo = "carvel-kapp";
     rev = "v${version}";
-    sha256 = "sha256-Z0BjwzTdKHAeETHya6M5OcsIIY//y6dDbbyZe/irCAY=";
+    sha256 = "sha256-TfTnq6cGlCm8Fv/pf6wAFrxbW2CJyZFze+woxy70OzA=";
   };
 
   vendorSha256 = null;

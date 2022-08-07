@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , aws-c-auth
 , aws-c-cal
 , aws-c-common
@@ -16,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-crt-cpp";
-  version = "0.17.16";
+  version = "0.17.28";
 
   outputs = [ "out" "dev" ];
 
@@ -24,13 +25,22 @@ stdenv.mkDerivation rec {
     owner = "awslabs";
     repo = "aws-crt-cpp";
     rev = "v${version}";
-    sha256 = "sha256-RNcx/Enm1bd/NZOcNosNnYsT9Ot7AMQU7wsg+moT16c=";
+    sha256 = "sha256-4/BgwX8Pa5D2lEn0Dh3JlUiYUtA9u0rWpBixqmv1X/A=";
   };
 
   patches = [
     # Correct include path for split outputs.
     # https://github.com/awslabs/aws-crt-cpp/pull/325
     ./0001-build-Make-includedir-properly-overrideable.patch
+
+    # Fix build with new input stream api
+    # https://github.com/awslabs/aws-crt-cpp/pull/341
+    # Remove with next release
+    (fetchpatch {
+      url = "https://github.com/awslabs/aws-crt-cpp/commit/8adb8490fd4f1d1fe65aad01b0a7dda0e52ac596.patch";
+      excludes = [ "crt/*" ];
+      sha256 = "190v8rlj6z0qllih6w3kqmdvqjifj66hc4bchsgr3gpfv18vpzid";
+    })
   ];
 
   postPatch = ''
@@ -57,7 +67,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_DEPS=OFF"
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
     "-DBUILD_SHARED_LIBS=ON"
   ];
 

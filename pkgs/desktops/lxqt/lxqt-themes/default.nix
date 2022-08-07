@@ -29,6 +29,6 @@ mkDerivation rec {
     description = "Themes, graphics and icons for LXQt";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

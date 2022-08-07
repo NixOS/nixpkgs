@@ -56,7 +56,14 @@ The function `mkOption` accepts the following arguments.
 `description`
 
 :   A textual description of the option, in DocBook format, that will be
-    included in the NixOS manual.
+    included in the NixOS manual. During the migration process from DocBook
+    to CommonMark the description may also be written in CommonMark, but has
+    to be wrapped in `lib.mdDoc` to differentiate it from DocBook. See
+    the nixpkgs manual for [the list of CommonMark extensions](
+    https://nixos.org/nixpkgs/manual/#sec-contributing-markup)
+    supported by NixOS documentation.
+
+    New documentation should preferably be written as CommonMark.
 
 ## Utility functions for common option patterns {#sec-option-declarations-util}
 
@@ -120,14 +127,14 @@ lib.mkOption {
 ```nix
 lib.mkPackageOption pkgs "GHC" {
   default = [ "ghc" ];
-  example = "pkgs.haskell.package.ghc922.ghc.withPackages (hkgs: [ hkgs.primes ])";
+  example = "pkgs.haskell.packages.ghc924.ghc.withPackages (hkgs: [ hkgs.primes ])";
 }
 # is like
 lib.mkOption {
   type = lib.types.package;
   default = pkgs.ghc;
   defaultText = lib.literalExpression "pkgs.ghc";
-  example = lib.literalExpression "pkgs.haskell.package.ghc922.ghc.withPackages (hkgs: [ hkgs.primes ])";
+  example = lib.literalExpression "pkgs.haskell.packages.ghc924.ghc.withPackages (hkgs: [ hkgs.primes ])";
   description = "The GHC package to use.";
 }
 ```

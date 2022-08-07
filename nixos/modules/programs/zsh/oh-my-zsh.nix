@@ -41,7 +41,7 @@ in
         enable = mkOption {
           type = types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Enable oh-my-zsh.
           '';
         };
@@ -59,7 +59,7 @@ in
         plugins = mkOption {
           default = [];
           type = types.listOf(types.str);
-          description = ''
+          description = lib.mdDoc ''
             List of oh-my-zsh plugins
           '';
         };
@@ -84,7 +84,7 @@ in
         theme = mkOption {
           default = "";
           type = types.str;
-          description = ''
+          description = lib.mdDoc ''
             Name of the theme to be used by oh-my-zsh.
           '';
         };

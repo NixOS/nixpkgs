@@ -20,7 +20,7 @@
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableStatic ? stdenv.hostPlatform.isStatic
 , webUISupport ? false
-, extraGrammars ? {}
+, extraGrammars ? { }
 }:
 
 # TODO: move to carnix or https://github.com/kolloch/crate2nix
@@ -69,9 +69,11 @@ let
         { tree-sitter-ocaml-interface = grammars'.tree-sitter-ocaml // { location = "interface"; }; } //
         { tree-sitter-org-nvim = grammars'.tree-sitter-org-nvim // { language = "org"; }; } //
         { tree-sitter-typescript = grammars'.tree-sitter-typescript // { location = "typescript"; }; } //
-        { tree-sitter-tsx = grammars'.tree-sitter-typescript // { location = "tsx"; }; };
+        { tree-sitter-tsx = grammars'.tree-sitter-typescript // { location = "tsx"; }; } //
+        { tree-sitter-markdown = grammars'.tree-sitter-markdown // { location = "tree-sitter-markdown"; }; } //
+        { tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // { language = "markdown_inline"; location = "tree-sitter-markdown-inline"; }; };
     in
-      lib.mapAttrs change (grammars);
+    lib.mapAttrs change (grammars);
 
   # Usage:
   # pkgs.tree-sitter.withPlugins (p: [ p.tree-sitter-c p.tree-sitter-java ... ])
@@ -166,6 +168,6 @@ rustPlatform.buildRustPackage {
       * Dependency-free so that the runtime library (which is written in pure C) can be embedded in any application
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ Profpatsch ];
+    maintainers = with maintainers; [ Profpatsch oxalica ];
   };
 }

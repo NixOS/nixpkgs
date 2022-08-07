@@ -1,5 +1,4 @@
 { lib, stdenv, fetchFromGitHub, cmake, ninja
-, fetchpatch
 , secureBuild ? false
 }:
 
@@ -8,21 +7,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname   = "mimalloc";
-  version = "2.0.5";
+  version = "2.0.6";
 
   src = fetchFromGitHub {
     owner  = "microsoft";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "sha256-q3W/w1Ofqt6EbKF/Jf9wcC+7jAxh59B3cOGxudWQXlA=";
+    sha256 = "sha256-u2ITXABBN/dwU+mCIbL3tN1f4c17aBuSdNTV+Adtohc=";
   };
-  patches = [
-    (fetchpatch {
-      name = "older-macos-fixes.patch";
-      url = "https://github.com/microsoft/mimalloc/commit/40e0507a5959ee218f308d33aec212c3ebeef3bb.patch";
-      sha256 = "15qx2a3axhhwbfzxdis98b8j14y9cfgca0i484aj2pjpqnm0pb8c";
-    })
-  ];
 
   doCheck = true;
   preCheck = let

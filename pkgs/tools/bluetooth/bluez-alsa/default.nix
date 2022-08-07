@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     homepage = src.meta.homepage;
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = [ maintainers.oxij maintainers.lheckemann ];
+    maintainers = [ maintainers.oxij ];
   };
 
 }

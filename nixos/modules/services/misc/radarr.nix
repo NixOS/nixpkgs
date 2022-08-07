@@ -11,28 +11,36 @@ in
     services.radarr = {
       enable = mkEnableOption "Radarr";
 
+      package = mkOption {
+        description = lib.mdDoc "Radarr package to use";
+        default = pkgs.radarr;
+        defaultText = literalExpression "pkgs.radarr";
+        example = literalExpression "pkgs.radarr";
+        type = types.package;
+      };
+
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/radarr/.config/Radarr";
-        description = "The directory where Radarr stores its data files.";
+        description = lib.mdDoc "The directory where Radarr stores its data files.";
       };
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = "Open ports in the firewall for the Radarr web interface.";
+        description = lib.mdDoc "Open ports in the firewall for the Radarr web interface.";
       };
 
       user = mkOption {
         type = types.str;
         default = "radarr";
-        description = "User account under which Radarr runs.";
+        description = lib.mdDoc "User account under which Radarr runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "radarr";
-        description = "Group under which Radarr runs.";
+        description = lib.mdDoc "Group under which Radarr runs.";
       };
     };
   };
@@ -51,7 +59,7 @@ in
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${pkgs.radarr}/bin/Radarr -nobrowser -data='${cfg.dataDir}'";
+        ExecStart = "${cfg.package}/bin/Radarr -nobrowser -data='${cfg.dataDir}'";
         Restart = "on-failure";
       };
     };

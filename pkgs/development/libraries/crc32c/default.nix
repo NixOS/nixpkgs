@@ -29,8 +29,6 @@ stdenv.mkDerivation rec {
     "-DCRC32C_BUILD_BENCHMARKS=0"
     "-DCRC32C_USE_GLOG=0"
     "-DBUILD_SHARED_LIBS=${if staticOnly then "0" else "1"}"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF" # for tests
   ];
 
   doCheck = false;

@@ -1,4 +1,4 @@
-{ lib, stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsa-lib
+{ lib, stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curlWithGnuTls, alsa-lib
 , libXfixes, atk, gtk3, libXrender, pango, gnome, cairo, freetype, fontconfig
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
 , nss, nspr, cups, fetchzip, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
@@ -9,26 +9,25 @@
 with lib;
 
 let
-  curlWithGnuTls = curl.override { gnutlsSupport = true; opensslSupport = false; };
   pname = "gitkraken";
-  version = "8.4.0";
+  version = "8.6.0";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchzip {
       url = "https://release.axocdn.com/linux/GitKraken-v${version}.tar.gz";
-      sha256 = "sha256-yVQILgEn67iiUUQqpQqt++cZMN5u9FT0MbNf7pFES9Y=";
+      sha256 = "sha256-BBhKenEm1D680wJ1hmIOM/AdXN1DxoipLf9K4eHESzs=";
     };
 
     x86_64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin/GitKraken-v${version}.zip";
-      sha256 = "sha256-cTHMl5peXj52Fy2XBfKaUKLuZnPCC4XdReOiB0fbCNk=";
+      sha256 = "sha256-fyRhvaKDGYyKu6lAxHb5ve7Ix+7Tuu5JWXnqBF73ti4=";
     };
 
     aarch64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin-arm64/GitKraken-v${version}.zip";
-      sha256 = "sha256-M3Y5qP0nozk5iTnEGK2+ds8/Vb/l0nhIo4LSrCWLDu8=";
+      sha256 = "sha256-qbu3gPTo5zY7OQyULY2iIUDQjwjlL4xZdkl68rE3VHA=";
     };
   };
 
@@ -37,6 +36,7 @@ let
   meta = {
     homepage = "https://www.gitkraken.com/";
     description = "The downright luxurious and most popular Git client for Windows, Mac & Linux";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = builtins.attrNames srcs;
     maintainers = with maintainers; [ xnwdd evanjs arkivm ];

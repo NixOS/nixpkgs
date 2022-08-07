@@ -20,9 +20,9 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ versioneer cython ];
-  propagatedBuildInputs = [ contexttimer ];
+  propagatedBuildInputs = [ contexttimer numpy ];
 
-  checkInputs = [ pytest numpy ];
+  checkInputs = [ pytest ];
   # Using approach bellow bcs the tests fail with the pytestCheckHook, throwing the following error
   # ImportError: cannot import name 'crevolve' from partially initialized module 'pyrevolve'
   # (most likely due to a circular import)

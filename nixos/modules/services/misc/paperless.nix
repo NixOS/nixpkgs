@@ -83,7 +83,7 @@ let
   };
 in
 {
-  meta.maintainers = with maintainers; [ earvstedt Flakebi ];
+  meta.maintainers = with maintainers; [ erikarvstedt Flakebi ];
 
   imports = [
     (mkRenamedOptionModule [ "services" "paperless-ng" ] [ "services" "paperless" ])
@@ -93,7 +93,7 @@ in
     enable = mkOption {
       type = lib.types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enable Paperless.
 
         When started, the Paperless database is automatically created if it doesn't
@@ -101,54 +101,54 @@ in
         Both tasks are achieved by running a Django migration.
 
         A script to manage the Paperless instance (by wrapping Django's manage.py) is linked to
-        <literal>''${dataDir}/paperless-manage</literal>.
+        `''${dataDir}/paperless-manage`.
       '';
     };
 
     dataDir = mkOption {
       type = types.str;
       default = "/var/lib/paperless";
-      description = "Directory to store the Paperless data.";
+      description = lib.mdDoc "Directory to store the Paperless data.";
     };
 
     mediaDir = mkOption {
       type = types.str;
       default = "${cfg.dataDir}/media";
       defaultText = literalExpression ''"''${dataDir}/media"'';
-      description = "Directory to store the Paperless documents.";
+      description = lib.mdDoc "Directory to store the Paperless documents.";
     };
 
     consumptionDir = mkOption {
       type = types.str;
       default = "${cfg.dataDir}/consume";
       defaultText = literalExpression ''"''${dataDir}/consume"'';
-      description = "Directory from which new documents are imported.";
+      description = lib.mdDoc "Directory from which new documents are imported.";
     };
 
     consumptionDirIsPublic = mkOption {
       type = types.bool;
       default = false;
-      description = "Whether all users can write to the consumption dir.";
+      description = lib.mdDoc "Whether all users can write to the consumption dir.";
     };
 
     passwordFile = mkOption {
       type = types.nullOr types.path;
       default = null;
       example = "/run/keys/paperless-password";
-      description = ''
+      description = lib.mdDoc ''
         A file containing the superuser password.
 
         A superuser is required to access the web interface.
         If unset, you can create a superuser manually by running
-        <literal>''${dataDir}/paperless-manage createsuperuser</literal>.
+        `''${dataDir}/paperless-manage createsuperuser`.
 
-        The default superuser name is <literal>admin</literal>. To change it, set
-        option <option>extraConfig.PAPERLESS_ADMIN_USER</option>.
+        The default superuser name is `admin`. To change it, set
+        option {option}`extraConfig.PAPERLESS_ADMIN_USER`.
         WARNING: When changing the superuser name after the initial setup, the old superuser
         will continue to exist.
 
         To disable login for the web interface, set the following:
-        <literal>extraConfig.PAPERLESS_AUTO_LOGIN_USERNAME = "admin";</literal>.
+        `extraConfig.PAPERLESS_AUTO_LOGIN_USERNAME = "admin";`.
         WARNING: Only use this on a trusted system without internet access to Paperless.
       '';
     };
@@ -156,22 +156,22 @@ in
     address = mkOption {
       type = types.str;
       default = "localhost";
-      description = "Web interface address.";
+      description = lib.mdDoc "Web interface address.";
     };
 
     port = mkOption {
       type = types.port;
       default = 28981;
-      description = "Web interface port.";
+      description = lib.mdDoc "Web interface port.";
     };
 
     extraConfig = mkOption {
       type = types.attrs;
       default = {};
-      description = ''
+      description = lib.mdDoc ''
         Extra paperless config options.
 
-        See <link xlink:href="https://paperless-ngx.readthedocs.io/en/latest/configuration.html">the documentation</link>
+        See [the documentation](https://paperless-ngx.readthedocs.io/en/latest/configuration.html)
         for available options.
       '';
       example = literalExpression ''
@@ -184,14 +184,14 @@ in
     user = mkOption {
       type = types.str;
       default = defaultUser;
-      description = "User under which Paperless runs.";
+      description = lib.mdDoc "User under which Paperless runs.";
     };
 
     package = mkOption {
       type = types.package;
       default = pkgs.paperless-ngx;
       defaultText = literalExpression "pkgs.paperless-ngx";
-      description = "The Paperless package to use.";
+      description = lib.mdDoc "The Paperless package to use.";
     };
   };
 

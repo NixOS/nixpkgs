@@ -45,9 +45,9 @@ in
           ];
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         The available options can be found in
-        <link xlink:href="https://github.com/dexidp/dex/blob/v${pkgs.dex.version}/config.yaml.dist">the example configuration</link>.
+        [the example configuration](https://github.com/dexidp/dex/blob/v${pkgs.dex.version}/config.yaml.dist).
       '';
     };
   };

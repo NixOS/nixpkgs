@@ -30,11 +30,10 @@
 }:
 
 let
-  version = "3.3.2";
+  version = "5.0.1";
   inherit (lib) optional optionals optionalString;
   mesonFeatureFlag = opt: b:
     "-D${opt}=${if b then "enabled" else "disabled"}";
-  isNativeCompilation = stdenv.buildPlatform == stdenv.hostPlatform;
 in
 
 stdenv.mkDerivation {
@@ -45,7 +44,7 @@ stdenv.mkDerivation {
     owner = "harfbuzz";
     repo = "harfbuzz";
     rev = version;
-    sha256 = "sha256-UbYqV7Ch9ugTIwSsCpjnS8H7tcv4P3OVpFDFDZtQCk0=";
+    sha256 = "sha256-01hpSTesPpUO2T9v1sq3VvCSFEOMyaxbHhX0vS1ms/k=";
   };
 
   postPatch = ''
@@ -70,7 +69,10 @@ stdenv.mkDerivation {
     (mesonFeatureFlag "coretext" withCoreText)
     (mesonFeatureFlag "graphite" withGraphite2)
     (mesonFeatureFlag "icu" withIcu)
-    (mesonFeatureFlag "introspection" isNativeCompilation)
+  ];
+
+  depsBuildBuild = [
+    pkg-config
   ];
 
   nativeBuildInputs = [
@@ -85,9 +87,8 @@ stdenv.mkDerivation {
     docbook_xml_dtd_43
   ];
 
-  buildInputs = [ glib freetype ]
-    ++ lib.optionals withCoreText [ ApplicationServices CoreText ]
-    ++ lib.optionals isNativeCompilation [ gobject-introspection ];
+  buildInputs = [ glib freetype gobject-introspection ]
+    ++ lib.optionals withCoreText [ ApplicationServices CoreText ];
 
   propagatedBuildInputs = optional withGraphite2 graphite2
     ++ optionals withIcu [ icu harfbuzz ];

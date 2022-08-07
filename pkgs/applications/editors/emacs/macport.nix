@@ -5,20 +5,20 @@
 
 stdenv.mkDerivation rec {
   pname = "emacs";
-  version = "27.2";
+  version = "28.1";
 
   emacsName = "emacs-${version}";
-  macportVersion = "8.3";
+  macportVersion = "9.0";
   name = "emacs-mac-${version}-${macportVersion}";
 
   src = fetchurl {
     url = "mirror://gnu/emacs/${emacsName}.tar.xz";
-    sha256 = "1ff182gjw9wqsbx1kj5gl2r5pbqhp4ar54g04j33fgz6g17cr9xl";
+    sha256 = "1qbmmmhnjhn4lvzsnyk7l5ganbi6wzbm38jc1a7hhyh3k78b7c98";
   };
 
   macportSrc = fetchurl {
     url = "ftp://ftp.math.s.chiba-u.ac.jp/emacs/${emacsName}-mac-${macportVersion}.tar.gz";
-    sha256 = "0q4lbk3nb8rz1ibmf23plgsh8sx2wvhry5bf5mivgz4m4b6s2yij";
+    sha256 = "10gyynz8wblz6r6dkk12m98kjbsmdwcbrhxpmsjylmdqmjxhlj4m";
     name = "${emacsName}-mac-${macportVersion}.tar.xz"; # It's actually compressed with xz, not gz
   };
 
@@ -56,7 +56,6 @@ stdenv.mkDerivation rec {
     # Fix sandbox impurities.
     substituteInPlace Makefile.in --replace '/bin/pwd' 'pwd'
     substituteInPlace lib-src/Makefile.in --replace '/bin/pwd' 'pwd'
-
 
     # Reduce closure size by cleaning the environment of the emacs dumper
     substituteInPlace src/Makefile.in \
@@ -114,7 +113,7 @@ stdenv.mkDerivation rec {
       extensions are distributed with GNU Emacs; others are available
       separately.
 
-      This is the "Mac port" addition to GNU Emacs 26. This provides a native
+      This is the "Mac port" addition to GNU Emacs. This provides a native
       GUI support for Mac OS X 10.6 - 10.12. Note that Emacs 23 and later
       already contain the official GUI support via the NS (Cocoa) port for
       Mac OS X 10.4 and later. So if it is good enough for you, then you

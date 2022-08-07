@@ -15,7 +15,7 @@ in {
 
     services.uhub = mkOption {
       default = { };
-      description = "Uhub ADC hub instances";
+      description = lib.mdDoc "Uhub ADC hub instances";
       type = types.attrsOf (types.submodule {
         options = {
 
@@ -24,12 +24,12 @@ in {
           enableTLS = mkOption {
             type = types.bool;
             default = false;
-            description = "Whether to enable TLS support.";
+            description = lib.mdDoc "Whether to enable TLS support.";
           };
 
           settings = mkOption {
             inherit (settingsFormat) type;
-            description = ''
+            description = lib.mdDoc ''
               Configuration of uhub.
               See https://www.uhub.org/doc/config.php for a list of options.
             '';
@@ -44,7 +44,7 @@ in {
           };
 
           plugins = mkOption {
-            description = "Uhub plugin configuration.";
+            description = lib.mdDoc "Uhub plugin configuration.";
             type = with types;
               listOf (submodule {
                 options = {
@@ -52,10 +52,10 @@ in {
                     type = path;
                     example = literalExpression
                       "$${pkgs.uhub}/plugins/mod_auth_sqlite.so";
-                    description = "Path to plugin file.";
+                    description = lib.mdDoc "Path to plugin file.";
                   };
                   settings = mkOption {
-                    description = "Settings specific to this plugin.";
+                    description = lib.mdDoc "Settings specific to this plugin.";
                     type = with types; attrsOf str;
                     example = { file = "/etc/uhub/users.db"; };
                   };
@@ -80,11 +80,12 @@ in {
           tls_enable = cfg.enableTLS;
           file_plugins = pkgs.writeText "uhub-plugins.conf"
             (lib.strings.concatStringsSep "\n" (map ({ plugin, settings }:
-              "plugin ${plugin} ${
-                toString
-                (lib.attrsets.mapAttrsToList (key: value: ''"${key}=${value}"'')
-                  settings)
-              }") cfg.plugins));
+              ''
+                plugin ${plugin} "${
+                  toString
+                  (lib.attrsets.mapAttrsToList (key: value: "${key}=${value}")
+                    settings)
+                }"'') cfg.plugins));
         };
       in {
         name = "uhub/${name}.conf";
@@ -104,6 +105,9 @@ in {
           ExecStart = "${pkg}/bin/uhub -c /etc/uhub/${name}.conf -L";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           DynamicUser = true;
+
+          AmbientCapabilities = "CAP_NET_BIND_SERVICE";
+          CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
         };
       };
     }) hubs;

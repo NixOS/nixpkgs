@@ -17,7 +17,9 @@ stdenv.mkDerivation rec {
     sourceRoot=.
   '';
 
-  buildInputs = [ readline bison ];
+  strictDeps = true;
+  nativeBuildInputs = [ bison ];
+  buildInputs = [ readline ];
 
   configureFlags = [ "--with-readline" ];
 

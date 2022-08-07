@@ -16,6 +16,7 @@
 , termcolor
 , tomlkit
 , typing-extensions
+, chardet
 
 , argcomplete, fetchPypi
 }:
@@ -34,13 +35,13 @@ in
 
 buildPythonApplication rec {
   pname = "commitizen";
-  version = "2.21.2";
+  version = "2.29.2";
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-7S676bpSrlAqpbgDj9nAo0WjeitbbHoYc693MJm35Js=";
+    hash = "sha256-4mK+GA1rfctJkMv4ZMfXE/qih/9fF0kwT6bIcLVB/Bk=";
     deepClone = true;
   };
 
@@ -49,6 +50,7 @@ buildPythonApplication rec {
   nativeBuildInputs = [ poetry ];
 
   propagatedBuildInputs = [
+    chardet
     termcolor
     questionary
     colorama
@@ -85,6 +87,8 @@ buildPythonApplication rec {
     "test_bump_on_git_with_hooks_no_verify_disabled"
     "test_bump_on_git_with_hooks_no_verify_enabled"
     "test_bump_patch_increment"
+    "test_bump_pre_commit_changelog"
+    "test_bump_pre_commit_changelog_fails_always"
     "test_bump_tag_exists_raises_exception"
     "test_bump_when_bumpping_is_not_support"
     "test_bump_when_version_inconsistent_in_version_files"

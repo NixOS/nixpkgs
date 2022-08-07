@@ -21,7 +21,7 @@ bootStages ++ [
         export NIX_IGNORE_LD_THROUGH_GCC=1
       '';
 
-      initialPath = (import ../common-path.nix) { pkgs = prevStage; };
+      initialPath = (import ../generic/common-path.nix) { pkgs = prevStage; };
 
       cc = import ../../build-support/cc-wrapper {
         inherit lib;

@@ -28,7 +28,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether or not to enable the headless Aria2 daemon service.
 
           Aria2 daemon can be controlled via the RPC interface using
@@ -41,7 +41,7 @@ in
       openPorts = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Open listen and RPC ports found in listenPortRange and rpcListenPort
           options in the firewall.
         '';
@@ -49,26 +49,26 @@ in
       downloadDir = mkOption {
         type = types.path;
         default = downloadDir;
-        description = ''
+        description = lib.mdDoc ''
           Directory to store downloaded files.
         '';
       };
       listenPortRange = mkOption {
         type = types.listOf types.attrs;
         default = [ { from = 6881; to = 6999; } ];
-        description = ''
+        description = lib.mdDoc ''
           Set UDP listening port range used by DHT(IPv4, IPv6) and UDP tracker.
         '';
       };
       rpcListenPort = mkOption {
         type = types.int;
         default = 6800;
-        description = "Specify a port number for JSON-RPC/XML-RPC server to listen to. Possible Values: 1024-65535";
+        description = lib.mdDoc "Specify a port number for JSON-RPC/XML-RPC server to listen to. Possible Values: 1024-65535";
       };
       rpcSecret = mkOption {
         type = types.str;
         default = "aria2rpc";
-        description = ''
+        description = lib.mdDoc ''
           Set RPC secret authorization token.
           Read https://aria2.github.io/manual/en/html/aria2c.html#rpc-auth to know how this option value is used.
         '';
@@ -77,7 +77,7 @@ in
         type = types.separatedString " ";
         example = "--rpc-listen-all --remote-time=true";
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Additional arguments to be passed to Aria2.
         '';
       };

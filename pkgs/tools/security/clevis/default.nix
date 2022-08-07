@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Automated Encryption Framework";
     homepage = "https://github.com/latchset/clevis";
-    maintainers = with lib.maintainers; [ fpletz ];
+    maintainers = with lib.maintainers; [ ];
     license = lib.licenses.gpl3Plus;
   };
 }

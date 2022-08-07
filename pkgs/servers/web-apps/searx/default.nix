@@ -31,7 +31,7 @@ toPythonModule (buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = [
-    Babel
+    babel
     certifi
     python-dateutil
     flask
@@ -70,6 +70,6 @@ toPythonModule (buildPythonApplication rec {
     homepage = "https://github.com/searx/searx";
     description = "A privacy-respecting, hackable metasearch engine";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ matejc fpletz globin danielfullmer ];
+    maintainers = with maintainers; [ matejc globin danielfullmer ];
   };
 })

@@ -34,7 +34,8 @@ let
     name = "nixos-generate-config";
     src = ./nixos-generate-config.pl;
     perl = "${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl";
-    detectvirt = "${pkgs.systemd}/bin/systemd-detect-virt";
+    nixInstantiate = "${pkgs.nix}/bin/nix-instantiate";
+    detectvirt = "${config.systemd.package}/bin/systemd-detect-virt";
     btrfs = "${pkgs.btrfs-progs}/bin/btrfs";
     inherit (config.system.nixos-generate-config) configuration desktopConfiguration;
     xserverEnabled = config.services.xserver.enable;
@@ -74,15 +75,15 @@ in
     configuration = mkOption {
       internal = true;
       type = types.str;
-      description = ''
-        The NixOS module that <literal>nixos-generate-config</literal>
-        saves to <literal>/etc/nixos/configuration.nix</literal>.
+      description = lib.mdDoc ''
+        The NixOS module that `nixos-generate-config`
+        saves to `/etc/nixos/configuration.nix`.
 
         This is an internal option. No backward compatibility is guaranteed.
         Use at your own risk!
 
         Note that this string gets spliced into a Perl script. The perl
-        variable <literal>$bootLoaderConfig</literal> can be used to
+        variable `$bootLoaderConfig` can be used to
         splice in the boot loader configuration.
       '';
     };
@@ -91,15 +92,15 @@ in
       internal = true;
       type = types.listOf types.lines;
       default = [];
-      description = ''
-        Text to preseed the desktop configuration that <literal>nixos-generate-config</literal>
-        saves to <literal>/etc/nixos/configuration.nix</literal>.
+      description = lib.mdDoc ''
+        Text to preseed the desktop configuration that `nixos-generate-config`
+        saves to `/etc/nixos/configuration.nix`.
 
         This is an internal option. No backward compatibility is guaranteed.
         Use at your own risk!
 
         Note that this string gets spliced into a Perl script. The perl
-        variable <literal>$bootLoaderConfig</literal> can be used to
+        variable `$bootLoaderConfig` can be used to
         splice in the boot loader configuration.
       '';
     };
@@ -109,7 +110,7 @@ in
     internal = true;
     type = types.bool;
     default = false;
-    description = ''
+    description = lib.mdDoc ''
       Disable nixos-rebuild, nixos-generate-config, nixos-installer
       and other NixOS tools. This is useful to shrink embedded,
       read-only systems which are not expected to be rebuild or
@@ -174,9 +175,13 @@ in
         # services.xserver.libinput.enable = true;
 
         # Define a user account. Don't forget to set a password with ‘passwd’.
-        # users.users.jane = {
+        # users.users.alice = {
         #   isNormalUser = true;
         #   extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+        #   packages = with pkgs; [
+        #     firefox
+        #     thunderbird
+        #   ];
         # };
 
         # List packages installed in system profile. To search, run:
@@ -184,7 +189,6 @@ in
         # environment.systemPackages = with pkgs; [
         #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
         #   wget
-        #   firefox
         # ];
 
         # Some programs need SUID wrappers, can be configured further or are

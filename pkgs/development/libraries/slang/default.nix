@@ -44,6 +44,13 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ ncurses ];
 
+  buildFlags = lib.optional stdenv.hostPlatform.isStatic "static";
+  installTargets = lib.optional stdenv.hostPlatform.isStatic "install-static";
+
+  preBuild = ''
+    makeFlagsArray+=(AR_CR="${stdenv.cc.targetPrefix}ar cr")
+  '';
+
   # slang 2.3.2 does not support parallel building
   enableParallelBuilding = false;
 
@@ -77,6 +84,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.jedsoft.org/slang/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
+    mainProgram = "slsh";
     platforms = platforms.unix;
   };
 }

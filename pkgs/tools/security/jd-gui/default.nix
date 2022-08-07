@@ -102,6 +102,10 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Fast Java Decompiler with powerful GUI";
     homepage    = "https://java-decompiler.github.io/";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license     = licenses.gpl3;
     platforms   = platforms.unix;
     maintainers = [ maintainers.thoughtpolice ];

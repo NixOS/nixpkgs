@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , numpy
+, packaging
 , pandas
 , pytestCheckHook
 , pythonOlder
@@ -30,6 +31,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     numpy
+    packaging
     pandas
   ];
 

@@ -55,9 +55,46 @@ let
     check = builtins.isAttrs;
   };
 
-  defaultPkgs = import ../../.. {
-    inherit (cfg) config overlays localSystem crossSystem;
-  };
+  hasBuildPlatform = opt.buildPlatform.highestPrio < (mkOptionDefault {}).priority;
+  hasHostPlatform = opt.hostPlatform.isDefined;
+  hasPlatform = hasHostPlatform || hasBuildPlatform;
+
+  # Context for messages
+  hostPlatformLine = optionalString hasHostPlatform "${showOptionWithDefLocs opt.hostPlatform}";
+  buildPlatformLine = optionalString hasBuildPlatform "${showOptionWithDefLocs opt.buildPlatform}";
+  platformLines = optionalString hasPlatform ''
+    Your system configuration configures nixpkgs with platform parameters:
+    ${hostPlatformLine
+    }${buildPlatformLine
+    }'';
+
+  legacyOptionsDefined =
+    optional (opt.localSystem.highestPrio < (mkDefault {}).priority) opt.system
+    ++ optional (opt.localSystem.highestPrio < (mkOptionDefault {}).priority) opt.localSystem
+    ++ optional (opt.crossSystem.highestPrio < (mkOptionDefault {}).priority) opt.crossSystem
+    ;
+
+  defaultPkgs =
+    if opt.hostPlatform.isDefined
+    then
+      let isCross = cfg.buildPlatform != cfg.hostPlatform;
+          systemArgs =
+            if isCross
+            then {
+              localSystem = cfg.buildPlatform;
+              crossSystem = cfg.hostPlatform;
+            }
+            else {
+              localSystem = cfg.hostPlatform;
+            };
+      in
+      import ../../.. ({
+        inherit (cfg) config overlays;
+      } // systemArgs)
+    else
+      import ../../.. {
+        inherit (cfg) config overlays localSystem crossSystem;
+      };
 
   finalPkgs = if opt.pkgs.isDefined then cfg.pkgs.appendOverlays cfg.overlays else defaultPkgs;
 
@@ -67,6 +104,7 @@ in
   imports = [
     ./assertions.nix
     ./meta.nix
+    (mkRemovedOptionModule [ "nixpkgs" "initialSystem" ] "The NixOS options `nesting.clone` and `nesting.children` have been deleted, and replaced with named specialisation. Therefore `nixpgks.initialSystem` has no effect anymore.")
   ];
 
   options.nixpkgs = {
@@ -81,11 +119,11 @@ in
       example = literalExpression "import <nixpkgs> {}";
       description = ''
         If set, the pkgs argument to all NixOS modules is the value of
-        this option, extended with <code>nixpkgs.overlays</code>, if
-        that is also set. Either <code>nixpkgs.crossSystem</code> or
-        <code>nixpkgs.localSystem</code> will be used in an assertion
+        this option, extended with <literal>nixpkgs.overlays</literal>, if
+        that is also set. Either <literal>nixpkgs.crossSystem</literal> or
+        <literal>nixpkgs.localSystem</literal> will be used in an assertion
         to check that the NixOS and Nixpkgs architectures match. Any
-        other options in <code>nixpkgs.*</code>, notably <code>config</code>,
+        other options in <literal>nixpkgs.*</literal>, notably <literal>config</literal>,
         will be ignored.
 
         If unset, the pkgs argument to all NixOS modules is determined
@@ -94,18 +132,18 @@ in
         The default value imports the Nixpkgs source files
         relative to the location of this NixOS module, because
         NixOS and Nixpkgs are distributed together for consistency,
-        so the <code>nixos</code> in the default value is in fact a
-        relative path. The <code>config</code>, <code>overlays</code>,
-        <code>localSystem</code>, and <code>crossSystem</code> come
+        so the <literal>nixos</literal> in the default value is in fact a
+        relative path. The <literal>config</literal>, <literal>overlays</literal>,
+        <literal>localSystem</literal>, and <literal>crossSystem</literal> come
         from this option's siblings.
 
         This option can be used by applications like NixOps to increase
         the performance of evaluation, or to create packages that depend
         on a container that should be built with the exact same evaluation
         of Nixpkgs, for example. Applications like this should set
-        their default value using <code>lib.mkDefault</code>, so
+        their default value using <literal>lib.mkDefault</literal>, so
         user-provided configuration can override it without using
-        <code>lib</code>.
+        <literal>lib</literal>.
 
         Note that using a distinct version of Nixpkgs with NixOS may
         be an unexpected source of problems. Use this option with care.
@@ -124,7 +162,7 @@ in
         details, see the Nixpkgs documentation.)  It allows you to set
         package configuration options.
 
-        Ignored when <code>nixpkgs.pkgs</code> is set.
+        Ignored when <literal>nixpkgs.pkgs</literal> is set.
       '';
     };
 
@@ -150,9 +188,49 @@ in
         The first argument should be used for finding dependencies, and
         the second should be used for overriding recipes.
 
-        If <code>nixpkgs.pkgs</code> is set, overlays specified here
+        If <literal>nixpkgs.pkgs</literal> is set, overlays specified here
         will be applied after the overlays that were already present
-        in <code>nixpkgs.pkgs</code>.
+        in <literal>nixpkgs.pkgs</literal>.
+      '';
+    };
+
+    hostPlatform = mkOption {
+      type = types.either types.str types.attrs; # TODO utilize lib.systems.parsedPlatform
+      example = { system = "aarch64-linux"; config = "aarch64-unknown-linux-gnu"; };
+      # Make sure that the final value has all fields for sake of other modules
+      # referring to this. TODO make `lib.systems` itself use the module system.
+      apply = lib.systems.elaborate;
+      defaultText = literalExpression
+        ''(import "''${nixos}/../lib").lib.systems.examples.aarch64-multiplatform'';
+      description = ''
+        Specifies the platform where the NixOS configuration will run.
+
+        To cross-compile, set also <literal>nixpkgs.buildPlatform</literal>.
+
+        Ignored when <literal>nixpkgs.pkgs</literal> is set.
+      '';
+    };
+
+    buildPlatform = mkOption {
+      type = types.either types.str types.attrs; # TODO utilize lib.systems.parsedPlatform
+      default = cfg.hostPlatform;
+      example = { system = "x86_64-linux"; config = "x86_64-unknown-linux-gnu"; };
+      # Make sure that the final value has all fields for sake of other modules
+      # referring to this.
+      apply = lib.systems.elaborate;
+      defaultText = literalExpression
+        ''config.nixpkgs.hostPlatform'';
+      description = ''
+        Specifies the platform on which NixOS should be built.
+        By default, NixOS is built on the system where it runs, but you can
+        change where it's built. Setting this option will cause NixOS to be
+        cross-compiled.
+
+        For instance, if you're doing distributed multi-platform deployment,
+        or if you're building machines, you can set this to match your
+        development system and/or build farm.
+
+        Ignored when <literal>nixpkgs.pkgs</literal> is set.
       '';
     };
 
@@ -166,8 +244,16 @@ in
       defaultText = literalExpression
         ''(import "''${nixos}/../lib").lib.systems.examples.aarch64-multiplatform'';
       description = ''
+        Systems with a recently generated <literal>hardware-configuration.nix</literal>
+        do not need to specify this option, unless cross-compiling, in which case
+        you should set <emphasis>only</emphasis> <option>nixpkgs.buildPlatform</option>.
+
+        If this is somehow not feasible, you may fall back to removing the
+        <option>nixpkgs.hostPlatform</option> line from the generated config and
+        use the old options.
+
         Specifies the platform on which NixOS should be built. When
-        <code>nixpkgs.crossSystem</code> is unset, it also specifies
+        <literal>nixpkgs.crossSystem</literal> is unset, it also specifies
         the platform <emphasis>for</emphasis> which NixOS should be
         built.  If this option is unset, it defaults to the platform
         type of the machine where evaluation happens. Specifying this
@@ -175,33 +261,62 @@ in
         deployment, or when building virtual machines. See its
         description in the Nixpkgs manual for more details.
 
-        Ignored when <code>nixpkgs.pkgs</code> is set.
+        Ignored when <literal>nixpkgs.pkgs</literal> or <literal>hostPlatform</literal> is set.
       '';
     };
 
+    # TODO deprecate. "crossSystem" is a nonsense identifier, because "cross"
+    #      is a relation between at least 2 systems in the context of a
+    #      specific build step, not a single system.
     crossSystem = mkOption {
       type = types.nullOr types.attrs; # TODO utilize lib.systems.parsedPlatform
       default = null;
       example = { system = "aarch64-linux"; config = "aarch64-unknown-linux-gnu"; };
       description = ''
+        Systems with a recently generated <literal>hardware-configuration.nix</literal>
+        may instead specify <emphasis>only</emphasis> <option>nixpkgs.buildPlatform</option>,
+        or fall back to removing the <option>nixpkgs.hostPlatform</option> line from the generated config.
+
         Specifies the platform for which NixOS should be
         built. Specify this only if it is different from
-        <code>nixpkgs.localSystem</code>, the platform
+        <literal>nixpkgs.localSystem</literal>, the platform
         <emphasis>on</emphasis> which NixOS should be built. In other
         words, specify this to cross-compile NixOS. Otherwise it
         should be set as null, the default. See its description in the
         Nixpkgs manual for more details.
 
-        Ignored when <code>nixpkgs.pkgs</code> is set.
+        Ignored when <literal>nixpkgs.pkgs</literal> or <literal>hostPlatform</literal> is set.
       '';
     };
 
     system = mkOption {
       type = types.str;
       example = "i686-linux";
+      default =
+        if opt.hostPlatform.isDefined
+        then
+          throw ''
+            Neither ${opt.system} nor any other option in nixpkgs.* is meant
+            to be read by modules and configurations.
+            Use pkgs.stdenv.hostPlatform instead.
+          ''
+        else
+          throw ''
+            Neither ${opt.hostPlatform} nor or the legacy option ${opt.system} has been set.
+            You can set ${opt.hostPlatform} in hardware-configuration.nix by re-running
+            a recent version of nixos-generate-config.
+            The option ${opt.system} is still fully supported for NixOS 22.05 interoperability,
+            but will be deprecated in the future, so we recommend to set ${opt.hostPlatform}.
+          '';
+      defaultText = lib.literalMD ''
+        Traditionally `builtins.currentSystem`, but unset when invoking NixOS through `lib.nixosSystem`.
+      '';
       description = ''
+        This option does not need to be specified for NixOS configurations
+        with a recently generated <literal>hardware-configuration.nix</literal>.
+
         Specifies the Nix platform type on which NixOS should be built.
-        It is better to specify <code>nixpkgs.localSystem</code> instead.
+        It is better to specify <literal>nixpkgs.localSystem</literal> instead.
         <programlisting>
         {
           nixpkgs.system = ..;
@@ -213,18 +328,9 @@ in
           nixpkgs.localSystem.system = ..;
         }
         </programlisting>
-        See <code>nixpkgs.localSystem</code> for more information.
+        See <literal>nixpkgs.localSystem</literal> for more information.
 
-        Ignored when <code>nixpkgs.localSystem</code> is set.
-        Ignored when <code>nixpkgs.pkgs</code> is set.
-      '';
-    };
-
-    initialSystem = mkOption {
-      type = types.str;
-      internal = true;
-      description = ''
-        Preserved value of <literal>system</literal> passed to <literal>eval-config.nix</literal>.
+        Ignored when <literal>nixpkgs.pkgs</literal>, <literal>nixpkgs.localSystem</literal> or <literal>nixpkgs.hostPlatform</literal> is set.
       '';
     };
   };
@@ -247,10 +353,23 @@ in
             else "nixpkgs.localSystem";
           pkgsSystem = finalPkgs.stdenv.targetPlatform.system;
         in {
-          assertion = nixosExpectedSystem == pkgsSystem;
+          assertion = !hasPlatform -> nixosExpectedSystem == pkgsSystem;
           message = "The NixOS nixpkgs.pkgs option was set to a Nixpkgs invocation that compiles to target system ${pkgsSystem} but NixOS was configured for system ${nixosExpectedSystem} via NixOS option ${nixosOption}. The NixOS system settings must match the Nixpkgs target system.";
         }
       )
+      {
+        assertion = hasPlatform -> legacyOptionsDefined == [];
+        message = ''
+          Your system configures nixpkgs with the platform parameter${optionalString hasBuildPlatform "s"}:
+          ${hostPlatformLine
+          }${buildPlatformLine
+          }
+          However, it also defines the legacy options:
+          ${concatMapStrings showOptionWithDefLocs legacyOptionsDefined}
+          For a future proof system configuration, we recommend to remove
+          the legacy definitions.
+        '';
+      }
     ];
   };
 

@@ -31,7 +31,7 @@ in
       mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           This option enables the common /etc/containers configuration module.
         '';
       };
@@ -39,13 +39,13 @@ in
     ociSeccompBpfHook.enable = mkOption {
       type = types.bool;
       default = false;
-      description = "Enable the OCI seccomp BPF hook";
+      description = lib.mdDoc "Enable the OCI seccomp BPF hook";
     };
 
     containersConf.settings = mkOption {
       type = toml.type;
       default = { };
-      description = "containers.conf configuration";
+      description = lib.mdDoc "containers.conf configuration";
     };
 
     containersConf.cniPlugins = mkOption {
@@ -60,7 +60,7 @@ in
           pkgs.cniPlugins.dnsname
         ]
       '';
-      description = ''
+      description = lib.mdDoc ''
         CNI plugins to install on the system.
       '';
     };
@@ -74,14 +74,14 @@ in
           runroot = "/run/containers/storage";
         };
       };
-      description = "storage.conf configuration";
+      description = lib.mdDoc "storage.conf configuration";
     };
 
     registries = {
       search = mkOption {
         type = types.listOf types.str;
         default = [ "docker.io" "quay.io" ];
-        description = ''
+        description = lib.mdDoc ''
           List of repositories to search.
         '';
       };
@@ -89,7 +89,7 @@ in
       insecure = mkOption {
         default = [];
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           List of insecure repositories.
         '';
       };
@@ -97,7 +97,7 @@ in
       block = mkOption {
         default = [];
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           List of blocked repositories.
         '';
       };
@@ -116,10 +116,10 @@ in
           };
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Signature verification policy file.
         If this option is empty the default policy file from
-        <literal>skopeo</literal> will be used.
+        `skopeo` will be used.
       '';
     };
 

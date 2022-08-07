@@ -16,17 +16,23 @@
 , proto-plus
 , psutil
 , pyarrow
+, pytest-xdist
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery";
-  version = "3.0.1";
+  version = "3.2.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-UmW6BEV44Ucdg/hUGSQk/kyDnB+Hsyx4q3AXTQe89hI=";
+    sha256 = "sha256-l/tDBuMky4aQnOMqmUToHSH7yyingMXN8BtuTUfUwyI=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'pyarrow >= 3.0.0, < 8.0dev' 'pyarrow >= 3.0.0, < 9.0dev'
+  '';
 
   propagatedBuildInputs = [
     google-cloud-core
@@ -47,6 +53,7 @@ buildPythonPackage rec {
     google-cloud-datacatalog
     google-cloud-storage
     pytestCheckHook
+    pytest-xdist
   ];
 
   # prevent google directory from shadowing google imports

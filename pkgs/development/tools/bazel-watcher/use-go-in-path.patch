@@ -6,7 +6,7 @@ index 51273b6..fcf9ffb 100644
  
  go_rules_dependencies()
  
--go_register_toolchains()
+-go_register_toolchains(version = "1.17.6")
 +go_register_toolchains(go_version = "host")
  
  load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies", "go_repository")

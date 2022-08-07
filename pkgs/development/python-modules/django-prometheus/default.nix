@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "korfuri";
     repo = pname;
-    rev = version;
-    sha256 = "1y1cmycc545xrys41jk8kia36hwnkwhkw26mlpfdjgb63vq30x1d";
+    rev = "v${version}";
+    hash = "sha256-NE0zHnGGSrtkBLrSyBcQuyGrSfSQbdpevokg3YZhwDw=";
   };
 
   patches = [

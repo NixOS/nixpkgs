@@ -2,6 +2,7 @@
 , bzip2, zlib, lz4, inotify-tools, pam, libcap, coreutils
 , clucene_core_2, icu, openldap, libsodium, libstemmer, cyrus_sasl
 , nixosTests
+, fetchpatch
 # Auth modules
 , withMySQL ? false, libmysqlclient
 , withPgSQL ? false, postgresql
@@ -11,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "dovecot";
-  version = "2.3.18";
+  version = "2.3.19.1";
 
   nativeBuildInputs = [ perl pkg-config ];
   buildInputs =
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://dovecot.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
-    hash = "sha256-Buc/ZoxsCTxFve7rfCA5irjcSTFyNPS1eBrF4sxdbDM=";
+    hash = "sha256-21q82H1zCWWeprRbLLbunF+XSGsrcZpd0Fp1nh9qXFE=";
   };
 
   enableParallelBuilding = true;
@@ -57,6 +58,11 @@ stdenv.mkDerivation rec {
     # so we can symlink plugins from several packages there.
     # The symlinking needs to be done in NixOS.
     ./2.3.x-module_dir.patch
+    # fix CVE-2022-30550
+    (fetchpatch {
+      url = "https://github.com/dovecot/core/compare/7bad6a24%5E..a1022072.patch";
+      hash = "sha256-aSyRcQreyA9j8QwkODHqPpRuS3vzouVatEWCqhh+r+8=";
+    })
   ];
 
   configureFlags = [

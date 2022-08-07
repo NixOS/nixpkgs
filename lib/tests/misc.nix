@@ -22,7 +22,6 @@ in
 
 runTests {
 
-
 # TRIVIAL
 
   testId = {
@@ -260,6 +259,15 @@ runTests {
           strings
           possibly newlines
         '';
+        drv = {
+          outPath = "/drv";
+          foo = "ignored attribute";
+        };
+        path = /path;
+        stringable = {
+          __toString = _: "hello toString";
+          bar = "ignored attribute";
+        };
       }}
     '';
     expected = ''
@@ -268,7 +276,40 @@ runTests {
       declare -A assoc=(['with some']='strings
       possibly newlines
       ')
+      drv='/drv'
+      path='/path'
+      stringable='hello toString'
     '';
+  };
+
+  testHasInfixFalse = {
+    expr = hasInfix "c" "abde";
+    expected = false;
+  };
+
+  testHasInfixTrue = {
+    expr = hasInfix "c" "abcde";
+    expected = true;
+  };
+
+  testHasInfixDerivation = {
+    expr = hasInfix "hello" (import ../.. { system = "x86_64-linux"; }).hello;
+    expected = true;
+  };
+
+  testHasInfixPath = {
+    expr = hasInfix "tests" ./.;
+    expected = true;
+  };
+
+  testHasInfixPathStoreDir = {
+    expr = hasInfix builtins.storeDir ./.;
+    expected = true;
+  };
+
+  testHasInfixToString = {
+    expr = hasInfix "a" { __toString = _: "a"; };
+    expected = true;
   };
 
 # LISTS
@@ -631,6 +672,21 @@ runTests {
       expr = (builtins.tryEval
         (generators.toPretty { } (generators.withRecursion { depthLimit = 2; } a))).success;
       expected = false;
+    };
+
+  testWithRecursionDealsWithFunctors =
+    let
+      functor = {
+        __functor = self: { a, b, }: null;
+      };
+      a = {
+        value = "1234";
+        b = functor;
+        c.d = functor;
+      };
+    in {
+      expr = generators.toPretty { } (generators.withRecursion { depthLimit = 1; throwOnDepthLimit = false; } a);
+      expected = "{\n  b = <function, args: {a, b}>;\n  c = {\n    d = \"<unevaluated>\";\n  };\n  value = \"<unevaluated>\";\n}";
     };
 
   testToPrettyMultiline = {

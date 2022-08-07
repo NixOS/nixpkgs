@@ -1,57 +1,60 @@
 { lib
 , buildPythonPackage
-, fetchPypi
 , click
 , cloudpickle
 , dask
+, fetchPypi
+, jinja2
+, locket
 , msgpack
+, packaging
 , psutil
+, pythonOlder
+, pyyaml
 , sortedcontainers
 , tblib
 , toolz
 , tornado
+, urllib3
 , zict
-, pyyaml
-, mpi4py
-, bokeh
-, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "2022.2.1";
+  version = "2022.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  # get full repository need conftest.py to run tests
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+2KnWvjvM7vhqoCmjAGjOpPBzVozLdAXq0SVW/fs9ls=";
+    hash = "sha256-5oq6i+PiDl0RIKvKyEGQn/GAIXCKhBKvpY/xU8T6sKw=";
   };
 
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "tornado >= 6.0.3, <6.2" "tornado >= 6.0.3"
+  '';
+
   propagatedBuildInputs = [
-    bokeh
     click
     cloudpickle
     dask
-    mpi4py
+    jinja2
+    locket
     msgpack
+    packaging
     psutil
     pyyaml
     sortedcontainers
     tblib
     toolz
     tornado
+    urllib3
     zict
   ];
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "dask == 2022.02.0" "dask"
-  '';
-
-  # when tested random tests would fail and not repeatably
+  # When tested random tests would fail and not repeatably
   doCheck = false;
 
   pythonImportsCheck = [

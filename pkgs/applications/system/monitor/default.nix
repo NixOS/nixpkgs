@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, nix-update-script
+, gitUpdater
 , meson
 , ninja
 , vala
@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "monitor";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "stsdc";
     repo = "monitor";
     rev = version;
-    sha256 = "sha256-qwx60cp3Q6PL1iwRP+M9Rtmxcis0EByi8fk13H4cXfc=";
+    sha256 = "sha256-dw1FR9nU8MY6LBL3sF942azeSgKmCntXCk4+nhMb4Wo=";
     fetchSubmodules = true;
   };
 
@@ -75,8 +75,9 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
+    updateScript = gitUpdater {
+      inherit pname version;
+      ignoredVersions = "ci.*";
     };
   };
 

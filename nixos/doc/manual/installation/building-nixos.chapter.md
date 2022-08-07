@@ -18,9 +18,12 @@ enforced values with `mkForce`.
 
 ## Practical Instructions {#sec-building-image-instructions}
 
+To build an ISO image for the channel `nixos-unstable`:
+
 ```ShellSession
 $ git clone https://github.com/NixOS/nixpkgs.git
 $ cd nixpkgs/nixos
+$ git switch nixos-unstable
 $ nix-build -A config.system.build.isoImage -I nixos-config=modules/installer/cd-dvd/installation-cd-minimal.nix default.nix
 ```
 

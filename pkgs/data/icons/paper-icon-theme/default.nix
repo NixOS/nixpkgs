@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, gtk3, gnome, gnome-icon-theme, hicolor-icon-theme, jdupes }:
+{ lib, stdenvNoCC, fetchFromGitHub, meson, ninja, gtk3, gnome, gnome-icon-theme, hicolor-icon-theme, jdupes }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "paper-icon-theme";
   version = "unstable-2020-03-12";
 

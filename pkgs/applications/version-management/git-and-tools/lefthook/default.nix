@@ -1,23 +1,35 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "lefthook";
-  version = "0.7.7";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "evilmartians";
     repo = "lefthook";
-    sha256 = "sha256-XyuXegCTJSW4uO6fEaRKq/jZnE+JbrxZw0kcDvhpsVo=";
+    sha256 = "sha256-/y9UUVwJ/u1F9+hMxWqGENscTuf8GP4VZl7hTk3zyrM=";
   };
 
-  vendorSha256 = "sha256-Rp67FnFU27u85t02MIs7wZQoOa8oGsHVVPQ9OdIyTJg=";
+  vendorSha256 = "sha256-LCBQyVSkUywceIlioYRNuRc6FrbPKuhgfw5OocR3NvI=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  ldflags = [ "-s" "-w" ];
 
   doCheck = false;
 
+  postInstall = ''
+    installShellCompletion --cmd lefthook \
+      --bash <($out/bin/lefthook completion bash) \
+      --fish <($out/bin/lefthook completion fish) \
+      --zsh <($out/bin/lefthook completion zsh)
+  '';
+
   meta = with lib; {
     description = "Fast and powerful Git hooks manager for any type of projects";
-    homepage = "https://github.com/Arkweid/lefthook";
+    homepage = "https://github.com/evilmartians/lefthook";
+    changelog = "https://github.com/evilmartians/lefthook/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ rencire ];
   };

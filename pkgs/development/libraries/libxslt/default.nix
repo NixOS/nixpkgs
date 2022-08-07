@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "http://xmlsoft.org/XSLT/";
+    homepage = "https://gitlab.gnome.org/GNOME/libxslt";
     description = "A C library and tools to do XSL transformations";
     license = licenses.mit;
     platforms = platforms.all;

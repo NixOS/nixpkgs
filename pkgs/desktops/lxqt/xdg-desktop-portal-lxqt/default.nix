@@ -4,8 +4,10 @@
 , cmake
 , kwindowsystem
 , libfm-qt
+, lxqt-qtplugin
 , qtx11extras
 , lxqtUpdateScript
+, extraQtStyles ? []
 }:
 
 mkDerivation rec {
@@ -26,8 +28,10 @@ mkDerivation rec {
   buildInputs = [
     kwindowsystem
     libfm-qt
+    lxqt-qtplugin
     qtx11extras
-  ];
+  ]
+  ++ extraQtStyles;
 
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 

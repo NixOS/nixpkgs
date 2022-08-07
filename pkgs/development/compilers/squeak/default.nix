@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, fetchzip
-, autoconf, automake, autoreconfHook, bash, clang, dos2unix, file, gzip, perl
+, autoconf, automake, autoreconfHook, clang, dos2unix, file, perl
 , pkg-config
 , alsa-lib, coreutils, freetype, glib, glibc, gnugrep, libpulseaudio, libtool
 , libuuid, openssl, pango, xorg
@@ -75,11 +75,9 @@ in stdenv.mkDerivation {
     autoconf
     automake
     autoreconfHook
-    bash
     clang
     dos2unix
     file
-    gzip
     perl
     pkg-config
   ];
@@ -137,6 +135,11 @@ in stdenv.mkDerivation {
     substituteInPlace ./platforms/unix/config/mkmf \
       --replace '/bin/rm ' '${coreutils}/bin/rm '
   '';
+
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: vm/vm.a(cogit.o):spur64src/vm/cogitX64SysV.c:2552: multiple definition of
+  #       `traceStores'; vm/vm.a(gcc3x-cointerp.o):spur64src/vm/cogit.h:140: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
 
   preAutoreconf = ''
     pushd ./platforms/unix/config > /dev/null

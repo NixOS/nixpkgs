@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "toipe";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-lAvFCvNm55SjRmrhIkMBiM0nSlAG+jUEKLlLaGs1RkY=";
+    sha256 = "sha256-aunejitHVNIB/zIDgX3mlA1FzG7wIxlDCFdUvtuzQnc=";
   };
 
-  cargoSha256 = "sha256-WmWH/x69H17uHQEB0+GRUtApJnSEkoeFLLweP8NoBrk=";
+  cargoSha256 = "sha256-Nabc2lPpsUCcWEJzL6U84UoIJ5PCtYKVyLRhjhiqhpE=";
 
   meta = with lib; {
     description = "Trusty terminal typing tester";

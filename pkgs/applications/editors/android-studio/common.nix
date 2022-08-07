@@ -6,6 +6,7 @@
 , cacert
 , coreutils
 , dbus
+, e2fsprogs
 , expat
 , fetchurl
 , findutils
@@ -52,6 +53,7 @@
 , xkeyboard_config
 , zlib
 , makeDesktopItem
+, tiling_wm # if we are using a tiling wm, need to set _JAVA_AWT_WM_NONREPARENTING in wrapper
 }:
 
 let
@@ -80,6 +82,7 @@ let
         --set-default JAVA_HOME "$out/jre" \
         --set ANDROID_EMULATOR_USE_SYSTEM_LIBS 1 \
         --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb" \
+        ${lib.optionalString tiling_wm "--set _JAVA_AWT_WM_NONREPARENTING 1"} \
         --set FONTCONFIG_FILE ${fontsConf} \
         --prefix PATH : "${lib.makeBinPath [
 
@@ -114,6 +117,9 @@ let
           libXi
           libXrender
           libXtst
+
+          # No crash, but attempted to load at startup
+          e2fsprogs
 
           # Gradle wants libstdc++.so.6
           stdenv.cc.cc.lib
@@ -190,7 +196,7 @@ in runCommand
   {
     startScript = ''
       #!${bash}/bin/bash
-      ${fhsEnv}/bin/${drvName}-fhs-env ${androidStudio}/bin/studio.sh
+      ${fhsEnv}/bin/${drvName}-fhs-env ${androidStudio}/bin/studio.sh "$@"
     '';
     preferLocalBuild = true;
     allowSubstitutes = false;
@@ -216,9 +222,9 @@ in runCommand
       # source-code itself).
       platforms = [ "x86_64-linux" ];
       maintainers = with maintainers; rec {
-        stable = [ ];
-        beta = [ ];
-        canary = [ ];
+        stable = [ alapshin ];
+        beta = [ alapshin ];
+        canary = [ alapshin ];
         dev = canary;
       }."${channel}";
     };

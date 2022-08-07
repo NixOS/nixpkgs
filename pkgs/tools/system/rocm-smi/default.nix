@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rocm-smi";
-  version = "5.0.2";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "rocm_smi_lib";
     rev = "rocm-${version}";
-    hash = "sha256-SQ6eBQzZ8CBD9RlIjt25FrOuWUSybBzx6ZzCOzHbxdI=";
+    hash = "sha256-11o4xUyeQ3W/RPY62r8ahwcljKh/rkVSyTk5ruTU66U=";
   };
 
   nativeBuildInputs = [ cmake wrapPython ];

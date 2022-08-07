@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     description = "Tools for high-throughput sequencing (HTS) data and formats such as SAM/BAM/CRAM and VCF";
     license = licenses.mit;
     homepage = "https://broadinstitute.github.io/picard/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     maintainers = with maintainers; [ jbedo ];
     mainProgram = "picard";
     platforms = platforms.all;

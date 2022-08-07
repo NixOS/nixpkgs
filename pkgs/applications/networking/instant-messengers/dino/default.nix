@@ -14,7 +14,7 @@
 , qrencode
 , icu
 , gspell
-, srtp, libnice, gnutls, gstreamer, gst-plugins-base, gst-plugins-good
+, srtp, libnice, gnutls, gstreamer, gst-plugins-base, gst-plugins-good, webrtc-audio-processing
  }:
 
 stdenv.mkDerivation rec {
@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
     gstreamer
     gst-plugins-base
     gst-plugins-good
+    webrtc-audio-processing
   ] ++ lib.optionals (!stdenv.isDarwin) [
     xorg.libxcb
     xorg.libpthreadstubs

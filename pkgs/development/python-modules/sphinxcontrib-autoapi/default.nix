@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
@@ -13,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "sphinx-autoapi";
-  version = "1.8.4";
+  version = "1.9.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8c4ec5fbedc1e6e8f4692bcc4fcd1abcfb9e8dfca8a4ded60ad811a743c22ccc";
+    sha256 = "sha256-yJfqM33xatDN4wfL3+K+ziB3iN3hWH+k/IuFfR/F3Lo=";
   };
 
   propagatedBuildInputs = [ astroid jinja2 pyyaml sphinx unidecode ];
@@ -33,6 +34,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://github.com/readthedocs/sphinx-autoapi";
     description = "Provides 'autodoc' style documentation";
     longDescription = "Sphinx AutoAPI provides 'autodoc' style documentation for multiple programming languages without needing to load, run, or import the project being documented.";

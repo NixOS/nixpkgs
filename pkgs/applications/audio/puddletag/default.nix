@@ -25,13 +25,13 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "puddletag";
-  version = "2.1.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "puddletag";
     repo = "puddletag";
-    rev = version;
-    hash = "sha256-eilETaFvvPMopIbccV1uLbpD55kHX9KGTCcGVXaHPgM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-KaFfpOWI9u2ZC/3kuCLneWOOKSmAaIuHPFHptkKMH/g=";
   };
 
   postPatch = ''

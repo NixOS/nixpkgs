@@ -9,7 +9,7 @@ in
 
     broker = mkOption {
       type = str;
-      description = "Hostname or IP address of your MQTT Broker.";
+      description = lib.mdDoc "Hostname or IP address of your MQTT Broker.";
       default = "127.0.0.1";
       example = [
         "mqtt"
@@ -19,15 +19,14 @@ in
 
     clientName = mkOption {
       type = str;
-      description = "Name, your client connects as.";
+      description = lib.mdDoc "Name, your client connects as.";
       default = "MyUSBRelay";
     };
   };
 
   config = mkIf cfg.enable {
 
-    # TODO: Rename to .conf in upcomming release
-    environment.etc."usbrelayd.ini".text = ''
+    environment.etc."usbrelayd.conf".text = ''
       [MQTT]
       BROKER = ${cfg.broker}
       CLIENTNAME = ${cfg.clientName}
@@ -40,5 +39,9 @@ in
       group = "usbrelay";
     };
     users.groups.usbrelay = { };
+  };
+
+  meta = {
+    maintainers = with lib.maintainers; [ wentasah ];
   };
 }

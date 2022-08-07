@@ -74,7 +74,7 @@ in
 
         Podman implements the Docker API.
 
-        Users must be in the <code>podman</code> group in order to connect. As
+        Users must be in the <literal>podman</literal> group in order to connect. As
         with Docker, members of this group can gain root access.
       '';
     };
@@ -152,6 +152,12 @@ in
 
       systemd.sockets.podman.wantedBy = [ "sockets.target" ];
       systemd.sockets.podman.socketConfig.SocketGroup = "podman";
+
+      systemd.user.services.podman.serviceConfig = {
+        ExecStart = [ "" "${cfg.package}/bin/podman $LOGGING system service" ];
+      };
+
+      systemd.user.sockets.podman.wantedBy = [ "sockets.target" ];
 
       systemd.tmpfiles.packages = [
         # The /run/podman rule interferes with our podman group, so we remove

@@ -11,15 +11,15 @@
 
 mkDerivation rec {
   pname = "audacious";
-  version = "4.1";
+  version = "4.2";
 
   src = fetchurl {
     url = "http://distfiles.audacious-media-player.org/audacious-${version}.tar.bz2";
-    sha256 = "0p734psjjvjcmla2hg5h6a9v1prvy63jj9xm2g2ngs49jy7qan0z";
+    sha256 = "sha256-/rME5HCkgf4rPEyhycs7I+wmJUDBLQ0ebCKl62JeBLM=";
   };
   pluginsSrc = fetchurl {
     url = "http://distfiles.audacious-media-player.org/audacious-plugins-${version}.tar.bz2";
-    sha256 = "0k0xnqmxi5lna034i2cnzvfzrykxmv4fbs1nkrc9sd2ma1igrmns";
+    sha256 = "sha256-b6D2nDoQQeuHfDcQlROrSioKVqd9nowToVgc8UOaQX8=";
   };
 
   nativeBuildInputs = [ gettext pkg-config ];

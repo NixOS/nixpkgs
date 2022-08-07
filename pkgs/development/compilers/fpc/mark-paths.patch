@@ -19,16 +19,16 @@ index a7398fb9..8e46fec0 100644
  {$else powerpc64}
        LibrarySearchPath.AddLibraryPath(sysrootpath,'=/lib;=/usr/lib;=/usr/X11R6/lib',true);
  {$endif powerpc64}
-@@ -164,7 +164,7 @@ begin
-       LibrarySearchPath.AddLibraryPath(sysrootpath,'=/usr/lib/i386-linux-gnu',true);
+@@ -165,7 +165,7 @@ begin
  {$endif i386}
  {$ifdef aarch64}
+       LibrarySearchPath.AddLibraryPath(sysrootpath,'=/usr/lib64',true);
 -      LibrarySearchPath.AddLibraryPath(sysrootpath,'=/usr/lib/aarch64-linux-gnu',true);
 +      LibrarySearchPath.AddLibraryPath(sysrootpath,'=@syslibpath@',true);
  {$endif aarch64}
  {$ifdef powerpc}
        LibrarySearchPath.AddLibraryPath(sysrootpath,'=/usr/lib/powerpc-linux-gnu',true);
-@@ -185,53 +185,53 @@ begin
+@@ -186,53 +186,53 @@ begin
  end;
  
  {$ifdef m68k}
@@ -95,7 +95,7 @@ index a7398fb9..8e46fec0 100644
  {$endif sparc64}
  
  
-@@ -266,9 +266,9 @@ begin
+@@ -267,9 +267,9 @@ begin
        libctype:=uclibc;
      end
  {$ifdef i386}

@@ -44,6 +44,7 @@ in stdenv.mkDerivation rec {
       https://www.sdrplay.com/docs/SDRplay_API_Specification_v${lib.concatStringsSep "." (lib.take 2 (builtins.splitVersion version))}.pdf
     '';
     homepage = "https://www.sdrplay.com/downloads/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = [ maintainers.pmenke ];
     platforms = platforms.linux;

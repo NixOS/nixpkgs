@@ -31,6 +31,9 @@ python3Packages.buildPythonApplication rec {
 
     sed -i 's/"zope.interface.*"/"zope.interface"/' src/allmydata/_auto_deps.py
     sed -i 's/"pycrypto.*"/"pycrypto"/' src/allmydata/_auto_deps.py
+
+    # incompatible with latest autobahn
+    rm src/allmydata/test/web/test_logs.py
   '';
 
   # Remove broken and expensive tests.
@@ -58,9 +61,10 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python3Packages; [
     appdirs beautifulsoup4 characteristic distro eliot fixtures foolscap future
     html5lib magic-wormhole netifaces pyasn1 pycrypto pyutil pyyaml recommonmark
-    service-identity simplejson sphinx_rtd_theme testtools treq twisted zfec
+    service-identity simplejson sphinx-rtd-theme testtools treq twisted zfec
     zope_interface
-  ];
+  ] ++ twisted.optional-dependencies.tls
+    ++ twisted.optional-dependencies.conch;
 
   checkInputs = with python3Packages; [ mock hypothesis twisted ];
 
@@ -94,6 +98,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://tahoe-lafs.org/";
     license = [ licenses.gpl2Plus /* or */ "TGPPLv1+" ];
     maintainers = with lib.maintainers; [ MostAwesomeDude ];
-    platforms = platforms.gnu ++ platforms.linux;
+    platforms = platforms.linux;
   };
 }

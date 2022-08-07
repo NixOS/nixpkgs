@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libspecbleach";
-  version = "0.1.2";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "lucianodato";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-WmUl8rA/+V+hv7FPG/5Or6aAQVqt1rIJtdb53KhSmuo=";
+    sha256 = "sha256-Tw5nrGVAeoiMH00efJwcU+QLmKDZZTXHQPSV9x789TM=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];

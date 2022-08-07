@@ -12,7 +12,6 @@
 , curl
 , flex
 , gnutls
-, jemalloc
 , libconfig
 , libdaemon
 , libev
@@ -99,7 +98,6 @@ stdenv.mkDerivation rec {
     ${lib.concatMapStringsSep "\n"
       (x: ''replace_dep "${x.f}" "${x.p.src}" "${x.p.pname or (builtins.parseDrvName x.p.name).name}" "${x.p.name}"'') [
         { f = "curl"; p = curl; }
-        { f = "jemalloc"; p = jemalloc; }
         { f = "libconfig"; p = libconfig; }
         { f = "libdaemon"; p = libdaemon; }
         { f = "libev"; p = libev; }

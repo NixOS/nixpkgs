@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     description = "St. Petersburg genome assembler: assembly toolkit containing various assembly pipelines";
     license = licenses.gpl2Only;
     homepage = "http://cab.spbu.ru/software/spades/";
-    platforms = with platforms; [ "x86_64-linux" "x86_64-darwin"];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = [ maintainers.bzizou ];
   };
 }

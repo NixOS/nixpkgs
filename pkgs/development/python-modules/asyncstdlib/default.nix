@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "asyncstdlib";
-  version = "3.10.4";
+  version = "3.10.5";
   format = "flit";
 
   disabled = pythonOlder "3.7";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "maxfischer2781";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-zPWXI5iHMCkSVjyNRcXplTadobYCeMv3Unjt+QVF8D8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ILb+iWg2xYWBEQY1a4jPITm4QCPO8qfVCPgO3YWIVAQ=";
   };
 
   propagatedBuildInputs = [

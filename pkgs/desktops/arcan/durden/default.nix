@@ -3,15 +3,15 @@
 , fetchFromGitHub
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalPackages: {
   pname = "durden";
-  version = "0.6.1+date=2022-03-11";
+  version = "unstable-2022-07-16";
 
   src = fetchFromGitHub {
     owner = "letoram";
-    repo = pname;
-    rev = "fec2a1051500df28becce188d932645743091efa";
-    hash = "sha256-uZ7oTnkWG3P/4ETgn6MQ9v47mRAJnvyzglQS7jlabPA=";
+    repo = "durden";
+    rev = "4c9eaf1550d34e10565b545e0f96b1f6b8d26dcd";
+    hash = "sha256-1d+Kg17nxNQeVT/iVa5oPXu96Ivvas9AO/H+NxhB4Yo=";
   };
 
   dontConfigure = true;
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.all;
   };
-}
+})

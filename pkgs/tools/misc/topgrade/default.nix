@@ -9,16 +9,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "topgrade";
-  version = "8.3.1";
+  version = "9.0.1";
 
   src = fetchFromGitHub {
     owner = "r-darwish";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-EsC17VUQDgrhCU26fsqf2zXOTKa/WeKHiWG0Zn1Qao4=";
+    sha256 = "sha256-9zP+rWhaK4fC2Qhd0oq9WVvCkvryooYo09k7016Rbxw=";
   };
 
-  cargoSha256 = "sha256-e5QJw5yY+ZkijqoqRauA5ncvLWiRlalYZCwSG5U7uDk=";
+  cargoPatches = [ ./darwin-cargo-lock.patch ];
+  cargoSha256 = "sha256-rkcEF/INNVn9K4p0/1M++l6lnjtZp1Srx57gkaqcKek=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Cocoa Foundation ];
 
@@ -32,7 +33,6 @@ rustPlatform.buildRustPackage rec {
     description = "Upgrade all the things";
     homepage = "https://github.com/r-darwish/topgrade";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ SuperSandro2000 ];
-    broken = stdenv.isDarwin;
+    maintainers = with maintainers; [ SuperSandro2000 xyenon ];
   };
 }

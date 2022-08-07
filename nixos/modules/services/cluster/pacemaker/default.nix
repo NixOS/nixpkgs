@@ -13,7 +13,7 @@ in
       type = types.package;
       default = pkgs.pacemaker;
       defaultText = literalExpression "pkgs.pacemaker";
-      description = "Package that should be used for pacemaker.";
+      description = lib.mdDoc "Package that should be used for pacemaker.";
     };
   };
 

@@ -8,27 +8,32 @@
 , libxcb
 , libXdmcp
 , qtbase
+, qt6
 }:
 
 mkDerivation rec {
   pname = "fcitx5-qt";
-  version = "5.0.11";
+  version = "5.0.14";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-T3gGErvB1DtEdHSC1oKzmttTLBBn3jXcvZFWnpoPz4E=";
+    sha256 = "sha256-LmE6HgNLoJmgJtJmubAIjFi8Xpnmw3hgqJh6HUcakzg=";
   };
 
   preConfigure = ''
     substituteInPlace qt5/platforminputcontext/CMakeLists.txt \
       --replace \$"{CMAKE_INSTALL_QT5PLUGINDIR}" $out/${qtbase.qtPluginPrefix}
+    substituteInPlace qt6/platforminputcontext/CMakeLists.txt \
+      --replace \$"{CMAKE_INSTALL_QT6PLUGINDIR}" $out/${qt6.qtbase.qtPluginPrefix}
   '';
 
   cmakeFlags = [
+    # adding qt6 to buildInputs would result in error: detected mismatched Qt dependencies
+    "-DCMAKE_PREFIX_PATH=${qt6.qtbase.dev}"
     "-DENABLE_QT4=0"
-    "-DENABLE_QT6=0"
+    "-DENABLE_QT6=1"
   ];
 
   nativeBuildInputs = [

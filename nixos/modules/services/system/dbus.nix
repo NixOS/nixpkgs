@@ -38,29 +38,29 @@ in
       packages = mkOption {
         type = types.listOf types.path;
         default = [ ];
-        description = ''
+        description = lib.mdDoc ''
           Packages whose D-Bus configuration files should be included in
           the configuration of the D-Bus system-wide or session-wide
           message bus.  Specifically, files in the following directories
           will be included into their respective DBus configuration paths:
-          <filename><replaceable>pkg</replaceable>/etc/dbus-1/system.d</filename>
-          <filename><replaceable>pkg</replaceable>/share/dbus-1/system.d</filename>
-          <filename><replaceable>pkg</replaceable>/share/dbus-1/system-services</filename>
-          <filename><replaceable>pkg</replaceable>/etc/dbus-1/session.d</filename>
-          <filename><replaceable>pkg</replaceable>/share/dbus-1/session.d</filename>
-          <filename><replaceable>pkg</replaceable>/share/dbus-1/services</filename>
+          {file}`«pkg»/etc/dbus-1/system.d`
+          {file}`«pkg»/share/dbus-1/system.d`
+          {file}`«pkg»/share/dbus-1/system-services`
+          {file}`«pkg»/etc/dbus-1/session.d`
+          {file}`«pkg»/share/dbus-1/session.d`
+          {file}`«pkg»/share/dbus-1/services`
         '';
       };
 
       apparmor = mkOption {
         type = types.enum [ "enabled" "disabled" "required" ];
-        description = ''
+        description = lib.mdDoc ''
           AppArmor mode for dbus.
 
-          <literal>enabled</literal> enables mediation when it's
-          supported in the kernel, <literal>disabled</literal>
+          `enabled` enables mediation when it's
+          supported in the kernel, `disabled`
           always disables AppArmor even with kernel support, and
-          <literal>required</literal> fails when AppArmor was not found
+          `required` fails when AppArmor was not found
           in the kernel.
         '';
         default = "disabled";

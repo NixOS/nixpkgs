@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "ocp-index";
-  version = "1.3.1";
+  version = "1.3.3";
 
   useDune2 = true;
 
@@ -10,7 +10,7 @@ buildDunePackage rec {
     owner = "OCamlPro";
     repo = "ocp-index";
     rev = version;
-    sha256 = "120w72fqymjp6ibicbp31jyx9yv34mdvgkr0zdfpzvfb7lgd8rc7";
+    sha256 = "sha256-ElCXjUR85tkyBLIpIKefDouE1upzJytQnk4xoQt/cb0=";
   };
 
   strictDeps = true;

@@ -48,6 +48,6 @@ mkDerivation rec {
     description = "The Qt port of obconf, the Openbox configuration tool";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

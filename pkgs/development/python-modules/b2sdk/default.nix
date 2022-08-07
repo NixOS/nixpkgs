@@ -4,6 +4,7 @@
 , fetchPypi
 , importlib-metadata
 , logfury
+, pyfakefs
 , pytestCheckHook
 , pytest-lazy-fixture
 , pytest-mock
@@ -15,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "1.14.1";
+  version = "1.17.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fYOeyhKm9mRT61NcQVaXFKeRC8AS9lfIZMO/s6iFaeg=";
+    hash = "sha256-pyPjjdQ8wzvQitlchGlfNTPwqs0PH6xgplSPUWpjtwM=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +43,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-lazy-fixture
     pytest-mock
+    pyfakefs
   ];
 
   postPatch = ''
@@ -50,6 +52,11 @@ buildPythonPackage rec {
     substituteInPlace requirements.txt \
       --replace 'arrow>=0.8.0,<1.0.0' 'arrow'
   '';
+
+  disabledTestPaths = [
+    # requires aws s3 auth
+    "test/integration/test_download.py"
+  ];
 
   disabledTests = [
     # Test requires an API key

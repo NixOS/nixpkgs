@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
@@ -6,15 +7,17 @@
 , enableWasmEval ? false
 }:
 
+assert enableWasmEval && stdenv.isDarwin -> builtins.throw "building with wasm on darwin is failing in nixpkgs";
+
 buildGoModule rec {
   pname = "open-policy-agent";
-  version = "0.38.1";
+  version = "0.43.0";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "opa";
     rev = "v${version}";
-    sha256 = "sha256-x8mSlZ2X0DdkhaW5QXs5axERJkwARu8tHueQHXfamXM=";
+    sha256 = "sha256-ZxMeYWrUnNoCUgYrg/f3C19kGeN81boTfJRSpZZ/GL4=";
   };
   vendorSha256 = null;
 
@@ -35,12 +38,13 @@ buildGoModule rec {
     # Feed in all but the e2e tests for testing
     # This is because subPackages above limits what is built to just what we
     # want but also limits the tests
+    # Also avoid wasm tests on darwin due to wasmtime-go build issues
     getGoDirs() {
-      go list ./... | grep -v e2e
+      go list ./... | grep -v -e e2e ${lib.optionalString stdenv.isDarwin "-e wasm"}
     }
-
-    # Remove test case that fails on < go1.17
-    rm test/cases/testdata/cryptox509parsecertificates/test-cryptox509parsecertificates-0123.yaml
+    '' + lib.optionalString stdenv.isDarwin ''
+    # remove tests that have "too many open files"/"no space left on device" issues on darwin in hydra
+    rm server/server_test.go
   '';
 
   postInstall = ''
@@ -66,6 +70,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
+    mainProgram = "opa";
     homepage = "https://www.openpolicyagent.org";
     changelog = "https://github.com/open-policy-agent/opa/blob/v${version}/CHANGELOG.md";
     description = "General-purpose policy engine";

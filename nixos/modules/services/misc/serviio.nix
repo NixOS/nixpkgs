@@ -31,7 +31,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the Serviio Media Server.
         '';
       };
@@ -39,7 +39,7 @@ in {
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/serviio";
-        description = ''
+        description = lib.mdDoc ''
           The directory where serviio stores its state, data, etc.
         '';
       };

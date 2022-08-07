@@ -8,14 +8,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.10";
+  version = "1.2.11";
   pname = "brial";
 
   src = fetchFromGitHub {
     owner = "BRiAl";
     repo = "BRiAl";
     rev = version;
-    sha256 = "1qg6ssp87rb8p37kahxmm88fbxqg6r540cky5v7wq7l19n2b1bss";
+    sha256 = "sha256-GkaeBggOCiIWNBZoIaCvAcqGDRc/whTOqPZbGpAxWIk=";
   };
 
   # FIXME package boost-test and enable checks

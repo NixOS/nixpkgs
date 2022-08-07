@@ -1,33 +1,21 @@
-{ alsa-lib
-, bctoolbox
+{ bctoolbox
 , bzrtp
 , cmake
-, doxygen
 , fetchFromGitLab
 , ffmpeg
 , glew
 , gsm
-, intltool
 , lib
-, libGL
-, libGLU
 , libX11
 , libXext
-, libXv
-, libmatroska
 , libopus
-, libpcap
 , libpulseaudio
-, libtheora
-, libupnp
 , libv4l
 , libvpx
 , ortp
-, pkg-config
 , python3
 , qtbase
 , qtdeclarative
-, SDL
 , speex
 , srtp
 , stdenv
@@ -59,9 +47,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    doxygen
-    intltool
-    pkg-config
     python3
     qtbase
     qtdeclarative
@@ -73,28 +58,19 @@ stdenv.mkDerivation rec {
     bzrtp
     ortp
 
-    # Vendored by BC but we use upstream, might cause problems
-    libmatroska
-
-    alsa-lib
     ffmpeg
     glew
-    gsm
-    libGL
-    libGLU
     libX11
     libXext
-    libXv
-    libopus
-    libpcap
     libpulseaudio
-    libtheora
-    libupnp
     libv4l
-    libvpx
-    SDL
     speex
     srtp
+
+    # Optional
+    gsm  # GSM audio codec
+    libopus  # Opus audio codec
+    libvpx  # VP8 video codec
   ];
 
   strictDeps = true;
@@ -104,6 +80,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_QT_GL=ON" # Build necessary MSQOGL plugin for Linphone desktop
     "-DCMAKE_C_FLAGS=-DGIT_VERSION=\"v${version}\""
     "-DENABLE_STRICT=NO" # Disable -Werror
+    "-DENABLE_UNIT_TESTS=NO" # Do not build test executables
   ];
 
   NIX_LDFLAGS = "-lXext";

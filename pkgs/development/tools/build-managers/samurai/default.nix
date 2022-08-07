@@ -35,7 +35,6 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/michaelforney/samurai";
     description = "ninja-compatible build tool written in C";
     longDescription = ''
       samurai is a ninja-compatible build tool with a focus on simplicity,
@@ -50,8 +49,10 @@ stdenv.mkDerivation rec {
       .ninja_deps as the original ninja tool, currently version 5 and 4
       respectively.
     '';
+    homepage = "https://github.com/michaelforney/samurai";
     license = with licenses; [ mit asl20 ]; # see LICENSE
     maintainers = with maintainers; [ dtzWill AndersonTorres ];
+    mainProgram = "samu";
     platforms = platforms.all;
   };
 }

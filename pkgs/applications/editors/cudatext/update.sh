@@ -4,7 +4,17 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
+nixpkgs="$(git rev-parse --show-toplevel)"
+
+oldVersion=$(nix-instantiate --eval -E "(import \"$nixpkgs\" { config = {}; overlays = []; }).cudatext.version" | tr -d '"')
 version=$(curl -s https://api.github.com/repos/Alexey-T/CudaText/releases/latest | jq -r '.tag_name')
+
+if [[ $version == $oldVersion ]]; then
+  echo "Already at latest version $version"
+  exit 0
+fi
+echo "New version: $version"
+
 url="https://github.com/Alexey-T/CudaText/archive/refs/tags/${version}.tar.gz"
 hash=$(nix-prefetch-url --quiet --unpack --type sha256 $url)
 sriHash=$(nix hash to-sri --type sha256 $hash)

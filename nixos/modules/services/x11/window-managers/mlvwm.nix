@@ -13,7 +13,7 @@ in
     configFile = mkOption {
       default = null;
       type = with types; nullOr path;
-      description = ''
+      description = lib.mdDoc ''
         Path to the mlvwm configuration file.
         If left at the default value, $HOME/.mlvwmrc will be used.
       '';

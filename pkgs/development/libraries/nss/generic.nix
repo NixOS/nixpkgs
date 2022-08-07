@@ -1,4 +1,4 @@
-{ version, sha256 }:
+{ version, hash }:
 { lib
 , stdenv
 , fetchurl
@@ -15,6 +15,7 @@
 , # allow FIPS mode. Note that this makes the output non-reproducible.
   # https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_Tech_Notes/nss_tech_note6
   enableFIPS ? false
+, nixosTests
 }:
 
 let
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://mozilla/security/nss/releases/NSS_${underscoreVersion}_RTM/src/${pname}-${version}.tar.gz";
-    inherit sha256;
+    inherit hash;
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -62,7 +63,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Based on http://patch-tracker.debian.org/patch/series/dl/nss/2:3.15.4-1/85_security_load.patch
-    ./85_security_load.patch
+    (if (lib.versionOlder version "3.77") then
+      ./85_security_load.patch
+    else
+      ./85_security_load_3.77+.patch
+    )
     ./ckpem.patch
     ./fix-cross-compilation.patch
   ];
@@ -181,6 +186,12 @@ stdenv.mkDerivation rec {
     '';
 
   passthru.updateScript = ./update.sh;
+
+  passthru.tests = lib.optionalAttrs (lib.versionOlder version "3.69") {
+    inherit (nixosTests) firefox-esr-91;
+  } // lib.optionalAttrs (lib.versionAtLeast version "3.69") {
+    inherit (nixosTests) firefox firefox-esr-102;
+  };
 
   meta = with lib; {
     homepage = "https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS";

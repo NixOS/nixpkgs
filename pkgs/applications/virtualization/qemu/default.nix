@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ makeWrapper removeReferencesTo pkg-config flex bison meson ninja perl python3 python3Packages.sphinx python3Packages.sphinx_rtd_theme ]
+  nativeBuildInputs = [ makeWrapper removeReferencesTo pkg-config flex bison meson ninja perl python3 python3Packages.sphinx python3Packages.sphinx-rtd-theme ]
     ++ lib.optionals gtkSupport [ wrapGAppsHook ]
     ++ lib.optionals stdenv.isDarwin [ sigtool ];
 
@@ -103,8 +103,31 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-gTRf9XENAfbFB3asYCXnw4OV4Af6VE1W56K2xpYDhgM=";
       revert = true;
     })
+    # Workaround for upstream issue with nested virtualisation: https://gitlab.com/qemu-project/qemu/-/issues/1008
+    (fetchpatch {
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/3e4546d5bd38a1e98d4bd2de48631abf0398a3a2.diff";
+      sha256 = "sha256-oC+bRjEHixv1QEFO9XAm4HHOwoiT+NkhknKGPydnZ5E=";
+      revert = true;
+    })
+    # make nixos tests that boot from USB more stable
+    # https://lists.nongnu.org/archive/html/qemu-devel/2022-05/msg01484.html
+    (fetchpatch {
+      url = "https://gitlab.com/raboof/qemu/-/commit/3fb5e8fe4434130b1167a995b2a01c077cca2cd5.patch";
+      sha256 = "sha256-evzrN3i4ntc/AFG0C0rezQpQbWcnx74nXO+5DLErX8o=";
+    })
+    # fix 9p on macOS host, landed in master
+    (fetchpatch {
+      name = "fix-9p-on-macos.patch";
+      url = "https://gitlab.com/qemu/qemu/-/commit/f5643914a9e8f79c606a76e6a9d7ea82a3fc3e65.patch";
+      sha256 = "sha256-8i13wU135h+YxoXFtkXweBN3hMslpWoNoeQ7Ydmn3V4=";
+    })
+    (fetchpatch {
+      name = "CVE-2022-35414.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/418ade7849ce7641c0f7333718caf5091a02fd4c.patch";
+      sha256 = "sha256-zQHDXedIXZBnabv4+3TA4z5mY1+KZiPmqUbhaSkGLgA=";
+    })
   ]
-    ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
+  ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
 
   postPatch = ''
     # Otherwise tries to ensure /var/run exists.

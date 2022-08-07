@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "gotty";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "sorenisanerd";
     repo = "gotty";
     rev = "v${version}";
-    sha256 = "sha256-KkFnZ0j6rrzX2M+C0nVdSdta34B9rvL7cC0TOL38lGQ=";
+    sha256 = "sha256-Pi+opqNEKaw/2qWRqZkVAysMT4moLyEG5g9J/Z9pUDQ=";
   };
 
-  vendorSha256 = "sha256-6SgF61LW5F/61cB2Yd4cyu3fmFhDooSTw9+NnIAo7lc=";
+  vendorSha256 = "sha256-XtqIiREtKg0LRnwOg8UyYrWUWJNQbCJUw+nVvaiN3GQ=";
 
   # upstream did not update the tests, so they are broken now
   # https://github.com/sorenisanerd/gotty/issues/13

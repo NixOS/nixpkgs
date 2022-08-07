@@ -13,9 +13,9 @@ in
       enable = mkEnableOption "RTSP Simple Server";
 
       settings = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Settings for rtsp-simple-server.
-          Read more at <link xlink:href="https://github.com/aler9/rtsp-simple-server/blob/main/rtsp-simple-server.yml"/>
+          Read more at <https://github.com/aler9/rtsp-simple-server/blob/main/rtsp-simple-server.yml>
         '';
         type = format.type;
 
@@ -40,7 +40,7 @@ in
 
       env = mkOption {
         type = with types; attrsOf anything;
-        description = "Extra environment variables for RTSP Simple Server";
+        description = lib.mdDoc "Extra environment variables for RTSP Simple Server";
         default = {};
         example = {
           RTSP_CONFKEY = "mykey";

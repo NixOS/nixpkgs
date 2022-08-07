@@ -23,6 +23,7 @@ in stdenv.mkDerivation {
     description = "Simple plaintext todo list manager";
     homepage = "http://todotxt.com";
     license = lib.licenses.gpl3;
+    mainProgram = "todo.sh";
     platforms = lib.platforms.all;
   };
 }

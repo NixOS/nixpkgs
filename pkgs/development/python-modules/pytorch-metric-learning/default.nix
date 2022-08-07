@@ -12,15 +12,15 @@
 
 buildPythonPackage rec {
   pname   = "pytorch-metric-learning";
-  version = "1.2.0";
+  version = "1.5.0";
 
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "KevinMusgrave";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-M/iH+pIuamOmvxLtKMzWXiuMCnMXzpVFRb/HfYfCKdc=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-ge6y5n1N/+nymgD4La3ger7N4vvcoo1Bxa+etirNFNI=";
   };
 
   propagatedBuildInputs = [

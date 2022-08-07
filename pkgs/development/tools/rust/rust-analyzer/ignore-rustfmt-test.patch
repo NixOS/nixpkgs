@@ -1,0 +1,10 @@
+--- a/crates/rust-analyzer/tests/slow-tests/tidy.rs
++++ b/crates/rust-analyzer/tests/slow-tests/tidy.rs
+@@ -6,6 +6,7 @@ use std::{
+ use xshell::{cmd, pushd, pushenv, read_file};
+ 
+ #[test]
++#[ignore]
+ fn check_code_formatting() {
+     let _dir = pushd(sourcegen::project_root()).unwrap();
+     let _e = pushenv("RUSTUP_TOOLCHAIN", "stable");

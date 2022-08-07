@@ -37,12 +37,15 @@ self: super: {
   rts = null;
   stm = null;
   template-haskell = null;
-  terminfo = null;
+  # GHC only builds terminfo if it is a native compiler
+  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_5;
   text = null;
   time = null;
   transformers = null;
   unix = null;
-  xhtml = null;
+  # GHC only bundles the xhtml library if haddock is enabled, check if this is
+  # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
+  xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_2_2_1;
 
   # GHC 8.8.x can build haddock version 2.23.*
   haddock = self.haddock_2_23_1;
@@ -116,7 +119,7 @@ self: super: {
   liquidhaskell = markBroken super.liquidhaskell;
 
   # This became a core library in ghc 8.10., so we don‘t have an "exception" attribute anymore.
-  exceptions = super.exceptions_0_10_4;
+  exceptions = super.exceptions_0_10_5;
 
   # ghc versions which don‘t match the ghc-lib-parser-ex version need the
   # additional dependency to compile successfully.
@@ -162,4 +165,10 @@ self: super: {
 
   # https://github.com/fpco/inline-c/issues/127 (recommend to upgrade to Nixpkgs GHC >=9.0)
   inline-c-cpp = (if isDarwin then dontCheck else x: x) super.inline-c-cpp;
+
+  # Depends on OneTuple for GHC < 9.0
+  universe-base = addBuildDepends [ self.OneTuple ] super.universe-base;
+
+  # doctest-parallel dependency requires newer Cabal
+  regex-tdfa = dontCheck super.regex-tdfa;
 }

@@ -13,6 +13,12 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
+  ldflags = [
+    "-w" "-s"
+    "-X github.com/docker/buildx/version.Package=github.com/docker/buildx"
+    "-X github.com/docker/buildx/version.Version=v${version}"
+  ];
+
   installPhase = ''
     install -D $GOPATH/bin/buildx $out/libexec/docker/cli-plugins/docker-buildx
   '';

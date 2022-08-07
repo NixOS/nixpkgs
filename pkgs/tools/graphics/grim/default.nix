@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, pixman, libpng, libjpeg, meson, ninja, wayland, pkg-config, scdoc, wayland-protocols }:
+{ lib, stdenv, fetchFromSourcehut, pixman, libpng, libjpeg, meson, ninja, wayland, pkg-config, scdoc, wayland-protocols }:
 
 stdenv.mkDerivation rec {
   pname = "grim";
   version = "1.4.0";
 
-  src = fetchFromGitHub {
-    owner = "emersion";
+  src = fetchFromSourcehut {
+    owner = "~emersion";
     repo = pname;
     rev = "v${version}";
     sha256 = "sha256-lwJn1Lysv1qLauqmrduUlzdoKUrUM5uBjv+dWSsrM6w=";

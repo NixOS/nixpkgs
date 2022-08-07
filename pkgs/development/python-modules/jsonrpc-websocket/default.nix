@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "jsonrpc-websocket";
-  version = "3.1.1";
+  version = "3.1.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "emlove";
     repo = "jsonrpc-websocket";
     rev = version;
-    sha256 = "aAXY1OUsF83rGQ1sg1lDrbWmxWqJJ+ZnuvHR1Y+ZDs4=";
+    sha256 = "sha256-xSOITOVtsNMEDrq610l8LNipLdyMWzKOQDedQEGaNOQ=";
   };
 
   propagatedBuildInputs = [
@@ -33,6 +33,7 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
+    "--asyncio-mode=legacy"
     "tests.py"
   ];
 

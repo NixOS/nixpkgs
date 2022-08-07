@@ -178,19 +178,12 @@ in
       man.generateCaches = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = mdDoc ''
           Whether to generate the manual page index caches.
           This allows searching for a page or
-          keyword using utilities like
-          <citerefentry>
-            <refentrytitle>apropos</refentrytitle>
-            <manvolnum>1</manvolnum>
-          </citerefentry>
-          and the <literal>-k</literal> option of
-          <citerefentry>
-            <refentrytitle>man</refentrytitle>
-            <manvolnum>1</manvolnum>
-          </citerefentry>.
+          keyword using utilities like {manpage}`apropos(1)`
+          and the `-k` option of
+          {manpage}`man(1)`.
         '';
       };
 
@@ -216,16 +209,14 @@ in
       dev.enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = mdDoc ''
           Whether to install documentation targeted at developers.
-          <itemizedlist>
-          <listitem><para>This includes man pages targeted at developers if <option>documentation.man.enable</option> is
-                    set (this also includes "devman" outputs).</para></listitem>
-          <listitem><para>This includes info pages targeted at developers if <option>documentation.info.enable</option>
-                    is set (this also includes "devinfo" outputs).</para></listitem>
-          <listitem><para>This includes other pages targeted at developers if <option>documentation.doc.enable</option>
-                    is set (this also includes "devdoc" outputs).</para></listitem>
-          </itemizedlist>
+          * This includes man pages targeted at developers if {option}`documentation.man.enable` is
+            set (this also includes "devman" outputs).
+          * This includes info pages targeted at developers if {option}`documentation.info.enable`
+            is set (this also includes "devinfo" outputs).
+          * This includes other pages targeted at developers if {option}`documentation.doc.enable`
+            is set (this also includes "devdoc" outputs).
         '';
       };
 

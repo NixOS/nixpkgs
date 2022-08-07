@@ -8,6 +8,7 @@
 , wayland-scanner
 , wlr-protocols
 , libGL
+, bash
 , installExampleScripts ? true
 , makeWrapper
 , pipectl
@@ -35,6 +36,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-D5uUKaepcSW9v2x6uBeLGXAyuLorlt4Lb6lZD/prfp8=";
   };
 
+  strictDeps = true;
+  nativeBuildInputs = [ cmake pkg-config wayland-scanner makeWrapper ];
+  buildInputs = [ libGL wayland wayland-protocols wlr-protocols bash ];
+
   postPatch = ''
     echo 'v${version}' > version.txt
     substituteInPlace CMakeLists.txt \
@@ -49,9 +54,6 @@ stdenv.mkDerivation rec {
   postInstall = lib.optionalString installExampleScripts ''
     wrapProgram $out/bin/wl-present --prefix PATH ":" ${wl-present-binpath}
   '';
-
-  nativeBuildInputs = [ cmake pkg-config wayland-scanner makeWrapper ];
-  buildInputs = [ libGL wayland wayland-protocols wlr-protocols ];
 
   meta = with lib; {
     homepage = "https://github.com/Ferdi265/wl-mirror";

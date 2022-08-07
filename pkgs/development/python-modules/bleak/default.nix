@@ -1,17 +1,33 @@
-{ lib, buildPythonPackage, isPy3k, fetchPypi
-, bluez, dbus-next, pytestCheckHook, pytest-cov
+{ lib
+, bluez
+, buildPythonPackage
+, dbus-next
+, fetchPypi
+, pytestCheckHook
+, pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "bleak";
-  version = "0.14.2";
+  version = "0.15.1";
+  format = "setuptools";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1fkq8q54s9apqiamdd8vgrhk5p02w5w281q93dfnrd37xv7ysk6h";
+    hash = "sha256-2MjYjeDyKhW9E1ugVsTlsvufFRGSg97yGx7X1DwA1ZA=";
   };
+
+  propagatedBuildInputs = [
+    dbus-next
+    typing-extensions
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   postPatch = ''
     # bleak checks BlueZ's version with a call to `bluetoothctl --version`
@@ -19,14 +35,12 @@ buildPythonPackage rec {
       --replace \"bluetoothctl\" \"${bluez}/bin/bluetoothctl\"
   '';
 
-  propagatedBuildInputs = [ dbus-next ];
-
-  checkInputs = [ pytestCheckHook pytest-cov ];
-
-  pythonImportsCheck = [ "bleak" ];
+  pythonImportsCheck = [
+    "bleak"
+  ];
 
   meta = with lib; {
-    description = "Bluetooth Low Energy platform Agnostic Klient for Python";
+    description = "Bluetooth Low Energy platform agnostic client";
     homepage = "https://github.com/hbldh/bleak";
     license = licenses.mit;
     platforms = platforms.linux;

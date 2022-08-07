@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchgit, pkg-config, asciidoc, xmlto, docbook_xsl, libxslt, libtraceevent, libtracefs }:
+{ lib, stdenv, fetchgit, pkg-config, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt, libtraceevent, libtracefs, zstd, sourceHighlight }:
 stdenv.mkDerivation rec {
   pname = "trace-cmd";
-  version = "2.9.7";
+  version = "3.1.1";
 
   src = fetchgit {
     url    = "git://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/";
     rev    = "trace-cmd-v${version}";
-    sha256 = "sha256-04qsTlOVYh/jHVWxaGuqYj4DkUpcEYcpfUqnqhphIMg=";
+    sha256 = "sha256-zYw6DObwmroAU3ikUNo9XrwQeDlyLppe7E63WFjn44Q=";
   };
 
   # Don't build and install html documentation
@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
        Documentation{,/trace-cmd,/libtracecmd}/Makefile
   '';
 
-  nativeBuildInputs = [ asciidoc libxslt pkg-config xmlto ];
+  nativeBuildInputs = [ asciidoc libxslt pkg-config xmlto docbook_xsl docbook_xml_dtd_45 sourceHighlight ];
 
-  buildInputs = [ libtraceevent libtracefs ];
+  buildInputs = [ libtraceevent libtracefs zstd ];
 
   outputs = [ "out" "lib" "dev" "man" ];
 
@@ -27,19 +27,28 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   makeFlags = [
-    "all" "libs" "doc"
     # The following values appear in the generated .pc file
     "prefix=${placeholder "lib"}"
-    "libdir=${placeholder "lib"}/lib"
-    "includedir=${placeholder "dev"}/include"
   ];
 
-  installTargets = [ "install_cmd" "install_libs" "install_doc" ];
+  # We do not mention targets (like "doc") explicitly in makeFlags
+  # because the Makefile would not print warnings about too old
+  # libraries (see "warning:" in the Makefile)
+  postBuild = ''
+    make libs doc -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES
+  '';
+
+  installTargets = [
+    "install_cmd"
+    "install_libs"
+    "install_doc"
+  ];
   installFlags = [
+    "LDCONFIG=false"
     "bindir=${placeholder "out"}/bin"
-    "man_dir=${placeholder "man"}/share/man"
+    "mandir=${placeholder "man"}/share/man"
     "libdir=${placeholder "lib"}/lib"
-    "pkgconfig_dir=${placeholder "lib"}/lib/pkgconfig"
+    "pkgconfig_dir=${placeholder "dev"}/lib/pkgconfig"
     "includedir=${placeholder "dev"}/include"
     "BASH_COMPLETE_DIR=${placeholder "out"}/share/bash-completion/completions"
   ];

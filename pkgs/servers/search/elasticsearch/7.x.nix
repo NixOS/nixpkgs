@@ -18,10 +18,10 @@ let
   plat = elemAt info 1;
   shas =
     {
-      x86_64-linux   = "1s16l95wc589cr69pfbgmkn9rkvxn6sd6jlbiqpm6p6iyxiaxd6c";
-      x86_64-darwin  = "05h7pvq4pb816wgcymnfklp3w6sv54x6138v2infw5219dnk8pfs";
-      aarch64-linux  = "0q4xnjzhlx1b2lkikca88qh9glfxaifsm419k2bxxlrfrx31zlkq";
-      aarch64-darwin = "067mb1dianwiarw8cz1va4g6zfhp9ls4s174xbpkxwsknvvyhgz6";
+      x86_64-linux   = "7281b79f2bf7421c2d71ab4eecdfd517b86b6788d1651dad315198c564284ea9";
+      x86_64-darwin  = "6d2343171a0d384910312220aae3512f45e3d3d900557b736c139b8363a008e4";
+      aarch64-linux  = "3153820d53a454513b534765fef68ce1f61a2dd92d4dae7428a1220bb3ce8fe5";
+      aarch64-darwin = "e62af7486c1041d3f1648646671d5c665e1abffd696cd2a5d96c2a5aaabe38f8";
     };
 in
 stdenv.mkDerivation rec {
@@ -72,6 +72,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Open Source, Distributed, RESTful Search Engine";
+    sourceProvenance = with lib.sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
     license = licenses.elastic;
     platforms = platforms.unix;
     maintainers = with maintainers; [ apeschar basvandijk ];

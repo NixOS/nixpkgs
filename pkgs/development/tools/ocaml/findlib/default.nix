@@ -54,14 +54,12 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://projects.camlcity.org/projects/findlib.html";
     description = "O'Caml library manager";
+    homepage = "http://projects.camlcity.org/projects/findlib.html";
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ maggesi vbmithr ];
+    mainProgram = "ocamlfind";
     platforms = ocaml.meta.platforms or [];
-    maintainers = [
-      lib.maintainers.maggesi
-      lib.maintainers.vbmithr
-    ];
   };
 }
 

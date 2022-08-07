@@ -3,7 +3,7 @@
 # targetPlatform, etc) containing at least the minimal set of attrs
 # required (see types.parsedPlatform in lib/systems/parse.nix).  This
 # file takes an already-valid platform and further elaborates it with
-# optional fields such as linux-kernel, gcc, etc.
+# optional fields; currently these are: linux-kernel, gcc, and rustc.
 
 { lib }:
 rec {
@@ -239,13 +239,6 @@ rec {
       cpu = "cortex-a7";
       fpu = "neon-vfpv4";
       float-abi = "hard";
-    };
-  };
-
-  scaleway-c1 = armv7l-hf-multiplatform // {
-    gcc = {
-      cpu = "cortex-a9";
-      fpu = "vfpv3";
     };
   };
 
@@ -490,8 +483,8 @@ rec {
   };
 
   # can execute on 32bit chip
-  gcc_mips32r2_o32 = { gcc = { arch = "mips32r2"; abi = "o32"; }; };
-  gcc_mips32r6_o32 = { gcc = { arch = "mips32r6"; abi = "o32"; }; };
+  gcc_mips32r2_o32 = { gcc = { arch = "mips32r2"; abi =  "32"; }; };
+  gcc_mips32r6_o32 = { gcc = { arch = "mips32r6"; abi =  "32"; }; };
   gcc_mips64r2_n32 = { gcc = { arch = "mips64r2"; abi = "n32"; }; };
   gcc_mips64r6_n32 = { gcc = { arch = "mips64r6"; abi = "n32"; }; };
   gcc_mips64r2_64  = { gcc = { arch = "mips64r2"; abi =  "64"; }; };
@@ -568,5 +561,5 @@ rec {
 
     else if platform.parsed.cpu == lib.systems.parse.cpuTypes.powerpc64le then powernv
 
-    else pc;
+    else { };
 }

@@ -10,22 +10,22 @@
 }:
 
 let
-  dbrev = "5171";
-  drivedbBranch = "RELEASE_7_2_DRIVEDB";
+  dbrev = "5388";
+  drivedbBranch = "RELEASE_7_3_DRIVEDB";
   driverdb = fetchurl {
     url = "https://sourceforge.net/p/smartmontools/code/${dbrev}/tree/branches/${drivedbBranch}/smartmontools/drivedb.h?format=raw";
-    sha256 = "0vncr98xagbcfsxgfgxsip2qrl9q3y8va19qhv6yknlwbdfap4mn";
+    sha256 = "sha256-0dtLev4JjeHsS259+qOgg19rz4yjkeX4D3ooUgS4RTI=";
     name = "smartmontools-drivedb.h";
   };
 
 in
 stdenv.mkDerivation rec {
   pname = "smartmontools";
-  version = "7.2";
+  version = "7.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/smartmontools/${pname}-${version}.tar.gz";
-    sha256 = "1mlc25sd5rgj5xmzcllci47inmfdw7cp185fday6hc9rwqkqmnaw";
+    sha256 = "sha256-pUT4gI0MWM+w50JMoYQcuFipdJIrA11QXU5MJIvjois=";
   };
 
   patches = [

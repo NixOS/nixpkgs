@@ -1,19 +1,23 @@
 { lib, stdenv, fetchFromGitHub, buildLinux, ... } @ args:
 
 let
-  stableVariant = {
-    version = "5.15.34";
-    suffix = "xanmod1";
-    hash = "sha256-sfrcaFhrdvupygXvajGyl6ruuBu+vFsAKjLyINyV3pw=";
+  ltsVariant = {
+    version = "5.15.54";
+    hash = "sha256-0Odo+ZrQok3MMPl/512F8kIQ31mGZH6e9FyVVpXrYf0=";
   };
 
   edgeVariant = {
-    version = "5.17.2";
-    suffix = "xanmod1";
-    hash = "sha256-DK6yFZewqmr/BXFW5tqKXtWb1OLfqokZRQLOQxvBg6Q=";
+    version = "5.18.11";
+    hash = "sha256-UPLwaEWhBu1yriCUJu9L/B8yy+1zxnTQzHaKlT507UY=";
   };
 
-  xanmodKernelFor = { version, suffix, hash }: buildLinux (args // rec {
+  ttVariant = {
+    version = "5.15.54";
+    suffix = "xanmod1-tt";
+    hash = "sha256-4ck9PAFuIt/TxA/U+moGlVfCudJnzSuAw7ooFG3OJis=";
+  };
+
+  xanmodKernelFor = { version, suffix ? "xanmod1", hash }: buildLinux (args // rec {
     inherit version;
     modDirVersion = "${version}-${suffix}";
 
@@ -32,9 +36,6 @@ let
 
       # AMD P-state driver
       X86_AMD_PSTATE = yes;
-
-      # Linux RNG framework
-      LRNG = yes;
 
       # Paragon's NTFS3 driver
       NTFS3_FS = module;
@@ -69,13 +70,14 @@ let
 
     extraMeta = {
       branch = lib.versions.majorMinor version;
-      maintainers = with lib.maintainers; [ fortuneteller2k lovesegfault ];
+      maintainers = with lib.maintainers; [ fortuneteller2k lovesegfault atemu ];
       description = "Built with custom settings and new features built to provide a stable, responsive and smooth desktop experience";
       broken = stdenv.isAarch64;
     };
   } // (args.argsOverride or { }));
 in
 {
-  stable = xanmodKernelFor stableVariant;
+  lts = xanmodKernelFor ltsVariant;
   edge = xanmodKernelFor edgeVariant;
+  tt = xanmodKernelFor ttVariant;
 }

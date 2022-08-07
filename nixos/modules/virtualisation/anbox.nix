@@ -10,7 +10,7 @@ let
     address = mkOption {
       default = addr;
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         IPv${toString v} ${name} address.
       '';
     };
@@ -18,9 +18,9 @@ let
     prefixLength = mkOption {
       default = pref;
       type = types.addCheck types.int (n: n >= 0 && n <= (if v == 4 then 32 else 128));
-      description = ''
+      description = lib.mdDoc ''
         Subnet mask of the ${name} address, specified as the number of
-        bits in the prefix (<literal>${if v == 4 then "24" else "64"}</literal>).
+        bits in the prefix (`${if v == 4 then "24" else "64"}`).
       '';
     };
   };
@@ -37,7 +37,7 @@ in
       default = pkgs.anbox.image;
       defaultText = literalExpression "pkgs.anbox.image";
       type = types.package;
-      description = ''
+      description = lib.mdDoc ''
         Base android image for Anbox.
       '';
     };
@@ -45,7 +45,7 @@ in
     extraInit = mkOption {
       type = types.lines;
       default = "";
-      description = ''
+      description = lib.mdDoc ''
         Extra shell commands to be run inside the container image during init.
       '';
     };
@@ -57,7 +57,7 @@ in
       dns = mkOption {
         default = "1.1.1.1";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Container DNS server.
         '';
       };
@@ -72,9 +72,6 @@ in
     };
 
     environment.systemPackages = with pkgs; [ anbox ];
-
-    boot.kernelModules = [ "ashmem_linux" "binder_linux" ];
-    boot.extraModulePackages = [ kernelPackages.anbox ];
 
     services.udev.extraRules = ''
       KERNEL=="ashmem", NAME="%k", MODE="0666"

@@ -3,7 +3,7 @@
 , python
 , fetchPypi
 , flask
-, Babel
+, babel
 , jinja2
 , pytz
 , speaklater
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     flask
-    Babel
+    babel
     jinja2
     pytz
     speaklater

@@ -4,7 +4,7 @@
 , buildPythonPackage, pythonOlder, python
 # Python libraries
 , numpy, tensorboard, absl-py
-, setuptools, wheel, keras, keras-preprocessing, google-pasta
+, packaging, setuptools, wheel, keras, keras-preprocessing, google-pasta
 , opt-einsum, astunparse, h5py
 , termcolor, grpcio, six, wrapt, protobuf-python, tensorflow-estimator
 , dill, flatbuffers-python, portpicker, tblib, typing-extensions
@@ -76,7 +76,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "2.8.0";
+  version = "2.9.1";
   variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
 
@@ -94,6 +94,7 @@ let
       keras-preprocessing
       numpy
       opt-einsum
+      packaging
       protobuf-python
       setuptools
       six
@@ -189,7 +190,7 @@ let
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "v${version}";
-      hash = "sha256-w78ehpsnXElIyYftgZEq3b/+TSrRN1gyWVUVlSZpGFM=";
+      hash = "sha256-kILNvwHi29F8BClYsZw+7RT2t6x57AsAHURVTfs5uOE=";
     };
 
     # On update, it can be useful to steal the changes from gentoo
@@ -350,7 +351,13 @@ let
     bazelBuildFlags = [
       "--config=opt" # optimize using the flags set in the configure phase
     ]
-    ++ lib.optionals stdenv.cc.isClang [ "--cxxopt=-x" "--cxxopt=c++" "--host_cxxopt=-x" "--host_cxxopt=c++" ]
+    ++ lib.optionals stdenv.cc.isClang [
+      "--cxxopt=-x" "--cxxopt=c++"
+      "--host_cxxopt=-x" "--host_cxxopt=c++"
+
+      # workaround for https://github.com/bazelbuild/bazel/issues/15359
+      "--spawn_strategy=sandboxed"
+    ]
     ++ lib.optionals (mklSupport) [ "--config=mkl" ];
 
     bazelTarget = "//tensorflow/tools/pip_package:build_pip_package //tensorflow/tools/lib_package:libtensorflow";
@@ -362,12 +369,12 @@ let
     fetchAttrs = {
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
-        "sha256-dQEyfueuQPcGvbhuh8Al45np3nRLDw2PCfC2lEqAH50="
+        "sha256-mcK60pLz70tOAu1+THUXweiO2SCSFUdFdT91HaUokzA="
       else
         if stdenv.isDarwin then
-          "sha256-yfnZVtKWqNQGvlfq2owXhem0LmzDYriVfYgf1ZRlaDo="
+          "sha256-j2k9Q+k41nq5nP1VjjkkNjXRov1uAda4RCMDMAthjrk="
         else
-          "sha256:12i1ix2xwq77f3h8qr4h57g0aazrdsjjqa536cpwx3n1mvl5p6qi";
+          "sha256-teW6o9Fb4hUxmaHpQU2F+5ihE/DA+MIY8QaMEKMnFiE=";
     };
 
     buildAttrs = {
@@ -428,16 +435,15 @@ in buildPythonPackage {
   src = bazel-build.python;
 
   # Adjust dependency requirements:
-  # - Relax gast version requirement that doesn't match what we have packaged
-  # - Relax tf-estimator, that would require a nightly version
+  # - Relax flatbuffers and gast version requirements
   # - The purpose of python3Packages.libclang is not clear at the moment and we don't have it packaged yet
   # - keras and tensorlow-io-gcs-filesystem will be considered as optional for now.
   postPatch = ''
     sed -i setup.py \
+      -e "s/'flatbuffers[^']*',/'flatbuffers',/" \
       -e "s/'gast[^']*',/'gast',/" \
-      -e "s/'tf-estimator-nightly[^']*',/'tensorflow-estimator',/" \
       -e "/'libclang[^']*',/d" \
-      -e "/'keras[^']*',/d" \
+      -e "/'keras[^']*')\?,/d" \
       -e "/'tensorflow-io-gcs-filesystem[^']*',/d"
   '';
 
@@ -463,6 +469,7 @@ in buildPythonPackage {
     keras-preprocessing
     numpy
     opt-einsum
+    packaging
     protobuf-python
     six
     tensorflow-estimator

@@ -30,7 +30,7 @@ in
 
       default = "/default.nix";
 
-      description = ''
+      description = lib.mdDoc ''
         Path to nix file in repository. Leading '/' refers to root of
         git repository.
       '';
@@ -88,7 +88,7 @@ in
 
       default = null;
 
-      description = ''
+      description = lib.mdDoc ''
         Path to SSH private key used to fetch private repositories over
         SSH.
       '';

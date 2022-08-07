@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fdm";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "nicm";
     repo = pname;
     rev = version;
-    sha256 = "0j2n271ni5wslgjq1f4zgz1nsvqjf895dxy3ij5c904bbp8ckcwq";
+    sha256 = "sha256-w7jgFq/uWGTF8+CsQCwXKu3eJ7Yjp1WWY4DGQhpBFmQ=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

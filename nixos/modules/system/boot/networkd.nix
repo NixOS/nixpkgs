@@ -452,13 +452,16 @@ let
           "AllMulticast"
           "Unmanaged"
           "RequiredForOnline"
+          "RequiredFamilyForOnline"
           "ActivationPolicy"
+          "Promiscuous"
         ])
         (assertMacAddress "MACAddress")
         (assertByteFormat "MTUBytes")
         (assertValueOneOf "ARP" boolValues)
         (assertValueOneOf "Multicast" boolValues)
         (assertValueOneOf "AllMulticast" boolValues)
+        (assertValueOneOf "Promiscuous" boolValues)
         (assertValueOneOf "Unmanaged" boolValues)
         (assertValueOneOf "RequiredForOnline" (boolValues ++ [
           "missing"
@@ -471,6 +474,12 @@ let
           "enslaved"
           "routable"
         ]))
+        (assertValueOneOf "RequiredFamilyForOnline" [
+          "ipv4"
+          "ipv6"
+          "both"
+          "any"
+        ])
         (assertValueOneOf "ActivationPolicy" ([
           "up"
           "always-up"
@@ -779,6 +788,7 @@ let
           "RouteDenyList"
           "RouteAllowList"
           "DHCPv6Client"
+          "RouteMetric"
         ])
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
@@ -875,8 +885,8 @@ let
     enable = mkOption {
       default = true;
       type = types.bool;
-      description = ''
-        Whether to manage network configuration using <command>systemd-network</command>.
+      description = lib.mdDoc ''
+        Whether to manage network configuration using {command}`systemd-network`.
       '';
     };
 
@@ -884,12 +894,12 @@ let
       default = {};
       example = { Name = "eth0"; };
       type = types.attrsOf unitOption;
-      description = ''
+      description = lib.mdDoc ''
         Each attribute in this set specifies an option in the
-        <literal>[Match]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.link</refentrytitle><manvolnum>5</manvolnum></citerefentry>
-        <citerefentry><refentrytitle>systemd.netdev</refentrytitle><manvolnum>5</manvolnum></citerefentry>
-        <citerefentry><refentrytitle>systemd.network</refentrytitle><manvolnum>5</manvolnum></citerefentry>
+        `[Match]` section of the unit.  See
+        {manpage}`systemd.link(5)`
+        {manpage}`systemd.netdev(5)`
+        {manpage}`systemd.network(5)`
         for details.
       '';
     };
@@ -897,7 +907,7 @@ let
     extraConfig = mkOption {
       default = "";
       type = types.lines;
-      description = "Extra configuration append to unit";
+      description = lib.mdDoc "Extra configuration append to unit";
     };
   };
 
@@ -944,8 +954,8 @@ let
     enable = mkOption {
       default = true;
       type = types.bool;
-      description = ''
-        Whether to enable this .link unit. It's handled by udev no matter if <command>systemd-networkd</command> is enabled or not
+      description = lib.mdDoc ''
+        Whether to enable this .link unit. It's handled by udev no matter if {command}`systemd-networkd` is enabled or not
       '';
     };
 
@@ -1160,8 +1170,7 @@ let
         <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
         A detailed explanation about how VRFs work can be found in the
-        <link xlink:href="https://www.kernel.org/doc/Documentation/networking/vrf.txt">kernel
-        docs</link>.
+        <link xlink:href="https://www.kernel.org/doc/Documentation/networking/vrf.txt">kernel docs</link>.
       '';
     };
 
@@ -1378,7 +1387,7 @@ let
 
     dhcpServerStaticLeases = mkOption {
       default = [];
-      example = [ { MACAddress = "65:43:4a:5b:d8:5f"; Address = "192.168.1.42"; } ];
+      example = [ { dhcpServerStaticLeaseConfig = { MACAddress = "65:43:4a:5b:d8:5f"; Address = "192.168.1.42"; }; } ];
       type = with types; listOf (submodule dhcpServerStaticLeaseOptions);
       description = ''
         A list of DHCPServerStaticLease sections to be added to the unit.  See
@@ -1389,7 +1398,7 @@ let
 
     ipv6Prefixes = mkOption {
       default = [];
-      example = [ { AddressAutoconfiguration = true; OnLink = true; } ];
+      example = [ { ipv6PrefixConfig = { AddressAutoconfiguration = true; OnLink = true; }; } ];
       type = with types; listOf (submodule ipv6PrefixOptions);
       description = ''
         A list of ipv6Prefix sections to be added to the unit.  See
@@ -1401,7 +1410,7 @@ let
     name = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         The name of the network interface to match against.
       '';
     };
@@ -1409,7 +1418,7 @@ let
     DHCP = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable DHCP on the interfaces matched.
       '';
     };
@@ -1417,7 +1426,7 @@ let
     domains = mkOption {
       type = types.nullOr (types.listOf types.str);
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         A list of domains to pass to the network config.
       '';
     };
@@ -1604,7 +1613,7 @@ let
         default = true;
         example = false;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           If true and routeTables are set, then the specified route tables
           will also be installed into /etc/iproute2/rt_tables.
         '';
@@ -1824,7 +1833,7 @@ in
     systemd.network.enable = mkOption {
       default = false;
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable networkd or not.
       '';
     };
@@ -1832,25 +1841,25 @@ in
     systemd.network.links = mkOption {
       default = {};
       type = with types; attrsOf (submodule [ { options = linkOptions; } ]);
-      description = "Definition of systemd network links.";
+      description = lib.mdDoc "Definition of systemd network links.";
     };
 
     systemd.network.netdevs = mkOption {
       default = {};
       type = with types; attrsOf (submodule [ { options = netdevOptions; } ]);
-      description = "Definition of systemd network devices.";
+      description = lib.mdDoc "Definition of systemd network devices.";
     };
 
     systemd.network.networks = mkOption {
       default = {};
       type = with types; attrsOf (submodule [ { options = networkOptions; } networkConfig ]);
-      description = "Definition of systemd networks.";
+      description = lib.mdDoc "Definition of systemd networks.";
     };
 
     systemd.network.config = mkOption {
       default = {};
       type = with types; submodule [ { options = networkdOptions; } networkdConfig ];
-      description = "Definition of global systemd network config.";
+      description = lib.mdDoc "Definition of global systemd network config.";
     };
 
     systemd.network.units = mkOption {
@@ -1868,7 +1877,7 @@ in
 
     systemd.network.wait-online = {
       anyInterface = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Whether to consider the network online when any interface is online, as opposed to all of them.
           This is useful on portable machines with a wired and a wireless interface, for example.
         '';
@@ -1877,7 +1886,7 @@ in
       };
 
       ignoredInterfaces = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Network interfaces to be ignored when deciding if the system is online.
         '';
         type = with types; listOf str;
@@ -1886,7 +1895,7 @@ in
       };
 
       timeout = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Time to wait for the network to come online, in seconds. Set to 0 to disable.
         '';
         type = types.ints.unsigned;
@@ -1895,13 +1904,11 @@ in
       };
 
       extraArgs = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Extra command-line arguments to pass to systemd-networkd-wait-online.
-          These also affect per-interface <literal>systemd-network-wait-online@</literal> services.
+          These also affect per-interface `systemd-network-wait-online@` services.
 
-          See <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd-networkd-wait-online.service.html">
-          <citerefentry><refentrytitle>systemd-networkd-wait-online.service</refentrytitle><manvolnum>8</manvolnum>
-          </citerefentry></link> for all available options.
+          See [{manpage}`systemd-networkd-wait-online.service(8)`](https://www.freedesktop.org/software/systemd/man/systemd-networkd-wait-online.service.html) for all available options.
         '';
         type = with types; listOf str;
         default = [];

@@ -11,14 +11,14 @@
 }:
 
 let
-  inherit ((import ./sources.nix).gwenhywfar) sha256 releaseId version;
+  inherit ((import ./sources.nix).gwenhywfar) hash releaseId version;
 in stdenv.mkDerivation rec {
   pname = "gwenhywfar";
   inherit version;
 
   src = fetchurl {
     url = "https://www.aquamaniac.de/rdm/attachments/download/${releaseId}/${pname}-${version}.tar.gz";
-    inherit sha256;
+    inherit hash;
   };
 
   configureFlags = [

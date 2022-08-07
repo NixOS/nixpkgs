@@ -8,9 +8,11 @@ let
   # compression type and filename extension.
   compressorName = fullCommand: builtins.elemAt (builtins.match "([^ ]*/)?([^ ]+).*" fullCommand) 1;
 in
-{ stdenvNoCC, perl, cpio, ubootTools, lib, pkgsBuildHost, makeInitrdNGTool, patchelf, runCommand, glibc
+{ stdenvNoCC, perl, cpio, ubootTools, lib, pkgsBuildHost, makeInitrdNGTool, binutils, runCommand
 # Name of the derivation (not of the resulting file!)
 , name ? "initrd"
+
+, strip ? true
 
 # Program used to compress the cpio archive; use "cat" for no compression.
 # This can also be a function which takes a package set and returns the path to the compressor,
@@ -59,7 +61,7 @@ in
 # If this isn't guessed, you may want to complete the metadata above and send a PR :)
 , uInitrdCompression ? _compressorMeta.ubootName or
     (throw "Unrecognised compressor ${_compressorName}, please specify uInitrdCompression")
-}: runCommand name {
+}: runCommand name ({
   compress = "${_compressorExecutable} ${lib.escapeShellArgs _compressorArgsReal}";
   passthru = {
     compressorExecutableFunction = _compressorFunction;
@@ -72,8 +74,10 @@ in
   passAsFile = ["contents"];
   contents = lib.concatMapStringsSep "\n" ({ object, symlink, ... }: "${object}\n${if symlink == null then "" else symlink}") contents + "\n";
 
-  nativeBuildInputs = [makeInitrdNGTool patchelf glibc cpio] ++ lib.optional makeUInitrd ubootTools;
-} ''
+  nativeBuildInputs = [makeInitrdNGTool cpio] ++ lib.optional makeUInitrd ubootTools ++ lib.optional strip binutils;
+
+  STRIP = if strip then "${(binutils.nativeDrv or binutils).targetPrefix}strip" else null;
+}) ''
   mkdir ./root
   make-initrd-ng "$contentsPath" ./root
   mkdir "$out"

@@ -14,7 +14,7 @@ let
   mkCombyPackage = { pname, extraBuildInputs ? [ ], extraNativeInputs ? [ ], preBuild ? "" }:
     ocamlPackages.buildDunePackage rec {
       inherit pname preBuild;
-      version = "1.7.0";
+      version = "1.7.1";
       useDune2 = true;
       minimumOcamlVersion = "4.08.1";
       doCheck = true;
@@ -23,8 +23,10 @@ let
         owner = "comby-tools";
         repo = "comby";
         rev = version;
-        sha256 = "sha256-Y2RcYvJOSqppmxxG8IZ5GlFkXCOIQU+1jJZ6j+PBHC4";
+        sha256 = "0k60hj8wcrvrk0isr210vnalylkd63ria1kgz5n49inl7w1hfwpv";
       };
+
+      patches = [ ./comby.patch ];
 
       nativeBuildInputs = [
         ocamlPackages.ppx_deriving
@@ -35,6 +37,7 @@ let
 
       buildInputs = [
         ocamlPackages.core
+        ocamlPackages.core_kernel
         ocamlPackages.ocaml_pcre
         ocamlPackages.mparser
         ocamlPackages.mparser-pcre
@@ -82,6 +85,7 @@ mkCombyPackage {
     ocamlPackages.parany
     ocamlPackages.conduit-lwt-unix
     ocamlPackages.lwt_react
+    ocamlPackages.tar-unix
     ocamlPackages.tls
     combyKernel
     combySemantic

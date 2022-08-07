@@ -59,6 +59,7 @@ mkDerivation rec {
   meta = {
     description = "Lync & Skype for Business on Linux";
     homepage = "https://tel.red/";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.wucke13 ];
     platforms = [ "x86_64-linux" ];

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "ftputil";
-  version = "5.0.3";
+  version = "5.0.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-m4buZ8GYDOHYmxN1K8SLlJP+4GNJy0doKFlOduCPhIg=";
+    hash = "sha256-aInbhkndINm21ApsXw+EzPNAp9rB4L/A8AJAkPwq+zM=";
   };
 
   checkInputs = [

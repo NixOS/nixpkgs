@@ -1,4 +1,4 @@
-{ pkgs, config, buildPackages, lib, stdenv, libiconv, mkNugetDeps, mkNugetSource, gawk, gnused, gixy }:
+{ pkgs, config, buildPackages, lib, stdenv, libiconv, mkNugetDeps, mkNugetSource, gixy }:
 
 let
   aliases = if config.allowAliases then (import ./aliases.nix lib) else prev: {};
@@ -132,12 +132,17 @@ let
     libraries ? [],
     ghc ? pkgs.ghc,
     ghcArgs ? [],
+    threadedRuntime ? true,
     strip ? true
   }:
-    makeBinWriter {
+    let
+      appendIfNotSet = el: list: if elem el list then list else list ++ [ el ];
+      ghcArgs' = if threadedRuntime then appendIfNotSet "-threaded" ghcArgs else ghcArgs;
+
+    in makeBinWriter {
       compileScript = ''
         cp $contentPath tmp.hs
-        ${ghc.withPackages (_: libraries )}/bin/ghc ${lib.escapeShellArgs ghcArgs} tmp.hs
+        ${ghc.withPackages (_: libraries )}/bin/ghc ${lib.escapeShellArgs ghcArgs'} tmp.hs
         mv tmp $out
       '';
       inherit strip;
@@ -205,7 +210,7 @@ let
   writeNginxConfig = name: text: pkgs.runCommandLocal name {
     inherit text;
     passAsFile = [ "text" ];
-    nativeBuildInputs = [ gawk gnused gixy ];
+    nativeBuildInputs = [ gixy ];
   } /* sh */ ''
     # nginx-config-formatter has an error - https://github.com/1connect/nginx-config-formatter/issues/16
     awk -f ${awkFormatNginx} "$textPath" | sed '/^\s*$/d' > $out

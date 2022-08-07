@@ -21,20 +21,20 @@
 , graalvmXmx ? "-J-Xmx6g"
   # The GraalVM derivation to use
 , graalvmDrv ? graalvm
+  # Locale to be used by GraalVM compiler
+, LC_ALL ? "en_US.UTF-8"
 , meta ? { }
 , ...
 } @ args:
 
 stdenv.mkDerivation (args // {
-  inherit dontUnpack;
+  inherit dontUnpack LC_ALL;
 
   nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ graalvmDrv glibcLocales ];
 
   nativeImageBuildArgs = nativeImageBuildArgs ++ extraNativeImageBuildArgs ++ [ graalvmXmx ];
 
   buildPhase = args.buildPhase or ''
-    export LC_ALL="en_US.UTF-8"
-
     runHook preBuild
 
     native-image ''${nativeImageBuildArgs[@]}

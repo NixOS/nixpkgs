@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , python3
 , glibcLocales
 , installShellFiles
@@ -68,6 +69,8 @@ buildPythonApplication rec {
     "test_missing_cache_dir"
     "test_sorting_null_values"
     "test_xdg_existant"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_sorting_fields"
   ];
 
   pythonImportsCheck = [
