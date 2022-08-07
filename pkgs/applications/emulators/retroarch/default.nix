@@ -5,6 +5,7 @@
 , withVulkan ? stdenv.isLinux
 , alsa-lib
 , AppKit
+, dbus
 , fetchFromGitHub
 , ffmpeg_4
 , Foundation
@@ -80,6 +81,7 @@ stdenv.mkDerivation rec {
     lib.optionals stdenv.isDarwin [ libobjc AppKit Foundation ] ++
     lib.optionals stdenv.isLinux [
       alsa-lib
+      dbus
       libX11
       libXdmcp
       libXext
@@ -95,7 +97,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = lib.optionals stdenv.isLinux [ "--enable-kms" "--enable-egl" ];
+  configureFlags = lib.optionals stdenv.isLinux [ "--enable-kms" "--enable-egl" "--enable-dbus" ];
 
   postInstall = ''
     mkdir -p $out/share/libretro/info
