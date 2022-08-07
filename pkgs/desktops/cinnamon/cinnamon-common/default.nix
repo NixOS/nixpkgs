@@ -1,6 +1,5 @@
 { atk
 , cacert
-, fetchpatch
 , dbus
 , cinnamon-control-center
 , cinnamon-desktop
@@ -8,11 +7,13 @@
 , cinnamon-session
 , cinnamon-translations
 , cjs
+, clutter
 , fetchFromGitHub
 , gdk-pixbuf
 , libgnomekbd
 , glib
 , gobject-introspection
+, gsound
 , gtk3
 , intltool
 , json-glib
@@ -34,7 +35,7 @@
 , python3
 , keybinder3
 , cairo
-, xapps
+, xapp
 , upower
 , nemo
 , libnotify
@@ -47,41 +48,51 @@
 , meson
 , ninja
 , gst_all_1
+, perl
 }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-common";
-  version = "5.2.0";
+  version = "5.4.8";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon";
     rev = version;
-    hash = "sha256-B2Du2zis0xWeeyh3kSyz1doWImk9Fuk4qQ8HNZZdqdw=";
+    hash = "sha256-Z+BbvLgH4gOsLMSC0r5Hp9yDZz4XMH7NR/A9to+/djA=";
   };
 
   patches = [
     ./use-sane-install-dir.patch
     ./libdir.patch
-
-    (fetchpatch {
-      url = "https://github.com/linuxmint/cinnamon/commit/77ed66050f7df889fcb7a10b702c7b8bcdeaa130.patch";
-      sha256 = "sha256-OegLxz6Xr/nxVwVOAd2oOY62ohZ3r6uYn1+YED5EBHQ=";
-    })
   ];
 
   buildInputs = [
-    # TODO: review if we really need this all
-    (python3.withPackages (pp: with pp; [ dbus-python setproctitle pygobject3 pycairo xapp pillow pytz tinycss2 python-pam pexpect distro requests ]))
+    (python3.withPackages (pp: with pp; [
+      dbus-python
+      setproctitle
+      pygobject3
+      pycairo
+      python3.pkgs.xapp # The scope prefix is required
+      pillow
+      pytz
+      tinycss2
+      python-pam
+      pexpect
+      distro
+      requests
+    ]))
     atk
     cacert
     cinnamon-control-center
     cinnamon-desktop
     cinnamon-menus
     cjs
+    clutter
     dbus
     gdk-pixbuf
     glib
+    gsound
     gtk3
     json-glib
     libsoup
@@ -101,7 +112,7 @@ stdenv.mkDerivation rec {
     gnome.caribou
     keybinder3
     upower
-    xapps
+    xapp
     timezonemap
     nemo
     libnotify
@@ -120,6 +131,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
     intltool
     gtk-doc
+    perl
   ];
 
   # use locales from cinnamon-translations (not using --localedir because datadir is used)
@@ -135,8 +147,8 @@ stdenv.mkDerivation rec {
 
     sed "s|/usr/share/sounds|/run/current-system/sw/share/sounds|g" -i ./files/usr/share/cinnamon/cinnamon-settings/bin/SettingsWidgets.py
 
-    sed "s|/usr/bin/upload-system-info|${xapps}/bin/upload-system-info|g" -i ./files/usr/share/cinnamon/cinnamon-settings/modules/cs_info.py
-    sed "s|upload-system-info|${xapps}/bin/upload-system-info|g" -i ./files/usr/share/cinnamon/cinnamon-settings/modules/cs_info.py
+    sed "s|/usr/bin/upload-system-info|${xapp}/bin/upload-system-info|g" -i ./files/usr/share/cinnamon/cinnamon-settings/modules/cs_info.py
+    sed "s|upload-system-info|${xapp}/bin/upload-system-info|g" -i ./files/usr/share/cinnamon/cinnamon-settings/modules/cs_info.py
 
     sed "s|/usr/bin/cinnamon-control-center|${cinnamon-control-center}/bin/cinnamon-control-center|g" -i ./files/usr/bin/cinnamon-settings
     # this one really IS optional
@@ -151,6 +163,8 @@ stdenv.mkDerivation rec {
 
     sed "s| cinnamon-session| ${cinnamon-session}/bin/cinnamon-session|g" -i ./files/usr/bin/cinnamon-session-cinnamon  -i ./files/usr/bin/cinnamon-session-cinnamon2d
     sed "s|/usr/bin|$out/bin|g" -i ./files/usr/share/xsessions/cinnamon.desktop ./files/usr/share/xsessions/cinnamon2d.desktop
+
+    patchShebangs src/data-to-c.pl
   '';
 
   passthru = {

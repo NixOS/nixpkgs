@@ -10,18 +10,18 @@
 , libgee
 , util-linux
 , vte
-, xapps
+, xapp
 }:
 
 stdenv.mkDerivation rec {
   pname = "timeshift";
-  version = "22.06.1";
+  version = "22.06.5";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "timeshift";
-    rev = "v${version}";
-    sha256 = "XcxwVBKMv2YwbrI3FFWDQFs8hHruhkZq3YqzkptE6KE=";
+    rev = version;
+    sha256 = "IHX/F3tnl3ckX20mnPHmuK/W4pRTFHzBUfaJg2sMpqc=";
   };
 
   patches = [
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     json-glib
     libgee
     vte
-    xapps
+    xapp
   ];
 
   preBuild = ''
