@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     nautilus
   ];
 
-  PKG_CONFIG_LIBNAUTILUS_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/lib/nautilus/extensions-3.0";
+  PKG_CONFIG_LIBNAUTILUS_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/lib/nautilus/extensions-4";
 
   postPatch = ''
     chmod +x postinstall.py # patchShebangs requires executable file
