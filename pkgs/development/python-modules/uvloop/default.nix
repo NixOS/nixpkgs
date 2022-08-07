@@ -46,7 +46,6 @@ buildPythonPackage rec {
     "--assert=plain"
     "--strict"
     "--tb=native"
-  ] ++ lib.optionals (stdenv.isAarch64) [
     # test gets stuck in epoll_pwait on hydras aarch64 builders
     # https://github.com/MagicStack/uvloop/issues/412
     "--deselect" "tests/test_tcp.py::Test_AIO_TCPSSL::test_remote_shutdown_receives_trailing_data"
