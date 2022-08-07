@@ -8200,6 +8200,8 @@ in {
 
   pysigma-backend-opensearch = callPackage ../development/python-modules/pysigma-backend-opensearch { };
 
+  pysigma-backend-qradar = callPackage ../development/python-modules/pysigma-backend-qradar { };
+
   pysigma-backend-splunk = callPackage ../development/python-modules/pysigma-backend-splunk { };
 
   pysigma-backend-insightidr = callPackage ../development/python-modules/pysigma-backend-insightidr { };
