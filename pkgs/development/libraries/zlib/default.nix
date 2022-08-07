@@ -48,6 +48,7 @@ stdenv.mkDerivation (rec {
     # TODO: remove the patch if upstream releases https://github.com/madler/zlib/commit/ec3df00224d4b396e2ac6586ab5d25f673caa4c2
     # see https://github.com/NixOS/nixpkgs/issues/170539 for history.
     ./comprehensive-crc-validation-for-wrong-implementations.patch
+    ./CVE-2022-37434.patch
   ];
 
   strictDeps = true;
