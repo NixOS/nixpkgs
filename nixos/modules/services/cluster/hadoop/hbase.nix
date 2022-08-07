@@ -9,11 +9,7 @@ in
 {
   options.services.hadoop = {
 
-    gatewayRole.enableHbaseCli = mkOption {
-      description = "Whether to enable HBase CLI tools";
-      default = false;
-      type = types.bool;
-    };
+    gatewayRole.enableHbaseCli = mkEnableOption "HBase CLI tools";
 
     hbaseSiteDefault = mkOption {
       default = {
