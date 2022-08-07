@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     "PYTHON_LIB_LOC=${python3}/lib"
   ];
 
-  PKG_CONFIG_LIBNAUTILUS_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/lib/nautilus/extensions-3.0";
+  PKG_CONFIG_LIBNAUTILUS_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/lib/nautilus/extensions-4";
 
   passthru = {
     updateScript = gnome.updateScript {
