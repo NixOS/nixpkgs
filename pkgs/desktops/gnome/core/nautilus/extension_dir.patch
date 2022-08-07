@@ -13,7 +13,7 @@ index 6273a76..4adcc8a 100644
          initialized = TRUE;
  
 -        load_module_dir (NAUTILUS_EXTENSIONDIR);
-+        extensiondir = g_getenv ("NAUTILUS_EXTENSION_DIR");
++        extensiondir = g_getenv ("NAUTILUS_4_EXTENSION_DIR");
 +        if (extensiondir == NULL) {
 +            extensiondir = NAUTILUS_EXTENSIONDIR;
 +        }
