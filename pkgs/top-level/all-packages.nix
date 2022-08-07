@@ -3186,6 +3186,8 @@ with pkgs;
 
   cinny = callPackage ../applications/networking/instant-messengers/cinny { stdenv = stdenvNoCC; };
 
+  cinny-desktop = callPackage ../applications/networking/instant-messengers/cinny-desktop { };
+
   ckbcomp = callPackage ../tools/X11/ckbcomp { };
 
   clac = callPackage ../tools/misc/clac {};
