@@ -1,6 +1,6 @@
-{ lib, stdenv, SDL, SDL2, fetchurl, gzip, libvorbis, libmad
+{ lib, stdenv, SDL, SDL2, fetchurl, gzip, libvorbis, libmad, flac, libopus, opusfile, libogg, libxmp
 , Cocoa, CoreAudio, CoreFoundation, IOKit, OpenGL
-, copyDesktopItems, makeDesktopItem
+, copyDesktopItems, makeDesktopItem, pkg-config
 , useSDL2 ? stdenv.isDarwin # TODO: CoreAudio fails to initialize with SDL 1.x for some reason.
 }:
 
@@ -20,9 +20,14 @@ stdenv.mkDerivation rec {
     ./quakespasm-darwin-makefile-improvements.patch
   ];
 
-  nativeBuildInputs = [ copyDesktopItems ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    pkg-config
+  ];
+
   buildInputs = [
-    gzip libvorbis libmad (if useSDL2 then SDL2 else SDL)
+    gzip libvorbis libmad flac libopus opusfile libogg libxmp
+    (if useSDL2 then SDL2 else SDL)
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa CoreAudio IOKit OpenGL
   ] ++ lib.optionals (stdenv.isDarwin && useSDL2) [
@@ -35,10 +40,11 @@ stdenv.mkDerivation rec {
     "USE_CODEC_WAVE=1"
     "USE_CODEC_MP3=1"
     "USE_CODEC_VORBIS=1"
-    "USE_CODEC_FLAC=0"
-    "USE_CODEC_OPUS=0"
+    "USE_CODEC_FLAC=1"
+    "USE_CODEC_OPUS=1"
     "USE_CODEC_MIKMOD=0"
     "USE_CODEC_UMX=0"
+    "USE_CODEC_XMP=1"
     "MP3LIB=mad"
     "VORBISLIB=vorbis"
   ] ++ lib.optionals useSDL2 [
