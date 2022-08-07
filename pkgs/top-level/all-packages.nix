@@ -11987,6 +11987,8 @@ with pkgs;
 
   xdg-launch = callPackage ../applications/misc/xdg-launch { };
 
+  xdp-tools = callPackage ../tools/networking/xdp-tools { };
+
   xkbvalidate = callPackage ../tools/X11/xkbvalidate { };
 
   xkeysnail = callPackage ../tools/X11/xkeysnail { };
