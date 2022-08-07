@@ -17,16 +17,26 @@ stdenv.mkDerivation rec {
     hash = "sha256-ewDB4UYrLh5Upk2ND88n/HfursPxOSDv+NlST/BZ1to=";
   };
 
-  # Make tests work with musl
+  # Make tests work with musl:
   # * Disable deptgt-delete_on_error test (alpine does this too)
   # * Disable shell-ksh test (ksh doesn't compile with musl)
   # * Fix test failing due to different strerror(3) output for musl and glibc
-  postPatch = lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
-    sed -i unit-tests/Makefile \
-      -e '/deptgt-delete_on_error/d' \
-      -e '/shell-ksh/d'
-    substituteInPlace unit-tests/opt-chdir.exp --replace "File name" "Filename"
-  '';
+  # and libSystem:
+  # * Disable shell-ksh (ksh doesn't compile with libSystem either (?))
+  # * Disable opt-chdir altogether (a bit much for Darwin syscalls to manage)
+  postPatch = {
+    "musl" = ''
+      sed -i unit-tests/Makefile \
+        -e '/deptgt-delete_on_error/d' \
+        -e '/shell-ksh/d'
+      substituteInPlace unit-tests/opt-chdir.exp --replace "File name" "Filename"
+    '';
+    "libSystem" = ''
+      sed -i unit-tests/Makefile \
+      -e '/shell-ksh/d' \
+      -e '/opt-chdir/d'
+    '';
+  }.${stdenv.hostPlatform.libc} or "";
 
   nativeBuildInputs = [ getopt ];
 
