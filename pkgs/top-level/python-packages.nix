@@ -2029,6 +2029,10 @@ in {
     inherit (pkgs.darwin.apple_sdk.frameworks) Security;
   };
 
+  cryptolyzer = callPackage ../development/python-modules/cryptolyzer { };
+
+  cryptoparser = callPackage ../development/python-modules/cryptoparser { };
+
   crytic-compile = callPackage ../development/python-modules/crytic-compile { };
 
   csrmesh  = callPackage ../development/python-modules/csrmesh { };
