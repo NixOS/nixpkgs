@@ -287,6 +287,8 @@ in {
 
   aioeagle = callPackage ../development/python-modules/aioeagle { };
 
+  aioecowitt = callPackage ../development/python-modules/aioecowitt { };
+
   aioemonitor = callPackage ../development/python-modules/aioemonitor { };
 
   aioesphomeapi = callPackage ../development/python-modules/aioesphomeapi { };
@@ -5458,6 +5460,8 @@ in {
   metar = callPackage ../development/python-modules/metar { };
 
   meteoalertapi = callPackage ../development/python-modules/meteoalertapi { };
+
+  meteocalc = callPackage ../development/python-modules/meteocalc { };
 
   meteofrance-api = callPackage ../development/python-modules/meteofrance-api { };
 
