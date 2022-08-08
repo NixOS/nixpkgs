@@ -1,27 +1,50 @@
-{ lib, buildPythonPackage, fetchPypi
-, mock, pytest
-, six
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatch-vcs
+, hatchling
+, numpy
+, pytestCheckHook
+, pythonOlder
 }:
-buildPythonPackage rec {
-  pname = "PyHamcrest";
-  version = "2.0.3";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "dfb19cf6d71743e086fbb761ed7faea5aacbc8ec10c17a08b93ecde39192a3db";
+buildPythonPackage rec {
+  pname = "pyhamcrest";
+  version = "2.0.4";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "hamcrest";
+    repo = "PyHamcrest";
+    rev = "refs/tags/V${version}";
+    sha256 = "sha256-CIkttiijbJCR0zdmwM5JvFogQKYuHUXHJhdyWonHcGk=";
   };
 
-  checkInputs = [ mock pytest ];
-  propagatedBuildInputs = [ six ];
+  nativeBuildInputs = [
+    hatch-vcs
+    hatchling
+  ];
 
-  doCheck = false;  # pypi tarball does not include tests
+  checkInputs = [
+    numpy
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
+  pythonImportsCheck = [
+    "hamcrest"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/hamcrest/PyHamcrest";
     description = "Hamcrest framework for matcher objects";
+    homepage = "https://github.com/hamcrest/PyHamcrest";
     license = licenses.bsd3;
-    maintainers = with maintainers; [
-      alunduil
-    ];
+    maintainers = with maintainers; [ alunduil ];
   };
 }
