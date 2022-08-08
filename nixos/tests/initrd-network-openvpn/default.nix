@@ -26,7 +26,7 @@ import ../make-test-python.nix ({ lib, ...}:
             enable = true;
             openvpn = {
               enable = true;
-              configuration = "/dev/null";
+              configuration = builtins.toFile "initrd.ovpn" "";
             };
           };
         };
