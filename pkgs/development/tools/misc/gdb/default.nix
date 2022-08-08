@@ -92,7 +92,6 @@ stdenv.mkDerivation rec {
 
     "--enable-targets=all" "--enable-64-bit-bfd"
     "--disable-install-libbfd"
-    "--disable-shared" "--enable-static"
     "--with-system-zlib"
     "--with-system-readline"
 
