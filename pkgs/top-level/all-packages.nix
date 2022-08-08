@@ -27336,6 +27336,8 @@ with pkgs;
 
   fluxbox = callPackage ../applications/window-managers/fluxbox { };
 
+  hackedbox = callPackage ../applications/window-managers/hackedbox { };
+
   fomp = callPackage ../applications/audio/fomp { };
 
   formatter = callPackage ../applications/misc/formatter { };
