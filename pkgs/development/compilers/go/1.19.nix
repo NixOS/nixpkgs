@@ -11,10 +11,15 @@
 , buildPackages
 , pkgsBuildTarget
 , threadsCross
+, testers
+, skopeo
+, buildGo119Module
 }:
 
 let
   goBootstrap = buildPackages.callPackage ./bootstrap116.nix { };
+
+  skopeoTest = skopeo.override { buildGoModule = buildGo119Module; };
 
   goarch = platform: {
     "aarch64" = "arm64";
@@ -160,7 +165,10 @@ stdenv.mkDerivation rec {
   disallowedReferences = [ goBootstrap ];
 
   passthru = {
-    inherit goBootstrap;
+    inherit goBootstrap skopeoTest;
+    tests = {
+      skopeo = testers.testVersion { package = skopeoTest; };
+    };
   };
 
   meta = with lib; {
