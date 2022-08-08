@@ -364,6 +364,8 @@ with pkgs;
 
   conftest = callPackage ../development/tools/conftest { };
 
+  colemak-dh = callPackage ../data/misc/colemak-dh { };
+
   colmena = callPackage ../tools/admin/colmena { };
 
   colorz = callPackage ../tools/misc/colorz { };
