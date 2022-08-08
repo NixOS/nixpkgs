@@ -48,6 +48,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-PVdRyg/t6D3HjSHeap5L8AiEm39iSO5qXohLw2UAUYY=";
   };
 
+  patches = [ ./paths.patch ];
+
   nativeBuildInputs = [ docutils meson ninja pkg-config ];
 
   buildInputs = [
