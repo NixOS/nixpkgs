@@ -25998,6 +25998,10 @@ with pkgs;
   aucatctl = callPackage ../applications/audio/aucatctl { };
 
   audacious = libsForQt5.callPackage ../applications/audio/audacious { };
+  audacious-plugins = libsForQt5.callPackage ../applications/audio/audacious/plugins.nix {
+    # Avoid circular dependency
+    audacious = audacious.override { audacious-plugins = null; };
+  };
   audaciousQt5 = audacious;
 
   audacity-gtk2 = callPackage ../applications/audio/audacity { wxGTK = wxGTK31-gtk2; };
