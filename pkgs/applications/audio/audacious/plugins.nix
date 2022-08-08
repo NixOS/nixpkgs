@@ -37,6 +37,7 @@
 , pkg-config
 , qtbase
 , qtmultimedia
+, qtx11extras
 , soxr
 , wavpack
 }:
@@ -92,6 +93,7 @@ stdenv.mkDerivation rec {
     neon
     qtbase
     qtmultimedia
+    qtx11extras
     soxr
     wavpack
     libopenmpt
