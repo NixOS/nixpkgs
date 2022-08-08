@@ -32,6 +32,7 @@
 , withPgtk ? false
 , withXinput2 ? false
 , withImageMagick ? lib.versionOlder version "27" && (withX || withNS)
+, withCompressInstall ? true
 , toolkit ? (
   if withGTK2 then "gtk2"
   else if withGTK3 then "gtk3"
@@ -163,6 +164,7 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
     ++ lib.optional withPgtk "--with-pgtk"
     ++ lib.optional withXinput2 "--with-xinput2"
     ++ lib.optional (!withToolkitScrollBars) "--without-toolkit-scroll-bars"
+    ++ lib.optional (!withCompressInstall) "--without-compress-install"
   ;
 
   installTargets = [ "tags" "install" ];
