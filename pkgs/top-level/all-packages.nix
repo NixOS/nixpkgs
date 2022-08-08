@@ -5848,6 +5848,10 @@ with pkgs;
 
   zabbixctl = callPackage ../tools/misc/zabbixctl { };
 
+  zee = callPackage ../applications/editors/zee {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   zeek = callPackage ../applications/networking/ids/zeek { };
 
   zoekt = callPackage ../tools/text/zoekt { };
@@ -10028,6 +10032,8 @@ with pkgs;
   openmpi = callPackage ../development/libraries/openmpi { };
 
   ouch = callPackage ../tools/compression/ouch { };
+
+  outils = callPackage ../tools/misc/outils {};
 
   mpi = openmpi; # this attribute should used to build MPI applications
 
