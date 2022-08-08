@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ thoughtpolice AndersonTorres ];
     platforms = platforms.unix;
-    broken = stdenv.isAarch64; # ofborg complains
+    broken = with stdenv; isAarch64 && !isDarwin; # ofborg complains
   };
 
   passthru.tests.bmakeMusl = pkgsMusl.bmake;

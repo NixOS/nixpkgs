@@ -25,7 +25,7 @@
 , libxslt
 , perl
 , pkg-config
-, python3
+, python3Packages
 , readline
 , sharutils
 }:
@@ -45,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     asciidoctor
     pkg-config
+    python3Packages.wrapPython
   ];
 
   buildInputs = [
@@ -69,14 +70,24 @@ stdenv.mkDerivation (finalAttrs: {
     libstroke
     libxslt
     perl
-    python3
+    python3Packages.python
     readline
     sharutils
+  ];
+
+  pythonPath = [
+    python3Packages.pyxdg
   ];
 
   configureFlags = [
     "--enable-mandoc"
   ];
+
+  postFixup = ''
+    wrapPythonPrograms
+  '';
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = "http://fvwm.org";

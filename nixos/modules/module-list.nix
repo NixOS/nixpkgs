@@ -357,7 +357,7 @@
   ./services/databases/dgraph.nix
   ./services/databases/firebird.nix
   ./services/databases/foundationdb.nix
-  ./services/databases/hbase.nix
+  ./services/databases/hbase-standalone.nix
   ./services/databases/influxdb.nix
   ./services/databases/influxdb2.nix
   ./services/databases/memcached.nix

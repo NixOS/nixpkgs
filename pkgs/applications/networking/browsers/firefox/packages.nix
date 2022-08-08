@@ -27,7 +27,7 @@ rec {
   };
 
   firefox-esr-102 = buildMozillaMach rec {
-    pname = "firefox-esr";
+    pname = "firefox-esr-102";
     version = "102.1.0esr";
     applicationName = "Mozilla Firefox ESR";
     src = fetchurl {
@@ -54,7 +54,7 @@ rec {
   };
 
   firefox-esr-91 = buildMozillaMach rec {
-    pname = "firefox-esr";
+    pname = "firefox-esr-91";
     version = "91.12.0esr";
     applicationName = "Mozilla Firefox ESR";
     src = fetchurl {

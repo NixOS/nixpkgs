@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mafft";
-  version = "7.490";
+  version = "7.505";
 
   src = fetchurl {
     url = "https://mafft.cbrc.jp/alignment/software/mafft-${version}-with-extensions-src.tgz";
-    sha256 = "0hb5jzcqdnjn3micm5z301lrnyvmn9pnnnxjz4h2wa4yicyz7vnn";
+    sha256 = "sha256-9Up4Zw/NmWAjO8w7PdNZ85WnHAztRae+HP6uGZUM5v8=";
   };
 
   preBuild = ''
