@@ -374,6 +374,9 @@ in {
         '';
         "/etc/modprobe.d/debian.conf".source = pkgs.kmod-debian-aliases;
 
+        "/etc/os-release".source = config.boot.initrd.osRelease;
+        "/etc/initrd-release".source = config.boot.initrd.osRelease;
+
       };
 
       storePaths = [

@@ -25982,6 +25982,10 @@ with pkgs;
   aucatctl = callPackage ../applications/audio/aucatctl { };
 
   audacious = libsForQt5.callPackage ../applications/audio/audacious { };
+  audacious-plugins = libsForQt5.callPackage ../applications/audio/audacious/plugins.nix {
+    # Avoid circular dependency
+    audacious = audacious.override { audacious-plugins = null; };
+  };
   audaciousQt5 = audacious;
 
   audacity-gtk2 = callPackage ../applications/audio/audacity { wxGTK = wxGTK31-gtk2; };
@@ -33050,6 +33054,10 @@ with pkgs;
   sfrotz = callPackage ../games/sfrotz { };
 
   sgtpuzzles = callPackage ../games/sgt-puzzles { };
+
+  sgtpuzzles-mobile = callPackage ../games/sgt-puzzles {
+    isMobile = true;
+  };
 
   shattered-pixel-dungeon = callPackage ../games/shattered-pixel-dungeon { };
 
