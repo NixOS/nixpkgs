@@ -56,7 +56,8 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace "dill>=0.3.1.1,<0.3.2" "dill" \
       --replace "pyarrow>=0.15.1,<8.0.0" "pyarrow" \
-      --replace "numpy>=1.14.3,<1.23.0" "numpy"
+      --replace "numpy>=1.14.3,<1.23.0" "numpy" \
+      --replace "pymongo>=3.8.0,<4.0.0" "pymongo"
   '';
 
   sourceRoot = "source/sdks/python";
