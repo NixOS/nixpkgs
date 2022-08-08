@@ -4,11 +4,6 @@
 , tzdata
 , substituteAll
 , iana-etc
-, which
-, pkg-config
-, procps
-, pcre
-, cacert
 , Security
 , Foundation
 , xcbuild
@@ -53,8 +48,7 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ which pkg-config procps ];
-  buildInputs = [ cacert pcre ]
+  buildInputs = [ ]
     ++ lib.optionals stdenv.isLinux [ stdenv.cc.libc.out ]
     ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
 
