@@ -1,4 +1,4 @@
-{ config, options, lib, pkgs, utils, modules, baseModules, extraModules, modulesPath, ... }:
+{ config, options, lib, pkgs, utils, modules, baseModules, extraModules, modulesPath, specialArgs, ... }:
 
 with lib;
 
@@ -6,9 +6,6 @@ let
 
   cfg = config.documentation;
   allOpts = options;
-
-  /* Modules for which to show options even when not imported. */
-  extraDocModules = [ ../virtualisation/qemu-vm.nix ];
 
   canCacheDocs = m:
     let
@@ -23,7 +20,7 @@ let
 
   docModules =
     let
-      p = partition canCacheDocs (baseModules ++ extraDocModules);
+      p = partition canCacheDocs (baseModules ++ cfg.nixos.extraModules);
     in
       {
         lazy = p.right;
@@ -41,7 +38,7 @@ let
           modules = [ {
             _module.check = false;
           } ] ++ docModules.eager;
-          specialArgs = {
+          specialArgs = specialArgs // {
             pkgs = scrubDerivations "pkgs" pkgs;
             # allow access to arbitrary options for eager modules, eg for getting
             # option types from lazy modules
@@ -145,6 +142,12 @@ in
 
 {
   imports = [
+    ./man-db.nix
+    ./mandoc.nix
+    ./assertions.nix
+    ./meta.nix
+    ../config/system-path.nix
+    ../system/etc/etc.nix
     (mkRenamedOptionModule [ "programs" "info" "enable" ] [ "documentation" "info" "enable" ])
     (mkRenamedOptionModule [ "programs" "man"  "enable" ] [ "documentation" "man"  "enable" ])
     (mkRenamedOptionModule [ "services" "nixosManual" "enable" ] [ "documentation" "nixos" "enable" ])
@@ -233,6 +236,14 @@ in
           <listitem><para>This includes the HTML manual and the <command>nixos-help</command> command if
                     <option>documentation.doc.enable</option> is set.</para></listitem>
           </itemizedlist>
+        '';
+      };
+
+      nixos.extraModules = mkOption {
+        type = types.listOf types.raw;
+        default = [];
+        description = ''
+          Modules for which to show options even when not imported.
         '';
       };
 
@@ -327,10 +338,6 @@ in
       environment.systemPackages = []
         ++ optional cfg.man.enable manual.manpages
         ++ optionals cfg.doc.enable [ manual.manualHTML nixos-help ];
-
-      services.getty.helpLine = mkIf cfg.doc.enable (
-          "\nRun 'nixos-help' for the NixOS manual."
-      );
     })
 
   ]);
