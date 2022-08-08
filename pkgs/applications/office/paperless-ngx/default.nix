@@ -11,6 +11,7 @@
 , tesseract4
 , unpaper
 , liberation_ttf
+, fetchFromGitHub
 }:
 
 let
@@ -18,6 +19,20 @@ let
   py = python3.override {
     packageOverrides = self: super: {
       django = super.django_4;
+
+      # use paperless-ngx version of django-q
+      # see https://github.com/paperless-ngx/paperless-ngx/pull/1014
+      django-q = super.django-q.overridePythonAttrs (oldAttrs: rec {
+        src = fetchFromGitHub {
+          owner = "paperless-ngx";
+          repo = "django-q";
+          sha256 = "sha256-aoDuPig8Nf8fLzn7GjBn69aF2zH2l8gxascAu9lIG3U=";
+          rev = "71abc78fdaec029cf71e9849a3b0fa084a1678f7";
+        };
+        # due to paperless-ngx modification of the pyproject.toml file
+        # the patch is not needed any more
+        patches = [];
+      });
 
       # django-extensions 3.1.5 is required, but its tests are incompatible with Django 4
       django-extensions = super.django-extensions.overridePythonAttrs (_: {
@@ -38,12 +53,12 @@ let
 in
 py.pkgs.pythonPackages.buildPythonApplication rec {
   pname = "paperless-ngx";
-  version = "1.7.1";
+  version = "1.8.0";
 
   # Fetch the release tarball instead of a git ref because it contains the prebuilt fontend
   src = fetchurl {
     url = "https://github.com/paperless-ngx/paperless-ngx/releases/download/v${version}/${pname}-v${version}.tar.xz";
-    hash = "sha256-8vx4hvbIqaChjPyS8Q0ar2bz/pLzEdxoF7P2gBEeFzc=";
+    hash = "sha256-BLfhh04RvBJFRQiPXkMl8XlWqZOWKmjjl+6lZ326stU=";
   };
 
   format = "other";
@@ -143,6 +158,13 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
     whoosh
     zope_interface
   ];
+
+  # paperless-ngx includes the bundled django-q version. This will
+  # conflict with the tests and is not needed since we overrode the
+  # django-q version with the paperless-ngx version
+  postPatch = ''
+    rm -rf src/django-q
+  '';
 
   # Compile manually because `pythonRecompileBytecodeHook` only works for
   # files in `python.sitePackages`
