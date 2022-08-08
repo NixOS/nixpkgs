@@ -1521,6 +1521,22 @@ let
     };
   };
 
+  BioPerl = buildPerlPackage {
+    pname = "BioPerl";
+    version = "1.7.8";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CJ/CJFIELDS/BioPerl-1.7.8.tar.gz";
+      sha256 = "c490a3be7715ea6e4305efd9710e5edab82dabc55fd786b6505b550a30d71738";
+    };
+    buildInputs = [ ModuleBuild TestMemoryCycle TestWeaken TestDeep TestWarn TestException TestDifferences ];
+    propagatedBuildInputs = [ DataStag Error Graph HTTPMessage IOString IOStringy IPCRun LWP ListMoreUtils SetScalar TestMost TestRequiresInternet URI XMLDOM XMLLibXML XMLSAX XMLSAXBase XMLSAXWriter XMLTwig XMLWriter YAML DBFile libxml_perl ];
+    meta = {
+      homepage = "https://metacpan.org/release/BioPerl";
+      description = "Perl modules for biology";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   BitVector = buildPerlPackage {
     pname = "Bit-Vector";
     version = "7.4";
@@ -5435,6 +5451,20 @@ let
     };
     propagatedBuildInputs = [ DataPage MathRound ];
     meta = {
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  DataStag = buildPerlPackage {
+    pname = "Data-Stag";
+    version = "0.14";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CM/CMUNGALL/Data-Stag-0.14.tar.gz";
+      sha256 = "4ab122508d2fb86d171a15f4006e5cf896d5facfa65219c0b243a89906258e59";
+    };
+    propagatedBuildInputs = [ IOString ];
+    meta = {
+      description = "Structured Tags";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -23302,6 +23332,20 @@ let
     meta = {
       homepage = "https://github.com/karenetheridge/Test-Warnings";
       description = "Test for warnings and the lack of them";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  TestWeaken = buildPerlPackage {
+    pname = "Test-Weaken";
+    version = "3.022000";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KR/KRYDE/Test-Weaken-3.022000.tar.gz";
+      sha256 = "2631a87121310262e0e96107a6fa0ed69487b7701520773bee5fa9accc295f5b";
+    };
+    propagatedBuildInputs = [ ScalarListUtils ];
+    meta = {
+      description = "Test that freed memory objects were, indeed, freed";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
