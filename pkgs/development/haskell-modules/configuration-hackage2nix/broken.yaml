@@ -2939,7 +2939,6 @@ broken-packages:
   - libhbb
   - libinfluxdb
   - libjenkins
-  - libjwt-typed
   - libltdl
   - liboath-hs
   - liboleg
