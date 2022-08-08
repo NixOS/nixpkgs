@@ -1702,6 +1702,8 @@ in {
 
   ci-py = callPackage ../development/python-modules/ci-py { };
 
+  cinemagoer = callPackage ../development/python-modules/cinemagoer { };
+
   circuit-webhook = callPackage ../development/python-modules/circuit-webhook { };
 
   circuitbreaker = callPackage ../development/python-modules/circuitbreaker { };
@@ -4287,8 +4289,6 @@ in {
   imap-tools = callPackage ../development/python-modules/imap-tools { };
 
   imbalanced-learn = callPackage ../development/python-modules/imbalanced-learn { };
-
-  imdbpy = callPackage ../development/python-modules/imdbpy { };
 
   img2pdf = callPackage ../development/python-modules/img2pdf { };
 
