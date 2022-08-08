@@ -65,7 +65,21 @@ let
     pname = "checks-base";
     sourceRoot = "datadog_checks_base";
     propagatedBuildInputs = with python.pkgs; [
-      requests protobuf prometheus-client simplejson uptime
+      cachetools
+      cryptography
+      immutables
+      jellyfish
+      prometheus-client
+      protobuf
+      pydantic
+      python-dateutil
+      pyyaml
+      requests
+      requests-toolbelt
+      requests-unixsocket
+      simplejson
+      uptime
+      wrapt
     ];
   };
 
@@ -75,8 +89,8 @@ let
     mongo    = (ps: [ ps.pymongo ]);
     network  = (ps: [ ps.psutil ]);
     nginx    = (ps: []);
-    postgres = (ps: with ps; [ pg8000 psycopg2 ]);
-    process  = (ps: []);
+    postgres = (ps: with ps; [ pg8000 psycopg2 semver ]);
+    process  = (ps: [ ps.psutil]);
   };
 
   # All integrations (default + extra):
