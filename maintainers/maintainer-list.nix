@@ -8818,6 +8818,13 @@
       fingerprint = "1248 D3E1 1D11 4A85 75C9  8934 6794 D45A 488C 2EDE";
     }];
   };
+  monaaraj = {
+    name = "Mon Aaraj";
+    email = "owo69uwu69@gmail.com";
+    matrix = "@mon:tchncs.de";
+    github = "MonAaraj";
+    githubId = 46468162;
+  };
   monsieurp = {
     email = "monsieurp@gentoo.org";
     github = "monsieurp";
