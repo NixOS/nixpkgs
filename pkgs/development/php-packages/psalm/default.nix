@@ -28,6 +28,7 @@ mkDerivation {
     description = "A static analysis tool for finding errors in PHP applications";
     license = licenses.mit;
     homepage = "https://github.com/vimeo/psalm";
+    mainProgram = "psalm";
     maintainers = teams.php.members;
   };
 }
