@@ -28,6 +28,7 @@ mkDerivation {
     description = "PHP coding standard tool";
     license = licenses.bsd3;
     homepage = "https://squizlabs.github.io/PHP_CodeSniffer/";
+    mainProgram = "phpcs";
     maintainers = with maintainers; [ javaguirre ] ++ teams.php.members;
   };
 }
