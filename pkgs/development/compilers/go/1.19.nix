@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , tzdata
+, substituteAll
 , iana-etc
 , which
 , pkg-config
@@ -68,21 +69,26 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "all" ];
 
   postPatch = ''
-    patchShebangs ./ # replace /bin/bash
-
-    # Patch the mimetype database location which is missing on NixOS.
-    # but also allow static binaries built with NixOS to run outside nix
-    sed -i 's,\"/etc/mime.types,"${mailcap}/etc/mime.types\"\,\n\t&,' src/mime/type_unix.go
-
-    sed -i 's,/etc/protocols,${iana-etc}/etc/protocols,' src/net/lookup_unix.go
-    sed -i 's,/etc/services,${iana-etc}/etc/services,' src/net/port_unix.go
-
-    # prepend the nix path to the zoneinfo files but also leave the original value for static binaries
-    # that run outside a nix server
-    sed -i 's,\"/usr/share/zoneinfo/,"${tzdata}/share/zoneinfo/\"\,\n\t&,' src/time/zoneinfo_unix.go
+    patchShebangs .
   '';
 
   patches = [
+    (substituteAll {
+      src = ./iana-etc-1.17.patch;
+      iana = iana-etc;
+    })
+    # Patch the mimetype database location which is missing on NixOS.
+    # but also allow static binaries built with NixOS to run outside nix
+    (substituteAll {
+      src = ./mailcap-1.17.patch;
+      inherit mailcap;
+    })
+    # prepend the nix path to the zoneinfo files but also leave the original value for static binaries
+    # that run outside a nix server
+    (substituteAll {
+      src = ./tzdata-1.19.patch;
+      inherit tzdata;
+    })
     ./remove-tools-1.11.patch
     ./ssl-cert-file-1.16.patch
     ./go_no_vendor_checks-1.16.patch
