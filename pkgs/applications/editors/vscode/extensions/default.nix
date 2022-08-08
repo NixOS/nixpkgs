@@ -55,7 +55,7 @@ let
           sha256 = "3svGVbaxUh/60NywMdWFsL3fSv+kPgt39bGmPVIu6sI=";
         };
         meta = with lib; {
-          description = "Provides rainbow coloured brackets";
+          description = "A rainbow brackets extension for VS Code";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=2gua.rainbow-brackets";
           homepage = "https://github.com/lcultx/rainbow-brackets";
           license = licenses.mit;
