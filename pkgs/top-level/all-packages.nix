@@ -1788,8 +1788,8 @@ with pkgs;
 
   wayst = callPackage ../applications/terminal-emulators/wayst { };
 
-  wezterm = callPackage ../applications/terminal-emulators/wezterm {
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics Foundation;
+  wezterm = darwin.apple_sdk_11_0.callPackage ../applications/terminal-emulators/wezterm {
+    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa CoreGraphics Foundation UserNotifications;
   };
 
   x3270 = callPackage ../applications/terminal-emulators/x3270 { };
@@ -2638,6 +2638,14 @@ with pkgs;
   oracle-instantclient = callPackage ../development/libraries/oracle-instantclient { };
 
   goku = callPackage ../os-specific/darwin/goku { };
+
+  kerf   = kerf_1; /* kerf2 is WIP */
+  kerf_1 = callPackage ../development/interpreters/kerf {
+    stdenv = clangStdenv;
+    inherit (darwin.apple_sdk.frameworks)
+      Accelerate CoreGraphics CoreVideo
+    ;
+  };
 
   kwakd = callPackage ../servers/kwakd { };
 
@@ -8568,6 +8576,7 @@ with pkgs;
   mangohud = callPackage ../tools/graphics/mangohud {
     libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
     mangohud32 = pkgsi686Linux.mangohud;
+    inherit (python3Packages) Mako;
   };
 
   manix = callPackage ../tools/nix/manix {
@@ -8763,6 +8772,8 @@ with pkgs;
   mrtg = callPackage ../tools/misc/mrtg { };
 
   mscgen = callPackage ../tools/graphics/mscgen { };
+
+  msfpc = callPackage ../tools/security/msfpc { };
 
   melt = callPackage ../tools/security/melt { };
 
@@ -13528,6 +13539,9 @@ with pkgs;
 
   remarkable2-toolchain = callPackage ../development/tools/misc/remarkable/remarkable2-toolchain { };
 
+  spicedb     = callPackage ../servers/spicedb { };
+  spicedb-zed = callPackage ../servers/spicedb/zed.nix { };
+
   tacacsplus = callPackage ../servers/tacacsplus { };
 
   tamarin-prover =
@@ -14916,6 +14930,8 @@ with pkgs;
   pythonInterpreters = callPackage ./../development/interpreters/python { };
   inherit (pythonInterpreters) python27 python37 python38 python39 python310 python311 python3Minimal pypy27 pypy38 pypy37 rustpython;
 
+  # List of extensions with overrides to apply to all Python package sets.
+  pythonPackagesExtensions = [ ];
   # Python package sets.
   python27Packages = python27.pkgs;
   python37Packages = python37.pkgs;
@@ -16226,9 +16242,7 @@ with pkgs;
 
   kubeaudit = callPackage ../tools/security/kubeaudit { };
 
-  kubectx = callPackage ../development/tools/kubectx {
-    buildGoModule = buildGo117Module;
-  };
+  kubectx = callPackage ../development/tools/kubectx { };
 
   kube-linter = callPackage ../development/tools/kube-linter { };
 
@@ -17786,7 +17800,7 @@ with pkgs;
 
   ganv = callPackage ../development/libraries/ganv { };
 
-  garble = callPackage ../build-support/go/garble.nix {
+  garble = callPackage ../development/tools/garble {
     # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
@@ -21971,10 +21985,10 @@ with pkgs;
     stdenv = gcc8Stdenv;
     buildPackages = buildPackages // { stdenv = buildPackages.gcc8Stdenv; };
   });
-  buildGo117Module = callPackage ../development/go-modules/generic {
+  buildGo117Module = callPackage ../build-support/go/module.nix {
     go = buildPackages.go_1_17;
   };
-  buildGo117Package = callPackage ../development/go-packages/generic {
+  buildGo117Package = callPackage ../build-support/go/package.nix {
     go = buildPackages.go_1_17;
   };
 
@@ -21982,10 +21996,10 @@ with pkgs;
   go_1_18 = darwin.apple_sdk_11_0.callPackage ../development/compilers/go/1.18.nix {
     inherit (darwin.apple_sdk_11_0.frameworks) Foundation Security;
   };
-  buildGo118Module = darwin.apple_sdk_11_0.callPackage ../development/go-modules/generic {
+  buildGo118Module = darwin.apple_sdk_11_0.callPackage ../build-support/go/module.nix {
     go = buildPackages.go_1_18;
   };
-  buildGo118Package = darwin.apple_sdk_11_0.callPackage ../development/go-packages/generic {
+  buildGo118Package = darwin.apple_sdk_11_0.callPackage ../build-support/go/package.nix{
     go = buildPackages.go_1_18;
   };
 
@@ -21993,10 +22007,10 @@ with pkgs;
   go_1_19 = darwin.apple_sdk_11_0.callPackage ../development/compilers/go/1.19.nix {
     inherit (darwin.apple_sdk_11_0.frameworks) Foundation Security;
   };
-  buildGo119Module = darwin.apple_sdk_11_0.callPackage ../development/go-modules/generic {
+  buildGo119Module = darwin.apple_sdk_11_0.callPackage ../build-support/go/module.nix {
     go = buildPackages.go_1_19;
   };
-  buildGo119Package = darwin.apple_sdk_11_0.callPackage ../development/go-packages/generic {
+  buildGo119Package = darwin.apple_sdk_11_0.callPackage ../build-support/go/package.nix {
     go = buildPackages.go_1_19;
   };
 
@@ -25331,6 +25345,8 @@ with pkgs;
 
   oldsindhi = callPackage ../data/fonts/oldsindhi { };
 
+  omni-gtk-theme = callPackage ../data/themes/omni-gtk-theme { };
+
   onestepback = callPackage ../data/themes/onestepback { };
 
   open-dyslexic = callPackage ../data/fonts/open-dyslexic { };
@@ -25982,6 +25998,10 @@ with pkgs;
   aucatctl = callPackage ../applications/audio/aucatctl { };
 
   audacious = libsForQt5.callPackage ../applications/audio/audacious { };
+  audacious-plugins = libsForQt5.callPackage ../applications/audio/audacious/plugins.nix {
+    # Avoid circular dependency
+    audacious = audacious.override { audacious-plugins = null; };
+  };
   audaciousQt5 = audacious;
 
   audacity-gtk2 = callPackage ../applications/audio/audacity { wxGTK = wxGTK31-gtk2; };
@@ -30220,6 +30240,10 @@ with pkgs;
 
   runc = callPackage ../applications/virtualization/runc {};
 
+  rusty-psn = callPackage ../applications/misc/rusty-psn {};
+
+  rusty-psn-gui = rusty-psn.override { withGui = true; };
+
   rymcast = callPackage ../applications/audio/rymcast {
     inherit (gnome) zenity;
   };
@@ -30321,6 +30345,8 @@ with pkgs;
   sniproxy = callPackage ../applications/networking/sniproxy { };
 
   snixembed = callPackage ../applications/misc/snixembed { };
+
+  sommelier = callPackage ../applications/window-managers/sommelier { };
 
   sooperlooper = callPackage ../applications/audio/sooperlooper { };
 
@@ -30819,7 +30845,7 @@ with pkgs;
 
   timelimit = callPackage ../tools/misc/timelimit { };
 
-  timeshift-unwrapped = callPackage ../applications/backup/timeshift/unwrapped.nix { inherit (cinnamon) xapps; };
+  timeshift-unwrapped = callPackage ../applications/backup/timeshift/unwrapped.nix { inherit (cinnamon) xapp; };
 
   timeshift = callPackage ../applications/backup/timeshift { grubPackage = grub2_full; };
 
@@ -31567,7 +31593,7 @@ with pkgs;
   xdotool = callPackage ../tools/X11/xdotool { };
 
   xed-editor = callPackage ../applications/editors/xed-editor {
-    xapps = cinnamon.xapps;
+    xapp = cinnamon.xapp;
   };
 
   xenPackages = recurseIntoAttrs (callPackage ../applications/virtualization/xen/packages.nix {});
@@ -31677,7 +31703,7 @@ with pkgs;
 
   xplayer = callPackage ../applications/video/xplayer {
     inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad;
-    inherit (cinnamon) xapps;
+    inherit (cinnamon) xapp;
   };
   libxplayer-plparser = callPackage ../applications/video/xplayer/plparser.nix { };
 
@@ -32109,6 +32135,8 @@ with pkgs;
   zcash = callPackage ../applications/blockchains/zcash {
     stdenv = if stdenv.isDarwin then stdenv else llvmPackages_13.stdenv;
   };
+
+  zecwallet-lite = callPackage ../applications/blockchains/zecwallet-lite { };
 
   lightwalletd = callPackage ../applications/blockchains/lightwalletd { };
 
@@ -33043,6 +33071,10 @@ with pkgs;
 
   sgtpuzzles = callPackage ../games/sgt-puzzles { };
 
+  sgtpuzzles-mobile = callPackage ../games/sgt-puzzles {
+    isMobile = true;
+  };
+
   shattered-pixel-dungeon = callPackage ../games/shattered-pixel-dungeon { };
 
   shticker-book-unwritten = callPackage ../games/shticker-book-unwritten { };
@@ -33596,6 +33628,8 @@ with pkgs;
   conglomerate = callPackage ../applications/science/biology/conglomerate { };
 
   dalfox = callPackage ../tools/security/dalfox { };
+
+  davtest = callPackage ../tools/security/davtest { };
 
   dcm2niix = callPackage ../applications/science/biology/dcm2niix { };
 

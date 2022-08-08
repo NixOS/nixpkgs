@@ -8,7 +8,7 @@
 , python3
 , cairo
 , gnome
-, xapps
+, xapp
 , keybinder3
 , upower
 , callPackage
@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cjs";
-  version = "5.2.0";
+  version = "5.4.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cjs";
     rev = version;
-    hash = "sha256-06sTk513qVMdznSHJzzB3XIPTcfjgxTB2o+ALqwPpHM=";
+    hash = "sha256-8LIVM9+Wt9V7iKUwqTBUTf8LiQ16NE3CYtCJknjl56o=";
   };
 
   outputs = [ "out" "dev" ];
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     gnome.caribou
     keybinder3
     upower
-    xapps
+    xapp
   ];
 
   mesonFlags = [

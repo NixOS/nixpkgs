@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "pyipma";
-  version = "2.1.5";
+  version = "3.0.0";
   disabled = pythonOlder "3.7";
 
   # Request for GitHub releases, https://github.com/dgomes/pyipma/issues/10
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0hq5dasqpsn64x2sf6a28hdmysygmcdq4in6s08w97jfvwc6xmym";
+    sha256 = "sha256-LfnatA8CimHIXH3f3T4PatDBIEhh6vlQtI080iu8UEg=";
   };
 
   propagatedBuildInputs = [

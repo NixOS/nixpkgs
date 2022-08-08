@@ -27,7 +27,7 @@
 }:
 
 let
-  version = "1.12.1";
+  version = "1.13.0";
 
   # build stimuli file for PGO build and the script to generate it
   # independently of the foot's build, so we can cache the result
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
     owner = "dnkl";
     repo = pname;
     rev = version;
-    sha256 = "14jqs4sarxbrgi5pxz0afqa9jxq90cb5ayqd21qj2n65whqa5bpk";
+    sha256 = "0cc262jpqp8l25p04pcqh3w671gw0p1d2zrr3d34ch8k9c6s4nzq";
   };
 
   depsBuildBuild = [
@@ -144,7 +144,6 @@ stdenv.mkDerivation rec {
   mesonBuildType = "release";
 
   # See https://codeberg.org/dnkl/foot/src/tag/1.9.2/INSTALL.md#options
-  # TODO(@sternenseemann): install systemd user units
   mesonFlags = [
     # Use lto
     "-Db_lto=true"
@@ -154,6 +153,8 @@ stdenv.mkDerivation rec {
     "-Ddefault-terminfo=foot"
     # Tell foot to set TERMINFO and where to install the terminfo files
     "-Dcustom-terminfo-install-location=${terminfoDir}"
+    # Install systemd user units for foot-server
+    "-Dsystemd-units-dir=${placeholder "out"}/lib/systemd/user"
   ];
 
   # build and run binary generating PGO profiles,

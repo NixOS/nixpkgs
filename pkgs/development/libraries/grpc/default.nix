@@ -16,6 +16,7 @@
 
 # tests
 , python3
+, arrow-cpp
 }:
 
 stdenv.mkDerivation rec {
@@ -92,6 +93,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     inherit (python3.pkgs) grpcio-status grpcio-tools;
+    inherit arrow-cpp;
   };
 
   meta = with lib; {

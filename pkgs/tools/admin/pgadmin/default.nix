@@ -10,11 +10,11 @@
 
 let
   pname = "pgadmin";
-  version = "6.11";
+  version = "6.12";
 
   src = fetchurl {
     url = "https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v${version}/source/pgadmin4-${version}.tar.gz";
-    sha256 = "sha256-1MvvQvVoWiV5hhgJUcAHbMyZzkADunLtwmszaO4EeCA=";
+    sha256 = "sha256-cO7GdZDfJ0pq1jpMyrVy0UM49WhrKOIJOmMJauSkbyo=";
   };
 
   yarnDeps = mkYarnModules {
@@ -72,7 +72,7 @@ let
     azure-identity
   ];
 
-  # override necessary on pgadmin4 6.11
+  # override necessary on pgadmin4 6.12
   pythonPackages = python3.pkgs.overrideScope (final: prev: rec {
     werkzeug = prev.werkzeug.overridePythonAttrs (oldAttrs: rec {
       version = "2.0.3";

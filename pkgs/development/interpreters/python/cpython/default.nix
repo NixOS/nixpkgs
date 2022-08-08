@@ -91,7 +91,7 @@ let
     executable = libPrefix;
     pythonVersion = with sourceVersion; "${major}.${minor}";
     sitePackages = "lib/${libPrefix}/site-packages";
-    inherit hasDistutilsCxxPatch;
+    inherit hasDistutilsCxxPatch pythonAttr;
     pythonOnBuildForBuild = override pkgsBuildBuild.${pythonAttr};
     pythonOnBuildForHost = override pkgsBuildHost.${pythonAttr};
     pythonOnBuildForTarget = override pkgsBuildTarget.${pythonAttr};

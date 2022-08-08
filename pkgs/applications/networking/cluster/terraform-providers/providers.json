@@ -114,19 +114,19 @@
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/azuread",
     "repo": "terraform-provider-azuread",
-    "rev": "v2.26.1",
-    "sha256": "sha256-9S+J0z9ilRqfpZv3aZe6Fv1Jyo2ShRQzeoMuRsDBiUo=",
+    "rev": "v2.27.0",
+    "sha256": "sha256-E8O0+OblKl1aSOXB5fnc34m+pUsfIZ6eHWoAq6HkKHs=",
     "vendorSha256": null,
-    "version": "2.26.1"
+    "version": "2.27.0"
   },
   "azurerm": {
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/azurerm",
     "repo": "terraform-provider-azurerm",
-    "rev": "v3.16.0",
-    "sha256": "sha256-b4aMwU9vDQ3t5fske5MZm5i9DJehy1WFySsJbowRjbc=",
+    "rev": "v3.17.0",
+    "sha256": "sha256-XeZwQxK0WhLv2Y7PFADsv4f6vO4E3/j/9HM1wJ8LXKE=",
     "vendorSha256": null,
-    "version": "3.16.0"
+    "version": "3.17.0"
   },
   "azurestack": {
     "owner": "hashicorp",
@@ -411,13 +411,15 @@
     "version": "1.31.1"
   },
   "fortios": {
+    "deleteVendor": true,
     "owner": "fortinetdev",
     "provider-source-address": "registry.terraform.io/fortinetdev/fortios",
+    "proxyVendor": true,
     "repo": "terraform-provider-fortios",
-    "rev": "v1.14.1",
-    "sha256": "sha256-9e1PEg8RtJa7DR5g3cCdAhubFxt7vN5dPjaBA+F7Y4E=",
-    "vendorSha256": null,
-    "version": "1.14.1"
+    "rev": "v1.15.0",
+    "sha256": "sha256-jXaEGWt/O0Cv15ksFax571f6aoDhVpNZSbvbOFj6TZ4=",
+    "vendorSha256": "sha256-WkF2mVDrDlCefM4pjADoXsVwpa7E02c6kUyOgHxNFpo=",
+    "version": "1.15.0"
   },
   "gandi": {
     "owner": "go-gandi",
@@ -677,10 +679,10 @@
     "owner": "linode",
     "provider-source-address": "registry.terraform.io/linode/linode",
     "repo": "terraform-provider-linode",
-    "rev": "v1.28.1",
-    "sha256": "sha256-w7PvzcgyzrkxQ+I8Bjw5C3MqMmiJS5neuGipC+H+mEM=",
-    "vendorSha256": "sha256-c0NtM3TkkSjrwQ9fj0XiH0BYnSsE8uzirkTv2QHzPOg=",
-    "version": "1.28.1"
+    "rev": "v1.29.1",
+    "sha256": "sha256-eZ13kVQplnIQNT4KecUeLAfrCime1WNEdG0yuv3dBWk=",
+    "vendorSha256": "sha256-PBnMIEuMGcb+qeFO4e17e9sg58DmL6BEAZJeTTVjS1g=",
+    "version": "1.29.1"
   },
   "linuxbox": {
     "owner": "numtide",
@@ -1012,10 +1014,10 @@
     "owner": "scaleway",
     "provider-source-address": "registry.terraform.io/scaleway/scaleway",
     "repo": "terraform-provider-scaleway",
-    "rev": "v2.2.6",
-    "sha256": "sha256-YrCpZCQGm8yFCxJRClrQJ1axFDBradJireMAW0ViLvc=",
+    "rev": "v2.2.7",
+    "sha256": "sha256-W100EYLKaFH9KGmSkgk0Ig2Z0R+RvYijrm3ikhEvBe8=",
     "vendorSha256": "sha256-zswPGl4a/V8tOMMUWCjxY8ubSy5GT9pP6eBpqSrAg/k=",
-    "version": "2.2.6"
+    "version": "2.2.7"
   },
   "secret": {
     "owner": "numtide",

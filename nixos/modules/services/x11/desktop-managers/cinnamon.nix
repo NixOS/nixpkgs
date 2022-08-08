@@ -82,6 +82,7 @@ in
       '';
 
       # Default services
+      services.blueman.enable = mkDefault true;
       hardware.bluetooth.enable = mkDefault true;
       hardware.pulseaudio.enable = mkDefault true;
       security.polkit.enable = true;
@@ -91,7 +92,7 @@ in
         cinnamon-common
         cinnamon-screensaver
         nemo
-        xapps
+        xapp
       ];
       services.cinnamon.apps.enable = mkDefault true;
       services.gnome.glib-networking.enable = true;
@@ -199,13 +200,12 @@ in
       environment.systemPackages = with pkgs // pkgs.gnome // pkgs.cinnamon; utils.removePackagesByName [
         # cinnamon team apps
         bulky
-        blueberry
         warpinator
 
-        # cinnamon xapps
+        # cinnamon xapp
         xviewer
         xreader
-        xed
+        xed-editor
         xplayer
         pix
 
