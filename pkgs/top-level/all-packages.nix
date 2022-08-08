@@ -30772,6 +30772,8 @@ with pkgs;
 
   subunit = callPackage ../development/libraries/subunit { };
 
+  surelog = callPackage ../development/compilers/surelog { };
+
   surf = callPackage ../applications/networking/browsers/surf { gtk = gtk2; };
 
   surge = callPackage ../applications/audio/surge {
