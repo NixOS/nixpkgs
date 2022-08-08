@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   ];
 
   pythonPath = with python3.pkgs; [
-    imdbpy
+    cinemagoer
     pygobject3
     requests
     setproctitle
