@@ -287,6 +287,8 @@ in {
 
   aioeagle = callPackage ../development/python-modules/aioeagle { };
 
+  aioecowitt = callPackage ../development/python-modules/aioecowitt { };
+
   aioemonitor = callPackage ../development/python-modules/aioemonitor { };
 
   aioesphomeapi = callPackage ../development/python-modules/aioesphomeapi { };
@@ -5459,6 +5461,8 @@ in {
 
   meteoalertapi = callPackage ../development/python-modules/meteoalertapi { };
 
+  meteocalc = callPackage ../development/python-modules/meteocalc { };
+
   meteofrance-api = callPackage ../development/python-modules/meteofrance-api { };
 
   mezzanine = callPackage ../development/python-modules/mezzanine { };
@@ -8195,6 +8199,12 @@ in {
   pysideTools = callPackage ../development/python-modules/pyside/tools.nix { };
 
   pysigma = callPackage ../development/python-modules/pysigma { };
+
+  pysigma-backend-elasticsearch = callPackage ../development/python-modules/pysigma-backend-elasticsearch { };
+
+  pysigma-backend-opensearch = callPackage ../development/python-modules/pysigma-backend-opensearch { };
+
+  pysigma-backend-qradar = callPackage ../development/python-modules/pysigma-backend-qradar { };
 
   pysigma-backend-splunk = callPackage ../development/python-modules/pysigma-backend-splunk { };
 
@@ -11694,6 +11704,8 @@ in {
   z3 = (toPythonModule (pkgs.z3.override {
     inherit python;
   })).python;
+
+  zadnegoale = callPackage ../development/python-modules/zadnegoale { };
 
   zake = callPackage ../development/python-modules/zake { };
 

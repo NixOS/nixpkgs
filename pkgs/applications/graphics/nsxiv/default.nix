@@ -1,24 +1,35 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, fetchFromGitea
+, fetchpatch
 , giflib
 , imlib2
 , libXft
 , libexif
 , libwebp
+, libinotify-kqueue
 , conf ? null
 }:
 
 stdenv.mkDerivation rec {
   pname = "nsxiv";
-  version = "29";
+  version = "30";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "nsxiv";
-    repo = pname;
+    repo = "nsxiv";
     rev = "v${version}";
-    hash = "sha256-JUF2cF6QeAXk6G76uMu3reaMgxp2RcqHDbamkNufwqE=";
+    hash = "sha256-swzTdQ6ow1At4bKRORqz6fb0Ej92yU9rlI/OgcinPu4=";
   };
+
+  patches = [
+    # Fix build failure when _SC_PHYS_PAGES is not defined
+    (fetchpatch {
+      url = "https://codeberg.org/nsxiv/nsxiv/commit/1a50bff9f300f84e93a6e7035657e6029e7e8183.patch";
+      hash = "sha256-PpUqGVWaJ06EVu3tBKVzOh8HYvT6wAG3bvY6wUD+dTM=";
+    })
+  ];
 
   buildInputs = [
     giflib
@@ -26,18 +37,22 @@ stdenv.mkDerivation rec {
     libXft
     libexif
     libwebp
-  ];
+  ] ++ lib.optional stdenv.isDarwin libinotify-kqueue;
 
   preBuild = lib.optionalString (conf!=null) ''
     cp ${(builtins.toFile "config.def.h" conf)} config.def.h
   '';
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-linotify";
+
+  makeFlags = [ "CC:=$(CC)" ];
+
+  installFlags = [ "PREFIX=$(out)" ];
+
+  installTargets = [ "install-all" ];
 
   meta = with lib; {
-    homepage = "https://nsxiv.github.io/nsxiv/";
+    homepage = "https://nsxiv.codeberg.page/";
     description = "New Suckless X Image Viewer";
     longDescription = ''
       nsxiv is a fork of now unmaintained sxiv with the purpose of being a
@@ -54,8 +69,7 @@ stdenv.mkDerivation rec {
       - Display image name/path in X title
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres sikmir ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
   };
 }

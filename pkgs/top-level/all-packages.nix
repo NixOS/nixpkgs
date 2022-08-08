@@ -8572,6 +8572,7 @@ with pkgs;
   mangohud = callPackage ../tools/graphics/mangohud {
     libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
     mangohud32 = pkgsi686Linux.mangohud;
+    inherit (python3Packages) Mako;
   };
 
   manix = callPackage ../tools/nix/manix {
@@ -16237,9 +16238,7 @@ with pkgs;
 
   kubeaudit = callPackage ../tools/security/kubeaudit { };
 
-  kubectx = callPackage ../development/tools/kubectx {
-    buildGoModule = buildGo117Module;
-  };
+  kubectx = callPackage ../development/tools/kubectx { };
 
   kube-linter = callPackage ../development/tools/kube-linter { };
 
