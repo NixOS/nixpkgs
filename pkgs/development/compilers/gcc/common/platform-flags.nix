@@ -1,7 +1,8 @@
 { lib, targetPlatform }:
 
 let
-  p =  targetPlatform.gcc or {}
+  gcc = targetPlatform.gcc or {};
+  p =  gcc
     // targetPlatform.parsed.abi;
 in lib.concatLists [
   (lib.optional (!targetPlatform.isx86_64 && p ? arch) "--with-arch=${p.arch}") # --with-arch= is unknown flag on x86_64
@@ -15,6 +16,6 @@ in lib.concatLists [
     # powerpc64; see musl/arch/powerpc64/bits/float.h
     (lib.optionals (!targetPlatform.isMusl) [
       "--with-long-double-128"
-      "--with-long-double-format=ieee"
+      "--with-long-double-format=${gcc.long-double-format or "ieee"}"
     ]))
 ]
