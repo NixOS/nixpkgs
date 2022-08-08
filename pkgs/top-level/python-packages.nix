@@ -11351,6 +11351,8 @@ in {
 
   weasyprint = callPackage ../development/python-modules/weasyprint { };
 
+  web3 = callPackage ../development/python-modules/web3 { };
+
   webargs = callPackage ../development/python-modules/webargs { };
 
   webassets = callPackage ../development/python-modules/webassets { };
