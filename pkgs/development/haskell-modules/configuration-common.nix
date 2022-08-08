@@ -2623,6 +2623,8 @@ in {
 
   purenix = purescriptStOverride super.purenix;
 
+  # Needs update for ghc-9:
+  # https://github.com/haskell/text-format/issues/27
   text-format = appendPatch (fetchpatch {
     url = "https://github.com/hackage-trustees/text-format/pull/4/commits/949383aa053497b8c251219c10506136c29b4d32.patch";
     sha256 = "QzpZ7lDedsz1mZcq6DL4x7LBnn58rx70+ZVvPh9shRo=";
