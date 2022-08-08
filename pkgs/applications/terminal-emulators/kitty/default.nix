@@ -125,6 +125,21 @@ buildPythonApplication rec {
     fish
   ];
 
+  # skip failing tests due to darwin sandbox
+  preCheck = if stdenv.isDarwin then ''
+    substituteInPlace kitty_tests/file_transmission.py \
+      --replace test_file_get dont_test_file_get \
+      --replace test_path_mapping_receive dont_test_path_mapping_receive
+    substituteInPlace kitty_tests/shell_integration.py \
+      --replace test_fish_integration dont_test_fish_integration
+    substituteInPlace kitty_tests/open_actions.py \
+      --replace test_parsing_of_open_actions dont_test_parsing_of_open_actions
+    substituteInPlace kitty_tests/ssh.py \
+      --replace test_ssh_connection_data dont_test_ssh_connection_data
+    substituteInPlace kitty_tests/fonts.py \
+      --replace 'class Rendering(BaseTest)' 'class Rendering'
+  '' else "";
+
   checkPhase =
     let buildBinPath =
       if stdenv.isDarwin
@@ -132,6 +147,8 @@ buildPythonApplication rec {
         else "linux-package/bin";
     in
     ''
+      runHook preCheck
+
       # Fontconfig error: Cannot load default config file: No such file: (null)
       export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
 
