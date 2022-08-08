@@ -47,6 +47,21 @@ let
         };
       };
 
+      _2gua.rainbow-brackets = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "2gua";
+          name = "Rainbow Brackets";
+          version = "0.0.6";
+          sha256 = "3svGVbaxUh/60NywMdWFsL3fSv+kPgt39bGmPVIu6sI=";
+        };
+        meta = with lib; {
+          description = "Provides rainbow coloured brackets";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=2gua.rainbow-brackets";
+          homepage = "https://github.com/lcultx/rainbow-brackets";
+          license = licenses.mit;
+        };
+      };
+
       _4ops.terraform = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "4ops";
@@ -1858,6 +1873,22 @@ let
           homepage = "https://github.com/phoenixframework/vscode-phoenix";
           license = licenses.mit;
           maintainers = with maintainers; [ superherointj ];
+        };
+      };
+
+      randomfractalsinc.vscode-data-preview = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "Data Preview";
+          publisher = "Random Fractal Inc";
+          version = "2.3.0";
+          shar256 = "DaI1/6IMQ44HrBM9tc04DGZmdlLdk1lVVMkMCa6cMHA=";
+        };
+        meta = with lib; {
+          changelog = "https://github.com/RandomFractals/vscode-data-preview/blob/master/CHANGELOG.md";
+          description = "Data preview for mulitple file extensions";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=RandomFractalsInc.vscode-data-preview";
+          homepage = "https://github.com/RandomFractals/vscode-data-preview";
+          license = licenses.asl20;
         };
       };
 
