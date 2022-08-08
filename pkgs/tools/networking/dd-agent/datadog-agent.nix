@@ -1,4 +1,16 @@
-{ lib, buildGoModule, makeWrapper, fetchFromGitHub, pythonPackages, pkg-config, systemd, hostname, extraTags ? [] }:
+{ lib
+, stdenv
+, cmake
+, buildGoModule
+, makeWrapper
+, fetchFromGitHub
+, pythonPackages
+, pkg-config
+, systemd
+, hostname
+, withSystemd ? stdenv.isLinux
+, extraTags ? [ ]
+}:
 
 let
   # keep this in sync with github.com/DataDog/agent-payload dependency
@@ -7,16 +19,27 @@ let
   owner   = "DataDog";
   repo    = "datadog-agent";
   goPackagePath = "github.com/${owner}/${repo}";
-
-in buildGoModule rec {
-  pname = "datadog-agent";
-  version = "7.35.1";
+  version = "7.36.0";
 
   src = fetchFromGitHub {
     inherit owner repo;
     rev = version;
     sha256 = "sha256-TvkPw67HBeRkKbbA3O/JVBkEUds36eW4UwKnRvPwAXc=";
   };
+  rtloader = stdenv.mkDerivation {
+    pname = "datadog-agent-rtloader";
+    src = "${src}/rtloader";
+    inherit version;
+    nativeBuildInputs = [ cmake ];
+    buildInputs = [ python ];
+    cmakeFlags = ["-DBUILD_DEMO=OFF" "-DDISABLE_PYTHON2=ON"];
+  };
+
+in buildGoModule rec {
+  pname = "datadog-agent";
+  inherit src version;
+
+  doCheck = false;
 
   vendorSha256 = "sha256-RmHxjJAMS+2MVoBJMD6FTQLhxDgzH3jtp87474i9ho8=";
 
@@ -30,19 +53,29 @@ in buildGoModule rec {
 
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
-  buildInputs = [ systemd ];
+  buildInputs = [rtloader] ++ lib.optionals withSystemd [ systemd ];
   PKG_CONFIG_PATH = "${python}/lib/pkgconfig";
 
-  preBuild = let
-    ldFlags = lib.concatStringsSep " " [
-      "-X ${goPackagePath}/pkg/version.Commit=${src.rev}"
-      "-X ${goPackagePath}/pkg/version.AgentVersion=${version}"
-      "-X ${goPackagePath}/pkg/serializer.AgentPayloadVersion=${payloadVersion}"
-      "-X ${goPackagePath}/pkg/collector/py.pythonHome=${python}"
-      "-r ${python}/lib"
-    ];
-  in ''
-    buildFlagsArray=( "-tags" "ec2 systemd cpython process log secrets ${lib.concatStringsSep " " extraTags}" "-ldflags" "${ldFlags}")
+  tags = [
+    "ec2"
+    "python"
+    "process"
+    "log"
+    "secrets"
+  ]
+  ++ lib.optionals withSystemd [ "systemd" ]
+  ++ extraTags;
+
+  ldflags = [
+    "-X ${goPackagePath}/pkg/version.Commit=${src.rev}"
+    "-X ${goPackagePath}/pkg/version.AgentVersion=${version}"
+    "-X ${goPackagePath}/pkg/serializer.AgentPayloadVersion=${payloadVersion}"
+    "-X ${goPackagePath}/pkg/collector/python.pythonHome3=${python}"
+    "-X ${goPackagePath}/pkg/config.DefaultPython=3"
+    "-r ${python}/lib"
+  ];
+
+  preBuild = ''
     # Keep directories to generate in sync with tasks/go.py
     go generate ./pkg/status ./cmd/agent/gui
   '';
