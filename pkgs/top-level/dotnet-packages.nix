@@ -154,9 +154,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     postFixup = ''
         ln -s "$out/bin/BoogieDriver" "$out/bin/boogie"
-        rm -f "$out/bin"/System.* "$out/bin"/Microsoft.*
-        rm -f "$out/bin"/NUnit3.*
-        rm -f "$out/bin"/*Tests
+        rm -f $out/bin/{Microsoft,NUnit3,System}.* "$out/bin"/*Tests
     '';
 
     meta = with lib; {
