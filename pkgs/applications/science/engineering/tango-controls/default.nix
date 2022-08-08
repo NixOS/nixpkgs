@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     mainProgram = "tango";
     license = with licenses; [ gpl3Only lgpl3Only ];
     maintainers = [ maintainers.pmiddend ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
   };
 }
