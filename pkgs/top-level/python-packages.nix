@@ -8529,6 +8529,8 @@ in {
 
   pytest-sugar = callPackage ../development/python-modules/pytest-sugar { };
 
+  pytest-tap = callPackage ../development/python-modules/pytest-tap { };
+
   pytest-test-utils = callPackage ../development/python-modules/pytest-test-utils { };
 
   pytest-testmon = callPackage ../development/python-modules/pytest-testmon { };
