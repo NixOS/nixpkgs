@@ -5033,7 +5033,6 @@ broken-packages:
   - text-ascii
   - text-builder-linear
   - text-containers
-  - text-format
   - text-format-heavy
   - text-generic-pretty
   - text-icu-normalized
