@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pescea";
-  version = "1.0.10";
+  version = "1.0.11";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "lazdavila";
     repo = pname;
     rev = "v${version}";
-    sha256 = "Q38mLGjrRdXEvT+PCNsil1e2p0mmM0Xy8TUx9QOnFRA=";
+    sha256 = "sha256-yiBtvD7kCqR/F4yoJa5rIOekYy8+zlJh849Jv+HkA4M=";
   };
 
   propagatedBuildInputs = [
