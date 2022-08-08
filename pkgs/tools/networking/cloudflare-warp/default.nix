@@ -28,7 +28,8 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mv usr $out
-    cp -a lib $out && rm -rf lib
+    cp -a lib $out
+    rm -rf lib
     mv bin $out
 
     runHook postInstall
