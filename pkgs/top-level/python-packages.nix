@@ -1522,6 +1522,8 @@ in {
     inherit (self) python numpy boost;
   });
 
+  cairo-lang = callPackage ../development/python-modules/cairo-lang { };
+
   cairocffi = callPackage ../development/python-modules/cairocffi { };
 
   cairosvg = callPackage ../development/python-modules/cairosvg { };
