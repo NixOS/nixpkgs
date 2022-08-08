@@ -1,11 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pycosat
 , requests
 , ruamel-yaml
 , isPy3k
 , enum34
+, pytestCheckHook
+, ruamel-yaml-conda
 }:
 
 # Note: this installs conda as a library. The application cannot be used.
@@ -13,22 +15,35 @@
 
 buildPythonPackage rec {
   pname = "conda";
-  version = "4.3.16";
+  version = "4.14.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a91ef821343dea3ba9670f3d10b36c1ace4f4c36d70c175d8fc8886e94285953";
+  src = fetchFromGitHub {
+    owner = "conda";
+    repo = "conda";
+    rev = version;
+    sha256 = "sha256-nmQP6K2eyT0t7KKKSE4hUVsxIhMoCCEpN5ktcs5I+Sk=";
   };
 
-  propagatedBuildInputs = [ pycosat requests ruamel-yaml ] ++ lib.optional (!isPy3k) enum34;
+  postPatch = ''
+    echo ${version} > conda/.version
+  '';
 
-  # No tests
-  doCheck = false;
+  propagatedBuildInputs = [
+    pycosat
+    requests
+    ruamel-yaml
+    ruamel-yaml-conda
+  ] ++ lib.optional (!isPy3k) enum34;
 
-  meta = {
+  checkInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "conda" ];
+
+  meta = with lib; {
     description = "OS-agnostic, system-level binary package manager";
     homepage = "https://github.com/conda/conda";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ onny ];
   };
 
 }
