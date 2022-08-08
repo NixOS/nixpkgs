@@ -1885,7 +1885,7 @@ let
         };
         meta = with lib; {
           changelog = "https://github.com/RandomFractals/vscode-data-preview/blob/master/CHANGELOG.md";
-          description = "Data preview for mulitple file extensions";
+          description = "A VS Code extension for data preview supporting multiple file extensions";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=RandomFractalsInc.vscode-data-preview";
           homepage = "https://github.com/RandomFractals/vscode-data-preview";
           license = licenses.asl20;
