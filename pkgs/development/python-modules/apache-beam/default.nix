@@ -92,6 +92,8 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  enableParallelBuilding = true;
+
   pythonImportsCheck = [
     "apache_beam"
   ];
