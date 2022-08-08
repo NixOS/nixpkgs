@@ -25,7 +25,7 @@
 assert threadsCross != null -> stdenv.targetPlatform.isWindows;
 
 let
-  go_bootstrap = buildPackages.callPackage ./bootstrap.nix { };
+  go_bootstrap = buildPackages.callPackage ./bootstrap116.nix { };
 
   goBootstrap = runCommand "go-bootstrap" { } ''
     mkdir $out

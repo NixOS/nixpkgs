@@ -3,8 +3,8 @@
 with lib;
 
 let
-  cfg = config.services.hbase;
-  opt = options.services.hbase;
+  cfg = config.services.hbase-standalone;
+  opt = options.services.hbase-standalone;
 
   buildProperty = configAttr:
     (builtins.concatStringsSep "\n"
@@ -32,19 +32,19 @@ let
 
 in {
 
+  imports = [
+    (mkRenamedOptionModule [ "services" "hbase" ] [ "services" "hbase-standalone" ])
+  ];
+
   ###### interface
 
   options = {
+    services.hbase-standalone = {
 
-    services.hbase = {
-
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc ''
-          Whether to run HBase.
-        '';
-      };
+      enable = mkEnableOption ''
+        HBase master in standalone mode with embedded regionserver and zookeper.
+        Do not use this configuration for production nor for evaluating HBase performance.
+      '';
 
       package = mkOption {
         type = types.package;
@@ -108,12 +108,11 @@ in {
       };
 
     };
-
   };
 
   ###### implementation
 
-  config = mkIf config.services.hbase.enable {
+  config = mkIf cfg.enable {
 
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -"

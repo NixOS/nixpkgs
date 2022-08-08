@@ -133,6 +133,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://hbase.apache.org/">HBase
+          cluster</link>, a distributed, scalable, big data store.
+          Available as
+          <link xlink:href="options.html#opt-services.hadoop.hbase.enable">services.hadoop.hbase</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/leetronics/infnoise">infnoise</link>,
           a hardware True Random Number Generator dongle. Available as
           <link xlink:href="options.html#opt-services.infnoise.enable">services.infnoise</link>.
@@ -255,6 +263,14 @@
           <link xlink:href="https://www.barco.com/de/support/knowledge-base/4380-can-i-use-linux-os-with-clickshare-base-units">According
           to Barco</link> many of their base unit models can be used
           with Google Chrome and the Google Cast extension.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.hbase</literal> has been renamed to
+          <literal>services.hbase-standalone</literal>. For production
+          HBase clusters, use <literal>services.hadoop.hbase</literal>
+          instead.
         </para>
       </listitem>
       <listitem>
