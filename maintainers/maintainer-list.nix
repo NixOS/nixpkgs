@@ -2573,6 +2573,12 @@
     githubId = 244239;
     name = "Mauricio Collares";
   };
+  compeng0001 = {
+    email = "sb1501@canterbury.ac.uk";
+    github = "compeng0001";
+    githubId = 40290417;
+    name = "Seb Blair";
+  };
   copumpkin = {
     email = "pumpkingod@gmail.com";
     github = "copumpkin";
