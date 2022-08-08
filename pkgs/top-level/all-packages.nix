@@ -23105,6 +23105,7 @@ with pkgs;
   prometheus-wireguard-exporter = callPackage ../servers/monitoring/prometheus/wireguard-exporter.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  prometheus-zfs-exporter = callPackage ../servers/monitoring/prometheus/zfs-exporter.nix { };
   prometheus-xmpp-alerts = callPackage ../servers/monitoring/prometheus/xmpp-alerts.nix { };
 
   prometheus-cpp = callPackage ../development/libraries/prometheus-cpp { };
