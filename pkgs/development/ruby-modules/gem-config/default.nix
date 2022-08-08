@@ -564,6 +564,10 @@ in
     buildInputs = [ linux-pam ];
   };
 
+  rubocop = attrs: {
+    meta.mainProgram = "rubocop";
+  };
+
   ruby-libvirt = attrs: {
     buildInputs = [ libvirt pkg-config ];
     buildFlags = [
