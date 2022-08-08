@@ -13,6 +13,7 @@
 , ps
 , bats
 , lsof
+, callPackages
 , doInstallCheck ? true
 }:
 
@@ -104,6 +105,8 @@ resholve.mkDerivation rec {
       ];
     };
   };
+
+  passthru.libraries = callPackages ./libraries.nix {};
 
   passthru.tests.upstream = bats.unresholved.overrideAttrs (old: {
     name = "${bats.name}-tests";
