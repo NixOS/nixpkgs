@@ -32,6 +32,11 @@ buildPythonPackage rec {
     hash = "sha256-WSsT+p23VctVt9A+WFKNHcgUHFijfT775eMF3RzaXDA=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "mailchecker >= 4.1.0, < 5.0.0" "mailchecker >= 4.1.0"
+  '';
+
   propagatedBuildInputs = [
     mailchecker
     phonenumbers
