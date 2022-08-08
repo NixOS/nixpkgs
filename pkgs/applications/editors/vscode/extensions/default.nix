@@ -1881,7 +1881,7 @@ let
           name = "Data Preview";
           publisher = "Random Fractal Inc";
           version = "2.3.0";
-          shar256 = "DaI1/6IMQ44HrBM9tc04DGZmdlLdk1lVVMkMCa6cMHA=";
+          sha256 = "DaI1/6IMQ44HrBM9tc04DGZmdlLdk1lVVMkMCa6cMHA=";
         };
         meta = with lib; {
           changelog = "https://github.com/RandomFractals/vscode-data-preview/blob/master/CHANGELOG.md";
