@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch, makeWrapper }:
 
 buildGoModule rec {
   pname = "3mux";
@@ -11,9 +11,18 @@ buildGoModule rec {
     sha256 = "sha256-QT4QXTlJf2NfTqXE4GF759EoW6Ri12lxDyodyEFc+ag=";
   };
 
+  patches = [
+    # Fix the build for Darwin when building with Go 1.18.
+    (fetchpatch {
+      name = "darwin-go-1.18-fix.patch";
+      url = "https://github.com/aaronjanse/3mux/pull/127/commits/91aed826c50f75a5175b63c72a1fb6a4ad57a008.patch";
+      sha256 = "sha256-MOPAyWAYYWrlCCgw1rBaNmHZO9oTIpIQwLJcs0aY/m8=";
+    })
+  ];
+
   nativeBuildInputs = [ makeWrapper ];
 
-  vendorSha256 = "sha256-tbziQZIA1+b+ZtvA/865c8YQxn+r8HQy6Pqaac2kwcU=";
+  vendorSha256 = "sha256-qt8MYnvbZMuU1VwdSij6+x4N0r10c1R5Gcm+jDt76uc=";
 
   # This is a package used for internally testing 3mux. It's meant for
   # use by 3mux maintainers/contributors only.
