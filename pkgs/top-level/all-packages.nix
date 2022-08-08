@@ -20810,9 +20810,10 @@ with pkgs;
     qt5 = qt515;
   });
 
-  # TODO bump to 5.15 on darwin once it's not broken; see #125548
-  qt5 =        if stdenv.hostPlatform.isDarwin then qt514 else qt515;
-  libsForQt5 = if stdenv.hostPlatform.isDarwin then libsForQt514 else libsForQt515;
+  # TODO bump to 5.14 on darwin once it works; see #185615
+  # Also, qt514.qtwebengine is broken on darwin
+  qt5 =        if stdenv.hostPlatform.isDarwin then qt512 else qt515;
+  libsForQt5 = if stdenv.hostPlatform.isDarwin then libsForQt512 else libsForQt515;
 
   # plasma5Packages maps to the Qt5 packages set that is used to build the plasma5 desktop
   plasma5Packages = libsForQt515;
