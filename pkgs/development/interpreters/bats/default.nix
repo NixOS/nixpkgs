@@ -14,6 +14,8 @@
 , bats
 , lsof
 , callPackages
+, symlinkJoin
+, makeWrapper
 , doInstallCheck ? true
 }:
 
@@ -107,6 +109,24 @@ resholve.mkDerivation rec {
   };
 
   passthru.libraries = callPackages ./libraries.nix {};
+
+  passthru.withLibraries = selector:
+    symlinkJoin {
+      name = "bats-with-libraries-${bats.version}";
+
+      paths = [
+        bats
+      ] ++ selector bats.libraries;
+
+      nativeBuildInputs = [
+        makeWrapper
+      ];
+
+      postBuild = ''
+        wrapProgram "$out/bin/bats" \
+          --suffix BATS_LIB_PATH : "$out/share/bats"
+      '';
+    };
 
   passthru.tests.upstream = bats.unresholved.overrideAttrs (old: {
     name = "${bats.name}-tests";
