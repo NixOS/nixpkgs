@@ -55,7 +55,7 @@ let
           sha256 = "3svGVbaxUh/60NywMdWFsL3fSv+kPgt39bGmPVIu6sI=";
         };
         meta = with lib; {
-          description = "Provide rainbow colors for the round brackets, the square brackets and the squiggly brackets. This is particularly useful for Lisp or Clojure programmers, and of course, JavaScript, and other programmer";
+          description = "Provides rainbow coloured brackets";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=2gua.rainbow-brackets";
           homepage = "https://github.com/lcultx/rainbow-brackets";
           license = licenses.mit;
@@ -1996,7 +1996,7 @@ let
         };
         meta = with lib; {
           changelog = "https://github.com/RandomFractals/vscode-data-preview/blob/master/CHANGELOG.md";
-          description = "Data Preview u7533 extension for importing outbox_tray viewing mag_right slicing hocho dicing game_die charting bar_chart & exporting inbox_tray large .json array .arrow .avro .parquet data files, .config .env .properties .ini .yml configurations files, .csv/.tsv & .xlsx/.xlsb Excel files and .md markdown tables with Perspective - streaming data analytics WebAssembly library.";
+          description = "Data preview for mulitple file extensions";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=RandomFractalsInc.vscode-data-preview";
           homepage = "https://github.com/RandomFractals/vscode-data-preview";
           license = licenses.asl20;
