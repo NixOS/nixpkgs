@@ -40,6 +40,10 @@ let
 in
 
 {
+  ZenTest = attrs: {
+    meta.mainProgram = "zentest";
+  };
+
   atk = attrs: {
     dependencies = attrs.dependencies ++ [ "gobject-introspection" ];
     nativeBuildInputs = [ rake bundler pkg-config ]
@@ -241,6 +245,10 @@ in
     '';
   };
 
+  parser = attrs: {
+    meta.mainProgram = "ruby-parse";
+  };
+
   pg_query = attrs: lib.optionalAttrs (attrs.version == "2.0.2") {
     dontBuild = false;
     postPatch = ''
@@ -258,6 +266,10 @@ in
         sha256 = "0f0kshhai0pnkqj0w4kgz3fssnvwidllc31n1fysxjjzdqlr1k48";
       }}';" ext/pg_query/extconf.rb
     '';
+  };
+
+  prettier = attrs: {
+    meta.mainProgram = "rbprettier";
   };
 
   glib2 = attrs: {
@@ -526,6 +538,14 @@ in
     buildInputs = [ openssl ];
   };
 
+  rack = attrs: {
+    meta.mainProgram = "rackup";
+  };
+
+  railties = attrs: {
+    meta.mainProgram = "rails";
+  };
+
   rainbow = attrs: {
     buildInputs = [ rainbow_rake ];
   };
@@ -555,13 +575,25 @@ in
     buildInputs = [ re2 ];
   };
 
+  rest-client = attrs: {
+    meta.mainProgram = "restclient";
+  };
+
   rmagick = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ imagemagick which ];
   };
 
+  rouge = attrs: {
+    meta.mainProgram = "rougify";
+  };
+
   rpam2 = attrs: {
     buildInputs = [ linux-pam ];
+  };
+
+  rspec-core = attrs: {
+    meta.mainProgram = "rspec";
   };
 
   ruby-libvirt = attrs: {
@@ -661,6 +693,10 @@ in
     buildInputs = [ freetds ];
   };
 
+  treetop = attrs: {
+    meta.mainProgram = "tt";
+  };
+
   typhoeus = attrs: {
     buildInputs = [ curl ];
   };
@@ -681,6 +717,10 @@ in
 
   uuid4r = attrs: {
     buildInputs = [ which libossp_uuid ];
+  };
+
+  whois = attrs: {
+    meta.mainProgram = "whoisrb";
   };
 
   xapian-ruby = attrs: {
