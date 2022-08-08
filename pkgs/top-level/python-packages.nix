@@ -9519,6 +9519,8 @@ in {
 
   ruamel-yaml-clib = callPackage ../development/python-modules/ruamel-yaml-clib { };
 
+  ruamel-yaml-conda = callPackage ../development/python-modules/ruamel-yaml-conda { };
+
   rubymarshal = callPackage ../development/python-modules/rubymarshal { };
 
   ruffus = callPackage ../development/python-modules/ruffus { };
