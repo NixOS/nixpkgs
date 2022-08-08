@@ -8,12 +8,13 @@
 # Whether to enable Windows font variants, their internal font name is limited
 # to 31 characters
 , enableWindowsFonts ? false
+, unstable ? false
 }:
 
 let
   # both of these files are generated via ./update.sh
-  version = import ./version.nix;
-  fontsShas = import ./shas.nix;
+  version = import (if unstable then ./version-unstable.nix else ./version.nix);
+  fontsShas = import (if unstable then ./shas-unstable.nix else ./shas.nix);
   knownFonts = builtins.attrNames fontsShas;
   selectedFonts = if (fonts == []) then
     knownFonts
@@ -32,7 +33,7 @@ let
     fName:
     fSha:
     (fetchurl {
-      url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v${version}/${fName}.zip";
+      url = "https://github.com/ryanoasis/nerd-fonts/releases/download/${version}/${fName}.zip";
       sha256 = fSha;
     })
   ) selectedFontsShas;
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
     unzip
   ];
   sourceRoot = ".";
+  unpackCmd = "unzip -o $curSrc";
   buildPhase = ''
     echo "selected fonts are ${toString selectedFonts}"
     ls *.otf *.ttf

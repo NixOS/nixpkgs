@@ -1,21 +1,32 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -i bash -p nix-prefetch jq
 
-latest_release=$(curl --silent https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest)
-version=$(jq -r '.tag_name' <<<"$latest_release")
-
 dirname="$(dirname "$0")"
-echo \""${version#v}"\" >"$dirname/version.nix"
+releases=$(curl --silent https://api.github.com/repos/ryanoasis/nerd-fonts/releases)
 
-echo Using version "$version"
+update () {
+  unstable=$1
 
-printf '{\n' > "$dirname/shas.nix"
+  [[ $unstable = true ]] && start="" || start="map(select(.prerelease == false)) | "
+  version=$(jq -r "${start}first | .tag_name" <<<"$releases")
 
-while
-  read -r name
-  read -r url
-do
-    printf '  "%s" = "%s";\n' "${name%.*}" "$(nix-prefetch-url "$url")" >>"$dirname/shas.nix"
-done < <(jq -r '.assets[] | .name, .browser_download_url' <<<"$latest_release")
+  [[ $unstable = true ]] && fname="-unstable" || fname=""
 
-printf '}\n' >> "$dirname/shas.nix"
+  echo \""${version}"\" >"$dirname/version${fname}.nix"
+
+  echo Using version "$version"
+
+  printf '{\n' > "$dirname/shas${fname}.nix"
+
+  while
+    read -r name
+    read -r url
+  do
+      printf '  "%s" = "%s";\n' "${name%.*}" "$(nix-prefetch-url "$url")" >>"$dirname/shas${fname}.nix"
+  done < <(jq -r "map(select( .tag_name == \"$version\" )) | first | .assets[] | .name, .browser_download_url" <<<"$releases")
+
+  printf '}\n' >> "$dirname/shas${fname}.nix"
+}
+
+update false
+update true

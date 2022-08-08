@@ -8893,6 +8893,10 @@ with pkgs;
 
   nerdfonts = callPackage ../data/fonts/nerdfonts { };
 
+  nerdfonts-unstable = callPackage ../data/fonts/nerdfonts {
+    unstable = true;
+  };
+
   netatalk = callPackage ../tools/filesystems/netatalk { };
 
   netavark = callPackage ../tools/networking/netavark { };
