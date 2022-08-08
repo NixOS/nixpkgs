@@ -66,8 +66,6 @@ stdenv.mkDerivation rec {
 
   depsTargetTarget = lib.optional stdenv.targetPlatform.isWindows threadsCross;
 
-  hardeningDisable = [ "all" ];
-
   postPatch = ''
     patchShebangs .
   '';
