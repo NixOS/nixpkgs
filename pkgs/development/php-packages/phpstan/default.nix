@@ -35,6 +35,7 @@ mkDerivation {
     '';
     license = licenses.mit;
     homepage = "https://github.com/phpstan/phpstan";
+    mainProgram = "phpstan";
     maintainers = teams.php.members;
   };
 }
