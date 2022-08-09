@@ -1702,6 +1702,8 @@ in {
 
   ci-py = callPackage ../development/python-modules/ci-py { };
 
+  cinemagoer = callPackage ../development/python-modules/cinemagoer { };
+
   circuit-webhook = callPackage ../development/python-modules/circuit-webhook { };
 
   circuitbreaker = callPackage ../development/python-modules/circuitbreaker { };
@@ -1893,6 +1895,8 @@ in {
   colorspacious = callPackage ../development/python-modules/colorspacious { };
 
   colorthief = callPackage ../development/python-modules/colorthief { };
+
+  colorzero = callPackage ../development/python-modules/colorzero { };
 
   colour = callPackage ../development/python-modules/colour { };
 
@@ -3772,6 +3776,8 @@ in {
 
   gpapi = callPackage ../development/python-modules/gpapi { };
 
+  gpiozero = callPackage ../development/python-modules/gpiozero { };
+
   gplaycli = callPackage ../development/python-modules/gplaycli { };
 
   gpgme = toPythonModule (pkgs.gpgme.override {
@@ -4287,8 +4293,6 @@ in {
   imap-tools = callPackage ../development/python-modules/imap-tools { };
 
   imbalanced-learn = callPackage ../development/python-modules/imbalanced-learn { };
-
-  imdbpy = callPackage ../development/python-modules/imdbpy { };
 
   img2pdf = callPackage ../development/python-modules/img2pdf { };
 

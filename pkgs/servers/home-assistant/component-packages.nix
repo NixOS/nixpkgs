@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2022.8.1";
+  version = "2022.8.2";
   components = {
     "abode" = ps: with ps; [
       abodepy
@@ -1048,7 +1048,9 @@
     "graphite" = ps: with ps; [
     ];
     "gree" = ps: with ps; [
+      aiohttp-cors
       greeclimate
+      ifaddr
     ];
     "greeneye_monitor" = ps: with ps; [
       greeneye-monitor
@@ -2235,7 +2237,8 @@
     "remote" = ps: with ps; [
     ];
     "remote_rpi_gpio" = ps: with ps; [
-    ]; # missing inputs: gpiozero pigpio
+      gpiozero
+    ]; # missing inputs: pigpio
     "renault" = ps: with ps; [
       renault-api
     ];

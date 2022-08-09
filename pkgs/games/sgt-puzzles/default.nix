@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl, desktop-file-utils
 , gtk3, libX11, cmake, imagemagick
 , pkg-config, perl, wrapGAppsHook
+, isMobile ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -25,6 +26,8 @@ stdenv.mkDerivation rec {
     pkg-config
     wrapGAppsHook
   ];
+
+  NIX_CFLAGS_COMPILE = if isMobile then "-DSTYLUS_BASED" else "";
 
   buildInputs = [ gtk3 libX11 ];
 
