@@ -424,7 +424,7 @@ in
       recommendedProxySettings = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc "Whether to enable recommended proxy settings if a vhost does not specify the option manually.";
+        description = lib.mdDoc "Enable recommended proxy settings if a vhost does not specify the option manually.";
       };
 
       proxyTimeout = mkOption {
