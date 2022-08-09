@@ -38,6 +38,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DGTEST_SOURCE_DIR=${gtest.dev}/include"
+  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
+    "-DRAPIDJSON_BUILD_TESTS=OFF"
   ];
 
   checkInputs = [
