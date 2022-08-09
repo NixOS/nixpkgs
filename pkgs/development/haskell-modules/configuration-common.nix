@@ -833,9 +833,9 @@ self: super: {
     testHaskellDepends = drv.testHaskellDepends or [] ++ [ self.hspec-meta_2_9_3 ];
     testToolDepends = drv.testToolDepends or [] ++ [ pkgs.git ];
   }) (super.sensei.override {
-    hspec = self.hspec_2_10_0;
+    hspec = self.hspec_2_10_0_1;
     hspec-wai = super.hspec-wai.override {
-      hspec = self.hspec_2_10_0;
+      hspec = self.hspec_2_10_0_1;
     };
   });
 
@@ -1646,14 +1646,14 @@ self: super: {
   servant-openapi3 = dontCheck super.servant-openapi3;
 
   # Give hspec 2.10.* correct dependency versions without overrideScope
-  hspec_2_10_0 = doDistribute (super.hspec_2_10_0.override {
-    hspec-discover = self.hspec-discover_2_10_0;
-    hspec-core = self.hspec-core_2_10_0;
+  hspec_2_10_0_1 = doDistribute (super.hspec_2_10_0_1.override {
+    hspec-discover = self.hspec-discover_2_10_0_1;
+    hspec-core = self.hspec-core_2_10_0_1;
   });
-  hspec-discover_2_10_0 = super.hspec-discover_2_10_0.override {
+  hspec-discover_2_10_0_1 = super.hspec-discover_2_10_0_1.override {
     hspec-meta = self.hspec-meta_2_9_3;
   };
-  hspec-core_2_10_0 = super.hspec-core_2_10_0.override {
+  hspec-core_2_10_0_1 = super.hspec-core_2_10_0_1.override {
     hspec-meta = self.hspec-meta_2_9_3;
   };
 
@@ -2357,6 +2357,10 @@ self: super: {
   # https://github.com/tree-sitter/haskell-tree-sitter/issues/298
   tree-sitter = doJailbreak super.tree-sitter;
 
+  # 2022-08-07: Bounds are too restrictive: https://github.com/marcin-rzeznicki/libjwt-typed/issues/2
+  # Also, the tests fail.
+  libjwt-typed = dontCheck (doJailbreak super.libjwt-typed);
+
   # Test suite fails to compile
   # https://github.com/kuribas/mfsolve/issues/8
   mfsolve = dontCheck super.mfsolve;
@@ -2622,4 +2626,11 @@ in {
   purescript-ast = purescriptStOverride super.purescript-ast;
 
   purenix = purescriptStOverride super.purenix;
+
+  # Needs update for ghc-9:
+  # https://github.com/haskell/text-format/issues/27
+  text-format = appendPatch (fetchpatch {
+    url = "https://github.com/hackage-trustees/text-format/pull/4/commits/949383aa053497b8c251219c10506136c29b4d32.patch";
+    sha256 = "QzpZ7lDedsz1mZcq6DL4x7LBnn58rx70+ZVvPh9shRo=";
+  }) super.text-format;
 })
