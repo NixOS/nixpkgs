@@ -29,7 +29,7 @@
 , gnutls
 , protobufc
 , python3
-, wrapGAppsHook
+, wrapGAppsNoGuiHook
 , json-glib
 , bash-completion
 , shared-mime-info
@@ -159,7 +159,7 @@ let
       gnutls
       protobufc # for protoc
       python
-      wrapGAppsHook
+      wrapGAppsNoGuiHook
       vala
     ];
 

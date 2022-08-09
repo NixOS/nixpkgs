@@ -7,8 +7,7 @@
 , alsa-lib
 , curl
 , avahi
-, gstreamer
-, gst-plugins-base
+, jack2
 , libxcb
 , libX11
 , libXcursor
@@ -26,6 +25,7 @@ let
   runLibDeps = [
     curl
     avahi
+    jack2
     libxcb
     libX11
     libXcursor
@@ -44,8 +44,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  pname = "kodelife";
-  version = "1.0.5.161";
+  pname = "touchosc";
+  version = "1.1.4.143";
 
   suffix = {
     aarch64-linux = "linux-arm64";
@@ -56,9 +56,9 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://hexler.net/pub/${pname}/${pname}-${version}-${suffix}.deb";
     hash = {
-      aarch64-linux = "sha256-6QZ5jCxINCH46GQx+V68FpkIAOIOFw4Kd0tUQTKBRzU=";
-      armv7l-linux  = "sha256-eToNjPttY62EzNuRSVvJsHttO6Ux6LXRPRuuIKnvaxM=";
-      x86_64-linux  = "sha256-5M2tgpF74RmrCLI44RBNXK5t0hMAOHtmcjWu7fypc0U=";
+      aarch64-linux = "sha256-BLPTCaFtsvYzesFvOJVCCofgRVpT2hCvrpYbceh95J4=";
+      armv7l-linux  = "sha256-RpHAXj2biZDqeE9xy3Q+fcGTIvCXfTJNn/jMObfL44g=";
+      x86_64-linux  = "sha256-CD8JR1QVMBe//MyrNfo8RE1ogoVU0H87IU5rTg5rDAU=";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
@@ -75,9 +75,10 @@ stdenv.mkDerivation rec {
   buildInputs = [
     stdenv.cc.cc.lib
     alsa-lib
-    gstreamer
-    gst-plugins-base
   ];
+
+  dontConfigure = true;
+  dontBuild = true;
 
   installPhase = ''
     runHook preInstall
@@ -86,9 +87,9 @@ stdenv.mkDerivation rec {
     cp -r usr/share $out/share
 
     mkdir -p $out/bin
-    cp opt/kodelife/KodeLife $out/bin/KodeLife
+    cp opt/touchosc/TouchOSC $out/bin/TouchOSC
 
-    wrapProgram $out/bin/KodeLife \
+    wrapProgram $out/bin/TouchOSC \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath runLibDeps} \
       --prefix PATH : ${lib.makeBinPath runBinDeps}
 
@@ -96,12 +97,12 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://hexler.net/kodelife";
-    description = "Real-time GPU shader editor";
+    homepage = "https://hexler.net/touchosc";
+    description = "Next generation modular control surface";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ prusnak lilyinstarlight ];
+    maintainers = with maintainers; [ lilyinstarlight ];
     platforms = [ "aarch64-linux" "armv7l-linux" "x86_64-linux" ];
-    mainProgram = "KodeLife";
+    mainProgram = "TouchOSC";
   };
 }
