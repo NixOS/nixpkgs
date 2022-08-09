@@ -19,10 +19,10 @@ buildGoModule {
 
   subPackages = [ "cmd/sqlc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Generate type-safe code from SQL";
     homepage = "https://sqlc.dev/";
-    license = licenses.mit;
-    maintainers = [ maintainers.adisbladis ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.adisbladis ];
   };
 }
