@@ -446,6 +446,7 @@ unsupported-platforms:
   grid-proto:                                   [ platforms.darwin ]
   gtk-sni-tray:                                 [ platforms.darwin ]
   haskell-snake:                                [ platforms.darwin ]
+  hb3sum:                                       [ aarch64-linux ] # depends on blake3, which is not supported on aarch64-linux
   hcwiid:                                       [ platforms.darwin ]
   HDRUtils:                                     [ platforms.darwin ]
   hidapi:                                       [ platforms.darwin ]
