@@ -406,42 +406,32 @@ in
       recommendedTlsSettings = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
-          Enable recommended TLS settings.
-        '';
+        description = lib.mdDoc "Enable recommended TLS settings.";
       };
 
       recommendedOptimisation = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
-          Enable recommended optimisation settings.
-        '';
+        description = lib.mdDoc "Enable recommended optimisation settings.";
       };
 
       recommendedGzipSettings = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
-          Enable recommended gzip settings.
-        '';
+        description = lib.mdDoc "Enable recommended gzip settings.";
       };
 
       recommendedProxySettings = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
-          Whether to enable recommended proxy settings if a vhost does not specify the option manually.
-        '';
+        description = lib.mdDoc "Whether to enable recommended proxy settings if a vhost does not specify the option manually.";
       };
 
       proxyTimeout = mkOption {
         type = types.str;
         default = "60s";
         example = "20s";
-        description = lib.mdDoc ''
-          Change the proxy related timeouts in recommendedProxySettings.
-        '';
+        description = lib.mdDoc "Change the proxy related timeouts in recommendedProxySettings.";
       };
 
       defaultListenAddresses = mkOption {
@@ -449,9 +439,7 @@ in
         default = [ "0.0.0.0" ] ++ optional enableIPv6 "[::0]";
         defaultText = literalExpression ''[ "0.0.0.0" ] ++ lib.optional config.networking.enableIPv6 "[::0]"'';
         example = literalExpression ''[ "10.0.0.12" "[2002:a00:1::]" ]'';
-        description = lib.mdDoc ''
-          If vhosts do not specify listenAddresses, use these addresses by default.
-        '';
+        description = lib.mdDoc "If vhosts do not specify listenAddresses, use these addresses by default.";
       };
 
       package = mkOption {
