@@ -3,21 +3,31 @@
 , fetchPypi
 , h5py
 , nose
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  version = "1.17.1";
   pname = "annoy";
+  version = "1.17.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-vxd9vq+4H2OyrB4SRrHyairMguc7pGY4c00p2CWBIto=";
+    hash = "sha256-vxd9vq+4H2OyrB4SRrHyairMguc7pGY4c00p2CWBIto=";
   };
 
-  nativeBuildInputs = [ h5py ];
+  nativeBuildInputs = [
+    h5py
+  ];
 
   checkInputs = [
     nose
+  ];
+
+  pythonImportsCheck = [
+    "annoy"
   ];
 
   meta = with lib; {
