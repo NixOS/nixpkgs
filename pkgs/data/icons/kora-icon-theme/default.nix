@@ -10,13 +10,13 @@
 
 stdenvNoCC.mkDerivation rec  {
   pname = "kora-icon-theme";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchFromGitHub  {
     owner = "bikass";
     repo = "kora";
     rev = "v${version}";
-    sha256 = "sha256-OwuePPn4seHbzv81pnTEP1Q0Tp1ywZIEmw+dx3bDoXw=";
+    sha256 = "sha256-j4W9w/icGjfkbbb0xYF3NfSFsp5RkNCc805E089JaFQ=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,8 @@ stdenvNoCC.mkDerivation rec  {
     runHook preInstall
 
     mkdir -p $out/share/icons
-    mv kora* $out/share/icons/
+    cp -a kora* $out/share/icons/
+    rm $out/share/icons/kora*/create-new-icon-theme.cache.sh
 
     for theme in $out/share/icons/*; do
       gtk-update-icon-cache -f $theme
