@@ -48,6 +48,6 @@ stdenvNoCC.mkDerivation rec  {
     homepage = "https://github.com/bikass/kora";
     license = with licenses; [ gpl3Only ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ romildo ];
   };
 }
