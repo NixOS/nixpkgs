@@ -22,11 +22,7 @@ let
    anymore, $MYVIMRC wont be set etc
    */
   makeNeovimConfig =
-    {
-    withPython2 ? false
-    /* the function you would have passed to python.withPackages */
-    , extraPython2Packages ? (_: [ ])
-    , withPython3 ? true
+    { withPython3 ? true
     /* the function you would have passed to python3.withPackages */
     , extraPython3Packages ? (_: [ ])
     , withNodeJs ? false
@@ -122,7 +118,6 @@ let
       # we call vimrcContent without 'packages' to avoid the init.vim generation
       neovimRcContent = vimUtils.vimrcContent ({ beforePlugins = ""; customRC = pluginRC + customRC; packages = null; });
     in
-    assert withPython2 -> throw "Python2 support has been removed from neovim, please remove withPython2 and extraPython2Packages.";
 
     builtins.removeAttrs args ["plugins"] // {
       wrapperArgs = makeWrapperArgs;
@@ -145,7 +140,6 @@ let
   # to keep backwards compatibility for people using neovim.override
   legacyWrapper = neovim: {
     extraMakeWrapperArgs ? ""
-    , withPython ? false
     /* the function you would have passed to python.withPackages */
     , extraPythonPackages ? (_: [])
     /* the function you would have passed to python.withPackages */
@@ -183,8 +177,6 @@ let
         inherit extraName;
       };
     in
-    assert withPython -> throw "Python2 support has been removed from neovim, please remove withPython and extraPythonPackages.";
-
     wrapNeovimUnstable neovim (res // {
       wrapperArgs = lib.escapeShellArgs res.wrapperArgs + " " + extraMakeWrapperArgs;
       wrapRc = (configure != {});
