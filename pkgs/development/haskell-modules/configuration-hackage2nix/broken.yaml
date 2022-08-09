@@ -971,6 +971,7 @@ broken-packages:
   - data-diverse
   - datadog
   - data-easy
+  - data-elevator
   - data-embed
   - data-emoticons
   - data-filepath
@@ -1177,6 +1178,7 @@ broken-packages:
   - dpor
   - dragen
   - drawille
+  - dr-cabal
   - drClickOn
   - dresdner-verkehrsbetriebe
   - DrIFT
@@ -1436,6 +1438,7 @@ broken-packages:
   - file-command-qq
   - filediff
   - file-embed-poly
+  - file-io
   - file-location
   - FileManip
   - FileManipCompat
@@ -2521,6 +2524,7 @@ broken-packages:
   - hunit-rematch
   - hunspell-hs
   - hup
+  - hurl
   - hurriyet
   - husky
   - hutton
@@ -4137,6 +4141,7 @@ broken-packages:
   - rand-vars
   - Range
   - rangemin
+  - rangeset
   - rank1dynamic
   - rank-product
   - rapid-term
