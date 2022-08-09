@@ -36,17 +36,17 @@
 , python3
 , tzdata
 , nss
-, gcr
+, gcr_4
 , gnome-session-ctl
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-settings-daemon";
-  version = "43.alpha";
+  version = "43.beta";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-settings-daemon/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "SlKagmJ6aJfhgxW1htr7kKLBQvpiELRAkcp8eVV9ONM=";
+    sha256 = "PDPeNaxpZgo/JQKkv7YS1bR05MIuWw8zoNCB+UbdMcs=";
   };
 
   patches = [
@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
     systemd
     libgudev
     libwacom
-    gcr
+    gcr_4
   ];
 
   mesonFlags = [
