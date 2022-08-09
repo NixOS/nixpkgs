@@ -49,19 +49,14 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker-miners";
-  version = "3.4.0.alpha";
+  version = "3.4.0.beta";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "P84wGmT1IPGMZLPGPgoRRbtpN5bJNmxBxwfZNJ8XPyY=";
+    sha256 = "49XkMVzkLwKf6VKIPnCqb4uXLY+qwmGAjDdKSzglLwo=";
   };
 
-  # TODO: remove me on 3.4.0
   patches = [
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/tracker-miners/-/commit/cc655ba0f95022cf35bc6d44cb5155788fee2e24.patch";
-      sha256 = "sha256-a85ygtabpkruiDgKbseQxYbFIAQlVDhs3eWkbStJjKs=";
-    })
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/tracker-miners/-/commit/9e613ceb37ec41fd1cd88c3d539e3ee03e8f6ba6.patch";
       sha256 = "sha256-ht7EfZztyl0st0Sv7H92Q37vwXY4T61GQm9WJ8IxTTg=";
