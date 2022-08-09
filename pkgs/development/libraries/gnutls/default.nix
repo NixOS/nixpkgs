@@ -1,4 +1,5 @@
 { config, lib, stdenv, fetchurl, zlib, lzo, libtasn1, nettle, pkg-config, lzip
+, fetchpatch
 , perl, gmp, autoconf, automake, libidn2, libiconv
 , unbound, dns-root-data, gettext, util-linux
 , cxxBindings ? !stdenv.hostPlatform.isStatic # tries to link libstdc++.so
@@ -33,7 +34,15 @@ stdenv.mkDerivation rec {
   outputInfo = "devdoc";
   outputDoc  = "devdoc";
 
-  patches = [ ./nix-ssl-cert-file.patch ]
+  patches = [
+      ./nix-ssl-cert-file.patch
+      (fetchpatch {
+        name = "CVE-2022-2509.patch";
+        url = "https://gitlab.com/gnutls/gnutls/-/commit/ce37f9eb265dbe9b6d597f5767449e8ee95848e2.diff";
+        includes = [ "lib/x509/pkcs7.c" ]; # avoid conflicts in NEWS and tests/Makefile.am
+        sha256 = "sha256-4OKZMPwkANeOwVQewTwB6uRPPM28skcVYaqdppFiPKo=";
+      })
+    ]
     # Disable native add_system_trust.
     ++ lib.optional (isDarwin && !withSecurity) ./no-security-framework.patch;
 
