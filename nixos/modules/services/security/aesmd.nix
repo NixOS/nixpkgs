@@ -30,7 +30,7 @@ in
     debug = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc "Whether to build the PSW package in debug mode.";
+      description = mdDoc "Whether to build the PSW package in debug mode.";
     };
     environment = mkOption {
       type = with types; attrsOf str;
@@ -52,13 +52,13 @@ in
       type = with types; nullOr str;
       default = null;
       example = "http://whitelist.trustedservices.intel.com/SGX/LCWL/Linux/sgx_white_list_cert.bin";
-      description = lib.mdDoc "URL to retrieve authorized Intel SGX enclave signers.";
+      description = mdDoc "URL to retrieve authorized Intel SGX enclave signers.";
     };
     proxy = mkOption {
       type = with types; nullOr str;
       default = null;
       example = "http://proxy_url:1234";
-      description = lib.mdDoc "HTTP network proxy.";
+      description = mdDoc "HTTP network proxy.";
     };
     proxyType = mkOption {
       type = with types; nullOr (enum [ "default" "direct" "manual" ]);
@@ -67,7 +67,7 @@ in
         if (config.services.aesmd.proxy != null) then "manual" else null
       '';
       example = "default";
-      description = lib.mdDoc ''
+      description = mdDoc ''
         Type of proxy to use. The `default` uses the system's default proxy.
         If `direct` is given, uses no proxy.
         A value of `manual` uses the proxy from
@@ -78,29 +78,29 @@ in
       type = with types; nullOr (enum [ "ecdsa_256" "epid_linkable" "epid_unlinkable" ]);
       default = null;
       example = "ecdsa_256";
-      description = lib.mdDoc "Attestation quote type.";
+      description = mdDoc "Attestation quote type.";
     };
     qcnl = mkOption {
-      description = lib.mdDoc "QCNL configuration";
+      description = mdDoc "QCNL configuration";
       default = null;
       type = with types; nullOr (submodule {
         options.pccsUrl = mkOption {
           type = with types; nullOr str;
           default = null;
           example = "https://localhost:8081/sgx/certification/v3/";
-          description = lib.mdDoc "PCCS server address.";
+          description = mdDoc "PCCS server address.";
         };
         options.useSecureCert = mkOption {
           type = with types; nullOr bool;
           default = null;
           example = false;
-          description = lib.mdDoc "To accept insecure HTTPS certificate, set this option to `false`.";
+          description = mdDoc "To accept insecure HTTPS certificate, set this option to `false`.";
         };
         options.collateralService = mkOption {
           type = with types; nullOr str;
           default = null;
           example = "https://api.trustedservices.intel.com/sgx/certification/v3/";
-          description = lib.mdDoc ''
+          description = mdDoc ''
             You can use the Intel PCS or another PCCS to get quote verification collateral.
 
             Retrieval of PCK Certificates will always use the PCCS described in `config.services.aesmd.qcnl.pccsUrl`.
@@ -112,7 +112,7 @@ in
           type = with types; nullOr (enum [ "3.0" "3.1" ]);
           default = null;
           example = "3.1";
-          description = lib.mdDoc ''
+          description = mdDoc ''
             If you use a PCCS service to get the quote verification collateral, you can specify which PCCS API version is to be used.
 
             The legacy 3.0 API will return CRLs in HEX encoded DER format and the sgx_ql_qve_collateral_t.version will be set to 3.0, while
@@ -129,7 +129,7 @@ in
           type = with types; nullOr ints.u32;
           default = null;
           example = 6;
-          description = lib.mdDoc ''
+          description = mdDoc ''
             Maximum retry times for QCNL. When `null` or set to `0`, no retry will be performed.
 
             It will first wait one second and then for all forthcoming retries it will double the waiting time.
@@ -141,7 +141,7 @@ in
           type = with types; nullOr ints.u32;
           default = null;
           example = 10;
-          description = lib.mdDoc ''
+          description = mdDoc ''
             Sleep this amount of seconds before each retry when a transfer has failed with a transient error.
           '';
         };
@@ -149,7 +149,7 @@ in
           type = with types; nullOr str;
           default = null;
           example = "http://localhost:8081/sgx/certification/v3/";
-          description = lib.mdDoc ''
+          description = mdDoc ''
             When not `null`, the QCNL will try to retrieve PCK cert chain from this URL first,
             and failover to {option}`services.aesmd.qcnl.pccsUrl` as in legacy mode.
           '';
@@ -158,7 +158,7 @@ in
           type = with types; nullOr ints.u32;
           default = null;
           example = 168;
-          description = lib.mdDoc ''
+          description = mdDoc ''
             If {option}`services.aesmd.qcnl.localPckUrl` is `null`, the QCNL will cache PCK certificates in memory by default.
             The cached PCK certificates will expire after this many hours.
           '';
@@ -177,7 +177,7 @@ in
               };
             };
           };
-          description = lib.mdDoc ''
+          description = mdDoc ''
             You can add custom request headers and parameters to the get certificate API.
             But the default PCCS implementation just ignores them.
           '';
