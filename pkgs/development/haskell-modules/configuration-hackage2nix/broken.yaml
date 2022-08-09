@@ -357,6 +357,7 @@ broken-packages:
   - bindings-apr
   - bindings-bfd
   - bindings-cctools
+  - bindings-common
   - bindings-dc1394
   - bindings-eskit
   - bindings-EsounD
@@ -1691,6 +1692,7 @@ broken-packages:
   - ghcup
   - ghc-usage
   - gh-labeler
+  - gi-adwaita
   - giak
   - gi-cogl
   - Gifcurry
@@ -2306,6 +2308,7 @@ broken-packages:
   - houseman
   - hp2any-core
   - hpack-convert
+  - hpapi
   - hpasteit
   - HPath
   - hpc-coveralls
@@ -4682,6 +4685,7 @@ broken-packages:
   - SNet
   - snipcheck
   - snorkels
+  - snowchecked
   - snowtify
   - socket-activation
   - socketed
@@ -5737,7 +5741,9 @@ broken-packages:
   - zeno
   - zeolite-lang
   - zephyr
+  - zeromq4-clone-pattern
   - zeromq4-conduit
+  - zeromq4-patterns
   - zeromq-haskell
   - zettelkast
   - ZFS

@@ -693,7 +693,6 @@ dont-distribute-packages:
  - aws-dynamodb-conduit
  - aws-dynamodb-streams
  - aws-easy
- - aws-ec2-knownhosts
  - aws-elastic-transcoder
  - aws-kinesis
  - aws-kinesis-client
@@ -857,9 +856,7 @@ dont-distribute-packages:
  - cabal2json
  - cabalmdvrpm
  - cabalrpmdeps
- - cabocha
  - cake
- - cake3
  - cakyrespa
  - cal3d-examples
  - cal3d-opengl
@@ -1273,7 +1270,6 @@ dont-distribute-packages:
  - dtd
  - dtw
  - dumb-cas
- - duplo
  - dvda
  - dynamic-cabal
  - dynamic-plot
@@ -1506,7 +1502,6 @@ dont-distribute-packages:
  - gbu
  - gdax
  - gdiff-ig
- - gedcom
  - geek
  - geek-server
  - gelatin-freetype2
@@ -1549,6 +1544,7 @@ dont-distribute-packages:
  - gi-cairo-again
  - gi-clutter
  - gi-coglpango
+ - gi-ges
  - gi-gsk
  - gi-gstpbutils
  - gi-gtk_4_0_5
@@ -1905,7 +1901,6 @@ dont-distribute-packages:
  - hashes
  - hashflare
  - hask-home
- - haskades
  - haskdeep
  - haskeem
  - haskell-aliyun
@@ -2045,7 +2040,6 @@ dont-distribute-packages:
  - hesh
  - hesql
  - heterolist
- - hevm
  - hevolisa
  - hevolisa-dph
  - hexpat-conduit
@@ -2071,7 +2065,6 @@ dont-distribute-packages:
  - hinvaders
  - hinze-streams
  - hipbot
- - hipe
  - hipsql-client
  - hipsql-server
  - hirt
@@ -2335,7 +2328,6 @@ dont-distribute-packages:
  - jmacro-rpc-happstack
  - jmacro-rpc-snap
  - jmonkey
- - jobqueue
  - join
  - jsc
  - jsmw
@@ -2370,7 +2362,6 @@ dont-distribute-packages:
  - kansas-lava-papilio
  - kansas-lava-shake
  - karakuri
- - karps
  - katip-rollbar
  - keenser
  - keera-hails-i18n
@@ -2407,7 +2398,6 @@ dont-distribute-packages:
  - koji-install
  - koji-tool
  - korfu
- - krapsh
  - ks-test
  - kubernetes-client
  - kure-your-boilerplate
@@ -2448,7 +2438,6 @@ dont-distribute-packages:
  - language-qux
  - language-spelling
  - lat
- - latest-npm-version
  - latex-formulae-hakyll
  - latex-formulae-pandoc
  - latex-svg-hakyll
@@ -2552,11 +2541,9 @@ dont-distribute-packages:
  - lojysamban
  - lol-apps
  - lol-benches
- - lol-calculus
  - lol-cpp
  - lol-repa
  - lol-tests
- - lol-typing
  - loli
  - loop-effin
  - looper
@@ -2647,7 +2634,6 @@ dont-distribute-packages:
  - micro-gateway
  - microformats2-parser
  - microformats2-types
- - micrologger
  - midimory
  - mighttpd
  - migrant-hdbc
@@ -2816,7 +2802,6 @@ dont-distribute-packages:
  - newsynth
  - ngrams-loader
  - ngx-export-tools-extra
- - nicovideo-translator
  - nikepub
  - nirum
  - nix-thunk
@@ -2964,7 +2949,6 @@ dont-distribute-packages:
  - phonetic-languages-simplified-properties-lists-double
  - phonetic-languages-ukrainian
  - phooey
- - pia-forward
  - pianola
  - pier
  - ping
@@ -3082,7 +3066,6 @@ dont-distribute-packages:
  - push-notify-apn
  - push-notify-ccs
  - push-notify-general
- - pushme
  - puzzle-draw-cmdline
  - pvd
  - qd-vec
@@ -3412,8 +3395,6 @@ dont-distribute-packages:
  - servant-streaming-server
  - servant-swagger-tags
  - servant-to-elm
- - servant-util
- - servant-util-beam-pg
  - servant-waargonaut
  - servant-zeppelin-client
  - servant-zeppelin-server
@@ -3653,7 +3634,6 @@ dont-distribute-packages:
  - syntaxnet-haskell
  - synthesizer-llvm
  - sys-process
- - systemstats
  - t3-client
  - ta
  - tag-stream
@@ -3696,7 +3676,6 @@ dont-distribute-packages:
  - test-sandbox-compose
  - test-simple
  - testbench
- - text-all
  - text-builder-dev_0_3_3
  - text-json-qq
  - text-locale-encoding
@@ -3862,7 +3841,6 @@ dont-distribute-packages:
  - urbit-airlock
  - urbit-api
  - ureader
- - urembed
  - uri-enumerator
  - uri-enumerator-file
  - usb
