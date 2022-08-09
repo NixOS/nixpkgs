@@ -19,17 +19,17 @@
 
 let
   libdeltachat' = libdeltachat.overrideAttrs (old: rec {
-    version = "1.86.0";
+    version = "1.87.0";  # FIXME use 1.91.0
     src = fetchFromGitHub {
       owner = "deltachat";
       repo = "deltachat-core-rust";
       rev = version;
-      hash = "sha256-VLS93Ffeit2rVmXxYkXcnf8eDA3DC2/wKYZTh56QCk0=";
+      hash = "sha256-iRGLNMGs5WawzcqQb5AQTuD4NCJoBUSHfFUXXvm5+jE=";
     };
     cargoDeps = rustPlatform.fetchCargoTarball {
       inherit src;
       name = "${old.pname}-${version}";
-      hash = "sha256-4rpoDQ3o0WdWg/TmazTI+J0hL/MxwHcNMXWMq7GE7Tk=";
+      hash = "sha256-bmtm+cvjBIlZVRq/vjHd5Sl4FXJHP3cPp4+bWY5SKus=";
     };
   });
   electronExec = if stdenv.isDarwin then
@@ -38,25 +38,25 @@ let
     "${electron_18}/bin/electron";
   esbuild' = esbuild.override {
     buildGoModule = args: buildGoModule (args // rec {
-      version = "0.12.29";
+      version = "0.14.54";
       src = fetchFromGitHub {
         owner = "evanw";
         repo = "esbuild";
         rev = "v${version}";
-        hash = "sha256-oU++9E3StUoyrMVRMZz8/1ntgPI62M1NoNz9sH/N5Bg=";
+        hash = "sha256-qCtpy69ROCspRgPKmCV0YY/EOSWiNU/xwDblU0bQp4w=";
       };
-      vendorSha256 = "sha256-QPkBR+FscUc3jOvH7olcGUhM6OW4vxawmNJuRQxPuGs=";
+      vendorSha256 = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
     });
   };
 in nodePackages.deltachat-desktop.override rec {
   pname = "deltachat-desktop";
-  version = "1.30.1";
+  version = "1.32.0";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     rev = "v${version}";
-    hash = "sha256-gZjZbXiqhFVfThZOsvL/nKkf6MX+E3KB5ldEAIuzBYA=";
+    hash = "sha256-5eau6CLgze13rc1+fhNgdy/NEbEHBKf5/xd5K+zb4Co=";
   };
 
   nativeBuildInputs = [
