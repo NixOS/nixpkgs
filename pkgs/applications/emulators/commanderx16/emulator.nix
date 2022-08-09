@@ -35,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ AndersonTorres ];
     mainProgram = "x16emu";
     inherit (SDL2.meta) platforms;
+    broken = with stdenv; isDarwin && isAarch64;
   };
 
   passthru = {
