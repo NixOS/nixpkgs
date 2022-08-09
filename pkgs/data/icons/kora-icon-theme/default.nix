@@ -5,6 +5,7 @@
 , adwaita-icon-theme
 , breeze-icons
 , hicolor-icon-theme
+, gitUpdater
 }:
 
 stdenvNoCC.mkDerivation rec  {
@@ -42,6 +43,11 @@ stdenvNoCC.mkDerivation rec  {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater {
+    inherit pname version;
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     description = "An SVG icon theme in four variants";
