@@ -42,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd2;
     maintainers = with maintainers; [ AndersonTorres ];
     inherit (cc65.meta) platforms;
+    broken = with stdenv; isDarwin && isAarch64;
   };
 
   passthru = {
