@@ -765,10 +765,10 @@ in
         description = "ZFS pools scrubbing";
         after = [ "zfs-import.target" ];
         serviceConfig = {
-          Type = "oneshot";
+          Type = "simple";
         };
         script = ''
-          ${cfgZfs.package}/bin/zpool scrub ${
+          ${cfgZfs.package}/bin/zpool scrub -w ${
             if cfgScrub.pools != [] then
               (concatStringsSep " " cfgScrub.pools)
             else
