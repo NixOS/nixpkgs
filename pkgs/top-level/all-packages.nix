@@ -36252,6 +36252,11 @@ with pkgs;
 
   freenukum = callPackage ../games/freenukum { };
 
+  inherit (callPackages ../games/fteqw {})
+    fteqw
+    fteqw-dedicated
+    fteqcc;
+
   gamepad-tool = callPackage ../games/gamepad-tool { };
 
   gnome-hexgl = callPackage ../games/gnome-hexgl { };
