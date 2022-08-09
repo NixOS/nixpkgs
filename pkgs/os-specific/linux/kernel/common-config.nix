@@ -394,6 +394,10 @@ let
       EXT4_FS_SECURITY  = yes;
       EXT4_ENCRYPTION   = option yes;
 
+      NTFS_FS            = whenAtLeast "5.15" no;
+      NTFS3_LZX_XPRESS   = whenAtLeast "5.15" yes;
+      NTFS3_FS_POSIX_ACL = whenAtLeast "5.15" yes;
+
       REISERFS_FS_XATTR     = option yes;
       REISERFS_FS_POSIX_ACL = option yes;
       REISERFS_FS_SECURITY  = option yes;
