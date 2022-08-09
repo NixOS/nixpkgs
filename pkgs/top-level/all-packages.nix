@@ -34929,6 +34929,14 @@ with pkgs;
     buildGoModule = buildGo117Module;
   };
 
+  guestfs-tools = callPackage ../development/tools/guestfs-tools {
+    autoreconfHook = buildPackages.autoreconfHook264;
+  };
+  guestfs-tools-with-appliance = guestfs-tools.override {
+    appliance = libguestfs-appliance;
+    autoreconfHook = buildPackages.autoreconfHook264;
+  };
+
   guetzli = callPackage ../applications/graphics/guetzli { };
 
   gummi = callPackage ../applications/misc/gummi { };
