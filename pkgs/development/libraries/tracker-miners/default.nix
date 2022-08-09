@@ -49,11 +49,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker-miners";
-  version = "3.4.0.alpha";
+  version = "3.4.0.beta";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "P84wGmT1IPGMZLPGPgoRRbtpN5bJNmxBxwfZNJ8XPyY=";
+    sha256 = "49XkMVzkLwKf6VKIPnCqb4uXLY+qwmGAjDdKSzglLwo=";
   };
 
   # TODO: remove me on 3.4.0
