@@ -17821,10 +17821,7 @@ with pkgs;
 
   ganv = callPackage ../development/libraries/ganv { };
 
-  garble = callPackage ../development/tools/garble {
-    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
-    buildGoModule = buildGo117Module;
-  };
+  garble = callPackage ../development/tools/garble { };
 
   gcab = callPackage ../development/libraries/gcab { };
 
