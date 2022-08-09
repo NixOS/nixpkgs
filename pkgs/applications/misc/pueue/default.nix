@@ -14,11 +14,11 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Nukesor";
     repo = "pueue";
-    rev = "v${version}";
-    hash = "sha256-xUTkjj/PdlgDEp2VMwBuRtF/9iGGiN4FZizdOdcbTag=";
+    rev = "b0686da99806357aa7d207586f6d937fcc0d7fea";
+    hash = "sha256-PlTDFXkRlScv1bfNJfz85PJh/yU6kChR4yVAJkPd1oo=";
   };
 
-  cargoSha256 = "sha256-7VdPu+9RYoj4Xfb3J6GLOji7Fqxkk+Fswi4C4q33+jk=";
+  cargoSha256 = "sha256-I2XDifbSolS6riPJVJLuyqehcBus1T4JnRsRCvIEmjc=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -28,7 +28,6 @@ rustPlatform.buildRustPackage rec {
   ];
 
   checkFlags = [
-    "--test client_tests"
     "--skip=test_single_huge_payload"
     "--skip=test_create_unix_socket"
   ];
