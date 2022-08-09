@@ -446,6 +446,7 @@ unsupported-platforms:
   grid-proto:                                   [ platforms.darwin ]
   gtk-sni-tray:                                 [ platforms.darwin ]
   haskell-snake:                                [ platforms.darwin ]
+  hb3sum:                                       [ aarch64-linux ] # depends on blake3, which is not supported on aarch64-linux
   hcwiid:                                       [ platforms.darwin ]
   HDRUtils:                                     [ platforms.darwin ]
   hidapi:                                       [ platforms.darwin ]
@@ -539,8 +540,10 @@ supported-platforms:
   hw-prim-bits:                                 [ platforms.x86 ] # x86 assembler
   inline-asm:                                   [ platforms.x86 ] # x86 assembler
   keid-core:                                    [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
+  keid-frp-banana:                              [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
   keid-geometry:                                [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
   keid-render-basic:                            [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
+  keid-resource-gltf:                           [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
   keid-sound-openal:                            [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
   keid-ui-dearimgui:                            [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
   kqueue:                                       [ platforms.netbsd, platforms.freebsd, platforms.openbsd, platforms.darwin ]
@@ -644,3 +647,6 @@ dont-distribute-packages:
 
   # mesos was removed from nixpkgs
   - hs-mesos
+
+  # Output exceeds Hydra's maximum allowable size
+  - stripeapi
