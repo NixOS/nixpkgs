@@ -357,6 +357,7 @@ broken-packages:
   - bindings-apr
   - bindings-bfd
   - bindings-cctools
+  - bindings-common
   - bindings-dc1394
   - bindings-eskit
   - bindings-EsounD
@@ -970,6 +971,7 @@ broken-packages:
   - data-diverse
   - datadog
   - data-easy
+  - data-elevator
   - data-embed
   - data-emoticons
   - data-filepath
@@ -1176,6 +1178,7 @@ broken-packages:
   - dpor
   - dragen
   - drawille
+  - dr-cabal
   - drClickOn
   - dresdner-verkehrsbetriebe
   - DrIFT
@@ -1435,6 +1438,7 @@ broken-packages:
   - file-command-qq
   - filediff
   - file-embed-poly
+  - file-io
   - file-location
   - FileManip
   - FileManipCompat
@@ -1691,6 +1695,7 @@ broken-packages:
   - ghcup
   - ghc-usage
   - gh-labeler
+  - gi-adwaita
   - giak
   - gi-cogl
   - Gifcurry
@@ -2306,6 +2311,7 @@ broken-packages:
   - houseman
   - hp2any-core
   - hpack-convert
+  - hpapi
   - hpasteit
   - HPath
   - hpc-coveralls
@@ -2518,6 +2524,7 @@ broken-packages:
   - hunit-rematch
   - hunspell-hs
   - hup
+  - hurl
   - hurriyet
   - husky
   - hutton
@@ -2939,7 +2946,6 @@ broken-packages:
   - libhbb
   - libinfluxdb
   - libjenkins
-  - libjwt-typed
   - libltdl
   - liboath-hs
   - liboleg
@@ -4135,6 +4141,7 @@ broken-packages:
   - rand-vars
   - Range
   - rangemin
+  - rangeset
   - rank1dynamic
   - rank-product
   - rapid-term
@@ -4683,6 +4690,7 @@ broken-packages:
   - SNet
   - snipcheck
   - snorkels
+  - snowchecked
   - snowtify
   - socket-activation
   - socketed
@@ -5033,7 +5041,6 @@ broken-packages:
   - text-ascii
   - text-builder-linear
   - text-containers
-  - text-format
   - text-format-heavy
   - text-generic-pretty
   - text-icu-normalized
@@ -5739,7 +5746,9 @@ broken-packages:
   - zeno
   - zeolite-lang
   - zephyr
+  - zeromq4-clone-pattern
   - zeromq4-conduit
+  - zeromq4-patterns
   - zeromq-haskell
   - zettelkast
   - ZFS

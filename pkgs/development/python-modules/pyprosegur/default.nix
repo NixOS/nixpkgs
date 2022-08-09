@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pyprosegur";
-  version = "0.0.7";
+  version = "0.0.8";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dgomes";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-eP8BFEdAJH2qHqqBXPxTaX1OGFggbWb3517G+gBPxhs=";
+    sha256 = "sha256-Spxzyn0gZ1TIHrtt7W0j6VwKnm2Km5vLGZZ//HINyBA=";
   };
 
   propagatedBuildInputs = [
