@@ -3,7 +3,7 @@
 , fetchurl
 , pkg-config
 , autoreconfHook
-, makeWrapper
+, makeBinaryWrapper
 , ncurses
 , cpio
 , gperf
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     flex
     getopt
     gperf
-    makeWrapper
+    makeBinaryWrapper
     pkg-config
     qemu
   ] ++ (with perlPackages; [ perl libintl-perl GetoptLong ModuleBuild ])
@@ -120,9 +120,14 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mv "$out/lib/ocaml/guestfs" "$OCAMLFIND_DESTDIR/guestfs"
     for bin in $out/bin/*; do
-      wrapProgram "$bin" \
-        --prefix PATH     : "$out/bin:${hivex}/bin:${qemu}/bin" \
-        --prefix PERL5LIB : "$out/${perlPackages.perl.libPrefix}"
+      if isScript "$bin"; then
+        substituteInPlace "$bin" \
+          --replace guestfish "$out/bin/guestfish"
+      elif isELF "$bin"; then
+        wrapProgram "$bin" \
+          --prefix PATH     : "$out/bin:${hivex}/bin:${qemu}/bin" \
+          --prefix PERL5LIB : "$out/${perlPackages.perl.libPrefix}"
+      fi
     done
   '';
 
