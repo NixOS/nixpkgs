@@ -6460,6 +6460,8 @@ with pkgs;
 
   gawkInteractive = gawk.override { interactive = true; };
 
+  gatk = callPackage ../applications/science/biology/gatk {} ;
+
   gbdfed = callPackage ../tools/misc/gbdfed {
     gtk = gtk2-x11;
   };
