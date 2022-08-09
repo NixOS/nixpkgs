@@ -6,7 +6,7 @@ let
   cfg = config.services.discourse;
   opt = options.services.discourse;
 
-  # Keep in sync with https://github.com/discourse/discourse_docker/blob/master/image/base/Dockerfile#L5
+  # Keep in sync with https://github.com/discourse/discourse_docker/blob/main/image/base/slim.Dockerfile#L5
   upstreamPostgresqlVersion = lib.getVersion pkgs.postgresql_13;
 
   postgresqlPackage = if config.services.postgresql.enable then
@@ -604,7 +604,6 @@ in
       cors_origin = "";
       serve_static_assets = false;
       sidekiq_workers = 5;
-      rtl_css = false;
       connection_reaper_age = 30;
       connection_reaper_interval = 30;
       relative_url_root = null;
@@ -940,7 +939,6 @@ in
                   proxy_cache discourse;
                   proxy_cache_key "$scheme,$host,$request_uri";
                   proxy_cache_valid 200 301 302 7d;
-                  proxy_cache_valid any 1m;
                 '';
               };
               "/message-bus/" = proxy {
