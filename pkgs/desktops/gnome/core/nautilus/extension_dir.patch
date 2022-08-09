@@ -1,14 +1,16 @@
 diff --git a/src/nautilus-module.c b/src/nautilus-module.c
-index 6273a76..4adcc8a 100644
+index cd889ff18..e2cd6468e 100644
 --- a/src/nautilus-module.c
 +++ b/src/nautilus-module.c
-@@ -242,11 +242,17 @@ void
+@@ -267,6 +267,7 @@ void
  nautilus_module_setup (void)
  {
      static gboolean initialized = FALSE;
 +    const gchar* extensiondir = NULL;
+     const gchar *disable_plugins;
  
-     if (!initialized)
+     disable_plugins = g_getenv ("NAUTILUS_DISABLE_PLUGINS");
+@@ -280,7 +281,12 @@ nautilus_module_setup (void)
      {
          initialized = TRUE;
  
