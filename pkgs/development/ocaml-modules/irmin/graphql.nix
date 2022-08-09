@@ -24,6 +24,7 @@ buildDunePackage rec {
 
   meta = irmin.meta // {
     description = "GraphQL server for Irmin";
+    broken = true; # Not compatible with graphql 0.14
   };
 
 }
