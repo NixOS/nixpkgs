@@ -31,6 +31,9 @@ buildDunePackage rec {
   pname = "elpi";
   inherit (fetched) version src;
 
+  patches = lib.optional (versionAtLeast version "1.16" || version == "dev")
+    ./atd_2_10.patch;
+
   minimalOCamlVersion = "4.04";
 
   buildInputs = [ perl ncurses ]
