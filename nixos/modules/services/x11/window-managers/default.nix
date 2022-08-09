@@ -21,6 +21,7 @@ in
     ./fluxbox.nix
     ./fvwm2.nix
     ./fvwm3.nix
+    ./hackedbox.nix
     ./herbstluftwm.nix
     ./i3.nix
     ./jwm.nix
