@@ -10399,6 +10399,8 @@ in {
 
   stravalib = callPackage ../development/python-modules/stravalib { };
 
+  strawberry-graphql = callPackage ../development/python-modules/strawberry-graphql { };
+
   streamdeck = callPackage ../development/python-modules/streamdeck { };
 
   streaming-form-data = callPackage ../development/python-modules/streaming-form-data { };
