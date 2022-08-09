@@ -2,7 +2,7 @@
 echo "Sourcing python-catch-conflicts-hook.sh"
 
 pythonCatchConflictsPhase() {
-    @pythonInterpreter@ @catchConflicts@
+    PYTHONPATH="@setuptools@/@pythonSitePackages@:$PYTHONPATH" @pythonInterpreter@ @catchConflicts@
 }
 
 if [ -z "${dontUsePythonCatchConflicts-}" ]; then
