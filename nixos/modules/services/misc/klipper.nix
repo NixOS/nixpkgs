@@ -129,6 +129,7 @@ in
           RuntimeDirectory = "klipper";
           SupplementaryGroups = [ "dialout" ];
           WorkingDirectory = "${cfg.package}/lib";
+          OOMScoreAdjust = "-999";
         } // (if cfg.user != null then {
           Group = cfg.group;
           User = cfg.user;
