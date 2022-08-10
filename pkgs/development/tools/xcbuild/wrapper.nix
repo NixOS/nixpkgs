@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, writeText, runCommand
+{ stdenv, makeWrapper, writeText, writeShellScriptBin, runCommand
 , CoreServices, ImageIO, CoreGraphics
 , runtimeShell, callPackage
 , xcodePlatform ? stdenv.targetPlatform.xcodePlatform or "MacOSX"
@@ -50,8 +50,7 @@ while [ $# -gt 0 ]; do
 done
   '';
 
-  xcrun = writeText "xcrun" ''
-#!${runtimeShell}
+  xcrun = writeShellScriptBin "xcrun" ''
 while [ $# -gt 0 ]; do
    case "$1" in
          --sdk | -sdk) shift ;;
@@ -90,7 +89,7 @@ runCommand "xcodebuild-${xcbuild.version}" {
   propagatedBuildInputs = [ "${toolchains}/XcodeDefault.xctoolchain" ];
 
   passthru = {
-    inherit xcbuild;
+    inherit xcbuild xcrun;
     toolchain = "${toolchains}/XcodeDefault.xctoolchain";
     sdk = "${sdks}/${sdkName}";
     platform = "${platforms}/${xcodePlatform}.platform";
@@ -127,8 +126,7 @@ runCommand "xcodebuild-${xcbuild.version}" {
     --subst-var-by DEVELOPER_DIR $out/Applications/Xcode.app/Contents/Developer
   chmod +x $out/bin/xcode-select
 
-  substitute ${xcrun} $out/bin/xcrun
-  chmod +x $out/bin/xcrun
+  cp ${xcrun}/bin/xcrun $out/bin/xcrun
 
   for bin in PlistBuddy actool builtin-copy builtin-copyPlist \
              builtin-copyStrings builtin-copyTiff \
