@@ -52,13 +52,16 @@ rustPlatform.buildRustPackage rec {
         compile_seccomp_policy \
             --default-action trap $policy ''${policy%.policy}.bpf
     done
+
+    substituteInPlace seccomp/$arch/*.policy \
+      --replace "@include $(pwd)/seccomp/$arch/" "@include $out/share/policy/"
   '';
 
   buildFeatures = [ "default" "virgl_renderer" "virgl_renderer_next" ];
 
   postInstall = ''
     mkdir -p $out/share/policy/
-    cp -v seccomp/$arch/*.bpf $out/share/policy/
+    cp -v seccomp/$arch/*.{policy,bpf} $out/share/policy/
   '';
 
   passthru.updateScript = ./update.py;
