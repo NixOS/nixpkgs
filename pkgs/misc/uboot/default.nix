@@ -49,6 +49,10 @@ let
       # See also: https://github.com/NixOS/nixpkgs/issues/135828
       # Source: https://patchwork.ozlabs.org/project/uboot/patch/20210822143656.289891-1-sjoerd@collabora.com/
       ./0001-rpi-Copy-properties-from-firmware-dtb-to-the-loaded-.patch
+
+      # also copy the correct ethernet PHY address to ensure ethernet works
+      # See: https://github.com/NixOS/nixpkgs/issues/183019
+      ./0002-rpi-Copy-eth-PHY-address-from-fw-DT-to-loaded-DT.patch
     ] ++ extraPatches;
 
     postPatch = ''

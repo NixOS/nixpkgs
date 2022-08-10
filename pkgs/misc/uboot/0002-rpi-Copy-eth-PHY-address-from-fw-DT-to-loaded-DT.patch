@@ -1,0 +1,29 @@
+From 15f872f2db217d87dff2ae304b96096068b0de32 Mon Sep 17 00:00:00 2001
+From: Antoine Mazeas <antoine@karthanis.net>
+Date: Wed, 10 Aug 2022 13:51:21 +0200
+Subject: [PATCH 2/2] rpi: Copy eth PHY address from fw DT to loaded DT
+
+Some Raspberry Pi 400 boards, specifically rev 1.1, have a different address for the ethernet PHY device than what is provided by the kernel DTB. The correct address is provided by the firmware, so we should carry it over into the loaded device tree so that ethernet works on such boards.
+
+Signed-off-by: Antoine Mazeas <antoine@karthanis.net>
+---
+ board/raspberrypi/rpi/rpi.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/board/raspberrypi/rpi/rpi.c b/board/raspberrypi/rpi/rpi.c
+index 28b6f52506..793fd1aa30 100644
+--- a/board/raspberrypi/rpi/rpi.c
++++ b/board/raspberrypi/rpi/rpi.c
+@@ -548,6 +548,9 @@ void  update_fdt_from_fw(void *fdt, void *fw_fdt)
+ 
+ 	/* kernel address randomisation seed as provided by the firmware */
+ 	copy_property(fdt, fw_fdt, "/chosen", "kaslr-seed");
++
++	/* address of the PHY device as provided by the firmware  */
++	copy_property(fdt, fw_fdt, "ethernet0/mdio@e14/ethernet-phy@1", "reg");
+ }
+ 
+ int ft_board_setup(void *blob, struct bd_info *bd)
+-- 
+2.37.1
+
