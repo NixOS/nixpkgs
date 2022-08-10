@@ -88,6 +88,7 @@ stdenv.mkDerivation rec {
       "assembly"
     ];
   };
+  desktopItems = [ desktopItem ];
 
   meta = with lib; {
     description = ".NET assembly browser and decompiler";
