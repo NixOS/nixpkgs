@@ -183,6 +183,14 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
       sha256 = "1knv6zvpq0bnngmlwkcqgjpdkqsgbiihs6a0cycb8ssn18s4ippr";
     };
 
+    postPatch = ''
+      cp ${pkgs.writeScript "fake-gradlew-for-dafny" ''
+        mkdir -p build/libs/
+        javac $(find -name "*.java" | grep "^./src/main") -d classes
+        jar cf build/libs/DafnyRuntime.jar -C classes dafny
+      ''} Source/DafnyRuntime/DafnyRuntimeJava/gradlew
+    '';
+
     preBuild = ''
       ln -s ${pkgs.z3} Binaries/z3
     '';
