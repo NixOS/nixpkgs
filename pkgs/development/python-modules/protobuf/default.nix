@@ -14,7 +14,12 @@
 }:
 
 buildPythonPackage {
-  inherit (protobuf) pname src version;
+  inherit (protobuf) pname src;
+  version =
+    if lib.versionAtLeast protobuf.version "3.21" then
+      "4.21.5" # Version source: https://github.com/protocolbuffers/protobuf/blob/v21.5/version.json#L13
+    else protobuf.version;
+
   inherit disabled;
   doCheck = doCheck && !isPy27; # setuptools>=41.4 no longer collects correctly on python2
 
