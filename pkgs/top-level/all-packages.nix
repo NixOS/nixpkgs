@@ -29085,6 +29085,8 @@ with pkgs;
 
   rofi-mpd = callPackage ../applications/audio/rofi-mpd { };
 
+  rofi-bluetooth = callPackage ../applications/misc/rofi-bluetooth { };
+
   rofi-calc = callPackage ../applications/science/math/rofi-calc { };
 
   rofi-emoji = callPackage ../applications/misc/rofi-emoji { };
