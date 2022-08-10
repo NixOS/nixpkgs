@@ -4,6 +4,8 @@
 , meson
 , ninja
 , pkg-config
+, gtk-doc
+, docbook-xsl-nons
 , gettext
 , libxml2
 , desktop-file-utils
@@ -37,7 +39,7 @@ stdenv.mkDerivation rec {
   pname = "nautilus";
   version = "43.beta.1";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
@@ -63,6 +65,8 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    gtk-doc
+    docbook-xsl-nons
     wrapGAppsHook4
   ];
 
@@ -91,6 +95,10 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     gtk4
+  ];
+
+  mesonFlags = [
+    "-Ddocs=true"
   ];
 
   preFixup = ''
