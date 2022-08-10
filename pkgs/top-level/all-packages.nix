@@ -4485,6 +4485,8 @@ with pkgs;
 
   shellhub-agent = callPackage ../applications/networking/shellhub-agent { };
 
+  shellnoob = callPackage ../tools/security/shellnoob { };
+
   sheesy-cli = callPackage ../tools/security/sheesy-cli {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -7253,6 +7255,8 @@ with pkgs;
 
   heaptrack = libsForQt5.callPackage ../development/tools/profiling/heaptrack {};
 
+  heatshrink = callPackage ../tools/compression/heatshrink { };
+
   heimdall = libsForQt5.callPackage ../tools/misc/heimdall { };
 
   heimdall-gui = heimdall.override { enableGUI = true; };
@@ -8126,7 +8130,7 @@ with pkgs;
 
   motion = callPackage ../applications/video/motion { };
 
-  moz-phab = python3Packages.callPackage ../applications/misc/moz-phab { };
+  mozphab = callPackage ../applications/misc/mozphab { };
 
   mtail = callPackage ../servers/monitoring/mtail { };
 
