@@ -35,7 +35,7 @@
 
 stdenv.mkDerivation rec {
   pname = "muffin";
-  version = "5.4.4";
+  version = "5.4.5";
 
   outputs = [ "out" "dev" "man" ];
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-u3PNSyjxtPLFdA+2Iz+NuqlcQC9IwsFb7Tb5eVAJunY=";
+    hash = "sha256-gtki0MTIMI1JggtVn0dAhkq364hkTuH7Zf7CF32Lc8E=";
   };
 
   nativeBuildInputs = [
