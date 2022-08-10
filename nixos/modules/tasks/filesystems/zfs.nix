@@ -714,6 +714,8 @@ in
             RemainAfterExit = true;
           };
 
+          path = lib.optionals (cfgExpandOnBoot == "all") [ cfgZfs.package ];
+
           script = ''
             for pool in ${poolListProvider}; do
               systemctl start --no-block "zpool-expand@$pool"
