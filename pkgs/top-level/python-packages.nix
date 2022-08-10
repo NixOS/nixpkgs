@@ -1351,6 +1351,8 @@ in {
 
   bluetooth-adapters = callPackage ../development/python-modules/bluetooth-adapters { };
 
+  bluetooth-sensor-state-data = callPackage ../development/python-modules/bluetooth-sensor-state-data { };
+
   blurhash = callPackage ../development/python-modules/blurhash { };
 
   bme280spi = callPackage ../development/python-modules/bme280spi { };
