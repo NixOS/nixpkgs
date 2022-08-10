@@ -1351,6 +1351,8 @@ in {
 
   bluetooth-adapters = callPackage ../development/python-modules/bluetooth-adapters { };
 
+  bluetooth-sensor-state-data = callPackage ../development/python-modules/bluetooth-sensor-state-data { };
+
   blurhash = callPackage ../development/python-modules/blurhash { };
 
   bme280spi = callPackage ../development/python-modules/bme280spi { };
@@ -3774,6 +3776,8 @@ in {
 
   gorilla = callPackage ../development/python-modules/gorilla { };
 
+  govee-ble = callPackage ../development/python-modules/govee-ble { };
+
   goveelights = callPackage ../development/python-modules/goveelights { };
 
   gpapi = callPackage ../development/python-modules/gpapi { };
@@ -4349,6 +4353,8 @@ in {
   iniparse = callPackage ../development/python-modules/iniparse { };
 
   injector = callPackage ../development/python-modules/injector { };
+
+  inkbird-ble = callPackage ../development/python-modules/inkbird-ble { };
 
   inkex = callPackage ../development/python-modules/inkex { };
 
@@ -5570,6 +5576,8 @@ in {
   mne-python = callPackage ../development/python-modules/mne-python { };
 
   mnist = callPackage ../development/python-modules/mnist { };
+
+  moat-ble = callPackage ../development/python-modules/moat-ble { };
 
   mocket = callPackage ../development/python-modules/mocket { };
 
@@ -9721,6 +9729,10 @@ in {
 
   sense-energy = callPackage ../development/python-modules/sense-energy { };
 
+  sensor-state-data = callPackage ../development/python-modules/sensor-state-data { };
+
+  sensorpush-ble = callPackage ../development/python-modules/sensorpush-ble { };
+
   sentencepiece = callPackage ../development/python-modules/sentencepiece {
     inherit (pkgs) sentencepiece;
   };
@@ -11546,6 +11558,8 @@ in {
   };
 
   xhtml2pdf = callPackage ../development/python-modules/xhtml2pdf { };
+
+  xiaomi-ble = callPackage ../development/python-modules/xiaomi-ble { };
 
   xkbcommon = callPackage ../development/python-modules/xkbcommon { };
 
