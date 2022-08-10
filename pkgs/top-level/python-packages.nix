@@ -4352,6 +4352,8 @@ in {
 
   injector = callPackage ../development/python-modules/injector { };
 
+  inkbird-ble = callPackage ../development/python-modules/inkbird-ble { };
+
   inkex = callPackage ../development/python-modules/inkex { };
 
   inotify = callPackage ../development/python-modules/inotify { };
