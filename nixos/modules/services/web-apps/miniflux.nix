@@ -39,6 +39,15 @@ in
         '';
       };
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.miniflux;
+        defaultText = literalExpression "pkgs.miniflux";
+        description = lib.mdDoc ''
+          Which miniflux package to use for the running server.
+        '';
+      };
+
       adminCredentialsFile = mkOption  {
         type = types.path;
         description = lib.mdDoc ''
@@ -89,7 +98,7 @@ in
       after = [ "network.target" "postgresql.service" "miniflux-dbsetup.service" ];
 
       serviceConfig = {
-        ExecStart = "${pkgs.miniflux}/bin/miniflux";
+        ExecStart = "${cfg.package}/bin/miniflux";
         User = dbUser;
         DynamicUser = true;
         RuntimeDirectory = "miniflux";
