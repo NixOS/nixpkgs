@@ -2,6 +2,7 @@
 , withGocode ? true, gocode
 , withGodef ? true, godef
 , withGotools? true, gotools
+, withRust ? true, rust-analyzer
 , withTypescript ? true, nodePackages
 , fixDarwinDylibNames, Cocoa
 }:
@@ -73,6 +74,9 @@ stdenv.mkDerivation {
     TARGET=$out/lib/ycmd/third_party/go/src/golang.org/x/tools/cmd/gopls
     mkdir -p $TARGET
     ln -sf ${gotools}/bin/gopls $TARGET
+  '' + lib.optionalString withRust ''
+    TARGET=$out/lib/ycmd/third_party/rust-analyzer
+    ln -sf ${rust-analyzer} $TARGET
   '' + lib.optionalString withTypescript ''
     TARGET=$out/lib/ycmd/third_party/tsserver
     ln -sf ${nodePackages.typescript} $TARGET
