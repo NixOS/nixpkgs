@@ -1528,6 +1528,8 @@ in {
 
   caldav = callPackage ../development/python-modules/caldav { };
 
+  callee = callPackage ../development/python-modules/callee { };
+
   calmjs-parse = callPackage ../development/python-modules/calmjs-parse { };
 
   can = callPackage ../development/python-modules/can { };
