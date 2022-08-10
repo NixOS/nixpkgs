@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "INSTALL_ROOT=$(out)" ];
 
   meta = with lib; {
+    mainProgram = "vulkanCapsViewer";
     description = "Vulkan hardware capability viewer";
     longDescription = ''
       Client application to display hardware implementation details for GPUs supporting the Vulkan API by Khronos.
