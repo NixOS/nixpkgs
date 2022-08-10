@@ -9721,6 +9721,8 @@ in {
 
   sense-energy = callPackage ../development/python-modules/sense-energy { };
 
+  sensor-state-data = callPackage ../development/python-modules/sensor-state-data { };
+
   sentencepiece = callPackage ../development/python-modules/sentencepiece {
     inherit (pkgs) sentencepiece;
   };
