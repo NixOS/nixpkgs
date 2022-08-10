@@ -104,6 +104,11 @@ in
     };
   };
 
+  nfd = callPackage ../development/lua-modules/nfd {
+    inherit (lib) maintainers;
+    inherit (pkgs.gnome) zenity;
+  };
+
   vicious = luaLib.toLuaModule( stdenv.mkDerivation rec {
     pname = "vicious";
     version = "2.5.1";
