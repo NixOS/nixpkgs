@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, protobuf, grpcio, setuptools }:
+{ lib, buildPythonPackage, fetchPypi, protobuf, grpcio, setuptools, pythonRelaxDepsHook }:
 
 buildPythonPackage rec {
   pname = "grpcio-tools";
@@ -12,6 +12,10 @@ buildPythonPackage rec {
   outputs = [ "out" "dev" ];
 
   enableParallelBuilding = true;
+
+  pythonRelaxDeps = [ "protobuf" ];
+
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = [ protobuf grpcio setuptools ];
 
