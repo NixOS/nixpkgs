@@ -9,7 +9,7 @@ in {
 
   config = mkIf cfg.enable {
     programs.bash.interactiveShellInit = mkBefore ''
-      source ${pkgs.blesh}/share/ble.sh
+      source ${pkgs.blesh}/share/blesh/ble.sh
     '';
   };
   meta.maintainers = with maintainers; [ laalsaas ];
