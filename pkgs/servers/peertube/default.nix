@@ -6,18 +6,18 @@ let
     if stdenv.hostPlatform.system == "x86_64-linux" then "linux-x64"
     else throw "Unsupported architecture: ${stdenv.hostPlatform.system}";
 
-  version = "4.2.1";
+  version = "4.2.2";
 
   source = fetchFromGitHub {
     owner = "Chocobozzz";
     repo = "PeerTube";
     rev = "v${version}";
-    sha256 = "sha256-bb22/GidSPaRtvbht6FzVqTGzzNDYgBdHqHGnzA1Iy0=";
+    sha256 = "sha256-q6wSk5AO91Z6dw5MgpO7QTAlA8Q5Xx1CboBr7SElVUA=";
   };
 
   yarnOfflineCacheServer = fetchYarnDeps {
     yarnLock = "${source}/yarn.lock";
-    sha256 = "sha256-7fYQ4YS92XbzeI7nwpQfI2reDp6EiDgncK5YGSWzHF0=";
+    sha256 = "sha256-MMsxh20jcbW4YYsJyoupKbT9+Xa1BWZAmYHoj2/t+LM=";
   };
 
   yarnOfflineCacheTools = fetchYarnDeps {
