@@ -136,6 +136,9 @@ in stdenvNoCC.mkDerivation (args // {
 
       mkdir -p "$HOME/nuget_pkgs"
 
+      ${dotnet-sdk}/bin/dotnet tool restore
+      mv $HOME/.nuget/packages/* $HOME/nuget_pkgs || true
+
       for project in "${lib.concatStringsSep "\" \"" ((lib.toList projectFile) ++ lib.optionals (testProjectFile != "") (lib.toList testProjectFile))}"; do
         ${dotnet-sdk}/bin/dotnet restore "$project" \
           ${lib.optionalString (!enableParallelBuilding) "--disable-parallel"} \

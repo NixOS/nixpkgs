@@ -13,6 +13,8 @@ dotnetConfigureHook() {
         parallelFlag="--disable-parallel"
     fi
 
+    env dotnet tool restore --add-source "@nugetSource@/lib"
+
     for project in ${projectFile[@]} ${testProjectFile[@]}; do
         env \
             dotnet restore "$project" \
