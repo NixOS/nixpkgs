@@ -5573,6 +5573,8 @@ in {
 
   mnist = callPackage ../development/python-modules/mnist { };
 
+  moat-ble = callPackage ../development/python-modules/moat-ble { };
+
   mocket = callPackage ../development/python-modules/mocket { };
 
   mock = callPackage ../development/python-modules/mock { };
