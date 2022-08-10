@@ -51,7 +51,7 @@ with localPython.pkgs; buildPythonApplication rec {
       --replace "six>=1.11.0,<1.15.0" "six==1.16.0" \
       --replace "requests>=2.20.1,<=2.26" "requests==2.28.1" \
       --replace "jmespath>=0.7.1,<1.0.0" "jmespath==1.0.1" \
-      --replace "botocore>1.23.41,<1.24.0" "botocore==1.27.31"
+      --replace "botocore>1.23.41,<1.24.0" "botocore>1.23.41,<1.27.49"
   '';
 
   buildInputs = [

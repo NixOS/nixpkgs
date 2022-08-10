@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyotgw";
-  version = "2.0.1";
+  version = "2.0.2";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mvn23";
     repo = pname;
     rev = version;
-    hash = "sha256-2mO8/qBG01zR0LHS4ajaNHrPsM//4i4gKnviy2aGeRs=";
+    hash = "sha256-lmhFQ1HhRuiS++NsELA53YafrJ9uX2UDBQ9Kgyq0N0o=";
   };
 
   propagatedBuildInputs = [
