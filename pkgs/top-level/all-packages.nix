@@ -2533,9 +2533,13 @@ with pkgs;
 
   hime = callPackage ../tools/inputmethods/hime {};
 
-  himitsu = callPackage ../tools/security/himitsu { };
+  himitsu = callPackage ../tools/security/himitsu {
+    inherit (harePackages) hare;
+  };
 
-  himitsu-firefox = callPackage ../tools/security/himitsu-firefox { };
+  himitsu-firefox = callPackage ../tools/security/himitsu-firefox {
+    inherit (harePackages) hare;
+  };
 
   hinit = haskell.lib.compose.justStaticExecutables haskellPackages.hinit;
 
