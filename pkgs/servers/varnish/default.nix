@@ -53,7 +53,7 @@ in
     hash = "sha256-a4W/dI7jeaoI43UE+G6tS6fgzEDqsXI8CUv+Wh4HJus=";
   };
   varnish71 = common {
-    version = "7.1.0";
-    hash = "sha256-9Uq4hoVmdmTls8OetWrIxiS2wQk0Nqf4xVVJEUTGnro=";
+    version = "7.1.1";
+    hash = "sha256-LK++JZDn1Yp7rIrZm+kuRA/k04raaBbdiDbyL6UToZA=";
   };
 }
