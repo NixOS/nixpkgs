@@ -8128,7 +8128,7 @@ with pkgs;
 
   motion = callPackage ../applications/video/motion { };
 
-  moz-phab = python3Packages.callPackage ../applications/misc/moz-phab { };
+  mozphab = callPackage ../applications/misc/mozphab { };
 
   mtail = callPackage ../servers/monitoring/mtail { };
 
