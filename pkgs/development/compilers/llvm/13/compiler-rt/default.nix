@@ -1,4 +1,4 @@
-{ lib, stdenv, llvm_meta, version, src, cmake, python3, libllvm, libcxxabi }:
+{ lib, stdenv, llvm_meta, version, src, cmake, python3, xcbuild, libllvm, libcxxabi }:
 
 let
 
@@ -16,7 +16,8 @@ stdenv.mkDerivation {
   inherit src;
   sourceRoot = "source/compiler-rt";
 
-  nativeBuildInputs = [ cmake python3 libllvm.dev ];
+  nativeBuildInputs = [ cmake python3 libllvm.dev ]
+    ++ lib.optional stdenv.isDarwin xcbuild.xcrun;
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
 
   NIX_CFLAGS_COMPILE = [
@@ -62,9 +63,11 @@ stdenv.mkDerivation {
     # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
     # extra `/`.
     ./normalize-var.patch
-  ] # Prevent a compilation error on darwin
-    ++ lib.optional stdenv.hostPlatform.isDarwin ./darwin-targetconditionals.patch
-    ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch;
+    # Prevent a compilation error on darwin
+    ./darwin-targetconditionals.patch
+    ../../common/compiler-rt/darwin-plistbuddy-workaround.patch
+    ./armv7l.patch
+  ];
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
   # to get it, but they're unfree. Since LLVM is rather central to the stdenv, we patch out TSAN support so that Hydra
@@ -75,8 +78,6 @@ stdenv.mkDerivation {
     substituteInPlace cmake/builtin-config-ix.cmake \
       --replace 'set(X86 i386)' 'set(X86 i386 i486 i586 i686)'
   '' + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace cmake/builtin-config-ix.cmake \
-      --replace 'set(ARM64 arm64 arm64e)' 'set(ARM64)'
     substituteInPlace cmake/config-ix.cmake \
       --replace 'set(COMPILER_RT_HAS_TSAN TRUE)' 'set(COMPILER_RT_HAS_TSAN FALSE)'
   '' + lib.optionalString (useLLVM) ''

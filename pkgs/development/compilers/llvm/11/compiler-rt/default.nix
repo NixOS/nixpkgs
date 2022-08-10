@@ -1,4 +1,4 @@
-{ lib, stdenv, llvm_meta, version, fetch, cmake, python3, libllvm, libcxxabi }:
+{ lib, stdenv, llvm_meta, version, fetch, cmake, python3, xcbuild, libllvm, libcxxabi }:
 
 let
 
@@ -15,7 +15,8 @@ stdenv.mkDerivation {
   inherit version;
   src = fetch "compiler-rt" "0x1j8ngf1zj63wlnns9vlibafq48qcm72p4jpaxkmkb4qw0grwfy";
 
-  nativeBuildInputs = [ cmake python3 libllvm.dev ];
+  nativeBuildInputs = [ cmake python3 libllvm.dev ]
+     ++ lib.optional stdenv.isDarwin xcbuild.xcrun;
 
   NIX_CFLAGS_COMPILE = [
     "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
@@ -59,8 +60,9 @@ stdenv.mkDerivation {
     # extra `/`.
     ./normalize-var.patch
     ../../common/compiler-rt/libsanitizer-no-cyclades-11.patch
-  ] ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch;
-
+    ../../common/compiler-rt/darwin-plistbuddy-workaround.patch
+    ./armv7l.patch
+  ];
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     cmakeFlagsArray+=("-DCMAKE_LIPO=$(command -v ${stdenv.cc.targetPrefix}lipo)")
@@ -75,8 +77,6 @@ stdenv.mkDerivation {
     substituteInPlace cmake/builtin-config-ix.cmake \
       --replace 'set(X86 i386)' 'set(X86 i386 i486 i586 i686)'
   '' + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace cmake/builtin-config-ix.cmake \
-      --replace 'foreach(arch ''${ARM64})' 'foreach(arch)'
     substituteInPlace cmake/config-ix.cmake \
       --replace 'set(COMPILER_RT_HAS_TSAN TRUE)' 'set(COMPILER_RT_HAS_TSAN FALSE)'
   '' + lib.optionalString (useLLVM) ''
