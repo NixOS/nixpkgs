@@ -20,7 +20,7 @@
   <literal
    xlink:href="https://discourse.nixos.org">Discourse</literal>,
   the <link
-   xlink:href="https://matrix.to/#/#nix:nixos.org">Matrix room</link>,
+   xlink:href="https://matrix.to/#nix:nixos.org">Matrix room</link>,
   or on the <link
    xlink:href="irc://irc.libera.chat/#nixos">
   <literal>#nixos</literal> channel on Libera.Chat</link>.
