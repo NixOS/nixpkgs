@@ -2,6 +2,7 @@
 # Please dont edit it manually, your changes might get overwritten!
 
 { fetchNuGet }: [
+  (fetchNuGet { pname = "CocoR"; version = "2014.12.24"; sha256 = "0ps8h7aawkcc1910qnh13llzb01pvgsjmg862pxp0p4wca2dn7a2"; })
   (fetchNuGet { pname = "Microsoft.Bcl.AsyncInterfaces"; version = "6.0.0"; sha256 = "15gqy2m14fdlvy1g59207h5kisznm355kbw010gy19vh47z8gpz3"; })
   (fetchNuGet { pname = "Microsoft.CodeCoverage"; version = "16.2.0"; sha256 = "07h1ylca2j7a4hznq4m4b8nrzv1lw7gcf848k2a3nbm6rapv61ki"; })
   (fetchNuGet { pname = "Microsoft.CSharp"; version = "4.0.1"; sha256 = "0zxc0apx1gcx361jlq8smc9pfdgmyjh6hpka8dypc9w23nlsh6yj"; })
