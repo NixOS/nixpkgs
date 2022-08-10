@@ -49,10 +49,10 @@
       elpaBuild {
         pname = "annotate";
         ename = "annotate";
-        version = "1.7.0";
+        version = "1.7.1";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/annotate-1.7.0.tar";
-          sha256 = "0bpicd0m9h1n56ywinfa0wykhx86sxn8i1f2j5vwhwcidap42qaa";
+          url = "https://elpa.nongnu.org/nongnu/annotate-1.7.1.tar";
+          sha256 = "0jyzx5z10mv9b134jz4hkp1mbc9f1ki794cr5na9zwvpd9q3j9iy";
         };
         packageRequires = [];
         meta = {
@@ -144,10 +144,10 @@
       elpaBuild {
         pname = "autothemer";
         ename = "autothemer";
-        version = "0.2.3";
+        version = "0.2.5";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/autothemer-0.2.3.tar";
-          sha256 = "10r4lf3nl7mk6yzfcyld5k0njslw8ly2sd0iz1zkzywnv31lsxnd";
+          url = "https://elpa.nongnu.org/nongnu/autothemer-0.2.5.tar";
+          sha256 = "1g07j8fmyqhhas0ci2f9l7i5l238cpb02vr93gyn2a3r3lq6wn4d";
         };
         packageRequires = [ cl-lib dash emacs ];
         meta = {
@@ -296,10 +296,10 @@
       elpaBuild {
         pname = "clojure-mode";
         ename = "clojure-mode";
-        version = "5.14.0";
+        version = "5.15.1";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/clojure-mode-5.14.0.tar";
-          sha256 = "1lirhp6m5r050dm73nrslgzdgy6rdbxn02wal8n52q37m2armra2";
+          url = "https://elpa.nongnu.org/nongnu/clojure-mode-5.15.1.tar";
+          sha256 = "14j6v32cbj52n91f7ckbjlam60rszh05r09bwv579p1xs2m7s7q3";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -473,10 +473,10 @@
       elpaBuild {
         pname = "dockerfile-mode";
         ename = "dockerfile-mode";
-        version = "1.5";
+        version = "1.7";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/dockerfile-mode-1.5.tar";
-          sha256 = "0dz91i4ak3v0x1v75ibhjjz211k9g6qimz4lxn3x424j7dlpa9f3";
+          url = "https://elpa.nongnu.org/nongnu/dockerfile-mode-1.7.tar";
+          sha256 = "1kb768kv48ypw7fm5xcvkw4pq9mfkvv0bg1inlhfifkb4i9kmz3l";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -1123,10 +1123,10 @@
       elpaBuild {
         pname = "gruvbox-theme";
         ename = "gruvbox-theme";
-        version = "1.26.0";
+        version = "1.27.0";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/gruvbox-theme-1.26.0.tar";
-          sha256 = "19q5i0jz01hdn09wwg929yva6278fhyvk68id5p9dyi8h2n73djn";
+          url = "https://elpa.nongnu.org/nongnu/gruvbox-theme-1.27.0.tar";
+          sha256 = "0p36b2rrhizfrj8i86zm810bh0w7qikb5cwpyn106yfvgcv39jl8";
         };
         packageRequires = [ autothemer ];
         meta = {
@@ -1198,10 +1198,10 @@
       elpaBuild {
         pname = "helm";
         ename = "helm";
-        version = "3.8.6";
+        version = "3.8.7";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/helm-3.8.6.tar";
-          sha256 = "0h0l36wmzxi03viy0jd3zri84big0syiilvjm639nqhzsr1lbvy2";
+          url = "https://elpa.nongnu.org/nongnu/helm-3.8.7.tar";
+          sha256 = "1n0m061amrzm0xpgqy2mp9vrk2960gqhl5hi6c1smcmm7nxqwz12";
         };
         packageRequires = [ helm-core popup ];
         meta = {
@@ -1213,10 +1213,10 @@
       elpaBuild {
         pname = "helm-core";
         ename = "helm-core";
-        version = "3.8.6";
+        version = "3.8.7";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/helm-core-3.8.6.tar";
-          sha256 = "0yzzwdggd37m7kv0gh4amc7l5x0r5x2pxi3lfs36hq2hfsqlfkza";
+          url = "https://elpa.nongnu.org/nongnu/helm-core-3.8.7.tar";
+          sha256 = "1sak74v3gg34zzlbbgvlzvg7gw32fhcbxp5kigigmwvvbj5imgs7";
         };
         packageRequires = [ async emacs ];
         meta = {
@@ -1330,10 +1330,10 @@
       elpaBuild {
         pname = "inf-clojure";
         ename = "inf-clojure";
-        version = "3.2.0";
+        version = "3.2.1";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/inf-clojure-3.2.0.tar";
-          sha256 = "1a9hr28l8cxf5j9b5z0mwds4jd36bhdqz9r86c85rylgaibx5ky7";
+          url = "https://elpa.nongnu.org/nongnu/inf-clojure-3.2.1.tar";
+          sha256 = "0p1q51wn67abwhn6qa01f190czaq33nmy4ir1jrcxsny4vnbxvx4";
         };
         packageRequires = [ clojure-mode emacs ];
         meta = {
@@ -1959,10 +1959,10 @@
       elpaBuild {
         pname = "popon";
         ename = "popon";
-        version = "0.7";
+        version = "0.9";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/popon-0.7.tar";
-          sha256 = "0sr0cv9jlaj83sgk1cb7wd6r12g6gmzdjzm077gxa6jy9p4qrv0q";
+          url = "https://elpa.nongnu.org/nongnu/popon-0.9.tar";
+          sha256 = "1vnrdjg63fcpgzzc45l9cx67yb2lnk5prfp5js4dpdhz93d14qck";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -2338,10 +2338,10 @@
       elpaBuild {
         pname = "subed";
         ename = "subed";
-        version = "1.0.5";
+        version = "1.0.7";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/subed-1.0.5.tar";
-          sha256 = "1wpkwab6scmc9d3bzp5161d8agmcjacpijs8xqb1mpbyvl1jvavc";
+          url = "https://elpa.nongnu.org/nongnu/subed-1.0.7.tar";
+          sha256 = "0js48yar8xgj3wjmlkv3k5208q1zvv74sg4lhk6asiy4cq3pqjia";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -2712,10 +2712,10 @@
       elpaBuild {
         pname = "xah-fly-keys";
         ename = "xah-fly-keys";
-        version = "17.17.20220709145456";
+        version = "17.19.20220806194323";
         src = fetchurl {
-          url = "https://elpa.nongnu.org/nongnu/xah-fly-keys-17.17.20220709145456.tar";
-          sha256 = "1npgdc9f1vj1d9nyfh30vskybqs2lwhd31b2a7i79ifrxs48kqr4";
+          url = "https://elpa.nongnu.org/nongnu/xah-fly-keys-17.19.20220806194323.tar";
+          sha256 = "1cflsvp1cpyr3zsj2dij3mc36lprwjdhrvxx2k8ilavhzi4dn64v";
         };
         packageRequires = [ emacs ];
         meta = {
