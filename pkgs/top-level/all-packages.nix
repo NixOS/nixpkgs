@@ -35855,6 +35855,8 @@ with pkgs;
     gtk = lib.getDev gtk3;
   };
   
+  moda = callPackage ../applications/science/engineering/moda {
+    gtk = lib.getDev gtk3;
   };
 
   strictdoc = python3.pkgs.callPackage ../applications/science/engineering/strictdoc { };
