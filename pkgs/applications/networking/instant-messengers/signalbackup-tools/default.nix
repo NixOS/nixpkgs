@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-z/RAvNUss9rNuBQvxjJQl66ZMrlxvmS9at8L/vSG0XU=";
   };
 
+  # TODO: Remove when updating to next release.
   patches = [
     (fetchpatch {
       name = "fix-platform-checks.patch";
@@ -19,25 +20,29 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    patchShebangs BUILDSCRIPT_MULTIPROC.bash44
+  '';
+
   buildInputs = [ openssl sqlite ];
-  buildFlags = [
-    "-Wall"
-    "-Wextra"
-    "-Wshadow"
-    "-Wold-style-cast"
-    "-Woverloaded-virtual"
-    "-pedantic"
-    "-std=c++2a"
-    "-O3"
-    "-march=native"
-  ];
+
+  # Manually define `CXXFLAGS` and `LDFLAGS` on Darwin since the build scripts includes flags
+  # that don't work on Darwin.
   buildPhase = ''
-    $CXX $buildFlags */*.cc *.cc -lcrypto -lsqlite3 -o signalbackup-tools
+    runHook preBuild
+  '' + lib.optionalString stdenv.isDarwin ''
+    export CXXFLAGS="-Wall -Wextra -Wshadow -Wold-style-cast -Woverloaded-virtual -pedantic -O3"
+    export LDFLAGS="-Wall -Wextra -O3"
+  '' + ''
+    ./BUILDSCRIPT_MULTIPROC.bash44
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     cp signalbackup-tools $out/bin/
+    runHook postInstall
   '';
 
   meta = with lib; {
