@@ -11,6 +11,7 @@ let
     NODE_CONFIG_DIR = "/var/lib/peertube/config";
     NODE_ENV = "production";
     NODE_EXTRA_CA_CERTS = "/etc/ssl/certs/ca-certificates.crt";
+    NPM_CONFIG_CACHE = "/var/cache/peertube/.npm";
     NPM_CONFIG_PREFIX = cfg.package;
     HOME = cfg.package;
   };
@@ -425,6 +426,9 @@ in {
         # State directory and mode
         StateDirectory = "peertube";
         StateDirectoryMode = "0750";
+        # Cache directory and mode
+        CacheDirectory = "peertube";
+        CacheDirectoryMode = "0750";
         # Access write directories
         ReadWritePaths = cfg.dataDirs;
         # Environment
