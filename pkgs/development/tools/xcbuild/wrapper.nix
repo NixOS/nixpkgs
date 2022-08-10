@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, writeText, writeShellScriptBin, runCommand
+{ lib, stdenv, makeWrapper, writeText, writeShellScriptBin, runCommand
 , CoreServices, ImageIO, CoreGraphics
 , runtimeShell, callPackage
 , xcodePlatform ? stdenv.targetPlatform.xcodePlatform or "MacOSX"
@@ -9,6 +9,7 @@ let
 
   toolchainName = "com.apple.dt.toolchain.XcodeDefault";
   sdkName = "${xcodePlatform}${sdkVer}";
+  xcrunSdkName = lib.toLower xcodePlatform;
 
   # TODO: expose MACOSX_DEPLOYMENT_TARGET in nix so we can use it here.
   sdkBuildVersion = "17E189";
@@ -51,6 +52,21 @@ done
   '';
 
   xcrun = writeShellScriptBin "xcrun" ''
+args=( "$@" )
+
+# If an SDK was requested, check that it matches.
+for ((i = 0; i < ''${#args[@]}; i++)); do
+  case "''${args[i]}" in
+    --sdk | -sdk)
+      i=$((i + 1))
+      if [[ "''${args[i]}" != '${xcrunSdkName}' ]]; then
+        echo >&2 "xcodebuild: error: SDK \"''${args[i]}\" cannot be located."
+        exit 1
+      fi
+      ;;
+  esac
+done
+
 while [ $# -gt 0 ]; do
    case "$1" in
          --sdk | -sdk) shift ;;
@@ -74,6 +90,7 @@ while [ $# -gt 0 ]; do
     esac
     shift
 done
+
 if ! [[ -z "$@" ]]; then
    exec "$@"
 fi
