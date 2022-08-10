@@ -7212,7 +7212,6 @@ with pkgs;
   };
 
   harePackages = recurseIntoAttrs (callPackage ../development/compilers/hare { });
-  inherit (harePackages) hare harec;
 
   ham = pkgs.perlPackages.ham;
 
