@@ -9727,6 +9727,8 @@ in {
 
   sensor-state-data = callPackage ../development/python-modules/sensor-state-data { };
 
+  sensorpush-ble = callPackage ../development/python-modules/sensorpush-ble { };
+
   sentencepiece = callPackage ../development/python-modules/sentencepiece {
     inherit (pkgs) sentencepiece;
   };
