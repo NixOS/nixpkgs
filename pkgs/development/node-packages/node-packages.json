@@ -294,7 +294,7 @@
 , "svgo"
 , "swagger"
 , "tailwindcss"
-, {"tedicross": "git+https://github.com/TediCross/TediCross.git#v0.8.7"}
+, {"tedicross": "git+https://github.com/TediCross/TediCross.git#v0.11.2"}
 , "teck-programmer"
 , "tern"
 , "terser"

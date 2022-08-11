@@ -438,11 +438,11 @@ final: prev: {
     buildInputs = [ pkgs.libusb1 ];
   };
 
-  tedicross = prev."tedicross-git+https://github.com/TediCross/TediCross.git#v0.8.7".override {
+  tedicross = prev."tedicross-git+https://github.com/TediCross/TediCross.git#v0.11.2".override {
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postInstall = ''
-      makeWrapper '${nodejs}/bin/node' "$out/bin/tedicross" \
-        --add-flags "$out/lib/node_modules/tedicross/main.js"
+      makeWrapper '${pkgs.nodejs-16_x}/bin/node' "$out/bin/tedicross" \
+        --add-flags "$out/lib/node_modules/tedicross/dist/main.js"
     '';
   };
 
