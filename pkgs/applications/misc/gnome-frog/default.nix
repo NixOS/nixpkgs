@@ -53,9 +53,12 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook4
   ];
 
+  propagatedNativeBuildInputs = [
+    gobject-introspection
+  ];
+
   buildInputs = [
     librsvg
-    gobject-introspection
     libnotify
     libadwaita
     libportal
