@@ -1,7 +1,7 @@
 { lib
+, bluetooth-sensor-state-data
 , buildPythonPackage
 , fetchFromGitHub
-, home-assistant-bluetooth
 , poetry-core
 , pytestCheckHook
 , pythonOlder
@@ -9,21 +9,26 @@
 }:
 
 buildPythonPackage rec {
-  pname = "sensor-state-data";
-  version = "2.1.2";
+  pname = "qingping-ble";
+  version = "0.2.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
-    owner = "Bluetooth-Devices";
+    owner = "bluetooth-devices";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Z4sHrj0APoCfPhdSKB9guRrPo4TD47+GcQ0KoFgb268=";
+    hash = "sha256-+iUZIsaSYgptHXtNSc9sJiBU8CUEFPDsLVGuFR5WvDw=";
   };
 
   nativeBuildInputs = [
     poetry-core
+  ];
+
+  propagatedBuildInputs = [
+    bluetooth-sensor-state-data
+    sensor-state-data
   ];
 
   checkInputs = [
@@ -32,17 +37,17 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=sensor_state_data --cov-report=term-missing:skip-covered" ""
+      --replace " --cov=qingping_ble --cov-report=term-missing:skip-covered" ""
   '';
 
   pythonImportsCheck = [
-    "sensor_state_data"
+    "qingping_ble"
   ];
 
   meta = with lib; {
-    description = "Models for storing and converting Sensor Data state";
-    homepage = "https://github.com/bluetooth-devices/sensor-state-data";
-    license = with licenses; [ asl20 ];
+    description = "Library for Qingping BLE devices";
+    homepage = "https://github.com/bluetooth-devices/qingping-ble";
+    license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
 }
