@@ -8,6 +8,7 @@
 , starlette
 , httpx
 , pytest-asyncio
+, asgi-lifespan
 }:
 
 buildPythonPackage rec {
@@ -29,13 +30,18 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    asgi-lifespan
     httpx
     pytest-asyncio
     pytestCheckHook
     starlette
   ];
 
-  doCheck = false; # asgi-lifespan missing
+  disabledTests = [
+    # Require network
+    "test_multipart"
+    "test_multipart_failure_wrong_token"
+  ];
 
   pythonImportsCheck = [ "asgi_csrf" ];
 
