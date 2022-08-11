@@ -9,7 +9,8 @@ let
 
   edgeVariant = {
     version = "5.19.0";
-    hash = "sha256-cudv8Bf58VceZ+zet5XBrTwq0GzYBWX3Od6dtsc5GKU=";
+    suffix = "xanmod2";
+    hash = "sha256-PJY80r5jciVJwB1S82zhii+nplb+D+V7btNq/pVS/NI=";
   };
 
   ttVariant = {
