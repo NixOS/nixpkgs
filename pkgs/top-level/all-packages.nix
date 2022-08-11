@@ -34575,6 +34575,13 @@ with pkgs;
     jre = openjdk11;
   };
 
+  faiss = callPackage ../development/libraries/science/math/faiss {
+    pythonPackages = python3Packages;
+    # faiss wants the "-doxygen" option
+    # available only since swig4
+    swig = swig4;
+  };
+
   fityk = callPackage ../applications/science/misc/fityk { };
 
   galario = callPackage ../development/libraries/galario { };
