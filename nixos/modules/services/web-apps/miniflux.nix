@@ -1,42 +1,168 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 let
   cfg = config.services.miniflux;
 
-  defaultAddress = "localhost:8080";
+  databaseUrl = "";
 
-  dbUser = "miniflux";
-  dbName = "miniflux";
+  appConfig = {
+    LISTEN_ADDR = cfg.listenAddress;
+    DATABASE_URL = dbconnectionString;
+    RUN_MIGRATIONS = "1";
+    CREATE_ADMIN = "1";
+  } // cfg.settings;
+
+  dbPassword =
+    if cfg.database.passwordFile != null
+    then "$(cat $(cfg.database.passwordFile))"
+    else cfg.database.password;
+
+  dbconnectionString =
+    if cfg.database.createLocally then
+      if cfg.database.socket != null
+      # Socket connection
+      then "user=${cfg.database.user} dbname=${cfg.database.name} host=${cfg.database.socket}"
+      # TCP connection
+      else "user=${cfg.database.user} password=${dbPassword} host=${cfg.database.host} port=${toString cfg.database.port}"
+    else
+      cfg.database.connectionString;
 
   pgbin = "${config.services.postgresql.package}/bin";
   preStart = pkgs.writeScript "miniflux-pre-start" ''
     #!${pkgs.runtimeShell}
-    ${pgbin}/psql "${dbName}" -c "CREATE EXTENSION IF NOT EXISTS hstore"
+    ${pgbin}/psql "${dbconnectionString}" -c "CREATE EXTENSION IF NOT EXISTS hstore"
   '';
 in
-
 {
   options = {
     services.miniflux = {
       enable = mkEnableOption "miniflux and creates a local postgres database for it";
 
-      config = mkOption {
+      user = mkOption {
+        type = types.str;
+        default = "miniflux";
+        description = lib.mdDoc "User account under which miniflux runs.";
+      };
+
+      listenAddress = mkOption {
+        default = "localhost:8080";
+        type = types.str;
+        description = lib.mdDoc ''
+          IP address and port of the server.
+        '';
+      };
+
+      settings = mkOption {
         type = types.attrsOf types.str;
         example = literalExpression ''
           {
-            CLEANUP_FREQUENCY = "48";
-            LISTEN_ADDR = "localhost:8080";
+            CLEANUP_FREQUENCY_HOURS = "48";
+          }
+        '';
+        default = {
+          RUN_MIGRATIONS = "1";
+          CREATE_ADMIN = "1";
+        };
+        defaultText = literalExpression ''
+          {
+            RUN_MIGRATIONS = "1";
+            CREATE_ADMIN = "1";
           }
         '';
         description = lib.mdDoc ''
           Configuration for Miniflux, refer to
           <https://miniflux.app/docs/configuration.html>
           for documentation on the supported values.
-
-          Correct configuration for the database is already provided.
-          By default, listens on ${defaultAddress}.
         '';
+      };
+
+      database = {
+        host = mkOption {
+          type = types.str;
+          default = "localhost";
+          defaultText = literalExpression ''"localhost"'';
+          description = lib.mdDoc ''
+            Database host address.
+          '';
+        };
+
+        port = mkOption {
+          type = types.port;
+          default = config.services.postgresql.port;
+          defaultText = literalExpression ''
+            config.${options.services.postgresql.port}
+          '';
+          description = lib.mdDoc ''
+            Database host port.
+          '';
+        };
+
+        name = mkOption {
+          type = types.str;
+          default = "miniflux";
+          defaultText = literalExpression ''"miniflux'';
+          description = lib.mdDoc ''
+            Database name.
+          '';
+        };
+
+        user = mkOption {
+          type = types.str;
+          default = "miniflux";
+          defaultText = literalExpression ''"miniflux'';
+          description = lib.mdDoc ''
+            Database user.
+          '';
+        };
+
+        password = mkOption {
+          type = types.str;
+          default = "miniflux";
+          defaultText = literalExpression ''"miniflux'';
+          description = lib.mdDoc ''
+            Database password.
+          '';
+        };
+
+        passwordFile = mkOption {
+          type = types.nullOr types.path;
+          default = null;
+          defaultText = literalExpression "null";
+          example = "/run/secrets/miniflux-password";
+          description = lib.mdDoc ''
+            A file containing the password corresponding to
+            {option}`database.user`.
+          '';
+        };
+
+        socket = mkOption {
+          type = types.nullOr types.path;
+          default = if cfg.database.createLocally then "/run/postgresql" else null;
+          defaultText = literalExpression "null";
+          example = "/run/postgresql";
+          description = lib.mdDoc ''
+            Path to the unix socket file to use for the database authentication.
+          '';
+        };
+
+        createLocally = mkOption {
+          type = types.bool;
+          default = false;
+          defaultText = literalExpression "false";
+          description = lib.mdDoc ''
+            Whether to create a local database automatically.
+          '';
+        };
+
+        connectionString = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          defaultText = literalExpression "null";
+          description = lib.mdDoc ''
+            Database connection string.
+          '';
+        };
       };
 
       package = mkOption {
@@ -48,7 +174,7 @@ in
         '';
       };
 
-      adminCredentialsFile = mkOption  {
+      adminCredentialsFile = mkOption {
         type = types.path;
         description = lib.mdDoc ''
           File containing the ADMIN_USERNAME and
@@ -61,23 +187,39 @@ in
   };
 
   config = mkIf cfg.enable {
+    assertions =
+      let
+      in
+      [
+        {
+          assertion = cfg.database.createLocally -> cfg.database.connectionString == null;
+          message = "services.miniflux.database.connectionString cannot be set if services.miniflux.database.createLocally is true;";
+        }
+        {
+          assertion = !cfg.database.createLocally -> cfg.database.connectionString == null;
+          message = "services.miniflux.database.connectionString cannot be null if services.miniflux.database.createLocally is false;";
+        }
+      ];
 
-    services.miniflux.config =  {
-      LISTEN_ADDR = mkDefault defaultAddress;
-      DATABASE_URL = "user=${dbUser} host=/run/postgresql dbname=${dbName}";
-      RUN_MIGRATIONS = "1";
-      CREATE_ADMIN = "1";
+    users.users."${cfg.user}" = {
+      description = "Miniflux Service";
+      group = cfg.user;
+      createHome = false;
+      isSystemUser = true;
+      useDefaultShell = true;
     };
 
-    services.postgresql = {
-      enable = true;
-      ensureUsers = [ {
-        name = dbUser;
-        ensurePermissions = {
-          "DATABASE ${dbName}" = "ALL PRIVILEGES";
-        };
-      } ];
-      ensureDatabases = [ dbName ];
+    services.postgresql = mkIf cfg.database.createLocally {
+      enable = mkDefault true;
+      ensureDatabases = [ cfg.database.name ];
+      ensureUsers = [
+        {
+          name = cfg.database.user;
+          ensurePermissions = {
+            "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES";
+          };
+        }
+      ];
     };
 
     systemd.services.miniflux-dbsetup = {
@@ -86,7 +228,7 @@ in
       after = [ "network.target" "postgresql.service" ];
       serviceConfig = {
         Type = "oneshot";
-        User = config.services.postgresql.superUser;
+        User = cfg.user;
         ExecStart = preStart;
       };
     };
@@ -96,12 +238,12 @@ in
       wantedBy = [ "multi-user.target" ];
       requires = [ "miniflux-dbsetup.service" ];
       after = [ "network.target" "postgresql.service" "miniflux-dbsetup.service" ];
+      environment = appConfig;
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/miniflux";
-        User = dbUser;
-        DynamicUser = true;
-        RuntimeDirectory = "miniflux";
+        User = cfg.user;
+        RuntimeDirectory = cfg.user;
         RuntimeDirectoryMode = "0700";
         EnvironmentFile = cfg.adminCredentialsFile;
         # Hardening
@@ -128,9 +270,6 @@ in
         SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
         UMask = "0077";
       };
-
-      environment = cfg.config;
     };
-    environment.systemPackages = [ pkgs.miniflux ];
   };
 }
