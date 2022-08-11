@@ -2314,6 +2314,12 @@
     githubId = 811527;
     name = "Christopher Jefferson";
   };
+  chrispattison = {
+    email = "chpattison@gmail.com";
+    github = "ChrisPattison";
+    githubId = 641627;
+    name = "Chris Pattison";
+  };
   chrispickard = {
     email = "chrispickard9@gmail.com";
     github = "chrispickard";

@@ -21,7 +21,6 @@
 , polkit
 , librsvg
 , libwacom
-, xf86_input_wacom
 , xorg
 , fontconfig
 , tzdata
@@ -33,13 +32,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-settings-daemon";
-  version = "5.4.3";
+  version = "5.4.5";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-3ELsb0hH7GjMjwjsIg2m8k/EBCHIQGW3O7eDaqT2V7I=";
+    hash = "sha256-qjI1z1MuaI5JFqjHap/+aYDQ0YuP9VNnnY6vy/AaKqs=";
   };
 
   patches = [
@@ -65,11 +64,9 @@ stdenv.mkDerivation rec {
     polkit
     librsvg
     libwacom
-    xf86_input_wacom
     xorg.libXext
     xorg.libX11
     xorg.libXi
-    xorg.libXtst
     xorg.libXfixes
     fontconfig
     nss

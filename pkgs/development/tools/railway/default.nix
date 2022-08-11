@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "railway";
-  version = "2.0.0";
+  version = "2.0.8";
 
   src = fetchFromGitHub {
     owner = "railwayapp";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-0849Rm1QSMAJ2jVK0H8sA89bxI2nFDDTEsnSdXTuWTs=";
+    sha256 = "sha256-E6DCY+xM796pQb48xkVQ6d3qgIB528hbCU96SCu2eYI=";
   };
 
   ldflags = [ "-s" "-w" ];

@@ -4720,7 +4720,7 @@ with pkgs;
 
   bdsync = callPackage ../tools/backup/bdsync { };
 
-  beamerpresenter = libsForQt5.callPackage ../applications/office/beamerpresenter { };
+  beamerpresenter = qt6Packages.callPackage ../applications/office/beamerpresenter { };
 
   beanstalkd = callPackage ../servers/beanstalkd { };
 
@@ -11334,6 +11334,8 @@ with pkgs;
 
   tlspool = callPackage ../tools/networking/tlspool { };
 
+  tlsx = callPackage ../tools/security/tlsx { };
+
   tmate = callPackage ../tools/misc/tmate { };
 
   tmate-ssh-server = callPackage ../servers/tmate-ssh-server { };
@@ -16264,6 +16266,8 @@ with pkgs;
   krankerl = callPackage ../development/tools/krankerl { };
 
   krew = callPackage ../development/tools/krew { };
+
+  kube-bench = callPackage ../tools/security/kube-bench { };
 
   kube-hunter = callPackage ../tools/security/kube-hunter { };
 
@@ -22906,7 +22910,10 @@ with pkgs;
   percona-server56 = callPackage ../servers/sql/percona/5.6.x.nix { stdenv = gcc10StdenvCompat; };
   percona-server = percona-server56;
 
-  influxdb = callPackage ../servers/nosql/influxdb { };
+  influxdb = callPackage ../servers/nosql/influxdb {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
+    buildGoModule = buildGo117Module;
+  };
   influxdb2-server = callPackage ../servers/nosql/influxdb2 { };
   influxdb2-cli = callPackage ../servers/nosql/influxdb2/cli.nix { };
   # For backwards compatibility with older versions of influxdb2,
@@ -34555,6 +34562,13 @@ with pkgs;
 
   cytoscape = callPackage ../applications/science/misc/cytoscape {
     jre = openjdk11;
+  };
+
+  faiss = callPackage ../development/libraries/science/math/faiss {
+    pythonPackages = python3Packages;
+    # faiss wants the "-doxygen" option
+    # available only since swig4
+    swig = swig4;
   };
 
   fityk = callPackage ../applications/science/misc/fityk { };
