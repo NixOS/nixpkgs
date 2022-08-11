@@ -101,10 +101,12 @@
   (fetchNuGet { pname = "Microsoft.TestPlatform.ObjectModel"; version = "16.8.3"; sha256 = "0szyg2p18w9lhlp52iylrr97w3kdalab089imhc53x1850avddsg"; })
   (fetchNuGet { pname = "Microsoft.TestPlatform.ObjectModel"; version = "16.9.4"; sha256 = "1jizkbrnm4pv60zch29ki7gj8m7j5whk141x9cwx4kwsd6cfzwi6"; })
   (fetchNuGet { pname = "Microsoft.TestPlatform.ObjectModel"; version = "17.0.0"; sha256 = "1bh5scbvl6ndldqv20sl34h4y257irm9ziv2wyfc3hka6912fhn7"; })
-  (fetchNuGet { pname = "Microsoft.TestPlatform.TestHost"; version = "16.10.0"; sha256 = "1lhwwxlylmklp8wwirfmdc4dzfp2h8fxgw847cqy8by8h5wcwbjc"; })
   (fetchNuGet { pname = "Microsoft.TestPlatform.TestHost"; version = "16.11.0"; sha256 = "0hp1vndf2jhyg1f3miq4g2068z5kpfzy6nmswm25vymghxp1ws4k"; })
-  (fetchNuGet { pname = "Microsoft.TestPlatform.TestHost"; version = "16.8.3"; sha256 = "0lgjvzhh2gkcl1r1f9w97wv5zy0p8iga68ml6v10m9wxh640zdqr"; })
-  (fetchNuGet { pname = "Microsoft.TestPlatform.TestHost"; version = "16.9.4"; sha256 = "14110qzmypr72ywvx3npq7mf4n0gvdr4536v91z1xbapms65am6x"; })
+  # Fix "error NETSDK1152: Found multiple publish output files with the same relative path:"
+  # by removing old versions from the mix.
+  #(fetchNuGet { pname = "Microsoft.TestPlatform.TestHost"; version = "16.10.0"; sha256 = "1lhwwxlylmklp8wwirfmdc4dzfp2h8fxgw847cqy8by8h5wcwbjc"; })
+  #(fetchNuGet { pname = "Microsoft.TestPlatform.TestHost"; version = "16.9.4"; sha256 = "14110qzmypr72ywvx3npq7mf4n0gvdr4536v91z1xbapms65am6x"; })
+  #(fetchNuGet { pname = "Microsoft.TestPlatform.TestHost"; version = "16.8.3"; sha256 = "0lgjvzhh2gkcl1r1f9w97wv5zy0p8iga68ml6v10m9wxh640zdqr"; })
   (fetchNuGet { pname = "Microsoft.VisualStudio.Threading"; version = "16.7.56"; sha256 = "13x0xrsjxd86clf9cjjwmpzlyp8pkrf13riya7igs8zy93zw2qap"; })
   (fetchNuGet { pname = "Microsoft.VisualStudio.Threading.Analyzers"; version = "16.7.56"; sha256 = "04v9df0k7bsc0rzgkw4mnvi43pdrh42vk6xdcwn9m6im33m0nnz2"; })
   (fetchNuGet { pname = "Microsoft.VisualStudio.Validation"; version = "15.5.31"; sha256 = "1ah99rn922qa0sd2k3h64m324f2r32pw8cn4cfihgvwx4qdrpmgw"; })
