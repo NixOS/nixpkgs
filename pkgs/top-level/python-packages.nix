@@ -403,6 +403,8 @@ in {
 
   aiorpcx = callPackage ../development/python-modules/aiorpcx { };
 
+  aiortm = callPackage ../development/python-modules/aiortm { };
+
   aiorun = callPackage ../development/python-modules/aiorun { };
 
   aiosenseme = callPackage ../development/python-modules/aiosenseme { };
