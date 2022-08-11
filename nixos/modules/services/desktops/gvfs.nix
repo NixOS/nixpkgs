@@ -56,6 +56,8 @@ in
 
     services.udev.packages = [ pkgs.libmtp.out ];
 
+    services.udisks2.enable = true;
+
     # Needed for unwrapped applications
     environment.sessionVariables.GIO_EXTRA_MODULES = [ "${cfg.package}/lib/gio/modules" ];
 
