@@ -10129,6 +10129,8 @@ in {
 
   sphinx-external-toc = callPackage ../development/python-modules/sphinx-external-toc { };
 
+  sphinx-fortran = callPackage ../development/python-modules/sphinx-fortran { };
+
   sphinx-jupyterbook-latex = callPackage ../development/python-modules/sphinx-jupyterbook-latex { };
 
   sphinx-multitoc-numbering = callPackage ../development/python-modules/sphinx-multitoc-numbering { };
