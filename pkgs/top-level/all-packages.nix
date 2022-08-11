@@ -12367,6 +12367,8 @@ with pkgs;
 
   zdelta = callPackage ../tools/compression/zdelta { };
 
+  zed = callPackage ../development/tools/zed { };
+
   zellij = callPackage ../tools/misc/zellij {
     inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation;
   };
