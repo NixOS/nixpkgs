@@ -37,5 +37,6 @@ stdenv.mkDerivation {
     maintainers = [ maintainers.eelco ];
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
+    broken = stdenv.isDarwin;
   };
 }
