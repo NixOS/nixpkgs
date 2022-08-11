@@ -375,6 +375,8 @@ in {
 
   aiooncue = callPackage ../development/python-modules/aiooncue { };
 
+  aioopenexchangerates = callPackage ../development/python-modules/aioopenexchangerates { };
+
   aiopg = callPackage ../development/python-modules/aiopg { };
 
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
