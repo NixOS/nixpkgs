@@ -24042,6 +24042,10 @@ with pkgs;
     cudaSupport = false;
   };
 
+  librealsense-gui = callPackage ../development/libraries/librealsense {
+    enableGUI = true;
+  };
+
   libsass = callPackage ../development/libraries/libsass { };
 
   libsepol = callPackage ../os-specific/linux/libsepol { };
