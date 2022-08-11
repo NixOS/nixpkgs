@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "dnsproxy";
-  version = "0.42.1";
+  version = "0.43.1";
 
   src = fetchFromGitHub {
     owner = "AdguardTeam";
