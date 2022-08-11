@@ -10264,6 +10264,8 @@ with pkgs;
 
   qalculate-gtk = callPackage ../applications/science/math/qalculate-gtk { };
 
+  qalculate-qt = libsForQt5.callPackage ../applications/science/math/qalculate-qt { };
+
   qastools = libsForQt5.callPackage ../tools/audio/qastools { };
 
   qdigidoc = libsForQt5.callPackage ../tools/security/qdigidoc { } ;
