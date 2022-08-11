@@ -1,15 +1,19 @@
 { lib, stdenv, fetchFromGitHub, darwin, xxd }:
-
 stdenv.mkDerivation rec {
   pname = "yabai";
-  version = "3.3.10";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "koekeishiya";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-8O6//T894C32Pba3F2Z84Z6VWeCXlwml3xsXoIZGqL0=";
+    sha256 = "10n67xwhifl0gij1hdqr00ncmkq2j7pa9m10p6ishqfmxy1wqp0z";
   };
+
+  prePatch = ''
+    substituteInPlace Makefile \
+        --replace 'xcrun clang' '/usr/bin/xcrun clang'
+  '';
 
   nativeBuildInputs = [ xxd ];
 
@@ -19,6 +23,20 @@ stdenv.mkDerivation rec {
     ScriptingBridge
     SkyLight
   ];
+
+  buildPhase = ''
+    export PATH=/usr/bin:/bin:/usr/sbin
+
+    touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress;
+    PROD=$(softwareupdate -l |
+           grep "\*.*Command Line" |
+           head -n 1 | awk -F"*" '{print$2}' |
+           sed -e 's/^ *//' |
+           sed 's/Label: //g' |
+           tr -d '\n')
+    softwareupdate -i "$PROD" --verbose
+    /usr/bin/make install
+  '';
 
   installPhase = ''
     mkdir -p $out/bin
