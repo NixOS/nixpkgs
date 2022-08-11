@@ -16,13 +16,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "irrlichtmt";
-  version = "1.9.0mt5";
+  version = "1.9.0mt7";
 
   src = fetchFromGitHub {
     owner = "minetest";
     repo = "irrlicht";
     rev = version;
-    sha256 = "sha256-ocsO4nKab2YxHY1qqZbF4OErpBKmG4V+psgC40APs8s=";
+    sha256 = "sha256-Eu7zW3mXl7GPRmLnKjt/dPoZ64HPYulI7MO1dJfj+10=";
   };
 
   nativeBuildInputs = [
@@ -30,9 +30,11 @@ stdenv.mkDerivation rec {
   ];
 
   # https://github.com/minetest/minetest/pull/10729
-  postPatch = lib.optionalString withTouchSupport ''
-    substituteInPlace include/IrrCompileConfig.h \
-      --replace '//#define _IRR_LINUX_X11_XINPUT2_' '#define _IRR_LINUX_X11_XINPUT2_'
+  postPatch = lib.optionalString (!withTouchSupport) ''
+    sed -i '1i #define NO_IRR_LINUX_X11_XINPUT2_' include/IrrCompileConfig.h
+
+    # HACK: Fix mistake in build script
+    sed -i '/''${X11_Xi_LIB}/d' source/Irrlicht/CMakeLists.txt
   '';
 
   buildInputs = [
