@@ -184,6 +184,14 @@
           <link linkend="opt-services.tempo.enable">services.tempo</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/writefreely/writefreely">WriteFreely</link>,
+          a clean, Markdown-based publishing platform made for writers.
+          Available as
+          <link linkend="opt-services.writefreely.enable">services.writefreely</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.11-incompatibilities">
