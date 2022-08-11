@@ -1600,6 +1600,8 @@ in {
 
   censys = callPackage ../development/python-modules/censys { };
 
+  cexprtk = callPackage ../development/python-modules/cexprtk { };
+
   coincurve = callPackage ../development/python-modules/coincurve {
     inherit (pkgs) secp256k1;
   };
