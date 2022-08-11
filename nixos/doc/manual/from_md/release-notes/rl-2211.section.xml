@@ -408,6 +408,12 @@
       </listitem>
       <listitem>
         <para>
+          There is a new module for AMD SEV CPU functionality, which
+          grants access to the hardware.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           There is a new module for the <literal>thunar</literal>
           program (the Xfce file manager), which depends on the
           <literal>xfconf</literal> dbus service, and also has a dbus

@@ -347,8 +347,9 @@ in
         };
     };
 
-    services.redis = lib.mkIf (cfg.redisCreateLocally) {
+    services.redis.servers.nitter = lib.mkIf (cfg.redisCreateLocally) {
       enable = true;
+      port = cfg.cache.redisPort;
     };
 
     networking.firewall = mkIf cfg.openFirewall {

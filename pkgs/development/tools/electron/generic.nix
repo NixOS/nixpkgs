@@ -104,14 +104,17 @@ let
   };
 
   darwin = {
-    nativeBuildInputs = [ unzip ];
+    nativeBuildInputs = [
+      makeWrapper
+      unzip
+    ];
 
     buildCommand = ''
       mkdir -p $out/Applications
       unzip $src
       mv Electron.app $out/Applications
       mkdir -p $out/bin
-      ln -s $out/Applications/Electron.app/Contents/MacOS/Electron $out/bin/electron
+      makeWrapper $out/Applications/Electron.app/Contents/MacOS/Electron $out/bin/electron
     '';
   };
 in

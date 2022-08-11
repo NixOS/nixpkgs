@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'pyarrow >= 3.0.0, < 8.0dev' 'pyarrow >= 3.0.0, < 9.0dev'
+      --replace 'pyarrow >= 3.0.0, < 9.0dev' 'pyarrow >= 3.0.0, < 10.0dev'
   '';
 
   propagatedBuildInputs = [
@@ -84,6 +84,7 @@ buildPythonPackage rec {
     "test__initiate_resumable_upload"
     "test__initiate_resumable_upload_mtls"
     "test__initiate_resumable_upload_with_retry"
+    "test_table_clones"
   ];
 
   disabledTestPaths = [
