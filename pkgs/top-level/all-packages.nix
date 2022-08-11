@@ -11338,6 +11338,8 @@ with pkgs;
 
   tlspool = callPackage ../tools/networking/tlspool { };
 
+  tlsx = callPackage ../tools/security/tlsx { };
+
   tmate = callPackage ../tools/misc/tmate { };
 
   tmate-ssh-server = callPackage ../servers/tmate-ssh-server { };
