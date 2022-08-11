@@ -693,6 +693,8 @@ in {
 
   asgi-csrf = callPackage ../development/python-modules/asgi-csrf { };
 
+  asgi-lifespan = callPackage ../development/python-modules/asgi-lifespan { };
+
   asgineer = callPackage ../development/python-modules/asgineer { };
 
   asgiref = callPackage ../development/python-modules/asgiref { };
