@@ -8700,6 +8700,12 @@
       fingerprint = "E90C BA34 55B3 6236 740C  038F 0D94 8CE1 9CF4 9C5F";
     }];
   };
+  mkohler = {
+    email = "mark.kohler@gmail.com";
+    github = "mkohler";
+    githubId = 68706;
+    name = "Mark Kohler";
+  };
   mlieberman85 = {
     email = "mlieberman85@gmail.com";
     github = "mlieberman85";
