@@ -151,6 +151,8 @@ in {
 
   aafigure = callPackage ../development/python-modules/aafigure { };
 
+  aardwolf = callPackage ../development/python-modules/aardwolf { };
+
   abodepy = callPackage ../development/python-modules/abodepy { };
 
   absl-py = callPackage ../development/python-modules/absl-py { };
@@ -632,6 +634,8 @@ in {
   aqualogic = callPackage ../development/python-modules/aqualogic { };
 
   arabic-reshaper = callPackage ../development/python-modules/arabic-reshaper { };
+
+  arc4 = callPackage ../development/python-modules/arc4 { };
 
   arcam-fmj = callPackage ../development/python-modules/arcam-fmj { };
 
