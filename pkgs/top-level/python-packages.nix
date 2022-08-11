@@ -11656,6 +11656,8 @@ in {
 
   yalexs = callPackage ../development/python-modules/yalexs { };
 
+  yalexs-ble = callPackage ../development/python-modules/yalexs-ble { };
+
   yamale = callPackage ../development/python-modules/yamale { };
 
   yamlfix = callPackage ../development/python-modules/yamlfix { };
