@@ -1038,7 +1038,8 @@
       aiohttp-cors
       bleak
       bluetooth-adapters
-    ]; # missing inputs: govee-ble
+      govee-ble
+    ];
     "gpsd" = ps: with ps; [
       gps3
     ];
@@ -1278,7 +1279,8 @@
       aiohttp-cors
       bleak
       bluetooth-adapters
-    ]; # missing inputs: inkbird-ble
+      inkbird-ble
+    ];
     "input_boolean" = ps: with ps; [
     ];
     "input_button" = ps: with ps; [
@@ -1660,7 +1662,8 @@
       aiohttp-cors
       bleak
       bluetooth-adapters
-    ]; # missing inputs: moat-ble
+      moat-ble
+    ];
     "mobile_app" = ps: with ps; [
       pynacl
       pyturbojpeg
@@ -2394,7 +2397,8 @@
       aiohttp-cors
       bleak
       bluetooth-adapters
-    ]; # missing inputs: sensorpush-ble
+      sensorpush-ble
+    ];
     "sentry" = ps: with ps; [
       sentry-sdk
     ];
@@ -3140,7 +3144,8 @@
       aiohttp-cors
       bleak
       bluetooth-adapters
-    ]; # missing inputs: xiaomi-ble
+      xiaomi-ble
+    ];
     "xiaomi_miio" = ps: with ps; [
       construct
       micloud
@@ -3464,6 +3469,7 @@
     "google_translate"
     "google_travel_time"
     "google_wifi"
+    "govee_ble"
     "gpslogger"
     "graphite"
     "gree"
@@ -3514,6 +3520,7 @@
     "image_processing"
     "imap_email_content"
     "influxdb"
+    "inkbird"
     "input_boolean"
     "input_button"
     "input_datetime"
@@ -3591,6 +3598,7 @@
     "minecraft_server"
     "minio"
     "mjpeg"
+    "moat"
     "mobile_app"
     "modbus"
     "modem_callerid"
@@ -3729,6 +3737,7 @@
     "senseme"
     "sensibo"
     "sensor"
+    "sensorpush"
     "sentry"
     "senz"
     "seventeentrack"
@@ -3891,6 +3900,7 @@
     "xbox"
     "xiaomi"
     "xiaomi_aqara"
+    "xiaomi_ble"
     "xiaomi_miio"
     "yale_smart_alarm"
     "yamaha"
