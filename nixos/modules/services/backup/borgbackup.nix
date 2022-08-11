@@ -93,6 +93,8 @@ let
           ++ cfg.readWritePaths
           # Borg needs write access to repo if it is not remote
           ++ optional (isLocalPath cfg.repo) cfg.repo;
+        Restart = if cfg.restartSec == null then "no" else "on-failure";
+        RestartSec = cfg.restartSec;
         PrivateTmp = cfg.privateTmp;
       };
       environment = {
@@ -101,16 +103,17 @@ let
       } // (mkPassEnv cfg) // cfg.environment;
     };
 
-  mkBackupTimers = name: cfg:
+  mkBackupTimer = name: cfg:
     nameValuePair "borgbackup-job-${name}" {
-      description = "BorgBackup job ${name} timer";
-      wantedBy = [ "timers.target" ];
-      timerConfig = {
-        Persistent = cfg.persistentTimer;
-        OnCalendar = cfg.startAt;
-      };
       # if remote-backup wait for network
-      after = optional (cfg.persistentTimer && !isLocalPath cfg.repo) "network-online.target";
+      after = optional (cfg.persistent && !isLocalPath cfg.repo) "network-online.target";
+      description = "BorgBackup job ${name} timer";
+      timerConfig = {
+        OnCalendar = cfg.startAt;
+        Persistent = cfg.persistent;
+        RandomizedDelaySec = cfg.randomizedDelaySec;
+      };
+      wantedBy = [ "timers.target" ];
     };
 
   # utility function around makeWrapper
@@ -317,6 +320,50 @@ in {
             example = "-u +%s";
           };
 
+          persistent = mkOption {
+            type = types.bool;
+            default = false;
+            description = ''
+              Set the <literal>persistent</literal> option for the
+              <citerefentry><refentrytitle>systemd.timer</refentrytitle>
+              <manvolnum>5</manvolnum></citerefentry>
+              which triggers the backup immediately if the last trigger
+              was missed (e.g. if the system was powered down).
+            '';
+            example = true;
+          };
+
+          randomizedDelaySec = mkOption {
+            type = types.str;
+            default = "0";
+            description = ''
+              Backups are delayed by a uniformly random amount of time up to
+              the value. Useful to stagger remote backups on a weak network
+              connection. Must be in the format described in
+              <citerefentry><refentrytitle>systemd.time</refentrytitle>
+              <manvolnum>7</manvolnum></citerefentry>. Either a unit-less value
+              (in seconds) or a time span value, e.g.,
+              <literal>"5min 20s"</literal>.
+            '';
+            example = "5 min";
+          };
+
+          restartSec = mkOption {
+            type = with types; nullOr str;
+            default = null;
+            description = ''
+              Whether and how soon a failed backup should be restarted.
+              Must be in the format described in
+              <citerefentry><refentrytitle>systemd.time</refentrytitle>
+              <manvolnum>7</manvolnum></citerefentry>. Either a unit-less value
+              (in seconds) or a time span value, e.g.,
+              <literal>"5min 20s"</literal>.
+              If you do not want a failed backup to restart automatically, use
+              <literal>null</literal>.
+            '';
+            example = "10 min";
+          };
+
           startAt = mkOption {
             type = with types; either str (listOf str);
             default = "daily";
@@ -329,19 +376,6 @@ in {
               automatically, use <literal>[ ]</literal>.
               It will generate a systemd service borgbackup-job-NAME.
               You may trigger it manually via systemctl restart borgbackup-job-NAME.
-            '';
-          };
-
-          persistentTimer = mkOption {
-            default = false;
-            type = types.bool;
-            example = true;
-            description = ''
-              Set the <literal>persistentTimer</literal> option for the
-              <citerefentry><refentrytitle>systemd.timer</refentrytitle>
-              <manvolnum>5</manvolnum></citerefentry>
-              which triggers the backup immediately if the last trigger
-              was missed (e.g. if the system was powered down).
             '';
           };
 
@@ -721,7 +755,7 @@ in {
 
       # A job named "foo" is mapped to systemd.timers.borgbackup-job-foo
       # only generate the timer if interval (startAt) is set
-      systemd.timers = mapAttrs' mkBackupTimers (filterAttrs (_: cfg: cfg.startAt != []) jobs);
+      systemd.timers = mapAttrs' mkBackupTimer (filterAttrs (_: cfg: cfg.startAt != []) jobs);
 
       users = mkMerge (mapAttrsToList mkUsersConfig repos);
 
