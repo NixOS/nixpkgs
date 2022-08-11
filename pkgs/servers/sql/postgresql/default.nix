@@ -202,9 +202,9 @@ let
 in self: {
 
   postgresql_10 = self.callPackage generic {
-    version = "10.21";
+    version = "10.22";
     psqlSchema = "10.0"; # should be 10, but changing it is invasive
-    hash = "sha256-0yGYhW1Sqab11QZC74ZoesBYvW78pcntV754CElvRdE=";
+    hash = "sha256-lVl3VVxp3xpk9EuB1KGYfrdKu9GHBXn1rZ2UYTPdjk0=";
     this = self.postgresql_10;
     thisAttr = "postgresql_10";
     inherit self;
