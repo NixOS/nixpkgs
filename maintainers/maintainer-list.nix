@@ -6440,13 +6440,6 @@
     githubId = 3267697;
     name = "Joshua Potter";
   };
-  jschievink = {
-    email = "jonasschievink@gmail.com";
-    matrix = "@jschievink:matrix.org";
-    github = "jonas-schievink";
-    githubId = 1786438;
-    name = "Jonas Schievink";
-  };
   jshcmpbll = {
     email = "me@joshuadcampbell.com";
     github = "jshcmpbll";

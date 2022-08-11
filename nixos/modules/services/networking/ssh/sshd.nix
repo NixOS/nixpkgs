@@ -435,13 +435,12 @@ in
                 # socket activation, it goes to the remote side (#19589).
                 exec >&2
 
-                mkdir -m 0755 -p /etc/ssh
-
                 ${flip concatMapStrings cfg.hostKeys (k: ''
                   if ! [ -s "${k.path}" ]; then
                       if ! [ -h "${k.path}" ]; then
                           rm -f "${k.path}"
                       fi
+                      mkdir -m 0755 -p "$(dirname '${k.path}')"
                       ssh-keygen \
                         -t "${k.type}" \
                         ${if k ? bits then "-b ${toString k.bits}" else ""} \

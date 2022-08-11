@@ -394,6 +394,18 @@
       </listitem>
       <listitem>
         <para>
+          The udisks2 service, available at
+          <literal>services.udisks2.enable</literal>, is now disabled by
+          default. It will automatically be enabled through services and
+          desktop environments as needed. This also means that polkit
+          will now actually be disabled by default. The default for
+          <literal>security.polkit.enable</literal> was already flipped
+          in the previous release, but udisks2 being enabled by default
+          re-enabled it.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Add udev rules for the Teensy family of microcontrollers.
         </para>
       </listitem>
