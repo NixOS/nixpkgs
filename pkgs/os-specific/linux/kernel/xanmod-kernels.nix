@@ -41,13 +41,6 @@ let
       NTFS3_LZX_XPRESS = yes;
       NTFS3_FS_POSIX_ACL = yes;
 
-      # Preemptive Full Tickless Kernel at 500Hz
-      SCHED_CORE = lib.mkForce (option no);
-      PREEMPT_VOLUNTARY = lib.mkForce no;
-      PREEMPT = lib.mkForce yes;
-      NO_HZ_FULL = yes;
-      HZ_500 = yes;
-
       # Google's BBRv2 TCP congestion Control
       TCP_CONG_BBR2 = yes;
       DEFAULT_BBR2 = yes;
@@ -70,6 +63,7 @@ let
       CFS_BANDWIDTH = lib.mkForce (option no);
       RT_GROUP_SCHED = lib.mkForce (option no);
       SCHED_AUTOGROUP = lib.mkForce (option no);
+      SCHED_CORE = lib.mkForce (option no);
     };
 
     extraMeta = {
