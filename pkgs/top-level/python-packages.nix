@@ -4735,6 +4735,8 @@ in {
 
   justbytes = callPackage ../development/python-modules/justbytes { };
 
+  justnimbus = callPackage ../development/python-modules/justnimbus { };
+
   jwcrypto = callPackage ../development/python-modules/jwcrypto { };
 
   jxmlease = callPackage ../development/python-modules/jxmlease { };
