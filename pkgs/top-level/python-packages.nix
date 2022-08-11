@@ -7814,6 +7814,8 @@ in {
 
   pymetno = callPackage ../development/python-modules/pymetno { };
 
+  pymicrobot = callPackage ../development/python-modules/pymicrobot { };
+
   pymitv = callPackage ../development/python-modules/pymitv { };
 
   pymfy = callPackage ../development/python-modules/pymfy { };
