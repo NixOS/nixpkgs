@@ -1,4 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, nose, version, sha256, format ? "setuptools" }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, nose
+, version
+, sha256
+, format ? "setuptools"
+, extraMeta ? {}
+}:
 
 buildPythonPackage rec {
   inherit version format;
@@ -15,5 +23,5 @@ buildPythonPackage rec {
     description = "The fastest markdown parser in pure Python";
     homepage = "https://github.com/lepture/mistune";
     license = licenses.bsd3;
-  };
+  } // extraMeta;
 }
