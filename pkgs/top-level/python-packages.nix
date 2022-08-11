@@ -2234,6 +2234,8 @@ in {
 
   debugpy = callPackage ../development/python-modules/debugpy { };
 
+  debuglater = callPackage ../development/python-modules/debuglater { };
+
   decli = callPackage ../development/python-modules/decli { };
 
   decorator = callPackage ../development/python-modules/decorator { };
