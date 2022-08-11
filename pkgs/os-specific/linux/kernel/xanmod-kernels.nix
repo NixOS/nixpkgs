@@ -5,20 +5,23 @@ let
   ltsVariant = {
     version = "5.15.60";
     hash = "sha256-XSOYgrJ/uvPpEG+P3Zy1geFeF/HMZ4LejsKWtTxMUTs=";
+    variant = "lts";
   };
 
   edgeVariant = {
     version = "5.19.1";
     hash = "sha256-Fw+XW2YDAGKEzZ4AO88Y8GcypfOb6AjKp3XOlkT8ZTQ=";
+    variant = "edge";
   };
 
   ttVariant = {
     version = "5.15.54";
     suffix = "xanmod1-tt";
     hash = "sha256-4ck9PAFuIt/TxA/U+moGlVfCudJnzSuAw7ooFG3OJis=";
+    variant = "tt";
   };
 
-  xanmodKernelFor = { version, suffix ? "xanmod1", hash }: buildLinux (args // rec {
+  xanmodKernelFor = { version, suffix ? "xanmod1", hash, variant }: buildLinux (args // rec {
     inherit version;
     modDirVersion = "${version}-${suffix}";
 
@@ -30,11 +33,6 @@ let
     };
 
     structuredExtraConfig = with lib.kernel; {
-      # removed options
-      CFS_BANDWIDTH = lib.mkForce (option no);
-      RT_GROUP_SCHED = lib.mkForce (option no);
-      SCHED_AUTOGROUP = lib.mkForce (option no);
-
       # AMD P-state driver
       X86_AMD_PSTATE = yes;
 
@@ -67,6 +65,11 @@ let
 
       # WineSync driver for fast kernel-backed Wine
       WINESYNC = module;
+    } // lib.optionalAttrs (variant == "tt") {
+      # removed options
+      CFS_BANDWIDTH = lib.mkForce (option no);
+      RT_GROUP_SCHED = lib.mkForce (option no);
+      SCHED_AUTOGROUP = lib.mkForce (option no);
     };
 
     extraMeta = {
