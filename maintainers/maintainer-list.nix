@@ -3485,9 +3485,10 @@
     }];
   };
   drzoidberg = {
-    email = "jakob@mast3rsoft.com";
+    email = "jakobneufeld@tutanota.com";
     github = "jakobneufeld";
     githubId = 24791219;
+    matrix = "@dzoidberg:matrix.org";
     name = "Jakob Neufeld";
   };
   dsalaza4 = {
