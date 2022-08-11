@@ -15,7 +15,7 @@
 , udev
 , pixman
 , libinput
-, libseat
+, seatd
 , xwayland
 , glslang
 , stb
@@ -65,7 +65,7 @@ stdenv.mkDerivation {
     wayland-protocols
     wlroots
     xwayland
-    libseat
+    seatd
     libinput
     libxkbcommon
     udev
