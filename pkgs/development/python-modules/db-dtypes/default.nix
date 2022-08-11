@@ -23,6 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-LLKhYLzGUQRx4ciWv1TilYvTOO0sj6rdkPlJLPZ8VXA=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'pyarrow>=3.0.0, <9.0dev' 'pyarrow>=3.0.0, <10.0dev'
+  '';
+
   propagatedBuildInputs = [
     numpy
     packaging
