@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fheroes2";
-  version = "0.9.17";
+  version = "0.9.18";
 
   src = fetchFromGitHub {
     owner = "ihhub";
     repo = "fheroes2";
     rev = version;
-    sha256 = "sha256-mitkB7BDqqDbWa+zhcg66dh/SQd6XuUjl/kLWob9zwI=";
+    sha256 = "sha256-I79PoNE6GFvYD4jnsxKo7MsoPgVow8b8fTIiClOGnAI=";
   };
 
   buildInputs = [ gettext libpng SDL2 SDL2_image SDL2_mixer SDL2_ttf zlib ];
