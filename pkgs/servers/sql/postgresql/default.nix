@@ -14,7 +14,7 @@ let
       , this, self, newScope, buildEnv
 
       # source specification
-      , version, sha256, psqlSchema,
+      , version, hash, psqlSchema,
 
       # for tests
       nixosTests, thisAttr
@@ -30,7 +30,7 @@ let
 
     src = fetchurl {
       url = "mirror://postgresql/source/v${version}/${pname}-${version}.tar.bz2";
-      inherit sha256;
+      inherit hash;
     };
 
     hardeningEnable = lib.optionals (!stdenv.cc.isClang) [ "pie" ];
@@ -203,7 +203,7 @@ in self: {
   postgresql_10 = self.callPackage generic {
     version = "10.21";
     psqlSchema = "10.0"; # should be 10, but changing it is invasive
-    sha256 = "sha256-0yGYhW1Sqab11QZC74ZoesBYvW78pcntV754CElvRdE=";
+    hash = "sha256-0yGYhW1Sqab11QZC74ZoesBYvW78pcntV754CElvRdE=";
     this = self.postgresql_10;
     thisAttr = "postgresql_10";
     inherit self;
@@ -213,7 +213,7 @@ in self: {
   postgresql_11 = self.callPackage generic {
     version = "11.16";
     psqlSchema = "11.1"; # should be 11, but changing it is invasive
-    sha256 = "sha256-LdnhEfCllJ7nyswGXOoPshCSkpuuMQzgW/AbT/xRA6U=";
+    hash = "sha256-LdnhEfCllJ7nyswGXOoPshCSkpuuMQzgW/AbT/xRA6U=";
     this = self.postgresql_11;
     thisAttr = "postgresql_11";
     inherit self;
@@ -222,7 +222,7 @@ in self: {
   postgresql_12 = self.callPackage generic {
     version = "12.11";
     psqlSchema = "12";
-    sha256 = "sha256-ECYkil/Svur0PkxyNqyBflbVi2gaM1hWRl37x1s+gwI=";
+    hash = "sha256-ECYkil/Svur0PkxyNqyBflbVi2gaM1hWRl37x1s+gwI=";
     this = self.postgresql_12;
     thisAttr = "postgresql_12";
     inherit self;
@@ -231,7 +231,7 @@ in self: {
   postgresql_13 = self.callPackage generic {
     version = "13.7";
     psqlSchema = "13";
-    sha256 = "sha256-G5Bb9PPYNhSjk7PFH9NFkQ/SYeT1Ekpo2aH906KkY5k=";
+    hash = "sha256-G5Bb9PPYNhSjk7PFH9NFkQ/SYeT1Ekpo2aH906KkY5k=";
     this = self.postgresql_13;
     thisAttr = "postgresql_13";
     inherit self;
@@ -240,7 +240,7 @@ in self: {
   postgresql_14 = self.callPackage generic {
     version = "14.4";
     psqlSchema = "14";
-    sha256 = "sha256-wjtiN8UjHHkVEb3HkJhhfWhS6eO982Dv2LXRWho9j2o=";
+    hash = "sha256-wjtiN8UjHHkVEb3HkJhhfWhS6eO982Dv2LXRWho9j2o=";
     this = self.postgresql_14;
     thisAttr = "postgresql_14";
     inherit self;
