@@ -104,6 +104,28 @@ in
     };
   };
 
+  lsqlite3complete = callPackage ({ fetchzip }:
+    buildLuarocksPackage {
+      pname = "lsqlite3complete";
+      version = "0.9.5-1";
+
+      src = fetchzip {
+        url =
+          "http://lua.sqlite.org/index.cgi/zip/lsqlite3_fsl09y.zip?uuid=fsl_9y";
+        extension = "zip";
+        hash = "sha256-lNiYaqZPw31Y8jzW8i7mETtRh9G3/q5EwckJeCg3EL8=";
+      };
+
+      propagatedBuildInputs = [ glibc.out ];
+      nativeBuildInputs = [ pkg-config ];
+
+      meta = {
+        homepage = "http://lua.sqlite.org/";
+        description = "A binding for Lua to the SQLite3 database library";
+        license.fullName = "MIT";
+      };
+    }) {};
+
   nfd = callPackage ../development/lua-modules/nfd {
     inherit (lib) maintainers;
     inherit (pkgs.gnome) zenity;
