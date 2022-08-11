@@ -9,16 +9,15 @@
 , substituteAll
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hare";
-  version = "unstable-2022-06-18";
+  version = "unstable-2022-07-30";
 
   src = fetchFromSourcehut {
-    name = pname + "-src";
     owner = "~sircmpwn";
-    repo = pname;
-    rev = "ac9b2c35c09d555e09dbd81c5ed95bdfa14313ba";
-    hash = "sha256-eeS14LGkbi9IamvKzK+HF0Rvk9NFp4QVYcrHwNSNBx4=";
+    repo = "hare";
+    rev = "296925c91d79362d6b8ac94e0336a38e9af0f1c9";
+    hash = "sha256-LeIUnpTMZ6vxgAy/LPm9/IMit41RgezdVESIv+gQFHc=";
   };
 
   patches = [ ./disable-failing-test-cases.patch ];
@@ -37,7 +36,6 @@ stdenv.mkDerivation rec {
     qbe
   ];
 
-  setupHook = ./setup-hook.sh;
   strictDeps = true;
 
   configurePhase =
@@ -86,6 +84,8 @@ stdenv.mkDerivation rec {
         wrapProgram $out/bin/hare --prefix PATH : ${binPath}
       '';
 
+  setupHook = ./setup-hook.sh;
+
   meta = with lib; {
     homepage = "http://harelang.org/";
     description =
@@ -94,4 +94,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ AndersonTorres ];
     inherit (harec.meta) platforms badPlatforms;
   };
-}
+})
