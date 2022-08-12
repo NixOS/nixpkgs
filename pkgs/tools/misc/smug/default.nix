@@ -21,6 +21,7 @@ buildGoModule rec {
 
   postInstall = ''
     installManPage ./man/man1/smug.1
+    installShellCompletion completion/smug.{bash,fish}
   '';
 
   meta = with lib; {
