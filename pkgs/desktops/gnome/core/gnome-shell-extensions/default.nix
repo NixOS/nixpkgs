@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extensions";
-  version = "43.alpha";
+  version = "43.beta";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell-extensions/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "zoqztQf0NCz6Z3F/zL/VD8LW0sHOVu3SvnTtDyawlu8=";
+    sha256 = "3Z6QQONEtrkkgAvmxBG0OzbMy1HDHxLxTyPhoHPfWrU=";
   };
 
   patches = [
