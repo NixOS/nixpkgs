@@ -35,7 +35,7 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Open ports in the firewall for Tautulli.";
+        description = "Open ports in the firewall for Tautulli.";
       };
 
       user = mkOption {
