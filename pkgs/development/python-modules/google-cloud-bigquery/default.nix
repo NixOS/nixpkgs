@@ -17,6 +17,7 @@
 , psutil
 , pyarrow
 , pytest-xdist
+, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -24,15 +25,12 @@ buildPythonPackage rec {
   version = "3.3.1";
   format = "setuptools";
 
+  disabled = pythonOlder "3.7";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-S2gYVMAaQnK4AmHd8biofYAvxVmM7UTc/HuDPLAsDhg=";
+    hash = "sha256-S2gYVMAaQnK4AmHd8biofYAvxVmM7UTc/HuDPLAsDhg=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'pyarrow >= 3.0.0, < 9.0dev' 'pyarrow >= 3.0.0, < 10.0dev'
-  '';
 
   propagatedBuildInputs = [
     google-cloud-core
