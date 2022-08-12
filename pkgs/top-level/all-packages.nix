@@ -22309,6 +22309,8 @@ with pkgs;
 
   seasocks = callPackage ../development/libraries/seasocks { };
 
+  semver-cpp = callPackage ../development/libraries/semver-cpp { };
+
   serd = callPackage ../development/libraries/serd {};
 
   serf = callPackage ../development/libraries/serf {
