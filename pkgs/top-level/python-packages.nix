@@ -1641,6 +1641,8 @@ self: super: with self; {
 
   calmjs-parse = callPackage ../development/python-modules/calmjs-parse { };
 
+  calmjs-types = callPackage ../development/python-modules/calmjs-types { };
+
   calysto = callPackage ../development/python-modules/calysto { };
 
   calysto-scheme = callPackage ../development/python-modules/calysto-scheme { };
