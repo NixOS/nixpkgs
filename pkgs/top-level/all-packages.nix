@@ -4087,6 +4087,8 @@ with pkgs;
 
   klog = qt5.callPackage ../applications/radio/klog { };
 
+  komga = callPackage ../servers/komga { };
+
   krapslog = callPackage ../tools/misc/krapslog { };
 
   krelay = callPackage ../applications/networking/cluster/krelay { };
