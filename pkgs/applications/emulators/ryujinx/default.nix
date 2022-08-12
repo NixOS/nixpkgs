@@ -14,6 +14,14 @@
 , gdk-pixbuf
 , wrapGAppsHook
 , vulkan-loader
+, libICE
+, libSM
+, libXi
+, libXcursor
+, libXext
+, libXrandr
+, fontconfig
+, glew
 }:
 
 buildDotnetModule rec {
@@ -34,7 +42,7 @@ buildDotnetModule rec {
 
   # TODO: Add the headless frontend. Currently errors on the following:
   # System.Exception: SDL2 initlaization failed with error "No available video device"
-  executables = [ "Ryujinx" ];
+  executables = [ "Ryujinx" "Ryujinx.Ava" ];
 
   nativeBuildInputs = [
     wrapGAppsHook
@@ -56,6 +64,16 @@ buildDotnetModule rec {
     pulseaudio
     vulkan-loader
     ffmpeg
+
+    # Avalonia UI
+    libICE
+    libSM
+    libXi
+    libXcursor
+    libXext
+    libXrandr
+    fontconfig
+    glew
   ];
 
   patches = [
