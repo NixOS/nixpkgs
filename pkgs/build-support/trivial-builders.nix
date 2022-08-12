@@ -523,12 +523,22 @@ rec {
    *                 substitutions = { bash = "${pkgs.bash}/bin/bash"; };
    *                 meta.platforms = lib.platforms.linux;
    *               } ./myscript.sh;
+   *
+   * # setup hook with a package test
+   * myhellohookTested = makeSetupHook {
+   *                 deps = [ hello ];
+   *                 substitutions = { bash = "${pkgs.bash}/bin/bash"; };
+   *                 meta.platforms = lib.platforms.linux;
+   *                 passthru.tests.greeting = callPackage ./test { };
+   *               } ./myscript.sh;
    */
-  makeSetupHook = { name ? "hook", deps ? [], substitutions ? {}, meta ? {} }: script:
+  makeSetupHook = { name ? "hook", deps ? [], substitutions ? {}, meta ? {}, passthru ? null }: script:
     runCommand name
       (substitutions // {
         inherit meta;
         strictDeps = true;
+      } // lib.optionalAttrs (passthru != null) {
+        inherit passthru;
       })
       (''
         mkdir -p $out/nix-support
