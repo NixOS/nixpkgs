@@ -10158,6 +10158,10 @@ with pkgs;
 
   radvd = callPackage ../tools/networking/radvd { };
 
+  rain = callPackage ../development/tools/rain {
+    buildGoModule = buildGo117Module;
+  };
+
   rainbowstream = with python3.pkgs; toPythonApplication rainbowstream;
 
   rambox = callPackage ../applications/networking/instant-messengers/rambox { };
