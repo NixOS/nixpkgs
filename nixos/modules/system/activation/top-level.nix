@@ -87,7 +87,9 @@ let
 
       echo -n "${toString config.system.extraDependencies}" > $out/extra-dependencies
 
-      ${bootSpec.writer}
+      ${optionalString (!config.boot.isContainer) ''
+        ${bootSpec.writer}
+      ''}
 
       ${config.system.extraSystemBuilderCmds}
     '';
