@@ -7279,6 +7279,8 @@ self: super: with self; {
 
   pykrakenapi = callPackage ../development/python-modules/pykrakenapi { };
 
+  pykrb5  = callPackage ../development/python-modules/pykrb5 { };
+
   pylddwrap = callPackage ../development/python-modules/pylddwrap { };
 
   pyngrok = callPackage ../development/python-modules/pyngrok { };

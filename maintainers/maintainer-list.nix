@@ -3146,6 +3146,12 @@
     githubId = 6297001;
     name = "Jona Stubbe";
   };
+  csernazs = {
+    email = "cserna.zsolt@gmail.com";
+    github = "csernazs";
+    githubId = 1304175;
+    name = "Zsolt Cserna";
+  };
   csingley = {
     email = "csingley@gmail.com";
     github = "csingley";
