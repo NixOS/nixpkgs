@@ -126,6 +126,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/mozilla-services/syncstorage-rs">syncstorage-rs</link>,
+          a self-hostable sync server for Firefox. Available as
+          <link xlink:href="options.html#opt-services.firefox-syncserver.enable">services.firefox-syncserver</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://dragonflydb.io/">dragonflydb</link>,
           a modern replacement for Redis and Memcached. Available as
           <link linkend="opt-services.dragonflydb.enable">services.dragonflydb</link>.

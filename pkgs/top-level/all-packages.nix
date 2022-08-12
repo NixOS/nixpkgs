@@ -3186,6 +3186,8 @@ with pkgs;
 
   cinny = callPackage ../applications/networking/instant-messengers/cinny { stdenv = stdenvNoCC; };
 
+  cinny-desktop = callPackage ../applications/networking/instant-messengers/cinny-desktop { };
+
   ckbcomp = callPackage ../tools/X11/ckbcomp { };
 
   clac = callPackage ../tools/misc/clac {};
@@ -9821,6 +9823,10 @@ with pkgs;
 
   pngtoico = callPackage ../tools/graphics/pngtoico {
     libpng = libpng12;
+  };
+
+  pngpaste = callPackage ../os-specific/darwin/pngpaste {
+    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
   };
 
   pngtools = callPackage ../tools/graphics/pngtools { };
@@ -22793,6 +22799,8 @@ with pkgs;
 
   sympa = callPackage ../servers/mail/sympa { };
 
+  syncstorage-rs = callPackage ../servers/syncstorage-rs { };
+
   system-sendmail = lowPrio (callPackage ../servers/mail/system-sendmail { });
 
   # PulseAudio daemons
@@ -24028,6 +24036,10 @@ with pkgs;
 
   librealsenseWithoutCuda = callPackage ../development/libraries/librealsense {
     cudaSupport = false;
+  };
+
+  librealsense-gui = callPackage ../development/libraries/librealsense {
+    enableGUI = true;
   };
 
   libsass = callPackage ../development/libraries/libsass { };
