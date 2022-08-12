@@ -7598,6 +7598,8 @@ in {
 
   pyjson5 = callPackage ../development/python-modules/pyjson5 { };
 
+  pyjsparser = callPackage ../development/python-modules/pyjsparser { };
+
   pyjwkest = callPackage ../development/python-modules/pyjwkest { };
 
   pyjwt = callPackage ../development/python-modules/pyjwt { };
