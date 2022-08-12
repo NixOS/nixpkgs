@@ -35,7 +35,7 @@ in {
     authentication = mkOption {
       type = types.str;
       default = "jupyterhub.auth.PAMAuthenticator";
-      description = ''
+      description = lib.mdDoc ''
         Jupyterhub authentication to use
 
         There are many authenticators available including: oauth, pam,
@@ -46,7 +46,7 @@ in {
     spawner = mkOption {
       type = types.str;
       default = "systemdspawner.SystemdSpawner";
-      description = ''
+      description = lib.mdDoc ''
         Jupyterhub spawner to use
 
         There are many spawners available including: local process,
@@ -57,7 +57,7 @@ in {
     extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = ''
+      description = lib.mdDoc ''
         Extra contents appended to the jupyterhub configuration
 
         Jupyterhub configuration is a normal python file using
@@ -84,7 +84,7 @@ in {
           jupyterhub-systemdspawner
         ])
       '';
-      description = ''
+      description = lib.mdDoc ''
         Python environment to run jupyterhub
 
         Customizing will affect the packages available in the hub and
@@ -106,7 +106,7 @@ in {
           jupyterlab
         ])
       '';
-      description = ''
+      description = lib.mdDoc ''
         Python environment to run jupyterlab
 
         Customizing will affect the packages available in the
@@ -146,7 +146,7 @@ in {
           };
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Declarative kernel config
 
         Kernels can be declared in any language that supports and has
@@ -159,7 +159,7 @@ in {
     port = mkOption {
       type = types.port;
       default = 8000;
-      description = ''
+      description = lib.mdDoc ''
         Port number Jupyterhub will be listening on
       '';
     };
@@ -167,7 +167,7 @@ in {
     host = mkOption {
       type = types.str;
       default = "0.0.0.0";
-      description = ''
+      description = lib.mdDoc ''
         Bind IP JupyterHub will be listening on
       '';
     };
@@ -175,7 +175,7 @@ in {
     stateDirectory = mkOption {
       type = types.str;
       default = "jupyterhub";
-      description = ''
+      description = lib.mdDoc ''
         Directory for jupyterhub state (token + database)
       '';
     };

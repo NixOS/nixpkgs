@@ -19,16 +19,15 @@ in {
     knotSocketPath = mkOption {
       type = types.str;
       default = "/run/knot/knot.sock";
-      description = ''
-        Socket path of <citerefentry><refentrytitle>knotd</refentrytitle>
-        <manvolnum>8</manvolnum></citerefentry>.
+      description = lib.mdDoc ''
+        Socket path of {manpage}`knotd(8)`.
       '';
     };
 
     knotSocketTimeout = mkOption {
       type = types.int;
       default = 2000;
-      description = ''
+      description = lib.mdDoc ''
         Timeout in seconds.
       '';
     };

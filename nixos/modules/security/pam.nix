@@ -314,8 +314,7 @@ let
           Attribute set describing resource limits.  Defaults to the
           value of <option>security.pam.loginLimits</option>.
           The meaning of the values is explained in <citerefentry>
-          <refentrytitle>limits.conf</refentrytitle><manvolnum>5</manvolnum>
-          </citerefentry>.
+          <refentrytitle>limits.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
         '';
       };
 
@@ -756,8 +755,7 @@ in
           <varname>domain</varname>, <varname>type</varname>,
           <varname>item</varname>, and <varname>value</varname>
           attribute.  The syntax and semantics of these attributes
-          must be that described in <citerefentry><refentrytitle>limits.conf</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>.
+          must be that described in <citerefentry><refentrytitle>limits.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
 
           Note that these limits do not apply to systemd services,
           whose limits can be changed via <option>systemd.extraConfig</option>
@@ -838,17 +836,14 @@ in
       control = mkOption {
         default = "sufficient";
         type = types.enum [ "required" "requisite" "sufficient" "optional" ];
-        description = ''
+        description = lib.mdDoc ''
           This option sets pam "control".
           If you want to have multi factor authentication, use "required".
           If you want to use the PKCS#11 device instead of the regular password,
           use "sufficient".
 
           Read
-          <citerefentry>
-            <refentrytitle>pam.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>
+          {manpage}`pam.conf(5)`
           for better understanding of this option.
         '';
       };
@@ -929,16 +924,13 @@ in
       control = mkOption {
         default = "sufficient";
         type = types.enum [ "required" "requisite" "sufficient" "optional" ];
-        description = ''
+        description = lib.mdDoc ''
           This option sets pam "control".
           If you want to have multi factor authentication, use "required".
           If you want to use U2F device instead of regular password, use "sufficient".
 
           Read
-          <citerefentry>
-            <refentrytitle>pam.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>
+          {manpage}`pam.conf(5)`
           for better understanding of this option.
         '';
       };
@@ -1047,17 +1039,14 @@ in
       control = mkOption {
         default = "sufficient";
         type = types.enum [ "required" "requisite" "sufficient" "optional" ];
-        description = ''
+        description = lib.mdDoc ''
           This option sets pam "control".
           If you want to have multi factor authentication, use "required".
           If you want to use the SSH certificate instead of the regular password,
           use "sufficient".
 
           Read
-          <citerefentry>
-            <refentrytitle>pam.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>
+          {manpage}`pam.conf(5)`
           for better understanding of this option.
         '';
       };
@@ -1082,16 +1071,13 @@ in
       control = mkOption {
         default = "sufficient";
         type = types.enum [ "required" "requisite" "sufficient" "optional" ];
-        description = ''
+        description = lib.mdDoc ''
           This option sets pam "control".
           If you want to have multi factor authentication, use "required".
           If you want to use Yubikey instead of regular password, use "sufficient".
 
           Read
-          <citerefentry>
-            <refentrytitle>pam.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>
+          {manpage}`pam.conf(5)`
           for better understanding of this option.
         '';
       };

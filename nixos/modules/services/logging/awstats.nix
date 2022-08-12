@@ -121,11 +121,9 @@ in
       type = types.nullOr types.str;
       default = null;
       example = "hourly";
-      description = ''
+      description = lib.mdDoc ''
         Specification of the time at which awstats will get updated.
-        (in the format described by <citerefentry>
-          <refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>)
+        (in the format described by {manpage}`systemd.time(7)`)
       '';
     };
   };

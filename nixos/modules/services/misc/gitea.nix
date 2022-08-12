@@ -159,12 +159,11 @@ in
           type = types.str;
           default = "04:31";
           example = "hourly";
-          description = ''
+          description = lib.mdDoc ''
             Run a gitea dump at this interval. Runs by default at 04:31 every day.
 
             The format is described in
-            <citerefentry><refentrytitle>systemd.time</refentrytitle>
-            <manvolnum>7</manvolnum></citerefentry>.
+            {manpage}`systemd.time(7)`.
           '';
         };
 

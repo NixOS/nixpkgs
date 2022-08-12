@@ -118,12 +118,11 @@ in
       type = types.str;
       default = "hourly";
       example = "daily";
-      description = ''
+      description = lib.mdDoc ''
         Run sanoid at this interval. The default is to run hourly.
 
         The format is described in
-        <citerefentry><refentrytitle>systemd.time</refentrytitle>
-        <manvolnum>7</manvolnum></citerefentry>.
+        {manpage}`systemd.time(7)`.
       '';
     };
 
