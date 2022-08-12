@@ -140,6 +140,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://komga.org/">Komga</link>, a free and
+          open source comics/mangas media server. Available as
+          <link linkend="opt-services.komga.enable">services.komga</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://hbase.apache.org/">HBase
           cluster</link>, a distributed, scalable, big data store.
           Available as
