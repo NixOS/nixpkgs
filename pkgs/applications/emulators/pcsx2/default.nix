@@ -32,14 +32,14 @@
 
 stdenv.mkDerivation rec {
   pname = "pcsx2";
-  version = "1.7.3128";
+  version = "1.7.3165";
 
   src = fetchFromGitHub {
     owner = "PCSX2";
     repo = "pcsx2";
     fetchSubmodules = true;
     rev = "v${version}";
-    hash = "sha256-OVKxVyUkTpyVvQ1oA8G6W77ssC1NmUAu/VanBM8Z168=";
+    hash = "sha256-FdLmLZLpS8zPmHVn4k0nE6vS/omYVIOal9ej0h3bE/Y=";
   };
 
   cmakeFlags = [
