@@ -19,7 +19,6 @@ let
 
   generic = { version, sha256 }: let
     ver = version;
-    tag = ver.gitTag;
     atLeast30 = lib.versionAtLeast ver.majMin "3.0";
     self = lib.makeOverridable (
       { stdenv, buildPackages, lib
@@ -248,11 +247,6 @@ let
             ruby = self;
           }) withPackages gems;
 
-          # deprecated 2016-09-21
-          majorVersion = ver.major;
-          minorVersion = ver.minor;
-          teenyVersion = ver.tiny;
-          patchLevel = ver.patchLevel;
         } // lib.optionalAttrs useBaseRuby {
           inherit baseRuby;
         };
