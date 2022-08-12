@@ -20154,6 +20154,8 @@ with pkgs;
     deps = [ memorymapping ];
   } ../development/libraries/memorymapping/setup-hook.sh;
 
+  memray = callPackage ../development/tools/memray { };
+
   memstream = callPackage ../development/libraries/memstream { };
   memstreamHook = makeSetupHook {
     deps = [ memstream ];
