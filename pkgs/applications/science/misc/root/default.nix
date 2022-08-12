@@ -43,7 +43,7 @@
 let
 
   _llvm_9 = llvm_9.overrideAttrs (prev: {
-    patches = (prev.patches or []) ++ [
+    patches = (prev.patches or [ ]) ++ [
       (fetchpatch {
         url = "https://github.com/root-project/root/commit/a9c961cf4613ff1f0ea50f188e4a4b0eb749b17d.diff";
         stripLen = 3;
