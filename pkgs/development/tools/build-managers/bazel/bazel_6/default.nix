@@ -52,9 +52,10 @@ let
       srcs.io_bazel_rules_sass
       srcs.platforms
       srcs.remote_java_tools_for_testing
-      srcs.remote_java_tools_linux
+      #srcs.remote_java_tools_linux
+      #srcs."java_tools_linux-v11.8.zip"
+      #srcs."java_tools-v11.8.zip"
       srcs."coverage_output_generator-v2.6.zip"
-      srcs."java_tools_linux-v11.8.zip"
       srcs.build_bazel_rules_nodejs
       srcs."android_tools_pkg-0.26.0.tar.gz"
       srcs."zulu11.56.19-ca-jdk11.0.15-linux_x64.tar.gz"
@@ -451,6 +452,7 @@ stdenv.mkDerivation rec {
       # Limit the resources Bazel is allowed to use during the build to 1/2 the
       # available RAM and 3/4 the available CPU cores. This should help avoid
       # overwhelming the build machine.
+      build --toolchain_resolution_debug=".*"
       build --local_ram_resources=HOST_RAM*.5
       build --local_cpu_resources=HOST_CPUS*.75
 
