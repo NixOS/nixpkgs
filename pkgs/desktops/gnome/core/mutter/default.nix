@@ -1,6 +1,7 @@
 { fetchurl
 , runCommand
 , lib
+, fetchpatch
 , stdenv
 , pkg-config
 , gnome
@@ -35,6 +36,7 @@
 , python3
 , wrapGAppsHook
 , sysprof
+, libsysprof-capture
 , desktop-file-utils
 , libcap_ng
 , egl-wayland
@@ -44,14 +46,23 @@
 
 let self = stdenv.mkDerivation rec {
   pname = "mutter";
-  version = "43.alpha";
+  version = "43.beta";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "IM4d5uTepo8AEFFihn6s6nJ26WdeconFgXIu/Pou7IA=";
+    sha256 = "/nE+P+k+gHkzw8Xy3stscYtq3C1wjV8951+o7mnbjGg=";
   };
+
+  patches = [
+    # Fix build with separate sysprof.
+    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/2572
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/285a5a4d54ca83b136b787ce5ebf1d774f9499d5.patch";
+      sha256 = "/npUE3idMSTVlFptsDpZmGWjZ/d2gqruVlJKq4eF4xU=";
+    })
+  ];
 
   mesonFlags = [
     "-Degl_device=true"
@@ -105,7 +116,8 @@ let self = stdenv.mkDerivation rec {
     libXdamage
     pango
     pipewire
-    sysprof
+    sysprof # for D-Bus interfaces
+    libsysprof-capture
     xkeyboard_config
     xwayland
     wayland-protocols
