@@ -29,7 +29,7 @@
 , gobject-introspection
 , wrapGAppsHook
 , libxslt
-, gcr
+, gcr_4
 , accountsservice
 , gdk-pixbuf
 , gdm
@@ -67,13 +67,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "43.alpha";
+  version = "43.beta";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "79OvceBnO5hxTxxhDGv/ffcBvB0tRoeVG7aJt47jkPw=";
+    sha256 = "4Ri5bdn1sL0UVOSneXgPPVfONUD6vqmhaBonrpzelME=";
   };
 
   patches = [
@@ -127,7 +127,7 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     gnome-keyring
     glib
-    gcr
+    gcr_4
     accountsservice
     libsecret
     polkit
