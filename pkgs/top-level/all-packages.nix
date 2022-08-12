@@ -4942,6 +4942,8 @@ with pkgs;
 
   cirrus-cli = callPackage ../development/tools/continuous-integration/cirrus-cli { };
 
+  cirrusgo = callPackage ../tools/security/cirrusgo { };
+
   inherit (callPackage ../applications/networking/remote/citrix-workspace { })
     citrix_workspace_21_01_0
     citrix_workspace_21_03_0
