@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -p nix-prefetch-git python3
+#! nix-shell -p common-updater-scripts python3
 #! nix-shell -i python
 
 import csv
@@ -36,32 +36,26 @@ chrome_major_version = chrome_version[0]
 chromeos_tip_build = platform_version[0]
 release_branch = f'release-R{chrome_major_version}-{chromeos_tip_build}.B-chromeos'
 
+# Determine the git revision.
+with urlopen(f'https://chromium.googlesource.com/chromiumos/platform/crosvm/+/refs/heads/{release_branch}?format=JSON') as resp:
+    resp.readline() # Remove )]}' header
+    rev = json.load(resp)['commit']
+
 # Determine the patch version by counting the commits that have been
 # added to the release branch since it forked off the chromeos branch.
-with urlopen(f'https://chromium.googlesource.com/chromiumos/platform/crosvm/+log/refs/heads/chromeos..refs/heads/{release_branch}?format=JSON') as resp:
+with urlopen(f'https://chromium.googlesource.com/chromiumos/platform/crosvm/+log/refs/heads/chromeos..{rev}?format=JSON') as resp:
     resp.readline() # Remove )]}' header
     branch_commits = json.load(resp)['log']
-    data = {'version': f'{chrome_major_version}.{len(branch_commits)}'}
+    version = f'{chrome_major_version}.{len(branch_commits)}'
 
-# Fill in the 'src' key with the output from nix-prefetch-git, which
-# can be passed straight to fetchGit when imported by Nix.
-argv = ['nix-prefetch-git',
-        '--fetch-submodules',
-        '--url', 'https://chromium.googlesource.com/crosvm/crosvm',
-        '--rev', f'refs/heads/{release_branch}']
-output = subprocess.check_output(argv)
-data['src'] = json.loads(output.decode('utf-8'))
+# Update the version, git revision, and hash in crosvm's default.nix.
+subprocess.run(['update-source-version', 'crosvm', f'--rev={rev}', version])
 
-# Find the path to crosvm's default.nix, so the src data can be
-# written into the same directory.
+# Find the path to crosvm's default.nix, so Cargo.lock can be written
+# into the same directory.
 argv = ['nix-instantiate', '--eval', '--json', '-A', 'crosvm.meta.position']
 position = json.loads(subprocess.check_output(argv).decode('utf-8'))
 filename = re.match(r'[^:]*', position)[0]
-
-# Write the output.
-with open(dirname(filename) + '/upstream-info.json', 'w') as out:
-    json.dump(data, out, indent=2)
-    out.write('\n')
 
 # Generate a Cargo.lock
 run = ['.',

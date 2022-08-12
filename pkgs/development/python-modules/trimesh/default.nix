@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "trimesh";
-  version = "3.13.0";
+  version = "3.13.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-hmfjsyOyFJXw/B08g/ZkdN746vK5ZgmNQqo81gDUQA0=";
+    sha256 = "sha256-NTHh5kWu3Nri+Yoi9yvkHlWRD3slYraktKfcah7CEY8=";
   };
 
   propagatedBuildInputs = [ numpy ];
