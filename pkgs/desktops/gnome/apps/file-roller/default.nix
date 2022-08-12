@@ -44,6 +44,13 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.gnome.org/GNOME/file-roller/-/commit/d8461bbad8226d101beb02c2695a2f66cea675df.patch";
       sha256 = "OKEZGijiIYDMiyuLqyHHrnTw88p+0hwkt6liufv3T74=";
     })
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/file-roller/-/commit/5cfaa00f04130084e42548abb2226c1c2e378e48.patch";
+      sha256 = "/3ceT7fv/L9tV5kQwmiBBDL2AOjhjoPUT3AgVLk/q98=";
+      excludes = [
+        "default.nix"
+      ];
+    })
   ];
 
   LANG = "en_US.UTF-8"; # postinstall.py
@@ -74,7 +81,7 @@ stdenv.mkDerivation rec {
     nautilus
   ];
 
-  PKG_CONFIG_LIBNAUTILUS_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/lib/nautilus/extensions-4";
+  PKG_CONFIG_LIBNAUTILUS_EXTENSION_4_EXTENSIONDIR = "${placeholder "out"}/lib/nautilus/extensions-4";
 
   postPatch = ''
     chmod +x postinstall.py # patchShebangs requires executable file
