@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl
 # Image file formats
 , libjpeg, libtiff, giflib, libpng, libwebp, libjxl
+, libspectre
 # imlib2 can load images from ID3 tags.
 , libid3tag, librsvg, libheif
 , freetype , bzip2, pkg-config
@@ -10,6 +11,7 @@
 , svgSupport ? !stdenv.isDarwin
 , heifSupport ? !stdenv.isDarwin
 , jxlSupport ? true
+, psSupport ? true
 
 # for passthru.tests
 , libcaca
@@ -39,7 +41,8 @@ stdenv.mkDerivation rec {
   ] ++ optional x11Support xlibsWrapper
     ++ optional heifSupport libheif
     ++ optional svgSupport librsvg
-    ++ optional jxlSupport libjxl;
+    ++ optional jxlSupport libjxl
+    ++ optional psSupport libspectre;
 
   nativeBuildInputs = [ pkg-config ];
 
