@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     description = "Library of high-performance linear algebra routines for parallel distributed memory machines";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ costrouc markuskowa ];
+    maintainers = with maintainers; [ costrouc markuskowa gdinh ];
     # xslu and xsllt tests fail on x86 darwin
     broken = stdenv.isDarwin && stdenv.isx86_64;
   };
