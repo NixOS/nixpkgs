@@ -16878,6 +16878,8 @@ with pkgs;
 
   faas-cli = callPackage ../development/tools/faas-cli { };
 
+  fastddsgen = callPackage ../development/tools/fastddsgen { };
+
   findbugs = callPackage ../development/tools/analysis/findbugs { };
 
   findnewest = callPackage ../development/tools/misc/findnewest { };
