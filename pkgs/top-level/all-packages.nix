@@ -1140,6 +1140,8 @@ with pkgs;
 
   aide = callPackage ../tools/security/aide { };
 
+  aioblescan = with python3Packages; toPythonApplication aioblescan;
+
   aiodnsbrute = python3Packages.callPackage ../tools/security/aiodnsbrute { };
 
   aircrack-ng = callPackage ../tools/networking/aircrack-ng { };

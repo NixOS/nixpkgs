@@ -271,6 +271,8 @@ in {
 
   aioazuredevops = callPackage ../development/python-modules/aioazuredevops { };
 
+  aioblescan = callPackage ../development/python-modules/aioblescan { };
+
   aiocache = callPackage ../development/python-modules/aiocache { };
 
   aiocoap = callPackage ../development/python-modules/aiocoap { };
