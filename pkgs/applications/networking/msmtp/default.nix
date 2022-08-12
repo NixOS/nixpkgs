@@ -24,13 +24,13 @@
 let
   inherit (lib) getBin getExe optionals;
 
-  version = "1.8.20";
+  version = "1.8.22";
 
   src = fetchFromGitHub {
     owner = "marlam";
     repo = "msmtp-mirror";
     rev = "msmtp-${version}";
-    hash = "sha256-RcQZ7Vm8UjJJoogkmUmZ+/2fz7C4AcVYY/kTOlfz7+I=";
+    hash = "sha256-Jt/uvGBrYYr6ua6LVPiP0nuRiIkxBJASdgHBNHivzxQ=";
   };
 
   meta = with lib; {
