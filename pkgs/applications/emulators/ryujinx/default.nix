@@ -55,10 +55,7 @@ buildDotnetModule rec {
     sndio
     pulseaudio
     vulkan-loader
-  ];
-
-  makeWrapperArgs = [
-    "--suffix PATH : ${lib.getBin ffmpeg}"
+    ffmpeg
   ];
 
   patches = [
