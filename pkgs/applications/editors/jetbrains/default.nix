@@ -1,5 +1,5 @@
 { lib, stdenv, callPackage, fetchurl
-, jdk, cmake, gdb, zlib, python3, gdbm
+, jdk, cmake, gdb, zlib, python3
 , dotnet-sdk_6
 , maven
 , autoPatchelfHook

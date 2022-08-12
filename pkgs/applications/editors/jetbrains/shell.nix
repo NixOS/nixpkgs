@@ -1,7 +1,7 @@
 { pkgs ? import <nixpkgs> {} }:
 let
   python = pkgs.python3;
-  python-with-my-packages = python.withPackages (p: with p; [
+  packages = python.withPackages (p: with p; [
     xmltodict
     requests
     packaging
@@ -9,9 +9,9 @@ let
 in
 pkgs.mkShell {
   buildInputs = [
-    python-with-my-packages
+    packages
   ];
   shellHook = ''
-    PYTHONPATH=${python-with-my-packages}/${python-with-my-packages.sitePackages}
+    PYTHONPATH=${packages}/${packages.sitePackages}
   '';
 }
