@@ -20221,6 +20221,8 @@ with pkgs;
 
   mimalloc = callPackage ../development/libraries/mimalloc { };
 
+  miniz = callPackage ../development/libraries/miniz { };
+
   minizip = callPackage ../development/libraries/minizip { };
 
   minizip2 = callPackage ../development/libraries/minizip2 { };
