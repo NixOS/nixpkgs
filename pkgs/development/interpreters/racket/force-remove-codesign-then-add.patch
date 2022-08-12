@@ -1,11 +1,10 @@
---- old/src/mac/codesign.rkt        2022-01-08 18:25:53.000000000 -0500
-+++ new/src/mac/codesign.rkt        2022-02-15 15:49:51.000000000 -0500
-@@ -17,6 +17,5 @@
-    #:args (file)
+--- old/src/mac/codesign.rkt
++++ new/src/mac/codesign.rkt
+@@ -18,6 +18,6 @@
     file))
-
--(if remove?
--    (remove-signature file)
--    (add-ad-hoc-signature file))
-+(remove-signature file)
-+(add-ad-hoc-signature file)
+ 
+ (void
+- (if remove?
++ (if #t
+      (remove-signature file)
+      (add-ad-hoc-signature file)))
