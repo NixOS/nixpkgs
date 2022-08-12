@@ -21559,6 +21559,8 @@ with pkgs;
     buildGoModule = buildGo117Module;
   };
 
+  uncover = callPackage ../tools/security/uncover { };
+
   unibilium = callPackage ../development/libraries/unibilium { };
 
   unicap = callPackage ../development/libraries/unicap {};
