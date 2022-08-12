@@ -126,6 +126,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/mozilla-services/syncstorage-rs">syncstorage-rs</link>,
+          a self-hostable sync server for Firefox. Available as
+          <link xlink:href="options.html#opt-services.firefox-syncserver.enable">services.firefox-syncserver</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://dragonflydb.io/">dragonflydb</link>,
           a modern replacement for Redis and Memcached. Available as
           <link linkend="opt-services.dragonflydb.enable">services.dragonflydb</link>.
@@ -390,6 +397,18 @@
           memtest86+ was updated from 5.00-coreboot-002 to 6.00-beta2.
           It is now the upstream version from https://www.memtest.org/,
           as coreboot’s fork is no longer available.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The udisks2 service, available at
+          <literal>services.udisks2.enable</literal>, is now disabled by
+          default. It will automatically be enabled through services and
+          desktop environments as needed. This also means that polkit
+          will now actually be disabled by default. The default for
+          <literal>security.polkit.enable</literal> was already flipped
+          in the previous release, but udisks2 being enabled by default
+          re-enabled it.
         </para>
       </listitem>
       <listitem>

@@ -43,6 +43,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/NordicSemiconductor/pc-ble-driver";
     license = licenses.unfreeRedistributable;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ jschievink ];
   };
 }

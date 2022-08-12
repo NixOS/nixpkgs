@@ -2535,9 +2535,13 @@ with pkgs;
 
   hime = callPackage ../tools/inputmethods/hime {};
 
-  himitsu = callPackage ../tools/security/himitsu { };
+  himitsu = callPackage ../tools/security/himitsu {
+    inherit (harePackages) hare;
+  };
 
-  himitsu-firefox = callPackage ../tools/security/himitsu-firefox { };
+  himitsu-firefox = callPackage ../tools/security/himitsu-firefox {
+    inherit (harePackages) hare;
+  };
 
   hinit = haskell.lib.compose.justStaticExecutables haskellPackages.hinit;
 
@@ -3181,6 +3185,8 @@ with pkgs;
   cht-sh = callPackage ../tools/misc/cht.sh { };
 
   cinny = callPackage ../applications/networking/instant-messengers/cinny { stdenv = stdenvNoCC; };
+
+  cinny-desktop = callPackage ../applications/networking/instant-messengers/cinny-desktop { };
 
   ckbcomp = callPackage ../tools/X11/ckbcomp { };
 
@@ -4716,7 +4722,7 @@ with pkgs;
 
   bdsync = callPackage ../tools/backup/bdsync { };
 
-  beamerpresenter = libsForQt5.callPackage ../applications/office/beamerpresenter { };
+  beamerpresenter = qt6Packages.callPackage ../applications/office/beamerpresenter { };
 
   beanstalkd = callPackage ../servers/beanstalkd { };
 
@@ -7215,8 +7221,7 @@ with pkgs;
     llvmPackages = llvmPackages_9;
   };
 
-  harec = callPackage ../development/compilers/hare/harec.nix { };
-  hare = callPackage ../development/compilers/hare/hare.nix { };
+  harePackages = recurseIntoAttrs (callPackage ../development/compilers/hare { });
 
   ham = pkgs.perlPackages.ham;
 
@@ -9824,6 +9829,10 @@ with pkgs;
     libpng = libpng12;
   };
 
+  pngpaste = callPackage ../os-specific/darwin/pngpaste {
+    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
+  };
+
   pngtools = callPackage ../tools/graphics/pngtools { };
 
   pngpp = callPackage ../development/libraries/png++ { };
@@ -11334,6 +11343,8 @@ with pkgs;
   tldr-hs = haskellPackages.tldr;
 
   tlspool = callPackage ../tools/networking/tlspool { };
+
+  tlsx = callPackage ../tools/security/tlsx { };
 
   tmate = callPackage ../tools/misc/tmate { };
 
@@ -14218,6 +14229,9 @@ with pkgs;
   cargo-outdated = callPackage ../development/tools/rust/cargo-outdated {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
+  cargo-pgx = callPackage ../development/tools/rust/cargo-pgx {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   cargo-release = callPackage ../development/tools/rust/cargo-release {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -16265,6 +16279,8 @@ with pkgs;
   krankerl = callPackage ../development/tools/krankerl { };
 
   krew = callPackage ../development/tools/krew { };
+
+  kube-bench = callPackage ../tools/security/kube-bench { };
 
   kube-hunter = callPackage ../tools/security/kube-hunter { };
 
@@ -22789,6 +22805,8 @@ with pkgs;
 
   sympa = callPackage ../servers/mail/sympa { };
 
+  syncstorage-rs = callPackage ../servers/syncstorage-rs { };
+
   system-sendmail = lowPrio (callPackage ../servers/mail/system-sendmail { });
 
   # PulseAudio daemons
@@ -22909,7 +22927,10 @@ with pkgs;
   percona-server56 = callPackage ../servers/sql/percona/5.6.x.nix { stdenv = gcc10StdenvCompat; };
   percona-server = percona-server56;
 
-  influxdb = callPackage ../servers/nosql/influxdb { };
+  influxdb = callPackage ../servers/nosql/influxdb {
+    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
+    buildGoModule = buildGo117Module;
+  };
   influxdb2-server = callPackage ../servers/nosql/influxdb2 { };
   influxdb2-cli = callPackage ../servers/nosql/influxdb2/cli.nix { };
   # For backwards compatibility with older versions of influxdb2,
@@ -24021,6 +24042,10 @@ with pkgs;
 
   librealsenseWithoutCuda = callPackage ../development/libraries/librealsense {
     cudaSupport = false;
+  };
+
+  librealsense-gui = callPackage ../development/libraries/librealsense {
+    enableGUI = true;
   };
 
   libsass = callPackage ../development/libraries/libsass { };
@@ -34568,6 +34593,13 @@ with pkgs;
 
   cytoscape = callPackage ../applications/science/misc/cytoscape {
     jre = openjdk11;
+  };
+
+  faiss = callPackage ../development/libraries/science/math/faiss {
+    pythonPackages = python3Packages;
+    # faiss wants the "-doxygen" option
+    # available only since swig4
+    swig = swig4;
   };
 
   fityk = callPackage ../applications/science/misc/fityk { };
