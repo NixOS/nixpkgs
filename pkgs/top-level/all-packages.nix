@@ -19052,6 +19052,8 @@ with pkgs;
 
   graphinder = callPackage ../tools/security/graphinder { };
 
+  httplib = callPackage ../development/libraries/httplib { };
+
   icon-lang = callPackage ../development/interpreters/icon-lang { };
 
   libgit2 = callPackage ../development/libraries/libgit2 {
