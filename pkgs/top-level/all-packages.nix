@@ -16506,6 +16506,8 @@ with pkgs;
     inherit (linuxPackages) perf;
   };
 
+  cargo-feature-set = callPackage ../development/tools/rust/cargo-feature-set { };
+
   defaultCrateOverrides = callPackage ../build-support/rust/default-crate-overrides.nix { };
 
   cargo-about = callPackage ../development/tools/rust/cargo-about { };
