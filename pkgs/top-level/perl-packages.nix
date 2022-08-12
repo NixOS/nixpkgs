@@ -19854,10 +19854,10 @@ let
 
   SerealDecoder = buildPerlPackage {
     pname = "Sereal-Decoder";
-    version = "4.018";
+    version = "4.025";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Y/YV/YVES/Sereal-Decoder-4.018.tar.gz";
-      sha256 = "0wfdixpm3p94mnng474l0nh9mjiy8q8hbrbh2af4vwn2hmazr91f";
+      url = "mirror://cpan/authors/id/Y/YV/YVES/Sereal-Decoder-4.025.tar.gz";
+      sha256 = "sha256-jg47mprxp3i33iFQb6MHl/sbUg3NAC8/KebctSRG3qU=";
     };
     buildInputs = [ TestDeep TestDifferences TestLongString TestWarn ];
     preBuild = "ls";
