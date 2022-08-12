@@ -633,6 +633,8 @@ in {
 
   apycula = callPackage ../development/python-modules/apycula { };
 
+  aqipy-atmotech = callPackage ../development/python-modules/aqipy-atmotech { };
+
   aqualogic = callPackage ../development/python-modules/aqualogic { };
 
   arabic-reshaper = callPackage ../development/python-modules/arabic-reshaper { };
