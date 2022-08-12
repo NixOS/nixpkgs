@@ -12090,6 +12090,8 @@ with pkgs;
 
   vorbisgain = callPackage ../tools/misc/vorbisgain { };
 
+  vosk = callPackage ../tools/audio/vosk { };
+
   vpnc = callPackage ../tools/networking/vpnc { };
 
   vpnc-scripts = callPackage ../tools/networking/vpnc-scripts { };
