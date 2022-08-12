@@ -32,12 +32,6 @@ in
         description = "TCP port where Tautulli listens.";
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Open ports in the firewall for Tautulli.";
-      };
-
       user = mkOption {
         type = types.str;
         default = "plexpy";
@@ -79,8 +73,6 @@ in
         Restart = "on-failure";
       };
     };
-
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
 
     users.users = mkIf (cfg.user == "plexpy") {
       plexpy = { group = cfg.group; uid = config.ids.uids.plexpy; };
