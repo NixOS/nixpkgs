@@ -1,4 +1,4 @@
-{ lib, stdenv, kernel, elfutils, python2, python3, perl, newt, slang, asciidoc, xmlto, makeWrapper
+{ lib, stdenv, fetchpatch, kernel, elfutils, python2, python3, perl, newt, slang, asciidoc, xmlto, makeWrapper
 , docbook_xsl, docbook_xml_dtd_45, libxslt, flex, bison, pkg-config, libunwind, binutils-unwrapped
 , libiberty, audit, libbfd, libopcodes, openssl, systemtap, numactl
 , zlib
@@ -14,6 +14,13 @@ stdenv.mkDerivation {
   version = kernel.version;
 
   inherit (kernel) src;
+
+  patches = optionals (versionAtLeast kernel.version "5.19" && versionOlder kernel.version "5.20") [
+    # binutils-2.39 support around init_disassemble_info()
+    # API change.
+    # Will be included in 5.20.
+    ./5.19-binutils-2.39-support.patch
+  ];
 
   preConfigure = ''
     cd tools/perf
