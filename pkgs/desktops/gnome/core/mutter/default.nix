@@ -35,6 +35,7 @@
 , xorgserver
 , python3
 , wrapGAppsHook
+, gi-docgen
 , sysprof
 , libsysprof-capture
 , desktop-file-utils
@@ -48,7 +49,7 @@ let self = stdenv.mkDerivation rec {
   pname = "mutter";
   version = "43.beta";
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major version}/${pname}-${version}.tar.xz";
@@ -73,6 +74,7 @@ let self = stdenv.mkDerivation rec {
     # This should be auto detected, but it looks like it manages a false
     # positive.
     "-Dxwayland_initfd=disabled"
+    "-Ddocs=true"
   ];
 
   propagatedBuildInputs = [
@@ -93,6 +95,7 @@ let self = stdenv.mkDerivation rec {
     pkg-config
     python3
     wrapGAppsHook
+    gi-docgen
     xorgserver # for cvt command
   ];
 
@@ -129,6 +132,12 @@ let self = stdenv.mkDerivation rec {
 
   postInstall = ''
     ${glib.dev}/bin/glib-compile-schemas "$out/share/glib-2.0/schemas"
+  '';
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    # TODO: Move this into a directory devhelp can find.
+    moveToOutput "share/mutter-11/doc" "$devdoc"
   '';
 
   # Install udev files into our own tree.
