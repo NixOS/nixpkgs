@@ -8,9 +8,8 @@ let
   };
 
   edgeVariant = {
-    version = "5.19.0";
-    suffix = "xanmod2";
-    hash = "sha256-PJY80r5jciVJwB1S82zhii+nplb+D+V7btNq/pVS/NI=";
+    version = "5.19.1";
+    hash = "sha256-Fw+XW2YDAGKEzZ4AO88Y8GcypfOb6AjKp3XOlkT8ZTQ=";
   };
 
   ttVariant = {
