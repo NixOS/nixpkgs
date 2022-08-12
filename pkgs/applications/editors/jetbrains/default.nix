@@ -1,9 +1,9 @@
 { lib, stdenv, callPackage, fetchurl
-, jdk, cmake, gdb, zlib, python3
+, jdk, cmake, gdb, zlib, python3, gdbm
 , dotnet-sdk_6
 , maven
 , autoPatchelfHook
-, libdbusmenu
+, libdbusmenu, expat, lldb
 , vmopts ? null
 }:
 
@@ -40,11 +40,12 @@ let
     }).overrideAttrs (attrs: {
       nativeBuildInputs = (attrs.nativeBuildInputs or []) ++ optionals (stdenv.isLinux) [
         autoPatchelfHook
+        libdbusmenu
+        expat
       ];
       buildInputs = (attrs.buildInputs or []) ++ optionals (stdenv.isLinux) [
         python3
         stdenv.cc.cc
-        libdbusmenu
       ];
       dontAutoPatchelf = true;
       postFixup = (attrs.postFixup or "") + optionalString (stdenv.isLinux) ''
@@ -56,6 +57,9 @@ let
           # bundled gdb does not find libcrypto 10
           rm -rf bin/gdb/linux
           ln -s ${gdb} bin/gdb/linux
+          # bundled gdb does not find libssl 10
+          rm -rf bin/lldb/linux
+          ln -s ${lldb} bin/lldb/linux
 
           autoPatchelf $PWD/bin
 
