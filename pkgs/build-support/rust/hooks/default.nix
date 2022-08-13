@@ -75,10 +75,6 @@ in {
           ${lib.optionalString (stdenv.buildPlatform.config != stdenv.hostPlatform.config) ''
             [target."${shortTarget}"]
             "linker" = "${ccForHost}"
-            ${# https://github.com/rust-lang/rust/issues/46651#issuecomment-433611633
-            lib.optionalString (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isAarch64) ''
-              "rustflags" = [ "-C", "target-feature=+crt-static", "-C", "link-arg=-lgcc" ]
-            ''}
           ''}
         '';
       };
