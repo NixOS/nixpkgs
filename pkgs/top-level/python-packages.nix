@@ -487,6 +487,8 @@ in {
 
   algebraic-data-types = callPackage ../development/python-modules/algebraic-data-types { };
 
+  aliyun-python-sdk-core = callPackage ../development/python-modules/aliyun-python-sdk-core { };
+
   allpairspy = callPackage ../development/python-modules/allpairspy { };
 
   allure-behave = callPackage ../development/python-modules/allure-behave { };
