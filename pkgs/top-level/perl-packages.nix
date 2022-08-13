@@ -1594,6 +1594,8 @@ let
     };
   };
 
+  BioExtAlign = callPackage ../development/perl-modules/Bio-Ext-Align { };
+
   BioPerl = buildPerlPackage {
     pname = "BioPerl";
     version = "1.7.8";
