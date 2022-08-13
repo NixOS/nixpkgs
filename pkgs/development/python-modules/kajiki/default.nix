@@ -4,7 +4,6 @@
 , babel
 , pytz
 , nine
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -17,7 +16,13 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ babel pytz nine ];
-  checkInputs = [ pytestCheckHook ];
+
+  # Since the following commit included in version 0.9.1+, no tests are present
+  # in the archive on PyPI.
+  #
+  #   https://github.com/jackrosenthal/kajiki/commit/fe97577d99d670fa5e43701f0a415d247316177b
+  #
+  doCheck = false;
 
   meta = with lib; {
     description = "Kajiki provides fast well-formed XML templates";
