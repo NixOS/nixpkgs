@@ -7192,8 +7192,6 @@ with pkgs;
 
   habitat = callPackage ../applications/networking/cluster/habitat { };
 
-  hardlink = callPackage ../tools/system/hardlink { };
-
   hashcash = callPackage ../tools/security/hashcash { };
 
   hashcat = callPackage ../tools/security/hashcat { };
