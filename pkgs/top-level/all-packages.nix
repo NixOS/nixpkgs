@@ -7859,6 +7859,8 @@ with pkgs;
 
   krunner-pass = libsForQt5.callPackage ../tools/security/krunner-pass { };
 
+  krunvm = callPackage ../applications/virtualization/krunvm { };
+
   kronometer = libsForQt5.callPackage ../tools/misc/kronometer { };
 
   krop = callPackage ../applications/graphics/krop { };
@@ -23878,6 +23880,12 @@ with pkgs;
   libatasmart = callPackage ../os-specific/linux/libatasmart { };
 
   libcgroup = callPackage ../os-specific/linux/libcgroup { };
+
+  libkrun = callPackage ../development/libraries/libkrun { };
+
+  libkrun-sev = callPackage ../development/libraries/libkrun { sevVariant = true; };
+
+  libkrunfw = callPackage ../development/libraries/libkrunfw { };
 
   libnl = callPackage ../os-specific/linux/libnl { };
 
