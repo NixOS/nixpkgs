@@ -8481,6 +8481,15 @@
     githubId = 9980864;
     name = "Max Hofer";
   };
+  miangraham = {
+    email = "miangraham@users.noreply.github.com";
+    github = "miangraham";
+    githubId = 704580;
+    name = "M. Ian Graham";
+    keys = [{
+      fingerprint = "8CE3 2906 516F C4D8 D373  308A E189 648A 55F5 9A9F";
+    }];
+  };
   mic92 = {
     email = "joerg@thalheim.io";
     matrix = "@mic92:nixos.dev";
