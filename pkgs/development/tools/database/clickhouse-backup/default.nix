@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "clickhouse-backup";
-  version = "1.4.9";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "AlexAkulov";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-I/4o9hynmB9Bj3WDgrNesy9noUgtV8pMOcSaA2EsX2o=";
+    sha256 = "sha256-j4z9Ldufrc1LiO1OgcBrAW17n9sXzJ2930uawdw07Pk=";
   };
 
   vendorSha256 = "sha256-N4zAdylb7etNknR0/VjIVkuI6kTWlk137HNT03Y2gWs=";
