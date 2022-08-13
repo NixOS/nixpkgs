@@ -4,7 +4,7 @@
 , CoreFoundation, Security
 }:
 
-rustPlatform.buildRustPackage {
+stdenv.mkDerivation {
   pname = "cargo";
   inherit (rustc) version src;
 
@@ -17,11 +17,26 @@ rustPlatform.buildRustPackage {
   # changes hash of vendor directory otherwise
   dontUpdateAutotoolsGnuConfigScripts = true;
 
+  configurePhase = ''
+    runHook preConfigure
+    runHook postConfigure
+  '';
+
   nativeBuildInputs = [
-    pkg-config cmake installShellFiles makeWrapper
+    pkg-config installShellFiles makeWrapper zlib
     (lib.getDev pkgsHostHost.curl)
+
+    rustc
+    rustPlatform.cargoSetupHook
+    rustPlatform.cargoInstallHook
+    rustPlatform.cargoBuildHook
+    rustPlatform.cargoCheckHook
   ];
-  buildInputs = [ cacert file curl python3 openssl zlib ]
+
+  cargoBuildType = "release";
+  cargoCheckType = "release";
+
+  buildInputs = [ cacert file curl python3 openssl ]
     ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
 
   # cargo uses git-rs which is made for a version of libgit2 from recent master that
