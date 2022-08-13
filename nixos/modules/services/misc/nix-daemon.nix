@@ -568,7 +568,7 @@ in
                 then Nix will use a binary from a binary cache if and only
                 if it is signed by <emphasis>any</emphasis> of the keys
                 listed here. By default, only the key for
-                <uri>cache.nixos.org</uri> is included.
+                <literal>cache.nixos.org</literal> is included.
               '';
             };
 
