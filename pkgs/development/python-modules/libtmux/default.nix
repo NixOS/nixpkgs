@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , buildPythonPackage
 , poetry-core
@@ -29,6 +30,10 @@ buildPythonPackage rec {
 
     pytestCheckHook
   ];
+
+  pytestFlagsArray = lib.optionals stdenv.isDarwin [ "--ignore=tests/test_test.py" ];
+
+  pythonImportsCheck = [ "libtmux" ];
 
   meta = with lib; {
     description = "Scripting library for tmux";
