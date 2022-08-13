@@ -39,7 +39,7 @@ in
 
     settings = mkOption {
       description = ''
-        Configuration for <package>grafana-agent</package>.
+        Configuration for <literal>grafana-agent</literal>.
 
         See https://grafana.com/docs/agent/latest/configuration/
       '';

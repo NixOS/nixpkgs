@@ -94,7 +94,7 @@ in {
 
           <note><para>If this is <literal>false</literal> the resulting store
           path will be non-deterministic and will be rebuilt every time the
-          <package>openssl</package> package changes.</para></note>
+          <literal>openssl</literal> package changes.</para></note>
         '';
       };
 

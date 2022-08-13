@@ -51,7 +51,7 @@ in {
         default = null;
         description = ''
           Path to an environment-file which may contain secrets to be
-          substituted via <package>envsubst</package>.
+          substituted via <literal>envsubst</literal>.
         '';
       };
 

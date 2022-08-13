@@ -86,7 +86,7 @@ in
         default = true;
         type = types.bool;
         description = ''
-          Binds <package>captive-browser</package> to the network interface declared in
+          Binds <literal>captive-browser</literal> to the network interface declared in
           <literal>cfg.interface</literal>. This can be used to avoid collisions
           with private subnets.
         '';

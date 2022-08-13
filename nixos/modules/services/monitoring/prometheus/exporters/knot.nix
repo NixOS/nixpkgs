@@ -12,7 +12,7 @@ in {
       default = "${pkgs.knot-dns.out}/lib/libknot.so";
       defaultText = literalExpression ''"''${pkgs.knot-dns.out}/lib/libknot.so"'';
       description = ''
-        Path to the library of <package>knot-dns</package>.
+        Path to the library of <literal>knot-dns</literal>.
       '';
     };
 

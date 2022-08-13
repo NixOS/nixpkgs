@@ -63,7 +63,7 @@ in {
               default = "default";
               type = types.enum [ "default" "reusable" "clustered" ];
               description = ''
-                Rendering mode of <package>grafana-image-renderer</package>:
+                Rendering mode of <literal>grafana-image-renderer</literal>:
                 <itemizedlist>
                 <listitem><para><literal>default:</literal> Creates on browser-instance
                   per rendering request.</para></listitem>
@@ -80,7 +80,7 @@ in {
               type = types.listOf types.str;
               default = [ "--no-sandbox" ];
               description = ''
-                List of CLI flags passed to <package>chromium</package>.
+                List of CLI flags passed to <literal>chromium</literal>.
               '';
             };
           };
@@ -90,7 +90,7 @@ in {
       default = {};
 
       description = ''
-        Configuration attributes for <package>grafana-image-renderer</package>.
+        Configuration attributes for <literal>grafana-image-renderer</literal>.
 
         See <link xlink:href="https://github.com/grafana/grafana-image-renderer/blob/ce1f81438e5f69c7fd7c73ce08bab624c4c92e25/default.json"/>
         for supported values.

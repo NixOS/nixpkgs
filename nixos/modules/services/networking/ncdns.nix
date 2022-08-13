@@ -126,7 +126,7 @@ in
         description = ''
           Path to the file containing the KSK public key.
           The key can be generated using the <literal>dnssec-keygen</literal>
-          command, provided by the package <package>bind</package> as follows:
+          command, provided by the package <literal>bind</literal> as follows:
           <programlisting>
           $ dnssec-keygen -a RSASHA256 -3 -b 2048 -f KSK bit
           </programlisting>
@@ -147,7 +147,7 @@ in
         description = ''
           Path to the file containing the ZSK public key.
           The key can be generated using the <literal>dnssec-keygen</literal>
-          command, provided by the package <package>bind</package> as follows:
+          command, provided by the package <literal>bind</literal> as follows:
           <programlisting>
           $ dnssec-keygen -a RSASHA256 -3 -b 2048 bit
           </programlisting>

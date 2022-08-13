@@ -21,7 +21,7 @@ in {
 
       settings = mkOption {
         description = ''
-          Configuration for <package>isso</package>.
+          Configuration for <literal>isso</literal>.
 
           See <link xlink:href="https://posativ.org/isso/docs/configuration/server/">Isso Server Configuration</link>
           for supported values.

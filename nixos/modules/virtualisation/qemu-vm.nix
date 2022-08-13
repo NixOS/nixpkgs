@@ -717,7 +717,7 @@ in
         default = null;
         description =
           ''
-            An alternate BIOS (such as <package>qboot</package>) with which to start the VM.
+            An alternate BIOS (such as <literal>qboot</literal>) with which to start the VM.
             Should contain a file named <literal>bios.bin</literal>.
             If <literal>null</literal>, QEMU's builtin SeaBIOS will be used.
           '';

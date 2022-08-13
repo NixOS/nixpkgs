@@ -195,7 +195,7 @@ in
             actually contact the directory server, and it is possible that
             a malformed configuration file will trigger reconnection. If
             <literal>soft</literal> is specified, then
-            <package>nss_ldap</package> will return immediately on server
+            <literal>nss_ldap</literal> will return immediately on server
             failure. All hard reconnect policies block with exponential
             backoff before retrying.
           '';
