@@ -495,9 +495,7 @@ in
           ];
         '';
         description = ''
-          Plugins to install as part of
-          <productname>Discourse</productname>, expressed as a list of
-          derivations.
+          Plugins to install as part of Discourse, expressed as a list of derivations.
         '';
       };
 

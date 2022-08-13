@@ -12,8 +12,7 @@ in
   options = {
     services.geoipupdate = {
       enable = lib.mkEnableOption ''
-        periodic downloading of GeoIP databases using
-        <productname>geoipupdate</productname>.
+        periodic downloading of GeoIP databases using geoipupdate.
       '';
 
       interval = lib.mkOption {
@@ -37,8 +36,7 @@ in
           }
         '';
         description = ''
-          <productname>geoipupdate</productname> configuration
-          options. See
+          geoipupdate configuration options. See
           <link xlink:href="https://github.com/maxmind/geoipupdate/blob/main/doc/GeoIP.conf.md"/>
           for a full list of available options.
 
@@ -86,8 +84,7 @@ in
             LicenseKey = lib.mkOption {
               type = with lib.types; either path (attrsOf path);
               description = ''
-                A file containing the
-                <productname>MaxMind</productname> license key.
+                A file containing the MaxMind license key.
 
                 Always handled as a secret whether the value is
                 wrapped in a <literal>{ _secret = ...; }</literal>
