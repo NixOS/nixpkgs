@@ -1,5 +1,12 @@
 { lib, stdenv, stdenvNoCC, lndir, runtimeShell, shellcheck }:
 
+let
+  inherit (lib)
+    optionalAttrs
+    warn
+    ;
+in
+
 rec {
 
   /* Run the shell command `buildCommand' to produce a store path named
@@ -532,13 +539,16 @@ rec {
    *                 passthru.tests.greeting = callPackage ./test { };
    *               } ./myscript.sh;
    */
-  makeSetupHook = { name ? "hook", deps ? [], substitutions ? {}, meta ? {}, passthru ? null }: script:
+  makeSetupHook = { name ? "hook", deps ? [], substitutions ? {}, meta ? {}, passthru ? {} }: script:
     runCommand name
       (substitutions // {
         inherit meta;
         strictDeps = true;
-      } // lib.optionalAttrs (passthru != null) {
-        inherit passthru;
+        # TODO 2023-01, no backport: simplify to inherit passthru;
+        passthru = passthru
+          // optionalAttrs (substitutions?passthru)
+            (warn "makeSetupHook (name = ${lib.strings.escapeNixString name}): `substitutions.passthru` is deprecated. Please set `passthru` directly."
+              substitutions.passthru);
       })
       (''
         mkdir -p $out/nix-support
