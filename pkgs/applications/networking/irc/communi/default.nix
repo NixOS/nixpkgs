@@ -1,4 +1,11 @@
-{ fetchFromGitHub, libcommuni, qtbase, qmake, lib, stdenv, wrapQtAppsHook }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, libcommuni
+, qmake
+, qtbase
+, wrapQtAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "communi";
@@ -15,12 +22,15 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ qmake ]
-    ++ lib.optional stdenv.isDarwin wrapQtAppsHook;
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [ libcommuni qtbase ];
-
-  dontWrapQtApps = true;
+  buildInputs = [
+    libcommuni
+    qtbase
+  ];
 
   preConfigure = ''
     export QMAKEFEATURES=${libcommuni}/features
@@ -32,20 +42,19 @@ stdenv.mkDerivation rec {
     "COMMUNI_INSTALL_ICONS=${placeholder "out"}/share/icons/hicolor"
     "COMMUNI_INSTALL_DESKTOP=${placeholder "out"}/share/applications"
     "COMMUNI_INSTALL_THEMES=${placeholder "out"}/share/communi/themes"
-    (if stdenv.isDarwin
-      then [ "COMMUNI_INSTALL_BINS=${placeholder "out"}/Applications" ]
-      else [ "COMMUNI_INSTALL_BINS=${placeholder "out"}/bin" ])
+    "COMMUNI_INSTALL_BINS=${placeholder "out"}/${if stdenv.isDarwin then "Applications" else "bin"}"
   ];
 
-  postInstall = if stdenv.isDarwin then ''
-    # Nix qmake does not add the bundle rpath by default.
-    install_name_tool \
-      -add_rpath @executable_path/../Frameworks \
-      $out/Applications/Communi.app/Contents/MacOS/Communi
-  '' else ''
-    substituteInPlace "$out/share/applications/communi.desktop" \
-      --replace "/usr/bin" "$out/bin"
-  '';
+  postInstall =
+    if stdenv.isDarwin then ''
+      # Nix qmake does not add the bundle rpath by default.
+      install_name_tool \
+        -add_rpath @executable_path/../Frameworks \
+        $out/Applications/Communi.app/Contents/MacOS/Communi
+    '' else ''
+      substituteInPlace "$out/share/applications/communi.desktop" \
+        --replace "/usr/bin" "$out/bin"
+    '';
 
   preFixup = ''
     rm -rf lib
@@ -56,6 +65,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/communi/communi-desktop";
     license = licenses.bsd3;
     maintainers = with maintainers; [ hrdinka ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
+    broken = stdenv.isDarwin;
   };
 }
