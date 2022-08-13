@@ -1,4 +1,13 @@
-{ lib, mkXfceDerivation, exo, gtk3, libsoup, libxfce4ui, libxfce4util, xfce4-panel, glib-networking }:
+{ lib
+, mkXfceDerivation
+, exo
+, glib-networking
+, gtk3
+, libsoup
+, libxfce4ui
+, libxfce4util
+, xfce4-panel
+}:
 
 mkXfceDerivation {
   category = "apps";
@@ -8,7 +17,15 @@ mkXfceDerivation {
 
   sha256 = "sha256-i3QdQij58JYv3fWdESUeTV0IW3A8RVGNtmuxUc6FUMg=";
 
-  buildInputs = [ exo gtk3 libsoup libxfce4ui libxfce4util xfce4-panel glib-networking ];
+  buildInputs = [
+    exo
+    glib-networking
+    gtk3
+    libsoup
+    libxfce4ui
+    libxfce4util
+    xfce4-panel
+  ];
 
   meta = with lib; {
     description = "Screenshot utility for the Xfce desktop";
