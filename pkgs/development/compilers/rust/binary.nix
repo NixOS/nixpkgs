@@ -82,9 +82,6 @@ rec {
       patchShebangs ./install.sh
       ./install.sh --prefix=$out \
         --components=cargo
-
-      wrapProgram "$out/bin/cargo" \
-        --suffix PATH : "${rustc}/bin"
     '';
   };
 }
