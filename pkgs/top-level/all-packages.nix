@@ -12807,6 +12807,7 @@ in
   binutils-unwrapped = callPackage ../development/tools/misc/binutils {
     # FHS sys dirs presumably only have stuff for the build platform
     noSysDirs = (stdenv.targetPlatform != stdenv.hostPlatform) || noSysDirs;
+    autoreconfHook = if targetPlatform.isiOS then autoreconfHook269 else autoreconfHook;
   };
   binutils = wrapBintoolsWith {
     bintools = binutils-unwrapped;
