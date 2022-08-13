@@ -5636,6 +5636,8 @@ in {
 
   moku = callPackage ../development/python-modules/moku { };
 
+  monai = callPackage ../development/python-modules/monai { };
+
   monero = callPackage ../development/python-modules/monero { };
 
   mongomock = callPackage ../development/python-modules/mongomock { };
@@ -10495,9 +10497,7 @@ in {
 
   tableaudocumentapi = callPackage ../development/python-modules/tableaudocumentapi { };
 
-  tables = callPackage ../development/python-modules/tables {
-    hdf5 = pkgs.hdf5_1_10;
-  };
+  tables = callPackage ../development/python-modules/tables { };
 
   tablib = callPackage ../development/python-modules/tablib { };
 
