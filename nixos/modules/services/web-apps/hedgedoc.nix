@@ -190,7 +190,7 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Whether to allow guests to edit existing notes with the `freely' permission,
+          Whether to allow guests to edit existing notes with the <literal>freely</literal> permission,
           when <option>allowAnonymous</option> is enabled.
         '';
       };
@@ -954,8 +954,8 @@ in
                 type = types.str;
                 default = "";
                 description = ''
-                  Attribute map for `email'.
-                  Defaults to `NameID' of SAML response if
+                  Attribute map for <literal>email</literal>.
+                  Defaults to <literal>NameID</literal> of SAML response if
                   <option>identifierFormat</option> has
                   the default value.
                 '';

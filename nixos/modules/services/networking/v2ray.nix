@@ -54,7 +54,7 @@ with lib;
         description = ''
           The configuration object.
 
-          Either `configFile` or `config` must be specified.
+          Either <literal>configFile</literal> or <literal>config</literal> must be specified.
 
           See <link xlink:href="https://www.v2fly.org/en_US/config/overview.html"/>.
         '';

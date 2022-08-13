@@ -202,7 +202,7 @@ with lib;
         This requires using <literal>pkgs.nginxQuic</literal> package
         which can be achieved by setting <literal>services.nginx.package = pkgs.nginxQuic;</literal>.
         Note that HTTP 3 support is experimental and
-        *not* yet recommended for production.
+        <emphasis>not</emphasis> yet recommended for production.
         Read more at https://quic.nginx.org/
       '';
     };

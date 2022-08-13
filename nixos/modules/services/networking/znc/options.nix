@@ -178,7 +178,7 @@ in
           '';
           type = types.str;
           description = ''
-            Generate with `nix-shell -p znc --command "znc --makepass"`.
+            Generate with <command>nix-shell -p znc --command "znc --makepass"</command>.
             This is the password used to log in to the ZNC web admin interface.
             You can also set this through
             <option>services.znc.config.User.&lt;username&gt;.Pass.Method</option>
