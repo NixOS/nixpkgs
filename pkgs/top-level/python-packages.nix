@@ -6019,6 +6019,8 @@ in {
 
   normality = callPackage ../development/python-modules/normality { };
 
+  nornir = callPackage ../development/python-modules/nornir { };
+
   nose2 = callPackage ../development/python-modules/nose2 { };
 
   nose = callPackage ../development/python-modules/nose { };
