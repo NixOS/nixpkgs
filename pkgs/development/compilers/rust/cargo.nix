@@ -87,7 +87,5 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ retrry ];
     license = [ licenses.mit licenses.asl20 ];
     platforms = platforms.unix;
-    # weird segfault in a build script
-    broken = stdenv.targetPlatform.isMusl && !stdenv.targetPlatform.isStatic;
   };
 }
