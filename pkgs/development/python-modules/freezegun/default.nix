@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "freezegun";
-  version = "1.2.1";
+  version = "1.2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tMZO+ydea8aNxudxsX/+D/D5C4GipRiQQ1ULZRmSa6Q=";
+    hash = "sha256-zSLRugaUE4RBDNln2KmdWuJEL1ffr+/y/aXejcXAVEY=";
   };
 
   patches = lib.optionals (pythonAtLeast "3.10") [
