@@ -157,10 +157,16 @@ in {
     };
     ghc941 = callPackage ../development/compilers/ghc/9.4.1.nix {
       bootPkgs =
-        # TODO(@sternenseemann): Package 9.0.2 bindist or wait for upstream fix
-        # Need to use 902 due to
+        # 9.2 is broken due to
         # https://gitlab.haskell.org/ghc/ghc/-/issues/21914
-          packages.ghc902;
+        # Use 8.10 as a workaround, TODO: maybe package binary 9.0?
+        # aarch ghc8107Binary exceeds max output size on hydra
+        if stdenv.hostPlatform.isAarch then
+          packages.ghc8107BinaryMinimal
+        else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
+          packages.ghc8107
+        else
+          packages.ghc8107Binary;
       inherit (buildPackages.python3Packages) sphinx;
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
