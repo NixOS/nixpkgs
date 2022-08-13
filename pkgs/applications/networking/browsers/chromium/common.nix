@@ -160,6 +160,22 @@ let
       ./patches/no-build-timestamps.patch
       # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags:
       ./patches/widevine-79.patch
+    ] ++ optionals (lib.versionOlder version "105") [
+      # Fix WebRTP affecting screen sharing. These fixes were integrated into chromium 105
+      # See https://webrtc-review.googlesource.com/c/src/+/267002
+      # and https://webrtc-review.googlesource.com/c/src/+/267002
+      (fetchpatch {
+        extraPrefix = "third_party/webrtc/";
+        stripLen = 1;
+        url = "https://github.com/maitrungduc1410/webrtc/commit/a6ed749b12c63d252c6d893d5b5b62fcf35773d9.patch";
+        sha256 = "sha256-pFVM9a6os8/cy0L8gc7iPfVYbWVtQpMN+2c0bPee5bw=";
+      })
+      (fetchpatch {
+        extraPrefix = "third_party/webrtc/";
+        stripLen = 1;
+        url = "https://github.com/maitrungduc1410/webrtc/commit/450da27933f9fc623f4f697e2e724b9e68fd2a99.patch";
+        sha256 = "sha256-0zRlsO1BCXrxfNS+b/ezMAGO/M2+0ZRz2Iw05j0gzUg=";
+      })
     ];
 
     postPatch = ''
