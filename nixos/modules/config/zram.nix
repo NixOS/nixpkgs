@@ -108,7 +108,7 @@ in
           but is slow. <literal>lz4</literal> has bad compression, but is fast.
           <literal>zstd</literal> is both good compression and fast, but requires newer kernel.
           You can check what other algorithms are supported by your zram device with
-          <programlisting>cat /sys/class/block/zram*/comp_algorithm</programlisting>
+          <command>cat /sys/class/block/zram*/comp_algorithm</command>
         '';
       };
     };

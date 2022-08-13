@@ -24,7 +24,7 @@ in {
         Path to file containing the Mackerel API key. The file should contain a
         single line of the following form:
 
-        <literallayout>apikey = "EXAMPLE_API_KEY"</literallayout>
+        <literal>apikey = "EXAMPLE_API_KEY"</literal>
       '';
     };
 

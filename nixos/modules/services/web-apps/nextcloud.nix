@@ -572,7 +572,7 @@ in {
       description = ''
         Secret options which will be appended to nextcloud's config.php file (written as JSON, in the same
         form as the <xref linkend="opt-services.nextcloud.extraOptions"/> option), for example
-        <programlisting>{"redis":{"password":"secret"}}</programlisting>.
+        <literal>{"redis":{"password":"secret"}}</literal>.
       '';
     };
 
