@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation {
   pname = "kvmtool";
-  version = "unstable-2022-04-04";
+  version = "unstable-2022-06-09";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/linux/kernel/git/will/kvmtool.git";
-    rev = "5657dd3e48b41bc6db38fa657994bc0e030fd31f";
-    sha256 = "1y1j44lk9957f2dmyrscbxl4zncp4ibvvcdj6bwylb8jsvmd5fs2";
+    rev = "f44af23e3a62e46158341807b0d2d132249b96a8";
+    sha256 = "sha256-M83dCCXU/fkh21x10vx6BLg9Wja1714qW7yxl5zY6z0=";
   };
 
   enableParallelBuilding = true;
