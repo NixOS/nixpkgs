@@ -38,9 +38,10 @@ pypkgs.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "Manage tmux workspaces from JSON and YAML";
+    description = "tmux session manager";
     homepage = "https://tmuxp.git-pull.com/";
-    license = licenses.bsd3;
+    changelog = "https://github.com/tmux-python/tmuxp/raw/v${version}/CHANGES";
+    license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
   };
 }
