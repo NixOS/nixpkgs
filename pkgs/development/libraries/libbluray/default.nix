@@ -20,11 +20,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-wksPQcW3N7u2XFRP5jSVY3p3HBClGd/IAudp8RK0O3U=";
   };
 
-  patches = optional withJava ./BDJ-JARFILE-path.patch;
+  patches = [
+    ./BDJ-JARFILE-path.patch
+    ./libbluray-1.3.1-Fix-build-failure-after-Oracle-Java-CPU-for-April-2022.patch
+  ];
 
   nativeBuildInputs = [ pkg-config autoreconfHook ]
-                      ++ optionals withJava [ ant ]
-                      ;
+    ++ optionals withJava [ ant ];
 
   buildInputs = [ fontconfig ]
                 ++ optional withJava jdk
