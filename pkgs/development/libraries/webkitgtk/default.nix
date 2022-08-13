@@ -2,6 +2,8 @@
 , stdenv
 , runCommand
 , fetchurl
+, fetchgit
+, fetchpatch
 , perl
 , python3
 , ruby
@@ -49,7 +51,7 @@
 , openjpeg
 , geoclue2
 , sqlite
-, enableGLES ? true
+, enableGLES ? stdenv.isLinux
 , gst-plugins-base
 , gst-plugins-bad
 , woff2
@@ -92,6 +94,31 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fdo-backend-path.patch;
       wpebackend_fdo = libwpe-fdo;
+    })
+  ] ++ [
+    # Fix build without OpenGL.
+    # https://bugs.webkit.org/show_bug.cgi?id=232934
+    # This is required when building WebKitGTK with Quartz backend on macOS.
+    (fetchpatch {
+      url = "https://git.yoctoproject.org/poky/plain/meta/recipes-sato/webkit/webkitgtk/0001-Fix-build-without-opengl-or-es.patch";
+      sha256 = "sha256-9MUDNTda2yxo5knhBKu2PQXNASgTW2Z7H4F0aFt4b0Q=";
+    })
+    # Fix conflicting types on OS X.
+    # https://bugs.webkit.org/show_bug.cgi?id=126433
+    # This patch was reverted later since it used to break builds under OS X 10.9 and earlier.
+    # However, including CoreFoundation.h causes exactly the same errors in the link.
+    (fetchpatch {
+      url = "https://github.com/WebKit/WebKit/commit/68822eb73f2cdd843dbe6bdd346e7268b279650b.patch";
+      postFetch = ''sed -i 's/#ifdef __APPLE__/#if defined(__APPLE__)/' $out'';
+      excludes = [ "Source/JavaScriptCore/ChangeLog" ];
+      sha256 = "sha256-0jbQeOY9EC+8cgK4LWTO+q0TE50RdnWgSJalULc52m4=";
+    })
+    # Fix WTF errors on Darwin. (upstreamed)
+    # This patch fixes missing headers in WTF.
+    # TODO: remove me on 2.38+
+    (fetchpatch {
+      url = "https://github.com/WebKit/WebKit/commit/6bb3f1342f342358061b525c7b8f077b7b5ed15b.patch";
+      sha256 = "sha256-f0ovaxF0IT3EDXTjaoYSu9fQlJa55AtlpalRisrx+Wk=";
     })
   ];
 
@@ -195,30 +222,30 @@ stdenv.mkDerivation rec {
     "-DUSE_SOUP2=${cmakeBool (lib.versions.major libsoup.version == "2")}"
     "-DUSE_LIBSECRET=${cmakeBool withLibsecret}"
   ] ++ lib.optionals stdenv.isDarwin [
-    "-DENABLE_GAMEPAD=OFF"
-    "-DENABLE_GTKDOC=OFF"
-    "-DENABLE_MINIBROWSER=OFF"
+    "-DENABLE_GAMEPAD=OFF" # we don't have libmanette on darwin
+    "-DENABLE_JOURNALD_LOG=OFF"
     "-DENABLE_QUARTZ_TARGET=ON"
-    "-DENABLE_VIDEO=ON"
-    "-DENABLE_WEBGL=OFF"
-    "-DENABLE_WEB_AUDIO=OFF"
     "-DENABLE_X11_TARGET=OFF"
-    "-DUSE_APPLE_ICU=OFF"
+    "-DUSE_APPLE_ICU=OFF" # https://bugs.webkit.org/show_bug.cgi?id=220081
     "-DUSE_OPENGL_OR_ES=OFF"
-    "-DUSE_SYSTEM_MALLOC=ON"
   ] ++ lib.optionals (!systemdSupport) [
     "-DUSE_SYSTEMD=OFF"
-  ] ++ lib.optionals (stdenv.isLinux && enableGLES) [
+  ] ++ lib.optionals enableGLES [
     "-DENABLE_GLES2=ON"
+  ];
+
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [
+    # FAILED: Source/WTF/wtf/CMakeFiles/WTF.dir/FileSystem.cpp.o
+    # error: no matching constructor for initialization of 'std::filesystem::path'
+    "-D HAVE_MISSING_STD_FILESYSTEM_PATH_CONSTRUCTOR=1"
+    # FAILED: lib/libwebkit2gtk-4.0.37.56.9.dylib
+    # Undefined symbols for architecture arm64: "bmalloc::api::isoAllocate(__pas_heap_ref&)"
+    # TODO: check if it can be removed on 2.37.2+
+    "-D BENABLE_LIBPAS=0"
   ];
 
   postPatch = ''
     patchShebangs .
-  '' + lib.optionalString stdenv.isDarwin ''
-    # It needs malloc_good_size.
-    sed 22i'#include <malloc/malloc.h>' -i Source/WTF/wtf/FastMalloc.h
-    # <CommonCrypto/CommonRandom.h> needs CCCryptorStatus.
-    sed 43i'#include <CommonCrypto/CommonCryptor.h>' -i Source/WTF/wtf/RandomDevice.cpp
   '';
 
   requiredSystemFeatures = [ "big-parallel" ];
@@ -229,6 +256,5 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = teams.gnome.members;
-    broken = stdenv.isDarwin;
   };
 }
