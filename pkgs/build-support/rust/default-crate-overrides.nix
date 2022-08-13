@@ -28,6 +28,7 @@
 , cmake
 , glib
 , freetype
+, fontconfig
 , rdkafka
 , udev
 , libevdev
@@ -253,7 +254,7 @@ in
 
   servo-fontconfig-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ freetype ];
+    buildInputs = [ freetype fontconfig ];
   };
 
   thrussh-libsodium = attrs: {
