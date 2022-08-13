@@ -83,8 +83,8 @@ in
       type = format.type;
       description = ''
         The ASF.json file, all the options are documented <link xlink:href="https://github.com/JustArchiNET/ArchiSteamFarm/wiki/Configuration#global-config">here</link>.
-        Do note that `AutoRestart`  and `UpdateChannel` is always to `false` respectively `0` because NixOS takes care of updating everything.
-        `Headless` is also always set to `true` because there is no way to provide inputs via a systemd service.
+        Do note that <literal>AutoRestart</literal>  and <literal>UpdateChannel</literal> is always to <literal>false</literal> respectively <literal>0</literal> because NixOS takes care of updating everything.
+        <literal>Headless</literal> is also always set to <literal>true</literal> because there is no way to provide inputs via a systemd service.
         You should try to keep ASF up to date since upstream does not provide support for anything but the latest version and you're exposing yourself to all kinds of issues - as is outlined <link xlink:href="https://github.com/JustArchiNET/ArchiSteamFarm/wiki/Configuration#updateperiod">here</link>.
       '';
       example = {

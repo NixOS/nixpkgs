@@ -83,7 +83,7 @@ in
 
           If you already have a customized (or otherwise changed)
           <literal>~/.gitolite.rc</literal> file, NixOS will refuse to replace
-          it with a symlink, and the `gitolite-init` initialization service
+          it with a symlink, and the <literal>gitolite-init</literal> initialization service
           will fail. In this situation, in order to use this option, you
           will need to take any customizations you may have in
           <literal>~/.gitolite.rc</literal>, convert them to appropriate Perl
