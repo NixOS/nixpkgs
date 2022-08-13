@@ -319,11 +319,10 @@ in {
         type = with types; either str (listOf str);
         default = [];
         example = "03:00";
-        description = ''
+        description = lib.mdDoc ''
           The time(s) to run automatic backup of GitLab
           state. Specified in systemd's time format; see
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>.
+          {manpage}`systemd.time(7)`.
         '';
       };
 

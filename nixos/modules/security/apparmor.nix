@@ -42,7 +42,7 @@ in
         if you want this service to do such killing
         by sending a <literal>SIGTERM</literal> to those running processes'';
       policies = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           AppArmor policies.
         '';
         type = types.attrsOf (types.submodule ({ name, config, ... }: {
@@ -50,7 +50,7 @@ in
             enable = mkDisableOption "loading of the profile into the kernel";
             enforce = mkDisableOption "enforcing of the policy or only complain in the logs";
             profile = mkOption {
-              description = "The policy of the profile.";
+              description = lib.mdDoc "The policy of the profile.";
               type = types.lines;
               apply = pkgs.writeText name;
             };
@@ -61,16 +61,16 @@ in
       includes = mkOption {
         type = types.attrsOf types.lines;
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           List of paths to be added to AppArmor's searched paths
-          when resolving <literal>include</literal> directives.
+          when resolving `include` directives.
         '';
         apply = mapAttrs pkgs.writeText;
       };
       packages = mkOption {
         type = types.listOf types.package;
         default = [];
-        description = "List of packages to be added to AppArmor's include path";
+        description = lib.mdDoc "List of packages to be added to AppArmor's include path";
       };
       enableCache = mkEnableOption ''
         caching of AppArmor policies

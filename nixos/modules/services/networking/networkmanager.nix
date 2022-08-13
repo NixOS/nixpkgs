@@ -173,17 +173,14 @@ in {
           str
         ]));
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           Configuration for the [connection] section of NetworkManager.conf.
           Refer to
-          <link xlink:href="https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html">
+          [
             https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html#id-1.2.3.11
-          </link>
+          ](https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html)
           or
-          <citerefentry>
-            <refentrytitle>NetworkManager.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>
+          {manpage}`NetworkManager.conf(5)`
           for more information.
         '';
       };
@@ -191,17 +188,14 @@ in {
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Configuration appended to the generated NetworkManager.conf.
           Refer to
-          <link xlink:href="https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html">
+          [
             https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html
-          </link>
+          ](https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html)
           or
-          <citerefentry>
-            <refentrytitle>NetworkManager.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>
+          {manpage}`NetworkManager.conf(5)`
           for more information.
         '';
       };
@@ -209,18 +203,15 @@ in {
       unmanaged = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           List of interfaces that will not be managed by NetworkManager.
           Interface name can be specified here, but if you need more fidelity,
           refer to
-          <link xlink:href="https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html#device-spec">
+          [
             https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html#device-spec
-          </link>
+          ](https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html#device-spec)
           or the "Device List Format" Appendix of
-          <citerefentry>
-            <refentrytitle>NetworkManager.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>.
+          {manpage}`NetworkManager.conf(5)`.
         '';
       };
 
@@ -327,18 +318,15 @@ in {
       dns = mkOption {
         type = types.enum [ "default" "dnsmasq" "unbound" "systemd-resolved" "none" ];
         default = "default";
-        description = ''
-          Set the DNS (<literal>resolv.conf</literal>) processing mode.
+        description = lib.mdDoc ''
+          Set the DNS (`resolv.conf`) processing mode.
 
           A description of these modes can be found in the main section of
-          <link xlink:href="https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html">
+          [
             https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html
-          </link>
+          ](https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html)
           or in
-          <citerefentry>
-            <refentrytitle>NetworkManager.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>.
+          {manpage}`NetworkManager.conf(5)`.
         '';
       };
 

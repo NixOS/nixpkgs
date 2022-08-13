@@ -87,7 +87,7 @@ in
         default = "znc";
         example = "john";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The name of an existing user account to use to own the ZNC server
           process. If not specified, a default user will be created.
         '';
@@ -97,7 +97,7 @@ in
         default = defaultUser;
         example = "users";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Group to own the ZNC process.
         '';
       };
@@ -106,7 +106,7 @@ in
         default = "/var/lib/znc";
         example = "/home/john/.znc";
         type = types.path;
-        description = ''
+        description = lib.mdDoc ''
           The state directory for ZNC. The config and the modules will be linked
           to from this directory as well.
         '';
@@ -115,10 +115,10 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to open ports in the firewall for ZNC. Does work with
           ports for listeners specified in
-          <option>services.znc.config.Listener</option>.
+          {option}`services.znc.config.Listener`.
         '';
       };
 
@@ -177,12 +177,12 @@ in
       configFile = mkOption {
         type = types.path;
         example = literalExpression "~/.znc/configs/znc.conf";
-        description = ''
+        description = lib.mdDoc ''
           Configuration file for ZNC. It is recommended to use the
-          <option>config</option> option instead.
+          {option}`config` option instead.
 
           Setting this option will override any auto-generated config file
-          through the <option>confOptions</option> or <option>config</option>
+          through the {option}`confOptions` or {option}`config`
           options.
         '';
       };
@@ -191,7 +191,7 @@ in
         type = types.listOf types.package;
         default = [ ];
         example = literalExpression "[ pkgs.zncModules.fish pkgs.zncModules.push ]";
-        description = ''
+        description = lib.mdDoc ''
           A list of global znc module packages to add to znc.
         '';
       };
@@ -199,9 +199,9 @@ in
       mutable = mkOption {
         default = true; # TODO: Default to true when config is set, make sure to not delete the old config if present
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Indicates whether to allow the contents of the
-          <literal>dataDir</literal> directory to be changed by the user at
+          `dataDir` directory to be changed by the user at
           run-time.
 
           If enabled, modifications to the ZNC configuration after its initial
@@ -217,7 +217,7 @@ in
         default = [ ];
         example = [ "--debug" ];
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           Extra arguments to use for executing znc.
         '';
       };

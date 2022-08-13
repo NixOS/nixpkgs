@@ -39,10 +39,9 @@ in {
             "secrets file" = "/etc/rsyncd.secrets";
           };
         };
-        description = ''
+        description = lib.mdDoc ''
           Configuration for rsyncd. See
-          <citerefentry><refentrytitle>rsyncd.conf</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>.
+          {manpage}`rsyncd.conf(5)`.
         '';
       };
 

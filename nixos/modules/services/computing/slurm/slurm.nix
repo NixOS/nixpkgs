@@ -109,10 +109,9 @@ in
         extraConfig = mkOption {
           type = types.lines;
           default = "";
-          description = ''
-            Extra configuration for <literal>slurmdbd.conf</literal> See also:
-            <citerefentry><refentrytitle>slurmdbd.conf</refentrytitle>
-            <manvolnum>8</manvolnum></citerefentry>.
+          description = lib.mdDoc ''
+            Extra configuration for `slurmdbd.conf` See also:
+            {manpage}`slurmdbd.conf(8)`.
           '';
         };
       };

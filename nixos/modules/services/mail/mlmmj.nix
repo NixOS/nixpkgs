@@ -86,10 +86,9 @@ in
       maintInterval = mkOption {
         type = types.str;
         default = "20min";
-        description = ''
+        description = lib.mdDoc ''
           Time interval between mlmmj-maintd runs, see
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry> for format information.
+          {manpage}`systemd.time(7)` for format information.
         '';
       };
 

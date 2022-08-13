@@ -226,9 +226,7 @@ in {
           File consisting of lines of the form <literal>varname=value</literal>
           to define variables for the wireless configuration.
 
-          See section "EnvironmentFile=" in <citerefentry>
-          <refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum>
-          </citerefentry> for a syntax reference.
+          See section "EnvironmentFile=" in <citerefentry><refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum></citerefentry> for a syntax reference.
 
           Secrets (PSKs, passwords, etc.) can be provided without adding them to
           the world-readable Nix store by defining them in the environment file and
@@ -348,10 +346,7 @@ in {
               description = ''
                 Use this option to configure advanced authentication methods like EAP.
                 See
-                <citerefentry>
-                  <refentrytitle>wpa_supplicant.conf</refentrytitle>
-                  <manvolnum>5</manvolnum>
-                </citerefentry>
+                <citerefentry><refentrytitle>wpa_supplicant.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>
                 for example configurations.
 
                 <warning><para>
@@ -401,13 +396,10 @@ in {
               example = ''
                 bssid_blacklist=02:11:22:33:44:55 02:22:aa:44:55:66
               '';
-              description = ''
+              description = lib.mdDoc ''
                 Extra configuration lines appended to the network block.
                 See
-                <citerefentry>
-                  <refentrytitle>wpa_supplicant.conf</refentrytitle>
-                  <manvolnum>5</manvolnum>
-                </citerefentry>
+                {manpage}`wpa_supplicant.conf(5)`
                 for available options.
               '';
             };
@@ -478,13 +470,10 @@ in {
         example = ''
           p2p_disabled=1
         '';
-        description = ''
+        description = lib.mdDoc ''
           Extra lines appended to the configuration file.
           See
-          <citerefentry>
-            <refentrytitle>wpa_supplicant.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>
+          {manpage}`wpa_supplicant.conf(5)`
           for available options.
         '';
       };
