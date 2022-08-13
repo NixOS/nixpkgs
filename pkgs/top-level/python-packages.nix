@@ -5797,6 +5797,8 @@ in {
 
   myst-parser = callPackage ../development/python-modules/myst-parser { };
 
+  n2g = callPackage ../development/python-modules/n2g { };
+
   nad-receiver = callPackage ../development/python-modules/nad-receiver { };
 
   nagiosplugin = callPackage ../development/python-modules/nagiosplugin { };
