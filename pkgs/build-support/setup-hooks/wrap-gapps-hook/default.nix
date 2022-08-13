@@ -13,6 +13,7 @@
 }:
 
 makeSetupHook {
+  name = "wrap-gapps-hook";
   deps = lib.optionals (!stdenv.isDarwin) [
     # It is highly probable that a program will use GSettings,
     # at minimum through GTK file chooser dialogue.
