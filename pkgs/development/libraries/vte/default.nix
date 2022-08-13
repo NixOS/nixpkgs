@@ -14,6 +14,7 @@
 , gobject-introspection
 , vala
 , python3
+, gi-docgen
 , libxml2
 , gnutls
 , gperf
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
   pname = "vte";
   version = "0.69.92";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -59,6 +60,7 @@ stdenv.mkDerivation rec {
     pkg-config
     vala
     python3
+    gi-docgen
   ];
 
   buildInputs = [
@@ -78,7 +80,9 @@ stdenv.mkDerivation rec {
     pango
   ];
 
-  mesonFlags = lib.optionals (!systemdSupport) [
+  mesonFlags = [
+    "-Ddocs=true"
+  ] ++ lib.optionals (!systemdSupport) [
     "-D_systemd=false"
   ] ++ lib.optionals (gtkVersion == "4") [
     "-Dgtk3=false"
@@ -93,6 +97,11 @@ stdenv.mkDerivation rec {
     patchShebangs src/box_drawing_generate.sh
     patchShebangs src/parser-seq.py
     patchShebangs src/modes.py
+  '';
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {
