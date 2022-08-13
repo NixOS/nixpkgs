@@ -489,6 +489,8 @@ in {
 
   aliyun-python-sdk-cdn = callPackage ../development/python-modules/aliyun-python-sdk-cdn { };
 
+  aliyun-python-sdk-config = callPackage ../development/python-modules/aliyun-python-sdk-config { };
+
   aliyun-python-sdk-core = callPackage ../development/python-modules/aliyun-python-sdk-core { };
 
   aliyun-python-sdk-dbfs = callPackage ../development/python-modules/aliyun-python-sdk-dbfs { };
