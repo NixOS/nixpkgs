@@ -14,6 +14,8 @@
 , tabulate
 , ttp-templates
 , yangson
+, n2g
+, nornir
 }:
 
 buildPythonPackage rec {
@@ -39,9 +41,9 @@ buildPythonPackage rec {
     deepdiff
     geoip2
     jinja2
-    # n2g unpackaged
+    n2g
     netmiko
-    # nornir unpackaged
+    nornir
     openpyxl
     tabulate
     yangson
@@ -58,8 +60,6 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    # missing package n2g
-    "test/pytest/test_N2G_formatter.py"
     # missing test file
     "test/pytest/test_extend_tag.py"
   ];
@@ -84,8 +84,6 @@ buildPythonPackage rec {
     # Missing .xslx files *shrug*
     "test_excel_formatter_update"
     "test_excel_formatter_update_using_result_kwargs"
-    # missing package n2g
-    "test_n2g_formatter"
     # missing test files
     "test_TTP_CACHE_FOLDER_env_variable_usage"
     # requires additional network setup
