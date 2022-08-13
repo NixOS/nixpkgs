@@ -14967,4 +14967,10 @@
     github = "yisuidenghua";
     githubId = 102890144;
   };
+  neverupdate = {
+    email = "sotospeak@tuta.io";
+    name = "neverupdate";
+    github = "neverupdate";
+    githubId = 109185139;
+  };
 }

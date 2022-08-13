@@ -32158,6 +32158,8 @@ with pkgs;
     boost = boost17x;
   };
 
+  feather-wallet = qt6.callPackage ../applications/blockchains/feather-wallet { };
+
   oxen = callPackage ../applications/blockchains/oxen
     { stdenv = gcc10StdenvCompat; boost = boost17x; };
 

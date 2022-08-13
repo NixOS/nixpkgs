@@ -1,0 +1,11 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 481874d..6dbe2b2 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -302,5 +302,5 @@ if(APPLE)
+ endif()
+ 
+ install(TARGETS feather
+-        DESTINATION ${CMAKE_INSTALL_PREFIX}
++        DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
+ )

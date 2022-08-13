@@ -1,0 +1,12 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt                                                                                                 
+index ce8c9fb..93b85a4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -152,6 +152,7 @@ if(TOR_DIR)
+     message(STATUS "Embedding Tor binaries at ${TOR_DIR}")
+ else()
+     message(STATUS "Skipping Tor inclusion because -DTOR_DIR=Off")
++    configure_file("cmake/config-feather.h.cmake" "${CMAKE_CURRENT_SOURCE_DIR}/src/config-feather.h")
+ endif()
+ 
+ if(MINGW)
