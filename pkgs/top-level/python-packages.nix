@@ -493,6 +493,8 @@ in {
 
   aliyun-python-sdk-kms = callPackage ../development/python-modules/aliyun-python-sdk-kms { };
 
+  aliyun-python-sdk-sts = callPackage ../development/python-modules/aliyun-python-sdk-sts { };
+
   allpairspy = callPackage ../development/python-modules/allpairspy { };
 
   allure-behave = callPackage ../development/python-modules/allure-behave { };
