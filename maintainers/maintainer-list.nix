@@ -4661,6 +4661,12 @@
     githubId = 37017396;
     name = "gbtb";
   };
+  gdinh = {
+    email = "nix@contact.dinh.ai";
+    github = "gdinh";
+    githubId = 34658064;
+    name = "Grace Dinh";
+  };
   gebner = {
     email = "gebner@gebner.org";
     github = "gebner";
