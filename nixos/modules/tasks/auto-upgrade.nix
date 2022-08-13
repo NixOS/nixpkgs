@@ -49,8 +49,8 @@ in {
         description = ''
           The URI of the NixOS channel to use for automatic
           upgrades. By default, this is the channel set using
-          <command>nix-channel</command> (run <literal>nix-channel
-          --list</literal> to see the current value).
+          <command>nix-channel</command> (run <literal>nix-channel --list</literal>
+          to see the current value).
         '';
       };
 

@@ -51,8 +51,7 @@ in
       example = "/var/lib/dendrite/registration_secret";
       default = null;
       description = ''
-        Environment file as defined in <citerefentry>
-        <refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
+        Environment file as defined in <citerefentry><refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
         Secrets may be passed to the service without adding them to the world-readable
         Nix store, by specifying placeholder variables as the option value in Nix and
         setting these variables accordingly in the environment file. Currently only used

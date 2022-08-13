@@ -18,8 +18,7 @@ in
           Enable gitolite management under the
           <literal>gitolite</literal> user. After
           switching to a configuration with Gitolite enabled, you can
-          then run <literal>git clone
-          gitolite@host:gitolite-admin.git</literal> to manage it further.
+          then run <literal>git clone gitolite@host:gitolite-admin.git</literal> to manage it further.
         '';
       };
 

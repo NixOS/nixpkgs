@@ -207,8 +207,8 @@ in {
         description = ''
           These lines go to the end of <literal>krb5.conf</literal> verbatim.
           <literal>krb5.conf</literal> may include any of the relations that are
-          valid for <literal>kdc.conf</literal> (see <literal>man
-          kdc.conf</literal>), but it is not a recommended practice.
+          valid for <literal>kdc.conf</literal> (see <literal>man kdc.conf</literal>),
+          but it is not a recommended practice.
         '';
       };
 

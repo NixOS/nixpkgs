@@ -92,8 +92,8 @@ let
               Whether this activation script supports being dry-activated.
               These activation scripts will also be executed on dry-activate
               activations with the environment variable
-              <literal>NIXOS_ACTION</literal> being set to <literal>dry-activate
-              </literal>.  it's important that these activation scripts  don't
+              <literal>NIXOS_ACTION</literal> being set to <literal>dry-activate</literal>.
+              it's important that these activation scripts  don't
               modify anything about the system when the variable is set.
             '';
           };

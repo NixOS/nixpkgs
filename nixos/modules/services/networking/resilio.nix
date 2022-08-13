@@ -201,8 +201,8 @@ in
           ];
         description = ''
           Shared folder list. If enabled, web UI must be
-          disabled. Secrets can be generated using <literal>rslsync
-          --generate-secret</literal>. Note that this secret will be
+          disabled. Secrets can be generated using <literal>rslsync --generate-secret</literal>.
+          Note that this secret will be
           put inside the Nix store, so it is realistically not very
           secret.
 
