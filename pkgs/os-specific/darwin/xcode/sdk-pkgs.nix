@@ -36,7 +36,13 @@ rec {
     bintools = binutils;
     libc = targetIosSdkPkgs.libraries;
     extraPackages = [ "${sdk}/System" ];
+    # The resource-root commands are copied from pkgs/development/compilers/llvm/7/default.nix
     extraBuildCommands = ''
+      rsrc="$out/resource-root"
+      mkdir "$rsrc"
+      ln -s "${clang-unwrapped.lib}/lib/clang/${clang-unwrapped.version}/include" "$rsrc"
+      echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
+
       tr '\n' ' ' < $out/nix-support/cc-cflags > cc-cflags.tmp
       mv cc-cflags.tmp $out/nix-support/cc-cflags
       echo "-target ${targetPlatform.config}" >> $out/nix-support/cc-cflags
