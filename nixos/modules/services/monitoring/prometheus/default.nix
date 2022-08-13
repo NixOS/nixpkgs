@@ -1730,8 +1730,7 @@ in
       default = true;
       example = "syntax-only";
       description = ''
-        Check configuration with <literal>promtool
-        check</literal>. The call to <literal>promtool</literal> is
+        Check configuration with <literal>promtool check</literal>. The call to <literal>promtool</literal> is
         subject to sandboxing by Nix.
 
         If you use credentials stored in external files

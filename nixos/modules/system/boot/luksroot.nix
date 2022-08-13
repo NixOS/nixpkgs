@@ -539,8 +539,8 @@ in
         Useful for mounting a number of devices that use the same
         passphrase without retyping it several times.
 
-        Such setup can be useful if you use <command>cryptsetup
-        luksSuspend</command>. Different LUKS devices will still have
+        Such setup can be useful if you use <command>cryptsetup luksSuspend</command>.
+        Different LUKS devices will still have
         different master keys even when using the same passphrase.
       '';
     };

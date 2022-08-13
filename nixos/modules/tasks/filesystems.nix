@@ -188,8 +188,7 @@ in
 
         Instead of specifying <literal>device</literal>, you can also
         specify a volume label (<literal>label</literal>) for file
-        systems that support it, such as ext2/ext3 (see <command>mke2fs
-        -L</command>).
+        systems that support it, such as ext2/ext3 (see <command>mke2fs -L</command>).
       '';
     };
 

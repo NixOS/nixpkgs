@@ -125,8 +125,8 @@ in {
         contain non-consecutive underscores except at the end, and consists of
         small-case a-z characters and digits 0-9.  The
         <command>htpasswd</command> tool from the <literal>apacheHttpd</literal>
-        package may be used to generate the hash: <command>htpasswd
-        -bnBC 12 username password</command>
+        package may be used to generate the hash:
+        <command>htpasswd -bnBC 12 username password</command>
 
         <warning>
         <para>

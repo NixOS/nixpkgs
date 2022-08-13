@@ -51,9 +51,8 @@ in {
           are supplied, they will be combined, with values from
           <option>configFile</option> taking precedence.
 
-          You can use the command <literal>nix-shell -p yggdrasil --run
-          "yggdrasil -genconf"</literal> to generate default
-          configuration values with documentation.
+          You can use the command <literal>nix-shell -p yggdrasil --run "yggdrasil -genconf"</literal>
+          to generate default configuration values with documentation.
         '';
       };
 
