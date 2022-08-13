@@ -5,6 +5,7 @@
 , perl
 , python3
 , ruby
+, gi-docgen
 , bison
 , gperf
 , cmake
@@ -68,15 +69,15 @@
 
 stdenv.mkDerivation rec {
   pname = "webkitgtk";
-  version = "2.36.6";
+  version = "2.37.1";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   separateDebugInfo = stdenv.isLinux;
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "sha256-EZO8ghlGM2d28N+l4NylZR8eVxV+2hLaRyHSRB8kpho=";
+    sha256 = "sha256-xTMmsXUfjG2j2y9L+pHBgBdViT4ofQ4fbAc0RYnUpqc=";
   };
 
   patches = lib.optionals stdenv.isLinux [
@@ -116,6 +117,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     ruby
+    gi-docgen
     glib # for gdbus-codegen
   ] ++ lib.optionals stdenv.isLinux [
     wayland # for wayland-scanner
@@ -225,6 +227,11 @@ stdenv.mkDerivation rec {
     sed 22i'#include <malloc/malloc.h>' -i Source/WTF/wtf/FastMalloc.h
     # <CommonCrypto/CommonRandom.h> needs CCCryptorStatus.
     sed 43i'#include <CommonCrypto/CommonCryptor.h>' -i Source/WTF/wtf/RandomDevice.cpp
+  '';
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   requiredSystemFeatures = [ "big-parallel" ];
