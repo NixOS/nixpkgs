@@ -133,6 +133,8 @@ in stdenv.mkDerivation rec {
 
     # Useful debugging parameter
     # export VERBOSE=1
+
+    sed -i "s/base.crt_static_default = true/base.crt_static_default = false/" compiler/rustc_target/src/spec/linux_musl_base.rs
   '';
 
   # rustc unfortunately needs cmake to compile llvm-rt but doesn't
