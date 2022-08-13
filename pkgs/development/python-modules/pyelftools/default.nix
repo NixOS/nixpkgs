@@ -20,7 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-+T5C0ah2oj5E8fWaQbuzYRVgD5bSiUbaArrlxNLojvw=";
   };
 
-  doCheck = stdenv.hostPlatform.system == "x86_64-linux";
+  doCheck = stdenv.hostPlatform.system == "x86_64-linux" && stdenv.hostPlatform.isGnu;
 
   checkPhase = ''
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" test/external_tools/readelf
