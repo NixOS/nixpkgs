@@ -16,13 +16,12 @@ in {
       interval = mkOption {
         type = types.str;
         default = "weekly";
-        description = ''
+        description = lib.mdDoc ''
           How often we run fstrim. For most desktop and server systems
           a sufficient trimming frequency is once a week.
 
           The format is described in
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>.
+          {manpage}`systemd.time(7)`.
         '';
       };
     };

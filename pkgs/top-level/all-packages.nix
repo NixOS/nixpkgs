@@ -242,6 +242,8 @@ with pkgs;
 
   atkinson-hyperlegible = callPackage ../data/fonts/atkinson-hyperlegible { };
 
+  _0x =  callPackage ../tools/misc/0x { };
+
   atuin = callPackage ../tools/misc/atuin {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
@@ -1089,7 +1091,6 @@ with pkgs;
 
   acme-client = callPackage ../tools/networking/acme-client {
     stdenv = gccStdenv;
-    libressl = libressl_3_4;
   };
 
   adrgen = callPackage ../tools/misc/adrgen { };
@@ -1139,6 +1140,8 @@ with pkgs;
   ahcpd = callPackage ../tools/networking/ahcpd { };
 
   aide = callPackage ../tools/security/aide { };
+
+  aioblescan = with python3Packages; toPythonApplication aioblescan;
 
   aiodnsbrute = python3Packages.callPackage ../tools/security/aiodnsbrute { };
 
@@ -10154,6 +10157,10 @@ with pkgs;
   radsecproxy = callPackage ../tools/networking/radsecproxy { };
 
   radvd = callPackage ../tools/networking/radvd { };
+
+  rain = callPackage ../development/tools/rain {
+    buildGoModule = buildGo117Module;
+  };
 
   rainbowstream = with python3.pkgs; toPythonApplication rainbowstream;
 
@@ -20214,6 +20221,8 @@ with pkgs;
 
   mimalloc = callPackage ../development/libraries/mimalloc { };
 
+  miniz = callPackage ../development/libraries/miniz { };
+
   minizip = callPackage ../development/libraries/minizip { };
 
   minizip2 = callPackage ../development/libraries/minizip2 { };
@@ -21559,6 +21568,8 @@ with pkgs;
     buildGoModule = buildGo117Module;
   };
 
+  uncover = callPackage ../tools/security/uncover { };
+
   unibilium = callPackage ../development/libraries/unibilium { };
 
   unicap = callPackage ../development/libraries/unicap {};
@@ -22316,10 +22327,7 @@ with pkgs;
 
   dcnnt = python3Packages.callPackage ../servers/dcnnt { };
 
-  dendrite = callPackage ../servers/dendrite {
-    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
-    buildGoModule = buildGo117Module;
-  };
+  dendrite = callPackage ../servers/dendrite { };
 
   dex-oidc = callPackage ../servers/dex { };
 
@@ -22992,9 +23000,7 @@ with pkgs;
 
   check_zfs = callPackage ../servers/monitoring/nagios/plugins/zfs.nix { };
 
-  neo4j = callPackage ../servers/nosql/neo4j {
-    jre = jre8_headless;
-  };
+  neo4j = callPackage ../servers/nosql/neo4j { };
 
   neo4j-desktop = callPackage ../applications/misc/neo4j-desktop { };
 
@@ -30789,6 +30795,8 @@ with pkgs;
 
   telegram-cli = callPackage ../applications/networking/instant-messengers/telegram/telegram-cli { };
 
+  tg = python3Packages.callPackage ../applications/networking/instant-messengers/telegram/tg { };
+
   telepathy-gabble = callPackage ../applications/networking/instant-messengers/telepathy/gabble { };
 
   telepathy-haze = callPackage ../applications/networking/instant-messengers/telepathy/haze {};
@@ -35789,9 +35797,7 @@ with pkgs;
 
   viewnior = callPackage ../applications/graphics/viewnior { };
 
-  vimUtils = callPackage ../applications/editors/vim/plugins/vim-utils.nix {
-    inherit (lua51Packages) hasLuaModule;
-  };
+  vimUtils = callPackage ../applications/editors/vim/plugins/vim-utils.nix { };
 
   vimPlugins = recurseIntoAttrs (callPackage ../applications/editors/vim/plugins {
     llvmPackages = llvmPackages_6;

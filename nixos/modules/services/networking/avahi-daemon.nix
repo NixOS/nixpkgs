@@ -150,10 +150,9 @@ in
           ''';
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Specify custom service definitions which are placed in the avahi service directory.
-        See the <citerefentry><refentrytitle>avahi.service</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> manpage for detailed information.
+        See the {manpage}`avahi.service(5)` manpage for detailed information.
       '';
     };
 

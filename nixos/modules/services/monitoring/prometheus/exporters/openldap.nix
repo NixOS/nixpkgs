@@ -40,7 +40,7 @@ in {
     metricsPath = mkOption {
       default = "/metrics";
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         URL path where metrics should be exposed.
       '';
     };
@@ -48,7 +48,7 @@ in {
       default = "30s";
       type = types.str;
       example = "1m";
-      description = ''
+      description = lib.mdDoc ''
         Scrape interval of the exporter.
       '';
     };

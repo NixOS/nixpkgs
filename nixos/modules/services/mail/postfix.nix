@@ -535,9 +535,8 @@ in
       canonical = mkOption {
         type = types.lines;
         default = "";
-        description = ''
-          Entries for the <citerefentry><refentrytitle>canonical</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry> table.
+        description = lib.mdDoc ''
+          Entries for the {manpage}`canonical(5)` table.
         '';
       };
 

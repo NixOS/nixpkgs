@@ -157,12 +157,12 @@ in
           { allowBroken = true; allowUnfree = true; }
         '';
       type = configType;
-      description = ''
+      description = lib.mdDoc ''
         The configuration of the Nix Packages collection.  (For
         details, see the Nixpkgs documentation.)  It allows you to set
         package configuration options.
 
-        Ignored when <literal>nixpkgs.pkgs</literal> is set.
+        Ignored when `nixpkgs.pkgs` is set.
       '';
     };
 
@@ -180,17 +180,17 @@ in
           ]
         '';
       type = types.listOf overlayType;
-      description = ''
+      description = lib.mdDoc ''
         List of overlays to use with the Nix Packages collection.
         (For details, see the Nixpkgs documentation.)  It allows
         you to override packages globally. Each function in the list
-        takes as an argument the <emphasis>original</emphasis> Nixpkgs.
+        takes as an argument the *original* Nixpkgs.
         The first argument should be used for finding dependencies, and
         the second should be used for overriding recipes.
 
-        If <literal>nixpkgs.pkgs</literal> is set, overlays specified here
+        If `nixpkgs.pkgs` is set, overlays specified here
         will be applied after the overlays that were already present
-        in <literal>nixpkgs.pkgs</literal>.
+        in `nixpkgs.pkgs`.
       '';
     };
 
@@ -202,12 +202,12 @@ in
       apply = lib.systems.elaborate;
       defaultText = literalExpression
         ''(import "''${nixos}/../lib").lib.systems.examples.aarch64-multiplatform'';
-      description = ''
+      description = lib.mdDoc ''
         Specifies the platform where the NixOS configuration will run.
 
-        To cross-compile, set also <literal>nixpkgs.buildPlatform</literal>.
+        To cross-compile, set also `nixpkgs.buildPlatform`.
 
-        Ignored when <literal>nixpkgs.pkgs</literal> is set.
+        Ignored when `nixpkgs.pkgs` is set.
       '';
     };
 
@@ -220,7 +220,7 @@ in
       apply = lib.systems.elaborate;
       defaultText = literalExpression
         ''config.nixpkgs.hostPlatform'';
-      description = ''
+      description = lib.mdDoc ''
         Specifies the platform on which NixOS should be built.
         By default, NixOS is built on the system where it runs, but you can
         change where it's built. Setting this option will cause NixOS to be
@@ -230,7 +230,7 @@ in
         or if you're building machines, you can set this to match your
         development system and/or build farm.
 
-        Ignored when <literal>nixpkgs.pkgs</literal> is set.
+        Ignored when `nixpkgs.pkgs` is set.
       '';
     };
 
@@ -243,25 +243,25 @@ in
       apply = lib.systems.elaborate;
       defaultText = literalExpression
         ''(import "''${nixos}/../lib").lib.systems.examples.aarch64-multiplatform'';
-      description = ''
-        Systems with a recently generated <literal>hardware-configuration.nix</literal>
+      description = lib.mdDoc ''
+        Systems with a recently generated `hardware-configuration.nix`
         do not need to specify this option, unless cross-compiling, in which case
-        you should set <emphasis>only</emphasis> <option>nixpkgs.buildPlatform</option>.
+        you should set *only* {option}`nixpkgs.buildPlatform`.
 
         If this is somehow not feasible, you may fall back to removing the
-        <option>nixpkgs.hostPlatform</option> line from the generated config and
+        {option}`nixpkgs.hostPlatform` line from the generated config and
         use the old options.
 
         Specifies the platform on which NixOS should be built. When
-        <literal>nixpkgs.crossSystem</literal> is unset, it also specifies
-        the platform <emphasis>for</emphasis> which NixOS should be
+        `nixpkgs.crossSystem` is unset, it also specifies
+        the platform *for* which NixOS should be
         built.  If this option is unset, it defaults to the platform
         type of the machine where evaluation happens. Specifying this
         option is useful when doing distributed multi-platform
         deployment, or when building virtual machines. See its
         description in the Nixpkgs manual for more details.
 
-        Ignored when <literal>nixpkgs.pkgs</literal> or <literal>hostPlatform</literal> is set.
+        Ignored when `nixpkgs.pkgs` or `hostPlatform` is set.
       '';
     };
 
@@ -272,20 +272,20 @@ in
       type = types.nullOr types.attrs; # TODO utilize lib.systems.parsedPlatform
       default = null;
       example = { system = "aarch64-linux"; config = "aarch64-unknown-linux-gnu"; };
-      description = ''
-        Systems with a recently generated <literal>hardware-configuration.nix</literal>
-        may instead specify <emphasis>only</emphasis> <option>nixpkgs.buildPlatform</option>,
-        or fall back to removing the <option>nixpkgs.hostPlatform</option> line from the generated config.
+      description = lib.mdDoc ''
+        Systems with a recently generated `hardware-configuration.nix`
+        may instead specify *only* {option}`nixpkgs.buildPlatform`,
+        or fall back to removing the {option}`nixpkgs.hostPlatform` line from the generated config.
 
         Specifies the platform for which NixOS should be
         built. Specify this only if it is different from
-        <literal>nixpkgs.localSystem</literal>, the platform
-        <emphasis>on</emphasis> which NixOS should be built. In other
+        `nixpkgs.localSystem`, the platform
+        *on* which NixOS should be built. In other
         words, specify this to cross-compile NixOS. Otherwise it
         should be set as null, the default. See its description in the
         Nixpkgs manual for more details.
 
-        Ignored when <literal>nixpkgs.pkgs</literal> or <literal>hostPlatform</literal> is set.
+        Ignored when `nixpkgs.pkgs` or `hostPlatform` is set.
       '';
     };
 

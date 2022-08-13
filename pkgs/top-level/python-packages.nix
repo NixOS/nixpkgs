@@ -271,6 +271,8 @@ in {
 
   aioazuredevops = callPackage ../development/python-modules/aioazuredevops { };
 
+  aioblescan = callPackage ../development/python-modules/aioblescan { };
+
   aiocache = callPackage ../development/python-modules/aiocache { };
 
   aiocoap = callPackage ../development/python-modules/aiocoap { };
@@ -630,6 +632,8 @@ in {
   apsw = callPackage ../development/python-modules/apsw { };
 
   apycula = callPackage ../development/python-modules/apycula { };
+
+  aqipy-atmotech = callPackage ../development/python-modules/aqipy-atmotech { };
 
   aqualogic = callPackage ../development/python-modules/aqualogic { };
 
@@ -2247,6 +2251,8 @@ in {
   debts = callPackage ../development/python-modules/debts { };
 
   debugpy = callPackage ../development/python-modules/debugpy { };
+
+  debuglater = callPackage ../development/python-modules/debuglater { };
 
   decli = callPackage ../development/python-modules/decli { };
 
@@ -4759,6 +4765,8 @@ in {
   justbases = callPackage ../development/python-modules/justbases { };
 
   justbytes = callPackage ../development/python-modules/justbytes { };
+
+  justnimbus = callPackage ../development/python-modules/justnimbus { };
 
   jwcrypto = callPackage ../development/python-modules/jwcrypto { };
 
@@ -7701,6 +7709,8 @@ in {
 
   pykoplenti = callPackage ../development/python-modules/pykoplenti { };
 
+  pykostalpiko = callPackage ../development/python-modules/pykostalpiko { };
+
   pykulersky = callPackage ../development/python-modules/pykulersky { };
 
   pykwalify = callPackage ../development/python-modules/pykwalify { };
@@ -8851,6 +8861,8 @@ in {
   python-sql = callPackage ../development/python-modules/python-sql { };
 
   python-stdnum = callPackage ../development/python-modules/python-stdnum { };
+
+  python-telegram = callPackage ../development/python-modules/python-telegram { };
 
   python-telegram-bot = callPackage ../development/python-modules/python-telegram-bot { };
 

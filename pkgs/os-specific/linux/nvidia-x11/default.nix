@@ -34,6 +34,7 @@ rec {
     openSha256 = "sha256-1bAr5dWZ4jnY3Uo2JaEz/rhw2HuW9LZ5bACmA1VG068=";
     settingsSha256 = "sha256-j47LtP6FNTPfiXFh9KwXX8vZOQzlytA30ZfW9N5F2PY=";
     persistencedSha256 = "sha256-hULBy0wnVpLH8I0L6O9/HfgvJURtE2whpXOgN/vb3Wo=";
+    broken = kernel.kernelAtLeast "5.19"; # Added at 2022-08-12
   };
 
   # Vulkan developer beta driver
