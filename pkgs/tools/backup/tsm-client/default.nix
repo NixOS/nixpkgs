@@ -58,7 +58,7 @@
 #   check the date of the "Linux x86_64 client"
 # * "IBM Spectrum Protect BA client ... interim fix downloads"
 # Look for the "Linux x86_64 client" rows
-# in the table # at the bottom of each page.
+# in the table at the bottom of each page.
 # Follow the "HTTPS" link of the row with the latest date stamp.
 # In the directory listing to show up, pick the big `.tar` file.
 #
