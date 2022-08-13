@@ -36,9 +36,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "libtmux" ];
 
   meta = with lib; {
-    description = "Scripting library for tmux";
-    homepage = "https://libtmux.readthedocs.io/";
-    license = licenses.bsd3;
+    description = "Typed scripting library / ORM / API wrapper for tmux";
+    homepage = "https://libtmux.git-pull.com/";
+    changelog = "https://github.com/tmux-python/libtmux/raw/v${version}/CHANGES";
+    license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
 }
