@@ -89,7 +89,7 @@ in
           for a running system, entries can be removed for a more
           minimal NixOS installation.
 
-          Note: If <package>pkgs.nano</package> is removed from this list,
+          Note: If <literal>pkgs.nano</literal> is removed from this list,
           make sure another editor is installed and the
           <literal>EDITOR</literal> environment variable is set to it.
           Environment variables can be set using

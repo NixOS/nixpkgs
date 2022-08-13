@@ -50,7 +50,7 @@ in {
           default = "http://localhost:8123/default";
           type = types.str;
           description = ''
-            The URL to be used to connect to <package>clickhouse</package>.
+            The URL to be used to connect to <literal>clickhouse</literal>.
           '';
         };
       };
@@ -67,7 +67,7 @@ in {
           default = "/run/postgresql";
           type = types.str;
           description = ''
-            Path to the UNIX domain-socket to communicate with <package>postgres</package>.
+            Path to the UNIX domain-socket to communicate with <literal>postgres</literal>.
           '';
         };
       };

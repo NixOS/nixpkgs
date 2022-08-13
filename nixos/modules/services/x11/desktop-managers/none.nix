@@ -17,7 +17,7 @@ in
         <option>service.earlyoom</option> use XDG autostart files to start.
         If this option is not set to <literal>true</literal> and you are using
         a window manager without a desktop manager, you need to manually start
-        them or running <package>dex</package> somewhere.
+        them or running <literal>dex</literal> somewhere.
       '';
     };
   };

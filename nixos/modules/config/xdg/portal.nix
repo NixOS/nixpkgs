@@ -44,8 +44,8 @@ in
         List of additional portals to add to path. Portals allow interaction
         with system, like choosing files or taking screenshots. At minimum,
         a desktop portal implementation should be listed. GNOME and KDE already
-        adds <package>xdg-desktop-portal-gtk</package>; and
-        <package>xdg-desktop-portal-kde</package> respectively. On other desktop
+        adds <literal>xdg-desktop-portal-gtk</literal>; and
+        <literal>xdg-desktop-portal-kde</literal> respectively. On other desktop
         environments you probably want to add them yourself.
       '';
     };

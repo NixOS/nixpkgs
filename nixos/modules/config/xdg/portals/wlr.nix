@@ -17,14 +17,14 @@ in
     enable = mkEnableOption ''
       desktop portal for wlroots-based desktops
 
-      This will add the <package>xdg-desktop-portal-wlr</package> package into
+      This will add the <literal>xdg-desktop-portal-wlr</literal> package into
       the <option>xdg.portal.extraPortals</option> option, and provide the
       configuration file
     '';
 
     settings = mkOption {
       description = ''
-        Configuration for <package>xdg-desktop-portal-wlr</package>.
+        Configuration for <literal>xdg-desktop-portal-wlr</literal>.
 
         See <literal>xdg-desktop-portal-wlr(5)</literal> for supported
         values.

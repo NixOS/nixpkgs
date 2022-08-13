@@ -13,7 +13,7 @@ in {
         type = with types; attrsOf (oneOf [ int bool str ]);
         default = {};
         description = ''
-          Configuration for <package>create_ap</package>.
+          Configuration for <literal>create_ap</literal>.
           See <link xlink:href="https://raw.githubusercontent.com/lakinduakash/linux-wifi-hotspot/master/src/scripts/create_ap.conf">upstream example configuration</link>
           for supported values.
         '';

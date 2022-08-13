@@ -134,10 +134,10 @@ in {
           User under which mastodon runs. If it is set to "mastodon",
           that user will be created, otherwise it should be set to the
           name of a user created elsewhere.  In both cases,
-          <package>mastodon</package> and a package containing only
+          <literal>mastodon</literal> and a package containing only
           the shell script <literal>mastodon-env</literal> will be added to
           the user's package set. To run a command from
-          <package>mastodon</package> such as <literal>tootctl</literal>
+          <literal>mastodon</literal> such as <literal>tootctl</literal>
           with the environment configured by this module use
           <literal>mastodon-env</literal>, as in:
 

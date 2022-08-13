@@ -75,7 +75,7 @@ in
         description = ''
           File to load as environment file. Environment variables
           from this file will be interpolated into the config file
-          using <package>envsubst</package> which is helpful for specifying
+          using <literal>envsubst</literal> which is helpful for specifying
           secrets:
           <programlisting>
           { <xref linkend="opt-services.privacyidea.secretKey"/> = "$SECRET"; }
@@ -205,10 +205,10 @@ in
           type = with types; attrsOf (attrsOf (oneOf [ str bool int (listOf str) ]));
           default = {};
           description = ''
-            Attribute-set containing the settings for <package>privacyidea-ldap-proxy</package>.
+            Attribute-set containing the settings for <literal>privacyidea-ldap-proxy</literal>.
             It's possible to pass secrets using env-vars as substitutes and
             use the option <xref linkend="opt-services.privacyidea.ldap-proxy.environmentFile"/>
-            to inject them via <package>envsubst</package>.
+            to inject them via <literal>envsubst</literal>.
           '';
         };
 

@@ -12,7 +12,7 @@ in {
       example = "/run/keys/ldap_pass";
       description = ''
         Environment file to contain the credentials to authenticate against
-        <package>openldap</package>.
+        <literal>openldap</literal>.
 
         The file should look like this:
         <programlisting>
@@ -27,14 +27,14 @@ in {
       example = "udp";
       type = types.str;
       description = ''
-        Which protocol to use to connect against <package>openldap</package>.
+        Which protocol to use to connect against <literal>openldap</literal>.
       '';
     };
     ldapAddr = mkOption {
       default = "localhost:389";
       type = types.str;
       description = ''
-        Address of the <package>openldap</package>-instance.
+        Address of the <literal>openldap</literal>-instance.
       '';
     };
     metricsPath = mkOption {
