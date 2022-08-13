@@ -37,8 +37,9 @@ in {
         };
       };
 
-      services.redis = {
+      services.redis.servers.nextcloud = {
         enable = true;
+        port = 6379;
       };
 
       systemd.services.nextcloud-setup= {

@@ -47,7 +47,7 @@ in {
         };
       };
 
-      services.redis = {
+      services.redis.servers.nextcloud = {
         enable = true;
       };
 
