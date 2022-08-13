@@ -1,0 +1,46 @@
+diff --git a/src/backends/meta-screen-cast-stream-src.c b/src/backends/meta-screen-cast-stream-src.c
+index 0d8bc175142f5da2b350ed5a6d81c2773f3ed832..806fa806c1e005b0f1f52f75376a8c7a79e7da9a 100644
+--- a/src/backends/meta-screen-cast-stream-src.c
++++ b/src/backends/meta-screen-cast-stream-src.c
+@@ -569,6 +569,26 @@ maybe_schedule_follow_up_frame (MetaScreenCastStreamSrc *src,
+                                                    src);
+ }
+ 
++static int32_t
++meta_screen_cast_stream_src_calculate_stride (MetaScreenCastStreamSrc *src,
++                                              struct spa_data         *spa_data)
++{
++  MetaScreenCastStreamSrcPrivate *priv =
++    meta_screen_cast_stream_src_get_instance_private (src);
++  CoglDmaBufHandle *dmabuf_handle = NULL;
++
++  if (spa_data->type == SPA_DATA_DmaBuf)
++    {
++      dmabuf_handle = g_hash_table_lookup (priv->dmabuf_handles,
++                                           GINT_TO_POINTER (spa_data->fd));
++    }
++
++  if (dmabuf_handle)
++    return cogl_dma_buf_handle_get_stride (dmabuf_handle);
++  else
++    return priv->video_stride;
++}
++
+ void
+ meta_screen_cast_stream_src_maybe_record_frame (MetaScreenCastStreamSrc  *src,
+                                                 MetaScreenCastRecordFlag  flags)
+@@ -631,10 +651,12 @@ meta_screen_cast_stream_src_maybe_record_frame (MetaScreenCastStreamSrc  *src,
+       g_clear_handle_id (&priv->follow_up_frame_source_id, g_source_remove);
+       if (do_record_frame (src, flags, spa_buffer, data, &error))
+         {
++          struct spa_data *spa_data = &spa_buffer->datas[0];
+           struct spa_meta_region *spa_meta_video_crop;
+ 
+-          spa_buffer->datas[0].chunk->size = spa_buffer->datas[0].maxsize;
+-          spa_buffer->datas[0].chunk->stride = priv->video_stride;
++          spa_data->chunk->size = spa_data->maxsize;
++          spa_data->chunk->stride =
++            meta_screen_cast_stream_src_calculate_stride (src, spa_data);
+ 
+           /* Update VideoCrop if needed */
+           spa_meta_video_crop =

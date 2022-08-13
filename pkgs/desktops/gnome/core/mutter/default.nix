@@ -64,6 +64,10 @@ let self = stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       inherit zenity;
     })
+
+    # Fix stride calculation, see https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/2513
+    # The patch was merged into the main mutter repository and should be included from GNOME 43.0.
+    ./fix-stream-stride-2513.patch
   ];
 
   mesonFlags = [
