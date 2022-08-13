@@ -6359,6 +6359,8 @@ in {
 
   oss2 = callPackage ../development/python-modules/oss2 { };
 
+  ossfs = callPackage ../development/python-modules/ossfs { };
+
   outcome = callPackage ../development/python-modules/outcome { };
 
   ovh = callPackage ../development/python-modules/ovh { };
