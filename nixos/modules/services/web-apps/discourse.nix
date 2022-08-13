@@ -130,8 +130,7 @@ in
           file in the upstream distribution to find available options.
 
           Setting an option to <literal>null</literal> means
-          <quote>define variable, but leave right-hand side
-          empty</quote>.
+          “define variable, but leave right-hand side empty”.
         '';
       };
 
@@ -242,8 +241,8 @@ in
           type = with lib.types; nullOr str;
           default = null;
           description = ''
-            Discourse database hostname. <literal>null</literal> means <quote>prefer
-            local unix socket connection</quote>.
+            Discourse database hostname. <literal>null</literal> means
+            “prefer local unix socket connection”.
           '';
         };
 

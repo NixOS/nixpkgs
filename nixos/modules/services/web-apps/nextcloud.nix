@@ -532,7 +532,7 @@ in {
         here because it has the side-effect that personal information is even accessible to
         unauthenticated users by default.
 
-        By default, the following properties are set to <quote>Show to everyone</quote>
+        By default, the following properties are set to “Show to everyone”
         if this flag is enabled:
         <itemizedlist>
         <listitem><para>About</para></listitem>
