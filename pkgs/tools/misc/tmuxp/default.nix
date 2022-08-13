@@ -1,4 +1,4 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, installShellFiles }:
 
 let
   pypkgs = python3Packages;
@@ -21,12 +21,21 @@ pypkgs.buildPythonApplication rec {
   # No tests in archive
   doCheck = false;
 
+  nativeBuildInputs = [ installShellFiles ];
+
   propagatedBuildInputs = with pypkgs; [
     click
     colorama
     kaptan
     libtmux
   ];
+
+  postInstall = ''
+    installShellCompletion --cmd tmuxp \
+      --bash <(_TMUXP_COMPLETE=bash_source $out/bin/tmuxp) \
+      --fish <(_TMUXP_COMPLETE=fish_source $out/bin/tmuxp) \
+      --zsh <(_TMUXP_COMPLETE=zsh_source $out/bin/tmuxp)
+  '';
 
   meta = with lib; {
     description = "Manage tmux workspaces from JSON and YAML";
