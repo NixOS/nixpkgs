@@ -227,11 +227,8 @@ in {
       queueSize = mkOption {
         type = types.int;
         default = 10;
-        description = ''
-          Size of the connection backlog, see <citerefentry>
-            <refentrytitle>listen</refentrytitle>
-            <manvolnum>2</manvolnum>
-          </citerefentry>.
+        description = lib.mdDoc ''
+          Size of the connection backlog, see {manpage}`listen(2)`.
         '';
       };
 
@@ -324,18 +321,16 @@ in {
       config = mkOption {
         type = types.attrs;
         example.client.cert = "/tmp/debugging.cert";
-        description = ''
+        description = lib.mdDoc ''
           Configuration options to pass to Taskserver.
 
-          The options here are the same as described in <citerefentry>
-            <refentrytitle>taskdrc</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>, but with one difference:
+          The options here are the same as described in
+          {manpage}`taskdrc(5)`, but with one difference:
 
-          The <literal>server</literal> option is
-          <literal>server.listen</literal> here, because the
-          <literal>server</literal> option would collide with other options
-          like <literal>server.cert</literal> and we would run in a type error
+          The `server` option is
+          `server.listen` here, because the
+          `server` option would collide with other options
+          like `server.cert` and we would run in a type error
           (attribute set versus string).
 
           Nix types like integers or booleans are automatically converted to

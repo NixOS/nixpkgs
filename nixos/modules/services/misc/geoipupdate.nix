@@ -19,11 +19,10 @@ in
       interval = lib.mkOption {
         type = lib.types.str;
         default = "weekly";
-        description = ''
+        description = lib.mdDoc ''
           Update the GeoIP databases at this time / interval.
           The format is described in
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>.
+          {manpage}`systemd.time(7)`.
         '';
       };
 

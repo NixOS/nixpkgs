@@ -160,9 +160,9 @@ in
       enable = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to install documentation of packages from
-          <option>environment.systemPackages</option> into the generated system path.
+          {option}`environment.systemPackages` into the generated system path.
 
           See "Multiple-output packages" chapter in the nixpkgs manual for more info.
         '';
@@ -172,9 +172,9 @@ in
       man.enable = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to install manual pages.
-          This also includes <literal>man</literal> outputs.
+          This also includes `man` outputs.
         '';
       };
 
@@ -193,8 +193,8 @@ in
       info.enable = mkOption {
         type = types.bool;
         default = true;
-        description = ''
-          Whether to install info pages and the <command>info</command> command.
+        description = lib.mdDoc ''
+          Whether to install info pages and the {command}`info` command.
           This also includes "info" outputs.
         '';
       };
@@ -202,8 +202,8 @@ in
       doc.enable = mkOption {
         type = types.bool;
         default = true;
-        description = ''
-          Whether to install documentation distributed in packages' <literal>/share/doc</literal>.
+        description = lib.mdDoc ''
+          Whether to install documentation distributed in packages' `/share/doc`.
           Usually plain text and/or HTML.
           This also includes "doc" outputs.
         '';
@@ -230,8 +230,7 @@ in
           Whether to install NixOS's own documentation.
           <itemizedlist>
           <listitem><para>This includes man pages like
-                    <citerefentry><refentrytitle>configuration.nix</refentrytitle>
-                    <manvolnum>5</manvolnum></citerefentry> if <option>documentation.man.enable</option> is
+                    <citerefentry><refentrytitle>configuration.nix</refentrytitle><manvolnum>5</manvolnum></citerefentry> if <option>documentation.man.enable</option> is
                     set.</para></listitem>
           <listitem><para>This includes the HTML manual and the <command>nixos-help</command> command if
                     <option>documentation.doc.enable</option> is set.</para></listitem>
@@ -250,7 +249,7 @@ in
       nixos.options.splitBuild = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to split the option docs build into a cacheable and an uncacheable part.
           Splitting the build can substantially decrease the amount of time needed to build
           the manual, but some user modules may be incompatible with this splitting.
@@ -260,7 +259,7 @@ in
       nixos.options.warningsAreErrors = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Treat warning emitted during the option documentation build (eg for missing option
           descriptions) as errors.
         '';
@@ -269,18 +268,18 @@ in
       nixos.includeAllModules = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether the generated NixOS's documentation should include documentation for all
           the options from all the NixOS modules included in the current
-          <literal>configuration.nix</literal>. Disabling this will make the manual
-          generator to ignore options defined outside of <literal>baseModules</literal>.
+          `configuration.nix`. Disabling this will make the manual
+          generator to ignore options defined outside of `baseModules`.
         '';
       };
 
       nixos.extraModuleSources = mkOption {
         type = types.listOf (types.either types.path types.str);
         default = [ ];
-        description = ''
+        description = lib.mdDoc ''
           Which extra NixOS module paths the generated NixOS's documentation should strip
           from options.
         '';

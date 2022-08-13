@@ -23,8 +23,8 @@
 , libxcb
 , libxkbcommon
 , libxshmfence
-, libappindicator-gtk3
 , libGL
+, libappindicator-gtk3
 , mesa
 , nspr
 , nss
@@ -44,12 +44,19 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "1password";
-  version = "8.7.3";
+  version = "8.8.0";
 
-  src = fetchurl {
-    url = "https://downloads.1password.com/linux/tar/stable/x86_64/1password-${version}.x64.tar.gz";
-    sha256 = "sha256-1JMSUKbeqcyz5SJLrPD9kaqSlPI0pZVMXFjRuMIvwqo=";
-  };
+  src =
+    if stdenv.hostPlatform.isAarch64 then
+      fetchurl {
+        url = "https://downloads.1password.com/linux/tar/stable/aarch64/1password-${version}.arm64.tar.gz";
+        sha256 = "01swx12nqqh9i3191ibc8gv92k4dzsk1qpikg053qhn1zh2ag1dd";
+      }
+    else
+      fetchurl {
+        url = "https://downloads.1password.com/linux/tar/stable/x86_64/1password-${version}.x64.tar.gz";
+        sha256 = "1rcvxxcz2q7kgf6qbcjnjhysnx9z81hvl0jfv0nkp0p1w8bf1h66";
+      };
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -126,14 +133,12 @@ in stdenv.mkDerivation rec {
       runHook postInstall
     '';
 
-  passthru.updateScript = ./update.sh;
-
   meta = with lib; {
     description = "Multi-platform password manager";
     homepage = "https://1password.com/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ timstott savannidgerinel maxeaubrey sebtm ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }

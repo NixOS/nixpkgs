@@ -126,9 +126,7 @@ in {
       default = null;
       example = "/var/lib/vaultwarden.env";
       description = ''
-        Additional environment file as defined in <citerefentry>
-        <refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum>
-        </citerefentry>.
+        Additional environment file as defined in <citerefentry><refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
 
         Secrets like <envar>ADMIN_TOKEN</envar> and <envar>SMTP_PASSWORD</envar>
         may be passed to the service without adding them to the world-readable Nix store.

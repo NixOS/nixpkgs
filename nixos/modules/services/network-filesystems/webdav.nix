@@ -67,10 +67,8 @@ in
       environmentFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = ''
-          Environment file as defined in <citerefentry>
-          <refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum>
-          </citerefentry>.
+        description = lib.mdDoc ''
+          Environment file as defined in {manpage}`systemd.exec(5)`.
         '';
       };
     };
