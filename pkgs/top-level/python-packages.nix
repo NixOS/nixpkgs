@@ -491,6 +491,8 @@ in {
 
   aliyun-python-sdk-dbfs = callPackage ../development/python-modules/aliyun-python-sdk-dbfs { };
 
+  aliyun-python-sdk-iot = callPackage ../development/python-modules/aliyun-python-sdk-iot { };
+
   aliyun-python-sdk-kms = callPackage ../development/python-modules/aliyun-python-sdk-kms { };
 
   aliyun-python-sdk-sts = callPackage ../development/python-modules/aliyun-python-sdk-sts { };
