@@ -107,7 +107,7 @@ let
           Location of the cluster-join-token.key file.
 
           You can retrieve the contents of the file when creating a new agent via
-          <link xlink:href="https://hercules-ci.com/dashboard">https://hercules-ci.com/dashboard</link>.
+          <link xlink:href="https://hercules-ci.com/dashboard"/>.
 
           As this value is confidential, it should not be in the store, but
           installed using other means, such as agenix, NixOps
@@ -127,7 +127,7 @@ let
           copied over using other means, such as agenix, NixOps
           <literal>deployment.keys</literal>, or manual installation.
 
-          The format is described on <link xlink:href="https://docs.hercules-ci.com/hercules-ci-agent/binary-caches-json/">https://docs.hercules-ci.com/hercules-ci-agent/binary-caches-json/</link>.
+          The format is described on <link xlink:href="https://docs.hercules-ci.com/hercules-ci-agent/binary-caches-json/"/>.
         '';
         type = types.path;
         default = config.staticSecretsDirectory + "/binary-caches.json";
@@ -141,8 +141,7 @@ let
           copied over using other means, such as agenix, NixOps
           <literal>deployment.keys</literal>, or manual installation.
 
-          The format is described on <link xlink:href="https://docs.hercules-ci.com/hercules-ci-agent/secrets-json/">https://docs.hercules-ci.com/hercules-ci-agent/secrets-json/</link>.
-
+          The format is described on <link xlink:href="https://docs.hercules-ci.com/hercules-ci-agent/secrets-json/"/>.
         '';
         type = types.path;
         default = config.staticSecretsDirectory + "/secrets.json";
