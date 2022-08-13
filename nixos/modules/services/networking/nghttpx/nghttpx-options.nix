@@ -4,7 +4,7 @@
 
     frontends = lib.mkOption {
       type        = lib.types.listOf (lib.types.submodule (import ./frontend-submodule.nix));
-      description = ''
+      description = lib.mdDoc ''
         A list of frontend listener specifications.
       '';
       example = [
@@ -22,7 +22,7 @@
 
     backends  = lib.mkOption {
       type = lib.types.listOf (lib.types.submodule (import ./backend-submodule.nix));
-      description = ''
+      description = lib.mdDoc ''
         A list of backend specifications.
       '';
       example = [
@@ -42,10 +42,10 @@
     tls = lib.mkOption {
       type        = lib.types.nullOr (lib.types.submodule (import ./tls-submodule.nix));
       default     = null;
-      description = ''
+      description = lib.mdDoc ''
         TLS certificate and key paths. Note that this does not enable
         TLS for a frontend listener, to do so, a frontend
-        specification must set <literal>params.tls</literal> to true.
+        specification must set `params.tls` to true.
       '';
       example = {
         key = "/etc/ssl/keys/server.key";
@@ -56,7 +56,7 @@
     extraConfig = lib.mkOption {
       type        = lib.types.lines;
       default     = "";
-      description = ''
+      description = lib.mdDoc ''
         Extra configuration options to be appended to the generated
         configuration file.
       '';
@@ -65,7 +65,7 @@
     single-process = lib.mkOption {
       type        = lib.types.bool;
       default     = false;
-      description = ''
+      description = lib.mdDoc ''
         Run this program in a single process mode for debugging
         purpose. Without this option, nghttpx creates at least 2
         processes: master and worker processes. If this option is
@@ -81,7 +81,7 @@
     backlog = lib.mkOption {
       type        = lib.types.int;
       default     = 65536;
-      description = ''
+      description = lib.mdDoc ''
         Listen backlog size.
 
         Please see https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx--backlog
@@ -95,7 +95,7 @@
         "IPv6"
       ];
       default = "auto";
-      description = ''
+      description = lib.mdDoc ''
         Specify address family of backend connections. If "auto" is
         given, both IPv4 and IPv6 are considered. If "IPv4" is given,
         only IPv4 address is considered. If "IPv6" is given, only IPv6
@@ -108,7 +108,7 @@
     workers = lib.mkOption {
       type        = lib.types.int;
       default     = 1;
-      description = ''
+      description = lib.mdDoc ''
         Set the number of worker threads.
 
         Please see https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx-n
@@ -118,7 +118,7 @@
     single-thread = lib.mkOption {
       type        = lib.types.bool;
       default     = false;
-      description = ''
+      description = lib.mdDoc ''
         Run everything in one thread inside the worker process. This
         feature is provided for better debugging experience, or for
         the platforms which lack thread support. If threading is

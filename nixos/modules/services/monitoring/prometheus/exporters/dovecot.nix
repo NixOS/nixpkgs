@@ -11,7 +11,7 @@ in
     telemetryPath = mkOption {
       type = types.str;
       default = "/metrics";
-      description = ''
+      description = lib.mdDoc ''
         Path under which to expose metrics.
       '';
     };
@@ -67,7 +67,7 @@ in
       type = types.listOf types.str;
       default = [ "user" ];
       example = [ "user" "global" ];
-      description = ''
+      description = lib.mdDoc ''
         Stats scopes to query.
       '';
     };

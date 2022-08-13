@@ -388,13 +388,12 @@ in
         default = "weekly";
         type = types.str;
         example = "daily";
-        description = ''
+        description = lib.mdDoc ''
           How often we run trim. For most desktop and server systems
           a sufficient trimming frequency is once a week.
 
           The format is described in
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>.
+          {manpage}`systemd.time(7)`.
         '';
       };
     };
@@ -406,10 +405,9 @@ in
         default = "Sun, 02:00";
         type = types.str;
         example = "daily";
-        description = ''
+        description = lib.mdDoc ''
           Systemd calendar expression when to scrub ZFS pools. See
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>.
+          {manpage}`systemd.time(7)`.
         '';
       };
 

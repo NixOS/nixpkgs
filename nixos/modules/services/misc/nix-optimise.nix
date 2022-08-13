@@ -23,10 +23,9 @@ in
       dates = mkOption {
         default = ["03:45"];
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           Specification (in the format described by
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>) of the time at
+          {manpage}`systemd.time(7)`) of the time at
           which the optimiser will run.
         '';
       };

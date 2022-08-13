@@ -629,11 +629,10 @@ in
             timeoutStartSec = mkOption {
               type = types.str;
               default = "1min";
-              description = ''
+              description = lib.mdDoc ''
                 Time for the container to start. In case of a timeout,
                 the container processes get killed.
-                See <citerefentry><refentrytitle>systemd.time</refentrytitle>
-                <manvolnum>7</manvolnum></citerefentry>
+                See {manpage}`systemd.time(7)`
                 for more information about the format.
                '';
             };

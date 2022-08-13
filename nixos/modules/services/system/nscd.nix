@@ -20,7 +20,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the Name Service Cache Daemon.
           Disabling this is strongly discouraged, as this effectively disables NSS Lookups
           from all non-glibc NSS modules, including the ones provided by systemd.
@@ -30,7 +30,7 @@ in
       config = mkOption {
         type = types.lines;
         default = builtins.readFile ./nscd.conf;
-        description = "Configuration to use for Name Service Cache Daemon.";
+        description = lib.mdDoc "Configuration to use for Name Service Cache Daemon.";
       };
 
       package = mkOption {
@@ -43,7 +43,7 @@ in
             then pkgs.stdenv.cc.libc.bin
             else pkgs.glibc.bin;
         '';
-        description = "package containing the nscd binary to be used by the service";
+        description = lib.mdDoc "package containing the nscd binary to be used by the service";
       };
 
     };

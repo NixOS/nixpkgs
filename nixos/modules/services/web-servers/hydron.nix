@@ -17,12 +17,11 @@ in with lib; {
       type = types.str;
       default = "weekly";
       example = "06:00";
-      description = ''
+      description = lib.mdDoc ''
         How often we run hydron import and possibly fetch tags. Runs by default every week.
 
         The format is described in
-        <citerefentry><refentrytitle>systemd.time</refentrytitle>
-        <manvolnum>7</manvolnum></citerefentry>.
+        {manpage}`systemd.time(7)`.
       '';
     };
 
