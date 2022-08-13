@@ -523,12 +523,12 @@ in rec {
   tmux-fzf = mkTmuxPlugin {
     pluginName = "tmux-fzf";
     rtpFilePath = "main.tmux";
-    version = "unstable-2021-10-20";
+    version = "unstable-2022-08-02";
     src = fetchFromGitHub {
       owner = "sainnhe";
       repo = "tmux-fzf";
-      rev = "1801dd525b39154745ea668fb6916035023949e3";
-      sha256 = "e929Jqletmobp3WAR1tPU3pJuYTYVynxc5CvB80gig8=";
+      rev = "3e261309ad367c3fe56c0ef14af00078684b1035";
+      sha256 = "13wlcq3f7944v74lcnfbmabcy2c0ca83ya21s3qn3j0lw3wqj6vj";
     };
     postInstall = ''
       find $target -type f -print0 | xargs -0 sed -i -e 's|fzf |${pkgs.fzf}/bin/fzf |g'
