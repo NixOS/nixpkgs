@@ -205,6 +205,8 @@ in {
 
   adjusttext = callPackage ../development/python-modules/adjusttext { };
 
+  adlfs = callPackage ../development/python-modules/adlfs { };
+
   advantage-air = callPackage ../development/python-modules/advantage-air { };
 
   advocate = callPackage ../development/python-modules/advocate { };
