@@ -7857,6 +7857,8 @@ with pkgs;
 
   krunner-pass = libsForQt5.callPackage ../tools/security/krunner-pass { };
 
+  krunvm = callPackage ../applications/virtualization/krunvm { };
+
   kronometer = libsForQt5.callPackage ../tools/misc/kronometer { };
 
   krop = callPackage ../applications/graphics/krop { };
