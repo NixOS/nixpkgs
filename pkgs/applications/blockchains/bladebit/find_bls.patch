@@ -1,0 +1,24 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 66cc8a4..0358f9b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -37,18 +37,11 @@ set(CMAKE_MODULE_PATH
+ set(platform_libs)
+ 
+ # BLS
+-include(FetchContent)
+-
+-FetchContent_Declare(
+-  bls
+-  GIT_REPOSITORY https://github.com/Chia-Network/bls-signatures.git
+-  GIT_TAG        1.0.10
+-)
++find_library(bls NAMES bls-signatures)
+ 
+ set(BUILD_BLS_PYTHON_BINDINGS "0" CACHE STRING "0")
+ set(BUILD_BLS_TESTS "0" CACHE STRING "")
+ set(BUILD_BLS_BENCHMARKS "0" CACHE STRING "")
+-FetchContent_MakeAvailable(bls)
+ 
+ # Threads
+ find_package(Threads REQUIRED)

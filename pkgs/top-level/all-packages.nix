@@ -2904,6 +2904,8 @@ with pkgs;
 
   blitz = callPackage ../development/libraries/blitz { };
 
+  bls-signatures = callPackage ../development/libraries/bls-signatures { };
+
   blockbook = callPackage ../servers/blockbook { };
 
   blockhash = callPackage ../tools/graphics/blockhash { };
@@ -31975,6 +31977,8 @@ with pkgs;
     withGui = false;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
+
+  bladebit = callPackage ../applications/blockchains/bladebit { };
 
   cgminer = callPackage ../applications/blockchains/cgminer { };
 
