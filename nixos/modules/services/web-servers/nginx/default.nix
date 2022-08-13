@@ -464,10 +464,10 @@ in
         default = [];
         type = types.listOf (types.attrsOf types.anything);
         example = literalExpression "[ pkgs.nginxModules.brotli ]";
-        description = ''
-          Additional <link xlink:href="https://www.nginx.com/resources/wiki/modules/">third-party nginx modules</link>
+        description = lib.mdDoc ''
+          Additional [third-party nginx modules](https://www.nginx.com/resources/wiki/modules/)
           to install. Packaged modules are available in
-          <literal>pkgs.nginxModules</literal>.
+          `pkgs.nginxModules`.
         '';
       };
 
@@ -520,12 +520,12 @@ in
       appendConfig = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Configuration lines appended to the generated Nginx
           configuration file. Commonly used by different modules
-          providing http snippets. <option>appendConfig</option>
+          providing http snippets. {option}`appendConfig`
           can be specified more than once and it's value will be
-          concatenated (contrary to <option>config</option> which
+          concatenated (contrary to {option}`config` which
           can be set only once).
         '';
       };
@@ -540,7 +540,7 @@ in
                               '"$request" $status $body_bytes_sent '
                               '"$http_referer" "$http_user_agent"';
         '';
-        description = ''
+        description = lib.mdDoc ''
           With nginx you must provide common http context definitions before
           they are used, e.g. log_format, resolver, etc. inside of server
           or location contexts. Use this attribute to set these definitions
@@ -577,7 +577,7 @@ in
       eventsConfig = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Configuration lines to be set inside the events block.
         '';
       };
@@ -605,52 +605,52 @@ in
       user = mkOption {
         type = types.str;
         default = "nginx";
-        description = "User account under which nginx runs.";
+        description = lib.mdDoc "User account under which nginx runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "nginx";
-        description = "Group account under which nginx runs.";
+        description = lib.mdDoc "Group account under which nginx runs.";
       };
 
       serverTokens = mkOption {
         type = types.bool;
         default = false;
-        description = "Show nginx version in headers and error pages.";
+        description = lib.mdDoc "Show nginx version in headers and error pages.";
       };
 
       clientMaxBodySize = mkOption {
         type = types.str;
         default = "10m";
-        description = "Set nginx global client_max_body_size.";
+        description = lib.mdDoc "Set nginx global client_max_body_size.";
       };
 
       sslCiphers = mkOption {
         type = types.nullOr types.str;
         # Keep in sync with https://ssl-config.mozilla.org/#server=nginx&config=intermediate
         default = "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384";
-        description = "Ciphers to choose from when negotiating TLS handshakes.";
+        description = lib.mdDoc "Ciphers to choose from when negotiating TLS handshakes.";
       };
 
       sslProtocols = mkOption {
         type = types.str;
         default = "TLSv1.2 TLSv1.3";
         example = "TLSv1 TLSv1.1 TLSv1.2 TLSv1.3";
-        description = "Allowed TLS protocol versions.";
+        description = lib.mdDoc "Allowed TLS protocol versions.";
       };
 
       sslDhparam = mkOption {
         type = types.nullOr types.path;
         default = null;
         example = "/path/to/dhparams.pem";
-        description = "Path to DH parameters file.";
+        description = lib.mdDoc "Path to DH parameters file.";
       };
 
       proxyResolveWhileRunning = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Resolves domains of proxyPass targets at runtime
           and not only at start, you have to set
           services.nginx.resolver, too.
@@ -660,7 +660,7 @@ in
       mapHashBucketSize = mkOption {
         type = types.nullOr (types.enum [ 32 64 128 ]);
         default = null;
-        description = ''
+        description = lib.mdDoc ''
             Sets the bucket size for the map variables hash tables. Default
             value depends on the processor’s cache line size.
           '';
@@ -669,7 +669,7 @@ in
       mapHashMaxSize = mkOption {
         type = types.nullOr types.ints.positive;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
             Sets the maximum size of the map variables hash tables.
           '';
       };
@@ -677,7 +677,7 @@ in
       serverNamesHashBucketSize = mkOption {
         type = types.nullOr types.ints.positive;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
             Sets the bucket size for the server names hash tables. Default
             value depends on the processor’s cache line size.
           '';
@@ -686,7 +686,7 @@ in
       serverNamesHashMaxSize = mkOption {
         type = types.nullOr types.ints.positive;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
             Sets the maximum size of the server names hash tables.
           '';
       };
@@ -698,13 +698,13 @@ in
               type = types.listOf types.str;
               default = [];
               example = literalExpression ''[ "[::1]" "127.0.0.1:5353" ]'';
-              description = "List of resolvers to use";
+              description = lib.mdDoc "List of resolvers to use";
             };
             valid = mkOption {
               type = types.str;
               default = "";
               example = "30s";
-              description = ''
+              description = lib.mdDoc ''
                 By default, nginx caches answers using the TTL value of a response.
                 An optional valid parameter allows overriding it
               '';
@@ -712,7 +712,7 @@ in
             ipv6 = mkOption {
               type = types.bool;
               default = true;
-              description = ''
+              description = lib.mdDoc ''
                 By default, nginx will look up both IPv4 and IPv6 addresses while resolving.
                 If looking up of IPv6 addresses is not desired, the ipv6=off parameter can be
                 specified.
@@ -720,7 +720,7 @@ in
             };
           };
         };
-        description = ''
+        description = lib.mdDoc ''
           Configures name servers used to resolve names of upstream servers into addresses
         '';
         default = {};
@@ -735,14 +735,14 @@ in
                   backup = mkOption {
                     type = types.bool;
                     default = false;
-                    description = ''
+                    description = lib.mdDoc ''
                       Marks the server as a backup server. It will be passed
                       requests when the primary servers are unavailable.
                     '';
                   };
                 };
               });
-              description = ''
+              description = lib.mdDoc ''
                 Defines the address and other parameters of the upstream servers.
               '';
               default = {};
@@ -751,13 +751,13 @@ in
             extraConfig = mkOption {
               type = types.lines;
               default = "";
-              description = ''
+              description = lib.mdDoc ''
                 These lines go to the end of the upstream verbatim.
               '';
             };
           };
         });
-        description = ''
+        description = lib.mdDoc ''
           Defines a group of servers to use as proxy target.
         '';
         default = {};
@@ -789,7 +789,7 @@ in
             };
           };
         '';
-        description = "Declarative vhost config";
+        description = lib.mdDoc "Declarative vhost config";
       };
     };
   };

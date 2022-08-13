@@ -24,12 +24,11 @@ with lib;
         ''
           options parport_pc io=0x378 irq=7 dma=1
         '';
-      description = ''
+      description = lib.mdDoc ''
         Any additional configuration to be appended to the generated
-        <filename>modprobe.conf</filename>.  This is typically used to
+        {file}`modprobe.conf`.  This is typically used to
         specify module options.  See
-        <citerefentry><refentrytitle>modprobe.d</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
+        {manpage}`modprobe.d(5)` for details.
       '';
       type = types.lines;
     };

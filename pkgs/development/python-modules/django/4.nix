@@ -6,6 +6,7 @@
 , substituteAll
 
 # patched in
+, fetchpatch
 , geos
 , gdal
 , withGdal ? false
@@ -39,23 +40,32 @@
 
 buildPythonPackage rec {
   pname = "Django";
-  version = "4.0.7";
+  version = "4.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nG1a02vnmOVi3cqmsXscP/LTxPUppHQytp+5ow+EdGE=";
+    hash = "sha256-Ay+Kb8fPBczRIU5KLiHfzWojudV1xlc8rMjGeCjb5kI=";
   };
 
-  patches = lib.optional withGdal
+  patches = [
+    (fetchpatch {
+      # Fix regression in sqlite backend introduced in 4.1.
+      # https://github.com/django/django/pull/15925
+      url = "https://github.com/django/django/commit/c0beff21239e70cbdcc9597e5be09e505bb8f76c.patch";
+      hash = "sha256-QE7QnfYAK74wvK8gDJ15FtQ+BCIWRQKAVvM7v1FzwlE=";
+      excludes = [ "docs/releases/4.1.1.txt" ];
+    })
+  ] ++ lib.optionals withGdal [
     (substituteAll {
       src = ./django_4_set_geos_gdal_lib.patch;
       geos = geos;
       gdal = gdal;
       extension = stdenv.hostPlatform.extensions.sharedLibrary;
-    });
+    })
+  ];
 
   propagatedBuildInputs = [
     asgiref

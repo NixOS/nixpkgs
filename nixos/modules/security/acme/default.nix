@@ -451,10 +451,9 @@ let
       renewInterval = mkOption {
         type = types.str;
         inherit (defaultAndText "renewInterval" "daily") default defaultText;
-        description = ''
+        description = lib.mdDoc ''
           Systemd calendar expression when to check for renewal. See
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>.
+          {manpage}`systemd.time(7)`.
         '';
       };
 

@@ -39,16 +39,15 @@ in
       type = str;
       default = "02:15";
       example = "hourly";
-      description = ''
+      description = lib.mdDoc ''
         Update the locate database at this interval. Updates by
         default at 2:15 AM every day.
 
         The format is described in
-        <citerefentry><refentrytitle>systemd.time</refentrytitle>
-        <manvolnum>7</manvolnum></citerefentry>.
+        {manpage}`systemd.time(7)`.
 
-        To disable automatic updates, set to <literal>"never"</literal>
-        and run <command>updatedb</command> manually.
+        To disable automatic updates, set to `"never"`
+        and run {command}`updatedb` manually.
       '';
     };
 

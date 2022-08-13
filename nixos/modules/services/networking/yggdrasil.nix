@@ -4,16 +4,23 @@ let
   keysPath = "/var/lib/yggdrasil/keys.json";
 
   cfg = config.services.yggdrasil;
-  configProvided = cfg.config != { };
+  settingsProvided = cfg.settings != { };
   configFileProvided = cfg.configFile != null;
 
+  format = pkgs.formats.json { };
 in {
+  imports = [
+    (mkRenamedOptionModule
+      [ "services" "yggdrasil" "config" ]
+      [ "services" "yggdrasil" "settings" ])
+  ];
+
   options = with types; {
     services.yggdrasil = {
       enable = mkEnableOption "the yggdrasil system service";
 
-      config = mkOption {
-        type = attrs;
+      settings = mkOption {
+        type = format.type;
         default = {};
         example = {
           Peers = [
@@ -138,11 +145,11 @@ in {
       wantedBy = [ "multi-user.target" ];
 
       preStart =
-        (if configProvided || configFileProvided || cfg.persistentKeys then
+        (if settingsProvided || configFileProvided || cfg.persistentKeys then
           "echo "
 
-          + (lib.optionalString configProvided
-            "'${builtins.toJSON cfg.config}'")
+          + (lib.optionalString settingsProvided
+            "'${builtins.toJSON cfg.settings}'")
           + (lib.optionalString configFileProvided "$(cat ${cfg.configFile})")
           + (lib.optionalString cfg.persistentKeys "$(cat ${keysPath})")
           + " | ${pkgs.jq}/bin/jq -s add | ${binYggdrasil} -normaliseconf -useconf"

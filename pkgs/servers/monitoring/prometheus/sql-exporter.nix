@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "sql_exporter";
-  version = "0.4.2";
+  version = "0.4.4";
 
   vendorSha256 = null;
 
@@ -10,7 +10,7 @@ buildGoModule rec {
     owner = "justwatchcom";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Ujon6TLniQrYRxJe4+ZTu4/dI2K94r9M/lBmMizDZrA=";
+    sha256 = "sha256-A3hMSnfxiEgFYueARuldEHT/5ROCIwWjqQj2FdkVYqo=";
   };
 
   meta = with lib; {

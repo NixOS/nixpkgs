@@ -125,14 +125,14 @@ in
           debug_file = "/var/log/nagios/debug.log";
         };
         default = {};
-        description = "Configuration to add to /etc/nagios.cfg";
+        description = lib.mdDoc "Configuration to add to /etc/nagios.cfg";
       };
 
       validateConfig = mkOption {
         type = types.bool;
         default = pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform;
         defaultText = literalExpression "pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform";
-        description = "if true, the syntax of the nagios configuration file is checked at build time";
+        description = lib.mdDoc "if true, the syntax of the nagios configuration file is checked at build time";
       };
 
       cgiConfigFile = mkOption {
@@ -164,9 +164,9 @@ in
             sslServerKey = "/var/lib/acme/example.org/key.pem";
           }
         '';
-        description = ''
-          Apache configuration can be done by adapting <option>services.httpd.virtualHosts</option>.
-          See <xref linkend="opt-services.httpd.virtualHosts"/> for further information.
+        description = lib.mdDoc ''
+          Apache configuration can be done by adapting {option}`services.httpd.virtualHosts`.
+          See [](#opt-services.httpd.virtualHosts) for further information.
         '';
       };
     };

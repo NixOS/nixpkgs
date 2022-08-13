@@ -129,6 +129,11 @@ in
           RuntimeDirectory = "klipper";
           SupplementaryGroups = [ "dialout" ];
           WorkingDirectory = "${cfg.package}/lib";
+          OOMScoreAdjust = "-999";
+          CPUSchedulingPolicy = "rr";
+          CPUSchedulingPriority = 99;
+          IOSchedulingClass = "realtime";
+          IOSchedulingPriority = 0;
         } // (if cfg.user != null then {
           Group = cfg.group;
           User = cfg.user;

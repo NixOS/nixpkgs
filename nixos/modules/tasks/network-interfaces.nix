@@ -876,10 +876,9 @@ in
           primary = { port = 9001; local = { address = "192.0.2.1"; dev = "eth0"; }; };
           backup =  { port = 9002; };
         };
-      description = ''
+      description = lib.mdDoc ''
         This option allows you to configure Foo Over UDP and Generic UDP Encapsulation
-        endpoints. See <citerefentry><refentrytitle>ip-fou</refentrytitle>
-        <manvolnum>8</manvolnum></citerefentry> for details.
+        endpoints. See {manpage}`ip-fou(8)` for details.
       '';
       type = with types; attrsOf (submodule {
         options = {
@@ -998,10 +997,9 @@ in
               options = {
                 type = mkOption {
                   type = enum [ "fou" "gue" ];
-                  description = ''
+                  description = lib.mdDoc ''
                     Selects encapsulation type. See
-                    <citerefentry><refentrytitle>ip-link</refentrytitle>
-                    <manvolnum>8</manvolnum></citerefentry> for details.
+                    {manpage}`ip-link(8)` for details.
                   '';
                 };
 

@@ -73,7 +73,7 @@ let
 in
 env.mkDerivation rec {
   pname = "telegram-desktop";
-  version = "4.0.2";
+  version = "4.1.0";
   # Note: Update via pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
 
   # Telegram-Desktop with submodules
@@ -82,7 +82,7 @@ env.mkDerivation rec {
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "07fhm36394171w0rvay1x9x1br3z36z4dlpi57bkq23dvi331pxj";
+    sha256 = "06va1b5dac7a2av6vc0xin27y1hfnf4xbafy10myv33am8l5222m";
   };
 
   postPatch = ''
