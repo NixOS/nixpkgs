@@ -1940,6 +1940,8 @@ in {
 
   configargparse = callPackage ../development/python-modules/configargparse { };
 
+  configclass = callPackage ../development/python-modules/configclass { };
+
   configobj = callPackage ../development/python-modules/configobj { };
 
   configparser = callPackage ../development/python-modules/configparser { };
@@ -2644,6 +2646,8 @@ in {
   dogtail = callPackage ../development/python-modules/dogtail { };
 
   doit = callPackage ../development/python-modules/doit { };
+
+  doit-py = callPackage ../development/python-modules/doit-py { };
 
   dominate = callPackage ../development/python-modules/dominate { };
 
@@ -5472,6 +5476,8 @@ in {
   mergedb = callPackage ../development/python-modules/mergedb { };
 
   mergedeep = callPackage ../development/python-modules/mergedeep { };
+
+  mergedict = callPackage ../development/python-modules/mergedict { };
 
   merkletools = callPackage ../development/python-modules/merkletools { };
 
