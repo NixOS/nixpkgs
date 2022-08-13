@@ -16,12 +16,14 @@ makeSetupHook {
 
   substitutions = {
     cc = "${cc}/bin/${cc.targetPrefix}cc ${lib.escapeShellArgs (map (s: "-fsanitize=${s}") sanitizers)}";
+  };
 
+  passthru = {
     # Extract the function call used to create a binary wrapper from its embedded docstring
-    passthru.extractCmd = writeShellScript "extract-binary-wrapper-cmd" ''
+    extractCmd = writeShellScript "extract-binary-wrapper-cmd" ''
       strings -dw "$1" | sed -n '/^makeCWrapper/,/^$/ p'
     '';
 
-    passthru.tests = tests.makeBinaryWrapper;
+    tests = tests.makeBinaryWrapper;
   };
 } ./make-binary-wrapper.sh

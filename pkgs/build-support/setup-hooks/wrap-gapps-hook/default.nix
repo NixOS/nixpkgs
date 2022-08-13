@@ -36,8 +36,8 @@ makeSetupHook {
     # We use the wrapProgram function.
     makeWrapper
   ];
-  substitutions = {
-    passthru.tests = let
+  passthru = {
+    tests = let
       sample-project = ./tests/sample-project;
 
       testLib = callPackage ./tests/lib.nix { };
