@@ -23877,6 +23877,8 @@ with pkgs;
 
   libcgroup = callPackage ../os-specific/linux/libcgroup { };
 
+  libkrunfw = callPackage ../development/libraries/libkrunfw { };
+
   libnl = callPackage ../os-specific/linux/libnl { };
 
   libtraceevent = callPackage ../os-specific/linux/libtraceevent {};
