@@ -132,12 +132,14 @@ let
   };
 
   v5 = {
-    version = "5.5.1";
-    sha256 = "sha256-ssaDy6tYxhXGZ1+05J5DwoKYnfhKIKtZj66DOV84WxA=";
-    dataSha256 = "sha256-SI6I1wXbB0CgTmIemm3VY9DNnWMoI5bt/hqRwHlUl4k=";
+    version = "5.6.0";
+    sha256 = "sha256-wcbYcVHs4L0etOwUBjKvzsmZtnpOxpFgLV8nx3UfJQI=";
+    dataSha256 = "sha256-TVaDHYstFEuT0nBExwLE1PtM1CZh71t9CRxC9rEYTd4=";
   };
 
+  mkClient = version: generic (version // { buildClient = true; buildServer = false; });
+  mkServer = version: generic (version // { buildClient = false; buildServer = true; });
 in {
-  minetestclient_5 = generic (v5 // { buildClient = true; buildServer = false; });
-  minetestserver_5 = generic (v5 // { buildClient = false; buildServer = true; });
+  minetestclient_5 = mkClient v5;
+  minetestserver_5 = mkServer v5;
 }

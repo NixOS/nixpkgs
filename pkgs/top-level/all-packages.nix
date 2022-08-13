@@ -3319,6 +3319,8 @@ with pkgs;
 
   wayland-proxy-virtwl = callPackage ../tools/wayland/wayland-proxy-virtwl { };
 
+  wayout = callPackage ../tools/wayland/wayout { };
+
   way-displays = callPackage ../tools/wayland/way-displays { };
 
   wev = callPackage ../tools/wayland/wev { };
@@ -4942,6 +4944,8 @@ with pkgs;
   circus = callPackage ../tools/networking/circus { };
 
   cirrus-cli = callPackage ../development/tools/continuous-integration/cirrus-cli { };
+
+  cirrusgo = callPackage ../tools/security/cirrusgo { };
 
   inherit (callPackage ../applications/networking/remote/citrix-workspace { })
     citrix_workspace_21_01_0
@@ -7852,6 +7856,8 @@ with pkgs;
   krename = libsForQt5.callPackage ../applications/misc/krename { };
 
   krunner-pass = libsForQt5.callPackage ../tools/security/krunner-pass { };
+
+  krunvm = callPackage ../applications/virtualization/krunvm { };
 
   kronometer = libsForQt5.callPackage ../tools/misc/kronometer { };
 
@@ -19541,9 +19547,7 @@ with pkgs;
 
   libmilter = callPackage ../development/libraries/libmilter { };
 
-  libminc = callPackage ../development/libraries/libminc {
-    hdf5 = hdf5_1_10;
-  };
+  libminc = callPackage ../development/libraries/libminc { };
 
   libmkv = callPackage ../development/libraries/libmkv { };
 
@@ -20158,6 +20162,8 @@ with pkgs;
   memorymappingHook = makeSetupHook {
     deps = [ memorymapping ];
   } ../development/libraries/memorymapping/setup-hook.sh;
+
+  memray = callPackage ../development/tools/memray { };
 
   memstream = callPackage ../development/libraries/memstream { };
   memstreamHook = makeSetupHook {
@@ -23870,6 +23876,12 @@ with pkgs;
   libatasmart = callPackage ../os-specific/linux/libatasmart { };
 
   libcgroup = callPackage ../os-specific/linux/libcgroup { };
+
+  libkrun = callPackage ../development/libraries/libkrun { };
+
+  libkrun-sev = callPackage ../development/libraries/libkrun { sevVariant = true; };
+
+  libkrunfw = callPackage ../development/libraries/libkrunfw { };
 
   libnl = callPackage ../os-specific/linux/libnl { };
 
@@ -33663,6 +33675,10 @@ with pkgs;
 
   cd-hit = callPackage ../applications/science/biology/cd-hit {
     inherit (llvmPackages) openmp;
+  };
+
+  ciftilib = callPackage ../development/libraries/science/biology/ciftilib {
+    boost = boost16x;
   };
 
   cmtk = callPackage ../applications/science/biology/cmtk { };
