@@ -390,50 +390,50 @@ in
       statusPage = mkOption {
         default = false;
         type = types.bool;
-        description = "
+        description = ''
           Enable status page reachable from localhost on http://127.0.0.1/nginx_status.
-        ";
+        '';
       };
 
       recommendedTlsSettings = mkOption {
         default = false;
         type = types.bool;
-        description = "
+        description = ''
           Enable recommended TLS settings.
-        ";
+        '';
       };
 
       recommendedOptimisation = mkOption {
         default = false;
         type = types.bool;
-        description = "
+        description = ''
           Enable recommended optimisation settings.
-        ";
+        '';
       };
 
       recommendedGzipSettings = mkOption {
         default = false;
         type = types.bool;
-        description = "
+        description = ''
           Enable recommended gzip settings.
-        ";
+        '';
       };
 
       recommendedProxySettings = mkOption {
         default = false;
         type = types.bool;
-        description = "
+        description = ''
           Whether to enable recommended proxy settings if a vhost does not specify the option manually.
-        ";
+        '';
       };
 
       proxyTimeout = mkOption {
         type = types.str;
         default = "60s";
         example = "20s";
-        description = "
+        description = ''
           Change the proxy related timeouts in recommendedProxySettings.
-        ";
+        '';
       };
 
       defaultListenAddresses = mkOption {
@@ -441,9 +441,9 @@ in
         default = [ "0.0.0.0" ] ++ optional enableIPv6 "[::0]";
         defaultText = literalExpression ''[ "0.0.0.0" ] ++ lib.optional config.networking.enableIPv6 "[::0]"'';
         example = literalExpression ''[ "10.0.0.12" "[2002:a00:1::]" ]'';
-        description = "
+        description = ''
           If vhosts do not specify listenAddresses, use these addresses by default.
-        ";
+        '';
       };
 
       package = mkOption {
@@ -453,11 +453,11 @@ in
         apply = p: p.override {
           modules = p.modules ++ cfg.additionalModules;
         };
-        description = "
+        description = ''
           Nginx package to use. This defaults to the stable version. Note
           that the nginx team recommends to use the mainline version which
           available in nixpkgs as <literal>nginxMainline</literal>.
-        ";
+        '';
       };
 
       additionalModules = mkOption {
@@ -474,7 +474,7 @@ in
       logError = mkOption {
         default = "stderr";
         type = types.str;
-        description = "
+        description = ''
           Configures logging.
           The first parameter defines a file that will store the log. The
           special value stderr selects the standard error file. Logging to
@@ -485,15 +485,15 @@ in
           increasing severity. Setting a certain log level will cause all
           messages of the specified and more severe log levels to be logged.
           If this parameter is omitted then error is used.
-        ";
+        '';
       };
 
       preStart =  mkOption {
         type = types.lines;
         default = "";
-        description = "
+        description = ''
           Shell commands executed before the service's nginx is started.
-        ";
+        '';
       };
 
       config = mkOption {
@@ -551,12 +551,12 @@ in
       httpConfig = mkOption {
         type = types.lines;
         default = "";
-        description = "
+        description = ''
           Configuration lines to be set inside the http block.
           This is mutually exclusive with the structured configuration
           via virtualHosts and the recommendedXyzSettings configuration
           options. See appendHttpConfig for appending to the generated http block.
-        ";
+        '';
       };
 
       streamConfig = mkOption {
@@ -569,9 +569,9 @@ in
             proxy_pass 192.168.0.1:53535;
           }
         '';
-        description = "
+        description = ''
           Configuration lines to be set inside the stream block.
-        ";
+        '';
       };
 
       eventsConfig = mkOption {
@@ -585,11 +585,11 @@ in
       appendHttpConfig = mkOption {
         type = types.lines;
         default = "";
-        description = "
+        description = ''
           Configuration lines to be appended to the generated http block.
           This is mutually exclusive with using config and httpConfig for
           specifying the whole http block verbatim.
-        ";
+        '';
       };
 
       enableReload = mkOption {

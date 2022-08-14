@@ -24,34 +24,34 @@ in
         default = pkgs.pgpkeyserver-lite;
         defaultText = literalExpression "pkgs.pgpkeyserver-lite";
         type = types.package;
-        description = "
+        description = ''
           Which webgui derivation to use.
-        ";
+        '';
       };
 
       hostname = mkOption {
         type = types.str;
-        description = "
+        description = ''
           Which hostname to set the vHost to that is proxying to sks.
-        ";
+        '';
       };
 
       hkpAddress = mkOption {
         default = builtins.head sksCfg.hkpAddress;
         defaultText = literalExpression "head config.${sksOpt.hkpAddress}";
         type = types.str;
-        description = "
+        description = ''
           Wich ip address the sks-keyserver is listening on.
-        ";
+        '';
       };
 
       hkpPort = mkOption {
         default = sksCfg.hkpPort;
         defaultText = literalExpression "config.${sksOpt.hkpPort}";
         type = types.int;
-        description = "
+        description = ''
           Which port the sks-keyserver is listening on.
-        ";
+        '';
       };
     };
   };
