@@ -3578,6 +3578,8 @@ with pkgs;
 
   dokuwiki = callPackage ../servers/web-apps/dokuwiki { };
 
+  dolibarr = callPackage ../servers/web-apps/dolibarr { };
+
   doppler = callPackage ../tools/security/doppler {};
 
   dosage = callPackage ../applications/graphics/dosage { };
