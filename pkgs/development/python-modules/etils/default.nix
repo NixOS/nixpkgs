@@ -58,8 +58,6 @@ buildPythonPackage rec {
       ++ etree ++ etree-dm ++ etree-jax ++ etree-tf;
   };
 
-  doCheck = false; # disable tests until https://github.com/NixOS/nixpkgs/issues/185273 is resolved
-
   pythonImportsCheck = [
     "etils"
   ];
