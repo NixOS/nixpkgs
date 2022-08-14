@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "frozenlist";
-  version = "1.3.0";
+  version = "1.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-cHKqkvsBUN7If+8swbd6aafFrSgnop3YlweBLPOHzyU=";
+    hash = "sha256-nOzS004uduS5C8y4ig0IaYyfk+h94uTiN048X66HO+Q=";
   };
 
   nativeBuildInputs = [
