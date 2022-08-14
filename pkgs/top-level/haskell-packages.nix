@@ -157,14 +157,17 @@ in {
     };
     ghc941 = callPackage ../development/compilers/ghc/9.4.1.nix {
       bootPkgs =
-        # 9.2 is broken due to
+        # Building with 9.2 is broken due to
         # https://gitlab.haskell.org/ghc/ghc/-/issues/21914
-        # Use 8.10 as a workaround, TODO: maybe package binary 9.0?
-        # aarch ghc8107Binary exceeds max output size on hydra
+        # Use 8.10 as a workaround where possible to keep bootstrap path short.
+
+        # On ARM text won't build with GHC 8.10.*
         if stdenv.hostPlatform.isAarch then
-          packages.ghc8107BinaryMinimal
+          # TODO(@sternenseemann): package bindist
+          packages.ghc902
+        # No suitable bindists for powerpc64le
         else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
-          packages.ghc8107
+          packages.ghc902
         else
           packages.ghc8107Binary;
       inherit (buildPackages.python3Packages) sphinx;
