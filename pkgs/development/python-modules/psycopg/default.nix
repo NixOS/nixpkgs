@@ -180,6 +180,10 @@ buildPythonPackage rec {
     # don't depend on mypy for tests
     "test_version"
     "test_package_version"
+  ] ++ lib.optionals (stdenv.isDarwin) [
+    # racy test
+    "test_sched"
+    "test_sched_error"
   ];
 
   disabledTestPaths = [
