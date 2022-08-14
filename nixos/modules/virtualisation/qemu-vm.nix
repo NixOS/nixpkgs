@@ -783,7 +783,7 @@ in
           for more frequent garbage collection.
 
           If you really need this combination, you can set ${opt.writableStore}
-          explicitly to false, incur the cost and make this warning go away.
+          explicitly to true, incur the cost and make this warning go away.
           Otherwise, we recommend
 
             ${opt.writableStore} = false;
