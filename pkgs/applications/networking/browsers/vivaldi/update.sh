@@ -37,7 +37,7 @@ git commit -m "vivaldi: ${vivaldi_version_old} -> ${vivaldi_version}"
 # Check vivaldi-ffmpeg-codecs version.
 chromium_version_old=$(version vivaldi-ffmpeg-codecs)
 ffmpeg_update_script=$(bsdtar xOf "$path" data.tar.xz | bsdtar xOf - ./opt/vivaldi/update-ffmpeg)
-chromium_version=$(sed -rne 's/FFMPEG_VERSION_DEB\=([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*/\1/p' <<< $ffmpeg_update_script)
+chromium_version=$(sed -rne 's/^FFMPEG_VERSION_DEB\=([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*/\1/p' <<< $ffmpeg_update_script)
 download_subdir=$(sed -rne 's/.*FFMPEG_URL_DEB\=https:\/\/launchpadlibrarian\.net\/([0-9]+)\/.*_amd64\.deb/\1/p' <<< $ffmpeg_update_script)
 
 if [[ "$chromium_version" != "$chromium_version_old" ]]; then
