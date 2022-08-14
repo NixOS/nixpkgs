@@ -1,8 +1,10 @@
 { lib
 , fetchFromGitHub
 , stdenv
-, cmake, gmp, libsodium
+, cmake, gmp, libsodium, chia-relic
 , substituteAll
+, python310
+, python3Packages
 }:
 
 stdenv.mkDerivation {
@@ -21,31 +23,20 @@ patches = [
     # prevent CMake from trying to get libraries on the Internet
     (substituteAll {
       src = ./dont_fetch_dependencies.patch;
-      relic_src = fetchFromGitHub {
-        owner = "Chia-Network";
-        repo = "relic";
-        rev = "1d98e5abf3ca5b14fd729bd5bcced88ea70ecfd7";
-        hash = "sha256-IfTD8DvTEXeLUoKe4Ejafb+PEJW5DV/VXRYuutwGQHU=";
-      };
-      sodium_src = fetchFromGitHub {
-        owner = "AmineKhaldi";
-        repo = "libsodium-cmake";
-        rev = "f73a3fe1afdc4e37ac5fe0ddd401bf521f6bba65"; # pinned by upstream
-        sha256 = "sha256-lGz7o6DQVAuEc7yTp8bYS2kwjzHwGaNjugDi1ruRJOA=";
-        fetchSubmodules = true;
-      };
+      pybind11_src = python3Packages.pybind11.src;
+      relic = chia-relic;
+      sodium = libsodium;
     })
   ];
 
 
-  nativeBuildInputs = [ cmake gmp ];
+  nativeBuildInputs = [ cmake gmp chia-relic ];
 
-  buildInputs = [ libsodium ];
+  buildInputs = [ libsodium python310 ];
 
   CXXFLAGS = "-O3 -fmax-errors=1";
   cmakeFlags = [
     "-DARITH=easy"
-    "-DBUILD_BLS_PYTHON_BINDINGS=false"
     "-DBUILD_BLS_TESTS=false"
     "-DBUILD_BLS_BENCHMARKS=false"
   ];

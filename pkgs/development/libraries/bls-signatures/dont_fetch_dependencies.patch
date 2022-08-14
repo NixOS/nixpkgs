@@ -1,36 +1,102 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 7922652..a1519ae 100644
+index 7922652..d666b7b 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -31,29 +31,18 @@ set(CMAKE_MODULE_PATH
+@@ -30,31 +30,10 @@ set(CMAKE_MODULE_PATH
+ 
  include(FetchContent)
  
- FetchContent_Declare(Sodium
+-FetchContent_Declare(Sodium
 -  GIT_REPOSITORY https://github.com/AmineKhaldi/libsodium-cmake.git
 -  # Latest commit at the moment this was added here
 -  # Anchored to libsodium v1.0.18
 -  GIT_TAG f73a3fe1afdc4e37ac5fe0ddd401bf521f6bba65
-+  URL @sodium_src@
- )
+-)
  set(SODIUM_PCH "on" CACHE STRING "")
  set(SODIUM_DISABLE_TESTS "on" CACHE STRING "")
  set(SODIUM_CHIA_MINIMAL "on" CACHE STRING "")
- FetchContent_MakeAvailable(Sodium)
- 
+-FetchContent_MakeAvailable(Sodium)
+-
 -if (DEFINED ENV{RELIC_MAIN})
 -  set(RELIC_GIT_TAG "origin/main")
 -else ()
 -  # This is currently anchored to upstream aecdcae7956f542fbee2392c1f0feb0a8ac41dc5
 -  set(RELIC_GIT_TAG "215c69966cb78b255995f0ee9c86bbbb41c3c42b")
 -endif ()
--
- message(STATUS "Relic will be built from: ${RELIC_GIT_TAG}")
  
- FetchContent_Declare(
-   relic
+-message(STATUS "Relic will be built from: ${RELIC_GIT_TAG}")
+-
+-FetchContent_Declare(
+-  relic
 -  GIT_REPOSITORY https://github.com/Chia-Network/relic.git
 -  GIT_TAG ${RELIC_GIT_TAG}
-+  SOURCE_DIR @relic_src@
- )
+-)
  
  # Relic related options
+ 
+@@ -128,8 +107,6 @@ set(QUIET "on" CACHE STRING "Relic - Build with printing disabled")
+ set(PP_EXT "LAZYR" CACHE STRING "")
+ set(PP_METHD "LAZYR;OATEP" CACHE STRING "")
+ 
+-FetchContent_MakeAvailable(relic)
+-
+ add_subdirectory(src)
+ 
+ if(EMSCRIPTEN)
+diff --git a/python-bindings/CMakeLists.txt b/python-bindings/CMakeLists.txt
+index 5a8c381..546cdb0 100644
+--- a/python-bindings/CMakeLists.txt
++++ b/python-bindings/CMakeLists.txt
+@@ -1,10 +1,9 @@
+ 
+ FetchContent_Declare(
+   pybind11
+-  GIT_REPOSITORY https://github.com/pybind/pybind11.git
+-  GIT_TAG        v2.6.2
++  SOURCE_DIR @pybind11_src@
+ )
+-FetchContent_MakeAvailable(pybind11 relic)
++FetchContent_MakeAvailable(pybind11)
+ 
+ pybind11_add_module(blspy ${CMAKE_CURRENT_SOURCE_DIR}/pythonbindings.cpp)
+ target_link_libraries(blspy PRIVATE bls)
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 3164f7f..610b040 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -10,12 +10,16 @@ add_library(bls
+   ${CMAKE_CURRENT_SOURCE_DIR}/schemes.cpp
+ )
+ 
++include_directories(@relic@)
++include_directories(@sodium@)
++find_package(relic CONFIG REQUIRED)
++find_package(sodium)
++
+ target_include_directories(bls
+   PUBLIC
+     ${CMAKE_CURRENT_SOURCE_DIR}
++    @relic@/include/relic
+     $<$<BOOL:${GMP_FOUND}>:${GMP_INCLUDES}>
+-    ${relic_SOURCE_DIR}/include
+-    ${relic_BINARY_DIR}/include
+ )
+ 
+ target_compile_definitions(bls
+@@ -23,14 +27,9 @@ target_compile_definitions(bls
+     BLSALLOC_SODIUM=1
+ )
+ 
+-target_link_libraries(bls
+-  PUBLIC
+-    relic_s
+-    sodium
+-)
++target_link_libraries(bls)
+ 
+-install(DIRECTORY ${relic_SOURCE_DIR}/include/ DESTINATION include/chiabls)
+-install(DIRECTORY ${relic_BINARY_DIR}/include/ DESTINATION include/chiabls)
++install(DIRECTORY @relic@/include/ DESTINATION include/chiabls)
+ install(FILES ${HEADERS} DESTINATION include/chiabls)
+ install(FILES $<TARGET_FILE:bls> DESTINATION lib)
+ 

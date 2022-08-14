@@ -17381,7 +17381,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
-  chipmunk = callPackage ../development/libraries/chipmunk {};
+
+  chia-relic = callPackage ../development/libraries/chia-relic { };
+
+  chipmunk = callPackage ../development/libraries/chipmunk { };
 
   chmlib = callPackage ../development/libraries/chmlib { };
 
@@ -19749,6 +19752,8 @@ with pkgs;
   libsnark = callPackage ../development/libraries/libsnark { };
 
   libsodium = callPackage ../development/libraries/libsodium { };
+
+  libsodium-cmake = callPackage ../development/libraries/libsodium-cmake { };
 
   libsoup = callPackage ../development/libraries/libsoup { };
 
