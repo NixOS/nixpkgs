@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "keysmith";
-  version = "1.6.0";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "dfinity";
     repo = "keysmith";
     rev = "v${version}";
-    sha256 = "1z0sxirk71yabgilq8v5lz4nd2bbm1xyrd5zppif8k9jqhr6v3v3";
+    sha256 = "sha256-+wYWIoPYc7qpTRS4Zlxp50Up8obZOmfQpiT0SWwVJE0=";
   };
 
-  vendorSha256 = "1p0r15ihmnmrybf12cycbav80sdj2dv2kry66f4hjfjn6k8zb0dc";
+  vendorSha256 = "sha256-rIH10TRWOgmJM8bnKXYTsmmAtlrMMxHc8rnaCmMJGdw=";
 
   meta = with lib; {
     description = "Hierarchical Deterministic Key Derivation for the Internet Computer";
