@@ -1493,7 +1493,9 @@ with pkgs;
 
   pcsxr = callPackage ../applications/emulators/pcsxr { };
 
-  ppsspp = libsForQt5.callPackage ../applications/emulators/ppsspp { };
+  ppsspp = callPackage ../applications/emulators/ppsspp {
+    inherit (libsForQt5) qtbase qtmultimedia wrapQtAppsHook;
+  };
 
   proton-caller = callPackage ../applications/emulators/proton-caller { };
 
