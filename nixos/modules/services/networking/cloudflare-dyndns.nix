@@ -13,7 +13,7 @@ in
       apiTokenFile = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           The path to a file containing the CloudFlare API token.
 
           The file must have the form `CLOUDFLARE_API_TOKEN=...`

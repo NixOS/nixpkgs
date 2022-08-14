@@ -81,7 +81,7 @@ let
         type = types.package;
         default = pkgs.qemu;
         defaultText = literalExpression "pkgs.qemu";
-        description = ''
+        description = lib.mdDoc ''
           Qemu package to use with libvirt.
           `pkgs.qemu` can emulate alien architectures (e.g. aarch64 on x86)
           `pkgs.qemu_kvm` saves disk space allowing to emulate only host architectures.

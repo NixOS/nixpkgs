@@ -181,7 +181,7 @@ in
       exclusiveNodes = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        description = ''
+        description = lib.mdDoc ''
           List of peer IP addresses to connect to *only*.
           If given the other peer options will be ignored.
         '';

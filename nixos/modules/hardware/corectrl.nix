@@ -20,7 +20,7 @@ in
         type = types.str;
         default = "0xfffd7fff";
         example = "0xffffffff";
-        description = ''
+        description = lib.mdDoc ''
           Sets the `amdgpu.ppfeaturemask` kernel option.
           In particular, it is used here to set the overdrive bit.
           Default is `0xfffd7fff` as it is less likely to cause flicker issues.

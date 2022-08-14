@@ -251,7 +251,7 @@ let
       authorization = mkOption {
         type = types.nullOr types.attrs;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Sets the `Authorization` header on every scrape request with the configured credentials.
         '';
       };
@@ -664,7 +664,7 @@ let
   promTypes.dockerswarm_sd_config = mkDockerSdConfigModule {
     role = mkOption {
       type = types.enum [ "services" "tasks" "nodes" ];
-      description = ''
+      description = lib.mdDoc ''
         Role of the targets to retrieve. Must be `services`, `tasks`, or `nodes`.
       '';
     };
@@ -1222,7 +1222,7 @@ let
 
       role = mkOption {
         type = types.enum [ "instance" "baremetal" ];
-        description = ''
+        description = lib.mdDoc ''
           Role of the targets to retrieve. Must be `instance` or `baremetal`.
         '';
       };

@@ -10,7 +10,7 @@ in {
     settings = mkOption {
       type = types.attrs;
       default = {};
-      description = ''
+      description = lib.mdDoc ''
         All settings of nginxlog expressed as an Nix attrset.
 
         Check the official documentation for the corresponding YAML

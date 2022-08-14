@@ -15,7 +15,7 @@ in
         };
 
         datasets = lib.mkOption {
-          description = ''
+          description = lib.mdDoc ''
             Datasets to create under the `tank` and `boot` zpools.
 
             **NOTE:** This option is used only at image creation time, and

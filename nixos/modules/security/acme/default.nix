@@ -676,7 +676,7 @@ let
       inheritDefaults = mkOption {
         default = true;
         example = true;
-        description = "Whether to inherit values set in `security.acme.defaults` or not.";
+        description = lib.mdDoc "Whether to inherit values set in `security.acme.defaults` or not.";
         type = lib.types.bool;
       };
     };

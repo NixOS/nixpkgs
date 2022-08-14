@@ -62,7 +62,7 @@ in
           to use `yabar-unstable'.
         '';
 
-        description = ''
+        description = lib.mdDoc ''
           The package which contains the `yabar` binary.
 
           Nixpkgs provides the `yabar` and `yabar-unstable`

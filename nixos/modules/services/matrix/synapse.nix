@@ -516,7 +516,7 @@ in {
               type = types.bool;
               default = true;
               example = false;
-              description = ''
+              description = lib.mdDoc ''
                 Is the preview URL API enabled?  If enabled, you *must* specify an
                 explicit url_preview_ip_range_blacklist of IPs that the spider is
                 denied from accessing.

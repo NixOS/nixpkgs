@@ -87,7 +87,7 @@ in
         type = types.str;
         default = localDB;
         example = "dbi:Pg:dbname=hydra;host=postgres.example.org;user=foo;";
-        description = ''
+        description = lib.mdDoc ''
           The DBI string for Hydra database connection.
 
           NOTE: Attempts to set `application_name` will be overridden by
