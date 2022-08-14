@@ -21544,7 +21544,7 @@ with pkgs;
       inherit buildPackages;
       cmake = cmake.overrideAttrs (attrs: {
         patches = attrs.patches ++ [
-          ../development/libraries/qt-6/cmake.patch
+          ../development/libraries/qt-6/patches/cmake.patch
         ];
       });
     });

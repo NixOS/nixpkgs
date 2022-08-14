@@ -49,6 +49,9 @@ let
         withGtk3 = true;
         inherit (srcs.qtbase) src version;
         inherit bison cups harfbuzz libGL dconf gtk3 developerBuild cmake;
+        patches = [
+          ./patches/qtbase-qmake-pkg-config.patch
+        ];
       };
 
       qt3d = callPackage ./modules/qt3d.nix { };
@@ -90,6 +93,14 @@ let
       wrapQtAppsHook = makeSetupHook {
           deps = [ buildPackages.makeWrapper ];
         } ./hooks/wrap-qt-apps-hook.sh;
+
+      qmake = makeSetupHook {
+        deps = [ self.qtbase.dev ];
+        substitutions = {
+          inherit debug;
+          fix_qmake_libtool = ./hooks/fix-qmake-libtool.sh;
+        };
+      } ./hooks/qmake-hook.sh;
     };
 
   self = lib.makeScope newScope addPackages;
