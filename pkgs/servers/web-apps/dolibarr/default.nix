@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, stateDir ? "/var/lib/dolibarr" }:
+{ stdenv, lib, fetchFromGitHub, nixosTests, stateDir ? "/var/lib/dolibarr" }:
 
 stdenv.mkDerivation rec {
   pname = "dolibarr";
@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     mkdir -p "$out"
     cp -r * $out
   '';
+
+  passthru.tests = { inherit (nixosTests) dolibarr; };
 
   meta = with lib; {
     description = "A enterprise resource planning (ERP) and customer relationship manager (CRM) server";
