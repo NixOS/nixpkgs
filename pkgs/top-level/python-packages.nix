@@ -6184,6 +6184,8 @@ in {
 
   oci = callPackage ../development/python-modules/oci { };
 
+  ocifs = callPackage ../development/python-modules/ocifs { };
+
   ocrmypdf = callPackage ../development/python-modules/ocrmypdf { };
 
   od = callPackage ../development/python-modules/od { };
