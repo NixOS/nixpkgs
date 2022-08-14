@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , cython
-, python
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -25,10 +25,9 @@ buildPythonPackage rec {
       --replace "wheel>=0.32.0,<0.33.0" "wheel>=0.31.0"
   '';
 
-  checkPhase = ''
-    cd cymem/tests
-    ${python.interpreter} -m unittest discover -p "*test*"
-  '';
+  checkInputs = [ unittestCheckHook ];
+
+  unittestFlagsArray = [ "-s" "cymem/tests" "-p" "*test*" ];
 
   meta = with lib; {
     description = "Cython memory pool for RAII-style memory management";

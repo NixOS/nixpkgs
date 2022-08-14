@@ -3,8 +3,10 @@
 , fetchPypi
 , isPyPy
 , python
-, blas, lapack # build segfaults with 64-bit blas
+, blas
+, lapack # build segfaults with 64-bit blas
 , suitesparse
+, unittestCheckHook
 , glpk ? null
 , gsl ? null
 , fftw ? null
@@ -49,9 +51,9 @@ buildPythonPackage rec {
     export CVXOPT_FFTW_INC_DIR=${fftw.dev}/include
   '';
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover -s tests
-  '';
+  checkInputs = [ unittestCheckHook ];
+
+  unittestFlagsArray = [ "-s" "tests" ];
 
   meta = with lib; {
     homepage = "http://cvxopt.org/";
