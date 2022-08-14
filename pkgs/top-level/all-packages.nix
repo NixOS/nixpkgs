@@ -1097,6 +1097,22 @@ with pkgs;
 
   adriconf = callPackage ../tools/graphics/adriconf { };
 
+  am2r = callPackage ../games/am2r {
+    stdenv32Bit = pkgsi686Linux.stdenv;
+
+    inherit (pkgsi686Linux)
+      openal
+      libGLU
+      libglvnd
+      libzip
+      curl;
+    inherit (pkgsi686Linux.xorg)
+      libX11
+      libXext
+      libXrandr
+      libXxf86vm;
+  };
+
   amass = callPackage ../tools/networking/amass { };
 
   afew = callPackage ../applications/networking/mailreaders/afew { };
