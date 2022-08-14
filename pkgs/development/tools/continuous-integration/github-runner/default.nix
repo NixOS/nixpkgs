@@ -21,14 +21,15 @@
 , nuget-to-nix
 }:
 let
+  fetchNuGet = { pname, version, sha256 }: fetchurl {
+    name = "${pname}.${version}.nupkg";
+    url = "https://www.nuget.org/api/v2/package/${pname}/${version}";
+    inherit sha256;
+  };
+
   nugetSource = linkFarmFromDrvs "nuget-packages" (
-    import ./deps.nix {
-      fetchNuGet = { pname, version, sha256 }: fetchurl {
-        name = "${pname}.${version}.nupkg";
-        url = "https://www.nuget.org/api/v2/package/${pname}/${version}";
-        inherit sha256;
-      };
-    }
+    import ./deps.nix { inherit fetchNuGet; } ++
+    dotnetSdk.passthru.packages { inherit fetchNuGet; }
   );
 
   dotnetSdk = dotnetCorePackages.sdk_6_0;
