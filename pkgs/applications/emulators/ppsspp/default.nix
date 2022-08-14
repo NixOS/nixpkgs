@@ -1,37 +1,43 @@
-{ mkDerivation
+{ lib
+, stdenv
 , fetchFromGitHub
 , SDL2
 , cmake
 , ffmpeg
 , glew
-, lib
 , libzip
 , pkg-config
 , python3
 , qtbase
 , qtmultimedia
 , snappy
+, wrapQtAppsHook
 , zlib
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ppsspp";
   version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "hrydgard";
-    repo = pname;
-    rev = "v${version}";
+    repo = "ppsspp";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
     sha256 = "sha256-WsFy2aSOmkII2Lte5et4W6qj0AXUKWWkYe88T0OQP08=";
   };
 
   postPatch = ''
-    substituteInPlace git-version.cmake --replace unknown ${src.rev}
+    substituteInPlace git-version.cmake --replace unknown ${finalAttrs.src.rev}
     substituteInPlace UI/NativeApp.cpp --replace /usr/share $out/share
   '';
 
-  nativeBuildInputs = [ cmake pkg-config python3 ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    python3
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
     SDL2
@@ -68,5 +74,5 @@ mkDerivation rec {
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.linux;
   };
-}
+})
 # TODO: add SDL headless port
