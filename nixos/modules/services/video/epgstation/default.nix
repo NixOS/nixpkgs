@@ -323,6 +323,8 @@ in
         ++ lib.optional config.services.mirakurun.enable "mirakurun.service"
         ++ lib.optional config.services.mysql.enable "mysql.service";
 
+      environment.NODE_ENV = "production";
+
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/epgstation start";
         ExecStartPre = "+${preStartScript}";
