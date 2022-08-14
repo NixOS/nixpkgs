@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , isPy27
 , fetchPypi
@@ -37,11 +38,19 @@ buildPythonPackage rec {
     ./pyqt5-confirm-license.patch
   ];
 
+  postPatch =
   # be more verbose
-  postPatch = ''
+  ''
     cat >> pyproject.toml <<EOF
     [tool.sip.project]
     verbose = true
+  ''
+  # Due to bug in SIP .whl name generation we have to bump minimal macos sdk upto 11.0 for
+  # aarch64-darwin. This patch can be removed once SIP will fix it in upstream,
+  # see https://github.com/NixOS/nixpkgs/pull/186612#issuecomment-1214635456.
+  + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    minimum-macos-version = "11.0"
+  '' + ''
     EOF
   '';
 
