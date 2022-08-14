@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: addeeea49e5217ade1407a2e9a3cf6514ad8972e
-  ref: refs/tags/6.2.11
+  revision: 38794f11b8a4c685c1f90b832a9a77974f5e0471
+  ref: refs/tags/6.2.12
   specs:
-    metasploit-framework (6.2.11)
+    metasploit-framework (6.2.12)
       actionpack (~> 6.0)
       activerecord (~> 6.0)
       activesupport (~> 6.0)
@@ -130,13 +130,13 @@ GEM
     arel-helpers (2.14.0)
       activerecord (>= 3.1.0, < 8)
     aws-eventstream (1.2.0)
-    aws-partitions (1.616.0)
+    aws-partitions (1.618.0)
     aws-sdk-core (3.132.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1, >= 1.6.1)
-    aws-sdk-ec2 (1.326.0)
+    aws-sdk-ec2 (1.327.0)
       aws-sdk-core (~> 3, >= 3.127.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-iam (1.69.0)
@@ -178,7 +178,7 @@ GEM
     eventmachine (1.2.7)
     faker (2.22.0)
       i18n (>= 1.8.11, < 2)
-    faraday (2.5.1)
+    faraday (2.5.2)
       faraday-net_http (>= 2.0, < 3.1)
       ruby2_keywords (>= 0.0.4)
     faraday-net_http (3.0.0)
@@ -402,7 +402,7 @@ GEM
     ttfunk (1.7.0)
     tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
-    tzinfo-data (1.2022.1)
+    tzinfo-data (1.2022.2)
       tzinfo (>= 1.0.0)
     unf (0.1.4)
       unf_ext
