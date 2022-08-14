@@ -748,18 +748,18 @@ in
           }
        ];
 
-     description =
-       '' Define resource limits that should apply to users or groups.
-          Each item in the list should be an attribute set with a
-          <varname>domain</varname>, <varname>type</varname>,
-          <varname>item</varname>, and <varname>value</varname>
-          attribute.  The syntax and semantics of these attributes
-          must be that described in <citerefentry><refentrytitle>limits.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
+     description = ''
+       Define resource limits that should apply to users or groups.
+       Each item in the list should be an attribute set with a
+       <varname>domain</varname>, <varname>type</varname>,
+       <varname>item</varname>, and <varname>value</varname>
+       attribute.  The syntax and semantics of these attributes
+       must be that described in <citerefentry><refentrytitle>limits.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
 
-          Note that these limits do not apply to systemd services,
-          whose limits can be changed via <option>systemd.extraConfig</option>
-          instead.
-       '';
+       Note that these limits do not apply to systemd services,
+       whose limits can be changed via <option>systemd.extraConfig</option>
+       instead.
+     '';
     };
 
     security.pam.services = mkOption {
