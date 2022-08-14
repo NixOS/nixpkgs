@@ -10501,7 +10501,7 @@ with pkgs;
 
   safe-rm = callPackage ../tools/system/safe-rm { };
 
-  safeeyes = callPackage ../applications/misc/safeeyes { };
+  safeeyes = with python3.pkgs; toPythonApplication safeeyes;
 
   sahel-fonts = callPackage ../data/fonts/sahel-fonts { };
 

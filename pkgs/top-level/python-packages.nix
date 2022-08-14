@@ -9608,6 +9608,8 @@ in {
 
   safe = callPackage ../development/python-modules/safe { };
 
+  safeeyes = callPackage ../applications/misc/safeeyes { };
+
   safeio = callPackage ../development/python-modules/safeio { };
 
   safety = callPackage ../development/python-modules/safety { };
