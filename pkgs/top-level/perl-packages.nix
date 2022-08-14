@@ -17313,6 +17313,23 @@ let
     };
   };
 
+  ObjectPad = buildPerlModule {
+    pname = "Object-Pad";
+    version = "0.68";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Object-Pad-0.68.tar.gz";
+      sha256 = "sha256-xN5jBIQxMJZNrskozF99HphTnu/X7azHvn4Yg0XhnXE=";
+    };
+    buildInputs = [ TestFatal TestRefcount ];
+    perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
+    propagatedBuildInputs = [ XSParseKeyword XSParseSublike ];
+    meta = {
+      description = "simple syntax for lexical field-based objects";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.zakame ];
+    };
+  };
+
   ObjectSignature = buildPerlPackage {
     pname = "Object-Signature";
     version = "1.08";

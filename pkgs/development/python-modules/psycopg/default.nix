@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , fetchurl
@@ -59,7 +60,7 @@ buildPythonPackage {
   patches = [
     (substituteAll {
       src = ./libpq.patch;
-      libpq = "${postgresql.lib}/lib/libpq.so";
+      libpq = "${postgresql.lib}/lib/libpq${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
 
