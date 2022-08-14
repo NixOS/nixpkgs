@@ -1,39 +1,10 @@
 { lib
 , fetchFromGitHub
 , stdenv, git
-, cmake , numactl, libsodium
+, cmake , numactl, bls-signatures, chia-relic
 , substituteAll
 }:
 
-let
-  bls = fetchFromGitHub {
-    owner = "Chia-Network";
-    repo = "bls-signatures";
-    rev = "1.0.14";
-    sha256 = "sha256-nUBvjCjhQ6GSO8GBZ0oFAGWoR+lclk/vgu2uJRzhYNw=";
-    fetchSubmodules = true;
-  };
-
-    sodium = fetchFromGitHub {
-      owner = "AmineKhaldi";
-      repo = "libsodium-cmake";
-      rev = "f73a3fe1afdc4e37ac5fe0ddd401bf521f6bba65"; # pinned by upstream
-      sha256 = "sha256-lGz7o6DQVAuEc7yTp8bYS2kwjzHwGaNjugDi1ruRJOA=";
-      fetchSubmodules = true;
-    };
-
-  relic = fetchFromGitHub {
-    owner = "Chia-Network";
-    repo = "relic";
-    rev = "1d98e5abf3ca5b14fd729bd5bcced88ea70ecfd7";
-    hash = "sha256-IfTD8DvTEXeLUoKe4Ejafb+PEJW5DV/VXRYuutwGQHU=";
-    patches = [(substituteAll {
-           src = ./patch_bls.patch;
-           inherit sodium;
-           inherit relic;
-        })];
-  };
-in
 stdenv.mkDerivation {
   pname = "bladebit";
   version = "2.0.0-alpha2";
@@ -51,19 +22,18 @@ stdenv.mkDerivation {
     # prevent CMake from trying to get libraries on the Internet
     (substituteAll {
         src = ./find_bls.patch;
-        inherit bls;
+        bls = bls-signatures;
+        relic = chia-relic;
       })
-
   ];
 
-  nativeBuildInputs = [ cmake numactl git sodium ];
-
-  buildInputs = [ libsodium ];
+  nativeBuildInputs = [ cmake numactl git ];
 
   installPhase = ''
     runHook preInstall
 
     install -D -m 755 bladebit $out/bin/bladebit
+    echo test
 
     runHook postInstall
   '';

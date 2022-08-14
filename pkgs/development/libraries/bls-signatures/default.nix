@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation {
   pname = "bls-signatures";
-  version = "1.0.14";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "Chia-Network";
     repo = "bls-signatures";
-    rev = "1.0.14";
-    sha256 = "sha256-nUBvjCjhQ6GSO8GBZ0oFAGWoR+lclk/vgu2uJRzhYNw=";
+    rev = "1.0.6";
+    sha256 = "sha256-viP9IcYXg4BGndvildVZXICMrTtMmNyezc2Sbu/oZyk=";
     fetchSubmodules = true;
   };
 
@@ -39,6 +39,7 @@ patches = [
     "-DARITH=easy"
     "-DBUILD_BLS_TESTS=false"
     "-DBUILD_BLS_BENCHMARKS=false"
+    "-DBUILD_BLS_PYTHON_BINDINGS=false"
   ];
 
   meta = with lib; {
