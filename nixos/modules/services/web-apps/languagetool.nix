@@ -7,7 +7,7 @@ let
 in
 {
   options.services.languageToolHttp = {
-    enable = mkEnableOption "the LanguagTool http server";
+    enable = mkEnableOption "the LanguageTool http server";
     allowBrowserPluginAccess = mkEnableOption "access from the browser plugin";
     public = mkEnableOption ''
       access this server from anywhere, not only localhost.
@@ -16,7 +16,7 @@ in
     '';
     settings = mkOption {
       description = ''
-        Contents of the configuration file. ${confDoc}
+        Content of the configuration file. ${confDoc}
       '';
       inherit (format) type;
       default = { };
