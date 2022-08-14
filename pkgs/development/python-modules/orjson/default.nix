@@ -52,6 +52,15 @@ buildPythonPackage rec {
     xxhash
   ];
 
+  disabledTests = [
+    # Disable the partial second tests until the following is fixed:
+    #
+    #   https://github.com/ijl/orjson/issues/293
+    #
+    "test_datetime_partial_second_zoneinfo"
+    "test_datetime_partial_second_pytz"
+  ];
+
   pythonImportsCheck = [ pname ];
 
   meta = with lib; {
