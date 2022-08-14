@@ -13,17 +13,18 @@
 , gtk3
 , gdk-pixbuf
 , wrapGAppsHook
+, vulkan-loader
 }:
 
 buildDotnetModule rec {
   pname = "ryujinx";
-  version = "1.1.181"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
+  version = "1.1.213"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "6eb85e846f25ae36a39685d6ac91025deaea306c";
-    sha256 = "0lc8hhcrad26sw2dx0lwml8lk2mxg4db4sgfxnd450xi2qd63kdc";
+    rev = "e8f1ca84277240c4d6215eb9cd85713aab73e2f7";
+    sha256 = "0ha5wn9h9rqxbkjbz7sm5m8q3rbsiiddh72wx0s3sga5w8054cb3";
   };
 
   projectFile = "Ryujinx.sln";
@@ -53,10 +54,8 @@ buildDotnetModule rec {
     libsoundio
     sndio
     pulseaudio
-  ];
-
-  makeWrapperArgs = [
-    "--suffix PATH : ${lib.getBin ffmpeg}"
+    vulkan-loader
+    ffmpeg
   ];
 
   patches = [
