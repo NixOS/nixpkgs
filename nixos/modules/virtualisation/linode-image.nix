@@ -48,8 +48,7 @@ in
     system.build.linodeImage = import ../../lib/make-disk-image.nix {
       name = "linode-image";
       postVM = ''
-        PATH=$PATH:${with pkgs; lib.makeBinPath [ gzip ]}
-        gzip -${toString cfg.compressionLevel} -c -- $diskImage > \
+        ${pkgs.gzip}/bin/gzip -${toString cfg.compressionLevel} -c -- $diskImage > \
         $out/nixos-image-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.img.gz
         rm $diskImage
       '';
