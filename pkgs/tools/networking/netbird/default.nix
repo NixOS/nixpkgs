@@ -80,6 +80,8 @@ buildGoModule rec {
         --replace "Exec=/usr/bin/netbird-ui" "Exec=$out/bin/netbird-ui"
     '';
 
+  passthru.tests.netbird = nixosTests.netbird;
+
   meta = with lib; {
     homepage = "https://netbird.io";
     description = "Connect your devices into a single secure private WireGuard®-based mesh network with SSO/MFA and simple access controls";
