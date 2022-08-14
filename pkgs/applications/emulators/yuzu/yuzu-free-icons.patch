@@ -1,143 +1,304 @@
-From 23e02aec6ff6b0823c2e66f5cff737e0cd430a22 Mon Sep 17 00:00:00 2001
-From: Kyle K <190571+Docteh@users.noreply.github.com>
-Date: Mon, 28 Mar 2022 14:44:12 -0700
-Subject: [PATCH 1/2] Moving Icons away from CC BY-ND 3.0 for FOSS packaging
+From 44edc19f8f1ac0046770d6f3587a17bdd0f82d32 Mon Sep 17 00:00:00 2001
+From: Kyle Kienapfel <Docteh@users.noreply.github.com>
+Date: Tue, 19 Jul 2022 07:08:29 -0700
+Subject: [PATCH] Moving Icons away from CC BY-ND 3.0 for FOSS packaging
  purposes
 
 I've seen some comments stating that sharing pre-compiled packages
 of yuzu is problematic for linux distributions due to some contents
 having license of CC BY-ND 3.0
 
-Sources for the icons have been updated in the dist/license.md document
+Better licensed sources of icons have been found for most cases,
+see the changes to the .reuse/dep5 file for details.
 
-Also a note has been added to call attention to the two copies of a QT theme
-called QDarkStyleSheet
+Placeholders for connected/disconnected icons
+
+At the time of writing I consider these icons to be placeholders,
+hence three copies. colorful is grey, default is black, qdarkstyle is white
+
+connected is gnome/16x16/network-idle.png with no changes
+connected_notification is gnome/16x16/network-error.png with changes
+disconnected is gnome/16x16/network-offline.png with changes
+
+Looking at licenses: GNOME icon theme is distributed under the terms of either
+GNU LGPL v.3 or Creative Commons BY-SA 3.0 license.
+
+Debian appears to explicitly state they're licensing under
+Creative Commons Attribution-Share Alike 3.0
+
+From a tarball at the following link suggests we can just attribute GNOME Project
+https://download.gnome.org/sources/gnome-icon-theme/
+
+When attributing the artwork, using "GNOME Project" is enough.
+Please link to http://www.gnome.org where available.
 ---
- dist/license.md                               |  63 ++++++++++--------
- dist/qt_themes/colorful/icons/48x48/plus.png  | Bin 496 -> 232 bytes
- .../colorful/icons/48x48/sd_card.png          | Bin 680 -> 760 bytes
- dist/qt_themes/colorful/icons/48x48/star.png  | Bin 1248 -> 1330 bytes
+ LICENSES/CC-BY-ND-3.0.txt                     |  87 ------------------
+ LICENSES/CC-BY-SA-3.0.txt                     |  60 ++++++++++++
+ .../colorful/icons/16x16/connected.png        | Bin 362 -> 575 bytes
+ .../icons/16x16/connected_notification.png    | Bin 607 -> 760 bytes
+ .../colorful/icons/16x16/disconnected.png     | Bin 784 -> 648 bytes
+ .../colorful/icons/48x48/list-add.png         | Bin 496 -> 204 bytes
+ .../colorful/icons/48x48/sd_card.png          | Bin 680 -> 981 bytes
+ dist/qt_themes/colorful/icons/48x48/star.png  | Bin 1248 -> 1108 bytes
+ .../icons/16x16/lock.png                      | Bin 401 -> 0 bytes
+ .../icons/16x16/view-refresh.png              | Bin 362 -> 0 bytes
+ .../colorful_midnight_blue/style.qrc          |   4 +-
  .../qt_themes/default/icons/16x16/checked.png | Bin 657 -> 414 bytes
- dist/qt_themes/default/icons/16x16/failed.png | Bin 524 -> 361 bytes
+ .../default/icons/16x16/connected.png         | Bin 269 -> 575 bytes
+ .../icons/16x16/connected_notification.png    | Bin 517 -> 760 bytes
+ .../default/icons/16x16/disconnected.png      | Bin 306 -> 648 bytes
+ dist/qt_themes/default/icons/16x16/failed.png | Bin 524 -> 431 bytes
  dist/qt_themes/default/icons/16x16/lock.png   | Bin 279 -> 318 bytes
  .../default/icons/256x256/plus_folder.png     | Bin 3135 -> 3521 bytes
  .../default/icons/48x48/bad_folder.png        | Bin 1088 -> 1007 bytes
  dist/qt_themes/default/icons/48x48/chip.png   | Bin 15070 -> 511 bytes
  dist/qt_themes/default/icons/48x48/folder.png | Bin 410 -> 535 bytes
- dist/qt_themes/default/icons/48x48/plus.png   | Bin 316 -> 274 bytes
- .../qt_themes/default/icons/48x48/sd_card.png | Bin 614 -> 638 bytes
+ .../default/icons/48x48/list-add.png          | Bin 316 -> 204 bytes
+ .../default/icons/48x48/no_avatar.png         | Bin 588 -> 678 bytes
+ .../qt_themes/default/icons/48x48/sd_card.png | Bin 614 -> 561 bytes
  dist/qt_themes/default/icons/48x48/star.png   | Bin 686 -> 1029 bytes
+ .../qdarkstyle/icons/16x16/connected.png      | Bin 397 -> 575 bytes
+ .../icons/16x16/connected_notification.png    | Bin 526 -> 760 bytes
+ .../qdarkstyle/icons/16x16/disconnected.png   | Bin 444 -> 648 bytes
  .../qt_themes/qdarkstyle/icons/16x16/lock.png | Bin 304 -> 343 bytes
  .../qdarkstyle/icons/256x256/plus_folder.png  | Bin 3438 -> 3931 bytes
  .../qdarkstyle/icons/48x48/bad_folder.png     | Bin 1098 -> 1061 bytes
  .../qt_themes/qdarkstyle/icons/48x48/chip.png | Bin 15120 -> 551 bytes
  .../qdarkstyle/icons/48x48/folder.png         | Bin 542 -> 594 bytes
- .../qt_themes/qdarkstyle/icons/48x48/plus.png | Bin 339 -> 297 bytes
- .../qdarkstyle/icons/48x48/sd_card.png        | Bin 676 -> 679 bytes
+ .../qdarkstyle/icons/48x48/list-add.png       | Bin 339 -> 204 bytes
+ .../qdarkstyle/icons/48x48/no_avatar.png      | Bin 708 -> 763 bytes
+ .../qdarkstyle/icons/48x48/sd_card.png        | Bin 676 -> 587 bytes
  .../qt_themes/qdarkstyle/icons/48x48/star.png | Bin 725 -> 1055 bytes
- .../icons/16x16/lock.png                      | Bin 304 -> 343 bytes
- .../icons/256x256/plus_folder.png             | Bin 3438 -> 3931 bytes
- .../icons/48x48/bad_folder.png                | Bin 1098 -> 1061 bytes
- .../icons/48x48/chip.png                      | Bin 15120 -> 551 bytes
- .../icons/48x48/folder.png                    | Bin 542 -> 594 bytes
- .../icons/48x48/plus.png                      | Bin 339 -> 297 bytes
- .../icons/48x48/sd_card.png                   | Bin 676 -> 679 bytes
- .../icons/48x48/star.png                      | Bin 725 -> 1055 bytes
- 30 files changed, 37 insertions(+), 26 deletions(-)
+ 38 files changed, 103 insertions(+), 103 deletions(-)
+ delete mode 100644 LICENSES/CC-BY-ND-3.0.txt
+ create mode 100644 LICENSES/CC-BY-SA-3.0.txt
+ delete mode 100644 dist/qt_themes/colorful_midnight_blue/icons/16x16/lock.png
+ delete mode 100644 dist/qt_themes/colorful_midnight_blue/icons/16x16/view-refresh.png
 
-diff --git a/dist/license.md b/dist/license.md
-index 7bdebfec1fccdf97a4cf24a1eddd94638d510d8b..745256c32947aeb5d77bae10bc3cce666542967e 100644
---- a/dist/license.md
-+++ b/dist/license.md
-@@ -2,34 +2,45 @@ The icons in this folder and its subfolders have the following licenses:
- 
- Icon Name | License | Origin/Author
- --- | --- | ---
--qt_themes/default/icons/16x16/checked.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/default/icons/16x16/failed.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/default/icons/16x16/lock.png | CC BY-ND 3.0 | https://icons8.com
-+qt_themes/default/icons/16x16/checked.png |Apache 2.0 | https://github.com/google/material-design-icons/ (modified)
-+qt_themes/default/icons/16x16/failed.png | Apache 2.0 | https://github.com/google/material-design-icons/ (modified)
-+qt_themes/default/icons/16x16/lock.png | Apache 2.0 | https://github.com/google/material-design-icons/
- qt_themes/default/icons/16x16/view-refresh.png | Apache 2.0 | https://material.io
--qt_themes/default/icons/256x256/plus_folder.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/default/icons/48x48/bad_folder.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/default/icons/48x48/chip.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/default/icons/48x48/folder.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/default/icons/48x48/plus.png | CC0 1.0 | Designed by BreadFish64 from the Citra team
--qt_themes/default/icons/48x48/sd_card.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/default/icons/48x48/star.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/qdarkstyle/icons/16x16/lock.png | CC BY-ND 3.0 | https://icons8.com
-+qt_themes/default/icons/256x256/plus_folder.png | MIT | https://github.com/tailwindlabs/heroicons
-+qt_themes/default/icons/48x48/bad_folder.png | MIT | https://github.com/tailwindlabs/heroicons
-+qt_themes/default/icons/48x48/chip.png | MIT | https://github.com/tailwindlabs/heroicons
-+qt_themes/default/icons/48x48/folder.png | MIT | https://github.com/tailwindlabs/heroicons
-+qt_themes/default/icons/48x48/plus.png | MIT | https://github.com/tailwindlabs/heroicons
-+qt_themes/default/icons/48x48/sd_card.png | CC0 1.0 | SVG Repo https://www.svgrepo.com/svg/70351/sd-card
-+qt_themes/default/icons/48x48/star.png | MIT | https://github.com/tailwindlabs/heroicons
-+qt_themes/qdarkstyle/icons/16x16/lock.png | Apache 2.0 | https://github.com/google/material-design-icons/
- qt_themes/qdarkstyle/icons/16x16/view-refresh.png | Apache 2.0 | https://material.io
--qt_themes/qdarkstyle/icons/256x256/plus_folder.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/qdarkstyle/icons/48x48/bad_folder.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/qdarkstyle/icons/48x48/chip.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/qdarkstyle/icons/48x48/folder.png | CC BY-ND 3.0 | https://icons8.com
-+qt_themes/qdarkstyle/icons/256x256/plus_folder.png | MIT | https://github.com/tailwindlabs/heroicons
-+qt_themes/qdarkstyle/icons/48x48/bad_folder.png | MIT | https://github.com/tailwindlabs/heroicons
-+qt_themes/qdarkstyle/icons/48x48/chip.png | MIT | https://github.com/tailwindlabs/heroicons
-+qt_themes/qdarkstyle/icons/48x48/folder.png | MIT | https://github.com/tailwindlabs/heroicons
- qt_themes/qdarkstyle/icons/48x48/plus.png | CC0 1.0 | Designed by BreadFish64 from the Citra team
--qt_themes/qdarkstyle/icons/48x48/sd_card.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/qdarkstyle/icons/48x48/star.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/colorful/icons/16x16/lock.png | CC BY-ND 3.0 | https://icons8.com
-+qt_themes/qdarkstyle/icons/48x48/sd_card.png | CC0 1.0 | SVG Repo https://www.svgrepo.com/svg/70351/sd-card
-+qt_themes/qdarkstyle/icons/48x48/star.png | MIT | https://github.com/tailwindlabs/heroicons
-+qt_themes/qdarkstyle/ | MIT/CC BY 4.0 | Upstream https://github.com/ColinDuquesnoy/QDarkStyleSheet
+diff --git a/LICENSES/CC-BY-ND-3.0.txt b/LICENSES/CC-BY-ND-3.0.txt
+deleted file mode 100644
+index d9265b9f19e250785f5fc953c73e5f8915fcdd21..0000000000000000000000000000000000000000
+--- a/LICENSES/CC-BY-ND-3.0.txt
++++ /dev/null
+@@ -1,87 +0,0 @@
+-Creative Commons Attribution-NoDerivs 3.0 Unported
+-
+- CREATIVE COMMONS CORPORATION IS NOT A LAW FIRM AND DOES NOT PROVIDE LEGAL SERVICES. DISTRIBUTION OF THIS LICENSE DOES NOT CREATE AN ATTORNEY-CLIENT RELATIONSHIP. CREATIVE COMMONS PROVIDES THIS INFORMATION ON AN "AS-IS" BASIS. CREATIVE COMMONS MAKES NO WARRANTIES REGARDING THE INFORMATION PROVIDED, AND DISCLAIMS LIABILITY FOR DAMAGES RESULTING FROM ITS USE.
+-
+-License
+-
+-THE WORK (AS DEFINED BELOW) IS PROVIDED UNDER THE TERMS OF THIS CREATIVE COMMONS PUBLIC LICENSE ("CCPL" OR "LICENSE"). THE WORK IS PROTECTED BY COPYRIGHT AND/OR OTHER APPLICABLE LAW. ANY USE OF THE WORK OTHER THAN AS AUTHORIZED UNDER THIS LICENSE OR COPYRIGHT LAW IS PROHIBITED.
+-
+-BY EXERCISING ANY RIGHTS TO THE WORK PROVIDED HERE, YOU ACCEPT AND AGREE TO BE BOUND BY THE TERMS OF THIS LICENSE. TO THE EXTENT THIS LICENSE MAY BE CONSIDERED TO BE A CONTRACT, THE LICENSOR GRANTS YOU THE RIGHTS CONTAINED HERE IN CONSIDERATION OF YOUR ACCEPTANCE OF SUCH TERMS AND CONDITIONS.
+-
+-1. Definitions
+-
+-     a. "Adaptation" means a work based upon the Work, or upon the Work and other pre-existing works, such as a translation, adaptation, derivative work, arrangement of music or other alterations of a literary or artistic work, or phonogram or performance and includes cinematographic adaptations or any other form in which the Work may be recast, transformed, or adapted including in any form recognizably derived from the original, except that a work that constitutes a Collection will not be considered an Adaptation for the purpose of this License. For the avoidance of doubt, where the Work is a musical work, performance or phonogram, the synchronization of the Work in timed-relation with a moving image ("synching") will be considered an Adaptation for the purpose of this License.
+-
+-     b. "Collection" means a collection of literary or artistic works, such as encyclopedias and anthologies, or performances, phonograms or broadcasts, or other works or subject matter other than works listed in Section 1(f) below, which, by reason of the selection and arrangement of their contents, constitute intellectual creations, in which the Work is included in its entirety in unmodified form along with one or more other contributions, each constituting separate and independent works in themselves, which together are assembled into a collective whole. A work that constitutes a Collection will not be considered an Adaptation (as defined above) for the purposes of this License.
+-
+-     c. "Distribute" means to make available to the public the original and copies of the Work through sale or other transfer of ownership.
+-
+-     d. "Licensor" means the individual, individuals, entity or entities that offer(s) the Work under the terms of this License.
+-
+-     e. "Original Author" means, in the case of a literary or artistic work, the individual, individuals, entity or entities who created the Work or if no individual or entity can be identified, the publisher; and in addition (i) in the case of a performance the actors, singers, musicians, dancers, and other persons who act, sing, deliver, declaim, play in, interpret or otherwise perform literary or artistic works or expressions of folklore; (ii) in the case of a phonogram the producer being the person or legal entity who first fixes the sounds of a performance or other sounds; and, (iii) in the case of broadcasts, the organization that transmits the broadcast.
+-
+-     f. "Work" means the literary and/or artistic work offered under the terms of this License including without limitation any production in the literary, scientific and artistic domain, whatever may be the mode or form of its expression including digital form, such as a book, pamphlet and other writing; a lecture, address, sermon or other work of the same nature; a dramatic or dramatico-musical work; a choreographic work or entertainment in dumb show; a musical composition with or without words; a cinematographic work to which are assimilated works expressed by a process analogous to cinematography; a work of drawing, painting, architecture, sculpture, engraving or lithography; a photographic work to which are assimilated works expressed by a process analogous to photography; a work of applied art; an illustration, map, plan, sketch or three-dimensional work relative to geography, topography, architecture or science; a performance; a broadcast; a phonogram; a compilation of data to the extent it is protected as a copyrightable work; or a work performed by a variety or circus performer to the extent it is not otherwise considered a literary or artistic work.
+-
+-     g. "You" means an individual or entity exercising rights under this License who has not previously violated the terms of this License with respect to the Work, or who has received express permission from the Licensor to exercise rights under this License despite a previous violation.
+-
+-     h. "Publicly Perform" means to perform public recitations of the Work and to communicate to the public those public recitations, by any means or process, including by wire or wireless means or public digital performances; to make available to the public Works in such a way that members of the public may access these Works from a place and at a place individually chosen by them; to perform the Work to the public by any means or process and the communication to the public of the performances of the Work, including by public digital performance; to broadcast and rebroadcast the Work by any means including signs, sounds or images.
+-
+-     i. "Reproduce" means to make copies of the Work by any means including without limitation by sound or visual recordings and the right of fixation and reproducing fixations of the Work, including storage of a protected performance or phonogram in digital form or other electronic medium.
+-
+-2. Fair Dealing Rights. Nothing in this License is intended to reduce, limit, or restrict any uses free from copyright or rights arising from limitations or exceptions that are provided for in connection with the copyright protection under copyright law or other applicable laws.
+-
+-3. License Grant. Subject to the terms and conditions of this License, Licensor hereby grants You a worldwide, royalty-free, non-exclusive, perpetual (for the duration of the applicable copyright) license to exercise the rights in the Work as stated below:
+-
+-     a. to Reproduce the Work, to incorporate the Work into one or more Collections, and to Reproduce the Work as incorporated in the Collections; and,
+-
+-     b. to Distribute and Publicly Perform the Work including as incorporated in Collections.
+-
+-     c. For the avoidance of doubt:
+-
+-          i. Non-waivable Compulsory License Schemes. In those jurisdictions in which the right to collect royalties through any statutory or compulsory licensing scheme cannot be waived, the Licensor reserves the exclusive right to collect such royalties for any exercise by You of the rights granted under this License;
+-
+-          ii. Waivable Compulsory License Schemes. In those jurisdictions in which the right to collect royalties through any statutory or compulsory licensing scheme can be waived, the Licensor waives the exclusive right to collect such royalties for any exercise by You of the rights granted under this License; and,
+-
+-          iii. Voluntary License Schemes. The Licensor waives the right to collect royalties, whether individually or, in the event that the Licensor is a member of a collecting society that administers voluntary licensing schemes, via that society, from any exercise by You of the rights granted under this License.
+-
+-The above rights may be exercised in all media and formats whether now known or hereafter devised. The above rights include the right to make such modifications as are technically necessary to exercise the rights in other media and formats, but otherwise you have no rights to make Adaptations. Subject to Section 8(f), all rights not expressly granted by Licensor are hereby reserved.
+-
+-4. Restrictions. The license granted in Section 3 above is expressly made subject to and limited by the following restrictions:
+-
+-     a. You may Distribute or Publicly Perform the Work only under the terms of this License. You must include a copy of, or the Uniform Resource Identifier (URI) for, this License with every copy of the Work You Distribute or Publicly Perform. You may not offer or impose any terms on the Work that restrict the terms of this License or the ability of the recipient of the Work to exercise the rights granted to that recipient under the terms of the License. You may not sublicense the Work. You must keep intact all notices that refer to this License and to the disclaimer of warranties with every copy of the Work You Distribute or Publicly Perform. When You Distribute or Publicly Perform the Work, You may not impose any effective technological measures on the Work that restrict the ability of a recipient of the Work from You to exercise the rights granted to that recipient under the terms of the License. This Section 4(a) applies to the Work as incorporated in a Collection, but this does not require the Collection apart from the Work itself to be made subject to the terms of this License. If You create a Collection, upon notice from any Licensor You must, to the extent practicable, remove from the Collection any credit as required by Section 4(b), as requested.
+-
+-     b. If You Distribute, or Publicly Perform the Work or Collections, You must, unless a request has been made pursuant to Section 4(a), keep intact all copyright notices for the Work and provide, reasonable to the medium or means You are utilizing: (i) the name of the Original Author (or pseudonym, if applicable) if supplied, and/or if the Original Author and/or Licensor designate another party or parties (e.g., a sponsor institute, publishing entity, journal) for attribution ("Attribution Parties") in Licensor's copyright notice, terms of service or by other reasonable means, the name of such party or parties; (ii) the title of the Work if supplied; (iii) to the extent reasonably practicable, the URI, if any, that Licensor specifies to be associated with the Work, unless such URI does not refer to the copyright notice or licensing information for the Work. The credit required by this Section 4(b) may be implemented in any reasonable manner; provided, however, that in the case of a Collection, at a minimum such credit will appear, if a credit for all contributing authors of the Collection appears, then as part of these credits and in a manner at least as prominent as the credits for the other contributing authors. For the avoidance of doubt, You may only use the credit required by this Section for the purpose of attribution in the manner set out above and, by exercising Your rights under this License, You may not implicitly or explicitly assert or imply any connection with, sponsorship or endorsement by the Original Author, Licensor and/or Attribution Parties, as appropriate, of You or Your use of the Work, without the separate, express prior written permission of the Original Author, Licensor and/or Attribution Parties.
+-
+-     c. Except as otherwise agreed in writing by the Licensor or as may be otherwise permitted by applicable law, if You Reproduce, Distribute or Publicly Perform the Work either by itself or as part of any Collections, You must not distort, mutilate, modify or take other derogatory action in relation to the Work which would be prejudicial to the Original Author's honor or reputation.
+-
+-5. Representations, Warranties and Disclaimer
+-
+-UNLESS OTHERWISE MUTUALLY AGREED TO BY THE PARTIES IN WRITING, LICENSOR OFFERS THE WORK AS-IS AND MAKES NO REPRESENTATIONS OR WARRANTIES OF ANY KIND CONCERNING THE WORK, EXPRESS, IMPLIED, STATUTORY OR OTHERWISE, INCLUDING, WITHOUT LIMITATION, WARRANTIES OF TITLE, MERCHANTIBILITY, FITNESS FOR A PARTICULAR PURPOSE, NONINFRINGEMENT, OR THE ABSENCE OF LATENT OR OTHER DEFECTS, ACCURACY, OR THE PRESENCE OF ABSENCE OF ERRORS, WHETHER OR NOT DISCOVERABLE. SOME JURISDICTIONS DO NOT ALLOW THE EXCLUSION OF IMPLIED WARRANTIES, SO SUCH EXCLUSION MAY NOT APPLY TO YOU.
+-
+-6. Limitation on Liability. EXCEPT TO THE EXTENT REQUIRED BY APPLICABLE LAW, IN NO EVENT WILL LICENSOR BE LIABLE TO YOU ON ANY LEGAL THEORY FOR ANY SPECIAL, INCIDENTAL, CONSEQUENTIAL, PUNITIVE OR EXEMPLARY DAMAGES ARISING OUT OF THIS LICENSE OR THE USE OF THE WORK, EVEN IF LICENSOR HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+-
+-7. Termination
+-
+-     a. This License and the rights granted hereunder will terminate automatically upon any breach by You of the terms of this License. Individuals or entities who have received Collections from You under this License, however, will not have their licenses terminated provided such individuals or entities remain in full compliance with those licenses. Sections 1, 2, 5, 6, 7, and 8 will survive any termination of this License.
+-
+-     b. Subject to the above terms and conditions, the license granted here is perpetual (for the duration of the applicable copyright in the Work). Notwithstanding the above, Licensor reserves the right to release the Work under different license terms or to stop distributing the Work at any time; provided, however that any such election will not serve to withdraw this License (or any other license that has been, or is required to be, granted under the terms of this License), and this License will continue in full force and effect unless terminated as stated above.
+-
+-8. Miscellaneous
+-
+-     a. Each time You Distribute or Publicly Perform the Work or a Collection, the Licensor offers to the recipient a license to the Work on the same terms and conditions as the license granted to You under this License.
+-
+-     b. If any provision of this License is invalid or unenforceable under applicable law, it shall not affect the validity or enforceability of the remainder of the terms of this License, and without further action by the parties to this agreement, such provision shall be reformed to the minimum extent necessary to make such provision valid and enforceable.
+-
+-     c. No term or provision of this License shall be deemed waived and no breach consented to unless such waiver or consent shall be in writing and signed by the party to be charged with such waiver or consent.
+-
+-     d. This License constitutes the entire agreement between the parties with respect to the Work licensed here. There are no understandings, agreements or representations with respect to the Work not specified here. Licensor shall not be bound by any additional provisions that may appear in any communication from You. This License may not be modified without the mutual written agreement of the Licensor and You.
+-
+-     e. The rights granted under, and the subject matter referenced, in this License were drafted utilizing the terminology of the Berne Convention for the Protection of Literary and Artistic Works (as amended on September 28, 1979), the Rome Convention of 1961, the WIPO Copyright Treaty of 1996, the WIPO Performances and Phonograms Treaty of 1996 and the Universal Copyright Convention (as revised on July 24, 1971). These rights and subject matter take effect in the relevant jurisdiction in which the License terms are sought to be enforced according to the corresponding provisions of the implementation of those treaty provisions in the applicable national law. If the standard suite of rights granted under applicable copyright law includes additional rights not granted under this License, such additional rights are deemed to be included in the License; this License is not intended to restrict the license of any rights under applicable law.
+-
+-Creative Commons Notice
+-
+-Creative Commons is not a party to this License, and makes no warranty whatsoever in connection with the Work. Creative Commons will not be liable to You or any party on any legal theory for any damages whatsoever, including without limitation any general, special, incidental or consequential damages arising in connection to this license. Notwithstanding the foregoing two (2) sentences, if Creative Commons has expressly identified itself as the Licensor hereunder, it shall have all rights and obligations of Licensor.
+-
+-Except for the limited purpose of indicating to the public that the Work is licensed under the CCPL, Creative Commons does not authorize the use by either party of the trademark "Creative Commons" or any related trademark or logo of Creative Commons without the prior written consent of Creative Commons. Any permitted use will be in compliance with Creative Commons' then-current trademark usage guidelines, as may be published on its website or otherwise made available upon request from time to time. For the avoidance of doubt, this trademark restriction does not form part of this License.
+-
+-Creative Commons may be contacted at http://creativecommons.org/.
+diff --git a/LICENSES/CC-BY-SA-3.0.txt b/LICENSES/CC-BY-SA-3.0.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..a29ac86c302d49546b1f854ada7f0c1ca5d7f659
+--- /dev/null
++++ b/LICENSES/CC-BY-SA-3.0.txt
+@@ -0,0 +1,60 @@
++Creative Commons Attribution-ShareAlike 3.0 Unported
 +
-+qt_themes/qdarkstyle_midnight_blue/icons | See above | See the above qt_themes/qdarkstyle/icons entries
-+qt_themes/qdarkstyle_midnight_blue/ | MIT/CC BY 4.0 | Upstream https://github.com/ColinDuquesnoy/QDarkStyleSheet
++CREATIVE COMMONS CORPORATION IS NOT A LAW FIRM AND DOES NOT PROVIDE LEGAL SERVICES. DISTRIBUTION OF THIS LICENSE DOES NOT CREATE AN ATTORNEY-CLIENT RELATIONSHIP. CREATIVE COMMONS PROVIDES THIS INFORMATION ON AN "AS-IS" BASIS. CREATIVE COMMONS MAKES NO WARRANTIES REGARDING THE INFORMATION PROVIDED, AND DISCLAIMS LIABILITY FOR DAMAGES RESULTING FROM ITS USE.
 +
-+qt_themes/colorful/icons/16x16/lock.png | MIT | https://github.com/icons8/flat-color-icons
- qt_themes/colorful/icons/16x16/view-refresh.png | Apache 2.0 | https://material.io
--qt_themes/colorful/icons/256x256/plus_folder.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/colorful/icons/48x48/bad_folder.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/colorful/icons/48x48/chip.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/colorful/icons/48x48/folder.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/colorful/icons/48x48/plus.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/colorful/icons/48x48/sd_card.png | CC BY-ND 3.0 | https://icons8.com
--qt_themes/colorful/icons/48x48/star.png | CC BY-ND 3.0 | https://icons8.com
-+qt_themes/colorful/icons/256x256/plus_folder.png | MIT | https://github.com/icons8/flat-color-icons (modified)
-+qt_themes/colorful/icons/48x48/bad_folder.png | MIT | https://github.com/icons8/flat-color-icons (modified)
-+qt_themes/colorful/icons/48x48/chip.png | MIT | https://github.com/icons8/flat-color-icons (modified)
-+qt_themes/colorful/icons/48x48/folder.png | MIT | https://github.com/icons8/flat-color-icons
-+qt_themes/colorful/icons/48x48/plus.png | Apache 2.0 | https://remixicon.com/ (modified)
-+qt_themes/colorful/icons/48x48/sd_card.png | CC0 1.0 | https://www.svgrepo.com/svg/276818/sd-card
-+qt_themes/colorful/icons/48x48/star.png | CC0 1.0 | https://www.svgrepo.com/svg/13674/star
++License
 +
-+qt_themes/colorful_dark/icons/16x16/lock.png | MIT | https://github.com/icons8/flat-color-icons (modified)
-+qt_themes/colorful_dark/icons/16x16/view-refresh.png | Apache 2.0 | https://material.io
++THE WORK (AS DEFINED BELOW) IS PROVIDED UNDER THE TERMS OF THIS CREATIVE COMMONS PUBLIC LICENSE ("CCPL" OR "LICENSE"). THE WORK IS PROTECTED BY COPYRIGHT AND/OR OTHER APPLICABLE LAW. ANY USE OF THE WORK OTHER THAN AS AUTHORIZED UNDER THIS LICENSE OR COPYRIGHT LAW IS PROHIBITED.
 +
-+qt_themes/colorful_midnight_blue/icons/16x16/lock.png | MIT | https://github.com/icons8/flat-color-icons (modified)
-+qt_themes/colorful_midnight_blue/icons/16x16/view-refresh.png | Apache 2.0 | https://material.io
- 
--<!-- TODO: Add the license of the yuzu icon -->
++BY EXERCISING ANY RIGHTS TO THE WORK PROVIDED HERE, YOU ACCEPT AND AGREE TO BE BOUND BY THE TERMS OF THIS LICENSE. TO THE EXTENT THIS LICENSE MAY BE CONSIDERED TO BE A CONTRACT, THE LICENSOR GRANTS YOU THE RIGHTS CONTAINED HERE IN CONSIDERATION OF YOUR ACCEPTANCE OF SUCH TERMS AND CONDITIONS.
++
++1. Definitions
++a. "Adaptation" means a work based upon the Work, or upon the Work and other pre-existing works, such as a translation, adaptation, derivative work, arrangement of music or other alterations of a literary or artistic work, or phonogram or performance and includes cinematographic adaptations or any other form in which the Work may be recast, transformed, or adapted including in any form recognizably derived from the original, except that a work that constitutes a Collection will not be considered an Adaptation for the purpose of this License. For the avoidance of doubt, where the Work is a musical work, performance or phonogram, the synchronization of the Work in timed-relation with a moving image ("synching") will be considered an Adaptation for the purpose of this License.
++b. "Collection" means a collection of literary or artistic works, such as encyclopedias and anthologies, or performances, phonograms or broadcasts, or other works or subject matter other than works listed in Section 1(f) below, which, by reason of the selection and arrangement of their contents, constitute intellectual creations, in which the Work is included in its entirety in unmodified form along with one or more other contributions, each constituting separate and independent works in themselves, which together are assembled into a collective whole. A work that constitutes a Collection will not be considered an Adaptation (as defined below) for the purposes of this License.
++c. "Creative Commons Compatible License" means a license that is listed at http://creativecommons.org/compatiblelicenses that has been approved by Creative Commons as being essentially equivalent to this License, including, at a minimum, because that license: (i) contains terms that have the same purpose, meaning and effect as the License Elements of this License; and, (ii) explicitly permits the relicensing of adaptations of works made available under that license under this License or a Creative Commons jurisdiction license with the same License Elements as this License.
++d. "Distribute" means to make available to the public the original and copies of the Work or Adaptation, as appropriate, through sale or other transfer of ownership.
++e. "License Elements" means the following high-level license attributes as selected by Licensor and indicated in the title of this License: Attribution, ShareAlike.
++f. "Licensor" means the individual, individuals, entity or entities that offer(s) the Work under the terms of this License.
++g. "Original Author" means, in the case of a literary or artistic work, the individual, individuals, entity or entities who created the Work or if no individual or entity can be identified, the publisher; and in addition (i) in the case of a performance the actors, singers, musicians, dancers, and other persons who act, sing, deliver, declaim, play in, interpret or otherwise perform literary or artistic works or expressions of folklore; (ii) in the case of a phonogram the producer being the person or legal entity who first fixes the sounds of a performance or other sounds; and, (iii) in the case of broadcasts, the organization that transmits the broadcast.
++h. "Work" means the literary and/or artistic work offered under the terms of this License including without limitation any production in the literary, scientific and artistic domain, whatever may be the mode or form of its expression including digital form, such as a book, pamphlet and other writing; a lecture, address, sermon or other work of the same nature; a dramatic or dramatico-musical work; a choreographic work or entertainment in dumb show; a musical composition with or without words; a cinematographic work to which are assimilated works expressed by a process analogous to cinematography; a work of drawing, painting, architecture, sculpture, engraving or lithography; a photographic work to which are assimilated works expressed by a process analogous to photography; a work of applied art; an illustration, map, plan, sketch or three-dimensional work relative to geography, topography, architecture or science; a performance; a broadcast; a phonogram; a compilation of data to the extent it is protected as a copyrightable work; or a work performed by a variety or circus performer to the extent it is not otherwise considered a literary or artistic work.
++i. "You" means an individual or entity exercising rights under this License who has not previously violated the terms of this License with respect to the Work, or who has received express permission from the Licensor to exercise rights under this License despite a previous violation.
++j. "Publicly Perform" means to perform public recitations of the Work and to communicate to the public those public recitations, by any means or process, including by wire or wireless means or public digital performances; to make available to the public Works in such a way that members of the public may access these Works from a place and at a place individually chosen by them; to perform the Work to the public by any means or process and the communication to the public of the performances of the Work, including by public digital performance; to broadcast and rebroadcast the Work by any means including signs, sounds or images.
++k. "Reproduce" means to make copies of the Work by any means including without limitation by sound or visual recordings and the right of fixation and reproducing fixations of the Work, including storage of a protected performance or phonogram in digital form or other electronic medium.
++2. Fair Dealing Rights. Nothing in this License is intended to reduce, limit, or restrict any uses free from copyright or rights arising from limitations or exceptions that are provided for in connection with the copyright protection under copyright law or other applicable laws.
++3. License Grant. Subject to the terms and conditions of this License, Licensor hereby grants You a worldwide, royalty-free, non-exclusive, perpetual (for the duration of the applicable copyright) license to exercise the rights in the Work as stated below:
++a. to Reproduce the Work, to incorporate the Work into one or more Collections, and to Reproduce the Work as incorporated in the Collections;
++b. to create and Reproduce Adaptations provided that any such Adaptation, including any translation in any medium, takes reasonable steps to clearly label, demarcate or otherwise identify that changes were made to the original Work. For example, a translation could be marked "The original work was translated from English to Spanish," or a modification could indicate "The original work has been modified.";
++c. to Distribute and Publicly Perform the Work including as incorporated in Collections; and,
++d. to Distribute and Publicly Perform Adaptations.
++e. For the avoidance of doubt:
++i. Non-waivable Compulsory License Schemes. In those jurisdictions in which the right to collect royalties through any statutory or compulsory licensing scheme cannot be waived, the Licensor reserves the exclusive right to collect such royalties for any exercise by You of the rights granted under this License;
++ii. Waivable Compulsory License Schemes. In those jurisdictions in which the right to collect royalties through any statutory or compulsory licensing scheme can be waived, the Licensor waives the exclusive right to collect such royalties for any exercise by You of the rights granted under this License; and,
++iii. Voluntary License Schemes. The Licensor waives the right to collect royalties, whether individually or, in the event that the Licensor is a member of a collecting society that administers voluntary licensing schemes, via that society, from any exercise by You of the rights granted under this License.
++The above rights may be exercised in all media and formats whether now known or hereafter devised. The above rights include the right to make such modifications as are technically necessary to exercise the rights in other media and formats. Subject to Section 8(f), all rights not expressly granted by Licensor are hereby reserved.
++
++4. Restrictions. The license granted in Section 3 above is expressly made subject to and limited by the following restrictions:
++a. You may Distribute or Publicly Perform the Work only under the terms of this License. You must include a copy of, or the Uniform Resource Identifier (URI) for, this License with every copy of the Work You Distribute or Publicly Perform. You may not offer or impose any terms on the Work that restrict the terms of this License or the ability of the recipient of the Work to exercise the rights granted to that recipient under the terms of the License. You may not sublicense the Work. You must keep intact all notices that refer to this License and to the disclaimer of warranties with every copy of the Work You Distribute or Publicly Perform. When You Distribute or Publicly Perform the Work, You may not impose any effective technological measures on the Work that restrict the ability of a recipient of the Work from You to exercise the rights granted to that recipient under the terms of the License. This Section 4(a) applies to the Work as incorporated in a Collection, but this does not require the Collection apart from the Work itself to be made subject to the terms of this License. If You create a Collection, upon notice from any Licensor You must, to the extent practicable, remove from the Collection any credit as required by Section 4(c), as requested. If You create an Adaptation, upon notice from any Licensor You must, to the extent practicable, remove from the Adaptation any credit as required by Section 4(c), as requested.
++b. You may Distribute or Publicly Perform an Adaptation only under the terms of: (i) this License; (ii) a later version of this License with the same License Elements as this License; (iii) a Creative Commons jurisdiction license (either this or a later license version) that contains the same License Elements as this License (e.g., Attribution-ShareAlike 3.0 US)); (iv) a Creative Commons Compatible License. If you license the Adaptation under one of the licenses mentioned in (iv), you must comply with the terms of that license. If you license the Adaptation under the terms of any of the licenses mentioned in (i), (ii) or (iii) (the "Applicable License"), you must comply with the terms of the Applicable License generally and the following provisions: (I) You must include a copy of, or the URI for, the Applicable License with every copy of each Adaptation You Distribute or Publicly Perform; (II) You may not offer or impose any terms on the Adaptation that restrict the terms of the Applicable License or the ability of the recipient of the Adaptation to exercise the rights granted to that recipient under the terms of the Applicable License; (III) You must keep intact all notices that refer to the Applicable License and to the disclaimer of warranties with every copy of the Work as included in the Adaptation You Distribute or Publicly Perform; (IV) when You Distribute or Publicly Perform the Adaptation, You may not impose any effective technological measures on the Adaptation that restrict the ability of a recipient of the Adaptation from You to exercise the rights granted to that recipient under the terms of the Applicable License. This Section 4(b) applies to the Adaptation as incorporated in a Collection, but this does not require the Collection apart from the Adaptation itself to be made subject to the terms of the Applicable License.
++c. If You Distribute, or Publicly Perform the Work or any Adaptations or Collections, You must, unless a request has been made pursuant to Section 4(a), keep intact all copyright notices for the Work and provide, reasonable to the medium or means You are utilizing: (i) the name of the Original Author (or pseudonym, if applicable) if supplied, and/or if the Original Author and/or Licensor designate another party or parties (e.g., a sponsor institute, publishing entity, journal) for attribution ("Attribution Parties") in Licensor's copyright notice, terms of service or by other reasonable means, the name of such party or parties; (ii) the title of the Work if supplied; (iii) to the extent reasonably practicable, the URI, if any, that Licensor specifies to be associated with the Work, unless such URI does not refer to the copyright notice or licensing information for the Work; and (iv), consistent with Section 3(b), in the case of an Adaptation, a credit identifying the use of the Work in the Adaptation (e.g., "French translation of the Work by Original Author," or "Screenplay based on original Work by Original Author"). The credit required by this Section 4(c) may be implemented in any reasonable manner; provided, however, that in the case of a Adaptation or Collection, at a minimum such credit will appear, if a credit for all contributing authors of the Adaptation or Collection appears, then as part of these credits and in a manner at least as prominent as the credits for the other contributing authors. For the avoidance of doubt, You may only use the credit required by this Section for the purpose of attribution in the manner set out above and, by exercising Your rights under this License, You may not implicitly or explicitly assert or imply any connection with, sponsorship or endorsement by the Original Author, Licensor and/or Attribution Parties, as appropriate, of You or Your use of the Work, without the separate, express prior written permission of the Original Author, Licensor and/or Attribution Parties.
++d. Except as otherwise agreed in writing by the Licensor or as may be otherwise permitted by applicable law, if You Reproduce, Distribute or Publicly Perform the Work either by itself or as part of any Adaptations or Collections, You must not distort, mutilate, modify or take other derogatory action in relation to the Work which would be prejudicial to the Original Author's honor or reputation. Licensor agrees that in those jurisdictions (e.g. Japan), in which any exercise of the right granted in Section 3(b) of this License (the right to make Adaptations) would be deemed to be a distortion, mutilation, modification or other derogatory action prejudicial to the Original Author's honor and reputation, the Licensor will waive or not assert, as appropriate, this Section, to the fullest extent permitted by the applicable national law, to enable You to reasonably exercise Your right under Section 3(b) of this License (right to make Adaptations) but not otherwise.
++5. Representations, Warranties and Disclaimer
++UNLESS OTHERWISE MUTUALLY AGREED TO BY THE PARTIES IN WRITING, LICENSOR OFFERS THE WORK AS-IS AND MAKES NO REPRESENTATIONS OR WARRANTIES OF ANY KIND CONCERNING THE WORK, EXPRESS, IMPLIED, STATUTORY OR OTHERWISE, INCLUDING, WITHOUT LIMITATION, WARRANTIES OF TITLE, MERCHANTIBILITY, FITNESS FOR A PARTICULAR PURPOSE, NONINFRINGEMENT, OR THE ABSENCE OF LATENT OR OTHER DEFECTS, ACCURACY, OR THE PRESENCE OF ABSENCE OF ERRORS, WHETHER OR NOT DISCOVERABLE. SOME JURISDICTIONS DO NOT ALLOW THE EXCLUSION OF IMPLIED WARRANTIES, SO SUCH EXCLUSION MAY NOT APPLY TO YOU.
++
++6. Limitation on Liability. EXCEPT TO THE EXTENT REQUIRED BY APPLICABLE LAW, IN NO EVENT WILL LICENSOR BE LIABLE TO YOU ON ANY LEGAL THEORY FOR ANY SPECIAL, INCIDENTAL, CONSEQUENTIAL, PUNITIVE OR EXEMPLARY DAMAGES ARISING OUT OF THIS LICENSE OR THE USE OF THE WORK, EVEN IF LICENSOR HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
++7. Termination
++a. This License and the rights granted hereunder will terminate automatically upon any breach by You of the terms of this License. Individuals or entities who have received Adaptations or Collections from You under this License, however, will not have their licenses terminated provided such individuals or entities remain in full compliance with those licenses. Sections 1, 2, 5, 6, 7, and 8 will survive any termination of this License.
++b. Subject to the above terms and conditions, the license granted here is perpetual (for the duration of the applicable copyright in the Work). Notwithstanding the above, Licensor reserves the right to release the Work under different license terms or to stop distributing the Work at any time; provided, however that any such election will not serve to withdraw this License (or any other license that has been, or is required to be, granted under the terms of this License), and this License will continue in full force and effect unless terminated as stated above.
++8. Miscellaneous
++a. Each time You Distribute or Publicly Perform the Work or a Collection, the Licensor offers to the recipient a license to the Work on the same terms and conditions as the license granted to You under this License.
++b. Each time You Distribute or Publicly Perform an Adaptation, Licensor offers to the recipient a license to the original Work on the same terms and conditions as the license granted to You under this License.
++c. If any provision of this License is invalid or unenforceable under applicable law, it shall not affect the validity or enforceability of the remainder of the terms of this License, and without further action by the parties to this agreement, such provision shall be reformed to the minimum extent necessary to make such provision valid and enforceable.
++d. No term or provision of this License shall be deemed waived and no breach consented to unless such waiver or consent shall be in writing and signed by the party to be charged with such waiver or consent.
++e. This License constitutes the entire agreement between the parties with respect to the Work licensed here. There are no understandings, agreements or representations with respect to the Work not specified here. Licensor shall not be bound by any additional provisions that may appear in any communication from You. This License may not be modified without the mutual written agreement of the Licensor and You.
++f. The rights granted under, and the subject matter referenced, in this License were drafted utilizing the terminology of the Berne Convention for the Protection of Literary and Artistic Works (as amended on September 28, 1979), the Rome Convention of 1961, the WIPO Copyright Treaty of 1996, the WIPO Performances and Phonograms Treaty of 1996 and the Universal Copyright Convention (as revised on July 24, 1971). These rights and subject matter take effect in the relevant jurisdiction in which the License terms are sought to be enforced according to the corresponding provisions of the implementation of those treaty provisions in the applicable national law. If the standard suite of rights granted under applicable copyright law includes additional rights not granted under this License, such additional rights are deemed to be included in the License; this License is not intended to restrict the license of any rights under applicable law.
++Creative Commons Notice
++
++Creative Commons is not a party to this License, and makes no warranty whatsoever in connection with the Work. Creative Commons will not be liable to You or any party on any legal theory for any damages whatsoever, including without limitation any general, special, incidental or consequential damages arising in connection to this license. Notwithstanding the foregoing two (2) sentences, if Creative Commons has expressly identified itself as the Licensor hereunder, it shall have all rights and obligations of Licensor.
++
++Except for the limited purpose of indicating to the public that the Work is licensed under the CCPL, Creative Commons does not authorize the use by either party of the trademark "Creative Commons" or any related trademark or logo of Creative Commons without the prior written consent of Creative Commons. Any permitted use will be in compliance with Creative Commons' then-current trademark usage guidelines, as may be published on its website or otherwise made available upon request from time to time. For the avoidance of doubt, this trademark restriction does not form part of the License.
++
++Creative Commons may be contacted at http://creativecommons.org/.
 \ No newline at end of file
-+<!-- TODO: Add the license of the yuzu icon -->
-diff --git a/dist/qt_themes/colorful/icons/48x48/plus.png b/dist/qt_themes/colorful/icons/48x48/plus.png
-index bc2c47c91a761228dc4ebdc8df8713119d5fec3a..ff3cf889e467cfa18e1af577ceff6b3931c5290c 100644
---- a/dist/qt_themes/colorful/icons/48x48/plus.png
-+++ b/dist/qt_themes/colorful/icons/48x48/plus.png
-@@ -1,3 +1,3 @@
+diff --git a/dist/qt_themes/colorful/icons/16x16/connected.png b/dist/qt_themes/colorful/icons/16x16/connected.png
+index d6052f1a09a9a828bf8d43ad1827d4d9d9cbae0f..0afc18cb7a19028fd567a7ca7ced62cd164657de 100644
+--- a/dist/qt_themes/colorful/icons/16x16/connected.png
++++ b/dist/qt_themes/colorful/icons/16x16/connected.png
+@@ -1,4 +1,5 @@
+ ‰PNG
+ 
+-   IHDR         óÿa   sRGB ®Îé   gAMA  ±üa   	pHYs  Ã  ÃÇo¨d   ÿIDAT8Ocz`Â’µ…ı‹×õA¹„Aÿ¢õ¯[5aÉºÙ—¬/ÒÿA†@¥qƒ ÜJÇŠŞ™Y@Í?!šÀøê„%kÊ JpƒˆìR©ÜÊUaE5{®¹‚dÀÿşÅkgB•aáEÕ²Á¹U_‚ój
+-ƒó*· ôÿR¨Rì`â’uşuSæïÉ«ú‡aĞ; y¨RLĞ·x­ÌÏuSæíG7&P¥ØĞ o˜SÑ…	(`¡J±ƒ	K×¨£èª!ó÷‚Â$¤°Jª7 Å/D#Ô w@é °P%¸’æÂIK×hLXº.´Ñs¨4a J ÍPî IÀĞÜ\     IEND®B`‚
+\ No newline at end of file
++   IHDR         óÿa  IDATxÚÒ¬QÆñiÔ¶mÛŠ“º]ëYk×ÆCXÛvPÛîÚªm·‹¯÷>OP%ùïOÎ/@i³çÎœonŒÍ:h&-ôFt4ƒZ½
++šNIRE&İ"Ö r!êö8ñüÅ3|øğ?~|G<Ç—/ŸñæÍ+<~òÁ°N·—¯^€B•ePk•G‚¨ÙK‚¤ê¤Z½e¨ŞSŒ½%h0 õIUº‹pÏz™9é`P¨²ùP»_2ZOY…n’£Ü…Fã–cDÎğæÁ”‡P—Ü·Øî -#åßÜje.jö–Âæ¸‡¤Té¿»åJ9ªöÁî´@"ıŸ»r7!`…PÌû?÷]«7n]OÀ‰2Y9ğúİ¨ÕW†æ“V wòto@ÁzŒTìÆÌíè—º™åæğ¦€ËŸK…¹Lzf
++\;y@†^);1T~ r`¤ö†*¢oúntoa¹só#¯`é—ÜÜEÃ˜äT½Qh¯Ó?…PJJ&[U³O2ËíğXpêì1ä(²¾0²qôÊµ‹¸y÷,;\^/üÁáü¡¼ nwyw!&ó^Ò	Åü¨@Ä_È¥Ñ‡¨‘Vò0Ë]şãc¨ƒz¨ëO•¸Y¨ƒx¨ë•º¦Bé ²úsºŞb¹9NÅ’¿ re€HG¹sƒ    IEND®B`‚
+\ No newline at end of file
+diff --git a/dist/qt_themes/colorful/icons/16x16/connected_notification.png b/dist/qt_themes/colorful/icons/16x16/connected_notification.png
+index 0dfe032d58160f1a24f54040964b5b5f2e97a724..72466e098e471ae5a97c49a56536dd4bf62b3a08 100644
+--- a/dist/qt_themes/colorful/icons/16x16/connected_notification.png
++++ b/dist/qt_themes/colorful/icons/16x16/connected_notification.png
+@@ -1,6 +1,8 @@
+ ‰PNG
+ 
+-   IHDR         óÿa   sBIT|dˆ   	pHYs   á   áp.   tEXtSoftware www.inkscape.org›î<  ÜIDAT8Õ’MHTa†Ÿsg¦”bºà„%,ˆ\DV$9åÂè‡‚
+-²"ŠÀ¨ÅD›JİED ¥A«¢US»©-Š 'm ÈHbÂ)†şl
+-úA­Yé½ßiã§Æ²mg÷Ş÷á|ç;ğßUOüæÑ‹ñÄY_gôÆ»ë¢£bdPÑsªrbVÀ®Xç†ÚšEKAÎ+0–Yn«+¶G·ï³f
+-ïuVªrğõ»g\Ïdü¾ uj™úbo	`Ïñ®êI%‹È€gÜ;O-tİ¡i‡Ìû+ ¹©iEcCı ª—Dä…gôÁÓçiWÕµÖªèÉb¿‹×o­¶T¡±ïùd:“Y/Æ´}‰”õ÷9¡…Z”¼¤ø8ã‚V! ;<¿µ±¡îò²HY²ï¾³’(Yª–¼Ä®Èi”»ea	À¸¤÷µm‡oœ¾çØ·8Ğ¼`#ÂÕ@  Ûß o,ä=&Ä&„Êßw…²U[‰ =×H7Ğ0ÁUªÒæ´·O å…P.ã_§_l(/’ˆµ ÑSÇöí¼2Õz3µ¥‡xL sy£ŸıÈ°ô3òË/ü©4Êa —5›çòé-¼Îá±]Rş @×Q¡È£$%Å€ŸXÇ­7£t¹C    IEND®B`‚
+\ No newline at end of file
++   IHDR         óÿa   sRGB ®Îé   gAMA  ±üa   	pHYs  Ã  ÃÇo¨d  IDAT8O•S]HQşîìiœİduKa­Àh‰DûÃ5"ŒJì¡Œ$"ÈŠ’ìêÁ—òÉ„¨-¡Ã~ˆ2_|TŒ
++BTjmkwİwîÜéÎ¸IAùÁá^Î½ç;ß9÷\â8²¸zıòt:İÆ¹M=¯8sÏÿ¶£”¶/#8ßzÎj:ÚDóóCÈQs ª*(•aš†g†iÂ\\ÚÇb1ôô<d4ëÁ²,ê•×\ğ2¹æ#lnƒHª,{¾cƒZ`1‹.#°mæ]–„;¸¾~MAAPÃÄä<ÊÂyĞ×ÀÇ«' „Àf‚øÊµKÿ]·	_,ƒx}¿w::@Ãh[IİİİÀl‘9£€®´nf§Á¹ë¢dú¯º‹B~Tõ¡l¼Î¶Ç8¤å ¹ñ0RÉ„ àLbB†-$9ã² úK!7 zJt]Äî÷/±cWJ°¹j+äŞ^|Û[ï(’t[òñååAÓX„¾n-v>C)P²§ŠÛÄÑQÈ"ÉÆº:„5?9öæmfpÁ05öÂmvÎNô¡¨º
++|f|jjÉ›Jy«‰ 64tœrÇfñxœ>ï:EQ ÈŠ(C”tC),ö‚²àÓÓ««¡&„JÄ×ŞÙy·U¼7Íµ÷öÂšW)°fg¡ÿRàB
++‡a	Ub
++'iyiéSâóM\6•.æIDßcCmíÒ ÍÏƒ„BÁ\¿!Òİ#'OX¨ß¿OÓ‹ôLØo°9ìÆ#P¾ÿ@Á¦d]÷ÍŒF4úÑæ¼’44Œ2Æ
++3!@|Wlÿğ	[>O"LÂğûm¿iŞŸâf…ãX?P”¹Nÿ\    IEND®B`‚
+\ No newline at end of file
+diff --git a/dist/qt_themes/colorful/icons/16x16/disconnected.png b/dist/qt_themes/colorful/icons/16x16/disconnected.png
+index bacee3aebfe9f9058f7d49bde34d8d6e5963e2bb..7258a8cfe5ab54a3f53252c08520824ed91969a8 100644
+--- a/dist/qt_themes/colorful/icons/16x16/disconnected.png
++++ b/dist/qt_themes/colorful/icons/16x16/disconnected.png
+@@ -1,3 +1,4 @@
+ ‰PNG
+ 
+-   IHDR         óÿa   sBIT|dˆ   	pHYs  Å  Å‰Öï   tEXtSoftware www.inkscape.org›î<  IDAT8Ò[HSqğï9çÔ­ÍÜÜQX¹¹A”AÊB|ˆ$¢$»‚`d¥)–=D(µZáƒv£óB…ô`X‘TRh*"mN]ÎËÎ™SwvÎ¶¶ìá”¿§?¿ßÏÿÂŸÂ«ú^[nT»CòùŞ}|aL]^pñäş:j)á›^V˜ÌI—XBX9]®©/‰œ!­ÿÇÀ‰×ê[w²4UlN6g²,aÏœ¿\Ÿz:†2Å#7´äY’MO9KåQEÇ€¢şì§Š‰N„Zî£• Ñ'MH’ì¡( ^¯ƒ›ç"sB«Ñh·+éÓuï¡ƒâÂŒ ôz·'‚È²,	Ât×_@yÕÃ´ğ:9së5IódÜ6xÀëõ: @¯Ï{ úı¢İ1Vv¾p_S¸^ßš½>um{e}K Ì	3}ı9%…ÍöŞRq÷€^§Ã˜Ãù¶ôÈ®Û @"wŠ&g4ËÔqVëªÒªûmÔº¬=å ğ±ù`‚%Åyê›}æÍt0cKX(ÎW‡s4 Ô<y}Åh4nsóÃ0V‹¥ìÖ£Ww @«R§Ìòü÷Y_wöğ°ıØ°ÍVTq<·3PW^ä¬N±>#ÃAx<ètqƒ!ûÈèİ’ÃY§*¤ôØ´N«M'Ã ÃĞˆ…ÛÍƒ¦iÊlZYTû¸½)~8šŸŸû,Ë²n0­V7/€¦iŠKä«iÜ¬Œ{Í“SS=‹›„¨Õ*é§}¤Ó6âÈ¯,ÎïVÇ®Èã†NçD—`ØB†H²,9FÇ.”İ]© —ëšòƒ®ŞçjÓÆÜ(B2DÑßq¶`oÓÿÂ ğ’Óı»£(©¢    IEND®B`‚
+\ No newline at end of file
++   IHDR         óÿa   sRGB ®Îé   gAMA  ±üa   	pHYs  Ã  ÃÇo¨d  IDAT8O•RMkSA=óŞ´ym„Jƒ©ñc£&)ˆè_°ØD7â¢MëB¥XE¤P¿AA4ÄŠQP¤®Åt™.?Ğ"”¨qY]Eö}ÍÌëÌô=ÛJ,öÀ…{ç¼{ß9s‡A€W®]ºîyŞ¤œêSÉ)¾UF)½µjÀ…‰óşHa„vw'ĞauÀ²,PÚÇ±uØÇ]Ê¦¦^0#ìÕğ}Ÿª¦Í=)tumD,fÁ4MÄãHlÂ¶­Û±kG}»÷È³8|æÓU8gà‚‡ÕÚ „€3rùêÅÿöÀ@åeµZfßán±jÛöäz|3Ÿé‘c½¾÷”	9@Z&cgNããg‘ŞÙËÈd2(œ–Ÿ.o*‚R0?ÿCP&epŞúâ†G‡°ß^i«SVcêæÕ¶à,8BÀĞ7/£<×A{{¥RIÆ=üjşÄƒûñ¸ü´Âu]ÃXKëzú/=}fj)æpÖl6ñúí¼ŸıˆOss¨}ùŠÏõoğ<WËÎÛ–Ë@ÈŠ'…Ñ¡RÊ„œH£g­w/#™L"›Ë¢ü¨¬ÏW"ŸDµ:Ú›NOÓ<‚†ÜÔëu¹w?¬€ìAT^Më\ÙÖ
++Nü}øÈ¡ÎÔ–”&VâÎí"úûÈ·ÓµR%„Ù¼`Û¨ÎT9v<ÿ]úìÑ_üJMõ‚ÿfšæÍEÿHaƒ=    IEND®B`‚
+\ No newline at end of file
+diff --git a/dist/qt_themes/colorful/icons/48x48/list-add.png b/dist/qt_themes/colorful/icons/48x48/list-add.png
+index bc2c47c91a761228dc4ebdc8df8713119d5fec3a..74e4882aaedc98b57cce65ae5c0a2683bab31279 100644
+--- a/dist/qt_themes/colorful/icons/48x48/list-add.png
++++ b/dist/qt_themes/colorful/icons/48x48/list-add.png
+@@ -1,3 +1,6 @@
  ‰PNG
  
 -   IHDR   0   0   Wù‡   sRGB ®Îé   gAMA  ±üa   	pHYs  Ã  ÃÇo¨d  …IDAThCí˜±JÄ@†ƒ XZXk#(áv#ÜXYè;XXÚ\fãZ+}AÄVP,m¬n÷TDKk«³S‹8ör¦8gÅùàg!™ÿŸ@²“H„ÑÜ¤S‰M—â™£CmÍš²æE;S”RNâû|‚N‡MyÇµ…·Oó_´K%a£zĞò˜/”3WT6ÚÁ/ >•;*		ÀàFp#¸‘ Ü@uÓyÜ·Öl×n/¼<ùê«„×tp]‰Š|ŒlıİM×•ƒw¿‘ßÎgM×'{Õ4]6æ_}Xeaƒ,V“XXö6`ŞÔC²XÍâõVìkÀ/8 ‹ÃÁâS&Yx]{†ìgö2ŸÄ·É¾…,6x¬'èãê3QÎÉúÁB¸7\¶@ÖF+€	ÀàFp#¸Á n©$lp ZõÀ]%•àøÎ¿›‡~ù“€*Â§ÀµÍ6q8Â|¿Ö0"Â"Š> ŸP}¡ó¼_    IEND®B`‚
 \ No newline at end of file
-+   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  ‡  ‡åñe   tEXtSoftware www.inkscape.org›î<   eIDAThí×¡€0†ÑÂ@(c«b!°Usü!¼çj®ùRsm È™ª/};ïçcİKîš+†¾I@š€4iÒ¤ï'Ïİ¦Úèîôùæ?& M@š€4i €?» òt6ıºç    IEND®B`‚
++   IHDR   0   0   `Ü	µ   sRGB ®Îé   gAMA  ±üa   PLTE.Ìq   g§ª   tRNSÿ å·0J   	pHYs  Ã  ÃÇo¨d   AIDATHKíË1
++  CÑæş—V¡P"**:äMò‹T<¬ó9Q`|r~ú< ô!
++‚r*È)¨¸ ^[!º3
++D    IEND®B`‚
 \ No newline at end of file
 diff --git a/dist/qt_themes/colorful/icons/48x48/sd_card.png b/dist/qt_themes/colorful/icons/48x48/sd_card.png
-index 29be71a0d4307c9653e22a31e77e43e87a907beb..5a81693cb0d95c36b65793a91628867742e27374 100644
+index 29be71a0d4307c9653e22a31e77e43e87a907beb..47e491d32c99fe208c59dae4d4a568e8e7dd6485 100644
 --- a/dist/qt_themes/colorful/icons/48x48/sd_card.png
 +++ b/dist/qt_themes/colorful/icons/48x48/sd_card.png
-@@ -1,6 +1,5 @@
+@@ -1,6 +1,7 @@
  ‰PNG
  
 -   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  £  £dÜ_‰   tEXtSoftware www.inkscape.org›î<  %IDAThíšAkÔ@†ß™Ù¤Iwci)•R/¢%õ(”¢`QèÙ£‡B©¢`½yğàÊ¶ÛEñôôPı	İ-*ş ¥¥zÚB©°ºØ6[³™ñ «­8›d›8[™ç–o¾„÷	/$œpH»'ºÅÊm0ú $ ˆØá«ùñ¥V­m	ŒÌ•o;û¤Ëéhÿ„ €†W«ùŞîâûGWgdm4îuGŠ+ÓÔîN7<  ÓİÓC3ÆwvùŒ¬-çšn±2E,û©y(üY§Û  Ïğé›•hYÎéÀ÷® X<–€[ªÜgV®`æúú×çG?àBï `íK“Ë­SF©à’åŠôÉÂw¡Ãóåf9GÂfÒMƒ–Ã¥•{†}jÖÌõş
@@ -145,12 +306,14 @@ index 29be71a0d4307c9653e22a31e77e43e87a907beb..5a81693cb0d95c36b65793a916288677
 -Š-ÁåßÔyÀ¹`bS¶. ^7¼½ítbE'¨ïnsA_ÉÖ¥ïòÂ¯¿ğ÷kU%ÿ6àï×ªÜ?x¾¿¶%kİ,à–^Şw!Ğ—lÂª¼,¬®·ÜìqâùŒÌ ÑÅ
 -(    IEND®B`‚
 \ No newline at end of file
-+   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  b  b_'ĞS   tEXtSoftware www.inkscape.org›î<  uIDAThí˜ËnÔ0†?Û¹M’)#•G ºDB¬yX±àX‚`Á 	Vğ*,Ë"ñP1¹eÛ,Zª2´¹Ìà&•òí<äü¿sdAK¼ùöÜ
-+ñ¬ís»ğşáuqÑœló¢.Ä×ÑØ@ÅCC}T‰zë%O^97ÁÛV<ÀÍô«Óq*3°)~›rMe6Ùf…\Óêí#ƒ®iU›|™ßÀZwã&\Øc Üûı¯×½»ó€Ÿ^·‹²#U½P«l³B®ieàÅácW:¶æÊqïTí¸>~>üP5_i Îı%aª&{Ÿ»·îUÍWØüô‘Şg Ş¨Û½7PÇ` k]3èšÁ@×ê0ÆbLeG¼;]«T¡KÍl¶ Ô )iã>Ú¦?~şWRŠQ„A«8Î20›/1Ö0'ìí%!ÈfÎvfÊS$ñˆ0ÑÚÍ¬×E«8Î2`RI<¥HS‰Öš³÷2RD£€(
-+˜N3V«œ ğÇqf ŒB‹%?§RJ‚À'ŠB„œw¹¤”ÄS’²lW/ÎŒF!~à±ÎÖë‚Õ*'Ïsö®Mœƒ…š»ÂqRÆ²l.5q1™ŒIÒk¡X—ç>£µAkƒ§ÚIr’!$eYP”B¤””Å±puF`©5«e±–<ÏK…­b92 iš0Ÿ/É²ùÉo‚8NQ8>jçå!R$IØª€Áaø¾Çd2ÆXÆ"”<İŞJJö÷'ÿ%3B€rw?6ôB]S¹…¦—¥ck®|~.úó=è`ä<    IEND®B`‚
++   IHDR   0   0   Wù‡   sRGB ®Îé   gAMA  ±üa   	pHYs  E  EŸKW¸  jIDAThCí™ÏkÔ@Ç_~löG’¶J¥+[)¼
++Ş­ŞìI/-hA´'zVô Zé¡jÁ“¢'Eğ¢ÿ‡zPTÔCÙŠl»íşÌf“‰ofg¥â¦I”l"ì‡ï}'Sv¾÷º³-tˆGÿ8pjnù6~çŸ	fMô^àª%"şhçæ‡§®ø7ĞæÍSê6ÙÏSWüØ`ó»Õ/ ˆ&Ë“we¾²œ²%™c£Iµ~ñ6°Áæ·§áêĞë{Åô1Œ×†¯³yÊô®;lP‚¬‚§ÓrÓë7¿WÿÃÚ'–kr…EU.ÿ›ój:¹ÿµAğ4àØÉSÆÙópnğ!WÑãi n‘ƒ<eĞnÖqğ>ÁQxK¼›8æü“%£–ÍÍğ¹Üh©ÎVû™şPÜï‹C,²6W‰ñÙïŠ,ïãfF§Y<¿p“Å01-ëİãÉşQ.[øŞäÃëÜ®¢'°§Ùğ,{œ«è‰mâØEŞréJl¨²•¿x4‰KW<8uë…Mì¶¿sôŞ¤%OréŠ§'SWˆM~pÙ6WÅ\M¶f¹tÅÓÀÉ»ÙyI’·rÙ6
++50Œ¬péŠ§Aˆ¢ q;bÛÄrBŞ6~oé%—®ÄÖ€ ‚ ¢0À¥+±5à—¨éˆš¨éˆšĞ8„@±X†üÊ¬äP*VÀq{V­°¶Vä£ÄÖÕë{”ĞT*X¸©Œš5“³^‡rÙ`Ïl›€eÙô¾²,±¼P(an"46qØß<DQ„dR®.Åõ¨4‡»»u¼ùPEÓA	Í@:Ä:Â{=şdiFD©õËáu$<	z2A	Í@Ë£gSèº
++	EÓ4Y½3W­ppş/vš<6n¹\EI€¦©J¥Xcã×˜Ø+´r‚Ïø'4tãµš	E,¡R©ÂJˆ
++-—&ùÕ]ck$I‚46{PB3@›S×3X÷O£lX]×XNÍ¥°GXL%Y™õtkøù%ø?MC3@Q…Ñ´nT¡Ÿ±ø|¢ñG:bú×Ã€„j ü÷<ÏmìÖ·9¼LpÙVA¼ÿüòà.[ây¶mß`¢ôµù6:Ä€Ÿae£*Ã¹Úì    IEND®B`‚
 \ No newline at end of file
 diff --git a/dist/qt_themes/colorful/icons/48x48/star.png b/dist/qt_themes/colorful/icons/48x48/star.png
-index 43b5d52ed7cca57aec41d75670cf29cfa98e849d..5798992ed990bb95cb354bb5108cec972693e220 100644
+index 43b5d52ed7cca57aec41d75670cf29cfa98e849d..19d55a0a8065cf4168752568bc67d4ebc3b8ec9f 100644
 --- a/dist/qt_themes/colorful/icons/48x48/star.png
 +++ b/dist/qt_themes/colorful/icons/48x48/star.png
 @@ -1,8 +1,7 @@
@@ -163,12 +326,54 @@ index 43b5d52ed7cca57aec41d75670cf29cfa98e849d..5798992ed990bb95cb354bb5108cec97
 -Ü‡H7•²/ë_ŸdÂÄğÍ´Å’ûw Ğë—á´1íÆK¦l¬Éµ[ªó£R¬»zÖ/Â¹ÏA-ÿ¥d@MZe©ÎÎr8Û¨N¬™INû@w——CYE#@çMö¨¥2G+a¬zèØº[°áO‘î»’Ôkæ?lÉ¿á«é ÓÉG˜úèÉ €Cfö˜%3VÃVÓ]ÈìËò£­ÁÜ[ãË=Ş—T"›Â1®ìœÿ3³++ju\%ttÕÀº% ;Iïyÿx›mE&_+úîBGx´5BÉ ô®—ìÜlvm@MÖP}H35%ì2µu*¤lXğõÒQH¦Ğ7Sª(á÷@Ïê&rA‰ò’	èLÁwªaË»›mùw¡ŞÂ¿‘å“Ò(øÊ¨&¿øÙ$¸7,œğœŸ
 -Rı•²2Gh…Ş2RãP›_¥3¹:öA›X©:»L±_&†@(	éğCÍÈµÔ(™~C›Íô4ÒïUô?úl¾·ŞkŸZ–ô¦ùCwZ[ç;–üæm›š¸CâePvd«DÆ¶¶Ø8S[ğ{Í©ı[mÙÁ¿GçÙâÌ•DúÀKæü% ½A1.S¨=`(]á`ê5Ï:¬5óEàüeO««m¥|Û	ZT†â©€„!µ–¬Øsn›õİ¶ÄZ¿_D¤­ë+kğ—lCºTR‰´BüPó@y`|ÿ§«K•“Øéù¯J¥Ó¡¶Î~Í°§<–Ğ|Kë«>;Œ„½LÎ2c»—ÌœªuYª«Ø¤o—îz4‡Ä¤ËQÄ°	û?Ø¿Š•IëMu»    IEND®B`‚
 \ No newline at end of file
-+   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  (  (5ÈÍÆ   tEXtSoftware www.inkscape.org›î<  ¯IDAThí™OlTUÆç¾™©¤ÓR‚H,halbŒáÿØbX)WÆ7ÄD*hŒ‰	!îHÜ¸2®º1”R@pié¨´´ ¨”a ù33ï7‚P˜¾÷è{­¿åÌ¹çûÎ|÷9÷=ø•1v2Û4v2Û%G,Êä5Ÿƒ(ğATUâÂ‰wSVí ×:Ís3]ƒQğ˜(’X«_à8»3*H(ä²Vœ3ü»E]Ç±M³Ó‡ÂæŠÄ+Î<y¾×•Ï¢à
-+İ›½mKÔÈ O7×ˆYVİ²8L¾ĞPcvğìîæXµÛÃæÕ|_ûbà,¨RÇiL¦»~‹3TTe'•ÅÄ­-w„ÉšcÇ7.2±Ø PBìÒš–ƒÂàÍ'Û·x€¸¨óiX¼¡80Ößö²qe¨ò¹¤,­i=pq²Ü¡8`\³ÿâ Ÿ„Á=işìÍ.ˆç0#È:…ûÖ˜†¹¯í¿<ş@Üè]_mL"e!%hjÍˆĞø<äª	Ò‹Ø!EF[[®Í)øÍñT:ÜVU¸iZc›Œ˜åVl½¨Ô#Ô£¼ú¬5 œÎ+z^àWQ3Pºçœ÷Ö¾ÛOïkûHÕ¬±)°p
-+N—A‡UÍ°ˆ=&×s›–9¢GÓ­, FUí¸ÕÿN£ëš£ü÷ı‡¸¦¬¯MwŸ6 ³Ó‡Œ˜5À¥iæW,º¶6İ}ÆÈ|_ûb„ŸQê§G›'~«k“™s?xâ¬¦õÀEu5 #S¯ÍÄ•5‹‡
-+-qôx{]<ÆQ`ù”HóÆYëèº9é§¶xÅ~çÔæù¥bùBs´Ú&†À`‰Øºy­ûş¨ğ}eÜîßøRÙı¬ŒDÎ”¬»n^æĞ•J1s/¦JLVÇÃç	å„±ÎÛ‰ÓhrewId…§Î9§\µav¦ëºW ï¹ft`õ¬øƒ] «'%Í¿Ø¢¶ÍYÕsËOp ÁìÎ©ÍóK¥òÕçÓåñx¬nÖŠ}×üÆºĞ¸åâ+Á%C¹T^$>PÖšÈ[ªlÛÁ®”"‘>ëP«8 ØÈ0"Ñ9 LˆÃwºÑ»¾ZL"dÍsC55-?ŞôÀØ
-+¦æ>ŒòÀ·ş0Ñw GTÖÿ9ğ]@ğı/"²E }AVªøïDŞRÚfŸ;è‚¨ìª>7ó;ÙÒé¨’)œÜôª~,õÌ 8€·—Dek²p7•|½{ïCñ "h²¥»3ÙòÆ2ÙLü~@Xá[•Ÿ nhÆZÌ7·ïÏÜ³èÍÎ{~òéÀû‰Âı»"ú•Bİ³büÎD¾¶P"&ÍŠûTî(ö[liWM€G ÒÔYö^íßøÃnücE;€äã1åR±ğ,À×w¨Š*º7wj[{:‚<Çºôá¿’­İ»M•»DÑİÀ#ãë û+ÀJP¾GlcmKÏÖ #¯ª›İ¨míépI{€A:‘'ò¹öm…\¶!´„(ä²ù\û¶©â›VüZÍIŠ(…˜    IEND®B`‚
++   IHDR   0   0   Wù‡   sRGB ®Îé   gAMA  ±üa   	pHYs  ‚  ‚¾úâ¥  éIDAThCí™ÏoLQÇÏyS„Š¤¬,èïªjôMKø„¦$66~KÄ®ñ[ˆHX±ÅÆ¢ñ Ìñ#šÎ´ˆ bA+Ì„j½ã{ßÜ”©óî¸O»˜Osß;çÌûî9çşšW*S¦LxH¬~¹ÄWi5}¦Ãäxû´
++¬ïÖ‘ûäÈ=_aYÉnê®/[&¼8t@KDíÑ’uBÉ€Ü¯_µÏ^;»q­Y#œ8t×ÜàˆÊ\°I4¶’x!şÙ¶ˆËí©Z³‚ıxr×üqh¯–¬a5«m!vA,Ô®`B»Ü‘T²‚İ°³_]³J^İZ¶‚µH¼±	ãç)ÄbAAd)w¤TİÆbD­ûAÚcÔ²¶/XÉ€Ü«i HäÄ ñˆ¹…İ~õÂØ‰7ÍÇók1jpÎ©!áj˜]”~…à¼FIà˜ñœ<g=„ÿí{Ÿı8yÛÍU4mt!_ˆFõ0Æ©eª"#(/¡>ê%º¨Ë—ØÉqÏ%Ç‰×ƒe+¢[¥MS¦aôíG“ãs(wÌVF…;Z›zÅi,}Dk>9pÍóªŒtbÈÜÔ¦©ƒÈ-Ê|[Í+Ş~ÕŸüsàÁ²iäe®B\›µL:½~€'wÙã¶‡£ô*¹ÒmšDø:9•kòu^Qpİæ.úA¯ú7B¼”µL
++=”™·ÁhŠî"¨“¨;‹ªÛµéÿÀr‘ÚR›™±éı…¢;'rS;áÆmú\ÒyEQ¾mÉ]ÈÇim
++æsä&·é¼"
++åGS»!Õ¦08‰óÑ6?`1>)$^×ƒ¯b•²‰\C€Ök%03ƒpDKö`§¤¾”æ€Ãê`g‘’Ú4B2X=ƒ†+Ò+²kŒa·]hÃ*„y†œz\mw^QA#uZŒ¹Ì‹µdŸÚ.a„0şaÜv)“8Ä˜·]ŠA£ôSç'U”cŒV!y²¤’F¾†ø7Ç‡°¡Q9Å+S_”¿/f‘—Ş„Ç©Ÿ‚s•­ Í˜>‡[f´^3µQ'¦Õ‰dp‚<K3sëãOÚ–ƒô5Í¦´·õ”#^xQ¨Wó0ByW‰ï(ç‰"Õì¦ºu^ÁM}inï?A·Nœ€é[ö“ß1[‰Lø}ü«—S7ˆ½âôhğ>‡Û>(g±ô×B…óØÄÆ1[åL'±Š:)ö’'­89vå{W>{£œGFšq”¸“:BOäÀH¬á¢ÿï£Pm«ghµL™2E!ú	ËA‚Q7În    IEND®B`‚
 \ No newline at end of file
+diff --git a/dist/qt_themes/colorful_midnight_blue/icons/16x16/lock.png b/dist/qt_themes/colorful_midnight_blue/icons/16x16/lock.png
+deleted file mode 100644
+index 32c505848ebc0ac4c84f8b544e94d077270297f4..0000000000000000000000000000000000000000
+--- a/dist/qt_themes/colorful_midnight_blue/icons/16x16/lock.png
++++ /dev/null
+@@ -1,9 +0,0 @@
+-‰PNG
+-
+-   IHDR         óÿa   sBIT|dˆ   	pHYs   á   áp.   tEXtSoftware www.inkscape.org›î<  IDAT8¥’1NÃ@Eß`“¤­Ó"Ñ¹¸3¢ã !Pî€Äà
+- 
+-:ãÂ@@Lá {—YÙx-ñ«ÑÌü?fş	ù« ªG"r`Œ¹‰¢è¶­o£-™¦éXcö¬µû"²PÕó^–’$™¨ê*MÓÓ57gªºÊ²,p:ğ<oF£Ñu+Šâ
+-”e9s
+-ˆÈ Ã:Çq`­İjô×½$(…`·sGË£?äPNxûå b'ù{ä´úä ¹‚à9É-½­ÏXã%‡×¼[Ëï*>/A‚Æéz
+-L'tüÕÃÍn2¬İÀ
+-m`+–ş;wå˜`ÇÁò·¹ï;Ì‰/ïĞO«¾Ô{    IEND®B`‚
+\ No newline at end of file
+diff --git a/dist/qt_themes/colorful_midnight_blue/icons/16x16/view-refresh.png b/dist/qt_themes/colorful_midnight_blue/icons/16x16/view-refresh.png
+deleted file mode 100644
+index d4afd76f949ff5c65e039b69ff999325bff5d7b8..0000000000000000000000000000000000000000
+--- a/dist/qt_themes/colorful_midnight_blue/icons/16x16/view-refresh.png
++++ /dev/null
+@@ -1,4 +0,0 @@
+-‰PNG
+-
+-   IHDR         óÿa   sBIT|dˆ   	pHYs      BÅ£   tEXtSoftware www.inkscape.org›î<   çIDAT8ÅÒ1NÃ@ĞY„D•€Pî€à©Qà8©¹ÔQê\€2ˆ
+-@JDo+0ÆvÊ|išışşÙˆu#µ("â("DÄ2¥ôVáú)¥¶Æ}Ìñé%f(0Å¤­yˆ§\côrâïÙ°Õ`›·¸óJ¢ÿ9^‰q7õ?›İADlDÄ¢ÖÜˆ›ˆ8©_7%e÷^ã|«€Aá¸C3Â¶Ú3Üµ<âpÙ•¢À#1A»8Ã=n±³j”aNRÖéƒº¾k•qß?³L)½vŞ¼6|EØ	ÔÏ	no    IEND®B`‚
+\ No newline at end of file
+diff --git a/dist/qt_themes/colorful_midnight_blue/style.qrc b/dist/qt_themes/colorful_midnight_blue/style.qrc
+index 1081d281d8f873e160396a28eac7b470f61c4a9f..b9821c6722cbe91d6bbf185da0a2051f2aa32059 100644
+--- a/dist/qt_themes/colorful_midnight_blue/style.qrc
++++ b/dist/qt_themes/colorful_midnight_blue/style.qrc
+@@ -6,8 +6,8 @@ SPDX-License-Identifier: GPL-2.0-or-later
+ <RCC>
+     <qresource prefix="icons/colorful_midnight_blue">
+         <file alias="index.theme">icons/index.theme</file>
+-        <file alias="16x16/lock.png">icons/16x16/lock.png</file>
+-        <file alias="16x16/view-refresh.png">icons/16x16/view-refresh.png</file>
++        <file alias="16x16/lock.png">../colorful_dark/icons/16x16/lock.png</file>
++        <file alias="16x16/view-refresh.png">../qdarkstyle/icons/16x16/view-refresh.png</file>
+         <file alias="48x48/bad_folder.png">../colorful/icons/48x48/bad_folder.png</file>
+         <file alias="48x48/chip.png">../colorful/icons/48x48/chip.png</file>
+         <file alias="48x48/folder.png">../colorful/icons/48x48/folder.png</file>
 diff --git a/dist/qt_themes/default/icons/16x16/checked.png b/dist/qt_themes/default/icons/16x16/checked.png
 index 3e017b715802d120d3c93343e374ef3566c954d3..b9e64e9e083479d3ee98f767e7db0afa918733a4 100644
 --- a/dist/qt_themes/default/icons/16x16/checked.png
@@ -181,11 +386,57 @@ index 3e017b715802d120d3c93343e374ef3566c954d3..b9e64e9e083479d3ee98f767e7db0afa
 +   IHDR         óÿa   sRGB ®Îé   gAMA  ±üa   	pHYs  Ã  ÃÇo¨d  3IDAT8O¥“¡NAE§‚C@R@í4˜òH8$ àPÒ?¨B ‹%(!!áœé¾íÒl79·sßtŞ¼í¤m6¡›)àá±¸xO'ú– ã2ÃlÃ¼±š>àHôš#¨J€yáÖr`¶¡O’''9A¹ó~2‡LRøOæÆót
 +¿1{„>¬‚Ôa÷%Æ˜>ó´4ï‚Å½7_ñ§5/€	âªŞanól¢&s¨5}ÂhRmæ,Ø$Ê—.r±&{¡ÕŒF&€M¢ª$\‘Gi3ëD\2ìù\ÊzœÃ!4™Õ›ìGÁæi:)Ç&¹VO®A*{Û©'™¥håü=T·@ÀŞ.à¢&uó-œ¿õÏÏ9¥/¼ÂVõ´â§    IEND®B`‚
 \ No newline at end of file
+diff --git a/dist/qt_themes/default/icons/16x16/connected.png b/dist/qt_themes/default/icons/16x16/connected.png
+index afa7973948c2fd69a5b838ebc993a4a618e20e31..0afc18cb7a19028fd567a7ca7ced62cd164657de 100644
+--- a/dist/qt_themes/default/icons/16x16/connected.png
++++ b/dist/qt_themes/default/icons/16x16/connected.png
+@@ -1,4 +1,5 @@
+ ‰PNG
+ 
+-   IHDR         óÿa   ÔIDAT8O’íADßE d@R  "@d@B@B !¨ŞÚÙZk§Îİü»~ÛÓÛıg	šz‰OÀêÀXÄƒî€ƒ8{€)pì¤Òhë¥x@ ÚÌâ? 	.À8°vYŸ´@\@¾³ÖğœŒWé@é>Ë5H
+-°h§meç¢``šü<€~Î!s»Ònàê¤®)Øaù=wĞV+×Ã ©Û1]+ÚÒöF€\êÙeP@këv±şı <C.`9ú¾·    IEND®B`‚
+\ No newline at end of file
++   IHDR         óÿa  IDATxÚÒ¬QÆñiÔ¶mÛŠ“º]ëYk×ÆCXÛvPÛîÚªm·‹¯÷>OP%ùïOÎ/@i³çÎœonŒÍ:h&-ôFt4ƒZ½
++šNIRE&İ"Ö r!êö8ñüÅ3|øğ?~|G<Ç—/ŸñæÍ+<~òÁ°N·—¯^€B•ePk•G‚¨ÙK‚¤ê¤Z½e¨ŞSŒ½%h0 õIUº‹pÏz™9é`P¨²ùP»_2ZOY…n’£Ü…Fã–cDÎğæÁ”‡P—Ü·Øî -#åßÜje.jö–Âæ¸‡¤Té¿»åJ9ªöÁî´@"ıŸ»r7!`…PÌû?÷]«7n]OÀ‰2Y9ğúİ¨ÕW†æ“V wòto@ÁzŒTìÆÌíè—º™åæğ¦€ËŸK…¹Lzf
++\;y@†^);1T~ r`¤ö†*¢oúntoa¹só#¯`é—ÜÜEÃ˜äT½Qh¯Ó?…PJJ&[U³O2ËíğXpêì1ä(²¾0²qôÊµ‹¸y÷,;\^/üÁáü¡¼ nwyw!&ó^Ò	Åü¨@Ä_È¥Ñ‡¨‘Vò0Ë]şãc¨ƒz¨ëO•¸Y¨ƒx¨ë•º¦Bé ²úsºŞb¹9NÅ’¿ re€HG¹sƒ    IEND®B`‚
+\ No newline at end of file
+diff --git a/dist/qt_themes/default/icons/16x16/connected_notification.png b/dist/qt_themes/default/icons/16x16/connected_notification.png
+index e64901378b000db1871d03db88af5f06c454cb01..72466e098e471ae5a97c49a56536dd4bf62b3a08 100644
+--- a/dist/qt_themes/default/icons/16x16/connected_notification.png
++++ b/dist/qt_themes/default/icons/16x16/connected_notification.png
+@@ -1,4 +1,8 @@
+ ‰PNG
+ 
+-   IHDR         óÿa   sBIT|dˆ   	pHYs   á   áp.   tEXtSoftware www.inkscape.org›î<  ‚IDAT8Ó=hTQàïn"®­ŒØX¨BPbaX]Ô,Øl„€ˆh%i„ˆ`•VA!
+-bgaeÔÆ"‹jg¥ÒíV$BòÆb÷™çÃ'’SÜ¹sÎœ¹?¬°´^òy¬`zø?Š÷ãFğ»qñ°ŠÔ@ÂÌ S"+±_ñ®D,Æx^\+‘à3n`×?šœ¬ÚHx‹®â[…ƒÙ*™BQW"Ÿp‡ĞÂbÇcúsr=œÆ«/í‰VD­‘’e²'£O;ùó&Kdx?Åbw²ñ@¤çIìÙ)‘>tÛgËfq³$p¸Ûnì‰ˆù¾ßÔLYä:–‡j«ûŠ•È«x²3şz–Õ¦Šãú‡—#CˆTÏq Kv®­Õó§|w¬}~bCH‹IÌ»YRÏÛ/‡1{¸„ûÁÅß>Ò[)6ÆRdK?··/t^'ı;Ã|Å¬–šÍúÆ‘•k‰c¤ïIöhÛBç1ü÷|ÒP1    IEND®B`‚
+\ No newline at end of file
++   IHDR         óÿa   sRGB ®Îé   gAMA  ±üa   	pHYs  Ã  ÃÇo¨d  IDAT8O•S]HQşîìiœİduKa­Àh‰DûÃ5"ŒJì¡Œ$"ÈŠ’ìêÁ—òÉ„¨-¡Ã~ˆ2_|TŒ
++BTjmkwİwîÜéÎ¸IAùÁá^Î½ç;ß9÷\â8²¸zıòt:İÆ¹M=¯8sÏÿ¶£”¶/#8ßzÎj:ÚDóóCÈQs ª*(•aš†g†iÂ\\ÚÇb1ôô<d4ëÁ²,ê•×\ğ2¹æ#lnƒHª,{¾cƒZ`1‹.#°mæ]–„;¸¾~MAAPÃÄä<ÊÂyĞ×ÀÇ«' „Àf‚øÊµKÿ]·	_,ƒx}¿w::@Ãh[IİİİÀl‘9£€®´nf§Á¹ë¢dú¯º‹B~Tõ¡l¼Î¶Ç8¤å ¹ñ0RÉ„ àLbB†-$9ã² úK!7 zJt]Äî÷/±cWJ°¹j+äŞ^|Û[ï(’t[òñååAÓX„¾n-v>C)P²§ŠÛÄÑQÈ"ÉÆº:„5?9öæmfpÁ05öÂmvÎNô¡¨º
++|f|jjÉ›Jy«‰ 64tœrÇfñxœ>ï:EQ ÈŠ(C”tC),ö‚²àÓÓ««¡&„JÄ×ŞÙy·U¼7Íµ÷öÂšW)°fg¡ÿRàB
++‡a	Ub
++'iyiéSâóM\6•.æIDßcCmíÒ ÍÏƒ„BÁ\¿!Òİ#'OX¨ß¿OÓ‹ôLØo°9ìÆ#P¾ÿ@Á¦d]÷ÍŒF4úÑæ¼’44Œ2Æ
++3!@|Wlÿğ	[>O"LÂğûm¿iŞŸâf…ãX?P”¹Nÿ\    IEND®B`‚
+\ No newline at end of file
+diff --git a/dist/qt_themes/default/icons/16x16/disconnected.png b/dist/qt_themes/default/icons/16x16/disconnected.png
+index 835b1f0d6b5ceeb11e9a2b7d68c61521aef7bcb8..7258a8cfe5ab54a3f53252c08520824ed91969a8 100644
+--- a/dist/qt_themes/default/icons/16x16/disconnected.png
++++ b/dist/qt_themes/default/icons/16x16/disconnected.png
+@@ -1,6 +1,4 @@
+ ‰PNG
+ 
+-   IHDR         óÿa   ùIDAT8O“á1W¨€ë@è€
+-ĞN”€
+-Pè€œÌšd&“9‰÷ëîæeó½M®Çÿ5¦¡ı,€]¯²~ ´ÀÚfÀwËo>oJ€	pï%¤©%pç}!å¼0¦)œ¿«–%€‹¯€=¡ƒ´ŞÀ$8ó=é8‡gAÚ6ƒlG€»½´v“#ğ™7ÍÇ(6M`ÌU”bÏ_±ÂÚÈm§I\d|{<:K©¦û
+-òåÑ¡8…ü<IF:ıè¨Bj ¹Eˆ %9O¿#…¶ÛÄ™óQ #B|Vœ'¨Î)hÖf/Æ-/Ô×r­>qà5 ­_Ú    IEND®B`‚
+\ No newline at end of file
++   IHDR         óÿa   sRGB ®Îé   gAMA  ±üa   	pHYs  Ã  ÃÇo¨d  IDAT8O•RMkSA=óŞ´ym„Jƒ©ñc£&)ˆè_°ØD7â¢MëB¥XE¤P¿AA4ÄŠQP¤®Åt™.?Ğ"”¨qY]Eö}ÍÌëÌô=ÛJ,öÀ…{ç¼{ß9s‡A€W®]ºîyŞ¤œêSÉ)¾UF)½µjÀ…‰óşHa„vw'ĞauÀ²,PÚÇ±uØÇ]Ê¦¦^0#ìÕğ}Ÿª¦Í=)tumD,fÁ4MÄãHlÂ¶­Û±kG}»÷È³8|æÓU8gà‚‡ÕÚ „€3rùêÅÿöÀ@åeµZfßán±jÛöäz|3Ÿé‘c½¾÷”	9@Z&cgNããg‘ŞÙËÈd2(œ–Ÿ.o*‚R0?ÿCP&epŞúâ†G‡°ß^i«SVcêæÕ¶à,8BÀĞ7/£<×A{{¥RIÆ=üjşÄƒûñ¸ü´Âu]ÃXKëzú/=}fj)æpÖl6ñúí¼ŸıˆOss¨}ùŠÏõoğ<WËÎÛ–Ë@ÈŠ'…Ñ¡RÊ„œH£g­w/#™L"›Ë¢ü¨¬ÏW"ŸDµ:Ú›NOÓ<‚†ÜÔëu¹w?¬€ìAT^Më\ÙÖ
++Nü}øÈ¡ÎÔ–”&VâÎí"úûÈ·ÓµR%„Ù¼`Û¨ÎT9v<ÿ]úìÑ_üJMõ‚ÿfšæÍEÿHaƒ=    IEND®B`‚
+\ No newline at end of file
 diff --git a/dist/qt_themes/default/icons/16x16/failed.png b/dist/qt_themes/default/icons/16x16/failed.png
-index 7c4047dd0842e321cb89bd20038772bafc6300cd..1fea7d8f1591573cfac8f772d030a6fdb43fe2a8 100644
+index 7c4047dd0842e321cb89bd20038772bafc6300cd..a1872835df734e35fc97e363b2ebdcb6b5e814e0 100644
 --- a/dist/qt_themes/default/icons/16x16/failed.png
 +++ b/dist/qt_themes/default/icons/16x16/failed.png
-@@ -1,8 +1,4 @@
+@@ -1,8 +1,3 @@
  ‰PNG
  
 -   IHDR         óÿa   bKGD ÿ ÿ ÿ ½§“  ÁIDAT8’1OQ…¿û†ÆB:pFh(`ÿd¦pân6ÔÛ6 k/Ğ’@46ğøÈN[lHfåà&&4PìÌª4šÈÎµØÙuft§{'çÜwÏyOÈ!ZŸŒo¬ª ‹ÄL \¨jCbsà|
@@ -195,8 +446,7 @@ index 7c4047dd0842e321cb89bd20038772bafc6300cd..1fea7d8f1591573cfac8f772d030a6fd
 -+w´ï9õà%$_Àö[«¯€ëÑ>®Dem`îS9„KŞ„š¸*b@§Ù… XÆüHëÿ û"ª0
 -2-ø    IEND®B`‚
 \ No newline at end of file
-+   IHDR         óÿa   sRGB ®Îé   gAMA  ±üa   	pHYs  Ã  ÃÇo¨d   şIDAT8O­“+Â@„·H0¡CÒô¤ÁôÜ€àà XL¹†4\€T¢‹AH3ÛİRšİlx|ÉäïşefË><aà†m”	È†´ëçù½¾x€±‹²„¦P‹½hÍt•PÀ<DÙBÙ°s‚„9jæä2kñKür,É<SjÂßÒ#<ÌŞA½@ÍÿLÆªîU­Ã5éñbÈdvAOÌ ½Ußè5°1R²Â +%2ˆbÂ¶„ÌÇ^ŞğÊÖg¤ôşç ñ%Q/\è£,ïCµhğlGĞ2­	{|Ç™å= ?^g!
-+J¿û<W(    IEND®B`‚
++   IHDR         óÿa   sRGB ®Îé   gAMA  ±üa   	pHYs  Â  Â(J€  DIDAT8O…“]+a€ßÅ?AQR""ëbK²>/üR7JäB¤Ö…âJR~ƒòíBëyfçŒÙiZO=Íœwçœ™sŞwİæj*1Š‡¸‰*œã¾dåW1ùÛX—,ëx‚cYQ ’[Y4˜&E,PM~ÄŸŞmßøĞ»ı+b{ä{œÁ|u!ç·pï\ ‹YÀƒIô‡ÜA‹˜¼—¯-â-w¡›I»x…Ë8Œ×¸„g8uäı²N¥4‡~A_²”·±Œë¾9Ár\PWÀ÷ÑĞ¾oÑ!(¨øB“=q+ùU¬sØÆ,°€Oh¯&Ÿâ8z`Üó5t&q¤ããß"îó4zÀÊ|¢‡l>‹RºÁvü™ªEş#KÆç˜Ã±¿Ø¶AÉå!F‘Ë,ªÇÉ)¥ôüßI¯CòÄ    IEND®B`‚
 \ No newline at end of file
 diff --git a/dist/qt_themes/default/icons/16x16/lock.png b/dist/qt_themes/default/icons/16x16/lock.png
 index 496b58078983bc3c4f7dc2808fd02b8deb8b7b67..69d399050804cfa45e00850d4330a5b7cfaa3a43 100644
@@ -460,22 +710,40 @@ index 2e67d8b38fe9219a9bee674472f6a1356cae3698..507337fae59964244795a3b0bc528e07
 +:¡$|-¡R¨Pz—ãùí­³;FávïfWæIìÌİìİÿw7w›)x<|S£4à4b'6b%œá>½1…Wø‘’'ØŒ5aßÑVHkb_ĞV@V=Ä!ÚŞ8M«¢Í©ó€¨ô_Q‘*6úzI|ÅkÜÆaüÁš'­cÒñe·0öÁÎ¢9p“R­rƒK@}¨‰%EÓpOƒ^º,â’J1‡»êDĞ7°Wj&¦	×p(èı]HG°5è}s=j(€ùé±,¡?š4ëì¶MŸ,r‡›¥fŒÜ·á1JKXñ\ã¸ÆpàÀ5>€k| ×ø ®Q ­µ˜ØV­]c«©¨ ÷¥vŒ¾ğ˜%Âcİ+Úñ£wû¨µ-‰¸F5,£ö¢5ªæ68Àè“ypËôã3ÚfQÕÚ‹1VĞœJYT5ËŠ6&ñm'fA­Îc™ß6ù&P»°ÒM¾´ĞşÀãj/Ããñü
 +…O{pƒ.Ó­ó    IEND®B`‚
 \ No newline at end of file
-diff --git a/dist/qt_themes/default/icons/48x48/plus.png b/dist/qt_themes/default/icons/48x48/plus.png
-index dbc74687b177ea85ffa48be3864db8a49bed76cb..ba7b62aaf7e681348c0780f96f929425bb75f4c0 100644
---- a/dist/qt_themes/default/icons/48x48/plus.png
-+++ b/dist/qt_themes/default/icons/48x48/plus.png
-@@ -1,3 +1,3 @@
+diff --git a/dist/qt_themes/default/icons/48x48/list-add.png b/dist/qt_themes/default/icons/48x48/list-add.png
+index dbc74687b177ea85ffa48be3864db8a49bed76cb..fd8a06132ccd4e99b947cecffafa3a593b1cce25 100644
+--- a/dist/qt_themes/default/icons/48x48/list-add.png
++++ b/dist/qt_themes/default/icons/48x48/list-add.png
+@@ -1,3 +1,6 @@
  ‰PNG
  
 -   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  Ä  Ä•+   tEXtSoftware www.inkscape.org›î<   ¹IDAThí™1„0ÄÓSğ	š{ZZò® \$q–œv$7)ìÂR¢ B& @ÌòY7Ì ¶CÍÔDYqX=M±n2o¬İ°5`#6`#6`#6¿&ìw÷„ó•ØZ%îöK9“éQò®`ˆ/Zªxû—;ğiÂ)[%®]Å%Ö›˜ØH€ØH€ØH€—@2=ÆK`1½–î¿Y…è…/ËÇ©?â™ì²    IEND®B`‚
 \ No newline at end of file
-+   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  ‡  ‡åñe   tEXtSoftware www.inkscape.org›î<   IDAThíÙÁ	€0DÑÑúì¿­#T!V×!ò,xŠ~È!A	 şj’´ì3™¿%d–Tö™³^2d-¬íÃÓß5f,ú%Üp#À 7Üpkçùœ«è:áûÄù<ïê}¢û-Ôòt½5Í-ÄÌ 7Üp#À 7Ü2–Ês7ºÿÅ ÷VOsp¿×5²    IEND®B`‚
++   IHDR   0   0   `Ü	µ   sRGB ®Îé   gAMA  ±üa   PLTE      ¥g¹Ï   tRNSÿ å·0J   	pHYs  Ã  ÃÇo¨d   AIDATHKíË1
++  CÑæş—V¡P"**:äMò‹T<¬ó9Q`|r~ú< ô!
++‚r*È)¨¸ ^[!º3
++D    IEND®B`‚
+\ No newline at end of file
+diff --git a/dist/qt_themes/default/icons/48x48/no_avatar.png b/dist/qt_themes/default/icons/48x48/no_avatar.png
+index d4bf82026a63d3498c57615ed744ef6ad1a11db4..76f812349b462cd8b05465d12a7e1a4df6788ea9 100644
+--- a/dist/qt_themes/default/icons/48x48/no_avatar.png
++++ b/dist/qt_themes/default/icons/48x48/no_avatar.png
+@@ -1,5 +1,5 @@
+ ‰PNG
+ 
+-   IHDR   0   0   Wù‡   sRGB ®Îé   gAMA  ±üa   	pHYs  Ã  ÃÇo¨d  áIDAThCíØ?HÔaÇñKÃ?A"4j8Õ¢›º8„CC 8$Šm9„ƒ"´¤èfô"B‡]‚¦0¥¡©K±Ò÷wûq|¸{»ó¾ñ{ÃkıİÇóşüî)äååÕ¼vLáÖ±…M,cH²ÌàNKxËHªfl@Vşà=®#‰f¡†–ó7àÚAñ®AõWáÖ<Ô°#pkjTŒ{pë-Ô¨ãpk	jTŒ;pë)Ô¨½pËnÔ¨P‡h‚[7¡†…rÿhÅ	Ô¸ö-îÚc¨a¡ì%Ô·V †Åp½š†ê7\ßÄø	5.ÄÜëÆÔÀRĞˆ$²C5²”a$SìÚ7\D2]Â.ÔXå’ë¡g}„ıN²OP£³\oŸËµ5:+é? ä?pÉ¶5:ë!’¬¡FgÙ‘ã$Õ ö +Ï‘ÄcòÌ³ï;‘¨ûGª0ßÆ;T2¼Øw<A'Î5{¦à+ÔjÙ¡ïô¡¦ÙnûP\kvÜø
+-]¨:;÷_ƒz óf¿3ª:v´×ú¨‹×‹İ[¢¢& .Zo_PÑ'Õg¨z¸‹¨®A]È‹‚G5»¯IÅKäååı_
+-g‹w¢“(³v    IEND®B`‚
+\ No newline at end of file
++   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  b  b_'ĞS   tEXtSoftware www.inkscape.org›î<  #IDAThíÙËja‡ñ_Ô#õ°,è(V¤¨«*Ö½ ˆ.]{‚àRÄ•^BÕ"x‚‚‡•µ).<R<Ûêb©_G3ó}ÉÌ,òÀ3“wò¼Éä;L0 QlÀiÜÄ+|iç%¦p
++ëk³ëÂ¼Á¯.™ÃÉšsiášîâa®bM¾«¸¬¼|'kğı‹cXßÀWn½‚G9Reó rë6ã‹d,V"åG4‘P}¥4ı©å°/¶0¥	µ!›bSJ¨iÅ¦40—Pò:¶0¥ç	µı¼VavJ›Ä:YÆ®Šİÿp¿€`·Ü«Zz%Ò8RµtÈmñòS5ø®b³lóRVşFjğÍeO—&ÅÜ-‘ÿ·|¾.ûÖËnÙ&gŸÛ™Á¥ö¹šD¯V”Ûq@¶KÇlÃÖöùOøˆ·x‚Ç²íè»½ëpwñSùy`I¶>+a?Ã0ÎáC„ô¿ò¾}Íá~ËÇlÅÃÌb²â-\Ñ›ås·,Ëæ‘è]ZÈZÜ©@<Ì´ÜR-ÜªA¾“)‰ÏO/Ô(ßÉùXùq,6 Eì/+?$›pê–ïäaÙ& æh™êuºeº¨ü~4@8Ìw9K¼!êlìoëp0<˜×Àş»D³7<×À·
++DbùZäE£˜Wÿ=f^¶Ï(Ä˜l­¾Ğ ñÙ#Ì^ş¡2`@‡ßá¸‰ĞÂgå    IEND®B`‚
 \ No newline at end of file
 diff --git a/dist/qt_themes/default/icons/48x48/sd_card.png b/dist/qt_themes/default/icons/48x48/sd_card.png
-index edacaeeb5629c5cf4a86d24eb35a4d37c45bfa77..8a8682133a1da5bcffa2612334db7badf4c5a6a4 100644
+index edacaeeb5629c5cf4a86d24eb35a4d37c45bfa77..60dfba2693ca39fe823f89fbcbeb25ea274698cd 100644
 --- a/dist/qt_themes/default/icons/48x48/sd_card.png
 +++ b/dist/qt_themes/default/icons/48x48/sd_card.png
-@@ -1,6 +1,5 @@
+@@ -1,6 +1,7 @@
  ‰PNG
  
 -   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  Ä  Ä•+   tEXtSoftware www.inkscape.org›î<  ãIDAThíÚ1kAÆñ_Ì±±PKAHª€ •˜ÆF‚_À*½Ø	VZªßÀFl¬DPÔ*…ú1…¢‘(ê)B’³È77{{·Ù›Sæ/ì>÷.ó<·³3Å.ã±„çøNCµ‰·¸#cú,ÑÂul7h|P}Â©¿5¿÷'l<¬÷8›š©i~®0¿hÏğ¡8Å2¾àqĞ³€y¬b-Ğ—ñíñ
@@ -483,9 +751,11 @@ index edacaeeb5629c5cf4a86d24eb35a4d37c45bfa77..8a8682133a1da5bcffa2612334db7bad
 -°Ş°‘q)½\©
 -ğ¤a#ãRÛ×q½·+ÓRïøÔ`¦(Ä:Nş‰ù.ó¸c'ı¤¿PÙÄÜÄá*ƒ¿¾3íiS    IEND®B`‚
 \ No newline at end of file
-+   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs   È   Èı×;   tEXtSoftware www.inkscape.org›î<  ûIDAThí˜=/AÇ¬ó–¸„‚D´¢‰F¼4:
-+ÑKT*!Qqß·JDN¡ñ$áP¨t$3’±vìÎŞíÎJæ—LvîÙ™Íÿ¿;Ïs“òÈËÀğ|&Ğ€ù2uR'$Úß>€ş Õ1Å×ÀxÌù¦T#A7jb<¬Ø&”ØP’ıV`MöÀ­2nhö€3%¾´Eùìo€nÙoŒ¡õ9àˆßŸx@Ó©Ä}ó_d|Ñ¿’ñ‚/~¢<k=HÉò€m`Ò`NâD5à»Àt‚ZbÅÀ÷›ÏœxOâÄ›Ÿ’¿Ùofe¿	h–ı¼2_ƒ¨& ¾¸'¯õ¾x.DßŸxÀ?“U]ÿ½T¶Ö‡5ã$ŞfLÛ@g Qƒ3ÎÀè÷2….‰óšxÚ\"–ò;pm2qàDzFlJÀ“fL%ÛX˜PÓ½P›áøry 3px=¤·ãLŒÒ­÷j
-+¥Ò<Fqi‹(Êú;O]4 ö%]Àpzr*‡®ŒşËÈ4Y7º|³n`QKÀRĞ€8§iÓ!¯-A7³şBqlãØÆ°3`gÀ6Î€mœÛ8¶ql£3ğ–ªŠhjÒ("–²Â'pj:i¸ÇşéÜ=0§ù¹	ÌŒ€    IEND®B`‚
++   IHDR   0   0   Wù‡   sRGB ®Îé   gAMA  ±üa   	pHYs  Ã  ÃÇo¨d  ÆIDAThCí™M+QÆO(ò’BÙX)/+ÊÒg°òdãƒØ°²gc!YØù ²²±@r‘B„ç9sNMÓ¸Î½æøÏí_ı:óŸ;·9Ï™—3s¯
++T8“ğ~yr¥Æ´åÀÎïÁ6])uc´<ÂKø¡+¥Ş!ëg]E\ÁÛhQó ¹Í§®<’ù-hÙ„ìT‹®”Z€Üf^WJuÂW¸¦«h÷á)¬ç
++°½äÈ“sÓ’3xyëxË£ômÍÑ¾€×ğ+ k'JÖyQJ	»Î× ÉÎ/Ã8 í©"‚K€˜ùCÈó•^üÎóï¸˜€¹:mâ”zÿÄì5Ãn8
++»à$³õ4l†˜Ø‡a?‚üîÌŒEhï÷Ö9h9ÉÏ³ÒëLœª6À i;Œb”`ò¡¬ [¹BŠ¿œB°.Z”#\ÄÒT|€ZÓƒÏ<Çp7&gMÎª¾á‹ÎA´˜-;0mæÌÚ0“´g!û~+N¸IHHHHHHHS¼ÿåY„_÷íàÈ´d¶ïm˜|/ö-NqùÙÇ‰&¸
++Ÿ`ÚÎ²”ÿ!oÀvÈ9J}-æÊÁÁ/Í†    IEND®B`‚
 \ No newline at end of file
 diff --git a/dist/qt_themes/default/icons/48x48/star.png b/dist/qt_themes/default/icons/48x48/star.png
 index 740f7f3e75da9160a8db6a1941b159509a7ab8ee..c2b78f0c3e543913b18d4f95956109c7d2646ba8 100644
@@ -503,6 +773,51 @@ index 740f7f3e75da9160a8db6a1941b159509a7ab8ee..c2b78f0c3e543913b18d4f95956109c7
 \ No newline at end of file
 +   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  ‡  ‡åñe   tEXtSoftware www.inkscape.org›î<  ‚IDAThí™KHUAÆ7E3R3[D–YmŠ‹Ê¤UE`T(‘¹ÓhÕ¢AsaDÑB¢Ç¢¢H"ZÔª–¡½ˆ|’eàm1sñœÿyŞ{æh„83ÿù¾osæüg.Ìav‘ˆ‘{°HO€W1jEpeÜZ.ófÑWhÃi>UÎ¢¯PH ıxO Ÿx—mdTc7<®‹µ­Ú¤ é5¹OÔïDÛ^ÃšFñûÓ®DÛ‡Ys€õØN ùÀBà§è[gJÔä’Ëç0†zÄşxƒı)²ô}ogÜ] Ö`78	Yú¿EÌjÂ¦–\İÀ¥>ŒJ'üÆd„lö@°,$ÏAQ¿ísØa©7ßBò ÏPC ¶Ÿñşš•?@‰o‰îË”÷°5Èü`4‚H¸âÃ5"÷Pê73¢ö~/ –BÓVBù¬õ^m*?€çÀ=-â…Q Øl‡à®Ê}<Úpûl§€‹@n!ÓÈÕÚSÂÓy¿Aå¸¿h¯ŠÍJThMécX4ø€”ƒÇ¦xüÚĞ„3O™oKR¼s!I¢öó"ï¡£ ¸á¡ÙlN—0¸îA8 l1`:…*œ©xªÜ$â;‚Ê*İ>XÍQˆ5šqïÆ´¶”/]D¦°§ébÎ]&©µÊ}Æe„\ ÍEPæúé çi#æm[?Fà’9Wè]&…LÒéQÿšG
 +_¸‘Éö‹z”%4ãGMÓt¯‹€ØP/û|b‹ºûÄõ	Îz#N=Ğ%ÄZ]b²P)¯õÛ1œÒ}­‚³Ë¸kù8;òšp)*ıöÊå_ ËÅ˜"fÈ‹c{„Ğ'ìµuÀwó©2Œ}»L RkL]è"íº=èğ0;¨‹[_ÓOº]ôuš6Ÿƒº&±ŠÔ kƒQç×Rı·[Læ¨íCdğMğƒÜîœ[juuûòJè6y¹•Ô-8ÿSÆîOaú·.k&êöD{JJã6VrÖšœ@1ğËC8U®î#”¯cı¸&wàOç<ÄFP·lé¢Quã<İ®	à$jL¢Rß;@YÎ2à.Ó)ú0p‚˜GËV …9Q“ñº«Ãæğ¿â/×ñé6v•O    IEND®B`‚
+\ No newline at end of file
+diff --git a/dist/qt_themes/qdarkstyle/icons/16x16/connected.png b/dist/qt_themes/qdarkstyle/icons/16x16/connected.png
+index 90feb372af3e4c1dd9782e075993946c26b1e5b0..0afc18cb7a19028fd567a7ca7ced62cd164657de 100644
+--- a/dist/qt_themes/qdarkstyle/icons/16x16/connected.png
++++ b/dist/qt_themes/qdarkstyle/icons/16x16/connected.png
+@@ -1,4 +1,5 @@
+ ‰PNG
+ 
+-   IHDR         VÎW   sRGB ®Îé   gAMA  ±üa   	pHYs  Ã  ÃÇo¨d  "IDAT8O¥”=JQ…M‘ÎÂd-BqB:· –Y€eVQl$[¤’2Mˆifò½™“ŸyïÎ#šïqï9‡aò“BçÍ,Ë^P_£¿£’wô‹.4C¨¹ÃyZ^É¥lq0^¡oÂ
+-uÆKğßcú@]´,+ª0’İÃºA3eLØ±Á0t%è6VÆn©ˆ†®ŒÑ2æEBXº»y'®™eÌ«ÂÎ}ÄÓÒ¶Å*ãşÆq¬h–g¥-d·-P[±–çÊ™¨dıd©b!,O0Í‹”»•¹'o)ÂÒ}í?‹”óWÔæšr*‚a÷·ÓC_*˜ ®YëñJ6¿æGºîá_ò/(xFûıŸÔ’$+Ì9F±„êIù    IEND®B`‚
+\ No newline at end of file
++   IHDR         óÿa  IDATxÚÒ¬QÆñiÔ¶mÛŠ“º]ëYk×ÆCXÛvPÛîÚªm·‹¯÷>OP%ùïOÎ/@i³çÎœonŒÍ:h&-ôFt4ƒZ½
++šNIRE&İ"Ö r!êö8ñüÅ3|øğ?~|G<Ç—/ŸñæÍ+<~òÁ°N·—¯^€B•ePk•G‚¨ÙK‚¤ê¤Z½e¨ŞSŒ½%h0 õIUº‹pÏz™9é`P¨²ùP»_2ZOY…n’£Ü…Fã–cDÎğæÁ”‡P—Ü·Øî -#åßÜje.jö–Âæ¸‡¤Té¿»åJ9ªöÁî´@"ıŸ»r7!`…PÌû?÷]«7n]OÀ‰2Y9ğúİ¨ÕW†æ“V wòto@ÁzŒTìÆÌíè—º™åæğ¦€ËŸK…¹Lzf
++\;y@†^);1T~ r`¤ö†*¢oúntoa¹só#¯`é—ÜÜEÃ˜äT½Qh¯Ó?…PJJ&[U³O2ËíğXpêì1ä(²¾0²qôÊµ‹¸y÷,;\^/üÁáü¡¼ nwyw!&ó^Ò	Åü¨@Ä_È¥Ñ‡¨‘Vò0Ë]şãc¨ƒz¨ëO•¸Y¨ƒx¨ë•º¦Bé ²úsºŞb¹9NÅ’¿ re€HG¹sƒ    IEND®B`‚
+\ No newline at end of file
+diff --git a/dist/qt_themes/qdarkstyle/icons/16x16/connected_notification.png b/dist/qt_themes/qdarkstyle/icons/16x16/connected_notification.png
+index 7cd8b9d2930d99340778360c68bf28923a66609c..72466e098e471ae5a97c49a56536dd4bf62b3a08 100644
+--- a/dist/qt_themes/qdarkstyle/icons/16x16/connected_notification.png
++++ b/dist/qt_themes/qdarkstyle/icons/16x16/connected_notification.png
+@@ -1,5 +1,8 @@
+ ‰PNG
+ 
+-   IHDR         óÿa   sBIT|dˆ   	pHYs   á   áp.   tEXtSoftware www.inkscape.org›î<  ‹IDAT8=k“a†¯“FŒPAT\ÔE¡XêàGµ).…‚Ú"¢“t*qpUP¨‚¸I×ª‹DŠê¨E¤™ª¸ThŸËÁ7ø|‹ôŞçÜ_6	uRíl–|U]S'ªÿq|8¯ƒÀ#`*"•‘N©¡NN9’:µ‘ã.õ»úÑrŒôî+}äÓÀàp`ƒfÊÜCı ®¨7Õ%	fÊ¦³£õF!²¤^W«Mu_SÍÈCÀ½Lo0Œo—ÇN6µ2Á*¤.ğµÿ£À@_¨OÌÏ·»­úSŒW‡1]Äø¼Ü:q ²3…czw¬~H ¢É3·ÕÊú‘<ÁË>ò:ğ^Ò¥>j)UÆsÀlN€µ,åp
+-öÿ©U‹Åà!0	t€&ğØ"Ñ<VôİNPëÙoªêğ¸O
+-ñvÏå[køn¸íœ0²Ç`çŸø`ïÂâ»P—€û1WÒ•N£QÛ:¸v+à,ÄÏ =ß½°øà7;ræTÓkÀ    IEND®B`‚
+\ No newline at end of file
++   IHDR         óÿa   sRGB ®Îé   gAMA  ±üa   	pHYs  Ã  ÃÇo¨d  IDAT8O•S]HQşîìiœİduKa­Àh‰DûÃ5"ŒJì¡Œ$"ÈŠ’ìêÁ—òÉ„¨-¡Ã~ˆ2_|TŒ
++BTjmkwİwîÜéÎ¸IAùÁá^Î½ç;ß9÷\â8²¸zıòt:İÆ¹M=¯8sÏÿ¶£”¶/#8ßzÎj:ÚDóóCÈQs ª*(•aš†g†iÂ\\ÚÇb1ôô<d4ëÁ²,ê•×\ğ2¹æ#lnƒHª,{¾cƒZ`1‹.#°mæ]–„;¸¾~MAAPÃÄä<ÊÂyĞ×ÀÇ«' „Àf‚øÊµKÿ]·	_,ƒx}¿w::@Ãh[IİİİÀl‘9£€®´nf§Á¹ë¢dú¯º‹B~Tõ¡l¼Î¶Ç8¤å ¹ñ0RÉ„ àLbB†-$9ã² úK!7 zJt]Äî÷/±cWJ°¹j+äŞ^|Û[ï(’t[òñååAÓX„¾n-v>C)P²§ŠÛÄÑQÈ"ÉÆº:„5?9öæmfpÁ05öÂmvÎNô¡¨º
++|f|jjÉ›Jy«‰ 64tœrÇfñxœ>ï:EQ ÈŠ(C”tC),ö‚²àÓÓ««¡&„JÄ×ŞÙy·U¼7Íµ÷öÂšW)°fg¡ÿRàB
++‡a	Ub
++'iyiéSâóM\6•.æIDßcCmíÒ ÍÏƒ„BÁ\¿!Òİ#'OX¨ß¿OÓ‹ôLØo°9ìÆ#P¾ÿ@Á¦d]÷ÍŒF4úÑæ¼’44Œ2Æ
++3!@|Wlÿğ	[>O"LÂğûm¿iŞŸâf…ãX?P”¹Nÿ\    IEND®B`‚
+\ No newline at end of file
+diff --git a/dist/qt_themes/qdarkstyle/icons/16x16/disconnected.png b/dist/qt_themes/qdarkstyle/icons/16x16/disconnected.png
+index fc5f23894e4aedae7a49981f68ba017a177b065b..7258a8cfe5ab54a3f53252c08520824ed91969a8 100644
+--- a/dist/qt_themes/qdarkstyle/icons/16x16/disconnected.png
++++ b/dist/qt_themes/qdarkstyle/icons/16x16/disconnected.png
+@@ -1,4 +1,4 @@
+ ‰PNG
+ 
+-   IHDR         VÎW   sRGB ®Îé   gAMA  ±üa   	pHYs  Ã  ÃÇo¨d  QIDAT8O•”¿JÃ`Å#:‰J§Vé{ˆ"88ù¢ƒQÁİ± ºøŠoà"î[©“è"(Bâï$ÇÈ—~‰íÃıwîÍ—ä&É,È²l1MÓmì>\w|¯,ùˆwà3Í9ğ¿áü€›–ÅşÑ=<„_ÅˆäÏ,¯¢8rOÔ‡–7a¾¹/
+-ê–×QÏúwÛ ÔÇ–Öãwˆ,ÔÉ&n“Ü©åHÀCÅ«öœRn7ï6ˆo1ó. ù G°ë”rkvåç'‚[½Å¶Ë pä«ÃâÂG$-Õ_ZR€„–­ÜüêÉöà¥–SÚ±Ña¹öcl rºbp²FĞ³U´Nb¦aƒ7QÅÔÃĞêáE¿#Ú§†á.»%zFƒ¼«òÚ“6öÛ<Ñ5Ô¯ _=àà†ËÖÎaù?Á_bÀœÃ)‘$?Äki–ı­ı    IEND®B`‚
+\ No newline at end of file
++   IHDR         óÿa   sRGB ®Îé   gAMA  ±üa   	pHYs  Ã  ÃÇo¨d  IDAT8O•RMkSA=óŞ´ym„Jƒ©ñc£&)ˆè_°ØD7â¢MëB¥XE¤P¿AA4ÄŠQP¤®Åt™.?Ğ"”¨qY]Eö}ÍÌëÌô=ÛJ,öÀ…{ç¼{ß9s‡A€W®]ºîyŞ¤œêSÉ)¾UF)½µjÀ…‰óşHa„vw'ĞauÀ²,PÚÇ±uØÇ]Ê¦¦^0#ìÕğ}Ÿª¦Í=)tumD,fÁ4MÄãHlÂ¶­Û±kG}»÷È³8|æÓU8gà‚‡ÕÚ „€3rùêÅÿöÀ@åeµZfßán±jÛöäz|3Ÿé‘c½¾÷”	9@Z&cgNããg‘ŞÙËÈd2(œ–Ÿ.o*‚R0?ÿCP&epŞúâ†G‡°ß^i«SVcêæÕ¶à,8BÀĞ7/£<×A{{¥RIÆ=üjşÄƒûñ¸ü´Âu]ÃXKëzú/=}fj)æpÖl6ñúí¼ŸıˆOss¨}ùŠÏõoğ<WËÎÛ–Ë@ÈŠ'…Ñ¡RÊ„œH£g­w/#™L"›Ë¢ü¨¬ÏW"ŸDµ:Ú›NOÓ<‚†ÜÔëu¹w?¬€ìAT^Më\ÙÖ
++Nü}øÈ¡ÎÔ–”&VâÎí"úûÈ·ÓµR%„Ù¼`Û¨ÎT9v<ÿ]úìÑ_üJMõ‚ÿfšæÍEÿHaƒ=    IEND®B`‚
 \ No newline at end of file
 diff --git a/dist/qt_themes/qdarkstyle/icons/16x16/lock.png b/dist/qt_themes/qdarkstyle/icons/16x16/lock.png
 index c750a39e855800fe4cde217a1bf28f841030e501..7e63927b2c047718f80ec29512472f1a2d9d357e 100644
@@ -794,24 +1109,41 @@ index 0f1e987d6aa24b1d2f26d40181ec05b62c5862da..11a76b5c1256ade016d4e22cf048656c
 +îô ù|Æ°¸Â´Ş}´°ĞşÈª!}ÃOY-"¢ÁÎÏÕ2ÑMvÚ‡µ§NWQ>Ğ-ÁkÒ(Í†Å¾à!Nêeª°qkÙÕ‚×‡¢L°r`Û°Çú¸×5\:ó”%¼VÂC.ûÛxDõ ÄZJº&ÂB×dà$C=–‰‡8Ñã?Áş;);8®6´|‘Na·šUy Ç!Y ƒµH¨Ø@?r¡yTùltúÄt²ïÎ|$#€æMW/]I
 +ĞÀ46€il ÓØ ¦±Lc˜Æ0`	Pt‡>êîZÇ€F=%À»;ö1¬kœÕÕKN~ñ÷â·ú_å³(·DŒ"=à:Ğ‹ôÜ£Şg¹	•$NÇY.¡Ü ñ#Ş$Ÿ8A€{ubpGÙÂ™ÇéqSšw§x'æñ	ãŠÜ›Õí*ê.M<An]Ï¡<q ƒşÉ_øŠ—xÁ‘OÂYb±Xš#•ú‹ƒ¿¢şÃè    IEND®B`‚
 \ No newline at end of file
-diff --git a/dist/qt_themes/qdarkstyle/icons/48x48/plus.png b/dist/qt_themes/qdarkstyle/icons/48x48/plus.png
-index 16cc8b4f44d52009d4a3f4c9d46f5bb0e20babcf..6af929bf66b9d82cd43aa2db19fb0db05c89b8af 100644
---- a/dist/qt_themes/qdarkstyle/icons/48x48/plus.png
-+++ b/dist/qt_themes/qdarkstyle/icons/48x48/plus.png
-@@ -1,4 +1,4 @@
+diff --git a/dist/qt_themes/qdarkstyle/icons/48x48/list-add.png b/dist/qt_themes/qdarkstyle/icons/48x48/list-add.png
+index 16cc8b4f44d52009d4a3f4c9d46f5bb0e20babcf..8fbe78011661fb22d94921dfe4e4ac7a513c445b 100644
+--- a/dist/qt_themes/qdarkstyle/icons/48x48/list-add.png
++++ b/dist/qt_themes/qdarkstyle/icons/48x48/list-add.png
+@@ -1,4 +1,6 @@
  ‰PNG
  
 -   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  Ä  Ä•+   tEXtSoftware www.inkscape.org›î<   ĞIDAThíÙA‚0…á©ázZ½„†K¸ÃïBF 4J}`Ş—°é¢3/M“Nˆ0³ÍĞİøµ@£î«™Êê¾ŠıL€¾F­TcS€Ùb)m^ï´õ†¿æ j æ j æ j 6	0#fÄE–Š}ºßØK¦d(â9=íUûŞïä}tq^?<‰{Jéòºğw "n?ï¢Üzolp‰+X¼Ä‰Õ@ÍÔ@ÍÔ@ÍÔj
 -×¾V+ÀµpmŸ8úoV³y ãÈ)" Q¢O    IEND®B`‚
 \ No newline at end of file
-+   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  ‡  ‡åñe   tEXtSoftware www.inkscape.org›î<   ¦IDAThíÙQ
-+ƒ0EÑ™n£]’éÂÛxı¨Ğ¢Ta|(÷€ I®ø‘` \’¤AR›¯Á½Í$ú«æÉª%ég¢Ì’¹nƒ‰ 7Üp#À 7Ü¾öó»tÆÛkõ<±¸Å÷ğ÷Í¯¤FËÌGïÁu?¡ˆxFÄtÔBVLñ^K'27Üp#À 7Üp«h÷ç ³ÿb€¿¼ f	»òd¹    IEND®B`‚
++   IHDR   0   0   `Ü	µ   sRGB ®Îé   gAMA  ±üa   PLTEÿÿÿ   UÂÓ~   tRNSÿ å·0J   	pHYs  Ã  ÃÇo¨d   AIDATHKíË1
++  CÑæş—V¡P"**:äMò‹T<¬ó9Q`|r~ú< ô!
++‚r*È)¨¸ ^[!º3
++D    IEND®B`‚
+\ No newline at end of file
+diff --git a/dist/qt_themes/qdarkstyle/icons/48x48/no_avatar.png b/dist/qt_themes/qdarkstyle/icons/48x48/no_avatar.png
+index 43e0dd267598453717004f7399e1713891663857..a7a48d33cabde1803124a13f321adc4bc317a0c6 100644
+--- a/dist/qt_themes/qdarkstyle/icons/48x48/no_avatar.png
++++ b/dist/qt_themes/qdarkstyle/icons/48x48/no_avatar.png
+@@ -1,4 +1,6 @@
+ ‰PNG
+ 
+-   IHDR   0   0   Wù‡   sRGB ®Îé   gAMA  ±üa   	pHYs  Ã  ÃÇo¨d  YIDAThCí˜=HQEW#j„ ˆBˆŠURHĞ.Ú¤)„€…‚ h™Â.Ö‚ÄBÒ˜ Á’Bbaa“4T¢ Š…U$hu×3¾[	ÃÎ<×÷2.ãâûîwÆßer¥¥P(Ôçóù!ò‰üàõO®›äyÇërÄªÉG$O¹ÆÂçWÈ…BUdCEáì%ùN«Â/ˆLÊ--™}¡? Q‹Ä™ñI³ëªò=FÅn â©êÜÃòi¹XCG—êÜÃòyXCG¿êÜÃòoò°†>Õ¹‡ıŸ†=Ü@·êÜÃò	yÜ…—ªs70$	+˜?áR©:÷ ĞjTì`Şïÿ“ù¤†ÙIUù1¹XÁü	©S{X>/kèğ÷~ˆı£FÃäÿsñúKÜ@Nz˜R•?ğhBäŸQJ33\©Æ/È¬­ä0óZãşA&Õ?4Îr©Ğ¸©AjïÆ.œı Ñp@ê9—c,œÙ"UÄ~Ë3Îø{û\ä~É3–Ğo Éw`XÇÃ¹yÆÂ™ÜÚ‘»2šñp&zäX¦±0@êÙ7ŠÅáìñÿˆ‰2KŠ~åoÃÌé'nÿ¤²»œ¥oÉI-~:È8>ÓŠû%ÑCÜ÷d×¬.-ôF}¿’6­,t—Q:HÌªû…=Ë¤Q
+-öĞWMÑ¢©v{‰ıcG:¢ŸõUSçöŸ“)¥ƒùSãn`›¤ÿKÅĞux—^i%ƒfÍ>RK3í”%©edd<r¹k¦7\²É\°Y    IEND®B`‚
+\ No newline at end of file
++   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  b  b_'ĞS   tEXtSoftware www.inkscape.org›î<  xIDAThí˜;kA@Ï0â+*(ì¬|‚!Ú$
++B´°ÁÊR±ó‚¥"Hlô'Šÿ@¢D±0 L!ñ	¾Á'Jr,ö^¹löÆdfïİ÷À63ûíoçµ3Ğ¡C¡Ì‡©+cÀQ`'Ğ[«zL ·ÑÂÏ2ß[
++êIõ•ÿgZ=Qµï?Ô.uxây®¨ËªöG½!_çBÕòCêlB3ê*O¯3V•|_	òuvÇz¤¢Á„Ø<Ñİ(%è¯VÀØÀ”V%ÄæY˜’@™«xWl`JÓ	±yÇ¦$ğ4!¶´gEwuY+¤v%­!„1ÁÑ-Bx	Ü‹oàn¬|2ê`	‹ØÁJä’¸™ ?R©|-õY„ü¤º¶j Ô^õñ"äŸ˜MKuzİì¹3ê5µ§jß¦¨ÛÍ69ê—Ú5¡^T·Wí×¡CRş(ÕM@?ĞW»6€õµ[>Ÿ€·ÀCà0Bx_Æû£PW¨ÇÕ;êŸEL¡3Ò˜zJŞÄˆ/WÏª#¤›ñ¡öÌå­–?¢N•(gJ=Ü
++ñ.õ²ig@eÖl‰Ş¥åå»Õ[mÏ3jj—2ûò7*¯3bÊù©z¾Bù:çæslº¨}À}NJbè!<*ª,l5 W©^2‡áf•Íú×°·%:qô«‡Š*š%pº…2±œ)*œ3Ì¶yï€îV-’_ÀÆÂ·ÆÂ¢ØÏÒ“XìË%°£õ.ÑìÊ%ğ£"±|Ï^`XÓ£EğØBxÛX8§Bo€²cÃßíq›—ßÀ0—ïĞ¡ş+#(q(‰    IEND®B`‚
 \ No newline at end of file
 diff --git a/dist/qt_themes/qdarkstyle/icons/48x48/sd_card.png b/dist/qt_themes/qdarkstyle/icons/48x48/sd_card.png
-index 0291c6542d05a40a350bb5bdbd99a15c01467161..42b9f27738d95d742b4e8380c6450e639630e049 100644
+index 0291c6542d05a40a350bb5bdbd99a15c01467161..87ae5186d95a9aaee49247dea04264aea58a2353 100644
 --- a/dist/qt_themes/qdarkstyle/icons/48x48/sd_card.png
 +++ b/dist/qt_themes/qdarkstyle/icons/48x48/sd_card.png
-@@ -1,7 +1,5 @@
+@@ -1,7 +1,4 @@
  ‰PNG
  
 -   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  Ä  Ä•+   tEXtSoftware www.inkscape.org›î<  !IDAThíš¿kA†ŸÏœBbc¡–‚˜T+ñMgaku}°¬´Tÿ±I%A­RhÒ
@@ -820,351 +1152,13 @@ index 0291c6542d05a40a350bb5bdbd99a15c01467161..42b9f27738d95d742b4e8380c6450e63
 -!W¡İDî*´ç§P*›T 6©@lRØ¤±Ib“
 -Ä&ˆM*›T 6©@lşÛjÔ"œœWY5‹T%÷p¥¬À“šEª’ó*ûmô$°ÂğéÊna8efîSâ0³WÀUàkb!¬—}ù±Hš–t_Ò;5ÿ•MIo$İ‘t´Ìñ7'÷şªu    IEND®B`‚
 \ No newline at end of file
-+   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs   È   Èı×;   tEXtSoftware www.inkscape.org›î<  $IDAThí˜?hÖ@Æç×Ïşuh¡¸ºXÄIÁED—nvpŠ«à$Ä‚“VquV7ÿt’"íà â*¸ˆV>èŞMÁ¥CN8Âİ—\brò[òò¾oç¹Ë]B ’†’îHú!é@Í0’´ZGgHü¤¤7‰Îs éŒOÇ¡Šâ¯€Ëu&!\ô&bG²â_Wœô`×ÆóÀ=o ß¾ÇÀğØqòwE`Ûı—›À’gbµúÄ%mz–ø¬ÓsÜÉŸËİ¿oó·rù/6¿‘Ëo9cİ÷i*ıI Oå²÷´A)Vüs`¥Y9ñpf¾sâ¡`Kš ›ù«6õøfãàºHš³ñ¬3„›‡ì4˜Îåö:•ËŒ?ô,·Y—ú©*z¢7ñCàZåh	¯I§ÉÎàÎZKcj"´‰gù¶ùLö(ÿ¾úb?%HzdãÉÂÊ²fŒÙ×k`¡†˜*ü,jx8I{_œÍ éCËç½Ëù"}eNš½0QÆ@õ×yx÷€¤i`
-+8\hUQ$¡Xö÷À\ §üoÛqtİ@áãÛuë’ö$íJºíkˆş+‘€cözÔWìú
-+ÒHMo 5½ÔôRÓHMo 5½ÔôRÓHMÈÀ¯VU”Ã«)d`›ìïtWğÖWğ0Æ|n £æ4•f¬c>ùŠ K‹~· Bµ    IEND®B`‚
++   IHDR   0   0   Wù‡   sRGB ®Îé   gAMA  ±üa   	pHYs  Ã  ÃÇo¨d  àIDAThCíšÍ+aÇ‡‰(!)”‹¼DÊË‰rÜòÈÉÉU.üşnÎœ”ƒäè*¹;,É[Z’—õùÍ<£i2»Ïîš}fó|êÓóüÙmæ;3ÏÌîÎVe³Y§’©VmÅRj€qÌ Æ8\Áœ”@6~›İÊqî”>Ox…nå8ï(õ³[yÜà½×uyDyÍ—[é s Ç1ƒ>;è/ÛÆ{lTõ<
++)”º_qCÕÕxˆi¬UcK(¬ Ô‘sÂ{^¸P­p(G@:ØÊQzA¿–½}‰·ø& µ…ømãRH€Äm¼  ¼ñËX‡=èŸ*FĞ	0„á=‚r¾¦1xå);:Æ0Q§MB'q#Ø©ÅvÆ6œBa¥Ä”Ó]8ˆİØ‡òŞ	Ôã·kkÈ3ƒşò3ˆ‰Xî‰âßèUm‹ÒÅØDùPvM2`ŠRN¡z¬ñºæ°“Ø4@çK}?ÎxİqÀëÆÊ*®yİÂw6M÷°Ø;±°€á_R˜ìUÈ46€il ÓØ ¦±Lc˜Æ0`š@ÿ‘çß“wİ:NUk‚¼ëÖ	pŒ»^·¬á×FwÌá:Ÿ²ÇÅ+ná,~Ê@.ì¿UÌâ8ßŠÇMÌdø:Ì    IEND®B`‚
 \ No newline at end of file
 diff --git a/dist/qt_themes/qdarkstyle/icons/48x48/star.png b/dist/qt_themes/qdarkstyle/icons/48x48/star.png
 index 90d423a1d4c1e05ccec0a01fa34abca9fe99676d..546779e2a810e73169f65a79850aa07dffd70267 100644
 --- a/dist/qt_themes/qdarkstyle/icons/48x48/star.png
 +++ b/dist/qt_themes/qdarkstyle/icons/48x48/star.png
-@@ -1,4 +1,8 @@
- ‰PNG
- 
--   IHDR   0   0   Wù‡   bKGD ÿ ÿ ÿ ½§“  ŠIDAThí™=hA†ß1†‹r(Î…øÓ(ˆÂùS¥ò+­¬"be›&VÚˆbo§¨•VV*jZ!1ç"sQ“Çâöp¸ÜííLf²"÷ÀÇŞ÷}ï;3»3+uéÒ%@(ç­Ã ø\ı±ê¬Š•XÒˆ¤br]X'<@¨ğ—*Ğ—·®Ì XÊù¼uexÛÂÀ{Àä­­#ÀÉâœÈ[_G€ç)å­/`?°˜b`8²fè×èuIiëÜHº¸f€-À\Êè7¨¥PuCÎÀIYŞõıkĞG}³ÊÊ4°&DíÕ‚û%m“´CRIÒ°¤­)6Kº¼”T•4)é‹1æ««–%0$i»¤Á&‘ƒ’’{±5IS’*’>Ë2—ü2Æ|jŒ9,ƒ¼¸ikn~ˆ?HZ8¢1˜L½œ~ä=Ì-øŒd²frlSÎ9Í°˜ÈY8À7`ØI¼eb x—£ø
--pĞK¼ebğ*ñãÀÎe‰·L€G+(ş5°)ˆxËDpoÄ?ÖßdäFDñ¯ã«‰ÛÄßÇ£gö=N=ãÒ˜7Æàäkà¨g\G|‚œ§(Jš•ÔãS0…_’Öcæ\‚|f ¬ğâ%©WÒ!× ^S+w×@`â -fª’.Jº$i:cÌ.B!l€³6¤ŸÀ`WF©Ÿë;q:¦N=ó`wJüŞä?iŒÆ4ğ¢MÑqà”CãÀÇ6¹Æo¨wG63À5Ày_ z“ØÙ9ÃGH¦¿Á<pk/#o	x ,Xù‡Bhn.´xC½±Ù!ÿaêß1ßD]ºügüöÃšÊéÄ¯    IEND®B`‚
-\ No newline at end of file
-+   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  ‡  ‡åñe   tEXtSoftware www.inkscape.org›î<  œIDAThí™[ˆMQÇ¿edq›Äƒ”0n/„†0&OHÉP¼!O\J))å”’B$—D$yà	åArkÆ-If8“q©ùy8k7Û·×Şûœ³×vJó¯ı°ÖúÖÿÿÿÖY{íµÖéCuaò"f‰ÈbADîcå¥å@p‚(ıªí/Àv‡ù Ûªí/€Úhr›¶™4*Ã]ö	£Ñ§¦ï9¹Z•¯‰ÈuU·Ê³¦? /Õh· kUİëjût˜©ŒvuÀà»j›áK×çÒÓç¦1¦`Œé‘[)±ÕğTò†PÛFÕö¬š^# ¦)ƒ¿€¡öáÀO3Õ‡¶¯)¤§ÄmcLGP0ÆtŠÈ”>¡¿«,"M"2®Dõª|ÉsQD–„Ê­À§ùÛEä1¦;5X¼£rüF9xGÙ¶JñX˜f~ğ-ƒÀÉşS¹¿£“Ø›Qà.P—À?¸—QcO˜S¿“Uù¹ˆÜÍ¸_Dä¾ˆ\5ÆdŒù4‹Èr™'"#Kàn‘†½ ªl{€#@m	B^ÔZíåé@R§Ü/Úc`Ê?4?Åjjü&¥u^g5º€ÍÿÀüf¢[ğÀüÚRIæ /$ 	}e=
-+œ‹Ñlæ—KXœ!lx4?‡èV<À…Ll
-+âßÀæ·à~ï
-+À¦¬üHğĞ!Ò,Igˆå]Ft•Áj5¤3”'Vvê½~9œ·r˜<—m¢GÄ7¸ô«´U&„J¶ÓTùCŞ§p§¢’Ö¨rÅSÈÑ7ß£&èÄ\øô¬[”à«„Øz`©}êâ^)Î–|ÜÅÎ+±C˜`;
-+Àn ÆHqÏËü@¢‡F3–â™ €ñªÏ\S å‘ÀJ%ô–ĞE-°øœ`>@'¡å’â…p»ŠY‘Gg”ÈQ[?8cö£}\8Œ4pTµñm~ Ğ¡Dš€éÀ“ƒ7€Ñö¹óÄr4©ú ìoBRz¹ûl%º¤BñkO/cëôå–c+Ñ_ÊÛı© ‹yÜõÈs`vÏlã‚ælö™@=ğ#F8ÀiJøQ<gœNáêJ9ğ—•Äş±¯@k|­¶¯û¼š·‚ØEq„âÖ÷20!çà
-+½[ôN`'yşô&Ã<r³É8ïjûĞ‡>üÇø€üÀ¸Š6Õ    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/qdarkstyle_midnight_blue/icons/16x16/lock.png b/dist/qt_themes/qdarkstyle_midnight_blue/icons/16x16/lock.png
-index c750a39e855800fe4cde217a1bf28f841030e501..7e63927b2c047718f80ec29512472f1a2d9d357e 100644
---- a/dist/qt_themes/qdarkstyle_midnight_blue/icons/16x16/lock.png
-+++ b/dist/qt_themes/qdarkstyle_midnight_blue/icons/16x16/lock.png
-@@ -1,3 +1,5 @@
- ‰PNG
- 
--   IHDR         óÿa   bKGD ÿ ÿ ÿ ½§“   	pHYs     šœ   tIMEâ	-êœIj   ½IDAT8Ë’Ñ‚0DW†RHRv@h”@¶@Út Vğü	c8İŸ$·—Íæ¤ 5pç‹PÈ 	.Áşµ)8ßPõÖ×º-*Õ Ó9Kh”~"Ü0¹”¤<!ğt•ÔG¸Î×¤q±x‘tçùå’ßğœgàôŠÌĞô–t\Øİø¾}À/ìıäÕ1Òò'©Hå“Ã:Ãõ—@½ğ"ÈÖ8#Ğ| ]bíû=Ú    IEND®B`‚
-\ No newline at end of file
-+   IHDR         óÿa   sRGB ®Îé   gAMA  ±üa   	pHYs  Ã  ÃÇo¨d   ìIDAT8O•’1
-+Â0†ñ®BÅÙ©Bğ Ã©[ ¸{
-+7÷®UÜ]»¨Küÿæ·XLª~ğ‘÷^^mˆ	áœKá¾`œj»4&°‚\IÆ¬%j‹ƒ¦\Í#•X©–«ÔĞÓúÎÖÚ«OQ\@îµÀ‡[°Æ½0ø¼Şá7Ø“é˜±Z9à†åu!ÎÎñ[CŸŠz¶s¥QØÃF¥Á;h@ß˜*€ƒ|8'ª8H×Ì`_2Ò5`·’qè Ür×²RùƒÎKü\T	¥Ô±ÖCš`YÂøsõğIïñ[gcŒy\íÚÛ›±¦\    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/qdarkstyle_midnight_blue/icons/256x256/plus_folder.png b/dist/qt_themes/qdarkstyle_midnight_blue/icons/256x256/plus_folder.png
-index 303f9a321890fc4c2054e2cff498adf23f654b70..002101114d150e304765a3466be9bf267ae96382 100644
---- a/dist/qt_themes/qdarkstyle_midnight_blue/icons/256x256/plus_folder.png
-+++ b/dist/qt_themes/qdarkstyle_midnight_blue/icons/256x256/plus_folder.png
-@@ -1,17 +1,47 @@
- ‰PNG
- 
--   IHDR         \r¨f   sBIT|dˆ   	pHYs    ùĞP9   tEXtSoftware www.inkscape.org›î<  ëIDATxœíİ¬İõ]ÇñçûP ¥å÷*lƒ±	k™CEµH˜À¨¢3cÈ~˜e’!XL5nKÆĞ÷ƒÌM%ò#0Ût ØlÈÄ°ŒZL[`F	?ÛÒ}ûÇ9].åş8÷öû=Ÿs¾Ÿç#¹¡¹÷ôóyqo?¯ûı~Ï÷H’$I’$I’$I’$I’$I’$I’$I’$I’$I*(F1Ifî 
--,–ŒbîıØ
--lv FÄ–²‘¤ùi¥ 2óxàT`p"ğãÀ¢6æ3ßÖÿ	üpwD¼T6’4³Æ
-- 3.|¼©©q'Üà_€k»""ç‘^a¯ 3WWg41^‡= |øBD¼X:Œ{±`3óg€O?ß\œ*<
--üğn¨´y@füğ;@¯ñDõ¸ø`D¬+DõšWdæ)ÀuÀÑíÄ©ÎÀG"âªÒAT§¡ 3ø,“ÿöİ8ºøpD¼\:ˆê2Tdæ•À_ûz-È­ÀoFÄöÒAT9tf~„şâWûşxgDì,Du˜µ 2ó÷OŒ(‹ún~Íˆ4
--3@fÜ ì3º8ø›ˆøPéê¾i 3ßÜ,mMñŞˆø\éê¶W@f.Ö?;ú8šbpRDü_é ê®éNä¹ÿ8X|&3}çE­yÅ?®Ì<XGÿ²]‡"âK¥C¨›öÜø(.şqóg™¹oéê¦@f¾¸¸`MïÀûJ‡P7Mİ¸ßòWWd¦?5. 2sğ8°´lÍâW"âöÒ!Ô-»· ÎÁÅ?îŞ]:€ºgw¼«h
--cMfî_:„º¥78ñç´ÒA4§ex÷%5¬ü4p`é ÊêÒÔ-=ü­2IüY©Q=àøÒ!4´JP·ô€•¥Chh¯¼e+5¢‡7øœ$?/5¨T:„æåàÒÔ=|`ÒøóRc"3}:ÍdÙ <W:„·cğñ,ğ<ıGÉ­¾›ÚšÔÆß÷€o _niò®Ñ€4Y¥ÿt®«#â;{;˜ M¦nş<"Ö.t@š|_¦ÿ ÙGçû}º¯4ùÎş'3×Ì÷/Z R7,nÌÌOÍç²qw¤î¹83"œë…nHİs2ğõÌ<r®º u×à"bóL/p@ê®ã€2sÆg}X R·½¸v¦/Z R÷ıFf^2İ< Õağ±qê'İê°øÛ=?iHõ8=3Ïú	w¤º¬£¿+°Üjsık @ªÑ¥»ÿPb`°™şQII}K€#Í/å]À±ñĞ¢Lpı“nˆh^ibÓy°¸x[KSõ€?%ÛõTf^”™îjHó™½Ì¼83Ÿnim~ÚİX¼3"6´4¾Ôy™¹¸XÑğĞ/ËÛ*€GS"âû-Œ-U%3î^ÛğĞ¿ÚÖ¦ùy.~©ñpACÿdpkDÜÕÂ¸Rµ"âàö†‡]ÙF\ÓÂ˜’š_[+š>°X/48¦$ 3OKò{MoltñKí<lãœ/ŞMÀã'é•~ĞàX€¿ı¥v5ö`P`‘gèI³ ¤ŠY RÅ, ©b€T1@ª˜ UÌ*fHÕ=5B™¹°
--xı;ÉŞà/ OĞ¿ñËZà¶ˆx°Áñ5"@‡dæ>À%ÀÀë[îøÁÏïO7ˆï¶<¯ä.@Gdæ2à&à“´¿ø÷ôïdû­Ì\3â¹µ,€Èşí¤odÊ_
--Y
--\Ÿ™gÎ¡!Y İp9pzéû ŸÏÌƒKÑÜ,€	7XhW–Î±‡åÀe¥ChnÀä;8¬tˆi¼?3£tÍÎ˜|§•0ƒ×+K‡Ğì,€ÉwBé ³çlÂè‚å¥ÌâÇJĞì,€Éw@é ³XV:€fgH³ ¤ŠY RÅ, ©b€T1@ª˜ UÌ*fH³ ¤ŠY RÅ, ©b€T1@ª˜ UÌ*fH³ ¤ŠY RÅ, ©b€T1@ª˜ UÌ*fH³ ¤ŠY RÅ, ©b‹J˜d™¹?ppp$°¤@ŒÅæÖêÌÜ§À¼O>îˆ‡
--Ì?1,€ÈÌ·—g KÇgg>ŠÉÌ€Ï×DÄ–’YÆ‘» ó™ûgæµÀZà\\ü“`%ğÀÆÌ\U:Ì¸± †”™û_ŞS:‹ä5À×2óìÒAÆ‰0¼«€SK‡Ğ^Ùøbf®,d\X CÈÌ“–Î¡F|¼tˆqaç J‡PcÎÊÌ¥CŒ`™ÙÎ*C
--ÀcX Ã88¼t5îçJÀÜ,@­xmé ãÀ˜Û¡¥¨‡•0,€¹ù=ê&®øMªfH³ ¤ŠY RÅ, ©b€T1@ª˜ UÌ*fH³ ¤ŠY RÅ, ©b€T1@ª˜ UÌ*fH³ æ¶³t µbGé ãÀ˜Û¥¨›KÀÜ^.BÛP:À8° æOw—Î¡ÆİV:À8° †óÅÒÔ¨Ç€;J‡Àp><Z:„ó×áÁ],€¡ş±¬Á#Ç]p3ğéÒ!Æ…0¤ˆøoà|`[é,Z°¯ï‰ˆ]¥ƒŒ`"â&úO•ıjé,š—§+€³"â¹ÒaÆÉ¢Ò&MD¬Ş‘™'ç «€£€C
--E:„şóîÇÑÊœHõıó7î§_Ö×GÄ–9Æ°@qpOé™ùãû¤Û?Œˆ—¡™¹ UÌ*fH³ ¤ŠY RÅ, ©b€T1@ª˜ UÌ*fH³ ¤ŠY RÅ, ©b€T1@ª˜ UÌ*fH³ ¤ŠY RÅ, ©b€T1@ª˜ UÌ*fH³ ¤ŠY “oœŸuÿré š0ù*`O– ÙY “ïñÒfñƒÒ4;`òİQ:Àvß,B³³ &ß-¥Ìàñ|éš0á"â^àË¥sì!?*Bs³ ºáJ`[éS\ß.Bs³ : "ş¸x±tà[À‡J‡Ğp,€ˆˆ€SG
--EHàïÕ±£PÍ“Ğ!±Xüp/ıEÙ¶gNŠˆDÄÎÌ©†,*@Í,À«€«2óàà ¦z‘şâ¿?"<ãoBY ›Í¥sh|¹ UÌ*fH³ ¤ŠY RÅ, ©b€T±Í-f¡HíjreØŞà€ËKÒ«ÑàXÏ÷hö2Ò748–¤Wkrmí[ğu™ùÖÇ“4™'G68äs=`Sƒœ×ğx’úš^[›zÀú†½,3jxL©j™ùàÒ†‡]ßF,®ÎLß0XK× ‹z=™yB¶ã™–ª’™‘™Ÿli®Ü=Ác-Mp]f¶q3
--©ó2óàÌ¼¾¥µù@/"øZKÿï6dæ%™ùš–æ:%3—gæ‡À¹-Ms;@&<øzKí¶‹ş}êf¼Ÿg7É’ş÷÷`ı»mˆZ™,ó`úû¥oV¶1W%ŞüíŸU»:"îÜ] =à!àè–'•TŞƒÀ±Ñ?R»èßÒYR÷}f°ëÏÒÖ=R*•¤Ö=[aÊ~FDlş®T*I#qõîÅS¶  2ó à~ú"$uË&à­SŸÜôŠ#±¸lÔ©$ÄïîùØ¶W½Õ7×,’¤QøRDÜ¾ç'§=U73—ÿœĞv*I­»8eºç6N{²AD<œlîë’&ÆsÀ»gzhëŒgEÄ}ÀÙ€O{•&ÓvàŒˆøîL/˜õtÃˆøàbà¥†ƒIj×‹ÀoGÄİ³½h¨Ëu3ó—ñ$!i<	œßœë…C]pw§Ñ¿^@ÒøÚœ>Ìâ‡y\q÷oşyÁ$µëÇï†2¯K§|€şf†¤ò Ş\óºÍÿ‚oÙ•™‡¼Ø¡ãHZ°ô¯ßùãˆxf!ìõ=û²à+€÷K÷v<IsÚFÿòıEÄc{3Pc7íÌÌeÀ¯¿ìÛÔØ’x	øwàÀõƒ“õöZ+wí”Á/«€· Ç>–´1ŸÔ1ÛéÍßHÿ¶ıww5µè§ém»3s1p(4À33¶+I’$I’$I’$I’$IÓú™›ÙÌßN>3    IEND®B`‚
-\ No newline at end of file
-+   IHDR         \r¨f   sRGB ®Îé   gAMA  ±üa   	pHYs  ¼<  ¼<Á¿Š-  ğIDATx^íİyeÆq†¥„PC0¹J@îÂ¥¢"%*‰àKQ(ÎTòHÉ!D(-)KTY r(p¥DğH¹QQ@¹X€ãóôûn²ÉÙé™î™}ßï§êÉÛİ»;»éé÷7o÷ôt¯                                      :¨ÛÚ5›ÍÕì¨LV&)•M”u”u•õ•®ı}£Ô»ÊËÊcÊï•ë”EF£© ¶¦ÿ~5ŸQöSöU¦*tğê=¤œ¥"° Ì+TŞÕñwWs¤r¨²—¡+~£¡Bğb˜** êôcÔ|E9MÙÎËĞş¦ "ğD˜Eî:Z Ôñıx3•YŠ÷éÑ{ş¥ì£"ğx˜EÎ:V ÔùıJ©²G± ½Œ"€Âš±-Í÷”ó5ù€Bç>ªÜ®çm«0‹\µ5Ğ´¥šùÊ.ÅŒ6Œ2Wz Îïƒ|Qèü£#Ì•* Ú`¾£Æ¯üã‹Í(k© h#i(s4y±ÒöñôŠ@¦Z: Äß¯şHÇ23âWquşÙjèüic$™ ´A­æ²0‡0ÈÄj€:¿òß¥¬U,@.(¶ ¨óûÃ;R¶( 7Äy@ßÅá
-+…ÎŸ/	$n¸ƒ€G(Ÿ“ÈE aƒîèÉö	>+› v’4Ôà…Îş	$hÀ@Oğ5(c‹ÀÊ	$d°À)
-+Ca$•F zRıäº²ûÀp	$`ÕÀ±
-+#ÁH ËG z"}!Ï*üC+	Œbı€¯ÙïKGwÓŠohá[¼åÒáŠ_…{‹Àn@24oÏÿU^QWQÑ|VmWõ/ Wª9,ÌÕêmåjåÇÊb­6¢ˆCïÛ•^)hİ«Ê£Š_ôü\Ş¡í¿Öû6@“øÕ·îw,R¾¡ÿ´ßvD‹(ÉyOñeöü‚x•úÅÓ^X¥¾°ƒ_Õ·Nç*³ôŸôıìPE Yîÿ:õ‡ë{À÷ê«Ólı‡N£ó·OëĞßöQ¼tø üÊ5ÊúÃ/ë¨¾°wlëğsm´gÇit E yWæ)ªì_,é¾]€'Õ|ÌÓóÛŒSµÁ¾fÑIìdÃwz>Qı¨íckj£Y[m]Ÿù÷>?¿"Œ²1]Yª¾û¥0[w¶mÕüçUaU¡dc=å—*—(¥ÏŞuÇ÷§ÿê°@ç;q¢dåe‘ŠÀFa¶5. uİİÇoi &¬øÂ½w«ø^-q&+÷`lQŠ@V&*÷¨øƒ«³ ü;¶¨Q,{*/ e›)·´2pğ» •Ó†øFœDÍ´îİù}R	#ô¹üv¤Ç\ – ébw +“”ëUVûî€ 2Áî@V|`ğ¼094
-+@fâî€Gô«QÀ!qzP€qL +—«ø¸À ( ™bw ë+ç‡É( cw 34
-+ğ%ÿ  dİl\ "0àz ôíx$àk#MS”CÃä
-+ bØKñµ!¦Ó5
-+Xé¼
-+ –‹»;+İ¾<<ª±rp˜( X‰ŠÀ‹Êg59Cy¨Xˆ”Û ƒRğe§üÉ2¸HY¬øÒñ\ÈutÛ_»+îş¥™9Jåâ¯²£Í¿¡l¨ì¤øì¼[•w•n91şiŒ €ªi4ÕT^Pş \¬øÊ¾“_"¯/¾¦` tŠÀcŠïïx ò\±°>;hPÜŒ t‘ŠÀÍjvSê|ûÕ'Mó è2w~ŸYçH ¸ è±©ÔuL`'ÿC zDÜ˜æ*ç«Q €3G©äNÀ«X¿ÙlnL zˆFªYæ*7‰ ô_Ç¶jQ €ŞãÓ®ë0 ô4»€5›Í±ÊDe×O_F÷-‹mÕÆQ 2¡¾®òMåVÍ¾¦<¢x¨éxú5-~ÏºšG—4ê»‹öX
-+@âÔ™ıjÿ]M>¥\ªì§v;8/ó×ü=Oùgü³şÒEH˜:°¯‡rR|øc„ü½ş™;âc Q€D©ãn®æ.ebA9şÙÅz¬	a©¡ $Hv¼ŸVÚ‰ëBrc|L$†¦¹Š/8Ñ)~,?&CHŒ^©=lŸæ:jf|l$„Ó••®ıŞ!~ÌÓÂ$RAHˆ^¡7V3è=à:ä@ıMâ4@H‹¯/WåsêÇ®²À f€´ìÛ*Õñ;P
-+@Z¶ˆm•ü¶ AHKçğ‹-@HKÏ'ÛLBx2ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ €ŒQ :¬Ùl6”iÊ…Ê½ÊóÊ;Jåôë§…¿¢Rş¿ÕÁëÌëÎëĞëÒ¿·ŠÛgĞAÚ@§«YªÜ®¯ì¦l¨ŒQĞ¯3¯;¯C¯K¯Ó¥q£C(  òCÊMšœ¯L)¢
-+^·ó½®½ÎÃ"´ƒĞ&mˆ¾#ï}ŠïÍzx]ß×=Ú@hC|Z¨L( N^ç	´‡Ğ_(tşîñº÷s€’( %é•Ç£öwßñ¹@	€´Áùí¨Ùa=à,='lË%°ÒÊÙ[™&Ñ&){…I´‚PÎÁ±Eïà9)PÎ®±EïØ%¶h œ­b‹Ş±ulÑ
-+@9ëÅ½ƒç¤
-+@9oÅ½ãÍØ¢€rş[ôçb‹P ÊY[ô“( åü.¶è·Ä-  ”sÂq€ŞáçâÚ0‰VP Jh4>0/Ì¡Ì‹Ï	ZD(ïå•0‰.zUás%Q JŠ¯8G‡9tÑ1z.‰Óh Úğ¨áÕ§{fë9àz m  ´IàÙjNPŞ) ^×'Äu6P :@â…j|Iî‹¨’×ñ´¸ÎÑ&
-+@‡hƒ¼GÍöÊe‘ò®‚Îğºô:õºİ>®kt€ob1Gí™a¶:zÒ²º©ƒÖ«/V¹£2QñUÆ)Uûª²y˜¬ÌSÊÕa²R¯)Ë”G•´ù¼è…¹Ğöã½Tí,
-+@Bô\úæUßè=•ûÄiT¤®À. 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+ 1
-+@ZŞŒm•Şˆ-@HËK±­ÒË±E( iYÛ*qä„P ÒrWl«twl‘ 
-+@ZîU“•ğcûw €„4ßGn˜«ÄÜø;
-+@z.Q“åWÿ*‹º€½B¿¦æëÊ{Å‚Îğc}Mıj˜E*( 	RG½IÍ¬0×³âc"1€D©Ã£æt¥‘€öôøXH a±ã¤”9&àŸ9ˆÎŸ6
-+@ââĞ}²r†2’·ı=şŞÉñg‘°F³Ù<Síœ0[mL8‰.Ñs=FÍîÊÊTeCÅ^PşªøD¢{õTñV_—é¹jÆÉ*Íq8Eç†ùJ}@$VC}r5¯‡¹Jì]€ºŞÚÙ$¶ †WW_yİ JcÛÆÀğ¶‹mÕ^uX¦+·_l¯®¾²ÌàÉ0]¹Cµo³Vœ0ˆØG¾æ*÷¤ÀãJG}½_33LÂQÊÆa²RîóOoÍ©ê<¡f‚§+æ“K¦4Âùê úQ?¯æ!e³bAµW?ÜÚ# ó{Àuøˆri˜°ŠŸ(ut~+ú|_XÛ:ÌT¥óÉG "õ‰ï©™æj±¢Ïë—ï¨ÔíŠÏL²¥>0V¹È¢fŸˆBñGŒQ^*×ëNeJü3€¬hÛßF¹Ç¡fÏ+Åè¿ø'û}£§kæsÒ—è™§ìÕ÷G©ò6®ì­\©Ù?+şlFİnPŸ/>&¾ü:úƒ>¥ææ0×5¾®ı}ÊcŠOQæİ¤`\ÌDegåƒJ7í§°Ğı€_}ŸR|¤@šüVüqÔ¿âz qHàa	€t]Ñ×ùm¥Ïèk°©Ÿ¼v± @JŞR&¨ <fW¹"¾à«Á\æ $æ§ı;¿¸JF>%øel± @
-+ŞV¶VøG˜¼í¦oğ.Àea@".^µóÛ€€iPç‡ TË»öşŞ€kzâ¾ÑïÁŸæ ŒrÇÖùmĞ€ià¯ıJùB± Àht­:ÿ!qz€!€©l æÊ–Å £‰OìÛ^ÀgØjĞ]€>úÁ—Õø#Šÿ+ -|ÔÆpß†- ¦ğ¹ùßRê¸Q€ö¹¯únÎ‹ÃìĞV[ Lt¹ß.
-+@ï;U}vD'ô{`UÍfó"5Ç…9 =èuşãôjhĞG|¼šSÃ€ó}å¤092- úh$pŒš*- •ğ>ÿIz¾ Ì\©`*_Tó3e½b€nğ;uG©ó_f[Sº ˜ŠÀæj(» Ôé~eº:é»{µ5„×/ö‰Ó”ó¿ï zîk¾¥ÿít~kkĞŸF¾ŞÙ\å€b€*Ü©|[ÿÁ0ÛÄÓô¨šO+‡){€YªÌP¦uªó[ÇF ıi4àÂò9e¶òI/PÊå|åJuüßÄ·’ĞŸŠÁjT\½>ìe †å#û7(>›ï6uüÊNÃ¯¼ ôQ!xŸØ_ÙWÙV©í÷=ÌÜ¯ô·)·ºU§¯åx]ë€*©ñîÁdÅ')¾/ú:Š¯Häó8Ñ)ğ%÷}A¾›İ<§ø˜™¯½éãe÷«Ã¿                                       Œbk¬ñ*IfÚe”’    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/bad_folder.png b/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/bad_folder.png
-index 4a9709623476fcf4070c4e3da2bb17375222082e..245f96c7ba65c9a792abc01a1b76c39accd3ee5e 100644
---- a/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/bad_folder.png
-+++ b/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/bad_folder.png
-@@ -1,8 +1,7 @@
- ‰PNG
- 
--   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  £  £dÜ_‰   tEXtSoftware www.inkscape.org›î<  ÇIDAThí™[he†Ÿwvµi¢¶6ZCTTŠŞÔCcÀd#!	A›0^(E<!RĞâ/¤%-¢‚µZAz#*êµÖx0JH/#”ˆxîEën¶‚4ÚæĞİÏ‹İÙ¬c’=f‡Â>°°ßÿÿß»ïËìü3Ì@:¡üÂÌÂÀ@3°±@o
--˜¦%Í­½0³GÍ,n¥³df‡Í¬1Hó£e÷ó™5a¾·
--æ=àXœ³ÿ• ³ŠzMÀíUÔ+ˆÌÌÅ·UÈ¯dv§j³ ü||,)	™ ¶?¶Şœ †$¼X@æHïX-Àà\â2`«oìe|»HÒÌúƒpWfvOÖ£ÇŒ?ÀDĞ&af_çù]p|óâª4Îæ}oğ¸è¨šz€ ©šz€ 	m À†‡C±¥ÄvHÏ_ûÙñŸJéühv1ş©ãºß9®~ŒE#¯•Òx€Ä`çc^-x)í¸«Øş@œjo6sF}ÃrqØğp¨@„’FÀšW˜º#¾{¢ÀœŞÙqØÓ«ÍËôjl°ûªB:9Î! ó71ë1£ÍŒ6IOf—lÉ}+´ÎçˆFvİ^J¹'ZÇ¦¦[Ç¦¦İ´~Î-4íG»Ú}í¯ I¯¨y€¿úú6Éx½ÈåfïØÈ²OI? o-/¨1K‹û€kŠnm³ßFñîş€HÜ×µx¦ŒÖƒ'ïïŞì’ş^„0ëÚÊ»}Ùº!•ÚŸ? é`¢fÑÎ®rû»ÑÈ­¾á=5¹™‹îh4“ÿŠ›#vDæ„{Ó*Ï:C.öĞëHš©Íİ¨mÜÜ°ê¼”Ûï×~P«X´óáÖÏ”1³4ËçÂ˜¤hEf}$îíØæ†œï†ÕÖ˜ô®ºÙkHÒ…Æ[ZÆÇÏCÆø™¼Év3ÛRãéó.k˜H_H½ß:6u´ulê¨™¼Ş.YñŠ00<”­¯¦ÍìK ]†ßIq¯ˆE#C‚¾2tÖF¶gvçİ´|19F€K³Ó7—!;+é©\ÑßßdÌ®ØìÊ„ÍI¿	ô
--ÀÌvïáİ\•ÇÛ’r©ø@ç^¤Å4
--ÎÚòù./¦Ï¤!@Ò‡@0Næ|9ü’!­u"ş×l®Ì~Š2 ³ƒ¹mTÒ$0™}MÚR¬Hæ´Àâ™GõW”¡S
--sÿ»Hš~¯TÙq4N»$]W©ÖJNÉxş_1î{^G    IEND®B`‚
-\ No newline at end of file
-+   IHDR   0   0   Wù‡   sRGB ®Îé   gAMA  ±üa   	pHYs  "r  "rÒm!  ºIDAThCí™[HaÇgÖõ†˜´E¨O†‚PYA‘éº²•^V
-+Q³ ºøR$Foù%Eİ^“^ëQëÉ¢ëC=™Qi±»¥A‘Ùnë|ıÏÌY÷¢Â:óm®°?ø{Îùö›ùÎ™ùæ›‹Jš4i–6*Û„™0» 7TeAfx]VUuÊÿH~'4Éâ”Ç»O.è ¢Q%“ü"0ÀF(@£%‰äßÑ‡I.É);]	ÅOI¨¢zA`›<ˆ’•EúõC[x˜hÜÅÓË?›ÛË."Œ]‡f¬rn#lM¥s¦z¨7Èƒ–ıãĞM¡ß¨ R<‚­i’XÑí'GE%­°·(ˆ¢	ÜfßØ6ÌIh“Ş°pèFZ-×£oã Š‡ŠJ-4oõÌb)›kú¤8Òã0WŒ(†äğyw•Ã×èêò69OÏÍVùÆ6š|éLÔW.³gÚŸ	Uàˆ©WÉ§6şY:ÒÚ3{0kË8¢,‘yšéH-À»Ç]‚¸›Ã°`Ÿò×W—r(¹g êÃßèèuªf[ŸîYZFÆYXéH+Àçqn…i7"e´hàéëÂ»^Ág4‰6Su•áËCJ¸m«Š¦^„~Ã‹¾“‡}USm—ô¾‘R€ßS³O&NçG(•şFWø,IÁrİî<#ã0LôQ9âBÑúh-c¹€œ¼P7n•%†)÷5ÔVø›]t—Múææ‡èÙH
-+–
-+ğí­^…=ÌµÆç	›6¬iâ%ùFS!”¯îB-aím½˜-„üiÛôö-aº ¯Ç¹îQgÕ†%®q8¢“öÁiÌŸa»€¿v#ˆÉ>é.|Ü…"Şss<ØV=Ï¾i,L!QÏÎ,°ì¬öz\‡¼M5‡Ñ/ş ”öLc¾ UùÉŞ\Øq¥öÃŞĞıy@¡?Ø5é08½\[ùî9¥õû¦±ôNü½®®àOn TÑŒ/	cSEÎTöÇĞPÂg`¾<é‡z¹Œ£;¤”“‘Z-4…&Œ.1T°M%6°fœ*[ıÕë‰ğê€è“È¢B9@ )(ÊÙ¡Ï]8ƒ0ôj)1€ë´9\ =t=‡ıˆ'H ÚŒFôeÎ0L'¢8Å¡PòFÎD4
-+¥*ôun;§«3kıFút½¢ÅÙòÉ"}îC÷pä—Â,I“&Mb(Ê?µR{"!    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/chip.png b/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/chip.png
-index 973fabd052e389c28ef36c482cf44d764795a3b4..db0cadac1338a971b7b890c33f5920580c1013a5 100644
---- a/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/chip.png
-+++ b/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/chip.png
-@@ -1,165 +1,5 @@
- ‰PNG
- 
--   IHDR   0   0   Wù‡   	pHYs  Ä  Ä•+  8$iTXtXML:com.adobe.xmp     <?xpacket begin="ï»¿" id="W5M0MpCehiHzreSzNTczkc9d"?>
--<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Adobe XMP Core 5.6-c138 79.159824, 2016/09/14-01:09:01        ">
--   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
--      <rdf:Description rdf:about=""
--            xmlns:xmp="http://ns.adobe.com/xap/1.0/"
--            xmlns:dc="http://purl.org/dc/elements/1.1/"
--            xmlns:photoshop="http://ns.adobe.com/photoshop/1.0/"
--            xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/"
--            xmlns:stEvt="http://ns.adobe.com/xap/1.0/sType/ResourceEvent#"
--            xmlns:tiff="http://ns.adobe.com/tiff/1.0/"
--            xmlns:exif="http://ns.adobe.com/exif/1.0/">
--         <xmp:CreatorTool>Adobe Photoshop CC 2017 (Windows)</xmp:CreatorTool>
--         <xmp:CreateDate>2018-07-25T21:37:27+08:00</xmp:CreateDate>
--         <xmp:ModifyDate>2018-07-25T21:38:09+08:00</xmp:ModifyDate>
--         <xmp:MetadataDate>2018-07-25T21:38:09+08:00</xmp:MetadataDate>
--         <dc:format>image/png</dc:format>
--         <photoshop:ColorMode>3</photoshop:ColorMode>
--         <xmpMM:InstanceID>xmp.iid:d24b6914-04d7-6e40-94e6-a3f5f4d24f35</xmpMM:InstanceID>
--         <xmpMM:DocumentID>xmp.did:d24b6914-04d7-6e40-94e6-a3f5f4d24f35</xmpMM:DocumentID>
--         <xmpMM:OriginalDocumentID>xmp.did:d24b6914-04d7-6e40-94e6-a3f5f4d24f35</xmpMM:OriginalDocumentID>
--         <xmpMM:History>
--            <rdf:Seq>
--               <rdf:li rdf:parseType="Resource">
--                  <stEvt:action>created</stEvt:action>
--                  <stEvt:instanceID>xmp.iid:d24b6914-04d7-6e40-94e6-a3f5f4d24f35</stEvt:instanceID>
--                  <stEvt:when>2018-07-25T21:37:27+08:00</stEvt:when>
--                  <stEvt:softwareAgent>Adobe Photoshop CC 2017 (Windows)</stEvt:softwareAgent>
--               </rdf:li>
--            </rdf:Seq>
--         </xmpMM:History>
--         <tiff:Orientation>1</tiff:Orientation>
--         <tiff:XResolution>960000/10000</tiff:XResolution>
--         <tiff:YResolution>960000/10000</tiff:YResolution>
--         <tiff:ResolutionUnit>2</tiff:ResolutionUnit>
--         <exif:ColorSpace>65535</exif:ColorSpace>
--         <exif:PixelXDimension>48</exif:PixelXDimension>
--         <exif:PixelYDimension>48</exif:PixelYDimension>
--      </rdf:Description>
--   </rdf:RDF>
--</x:xmpmeta>
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                                                                                                    
--                            
--<?xpacket end="w"?>Ú(    cHRM  z%  €ƒ  ùÿ  €é  u0  ê`  :˜  o’_ÅF  fIDATxÚì™¿kAÅ7Š§‰zI0¦	b!±Hs˜€ ˜J‚¦I© Zè_à4ÿÄÎNT4juD´°ˆ¤V‹ÃF¹Ï³pÆáöfãev—0¾ÕÛ™yogç»3ßI’M ¸ü>£7|~ ó7
--4€pÓæ$õù‹ç’v'! ©hÉÀ¼´¸wËâZÀ>‹;%ÀB(cÎ@+È†Å5nEÿbÌâÎ9ı.EÛÕ@Àè#ò­Å½qÚ.[’jV»ÓI( OÌ M`Âá®Z:®8Ü$Ğ4m9\X3Ü:0Ì€¤
--PFRøqIã)æG€º¤J‡v{Y` ‰èüf§Uà{ñ¸´Y$Õ¬èw¦ÿrğ[Òp&}À³`ìNóÌWå`BÒ¯>O'õ" 3^}ÀÏ²ÙÎ68äÕL÷$İ·b˜´>³B˜±½ú²üÀÒ$[]lÕ8f ¸¬JúĞà5p­¼ú<éx‘ÌŞª»¾2 yõ×÷Î½*Ñ'äÕ³P4Ğcîº¿jI'J²ºëëq3:öêëq;:Ì²~šr`xœá@z*Yô%’ÚG6»vY†EìÓÓh¡LQéŒ¤³í æ$í)Ã‰Ì«ø”ÒÁP-øL\õêót2W°Y¯>`#…\öl`À«.JZlp²ÖÀgå#fl¯¾,Yè²)÷åõö„(ğKšÎ!†®TïêÆIêûß¶ÁËìñ8ŞGñ8Şo»{â? ¨‡ÌîH‘    IEND®B`‚
-\ No newline at end of file
-+   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  ‡  ‡åñe   tEXtSoftware www.inkscape.org›î<  ¤IDAThí™AR1E;,ô*à‘8†(=§°\ªK)VºáÀ„ısÁP™a2!"T^‹Îïî©üÉˆd2™ €°(>íøè svÌµã]˜P€=Ac5}ã]tBÿZ7 à	˜ëí¨‰k¤!~L€gà*´1;Iøt§È7ĞÓ*¾sââ·| ÁÿQF	Šßò¨ÑÀÔ}nƒ…«yn€W+×DCxe‰Ş)Ô{(W×Êõëãœc »nkç»¼}€WÁ¾uØñ´õN^ñ¶W©àï â…|ã5¦P?ÑX©o`$"ËPá,eSÛÁ«ë÷Øz—·
-+¹ÔäRsyàé…jÆ7 Wë…*›Dá7nñ®ÇO½…1æ¾ü…ÆZ$+":^èXïTëm|ãóYjÚ4°._áD¢¤mf9êÛ40³®ÇD8™ º"2vä>JøÅµ¶Gd¨ÑÀ5ğ“ øw4‹&úlÎ*OY|W¥øR_TOë4XÚxÜùü†&5Ú^¨·ñçşš5“9sş 
-+/º„°M+ö    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/folder.png b/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/folder.png
-index 0f1e987d6aa24b1d2f26d40181ec05b62c5862da..11a76b5c1256ade016d4e22cf048656cb0788ad3 100644
---- a/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/folder.png
-+++ b/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/folder.png
-@@ -1,3 +1,5 @@
- ‰PNG
- 
--   IHDR   0   0   Wù‡   	pHYs  Ä  Ä•+  ĞIDAThŞíš1kA…Ï‘‡¥X[‹ 6!¥Õëì,mS[Z‹? Â?«¤!¤yØh!6‚$i’Çùlva2¼„„·fwes·ØåÌìwï,3+UU­¥È/€x%¥U7 Šˆ.>ˆEDüt€l¿²ıÃ6]®ŸÚŞî9€w¹±²¿f¼?È l?Ïg}l1û;ô§S`v›ş“¤àB>”ıâ»À“[­B¶éù™_%ış´Kú;Àû”Ò™$ùôOGŸ)¥ïÑ²›×vEÄ…^ÒãoÀÓ¦d¾Õ±¤e¯¬®o¼îg¹ú("^«¨"çÀÜöè˜±-`ŞzìôEù¢ì~Û{Ùz^"t2>Éü6M—¼“ùú,ü¦	<zåÔ\V…&a^’*B¡ŠPE¨"TªU„*B¡ŠPE¨"Tªı'¥	 ”Êe[‹‡¶g#ı™íÃlkñ¨v%½l_ÉIÀIg#ó˜·;„v£=:ÔhZZÏRD,$m^•$—Å7<;ë;6°•RZDflSÒ[`c¬o#"–’>Iz¥âWƒ.QZÎÒU¥¬<’º*îI–ôkğßúÖ_é>…$Öy#    IEND®B`‚
-\ No newline at end of file
-+   IHDR   0   0   Wù‡   sRGB ®Îé   gAMA  ±üa   	pHYs  "r  "rÒm!  çIDAThCí™;KÃP†AŠƒ—Eg'Á(â}ÜªTÁAœœüşgqÕQ]DPtrp²µx¡õùNNÛ¤íĞÆÄ“Àyàá;'ms¾7MSš¦,K²qt­P*•Ú)‹8ıØA¸Å=Çq
-+îô ù|Æ°¸Â´Ş}´°ĞşÈª!}ÃOY-"¢ÁÎÏÕ2ÑMvÚ‡µ§NWQ>Ğ-ÁkÒ(Í†Å¾à!Nêeª°qkÙÕ‚×‡¢L°r`Û°Çú¸×5\:ó”%¼VÂC.ûÛxDõ ÄZJº&ÂB×dà$C=–‰‡8Ñã?Áş;);8®6´|‘Na·šUy Ç!Y ƒµH¨Ø@?r¡yTùltúÄt²ïÎ|$#€æMW/]I
-+ĞÀ46€il ÓØ ¦±Lc˜Æ0`	Pt‡>êîZÇ€F=%À»;ö1¬kœÕÕKN~ñ÷â·ú_å³(·DŒ"=à:Ğ‹ôÜ£Şg¹	•$NÇY.¡Ü ñ#Ş$Ÿ8A€{ubpGÙÂ™ÇéqSšw§x'æñ	ãŠÜ›Õí*ê.M<An]Ï¡<q ƒşÉ_øŠ—xÁ‘OÂYb±Xš#•ú‹ƒ¿¢şÃè    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/plus.png b/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/plus.png
-index 16cc8b4f44d52009d4a3f4c9d46f5bb0e20babcf..6af929bf66b9d82cd43aa2db19fb0db05c89b8af 100644
---- a/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/plus.png
-+++ b/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/plus.png
-@@ -1,4 +1,4 @@
- ‰PNG
- 
--   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  Ä  Ä•+   tEXtSoftware www.inkscape.org›î<   ĞIDAThíÙA‚0…á©ázZ½„†K¸ÃïBF 4J}`Ş—°é¢3/M“Nˆ0³ÍĞİøµ@£î«™Êê¾ŠıL€¾F­TcS€Ùb)m^ï´õ†¿æ j æ j æ j 6	0#fÄE–Š}ºßØK¦d(â9=íUûŞïä}tq^?<‰{Jéòºğw "n?ï¢Üzolp‰+X¼Ä‰Õ@ÍÔ@ÍÔ@ÍÔj
--×¾V+ÀµpmŸ8úoV³y ãÈ)" Q¢O    IEND®B`‚
-\ No newline at end of file
-+   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  ‡  ‡åñe   tEXtSoftware www.inkscape.org›î<   ¦IDAThíÙQ
-+ƒ0EÑ™n£]’éÂÛxı¨Ğ¢Ta|(÷€ I®ø‘` \’¤AR›¯Á½Í$ú«æÉª%ég¢Ì’¹nƒ‰ 7Üp#À 7Ü¾öó»tÆÛkõ<±¸Å÷ğ÷Í¯¤FËÌGïÁu?¡ˆxFÄtÔBVLñ^K'27Üp#À 7Üp«h÷ç ³ÿb€¿¼ f	»òd¹    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/sd_card.png b/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/sd_card.png
-index 0291c6542d05a40a350bb5bdbd99a15c01467161..42b9f27738d95d742b4e8380c6450e639630e049 100644
---- a/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/sd_card.png
-+++ b/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/sd_card.png
-@@ -1,7 +1,5 @@
- ‰PNG
- 
--   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs  Ä  Ä•+   tEXtSoftware www.inkscape.org›î<  !IDAThíš¿kA†ŸÏœBbc¡–‚˜T+ñMgaku}°¬´Tÿ±I%A­RhÒ
--‚x…AM¡Áşˆ¾·á&³»¹quw™vßÛÛ}Ş¹]¸=¨€¤®¤ç’6T›’ŞJº'éXÏ"ñ–¤[’~Õ(^Äš¤³+ß–´Ğ°¸Ëª¤IßËå;ÀĞuâgÀûly˜>‹Î63À4°ô|ø<r²À,°¼vò‹@'[7³Û!ÎÛä%=-8#¼m$é¥÷ÙY~ÅË’ú^ÖË¶íyyß9æcßoßù6Ã3.¼r­ñƒÒ’ZÀ¶O›Øä¦üN#p¸TŸË¿¡°€¤óÀ|Ã.•(ëŒ†k	8ã¼6àL«$Ÿu–×ÍìÅÖŠ¤õ*ı…÷IF×ŞE3ë:ïİzÀà‡³Ÿ)à'°îìê ° ß|
--ğÙÉÚÙ17Ş#¶˜d4S–Íì´ëZ6!*È&€ÃùÁìåb%Ûv¼±ìxØ¤±	ù—tÍYŸ©K¦
--!W¡İDî*´ç§P*›T 6©@lRØ¤±Ib“
--Ä&ˆM*›T 6©@lşÛjÔ"œœWY5‹T%÷p¥¬À“šEª’ó*ûmô$°ÂğéÊna8efîSâ0³WÀUàkb!¬—}ù±Hš–t_Ò;5ÿ•MIo$İ‘t´Ìñ7'÷şªu    IEND®B`‚
-\ No newline at end of file
-+   IHDR   0   0   Wù‡   sBIT|dˆ   	pHYs   È   Èı×;   tEXtSoftware www.inkscape.org›î<  $IDAThí˜?hÖ@Æç×Ïşuh¡¸ºXÄIÁED—nvpŠ«à$Ä‚“VquV7ÿt’"íà â*¸ˆV>èŞMÁ¥CN8Âİ—\brò[òò¾oç¹Ë]B ’†’îHú!é@Í0’´ZGgHü¤¤7‰Îs éŒOÇ¡Šâ¯€Ëu&!\ô&bG²â_Wœô`×ÆóÀ=o ß¾ÇÀğØqòwE`Ûı—›À’gbµúÄ%mz–ø¬ÓsÜÉŸËİ¿oó·rù/6¿‘Ëo9cİ÷i*ıI Oå²÷´A)Vüs`¥Y9ñpf¾sâ¡`Kš ›ù«6õøfãàºHš³ñ¬3„›‡ì4˜Îåö:•ËŒ?ô,·Y—ú©*z¢7ñCàZåh	¯I§ÉÎàÎZKcj"´‰gù¶ùLö(ÿ¾úb?%HzdãÉÂÊ²fŒÙ×k`¡†˜*ü,jx8I{_œÍ éCËç½Ëù"}eNš½0QÆ@õ×yx÷€¤i`
-+8\hUQ$¡Xö÷À\ §üoÛqtİ@áãÛuë’ö$íJºíkˆş+‘€cözÔWìú
-+ÒHMo 5½ÔôRÓHMo 5½ÔôRÓHMÈÀ¯VU”Ã«)d`›ìïtWğÖWğ0Æ|n £æ4•f¬c>ùŠ K‹~· Bµ    IEND®B`‚
-\ No newline at end of file
-diff --git a/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/star.png b/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/star.png
-index 90d423a1d4c1e05ccec0a01fa34abca9fe99676d..546779e2a810e73169f65a79850aa07dffd70267 100644
---- a/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/star.png
-+++ b/dist/qt_themes/qdarkstyle_midnight_blue/icons/48x48/star.png
 @@ -1,4 +1,8 @@
  ‰PNG
  
