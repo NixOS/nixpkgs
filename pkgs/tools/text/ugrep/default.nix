@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ugrep";
-  version = "3.8.3";
+  version = "3.9.0";
 
   src = fetchFromGitHub {
     owner = "Genivia";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-p2x3WQIzM1FJBn9mvqfisjTLgjtkZouV/fr/waCiYw0=";
+    sha256 = "sha256-9tHSdO9VlsbLqFFA/CKhbPvstU3+26jBaBw/tX5qJnw=";
   };
 
   buildInputs = [

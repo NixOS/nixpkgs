@@ -1940,6 +1940,8 @@ in {
 
   configargparse = callPackage ../development/python-modules/configargparse { };
 
+  configclass = callPackage ../development/python-modules/configclass { };
+
   configobj = callPackage ../development/python-modules/configobj { };
 
   configparser = callPackage ../development/python-modules/configparser { };
@@ -2644,6 +2646,8 @@ in {
   dogtail = callPackage ../development/python-modules/dogtail { };
 
   doit = callPackage ../development/python-modules/doit { };
+
+  doit-py = callPackage ../development/python-modules/doit-py { };
 
   dominate = callPackage ../development/python-modules/dominate { };
 
@@ -5473,6 +5477,8 @@ in {
 
   mergedeep = callPackage ../development/python-modules/mergedeep { };
 
+  mergedict = callPackage ../development/python-modules/mergedict { };
+
   merkletools = callPackage ../development/python-modules/merkletools { };
 
   meross-iot = callPackage ../development/python-modules/meross-iot { };
@@ -5629,6 +5635,8 @@ in {
   mohawk = callPackage ../development/python-modules/mohawk { };
 
   moku = callPackage ../development/python-modules/moku { };
+
+  monai = callPackage ../development/python-modules/monai { };
 
   monero = callPackage ../development/python-modules/monero { };
 
@@ -10489,9 +10497,7 @@ in {
 
   tableaudocumentapi = callPackage ../development/python-modules/tableaudocumentapi { };
 
-  tables = callPackage ../development/python-modules/tables {
-    hdf5 = pkgs.hdf5_1_10;
-  };
+  tables = callPackage ../development/python-modules/tables { };
 
   tablib = callPackage ../development/python-modules/tablib { };
 
@@ -11418,6 +11424,8 @@ in {
 
   webcolors = callPackage ../development/python-modules/webcolors { };
 
+  webdav4 = callPackage ../development/python-modules/webdav4 { };
+
   webdavclient3 = callPackage ../development/python-modules/webdavclient3 { };
 
   webencodings = callPackage ../development/python-modules/webencodings { };
@@ -11523,6 +11531,8 @@ in {
   wsdiscovery = callPackage ../development/python-modules/wsdiscovery { };
 
   wsgi-intercept = callPackage ../development/python-modules/wsgi-intercept { };
+
+  wsgidav = callPackage ../development/python-modules/wsgidav { };
 
   wsgiprox = callPackage ../development/python-modules/wsgiprox { };
 

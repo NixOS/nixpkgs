@@ -3319,6 +3319,8 @@ with pkgs;
 
   wayland-proxy-virtwl = callPackage ../tools/wayland/wayland-proxy-virtwl { };
 
+  wayout = callPackage ../tools/wayland/wayout { };
+
   way-displays = callPackage ../tools/wayland/way-displays { };
 
   wev = callPackage ../tools/wayland/wev { };
@@ -4084,6 +4086,8 @@ with pkgs;
   klipper-genconf = callPackage ../servers/klipper/klipper-genconf.nix { };
 
   klog = qt5.callPackage ../applications/radio/klog { };
+
+  komga = callPackage ../servers/komga { };
 
   krapslog = callPackage ../tools/misc/krapslog { };
 
@@ -4942,6 +4946,8 @@ with pkgs;
   circus = callPackage ../tools/networking/circus { };
 
   cirrus-cli = callPackage ../development/tools/continuous-integration/cirrus-cli { };
+
+  cirrusgo = callPackage ../tools/security/cirrusgo { };
 
   inherit (callPackage ../applications/networking/remote/citrix-workspace { })
     citrix_workspace_21_01_0
@@ -7192,8 +7198,6 @@ with pkgs;
 
   habitat = callPackage ../applications/networking/cluster/habitat { };
 
-  hardlink = callPackage ../tools/system/hardlink { };
-
   hashcash = callPackage ../tools/security/hashcash { };
 
   hashcat = callPackage ../tools/security/hashcat { };
@@ -7261,9 +7265,7 @@ with pkgs;
 
   hdf5-blosc = callPackage ../development/libraries/hdf5-blosc { };
 
-  hdfview = callPackage ../tools/misc/hdfview {
-    hdf5 = hdf5_1_10;
-  };
+  hdfview = callPackage ../tools/misc/hdfview { };
 
   hecate = callPackage ../applications/editors/hecate { };
 
@@ -7856,6 +7858,8 @@ with pkgs;
   krename = libsForQt5.callPackage ../applications/misc/krename { };
 
   krunner-pass = libsForQt5.callPackage ../tools/security/krunner-pass { };
+
+  krunvm = callPackage ../applications/virtualization/krunvm { };
 
   kronometer = libsForQt5.callPackage ../tools/misc/kronometer { };
 
@@ -9471,7 +9475,9 @@ with pkgs;
 
   oshka = callPackage ../development/tools/oshka {};
 
-  osl = callPackage ../development/compilers/osl { };
+  osl = libsForQt5.callPackage ../development/compilers/osl {
+    boost = boost165;
+  };
 
   osqp = callPackage ../development/libraries/science/math/osqp { };
 
@@ -14260,7 +14266,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   cargo-crev = callPackage ../development/tools/rust/cargo-crev {
-    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration CoreFoundation;
   };
   cargo-cross = callPackage ../development/tools/rust/cargo-cross { };
   cargo-deny = callPackage ../development/tools/rust/cargo-deny {
@@ -19545,9 +19551,7 @@ with pkgs;
 
   libmilter = callPackage ../development/libraries/libmilter { };
 
-  libminc = callPackage ../development/libraries/libminc {
-    hdf5 = hdf5_1_10;
-  };
+  libminc = callPackage ../development/libraries/libminc { };
 
   libmkv = callPackage ../development/libraries/libmkv { };
 
@@ -20164,6 +20168,8 @@ with pkgs;
   memorymappingHook = makeSetupHook {
     deps = [ memorymapping ];
   } ../development/libraries/memorymapping/setup-hook.sh;
+
+  memray = callPackage ../development/tools/memray { };
 
   memstream = callPackage ../development/libraries/memstream { };
   memstreamHook = makeSetupHook {
@@ -21272,6 +21278,8 @@ with pkgs;
   };
 
   soapyuhd = callPackage ../applications/radio/soapyuhd { };
+
+  social-engineer-toolkit = callPackage ../tools/security/social-engineer-toolkit { };
 
   socket_wrapper = callPackage ../development/libraries/socket_wrapper { };
 
@@ -23178,6 +23186,10 @@ with pkgs;
 
   radicale = radicale3;
 
+  radicle-cli = callPackage ../applications/version-management/git-and-tools/radicle-cli {
+    inherit (darwin) DarwinTools;
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
   radicle-upstream = callPackage ../applications/version-management/git-and-tools/radicle-upstream {};
 
   rake = callPackage ../development/tools/build-managers/rake { };
@@ -23876,6 +23888,12 @@ with pkgs;
   libatasmart = callPackage ../os-specific/linux/libatasmart { };
 
   libcgroup = callPackage ../os-specific/linux/libcgroup { };
+
+  libkrun = callPackage ../development/libraries/libkrun { };
+
+  libkrun-sev = callPackage ../development/libraries/libkrun { sevVariant = true; };
+
+  libkrunfw = callPackage ../development/libraries/libkrunfw { };
 
   libnl = callPackage ../os-specific/linux/libnl { };
 
@@ -26430,6 +26448,8 @@ with pkgs;
   clipmenu = callPackage ../applications/misc/clipmenu { };
 
   clipit = callPackage ../applications/misc/clipit { };
+
+  clipqr = callPackage ../applications/misc/clipqr { };
 
   cloud-hypervisor = callPackage ../applications/virtualization/cloud-hypervisor { };
 
@@ -33679,6 +33699,10 @@ with pkgs;
 
   cd-hit = callPackage ../applications/science/biology/cd-hit {
     inherit (llvmPackages) openmp;
+  };
+
+  ciftilib = callPackage ../development/libraries/science/biology/ciftilib {
+    boost = boost16x;
   };
 
   cmtk = callPackage ../applications/science/biology/cmtk { };
