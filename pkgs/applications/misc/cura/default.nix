@@ -29,7 +29,7 @@ mkDerivation rec {
   cmakeFlags = [
     "-DURANIUM_DIR=${python3.pkgs.uranium.src}"
     "-DCURA_VERSION=${version}"
-    "-DPython_SITELIB_LOCAL=python/site-packages"
+    "-DPython_SITELIB_LOCAL=${python3.sitePackages}"
   ];
 
   makeWrapperArgs = [
@@ -39,6 +39,9 @@ mkDerivation rec {
 
   prePatch = ''
   substituteInPlace CMakeLists.txt --replace cura/CuraVersion.py.in CuraVersion.py.jinja
+  substituteInPlace CuraVersion.py.jinja \
+    --replace '{{ cura_debug_mode }}' False \
+    --replace '{{ cura_version }}' '${version}'
   '';
 
   postPatch = ''

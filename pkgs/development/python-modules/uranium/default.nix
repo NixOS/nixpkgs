@@ -2,7 +2,7 @@
 , pyqt5, numpy, scipy, shapely, libarcus, cryptography, doxygen, gettext, pythonOlder }:
 
 buildPythonPackage rec {
-  version = "4.12.0";
+  version = "5.1.0";
   pname = "uranium";
   format = "other";
 
@@ -10,10 +10,14 @@ buildPythonPackage rec {
     owner = "Ultimaker";
     repo = "Uranium";
     rev = version;
-    sha256 = "sha256-SE9xqrloPXIRTJiiqUdRKFmb4c0OjmJK5CMn6VXMFmk=";
+    sha256 = "sha256-3a/Ju/rU0euN3VyZacgEvgJZKsIJaEUrBdgct7YtL0c=";
   };
 
   disabled = pythonOlder "3.5.0";
+
+  cmakeFlags = [
+    "-DPython_SITELIB_LOCAL=${python.sitePackages}"
+  ];
 
   buildInputs = [ python gettext ];
   propagatedBuildInputs = [ pyqt5 numpy scipy shapely libarcus cryptography ];
