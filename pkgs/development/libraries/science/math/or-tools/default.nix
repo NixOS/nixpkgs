@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-dEYMPWpa3J9EqtCq3kubdUYJivNRTOKUpNDx3UC1IcQ=";
   };
 
+  patches = [
+    ./absl-string_view.patch
+  ];
+
   # The original build system uses cmake which does things like pull
   # in dependencies through git and Makefile creation time. We
   # obviously don't want to do this so instead we provide the

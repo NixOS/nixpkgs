@@ -1,0 +1,19 @@
+commit 32513329e4d024afaf0f62831587fa89c7990ea7
+Author: Tobias Mayer <tobim@fastmail.fm>
+Date:   Sun Aug 14 23:17:35 2022 +0200
+
+    Fix build with absl::string_view
+
+diff --git a/examples/cpp/network_routing_sat.cc b/examples/cpp/network_routing_sat.cc
+index b64fe87932..68bb84eb0a 100644
+--- a/examples/cpp/network_routing_sat.cc
++++ b/examples/cpp/network_routing_sat.cc
+@@ -131,7 +131,7 @@ class NetworkRoutingData {
+   void AddDemand(int source, int destination, int traffic) {
+     all_demands_[std::make_pair(source, destination)] = traffic;
+   }
+-  void set_name(absl::string_view name) { name_ = name; }
++  void set_name(absl::string_view name) { name_ = std::string{name}; }
+   void set_max_capacity(int max_capacity) { max_capacity_ = max_capacity; }
+   void set_fixed_charge_cost(int cost) { fixed_charge_cost_ = cost; }
+ 
