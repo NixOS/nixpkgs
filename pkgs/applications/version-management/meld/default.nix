@@ -14,17 +14,18 @@
 , gtksourceview4
 , gnome
 , gsettings-desktop-schemas
+, runtimeShell
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meld";
-  version = "3.21.2";
+  version = "3.21.3";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "IV+odABTZ5TFllddE6nIfijxjdNyW43/mG2y4pM6cU4=";
+    sha256 = "xanGKMaCh6bPV22NggQegICl3VwSy01wmsKZSqCxsZc=";
   };
 
   nativeBuildInputs = [
@@ -55,6 +56,14 @@ python3.pkgs.buildPythonApplication rec {
   # gobject-introspection and some other similar setup hooks do not currently work with strictDeps.
   # https://github.com/NixOS/nixpkgs/issues/56943
   strictDeps = false;
+
+  postPatch = ''
+    # Do not clear /usr/bin/env out of interpreter, patchShebangs will not work.
+    # (Introduced by https://github.com/GNOME/meld/commit/1a8c44ea48f2e6cbdc11c47f0c5754c47c343a0d)
+    echo > meson_shebang_normalisation.py '#! ${runtimeShell}
+    cp "$@"
+    '
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {
