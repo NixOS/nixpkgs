@@ -50,8 +50,7 @@ in
       after = [ "network.target" ];
       description = "LanguageTool HTTP server";
       serviceConfig = {
-        User = "languagetool";
-        Group = "languagetool";
+        DynamicUser = true;
         Type = "simple";
         ExecStart = "${pkgs.languagetool}/bin/languagetool-http-server ${cli.toGNUCommandLineShell {} cfg.args}";
         PrivateTmp = true;
@@ -64,10 +63,5 @@ in
         RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
       };
     };
-    users.users.languagetool = {
-      isSystemUser = true;
-      group = "languagetool";
-    };
-    users.groups.languagetool = { };
   };
 }
