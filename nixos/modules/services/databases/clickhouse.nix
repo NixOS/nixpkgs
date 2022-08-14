@@ -66,6 +66,15 @@ with lib;
       "clickhouse-server/users.xml" = {
         source = "${cfg.package}/etc/clickhouse-server/users.xml";
       };
+      "clickhouse-server/config.d/logging.xml" = {
+        text = ''
+          <clickhouse>
+            <logger>
+              <level>notice</level>
+            <logger>
+          </clickhouse>
+        '';
+      };
     };
 
     environment.systemPackages = [ cfg.package ];
