@@ -13677,6 +13677,12 @@
     githubId = 118959;
     name = "VinyMeuh";
   };
+  virchau13 = {
+    email = "virchau13@hexular.net";
+    github = "virchau13";
+    githubId = 16955157;
+    name = "Vir Chaudhury";
+  };
   viraptor = {
     email = "nix@viraptor.info";
     github = "viraptor";

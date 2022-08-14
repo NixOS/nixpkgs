@@ -1,10 +1,12 @@
 { type
 , version
 , srcs
-, icu #passing icu as an argument, because dotnet 3.1 has troubles with icu71
+, icu # passing icu as an argument, because dotnet 3.1 has troubles with icu71
+, packages ? null
 }:
 
 assert builtins.elem type [ "aspnetcore" "runtime" "sdk" ];
+assert if type == "sdk" then packages != null else true;
 
 { lib
 , stdenv
@@ -104,7 +106,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit icu;
+    inherit icu packages;
   };
 
   meta = with lib; {

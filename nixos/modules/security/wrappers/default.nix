@@ -185,6 +185,16 @@ in
       '';
     };
 
+    security.wrapperDirSize = lib.mkOption {
+      default = "50%";
+      example = "10G";
+      type = lib.types.str;
+      description = ''
+        Size limit for the /run/wrappers tmpfs. Look at mount(8), tmpfs size option,
+        for the accepted syntax. WARNING: don't set to less than 64MB.
+      '';
+    };
+
     security.wrapperDir = lib.mkOption {
       type        = lib.types.path;
       default     = "/run/wrappers/bin";
@@ -227,7 +237,7 @@ in
 
     boot.specialFileSystems.${parentWrapperDir} = {
       fsType = "tmpfs";
-      options = [ "nodev" "mode=755" ];
+      options = [ "nodev" "mode=755" "size=${config.security.wrapperDirSize}" ];
     };
 
     # Make sure our wrapperDir exports to the PATH env variable when

@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, linkFarmFromDrvs, callPackage, nuget-to-nix, writeScript, makeWrapper, fetchurl, xml2, dotnetCorePackages, dotnetPackages, mkNugetSource, mkNugetDeps, cacert, srcOnly }:
+{ lib, stdenvNoCC, linkFarmFromDrvs, callPackage, nuget-to-nix, writeScript, makeWrapper, fetchurl, xml2, dotnetCorePackages, dotnetPackages, mkNugetSource, mkNugetDeps, cacert, srcOnly, symlinkJoin }:
 
 { name ? "${args.pname}-${args.version}"
 , pname ? name
@@ -84,12 +84,30 @@ let
     then nugetDeps
     else mkNugetDeps { inherit name; nugetDeps = import nugetDeps; };
 
-  nuget-source = mkNugetSource {
-    name = "${name}-nuget-source";
+  # contains the actual package dependencies
+  _dependenciesSource = mkNugetSource {
+    name = "${name}-dependencies-source";
     description = "A Nuget source with the dependencies for ${name}";
     deps = [ _nugetDeps ] ++ lib.optional (localDeps != null) localDeps;
   };
 
+  # this contains all the nuget packages that are implictly referenced by the dotnet
+  # build system. having them as separate deps allows us to avoid having to regenerate
+  # a packages dependencies when the dotnet-sdk version changes
+  _sdkDeps = mkNugetDeps {
+    name = "dotnet-sdk-${dotnet-sdk.version}-deps";
+    nugetDeps = dotnet-sdk.passthru.packages;
+  };
+
+  _sdkSource = mkNugetSource {
+    name = "dotnet-sdk-${dotnet-sdk.version}-source";
+    deps = [ _sdkDeps ];
+  };
+
+  nuget-source = symlinkJoin {
+    name = "${name}-nuget-source";
+    paths = [ _dependenciesSource _sdkSource ];
+  };
 in stdenvNoCC.mkDerivation (args // {
   nativeBuildInputs = args.nativeBuildInputs or [] ++ [
     dotnetConfigureHook
@@ -116,7 +134,9 @@ in stdenvNoCC.mkDerivation (args // {
   passthru = {
     inherit nuget-source;
 
-    fetch-deps = writeScript "fetch-${pname}-deps" ''
+    fetch-deps = let
+      exclusions = dotnet-sdk.passthru.packages { fetchNuGet = attrs: attrs.pname; };
+    in writeScript "fetch-${pname}-deps" ''
       set -euo pipefail
       cd "$(dirname "''${BASH_SOURCE[0]}")"
 
@@ -146,8 +166,10 @@ in stdenvNoCC.mkDerivation (args // {
           ${lib.optionalString (dotnetFlags != []) (builtins.toString dotnetFlags)}
       done
 
+      echo "${lib.concatStringsSep "\n" exclusions}" > "$HOME/package_exclusions"
+
       echo "Writing lockfile..."
-      ${nuget-to-nix}/bin/nuget-to-nix "$HOME/nuget_pkgs" > "$deps_file"
+      ${nuget-to-nix}/bin/nuget-to-nix "$HOME/nuget_pkgs" "$HOME/package_exclusions" > "$deps_file"
       echo "Succesfully wrote lockfile to: $deps_file"
     '';
   } // args.passthru or {};

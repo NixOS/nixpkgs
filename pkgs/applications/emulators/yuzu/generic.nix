@@ -47,8 +47,11 @@ stdenv.mkDerivation rec {
 
   # Replace icons licensed under CC BY-ND 3.0 with free ones to allow
   # for binary redistribution: https://github.com/yuzu-emu/yuzu/pull/8104
-  # The patch hosted on GitHub has the binary information stripped, so
-  # it has been regenerated with "git format-patch --text --full-index --binary"
+  # The patch hosted on GitHub has the binary information in git format, which
+  # can’t be applied with patch(1), so it has been regenerated with
+  # "git format-patch --text --full-index --binary".
+  # Because pineapple strips all files beginning with a dot, the patch needs to
+  # be edited manually afterwards to remove all changes to those.
   patches = [ ./yuzu-free-icons.patch ];
 
   nativeBuildInputs = [
