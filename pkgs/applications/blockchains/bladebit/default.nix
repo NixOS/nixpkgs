@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitHub
 , stdenv, git
-, cmake , numactl, bls-signatures, chia-relic
+, cmake , numactl, bls-signatures, chia-relic, gmp, libsodium
 , substituteAll
 }:
 
@@ -22,23 +22,28 @@ stdenv.mkDerivation {
     # prevent CMake from trying to get libraries on the Internet
     (substituteAll {
         src = ./find_bls.patch;
+        inherit gmp;
+        gmpdev = gmp.dev;
         bls = bls-signatures;
         relic = chia-relic;
+        sodium = libsodium;
       })
   ];
 
-  nativeBuildInputs = [ cmake numactl git ];
+  nativeBuildInputs = [ cmake numactl gmp gmp.dev libsodium chia-relic];
+
+  buildPhase = ''
+    cmake . -DBUILD_BLADEBIT_TESTS=false
+    cmake --build . --target bladebit --config Release -j10
+  '';
 
   installPhase = ''
     runHook preInstall
-
     install -D -m 755 bladebit $out/bin/bladebit
-    echo test
-
     runHook postInstall
   '';
 
-  CXXFLAGS = "-O3 -fmax-errors=1";
+  enableParallelBuilding = true;
   cmakeFlags = [
     "-DBUILD_BLADEBIT_TESTS=false"
   ];

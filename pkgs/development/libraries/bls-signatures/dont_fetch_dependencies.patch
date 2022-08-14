@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 6922167..047d812 100644
+index 6922167..269ff1e 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -30,33 +30,9 @@ set(CMAKE_MODULE_PATH
@@ -36,7 +36,15 @@ index 6922167..047d812 100644
  
  set(STBIN TRUE)
  find_package(gmp)
-@@ -129,8 +105,6 @@ set(QUIET "on" CACHE STRING "Relic - Build with printing disabled")
+@@ -120,7 +96,6 @@ set(FP_PMERS "off" CACHE STRING "")
+ set(FPX_METHD "INTEG;INTEG;LAZYR" CACHE STRING "")
+ set(EP_PLAIN "off" CACHE STRING "")
+ set(EP_SUPER "off" CACHE STRING "")
+-# Disable relic tests and benchmarks
+ set(TESTS "0" CACHE STRING "Relic - Number of times each test is ran")
+ set(BENCH "0" CACHE STRING "Relic - Number of times each benchmark is ran")
+ 
+@@ -129,8 +104,6 @@ set(QUIET "on" CACHE STRING "Relic - Build with printing disabled")
  set(PP_EXT "LAZYR" CACHE STRING "")
  set(PP_METHD "LAZYR;OATEP" CACHE STRING "")
  
@@ -45,11 +53,23 @@ index 6922167..047d812 100644
  add_subdirectory(src)
  
  if(EMSCRIPTEN)
+diff --git a/cmake-build-debug/.cmake/api/v1/query/cache-v2 b/cmake-build-debug/.cmake/api/v1/query/cache-v2
+new file mode 100644
+index 0000000..e69de29
+diff --git a/cmake-build-debug/.cmake/api/v1/query/cmakeFiles-v1 b/cmake-build-debug/.cmake/api/v1/query/cmakeFiles-v1
+new file mode 100644
+index 0000000..e69de29
+diff --git a/cmake-build-debug/.cmake/api/v1/query/codemodel-v2 b/cmake-build-debug/.cmake/api/v1/query/codemodel-v2
+new file mode 100644
+index 0000000..e69de29
+diff --git a/cmake-build-debug/.cmake/api/v1/query/toolchains-v1 b/cmake-build-debug/.cmake/api/v1/query/toolchains-v1
+new file mode 100644
+index 0000000..e69de29
 diff --git a/python-bindings/CMakeLists.txt b/python-bindings/CMakeLists.txt
-index 5a8c381..7d0e3cf 100644
+index 5a8c381..fd1b7be 100644
 --- a/python-bindings/CMakeLists.txt
 +++ b/python-bindings/CMakeLists.txt
-@@ -1,10 +1,15 @@
+@@ -1,10 +1,9 @@
  
  FetchContent_Declare(
    pybind11
@@ -59,52 +79,33 @@ index 5a8c381..7d0e3cf 100644
  )
 -FetchContent_MakeAvailable(pybind11 relic)
 +FetchContent_MakeAvailable(pybind11)
-+
-+add_library(relic STATIC IMPORTED GLOBAL)
-+set_target_properties(relic PROPERTIES
-+        LINKER_LANGUAGE CXX
-+        IMPORTED_LOCATION "@relic@/lib/lib_relic_s.a"
-+        )
  
  pybind11_add_module(blspy ${CMAKE_CURRENT_SOURCE_DIR}/pythonbindings.cpp)
 -target_link_libraries(blspy PRIVATE bls)
 +target_link_libraries(blspy PRIVATE relic bls)
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index e10cb8f..050dff2 100644
+index e10cb8f..005d42f 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
-@@ -10,12 +10,17 @@ add_library(bls
-   ${CMAKE_CURRENT_SOURCE_DIR}/schemes.cpp
- )
- 
-+add_library(relic STATIC IMPORTED GLOBAL)
-+set_target_properties(relic PROPERTIES
-+    LINKER_LANGUAGE CXX
-+    IMPORTED_LOCATION "@relic@/lib/lib_relic_s.a"
-+)
-+
- target_include_directories(bls
+@@ -14,8 +14,8 @@ target_include_directories(bls
    PUBLIC
      ${CMAKE_CURRENT_SOURCE_DIR}
-+    @relic@/include/relic
      $<$<BOOL:${GMP_FOUND}>:${GMP_INCLUDES}>
 -    ${relic_SOURCE_DIR}/include
 -    ${relic_BINARY_DIR}/include
++        @relic@/include/relic
++        @relic@/lib
  )
  
  target_compile_definitions(bls
-@@ -25,12 +30,11 @@ target_compile_definitions(bls
- 
- target_link_libraries(bls
-   PUBLIC
--    relic_s
-+    relic
+@@ -29,8 +29,8 @@ target_link_libraries(bls
      sodium
  )
  
 -install(DIRECTORY ${relic_SOURCE_DIR}/include/ DESTINATION include/chiabls)
 -install(DIRECTORY ${relic_BINARY_DIR}/include/ DESTINATION include/chiabls)
-+install(DIRECTORY @relic@/include/ DESTINATION include/chiabls)
++install(DIRECTORY @relic@/include/relic DESTINATION include/chiabls)
++install(DIRECTORY @relic@/lib DESTINATION include/chiabls)
  install(FILES ${HEADERS} DESTINATION include/chiabls)
  install(FILES $<TARGET_FILE:bls> DESTINATION lib)
  

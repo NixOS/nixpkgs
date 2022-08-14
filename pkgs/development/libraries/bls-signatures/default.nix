@@ -3,8 +3,6 @@
 , stdenv
 , cmake, gmp, libsodium, chia-relic
 , substituteAll
-, python310
-, python3Packages
 }:
 
 stdenv.mkDerivation {
@@ -23,7 +21,6 @@ patches = [
     # prevent CMake from trying to get libraries on the Internet
     (substituteAll {
       src = ./dont_fetch_dependencies.patch;
-      pybind11_src = python3Packages.pybind11.src;
       relic = chia-relic;
       sodium = libsodium;
     })
@@ -32,11 +29,10 @@ patches = [
 
   nativeBuildInputs = [ cmake gmp chia-relic ];
 
-  buildInputs = [ libsodium python310 ];
+  buildInputs = [ libsodium ];
 
-  CXXFLAGS = "-O3 -fmax-errors=1";
+  enableParallelBuilding = true;
   cmakeFlags = [
-    "-DARITH=easy"
     "-DBUILD_BLS_TESTS=false"
     "-DBUILD_BLS_BENCHMARKS=false"
     "-DBUILD_BLS_PYTHON_BINDINGS=false"

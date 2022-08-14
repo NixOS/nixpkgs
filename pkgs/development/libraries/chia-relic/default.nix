@@ -9,6 +9,8 @@ stdenv.mkDerivation {
   pname = "relic";
   version = "0.5.0";
 
+
+
   src = fetchFromGitHub {
     owner = "Chia-Network";
     repo = "relic";
@@ -18,6 +20,11 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake gmp ];
+
+  enableParallelBuilding = true;
+  cmakeFlags = [
+    "-DARITH=gmp"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/Chia-Network/relic";
