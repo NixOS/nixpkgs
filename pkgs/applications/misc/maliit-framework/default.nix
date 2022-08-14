@@ -23,13 +23,13 @@
 
 mkDerivation rec {
   pname = "maliit-framework";
-  version = "2.0.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "maliit";
     repo = "framework";
     rev = version;
-    sha256 = "138jyvw130kmrldksbk4l38gvvahh3x51zi4vyplad0z5nxmbazb";
+    sha256 = "sha256-q+hiupwlA0PfG+xtomCUp2zv6HQrGgmOd9CU193ucrY=";
   };
 
   buildInputs = [
