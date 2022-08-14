@@ -15,6 +15,7 @@
 , hidapi
 , libieee1284
 , bluez
+, sigrok-firmware-fx2lafw
 }:
 
 stdenv.mkDerivation rec {
@@ -24,11 +25,6 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://sigrok.org/download/source/${pname}/${pname}-${version}.tar.gz";
     sha256 = "0g6fl684bpqm5p2z4j12c62m45j1dircznjina63w392ns81yd2d";
-  };
-
-  firmware = fetchurl {
-    url = "https://sigrok.org/download/binary/sigrok-firmware-fx2lafw/sigrok-firmware-fx2lafw-bin-0.1.6.tar.gz";
-    sha256 = "14sd8xqph4kb109g073daiavpadb20fcz7ch1ipn0waz7nlly4sw";
   };
 
   enableParallelBuilding = true;
@@ -45,7 +41,7 @@ stdenv.mkDerivation rec {
     cp contrib/*.rules $out/etc/udev/rules.d
 
     mkdir -p "$out/share/sigrok-firmware/"
-    tar --strip-components=1 -xvf "${firmware}" -C "$out/share/sigrok-firmware/"
+    cp ${sigrok-firmware-fx2lafw}/share/sigrok-firmware/* "$out/share/sigrok-firmware/"
   '';
 
   doInstallCheck = true;
