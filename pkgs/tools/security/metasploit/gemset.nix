@@ -104,10 +104,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1bz5wb377xnp4hs13sf4sxalfn2ycxfry1g5lfwixzvwhhbim5x1";
+      sha256 = "1wv819cag3bhq07d4xjspinakqdfw97chpd9s6qqr70xicpl43zn";
       type = "gem";
     };
-    version = "1.616.0";
+    version = "1.618.0";
   };
   aws-sdk-core = {
     groups = ["default"];
@@ -124,10 +124,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0674pphc7m3di01dzbcvl9g5brv1mmcmj14lwaj73gsvbc6zybhy";
+      sha256 = "0gdqf0dfkqk4q6x9rz9dq0sliqmybdfkbfzyifm4y2pvqaiybgir";
       type = "gem";
     };
-    version = "1.326.0";
+    version = "1.327.0";
   };
   aws-sdk-iam = {
     groups = ["default"];
@@ -354,10 +354,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1jf9gfr2viracxm0nzd2mzs07j2ilznj7w3awyrr2wm53b56pc3h";
+      sha256 = "1a6q8k82vfqyzlnrs6r6d82fyz5fminc8p57mr5xkdabs0m2y3mx";
       type = "gem";
     };
-    version = "2.5.1";
+    version = "2.5.2";
   };
   faraday-net_http = {
     groups = ["default"];
@@ -614,12 +614,12 @@
     platforms = [];
     source = {
       fetchSubmodules = false;
-      rev = "addeeea49e5217ade1407a2e9a3cf6514ad8972e";
-      sha256 = "1ndzjsynm11dclr18x8cvpfw94399r1wv3mylqwlby87rljq1m1i";
+      rev = "38794f11b8a4c685c1f90b832a9a77974f5e0471";
+      sha256 = "0kqizq4k16r8v599hj3rc1pz31b0ypxwmygf4qg17lnk3574z2i8";
       type = "git";
       url = "https://github.com/rapid7/metasploit-framework";
     };
-    version = "6.2.11";
+    version = "6.2.12";
   };
   metasploit-model = {
     groups = ["default"];
@@ -1447,10 +1447,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0yvfyxz70r45j65763fzy0p5j8cxlhnpn1n5lcxj4is7hp8v5i23";
+      sha256 = "0792pfxr0n143r424ibl4ahpd5yl9yxnnwifiy8qdc14j2c7bsz8";
       type = "gem";
     };
-    version = "1.2022.1";
+    version = "1.2022.2";
   };
   unf = {
     groups = ["default"];
