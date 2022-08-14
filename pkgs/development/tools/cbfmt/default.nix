@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cbfmt";
-  version = "0.1.1";
+  version = "0.1.1-2";
 
   src = fetchFromGitHub {
     owner = "lukas-reineke";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-cTX7eBcEZiTJm3b1d2Mwu7NdbtHjeF+dkc3YMede0cQ=";
+    sha256 = "sha256-wGMa3hJ3LUCh6YIdTq+7Bl37v40vCZpNFdviE23X/YI=";
   };
 
-  cargoSha256 = "sha256-vEInZplfgrM4gD5wPATl7j5iTo9pSstElfd0Lq9giJw=";
+  cargoSha256 = "sha256-mWJKolWd6nf8OsU4BU2CituARImyC0E0y7851Q0OLN8=";
 
   passthru.tests.version = testers.testVersion {
     package = cbfmt;
