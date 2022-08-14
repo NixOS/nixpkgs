@@ -14336,6 +14336,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
   };
   cargo-valgrind = callPackage ../development/tools/rust/cargo-valgrind { };
+  cargo-wasi = callPackage ../development/tools/rust/cargo-wasi {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   cargo-watch = callPackage ../development/tools/rust/cargo-watch {
     inherit (darwin.apple_sdk.frameworks) CoreServices Foundation;
   };
