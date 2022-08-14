@@ -14,9 +14,9 @@ let
 
       passthru.python = python3;
 
-      nativeBuildInputs = with python3.pkgs; [ pkg-config docutils sphinx ];
+      nativeBuildInputs = with python3.pkgs; [ pkg-config docutils sphinx makeWrapper];
       buildInputs = [
-        libxslt groff ncurses readline libedit makeWrapper python3
+        libxslt groff ncurses readline libedit python3
       ]
       ++ lib.optional (lib.versionOlder version "7") pcre
       ++ lib.optional (lib.versionAtLeast version "7") pcre2
