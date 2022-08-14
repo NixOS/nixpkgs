@@ -1113,6 +1113,26 @@ with pkgs;
       libXxf86vm;
   };
 
+  am2r-multitroid-server = callPackage ../games/am2r/multitroid.nix {
+    stdenv32Bit = pkgsi686Linux.stdenv;
+
+    inherit (pkgsi686Linux)
+      openal
+      libGLU
+      libglvnd
+      libzip
+      curl;
+    inherit (pkgsi686Linux.xorg)
+      libX11
+      libXext
+      libXrandr
+      libXxf86vm;
+  };
+
+  am2r-multitroid = am2r.override {
+    customClient = am2r-multitroid-server.client;
+  };
+
   amass = callPackage ../tools/networking/amass { };
 
   afew = callPackage ../applications/networking/mailreaders/afew { };
