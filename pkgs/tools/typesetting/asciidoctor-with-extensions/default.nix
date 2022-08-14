@@ -20,7 +20,7 @@ bundlerApp rec {
     "asciidoctor-revealjs"
   ];
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postBuild = lib.optionalString (path != "") (lib.concatMapStrings (exe: ''
     wrapProgram $out/bin/${exe} \

@@ -7,7 +7,7 @@ bundlerApp rec {
   inherit ruby;
   gemdir = ./.;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   passthru.updateScript = bundlerUpdateScript "gollum";
 
