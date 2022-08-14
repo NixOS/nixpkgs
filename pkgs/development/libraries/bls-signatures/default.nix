@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation {
   pname = "bls-signatures";
-  version = "1.0.6";
+  version = "1.0.14";
 
   src = fetchFromGitHub {
     owner = "Chia-Network";
     repo = "bls-signatures";
-    rev = "1.0.6";
-    sha256 = "sha256-viP9IcYXg4BGndvildVZXICMrTtMmNyezc2Sbu/oZyk=";
+    rev = "1.0.14";
+    sha256 = "sha256-nUBvjCjhQ6GSO8GBZ0oFAGWoR+lclk/vgu2uJRzhYNw=";
     fetchSubmodules = true;
   };
 
