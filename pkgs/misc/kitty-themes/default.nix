@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "kovidgoyal";
     repo = pname;
     rev = "72cf0dc4338ab1ad85f5ed93fdb13318916cae14";
-    sha256 = "/JCLty73YHsTkNxZP6EwhhoiHi2HjtyMZphAPhHe5h0=";
+    sha256 = "d9mO2YqA7WD2dTPsmNeQg2dUR/iv2T/l7yxrt6WKX60=";
   };
 
   installPhase = ''
