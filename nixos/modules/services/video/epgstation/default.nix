@@ -266,6 +266,9 @@ in
       description = "EPGStation user";
       group = config.users.groups.epgstation.name;
       isSystemUser = true;
+
+      # NPM insists on creating ~/.npm
+      home = "/var/cache/epgstation";
     };
 
     users.groups.epgstation = { };
@@ -325,6 +328,7 @@ in
         ExecStartPre = "+${preStartScript}";
         User = username;
         Group = groupname;
+        CacheDirectory = "epgstation";
         StateDirectory = "epgstation";
         LogsDirectory = "epgstation";
         ConfigurationDirectory = "epgstation";
