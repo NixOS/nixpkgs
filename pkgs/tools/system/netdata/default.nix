@@ -4,7 +4,7 @@
 , curl, jemalloc, libuv, zlib
 , libcap, libuuid, lm_sensors, protobuf
 , withCups ? false, cups
-, withDBengine ? true, judy, lz4
+, withDBengine ? true, lz4
 , withIpmi ? (!stdenv.isDarwin), freeipmi
 , withNetfilter ? (!stdenv.isDarwin), libmnl, libnetfilter_acct
 , withCloud ? (!stdenv.isDarwin), json_c
@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
     ++ optionals stdenv.isDarwin [ CoreFoundation IOKit libossp_uuid ]
     ++ optionals (!stdenv.isDarwin) [ libcap.dev libuuid.dev ]
     ++ optionals withCups [ cups ]
-    ++ optionals withDBengine [ judy lz4.dev ]
+    ++ optionals withDBengine [ lz4 ]
     ++ optionals withIpmi [ freeipmi ]
     ++ optionals withNetfilter [ libmnl libnetfilter_acct ]
     ++ optionals withCloud [ json_c ]
