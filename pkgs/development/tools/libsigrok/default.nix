@@ -1,15 +1,29 @@
-{ lib, stdenv, fetchurl, pkg-config, libzip, glib, libusb1, libftdi1, check
-, libserialport, librevisa, doxygen, glibmm, python
-, version ? "0.5.1", sha256 ? "171b553dir5gn6w4f7n37waqk62nq2kf1jykx4ifjacdz5xdw3z4", doInstallCheck ? true
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libzip
+, glib
+, libusb1
+, libftdi1
+, check
+, libserialport
+, librevisa
+, doxygen
+, glibmm
+, python
+, hidapi
+, libieee1284
+, bluez
 }:
 
 stdenv.mkDerivation rec {
-  inherit version doInstallCheck;
   pname = "libsigrok";
+  version = "0.5.2";
 
   src = fetchurl {
     url = "https://sigrok.org/download/source/${pname}/${pname}-${version}.tar.gz";
-    inherit sha256;
+    sha256 = "0g6fl684bpqm5p2z4j12c62m45j1dircznjina63w392ns81yd2d";
   };
 
   firmware = fetchurl {
@@ -17,16 +31,24 @@ stdenv.mkDerivation rec {
     sha256 = "14sd8xqph4kb109g073daiavpadb20fcz7ch1ipn0waz7nlly4sw";
   };
 
+  enableParallelBuilding = true;
+
   nativeBuildInputs = [ doxygen pkg-config python ];
-  buildInputs = [ libzip glib libusb1 libftdi1 check libserialport librevisa glibmm ];
+  buildInputs = [
+    libzip glib libusb1 libftdi1 check libserialport librevisa glibmm hidapi
+  ] ++ lib.optionals stdenv.isLinux [ libieee1284 bluez ];
 
   strictDeps = true;
 
   postInstall = ''
+    mkdir -p $out/etc/udev/rules.d
+    cp contrib/*.rules $out/etc/udev/rules.d
+
     mkdir -p "$out/share/sigrok-firmware/"
     tar --strip-components=1 -xvf "${firmware}" -C "$out/share/sigrok-firmware/"
   '';
 
+  doInstallCheck = true;
   installCheckPhase = ''
     # assert that c++ bindings are included
     # note that this is only true for modern (>0.5) versions; the 0.3 series does not have these
