@@ -63,6 +63,6 @@ python3Packages.buildPythonApplication rec {
     description = "Command-line tool for accessing the Backblaze B2 storage service";
     homepage = "https://github.com/Backblaze/B2_Command_Line_Tool";
     license = licenses.mit;
-    maintainers = with maintainers; [ hrdinka kevincox ];
+    maintainers = with maintainers; [ hrdinka kevincox tomhoule ];
   };
 }
