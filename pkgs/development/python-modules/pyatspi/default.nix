@@ -1,4 +1,4 @@
-{ lib, fetchurl, pkg-config, buildPythonPackage, isPy3k, at-spi2-core, pygobject3, gnome }:
+{ lib, fetchurl, pkg-config, buildPythonPackage, isPy3k, at-spi2-core, pygobject3, gnome, python }:
 
 buildPythonPackage rec {
   pname = "pyatspi";
@@ -16,6 +16,16 @@ buildPythonPackage rec {
     at-spi2-core
     pygobject3
   ];
+
+  configureFlags = [
+    "PYTHON=${python.pythonForBuild.interpreter}"
+  ];
+
+  postPatch = ''
+    # useless python existence check for us
+    substituteInPlace configure \
+      --replace '&& ! which' '&& false'
+  '';
 
   disabled = !isPy3k;
 
