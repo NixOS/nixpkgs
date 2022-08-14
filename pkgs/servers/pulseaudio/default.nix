@@ -34,11 +34,11 @@
 
 stdenv.mkDerivation rec {
   pname = "${if libOnly then "lib" else ""}pulseaudio";
-  version = "15.0";
+  version = "16.1";
 
   src = fetchurl {
     url = "http://freedesktop.org/software/pulseaudio/releases/pulseaudio-${version}.tar.xz";
-    sha256 = "pAuIejupjMJpdusRvbZhOYjxRbGQJNG2VVxqA8nLoaA=";
+    sha256 = "sha256-ju8yzpHUeXn5X9mpNec4zX63RjQw2rxyhjJRdR5QSuQ=";
   };
 
   patches = [
