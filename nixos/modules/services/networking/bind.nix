@@ -117,7 +117,7 @@ in
       cacheNetworks = mkOption {
         default = [ "127.0.0.0/24" ];
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           What networks are allowed to use us as a resolver.  Note
           that this is for recursive queries -- all networks are
           allowed to query zones configured with the `zones` option.

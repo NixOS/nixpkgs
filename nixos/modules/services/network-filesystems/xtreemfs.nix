@@ -111,7 +111,7 @@ in
         uuid = mkOption {
           example = "eacb6bab-f444-4ebf-a06a-3f72d7465e40";
           type = types.str;
-          description = ''
+          description = lib.mdDoc ''
             Must be set to a unique identifier, preferably a UUID according to
             RFC 4122. UUIDs can be generated with `uuidgen` command, found in
             the `util-linux` package.
@@ -236,7 +236,7 @@ in
         uuid = mkOption {
           example = "eacb6bab-f444-4ebf-a06a-3f72d7465e41";
           type = types.str;
-          description = ''
+          description = lib.mdDoc ''
             Must be set to a unique identifier, preferably a UUID according to
             RFC 4122. UUIDs can be generated with `uuidgen` command, found in
             the `util-linux` package.
@@ -379,7 +379,7 @@ in
         uuid = mkOption {
           example = "eacb6bab-f444-4ebf-a06a-3f72d7465e42";
           type = types.str;
-          description = ''
+          description = lib.mdDoc ''
             Must be set to a unique identifier, preferably a UUID according to
             RFC 4122. UUIDs can be generated with `uuidgen` command, found in
             the `util-linux` package.

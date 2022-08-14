@@ -29,7 +29,7 @@ in {
     address = mkOption {
       default = "127.0.0.1";
       type = str;
-      description = ''
+      description = lib.mdDoc ''
         Address to listen on.
         Pass `all` to listen on all interfaces.
       '';

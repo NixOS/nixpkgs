@@ -24,7 +24,7 @@ let
   phocConfigType = types.submodule {
     options = {
       xwayland = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable XWayland support.
 
           To start XWayland immediately, use `immediate`.

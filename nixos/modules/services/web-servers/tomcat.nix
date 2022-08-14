@@ -34,7 +34,7 @@ in
       purifyOnStart = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           On startup, the `baseDir` directory is populated with various files,
           subdirectories and symlinks. If this option is enabled, these items
           (except for the `logs` and `work` subdirectories) are first removed.
@@ -46,7 +46,7 @@ in
       baseDir = mkOption {
         type = lib.types.path;
         default = "/var/tomcat";
-        description = ''
+        description = lib.mdDoc ''
           Location where Tomcat stores configuration files, web applications
           and logfiles. Note that it is partially cleared on each service startup
           if `purifyOnStart` is enabled.

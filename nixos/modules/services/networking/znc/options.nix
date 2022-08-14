@@ -118,7 +118,7 @@ in
           type = types.listOf types.str;
           default = [ "webadmin" "adminlog" ];
           example = [ "partyline" "webadmin" "adminlog" "log" ];
-          description = ''
+          description = lib.mdDoc ''
             A list of modules to include in the `znc.conf` file.
           '';
         };
@@ -127,7 +127,7 @@ in
           type = types.listOf types.str;
           default = [ "chansaver" "controlpanel" ];
           example = [ "chansaver" "controlpanel" "fish" "push" ];
-          description = ''
+          description = lib.mdDoc ''
             A list of user modules to include in the `znc.conf` file.
           '';
         };
@@ -216,7 +216,7 @@ in
         extraZncConf = mkOption {
           default = "";
           type = types.lines;
-          description = ''
+          description = lib.mdDoc ''
             Extra config to `znc.conf` file.
           '';
         };

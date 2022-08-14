@@ -50,7 +50,7 @@ in {
     settings = mkOption {
       type = types.attrsOf types.attrs;
       default = {};
-      description = ''
+      description = lib.mdDoc ''
         x2goserver.conf ini configuration as nix attributes. See
         `x2goserver.conf(5)` for details
       '';

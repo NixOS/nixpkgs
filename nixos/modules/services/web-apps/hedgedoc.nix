@@ -937,7 +937,7 @@ in
               id = mkOption {
                 type = types.str;
                 default = "";
-                description = ''
+                description = lib.mdDoc ''
                   Attribute map for `id'.
                   Defaults to `NameID' of SAML response.
                 '';
@@ -945,7 +945,7 @@ in
               username = mkOption {
                 type = types.str;
                 default = "";
-                description = ''
+                description = lib.mdDoc ''
                   Attribute map for `username'.
                   Defaults to `NameID' of SAML response.
                 '';

@@ -219,7 +219,7 @@ in
       registerHostname = mkOption {
         type = types.str;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           DNS hostname where your server can be reached. This is only
           needed if you want your server to be accessed by its
           hostname and not IP - but the name *must* resolve on the

@@ -11,7 +11,7 @@ in {
       package = mkOption {
         default = pkgs.zsh-autoenv;
         defaultText = literalExpression "pkgs.zsh-autoenv";
-        description = ''
+        description = lib.mdDoc ''
           Package to install for `zsh-autoenv` usage.
         '';
 

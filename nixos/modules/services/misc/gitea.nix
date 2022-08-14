@@ -183,7 +183,7 @@ in
         file = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = "Filename to be used for the dump. If `null` a default name is choosen by gitea.";
+          description = lib.mdDoc "Filename to be used for the dump. If `null` a default name is choosen by gitea.";
           example = "gitea-dump";
         };
       };
