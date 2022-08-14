@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchzip, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, fetchzip, installShellFiles, stdenv }:
 
 let
   version = "0.32.0";
@@ -46,7 +46,7 @@ in buildGoModule rec {
     $out/bin/flux --version | grep ${version} > /dev/null
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     for shell in bash fish zsh; do
       $out/bin/flux completion $shell > flux.$shell
       installShellCompletion flux.$shell
