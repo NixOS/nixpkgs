@@ -7,15 +7,13 @@
 , withLibcap ? true, libcap
 }:
 
-with lib;
-
 stdenv.mkDerivation {
   pname = "perf-linux";
   version = kernel.version;
 
   inherit (kernel) src;
 
-  patches = optionals (versionAtLeast kernel.version "5.19" && versionOlder kernel.version "5.20") [
+  patches = lib.optionals (lib.versionAtLeast kernel.version "5.19" && lib.versionOlder kernel.version "5.20") [
     # binutils-2.39 support around init_disassemble_info()
     # API change.
     # Will be included in 5.20.
@@ -50,12 +48,10 @@ stdenv.mkDerivation {
     elfutils newt slang libunwind libbfd zlib openssl systemtap.stapBuild numactl
     libopcodes python3 perl
   ] ++ lib.optional withGtk gtk2
-    ++ (if (versionAtLeast kernel.version "4.19") then [ python3 ] else [ python2 ])
+    ++ (if (lib.versionAtLeast kernel.version "4.19") then [ python3 ] else [ python2 ])
     ++ lib.optional withZstd zstd
     ++ lib.optional withLibcap libcap;
 
-  # Note: we don't add elfutils to buildInputs, since it provides a
-  # bad `ld' and other stuff.
   NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=cpp"
     "-Wno-error=bool-compare"
@@ -79,11 +75,11 @@ stdenv.mkDerivation {
       --prefix PATH : "${binutils-unwrapped}/bin"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://perf.wiki.kernel.org/";
     description = "Linux tools to profile with performance counters";
-    maintainers = with lib.maintainers; [viric];
-    platforms = with lib.platforms; linux;
+    maintainers = with maintainers; [ viric ];
+    platforms = platforms.linux;
     broken = kernel.kernelOlder "5";
   };
 }
