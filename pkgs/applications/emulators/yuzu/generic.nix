@@ -45,15 +45,6 @@
 stdenv.mkDerivation rec {
   inherit pname version src;
 
-  # Replace icons licensed under CC BY-ND 3.0 with free ones to allow
-  # for binary redistribution: https://github.com/yuzu-emu/yuzu/pull/8104
-  # The patch hosted on GitHub has the binary information in git format, which
-  # can’t be applied with patch(1), so it has been regenerated with
-  # "git format-patch --text --full-index --binary".
-  # Because pineapple strips all files beginning with a dot, the patch needs to
-  # be edited manually afterwards to remove all changes to those.
-  patches = [ ./yuzu-free-icons.patch ];
-
   nativeBuildInputs = [
     cmake
     doxygen
@@ -111,6 +102,13 @@ stdenv.mkDerivation rec {
     "-DENABLE_COMPATIBILITY_LIST_DOWNLOAD=OFF" # We provide this deterministically
   ];
 
+  qtWrapperArgs = [
+    # Fixes vulkan detection
+    "--prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib"
+    # Without yuzu doesnt start on wayland. See https://github.com/yuzu-emu/yuzu/issues/6088
+    "--set QT_QPA_PLATFORM xcb"
+  ];
+
   preConfigure = ''
     # This prevents a check for submodule directories.
     rm -f .gitmodules
@@ -125,13 +123,6 @@ stdenv.mkDerivation rec {
   # This must be done after cmake finishes as it overwrites the file
   postConfigure = ''
     ln -sf ${compat-list} ./dist/compatibility_list/compatibility_list.json
-  '';
-
-  # Fix vulkan detection
-  postFixup = ''
-    for bin in $out/bin/yuzu $out/bin/yuzu-cmd; do
-      wrapProgram $bin --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
-    done
   '';
 
   passthru.updateScript = runCommandLocal "yuzu-${branch}-updateScript" {
@@ -154,7 +145,7 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     license = with licenses; [
       gpl3Plus
-      # Icons. Note that this would be cc0 and cc-by-nd-30 without the "yuzu-free-icons" patch
+      # Icons
       asl20 mit cc0
     ];
     maintainers = with maintainers; [
