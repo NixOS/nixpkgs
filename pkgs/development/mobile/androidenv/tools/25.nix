@@ -2,8 +2,8 @@
 
 deployAndroidPackage {
   name = "androidsdk";
-  buildInputs = [ autoPatchelfHook makeWrapper ]
-    ++ lib.optional (os == "linux") [ pkgs.glibc pkgs.xorg.libX11 pkgs.xorg.libXext pkgs.xorg.libXdamage pkgs.xorg.libxcb pkgs.xorg.libXfixes pkgs.xorg.libXrender pkgs.fontconfig.lib pkgs.freetype pkgs.libGL pkgs.zlib pkgs.ncurses5 pkgs.libpulseaudio pkgs_i686.glibc pkgs_i686.xorg.libX11 pkgs_i686.xorg.libXrender pkgs_i686.fontconfig pkgs_i686.freetype pkgs_i686.zlib ];
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
+  buildInputs = lib.optional (os == "linux") [ pkgs.glibc pkgs.xorg.libX11 pkgs.xorg.libXext pkgs.xorg.libXdamage pkgs.xorg.libxcb pkgs.xorg.libXfixes pkgs.xorg.libXrender pkgs.fontconfig.lib pkgs.freetype pkgs.libGL pkgs.zlib pkgs.ncurses5 pkgs.libpulseaudio pkgs_i686.glibc pkgs_i686.xorg.libX11 pkgs_i686.xorg.libXrender pkgs_i686.fontconfig pkgs_i686.freetype pkgs_i686.zlib ];
   inherit package os;
 
   patchInstructions = ''

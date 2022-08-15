@@ -18,7 +18,7 @@ let
 in buildEnv {
   name = "frogatto-${version}";
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   paths = [ engine data desktopItem ];
   pathsToLink = [
     "/bin"

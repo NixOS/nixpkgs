@@ -37,9 +37,9 @@ stdenv.mkDerivation {
     })
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ git curl SDL2 xercesc openal lua libpng libjpeg libvlc wxGTK
-    glib cppunit fontconfig freetype ftgl glew libogg libvorbis makeWrapper libGLU ];
+  nativeBuildInputs = [ cmake pkg-config makeWrapper git ];
+  buildInputs = [ curl SDL2 xercesc openal lua libpng libjpeg libvlc wxGTK
+    glib cppunit fontconfig freetype ftgl glew libogg libvorbis libGLU ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_PREFIX=$out"

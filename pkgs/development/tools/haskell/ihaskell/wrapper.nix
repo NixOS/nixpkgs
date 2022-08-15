@@ -14,7 +14,7 @@ let
 in
 buildEnv {
   name = "ihaskell-with-packages";
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   paths = [ ihaskellEnv jupyter ];
   postBuild = ''
     ln -s ${ihaskellSh}/bin/ihaskell-notebook $out/bin/

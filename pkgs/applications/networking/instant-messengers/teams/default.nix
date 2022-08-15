@@ -137,7 +137,7 @@ let
       hash = "sha256-vLUEvOSBUyAJIWHOAIkTqTW/W6TkgmeyRzQbquZP810=";
     };
 
-    buildInputs = [ xar cpio makeWrapper ];
+    nativeBuildInputs = [ xar cpio makeWrapper ];
 
     unpackPhase = ''
       xar -xf $src

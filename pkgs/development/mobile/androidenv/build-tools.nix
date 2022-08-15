@@ -2,8 +2,9 @@
 
 deployAndroidPackage {
   inherit package os;
-  buildInputs = [ makeWrapper ] ++
-    lib.optionals (os == "linux") [ autoPatchelfHook pkgs.glibc pkgs.zlib pkgs.ncurses5 pkgs_i686.glibc pkgs_i686.zlib pkgs_i686.ncurses5 pkgs.libcxx ];
+  nativeBuildInputs = [ makeWrapper ]
+    ++ lib.optionals (os == "linux") [ autoPatchelfHook ];
+  buildInputs = lib.optionals (os == "linux") [ pkgs.glibc pkgs.zlib pkgs.ncurses5 pkgs_i686.glibc pkgs_i686.zlib pkgs_i686.ncurses5 pkgs.libcxx ];
   patchInstructions = ''
     ${lib.optionalString (os == "linux") ''
       addAutoPatchelfSearchPath $packageBaseDir/lib

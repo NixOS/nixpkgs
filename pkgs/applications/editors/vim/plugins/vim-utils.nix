@@ -338,7 +338,7 @@ rec {
           if vimrcFile != null then vimrcFile
           else if vimrcConfig != null then mkVimrcFile vimrcConfig
           else throw "at least one of vimrcConfig and vimrcFile must be specified";
-        bin = runCommand "${name}-bin" { buildInputs = [ makeWrapper ]; } ''
+        bin = runCommand "${name}-bin" { nativeBuildInputs = [ makeWrapper ]; } ''
           vimrc=${lib.escapeShellArg vimrc}
           gvimrc=${if gvimrcFile != null then lib.escapeShellArg gvimrcFile else ""}
 
