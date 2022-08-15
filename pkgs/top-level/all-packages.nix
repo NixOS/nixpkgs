@@ -34447,6 +34447,8 @@ with pkgs;
 
   yafu = callPackage ../applications/science/math/yafu { };
 
+  ytools = callPackage ../development/libraries/ytools { };
+
   speedcrunch = libsForQt5.callPackage ../applications/science/math/speedcrunch { };
 
   ### SCIENCE / MISC
