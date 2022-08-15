@@ -9045,7 +9045,7 @@ with pkgs;
   };
   nomad_1_3 = callPackage ../applications/networking/cluster/nomad/1.3.nix {
     # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
-    buildGoModule = buildGo117Module;
+    buildGoModule = buildGo118Module;
   };
 
   nomad-autoscaler = callPackage ../applications/networking/cluster/nomad-autoscaler { };
