@@ -252,9 +252,9 @@ in {
     hash = "sha256-N5Wfi1+8ZNlOGA3NiuW9+v1AYgOgf0j3vs1rinYzdEw=";
   };
   mariadb_107 = mariadbPackage {
-    # Supported until 2023-02
-    version = "10.7.4";
-    hash = "sha256:0ws17azsw3f26pkphjkyxmmi9qbv9gwidvz0ll6g482m6afrrpbk";
+    # Supported until 2023-02. TODO: remove ahead of 22.11 release.
+    version = "10.7.5";
+    hash = "sha256-f/OkzNoe7S8aZBO4DE7WjMqRFzD1Aaaf1/STo0oJVLo=";
   };
   mariadb_108 = mariadbPackage {
     # Supported until 2023-05
