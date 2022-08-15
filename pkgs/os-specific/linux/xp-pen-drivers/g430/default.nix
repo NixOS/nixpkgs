@@ -1,7 +1,7 @@
 { lib, stdenv, mkDerivation, fetchzip, autoPatchelfHook, libusb1, libX11, libXtst, qtbase, libglvnd }:
 
 mkDerivation rec {
-  pname = "pentablet-driver";
+  pname = "xp-pen-g430-driver";
   version = "1.2.13.1";
 
   src = fetchzip {

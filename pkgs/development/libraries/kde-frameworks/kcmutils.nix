@@ -13,7 +13,4 @@ mkDerivation {
     qtdeclarative
   ];
   propagatedBuildInputs = [ kconfigwidgets kservice ];
-  patches = [
-    ./0001-kcmutils-follow-symlinks.patch
-  ];
 }
