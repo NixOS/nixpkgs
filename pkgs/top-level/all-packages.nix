@@ -20117,9 +20117,7 @@ with pkgs;
 
   libopusenc = callPackage ../development/libraries/libopusenc { };
 
-  libosinfo = callPackage ../development/libraries/libosinfo {
-    inherit (gnome) libsoup;
-  };
+  libosinfo = callPackage ../development/libraries/libosinfo { };
 
   libosip = callPackage ../development/libraries/osip {};
 

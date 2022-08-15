@@ -9,7 +9,7 @@
 , gtk-doc
 , docbook_xsl
 , glib
-, libsoup
+, libsoup_3
 , libxml2
 , libxslt
 , check
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     glib
-    libsoup
+    libsoup_3
     libxml2
     libxslt
   ];
