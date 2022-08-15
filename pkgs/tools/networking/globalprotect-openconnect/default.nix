@@ -21,10 +21,6 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     substituteInPlace GPService/gpservice.h \
       --replace /usr/local/bin/openconnect ${openconnect}/bin/openconnect;
-    substituteInPlace GPClient/settingsdialog.ui \
-      --replace /etc/gpservice/gp.conf $out/etc/gpservice/gp.conf;
-    substituteInPlace GPService/gpservice.cpp \
-      --replace /etc/gpservice/gp.conf $out/etc/gpservice/gp.conf;
     substituteInPlace GPService/CMakeLists.txt \
       --replace /etc/gpservice $out/etc/gpservice;
   '';
