@@ -62,6 +62,7 @@ in
         before = [ "nss-lookup.target" "nss-user-lookup.target" ];
         wants = [ "nss-lookup.target" "nss-user-lookup.target" ];
         wantedBy = [ "multi-user.target" ];
+        requiredBy = [ "nss-lookup.target" "nss-user-lookup.target" ];
 
         environment = { LD_LIBRARY_PATH = nssModulesPath; };
 
