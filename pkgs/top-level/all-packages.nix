@@ -8692,7 +8692,7 @@ with pkgs;
     nvidiaGpuSupport = config.cudaSupport or false;
   };
   nomad_1_3 = callPackage ../applications/networking/cluster/nomad/1.3.nix {
-    buildGoModule = buildGo117Module;
+    buildGoModule = buildGo118Module;
     inherit (linuxPackages) nvidia_x11;
     nvidiaGpuSupport = config.cudaSupport or false;
   };
