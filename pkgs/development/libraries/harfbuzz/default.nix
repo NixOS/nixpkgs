@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , pkg-config
 , glib
 , freetype
@@ -46,6 +47,14 @@ stdenv.mkDerivation {
     rev = version;
     sha256 = "sha256-K6iScmg1vNfwb1UYqtXsnijLVpcC+am2ZL+W5bLFzsI=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "aarch64-test-narrowing.diff";
+      url = "https://github.com/harfbuzz/harfbuzz/commit/04d28d94e576aab099891e6736fd0088dfac3366.diff";
+      sha256 = "sha256-099GP8t1G0kyYl79A6xJhfyrs3WXYitvn+He7sEz+Oo=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs src/*.py test
