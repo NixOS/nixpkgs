@@ -8429,6 +8429,8 @@ in {
 
   pytest-aiohttp = callPackage ../development/python-modules/pytest-aiohttp { };
 
+  pytest-allclose = callPackage ../development/python-modules/pytest-allclose { };
+
   pytest-annotate = callPackage ../development/python-modules/pytest-annotate { };
 
   pytest-ansible = callPackage ../development/python-modules/pytest-ansible { };
