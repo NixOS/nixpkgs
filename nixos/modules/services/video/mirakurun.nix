@@ -189,6 +189,7 @@ in
           CHANNELS_CONFIG_PATH = "/etc/mirakurun/channels.yml";
           SERVICES_DB_PATH = "/var/lib/mirakurun/services.json";
           PROGRAMS_DB_PATH = "/var/lib/mirakurun/programs.json";
+          LOGO_DATA_DIR_PATH = "/var/lib/mirakurun/logos";
           NODE_ENV = "production";
         };
 
