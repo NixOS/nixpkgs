@@ -5509,6 +5509,8 @@ in {
 
   meshtastic = callPackage ../development/python-modules/meshtastic { };
 
+  meshzoo = callPackage ../development/python-modules/meshzoo { };
+
   meson = toPythonModule ((pkgs.meson.override { python3 = python; }).overrideAttrs
     (oldAttrs: { # We do not want the setup hook in Python packages because the build is performed differently.
       setupHook = null;
