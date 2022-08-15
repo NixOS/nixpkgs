@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "avizo";
-  version = "1.2";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "misterdanb";
     repo = "avizo";
     rev = version;
-    sha256 = "sha256-BRtdCOBFsKkJif/AlnF7N9ZDcmA+878M9lDQld+SAgo=";
+    sha256 = "sha256-ainU4nXWFp1udVujPHZUeWIfJE4RrjU1hn9J17UuuzU=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config vala gobject-introspection wrapGAppsHook ];
