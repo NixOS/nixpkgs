@@ -11593,6 +11593,8 @@ in {
 
   x11_hash = callPackage ../development/python-modules/x11_hash { };
 
+  x21 = callPackage ../development/python-modules/x21 { };
+
   x256 = callPackage ../development/python-modules/x256 { };
 
   xapian = callPackage ../development/python-modules/xapian {
