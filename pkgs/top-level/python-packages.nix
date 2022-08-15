@@ -9696,6 +9696,8 @@ in {
 
   scikit-build = callPackage ../development/python-modules/scikit-build { };
 
+  scikit-fem = callPackage ../development/python-modules/scikit-fem { };
+
   scikit-fmm = callPackage ../development/python-modules/scikit-fmm { };
 
   scikit-fuzzy = callPackage ../development/python-modules/scikit-fuzzy { };
