@@ -7,7 +7,7 @@ flutter.mkFlutterApp {
   pname = "firmware-updater";
   version = "unstable";
 
-  vendorHash = "sha256-3wVA9BLCnMijC0gOmskz+Hv7NQIGu/jhBDbWjmoq1Tc=";
+  vendorHash = "sha256-lZ+o4EwaY8K0bfGYpiECwhtGudbRG5z/UfHWjb35XLE=";
 
   src = fetchFromGitHub {
     owner = "canonical";
