@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "aiohttp-retry";
-  version = "2.7.0";
+  version = "2.8.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "inyutin";
     repo = "aiohttp_retry";
     rev = "v${version}";
-    hash = "sha256-vMnk7OHXTgFLcnqauAPB/vxVt8bP1To6KTIgNv7Ek+Q=";
+    hash = "sha256-Zr68gx8ZR9jKrogmqaFLvpBAIHE9ptHm0zZ/b49cCLw=";
   };
 
   propagatedBuildInputs = [

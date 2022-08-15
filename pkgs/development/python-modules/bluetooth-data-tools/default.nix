@@ -1,16 +1,14 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, home-assistant-bluetooth
 , poetry-core
 , pytestCheckHook
 , pythonOlder
-, sensor-state-data
 }:
 
 buildPythonPackage rec {
-  pname = "sensor-state-data";
-  version = "2.2.0";
+  pname = "bluetooth-data-tools";
+  version = "0.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -19,7 +17,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ThROGmCNsOOJ65sOXRS1FefwN8Wf2DmHP294y3JVQvk=";
+    hash = "sha256-AobkHODtWun2TPxb6yR/ieYyeIndTG0KmxTY81fQHCA=";
   };
 
   nativeBuildInputs = [
@@ -32,16 +30,16 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=sensor_state_data --cov-report=term-missing:skip-covered" ""
+      --replace " --cov=bluetooth_data_tools --cov-report=term-missing:skip-covered" ""
   '';
 
   pythonImportsCheck = [
-    "sensor_state_data"
+    "bluetooth_data_tools"
   ];
 
   meta = with lib; {
-    description = "Models for storing and converting Sensor Data state";
-    homepage = "https://github.com/bluetooth-devices/sensor-state-data";
+    description = "Library for converting bluetooth data and packets";
+    homepage = "https://github.com/Bluetooth-Devices/bluetooth-data-tools";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
