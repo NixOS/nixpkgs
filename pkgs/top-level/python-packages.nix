@@ -8548,6 +8548,8 @@ in {
 
   pytest-param-files = callPackage ../development/python-modules/pytest-param-files { };
 
+  pytest-plt = callPackage ../development/python-modules/pytest-plt { };
+
   pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
 
   pytest-qt = callPackage ../development/python-modules/pytest-qt { };
