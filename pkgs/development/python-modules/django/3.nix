@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Django";
     inherit version;
-    sha256 = "sha256-Z3GCuotbKFpOBy86wXzu5q/xtc53/Rc8xbai09wCL88=";
+    hash = "sha256-Z3GCuotbKFpOBy86wXzu5q/xtc53/Rc8xbai09wCL88=";
   };
 
   patches = lib.optional withGdal
