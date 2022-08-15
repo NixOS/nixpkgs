@@ -35,7 +35,11 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -D libvosk${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libvosk${stdenv.hostPlatform.extensions.sharedLibrary}
-  '';
+    '';
+
+  passthru = {
+    models = callPackage ./models.nix { };
+  };
 
   meta = with lib; {
     homepage = "https://alphacephei.com/vosk/";
