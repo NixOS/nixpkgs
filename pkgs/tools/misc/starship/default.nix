@@ -5,6 +5,8 @@
 , installShellFiles
 , libiconv
 , libgit2
+, cmake
+, fetchpatch
 , pkg-config
 , nixosTests
 , Security
@@ -14,16 +16,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "starship";
-  version = "1.9.1";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-IujaGyAGYlBb4efaRb13rsPSD2gWAg5UgG10iMp9iQE=";
+    sha256 = "sha256-mumlnY9KGKdS3x4U84J4I8m5uMJI7SZR52aT6DPi/MM=";
   };
 
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  nativeBuildInputs = [ installShellFiles cmake ]
+    ++ lib.optionals stdenv.isLinux [ pkg-config ];
 
   buildInputs = [ libgit2 ] ++ lib.optionals stdenv.isDarwin [ libiconv Security Foundation Cocoa ];
 
@@ -32,13 +35,21 @@ rustPlatform.buildRustPackage rec {
   buildFeatures = if stdenv.isDarwin then [ "battery" ] else [ "default" ];
 
   postInstall = ''
-    for shell in bash fish zsh; do
-      STARSHIP_CACHE=$TMPDIR $out/bin/starship completions $shell > starship.$shell
-      installShellCompletion starship.$shell
-    done
+    installShellCompletion --cmd starship \
+      --bash <($out/bin/starship completions bash) \
+      --fish <($out/bin/starship completions fish) \
+      --zsh <($out/bin/starship completions zsh)
   '';
 
-  cargoSha256 = "sha256-HrSMNNrldwb6LMMuxdQ84iY+/o5L2qwe+Vz3ekQt1YQ=";
+  cargoPatches = [
+    # Bump chrono dependency to fix panic when no timezone
+    (fetchpatch {
+      url = "https://github.com/starship/starship/commit/e652e8643310c3b41ce19ad05b8168abc29bb683.patch";
+      sha256 = "sha256-iGYLJuptPMc45E7o+GXjIx7y2PxuO1mGM7xSopDBve0=";
+    })
+  ];
+
+  cargoSha256 = "sha256-w7UCExSkgEY52D98SSe2EkuiwtjM6t0/uTiafrtEBaU=";
 
   preCheck = ''
     HOME=$TMPDIR
