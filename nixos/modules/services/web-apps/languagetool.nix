@@ -2,7 +2,6 @@
 with lib;
 let
   cfg = config.services.languageToolHttp;
-  format = pkgs.formats.toml { };
   confDoc = "See languagetool-http-server --help for further details";
 in
 {
@@ -18,7 +17,7 @@ in
       description = ''
         Content of the configuration file. ${confDoc}
       '';
-      inherit (format) type;
+      type = with lib.types;attrsOf (oneOf [ str bool path int ]);
       default = { };
     };
     args = mkOption {
@@ -42,7 +41,11 @@ in
   config = mkIf cfg.enable {
     services.languageToolHttp.args = {
       allow-origin = mkIf cfg.allowBrowserPluginAccess (mkDefault "*");
-      config = format.generate "LanguageTool.cfg" cfg.settings;
+      config = pkgs.writeText "language-tool.properties"
+        (with lib; concatStringSep "\n" (mapAttrsToList
+          (n: v: "${n}=${with builtins;
+          if isBool v then toJSON v else toString v}")
+          cfg.settings));
       public = mkIf cfg.public "";
     };
     systemd.services.languagetool-http = {
