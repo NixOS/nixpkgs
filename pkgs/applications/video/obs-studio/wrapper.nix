@@ -16,19 +16,14 @@ symlinkJoin {
 
       pluginsJoined = symlinkJoin {
         name = "obs-studio-plugins";
-        paths = lists.map (plugin: "${plugin}/lib/obs-plugins") plugins;
-      };
-
-      pluginsDataJoined = symlinkJoin {
-        name = "obs-studio-plugins-data";
-        paths = lists.map (plugin: "${plugin}/share/obs/obs-plugins") plugins;
+        paths = plugins;
       };
 
       wrapCommand = [
           "wrapProgram"
           "$out/bin/obs"
-          ''--set OBS_PLUGINS_PATH "${pluginsJoined}"''
-          ''--set OBS_PLUGINS_DATA_PATH "${pluginsDataJoined}"''
+          ''--set OBS_PLUGINS_PATH "${pluginsJoined}/lib/obs-plugins"''
+          ''--set OBS_PLUGINS_DATA_PATH "${pluginsJoined}/share/obs/obs-plugins"''
         ] ++ pluginArguments;
     in concatStringsSep " " wrapCommand;
 
