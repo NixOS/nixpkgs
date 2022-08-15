@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substituteInPlace Makefile \
-        --replace 'xcrun clang' '/usr/bin/xcrun clang'
+        --replace 'xcrun clang' clang
   '';
 
   nativeBuildInputs = [ xxd ];
@@ -23,20 +23,6 @@ stdenv.mkDerivation rec {
     ScriptingBridge
     SkyLight
   ];
-
-  buildPhase = ''
-    export PATH=/usr/bin:/bin:/usr/sbin
-
-    touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress;
-    PROD=$(softwareupdate -l |
-           grep "\*.*Command Line" |
-           head -n 1 | awk -F"*" '{print$2}' |
-           sed -e 's/^ *//' |
-           sed 's/Label: //g' |
-           tr -d '\n')
-    softwareupdate -i "$PROD" --verbose
-    /usr/bin/make install
-  '';
 
   installPhase = ''
     mkdir -p $out/bin
