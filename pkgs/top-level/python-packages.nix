@@ -8578,6 +8578,8 @@ in {
 
   pytest-resource-path = callPackage ../development/python-modules/pytest-resource-path { };
 
+  pytest-rng = callPackage ../development/python-modules/pytest-rng { };
+
   pytest-runner = callPackage ../development/python-modules/pytest-runner { };
 
   pytest-sanic = callPackage ../development/python-modules/pytest-sanic {
