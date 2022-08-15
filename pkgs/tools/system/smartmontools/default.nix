@@ -3,6 +3,7 @@
 , fetchurl
 , autoreconfHook
 , enableMail ? false
+, gnused
 , mailutils
 , inetutils
 , IOKit
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
     cp -v ${driverdb} drivedb.h
   '';
 
-  configureFlags = lib.optional enableMail "--with-scriptpath=${lib.makeBinPath [ inetutils mailutils ]}";
+  configureFlags = lib.optional enableMail "--with-scriptpath=${lib.makeBinPath [ gnused inetutils mailutils ]}";
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = lib.optionals stdenv.isDarwin [ IOKit ApplicationServices ];
