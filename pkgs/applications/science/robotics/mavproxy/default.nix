@@ -1,5 +1,6 @@
-{ stdenv, lib, buildPythonApplication, fetchPypi, matplotlib, numpy, pymavlink, pyserial
-, setuptools, wxPython_4_0, billiard, gnureadline, opencv4 }:
+{ stdenv, lib, buildPythonApplication, fetchPypi, lxml, matplotlib, numpy
+, opencv4, pymavlink, pyserial, setuptools, wxPython_4_0, billiard
+, gnureadline }:
 
 buildPythonApplication rec {
   pname = "MAVProxy";
@@ -16,13 +17,14 @@ buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = [
+    lxml
     matplotlib
     numpy
+    opencv4
     pymavlink
     pyserial
     setuptools
     wxPython_4_0
-    opencv4
   ] ++ lib.optionals stdenv.isDarwin [ billiard gnureadline ];
 
   # No tests
