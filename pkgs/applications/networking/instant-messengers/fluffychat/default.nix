@@ -3,20 +3,26 @@
 , flutter
 , olm
 , imagemagick
+, jack2
+, alsa-lib
+, libpulseaudio
+, fribidi
+, libgcrypt
+, libgpg-error
 , makeDesktopItem
 }:
 
 flutter.mkFlutterApp rec {
   pname = "fluffychat";
-  version = "1.2.0";
+  version = "1.6.1";
 
-  vendorHash = "sha256-co+bnsVIyg42JpM9FimfGEjrd6A99GlBeow1Dgv7NBI=";
+  vendorHash = "sha256-SelMRETFYZgTStV90gRoKhazu1NPbcSMO9mYebSQskQ=";
 
   src = fetchFromGitLab {
     owner = "famedly";
     repo = "fluffychat";
     rev = "v${version}";
-    hash = "sha256-PJH3jMQc6u9R6Snn+9rNN8t+8kt6l3Xt7zKPbpqj13E=";
+    hash = "sha256-aBhhGyzNgwCWQ+zLanFJpQ2ibR+qI+ETRTWL0TzNHT4=";
   };
 
   desktopItem = makeDesktopItem {
@@ -30,7 +36,15 @@ flutter.mkFlutterApp rec {
 
   buildInputs = [
     olm
+    jack2
+    alsa-lib
+    libpulseaudio
+    fribidi
+    libgcrypt
+    libgpg-error
   ];
+
+  NIX_CFLAGS_COMPILE = "-I${fribidi}/include/fribidi";
 
   nativeBuildInputs = [
     imagemagick
