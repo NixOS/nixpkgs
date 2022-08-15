@@ -77,6 +77,7 @@ let
     "varnish"
     "wireguard"
     "flow"
+    "zfs"
   ] (name:
     import (./. + "/exporters/${name}.nix") { inherit config lib pkgs options; }
   );

@@ -1396,6 +1396,19 @@ let
           )
         '';
       };
+
+    zfs = {
+      exporterConfig = {
+        enable = true;
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-zfs-exporter.service")
+        wait_for_open_port(9134)
+        wait_until_succeeds(
+          "curl -sSf 'localhost:9134/metrics'"
+        )
+      '';
+    };
   };
 in
 mapAttrs

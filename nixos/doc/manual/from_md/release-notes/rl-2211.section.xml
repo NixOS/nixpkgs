@@ -383,6 +383,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/pdf/zfs_exporter">Prometheus
+          ZFS exporter</link>, a Prometheus ZFS exporter that reports
+          datasets’ sizes/properties. Available as
+          <link linkend="opt-services.prometheus.exporters">services.prometheus.exporters.zfs</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://www.grafana.com/oss/tempo/">Grafana
           Tempo</link>, a distributed tracing store. Available as
           <link linkend="opt-services.tempo.enable">services.tempo</link>.
