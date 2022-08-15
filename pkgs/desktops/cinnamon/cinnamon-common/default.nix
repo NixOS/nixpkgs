@@ -10,6 +10,7 @@
 , cjs
 , fetchFromGitHub
 , gdk-pixbuf
+, gettext
 , libgnomekbd
 , glib
 , gobject-introspection
@@ -151,6 +152,8 @@ stdenv.mkDerivation rec {
 
     sed "s| cinnamon-session| ${cinnamon-session}/bin/cinnamon-session|g" -i ./files/usr/bin/cinnamon-session-cinnamon  -i ./files/usr/bin/cinnamon-session-cinnamon2d
     sed "s|/usr/bin|$out/bin|g" -i ./files/usr/share/xsessions/cinnamon.desktop ./files/usr/share/xsessions/cinnamon2d.desktop
+
+    sed "s|msgfmt|${gettext}/bin/msgfmt|g" -i ./files/usr/share/cinnamon/cinnamon-settings/bin/Spices.py
   '';
 
   passthru = {
