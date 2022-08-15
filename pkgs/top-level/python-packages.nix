@@ -4868,6 +4868,8 @@ in {
     inherit (pkgs) keyutils;
   };
 
+  kgt = callPackage ../development/python-modules/kgt { };
+
   kicad = toPythonModule (pkgs.kicad.override {
     python3 = python;
   }).src;
