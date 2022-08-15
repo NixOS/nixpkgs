@@ -37,12 +37,12 @@ let
         };
 
         keystore = mkOption {
-          description = ''
+          description = lib.mdDoc ''
             Path to keystore (combined PEM with cert/key, or PKCS12 keystore).
 
-            NB: storepass is not supported because it would expose credentials via <literal>/proc/*/cmdline</literal>.
+            NB: storepass is not supported because it would expose credentials via `/proc/*/cmdline`.
 
-            Specify this or <literal>cert</literal> and <literal>key</literal>.
+            Specify this or `cert` and `key`.
           '';
           type = types.nullOr types.str;
           default = null;

@@ -10,7 +10,7 @@ with lib;
         type = types.str;
         default = "";
         example = "order=scsi0;net0";
-        description = ''
+        description = lib.mdDoc ''
           Default boot device. PVE will try all devices in its default order if this value is empty.
         '';
       };
@@ -18,16 +18,16 @@ with lib;
         type = types.str;
         default = "virtio-scsi-pci";
         example = "lsi";
-        description = ''
+        description = lib.mdDoc ''
           SCSI controller type. Must be one of the supported values given in
-          <link xlink:href="https://pve.proxmox.com/wiki/Qemu/KVM_Virtual_Machines"/>
+          <https://pve.proxmox.com/wiki/Qemu/KVM_Virtual_Machines>
         '';
       };
       virtio0 = mkOption {
         type = types.str;
         default = "local-lvm:vm-9999-disk-0";
         example = "ceph:vm-123-disk-0";
-        description = ''
+        description = lib.mdDoc ''
           Configuration for the default virtio disk. It can be used as a cue for PVE to autodetect the target sotrage.
           This parameter is required by PVE even if it isn't used.
         '';
@@ -35,21 +35,21 @@ with lib;
       ostype = mkOption {
         type = types.str;
         default = "l26";
-        description = ''
+        description = lib.mdDoc ''
           Guest OS type
         '';
       };
       cores = mkOption {
         type = types.ints.positive;
         default = 1;
-        description = ''
+        description = lib.mdDoc ''
           Guest core count
         '';
       };
       memory = mkOption {
         type = types.ints.positive;
         default = 1024;
-        description = ''
+        description = lib.mdDoc ''
           Guest memory in MB
         '';
       };
@@ -58,14 +58,14 @@ with lib;
       name = mkOption {
         type = types.str;
         default = "nixos-${config.system.nixos.label}";
-        description = ''
+        description = lib.mdDoc ''
           VM name
         '';
       };
       net0 = mkOption {
         type = types.commas;
         default = "virtio=00:00:00:00:00:00,bridge=vmbr0,firewall=1";
-        description = ''
+        description = lib.mdDoc ''
           Configuration for the default interface. When restoring from VMA, check the
           "unique" box to ensure device mac is randomized.
         '';
@@ -74,7 +74,7 @@ with lib;
         type = types.str;
         default = "socket";
         example = "/dev/ttyS0";
-        description = ''
+        description = lib.mdDoc ''
           Create a serial device inside the VM (n is 0 to 3), and pass through a host serial device (i.e. /dev/ttyS0),
           or create a unix socket on the host side (use qm terminal to open a terminal connection).
         '';
@@ -83,7 +83,7 @@ with lib;
         type = types.bool;
         apply = x: if x then "1" else "0";
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Expect guest to have qemu agent running
         '';
       };
@@ -95,7 +95,7 @@ with lib;
         cpu = "host";
         onboot = 1;
       }'';
-      description = ''
+      description = lib.mdDoc ''
         Additional options appended to qemu-server.conf
       '';
     };
@@ -103,7 +103,7 @@ with lib;
       type = types.str;
       default = config.proxmox.qemuConf.name;
       example = "999-nixos_template";
-      description = ''
+      description = lib.mdDoc ''
         Filename of the image will be vzdump-qemu-''${filenameSuffix}.vma.zstd.
         This will also determine the default name of the VM on restoring the VMA.
         Start this value with a number if you want the VMA to be detected as a backup of

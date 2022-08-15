@@ -149,7 +149,7 @@ in {
           };
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Declarative kernel config.
 
         Kernels can be declared in any language that supports and has the required

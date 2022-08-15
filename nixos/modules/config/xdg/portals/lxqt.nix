@@ -29,9 +29,9 @@ in
         pkgs.qtcurve
       ];
       '';
-      description = ''
+      description = lib.mdDoc ''
         Extra Qt styles that will be available to the
-        <literal>lxqt.xdg-desktop-portal-lxqt</literal>.
+        `lxqt.xdg-desktop-portal-lxqt`.
       '';
     };
   };

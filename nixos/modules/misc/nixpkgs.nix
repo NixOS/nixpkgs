@@ -117,13 +117,13 @@ in
       '';
       type = pkgsType;
       example = literalExpression "import <nixpkgs> {}";
-      description = ''
+      description = lib.mdDoc ''
         If set, the pkgs argument to all NixOS modules is the value of
-        this option, extended with <literal>nixpkgs.overlays</literal>, if
-        that is also set. Either <literal>nixpkgs.crossSystem</literal> or
-        <literal>nixpkgs.localSystem</literal> will be used in an assertion
+        this option, extended with `nixpkgs.overlays`, if
+        that is also set. Either `nixpkgs.crossSystem` or
+        `nixpkgs.localSystem` will be used in an assertion
         to check that the NixOS and Nixpkgs architectures match. Any
-        other options in <literal>nixpkgs.*</literal>, notably <literal>config</literal>,
+        other options in `nixpkgs.*`, notably `config`,
         will be ignored.
 
         If unset, the pkgs argument to all NixOS modules is determined
@@ -132,18 +132,18 @@ in
         The default value imports the Nixpkgs source files
         relative to the location of this NixOS module, because
         NixOS and Nixpkgs are distributed together for consistency,
-        so the <literal>nixos</literal> in the default value is in fact a
-        relative path. The <literal>config</literal>, <literal>overlays</literal>,
-        <literal>localSystem</literal>, and <literal>crossSystem</literal> come
+        so the `nixos` in the default value is in fact a
+        relative path. The `config`, `overlays`,
+        `localSystem`, and `crossSystem` come
         from this option's siblings.
 
         This option can be used by applications like NixOps to increase
         the performance of evaluation, or to create packages that depend
         on a container that should be built with the exact same evaluation
         of Nixpkgs, for example. Applications like this should set
-        their default value using <literal>lib.mkDefault</literal>, so
+        their default value using `lib.mkDefault`, so
         user-provided configuration can override it without using
-        <literal>lib</literal>.
+        `lib`.
 
         Note that using a distinct version of Nixpkgs with NixOS may
         be an unexpected source of problems. Use this option with care.

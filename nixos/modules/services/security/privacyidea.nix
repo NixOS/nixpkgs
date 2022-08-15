@@ -204,11 +204,11 @@ in
         settings = mkOption {
           type = with types; attrsOf (attrsOf (oneOf [ str bool int (listOf str) ]));
           default = {};
-          description = ''
-            Attribute-set containing the settings for <literal>privacyidea-ldap-proxy</literal>.
+          description = lib.mdDoc ''
+            Attribute-set containing the settings for `privacyidea-ldap-proxy`.
             It's possible to pass secrets using env-vars as substitutes and
-            use the option <xref linkend="opt-services.privacyidea.ldap-proxy.environmentFile"/>
-            to inject them via <literal>envsubst</literal>.
+            use the option [](#opt-services.privacyidea.ldap-proxy.environmentFile)
+            to inject them via `envsubst`.
           '';
         };
 

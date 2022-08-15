@@ -115,8 +115,8 @@ in
         type = types.str;
         default = "*";
         example = "localhost";
-        description = ''
-          The hostname or address to listen on or <literal>*</literal> to listen
+        description = lib.mdDoc ''
+          The hostname or address to listen on or `*` to listen
           on all interfaces.
         '';
       };

@@ -35,7 +35,7 @@ in
         default = pkgs.mongodb;
         defaultText = literalExpression "pkgs.mongodb";
         type = types.package;
-        description = ''
+        description = lib.mdDoc ''
           Which MongoDB derivation to use.
         '';
       };

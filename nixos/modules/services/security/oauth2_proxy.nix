@@ -160,9 +160,9 @@ in
       domains = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           Authenticate emails with the specified domains. Use
-          <literal>*</literal> to authenticate any email.
+          `*` to authenticate any email.
         '';
       };
 

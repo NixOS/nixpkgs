@@ -112,7 +112,7 @@ in
       serverXml = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Verbatim server.xml configuration.
           This is mutually exclusive with the virtualHosts options.
         '';

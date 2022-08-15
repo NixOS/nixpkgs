@@ -40,12 +40,12 @@ in
     extraPortals = mkOption {
       type = types.listOf types.package;
       default = [ ];
-      description = ''
+      description = lib.mdDoc ''
         List of additional portals to add to path. Portals allow interaction
         with system, like choosing files or taking screenshots. At minimum,
         a desktop portal implementation should be listed. GNOME and KDE already
-        adds <literal>xdg-desktop-portal-gtk</literal>; and
-        <literal>xdg-desktop-portal-kde</literal> respectively. On other desktop
+        adds `xdg-desktop-portal-gtk`; and
+        `xdg-desktop-portal-kde` respectively. On other desktop
         environments you probably want to add them yourself.
       '';
     };

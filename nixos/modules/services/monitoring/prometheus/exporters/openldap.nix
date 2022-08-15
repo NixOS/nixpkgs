@@ -26,15 +26,15 @@ in {
       default = "tcp";
       example = "udp";
       type = types.str;
-      description = ''
-        Which protocol to use to connect against <literal>openldap</literal>.
+      description = lib.mdDoc ''
+        Which protocol to use to connect against `openldap`.
       '';
     };
     ldapAddr = mkOption {
       default = "localhost:389";
       type = types.str;
-      description = ''
-        Address of the <literal>openldap</literal>-instance.
+      description = lib.mdDoc ''
+        Address of the `openldap`-instance.
       '';
     };
     metricsPath = mkOption {

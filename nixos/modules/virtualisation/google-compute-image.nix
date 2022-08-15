@@ -21,7 +21,7 @@ in
       type = with types; either (enum [ "auto" ]) int;
       default = "auto";
       example = 1536;
-      description = ''
+      description = lib.mdDoc ''
         Size of disk image. Unit is MB.
       '';
     };
@@ -40,7 +40,7 @@ in
     virtualisation.googleComputeImage.compressionLevel = mkOption {
       type = types.int;
       default = 6;
-      description = ''
+      description = lib.mdDoc ''
         GZIP compression level of the resulting disk image (1-9).
       '';
     };
