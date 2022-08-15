@@ -11152,6 +11152,8 @@ in {
 
   unittest-xml-reporting = callPackage ../development/python-modules/unittest-xml-reporting { };
 
+  univers = callPackage ../development/python-modules/univers { };
+
   unpaddedbase64 = callPackage ../development/python-modules/unpaddedbase64 { };
 
   unrardll = callPackage ../development/python-modules/unrardll { };
