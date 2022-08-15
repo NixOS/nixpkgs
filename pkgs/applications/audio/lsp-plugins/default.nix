@@ -1,22 +1,22 @@
 { lib, stdenv, fetchurl, pkg-config, makeWrapper
 , libsndfile, jack2
 , libGLU, libGL, lv2, cairo
-, ladspaH, php }:
+, ladspaH, php, libXrandr }:
 
 stdenv.mkDerivation rec {
-  pname = "lsp-plugins";
-  version = "1.2.1";
+        pname = "lsp-plugins";
+        version = "1.2.2";
 
-  src = fetchurl {
-    url = "https://github.com/sadko4u/${pname}/releases/download/${version}/${pname}-src-${version}.tar.gz";
-    sha256 = "sha256-wHibZJbrgy7t0z2rRDe1FUAG38BW/dR0JgoKVWYCn60=";
-  };
+        src = fetchurl {
+                url = "https://github.com/sadko4u/${pname}/releases/download/${version}/${pname}-src-${version}.tar.gz";
+                sha256 = "sha256-qIakDWNs8fQmlw/VHwTET2LmIvI+6I6zK88bmsWF4VI=";
+        };
 
-  nativeBuildInputs = [ pkg-config php makeWrapper ];
-  buildInputs = [ jack2 libsndfile libGLU libGL lv2 cairo ladspaH ];
+        nativeBuildInputs = [ pkg-config php makeWrapper ];
+        buildInputs = [ jack2 libsndfile libGLU libGL lv2 cairo ladspaH libXrandr ];
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
+        makeFlags = [
+                "PREFIX=${placeholder "out"}"
   ];
 
   NIX_CFLAGS_COMPILE = "-DLSP_NO_EXPERIMENTAL";

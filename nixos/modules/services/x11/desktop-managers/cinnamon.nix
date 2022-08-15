@@ -212,6 +212,7 @@ in
         # external apps shipped with linux-mint
         hexchat
         gnome-calculator
+        gnome-screenshot
       ] config.environment.cinnamon.excludePackages;
     })
   ];
