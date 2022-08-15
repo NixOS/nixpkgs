@@ -80,7 +80,7 @@ let
                 owner = "OctoPrint";
                 repo = "OctoPrint";
                 rev = version;
-                sha256 = "sha256-8MUKUayVFbUv5JYpssneaEmK7Q2RlleHJgQsLZQnHa8=";
+                sha256 = "sha256-uJuGeDS4TnGH1r+6oHtcJDZVGM7hDmkJpB35B1JtqQ0=";
               };
 
               propagatedBuildInputs = with super; [
