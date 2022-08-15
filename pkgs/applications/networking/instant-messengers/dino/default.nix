@@ -77,20 +77,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkPhase = ''
-  echo "================= Running built tests ================="
-  set -x
-  ./xmpp-vala-test
-  TEST1=$?
-  ./signal-protocol-vala-test
-  TEST2=$?
-  set +x
-  if [ $TEST1 != 0 ] || [ $TEST2 != 0 ]; then
-    echo "tests failed"
-    exit 1;
-  else
-    echo "tests succeeded"
-  fi
-  echo "================= /Running built tests ================="
+    runHook preCheck
+    set -e
+    ./xmpp-vala-test
+    ./signal-protocol-vala-test
+    runHook postCheck
   '';
 
   # Dino looks for plugins with a .so filename extension, even on macOS where
