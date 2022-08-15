@@ -117,14 +117,14 @@ in
     typeface = "Sans";
     version = "2.004";
     rev = "9f7f3c38eab63e1d1fddd8d50937fe4f1eacdb1d";
-    sha256 = "sha256-11d/78i21yuzxrfB5t2VQN9OBz/qZKeozuS6BrLFjzw=";
+    sha256 = "sha256-PWpcTBnBRK87ZuRI/PsGp2UMQgCCyfkLHwvB1mOl5K0=";
   };
 
   noto-fonts-cjk-serif = mkNotoCJK {
     typeface = "Serif";
     version = "2.000";
     rev = "9f7f3c38eab63e1d1fddd8d50937fe4f1eacdb1d";
-    sha256 = "sha256-G+yl3LZvSFpbEUuuvattPDctKTzBCshOi970DcbPliE=";
+    sha256 = "sha256-1w66Ge7DZjbONGhxSz69uFhfsjMsDiDkrGl6NsoB7dY=";
   };
 
   noto-fonts-emoji = let

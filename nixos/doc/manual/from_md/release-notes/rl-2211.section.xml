@@ -253,6 +253,18 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>fetchgit</literal> fetcher now uses
+          <link xlink:href="https://www.git-scm.com/docs/git-sparse-checkout/2.37.0#_internalscone_mode_handling">cone
+          mode</link> by default for sparse checkouts.
+          <link xlink:href="https://www.git-scm.com/docs/git-sparse-checkout/2.37.0#_internalsnon_cone_problems">Non-cone
+          mode</link> can be enabled by passing
+          <literal>nonConeMode = true</literal>, but note that non-cone
+          mode is deprecated and this option may be removed alongside a
+          future Git update without notice.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>bsp-layout</literal> no longer uses the command
           <literal>cycle</literal> to switch to other window layouts, as
           it got replaced by the commands <literal>previous</literal>

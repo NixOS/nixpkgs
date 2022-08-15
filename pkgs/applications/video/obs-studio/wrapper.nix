@@ -6,7 +6,7 @@ symlinkJoin {
   name = "wrapped-${obs-studio.name}";
 
   nativeBuildInputs = [ makeWrapper ];
-  paths = [ obs-studio ] ++ plugins;
+  paths = [ obs-studio ];
 
   postBuild = with lib;
     let
@@ -14,11 +14,21 @@ symlinkJoin {
       pluginArguments =
         lists.concatMap (plugin: plugin.obsWrapperArguments or []) plugins;
 
+      pluginsJoined = symlinkJoin {
+        name = "obs-studio-plugins";
+        paths = lists.map (plugin: "${plugin}/lib/obs-plugins") plugins;
+      };
+
+      pluginsDataJoined = symlinkJoin {
+        name = "obs-studio-plugins-data";
+        paths = lists.map (plugin: "${plugin}/share/obs/obs-plugins") plugins;
+      };
+
       wrapCommand = [
           "wrapProgram"
           "$out/bin/obs"
-          ''--set OBS_PLUGINS_PATH "$out/lib/obs-plugins"''
-          ''--set OBS_PLUGINS_DATA_PATH "$out/share/obs/obs-plugins"''
+          ''--set OBS_PLUGINS_PATH "${pluginsJoined}"''
+          ''--set OBS_PLUGINS_DATA_PATH "${pluginsDataJoined}"''
         ] ++ pluginArguments;
     in concatStringsSep " " wrapCommand;
 
