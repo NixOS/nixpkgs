@@ -31,7 +31,7 @@ commonOptions = packageSettings: rec { # attributes common to both builds
 
   src = fetchurl {
     url = "https://downloads.mariadb.com/MariaDB/mariadb-${version}/source/mariadb-${version}.tar.gz";
-    inherit (packageSettings) sha256;
+    inherit (packageSettings) hash;
   };
 
   nativeBuildInputs = [ cmake pkg-config ]
@@ -239,26 +239,26 @@ in {
   mariadb_104 = mariadbPackage {
     # Supported until 2024-06-18
     version = "10.4.25";
-    sha256 = "1y3ym8pb0pyra3dwy8sbzc4656c4y7g1savgyrsvf1mw2573r5pz";
+    hash = "sha256:1y3ym8pb0pyra3dwy8sbzc4656c4y7g1savgyrsvf1mw2573r5pz";
   };
   mariadb_105 = mariadbPackage {
     # Supported until 2025-06-24
     version = "10.5.16";
-    sha256 = "19nj7ilk1aqs9zvvzhx4619pgfqjp7ac90ffr3fdaw4viljqfgn1";
+    hash = "sha256:19nj7ilk1aqs9zvvzhx4619pgfqjp7ac90ffr3fdaw4viljqfgn1";
   };
   mariadb_106 = mariadbPackage {
     # Supported until 2026-07
     version = "10.6.8";
-    sha256 = "0f6lkvv0dbq64y7zpks7nvhy1n08gad0i0dp0s2zpgfcb62liaap";
+    hash = "sha256:0f6lkvv0dbq64y7zpks7nvhy1n08gad0i0dp0s2zpgfcb62liaap";
   };
   mariadb_107 = mariadbPackage {
     # Supported until 2023-02
     version = "10.7.4";
-    sha256 = "0ws17azsw3f26pkphjkyxmmi9qbv9gwidvz0ll6g482m6afrrpbk";
+    hash = "sha256:0ws17azsw3f26pkphjkyxmmi9qbv9gwidvz0ll6g482m6afrrpbk";
   };
   mariadb_108 = mariadbPackage {
     # Supported until 2023-05
     version = "10.8.3";
-    sha256 = "14h80lfb9b3rv3fd8nkljbqhx6dmwjnqkz6c3ynixb3na72sszl8";
+    hash = "sha256:14h80lfb9b3rv3fd8nkljbqhx6dmwjnqkz6c3ynixb3na72sszl8";
   };
 }
