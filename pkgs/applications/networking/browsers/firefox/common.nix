@@ -40,6 +40,8 @@
 , unzip
 , which
 , wrapGAppsHook
+, gcc
+, mimalloc
 
 # runtime
 , bzip2
@@ -86,9 +88,9 @@
 , ffmpegSupport ? true
 , gssSupport ? true, libkrb5
 , jackSupport ? stdenv.isLinux, libjack2
-, jemallocSupport ? true, jemalloc
+, jemallocSupport ? !stdenv.hostPlatform.isMusl, jemalloc
 , ltoSupport ? (stdenv.isLinux && stdenv.is64bit), overrideCC, buildPackages
-, pgoSupport ? (stdenv.isLinux && stdenv.hostPlatform == stdenv.buildPlatform), xvfb-run
+, pgoSupport ? (stdenv.isLinux && stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isMusl), xvfb-run
 , pipewireSupport ? waylandSupport && webrtcSupport
 , pulseaudioSupport ? stdenv.isLinux, libpulseaudio
 , sndioSupport ? stdenv.isLinux, sndio
@@ -101,7 +103,7 @@
 # WARNING: NEVER set any of the options below to `true` by default.
 # Set to `!privacySupport` or `false`.
 
-, crashreporterSupport ? !privacySupport
+, crashreporterSupport ? !privacySupport && !stdenv.hostPlatform.isMusl
 , geolocationSupport ? !privacySupport
 , googleAPISupport ? geolocationSupport
 , mlsAPISupport ? geolocationSupport
@@ -226,6 +228,11 @@ buildStdenv.mkDerivation ({
       url = "https://raw.githubusercontent.com/canonical/firefox-snap/5622734942524846fb0eb7108918c8cd8557fde3/patches/fix-ftbfs-newer-cbindgen.patch";
       hash = "sha256-+wNZhkDB3HSknPRD4N6cQXY7zMT/DzNXx29jQH0Gb1o=";
     })
+  ] ++ [
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/community/firefox/avoid-redefinition.patch?id=2f620d205ed0f9072bbd7714b5ec1b7bf6911c12";
+      hash = "sha256-fLUYaJwhrC/wF24HkuWn2PHqz7LlAaIZ1HYjRDB2w9A=";
+    })
   ]
   ++ lib.optional (lib.versionAtLeast version "86") ./env_var_for_system_dir-ff86.patch
   ++ lib.optional (lib.versionAtLeast version "96") ./no-buildconfig-ffx96.patch
@@ -262,6 +269,7 @@ buildStdenv.mkDerivation ({
     unzip
     which
     wrapGAppsHook
+    gcc.cc.lib
   ]
   ++ lib.optionals crashreporterSupport [ dump_syms ]
   ++ lib.optionals pgoSupport [ xvfb-run ]
@@ -333,6 +341,8 @@ buildStdenv.mkDerivation ({
     configureFlagsArray+=("--with-mozilla-api-keyfile=$TMPDIR/mls-api-key")
   '' + lib.optionalString (enableOfficialBranding && !stdenv.is32bit) ''
     export MOZILLA_OFFICIAL=1
+  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
+    export LD_PRELOAD=${mimalloc}/lib/libmimalloc.so
   '';
 
   # firefox has a different definition of configurePlatforms from nixpkgs, see configureFlags
@@ -472,6 +482,7 @@ buildStdenv.mkDerivation ({
   makeFlags = extraMakeFlags;
   separateDebugInfo = enableDebugSymbols;
   enableParallelBuilding = true;
+  LDFLAGS = lib.optionalString stdenv.hostPlatform.isMusl "-Wl,-rpath,${placeholder "out"}/lib/${binaryName}";
 
   # tests were disabled in configureFlags
   doCheck = false;
