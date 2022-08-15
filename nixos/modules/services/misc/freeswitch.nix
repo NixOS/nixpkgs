@@ -22,11 +22,11 @@ in {
       enableReload = mkOption {
         default = false;
         type = types.bool;
-        description = ''
-          Issue the <literal>reloadxml</literal> command to FreeSWITCH when configuration directory changes (instead of restart).
-          See <link xlink:href="https://freeswitch.org/confluence/display/FREESWITCH/Reloading">FreeSWITCH documentation</link> for more info.
-          The configuration directory is exposed at <filename>/etc/freeswitch</filename>.
-          See also <literal>systemd.services.*.restartIfChanged</literal>.
+        description = lib.mdDoc ''
+          Issue the `reloadxml` command to FreeSWITCH when configuration directory changes (instead of restart).
+          See [FreeSWITCH documentation](https://freeswitch.org/confluence/display/FREESWITCH/Reloading) for more info.
+          The configuration directory is exposed at {file}`/etc/freeswitch`.
+          See also `systemd.services.*.restartIfChanged`.
         '';
       };
       configTemplate = mkOption {

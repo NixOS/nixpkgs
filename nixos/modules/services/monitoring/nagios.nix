@@ -91,7 +91,7 @@ in
       enable = mkEnableOption ''<link xlink:href="http://www.nagios.org/">Nagios</link> to monitor your system or network.'';
 
       objectDefs = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           A list of Nagios object configuration files that must define
           the hosts, host groups, services and contacts for the
           network that you want Nagios to monitor.
@@ -113,7 +113,7 @@ in
       mainConfigFile = mkOption {
         type = types.nullOr types.package;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           If non-null, overrides the main configuration file of Nagios.
         '';
       };
@@ -139,7 +139,7 @@ in
         type = types.package;
         default = nagiosCGICfgFile;
         defaultText = literalExpression "nagiosCGICfgFile";
-        description = ''
+        description = lib.mdDoc ''
           Derivation for the configuration file of Nagios CGI scripts
           that can be used in web servers for running the Nagios web interface.
         '';
@@ -148,9 +148,9 @@ in
       enableWebInterface = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the Nagios web interface.  You should also
-          enable Apache (<option>services.httpd.enable</option>).
+          enable Apache ({option}`services.httpd.enable`).
         '';
       };
 

@@ -8,15 +8,15 @@ with lib;
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable k3b, the KDE disk burning application.
 
-        Additionally to installing <literal>k3b</literal> enabling this will
-        add <literal>setuid</literal> wrappers in <literal>/run/wrappers/bin</literal>
-        for both <literal>cdrdao</literal> and <literal>cdrecord</literal>. On first
-        run you must manually configure the path of <literal>cdrdae</literal> and
-        <literal>cdrecord</literal> to correspond to the appropriate paths under
-        <literal>/run/wrappers/bin</literal> in the "Setup External Programs" menu.
+        Additionally to installing `k3b` enabling this will
+        add `setuid` wrappers in `/run/wrappers/bin`
+        for both `cdrdao` and `cdrecord`. On first
+        run you must manually configure the path of `cdrdae` and
+        `cdrecord` to correspond to the appropriate paths under
+        `/run/wrappers/bin` in the "Setup External Programs" menu.
       '';
     };
   };

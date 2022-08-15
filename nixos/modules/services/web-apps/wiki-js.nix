@@ -54,10 +54,10 @@ in {
             type = mkOption {
               default = "postgres";
               type = types.enum [ "postgres" "mysql" "mariadb" "mssql" ];
-              description = ''
-                Database driver to use for persistence. Please note that <literal>sqlite</literal>
+              description = lib.mdDoc ''
+                Database driver to use for persistence. Please note that `sqlite`
                 is currently not supported as the build process for it is currently not implemented
-                in <literal>pkgs.wiki-js</literal> and it's not recommended by upstream for
+                in `pkgs.wiki-js` and it's not recommended by upstream for
                 production use.
               '';
             };

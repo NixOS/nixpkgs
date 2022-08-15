@@ -569,10 +569,10 @@ in {
     secretFile = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Secret options which will be appended to nextcloud's config.php file (written as JSON, in the same
-        form as the <xref linkend="opt-services.nextcloud.extraOptions"/> option), for example
-        <literal>{"redis":{"password":"secret"}}</literal>.
+        form as the [](#opt-services.nextcloud.extraOptions) option), for example
+        `{"redis":{"password":"secret"}}`.
       '';
     };
 

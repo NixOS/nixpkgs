@@ -189,9 +189,9 @@ in
       allowAnonymousEdits = mkOption {
         type = types.bool;
         default = false;
-        description = ''
-          Whether to allow guests to edit existing notes with the <literal>freely</literal> permission,
-          when <option>allowAnonymous</option> is enabled.
+        description = lib.mdDoc ''
+          Whether to allow guests to edit existing notes with the `freely` permission,
+          when {option}`allowAnonymous` is enabled.
         '';
       };
       allowFreeURL = mkOption {
@@ -953,10 +953,10 @@ in
               email = mkOption {
                 type = types.str;
                 default = "";
-                description = ''
-                  Attribute map for <literal>email</literal>.
-                  Defaults to <literal>NameID</literal> of SAML response if
-                  <option>identifierFormat</option> has
+                description = lib.mdDoc ''
+                  Attribute map for `email`.
+                  Defaults to `NameID` of SAML response if
+                  {option}`identifierFormat` has
                   the default value.
                 '';
               };

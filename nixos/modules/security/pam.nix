@@ -320,10 +320,10 @@ let
       limits = mkOption {
         default = [];
         type = limitsType;
-        description = ''
+        description = lib.mdDoc ''
           Attribute set describing resource limits.  Defaults to the
-          value of <option>security.pam.loginLimits</option>.
-          The meaning of the values is explained in <citerefentry><refentrytitle>limits.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
+          value of {option}`security.pam.loginLimits`.
+          The meaning of the values is explained in {manpage}`limits.conf(5)`.
         '';
       };
 

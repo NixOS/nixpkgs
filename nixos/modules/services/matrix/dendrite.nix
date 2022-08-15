@@ -26,24 +26,24 @@ in
       type = lib.types.nullOr lib.types.path;
       example = "/var/lib/dendrite/server.cert";
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         The path to the TLS certificate.
 
-        <programlisting>
+        ```
           nix-shell -p dendrite --command "generate-keys --tls-cert server.crt --tls-key server.key"
-        </programlisting>
+        ```
       '';
     };
     tlsKey = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       example = "/var/lib/dendrite/server.key";
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         The path to the TLS key.
 
-        <programlisting>
+        ```
           nix-shell -p dendrite --command "generate-keys --tls-cert server.crt --tls-key server.key"
-        </programlisting>
+        ```
       '';
     };
     environmentFile = lib.mkOption {
@@ -102,13 +102,13 @@ in
               lib.types.path
               (lib.types.strMatching "^\\$CREDENTIALS_DIRECTORY/.+");
             example = "$CREDENTIALS_DIRECTORY/private_key";
-            description = ''
+            description = lib.mdDoc ''
               The path to the signing private key file, used to sign
               requests and events.
 
-              <programlisting>
+              ```
                 nix-shell -p dendrite --command "generate-keys --private-key matrix_key.pem"
-              </programlisting>
+              ```
             '';
           };
           trusted_third_party_id_servers = lib.mkOption {

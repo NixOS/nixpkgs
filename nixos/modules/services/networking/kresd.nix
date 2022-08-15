@@ -59,7 +59,7 @@ in {
     };
     package = mkOption {
       type = types.package;
-      description = ''
+      description = lib.mdDoc ''
         knot-resolver package to use.
       '';
       default = pkgs.knot-resolver;

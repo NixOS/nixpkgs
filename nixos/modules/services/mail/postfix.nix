@@ -355,7 +355,7 @@ in
       setgidGroup = mkOption {
         type = types.str;
         default = "postdrop";
-        description = ''
+        description = lib.mdDoc ''
           How to call postfix setgid group (for postdrop). Should
           be uniquely used group.
         '';
@@ -365,7 +365,7 @@ in
         type = types.nullOr (types.listOf types.str);
         default = null;
         example = ["192.168.0.1/24"];
-        description = ''
+        description = lib.mdDoc ''
           Net masks for trusted - allowed to relay mail to third parties -
           hosts. Leave empty to use mynetworks_style configuration or use
           default (localhost-only).
@@ -375,7 +375,7 @@ in
       networksStyle = mkOption {
         type = types.str;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Name of standard way of trusted network specification to use,
           leave blank if you specify it explicitly or if you want to use
           default (localhost-only).
@@ -385,7 +385,7 @@ in
       hostname = mkOption {
         type = types.str;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Hostname to use. Leave blank to use just the hostname of machine.
           It should be FQDN.
         '';
@@ -394,7 +394,7 @@ in
       domain = mkOption {
         type = types.str;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Domain to use. Leave blank to use hostname minus first component.
         '';
       };
@@ -402,7 +402,7 @@ in
       origin = mkOption {
         type = types.str;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Origin to use in outgoing e-mail. Leave blank to use hostname.
         '';
       };
@@ -411,7 +411,7 @@ in
         type = types.nullOr (types.listOf types.str);
         default = null;
         example = ["localhost"];
-        description = ''
+        description = lib.mdDoc ''
           Full (!) list of domains we deliver locally. Leave blank for
           acceptable Postfix default.
         '';
@@ -421,7 +421,7 @@ in
         type = types.nullOr (types.listOf types.str);
         default = null;
         example = ["localdomain"];
-        description = ''
+        description = lib.mdDoc ''
           List of domains we agree to relay to. Default is empty.
         '';
       };
@@ -429,7 +429,7 @@ in
       relayHost = mkOption {
         type = types.str;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Mail relay for outbound mail.
         '';
       };
@@ -437,7 +437,7 @@ in
       relayPort = mkOption {
         type = types.int;
         default = 25;
-        description = ''
+        description = lib.mdDoc ''
           SMTP port for relay mail relay.
         '';
       };
@@ -445,7 +445,7 @@ in
       lookupMX = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether relay specified is just domain whose MX must be used.
         '';
       };
@@ -453,7 +453,7 @@ in
       postmasterAlias = mkOption {
         type = types.str;
         default = "root";
-        description = ''
+        description = lib.mdDoc ''
           Who should receive postmaster e-mail. Multiple values can be added by
           separating values with comma.
         '';
@@ -462,7 +462,7 @@ in
       rootAlias = mkOption {
         type = types.str;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Who should receive root e-mail. Blank for no redirection.
           Multiple values can be added by separating values with comma.
         '';
@@ -471,7 +471,7 @@ in
       extraAliases = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Additional entries to put verbatim into aliases file, cf. man-page aliases(8).
         '';
       };
@@ -497,7 +497,7 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Extra lines to be added verbatim to the main.cf configuration file.
         '';
       };
@@ -527,7 +527,7 @@ in
         type = types.str;
         default = "";
         example = "+";
-        description = ''
+        description = lib.mdDoc ''
           Delimiter for address extension: so mail to user+test can be handled by ~user/.forward+test
         '';
       };
@@ -543,7 +543,7 @@ in
       virtual = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Entries for the virtual alias map, cf. man-page virtual(5).
         '';
       };
@@ -572,7 +572,7 @@ in
       transport = mkOption {
         default = "";
         type = types.lines;
-        description = ''
+        description = lib.mdDoc ''
           Entries for the transport map, cf. man-page transport(8).
         '';
       };

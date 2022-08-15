@@ -121,15 +121,15 @@ in
             max_reqs_per_ip_mode = "warn+block";
           };
         '';
-        description = ''
+        description = lib.mdDoc ''
           Additional settings to put in the
-          <filename>discourse.conf</filename> file.
+          {file}`discourse.conf` file.
 
           Look in the
-          <link xlink:href="https://github.com/discourse/discourse/blob/master/config/discourse_defaults.conf">discourse_defaults.conf</link>
+          [discourse_defaults.conf](https://github.com/discourse/discourse/blob/master/config/discourse_defaults.conf)
           file in the upstream distribution to find available options.
 
-          Setting an option to <literal>null</literal> means
+          Setting an option to `null` means
           “define variable, but leave right-hand side empty”.
         '';
       };
@@ -240,8 +240,8 @@ in
         host = lib.mkOption {
           type = with lib.types; nullOr str;
           default = null;
-          description = ''
-            Discourse database hostname. <literal>null</literal> means
+          description = lib.mdDoc ''
+            Discourse database hostname. `null` means
             “prefer local unix socket connection”.
           '';
         };
@@ -493,7 +493,7 @@ in
             discourse-github
           ];
         '';
-        description = ''
+        description = lib.mdDoc ''
           Plugins to install as part of Discourse, expressed as a list of derivations.
         '';
       };

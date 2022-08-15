@@ -38,8 +38,8 @@ in
     };
 
     settings = mkOption {
-      description = ''
-        Configuration for <literal>grafana-agent</literal>.
+      description = lib.mdDoc ''
+        Configuration for `grafana-agent`.
 
         See https://grafana.com/docs/agent/latest/configuration/
       '';

@@ -23,7 +23,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable Yandex-disk client. See https://disk.yandex.ru/
         '';
       };

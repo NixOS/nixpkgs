@@ -61,7 +61,7 @@ in
         default = pkgs.haka;
         defaultText = literalExpression "pkgs.haka";
         type = types.package;
-        description = ''
+        description = lib.mdDoc ''
           Which Haka derivation to use.
         '';
       };

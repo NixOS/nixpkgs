@@ -95,13 +95,13 @@ let
         exclude.dir     /nix/store
         include.encrypt /home/.../*
       '';
-      description = ''
-        <literal>include.*</literal> and
-        <literal>exclude.*</literal> directives to be
+      description = lib.mdDoc ''
+        `include.*` and
+        `exclude.*` directives to be
         used when sending files to the IBM TSM server.
         The lines will be written into a file that the
-        <literal>inclexcl</literal>
-        directive in <filename>dsm.sys</filename> points to.
+        `inclexcl`
+        directive in {file}`dsm.sys` points to.
       '';
     };
     options.extraConfig = mkOption {

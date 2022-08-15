@@ -338,9 +338,9 @@ in {
         default = 0;
         example = 48;
         apply = x: x * 60 * 60;
-        description = ''
+        description = lib.mdDoc ''
           How long to keep the backups around, in
-          hours. <literal>0</literal> means “keep forever”.
+          hours. `0` means “keep forever”.
         '';
       };
 
@@ -414,7 +414,7 @@ in {
       databaseHost = mkOption {
         type = types.str;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           GitLab database hostname. An empty string means
           “use local unix socket connection”.
         '';
