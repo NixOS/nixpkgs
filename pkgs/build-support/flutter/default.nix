@@ -107,7 +107,6 @@ let
           }
 
           # nuke nondeterminism
-          nuke-refs
 
           # clientId is random
           remove_line_matching "$RES/.flutter" clientId
