@@ -562,7 +562,7 @@ in
             shopt -s inherit_errexit
 
             create_role="$(mktemp)"
-            trap 'rm -f "$create_role"' ERR EXIT
+            trap 'rm -f "$create_role"' EXIT
 
             db_password="$(<"$CREDENTIALS_DIRECTORY/db_password")"
             echo "CREATE ROLE keycloak WITH LOGIN PASSWORD '$db_password' CREATEDB" > "$create_role"

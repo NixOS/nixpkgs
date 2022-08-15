@@ -282,6 +282,8 @@ with pkgs;
 
   beyond-identity = callPackage ../tools/security/beyond-identity {};
 
+  binbloom = callPackage ../tools/security/binbloom {};
+
   bingo = callPackage ../development/tools/bingo {};
 
   binserve = callPackage ../servers/binserve {
@@ -5454,11 +5456,14 @@ with pkgs;
 
   ddrutility = callPackage ../tools/system/ddrutility { };
 
-  deluge-2_x = callPackage ../applications/networking/p2p/deluge {
-    pythonPackages = python3Packages;
+  inherit (callPackages ../applications/networking/p2p/deluge {
     libtorrent-rasterbar = libtorrent-rasterbar-1_2_x.override { python = python3; };
-  };
-  deluge = deluge-2_x;
+  })
+    deluge-gtk
+    deluged
+    deluge;
+
+  deluge-2_x = deluge;
 
   desktop-file-utils = callPackage ../tools/misc/desktop-file-utils { };
 
@@ -11637,6 +11642,8 @@ with pkgs;
 
   up = callPackage ../tools/misc/up { };
 
+  upbound = callPackage ../development/tools/upbound { };
+
   upterm = callPackage ../tools/misc/upterm { };
 
   upx = callPackage ../tools/compression/upx { };
@@ -16266,6 +16273,8 @@ with pkgs;
   kafka-delta-ingest = callPackage ../development/tools/kafka-delta-ingest { };
 
   kamid = callPackage ../servers/ftp/kamid { };
+
+  karate = callPackage ../development/tools/karate { };
 
   kati = callPackage ../development/tools/build-managers/kati { };
 
@@ -25034,6 +25043,8 @@ with pkgs;
   fira-code = callPackage ../data/fonts/fira-code { };
   fira-code-symbols = callPackage ../data/fonts/fira-code/symbols.nix { };
 
+  fira-go = callPackage ../data/fonts/fira-go { };
+
   fira-mono = callPackage ../data/fonts/fira-mono { };
 
   flat-remix-icon-theme = callPackage ../data/icons/flat-remix-icon-theme {
@@ -30597,16 +30608,6 @@ with pkgs;
   spotify-unwrapped = callPackage ../applications/audio/spotify { };
 
   spotify = callPackage ../applications/audio/spotify/wrapper.nix { };
-
-  sourcetrail = let
-    llvmPackages = llvmPackages_10;
-  in libsForQt5.callPackage ../development/tools/sourcetrail {
-    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
-    jdk = jdk8;
-    pythonPackages = python3Packages;
-    inherit llvmPackages;
-    boost = boost16x; # Filesystem tests in the checkPhase fail with Boost 1.77
-  };
 
   spotifywm = callPackage ../applications/audio/spotifywm { };
 
