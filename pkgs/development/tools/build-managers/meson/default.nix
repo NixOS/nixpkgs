@@ -10,11 +10,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "0.63.0";
+  version = "0.63.1";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-O1HUUXRMK8cYOFJOyNls1PjEeT1bjV0NCpyKT3yUzW8=";
+    sha256 = "Bv4TKXIT1v8BIcXVqrJaVu+Tj/7FdBTtYIb9onLLZek=";
   };
 
   patches = [
@@ -22,14 +22,6 @@ python3.pkgs.buildPythonApplication rec {
     # makes it harder for us to use setup hooks, etc.  Taken from
     # https://github.com/mesonbuild/meson/pull/6827
     ./more-env-vars.patch
-
-    # Use more binutils variables, so we don't have to define them in stdenv.
-    # pr has been merged
-    # https://github.com/mesonbuild/meson/pull/10640
-    (fetchpatch {
-      url = "https://github.com/mesonbuild/meson/commit/8a8ab9a8e0c2cefb6faa0734e52803c74790576c.patch";
-      sha256 = "sha256-BdBf1NB4SZLFyFRDzD0p//XUgUeAHpo6XXUtsHdCgKE=";
-    })
 
     # Unlike libtool, vanilla Meson does not pass any information
     # about the path library will be installed to to g-ir-scanner,
