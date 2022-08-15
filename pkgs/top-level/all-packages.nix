@@ -16278,6 +16278,8 @@ with pkgs;
 
   kamid = callPackage ../servers/ftp/kamid { };
 
+  karate = callPackage ../development/tools/karate { };
+
   kati = callPackage ../development/tools/build-managers/kati { };
 
   kcat = callPackage ../development/tools/kcat { };
