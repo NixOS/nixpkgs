@@ -49,6 +49,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/nschloe/perfplot";
     license = licenses.mit;
     maintainers = with maintainers; [ costrouc ];
-    broken = true; # missing matplotx dependency
   };
 }
