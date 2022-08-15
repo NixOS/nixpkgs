@@ -286,11 +286,11 @@ in
             '';
           };
           challengeType = mkOption {
-            type = types.enum [ "TLS_ALPN-01" "HTTP-01" ];
+            type = types.enum [ "TLS-ALPN-01" "HTTP-01" ];
             default = "HTTP-01";
             description = lib.mdDoc ''
               Type of ACME challenge to use, currently supported types:
-              `HTTP-01` or `TLS_ALPN-01`.
+              `HTTP-01` or `TLS-ALPN-01`.
             '';
           };
           httpListen = mkOption {
