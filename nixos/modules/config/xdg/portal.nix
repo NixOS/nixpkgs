@@ -91,11 +91,11 @@ in
         # share/applications/*.desktop files
         # see https://github.com/NixOS/nixpkgs/issues/145174
         systemPackages = [ joinedPortals ];
-        pathsToLink = [ "/share/applications" ];
+        inherit (joinedPortals) pathsToLink;
 
         sessionVariables = {
           GTK_USE_PORTAL = mkIf cfg.gtkUsePortal "1";
-          XDG_DESKTOP_PORTAL_DIR = "${joinedPortals}/share/xdg-desktop-portal/portals";
+          XDG_DESKTOP_PORTAL_DIR = "/run/current-system/sw/share/xdg-desktop-portal/portals";
         };
       };
     };
