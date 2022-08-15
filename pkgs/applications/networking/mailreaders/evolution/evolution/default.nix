@@ -104,7 +104,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DENABLE_AUTOAR=OFF"
-    "-DENABLE_LIBCRYPTUI=OFF"
     "-DENABLE_YTNEF=OFF"
     "-DWITH_SPAMASSASSIN=${spamassassin}/bin/spamassassin"
     "-DWITH_SA_LEARN=${spamassassin}/bin/sa-learn"
