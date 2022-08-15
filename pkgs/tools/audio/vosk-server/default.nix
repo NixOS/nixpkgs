@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchFromGitHub, vosk }:
+{ lib, buildPythonApplication, fetchFromGitHub, vosk, nixosTests }:
 
 buildPythonApplication rec {
   pname = "vosk-server";
@@ -22,6 +22,10 @@ buildPythonApplication rec {
     install -D asr_server.py $out/bin/vosk-server
     runHook postInstall
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) vosk;
+  };
 
   meta = with lib; {
     homepage = "https://alphacephei.com/vosk/server";
