@@ -4,6 +4,8 @@ stdenv.mkDerivation rec {
   pname = "liblqr-1";
   version = "0.4.2";
 
+  outputs = [ "out" "dev" ];
+
   src = fetchFromGitHub {
     owner = "carlobaldassi";
     repo = "liblqr";
