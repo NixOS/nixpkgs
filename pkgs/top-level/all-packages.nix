@@ -21533,6 +21533,8 @@ with pkgs;
 
   spice-gtk = callPackage ../development/libraries/spice-gtk { };
 
+  spice-gtk_libsoup2 = spice-gtk.override { withLibsoup2 = true; };
+
   spice-protocol = callPackage ../development/libraries/spice-protocol { };
 
   spice-up = callPackage ../applications/office/spice-up { };
