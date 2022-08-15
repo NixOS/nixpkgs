@@ -479,6 +479,12 @@
           dbus service.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>nomad</literal> package now defaults to 1.3,
+          which no longer has a downgrade path to releases 1.2 or older.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
