@@ -3,7 +3,7 @@
 , freerdp, libssh, libgcrypt, gnutls, vte
 , pcre2, libdbusmenu-gtk3, libappindicator-gtk3
 , libvncserver, libpthreadstubs, libXdmcp, libxkbcommon
-, libsecret, libsoup, spice-protocol, spice-gtk, libepoxy, at-spi2-core
+, libsecret, libsoup, spice-protocol, spice-gtk_libsoup2, libepoxy, at-spi2-core
 , openssl, gsettings-desktop-schemas, json-glib, libsodium, webkitgtk, harfbuzz
 # The themes here are soft dependencies; only icons are missing without them.
 , gnome
@@ -31,7 +31,10 @@ stdenv.mkDerivation rec {
     freerdp libssh libgcrypt gnutls
     pcre2 libdbusmenu-gtk3 libappindicator-gtk3
     libvncserver libpthreadstubs libXdmcp libxkbcommon
-    libsoup spice-protocol spice-gtk libepoxy at-spi2-core
+    libsoup spice-protocol
+    # https://gitlab.com/Remmina/Remmina/-/issues/2754
+    spice-gtk_libsoup2
+    libepoxy at-spi2-core
     openssl gnome.adwaita-icon-theme json-glib libsodium webkitgtk
     harfbuzz python3
   ] ++ optionals withLibsecret [ libsecret ]
