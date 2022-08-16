@@ -26046,6 +26046,8 @@ with pkgs;
   };
 
 
+  armcord = callPackage ../applications/networking/instant-messengers/armcord { };
+
   aumix = callPackage ../applications/audio/aumix {
     gtkGUI = false;
   };
