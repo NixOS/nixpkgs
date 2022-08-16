@@ -8,6 +8,7 @@
 , makeWrapper
 , qtbase
 , qttools
+, nixosTests
 }:
 
 let serenity = fetchFromGitHub {
@@ -81,6 +82,10 @@ in gcc11Stdenv.mkDerivation {
 
   # Stripping results in a symbol lookup error
   dontStrip = true;
+
+  passthru.tests = {
+    nixosTest = nixosTests.ladybird;
+  };
 
   meta = with lib; {
     description = "A browser using the SerenityOS LibWeb engine with a Qt GUI";
