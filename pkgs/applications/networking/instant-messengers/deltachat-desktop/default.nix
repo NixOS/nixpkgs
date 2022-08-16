@@ -33,10 +33,6 @@ let
     };
     patches = [ ./libdeltachat-darwin-dylib.patch ] ++ old.patches;
   });
-  electronExec = if stdenv.isDarwin then
-    "${electron_16}/Applications/Electron.app/Contents/MacOS/Electron"
-  else
-    "${electron_16}/bin/electron";
   esbuild' = esbuild.overrideAttrs (old: rec {
     version = "0.12.29";
     src = fetchFromGitHub {
@@ -95,7 +91,7 @@ in nodejs-14_x.pkgs.deltachat-desktop.override rec {
         $out/lib/node_modules/deltachat-desktop/html-dist/fonts
     done
 
-    makeWrapper ${electronExec} $out/bin/deltachat \
+    makeWrapper ${electron_16}/bin/electron $out/bin/deltachat \
       --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher${stdenv.hostPlatform.extensions.sharedLibrary} \
       --add-flags $out/lib/node_modules/deltachat-desktop
   '';
