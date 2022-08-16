@@ -1,10 +1,5 @@
 { lib, stdenv, fetchFromGitHub, darwin, xxd }:
-let
-  replace = {
-    "aarch64-darwin" = "--replace '-arch x86_64' ''";
-    "x86_64-darwin" = "--replace '-arch arm64e' '' --replace '-arch arm64' ''";
-  }.${stdenv.system};
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "yabai";
   version = "4.0.1";
 
@@ -15,10 +10,14 @@ in stdenv.mkDerivation rec {
     sha256 = "10n67xwhifl0gij1hdqr00ncmkq2j7pa9m10p6ishqfmxy1wqp0z";
   };
 
-  prePatch = ''
+  postPatch = ''
     substituteInPlace Makefile \
-        --replace 'xcrun clang' clang \
-        ${replace}
+      --replace 'xcrun clang' clang \
+  '' + lib.optionalString (stdenv.system == "aarch64-darwin") ''
+      --replace "-arch x86_64" ""
+  '' + lib.optionalString (stdenv.system == "x86_64-darwin") ''
+    --replace "-arch arm64e" ""
+    --replace "-arch arm64" ""
   '';
 
   nativeBuildInputs = [ xxd ];
