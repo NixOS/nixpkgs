@@ -15,11 +15,14 @@ stdenv.mkDerivation rec {
   pname = "libkrunfw";
   version = "3.3.0";
 
-  src = fetchFromGitHub {
+  src = if stdenv.isLinux then fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
     hash = "sha256-ay+E5AgJeA0i3T4JDosDawwtezDGquzAvYEWHGbPidg=";
+  } else fetchurl {
+    url = "https://github.com/containers/libkrunfw/releases/download/v${version}/v${version}-with_macos_prebuilts.tar.gz";
+    hash = "sha256-9Wp93PC+PEqUpWHIe6BUnfDMpFvYL8rGGjTU2nWSUVY=";
   };
 
   kernelSrc = fetchurl {
@@ -28,14 +31,18 @@ stdenv.mkDerivation rec {
   };
 
   preBuild = ''
-    substituteInPlace Makefile --replace 'curl $(KERNEL_REMOTE) -o $(KERNEL_TARBALL)' 'ln -s $(kernelSrc) $(KERNEL_TARBALL)'
+    substituteInPlace Makefile \
+      --replace 'curl $(KERNEL_REMOTE) -o $(KERNEL_TARBALL)' 'ln -s $(kernelSrc) $(KERNEL_TARBALL)' \
+      --replace 'gcc' '$(CC)'
   '';
 
   nativeBuildInputs = [ flex bison bc python3 python3.pkgs.pyelftools ];
-  buildInputs = [ elfutils ];
+  buildInputs = lib.optionals stdenv.isLinux [ elfutils ];
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ]
-    ++ lib.optional sevVariant "SEV=1";
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "SONAME_Darwin=-Wl,-install_name,${placeholder "out"}/lib/libkrunfw.dylib"
+  ] ++ lib.optional sevVariant "SEV=1";
 
   enableParallelBuilding = true;
 
@@ -44,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/containers/libkrunfw";
     license = with licenses; [ lgpl2Only lgpl21Only ];
     maintainers = with maintainers; [ nickcao ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" ];
   };
 }
