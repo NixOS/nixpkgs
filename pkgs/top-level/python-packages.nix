@@ -5473,6 +5473,8 @@ in {
 
   mediapy = callPackage ../development/python-modules/mediapy { };
 
+  megaplan = callPackage ../development/python-modules/megaplan { };
+
   meilisearch = callPackage ../development/python-modules/meilisearch { };
 
   meinheld = callPackage ../development/python-modules/meinheld { };
