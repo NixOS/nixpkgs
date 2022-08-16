@@ -10457,6 +10457,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  rustypaste = callPackage ../servers/rustypaste { };
+
   rw = callPackage ../tools/misc/rw { };
 
   rwc = callPackage ../tools/system/rwc { };
