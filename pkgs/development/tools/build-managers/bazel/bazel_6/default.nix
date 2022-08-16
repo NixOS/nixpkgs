@@ -176,6 +176,10 @@ stdenv.mkDerivation rec {
   inherit src;
   inherit sourceRoot;
   patches = [
+    # Force usage of the _non_ prebuilt java toolchain.
+    # the prebuilt one does not work in nix world.
+    ./java_toolchain.patch
+
     # On Darwin, the last argument to gcc is coming up as an empty string. i.e: ''
     # This is breaking the build of any C target. This patch removes the last
     # argument if it's found to be an empty string.
@@ -468,15 +472,6 @@ stdenv.mkDerivation rec {
       build --verbose_failures
       build --curses=no
       build --features=-layering_check
-      EOF
-
-      cat >> tools/jdk/BUILD.tools <<EOF
-      load("@bazel_tools//tools/jdk:default_java_toolchain.bzl", "default_java_toolchain", "NONPREBUILT_TOOLCHAIN_CONFIGURATION")
-      default_java_toolchain(
-        name = "nonprebuilt_toolchain",
-        configuration = NONPREBUILT_TOOLCHAIN_CONFIGURATION,
-        java_runtime = "@local_jdk//:jdk",
-      )
       EOF
 
       cat >> third_party/grpc/bazel_1.41.0.patch <<EOF
