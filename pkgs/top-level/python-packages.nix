@@ -8297,6 +8297,8 @@ in {
 
   pysimplegui = callPackage ../development/python-modules/pysimplegui { };
 
+  pysimplesoap = callPackage ../development/python-modules/pysimplesoap { };
+
   pysingleton = callPackage ../development/python-modules/pysingleton { };
 
   pyslurm = callPackage ../development/python-modules/pyslurm {
