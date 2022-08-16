@@ -1,5 +1,6 @@
 { lib, stdenv, callPackage, fetchurl
 , jdk, cmake, gdb, zlib, python3
+, lldb
 , dotnet-sdk_6
 , maven
 , autoPatchelfHook
@@ -45,6 +46,7 @@ let
         python3
         stdenv.cc.cc
         libdbusmenu
+        lldb
       ];
       dontAutoPatchelf = true;
       postFixup = (attrs.postFixup or "") + optionalString (stdenv.isLinux) ''
@@ -56,6 +58,9 @@ let
           # bundled gdb does not find libcrypto 10
           rm -rf bin/gdb/linux
           ln -s ${gdb} bin/gdb/linux
+          # bundled lldb does not find libssl
+          rm -rf bin/lldb/linux
+          ln -s ${lldb} bin/lldb/linux
 
           autoPatchelf $PWD/bin
 
