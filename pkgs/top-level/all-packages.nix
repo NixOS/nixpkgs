@@ -4144,6 +4144,8 @@ with pkgs;
 
   libndtypes = callPackage ../development/libraries/libndtypes { };
 
+  libnss-mysql = callPackage ../os-specific/linux/libnss-mysql { };
+
   libxnd = callPackage ../development/libraries/libxnd { };
 
   lifeograph = callPackage ../applications/editors/lifeograph { };
@@ -15813,6 +15815,8 @@ with pkgs;
 
   cmake-format = python3Packages.callPackage ../development/tools/cmake-format { };
 
+  cobra-cli = callPackage ../development/tools/cobra-cli { };
+
   cmake-language-server = python3Packages.callPackage ../development/tools/misc/cmake-language-server {
     inherit cmake cmake-format;
   };
@@ -20901,9 +20905,8 @@ with pkgs;
     qt5 = qt515;
   });
 
-  # TODO bump to 5.15 on darwin once it's not broken; see #125548
-  qt5 =        if stdenv.hostPlatform.isDarwin then qt514 else qt515;
-  libsForQt5 = if stdenv.hostPlatform.isDarwin then libsForQt514 else libsForQt515;
+  qt5 =        qt515;
+  libsForQt5 = libsForQt515;
 
   # plasma5Packages maps to the Qt5 packages set that is used to build the plasma5 desktop
   plasma5Packages = libsForQt515;
@@ -24377,6 +24380,8 @@ with pkgs;
   pam_ldap = callPackage ../os-specific/linux/pam_ldap { };
 
   pam_mount = callPackage ../os-specific/linux/pam_mount { };
+
+  pam_mysql = callPackage ../os-specific/linux/pam_mysql { };
 
   pam_p11 = callPackage ../os-specific/linux/pam_p11 { };
 
@@ -35165,6 +35170,15 @@ with pkgs;
   lguf-brightness = callPackage ../misc/lguf-brightness { };
 
   lilypond = callPackage ../misc/lilypond { guile = guile_1_8; };
+
+  lilypond-unstable = callPackage ../misc/lilypond/unstable.nix { };
+
+  lilypond-unstable-with-fonts = callPackage ../misc/lilypond/with-fonts.nix {
+    lilypond = lilypond-unstable;
+    openlilylib-fonts = openlilylib-fonts.override {
+      lilypond = lilypond-unstable;
+    };
+  };
 
   lilypond-with-fonts = callPackage ../misc/lilypond/with-fonts.nix { };
 

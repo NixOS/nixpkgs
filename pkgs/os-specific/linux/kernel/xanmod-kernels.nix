@@ -1,14 +1,15 @@
 { lib, stdenv, fetchFromGitHub, buildLinux, ... } @ args:
 
 let
+  # These names are how they are designated in https://xanmod.org.
   ltsVariant = {
-    version = "5.15.54";
-    hash = "sha256-0Odo+ZrQok3MMPl/512F8kIQ31mGZH6e9FyVVpXrYf0=";
+    version = "5.15.60";
+    hash = "sha256-XSOYgrJ/uvPpEG+P3Zy1geFeF/HMZ4LejsKWtTxMUTs=";
   };
 
   edgeVariant = {
-    version = "5.18.11";
-    hash = "sha256-UPLwaEWhBu1yriCUJu9L/B8yy+1zxnTQzHaKlT507UY=";
+    version = "5.19.1";
+    hash = "sha256-Fw+XW2YDAGKEzZ4AO88Y8GcypfOb6AjKp3XOlkT8ZTQ=";
   };
 
   ttVariant = {
