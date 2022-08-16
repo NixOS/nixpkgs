@@ -589,6 +589,7 @@
   ./services/misc/jackett.nix
   ./services/misc/jellyfin.nix
   ./services/misc/klipper.nix
+  ./services/misc/languagetool.nix
   ./services/misc/logkeys.nix
   ./services/misc/leaps.nix
   ./services/misc/lidarr.nix
