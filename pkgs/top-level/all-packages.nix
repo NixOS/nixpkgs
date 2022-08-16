@@ -9826,6 +9826,8 @@ with pkgs;
 
   phodav = callPackage ../tools/networking/phodav { };
 
+  phodav_2_0 = callPackage ../tools/networking/phodav/2.0.nix { };
+
   photon-rss = callPackage ../applications/networking/feedreaders/photon { };
 
   pim6sd = callPackage ../servers/pim6sd { };
