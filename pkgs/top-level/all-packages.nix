@@ -34772,6 +34772,8 @@ with pkgs;
 
   csxcad = callPackage ../applications/science/electronics/csxcad { };
 
+  dataexplorer = callPackage ../applications/science/electronics/dataexplorer { };
+
   diylc = callPackage ../applications/science/electronics/diylc { };
 
   flatcam = callPackage ../applications/science/electronics/flatcam { };
