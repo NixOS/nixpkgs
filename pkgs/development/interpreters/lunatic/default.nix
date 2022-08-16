@@ -17,6 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 
+  checkFlags = [
+    # requires simd support which is not always available on hydra
+    "--skip=state::tests::import_filter_signature_matches"
+  ];
+
   meta = with lib; {
     description = "An Erlang inspired runtime for WebAssembly";
     homepage = "https://lunatic.solutions";
