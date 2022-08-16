@@ -75,7 +75,7 @@
   FileProviderUI                   = {};
   FinderSync                       = {};
   ForceFeedback                    = { inherit IOKit; };
-  Foundation                       = { inherit ApplicationServices CoreFoundation Security SystemConfiguration libobjc; };
+  Foundation                       = { inherit ApplicationServices CoreFoundation Security SystemConfiguration Combine libobjc; };
   GLKit                            = {};
   GLUT                             = { inherit OpenGL; };
   GSS                              = {};
