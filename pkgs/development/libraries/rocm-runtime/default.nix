@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , writeScript
 , addOpenGLRunpath
-, clang-unwrapped
 , cmake
 , xxd
 , elfutils
@@ -27,7 +26,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake xxd ];
 
-  buildInputs = [ clang-unwrapped elfutils llvm numactl ];
+  buildInputs = [ elfutils llvm numactl ];
 
   cmakeFlags = [
    "-DBITCODE_DIR=${rocm-device-libs}/amdgcn/bitcode"

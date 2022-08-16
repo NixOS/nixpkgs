@@ -6,11 +6,9 @@
 , cmake
 , rocm-cmake
 , clang
-, clang-unwrapped
 , glew
 , libglvnd
 , libX11
-, lld
 , llvm
 , mesa
 , numactl
@@ -37,11 +35,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     clang
-    clang-unwrapped
     glew
     libglvnd
     libX11
-    lld
     llvm
     mesa
     numactl

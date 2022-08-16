@@ -14132,27 +14132,27 @@ with pkgs;
   rocclr = callPackage ../development/libraries/rocclr { };
 
   hip = callPackage ../development/compilers/hip {
-    inherit (llvmPackages_rocm) clang clang-unwrapped compiler-rt lld llvm;
+    inherit (llvmPackages_rocm) clang llvm;
   };
 
   rocm-cmake = callPackage ../development/tools/build-managers/rocm-cmake { };
 
   rocm-comgr = callPackage ../development/libraries/rocm-comgr {
-    inherit (llvmPackages_rocm) clang lld llvm;
+    inherit (llvmPackages_rocm) clang llvm;
   };
 
   rocm-device-libs = callPackage ../development/libraries/rocm-device-libs {
-    inherit (llvmPackages_rocm) clang clang-unwrapped lld llvm;
+    inherit (llvmPackages_rocm) clang llvm;
   };
 
   rocm-opencl-icd = callPackage ../development/libraries/rocm-opencl-icd { };
 
   rocm-opencl-runtime = callPackage ../development/libraries/rocm-opencl-runtime {
-    inherit (llvmPackages_rocm) clang clang-unwrapped lld llvm;
+    inherit (llvmPackages_rocm) clang llvm;
   };
 
   rocm-runtime = callPackage ../development/libraries/rocm-runtime {
-    inherit (llvmPackages_rocm) clang-unwrapped llvm;
+    inherit (llvmPackages_rocm) llvm;
   };
 
   rocm-smi = python3Packages.callPackage ../tools/system/rocm-smi { };

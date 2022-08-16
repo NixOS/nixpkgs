@@ -3,8 +3,6 @@
 , writeScript
 , cmake
 , clang
-, clang-unwrapped
-, lld
 , llvm
 }:
 
@@ -21,10 +19,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ clang lld llvm ];
+  buildInputs = [ clang llvm ];
 
   cmakeFlags = [
-    "-DCMAKE_PREFIX_PATH=${llvm}/lib/cmake/llvm;${clang-unwrapped}/lib/cmake/clang"
+    "-DCMAKE_PREFIX_PATH=${llvm}/lib/cmake/llvm;${llvm}/lib/cmake/clang"
     "-DLLVM_TARGETS_TO_BUILD='AMDGPU;X86'"
     "-DCLANG=${clang}/bin/clang"
   ];
