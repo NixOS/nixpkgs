@@ -3789,7 +3789,9 @@ with pkgs;
 
   fits-cloudctl = callPackage ../tools/admin/fits-cloudctl { };
 
-  flitter = callPackage ../tools/misc/flitter { };
+  flitter = callPackage ../tools/misc/flitter {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_13;
+  };
 
   frangipanni = callPackage ../tools/text/frangipanni { };
 
@@ -4022,6 +4024,8 @@ with pkgs;
       };
     });
   };
+
+  hysteria = callPackage ../tools/networking/hysteria { };
 
   hyx = callPackage ../tools/text/hyx { };
 
@@ -10455,6 +10459,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  rustypaste = callPackage ../servers/rustypaste { };
+
   rw = callPackage ../tools/misc/rw { };
 
   rwc = callPackage ../tools/system/rwc { };
@@ -14347,6 +14353,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
   };
   cargo-valgrind = callPackage ../development/tools/rust/cargo-valgrind { };
+  cargo-wasi = callPackage ../development/tools/rust/cargo-wasi {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   cargo-watch = callPackage ../development/tools/rust/cargo-watch {
     inherit (darwin.apple_sdk.frameworks) CoreServices Foundation;
   };
@@ -27955,7 +27964,9 @@ with pkgs;
 
   indigenous-desktop = callPackage ../applications/networking/feedreaders/indigenous-desktop { };
 
-  jackline = callPackage ../applications/networking/instant-messengers/jackline { };
+  jackline = callPackage ../applications/networking/instant-messengers/jackline {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_13;
+  };
 
   keylight-controller-mschneider82 = callPackage ../applications/misc/keylight-controller-mschneider82 { };
 
@@ -28636,6 +28647,8 @@ with pkgs;
   };
 
   ladspa-sdk = callPackage ../applications/audio/ladspa-sdk { };
+
+  ladybird = qt6.callPackage ../applications/networking/browsers/ladybird { };
 
   lazpaint = callPackage ../applications/graphics/lazpaint { };
 
@@ -32551,6 +32564,8 @@ with pkgs;
 
   cuyo = callPackage ../games/cuyo { };
 
+  darkplaces = callPackage ../games/darkplaces {};
+
   deliantra-server = callPackage ../games/deliantra/server.nix {
     stdenv = gcc10StdenvCompat;
   };
@@ -32791,6 +32806,8 @@ with pkgs;
   ingen = callPackage ../applications/audio/ingen { };
 
   ideogram = callPackage ../applications/graphics/ideogram { };
+
+  instaloader = python3Packages.callPackage ../tools/misc/instaloader { };
 
   instead = callPackage ../games/instead { };
 
