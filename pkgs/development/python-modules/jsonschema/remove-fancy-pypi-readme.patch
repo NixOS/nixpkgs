@@ -1,0 +1,33 @@
+--- a/pyproject.toml	2022-08-21 05:04:18.443484836 +0200
++++ b/pyproject.toml	2022-08-21 05:04:50.789353514 +0200
+@@ -76,30 +76,6 @@
+ Changelog = "https://github.com/python-jsonschema/jsonschema/blob/main/CHANGELOG.rst"
+ Source = "https://github.com/python-jsonschema/jsonschema"
+ 
+-[tool.hatch.metadata.hooks.fancy-pypi-readme]
+-content-type = "text/x-rst"
+-
+-[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+-path = "README.rst"
+-end-before = ".. start cut from PyPI"
+-
+-[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+-path = "README.rst"
+-start-after = ".. end cut from PyPI\n\n\n"
+-
+-[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+-text = """
+-
+-
+-Release Information
+--------------------
+-
+-"""
+-
+-[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+-path = "CHANGELOG.rst"
+-pattern = "(^v.+?)\nv"
+-
+ [tool.isort]
+ from_first = true
+ include_trailing_comma = true
