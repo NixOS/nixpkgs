@@ -208,6 +208,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://languagetool.org/">languagetool</link>,
+          a multilingual grammar, style, and spell checker. Available as
+          <link xlink:href="options.html#opt-services.languagetool.enable">services.languagetool</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://www.getoutline.com/">Outline</link>,
           a wiki and knowledge base similar to Notion. Available as
           <link linkend="opt-services.outline.enable">services.outline</link>.
