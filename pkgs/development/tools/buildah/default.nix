@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
 , go-md2man
@@ -32,8 +33,9 @@ buildGoModule rec {
   nativeBuildInputs = [ go-md2man installShellFiles pkg-config ];
 
   buildInputs = [
-    btrfs-progs
     gpgme
+  ] ++ lib.optionals stdenv.isLinux [
+    btrfs-progs
     libapparmor
     libseccomp
     libselinux
@@ -62,6 +64,5 @@ buildGoModule rec {
     changelog = "https://github.com/containers/buildah/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ Profpatsch ] ++ teams.podman.members;
-    platforms = platforms.linux;
   };
 }
