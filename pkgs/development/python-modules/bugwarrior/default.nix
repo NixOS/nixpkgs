@@ -23,6 +23,8 @@
 , pytestCheckHook
 , responses
 , megaplan
+, pypandoc
+, debianbts
 }:
 
 buildPythonPackage rec {
@@ -38,6 +40,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     bugzilla
     click
+    debianbts
     dogpile-cache
     future
     jinja2
@@ -46,6 +49,7 @@ buildPythonPackage rec {
     lockfile
     offtrac
     pycurl
+    pypandoc
     python-dateutil
     pytz
     pyxdg
