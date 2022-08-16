@@ -17,13 +17,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ scons pkg-config wrapGAppsHook ];
   buildInputs = [ glfw3 gtk3 libpng12 ];
 
-  buildPhase = ''
-    make release
-  '';
+  makeTarget = [ "release" ];
 
-  installPhase = ''
-    install -D ./goxel $out/bin/goxel
-  '';
+  makeFlags = [ "PREFIX=$(out)" ];
+
+  dontUseSconsInstall = true;
 
   meta = with lib; {
     description = "Open Source 3D voxel editor";
