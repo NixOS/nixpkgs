@@ -8680,6 +8680,8 @@ in {
 
   python-dbusmock = callPackage ../development/python-modules/python-dbusmock { };
 
+  python-debianbts = callPackage ../development/python-modules/python-debianbts { };
+
   pythondialog = callPackage ../development/python-modules/pythondialog { };
 
   python-didl-lite = callPackage ../development/python-modules/python-didl-lite { };
