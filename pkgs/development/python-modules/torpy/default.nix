@@ -29,8 +29,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-
-  disabledTestPaths =[
+  disabledTestPaths = [
     # requires network
     "tests/integration"
   ];
