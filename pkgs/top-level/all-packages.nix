@@ -22620,6 +22620,8 @@ with pkgs;
 
   lighttpd = callPackage ../servers/http/lighttpd { };
 
+  listmonk = callPackage ../servers/mail/listmonk { };
+
   livepeer = callPackage ../servers/livepeer { };
 
   lwan = callPackage ../servers/http/lwan { };
@@ -30660,6 +30662,8 @@ with pkgs;
   stp = callPackage ../applications/science/logic/stp { };
 
   stretchly = callPackage ../applications/misc/stretchly { };
+
+  stuffbin = callPackage ../tools/filesystems/stuffbin { };
 
   stumpish = callPackage ../applications/window-managers/stumpish {};
 
