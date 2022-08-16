@@ -1,6 +1,29 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, setuptools
-, twiggy, requests, offtrac, bugzilla, taskw, python-dateutil, pytz, keyring, six
-, jinja2, pycurl, dogpile-cache, lockfile, click, pyxdg, future, jira }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, setuptools
+, twiggy
+, requests
+, offtrac
+, bugzilla
+, taskw
+, python-dateutil
+, pytz
+, keyring
+, six
+, jinja2
+, pycurl
+, dogpile-cache
+, lockfile
+, click
+, pyxdg
+, future
+, jira
+, pytestCheckHook
+, responses
+, megaplan
+}:
 
 buildPythonPackage rec {
   pname = "bugwarrior";
@@ -13,13 +36,35 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    bugzilla
+    click
+    dogpile-cache
+    future
+    jinja2
+    jira
+    keyring
+    lockfile
+    offtrac
+    pycurl
+    python-dateutil
+    pytz
+    pyxdg
+    requests
     setuptools
-    twiggy requests offtrac bugzilla taskw python-dateutil pytz keyring six
-    jinja2 pycurl dogpile-cache lockfile click pyxdg future jira
+    six
+    taskw
+    twiggy
   ];
 
-  # for the moment oauth2client <4.0.0 and megaplan>=1.4 are missing for running the test suite.
-  doCheck = false;
+  checkInputs = [
+    megaplan
+    pytestCheckHook
+    responses
+  ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d);
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/ralphbean/bugwarrior";
