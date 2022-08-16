@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libsoup";
-  version = "3.1.1";
+  version = "3.1.3";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-RAO/PnpMeoXLPEpSgcm5nSVuKGOfVXMKUq3UMqr84Fw=";
+    sha256 = "sha256-2KqVN6Fk6m+72ohY8ozGPYgPxEGMm+7T3mJe2XHrWac=";
   };
 
   nativeBuildInputs = [
@@ -66,8 +66,6 @@ stdenv.mkDerivation rec {
     "-Dntlm=disabled"
     # Requires wstest from autobahn-testsuite.
     "-Dautobahn=disabled"
-    # Requires quart Python module.
-    "-Dhttp2_tests=disabled"
     # Requires gnutls, not added for closure size.
     "-Dpkcs11_tests=disabled"
   ] ++ lib.optionals (!stdenv.isLinux) [
