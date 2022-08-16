@@ -7262,7 +7262,7 @@
   };
   lassulus = {
     email = "lassulus@gmail.com";
-    matrix = "@lassulus:nixos.dev";
+    matrix = "@lassulus:lassul.us";
     github = "Lassulus";
     githubId = 621759;
     name = "Lassulus";

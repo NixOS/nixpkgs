@@ -33,6 +33,10 @@ stdenv.mkDerivation rec {
     qtbase
   ] ++ lib.optional withServer ghc;
 
+  patches = [
+    ./qt515.patch
+  ];
+
   postPatch = ''
     substituteInPlace gameServer/CMakeLists.txt \
       --replace mask evaluate

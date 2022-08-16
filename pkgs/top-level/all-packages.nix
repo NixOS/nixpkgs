@@ -15780,6 +15780,11 @@ with pkgs;
     inherit (libsForQt5) qtbase wrapQtAppsHook;
   };
 
+  cmake_3_23 = callPackage ../development/tools/build-managers/cmake/3_23.nix {
+    inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
+    inherit (libsForQt5) qtbase wrapQtAppsHook;
+  };
+
   cmakeMinimal = callPackage ../development/tools/build-managers/cmake {
     isBootstrap = true;
     qtbase = null;
@@ -22615,6 +22620,8 @@ with pkgs;
 
   lighttpd = callPackage ../servers/http/lighttpd { };
 
+  listmonk = callPackage ../servers/mail/listmonk { };
+
   livepeer = callPackage ../servers/livepeer { };
 
   lwan = callPackage ../servers/http/lwan { };
@@ -25392,7 +25399,9 @@ with pkgs;
 
   netease-music-tui = callPackage ../applications/audio/netease-music-tui { };
 
-  netease-cloud-music-gtk = callPackage ../applications/audio/netease-cloud-music-gtk { };
+  netease-cloud-music-gtk = callPackage ../applications/audio/netease-cloud-music-gtk {
+    inherit (darwin.apple_sdk.frameworks) Foundation SystemConfiguration;
+  };
 
   nordic = callPackage ../data/themes/nordic { };
 
@@ -30656,6 +30665,8 @@ with pkgs;
 
   stretchly = callPackage ../applications/misc/stretchly { };
 
+  stuffbin = callPackage ../tools/filesystems/stuffbin { };
+
   stumpish = callPackage ../applications/window-managers/stumpish {};
 
   stumpwm = lispPackages.stumpwm;
@@ -32767,7 +32778,7 @@ with pkgs;
 
   harmonist = callPackage ../games/harmonist { };
 
-  hedgewars = libsForQt514.callPackage ../games/hedgewars {
+  hedgewars = libsForQt5.callPackage ../games/hedgewars {
     inherit (haskellPackages) ghcWithPackages;
   };
 
