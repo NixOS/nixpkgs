@@ -24,7 +24,7 @@
 , responses
 , megaplan
 , pypandoc
-, debianbts
+, python-debianbts
 }:
 
 buildPythonPackage rec {
@@ -40,7 +40,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     bugzilla
     click
-    debianbts
     dogpile-cache
     future
     jinja2
@@ -51,6 +50,7 @@ buildPythonPackage rec {
     pycurl
     pypandoc
     python-dateutil
+    python-debianbts
     pytz
     pyxdg
     requests
