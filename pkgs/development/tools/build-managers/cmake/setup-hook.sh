@@ -15,6 +15,9 @@ fixCmakeFiles() {
 cmakeConfigurePhase() {
     runHook preConfigure
 
+    # default to CMake defaults if unset
+    : ${cmakeBuildDir:=build}
+
     export CTEST_OUTPUT_ON_FAILURE=1
     if [ -n "${enableParallelChecking-1}" ]; then
         export CTEST_PARALLEL_LEVEL=$NIX_BUILD_CORES
@@ -25,9 +28,11 @@ cmakeConfigurePhase() {
     fi
 
     if [ -z "${dontUseCmakeBuildDir-}" ]; then
-        mkdir -p build
-        cd build
-        cmakeDir=${cmakeDir:-..}
+        mkdir -p "$cmakeBuildDir"
+        cd "$cmakeBuildDir"
+        : ${cmakeDir:=..}
+    else
+        : ${cmakeDir:=.}
     fi
 
     if [ -z "${dontAddPrefix-}" ]; then
@@ -118,7 +123,7 @@ cmakeConfigurePhase() {
 
     echo "cmake flags: $cmakeFlags ${cmakeFlagsArray[@]}"
 
-    cmake ${cmakeDir:-.} $cmakeFlags "${cmakeFlagsArray[@]}"
+    cmake "$cmakeDir" $cmakeFlags "${cmakeFlagsArray[@]}"
 
     if ! [[ -v enableParallelBuilding ]]; then
         enableParallelBuilding=1

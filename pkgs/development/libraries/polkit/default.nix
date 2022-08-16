@@ -22,7 +22,7 @@
 , gtk-doc
 , coreutils
 , useSystemd ? stdenv.isLinux
-, systemd
+, systemdMinimal
 , elogind
 # A few tests currently fail on musl (polkitunixusertest, polkitunixgrouptest, polkitidentitytest segfault).
 # Not yet investigated; it may be due to the "Make netgroup support optional"
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
     duktape
   ] ++ lib.optionals stdenv.isLinux [
     # On Linux, fall back to elogind when systemd support is off.
-    (if useSystemd then systemd else elogind)
+    (if useSystemd then systemdMinimal else elogind)
   ];
 
   propagatedBuildInputs = [
