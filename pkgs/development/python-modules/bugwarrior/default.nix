@@ -27,6 +27,7 @@
 , python-debianbts
 , typing-extensions
 , pyac
+, google
 }:
 
 buildPythonPackage rec {
@@ -44,6 +45,7 @@ buildPythonPackage rec {
     click
     dogpile-cache
     future
+    google
     jinja2
     jira
     keyring

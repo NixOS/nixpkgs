@@ -3697,6 +3697,8 @@ in {
 
   goodwe = callPackage ../development/python-modules/goodwe { };
 
+  google = callPackage ../development/python-modules/google { };
+
   google-api-core = callPackage ../development/python-modules/google-api-core { };
 
   google-api-python-client = callPackage ../development/python-modules/google-api-python-client { };
@@ -7217,6 +7219,8 @@ in {
   py3to2 = callPackage ../development/python-modules/3to2 { };
 
   py4j = callPackage ../development/python-modules/py4j { };
+
+  pyac = callPackage ../development/python-modules/pyac { };
 
   pyacoustid = callPackage ../development/python-modules/pyacoustid { };
 
