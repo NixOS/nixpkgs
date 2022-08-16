@@ -25434,7 +25434,10 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
-  numix-icon-theme = callPackage ../data/icons/numix-icon-theme { };
+  numix-icon-theme = callPackage ../data/icons/numix-icon-theme {
+    inherit (gnome) adwaita-icon-theme;
+    inherit (plasma5Packages) breeze-icons;
+  };
 
   numix-icon-theme-circle = callPackage ../data/icons/numix-icon-theme-circle { };
 

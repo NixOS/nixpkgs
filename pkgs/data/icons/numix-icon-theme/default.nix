@@ -2,6 +2,8 @@
 , stdenvNoCC
 , fetchFromGitHub
 , gtk3
+, adwaita-icon-theme
+, breeze-icons
 , gnome-icon-theme
 , hicolor-icon-theme
 , gitUpdater
@@ -23,6 +25,8 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
+    adwaita-icon-theme
+    breeze-icons
     gnome-icon-theme
     hicolor-icon-theme
   ];
@@ -31,6 +35,8 @@ stdenvNoCC.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
+
+    substituteInPlace Numix/index.theme --replace Breeze breeze
 
     mkdir -p $out/share/icons
     cp -a Numix{,-Light} $out/share/icons/
