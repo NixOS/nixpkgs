@@ -26234,6 +26234,8 @@ with pkgs;
 
   blender-with-packages = callPackage ../applications/misc/blender/wrapper.nix {};
 
+  blender-hip = blender.override { hipSupport = true; };
+
   blflash = callPackage ../tools/misc/blflash { };
 
   blogc = callPackage ../applications/misc/blogc { };
