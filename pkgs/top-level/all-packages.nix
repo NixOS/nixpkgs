@@ -7220,6 +7220,8 @@ with pkgs;
 
   gupnp = callPackage ../development/libraries/gupnp { };
 
+  gupnp_1_6 = callPackage ../development/libraries/gupnp/1.6.nix { };
+
   gupnp-av = callPackage ../development/libraries/gupnp-av {};
 
   gupnp-dlna = callPackage ../development/libraries/gupnp-dlna {};
