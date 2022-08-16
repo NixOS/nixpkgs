@@ -1,9 +1,4 @@
-commit 35cab741af069571cf4c55e0ce1ae96617d5778c
-Author: Peter Hoeg <peter@hoeg.com>
-Date:   Fri Aug 12 10:52:22 2022 +0800
-
-    nixify
-
+35cab741af069571cf4c55e0ce1ae96617d5778c nixify
 diff --git a/scripts/msmtpq/msmtpq b/scripts/msmtpq/msmtpq
 index d8b4039..1ab89f8 100755
 --- a/scripts/msmtpq/msmtpq
