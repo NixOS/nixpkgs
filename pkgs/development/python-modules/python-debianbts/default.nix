@@ -1,7 +1,6 @@
 { lib
-, fetchPypi
+, fetchFromGitHub
 , buildPythonPackage
-, pytestCheckHook
 , pysimplesoap
 }:
 
@@ -9,14 +8,22 @@ buildPythonPackage rec {
   pname = "python-debianbts";
   version = "3.2.3";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-SS2xxiaio25zz9NcrLiRPHNHEiFLBoTV8q3Fy67YYUk=";
+  src = fetchFromGitHub {
+    owner = "venthur";
+    repo = "python-debianbts";
+    rev = version;
+    sha256 = "sha256-GQTxoEjmV6RHdVWDf1+C8u5VNTlAIBqNyGWK+sJh1Jk=";
   };
+
+  postPatch = ''
+    # Disable coverage and linting tests
+    rm setup.cfg
+  '';
 
   propagatedBuildInputs = [ pysimplesoap ];
 
-  checkInputs = [ pytestCheckHook ];
+  # Tests require network connection
+  doCheck = false;
 
   pythonImportsCheck = [ "debianbts" ];
 
