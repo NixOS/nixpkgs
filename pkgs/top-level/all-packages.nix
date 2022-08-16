@@ -21667,30 +21667,18 @@ with pkgs;
   vte_290 = callPackage ../development/libraries/vte/2.90.nix { };
 
   vtk_7 = libsForQt515.callPackage ../development/libraries/vtk/7.x.nix {
-    stdenv = gcc9Stdenv;
-    inherit (darwin) libobjc;
-    inherit (darwin.apple_sdk.libs) xpc;
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreServices DiskArbitration
-                                          IOKit CFNetwork Security ApplicationServices
-                                          CoreText IOSurface ImageIO OpenGL GLUT;
+    stdenv = if stdenv.cc.isGNU then gcc9Stdenv else stdenv;
+    inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
   };
   vtk_8 = libsForQt515.callPackage ../development/libraries/vtk/8.x.nix {
-    stdenv = gcc9Stdenv;
-    inherit (darwin) libobjc;
-    inherit (darwin.apple_sdk.libs) xpc;
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreServices DiskArbitration
-                                          IOKit CFNetwork Security ApplicationServices
-                                          CoreText IOSurface ImageIO OpenGL GLUT;
+    stdenv = if stdenv.cc.isGNU then gcc9Stdenv else stdenv;
+    inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
   };
 
   vtk_8_withQt5 = vtk_8.override { enableQt = true; };
 
   vtk_9 = libsForQt515.callPackage ../development/libraries/vtk/9.x.nix {
-    inherit (darwin) libobjc;
-    inherit (darwin.apple_sdk.libs) xpc;
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreServices DiskArbitration
-                                          IOKit CFNetwork Security ApplicationServices
-                                          CoreText IOSurface ImageIO OpenGL GLUT;
+    inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
   };
 
   vtk_9_withQt5 = vtk_9.override { enableQt = true; };
