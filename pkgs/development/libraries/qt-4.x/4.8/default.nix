@@ -50,9 +50,6 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString stdenv.cc.isClang ''
     substituteInPlace src/3rdparty/webkit/Source/WebCore/html/HTMLImageElement.cpp \
       --replace 'optionalHeight > 0' 'optionalHeight != NULL'
-
-    substituteInPlace ./tools/linguist/linguist/messagemodel.cpp \
-      --replace 'm->comment()) >= 0' 'm->comment()) != NULL'
   '';
 
   patches =
