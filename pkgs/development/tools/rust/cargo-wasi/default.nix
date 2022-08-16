@@ -22,9 +22,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    lib.optionals stdenv.isDarwin [ Security ] ++
-    lib.optionals stdenv.isLinux [ openssl ];
+  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ Security ];
 
   cargoPatches = [
     ./0001-Add-Cargo.lock.patch
