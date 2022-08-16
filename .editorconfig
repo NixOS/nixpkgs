@@ -60,6 +60,13 @@ indent_size = unset
 [*.md]
 trim_trailing_whitespace = unset
 
+# binaries
+[*.nib]
+end_of_line = unset
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+charset = unset
+
 [eggs.nix]
 trim_trailing_whitespace = unset
 
