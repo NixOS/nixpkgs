@@ -13,20 +13,20 @@
 let serenity = fetchFromGitHub {
   owner = "SerenityOS";
   repo = "serenity";
-  rev = "094ba6525f0217f3b8d5e467cef326caeb659e8a";
-  hash = "sha256-IHXe2Td9iRSL1oQVwL2gZHxEM2ID4SghZwK6ewjFV1Y=";
+  rev = "ae8f1c7dc88e5bd79fb3e232e540ddc3dd2f1c11";
+  hash = "sha256-1OcSBwEs/SGocTlOoVEv+2bTg4kqtUT2TUBOWG7BqkE=";
 };
 
 in gcc11Stdenv.mkDerivation {
   pname = "ladybird";
-  version = "unstable-2022-07-20";
+  version = "unstable-2022-08-14";
 
   # Remember to update `serenity` too!
   src = fetchFromGitHub {
     owner = "awesomekling";
     repo = "ladybird";
-    rev = "9e3a1f47d484cee6f23c4dae6c51750af155a8fc";
-    hash = "sha256-1cPWpPvjM/VcVUEf2k+MvGvTgZ3Fc4LFHZCLh1wU78Y=";
+    rev = "35a6f69d65fcdb17fb9f84247fe8caf2b49f7c7d";
+    hash = "sha256-W46GXK2vxDgeUtCR3OwUs00WiAAu0aAERmtxrt2ICYI=";
   };
 
   nativeBuildInputs = [
