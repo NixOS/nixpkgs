@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString (stdenv.system == "aarch64-darwin") ''
       --replace "-arch x86_64" ""
   '' + lib.optionalString (stdenv.system == "x86_64-darwin") ''
-    --replace "-arch arm64e" ""
+    --replace "-arch arm64e" "" \
     --replace "-arch arm64" ""
   '';
 
