@@ -3,7 +3,6 @@
 buildGoModule rec {
   pname = "kubernetes-helm";
   version = "3.9.3";
-  gitCommit = "a7c043acb5ff905c261cfdc923a35776ba5e66e4";
 
   src = fetchFromGitHub {
     owner = "helm";
@@ -18,7 +17,7 @@ buildGoModule rec {
     "-w"
     "-s"
     "-X helm.sh/helm/v3/internal/version.version=v${version}"
-    "-X helm.sh/helm/v3/internal/version.gitCommit=${gitCommit}"
+    "-X helm.sh/helm/v3/internal/version.gitCommit=${src.rev}"
   ];
 
   preCheck = ''
