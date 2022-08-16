@@ -24,6 +24,10 @@ buildGoModule rec {
     "-X ${t}/util.CommitHash=${src.rev}"
   ];
 
+  preBuild = ''
+    go generate ./runtime
+  '';
+
   postInstall = ''
     installManPage assets/packaging/micro.1
     install -Dt $out/share/applications assets/packaging/micro.desktop
