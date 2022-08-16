@@ -10938,6 +10938,8 @@ in {
     inherit (pkgs.libsForQt5) wrapQtAppsHook;
   };
 
+  turnt = callPackage ../development/python-modules/turnt { };
+
   tuya-iot-py-sdk = callPackage ../development/python-modules/tuya-iot-py-sdk { };
 
   tuyaha = callPackage ../development/python-modules/tuyaha { };
