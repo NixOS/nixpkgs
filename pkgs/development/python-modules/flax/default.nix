@@ -7,6 +7,7 @@
 , msgpack
 , numpy
 , optax
+, rich
 , pytest-xdist
 , pytestCheckHook
 , tensorflow
@@ -23,6 +24,11 @@ buildPythonPackage rec {
     sha256 = "sha256-t24JZ08EmvuAINZC26OQI1icklUhUkfz6ZRKPr2COAw=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "rich~=11.1" rich
+  '';
+
   buildInputs = [ jaxlib ];
 
   propagatedBuildInputs = [
@@ -30,6 +36,7 @@ buildPythonPackage rec {
     msgpack
     numpy
     optax
+    rich
   ];
 
   pythonImportsCheck = [
