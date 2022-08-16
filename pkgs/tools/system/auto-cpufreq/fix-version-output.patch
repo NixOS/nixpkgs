@@ -1,37 +1,45 @@
+diff --git a/auto_cpufreq/core.py b/auto_cpufreq/core.py
+index faf86c6..e0e0f42 100644
 --- a/auto_cpufreq/core.py
 +++ b/auto_cpufreq/core.py
-@@ -68,32 +68,8 @@ dist_name = distro.id()
+@@ -114,26 +114,8 @@ except PermissionError:
  
  # display running version of auto-cpufreq
  def app_version():
 -
--    print("auto-cpufreq version:")
+-    print("auto-cpufreq version: ", end="")
 -
 -    # snap package
 -    if os.getenv("PKG_MARKER") == "SNAP":
--        print(getoutput("echo Snap: $SNAP_VERSION"))
+-        print(getoutput("echo \(Snap\) $SNAP_VERSION"))
 -    # aur package
 -    elif dist_name in ["arch", "manjaro", "garuda"]:
 -        aur_pkg_check = call("pacman -Qs auto-cpufreq > /dev/null", shell=True)
 -        if aur_pkg_check == 1:
--            print(
--                "Git commit:",
--                check_output(["git", "describe", "--always"]).strip().decode(),
--            )
+-            print(get_formatted_version())
 -        else:
 -            print(getoutput("pacman -Qi auto-cpufreq | grep Version"))
 -    else:
 -        # source code (auto-cpufreq-installer)
 -        try:
--            print(
--                "Git commit:",
--                check_output(["git", "describe", "--always"]).strip().decode(),
--            )
+-            print(get_formatted_version())
 -        except Exception as e:
 -            print(repr(e))
 -            pass
 +    print("auto-cpufreq version: @version@")
 +    print("Git commit: v@version@")
  
- 
- def app_res_use():
+ # return formatted version for a better readability
+ def get_formatted_version():
+diff --git a/setup.py b/setup.py
+index e0c97e7..f95c014 100644
+--- a/setup.py
++++ b/setup.py
+@@ -23,7 +23,6 @@ setup(
+         "dev_template": "{tag}+{sha}",
+         "dirty_template": "{tag}+{sha}.post{ccount}.dirty"
+     },
+-    setup_requires=["setuptools-git-versioning"],
+     description="Automatic CPU speed & power optimizer for Linux",
+     long_description=readme,
+     author="Adnan Hodzic",

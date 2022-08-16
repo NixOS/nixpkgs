@@ -2,16 +2,21 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "auto-cpufreq";
-  version = "1.7.1";
+  version = "1.9.5";
 
   src = fetchFromGitHub {
     owner = "AdnanHodzic";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1r27ydv258c6pc82za0wq8q8fj0j3r50c8wxc6r7dwr6wx8q3asx";
+    sha256 = "sha256-+8M7PJiJvfFAKYgN93R4NML9GQR989DRnJnv+j0sjUI=";
   };
 
-  propagatedBuildInputs = with python3Packages; [ click distro psutil ];
+  propagatedBuildInputs = with python3Packages; [
+    click
+    distro
+    psutil
+    setuptools
+  ];
 
   doCheck = false;
   pythonImportsCheck = [ "auto_cpufreq" ];
@@ -25,15 +30,18 @@ python3Packages.buildPythonPackage rec {
 
     # patch to prevent script copying and to disable install
     ./prevent-install-and-copy.patch
+
+    # patch to remove venvs from the service file
+    ./remove-service-venv.patch
   ];
 
   postInstall = ''
     # copy script manually
-    cp ${src}/scripts/cpufreqctl.sh $out/bin/cpufreqctl.auto-cpufreq
+    cp scripts/cpufreqctl.sh $out/bin/cpufreqctl.auto-cpufreq
 
     # systemd service
     mkdir -p $out/lib/systemd/system
-    cp ${src}/scripts/auto-cpufreq.service $out/lib/systemd/system
+    cp scripts/auto-cpufreq.service $out/lib/systemd/system
     substituteInPlace $out/lib/systemd/system/auto-cpufreq.service --replace "/usr/local" $out
   '';
 

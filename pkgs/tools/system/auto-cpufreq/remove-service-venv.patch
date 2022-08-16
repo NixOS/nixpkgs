@@ -1,0 +1,15 @@
+diff --git a/scripts/auto-cpufreq.service b/scripts/auto-cpufreq.service
+index 3362723..aa95fba 100644
+--- a/scripts/auto-cpufreq.service
++++ b/scripts/auto-cpufreq.service
+@@ -5,9 +5,7 @@ After=network.target network-online.target
+ [Service]
+ Type=simple
+ User=root
+-WorkingDirectory=/opt/auto-cpufreq/venv
+-Environment=PYTHONPATH=/opt/auto-cpufreq
+-ExecStart=/opt/auto-cpufreq/venv/bin/python /opt/auto-cpufreq/venv/bin/auto-cpufreq --daemon
++ExecStart=/usr/local/bin/auto-cpufreq --daemon
+ Restart=on-failure
+ 
+ [Install]
