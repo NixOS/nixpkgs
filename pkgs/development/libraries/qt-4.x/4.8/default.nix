@@ -234,6 +234,6 @@ stdenv.mkDerivation rec {
     license     = lib.licenses.lgpl21Plus; # or gpl3
     maintainers = with lib.maintainers; [ orivej lovek323 sander ];
     platforms   = lib.platforms.unix;
-    badPlatforms = [ "x86_64-darwin" ];
+    badPlatforms = [ "x86_64-darwin" "aarch64-darwin" ];
   };
 }
