@@ -15783,11 +15783,6 @@ with pkgs;
     inherit (libsForQt5) qtbase wrapQtAppsHook;
   };
 
-  cmake_3_23 = callPackage ../development/tools/build-managers/cmake/3_23.nix {
-    inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
-    inherit (libsForQt5) qtbase wrapQtAppsHook;
-  };
-
   cmakeMinimal = callPackage ../development/tools/build-managers/cmake {
     isBootstrap = true;
     qtbase = null;
