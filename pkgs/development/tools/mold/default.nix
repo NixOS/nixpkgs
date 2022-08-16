@@ -35,8 +35,7 @@ stdenv.mkDerivation rec {
   wrapperName = "MOLD_WRAPPER";
   coreutils_bin = lib.getBin coreutils;
   postInstall = let
-    targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
-                                          (stdenv.targetPlatform.config + "-");
+    targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) (stdenv.targetPlatform.config + "-");
   in ''
     mkdir -p $out/nix-support
 
