@@ -4144,6 +4144,8 @@ with pkgs;
 
   libndtypes = callPackage ../development/libraries/libndtypes { };
 
+  libnss-mysql = callPackage ../os-specific/linux/libnss-mysql { };
+
   libxnd = callPackage ../development/libraries/libxnd { };
 
   lifeograph = callPackage ../applications/editors/lifeograph { };
@@ -24377,6 +24379,8 @@ with pkgs;
   pam_ldap = callPackage ../os-specific/linux/pam_ldap { };
 
   pam_mount = callPackage ../os-specific/linux/pam_mount { };
+
+  pam_mysql = callPackage ../os-specific/linux/pam_mysql { };
 
   pam_p11 = callPackage ../os-specific/linux/pam_p11 { };
 
