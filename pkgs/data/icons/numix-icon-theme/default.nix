@@ -4,6 +4,7 @@
 , gtk3
 , gnome-icon-theme
 , hicolor-icon-theme
+, gitUpdater
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -40,6 +41,8 @@ stdenvNoCC.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater { inherit pname version; };
 
   meta = with lib; {
     description = "Numix icon theme";
