@@ -25,6 +25,7 @@ buildPythonPackage rec {
   checkInputs = [ nose2 autograd matplotlib tensorflow ];
 
   checkPhase = ''
+    runHook preCheck
     # FIXME: Some numpy regression?
     # Traceback (most recent call last):
     #   File "/build/source/tests/manifolds/test_hyperbolic.py", line 270, in test_second_order_function_approximation
@@ -35,6 +36,7 @@ buildPythonPackage rec {
     rm tests/manifolds/test_hyperbolic.py
 
     nose2 tests -v
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "pymanopt" ];
