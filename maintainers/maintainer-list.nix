@@ -10178,6 +10178,16 @@
       fingerprint = "5D69 CF04 B7BC 2BC1 A567  9267 00BC F29B 3208 0700";
     }];
   };
+  phfroidmont = {
+    name = "Paul-Henri Froidmont";
+    email = "nix.contact-j9dw4d@froidmont.org";
+
+    github = "phfroidmont";
+    githubId = 8150907;
+    keys = [{
+      fingerprint = "3AC6 F170 F011 33CE 393B  CD94 BE94 8AFD 7E78 73BE";
+    }];
+  };
   philandstuff = {
     email = "philip.g.potter@gmail.com";
     github = "philandstuff";
