@@ -18479,6 +18479,8 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+  hmat-oss = callPackage ../development/libraries/hmat-oss { };
+
   hound = callPackage ../development/tools/misc/hound { };
 
   hpx = callPackage ../development/libraries/hpx {
