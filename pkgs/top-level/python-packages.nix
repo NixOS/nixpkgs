@@ -10826,6 +10826,8 @@ in {
 
   torchaudio-bin = callPackage ../development/python-modules/torchaudio/bin.nix { };
 
+  torchdata-bin = callPackage ../development/python-modules/torchdata/bin.nix { };
+
   torchgpipe = callPackage ../development/python-modules/torchgpipe { };
 
   torchmetrics = callPackage ../development/python-modules/torchmetrics { };
