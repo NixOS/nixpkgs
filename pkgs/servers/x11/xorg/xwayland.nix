@@ -42,12 +42,12 @@
 , defaultFontPath ? "" }:
 
 stdenv.mkDerivation rec {
-
   pname = "xwayland";
-  version = "22.1.1";
+  version = "22.1.3";
+
   src = fetchurl {
     url = "mirror://xorg/individual/xserver/${pname}-${version}.tar.xz";
-    sha256 = "sha256-9dDgujfhm7h8YvYdpZcL0gSTnyEgYglkvtTMhJW6plc=";
+    sha256 = "sha256-pxLre84yzZNN82gUtd0EaqZwiZwW/pjyr7ADV4+GocU=";
   };
 
   depsBuildBuild = [
