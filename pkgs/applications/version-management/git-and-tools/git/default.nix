@@ -375,8 +375,7 @@ stdenv.mkDerivation (finalAttrs: {
         doInstallCheck = true;
       });
       buildbot-integration = nixosTests.buildbot;
-      inherit (tests) fetchgit;
-    };
+    } // tests.fetchgit;
   };
 
   meta = {

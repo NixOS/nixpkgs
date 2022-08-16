@@ -6789,6 +6789,12 @@
     githubId = 2029444;
     name = "James Kent";
   };
+  kephasp = {
+    email = "pierre@nothos.net";
+    github = "kephas";
+    githubId = 762421;
+    name = "Pierre Thierry";
+  };
   ketzacoatl = {
     email = "ketzacoatl@protonmail.com";
     github = "ketzacoatl";
@@ -8811,6 +8817,13 @@
     keys = [{
       fingerprint = "1248 D3E1 1D11 4A85 75C9  8934 6794 D45A 488C 2EDE";
     }];
+  };
+  monaaraj = {
+    name = "Mon Aaraj";
+    email = "owo69uwu69@gmail.com";
+    matrix = "@mon:tchncs.de";
+    github = "MonAaraj";
+    githubId = 46468162;
   };
   monsieurp = {
     email = "monsieurp@gentoo.org";

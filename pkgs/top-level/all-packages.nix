@@ -282,6 +282,8 @@ with pkgs;
 
   beyond-identity = callPackage ../tools/security/beyond-identity {};
 
+  binbloom = callPackage ../tools/security/binbloom {};
+
   bingo = callPackage ../development/tools/bingo {};
 
   binserve = callPackage ../servers/binserve {
@@ -365,6 +367,8 @@ with pkgs;
   };
 
   conftest = callPackage ../development/tools/conftest { };
+
+  colemak-dh = callPackage ../data/misc/colemak-dh { };
 
   colmena = callPackage ../tools/admin/colmena { };
 
@@ -1493,8 +1497,18 @@ with pkgs;
 
   pcsxr = callPackage ../applications/emulators/pcsxr { };
 
-  ppsspp = callPackage ../applications/emulators/ppsspp {
+  ppsspp = callPackage ../applications/emulators/ppsspp { };
+
+  ppsspp-sdl = ppsspp;
+
+  ppsspp-sdl-wayland = ppsspp.override {
+    forceWayland = true;
+    enableVulkan = false; # https://github.com/hrydgard/ppsspp/issues/13845
+  };
+
+  ppsspp-qt = ppsspp.override {
     inherit (libsForQt5) qtbase qtmultimedia wrapQtAppsHook;
+    enableVulkan = false; # https://github.com/hrydgard/ppsspp/issues/11628
   };
 
   proton-caller = callPackage ../applications/emulators/proton-caller { };
@@ -5454,11 +5468,14 @@ with pkgs;
 
   ddrutility = callPackage ../tools/system/ddrutility { };
 
-  deluge-2_x = callPackage ../applications/networking/p2p/deluge {
-    pythonPackages = python3Packages;
+  inherit (callPackages ../applications/networking/p2p/deluge {
     libtorrent-rasterbar = libtorrent-rasterbar-1_2_x.override { python = python3; };
-  };
-  deluge = deluge-2_x;
+  })
+    deluge-gtk
+    deluged
+    deluge;
+
+  deluge-2_x = deluge;
 
   desktop-file-utils = callPackage ../tools/misc/desktop-file-utils { };
 
@@ -8069,7 +8086,7 @@ with pkgs;
 
   mcfly = callPackage ../tools/misc/mcfly { };
 
-  m2r = python3Packages.callPackage ../tools/text/m2r { };
+  m2r = with python3Packages; toPythonApplication m2r;
 
   md2gemini = with python3.pkgs; toPythonApplication md2gemini;
 
@@ -9025,7 +9042,7 @@ with pkgs;
 
   noip = callPackage ../tools/networking/noip { };
 
-  nomad = nomad_1_2;
+  nomad = nomad_1_3;
 
   # Nomad never updates major go versions within a release series and is unsupported
   # on Go versions that it did not ship with. Due to historic bugs when compiled
@@ -9033,12 +9050,10 @@ with pkgs;
   # Upstream partially documents used Go versions here
   # https://github.com/hashicorp/nomad/blob/master/contributing/golang.md
   nomad_1_2 = callPackage ../applications/networking/cluster/nomad/1.2.nix {
-    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
     buildGoModule = buildGo117Module;
   };
   nomad_1_3 = callPackage ../applications/networking/cluster/nomad/1.3.nix {
-    # pinned due to build failure or vendoring problems. When unpinning double check with: nix-build -A $name.go-modules --rebuild
-    buildGoModule = buildGo117Module;
+    buildGoModule = buildGo118Module;
   };
 
   nomad-autoscaler = callPackage ../applications/networking/cluster/nomad-autoscaler { };
@@ -9939,9 +9954,7 @@ with pkgs;
 
   proxify = callPackage ../tools/networking/proxify { };
 
-  proxysql = callPackage ../servers/sql/proxysql {
-    stdenv = if stdenv.targetPlatform.isx86_64 then gcc10Stdenv else stdenv;
-  };
+  proxysql = callPackage ../servers/sql/proxysql { };
 
   prs = callPackage ../tools/security/prs { };
 
@@ -11640,6 +11653,8 @@ with pkgs;
   untrunc-anthwlock = callPackage ../tools/video/untrunc-anthwlock { };
 
   up = callPackage ../tools/misc/up { };
+
+  upbound = callPackage ../development/tools/upbound { };
 
   upterm = callPackage ../tools/misc/upterm { };
 
@@ -16270,6 +16285,8 @@ with pkgs;
   kafka-delta-ingest = callPackage ../development/tools/kafka-delta-ingest { };
 
   kamid = callPackage ../servers/ftp/kamid { };
+
+  karate = callPackage ../development/tools/karate { };
 
   kati = callPackage ../development/tools/build-managers/kati { };
 
@@ -20996,7 +21013,7 @@ with pkgs;
 
   qgnomeplatform = libsForQt5.callPackage ../development/libraries/qgnomeplatform { };
 
-  randomx = callPackage ../development/libraries/randomx { };
+  randomx = darwin.apple_sdk_11_0.callPackage ../development/libraries/randomx { };
 
   remodel = callPackage ../development/tools/remodel {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -24299,6 +24316,8 @@ with pkgs;
 
   impl = callPackage ../development/tools/impl { };
 
+  moq = callPackage ../development/tools/moq { };
+
   quicktemplate = callPackage ../development/tools/quicktemplate { };
 
   linux_logo = callPackage ../tools/misc/linux-logo { };
@@ -25049,6 +25068,8 @@ with pkgs;
 
   fira-code = callPackage ../data/fonts/fira-code { };
   fira-code-symbols = callPackage ../data/fonts/fira-code/symbols.nix { };
+
+  fira-go = callPackage ../data/fonts/fira-go { };
 
   fira-mono = callPackage ../data/fonts/fira-mono { };
 
@@ -30614,16 +30635,6 @@ with pkgs;
 
   spotify = callPackage ../applications/audio/spotify/wrapper.nix { };
 
-  sourcetrail = let
-    llvmPackages = llvmPackages_10;
-  in libsForQt5.callPackage ../development/tools/sourcetrail {
-    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
-    jdk = jdk8;
-    pythonPackages = python3Packages;
-    inherit llvmPackages;
-    boost = boost16x; # Filesystem tests in the checkPhase fail with Boost 1.77
-  };
-
   spotifywm = callPackage ../applications/audio/spotifywm { };
 
   psst = callPackage ../applications/audio/psst { };
@@ -31950,18 +31961,17 @@ with pkgs;
 
   inherit (nodePackages) zx;
 
-  zynaddsubfx = zyn-fusion;
+  zynaddsubfx = callPackage ../applications/audio/zynaddsubfx {
+    guiModule = "zest";
+    fftw = fftwSinglePrec;
+  };
 
-  zynaddsubfx-fltk = callPackage ../applications/audio/zynaddsubfx {
+  zynaddsubfx-fltk = zynaddsubfx.override {
     guiModule = "fltk";
   };
 
-  zynaddsubfx-ntk = callPackage ../applications/audio/zynaddsubfx {
+  zynaddsubfx-ntk = zynaddsubfx.override {
     guiModule = "ntk";
-  };
-
-  zyn-fusion = callPackage ../applications/audio/zynaddsubfx {
-    guiModule = "zest";
   };
 
   ### BLOCKCHAINS / CRYPTOCURRENCIES / WALLETS
@@ -34494,6 +34504,8 @@ with pkgs;
   };
 
   openroad = libsForQt5.callPackage ../applications/science/electronics/openroad { };
+
+  openboardview = callPackage ../applications/science/electronics/openboardview { };
 
   pcb = callPackage ../applications/science/electronics/pcb { };
 

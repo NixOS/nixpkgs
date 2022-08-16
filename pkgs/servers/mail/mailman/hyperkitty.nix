@@ -50,7 +50,7 @@ buildPythonPackage rec {
     django-extensions
     djangorestframework
     flufl_lock
-    mistune_2_0
+    mistune
     networkx
     psycopg2
     python-dateutil

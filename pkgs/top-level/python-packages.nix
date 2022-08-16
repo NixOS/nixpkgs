@@ -5574,11 +5574,7 @@ in {
 
   mistletoe = callPackage ../development/python-modules/mistletoe { };
 
-  inherit (import ../development/python-modules/mistune self)
-    mistune
-    mistune_0_8
-    mistune_2_0
-  ;
+  mistune = callPackage ../development/python-modules/mistune { };
 
   mitmproxy = callPackage ../development/python-modules/mitmproxy { };
 
@@ -10385,6 +10381,8 @@ in {
 
   stickytape = callPackage ../development/python-modules/stickytape { };
 
+  stim = callPackage ../development/python-modules/stim { };
+
   stm32loader = callPackage ../development/python-modules/stm32loader { };
 
   stone = callPackage ../development/python-modules/stone { };
@@ -11155,6 +11153,8 @@ in {
   unittest-data-provider = callPackage ../development/python-modules/unittest-data-provider { };
 
   unittest-xml-reporting = callPackage ../development/python-modules/unittest-xml-reporting { };
+
+  univers = callPackage ../development/python-modules/univers { };
 
   unpaddedbase64 = callPackage ../development/python-modules/unpaddedbase64 { };
 

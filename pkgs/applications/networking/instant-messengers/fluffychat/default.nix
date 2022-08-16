@@ -10,7 +10,7 @@ flutter.mkFlutterApp rec {
   pname = "fluffychat";
   version = "1.2.0";
 
-  vendorHash = "sha256-j5opwEFifa+DMG7Uziv4SWEPVokD6OSq8mSIr0AdDL0=";
+  vendorHash = "sha256-co+bnsVIyg42JpM9FimfGEjrd6A99GlBeow1Dgv7NBI=";
 
   src = fetchFromGitLab {
     owner = "famedly";
