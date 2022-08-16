@@ -215,7 +215,7 @@ stdenv.mkDerivation ({
 
   preConfigure = import ../common/pre-configure.nix {
     inherit lib;
-    inherit version targetPlatform hostPlatform langJava langGo crossStageStatic;
+    inherit version targetPlatform hostPlatform langJava langGo crossStageStatic enableMultilib;
   };
 
   dontDisableStatic = true;
@@ -309,8 +309,6 @@ stdenv.mkDerivation ({
 
   enableParallelBuilding = true;
   inherit enableShared enableMultilib;
-
-  inherit (stdenv) is64bit;
 
   meta = {
     homepage = "https://gcc.gnu.org/";
