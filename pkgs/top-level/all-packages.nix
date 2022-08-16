@@ -7882,7 +7882,9 @@ with pkgs;
 
   krunner-pass = libsForQt5.callPackage ../tools/security/krunner-pass { };
 
-  krunvm = callPackage ../applications/virtualization/krunvm { };
+  krunvm = callPackage ../applications/virtualization/krunvm {
+    inherit (darwin) sigtool;
+  };
 
   kronometer = libsForQt5.callPackage ../tools/misc/kronometer { };
 
