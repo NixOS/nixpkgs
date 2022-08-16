@@ -123,6 +123,17 @@ rec {
     finalImageTag = "2.2.1";
     finalImageName = "nix";
   };
+  # Same example again, but this time specify an os, an arch and a cpu variant
+  busyboxFromDockerHub = pullImage {
+    imageName = "docker.io/library/busybox";
+    imageDigest = "sha256:ef320ff10026a50cf5f0213d35537ce0041ac1d96e9b7800bafd8bc9eff6c693";
+    sha256 = "sha256-9T6tP/xnZwaTH+qkbkVuXhCk+qZGE3WBY8T+Ug4qCmc=";
+    finalImageName = "docker.io/library/busybox";
+    finalImageTag = "stable-uclibc";
+    os = "linux";
+    arch ="arm";
+    variant = "v7";
+  }
 
   # 5. example of multiple contents, emacs and vi happily coexisting
   editors = buildImage {

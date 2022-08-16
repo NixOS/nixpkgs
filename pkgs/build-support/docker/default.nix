@@ -23,6 +23,7 @@
 , shadow
 , skopeo
 , storeDir ? builtins.storeDir
+, stdenv
 , substituteAll
 , symlinkJoin
 , tarsum
@@ -75,6 +76,13 @@ let
   # mapping from the go package.
   defaultArch = go.GOARCH;
 
+  # Add ARM variant support (e.g. v8, v7...)
+  defaultVariant =
+    if stdenv.hostPlatform.parsed.cpu.version != null then
+      "v${stdenv.hostPlatform.parsed.cpu.version}"
+    else
+      "";
+
 in
 rec {
   examples = callPackage ./examples.nix {
@@ -101,7 +109,7 @@ rec {
     , sha256
     , os ? "linux"
     , arch ? defaultArch
-
+    , variant ? defaultVariant
       # This is used to set name to the pulled image
     , finalImageName ? imageName
       # This used to set a tag to the pulled image
@@ -133,6 +141,7 @@ rec {
         --tmpdir=$TMPDIR \
         --override-os ${os} \
         --override-arch ${arch} \
+        --override-variant ${variant} \
         copy \
         --src-tls-verify=${lib.boolToString tlsVerify} \
         "$sourceURL" "docker-archive://$out:$destNameTag" \
@@ -541,6 +550,7 @@ rec {
           pure = writeText "${baseName}-config.json" (builtins.toJSON {
             inherit created config;
             architecture = defaultArch;
+            variant = defaultVariant;
             os = "linux";
           });
           impure = runCommand "${baseName}-config.json"
@@ -849,6 +859,7 @@ rec {
         baseJson = writeText "${baseName}-base.json" (builtins.toJSON {
           inherit config;
           architecture = defaultArch;
+          variant = defaultVariant;
           os = "linux";
         });
 

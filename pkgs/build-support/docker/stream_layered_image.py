@@ -354,6 +354,7 @@ def main():
         image_json = {
             "created": datetime.isoformat(created),
             "architecture": conf["architecture"],
+            "variant": conf["variant"],
             "os": "linux",
             "config": overlay_base_config(from_image, conf["config"]),
             "rootfs": {

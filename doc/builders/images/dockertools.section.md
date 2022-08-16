@@ -236,14 +236,14 @@ Its parameters are described in the example below:
 
 ```nix
 pullImage {
-  imageName = "nixos/nix";
-  imageDigest =
-    "sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b";
-  finalImageName = "nix";
-  finalImageTag = "1.11";
-  sha256 = "0mqjy3zq2v6rrhizgb9nvhczl87lcfphq9601wcprdika2jz7qh8";
+  imageName = "docker.io/library/busybox";
+  imageDigest = "sha256:ef320ff10026a50cf5f0213d35537ce0041ac1d96e9b7800bafd8bc9eff6c693";
+  sha256 = "sha256-9T6tP/xnZwaTH+qkbkVuXhCk+qZGE3WBY8T+Ug4qCmc=";
+  finalImageName = "docker.io/library/busybox";
+  finalImageTag = "stable-uclibc";
   os = "linux";
-  arch = "x86_64";
+  arch ="arm";
+  variant = "v7";
 }
 ```
 
@@ -259,7 +259,9 @@ pullImage {
 
 - `os`, if specified, is the operating system of the fetched image. By default it's `linux`.
 
-- `arch`, if specified, is the cpu architecture of the fetched image. By default it's `x86_64`.
+- `arch`, if specified, is the cpu architecture of the fetched image. By default it's the host machine cpu architecture.
+
+- `variant`, if specified, is the cpu architecture variant of the fetched image. By default it's null
 
 `nix-prefetch-docker` command can be used to get required image parameters:
 
