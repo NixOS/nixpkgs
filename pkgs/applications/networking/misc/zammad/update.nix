@@ -11,13 +11,12 @@
 
 stdenv.mkDerivation rec {
   name = "zammad-update-script";
-  installPhase = ''
+  buildCommand = ''
     mkdir -p $out/bin
     cp ${./update.sh} $out/bin/update.sh
     patchShebangs $out/bin/update.sh
     wrapProgram $out/bin/update.sh --prefix PATH : ${lib.makeBinPath buildInputs}
   '';
-  phases = [ "installPhase" ];
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [

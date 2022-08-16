@@ -43,7 +43,6 @@ in stdenv.mkDerivation rec {
         sha256 = "1z66jiwcxixsqqwa0f4q8m2p5kna4knq6lic8y8l74dgv25mw912"; } );
 
   nativeBuildInputs = [ makeWrapper ];
-  phases = [ "installPhase" ];
 
   # TODO: load generator / monitoring agent only builds
 

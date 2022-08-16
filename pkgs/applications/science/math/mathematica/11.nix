@@ -75,17 +75,21 @@ stdenv.mkDerivation rec {
     + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
       (":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs);
 
-  phases = "unpackPhase installPhase fixupPhase";
-
   unpackPhase = ''
+    runHook preUnpack
+
     echo "=== Extracting makeself archive ==="
     # find offset from file
     offset=$(${stdenv.shell} -c "$(grep -axm1 -e 'offset=.*' $src); echo \$offset" $src)
     dd if="$src" ibs=$offset skip=1 | tar -xf -
     cd Unix
+
+    runHook postUnpack
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cd Installer
     # don't restrict PATH, that has already been done
     sed -i -e 's/^PATH=/# PATH=/' MathInstaller
@@ -105,6 +109,8 @@ stdenv.mkDerivation rec {
       line=$(grep -n QT_PLUGIN_PATH $path | sed 's/:.*//')
       sed -i -e "$line iexport QT_XKB_CONFIG_ROOT=\"${xkeyboard_config}/share/X11/xkb\"" $path
     done
+
+    runHook postInstall
   '';
 
   preFixup = ''

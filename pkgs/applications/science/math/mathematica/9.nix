@@ -64,23 +64,29 @@ stdenv.mkDerivation rec {
     + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
     (":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs);
 
-  phases = "unpackPhase installPhase fixupPhase";
-
   unpackPhase = ''
+    runHook preUnpack
+
     echo "=== Extracting makeself archive ==="
     # find offset from file
     offset=$(${stdenv.shell} -c "$(grep -axm1 -e 'offset=.*' $src); echo \$offset" $src)
     dd if="$src" ibs=$offset skip=1 | tar -xf -
     cd Unix
+
+    runHook postUnpack
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cd Installer
     # don't restrict PATH, that has already been done
     sed -i -e 's/^PATH=/# PATH=/' MathInstaller
 
     echo "=== Running MathInstaller ==="
     ./MathInstaller -auto -createdir=y -execdir=$out/bin -targetdir=$out/libexec/Mathematica -platforms=${platform} -silent
+
+    runHook postInstall
   '';
 
   preFixup = ''

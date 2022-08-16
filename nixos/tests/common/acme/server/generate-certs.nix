@@ -11,16 +11,13 @@ let
 in mkDerivation {
   name = "test-certs";
   buildInputs = [ minica ];
-  phases = [ "buildPhase" "installPhase" ];
 
-  buildPhase = ''
+  buildCommand = ''
     minica \
       --ca-key ca.key.pem \
       --ca-cert ca.cert.pem \
       --domains ${domain}
-  '';
 
-  installPhase = ''
     mkdir -p $out
     mv ca.*.pem $out/
     mv ${domain}/key.pem $out/${domain}.key.pem

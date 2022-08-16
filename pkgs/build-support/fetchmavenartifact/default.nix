@@ -63,12 +63,15 @@ let
 in
   stdenv.mkDerivation {
     name = name_;
-    phases = "installPhase fixupPhase";
     # By moving the jar to $out/share/java we make it discoverable by java
     # packages packages that mention this derivation in their buildInputs.
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/share/java
       ln -s ${jar} $out/share/java/${artifactId}-${version}.jar
+
+      runHook postInstall
     '';
     # We also add a `jar` attribute that can be used to easily obtain the path
     # to the downloaded jar file.

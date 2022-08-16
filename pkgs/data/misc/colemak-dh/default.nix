@@ -15,8 +15,6 @@ stdenvNoCC.mkDerivation rec {
     sparseCheckout = "console";
   };
 
-  phases = [ "unpackPhase" "installPhase" ];
-
   installPhase = ''
     runHook preInstall
 
