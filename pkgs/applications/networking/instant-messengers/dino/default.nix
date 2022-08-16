@@ -78,7 +78,6 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkPhase = ''
     runHook preCheck
-    set -e
     ./xmpp-vala-test
     ./signal-protocol-vala-test
     runHook postCheck
