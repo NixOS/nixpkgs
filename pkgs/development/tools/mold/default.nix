@@ -31,9 +31,14 @@ stdenv.mkDerivation rec {
   LTO = 1;
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
+  # The next three variables are substituted into the script scaffold below.
+  # add-flags.sh; add-hardening.sh; ld-wrapper.sh; utils.bash
   suffixSalt = lib.replaceStrings ["-" "."] ["_" "_"] stdenv.targetPlatform.config;
+  # utils.bash
   wrapperName = "MOLD_WRAPPER";
+  # ld-wrapper.sh; utils.bash
   coreutils_bin = lib.getBin coreutils;
+
   postInstall = let
     targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) (stdenv.targetPlatform.config + "-");
   in ''
