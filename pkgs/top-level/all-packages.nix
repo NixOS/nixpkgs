@@ -7188,6 +7188,8 @@ with pkgs;
 
   gssdp = callPackage ../development/libraries/gssdp { };
 
+  gssdp_1_6 = callPackage ../development/libraries/gssdp/1.6.nix { };
+
   gssdp-tools = callPackage ../development/libraries/gssdp/tools.nix { };
 
   grype = callPackage ../tools/security/grype { };
