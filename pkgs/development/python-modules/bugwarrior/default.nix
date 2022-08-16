@@ -25,6 +25,8 @@
 , megaplan
 , pypandoc
 , python-debianbts
+, typing-extensions
+, pyac
 }:
 
 buildPythonPackage rec {
@@ -47,6 +49,7 @@ buildPythonPackage rec {
     keyring
     lockfile
     offtrac
+    pyac
     pycurl
     pypandoc
     python-dateutil
@@ -64,6 +67,7 @@ buildPythonPackage rec {
     megaplan
     pytestCheckHook
     responses
+    typing-extensions
   ];
 
   preCheck = ''
