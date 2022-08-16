@@ -4025,6 +4025,8 @@ with pkgs;
     });
   };
 
+  hysteria = callPackage ../tools/networking/hysteria { };
+
   hyx = callPackage ../tools/text/hyx { };
 
   icdiff = callPackage ../tools/text/icdiff {};
