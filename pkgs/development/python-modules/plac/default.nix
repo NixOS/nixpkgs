@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python
+, unittestCheckHook
 , pythonOlder
 }:
 
@@ -17,10 +17,9 @@ buildPythonPackage rec {
     hash = "sha256-OL3YZNBFD7dIGTqoF7nEWKj1MZ+/l7ImEVHPwKWBIJA=";
   };
 
-  checkPhase = ''
-    cd doc
-    ${python.interpreter} -m unittest discover -p "*test_plac*"
-  '';
+  checkInputs = [ unittestCheckHook ];
+
+  unittestFlagsArray = [ "-s" "doc" "-p" "*test_plac*" ];
 
   pythonImportsCheck = [
     "plac"

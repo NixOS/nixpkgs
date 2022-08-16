@@ -4,7 +4,7 @@
 , fetchPypi
 , importlib-metadata
 , pyyaml
-, python
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -25,11 +25,7 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  checkInputs = [ pyyaml ];
-
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover
-  '';
+  checkInputs = [ unittestCheckHook pyyaml ];
 
   pythonImportsCheck = [ "markdown" ];
 

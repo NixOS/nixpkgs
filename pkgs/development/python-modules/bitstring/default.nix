@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, python
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -15,10 +15,9 @@ buildPythonPackage rec {
     sha256 = "0y2kcq58psvl038r6dhahhlhp1wjgr5zsms45wyz1naq6ri8x9qa";
   };
 
-  checkPhase = ''
-    cd test
-    ${python.interpreter} -m unittest discover
-  '';
+  checkInputs = [ unittestCheckHook ];
+
+  unittestFlagsArray = [ "-s" "test" ];
 
   pythonImportsCheck = [ "bitstring" ];
 

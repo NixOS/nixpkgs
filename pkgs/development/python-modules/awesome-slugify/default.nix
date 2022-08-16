@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, unidecode, regex, python }:
+{ lib, buildPythonPackage, fetchPypi, unidecode, regex, unittestCheckHook }:
 
 buildPythonPackage rec {
   pname = "awesome-slugify";
@@ -20,9 +20,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ unidecode regex ];
 
-  checkPhase = ''
-      ${python.interpreter} -m unittest discover
-  '';
+  checkInputs = [ unittestCheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/dimka665/awesome-slugify";

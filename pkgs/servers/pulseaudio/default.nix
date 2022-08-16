@@ -9,7 +9,7 @@
 
 , x11Support ? false
 
-, useSystemd ? true
+, useSystemd ? stdenv.isLinux
 
 , # Whether to support the JACK sound system as a backend.
   jackaudioSupport ? false
@@ -19,44 +19,44 @@
 
 , airtunesSupport ? false
 
-, bluetoothSupport ? true
+, bluetoothSupport ? stdenv.isLinux
 , advancedBluetoothCodecs ? false
 
 , remoteControlSupport ? false
 
 , zeroconfSupport ? false
 
+, alsaSupport ? stdenv.isLinux
+, udevSupport ? stdenv.isLinux
+
 , # Whether to build only the library.
   libOnly ? false
 
-, AudioUnit, Cocoa, CoreServices
+, AudioUnit, Cocoa, CoreServices, CoreAudio
 }:
 
 stdenv.mkDerivation rec {
   pname = "${if libOnly then "lib" else ""}pulseaudio";
-  version = "15.0";
+  version = "16.1";
 
   src = fetchurl {
     url = "http://freedesktop.org/software/pulseaudio/releases/pulseaudio-${version}.tar.xz";
-    sha256 = "pAuIejupjMJpdusRvbZhOYjxRbGQJNG2VVxqA8nLoaA=";
+    sha256 = "sha256-ju8yzpHUeXn5X9mpNec4zX63RjQw2rxyhjJRdR5QSuQ=";
   };
 
   patches = [
     # Install sysconfdir files inside of the nix store,
     # but use a conventional runtime sysconfdir outside the store
     ./add-option-for-installation-sysconfdir.patch
-  ] ++ lib.optionals stdenv.isDarwin [
     # https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/merge_requests/654
-    ./0001-Make-gio-2.0-optional-when-gsettings-is-disabled.patch
-
+    (./0001-Make-gio-2.0-optional-${lib.versions.major version}.patch)
     # TODO (not sent upstream)
-    ./0002-Ignore-SCM_CREDS-on-macOS.patch
-    ./0003-Disable-z-nodelete-on-darwin.patch
-    ./0004-Prefer-clock_gettime.patch
-    ./0005-Include-poll-posix.c-on-darwin.patch
-    ./0006-Only-use-version-script-on-GNU-ish-linkers.patch
-    ./0007-Adapt-undefined-link-args-per-linker.patch
-    ./0008-Use-correct-semaphore-on-darwin.patch
+    ./0002-Ignore-SCM_CREDS-on-darwin.patch
+    ./0003-Ignore-HAVE_CPUID_H-on-aarch64-darwin.patch
+    ./0004-Prefer-HAVE_CLOCK_GETTIME-on-darwin.patch
+    ./0005-Enable-CoreAudio-on-darwin.patch
+    ./0006-Fix-libpulsecommon-sources-on-darwin.patch
+    ./0007-Fix-link-args-on-darwin.patch
   ];
 
   outputs = [ "out" "dev" ];
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ libtool libsndfile soxr speexdsp fftwFloat check ]
     ++ lib.optionals stdenv.isLinux [ glib dbus ]
-    ++ lib.optionals stdenv.isDarwin [ AudioUnit Cocoa CoreServices libintl ]
+    ++ lib.optionals stdenv.isDarwin [ AudioUnit Cocoa CoreServices CoreAudio libintl ]
     ++ lib.optionals (!libOnly) (
       [ libasyncns webrtc-audio-processing ]
       ++ lib.optional jackaudioSupport libjack2
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   );
 
   mesonFlags = [
-    "-Dalsa=${if !libOnly then "enabled" else "disabled"}"
+    "-Dalsa=${if !libOnly && alsaSupport then "enabled" else "disabled"}"
     "-Dasyncns=${if !libOnly then "enabled" else "disabled"}"
     "-Davahi=${if zeroconfSupport then "enabled" else "disabled"}"
     "-Dbluez5=${if !libOnly && bluetoothSupport then "enabled" else "disabled"}"
@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
     "-Dorc=disabled"
     "-Dsystemd=${if useSystemd && !libOnly then "enabled" else "disabled"}"
     "-Dtcpwrap=disabled"
-    "-Dudev=${if !libOnly then "enabled" else "disabled"}"
+    "-Dudev=${if !libOnly && udevSupport then "enabled" else "disabled"}"
     "-Dvalgrind=disabled"
     "-Dwebrtc-aec=${if !libOnly then "enabled" else "disabled"}"
     "-Dx11=${if x11Support then "enabled" else "disabled"}"
@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
     "-Dudevrulesdir=${placeholder "out"}/lib/udev/rules.d"
   ]
   ++ lib.optional (stdenv.isLinux && useSystemd) "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
-  ++ lib.optionals (stdenv.isDarwin) [
+  ++ lib.optionals stdenv.isDarwin [
     "-Ddbus=disabled"
     "-Dglib=disabled"
     "-Doss-output=disabled"
@@ -144,10 +144,21 @@ stdenv.mkDerivation rec {
     wrapProgram $out/libexec/pulse/gsettings-helper \
      --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/${pname}-${version}" \
      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"
+  ''
+  # add .so symlinks for modules to be found under macOS
+  + lib.optionalString stdenv.isDarwin ''
+    for file in $out/${passthru.pulseDir}/modules/*.dylib; do
+      ln -s "''$file" "''${file%.dylib}.so"
+      ln -s "''$file" "$out/lib/pulseaudio/''$(basename ''$file .dylib).so"
+    done
   '';
 
   passthru = {
-    pulseDir = "lib/pulse-" + lib.versions.majorMinor version;
+    pulseDir =
+      if (lib.versionAtLeast version "16.0") then
+        "lib/pulseaudio"
+      else
+        "lib/pulse-" + lib.versions.majorMinor version;
   };
 
   meta = {

@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     description = "Small library for playing system sounds";
     maintainers = teams.gnome.members;
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

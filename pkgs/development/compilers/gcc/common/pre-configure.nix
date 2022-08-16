@@ -5,6 +5,7 @@
 , langJit ? false
 , langGo
 , crossStageStatic
+, enableMultilib
 }:
 
 assert langJava -> lib.versionOlder version "7";
@@ -77,4 +78,18 @@ in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 # We explicitly inhibit libc headers use in this case as well.
 + lib.optionalString (targetPlatform != hostPlatform && crossStageStatic) ''
   export inhibit_libc=true
+''
+
++ lib.optionalString (!enableMultilib && hostPlatform.is64bit && !hostPlatform.isMips64n32) ''
+  export linkLib64toLib=1
+''
+
+# On mips platforms, gcc follows the IRIX naming convention:
+#
+#  $PREFIX/lib   = mips32
+#  $PREFIX/lib32 = mips64n32
+#  $PREFIX/lib64 = mips64
+#
++ lib.optionalString (!enableMultilib && targetPlatform.isMips64n32) ''
+  export linkLib32toLib=1
 ''
