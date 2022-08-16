@@ -13195,6 +13195,8 @@ with pkgs;
 
   zip = callPackage ../tools/archivers/zip { };
 
+  zinc = callPackage ../servers/search/zinc { };
+
   zkfuse = callPackage ../tools/filesystems/zkfuse { };
 
   zpaq = callPackage ../tools/archivers/zpaq { };
