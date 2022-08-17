@@ -23982,6 +23982,19 @@ let
     buildInputs = [ TestException ];
   };
 
+  TextReflow = buildPerlPackage {
+    pname = "Text-Reflow";
+    version = "1.17";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MW/MWARD/Text-Reflow-1.17.tar.gz";
+      sha256 = "4bf2139ff617d6e59cc0e59cdecd7cb723ecfd28d5ac387afb553ffdc071b860";
+    };
+    meta = {
+      description = "Reflow text files using Knuth's paragraphing algorithm";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TextReform = buildPerlModule {
     pname = "Text-Reform";
     version = "1.20";
