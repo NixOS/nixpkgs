@@ -2,11 +2,11 @@
 
 let
   pname = "heroic";
-  version = "2.4.0-beta.2";
+  version = "2.4.0";
   name = "${pname}-${version}";
   src = fetchurl {
     url = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases/download/v${version}/Heroic-${version}.AppImage";
-    sha256 = "sha256-w+DY/hxGdxwIGtW9JGoqxC90DOaCLs3yvXL4uKOACWU=";
+    sha256 = "sha256-G4oO+4+LNXgz/jPJnEJnBJd+zczPcP7577Bt404Ucjo=";
   };
   appimageContents = appimageTools.extractType2 { inherit name src; };
 
