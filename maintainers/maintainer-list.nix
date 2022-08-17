@@ -1778,7 +1778,7 @@
   };
   booklearner = {
     name = "booklearner";
-    email = "hey@booklearner.org";
+    email = "booklearner@proton.me";
     matrix = "@booklearner:matrix.org";
     github = "booklearner";
     githubId = 103979114;
