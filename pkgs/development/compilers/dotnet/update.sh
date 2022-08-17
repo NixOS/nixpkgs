@@ -51,7 +51,23 @@ platform_sources () {
     echo "    };"
 }
 
-sdk_packages () {
+generate_package_list() {
+    local version pkgs nuget_url
+    version="$1"
+    shift
+    pkgs=( "$@" )
+
+    nuget_url="$(curl -f "https://api.nuget.org/v3/index.json" | jq --raw-output '.resources[] | select(."@type" == "PackageBaseAddress/3.0.0")."@id"')"
+
+    for pkg in "${pkgs[@]}"; do
+        local url hash
+        url="${nuget_url}${pkg,,}/${version,,}/${pkg,,}.${version,,}.nupkg"
+        hash="$(nix-prefetch-url "$url")"
+        echo "      (fetchNuGet { pname = \"${pkg}\"; version = \"${version}\"; sha256 = \"${hash}\"; })"
+    done
+}
+
+aspnetcore_packages () {
     local version=$1
     # These packages are implicitly references by the build process,
     # based on the specific project configurations (RIDs, used features, etc.)
@@ -89,6 +105,36 @@ sdk_packages () {
       "Microsoft.AspNetCore.App.Runtime.win-arm64" \
       "Microsoft.AspNetCore.App.Runtime.win-x64" \
       "Microsoft.AspNetCore.App.Runtime.win-x86" \
+    )
+
+    generate_package_list "$version" "${pkgs[@]}"
+}
+
+sdk_packages () {
+    local version=$1
+    # These packages are implicitly references by the build process,
+    # based on the specific project configurations (RIDs, used features, etc.)
+    # They are always referenced with the same version as the SDK used for building.
+    # Since we lock nuget dependencies, when these packages are included in the generated
+    # lock files (deps.nix), every update of SDK required those lock files to be
+    # updated to reflect the new versions of these packages - otherwise, the build
+    # would fail due to missing dependencies.
+    #
+    # Moving them to a separate list stored alongside the SDK package definitions,
+    # and implictly including them along in buildDotnetModule allows us
+    # to make updating .NET SDK packages a lot easier - we now just update
+    # the versions of these packages in one place, and all packages that
+    # use buildDotnetModule continue building with the new .NET version without changes.
+    #
+    # Keep in mind that there is no canonical list of these implicitly
+    # referenced packages - this list was created based on looking into
+    # the deps.nix files of existing packages, and which dependencies required
+    # updating after a SDK version bump.
+    #
+    # Due to this, make sure to check if new SDK versions introduce any new packages.
+    # This should not happend in minor or bugfix updates, but probably happens
+    # with every new major .NET release.
+    local pkgs=( \
       "Microsoft.NETCore.App.Composite" \
       "Microsoft.NETCore.App.Host.linux-arm" \
       "Microsoft.NETCore.App.Host.linux-arm64" \
@@ -109,6 +155,14 @@ sdk_packages () {
       "Microsoft.NETCore.App.Runtime.linux-musl-arm64" \
       "Microsoft.NETCore.App.Runtime.linux-musl-x64" \
       "Microsoft.NETCore.App.Runtime.linux-x64" \
+      "Microsoft.NETCore.App.Runtime.Mono.linux-arm" \
+      "Microsoft.NETCore.App.Runtime.Mono.linux-arm64" \
+      "Microsoft.NETCore.App.Runtime.Mono.linux-musl-x64" \
+      "Microsoft.NETCore.App.Runtime.Mono.linux-x64" \
+      "Microsoft.NETCore.App.Runtime.Mono.osx-arm64" \
+      "Microsoft.NETCore.App.Runtime.Mono.osx-x64" \
+      "Microsoft.NETCore.App.Runtime.Mono.win-x64" \
+      "Microsoft.NETCore.App.Runtime.Mono.win-x86" \
       "Microsoft.NETCore.App.Runtime.osx-arm64" \
       "Microsoft.NETCore.App.Runtime.osx-x64" \
       "Microsoft.NETCore.App.Runtime.win-arm" \
@@ -169,14 +223,21 @@ sdk_packages () {
       "runtime.win-x86.Microsoft.NETCore.DotNetHostResolver" \
     )
 
-    local nuget_url="$(curl -f "https://api.nuget.org/v3/index.json" | jq --raw-output '.resources[] | select(."@type" == "PackageBaseAddress/3.0.0")."@id"')"
+    # Packages that only apply to .NET 7 and up
+    if [[ ! ( "$version" =~ ^[1-6]\. ) ]]; then
+        # ILCompiler requires nixpkgs#181373 to be fixed to work properly
+        pkgs+=( \
+          "runtime.linux-arm64.Microsoft.DotNet.ILCompiler" \
+          "runtime.linux-musl-arm64.Microsoft.DotNet.ILCompiler" \
+          "runtime.linux-musl-x64.Microsoft.DotNet.ILCompiler" \
+          "runtime.linux-x64.Microsoft.DotNet.ILCompiler" \
+          "runtime.osx-x64.Microsoft.DotNet.ILCompiler" \
+          "runtime.win-arm64.Microsoft.DotNet.ILCompiler" \
+          "runtime.win-x64.Microsoft.DotNet.ILCompiler" \
+        )
+    fi
 
-    for pkg in "${pkgs[@]}"; do
-        local url hash
-        url="${nuget_url}${pkg,,}/${version,,}/${pkg,,}.${version,,}.nupkg"
-        hash="$(nix-prefetch-url "$url")"
-        echo "      (fetchNuGet { pname = \"${pkg}\"; version = \"${version}\"; sha256 = \"${hash}\"; })"
-    done
+    generate_package_list "$version" "${pkgs[@]}"
 }
 
 main () {
@@ -244,6 +305,7 @@ Examples:
     version = \"${sdk_version}\";
     $(platform_sources "$sdk_files")
     packages = { fetchNuGet }: [
+$(aspnetcore_packages "${aspnetcore_version}")
 $(sdk_packages "${runtime_version}")
     ];
   };
