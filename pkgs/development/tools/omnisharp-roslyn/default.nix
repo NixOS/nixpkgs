@@ -51,13 +51,13 @@ buildDotnetModule rec {
   '';
 
   dontDotnetFixup = true; # we'll fix it ourselves
-  postFixup = (lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.isLinux ''
     # Emulate what .NET 7 does to its binaries while a fix doesn't land in buildDotnetModule
     patchelf --set-interpreter $(patchelf --print-interpreter ${sdk_6_0}/dotnet) \
       --set-rpath $(patchelf --print-rpath ${sdk_6_0}/dotnet) \
       $out/lib/omnisharp-roslyn/OmniSharp
 
-  '') + ''
+  '' + ''
     # Now create a wrapper without DOTNET_ROOT
     # we explicitly don't set DOTNET_ROOT as it should get the one from PATH
     # as you can use any .NET SDK higher than 6 to run OmniSharp and you most
