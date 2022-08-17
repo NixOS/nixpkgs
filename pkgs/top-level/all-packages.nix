@@ -22437,6 +22437,8 @@ with pkgs;
 
   podgrab = callPackage ../servers/misc/podgrab { };
 
+  portunus = callPackage ../servers/portunus { };
+
   prosody = callPackage ../servers/xmpp/prosody {
     withExtraLibs = [];
     withExtraLuaPackages = _: [];
