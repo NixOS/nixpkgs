@@ -1,4 +1,10 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub }:
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, git
+}:
 let
   faasPlatform = platform:
     let cpuName = platform.parsed.cpu.name; in {
@@ -18,6 +24,8 @@ buildGoModule rec {
     sha256 = "sha256-nHpsScpVQhSoqvNZ+xTv2cA3lV1MyPZAgNLZRuyvksE=";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
+
   CGO_ENABLED = 0;
 
   vendorSha256 = null;
@@ -30,6 +38,11 @@ buildGoModule rec {
     "-X github.com/openfaas/faas-cli/version.Version=${version}"
     "-X github.com/openfaas/faas-cli/commands.Platform=${faasPlatform stdenv.targetPlatform}"
   ];
+
+  postInstall = ''
+    wrapProgram "$out/bin/faas-cli" \
+      --prefix PATH : ${lib.makeBinPath [ git ]}
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/openfaas/faas-cli";
