@@ -2,14 +2,14 @@
 , symlinkJoin, breakpointHook, cudaPackages, enableCUDA ? false }:
 
 let
-  luajitRev = "6053b04815ecbc8eec1e361ceb64e68fb8fac1b3";
+  luajitRev = "50936d784474747b4569d988767f1b5bab8bb6d0";
   luajitBase = "LuaJIT-${luajitRev}";
   luajitArchive = "${luajitBase}.tar.gz";
   luajitSrc = fetchFromGitHub {
     owner = "LuaJIT";
     repo = "LuaJIT";
     rev = luajitRev;
-    sha256 = "1caxm1js877mky8hci1km3ycz2hbwpm6xbyjha72gfc7lr6pc429";
+    sha256 = "1g87pl014b5v6z2nnhiwn3wf405skawszfr5wdzyfbx00j3kgxd0";
   };
 
   llvmMerged = symlinkJoin {
@@ -30,13 +30,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "terra";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "terralang";
     repo = "terra";
     rev = "release-${version}";
-    sha256 = "07715qsc316h0mmsjifr1ja5fbp216ji70hpq665r0v5ikiqjfsv";
+    sha256 = "080h718y3r3ca6jlxc985g3dac4q5ysqcalg3h0jl9bxm6rssv50";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -83,7 +83,7 @@ in stdenv.mkDerivation rec {
     broken = stdenv.isDarwin;
     description = "A low-level counterpart to Lua";
     homepage = "https://terralang.org/";
-    platforms = platforms.x86_64;
+    platforms = platforms.x86_64 ++ platforms.aarch64;
     maintainers = with maintainers; [ jb55 seylerius thoughtpolice elliottslaughter ];
     license = licenses.mit;
   };
