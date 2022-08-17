@@ -4826,10 +4826,10 @@ let
 
   CryptOpenSSLGuess = buildPerlPackage {
     pname = "Crypt-OpenSSL-Guess";
-    version = "0.11";
+    version = "0.15";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AK/AKIYM/Crypt-OpenSSL-Guess-0.11.tar.gz";
-      sha256 = "0rvi9l4ljcbhwwvspq019nfq2h2v746dk355h2nwnlmqikiihsxa";
+      url = "mirror://cpan/authors/id/A/AK/AKIYM/Crypt-OpenSSL-Guess-0.15.tar.gz";
+      sha256 = "1c5033381819fdb4c9087dd291b90ec70e7810d31d57eade9b388eccfd70386d";
     };
     meta = {
       description = "Guess OpenSSL include path";
@@ -4862,20 +4862,22 @@ let
       sha256 = "4173403ad4cf76732192099f833fbfbf3cd8104e0246b3844187ae384d2c5436";
     };
     propagatedBuildInputs = [ CryptOpenSSLRandom ];
-    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
-    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
+    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl_1_1.dev}/include";
+    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl_1_1}/lib -lcrypto";
     buildInputs = [ CryptOpenSSLGuess ];
   };
 
   CryptOpenSSLX509 = buildPerlPackage rec {
     pname = "Crypt-OpenSSL-X509";
-    version = "1.813";
+    version = "1.914";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JO/JONASBN/Crypt-OpenSSL-X509-1.813.tar.gz";
-      sha256 = "684bd888d2ed4c748f8f6dd8e87c14afa2974b12ee01faa082ad9cfa1e321e62";
+      url = "mirror://cpan/authors/id/J/JO/JONASBN/Crypt-OpenSSL-X509-1.914.tar.gz";
+      sha256 = "49c575257e6408ad5a89011e5b5800d598f9ccafdf42e71004ed81cb2f44ee7a";
     };
     NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
     NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
+    buildInputs = [ CryptOpenSSLGuess ];
+    propagatedBuildInputs = [ ConvertASN1 ];
     meta = {
       homepage = "https://github.com/dsully/perl-crypt-openssl-x509";
       description = "Perl extension to OpenSSL's X509 API";

@@ -15,7 +15,7 @@ assert if type == "sdk" then packages != null else true;
 , autoPatchelfHook
 , makeWrapper
 , libunwind
-, openssl
+, openssl_1_1
 , libuuid
 , zlib
 , curl
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     icu
     libunwind
     libuuid
-    openssl
+    openssl_1_1
   ] ++ lib.optional stdenv.isLinux lttng-ust_2_12);
 
   nativeBuildInputs = [

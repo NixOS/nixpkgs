@@ -2086,6 +2086,7 @@ in {
   cryptography = callPackage ../development/python-modules/cryptography {
     inherit (pkgs.darwin) libiconv;
     inherit (pkgs.darwin.apple_sdk.frameworks) Security;
+    openssl = pkgs.openssl_1_1;
   };
 
   cryptolyzer = callPackage ../development/python-modules/cryptolyzer { };
@@ -5312,7 +5313,10 @@ in {
 
   lzstring = callPackage ../development/python-modules/lzstring { };
 
-  m2crypto = callPackage ../development/python-modules/m2crypto { };
+  m2crypto = callPackage ../development/python-modules/m2crypto {
+    # https://gitlab.com/m2crypto/m2crypto/-/issues/310
+    openssl = pkgs.openssl_1_1;
+  };
 
   m2r = callPackage ../development/python-modules/m2r { };
 
@@ -11092,6 +11096,7 @@ in {
   tzlocal = callPackage ../development/python-modules/tzlocal { };
 
   uamqp = callPackage ../development/python-modules/uamqp {
+    openssl = pkgs.openssl_1_1;
     inherit (pkgs.darwin.apple_sdk.frameworks) CFNetwork CoreFoundation Security;
   };
 
