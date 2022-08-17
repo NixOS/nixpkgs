@@ -14602,6 +14602,21 @@ let
     };
   };
 
+  ModuleInstallXSUtil = buildPerlPackage {
+    pname = "Module-Install-XSUtil";
+    version = "0.45";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GF/GFUJI/Module-Install-XSUtil-0.45.tar.gz";
+      sha256 = "fe71e53320bee13197749a0b17609aa263f71ff46e5e2c130e94742ea6abdf56";
+    };
+    buildInputs = [ BHooksOPAnnotation ];
+    propagatedBuildInputs = [ ModuleInstall ];
+    meta = {
+      description = "Utility functions for XS modules";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ModuleManifest = buildPerlPackage {
     pname = "Module-Manifest";
     version = "1.09";
