@@ -154,6 +154,17 @@ _multioutDocs() {
 
     moveToOutput share/info "${!outputInfo}"
     moveToOutput share/doc "${!outputDoc}"
+
+    # Move gi-docgen-generated Devhelp docs to devdoc.
+    for output in $(getAllOutputNames); do
+        if [ -d "${!output}/share/doc" ]; then
+            while IFS= read -r -d $'\0' path; do
+                local dirpath="$(dirname "$path")"
+                moveToOutput "${dirpath#"${!output}/"}" "''${!outputDevdoc}"
+            done <  <(find "${!output}/share/doc" -type f -name "*devhelp*" -print0)
+        fi
+    done
+
     moveToOutput share/gtk-doc "${!outputDevdoc}"
     moveToOutput share/devhelp/books "${!outputDevdoc}"
 
