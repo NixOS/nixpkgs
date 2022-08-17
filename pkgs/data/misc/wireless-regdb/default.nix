@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenvNoCC, fetchurl }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "wireless-regdb";
   version = "2022.06.06";
 

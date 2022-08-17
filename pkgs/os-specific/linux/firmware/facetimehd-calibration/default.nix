@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, unrar-wrapper, pkgs }:
+{ lib, stdenvNoCC, fetchurl, unrar-wrapper, pkgs }:
 
 let
 
@@ -24,7 +24,7 @@ let
 
 in
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
 
   pname = "facetimehd-calibration";
   inherit version;
