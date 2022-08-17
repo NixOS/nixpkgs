@@ -40,7 +40,7 @@ let
       dontInstall = true;
 
       postPatch = ''
-        patchShebangs $out/util/crossgcc/buildgcc
+        patchShebangs util/crossgcc/buildgcc
 
         mkdir -p util/crossgcc/tarballs
 
