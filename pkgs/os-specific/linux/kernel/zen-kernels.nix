@@ -4,9 +4,9 @@ let
   # comments with variant added for update script
   # ./update-zen.py zen
   zenVariant = {
-    version = "5.19.1"; #zen
+    version = "5.19.2"; #zen
     suffix = "zen1"; #zen
-    sha256 = "1b906fa4hk56y5g1hx50kp395fakrphna4nnvy98vs8cxpcfyqi7"; #zen
+    sha256 = "0n21karcw9f861h26jxh29yiyg67kcxja7wh1xpdgx957avazacp"; #zen
     isLqx = false;
   };
   # ./update-zen.py lqx
