@@ -1507,6 +1507,20 @@ let
     };
   };
 
+  BHooksOPAnnotation = buildPerlPackage {
+    pname = "B-Hooks-OP-Annotation";
+    version = "0.44";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CH/CHOCOLATE/B-Hooks-OP-Annotation-0.44.tar.gz";
+      sha256 = "6e26f99367f4ea944169cf6e05cf4d067832082424ca8ecefccb7b5a63217b16";
+    };
+    propagatedBuildInputs = [ ExtUtilsDepends ];
+    meta = {
+      description = "Annotate and delegate hooked OPs";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   BHooksOPCheck = buildPerlPackage {
     pname = "B-Hooks-OP-Check";
     version = "0.22";
