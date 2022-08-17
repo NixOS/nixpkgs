@@ -97,7 +97,7 @@ let
       # In uclibc cases, libgomp needs an additional '-ldl'
       # and as I don't know how to pass it, I disable libgomp.
       "--disable-libgomp"
-    ] ++ lib.optional (targetPlatform.libc == "newlib") "--with-newlib"
+    ] ++ lib.optional (targetPlatform.libc == "newlib" || targetPlatform.libc == "newlib-nano") "--with-newlib"
       ++ lib.optional (targetPlatform.libc == "avrlibc") "--with-avrlibc"
     );
 
@@ -111,8 +111,30 @@ let
       "--with-mpc=${libmpc}"
     ]
     ++ lib.optional (libelf != null) "--with-libelf=${libelf}"
-    ++ lib.optional (!(crossMingw && crossStageStatic))
-      "--with-native-system-header-dir=${lib.getDev stdenv.cc.libc}/include"
+    ++ lib.optionals (!crossStageStatic) [
+      (if libcCross == null
+       then "--with-native-system-header-dir=${lib.getDev stdenv.cc.libc}/include"
+       else "--with-native-system-header-dir=${lib.getDev libcCross}${libcCross.incdir or "/include"}")
+      # gcc builds for cross-compilers (build != host) or cross-built
+      # gcc (host != target) always apply the offset prefix to disentangle
+      # target headers from build or host headers:
+      #     ${with_build_sysroot}${native_system_header_dir}
+      #  or ${test_exec_prefix}/${target_noncanonical}/sys-include
+      #  or ${with_sysroot}${native_system_header_dir}
+      # While native build (build == host == target) uses passed headers
+      # path as is:
+      #    ${native_system_header_dir}
+      #
+      # Nixpkgs uses flat directory structure for both native and cross
+      # cases. As a result libc headers don't get found for cross case
+      # and many modern features get disabled (libssp is used instead of
+      # target-specific implementations and similar). More details at:
+      #   https://github.com/NixOS/nixpkgs/pull/181802#issuecomment-1186822355
+      #
+      # We pick "/" path to effectively avoid sysroot offset and make it work
+      # as a native case.
+      "--with-build-sysroot=/"
+    ]
 
     # Basic configuration
     ++ [

@@ -3,8 +3,8 @@
 buildPecl {
   pname = "swoole";
 
-  version = "4.8.8";
-  sha256 = "sha256-SnhDRC7/a7BTHn87c6YCz/R8jI6aES1ibSD6YAl6R+I=";
+  version = "4.8.11";
+  sha256 = "sha256-MH3deQniTI7df2UNfK7v1qkP5JxyGw3j9adAeZBDD2c=";
 
   buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.isDarwin) [ valgrind ];
 

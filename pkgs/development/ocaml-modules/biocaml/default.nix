@@ -6,9 +6,7 @@ buildDunePackage rec {
   pname = "biocaml";
   version = "0.11.2";
 
-  useDune2 = true;
-
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.11";
 
   src = fetchFromGitHub {
     owner = "biocaml";

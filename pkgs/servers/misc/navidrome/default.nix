@@ -41,7 +41,12 @@ buildGoModule {
 
   buildInputs = [ taglib zlib ];
 
-  CGO_CFLAGS = [ "-Wno-return-local-addr" ];
+  ldflags = [
+    "-X github.com/navidrome/navidrome/consts.gitSha=${src.rev}"
+    "-X github.com/navidrome/navidrome/consts.gitTag=v${version}"
+  ];
+
+  CGO_CFLAGS = lib.optionals stdenv.cc.isGNU [ "-Wno-return-local-addr" ];
 
   prePatch = ''
     cp -r ${ui}/* ui/build
@@ -51,8 +56,6 @@ buildGoModule {
     wrapProgram $out/bin/navidrome \
       --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
   '';
-
-  doCheck = false;
 
   passthru = {
     inherit ui;

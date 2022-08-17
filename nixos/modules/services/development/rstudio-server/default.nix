@@ -26,7 +26,7 @@ in
     serverWorkingDir = mkOption {
       type = types.str;
       default = "/var/lib/rstudio-server";
-      description = ''
+      description = lib.mdDoc ''
         Default working directory for server (server-working-dir in rserver.conf).
       '';
     };
@@ -34,7 +34,7 @@ in
     listenAddr = mkOption {
       type = types.str;
       default = "127.0.0.1";
-      description = ''
+      description = lib.mdDoc ''
         Address to listen on (www-address in rserver.conf).
       '';
     };
@@ -44,7 +44,7 @@ in
       default = pkgs.rstudio-server;
       defaultText = literalExpression "pkgs.rstudio-server";
       example = literalExpression "pkgs.rstudioServerWrapper.override { packages = [ pkgs.rPackages.ggplot2 ]; }";
-      description = ''
+      description = lib.mdDoc ''
         Rstudio server package to use. Can be set to rstudioServerWrapper to provide packages.
       '';
     };
@@ -52,7 +52,7 @@ in
     rserverExtraConfig = mkOption {
       type = types.str;
       default = "";
-      description = ''
+      description = lib.mdDoc ''
         Extra contents for rserver.conf.
       '';
     };
@@ -60,7 +60,7 @@ in
     rsessionExtraConfig = mkOption {
       type = types.str;
       default = "";
-      description = ''
+      description = lib.mdDoc ''
         Extra contents for resssion.conf.
       '';
     };

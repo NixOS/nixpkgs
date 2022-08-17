@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "nose2";
-  version = "0.11.0";
+  version = "0.12.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bSCNfW7J+dVcdNrIHJOUvDkG2++BqMpUILK5t/jmnek=";
+    hash = "sha256-lW55ub1VjuCLYgDAWtLHZGW344YMDAU3aGCJKFwyARM=";
   };
 
   propagatedBuildInputs = [

@@ -19,22 +19,22 @@ in
       user = mkOption {
         type = types.str;
         default = "webdav";
-        description = "User to run under when setuid is not enabled.";
+        description = lib.mdDoc "User to run under when setuid is not enabled.";
       };
 
       group = mkOption {
         type = types.str;
         default = "webdav";
-        description = "Group to run under when setuid is not enabled.";
+        description = lib.mdDoc "Group to run under when setuid is not enabled.";
       };
 
       settings = mkOption {
         type = format.type;
         default = { };
-        description = ''
+        description = lib.mdDoc ''
           Attrset that is converted and passed as config file. Available
           options can be found at
-          <link xlink:href="https://github.com/miquels/webdav-server-rs/blob/master/webdav-server.toml">here</link>.
+          [here](https://github.com/miquels/webdav-server-rs/blob/master/webdav-server.toml).
         '';
         example = literalExpression ''
           {
@@ -73,7 +73,7 @@ in
         type = types.path;
         default = format.generate "webdav-server.toml" settings;
         defaultText = "Config file generated from services.webdav-server-rs.settings";
-        description = ''
+        description = lib.mdDoc ''
           Path to config file. If this option is set, it will override any
           configuration done in services.webdav-server-rs.settings.
         '';

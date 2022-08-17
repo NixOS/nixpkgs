@@ -11,7 +11,7 @@ in
     rttablesExtraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = ''
+      description = lib.mdDoc ''
         Verbatim lines to add to /etc/iproute2/rt_tables
       '';
     };

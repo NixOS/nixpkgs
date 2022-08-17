@@ -852,6 +852,8 @@ let
       MOUSE_PS2_VMMOUSE  = yes;
       MTRR_SANITIZER     = yes;
       NET_FC             = yes; # Fibre Channel driver support
+      # Needed for touchpads to work on some AMD laptops
+      PINCTRL_AMD        = whenAtLeast "5.19" yes;
       # GPIO on Intel Bay Trail, for some Chromebook internal eMMC disks
       PINCTRL_BAYTRAIL   = yes;
       # GPIO for Braswell and Cherryview devices
@@ -917,7 +919,7 @@ let
 
       FSL_MC_UAPI_SUPPORT = mkIf (stdenv.hostPlatform.system == "aarch64-linux") (whenAtLeast "5.12" yes);
 
-      ASHMEM =                 { optional = true; tristate = whenAtLeast "5.0" "y";};
+      ASHMEM =                 { optional = true; tristate = whenBetween "5.0" "5.18" "y";};
       ANDROID =                { optional = true; tristate = whenAtLeast "5.0" "y";};
       ANDROID_BINDER_IPC =     { optional = true; tristate = whenAtLeast "5.0" "y";};
       ANDROID_BINDERFS =       { optional = true; tristate = whenAtLeast "5.0" "y";};

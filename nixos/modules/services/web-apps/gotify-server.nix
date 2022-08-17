@@ -11,7 +11,7 @@ in {
 
       port = mkOption {
         type = types.port;
-        description = ''
+        description = lib.mdDoc ''
           Port the server listens to.
         '';
       };
@@ -19,8 +19,8 @@ in {
       stateDirectoryName = mkOption {
         type = types.str;
         default = "gotify-server";
-        description = ''
-          The name of the directory below <filename>/var/lib</filename> where
+        description = lib.mdDoc ''
+          The name of the directory below {file}`/var/lib` where
           gotify stores its runtime data.
         '';
       };

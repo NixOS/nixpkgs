@@ -1,6 +1,6 @@
 { lib, stdenv, cln, fetchurl, gmp, swig, pkg-config
-, readline, libantlr3c, boost, jdk8, autoreconfHook
-, python3, antlr3_4
+, libantlr3c, boost, autoreconfHook
+, python3
 }:
 
 stdenv.mkDerivation rec {
@@ -13,13 +13,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ gmp readline swig libantlr3c antlr3_4 boost jdk8 python3 ]
+  buildInputs = [ gmp swig libantlr3c boost python3 ]
     ++ lib.optionals stdenv.isLinux [ cln ];
 
   configureFlags = [
-    "--enable-language-bindings=c,c++,java"
+    "--enable-language-bindings=c"
     "--enable-gpl"
-    "--with-readline"
     "--with-boost=${boost.dev}"
   ] ++ lib.optionals stdenv.isLinux [ "--with-cln" ];
 

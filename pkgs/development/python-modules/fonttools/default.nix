@@ -24,15 +24,15 @@
 
 buildPythonPackage rec {
   pname = "fonttools";
-  version = "4.33.3";
+  version = "4.34.4";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner  = pname;
     repo   = pname;
-    rev    = version;
-    sha256 = "MUIZGnYwlfTat9655AOYgK5r6AvHj/xXghUvOZR8HIM=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-GwbcrDsfxs5qRQJozhK/+n3W3NlO39g7pzxL9iIiDfU=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

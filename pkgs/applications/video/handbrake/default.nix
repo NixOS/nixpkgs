@@ -206,7 +206,7 @@ let self = stdenv.mkDerivation rec {
   ++ optional (!useGtk) "--disable-gtk"
   ++ optional useFdk "--enable-fdk-aac"
   ++ optional stdenv.isDarwin "--disable-xcode"
-  ++ optional (stdenv.isx86_32 || stdenv.isx86_64) "--harden";
+  ++ optional stdenv.hostPlatform.isx86 "--harden";
 
   # NOTE: 2018-12-27: Check NixOS HandBrake test if changing
   NIX_LDFLAGS = [ "-lx265" ];

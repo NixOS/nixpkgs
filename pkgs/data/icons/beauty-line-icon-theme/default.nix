@@ -1,16 +1,32 @@
-{ lib, stdenvNoCC, fetchzip, breeze-icons, gtk3, gnome-icon-theme, hicolor-icon-theme, mint-x-icons, pantheon }:
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, breeze-icons
+, gtk3
+, gnome-icon-theme
+, hicolor-icon-theme
+, mint-x-icons
+, pantheon
+, jdupes
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "BeautyLine";
-  version = "0.0.1";
+  version = "0.0.4";
 
-  src = fetchzip {
-    name = "${pname}-${version}";
-    url = "https://github.com/gvolpe/BeautyLine/releases/download/${version}/BeautyLine.tar.gz";
-    sha256 = "030bjk333fr9wm1nc740q8i31rfsgf3vg6cvz36xnvavx3q363l7";
+  src = fetchFromGitHub {
+    owner = "gvolpe";
+    repo = pname;
+    rev = version;
+    sparseCheckout = ''
+      BeautyLine-V3
+    '';
+    sha256 = "sha256-IkkypAj250+OXbf19TampCnqYsSbJVIjeYlxJoyhpzk=";
   };
 
-  nativeBuildInputs = [ gtk3 ];
+  sourceRoot = "${src.name}/BeautyLine-V3";
+
+  nativeBuildInputs = [ jdupes gtk3 ];
 
   # ubuntu-mono is also required but missing in ubuntu-themes (please add it if it is packaged at some point)
   propagatedBuildInputs = [
@@ -23,10 +39,19 @@ stdenvNoCC.mkDerivation rec {
 
   dontDropIconThemeCache = true;
 
+  dontPatchELF = true;
+  dontRewriteSymlinks = true;
+
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/icons/${pname}
     cp -r * $out/share/icons/${pname}/
     gtk-update-icon-cache $out/share/icons/${pname}
+
+    jdupes --link-soft --recurse $out/share
+
+    runHook postInstall
   '';
 
   meta = with lib; {

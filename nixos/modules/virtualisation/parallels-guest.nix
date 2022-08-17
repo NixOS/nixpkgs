@@ -14,7 +14,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           This enables Parallels Tools for Linux guests, along with provided
           video, mouse and other hardware drivers.
         '';
@@ -36,7 +36,7 @@ in
         default = config.boot.kernelPackages.prl-tools;
         defaultText = "config.boot.kernelPackages.prl-tools";
         example = literalExpression "config.boot.kernelPackages.prl-tools";
-        description = ''
+        description = lib.mdDoc ''
           Defines which package to use for prl-tools. Override to change the version.
         '';
       };

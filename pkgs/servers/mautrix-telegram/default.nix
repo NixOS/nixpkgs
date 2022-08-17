@@ -5,6 +5,21 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
+      asyncpg = super.asyncpg.overridePythonAttrs (oldAttrs: rec {
+        version = "0.25.0";
+        src = oldAttrs.src.override {
+          inherit version;
+          hash = "sha256-Y/jmppczsoVJfChVRko03mV/LMzSWurutQcYcuk4JUA=";
+        };
+      });
+      mautrix = super.mautrix.overridePythonAttrs (oldAttrs: rec {
+        version = "0.16.3";
+        src = oldAttrs.src.override {
+          inherit (oldAttrs) pname;
+          inherit version;
+          sha256 = "sha256-OpHLh5pCzGooQ5yxAa0+85m/szAafV+l+OfipQcfLtU=";
+        };
+      });
       tulir-telethon = self.telethon.overridePythonAttrs (oldAttrs: rec {
         version = "1.25.0a7";
         pname = "tulir-telethon";

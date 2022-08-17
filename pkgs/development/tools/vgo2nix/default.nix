@@ -17,8 +17,7 @@ buildGoModule {
     sha256 = "0n9pf0i5y59kiiv6dq8h8w1plaz9w6s67rqr2acqgxa45iq36mkh";
   };
 
-  vendorSha256 = "1xgl4avq0rblzqqpaxl4dwg4ysrhacwhfd21vb0v9ffr3zcpdw9n";
-  proxyVendor = true;
+  vendorSha256 = "sha256-e5n0QhgffzC1igZX1zS18IX5oF5F0Zy/s8jWyNOD8NM=";
 
   subPackages = [ "." ];
 
@@ -36,8 +35,5 @@ buildGoModule {
     license = licenses.mit;
     maintainers = with maintainers; [ adisbladis ];
     mainProgram = "vgo2nix";
-    # vendoring fails with cryptic error:
-    # reading file:///nix/store/..../github.com/orivej/e/@v/v0.0.0-20180728214217-ac3492690fda.zip: no such file or directory
-    broken = true;
   };
 }

@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "qdldl";
-  version = "0.1.5.post0";
+  version = "0.1.5.post2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c392c7427651d8b226423c7aba4a0f2338a1f38a4bbdabac6bc4afd8bc934f06";
+    sha256 = "sha256-fa960b//HacdoG6C1RR72xrIZlgWF9jwbMTu2kjioUk=";
   };
 
   dontUseCmakeConfigure = true;

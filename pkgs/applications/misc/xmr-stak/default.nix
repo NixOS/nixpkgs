@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/fireice-uk/xmr-stak";
     license = licenses.gpl3Plus;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ fpletz bfortz ];
+    maintainers = with maintainers; [ bfortz ];
   };
 }

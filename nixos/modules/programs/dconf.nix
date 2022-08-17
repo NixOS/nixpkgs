@@ -33,14 +33,14 @@ in
       profiles = mkOption {
         type = types.attrsOf types.path;
         default = {};
-        description = "Set of dconf profile files, installed at <filename>/etc/dconf/profiles/<replaceable>name</replaceable></filename>.";
+        description = lib.mdDoc "Set of dconf profile files, installed at {file}`/etc/dconf/profiles/«name»`.";
         internal = true;
       };
 
       packages = mkOption {
         type = types.listOf types.package;
         default = [];
-        description = "A list of packages which provide dconf profiles and databases in <filename>/etc/dconf</filename>.";
+        description = lib.mdDoc "A list of packages which provide dconf profiles and databases in {file}`/etc/dconf`.";
       };
     };
   };

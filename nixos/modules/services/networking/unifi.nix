@@ -17,7 +17,7 @@ in
     services.unifi.enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether or not to enable the unifi controller service.
       '';
     };
@@ -26,7 +26,7 @@ in
       type = types.package;
       default = pkgs.jre8;
       defaultText = literalExpression "pkgs.jre8";
-      description = ''
+      description = lib.mdDoc ''
         The JRE package to use. Check the release notes to ensure it is supported.
       '';
     };
@@ -35,7 +35,7 @@ in
       type = types.package;
       default = pkgs.unifiLTS;
       defaultText = literalExpression "pkgs.unifiLTS";
-      description = ''
+      description = lib.mdDoc ''
         The unifi package to use.
       '';
     };
@@ -44,7 +44,7 @@ in
       type = types.package;
       default = pkgs.mongodb;
       defaultText = literalExpression "pkgs.mongodb";
-      description = ''
+      description = lib.mdDoc ''
         The mongodb package to use.
       '';
     };
@@ -52,7 +52,7 @@ in
     services.unifi.openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether or not to open the minimum required ports on the firewall.
 
         This is necessary to allow firmware upgrades and device discovery to
@@ -65,7 +65,7 @@ in
       type = types.nullOr types.int;
       default = null;
       example = 1024;
-      description = ''
+      description = lib.mdDoc ''
         Set the initial heap size for the JVM in MB. If this option isn't set, the
         JVM will decide this value at runtime.
       '';
@@ -75,7 +75,7 @@ in
       type = types.nullOr types.int;
       default = null;
       example = 4096;
-      description = ''
+      description = lib.mdDoc ''
         Set the maximimum heap size for the JVM in MB. If this option isn't set, the
         JVM will decide this value at runtime.
       '';

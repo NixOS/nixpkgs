@@ -4,31 +4,31 @@ let
     aarch64-darwin = {
       arch = "aarch64";
       shortName = "darwin";
-      sha256 = "80304f6cf43c6be3db0303bdcb4de4995ace1a394ac6068bbe1e2b6fba32b2e5";
+      sha256 = "c82547d96125bf93ae76dafe203cae5f7cd50d041bfb1cf972f9f0232a0d1cc1";
     };
 
     aarch64-linux = {
       arch = "aarch64";
       shortName = "linux";
-      sha256 = "6b22b6221014fed9e6b6cb432505424e618ef095b2060945ad119cd8f2155fae";
+      sha256 = "3430f3ff456ee86ddb607a46ee937c9c1a02b8e4d2546de52b4493878f66afb8";
     };
 
     x86_64-darwin = {
       arch = "x64";
       shortName = "darwin";
-      sha256 = "33f4c420467af85584ba444606651a0352906c9135d952b266bb6da100ef95bf";
+      sha256 = "51fb5f29b5f00207ede11c892ccf5bb3ab437b77e7420e1c18b7fc91e02e2494";
     };
 
     x86_64-linux = {
       arch = "x64";
       shortName = "linux";
-      sha256 = "524a2d7e51ddda4786799552ae1c18ab8e6173bb30f158f26cae899a7e74f22f";
+      sha256 = "89fe00713a4e0e9f77d8842c5e07f771bd743271746fcb755c5d98cb5c00456e";
     };
   };
   dist = dists.${stdenvNoCC.hostPlatform.system} or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
 in
 stdenvNoCC.mkDerivation rec {
-  version = "0.1.5";
+  version = "0.1.6";
   pname = "bun";
 
   src = fetchurl {

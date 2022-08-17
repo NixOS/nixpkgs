@@ -22,7 +22,7 @@ in
 
       config = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Charybdis IRC daemon configuration file.
         '';
       };
@@ -30,7 +30,7 @@ in
       statedir = mkOption {
         type = types.path;
         default = "/var/lib/charybdis";
-        description = ''
+        description = lib.mdDoc ''
           Location of the state directory of charybdis.
         '';
       };
@@ -38,7 +38,7 @@ in
       user = mkOption {
         type = types.str;
         default = "ircd";
-        description = ''
+        description = lib.mdDoc ''
           Charybdis IRC daemon user.
         '';
       };
@@ -46,7 +46,7 @@ in
       group = mkOption {
         type = types.str;
         default = "ircd";
-        description = ''
+        description = lib.mdDoc ''
           Charybdis IRC daemon group.
         '';
       };
@@ -54,7 +54,7 @@ in
       motd = mkOption {
         type = types.nullOr types.lines;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Charybdis MOTD text.
 
           Charybdis will read its MOTD from /etc/charybdis/ircd.motd .

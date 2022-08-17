@@ -15,45 +15,12 @@
 
 stdenv.mkDerivation rec {
   pname = "openldap";
-  version = "2.6.2";
+  version = "2.6.3";
 
   src = fetchurl {
     url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/${pname}-${version}.tgz";
-    hash = "sha256-gdCTRSMutiSG7PWsrNLFbAxFtKbIwGZhLn9CGiOhz4c";
+    hash = "sha256-0qKh1x3z13OWscFq11AuZ030RuBgcrDlpOlBw9BsDUY=";
   };
-
-  patches = [
-    # ITS#9840 - ldif-filter: fix parallel build failure
-    (fetchpatch {
-      url = "https://github.com/openldap/openldap/commit/7d977f51e6dfa570a471d163b9e8255bdd3dc12f.patch";
-      hash = "sha256:1vid6pj2gmqywbghnd380x19ml241ldc1fyslb6br6q27zpgbdlp";
-    })
-    # ITS#9840 - libraries/Makefile.in: ignore the mkdir errors
-    (fetchpatch {
-      url = "https://github.com/openldap/openldap/commit/71f24015c312171c00ce94c9ff9b9c6664bdca8d.patch";
-      hash = "sha256:1a81vv6nkhgiadnj4g1wyzgzdp2zd151h0vkwvv9gzmqvhwcnc04";
-    })
-    # ITS#7165 back-mdb: check for stale readers on
-    (fetchpatch {
-      url = "https://github.com/openldap/openldap/commit/7e7f01c301db454e8c507999c77b55a1d97efc21.patch";
-      hash = "sha256:1fc2yck2gn3zlpfqjdn56ar206npi8cmb8yg5ny4lww0ygmyzdfz";
-    })
-    # ITS#9858 back-mdb: delay indexer task startup
-    (fetchpatch {
-      url = "https://github.com/openldap/openldap/commit/ac061c684cc79d64ab4089fe3020921a0064a307.patch";
-      hash = "sha256:01f0y50zlcj6n5mfkmb0di4p5vrlgn31zccx4a9k5m8vzxaqmw9d";
-    })
-    # ITS#9858 back-mdb: fix index reconfig
-    (fetchpatch {
-      url = "https://github.com/openldap/openldap/commit/c43c7a937cfb3a781f99b458b7ad71eb564a2bc2.patch";
-      hash = "sha256:02yh0c8cyx14iir5qhfam5shrg5d3115s2nv0pmqdj6najrqc5mm";
-    })
-    # ITS#9157: check for NULL ld
-    (fetchpatch {
-      url = "https://github.com/openldap/openldap/commit/6675535cd6ad01f9519ecd5d75061a74bdf095c7.patch";
-      hash = "sha256:0dali5ifcwba8400s065f0fizl9h44i0mzb06qgxhygff6yfrgif";
-    })
-  ];
 
   # TODO: separate "out" and "bin"
   outputs = [
@@ -93,18 +60,18 @@ stdenv.mkDerivation rec {
     "ac_cv_func_memcmp_working=yes"
   ] ++ lib.optional stdenv.isFreeBSD "--with-pic";
 
-  makeFlags = [
+  NIX_CFLAGS_COMPILE = [ "-DLDAPI_SOCK=\"/run/openldap/ldapi\"" ];
+
+  makeFlags= [
     "CC=${stdenv.cc.targetPrefix}cc"
     "STRIP="  # Disable install stripping as it breaks cross-compiling. We strip binaries anyway in fixupPhase.
+    "STRIP_OPTS="
     "prefix=${placeholder "out"}"
-    "sysconfdir=${placeholder "out"}/etc"
+    "sysconfdir=/etc"
     "systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     # contrib modules require these
     "moduledir=${placeholder "out"}/lib/modules"
     "mandir=${placeholder "out"}/share/man"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    # Can be unconditional, doing it like this to prevent a mass rebuild.
-    "STRIP_OPTS="
   ];
 
   extraContribModules = [
@@ -134,6 +101,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [
     "prefix=${placeholder "out"}"
+    "sysconfdir=${placeholder "out"}/etc"
     "moduledir=${placeholder "out"}/lib/modules"
     "INSTALL=install"
   ];

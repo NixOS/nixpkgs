@@ -29,7 +29,7 @@ let
   };
 
   pythonDeps = with python.pkgs; [
-    flask flask_assets flask_login flask_sqlalchemy flask_migrate flask-seasurf flask_mail flask-session flask-sslify
+    flask flask_assets flask_login flask-sqlalchemy flask_migrate flask-seasurf flask_mail flask-session flask-sslify
     mysqlclient psycopg2 sqlalchemy
     cffi configobj cryptography bcrypt requests ldap pyotp qrcode dnspython
     gunicorn python3-saml pytz cssmin rjsmin authlib bravado-core

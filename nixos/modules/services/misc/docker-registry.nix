@@ -50,13 +50,13 @@ in {
     enable = mkEnableOption "Docker Registry";
 
     listenAddress = mkOption {
-      description = "Docker registry host or ip to bind to.";
+      description = lib.mdDoc "Docker registry host or ip to bind to.";
       default = "127.0.0.1";
       type = types.str;
     };
 
     port = mkOption {
-      description = "Docker registry port to bind to.";
+      description = lib.mdDoc "Docker registry port to bind to.";
       default = 5000;
       type = types.port;
     };
@@ -64,7 +64,7 @@ in {
     storagePath = mkOption {
       type = types.nullOr types.path;
       default = "/var/lib/docker-registry";
-      description = ''
+      description = lib.mdDoc ''
         Docker registry storage path for the filesystem storage backend. Set to
         null to configure another backend via extraConfig.
       '';
@@ -73,7 +73,7 @@ in {
     enableDelete = mkOption {
       type = types.bool;
       default = false;
-      description = "Enable delete for manifests and blobs.";
+      description = lib.mdDoc "Enable delete for manifests and blobs.";
     };
 
     enableRedisCache = mkEnableOption "redis as blob cache";
@@ -81,17 +81,17 @@ in {
     redisUrl = mkOption {
       type = types.str;
       default = "localhost:6379";
-      description = "Set redis host and port.";
+      description = lib.mdDoc "Set redis host and port.";
     };
 
     redisPassword = mkOption {
       type = types.str;
       default = "";
-      description = "Set redis password.";
+      description = lib.mdDoc "Set redis password.";
     };
 
     extraConfig = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Docker extra registry configuration via environment variables.
       '';
       default = {};
@@ -103,10 +103,9 @@ in {
     garbageCollectDates = mkOption {
       default = "daily";
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Specification (in the format described by
-        <citerefentry><refentrytitle>systemd.time</refentrytitle>
-        <manvolnum>7</manvolnum></citerefentry>) of the time at
+        {manpage}`systemd.time(7)`) of the time at
         which the garbage collect will occur.
       '';
     };

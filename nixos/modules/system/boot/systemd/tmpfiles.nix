@@ -12,10 +12,10 @@ in
       type = types.listOf types.str;
       default = [];
       example = [ "d /tmp 1777 root root 10d" ];
-      description = ''
+      description = lib.mdDoc ''
         Rules for creation, deletion and cleaning of volatile and temporary files
         automatically. See
-        <citerefentry><refentrytitle>tmpfiles.d</refentrytitle><manvolnum>5</manvolnum></citerefentry>
+        {manpage}`tmpfiles.d(5)`
         for the exact format.
       '';
     };
@@ -25,16 +25,16 @@ in
       default = [];
       example = literalExpression "[ pkgs.lvm2 ]";
       apply = map getLib;
-      description = ''
-        List of packages containing <command>systemd-tmpfiles</command> rules.
+      description = lib.mdDoc ''
+        List of packages containing {command}`systemd-tmpfiles` rules.
 
         All files ending in .conf found in
-        <filename><replaceable>pkg</replaceable>/lib/tmpfiles.d</filename>
+        {file}`«pkg»/lib/tmpfiles.d`
         will be included.
         If this folder does not exist or does not contain any files an error will be returned instead.
 
-        If a <filename>lib</filename> output is available, rules are searched there and only there.
-        If there is no <filename>lib</filename> output it will fall back to <filename>out</filename>
+        If a {file}`lib` output is available, rules are searched there and only there.
+        If there is no {file}`lib` output it will fall back to {file}`out`
         and if that does not exist either, the default output will be used.
       '';
     };

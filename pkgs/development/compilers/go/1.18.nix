@@ -17,15 +17,11 @@
 , runtimeShell
 , buildPackages
 , pkgsBuildTarget
-, callPackage
-, threadsCross ? null # for MinGW
+, threadsCross
 }:
 
-# threadsCross is just for MinGW
-assert threadsCross != null -> stdenv.targetPlatform.isWindows;
-
 let
-  go_bootstrap = buildPackages.callPackage ./bootstrap.nix { };
+  go_bootstrap = buildPackages.callPackage ./bootstrap116.nix { };
 
   goBootstrap = runCommand "go-bootstrap" { } ''
     mkdir $out
@@ -36,19 +32,19 @@ let
   '';
 
   goarch = platform: {
-    "i686" = "386";
-    "x86_64" = "amd64";
     "aarch64" = "arm64";
     "arm" = "arm";
     "armv5tel" = "arm";
     "armv6l" = "arm";
     "armv7l" = "arm";
+    "i686" = "386";
     "mips" = "mips";
+    "mips64el" = "mips64le";
     "mipsel" = "mipsle";
+    "powerpc64le" = "ppc64le";
     "riscv64" = "riscv64";
     "s390x" = "s390x";
-    "powerpc64le" = "ppc64le";
-    "mips64el" = "mips64le";
+    "x86_64" = "amd64";
   }.${platform.parsed.cpu.name} or (throw "Unsupported system: ${platform.parsed.cpu.name}");
 
   # We need a target compiler which is still runnable at build time,
@@ -57,14 +53,13 @@ let
 
   isCross = stdenv.buildPlatform != stdenv.targetPlatform;
 in
-
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.18.4";
+  version = "1.18.5";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${version}.src.tar.gz";
-    sha256 = "sha256-RSWqaw487LV4RfQGCnB1qvyat1K7e2tM+KIS1DB44eQ=";
+    sha256 = "sha256-mSDTMGoaxTbN0seW1ss8VLxVnCJvw8w5wy8eC9f1DSo=";
   };
 
   strictDeps = true;
@@ -80,7 +75,7 @@ stdenv.mkDerivation rec {
 
   depsBuildTarget = lib.optional isCross targetCC;
 
-  depsTargetTarget = lib.optional (threadsCross != null) threadsCross;
+  depsTargetTarget = lib.optional stdenv.targetPlatform.isWindows threadsCross;
 
   hardeningDisable = [ "all" ];
 
@@ -277,10 +272,10 @@ stdenv.mkDerivation rec {
   disallowedReferences = [ goBootstrap ];
 
   meta = with lib; {
-    homepage = "https://go.dev/";
     description = "The Go Programming language";
+    homepage = "https://go.dev/";
     license = licenses.bsd3;
     maintainers = teams.golang.members;
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.darwin ++ platforms.linux;
   };
 }

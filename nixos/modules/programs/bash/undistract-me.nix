@@ -14,7 +14,7 @@ in
 
       timeout = mkOption {
         default = 10;
-        description = ''
+        description = lib.mdDoc ''
           Number of seconds it would take for a command to be considered long-running.
         '';
         type = types.int;

@@ -15,27 +15,19 @@ let
           sha256 = "sha256-Yx3I3RD57Nx6Cvm4moc5zmMbdsHeYiMghDfbQUor38E=";
         };
       });
-      jmespath = super.jmespath.overridePythonAttrs (oldAttrs: rec {
-        version = "0.10.0";
-        src = self.fetchPypi {
-          inherit (oldAttrs) pname;
-          inherit version;
-          sha256 = "sha256-uF0FZ7hmYUmpMXJxLmiSBzQzPAzn6Jt4s+mH9x5e1Pk=";
-        };
-      });
     };
   };
 
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.7.14"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.7.20"; # N.B: if you change this, check if overrides are still up-to-date
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    sha256 = "sha256-ji/hKoYxM3wag9DXy2e/VsJZVGN5UEebWX/ctOVJ42M=";
+    sha256 = "sha256-o6rs9OMP3154WApboSqUfVn3TRxap0htHczyjAMQe2I=";
   };
 
   propagatedBuildInputs = [
@@ -71,6 +63,7 @@ with py.pkgs; buildPythonApplication rec {
       --replace "docutils>=0.10,<0.16" "docutils" \
       --replace "ruamel.yaml>=0.15.0,<0.16.0" "ruamel.yaml" \
       --replace "wcwidth<0.2.0" "wcwidth" \
+      --replace "prompt-toolkit>=3.0.24,<3.0.29" "prompt-toolkit~=3.0" \
       --replace "distro>=1.5.0,<1.6.0" "distro"
   '';
 

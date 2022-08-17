@@ -62,7 +62,7 @@ buildGoPackage rec {
     homepage = "https://linuxcontainers.org/lxd/";
     changelog = "https://github.com/lxc/lxd/releases/tag/lxd-${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fpletz marsam ];
+    maintainers = with maintainers; [ marsam ];
     platforms = platforms.linux;
   };
 }

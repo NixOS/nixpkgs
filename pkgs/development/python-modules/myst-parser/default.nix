@@ -30,6 +30,11 @@ buildPythonPackage rec {
     sha256 = "sha256-GEtrC7o5YnkuvBfQQfhG5P74QMiHz63Fdh1cC/r5CF0=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "docutils>=0.15,<0.19" "docutils>=0.15"
+  '';
+
   format = "flit";
 
   nativeBuildInputs = [ flit-core ];
@@ -60,6 +65,8 @@ buildPythonPackage rec {
     "test_footnotes"
     "test_gettext_html"
     "test_fieldlist_extension"
+    # docutils 0.19 expectation mismatches
+    "test_docutils_roles"
   ];
 
   meta = with lib; {

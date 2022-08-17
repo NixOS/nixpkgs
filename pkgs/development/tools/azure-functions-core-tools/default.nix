@@ -23,13 +23,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-NdTEFQaG8eFengjzQr51ezehIHFvQZqmrjpjWk4vZKo=";
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
     unzip
     makeWrapper
     dotnetbuildhelpers
-  ];
-
-  nativeBuildInputs = [
     icu
     libunwind
     curl

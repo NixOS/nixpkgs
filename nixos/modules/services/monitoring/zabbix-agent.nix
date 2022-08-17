@@ -35,7 +35,7 @@ in
         type = types.package;
         default = pkgs.zabbix.agent;
         defaultText = literalExpression "pkgs.zabbix.agent";
-        description = "The Zabbix package to use.";
+        description = lib.mdDoc "The Zabbix package to use.";
       };
 
       extraPackages = mkOption {
@@ -51,7 +51,7 @@ in
 
       modules = mkOption {
         type = types.attrsOf types.package;
-        description = "A set of modules to load.";
+        description = lib.mdDoc "A set of modules to load.";
         default = {};
         example = literalExpression ''
           {
@@ -71,7 +71,7 @@ in
 
       server = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The IP address or hostname of the Zabbix server to connect to.
         '';
       };
@@ -80,7 +80,7 @@ in
         ip = mkOption {
           type = types.str;
           default = "0.0.0.0";
-          description = ''
+          description = lib.mdDoc ''
             List of comma delimited IP addresses that the agent should listen on.
           '';
         };
@@ -88,7 +88,7 @@ in
         port = mkOption {
           type = types.port;
           default = 10050;
-          description = ''
+          description = lib.mdDoc ''
             Agent will listen on this port for connections from the server.
           '';
         };
@@ -97,7 +97,7 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Open ports in the firewall for the Zabbix Agent.
         '';
       };
@@ -105,9 +105,9 @@ in
       settings = mkOption {
         type = with types; attrsOf (oneOf [ int str (listOf str) ]);
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           Zabbix Agent configuration. Refer to
-          <link xlink:href="https://www.zabbix.com/documentation/current/manual/appendix/config/zabbix_agentd"/>
+          <https://www.zabbix.com/documentation/current/manual/appendix/config/zabbix_agentd>
           for details on supported values.
         '';
         example = {

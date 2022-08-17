@@ -44,18 +44,18 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "1password";
-  version = "8.8.0-215.BETA";
+  version = "8.9.0-1.BETA";
 
   src =
     if stdenv.hostPlatform.isAarch64 then
       fetchurl {
         url = "https://downloads.1password.com/linux/tar/beta/aarch64/1password-${version}.arm64.tar.gz";
-        sha256 = "sha256-GjLwLeJ6GE39NFIZ+v83xaUVsgrkKRH3xt60aG/XrDg=";
+        sha256 = "0wxf1l6wh5m80f6s4f32j9i7f233lg162fw40770xxgwv8bl1f6a";
       }
     else
       fetchurl {
         url = "https://downloads.1password.com/linux/tar/beta/x86_64/1password-${version}.x64.tar.gz";
-        sha256 = "sha256-TR0evvu5NNR6Kvqj8JlpYuTcK9Rmf1oDFGrfzrGZzo8=";
+        sha256 = "0vqrcwn5y350g91w3kh8n43gw21kck1cwim92dw9i0xxxch91hrg";
       };
 
   nativeBuildInputs = [ makeWrapper ];

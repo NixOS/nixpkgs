@@ -1,4 +1,4 @@
-{fetchurl, lib, virtualbox}:
+{ fetchurl, lib, virtualbox }:
 
 with lib;
 
@@ -12,7 +12,7 @@ fetchurl rec {
     # Manually sha256sum the extensionPack file, must be hex!
     # Thus do not use `nix-prefetch-url` but instead plain old `sha256sum`.
     # Checksums can also be found at https://www.virtualbox.org/download/hashes/${version}/SHA256SUMS
-    let value = "d7856f0688b6d2ed1e8bff0b367efa952068b03fa5a3a29b46db08cfd5d9a810";
+    let value = "3c84f0177a47a1969aff7c98e01ddceedd50348f56cc52d63f4c2dd38ad2ca75";
     in assert (builtins.stringLength value) == 64; value;
 
   meta = {

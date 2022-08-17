@@ -3,16 +3,16 @@
 
 buildGoModule rec {
   pname = "matrix-dendrite";
-  version = "0.8.9";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "dendrite";
     rev = "v${version}";
-    sha256 = "sha256-+B7+hstJfkRnzu/u3afRImhzeFrFkth1MMGdAiV3vN8=";
+    sha256 = "sha256-A/4FN0FYuhP5AO7yQq/o5ZJKEJAotfervot70Scgj6M=";
   };
 
-  vendorSha256 = "sha256-tKvXM+pnhoysucBRLMSbm1bR2SIQmTZjVZbJ0lnLaMw=";
+  vendorSha256 = "sha256-tgVImIfn1lPTYGXczoAxVta3L+VR0v13KowLIYQ7bwY=";
 
   checkInputs = [
     postgresqlTestHook

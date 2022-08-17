@@ -5,7 +5,7 @@
 , alembic
 , flask
 , flask_script
-, flask_sqlalchemy
+, flask-sqlalchemy
 , python
 }:
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     alembic
     flask
-    flask_sqlalchemy
+    flask-sqlalchemy
   ];
 
   pythonImportsCheck = [

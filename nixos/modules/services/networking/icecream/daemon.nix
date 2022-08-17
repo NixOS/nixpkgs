@@ -16,14 +16,14 @@ in {
 
       openFirewall = mkOption {
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Whether to automatically open receive port in the firewall.
         '';
       };
 
       openBroadcast = mkOption {
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Whether to automatically open the firewall for scheduler discovery.
         '';
       };
@@ -31,7 +31,7 @@ in {
       cacheLimit = mkOption {
         type = types.ints.u16;
         default = 256;
-        description = ''
+        description = lib.mdDoc ''
           Maximum size in Megabytes of cache used to store compile environments of compile clients.
         '';
       };
@@ -39,7 +39,7 @@ in {
       netName = mkOption {
         type = types.str;
         default = "ICECREAM";
-        description = ''
+        description = lib.mdDoc ''
           Network name to connect to. A scheduler with the same name needs to be running.
         '';
       };
@@ -47,7 +47,7 @@ in {
       noRemote = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Prevent jobs from other nodes being scheduled on this daemon.
         '';
       };
@@ -55,7 +55,7 @@ in {
       schedulerHost = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Explicit scheduler hostname, useful in firewalled environments.
 
           Uses scheduler autodiscovery via broadcast if set to null.
@@ -65,7 +65,7 @@ in {
       maxProcesses = mkOption {
         type = types.nullOr types.ints.u16;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Maximum number of compile jobs started in parallel for this daemon.
 
           Uses the number of CPUs if set to null.
@@ -75,7 +75,7 @@ in {
       nice = mkOption {
         type = types.int;
         default = 5;
-        description = ''
+        description = lib.mdDoc ''
           The level of niceness to use.
         '';
       };
@@ -83,7 +83,7 @@ in {
       hostname = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Hostname of the daemon in the icecream infrastructure.
 
           Uses the hostname retrieved via uname if set to null.
@@ -93,7 +93,7 @@ in {
       user = mkOption {
         type = types.str;
         default = "icecc";
-        description = ''
+        description = lib.mdDoc ''
           User to run the icecream daemon as. Set to root to enable receive of
           remote compile environments.
         '';
@@ -103,13 +103,13 @@ in {
         default = pkgs.icecream;
         defaultText = literalExpression "pkgs.icecream";
         type = types.package;
-        description = "Icecream package to use.";
+        description = lib.mdDoc "Icecream package to use.";
       };
 
       extraArgs = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = "Additional command line parameters.";
+        description = lib.mdDoc "Additional command line parameters.";
         example = [ "-v" ];
       };
     };

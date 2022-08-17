@@ -28,13 +28,13 @@ in {
         '';
       };
       config = mkOption {
-        description = "Verbatim ferm.conf configuration.";
+        description = lib.mdDoc "Verbatim ferm.conf configuration.";
         default = "";
         defaultText = literalDocBook "empty firewall, allows any traffic";
         type = types.lines;
       };
       package = mkOption {
-        description = "The ferm package.";
+        description = lib.mdDoc "The ferm package.";
         type = types.package;
         default = pkgs.ferm;
         defaultText = literalExpression "pkgs.ferm";

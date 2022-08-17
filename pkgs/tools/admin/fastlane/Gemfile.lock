@@ -8,8 +8,8 @@ GEM
     artifactory (3.0.15)
     atomos (0.1.3)
     aws-eventstream (1.2.0)
-    aws-partitions (1.608.0)
-    aws-sdk-core (3.131.3)
+    aws-partitions (1.617.0)
+    aws-sdk-core (3.132.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
       aws-sigv4 (~> 1.1)
@@ -34,10 +34,10 @@ GEM
       rake (>= 12.0.0, < 14.0.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
-    dotenv (2.7.6)
+    dotenv (2.8.1)
     emoji_regex (3.2.3)
-    excon (0.92.3)
-    faraday (1.10.0)
+    excon (0.92.4)
+    faraday (1.10.1)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
       faraday-excon (~> 1.1)
@@ -66,7 +66,7 @@ GEM
     faraday_middleware (1.2.0)
       faraday (~> 1.0)
     fastimage (2.2.6)
-    fastlane (2.208.0)
+    fastlane (2.209.0)
       CFPropertyList (>= 2.3, < 4.0.0)
       addressable (>= 2.8, < 3.0.0)
       artifactory (~> 3.0)
@@ -215,4 +215,4 @@ DEPENDENCIES
   fastlane
 
 BUNDLED WITH
-   2.3.9
+   2.3.20

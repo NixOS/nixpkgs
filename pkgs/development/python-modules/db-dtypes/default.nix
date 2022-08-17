@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "db-dtypes";
-  version = "1.0.2";
+  version = "1.0.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "googleapis";
     repo = "python-db-dtypes-pandas";
     rev = "refs/tags/v${version}";
-    hash = "sha256-LLKhYLzGUQRx4ciWv1TilYvTOO0sj6rdkPlJLPZ8VXA=";
+    hash = "sha256-KkwXmJ9KwmslBPhBApm+bcY7Tu/J2ZK4sszBaMMDcpY=";
   };
 
   propagatedBuildInputs = [

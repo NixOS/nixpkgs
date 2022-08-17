@@ -21,8 +21,8 @@ in {
         example = {
           MusicFolder = "/mnt/music";
         };
-        description = ''
-          Configuration for Navidrome, see <link xlink:href="https://www.navidrome.org/docs/usage/configuration-options/"/> for supported values.
+        description = lib.mdDoc ''
+          Configuration for Navidrome, see <https://www.navidrome.org/docs/usage/configuration-options/> for supported values.
         '';
       };
 

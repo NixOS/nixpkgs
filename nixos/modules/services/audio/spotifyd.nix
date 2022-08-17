@@ -22,9 +22,9 @@ in
       config = mkOption {
         default = "";
         type = types.lines;
-        description = ''
+        description = lib.mdDoc ''
           (Deprecated) Configuration for Spotifyd. For syntax and directives, see
-          <link xlink:href="https://github.com/Spotifyd/spotifyd#Configuration"/>.
+          <https://github.com/Spotifyd/spotifyd#Configuration>.
         '';
       };
 
@@ -32,9 +32,9 @@ in
         default = {};
         type = toml.type;
         example = { global.bitrate = 320; };
-        description = ''
+        description = lib.mdDoc ''
           Configuration for Spotifyd. For syntax and directives, see
-          <link xlink:href="https://github.com/Spotifyd/spotifyd#Configuration"/>.
+          <https://github.com/Spotifyd/spotifyd#Configuration>.
         '';
       };
     };

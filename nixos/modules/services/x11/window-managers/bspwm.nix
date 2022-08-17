@@ -16,7 +16,7 @@ in
         default     = pkgs.bspwm;
         defaultText = literalExpression "pkgs.bspwm";
         example     = literalExpression "pkgs.bspwm-unstable";
-        description = ''
+        description = lib.mdDoc ''
           bspwm package to use.
         '';
       };
@@ -24,7 +24,7 @@ in
         type        = with types; nullOr path;
         example     = literalExpression ''"''${pkgs.bspwm}/share/doc/bspwm/examples/bspwmrc"'';
         default     = null;
-        description = ''
+        description = lib.mdDoc ''
           Path to the bspwm configuration file.
           If null, $HOME/.config/bspwm/bspwmrc will be used.
         '';
@@ -36,7 +36,7 @@ in
           default     = pkgs.sxhkd;
           defaultText = literalExpression "pkgs.sxhkd";
           example     = literalExpression "pkgs.sxhkd-unstable";
-          description = ''
+          description = lib.mdDoc ''
             sxhkd package to use.
           '';
         };
@@ -44,7 +44,7 @@ in
           type        = with types; nullOr path;
           example     = literalExpression ''"''${pkgs.bspwm}/share/doc/bspwm/examples/sxhkdrc"'';
           default     = null;
-          description = ''
+          description = lib.mdDoc ''
             Path to the sxhkd configuration file.
             If null, $HOME/.config/sxhkd/sxhkdrc will be used.
           '';

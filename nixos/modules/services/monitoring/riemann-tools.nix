@@ -23,14 +23,14 @@ in {
       enableHealth = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable the riemann-health daemon.
         '';
       };
       riemannHost = mkOption {
         type = types.str;
         default = "127.0.0.1";
-        description = ''
+        description = lib.mdDoc ''
           Address of the host riemann node. Defaults to localhost.
         '';
       };

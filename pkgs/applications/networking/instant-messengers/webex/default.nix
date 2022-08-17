@@ -2,7 +2,7 @@
 , writeScript
 , stdenv
 , fetchurl
-, alsaLib
+, alsa-lib
 , at-spi2-atk
 , at-spi2-core
 , atk
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     at-spi2-atk
     at-spi2-core
     atk

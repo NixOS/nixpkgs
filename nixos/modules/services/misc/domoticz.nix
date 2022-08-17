@@ -17,13 +17,13 @@ in {
       bind = mkOption {
         type = types.str;
         default = "0.0.0.0";
-        description = "IP address to bind to.";
+        description = lib.mdDoc "IP address to bind to.";
       };
 
       port = mkOption {
         type = types.int;
         default = 8080;
-        description = "Port to bind to for HTTP, set to 0 to disable HTTP.";
+        description = lib.mdDoc "Port to bind to for HTTP, set to 0 to disable HTTP.";
       };
 
     };

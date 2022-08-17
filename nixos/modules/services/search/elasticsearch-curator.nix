@@ -39,22 +39,22 @@ in {
 
     enable = mkEnableOption "elasticsearch curator";
     interval = mkOption {
-      description = "The frequency to run curator, a systemd.time such as 'hourly'";
+      description = lib.mdDoc "The frequency to run curator, a systemd.time such as 'hourly'";
       default = "hourly";
       type = types.str;
     };
     hosts = mkOption {
-      description = "a list of elasticsearch hosts to connect to";
+      description = lib.mdDoc "a list of elasticsearch hosts to connect to";
       type = types.listOf types.str;
       default = ["localhost"];
     };
     port = mkOption {
-      description = "the port that elasticsearch is listening on";
+      description = lib.mdDoc "the port that elasticsearch is listening on";
       type = types.int;
       default = 9200;
     };
     actionYAML = mkOption {
-      description = "curator action.yaml file contents, alternatively use curator-cli which takes a simple action command";
+      description = lib.mdDoc "curator action.yaml file contents, alternatively use curator-cli which takes a simple action command";
       type = types.lines;
       example = ''
         ---

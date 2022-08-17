@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = "https://code-industry.net/free-pdf-editor/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfreeRedistributable;
-    platforms = with platforms; [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
   };
 }

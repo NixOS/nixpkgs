@@ -10,15 +10,15 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-monitor";
-  version = "3.1.0";
+  version = "4.0.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    hash = "sha256-ROcUAm0KgIjO2A2XBpS00IeEPgd8x4cjoMfn6X9C+Gw=";
+    hash = "sha256-rwUhKm9arvUW3EWAgv3+SdJYR54Hob2RmMDA6IjEpn4=";
   };
 
   propagatedBuildInputs = [

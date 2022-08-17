@@ -16,7 +16,7 @@ in {
       type = types.package;
       default = pkgs.mbpfan;
       defaultText = literalExpression "pkgs.mbpfan";
-      description = ''
+      description = lib.mdDoc ''
         The package used for the mbpfan daemon.
       '';
     };
@@ -24,14 +24,14 @@ in {
     verbose = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         If true, sets the log level to verbose.
       '';
     };
 
     settings = mkOption {
       default = {};
-      description = "INI configuration for Mbpfan.";
+      description = lib.mdDoc "INI configuration for Mbpfan.";
       type = types.submodule {
         freeformType = settingsFormat.type;
 
@@ -48,22 +48,22 @@ in {
         options.general.low_temp = mkOption {
           type = types.int;
           default = 55;
-          description = "If temperature is below this, fans will run at minimum speed.";
+          description = lib.mdDoc "If temperature is below this, fans will run at minimum speed.";
         };
         options.general.high_temp = mkOption {
           type = types.int;
           default = 58;
-          description = "If temperature is above this, fan speed will gradually increase.";
+          description = lib.mdDoc "If temperature is above this, fan speed will gradually increase.";
         };
         options.general.max_temp = mkOption {
           type = types.int;
           default = 86;
-          description = "If temperature is above this, fans will run at maximum speed.";
+          description = lib.mdDoc "If temperature is above this, fans will run at maximum speed.";
         };
         options.general.polling_interval = mkOption {
           type = types.int;
           default = 1;
-          description = "The polling interval.";
+          description = lib.mdDoc "The polling interval.";
         };
       };
     };

@@ -63,7 +63,7 @@ with lib;
       enable = mkOption {
         default = false;
         type = bool;
-        description = ''
+        description = lib.mdDoc ''
           Whether to synchronise your machine's IP address with a dynamic DNS provider (e.g. dyndns.org).
         '';
       };
@@ -72,7 +72,7 @@ with lib;
         type = package;
         default = pkgs.ddclient;
         defaultText = "pkgs.ddclient";
-        description = ''
+        description = lib.mdDoc ''
           The ddclient executable package run by the service.
         '';
       };
@@ -80,7 +80,7 @@ with lib;
       domains = mkOption {
         default = [ "" ];
         type = listOf str;
-        description = ''
+        description = lib.mdDoc ''
           Domain name(s) to synchronize.
         '';
       };
@@ -90,7 +90,7 @@ with lib;
         default = lib.optionalString (config.services.ddclient.protocol == "nsupdate") "${pkgs.bind.dnsutils}/bin/nsupdate";
         defaultText = "";
         type = str;
-        description = ''
+        description = lib.mdDoc ''
           User name.
         '';
       };
@@ -98,7 +98,7 @@ with lib;
       passwordFile = mkOption {
         default = null;
         type = nullOr str;
-        description = ''
+        description = lib.mdDoc ''
           A file containing the password or a TSIG key in named format when using the nsupdate protocol.
         '';
       };
@@ -106,16 +106,16 @@ with lib;
       interval = mkOption {
         default = "10min";
         type = str;
-        description = ''
+        description = lib.mdDoc ''
           The interval at which to run the check and update.
-          See <command>man 7 systemd.time</command> for the format.
+          See {command}`man 7 systemd.time` for the format.
         '';
       };
 
       configFile = mkOption {
         default = null;
         type = nullOr path;
-        description = ''
+        description = lib.mdDoc ''
           Path to configuration file.
           When set this overrides the generated configuration from module options.
         '';
@@ -125,7 +125,7 @@ with lib;
       protocol = mkOption {
         default = "dyndns2";
         type = str;
-        description = ''
+        description = lib.mdDoc ''
           Protocol to use with dynamic DNS provider (see https://sourceforge.net/p/ddclient/wiki/protocols).
         '';
       };
@@ -133,7 +133,7 @@ with lib;
       server = mkOption {
         default = "";
         type = str;
-        description = ''
+        description = lib.mdDoc ''
           Server address.
         '';
       };
@@ -141,7 +141,7 @@ with lib;
       ssl = mkOption {
         default = true;
         type = bool;
-        description = ''
+        description = lib.mdDoc ''
           Whether to use SSL/TLS to connect to dynamic DNS provider.
         '';
       };
@@ -149,7 +149,7 @@ with lib;
       ipv6 = mkOption {
         default = false;
         type = bool;
-        description = ''
+        description = lib.mdDoc ''
           Whether to use IPv6.
         '';
       };
@@ -158,7 +158,7 @@ with lib;
       quiet = mkOption {
         default = false;
         type = bool;
-        description = ''
+        description = lib.mdDoc ''
           Print no messages for unnecessary updates.
         '';
       };
@@ -166,7 +166,7 @@ with lib;
       script = mkOption {
         default = "";
         type = str;
-        description = ''
+        description = lib.mdDoc ''
           script as required by some providers.
         '';
       };
@@ -174,7 +174,7 @@ with lib;
       use = mkOption {
         default = "web, web=checkip.dyndns.com/, web-skip='Current IP Address: '";
         type = str;
-        description = ''
+        description = lib.mdDoc ''
           Method to determine the IP address to send to the dynamic DNS provider.
         '';
       };
@@ -182,7 +182,7 @@ with lib;
       verbose = mkOption {
         default = false;
         type = bool;
-        description = ''
+        description = lib.mdDoc ''
           Print verbose information.
         '';
       };
@@ -190,7 +190,7 @@ with lib;
       zone = mkOption {
         default = "";
         type = str;
-        description = ''
+        description = lib.mdDoc ''
           zone as required by some providers.
         '';
       };
@@ -198,7 +198,7 @@ with lib;
       extraConfig = mkOption {
         default = "";
         type = lines;
-        description = ''
+        description = lib.mdDoc ''
           Extra configuration. Contents will be added verbatim to the configuration file.
         '';
       };

@@ -202,7 +202,7 @@ let
 in
 
 buildStdenv.mkDerivation ({
-  name = "${pname}-unwrapped-${version}";
+  pname = "${pname}-unwrapped";
   inherit version;
 
   inherit src unpackPhase meta;
@@ -219,7 +219,7 @@ buildStdenv.mkDerivation ({
     "profilingPhase"
   ];
 
-  patches = [
+  patches = lib.optionals (lib.versionOlder version "103") [
     (fetchpatch {
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1773259
       name = "rust-cbindgen-0.24.2-compat.patch";

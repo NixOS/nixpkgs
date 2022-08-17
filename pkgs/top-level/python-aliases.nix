@@ -73,6 +73,7 @@ mapAliases ({
   email_validator = email-validator; # added 2022-06-22
   fake_factory = throw "fake_factory has been removed because it is unused and deprecated by upstream since 2016."; # added 2022-05-30
   faulthandler = throw "faulthandler is built into ${python.executable}"; # added 2021-07-12
+  flask_sqlalchemy = flask-sqlalchemy; # added 2022-07-20
   flask_testing = flask-testing; # added 2022-04-25
   flask_wtf = flask-wtf; # added 2022-05-24
   garminconnect-ha = garminconnect; # added 2022-02-05
@@ -89,6 +90,7 @@ mapAliases ({
   hdlparse = throw "hdlparse has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
   hyperkitty = throw "Please use pkgs.mailmanPackages.hyperkitty"; # added 2022-04-29
   IMAPClient = imapclient; # added 2021-10-28
+  imdbpy = throw "imdbpy has been renamed to cinemagoer"; # added 2022-08-08
   ipaddress = throw "ipaddress has been removed because it is no longer required since python 2.7."; # added 2022-05-30
   influxgraph = throw "influxgraph has been removed because it is no longer maintained"; # added 2022-07-10
   jupyter_client = jupyter-client; # added 2021-10-15
@@ -101,6 +103,8 @@ mapAliases ({
   mailman = throw "Please use pkgs.mailman"; # added 2022-04-29
   mailman-hyperkitty = throw "Please use pkgs.mailmanPackages.mailman-hyperkitty"; # added 2022-04-29
   mailman-web = throw "Please use pkgs.mailman-web"; # added 2022-04-29
+  mistune_0_8 = throw "mistune_0_8 was removed because it was outdated and insecure"; # added 2022-08-12
+  mistune_2_0 = mistune; # added 2022-08-12
   net2grid = gridnet; # add 2022-04-22
   nose-cover3 = throw "nose-cover3 has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-02-16
   ordereddict = throw "ordereddict has been removed because it is only useful on unsupported python versions."; # added 2022-05-28
@@ -127,6 +131,14 @@ mapAliases ({
   pymc3 = pymc; # added 2022-06-05, module was rename starting with 4.0.0
   pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
   pyreadability = readability-lxml; # added 2022-05-24
+  pyroute2-core = throw "pyroute2 migrated back to a single package scheme in version 0.7.1"; # added 2022-07-16
+  pyroute2-ethtool = throw "pyroute2 migrated back to a single package scheme in version 0.7.1"; # added 2022-07-16
+  pyroute2-ipdb = throw "pyroute2 migrated back to a single package scheme in version 0.7.1"; # added 2022-07-16
+  pyroute2-ipset = throw "pyroute2 migrated back to a single package scheme in version 0.7.1"; # added 2022-07-16
+  pyroute2-ndb = throw "pyroute2 migrated back to a single package scheme in version 0.7.1"; # added 2022-07-16
+  pyroute2-nftables = throw "pyroute2 migrated back to a single package scheme in version 0.7.1"; # added 2022-07-16
+  pyroute2-nslink = throw "pyroute2 migrated back to a single package scheme in version 0.7.1"; # added 2022-07-16
+  pyroute2-protocols = throw "pyroute2 migrated back to a single package scheme in version 0.7.1"; # added 2022-07-16
   pysmart-smartx = pysmart; # added 2021-10-22
   pyspotify = throw "pyspotify has been removed because Spotify stopped supporting libspotify"; # added 2022-05-29
   pytest_6 = pytest; # added 2022-02-10
@@ -141,6 +153,7 @@ mapAliases ({
   python-lz4 = lz4; # added 2018-06-01
   python_magic = python-magic; # added 2022-05-07
   python_mimeparse = python-mimeparse; # added 2021-10-31
+  python-language-server = throw "python-language-server is no longer maintained, use the python-lsp-server community fork instead."; # Added 2022-08-03
   python-subunit = subunit; # added 2021-09-10
   pytest_xdist = pytest-xdist; # added 2021-01-04
   python_simple_hipchat = python-simple-hipchat; # added 2021-07-21
@@ -165,6 +178,7 @@ mapAliases ({
   smart_open = smart-open; # added 2021-03-14
   smmap2 = throw "smmap2 has been deprecated, use smmap instead."; # added 2020-03-14
   SPARQLWrapper = sparqlwrapper;
+  sphinx_rtd_theme = sphinx-rtd-theme; # added 2022-08-03
   sphinxcontrib_plantuml = sphinxcontrib-plantuml; # added 2021-08-02
   sqlalchemy_migrate = sqlalchemy-migrate; # added 2021-10-28
   SQLAlchemy-ImageAttach = throw "sqlalchemy-imageattach has been removed as it is incompatible with sqlalchemy 1.4 and unmaintained"; # added 2022-04-23

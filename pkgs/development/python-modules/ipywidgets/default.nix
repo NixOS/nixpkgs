@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "ipywidgets";
-  version = "7.7.0";
+  version = "7.7.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-q0pVloVaiLg3YZIcdocH1l5YRwaBObwXKd3+g0cDVCo=";
+    hash = "sha256-Xy+ht6+uGvMsiAiMmCitl43pPd2jk9ftQU5VP+6T3Ks=";
   };
 
   propagatedBuildInputs = [

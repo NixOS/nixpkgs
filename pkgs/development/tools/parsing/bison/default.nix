@@ -28,7 +28,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  # Normal check and install check largely execute the same test suite
+  doCheck = false;
   doInstallCheck = true;
 
   meta = {

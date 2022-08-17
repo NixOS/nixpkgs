@@ -2,21 +2,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmtime";
-  version = "0.38.0";
+  version = "0.39.1";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-q+6w22MbI3HRpmkybZXXWbkK7jbd6lyxodC3EpSovRI=";
+    sha256 = "sha256-cU03wm1+V++mV7j7VyMtjAYrPldzTysNzpJ8m0q4Rx8=";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "sha256-uuhGb0/RDz1/3O8WYiyGIUQFh0WZWJgujqtvH+hgbdA=";
+  cargoSha256 = "sha256-DnThste0SbBdpGAUYhmwbdQFNEB3LozyDf0X8r2A90Q=";
 
   doCheck = true;
   checkFlags = [
     "--skip=cli_tests::run_cwasm"
+    "--skip=commands::compile::test::test_unsupported_flags_compile"
     "--skip=commands::compile::test::test_aarch64_flags_compile"
     "--skip=commands::compile::test::test_successful_compile"
     "--skip=commands::compile::test::test_x64_flags_compile"

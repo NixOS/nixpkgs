@@ -6,7 +6,7 @@
 , patches ? [ ]
 }:
 stdenv.mkDerivation {
-  name = "nc-app-${name}";
+  pname = "nc-app-${name}";
   inherit version patches;
 
   src = fetchurl {

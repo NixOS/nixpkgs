@@ -5,7 +5,7 @@
 , agate
 , sqlalchemy
 , crate
-, nose
+, pytestCheckHook
 , geojson
 }:
 
@@ -22,15 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ agate sqlalchemy ];
 
-  # crate is broken in nixpkgs, with SQLAlchemy > 1.3
-  # Skip tests for now as they rely on it.
-  doCheck = false;
-
-  checkInputs = [ crate nose geojson ];
-
-  checkPhase = ''
-    nosetests
-  '';
+  checkInputs = [ crate geojson pytestCheckHook ];
 
   pythonImportsCheck = [ "agatesql" ];
 

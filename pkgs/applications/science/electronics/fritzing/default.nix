@@ -1,7 +1,8 @@
-{ mkDerivation
+{ stdenv
 , lib
 , fetchFromGitHub
 , fetchpatch
+, wrapQtAppsHook
 , qmake
 , pkg-config
 , qtbase
@@ -9,6 +10,7 @@
 , qttools
 , qtserialport
 , boost
+, libngspice
 , libgit2
 , quazip
 }:
@@ -16,35 +18,34 @@
 let
   # SHA256 of the fritzing-parts HEAD on the master branch,
   # which contains the latest stable parts definitions
-  partsSha = "640fa25650211afccd369f960375ade8ec3e8653";
+  partsSha = "4713511c894cb2894eae505b9307c6555afcc32c";
 
   parts = fetchFromGitHub {
     owner = "fritzing";
     repo = "fritzing-parts";
     rev = partsSha;
-    sha256 = "sha256-4S65eX4LCnXCFQAOxmdvr8d0nAgTWcJooE2SpLYpcXI=";
+    sha256 = "sha256-QiOGWc+99MJhOVrXyNOinR8rTVvW/E+wPfoB6QvbhY0=";
   };
 in
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "fritzing";
-  version = "unstable-2021-09-22";
+  version = "unstable-2022-07-01";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "fritzing-app";
-    rev = "f0af53a9077f7cdecef31d231b85d8307de415d4";
-    sha256 = "sha256-fF38DrBoeZ0aKwVMNyYMPWa5rFPbIVXRARZT+eRat5Q=";
+    rev = "40d23c29b0463d5c968c3c4b34ed5ffc05c5a258";
+    sha256 = "sha256-smvfuxQWF/LMFFXHOKb3zUZsEet/XoiaxXOR5QMaYzw=";
   };
 
-  buildInputs = [ qtbase qtsvg qtserialport boost libgit2 quazip ];
-  nativeBuildInputs = [ qmake pkg-config qttools ];
+  buildInputs = [ qtbase qtsvg qtserialport boost libgit2 quazip libngspice ];
+  nativeBuildInputs = [ qmake pkg-config qttools wrapQtAppsHook ];
 
   patches = [
-    # Add support for QuaZip 1.x
     (fetchpatch {
-      url = "https://github.com/fritzing/fritzing-app/commit/ef83ebd9113266bb31b3604e3e9d0332bb48c999.patch";
-      sha256 = "sha256-J43E6iBRIVbsuuo82gPk3Q7tyLhNkuuyYwtH8hUfcPU=";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/0001-Quick-Dirty-patch-to-allow-finding-quazip-qt5-on-Arc.patch?h=fritzing&id=1ae0dc88464f375a54b156e6761315bcb04bcc1f";
+      sha256 = "sha256-iS18EWw920gyeXDoHBRGwXvwMJurJS21H77Erl+fqog=";
     })
   ];
 
@@ -60,10 +61,10 @@ mkDerivation rec {
     cp -a ${parts}/* parts/
   '';
 
+  NIX_CFLAGS_COMPILE = "-I${quazip}/include/QuaZip-Qt${lib.versions.major qtbase.version}-${quazip.version}/quazip";
+
   qmakeFlags = [
     "phoenix.pro"
-    "DEFINES=QUAZIP_INSTALLED"
-    "DEFINES+=QUAZIP_1X"
   ];
 
   postFixup = ''

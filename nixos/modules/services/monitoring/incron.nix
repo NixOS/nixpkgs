@@ -27,12 +27,12 @@ in
       allow = mkOption {
         type = types.nullOr (types.listOf types.str);
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Users allowed to use incrontab.
 
           If empty then no user will be allowed to have their own incrontab.
-          If <literal>null</literal> then will defer to <option>deny</option>.
-          If both <option>allow</option> and <option>deny</option> are null
+          If `null` then will defer to {option}`deny`.
+          If both {option}`allow` and {option}`deny` are null
           then all users will be allowed to have their own incrontab.
         '';
       };
@@ -40,13 +40,13 @@ in
       deny = mkOption {
         type = types.nullOr (types.listOf types.str);
         default = null;
-        description = "Users forbidden from using incrontab.";
+        description = lib.mdDoc "Users forbidden from using incrontab.";
       };
 
       systab = mkOption {
         type = types.lines;
         default = "";
-        description = "The system incrontab contents.";
+        description = lib.mdDoc "The system incrontab contents.";
         example = ''
           /var/mail IN_CLOSE_WRITE abc $@/$#
           /tmp IN_ALL_EVENTS efg $@/$# $&
@@ -57,7 +57,7 @@ in
         type = types.listOf types.package;
         default = [];
         example = literalExpression "[ pkgs.rsync ]";
-        description = "Extra packages available to the system incrontab.";
+        description = lib.mdDoc "Extra packages available to the system incrontab.";
       };
 
     };

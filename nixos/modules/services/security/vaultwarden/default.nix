@@ -44,7 +44,7 @@ in {
     dbBackend = mkOption {
       type = enum [ "sqlite" "mysql" "postgresql" ];
       default = "sqlite";
-      description = ''
+      description = lib.mdDoc ''
         Which database backend vaultwarden will be using.
       '';
     };
@@ -52,7 +52,7 @@ in {
     backupDir = mkOption {
       type = nullOr str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         The directory under which vaultwarden will backup its persistent data.
       '';
     };
@@ -116,7 +116,7 @@ in {
         The available configuration options can be found in
         <link xlink:href="https://github.com/dani-garcia/vaultwarden/blob/${vaultwarden.version}/.env.template">the environment template file</link>.
 
-        See <xref linkend="opt-services.vaultwarden.environmentFile" /> for how
+        See <xref linkend="opt-services.vaultwarden.environmentFile"/> for how
         to set up access to the Admin UI to invite initial users.
       '';
     };
@@ -126,9 +126,7 @@ in {
       default = null;
       example = "/var/lib/vaultwarden.env";
       description = ''
-        Additional environment file as defined in <citerefentry>
-        <refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum>
-        </citerefentry>.
+        Additional environment file as defined in <citerefentry><refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
 
         Secrets like <envar>ADMIN_TOKEN</envar> and <envar>SMTP_PASSWORD</envar>
         may be passed to the service without adding them to the world-readable Nix store.
@@ -159,14 +157,14 @@ ADMIN_TOKEN=...copy-paste a unique generated secret token here...
       type = package;
       default = pkgs.vaultwarden;
       defaultText = literalExpression "pkgs.vaultwarden";
-      description = "Vaultwarden package to use.";
+      description = lib.mdDoc "Vaultwarden package to use.";
     };
 
     webVaultPackage = mkOption {
       type = package;
       default = pkgs.vaultwarden-vault;
       defaultText = literalExpression "pkgs.vaultwarden-vault";
-      description = "Web vault package to use.";
+      description = lib.mdDoc "Web vault package to use.";
     };
   };
 

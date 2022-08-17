@@ -4,11 +4,11 @@ index 1afa28e1..3da81d30 100644
 +++ b/libfwupdplugin/meson.build
 @@ -220,7 +220,8 @@ fwupdplugin = library(
    ],
-   link_args : cc.get_supported_link_arguments([vflag]),
-   link_depends : fwupdplugin_mapfile,
--  install : true
-+  install : true,
-+  install_dir : bindir / '..' / 'lib',
+   link_args: cc.get_supported_link_arguments([vflag]),
+   link_depends: fwupdplugin_mapfile,
+-  install: true
++  install: true,
++  install_dir: bindir / '..' / 'lib',
  )
  
  fwupdplugin_pkgg = import('pkgconfig')
@@ -16,9 +16,9 @@ index 1afa28e1..3da81d30 100644
        girtargets,
        fwupd_gir[0],
      ],
--    install : true
-+    install : true,
-+    install_dir_typelib : bindir / '..' / 'lib' / 'girepository-1.0',
+-    install: true
++    install: true,
++    install_dir_typelib: bindir / '..' / 'lib' / 'girepository-1.0',
    )
  
    # Verify the map file is correct -- note we can't actually use the generated

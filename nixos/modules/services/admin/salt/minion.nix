@@ -25,9 +25,9 @@ in
       configuration = mkOption {
         type = types.attrs;
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           Salt minion configuration as Nix attribute set.
-          See <link xlink:href="https://docs.saltstack.com/en/latest/ref/configuration/minion.html"/>
+          See <https://docs.saltstack.com/en/latest/ref/configuration/minion.html>
           for details.
         '';
       };

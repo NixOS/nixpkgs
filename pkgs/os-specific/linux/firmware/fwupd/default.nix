@@ -4,7 +4,7 @@
 , lib
 , fetchurl
 , fetchFromGitHub
-, gtk-doc
+, gi-docgen
 , pkg-config
 , gobject-introspection
 , gettext
@@ -17,7 +17,6 @@
 , libarchive
 , curl
 , libjcat
-, libxslt
 , elfutils
 , libsmbios
 , efivar
@@ -25,14 +24,12 @@
 , meson
 , libuuid
 , colord
-, docbook_xml_dtd_43
-, docbook-xsl-nons
 , ninja
 , gcab
 , gnutls
 , protobufc
 , python3
-, wrapGAppsHook
+, wrapGAppsNoGuiHook
 , json-glib
 , bash-completion
 , shared-mime-info
@@ -117,7 +114,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "fwupd";
-    version = "1.8.1";
+    version = "1.8.3";
 
     # libfwupd goes to lib
     # daemon, plug-ins and libfwupdplugin go to out
@@ -126,7 +123,7 @@ let
 
     src = fetchurl {
       url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-      sha256 = "sha256-V1ZGZELrkTT7QM3IpG+eAQAyR8jqyC+l2LFvZCA3W3k=";
+      sha256 = "sha256-ciIpd86KhmJRH/o8CIFWb2xFjsjWHSUNlGYRfWEiOOw=";
     };
 
     patches = [
@@ -152,7 +149,7 @@ let
     nativeBuildInputs = [
       meson
       ninja
-      gtk-doc
+      gi-docgen
       pkg-config
       gobject-introspection
       gettext
@@ -160,12 +157,9 @@ let
       valgrind
       gcab
       gnutls
-      docbook_xml_dtd_43
-      docbook-xsl-nons
-      libxslt
       protobufc # for protoc
       python
-      wrapGAppsHook
+      wrapGAppsNoGuiHook
       vala
     ];
 
@@ -201,7 +195,7 @@ let
     ];
 
     mesonFlags = [
-      "-Ddocs=gtkdoc"
+      "-Ddocs=enabled"
       "-Dplugin_dummy=true"
       # We are building the official releases.
       "-Dsupported_build=enabled"
@@ -216,6 +210,8 @@ let
       "-Dsysconfdir_install=${placeholder "out"}/etc"
       "-Defi_os_dir=nixos"
       "-Dplugin_modem_manager=enabled"
+      # Requires Meson 0.63
+      "-Dgresource_quirks=disabled"
 
       # We do not want to place the daemon into lib (cyclic reference)
       "--libexecdir=${placeholder "out"}/libexec"
@@ -261,8 +257,18 @@ let
         meson_post_install.sh \
         po/test-deps
 
+      # This checks a version of a dependency of gi-docgen but gi-docgen is self-contained in Nixpkgs.
+      echo "Clearing docs/test-deps.py"
+      test -f docs/test-deps.py
+      echo > docs/test-deps.py
+
       substituteInPlace data/installed-tests/fwupdmgr-p2p.sh \
         --replace "gdbus" ${glib.bin}/bin/gdbus
+    '';
+
+    preBuild = ''
+      # jcat-tool at buildtime requires a home directory
+      export HOME="$(mktemp -d)"
     '';
 
     preCheck = ''
@@ -298,8 +304,8 @@ let
       )
     '';
 
-    # Since we had to disable wrapGAppsHook, we need to wrap the executables manually.
     postFixup = ''
+      # Since we had to disable wrapGAppsHook, we need to wrap the executables manually.
       find -L "$out/bin" "$out/libexec" -type f -executable -print0 \
         | while IFS= read -r -d ''' file; do
         if [[ "$file" != *.efi ]]; then
@@ -307,6 +313,9 @@ let
           wrapGApp "$file"
         fi
       done
+
+      # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+      moveToOutput "share/doc" "$devdoc"
     '';
 
     separateDebugInfo = true;

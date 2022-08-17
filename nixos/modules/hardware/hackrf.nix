@@ -9,7 +9,7 @@ in
     enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enables hackrf udev rules and ensures 'plugdev' group exists.
         This is a prerequisite to using HackRF devices without being root, since HackRF USB descriptors will be owned by plugdev through udev.
       '';

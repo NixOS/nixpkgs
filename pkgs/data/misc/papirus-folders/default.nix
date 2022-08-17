@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, getent }:
 
 stdenv.mkDerivation rec {
   pname = "papirus-folders";
@@ -11,7 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ZZMEZCWO+qW76eqa+TgxWGVz69VkSCPcttLoCrH7ppY=";
   };
 
+  buildInputs = [
+    getent
+  ];
+
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  patchPhase = ''
+    substituteInPlace ./papirus-folders --replace "getent" "${getent}/bin/getent"
+  '';
 
   meta = with lib; {
     description = "A tool to change papirus icon theme color";

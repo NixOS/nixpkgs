@@ -33,11 +33,11 @@ in
             auth_service.enabled = false;
           }
         '';
-        description = ''
-          Contents of the <literal>teleport.yaml</literal> config file.
-          The <literal>--config</literal> arguments will only be passed if this set is not empty.
+        description = lib.mdDoc ''
+          Contents of the `teleport.yaml` config file.
+          The `--config` arguments will only be passed if this set is not empty.
 
-          See <link xlink:href="https://goteleport.com/docs/setup/reference/config/"/>.
+          See <https://goteleport.com/docs/setup/reference/config/>.
         '';
       };
 
@@ -61,13 +61,13 @@ in
         addr = mkOption {
           type = str;
           default = "127.0.0.1";
-          description = "Metrics and diagnostics address.";
+          description = lib.mdDoc "Metrics and diagnostics address.";
         };
 
         port = mkOption {
           type = int;
           default = 3000;
-          description = "Metrics and diagnostics port.";
+          description = lib.mdDoc "Metrics and diagnostics port.";
         };
       };
     };

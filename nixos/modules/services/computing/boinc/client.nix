@@ -19,7 +19,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the BOINC distributed computing client. If this
           option is set to true, the boinc_client daemon will be run as a
           background service. The boinccmd command can be used to control the
@@ -31,7 +31,7 @@ in
         type = types.package;
         default = pkgs.boinc;
         defaultText = literalExpression "pkgs.boinc";
-        description = ''
+        description = lib.mdDoc ''
           Which BOINC package to use.
         '';
       };
@@ -39,7 +39,7 @@ in
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/boinc";
-        description = ''
+        description = lib.mdDoc ''
           The directory in which to store BOINC's configuration and data files.
         '';
       };

@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "kubeone";
-  version = "1.4.0";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "kubermatic";
     repo = "kubeone";
     rev = "v${version}";
-    sha256 = "sha256-uij5daVHKIfxx+8UTmU/HKSbf/RTRFuO8mCQdsC80qI=";
+    sha256 = "sha256-2abuKLAqOaRceokmNb7YG0qg/iYbPhSTG75Rs5mwHDU=";
   };
 
   vendorSha256 = "sha256-kI5i1us3Ooh603HOz9Y+HlfPUy/1J8z89/jvKEenpLw=";

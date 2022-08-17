@@ -66,6 +66,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/apache/thrift/commit/54765854873e19b8ba50a0ec8080dd92d8323851.diff";
       sha256 = "wnG2MjY0DtAhVcEdcxu77tDa4T9Xm2pMYZU2wXLx2OA=";
     })
+    (fetchpatch {
+      name = "setuptools-gte-62.1.0.patch";
+      url = "https://github.com/apache/thrift/pull/2635/commits/c41ad9d5119e9bdae1746167e77e224f390f2c42.patch";
+      hash = "sha256-FkErrg/6vXTomS4AsCsld7t+Iccc55ZiDaNjJ3W1km0=";
+    })
   ];
 
   cmakeFlags = [

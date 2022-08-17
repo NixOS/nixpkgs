@@ -11,39 +11,55 @@ let
     gemdir = ./.;
   };
 
-  version = "15.1.2";
+  version = "15.2.2";
   package_version = "v${lib.versions.major version}";
   gitaly_package = "gitlab.com/gitlab-org/gitaly/${package_version}";
-in
 
-buildGoModule {
-  pname = "gitaly";
-  inherit version;
+  commonOpts = {
+    inherit version;
 
-  src = fetchFromGitLab {
-    owner = "gitlab-org";
-    repo = "gitaly";
-    rev = "v${version}";
-    sha256 = "sha256-g/SlrE/NVMYqZaEgKncMLjsfI8jAE0xfyy6rpShsi2Q=";
+    src = fetchFromGitLab {
+      owner = "gitlab-org";
+      repo = "gitaly";
+      rev = "v${version}";
+      sha256 = "sha256-ZePtqpe5zwbslgisIQ+BFM9vtnWknB75gtgoOlkbuyo=";
+    };
+
+    vendorSha256 = "sha256-aKF7iupg3XNopi0asasSu5ug+2M9p2nwxk/0g5how6U=";
+
+    ldflags = [ "-X ${gitaly_package}/internal/version.version=${version}" "-X ${gitaly_package}/internal/version.moduleVersion=${version}" ];
+
+    tags = [ "static,system_libgit2" ];
+
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ rubyEnv.wrappedRuby libgit2_1_3_0 openssl zlib pcre http-parser ];
+
+    doCheck = false;
   };
 
-  vendorSha256 = "sha256-0JWJ2mpf79gJdnNRdlQLi0oDvnj6VmibkW2XcPnaCww=";
+  auxBins = buildGoModule ({
+    pname = "gitaly-aux";
+
+    subPackages = [ "cmd/gitaly-hooks" "cmd/gitaly-ssh" "cmd/gitaly-git2go-v15" "cmd/gitaly-lfs-smudge" ];
+  } // commonOpts);
+in
+buildGoModule ({
+  pname = "gitaly";
 
   passthru = {
     inherit rubyEnv;
   };
 
-  ldflags = "-X ${gitaly_package}/internal/version.version=${version} -X ${gitaly_package}/internal/version.moduleVersion=${version}";
+  subPackages = [ "cmd/gitaly" "cmd/gitaly-backup" ];
 
-  tags = [ "static,system_libgit2" ];
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ rubyEnv.wrappedRuby libgit2_1_3_0 openssl zlib pcre http-parser ];
-  doCheck = false;
+  preConfigure = ''
+    mkdir -p _build/bin
+    cp -r ${auxBins}/bin/* _build/bin
+  '';
 
   postInstall = ''
     mkdir -p $ruby
     cp -rv $src/ruby/{bin,lib,proto} $ruby
-    mv $out/bin/gitaly-git2go-${package_version} $out/bin/gitaly-git2go-${version}
   '';
 
   outputs = [ "out" "ruby" ];
@@ -52,7 +68,7 @@ buildGoModule {
     homepage = "https://gitlab.com/gitlab-org/gitaly";
     description = "A Git RPC service for handling all the git calls made by GitLab";
     platforms = platforms.linux ++ [ "x86_64-darwin" ];
-    maintainers = with maintainers; [ roblabla globin fpletz talyz yayayayaka ];
+    maintainers = with maintainers; [ roblabla globin talyz yayayayaka ];
     license = licenses.mit;
   };
-}
+} // commonOpts)

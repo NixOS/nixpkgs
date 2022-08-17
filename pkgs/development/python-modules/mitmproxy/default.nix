@@ -51,7 +51,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     sha256 = "sha256-nW/WfiY6uF67qNa95tvNvSv/alP2WmzTk34LEBma/04=";
   };
 
@@ -121,6 +121,6 @@ buildPythonPackage rec {
     description = "Man-in-the-middle proxy";
     homepage = "https://mitmproxy.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ fpletz kamilchm ];
+    maintainers = with maintainers; [ kamilchm SuperSandro2000 ];
   };
 }

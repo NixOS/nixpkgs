@@ -31,6 +31,12 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/multimedia-team/intel-media-driver-non-free/-/raw/master/debian/patches/0002-Remove-settings-based-on-ARCH.patch";
       sha256 = "sha256-f4M0CPtAVf5l2ZwfgTaoPw7sPuAP/Uxhm5JSHEGhKT0=";
     })
+    # fix compilation on i686-linux
+    (fetchpatch {
+      url = "https://github.com/intel/media-driver/commit/5ee502b84eb70f0d677a3b49d624c356b3f0c2b1.patch";
+      revert = true;
+      sha256 = "sha256-yRS10BKD5IkW8U0PxmyB7ryQiLwrqeetm0NivnoM224=";
+    })
   ];
 
   cmakeFlags = [

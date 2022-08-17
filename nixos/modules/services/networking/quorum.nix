@@ -18,82 +18,82 @@ in {
       user = mkOption {
         type = types.str;
         default = "quorum";
-        description = "The user as which to run quorum.";
+        description = lib.mdDoc "The user as which to run quorum.";
       };
 
       group = mkOption {
         type = types.str;
         default = cfg.user;
         defaultText = literalExpression "config.${opt.user}";
-        description = "The group as which to run quorum.";
+        description = lib.mdDoc "The group as which to run quorum.";
       };
 
       port = mkOption {
         type = types.port;
         default = 21000;
-        description = "Override the default port on which to listen for connections.";
+        description = lib.mdDoc "Override the default port on which to listen for connections.";
       };
 
       nodekeyFile = mkOption {
         type = types.path;
         default = "${dataDir}/nodekey";
-        description = "Path to the nodekey.";
+        description = lib.mdDoc "Path to the nodekey.";
       };
 
       staticNodes = mkOption {
         type = types.listOf types.str;
         default = [];
         example = [ "enode://dd333ec28f0a8910c92eb4d336461eea1c20803eed9cf2c056557f986e720f8e693605bba2f4e8f289b1162e5ac7c80c914c7178130711e393ca76abc1d92f57@0.0.0.0:30303?discport=0" ];
-        description = "List of validator nodes.";
+        description = lib.mdDoc "List of validator nodes.";
       };
 
       privateconfig = mkOption {
         type = types.str;
         default = "ignore";
-        description = "Configuration of privacy transaction manager.";
+        description = lib.mdDoc "Configuration of privacy transaction manager.";
       };
 
       syncmode = mkOption {
         type = types.enum [ "fast" "full" "light" ];
         default = "full";
-        description = "Blockchain sync mode.";
+        description = lib.mdDoc "Blockchain sync mode.";
       };
 
       blockperiod = mkOption {
         type = types.int;
         default = 5;
-        description = "Default minimum difference between two consecutive block's timestamps in seconds.";
+        description = lib.mdDoc "Default minimum difference between two consecutive block's timestamps in seconds.";
       };
 
       permissioned = mkOption {
         type = types.bool;
         default = true;
-        description = "Allow only a defined list of nodes to connect.";
+        description = lib.mdDoc "Allow only a defined list of nodes to connect.";
       };
 
       rpc = {
         enable = mkOption {
           type = types.bool;
           default = true;
-          description = "Enable RPC interface.";
+          description = lib.mdDoc "Enable RPC interface.";
         };
 
         address = mkOption {
           type = types.str;
           default = "0.0.0.0";
-          description = "Listening address for RPC connections.";
+          description = lib.mdDoc "Listening address for RPC connections.";
         };
 
         port = mkOption {
           type = types.port;
           default = 22004;
-          description = "Override the default port on which to listen for RPC connections.";
+          description = lib.mdDoc "Override the default port on which to listen for RPC connections.";
         };
 
         api = mkOption {
           type = types.str;
           default = "admin,db,eth,debug,miner,net,shh,txpool,personal,web3,quorum,istanbul";
-          description = "API's offered over the HTTP-RPC interface.";
+          description = lib.mdDoc "API's offered over the HTTP-RPC interface.";
         };
       };
 
@@ -101,31 +101,31 @@ in {
         enable = mkOption {
           type = types.bool;
           default = true;
-          description = "Enable WS-RPC interface.";
+          description = lib.mdDoc "Enable WS-RPC interface.";
         };
 
         address = mkOption {
           type = types.str;
           default = "0.0.0.0";
-          description = "Listening address for WS-RPC connections.";
+          description = lib.mdDoc "Listening address for WS-RPC connections.";
         };
 
         port = mkOption {
           type = types.port;
           default = 8546;
-          description = "Override the default port on which to listen for WS-RPC connections.";
+          description = lib.mdDoc "Override the default port on which to listen for WS-RPC connections.";
         };
 
         api = mkOption {
           type = types.str;
           default = "admin,db,eth,debug,miner,net,shh,txpool,personal,web3,quorum,istanbul";
-          description = "API's offered over the WS-RPC interface.";
+          description = lib.mdDoc "API's offered over the WS-RPC interface.";
         };
 
        origins = mkOption {
           type = types.str;
           default = "*";
-          description = "Origins from which to accept websockets requests";
+          description = lib.mdDoc "Origins from which to accept websockets requests";
        };
      };
 
@@ -160,7 +160,7 @@ in {
           parentHash = "0x0000000000000000000000000000000000000000000000000000000000000000";
           timestamp = "0x00";
           }'';
-        description = "Blockchain genesis settings.";
+        description = lib.mdDoc "Blockchain genesis settings.";
       };
      };
   };

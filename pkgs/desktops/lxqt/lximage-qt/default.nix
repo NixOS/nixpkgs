@@ -12,6 +12,7 @@
 , lxqt-build-tools
 , libfm-qt
 , libexif
+, menu-cache
 , lxqtUpdateScript
 }:
 
@@ -42,6 +43,7 @@ mkDerivation rec {
     xorg.libpthreadstubs
     xorg.libXdmcp
     libexif
+    menu-cache
   ];
 
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };

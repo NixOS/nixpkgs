@@ -78,7 +78,7 @@ in
           using <package>envsubst</package> which is helpful for specifying
           secrets:
           <programlisting>
-          { <xref linkend="opt-services.privacyidea.secretKey" /> = "$SECRET"; }
+          { <xref linkend="opt-services.privacyidea.secretKey"/> = "$SECRET"; }
           </programlisting>
 
           The environment-file can now specify the actual secret key:
@@ -91,7 +91,7 @@ in
       stateDir = mkOption {
         type = types.str;
         default = "/var/lib/privacyidea";
-        description = ''
+        description = lib.mdDoc ''
           Directory where all PrivacyIDEA files will be placed by default.
         '';
       };
@@ -99,7 +99,7 @@ in
       superuserRealm = mkOption {
         type = types.listOf types.str;
         default = [ "super" "administrators" ];
-        description = ''
+        description = lib.mdDoc ''
           The realm where users are allowed to login as administrators.
         '';
       };
@@ -107,7 +107,7 @@ in
       secretKey = mkOption {
         type = types.str;
         example = "t0p s3cr3t";
-        description = ''
+        description = lib.mdDoc ''
           This is used to encrypt the auth_token.
         '';
       };
@@ -115,7 +115,7 @@ in
       pepper = mkOption {
         type = types.str;
         example = "Never know...";
-        description = ''
+        description = lib.mdDoc ''
           This is used to encrypt the admin passwords.
         '';
       };
@@ -124,7 +124,7 @@ in
         type = types.str;
         default = "${cfg.stateDir}/enckey";
         defaultText = literalExpression ''"''${config.${opt.stateDir}}/enckey"'';
-        description = ''
+        description = lib.mdDoc ''
           This is used to encrypt the token data and token passwords
         '';
       };
@@ -133,7 +133,7 @@ in
         type = types.str;
         default = "${cfg.stateDir}/private.pem";
         defaultText = literalExpression ''"''${config.${opt.stateDir}}/private.pem"'';
-        description = ''
+        description = lib.mdDoc ''
           Private Key for signing the audit log.
         '';
       };
@@ -142,26 +142,26 @@ in
         type = types.str;
         default = "${cfg.stateDir}/public.pem";
         defaultText = literalExpression ''"''${config.${opt.stateDir}}/public.pem"'';
-        description = ''
+        description = lib.mdDoc ''
           Public key for checking signatures of the audit log.
         '';
       };
 
       adminPasswordFile = mkOption {
         type = types.path;
-        description = "File containing password for the admin user";
+        description = lib.mdDoc "File containing password for the admin user";
       };
 
       adminEmail = mkOption {
         type = types.str;
         example = "admin@example.com";
-        description = "Mail address for the admin user";
+        description = lib.mdDoc "Mail address for the admin user";
       };
 
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Extra configuration options for pi.cfg.
         '';
       };
@@ -169,13 +169,13 @@ in
       user = mkOption {
         type = types.str;
         default = "privacyidea";
-        description = "User account under which PrivacyIDEA runs.";
+        description = lib.mdDoc "User account under which PrivacyIDEA runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "privacyidea";
-        description = "Group account under which PrivacyIDEA runs.";
+        description = lib.mdDoc "Group account under which PrivacyIDEA runs.";
       };
 
       ldap-proxy = {
@@ -184,7 +184,7 @@ in
         configFile = mkOption {
           type = types.nullOr types.path;
           default = null;
-          description = ''
+          description = lib.mdDoc ''
             Path to PrivacyIDEA LDAP Proxy configuration (proxy.ini).
           '';
         };
@@ -192,13 +192,13 @@ in
         user = mkOption {
           type = types.str;
           default = "pi-ldap-proxy";
-          description = "User account under which PrivacyIDEA LDAP proxy runs.";
+          description = lib.mdDoc "User account under which PrivacyIDEA LDAP proxy runs.";
         };
 
         group = mkOption {
           type = types.str;
           default = "pi-ldap-proxy";
-          description = "Group account under which PrivacyIDEA LDAP proxy runs.";
+          description = lib.mdDoc "Group account under which PrivacyIDEA LDAP proxy runs.";
         };
 
         settings = mkOption {
@@ -207,7 +207,7 @@ in
           description = ''
             Attribute-set containing the settings for <package>privacyidea-ldap-proxy</package>.
             It's possible to pass secrets using env-vars as substitutes and
-            use the option <xref linkend="opt-services.privacyidea.ldap-proxy.environmentFile" />
+            use the option <xref linkend="opt-services.privacyidea.ldap-proxy.environmentFile"/>
             to inject them via <package>envsubst</package>.
           '';
         };
@@ -215,9 +215,9 @@ in
         environmentFile = mkOption {
           default = null;
           type = types.nullOr types.str;
-          description = ''
+          description = lib.mdDoc ''
             Environment file containing secrets to be substituted into
-            <xref linkend="opt-services.privacyidea.ldap-proxy.settings" />.
+            [](#opt-services.privacyidea.ldap-proxy.settings).
           '';
         };
       };

@@ -37,7 +37,7 @@ in
       default = pkgs.healthchecks;
       defaultText = literalExpression "pkgs.healthchecks";
       type = types.package;
-      description = "healthchecks package to use.";
+      description = lib.mdDoc "healthchecks package to use.";
     };
 
     user = mkOption {
@@ -71,13 +71,13 @@ in
     listenAddress = mkOption {
       type = types.str;
       default = "localhost";
-      description = "Address the server will listen on.";
+      description = lib.mdDoc "Address the server will listen on.";
     };
 
     port = mkOption {
       type = types.port;
       default = 8000;
-      description = "Port the server will listen on.";
+      description = lib.mdDoc "Port the server will listen on.";
     };
 
     dataDir = mkOption {
@@ -114,26 +114,26 @@ in
           ALLOWED_HOSTS = lib.mkOption {
             type = types.listOf types.str;
             default = [ "*" ];
-            description = "The host/domain names that this site can serve.";
+            description = lib.mdDoc "The host/domain names that this site can serve.";
             apply = lib.concatStringsSep ",";
           };
 
           SECRET_KEY_FILE = mkOption {
             type = types.path;
-            description = "Path to a file containing the secret key.";
+            description = lib.mdDoc "Path to a file containing the secret key.";
           };
 
           DEBUG = mkOption {
             type = types.bool;
             default = false;
-            description = "Enable debug mode.";
+            description = lib.mdDoc "Enable debug mode.";
             apply = boolToPython;
           };
 
           REGISTRATION_OPEN = mkOption {
             type = types.bool;
             default = false;
-            description = ''
+            description = lib.mdDoc ''
               A boolean that controls whether site visitors can create new accounts.
               Set it to false if you are setting up a private Healthchecks instance,
               but it needs to be publicly accessible (so, for example, your cloud

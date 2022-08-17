@@ -16,34 +16,34 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable xpra as display manager.";
+        description = lib.mdDoc "Whether to enable xpra as display manager.";
       };
 
       bindTcp = mkOption {
         default = "127.0.0.1:10000";
         example = "0.0.0.0:10000";
         type = types.nullOr types.str;
-        description = "Bind xpra to TCP";
+        description = lib.mdDoc "Bind xpra to TCP";
       };
 
       desktop = mkOption {
         type = types.nullOr types.str;
         default = null;
         example = "gnome-shell";
-        description = "Start a desktop environment instead of seamless mode";
+        description = lib.mdDoc "Start a desktop environment instead of seamless mode";
       };
 
       auth = mkOption {
         type = types.str;
         default = "pam";
         example = "password:value=mysecret";
-        description = "Authentication to use when connecting to xpra";
+        description = lib.mdDoc "Authentication to use when connecting to xpra";
       };
 
       pulseaudio = mkEnableOption "pulseaudio audio streaming";
 
       extraOptions = mkOption {
-        description = "Extra xpra options";
+        description = lib.mdDoc "Extra xpra options";
         default = [];
         type = types.listOf types.str;
       };

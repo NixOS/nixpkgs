@@ -31,6 +31,7 @@
 , libkate
 , libmad
 , libmatroska
+, libmodplug
 , libmtp
 , liboggz
 , libopus
@@ -79,7 +80,6 @@
 
 let
   inherit (lib) optionalString optional optionals;
-  hostIsAarch = stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64;
 in
 stdenv.mkDerivation rec {
   pname = "${optionalString onlyLibVLC "lib"}vlc";
@@ -122,6 +122,7 @@ stdenv.mkDerivation rec {
     libmad
     libmatroska
     libmtp
+    libmodplug
     liboggz
     libopus
     libplacebo
@@ -157,7 +158,7 @@ stdenv.mkDerivation rec {
     xcbutilkeysyms
     xlibsWrapper
   ])
-  ++ optional (!hostIsAarch && !onlyLibVLC) live555
+  ++ optional (!stdenv.hostPlatform.isAarch && !onlyLibVLC) live555
   ++ optional jackSupport libjack2
   ++ optionals chromecastSupport [ libmicrodns protobuf ]
   ++ optionals skins2Support (with xorg; [
@@ -182,7 +183,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  LIVE555_PREFIX = if hostIsAarch then null else live555;
+  LIVE555_PREFIX = if stdenv.hostPlatform.isAarch then null else live555;
 
   # vlc depends on a c11-gcc wrapper script which we don't have so we need to
   # set the path to the compiler

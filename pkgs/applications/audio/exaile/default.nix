@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals documentationSupport [
     help2man
     python3.pkgs.sphinx
-    python3.pkgs.sphinx_rtd_theme
+    python3.pkgs.sphinx-rtd-theme
   ] ++ lib.optional translationSupport gettext;
 
   buildInputs = [

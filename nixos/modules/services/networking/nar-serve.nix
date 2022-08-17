@@ -15,7 +15,7 @@ in
       port = mkOption {
         type = types.port;
         default = 8383;
-        description = ''
+        description = lib.mdDoc ''
           Port number where nar-serve will listen on.
         '';
       };

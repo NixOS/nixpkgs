@@ -1664,6 +1664,26 @@ self: super: {
 }
 ```
 
+### How to override a Python package for all Python versions using extensions? {#how-to-override-a-python-package-for-all-python-versions-using-extensions}
+
+The following overlay overrides the call to `buildPythonPackage` for the
+`foo` package for all interpreters by appending a Python extension to the
+`pythonPackagesExtensions` list of extensions.
+
+```nix
+final: prev: {
+  pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
+    (
+      python-final: python-prev: {
+        foo = python-prev.foo.overridePythonAttrs (oldAttrs: {
+          ...
+        });
+      }
+    )
+  ];
+}
+```
+
 ### How to use Intel’s MKL with numpy and scipy? {#how-to-use-intels-mkl-with-numpy-and-scipy}
 
 MKL can be configured using an overlay. See the section "[Using overlays to

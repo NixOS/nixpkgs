@@ -49,8 +49,11 @@
 , alsa-lib ? null # Alsa in/output support
 #, avisynth ? null # Support for reading AviSynth scripts
 , bzip2 ? null
+, clang ? null
 , celt ? null # CELT decoder
 #, crystalhd ? null # Broadcom CrystalHD hardware acceleration
+, cuda ? !stdenv.isDarwin && !stdenv.isAarch64 # Dynamically linked CUDA
+, cuda-llvm ? !stdenv.isDarwin && !stdenv.isAarch64 # LLVM-based CUDA compilation
 , dav1d ? null # AV1 decoder (focused on speed and correctness)
 #, decklinkExtlib ? false, blackmagic-design-desktop-video ? null # Blackmagic Design DeckLink I/O support
 , fdkaacExtlib ? false, fdk_aac ? null # Fraunhofer FDK AAC de/encoder
@@ -331,6 +334,8 @@ stdenv.mkDerivation rec {
     #(enableFeature avisynth "avisynth")
     (enableFeature (bzip2 != null) "bzlib")
     (enableFeature (celt != null) "libcelt")
+    (enableFeature cuda "cuda")
+    (enableFeature (clang != null && cuda-llvm) "cuda-llvm")
     #(enableFeature crystalhd "crystalhd")
     (enableFeature (dav1d != null) "libdav1d")
     #(enableFeature decklinkExtlib "decklink")
@@ -451,6 +456,7 @@ stdenv.mkDerivation rec {
     ++ optionals isLinux [ alsa-lib libraw1394 libv4l vulkan-loader glslang ]
     ++ optional (isLinux && !isAarch64 && libmfx != null) libmfx
     ++ optional (nvdec || nvenc) nv-codec-headers
+    ++ optional cuda-llvm clang
     ++ optionals stdenv.isDarwin [ Cocoa CoreServices CoreAudio AVFoundation
                                    MediaToolbox VideoDecodeAcceleration
                                    libiconv ];

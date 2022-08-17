@@ -14,7 +14,7 @@ in
         type = types.package;
         default = pkgs.nomad;
         defaultText = literalExpression "pkgs.nomad";
-        description = ''
+        description = lib.mdDoc ''
           The package used for the Nomad agent and CLI.
         '';
       };
@@ -33,7 +33,7 @@ in
       dropPrivileges = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether the nomad agent should be run as a non-root nomad user.
         '';
       };
@@ -41,7 +41,7 @@ in
       enableDocker = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Enable Docker support. Needed for Nomad's docker driver.
 
           Note that the docker group membership is effectively equivalent
@@ -52,7 +52,7 @@ in
       extraSettingsPaths = mkOption {
         type = types.listOf types.path;
         default = [ ];
-        description = ''
+        description = lib.mdDoc ''
           Additional settings paths used to configure nomad. These can be files or directories.
         '';
         example = literalExpression ''
@@ -63,7 +63,7 @@ in
       extraSettingsPlugins = mkOption {
         type = types.listOf (types.either types.package types.path);
         default = [ ];
-        description = ''
+        description = lib.mdDoc ''
           Additional plugins dir used to configure nomad.
         '';
         example = literalExpression ''
@@ -75,23 +75,23 @@ in
       settings = mkOption {
         type = format.type;
         default = { };
-        description = ''
-          Configuration for Nomad. See the <link xlink:href="https://www.nomadproject.io/docs/configuration">documentation</link>
+        description = lib.mdDoc ''
+          Configuration for Nomad. See the [documentation](https://www.nomadproject.io/docs/configuration)
           for supported values.
 
-          Notes about <literal>data_dir</literal>:
+          Notes about `data_dir`:
 
-          If <literal>data_dir</literal> is set to a value other than the
-          default value of <literal>"/var/lib/nomad"</literal> it is the Nomad
+          If `data_dir` is set to a value other than the
+          default value of `"/var/lib/nomad"` it is the Nomad
           cluster manager's responsibility to make sure that this directory
           exists and has the appropriate permissions.
 
-          Additionally, if <literal>dropPrivileges</literal> is
-          <literal>true</literal> then <literal>data_dir</literal>
-          <emphasis>cannot</emphasis> be customized. Setting
-          <literal>dropPrivileges</literal> to <literal>true</literal> enables
-          the <literal>DynamicUser</literal> feature of systemd which directly
-          manages and operates on <literal>StateDirectory</literal>.
+          Additionally, if `dropPrivileges` is
+          `true` then `data_dir`
+          *cannot* be customized. Setting
+          `dropPrivileges` to `true` enables
+          the `DynamicUser` feature of systemd which directly
+          manages and operates on `StateDirectory`.
         '';
         example = literalExpression ''
           {

@@ -26,7 +26,7 @@ in
           (require 'exwm)
           (exwm-enable)
         '';
-        description = ''
+        description = lib.mdDoc ''
           Emacs lisp code to be run after loading the user's init
           file. If enableDefaultConfig is true, this will be run
           before loading the default config.
@@ -35,7 +35,7 @@ in
       enableDefaultConfig = mkOption {
         default = true;
         type = lib.types.bool;
-        description = "Enable an uncustomised exwm configuration.";
+        description = lib.mdDoc "Enable an uncustomised exwm configuration.";
       };
       extraPackages = mkOption {
         type = types.functionTo (types.listOf types.package);

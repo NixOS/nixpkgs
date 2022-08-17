@@ -41,13 +41,13 @@
 
 buildPythonPackage rec {
   pname = "tensorflow-datasets";
-  version = "4.5.2";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner = "tensorflow";
     repo = "datasets";
-    rev = "v${version}";
-    sha256 = "sha256-OZpaY/6BMISq5IeDXyuyu5L/yG+DwlFliw4BsipPOLg=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-z52UZz9d1AaZklLOPbWuzByEl1hJ6ra4Hoz6eNGD+hg=";
   };
 
   patches = [

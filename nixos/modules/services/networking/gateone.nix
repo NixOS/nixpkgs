@@ -10,12 +10,12 @@ options = {
       pidDir = mkOption {
         default = "/run/gateone";
         type = types.path;
-        description = "Path of pid files for GateOne.";
+        description = lib.mdDoc "Path of pid files for GateOne.";
       };
       settingsDir = mkOption {
         default = "/var/lib/gateone";
         type = types.path;
-        description = "Path of configuration files for GateOne.";
+        description = lib.mdDoc "Path of configuration files for GateOne.";
       };
     };
 };

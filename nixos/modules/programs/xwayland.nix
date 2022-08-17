@@ -19,7 +19,7 @@ in
       defaultText = literalExpression ''
         optionalString config.fonts.fontDir.enable "/run/current-system/sw/share/X11/fonts"
       '';
-      description = ''
+      description = lib.mdDoc ''
         Default font path. Setting this option causes Xwayland to be rebuilt.
       '';
     };
@@ -34,7 +34,7 @@ in
           inherit (config.programs.xwayland) defaultFontPath;
         })
       '';
-      description = "The Xwayland package to use.";
+      description = lib.mdDoc "The Xwayland package to use.";
     };
 
   };

@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "goodwe";
-  version = "0.2.18";
+  version = "0.2.19";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "marcelblijleven";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-2AbEX/dYwcMIlp27umBcSGgPboGu5y0mmndefXCjkJg=";
+    sha256 = "sha256-H3N0hAJsjBX3pQ2i03r4MRBQQLCXjLhftokZQx0bF80=";
   };
 
   checkInputs = [

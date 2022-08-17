@@ -21,14 +21,15 @@
 , nuget-to-nix
 }:
 let
+  fetchNuGet = { pname, version, sha256 }: fetchurl {
+    name = "${pname}.${version}.nupkg";
+    url = "https://www.nuget.org/api/v2/package/${pname}/${version}";
+    inherit sha256;
+  };
+
   nugetSource = linkFarmFromDrvs "nuget-packages" (
-    import ./deps.nix {
-      fetchNuGet = { pname, version, sha256 }: fetchurl {
-        name = "${pname}.${version}.nupkg";
-        url = "https://www.nuget.org/api/v2/package/${pname}/${version}";
-        inherit sha256;
-      };
-    }
+    import ./deps.nix { inherit fetchNuGet; } ++
+    dotnetSdk.passthru.packages { inherit fetchNuGet; }
   );
 
   dotnetSdk = dotnetCorePackages.sdk_6_0;
@@ -42,13 +43,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "github-runner";
-  version = "2.294.0";
+  version = "2.295.0";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-2MOvqVlUZBmCt24EYSVjXWKR+fB2Mys70L/1/7jtwQQ=";
+    hash = "sha256-C5tINoFkd2PRbpnlSkPL/o59B7+J+so07oVvJu1m3dk=";
   };
 
   nativeBuildInputs = [

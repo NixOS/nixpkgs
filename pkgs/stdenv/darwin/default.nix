@@ -683,7 +683,7 @@ rec {
       __stdenvImpureHostDeps = commonImpureHostDeps;
       __extraImpureHostDeps = commonImpureHostDeps;
 
-      initialPath = import ../common-path.nix { inherit pkgs; };
+      initialPath = import ../generic/common-path.nix { inherit pkgs; };
       shell = "${pkgs.bash}/bin/bash";
 
       cc = pkgs."${finalLlvmPackages}".libcxxClang;

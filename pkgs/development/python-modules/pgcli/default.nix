@@ -1,7 +1,6 @@
 { lib, stdenv
 , buildPythonPackage
 , fetchPypi
-, isPy3k
 , cli-helpers
 , click
 , configobj
@@ -28,6 +27,11 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "sha256-8DkwGH4n1g32WMqKBPtgHsXXR2xzXysVQsat7Fysj+I=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pgspecial>=1.13.1,<2.0.0" "pgspecial>=1.13.1"
+  '';
 
   propagatedBuildInputs = [
     cli-helpers
@@ -57,6 +61,6 @@ buildPythonPackage rec {
     homepage = "https://pgcli.com";
     changelog = "https://github.com/dbcli/pgcli/raw/v${version}/changelog.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ dywedir ];
+    maintainers = with maintainers; [ dywedir SuperSandro2000 ];
   };
 }

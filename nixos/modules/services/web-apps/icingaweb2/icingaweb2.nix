@@ -17,7 +17,7 @@ in {
     pool = mkOption {
       type = str;
       default = poolName;
-      description = ''
+      description = lib.mdDoc ''
          Name of existing PHP-FPM pool that is used to run Icingaweb2.
          If not specified, a pool will automatically created with default values.
       '';
@@ -26,7 +26,7 @@ in {
     libraryPaths = mkOption {
       type = attrsOf package;
       default = { };
-      description = ''
+      description = lib.mdDoc ''
         Libraries to add to the Icingaweb2 library path.
         The name of the attribute is the name of the library, the value
         is the package to add.
@@ -36,7 +36,7 @@ in {
     virtualHost = mkOption {
       type = nullOr str;
       default = "icingaweb2";
-      description = ''
+      description = lib.mdDoc ''
         Name of the nginx virtualhost to use and setup. If null, no virtualhost is set up.
       '';
     };
@@ -45,7 +45,7 @@ in {
       type = str;
       default = "UTC";
       example = "Europe/Berlin";
-      description = "PHP-compliant timezone specification";
+      description = lib.mdDoc "PHP-compliant timezone specification";
     };
 
     modules = {
@@ -64,7 +64,7 @@ in {
           "snow" = icingaweb2Modules.theme-snow;
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Name-package attrset of Icingaweb 2 modules packages to enable.
 
         If you enable modules manually (e.g. via the web ui), they will not be touched.
@@ -84,7 +84,7 @@ in {
           level = "CRITICAL";
         };
       };
-      description = ''
+      description = lib.mdDoc ''
         config.ini contents.
         Will automatically be converted to a .ini file.
         If you don't set global.module_path, the module will take care of it.
@@ -108,7 +108,7 @@ in {
           dbname = "icingaweb2";
         };
       };
-      description = ''
+      description = lib.mdDoc ''
         resources.ini contents.
         Will automatically be converted to a .ini file.
 
@@ -127,7 +127,7 @@ in {
           resource = "icingaweb_db";
         };
       };
-      description = ''
+      description = lib.mdDoc ''
         authentication.ini contents.
         Will automatically be converted to a .ini file.
 
@@ -145,7 +145,7 @@ in {
           resource = "icingaweb_db";
         };
       };
-      description = ''
+      description = lib.mdDoc ''
         groups.ini contents.
         Will automatically be converted to a .ini file.
 
@@ -163,7 +163,7 @@ in {
           permissions = "*";
         };
       };
-      description = ''
+      description = lib.mdDoc ''
         roles.ini contents.
         Will automatically be converted to a .ini file.
 

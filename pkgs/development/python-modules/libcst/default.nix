@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "libcst";
-  version = "0.4.3";
+  version = "0.4.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -25,15 +25,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "instagram";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-Lm62rVL5f+fu4KzOQMroM0Eu27l5v2dkGtRiIVPFNhg=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-YrGajxs8t8PU4XRkFlhwtxoa9pzpKPXq8ZvN/uqftlE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "source/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256-i5BYYiILadKEPIJOaWdG1lZNSHfNQnwmc5j0D1jg/kc=";
+    hash = "sha256-V/WHZVvh8HtD8IUNk3V4e8/E2A8DebqY5i/lS1X6x3o=";
   };
 
   cargoRoot = "native";

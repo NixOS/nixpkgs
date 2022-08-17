@@ -1,15 +1,15 @@
-{ python3Packages, lib }:
+{ python3Packages, lib, nrfutil  }:
 
 with python3Packages;
 
 buildPythonApplication rec {
   pname = "pynitrokey";
-  version = "0.4.9";
+  version = "0.4.26";
   format = "flit";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-mhH6mVgLRX87PSGTFkj1TE75jU1lwcaRZWbC67T+vWo=";
+    sha256 = "sha256-OuLR6txvoOpOUYpkjA5UkXUIIa1hYCwTmmPuUC3i4zM=";
   };
 
   propagatedBuildInputs = [
@@ -18,16 +18,24 @@ buildPythonApplication rec {
     ecdsa
     fido2
     intelhex
+    nrfutil
     pyserial
     pyusb
     requests
     pygments
     python-dateutil
+    spsdk
     urllib3
     cffi
     cbor
     nkdfu
   ];
+
+  # spsdk is patched to allow for newer cryptography
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+        --replace "cryptography >=3.4.4,<37" "cryptography"
+  '';
 
   # no tests
   doCheck = false;

@@ -2,20 +2,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "simple-http-server";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "TheWaWaR";
     repo = pname;
     rev = "v${version}";
-    sha256 = "01a129i1ph3m8k6zkdcqnnkqbhlqpk7qvvdsz2i2kas54csbgsww";
+    sha256 = "sha256-ndLFN9FZZA+zsb+bjZ3gMvQJqo6I92erGOQ44H+/LCg=";
   };
 
-  cargoSha256 = "050avk6wff8v1dlsfvxwvldmmgfakdxmhglv2bhvc2f3q8cf1d5d";
+  cargoLock.lockFile = ./Cargo.lock;
+
+  patches = [ ./0001-cargo-remove-vendored-openssl.patch ];
+  postPatch = ''
+    cp ${./Cargo.lock} Cargo.lock
+  '';
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = if stdenv.isDarwin then [ Security ] else [ openssl ];
+  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
 
   # Currently no tests are implemented, so we avoid building the package twice
   doCheck = false;

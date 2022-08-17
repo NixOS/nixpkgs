@@ -11,7 +11,7 @@ in {
   options.systemd.shutdownRamfs = {
     enable = lib.mkEnableOption "pivoting back to an initramfs for shutdown" // { default = true; };
     contents = lib.mkOption {
-      description = "Set of files that have to be linked into the shutdown ramfs";
+      description = lib.mdDoc "Set of files that have to be linked into the shutdown ramfs";
       example = lib.literalExpression ''
         {
           "/lib/systemd/system-shutdown/zpool-sync-shutdown".source = writeShellScript "zpool" "exec ''${zfs}/bin/zpool sync"
@@ -21,7 +21,7 @@ in {
     };
 
     storePaths = lib.mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Store paths to copy into the shutdown ramfs as well.
       '';
       type = lib.types.listOf lib.types.singleLineStr;

@@ -31,16 +31,8 @@ stdenv.mkDerivation rec {
     libiberty
   ];
 
-  # Disable some tests because they're failing
-  preCheck = ''
-    for f in reloc2 layout1 unprel1 tls3 cxx2 cxx3 quick1 quick2 deps1 deps2; do
-      echo '#' > testsuite/''${f}.sh
-    done
-    patchShebangs --build testsuite
-  '';
-
   # most tests fail
-  doCheck = !stdenv.isAarch64;
+  doCheck = false;
 
   enableParallelBuilding = true;
 

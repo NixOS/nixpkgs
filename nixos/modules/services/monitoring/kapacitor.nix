@@ -62,24 +62,24 @@ in
     dataDir = mkOption {
       type = types.path;
       default = "/var/lib/kapacitor";
-      description = "Location where Kapacitor stores its state";
+      description = lib.mdDoc "Location where Kapacitor stores its state";
     };
 
     port = mkOption {
       type = types.int;
       default = 9092;
-      description = "Port of Kapacitor";
+      description = lib.mdDoc "Port of Kapacitor";
     };
 
     bind = mkOption {
       type = types.str;
       default = "";
       example = "0.0.0.0";
-      description = "Address to bind to. The default is to bind to all addresses";
+      description = lib.mdDoc "Address to bind to. The default is to bind to all addresses";
     };
 
     extraConfig = mkOption {
-      description = "These lines go into kapacitord.conf verbatim.";
+      description = lib.mdDoc "These lines go into kapacitord.conf verbatim.";
       default = "";
       type = types.lines;
     };
@@ -87,24 +87,24 @@ in
     user = mkOption {
       type = types.str;
       default = "kapacitor";
-      description = "User account under which Kapacitor runs";
+      description = lib.mdDoc "User account under which Kapacitor runs";
     };
 
     group = mkOption {
       type = types.str;
       default = "kapacitor";
-      description = "Group under which Kapacitor runs";
+      description = lib.mdDoc "Group under which Kapacitor runs";
     };
 
     taskSnapshotInterval = mkOption {
       type = types.str;
-      description = "Specifies how often to snapshot the task state  (in InfluxDB time units)";
+      description = lib.mdDoc "Specifies how often to snapshot the task state  (in InfluxDB time units)";
       default = "1m0s";
     };
 
     loadDirectory = mkOption {
       type = types.nullOr types.path;
-      description = "Directory where to load services from, such as tasks, templates and handlers (or null to disable service loading on startup)";
+      description = lib.mdDoc "Directory where to load services from, such as tasks, templates and handlers (or null to disable service loading on startup)";
       default = null;
     };
 
@@ -112,18 +112,18 @@ in
       enable = mkEnableOption "kapacitor.defaultDatabase";
 
       url = mkOption {
-        description = "The URL to an InfluxDB server that serves as the default database";
+        description = lib.mdDoc "The URL to an InfluxDB server that serves as the default database";
         example = "http://localhost:8086";
         type = types.str;
       };
 
       username = mkOption {
-        description = "The username to connect to the remote InfluxDB server";
+        description = lib.mdDoc "The username to connect to the remote InfluxDB server";
         type = types.str;
       };
 
       password = mkOption {
-        description = "The password to connect to the remote InfluxDB server";
+        description = lib.mdDoc "The password to connect to the remote InfluxDB server";
         type = types.str;
       };
     };
@@ -132,25 +132,25 @@ in
       enable = mkEnableOption "kapacitor alerta integration";
 
       url = mkOption {
-        description = "The URL to the Alerta REST API";
+        description = lib.mdDoc "The URL to the Alerta REST API";
         default = "http://localhost:5000";
         type = types.str;
       };
 
       token = mkOption {
-        description = "Default Alerta authentication token";
+        description = lib.mdDoc "Default Alerta authentication token";
         type = types.str;
         default = "";
       };
 
       environment = mkOption {
-        description = "Default Alerta environment";
+        description = lib.mdDoc "Default Alerta environment";
         type = types.str;
         default = "Production";
       };
 
       origin = mkOption {
-        description = "Default origin of alert";
+        description = lib.mdDoc "Default origin of alert";
         type = types.str;
         default = "kapacitor";
       };

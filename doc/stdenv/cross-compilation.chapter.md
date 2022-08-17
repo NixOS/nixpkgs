@@ -155,14 +155,14 @@ doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 
 #### Package using Meson needs to run binaries for the host platform during build. {#cross-meson-runs-host-code}
 
-Add `mesonEmulatorHook` cross conditionally to `nativeBuildInputs`.
+Add `mesonEmulatorHook` to `nativeBuildInputs` conditionally on if the target binaries can be executed.
 
 e.g.
 
 ```
 nativeBuildInputs = [
   meson
-] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
   mesonEmulatorHook
 ];
 ```

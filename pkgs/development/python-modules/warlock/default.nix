@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, poetry-core
 , jsonpatch
 , jsonschema
 , six
@@ -10,28 +11,29 @@
 
 buildPythonPackage rec {
   pname = "warlock";
-  version = "1.3.3";
-  format = "setuptools";
+  version = "2.0.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bcwaldon";
     repo = pname;
-    rev = version;
-    hash = "sha256-59V4KOwjs/vhA3F3E0j3p5L4JnKPgcExN+mgSWs0Cn0=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-HOCLzFYmOL/tCXT+NO/tCZuVXVowNEPP3g33ZYg4+6Q=";
   };
 
   postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "jsonschema>=0.7,<4" "jsonschema"
-    sed -i "/--cov/d" pytest.ini
+    sed -i '/--cov/d' pytest.ini
   '';
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     jsonpatch
     jsonschema
-    six
   ];
 
   checkInputs = [

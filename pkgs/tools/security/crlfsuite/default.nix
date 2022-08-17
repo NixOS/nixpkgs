@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "crlfsuite";
-  version = "2.1.1";
+  version = "2.1.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Nefcore";
     repo = "CRLFsuite";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-wWXqeQ6rq4yMG1V9f9JGE91Se8VuU8gpahmYyNTtkmo=";
+    sha256 = "sha256-Olwt19HauTG2HuG4Pro0ImVbQtWqCgx9gV+2RtePT/8=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

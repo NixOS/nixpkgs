@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "cssutils";
-  version = "2.5.0";
+  version = "2.5.1";
 
   disabled = pythonOlder "3.7";
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1H5N1nsowm/5oeVBEV3u05YX/5JlERxtJQD3qBcHeVs=";
+    hash = "sha256-tKTaWOeDJuyfSp01VQBN33BvPpn3oQJsGIDwk0NiuLQ=";
   };
 
   nativeBuildInputs = [

@@ -15,6 +15,11 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook pytest-mock ];
 
+  disabledTests = [
+    # console output order is racy
+    "test_rich_console_ex"
+  ];
+
   pythonImportsCheck = [ "enrich" ];
 
   meta = with lib; {

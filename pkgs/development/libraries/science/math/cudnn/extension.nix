@@ -85,7 +85,7 @@ final: prev: let
       rec {
         fileVersion = "10.2";
         fullVersion = "8.3.2.44";
-        hash = "sha256-mKh4TpKGLyABjSDCgbMNSgzZUfk2lPZDPM9K6cUCumo=";
+        hash = "sha256-1vVu+cqM+PketzIQumw9ykm6REbBZhv6/lXB7EC2aaw=";
         url = "${urlPrefix}/v${majorMinorPatch fullVersion}/local_installers/${fileVersion}/cudnn-linux-x86_64-${fullVersion}_cuda${fileVersion}-archive.tar.xz";
         supportedCudaVersions = [ "10.2" ];
       }

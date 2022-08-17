@@ -249,12 +249,19 @@ stdenv.mkDerivation {
       wrap ${targetPrefix}gdc $wrapper $ccPath/${targetPrefix}gdc
     ''
 
-    + optionalString cc.langFortran or false ''
+    + optionalString cc.langFortran or false (''
       wrap ${targetPrefix}gfortran $wrapper $ccPath/${targetPrefix}gfortran
       ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}g77
       ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}f77
       export named_fc=${targetPrefix}gfortran
     ''
+    # Darwin aarch64 fortran compilations seem to fail otherwise, see:
+    # https://github.com/NixOS/nixpkgs/issues/140041
+    + (if (stdenvNoCC.isDarwin && stdenvNoCC.isAarch64) then ''
+      export fortran_hardening="pic strictoverflow relro bindnow"
+    '' else ''
+      export fortran_hardening="pic strictoverflow relro bindnow stackprotector"
+    ''))
 
     + optionalString cc.langJava or false ''
       wrap ${targetPrefix}gcj $wrapper $ccPath/${targetPrefix}gcj
@@ -374,7 +381,6 @@ stdenv.mkDerivation {
     + optionalString (libcxx.isLLVM or false) (''
       echo "-isystem ${lib.getDev libcxx}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
       echo "-stdlib=libc++" >> $out/nix-support/libcxx-ldflags
-    '' + lib.optionalString stdenv.targetPlatform.isLinux ''
       echo "-lc++abi" >> $out/nix-support/libcxx-ldflags
     '')
 
@@ -474,7 +480,7 @@ stdenv.mkDerivation {
       hardening_unsupported_flags+=" stackprotector fortify"
     '' + optionalString targetPlatform.isAvr ''
       hardening_unsupported_flags+=" stackprotector pic"
-    '' + optionalString (targetPlatform.libc == "newlib") ''
+    '' + optionalString (targetPlatform.libc == "newlib" || targetPlatform.libc == "newlib-nano") ''
       hardening_unsupported_flags+=" stackprotector fortify pie pic"
     '' + optionalString (targetPlatform.libc == "musl" && targetPlatform.isx86_32) ''
       hardening_unsupported_flags+=" stackprotector"

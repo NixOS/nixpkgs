@@ -33,12 +33,12 @@ in
         frequency = mkOption {
           type = types.str;
           default = "hourly";
-          description = ''
+          description = lib.mdDoc ''
             How often to trigger the queue cleaner.
 
             NOTE: This string should be a valid value for a systemd
-            timer's <literal>OnCalendar</literal> configuration. See
-            <citerefentry><refentrytitle>systemd.timer</refentrytitle><manvolnum>5</manvolnum></citerefentry>
+            timer's `OnCalendar` configuration. See
+            {manpage}`systemd.timer(5)`
             for more information.
           '';
         };
@@ -46,7 +46,7 @@ in
         parallel = mkOption {
           type = types.ints.unsigned;
           default = 20;
-          description = ''
+          description = lib.mdDoc ''
             The number of parallel deletes to run.
           '';
         };
@@ -55,7 +55,7 @@ in
       instanceId = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           The instance ID to listen for events for.
         '';
       };
@@ -63,7 +63,7 @@ in
       snsTopic = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           The SNS topic that receives events.
         '';
       };
@@ -71,14 +71,14 @@ in
       noSpot = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Disable the spot termination listener.
         '';
       };
 
       handler = mkOption {
         type = types.path;
-        description = ''
+        description = lib.mdDoc ''
           The script to invoke to handle events.
         '';
       };
@@ -86,7 +86,7 @@ in
       json = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable JSON logging.
         '';
       };
@@ -94,7 +94,7 @@ in
       cloudwatchGroup = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Write logs to a specific Cloudwatch Logs group.
         '';
       };
@@ -102,7 +102,7 @@ in
       cloudwatchStream = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Write logs to a specific Cloudwatch Logs stream. Defaults to the instance ID.
         '';
       };
@@ -110,7 +110,7 @@ in
       debug = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable debugging information.
         '';
       };
@@ -120,7 +120,7 @@ in
       awsRegion = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           The region used for accessing AWS services.
         '';
       };

@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "convimg";
-  version = "8.9";
+  version = "8.10.2";
 
   src = fetchFromGitHub {
     owner = "mateoconlechuga";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-JTKyOjeiu6FAUrDPDAwLBVgZwmNY11wHonqEV1ukRpw=";
+    sha256 = "sha256-mXwgTltYSBgBm2z1gDRCFqJbRoEuDbQAIoDlr2Kjmi0=";
     fetchSubmodules = true;
   };
 

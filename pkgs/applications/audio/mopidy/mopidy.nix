@@ -35,6 +35,10 @@ pythonPackages.buildPythonApplication rec {
     ] ++ lib.optional (!stdenv.isDarwin) dbus-python
   );
 
+  propagatedNativeBuildInputs = [
+    gobject-introspection
+  ];
+
   # There are no tests
   doCheck = false;
 

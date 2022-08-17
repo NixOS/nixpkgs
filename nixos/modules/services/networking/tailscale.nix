@@ -17,26 +17,26 @@ in {
     port = mkOption {
       type = types.port;
       default = 41641;
-      description = "The port to listen on for tunnel traffic (0=autoselect).";
+      description = lib.mdDoc "The port to listen on for tunnel traffic (0=autoselect).";
     };
 
     interfaceName = mkOption {
       type = types.str;
       default = "tailscale0";
-      description = ''The interface name for tunnel traffic. Use "userspace-networking" (beta) to not use TUN.'';
+      description = lib.mdDoc ''The interface name for tunnel traffic. Use "userspace-networking" (beta) to not use TUN.'';
     };
 
     permitCertUid = mkOption {
       type = types.nullOr types.nonEmptyStr;
       default = null;
-      description = "Username or user ID of the user allowed to to fetch Tailscale TLS certificates for the node.";
+      description = lib.mdDoc "Username or user ID of the user allowed to to fetch Tailscale TLS certificates for the node.";
     };
 
     package = mkOption {
       type = types.package;
       default = pkgs.tailscale;
       defaultText = literalExpression "pkgs.tailscale";
-      description = "The package to use for tailscale";
+      description = lib.mdDoc "The package to use for tailscale";
     };
   };
 

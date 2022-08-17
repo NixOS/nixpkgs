@@ -48,7 +48,6 @@ buildPythonPackage rec {
     # Depend on pyopenssl
     "--deselect tests/test_tcp.py::Test_UV_TCPSSL::test_flush_before_shutdown"
     "--deselect tests/test_tcp.py::Test_UV_TCPSSL::test_renegotiation"
-  ] ++ lib.optionals (stdenv.isAarch32 || stdenv.isAarch64) [
     # test gets stuck in epoll_pwait on hydras aarch64 builders
     # https://github.com/MagicStack/uvloop/issues/412
     "--deselect tests/test_tcp.py::Test_AIO_TCPSSL::test_remote_shutdown_receives_trailing_data"

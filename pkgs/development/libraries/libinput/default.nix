@@ -32,7 +32,7 @@ let
       env = python3.withPackages (pp: with pp; [
         sphinx
         recommonmark
-        sphinx_rtd_theme
+        sphinx-rtd-theme
       ]);
     in
     # Expose only the sphinx-build binary to avoid contaminating

@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "toolz";
-  version = "0.11.2";
+  version = "0.12.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6b312d5e15138552f1bda8a4e66c30e236c831b612b2bf0005f8a1df10a4bc33";
+    sha256 = "sha256-iMVwhhxEDuPy9gN8RlRhMij/QMk6bCXg66cNFygsYZQ=";
   };
 
   checkInputs = [ pytestCheckHook ];

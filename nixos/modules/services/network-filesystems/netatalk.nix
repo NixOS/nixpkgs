@@ -15,7 +15,7 @@ in {
       port = mkOption {
         type = types.port;
         default = 548;
-        description = "TCP port to be used for AFP.";
+        description = lib.mdDoc "TCP port to be used for AFP.";
       };
 
       settings = mkOption {
@@ -32,20 +32,18 @@ in {
             "read only" = true;
           };
         };
-        description = ''
+        description = lib.mdDoc ''
           Configuration for Netatalk. See
-          <citerefentry><refentrytitle>afp.conf</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>.
+          {manpage}`afp.conf(5)`.
         '';
       };
 
       extmap = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           File name extension mappings.
-          See <citerefentry><refentrytitle>extmap.conf</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>. for more information.
+          See {manpage}`extmap.conf(5)`. for more information.
         '';
       };
 

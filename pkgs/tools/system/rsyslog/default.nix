@@ -11,11 +11,11 @@
 with lib;
 stdenv.mkDerivation rec {
   pname = "rsyslog";
-  version = "8.2204.1";
+  version = "8.2208.0";
 
   src = fetchurl {
     url = "https://www.rsyslog.com/files/download/rsyslog/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ptcx5GrT1k9q1LGbvxv1bKR2CkSiS7loIxidwucfcCg=";
+    sha256 = "sha256-FN5o57jlqwxdc0+C4tyf/yLNf0cQrWkHJ+sQp7mz314=";
   };
 
   #patches = [ ./fix-gnutls-detection.patch ];

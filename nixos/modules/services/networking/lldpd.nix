@@ -15,7 +15,7 @@ in
       type = types.listOf types.str;
       default = [];
       example = [ "-c" "-k" "-I eth0" ];
-      description = "List of command line parameters for lldpd";
+      description = lib.mdDoc "List of command line parameters for lldpd";
     };
   };
 

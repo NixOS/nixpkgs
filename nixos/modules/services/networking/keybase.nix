@@ -14,7 +14,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to start the Keybase service.";
+        description = lib.mdDoc "Whether to start the Keybase service.";
       };
 
     };

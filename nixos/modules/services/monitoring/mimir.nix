@@ -13,7 +13,7 @@ in {
     configuration = mkOption {
       type = (pkgs.formats.json {}).type;
       default = {};
-      description = ''
+      description = lib.mdDoc ''
         Specify the configuration for Mimir in Nix.
       '';
     };
@@ -21,7 +21,7 @@ in {
     configFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Specify a configuration file that Mimir should use.
       '';
     };

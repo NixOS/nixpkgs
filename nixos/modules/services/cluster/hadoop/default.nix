@@ -5,7 +5,7 @@ let
 in
 with lib;
 {
-  imports = [ ./yarn.nix ./hdfs.nix ];
+  imports = [ ./yarn.nix ./hdfs.nix ./hbase.nix ];
 
   options.services.hadoop = {
     coreSite = mkOption {
@@ -16,9 +16,9 @@ with lib;
           "fs.defaultFS" = "hdfs://localhost";
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Hadoop core-site.xml definition
-        <link xlink:href="https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/core-default.xml"/>
+        <https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/core-default.xml>
       '';
     };
     coreSiteInternal = mkOption {
@@ -38,7 +38,7 @@ with lib;
         "dfs.namenode.http-bind-host" = "0.0.0.0";
       };
       type = types.attrsOf types.anything;
-      description = ''
+      description = lib.mdDoc ''
         Default options for hdfs-site.xml
       '';
     };
@@ -50,9 +50,9 @@ with lib;
           "dfs.nameservices" = "namenode1";
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Additional options and overrides for hdfs-site.xml
-        <link xlink:href="https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml"/>
+        <https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml>
       '';
     };
     hdfsSiteInternal = mkOption {
@@ -80,7 +80,7 @@ with lib;
         }
       '';
       type = types.attrsOf types.anything;
-      description = ''
+      description = lib.mdDoc ''
         Default options for mapred-site.xml
       '';
     };
@@ -92,9 +92,9 @@ with lib;
           "mapreduce.map.java.opts" = "-Xmx900m -XX:+UseParallelGC";
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Additional options and overrides for mapred-site.xml
-        <link xlink:href="https://hadoop.apache.org/docs/current/hadoop-mapreduce-client/hadoop-mapreduce-client-core/mapred-default.xml"/>
+        <https://hadoop.apache.org/docs/current/hadoop-mapreduce-client/hadoop-mapreduce-client-core/mapred-default.xml>
       '';
     };
 
@@ -113,7 +113,7 @@ with lib;
         "yarn.resourcemanager.scheduler.class" = "org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler";
       };
       type = types.attrsOf types.anything;
-      description = ''
+      description = lib.mdDoc ''
         Default options for yarn-site.xml
       '';
     };
@@ -125,9 +125,9 @@ with lib;
           "yarn.resourcemanager.hostname" = "''${config.networking.hostName}";
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Additional options and overrides for yarn-site.xml
-        <link xlink:href="https://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-common/yarn-default.xml"/>
+        <https://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-common/yarn-default.xml>
       '';
     };
     yarnSiteInternal = mkOption {
@@ -147,9 +147,9 @@ with lib;
           "hadoop.http.max.threads" = 500;
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Hadoop httpfs-site.xml definition
-        <link xlink:href="https://hadoop.apache.org/docs/current/hadoop-hdfs-httpfs/httpfs-default.html"/>
+        <https://hadoop.apache.org/docs/current/hadoop-hdfs-httpfs/httpfs-default.html>
       '';
     };
 
@@ -162,7 +162,7 @@ with lib;
       example = literalExpression ''
         "''${pkgs.hadoop}/lib/''${pkgs.hadoop.untarDir}/etc/hadoop/log4j.properties";
       '';
-      description = "log4j.properties file added to HADOOP_CONF_DIR";
+      description = lib.mdDoc "log4j.properties file added to HADOOP_CONF_DIR";
     };
 
     containerExecutorCfg = mkOption {
@@ -179,9 +179,9 @@ with lib;
           "feature.terminal.enabled" = 0;
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Yarn container-executor.cfg definition
-        <link xlink:href="https://hadoop.apache.org/docs/r2.7.2/hadoop-yarn/hadoop-yarn-site/SecureContainer.html"/>
+        <https://hadoop.apache.org/docs/r2.7.2/hadoop-yarn/hadoop-yarn-site/SecureContainer.html>
       '';
     };
 
@@ -194,7 +194,7 @@ with lib;
           ./extraYARNConfs
         ]
       '';
-      description = "Directories containing additional config files to be added to HADOOP_CONF_DIR";
+      description = lib.mdDoc "Directories containing additional config files to be added to HADOOP_CONF_DIR";
     };
 
     gatewayRole.enable = mkEnableOption "gateway role for deploying hadoop configs";

@@ -25,33 +25,33 @@ in
     storageDriver = mkOption {
       type = types.enum [ "btrfs" "overlay" "vfs" ];
       default = "overlay";
-      description = "Storage driver to be used";
+      description = lib.mdDoc "Storage driver to be used";
     };
 
     logLevel = mkOption {
       type = types.enum [ "trace" "debug" "info" "warn" "error" "fatal" ];
       default = "info";
-      description = "Log level to be used";
+      description = lib.mdDoc "Log level to be used";
     };
 
     pauseImage = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = "Override the default pause image for pod sandboxes";
+      description = lib.mdDoc "Override the default pause image for pod sandboxes";
       example = "k8s.gcr.io/pause:3.2";
     };
 
     pauseCommand = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = "Override the default pause command";
+      description = lib.mdDoc "Override the default pause command";
       example = "/pause";
     };
 
     runtime = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = "Override the default runtime";
+      description = lib.mdDoc "Override the default runtime";
       example = "crun";
     };
 
@@ -63,7 +63,7 @@ in
           pkgs.gvisor
         ]
       '';
-      description = ''
+      description = lib.mdDoc ''
         Extra packages to be installed in the CRI-O wrapper.
       '';
     };
@@ -87,9 +87,9 @@ in
     settings = mkOption {
       type = format.type;
       default = { };
-      description = ''
+      description = lib.mdDoc ''
         Configuration for cri-o, see
-        <link xlink:href="https://github.com/cri-o/cri-o/blob/master/docs/crio.conf.5.md"/>.
+        <https://github.com/cri-o/cri-o/blob/master/docs/crio.conf.5.md>.
       '';
     };
   };

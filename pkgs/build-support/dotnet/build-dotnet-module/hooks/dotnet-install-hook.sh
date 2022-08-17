@@ -6,6 +6,12 @@ dotnetInstallHook() {
 
     runHook preInstall
 
+    if [ "${selfContainedBuild-}" ]; then
+        dotnetInstallFlags+=("--self-contained")
+    else
+        dotnetInstallFlags+=("--no-self-contained")
+    fi
+
     for project in ${projectFile[@]}; do
         env \
             dotnet publish "$project" \
@@ -15,7 +21,6 @@ dotnetInstallHook() {
                 --output "$out/lib/${pname}" \
                 --configuration "@buildType@" \
                 --no-build \
-                --no-self-contained \
                 ${dotnetInstallFlags[@]}  \
                 ${dotnetFlags[@]}
     done

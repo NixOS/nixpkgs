@@ -2,6 +2,7 @@
 , runCommand
 , makeWrapper
 , lib
+, stdenv
 , extraPackages ? []
 , buildah
 , runc # Default container runtime
@@ -20,6 +21,7 @@ let
   preferLocalBuild = true;
 
   binPath = lib.makeBinPath ([
+  ] ++ lib.optionals stdenv.isLinux [
     runc
     crun
     conmon

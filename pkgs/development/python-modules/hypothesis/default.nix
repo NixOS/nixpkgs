@@ -1,8 +1,8 @@
 { lib
 , buildPythonPackage
-, pythonAtLeast
 , fetchFromGitHub
 , attrs
+, exceptiongroup
 , pexpect
 , doCheck ? true
 , pytestCheckHook
@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "hypothesis";
-  version = "6.46.10";
+  version = "6.50.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "HypothesisWorks";
     repo = "hypothesis";
     rev = "hypothesis-python-${version}";
-    hash = "sha256-eQ7Ns0k1hOVw8/xiINMei6GbQqDHXrBl+1v8YQeFO9Q=";
+    hash = "sha256-G7OXlYaCPBfdXtmX/f/6i2LRCZZk5yvzhLc6sissuRo=";
   };
 
   postUnpack = "sourceRoot=$sourceRoot/hypothesis-python";
@@ -30,6 +30,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     attrs
     sortedcontainers
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    exceptiongroup
   ];
 
   checkInputs = [

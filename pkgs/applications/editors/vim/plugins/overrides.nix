@@ -824,6 +824,10 @@ self: super: {
     meta.platforms = lib.platforms.all;
   });
 
+  telescope-media-files-nvim = super.telescope-media-files-nvim.overrideAttrs (old: {
+    dependencies = with self; [ telescope-nvim popup-nvim plenary-nvim ];
+  });
+
   telescope-nvim = super.telescope-nvim.overrideAttrs (old: {
     dependencies = with self; [ plenary-nvim ];
   });
@@ -974,7 +978,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "sha256-9Vr1gpggfAQlMgM/s8j6FTTYFppHql2PQ7cPtg1wNmo=";
+          cargoSha256 = "sha256-prqS4cx5T+EiilXf3v7ResNBtgst0Kpgvayknf0QDXA=";
         };
       in
       ''

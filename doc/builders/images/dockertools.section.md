@@ -36,6 +36,9 @@ buildImage {
     WorkingDir = "/data";
     Volumes = { "/data" = { }; };
   };
+
+  diskSize = 1024;
+  buildVMMemorySize = 512;
 }
 ```
 
@@ -58,6 +61,10 @@ The above example will build a Docker image `redis/latest` from the given base i
 > **_NOTE:_** Using this parameter requires the `kvm` device to be available.
 
 - `config` is used to specify the configuration of the containers that will be started off the built image in Docker. The available options are listed in the [Docker Image Specification v1.2.0](https://github.com/moby/moby/blob/master/image/spec/v1.2.md#image-json-field-descriptions).
+
+- `diskSize` is used to specify the disk size of the VM used to build the image in megabytes. By default it's 1024 MiB.
+
+- `buildVMMemorySize` is used to specify the memory size of the VM to build the image in megabytes. By default it's 512 MiB.
 
 After the new layer has been created, its closure (to which `contents`, `config` and `runAsRoot` contribute) will be copied in the layer itself. Only new dependencies that are not already in the existing layers will be copied.
 
@@ -321,3 +328,32 @@ buildImage {
 ```
 
 Creating base files like `/etc/passwd` or `/etc/login.defs` is necessary for shadow-utils to manipulate users and groups.
+
+## fakeNss {#ssec-pkgs-dockerTools-fakeNss}
+
+If your primary goal is providing a basic skeleton for user lookups to work,
+and/or a lesser privileged user, adding `pkgs.fakeNss` to
+the container image root might be the better choice than a custom script
+running `useradd` and friends.
+
+It provides a `/etc/passwd` and `/etc/group`, containing `root` and `nobody`
+users and groups.
+
+It also provides a `/etc/nsswitch.conf`, configuring NSS host resolution to
+first check `/etc/hosts`, before checking DNS, as the default in the absence of
+a config file (`dns [!UNAVAIL=return] files`) is quite unexpected.
+
+You can pair it with `binSh`, which provides `bin/sh` as a symlink
+to `bashInteractive` (as `/bin/sh` is configured as a shell).
+
+```nix
+buildImage {
+  name = "shadow-basic";
+
+  copyToRoot = pkgs.buildEnv {
+    name = "image-root";
+    paths = [ binSh pkgs.fakeNss ];
+    pathsToLink = [ "/bin" "/etc" "/var" ];
+  };
+}
+```

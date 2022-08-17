@@ -1,7 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytest
+, fastjsonschema
+, pytestCheckHook
 , glibcLocales
 , ipython_genutils
 , traitlets
@@ -12,17 +13,17 @@
 
 buildPythonPackage rec {
   pname = "nbformat";
-  version = "5.2.0";
+  version = "5.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-k98LnGciHTj7lwxI9tNhgZpsOIKZoO8xcbu5Eu3+EyQ=";
+    sha256 = "sha256-RLpcpqy4DF1aUA8eW4Pt6MvjZNWklcTIz2Cq8bplZQE=";
   };
 
   LC_ALL="en_US.utf8";
 
-  checkInputs = [ pytest glibcLocales ];
-  propagatedBuildInputs = [ ipython_genutils traitlets testpath jsonschema jupyter_core ];
+  checkInputs = [ pytestCheckHook glibcLocales ];
+  propagatedBuildInputs = [ ipython_genutils traitlets testpath jsonschema jupyter_core fastjsonschema ];
 
   preCheck = ''
     mkdir tmp

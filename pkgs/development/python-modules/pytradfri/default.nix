@@ -4,12 +4,13 @@
 , fetchFromGitHub
 , aiocoap
 , dtlssocket
+, pydantic
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pytradfri";
-  version = "9.0.0";
+  version = "11.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -17,9 +18,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "pytradfri";
-    rev = version;
-    hash = "sha256-12ol+2CnoPfkxmDGJJAkoafHGpQuWC4lh0N7lSvx2DE=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-+OOmoh2HLKiHAqOIH2aB4CZcW/ND/0bszgkcdRMYBlc=";
   };
+
+  propagatedBuildInputs = [
+    pydantic
+  ];
 
   passthru.optional-dependencies = {
     async = [

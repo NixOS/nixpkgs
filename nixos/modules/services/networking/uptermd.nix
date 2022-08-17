@@ -13,15 +13,15 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = ''
-          Whether to open the firewall for the port in <option>services.uptermd.port</option>.
+        description = lib.mdDoc ''
+          Whether to open the firewall for the port in {option}`services.uptermd.port`.
         '';
       };
 
       port = mkOption {
         type = types.port;
         default = 2222;
-        description = ''
+        description = lib.mdDoc ''
           Port the server will listen on.
         '';
       };
@@ -30,7 +30,7 @@ in
         type = types.str;
         default = "[::]";
         example = "127.0.0.1";
-        description = ''
+        description = lib.mdDoc ''
           Address the server will listen on.
         '';
       };
@@ -39,7 +39,7 @@ in
         type = types.nullOr types.path;
         default = null;
         example = "/run/keys/upterm_host_ed25519_key";
-        description = ''
+        description = lib.mdDoc ''
           Path to SSH host key. If not defined, an ed25519 keypair is generated automatically.
         '';
       };
@@ -48,7 +48,7 @@ in
         type = types.listOf types.str;
         default = [];
         example = [ "--debug" ];
-        description = ''
+        description = lib.mdDoc ''
           Extra flags passed to the uptermd command.
         '';
       };

@@ -13,7 +13,7 @@ in {
     settings = mkOption {
       type = settingsFormat.type;
       default = {};
-      description = ''
+      description = lib.mdDoc ''
         Specify the configuration for Tempo in Nix.
 
         See https://grafana.com/docs/tempo/latest/configuration/ for available options.
@@ -23,7 +23,7 @@ in {
     configFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Specify a path to a configuration file that Tempo should use.
       '';
     };

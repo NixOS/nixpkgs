@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "watchdog";
-  version = "2.1.8";
+  version = "2.1.9";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-bQMUkSaGSr0ycV1OkmfSdUzt4lppBSkBOZNWrTvF7P8=";
+    sha256 = "sha256-Q84g67NqUfIfo3b3bR1GkkUrJSfM1gGVDWntNrniFgk=";
   };
 
   patches = lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [

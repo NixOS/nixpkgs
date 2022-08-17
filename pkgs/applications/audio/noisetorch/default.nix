@@ -12,7 +12,7 @@ buildGoModule rec {
     fetchSubmodules = true;
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
 

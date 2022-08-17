@@ -42,6 +42,7 @@ buildPythonPackage rec {
     # boolean list representation changed
     "test_get_abi_strategy_returns_certain_strategies_for_known_type_strings"
     # hypothesis.errors.Flaky
+    "test_base_equals_has_expected_behavior_for_parsable_types"
     "test_has_arrlist_has_expected_behavior_for_parsable_types"
     "test_is_base_tuple_has_expected_behavior_for_parsable_types"
   ];

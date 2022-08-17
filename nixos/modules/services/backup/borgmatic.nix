@@ -11,7 +11,7 @@ in {
     enable = mkEnableOption "borgmatic";
 
     settings = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         See https://torsion.org/borgmatic/docs/reference/configuration/
       '';
       type = types.submodule {
@@ -19,7 +19,7 @@ in {
         options.location = {
           source_directories = mkOption {
             type = types.listOf types.str;
-            description = ''
+            description = lib.mdDoc ''
               List of source directories to backup (required). Globs and
               tildes are expanded.
             '';
@@ -27,7 +27,7 @@ in {
           };
           repositories = mkOption {
             type = types.listOf types.str;
-            description = ''
+            description = lib.mdDoc ''
               Paths to local or remote repositories (required). Tildes are
               expanded. Multiple repositories are backed up to in
               sequence. Borg placeholders can be used. See the output of

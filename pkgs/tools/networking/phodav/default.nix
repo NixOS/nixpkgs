@@ -1,9 +1,17 @@
-{ lib, stdenv, fetchurl
-, pkg-config, libsoup, meson, ninja }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, libsoup
+, meson
+, ninja
+}:
 
 let
   version = "2.5";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "phodav";
   inherit version;
 
@@ -12,6 +20,17 @@ in stdenv.mkDerivation rec {
     sha256 = "045rdzf8isqmzix12lkz6z073b5qvcqq6ad028advm5gf36skw3i";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/phodav/-/commit/ae9ac98c1b3db26070111661aba02594c62d2cef.patch";
+      sha256 = "sha256-jIHG6aRqG00Q6aIQsn4tyQdy/b6juW6QiUPXLmIc3TE=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/phodav/-/commit/560ab5ca4f836d82bddbbe66ea0f7c6b4cab6b3b.patch";
+      sha256 = "sha256-2gP579qhEkp7fQ8DBGYbZcjb2Tr+WpJs30Z7lsQaz2g=";
+    })
+  ];
+
   mesonFlags = [
     "-Davahi=disabled"
     "-Dsystemd=disabled"
@@ -19,15 +38,22 @@ in stdenv.mkDerivation rec {
     "-Dudev=disabled"
   ];
 
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lintl";
+
   nativeBuildInputs = [ libsoup pkg-config meson ninja ];
 
   outputs = [ "out" "dev" "lib" ];
+
+  # We need to do this in pre-configure before the data/ folder disappears.
+  preConfigure = ''
+    install -vDt $out/lib/udev/rules.d/ data/*-spice-webdavd.rules
+  '';
 
   meta = with lib; {
     description = "WebDav server implementation and library using libsoup";
     homepage = "https://wiki.gnome.org/phodav";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.unix;
   };
 }

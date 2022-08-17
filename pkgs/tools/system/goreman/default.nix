@@ -1,24 +1,24 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, testers, goreman }:
 
 buildGoModule rec {
   pname = "goreman";
-  version = "0.3.11";
-  rev = "6006c6e410ec5a5ba22b50e96227754a42f2834d";
+  version = "0.3.13";
 
   src = fetchFromGitHub {
     owner = "mattn";
     repo = "goreman";
     rev = "v${version}";
-    sha256 = "sha256-TbJfeU94wakI2028kDqU+7dRRmqXuqpPeL4XBaA/HPo=";
+    sha256 = "sha256-BQMRkXHac2Is3VvqrBFA+/NrR3sw/gA1k3fPi3EzONQ=";
   };
 
-  ldflags = [
-    "-s"
-    "-w"
-    "-X main.revision=${builtins.substring 0 7 rev}"
-  ];
+  vendorSha256 = "sha256-BWfhvJ6kPz3X3TpHNvRIBgfUAQJB2f/lngRvHq91uyw=";
 
-  vendorSha256 = "sha256-87aHBRWm5Odv6LeshZty5N31sC+vdSwGlTYhk3BZkPo=";
+  ldflags = [ "-s" "-w" ];
+
+  passthru.tests.version = testers.testVersion {
+    package = goreman;
+    command = "goreman version";
+  };
 
   meta = with lib; {
     description = "foreman clone written in go language";

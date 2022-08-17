@@ -39,7 +39,8 @@ self: super: {
   rts = null;
   stm = null;
   template-haskell = null;
-  terminfo = null;
+  # GHC only builds terminfo if it is a native compiler
+  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_5;
   text = null;
   time = null;
   transformers = null;
@@ -97,9 +98,9 @@ self: super: {
       self.data-default
     ] ++ drv.libraryHaskellDepends or [];
   }) super.ghc-exactprint;
-  ghc-lib = self.ghc-lib_9_2_3_20220709;
-  ghc-lib-parser = self.ghc-lib-parser_9_2_3_20220709;
-  ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_1_0;
+  ghc-lib = doDistribute self.ghc-lib_9_2_4_20220729;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_2_4_20220729;
+  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_2_1_1;
   hackage-security = doJailbreak super.hackage-security;
   hashable = super.hashable_1_4_0_2;
   hashable-time = doJailbreak super.hashable-time;
@@ -112,7 +113,7 @@ self: super: {
   lifted-async = doJailbreak super.lifted-async;
   lukko = doJailbreak super.lukko;
   lzma-conduit = doJailbreak super.lzma-conduit;
-  ormolu = self.ormolu_0_5_0_0;
+  ormolu = self.ormolu_0_5_0_1;
   parallel = doJailbreak super.parallel;
   path = doJailbreak super.path;
   polyparse = overrideCabal (drv: { postPatch = "sed -i -e 's, <0.11, <0.12,' polyparse.cabal"; }) (doJailbreak super.polyparse);
@@ -189,7 +190,9 @@ self: super: {
   implicit-hie-cradle = doJailbreak super.implicit-hie-cradle;
   # 1.3 introduced support for GHC 9.2.x, so when this assert fails, the jailbreak can be removed
   hashtables = assert super.hashtables.version == "1.2.4.2"; doJailbreak super.hashtables;
-  hiedb = doJailbreak super.hiedb;
+
+  # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
+  hiedb = doJailbreak (dontCheck super.hiedb);
 
   # 2022-02-05: The following plugins don‘t work yet on ghc9.2.
   # Compare: https://haskell-language-server.readthedocs.io/en/latest/supported-versions.html

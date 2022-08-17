@@ -12,7 +12,7 @@ in
     xmppHost = mkOption {
       type = str;
       example = "localhost";
-      description = ''
+      description = lib.mdDoc ''
         Hostname of the XMPP server to connect to.
       '';
     };
@@ -20,17 +20,17 @@ in
     xmppDomain = mkOption {
       type = nullOr str;
       example = "meet.example.org";
-      description = ''
+      description = lib.mdDoc ''
         Domain name of the XMMP server to which to connect as a component.
 
-        If null, <option>xmppHost</option> is used.
+        If null, {option}`xmppHost` is used.
       '';
     };
 
     componentPasswordFile = mkOption {
       type = str;
       example = "/run/keys/jicofo-component";
-      description = ''
+      description = lib.mdDoc ''
         Path to file containing component secret.
       '';
     };
@@ -38,7 +38,7 @@ in
     userName = mkOption {
       type = str;
       default = "focus";
-      description = ''
+      description = lib.mdDoc ''
         User part of the JID for XMPP user connection.
       '';
     };
@@ -46,7 +46,7 @@ in
     userDomain = mkOption {
       type = str;
       example = "auth.meet.example.org";
-      description = ''
+      description = lib.mdDoc ''
         Domain part of the JID for XMPP user connection.
       '';
     };
@@ -54,7 +54,7 @@ in
     userPasswordFile = mkOption {
       type = str;
       example = "/run/keys/jicofo-user";
-      description = ''
+      description = lib.mdDoc ''
         Path to file containing password for XMPP user connection.
       '';
     };
@@ -62,7 +62,7 @@ in
     bridgeMuc = mkOption {
       type = str;
       example = "jvbbrewery@internal.meet.example.org";
-      description = ''
+      description = lib.mdDoc ''
         JID of the internal MUC used to communicate with Videobridges.
       '';
     };
@@ -75,8 +75,8 @@ in
           "org.jitsi.jicofo.auth.URL" = "XMPP:jitsi-meet.example.com";
         }
       '';
-      description = ''
-        Contents of the <filename>sip-communicator.properties</filename> configuration file for jicofo.
+      description = lib.mdDoc ''
+        Contents of the {file}`sip-communicator.properties` configuration file for jicofo.
       '';
     };
   };

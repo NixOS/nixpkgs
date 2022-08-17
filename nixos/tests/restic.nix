@@ -63,6 +63,12 @@ import ./make-test-python.nix (
               inherit repository passwordFile;
               pruneOpts = [ "--keep-last 1" ];
             };
+            custompackage = {
+              inherit repository passwordFile paths;
+              package = pkgs.writeShellScriptBin "restic" ''
+                echo "$@" >> /tmp/fake-restic.log;
+              '';
+            };
           };
 
           environment.sessionVariables.RCLONE_CONFIG_LOCAL_TYPE = "local";
@@ -76,6 +82,7 @@ import ./make-test-python.nix (
           "${pkgs.restic}/bin/restic -r ${repository} -p ${passwordFile} snapshots",
           '${pkgs.restic}/bin/restic --repository-file ${repositoryFile} -p ${passwordFile} snapshots"',
           "${pkgs.restic}/bin/restic -r ${rcloneRepository} -p ${passwordFile} snapshots",
+          "grep 'backup .* /opt' /tmp/fake-restic.log",
       )
       server.succeed(
           "mkdir -p /opt",
@@ -89,6 +96,8 @@ import ./make-test-python.nix (
           '${pkgs.restic}/bin/restic -r ${repository} -p ${passwordFile} snapshots -c | grep -e "^1 snapshot"',
           '${pkgs.restic}/bin/restic --repository-file ${repositoryFile} -p ${passwordFile} snapshots -c | grep -e "^1 snapshot"',
           '${pkgs.restic}/bin/restic -r ${rcloneRepository} -p ${passwordFile} snapshots -c | grep -e "^1 snapshot"',
+          "systemctl start restic-backups-custompackage.service",
+          "grep 'backup .* /opt' /tmp/fake-restic.log",
           "timedatectl set-time '2017-12-13 13:45'",
           "systemctl start restic-backups-remotebackup.service",
           "rm /opt/backupCleanupCommand",

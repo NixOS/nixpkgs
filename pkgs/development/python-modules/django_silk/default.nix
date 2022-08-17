@@ -26,22 +26,15 @@
 
 buildPythonPackage rec {
   pname = "django-silk";
-  version = "4.1.0";
+  version = "5.0.1";
 
   # pypi tarball doesn't include test project
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-silk";
     rev = version;
-    sha256 = "1km3hmx1sir0c5gqr2p1h2938slhxp2hzf10cb80q98mas8spjkn";
+    hash = "sha256-U2lj0B85cf2xu0o7enuLJB5YKaIt6gMvn+TgxleLslk=";
   };
-
-  patches = lib.optional (pythonAtLeast "3.9") (fetchpatch {
-    # should be able to remove after 4.1.1
-    name = "python-3.9-support.patch";
-    url = "https://github.com/jazzband/django-silk/commit/134089e4cad7bd3b76fb0f70c423082cb7d2b34a.patch";
-    sha256 = "09c1xd9y33h3ibiv5w9af9d79c909rgc1g5sxpd4y232h5id3c8r";
-  });
 
   # "test_time_taken" tests aren't suitable for reproducible execution, but django's
   # test runner doesn't have an easy way to ignore tests - so instead prevent it from picking
@@ -62,8 +55,13 @@ buildPythonPackage rec {
 
   checkInputs = [ freezegun contextlib2 networkx pydot factory_boy ];
   checkPhase = ''
-    cd project
-    DB=sqlite3 DB_NAME=db.sqlite3 ${python.interpreter} manage.py test
+    runHook preCheck
+
+    pushd project
+    DB_ENGINE=sqlite3 DB_NAME=':memory:' ${python.interpreter} manage.py test
+    popd # project
+
+    runHook postCheck
   '';
 
   meta = with lib; {

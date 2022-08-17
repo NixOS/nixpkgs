@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "gotktrix";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "diamondburned";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/UDXqN7FnFvbiXp3pID1WbNfCuKDsMrFQvL1101xxOo=";
+    sha256 = "sha256-ZaE7L43fA9L5WbTAsBiIxlwYgjl1hMrtfrraAROz+7k=";
   };
 
-  vendorSha256 = "sha256-xA2DW4v6aT4fEW2WSa96oRr5Yrb2HoR054V1+BiWSvk=";
+  vendorSha256 = "sha256-k6T44aH1NogyrbUnflfEHkp0zpOOH1YFly/X2kwbMzs=";
 
   buildInputs = [
     gtk4

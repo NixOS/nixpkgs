@@ -1,0 +1,13 @@
+diff --git a/tests/test_server.py b/tests/test_server.py
+index 2d09bb2..59a122a 100644
+--- a/tests/test_server.py
++++ b/tests/test_server.py
+@@ -26,7 +26,7 @@ from pygls.lsp.types import (
+ )
+ from pygls.server import LanguageServer
+ 
+-CALL_TIMEOUT = 2
++CALL_TIMEOUT = None
+ 
+ 
+ def _init(client: LanguageServer, root: Path) -> None:

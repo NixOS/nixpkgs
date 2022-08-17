@@ -30,7 +30,7 @@ let
         install -D ${xmonadEnv}/share/man/man1/xmonad.1.gz $out/share/man/man1/xmonad.1.gz
         makeWrapper ${configured}/bin/xmonad $out/bin/xmonad \
       '' + optionalString cfg.enableConfiguredRecompile ''
-          --set NIX_GHC "${xmonadEnv}/bin/ghc" \
+          --set XMONAD_GHC "${xmonadEnv}/bin/ghc" \
       '' + ''
           --set XMONAD_XMESSAGE "${pkgs.xorg.xmessage}/bin/xmessage"
       '');
@@ -46,7 +46,7 @@ in {
       haskellPackages = mkOption {
         default = pkgs.haskellPackages;
         defaultText = literalExpression "pkgs.haskellPackages";
-        example = literalExpression "pkgs.haskell.packages.ghc784";
+        example = literalExpression "pkgs.haskell.packages.ghc8107";
         type = types.attrs;
         description = ''
           haskellPackages used to build Xmonad and other packages.
@@ -76,13 +76,13 @@ in {
       enableContribAndExtras = mkOption {
         default = false;
         type = lib.types.bool;
-        description = "Enable xmonad-{contrib,extras} in Xmonad.";
+        description = lib.mdDoc "Enable xmonad-{contrib,extras} in Xmonad.";
       };
 
       config = mkOption {
         default = null;
         type = with lib.types; nullOr (either path str);
-        description = ''
+        description = lib.mdDoc ''
           Configuration from which XMonad gets compiled. If no value is
           specified, a vanilla xmonad binary is put in PATH, which will
           attempt to recompile and exec your xmonad config from $HOME/.xmonad.
@@ -94,17 +94,17 @@ in {
           "mod+q" restart key binding dysfunctional though, because that attempts
           to call your binary with the "--restart" command line option, unless
           you implement that yourself. You way mant to bind "mod+q" to
-          <literal>(restart "xmonad" True)</literal> instead, which will just restart
+          `(restart "xmonad" True)` instead, which will just restart
           xmonad from PATH. This allows e.g. switching to the new xmonad binary
           after rebuilding your system with nixos-rebuild.
           For the same reason, ghc is not added to the environment when this
-          option is set, unless <option>enableConfiguredRecompile</option> is
-          set to <literal>true</literal>.
+          option is set, unless {option}`enableConfiguredRecompile` is
+          set to `true`.
 
           If you actually want to run xmonad with a config specified here, but
           also be able to recompile and restart it from a copy of that source in
-          $HOME/.xmonad on the fly, set <option>enableConfiguredRecompile</option>
-          to <literal>true</literal> and implement something like "compileRestart"
+          $HOME/.xmonad on the fly, set {option}`enableConfiguredRecompile`
+          to `true` and implement something like "compileRestart"
           from the example.
           This should allow you to switch at will between the local xmonad and
           the one NixOS puts in your PATH.
@@ -162,8 +162,8 @@ in {
       enableConfiguredRecompile = mkOption {
         default = false;
         type = lib.types.bool;
-        description = ''
-          Enable recompilation even if <option>config</option> is set to a
+        description = lib.mdDoc ''
+          Enable recompilation even if {option}`config` is set to a
           non-null value. This adds the necessary Haskell dependencies (GHC with
           packages) to the xmonad binary's environment.
         '';
@@ -172,7 +172,7 @@ in {
       xmonadCliArgs = mkOption {
         default = [];
         type = with lib.types; listOf str;
-        description = ''
+        description = lib.mdDoc ''
           Command line arguments passed to the xmonad binary.
         '';
       };
@@ -180,7 +180,7 @@ in {
       ghcArgs = mkOption {
         default = [];
         type = with lib.types; listOf str;
-        description = ''
+        description = lib.mdDoc ''
           Command line arguments passed to the compiler (ghc)
           invocation when xmonad.config is set.
         '';

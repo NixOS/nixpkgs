@@ -1,4 +1,4 @@
-{ lib, stdenv, pkgs, mkCoqDerivation, coq, trakt, veriT, zchaff, fetchurl, version ? null }:
+{ lib, stdenv, gcc10StdenvCompat, pkgs, mkCoqDerivation, coq, trakt, veriT, zchaff, fetchurl, version ? null }:
 with lib;
 
 let
@@ -10,7 +10,9 @@ let
     };
     meta.broken = false;
   });
-  cvc4 = pkgs.callPackage ./cvc4.nix {};
+  cvc4 = pkgs.callPackage ./cvc4.nix {
+    stdenv = gcc10StdenvCompat;
+  };
 in
 
 mkCoqDerivation {

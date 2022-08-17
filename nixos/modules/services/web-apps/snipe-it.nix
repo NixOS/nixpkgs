@@ -32,21 +32,21 @@ in {
 
     user = mkOption {
       default = "snipeit";
-      description = "User snipe-it runs as.";
+      description = lib.mdDoc "User snipe-it runs as.";
       type = types.str;
     };
 
     group = mkOption {
       default = "snipeit";
-      description = "Group snipe-it runs as.";
+      description = lib.mdDoc "Group snipe-it runs as.";
       type = types.str;
     };
 
     appKeyFile = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         A file containing the Laravel APP_KEY - a 32 character long,
         base64 encoded key used for encryption where needed. Can be
-        generated with <code>head -c 32 /dev/urandom | base64</code>.
+        generated with `head -c 32 /dev/urandom | base64`.
       '';
       example = "/run/keys/snipe-it/appkey";
       type = types.path;
@@ -60,16 +60,16 @@ in {
                   config.networking.hostName;
       defaultText = lib.literalExpression "config.networking.fqdn";
       example = "snipe-it.example.com";
-      description = ''
+      description = lib.mdDoc ''
         The hostname to serve Snipe-IT on.
       '';
     };
 
     appURL = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         The root URL that you want to host Snipe-IT on. All URLs in Snipe-IT will be generated using this value.
         If you change this in the future you may need to run a command to update stored URLs in the database.
-        Command example: <code>snipe-it snipe-it:update-url https://old.example.com https://new.example.com</code>
+        Command example: `snipe-it snipe-it:update-url https://old.example.com https://new.example.com`
       '';
       default = "http${lib.optionalString tlsEnabled "s"}://${cfg.hostName}";
       defaultText = ''
@@ -80,7 +80,7 @@ in {
     };
 
     dataDir = mkOption {
-      description = "snipe-it data directory";
+      description = lib.mdDoc "snipe-it data directory";
       default = "/var/lib/snipe-it";
       type = types.path;
     };
@@ -89,37 +89,37 @@ in {
       host = mkOption {
         type = types.str;
         default = "localhost";
-        description = "Database host address.";
+        description = lib.mdDoc "Database host address.";
       };
       port = mkOption {
         type = types.port;
         default = 3306;
-        description = "Database host port.";
+        description = lib.mdDoc "Database host port.";
       };
       name = mkOption {
         type = types.str;
         default = "snipeit";
-        description = "Database name.";
+        description = lib.mdDoc "Database name.";
       };
       user = mkOption {
         type = types.str;
         default = user;
         defaultText = literalExpression "user";
-        description = "Database username.";
+        description = lib.mdDoc "Database username.";
       };
       passwordFile = mkOption {
         type = with types; nullOr path;
         default = null;
         example = "/run/keys/snipe-it/dbpassword";
-        description = ''
+        description = lib.mdDoc ''
           A file containing the password corresponding to
-          <option>database.user</option>.
+          {option}`database.user`.
         '';
       };
       createLocally = mkOption {
         type = types.bool;
         default = false;
-        description = "Create the database and database user locally.";
+        description = lib.mdDoc "Create the database and database user locally.";
       };
     };
 
@@ -127,65 +127,65 @@ in {
       driver = mkOption {
         type = types.enum [ "smtp" "sendmail" ];
         default = "smtp";
-        description = "Mail driver to use.";
+        description = lib.mdDoc "Mail driver to use.";
       };
       host = mkOption {
         type = types.str;
         default = "localhost";
-        description = "Mail host address.";
+        description = lib.mdDoc "Mail host address.";
       };
       port = mkOption {
         type = types.port;
         default = 1025;
-        description = "Mail host port.";
+        description = lib.mdDoc "Mail host port.";
       };
       encryption = mkOption {
         type = with types; nullOr (enum [ "tls" "ssl" ]);
         default = null;
-        description = "SMTP encryption mechanism to use.";
+        description = lib.mdDoc "SMTP encryption mechanism to use.";
       };
       user = mkOption {
         type = with types; nullOr str;
         default = null;
         example = "snipeit";
-        description = "Mail username.";
+        description = lib.mdDoc "Mail username.";
       };
       passwordFile = mkOption {
         type = with types; nullOr path;
         default = null;
         example = "/run/keys/snipe-it/mailpassword";
-        description = ''
+        description = lib.mdDoc ''
           A file containing the password corresponding to
-          <option>mail.user</option>.
+          {option}`mail.user`.
         '';
       };
       backupNotificationAddress = mkOption {
         type = types.str;
         default = "backup@example.com";
-        description = "Email Address to send Backup Notifications to.";
+        description = lib.mdDoc "Email Address to send Backup Notifications to.";
       };
       from = {
         name = mkOption {
           type = types.str;
           default = "Snipe-IT Asset Management";
-          description = "Mail \"from\" name.";
+          description = lib.mdDoc "Mail \"from\" name.";
         };
         address = mkOption {
           type = types.str;
           default = "mail@example.com";
-          description = "Mail \"from\" address.";
+          description = lib.mdDoc "Mail \"from\" address.";
         };
       };
       replyTo = {
         name = mkOption {
           type = types.str;
           default = "Snipe-IT Asset Management";
-          description = "Mail \"reply-to\" name.";
+          description = lib.mdDoc "Mail \"reply-to\" name.";
         };
         address = mkOption {
           type = types.str;
           default = "mail@example.com";
-          description = "Mail \"reply-to\" address.";
+          description = lib.mdDoc "Mail \"reply-to\" address.";
         };
       };
     };
@@ -194,7 +194,7 @@ in {
       type = types.str;
       default = "18M";
       example = "1G";
-      description = "The maximum size for uploads (e.g. images).";
+      description = lib.mdDoc "The maximum size for uploads (e.g. images).";
     };
 
     poolConfig = mkOption {
@@ -207,8 +207,8 @@ in {
         "pm.max_spare_servers" = 4;
         "pm.max_requests" = 500;
       };
-      description = ''
-        Options for the snipe-it PHP pool. See the documentation on <literal>php-fpm.conf</literal>
+      description = lib.mdDoc ''
+        Options for the snipe-it PHP pool. See the documentation on `php-fpm.conf`
         for details on configuration directives.
       '';
     };
@@ -229,7 +229,7 @@ in {
           enableACME = true;
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         With this option, you can customize the nginx virtualHost settings.
       '';
     };
@@ -272,19 +272,19 @@ in {
           OIDC_ISSUER_DISCOVER = true;
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Snipe-IT configuration options to set in the
-        <filename>.env</filename> file.
-        Refer to <link xlink:href="https://snipe-it.readme.io/docs/configuration"/>
+        {file}`.env` file.
+        Refer to <https://snipe-it.readme.io/docs/configuration>
         for details on supported values.
 
         Settings containing secret data should be set to an attribute
-        set containing the attribute <literal>_secret</literal> - a
+        set containing the attribute `_secret` - a
         string pointing to a file containing the value the option
         should be set to. See the example to get a better picture of
-        this: in the resulting <filename>.env</filename> file, the
-        <literal>OIDC_CLIENT_SECRET</literal> key will be set to the
-        contents of the <filename>/run/keys/oidc_secret</filename>
+        this: in the resulting {file}`.env` file, the
+        `OIDC_CLIENT_SECRET` key will be set to the
+        contents of the {file}`/run/keys/oidc_secret`
         file.
       '';
     };
@@ -472,6 +472,7 @@ in {
       "d ${cfg.dataDir}/storage/framework/views    0700 ${user} ${group} - -"
       "d ${cfg.dataDir}/storage/logs               0700 ${user} ${group} - -"
       "d ${cfg.dataDir}/storage/uploads            0700 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/private_uploads    0700 ${user} ${group} - -"
     ];
 
     users = {

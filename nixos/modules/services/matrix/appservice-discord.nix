@@ -40,23 +40,16 @@ in {
             };
           }
         '';
-        description = ''
-          <filename>config.yaml</filename> configuration as a Nix attribute set.
-          </para>
+        description = lib.mdDoc ''
+          {file}`config.yaml` configuration as a Nix attribute set.
 
-          <para>
           Configuration options should match those described in
-          <link xlink:href="https://github.com/Half-Shot/matrix-appservice-discord/blob/master/config/config.sample.yaml">
-          config.sample.yaml</link>.
-          </para>
+          [config.sample.yaml](https://github.com/Half-Shot/matrix-appservice-discord/blob/master/config/config.sample.yaml).
 
-          <para>
-          <option>config.bridge.domain</option> and <option>config.bridge.homeserverUrl</option>
+          {option}`config.bridge.domain` and {option}`config.bridge.homeserverUrl`
           should be set to match the public host name of the Matrix homeserver for webhooks and avatars to work.
-          </para>
 
-          <para>
-          Secret tokens should be specified using <option>environmentFile</option>
+          Secret tokens should be specified using {option}`environmentFile`
           instead of this world-readable attribute set.
         '';
       };
@@ -64,11 +57,11 @@ in {
       environmentFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           File containing environment variables to be passed to the matrix-appservice-discord service,
           in which secret tokens can be specified securely by defining values for
-          <literal>APPSERVICE_DISCORD_AUTH_CLIENT_I_D</literal> and
-          <literal>APPSERVICE_DISCORD_AUTH_BOT_TOKEN</literal>.
+          `APPSERVICE_DISCORD_AUTH_CLIENT_I_D` and
+          `APPSERVICE_DISCORD_AUTH_BOT_TOKEN`.
         '';
       };
 
@@ -76,7 +69,7 @@ in {
         type = types.str;
         default = "http://localhost:${toString cfg.port}";
         defaultText = literalExpression ''"http://localhost:''${toString config.${opt.port}}"'';
-        description = ''
+        description = lib.mdDoc ''
           The URL where the application service is listening for HS requests.
         '';
       };
@@ -84,7 +77,7 @@ in {
       port = mkOption {
         type = types.port;
         default = 9005; # from https://github.com/Half-Shot/matrix-appservice-discord/blob/master/package.json#L11
-        description = ''
+        description = lib.mdDoc ''
           Port number on which the bridge should listen for internal communication with the Matrix homeserver.
         '';
       };
@@ -92,7 +85,7 @@ in {
       localpart = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           The user_id localpart to assign to the AS.
         '';
       };
@@ -103,7 +96,7 @@ in {
         defaultText = literalExpression ''
           optional config.services.matrix-synapse.enable "matrix-synapse.service"
         '';
-        description = ''
+        description = lib.mdDoc ''
           List of Systemd services to require and wait for when starting the application service,
           such as the Matrix homeserver if it's running on the same host.
         '';

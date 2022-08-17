@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sqlx-cli";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "launchbadge";
     repo = "sqlx";
     rev = "v${version}";
-    sha256 = "sha256-wAPZVDhT6Z8hTOYgbrCGu9uhxNhBLuygAsSpwVGzZxc=";
+    sha256 = "sha256-4XJ0dNbACCcbN5+d05H++jlRKuL+au3iOLMoBR/whOs=";
   };
 
-  cargoSha256 = "sha256-YUIeph0aacrC4OXb5qcjM5CSvKZEG+gYk6r45urmUeg=";
+  cargoSha256 = "sha256-sIe+uVCzTVUTePNIBekCA/uwRG+GWGonnvzhRDwh5Y4=";
 
   doCheck = false;
   cargoBuildFlags = [ "-p sqlx-cli" ];

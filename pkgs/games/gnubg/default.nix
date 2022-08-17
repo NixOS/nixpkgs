@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, python, gtk2, readline }:
+{ lib, stdenv, fetchurl, pkg-config, glib, python2, gtk2, readline }:
 
 stdenv.mkDerivation rec {
   pname = "gnubg";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "11xwhcli1h12k6rnhhyq4jphzrhfik7i8ah3k32pqw803460n6yf";
   };
 
-  nativeBuildInputs = [ pkg-config python glib ];
+  nativeBuildInputs = [ pkg-config python2 glib ];
 
   buildInputs = [ gtk2 readline ];
 

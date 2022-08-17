@@ -54,6 +54,9 @@ in stdenv.mkDerivation rec {
     # these tests require network access so we need to skip them.
     brokenTests = map escapeRegex [
       "Ice/udp" "Glacier2" "IceGrid/simple" "IceStorm" "IceDiscovery/simple"
+
+      # FIXME: certificate expired, remove for next release?
+      "IceSSL/configuration"
     ];
     # matches CONFIGS flag in makeFlagsArray
     configFlag = optionalString cpp11 "--config=cpp11-shared";

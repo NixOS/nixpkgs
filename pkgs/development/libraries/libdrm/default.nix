@@ -18,13 +18,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpthreadstubs libpciaccess ]
     ++ lib.optional withValgrind valgrind-light;
 
-  patches = [ ./cross-build-nm-path.patch ];
-
   mesonFlags = [
-    "-Dnm-path=${stdenv.cc.targetPrefix}nm"
     "-Dinstall-test-programs=true"
     "-Domap=true"
-  ] ++ lib.optionals (stdenv.isAarch32 || stdenv.isAarch64) [
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch [
     "-Dtegra=true"
     "-Detnaviv=true"
   ];

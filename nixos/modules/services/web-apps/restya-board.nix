@@ -30,7 +30,7 @@ in
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/restya-board";
-        description = ''
+        description = lib.mdDoc ''
           Data of the application.
         '';
       };
@@ -38,7 +38,7 @@ in
       user = mkOption {
         type = types.str;
         default = "restya-board";
-        description = ''
+        description = lib.mdDoc ''
           User account under which the web-application runs.
         '';
       };
@@ -46,7 +46,7 @@ in
       group = mkOption {
         type = types.str;
         default = "nginx";
-        description = ''
+        description = lib.mdDoc ''
           Group account under which the web-application runs.
         '';
       };
@@ -55,7 +55,7 @@ in
         serverName = mkOption {
           type = types.str;
           default = "restya.board";
-          description = ''
+          description = lib.mdDoc ''
             Name of the nginx virtualhost to use.
           '';
         };
@@ -63,7 +63,7 @@ in
         listenHost = mkOption {
           type = types.str;
           default = "localhost";
-          description = ''
+          description = lib.mdDoc ''
             Listen address for the virtualhost to use.
           '';
         };
@@ -71,7 +71,7 @@ in
         listenPort = mkOption {
           type = types.int;
           default = 3000;
-          description = ''
+          description = lib.mdDoc ''
             Listen port for the virtualhost to use.
           '';
         };
@@ -81,7 +81,7 @@ in
         host = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = ''
+          description = lib.mdDoc ''
             Host of the database. Leave 'null' to use a local PostgreSQL database.
             A local PostgreSQL database is initialized automatically.
           '';
@@ -90,7 +90,7 @@ in
         port = mkOption {
           type = types.nullOr types.int;
           default = 5432;
-          description = ''
+          description = lib.mdDoc ''
             The database's port.
           '';
         };
@@ -98,7 +98,7 @@ in
         name = mkOption {
           type = types.str;
           default = "restya_board";
-          description = ''
+          description = lib.mdDoc ''
             Name of the database. The database must exist.
           '';
         };
@@ -106,7 +106,7 @@ in
         user = mkOption {
           type = types.str;
           default = "restya_board";
-          description = ''
+          description = lib.mdDoc ''
             The database user. The user must exist and have access to
             the specified database.
           '';
@@ -115,7 +115,7 @@ in
         passwordFile = mkOption {
           type = types.nullOr types.path;
           default = null;
-          description = ''
+          description = lib.mdDoc ''
             The database user's password. 'null' if no password is set.
           '';
         };
@@ -126,7 +126,7 @@ in
           type = types.nullOr types.str;
           default = null;
           example = "localhost";
-          description = ''
+          description = lib.mdDoc ''
             Hostname to send outgoing mail. Null to use the system MTA.
           '';
         };
@@ -134,7 +134,7 @@ in
         port = mkOption {
           type = types.int;
           default = 25;
-          description = ''
+          description = lib.mdDoc ''
             Port used to connect to SMTP server.
           '';
         };
@@ -142,7 +142,7 @@ in
         login = mkOption {
           type = types.str;
           default = "";
-          description = ''
+          description = lib.mdDoc ''
             SMTP authentication login used when sending outgoing mail.
           '';
         };
@@ -150,7 +150,7 @@ in
         password = mkOption {
           type = types.str;
           default = "";
-          description = ''
+          description = lib.mdDoc ''
             SMTP authentication password used when sending outgoing mail.
 
             ATTENTION: The password is stored world-readable in the nix-store!
@@ -161,7 +161,7 @@ in
       timezone = mkOption {
         type = types.lines;
         default = "GMT";
-        description = ''
+        description = lib.mdDoc ''
           Timezone the web-app runs in.
         '';
       };

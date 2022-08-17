@@ -65,13 +65,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "aegisub";
-  version = "3.3.2-20220612";
+  version = "3.3.3";
 
   src = fetchFromGitHub {
     owner = "wangqr";
     repo = pname;
-    rev = "91f8b5f91eb960bad19899c10af08aca34f9b697";
-    sha256 = "sha256-lPkPWSsncsBKJHDnma9cUXsQJynruT9JpPkMTHdQ/e8=";
+    rev = "v${version}";
+    sha256 = "sha256-oKhLv81EFudrJaaJ2ga3pVh4W5Hd2YchpjsoYoqRm78=";
   };
 
   nativeBuildInputs = [

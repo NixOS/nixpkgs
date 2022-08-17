@@ -293,7 +293,9 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     diskdev_cmds    = applePackage "diskdev_cmds"      "osx-10.11.6"     "1ssdyiaq5m1zfy96yy38yyknp682ki6bvabdqd5z18fa0rv3m2ar" {
       macosPackages_11_0_1 = macosPackages_11_0_1;
     };
-    network_cmds    = applePackage "network_cmds"      "osx-10.11.6"     "0lhi9wz84qr1r2ab3fb4nvmdg9gxn817n5ldg7zw9gnf3wwn42kw" {};
+    network_cmds    = if stdenv.isx86_64 then
+      applePackage "network_cmds" "osx-10.11.6" "0lhi9wz84qr1r2ab3fb4nvmdg9gxn817n5ldg7zw9gnf3wwn42kw" {}
+    else macosPackages_11_0_1.network_cmds;
     file_cmds       = applePackage "file_cmds"         "osx-10.11.6"     "1zfxbmasps529pnfdjvc13p7ws2cfx8pidkplypkswyff0nff4wp" {};
     shell_cmds      = applePackage "shell_cmds"        "osx-10.11.6"     "0084k271v66h4jqp7q7rmjvv7w4mvhx3aq860qs8jbd30canm86n" {};
     system_cmds     = applePackage "system_cmds"       "osx-10.11.6"     "1h46j2c5v02pkv5d9fyv6cpgyg0lczvwicrx6r9s210cl03l77jl" {};

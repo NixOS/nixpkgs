@@ -34,10 +34,10 @@ in buildPythonPackage rec {
   postPatch = ''
     # numpy
     substituteInPlace setup.py \
-      --replace "1.22" "2"
+      --replace "1.23" "2"
 
     substituteInPlace numba/__init__.py \
-      --replace "(1, 21)" "(2, 0)"
+      --replace "(1, 22)" "(2, 0)"
   '';
 
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";

@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitHub, nixosTests }:
+{ lib, buildGoPackage, fetchFromGitHub, nixosTests, stdenv }:
 
 buildGoPackage rec {
   pname = "etcd";
@@ -31,5 +31,6 @@ buildGoPackage rec {
     license = licenses.asl20;
     homepage = "https://etcd.io/";
     maintainers = with maintainers; [ offline zowoq ];
+    broken = stdenv.isDarwin; # outdated golang.org/x/sys
   };
 }

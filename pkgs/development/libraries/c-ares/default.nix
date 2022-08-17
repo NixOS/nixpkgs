@@ -25,13 +25,17 @@ stdenv.mkDerivation rec {
   };
 
   # Adapted from running a cmake build
-  passthru.cmake-config = writeTextDir "c-ares-config.cmake"
+  passthru.cmake-config = let
+    extension = if stdenv.hostPlatform.isStatic then ".a" else stdenv.hostPlatform.extensions.sharedLibrary;
+    buildType = if stdenv.hostPlatform.isStatic then "STATIC" else "SHARED";
+    buildTypeLower = if stdenv.hostPlatform.isStatic then "static" else "shared";
+    in writeTextDir "c-ares-config.cmake"
     ''
       set(c-ares_INCLUDE_DIR "${self}/include")
 
       set(c-ares_LIBRARY c-ares::cares)
 
-      add_library(c-ares::cares SHARED IMPORTED)
+      add_library(c-ares::cares ${buildType} IMPORTED)
 
       set_target_properties(c-ares::cares PROPERTIES
         INTERFACE_INCLUDE_DIRECTORIES "${self}/include"
@@ -39,12 +43,12 @@ stdenv.mkDerivation rec {
       )
       set_property(TARGET c-ares::cares APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
       set_target_properties(c-ares::cares PROPERTIES
-        IMPORTED_LOCATION_RELEASE "${self}/lib/libcares${stdenv.targetPlatform.extensions.sharedLibrary}"
-        IMPORTED_SONAME_RELEASE "libcares${stdenv.targetPlatform.extensions.sharedLibrary}"
+        IMPORTED_LOCATION_RELEASE "${self}/lib/libcares${extension}"
+        IMPORTED_SONAME_RELEASE "libcares${extension}"
         )
-      add_library(c-ares::cares_shared INTERFACE IMPORTED)
-      set_target_properties(c-ares::cares_shared PROPERTIES INTERFACE_LINK_LIBRARIES "c-ares::cares")
-      set(c-ares_SHARED_LIBRARY c-ares::cares_shared)
+      add_library(c-ares::cares_${buildTypeLower} INTERFACE IMPORTED)
+      set_target_properties(c-ares::cares_${buildTypeLower} PROPERTIES INTERFACE_LINK_LIBRARIES "c-ares::cares")
+      set(c-ares_${buildType}_LIBRARY c-ares::cares_${buildTypeLower})
     '';
 
 }; in self

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "argocd";
-  version = "2.4.4";
+  version = "2.4.9";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo-cd";
     rev = "v${version}";
-    sha256 = "sha256-rmgXsA9rOCUy1HDm09Aq5s8EfkM71We76gffPElnUAU=";
+    sha256 = "sha256-/g+icvpo62iV9GmpYxwHP7bsJF770bfnsVknVHEnEzM=";
   };
 
-  vendorSha256 = "sha256-32cuYIySHtV+PfN2wrqf+p01+F6uBZJN3w2MeDQ8hbI=";
+  vendorSha256 = "sha256-M1ZYooS22bntHXAMK4QpMAwuMvN4/tHtVu3WZW9V8TA=";
 
   # Set target as ./cmd per cli-local
   # https://github.com/argoproj/argo-cd/blob/master/Makefile#L227
@@ -26,9 +26,9 @@ buildGoModule rec {
       "-X ${package_url}.gitCommit=${src.rev}"
       "-X ${package_url}.gitTag=${src.rev}"
       "-X ${package_url}.gitTreeState=clean"
-      "-X ${package_url}.kubectlVersion=v0.23.3"
+      "-X ${package_url}.kubectlVersion=v0.23.1"
       # NOTE: Update kubectlVersion when upgrading this package with
-      # https://github.com/argoproj/argo-cd/blob/master/go.mod#L95
+      # https://github.com/argoproj/argo-cd/blob/v${version}/go.mod#L95
       # Per https://github.com/argoproj/argo-cd/blob/master/Makefile#L18
       # Will need a way to automate it :P
     ];

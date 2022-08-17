@@ -97,6 +97,11 @@
       </listitem>
       <listitem>
         <para>
+          Cinnamon has been updated to 5.4.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>hardware.nvidia</literal> has a new option
           <literal>open</literal> that can be used to opt in the
           opensource version of NVIDIA kernel driver. Note that the
@@ -121,6 +126,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/mozilla-services/syncstorage-rs">syncstorage-rs</link>,
+          a self-hostable sync server for Firefox. Available as
+          <link xlink:href="options.html#opt-services.firefox-syncserver.enable">services.firefox-syncserver</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://dragonflydb.io/">dragonflydb</link>,
           a modern replacement for Redis and Memcached. Available as
           <link linkend="opt-services.dragonflydb.enable">services.dragonflydb</link>.
@@ -128,9 +140,25 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://hbase.apache.org/">HBase
+          cluster</link>, a distributed, scalable, big data store.
+          Available as
+          <link xlink:href="options.html#opt-services.hadoop.hbase.enable">services.hadoop.hbase</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/leetronics/infnoise">infnoise</link>,
           a hardware True Random Number Generator dongle. Available as
           <link xlink:href="options.html#opt-services.infnoise.enable">services.infnoise</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/jtroo/kanata">kanata</link>,
+          a tool to improve keyboard comfort and usability with advanced
+          customization. Available as
+          <link xlink:href="options.html#opt-services.kanata.enable">services.kanata</link>.
         </para>
       </listitem>
       <listitem>
@@ -161,6 +189,14 @@
           <link xlink:href="https://www.grafana.com/oss/tempo/">Grafana
           Tempo</link>, a distributed tracing store. Available as
           <link linkend="opt-services.tempo.enable">services.tempo</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/zalando/patroni">Patroni</link>,
+          a template for PostgreSQL HA with ZooKeeper, etcd or Consul.
+          Available as
+          <link xlink:href="options.html#opt-services.patroni.enable">services.patroni</link>.
         </para>
       </listitem>
     </itemizedlist>
@@ -225,6 +261,18 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>fetchgit</literal> fetcher now uses
+          <link xlink:href="https://www.git-scm.com/docs/git-sparse-checkout/2.37.0#_internalscone_mode_handling">cone
+          mode</link> by default for sparse checkouts.
+          <link xlink:href="https://www.git-scm.com/docs/git-sparse-checkout/2.37.0#_internalsnon_cone_problems">Non-cone
+          mode</link> can be enabled by passing
+          <literal>nonConeMode = true</literal>, but note that non-cone
+          mode is deprecated and this option may be removed alongside a
+          future Git update without notice.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>bsp-layout</literal> no longer uses the command
           <literal>cycle</literal> to switch to other window layouts, as
           it got replaced by the commands <literal>previous</literal>
@@ -246,8 +294,22 @@
       </listitem>
       <listitem>
         <para>
+          <literal>services.hbase</literal> has been renamed to
+          <literal>services.hbase-standalone</literal>. For production
+          HBase clusters, use <literal>services.hadoop.hbase</literal>
+          instead.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           PHP 7.4 is no longer supported due to upstream not supporting
           this version for the entire lifecycle of the 22.11 release.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.cosign</literal> does not provide the
+          <literal>cosigned</literal> binary anymore.
         </para>
       </listitem>
       <listitem>
@@ -255,6 +317,20 @@
           riak package removed along with
           <literal>services.riak</literal> module, due to lack of
           maintainer to update the package.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          xow package removed along with the
+          <literal>hardware.xow</literal> module, due to the project
+          being deprecated in favor of <literal>xone</literal>, which is
+          available via the <literal>hardware.xone</literal> module.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          virtlyst package and <literal>services.virtlyst</literal>
+          module removed, due to lack of maintainers.
         </para>
       </listitem>
       <listitem>
@@ -303,6 +379,16 @@
       </listitem>
       <listitem>
         <para>
+          <literal>github-runner</literal> gained support for ephemeral
+          runners and registrations using a personal access token (PAT)
+          instead of a registration token. See
+          <literal>services.github-runner.ephemeral</literal> and
+          <literal>services.github-runner.tokenFile</literal> for
+          details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           A new module was added for the Saleae Logic device family,
           providing the options
           <literal>hardware.saleae-logic.enable</literal> and
@@ -314,6 +400,13 @@
           The Redis module now disables RDB persistence when
           <literal>services.redis.servers.&lt;name&gt;.save = []</literal>
           instead of using the Redis default.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Neo4j was updated from version 3 to version 4. See this
+          <link xlink:href="https://neo4j.com/docs/upgrade-migration-guide/current/">migration
+          guide</link> on how to migrate your Neo4j instance.
         </para>
       </listitem>
       <listitem>
@@ -345,6 +438,18 @@
       </listitem>
       <listitem>
         <para>
+          The udisks2 service, available at
+          <literal>services.udisks2.enable</literal>, is now disabled by
+          default. It will automatically be enabled through services and
+          desktop environments as needed. This also means that polkit
+          will now actually be disabled by default. The default for
+          <literal>security.polkit.enable</literal> was already flipped
+          in the previous release, but udisks2 being enabled by default
+          re-enabled it.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Add udev rules for the Teensy family of microcontrollers.
         </para>
       </listitem>
@@ -355,6 +460,12 @@
           NixOS <literal>services.dbus.packages</literal> option will
           make it start automatically as a systemd user service when an
           application tries to talk to the libsecret D-Bus API.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          There is a new module for AMD SEV CPU functionality, which
+          grants access to the hardware.
         </para>
       </listitem>
       <listitem>
@@ -374,6 +485,12 @@
           There is a new module for the <literal>xfconf</literal>
           program (the Xfce configuration storage system), which has a
           dbus service.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>nomad</literal> package now defaults to 1.3,
+          which no longer has a downgrade path to releases 1.2 or older.
         </para>
       </listitem>
     </itemizedlist>

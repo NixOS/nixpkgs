@@ -13,27 +13,27 @@ in
       user = mkOption {
         type = types.str;
         default = "webdav";
-        description = "User account under which WebDAV runs.";
+        description = lib.mdDoc "User account under which WebDAV runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "webdav";
-        description = "Group under which WebDAV runs.";
+        description = lib.mdDoc "Group under which WebDAV runs.";
       };
 
       settings = mkOption {
         type = format.type;
         default = { };
-        description = ''
+        description = lib.mdDoc ''
           Attrset that is converted and passed as config file. Available options
           can be found at
-          <link xlink:href="https://github.com/hacdias/webdav">here</link>.
+          [here](https://github.com/hacdias/webdav).
 
           This program supports reading username and password configuration
           from environment variables, so it's strongly recommended to store
           username and password in a separate
-          <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.exec.html#EnvironmentFile=">EnvironmentFile</link>.
+          [EnvironmentFile](https://www.freedesktop.org/software/systemd/man/systemd.exec.html#EnvironmentFile=).
           This prevents adding secrets to the world-readable Nix store.
         '';
         example = literalExpression ''
@@ -57,7 +57,7 @@ in
         type = types.path;
         default = format.generate "webdav.yaml" cfg.settings;
         defaultText = "Config file generated from services.webdav.settings";
-        description = ''
+        description = lib.mdDoc ''
           Path to config file. If this option is set, it will override any
           configuration done in options.services.webdav.settings.
         '';
@@ -67,10 +67,8 @@ in
       environmentFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = ''
-          Environment file as defined in <citerefentry>
-          <refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum>
-          </citerefentry>.
+        description = lib.mdDoc ''
+          Environment file as defined in {manpage}`systemd.exec(5)`.
         '';
       };
     };

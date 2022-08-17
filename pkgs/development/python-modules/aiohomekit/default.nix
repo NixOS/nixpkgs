@@ -1,9 +1,13 @@
 { lib
 , buildPythonPackage
+, aiocoap
+, bleak
+, bleak-retry-connector
 , chacha20poly1305-reuseable
 , commentjson
 , cryptography
 , fetchFromGitHub
+, orjson
 , poetry-core
 , pytest-aiohttp
 , pytestCheckHook
@@ -13,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "aiohomekit";
-  version = "0.7.20";
+  version = "1.2.11";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Jc2k";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-g7N+CIBJCMnW4FjN502SahhSpPS1p7AXZvduteHu+Z4=";
+    hash = "sha256-A/exf2XTlogowdeFLmxO/P7JeGIE8CDsOX9tR0HOXws=";
   };
 
   nativeBuildInputs = [
@@ -30,9 +34,13 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    aiocoap
+    bleak
+    bleak-retry-connector
     chacha20poly1305-reuseable
     commentjson
     cryptography
+    orjson
     zeroconf
   ];
 

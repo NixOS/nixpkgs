@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "jellyfin-web";
-  version = "10.8.1";
+  version = "10.8.3";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-web";
     rev = "v${version}";
-    sha256 = "TSgb76uGRX8TsSyctclwvCZVwwaebQQaoftH3fULZgY=";
+    sha256 = "ZQXvF8Tt5xSylIpxQpkOeJR8nWXw806s7uDcSiVDQyA=";
   };
 
   nativeBuildInputs = [

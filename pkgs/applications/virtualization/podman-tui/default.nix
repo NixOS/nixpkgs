@@ -2,6 +2,7 @@
 , stdenv
 , pkg-config
 , fetchFromGitHub
+, fetchpatch
 , buildGoModule
 , btrfs-progs
 , gpgme
@@ -12,14 +13,22 @@
 }:
 buildGoModule rec {
   pname = "podman-tui";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-tui";
     rev = "v${version}";
-    sha256 = "sha256-2WugN5JdTkz3OOt3ggzT7HwMXy1jxn85RwF7409D8m8=";
+    sha256 = "sha256-XLC1DqOME9xMF4z+cOPe5H60JnxU9gGaSOQQIofdtj8=";
   };
+
+  patches = [
+    # Fix flaky tests. See https://github.com/containers/podman-tui/pull/129.
+    (fetchpatch {
+      url = "https://github.com/containers/podman-tui/commit/7fff27e95a3891163da79d86bbc796f29b523f80.patch";
+      sha256 = "sha256-mETDXoMLq7vb8Qhpz/CmNG1LmY2DTaogI10Qav/qN9Q=";
+    })
+  ];
 
   vendorSha256 = null;
 
@@ -29,6 +38,10 @@ buildGoModule rec {
     ++ lib.optionals stdenv.isLinux [ btrfs-progs lvm2 ];
 
   ldflags = [ "-s" "-w" ];
+
+  preCheck = ''
+    export HOME=/home/$(whoami)
+  '';
 
   passthru.tests.version = testers.testVersion {
     package = podman-tui;

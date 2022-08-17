@@ -27,7 +27,7 @@ in {
         type = types.package;
         default = pkgs.gnome.file-roller;
         defaultText = literalExpression "pkgs.gnome.file-roller";
-        description = "File Roller derivation to use.";
+        description = lib.mdDoc "File Roller derivation to use.";
       };
 
     };

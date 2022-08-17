@@ -1,44 +1,51 @@
 { lib
 , buildPythonPackage
-, isPy3k
 , fetchFromGitHub
 , funcy
-, pefile
-, vivisect
 , intervaltree
-, setuptools
+, pefile
+, typing-extensions
+, vivisect
+, pytest-sugar
+, pytestCheckHook
+, python-flirt
 }:
 buildPythonPackage rec {
   pname = "viv-utils";
-  version = "0.3.17";
-  disabled = isPy3k;
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "williballenthin";
     repo = "viv-utils";
     rev = "v${version}";
-    sha256 = "wZWp6PMn1to/jP6lzlY/x0IhS/0w0Ys7AdklNQ+Vmyc=";
+    sha256 = "sha256-JDu+1n1wP2Vsp2V/bKdE+RFp6bE8RNmimi4wdsatwME=";
   };
 
-  # argparse is provided by Python itself
-  preBuild = ''
-    sed '/"argparse",/d' -i setup.py
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "==" ">="
   '';
 
   propagatedBuildInputs = [
     funcy
-    pefile
-    vivisect
     intervaltree
-    setuptools
+    pefile
+    typing-extensions
+    vivisect
   ];
 
-  # no tests
-  doCheck = false;
-
-  pythonImportsCheck = [
-    "viv_utils"
+  checkInputs = [
+    pytest-sugar
+    pytestCheckHook
   ];
+
+  passthru = {
+    optional-dependencies = {
+      flirt = [
+        python-flirt
+      ];
+    };
+  };
 
   meta = with lib; {
     description = "Utilities for working with vivisect";

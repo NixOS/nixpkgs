@@ -8,14 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "mint-themes";
-  version = "1.8.8";
+  version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     # they don't exactly do tags, it's just a named commit
-    rev = "a833fba6917043bf410dee4364c9a36af1ce4c83";
-    hash = "sha256-8abjjD0XoApvqB8SNlWsqIEp7ozgiERGS0kWglw2DWA=";
+    rev = "73d6cfea807ea84a645f43424c60916cb6214693";
+    hash = "sha256-WyEabE3K7xuBzXuLqJO0N4nxrc67bKT5YD9yn/bELl0=";
   };
 
   nativeBuildInputs = [
@@ -29,8 +29,10 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out
     mv usr/share $out
+    runHook postInstall
   '';
 
   meta = with lib; {

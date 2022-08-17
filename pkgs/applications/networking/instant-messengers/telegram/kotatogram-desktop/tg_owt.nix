@@ -73,7 +73,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkg-config cmake ninja yasm ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     libjpeg
     openssl
     libopus
@@ -119,14 +119,6 @@ stdenv.mkDerivation {
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lc++abi";
 
   enableParallelBuilding = true;
-
-  propagatedBuildInputs = [
-    # Required for linking downstream binaries.
-    abseil-cpp
-    openh264
-    usrsctp
-    libvpx
-  ];
 
   meta.license = lib.licenses.bsd3;
 }

@@ -39,13 +39,11 @@ stdenv.mkDerivation rec {
     fixDarwinDylibNames
   ];
 
+  buildInputs = [ gobject-introspection ];
+
   propagatedBuildInputs = [
     # Required by atk.pc
     glib
-  ];
-
-  mesonFlags = [
-    "-Dintrospection=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
   ];
 
   doCheck = true;

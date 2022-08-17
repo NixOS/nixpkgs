@@ -29,7 +29,7 @@
 , libxkbcommon
 , dbusSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
 , dbus
-, udevSupport ? false
+, udevSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
 , udev
 , ibusSupport ? false
 , ibus

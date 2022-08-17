@@ -1,7 +1,7 @@
 { lib, stdenv, make, makeWrapper, which }:
-{ buildInputs ? [], ...} @ args:
+{ nativeBuildInputs ? [], ...} @ args:
 stdenv.mkDerivation (args // {
-  buildInputs = [ makeWrapper make which ] ++ buildInputs;
+  nativeBuildInputs = [ makeWrapper make which ] ++ nativeBuildInputs;
 
   builder = ./builder.sh;
   setupHook = ./setup-hook.sh;

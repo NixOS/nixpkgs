@@ -1,5 +1,20 @@
 { lib, fetchFromGitHub, fetchpatch, python3 }:
-python3.pkgs.buildPythonApplication rec {
+
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      mautrix = super.mautrix.overridePythonAttrs (oldAttrs: rec {
+        version = "0.16.3";
+        src = oldAttrs.src.override {
+          inherit (oldAttrs) pname;
+          inherit version;
+          sha256 = "sha256-OpHLh5pCzGooQ5yxAa0+85m/szAafV+l+OfipQcfLtU=";
+        };
+      });
+    };
+  };
+
+in python.pkgs.buildPythonApplication rec {
   pname = "heisenbridge";
   version = "1.13.1";
 
@@ -14,7 +29,7 @@ python3.pkgs.buildPythonApplication rec {
     echo "${version}" > heisenbridge/version.txt
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python.pkgs; [
     aiohttp
     irc
     mautrix
@@ -22,7 +37,7 @@ python3.pkgs.buildPythonApplication rec {
     pyyaml
   ];
 
-  checkInputs = with python3.pkgs; [
+  checkInputs = with python.pkgs; [
     pytestCheckHook
   ];
 

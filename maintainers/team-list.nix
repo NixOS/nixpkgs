@@ -256,12 +256,8 @@ with lib.maintainers; {
   golang = {
     members = [
       c00w
-      cstrahan
-      Frostman
       kalbasit
       mic92
-      orivej
-      rvolosatovs
       zowoq
     ];
     scope = "Maintain Golang compilers.";

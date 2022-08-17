@@ -16,11 +16,12 @@
 
 # tests
 , python3
+, arrow-cpp
 }:
 
 stdenv.mkDerivation rec {
   pname = "grpc";
-  version = "1.47.0"; # N.B: if you change this, please update:
+  version = "1.48.0"; # N.B: if you change this, please update:
     # pythonPackages.grpcio-tools
     # pythonPackages.grpcio-status
 
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    sha256 = "sha256-fMYAos0gQelFMPkpR0DdKr4wPX+nhZSSqeaU4URqgto=";
+    hash = "sha256-cR+K3po/9XpYWe+sRXGwzvNAPChrWzYu5D4ygBTKKIQ=";
     fetchSubmodules = true;
   };
 
@@ -92,6 +93,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     inherit (python3.pkgs) grpcio-status grpcio-tools;
+    inherit arrow-cpp;
   };
 
   meta = with lib; {

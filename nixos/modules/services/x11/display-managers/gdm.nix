@@ -75,7 +75,7 @@ in
       autoLogin.delay = mkOption {
         type = types.int;
         default = 0;
-        description = ''
+        description = lib.mdDoc ''
           Seconds of inactivity after which the autologin will be performed.
         '';
       };
@@ -83,14 +83,14 @@ in
       wayland = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Allow GDM to run on Wayland instead of Xserver.
         '';
       };
 
       autoSuspend = mkOption {
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           On the GNOME Display Manager login screen, suspend the machine after inactivity.
           (Does not affect automatic suspend while logged in, or at lock screen.)
         '';
@@ -103,9 +103,9 @@ in
         example = {
           debug.enable = true;
         };
-        description = ''
+        description = lib.mdDoc ''
           Options passed to the gdm daemon.
-          See <link xlink:href="https://help.gnome.org/admin/gdm/stable/configuration.html.en#daemonconfig">here</link> for supported options.
+          See [here](https://help.gnome.org/admin/gdm/stable/configuration.html.en#daemonconfig) for supported options.
         '';
       };
 

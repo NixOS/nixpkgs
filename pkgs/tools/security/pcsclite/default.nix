@@ -8,7 +8,7 @@
 , python3
 , dbus
 , polkit
-, systemd
+, systemdMinimal
 , IOKit
 }:
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config perl ];
 
   buildInputs = [ python3 ]
-    ++ lib.optionals stdenv.isLinux [ dbus polkit systemd ]
+    ++ lib.optionals stdenv.isLinux [ dbus polkit systemdMinimal ]
     ++ lib.optionals stdenv.isDarwin [ IOKit ];
 
   meta = with lib; {

@@ -63,7 +63,7 @@ in {
         default = cfg.enableAll;
         defaultText = literalExpression "config.${opt.enableAll}";
         example = true;
-        description = "Whether to enable the system76 firmware daemon";
+        description = lib.mdDoc "Whether to enable the system76 firmware daemon";
         type = types.bool;
       };
 
@@ -71,7 +71,7 @@ in {
         default = cfg.enableAll;
         defaultText = literalExpression "config.${opt.enableAll}";
         example = true;
-        description = "Whether to make the system76 out-of-tree kernel modules available";
+        description = lib.mdDoc "Whether to make the system76 out-of-tree kernel modules available";
         type = types.bool;
       };
 
@@ -79,7 +79,7 @@ in {
         default = cfg.enableAll;
         defaultText = literalExpression "config.${opt.enableAll}";
         example = true;
-        description = "Whether to enable the system76 power daemon";
+        description = lib.mdDoc "Whether to enable the system76 power daemon";
         type = types.bool;
       };
     };

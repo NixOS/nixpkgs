@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "jsonschema";
-  version = "4.6.1";
+  version = "4.9.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-7CgC5qN1F/CdR9m6EHlHWJrh0l/1V7kl2DoyH8KqXTs=";
+    sha256 = "sha256-QIxMjtDe3jsmj3pEF4T3QgY4CwT5PrLVN8e++z3zCZ8=";
   };
 
   postPatch = ''

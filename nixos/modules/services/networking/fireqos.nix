@@ -28,7 +28,7 @@ in {
           class web commit 50kbit
             match tcp ports 80,443
       '';
-      description = ''
+      description = lib.mdDoc ''
         The FireQOS configuration goes here.
       '';
     };

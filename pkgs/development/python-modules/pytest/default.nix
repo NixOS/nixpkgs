@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, callPackage
 , pythonOlder
 , fetchPypi
 , isPyPy
@@ -15,21 +16,22 @@
 , pluggy
 , py
 , tomli
-
-# tests
-, hypothesis
-, pygments
 }:
 
 buildPythonPackage rec {
   pname = "pytest";
-  version = "7.1.1";
+  version = "7.1.2";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-hBEyyu9rGtF6mv3kbcT2z6WaBflVWq5RUfc73yggymM=";
+    sha256 = "sha256-oGoEJUU4ZKJwvEXnH3gzMKdCje+0Iw+15qcx/eBuzUU=";
   };
+
+  outputs = [
+    "out"
+    "testout"
+  ];
 
   nativeBuildInputs = [
     setuptools-scm
@@ -44,29 +46,13 @@ buildPythonPackage rec {
     tomli
   ];
 
-  checkInputs = [
-    hypothesis
-    pygments
-  ];
-
-  doCheck = !isPyPy; # https://github.com/pytest-dev/pytest/issues/3460
-
-  # Ignored file https://github.com/pytest-dev/pytest/pull/5605#issuecomment-522243929
-  # test_missing_required_plugins will emit deprecation warning which is treated as error
-  checkPhase = ''
-    runHook preCheck
-    $out/bin/py.test -x testing/ \
-      --ignore=testing/test_junitxml.py \
-      --ignore=testing/test_argcomplete.py \
-      -k "not test_collect_pyargs_with_testpaths and not test_missing_required_plugins"
-
-    # tests leave behind unreproducible pytest binaries in the output directory, remove:
-    find $out/lib -name "*-pytest-${version}.pyc" -delete
-    # specifically testing/test_assertion.py and testing/test_assertrewrite.py leave behind those:
-    find $out/lib -name "*opt-2.pyc" -delete
-
-    runHook postCheck
+  postInstall = ''
+    mkdir $testout
+    cp -R testing $testout/testing
   '';
+
+  doCheck = false;
+  passthru.tests.pytest = callPackage ./tests.nix { };
 
   # Remove .pytest_cache when using py.test in a Nix build
   setupHook = writeText "pytest-hook" ''
@@ -83,7 +69,7 @@ buildPythonPackage rec {
     # - files are not needed after tests are finished
     pytestRemoveBytecodePhase () {
         # suffix is defined at:
-        #    https://github.com/pytest-dev/pytest/blob/7.1.1/src/_pytest/assertion/rewrite.py#L51-L53
+        #    https://github.com/pytest-dev/pytest/blob/7.1.2/src/_pytest/assertion/rewrite.py#L51-L53
         find $out -name "*-pytest-*.py[co]" -delete
     }
     preDistPhases+=" pytestRemoveBytecodePhase"

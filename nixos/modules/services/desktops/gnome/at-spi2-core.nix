@@ -27,12 +27,12 @@ with lib;
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable at-spi2-core, a service for the Assistive Technologies
           available on the GNOME platform.
 
           Enable this if you get the error or warning
-          <literal>The name org.a11y.Bus was not provided by any .service files</literal>.
+          `The name org.a11y.Bus was not provided by any .service files`.
         '';
       };
 

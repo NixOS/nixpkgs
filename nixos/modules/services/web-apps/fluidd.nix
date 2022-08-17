@@ -10,7 +10,7 @@ in
 
     package = mkOption {
       type = types.package;
-      description = "Fluidd package to be used in the module";
+      description = lib.mdDoc "Fluidd package to be used in the module";
       default = pkgs.fluidd;
       defaultText = literalExpression "pkgs.fluidd";
     };
@@ -18,7 +18,7 @@ in
     hostName = mkOption {
       type = types.str;
       default = "localhost";
-      description = "Hostname to serve fluidd on";
+      description = lib.mdDoc "Hostname to serve fluidd on";
     };
 
     nginx = mkOption {
@@ -30,7 +30,7 @@ in
           serverAliases = [ "fluidd.''${config.networking.domain}" ];
         }
       '';
-      description = "Extra configuration for the nginx virtual host of fluidd.";
+      description = lib.mdDoc "Extra configuration for the nginx virtual host of fluidd.";
     };
   };
 

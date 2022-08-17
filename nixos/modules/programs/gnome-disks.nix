@@ -26,7 +26,7 @@ with lib;
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable GNOME Disks daemon, a program designed to
           be a UDisks2 graphical front-end.
         '';

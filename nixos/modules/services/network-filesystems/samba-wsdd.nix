@@ -23,46 +23,46 @@ in {
         type = types.nullOr types.str;
         default = null;
         example = "eth0";
-        description = "Interface or address to use.";
+        description = lib.mdDoc "Interface or address to use.";
       };
       hoplimit = mkOption {
         type = types.nullOr types.int;
         default = null;
         example = 2;
-        description = "Hop limit for multicast packets (default = 1).";
+        description = lib.mdDoc "Hop limit for multicast packets (default = 1).";
       };
       workgroup = mkOption {
         type = types.nullOr types.str;
         default = null;
         example = "HOME";
-        description = "Set workgroup name (default WORKGROUP).";
+        description = lib.mdDoc "Set workgroup name (default WORKGROUP).";
       };
       hostname = mkOption {
         type = types.nullOr types.str;
         default = null;
         example = "FILESERVER";
-        description = "Override (NetBIOS) hostname to be used (default hostname).";
+        description = lib.mdDoc "Override (NetBIOS) hostname to be used (default hostname).";
       };
       domain = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = "Set domain name (disables workgroup).";
+        description = lib.mdDoc "Set domain name (disables workgroup).";
       };
       discovery = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable discovery operation mode.";
+        description = lib.mdDoc "Enable discovery operation mode.";
       };
       listen = mkOption {
         type = types.str;
         default = "/run/wsdd/wsdd.sock";
-        description = "Listen on path or localhost port in discovery mode.";
+        description = lib.mdDoc "Listen on path or localhost port in discovery mode.";
       };
       extraOptions = mkOption {
         type = types.listOf types.str;
         default = [ "--shortlog" ];
         example = [ "--verbose" "--no-http" "--ipv4only" "--no-host" ];
-        description = "Additional wsdd options.";
+        description = lib.mdDoc "Additional wsdd options.";
       };
     };
   };
