@@ -87,6 +87,13 @@ in
       description = "epgstation package to use";
     };
 
+    ffmpeg = lib.mkOption {
+      default = pkgs.ffmpeg-full;
+      type = lib.types.package;
+      defaultText = lib.literalExpression "pkgs.ffmpeg-full";
+      description = "ffmpeg package to use for encoding";
+    };
+
     usePreconfiguredStreaming = lib.mkOption {
       type = lib.types.bool;
       default = true;
@@ -277,6 +284,8 @@ in
       package = lib.mkDefault pkgs.mariadb;
       ensureDatabases = [ cfg.database.name ];
       # FIXME: enable once mysqljs supports auth_socket
+      # https://github.com/mysqljs/mysql/issues/1507
+      #
       # ensureUsers = [ {
       #   name = username;
       #   ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
@@ -294,8 +303,8 @@ in
             database = cfg.database.name;
           };
 
-          ffmpeg = lib.mkDefault "${pkgs.ffmpeg-full}/bin/ffmpeg";
-          ffprobe = lib.mkDefault "${pkgs.ffmpeg-full}/bin/ffprobe";
+          ffmpeg = lib.mkDefault "${cfg.ffmpeg}/bin/ffmpeg";
+          ffprobe = lib.mkDefault "${cfg.ffmpeg}/bin/ffprobe";
 
           # for disambiguation with TypeScript files
           recordedFileExtension = lib.mkDefault ".m2ts";
