@@ -767,15 +767,6 @@
     "vendorSha256": null,
     "version": "2.1.0"
   },
-  "ncloud": {
-    "owner": "NaverCloudPlatform",
-    "provider-source-address": "registry.terraform.io/NaverCloudPlatform/ncloud",
-    "repo": "terraform-provider-ncloud",
-    "rev": "v2.2.9",
-    "sha256": "sha256-D9B3IJZZOCR/kzFee3sBPEbDcAL33kIef/NAYDuJv7U=",
-    "vendorSha256": "sha256-DPK/RF63rz5AQY/LybT8I6z6vSvqrFqypslhquRrgfg=",
-    "version": "2.2.9"
-  },
   "netlify": {
     "owner": "AegirHealth",
     "provider-source-address": "registry.terraform.io/AegirHealth/netlify",
