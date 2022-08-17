@@ -10032,6 +10032,8 @@ with pkgs;
 
   pympress = callPackage ../applications/office/pympress { };
 
+  pyocd = python3Packages.callPackage ../development/embedded/pyocd { };
+
   pyspread = libsForQt5.callPackage ../applications/office/pyspread { };
 
   teapot = callPackage ../applications/office/teapot { };
@@ -19945,6 +19947,8 @@ with pkgs;
   libusbgx = callPackage ../development/libraries/libusbgx { };
 
   libusbmuxd = callPackage ../development/libraries/libusbmuxd { };
+
+  libusbsio = callPackage ../development/libraries/libusbsio { };
 
   libutempter = callPackage ../development/libraries/libutempter { };
 
