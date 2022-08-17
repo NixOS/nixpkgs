@@ -125,6 +125,8 @@ in {
 
     services.udev.packages = [ cfg.package ];
 
+    services.udisks2.enable = true;
+
     systemd.packages = [ cfg.package ];
   };
 
