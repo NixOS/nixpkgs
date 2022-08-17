@@ -236,14 +236,18 @@ Its parameters are described in the example below:
 
 ```nix
 pullImage {
+  # mandatory parameters
   imageName = "docker.io/library/busybox";
   imageDigest = "sha256:ef320ff10026a50cf5f0213d35537ce0041ac1d96e9b7800bafd8bc9eff6c693";
   sha256 = "sha256-9T6tP/xnZwaTH+qkbkVuXhCk+qZGE3WBY8T+Ug4qCmc=";
+
+  # optional parameters
   finalImageName = "docker.io/library/busybox";
   finalImageTag = "stable-uclibc";
   os = "linux";
-  arch ="arm";
+  arch = "arm";
   variant = "v7";
+  tlsVerify = true;
 }
 ```
 
@@ -269,10 +273,11 @@ pullImage {
 $ nix run nixpkgs.nix-prefetch-docker -c nix-prefetch-docker --image-name mysql --image-tag 5
 ```
 
-Since a given `imageName` may transparently refer to a manifest list of images which support multiple architectures and/or operating systems, you can supply the `--os` and `--arch` arguments to specify exactly which image you want. By default it will match the OS and architecture of the host the command is run on.
+Since a given `imageName` may transparently refer to a manifest list of images which support multiple architectures and/or operating systems, you can supply the `--os` and `--arch` arguments to specify exactly which image you want. By default the os will be set to `linux` and the arch to 
+`amd64`
 
 ```ShellSession
-$ nix-prefetch-docker --image-name mysql --image-tag 5 --arch x86_64 --os linux
+$ nix-prefetch-docker --image-name mysql --image-tag 5 --arch amd64 --os linux
 ```
 
 Desired image name and tag can be set using `--final-image-name` and `--final-image-tag` arguments:
