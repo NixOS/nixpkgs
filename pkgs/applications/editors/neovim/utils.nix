@@ -49,12 +49,17 @@ let
       };
 
       # transform all plugins into an attrset
-      # { optional = bool; plugin = package; dest = filename; }
-      pluginsNormalized = map (x: if x ? plugin then { dest = "init.vim"; optional = false; } // x else { plugin = x; optional = false;}) plugins;
+      # { optional = bool; plugin = package; }
+      pluginsNormalized = let
+        defaultPlugin = {
+          plugin = null;
+          config = null;
+          optional = false;
+        };
+      in
+        map (x: defaultPlugin // (if (x ? plugin) then x else { plugin = x; })) plugins;
 
-
-
-      pluginRC = lib.concatMapStrings (p: p.config or "") pluginsNormalized;
+      pluginRC = lib.foldl (acc: p: if p.config != null then acc ++ [p.config] else acc) []  pluginsNormalized;
 
       pluginsPartitioned = lib.partition (x: x.optional == true) pluginsNormalized;
       requiredPlugins = vimUtils.requiredPluginsForPackage myVimPackage;
@@ -116,7 +121,11 @@ let
 
       manifestRc = vimUtils.vimrcContent ({ customRC = ""; }) ;
       # we call vimrcContent without 'packages' to avoid the init.vim generation
-      neovimRcContent = vimUtils.vimrcContent ({ beforePlugins = ""; customRC = pluginRC + customRC; packages = null; });
+      neovimRcContent = vimUtils.vimrcContent ({
+        beforePlugins = "";
+        customRC = lib.concatStringsSep "\n" (pluginRC ++ [customRC]);
+        packages = null;
+      });
     in
 
     builtins.removeAttrs args ["plugins"] // {
