@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchgit, wrapGAppsHook, autoreconfHook, bison, flex
+{ stdenv, lib, fetchgit, fetchpatch
+, wrapGAppsHook, autoreconfHook, bison, flex
 , curl, gtk3, pkg-config, python3, shared-mime-info
 , glib-networking, gsettings-desktop-schemas
 
@@ -110,6 +111,12 @@ in stdenv.mkDerivation rec {
 
   patches = [
     ./mime.patch
+
+    # Fix build with perl >= 5.35.2
+    (fetchpatch {
+      url = "https://git.claws-mail.org/?p=claws.git;a=patch;h=5fee50c54a370fdfb5241bd4c4c16281a741762e";
+      hash = "sha256-dO8g77IvnT1cB3kbCk/F1SgiQkZneqHQuwTTAZ1q8KY=";
+    })
   ];
 
   preConfigure = ''
