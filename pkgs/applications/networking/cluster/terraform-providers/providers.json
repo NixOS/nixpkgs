@@ -348,15 +348,6 @@
     "vendorSha256": "sha256-aPt1y7UEL+Y4aRm0rfHr/yJ393NP2oAqgz7+fo/msQo=",
     "version": "2.20.2"
   },
-  "dome9": {
-    "owner": "dome9",
-    "provider-source-address": "registry.terraform.io/dome9/dome9",
-    "repo": "terraform-provider-dome9",
-    "rev": "v1.27.4",
-    "sha256": "sha256-+3jIq7f21CkuF3UZYV3o+ZIdoQi0hFgO/qXwdhkcaPI=",
-    "vendorSha256": null,
-    "version": "1.27.4"
-  },
   "elasticsearch": {
     "owner": "phillbaker",
     "provider-source-address": "registry.terraform.io/phillbaker/elasticsearch",
