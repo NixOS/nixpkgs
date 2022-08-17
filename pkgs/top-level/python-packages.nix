@@ -361,6 +361,8 @@ in {
 
   aiolifx = callPackage ../development/python-modules/aiolifx { };
 
+  aiolifx-connection = callPackage ../development/python-modules/aiolifx-connection { };
+
   aiolifx-effects = callPackage ../development/python-modules/aiolifx-effects { };
 
   aiolimiter = callPackage ../development/python-modules/aiolimiter { };
