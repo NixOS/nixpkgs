@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vkBasalt";
-  version = "0.3.2.5";
+  version = "0.3.2.6";
 
   src = fetchFromGitHub {
     owner = "DadSchoorse";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-1UHxPtpmkDNOJwKXVlRN2lpvRm4XPHNwxOBpEikXxqA=";
+    sha256 = "sha256-wk/bmbwdE1sBZPlD+EqXfQWDITIfCelTpoFBtNtZV8Q=";
   };
 
   nativeBuildInputs = [ glslang meson ninja pkg-config ];
