@@ -5,7 +5,7 @@
 , fetchurl
 , pkg-config
 , cmake
-, python3
+, pythonPackages
 , libpng
 , zlib
 , eigen
@@ -49,7 +49,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    python3
+    pythonPackages.python
+    pythonPackages.setuptools
+    pythonPackages.wheel
+    pythonPackages.pip
     gtest
   ];
 
@@ -61,10 +64,15 @@ stdenv.mkDerivation rec {
     nlohmann_json
     boost
     oneDNN
+    pythonPackages.pybind11
+  ];
+
+  propagatedBuildInputs = [
+     pythonPackages.numpy
   ];
 
   # TODO: build server, and move .so's to lib output
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "python" ];
 
   enableParallelBuilding = true;
 
@@ -79,6 +87,7 @@ stdenv.mkDerivation rec {
     "-Donnxruntime_USE_MPI=ON"
     "-Deigen_SOURCE_PATH=${eigen.src}"
     "-Donnxruntime_USE_DNNL=YES"
+    "-Donnxruntime_ENABLE_PYTHON=ON"
   ];
 
   doCheck = true;
@@ -94,6 +103,8 @@ stdenv.mkDerivation rec {
       ../include/onnxruntime/core/framework/provider_options.h \
       ../include/onnxruntime/core/providers/cpu/cpu_provider_factory.h \
       ../include/onnxruntime/core/session/onnxruntime_*.h
+    python ../setup.py bdist_wheel
+    pip install dist/*.whl --no-index --no-warn-script-location --prefix="$python" --no-cache --no-deps
   '';
 
   meta = with lib; {

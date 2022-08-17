@@ -4382,7 +4382,9 @@ with pkgs;
 
   online-judge-tools = with python3.pkgs; toPythonApplication online-judge-tools;
 
-  onnxruntime = callPackage ../development/libraries/onnxruntime { };
+  onnxruntime = callPackage ../development/libraries/onnxruntime {
+    pythonPackages = python3Packages;
+  };
 
   xkbd = callPackage ../applications/misc/xkbd { };
 
