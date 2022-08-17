@@ -80,6 +80,11 @@ buildDotnetModule rec {
     ./appdir.patch # Ryujinx attempts to write to the nix store. This patch redirects it to "~/.config/Ryujinx" on Linux.
   ];
 
+  makeWrapperArgs = [
+    # Without this Ryujinx fails to start on wayland. See https://github.com/Ryujinx/Ryujinx/issues/2714
+    "--set GDK_BACKEND x11"
+  ];
+
   preInstall = ''
     # workaround for https://github.com/Ryujinx/Ryujinx/issues/2349
     mkdir -p $out/lib/sndio-6
