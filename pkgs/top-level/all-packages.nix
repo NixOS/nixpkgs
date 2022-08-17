@@ -31713,6 +31713,8 @@ with pkgs;
     w3m = buildPackages.w3m-batch;
   };
 
+  xdg-open-with-portal = callPackage ../tools/X11/xdg-open-with-portal { };
+
   xdgmenumaker = callPackage ../applications/misc/xdgmenumaker { };
 
   xdotool = callPackage ../tools/X11/xdotool { };
