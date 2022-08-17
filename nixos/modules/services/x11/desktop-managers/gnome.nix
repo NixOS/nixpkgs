@@ -361,7 +361,8 @@ in
       services.gnome.tracker-miners.enable = mkDefault true;
       services.gnome.tracker.enable = mkDefault true;
       services.hardware.bolt.enable = mkDefault true;
-      services.packagekit.enable = mkDefault true;
+      # TODO: Enable once #177946 is resolved
+      # services.packagekit.enable = mkDefault true;
       services.udisks2.enable = true;
       services.upower.enable = config.powerManagement.enable;
       services.xserver.libinput.enable = mkDefault true; # for controlling touchpad settings via gnome control center
