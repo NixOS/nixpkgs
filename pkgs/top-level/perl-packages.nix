@@ -26110,6 +26110,25 @@ let
     };
   };
 
+  ZonemasterLDNS = buildPerlPackage {
+    pname = "Zonemaster-LDNS";
+    version = "2.2.2";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-LDNS-2.2.2.tar.gz";
+      sha256 = "e0a71c3e35aa761909be323d4101823d7fc1f2f4541b0f75794520c611e4efcf";
+    };
+    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include -I${pkgs.libidn2}.dev}/include";
+    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.libidn2}/lib -lcrypto -lidn2";
+
+    makeMakerFlags = "--prefix-openssl=${pkgs.openssl.dev}";
+
+    buildInputs = [ DevelChecklib ModuleInstall ModuleInstallXSUtil TestFatal pkgs.ldns pkgs.libidn2 pkgs.openssl pkgs.pkg-config ];
+    meta = {
+      description = "Perl wrapper for the ldns DNS library";
+      license = lib.licenses.bsd3;
+    };
+  };
+
 } // lib.optionalAttrs config.allowAliases {
   autodie = null; # part of Perl
   AutoLoader = null; # part of Perl 5.22
