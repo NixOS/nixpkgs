@@ -16,10 +16,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "00palwawk897p5gypw5wjrh93d4p0xz2yl9w93yicb4kq7amh8d4";
+      sha256 = "037w5kg3y9jrwgg7izfn1pmzngy0hdhcr7slmxwqa3mdb4rx9r9q";
       type = "gem";
     };
-    version = "1.10.0";
+    version = "1.10.1";
   };
   faraday-em_http = {
     groups = ["default"];
@@ -67,10 +67,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "03qfi9020ynf7hkdiaq01sd2mllvw7fg4qiin3pk028b4wv23j3j";
+      sha256 = "09871c4hd7s5ws1wl4gs7js1k2wlby6v947m2bbzg43pnld044lh";
       type = "gem";
     };
-    version = "1.0.3";
+    version = "1.0.4";
   };
   faraday-net_http = {
     groups = ["default"];
@@ -127,10 +127,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1zgw9zlwh2a6i1yvhhc4a84ry1hv824d6g2iw2chs3k5aylpmpfj";
+      sha256 = "1n0kvnrcrjn31jb97kcx3wj1f5kkjza7yygfq8rxzf3i57g7jaa6";
       type = "gem";
     };
-    version = "2.1.1";
+    version = "2.2.3";
   };
   octokit = {
     dependencies = ["faraday" "sawyer"];
