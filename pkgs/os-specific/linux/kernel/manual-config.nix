@@ -60,7 +60,7 @@ let
     ++ optional (lib.versionAtLeast version "5.13") zstd;
 
 
-  installkernel = buildPackages.writeShellScript "installkernel" ''
+  installkernel = buildPackages.writeShellScriptBin "installkernel" ''
     set -e
     mkdir -p $4
     cp -av $2 $4
@@ -114,10 +114,6 @@ let
         ++ optional (lib.versionAtLeast version "5.2" && lib.versionOlder version "5.4") ./gen-kheaders-metadata.patch;
 
       prePatch = ''
-        for mf in $(find -name Makefile -o -name Makefile.include -o -name install.sh); do
-            echo "stripping FHS paths in \`$mf'..."
-            sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g ; s|/sbin/||g'
-        done
         sed -i Makefile -e 's|= depmod|= ${buildPackages.kmod}/bin/depmod|'
 
         # Don't include a (random) NT_GNU_BUILD_ID, to make the build more deterministic.
@@ -146,6 +142,11 @@ let
         fi
 
         patchShebangs scripts
+
+        # also patch arch-specific install scripts
+        for i in $(find arch -name install.sh); do
+            patchShebangs "$i"
+        done
       '';
 
       configurePhase = ''
@@ -189,7 +190,6 @@ let
       ++ extraMakeFlags;
 
       installFlags = [
-        "INSTALLKERNEL=${installkernel}"
         "INSTALL_PATH=$(out)"
       ] ++ (optional isModular "INSTALL_MOD_PATH=$(out)")
       ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware"
@@ -197,6 +197,9 @@ let
 
       preInstall = ''
         installFlagsArray+=("-j$NIX_BUILD_CORES")
+
+        # the install scripts expect to find installkernel in ~/bin/installkernel
+        export HOME=${installkernel}
       '';
 
       # Some image types need special install targets (e.g. uImage is installed with make uinstall)
