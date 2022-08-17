@@ -11574,6 +11574,8 @@ in {
 
   wsproto = callPackage ../development/python-modules/wsproto { };
 
+  wtfis = callPackage ../development/python-modules/wtfis { };
+
   wtforms = callPackage ../development/python-modules/wtforms { };
 
   wtf-peewee = callPackage ../development/python-modules/wtf-peewee { };

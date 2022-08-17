@@ -36172,6 +36172,8 @@ with pkgs;
 
   wtf = callPackage ../applications/misc/wtf { };
 
+  wtfis = with python3Packages; toPythonApplication wtfis;
+
   zk-shell = callPackage ../applications/misc/zk-shell { };
 
   tora = libsForQt5.callPackage ../development/tools/tora {};
