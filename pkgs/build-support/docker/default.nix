@@ -23,7 +23,6 @@
 , shadow
 , skopeo
 , storeDir ? builtins.storeDir
-, stdenv
 , substituteAll
 , symlinkJoin
 , tarsum
@@ -35,6 +34,9 @@
 , writeTextDir
 , writePython3
 }:
+
+# Prevent infinite recursion error to happen with pkgs.pkgsCross.[ARCH]-darwin
+assert go.GOOS == "darwin" -> throw "can't build container image for `darwin` with `dockerTools`";
 
 let
   inherit (lib)
@@ -78,10 +80,10 @@ let
 
   # Add ARM variant support (e.g. v8, v7...)
   defaultVariant =
-    if stdenv.hostPlatform.parsed.cpu.version != null then
-      "v${stdenv.hostPlatform.parsed.cpu.version}"
+    if go.GOARM != "" then
+      "v${go.GOARM}"
     else
-      "";
+      null;
 
 in
 rec {
@@ -107,9 +109,6 @@ rec {
       # see doc/functions.xml
     , imageDigest
     , sha256
-    , os ? "linux"
-    , arch ? defaultArch
-    , variant ? defaultVariant
       # This is used to set name to the pulled image
     , finalImageName ? imageName
       # This used to set a tag to the pulled image
@@ -118,7 +117,16 @@ rec {
     , tlsVerify ? true
 
     , name ? fixName "docker-image-${finalImageName}-${finalImageTag}.tar"
+
+    # These parameters are no longer needed
+    , os ? null
+    , arch ? null
+    , variant ? null
     }:
+
+    assert os != null -> throw "`os` parameter is no longer needed by `pullImage` function";
+    assert arch != null -> throw "`arch` parameter is no longer needed by `pullImage` function";
+    assert variant != null -> throw "`variant` parameter is no longer needed by `pullImage` function";
 
     runCommand name
       {
@@ -139,9 +147,9 @@ rec {
       skopeo \
         --insecure-policy \
         --tmpdir=$TMPDIR \
-        --override-os ${os} \
-        --override-arch ${arch} \
-        --override-variant ${variant} \
+        --override-os "linux" \
+        --override-arch ${defaultArch} \
+        ${optionalString (defaultVariant != null) "--override-variant ${defaultVariant}"} \
         copy \
         --src-tls-verify=${lib.boolToString tlsVerify} \
         "$sourceURL" "docker-archive://$out:$destNameTag" \

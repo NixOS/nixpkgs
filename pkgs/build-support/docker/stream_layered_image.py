@@ -355,7 +355,7 @@ def main():
             "created": datetime.isoformat(created),
             "architecture": conf["architecture"],
             "variant": conf["variant"],
-            "os": "linux",
+            "os": conf["os"],
             "config": overlay_base_config(from_image, conf["config"]),
             "rootfs": {
                 "diff_ids": [f"sha256:{layer.checksum}" for layer in layers],

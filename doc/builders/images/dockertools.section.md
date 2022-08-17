@@ -244,9 +244,6 @@ pullImage {
   # optional parameters
   finalImageName = "docker.io/library/busybox";
   finalImageTag = "stable-uclibc";
-  os = "linux";
-  arch = "arm";
-  variant = "v7";
   tlsVerify = true;
 }
 ```
@@ -261,11 +258,7 @@ pullImage {
 
 - `sha256` is the checksum of the whole fetched image. This argument is required.
 
-- `os`, if specified, is the operating system of the fetched image. By default it's `linux`.
-
-- `arch`, if specified, is the cpu architecture of the fetched image. By default it's the host machine cpu architecture.
-
-- `variant`, if specified, is the cpu architecture variant of the fetched image. By default it's null
+The host information (arch and cpu variant if available) will be used to fetch the correct image. The target os is set to `linux` by default and can't be changed to another os.
 
 `nix-prefetch-docker` command can be used to get required image parameters:
 
