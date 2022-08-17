@@ -95,12 +95,7 @@ stdenv.mkDerivation rec {
     "--enable-fixed-path=${gnupg}/bin"
     "--with-libgpg-error-prefix=${libgpg-error.dev}"
     "--with-libassuan-prefix=${libassuan.dev}"
-  ] ++ lib.optional pythonSupport "--enable-languages=python"
-  # Tests will try to communicate with gpg-agent instance via a UNIX socket
-  # which has a path length limit. Nix on darwin is using a build directory
-  # that already has quite a long path and the resulting socket path doesn't
-  # fit in the limit. https://github.com/NixOS/nix/pull/1085
-  ++ lib.optionals stdenv.isDarwin [ "--disable-gpg-test" ];
+  ] ++ lib.optional pythonSupport "--enable-languages=python";
 
   NIX_CFLAGS_COMPILE = toString (
     # qgpgme uses Q_ASSERT which retains build inputs at runtime unless
@@ -110,7 +105,16 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.hostPlatform.is32bit "-D_FILE_OFFSET_BITS=64"
   );
 
-  doCheck = true;
+  # prevent tests from being run during the buildPhase
+  makeFlags = [ "tests=" ];
+
+  # Tests will try to communicate with gpg-agent instance via a UNIX socket
+  # which has a path length limit. Nix on darwin is using a build directory
+  # that already has quite a long path and the resulting socket path doesn't
+  # fit in the limit. https://github.com/NixOS/nix/pull/1085
+  doCheck = !stdenv.isDarwin;
+
+  checkFlags = [ "-C" "tests" ];
 
   passthru.tests = {
     python = python3.pkgs.gpgme;
