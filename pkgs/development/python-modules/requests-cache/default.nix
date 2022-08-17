@@ -42,6 +42,21 @@ buildPythonPackage rec {
     poetry-core
   ];
 
+  postPatch = ''
+    #
+    # There is no functional reason why attrs (and cattrs) need to be
+    # restricted, but the versions are in flux right now. Please read
+    # and follow the following issue for the latest:
+    #
+    #   https://github.com/requests-cache/requests-cache/issues/675
+    #
+    # This can be removed once that issue is resolved, or if the new
+    # major version is released.
+    #
+    substituteInPlace pyproject.toml \
+      --replace 'attrs         = "^21.2"' 'attrs         = ">=21.2"'
+  '';
+
   propagatedBuildInputs = [
     appdirs
     attrs
