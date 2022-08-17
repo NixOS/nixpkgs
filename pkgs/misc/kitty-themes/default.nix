@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "kitty-themes";
-  version = "unstable-2022-05-04";
+  version = "unstable-2022-08-11";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
