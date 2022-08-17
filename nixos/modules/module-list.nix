@@ -8,6 +8,7 @@
   ./config/xdg/icons.nix
   ./config/xdg/menus.nix
   ./config/xdg/mime.nix
+  ./config/xdg/xdg-open.nix
   ./config/xdg/portal.nix
   ./config/xdg/portals/wlr.nix
   ./config/xdg/portals/lxqt.nix
