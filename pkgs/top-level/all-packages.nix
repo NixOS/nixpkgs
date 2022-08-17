@@ -5026,7 +5026,6 @@ with pkgs;
   convertlit = callPackage ../tools/text/convertlit { };
 
   collectd = callPackage ../tools/system/collectd {
-    libsigrok = libsigrok_0_3; # not compatible with >= 0.4.0 yet
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
@@ -7240,6 +7239,8 @@ with pkgs;
   haste-client = callPackage ../tools/misc/haste-client { };
 
   haste-server = callPackage ../servers/haste-server { };
+
+  hatch = python3Packages.callPackage ../development/tools/hatch { };
 
   hal-hardware-analyzer = libsForQt5.callPackage ../applications/science/electronics/hal-hardware-analyzer { };
 
@@ -10031,6 +10032,8 @@ with pkgs;
   pylint = with python3Packages; toPythonApplication pylint;
 
   pympress = callPackage ../applications/office/pympress { };
+
+  pyocd = python3Packages.callPackage ../development/embedded/pyocd { };
 
   pyspread = libsForQt5.callPackage ../applications/office/pyspread { };
 
@@ -14169,27 +14172,27 @@ with pkgs;
   rocclr = callPackage ../development/libraries/rocclr { };
 
   hip = callPackage ../development/compilers/hip {
-    inherit (llvmPackages_rocm) clang clang-unwrapped compiler-rt lld llvm;
+    inherit (llvmPackages_rocm) clang llvm;
   };
 
   rocm-cmake = callPackage ../development/tools/build-managers/rocm-cmake { };
 
   rocm-comgr = callPackage ../development/libraries/rocm-comgr {
-    inherit (llvmPackages_rocm) clang lld llvm;
+    inherit (llvmPackages_rocm) clang llvm;
   };
 
   rocm-device-libs = callPackage ../development/libraries/rocm-device-libs {
-    inherit (llvmPackages_rocm) clang clang-unwrapped lld llvm;
+    inherit (llvmPackages_rocm) clang llvm;
   };
 
   rocm-opencl-icd = callPackage ../development/libraries/rocm-opencl-icd { };
 
   rocm-opencl-runtime = callPackage ../development/libraries/rocm-opencl-runtime {
-    inherit (llvmPackages_rocm) clang clang-unwrapped lld llvm;
+    inherit (llvmPackages_rocm) clang llvm;
   };
 
   rocm-runtime = callPackage ../development/libraries/rocm-runtime {
-    inherit (llvmPackages_rocm) clang-unwrapped llvm;
+    inherit (llvmPackages_rocm) llvm;
   };
 
   rocm-smi = python3Packages.callPackage ../tools/system/rocm-smi { };
@@ -15895,13 +15898,6 @@ with pkgs;
   libsigrok = callPackage ../development/tools/libsigrok {
     python = python3;
   };
-  # old version:
-  libsigrok_0_3 = libsigrok.override {
-    python = python3;
-    version = "0.3.0";
-    sha256 = "0l3h7zvn3w4c1b9dgvl3hirc4aj1csfkgbk87jkpl7bgl03nk4j3";
-    doInstallCheck = false;
-  };
 
   libsigrokdecode = callPackage ../development/tools/libsigrokdecode {
     python3 = python38;
@@ -15910,6 +15906,8 @@ with pkgs;
   # special forks used for dsview
   libsigrok4dsl = callPackage ../applications/science/electronics/dsview/libsigrok4dsl.nix { };
   libsigrokdecode4dsl = callPackage ../applications/science/electronics/dsview/libsigrokdecode4dsl.nix { };
+
+  sigrok-firmware-fx2lafw = callPackage ../development/tools/sigrok-firmware-fx2lafw { };
 
   cli11 = callPackage ../development/tools/misc/cli11 { };
 
@@ -19946,6 +19944,8 @@ with pkgs;
 
   libusbmuxd = callPackage ../development/libraries/libusbmuxd { };
 
+  libusbsio = callPackage ../development/libraries/libusbsio { };
+
   libutempter = callPackage ../development/libraries/libutempter { };
 
   libuldaq = callPackage ../development/libraries/libuldaq { };
@@ -22438,6 +22438,8 @@ with pkgs;
   hyp = callPackage ../servers/http/hyp { };
 
   podgrab = callPackage ../servers/misc/podgrab { };
+
+  portunus = callPackage ../servers/portunus { };
 
   prosody = callPackage ../servers/xmpp/prosody {
     withExtraLibs = [];
@@ -26184,6 +26186,8 @@ with pkgs;
   };
 
 
+  armcord = callPackage ../applications/networking/instant-messengers/armcord { };
+
   aumix = callPackage ../applications/audio/aumix {
     gtkGUI = false;
   };
@@ -26822,6 +26826,8 @@ with pkgs;
   ed = callPackage ../applications/editors/ed { };
 
   edbrowse = callPackage ../applications/editors/edbrowse { };
+
+  o = callPackage ../applications/editors/o { };
 
   oed = callPackage ../applications/editors/oed { };
 

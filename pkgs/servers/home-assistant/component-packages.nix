@@ -1448,10 +1448,11 @@
     ];
     "lifx" = ps: with ps; [
       aiohttp-cors
+      aiolifx-connection
       aiolifx
       aiolifx-effects
       ifaddr
-    ]; # missing inputs: aiolifx-connection
+    ];
     "lifx_cloud" = ps: with ps; [
     ];
     "light" = ps: with ps; [
@@ -3557,6 +3558,7 @@
     "lcn"
     "lg_soundbar"
     "life360"
+    "lifx"
     "light"
     "litterrobot"
     "local_file"

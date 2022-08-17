@@ -2,28 +2,30 @@
 
 let
   pname = "alt-ergo";
-  version = "2.4.1";
+  version = "2.4.2";
+
+  configureScript = "ocaml unix.cma configure.ml";
 
   src = fetchFromGitHub {
     owner = "OCamlPro";
     repo = pname;
     rev = version;
-    sha256 = "0hglj1p0753w2isds01h90knraxa42d2jghr35dpwf9g8a1sm9d3";
+    sha256 = "sha256-8pJ/1UAbheQaLFs5Uubmmf5D0oFJiPxF6e2WTZgRyAc=";
   };
 in
 
 let alt-ergo-lib = ocamlPackages.buildDunePackage rec {
   pname = "alt-ergo-lib";
-  inherit version src;
+  inherit version src configureScript;
   configureFlags = [ pname ];
   nativeBuildInputs = [ which ];
   buildInputs = with ocamlPackages; [ dune-configurator ];
-  propagatedBuildInputs = with ocamlPackages; [ num ocplib-simplex stdlib-shims zarith ];
+  propagatedBuildInputs = with ocamlPackages; [ num ocplib-simplex seq stdlib-shims zarith ];
 }; in
 
 let alt-ergo-parsers = ocamlPackages.buildDunePackage rec {
   pname = "alt-ergo-parsers";
-  inherit version src;
+  inherit version src configureScript;
   configureFlags = [ pname ];
   nativeBuildInputs = [ which ocamlPackages.menhir ];
   propagatedBuildInputs = [ alt-ergo-lib ] ++ (with ocamlPackages; [ camlzip psmt2-frontend ]);
@@ -31,18 +33,12 @@ let alt-ergo-parsers = ocamlPackages.buildDunePackage rec {
 
 ocamlPackages.buildDunePackage {
 
-  inherit pname version src;
-
-  # Ensure compatibility with Menhir ≥ 20211215
-  patches = fetchpatch {
-    url = "https://github.com/OCamlPro/alt-ergo/commit/0f9c45af352657c3aec32fca63d11d44f5126df8.patch";
-    sha256 = "sha256:0zaj3xbk2s8k8jl0id3nrhdfq9mv0n378cbawwx3sziiizq7djbg";
-  };
+  inherit pname version src configureScript;
 
   configureFlags = [ pname ];
 
   nativeBuildInputs = [ which ocamlPackages.menhir ];
-  buildInputs = [ alt-ergo-parsers ocamlPackages.cmdliner ];
+  buildInputs = [ alt-ergo-parsers ocamlPackages.cmdliner_1_1 ];
 
   meta = {
     description = "High-performance theorem prover and SMT solver";
