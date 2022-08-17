@@ -30979,6 +30979,8 @@ with pkgs;
     inherit (linuxPackages) x86_energy_perf_policy;
   };
 
+  tlpui = python3Packages.callPackage ../tools/misc/tlpui { };
+
   tippecanoe = callPackage ../applications/misc/tippecanoe { };
 
   tmatrix = callPackage ../applications/misc/tmatrix { };
