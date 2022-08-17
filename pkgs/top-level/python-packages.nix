@@ -5389,6 +5389,7 @@ in {
   mkdocs-material-extensions = callPackage ../development/python-modules/mkdocs-material/mkdocs-material-extensions.nix { };
   mkdocs-minify = callPackage ../development/python-modules/mkdocs-minify { };
   mkdocs-redirects = callPackage ../development/python-modules/mkdocs-redirects { };
+  mkdocs-swagger-ui-tag = callPackage ../development/python-modules/mkdocs-swagger-ui-tag { };
 
   mkl-service = callPackage ../development/python-modules/mkl-service { };
 
