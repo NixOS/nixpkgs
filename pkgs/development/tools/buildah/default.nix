@@ -45,7 +45,7 @@ buildGoModule rec {
   buildPhase = ''
     runHook preBuild
     patchShebangs .
-    make bin/buildah GIT_COMMIT="unknown"
+    make bin/buildah
     make -C docs GOMD2MAN="${go-md2man}/bin/go-md2man"
     runHook postBuild
   '';
