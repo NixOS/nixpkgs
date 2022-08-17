@@ -26091,6 +26091,33 @@ let
     };
   };
 
+  ZonemasterCLI = buildPerlPackage {
+    pname = "Zonemaster-CLI";
+    version = "4.0.1";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-CLI-v4.0.1.tar.gz";
+      sha256 = "edd34f7b8137e492e6ce8474c45a550572dca5056abdefc45c076df9d6965ca0";
+    };
+    propagatedBuildInputs = [
+      JSONXS
+      MooseXGetopt
+      TextReflow
+      ZonemasterEngine
+      ZonemasterLDNS
+      libintl-perl
+    ];
+
+    preConfigure = ''
+      patchShebangs script/
+    '';
+
+    meta = {
+      description = "Run Zonemaster tests from the command line";
+      license = lib.licenses.bsd3;
+      maintainers = with lib.maintainers; [ qbit ];
+    };
+  };
+
   ZonemasterEngine = buildPerlPackage {
     pname = "Zonemaster-Engine";
     version = "4.5.1";
@@ -26099,10 +26126,12 @@ let
       sha256 = "45d204c6dad7cd90176084bf2427baa8ce503684a5699ebeb236e4d33bc0ba86";
     };
     buildInputs = [ PodCoverage TestDifferences TestException TestFatal TestNoWarnings TestPod ];
-    propagatedBuildInputs = [ ClassAccessor Clone EmailValid FileShareDir FileSlurp IOSocketInet6 ListMoreUtils ModuleFind Moose MooseXSingleton NetIP Readonly TextCSV ZonemasterLDNS libintlperl ];
+    propagatedBuildInputs = [ ClassAccessor Clone EmailValid FileShareDir FileSlurp IOSocketInet6 ListMoreUtils ModuleFind Moose MooseXSingleton NetIP Readonly TextCSV ZonemasterLDNS libintl-perl ];
 
-    # > t/Test-dnssec.t         (Wstat: 768 (exited 3) Tests: 763 Failed: 3)
-    doCheck = false;
+    preCheck = ''
+      # disable dnssec test as it fails
+      rm -f t/Test-dnssec.t t/manifest.t
+    '';
 
     meta = {
       description = "A tool to check the quality of a DNS zone";

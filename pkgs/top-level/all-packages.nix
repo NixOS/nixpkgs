@@ -5902,6 +5902,8 @@ with pkgs;
 
   zoekt = callPackage ../tools/text/zoekt { };
 
+  zonemaster-cli = perlPackages.ZonemasterCLI;
+
   zoxide = callPackage ../tools/misc/zoxide { };
 
   zzuf = callPackage ../tools/security/zzuf { };
