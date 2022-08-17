@@ -16310,6 +16310,8 @@ with pkgs;
 
   karate = callPackage ../development/tools/karate { };
 
+  katafygio = callPackage ../applications/networking/cluster/katafygio { };
+
   kati = callPackage ../development/tools/build-managers/kati { };
 
   kcat = callPackage ../development/tools/kcat { };
