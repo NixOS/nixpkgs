@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "openldap_exporter";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "tomcz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ok2fTYz1oQiNdTPsssPb/VuFqny1i8nKTngSpKgCpC4=";
+    sha256 = "sha256-1u+89odwV/lz34wtrK91lET2bOqkH6kRA7JCjzsmiEg=";
   };
 
   vendorSha256 = null;
