@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub, pcsclite, pkg-config, installShellFiles, PCSC, pivKeySupport ? true, pkcs11Support ? true }:
+{ stdenv, lib, buildGoModule, fetchFromGitHub, fetchpatch, pcsclite, pkg-config, installShellFiles, PCSC, pivKeySupport ? true, pkcs11Support ? true }:
 
 buildGoModule rec {
   pname = "cosign";
@@ -10,6 +10,14 @@ buildGoModule rec {
     rev = "v${version}";
     sha256 = "sha256-9zA50tnUWR8dglPvMagiGcJDkPHs7yXuqYV2jnRdWqA=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2022-35929.patch";
+      url = "https://github.com/sigstore/cosign/commit/c5fda01a8ff33ca981f45a9f13e7fb6bd2080b94.patch";
+      sha256 = "sha256-lTphuJp8j2W/3gNtXvfoQeqgdpMWVi5M04jA1UczxmA=";
+    })
+  ];
 
   buildInputs = lib.optional (stdenv.isLinux && pivKeySupport) (lib.getDev pcsclite)
     ++ lib.optionals (stdenv.isDarwin && pivKeySupport) [ PCSC ];
