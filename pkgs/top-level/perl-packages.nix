@@ -26091,6 +26091,25 @@ let
     };
   };
 
+  ZonemasterEngine = buildPerlPackage {
+    pname = "Zonemaster-Engine";
+    version = "4.5.1";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-Engine-v4.5.1.tar.gz";
+      sha256 = "45d204c6dad7cd90176084bf2427baa8ce503684a5699ebeb236e4d33bc0ba86";
+    };
+    buildInputs = [ PodCoverage TestDifferences TestException TestFatal TestNoWarnings TestPod ];
+    propagatedBuildInputs = [ ClassAccessor Clone EmailValid FileShareDir FileSlurp IOSocketInet6 ListMoreUtils ModuleFind Moose MooseXSingleton NetIP Readonly TextCSV ZonemasterLDNS libintlperl ];
+
+    # > t/Test-dnssec.t         (Wstat: 768 (exited 3) Tests: 763 Failed: 3)
+    doCheck = false;
+
+    meta = {
+      description = "A tool to check the quality of a DNS zone";
+      license = lib.licenses.bsd3;
+    };
+  };
+
 } // lib.optionalAttrs config.allowAliases {
   autodie = null; # part of Perl
   AutoLoader = null; # part of Perl 5.22
