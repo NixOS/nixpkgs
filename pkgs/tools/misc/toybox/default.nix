@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "toybox";
-  version = "0.8.6";
+  version = "0.8.8";
 
   src = fetchFromGitHub {
     owner = "landley";
     repo = pname;
     rev = version;
-    sha256 = "sha256-NbONJten685wekfCwbOOQxdS3B2/Ljfp/jdTa7D4U+M=";
+    sha256 = "sha256-T3qE9xlcEoZOcY52XfYPpN34zzQl6mfcRnyuldnIvCk=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]; # needed for cross
