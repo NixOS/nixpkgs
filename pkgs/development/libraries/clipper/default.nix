@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, ninja, unzip }:
+{ lib, stdenv, fetchurl, cmake, ninja, unzip, pkg-config }:
 
 stdenv.mkDerivation rec {
   version = "6.4.2";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ];
 
-  nativeBuildInputs = [ cmake ninja unzip ];
+  nativeBuildInputs = [ cmake ninja unzip pkg-config ];
 
   meta = with lib; {
     description = "A polygon and line clipping and offsetting library (C++, C#, Delphi)";

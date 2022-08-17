@@ -1,4 +1,4 @@
-{ lib, stdenv, python3, fetchFromGitHub, git, pkg-config }:
+{ lib, stdenv, python3, fetchFromGitHub, git, pkg-config, j2cli, symlinkJoin }:
 
 # Note:
 # Conan has specific dependency demands; check
@@ -87,6 +87,8 @@ in newPython.pkgs.buildPythonApplication rec {
     homepage = "https://conan.io";
     description = "Decentralized and portable C/C++ package manager";
     license = licenses.mit;
-    maintainers = with maintainers; [ HaoZeke ];
+    maintainers = with maintainers; [ HaoZeke LunNova ];
   };
+
+  passthru.withConanCMakeDepsFile = import ./withConanCMakeDepsFile.nix { inherit stdenv lib symlinkJoin j2cli; };
 }

@@ -1,7 +1,7 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, python3, qtbase,
- qtquickcontrols2, qtgraphicaleffects, curaengine, plugins ? [] }:
+{ stdenv, lib, fetchFromGitHub, cmake, python3, qtbase,
+ qtdeclarative, curaengine, plugins ? [], wrapQtAppsHook }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "cura";
   version = "5.1.0";
 
@@ -19,12 +19,12 @@ mkDerivation rec {
     sha256 = "sha256-BZHPyKZePBGqd8loiknE0qUoLJCUy6cxBII598Eilg4";
   };
 
-  buildInputs = [ qtbase qtquickcontrols2 qtgraphicaleffects ];
+  buildInputs = [ qtbase qtdeclarative ];
   propagatedBuildInputs = with python3.pkgs; [
     libsavitar numpy-stl pyserial requests uranium zeroconf pynest2d
-    sentry-sdk trimesh keyring pyqt6
+    sentry-sdk trimesh keyring pyqt6 pyclipper
   ] ++ plugins;
-  nativeBuildInputs = [ cmake python3.pkgs.wrapPython ];
+  nativeBuildInputs = [ cmake python3.pkgs.wrapPython wrapQtAppsHook ];
 
   cmakeFlags = [
     "-DURANIUM_DIR=${python3.pkgs.uranium.src}"

@@ -1,7 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake, clipper, nlopt, boost, python3 }:
+{ lib, stdenv, fetchFromGitHub, cmake, clipper, nlopt, boost, conan }:
 
+let withConanCMakeDeps = conan.withConanCMakeDepsFile;
+in
 stdenv.mkDerivation rec {
-  version = "4.12.0";
+  version = "5.1.0";
   pname = "libnest2d";
 
   # This revision is waiting to be merged upstream
@@ -10,15 +12,47 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "libnest2d";
-    rev = "31391fd173249ad9b906390058e13b09238fadc8";
-    sha256 = "1hzqi4z55x76rss3xk7hfqhy9hcaq2jaav5jqxa1aqmbvarr2gla";
+    rev = version;
+    hash = "sha256-m/ekKwkf4886tqOVIcNnUeBQtWreGFO/nx25usbAnDk=";
   };
 
-  propagatedBuildInputs = [ clipper nlopt boost ];
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DLIBNEST2D_HEADER_ONLY=OFF"
+  ];
+
+  propagatedBuildInputs = [
+    (withConanCMakeDeps {package = clipper; pkg_name = "clipper"; lib_search="polyclipping";})
+    nlopt boost
+  ];
   nativeBuildInputs = [ cmake ];
 
   CLIPPER_PATH = "${clipper.out}";
-  cmakeFlags = [ "-DLIBNEST2D_HEADER_ONLY=OFF" ];
+
+  postPatch = ''
+  echo '
+  install(TARGETS libnest2d libnest2d_headeronly ''${LIBNAME}
+  EXPORT ''${PROJECT_NAME}Targets
+  RUNTIME DESTINATION bin
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  INCLUDES DESTINATION include)
+  ' >> CMakeLists.txt;
+  '';
+
+  postInstall = ''
+  cp -r ../include/ $out/
+  mkdir -p $out/include/libnest2d/
+  exists() {
+      [ -e "$1" ]
+  }
+  ls -R .
+  for dir in . ..; do
+    if exists $dir/src/*.{h,hpp}; then
+      cp $dir/src/*.{h,hpp} $out/include/libnest2d/
+    fi
+  done
+  '';
 
   meta = with lib; {
     description =

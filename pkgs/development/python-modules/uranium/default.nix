@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchFromGitHub, python, cmake
-, pyqt5, numpy, scipy, shapely, libarcus, cryptography, doxygen, gettext, pythonOlder }:
+, pyqt6, numpy, scipy, shapely, libarcus, cryptography, doxygen, gettext, pythonOlder }:
 
 buildPythonPackage rec {
   version = "5.1.0";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [ python gettext ];
-  propagatedBuildInputs = [ pyqt5 numpy scipy shapely libarcus cryptography ];
+  propagatedBuildInputs = [ pyqt6 numpy scipy shapely libarcus cryptography ];
   nativeBuildInputs = [ cmake doxygen ];
 
   postPatch = ''

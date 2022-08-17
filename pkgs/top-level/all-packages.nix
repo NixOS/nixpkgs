@@ -31552,9 +31552,9 @@ with pkgs;
 
   curaengine_stable = callPackage ../applications/misc/curaengine/stable.nix { };
 
-  curaengine = callPackage ../applications/misc/curaengine { inherit (python3.pkgs) libarcus; };
+  curaengine = callPackage ../applications/misc/curaengine { inherit (python3.pkgs) libarcus; protobuf = protobuf3_21; };
 
-  cura = libsForQt5.callPackage ../applications/misc/cura { };
+  cura = qt6Packages.callPackage ../applications/misc/cura { };
 
   curaPlugins = callPackage ../applications/misc/cura/plugins.nix { };
 
