@@ -133,14 +133,14 @@ update /etc/fstab.
     which will be used by the boot partition.
 
     ```ShellSession
-    # parted /dev/sda -- mkpart primary 512MiB -8GiB
+    # parted /dev/sda -- mkpart primary 512MB -8GB
     ```
 
 3.  Next, add a *swap* partition. The size required will vary according
-    to needs, here a 8GiB one is created.
+    to needs, here a 8GB one is created.
 
     ```ShellSession
-    # parted /dev/sda -- mkpart primary linux-swap -8GiB 100%
+    # parted /dev/sda -- mkpart primary linux-swap -8GB 100%
     ```
 
     ::: {.note}
@@ -153,7 +153,7 @@ update /etc/fstab.
     reserved 512MiB at the start of the disk.
 
     ```ShellSession
-    # parted /dev/sda -- mkpart ESP fat32 1MiB 512MiB
+    # parted /dev/sda -- mkpart ESP fat32 1MB 512MB
     # parted /dev/sda -- set 3 esp on
     ```
 
@@ -180,14 +180,14 @@ update /etc/fstab.
     end part, where the swap will live.
 
     ```ShellSession
-    # parted /dev/sda -- mkpart primary 1MiB -8GiB
+    # parted /dev/sda -- mkpart primary 1MB -8GB
     ```
 
 3.  Finally, add a *swap* partition. The size required will vary
     according to needs, here a 8GiB one is created.
 
     ```ShellSession
-    # parted /dev/sda -- mkpart primary linux-swap -8GiB 100%
+    # parted /dev/sda -- mkpart primary linux-swap -8GB 100%
     ```
 
     ::: {.note}

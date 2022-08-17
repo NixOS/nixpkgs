@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pyathena";
-  version = "2.13.0";
+  version = "2.14.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyAthena";
     inherit version;
-    hash = "sha256-tt7Idp2MuR7DpXDUwtzqmMhQROb3018m/GxeSJia1j4=";
+    hash = "sha256-1DeqvlHlOt781nObnPdgZo3JqjwcK8lSREXqUNoKhhU=";
   };
 
   propagatedBuildInputs = [

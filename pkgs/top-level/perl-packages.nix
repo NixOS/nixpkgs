@@ -1549,10 +1549,10 @@ let
 
   BKeywords = buildPerlPackage rec {
     pname = "B-Keywords";
-    version = "1.22";
+    version = "1.24";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RU/RURBAN/B-Keywords-${version}.tar.gz";
-      sha256 = "0i2ksp0w9wv1qc22hrdl3k48cww64syhmv8zf6x0kgyd4081hr56";
+      url = "mirror://cpan/authors/id/R/RU/RURBAN/B-Keywords-1.24.tar.gz";
+      sha256 = "sha256-pc9rsoXQbRfO4id4O3I7snQhP9QVOl3uMR0kDhFpYG4=";
     };
     meta = {
       description = "Lists of reserved barewords and symbol names";
@@ -4178,10 +4178,10 @@ let
 
   CpanelJSONXS = buildPerlPackage {
     pname = "Cpanel-JSON-XS";
-    version = "4.25";
+    version = "4.31";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.25.tar.gz";
-      sha256 = "061940vyj9y3rzwq47z2a3f5i5rfpa90ccz7fgz228zr7njkvfpr";
+      url = "mirror://cpan/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.31.tar.gz";
+      sha256 = "sha256-AqZ6zuPeJKcow5ZIaADiojVZGlQ9B5REmtOI/j1c/yk=";
     };
     meta = {
       description = "CPanel fork of JSON::XS, fast and correct serializing";
@@ -5046,10 +5046,10 @@ let
 
   CryptX = buildPerlPackage {
     pname = "CryptX";
-    version = "0.069";
+    version = "0.076";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIK/CryptX-0.069.tar.gz";
-      sha256 = "b5503a35046a973174234a823dba63403b080957c4a370d60d66aa7c7587d850";
+      url = "mirror://cpan/authors/id/M/MI/MIK/CryptX-0.076.tar.gz";
+      sha256 = "sha256-u4SsASQ4x87NtRpab/+08f7jsOrgAi6WzrwuFnUiYhw=";
     };
     meta = {
       description = "Crypto toolkit";
@@ -6450,18 +6450,11 @@ let
 
   DBIxClass = buildPerlPackage {
     pname = "DBIx-Class";
-    version = "0.082842";
+    version = "0.082843";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RI/RIBASUSHI/DBIx-Class-0.082842.tar.gz";
-      sha256 = "1rh7idjjbibc1zmiaaarask434lh0lx7f2xyfwmy37k9fa0xcpmh";
+      url = "mirror://cpan/authors/id/R/RI/RIBASUSHI/DBIx-Class-0.082843.tar.gz";
+      sha256 = "sha256-NB4Lbssp2MSRdKbAnXxtvzhym6QBXuf9cDYKT/7h8lE=";
     };
-    patches = [
-      # https://github.com/Perl5/DBIx-Class/pull/141
-      (fetchpatch {
-        url = "https://github.com/Perl5/DBIx-Class/commit/fb896701d23fa4da622b5b1b2afbbba3da2dd8f3.patch";
-        sha256 = "sha256-MSbV9UfHu90NCdC5IFwuy/vpSDw4atfellYh7Ydvkm4=";
-      })
-    ];
     buildInputs = [ DBDSQLite TestDeep TestException TestWarn ];
     propagatedBuildInputs = [ ClassAccessorGrouped ClassC3Componentised ConfigAny ContextPreserve DBI DataDumperConcise DataPage DevelGlobalDestruction ModuleFind PathClass SQLAbstractClassic ScopeGuard SubName namespaceclean ];
     meta = {
@@ -7740,10 +7733,10 @@ let
 
   Encode = buildPerlPackage {
     pname = "Encode";
-    version = "3.08";
+    version = "3.19";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DA/DANKOGAI/Encode-3.08.tar.gz";
-      sha256 = "0nvvs5a7sz2x38isr5na31fa6ja85cpvmbn07qx0l50ss00ks1pd";
+      url = "mirror://cpan/authors/id/D/DA/DANKOGAI/Encode-3.19.tar.gz";
+      sha256 = "sha256-kWP4SO72nk1MyIODl/CGH9nqft4AERfb2WlPjZUFLvU=";
     };
     meta = {
       description = "Character encodings in Perl";
@@ -19834,10 +19827,10 @@ let
 
   ScopeUpper = buildPerlPackage {
     pname = "Scope-Upper";
-    version = "0.32";
+    version = "0.33";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/V/VP/VPIT/Scope-Upper-0.32.tar.gz";
-      sha256 = "ccaff3251c092f2af8b5ad840b76655c4bc4ccf504ff7bde233811822a40abcf";
+      url = "mirror://cpan/authors/id/V/VP/VPIT/Scope-Upper-0.33.tar.gz";
+      sha256 = "sha256-XzO+Aa1o/L7G74HusDs1EaL18HUq1RPZk6TBOl+xpkg=";
     };
     meta = {
       description = "Act on upper scopes";
@@ -19878,10 +19871,10 @@ let
 
   SerealDecoder = buildPerlPackage {
     pname = "Sereal-Decoder";
-    version = "4.018";
+    version = "4.025";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Y/YV/YVES/Sereal-Decoder-4.018.tar.gz";
-      sha256 = "0wfdixpm3p94mnng474l0nh9mjiy8q8hbrbh2af4vwn2hmazr91f";
+      url = "mirror://cpan/authors/id/Y/YV/YVES/Sereal-Decoder-4.025.tar.gz";
+      sha256 = "sha256-jg47mprxp3i33iFQb6MHl/sbUg3NAC8/KebctSRG3qU=";
     };
     buildInputs = [ TestDeep TestDifferences TestLongString TestWarn ];
     preBuild = "ls";
@@ -19895,10 +19888,10 @@ let
 
   SerealEncoder = buildPerlPackage {
     pname = "Sereal-Encoder";
-    version = "4.018";
+    version = "4.025";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Y/YV/YVES/Sereal-Encoder-4.018.tar.gz";
-      sha256 = "0z9dbkr8ggjqb5g1sikxhy1a359bg08gs3vfg9icqm6xx4gjsv6p";
+      url = "mirror://cpan/authors/id/Y/YV/YVES/Sereal-Encoder-4.025.tar.gz";
+      sha256 = "sha256-D9UbpggwJmUNCFJnWCYRc8GKuCNMVSb6x+25GtnGAm4=";
     };
     buildInputs = [ SerealDecoder TestDeep TestDifferences TestLongString TestWarn ];
     meta = {
@@ -19911,10 +19904,10 @@ let
 
   Sereal = buildPerlPackage {
     pname = "Sereal";
-    version = "4.018";
+    version = "4.025";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Y/YV/YVES/Sereal-4.018.tar.gz";
-      sha256 = "0pqygrl88jp2w73jd9cw4k22fhvh5vcwqbiwl9wpxm67ql95cwwa";
+      url = "mirror://cpan/authors/id/Y/YV/YVES/Sereal-4.025.tar.gz";
+      sha256 = "sha256-C+X+VStQtnhjk+Q+qczldzpItf80o6zyopWqdgmgYrk=";
     };
     buildInputs = [ TestDeep TestLongString TestWarn ];
     propagatedBuildInputs = [ SerealDecoder SerealEncoder ];

@@ -1,5 +1,6 @@
 {
   mkDerivation, lib, kdepimTeam,
+  cmake_3_23,
   extra-cmake-modules, kdoctools,
   akonadi, akonadi-mime, akonadi-notes, akonadi-search, gpgme, grantlee,
   grantleetheme, karchive, kcodecs, kconfig, kconfigwidgets, kcontacts,
@@ -14,7 +15,7 @@ mkDerivation {
     license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
     maintainers = kdepimTeam;
   };
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [ (extra-cmake-modules.override { cmake = cmake_3_23; }) kdoctools ];
   buildInputs = [
     akonadi-notes akonadi-search gpgme grantlee grantleetheme karchive kcodecs
     kconfig kconfigwidgets kiconthemes kio kjobwidgets kldap

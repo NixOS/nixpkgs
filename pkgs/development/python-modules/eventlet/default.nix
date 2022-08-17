@@ -51,6 +51,7 @@ buildPythonPackage rec {
   disabledTests = [
     # Tests requires network access
     "test_017_ssl_zeroreturnerror"
+    "test_018b_http_10_keepalive_framing"
     "test_getaddrinfo"
     "test_hosts_no_network"
     "test_leakage_from_tracebacks"

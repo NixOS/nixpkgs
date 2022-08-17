@@ -22,6 +22,7 @@
   ./config/ldap.nix
   ./config/locale.nix
   ./config/malloc.nix
+  ./config/mysql.nix
   ./config/networking.nix
   ./config/no-x-libs.nix
   ./config/nsswitch.nix
@@ -329,6 +330,7 @@
   ./services/cluster/kubernetes/proxy.nix
   ./services/cluster/kubernetes/scheduler.nix
   ./services/cluster/pacemaker/default.nix
+  ./services/cluster/patroni/default.nix
   ./services/cluster/spark/default.nix
   ./services/computing/boinc/client.nix
   ./services/computing/foldingathome/client.nix

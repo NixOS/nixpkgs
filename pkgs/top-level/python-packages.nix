@@ -237,6 +237,8 @@ in {
 
   agent-py = callPackage ../development/python-modules/agent-py { };
 
+  aggdraw = callPackage ../development/python-modules/aggdraw { };
+
   aio-geojson-client = callPackage ../development/python-modules/aio-geojson-client { };
 
   aio-geojson-generic-client = callPackage ../development/python-modules/aio-geojson-generic-client { };
@@ -10843,6 +10845,8 @@ in {
 
   # Used by streamlit, 2021-01-29
   tornado_5 = callPackage ../development/python-modules/tornado/5.nix { };
+
+  torpy = callPackage ../development/python-modules/torpy { };
 
   torrequest = callPackage ../development/python-modules/torrequest { };
 

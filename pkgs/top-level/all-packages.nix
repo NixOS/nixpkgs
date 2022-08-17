@@ -3789,7 +3789,9 @@ with pkgs;
 
   fits-cloudctl = callPackage ../tools/admin/fits-cloudctl { };
 
-  flitter = callPackage ../tools/misc/flitter { };
+  flitter = callPackage ../tools/misc/flitter {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_13;
+  };
 
   frangipanni = callPackage ../tools/text/frangipanni { };
 
@@ -4023,6 +4025,8 @@ with pkgs;
     });
   };
 
+  hysteria = callPackage ../tools/networking/hysteria { };
+
   hyx = callPackage ../tools/text/hyx { };
 
   icdiff = callPackage ../tools/text/icdiff {};
@@ -4139,6 +4143,8 @@ with pkgs;
   libnbd = callPackage ../development/libraries/libnbd { };
 
   libndtypes = callPackage ../development/libraries/libndtypes { };
+
+  libnss-mysql = callPackage ../os-specific/linux/libnss-mysql { };
 
   libxnd = callPackage ../development/libraries/libxnd { };
 
@@ -7036,11 +7042,7 @@ with pkgs;
 
   grive2 = callPackage ../tools/filesystems/grive2 { };
 
-  groff = callPackage ../tools/text/groff {
-    ghostscript = null;
-    psutils = null;
-    netpbm = null;
-  };
+  groff = callPackage ../tools/text/groff { };
 
   gromit-mpx = callPackage ../tools/graphics/gromit-mpx {
     gtk = gtk3;
@@ -10458,6 +10460,8 @@ with pkgs;
   rustscan = callPackage ../tools/security/rustscan {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  rustypaste = callPackage ../servers/rustypaste { };
 
   rw = callPackage ../tools/misc/rw { };
 
@@ -14351,6 +14355,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
   };
   cargo-valgrind = callPackage ../development/tools/rust/cargo-valgrind { };
+  cargo-wasi = callPackage ../development/tools/rust/cargo-wasi {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   cargo-watch = callPackage ../development/tools/rust/cargo-watch {
     inherit (darwin.apple_sdk.frameworks) CoreServices Foundation;
   };
@@ -14916,6 +14923,9 @@ with pkgs;
   # Import PHP81 interpreter, extensions and packages
   php81 = callPackage ../development/interpreters/php/8.1.nix {
     stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
+    pcre2 = pcre2.override {
+      withJitSealloc = false; # Needed to avoid crashes, see https://bugs.php.net/bug.php?id=78630
+    };
   };
   php81Extensions = recurseIntoAttrs php81.extensions;
   php81Packages = recurseIntoAttrs php81.packages;
@@ -14923,6 +14933,9 @@ with pkgs;
   # Import PHP80 interpreter, extensions and packages
   php80 = callPackage ../development/interpreters/php/8.0.nix {
     stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
+    pcre2 = pcre2.override {
+      withJitSealloc = false; # Needed to avoid crashes, see https://bugs.php.net/bug.php?id=78630
+    };
   };
   php80Extensions = recurseIntoAttrs php80.extensions;
   php80Packages = recurseIntoAttrs php80.packages;
@@ -15778,6 +15791,11 @@ with pkgs;
     inherit (libsForQt5) qtbase wrapQtAppsHook;
   };
 
+  cmake_3_23 = callPackage ../development/tools/build-managers/cmake/3_23.nix {
+    inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
+    inherit (libsForQt5) qtbase wrapQtAppsHook;
+  };
+
   cmakeMinimal = callPackage ../development/tools/build-managers/cmake {
     isBootstrap = true;
     qtbase = null;
@@ -15796,6 +15814,8 @@ with pkgs;
   };
 
   cmake-format = python3Packages.callPackage ../development/tools/cmake-format { };
+
+  cobra-cli = callPackage ../development/tools/cobra-cli { };
 
   cmake-language-server = python3Packages.callPackage ../development/tools/misc/cmake-language-server {
     inherit cmake cmake-format;
@@ -19829,9 +19849,7 @@ with pkgs;
 
   libtifiles2 = callPackage ../development/libraries/libtifiles2 { };
 
-  libtiff = if stdenv.isDarwin && stdenv.isAarch64
-    then callPackage ../development/libraries/libtiff/aarch64-darwin.nix { }
-    else callPackage ../development/libraries/libtiff { };
+  libtiff = callPackage ../development/libraries/libtiff { };
 
   libtiger = callPackage ../development/libraries/libtiger { };
 
@@ -20887,9 +20905,8 @@ with pkgs;
     qt5 = qt515;
   });
 
-  # TODO bump to 5.15 on darwin once it's not broken; see #125548
-  qt5 =        if stdenv.hostPlatform.isDarwin then qt514 else qt515;
-  libsForQt5 = if stdenv.hostPlatform.isDarwin then libsForQt514 else libsForQt515;
+  qt5 =        qt515;
+  libsForQt5 = libsForQt515;
 
   # plasma5Packages maps to the Qt5 packages set that is used to build the plasma5 desktop
   plasma5Packages = libsForQt515;
@@ -21261,6 +21278,8 @@ with pkgs;
   smpeg2 = callPackage ../development/libraries/smpeg2 { };
 
   snappy = callPackage ../development/libraries/snappy { };
+
+  snappymail = callPackage ../servers/snappymail { };
 
   snow = callPackage ../tools/security/snow { };
 
@@ -22150,14 +22169,14 @@ with pkgs;
   ### DEVELOPMENT / PERL MODULES
 
   perlInterpreters = callPackages ../development/interpreters/perl {};
-  inherit (perlInterpreters) perl532 perl534 perldevel;
+  inherit (perlInterpreters) perl534 perl536 perldevel;
 
-  perl532Packages = recurseIntoAttrs perl532.pkgs;
   perl534Packages = recurseIntoAttrs perl534.pkgs;
+  perl536Packages = recurseIntoAttrs perl536.pkgs;
   perldevelPackages = perldevel.pkgs;
 
-  perl = perl534;
-  perlPackages = perl534Packages;
+  perl = perl536;
+  perlPackages = perl536Packages;
 
   ack = perlPackages.ack;
 
@@ -22612,6 +22631,8 @@ with pkgs;
   };
 
   lighttpd = callPackage ../servers/http/lighttpd { };
+
+  listmonk = callPackage ../servers/mail/listmonk { };
 
   livepeer = callPackage ../servers/livepeer { };
 
@@ -23790,14 +23811,14 @@ with pkgs;
   gomplate = callPackage ../development/tools/gomplate { };
 
   gpm = callPackage ../servers/gpm {
-    ncurses = null;  # Keep curses disabled for lack of value
+    withNcurses = false; # Keep curses disabled for lack of value
 
     # latest 6.8 mysteriously fails to parse '@headings single':
     #   https://lists.gnu.org/archive/html/bug-texinfo/2021-09/msg00011.html
     texinfo = buildPackages.texinfo6_7;
   };
 
-  gpm-ncurses = gpm.override { inherit ncurses; };
+  gpm-ncurses = gpm.override { withNcurses = true; };
 
   gpu-switch = callPackage ../os-specific/linux/gpu-switch { };
 
@@ -24360,6 +24381,8 @@ with pkgs;
 
   pam_mount = callPackage ../os-specific/linux/pam_mount { };
 
+  pam_mysql = callPackage ../os-specific/linux/pam_mysql { };
+
   pam_p11 = callPackage ../os-specific/linux/pam_p11 { };
 
   pam_pgsql = callPackage ../os-specific/linux/pam_pgsql { };
@@ -24562,16 +24585,6 @@ with pkgs;
     gnupg = callPackage ../tools/security/gnupg/23.nix {
       enableMinimal = true;
       guiSupport = false;
-      pcsclite = null;
-      sqlite = null;
-      pinentry = null;
-      adns = null;
-      gnutls = null;
-      libusb1 = null;
-      openldap = null;
-      readline = null;
-      zlib = null;
-      bzip2 = null;
     };
   };
   systemdMinimal = systemd.override {
@@ -25400,7 +25413,9 @@ with pkgs;
 
   netease-music-tui = callPackage ../applications/audio/netease-music-tui { };
 
-  netease-cloud-music-gtk = callPackage ../applications/audio/netease-cloud-music-gtk { };
+  netease-cloud-music-gtk = callPackage ../applications/audio/netease-cloud-music-gtk {
+    inherit (darwin.apple_sdk.frameworks) Foundation SystemConfiguration;
+  };
 
   nordic = callPackage ../data/themes/nordic { };
 
@@ -27954,7 +27969,9 @@ with pkgs;
 
   indigenous-desktop = callPackage ../applications/networking/feedreaders/indigenous-desktop { };
 
-  jackline = callPackage ../applications/networking/instant-messengers/jackline { };
+  jackline = callPackage ../applications/networking/instant-messengers/jackline {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_13;
+  };
 
   keylight-controller-mschneider82 = callPackage ../applications/misc/keylight-controller-mschneider82 { };
 
@@ -28635,6 +28652,8 @@ with pkgs;
   };
 
   ladspa-sdk = callPackage ../applications/audio/ladspa-sdk { };
+
+  ladybird = qt6.callPackage ../applications/networking/browsers/ladybird { };
 
   lazpaint = callPackage ../applications/graphics/lazpaint { };
 
@@ -30664,6 +30683,8 @@ with pkgs;
 
   stretchly = callPackage ../applications/misc/stretchly { };
 
+  stuffbin = callPackage ../tools/filesystems/stuffbin { };
+
   stumpish = callPackage ../applications/window-managers/stumpish {};
 
   stumpwm = lispPackages.stumpwm;
@@ -32548,6 +32569,8 @@ with pkgs;
 
   cuyo = callPackage ../games/cuyo { };
 
+  darkplaces = callPackage ../games/darkplaces {};
+
   deliantra-server = callPackage ../games/deliantra/server.nix {
     stdenv = gcc10StdenvCompat;
   };
@@ -32775,7 +32798,7 @@ with pkgs;
 
   harmonist = callPackage ../games/harmonist { };
 
-  hedgewars = libsForQt514.callPackage ../games/hedgewars {
+  hedgewars = libsForQt5.callPackage ../games/hedgewars {
     inherit (haskellPackages) ghcWithPackages;
   };
 
@@ -32788,6 +32811,8 @@ with pkgs;
   ingen = callPackage ../applications/audio/ingen { };
 
   ideogram = callPackage ../applications/graphics/ideogram { };
+
+  instaloader = python3Packages.callPackage ../tools/misc/instaloader { };
 
   instead = callPackage ../games/instead { };
 
@@ -35145,6 +35170,15 @@ with pkgs;
   lguf-brightness = callPackage ../misc/lguf-brightness { };
 
   lilypond = callPackage ../misc/lilypond { guile = guile_1_8; };
+
+  lilypond-unstable = callPackage ../misc/lilypond/unstable.nix { };
+
+  lilypond-unstable-with-fonts = callPackage ../misc/lilypond/with-fonts.nix {
+    lilypond = lilypond-unstable;
+    openlilylib-fonts = openlilylib-fonts.override {
+      lilypond = lilypond-unstable;
+    };
+  };
 
   lilypond-with-fonts = callPackage ../misc/lilypond/with-fonts.nix { };
 

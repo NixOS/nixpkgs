@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Command-line tooling for Radicle, a decentralized code collaboration network";
     homepage = "https://radicle.xyz";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ amesgen ];
     platforms = lib.platforms.unix;
     mainProgram = "rad";
