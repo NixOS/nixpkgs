@@ -1,10 +1,15 @@
 { lib
 , fetchFromGitHub
 , pkgs
+, stdenv
 , rustPlatform
 , pkg-config
 , cmake
 , openssl
+, autoconf
+, automake
+, withSecurity ? true
+, darwin # darwin Security.framework
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,9 +25,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-ZNETA2JUZCS8/a2oeF+JCGVKbzeyhp51D0BmBTPToOw=";
 
-  nativeBuildInputs = [ pkg-config cmake ];
+  nativeBuildInputs = [ pkg-config cmake ] ++
+    lib.optionals (stdenv.isDarwin && !withSecurity) [ autoconf automake ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl ] ++ lib.optional (stdenv.isDarwin && withSecurity) darwin.apple_sdk.frameworks.Security
+  ;
 
   meta = with lib; {
     description = "A Matrix bot which can generate \"This Week in X\" like blog posts ";
