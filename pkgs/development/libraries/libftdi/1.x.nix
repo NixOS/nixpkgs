@@ -17,7 +17,6 @@
 
 let
   inherit (lib) optionals optionalString;
-  onOff = a: if a then "ON" else "OFF";
 in
 stdenv.mkDerivation rec {
   pname = "libftdi";
@@ -38,11 +37,11 @@ stdenv.mkDerivation rec {
     ++ optionals pythonSupport [ python3 ];
 
   cmakeFlags = [
-    "-DFTDIPP=${onOff cppSupport}"
-    "-DBUILD_TESTS=${onOff cppSupport}"
-    "-DLINK_PYTHON_LIBRARY=${onOff pythonSupport}"
-    "-DPYTHON_BINDINGS=${onOff pythonSupport}"
-    "-DDOCUMENTATION=${onOff docSupport}"
+    "-DFTDIPP=${lib.boolToCMakeString cppSupport}"
+    "-DBUILD_TESTS=${lib.boolToCMakeString cppSupport}"
+    "-DLINK_PYTHON_LIBRARY=${lib.boolToCMakeString pythonSupport}"
+    "-DPYTHON_BINDINGS=${lib.boolToCMakeString pythonSupport}"
+    "-DDOCUMENTATION=${lib.boolToCMakeString docSupport}"
   ];
 
   propagatedBuildInputs = [ libusb1 ];

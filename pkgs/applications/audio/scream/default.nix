@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   cmakeFlags = [
-    "-DPULSEAUDIO_ENABLE=${if pulseSupport then "ON" else "OFF"}"
-    "-DALSA_ENABLE=${if alsaSupport then "ON" else "OFF"}"
-    "-DJACK_ENABLE=${if jackSupport then "ON" else "OFF"}"
+    "-DPULSEAUDIO_ENABLE=${lib.boolToCMakeString pulseSupport}"
+    "-DALSA_ENABLE=${lib.boolToCMakeString alsaSupport}"
+    "-DJACK_ENABLE=${lib.boolToCMakeString jackSupport}"
   ];
 
   cmakeDir = "../Receivers/unix";

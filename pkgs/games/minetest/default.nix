@@ -42,8 +42,6 @@
 with lib;
 
 let
-  boolToCMake = b: if b then "ON" else "OFF";
-
   irrlichtmtInput = irrlichtmt.override { inherit withTouchSupport; };
 
   generic = { version, rev ? version, sha256, dataRev ? version, dataSha256, buildClient ? true, buildServer ? false }: let
@@ -68,8 +66,8 @@ let
 
     cmakeFlags = [
       "-G Ninja"
-      "-DBUILD_CLIENT=${boolToCMake buildClient}"
-      "-DBUILD_SERVER=${boolToCMake buildServer}"
+      "-DBUILD_CLIENT=${lib.boolToCMakeString buildClient}"
+      "-DBUILD_SERVER=${lib.boolToCMakeString buildServer}"
       "-DENABLE_GETTEXT=1"
       "-DENABLE_SPATIAL=1"
       "-DENABLE_SYSTEM_JSONCPP=1"

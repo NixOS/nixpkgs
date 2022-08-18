@@ -24,7 +24,7 @@ in stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
-    "-DBuildTests=${if finalAttrs.doCheck then "ON" else "OFF"}"
+    "-DBuildTests=${lib.boolToCMakeString finalAttrs.doCheck}"
     "-DJSON_MultipleHeaders=ON"
   ] ++ lib.optional finalAttrs.doCheck "-DJSON_TestDataDirectory=${testData}";
 

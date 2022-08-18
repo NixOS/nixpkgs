@@ -25,8 +25,8 @@ in stdenv.mkDerivation {
   };
 
   cmakeFlags = [
-    "-DBUILD_wireshark=${if withQt then "ON" else "OFF"}"
-    "-DENABLE_APPLICATION_BUNDLE=${if withQt && stdenv.isDarwin then "ON" else "OFF"}"
+    "-DBUILD_wireshark=${lib.boolToCMakeString withQt}"
+    "-DENABLE_APPLICATION_BUNDLE=${lib.boolToCMakeString (withQt && stdenv.isDarwin)}"
     # Fix `extcap` and `plugins` paths. See https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=16444
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DLEMON_C_COMPILER=cc"

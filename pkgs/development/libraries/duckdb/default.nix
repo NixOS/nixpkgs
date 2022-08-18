@@ -12,9 +12,6 @@
 , withOdbc ? false
 }:
 
-let
-  enableFeature = yes: if yes then "ON" else "OFF";
-in
 stdenv.mkDerivation rec {
   pname = "duckdb";
   version = "0.4.0";
@@ -47,10 +44,10 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DBUILD_EXCEL_EXTENSION=ON"
     "-DBUILD_FTS_EXTENSION=ON"
-    "-DBUILD_HTTPFS_EXTENSION=${enableFeature withHttpFs}"
+    "-DBUILD_HTTPFS_EXTENSION=${lib.boolToCMakeString withHttpFs}"
     "-DBUILD_ICU_EXTENSION=ON"
     "-DBUILD_JSON_EXTENSION=ON"
-    "-DBUILD_ODBC_DRIVER=${enableFeature withOdbc}"
+    "-DBUILD_ODBC_DRIVER=${lib.boolToCMakeString withOdbc}"
     "-DBUILD_PARQUET_EXTENSION=ON"
     "-DBUILD_REST=ON"
     "-DBUILD_SUBSTRAIT_EXTENSION=ON"
@@ -58,7 +55,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_TPCE=ON"
     "-DBUILD_TPCH_EXTENSION=ON"
     "-DBUILD_VISUALIZER_EXTENSION=ON"
-    "-DJDBC_DRIVER=${enableFeature withJdbc}"
+    "-DJDBC_DRIVER=${lib.boolToCMakeString withJdbc}"
   ];
 
   doInstallCheck = true;

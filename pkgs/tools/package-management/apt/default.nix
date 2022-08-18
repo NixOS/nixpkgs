@@ -72,8 +72,8 @@ stdenv.mkDerivation rec {
     "-DDOCBOOK_XSL=${docbook_xsl}/share/xml/docbook-xsl"
     "-DGNUTLS_INCLUDE_DIR=${gnutls.dev}/include"
     "-DROOT_GROUP=root"
-    "-DUSE_NLS=${if withNLS then "ON" else "OFF"}"
-    "-DWITH_DOC=${if withDocs then "ON" else "OFF"}"
+    "-DUSE_NLS=${lib.boolToCMakeString withNLS}"
+    "-DWITH_DOC=${lib.boolToCMakeString withDocs}"
   ];
 
   meta = with lib; {

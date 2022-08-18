@@ -139,9 +139,7 @@ let
     ln -s "${extra.src}/${name}" "${extra.dst}/${md5}-${name}"
   '') extra.files);
 
-  opencvFlag = name: enabled: "-DWITH_${name}=${printEnabled enabled}";
-
-  printEnabled = enabled : if enabled then "ON" else "OFF";
+  mkFlag = name: enabled: "-DWITH_${name}=${lib.boolToCMakeString enabled}";
 in
 
 stdenv.mkDerivation {
@@ -228,21 +226,21 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     "-DWITH_OPENMP=ON"
-    "-DBUILD_PROTOBUF=${printEnabled (!useSystemProtobuf)}"
-    "-DPROTOBUF_UPDATE_FILES=${printEnabled useSystemProtobuf}"
-    "-DOPENCV_ENABLE_NONFREE=${printEnabled enableUnfree}"
+    "-DBUILD_PROTOBUF=${lib.boolToCMakeString (!useSystemProtobuf)}"
+    "-DPROTOBUF_UPDATE_FILES=${lib.boolToCMakeString useSystemProtobuf}"
+    "-DOPENCV_ENABLE_NONFREE=${lib.boolToCMakeString enableUnfree}"
     "-DBUILD_TESTS=OFF"
     "-DBUILD_PERF_TESTS=OFF"
-    "-DBUILD_DOCS=${printEnabled enableDocs}"
-    (opencvFlag "IPP" enableIpp)
-    (opencvFlag "TIFF" enableTIFF)
-    (opencvFlag "WEBP" enableWebP)
-    (opencvFlag "JPEG" enableJPEG)
-    (opencvFlag "PNG" enablePNG)
-    (opencvFlag "OPENEXR" enableEXR)
-    (opencvFlag "CUDA" enableCuda)
-    (opencvFlag "CUBLAS" enableCuda)
-    (opencvFlag "TBB" enableTbb)
+    "-DBUILD_DOCS=${lib.boolToCMakeString enableDocs}"
+    (mkFlag "IPP" enableIpp)
+    (mkFlag "TIFF" enableTIFF)
+    (mkFlag "WEBP" enableWebP)
+    (mkFlag "JPEG" enableJPEG)
+    (mkFlag "PNG" enablePNG)
+    (mkFlag "OPENEXR" enableEXR)
+    (mkFlag "CUDA" enableCuda)
+    (mkFlag "CUBLAS" enableCuda)
+    (mkFlag "TBB" enableTbb)
   ] ++ lib.optionals enableCuda [
     "-DCUDA_FAST_MATH=ON"
     "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"

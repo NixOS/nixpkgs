@@ -25,7 +25,7 @@ in buildPythonPackage rec {
   '';
 
   HDF5_DIR = "${hdf5}";
-  HDF5_MPI = if mpiSupport then "ON" else "OFF";
+  HDF5_MPI = lib.boolToCMakeString mpiSupport;
 
   postConfigure = ''
     # Needed to run the tests reliably. See:

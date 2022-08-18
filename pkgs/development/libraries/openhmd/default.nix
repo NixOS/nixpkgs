@@ -9,8 +9,6 @@
 , withExamples ? true
 }:
 
-let examplesOnOff = if withExamples then "ON" else "OFF"; in
-
 stdenv.mkDerivation rec {
   pname = "openhmd";
   version = "0.3.0";
@@ -34,8 +32,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_BOTH_STATIC_SHARED_LIBS=ON"
-    "-DOPENHMD_EXAMPLE_SIMPLE=${examplesOnOff}"
-    "-DOPENHMD_EXAMPLE_SDL=${examplesOnOff}"
+    "-DOPENHMD_EXAMPLE_SIMPLE=${lib.boolToCMakeString withExamples}"
+    "-DOPENHMD_EXAMPLE_SDL=${lib.boolToCMakeString withExamples}"
     "-DOpenGL_GL_PREFERENCE=GLVND"
 
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/

@@ -47,9 +47,9 @@ stdenv.mkDerivation rec {
     ++ lib.optionals coremidiSupport [ CoreMIDI CoreAudio CoreServices ];
 
   cmakeFlags = [
-    "-DRTMIDI_API_ALSA=${if alsaSupport then "ON" else "OFF"}"
-    "-DRTMIDI_API_JACK=${if jackSupport then "ON" else "OFF"}"
-    "-DRTMIDI_API_CORE=${if coremidiSupport then "ON" else "OFF"}"
+    "-DRTMIDI_API_ALSA=${lib.boolToCMakeString alsaSupport}"
+    "-DRTMIDI_API_JACK=${lib.boolToCMakeString jackSupport}"
+    "-DRTMIDI_API_CORE=${lib.boolToCMakeString coremidiSupport}"
   ];
 
   meta = with lib; {

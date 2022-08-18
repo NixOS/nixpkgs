@@ -38,7 +38,6 @@ assert enableTools -> enableAudio && enableEmulation && enableLibplayer;
 
 let
   inherit (lib) optional optionals;
-  onOff = val: if val then "ON" else "OFF";
 in
 stdenv.mkDerivation rec {
   pname = "libvgm";
@@ -75,33 +74,33 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DBUILD_LIBAUDIO=${onOff enableAudio}"
-    "-DBUILD_LIBEMU=${onOff enableEmulation}"
-    "-DBUILD_LIBPLAYER=${onOff enableLibplayer}"
-    "-DBUILD_TESTS=${onOff enableTools}"
-    "-DBUILD_PLAYER=${onOff enableTools}"
-    "-DBUILD_VGM2WAV=${onOff enableTools}"
+    "-DBUILD_LIBAUDIO=${lib.boolToCMakeString enableAudio}"
+    "-DBUILD_LIBEMU=${lib.boolToCMakeString enableEmulation}"
+    "-DBUILD_LIBPLAYER=${lib.boolToCMakeString enableLibplayer}"
+    "-DBUILD_TESTS=${lib.boolToCMakeString enableTools}"
+    "-DBUILD_PLAYER=${lib.boolToCMakeString enableTools}"
+    "-DBUILD_VGM2WAV=${lib.boolToCMakeString enableTools}"
     "-DLIBRARY_TYPE=${if enableShared then "SHARED" else "STATIC"}"
     "-DUSE_SANITIZERS=ON"
   ] ++ optionals enableAudio [
-    "-DAUDIODRV_WAVEWRITE=${onOff withWaveWrite}"
-    "-DAUDIODRV_WINMM=${onOff withWinMM}"
-    "-DAUDIODRV_DSOUND=${onOff withDirectSound}"
-    "-DAUDIODRV_XAUDIO2=${onOff withXAudio2}"
-    "-DAUDIODRV_WASAPI=${onOff withWASAPI}"
-    "-DAUDIODRV_OSS=${onOff withOSS}"
-    "-DAUDIODRV_SADA=${onOff withSADA}"
-    "-DAUDIODRV_ALSA=${onOff withALSA}"
-    "-DAUDIODRV_PULSE=${onOff withPulseAudio}"
-    "-DAUDIODRV_APPLE=${onOff withCoreAudio}"
-    "-DAUDIODRV_LIBAO=${onOff withLibao}"
+    "-DAUDIODRV_WAVEWRITE=${lib.boolToCMakeString withWaveWrite}"
+    "-DAUDIODRV_WINMM=${lib.boolToCMakeString withWinMM}"
+    "-DAUDIODRV_DSOUND=${lib.boolToCMakeString withDirectSound}"
+    "-DAUDIODRV_XAUDIO2=${lib.boolToCMakeString withXAudio2}"
+    "-DAUDIODRV_WASAPI=${lib.boolToCMakeString withWASAPI}"
+    "-DAUDIODRV_OSS=${lib.boolToCMakeString withOSS}"
+    "-DAUDIODRV_SADA=${lib.boolToCMakeString withSADA}"
+    "-DAUDIODRV_ALSA=${lib.boolToCMakeString withALSA}"
+    "-DAUDIODRV_PULSE=${lib.boolToCMakeString withPulseAudio}"
+    "-DAUDIODRV_APPLE=${lib.boolToCMakeString withCoreAudio}"
+    "-DAUDIODRV_LIBAO=${lib.boolToCMakeString withLibao}"
   ] ++ optionals enableEmulation ([
-    "-DSNDEMU__ALL=${onOff withAllEmulators}"
+    "-DSNDEMU__ALL=${lib.boolToCMakeString withAllEmulators}"
   ] ++ optionals (!withAllEmulators)
     (lib.lists.forEach emulators (x: "-DSNDEMU_${x}=ON"))
   ) ++ optionals enableTools [
     "-DUTIL_CHARCNV_ICONV=ON"
-    "-DUTIL_CHARCNV_WINAPI=${onOff stdenv.hostPlatform.isWindows}"
+    "-DUTIL_CHARCNV_WINAPI=${lib.boolToCMakeString stdenv.hostPlatform.isWindows}"
   ];
 
   passthru.updateScript = unstableGitUpdater {

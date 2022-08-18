@@ -40,7 +40,6 @@
 }:
 
 let
-  cmFlag = flag: if flag then "ON" else "OFF";
   disabledTests = [
     # this one is probably due to our sandbox
     {
@@ -120,7 +119,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   cmakeFlags = [ "-DCMAKE_INSTALL_LIBDIR=lib" ]
-    ++ lib.mapAttrsToList (k: v: "-D${k}=${if v then "ON" else "OFF"}") {
+    ++ lib.mapAttrsToList (k: v: "-D${k}=${lib.boolToCMakeString v}") {
     BUILD_TESTING = doCheck;
     WITH_CUNIT = doCheck;
     WITH_CUPS = (cups != null);

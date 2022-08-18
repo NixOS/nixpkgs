@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional portaudio_sink portaudio
     ++ lib.optional m17_decoder codec2;
 
-  cmakeFlags = lib.mapAttrsToList (k: v: "-D${k}=${if v then "ON" else "OFF"}") {
+  cmakeFlags = lib.mapAttrsToList (k: v: "-D${k}=${lib.boolToCMakeString v}") {
     OPT_BUILD_AIRSPY_SOURCE = airspy_source;
     OPT_BUILD_AIRSPYHF_SOURCE = airspyhf_source;
     OPT_BUILD_BLADERF_SOURCE = bladerf_source;

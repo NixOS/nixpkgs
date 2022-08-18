@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_TESTS=ON"
-    "-DBUILD_SHARED_LIBS=${if shared then "ON" else "OFF"}"
+    "-DBUILD_SHARED_LIBS=${lib.boolToCMakeString shared}"
   ];
 
   checkInputs = [ check ];

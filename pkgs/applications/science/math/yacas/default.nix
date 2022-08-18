@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   cmakeFlags = [
-    "-DENABLE_CYACAS_GUI=${if enableGui then "ON" else "OFF"}"
-    "-DENABLE_CYACAS_KERNEL=${if enableJupyter then "ON" else "OFF"}"
-    "-DENABLE_JYACAS=${if enableJava then "ON" else "OFF"}"
+    "-DENABLE_CYACAS_GUI=${lib.boolToCMakeString enableGui}"
+    "-DENABLE_CYACAS_KERNEL=${lib.boolToCMakeString enableJupyter}"
+    "-DENABLE_JYACAS=${lib.boolToCMakeString enableJava}"
     "-DENABLE_CYACAS_UNIT_TESTS=ON"
   ];
   patches = [

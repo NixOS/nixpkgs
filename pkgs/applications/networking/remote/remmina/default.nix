@@ -38,10 +38,10 @@ stdenv.mkDerivation rec {
     ++ optionals withVte [ vte ];
 
   cmakeFlags = [
-    "-DWITH_VTE=${if withVte then "ON" else "OFF"}"
+    "-DWITH_VTE=${lib.boolToCMakeString withVte}"
     "-DWITH_TELEPATHY=OFF"
     "-DWITH_AVAHI=OFF"
-    "-DWITH_LIBSECRET=${if withLibsecret then "ON" else "OFF"}"
+    "-DWITH_LIBSECRET=${lib.boolToCMakeString withLibsecret}"
     "-DFREERDP_LIBRARY=${freerdp}/lib/libfreerdp2.so"
     "-DFREERDP_CLIENT_LIBRARY=${freerdp}/lib/libfreerdp-client2.so"
     "-DFREERDP_WINPR_LIBRARY=${freerdp}/lib/libwinpr2.so"

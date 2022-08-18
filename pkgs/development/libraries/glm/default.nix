@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=OFF"
     "-DBUILD_STATIC_LIBS=OFF"
-    "-DGLM_TEST_ENABLE=${if doCheck then "ON" else "OFF"}"
+    "-DGLM_TEST_ENABLE=${lib.boolToCMakeString doCheck}"
   ];
 
   doCheck = true;

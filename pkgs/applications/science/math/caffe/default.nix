@@ -30,8 +30,6 @@ assert ncclSupport -> cudaSupport;
 assert pythonSupport -> (python != null && numpy != null);
 
 let
-  toggle = bool: if bool then "ON" else "OFF";
-
   test_model_weights = fetchurl {
     url = "http://dl.caffe.berkeleyvision.org/bvlc_reference_caffenet.caffemodel";
     sha256 = "472d4a06035497b180636d8a82667129960371375bd10fcb6df5c6c7631f25e0";
@@ -61,9 +59,9 @@ stdenv.mkDerivation rec {
            "-DCUDA_ARCH_NAME=All"
            "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
          ] else [ "-DCPU_ONLY=ON" ])
-      ++ ["-DUSE_NCCL=${toggle ncclSupport}"]
-      ++ ["-DUSE_LEVELDB=${toggle leveldbSupport}"]
-      ++ ["-DUSE_LMDB=${toggle lmdbSupport}"];
+      ++ ["-DUSE_NCCL=${lib.boolToCMakeString ncclSupport}"]
+      ++ ["-DUSE_LEVELDB=${lib.boolToCMakeString leveldbSupport}"]
+      ++ ["-DUSE_LMDB=${lib.boolToCMakeString lmdbSupport}"];
 
   buildInputs = [ boost gflags glog protobuf hdf5-cpp opencv3 blas ]
                 ++ lib.optional cudaSupport cudatoolkit
