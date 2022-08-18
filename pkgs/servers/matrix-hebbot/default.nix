@@ -9,7 +9,7 @@
 , autoconf
 , automake
 , withSecurity ? true
-, darwin # darwin Security.framework
+, Security # darwin Security.framework
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,8 +28,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config cmake ] ++
     lib.optionals (stdenv.isDarwin && !withSecurity) [ autoconf automake ];
 
-  buildInputs = [ openssl ] ++ lib.optional (stdenv.isDarwin && withSecurity) darwin.apple_sdk.frameworks.Security
-  ;
+  buildInputs = [ openssl ] ++ lib.optional (stdenv.isDarwin && withSecurity) Security;
 
   meta = with lib; {
     description = "A Matrix bot which can generate \"This Week in X\" like blog posts ";
