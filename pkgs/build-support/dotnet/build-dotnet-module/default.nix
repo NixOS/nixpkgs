@@ -138,26 +138,28 @@ in stdenvNoCC.mkDerivation (args // {
       exclusions = dotnet-sdk.passthru.packages { fetchNuGet = attrs: attrs.pname; };
     in writeScript "fetch-${pname}-deps" ''
       set -euo pipefail
-      cd "$(${coreutils}/bin/dirname "''${BASH_SOURCE[0]}")"
+      export PATH="${lib.makeBinPath [ coreutils dotnet-sdk nuget-to-nix ]}"
 
-      export HOME=$(${coreutils}/bin/mktemp -d)
+      cd "$(dirname "''${BASH_SOURCE[0]}")"
+
+      export HOME=$(mktemp -d)
       deps_file="/tmp/${pname}-deps.nix"
 
       store_src="${srcOnly args}"
-      src="$(${coreutils}/bin/mktemp -d /tmp/${pname}.XXX)"
-      ${coreutils}/bin/cp -rT "$store_src" "$src"
-      ${coreutils}/bin/chmod -R +w "$src"
+      src="$(mktemp -d /tmp/${pname}.XXX)"
+      cp -rT "$store_src" "$src"
+      chmod -R +w "$src"
 
-      trap "${coreutils}/bin/rm -rf $src $HOME" EXIT
+      trap "rm -rf $src $HOME" EXIT
       pushd "$src"
 
       export DOTNET_NOLOGO=1
       export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
-      ${coreutils}/bin/mkdir -p "$HOME/nuget_pkgs"
+      mkdir -p "$HOME/nuget_pkgs"
 
       for project in "${lib.concatStringsSep "\" \"" ((lib.toList projectFile) ++ lib.optionals (testProjectFile != "") (lib.toList testProjectFile))}"; do
-        ${dotnet-sdk}/bin/dotnet restore "$project" \
+        dotnet restore "$project" \
           ${lib.optionalString (!enableParallelBuilding) "--disable-parallel"} \
           -p:ContinuousIntegrationBuild=true \
           -p:Deterministic=true \
@@ -166,11 +168,11 @@ in stdenvNoCC.mkDerivation (args // {
           ${lib.optionalString (dotnetFlags != []) (builtins.toString dotnetFlags)}
       done
 
-      ${coreutils}/bin/echo "${lib.concatStringsSep "\n" exclusions}" > "$HOME/package_exclusions"
+      echo "${lib.concatStringsSep "\n" exclusions}" > "$HOME/package_exclusions"
 
-      ${coreutils}/bin/echo "Writing lockfile..."
-      ${nuget-to-nix}/bin/nuget-to-nix "$HOME/nuget_pkgs" "$HOME/package_exclusions" > "$deps_file"
-      ${coreutils}/bin/echo "Succesfully wrote lockfile to: $deps_file"
+      echo "Writing lockfile..."
+      nuget-to-nix "$HOME/nuget_pkgs" "$HOME/package_exclusions" > "$deps_file"
+      echo "Succesfully wrote lockfile to: $deps_file"
     '';
   } // args.passthru or {};
 })
