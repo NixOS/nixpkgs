@@ -3042,6 +3042,8 @@ in {
 
   ezdxf = callPackage ../development/python-modules/ezdxf { };
 
+  ezyrb = callPackage ../development/python-modules/ezyrb { };
+
   f90nml = callPackage ../development/python-modules/f90nml { };
 
   Fabric = callPackage ../development/python-modules/Fabric { };
