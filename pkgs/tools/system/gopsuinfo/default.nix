@@ -36,5 +36,6 @@ buildGoModule rec {
     homepage = "https://github.com/nwg-piotr/gopsuinfo";
     license = licenses.bsd2;
     maintainers = with maintainers; [ otini ];
+    platforms = platforms.linux;
   };
 }
