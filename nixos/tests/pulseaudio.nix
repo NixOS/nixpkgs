@@ -59,9 +59,9 @@ let
           machine.screenshot("testPlay")
 
           # Pavucontrol only loads when Pulseaudio is running. If it isn't, the
-          # text "Playback" (one of the tabs) will never show.
+          # text "Dummy Output" (sound device name) will never show.
           machine.send_chars("pavucontrol\n")
-          machine.wait_for_text("Playback")
+          machine.wait_for_text("Dummy Output")
           machine.screenshot("Pavucontrol")
         '';
       });
