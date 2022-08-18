@@ -36,6 +36,4 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ agpl3 ];
     maintainers = with maintainers; [ a-kenji ];
   };
-
 }
-
