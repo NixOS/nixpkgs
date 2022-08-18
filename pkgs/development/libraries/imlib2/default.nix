@@ -6,13 +6,11 @@
 , libid3tag, librsvg, libheif
 , freetype , bzip2, pkg-config
 , x11Support ? true, xlibsWrapper ? null
-# Compilation error on Darwin with librsvg. For more information see:
-# https://github.com/NixOS/nixpkgs/pull/166452#issuecomment-1090725613
-, svgSupport ? !stdenv.isDarwin
-, heifSupport ? !stdenv.isDarwin
-, webpSupport ? true
-, jxlSupport ? true
-, psSupport ? true
+, svgSupport ? false
+, heifSupport ? false
+, webpSupport ? false
+, jxlSupport ? false
+, psSupport ? false
 
 # for passthru.tests
 , libcaca

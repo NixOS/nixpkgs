@@ -18635,6 +18635,15 @@ with pkgs;
   iml = callPackage ../development/libraries/iml { };
 
   imlib2 = callPackage ../development/libraries/imlib2 { };
+  imlib2Full = imlib2.override {
+    # Compilation error on Darwin with librsvg. For more information see:
+    # https://github.com/NixOS/nixpkgs/pull/166452#issuecomment-1090725613
+    svgSupport = !stdenv.isDarwin;
+    heifSupport = !stdenv.isDarwin;
+    webpSupport = true;
+    jxlSupport = true;
+    psSupport = true;
+  };
   imlib2-nox = imlib2.override {
     x11Support = false;
   };
