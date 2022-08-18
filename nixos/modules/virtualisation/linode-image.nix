@@ -16,7 +16,7 @@ in
 
   options = {
     virtualisation.linodeImage.diskSize = mkOption {
-      type = with types; either (enum (singleton "auto")) int;
+      type = with types; either (enum (singleton "auto")) ints.positive;
       default = "auto";
       example = 1536;
       description = ''
