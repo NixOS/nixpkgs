@@ -30551,6 +30551,8 @@ with pkgs;
     inherit (xfce) xfce4-dev-tools;
   };
 
+  lightdm-slick-greeter = callPackage ../applications/display-managers/lightdm-slick-greeter { };
+
   lightdm-mini-greeter = callPackage ../applications/display-managers/lightdm-mini-greeter { };
 
   lightdm-tiny-greeter = callPackage ../applications/display-managers/lightdm-tiny-greeter {
