@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, fetchgit, vdr, alsa-lib, fetchFromGitHub
-, libvdpau, libxcb, xcbutilwm, graphicsmagick, libav, pcre, xorgserver, ffmpeg
+{ lib, stdenv, fetchurl, fetchgit, vdr, fetchFromGitHub
+, graphicsmagick, libav, pcre, xorgserver, ffmpeg
 , libiconv, boost, libgcrypt, perl, util-linux, groff, libva, xorg, ncurses
 , callPackage
 }: let
@@ -46,43 +46,6 @@ in {
     };
 
   };
-
-  vaapidevice = stdenv.mkDerivation {
-    pname = "vdr-vaapidevice";
-    version = "20190525";
-
-    buildInputs = [
-      vdr libxcb xcbutilwm ffmpeg
-      alsa-lib
-      libvdpau # vdpau
-      libva # va-api
-    ] ++ (with xorg; [ libxcb libX11 ]);
-
-    makeFlags = [ "DESTDIR=$(out)" ];
-
-    postPatch = ''
-      substituteInPlace vaapidev.c --replace /usr/bin/X ${xorgserver}/bin/X
-      # https://github.com/rofafor/vdr-plugin-vaapidevice/issues/5
-      substituteInPlace Makefile --replace libva libva-x11
-    '';
-
-    src = fetchFromGitHub {
-      owner = "pesintta";
-      repo = "vdr-plugin-vaapidevice";
-      sha256 = "1gwjp15kjki9x5742fhaqk3yc2bbma74yp2vpn6wk6kj46nbnwp6";
-      rev = "d19657bae399e79df107e316ca40922d21393f80";
-    };
-
-    meta = with lib; {
-      homepage = "https://github.com/pesintta/vdr-plugin-vaapidevice";
-      description = "VDR SoftHDDevice Plug-in (with VA-API VPP additions)";
-      maintainers = [ maintainers.ck3d ];
-      license = licenses.gpl2;
-      platforms = [ "i686-linux" "x86_64-linux" ];
-    };
-
-  };
-
 
   markad = stdenv.mkDerivation rec {
     pname = "vdr-markad";
