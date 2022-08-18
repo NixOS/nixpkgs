@@ -28,7 +28,6 @@ stdenv.mkDerivation rec {
       -e s,DMZ-White,Vanilla-DMZ,g \
       -e s,DMZ-Black,Vanilla-DMZ-AA,g \
       -e s,linuxmint-logo-5,cinnamon-symbolic,g \
-      -e s,^theme-name=Mint-X$,theme-name=Mint-X-Dark,g \
       {} +
 
     # fixup broken symlink
