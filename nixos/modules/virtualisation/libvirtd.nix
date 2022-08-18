@@ -282,7 +282,7 @@ in
       setuid = true;
       owner = "root";
       group = "root";
-      source = "/run/${dirName}/nix-helpers/qemu-bridge-helper";
+      source = "${cfg.qemu.package}/libexec/qemu-bridge-helper";
     };
 
     systemd.packages = [ cfg.package ];
@@ -308,7 +308,7 @@ in
           ln -s --force "$emulator" /run/${dirName}/nix-emulators/
         done
 
-        for helper in libexec/qemu-bridge-helper bin/qemu-pr-helper; do
+        for helper in bin/qemu-pr-helper; do
           ln -s --force ${cfg.qemu.package}/$helper /run/${dirName}/nix-helpers/
         done
 
