@@ -13856,6 +13856,12 @@
     github = "wamserma";
     githubId = 60148;
   };
+  water-sucks = {
+    email = "varun@cvte.org";
+    name = "Varun Narravula";
+    github = "water-sucks";
+    githubId = 68445574;
+  };
   waynr = {
     name = "Wayne Warren";
     email = "wayne.warren.s@gmail.com";
