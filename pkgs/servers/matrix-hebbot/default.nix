@@ -8,8 +8,7 @@
 , openssl
 , autoconf
 , automake
-, withSecurity ? true
-, Security # darwin Security.framework
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {
