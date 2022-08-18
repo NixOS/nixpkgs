@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
     pango
     libsecret
     openssh
+  ] ++ lib.optionals stdenv.isLinux [
     systemd
   ];
 
@@ -72,6 +73,8 @@ stdenv.mkDerivation rec {
     # We are still using ssh-agent from gnome-keyring.
     # https://github.com/NixOS/nixpkgs/issues/140824
     "-Dssh_agent=false"
+  ] ++ lib.optionals (!stdenv.isLinux) [
+    "-Dsystemd=disabled"
   ];
 
   doCheck = false; # fails 21 out of 603 tests, needs dbus daemon
@@ -83,6 +86,7 @@ stdenv.mkDerivation rec {
 
     chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
+    substituteInPlace meson_post_install.py --replace ".so" "${stdenv.hostPlatform.extensions.sharedLibrary}"
   '';
 
   postFixup = ''
