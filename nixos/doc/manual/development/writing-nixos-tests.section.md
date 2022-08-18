@@ -614,39 +614,43 @@ The following example produces the 6 test derivations that form the Cartesian pr
 }
 ```
 
-### Ordering and caveats {#sec-nixos-test-matrix-ordering}
+### Using variables from the right scope {#sec-nixos-test-matrix-scope}
 
-It is usually sufficient to think only about the final test configuration where all decisions have been made, but it is possible to access non-final test configurations, on purpose or by accident.
+The decision making process of the test framework works by evaluating multiple nodes of a decision tree whose edges are defined by the `matrix.<...>.module` option.
 
-This possibility is useful when the availability of some choices depends on previous choices, to construct something akin to a decision tree rather than a matrix. See [`matrix.<name>.enable`](#opt-matrix._name_.enable).
+This means that when you are defining values in `matrix.*` and you reference the module arguments, those module arguments come from a node of the decision tree where the decision has _not_ been made yet.
 
-However, it can also be unexpected, when you use a "free variable" in `matrix.<...>.module`; a variable from the lexical scope, rather module arguments declared by the expression following `module =`. For example:
+For example, the following does not work:
 
 ```nix
-{ y, ... }: {
-  matrix.x.choice.foo.module =
-    # the following expression has `y` as a free variable:
-    {
-      # this `y` does not come from the final configuration, but rather from
-      # an incomplete configuration where `x` has not been decided yet.
-      bar = y;
-    };
-  matrix.y = …;
+{ foo, ... }: {
+  matrix.foo.choice.qux.module = {
+    config.testScript = foo;
+  };
 }
 ```
 
-The dependency on `y` can be fixed by declaring it as a module argument, so that it comes from the final test configuration.
+The reason is that `matrix.foo.choice.qux.module.something` refers to a module argument at the root, where `foo` is undecided. To fix this, reference the module argument at its own level of the decision tree:
 
 ```nix
 { ... }: {
-  matrix.x.choice.foo.module = { y, ... }: {
-    bar = y;
-  };
-  matrix.y = …;
+  matrix.foo.choice.qux.module =
+    { foo, ... }: {
+      config.testScript = foo;
+    };
 }
 ```
 
-You could also fix it by [ordering](See [`matrix.<decision>.after`](#opt-matrix._name_.after).) `x` to be decided after `y`. This is only preferable for dependencies that aren't in `matrix.<...>.module`.
+In this example, hardcoding the value of `foo`, `"qux"`, was also a valid solution.
+
+<!-- TBD
+### Omitting combinations from the test matrix {#sec-nixos-test-matrix-ordering}
+
+The previous section described that it is possible to reference information from parent nodes of the "decision tree" constructed by `matrix.*` options.
+By referencing such partially decided scopes, we can construct a test matrix where some combinations are skipped.
+
+This is achieved with the [`matrix.<name>.enable`](#opt-matrix._name_.enable) and [`matrix.<decision>.after`](#opt-matrix._name_.after) options.
+-->
 
 ## Test Options Reference {#sec-test-options-reference}
 
