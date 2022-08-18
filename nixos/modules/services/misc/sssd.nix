@@ -99,6 +99,7 @@ in {
           Type = "forking";
           PIDFile = "/run/sssd.pid";
           StateDirectory = baseNameOf dataDir;
+          # We cannot use LoadCredential here because it's not available in ExecStartPre
           EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         };
         preStart = ''
