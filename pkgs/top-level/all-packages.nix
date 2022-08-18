@@ -24729,6 +24729,8 @@ with pkgs;
 
   adementary-theme = callPackage ../data/themes/adementary { };
 
+  adwaita-dark-amoled-theme = callPackage ../data/themes/adwaita-dark-amoled { };
+
   adwaita-qt = libsForQt5.callPackage ../data/themes/adwaita-qt { };
 
   agave = callPackage ../data/fonts/agave { };
