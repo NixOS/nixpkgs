@@ -3,7 +3,6 @@ with lib;
 {
   imports = [ ../profiles/qemu-guest.nix ];
 
-  # Allow Root logins only using SSH keys
   services.openssh = {
     enable = true;
 
@@ -11,7 +10,6 @@ with lib;
     passwordAuthentication = mkDefault false;
   };
 
-  # Set networking config
   networking = {
     usePredictableInterfaceNames = false;
     useDHCP = false;
