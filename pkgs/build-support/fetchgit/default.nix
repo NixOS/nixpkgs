@@ -65,7 +65,7 @@ else
 stdenvNoCC.mkDerivation {
   inherit name;
   builder = ./builder.sh;
-  fetcher = ./nix-prefetch-git;  # This must be a string to ensure it's called with bash.
+  fetcher = ./nix-prefetch-git;
 
   nativeBuildInputs = [ git ]
     ++ lib.optionals fetchLFS [ git-lfs ];
