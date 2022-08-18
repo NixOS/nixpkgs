@@ -14,6 +14,8 @@ in {
 
   softhddevice = callPackage ./softhddevice {};
 
+  streamdev = callPackage ./streamdev {};
+
   xineliboutput = callPackage ./xineliboutput {};
 
   skincurses = (mkPlugin "skincurses").overrideAttrs(oldAttr: {
