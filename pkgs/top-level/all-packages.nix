@@ -1008,6 +1008,8 @@ with pkgs;
 
   sirula = callPackage ../tools/wayland/sirula { };
 
+  sitelen-seli-kiwen = callPackage ../data/fonts/sitelen-seli-kiwen {};
+
   srcOnly = callPackage ../build-support/src-only { };
 
   subnetcalc = callPackage ../tools/networking/subnetcalc { };
