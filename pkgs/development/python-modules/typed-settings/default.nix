@@ -8,6 +8,7 @@
 , toml
 , pytestCheckHook
 , click
+, click-option-group
 }:
 
 buildPythonPackage rec {
@@ -28,26 +29,20 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     attrs
     cattrs
+    click-option-group
     toml
   ];
 
-  preCheck = ''
-    pushd tests
-  '';
+  pytestFlagsArray = [
+    "tests"
+  ];
 
   checkInputs = [
     click
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # mismatches in click help output
-    "test_help"
-  ];
-
-  postCheck = ''
-    popd
-  '';
+  pythonImportsCheck = [ "typed_settings" ];
 
   meta = {
     description = "Typed settings based on attrs classes";
