@@ -13,47 +13,25 @@
 , python3
 , wrapGAppsHook
 , cpio
-, file
 , glib
 , gnome
 , gtk3
 , libhandy
 , json-glib
 , libarchive
-, libnotify
+, libportal-gtk3
 , nautilus
 , unzip
 }:
 
 stdenv.mkDerivation rec {
   pname = "file-roller";
-  version = "3.42.0";
+  version = "43.alpha";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "HEOObVPsEP9PLrWyLXu/KKfCqElXq2SnUcHN88UjAsc=";
+    url = "mirror://gnome/sources/file-roller/${lib.versions.major version}/file-roller-${version}.tar.xz";
+    sha256 = "OiUnSWeaejmX+r+gylEzUTuPb8vdH7lG8qSP99j8EPE=";
   };
-
-  patches = [
-    # Fix build with Nautilus 43.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/file-roller/-/commit/361219cd9e20530789417eeefd03c7cc4037b7d7.patch";
-      sha256 = "eP3BAa1SUS+EaV9UrlKnpoqJ78MhID863HPqsfFSTgM=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/file-roller/-/commit/d8461bbad8226d101beb02c2695a2f66cea675df.patch";
-      sha256 = "OKEZGijiIYDMiyuLqyHHrnTw88p+0hwkt6liufv3T74=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/file-roller/-/commit/5cfaa00f04130084e42548abb2226c1c2e378e48.patch";
-      sha256 = "/3ceT7fv/L9tV5kQwmiBBDL2AOjhjoPUT3AgVLk/q98=";
-      excludes = [
-        "default.nix"
-      ];
-    })
-  ];
-
-  LANG = "en_US.UTF-8"; # postinstall.py
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -70,22 +48,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cpio
-    file
     glib
-    gnome.adwaita-icon-theme
     gtk3
     libhandy
     json-glib
     libarchive
-    libnotify
+    libportal-gtk3
     nautilus
   ];
 
-  PKG_CONFIG_LIBNAUTILUS_EXTENSION_4_EXTENSIONDIR = "${placeholder "out"}/lib/nautilus/extensions-4";
-
   postPatch = ''
-    chmod +x postinstall.py # patchShebangs requires executable file
-    patchShebangs postinstall.py
     patchShebangs data/set-mime-type-entry.py
   '';
 
