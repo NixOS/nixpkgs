@@ -67,6 +67,10 @@ stdenv.mkDerivation rec {
     "PERL=${perl}/bin/perl"
     # used for .hlp generation at build time:
     "PERL_FOR_BUILD=${buildPackages.perl}/bin/perl"
+
+    # configure arguments have a bunch of build-only dependencies.
+    # Avoid their retention in final closure.
+    "--disable-configure-args"
   ];
 
   postPatch = ''
@@ -75,11 +79,6 @@ stdenv.mkDerivation rec {
 
     substituteInPlace misc/ext.d/misc.sh.in \
       --replace /bin/cat ${coreutils}/bin/cat
-  '';
-
-  preFixup = ''
-    # remove unwanted build-dependency references
-    sed -i -e "s!PKG_CONFIG_PATH=''${PKG_CONFIG_PATH}!PKG_CONFIG_PATH=$(echo "$PKG_CONFIG_PATH" | sed -e 's/./0/g')!" $out/bin/mc
   '';
 
   postFixup = lib.optionalString (!stdenv.isDarwin) ''
