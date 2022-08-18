@@ -91,5 +91,5 @@ buildGoModule rec {
     platforms = platforms.linux;
   };
 
-  passthru.tests = nixosTests.kubernetes;
+  passthru.tests = nixosTests.kubernetes // { inherit kubectl; };
 }
