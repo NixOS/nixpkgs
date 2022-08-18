@@ -60,6 +60,11 @@ let
           ''}
           machine.screenshot("testPlay")
 
+          ${lib.optionalString (!systemWide) ''
+            machine.send_chars("pacmd info && touch /tmp/pacmd_success\n")
+            machine.wait_for_file("/tmp/pacmd_success")
+          ''}
+
           # Pavucontrol only loads when Pulseaudio is running. If it isn't, the
           # text "Dummy Output" (sound device name) will never show.
           machine.send_chars("pavucontrol\n")
