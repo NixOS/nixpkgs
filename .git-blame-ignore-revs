@@ -36,3 +36,6 @@ d08ede042b74b8199dc748323768227b88efcf7c
 
 # fix indentation in mk-python-derivation.nix
 d1c1a0c656ccd8bd3b25d3c4287f2d075faf3cf3
+
+# fix indentation in meteor default.nix
+f76b359e4a55267ddd4e9e149e7cc13ae5cad98a
