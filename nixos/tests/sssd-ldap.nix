@@ -28,7 +28,7 @@ in import ./make-test-python.nix ({pkgs, ...}: {
             attrs = {
               objectClass = [ "olcDatabaseConfig" "olcMdbConfig" ];
               olcDatabase = "{1}mdb";
-              olcDbDirectory = "/var/db/openldap";
+              olcDbDirectory = "/var/lib/openldap/db";
               olcSuffix = dbSuffix;
               olcRootDN = "cn=${ldapRootUser},${dbSuffix}";
               olcRootPW = ldapRootPassword;
