@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-ZNETA2JUZCS8/a2oeF+JCGVKbzeyhp51D0BmBTPToOw=";
 
   nativeBuildInputs = [ pkg-config cmake ] ++
-    lib.optionals (stdenv.isDarwin && !withSecurity) [ autoconf automake ];
+    lib.optionals stdenv.isDarwin [ autoconf automake ];
 
   buildInputs = [ openssl ] ++ lib.optional (stdenv.isDarwin && withSecurity) Security;
 
