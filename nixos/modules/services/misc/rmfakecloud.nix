@@ -4,8 +4,6 @@ with lib;
 
 let
   cfg = config.services.rmfakecloud;
-  serviceDataDir = "/var/lib/rmfakecloud";
-
 in {
   options = {
     services.rmfakecloud = {
@@ -19,6 +17,17 @@ in {
           rmfakecloud package to use.
 
           The default does not include the web user interface.
+        '';
+      };
+
+      stateDir = mkOption {
+        type = types.path;
+        default = "/var/lib/rmfakecloud";
+        description = lib.mdDoc ''
+          The rmfakecloud directory used to store all data. If left as the default value
+          this directory will automatically be created before the rmfakecloud server starts, otherwise
+          you are responsible for ensuring the directory exists with appropriate ownership
+          and permissions.
         '';
       };
 
@@ -49,7 +58,7 @@ in {
       extraSettings = mkOption {
         type = with types; attrsOf str;
         default = { };
-        example = { DATADIR = "/custom/path/for/rmfakecloud/data"; };
+        example = { RM_HTTPS_COOKIE = "1"; };
         description = ''
           Extra settings in the form of a set of key-value pairs.
           For tokens and secrets, use `environmentFile` instead.
@@ -82,6 +91,7 @@ in {
         STORAGE_URL = cfg.storageUrl;
         PORT = toString cfg.port;
         LOGLEVEL = cfg.logLevel;
+        DATADIR = cfg.stateDir;
       } // cfg.extraSettings;
 
       preStart = ''
@@ -136,8 +146,8 @@ in {
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
-        WorkingDirectory = serviceDataDir;
-        StateDirectory = baseNameOf serviceDataDir;
+        WorkingDirectory = cfg.stateDir;
+        StateDirectory = mkIf (cfg.stateDir == "/var/lib/rmfakecloud") "rmfakecloud";
         UMask = 0027;
       };
     };
