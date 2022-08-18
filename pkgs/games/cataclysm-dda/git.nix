@@ -2,9 +2,9 @@
 , tiles ? true, Cocoa
 , debug ? false
 , useXdgDir ? false
-, version ? "2021-07-03"
-, rev ? "9017808252e1e149446c8f8bd7a6582ce0f95285"
-, sha256 ? "0qrvkbyg098jb9hv69sg5093b1vj8f4n75p73v01jnmyxlz3ax28"
+, version ? "2022-08-18"
+, rev ? "657d58288a2b83521d2af126f6bf211cff143976"
+, sha256 ? "sha256-ueulWT8pHQaEOEmTTQ/13Z4hUAtaxY0gHK5IBPw8QKA="
 }:
 
 let
@@ -22,6 +22,11 @@ let
       inherit rev sha256;
     };
 
+    patches = [
+      # Unconditionally look for translation files in $out/share/locale
+      ./locale-path-git.patch
+    ];
+    
     makeFlags = common.makeFlags ++ [
       "VERSION=git-${version}-${lib.substring 0 8 src.rev}"
     ];
