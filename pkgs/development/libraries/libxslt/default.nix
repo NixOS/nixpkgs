@@ -16,13 +16,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libxslt";
-  version = "1.1.35";
+  version = "1.1.36";
 
-  outputs = [ "bin" "dev" "out" "man" "doc" ] ++ lib.optional pythonSupport "py";
+  outputs = [ "bin" "dev" "out" "doc" "devdoc" ] ++ lib.optional pythonSupport "py";
+  outputMan = "bin";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "gkfzPpqHLGrIWapFAYvExNALl+L+rJ7rwQyTzh803Xk=";
+    sha256 = "EoSPCkQI9ltTDTlizZ/2cLaueWGRz+/zdSK1dy3o3I4=";
   };
 
   nativeBuildInputs = [
@@ -59,11 +60,10 @@ stdenv.mkDerivation rec {
   postFixup = ''
     moveToOutput bin/xslt-config "$dev"
     moveToOutput lib/xsltConf.sh "$dev"
-    moveToOutput share/man/man1 "$bin"
   '' + lib.optionalString pythonSupport ''
     mkdir -p $py/nix-support
     echo ${libxml2.py} >> $py/nix-support/propagated-build-inputs
-    moveToOutput ${python.libPrefix} "$py"
+    moveToOutput ${python.sitePackages} "$py"
   '';
 
   passthru = {
