@@ -1185,6 +1185,8 @@ in {
 
   backoff = callPackage ../development/python-modules/backoff { };
 
+  backports-cached-property = callPackage ../development/python-modules/backports-cached-property { };
+
   backports_abc = callPackage ../development/python-modules/backports_abc { };
 
   backports_csv = callPackage ../development/python-modules/backports_csv { };
@@ -10425,6 +10427,8 @@ in {
   strategies = callPackage ../development/python-modules/strategies { };
 
   stravalib = callPackage ../development/python-modules/stravalib { };
+
+  strawberry-graphql = callPackage ../development/python-modules/strawberry-graphql { };
 
   streamdeck = callPackage ../development/python-modules/streamdeck { };
 
