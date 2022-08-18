@@ -2177,6 +2177,12 @@
     githubId = 543423;
     name = "Alex Wied";
   };
+  CesarGallego = {
+    email = "gallego.cesar@gmail.com";
+    github = "CesarGallego";
+    githubId = 7999138;
+    name = "César Gallego Rodríguez";
+  };
   cfhammill = {
     email = "cfhammill@gmail.com";
     github = "cfhammill";

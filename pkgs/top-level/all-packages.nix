@@ -18520,6 +18520,8 @@ with pkgs;
   hamlib_3 = callPackage ../development/libraries/hamlib { };
   hamlib_4 = callPackage ../development/libraries/hamlib/4.nix { };
 
+  jtdxhamlib = callPackage ../development/libraries/jtdxhamlib { };
+
   heimdal = callPackage ../development/libraries/kerberos/heimdal.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
     autoreconfHook = buildPackages.autoreconfHook269;
@@ -31720,6 +31722,8 @@ with pkgs;
   wp-cli = callPackage ../development/tools/wp-cli { };
 
   wsjtx = qt5.callPackage ../applications/radio/wsjtx { };
+
+  jtdx = qt5.callPackage ../applications/radio/jtdx { };
 
   wxhexeditor = callPackage ../applications/editors/wxhexeditor {
     wxGTK = wxGTK31;
