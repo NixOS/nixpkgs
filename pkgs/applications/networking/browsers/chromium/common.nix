@@ -160,6 +160,8 @@ let
       ./patches/no-build-timestamps.patch
       # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags:
       ./patches/widevine-79.patch
+      # Replace initial_preferences directory location (original path is besides binary)
+      ./patches/master-preferences.patch
     ];
 
     postPatch = ''
