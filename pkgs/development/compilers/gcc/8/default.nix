@@ -12,7 +12,6 @@
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man)
 , gmp, mpfr, libmpc, gettext, which, patchelf
-, libelf                      # optional, for link-time optimizations (LTO)
 , isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null
 , enableMultilib ? false
@@ -25,9 +24,6 @@
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
 , buildPackages
 }:
-
-# LTO needs libelf and zlib.
-assert libelf != null -> zlib != null;
 
 # Make sure we get GNU sed.
 assert stdenv.hostPlatform.isDarwin -> gnused != null;
@@ -162,7 +158,7 @@ stdenv.mkDerivation ({
     ++ optional targetPlatform.isLinux patchelf;
 
   buildInputs = [
-    gmp mpfr libmpc libelf
+    gmp mpfr libmpc
     targetPackages.stdenv.cc.bintools # For linking code at run-time
   ] ++ (optional (isl != null) isl)
     ++ (optional (zlib != null) zlib)
@@ -192,7 +188,7 @@ stdenv.mkDerivation ({
       crossStageStatic libcCross
       version
 
-      gmp mpfr libmpc libelf isl
+      gmp mpfr libmpc isl
 
       enableLTO
       enableMultilib

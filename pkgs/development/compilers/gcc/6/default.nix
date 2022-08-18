@@ -15,7 +15,6 @@
 , flex
 , perl ? null # optional, for texi2pod (then pod2man); required for Java
 , gmp, mpfr, libmpc, gettext, which, patchelf
-, libelf                      # optional, for link-time optimizations (LTO)
 , isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null, boehmgc ? null
 , gnatboot ? null
@@ -39,9 +38,6 @@
 assert langJava     -> zip != null && unzip != null
                        && zlib != null && boehmgc != null
                        && perl != null;  # for `--enable-java-home'
-
-# LTO needs libelf and zlib.
-assert libelf != null -> zlib != null;
 
 # Make sure we get GNU sed.
 assert stdenv.hostPlatform.isDarwin -> gnused != null;
@@ -210,7 +206,7 @@ stdenv.mkDerivation ({
     ++ optional targetPlatform.isLinux patchelf;
 
   buildInputs = [
-    gmp mpfr libmpc libelf
+    gmp mpfr libmpc
     targetPackages.stdenv.cc.bintools # For linking code at run-time
   ] ++ (optional (isl != null) isl)
     ++ (optional (zlib != null) zlib)
@@ -242,7 +238,7 @@ stdenv.mkDerivation ({
       crossStageStatic libcCross
       version
 
-      gmp mpfr libmpc libelf isl
+      gmp mpfr libmpc isl
 
       enableLTO
       enableMultilib
