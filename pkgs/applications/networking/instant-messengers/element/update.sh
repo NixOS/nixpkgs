@@ -27,7 +27,6 @@ trap 'rm -rf "$web_tmpdir"' EXIT
 
 pushd $web_tmpdir
 wget "$web_src/yarn.lock"
-sed -i '/matrix-analytics-events "github/d' yarn.lock
 web_yarn_hash=$(prefetch-yarn-deps yarn.lock)
 popd
 

@@ -31,14 +31,8 @@ in stdenv.mkDerivation rec {
     sha256 = pinData.webSrcHash;
   };
 
-  # Remove the matrix-analytics-events dependency from the matrix-react-sdk
-  # dependencies list. It doesn't seem to be necessary since we already are
-  # installing it individually, and it causes issues with the offline mode.
-  yarnLock = (runCommand "${pname}-modified-lock" {} ''
-    sed '/matrix-analytics-events "github/d' ${src}/yarn.lock > "$out"
-  '');
   offlineCache = fetchYarnDeps {
-    inherit yarnLock;
+    yarnLock = src + "/yarn.lock";
     sha256 = pinData.webYarnHash;
   };
 
