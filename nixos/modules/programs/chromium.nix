@@ -74,6 +74,25 @@ in
           "https://encrypted.google.com/complete/search?output=chrome&q={searchTerms}";
       };
 
+      initialOpts = mkOption {
+        type = types.attrs;
+        description = ''
+          Default preferences to be set at first startup.
+          <link xlink:href="https://support.google.com/chrome/a/answer/187948?hl=en">https://support.google.com/chrome/a/answer/187948?hl=en</link>
+        '';
+        default = {};
+        example = literalExpression ''
+          {
+            "webkit" = {
+              "webprefs" = {
+                "default_fixed_font_size" = 12;
+                "default_font_size" = 12;
+              };
+            };
+          }
+        '';
+      };
+
       extraOpts = mkOption {
         type = types.attrs;
         description = ''
@@ -96,20 +115,61 @@ in
           }
         '';
       };
+
+      recommendedOpts = mkOption {
+        type = types.attrs;
+        description = ''
+          Recommended chromium policy options.
+          Recommended policies can be changed by the user.
+        '';
+        default = {};
+        example = literalExpression ''
+          {
+            "BrowserSignin" = 0;
+            "SyncDisabled" = true;
+            "PasswordManagerEnabled" = false;
+            "SpellcheckEnabled" = true;
+          }
+        '';
+      };
+
     };
   };
 
   ###### implementation
 
   config = lib.mkIf cfg.enable {
-    # for chromium
-    environment.etc."chromium/policies/managed/default.json".text = builtins.toJSON defaultProfile;
-    environment.etc."chromium/policies/managed/extra.json".text = builtins.toJSON cfg.extraOpts;
-    # for google-chrome https://www.chromium.org/administrators/linux-quick-start
-    environment.etc."opt/chrome/policies/managed/default.json".text = builtins.toJSON defaultProfile;
-    environment.etc."opt/chrome/policies/managed/extra.json".text = builtins.toJSON cfg.extraOpts;
-    # for brave
-    environment.etc."brave/policies/managed/default.json".text = builtins.toJSON defaultProfile;
-    environment.etc."brave/policies/managed/extra.json".text = builtins.toJSON cfg.extraOpts;
+
+    environment.etc = let
+
+      # Base folders for different browsers
+      baseFolders = [
+        "chromium"
+        "opt/chrome"
+        "brave"
+      ];
+
+      # Default file structure for each browser folder
+      commonStructure = let
+        addText = input: { text = input; };
+      in {
+        "master_preferences" = addText (builtins.toJSON cfg.initialOpts);
+        "initial_preferences" = addText (builtins.toJSON cfg.initialOpts);
+        "policies/managed/default.json" = addText (builtins.toJSON defaultProfile);
+        "policies/managed/extra.json" = addText (builtins.toJSON cfg.extraOpts);
+        "policies/recommended/default.json" = addText (builtins.toJSON cfg.recommendedOpts);
+      };
+
+      # Build full file list
+      allFiles = let
+        fullListFiles = map (
+          folder:
+            lib.mapAttrsToList (name: value: { name = "${folder}/${name}"; inherit value; }) commonStructure
+        ) baseFolders;
+      in builtins.listToAttrs (lib.flatten fullListFiles);
+
+    in allFiles;
+
   };
+
 }
