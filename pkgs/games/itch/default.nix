@@ -35,13 +35,14 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "sha256-5MP6X33Jfu97o5R1n6Og64Bv4ZMxVM0A8lXeQug+bNA=";
   };
 
-  icons = fetchFromGitHub {
-    owner = "itchio";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-DZBmf8fe0zw5uiQjNKXw8g/vU2hjNDa87z/7XuhyXog=";
-    sparseCheckout = "release/images/itch-icons";
-  };
+  icons = let sparseCheckout = "/release/images/itch-icons"; in
+    fetchFromGitHub {
+        owner = "itchio";
+        repo = pname;
+        rev = "v${version}";
+        hash = "sha256-DZBmf8fe0zw5uiQjNKXw8g/vU2hjNDa87z/7XuhyXog=";
+        inherit sparseCheckout;
+      } + sparseCheckout;
 
   nativeBuildInputs = [ copyDesktopItems makeWrapper ];
 
@@ -68,7 +69,7 @@ stdenvNoCC.mkDerivation rec {
     install -Dm644 LICENSE -t "$out/share/licenses/$pkgname/"
     install -Dm644 LICENSES.chromium.html -t "$out/share/licenses/$pkgname/"
 
-    for icon in $icons/release/images/itch-icons/icon*.png
+    for icon in $icons/icon*.png
     do
       iconsize="''${icon#$icons/icon}"
       iconsize="''${iconsize%.png}"
