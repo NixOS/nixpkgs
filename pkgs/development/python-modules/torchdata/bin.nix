@@ -33,7 +33,7 @@ let
 in
 buildPythonPackage rec {
   pname = "torchdata";
-  version = "0.3.0";
+  version = "0.4.1";
   format = "wheel";
 
   src =
