@@ -44,8 +44,6 @@ buildPythonPackage rec {
 
   cargoRoot = "src/rust";
 
-  outputs = [ "out" "dev" ];
-
   nativeBuildInputs = lib.optionals (!isPyPy) [
     cffi
   ] ++ [
