@@ -52,6 +52,10 @@ let
           choices will be applied, and the depth of the relevant subtree
           returned by `runTest` will be reduced by one node.
 
+          A similar effect can be achieved with
+          {option}`matrix.<name>.choice.<name>.enable`, which allows single
+          choices to be omitted, but does not reduce the decision tree depth.
+
           By avoiding useless test parameter combinations, you can reduce your testing workload,
           and by avoiding nonsensical combinations, you can make all reasonable tests pass.
 
@@ -84,6 +88,36 @@ let
 
   choiceModule = decisionName: extendModules: { name, ... }: {
     options = {
+      enable = mkOption {
+        description = mdDoc ''
+          Whether to produce a test for this choice.
+
+          This can be used in combination with {option}`matrix.<name>.after` to
+          make sure all information is present. For example:
+
+          ```nix
+          { backend, ... }: {
+            matrix.backend.choice.rest = ...;
+            matrix.backend.choice.smtp = ...;
+
+            # Make sure testsuite logic only runs where backend
+            # has been decided.
+            matrix.testsuite.after = ["backend"];
+
+            matrix.testsuite.choice.transactions = {
+
+              # The SMTP backend does not support transactions.
+              enable = backend != "smtp";
+
+              module = ...;
+            };
+            matrix.testsuite.choice.login = ...;
+          }
+          ```
+        '';
+        type = types.bool;
+        default = true;
+      };
       module = mkOption {
         description = mdDoc ''
           The effects of making a choice. You can specify any test-level option here.
@@ -248,8 +282,15 @@ in
       if sortedEnable == [ ]
       then config
       else
-        lib.recurseIntoAttrs (
-          lib.mapAttrs' (k: v: lib.nameValuePair "${nextDecision}-${k}" v.module.result) config.matrix.${nextDecision}.choice
-        ) // config.exposeIntermediateAttrs config;
+        lib.recurseIntoAttrs
+          (
+            lib.mapAttrs'
+              (k: v: lib.nameValuePair "${nextDecision}-${k}" v.module.result)
+              (lib.filterAttrs
+                (k: v: v.enable)
+                config.matrix.${nextDecision}.choice
+              )
+          )
+        // config.exposeIntermediateAttrs config;
   };
 }

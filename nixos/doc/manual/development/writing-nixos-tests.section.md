@@ -643,14 +643,12 @@ The reason is that `matrix.foo.choice.qux.module.something` refers to a module a
 
 In this example, hardcoding the value of `foo`, `"qux"`, was also a valid solution.
 
-<!-- TBD
 ### Omitting combinations from the test matrix {#sec-nixos-test-matrix-ordering}
 
 The previous section described that it is possible to reference information from parent nodes of the "decision tree" constructed by `matrix.*` options.
 By referencing such partially decided scopes, we can construct a test matrix where some combinations are skipped.
 
-This is achieved with the [`matrix.<name>.enable`](#opt-matrix._name_.enable) and [`matrix.<decision>.after`](#opt-matrix._name_.after) options.
--->
+This is achieved with the [`matrix.<name>.choice.<name>.enable`](#test-opt-matrix._name_.enable) option.
 
 ## Test Options Reference {#sec-test-options-reference}
 
