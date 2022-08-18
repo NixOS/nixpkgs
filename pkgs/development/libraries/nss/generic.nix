@@ -55,7 +55,6 @@ stdenv.mkDerivation rec {
     else
       ./85_security_load_3.77+.patch
     )
-    ./ckpem.patch
     ./fix-cross-compilation.patch
   ];
 
