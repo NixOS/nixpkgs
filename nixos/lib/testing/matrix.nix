@@ -243,13 +243,13 @@ in
           lib.concatMapStrings (x: "  ${x.name}     --after-->\n") (sorted.cycle)
           + "  ${(lib.head sorted.cycle).name}";
         sortedEnable = lib.filter (c: c.value.enable) sortedList;
-        nextChoice = (lib.head sortedEnable).name;
+        nextDecision = (lib.head sortedEnable).name;
       in
       if sortedEnable == [ ]
       then config
       else
         lib.recurseIntoAttrs (
-          lib.mapAttrs' (k: v: lib.nameValuePair "${nextChoice}-${k}" v.module.result) config.matrix.${nextChoice}.choice
+          lib.mapAttrs' (k: v: lib.nameValuePair "${nextDecision}-${k}" v.module.result) config.matrix.${nextDecision}.choice
         ) // config.exposeIntermediateAttrs config;
   };
 }
