@@ -40,7 +40,7 @@ let
             environment.systemPackages = [ testers.testPlay pkgs.pavucontrol ]
               ++ lib.optional pkgs.stdenv.isx86_64 testers.testPlay32;
           } // lib.optionalAttrs systemWide {
-            users.users.alice.extraGroups = [ "audio" ];
+            users.users.alice.extraGroups = [ "pulse-access" ];
             systemd.services.pulseaudio.wantedBy = [ "multi-user.target" ];
           };
 
