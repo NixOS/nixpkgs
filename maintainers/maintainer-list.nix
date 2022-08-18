@@ -4623,6 +4623,12 @@
     githubId = 868283;
     name = "Fatih Altinok";
   };
+  fschwalbe = {
+    email = "frederick@fschwal.be";
+    name = "Frederick Schwalbe";
+    github = "fschwalbe";
+    githubId = 88447041;
+  };
   ftrvxmtrx = {
     email = "ftrvxmtrx@gmail.com";
     github = "ftrvxmtrx";
