@@ -83,6 +83,7 @@ buildDotnetModule rec {
   makeWrapperArgs = [
     # Without this Ryujinx fails to start on wayland. See https://github.com/Ryujinx/Ryujinx/issues/2714
     "--set GDK_BACKEND x11"
+    "--set SDL_VIDEODRIVER x11"
   ];
 
   preInstall = ''
