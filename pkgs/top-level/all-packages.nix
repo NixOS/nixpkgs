@@ -1335,6 +1335,8 @@ with pkgs;
 
   ocs-url = libsForQt5.callPackage ../tools/misc/ocs-url { };
 
+  pacmc = callPackage ../tools/games/minecraft/pacmc { };
+
   pferd = callPackage ../tools/misc/pferd {};
 
   q = callPackage ../tools/networking/q {};
