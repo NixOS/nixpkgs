@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, fetchpatch
 , fetchurl
 , meson
 , ninja
@@ -19,6 +20,13 @@ stdenv.mkDerivation rec {
     url = "https://download.gimp.org/pub/babl/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "sha256-9mdzUCiUS2N1rRjxYKZM65P1x9zKqdh1HeNZd3SIosE=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/babl/-/commit/b05b2826365a7dbc6ca1bf0977b848055cd0cbb6.patch";
+      hash = "sha256-zyDOc6FcVyZeMij1XjJ46XXWLO5MMz9ZqLKjjT6VSCI=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
