@@ -113,6 +113,12 @@ rec {
   */
   boolToString = b: if b then "true" else "false";
 
+  /* Convert a boolean to a CMake string.
+
+     Type: boolToCMakeString :: bool -> string
+  */
+  boolToCMakeString = b: if b then "ON" else "OFF";
+
   /* Merge two attribute sets shallowly, right side trumps left
 
      mergeAttrs :: attrs -> attrs -> attrs
