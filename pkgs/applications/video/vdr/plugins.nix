@@ -12,6 +12,8 @@
   };
 in {
 
+  softhddevice = callPackage ./softhddevice {};
+
   xineliboutput = callPackage ./xineliboutput {};
 
   skincurses = (mkPlugin "skincurses").overrideAttrs(oldAttr: {
