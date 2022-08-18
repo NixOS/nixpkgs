@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, linkFarmFromDrvs, callPackage, nuget-to-nix, writeScript, makeWrapper, fetchurl, xml2, dotnetCorePackages, dotnetPackages, mkNugetSource, mkNugetDeps, cacert, srcOnly, symlinkJoin }:
+{ lib, stdenvNoCC, linkFarmFromDrvs, callPackage, nuget-to-nix, writeScript, makeWrapper, fetchurl, xml2, dotnetCorePackages, dotnetPackages, mkNugetSource, mkNugetDeps, cacert, srcOnly, symlinkJoin, coreutils }:
 
 { name ? "${args.pname}-${args.version}"
 , pname ? name
@@ -138,6 +138,8 @@ in stdenvNoCC.mkDerivation (args // {
       exclusions = dotnet-sdk.passthru.packages { fetchNuGet = attrs: attrs.pname; };
     in writeScript "fetch-${pname}-deps" ''
       set -euo pipefail
+      export PATH="${lib.makeBinPath [ coreutils dotnet-sdk nuget-to-nix ]}"
+
       cd "$(dirname "''${BASH_SOURCE[0]}")"
 
       export HOME=$(mktemp -d)
@@ -157,7 +159,7 @@ in stdenvNoCC.mkDerivation (args // {
       mkdir -p "$HOME/nuget_pkgs"
 
       for project in "${lib.concatStringsSep "\" \"" ((lib.toList projectFile) ++ lib.optionals (testProjectFile != "") (lib.toList testProjectFile))}"; do
-        ${dotnet-sdk}/bin/dotnet restore "$project" \
+        dotnet restore "$project" \
           ${lib.optionalString (!enableParallelBuilding) "--disable-parallel"} \
           -p:ContinuousIntegrationBuild=true \
           -p:Deterministic=true \
@@ -169,7 +171,7 @@ in stdenvNoCC.mkDerivation (args // {
       echo "${lib.concatStringsSep "\n" exclusions}" > "$HOME/package_exclusions"
 
       echo "Writing lockfile..."
-      ${nuget-to-nix}/bin/nuget-to-nix "$HOME/nuget_pkgs" "$HOME/package_exclusions" > "$deps_file"
+      nuget-to-nix "$HOME/nuget_pkgs" "$HOME/package_exclusions" > "$deps_file"
       echo "Succesfully wrote lockfile to: $deps_file"
     '';
   } // args.passthru or {};
