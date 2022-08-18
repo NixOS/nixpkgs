@@ -45,8 +45,8 @@
     }
   },
   "ungoogled-chromium": {
-    "version": "104.0.5112.81",
-    "sha256": "0x17jzzvn2aqx3ahqyi6ijyn70sn79kg648r0ks9m5gib1bbgf0y",
+    "version": "104.0.5112.102",
+    "sha256": "0sjpmfln6c96c2i83q8c2v1jfii8527951nbnyqi0g4wam5jqrfj",
     "sha256bin64": null,
     "deps": {
       "gn": {
@@ -56,8 +56,8 @@
         "sha256": "1q06vsz9b4bb764wy1wy8n177z2pgpm97kq3rl1hmq185mz5fhra"
       },
       "ungoogled-patches": {
-        "rev": "104.0.5112.81-1",
-        "sha256": "0dvwh470h06x5a4p8kw22pi4lvch16knh90i2kh10y0wfggqz78w"
+        "rev": "104.0.5112.102-1",
+        "sha256": "06l6af4a6ywjn6x02dgb5ywk057p30rylrvr483iwvrj4jlhqvii"
       }
     }
   }
