@@ -22598,6 +22598,21 @@ let
     };
   };
 
+  TestMockHTTPTiny = buildPerlPackage {
+    pname = "Test-Mock-HTTP-Tiny";
+    version = "0.002";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/O/OD/ODYNIEC/Test-Mock-HTTP-Tiny-0.002.tar.gz";
+      sha256 = "sha256-+c+tfYUEZQvtNJO8bSyoLXuRvDcTyGxDXnXriKxb5eY=";
+    };
+    propagatedBuildInputs = [ TestDeep URI ];
+    meta = {
+      homepage = "https://github.com/odyniec/p5-Test-Mock-HTTP-Tiny.git";
+      description = "Record and replay HTTP requests/responses with HTTP::Tiny";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TestMockModule = buildPerlModule {
     pname = "Test-MockModule";
     version = "0.175.0";
