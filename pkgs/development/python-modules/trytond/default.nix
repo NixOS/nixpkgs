@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "trytond";
-  version = "6.4.3";
+  version = "6.4.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-LzpEHUL1RUPtg4mQqViGHQ1iCfIwQ7KTlEcDZQfhHzA=";
+    sha256 = "sha256-eTYm3anMKhgoaB8t5jald5XRD3PIVijJP4vmh0pA9lE=";
   };
 
   propagatedBuildInputs = [
