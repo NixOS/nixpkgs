@@ -64,8 +64,12 @@ callPackage ./common.nix { inherit stdenv; } {
     # store path than that determined when built (as a source for the
     # bootstrap-tools tarball)
     # Building from a proper gcc staying in the path where it was installed,
-    # libgcc_s will not be at {gcc}/lib, and gcc's libgcc will be found without
+    # libgcc_s will now be at {gcc}/lib, and gcc's libgcc will be found without
     # any special hack.
+    # TODO: remove this hack. Things that rely on this hack today:
+    # - dejagnu: during linux bootstrap tcl SIGSEGVs
+    # - clang-wrapper in cross-compilation
+    # Last attempt: https://github.com/NixOS/nixpkgs/pull/36948
     preInstall = ''
       if [ -f ${stdenv.cc.cc}/lib/libgcc_s.so.1 ]; then
           mkdir -p $out/lib
