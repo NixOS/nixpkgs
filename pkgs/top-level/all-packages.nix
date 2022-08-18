@@ -1614,7 +1614,7 @@ with pkgs;
     inherit libsForQt5 fetchFromGitHub fetchurl;
   };
 
-  yuzu-ea = import ../applications/emulators/yuzu {
+  yuzu-early-access = import ../applications/emulators/yuzu {
     branch = "early-access";
     inherit libsForQt5 fetchFromGitHub fetchurl;
   };
