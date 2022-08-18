@@ -6,7 +6,7 @@ let
 
   dataDir = "/var/lib/sssd";
   settingsFile = "${dataDir}/sssd.conf";
-  settingsFileUnsubstituted = pkgs.writeText "${dataDir}/sssd-unsubsituted.conf" cfg.config;
+  settingsFileUnsubstituted = pkgs.writeText "${dataDir}/sssd-unsubstituted.conf" cfg.config;
 in {
   options = {
     services.sssd = {
