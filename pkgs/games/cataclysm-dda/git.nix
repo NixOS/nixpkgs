@@ -26,7 +26,7 @@ let
       # Unconditionally look for translation files in $out/share/locale
       ./locale-path-git.patch
     ];
-    
+
     makeFlags = common.makeFlags ++ [
       "VERSION=git-${version}-${lib.substring 0 8 src.rev}"
     ];
