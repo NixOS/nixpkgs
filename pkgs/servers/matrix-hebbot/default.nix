@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config cmake ] ++
     lib.optionals stdenv.isDarwin [ autoconf automake ];
 
-  buildInputs = [ openssl ] ++ lib.optional (stdenv.isDarwin && withSecurity) Security;
+  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
 
   meta = with lib; {
     description = "A Matrix bot which can generate \"This Week in X\" like blog posts ";
