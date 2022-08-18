@@ -133,6 +133,10 @@ stdenv.mkDerivation rec {
     sed -i '/virnetsockettest/d' tests/meson.build
     # delete only the first occurrence of this
     sed -i '0,/qemuxml2argvtest/{/qemuxml2argvtest/d;}' tests/meson.build
+  '' + optionalString isLinux ''
+    sed -i 's,define PARTED "parted",define PARTED "${parted}/bin/parted",' \
+      src/storage/storage_backend_disk.c \
+      src/storage/storage_util.c
   '' + optionalString isDarwin ''
     sed -i '/qemucapabilitiestest/d' tests/meson.build
     sed -i '/vircryptotest/d' tests/meson.build
