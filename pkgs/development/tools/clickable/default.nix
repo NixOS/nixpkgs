@@ -30,14 +30,15 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
-disabledTests = [
-  # Test require network connection
-  "test_cpp_plugin"
-  "test_html"
-  "test_python"
-  "test_qml_only"
-  "test_rust"
-];
+  disabledTests = [
+    # Test require network connection
+    "test_cpp_plugin"
+    "test_html"
+    "test_python"
+    "test_qml_only"
+    "test_rust"
+  ];
+
   meta = {
     description = "A build system for Ubuntu Touch apps";
     homepage = "https://clickable-ut.dev";
