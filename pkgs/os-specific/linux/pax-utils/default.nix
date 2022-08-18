@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, buildPackages
 , docbook_xml_dtd_44
 , docbook_xsl
 , libcap
@@ -23,6 +24,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ docbook_xml_dtd_44 docbook_xsl meson ninja pkg-config xmlto ];
   buildInputs = [ libcap ];
 
