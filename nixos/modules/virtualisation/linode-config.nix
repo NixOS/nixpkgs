@@ -3,7 +3,7 @@ with lib;
 {
   imports = [ ../profiles/qemu-guest.nix ];
 
-  ### Allow Root logins only using SSH keys
+  # Allow Root logins only using SSH keys
   services.openssh = {
     enable = true;
 
@@ -11,16 +11,14 @@ with lib;
     passwordAuthentication = mkDefault false;
   };
 
-  ### Set networking config
-  #
+  # Set networking config
   networking = {
     usePredictableInterfaceNames = false;
     useDHCP = false;
     interfaces.eth0.useDHCP = true;
   };
 
-  ### Install diagnostic tools for Linode support
-  #
+  # Install diagnostic tools for Linode support
   environment.systemPackages = with pkgs; [
     inetutils
     mtr
@@ -35,12 +33,10 @@ with lib;
 
   swapDevices = mkDefault [{ device = "/dev/sdb"; }];
 
-  ### Enable LISH and Linode Booting w/ GRUB
-  #
+  # Enable LISH and Linode Booting w/ GRUB
   boot = {
-    ### Add Required Kernel Modules
+    # Add Required Kernel Modules
     # NOTE: These are not documented in the install guide
-    #
     initrd.availableKernelModules = [
       "virtio_pci"
       "virtio_scsi"
@@ -48,15 +44,13 @@ with lib;
       "sd_mod"
     ];
 
-    ### Set Up LISH Serial Connection
-    #
+    # Set Up LISH Serial Connection
     kernelParams = [ "console=ttyS0,19200n8" ];
     kernelModules = [ "virtio_net" ];
 
     loader = {
-      ### Increase Timeout to Allow LISH Connection
+      # Increase Timeout to Allow LISH Connection
       # NOTE: The image generator tries to set a timeout of 0, so we must force
-      #
       timeout = lib.mkForce 10;
 
       grub = {
