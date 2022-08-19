@@ -15003,6 +15003,8 @@ with pkgs;
   acl2 = callPackage ../development/interpreters/acl2 { };
   acl2-minimal = callPackage ../development/interpreters/acl2 { certifyBooks = false; };
 
+  apeloader = callPackage ../development/interpreters/apeloader { };
+
   angelscript = callPackage ../development/interpreters/angelscript {};
 
   angelscript_2_22 = callPackage ../development/interpreters/angelscript/2.22.nix {};
