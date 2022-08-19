@@ -24,4 +24,9 @@ buildEnv {
       fi
     done
   '';
+  meta = {
+    # ihaskell has an indirect dependency on the Python package mistune, which
+    # is marked insecure.
+    hydraPlatforms = lib.platforms.none;
+  };
 }

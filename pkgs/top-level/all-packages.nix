@@ -1300,6 +1300,8 @@ with pkgs;
 
   sdlookup = callPackage ../tools/security/sdlookup { };
 
+  sgrep = callPackage ../tools/text/sgrep { };
+
   smbscan = callPackage ../tools/security/smbscan { };
 
   spectre-cli = callPackage ../tools/security/spectre-cli { };
@@ -1448,6 +1450,8 @@ with pkgs;
   gensgs = pkgsi686Linux.callPackage ../applications/emulators/gens-gs { };
 
   goldberg-emu = callPackage ../applications/emulators/goldberg-emu { };
+
+  gopsuinfo = callPackage ../tools/system/gopsuinfo { };
 
   gxemul = callPackage ../applications/emulators/gxemul { };
 
@@ -9584,6 +9588,8 @@ with pkgs;
 
   p3x-onenote = callPackage ../applications/office/p3x-onenote { };
 
+  p4c = callPackage ../development/compilers/p4c { };
+
   p7zip = callPackage ../tools/archivers/p7zip { };
 
   packagekit = callPackage ../tools/package-management/packagekit { nix = nixVersions.nix_2_8; };
@@ -10900,6 +10906,8 @@ with pkgs;
   soapui = callPackage ../applications/networking/soapui {
     jdk = jdk11;
   };
+
+  sockdump = callPackage ../tools/networking/sockdump { };
 
   spglib = callPackage ../development/libraries/spglib {
     inherit (llvmPackages) openmp;
@@ -14418,6 +14426,9 @@ with pkgs;
   cargo-udeps = callPackage ../development/tools/rust/cargo-udeps {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
   };
+
+  cargo-tauri = callPackage ../development/tools/rust/cargo-tauri { };
+
   cargo-valgrind = callPackage ../development/tools/rust/cargo-valgrind { };
   cargo-wasi = callPackage ../development/tools/rust/cargo-wasi {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -16703,6 +16714,10 @@ with pkgs;
   } // (config.radare or {}));
 
   ran = callPackage ../servers/http/ran { };
+
+  rathole = callPackage ../tools/networking/rathole {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   retry = callPackage ../tools/system/retry { };
 
@@ -30953,6 +30968,8 @@ with pkgs;
   tabula-java = callPackage ../applications/misc/tabula-java { };
 
   tasknc = callPackage ../applications/misc/tasknc { };
+
+  tasktimer = callPackage ../applications/misc/tasktimer { };
 
   taskwarrior = callPackage ../applications/misc/taskwarrior { };
 

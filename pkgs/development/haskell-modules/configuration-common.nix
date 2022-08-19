@@ -237,6 +237,11 @@ self: super: {
   # base bound
   digit = doJailbreak super.digit;
 
+  # matterhorn-50200.17.0 won't work with brick >= 0.71
+  matterhorn = doJailbreak (super.matterhorn.overrideScope (self: super: {
+    brick = self.brick_0_70_1;
+  }));
+
   # 2020-06-05: HACK: does not pass own build suite - `dontCheck`
   # 2022-06-17: Use hnix-store 0.5 until hnix 0.17
   hnix = generateOptparseApplicativeCompletion "hnix" (dontCheck (
@@ -351,24 +356,6 @@ self: super: {
   lensref = dontCheck super.lensref;
   lvmrun = disableHardening ["format"] (dontCheck super.lvmrun);
   matplotlib = dontCheck super.matplotlib;
-
-  brick_0_73 = doDistribute (super.brick_0_73.overrideScope (self: super: {
-    vty = self.vty_5_36;
-    text-zipper = self.text-zipper_0_12;
-  }));
-
-  # https://github.com/matterhorn-chat/matterhorn/issues/679 they do not want to be on stackage
-  matterhorn = doJailbreak (appendPatches [
-    # Fix build with brick 0.73
-    (fetchpatch {
-      name = "matterhorn-brick-0.72.patch";
-      url = "https://github.com/matterhorn-chat/matterhorn/commit/d52df3342b8420e219095aad477205e47fbef11b.patch";
-      sha256 = "1ifvv926g9m8niyc9nl1hy9bkx4kf12ciyv2v8vnrzz3njp4fsrz";
-    })
-  ] (super.matterhorn.overrideScope (self: super: {
-    brick = self.brick_0_73;
-  })));
-
   memcache = dontCheck super.memcache;
   metrics = dontCheck super.metrics;
   milena = dontCheck super.milena;
