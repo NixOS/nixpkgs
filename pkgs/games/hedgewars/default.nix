@@ -109,5 +109,6 @@ stdenv.mkDerivation rec {
     inherit (fpc.meta) platforms;
     # https://github.com/NixOS/nixpkgs/pull/185755#issuecomment-1219024584
     broken = true;
+    hydraPlatforms = platforms.none;
   };
 }
