@@ -37,5 +37,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/executablebooks/sphinx-external-toc";
     license = licenses.mit;
     maintainers = with maintainers; [ marsam ];
+    # Missing Sphinx 5.X support
+    # https://github.com/executablebooks/sphinx-external-toc/issues/83
+    broken = true;
   };
 }
