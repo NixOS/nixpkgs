@@ -1834,7 +1834,7 @@ with pkgs;
   lilo = callPackage ../tools/misc/lilo { };
 
   logseq = callPackage ../applications/misc/logseq {
-    electron = electron_15;
+    electron = electron_19;
   };
 
   natls = callPackage ../tools/misc/natls { };
@@ -3992,6 +3992,10 @@ with pkgs;
   heatseeker = callPackage ../tools/misc/heatseeker { };
 
   hebcal = callPackage ../tools/misc/hebcal {};
+
+  hebbot = callPackage ../servers/matrix-hebbot {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   hexio = callPackage ../development/tools/hexio { };
 
@@ -24376,6 +24380,8 @@ with pkgs;
   goconvey = callPackage ../development/tools/goconvey { };
 
   gofumpt = callPackage ../development/tools/gofumpt { };
+
+  gotags = callPackage ../development/tools/gotags { };
 
   go-task = callPackage ../development/tools/go-task { };
 

@@ -1,18 +1,27 @@
 { stdenv, lib, rustPlatform, fetchgit
-, minijail-tools, pkg-config, wayland-scanner
+, minijail-tools, pkg-config, protobuf, wayland-scanner
 , libcap, libdrm, libepoxy, minijail, virglrenderer, wayland, wayland-protocols
 }:
 
-rustPlatform.buildRustPackage rec {
-  pname = "crosvm";
-  version = "103.3";
-
+let
   src = fetchgit {
     url = "https://chromium.googlesource.com/crosvm/crosvm";
-    rev = "e7db3a5cc78ca90ab06aadd5f08bb151090269b6";
-    sha256 = "0hyz0mg5fn6hi97awfpxfykgv68m935r037sdf85v3vcwjy5n5ki";
+    rev = "265aab613b1eb31598ea0826f04810d9f010a2c6";
+    sha256 = "OzbtPHs6BWK83RZ/6eCQHA61X6SY8FoBkaN70a37pvc=";
     fetchSubmodules = true;
   };
+
+  # use vendored virglrenderer
+  virglrenderer' = virglrenderer.overrideAttrs (oa: {
+    src = "${src}/third_party/virglrenderer";
+  });
+in
+
+rustPlatform.buildRustPackage rec {
+  pname = "crosvm";
+  version = "104.0";
+
+  inherit src;
 
   separateDebugInfo = true;
 
@@ -22,10 +31,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoLock.lockFile = ./Cargo.lock;
 
-  nativeBuildInputs = [ minijail-tools pkg-config wayland-scanner ];
+  nativeBuildInputs = [ minijail-tools pkg-config protobuf wayland-scanner ];
 
   buildInputs = [
-    libcap libdrm libepoxy minijail virglrenderer wayland wayland-protocols
+    libcap libdrm libepoxy minijail virglrenderer' wayland wayland-protocols
   ];
 
   arch = stdenv.hostPlatform.parsed.cpu.name;
@@ -43,13 +52,16 @@ rustPlatform.buildRustPackage rec {
         compile_seccomp_policy \
             --default-action trap $policy ''${policy%.policy}.bpf
     done
+
+    substituteInPlace seccomp/$arch/*.policy \
+      --replace "@include $(pwd)/seccomp/$arch/" "@include $out/share/policy/"
   '';
 
   buildFeatures = [ "default" "virgl_renderer" "virgl_renderer_next" ];
 
   postInstall = ''
     mkdir -p $out/share/policy/
-    cp -v seccomp/$arch/*.bpf $out/share/policy/
+    cp -v seccomp/$arch/*.{policy,bpf} $out/share/policy/
   '';
 
   passthru.updateScript = ./update.py;
