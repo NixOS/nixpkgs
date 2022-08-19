@@ -14561,6 +14561,8 @@ with pkgs;
 
   terra = callPackage ../development/compilers/terra {
     llvmPackages = llvmPackages_11;
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) Cocoa Foundation;
   };
 
   teyjus = callPackage ../development/compilers/teyjus (
