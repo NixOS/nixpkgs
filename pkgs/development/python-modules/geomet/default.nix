@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "geomet";
-  version = "0.3.0";
+  version = "0.3.1";
 
   # pypi tarball doesn't include tests
   src = fetchFromGitHub {
     owner = "geomet";
     repo = "geomet";
-    rev = version;
-    sha256 = "1lb0df78gkivsb7hy3ix0xccvcznvskip11hr5sgq5y76qnfc8p0";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-7QfvGQlg4nTr1rwTyvTNm6n/jFptLtpBKMjjQj6OXCQ=";
   };
 
   propagatedBuildInputs = [ click six ];
