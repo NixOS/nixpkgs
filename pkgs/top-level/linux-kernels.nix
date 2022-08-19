@@ -36,7 +36,7 @@ let
       modDirVersion' = builtins.replaceStrings [ kernel.version ] [ version ] kernel.modDirVersion;
     in kernel.override {
       structuredExtraConfig = import ../os-specific/linux/kernel/hardened/config.nix {
-        inherit lib version;
+        inherit stdenv lib version;
       };
       argsOverride = {
         inherit version;
