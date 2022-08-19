@@ -653,6 +653,17 @@
           which no longer has a downgrade path to releases 1.2 or older.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          Introduced
+          <literal>services.zerotierone.localConfSourcePath</literal>
+          option, which controls generation of the
+          <literal>/var/lib/zerotier-one/local.conf</literal> file. If
+          you have previously manually placed a local.conf file there,
+          an assertion failure will be triggered and you will be
+          required to switch to using the option instead.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
