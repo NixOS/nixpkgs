@@ -1,6 +1,16 @@
-{ lib, buildPythonApplication, fetchFromGitHub, bash, cmake, flex
-, libclang, llvm, unifdef
-, chardet, pebble, psutil
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, bash
+, cmake
+, flex
+, libclang
+, llvm
+, unifdef
+, chardet
+, pebble
+, psutil
+, pytestCheckHook
 }:
 
 buildPythonApplication rec {
@@ -19,18 +29,48 @@ buildPythonApplication rec {
     ./unifdef.patch
   ];
 
-  nativeBuildInputs = [ cmake flex llvm.dev ];
-  buildInputs = [ bash libclang llvm llvm.dev unifdef ];
-  propagatedBuildInputs = [ chardet pebble psutil ];
-
-  # 'cvise --command=...' generates a script with hardcoded shebang.
   postPatch = ''
+    # 'cvise --command=...' generates a script with hardcoded shebang.
     substituteInPlace cvise.py \
       --replace "#!/bin/bash" "#!${bash}/bin/bash"
+
+    substituteInPlace setup.cfg \
+      --replace "--flake8" ""
   '';
 
-  # pytest-flake8 is broken in nixpkgs: https://github.com/tholo/pytest-flake8/issues/87
-  doCheck = false;
+  nativeBuildInputs = [
+    cmake
+    flex
+    llvm.dev
+  ];
+
+  buildInputs = [
+    libclang
+    llvm
+    llvm.dev
+    unifdef
+  ];
+
+  propagatedBuildInputs = [
+    chardet
+    pebble
+    psutil
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+    unifdef
+  ];
+
+  preCheck = ''
+    patchShebangs cvise.py
+  '';
+
+  disabledTests = [
+    # Needs gcc, fails when run noninteractively (without tty).
+    "test_simple_reduction"
+  ];
+
   dontUsePipInstall = true;
   dontUseSetuptoolsBuild = true;
   dontUseSetuptoolsCheck = true;

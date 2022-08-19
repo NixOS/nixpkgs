@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, linkFarmFromDrvs, callPackage, nuget-to-nix, writeScript, makeWrapper, fetchurl, xml2, dotnetCorePackages, dotnetPackages, mkNugetSource, mkNugetDeps, cacert, srcOnly, symlinkJoin, coreutils }:
+{ lib, stdenvNoCC, linkFarmFromDrvs, callPackage, nuget-to-nix, writeShellScript, makeWrapper, fetchurl, xml2, dotnetCorePackages, dotnetPackages, mkNugetSource, mkNugetDeps, cacert, srcOnly, symlinkJoin, coreutils }:
 
 { name ? "${args.pname}-${args.version}"
 , pname ? name
@@ -136,14 +136,14 @@ in stdenvNoCC.mkDerivation (args // {
 
     fetch-deps = let
       exclusions = dotnet-sdk.passthru.packages { fetchNuGet = attrs: attrs.pname; };
-    in writeScript "fetch-${pname}-deps" ''
+    in writeShellScript "fetch-${pname}-deps" ''
       set -euo pipefail
       export PATH="${lib.makeBinPath [ coreutils dotnet-sdk nuget-to-nix ]}"
 
       cd "$(dirname "''${BASH_SOURCE[0]}")"
 
       export HOME=$(mktemp -d)
-      deps_file="/tmp/${pname}-deps.nix"
+      deps_file="''${1:-/tmp/${pname}-deps.nix}"
 
       store_src="${srcOnly args}"
       src="$(mktemp -d /tmp/${pname}.XXX)"
