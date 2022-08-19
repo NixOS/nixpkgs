@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "portunus";
-  version = "1.1.0-beta.2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "majewsky";
     repo = "portunus";
     rev = "v${version}";
-    sha256 = "sha256-hGOMbaEWecgQvpk/2E8mcJZ9QMjllIhS3RBr7PKnbjQ=";
+    sha256 = "sha256-+sq5Wja0tVkPZ0Z++K2A6my9LfLJ4twxtoEAS6LHqzE=";
   };
 
   vendorSha256 = null;
