@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gstreamer";
-  version = "1.20.1";
+  version = "1.20.3";
 
   outputs = [
     "bin"
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0cghi6n4nhdbajz3wqcgbh5xm94myvnqgsi9g2bz9n1s9904l2fy";
+    sha256 = "sha256-YH2vZLu9X7GK+dF+IcDSLE1wL//oOyPLItGxryyiOio=";
   };
 
   strictDeps = true;
