@@ -14,7 +14,7 @@ buildGoModule rec {
   proxyVendor = true;
   vendorSha256 = "sha256-R1OB4jTmyyS2O91vqSNjmSA19KutHzPLcLQ7R7tCsIA=";
 
-  subPackages = ["cmd/ghz" "cmd/ghz-web"];
+  subPackages = [ "cmd/ghz" "cmd/ghz-web" ];
 
   ldflags = [ "-s" "-w" ];
 
