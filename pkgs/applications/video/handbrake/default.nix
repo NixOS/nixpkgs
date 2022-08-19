@@ -57,10 +57,10 @@
 , libdvdcss
 , libbluray
   # Darwin-specific
-, AudioToolbox ? null
-, Foundation ? null
-, libobjc ? null
-, VideoToolbox ? null
+, AudioToolbox
+, Foundation
+, libobjc
+, VideoToolbox
   # GTK
   # NOTE: 2019-07-19: The gtk3 package has a transitive dependency on dbus,
   # which in turn depends on systemd. systemd is not supported on Darwin, so
