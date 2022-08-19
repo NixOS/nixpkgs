@@ -38,6 +38,12 @@ directory.
 
 ## Interactive-only test configuration {#sec-nixos-test-interactive-configuration}
 
-You can add configuration that is specific to the interactive test driver, by adding to the `interactive` option.
-`interactive` is a copy of the regular test options namespace, and is used by the interactive test driver.
-It can be helpful for troubleshooting changes that you don't want to apply to regular test runs.
+The `.driverInteractive` attribute combines the regular test configuration with
+definitions from the [`interactive` submodule](#opt-interactive). This gives you
+a more usable, graphical, but slightly different configuration.
+
+You can add your own interactive-only test configuration by adding extra
+configuration to the [`interactive` submodule](#opt-interactive).
+
+To interactively run only the regular configuration, build the `<test>.driver` attribute
+instead, and call it with the flag `result/bin/nixos-test-driver --interactive`.

@@ -42,12 +42,23 @@ $ ./result/bin/nixos-test-driver --keep-vm-state
   <section xml:id="sec-nixos-test-interactive-configuration">
     <title>Interactive-only test configuration</title>
     <para>
-      You can add configuration that is specific to the interactive test
-      driver, by adding to the <literal>interactive</literal> option.
-      <literal>interactive</literal> is a copy of the regular test
-      options namespace, and is used by the interactive test driver. It
-      can be helpful for troubleshooting changes that you don’t want to
-      apply to regular test runs.
+      The <literal>.driverInteractive</literal> attribute combines the
+      regular test configuration with definitions from the
+      <link linkend="opt-interactive"><literal>interactive</literal>
+      submodule</link>. This gives you a more usable, graphical, but
+      slightly different configuration.
+    </para>
+    <para>
+      You can add your own interactive-only test configuration by adding
+      extra configuration to the
+      <link linkend="opt-interactive"><literal>interactive</literal>
+      submodule</link>.
+    </para>
+    <para>
+      To interactively run only the regular configuration, build the
+      <literal>&lt;test&gt;.driver</literal> attribute instead, and call
+      it with the flag
+      <literal>result/bin/nixos-test-driver --interactive</literal>.
     </para>
   </section>
 </section>
