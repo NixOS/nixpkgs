@@ -258,7 +258,7 @@ pullImage {
 
 - `sha256` is the checksum of the whole fetched image. This argument is required.
 
-The host information (arch and cpu variant if available) will be used to fetch the correct image. The target os is set to `linux` by default and can't be changed to another os.
+The host information (arch and cpu variant if available) will be used to fetch the correct image. You can fetch images for a different platform by using the Nixpkgs cross compilation functionality.
 
 `nix-prefetch-docker` command can be used to get required image parameters:
 
