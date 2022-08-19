@@ -1453,6 +1453,8 @@ with pkgs;
 
   hercules = callPackage ../applications/emulators/hercules { };
 
+  hostapd-mana = callPackage ../tools/networking/hostapd-mana { };
+
   image-analyzer = callPackage ../applications/emulators/cdemu/analyzer.nix { };
 
   kega-fusion = pkgsi686Linux.callPackage ../applications/emulators/kega-fusion { };
