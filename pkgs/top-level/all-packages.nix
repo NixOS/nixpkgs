@@ -39633,4 +39633,6 @@ with pkgs;
   udict = callPackage ../applications/misc/udict { };
 
   duden = callPackage ../applications/misc/duden { };
+
+  zf = callPackage ../tools/misc/zf { };
 }
