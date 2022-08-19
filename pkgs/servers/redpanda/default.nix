@@ -1,13 +1,13 @@
 { lib, stdenv, fetchzip }:
 
 let
-  version = "22.1.7";
+  version = "22.2.1";
   platform = if stdenv.isLinux then "linux" else "darwin";
   arch = if stdenv.isAarch64 then "arm" else "amd";
   sha256s = {
     darwin.amd = "sha256-AXk3aP1SGiHTfHTCBRTagX0DAVmdcVVIkxWaTnZxB8g=";
     darwin.arm = "sha256-pvOVvNc8lZ2d2fVZVYWvumVWYpnLORNY/3o1t4BN2N4=";
-    linux.amd = "sha256-FjDDrJmLvelQ8PmTEtnvV+5zpixizR0bowoJPLyPFcA=";
+    linux.amd = "sha256-cj/XzGtDGpsxWvVK1wiRn14TvvzonaL2hnPit0/7F3A=";
     linux.arm = "sha256-WHjYAbytiu747jFqN0KZ/CkIwAVI7fb32ywtRiQOBm8=";
   };
 in stdenv.mkDerivation rec {

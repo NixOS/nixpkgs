@@ -26,7 +26,7 @@
 , withWebP ? false
 , srcRepo ? true, autoreconfHook ? null, texinfo ? null
 , siteStart ? ./site-start.el
-, nativeComp ? false
+, nativeComp ? true
 , withAthena ? false
 , withToolkitScrollBars ? true
 , withPgtk ? false

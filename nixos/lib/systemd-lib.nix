@@ -285,6 +285,8 @@ in rec {
           Documentation = toString config.documentation; }
         // optionalAttrs (config.onFailure != []) {
           OnFailure = toString config.onFailure; }
+        // optionalAttrs (config.onSuccess != []) {
+          OnSuccess = toString config.onSuccess; }
         // optionalAttrs (options.startLimitIntervalSec.isDefined) {
           StartLimitIntervalSec = toString config.startLimitIntervalSec;
         } // optionalAttrs (options.startLimitBurst.isDefined) {

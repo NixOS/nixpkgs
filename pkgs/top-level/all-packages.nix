@@ -327,6 +327,8 @@ with pkgs;
 
   buildMaven = callPackage ../build-support/build-maven.nix {};
 
+  caroline = callPackage ../development/libraries/caroline { };
+
   castget = callPackage ../applications/networking/feedreaders/castget { };
 
   castxml = callPackage ../development/tools/castxml {
@@ -1284,6 +1286,8 @@ with pkgs;
 
   pferd = callPackage ../tools/misc/pferd {};
 
+  q = callPackage ../tools/networking/q {};
+
   qFlipper = libsForQt515.callPackage ../tools/misc/qflipper { };
 
   quich = callPackage ../tools/misc/quich { } ;
@@ -1364,6 +1368,8 @@ with pkgs;
   archi = callPackage ../tools/misc/archi { };
 
   breitbandmessung = callPackage ../applications/networking/breitbandmessung { };
+
+  zq = callPackage ../development/tools/zq { buildGoModule = buildGo118Module; };
 
   ### APPLICATIONS/EMULATORS
 
@@ -1448,6 +1454,8 @@ with pkgs;
   hatari = callPackage ../applications/emulators/hatari { };
 
   hercules = callPackage ../applications/emulators/hercules { };
+
+  hostapd-mana = callPackage ../tools/networking/hostapd-mana { };
 
   image-analyzer = callPackage ../applications/emulators/cdemu/analyzer.nix { };
 
@@ -12810,6 +12818,8 @@ with pkgs;
 
   avra = callPackage ../development/compilers/avra { };
 
+  ballerina = callPackage ../development/compilers/ballerina { };
+
   beekeeper-studio = callPackage ../development/tools/database/beekeeper-studio { };
 
   bigloo = callPackage ../development/compilers/bigloo { };
@@ -17489,6 +17499,8 @@ with pkgs;
   soxt = callPackage ../development/libraries/soxt { };
 
   CoinMP = callPackage ../development/libraries/CoinMP { };
+
+  coinlive = callPackage ../tools/misc/coinlive { };
 
   cointop = callPackage ../applications/misc/cointop { };
 
@@ -26870,7 +26882,6 @@ with pkgs;
   em = callPackage ../applications/editors/em { };
 
   emacs = emacs28;
-  emacsNativeComp = emacs28NativeComp;
   emacs-nox = emacs28-nox;
 
   emacs28 = callPackage ../applications/editors/emacs/28.nix {
@@ -26883,10 +26894,6 @@ with pkgs;
     gpm = null;
     inherit (darwin.apple_sdk.frameworks) AppKit GSS ImageIO;
     inherit (darwin) sigtool;
-  };
-
-  emacs28NativeComp = emacs28.override {
-    nativeComp = true;
   };
 
   emacs28-nox = lowPrio (emacs28.override {
