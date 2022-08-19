@@ -52,7 +52,7 @@ with lib;
 with builtins;
 
 let majorVersion = "12";
-    version = "${majorVersion}.1.0";
+    version = "${majorVersion}.2.0";
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -65,8 +65,11 @@ let majorVersion = "12";
         ../gcc-12-gfortran-driving.patch
         ../ppc-musl.patch
       ] ++ optional (stdenv.isDarwin && stdenv.isAarch64) (fetchpatch {
-        url = "https://github.com/Homebrew/formula-patches/raw/76677f2b/gcc/gcc-12.1.0-arm.diff";
-        sha256 = "sha256-IcCYHSCAElJqTAZELJnRRWo0/SlkgQzSvoMjYr3pgD0=";
+        # TODO: switch back to Homebrew patches:
+        #   was "https://github.com/Homebrew/formula-patches/raw/76677f2b/gcc/gcc-12.1.0-arm.diff"
+        name = "gcc-12-darwin-aarch64-support.patch";
+        url = "https://github.com/tjni/gcc-12-branch/compare/releases/gcc-12.2...gcc-12-2-darwin.diff";
+        sha256 = "sha256-hjM9q6tsdzoGOQWJ7v3BaeVxdWQGTaEnep2ZSwX5+74=";
       })
 
       # Obtain latest patch with ../update-mcfgthread-patches.sh
@@ -87,7 +90,7 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
-    sha256 = "sha256-Yv1jSInzHAK2SvLEaPBktHrRynhBHEWr5qxLX43RnHs=";
+    sha256 = "sha256-5UnPnPNZSgDie2WJ1DItcOByDN0hPzm+tBgeBpJiMP8=";
   };
 
   inherit patches;
