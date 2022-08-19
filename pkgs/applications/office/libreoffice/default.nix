@@ -94,6 +94,7 @@
 , ncurses
 , libepoxy
 , gpgme
+, libwebp
 , abseil-cpp
 , langs ? [ "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sl" "uk" "zh-CN" ]
 , withHelp ? true
@@ -453,6 +454,8 @@ in
     # https://github.com/NixOS/nixpkgs/commit/5c5362427a3fa9aefccfca9e531492a8735d4e6f
     "--without-system-orcus"
     "--without-system-xmlsec"
+    "--without-system-cuckoo"
+    "--without-system-zxing"
   ] ++ optionals kdeIntegration [
     "--enable-kf5"
     "--enable-qt5"
@@ -573,7 +576,8 @@ in
     gst-plugins-ugly
     gstreamer
   ])
-  ++ optionals kdeIntegration [ qtbase qtx11extras kcoreaddons kio ];
+  ++ optionals kdeIntegration [ qtbase qtx11extras kcoreaddons kio ]
+  ++ optionals (lib.versionAtLeast (lib.versions.majorMinor version) "7.4") [ libwebp ];
 
   passthru = {
     inherit srcs;
