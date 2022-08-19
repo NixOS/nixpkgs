@@ -186,7 +186,7 @@ let
         kernelConf.target
         "vmlinux"  # for "perf" and things like that
       ] ++ optional isModular "modules"
-        ++ optional buildDTBs "dtbs"
+        ++ optionals buildDTBs ["dtbs" "DTC_FLAGS=-@"]
       ++ extraMakeFlags;
 
       installFlags = [
