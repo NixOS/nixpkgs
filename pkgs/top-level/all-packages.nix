@@ -16222,6 +16222,8 @@ with pkgs;
 
   guff = callPackage ../tools/graphics/guff { };
 
+  guile-hall = callPackage ../development/tools/guile/guile-hall { };
+
   guile-lint = callPackage ../development/tools/guile/guile-lint {
     guile = guile_1_8;
   };
