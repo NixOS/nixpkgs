@@ -29,14 +29,12 @@
 , libnotify ? null
 , enableUI ? true
 , withWayland ? false
-, libxkbcommon ? null
-, wayland ? null
+, libxkbcommon
+, wayland
 , buildPackages
 , runtimeShell
 , nixosTests
 }:
-
-assert withWayland -> wayland != null && libxkbcommon != null;
 
 with lib;
 
