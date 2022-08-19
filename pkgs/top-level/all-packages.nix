@@ -1449,6 +1449,8 @@ with pkgs;
 
   goldberg-emu = callPackage ../applications/emulators/goldberg-emu { };
 
+  gopsuinfo = callPackage ../tools/system/gopsuinfo { };
+
   gxemul = callPackage ../applications/emulators/gxemul { };
 
   hatari = callPackage ../applications/emulators/hatari { };
