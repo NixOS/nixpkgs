@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "rfcat";
-  version = "1.9.5";
+  version = "1.9.6";
 
   src = fetchFromGitHub {
     owner = "atlas0fd00m";
     repo = "rfcat";
-    rev = "v${version}";
-    sha256 = "1mmr7g7ma70sk6vl851430nqnd7zxsk7yb0xngwrdx9z7fbz2ck0";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-7iYz7YY9zpnJmLfCmp/sF21eZ21HMGq2sLQIENxbr34=";
   };
 
   propagatedBuildInputs = [
