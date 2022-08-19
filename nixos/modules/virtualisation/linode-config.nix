@@ -13,7 +13,13 @@ with lib;
   networking = {
     usePredictableInterfaceNames = false;
     useDHCP = false;
-    interfaces.eth0.useDHCP = true;
+    interfaces.eth0 = {
+      useDHCP = true;
+
+      # Linode expects IPv6 privacy extensions to be disabled, so disable them
+      # See: https://www.linode.com/docs/guides/manual-network-configuration/#static-vs-dynamic-addressing
+      tempAddress = "disabled";
+    };
   };
 
   # Install diagnostic tools for Linode support
