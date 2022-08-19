@@ -21,6 +21,10 @@
 
 - Make commits of logical units.
 
+- Using a separate commit, register into the `.git-blame-ignore-revs` file any commits that you believe may be distracting when using `git blame`. The most common examples include commits that introduce purely cosmetic changes, such as commits that only rename symbols or adjust indentation.
+
+  - It is important that a PR containing both a cosmetic commit and a commit adding the hash to the `.git-blame-ignore-revs` file be taken into the upstream `nixpkgs` repository specifically via a merge commit; if any such PR is taken in via a rebase, for example, the hash of the cosmetic commit will change to something other than what is registered in the `.git-blame-ignore-revs` file.
+
 - If you removed pkgs or made some major NixOS changes, write about it in the release notes for the next stable release. For example `nixos/doc/manual/release-notes/rl-2003.xml`.
 
 - Check for unnecessary whitespace with `git diff --check` before committing.
