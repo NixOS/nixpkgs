@@ -69,8 +69,8 @@ in {
           Configuration options should match those described in
           [example-config.yaml](https://github.com/mautrix/whatsapp/blob/master/example-config.yaml).
 
-          Secret tokens should not be specified or only in the registration file
-	  Database password should be specified only in /var/lib/mautrix-whatsapp/db-password
+          Secret tokens should not be specified or only in the registration file.
+          Database password should be specified only in /var/lib/mautrix-whatsapp/db-password
         '';
       };
 
