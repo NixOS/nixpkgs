@@ -55,6 +55,8 @@ stdenv.mkDerivation rec {
     runHook preInstall
     mkdir -p $out
     cp -r ../include $out
+    cp -r ../dmlc-core/include/dmlc $out/include
+    cp -r ../rabit/include/rabit $out/include
     install -Dm755 ../lib/${libname} $out/lib/${libname}
     install -Dm755 ../xgboost $out/bin/xgboost
     runHook postInstall
