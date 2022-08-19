@@ -17494,6 +17494,8 @@ with pkgs;
 
   CoinMP = callPackage ../development/libraries/CoinMP { };
 
+  coinlive = callPackage ../tools/misc/coinlive { };
+
   cointop = callPackage ../applications/misc/cointop { };
 
   collada-dom = callPackage ../development/libraries/collada-dom { };
