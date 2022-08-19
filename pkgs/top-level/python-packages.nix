@@ -522,6 +522,8 @@ in {
 
   altair = callPackage ../development/python-modules/altair { };
 
+  amarna = callPackage ../development/python-modules/amarna { };
+
   amazon-ion = callPackage ../development/python-modules/amazon-ion { };
 
   amazon_kclpy = callPackage ../development/python-modules/amazon_kclpy { };
@@ -1500,6 +1502,8 @@ in {
   bsuite = callPackage ../development/python-modules/bsuite { };
 
   btchip = callPackage ../development/python-modules/btchip { };
+
+  bthome-ble = callPackage ../development/python-modules/bthome-ble { };
 
   bt-proximity = callPackage ../development/python-modules/bt-proximity { };
 
