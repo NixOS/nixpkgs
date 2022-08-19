@@ -310,7 +310,6 @@ in
       home = "/var/lib/lightdm";
       group = "lightdm";
       uid = config.ids.uids.lightdm;
-      shell = pkgs.bash;
     };
 
     systemd.tmpfiles.rules = [
