@@ -5677,6 +5677,8 @@ with pkgs;
 
   squawk = callPackage ../development/tools/squawk { };
 
+  zf = callPackage ../tools/misc/zf { };
+
   antibody = callPackage ../shells/zsh/antibody { };
 
   antigen = callPackage ../shells/zsh/antigen { };
