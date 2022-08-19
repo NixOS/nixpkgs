@@ -147,6 +147,7 @@ stdenv.mkDerivation rec {
     intltool
     gtk-doc
     perl
+    python3.pkgs.wrapPython
   ];
 
   # use locales from cinnamon-translations (not using --localedir because datadir is used)
@@ -189,6 +190,10 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(
       --prefix XDG_DATA_DIRS : "${gnome.caribou}/share"
     )
+
+    # https://github.com/NixOS/nixpkgs/issues/129946
+    buildPythonPath "${python3.pkgs.xapp}"
+    patchPythonScript $out/share/cinnamon/cinnamon-desktop-editor/cinnamon-desktop-editor.py
   '';
 
   passthru = {
