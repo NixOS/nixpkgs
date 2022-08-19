@@ -6,10 +6,6 @@ stdenv.mkDerivation rec {
 
   src = cosmopolitan.dist;
 
-  patches = [
-    ./ioctl.patch        # required /dev/tty
-  ];
-
   nativeBuildInputs = [ bintools-unwrapped unzip ];
 
   # slashes are significant because upstream uses o/$(MODE)/foo.o
