@@ -36269,6 +36269,8 @@ with pkgs;
 
   teseq = callPackage ../applications/misc/teseq {  };
 
+  tessen = callPackage ../applications/misc/tessen { };
+
   ape = callPackage ../applications/misc/ape { };
   attemptoClex = callPackage ../applications/misc/ape/clex.nix { };
   apeClex = callPackage ../applications/misc/ape/apeclex.nix { };
