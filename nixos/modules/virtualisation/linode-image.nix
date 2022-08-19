@@ -36,7 +36,7 @@ in
     };
 
     virtualisation.linodeImage.compressionLevel = mkOption {
-      type = types.int;
+      type = types.ints.between 1 9;
       default = 6;
       description = ''
         GZIP compression level of the resulting disk image (1-9).
