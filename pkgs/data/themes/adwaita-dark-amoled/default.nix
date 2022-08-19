@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A full black GTK3 theme, based on Adwaita";
     homepage = "https://gitlab.com/tearch-linux/artworks/themes-and-icons/adwaita-dark-amoled";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ quantenzitrone ];
   };
