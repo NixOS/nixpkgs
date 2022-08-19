@@ -1,15 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, unzip, bintools-unwrapped }:
+{ lib, stdenv, fetchFromGitHub, unzip, bintools-unwrapped, coreutils, substituteAll }:
 
 stdenv.mkDerivation rec {
   pname = "cosmopolitan";
-  version = "unstable-2022-03-22";
+  version = "2.0";
 
   src = fetchFromGitHub {
     owner = "jart";
-    repo = "cosmopolitan";
-    rev = "5022f9e9207ff2b79ddd6de6d792d3280e12fb3a";
-    sha256 = "sha256-UjL4wR5HhuXiQXg6Orcx2fKiVGRPMJk15P779BP1fRA=";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-o86dDvHp3lO8ycCimgVqn94ZzeiSLq+JbftGjBlIh/s=";
   };
+  
+  patches = [
+    # make sure tests set PATH correctly
+    (substituteAll { src = ./fix-paths.patch; inherit coreutils; })
+  ];
 
   nativeBuildInputs = [ bintools-unwrapped unzip ];
 
@@ -23,6 +28,12 @@ stdenv.mkDerivation rec {
   doCheck = true;
   dontConfigure = true;
   dontFixup = true;
+
+  postPatch = ''
+    # some syscall tests fail because we're in a sandbox
+    rm test/libc/calls/sched_setscheduler_test.c
+  '';
+
 
   installPhase = ''
     runHook preInstall
