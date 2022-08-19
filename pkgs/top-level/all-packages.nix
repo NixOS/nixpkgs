@@ -1300,6 +1300,8 @@ with pkgs;
 
   sdlookup = callPackage ../tools/security/sdlookup { };
 
+  sgrep = callPackage ../tools/text/sgrep { };
+
   smbscan = callPackage ../tools/security/smbscan { };
 
   spectre-cli = callPackage ../tools/security/spectre-cli { };
