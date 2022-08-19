@@ -1365,6 +1365,8 @@ with pkgs;
 
   breitbandmessung = callPackage ../applications/networking/breitbandmessung { };
 
+  zq = callPackage ../development/tools/zq { buildGoModule = buildGo118Module; };
+
   ### APPLICATIONS/EMULATORS
 
   atari800 = callPackage ../applications/emulators/atari800 { };
