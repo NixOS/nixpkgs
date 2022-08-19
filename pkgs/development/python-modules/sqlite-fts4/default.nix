@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "sqlite-fts4";
-  version = "1.0.1";
+  version = "1.0.3";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = pname;
-    rev = version;
-    sha256 = "15r1mijk306fpm61viry5wjhqyxlbqqdk4nfcd901qarx7vqypgy";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-Ibiows3DSnzjIUv7U9tYNVnDaecBBxjXzDqxbIlNhhU=";
   };
 
   checkInputs = [
