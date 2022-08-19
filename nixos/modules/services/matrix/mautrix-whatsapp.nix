@@ -47,13 +47,13 @@ in {
         example = literalExpression ''
           {
             homeserver.domain = "mydomain";
-      
+
             bridge = {
               permissions = {
                 "mydomain.example" = "user";
                 "@admin:mydomain.example" = "admin";
               };
-      
+
               encryption = {
                 allow = true;
                 default = true;
