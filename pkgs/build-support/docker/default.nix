@@ -35,8 +35,6 @@
 , writePython3
 }:
 
-# Prevent infinite recursion error to happen with pkgs.pkgsCross.[ARCH]-darwin
-assert go.GOOS == "darwin" -> throw "can't build container image for `darwin` with `dockerTools`";
 
 let
   inherit (lib)
