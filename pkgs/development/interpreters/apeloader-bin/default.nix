@@ -1,4 +1,4 @@
-{ stdenvNoCC, lib, fetchurl, cosmopolitan }:
+{ stdenvNoCC, lib, fetchurl, cosmopolitan, nixosTests }:
 
 stdenvNoCC.mkDerivation {
   pname = "apeloader-bin";
@@ -24,6 +24,10 @@ stdenvNoCC.mkDerivation {
     install $src -D $out/bin/ape
     runHook postInstall
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) apeloader;
+  };
 
   meta = with lib; {
     homepage = "https://justine.lol/apeloader/";

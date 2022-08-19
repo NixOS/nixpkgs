@@ -1,4 +1,4 @@
-{ lib, stdenv, cosmopolitan }:
+{ lib, stdenv, cosmopolitan, nixosTests }:
 
 stdenv.mkDerivation {
   pname = "apeloader";
@@ -23,6 +23,10 @@ stdenv.mkDerivation {
   installCheckPhase = ''
     $out/bin/ape build/bootstrap/echo.com Hello world!
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) apeloader;
+  };
 
   meta = with lib; {
     homepage = "https://justine.lol/apeloader/";
