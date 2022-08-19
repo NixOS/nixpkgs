@@ -2,10 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , cython
-, enum34
 , gfortran
-, isPy27
-, isPy3k
 , numpy
 , pytest
 , python
@@ -16,8 +13,6 @@
 buildPythonPackage rec {
   pname = "scikits.odes";
   version = "2.6.4";
-
-  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
@@ -33,10 +28,11 @@ buildPythonPackage rec {
     numpy
     sundials
     scipy
-  ] ++ lib.optionals (!isPy3k) [ enum34 ];
+  ];
+
+  checkInputs = [ pytestCheckHook ];
 
   doCheck = true;
-  checkInputs = [ pytest ];
 
   checkPhase = ''
     cd $out/${python.sitePackages}/scikits/odes/tests
@@ -49,5 +45,8 @@ buildPythonPackage rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ idontgetoutmuch ];
     platforms = [ "aarch64-linux" "x86_64-linux" "x86_64-darwin" ];
+    # Build fails with sundials 6.3.0
+    # https://github.com/bmcage/odes/issues/138
+    broken = true;
   };
 }
