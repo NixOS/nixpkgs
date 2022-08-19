@@ -184,6 +184,13 @@ stdenv.mkDerivation rec {
     patchShebangs src/data-to-c.pl
   '';
 
+  preFixup = ''
+    # https://github.com/NixOS/nixpkgs/issues/101881
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${gnome.caribou}/share"
+    )
+  '';
+
   passthru = {
     providedSessions = [ "cinnamon" "cinnamon2d" ];
   };
