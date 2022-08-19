@@ -156,6 +156,13 @@ stdenv.mkDerivation rec {
     sed "s|msgfmt|${gettext}/bin/msgfmt|g" -i ./files/usr/share/cinnamon/cinnamon-settings/bin/Spices.py
   '';
 
+  preFixup = ''
+    # https://github.com/NixOS/nixpkgs/issues/101881
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${gnome.caribou}/share"
+    )
+  '';
+
   passthru = {
     providedSessions = [ "cinnamon" "cinnamon2d" ];
   };
