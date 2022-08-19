@@ -4,6 +4,7 @@
 , acl, attr, e2fsprogs, libuuid, lzo, udev, zlib
 , runCommand, btrfs-progs
 , gitUpdater
+, udevSupport ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +32,8 @@ stdenv.mkDerivation rec {
     install -v -m 444 -D btrfs-completion $out/share/bash-completion/completions/btrfs
   '';
 
-  configureFlags = lib.optional stdenv.hostPlatform.isMusl "--disable-backtrace";
+  configureFlags = lib.optional stdenv.hostPlatform.isMusl "--disable-backtrace"
+    ++ lib.optional (!udevSupport) "--disable-libudev";
 
   makeFlags = [ "udevruledir=$(out)/lib/udev/rules.d" ];
 
