@@ -812,6 +812,8 @@ in {
 
   asysocks = callPackage ../development/python-modules/asysocks { };
 
+  atc-ble = callPackage ../development/python-modules/atc-ble { };
+
   atenpdu = callPackage ../development/python-modules/atenpdu { };
 
   atlassian-python-api = callPackage ../development/python-modules/atlassian-python-api { };
@@ -1366,6 +1368,8 @@ in {
 
   blebox-uniapi = callPackage ../development/python-modules/blebox-uniapi { };
 
+  bless = callPackage ../development/python-modules/bless { };
+
   blessed = callPackage ../development/python-modules/blessed { };
 
   blessings = callPackage ../development/python-modules/blessings { };
@@ -1636,6 +1640,8 @@ in {
   cement = callPackage ../development/python-modules/cement { };
 
   censys = callPackage ../development/python-modules/censys { };
+
+  cexprtk = callPackage ../development/python-modules/cexprtk { };
 
   coincurve = callPackage ../development/python-modules/coincurve {
     inherit (pkgs) secp256k1;
