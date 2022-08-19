@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.79.0";
+  version = "0.79.1";
   format = "flit";
 
   disabled = pythonOlder "3.6";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "tiangolo";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-HaA9a/tqKtB24YtObk/XAsUy2mmWNonRyPXHflGRiPQ=";
+    hash = "sha256-vriEwUcdITKLeIy1++dvsl5Guhtjlk2WZQrprVQsYMc=";
   };
 
   postPatch = ''
