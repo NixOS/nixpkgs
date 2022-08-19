@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+, pythonAtLeast
 , pythonOlder
 , substituteAll
 
@@ -65,6 +66,8 @@ buildPythonPackage rec {
       gdal = gdal;
       extension = stdenv.hostPlatform.extensions.sharedLibrary;
     })
+  ] ++ lib.optionals (pythonAtLeast "3.9") [
+    ./django_4_ignore_zoneinfo_exception.patch
   ];
 
   propagatedBuildInputs = [

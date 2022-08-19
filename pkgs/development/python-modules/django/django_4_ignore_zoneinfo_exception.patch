@@ -1,0 +1,16 @@
+--- a/django/conf/__init__.py	2022-08-19 00:21:44.000000000 -0400
++++ b/django/conf/__init__.py	2022-08-19 00:23:04.000000000 -0400
+@@ -229,8 +229,11 @@
+             # this file, no check happens and it's harmless.
+             zoneinfo_root = Path("/usr/share/zoneinfo")
+             zone_info_file = zoneinfo_root.joinpath(*self.TIME_ZONE.split("/"))
+-            if zoneinfo_root.exists() and not zone_info_file.exists():
+-                raise ValueError("Incorrect timezone setting: %s" % self.TIME_ZONE)
++            try:
++                if zoneinfo_root.exists() and not zone_info_file.exists():
++                    raise ValueError("Incorrect timezone setting: %s" % self.TIME_ZONE)
++            except PermissionError:
++                pass
+             # Move the time zone info into os.environ. See ticket #2315 for why
+             # we don't do this unconditionally (breaks Windows).
+             os.environ["TZ"] = self.TIME_ZONE
