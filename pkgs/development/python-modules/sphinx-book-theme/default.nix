@@ -23,6 +23,9 @@ buildPythonPackage rec {
     sha256 = "9685959dbbb492af005165ef1b9229fdd5d5431580ac181578beae3b4d012d91";
   };
 
+  postPatch = ''
+  '';
+
   propagatedBuildInputs = [
     sphinx
     pydata-sphinx-theme
@@ -36,5 +39,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/executablebooks/sphinx-book-theme";
     license = licenses.bsd3;
     maintainers = with maintainers; [ marsam ];
+    # Missing sphinx 5.X support
+    # https://github.com/executablebooks/sphinx-book-theme/issues/592
+    broken = true;
   };
 }
