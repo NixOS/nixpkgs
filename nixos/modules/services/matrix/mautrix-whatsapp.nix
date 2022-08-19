@@ -8,14 +8,6 @@ let
   cfg = config.services.mautrix-whatsapp;
   settingsFormat = pkgs.formats.yaml {};
   settingsFile = settingsFormat.generate "mautrix-whatsapp-config.yaml" cfg.settings;
-
-  puppetRegex = concatStringsSep
-    ".*"
-    (map
-      escapeRegex
-      (splitString
-        "{userid}"
-        cfg.settings.bridge.username_template));
 in {
   options = {
     services.mautrix-whatsapp = {
@@ -54,13 +46,18 @@ in {
         };
         example = literalExpression ''
           {
-            homeserver = {
-              address = "http://localhost:8008";
-            };
-
-            bridge.permissions = {
-              "mydomain.example" = "user";
-              "@admin:mydomain.example" = "admin";
+            homeserver.domain = "mydomain";
+      
+            bridge = {
+              permissions = {
+                "mydomain.example" = "user";
+                "@admin:mydomain.example" = "admin";
+              };
+      
+              encryption = {
+                allow = true;
+                default = true;
+              };
             };
           };
         '';
