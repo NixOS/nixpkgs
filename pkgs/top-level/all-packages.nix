@@ -15005,6 +15005,8 @@ with pkgs;
 
   apeloader = callPackage ../development/interpreters/apeloader { };
 
+  apeloader-bin = callPackage ../development/interpreters/apeloader-bin { };
+
   angelscript = callPackage ../development/interpreters/angelscript {};
 
   angelscript_2_22 = callPackage ../development/interpreters/angelscript/2.22.nix {};
