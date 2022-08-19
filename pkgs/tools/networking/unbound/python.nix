@@ -5,7 +5,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "pyunbound";
-  inherit (unbound) version src;
+  inherit (unbound) version src patches;
 
   nativeBuildInputs = [ swig ];
 
