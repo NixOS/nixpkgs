@@ -6404,6 +6404,12 @@
     githubId = 15893072;
     name = "Josh van Leeuwen";
   };
+  Jo-Blade = {
+    name = "Jo.Blade";
+    email = "bladeur13@free.fr";
+    github = "Jo-Blade";
+    githubId = "59778661";
+  };
   jpas = {
     name = "Jarrod Pas";
     email = "jarrod@jarrodpas.com";
