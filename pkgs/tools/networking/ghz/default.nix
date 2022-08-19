@@ -11,8 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-5l2PeN+VxTaORAkmAfI9TCGd4W6y8BFs/eY4T9nYJuc=";
   };
 
-  proxyVendor = true;
-  vendorSha256 = "sha256-R1OB4jTmyyS2O91vqSNjmSA19KutHzPLcLQ7R7tCsIA=";
+  vendorSha256 = "sha256-qZD+qxjjFgyQDtjOQcilS4w2sS9I+7iCK2/ThaAJTy4=";
 
   subPackages = [ "cmd/ghz" "cmd/ghz-web" ];
 
