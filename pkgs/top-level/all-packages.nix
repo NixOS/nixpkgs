@@ -1286,6 +1286,8 @@ with pkgs;
 
   pferd = callPackage ../tools/misc/pferd {};
 
+  q = callPackage ../tools/networking/q {};
+
   qFlipper = libsForQt515.callPackage ../tools/misc/qflipper { };
 
   quich = callPackage ../tools/misc/quich { } ;
