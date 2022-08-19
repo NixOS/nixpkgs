@@ -4,7 +4,6 @@
 , acl, attr, e2fsprogs, libuuid, lzo, udev, zlib
 , runCommand, btrfs-progs
 , gitUpdater
-
 , udevSupport ? true
 }:
 
