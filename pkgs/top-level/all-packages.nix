@@ -25692,6 +25692,8 @@ with pkgs;
 
   orbitron = callPackage ../data/fonts/orbitron { };
 
+  orbuculum = callPackage ../development/embedded/orbuculum { };
+
   orchis-theme = callPackage ../data/themes/orchis-theme { };
 
   orion = callPackage ../data/themes/orion {};
