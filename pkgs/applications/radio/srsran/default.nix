@@ -10,7 +10,7 @@
 , libconfig
 , pcsclite
 , uhd
-, soapysdr
+, soapysdr-with-plugins
 , libbladeRF
 , zeromq
 }:
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     lksctp-tools
     pcsclite
     uhd
-    soapysdr
+    soapysdr-with-plugins
     libbladeRF
     zeromq
   ];
