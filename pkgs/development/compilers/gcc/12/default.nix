@@ -65,8 +65,8 @@ let majorVersion = "12";
         ../gcc-12-gfortran-driving.patch
         ../ppc-musl.patch
       ] ++ optional (stdenv.isDarwin && stdenv.isAarch64) (fetchpatch {
-        url = "https://github.com/fxcoudert/gcc/compare/releases/gcc-11.1.0...gcc-11.1.0-arm-20210504.diff";
-        sha256 = "sha256-JqCGJAfbOxSmkNyq49aFHteK/RFsCSLQrL9mzUCnaD0=";
+        url = "https://github.com/Homebrew/formula-patches/raw/76677f2b/gcc/gcc-12.1.0-arm.diff";
+        sha256 = "sha256-IcCYHSCAElJqTAZELJnRRWo0/SlkgQzSvoMjYr3pgD0=";
       })
 
       # Obtain latest patch with ../update-mcfgthread-patches.sh
