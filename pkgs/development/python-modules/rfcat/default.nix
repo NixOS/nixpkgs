@@ -13,12 +13,15 @@
 buildPythonPackage rec {
   pname = "rfcat";
   version = "1.9.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "atlas0fd00m";
     repo = "rfcat";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-7iYz7YY9zpnJmLfCmp/sF21eZ21HMGq2sLQIENxbr34=";
+    hash = "sha256-7iYz7YY9zpnJmLfCmp/sF21eZ21HMGq2sLQIENxbr34=";
   };
 
   propagatedBuildInputs = [
@@ -38,7 +41,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "rflib" ];
+  pythonImportsCheck = [
+    "rflib"
+  ];
 
   meta = with lib; {
     description = "Swiss Army knife of sub-GHz ISM band radio";
