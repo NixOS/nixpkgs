@@ -3850,6 +3850,18 @@ final: prev:
     meta.homepage = "https://github.com/leanprover/lean.vim/";
   };
 
+  legendary-nvim = buildVimPluginFrom2Nix {
+    pname = "legendary.nvim";
+    version = "2022-07-26";
+    src = fetchFromGitHub {
+      owner = "mrjones2014";
+      repo = "legendary.nvim";
+      rev = "b0bcc7681ba884d1222faa8f2a56a438a02fc7c7";
+      sha256 = "1w1d5z47l72wmj5wi44yvmbicdczw4ym85msq333hhilh2866fw0";
+    };
+    meta.homepage = "https://github.com/mrjones2014/legendary.nvim/";
+  };
+
   lens-vim = buildVimPluginFrom2Nix {
     pname = "lens.vim";
     version = "2021-05-30";
