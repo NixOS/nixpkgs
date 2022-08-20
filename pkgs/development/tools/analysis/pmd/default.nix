@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pmd";
-  version = "6.47.0";
+  version = "6.48.0";
 
   src = fetchurl {
     url = "https://github.com/pmd/pmd/releases/download/pmd_releases/${version}/pmd-bin-${version}.zip";
-    hash = "sha256-0rOV6l5VCdBkk5+F/k2vYtHQWzwugvp3ogaTRuXUKXE=";
+    hash = "sha256-DXoiV5AunDGagfq8BWHFcgGBv9OdGij5DDuxOKJYnE4=";
   };
 
   nativeBuildInputs = [ unzip makeWrapper ];

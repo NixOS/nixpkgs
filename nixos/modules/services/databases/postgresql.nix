@@ -79,15 +79,15 @@ in
       authentication = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Defines how users authenticate themselves to the server. See the
-          <link xlink:href="https://www.postgresql.org/docs/current/auth-pg-hba-conf.html">PostgreSQL documentation for pg_hba.conf</link>
+          [PostgreSQL documentation for pg_hba.conf](https://www.postgresql.org/docs/current/auth-pg-hba-conf.html)
           for details on the expected format of this option. By default,
           peer based authentication will be used for users connecting
           via the Unix socket, and md5 password authentication will be
           used for users connecting via TCP. Any added rules will be
           inserted above the default rules. If you'd like to replace the
-          default rules entirely, you can use <function>lib.mkForce</function> in your
+          default rules entirely, you can use `lib.mkForce` in your
           module.
         '';
       };

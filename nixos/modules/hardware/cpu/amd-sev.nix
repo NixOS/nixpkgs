@@ -8,17 +8,17 @@ in
     options.hardware.cpu.amd.sev = {
       enable = mkEnableOption "access to the AMD SEV device";
       user = mkOption {
-        description = "Owner to assign to the SEV device.";
+        description = lib.mdDoc "Owner to assign to the SEV device.";
         type = types.str;
         default = "root";
       };
       group = mkOption {
-        description = "Group to assign to the SEV device.";
+        description = lib.mdDoc "Group to assign to the SEV device.";
         type = types.str;
         default = defaultGroup;
       };
       mode = mkOption {
-        description = "Mode to set for the SEV device.";
+        description = lib.mdDoc "Mode to set for the SEV device.";
         type = types.str;
         default = "0660";
       };

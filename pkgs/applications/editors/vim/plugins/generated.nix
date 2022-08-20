@@ -7673,6 +7673,18 @@ final: prev:
     meta.homepage = "https://github.com/tremor-rs/tremor-vim/";
   };
 
+  trim-nvim = buildVimPluginFrom2Nix {
+    pname = "trim.nvim";
+    version = "2022-06-16";
+    src = fetchFromGitHub {
+      owner = "cappyzawa";
+      repo = "trim.nvim";
+      rev = "ab366eb0dd7b3faeaf90a0ec40c993ff18d8c068";
+      sha256 = "0lxc593rys5yi35iabqgqxi18lsk2jp78f3wdksmkxclf9j7xmbw";
+    };
+    meta.homepage = "https://github.com/cappyzawa/trim.nvim/";
+  };
+
   trouble-nvim = buildVimPluginFrom2Nix {
     pname = "trouble.nvim";
     version = "2022-05-09";

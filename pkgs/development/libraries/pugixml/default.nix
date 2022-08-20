@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Udjx84mhLPJ1bU5WYDo73PAeeufS+vBLXZP0YbBvqLE=";
   };
 
-  outputs = if shared then [ "out" "dev" ] else [ "out" ];
+  outputs = [ "out" ] ++ lib.optionals shared [ "dev" ];
 
   nativeBuildInputs = [ cmake validatePkgConfig ];
 

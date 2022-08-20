@@ -177,32 +177,27 @@ assert buildTargetLlvmPackages.llvm == llvmPackages.llvm;
 assert stdenv.targetPlatform.isDarwin -> buildTargetLlvmPackages.clang == llvmPackages.clang;
 
 stdenv.mkDerivation (rec {
-  version = "9.4.0.20220721";
+  version = "9.4.1";
   pname = "${targetPrefix}ghc${variantSuffix}";
 
   src = fetchurl {
-    url = "https://downloads.haskell.org/ghc/9.4.1-rc1/ghc-${version}-src.tar.xz";
-    sha256 = "bca8c52f76d8747a66291181de2de7bdf9ff80093808fe39bf5cbff0f116c426";
+    url = "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz";
+    sha256 = "sha256-y/7UZAvfAl4zulVDPa+M32mPTgSZrnqADd5EqC5zluM=";
   };
 
   enableParallelBuilding = true;
 
   outputs = [ "out" "doc" ];
 
+
   patches = [
-    # fix hyperlinked haddock sources: https://github.com/haskell/haddock/pull/1482
+    # add missing profiling targets in make build system
     (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/haskell/haddock/pull/1482.patch";
-      sha256 = "sha256-8w8QUCsODaTvknCDGgTfFNZa8ZmvIKaKS+2ZJZ9foYk=";
-      extraPrefix = "utils/haddock/";
-      stripLen = 1;
+      name = "ghc-9.4.1-fix-bootstrapping-with-profiling-1.patch";
+      url = "https://gitlab.haskell.org/ghc/ghc/-/commit/47b4fea08bd0ef1476b8d134c7baf06157fe5fa5.diff";
+      sha256 = "sha256-oYQWg9cK0RNL9I+kap8KER+iiKim73zG6URQs8BeAXU=";
     })
-    # fix race condition in make build system
-    (fetchpatch {
-      name = "ghc-hs-boot-copying-fix.patch";
-      url = "https://gitlab.haskell.org/ghc/ghc/-/commit/4f17eff0cbd125eca55b68f4927befdd45008eb6.diff";
-      sha256 = "0anq3w9z9mhxb0wx6rvxac3n7rl3apcma9zk3r9zz9hj9v7vkqzx";
-    })
+    ./ghc-9.4.1-fix-bootstrapping-with-profiling-2.patch
   ];
 
   postPatch = "patchShebangs .";
@@ -240,14 +235,6 @@ stdenv.mkDerivation (rec {
   '' + ''
 
     echo -n "${buildMK}" > mk/build.mk
-    # GHC 9.4.1-rc1 tarball is not properly prepared, also the boot script has been renamed
-    # https://gitlab.haskell.org/ghc/ghc/-/issues/21626#note_444654
-    # TODO(@sternenseemann): make source-dist rules include all boot-generated files
-    ./boot.source
-
-    # Too restrictive upper bound on Cabal the make build system chokes on
-    # XXX(@sternenseemann): this should be upstreamed
-    substituteInPlace utils/ghc-cabal/ghc-cabal.cabal --replace "3.8" "3.9"
 
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '' + lib.optionalString (stdenv.isLinux && hostPlatform.libc == "glibc") ''
@@ -277,6 +264,13 @@ stdenv.mkDerivation (rec {
           --replace '*-android*|*-gnueabi*)' \
                     '*-android*|*-gnueabi*|*-musleabi*)'
       done
+  ''
+  # HACK: allow bootstrapping with GHC 8.10 which works fine, as we don't have
+  # binary 9.0 packaged. Bootstrapping with 9.2 is broken without hadrian.
+  + ''
+    substituteInPlace configure --replace \
+      'MinBootGhcVersion="9.0"' \
+      'MinBootGhcVersion="8.10"'
   '';
 
   # TODO(@Ericson2314): Always pass "--target" and always prefix.

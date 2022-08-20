@@ -91,7 +91,7 @@ in
         USB? y
         DEBUG n
       '';
-      description = ''
+      description = lib.mdDoc ''
         The result of converting the structured kernel configuration in settings
         to an intermediate string that can be parsed by generate-config.pl to
         answer the kernel `make defconfig`.

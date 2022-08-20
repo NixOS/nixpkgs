@@ -45,7 +45,7 @@ in {
             passwordeval = "cat /secrets/password.txt";
           };
         };
-        description = ''
+        description = lib.mdDoc ''
           Named accounts and their respective configurations.
           The special name "default" allows a default account to be defined.
           See msmtp(1) for the available options.

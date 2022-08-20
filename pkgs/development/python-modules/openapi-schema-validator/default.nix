@@ -5,7 +5,6 @@
 , pytestCheckHook
 , isodate
 , jsonschema
-, pytest-flake8
 , pytest-cov
 , rfc3339-validator
 , six
@@ -30,7 +29,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ isodate jsonschema six strict-rfc3339 rfc3339-validator ];
 
-  checkInputs = [ pytestCheckHook pytest-cov pytest-flake8 ];
+  checkInputs = [ pytestCheckHook pytest-cov ];
   pythonImportsCheck = [ "openapi_schema_validator" ];
 
   meta = with lib; {

@@ -72,6 +72,34 @@
       </listitem>
       <listitem>
         <para>
+          <literal>emacs</literal> enables native compilation which
+          means:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              emacs packages from nixpkgs, builtin or not, will do
+              native compilation ahead of time so you can enjoy the
+              benefit of native compilation without compiling them on
+              you machine;
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              emacs packages from somewhere else, e.g.
+              <literal>package-install</literal>, will do asynchronously
+              deferred native compilation. If you do not want this,
+              maybe to avoid CPU consumption for compilation, you can
+              use
+              <literal>(setq native-comp-deferred-compilation nil)</literal>
+              to disable it while still enjoy the benefit of native
+              compilation for packages from nixpkgs.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
           <literal>nixos-generate-config</literal> now generates
           configurations that can be built in pure mode. This is
           achieved by setting the new
@@ -97,7 +125,9 @@
       </listitem>
       <listitem>
         <para>
-          Cinnamon has been updated to 5.4.
+          Cinnamon has been updated to 5.4. While at it, the cinnamon
+          module now defaults to blueman as bluetooth manager and
+          slick-greeter as lightdm greeter to match upstream.
         </para>
       </listitem>
       <listitem>
@@ -136,6 +166,13 @@
           <link xlink:href="https://dragonflydb.io/">dragonflydb</link>,
           a modern replacement for Redis and Memcached. Available as
           <link linkend="opt-services.dragonflydb.enable">services.dragonflydb</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://komga.org/">Komga</link>, a free and
+          open source comics/mangas media server. Available as
+          <link linkend="opt-services.komga.enable">services.komga</link>.
         </para>
       </listitem>
       <listitem>
@@ -189,6 +226,14 @@
           <link xlink:href="https://www.grafana.com/oss/tempo/">Grafana
           Tempo</link>, a distributed tracing store. Available as
           <link linkend="opt-services.tempo.enable">services.tempo</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/zalando/patroni">Patroni</link>,
+          a template for PostgreSQL HA with ZooKeeper, etcd or Consul.
+          Available as
+          <link xlink:href="options.html#opt-services.patroni.enable">services.patroni</link>.
         </para>
       </listitem>
     </itemizedlist>

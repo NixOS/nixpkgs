@@ -15,13 +15,13 @@
 
 let
   pname = "zerotierone";
-  version = "1.10.0";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "zerotier";
     repo = "ZeroTierOne";
     rev = version;
-    sha256 = "sha256-2lxXgQArHTFCuSBbKRSaLka42p2INLDg0z3TZ+J5msc=";
+    sha256 = "sha256-Y0klfE7ANQl1uYMkRg+AaIiJYSVPT6zME7tDMg2xbOk=";
   };
 in stdenv.mkDerivation {
   inherit pname version src;
@@ -29,7 +29,7 @@ in stdenv.mkDerivation {
   cargoDeps = rustPlatform.fetchCargoTarball {
     src = "${src}/zeroidc";
     name = "${pname}-${version}";
-    sha256 = "sha256-Q9uBUD5xxo5gcTQTedVqQv+Z7B1TTPWtaTSuWo7WEPM=";
+    sha256 = "sha256-8K4zAXo85MT4pfIsg7DZAO+snfwzdo2TozVw17KhX4Q=";
   };
   postPatch = "cp ${src}/zeroidc/Cargo.lock Cargo.lock";
 

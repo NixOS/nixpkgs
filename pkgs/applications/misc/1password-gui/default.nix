@@ -126,8 +126,9 @@ in stdenv.mkDerivation rec {
       # Electron is trying to open udev via dlopen()
       # and for some reason that doesn't seem to be impacted from the rpath.
       # Adding udev to LD_LIBRARY_PATH fixes that.
+      # Make xdg-open overrideable at runtime.
       makeWrapper $out/share/1password/1password $out/bin/1password \
-        --prefix PATH : ${lib.makeBinPath [ xdg-utils ]} \
+        --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]}
 
       runHook postInstall

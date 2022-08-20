@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
         { suffix = "donna-sse2";    configureFlags = ["--enable-donna-sse2"]; }
       ] ++ lib.optionals (!stdenv.isDarwin && stdenv.isx86_64) [
         { suffix = "amd64-51-30k";  configureFlags = ["--enable-amd64-51-30k"]; }
-        { suffix = "amd64-64-20k";  configureFlags = ["--enable-amd64-64-24k"]; }
+        { suffix = "amd64-64-24k";  configureFlags = ["--enable-amd64-64-24k"]; }
       ];
     in
       lib.concatMapStrings ({suffix, configureFlags}: ''

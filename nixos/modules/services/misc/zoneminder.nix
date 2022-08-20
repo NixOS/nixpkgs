@@ -80,7 +80,7 @@ in {
       webserver = mkOption {
         type = types.enum [ "nginx" "none" ];
         default = "nginx";
-        description = ''
+        description = lib.mdDoc ''
           The webserver to configure for the PHP frontend.
 
           Set it to `none` if you want to configure it yourself. PRs are welcome

@@ -269,6 +269,7 @@ broken-packages:
   - awesomium-raw
   - aws-cloudfront-signer
   - aws-ec2
+  - aws-ec2-knownhosts
   - aws-general
   - aws-lambda-haskell-runtime
   - aws-lambda-runtime
@@ -550,6 +551,7 @@ broken-packages:
   - cabal-upload
   - cabalvchk
   - cabin
+  - cabocha
   - cached
   - cache-polysemy
   - caching
@@ -557,6 +559,7 @@ broken-packages:
   - cafeteria-prelude
   - caffegraph
   - cairo-core
+  - cake3
   - cal3d
   - calamity
   - caledon
@@ -1203,6 +1206,7 @@ broken-packages:
   - dump-core
   - dunai-core
   - Dung
+  - duplo
   - dura
   - dvault
   - dvdread
@@ -1957,6 +1961,7 @@ broken-packages:
   - hashtables-plus
   - hasim
   - hask
+  - haskades
   - haskanoid
   - haskarrow
   - haskbot-core
@@ -2138,6 +2143,7 @@ broken-packages:
   - heterogeneous-list-literals
   - hetris
   - heukarya
+  - hevm
   - HExcel
   - hexchat
   - hexif
@@ -2206,6 +2212,7 @@ broken-packages:
   - hinter
   - hinterface
   - hipchat-hs
+  - hipe
   - Hipmunk
   - hipsql-api
   - hircules
@@ -2551,6 +2558,7 @@ broken-packages:
   - hylolib
   - hyperdrive
   - hyperfunctions
+  - hypergeomatrix
   - hyper-haskell-server
   - hyperion
   - hyperloglogplus
@@ -2677,6 +2685,7 @@ broken-packages:
   - ireal
   - iri
   - iridium
+  - iris
   - iron-mq
   - irt
   - isdicom
@@ -2720,6 +2729,7 @@ broken-packages:
   - jinquantities
   - jml-web-service
   - jni
+  - jobqueue
   - join-api
   - joinlist
   - joint
@@ -2780,6 +2790,7 @@ broken-packages:
   - Kalman
   - kangaroo
   - karabiner-config
+  - karps
   - katip-datadog
   - katip-elasticsearch
   - katip-kafka
@@ -2824,6 +2835,7 @@ broken-packages:
   - korea-holidays
   - kraken
   - krank
+  - krapsh
   - Kriens
   - krpc
   - KSP
@@ -2887,6 +2899,7 @@ broken-packages:
   - language-webidl
   - LargeCardinalHierarchy
   - Lastik
+  - latest-npm-version
   - latex-formulae-image
   - latex-svg-image
   - LATS
@@ -3042,6 +3055,7 @@ broken-packages:
   - lojbanParser
   - lojbanXiragan
   - lol
+  - lol-calculus
   - longboi
   - longshot
   - lookup-tables
@@ -3201,6 +3215,7 @@ broken-packages:
   - miconix-test
   - microgroove
   - microlens-each
+  - micrologger
   - micro-recursion-schemes
   - microsoft-translator
   - mida
@@ -3477,6 +3492,7 @@ broken-packages:
   - niagra
   - nibblestring
   - nice-html
+  - nicovideo-translator
   - nitro
   - nix-delegate
   - nix-eval
@@ -3525,7 +3541,7 @@ broken-packages:
   - numhask-histogram
   - numhask-prelude
   - Nutri
-  - nvim-hs-contrib
+  - nvim-hs-ghcid
   - NXTDSL
   - nyan-interpolation-core
   - nylas
@@ -3808,6 +3824,7 @@ broken-packages:
   - phraskell
   - Phsu
   - phybin
+  - pia-forward
   - pi-calculus
   - picedit
   - pickle
@@ -4065,6 +4082,7 @@ broken-packages:
   - pushbullet-types
   - pusher-haskell
   - pusher-ws
+  - pushme
   - push-notifications
   - putlenses
   - puzzle-draw
@@ -4496,6 +4514,7 @@ broken-packages:
   - servant-static-th
   - servant-streaming
   - servant-streamly
+  - servant-util
   - servant-wasm
   - servant-yaml
   - servant-zeppelin
@@ -5037,6 +5056,7 @@ broken-packages:
   - tex2txt
   - texbuilder
   - text1
+  - text-all
   - text-and-plots
   - text-ascii
   - text-builder-linear
@@ -5134,6 +5154,10 @@ broken-packages:
   - tkhs
   - tkyprof
   - tmp-proc-example
+  - tmp-proc-postgres
+  - tmp-proc-rabbitmq
+  - tmp-proc-redis
+  - tmp-proc-zipkin
   - todo
   - tofromxml
   - to-haskell

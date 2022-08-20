@@ -138,7 +138,7 @@ in
       createLocally = mkOption {
         type = types.bool;
         default = true;
-        description = "Create the database and database user locally.";
+        description = lib.mdDoc "Create the database and database user locally.";
       };
     };
 

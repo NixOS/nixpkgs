@@ -193,7 +193,7 @@ in
   options.services.buildkite-agents = mkOption {
     type = types.attrsOf (types.submodule buildkiteOptions);
     default = {};
-    description = ''
+    description = lib.mdDoc ''
       Attribute set of buildkite agents.
       The attribute key is combined with the hostname and a unique integer to
       create the final agent name. This can be overridden by setting the `name`

@@ -10,7 +10,7 @@ if [ $# -eq 0 ]; then
 fi
 
 pkgs=$1
-exclusions=$2
+exclusions="${2:-/dev/null}"
 tmpfile=$(mktemp /tmp/nuget-to-nix.XXXXXX)
 trap "rm -f ${tmpfile}" EXIT
 

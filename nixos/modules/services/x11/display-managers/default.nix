@@ -35,6 +35,10 @@ let
       # Shared environment setup for graphical sessions.
 
       . /etc/profile
+      if test -f ~/.profile; then
+          source ~/.profile
+      fi
+
       cd "$HOME"
 
       # Allow the user to execute commands at the beginning of the X session.

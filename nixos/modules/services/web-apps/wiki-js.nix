@@ -54,10 +54,10 @@ in {
             type = mkOption {
               default = "postgres";
               type = types.enum [ "postgres" "mysql" "mariadb" "mssql" ];
-              description = ''
-                Database driver to use for persistence. Please note that <literal>sqlite</literal>
+              description = lib.mdDoc ''
+                Database driver to use for persistence. Please note that `sqlite`
                 is currently not supported as the build process for it is currently not implemented
-                in <package>pkgs.wiki-js</package> and it's not recommended by upstream for
+                in `pkgs.wiki-js` and it's not recommended by upstream for
                 production use.
               '';
             };
@@ -94,7 +94,7 @@ in {
         };
       };
       description = ''
-        Settings to configure <package>wiki-js</package>. This directly
+        Settings to configure <literal>wiki-js</literal>. This directly
         corresponds to <link xlink:href="https://docs.requarks.io/install/config">the upstream configuration options</link>.
 
         Secrets can be injected via the environment by

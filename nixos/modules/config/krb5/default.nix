@@ -204,11 +204,11 @@ in {
             admin_server = SYSLOG:NOTICE
             default      = SYSLOG:NOTICE
         '';
-        description = ''
-          These lines go to the end of <literal>krb5.conf</literal> verbatim.
-          <literal>krb5.conf</literal> may include any of the relations that are
-          valid for <literal>kdc.conf</literal> (see <literal>man
-          kdc.conf</literal>), but it is not a recommended practice.
+        description = lib.mdDoc ''
+          These lines go to the end of `krb5.conf` verbatim.
+          `krb5.conf` may include any of the relations that are
+          valid for `kdc.conf` (see `man kdc.conf`),
+          but it is not a recommended practice.
         '';
       };
 

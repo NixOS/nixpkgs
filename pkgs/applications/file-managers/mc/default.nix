@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl
+, buildPackages
 , pkg-config
 , glib
 , gpm
@@ -31,6 +32,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-6ZTZvppxcumsSkrWIQeSH2qjEuZosFbf5bi867r1OAM=";
   };
 
+  patches = [
+    # Add support for PERL_FOR_BUILD to fix cross-compilation:
+    #   https://midnight-commander.org/ticket/4399
+    (fetchurl {
+      url = "https://midnight-commander.org/raw-attachment/ticket/4399/0001-configure.ac-introduce-PERL_FOR_BUILD.patch";
+      hash = "sha256-i4cbg/pner+yPfgmP04DEIvpNDlM9YDca1TNBdhWhwI=";
+    })
+  ];
+
   nativeBuildInputs = [ pkg-config autoreconfHook unzip ]
     # The preFixup hook rewrites the binary, which invaliates the code
     # signature. Add the fixup hook to sign the output.
@@ -52,7 +62,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = [ "PERL=${perl}/bin/perl" ];
+  configureFlags = [
+    # used for vfs helpers at run time:
+    "PERL=${perl}/bin/perl"
+    # used for .hlp generation at build time:
+    "PERL_FOR_BUILD=${buildPackages.perl}/bin/perl"
+
+    # configure arguments have a bunch of build-only dependencies.
+    # Avoid their retention in final closure.
+    "--disable-configure-args"
+  ];
 
   postPatch = ''
     substituteInPlace src/filemanager/ext.c \
@@ -60,11 +79,6 @@ stdenv.mkDerivation rec {
 
     substituteInPlace misc/ext.d/misc.sh.in \
       --replace /bin/cat ${coreutils}/bin/cat
-  '';
-
-  preFixup = ''
-    # remove unwanted build-dependency references
-    sed -i -e "s!PKG_CONFIG_PATH=''${PKG_CONFIG_PATH}!PKG_CONFIG_PATH=$(echo "$PKG_CONFIG_PATH" | sed -e 's/./0/g')!" $out/bin/mc
   '';
 
   postFixup = lib.optionalString (!stdenv.isDarwin) ''

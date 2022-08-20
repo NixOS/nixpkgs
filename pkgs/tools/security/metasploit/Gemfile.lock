@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 38794f11b8a4c685c1f90b832a9a77974f5e0471
-  ref: refs/tags/6.2.12
+  revision: 6241267e515db4b2902831fda1bc41773fb24529
+  ref: refs/tags/6.2.13
   specs:
-    metasploit-framework (6.2.12)
+    metasploit-framework (6.2.13)
       actionpack (~> 6.0)
       activerecord (~> 6.0)
       activesupport (~> 6.0)
@@ -130,13 +130,13 @@ GEM
     arel-helpers (2.14.0)
       activerecord (>= 3.1.0, < 8)
     aws-eventstream (1.2.0)
-    aws-partitions (1.618.0)
+    aws-partitions (1.619.0)
     aws-sdk-core (3.132.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1, >= 1.6.1)
-    aws-sdk-ec2 (1.327.0)
+    aws-sdk-ec2 (1.328.0)
       aws-sdk-core (~> 3, >= 3.127.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-iam (1.69.0)
@@ -252,7 +252,7 @@ GEM
     metasploit_payloads-mettle (1.0.18)
     method_source (1.0.0)
     mini_portile2 (2.8.0)
-    minitest (5.16.2)
+    minitest (5.16.3)
     mqtt (0.5.0)
     msgpack (1.5.4)
     multi_json (1.15.0)
@@ -402,7 +402,7 @@ GEM
     ttfunk (1.7.0)
     tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
-    tzinfo-data (1.2022.2)
+    tzinfo-data (1.2022.3)
       tzinfo (>= 1.0.0)
     unf (0.1.4)
       unf_ext
@@ -439,4 +439,4 @@ DEPENDENCIES
   metasploit-framework!
 
 BUNDLED WITH
-   2.3.9
+   2.3.20

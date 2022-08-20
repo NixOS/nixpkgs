@@ -10,15 +10,15 @@ stdenv.mkDerivation rec {
   # base_version is of the form major.minor.patch
   # vc_version is of the form YYMMDDCC
   # version corresponds to the tag on GitHub
-  base_version = "8.0.0";
-  vc_version = "22062402";
+  base_version = "8.0.1";
+  vc_version = "22070801";
   version = "${base_version}.${vc_version}";
 
   src = fetchFromGitHub {
     owner = "renpy";
     repo = "renpy";
     rev = version;
-    sha256 = "sha256-37Hbs0i5eXMjVaETX7ImJCak0y8XtEHUaRFceA9J39A=";
+    sha256 = "sha256-rwRykovY8vv+boQiaSjCBoGxGpT1dF3qdEyxkykrKyk=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./renpy-system-fribidi.diff
+    ./shutup-erofs-errors.patch
   ];
 
   postPatch = ''
@@ -71,7 +72,7 @@ stdenv.mkDerivation rec {
 
     makeWrapper ${python.interpreter} $out/bin/renpy \
       --set PYTHONPATH "$PYTHONPATH:$out/${python.sitePackages}" \
-      --add-flags "-O $out/share/renpy/renpy.py"
+      --add-flags "$out/share/renpy/renpy.py"
 
     runHook postInstall
   '';

@@ -16,6 +16,8 @@
 , freetype
 , openssl
 , alsa-lib
+, alsa-plugins
+, makeWrapper
 , libGLU
 , zlib
 , yasm
@@ -31,16 +33,16 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "godot";
-  version = "3.4.4";
+  version = "3.5";
 
   src = fetchFromGitHub {
     owner = "godotengine";
     repo = "godot";
     rev = "${version}-stable";
-    sha256 = "sha256-3AESLzqozi7Fc80u8Ml3ergZMkIhHy4tNlRe/3FsE6k=";
+    sha256 = "sha256-aU5cTiz7OaM0fsv0EzJDUA1Es+Ei63CKLE6GVspJexc=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
   buildInputs = [
     scons
     udev
@@ -91,6 +93,9 @@ stdenv.mkDerivation rec {
     cp icon.png "$out/share/icons/godot.png"
     substituteInPlace "$out/share/applications/org.godotengine.Godot.desktop" \
       --replace "Exec=godot" "Exec=$out/bin/godot"
+
+    makeWrapper $out/bin/godot $out/bin/godot \
+      --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib
   '';
 
   meta = with lib; {

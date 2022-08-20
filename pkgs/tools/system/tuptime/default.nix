@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tuptime";
-  version = "5.1.0";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "rfrail3";
     repo = "tuptime";
     rev = version;
-    sha256 = "sha256-6N4dqgLOhWqVR8GqlBUxHWy10AHBZ4aZbdkw5SOxxBQ=";
+    sha256 = "sha256-s0VtKOaSPQlF58/2m/DwYDuHHPGnHVAJMA/p3hISTNE=";
   };
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Total uptime & downtime statistics utility";
     homepage = "https://github.com/rfrail3/tuptime";
+    changelog = "https://github.com/rfrail3/tuptime/blob/master/CHANGELOG";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.evils ];

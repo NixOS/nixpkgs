@@ -20,10 +20,10 @@ in {
       '';
 
       settings = mkOption {
-        description = ''
-          Configuration for <package>isso</package>.
+        description = lib.mdDoc ''
+          Configuration for `isso`.
 
-          See <link xlink:href="https://posativ.org/isso/docs/configuration/server/">Isso Server Configuration</link>
+          See [Isso Server Configuration](https://posativ.org/isso/docs/configuration/server/)
           for supported values.
         '';
 

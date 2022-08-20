@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "freedv";
-  version = "1.7.0";
+  version = "1.8.3.1";
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "freedv-gui";
     rev = "v${version}";
-    hash = "sha256-0E7r/7+AQRPIFAcE6O1WE0NYiKzAlBR0jKbssqWvRMU=";
+    hash = "sha256-LPCY5gPinxJkfPfumKggI/JQorcW+Qw/ZAP6XQmPkeA=";
   };
 
   nativeBuildInputs = [ cmake ];

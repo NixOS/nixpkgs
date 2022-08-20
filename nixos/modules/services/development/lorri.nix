@@ -9,7 +9,7 @@ in {
       enable = lib.mkOption {
         default = false;
         type = lib.types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Enables the daemon for `lorri`, a nix-shell replacement for project
           development. The socket-activated daemon starts on the first request
           issued by the `lorri` command.

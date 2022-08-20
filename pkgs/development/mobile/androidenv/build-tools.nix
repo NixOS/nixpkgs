@@ -14,8 +14,10 @@ deployAndroidPackage {
       autoPatchelf --no-recurse $packageBaseDir
     ''}
 
-    wrapProgram $PWD/mainDexClasses \
-      --prefix PATH : ${pkgs.jdk8}/bin
+    ${lib.optionalString (lib.toInt (lib.versions.major package.revision) < 33) ''
+      wrapProgram $PWD/mainDexClasses \
+        --prefix PATH : ${pkgs.jdk8}/bin
+    ''}
   '';
   noAuditTmpdir = true; # The checker script gets confused by the build-tools path that is incorrectly identified as a reference to /build
 }

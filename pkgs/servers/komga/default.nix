@@ -3,6 +3,7 @@
 , fetchurl
 , makeWrapper
 , jdk11_headless
+, nixosTests
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -21,6 +22,10 @@ stdenvNoCC.mkDerivation rec {
   buildCommand = ''
     makeWrapper ${jdk11_headless}/bin/java $out/bin/komga --add-flags "-jar $src"
   '';
+
+  passthru.tests = {
+    komga = nixosTests.komga;
+  };
 
   meta = with lib; {
     description = "Free and open source comics/mangas server";

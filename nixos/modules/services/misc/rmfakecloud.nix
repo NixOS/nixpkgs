@@ -59,7 +59,7 @@ in {
         type = with types; attrsOf str;
         default = { };
         example = { RM_HTTPS_COOKIE = "1"; };
-        description = ''
+        description = lib.mdDoc ''
           Extra settings in the form of a set of key-value pairs.
           For tokens and secrets, use `environmentFile` instead.
 

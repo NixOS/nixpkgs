@@ -20,8 +20,6 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KimiNewt";
     repo = pname;
-    # 0.4.5 was the last release which was tagged
-    # https://github.com/KimiNewt/pyshark/issues/541
     rev = "refs/tags/v${version}";
     hash = "sha256-byll2GWY2841AAf8Xh+KfaCOtMGVKabTsLCe3gCdZ1o=";
   };
@@ -36,7 +34,7 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    export HOME=$TMPDIR
+    export HOME=$(mktemp -d)
   '';
 
   checkInputs = [

@@ -356,12 +356,13 @@ in {
 
     nvidiaPackages = dontRecurseIntoAttrs (lib.makeExtensible (_: callPackage ../os-specific/linux/nvidia-x11 { }));
 
+    nvidia_x11             = nvidiaPackages.stable;
+    nvidia_x11_beta        = nvidiaPackages.beta;
     nvidia_x11_legacy340   = nvidiaPackages.legacy_340;
     nvidia_x11_legacy390   = nvidiaPackages.legacy_390;
     nvidia_x11_legacy470   = nvidiaPackages.legacy_470;
-    nvidia_x11_beta        = nvidiaPackages.beta;
+    nvidia_x11_production  = nvidiaPackages.production;
     nvidia_x11_vulkan_beta = nvidiaPackages.vulkan_beta;
-    nvidia_x11             = nvidiaPackages.stable;
 
     # this is not a replacement for nvidia_x11
     # only the opensource kernel driver exposed for hydra to build

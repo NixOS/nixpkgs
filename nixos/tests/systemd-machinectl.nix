@@ -62,16 +62,11 @@ import ./make-test-python.nix (
       # Test nss_mymachines without nscd
       machine.succeed('LD_LIBRARY_PATH="/run/current-system/sw/lib" getent -s hosts:mymachines hosts ${containerName}');
 
-      # Test failing nss_mymachines via nscd
-      # nscd has not enough rights to connect to systemd bus
-      # via sd_bus_open_system() in
-      # https://github.com/systemd/systemd/blob/main/src/nss-mymachines/nss-mymachines.c#L287
-      machine.fail("getent hosts ${containerName}");
+      # Test nss_mymachines via nscd
+      machine.succeed("getent hosts ${containerName}");
 
       # Test systemd-nspawn network configuration
-      machine.succeed("systemctl stop nscd");
-      machine.succeed('LD_LIBRARY_PATH="/run/current-system/sw/lib" ping -n -c 1 ${containerName}');
-      machine.succeed("systemctl start nscd");
+      machine.succeed("ping -n -c 1 ${containerName}");
 
       # Test systemd-nspawn uses a user namespace
       machine.succeed("test $(machinectl status ${containerName} | grep 'UID Shift: ' | wc -l) = 1")
