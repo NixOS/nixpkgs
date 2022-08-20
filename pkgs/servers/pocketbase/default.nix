@@ -2,6 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 }:
+
 buildGoModule rec {
   pname = "pocketbase";
   version = "0.4.2";
@@ -20,6 +21,7 @@ buildGoModule rec {
 
   CGO_ENABLED = 0;
 
+  # Upstream build instructions
   ldflags = [
     "-s"
     "-w"
