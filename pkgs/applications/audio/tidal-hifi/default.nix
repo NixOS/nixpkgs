@@ -106,6 +106,9 @@ stdenv.mkDerivation rec {
     makeWrapper $out/opt/tidal-hifi/tidal-hifi $out/bin/tidal-hifi \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath buildInputs}" \
       "''${gappsWrapperArgs[@]}"
+
+    sed -i "$out/share/applications/tidal-hifi.desktop" \
+      -e "s@Exec=.*@Exec=$out/bin/tidal-hifi@"
   '';
 
   meta = with lib; {
