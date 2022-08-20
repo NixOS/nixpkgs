@@ -2480,6 +2480,8 @@ in {
 
   django-dynamic-preferences = callPackage ../development/python-modules/django-dynamic-preferences { };
 
+  django-encrypted-model-fields = callPackage ../development/python-modules/django-encrypted-model-fields { };
+
   django-environ = callPackage ../development/python-modules/django_environ { };
 
   django-extensions = callPackage ../development/python-modules/django-extensions { };
