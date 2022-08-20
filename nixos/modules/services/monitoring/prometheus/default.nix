@@ -123,16 +123,16 @@ let
             '';
 
             credentials = mkOpt types.str ''
-              Sets the credentials. It is mutually exclusive with `credentials_file`.
+              Sets the credentials. It is mutually exclusive with <literal>credentials_file</literal>.
             '';
 
             credentials_file = mkOpt types.str ''
               Sets the credentials to the credentials read from the configured file.
-              It is mutually exclusive with `credentials`.
+              It is mutually exclusive with <literal>credentials</literal>.
             '';
           };
         }) ''
-        Optional `Authorization` header configuration.
+        Optional <literal>Authorization</literal> header configuration.
       '';
 
       oauth2 = mkOpt promtypes.oauth2 ''
@@ -229,7 +229,7 @@ let
       '';
 
       client_secret_file = mkOpt types.str ''
-        Read the client secret from a file. It is mutually exclusive with `client_secret`.
+        Read the client secret from a file. It is mutually exclusive with <literal>client_secret</literal>.
       '';
 
       scopes = mkOpt (types.listOf types.str) ''
@@ -315,19 +315,19 @@ let
       '';
 
       basic_auth = mkOpt promTypes.basic_auth ''
-        Sets the `Authorization` header on every scrape request with the
+        Sets the <literal>Authorization</literal> header on every scrape request with the
         configured username and password.
         password and password_file are mutually exclusive.
       '';
 
       bearer_token = mkOpt types.str ''
-        Sets the `Authorization` header on every scrape request with
+        Sets the <literal>Authorization</literal> header on every scrape request with
         the configured bearer token. It is mutually exclusive with
         <option>bearer_token_file</option>.
       '';
 
       bearer_token_file = mkOpt types.str ''
-        Sets the `Authorization` header on every scrape request with
+        Sets the <literal>Authorization</literal> header on every scrape request with
         the bearer token read from the configured file. It is mutually
         exclusive with <option>bearer_token</option>.
       '';
@@ -623,7 +623,7 @@ let
     };
 
     port = mkDefOpt types.int "80" ''
-      The port to scrape metrics from, when `role` is nodes, and for discovered
+      The port to scrape metrics from, when <literal>role</literal> is nodes, and for discovered
       tasks and services that don't have published ports.
     '';
 
@@ -1205,12 +1205,12 @@ let
 
       secret_key = mkOpt types.str ''
         Secret key to use when listing targets. https://console.scaleway.com/project/credentials
-        It is mutually exclusive with `secret_key_file`.
+        It is mutually exclusive with <literal>secret_key_file</literal>.
       '';
 
       secret_key_file = mkOpt types.str ''
         Sets the secret key with the credentials read from the configured file.
-        It is mutually exclusive with `secret_key`.
+        It is mutually exclusive with <literal>secret_key</literal>.
       '';
 
       project_id = mkOption {
@@ -1440,17 +1440,17 @@ let
         remote write configs.
       '';
       basic_auth = mkOpt promTypes.basic_auth ''
-        Sets the `Authorization` header on every remote write request with the
+        Sets the <literal>Authorization</literal> header on every remote write request with the
         configured username and password.
         password and password_file are mutually exclusive.
       '';
       bearer_token = mkOpt types.str ''
-        Sets the `Authorization` header on every remote write request with
-        the configured bearer token. It is mutually exclusive with `bearer_token_file`.
+        Sets the <literal>Authorization</literal> header on every remote write request with
+        the configured bearer token. It is mutually exclusive with <literal>bearer_token_file</literal>.
       '';
       bearer_token_file = mkOpt types.str ''
-        Sets the `Authorization` header on every remote write request with the bearer token
-        read from the configured file. It is mutually exclusive with `bearer_token`.
+        Sets the <literal>Authorization</literal> header on every remote write request with the bearer token
+        read from the configured file. It is mutually exclusive with <literal>bearer_token</literal>.
       '';
       tls_config = mkOpt promTypes.tls_config ''
         Configures the remote write request's TLS settings.
@@ -1531,17 +1531,17 @@ let
         the local storage should have complete data for.
       '';
       basic_auth = mkOpt promTypes.basic_auth ''
-        Sets the `Authorization` header on every remote read request with the
+        Sets the <literal>Authorization</literal> header on every remote read request with the
         configured username and password.
         password and password_file are mutually exclusive.
       '';
       bearer_token = mkOpt types.str ''
-        Sets the `Authorization` header on every remote read request with
-        the configured bearer token. It is mutually exclusive with `bearer_token_file`.
+        Sets the <literal>Authorization</literal> header on every remote read request with
+        the configured bearer token. It is mutually exclusive with <literal>bearer_token_file</literal>.
       '';
       bearer_token_file = mkOpt types.str ''
-        Sets the `Authorization` header on every remote read request with the bearer token
-        read from the configured file. It is mutually exclusive with `bearer_token`.
+        Sets the <literal>Authorization</literal> header on every remote read request with the bearer token
+        read from the configured file. It is mutually exclusive with <literal>bearer_token</literal>.
       '';
       tls_config = mkOpt promTypes.tls_config ''
         Configures the remote read request's TLS settings.
