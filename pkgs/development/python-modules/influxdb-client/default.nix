@@ -1,4 +1,5 @@
 { lib
+, aiohttp
 , buildPythonPackage
 , fetchFromGitHub
 , rx
@@ -17,7 +18,7 @@ buildPythonPackage rec {
   version = "1.31.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "influxdata";
@@ -33,9 +34,17 @@ buildPythonPackage rec {
     python-dateutil
     setuptools
     urllib3
-    ciso8601
     pytz
   ];
+
+  passthru.optional-dependencies = {
+    async = [
+      aiohttp
+    ];
+    ciso = [
+      ciso8601
+    ];
+  };
 
   # requires influxdb server
   doCheck = false;
