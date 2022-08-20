@@ -5913,6 +5913,18 @@ final: prev:
     meta.homepage = "https://github.com/sonph/onehalf/";
   };
 
+  onenord-nvim = buildVimPluginFrom2Nix {
+    pname = "onenord.nvim";
+    version = "2022-07-15";
+    src = fetchFromGitHub {
+      owner = "rmehri01";
+      repo = "onenord.nvim";
+      rev = "c2021ba34aecd8027437dadd27edf9fc949c9aa8";
+      sha256 = "1ps8pmib1xc9cxw6vs4hgns39680qnfhq783gabgz9gnk8v10j5y";
+    };
+    meta.homepage = "https://github.com/rmehri01/onenord.nvim/";
+  };
+
   open-browser-github-vim = buildVimPluginFrom2Nix {
     pname = "open-browser-github.vim";
     version = "2021-03-21";
