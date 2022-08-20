@@ -199,25 +199,25 @@ in
               ];
             }
           ];
-        description = ''
+        description = lib.mdDoc ''
           Shared folder list. If enabled, web UI must be
-          disabled. Secrets can be generated using <literal>rslsync
-          --generate-secret</literal>. Note that this secret will be
+          disabled. Secrets can be generated using `rslsync --generate-secret`.
+          Note that this secret will be
           put inside the Nix store, so it is realistically not very
           secret.
 
           If you would like to be able to modify the contents of this
           directories, it is recommended that you make your user a
-          member of the <literal>rslsync</literal> group.
+          member of the `rslsync` group.
 
           Directories in this list should be in the
-          <literal>rslsync</literal> group, and that group must have
+          `rslsync` group, and that group must have
           write access to the directory. It is also recommended that
-          <literal>chmod g+s</literal> is applied to the directory
+          `chmod g+s` is applied to the directory
           so that any sub directories created will also belong to
-          the <literal>rslsync</literal> group. Also,
-          <literal>setfacl -d -m group:rslsync:rwx</literal> and
-          <literal>setfacl -m group:rslsync:rwx</literal> should also
+          the `rslsync` group. Also,
+          `setfacl -d -m group:rslsync:rwx` and
+          `setfacl -m group:rslsync:rwx` should also
           be applied so that the sub directories are writable by
           the group.
         '';

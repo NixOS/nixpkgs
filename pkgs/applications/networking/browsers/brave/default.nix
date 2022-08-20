@@ -73,7 +73,7 @@ let
     libxkbcommon libXScrnSaver libXcomposite libXcursor libXdamage
     libXext libXfixes libXi libXrandr libXrender libxshmfence
     libXtst libuuid mesa nspr nss pango pipewire udev wayland
-    xdg-utils xorg.libxcb zlib snappy
+    xorg.libxcb zlib snappy
   ]
     ++ optional pulseSupport libpulseaudio
     ++ optional libvaSupport libva;
@@ -170,6 +170,7 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : ${rpath}
       --prefix PATH : ${binpath}
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
       ${optionalString (enableFeatures != []) ''
       --add-flags "--enable-features=${strings.concatStringsSep "," enableFeatures}"
       ''}

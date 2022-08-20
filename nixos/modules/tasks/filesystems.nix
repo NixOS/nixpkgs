@@ -175,21 +175,20 @@ in
         }
       '';
       type = types.attrsOf (types.submodule [coreFileSystemOpts fileSystemOpts]);
-      description = ''
+      description = lib.mdDoc ''
         The file systems to be mounted.  It must include an entry for
-        the root directory (<literal>mountPoint = "/"</literal>).  Each
+        the root directory (`mountPoint = "/"`).  Each
         entry in the list is an attribute set with the following fields:
-        <literal>mountPoint</literal>, <literal>device</literal>,
-        <literal>fsType</literal> (a file system type recognised by
-        <command>mount</command>; defaults to
-        <literal>"auto"</literal>), and <literal>options</literal>
-        (the mount options passed to <command>mount</command> using the
-        <option>-o</option> flag; defaults to <literal>[ "defaults" ]</literal>).
+        `mountPoint`, `device`,
+        `fsType` (a file system type recognised by
+        {command}`mount`; defaults to
+        `"auto"`), and `options`
+        (the mount options passed to {command}`mount` using the
+        {option}`-o` flag; defaults to `[ "defaults" ]`).
 
-        Instead of specifying <literal>device</literal>, you can also
-        specify a volume label (<literal>label</literal>) for file
-        systems that support it, such as ext2/ext3 (see <command>mke2fs
-        -L</command>).
+        Instead of specifying `device`, you can also
+        specify a volume label (`label`) for file
+        systems that support it, such as ext2/ext3 (see {command}`mke2fs -L`).
       '';
     };
 

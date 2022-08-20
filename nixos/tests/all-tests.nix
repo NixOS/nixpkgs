@@ -272,6 +272,7 @@ in {
   keycloak = discoverTests (import ./keycloak.nix);
   keymap = handleTest ./keymap.nix {};
   knot = handleTest ./knot.nix {};
+  komga = handleTest ./komga.nix {};
   krb5 = discoverTests (import ./krb5 {});
   ksm = handleTest ./ksm.nix {};
   kubernetes = handleTestOn ["x86_64-linux"] ./kubernetes {};

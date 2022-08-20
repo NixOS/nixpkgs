@@ -119,7 +119,7 @@ stdenv.mkDerivation rec {
     unzip $out/lib/javafx-web-18-linux${lib.optionalString stdenv.isAarch64 "-aarch64"}.jar libjfxwebkit.so -d $out/lib/
 
     wrapProgram $out/bin/JabRef \
-      --prefix PATH : ${lib.makeBinPath [ xdg-utils ]} \
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
       --set JAVA_HOME "${jdk}" \
       --set JAVA_OPTS "-Djava.library.path=$out/lib/ --patch-module org.jabref=$out/share/java/jabref/resources/main"
 

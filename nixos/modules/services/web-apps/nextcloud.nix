@@ -532,7 +532,7 @@ in {
         here because it has the side-effect that personal information is even accessible to
         unauthenticated users by default.
 
-        By default, the following properties are set to <quote>Show to everyone</quote>
+        By default, the following properties are set to “Show to everyone”
         if this flag is enabled:
         <itemizedlist>
         <listitem><para>About</para></listitem>
@@ -569,10 +569,10 @@ in {
     secretFile = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Secret options which will be appended to nextcloud's config.php file (written as JSON, in the same
-        form as the <xref linkend="opt-services.nextcloud.extraOptions"/> option), for example
-        <programlisting>{"redis":{"password":"secret"}}</programlisting>.
+        form as the [](#opt-services.nextcloud.extraOptions) option), for example
+        `{"redis":{"password":"secret"}}`.
       '';
     };
 

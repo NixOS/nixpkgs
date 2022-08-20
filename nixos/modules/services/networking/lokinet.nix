@@ -95,7 +95,7 @@ in with lib; {
           network.exit-node = [ "example.loki" "example2.loki" ];
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Configuration for Lokinet.
         Currently, the best way to view the available settings is by
         generating a config file using `lokinet -g`.

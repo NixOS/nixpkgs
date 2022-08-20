@@ -327,6 +327,8 @@ with pkgs;
 
   buildMaven = callPackage ../build-support/build-maven.nix {};
 
+  caroline = callPackage ../development/libraries/caroline { };
+
   castget = callPackage ../applications/networking/feedreaders/castget { };
 
   castxml = callPackage ../development/tools/castxml {
@@ -1284,6 +1286,8 @@ with pkgs;
 
   pferd = callPackage ../tools/misc/pferd {};
 
+  q = callPackage ../tools/networking/q {};
+
   qFlipper = libsForQt515.callPackage ../tools/misc/qflipper { };
 
   quich = callPackage ../tools/misc/quich { } ;
@@ -1295,6 +1299,8 @@ with pkgs;
   sdbus-cpp = callPackage ../development/libraries/sdbus-cpp { };
 
   sdlookup = callPackage ../tools/security/sdlookup { };
+
+  sgrep = callPackage ../tools/text/sgrep { };
 
   smbscan = callPackage ../tools/security/smbscan { };
 
@@ -1364,6 +1370,8 @@ with pkgs;
   archi = callPackage ../tools/misc/archi { };
 
   breitbandmessung = callPackage ../applications/networking/breitbandmessung { };
+
+  zq = callPackage ../development/tools/zq { buildGoModule = buildGo118Module; };
 
   ### APPLICATIONS/EMULATORS
 
@@ -1443,11 +1451,15 @@ with pkgs;
 
   goldberg-emu = callPackage ../applications/emulators/goldberg-emu { };
 
+  gopsuinfo = callPackage ../tools/system/gopsuinfo { };
+
   gxemul = callPackage ../applications/emulators/gxemul { };
 
   hatari = callPackage ../applications/emulators/hatari { };
 
   hercules = callPackage ../applications/emulators/hercules { };
+
+  hostapd-mana = callPackage ../tools/networking/hostapd-mana { };
 
   image-analyzer = callPackage ../applications/emulators/cdemu/analyzer.nix { };
 
@@ -6579,6 +6591,8 @@ with pkgs;
 
   ghrepo-stats = with python3Packages; toPythonApplication ghrepo-stats;
 
+  ghz = callPackage ../tools/networking/ghz { };
+
   gibberish-detector = with python3Packages; toPythonApplication gibberish-detector;
 
   gibo = callPackage ../tools/misc/gibo { };
@@ -9547,6 +9561,8 @@ with pkgs;
 
   p3x-onenote = callPackage ../applications/office/p3x-onenote { };
 
+  p4c = callPackage ../development/compilers/p4c { };
+
   p7zip = callPackage ../tools/archivers/p7zip { };
 
   packagekit = callPackage ../tools/package-management/packagekit { nix = nixVersions.nix_2_8; };
@@ -10856,6 +10872,8 @@ with pkgs;
   soapui = callPackage ../applications/networking/soapui {
     jdk = jdk11;
   };
+
+  sockdump = callPackage ../tools/networking/sockdump { };
 
   spglib = callPackage ../development/libraries/spglib {
     inherit (llvmPackages) openmp;
@@ -12810,6 +12828,8 @@ with pkgs;
 
   avra = callPackage ../development/compilers/avra { };
 
+  ballerina = callPackage ../development/compilers/ballerina { };
+
   beekeeper-studio = callPackage ../development/tools/database/beekeeper-studio { };
 
   bigloo = callPackage ../development/compilers/bigloo { };
@@ -14369,6 +14389,9 @@ with pkgs;
   cargo-udeps = callPackage ../development/tools/rust/cargo-udeps {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
   };
+
+  cargo-tauri = callPackage ../development/tools/rust/cargo-tauri { };
+
   cargo-valgrind = callPackage ../development/tools/rust/cargo-valgrind { };
   cargo-wasi = callPackage ../development/tools/rust/cargo-wasi {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -16653,6 +16676,10 @@ with pkgs;
 
   ran = callPackage ../servers/http/ran { };
 
+  rathole = callPackage ../tools/networking/rathole {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
+
   retry = callPackage ../tools/system/retry { };
 
   rizin = pkgs.callPackage ../development/tools/analysis/rizin { };
@@ -17489,6 +17516,8 @@ with pkgs;
   soxt = callPackage ../development/libraries/soxt { };
 
   CoinMP = callPackage ../development/libraries/CoinMP { };
+
+  coinlive = callPackage ../tools/misc/coinlive { };
 
   cointop = callPackage ../applications/misc/cointop { };
 
@@ -26315,6 +26344,8 @@ with pkgs;
 
   blender-with-packages = callPackage ../applications/misc/blender/wrapper.nix {};
 
+  blender-hip = blender.override { hipSupport = true; };
+
   blflash = callPackage ../tools/misc/blflash { };
 
   blogc = callPackage ../applications/misc/blogc { };
@@ -26870,7 +26901,6 @@ with pkgs;
   em = callPackage ../applications/editors/em { };
 
   emacs = emacs28;
-  emacsNativeComp = emacs28NativeComp;
   emacs-nox = emacs28-nox;
 
   emacs28 = callPackage ../applications/editors/emacs/28.nix {
@@ -26883,10 +26913,6 @@ with pkgs;
     gpm = null;
     inherit (darwin.apple_sdk.frameworks) AppKit GSS ImageIO;
     inherit (darwin) sigtool;
-  };
-
-  emacs28NativeComp = emacs28.override {
-    nativeComp = true;
   };
 
   emacs28-nox = lowPrio (emacs28.override {
@@ -30851,6 +30877,8 @@ with pkgs;
   tabula-java = callPackage ../applications/misc/tabula-java { };
 
   tasknc = callPackage ../applications/misc/tasknc { };
+
+  tasktimer = callPackage ../applications/misc/tasktimer { };
 
   taskwarrior = callPackage ../applications/misc/taskwarrior { };
 

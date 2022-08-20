@@ -82,7 +82,7 @@ in
               '';
               configFile = mkOption {
                 type = path;
-                description = "Path to firmware config which is generated using `klipper-genconf`";
+                description = lib.mdDoc "Path to firmware config which is generated using `klipper-genconf`";
               };
             };
           });

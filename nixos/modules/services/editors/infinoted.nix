@@ -36,7 +36,7 @@ in {
     certificateChain = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Chain of CA-certificates to which our `certificateFile` is relative.
         Optional for TLS.
       '';

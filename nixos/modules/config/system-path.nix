@@ -84,19 +84,19 @@ in
           <programlisting>${defaultPackagesText}</programlisting>
         '';
         example = [];
-        description = ''
+        description = lib.mdDoc ''
           Set of default packages that aren't strictly necessary
           for a running system, entries can be removed for a more
           minimal NixOS installation.
 
-          Note: If <package>pkgs.nano</package> is removed from this list,
+          Note: If `pkgs.nano` is removed from this list,
           make sure another editor is installed and the
-          <literal>EDITOR</literal> environment variable is set to it.
+          `EDITOR` environment variable is set to it.
           Environment variables can be set using
-          <option>environment.variables</option>.
+          {option}`environment.variables`.
 
           Like with systemPackages, packages are installed to
-          <filename>/run/current-system/sw</filename>. They are
+          {file}`/run/current-system/sw`. They are
           automatically available to all users, and are
           automatically updated every time you rebuild the system
           configuration.

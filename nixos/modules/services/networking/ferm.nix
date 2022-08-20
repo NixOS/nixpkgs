@@ -20,7 +20,7 @@ in {
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable Ferm Firewall.
           *Warning*: Enabling this service WILL disable the existing NixOS
           firewall! Default firewall rules provided by packages are not

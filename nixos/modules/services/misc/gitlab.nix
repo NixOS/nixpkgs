@@ -338,10 +338,9 @@ in {
         default = 0;
         example = 48;
         apply = x: x * 60 * 60;
-        description = ''
+        description = lib.mdDoc ''
           How long to keep the backups around, in
-          hours. <literal>0</literal> means <quote>keep
-          forever</quote>.
+          hours. `0` means “keep forever”.
         '';
       };
 
@@ -415,9 +414,9 @@ in {
       databaseHost = mkOption {
         type = types.str;
         default = "";
-        description = ''
-          GitLab database hostname. An empty string means <quote>use
-          local unix socket connection</quote>.
+        description = lib.mdDoc ''
+          GitLab database hostname. An empty string means
+          “use local unix socket connection”.
         '';
       };
 
@@ -752,8 +751,7 @@ in {
         description = ''
           The number of worker processes Puma should spawn. This
           controls the amount of parallel Ruby code can be
-          executed. GitLab recommends <quote>Number of CPU cores -
-          1</quote>, but at least two.
+          executed. GitLab recommends <literal>Number of CPU cores - 1</literal>, but at least two.
 
           <note>
             <para>

@@ -130,18 +130,18 @@ in {
       };
 
       user = lib.mkOption {
-        description = ''
+        description = lib.mdDoc ''
           User under which mastodon runs. If it is set to "mastodon",
           that user will be created, otherwise it should be set to the
           name of a user created elsewhere.  In both cases,
-          <package>mastodon</package> and a package containing only
-          the shell script <literal>mastodon-env</literal> will be added to
+          `mastodon` and a package containing only
+          the shell script `mastodon-env` will be added to
           the user's package set. To run a command from
-          <package>mastodon</package> such as <literal>tootctl</literal>
+          `mastodon` such as `tootctl`
           with the environment configured by this module use
-          <literal>mastodon-env</literal>, as in:
+          `mastodon-env`, as in:
 
-          <literal>mastodon-env tootctl accounts create newuser --email newuser@example.com</literal>
+          `mastodon-env tootctl accounts create newuser --email newuser@example.com`
         '';
         type = lib.types.str;
         default = "mastodon";

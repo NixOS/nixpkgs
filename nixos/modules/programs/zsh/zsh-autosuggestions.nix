@@ -24,7 +24,7 @@ in
     strategy = mkOption {
       type = types.listOf (types.enum [ "history" "completion" "match_prev_cmd" ]);
       default = [ "history" ];
-      description = ''
+      description = lib.mdDoc ''
         `ZSH_AUTOSUGGEST_STRATEGY` is an array that specifies how suggestions should be generated.
         The strategies in the array are tried successively until a suggestion is found.
         There are currently three built-in strategies to choose from:

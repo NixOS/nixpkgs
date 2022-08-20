@@ -521,6 +521,8 @@ in {
 
   altair = callPackage ../development/python-modules/altair { };
 
+  amarna = callPackage ../development/python-modules/amarna { };
+
   amazon-ion = callPackage ../development/python-modules/amazon-ion { };
 
   amazon_kclpy = callPackage ../development/python-modules/amazon_kclpy { };
@@ -810,6 +812,8 @@ in {
   asyncwhois = callPackage ../development/python-modules/asyncwhois { };
 
   asysocks = callPackage ../development/python-modules/asysocks { };
+
+  atc-ble = callPackage ../development/python-modules/atc-ble { };
 
   atenpdu = callPackage ../development/python-modules/atenpdu { };
 
@@ -1365,6 +1369,8 @@ in {
 
   blebox-uniapi = callPackage ../development/python-modules/blebox-uniapi { };
 
+  bless = callPackage ../development/python-modules/bless { };
+
   blessed = callPackage ../development/python-modules/blessed { };
 
   blessings = callPackage ../development/python-modules/blessings { };
@@ -1495,6 +1501,8 @@ in {
   bsuite = callPackage ../development/python-modules/bsuite { };
 
   btchip = callPackage ../development/python-modules/btchip { };
+
+  bthome-ble = callPackage ../development/python-modules/bthome-ble { };
 
   bt-proximity = callPackage ../development/python-modules/bt-proximity { };
 
@@ -1635,6 +1643,8 @@ in {
   cement = callPackage ../development/python-modules/cement { };
 
   censys = callPackage ../development/python-modules/censys { };
+
+  cexprtk = callPackage ../development/python-modules/cexprtk { };
 
   coincurve = callPackage ../development/python-modules/coincurve {
     inherit (pkgs) secp256k1;

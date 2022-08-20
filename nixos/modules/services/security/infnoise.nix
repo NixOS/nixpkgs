@@ -10,7 +10,7 @@ in {
       enable = mkEnableOption "the Infinite Noise TRNG driver";
 
       fillDevRandom = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Whether to run the infnoise driver as a daemon to refill /dev/random.
 
           If disabled, you can use the `infnoise` command-line tool to

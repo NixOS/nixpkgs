@@ -53,10 +53,9 @@ in
         type = types.lines;
         default = "";
         description =
-          ''
+          lib.mdDoc ''
             This is the config file for managing unprivileged user network
-            administration access in LXC. See <citerefentry><refentrytitle>lxc-usernet</refentrytitle><manvolnum>5</manvolnum>
-            </citerefentry>.
+            administration access in LXC. See {manpage}`lxc-usernet(5)`.
           '';
       };
   };

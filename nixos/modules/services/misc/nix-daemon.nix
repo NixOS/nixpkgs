@@ -264,7 +264,7 @@ in
               type = types.nullOr types.str;
               default = null;
               example = "/root/.ssh/id_buildhost_builduser";
-              description = ''
+              description = lib.mdDoc ''
                 The path to the SSH private key with which to authenticate on
                 the build machine. The private key must not have a passphrase.
                 If null, the building user (root on NixOS machines) must have an
@@ -562,13 +562,13 @@ in
             trusted-public-keys = mkOption {
               type = types.listOf types.str;
               example = [ "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs=" ];
-              description = ''
+              description = lib.mdDoc ''
                 List of public keys used to sign binary caches. If
-                <option>nix.settings.trusted-public-keys</option> is enabled,
+                {option}`nix.settings.trusted-public-keys` is enabled,
                 then Nix will use a binary from a binary cache if and only
-                if it is signed by <emphasis>any</emphasis> of the keys
+                if it is signed by *any* of the keys
                 listed here. By default, only the key for
-                <uri>cache.nixos.org</uri> is included.
+                `cache.nixos.org` is included.
               '';
             };
 
@@ -605,13 +605,13 @@ in
               type = types.listOf types.str;
               default = [ "*" ];
               example = [ "@wheel" "@builders" "alice" "bob" ];
-              description = ''
+              description = lib.mdDoc ''
                 A list of names of users (separated by whitespace) that are
                 allowed to connect to the Nix daemon. As with
-                <option>nix.settings.trusted-users</option>, you can specify groups by
-                prefixing them with <literal>@</literal>. Also, you can
-                allow all users by specifying <literal>*</literal>. The
-                default is <literal>*</literal>. Note that trusted users are
+                {option}`nix.settings.trusted-users`, you can specify groups by
+                prefixing them with `@`. Also, you can
+                allow all users by specifying `*`. The
+                default is `*`. Note that trusted users are
                 always allowed to connect.
               '';
             };

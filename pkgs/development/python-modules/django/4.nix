@@ -58,6 +58,10 @@ buildPythonPackage rec {
       hash = "sha256-QE7QnfYAK74wvK8gDJ15FtQ+BCIWRQKAVvM7v1FzwlE=";
       excludes = [ "docs/releases/4.1.1.txt" ];
     })
+    (substituteAll {
+      src = ./django_4_set_zoneinfo_dir.patch;
+      zoneinfo = tzdata + "/share/zoneinfo";
+    })
   ] ++ lib.optionals withGdal [
     (substituteAll {
       src = ./django_4_set_geos_gdal_lib.patch;

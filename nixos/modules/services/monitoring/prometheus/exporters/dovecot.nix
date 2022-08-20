@@ -33,10 +33,10 @@ in
         work with this exporter:
         <programlisting>
         {
-          <xref linkend="opt-services.prometheus.exporters.dovecot.enable"/> = true;
-          <xref linkend="opt-services.prometheus.exporters.dovecot.socketPath"/> = "/var/run/dovecot2/old-stats";
-          <xref linkend="opt-services.dovecot2.mailPlugins.globally.enable"/> = [ "old_stats" ];
-          <xref linkend="opt-services.dovecot2.extraConfig"/> = '''
+          services.prometheus.exporters.dovecot.enable = true;
+          services.prometheus.exporters.dovecot.socketPath = "/var/run/dovecot2/old-stats";
+          services.dovecot2.mailPlugins.globally.enable = [ "old_stats" ];
+          services.dovecot2.extraConfig = '''
             service old-stats {
               unix_listener old-stats {
                 user = dovecot-exporter
