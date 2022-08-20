@@ -23,11 +23,12 @@
 , setuptools
 , watchdog
 , werkzeug
+, deprecated
 }:
 
 buildPythonPackage rec {
   pname = "lektor";
-  version = "3.3.5";
+  version = "3.4.0b1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -36,12 +37,13 @@ buildPythonPackage rec {
     owner = "lektor";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-i3SuvRREuq0EENDtXjQegdmz30RmH1HVqBwdjq/mkTM=";
+    hash = "sha256-uVLvxHlHqOMiRSoBi1wWxrN8tb78MO/QidHCE1uOXvc=";
   };
 
   propagatedBuildInputs = [
     babel
     click
+    deprecated
     exifread
     filetype
     flask
