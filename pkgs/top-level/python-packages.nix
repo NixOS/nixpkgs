@@ -1728,6 +1728,8 @@ in {
 
   chart-studio = callPackage ../development/python-modules/chart-studio { };
 
+  chat-downloader = callPackage ../development/python-modules/chat-downloader { };
+
   check-manifest = callPackage ../development/python-modules/check-manifest { };
 
   cheetah3 = callPackage ../development/python-modules/cheetah3 { };
