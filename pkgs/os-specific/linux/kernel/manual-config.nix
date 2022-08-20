@@ -59,14 +59,6 @@ let
     ++ optional (lib.versionAtLeast version "4.14") libelf
     ++ optional (lib.versionAtLeast version "5.13") zstd;
 
-
-  installkernel = buildPackages.writeShellScript "installkernel" ''
-    set -e
-    mkdir -p $4
-    cp -av $2 $4
-    cp -av $3 $4
-  '';
-
   drvAttrs = config_: kernelConf: kernelPatches: configfile:
     let
       config = let attrName = attr: "CONFIG_" + attr; in {
@@ -114,10 +106,6 @@ let
         ++ optional (lib.versionAtLeast version "5.2" && lib.versionOlder version "5.4") ./gen-kheaders-metadata.patch;
 
       prePatch = ''
-        for mf in $(find -name Makefile -o -name Makefile.include -o -name install.sh); do
-            echo "stripping FHS paths in \`$mf'..."
-            sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g ; s|/sbin/||g'
-        done
         sed -i Makefile -e 's|= depmod|= ${buildPackages.kmod}/bin/depmod|'
 
         # Don't include a (random) NT_GNU_BUILD_ID, to make the build more deterministic.
@@ -146,6 +134,11 @@ let
         fi
 
         patchShebangs scripts
+
+        # also patch arch-specific install scripts
+        for i in $(find arch -name install.sh); do
+            patchShebangs "$i"
+        done
       '';
 
       configurePhase = ''
@@ -185,18 +178,69 @@ let
         kernelConf.target
         "vmlinux"  # for "perf" and things like that
       ] ++ optional isModular "modules"
-        ++ optional buildDTBs "dtbs"
+        ++ optionals buildDTBs ["dtbs" "DTC_FLAGS=-@"]
       ++ extraMakeFlags;
 
       installFlags = [
-        "INSTALLKERNEL=${installkernel}"
         "INSTALL_PATH=$(out)"
       ] ++ (optional isModular "INSTALL_MOD_PATH=$(out)")
       ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware"
       ++ optionals buildDTBs ["dtbs_install" "INSTALL_DTBS_PATH=$(out)/dtbs"];
 
-      preInstall = ''
+      preInstall = let
+        # All we really need to do here is copy the final image and System.map to $out,
+        # and use the kernel's modules_install, firmware_install, dtbs_install, etc. targets
+        # for the rest. Easy, right?
+        #
+        # Unfortunately for us, the obvious way of getting the built image path,
+        # make -s image_name, does not work correctly, because some architectures
+        # (*cough* aarch64 *cough*) change KBUILD_IMAGE on the fly in their install targets,
+        # so we end up attempting to install the thing we didn't actually build.
+        #
+        # Thankfully, there's a way out that doesn't involve just hardcoding everything.
+        #
+        # The kernel has an install target, which runs a pretty simple shell script
+        # (located at scripts/install.sh or arch/$arch/boot/install.sh, depending on
+        # which kernel version you're looking at) that tries to do something sensible.
+        #
+        # (it would be great to hijack this script immediately, as it has all the
+        #   information we need passed to it and we don't need it to try and be smart,
+        #   but unfortunately, the exact location of the scripts differs between kernel
+        #   versions, and they're seemingly not considered to be public API at all)
+        #
+        # One of the ways it tries to discover what "something sensible" actually is
+        # is by delegating to what's supposed to be a user-provided install script
+        # located at ~/bin/installkernel.
+        #
+        # (the other options are:
+        #   - a distribution-specific script at /sbin/installkernel,
+        #        which we can't really create in the sandbox easily
+        #   - an architecture-specific script at arch/$arch/boot/install.sh,
+        #        which attempts to guess _something_ and usually guesses very wrong)
+        #
+        # More specifically, the install script exec's into ~/bin/installkernel, if one
+        # exists, with the following arguments:
+        #
+        # $1: $KERNELRELEASE - full kernel version string
+        # $2: $KBUILD_IMAGE - the final image path
+        # $3: System.map - path to System.map file, seemingly hardcoded everywhere
+        # $4: $INSTALL_PATH - path to the destination directory as specified in installFlags
+        #
+        # $2 is exactly what we want, so hijack the script and use the knowledge given to it
+        # by the makefile overlords for our own nefarious ends.
+        #
+        # Note that the makefiles specifically look in ~/bin/installkernel, and
+        # writeShellScriptBin writes the script to <store path>/bin/installkernel,
+        # so HOME needs to be set to just the store path.
+        #
+        # FIXME: figure out a less roundabout way of doing this.
+        installkernel = buildPackages.writeShellScriptBin "installkernel" ''
+          cp -av $2 $4
+          cp -av $3 $4
+        '';
+      in ''
         installFlagsArray+=("-j$NIX_BUILD_CORES")
+        export HOME=${installkernel}
       '';
 
       # Some image types need special install targets (e.g. uImage is installed with make uinstall)
