@@ -18,13 +18,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "setzer";
-  version = "0.4.7";
+  version = "0.4.8";
 
   src = fetchFromGitHub {
     owner = "cvfosammmm";
     repo = "Setzer";
     rev = "v${version}";
-    hash = "sha256-IP56jOiiIK9EW4D5yEdLc49rUzcvegAX3Yyk2ERK/pE=";
+    hash = "sha256-7NPyvAof0xObYZws3KFAbdue/GpIRthzdX00jc9GhYs=";
   };
 
   format = "other";
@@ -37,10 +37,10 @@ python3.pkgs.buildPythonApplication rec {
     appstream-glib
     wrapGAppsHook
     desktop-file-utils
+    gobject-introspection
   ];
 
   buildInputs = [
-    gobject-introspection
     gtksourceview4
     gspell
     poppler_gi
