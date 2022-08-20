@@ -1,19 +1,20 @@
 { lib
 , buildPythonPackage
+, colorful
 , fetchFromGitHub
+, git
+, httpx
+, packaging
 , poetry-core
 , pytestCheckHook
 , pythonOlder
-, colorful
+, rich
 , tomlkit
-, git
-, packaging
-, requests
 }:
 
 buildPythonPackage rec {
   pname = "pontos";
-  version = "22.7.2";
+  version = "22.8.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-JvmdxkgWIcXQ7ML1Sx6/YeH5WXyq/UCEZlTc9nJbcQQ=";
+    hash = "sha256-oWk6t7PocF7go7EE7nQjHA78G0Q1tAOXBff2zKXDvgU=";
   };
 
   nativeBuildInputs = [
@@ -31,9 +32,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     colorful
-    tomlkit
+    httpx
     packaging
-    requests
+    rich
+    tomlkit
   ];
 
   checkInputs = [
@@ -47,6 +49,7 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
+    "PrepareTestCase"
     # Signing fails
     "test_find_no_signing_key"
     "test_find_signing_key"
