@@ -15165,6 +15165,8 @@ with pkgs;
     inherit (darwin) libobjc;
   };
   defaultGemConfig = callPackage ../development/ruby-modules/gem-config {
+    # recent v8 doesn't build on nixpkgs Darwin yet. https://github.com/NixOS/nixpkgs/issues/158076
+    v8 = if stdenv.isDarwin then v8_8_x else v8;
     inherit (darwin) DarwinTools cctools;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
