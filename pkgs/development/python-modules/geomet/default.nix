@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , click
 , six
+, pythonOlder
 }:
 
 buildPythonPackage rec {
