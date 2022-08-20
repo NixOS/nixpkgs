@@ -8,6 +8,7 @@
 , pyusb
 , hostPlatform
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
