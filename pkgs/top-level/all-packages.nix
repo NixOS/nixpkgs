@@ -11039,6 +11039,8 @@ with pkgs;
 
   subberthehut = callPackage ../tools/misc/subberthehut { };
 
+  subedit = callPackage ../tools/text/subedit { };
+
   subgit = callPackage ../applications/version-management/git-and-tools/subgit { };
 
   subsurface = libsForQt514.callPackage ../applications/misc/subsurface { };
