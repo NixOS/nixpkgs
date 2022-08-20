@@ -55,6 +55,11 @@ let
 
   };
 
+  selectPartitionTableLayout = { useEFIBoot, useDefaultFilesystems }:
+  if useDefaultFilesystems then
+    if useEFIBoot then "efi" else "legacy"
+  else "none";
+
   driveCmdline = idx: { file, driveExtraOpts, deviceExtraOpts, ... }:
     let
       drvId = "drive${toString idx}";
@@ -98,7 +103,6 @@ let
   addDeviceNames =
     imap1 (idx: drive: drive // { device = driveDeviceName idx; });
 
-
   # Shell script to start the VM.
   startVM =
     ''
@@ -111,8 +115,22 @@ let
       NIX_DISK_IMAGE=$(readlink -f "''${NIX_DISK_IMAGE:-${config.virtualisation.diskImage}}")
 
       if ! test -e "$NIX_DISK_IMAGE"; then
-          ${qemu}/bin/qemu-img create -f qcow2 "$NIX_DISK_IMAGE" \
-            ${toString config.virtualisation.diskSize}M
+          echo "Disk image do not exist, creating the virtualisation disk image..."
+          # If we are using a bootloader and default filesystems layout.
+          # We have to reuse the system image layout as a backing image format (CoW)
+          # And we can write on the top of it, this way.
+          # Otherwise, if we are not using the default filesystem layout, maybe, we want the raw disk
+          # and we do boot using the system image direct kernels (useBootLoader == false),
+          # but we want to perform operations in the postDeviceCommands
+          # to format the raw disk, etc. So we will not depend on the system image layout as a backing image format.
+          # Also, if we are not using a bootloader, we can use the size parameter as we are not using CoW anymore.
+          # CoW prevent size to be affected to an image, TODO: is this a bug?
+          ${qemu}/bin/qemu-img create \
+          ${concatStringsSep " \\\n" ([ "-f qcow2" ]
+          ++ optional (cfg.useBootLoader && cfg.useDefaultFilesystems) "-F qcow2 -b ${systemImage}/nixos.qcow2"
+          ++ optional (!cfg.useBootLoader) "-o size=${toString config.virtualisation.diskSize}M"
+          ++ [ "$NIX_DISK_IMAGE" ])}
+          echo "Virtualisation disk image created."
       fi
 
       # Create a directory for storing temporary data of the running VM.
@@ -152,17 +170,13 @@ let
 
       ${lib.optionalString cfg.useBootLoader
       ''
-        # Create a writable copy/snapshot of the boot disk.
-        # A writable boot disk can be booted from automatically.
-        ${qemu}/bin/qemu-img create -f qcow2 -F qcow2 -b ${bootDisk}/disk.img "$TMPDIR/disk.img"
-
-        NIX_EFI_VARS=$(readlink -f "''${NIX_EFI_VARS:-${cfg.efiVars}}")
+        NIX_EFI_VARS=$(readlink -f "''${NIX_EFI_VARS:-${config.system.name}-efi-vars.fd}")
 
         ${lib.optionalString cfg.useEFIBoot
         ''
           # VM needs writable EFI vars
           if ! test -e "$NIX_EFI_VARS"; then
-            cp ${bootDisk}/efi-vars.fd "$NIX_EFI_VARS"
+            cp ${systemImage}/efi-vars.fd "$NIX_EFI_VARS"
             chmod 0644 "$NIX_EFI_VARS"
           fi
         ''}
@@ -203,91 +217,21 @@ let
   # in the MBR.  Used when the `useBootLoader' option is set.
   # Uses `runInLinuxVM` to create the image in a throwaway VM.
   # See note [Disk layout with `useBootLoader`].
-  # FIXME: use nixos/lib/make-disk-image.nix.
-  bootDisk =
-    pkgs.vmTools.runInLinuxVM (
-      pkgs.runCommand "nixos-boot-disk"
-        { preVM =
-            ''
-              mkdir $out
-              diskImage=$out/disk.img
-              ${qemu}/bin/qemu-img create -f qcow2 $diskImage "60M"
-              ${if cfg.useEFIBoot then ''
-                efiVars=$out/efi-vars.fd
-                cp ${cfg.efi.variables} $efiVars
-                chmod 0644 $efiVars
-              '' else ""}
-            '';
-          buildInputs = [ pkgs.util-linux ];
-          QEMU_OPTS = "-nographic -serial stdio -monitor none"
-                      + lib.optionalString cfg.useEFIBoot (
-                        " -drive if=pflash,format=raw,unit=0,readonly=on,file=${cfg.efi.firmware}"
-                      + " -drive if=pflash,format=raw,unit=1,file=$efiVars");
-        }
-        ''
-          # Create a /boot EFI partition with 60M and arbitrary but fixed GUIDs for reproducibility
-          ${pkgs.gptfdisk}/bin/sgdisk \
-            --set-alignment=1 --new=1:34:2047 --change-name=1:BIOSBootPartition --typecode=1:ef02 \
-            --set-alignment=512 --largest-new=2 --change-name=2:EFISystem --typecode=2:ef00 \
-            --attributes=1:set:1 \
-            --attributes=2:set:2 \
-            --disk-guid=97FD5997-D90B-4AA3-8D16-C1723AEA73C1 \
-            --partition-guid=1:1C06F03B-704E-4657-B9CD-681A087A2FDC \
-            --partition-guid=2:970C694F-AFD0-4B99-B750-CDB7A329AB6F \
-            --hybrid 2 \
-            --recompute-chs /dev/vda
+  systemImage = import ../../lib/make-disk-image.nix {
+    inherit pkgs config lib;
+    additionalPaths = [ regInfo ];
+    format = "qcow2";
+    onlyNixStore = false;
+    partitionTableType = selectPartitionTableLayout { inherit (cfg) useDefaultFilesystems useEFIBoot; };
+    installBootLoader = cfg.useBootLoader && cfg.useDefaultFilesystems;
+    touchEFIVars = cfg.useEFIBoot;
+    diskSize = "auto";
+    additionalSpace = "0M";
+    copyChannel = false;
+  };
 
-          ${optionalString (config.boot.loader.grub.device != "/dev/vda")
-            # In this throwaway VM, we only have the /dev/vda disk, but the
-            # actual VM described by `config` (used by `switch-to-configuration`
-            # below) may set `boot.loader.grub.device` to a different device
-            # that's nonexistent in the throwaway VM.
-            # Create a symlink for that device, so that the `grub-install`
-            # by `switch-to-configuration` will hit /dev/vda anyway.
-            ''
-              ln -s /dev/vda ${config.boot.loader.grub.device}
-            ''
-          }
-
-          ${pkgs.dosfstools}/bin/mkfs.fat -F16 /dev/vda2
-          export MTOOLS_SKIP_CHECK=1
-          ${pkgs.mtools}/bin/mlabel -i /dev/vda2 ::boot
-
-          # Mount /boot; load necessary modules first.
-          ${pkgs.kmod}/bin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/nls/nls_cp437.ko.xz || true
-          ${pkgs.kmod}/bin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/nls/nls_iso8859-1.ko.xz || true
-          ${pkgs.kmod}/bin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/fat/fat.ko.xz || true
-          ${pkgs.kmod}/bin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/fat/vfat.ko.xz || true
-          ${pkgs.kmod}/bin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/efivarfs/efivarfs.ko.xz || true
-          mkdir /boot
-          mount /dev/vda2 /boot
-
-          ${optionalString config.boot.loader.efi.canTouchEfiVariables ''
-            mount -t efivarfs efivarfs /sys/firmware/efi/efivars
-          ''}
-
-          # This is needed for GRUB 0.97, which doesn't know about virtio devices.
-          mkdir /boot/grub
-          echo '(hd0) /dev/vda' > /boot/grub/device.map
-
-          # This is needed for systemd-boot to find ESP, and udev is not available here to create this
-          mkdir -p /dev/block
-          ln -s /dev/vda2 /dev/block/254:2
-
-          # Set up system profile (normally done by nixos-rebuild / nix-env --set)
-          mkdir -p /nix/var/nix/profiles
-          ln -s ${config.system.build.toplevel} /nix/var/nix/profiles/system-1-link
-          ln -s /nix/var/nix/profiles/system-1-link /nix/var/nix/profiles/system
-
-          # Install bootloader
-          touch /etc/NIXOS
-          export NIXOS_INSTALL_BOOTLOADER=1
-          ${config.system.build.toplevel}/bin/switch-to-configuration boot
-
-          umount /boot
-        '' # */
-    );
-
+  # This image is supposed to have no side-effects on the boot disk.
+  # It should be used when you do not need the bootloader.
   storeImage = import ../../lib/make-disk-image.nix {
     inherit pkgs config lib;
     additionalPaths = [ regInfo ];
@@ -295,10 +239,15 @@ let
     onlyNixStore = true;
     partitionTableType = "none";
     installBootLoader = false;
+    touchEFIVars = false;
     diskSize = "auto";
     additionalSpace = "0M";
     copyChannel = false;
   };
+
+  OVMF_fd = (pkgs.OVMF.override {
+    secureBoot = cfg.useSecureBoot;
+  }).fd;
 
 in
 
@@ -360,10 +309,29 @@ in
     virtualisation.bootDevice =
       mkOption {
         type = types.path;
+        default = lookupDriveDeviceName "root" cfg.qemu.drives;
+        defaultText = literalExpression ''lookupDriveDeviceName "root" cfg.qemu.drives'';
         example = "/dev/vda";
         description =
           lib.mdDoc ''
-            The disk to be used for the root filesystem.
+            The disk to be used for the boot filesystem.
+            By default, it is the same disk as the root filesystem.
+          '';
+        };
+
+    virtualisation.rootDevice =
+      mkOption {
+        type = types.path;
+        default = if cfg.useBootLoader then "${cfg.bootDevice}2" else cfg.bootDevice;
+        defaultText = ''if cfg.useBootLoader then "''${cfg.bootDevice}2" else cfg.bootDevice;'';
+        example = "/dev/vda2";
+        description =
+          lib.mdDoc ''
+            The disk or partition to be used for the root filesystem.
+            By default :
+
+            - the first one in case you're **NOT** using a bootloader (`useBootLoader == false`)
+            - the second one in case you're using a bootloader (`useBootLoader == true`)
           '';
       };
 
@@ -755,17 +723,16 @@ in
           '';
       };
 
-    virtualisation.efiVars =
+    virtualisation.useSecureBoot =
       mkOption {
-        type = types.str;
-        default = "./${config.system.name}-efi-vars.fd";
-        defaultText = literalExpression ''"./''${config.system.name}-efi-vars.fd"'';
+        type = types.bool;
+        default = false;
         description =
           lib.mdDoc ''
-            Path to nvram image containing UEFI variables.  The will be created
-            on startup if it does not exist.
+            Enable Secure Boot support in the EFI firmware.
           '';
       };
+
 
     virtualisation.bios =
       mkOption {
@@ -822,27 +789,7 @@ in
             ${opt.writableStore} = false;
         '';
 
-    # Note [Disk layout with `useBootLoader`]
-    #
-    # If `useBootLoader = true`, we configure 2 drives:
-    # `/dev/?da` for the root disk, and `/dev/?db` for the boot disk
-    # which has the `/boot` partition and the boot loader.
-    # Concretely:
-    #
-    # * The second drive's image `disk.img` is created in `bootDisk = ...`
-    #   using a throwaway VM. Note that there the disk is always `/dev/vda`,
-    #   even though in the final VM it will be at `/dev/*b`.
-    # * The disks are attached in `virtualisation.qemu.drives`.
-    #   Their order makes them appear as devices `a`, `b`, etc.
-    # * `fileSystems."/boot"` is adjusted to be on device `b`.
-
-    # If `useBootLoader`, GRUB goes to the second disk, see
-    # note [Disk layout with `useBootLoader`].
-    boot.loader.grub.device = mkVMOverride (
-      if cfg.useBootLoader
-        then driveDeviceName 2 # second disk
-        else cfg.bootDevice
-    );
+    boot.loader.grub.device = mkVMOverride cfg.bootDevice;
     boot.loader.grub.gfxmodeBios = with cfg.resolution; "${toString x}x${toString y}";
 
     boot.initrd.kernelModules = optionals (cfg.useNixStoreImage && !cfg.writableStore) [ "erofs" ];
@@ -857,9 +804,9 @@ in
       ''
         # If the disk image appears to be empty, run mke2fs to
         # initialise.
-        FSTYPE=$(blkid -o value -s TYPE ${cfg.bootDevice} || true)
+        FSTYPE=$(blkid -o value -s TYPE ${cfg.rootDevice} || true)
         if test -z "$FSTYPE"; then
-            mke2fs -t ext4 ${cfg.bootDevice}
+            mke2fs -t ext4 ${cfg.rootDevice}
         fi
       '';
 
@@ -905,7 +852,7 @@ in
       optional cfg.writableStore "overlay"
       ++ optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx";
 
-    virtualisation.bootDevice = mkDefault (driveDeviceName 1);
+    # TODO: needed? virtualisation.bootDevice = mkDefault (driveDeviceName 1);
 
     virtualisation.additionalPaths = [ config.system.build.toplevel ];
 
@@ -978,6 +925,7 @@ in
         file = ''"$NIX_DISK_IMAGE"'';
         driveExtraOpts.cache = "writeback";
         driveExtraOpts.werror = "report";
+        deviceExtraOpts.bootindex = mkIf cfg.useBootLoader "1";
       }]
       (mkIf cfg.useNixStoreImage [{
         name = "nix-store";
@@ -985,16 +933,6 @@ in
         deviceExtraOpts.bootindex = if cfg.useBootLoader then "3" else "2";
         driveExtraOpts.format = if cfg.writableStore then "qcow2" else "raw";
       }])
-      (mkIf cfg.useBootLoader [
-        # The order of this list determines the device names, see
-        # note [Disk layout with `useBootLoader`].
-        {
-          name = "boot";
-          file = ''"$TMPDIR"/disk.img'';
-          driveExtraOpts.media = "disk";
-          deviceExtraOpts.bootindex = "1";
-        }
-      ])
       (imap0 (idx: _: {
         file = "$(pwd)/empty${toString idx}.qcow2";
         driveExtraOpts.werror = "report";
@@ -1025,7 +963,8 @@ in
     in
       mkVMOverride (cfg.fileSystems //
       optionalAttrs cfg.useDefaultFilesystems {
-        "/".device = cfg.bootDevice;
+        # cfg.useBootLoader -> [ boot partition ; root partition ] layout on *root* disk
+        "/".device = cfg.rootDevice;
         "/".fsType = "ext4";
         "/".autoFormat = true;
       } //
@@ -1055,7 +994,7 @@ in
       optionalAttrs cfg.useBootLoader {
         # see note [Disk layout with `useBootLoader`]
         "/boot" = {
-          device = "${lookupDriveDeviceName "boot" cfg.qemu.drives}2"; # 2 for e.g. `vdb2`, as created in `bootDisk`
+          device = "${lookupDriveDeviceName "root" cfg.qemu.drives}1"; # 1 for e.g. `vda1`, as created in `systemImage`
           fsType = "vfat";
           noCheck = true; # fsck fails on a r/o filesystem
         };

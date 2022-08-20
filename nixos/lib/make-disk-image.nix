@@ -47,6 +47,18 @@
 , # Whether to invoke `switch-to-configuration boot` during image creation
   installBootLoader ? true
 
+, # Whether to output have EFIVARS available in $out/efi-vars.fd and use it during disk creation
+  touchEFIVars ? false
+
+, # OVMF firmware derivation, defaults to `pkgs.OVMF.fd`
+  OVMF ? pkgs.OVMF.fd
+
+, # EFI firmware
+  efiFirmware ? OVMF.firmware
+
+, # EFI variables
+  efiVariables ? OVMF.variables
+
 , # The root file system type.
   fsType ? "ext4"
 
@@ -87,8 +99,14 @@ assert partitionTableType != "none" -> fsType == "ext4";
 assert lib.all
          (attrs: ((attrs.user  or null) == null)
               == ((attrs.group or null) == null))
-         contents;
+        contents;
+
+# If only Nix store image, then: contents must be empty, configFile must be unset, and we should no install bootloader.
 assert onlyNixStore -> contents == [] && configFile == null && !installBootLoader;
+
+# EFI variables manipulation can be done only on a partiion table supporting UEFI.
+# TODO: legacy+gpt is it a good idea?
+assert touchEFIVars -> partitionTableType == "hybrid" || partitionTableType == "efi" || partitionTableType == "legacy+gpt";
 
 with lib;
 
@@ -146,6 +164,8 @@ let format' = format; in let
     '';
     none = "";
   }.${partitionTableType};
+
+  useEFIBoot = touchEFIVars;
 
   nixpkgs = cleanSource pkgs.path;
 
@@ -368,11 +388,21 @@ let format' = format; in let
     diskImage=$out/${filename}
   '';
 
+  createEFIVars = ''
+    efiVars=$out/efi-vars.fd
+    cp ${efiVariables} $efiVars
+    chmod 0644 $efiVars
+  '';
+
   buildImage = pkgs.vmTools.runInLinuxVM (
     pkgs.runCommand name {
-      preVM = prepareImage;
+      preVM = prepareImage + lib.optionalString touchEFIVars createEFIVars;
       buildInputs = with pkgs; [ util-linux e2fsprogs dosfstools ];
       postVM = moveOrConvertImage + postVM;
+      QEMU_OPTS =
+        concatStringsSep " " (lib.optional useEFIBoot "-drive if=pflash,format=raw,unit=0,readonly=on,file=${efiFirmware}"
+        ++ lib.optional touchEFIVars "-drive if=pflash,format=raw,unit=1,file=$efiVars"
+      );
       memSize = 1024;
     } ''
       export PATH=${binPath}:$PATH
@@ -396,6 +426,8 @@ let format' = format; in let
         mkdir -p /mnt/boot
         mkfs.vfat -n ESP /dev/vda1
         mount /dev/vda1 /mnt/boot
+
+        ${optionalString touchEFIVars "mount -t efivarfs efivarfs /sys/firmware/efi/efivars"}
       ''}
 
       # Install a configuration.nix
@@ -405,7 +437,17 @@ let format' = format; in let
       ''}
 
       ${lib.optionalString installBootLoader ''
-        # Set up core system link, GRUB, etc.
+        # In this throwaway resource, we only have /dev/vda, but the actual VM may refer to another disk for bootloader, e.g. /dev/vdb
+        # Use this option to create a symlink from vda to any arbitrary device you want.
+        ${optionalString (config.boot.loader.grub.device != "/dev/vda") ''
+            ln -s /dev/vda ${config.boot.loader.grub.device}
+        ''}
+        # TODO: needed?
+        # For GRUB 0.97 compatibility
+        mkdir -p /mnt/boot/grub
+        echo '(hd0) /dev/vda' > /mnt/boot/grub/device.map
+
+        # Set up core system link, bootloader (sd-boot, GRUB, uboot, etc.), etc.
         NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root $mountPoint -- /nix/var/nix/profiles/system/bin/switch-to-configuration boot
 
         # The above scripts will generate a random machine-id and we don't want to bake a single ID into all our images
