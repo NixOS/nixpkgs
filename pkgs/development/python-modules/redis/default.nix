@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "redis";
-  version = "4.2.1";
+  version = "4.3.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-/kVROIEinb7mEGILnggXsfSMR7pjWHAyD9RKcSIEu90=";
+    sha256 = "sha256-3fJwcd9K3zghxPLKWdZ1JcOoLl8mi+2XuBPLT6v4eIA=";
   };
 
   propagatedBuildInputs = [
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  passthru.extras-require = {
+  passthru.optional-dependencies = {
     hidredis = [
       hiredis
     ];

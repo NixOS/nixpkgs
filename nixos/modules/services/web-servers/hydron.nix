@@ -10,19 +10,18 @@ in with lib; {
       type = types.path;
       default = "/var/lib/hydron";
       example = "/home/okina/hydron";
-      description = "Location where hydron runs and stores data.";
+      description = lib.mdDoc "Location where hydron runs and stores data.";
     };
 
     interval = mkOption {
       type = types.str;
       default = "weekly";
       example = "06:00";
-      description = ''
+      description = lib.mdDoc ''
         How often we run hydron import and possibly fetch tags. Runs by default every week.
 
         The format is described in
-        <citerefentry><refentrytitle>systemd.time</refentrytitle>
-        <manvolnum>7</manvolnum></citerefentry>.
+        {manpage}`systemd.time(7)`.
       '';
     };
 
@@ -30,19 +29,19 @@ in with lib; {
       type = types.str;
       default = "hydron";
       example = "dumbpass";
-      description = "Password for the hydron database.";
+      description = lib.mdDoc "Password for the hydron database.";
     };
 
     passwordFile = mkOption {
       type = types.path;
       default = "/run/keys/hydron-password-file";
       example = "/home/okina/hydron/keys/pass";
-      description = "Password file for the hydron database.";
+      description = lib.mdDoc "Password file for the hydron database.";
     };
 
     postgresArgs = mkOption {
       type = types.str;
-      description = "Postgresql connection arguments.";
+      description = lib.mdDoc "Postgresql connection arguments.";
       example = ''
         {
           "driver": "postgres",
@@ -55,27 +54,27 @@ in with lib; {
       type = types.path;
       default = "/run/keys/hydron-postgres-args";
       example = "/home/okina/hydron/keys/postgres";
-      description = "Postgresql connection arguments file.";
+      description = lib.mdDoc "Postgresql connection arguments file.";
     };
 
     listenAddress = mkOption {
       type = types.nullOr types.str;
       default = null;
       example = "127.0.0.1:8010";
-      description = "Listen on a specific IP address and port.";
+      description = lib.mdDoc "Listen on a specific IP address and port.";
     };
 
     importPaths = mkOption {
       type = types.listOf types.path;
       default = [];
       example = [ "/home/okina/Pictures" ];
-      description = "Paths that hydron will recursively import.";
+      description = lib.mdDoc "Paths that hydron will recursively import.";
     };
 
     fetchTags = mkOption {
       type = types.bool;
       default = true;
-      description = "Fetch tags for imported images and webm from gelbooru.";
+      description = lib.mdDoc "Fetch tags for imported images and webm from gelbooru.";
     };
   };
 

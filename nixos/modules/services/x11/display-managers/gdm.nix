@@ -75,7 +75,7 @@ in
       autoLogin.delay = mkOption {
         type = types.int;
         default = 0;
-        description = ''
+        description = lib.mdDoc ''
           Seconds of inactivity after which the autologin will be performed.
         '';
       };
@@ -83,14 +83,14 @@ in
       wayland = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Allow GDM to run on Wayland instead of Xserver.
         '';
       };
 
       autoSuspend = mkOption {
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           On the GNOME Display Manager login screen, suspend the machine after inactivity.
           (Does not affect automatic suspend while logged in, or at lock screen.)
         '';
@@ -103,9 +103,9 @@ in
         example = {
           debug.enable = true;
         };
-        description = ''
+        description = lib.mdDoc ''
           Options passed to the gdm daemon.
-          See <link xlink:href="https://help.gnome.org/admin/gdm/stable/configuration.html.en#daemonconfig">here</link> for supported options.
+          See [here](https://help.gnome.org/admin/gdm/stable/configuration.html.en#daemonconfig) for supported options.
         '';
       };
 
@@ -140,8 +140,13 @@ in
         environment = {
           GDM_X_SERVER_EXTRA_ARGS = toString
             (filter (arg: arg != "-terminate") cfg.xserverArgs);
-          # GDM is needed for gnome-login.session
-          XDG_DATA_DIRS = "${gdm}/share:${cfg.sessionData.desktops}/share:${pkgs.gnome.gnome-control-center}/share";
+          XDG_DATA_DIRS = lib.makeSearchPath "share" [
+            gdm # for gnome-login.session
+            cfg.sessionData.desktops
+            pkgs.gnome.gnome-control-center # for accessibility icon
+            pkgs.gnome.adwaita-icon-theme
+            pkgs.hicolor-icon-theme # empty icon theme as a base
+          ];
         } // optionalAttrs (xSessionWrapper != null) {
           # Make GDM use this wrapper before running the session, which runs the
           # configured setupCommands. This relies on a patched GDM which supports
@@ -298,7 +303,7 @@ in
 
         session  required       pam_succeed_if.so audit quiet_success user = gdm
         session  required       pam_env.so conffile=/etc/pam/environment readenv=0
-        session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
+        session  optional       ${config.systemd.package}/lib/security/pam_systemd.so
         session  optional       pam_keyinit.so force revoke
         session  optional       pam_permit.so
       '';

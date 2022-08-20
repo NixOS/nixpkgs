@@ -12,21 +12,21 @@ in {
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Open ports in the firewall for the server.
         '';
       };
       user = mkOption {
         type = types.str;
         default = "roon-server";
-        description = ''
+        description = lib.mdDoc ''
           User to run the Roon Server as.
         '';
       };
       group = mkOption {
         type = types.str;
         default = "roon-server";
-        description = ''
+        description = lib.mdDoc ''
           Group to run the Roon Server as.
         '';
       };
@@ -53,10 +53,12 @@ in {
     networking.firewall = mkIf cfg.openFirewall {
       allowedTCPPortRanges = [
         { from = 9100; to = 9200; }
-        { from = 9330; to = 9332; }
+        { from = 9330; to = 9339; }
+        { from = 30000; to = 30010; }
       ];
       allowedUDPPorts = [ 9003 ];
       extraCommands = ''
+        ## IGMP / Broadcast ##
         iptables -A INPUT -s 224.0.0.0/4 -j ACCEPT
         iptables -A INPUT -d 224.0.0.0/4 -j ACCEPT
         iptables -A INPUT -s 240.0.0.0/5 -j ACCEPT

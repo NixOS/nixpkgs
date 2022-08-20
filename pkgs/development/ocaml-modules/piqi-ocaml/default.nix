@@ -28,9 +28,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://piqi.org";
     description = "Universal schema language and a collection of tools built around it. These are the ocaml bindings";
+    homepage = "https://piqi.org";
     license = licenses.asl20;
     maintainers = [ maintainers.maurer ];
+    mainProgram = "piqic-ocaml";
   };
 }

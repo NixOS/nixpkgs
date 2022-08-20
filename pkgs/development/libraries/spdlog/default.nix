@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, cmake, fmt_8 }:
+{ lib, stdenv, fetchFromGitHub, cmake, fmt_8
+, staticBuild ? stdenv.hostPlatform.isStatic
+}:
 
 let
   generic = { version, sha256 }:
@@ -18,8 +20,8 @@ let
       propagatedBuildInputs = lib.optional (lib.versionAtLeast version "1.3") fmt_8;
 
       cmakeFlags = [
-        "-DSPDLOG_BUILD_SHARED=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
-        "-DSPDLOG_BUILD_STATIC=${if stdenv.hostPlatform.isStatic then "ON" else "OFF"}"
+        "-DSPDLOG_BUILD_SHARED=${if staticBuild then "OFF" else "ON"}"
+        "-DSPDLOG_BUILD_STATIC=${if staticBuild then "ON" else "OFF"}"
         "-DSPDLOG_BUILD_EXAMPLE=OFF"
         "-DSPDLOG_BUILD_BENCH=OFF"
         "-DSPDLOG_BUILD_TESTS=ON"
@@ -36,11 +38,6 @@ let
       '';
 
       doCheck = true;
-      preCheck =  if stdenv.isDarwin then ''
-        export DYLD_LIBRARY_PATH="$(pwd)''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
-      '' else ''
-        export LD_LIBRARY_PATH="$(pwd)''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
-      '';
 
       meta = with lib; {
         description    = "Very fast, header only, C++ logging library";

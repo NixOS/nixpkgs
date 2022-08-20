@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, pkg-config, perl
-, libjpeg, udev
+, argp-standalone, libjpeg, udev
 , withUtils ? true
 , withGUI ? true, alsa-lib, libX11, qtbase, libGLU, wrapQtAppsHook
 }:
@@ -35,7 +35,9 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config perl ] ++ lib.optional withQt wrapQtAppsHook;
 
-  buildInputs = [ udev ] ++ lib.optionals withQt [ alsa-lib libX11 qtbase libGLU ];
+  buildInputs = [ udev ]
+    ++ lib.optional (!stdenv.hostPlatform.isGnu) argp-standalone
+    ++ lib.optionals withQt [ alsa-lib libX11 qtbase libGLU ];
 
   propagatedBuildInputs = [ libjpeg ];
 

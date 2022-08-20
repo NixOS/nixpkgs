@@ -41,12 +41,17 @@ buildPythonPackage rec {
     time-machine
   ];
 
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
+  ];
+
   disabledTests = [
     # AssertionError: Expected <14:00> to be equal to <17:00>, but was not.
     "test_schedule_parser_with_a_weekly_recurring_enabled_schedule_data"
     "test_schedule_parser_with_a_daily_recurring_enabled_schedule_data"
     "test_schedule_parser_with_a_partial_daily_recurring_enabled_schedule_data"
     "test_schedule_parser_with_a_non_recurring_enabled_schedule_data"
+    "test_hexadecimale_timestamp_to_localtime_with_the_current_timestamp_should_return_a_time_string"
   ];
 
   pythonImportsCheck = [ "aioswitcher" ];

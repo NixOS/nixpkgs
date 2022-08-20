@@ -58,7 +58,7 @@ in
     enableTor = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to configure Privoxy to use Tor's faster SOCKS port,
         suitable for HTTP.
       '';
@@ -106,8 +106,8 @@ in
     userActions = mkOption {
       type = types.lines;
       default = "";
-      description = ''
-        Actions to be included in a <literal>user.action</literal> file. This
+      description = lib.mdDoc ''
+        Actions to be included in a `user.action` file. This
         will have a higher priority and can be used to override all other
         actions.
       '';
@@ -116,8 +116,8 @@ in
     userFilters = mkOption {
       type = types.lines;
       default = "";
-      description = ''
-        Filters to be included in a <literal>user.filter</literal> file. This
+      description = lib.mdDoc ''
+        Filters to be included in a `user.filter` file. This
         will have a higher priority and can be used to override all other
         filters definitions.
       '';
@@ -130,13 +130,13 @@ in
         options.listen-address = mkOption {
           type = types.str;
           default = "127.0.0.1:8118";
-          description = "Pair of address:port the proxy server is listening to.";
+          description = lib.mdDoc "Pair of address:port the proxy server is listening to.";
         };
 
         options.enable-edit-actions = mkOption {
           type = types.bool;
           default = false;
-          description = "Whether the web-based actions file editor may be used.";
+          description = lib.mdDoc "Whether the web-based actions file editor may be used.";
         };
 
         options.actionsfile = mkOption {
@@ -146,7 +146,7 @@ in
           apply = x: x ++ optional (cfg.userActions != "")
             (toString (pkgs.writeText "user.actions" cfg.userActions));
           default = [ "match-all.action" "default.action" ];
-          description = ''
+          description = lib.mdDoc ''
             List of paths to Privoxy action files. These paths may either be
             absolute or relative to the privoxy configuration directory.
           '';
@@ -157,7 +157,7 @@ in
           default = [ "default.filter" ];
           apply = x: x ++ optional (cfg.userFilters != "")
             (toString (pkgs.writeText "user.filter" cfg.userFilters));
-          description = ''
+          description = lib.mdDoc ''
             List of paths to Privoxy filter files. These paths may either be
             absolute or relative to the privoxy configuration directory.
           '';

@@ -3,20 +3,20 @@
 let
   inherit (stdenv.hostPlatform) system;
   target = {
-    "aarch64-darwin" = "arm";
+    "aarch64-darwin" = "arm64";
     "x86_64-darwin" = "x86";
   }.${system} or (throw "Unsupported system: ${system}");
 in
 
 stdenv.mkDerivation rec {
   pname = "sketchybar";
-  version = "2.5.0";
+  version = "2.8.2";
 
   src = fetchFromGitHub {
     owner = "FelixKratz";
     repo = "SketchyBar";
     rev = "v${version}";
-    sha256 = "sha256-ucTyJhRhSVyE4E/x6PtFz7nHRUg6cKKVOrRpPs39iO8=";
+    sha256 = "sha256-GmM+0h6xxUzW2kpTDZWAiqJAXoQgdsJRlNbvsuxKmZ8=";
   };
 
   buildInputs = [ Carbon Cocoa SkyLight ]
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp ./bin/sketchybar_${target} $out/bin/sketchybar
+    cp ./bin/sketchybar $out/bin/sketchybar
   '';
 
   meta = with lib; {

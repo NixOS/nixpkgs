@@ -31,6 +31,9 @@ let
   # mounting `/`, like `/` on a loopback).
   fileSystems = filter utils.fsNeededForBoot config.system.build.fileSystems;
 
+  # Determine whether zfs-mount(8) is needed.
+  zfsRequiresMountHelper = any (fs: lib.elem "zfsutil" fs.options) fileSystems;
+
   # A utility for enumerating the shared-library dependencies of a program
   findLibs = pkgs.buildPackages.writeShellScriptBin "find-libs" ''
     set -euo pipefail
@@ -106,6 +109,22 @@ let
       for BIN in ${pkgs.busybox}/{s,}bin/*; do
         copy_bin_and_libs $BIN
       done
+
+      ${optionalString zfsRequiresMountHelper ''
+        # Filesystems using the "zfsutil" option are mounted regardless of the
+        # mount.zfs(8) helper, but it is required to ensure that ZFS properties
+        # are used as mount options.
+        #
+        # BusyBox does not use the ZFS helper in the first place.
+        # util-linux searches /sbin/ as last path for helpers (stage-1-init.sh
+        # must symlink it to the store PATH).
+        # Without helper program, both `mount`s silently fails back to internal
+        # code, using default options and effectively ignore security relevant
+        # ZFS properties such as `setuid=off` and `exec=off` (unless manually
+        # duplicated in `fileSystems.*.options`, defeating "zfsutil"'s purpose).
+        copy_bin_and_libs ${pkgs.util-linux}/bin/mount
+        copy_bin_and_libs ${pkgs.zfs}/bin/mount.zfs
+      ''}
 
       # Copy some util-linux stuff.
       copy_bin_and_libs ${pkgs.util-linux}/sbin/blkid
@@ -200,28 +219,33 @@ let
 
       # Strip binaries further than normal.
       chmod -R u+w $out
-      stripDirs "$STRIP" "lib bin" "-s"
+      stripDirs "$STRIP" "$RANLIB" "lib bin" "-s"
 
       # Run patchelf to make the programs refer to the copied libraries.
       find $out/bin $out/lib -type f | while read i; do
-        if ! test -L $i; then
-          nuke-refs -e $out $i
-        fi
+        nuke-refs -e $out $i
       done
 
       find $out/bin -type f | while read i; do
-        if ! test -L $i; then
-          echo "patching $i..."
-          patchelf --set-interpreter $out/lib/ld*.so.? --set-rpath $out/lib $i || true
-        fi
+        echo "patching $i..."
+        patchelf --set-interpreter $out/lib/ld*.so.? --set-rpath $out/lib $i || true
+      done
+
+      find $out/lib -type f \! -name 'ld*.so.?' | while read i; do
+        echo "patching $i..."
+        patchelf --set-rpath $out/lib $i
       done
 
       if [ -z "${toString (pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform)}" ]; then
       # Make sure that the patchelf'ed binaries still work.
       echo "testing patched programs..."
       $out/bin/ash -c 'echo hello world' | grep "hello world"
-      export LD_LIBRARY_PATH=$out/lib
-      $out/bin/mount --help 2>&1 | grep -q "BusyBox"
+      ${if zfsRequiresMountHelper then ''
+        $out/bin/mount -V 1>&1 | grep -q "mount from util-linux"
+        $out/bin/mount.zfs -h 2>&1 | grep -q "Usage: mount.zfs"
+      '' else ''
+        $out/bin/mount --help 2>&1 | grep -q "BusyBox"
+      ''}
       $out/bin/blkid -V 2>&1 | grep -q 'libblkid'
       $out/bin/udevadm --version
       $out/bin/dmsetup --version 2>&1 | tee -a log | grep -q "version:"
@@ -259,8 +283,6 @@ let
       preferLocalBuild = true;
     } ''
       mkdir -p $out
-
-      echo 'ENV{LD_LIBRARY_PATH}="${extraUtils}/lib"' > $out/00-env.rules
 
       cp -v ${udev}/lib/udev/rules.d/60-cdrom_id.rules $out/
       cp -v ${udev}/lib/udev/rules.d/60-persistent-storage.rules $out/
@@ -458,7 +480,7 @@ in
         if you want to resume from file. If left empty, the swap partitions are used.
         Specify here the device where the file resides.
         You should also use <varname>boot.kernelParams</varname> to specify
-        <literal><replaceable>resume_offset</replaceable></literal>.
+        <literal>«resume_offset»</literal>.
       '';
     };
 
@@ -466,7 +488,7 @@ in
       type = types.bool;
       default = !config.boot.isContainer;
       defaultText = literalExpression "!config.boot.isContainer";
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable the NixOS initial RAM disk (initrd). This may be
         needed to perform some initialisation tasks (like mounting
         network/encrypted file systems) before continuing the boot process.
@@ -480,11 +502,11 @@ in
           options = {
             source = mkOption {
               type = types.package;
-              description = "The object to make available inside the initrd.";
+              description = lib.mdDoc "The object to make available inside the initrd.";
             };
           };
         });
-      description = ''
+      description = lib.mdDoc ''
         Extra files to link and copy in to the initrd.
       '';
     };
@@ -492,7 +514,7 @@ in
     boot.initrd.prepend = mkOption {
       default = [ ];
       type = types.listOf types.str;
-      description = ''
+      description = lib.mdDoc ''
         Other initrd files to prepend to the final initrd we are building.
       '';
     };
@@ -500,15 +522,15 @@ in
     boot.initrd.checkJournalingFS = mkOption {
       default = true;
       type = types.bool;
-      description = ''
-        Whether to run <command>fsck</command> on journaling filesystems such as ext3.
+      description = lib.mdDoc ''
+        Whether to run {command}`fsck` on journaling filesystems such as ext3.
       '';
     };
 
     boot.initrd.preLVMCommands = mkOption {
       default = "";
       type = types.lines;
-      description = ''
+      description = lib.mdDoc ''
         Shell commands to be executed immediately before LVM discovery.
       '';
     };
@@ -516,7 +538,7 @@ in
     boot.initrd.preDeviceCommands = mkOption {
       default = "";
       type = types.lines;
-      description = ''
+      description = lib.mdDoc ''
         Shell commands to be executed before udev is started to create
         device nodes.
       '';
@@ -525,17 +547,17 @@ in
     boot.initrd.postDeviceCommands = mkOption {
       default = "";
       type = types.lines;
-      description = ''
+      description = lib.mdDoc ''
         Shell commands to be executed immediately after stage 1 of the
         boot has loaded kernel modules and created device nodes in
-        <filename>/dev</filename>.
+        {file}`/dev`.
       '';
     };
 
     boot.initrd.postMountCommands = mkOption {
       default = "";
       type = types.lines;
-      description = ''
+      description = lib.mdDoc ''
         Shell commands to be executed immediately after the stage 1
         filesystems have been mounted.
       '';
@@ -544,7 +566,7 @@ in
     boot.initrd.preFailCommands = mkOption {
       default = "";
       type = types.lines;
-      description = ''
+      description = lib.mdDoc ''
         Shell commands to be executed before the failure prompt is shown.
       '';
     };
@@ -608,14 +630,14 @@ in
     boot.initrd.compressorArgs = mkOption {
       default = null;
       type = types.nullOr (types.listOf types.str);
-      description = "Arguments to pass to the compressor for the initrd image, or null to use the compressor's defaults.";
+      description = lib.mdDoc "Arguments to pass to the compressor for the initrd image, or null to use the compressor's defaults.";
     };
 
     boot.initrd.secrets = mkOption
       { default = {};
         type = types.attrsOf (types.nullOr types.path);
         description =
-          ''
+          lib.mdDoc ''
             Secrets to append to the initrd. The attribute name is the
             path the secret should have inside the initrd, the value
             is the path it should be copied from (or null for the same
@@ -633,7 +655,7 @@ in
       default = [ ];
       example = [ "btrfs" ];
       type = types.listOf types.str;
-      description = "Names of supported filesystem types in the initial ramdisk.";
+      description = lib.mdDoc "Names of supported filesystem types in the initial ramdisk.";
     };
 
     boot.initrd.verbose = mkOption {
@@ -670,12 +692,12 @@ in
         options.neededForBoot = mkOption {
           default = false;
           type = types.bool;
-          description = ''
+          description = lib.mdDoc ''
             If set, this file system will be mounted in the initial ramdisk.
             Note that the file system will always be mounted in the initial
             ramdisk if its mount point is one of the following:
             ${concatStringsSep ", " (
-              forEach utils.pathsNeededForBoot (i: "<filename>${i}</filename>")
+              forEach utils.pathsNeededForBoot (i: "{file}`${i}`")
             )}.
           '';
         };

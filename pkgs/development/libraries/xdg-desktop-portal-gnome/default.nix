@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-gnome";
-  version = "42.0.1";
+  version = "42.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "3+i1JFDzKDj5+eiY6Vqo36JwXOEtQ4MFVXwSi5zg4uY=";
+    sha256 = "TtEFpmfkYyVGcQPcc0bSAj+uwdXsFTvRcxbak49TrOA=";
   };
 
   nativeBuildInputs = [
@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Backend implementation for xdg-desktop-portal for the GNOME desktop environment";
+    homepage = "https://gitlab.gnome.org/GNOME/xdg-desktop-portal-gnome";
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
     license = licenses.lgpl21Plus;

@@ -1,29 +1,50 @@
 { lib, stdenv, fetchFromGitHub
-, SDL2, cmake, curl, duktape, fontconfig, freetype, icu, jansson, libGLU
-, libiconv, libpng, libpthreadstubs, libzip, nlohmann_json, openssl, pkg-config
-, speexdsp, zlib
+
+, SDL2
+, cmake
+, curl
+, discord-rpc
+, duktape
+, flac
+, fontconfig
+, freetype
+, gbenchmark
+, icu
+, jansson
+, libGLU
+, libiconv
+, libogg
+, libpng
+, libpthreadstubs
+, libvorbis
+, libzip
+, nlohmann_json
+, openssl
+, pkg-config
+, speexdsp
+, zlib
 }:
 
 let
-  openrct2-version = "0.4.0";
+  openrct2-version = "0.4.1";
 
   # Those versions MUST match the pinned versions within the CMakeLists.txt
   # file. The REPLAYS repository from the CMakeLists.txt is not necessary.
-  objects-version = "1.2.7";
+  objects-version = "1.3.2";
   title-sequences-version = "0.4.0";
 
   openrct2-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "OpenRCT2";
     rev = "v${openrct2-version}";
-    sha256 = "sha256-4MDOLOPsKzk1vb1o/G90/NTyYJWBSrGRX6ZJETbBIaI=";
+    sha256 = "sha256-fMs0zrMzv9jXreZE4QyYIdvWUU/FUFVPuo4EzAF/2rU=";
   };
 
   objects-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "objects";
     rev = "v${objects-version}";
-    sha256 = "sha256-R4+rEdGdvYwFrkm/S3+zXmU+UDam51dI/pWKmFXNrbE=";
+    sha256 = "sha256-BG0IRiNb2l6/3P7tvuUqMoYNh1zkOS0lCFDDh7m9Q7Y=";
   };
 
   title-sequences-src = fetchFromGitHub {
@@ -47,15 +68,20 @@ stdenv.mkDerivation {
   buildInputs = [
     SDL2
     curl
+    discord-rpc
     duktape
+    flac
     fontconfig
     freetype
+    gbenchmark
     icu
     jansson
     libGLU
     libiconv
+    libogg
     libpng
     libpthreadstubs
+    libvorbis
     libzip
     nlohmann_json
     openssl

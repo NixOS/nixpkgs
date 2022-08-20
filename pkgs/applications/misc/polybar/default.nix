@@ -44,13 +44,13 @@
 
 stdenv.mkDerivation rec {
   pname = "polybar";
-  version = "3.6.2";
+  version = "3.6.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    hash = "sha256-mLAcA8afGLNhRRU/x/TngCMcSRXdEM5wKWoYZhezJqU=";
+    hash = "sha256-FKkPSAEMzptnjJq3xTk+fpD8XjASQ3smX5imstDyLNE=";
     fetchSubmodules = true;
   };
 
@@ -120,7 +120,7 @@ stdenv.mkDerivation rec {
       having a black belt in shell scripting.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ afldcr Br1ght0ne fortuneteller2k ];
+    maintainers = with maintainers; [ afldcr Br1ght0ne fortuneteller2k ckie ];
     platforms = platforms.linux;
   };
 }

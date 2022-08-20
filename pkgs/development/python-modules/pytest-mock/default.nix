@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchpatch
+, pythonOlder
 , fetchPypi
 , pytest
 , pytest-asyncio
@@ -10,24 +10,20 @@
 
 buildPythonPackage rec {
   pname = "pytest-mock";
-  version = "3.7.0";
+  version = "3.8.2";
+
+  disabled = pythonOlder "3.7";
+
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-URK9ksyfGG7pbhqS78hJaepJSTnDrq05xQ9CHEzGlTQ=";
+    hash = "sha256-d/A/RVQ5JVhwApXgWu0LEJaiDUpgpPPdzeWLDDHI/KI=";
   };
-
-  patches = [
-    (fetchpatch {
-      # pytest7 compatbilitya
-      url = "https://github.com/pytest-dev/pytest-mock/commit/0577f1ad051fb8d0da94ea22dcb02346d74064b2.patch";
-      hash = "sha256-eim4v7U8Mjigr462bXI0pKH/M0ANBzSRc0lT4RpbZ0w=";
-    })
-  ];
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  buildInputs = [
     pytest
   ];
 
@@ -36,18 +32,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # output of pytest has changed
-    "test_used_with_"
-    "test_plain_stopall"
-  ];
-
   pythonImportsCheck = [ "pytest_mock" ];
 
   meta = with lib; {
-    description = "Thin-wrapper around the mock package for easier use with pytest";
+    description = "Thin wrapper around the mock package for easier use with pytest";
     homepage = "https://github.com/pytest-dev/pytest-mock";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/pytest-dev/pytest-mock/blob/v${version}/CHANGELOG.rst";
+    license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };
 }

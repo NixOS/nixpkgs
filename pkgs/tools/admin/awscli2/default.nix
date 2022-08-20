@@ -8,19 +8,11 @@ let
   py = python3.override {
     packageOverrides = self: super: {
       awscrt = super.awscrt.overridePythonAttrs (oldAttrs: rec {
-        version = "0.13.5";
+        version = "0.13.11";
         src = self.fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
-          sha256 = "sha256-dUNljMKsbl6eByhEYivWgRJczTBw3N1RVl8r3e898mg=";
-        };
-      });
-      jmespath = super.jmespath.overridePythonAttrs (oldAttrs: rec {
-        version = "0.10.0";
-        src = self.fetchPypi {
-          inherit (oldAttrs) pname;
-          inherit version;
-          sha256 = "sha256-uF0FZ7hmYUmpMXJxLmiSBzQzPAzn6Jt4s+mH9x5e1Pk=";
+          sha256 = "sha256-Yx3I3RD57Nx6Cvm4moc5zmMbdsHeYiMghDfbQUor38E=";
         };
       });
     };
@@ -29,13 +21,13 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.5.6"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.7.20"; # N.B: if you change this, check if overrides are still up-to-date
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    sha256 = "sha256-NANdm2RK4U5sXPuGbC8KUGXsbYl/WwAoUep4JxJA5lI=";
+    sha256 = "sha256-o6rs9OMP3154WApboSqUfVn3TRxap0htHczyjAMQe2I=";
   };
 
   propagatedBuildInputs = [
@@ -67,9 +59,11 @@ with py.pkgs; buildPythonApplication rec {
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "colorama>=0.2.5,<0.4.4" "colorama" \
+      --replace "cryptography>=3.3.2,<37.0.0" "cryptography" \
       --replace "docutils>=0.10,<0.16" "docutils" \
       --replace "ruamel.yaml>=0.15.0,<0.16.0" "ruamel.yaml" \
       --replace "wcwidth<0.2.0" "wcwidth" \
+      --replace "prompt-toolkit>=3.0.24,<3.0.29" "prompt-toolkit~=3.0" \
       --replace "distro>=1.5.0,<1.6.0" "distro"
   '';
 
@@ -100,6 +94,6 @@ with py.pkgs; buildPythonApplication rec {
     changelog = "https://github.com/aws/aws-cli/blob/${version}/CHANGELOG.rst";
     description = "Unified tool to manage your AWS services";
     license = licenses.asl20;
-    maintainers = with maintainers; [ bhipple davegallant ];
+    maintainers = with maintainers; [ bhipple davegallant bryanasdev000 devusb ];
   };
 }

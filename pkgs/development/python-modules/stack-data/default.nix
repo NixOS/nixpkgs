@@ -49,8 +49,10 @@ buildPythonPackage rec {
 
   disabledTests = [
     # AssertionError
-    "test_variables"
     "test_example"
+    "test_executing_style_defs"
+    "test_pygments_example"
+    "test_variables"
   ];
 
   pythonImportsCheck = [ "stack_data" ];

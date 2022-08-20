@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "svd2rust";
-  version = "0.21.0";
+  version = "0.25.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "0mxzbbxrg1jysxpjqcvgwwmh8qf0lyf64fl1gxxp0whph0x279qj";
+    sha256 = "sha256-k+/FxVCUPQuVXZFk+FE3cAtAf/YCgk/fGVtRKIeefJ8=";
   };
 
-  cargoSha256 = "0kvya6swx1nsxxlhn2w8x4dhl4j3v56jxqr2h259cx6lzv3xjhin";
+  cargoSha256 = "sha256-RxpBhA5lf+mcr4VMtsrdzlxN8oDttNcWuwxQAAYN8U8=";
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 
@@ -18,6 +18,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/rust-embedded/svd2rust";
     changelog = "https://github.com/rust-embedded/svd2rust/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ newam ];
   };
 }

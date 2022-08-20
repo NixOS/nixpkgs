@@ -32,6 +32,7 @@
   , libXext
   , libXxf86vm
   , libXrandr
+  , libXpresent
 
 , cddaSupport ? false
   , libcdio
@@ -160,7 +161,7 @@ in stdenv.mkDerivation rec {
     ++ lib.optionals vdpauSupport       [ libvdpau ]
     ++ lib.optionals vulkanSupport      [ libplacebo shaderc vulkan-headers vulkan-loader ]
     ++ lib.optionals waylandSupport     [ wayland wayland-protocols libxkbcommon ]
-    ++ lib.optionals x11Support         [ libX11 libXext libGLU libGL libXxf86vm libXrandr ]
+    ++ lib.optionals x11Support         [ libX11 libXext libGLU libGL libXxf86vm libXrandr libXpresent ]
     ++ lib.optionals xineramaSupport    [ libXinerama ]
     ++ lib.optionals xvSupport          [ libXv ]
     ++ lib.optionals zimgSupport        [ zimg ]

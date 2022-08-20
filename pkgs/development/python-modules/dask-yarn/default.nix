@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
@@ -34,6 +35,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "dask_yarn" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Deploy dask on YARN clusters";
     longDescription = ''Dask-Yarn deploys Dask on YARN clusters,
       such as are found in traditional Hadoop installations.

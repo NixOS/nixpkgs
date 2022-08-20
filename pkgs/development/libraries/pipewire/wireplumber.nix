@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch
 , nix-update-script
 , # base build deps
   meson
@@ -26,7 +27,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "wireplumber";
-  version = "0.4.9";
+  version = "0.4.11";
 
   outputs = [ "out" "dev" ] ++ lib.optional enableDocs "doc";
 
@@ -35,8 +36,17 @@ stdenv.mkDerivation rec {
     owner = "pipewire";
     repo = "wireplumber";
     rev = version;
-    sha256 = "sha256-U92ozuEUFJA416qKnalVowJuBjLRdORHfhmznGf1IFU=";
+    sha256 = "sha256-3NrzOsL0MekxMMXCFubEkazzSWFNsjUsX8n2ECcr7yY=";
   };
+
+  patches = [
+    # fix sound not working in VMs
+    # FIXME: drop in next release
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/pipewire/wireplumber/-/commit/c16e637c329bc9dda8544b18f5bd47a8d63ee253.patch";
+      sha256 = "sha256-xhhAlhOovwIjwAxXxvHRTG4GzpIPYvKQE2F4ZP1Udq8=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
@@ -49,7 +59,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (enableDocs || enableGI) [
     doxygen
     (python3.withPackages (ps: with ps;
-    lib.optionals enableDocs [ sphinx sphinx_rtd_theme breathe ] ++
+    lib.optionals enableDocs [ sphinx sphinx-rtd-theme breathe ] ++
       lib.optionals enableGI [ lxml ]
     ))
   ];

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "bitlist";
-  version = "0.7.0";
-  format = "setuptools";
+  version = "1.0.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-p3Gws48u1/AzltbtPyWvSX4O0u4MgSXiVq4GstpPCCg=";
+    hash = "sha256-rpXQKkV2RUuYza+gfpGEH3kFJ+hjuNGKV2i46eXQUUI=";
   };
 
   propagatedBuildInputs = [
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace " --cov=bitlist --cov-report term-missing" ""
+    substituteInPlace pyproject.toml \
+      --replace "--doctest-modules --ignore=docs --cov=bitlist --cov-report term-missing" ""
   '';
 
   meta = with lib; {

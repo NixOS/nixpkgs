@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "spyder-kernels";
-  version = "2.3.0";
+  version = "2.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-pdU20Oil53TX1hbBAqj6LWqkX9MwoLeZuY7vFYNW02w=";
+    sha256 = "sha256-urI7Ak25NZzsUYLiR+cIdfcd3ECoJx/RNT3gj0QPJtw=";
   };
 
   propagatedBuildInputs = [
@@ -17,6 +17,10 @@ buildPythonPackage rec {
     jupyter-client
     pyzmq
   ];
+
+  postPatch = ''
+    substituteInPlace setup.py --replace "ipython>=7.31.1,<8" "ipython"
+  '';
 
   # No tests
   doCheck = false;

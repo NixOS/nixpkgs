@@ -64,14 +64,14 @@ in
         type = types.listOf types.package;
         default = [];
         example = literalExpression "[ pkgs.firefox pkgs.thunderbird ]";
-        description = ''
+        description = lib.mdDoc ''
           The set of packages that appear in
           /run/current-system/sw.  These packages are
           automatically available to all users, and are
           automatically updated every time you rebuild the system
           configuration.  (The latter is the main difference with
           installing them in the default profile,
-          <filename>/nix/var/nix/profiles/default</filename>.
+          {file}`/nix/var/nix/profiles/default`.
         '';
       };
 
@@ -84,19 +84,19 @@ in
           <programlisting>${defaultPackagesText}</programlisting>
         '';
         example = [];
-        description = ''
+        description = lib.mdDoc ''
           Set of default packages that aren't strictly necessary
           for a running system, entries can be removed for a more
           minimal NixOS installation.
 
-          Note: If <package>pkgs.nano</package> is removed from this list,
+          Note: If `pkgs.nano` is removed from this list,
           make sure another editor is installed and the
-          <literal>EDITOR</literal> environment variable is set to it.
+          `EDITOR` environment variable is set to it.
           Environment variables can be set using
-          <option>environment.variables</option>.
+          {option}`environment.variables`.
 
           Like with systemPackages, packages are installed to
-          <filename>/run/current-system/sw</filename>. They are
+          {file}`/run/current-system/sw`. They are
           automatically available to all users, and are
           automatically updated every time you rebuild the system
           configuration.
@@ -109,20 +109,20 @@ in
         # to work.
         default = [];
         example = ["/"];
-        description = "List of directories to be symlinked in <filename>/run/current-system/sw</filename>.";
+        description = lib.mdDoc "List of directories to be symlinked in {file}`/run/current-system/sw`.";
       };
 
       extraOutputsToInstall = mkOption {
         type = types.listOf types.str;
         default = [ ];
         example = [ "doc" "info" "devdoc" ];
-        description = "List of additional package outputs to be symlinked into <filename>/run/current-system/sw</filename>.";
+        description = lib.mdDoc "List of additional package outputs to be symlinked into {file}`/run/current-system/sw`.";
       };
 
       extraSetup = mkOption {
         type = types.lines;
         default = "";
-        description = "Shell fragments to be run after the system environment has been created. This should only be used for things that need to modify the internals of the environment, e.g. generating MIME caches. The environment being built can be accessed at $out.";
+        description = lib.mdDoc "Shell fragments to be run after the system environment has been created. This should only be used for things that need to modify the internals of the environment, e.g. generating MIME caches. The environment being built can be accessed at $out.";
       };
 
     };

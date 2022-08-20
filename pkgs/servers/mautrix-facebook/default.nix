@@ -1,5 +1,6 @@
 { enableSystemd ? stdenv.isLinux
 , fetchFromGitHub
+, fetchpatch
 , lib
 , python3
 , stdenv
@@ -7,13 +8,13 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "mautrix-facebook";
-  version = "0.3.3";
+  version = "unstable-2022-05-06";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "facebook";
-    rev = "v${version}";
-    hash = "sha256-lIUGuc6ZL+GW7jw5OhPE3/mU5pg8Y09dd+p5kiy14io=";
+    rev = "5e2c4e7f5a38e3c5d984d690c0ebee9b6bb4768c";
+    hash = "sha256-ukFtVRrmaJVVwgp5siwEwbfq6Yq5rmu3XJA5H2n/eJU=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -26,7 +27,7 @@ python3.pkgs.buildPythonPackage rec {
     prometheus-client
     pycryptodome
     python-olm
-    python_magic
+    python-magic
     ruamel-yaml
     unpaddedbase64
     yarl

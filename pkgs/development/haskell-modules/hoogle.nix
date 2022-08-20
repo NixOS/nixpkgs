@@ -49,9 +49,12 @@ buildPackages.stdenv.mkDerivation {
   # compiling databases takes less time than copying the results
   # between machines.
   preferLocalBuild = true;
-  # Plus, you need a complete database for each possible combination
-  # of dependencies, caching them does not make sense.
-  allowSubstitutes = false;
+
+  # we still allow substitutes because a database is relatively small and if it
+  # is already built downloading is probably faster.  The substitution will only
+  # trigger for users who have already cached the database on a substituter and
+  # thus probably intend to substitute it.
+  allowSubstitutes = true;
 
   inherit docPackages;
 

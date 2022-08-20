@@ -6,6 +6,7 @@
 , eventlet
 , greenlet
 , iana-etc
+, installShellFiles
 , libredirect
 , lxml
 , mock
@@ -35,7 +36,10 @@ buildPythonPackage rec {
     rm test/functional/s3api/{__init__.py,s3_test_client.py}
   '';
 
-  nativeBuildInputs = [ pbr ];
+  nativeBuildInputs = [
+    installShellFiles
+    pbr
+  ];
 
   propagatedBuildInputs = [
     cryptography
@@ -50,6 +54,10 @@ buildPythonPackage rec {
     six
     xattr
   ];
+
+  postInstall = ''
+    installManPage doc/manpages/*
+  '';
 
   checkInputs = [
     boto3

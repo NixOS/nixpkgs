@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.flashrom.org";
     description = "Utility for reading, writing, erasing and verifying flash ROM chips";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ funfunctor fpletz felixsinger ];
+    maintainers = with maintainers; [ fpletz felixsinger ];
     platforms = platforms.all;
     broken = stdenv.isDarwin; # requires DirectHW
   };

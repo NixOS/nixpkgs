@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "facetimehd-${version}-${kernel.version}";
-  version = "unstable-2020-04-16";
+  version = "0.5.18";
 
   # Note: When updating this revision:
   # 1. Also update pkgs/os-specific/linux/firmware/facetimehd-firmware/
@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
   #       still works.
   src = fetchFromGitHub {
     owner = "patjak";
-    repo = "bcwc_pcie";
-    rev = "82626d4892eeb9eb704538bf0dc49a00725ff451";
-    sha256 = "118z6vjvhhcwvs4n3sgwwdagys9w718b8nkh6l9ic93732vv7cqx";
+    repo = "facetimehd";
+    rev = version;
+    sha256 = "sha256-UO8t2zrfdJlu4uzhhyWOuHIjJNVezIq3nUPGZeW/KJU=";
   };
 
   preConfigure = ''

@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "RabbitMQ Java client library which allows Java code to interface to AMQP servers";
     homepage = "https://www.rabbitmq.com/java-client.html";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # source bundles dependencies as jars
+    ];
     license = with licenses; [ mpl11 gpl2 ];
     platforms = platforms.linux;
   };

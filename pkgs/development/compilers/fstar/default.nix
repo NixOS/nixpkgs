@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     fileutils
     menhirLib
     pprint
-    sedlex_2
+    sedlex
     ppxlib
     ppx_deriving
     ppx_deriving_yojson
@@ -64,9 +64,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "ML-like functional programming language aimed at program verification";
     homepage = "https://www.fstar-lang.org";
-    license = licenses.asl20;
     changelog = "https://github.com/FStarLang/FStar/raw/v${version}/CHANGES.md";
-    platforms = with platforms; darwin ++ linux;
+    license = licenses.asl20;
     maintainers = with maintainers; [ gebner pnmadelaine ];
+    mainProgram = "fstar.exe";
+    platforms = with platforms; darwin ++ linux;
   };
 }

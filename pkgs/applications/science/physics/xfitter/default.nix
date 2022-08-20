@@ -31,10 +31,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ZHIQ5hOY+k0/wmpE0o4Po+RZ4MkVMk+bK1Rc6eqwwH0=";
   };
 
-  preConfigure = ''
-    substituteInPlace CMakeLists.txt \
-      --replace "-fallow-argument-mismatch" ""
-  '';
+  patches = [
+    # Avoid need for -fallow-argument-mismatch
+    ./0001-src-GetChisquare.f-use-correct-types-in-calls-to-DSY.patch
+  ];
 
   nativeBuildInputs = [ cmake gfortran pkg-config ];
   buildInputs =

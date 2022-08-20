@@ -15,14 +15,14 @@ let
 in
 with python.pkgs; buildPythonApplication rec {
   pname = "esphome";
-  version = "2022.4.0";
+  version = "2022.8.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "sha256-/IMiUMtWFouAjOlyq+BXvqQ1IddBXvua7y0i4J1cktM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-lukK++CRpl7ucX9RuYa4qhHBbBY4oc/ijqGopeIaXPY=";
   };
 
   postPatch = ''
@@ -100,6 +100,6 @@ with python.pkgs; buildPythonApplication rec {
       mit # The C++/runtime codebase of the ESPHome project (file extensions .c, .cpp, .h, .hpp, .tcc, .ino)
       gpl3Only # The python codebase and all other parts of this codebase
     ];
-    maintainers = with maintainers; [ globin elseym hexa ];
+    maintainers = with maintainers; [ globin hexa ];
   };
 }

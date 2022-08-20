@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "clvm_tools";
-  version = "0.4.3";
+  version = "0.4.4";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Chia-Network";
     repo = "clvm_tools";
     rev = version;
-    sha256 = "sha256-bWz3YCrakob/kROq+LOA+yD1wtIbInVrmDqtg4/cV4g=";
+    sha256 = "sha256-Fv7NTUEjbEDALyc+WLDQ7yJOdODZCwLobN+vUvaBWMY=";
   };
 
   nativeBuildInputs = [

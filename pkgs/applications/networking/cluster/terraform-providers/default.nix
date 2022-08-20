@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
 , callPackage
@@ -16,13 +17,14 @@ let
      , rev
      , version
      , sha256
-     , vendorSha256 ? throw "vendorSha256 missing: please use `buildGoModule`" /* added 2022/01 */
+     , vendorSha256
      , deleteVendor ? false
      , proxyVendor ? false
+     , mkProviderGoModule ? buildGoModule
      , # Looks like "registry.terraform.io/vancluever/acme"
        provider-source-address
      }@attrs:
-      buildGoModule {
+      mkProviderGoModule {
         pname = repo;
         inherit vendorSha256 version deleteVendor proxyVendor;
         subPackages = [ "." ];
@@ -56,54 +58,23 @@ let
   # These are the providers that don't fall in line with the default model
   special-providers =
     {
-      # Packages that don't fit the default model
-
-      # mkisofs needed to create ISOs holding cloud-init data,
-      # and wrapped to terraform via deecb4c1aab780047d79978c636eeb879dd68630
+      # mkisofs needed to create ISOs holding cloud-init data and wrapped to terraform via deecb4c1aab780047d79978c636eeb879dd68630
       libvirt = automated-providers.libvirt.overrideAttrs (_: { propagatedBuildInputs = [ cdrtools ]; });
     };
 
   # Put all the providers we not longer support in this list.
   removed-providers =
     let
-      archived = date: throw "the provider has been archived by upstream on ${date}";
-      removed = date: throw "removed from nixpkgs on ${date}";
+      archived = name: date: throw "the ${name} terraform provider has been archived by upstream on ${date}";
+      removed = name: date: throw "the ${name} terraform provider removed from nixpkgs on ${date}";
     in
     lib.optionalAttrs config.allowAliases {
-      arukas = archived "2022/01";
-      chef = archived "2022/01";
-      cherryservers = archived "2022/01";
-      clc = archived "2022/01";
-      cloudstack = removed "2022/01";
-      cobbler = archived "2022/01";
-      cohesity = archived "2022/01";
-      dyn = archived "2022/01";
-      genymotion = archived "2022/01";
-      hedvig = archived "2022/01";
-      ignition = archived "2022/01";
-      incapsula = archived "2022/01";
-      influxdb = archived "2022/01";
-      jdcloud = archived "2022/01";
-      kubernetes-alpha = throw "This has been merged as beta into the kubernetes provider. See https://www.hashicorp.com/blog/beta-support-for-crds-in-the-terraform-provider-for-kubernetes for details";
-      librato = archived "2022/01";
-      logentries = archived "2022/01";
-      metalcloud = archived "2022/01";
-      mysql = archived "2022/01";
-      nixos = archived "2022/01";
-      oneandone = archived "2022/01";
-      packet = archived "2022/01";
-      profitbricks = archived "2022/01";
-      pureport = archived "2022/01";
-      rancher = archived "2022/01";
-      rightscale = archived "2022/01";
-      runscope = archived "2022/01";
-      segment = removed "2022/01";
-      softlayer = archived "2022/01";
-      telefonicaopencloud = archived "2022/01";
-      teleport = removed "2022/01";
-      terraform = archived "2022/01";
-      ultradns = archived "2022/01";
-      vthunder = throw "provider was renamed to thunder on 2022/01";
+      b2 = removed "b2" "2022/06";
+      dome9 = removed "dome9" "2022/08";
+      ncloud = removed "ncloud" "2022/08";
+      opc = archived "opc" "2022/05";
+      oraclepaas = archived "oraclepaas" "2022/05";
+      template = archived "template" "2022/05";
     };
 
   # excluding aliases, used by terraform-full

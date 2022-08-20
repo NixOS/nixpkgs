@@ -8,18 +8,21 @@
 , decorator
 , pythonOlder
 , six
+, hatchling
 }:
 
 buildPythonPackage rec {
   pname = "traitlets";
-  version = "5.1.1";
+  version = "5.3.0";
+  format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-BZ9FbFp8HIK5jC6MeZ85ybgSj20NRpQe4RjarOnrcMc=";
+    sha256 = "sha256-C7nx+fAXqo7Bh9ixsqemYmoqHYdxFrq6UqEpv6Ek+OI=";
   };
 
+  nativeBuildInputs = [ hatchling ];
   checkInputs = [ glibcLocales pytest mock ];
   propagatedBuildInputs = [ ipython_genutils decorator six ];
 

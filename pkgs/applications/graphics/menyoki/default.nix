@@ -4,6 +4,8 @@
 , pkg-config
 , rustPlatform
 , stdenv
+, withSixel ? false
+, libsixel
 , libX11
 , libXrandr
 , AppKit
@@ -12,24 +14,31 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "menyoki";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-7dqV18+Q0M1PrSXfMro5bUqSeA72Stj5JfP4MsTlrjM=";
+    sha256 = "sha256-z0OpRnjVfU6vcyZsxkdD2x3l+a9GkDHZcFveGunDYww=";
   };
 
-  cargoSha256 = "sha256-c3VpHr/X2tKh7mY4dOQac0lS7oem0GGqjzv7feNwc24=";
+  cargoSha256 = "sha256-uSoyfgPlsHeUwnTHE49ErrlB65wcfl5dxn/YrW5EKZw=";
 
   nativeBuildInputs = [ installShellFiles ]
     ++ lib.optional stdenv.isLinux pkg-config;
 
-  buildInputs = lib.optionals stdenv.isLinux [ libX11 libXrandr ]
+  buildInputs = lib.optional withSixel libsixel
+    ++ lib.optionals stdenv.isLinux [ libX11 libXrandr ]
     ++ lib.optional stdenv.isDarwin AppKit;
 
   buildNoDefaultFeatures = !withSki;
+  buildFeatures = lib.optional withSixel "sixel";
+
+  checkFlags = [
+    # sometimes fails on lower end machines
+    "--skip=record::fps::tests::test_fps"
+  ];
 
   postInstall = ''
     installManPage man/*

@@ -29,7 +29,7 @@ stdenv.mkDerivation (rec {
 
   meta = {
     branch = "2.14";
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
     maintainers = [
       lib.maintainers.maggesi
       lib.maintainers.roconnor

@@ -1,0 +1,13 @@
+diff --git a/src/cmd/dist/test.go b/src/cmd/dist/test.go
+index e1cd4965c3..0980d044df 100644
+--- a/src/cmd/dist/test.go
++++ b/src/cmd/dist/test.go
+@@ -1136,7 +1136,7 @@ func (t *tester) cgoTest(dt *distTest) error {
+ 					t.addCmd(dt, "misc/cgo/test", t.goTest(), "-buildmode=pie", "-ldflags=-linkmode=internal")
+ 				}
+ 				t.addCmd(dt, "misc/cgo/testtls", t.goTest(), "-buildmode=pie", ".")
+-				t.addCmd(dt, "misc/cgo/nocgo", t.goTest(), "-buildmode=pie", ".")
++				//t.addCmd(dt, "misc/cgo/nocgo", t.goTest(), "-buildmode=pie", ".")
+ 			}
+ 		}
+ 	}

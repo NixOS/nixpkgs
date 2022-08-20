@@ -19,7 +19,6 @@
 let
   pinData = lib.importJSON ./pin.json;
   executableName = "element-desktop";
-  electron_exec = if stdenv.isDarwin then "${electron}/Applications/Electron.app/Contents/MacOS/Electron" else "${electron}/bin/electron";
   keytar = callPackage ./keytar { inherit Security AppKit; };
   seshat = callPackage ./seshat { inherit CoreServices; };
 in
@@ -48,9 +47,9 @@ mkYarnPackage rec {
     runHook preBuild
     export HOME=$(mktemp -d)
     pushd deps/element-desktop/
-    npx tsc
+    yarn run build:ts
     yarn run i18n
-    node ./scripts/copy-res.js
+    yarn run build:res
     popd
     rm -rf node_modules/matrix-seshat node_modules/keytar
     ${lib.optionalString useKeytar "ln -s ${keytar} node_modules/keytar"}
@@ -83,7 +82,7 @@ mkYarnPackage rec {
 
     # executable wrapper
     # LD_PRELOAD workaround for sqlcipher not found: https://github.com/matrix-org/seshat/issues/102
-    makeWrapper '${electron_exec}' "$out/bin/${executableName}" \
+    makeWrapper '${electron}/bin/electron' "$out/bin/${executableName}" \
       --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher.so \
       --add-flags "$out/share/element/electron" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
@@ -91,11 +90,8 @@ mkYarnPackage rec {
     runHook postInstall
   '';
 
-  # Do not attempt generating a tarball for element-web again.
-  # note: `doDist = false;` does not work.
-  distPhase = ''
-    true
-  '';
+  # Do not attempt generating a tarball for element-desktop again.
+  doDist = false;
 
   # The desktop item properties should be kept in sync with data from upstream:
   # https://github.com/vector-im/element-desktop/blob/develop/package.json

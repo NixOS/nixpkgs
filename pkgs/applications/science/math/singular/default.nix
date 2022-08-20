@@ -4,6 +4,7 @@
 , buildPackages
 , sharutils
 , file
+, getconf
 , flint
 , ntl
 , cddlib
@@ -23,7 +24,7 @@
 
 stdenv.mkDerivation rec {
   pname = "singular";
-  version = "4.3.0";
+  version = "4.3.1";
 
   # since the tarball does not contain tests, we fetch from GitHub.
   src = fetchFromGitHub {
@@ -32,9 +33,8 @@ stdenv.mkDerivation rec {
 
     # if a release is tagged (which sometimes does not happen), it will
     # be in the format below.
-    # rev = "Release-${lib.replaceStrings ["."] ["-"] version}";
-    rev = "d895b0f1f543c61eb03adddad20f08655a419d4e";
-    sha256 = "sha256-c5Qr6VUuPKjfw8fowjJJz3oGAyUwo/K0WeMvU5djzVA=";
+    rev = "Release-${lib.replaceStrings ["."] ["-"] version}";
+    sha256 = "sha256-3r3epwaVbyveyYtmfxuevO4Q52J6FbI6RRqiaHQGJIk=";
 
     # the repository's .gitattributes file contains the lines "/Tst/
     # export-ignore" and "/doc/ export-ignore" so some directories are
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     latex2html
     texinfo4
     texlive.combined.scheme-small
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ getconf ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   preAutoreconf = ''

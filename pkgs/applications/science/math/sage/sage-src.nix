@@ -58,30 +58,19 @@ let
   );
 in
 stdenv.mkDerivation rec {
-  version = "9.5";
+  version = "9.6";
   pname = "sage-src";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "sha256-uOsLpsGpcIGs8Xr82X82MElnTB2E908gytyNJ8WVD5w=";
+    sha256 = "sha256-QY8Yga3hD1WhSCtA2/PVry8hHlMmC31J8jCBFtWgIU0=";
   };
 
   # Patches needed because of particularities of nix or the way this is packaged.
   # The goal is to upstream all of them and get rid of this list.
   nixPatches = [
-    # Since https://trac.sagemath.org/ticket/32174, some external features are
-    # marked as "safe" and get auto-detected, in which case the corresponding
-    # optional tests are executed. We disable auto-detection of safe features if
-    # we are doctesting with an "--optional" argument which does not include
-    # "sage", because tests from autodetected features expect context provided
-    # by running basic sage tests. This is necessary to test sagemath_doc_html
-    # separately. See https://trac.sagemath.org/ticket/26110 for a related
-    # upstream discussion (from the time when Sage still had optional py2/py3
-    # tags).
-    ./patches/Only-test-external-software-when-all-of-sage-is.patch
-
     # Fixes a potential race condition which can lead to transient doctest failures.
     ./patches/fix-ecl-race.patch
 
@@ -120,85 +109,29 @@ stdenv.mkDerivation rec {
     # https://trac.sagemath.org/ticket/32959
     ./patches/linbox-1.7-upgrade.patch
 
-    # https://trac.sagemath.org/ticket/33170
-    (fetchSageDiff {
-      base = "9.6.beta5";
-      name = "ipython-8.1-update.patch";
-      rev = "4d2b53f1541375861310af3a7f7109c1c2ed475d";
-      sha256 = "sha256-ELda/VBzsQH7NdFas69fQ35QPUoJCeLx/gxT1j7qGR8=";
-    })
-
-    # https://trac.sagemath.org/ticket/32968
-    (fetchSageDiff {
-      base = "9.5";
-      name = "sphinx-4.3-update.patch";
-      rev = "fc84f82f52b6f05f512cb359ec7c100f93cf8841";
-      sha256 = "sha256-bBbfdcnw/9LUOlY8rHJRbFJEdMXK4shosqTNaobTS1Q=";
-    })
-
-    # https://trac.sagemath.org/ticket/33189
-    (fetchSageDiff {
-      base = "9.5";
-      name = "arb-2.22-update.patch";
-      rev = "53532ddd4e2dc92469c1590ebf0c40f8f69bf579";
-      sha256 = "sha256-6SoSBvIlqvNwZV3jTB6uPdUtaWIOeNmddi2poK/WvGs=";
-    })
-
-    # TODO: This will not be necessary when Sphinx 4.4.1 is released,
-    # since some warnings introduced in 4.4.0 will be disabled by then
-    # (https://github.com/sphinx-doc/sphinx/pull/10126).
-    # https://trac.sagemath.org/ticket/33272
-    (fetchSageDiff {
-      base = "9.5";
-      name = "sphinx-4.4-warnings.patch";
-      rev = "97d7958bed441cf2ccc714d88f83d3a8426bc085";
-      sha256 = "sha256-y1STE0oxswnijGCsBw8eHWWqpmT1XMznIfA0vvX9pFA=";
-    })
-
     # adapted from https://trac.sagemath.org/ticket/23712#comment:22
     ./patches/tachyon-renamed-focallength.patch
 
-    # https://trac.sagemath.org/ticket/33336
     (fetchSageDiff {
-      base = "9.6.beta2";
-      name = "scipy-1.8-update.patch";
-      rev = "9c8235e44ffb509efa8a3ca6cdb55154e2b5066d";
-      sha256 = "sha256-bfc4ljNOxVnhlmxIuNbjbKl4vJXYq2tlF3Z8bbC8PWw=";
+      name = "eclib-20220621-update.patch";
+      base = "9.7.beta4";
+      rev = "9b65d73399b33043777ba628a4d318638aec6e0e";
+      sha256 = "sha256-pcb9Q9a0ROCZTyfT7TRMtgEqCom8SgrtAaZ8ATgeqVI=";
     })
 
-    # https://trac.sagemath.org/ticket/33495
+    # https://trac.sagemath.org/ticket/34149
     (fetchSageDiff {
-      base = "9.6.beta5";
-      name = "networkx-2.7-update.patch";
-      rev = "8452003846a7303100847d8d0ed642fc642c11d6";
-      sha256 = "sha256-A/XMouPlc2sjFp30L+56fBGJXydS2EtzfPOV98FCDqI=";
+      name = "sphinx-5-update.patch";
+      base = "9.7.beta6";
+      rev = "6f9ceb7883376a1cacda51d84ec7870121860482";
+      sha256 = "sha256-prTCwBfl/wNXIkdjKLiMSe/B64wCXOjOTr4AVNiFruw=";
     })
-
-    # https://trac.sagemath.org/ticket/33226
-    (fetchSageDiff {
-      base = "9.6.beta0";
-      name = "giac-1.7.0-45-update.patch";
-      rev = "33ea2adf01e9e2ce9f1e33779f0b1ac0d9d1989c";
-      sha256 = "sha256-DOyxahf3+IaYdkgmAReNDCorRzMgO8+yiVrJ5TW1km0=";
-    })
-
-    # https://trac.sagemath.org/ticket/33398
-    (fetchSageDiff {
-      base = "9.6.beta4";
-      name = "sympy-1.10-update.patch";
-      rev = "6b7c3a28656180e42163dc10f7b4a571b93e5f27";
-      sha256 = "sha256-fnUyM2yjHkCykKRfzQQ4glcUYmCS/fYzDzmCf0nuebk=";
-      # The patch contains a whitespace change to a file that didn't exist in Sage 9.5.
-      excludes = [ "build/*" "src/sage/manifolds/vector_bundle_fiber_element.py" ];
-    })
-
-    # docutils 0.18.1 now triggers Sphinx warnings. tolerate them for
-    # now, because patching Sphinx is not feasible.
-    # https://github.com/sphinx-doc/sphinx/issues/9777#issuecomment-1104481271
-    ./patches/docutils-0.18.1-deprecation.patch
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
+
+  # do not create .orig backup files if patch applies with fuzz
+  patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
 
   postPatch = ''
     # Make sure sage can at least be imported without setting any environment

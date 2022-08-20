@@ -1,13 +1,21 @@
-{lib, stdenv, fetchurl }:
+{ lib
+, stdenv
+, fetchurl
+, unzip
+}:
 
 stdenv.mkDerivation rec {
   pname = "goku";
-  version = "0.3.6";
+  version = "0.5.2";
 
   src = fetchurl {
-    url = "https://github.com/yqrashawn/GokuRakuJoudo/releases/download/v${version}/goku.tar.gz";
-    sha256 = "1pss1k2slbqzpfynik50pdk4jsaiag4abhmr6kadmaaj18mfz7ai";
+    url = "https://github.com/yqrashawn/GokuRakuJoudo/releases/download/v${version}/goku.zip";
+    sha256 = "506eccdabedc68c112778b13ded65099327267c2e3fd488916e3a340bc312954";
   };
+
+  nativeBuildInputs = [
+    unzip
+  ];
 
   sourceRoot = ".";
 

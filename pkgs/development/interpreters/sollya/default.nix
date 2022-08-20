@@ -19,11 +19,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gmp mpfr mpfi libxml2 fplll ];
 
+  doCheck = true;
+
   meta = with lib; {
     description = "A tool environment for safe floating-point code development";
     homepage = "https://www.sollya.org/";
     license = licenses.cecill-c;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ wegank ];
   };
 }

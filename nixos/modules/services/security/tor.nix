@@ -234,7 +234,7 @@ in
         type = types.package;
         default = pkgs.tor;
         defaultText = literalExpression "pkgs.tor";
-        description = "Tor package to use.";
+        description = lib.mdDoc "Tor package to use.";
       };
 
       enableGeoIP = mkEnableOption ''use of GeoIP databases.
@@ -255,7 +255,7 @@ in
           type = optionSOCKSPort false;
           default = {addr = "127.0.0.1"; port = 9050; IsolateDestAddr = true;};
           example = {addr = "192.168.0.1"; port = 9090; IsolateDestAddr = true;};
-          description = ''
+          description = lib.mdDoc ''
             Bind to this address to listen for connections from
             Socks-speaking applications.
           '';
@@ -287,7 +287,7 @@ in
       relay = {
         enable = mkEnableOption ''relaying of Tor traffic for others.
 
-          See <link xlink:href="https://www.torproject.org/docs/tor-doc-relay" />
+          See <link xlink:href="https://www.torproject.org/docs/tor-doc-relay"/>
           for details.
 
           Setting this to true requires setting
@@ -348,7 +348,7 @@ in
 
                 <para>
                   See
-                  <link xlink:href="https://www.torproject.org/docs/tor-doc-relay.html.en" />
+                  <link xlink:href="https://www.torproject.org/docs/tor-doc-relay.html.en"/>
                   for more info.
                 </para>
               </listitem>
@@ -366,7 +366,7 @@ in
                 <para>
                   Using this option will make Tor advertise your bridge
                   to users through various mechanisms like
-                  <link xlink:href="https://bridges.torproject.org/" />, though.
+                  <link xlink:href="https://bridges.torproject.org/"/>, though.
                 </para>
 
                 <important>
@@ -384,7 +384,7 @@ in
                 </important>
 
                 <para>
-                  See <link xlink:href="https://www.torproject.org/docs/bridges.html.en" />
+                  See <link xlink:href="https://www.torproject.org/docs/bridges.html.en"/>
                   for more info.
                 </para>
               </listitem>
@@ -419,7 +419,7 @@ in
                 </para>
 
                 <para>
-                  See <link xlink:href="https://www.torproject.org/docs/bridges.html.en" />
+                  See <link xlink:href="https://www.torproject.org/docs/bridges.html.en"/>
                   for more info.
                 </para>
               </listitem>
@@ -442,20 +442,20 @@ in
           type = types.attrsOf (types.submodule ({name, config, ...}: {
             options.path = mkOption {
               type = types.path;
-              description = ''
+              description = lib.mdDoc ''
                 Path where to store the data files of the hidden service.
-                If the <option>secretKey</option> is null
-                this defaults to <literal>${stateDir}/onion/$onion</literal>,
-                otherwise to <literal>${runDir}/onion/$onion</literal>.
+                If the {option}`secretKey` is null
+                this defaults to `${stateDir}/onion/$onion`,
+                otherwise to `${runDir}/onion/$onion`.
               '';
             };
             options.secretKey = mkOption {
               type = with types; nullOr path;
               default = null;
               example = "/run/keys/tor/onion/expyuzz4wqqyqhjn/hs_ed25519_secret_key";
-              description = ''
+              description = lib.mdDoc ''
                 Secret key of the onion service.
-                If null, Tor reuses any preexisting secret key (in <option>path</option>)
+                If null, Tor reuses any preexisting secret key (in {option}`path`)
                 or generates a new one.
                 The associated public key and hostname are deterministically regenerated
                 from this file if they do not exist.
@@ -468,19 +468,19 @@ in
                 options = {
                   authType = mkOption {
                     type = types.enum [ "basic" "stealth" ];
-                    description = ''
-                      Either <literal>"basic"</literal> for a general-purpose authorization protocol
-                      or <literal>"stealth"</literal> for a less scalable protocol
+                    description = lib.mdDoc ''
+                      Either `"basic"` for a general-purpose authorization protocol
+                      or `"stealth"` for a less scalable protocol
                       that also hides service activity from unauthorized clients.
                     '';
                   };
                   clientNames = mkOption {
                     type = with types; nonEmptyListOf (strMatching "[A-Za-z0-9+-_]+");
-                    description = ''
+                    description = lib.mdDoc ''
                       Only clients that are listed here are authorized to access the hidden service.
-                      Generated authorization data can be found in <filename>${stateDir}/onion/$name/hostname</filename>.
+                      Generated authorization data can be found in {file}`${stateDir}/onion/$name/hostname`.
                       Clients need to put this authorization data in their configuration file using
-                      <xref linkend="opt-services.tor.settings.HidServAuth"/>.
+                      [](#opt-services.tor.settings.HidServAuth).
                     '';
                   };
                 };
@@ -569,8 +569,8 @@ in
       };
 
       settings = mkOption {
-        description = ''
-          See <link xlink:href="https://2019.www.torproject.org/docs/tor-manual.html.en">torrc manual</link>
+        description = lib.mdDoc ''
+          See [torrc manual](https://2019.www.torproject.org/docs/tor-manual.html.en)
           for documentation.
         '';
         default = {};
@@ -716,12 +716,12 @@ in
                 options = {
                   onion = mkOption {
                     type = strMatching "[a-z2-7]{16}\\.onion";
-                    description = "Onion address.";
+                    description = lib.mdDoc "Onion address.";
                     example = "xxxxxxxxxxxxxxxx.onion";
                   };
                   auth = mkOption {
                     type = strMatching "[A-Za-z0-9+/]{22}";
-                    description = "Authentication cookie.";
+                    description = lib.mdDoc "Authentication cookie.";
                   };
                 };
               })
@@ -783,13 +783,13 @@ in
             type = with types; nullOr (submodule ({...}: {
               options = {
                 transports = mkOption {
-                  description = "List of pluggable transports.";
+                  description = lib.mdDoc "List of pluggable transports.";
                   type = listOf str;
                   example = ["obfs2" "obfs3" "obfs4" "scramblesuit"];
                 };
                 exec = mkOption {
                   type = types.str;
-                  description = "Command of pluggable transport.";
+                  description = lib.mdDoc "Command of pluggable transport.";
                 };
               };
             }));

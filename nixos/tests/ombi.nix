@@ -12,7 +12,7 @@ with lib;
 
   testScript = ''
     machine.wait_for_unit("ombi.service")
-    machine.wait_for_open_port("5000")
+    machine.wait_for_open_port(5000)
     machine.succeed("curl --fail http://localhost:5000/")
   '';
 })

@@ -14,6 +14,8 @@ rec {
       propagatedBuildInputs = [ zlib ];
       configurePhase = ''
         HOME=$TMPDIR
+        mkdir -p .emscriptencache
+        export EM_CACHE=$(pwd)/.emscriptencache
         emcmake cmake . $cmakeFlags -DCMAKE_INSTALL_PREFIX=$out -DCMAKE_INSTALL_INCLUDEDIR=$dev/include
       '';
       checkPhase = ''
@@ -54,6 +56,8 @@ rec {
       autoreconfPhase = "echo autoreconfPhase not used...";
       configurePhase = ''
         HOME=$TMPDIR
+        mkdir -p .emscriptencache
+        export EM_CACHE=$(pwd)/.emscriptencache
         emconfigure ./configure --prefix=$out --without-python
       '';
       checkPhase = ''
@@ -102,6 +106,8 @@ rec {
       sed -e "s/\$(JSONC_LDFLAGS) \$(ZLIB_LDFLAGS) \$(LIBXML20_LDFLAGS)/\$(JSONC_LDFLAGS) \$(LIBXML20_LDFLAGS) \$(ZLIB_LDFLAGS) /g" -i Makefile.emEnv
       # https://gitlab.com/odfplugfest/xmlmirror/issues/11
       sed -e "s/-o fastXmlLint.js/-s EXTRA_EXPORTED_RUNTIME_METHODS='[\"ccall\", \"cwrap\"]' -o fastXmlLint.js/g" -i Makefile.emEnv
+      mkdir -p .emscriptencache
+      export EM_CACHE=$(pwd)/.emscriptencache
     '';
 
     buildPhase = ''
@@ -137,16 +143,6 @@ rec {
       buildInputs = old.buildInputs ++ [ pkg-config ];
       # we need to reset this setting!
       NIX_CFLAGS_COMPILE="";
-      configurePhase = ''
-        # FIXME: Some tests require writing at $HOME
-        HOME=$TMPDIR
-        runHook preConfigure
-
-        #export EMCC_DEBUG=2
-        emconfigure ./configure --prefix=$out --shared
-
-        runHook postConfigure
-      '';
       dontStrip = true;
       outputs = [ "out" ];
       buildPhase = ''
@@ -161,7 +157,7 @@ rec {
         echo "Compiling a custom test"
         set -x
         emcc -O2 -s EMULATE_FUNCTION_POINTER_CASTS=1 test/example.c -DZ_SOLO \
-        -L. libz.so.${old.version} -I . -o example.js
+        -L. libz.a -I . -o example.js
 
         echo "Using node to execute the test"
         ${pkgs.nodejs}/bin/node ./example.js

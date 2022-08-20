@@ -27,8 +27,9 @@ stdenv.mkDerivation rec {
     description = "CLI which helps you build against the Shopify platform faster";
     homepage    = "https://github.com/Shopify/shopify-cli";
     license     = licenses.mit;
-    platforms = ruby.meta.platforms;
     maintainers = with maintainers; [ onny ];
+    mainProgram = "shopify";
+    platforms = ruby.meta.platforms;
   };
 }
 

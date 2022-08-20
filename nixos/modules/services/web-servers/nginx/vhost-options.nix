@@ -11,7 +11,7 @@ with lib;
     serverName = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Name of this virtual host. Defaults to attribute name in virtualHosts.
       '';
       example = "example.org";
@@ -21,54 +21,54 @@ with lib;
       type = types.listOf types.str;
       default = [];
       example = [ "www.example.org" "example.org" ];
-      description = ''
+      description = lib.mdDoc ''
         Additional names of virtual hosts served by this virtual host configuration.
       '';
     };
 
     listen = mkOption {
       type = with types; listOf (submodule { options = {
-        addr = mkOption { type = str;  description = "IP address.";  };
-        port = mkOption { type = int;  description = "Port number."; default = 80; };
-        ssl  = mkOption { type = bool; description = "Enable SSL.";  default = false; };
-        extraParameters = mkOption { type = listOf str; description = "Extra parameters of this listen directive."; default = []; example = [ "backlog=1024" "deferred" ]; };
+        addr = mkOption { type = str;  description = lib.mdDoc "IP address.";  };
+        port = mkOption { type = int;  description = lib.mdDoc "Port number."; default = 80; };
+        ssl  = mkOption { type = bool; description = lib.mdDoc "Enable SSL.";  default = false; };
+        extraParameters = mkOption { type = listOf str; description = lib.mdDoc "Extra parameters of this listen directive."; default = []; example = [ "backlog=1024" "deferred" ]; };
       }; });
       default = [];
       example = [
         { addr = "195.154.1.1"; port = 443; ssl = true; }
         { addr = "192.154.1.1"; port = 80; }
       ];
-      description = ''
+      description = lib.mdDoc ''
         Listen addresses and ports for this virtual host.
         IPv6 addresses must be enclosed in square brackets.
-        Note: this option overrides <literal>addSSL</literal>
-        and <literal>onlySSL</literal>.
+        Note: this option overrides `addSSL`
+        and `onlySSL`.
 
         If you only want to set the addresses manually and not
-        the ports, take a look at <literal>listenAddresses</literal>
+        the ports, take a look at `listenAddresses`
       '';
     };
 
     listenAddresses = mkOption {
       type = with types; listOf str;
 
-      description = ''
+      description = lib.mdDoc ''
         Listen addresses for this virtual host.
-        Compared to <literal>listen</literal> this only sets the addreses
+        Compared to `listen` this only sets the addreses
         and the ports are choosen automatically.
 
-        Note: This option overrides <literal>enableIPv6</literal>
+        Note: This option overrides `enableIPv6`
       '';
       default = [];
-      example = [ "127.0.0.1" "::1" ];
+      example = [ "127.0.0.1" "[::1]" ];
     };
 
     enableACME = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to ask Let's Encrypt to sign a certificate for this vhost.
-        Alternately, you can use an existing certificate through <option>useACMEHost</option>.
+        Alternately, you can use an existing certificate through {option}`useACMEHost`.
       '';
     };
 
@@ -87,7 +87,7 @@ with lib;
     acmeRoot = mkOption {
       type = types.nullOr types.str;
       default = "/var/lib/acme/acme-challenge";
-      description = ''
+      description = lib.mdDoc ''
         Directory for the acme challenge which is PUBLIC, don't put certs or keys in here.
         Set to null to inherit from config.security.acme.
       '';
@@ -96,7 +96,7 @@ with lib;
     acmeFallbackHost = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Host which to proxy requests to if acme challenge is not found. Useful
         if you want multiple hosts to be able to verify the same domain name.
       '';
@@ -105,9 +105,9 @@ with lib;
     addSSL = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable HTTPS in addition to plain HTTP. This will set defaults for
-        <literal>listen</literal> to listen on all interfaces on the respective default
+        `listen` to listen on all interfaces on the respective default
         ports (80, 443).
       '';
     };
@@ -115,9 +115,9 @@ with lib;
     onlySSL = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable HTTPS and reject plain HTTP connections. This will set
-        defaults for <literal>listen</literal> to listen on all interfaces on port 443.
+        defaults for `listen` to listen on all interfaces on port 443.
       '';
     };
 
@@ -130,10 +130,10 @@ with lib;
     forceSSL = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to add a separate nginx server block that permanently redirects (301)
         all plain HTTP traffic to HTTPS. This will set defaults for
-        <literal>listen</literal> to listen on all interfaces on the respective default
+        `listen` to listen on all interfaces on the respective default
         ports (80, 443), where the non-SSL listens are used for the redirect vhosts.
       '';
     };
@@ -141,11 +141,11 @@ with lib;
     rejectSSL = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to listen for and reject all HTTPS connections to this vhost. Useful in
-        <link linkend="opt-services.nginx.virtualHosts._name_.default">default</link>
+        [default](#opt-services.nginx.virtualHosts._name_.default)
         server blocks to avoid serving the certificate for another vhost. Uses the
-        <literal>ssl_reject_handshake</literal> directive available in nginx versions
+        `ssl_reject_handshake` directive available in nginx versions
         1.19.4 and above.
       '';
     };
@@ -153,7 +153,7 @@ with lib;
     kTLS = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable kTLS support.
         Implementing TLS in the kernel (kTLS) improves performance by significantly
         reducing the need for copying operations between user space and the kernel.
@@ -164,26 +164,26 @@ with lib;
     sslCertificate = mkOption {
       type = types.path;
       example = "/var/host.cert";
-      description = "Path to server SSL certificate.";
+      description = lib.mdDoc "Path to server SSL certificate.";
     };
 
     sslCertificateKey = mkOption {
       type = types.path;
       example = "/var/host.key";
-      description = "Path to server SSL certificate key.";
+      description = lib.mdDoc "Path to server SSL certificate key.";
     };
 
     sslTrustedCertificate = mkOption {
       type = types.nullOr types.path;
       default = null;
       example = literalExpression ''"''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"'';
-      description = "Path to root SSL certificate for stapling and client certificates.";
+      description = lib.mdDoc "Path to root SSL certificate for stapling and client certificates.";
     };
 
     http2 = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable HTTP 2.
         Note that (as of writing) due to nginx's implementation, to disable
         HTTP 2 you have to disable it on all vhosts that use a given
@@ -197,10 +197,10 @@ with lib;
     http3 = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable HTTP 3.
-        This requires using <literal>pkgs.nginxQuic</literal> package
-        which can be achieved by setting <literal>services.nginx.package = pkgs.nginxQuic;</literal>.
+        This requires using `pkgs.nginxQuic` package
+        which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;`.
         Note that HTTP 3 support is experimental and
         *not* yet recommended for production.
         Read more at https://quic.nginx.org/
@@ -210,7 +210,7 @@ with lib;
     reuseport = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Create an individual listening socket .
         It is required to specify only once on one of the hosts.
       '';
@@ -220,7 +220,7 @@ with lib;
       type = types.nullOr types.path;
       default = null;
       example = "/data/webserver/docs";
-      description = ''
+      description = lib.mdDoc ''
         The path of the web root directory.
       '';
     };
@@ -228,7 +228,7 @@ with lib;
     default = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Makes this vhost the default.
       '';
     };
@@ -236,7 +236,7 @@ with lib;
     extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = ''
+      description = lib.mdDoc ''
         These lines go to the end of the vhost verbatim.
       '';
     };
@@ -245,7 +245,7 @@ with lib;
       type = types.nullOr types.str;
       default = null;
       example = "newserver.example.org";
-      description = ''
+      description = lib.mdDoc ''
         If set, all requests for this host are redirected permanently to
         the given hostname.
       '';
@@ -259,7 +259,7 @@ with lib;
           user = "password";
         };
       '';
-      description = ''
+      description = lib.mdDoc ''
         Basic Auth protection for a vhost.
 
         WARNING: This is implemented to store the password in plain text in the
@@ -270,9 +270,9 @@ with lib;
     basicAuthFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Basic Auth password file for a vhost.
-        Can be created via: <command>htpasswd -c &lt;filename&gt; &lt;username&gt;</command>.
+        Can be created via: {command}`htpasswd -c <filename> <username>`.
 
         WARNING: The generate file contains the users' passwords in a
         non-cryptographically-securely hashed way.
@@ -281,7 +281,7 @@ with lib;
 
     locations = mkOption {
       type = types.attrsOf (types.submodule (import ./location-options.nix {
-        inherit lib;
+        inherit lib config;
       }));
       default = {};
       example = literalExpression ''
@@ -291,7 +291,7 @@ with lib;
           };
         };
       '';
-      description = "Declarative location config";
+      description = lib.mdDoc "Declarative location config";
     };
   };
 }

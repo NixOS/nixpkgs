@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , anytree
@@ -21,13 +22,13 @@
 
 buildPythonPackage rec {
   pname = "devito";
-  version = "unstable-2022-04-22";
+  version = "4.7.1";
 
   src = fetchFromGitHub {
     owner = "devitocodes";
     repo = "devito";
-    rev = "7cb52eded4038c1a0ee92cfd04d3412c48f2fb7c";
-    sha256 = "sha256-QdQRCGmXaubPPnmyJo2ha0mW5P1akRZhXZVW2TNM5yY=";
+    rev = "v${version}";
+    sha256 = "sha256-crKTxlueE8NGjAqu625iFvp35UK2U7+9kl8rpbzf0gs=";
   };
 
   postPatch = ''
@@ -92,6 +93,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "devito" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://www.devitoproject.org/";
     description = "Code generation framework for automated finite difference computation";
     license = licenses.mit;

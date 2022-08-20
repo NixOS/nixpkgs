@@ -9,12 +9,26 @@
 
 { pkgs, buildImage, buildLayeredImage, fakeNss, pullImage, shadowSetup, buildImageWithNixDb, pkgsCross }:
 
+let
+  nixosLib = import ../../../nixos/lib {
+    # Experimental features need testing too, but there's no point in warning
+    # about it, so we enable the feature flag.
+    featureFlags.minimalModules = {};
+  };
+  evalMinimalConfig = module: nixosLib.evalModules { modules = [ module ]; };
+
+in
+
 rec {
   # 1. basic example
   bash = buildImage {
     name = "bash";
     tag = "latest";
-    contents = pkgs.bashInteractive;
+    copyToRoot = pkgs.buildEnv {
+      name = "image-root";
+      paths = [ pkgs.bashInteractive ];
+      pathsToLink = [ "/bin" ];
+    };
   };
 
   # 2. service example, layered on another image
@@ -26,7 +40,12 @@ rec {
     fromImage = bash;
     # fromImage = debian;
 
-    contents = pkgs.redis;
+    copyToRoot = pkgs.buildEnv {
+      name = "image-root";
+      paths = [ pkgs.redis ];
+      pathsToLink = [ "/bin" ];
+    };
+
     runAsRoot = ''
       mkdir -p /data
     '';
@@ -97,7 +116,7 @@ rec {
   };
   # Same example, but re-fetches every time the fetcher implementation changes.
   # NOTE: Only use this for testing, or you'd be wasting a lot of time, network and space.
-  testNixFromDockerHub = pkgs.invalidateFetcherByDrvHash pullImage {
+  testNixFromDockerHub = pkgs.testers.invalidateFetcherByDrvHash pullImage {
     imageName = "nixos/nix";
     imageDigest = "sha256:85299d86263a3059cf19f419f9d286cc9f06d3c13146a8ebbb21b3437f598357";
     sha256 = "19fw0n3wmddahzr20mhdqv6jkjn1kanh6n2mrr08ai53dr8ph5n7";
@@ -108,13 +127,17 @@ rec {
   # 5. example of multiple contents, emacs and vi happily coexisting
   editors = buildImage {
     name = "editors";
-    contents = [
-      pkgs.coreutils
-      pkgs.bash
-      pkgs.emacs
-      pkgs.vim
-      pkgs.nano
-    ];
+    copyToRoot = pkgs.buildEnv {
+      name = "image-root";
+      pathsToLink = [ "/bin" ];
+      paths = [
+        pkgs.coreutils
+        pkgs.bash
+        pkgs.emacs
+        pkgs.vim
+        pkgs.nano
+      ];
+    };
   };
 
   # 6. nix example to play with the container nix store
@@ -122,13 +145,17 @@ rec {
   nix = buildImageWithNixDb {
     name = "nix";
     tag = "latest";
-    contents = [
-      # nix-store uses cat program to display results as specified by
-      # the image env variable NIX_PAGER.
-      pkgs.coreutils
-      pkgs.nix
-      pkgs.bash
-    ];
+    copyToRoot = pkgs.buildEnv {
+      name = "image-root";
+      pathsToLink = [ "/bin" ];
+      paths = [
+        # nix-store uses cat program to display results as specified by
+        # the image env variable NIX_PAGER.
+        pkgs.coreutils
+        pkgs.nix
+        pkgs.bash
+      ];
+    };
     config = {
       Env = [
         "NIX_PAGER=cat"
@@ -145,7 +172,11 @@ rec {
     name = "onTopOfPulledImage";
     tag = "latest";
     fromImage = nixFromDockerHub;
-    contents = [ pkgs.hello ];
+    copyToRoot = pkgs.buildEnv {
+      name = "image-root";
+      pathsToLink = [ "/bin" ];
+      paths = [ pkgs.hello ];
+    };
   };
 
   # 8. regression test for erroneous use of eval and string expansion.
@@ -153,7 +184,11 @@ rec {
   runAsRootExtraCommands = pkgs.dockerTools.buildImage {
     name = "runAsRootExtraCommands";
     tag = "latest";
-    contents = [ pkgs.coreutils ];
+    copyToRoot = pkgs.buildEnv {
+      name = "image-root";
+      pathsToLink = [ "/bin" ];
+      paths = [ pkgs.coreutils ];
+    };
     # The parens here are to create problematic bash to embed and eval. In case
     # this is *embedded* into the script (with nix expansion) the initial quotes
     # will close the string and the following parens are unexpected
@@ -166,7 +201,11 @@ rec {
   unstableDate = pkgs.dockerTools.buildImage {
     name = "unstable-date";
     tag = "latest";
-    contents = [ pkgs.coreutils ];
+    copyToRoot = pkgs.buildEnv {
+      name = "image-root";
+      pathsToLink = [ "/bin" ];
+      paths = [ pkgs.coreutils ];
+    };
     created = "now";
   };
 
@@ -255,7 +294,11 @@ rec {
     name = "l3";
     fromImage = l2;
     tag = "latest";
-    contents = [ pkgs.coreutils ];
+    copyToRoot = pkgs.buildEnv {
+      name = "image-root";
+      pathsToLink = [ "/bin" ];
+      paths = [ pkgs.coreutils ];
+    };
     extraCommands = ''
       mkdir -p tmp
       echo layer3 > tmp/layer3
@@ -280,7 +323,11 @@ rec {
     name = "child";
     fromImage = environmentVariablesParent;
     tag = "latest";
-    contents = [ pkgs.coreutils ];
+    copyToRoot = pkgs.buildEnv {
+      name = "image-root";
+      pathsToLink = [ "/bin" ];
+      paths = [ pkgs.coreutils ];
+    };
     config = {
       Env = [
         "FROM_CHILD=true"
@@ -414,7 +461,11 @@ rec {
         name = "layers-unpack-order-${layerName}";
         tag = "latest";
         fromImage = parent;
-        contents = [ pkgs.coreutils ];
+        copyToRoot = pkgs.buildEnv {
+          name = "image-root";
+          pathsToLink = [ "/bin" ];
+          paths = [ pkgs.coreutils ];
+        };
         runAsRoot = ''
           #!${pkgs.runtimeShell}
           echo -n "${layerName}" >> /layer-order
@@ -431,7 +482,8 @@ rec {
   # buildImage without explicit tag
   bashNoTag = pkgs.dockerTools.buildImage {
     name = "bash-no-tag";
-    contents = pkgs.bashInteractive;
+    # Not recommended. Use `buildEnv` between copy and packages to avoid file duplication.
+    copyToRoot = pkgs.bashInteractive;
   };
 
   # buildLayeredImage without explicit tag
@@ -491,7 +543,11 @@ rec {
   in crossPkgs.dockerTools.buildImage {
     name = "hello-cross";
     tag = "latest";
-    contents = crossPkgs.hello;
+    copyToRoot = pkgs.buildEnv {
+      name = "image-root";
+      pathsToLink = [ "/bin" ];
+      paths = [ crossPkgs.hello ];
+    };
   };
 
   # layered image where a store path is itself a symlink
@@ -528,11 +584,11 @@ rec {
       pkgs.pkgsStatic.busybox
     ];
     fakeRootCommands = ''
-      mkdir -p ./home/jane
-      chown 1000 ./home/jane
+      mkdir -p ./home/alice
+      chown 1000 ./home/alice
       ln -s ${pkgs.hello.overrideAttrs (o: {
         # A unique `hello` to make sure that it isn't included via another mechanism by accident.
-        configureFlags = o.configureFlags or "" + " --program-prefix=layeredImageWithFakeRootCommands-";
+        configureFlags = o.configureFlags or [] ++ [ " --program-prefix=layeredImageWithFakeRootCommands-" ];
         doCheck = false;
       })} ./hello
     '';
@@ -551,7 +607,7 @@ rec {
   ];
 
   # tarball consisting of bash and layered image with different owner of the
-  # /home/jane directory
+  # /home/alice directory
   mergedBashFakeRoot = pkgs.dockerTools.mergeImages [
     bash
     layeredImageWithFakeRootCommands
@@ -582,6 +638,37 @@ rec {
     includeStorePaths = false;
   };
 
+  etc =
+    let
+      inherit (pkgs) lib;
+      nixosCore = (evalMinimalConfig ({ config, ... }: {
+        imports = [
+          pkgs.pkgsModule
+          ../../../nixos/modules/system/etc/etc.nix
+        ];
+        environment.etc."some-config-file" = {
+          text = ''
+            127.0.0.1 localhost
+            ::1 localhost
+          '';
+          # For executables:
+          # mode = "0755";
+        };
+      }));
+    in pkgs.dockerTools.streamLayeredImage {
+      name = "etc";
+      tag = "latest";
+      enableFakechroot = true;
+      fakeRootCommands = ''
+        mkdir -p /etc
+        ${nixosCore.config.system.build.etcActivationCommands}
+      '';
+      config.Cmd = pkgs.writeScript "etc-cmd" ''
+        #!${pkgs.busybox}/bin/sh
+        ${pkgs.busybox}/bin/cat /etc/some-config-file
+      '';
+    };
+
   # Example export of the bash image
   exportBash = pkgs.dockerTools.exportImage { fromImage = bash; };
 
@@ -602,7 +689,8 @@ rec {
   build-image-with-path = buildImage {
     name = "build-image-with-path";
     tag = "latest";
-    contents = [ pkgs.bashInteractive ./test-dummy ];
+    # Not recommended. Use `buildEnv` between copy and packages to avoid file duplication.
+    copyToRoot = [ pkgs.bashInteractive ./test-dummy ];
   };
 
   layered-image-with-path = pkgs.dockerTools.streamLayeredImage {

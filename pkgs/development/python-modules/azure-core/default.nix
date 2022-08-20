@@ -1,4 +1,8 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
 , aiodns
 , aiohttp
 , flask
@@ -11,18 +15,17 @@
 , requests
 , six
 , trio
-, typing-extensions
-}:
+, typing-extensions }:
 
 buildPythonPackage rec {
-  version = "1.23.1";
+  version = "1.24.2";
   pname = "azure-core";
-  disabled = isPy27;
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "sha256-KKAd+68KaBLE4qgtFkLqMJVqlznyW8d8myO5H06mjw8=";
+    sha256 = "sha256-Dzog0kVlm/gfs2cAcKVBDI1KQymNWpgeYtzjkwAKkIQ=";
   };
 
   propagatedBuildInputs = [
@@ -73,6 +76,8 @@ buildPythonPackage rec {
     "tests/test_streaming.py"
     # testserver tests require being in a very specific working directory to make it work
     "tests/testserver_tests/"
+    # requires missing pytest plugin
+    "tests/async_tests/test_rest_asyncio_transport.py"
   ];
 
   meta = with lib; {

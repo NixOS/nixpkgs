@@ -5,18 +5,19 @@
 , setuptools-scm
 , shapely
 , sqlalchemy
+, alembic
 , psycopg2
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "GeoAlchemy2";
-  version = "0.11.1";
+  version = "0.12.3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-+SoPrdtbdDhNu/PHAAQzNYzo4HoYD+HWwoQ+qgQ3/wg=";
+    sha256 = "sha256-MSgMZF3EoPkMHSmdL1x9WrZ8eENTW0ULTCq4ifAB4EI=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    alembic
     psycopg2
     pytestCheckHook
   ];
@@ -48,6 +50,7 @@ buildPythonPackage rec {
     "tests/gallery/test_type_decorator.py"
     "tests/test_functional.py"
     "tests/test_functional_postgresql.py"
+    "tests/test_alembic_migrations.py"
   ];
 
   pythonImportsCheck = [

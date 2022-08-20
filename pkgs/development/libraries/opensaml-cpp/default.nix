@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-xmltooling=${xml-tooling-c}" ];
 
+  NIX_CFLAGS_COMPILE = [ "-std=c++14" ];
+
   enableParallelBuilding = true;
 
   meta = with lib; {

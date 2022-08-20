@@ -79,40 +79,40 @@ in {
       logType = mkOption {
         type = with types; enum [ "file" "syslog" ];
         default = "syslog";
-        description = "Destination for log messages.";
+        description = lib.mdDoc "Destination for log messages.";
       };
 
       dataStorageSpace = mkOption {
         type = types.nullOr types.str;
         default = null;
         example = "/data/storage";
-        description = "Directory for data storage.";
+        description = lib.mdDoc "Directory for data storage.";
       };
 
       metadataStorageSpace = mkOption {
         type = types.nullOr types.str;
         default = null;
         example = "/data/meta";
-        description = "Directory for meta data storage.";
+        description = lib.mdDoc "Directory for meta data storage.";
       };
 
       BMIModules = mkOption {
         type = with types; listOf str;
         default = [ "bmi_tcp" ];
         example = [ "bmi_tcp" "bmi_ib"];
-        description = "List of BMI modules to load.";
+        description = lib.mdDoc "List of BMI modules to load.";
       };
 
       extraDefaults = mkOption {
         type = types.lines;
         default = "";
-        description = "Extra config for <literal>&lt;Defaults&gt;</literal> section.";
+        description = lib.mdDoc "Extra config for `<Defaults>` section.";
       };
 
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = "Extra config for the global section.";
+        description = lib.mdDoc "Extra config for the global section.";
       };
 
       servers = mkOption {
@@ -122,12 +122,12 @@ in {
           node1 = "tcp://node1:3334";
           node2 = "tcp://node2:3334";
         };
-        description = "URLs for storage server including port. The attribute names define the server alias.";
+        description = lib.mdDoc "URLs for storage server including port. The attribute names define the server alias.";
       };
 
       fileSystems = mkOption {
-        description = ''
-          These options will create the <literal>&lt;FileSystem&gt;</literal> sections of config file.
+        description = lib.mdDoc ''
+          These options will create the `<FileSystem>` sections of config file.
         '';
         default = { orangefs = {}; };
         example = literalExpression ''
@@ -146,37 +146,37 @@ in {
             id = mkOption {
               type = types.int;
               default = 1;
-              description = "File system ID (must be unique within configuration).";
+              description = lib.mdDoc "File system ID (must be unique within configuration).";
             };
 
             rootHandle = mkOption {
               type = types.int;
               default = 3;
-              description = "File system root ID.";
+              description = lib.mdDoc "File system root ID.";
             };
 
             extraConfig = mkOption {
               type = types.lines;
               default = "";
-              description = "Extra config for <literal>&lt;FileSystem&gt;</literal> section.";
+              description = lib.mdDoc "Extra config for `<FileSystem>` section.";
             };
 
             troveSyncMeta = mkOption {
               type = types.bool;
               default = true;
-              description = "Sync meta data.";
+              description = lib.mdDoc "Sync meta data.";
             };
 
             troveSyncData = mkOption {
               type = types.bool;
               default = false;
-              description = "Sync data.";
+              description = lib.mdDoc "Sync data.";
             };
 
             extraStorageHints = mkOption {
               type = types.lines;
               default = "";
-              description = "Extra config for <literal>&lt;StorageHints&gt;</literal> section.";
+              description = lib.mdDoc "Extra config for `<StorageHints>` section.";
             };
           };
         }));

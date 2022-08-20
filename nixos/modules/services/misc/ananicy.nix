@@ -18,7 +18,7 @@ in
         default = pkgs.ananicy;
         defaultText = literalExpression "pkgs.ananicy";
         example = literalExpression "pkgs.ananicy-cpp";
-        description = ''
+        description = lib.mdDoc ''
           Which ananicy package to use.
         '';
       };
@@ -29,18 +29,18 @@ in
         example = {
           apply_nice = false;
         };
-        description = ''
-          See <link xlink:href="https://github.com/Nefelim4ag/Ananicy/blob/master/ananicy.d/ananicy.conf"/>
+        description = lib.mdDoc ''
+          See <https://github.com/Nefelim4ag/Ananicy/blob/master/ananicy.d/ananicy.conf>
         '';
       };
 
       extraRules = mkOption {
         type = types.str;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Extra rules in json format on separate lines. See:
-          <link xlink:href="https://github.com/Nefelim4ag/Ananicy#configuration"/>
-          <link xlink:href="https://gitlab.com/ananicy-cpp/ananicy-cpp/#global-configuration"/>
+          <https://github.com/Nefelim4ag/Ananicy#configuration>
+          <https://gitlab.com/ananicy-cpp/ananicy-cpp/#global-configuration>
         '';
         example = literalExpression ''
           '''

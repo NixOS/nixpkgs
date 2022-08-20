@@ -74,5 +74,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/pyca/pyopenssl";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
+    # https://github.com/pyca/pyopenssl/issues/873
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

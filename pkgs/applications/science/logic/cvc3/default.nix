@@ -13,6 +13,13 @@ stdenv.mkDerivation rec {
 
   patches = [ ./cvc3-2.4.1-gccv6-fix.patch ];
 
+  # fails to configure on darwin due to gmp not found
+  configureFlags = [ "LIBS=-L${gmp}/lib" "CXXFLAGS=-I${gmp.dev}/include" ];
+
+  # disable stackprotector on aarch64-darwin for now
+  # https://github.com/NixOS/nixpkgs/issues/127608
+  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
+
   postPatch = ''
     sed -e "s@ /bin/bash@bash@g" -i Makefile.std
     find . -exec sed -e "s@/usr/bin/perl@${perl}/bin/perl@g" -i '{}' ';'

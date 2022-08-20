@@ -38,44 +38,44 @@ in {
       enable = mkEnableOption "ripple data api";
 
       port = mkOption {
-        description = "Ripple data api port";
+        description = lib.mdDoc "Ripple data api port";
         default = 5993;
         type = types.int;
       };
 
       importMode = mkOption {
-        description = "Ripple data api import mode.";
+        description = lib.mdDoc "Ripple data api import mode.";
         default = "liveOnly";
         type = types.enum ["live" "liveOnly"];
       };
 
       minLedger = mkOption {
-        description = "Ripple data api minimal ledger to fetch.";
+        description = lib.mdDoc "Ripple data api minimal ledger to fetch.";
         default = null;
         type = types.nullOr types.int;
       };
 
       maxLedger = mkOption {
-        description = "Ripple data api maximal ledger to fetch.";
+        description = lib.mdDoc "Ripple data api maximal ledger to fetch.";
         default = null;
         type = types.nullOr types.int;
       };
 
       redis = {
         enable = mkOption {
-          description = "Whether to enable caching of ripple data to redis.";
+          description = lib.mdDoc "Whether to enable caching of ripple data to redis.";
           default = true;
           type = types.bool;
         };
 
         host = mkOption {
-          description = "Ripple data api redis host.";
+          description = lib.mdDoc "Ripple data api redis host.";
           default = "localhost";
           type = types.str;
         };
 
         port = mkOption {
-          description = "Ripple data api redis port.";
+          description = lib.mdDoc "Ripple data api redis port.";
           default = 5984;
           type = types.int;
         };
@@ -83,44 +83,44 @@ in {
 
       couchdb = {
         host = mkOption {
-          description = "Ripple data api couchdb host.";
+          description = lib.mdDoc "Ripple data api couchdb host.";
           default = "localhost";
           type = types.str;
         };
 
         port = mkOption {
-          description = "Ripple data api couchdb port.";
+          description = lib.mdDoc "Ripple data api couchdb port.";
           default = 5984;
           type = types.int;
         };
 
         db = mkOption {
-          description = "Ripple data api couchdb database.";
+          description = lib.mdDoc "Ripple data api couchdb database.";
           default = "rippled";
           type = types.str;
         };
 
         user = mkOption {
-          description = "Ripple data api couchdb username.";
+          description = lib.mdDoc "Ripple data api couchdb username.";
           default = "rippled";
           type = types.str;
         };
 
         pass = mkOption {
-          description = "Ripple data api couchdb password.";
+          description = lib.mdDoc "Ripple data api couchdb password.";
           default = "";
           type = types.str;
         };
 
         create = mkOption {
-          description = "Whether to create couchdb database needed by ripple data api.";
+          description = lib.mdDoc "Whether to create couchdb database needed by ripple data api.";
           type = types.bool;
           default = true;
         };
       };
 
       rippleds = mkOption {
-        description = "List of rippleds to be used by ripple data api.";
+        description = lib.mdDoc "List of rippleds to be used by ripple data api.";
         default = [
           "http://s_east.ripple.com:51234"
           "http://s_west.ripple.com:51234"

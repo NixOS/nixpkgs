@@ -28,7 +28,7 @@ in {
         type = types.package;
         default = pkgs.evince;
         defaultText = literalExpression "pkgs.evince";
-        description = "Evince derivation to use.";
+        description = lib.mdDoc "Evince derivation to use.";
       };
 
     };

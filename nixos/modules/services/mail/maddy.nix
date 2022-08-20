@@ -173,7 +173,7 @@ in {
         default = "localhost";
         type = with types; uniq string;
         example = ''example.com'';
-        description = ''
+        description = lib.mdDoc ''
           Hostname to use. It should be FQDN.
         '';
       };
@@ -182,7 +182,7 @@ in {
         default = "localhost";
         type = with types; uniq string;
         example = ''mail.example.com'';
-        description = ''
+        description = lib.mdDoc ''
           Primary MX domain to use. It should be FQDN.
         '';
       };
@@ -195,7 +195,7 @@ in {
           "example.com"
           "other.example.com"
         ];
-        description = ''
+        description = lib.mdDoc ''
           Define list of allowed domains.
         '';
       };
@@ -217,7 +217,7 @@ in {
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Open the configured incoming and outgoing mail server ports.
         '';
       };

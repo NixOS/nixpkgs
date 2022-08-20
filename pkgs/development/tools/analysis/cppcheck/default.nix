@@ -1,22 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, libxslt, docbook_xsl, docbook_xml_dtd_45, pcre, withZ3 ? true, z3, python3 }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pcre
+, python3
+, libxslt
+, docbook_xsl
+, docbook_xml_dtd_45
+, withZ3 ? true
+, z3
+, which
+}:
 
 stdenv.mkDerivation rec {
   pname = "cppcheck";
-  version = "2.7.5";
+  version = "2.8.2";
 
   src = fetchFromGitHub {
     owner = "danmar";
     repo = "cppcheck";
     rev = version;
-    sha256 = "sha256-GRhQXGldirIhUBI4CucDTTxuZhG0XW0qp1FjYXhVS0o=";
+    sha256 = "sha256-Zv5dGjEtlloWdL2rkGEVLrVTS/QSRDjvDrequVSwgM0=";
   };
 
   buildInputs = [ pcre
     (python3.withPackages (ps: [ps.pygments]))
   ] ++ lib.optionals withZ3 [ z3 ];
-  nativeBuildInputs = [ libxslt docbook_xsl docbook_xml_dtd_45 ];
+  nativeBuildInputs = [ libxslt docbook_xsl docbook_xml_dtd_45 which ];
 
-  makeFlags = [ "PREFIX=$(out)" "FILESDIR=$(out)/cfg" "HAVE_RULES=yes" ]
+  makeFlags = [ "PREFIX=$(out)" "MATCHCOMPILER=yes" "FILESDIR=$(out)/share/cppcheck" "HAVE_RULES=yes" ]
    ++ lib.optionals withZ3 [ "USE_Z3=yes" "CPPFLAGS=-DNEW_Z3=1" ];
 
   outputs = [ "out" "man" ];

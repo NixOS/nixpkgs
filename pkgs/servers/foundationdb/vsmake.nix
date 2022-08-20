@@ -3,7 +3,7 @@
 # (which will eventually become the default version.)
 { gcc6Stdenv, lib, fetchurl, fetchFromGitHub
 
-, which, findutils, m4, gawk
+, which, m4
 , python2, openjdk, mono, libressl
 , ...
 }:
@@ -51,7 +51,7 @@ let
           inherit rev sha256;
         };
 
-        nativeBuildInputs = [ python2 openjdk gawk which m4 findutils mono ];
+        nativeBuildInputs = [ python2 openjdk which m4 mono ];
         buildInputs = [ libressl boost ];
 
         inherit patches;

@@ -1,23 +1,31 @@
 { lib, buildPythonPackage, fetchPypi, isPyPy
 , pytest, pytest-cov, pytest-mock, freezegun
-, jinja2, future, binaryornot, click, whichcraft, poyo, jinja2_time, requests
-, python-slugify }:
+, jinja2, future, binaryornot, click, jinja2_time, requests
+, python-slugify
+, pyyaml
+}:
 
 buildPythonPackage rec {
   pname = "cookiecutter";
-  version = "1.7.3";
+  version = "2.1.1";
 
   # not sure why this is broken
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-a5pNcoguJDvgd6c5fQ8fdv5mzz35HzEV27UzDiFPpFc=";
+    sha256 = "sha256-85gr6NnFPawSYYZAE/3sf4Ov0uQu3m9t0GnF4UnFQNU=";
   };
 
   checkInputs = [ pytest pytest-cov pytest-mock freezegun ];
   propagatedBuildInputs = [
-    jinja2 future binaryornot click whichcraft poyo jinja2_time requests python-slugify
+    binaryornot
+    jinja2
+    click
+    pyyaml
+    jinja2_time
+    python-slugify
+    requests
   ];
 
   # requires network access for cloning git repos

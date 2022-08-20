@@ -10,7 +10,7 @@ in {
 
     hostName = mkOption {
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         FQDN for the grocy instance.
       '';
     };
@@ -18,7 +18,7 @@ in {
     nginx.enableSSL = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether or not to enable SSL (with ACME and let's encrypt)
         for the grocy vhost.
       '';
@@ -39,7 +39,7 @@ in {
         "pm.max_requests" = "500";
       };
 
-      description = ''
+      description = lib.mdDoc ''
         Options for grocy's PHPFPM pool.
       '';
     };
@@ -47,8 +47,8 @@ in {
     dataDir = mkOption {
       type = types.str;
       default = "/var/lib/grocy";
-      description = ''
-        Home directory of the <literal>grocy</literal> user which contains
+      description = lib.mdDoc ''
+        Home directory of the `grocy` user which contains
         the application's state.
       '';
     };
@@ -58,7 +58,7 @@ in {
         type = types.str;
         default = "USD";
         example = "EUR";
-        description = ''
+        description = lib.mdDoc ''
           ISO 4217 code for the currency to display.
         '';
       };
@@ -66,7 +66,7 @@ in {
       culture = mkOption {
         type = types.enum [ "de" "en" "da" "en_GB" "es" "fr" "hu" "it" "nl" "no" "pl" "pt_BR" "ru" "sk_SK" "sv_SE" "tr" ];
         default = "en";
-        description = ''
+        description = lib.mdDoc ''
           Display language of the frontend.
         '';
       };
@@ -75,14 +75,14 @@ in {
         showWeekNumber = mkOption {
           default = true;
           type = types.bool;
-          description = ''
+          description = lib.mdDoc ''
             Show the number of the weeks in the calendar views.
           '';
         };
         firstDayOfWeek = mkOption {
           default = null;
           type = types.nullOr (types.enum (range 0 6));
-          description = ''
+          description = lib.mdDoc ''
             Which day of the week (0=Sunday, 1=Monday etc.) should be the
             first day.
           '';
@@ -115,9 +115,9 @@ in {
       user = "grocy";
       group = "nginx";
 
-      # PHP 7.4 is the only version which is supported/tested by upstream:
-      # https://github.com/grocy/grocy/blob/v3.0.0/README.md#how-to-install
-      phpPackage = pkgs.php74;
+      # PHP 8.0 is the only version which is supported/tested by upstream:
+      # https://github.com/grocy/grocy/blob/v3.3.0/README.md#how-to-install
+      phpPackage = pkgs.php80;
 
       inherit (cfg.phpfpm) settings;
 

@@ -15,7 +15,7 @@
 
 let
   pname = "findpython";
-  version = "0.1.6";
+  version = "0.2.1";
 in
 buildPythonPackage {
   inherit pname version;
@@ -25,7 +25,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-n9YYXNy5a6pxCTCER++0k7LH8aj1aeEorxTXJrKmnhg=";
+    hash = "sha256-Q5Shy828+NEOo0OeLYCGsuwHRQcJe25tvuGAKMblKwg=";
   };
 
   nativeBuildInputs = [

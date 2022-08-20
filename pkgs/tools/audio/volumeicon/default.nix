@@ -1,24 +1,36 @@
-{ pkgs, fetchurl, lib, stdenv, gtk3, pkg-config, intltool, alsa-lib }:
+{ fetchFromGitHub, lib, stdenv
+, autoreconfHook, intltool, pkg-config
+, gtk3, alsa-lib
+}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "volumeicon";
   version = "0.5.1";
 
-  src = fetchurl {
-    url = "http://softwarebakery.com/maato/files/volumeicon/volumeicon-0.5.1.tar.gz";
-    sha256 = "182xl2w8syv6ky2h2bc9imc6ap8pzh0p7rp63hh8nw0xm38c3f14";
+  src = fetchFromGitHub {
+    owner = "Maato";
+    repo = "volumeicon";
+    rev = version;
+    hash = "sha256-zYKC7rOoLf08rV4B43TrGNBcXfSBFxWZCe9bQD9JzaA";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gtk3 intltool alsa-lib ];
+  nativeBuildInputs = [
+    autoreconfHook
+    intltool
+    pkg-config
+  ];
+
+  buildInputs = [
+    gtk3
+    alsa-lib
+  ];
 
   meta = with lib; {
     description = "A lightweight volume control that sits in your systray";
-    homepage = "http://softwarebakery.com/maato/volumeicon.html";
-    platforms = pkgs.lib.platforms.linux;
+    homepage = "http://nullwise.com/volumeicon.html";
+    platforms = platforms.linux;
     maintainers = with maintainers; [ bobvanderlinden ];
-    license = pkgs.lib.licenses.gpl3;
+    license = licenses.gpl3;
   };
-
 }
 

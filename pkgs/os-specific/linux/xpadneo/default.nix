@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xpadneo";
-  version = "0.9.1";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "atar-axis";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-VUcS4OzvPj0o627ZWIOBqEAQJ4JuMCMjgaZoMkL/IHc=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-4zd+x9uYl0lJgePM9LEgLYFqvcw6VPF/CbR1XiYSwGE=";
   };
 
   setSourceRoot = ''
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Advanced Linux driver for Xbox One wireless controllers";
     homepage = "https://atar-axis.github.io/xpadneo";
-    license = licenses.gpl3Plus;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ kira-bruneau ];
     platforms = platforms.linux;
   };

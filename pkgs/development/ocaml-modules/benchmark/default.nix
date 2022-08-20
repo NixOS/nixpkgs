@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://ocaml-benchmark.forge.ocamlcore.org/";
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
     description = "Benchmark running times of code";
     license = lib.licenses.lgpl21;
-    maintainers = with lib.maintainers; [ volth ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

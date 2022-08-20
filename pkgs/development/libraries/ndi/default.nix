@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
     description = "NDI Software Developer Kit";
     platforms = ["x86_64-linux"];
     hydraPlatforms = [];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
   };
 }

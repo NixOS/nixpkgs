@@ -12,7 +12,7 @@ in
         options = {
           name = lib.mkOption {
             type = str;
-            description = "Name to match.";
+            description = lib.mdDoc "Name to match.";
           };
           "${field}" = lib.mkOption {
             type = int;
@@ -20,7 +20,7 @@ in
           };
           location = lib.mkOption {
             type = str;
-            description = "Location to match.";
+            description = lib.mdDoc "Location to match.";
           };
         };
       });
@@ -30,9 +30,9 @@ in
       type = lib.types.str;
       default = "-C si";
       example = "-C si -R 19";
-      description = ''
+      description = lib.mdDoc ''
         Flags passed verbatim to rtl_433 binary.
-        Having <literal>-C si</literal> (the default) is recommended since only Celsius temperatures are parsed.
+        Having `-C si` (the default) is recommended since only Celsius temperatures are parsed.
       '';
     };
     channels = lib.mkOption {
@@ -41,7 +41,7 @@ in
       example = [
         { name = "Acurite"; channel = 6543; location = "Kitchen"; }
       ];
-      description = ''
+      description = lib.mdDoc ''
         List of channel matchers to export.
       '';
     };
@@ -51,7 +51,7 @@ in
       example = [
         { name = "Nexus"; id = 1; location = "Bedroom"; }
       ];
-      description = ''
+      description = lib.mdDoc ''
         List of ID matchers to export.
       '';
     };

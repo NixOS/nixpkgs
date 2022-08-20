@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, pkgs }:
+{ lib, stdenv, fetchFromGitHub, substituteAll, pkgs, bash }:
 
 # To make use of this derivation, use
 # `programs.zsh.promptInit = "source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme";`
@@ -27,6 +27,9 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "0fkfh8j7rd8mkpgz6nsx4v7665d375266shl1aasdad8blgqmf0c";
   };
+
+  strictDeps = true;
+  buildInputs = [ bash ];
 
   patches = [
     (substituteAll {

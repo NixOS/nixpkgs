@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation rec {
   pname = "pixinsight";
-  version = "1.8.9";
+  version = "1.8.9-1";
 
   src = requireFile rec {
-    name = "PI-linux-x64-${version}-20220313-c.tar.xz";
+    name = "PI-linux-x64-${version}-20220518-c.tar.xz";
     url = "https://pixinsight.com/";
-    sha256 = "sha256-LvrTB8fofuysxR3OoZ2fkkOQU62yUAu8ePOczJG2uqU=";
+    sha256 = "sha256-AVeDJ7YYqCo7KfelUUQurjglNnTwCf0pOzJCV/bQrrw=";
     message = ''
       PixInsight is available from ${url} and requires a commercial (or trial) license.
       After a license has been obtained, PixInsight can be downloaded from the software distribution
@@ -124,6 +124,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Scientific image processing program for astrophotography";
     homepage = "https://pixinsight.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = [ maintainers.sheepforce ];

@@ -13,21 +13,27 @@
 , gtk3
 , gdk-pixbuf
 , wrapGAppsHook
+, vulkan-loader
+, libICE
+, libSM
+, libXi
+, libXcursor
+, libXext
+, libXrandr
+, fontconfig
+, glew
 }:
 
 buildDotnetModule rec {
   pname = "ryujinx";
-  version = "1.1.100"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
+  version = "1.1.223"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "26a881176eb6513a98889648e0d5b7fe647cd0e3";
-    sha256 = "09wjygkdr9sr0hwv77czi0x5xw8y585k9pghdm5s3iqjn9gbb45k";
+    rev = "951700fdd8f54fb34ffe8a3fb328a68b5bf37abe";
+    sha256 = "0kzchsxir8wh74rxvp582mci855hbd0vma6yhcc9vpz0zmhi2cpf";
   };
-
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
 
   projectFile = "Ryujinx.sln";
   nugetDeps = ./deps.nix;
@@ -36,7 +42,7 @@ buildDotnetModule rec {
 
   # TODO: Add the headless frontend. Currently errors on the following:
   # System.Exception: SDL2 initlaization failed with error "No available video device"
-  executables = [ "Ryujinx" ];
+  executables = [ "Ryujinx" "Ryujinx.Ava" ];
 
   nativeBuildInputs = [
     wrapGAppsHook
@@ -56,21 +62,34 @@ buildDotnetModule rec {
     libsoundio
     sndio
     pulseaudio
+    vulkan-loader
+    ffmpeg
+
+    # Avalonia UI
+    libICE
+    libSM
+    libXi
+    libXcursor
+    libXext
+    libXrandr
+    fontconfig
+    glew
   ];
 
   patches = [
     ./appdir.patch # Ryujinx attempts to write to the nix store. This patch redirects it to "~/.config/Ryujinx" on Linux.
   ];
 
+  makeWrapperArgs = [
+    # Without this Ryujinx fails to start on wayland. See https://github.com/Ryujinx/Ryujinx/issues/2714
+    "--set GDK_BACKEND x11"
+    "--set SDL_VIDEODRIVER x11"
+  ];
+
   preInstall = ''
     # workaround for https://github.com/Ryujinx/Ryujinx/issues/2349
     mkdir -p $out/lib/sndio-6
     ln -s ${sndio}/lib/libsndio.so $out/lib/sndio-6/libsndio.so.6
-
-    # Ryujinx tries to use ffmpeg from PATH
-    makeWrapperArgs+=(
-      --suffix PATH : ${lib.makeBinPath [ ffmpeg ]}
-    )
   '';
 
   preFixup = ''

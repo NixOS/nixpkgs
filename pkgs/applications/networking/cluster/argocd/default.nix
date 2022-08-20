@@ -2,19 +2,19 @@
 
 buildGoModule rec {
   pname = "argocd";
-  version = "2.3.3";
+  version = "2.4.10";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo-cd";
     rev = "v${version}";
-    sha256 = "sha256-ChgWqhkzVKhbyEA+g2flWK/WMxur7UHWXJUcLzp9RTE=";
+    sha256 = "sha256-qYHLK/3InkpRjMfmwmP+TE24D3OOw+glwEvYIEbxTa0=";
   };
 
-  vendorSha256 = "sha256-XrIIMnn65Y10KnVTsmw6vLE53Zra1lWNFgklmaj3gF8=";
+  vendorSha256 = "sha256-M1ZYooS22bntHXAMK4QpMAwuMvN4/tHtVu3WZW9V8TA=";
 
-  # Set target as ./cmd per release-cli
-  # https://github.com/argoproj/argo-cd/blob/master/Makefile#L222
+  # Set target as ./cmd per cli-local
+  # https://github.com/argoproj/argo-cd/blob/master/Makefile#L227
   subPackages = [ "cmd" ];
 
   ldflags =
@@ -26,6 +26,11 @@ buildGoModule rec {
       "-X ${package_url}.gitCommit=${src.rev}"
       "-X ${package_url}.gitTag=${src.rev}"
       "-X ${package_url}.gitTreeState=clean"
+      "-X ${package_url}.kubectlVersion=v0.23.1"
+      # NOTE: Update kubectlVersion when upgrading this package with
+      # https://github.com/argoproj/argo-cd/blob/v${version}/go.mod#L95
+      # Per https://github.com/argoproj/argo-cd/blob/master/Makefile#L18
+      # Will need a way to automate it :P
     ];
 
   nativeBuildInputs = [ installShellFiles ];

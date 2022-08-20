@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "pyrfxtrx";
-  version = "0.28.0";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pyRFXtrx";
-    rev = version;
-    hash = "sha256-Ty+yIA8amKyV3z++7n1m/YRH0gEoVIVTdX8xiZYp/eM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ntnZITj8upzUzlrSTjQxY9xNTU+gJ2rE9PN35cpWwvM=";
   };
 
   propagatedBuildInputs = [

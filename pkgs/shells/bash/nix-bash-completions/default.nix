@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1n5zs6xcnv4bv1hdaypmz7fv4j7dsr4a0ifah99iyj4p5j85i1bc";
   };
 
+  strictDeps = true;
   # To enable lazy loading via. bash-completion we need a symlink to the script
   # from every command name.
   installPhase = ''

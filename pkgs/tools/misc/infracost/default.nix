@@ -1,16 +1,16 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, terraform }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "infracost";
-  version = "0.9.22";
+  version = "0.10.10";
 
   src = fetchFromGitHub {
     owner = "infracost";
     rev = "v${version}";
     repo = "infracost";
-    sha256 = "sha256-JYC5wsv3JIqzv2woHits3wMpvPZ70lVrAZDh/DB1SVE=";
+    sha256 = "sha256-7SaT2jwrM0pD0BqX18d3nutU52RMCnQb2FuDtoJZMQM=";
   };
-  vendorSha256 = "sha256-/B3hXHRNk6DJ6iC0RalsoWsb6vK0md8asnLkhSAeHXU=";
+  vendorSha256 = "sha256-ccoFTg5OYpaagyzb2lJLr6WlTO/L4YevXK09gZOELOw=";
 
   ldflags = [ "-s" "-w" "-X github.com/infracost/infracost/internal/version.Version=v${version}" ];
 
@@ -26,6 +26,7 @@ buildGoModule rec {
 
     # checkFlags aren't correctly passed through via buildGoModule so we use buildFlagsArray
     # -short only runs the unit-tests tagged short
+    # move to checkFlags after https://github.com/NixOS/nixpkgs/pull/173702
     buildFlagsArray+="-short"
 
     # remove tests that require networking

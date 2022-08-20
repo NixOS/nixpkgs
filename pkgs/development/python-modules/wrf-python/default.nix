@@ -1,18 +1,21 @@
-{lib
+{ stdenv
+, lib
 , fetchFromGitHub
 , pythonOlder
 , buildPythonPackage
+, basemap
 , gfortran
+, netcdf4
+, numpy
+, python
+, setuptools
 , xarray
 , wrapt
-, numpy
-, netcdf4
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "wrf-python";
-  version = "1.3.3";
+  version = "1.3.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,19 +23,20 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "NCAR";
     repo = "wrf-python";
-    rev = version;
-    hash = "sha256-+v4FEK0FVE0oAIb18XDTOInHKfxXyykb1ngk9Uxwf0c=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4iIs/M9fzGJsnKCDSl09OTUoh7j6REBXuutE5uXFe3k=";
   };
-
-  propagatedBuildInputs = [
-    wrapt
-    numpy
-    setuptools
-    xarray
-  ];
 
   nativeBuildInputs = [
     gfortran
+  ];
+
+  propagatedBuildInputs = [
+    basemap
+    numpy
+    setuptools
+    xarray
+    wrapt
   ];
 
   checkInputs = [
@@ -42,7 +46,7 @@ buildPythonPackage rec {
   checkPhase = ''
     runHook preCheck
     cd ./test/ci_tests
-    python utests.py
+    ${python.interpreter} utests.py
     runHook postCheck
   '';
 
@@ -55,5 +59,6 @@ buildPythonPackage rec {
     homepage = "http://wrf-python.rtfd.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ mhaselsteiner ];
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
   };
 }

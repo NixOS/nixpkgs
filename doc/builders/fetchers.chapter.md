@@ -1,16 +1,55 @@
 # Fetchers {#chap-pkgs-fetchers}
 
-When using Nix, you will frequently need to download source code and other files from the internet. For this purpose, Nix provides the [_fixed output derivation_](https://nixos.org/manual/nix/stable/#fixed-output-drvs) feature and Nixpkgs provides various functions that implement the actual fetching from various protocols and services.
+Building software with Nix often requires downloading source code and other files from the internet.
+`nixpkgs` provides *fetchers* for different protocols and services. Fetchers are functions that simplify downloading files.
 
 ## Caveats
 
-Because fixed output derivations are _identified_ by their hash, a common mistake is to update a fetcher's URL or a version parameter, without updating the hash. **This will cause the old contents to be used.** So remember to always invalidate the hash argument.
+Fetchers create [fixed output derivations](https://nixos.org/manual/nix/stable/#fixed-output-drvs) from downloaded files.
+Nix can reuse the downloaded files via the hash of the resulting derivation.
 
-For those who develop and maintain fetchers, a similar problem arises with changes to the implementation of a fetcher. These may cause a fixed output derivation to fail, but won't normally be caught by tests because the supposed output is already in the store or cache. For the purpose of testing, you can use a trick that is embodied by the [`invalidateFetcherByDrvHash`](#tester-invalidateFetcherByDrvHash) function. It uses the derivation `name` to create a unique output path per fetcher implementation, defeating the caching precisely where it would be harmful.
+The fact that the hash belongs to the Nix derivation output and not the file itself can lead to confusion.
+For example, consider the following fetcher:
+
+```nix
+fetchurl {
+  url = "http://www.example.org/hello-1.0.tar.gz";
+  sha256 = "0v6r3wwnsk5pdjr188nip3pjgn1jrn5pc5ajpcfy6had6b3v4dwm";
+};
+```
+
+A common mistake is to update a fetcher’s URL, or a version parameter, without updating the hash.
+
+```nix
+fetchurl {
+  url = "http://www.example.org/hello-1.1.tar.gz";
+  sha256 = "0v6r3wwnsk5pdjr188nip3pjgn1jrn5pc5ajpcfy6had6b3v4dwm";
+};
+```
+
+**This will reuse the old contents**.
+Remember to invalidate the hash argument, in this case by setting the `sha256` attribute to an empty string.
+
+```nix
+fetchurl {
+  url = "http://www.example.org/hello-1.1.tar.gz";
+  sha256 = "";
+};
+```
+
+Use the resulting error message to determine the correct hash.
+
+```
+error: hash mismatch in fixed-output derivation '/path/to/my.drv':
+         specified: sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+            got:    sha256-RApQUm78dswhBLC/rfU9y0u6pSAzHceIJqgmetRD24E=
+```
+
+A similar problem arises while testing changes to a fetcher's implementation. If the output of the derivation already exists in the Nix store, test failures can go undetected. The [`invalidateFetcherByDrvHash`](#tester-invalidateFetcherByDrvHash) function helps prevent reusing cached derivations.
 
 ## `fetchurl` and `fetchzip` {#fetchurl}
 
-Two basic fetchers are `fetchurl` and `fetchzip`. Both of these have two required arguments, a URL and a hash. The hash is typically `sha256`, although many more hash algorithms are supported. Nixpkgs contributors are currently recommended to use `sha256`. This hash will be used by Nix to identify your source. A typical usage of fetchurl is provided below.
+Two basic fetchers are `fetchurl` and `fetchzip`. Both of these have two required arguments, a URL and a hash. The hash is typically `sha256`, although many more hash algorithms are supported. Nixpkgs contributors are currently recommended to use `sha256`. This hash will be used by Nix to identify your source. A typical usage of `fetchurl` is provided below.
 
 ```nix
 { stdenv, fetchurl }:
@@ -24,9 +63,21 @@ stdenv.mkDerivation {
 }
 ```
 
-The main difference between `fetchurl` and `fetchzip` is in how they store the contents. `fetchurl` will store the unaltered contents of the URL within the Nix store. `fetchzip` on the other hand will decompress the archive for you, making files and directories directly accessible in the future. `fetchzip` can only be used with archives. Despite the name, `fetchzip` is not limited to .zip files and can also be used with any tarball.
+The main difference between `fetchurl` and `fetchzip` is in how they store the contents. `fetchurl` will store the unaltered contents of the URL within the Nix store. `fetchzip` on the other hand, will decompress the archive for you, making files and directories directly accessible in the future. `fetchzip` can only be used with archives. Despite the name, `fetchzip` is not limited to .zip files and can also be used with any tarball.
 
-`fetchpatch` works very similarly to `fetchurl` with the same arguments expected. It expects patch files as a source and performs normalization on them before computing the checksum. For example it will remove comments or other unstable parts that are sometimes added by version control systems and can change over time.
+## `fetchpatch` {#fetchpatch}
+
+`fetchpatch` works very similarly to `fetchurl` with the same arguments expected. It expects patch files as a source and performs normalization on them before computing the checksum. For example, it will remove comments or other unstable parts that are sometimes added by version control systems and can change over time.
+
+- `relative`: Similar to using `git-diff`'s `--relative` flag, only keep changes inside the specified directory, making paths relative to it.
+- `stripLen`: Remove the first `stripLen` components of pathnames in the patch.
+- `extraPrefix`: Prefix pathnames by this string.
+- `excludes`: Exclude files matching these patterns (applies after the above arguments).
+- `includes`: Include only files matching these patterns (applies after the above arguments).
+- `revert`: Revert the patch.
+
+Note that because the checksum is computed after applying these effects, using or modifying these arguments will have no effect unless the `sha256` argument is changed as well.
+
 
 Most other fetchers return a directory rather than a single file.
 
@@ -38,9 +89,9 @@ Used with Subversion. Expects `url` to a Subversion directory, `rev`, and `sha25
 
 Used with Git. Expects `url` to a Git repo, `rev`, and `sha256`. `rev` in this case can be full the git commit id (SHA1 hash) or a tag name like `refs/tags/v1.0`.
 
-Additionally the following optional arguments can be given: `fetchSubmodules = true` makes `fetchgit` also fetch the submodules of a repository. If `deepClone` is set to true, the entire repository is cloned as opposing to just creating a shallow clone. `deepClone = true` also implies `leaveDotGit = true` which means that the `.git` directory of the clone won't be removed after checkout.
+Additionally, the following optional arguments can be given: `fetchSubmodules = true` makes `fetchgit` also fetch the submodules of a repository. If `deepClone` is set to true, the entire repository is cloned as opposing to just creating a shallow clone. `deepClone = true` also implies `leaveDotGit = true` which means that the `.git` directory of the clone won't be removed after checkout.
 
-If only parts of the repository are needed, `sparseCheckout` can be used. This will prevent git from fetching unnecessary blobs from server, see [git sparse-checkout](https://git-scm.com/docs/git-sparse-checkout) and [git clone --filter](https://git-scm.com/docs/git-clone#Documentation/git-clone.txt---filterltfilter-specgt) for more infomation:
+If only parts of the repository are needed, `sparseCheckout` can be used. This will prevent git from fetching unnecessary blobs from server, see [git sparse-checkout](https://git-scm.com/docs/git-sparse-checkout) for more information:
 
 ```nix
 { stdenv, fetchgit }:
@@ -50,8 +101,8 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "https://...";
     sparseCheckout = ''
-      path/to/be/included
-      another/path
+      directory/to/be/included
+      another/directory
     '';
     sha256 = "0000000000000000000000000000000000000000000000000000";
   };
@@ -78,17 +129,17 @@ A number of fetcher functions wrap part of `fetchurl` and `fetchzip`. They are m
 
 ## `fetchFromGitHub` {#fetchfromgithub}
 
-`fetchFromGitHub` expects four arguments. `owner` is a string corresponding to the GitHub user or organization that controls this repository. `repo` corresponds to the name of the software repository. These are located at the top of every GitHub HTML page as `owner`/`repo`. `rev` corresponds to the Git commit hash or tag (e.g `v1.0`) that will be downloaded from Git. Finally, `sha256` corresponds to the hash of the extracted directory. Again, other hash algorithms are also available but `sha256` is currently preferred.
+`fetchFromGitHub` expects four arguments. `owner` is a string corresponding to the GitHub user or organization that controls this repository. `repo` corresponds to the name of the software repository. These are located at the top of every GitHub HTML page as `owner`/`repo`. `rev` corresponds to the Git commit hash or tag (e.g `v1.0`) that will be downloaded from Git. Finally, `sha256` corresponds to the hash of the extracted directory. Again, other hash algorithms are also available, but `sha256` is currently preferred.
 
 `fetchFromGitHub` uses `fetchzip` to download the source archive generated by GitHub for the specified revision. If `leaveDotGit`, `deepClone` or `fetchSubmodules` are set to `true`, `fetchFromGitHub` will use `fetchgit` instead. Refer to its section for documentation of these options.
 
 ## `fetchFromGitLab` {#fetchfromgitlab}
 
-This is used with GitLab repositories. The arguments expected are very similar to fetchFromGitHub above.
+This is used with GitLab repositories. The arguments expected are very similar to `fetchFromGitHub` above.
 
 ## `fetchFromGitiles` {#fetchfromgitiles}
 
-This is used with Gitiles repositories. The arguments expected are similar to fetchgit.
+This is used with Gitiles repositories. The arguments expected are similar to `fetchgit`.
 
 ## `fetchFromBitbucket` {#fetchfrombitbucket}
 
@@ -96,11 +147,11 @@ This is used with BitBucket repositories. The arguments expected are very simila
 
 ## `fetchFromSavannah` {#fetchfromsavannah}
 
-This is used with Savannah repositories. The arguments expected are very similar to fetchFromGitHub above.
+This is used with Savannah repositories. The arguments expected are very similar to `fetchFromGitHub` above.
 
 ## `fetchFromRepoOrCz` {#fetchfromrepoorcz}
 
-This is used with repo.or.cz repositories. The arguments expected are very similar to fetchFromGitHub above.
+This is used with repo.or.cz repositories. The arguments expected are very similar to `fetchFromGitHub` above.
 
 ## `fetchFromSourcehut` {#fetchfromsourcehut}
 
@@ -111,4 +162,4 @@ or "hg"), `domain` and `fetchSubmodules`.
 
 If `fetchSubmodules` is `true`, `fetchFromSourcehut` uses `fetchgit`
 or `fetchhg` with `fetchSubmodules` or `fetchSubrepos` set to `true`,
-respectively. Otherwise the fetcher uses `fetchzip`.
+respectively. Otherwise, the fetcher uses `fetchzip`.

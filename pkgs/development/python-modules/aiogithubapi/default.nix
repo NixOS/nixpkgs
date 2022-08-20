@@ -45,7 +45,7 @@ buildPythonPackage rec {
     # Upstream is releasing with the help of a CI to PyPI, GitHub releases
     # are not in their focus
     substituteInPlace pyproject.toml \
-      --replace 'version="main",' 'version="${version}",'
+      --replace 'version = "0"' 'version = "${version}"'
   '';
 
   pythonImportsCheck = [

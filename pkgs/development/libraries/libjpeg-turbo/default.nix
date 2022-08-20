@@ -9,6 +9,21 @@
 , enableJpeg8 ? false # whether to build libjpeg with v8 compatibility
 , enableStatic ? stdenv.hostPlatform.isStatic
 , enableShared ? !stdenv.hostPlatform.isStatic
+
+# for passthru.tests
+, dvgrab
+, epeg
+, freeimage
+, gd
+, graphicsmagick
+, imagemagick
+, imlib2
+, jhead
+, libjxl
+, mjpegtools
+, opencv
+, python3
+, vips
 }:
 
 assert !(enableJpeg7 && enableJpeg8);  # pick only one or none, not both
@@ -60,6 +75,23 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckTarget = "test";
+
+  passthru.tests = {
+    inherit
+      dvgrab
+      epeg
+      freeimage
+      gd
+      graphicsmagick
+      imagemagick
+      imlib2
+      jhead
+      libjxl
+      mjpegtools
+      opencv
+      vips;
+    inherit (python3.pkgs) pillow imread pyturbojpeg;
+  };
 
   meta = with lib; {
     homepage = "https://libjpeg-turbo.org/";

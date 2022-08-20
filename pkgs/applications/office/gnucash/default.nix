@@ -26,12 +26,12 @@
 
 stdenv.mkDerivation rec {
   pname = "gnucash";
-  version = "4.9";
+  version = "4.11";
 
   # raw source code doesn't work out of box; fetchFromGitHub not usable
   src = fetchurl {
     url = "https://github.com/Gnucash/gnucash/releases/download/${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-mlUcMMG3EhmfwiJ6EJr7mE177xjhOBcLvHIlxsH6ty0=";
+    hash = "sha256-+BTt4w174N7Ar7KujQNii5rjTISLaDEuTFre2UwQKxk=";
   };
 
   nativeBuildInputs = [
@@ -154,8 +154,6 @@ stdenv.mkDerivation rec {
       test-xml-pricedb \
       test-xml-transaction \
       test-xml2-is-file
-
-      export LD_LIBRARY_PATH="$PWD/lib:$PWD/lib/gnucash:$PWD/lib/gnucash/test:$PWD/lib/gnucash/test/future"
   '';
 
   preFixup = ''
@@ -206,7 +204,7 @@ stdenv.mkDerivation rec {
       - Financial Calculations
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ domenkozar AndersonTorres ];
+    maintainers = with maintainers; [ domenkozar AndersonTorres rski ];
     platforms = platforms.unix;
   };
 }

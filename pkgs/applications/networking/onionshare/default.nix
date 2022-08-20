@@ -14,6 +14,7 @@
 , pycrypto
 , pynacl
 , pyside2
+, pysocks
 , pytestCheckHook
 , qrcode
 , qt5
@@ -132,6 +133,7 @@ rec {
       pyside2
       psutil
       qrcode
+      pysocks
     ];
 
     nativeBuildInputs = [ qt5.wrapQtAppsHook ];

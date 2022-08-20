@@ -34,7 +34,7 @@ buildPythonPackage rec {
   '';
 
   installPhase = ''
-    ${python.interpreter} setup.py install --prefix=$out
+    ${python.interpreter} setup.py install --prefix=$out --single-version-externally-managed
   '';
 
   doCheck = false;
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/DaveMDS/python-efl";
     platforms = platforms.linux;
     license = with licenses; [ gpl3 lgpl3 ];
-    maintainers = with maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
+    maintainers = with maintainers; [ matejc ftrvxmtrx ] ++ teams.enlightenment.members;
   };
 }

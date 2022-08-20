@@ -569,8 +569,9 @@
       <listitem>
         <para>
           The NixOS VM test framework,
-          <literal>pkgs.nixosTest</literal>/<literal>make-test-python.nix</literal>,
-          now requires detaching commands such as
+          <literal>pkgs.nixosTest</literal>/<literal>make-test-python.nix</literal>
+          (<literal>pkgs.testers.nixosTest</literal> since 22.05), now
+          requires detaching commands such as
           <literal>succeed(&quot;foo &amp;&quot;)</literal> and
           <literal>succeed(&quot;foo | xclip -i&quot;)</literal> to
           close stdout. This can be done with a redirect such as

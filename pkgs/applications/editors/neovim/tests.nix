@@ -86,9 +86,11 @@ rec {
 
   nvim_with_plug = neovim.override {
     extraName = "-with-plug";
-    configure.plug.plugins = with pkgs.vimPlugins; [
-      (base16-vim.overrideAttrs(old: { pname = old.pname + "-unique-for-tests-please-dont-use"; }))
-    ];
+    configure.packages.plugins = with pkgs.vimPlugins; {
+      start = [
+        (base16-vim.overrideAttrs(old: { pname = old.pname + "-unique-for-tests-please-dont-use"; }))
+      ];
+    };
     configure.customRC = ''
       color base16-tomorrow-night
       set background=dark
@@ -123,7 +125,7 @@ rec {
   });
 
   force-nowrap = runTest nvimDontWrap ''
-      ! grep "-u" ${nvimDontWrap}/bin/nvim
+      ! grep -F -- ' -u' ${nvimDontWrap}/bin/nvim
   '';
 
   nvim_via_override-test = runTest nvim_via_override ''
@@ -150,14 +152,8 @@ rec {
   # and do `:call deoplete#enable()`. It will print an error if the remote
   # plugin is not registered.
   test_nvim_with_remote_plugin = neovim.override {
-    extraName = "-pathogen-remote";
-    configure.pathogen.pluginNames = with vimPlugins; [ deoplete-nvim ];
-  };
-
-  # only neovim makes use of `requiredPlugins`, test this here
-  test_nvim_with_vim_nix_using_pathogen = neovim.override {
-    extraName = "-pathogen";
-    configure.pathogen.pluginNames = [ "vim-nix" ];
+    extraName = "-remote";
+    configure.packages.foo.start = with vimPlugins; [ deoplete-nvim ];
   };
 
   nvimWithLuaPackages = wrapNeovim2 "-with-lua-packages" (makeNeovimConfig {

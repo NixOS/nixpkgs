@@ -10,6 +10,10 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ dune-private-libs ];
 
+  preBuild = ''
+    rm -r vendor/csexp
+  '';
+
   meta = with lib; {
     inherit (dune_3.meta) homepage;
     description = "Glob string matching language supported by dune";

@@ -20,11 +20,11 @@ let
   vivaldiName = if isSnapshot then "vivaldi-snapshot" else "vivaldi";
 in stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "5.2.2623.39-1";
+  version = "5.4.2753.37-1";
 
   src = fetchurl {
     url = "https://downloads.vivaldi.com/${branch}/vivaldi-${branch}_${version}_amd64.deb";
-    sha256 = "1dd44b109gdbjqcbf5rhvgyiqb6qi8vpimsh5fb359dmnqfan1hk";
+    sha256 = "05aaprv1bqnb7iml1m6vlzv038dizy05ycwkrgb5nw1wiz9w6cyw";
   };
 
   unpackPhase = ''
@@ -101,6 +101,7 @@ in stdenv.mkDerivation rec {
     description = "A Browser for our Friends, powerful and personal";
     homepage    = "https://vivaldi.com";
     license     = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ otwieracz badmutex ];
     platforms   = [ "x86_64-linux" ];
   };

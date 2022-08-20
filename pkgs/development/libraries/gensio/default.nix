@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/projects/ser2net/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ emantor ];
+    mainProgram = "gensiot";
     platforms = platforms.unix;
   };
 }

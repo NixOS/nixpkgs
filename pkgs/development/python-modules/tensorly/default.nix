@@ -1,9 +1,9 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pytestCheckHook
-, isPy27
 , numpy
+, pytestCheckHook
+, pythonOlder
 , scipy
 , sparse
 }:
@@ -11,32 +11,51 @@
 buildPythonPackage rec {
   pname = "tensorly";
   version = "0.7.0";
-  disabled = isPy27;
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "VcX3pCczZQUYZaD7xrrkOcj0QPJt28cYTwpZm5D/X3c=";
+    sha256 = "sha256-VcX3pCczZQUYZaD7xrrkOcj0QPJt28cYTwpZm5D/X3c=";
   };
 
-  # nose is not actually required for anything
-  # (including testing with the minimal dependencies)
+  propagatedBuildInputs = [
+    numpy
+    scipy
+    sparse
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
   postPatch = ''
-    substituteInPlace setup.py --replace ", 'nose'" ""
+    # nose is not actually required for anything
+    # (including testing with the minimal dependencies)
+    substituteInPlace setup.py \
+      --replace ", 'nose'" ""
   '';
 
-  propagatedBuildInputs = [ numpy scipy sparse ];
+  pythonImportsCheck = [
+    "tensorly"
+  ];
 
-  checkInputs = [ pytestCheckHook ];
-  pytestFlagsArray = [ "tensorly" ];
+  pytestFlagsArray = [
+    "tensorly"
+  ];
 
-  pythonImportsCheck = [ "tensorly" ];
+  disabledTests = [
+    # AssertionError: Partial_SVD took too long, maybe full_matrices set wrongly
+    "test_svd_time"
+  ];
 
   meta = with lib; {
     description = "Tensor learning in Python";
     homepage = "https://tensorly.org/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.bcdarwin ];
+    maintainers = with maintainers; [ bcdarwin ];
   };
 }

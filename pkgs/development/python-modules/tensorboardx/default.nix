@@ -19,13 +19,13 @@
 
 buildPythonPackage rec {
   pname = "tensorboardx";
-  version = "2.4";
+  version = "2.5";
 
   src = fetchFromGitHub {
     owner = "lanpa";
     repo = "tensorboardX";
-    rev = "v${version}";
-    sha256 = "sha256-1jWpC64Ubl07Bday4h5ue0wuDj4yPTWL2nhjtoQBnM0=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-g6x0yUpofeSNA4rKPidqOKC7/TrOICstcc98VnQcfDY=";
   };
 
   # apparently torch API changed a bit at 1.6
@@ -70,8 +70,6 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # we are not interested in linting errors
     "tests/test_lint.py"
-    # missing caffe2 dependency
-    "tests/test_caffe2.py"
   ];
 
   meta = with lib; {

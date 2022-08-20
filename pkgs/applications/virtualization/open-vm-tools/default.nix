@@ -1,20 +1,20 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, makeWrapper, autoreconfHook
+{ stdenv, lib, fetchFromGitHub, makeWrapper, autoreconfHook
 , bash, fuse3, libmspack, openssl, pam, xercesc, icu, libdnet, procps, libtirpc, rpcsvc-proto
 , libX11, libXext, libXinerama, libXi, libXrender, libXrandr, libXtst
 , pkg-config, glib, gdk-pixbuf-xlib, gtk3, gtkmm3, iproute2, dbus, systemd, which
-, libdrm, udev
+, libdrm, udev, util-linux
 , withX ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "open-vm-tools";
-  version = "12.0.0";
+  version = "12.0.5";
 
   src = fetchFromGitHub {
     owner  = "vmware";
     repo   = "open-vm-tools";
     rev    = "stable-${version}";
-    sha256 = "sha256-agWTGf8x6bxZ7S5bU2scHt8IdLLe/hZdaEMfHIK9d8U=";
+    sha256 = "sha256-rjYYRh4ZWAd9iELW2/4PZvMOfQfgwtGcrI2icaed2Eg=";
   };
 
   sourceRoot = "${src.name}/open-vm-tools";
@@ -25,21 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ fuse3 glib icu libdnet libdrm libmspack libtirpc openssl pam procps rpcsvc-proto udev xercesc ]
       ++ lib.optionals withX [ gdk-pixbuf-xlib gtk3 gtkmm3 libX11 libXext libXinerama libXi libXrender libXrandr libXtst ];
 
-  patches = [
-    # glibc 2.35 and GCC 11 & 12 reporting possible array bounds overflow
-    # Will be fixed in the release after 12.0.0
-    (fetchpatch {
-      url = "https://github.com/vmware/open-vm-tools/commit/de6d129476724668b8903e2a87654f50ba21b1b2.patch";
-      sha256 = "1cqhm868g40kcp8qzzwq10zd4bah9ypaw1qawnli5d240mlkpfhh";
-    })
-  ];
-
-  prePatch = ''
-    cd ..
-  '';
-
   postPatch = ''
-     cd open-vm-tools
      sed -i 's,etc/vmware-tools,''${prefix}/etc/vmware-tools,' Makefile.am
      sed -i 's,^confdir = ,confdir = ''${prefix},' scripts/Makefile.am
      sed -i 's,usr/bin,''${prefix}/usr/bin,' scripts/Makefile.am
@@ -51,6 +37,13 @@ stdenv.mkDerivation rec {
 
      # Make reboot work, shutdown is not in /sbin on NixOS
      sed -i 's,/sbin/shutdown,shutdown,' lib/system/systemLinux.c
+
+     # Fix paths to fuse3 (we do not use fuse2 so that is not modified)
+     sed -i 's,/bin/fusermount3,${fuse3}/bin/fusermount3,' vmhgfs-fuse/config.c
+
+     substituteInPlace services/plugins/vix/foundryToolsDaemon.c \
+      --replace "/usr/bin/vmhgfs-fuse" "${placeholder "out"}/bin/vmhgfs-fuse" \
+      --replace "/bin/mount" "${util-linux}/bin/mount"
   '';
 
   configureFlags = [

@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "ToneLib Metal – Guitar amp simulator targeted at metal players";
     homepage = "https://tonelib.net/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ dan4ik605743 ];
     platforms = [ "x86_64-linux" ];

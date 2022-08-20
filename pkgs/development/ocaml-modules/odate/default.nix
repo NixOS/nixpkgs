@@ -6,9 +6,7 @@ buildDunePackage rec {
   pname = "odate";
   version = "0.6";
 
-  useDune2 = true;
-
-  minimumOCamlVersion = "4.07";
+  minimalOCamlVersion = "4.07";
 
   src = fetchFromGitHub {
     owner = "hhugo";
@@ -20,6 +18,11 @@ buildDunePackage rec {
   strictDeps = true;
 
   nativeBuildInputs = [ menhir ];
+
+  # Ensure compatibility of v0.6 with menhir ≥ 20220210
+  preBuild = ''
+    substituteInPlace dune-project --replace "(using menhir 1.0)" "(using menhir 2.0)"
+  '';
 
   meta = {
     description = "Date and duration in OCaml";

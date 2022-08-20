@@ -40,7 +40,7 @@ buildPythonPackage rec {
     six
   ];
 
-  passthru.extras-require = {
+  passthru.optional-dependencies = {
     datetime = [
       python-dateutil
     ];

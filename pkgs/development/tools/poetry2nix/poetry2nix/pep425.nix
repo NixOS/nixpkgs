@@ -23,7 +23,9 @@ let
     let
       entries' = splitString "-" str;
       # Hack: Remove version "suffixes" like 2.11.4-1
-      entries = builtins.filter (x: builtins.match "[0-9]" x == null) entries';
+      # Some wheels have build tag with more than one digit
+      # like openvino-2022.1.0-7019-cp36-cp36m-manylinux_2_27_x86_64.whl
+      entries = builtins.filter (x: builtins.match "[0-9]*" x == null) entries';
       p = removeSuffix ".whl" (builtins.elemAt entries 4);
     in
     {

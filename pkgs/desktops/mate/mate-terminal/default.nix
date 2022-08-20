@@ -1,4 +1,18 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, libxml2, mate-desktop, dconf, vte, pcre2, wrapGAppsHook, mateUpdateScript, nixosTests }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, itstool
+, libxml2
+, mate-desktop
+, dconf
+, vte
+, pcre2
+, wrapGAppsHook
+, mateUpdateScript
+, nixosTests
+}:
 
 stdenv.mkDerivation rec {
   pname = "mate-terminal";

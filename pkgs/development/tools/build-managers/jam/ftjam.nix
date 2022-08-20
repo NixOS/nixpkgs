@@ -42,10 +42,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = "https://freetype.org/jam/";
     description = "Freetype's enhanced, backwards-compatible Jam clone";
+    homepage = "https://freetype.org/jam/";
     license = licenses.free;
     maintainers = with maintainers; [ AndersonTorres ];
+    mainProgram = "jam";
     platforms = platforms.unix;
   };
 }

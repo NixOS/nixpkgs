@@ -7,10 +7,12 @@
 , qttools
 , qtx11extras
 , qtsvg
+, qtimageformats
 , xorg
 , lxqt-build-tools
 , libfm-qt
 , libexif
+, menu-cache
 , lxqtUpdateScript
 }:
 
@@ -36,10 +38,12 @@ mkDerivation rec {
     qttools
     qtx11extras
     qtsvg
+    qtimageformats # add-on module to support more image file formats
     libfm-qt
     xorg.libpthreadstubs
     xorg.libXdmcp
     libexif
+    menu-cache
   ];
 
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
@@ -49,6 +53,6 @@ mkDerivation rec {
     description = "The image viewer and screenshot tool for lxqt";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

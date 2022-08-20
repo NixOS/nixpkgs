@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     cp -r ../*pdf ../input_examples ../"R functions" $out/share/doc/bayescan
   '';
 
+  NIX_CFLAGS_COMPILE = [ "-std=c++14" ];
+
   meta = with lib; {
     description = "Detecting natural selection from population-based genetic data";
     homepage = "http://cmpg.unibe.ch/software/BayeScan";

@@ -63,11 +63,16 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     # Remove all version pinning
     sed -i -e "s/==[0-9.]*//" requirements.txt
+
     # We are not build for Python < 3.7
-    sed -i -e '/future-annotations/d' requirements.txt
-    # We can't work with dummy packages
-    sed -i -e 's/bs4/beautifulsoup4/g' requirements.txt
+    substituteInPlace requirements.txt \
+      --replace "future-annotations" ""
   '';
+
+  pytestFlagsArray = [
+    # DeprecationWarning: There is no current event loop
+    "-W ignore::DeprecationWarning"
+  ];
 
   disabledTests = [
     # Tests require network access

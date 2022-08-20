@@ -1,15 +1,16 @@
-{ fetchurl, lib, stdenv, libjpeg, libpng, libtiff, perl }:
+{ fetchurl, lib, stdenv, libjpeg, libpng, libtiff, perl, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "libpano13";
-  version = "2.9.20";
+  version = "2.9.21";
 
   src = fetchurl {
     url = "mirror://sourceforge/panotools/${pname}-${version}.tar.gz";
-    sha256 = "12cv4886l1czfjwy7k6ipgf3zjksgwhdjzr2s9fdg33vqcv2hlrv";
+    sha256 = "sha256-eeWhRSGZMF4pYUYnIO9ZQRUnecEnxblvw0DSSS5jNZA=";
   };
 
   buildInputs = [ perl libjpeg libpng libtiff ];
+  nativeBuildInputs = [ cmake ];
 
   # one of the tests succeeds on my machine but fails on Hydra (no idea why)
   #doCheck = true;

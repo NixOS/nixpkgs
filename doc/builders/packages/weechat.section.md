@@ -1,6 +1,6 @@
-# Weechat {#sec-weechat}
+# WeeChat {#sec-weechat}
 
-Weechat can be configured to include your choice of plugins, reducing its closure size from the default configuration which includes all available plugins. To make use of this functionality, install an expression that overrides its configuration such as
+WeeChat can be configured to include your choice of plugins, reducing its closure size from the default configuration which includes all available plugins. To make use of this functionality, install an expression that overrides its configuration, such as:
 
 ```nix
 weechat.override {configure = {availablePlugins, ...}: {
@@ -13,7 +13,7 @@ If the `configure` function returns an attrset without the `plugins` attribute, 
 
 The plugins currently available are `python`, `perl`, `ruby`, `guile`, `tcl` and `lua`.
 
-The python and perl plugins allows the addition of extra libraries. For instance, the `inotify.py` script in `weechat-scripts` requires D-Bus or libnotify, and the `fish.py` script requires `pycrypto`. To use these scripts, use the plugin's `withPackages` attribute:
+The Python and Perl plugins allows the addition of extra libraries. For instance, the `inotify.py` script in `weechat-scripts` requires D-Bus or libnotify, and the `fish.py` script requires `pycrypto`. To use these scripts, use the plugin's `withPackages` attribute:
 
 ```nix
 weechat.override { configure = {availablePlugins, ...}: {
@@ -49,7 +49,7 @@ weechat.override {
 
 Further values can be added to the list of commands when running `weechat --run-command "your-commands"`.
 
-Additionally it's possible to specify scripts to be loaded when starting `weechat`. These will be loaded before the commands from `init`:
+Additionally, it's possible to specify scripts to be loaded when starting `weechat`. These will be loaded before the commands from `init`:
 
 ```nix
 weechat.override {
@@ -64,7 +64,7 @@ weechat.override {
 }
 ```
 
-In `nixpkgs` there's a subpackage which contains derivations for WeeChat scripts. Such derivations expect a `passthru.scripts` attribute which contains a list of all scripts inside the store path. Furthermore all scripts have to live in `$out/share`. An exemplary derivation looks like this:
+In `nixpkgs` there's a subpackage which contains derivations for WeeChat scripts. Such derivations expect a `passthru.scripts` attribute, which contains a list of all scripts inside the store path. Furthermore, all scripts have to live in `$out/share`. An exemplary derivation looks like this:
 
 ```nix
 { stdenv, fetchurl }:

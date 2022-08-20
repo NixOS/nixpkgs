@@ -28,7 +28,7 @@ let
     flask-bootstrap
     flask-paginate
     flask-reverse-proxy-fix
-    flask_wtf
+    flask-wtf
     arrow
     werkzeug
     click
@@ -37,14 +37,14 @@ let
   ];
 in
 with python3'.pkgs; buildPythonApplication rec {
-  version = "4.6";
+  version = "4.7";
   pname = "buku";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "buku";
     rev = "v${version}";
-    sha256 = "sha256-hr9qiP7SbloigDcs+6KVWu0SOlggMaBr7CCfY8zoJG0=";
+    sha256 = "sha256-7piJK1hz9h6EWiU/q5MAS1PSvHFxnW7rZBKxq+wda1c=";
   };
 
   checkInputs = [

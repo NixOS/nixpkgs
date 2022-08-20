@@ -1,119 +1,185 @@
-{ mkDerivation
+{ stdenv
 , lib
-, qtbase
 , fetchFromGitHub
-, fftwSinglePrec
-, ruby
-, erlang
-, aubio
-, alsa-lib
-, rtmidi
-, libsndfile
+, wrapQtAppsHook
+, makeDesktopItem
+, copyDesktopItems
 , cmake
 , pkg-config
-, boost
-, bash
-, jack2
-, supercollider
+, catch2_3
+, qtbase
+, qtsvg
+, qttools
 , qwt
+, qscintilla
+, kissfftFloat
+, crossguid
+, reproc
+, platform-folders
+, ruby
+, erlang
+, elixir
+, beamPackages
+, alsa-lib
+, rtmidi
+, boost
+, aubio
+, jack2
+, supercollider-with-sc3-plugins
+, parallel
+
+, withTauWidget ? false
+, qtwebengine
+
+, withImGui ? false
+, gl3w
+, SDL2
+, fmt
 }:
 
-let
-
-  supercollider_single_prec = supercollider.override {  fftw = fftwSinglePrec; };
-
+stdenv.mkDerivation rec {
   pname = "sonic-pi";
-  version = "3.3.1";
+  version = "4.0.3";
+
   src = fetchFromGitHub {
     owner = "sonic-pi-net";
-    repo = "sonic-pi";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-AE7iuSNnW1SAtBMplReGzXKcqD4GG23i10MIAWnlcPo=";
+    hash = "sha256-kTuW+i/kdPhyG3L6SkgQTE9UvADY49KahJcw3+5Uz4k=";
   };
 
-  # sonic pi uses it's own aubioonset with hardcoded parameters but will compile a whole aubio for it
-  # let's just build the aubioonset instead and link against aubio from nixpkgs
-  aubioonset = mkDerivation {
-    name = "aubioonset";
-    src = src;
-    sourceRoot = "source/app/external/aubio/examples";
-    buildInputs = [jack2 aubio libsndfile];
-    patchPhase = ''
-      sed -i "s@<aubio.h>@<aubio/aubio.h>@" jackio.c utils.h
-    '';
-    buildPhase = ''
-      gcc -o aubioonset -laubio jackio.c utils.c aubioonset.c
-    '';
-    installPhase = ''
-      install -D aubioonset $out/aubioonset
-    '';
+  mixFodDeps = beamPackages.fetchMixDeps {
+    inherit version;
+    pname = "mix-deps-${pname}";
+    mixEnv = "test";
+    src = "${src}/app/server/beam/tau";
+    sha256 = "sha256-MvwUyVTS23vQKLpGxz46tEVCs/OyYk5dDaBlv+kYg1M=";
   };
 
-in
+  strictDeps = true;
 
-mkDerivation rec {
-  inherit pname version src;
+  nativeBuildInputs = [
+    wrapQtAppsHook
+    copyDesktopItems
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [
-    bash
+    cmake
     pkg-config
-    qtbase
-    qwt
-    ruby
-    aubio
-    supercollider_single_prec
-    boost
+
     erlang
-    alsa-lib
-    rtmidi
+    elixir
+    beamPackages.hex
   ];
 
-  dontUseCmakeConfigure = true;
+  buildInputs = [
+    qtbase
+    qtsvg
+    qttools
+    qwt
+    qscintilla
+    kissfftFloat
+    catch2_3
+    crossguid
+    reproc
+    platform-folders
+    ruby
+    alsa-lib
+    rtmidi
+    boost
+    aubio
+  ] ++ lib.optionals withTauWidget [
+    qtwebengine
+  ] ++ lib.optionals withImGui [
+    gl3w
+    SDL2
+    fmt
+  ];
 
-  prePatch = ''
-    sed -i '/aubio/d' app/external/linux_build_externals.sh
-    sed -i '/aubio/d' app/linux-prebuild.sh
-    patchShebangs app
+  checkInputs = [
+    parallel
+    ruby
+    supercollider-with-sc3-plugins
+    jack2
+  ];
+
+  cmakeFlags = [
+    "-DUSE_SYSTEM_LIBS=ON"
+    "-DBUILD_IMGUI_INTERFACE=${if withImGui then "ON" else "OFF"}"
+    "-DWITH_QT_GUI_WEBENGINE=${if withTauWidget then "ON" else "OFF"}"
+  ];
+
+  doCheck = true;
+
+  postPatch = ''
+    # Fix shebangs on files in app and bin scripts
+    patchShebangs app bin
   '';
 
-  configurePhase = ''
-    runHook preConfigure
+  preConfigure = ''
+    # Set build environment
+    export SONIC_PI_HOME="$TMPDIR/spi"
 
-    ./app/linux-prebuild.sh
-    ./app/linux-config.sh
+    export HEX_HOME="$TEMPDIR/hex"
+    export HEX_OFFLINE=1
+    export MIX_REBAR3='${beamPackages.rebar3}/bin/rebar3'
+    export REBAR_GLOBAL_CONFIG_DIR="$TEMPDIR/rebar3"
+    export REBAR_CACHE_DIR="$TEMPDIR/rebar3.cache"
+    export MIX_HOME="$TEMPDIR/mix"
+    export MIX_DEPS_PATH="$TEMPDIR/deps"
+    export MIX_ENV=prod
 
-    runHook postConfigure
+    # Copy Mix dependency sources
+    echo 'Copying ${mixFodDeps} to Mix deps'
+    cp --no-preserve=mode -R '${mixFodDeps}' "$MIX_DEPS_PATH"
+
+    # Change to project base directory
+    cd app
+
+    # Prebuild Ruby vendored dependencies and Qt docs
+    ./linux-prebuild.sh -o
+
+    # Append CMake flag depending on the value of $out
+    cmakeFlags+=" -DAPP_INSTALL_ROOT=$out/app"
   '';
 
-  buildPhase = ''
-    runHook preBuild
+  postBuild = ''
+    # Build BEAM server
+    ../linux-post-tau-prod-release.sh -o
+  '';
 
-    pushd app/build
-    cmake --build . --config Release
+  checkPhase = ''
+    runHook preCheck
+
+    # BEAM tests
+    pushd ../server/beam/tau
+      MIX_ENV=test TAU_ENV=test mix test
     popd
 
-    runHook postBuild
+    # Ruby tests
+    pushd ../server/ruby
+      rake test
+    popd
+
+    # API tests
+    pushd api-tests
+      # run JACK parallel to tests and quit both when one exits
+      SONIC_PI_ENV=test parallel --no-notice -j2 --halt now,done=1 ::: 'jackd -rd dummy' 'ctest --verbose'
+    popd
+
+    runHook postCheck
   '';
 
   installPhase = ''
     runHook preInstall
 
+    # Run Linux release script
+    ../linux-release.sh
+
+    # Copy dist directory to output
     mkdir $out
-    cp -r {bin,etc} $out/
+    cp -r linux_dist/* $out/
 
-    # Copy server whole.
-    mkdir -p $out/app
-    cp -r app/server $out/app/
-
-    # We didn't build this during linux-prebuild.sh so copy from the separate derivation
-    cp ${aubioonset}/aubioonset $out/app/server/native/
-
-    # Copy only necessary files for the gui app.
-    mkdir -p $out/app/gui/qt
-    cp -r app/gui/qt/{book,fonts,help,html,images,image_source,info,lang,theme} $out/app/gui/qt/
-    mkdir -p $out/app/build/gui/qt
-    cp app/build/gui/qt/sonic-pi $out/app/build/gui/qt/sonic-pi
+    # Copy icon
+    install -Dm644 ../gui/qt/images/icon-smaller.png $out/share/icons/hicolor/256x256/apps/sonic-pi.png
 
     runHook postInstall
   '';
@@ -121,19 +187,42 @@ mkDerivation rec {
   # $out/bin/sonic-pi is a shell script, and wrapQtAppsHook doesn't wrap them.
   dontWrapQtApps = true;
   preFixup = ''
-    wrapQtApp "$out/bin/sonic-pi" \
-      --prefix PATH : ${lib.makeBinPath [ bash jack2 ruby supercollider erlang] }
-    makeWrapper \
-      $out/app/server/ruby/bin/sonic-pi-server.rb \
-      $out/bin/sonic-pi-server \
-      --prefix PATH : ${lib.makeBinPath [ bash jack2 ruby supercollider erlang ] }
+    # Wrap Qt GUI (distributed binary)
+    wrapQtApp $out/bin/sonic-pi \
+      --prefix PATH : ${lib.makeBinPath [ ruby supercollider-with-sc3-plugins jack2 ]}
+
+    # If ImGui was built
+    if [ -e $out/app/build/gui/imgui/sonic-pi-imgui ]; then
+      # Wrap ImGui into bin
+      makeWrapper $out/app/build/gui/imgui/sonic-pi-imgui $out/bin/sonic-pi-imgui \
+        --inherit-argv0 \
+        --prefix PATH : ${lib.makeBinPath [ ruby supercollider-with-sc3-plugins jack2 ]}
+    fi
+
+    # Remove runtime Erlang references
+    for file in $(grep -FrIl '${erlang}/lib/erlang' $out/app/server/beam/tau); do
+      substituteInPlace "$file" --replace '${erlang}/lib/erlang' $out/app/server/beam/tau/_build/prod/rel/tau
+    done
   '';
 
-  meta = {
+  stripDebugList = [ "app" "bin" ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "sonic-pi";
+      exec = "sonic-pi";
+      icon = "sonic-pi";
+      desktopName = "Sonic Pi";
+      comment = meta.description;
+      categories = [ "Audio" "AudioVideo" "Education" ];
+    })
+  ];
+
+  meta = with lib; {
     homepage = "https://sonic-pi.net/";
     description = "Free live coding synth for everyone originally designed to support computing and music lessons within schools";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ Phlogistique kamilchm c0deaddict sohalt ];
-    platforms = lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ Phlogistique kamilchm c0deaddict sohalt lilyinstarlight ];
+    platforms = platforms.linux;
   };
 }

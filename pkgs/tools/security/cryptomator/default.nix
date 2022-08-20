@@ -1,18 +1,18 @@
 { lib, stdenv, fetchFromGitHub
 , autoPatchelfHook
 , fuse, jffi
-, maven, jdk, jre, makeWrapper, glib, wrapGAppsHook
+, maven, jdk, jre, makeShellWrapper, glib, wrapGAppsHook
 }:
 
 let
   pname = "cryptomator";
-  version = "1.6.8";
+  version = "1.6.13";
 
   src = fetchFromGitHub {
     owner = "cryptomator";
     repo = "cryptomator";
     rev = version;
-    sha256 = "sha256-2bvIjfutxfTPBtYiSXpgdEh63Eg74uqSf8CDo/Oma0U=";
+    sha256 = "sha256-xQxCSWbovdecTFWFDFu2K+lbA6+bSV2l2kk+R/hFcQ0=";
   };
 
   # perform fake build to make a fixed-output derivation out of the files downloaded from maven central (120MB)
@@ -37,7 +37,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-quYUJX/JErtWuUQBYXXee/uZGkO0UBr4qxcGticxGUc=";
+    outputHash = "sha256-SFiYHUH1Et7/SgciIvLcQGh54Z3fDVp22jSvDavXPjE=";
 
     doCheck = false;
   };
@@ -65,7 +65,7 @@ in stdenv.mkDerivation rec {
     rm $out/share/cryptomator/libs/jff*.jar
     cp -f ${jffi}/share/java/jffi-complete.jar $out/share/cryptomator/libs/
 
-    makeWrapper ${jre}/bin/java $out/bin/cryptomator \
+    makeShellWrapper ${jre}/bin/java $out/bin/cryptomator \
       --add-flags "--class-path '$out/share/cryptomator/libs/*'" \
       --add-flags "--module-path '$out/share/cryptomator/mods'" \
       --add-flags "-Dcryptomator.logDir='~/.local/share/Cryptomator/logs'" \
@@ -98,12 +98,22 @@ in stdenv.mkDerivation rec {
     cp ${src}/dist/linux/common/application-vnd.cryptomator.vault.xml $out/share/mime/packages/application-vnd.cryptomator.vault.xml
   '';
 
-  nativeBuildInputs = [ autoPatchelfHook maven makeWrapper wrapGAppsHook jdk ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    maven
+    makeShellWrapper
+    wrapGAppsHook
+    jdk
+  ];
   buildInputs = [ fuse jre glib jffi ];
 
   meta = with lib; {
     description = "Free client-side encryption for your cloud files";
     homepage = "https://cryptomator.org";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ bachp ];
     platforms = platforms.linux;

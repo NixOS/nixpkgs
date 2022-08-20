@@ -1,4 +1,4 @@
-{ lib, appimageTools, fetchurl, gsettings-desktop-schemas, gtk3 }:
+{ lib, appimageTools, fetchurl }:
 
 let
   version = "0.7.2";
@@ -16,10 +16,6 @@ let
 
 in appimageTools.wrapType2 rec {
   inherit name src;
-
-  profile = ''
-    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
-  '';
 
   extraInstallCommands = ''
     mv $out/bin/${name} $out/bin/${pname}

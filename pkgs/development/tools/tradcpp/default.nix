@@ -9,8 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "1h2bwxwc13rz3g2236l89hm47f72hn3m4h7wjir3j532kq0m68bc";
   };
 
+  strictDeps = true;
   # tradcpp only comes with BSD-make Makefile; the patch adds configure support
-  buildInputs = [ autoconf ];
+  nativeBuildInputs = [ autoconf ];
   preConfigure = "autoconf";
   patches = [
     ./tradcpp-configure.patch

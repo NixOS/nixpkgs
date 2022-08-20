@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, fetchzip, makeWrapper, runCommand, makeDesktopItem
+{ lib, stdenv, fetchurl, fetchzip, makeWrapper, runCommand, makeDesktopItem
 , xonotic-data, copyDesktopItems
 , # required for both
   unzip, libjpeg, zlib, libvorbis, curl
@@ -16,7 +16,7 @@
 
 let
   pname = "xonotic";
-  version = "0.8.2";
+  version = "0.8.5";
   name = "${pname}-${version}";
   variant =
     if withSDL && withGLX then
@@ -41,7 +41,7 @@ let
     '';
     homepage = "https://www.xonotic.org/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ astsmtl zalakain petabyteboy ];
+    maintainers = with lib.maintainers; [ astsmtl zalakain ];
     platforms = lib.platforms.linux;
   };
 
@@ -61,17 +61,8 @@ let
 
     src = fetchurl {
       url = "https://dl.xonotic.org/xonotic-${version}-source.zip";
-      sha256 = "0axxw04fyz6jlfqd0kp7hdrqa0li31sx1pbipf2j5qp9wvqicsay";
+      sha256 = "sha256-oagbpVqxUb8JdY5/WWFLLlFQ6EIkdT53lQvNB6KC6l0=";
     };
-
-    patches = [
-      # Fix to make darkplaces compile under GCC 11
-      (fetchpatch {
-        name = "fix-darkplaces-gcc11";
-        url = "https://gitlab.com/xonotic/darkplaces/-/commit/5e9e998c1759bc0085c3273fc39f9ea6f72a7dc8.patch";
-        sha256 = "sha256-s0JettSg0AYr8V2mXKJ2QU125bBcX1BAu/yDciTWC5o=";
-      })
-    ];
 
     nativeBuildInputs = [ unzip ];
     buildInputs = [ libjpeg zlib libvorbis curl gmp ]
@@ -146,8 +137,8 @@ in rec {
   xonotic-data = fetchzip {
     name = "xonotic-data";
     url = "https://dl.xonotic.org/xonotic-${version}.zip";
-    sha256 = "15caj11v9hhr7w55w3rs1rspblzr9lg1crqivbn9pyyq0rif8cpl";
-    extraPostFetch = ''
+    sha256 = "sha256-/malKGbDdUnqG+bJOJ2f3zHb7hAGiNZdprczr2Fgb5E=";
+    postFetch = ''
       cd $out
       rm -rf $(ls | grep -v "^data$" | grep -v "^key_0.d0pk$")
     '';

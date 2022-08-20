@@ -6,15 +6,15 @@
 
 buildGoModule rec {
   pname = "kubescape";
-  version = "2.0.152";
+  version = "2.0.161";
 
   src = fetchFromGitHub {
     owner = "armosec";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-hibXmA2JerfnkGiSnBUCMHGPm4Tefnsl/x2VAS5z0Fo=";
+    hash = "sha256-rsO6ZTQg5fmpp+5Zx36tQnDW1vf2k+FCI3cFbGZifVM=";
   };
-  vendorSha256 = "sha256-HfsQfoz1n3FEd2eVBBz3Za2jYCSrozXpL34Z8CgQsTA=";
+  vendorSha256 = "sha256-EinrVdGdYroh0X/ACAVD2gw4k0jrPHQ3Ucb3TUYKd8Q=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -37,7 +37,17 @@ buildGoModule rec {
       go list ./... | grep -v httphandler
     }
 
-    rm core/pkg/resourcehandler/{repositoryscanner,urlloader}_test.go
+    # remove tests that use networking
+    rm core/pkg/resourcehandler/urlloader_test.go
+
+    # remove tests that use networking
+    substituteInPlace core/pkg/resourcehandler/repositoryscanner_test.go \
+      --replace "TestScanRepository" "SkipScanRepository" \
+      --replace "TestGit" "SkipGit"
+
+    # remove test that requires networking
+    substituteInPlace core/cautils/scaninfo_test.go \
+      --replace "TestSetContextMetadata" "SkipSetContextMetadata"
   '';
 
   postInstall = ''

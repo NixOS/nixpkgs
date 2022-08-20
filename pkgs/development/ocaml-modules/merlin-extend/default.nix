@@ -19,6 +19,6 @@ buildDunePackage rec {
     homepage = "https://github.com/let-def/merlin-extend";
     description = "SDK to extend Merlin";
     license = licenses.mit;
-    maintainers = [ maintainers.volth ];
+    maintainers = [ ];
   };
 }

@@ -25,13 +25,14 @@ buildDotnetModule rec {
   };
 
   dotnet-runtime = dotnetCorePackages.runtime_3_1;
+  dotnet-sdk = dotnetCorePackages.sdk_3_1;
+
   nugetDeps = ./deps.nix;
 
   projectFile = "OpenTracker.sln";
   executables = [ "OpenTracker" ];
 
   doCheck = true;
-  dotnet-test-sdk = dotnetCorePackages.sdk_3_1;
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -57,9 +58,15 @@ buildDotnetModule rec {
   meta = with lib; {
     description = "A tracking application for A Link to the Past Randomizer";
     homepage = "https://github.com/trippsc2/OpenTracker";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      # deps
+      binaryBytecode
+      binaryNativeCode
+    ];
     license = licenses.mit;
     maintainers = [ maintainers.ivar ];
     mainProgram = "OpenTracker";
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }

@@ -12,37 +12,37 @@ let
 
   commonOptions = {
     hourly = mkOption {
-      description = "Number of hourly snapshots.";
+      description = lib.mdDoc "Number of hourly snapshots.";
       type = with types; nullOr ints.unsigned;
       default = null;
     };
 
     daily = mkOption {
-      description = "Number of daily snapshots.";
+      description = lib.mdDoc "Number of daily snapshots.";
       type = with types; nullOr ints.unsigned;
       default = null;
     };
 
     monthly = mkOption {
-      description = "Number of monthly snapshots.";
+      description = lib.mdDoc "Number of monthly snapshots.";
       type = with types; nullOr ints.unsigned;
       default = null;
     };
 
     yearly = mkOption {
-      description = "Number of yearly snapshots.";
+      description = lib.mdDoc "Number of yearly snapshots.";
       type = with types; nullOr ints.unsigned;
       default = null;
     };
 
     autoprune = mkOption {
-      description = "Whether to automatically prune old snapshots.";
+      description = lib.mdDoc "Whether to automatically prune old snapshots.";
       type = with types; nullOr bool;
       default = null;
     };
 
     autosnap = mkOption {
-      description = "Whether to automatically take snapshots.";
+      description = lib.mdDoc "Whether to automatically take snapshots.";
       type = with types; nullOr bool;
       default = null;
     };
@@ -50,7 +50,7 @@ let
 
   datasetOptions = rec {
     use_template = mkOption {
-      description = "Names of the templates to use for this dataset.";
+      description = lib.mdDoc "Names of the templates to use for this dataset.";
       type = types.listOf (types.str // {
         check = (types.enum (attrNames cfg.templates)).check;
         description = "configured template name";
@@ -60,9 +60,9 @@ let
     useTemplate = use_template;
 
     recursive = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Whether to recursively snapshot dataset children.
-        You can also set this to <literal>"zfs"</literal> to handle datasets
+        You can also set this to `"zfs"` to handle datasets
         recursively in an atomic way without the possibility to
         override settings for child datasets.
       '';
@@ -71,7 +71,7 @@ let
     };
 
     process_children_only = mkOption {
-      description = "Whether to only snapshot child datasets if recursing.";
+      description = lib.mdDoc "Whether to only snapshot child datasets if recursing.";
       type = types.bool;
       default = false;
     };
@@ -118,12 +118,11 @@ in
       type = types.str;
       default = "hourly";
       example = "daily";
-      description = ''
+      description = lib.mdDoc ''
         Run sanoid at this interval. The default is to run hourly.
 
         The format is described in
-        <citerefentry><refentrytitle>systemd.time</refentrytitle>
-        <manvolnum>7</manvolnum></citerefentry>.
+        {manpage}`systemd.time(7)`.
       '';
     };
 
@@ -135,7 +134,7 @@ in
         config.process_children_only = mkAliasDefinitions (mkDefault options.processChildrenOnly or { });
       }));
       default = { };
-      description = "Datasets to snapshot.";
+      description = lib.mdDoc "Datasets to snapshot.";
     };
 
     templates = mkOption {
@@ -144,14 +143,14 @@ in
         options = commonOptions;
       });
       default = { };
-      description = "Templates for datasets.";
+      description = lib.mdDoc "Templates for datasets.";
     };
 
     settings = mkOption {
       type = types.attrsOf datasetSettingsType;
-      description = ''
+      description = lib.mdDoc ''
         Free-form settings written directly to the config file. See
-        <link xlink:href="https://github.com/jimsalterjrs/sanoid/blob/master/sanoid.defaults.conf"/>
+        <https://github.com/jimsalterjrs/sanoid/blob/master/sanoid.defaults.conf>
         for allowed values.
       '';
     };
@@ -160,9 +159,9 @@ in
       type = types.listOf types.str;
       default = [ ];
       example = [ "--verbose" "--readonly" "--debug" ];
-      description = ''
+      description = lib.mdDoc ''
         Extra arguments to pass to sanoid. See
-        <link xlink:href="https://github.com/jimsalterjrs/sanoid/#sanoid-command-line-options"/>
+        <https://github.com/jimsalterjrs/sanoid/#sanoid-command-line-options>
         for allowed options.
       '';
     };

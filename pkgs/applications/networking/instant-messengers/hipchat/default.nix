@@ -81,6 +81,7 @@ in stdenv.mkDerivation {
   meta = with lib; {
     description = "Desktop client for HipChat services";
     homepage = "http://www.hipchat.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ puffnfresh ];

@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ lib, ... }: {
   name = "paperless";
-  meta.maintainers = with lib.maintainers; [ earvstedt Flakebi ];
+  meta.maintainers = with lib.maintainers; [ erikarvstedt Flakebi ];
 
   nodes.machine = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [ imagemagick jq ];

@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "python-smarttub";
-  version = "0.0.31";
+  version = "0.0.32";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "mdz";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-tyE50HzwnrxXGWJ0+YRxCmSxtqrPnYmJzBH2ZDFJDZ4=";
+    sha256 = "sha256-3qAs0vL6YGFDsMFC3KAhSc/axxVOll/SOswaJgVi9Hc=";
   };
 
   propagatedBuildInputs = [
@@ -36,6 +36,10 @@ buildPythonPackage rec {
     aresponses
     pytest-asyncio
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
   ];
 
   postPatch = ''

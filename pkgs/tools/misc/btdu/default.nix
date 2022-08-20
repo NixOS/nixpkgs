@@ -1,23 +1,23 @@
 {stdenv, lib, fetchurl, dub, ncurses, ldc, zlib, removeReferencesTo }:
 
 let
-    _d_ae_ver              = "0.0.3100";
+    _d_ae_ver              = "0.0.3184";
     _d_btrfs_ver           = "0.0.12";
     _d_ncurses_ver         = "0.0.149";
     _d_emsi_containers_ver = "0.9.0";
 in
 stdenv.mkDerivation rec {
     pname = "btdu";
-    version = "0.3.1";
+    version = "0.4.1";
 
     srcs = [
       (fetchurl {
         url = "https://github.com/CyberShadow/${pname}/archive/v${version}.tar.gz";
-        sha256 = "760b2f0d28920a78b7967dd34c429125135688a3aefc57ab3a92d07bc3ef10cb";
+        sha256 = "265c63ee82067f6b5dc44b47c9ec58be5e13c654f31035c60a7e375ffa4082c9";
       })
       (fetchurl {
         url = "https://github.com/CyberShadow/ae/archive/v${_d_ae_ver}.tar.gz";
-        sha256 = "86fa09ef6c1be4cbe8ad1c85729054e5d691b41ff57c7980d99937ec0f45b950";
+        sha256 = "74c17146ecde7ec4ba159eae4f88c74a5ef40cc200eabf97a0648f5abb5fde5e";
       })
       (fetchurl {
         url = "https://github.com/CyberShadow/d-btrfs/archive/v${_d_btrfs_ver}.tar.gz";

@@ -18,38 +18,38 @@ let
       type = nonEmptyStr;
       default = "backup";
       example = "incr";
-      description = ''
+      description = lib.mdDoc ''
         The actual command passed to the
-        <literal>dsmc</literal> executable to start the backup.
+        `dsmc` executable to start the backup.
       '';
     };
     servername = mkOption {
       type = nonEmptyStr;
       example = "mainTsmServer";
-      description = ''
+      description = lib.mdDoc ''
         Create a systemd system service
-        <literal>tsm-backup.service</literal> that starts
+        `tsm-backup.service` that starts
         a backup based on the given servername's stanza.
         Note that this server's
-        <option>passwdDir</option> will default to
-        <filename>/var/lib/tsm-backup/password</filename>
+        {option}`passwdDir` will default to
+        {file}`/var/lib/tsm-backup/password`
         (but may be overridden);
         also, the service will use
-        <filename>/var/lib/tsm-backup</filename> as
-        <literal>HOME</literal> when calling
-        <literal>dsmc</literal>.
+        {file}`/var/lib/tsm-backup` as
+        `HOME` when calling
+        `dsmc`.
       '';
     };
     autoTime = mkOption {
       type = nullOr nonEmptyStr;
       default = null;
       example = "12:00";
-      description = ''
+      description = lib.mdDoc ''
         The backup service will be invoked
         automatically at the given date/time,
         which must be in the format described in
-        <citerefentry><refentrytitle>systemd.time</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
-        The default <literal>null</literal>
+        {manpage}`systemd.time(5)`.
+        The default `null`
         disables automatic backups.
       '';
     };

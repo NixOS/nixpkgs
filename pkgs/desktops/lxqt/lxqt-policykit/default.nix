@@ -54,6 +54,6 @@ mkDerivation rec {
     description = "The LXQt PolicyKit agent";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "janet";
-  version = "1.21.2";
+  version = "1.24.0";
 
   src = fetchFromGitHub {
     owner = "janet-lang";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-6E726+DLs1hCUbr2/rqIdSn8u94LLFdKBBHkbB4rgm0=";
+    sha256 = "sha256-scc29tS3jiGacHp90tGmn/qnbLscJ4sAOCm8IteXfh4=";
   };
 
   # This release fails the test suite on darwin, remove when debugged.
@@ -25,6 +25,12 @@ stdenv.mkDerivation rec {
   mesonFlags = [ "-Dgit_hash=release" ];
 
   doCheck = true;
+
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    $out/bin/janet --help
+  '';
 
   meta = with lib; {
     description = "Janet programming language";

@@ -4,7 +4,6 @@
 , ninja
 , pkg-config
 , gettext
-, gobject-introspection
 , bison
 , flex
 , python3
@@ -17,11 +16,12 @@
 , bash-completion
 , lib
 , CoreServices
+, gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
   pname = "gstreamer";
-  version = "1.20.0";
+  version = "1.20.1";
 
   outputs = [
     "bin"
@@ -34,9 +34,14 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-7fS///hVkdT/97Ibue1/D+q8EjrEpO/ynnPLzkVPnbc=";
+    sha256 = "0cghi6n4nhdbajz3wqcgbh5xm94myvnqgsi9g2bz9n1s9904l2fy";
   };
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
+  strictDeps = true;
   nativeBuildInputs = [
     meson
     ninja
@@ -47,15 +52,18 @@ stdenv.mkDerivation rec {
     python3
     makeWrapper
     glib
-    gobject-introspection
     bash-completion
+    gobject-introspection
 
     # documentation
     # TODO add hotdoc here
+  ] ++ lib.optionals stdenv.isLinux [
+    libcap # for setcap binary
   ];
 
   buildInputs = [
     bash-completion
+    gobject-introspection
   ] ++ lib.optionals stdenv.isLinux [
     libcap
     libunwind
@@ -72,8 +80,6 @@ stdenv.mkDerivation rec {
     "-Ddbghelp=disabled" # not needed as we already provide libunwind and libdw, and dbghelp is a fallback to those
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
     "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-Dintrospection=disabled"
   ] ++ lib.optionals stdenv.isDarwin [
     # darwin.libunwind doesn't have pkg-config definitions so meson doesn't detect it.
     "-Dlibunwind=disabled"

@@ -15,6 +15,10 @@ let
   malloc0ReturnsNullCrossFlag = lib.optional
     (stdenv.hostPlatform != stdenv.buildPlatform)
     "--enable-malloc0returnsnull";
+
+  brokenOnDarwin = pkg: pkg.overrideAttrs (attrs: {
+    meta = attrs.meta // { broken = isDarwin; };
+  });
 in
 self: super:
 {
@@ -38,7 +42,7 @@ self: super:
   });
 
   encodings = super.encodings.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ self.mkfontscale ];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ self.mkfontscale ];
   });
 
   editres = super.editres.overrideAttrs (attrs: {
@@ -351,6 +355,10 @@ self: super:
     outputs = [ "out" "dev" ];
   });
 
+  xcbutilerrors = super.xcbutilerrors.overrideAttrs (attrs: {
+    outputs = [ "out" "dev" ]; # mainly to get rid of propagating others
+  });
+
   xcbutilcursor = super.xcbutilcursor.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ];
     meta = attrs.meta // { maintainers = [ lib.maintainers.lovek323 ]; };
@@ -384,13 +392,21 @@ self: super:
     configureFlags = [
       "--with-sdkdir=${placeholder "out"}/include/xorg"
     ];
+    meta = attrs.meta // {
+      broken = isDarwin; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86inputmouse.x86_64-darwin
+    };
   });
 
   xf86inputjoystick = super.xf86inputjoystick.overrideAttrs (attrs: {
     configureFlags = [
       "--with-sdkdir=${placeholder "out"}/include/xorg"
     ];
+    meta = attrs.meta // {
+      broken = isDarwin; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86inputjoystick.x86_64-darwin
+    };
   });
+
+  xf86inputkeyboard = brokenOnDarwin super.xf86inputkeyboard; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86inputkeyboard.x86_64-darwin
 
   xf86inputlibinput = super.xf86inputlibinput.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ];
@@ -419,6 +435,9 @@ self: super:
     };
   });
 
+  xf86inputvoid = brokenOnDarwin super.xf86inputvoid; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86inputvoid.x86_64-darwin
+  xf86videodummy = brokenOnDarwin super.xf86videodummy; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videodummy.x86_64-darwin
+
   # Obsolete drivers that don't compile anymore.
   xf86videoark     = super.xf86videoark.overrideAttrs     (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videogeode   = super.xf86videogeode.overrideAttrs   (attrs: { meta = attrs.meta // { broken = true; }; });
@@ -441,8 +460,8 @@ self: super:
   });
 
   xf86videoati = super.xf86videoati.overrideAttrs (attrs: {
-    NIX_CFLAGS_COMPILE = "-I${self.xorgserver.dev or self.xorgserver}/include/xorg";
-    nativeBuildInputs = with self; attrs.nativeBuildInputs ++ [ autoreconfHook utilmacros ];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook ];
+    buildInputs =  attrs.buildInputs ++ [ self.utilmacros ];
     patches = [
       (fetchpatch {
         url = "https://gitlab.freedesktop.org/xorg/driver/xf86-video-ati/-/commit/e0511968d04b42abf11bc0ffb387f143582bc144.patch";
@@ -452,7 +471,117 @@ self: super:
   });
 
   xf86videonouveau = super.xf86videonouveau.overrideAttrs (attrs: {
-    nativeBuildInputs = with self; attrs.nativeBuildInputs ++ [ autoreconfHook utilmacros ];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook ];
+    buildInputs =  attrs.buildInputs ++ [ self.utilmacros ];
+  });
+
+  xf86videoglint = super.xf86videoglint.overrideAttrs (attrs: {
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook ];
+    buildInputs =  attrs.buildInputs ++ [ self.utilmacros ];
+    # https://gitlab.freedesktop.org/xorg/driver/xf86-video-glint/-/issues/1
+    meta = attrs.meta // { broken = true; };
+  });
+
+  xf86videosuncg6 = super.xf86videosuncg6.overrideAttrs (attrs: {
+    meta = attrs.meta // { broken = isDarwin; }; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videosuncg6.x86_64-darwin
+    # https://gitlab.freedesktop.org/xorg/driver/xf86-video-suncg6/-/commit/14392504de04841fa2cbb5cdf8d9c9c7c4eb2ed8
+    postPatch = ''
+      patch -p1 <<EOF
+      diff --git a/src/cg6.h b/src/cg6.h
+      index 9f176e69dc1f6fc5e35ca20c30a4d3b4faf52623..d6bc19e8767c6aee9e7174a43cf1d71a9f35af32 100644
+      --- a/src/cg6.h
+      +++ b/src/cg6.h
+      @@ -26,7 +26,7 @@
+
+       #include "xf86.h"
+       #include "xf86_OSproc.h"
+      -#include "xf86RamDac.h"
+      +#include "xf86Cursor.h"
+       #include <X11/Xmd.h>
+       #include "gcstruct.h"
+       #include "cg6_regs.h"
+       EOF
+    '';
+  });
+
+  xf86videosunffb = super.xf86videosunffb.overrideAttrs (attrs: {
+    meta = attrs.meta // { broken = isDarwin; }; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videosunffb.x86_64-darwin
+    # https://gitlab.freedesktop.org/xorg/driver/xf86-video-sunffb/-/commit/656dd83b489e7bdc72d6c1990025d20dea26dc22
+    postPatch = ''
+      patch -p1 <<EOF
+      diff --git a/src/ffb.h b/src/ffb.h
+      index 67a2d87afa607b6bea07e53f4be738c1ebb757ab..d87024033fb48a83c50c588866c90cd6eac0975c 100644
+      --- a/src/ffb.h
+      +++ b/src/ffb.h
+      @@ -30,7 +30,7 @@
+
+       #include "xf86.h"
+       #include "xf86_OSproc.h"
+      -#include "xf86RamDac.h"
+      +#include "xf86Cursor.h"
+       #ifdef HAVE_XAA_H
+       #include "xaa.h"
+       #endif
+       EOF
+    '';
+  });
+
+  xf86videosunleo = super.xf86videosunleo.overrideAttrs (attrs: {
+    meta = attrs.meta // { broken = isDarwin; }; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videosunleo.x86_64-darwin
+    # https://gitlab.freedesktop.org/xorg/driver/xf86-video-sunleo/-/commit/f58ba53e6b6fe1b6e21d6aa3901a11e6130b95b0
+    postPatch = ''
+      patch -p1 <<EOF
+      diff --git a/src/leo.h b/src/leo.h
+      index a5bf41d34955d81b7ea14d4da6bc7f65191a3f98..c45c59b71be679333216d289d689a3c06c8dcbf7 100644
+      --- a/src/leo.h
+      +++ b/src/leo.h
+      @@ -26,7 +26,7 @@
+
+       #include "xf86.h"
+       #include "xf86_OSproc.h"
+      -#include "xf86RamDac.h"
+      +#include "xf86Cursor.h"
+       #include <X11/Xmd.h>
+       #include "gcstruct.h"
+       #include "leo_regs.h"
+       EOF
+    '';
+  });
+
+  xf86videotrident = super.xf86videotrident.overrideAttrs (attrs: {
+    # https://gitlab.freedesktop.org/xorg/driver/xf86-video-trident/-/commit/07a5c4732f1c28ffcb873ee04500e3cb813c50b4
+    postPatch = ''
+      patch -p1 <<EOF
+      diff --git a/src/trident.h b/src/trident.h
+      index 5cadf52d3be13f03e94a8f443f1c8a04358296e8..c82de4c7debf3ee42e3b7965b738a6bd6ae9147d 100644
+      --- a/src/trident.h
+      +++ b/src/trident.h
+      @@ -38,7 +38,6 @@
+       #include "xaa.h"
+       #endif
+       #include "xf86fbman.h"
+      -#include "xf86RamDac.h"
+       #include "compiler.h"
+       #include "vgaHW.h"
+       #include "xf86i2c.h"
+      @@ -103,7 +102,6 @@ typedef struct {
+           int			useEXA;
+           int			Chipset;
+           int			DACtype;
+      -    int			RamDac;
+           int                 ChipRev;
+           int			HwBpp;
+           int			BppShift;
+      @@ -169,7 +167,6 @@ typedef struct {
+           CARD32		BltScanDirection;
+           CARD32		DrawFlag;
+           CARD16		LinePattern;
+      -    RamDacRecPtr	RamDacRec;
+           int			CursorOffset;
+           xf86CursorInfoPtr	CursorInfoRec;
+           xf86Int10InfoPtr	Int10;
+       EOF
+    '';
   });
 
   xf86videovmware = super.xf86videovmware.overrideAttrs (attrs: {
@@ -631,7 +760,7 @@ self: super:
     in attrs //
     (let
       version = lib.getVersion attrs;
-      commonBuildInputs = attrs.buildInputs ++ [ libxcvt xtrans ];
+      commonBuildInputs = attrs.buildInputs ++ [ xtrans ];
       commonPropagatedBuildInputs = [
         zlib libGL libGLU dbus
         xorgproto
@@ -668,11 +797,37 @@ self: super:
           #
           # We set it to /var/log which can't be touched from inside the sandbox causing the build to hard-fail
           ./dont-create-logdir-during-build.patch
+
+          # Fix e.g. xorg.xf86videovmware with libdrm 2.4.108
+          # TODO: remove with xorgserver >= 1.21
+          (fetchpatch {
+            name = "stdbool.patch";
+            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/454b3a826edb5fc6d0fea3a9cfd1a5e8fc568747.diff";
+            sha256 = "1l9qg905jvlw3r0kx4xfw5m12pbs0782v2g3267d1m6q4m6fj1zy";
+          })
+        ]
+        # TODO: remove with xorgserver >= 21.1.4; https://lists.x.org/archives/xorg/2022-July/061035.html
+        ++ [
+          (fetchpatch {
+            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/f1070c01d616c5f21f939d5ebc533738779451ac.diff";
+            sha256 = "5hcreV3ND8Lklvo7QMpB0VWQ2tifIamRlCr6J82qXt8=";
+          })
+          (fetchpatch {
+            name = "CVE-2022-2319.diff";
+            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/6907b6ea2b4ce949cb07271f5b678d5966d9df42.diff";
+            sha256 = "gWXCalWj2SF4U7wSFGIgK396B0Fs3EtA/EL+34m3FWY=";
+          })
+          (fetchpatch {
+            name = "CVE-2022-2320.diff";
+            url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/dd8caf39e9e15d8f302e54045dd08d8ebf1025dc.diff";
+            sha256 = "rBiiXQRreMvexW9vOKblcfCYzul+9La01EAhir4FND8=";
+          })
         ];
         buildInputs = commonBuildInputs ++ [ libdrm mesa ];
         propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ libpciaccess libepoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
           udev
         ];
+        depsBuildBuild = [ buildPackages.stdenv.cc ];
         prePatch = lib.optionalString stdenv.hostPlatform.isMusl ''
           export CFLAGS+=" -D__uid_t=uid_t -D__gid_t=gid_t"
         '';
@@ -791,7 +946,8 @@ self: super:
   });
 
   xcursorthemes = super.xcursorthemes.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ self.xcursorgen self.xorgproto ];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ self.xcursorgen ];
+    buildInputs = attrs.buildInputs ++ [ self.xorgproto ];
     configureFlags = [ "--with-cursordir=$(out)/share/icons" ];
   });
 
@@ -837,8 +993,8 @@ self: super:
       rev = "31486f40f8e8f8923ca0799aea84b58799754564";
       sha256 = "sha256-nqT9VZDb2kAC72ot9UCdwEkM1uuP9NriJePulzrdZlM=";
     };
-    buildInputs = attrs.buildInputs ++ [ self.libXScrnSaver self.libXfixes self.libXv self.pixman ];
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [autoreconfHook self.utilmacros];
+    buildInputs = attrs.buildInputs ++ [ self.libXScrnSaver self.libXfixes self.libXv self.pixman self.utilmacros ];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [autoreconfHook ];
     configureFlags = [ "--with-default-dri=3" "--enable-tools" ];
 
     meta = attrs.meta // {
@@ -848,6 +1004,14 @@ self: super:
 
   xf86videoopenchrome = super.xf86videoopenchrome.overrideAttrs (attrs: {
     buildInputs = attrs.buildInputs ++ [ self.libXv ];
+    patches = [
+      # Pull upstream fix for -fno-common toolchains.
+      (fetchpatch {
+        name = "fno-common.patch";
+        url = "https://github.com/freedesktop/openchrome-xf86-video-openchrome/commit/edb46574d4686c59e80569ba236d537097dcdd0e.patch";
+        sha256 = "0xqawg9zzwb7x5vaf3in60isbkl3zfjq0wcnfi45s3hiii943sxz";
+      })
+    ];
   });
 
   xf86videoxgi = super.xf86videoxgi.overrideAttrs (attrs: {
@@ -861,6 +1025,12 @@ self: super:
       (fetchpatch {
         url = "https://cgit.freedesktop.org/xorg/driver/xf86-video-xgi/patch/?id=78d1138dd6e214a200ca66fa9e439ee3c9270ec8";
         sha256 = "0z3643afgrync280zrp531ija0hqxc5mrwjif9nh9lcnzgnz2d6d";
+      })
+      # Pull upstream fix for -fno-common toolchains.
+      (fetchpatch {
+        name = "fno-common.patch";
+        url = "https://github.com/freedesktop/xorg-xf86-video-xgi/commit/3143bdee580c4d397e21adb0fa35502d4dc8e888.patch";
+        sha256 = "0by6k26rj1xmljnbfd08v90s1f9bkmnf17aclhv50081m83lmm07";
       })
     ];
   });

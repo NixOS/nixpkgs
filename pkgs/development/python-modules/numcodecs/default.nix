@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "numcodecs";
-  version = "0.9.1";
+  version = "0.10.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "35adbcc746b95e3ac92e949a161811f5aa2602b9eb1ef241b5ea6f09bb220997";
+    sha256 = "sha256-LdQlZOd3KpOFkjsCo2Pjzt8FPOkwlKkGRIXn9ppvHJI=";
   };
 
   nativeBuildInputs = [

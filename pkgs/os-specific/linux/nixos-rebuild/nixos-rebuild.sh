@@ -20,7 +20,7 @@ origArgs=("$@")
 copyClosureFlags=()
 extraBuildFlags=()
 lockFlags=()
-flakeFlags=()
+flakeFlags=(--extra-experimental-features 'nix-command flakes')
 action=
 buildNix=1
 fast=
@@ -49,6 +49,8 @@ while [ "$#" -gt 0 ]; do
         ;;
       switch|boot|test|build|edit|dry-build|dry-run|dry-activate|build-vm|build-vm-with-bootloader)
         if [ "$i" = dry-run ]; then i=dry-build; fi
+        # exactly one action mandatory, bail out if multiple are given
+        if [ -n "$action" ]; then showSyntax; fi
         action="$i"
         ;;
       --install-grub)
@@ -118,7 +120,6 @@ while [ "$#" -gt 0 ]; do
         ;;
       --flake)
         flake="$1"
-        flakeFlags=(--extra-experimental-features 'nix-command flakes')
         shift 1
         ;;
       --no-flake)
@@ -252,7 +253,7 @@ nixBuild() {
 
 nixFlakeBuild() {
     logVerbose "Building in flake mode."
-    if [[ -z "$buildHost" && -z "$targetHost" && "$action" != switch && "$action" != boot ]]
+    if [[ -z "$buildHost" && -z "$targetHost" && "$action" != switch && "$action" != boot && "$action" != test && "$action" != dry-activate ]]
     then
         runCmd nix "${flakeFlags[@]}" build "$@"
         readlink -f ./result

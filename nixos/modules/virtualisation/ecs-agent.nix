@@ -10,14 +10,14 @@ in {
 
     package = mkOption {
       type = types.path;
-      description = "The ECS agent package to use";
+      description = lib.mdDoc "The ECS agent package to use";
       default = pkgs.ecs-agent;
       defaultText = literalExpression "pkgs.ecs-agent";
     };
 
     extra-environment = mkOption {
       type = types.attrsOf types.str;
-      description = "The environment the ECS agent should run with. See the ECS agent documentation for keys that work here.";
+      description = lib.mdDoc "The environment the ECS agent should run with. See the ECS agent documentation for keys that work here.";
       default = {};
     };
   };

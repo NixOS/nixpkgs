@@ -12,10 +12,11 @@ let
   });
 
   # Provides a fake "docker" binary mapping to podman
-  dockerCompat = pkgs.runCommand "${podmanPackage.pname}-docker-compat-${podmanPackage.version}" {
-    outputs = [ "out" "man" ];
-    inherit (podmanPackage) meta;
-  } ''
+  dockerCompat = pkgs.runCommand "${podmanPackage.pname}-docker-compat-${podmanPackage.version}"
+    {
+      outputs = [ "out" "man" ];
+      inherit (podmanPackage) meta;
+    } ''
     mkdir -p $out/bin
     ln -s ${podmanPackage}/bin/podman $out/bin/docker
 
@@ -26,13 +27,14 @@ let
     done
   '';
 
-  net-conflist = pkgs.runCommand "87-podman-bridge.conflist" {
-    nativeBuildInputs = [ pkgs.jq ];
-    extraPlugins = builtins.toJSON cfg.defaultNetwork.extraPlugins;
-    jqScript = ''
-      . + { "plugins": (.plugins + $extraPlugins) }
-    '';
-  } ''
+  net-conflist = pkgs.runCommand "87-podman-bridge.conflist"
+    {
+      nativeBuildInputs = [ pkgs.jq ];
+      extraPlugins = builtins.toJSON cfg.defaultNetwork.extraPlugins;
+      jqScript = ''
+        . + { "plugins": (.plugins + $extraPlugins) }
+      '';
+    } ''
     jq <${cfg.package}/etc/cni/net.d/87-podman-bridge.conflist \
       --argjson extraPlugins "$extraPlugins" \
       "$jqScript" \
@@ -57,24 +59,24 @@ in
       mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           This option enables Podman, a daemonless container engine for
           developing, managing, and running OCI Containers on your Linux System.
 
-          It is a drop-in replacement for the <command>docker</command> command.
+          It is a drop-in replacement for the {command}`docker` command.
         '';
       };
 
     dockerSocket.enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Make the Podman socket available in place of the Docker socket, so
         Docker tools can find the Podman socket.
 
         Podman implements the Docker API.
 
-        Users must be in the <code>podman</code> group in order to connect. As
+        Users must be in the `podman` group in order to connect. As
         with Docker, members of this group can gain root access.
       '';
     };
@@ -82,15 +84,15 @@ in
     dockerCompat = mkOption {
       type = types.bool;
       default = false;
-      description = ''
-        Create an alias mapping <command>docker</command> to <command>podman</command>.
+      description = lib.mdDoc ''
+        Create an alias mapping {command}`docker` to {command}`podman`.
       '';
     };
 
     enableNvidia = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enable use of NVidia GPUs from within podman containers.
       '';
     };
@@ -103,7 +105,7 @@ in
           pkgs.gvisor
         ]
       '';
-      description = ''
+      description = lib.mdDoc ''
         Extra packages to be installed in the Podman wrapper.
       '';
     };
@@ -119,8 +121,8 @@ in
 
     defaultNetwork.extraPlugins = lib.mkOption {
       type = types.listOf json.type;
-      default = [];
-      description = ''
+      default = [ ];
+      description = lib.mdDoc ''
         Extra CNI plugin configurations to add to podman's default network.
       '';
     };
@@ -153,6 +155,12 @@ in
       systemd.sockets.podman.wantedBy = [ "sockets.target" ];
       systemd.sockets.podman.socketConfig.SocketGroup = "podman";
 
+      systemd.user.services.podman.serviceConfig = {
+        ExecStart = [ "" "${cfg.package}/bin/podman $LOGGING system service" ];
+      };
+
+      systemd.user.sockets.podman.wantedBy = [ "sockets.target" ];
+
       systemd.tmpfiles.packages = [
         # The /run/podman rule interferes with our podman group, so we remove
         # it and let the systemd socket logic take care of it.
@@ -161,14 +169,15 @@ in
           grep -v 'D! /run/podman 0700 root root' \
             <$package/lib/tmpfiles.d/podman.conf \
             >$out/lib/tmpfiles.d/podman.conf
-        '') ];
+        '')
+      ];
 
       systemd.tmpfiles.rules =
         lib.optionals cfg.dockerSocket.enable [
           "L! /run/docker.sock - - - - /run/podman/podman.sock"
         ];
 
-      users.groups.podman = {};
+      users.groups.podman = { };
 
       assertions = [
         {

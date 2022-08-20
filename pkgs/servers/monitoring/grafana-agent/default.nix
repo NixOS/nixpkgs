@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, systemd }:
+{ lib, buildGoModule, fetchFromGitHub, systemd, nixosTests }:
 
 buildGoModule rec {
   pname = "grafana-agent";
@@ -35,6 +35,8 @@ buildGoModule rec {
       --set-rpath "${lib.makeLibraryPath [ (lib.getLib systemd) ]}:$(patchelf --print-rpath $out/bin/agent)" \
       $out/bin/agent
   '';
+
+  passthru.tests.grafana-agent = nixosTests.grafana-agent;
 
   meta = with lib; {
     description = "A lightweight subset of Prometheus and more, optimized for Grafana Cloud";

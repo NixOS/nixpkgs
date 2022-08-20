@@ -12,7 +12,7 @@ let
       server = mkOption {
         type = types.str;
         example = "irc.libera.chat";
-        description = ''
+        description = lib.mdDoc ''
           IRC server address.
         '';
       };
@@ -20,7 +20,7 @@ let
       port = mkOption {
         type = types.ints.u16;
         default = 6697;
-        description = ''
+        description = lib.mdDoc ''
           IRC server port.
         '';
       };
@@ -28,7 +28,7 @@ let
       password = mkOption {
         type = types.str;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           IRC server password, such as for a Slack gateway.
         '';
       };
@@ -36,7 +36,7 @@ let
       useSSL = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to use SSL to connect to the IRC server.
         '';
       };
@@ -45,7 +45,7 @@ let
         type = types.listOf types.str;
         default = [ "simple_away" ];
         example = literalExpression ''[ "simple_away" "sasl" ]'';
-        description = ''
+        description = lib.mdDoc ''
           ZNC network modules to load.
         '';
       };
@@ -54,7 +54,7 @@ let
         type = types.listOf types.str;
         default = [];
         example = [ "nixos" ];
-        description = ''
+        description = lib.mdDoc ''
           IRC channels to join.
         '';
       };
@@ -62,7 +62,7 @@ let
       hasBitlbeeControlChannel = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to add the special Bitlbee operations channel.
         '';
       };
@@ -79,9 +79,9 @@ let
           JoinDelay = 0
           Nick = johntron
         '';
-        description = ''
+        description = lib.mdDoc ''
           Extra config for the network. Consider using
-          <option>services.znc.config</option> instead.
+          {option}`services.znc.config` instead.
         '';
       };
     };
@@ -106,8 +106,7 @@ in
           <option>services.znc.confOptions.*</option> options.
           You can use <command>nix-instantiate --eval --strict '&lt;nixpkgs/nixos&gt;' -A config.services.znc.config</command>
           to view the current value of the config.
-          </para>
-          <para>
+
           In any case, if you need more flexibility,
           <option>services.znc.config</option> can be used to override/add to
           all of the legacy options.
@@ -119,7 +118,7 @@ in
           type = types.listOf types.str;
           default = [ "webadmin" "adminlog" ];
           example = [ "partyline" "webadmin" "adminlog" "log" ];
-          description = ''
+          description = lib.mdDoc ''
             A list of modules to include in the `znc.conf` file.
           '';
         };
@@ -128,7 +127,7 @@ in
           type = types.listOf types.str;
           default = [ "chansaver" "controlpanel" ];
           example = [ "chansaver" "controlpanel" "fish" "push" ];
-          description = ''
+          description = lib.mdDoc ''
             A list of user modules to include in the `znc.conf` file.
           '';
         };
@@ -137,7 +136,7 @@ in
           default = "znc";
           example = "johntron";
           type = types.str;
-          description = ''
+          description = lib.mdDoc ''
             The user name used to log in to the ZNC web admin interface.
           '';
         };
@@ -145,7 +144,7 @@ in
         networks = mkOption {
           default = { };
           type = with types; attrsOf (submodule networkOpts);
-          description = ''
+          description = lib.mdDoc ''
             IRC networks to connect the user to.
           '';
           example = literalExpression ''
@@ -164,7 +163,7 @@ in
           default = "znc-user";
           example = "john";
           type = types.str;
-          description = ''
+          description = lib.mdDoc ''
             The IRC nick.
           '';
         };
@@ -179,7 +178,7 @@ in
           '';
           type = types.str;
           description = ''
-            Generate with `nix-shell -p znc --command "znc --makepass"`.
+            Generate with <command>nix-shell -p znc --command "znc --makepass"</command>.
             This is the password used to log in to the ZNC web admin interface.
             You can also set this through
             <option>services.znc.config.User.&lt;username&gt;.Pass.Method</option>
@@ -190,7 +189,7 @@ in
         port = mkOption {
           default = 5000;
           type = types.int;
-          description = ''
+          description = lib.mdDoc ''
             Specifies the port on which to listen.
           '';
         };
@@ -198,7 +197,7 @@ in
         useSSL = mkOption {
           default = true;
           type = types.bool;
-          description = ''
+          description = lib.mdDoc ''
             Indicates whether the ZNC server should use SSL when listening on
             the specified port. A self-signed certificate will be generated.
           '';
@@ -208,7 +207,7 @@ in
           type = types.nullOr types.str;
           default = null;
           example = "/znc/";
-          description = ''
+          description = lib.mdDoc ''
             An optional URI prefix for the ZNC web interface. Can be
             used to make ZNC available behind a reverse proxy.
           '';
@@ -217,7 +216,7 @@ in
         extraZncConf = mkOption {
           default = "";
           type = types.lines;
-          description = ''
+          description = lib.mdDoc ''
             Extra config to `znc.conf` file.
           '';
         };

@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , ftfy
 , mailchecker
+, orjson
 , phonenumbers
 , pytestCheckHook
 , python-dateutil
@@ -19,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "python-benedict";
-  version = "0.25.1";
+  version = "0.25.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -28,8 +29,13 @@ buildPythonPackage rec {
     owner = "fabiocaccamo";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-egOrotWgRyB6pdWUIRWogwdoK82g/1JfRDc85W4FrjQ=";
+    hash = "sha256-WSsT+p23VctVt9A+WFKNHcgUHFijfT775eMF3RzaXDA=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "mailchecker >= 4.1.0, < 5.0.0" "mailchecker >= 4.1.0"
+  '';
 
   propagatedBuildInputs = [
     mailchecker
@@ -39,6 +45,7 @@ buildPythonPackage rec {
     python-slugify
     pyyaml
     ftfy
+    orjson
     requests
     six
     toml

@@ -19,14 +19,7 @@ in
 
     services.udisks2 = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Whether to enable Udisks, a DBus service that allows
-          applications to query and manipulate storage devices.
-        '';
-      };
+      enable = mkEnableOption "udisks2, a DBus service that allows applications to query and manipulate storage devices.";
 
       settings = mkOption rec {
         type = types.attrsOf settingsFormat.type;
@@ -51,10 +44,10 @@ in
           };
         };
         '';
-        description = ''
+        description = lib.mdDoc ''
           Options passed to udisksd.
-          See <link xlink:href="http://manpages.ubuntu.com/manpages/latest/en/man5/udisks2.conf.5.html">here</link> and
-          drive configuration in <link xlink:href="http://manpages.ubuntu.com/manpages/latest/en/man8/udisks.8.html">here</link> for supported options.
+          See [here](http://manpages.ubuntu.com/manpages/latest/en/man5/udisks2.conf.5.html) and
+          drive configuration in [here](http://manpages.ubuntu.com/manpages/latest/en/man8/udisks.8.html) for supported options.
         '';
       };
 

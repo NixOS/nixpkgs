@@ -14,6 +14,13 @@ stdenv.mkDerivation rec {
     sha256 = "1drhh08cqqkwv1yz3z4ngkplr23pqqrdx6cp8c3isy320gy25cvb";
   };
 
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: r_gl.h:52: multiple definition of `qglGenBuffers';
+  #     r_gl.h:52: first defined here
+  # TODO: drop once release contains upstream fix:
+  #   https://github.com/ufoai/ufoai/commit/8a3075fffdad294e
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   preConfigure = ''tar xvf "${srcData}"'';
 
   configureFlags = [ "--enable-release" "--enable-sse" ]

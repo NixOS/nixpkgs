@@ -49,6 +49,6 @@ buildPythonPackage rec {
     description = "A Python library for interacting with the LXD REST API";
     homepage = "https://pylxd.readthedocs.io/en/latest/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ petabyteboy ];
+    maintainers = with maintainers; [ ];
   };
 }

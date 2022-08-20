@@ -507,7 +507,7 @@ rec {
        compareLists compare [ "a" ] []
        => 1
        compareLists compare [ "a" "b" ] [ "a" "c" ]
-       => 1
+       => -1
   */
   compareLists = cmp: a: b:
     if a == []

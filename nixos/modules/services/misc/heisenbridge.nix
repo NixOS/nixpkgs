@@ -30,20 +30,20 @@ in
       default = pkgs.heisenbridge;
       defaultText = "pkgs.heisenbridge";
       example = "pkgs.heisenbridge.override { … = …; }";
-      description = ''
+      description = lib.mdDoc ''
         Package of the application to run, exposed for overriding purposes.
       '';
     };
 
     homeserver = mkOption {
       type = types.str;
-      description = "The URL to the home server for client-server API calls";
+      description = lib.mdDoc "The URL to the home server for client-server API calls";
       example = "http://localhost:8008";
     };
 
     registrationUrl = mkOption {
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         The URL where the application service is listening for HS requests, from the Matrix HS perspective.#
         The default value assumes the bridge runs on the same host as the home server, in the same network.
       '';
@@ -54,26 +54,26 @@ in
 
     address = mkOption {
       type = types.str;
-      description = "Address to listen on. IPv6 does not seem to be supported.";
+      description = lib.mdDoc "Address to listen on. IPv6 does not seem to be supported.";
       default = "127.0.0.1";
       example = "0.0.0.0";
     };
 
     port = mkOption {
       type = types.port;
-      description = "The port to listen on";
+      description = lib.mdDoc "The port to listen on";
       default = 9898;
     };
 
     debug = mkOption {
       type = types.bool;
-      description = "More verbose logging. Recommended during initial setup.";
+      description = lib.mdDoc "More verbose logging. Recommended during initial setup.";
       default = false;
     };
 
     owner = mkOption {
       type = types.nullOr types.str;
-      description = ''
+      description = lib.mdDoc ''
         Set owner MXID otherwise first talking local user will claim the bridge
       '';
       default = null;
@@ -81,7 +81,7 @@ in
     };
 
     namespaces = mkOption {
-      description = "Configure the 'namespaces' section of the registration.yml for the bridge and the server";
+      description = lib.mdDoc "Configure the 'namespaces' section of the registration.yml for the bridge and the server";
       # TODO link to Matrix documentation of the format
       type = types.submodule {
         freeformType = jsonType;
@@ -102,13 +102,13 @@ in
     identd.enable = mkEnableOption "identd service support";
     identd.port = mkOption {
       type = types.port;
-      description = "identd listen port";
+      description = lib.mdDoc "identd listen port";
       default = 113;
     };
 
     extraArgs = mkOption {
       type = types.listOf types.str;
-      description = "Heisenbridge is configured over the command line. Append extra arguments here";
+      description = lib.mdDoc "Heisenbridge is configured over the command line. Append extra arguments here";
       default = [ ];
     };
   };
@@ -204,7 +204,7 @@ in
         NoNewPrivileges = true;
         LockPersonality = true;
         RestrictRealtime = true;
-        SystemCallFilter = ["@system-service" "~@priviledged" "@chown"];
+        SystemCallFilter = ["@system-service" "~@privileged" "@chown"];
         SystemCallArchitectures = "native";
         RestrictAddressFamilies = "AF_INET AF_INET6";
       };

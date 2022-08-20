@@ -19,7 +19,7 @@ in {
           "/run/kea/kea-dhcp6.socket"
         ]
       '';
-      description = ''
+      description = lib.mdDoc ''
         Paths to kea control sockets
       '';
     };

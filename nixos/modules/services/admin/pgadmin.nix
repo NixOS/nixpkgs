@@ -31,18 +31,18 @@ in
     enable = mkEnableOption "PostgreSQL Admin 4";
 
     port = mkOption {
-      description = "Port for pgadmin4 to run on";
+      description = lib.mdDoc "Port for pgadmin4 to run on";
       type = types.port;
       default = 5050;
     };
 
     initialEmail = mkOption {
-      description = "Initial email for the pgAdmin account.";
+      description = lib.mdDoc "Initial email for the pgAdmin account.";
       type = types.str;
     };
 
     initialPasswordFile = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Initial password file for the pgAdmin account.
         NOTE: Should be string not a store path, to prevent the password from being world readable.
       '';
@@ -52,9 +52,9 @@ in
     openFirewall = mkEnableOption "firewall passthrough for pgadmin4";
 
     settings = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Settings for pgadmin4.
-        <link xlink:href="https://www.pgadmin.org/docs/pgadmin4/development/config_py.html">Documentation</link>.
+        [Documentation](https://www.pgadmin.org/docs/pgadmin4/development/config_py.html).
       '';
       type = pyType;
       default= {};

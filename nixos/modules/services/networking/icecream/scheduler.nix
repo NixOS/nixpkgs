@@ -16,7 +16,7 @@ in {
       netName = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Network name for the icecream scheduler.
 
           Uses the default ICECREAM if null.
@@ -26,14 +26,14 @@ in {
       port = mkOption {
         type = types.port;
         default = 8765;
-        description = ''
+        description = lib.mdDoc ''
           Server port to listen for icecream daemon requests.
         '';
       };
 
       openFirewall = mkOption {
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Whether to automatically open the daemon port in the firewall.
         '';
       };
@@ -41,7 +41,7 @@ in {
       openTelnet = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to open the telnet TCP port on 8766.
         '';
       };
@@ -49,7 +49,7 @@ in {
       persistentClientConnection = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to prevent clients from connecting to a better scheduler.
         '';
       };
@@ -58,13 +58,13 @@ in {
         default = pkgs.icecream;
         defaultText = literalExpression "pkgs.icecream";
         type = types.package;
-        description = "Icecream package to use.";
+        description = lib.mdDoc "Icecream package to use.";
       };
 
       extraArgs = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = "Additional command line parameters";
+        description = lib.mdDoc "Additional command line parameters";
         example = [ "-v" ];
       };
     };

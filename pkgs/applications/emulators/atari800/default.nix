@@ -4,13 +4,13 @@
 with lib;
 stdenv.mkDerivation rec {
   pname = "atari800";
-  version = "4.2.0";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "atari800";
     repo = "atari800";
     rev = "ATARI800_${replaceChars ["."] ["_"] version}";
-    sha256 = "15l08clqqayi9izrgsz9achan6gl4x57wqsc8mad3yn0xayzz3qy";
+    sha256 = "sha256-+eJXhqPyU0GhmzF7DbteTXzEnn5klCor9Io/UgXQfQg=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

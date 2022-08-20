@@ -119,6 +119,11 @@ let
       sha256 = "sha256-1KnYHz9ntKbgfLeoDcsQrV6RdvzDB2LHCoFYCmS4sLY=";
     };
 
+    patches = [
+      # https://savannah.gnu.org/bugs/?func=detailitem&item_id=62436
+      ./patches/bug62436.patch
+    ];
+
     buildInputs = [
       readline
       ncurses

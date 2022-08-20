@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "schema-salad";
-  version = "8.2.20220204150214";
+  version = "8.3.20220626185350";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PlPb/nE3eWueUTWSDpa7JxPe2ee+KFna5VTR3IsClwQ=";
+    hash = "sha256-g8h3dAdN+tbdLRO3ctmsW+ZLiyhU0zPd1XR+XvEBpwo=";
   };
 
   propagatedBuildInputs = [
@@ -32,9 +32,8 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    black
     pytestCheckHook
-  ];
+  ] ++ passthru.optional-dependencies.pycodegen;
 
   disabledTests = [
     # Setup for these tests requires network access
@@ -47,6 +46,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "schema_salad"
   ];
+
+  passthru.optional-dependencies = {
+    pycodegen = [ black ];
+  };
 
   meta = with lib; {
     description = "Semantic Annotations for Linked Avro Data";

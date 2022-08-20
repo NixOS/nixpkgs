@@ -93,14 +93,15 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Software metadata handling library";
-    homepage = "https://www.freedesktop.org/wiki/Distributions/AppStream/";
     longDescription = ''
       AppStream is a cross-distro effort for building Software-Center applications
       and enhancing metadata provided by software components.  It provides
       specifications for meta-information which is shipped by upstream projects and
       can be consumed by other software.
     '';
+    homepage = "https://www.freedesktop.org/wiki/Distributions/AppStream/";
     license = licenses.lgpl21Plus;
+    mainProgram = "appstreamcli";
     platforms = platforms.unix;
   };
 }

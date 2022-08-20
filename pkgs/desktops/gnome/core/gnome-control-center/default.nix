@@ -2,7 +2,6 @@
 , lib
 , stdenv
 , substituteAll
-, fetchpatch
 , accountsservice
 , adwaita-icon-theme
 , colord
@@ -64,11 +63,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-control-center";
-  version = "42.0";
+  version = "42.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-BzLvp8QXHOCg7UEGWAtM41pXsQFSwOo20jkTSRN3fto=";
+    sha256 = "sha256-zgrjZQ3ir368sKfh/JkS7dtu/40lfz/lD/iynBk0HH4=";
   };
 
   patches = [
@@ -78,13 +77,6 @@ stdenv.mkDerivation rec {
       gnome_desktop = gnome-desktop;
       inherit glibc libgnomekbd tzdata;
       inherit cups networkmanagerapplet;
-    })
-
-    # Fix Online Accounts configuration on X11
-    # https://gitlab.gnome.org/GNOME/gnome-control-center/-/merge_requests/1272
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-control-center/-/commit/7fe322b9cedae313cd9af6f403eab9bfc6027674.patch";
-      sha256 = "cv1abqv0Kbfkfu7mZzEaZKXPE85yVBcQbjNHW+8ODFE=";
     })
   ];
 

@@ -1,22 +1,41 @@
 { lib
 , buildPythonPackage
-, fetchurl
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "entry-points-txt";
-  version = "0.1.0";
-  format = "wheel";
+  version = "0.2.0";
+  format = "pyproject";
 
-  src = fetchurl {
-    url = "https://github.com/jwodder/entry-points-txt/releases/download/v0.1.0/entry_points_txt-0.1.0-py3-none-any.whl";
-    sha256 = "29773bed3d9d337766a394e19d6f7ab0be3ed7d6f3ebb753ff0f7f48f056aa8e";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "jwodder";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-klFSt3Od7xYgenpMP4DBFoZeQanGrmtJxDm5qeZ1Psc=";
   };
 
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace tox.ini \
+      --replace " --cov=entry_points_txt --no-cov-on-fail" ""
+  '';
+
+  pythonImportsCheck = [
+    "entry_points_txt"
+  ];
+
   meta = with lib; {
-    homepage = "https://github.com/jwodder/entry-points-txt";
     description = "Read & write entry_points.txt files";
+    homepage = "https://github.com/jwodder/entry-points-txt";
     license = with licenses; [ mit ];
-    maintainers = with lib.maintainers; [ ayazhafiz ];
+    maintainers = with maintainers; [ ayazhafiz ];
   };
 }

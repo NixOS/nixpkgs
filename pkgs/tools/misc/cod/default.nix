@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule, python3 }:
+{ stdenv, lib, fetchFromGitHub, buildGoModule, python3 }:
 
 buildGoModule rec {
   pname = "cod";
@@ -24,6 +24,8 @@ buildGoModule rec {
     done
     popd
     export COD_TEST_BINARY="''${NIX_BUILD_TOP}/go/bin/cod"
+
+    substituteInPlace test/learn_test.go --replace TestLearnArgparseSubCommand SkipLearnArgparseSubCommand
   '';
 
   meta = with lib; {
@@ -31,5 +33,6 @@ buildGoModule rec {
     homepage = "https://github.com/dim-an/cod/";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
+    broken = true;
   };
 }

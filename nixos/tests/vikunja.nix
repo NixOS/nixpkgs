@@ -1,9 +1,7 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "vikunja";
 
-  meta = with lib.maintainers; {
-    maintainers = [ em0lar ];
-  };
+  meta.maintainers = with lib.maintainers; [ leona ];
 
   nodes = {
     vikunjaSqlite = { ... }: {

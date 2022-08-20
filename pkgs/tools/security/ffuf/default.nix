@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "ffuf";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-m+L78fVsqntD7JfgWS9foUJUhIVr+CtJ6K8etsLuNzw=";
+    sha256 = "sha256-dqABifXA104NCPdrWhB79cZQloJrqwJ45rlh+M/lRrs=";
   };
 
   vendorSha256 = "sha256-szT08rIozAuliOmge5RFX4NeVrJ2pCVyfotrHuvc0UU=";

@@ -6,8 +6,11 @@ let
   prg = config.programs;
   cfg = prg.thefuck;
 
-  initScript = ''
+  bashAndZshInitScript = ''
     eval $(${pkgs.thefuck}/bin/thefuck --alias ${cfg.alias})
+  '';
+  fishInitScript = ''
+    ${pkgs.thefuck}/bin/thefuck --alias ${cfg.alias} | source
   '';
 in
   {
@@ -19,7 +22,7 @@ in
           default = "fuck";
           type = types.str;
 
-          description = ''
+          description = lib.mdDoc ''
             `thefuck` needs an alias to be configured.
             The default value is `fuck`, but you can use anything else as well.
           '';
@@ -30,10 +33,8 @@ in
     config = mkIf cfg.enable {
       environment.systemPackages = with pkgs; [ thefuck ];
 
-      programs.bash.interactiveShellInit = initScript;
-      programs.zsh.interactiveShellInit = mkIf prg.zsh.enable initScript;
-      programs.fish.interactiveShellInit = mkIf prg.fish.enable ''
-        ${pkgs.thefuck}/bin/thefuck --alias | source
-      '';
+      programs.bash.interactiveShellInit = bashAndZshInitScript;
+      programs.zsh.interactiveShellInit = mkIf prg.zsh.enable bashAndZshInitScript;
+      programs.fish.interactiveShellInit = mkIf prg.fish.enable fishInitScript;
     };
   }

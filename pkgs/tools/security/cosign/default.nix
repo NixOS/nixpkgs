@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "cosign";
-  version = "1.8.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-9zA50tnUWR8dglPvMagiGcJDkPHs7yXuqYV2jnRdWqA=";
+    sha256 = "sha256-fEgcxxDbSr8rVZ35MwLjT7tinQ1JuqddWRtftTjDdpY=";
   };
 
   buildInputs = lib.optional (stdenv.isLinux && pivKeySupport) (lib.getDev pcsclite)
@@ -16,11 +16,10 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config installShellFiles ];
 
-  vendorSha256 = "sha256-buOdutDZUFu+GbjyF0Ql8QAXpNEv2ej0mwjSZMHDmdA=";
+  vendorSha256 = "sha256-AdsXijxqpsx2Mh0xAvUoie6Oy3ywnGJ1WMg9ZBLWHgc=";
 
   subPackages = [
     "cmd/cosign"
-    "cmd/cosign/webhook"
     "cmd/sget"
   ];
 
@@ -33,19 +32,12 @@ buildGoModule rec {
     "-X sigs.k8s.io/release-utils/version.gitTreeState=clean"
   ];
 
-  postBuild = ''
-    # cmd/cosign/webhook should be called cosigned
-    mv $GOPATH/bin/{webhook,cosigned}
-  '';
-
   preCheck = ''
     # test all paths
     unset subPackages
 
-    rm cmd/cosign/cli/fulcio/fulcioroots/fulcioroots_test.go # Require network access
-    rm pkg/cosign/kubernetes/webhook/validator_test.go # Require network access
     rm pkg/cosign/tlog_test.go # Require network access
-    rm pkg/cosign/tuf/client_test.go # Require network access
+    rm pkg/cosign/verify_test.go # Require network access
   '';
 
   postInstall = ''

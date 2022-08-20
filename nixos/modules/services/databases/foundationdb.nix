@@ -66,7 +66,7 @@ in
 
     package = mkOption {
       type        = types.package;
-      description = ''
+      description = lib.mdDoc ''
         The FoundationDB package to use for this server. This must be specified by the user
         in order to ensure migrations and upgrades are controlled appropriately.
       '';
@@ -75,19 +75,19 @@ in
     publicAddress = mkOption {
       type        = types.str;
       default     = "auto";
-      description = "Publicly visible IP address of the process. Port is determined by process ID";
+      description = lib.mdDoc "Publicly visible IP address of the process. Port is determined by process ID";
     };
 
     listenAddress = mkOption {
       type        = types.str;
       default     = "public";
-      description = "Publicly visible IP address of the process. Port is determined by process ID";
+      description = lib.mdDoc "Publicly visible IP address of the process. Port is determined by process ID";
     };
 
     listenPortStart = mkOption {
       type          = types.int;
       default       = 4500;
-      description   = ''
+      description   = lib.mdDoc ''
         Starting port number for database listening sockets. Every FDB process binds to a
         subsequent port, to this number reflects the start of the overall range. e.g. having
         8 server processes will use all ports between 4500 and 4507.
@@ -97,52 +97,52 @@ in
     openFirewall = mkOption {
       type        = types.bool;
       default     = false;
-      description = ''
+      description = lib.mdDoc ''
         Open the firewall ports corresponding to FoundationDB processes and coordinators
-        using <option>config.networking.firewall.*</option>.
+        using {option}`config.networking.firewall.*`.
       '';
     };
 
     dataDir = mkOption {
       type        = types.path;
       default     = "/var/lib/foundationdb";
-      description = "Data directory. All cluster data will be put under here.";
+      description = lib.mdDoc "Data directory. All cluster data will be put under here.";
     };
 
     logDir = mkOption {
       type        = types.path;
       default     = "/var/log/foundationdb";
-      description = "Log directory.";
+      description = lib.mdDoc "Log directory.";
     };
 
     user = mkOption {
       type        = types.str;
       default     = "foundationdb";
-      description = "User account under which FoundationDB runs.";
+      description = lib.mdDoc "User account under which FoundationDB runs.";
     };
 
     group = mkOption {
       type        = types.str;
       default     = "foundationdb";
-      description = "Group account under which FoundationDB runs.";
+      description = lib.mdDoc "Group account under which FoundationDB runs.";
     };
 
     class = mkOption {
       type        = types.nullOr (types.enum [ "storage" "transaction" "stateless" ]);
       default     = null;
-      description = "Process class";
+      description = lib.mdDoc "Process class";
     };
 
     restartDelay = mkOption {
       type = types.int;
       default = 10;
-      description = "Number of seconds to wait before restarting servers.";
+      description = lib.mdDoc "Number of seconds to wait before restarting servers.";
     };
 
     logSize = mkOption {
       type        = types.str;
       default     = "10MiB";
-      description = ''
+      description = lib.mdDoc ''
         Roll over to a new log file after the current log file
         reaches the specified size.
       '';
@@ -151,7 +151,7 @@ in
     maxLogSize = mkOption {
       type        = types.str;
       default     = "100MiB";
-      description = ''
+      description = lib.mdDoc ''
         Delete the oldest log file when the total size of all log
         files exceeds the specified size. If set to 0, old log files
         will not be deleted.
@@ -161,33 +161,33 @@ in
     serverProcesses = mkOption {
       type = types.int;
       default = 1;
-      description = "Number of fdbserver processes to run.";
+      description = lib.mdDoc "Number of fdbserver processes to run.";
     };
 
     backupProcesses = mkOption {
       type = types.int;
       default = 1;
-      description = "Number of backup_agent processes to run for snapshots.";
+      description = lib.mdDoc "Number of backup_agent processes to run for snapshots.";
     };
 
     memory = mkOption {
       type        = types.str;
       default     = "8GiB";
-      description = ''
+      description = lib.mdDoc ''
         Maximum memory used by the process. The default value is
-        <literal>8GiB</literal>. When specified without a unit,
-        <literal>MiB</literal> is assumed. This parameter does not
+        `8GiB`. When specified without a unit,
+        `MiB` is assumed. This parameter does not
         change the memory allocation of the program. Rather, it sets
         a hard limit beyond which the process will kill itself and
-        be restarted. The default value of <literal>8GiB</literal>
+        be restarted. The default value of `8GiB`
         is double the intended memory usage in the default
         configuration (providing an emergency buffer to deal with
         memory leaks or similar problems). It is not recommended to
         decrease the value of this parameter below its default
         value. It may be increased if you wish to allocate a very
         large amount of storage engine memory or cache. In
-        particular, when the <literal>storageMemory</literal>
-        parameter is increased, the <literal>memory</literal>
+        particular, when the `storageMemory`
+        parameter is increased, the `memory`
         parameter should be increased by an equal amount.
       '';
     };
@@ -195,22 +195,22 @@ in
     storageMemory = mkOption {
       type        = types.str;
       default     = "1GiB";
-      description = ''
+      description = lib.mdDoc ''
         Maximum memory used for data storage. The default value is
-        <literal>1GiB</literal>. When specified without a unit,
-        <literal>MB</literal> is assumed. Clusters using the memory
+        `1GiB`. When specified without a unit,
+        `MB` is assumed. Clusters using the memory
         storage engine will be restricted to using this amount of
         memory per process for purposes of data storage. Memory
         overhead associated with storing the data is counted against
         this total. If you increase the
-        <literal>storageMemory</literal>, you should also increase
-        the <literal>memory</literal> parameter by the same amount.
+        `storageMemory`, you should also increase
+        the `memory` parameter by the same amount.
       '';
     };
 
     tls = mkOption {
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         FoundationDB Transport Security Layer (TLS) settings.
       '';
 
@@ -218,7 +218,7 @@ in
         options = {
           certificate = mkOption {
             type = types.str;
-            description = ''
+            description = lib.mdDoc ''
               Path to the TLS certificate file. This certificate will
               be offered to, and may be verified by, clients.
             '';
@@ -226,13 +226,13 @@ in
 
           key = mkOption {
             type = types.str;
-            description = "Private key file for the certificate.";
+            description = lib.mdDoc "Private key file for the certificate.";
           };
 
           allowedPeers = mkOption {
             type = types.str;
             default = "Check.Valid=1,Check.Unexpired=1";
-            description = ''
+            description = lib.mdDoc ''
               "Peer verification string". This may be used to adjust which TLS
               client certificates a server will accept, as a form of user
               authorization; for example, it may only accept TLS clients who
@@ -253,7 +253,7 @@ in
         dataHall     = null;
       };
 
-      description = ''
+      description = lib.mdDoc ''
         FoundationDB locality settings.
       '';
 
@@ -262,7 +262,7 @@ in
           machineId = mkOption {
             default = null;
             type = types.nullOr types.str;
-            description = ''
+            description = lib.mdDoc ''
               Machine identifier key. All processes on a machine should share a
               unique id. By default, processes on a machine determine a unique id to share.
               This does not generally need to be set.
@@ -272,7 +272,7 @@ in
           zoneId = mkOption {
             default = null;
             type = types.nullOr types.str;
-            description = ''
+            description = lib.mdDoc ''
               Zone identifier key. Processes that share a zone id are
               considered non-unique for the purposes of data replication.
               If unset, defaults to machine id.
@@ -282,7 +282,7 @@ in
           datacenterId = mkOption {
             default = null;
             type = types.nullOr types.str;
-            description = ''
+            description = lib.mdDoc ''
               Data center identifier key. All processes physically located in a
               data center should share the id. If you are depending on data
               center based replication this must be set on all processes.
@@ -292,7 +292,7 @@ in
           dataHall = mkOption {
             default = null;
             type = types.nullOr types.str;
-            description = ''
+            description = lib.mdDoc ''
               Data hall identifier key. All processes physically located in a
               data hall should share the id. If you are depending on data
               hall based replication this must be set on all processes.
@@ -305,7 +305,7 @@ in
     extraReadWritePaths = mkOption {
       default = [ ];
       type = types.listOf types.path;
-      description = ''
+      description = lib.mdDoc ''
         An extra set of filesystem paths that FoundationDB can read to
         and write from. By default, FoundationDB runs under a heavily
         namespaced systemd environment without write access to most of
@@ -319,13 +319,13 @@ in
     pidfile = mkOption {
       type        = types.path;
       default     = "/run/foundationdb.pid";
-      description = "Path to pidfile for fdbmonitor.";
+      description = lib.mdDoc "Path to pidfile for fdbmonitor.";
     };
 
     traceFormat = mkOption {
       type = types.enum [ "xml" "json" ];
       default = "xml";
-      description = "Trace logging format.";
+      description = lib.mdDoc "Trace logging format.";
     };
   };
 

@@ -22,18 +22,18 @@ let
 
       keys = mkOption {
         type = types.listOf types.str;
-        description = "List of keys to match.  Key names as defined in linux/input-event-codes.h";
+        description = lib.mdDoc "List of keys to match.  Key names as defined in linux/input-event-codes.h";
       };
 
       event = mkOption {
         type = types.enum ["press" "hold" "release"];
         default = "press";
-        description = "Event to match.";
+        description = lib.mdDoc "Event to match.";
       };
 
       cmd = mkOption {
         type = types.str;
-        description = "What to run.";
+        description = lib.mdDoc "What to run.";
       };
 
     };
@@ -52,8 +52,8 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
-          Whether to enable the <command>triggerhappy</command> hotkey daemon.
+        description = lib.mdDoc ''
+          Whether to enable the {command}`triggerhappy` hotkey daemon.
         '';
       };
 
@@ -61,8 +61,8 @@ in
         type = types.str;
         default = "nobody";
         example = "root";
-        description = ''
-          User account under which <command>triggerhappy</command> runs.
+        description = lib.mdDoc ''
+          User account under which {command}`triggerhappy` runs.
         '';
       };
 
@@ -72,16 +72,16 @@ in
         example = lib.literalExpression ''
           [ { keys = ["PLAYPAUSE"];  cmd = "''${pkgs.mpc-cli}/bin/mpc -q toggle"; } ]
         '';
-        description = ''
-          Key bindings for <command>triggerhappy</command>.
+        description = lib.mdDoc ''
+          Key bindings for {command}`triggerhappy`.
         '';
       };
 
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = ''
-          Literal contents to append to the end of <command>triggerhappy</command> configuration file.
+        description = lib.mdDoc ''
+          Literal contents to append to the end of {command}`triggerhappy` configuration file.
         '';
       };
 

@@ -1,5 +1,4 @@
 { lib, appimageTools, fetchurl, makeDesktopItem
-, gsettings-desktop-schemas, gtk3
 }:
 
 let
@@ -28,10 +27,6 @@ let
 
 in appimageTools.wrapType2 rec {
   inherit name src;
-
-  profile = ''
-    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
-  '';
 
   multiPkgs = null; # no p32bit needed
   extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;

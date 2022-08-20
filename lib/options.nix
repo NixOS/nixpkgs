@@ -7,6 +7,7 @@ let
     collect
     concatLists
     concatMap
+    concatMapStringsSep
     elemAt
     filter
     foldl'
@@ -120,7 +121,7 @@ rec {
      Example:
        mkPackageOption pkgs "GHC" {
          default = [ "ghc" ];
-         example = "pkgs.haskell.package.ghc922.ghc.withPackages (hkgs: [ hkgs.primes ])";
+         example = "pkgs.haskell.packages.ghc924.ghc.withPackages (hkgs: [ hkgs.primes ])";
        }
        => { _type = "option"; default = «derivation /nix/store/jxx55cxsjrf8kyh3fp2ya17q99w7541r-ghc-8.10.7.drv»; defaultText = { ... }; description = "The GHC package to use."; example = { ... }; type = { ... }; }
   */
@@ -241,6 +242,8 @@ rec {
           in if ss != {} then optionAttrSetToDocList' opt.loc ss else [];
         subOptionsVisible = docOption.visible && opt.visible or null != "shallow";
       in
+        # To find infinite recursion in NixOS option docs:
+        # builtins.trace opt.loc
         [ docOption ] ++ optionals subOptionsVisible subOptions) (collect isOption options);
 
 
@@ -279,6 +282,21 @@ rec {
   literalDocBook = text:
     if ! isString text then throw "literalDocBook expects a string."
     else { _type = "literalDocBook"; inherit text; };
+
+  /* Transition marker for documentation that's already migrated to markdown
+     syntax.
+  */
+  mdDoc = text:
+    if ! isString text then throw "mdDoc expects a string."
+    else { _type = "mdDoc"; inherit text; };
+
+  /* For use in the `defaultText` and `example` option attributes. Causes the
+     given MD text to be inserted verbatim in the documentation, for when
+     a `literalExpression` would be too hard to read.
+  */
+  literalMD = text:
+    if ! isString text then throw "literalMD expects a string."
+    else { _type = "literalMD"; inherit text; };
 
   # Helper functions.
 
@@ -324,6 +342,11 @@ rec {
         else ": " + value;
     in "\n- In `${def.file}'${result}"
   ) defs;
+
+  showOptionWithDefLocs = opt: ''
+      ${showOption opt.loc}, with values defined in:
+      ${concatMapStringsSep "\n" (defFile: "  - ${defFile}") opt.files}
+    '';
 
   unknownModule = "<unknown-file>";
 

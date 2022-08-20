@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "oslo-db";
-  version = "11.2.0";
+  version = "12.0.0";
 
   src = fetchPypi {
     pname = "oslo.db";
     inherit version;
-    sha256 = "sha256-ezppPrC1BEkUmiJWGMdQtvDhZWyEJoGEe0e4UK1FYL4=";
+    sha256 = "sha256-EFuxQWOk7GG85z+N8ZADLIdZiJuA8B1ZrsdwR+cN24c=";
   };
 
   nativeBuildInputs = [ pbr ];

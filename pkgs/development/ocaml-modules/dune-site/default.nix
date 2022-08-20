@@ -10,6 +10,10 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ dune-private-libs ];
 
+  preBuild = ''
+    rm -r vendor/csexp
+  '';
+
   meta = with lib; {
     description = "A library for embedding location information inside executable and libraries";
     inherit (dune_3.meta) homepage;

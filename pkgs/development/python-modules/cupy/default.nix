@@ -9,12 +9,12 @@ let
   inherit (cudaPackages) cudatoolkit cudnn cutensor nccl;
 in buildPythonPackage rec {
   pname = "cupy";
-  version = "10.3.1";
+  version = "10.6.0";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-c8BOKI1AWU+zN8lhliRus55PUAgvFm+TlxKToYn7jWc=";
+    sha256 = "sha256-9jWpfd4l4LSptJewdQaaurm/huHcKv48+XOZDCLTJV8=";
   };
 
   # See https://docs.cupy.dev/en/v10.2.0/reference/environment.html. Seting both
@@ -70,5 +70,8 @@ in buildPythonPackage rec {
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ hyphon81 ];
+
+    # See https://github.com/NixOS/nixpkgs/pull/179912#issuecomment-1206265922.
+    broken = true;
   };
 }

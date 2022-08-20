@@ -24,6 +24,8 @@ buildGoModule rec {
     makeWrapper
   ];
 
+  ldflags = [ "-s" "-w" "-X github.com/zrepl/zrepl/version.zreplVersion=${version}" ];
+
   postInstall = ''
     mkdir -p $out/lib/systemd/system
     substitute dist/systemd/zrepl.service $out/lib/systemd/system/zrepl.service \

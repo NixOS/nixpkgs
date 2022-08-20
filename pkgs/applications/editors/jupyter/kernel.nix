@@ -15,8 +15,8 @@ let
         "{connection_file}"
       ];
       language = "python";
-      logo32 = "${env.sitePackages}/ipykernel/resources/logo-32x32.png";
-      logo64 = "${env.sitePackages}/ipykernel/resources/logo-64x64.png";
+      logo32 = "${env}/${env.sitePackages}/ipykernel/resources/logo-32x32.png";
+      logo64 = "${env}/${env.sitePackages}/ipykernel/resources/logo-64x64.png";
     };
   };
 
@@ -39,26 +39,22 @@ in
 
       ${concatStringsSep "\n" (mapAttrsToList (kernelName: unfilteredKernel:
         let
-          allowedKernelKeys = ["argv" "displayName" "language" "interruptMode" "env" "metadata" "logo32" "logo64"];
+          allowedKernelKeys = ["argv" "displayName" "language" "interruptMode" "env" "metadata" "logo32" "logo64" "extraPaths"];
           kernel = filterAttrs (n: v: (any (x: x == n) allowedKernelKeys)) unfilteredKernel;
           config = builtins.toJSON (
             kernel
             // {display_name = if (kernel.displayName != "") then kernel.displayName else kernelName;}
             // (optionalAttrs (kernel ? interruptMode) { interrupt_mode = kernel.interruptMode; })
           );
-          logo32 =
-            if (kernel.logo32 != null)
-            then "ln -s ${kernel.logo32} 'kernels/${kernelName}/logo-32x32.png';"
-            else "";
-          logo64 =
-            if (kernel.logo64 != null)
-            then "ln -s ${kernel.logo64} 'kernels/${kernelName}/logo-64x64.png';"
-            else "";
+          extraPaths = kernel.extraPaths or {}
+            // lib.optionalAttrs (kernel.logo32 != null) { "logo-32x32.png" = kernel.logo32; }
+            // lib.optionalAttrs (kernel.logo64 != null) { "logo-64x64.png" = kernel.logo64; }
+          ;
+          linkExtraPaths = lib.mapAttrsToList (name: value: "ln -s ${value} 'kernels/${kernelName}/${name}';") extraPaths;
         in ''
           mkdir 'kernels/${kernelName}';
           echo '${config}' > 'kernels/${kernelName}/kernel.json';
-          ${logo32}
-          ${logo64}
+          ${lib.concatStringsSep "\n" linkExtraPaths}
         '') definitions)}
 
       mkdir $out

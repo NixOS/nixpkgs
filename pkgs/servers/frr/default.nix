@@ -1,8 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
-, python3Packages
 
 # build time
 , autoreconfHook
@@ -25,6 +23,7 @@
 , pcre2
 , python3
 , readline
+, rtrlib
 
 # tests
 , nettools
@@ -33,23 +32,14 @@
 
 stdenv.mkDerivation rec {
   pname = "frr";
-  version = "8.1";
+  version = "8.2.2";
 
   src = fetchFromGitHub {
     owner = "FRRouting";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-hJcgLiPBxOE5QEh0RhtZhM3dOxFqW5H0TUjN+aP4qRk=";
+    hash = "sha256-zuOgbRxyyhFdBplH/K1fpyD+KUWa7FXPDmGKF5Kb7SQ=";
   };
-
-  patches = [
-    (fetchpatch {
-      # Fix clippy build on aarch64-linux
-      # https://github.com/FRRouting/frr/issues/10267
-      url = "https://github.com/FRRouting/frr/commit/3942ee1f7bc754dd0dd9ae79f89d0f2635be334f.patch";
-      sha256 = "1i0acfy5k9fbm9cxchrcvkhyw9704srq4wm2hyjqgdimm2dq7ryf";
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -57,7 +47,7 @@ stdenv.mkDerivation rec {
     flex
     perl
     pkg-config
-    python3Packages.sphinx
+    python3.pkgs.sphinx
     texinfo
   ];
 
@@ -73,39 +63,42 @@ stdenv.mkDerivation rec {
     pcre2
     python3
     readline
+    rtrlib
   ] ++ lib.optionals stdenv.isLinux [
     libcap
   ];
 
   configureFlags = [
-    "--sysconfdir=/etc/frr"
+    "--disable-exampledir"
+    "--enable-configfile-mask=0640"
+    "--enable-group=frr"
+    "--enable-logfile-mask=0640"
+    "--enable-multipath=64"
+    "--enable-snmp"
+    "--enable-user=frr"
+    "--enable-vty-group=frrvty"
     "--localstatedir=/run/frr"
     "--sbindir=$(out)/libexec/frr"
-    "--disable-exampledir"
-    "--enable-user=frr"
-    "--enable-group=frr"
-    "--enable-configfile-mask=0640"
-    "--enable-logfile-mask=0640"
-    "--enable-vty-group=frrvty"
-    "--enable-snmp"
-    "--enable-multipath=64"
+    "--sysconfdir=/etc/frr"
+    "--enable-rpki"
   ];
 
   postPatch = ''
-    substituteInPlace tools/frr-reload --replace /usr/lib/frr/ $out/libexec/frr/
+    substituteInPlace tools/frr-reload \
+      --replace /usr/lib/frr/ $out/libexec/frr/
   '';
 
   doCheck = true;
+
   checkInputs = [
     nettools
-    python3Packages.pytest
+    python3.pkgs.pytest
   ];
 
   enableParallelBuilding = true;
 
-  passthru.tests = { inherit (nixosTests) frr; };
-
   meta = with lib; {
+    homepage = "https://frrouting.org/";
     description = "FRR BGP/OSPF/ISIS/RIP/RIPNG routing daemon suite";
     longDescription = ''
       FRRouting (FRR) is a free and open source Internet routing protocol suite
@@ -129,9 +122,10 @@ stdenv.mkDerivation rec {
       infrastructure, web 2.0 businesses, hyperscale services, and Fortune 500
       private clouds.
     '';
-    homepage = "https://frrouting.org/";
     license = with licenses; [ gpl2Plus lgpl21Plus ];
-    platforms = platforms.unix;
     maintainers = with maintainers; [ woffs ];
+    platforms = platforms.unix;
   };
+
+  passthru.tests = { inherit (nixosTests) frr; };
 }

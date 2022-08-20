@@ -92,6 +92,7 @@ in
   fwupd = callInstalledTest ./fwupd.nix {};
   gcab = callInstalledTest ./gcab.nix {};
   gdk-pixbuf = callInstalledTest ./gdk-pixbuf.nix {};
+  geocode-glib = callInstalledTest ./geocode-glib.nix {};
   gjs = callInstalledTest ./gjs.nix {};
   glib-networking = callInstalledTest ./glib-networking.nix {};
   gnome-photos = callInstalledTest ./gnome-photos.nix {};
@@ -106,6 +107,5 @@ in
   malcontent = callInstalledTest ./malcontent.nix {};
   ostree = callInstalledTest ./ostree.nix {};
   pipewire = callInstalledTest ./pipewire.nix {};
-  power-profiles-daemon = callInstalledTest ./power-profiles-daemon.nix {};
   xdg-desktop-portal = callInstalledTest ./xdg-desktop-portal.nix {};
 }

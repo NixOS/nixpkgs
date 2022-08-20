@@ -70,6 +70,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.raise3d.com/ideamaker/";
     description = "Raise3D's 3D slicer software";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ lovesegfault ];

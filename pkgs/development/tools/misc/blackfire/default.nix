@@ -8,39 +8,15 @@
 , common-updater-scripts
 }:
 
-let
-  version = "2.8.0";
-
-  sources = {
-    "x86_64-linux" = fetchurl {
-      url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_amd64.deb";
-      sha256 = "0bgd4hnpaxrqw0s0y2qiak8lbskfi2cqp147vj1kbhvm8834hwhg";
-    };
-    "i686-linux" = fetchurl {
-      url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_i386.deb";
-      sha256 = "06lf642m4imz8xvwipflmvjy1ih7k8bx8jpay0xawvilh14pqz8f";
-    };
-    "aarch64-linux" = fetchurl {
-      url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_arm64.deb";
-      sha256 = "0rddafjgdnj3na96x83paq5z14grj46v4iv38qbkvmdllrj26a0a";
-    };
-    "aarch64-darwin" = fetchurl {
-      url = "https://packages.blackfire.io/blackfire/${version}/blackfire-darwin_arm64.pkg.tar.gz";
-      sha256 = "YWiZnYdsW7dyQ0IeKeC1U00ZIdJRnzs9keeQTEU2ozA=";
-    };
-    "x86_64-darwin" = fetchurl {
-      url = "https://packages.blackfire.io/blackfire/${version}/blackfire-darwin_amd64.pkg.tar.gz";
-      sha256 = "391b0d239b11095bb8515cb60ee95f02d5862fcb509724081f314819967206b6";
-    };
-  };
-in
 stdenv.mkDerivation rec {
   pname = "blackfire";
-  inherit version;
+  version = "2.10.0";
 
-  src = sources.${stdenv.hostPlatform.system};
+  src = passthru.sources.${stdenv.hostPlatform.system} or (throw "Unsupported platform for blackfire: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ dpkg ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [
+    dpkg
+  ];
 
   dontUnpack = true;
 
@@ -78,7 +54,30 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = writeShellScript "update-${pname}" ''
+    sources = {
+      "x86_64-linux" = fetchurl {
+        url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_amd64.deb";
+        sha256 = "kyYmPU/y7pR2kx5ymDMuJvinTo5hpKs0Jy3LZPjDJyw=";
+      };
+      "i686-linux" = fetchurl {
+        url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_i386.deb";
+        sha256 = "swaZmlEoKSmH95pqAYW3ygOzQKkedWhc7FOMy3RnJFs=";
+      };
+      "aarch64-linux" = fetchurl {
+        url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_arm64.deb";
+        sha256 = "QjrLn+gxoJovMlLsIe24BNKVaFK3vgFk9BwRHSl/y3M=";
+      };
+      "aarch64-darwin" = fetchurl {
+        url = "https://packages.blackfire.io/blackfire/${version}/blackfire-darwin_arm64.pkg.tar.gz";
+        sha256 = "pBzSswicNK8z/asmGhj+IhBSS0mPJSf91XBX75AGAtY=";
+      };
+      "x86_64-darwin" = fetchurl {
+        url = "https://packages.blackfire.io/blackfire/${version}/blackfire-darwin_amd64.pkg.tar.gz";
+        sha256 = "ekeA/+N59mgDtkchEP1p4jz74goaPySmvZ6urCLcUNw=";
+      };
+    };
+
+    updateScript = writeShellScript "update-blackfire" ''
       set -o errexit
       export PATH="${lib.makeBinPath [ curl jq common-updater-scripts ]}"
       NEW_VERSION=$(curl -s https://blackfire.io/api/v1/releases | jq .cli --raw-output)
@@ -88,9 +87,9 @@ stdenv.mkDerivation rec {
           exit 0
       fi
 
-      for platform in ${lib.concatStringsSep " " meta.platforms}; do
-        update-source-version "blackfire" "0" "${lib.fakeSha256}" "--system=$platform"
-        update-source-version "blackfire" "$NEW_VERSION" "--system=$platform" --ignore-same-hash
+      for platform in ${lib.escapeShellArgs meta.platforms}; do
+        update-source-version "blackfire" "0" "${lib.fakeSha256}" --source-key="sources.$platform"
+        update-source-version "blackfire" "$NEW_VERSION" --source-key="sources.$platform"
       done
     '';
   };
@@ -98,8 +97,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Blackfire Profiler agent and client";
     homepage = "https://blackfire.io/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ jtojnar shyim ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "i686-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "i686-linux" "x86_64-darwin" ];
   };
 }

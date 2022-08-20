@@ -1,18 +1,12 @@
 { lib, stdenv, fetchurl, pkg-config, fontconfig, autoreconfHook, DiskArbitration
-, withJava ? false, jdk ? null, ant ? null
-, withAACS ? false, libaacs ? null
-, withBDplus ? false, libbdplus ? null
-, withMetadata ? true, libxml2 ? null
-, withFonts ? true, freetype ? null
+, withJava ? false, jdk, ant
+, withAACS ? false, libaacs
+, withBDplus ? false, libbdplus
+, withMetadata ? true, libxml2
+, withFonts ? true, freetype
 }:
 
 with lib;
-
-assert withJava -> jdk != null && ant != null;
-assert withAACS -> libaacs != null;
-assert withBDplus -> libbdplus != null;
-assert withMetadata -> libxml2 != null;
-assert withFonts -> freetype != null;
 
 # Info on how to use:
 # https://wiki.archlinux.org/index.php/BluRay
@@ -26,11 +20,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-wksPQcW3N7u2XFRP5jSVY3p3HBClGd/IAudp8RK0O3U=";
   };
 
-  patches = optional withJava ./BDJ-JARFILE-path.patch;
+  patches = [
+    ./BDJ-JARFILE-path.patch
+    ./libbluray-1.3.1-Fix-build-failure-after-Oracle-Java-CPU-for-April-2022.patch
+  ];
 
   nativeBuildInputs = [ pkg-config autoreconfHook ]
-                      ++ optionals withJava [ ant ]
-                      ;
+    ++ optionals withJava [ ant ];
 
   buildInputs = [ fontconfig ]
                 ++ optional withJava jdk

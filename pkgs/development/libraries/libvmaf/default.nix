@@ -21,12 +21,13 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = "https://github.com/Netflix/vmaf";
     description = "Perceptual video quality assessment based on multi-method fusion (VMAF)";
+    homepage = "https://github.com/Netflix/vmaf";
     changelog = "https://github.com/Netflix/vmaf/raw/v${version}/CHANGELOG.md";
-    platforms = platforms.unix;
     license = licenses.bsd2Patent;
     maintainers = [ maintainers.cfsmp3 maintainers.marsam ];
+    mainProgram = "vmaf";
+    platforms = platforms.unix;
   };
 
 }

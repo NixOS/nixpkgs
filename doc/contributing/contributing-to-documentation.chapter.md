@@ -27,7 +27,7 @@ If the build succeeds, the manual will be in `./result/share/doc/nixpkgs/manual.
 
 As per [RFC 0072](https://github.com/NixOS/rfcs/pull/72), all new documentation content should be written in [CommonMark](https://commonmark.org/) Markdown dialect.
 
-Additionally, the following syntax extensions are currently used:
+Additional syntax extensions are available, though not all extensions can be used in NixOS option documentation. The following extensions are currently used:
 
 - []{#ssec-contributing-markup-anchors}
   Explicitly defined **anchors** on headings, to allow linking to sections. These should be always used, to ensure the anchors can be linked even when the heading text changes, and to prevent conflicts between [automatically assigned identifiers](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/auto_identifiers.md).
@@ -53,11 +53,21 @@ Additionally, the following syntax extensions are currently used:
   This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/using/syntax.html#targets-and-cross-referencing).
 
 - []{#ssec-contributing-markup-inline-roles}
-  If you want to link to a man page, you can use `` {manpage}`nix.conf(5)` ``, which will turn into {manpage}`nix.conf(5)`.
+  If you want to link to a man page, you can use `` {manpage}`nix.conf(5)` ``, which will turn into {manpage}`nix.conf(5)`. The references will turn into links when a mapping exists in {file}`doc/build-aux/pandoc-filters/link-unix-man-references.lua`.
 
-  The references will turn into links when a mapping exists in {file}`doc/build-aux/pandoc-filters/link-unix-man-references.lua`.
+  A few markups for other kinds of literals are also available:
+
+  - `` {command}`rm -rfi` `` turns into {command}`rm -rfi`
+  - `` {option}`networking.useDHCP` `` turns into {option}`networking.useDHCP`
+  - `` {file}`/etc/passwd` `` turns into {file}`/etc/passwd`
+
+  These literal kinds are used mostly in NixOS option documentation.
 
   This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/syntax/syntax.html#roles-an-in-line-extension-point). Though, the feature originates from [reStructuredText](https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html#role-manpage) with slightly different syntax.
+
+  ::: {.note}
+  Inline roles are available for option documentation.
+  :::
 
 - []{#ssec-contributing-markup-admonitions}
   **Admonitions**, set off from the text to bring attention to something.
@@ -83,6 +93,10 @@ Additionally, the following syntax extensions are currently used:
     - [`note`](https://tdg.docbook.org/tdg/5.0/note.html)
     - [`tip`](https://tdg.docbook.org/tdg/5.0/tip.html)
     - [`warning`](https://tdg.docbook.org/tdg/5.0/warning.html)
+
+  ::: {.note}
+  Admonitions are available for option documentation.
+  :::
 
 - []{#ssec-contributing-markup-definition-lists}
   [**Definition lists**](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/definition_lists.md), for defining a group of terms:

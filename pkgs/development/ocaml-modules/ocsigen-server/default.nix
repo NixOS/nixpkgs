@@ -37,6 +37,8 @@ buildDunePackage rec {
     ocaml_pcre xml-light
   ];
 
+  patches = [ ./cohttp-5.patch ];
+
   configureFlags = [ "--root $(out)" "--prefix /" "--temproot ''" ];
 
   dontAddPrefix = true;
@@ -67,7 +69,7 @@ buildDunePackage rec {
       A full featured Web server. It implements most features of the HTTP protocol, and has a very powerful extension mechanism that make very easy to plug your own OCaml modules for generating pages.
       '';
     license = lib.licenses.lgpl21Only;
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
     maintainers = [ lib.maintainers.gal_bolle ];
   };
 

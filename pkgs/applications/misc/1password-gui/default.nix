@@ -23,6 +23,8 @@
 , libxcb
 , libxkbcommon
 , libxshmfence
+, libGL
+, libappindicator-gtk3
 , mesa
 , nspr
 , nss
@@ -42,12 +44,19 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "1password";
-  version = "8.6.1";
+  version = "8.8.0";
 
-  src = fetchurl {
-    url = "https://downloads.1password.com/linux/tar/stable/x86_64/1password-${version}.x64.tar.gz";
-    sha256 = "sha256-CbSx1UJAvNrA1gTQyi6r8NgjwQ7H+tqWU9t3TUNrDMg=";
-  };
+  src =
+    if stdenv.hostPlatform.isAarch64 then
+      fetchurl {
+        url = "https://downloads.1password.com/linux/tar/stable/aarch64/1password-${version}.arm64.tar.gz";
+        sha256 = "01swx12nqqh9i3191ibc8gv92k4dzsk1qpikg053qhn1zh2ag1dd";
+      }
+    else
+      fetchurl {
+        url = "https://downloads.1password.com/linux/tar/stable/x86_64/1password-${version}.x64.tar.gz";
+        sha256 = "1rcvxxcz2q7kgf6qbcjnjhysnx9z81hvl0jfv0nkp0p1w8bf1h66";
+      };
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -78,6 +87,8 @@ in stdenv.mkDerivation rec {
       libxcb
       libxkbcommon
       libxshmfence
+      libGL
+      libappindicator-gtk3
       mesa
       nspr
       nss
@@ -115,20 +126,20 @@ in stdenv.mkDerivation rec {
       # Electron is trying to open udev via dlopen()
       # and for some reason that doesn't seem to be impacted from the rpath.
       # Adding udev to LD_LIBRARY_PATH fixes that.
+      # Make xdg-open overrideable at runtime.
       makeWrapper $out/share/1password/1password $out/bin/1password \
-        --prefix PATH : ${lib.makeBinPath [ xdg-utils ]} \
+        --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]}
 
       runHook postInstall
     '';
 
-  passthru.updateScript = ./update.sh;
-
   meta = with lib; {
     description = "Multi-platform password manager";
     homepage = "https://1password.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ timstott savannidgerinel maxeaubrey sebtm ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }

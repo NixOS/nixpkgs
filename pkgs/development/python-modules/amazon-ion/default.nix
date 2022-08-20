@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , jsonconversion
 , six
 , pytestCheckHook
@@ -9,15 +9,18 @@
 
 buildPythonPackage rec {
   pname = "amazon-ion";
-  version = "0.9.1";
+  version = "0.9.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    pname = "amazon.ion";
-    inherit version;
-    hash = "sha256-Moq1e7LmI0L7DHg6UNYvseEDbqdL23aCwL38wDm3yCA=";
+  # test vectors require git submodule
+  src = fetchFromGitHub {
+    owner = "amzn";
+    repo = "ion-python";
+    rev = "v${version}";
+    fetchSubmodules = true;
+    hash = "sha256-BLlKxm63KsmMFajS4uJne/LPNXboOfy4uVm8HqO9Wfo=";
   };
 
   postPatch = ''
@@ -41,6 +44,10 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python implementation of Amazon Ion";
     homepage = "https://github.com/amzn/ion-python";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryNativeCode
+    ];
     license = licenses.asl20;
     maintainers = with maintainers; [ terlar ];
   };

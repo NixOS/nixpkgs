@@ -98,6 +98,7 @@ pythonPackages.callPackage
         "packaging"
         "six"
         "pyparsing"
+        "typing-extensions"
       ];
       baseBuildInputs = lib.optional (! lib.elem name skipSetupToolsSCM) pythonPackages.setuptools-scm;
       format = if isDirectory || isGit || isUrl then "pyproject" else fileInfo.format;

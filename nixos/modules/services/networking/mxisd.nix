@@ -43,26 +43,35 @@ in {
         type = types.package;
         default = pkgs.ma1sd;
         defaultText = literalExpression "pkgs.ma1sd";
-        description = "The mxisd/ma1sd package to use";
+        description = lib.mdDoc "The mxisd/ma1sd package to use";
+      };
+
+      environmentFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = lib.mdDoc ''
+          Path to an environment-file which may contain secrets to be
+          substituted via `envsubst`.
+        '';
       };
 
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/mxisd";
-        description = "Where data mxisd/ma1sd uses resides";
+        description = lib.mdDoc "Where data mxisd/ma1sd uses resides";
       };
 
       extraConfig = mkOption {
         type = types.attrs;
         default = {};
-        description = "Extra options merged into the mxisd/ma1sd configuration";
+        description = lib.mdDoc "Extra options merged into the mxisd/ma1sd configuration";
       };
 
       matrix = {
 
         domain = mkOption {
           type = types.str;
-          description = ''
+          description = lib.mdDoc ''
             the domain of the matrix homeserver
           '';
         };
@@ -74,7 +83,7 @@ in {
         name = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = ''
+          description = lib.mdDoc ''
             Public hostname of mxisd/ma1sd, if different from the Matrix domain.
           '';
         };
@@ -82,7 +91,7 @@ in {
         port = mkOption {
           type = types.nullOr types.int;
           default = null;
-          description = ''
+          description = lib.mdDoc ''
             HTTP port to listen on (unencrypted)
           '';
         };
@@ -118,7 +127,13 @@ in {
         Type = "simple";
         User = "mxisd";
         Group = "mxisd";
-        ExecStart = "${cfg.package}/bin/${executable} -c ${configFile}";
+        EnvironmentFile = mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
+        ExecStart = "${cfg.package}/bin/${executable} -c ${cfg.dataDir}/mxisd-config.yaml";
+        ExecStartPre = "${pkgs.writeShellScript "mxisd-substitute-secrets" ''
+          umask 0077
+          ${pkgs.envsubst}/bin/envsubst -o ${cfg.dataDir}/mxisd-config.yaml \
+            -i ${configFile}
+        ''}";
         WorkingDirectory = cfg.dataDir;
         Restart = "on-failure";
       };

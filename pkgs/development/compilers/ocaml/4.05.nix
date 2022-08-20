@@ -12,4 +12,10 @@ import ./generic.nix {
     { url = "https://github.com/ocaml/ocaml/commit/50c2d1275e537906ea144bd557fde31e0bf16e5f.patch";
       sha256 = "sha256:0ck9b2dpgg5k2p9ndbgniql24h35pn1bbpxjvk69j715lswzy4mh"; }
   ];
+
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: libcamlrun.a(startup.o):(.bss+0x800): multiple definition of
+  #     `caml_code_fragments_table'; libcamlrun.a(backtrace.o):(.bss+0x20): first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
 }

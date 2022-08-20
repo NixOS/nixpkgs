@@ -179,7 +179,7 @@ rec {
      they take effect as soon as the oldest release reaches end of life. */
   oldestSupportedRelease =
     # Update on master only. Do not backport.
-    2111;
+    2205;
 
   /* Whether a feature is supported in all supported releases (at the time of
      release branch-off, if applicable). See `oldestSupportedRelease`. */
@@ -195,7 +195,7 @@ rec {
      On each release the first letter is bumped and a new animal is chosen
      starting with that new letter.
   */
-  codeName = "Quokka";
+  codeName = "Raccoon";
 
   /* Returns the current nixpkgs version suffix as string. */
   versionSuffix =
@@ -229,6 +229,13 @@ rec {
   */
   inNixShell = builtins.getEnv "IN_NIX_SHELL" != "";
 
+  /* Determine whether the function is being called from inside pure-eval mode
+     by seeing whether `builtins` contains `currentSystem`. If not, we must be in
+     pure-eval mode.
+
+     Type: inPureEvalMode :: bool
+  */
+  inPureEvalMode = ! builtins ? currentSystem;
 
   ## Integer operations
 

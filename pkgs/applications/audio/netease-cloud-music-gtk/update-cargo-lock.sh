@@ -6,7 +6,7 @@
 set -eu -vx
 
 here=$PWD
-version=$(cat default.nix | rg '^  version = "' | cut -d '"' -f 2)
+version=$(rg '^  version = "' default.nix | cut -d '"' -f 2)
 checkout=$(mktemp -d)
 
 git clone -b "$version" --depth=1 https://github.com/gmg137/netease-cloud-music-gtk "$checkout"

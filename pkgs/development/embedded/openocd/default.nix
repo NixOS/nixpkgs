@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
+    "--disable-werror"
     "--enable-jtag_vpi"
     "--enable-usb_blaster_libftdi"
     (lib.enableFeature (! stdenv.isDarwin) "amtjtagaccel")

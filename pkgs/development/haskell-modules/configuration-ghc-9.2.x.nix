@@ -39,21 +39,21 @@ self: super: {
   rts = null;
   stm = null;
   template-haskell = null;
-  terminfo = null;
+  # GHC only builds terminfo if it is a native compiler
+  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_5;
   text = null;
   time = null;
   transformers = null;
   unix = null;
-  xhtml = null;
+  # GHC only bundles the xhtml library if haddock is enabled, check if this is
+  # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
+  xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_2_2_1;
 
   # Tests fail because of typechecking changes
   conduit = dontCheck super.conduit;
 
-  # 0.30 introduced support for GHC 9.2.x, so when this assert fails, the whole block can be removed
-  cryptonite = assert super.cryptonite.version == "0.29"; appendPatch (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/cryptonite-0.29.patch";
-    sha256 = "1g48lrmqgd88hqvfq3klz7lsrpwrir2v1931myrhh6dy0d9pqj09";
-  }) super.cryptonite;
+  # 0.30 introduced support for GHC 9.2.
+  cryptonite = doDistribute self.cryptonite_0_30;
 
   # cabal-install needs more recent versions of Cabal
   cabal-install = (doJailbreak super.cabal-install).overrideScope (self: super: {
@@ -80,6 +80,7 @@ self: super: {
   constraints = doJailbreak super.constraints;
   cpphs = overrideCabal (drv: { postPatch = "sed -i -e 's,time >=1.5 && <1.11,time >=1.5 \\&\\& <1.12,' cpphs.cabal";}) super.cpphs;
   data-fix = doJailbreak super.data-fix;
+  dbus = self.dbus_1_2_25;
   dec = doJailbreak super.dec;
   ed25519 = doJailbreak super.ed25519;
   ghc-byteorder = doJailbreak super.ghc-byteorder;
@@ -89,7 +90,7 @@ self: super: {
     # causing the build-depends to be skipped. Since the dependency
     # list hasn't changed much since 0.6.4, we can just reuse the
     # normal expression.
-    inherit (self.ghc-exactprint_1_4_1) src version;
+    inherit (self.ghc-exactprint_1_5_0) src version;
     revision = null; editedCabalFile = null;
     libraryHaskellDepends = [
       self.fail
@@ -97,9 +98,9 @@ self: super: {
       self.data-default
     ] ++ drv.libraryHaskellDepends or [];
   }) super.ghc-exactprint;
-  ghc-lib = self.ghc-lib_9_2_2_20220307;
-  ghc-lib-parser = self.ghc-lib-parser_9_2_2_20220307;
-  ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_3;
+  ghc-lib = doDistribute self.ghc-lib_9_2_4_20220729;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_2_4_20220729;
+  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_2_1_1;
   hackage-security = doJailbreak super.hackage-security;
   hashable = super.hashable_1_4_0_2;
   hashable-time = doJailbreak super.hashable-time;
@@ -112,38 +113,23 @@ self: super: {
   lifted-async = doJailbreak super.lifted-async;
   lukko = doJailbreak super.lukko;
   lzma-conduit = doJailbreak super.lzma-conduit;
-  ormolu = self.ormolu_0_4_0_0;
+  ormolu = self.ormolu_0_5_0_1;
   parallel = doJailbreak super.parallel;
   path = doJailbreak super.path;
   polyparse = overrideCabal (drv: { postPatch = "sed -i -e 's, <0.11, <0.12,' polyparse.cabal"; }) (doJailbreak super.polyparse);
   primitive = doJailbreak super.primitive;
-  # https://github.com/protolude/protolude/pull/136
-  protolude = appendPatches [
-    (pkgs.fetchpatch {
-      url = "https://github.com/protolude/protolude/commit/47820a36c25ea6f0c6e44382f7d4f3507358b8e7.diff";
-      sha256 = "sha256-PtHx5SyTgqFzI03YVeQD+RqglO6ASMQWSxdpy4ROMDY=";
-    })
-  ] (doJailbreak super.protolude);
   regex-posix = doJailbreak super.regex-posix;
   resolv = doJailbreak super.resolv;
   retrie = doDistribute (dontCheck self.retrie_1_2_0_1);
   singleton-bool = doJailbreak super.singleton-bool;
   servant = doJailbreak super.servant;
   servant-auth = doJailbreak super.servant-auth;
-  servant-server = appendPatches [
-    # awaiting release
-    (pkgs.fetchpatch {
-      url = "https://github.com/haskell-servant/servant/commit/61d0d14b5cb01db3d589101b3f17b0178f52e386.diff";
-      relative = "servant-server";
-      sha256 = "sha256-3lM8xLO8avVRo8oncJR8QLDSWEzOaoCmzgVtyaEBEw8=";
-    })
-  ] (doJailbreak super.servant-server);
   servant-swagger = doJailbreak super.servant-swagger;
   servant-auth-swagger = doJailbreak super.servant-auth-swagger;
   shelly = doJailbreak super.shelly;
   splitmix = doJailbreak super.splitmix;
   tasty-hspec = doJailbreak super.tasty-hspec;
-  th-desugar = self.th-desugar_1_13;
+  th-desugar = self.th-desugar_1_13_1;
   time-compat = doJailbreak super.time-compat;
   tomland = doJailbreak super.tomland;
   type-equality = doJailbreak super.type-equality;
@@ -159,18 +145,8 @@ self: super: {
     ] ++ drv.testFlags or [];
   }) (doJailbreak super.hpack);
 
-  validity = pkgs.lib.pipe super.validity [
-    # head.hackage patch
-    (appendPatch (pkgs.fetchpatch {
-      url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/9110e6972b5daf085e19cad41f97920d3ddac499/patches/validity-0.12.0.0.patch";
-      sha256 = "0hzns596dxvyn8irgi7aflx76wak1qi13chkkvl0055pkgykm08f";
-    }))
-    # head.hackage ignores test suite
-    dontCheck
-  ];
-
   # lens >= 5.1 supports 9.2.1
-  lens = super.lens_5_1;
+  lens = doDistribute self.lens_5_1_1;
 
   # Syntax error in tests fixed in https://github.com/simonmar/alex/commit/84b29475e057ef744f32a94bc0d3954b84160760
   alex = dontCheck super.alex;
@@ -194,17 +170,7 @@ self: super: {
   } super.memory);
 
   # Use hlint from git for GHC 9.2.1 support
-  hlint = doDistribute (
-    overrideSrc {
-      version = "unstable-2021-12-12";
-      src = pkgs.fetchFromGitHub {
-        owner = "ndmitchell";
-        repo = "hlint";
-        rev = "77a9702e10b772a7695c08682cd4f450fd0e9e46";
-        sha256 = "0hpp3iw7m7w2abr8vb86gdz3x6c8lj119zxln933k90ia7bmk8jc";
-      };
-    } super.hlint
-  );
+  hlint = self.hlint_3_4_1;
 
   # https://github.com/sjakobi/bsb-http-chunked/issues/38
   bsb-http-chunked = dontCheck super.bsb-http-chunked;
@@ -213,30 +179,30 @@ self: super: {
   regex-rure = doDistribute (markUnbroken super.regex-rure);
   jacinda = doDistribute super.jacinda;
   some = doJailbreak super.some;
+
+  # 2022-06-05: this is not the latest version of fourmolu because
+  # hls-fourmolu-plugin 1.0.3.0 doesn‘t support a newer one.
   fourmolu = super.fourmolu_0_6_0_0;
   # hls-fourmolu-plugin in this version has a to strict upper bound of fourmolu <= 0.5.0.0
-  hls-fourmolu-plugin = assert super.hls-fourmolu-plugin.version == "1.0.2.0"; doJailbreak super.hls-fourmolu-plugin;
+  hls-fourmolu-plugin = assert super.hls-fourmolu-plugin.version == "1.0.3.0"; doJailbreak super.hls-fourmolu-plugin;
+
+  hls-ormolu-plugin = assert super.hls-ormolu-plugin.version == "1.0.2.1"; doJailbreak super.hls-ormolu-plugin;
   implicit-hie-cradle = doJailbreak super.implicit-hie-cradle;
   # 1.3 introduced support for GHC 9.2.x, so when this assert fails, the jailbreak can be removed
   hashtables = assert super.hashtables.version == "1.2.4.2"; doJailbreak super.hashtables;
-  hiedb = doJailbreak super.hiedb;
+
+  # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
+  hiedb = doJailbreak (dontCheck super.hiedb);
 
   # 2022-02-05: The following plugins don‘t work yet on ghc9.2.
   # Compare: https://haskell-language-server.readthedocs.io/en/latest/supported-versions.html
   haskell-language-server = overrideCabal (old: {libraryHaskellDepends = builtins.filter (x: x != super.hls-tactics-plugin) old.libraryHaskellDepends;})
     (appendConfigureFlags [
-    "-f-alternateNumberFormat"
-    "-f-class"
-    "-f-eval"
     "-f-haddockComments"
-    "-f-hlint"
     "-f-retrie"
     "-f-splice"
     "-f-tactics"
   ] (super.haskell-language-server.override {
-    hls-alternate-number-format-plugin = null;
-    hls-class-plugin = null;
-    hls-eval-plugin = null;
     hls-haddock-comments-plugin = null;
     hls-hlint-plugin = null;
     hls-retrie-plugin = null;

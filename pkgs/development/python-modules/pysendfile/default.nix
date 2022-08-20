@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , python
@@ -20,6 +21,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://github.com/giampaolo/pysendfile";
     description = "A Python interface to sendfile(2)";
     license = licenses.mit;

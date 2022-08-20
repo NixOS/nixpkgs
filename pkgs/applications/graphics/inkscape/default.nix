@@ -5,7 +5,6 @@
 , cairo
 , cmake
 , fetchurl
-, fetchpatch
 , gettext
 , ghostscript
 , glib
@@ -44,20 +43,26 @@
 let
   python3Env = python3.withPackages
     (ps: with ps; [
+      appdirs
+      beautifulsoup4
+      cachecontrol
       numpy
       lxml
+      packaging
       pillow
       scour
       pyserial
-    ]);
+      requests
+      pygobject3
+    ] ++ inkex.propagatedBuildInputs);
 in
 stdenv.mkDerivation rec {
   pname = "inkscape";
-  version = "1.1.2";
+  version = "1.2.1";
 
   src = fetchurl {
-    url = "https://media.inkscape.org/dl/resources/file/${pname}-${version}.tar.xz";
-    sha256 = "sha256-P/5UoG0LJaTNi260JFNu8e0gW+E0Q6Oc1DfIx7ibltE=";
+    url = "https://media.inkscape.org/dl/resources/file/inkscape-${version}.tar.xz";
+    sha256 = "Rs59oOunykutwdtw6cu2fgrfm7NCaH3G4ItcohuNTBs=";
   };
 
   # Inkscape hits the ARGMAX when linking on macOS. It appears to be
@@ -72,13 +77,6 @@ stdenv.mkDerivation rec {
       # Python is used at run-time to execute scripts,
       # e.g., those from the "Effects" menu.
       python3 = "${python3Env}/bin/python";
-    })
-
-    # Fix build with poppler 22.03
-    # https://gitlab.com/inkscape/inkscape/-/merge_requests/4187
-    (fetchpatch {
-      url = "https://gitlab.com/inkscape/inkscape/-/commit/a18c57ffff313fd08bc8a44f6b6bf0b01d7e9b75.patch";
-      sha256 = "UZb8ZTtfA5667uo5ZlVQ5vPowiSgd4ItAJ9U1BOsRQg=";
     })
   ];
 

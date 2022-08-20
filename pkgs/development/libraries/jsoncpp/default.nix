@@ -43,14 +43,6 @@ stdenv.mkDerivation rec {
     sed -i 's/#define JSONCPP_USING_SECURE_MEMORY 0/#define JSONCPP_USING_SECURE_MEMORY 1/' include/json/version.h
   '';
 
-  # Hack to be able to run the test, broken because we use
-  # CMAKE_SKIP_BUILD_RPATH to avoid cmake resetting rpath on install
-  preBuild = if stdenv.isDarwin then ''
-    export DYLD_LIBRARY_PATH="$PWD/lib''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
-  '' else ''
-    export LD_LIBRARY_PATH="$PWD/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
-  '';
-
   nativeBuildInputs = [ cmake python3 validatePkgConfig ];
 
   cmakeFlags = [

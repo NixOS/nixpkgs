@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "pydicom";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/JWQUtFBW4uqCbs/nUxj1pRBfTCXV4wcqTkqvzpdFrM=";
+    hash = "sha256-/JWQUtFBW4uqCbs/nUxj1pRBfTCXV4wcqTkqvzpdFrM=";
   };
 
   propagatedBuildInputs = [
@@ -41,6 +41,7 @@ buildPythonPackage rec {
     "TestEchoSCP"
     "TestEchoSCPCLI"
     "TestEventHandlingAcceptor"
+    "TestEventHandlingRequestor"
     "TestFindSCP"
     "TestFindSCPCLI"
     "TestGetSCP"

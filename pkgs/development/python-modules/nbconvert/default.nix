@@ -1,77 +1,86 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, glibcLocales
-, entrypoints
+{ beautifulsoup4
 , bleach
-, beautifulsoup4
+, buildPythonPackage
+, defusedxml
+, fetchPypi
+, fetchpatch
+, ipywidgets
+, jinja2
+, jupyterlab-pygments
+, lib
+, markupsafe
 , mistune
 , nbclient
-, jinja2
-, pygments
-, traitlets
-, testpath
-, jupyter_core
-, jupyterlab-pygments
-, nbformat
-, ipykernel
 , pandocfilters
-, tornado
-, jupyter-client
-, defusedxml
+, pyppeteer
+, pytestCheckHook
+, tinycss2
 }:
 
 buildPythonPackage rec {
   pname = "nbconvert";
-  version = "6.4.5";
+  version = "6.5.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-IRY6jiBzwHEJyo85iDbkXv26KqzqaNb3WopUX+8HDU4=";
+    hash = "sha256-Ij5G4nq+hZa4rtVDAfrbukM7f/6oGWpo/Xsf9Qnu6Z0=";
   };
 
   # Add $out/share/jupyter to the list of paths that are used to search for
   # various exporter templates
   patches = [
     ./templates.patch
+
+    # Use mistune 2.x
+    (fetchpatch {
+      name = "support-mistune-2.x.patch";
+      url = "https://github.com/jupyter/nbconvert/commit/e870d9a4a61432a65bee5466c5fa80c9ee28966e.patch";
+      hash = "sha256-kdOmE7BnkRy2lsNQ2OVrEXXZntJUPJ//b139kSsfKmI=";
+      excludes = [ "pyproject.toml" ];
+    })
   ];
 
   postPatch = ''
     substituteAllInPlace ./nbconvert/exporters/templateexporter.py
-  '';
 
-  checkInputs = [ pytestCheckHook glibcLocales ];
+    # Use mistune 2.x
+    substituteInPlace setup.py \
+        --replace "mistune>=0.8.1,<2" "mistune>=2.0.3,<3"
+  '';
 
   propagatedBuildInputs = [
-    entrypoints bleach mistune jinja2 pygments traitlets testpath
-    jupyter_core nbformat ipykernel pandocfilters tornado jupyter-client
-    defusedxml beautifulsoup4
-    (nbclient.override { doCheck = false; }) # avoid infinite recursion
+    beautifulsoup4
+    bleach
+    defusedxml
+    jinja2
     jupyterlab-pygments
+    markupsafe
+    mistune
+    nbclient
+    pandocfilters
+    tinycss2
   ];
 
-  # disable preprocessor tests for ipython 7
-  # see issue https://github.com/jupyter/nbconvert/issues/898
   preCheck = ''
-    export LC_ALL=en_US.UTF-8
-    HOME=$(mktemp -d)
+    export HOME=$(mktemp -d)
   '';
 
-  pytestFlagsArray = [
-    "--ignore=nbconvert/preprocessors/tests/test_execute.py"
-    # can't resolve template paths within sandbox
-    "--ignore=nbconvert/tests/base.py"
-    "--ignore=nbconvert/tests/test_nbconvertapp.py"
+  checkInputs = [
+    ipywidgets
+    pyppeteer
+    pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    # DeprecationWarning: Support for bleach <5 will be removed in a future version of nbconvert
+    "-W ignore::DeprecationWarning"
+  ];
 
   disabledTests = [
+    # Attempts network access (Failed to establish a new connection: [Errno -3] Temporary failure in name resolution)
     "test_export"
-    "test_webpdf_without_chromium"
-    #"test_cell_tag_output"
-    #"test_convert_from_stdin"
-    #"test_convert_full_qualified_name"
+    "test_webpdf_with_chromium"
   ];
 
   # Some of the tests use localhost networking.

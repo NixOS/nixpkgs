@@ -1,30 +1,15 @@
-{ stdenv, lib, fetchurl, autoPatchelfHook, dpkg, wrapGAppsHook, nixosTests
+{ stdenv, lib, fetchurl, autoPatchelfHook, dpkg, wrapGAppsHook, makeWrapper, nixosTests
 , gtk3, atk, at-spi2-atk, cairo, pango, gdk-pixbuf, glib, freetype, fontconfig
 , dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
 , libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsa-lib
 , cups, expat, libuuid, at-spi2-core, libappindicator-gtk3, mesa
 # Runtime dependencies:
 , systemd, libnotify, libdbusmenu, libpulseaudio, xdg-utils
-# Unfortunately this also overwrites the UI language (not just the spell
-# checking language!):
-, hunspellDicts, spellcheckerLanguage ? null # E.g. "de_DE"
-# For a full list of available languages:
-# $ cat pkgs/development/libraries/hunspell/dictionaries.nix | grep "dictFileName =" | awk '{ print $3 }'
 }:
 
-let
-  customLanguageWrapperArgs = (with lib;
-    let
-      # E.g. "de_DE" -> "de-de" (spellcheckerLanguage -> hunspellDict)
-      spellLangComponents = splitString "_" spellcheckerLanguage;
-      hunspellDict = elemAt spellLangComponents 0 + "-" + toLower (elemAt spellLangComponents 1);
-    in lib.optionalString (spellcheckerLanguage != null) ''
-      --set HUNSPELL_DICTIONARIES "${hunspellDicts.${hunspellDict}}/share/hunspell" \
-      --set LC_MESSAGES "${spellcheckerLanguage}"'');
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "signal-desktop";
-  version = "5.39.0"; # Please backport all updates to the stable channel.
+  version = "5.54.0"; # Please backport all updates to the stable channel.
   # All releases have a limited lifetime and "expire" 90 days after the release.
   # When releases "expire" the application becomes unusable until an update is
   # applied. The expiration date for the current release can be extracted with:
@@ -34,13 +19,13 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
-    sha256 = "sha256-Dy5orMKZvvnHZu/2U5YIJdDR4eDM3SBjXVGHuBv0kgc=";
+    sha256 = "sha256-dGxbsSNvBT0KFukSNXyii69hMN246IYFbb0CzrDh7IU=";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
     dpkg
-    wrapGAppsHook
+    (wrapGAppsHook.override { inherit makeWrapper; })
   ];
 
   buildInputs = [
@@ -82,6 +67,7 @@ in stdenv.mkDerivation rec {
 
   runtimeDependencies = [
     (lib.getLib systemd)
+    libappindicator-gtk3
     libnotify
     libdbusmenu
     xdg-utils
@@ -122,7 +108,6 @@ in stdenv.mkDerivation rec {
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ] }"
-      ${customLanguageWrapperArgs}
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
     )
@@ -149,5 +134,6 @@ in stdenv.mkDerivation rec {
     license     = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ mic92 equirosa ];
     platforms   = [ "x86_64-linux" ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

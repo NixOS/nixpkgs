@@ -35,7 +35,7 @@ in
     environment.variables = mkOption {
       default = {};
       example = { EDITOR = "nvim"; VISUAL = "nvim"; };
-      description = ''
+      description = lib.mdDoc ''
         A set of environment variables used in the global environment.
         These variables will be set on shell initialisation (e.g. in /etc/profile).
         The value of each variable can be either a string or a list of
@@ -48,7 +48,7 @@ in
 
     environment.profiles = mkOption {
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         A list of profiles used to setup the global environment.
       '';
       type = types.listOf types.str;
@@ -57,10 +57,10 @@ in
     environment.profileRelativeEnvVars = mkOption {
       type = types.attrsOf (types.listOf types.str);
       example = { PATH = [ "/bin" ]; MANPATH = [ "/man" "/share/man" ]; };
-      description = ''
+      description = lib.mdDoc ''
         Attribute set of environment variable.  Each attribute maps to a list
         of relative paths.  Each relative path is appended to the each profile
-        of <option>environment.profiles</option> to form the content of the
+        of {option}`environment.profiles` to form the content of the
         corresponding environment variable.
       '';
     };
@@ -68,7 +68,7 @@ in
     # !!! isn't there a better way?
     environment.extraInit = mkOption {
       default = "";
-      description = ''
+      description = lib.mdDoc ''
         Shell script code called during global environment initialisation
         after all variables and profileVariables have been set.
         This code is assumed to be shell-independent, which means you should
@@ -79,7 +79,7 @@ in
 
     environment.shellInit = mkOption {
       default = "";
-      description = ''
+      description = lib.mdDoc ''
         Shell script code called during shell initialisation.
         This code is assumed to be shell-independent, which means you should
         stick to pure sh without sh word split.
@@ -89,7 +89,7 @@ in
 
     environment.loginShellInit = mkOption {
       default = "";
-      description = ''
+      description = lib.mdDoc ''
         Shell script code called during login shell initialisation.
         This code is assumed to be shell-independent, which means you should
         stick to pure sh without sh word split.
@@ -99,7 +99,7 @@ in
 
     environment.interactiveShellInit = mkOption {
       default = "";
-      description = ''
+      description = lib.mdDoc ''
         Shell script code called during interactive shell initialisation.
         This code is assumed to be shell-independent, which means you should
         stick to pure sh without sh word split.
@@ -109,17 +109,17 @@ in
 
     environment.shellAliases = mkOption {
       example = { l = null; ll = "ls -l"; };
-      description = ''
+      description = lib.mdDoc ''
         An attribute set that maps aliases (the top level attribute names in
         this option) to command strings or directly to build outputs. The
         aliases are added to all users' shells.
-        Aliases mapped to <code>null</code> are ignored.
+        Aliases mapped to `null` are ignored.
       '';
       type = with types; attrsOf (nullOr (either str path));
     };
 
     environment.homeBinInPath = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Include ~/bin/ in $PATH.
       '';
       default = false;
@@ -127,7 +127,7 @@ in
     };
 
     environment.localBinInPath = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Add ~/.local/bin/ to $PATH
       '';
       default = false;
@@ -151,9 +151,9 @@ in
     environment.shells = mkOption {
       default = [];
       example = literalExpression "[ pkgs.bashInteractive pkgs.zsh ]";
-      description = ''
+      description = lib.mdDoc ''
         A list of permissible login shells for user accounts.
-        No need to mention <literal>/bin/sh</literal>
+        No need to mention `/bin/sh`
         here, it is placed into this list implicitly.
       '';
       type = types.listOf (types.either types.shellPackage types.path);

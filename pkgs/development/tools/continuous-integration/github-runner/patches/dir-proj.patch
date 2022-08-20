@@ -35,7 +35,7 @@ index 1c91e0c..8b27d3f 100644
  
      <Target Name="Test" DependsOnTargets="GenerateConstant">
 -        <Exec Command="dotnet build Test/Test.csproj -c $(BUILDCONFIG) /p:PackageRuntime=$(PackageRuntime)" ConsoleToMSBuild="true" />
--        <Exec Command="dotnet test Test/Test.csproj --no-build --logger:trx" ConsoleToMSBuild="true" />
+-        <Exec Command="dotnet test Test/Test.csproj -c $(BUILDCONFIG) --no-build --logger:trx" ConsoleToMSBuild="true" />
 +        <Exec Command="dotnet build Test/Test.csproj --no-restore -c $(BUILDCONFIG) /p:PackageRuntime=$(PackageRuntime)" ConsoleToMSBuild="true" />
 +        <Exec Command="dotnet test Test/Test.csproj --no-restore --no-build --logger:trx" ConsoleToMSBuild="true" />
      </Target>

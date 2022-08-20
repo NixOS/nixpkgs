@@ -2,8 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , nix-update-script
-, appstream
-, desktop-file-utils
 , meson
 , ninja
 , pkg-config
@@ -25,18 +23,16 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-tasks";
-  version = "6.2.0";
+  version = "6.3.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "tasks";
     rev = version;
-    sha256 = "sha256-eHaWXntLkk5G+cR5uFwWsIvbSPsbrvpglYBh91ta/M0=";
+    sha256 = "sha256-kW36bKA0uzW98Xl2bjbTkcfLm4SeQR8VB2FyKOqfPnM=";
   };
 
   nativeBuildInputs = [
-    appstream
-    desktop-file-utils
     meson
     ninja
     pkg-config

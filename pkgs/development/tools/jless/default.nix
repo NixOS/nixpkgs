@@ -23,6 +23,6 @@ rustPlatform.buildRustPackage rec {
     description = "A command-line pager for JSON data";
     homepage = "https://jless.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ jfchevrette zowoq ];
+    maintainers = with maintainers; [ jfchevrette ];
   };
 }

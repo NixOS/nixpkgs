@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     description = "Windows Imaging Format bootloader";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ das_j ajs124 ];
-    platforms = platforms.x86; # Fails on aarch64
+    platforms = [ "x86_64-linux" ];
   };
 }

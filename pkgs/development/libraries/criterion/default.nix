@@ -27,9 +27,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DCTESTS=ON" ];
   doCheck = true;
-  preCheck = ''
-    export LD_LIBRARY_PATH=`pwd`''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
-  '';
   checkTarget = "criterion_tests test";
 
   outputs = [ "dev" "out" ];

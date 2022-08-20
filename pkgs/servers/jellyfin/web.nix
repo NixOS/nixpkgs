@@ -7,28 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "jellyfin-web";
-  version = "10.7.7";
-  # TODO: on the next major release remove src.postFetch
-  # and use the lock file in web-update.sh:
-  # https://github.com/jellyfin/jellyfin-web/commit/6efef9680d55a93f4333ef8bfb65a8a650c99a49
+  version = "10.8.3";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-web";
     rev = "v${version}";
-    sha256 = "RDp51IWQ0Woz26cVgWsiLc8DyZztI2ysPbhmOR3jguE=";
-    postFetch = ''
-      mkdir -p $out
-      cd $out
-      tar -xzf $downloadedFile --strip-components=1
-
-      # replace unsupported dependency url
-      # https://github.com/svanderburg/node2nix/issues/163
-      substituteInPlace package.json \
-        --replace \
-          "https://github.com/jellyfin/JavascriptSubtitlesOctopus#4.0.0-jf-smarttv" \
-          "https://github.com/jellyfin/JavascriptSubtitlesOctopus/archive/refs/tags/4.0.0-jf-smarttv.tar.gz"
-    '';
+    sha256 = "ZQXvF8Tt5xSylIpxQpkOeJR8nWXw806s7uDcSiVDQyA=";
   };
 
   nativeBuildInputs = [

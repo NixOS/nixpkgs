@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , bcrypt
 , buildPythonPackage
 , cryptography
@@ -19,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "asyncssh";
-  version = "2.10.1";
+  version = "2.12.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-SZuDbPWKnxknrStaQMPL0N042+CNLfj6is1TjCj8j6k=";
+    sha256 = "sha256-J0EBMixLlBgjru2OGrbnvlGRaGxtstK9Na/rowUF54A=";
   };
 
   propagatedBuildInputs = [
@@ -77,6 +78,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Asynchronous SSHv2 Python client and server library";
     homepage = "https://asyncssh.readthedocs.io/";
     license = licenses.epl20;

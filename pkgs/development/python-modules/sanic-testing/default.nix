@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "sanic-testing";
-  version = "0.8.2";
+  version = "22.3.1";
 
   src = fetchFromGitHub {
     owner = "sanic-org";
     repo = "sanic-testing";
-    rev = "v${version}";
-    sha256 = "17fbb78gvic5s9nlcgwj817fq1f9j9d1d7z6n2ahhinmvyzl9gc8";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-6aJyc5B9e65RPG3FwXAoQByVNdrLAWTEu2/Dqf9hf+g=";
   };
 
   outputs = [
@@ -24,8 +24,7 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "httpx>=0.18,<0.22" "httpx"
+    sed -i 's/httpx>=.*"/httpx"/' setup.py
   '';
 
   propagatedBuildInputs = [

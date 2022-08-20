@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "prometheus-client";
-  version = "0.13.1";
+  version = "0.14.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "prometheus";
     repo = "client_python";
     rev = "v${version}";
-    sha256 = "sha256-1sMnlUOvvdlUuh288UalAdlf0a1mpnM+Y/upwlnL1H8=";
+    sha256 = "sha256-hvBdWOMDuzF91Hv4u//tF+z6la0JfiTQHlpS4TnWpmk=";
   };
 
   checkInputs = [

@@ -39,7 +39,7 @@ in
           };
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Specify the configuration for Envoy in Nix.
       '';
     };

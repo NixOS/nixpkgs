@@ -1,9 +1,42 @@
-{ lib, stdenv, fetchFromGitHub, cmake, irrlicht, libpng, bzip2, curl, libogg, jsoncpp
-, libjpeg, libXxf86vm, libGLU, libGL, openal, libvorbis, sqlite, luajit
-, freetype, gettext, doxygen, ncurses, graphviz, xorg, gmp, libspatialindex
-, leveldb, postgresql, hiredis, libiconv, zlib, libXrandr, libX11, ninja, prometheus-cpp
-, OpenGL, OpenAL ? openal, Carbon, Cocoa
-, Kernel
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, irrlichtmt
+, coreutils
+, libpng
+, bzip2
+, curl
+, libogg
+, jsoncpp
+, libjpeg
+, libGLU
+, openal
+, libvorbis
+, sqlite
+, luajit
+, freetype
+, gettext
+, doxygen
+, ncurses
+, graphviz
+, xorg
+, gmp
+, libspatialindex
+, leveldb
+, postgresql
+, hiredis
+, libiconv
+, zlib
+, libXrandr
+, libX11
+, ninja
+, prometheus-cpp
+, OpenGL
+, OpenAL ? openal
+, Carbon
+, Cocoa
+, withTouchSupport ? false
 }:
 
 with lib;
@@ -11,21 +44,7 @@ with lib;
 let
   boolToCMake = b: if b then "ON" else "OFF";
 
-  irrlichtMt = stdenv.mkDerivation rec {
-    pname = "irrlichtMt";
-    version = "1.9.0mt4";
-    src = fetchFromGitHub {
-      owner = "minetest";
-      repo = "irrlicht";
-      rev = version;
-      sha256 = "sha256-YlXn9LrfGkjdb8+zQGDgrInolUYj9nVSF2AXWFpEEkw=";
-    };
-    nativeBuildInputs = [ cmake ];
-    buildInputs = [ zlib libjpeg libpng libGLU libGL libXrandr libX11 libXxf86vm ]
-    ++ lib.optionals stdenv.isDarwin [ Cocoa Kernel ];
-    outputs = [ "out" "dev" ];
-    meta = irrlicht.meta;
-  };
+  irrlichtmtInput = irrlichtmt.override { inherit withTouchSupport; };
 
   generic = { version, rev ? version, sha256, dataRev ? version, dataSha256, buildClient ? true, buildServer ? false }: let
     sources = {
@@ -54,7 +73,6 @@ let
       "-DENABLE_GETTEXT=1"
       "-DENABLE_SPATIAL=1"
       "-DENABLE_SYSTEM_JSONCPP=1"
-      "-DIRRLICHT_INCLUDE_DIR=${irrlichtMt.dev}/include/irrlicht"
 
       # Remove when https://github.com/NixOS/nixpkgs/issues/144170 is fixed
       "-DCMAKE_INSTALL_BINDIR=bin"
@@ -64,10 +82,10 @@ let
       "-DCMAKE_INSTALL_MANDIR=share/man"
       "-DCMAKE_INSTALL_LOCALEDIR=share/locale"
 
-    ] ++ optionals buildClient [
-      "-DOpenGL_GL_PREFERENCE=GLVND"
     ] ++ optionals buildServer [
       "-DENABLE_PROMETHEUS=1"
+    ] ++ optionals withTouchSupport [
+      "-DENABLE_TOUCH=TRUE"
     ];
 
     NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
@@ -75,19 +93,24 @@ let
     nativeBuildInputs = [ cmake doxygen graphviz ninja ];
 
     buildInputs = [
-      irrlichtMt luajit jsoncpp gettext freetype sqlite curl bzip2 ncurses
+      irrlichtmtInput luajit jsoncpp gettext freetype sqlite curl bzip2 ncurses
       gmp libspatialindex
     ] ++ optionals stdenv.isDarwin [
       libiconv OpenGL OpenAL Carbon Cocoa
     ] ++ optionals buildClient [
-      libpng libjpeg libGLU libGL openal libogg libvorbis xorg.libX11 libXxf86vm
+      libpng libjpeg libGLU openal libogg libvorbis xorg.libX11
     ] ++ optionals buildServer [
       leveldb postgresql hiredis prometheus-cpp
     ];
 
+    postPatch = ''
+      substituteInPlace src/filesys.cpp --replace "/bin/rm" "${coreutils}/bin/rm"
+    '';
+
     postInstall = ''
       mkdir -pv $out/share/minetest/games/minetest_game/
       cp -rv ${sources.data}/* $out/share/minetest/games/minetest_game/
+      patchShebangs $out
     '';
 
     meta = with lib; {
@@ -104,12 +127,14 @@ let
   };
 
   v5 = {
-    version = "5.5.0";
-    sha256 = "sha256-V+ggqvZibSQrJbrtNCEkmRYHhgSKTQsdBh3c8+t6WeA=";
-    dataSha256 = "sha256-6ZS3EET3nm09eL0czCGadwzon35/EBfAg2KjPX3ZP/0=";
+    version = "5.6.0";
+    sha256 = "sha256-wcbYcVHs4L0etOwUBjKvzsmZtnpOxpFgLV8nx3UfJQI=";
+    dataSha256 = "sha256-TVaDHYstFEuT0nBExwLE1PtM1CZh71t9CRxC9rEYTd4=";
   };
 
+  mkClient = version: generic (version // { buildClient = true; buildServer = false; });
+  mkServer = version: generic (version // { buildClient = false; buildServer = true; });
 in {
-  minetestclient_5 = generic (v5 // { buildClient = true; buildServer = false; });
-  minetestserver_5 = generic (v5 // { buildClient = false; buildServer = true; });
+  minetestclient_5 = mkClient v5;
+  minetestserver_5 = mkServer v5;
 }

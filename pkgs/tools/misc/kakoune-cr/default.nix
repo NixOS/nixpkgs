@@ -1,4 +1,4 @@
-{ lib, crystal, fetchFromGitHub, fetchurl, jq }:
+{ lib, crystal, fetchFromGitHub, fetchurl, jq, bash }:
 let
   icon = fetchurl {
     url = "https://github.com/mawww/kakoune/raw/master/doc/kakoune_logo.svg";
@@ -16,6 +16,7 @@ crystal.buildCrystalPackage rec {
     hash = "sha256-xFrxbnZl/49vGKdkESPa6LpK0ckq4Jv5GNLL/G0qA1w=";
   };
 
+  buildInputs = [ bash ];
   propagatedUserEnvPkgs = [ jq ];
 
   format = "shards";

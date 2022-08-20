@@ -1,14 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, meson, ninja, pkg-config, gtk3, vte, libgudev, wrapGAppsHook }:
+{ stdenv, lib, fetchFromGitHub, meson, ninja, pkg-config, gtk3, vte, libgudev, wrapGAppsHook, pcre2 }:
 
 stdenv.mkDerivation rec {
   pname = "gtkterm";
-  version = "1.1.1";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "Jeija";
     repo = "gtkterm";
     rev = "${version}";
-    sha256 = "0s2cx8w1n8d37pl80gll5h6dyvbqrfcam8l4wmvnqqww9jml6577";
+    sha256 = "sha256-4Z+8fs4VEk2+Ci1X3oUuInylTdIbQ5AiPenFqnyNXvc=";
   };
 
   nativeBuildInputs = [
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     gtk3
     vte
     libgudev
+    pcre2
   ];
 
   meta = with lib; {

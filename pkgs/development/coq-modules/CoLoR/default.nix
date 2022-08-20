@@ -4,8 +4,8 @@ with lib; mkCoqDerivation {
   pname = "color";
   owner = "fblanqui";
   inherit version;
-  defaultVersion = with versions; switch coq.coq-version [
-    {case = range "8.12" "8.15"; out = "1.8.2"; }
+  defaultVersion = with versions; switch coq.version [
+    {case = range "8.12" "8.16"; out = "1.8.2"; }
     {case = range "8.10" "8.11"; out = "1.7.0"; }
     {case = range "8.8"  "8.9";  out = "1.6.0"; }
     {case = range "8.6"  "8.7";  out = "1.4.0"; }
@@ -20,7 +20,7 @@ with lib; mkCoqDerivation {
   release."1.4.0".rev    = "168c6b86c7d3f87ee51791f795a8828b1521589a";
   release."1.4.0".sha256 = "1d2whsgs3kcg5wgampd6yaqagcpmzhgb6a0hp6qn4lbimck5dfmm";
 
-  extraBuildInputs = [ bignums ];
+  propagatedBuildInputs = [ bignums ];
   enableParallelBuilding = false;
 
   meta = {

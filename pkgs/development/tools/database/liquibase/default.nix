@@ -1,11 +1,25 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper
-, mysqlSupport ? true, mysql_jdbc
-, postgresqlSupport ? true, postgresql_jdbc }:
+{ lib
+, stdenv
+, fetchurl
+, jre
+, makeWrapper
+, mysqlSupport ? true
+, mysql_jdbc
+, postgresqlSupport ? true
+, postgresql_jdbc
+, redshiftSupport ? true
+, redshift_jdbc
+, liquibase_redshift_extension
+}:
 
 let
   extraJars =
     lib.optional mysqlSupport mysql_jdbc
-    ++ lib.optional postgresqlSupport postgresql_jdbc;
+    ++ lib.optional postgresqlSupport postgresql_jdbc
+    ++ lib.optionals redshiftSupport [
+      redshift_jdbc
+      liquibase_redshift_extension
+    ];
 in
 
 stdenv.mkDerivation rec {
@@ -30,7 +44,8 @@ stdenv.mkDerivation rec {
         CP="\$CP":"\$jar"
       done
     '';
-    in ''
+    in
+    ''
       mkdir -p $out
       mv ./{lib,licenses,liquibase.jar} $out/
 
@@ -51,15 +66,16 @@ stdenv.mkDerivation rec {
       ${lib.concatStringsSep "\n" (map (p: addJars "${p}/share/java") extraJars)}
 
       ${lib.getBin jre}/bin/java -cp "\$CP" \$JAVA_OPTS \
-        liquibase.integration.commandline.Main \''${1+"\$@"}
+        liquibase.integration.commandline.LiquibaseCommandLine \''${1+"\$@"}
       EOF
       chmod +x $out/bin/liquibase
-  '';
+    '';
 
   meta = with lib; {
     description = "Version Control for your database";
     homepage = "https://www.liquibase.org/";
     changelog = "https://raw.githubusercontent.com/liquibase/liquibase/v${version}/changelog.txt";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
     platforms = with platforms; unix;

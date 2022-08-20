@@ -1,35 +1,55 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "hyperledger-fabric";
-  version = "1.3.0";
-
-  goPackagePath = "github.com/hyperledger/fabric";
-
-  # taken from https://github.com/hyperledger/fabric/blob/v1.3.0/Makefile#L108
-  subPackages = [
-    "common/tools/configtxgen"
-    "common/tools/configtxlator"
-    "common/tools/cryptogen"
-    "common/tools/idemixgen"
-    "cmd/discover"
-    "peer"
-    "orderer"
-  ];
+  version = "2.4.6";
 
   src = fetchFromGitHub {
     owner = "hyperledger";
     repo = "fabric";
     rev = "v${version}";
-    sha256 = "08qrrxzgkqg9v7n3y8f2vggyqx9j65wisxi17hrabz5mzaq299xs";
+    sha256 = "sha256-Q0qrDPih3M4YCzjhLFBy51qVvoICwwn1LJf63rYiUUg=";
   };
 
-  doCheck = true;
+  vendorSha256 = null;
+
+  postPatch = ''
+    # Broken
+    rm cmd/peer/main_test.go
+  '';
+
+  subPackages = [
+    "cmd/configtxgen"
+    "cmd/configtxlator"
+    "cmd/cryptogen"
+    "cmd/discover"
+    "cmd/ledgerutil"
+    "cmd/orderer"
+    "cmd/osnadmin"
+    "cmd/peer"
+  ];
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/hyperledger/fabric/common/metadata.Version=${version}"
+    "-X github.com/hyperledger/fabric/common/metadata.CommitSha=${src.rev}"
+  ];
 
   meta = with lib; {
-    description = "An implementation of blockchain technology, leveraging familiar and proven technologies";
+    description = "High-performance, secure, permissioned blockchain network";
+    longDescription = ''
+      Hyperledger Fabric is an enterprise-grade permissioned distributed ledger
+      framework for developing solutions and applications. Its modular and
+      versatile design satisfies a broad range of industry use cases. It offers
+      a unique approach to consensus that enables performance at scale while
+      preserving privacy.
+    '';
     homepage = "https://wiki.hyperledger.org/display/fabric";
     license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ marsam ];
   };
 }

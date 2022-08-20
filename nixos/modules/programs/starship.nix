@@ -16,8 +16,8 @@ in {
     settings = mkOption {
       inherit (settingsFormat) type;
       default = { };
-      description = ''
-        Configuration included in <literal>starship.toml</literal>.
+      description = lib.mdDoc ''
+        Configuration included in `starship.toml`.
 
         See https://starship.rs/config/#prompt for documentation.
       '';

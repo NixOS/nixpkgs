@@ -21,5 +21,6 @@ buildGoModule rec {
     homepage = "https://github.com/nats-io/nkeys";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "nk";
   };
 }

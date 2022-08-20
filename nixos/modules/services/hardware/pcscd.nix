@@ -23,7 +23,7 @@ in
       default = [ pkgs.ccid ];
       defaultText = literalExpression "[ pkgs.ccid ]";
       example = literalExpression "[ pkgs.pcsc-cyberjack ]";
-      description = "Plugin packages to be used for PCSC-Lite.";
+      description = lib.mdDoc "Plugin packages to be used for PCSC-Lite.";
     };
 
     readerConfig = mkOption {
@@ -35,11 +35,10 @@ in
         LIBPATH           /path/to/serial_reader.so
         CHANNELID         1
       '';
-      description = ''
+      description = lib.mdDoc ''
         Configuration for devices that aren't hotpluggable.
 
-        See <citerefentry><refentrytitle>reader.conf</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for valid options.
+        See {manpage}`reader.conf(5)` for valid options.
       '';
     };
   };

@@ -29,6 +29,14 @@ python3.pkgs.buildPythonApplication rec {
     # https://github.com/mesonbuild/meson/pull/6827
     ./more-env-vars.patch
 
+    # Use more binutils variables, so we don't have to define them in stdenv.
+    # pr has been merged
+    # https://github.com/mesonbuild/meson/pull/10640
+    (fetchpatch {
+      url = "https://github.com/mesonbuild/meson/commit/8a8ab9a8e0c2cefb6faa0734e52803c74790576c.patch";
+      sha256 = "sha256-BdBf1NB4SZLFyFRDzD0p//XUgUeAHpo6XXUtsHdCgKE=";
+    })
+
     # Unlike libtool, vanilla Meson does not pass any information
     # about the path library will be installed to to g-ir-scanner,
     # breaking the GIR when path other than ${!outputLib}/lib is used.
@@ -58,6 +66,13 @@ python3.pkgs.buildPythonApplication rec {
     # unsandboxed non-NixOS builds, see:
     # https://github.com/NixOS/nixpkgs/issues/86131#issuecomment-711051774
     ./boost-Do-not-add-system-paths-on-nix.patch
+
+    # https://github.com/mesonbuild/meson/pull/9841
+    # cross-compilation fix
+    (fetchpatch {
+      url = "https://github.com/mesonbuild/meson/commit/266e8acb5807b38a550cb5145cea0e19545a21d7.patch";
+      sha256 = "sha256-1GdKsm2xvq2GxTNeTyBH5O73hxboL0YI+w2BCoUeWXM=";
+    })
   ] ++ lib.optionals withDarwinFrameworksGtkDocPatch [
     # Fix building gtkdoc for GLib
     # https://github.com/mesonbuild/meson/pull/10186

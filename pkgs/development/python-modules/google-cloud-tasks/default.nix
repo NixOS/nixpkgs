@@ -6,22 +6,35 @@
 , libcst
 , mock
 , proto-plus
-, pytestCheckHook
 , pytest-asyncio
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-tasks";
-  version = "2.8.1";
+  version = "2.10.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-VfRDZRgwq1pOwjzmq6mdbVqcT6wQdD6qOMivQn4Ua10=";
+    hash = "sha256-Us6K8gf8zzdbek9CDgitkhb40IA9MkqFNblLw/KmfSc=";
   };
 
-  propagatedBuildInputs = [ google-api-core grpc-google-iam-v1 libcst proto-plus ];
+  propagatedBuildInputs = [
+    google-api-core
+    grpc-google-iam-v1
+    libcst
+    proto-plus
+  ];
 
-  checkInputs = [ mock pytestCheckHook pytest-asyncio ];
+  checkInputs = [
+    mock
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   disabledTests = [
     # requires credentials

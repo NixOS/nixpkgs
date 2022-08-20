@@ -11,7 +11,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mpDris2";
-  version = "0.8";
+  version = "0.9.1";
   format = "other";
   strictDeps = false; # https://github.com/NixOS/nixpkgs/issues/56943
 
@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "eonpatapon";
     repo = pname;
     rev = version;
-    sha256 = "048b8acsd1b8kcxzd9fsh5p9g2an9c4rznicfcpyrsjz5syv894h";
+    sha256 = "sha256-1Y6K3z8afUXeKhZzeiaEF3yqU0Ef7qdAj9vAkRlD2p8=";
   };
 
   preConfigure = ''
@@ -49,7 +49,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "MPRIS 2 support for mpd";
     homepage = "https://github.com/eonpatapon/mpDris2/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

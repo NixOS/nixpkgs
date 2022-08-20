@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "minio-client";
-  version = "2022-03-17T20-25-06Z";
+  version = "2022-08-11T00-30-48Z";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "mc";
     rev = "RELEASE.${version}";
-    sha256 = "sha256-+MfRosEyIaQ5RndpAeK5AXm8EHX2ND7VJcr1NVFs5TI=";
+    sha256 = "sha256-wv/Y4MIJFISf+fvV3BYbA5kQqETsYe4vt2lp36DfFrE=";
   };
 
-  vendorSha256 = "sha256-Wdw9mZ3UupoJ4yDwS4f3mOmCn+7TvHmx4aRu+96pHM4=";
+  vendorSha256 = "sha256-5kpE0jtE3ljnUsXQY2cWvABVpegrTSYZCIYy0pz4iz8=";
 
   subPackages = [ "." ];
 
@@ -25,6 +25,8 @@ buildGoModule rec {
   installCheckPhase = ''
     $out/bin/mc --version | grep ${version} > /dev/null
   '';
+
+  passthru.tests.minio = nixosTests.minio;
 
   meta = with lib; {
     homepage = "https://github.com/minio/mc";

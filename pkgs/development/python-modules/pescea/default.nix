@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , async-timeout
 , buildPythonPackage
 , fetchFromGitHub
@@ -10,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pescea";
-  version = "1.0.10";
+  version = "1.0.11";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +20,7 @@ buildPythonPackage rec {
     owner = "lazdavila";
     repo = pname;
     rev = "v${version}";
-    sha256 = "Q38mLGjrRdXEvT+PCNsil1e2p0mmM0Xy8TUx9QOnFRA=";
+    sha256 = "sha256-yiBtvD7kCqR/F4yoJa5rIOekYy8+zlJh849Jv+HkA4M=";
   };
 
   propagatedBuildInputs = [
@@ -50,6 +51,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Python interface to Escea fireplaces";
     homepage = "https://github.com/lazdavila/pescea";
     license = licenses.gpl3Plus;

@@ -47,10 +47,6 @@ def fetch_extension_data(uuid: str, version: str) -> Tuple[str, str]:
     uuid = uuid.replace("@", "")
     url: str = f"https://extensions.gnome.org/extension-data/{uuid}.v{version}.shell-extension.zip"
 
-    # TODO remove when Vitals@CoreCoding.com version != 53, this extension has a missing manifest.json
-    if url == 'https://extensions.gnome.org/extension-data/VitalsCoreCoding.com.v53.shell-extension.zip':
-        url = 'https://extensions.gnome.org/extension-data/VitalsCoreCoding.com.v53.shell-extension_v1BI2FB.zip'
-
     # Download extension and add the zip content to nix-store
     process = subprocess.run(
         ["nix-prefetch-url", "--unpack", "--print-path", url], capture_output=True, text=True
@@ -239,7 +235,7 @@ def scrape_extensions_index() -> List[Dict[str, Any]]:
                 # If our page isn't "full", it must have been the last one
                 if response_length < 25:
                     logging.debug(
-                        f"\tThis page only has {responseLength} entries, so it must be the last one."
+                        f"\tThis page only has {response_length} entries, so it must be the last one."
                     )
                     break
         except urllib.error.HTTPError as e:

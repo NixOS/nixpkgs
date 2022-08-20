@@ -4,14 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "20220415";
+  version = "20220429";
   pname = "neomutt";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
     rev    = version;
-    sha256 = "sha256-iVKDgVN7YFPEMP+OISS7jRG9Whs2QG60yH1r2kw3MUQ=";
+    sha256 = "sha256-LBY7WtmEMg/PcMS/Tc5XEYunIWjoI4IQfUJURKgy1YA=";
   };
 
   buildInputs = [
@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postPatch = ''
+    substituteInPlace auto.def --replace /usr/sbin/sendmail sendmail
     substituteInPlace contrib/smime_keys \
       --replace /usr/bin/openssl ${openssl}/bin/openssl
 
@@ -60,8 +61,6 @@ stdenv.mkDerivation rec {
     # To make it not reference .dev outputs. See:
     # https://github.com/neomutt/neomutt/pull/2367
     "--disable-include-path-in-cflags"
-    # Look in $PATH at runtime, instead of hardcoding /usr/bin/sendmail
-    "ac_cv_path_SENDMAIL=sendmail"
     "--zlib"
   ];
 

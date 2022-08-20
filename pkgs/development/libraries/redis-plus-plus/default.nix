@@ -8,13 +8,13 @@ assert enableShared || enableStatic;
 
 stdenv.mkDerivation rec {
   pname = "redis-plus-plus";
-  version = "1.3.3";
+  version = "1.3.5";
 
   src = fetchFromGitHub {
     owner = "sewenew";
     repo = "redis-plus-plus";
     rev = version;
-    sha256 = "sha256-k4q5YbbbKKHXcL0nndzJPshzXS20ARz4Tdy5cBg7kMc=";
+    sha256 = "sha256-5tjadh3Ku7lrJn4tbi8TjTH6N0+QB2ER9xuO51cK/LU=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/sewenew/redis-plus-plus";
     description = "Redis client written in C++";
     license = licenses.asl20;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ wheelsandmetal ];
   };
 }

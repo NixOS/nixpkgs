@@ -17,7 +17,7 @@ in
     headless = mkOption {
       type = types.bool;
       default = false;
-      description = "Whether to disable X11-related features.";
+      description = lib.mdDoc "Whether to disable X11-related features.";
     };
   };
 
@@ -64,7 +64,6 @@ in
     environment.etc.vmware-tools.source = "${open-vm-tools}/etc/vmware-tools/*";
 
     services.xserver = mkIf (!cfg.headless) {
-      videoDrivers = mkOverride 50 [ "vmware" ];
       modules = [ xf86inputvmmouse ];
 
       config = ''

@@ -1,6 +1,5 @@
 { stdenv
 , fetchurl
-, coursier
 , autoPatchelfHook
 , installShellFiles
 , makeWrapper
@@ -11,58 +10,34 @@
 
 stdenv.mkDerivation rec {
   pname = "bloop";
-  version = "1.4.13";
+  version = "1.5.2";
 
-  bloop-coursier-channel = fetchurl {
-    url = "https://github.com/scalacenter/bloop/releases/download/v${version}/bloop-coursier.json";
-    sha256 = "VbvBAz7mXhgQtbrlB6uCSmZXLcdYaROJRSREbazAReo=";
-  };
+  platform =
+    if stdenv.isLinux && stdenv.isx86_64 then "x86_64-pc-linux"
+    else if stdenv.isDarwin && stdenv.isx86_64 then "x86_64-apple-darwin"
+    else throw "unsupported platform";
 
   bloop-bash = fetchurl {
     url = "https://github.com/scalacenter/bloop/releases/download/v${version}/bash-completions";
-    sha256 = "2mt+zUEJvQ/5ixxFLZ3Z0m7uDSj/YE9sg/uNMjamvdE=";
+    sha256 = "sha256-2mt+zUEJvQ/5ixxFLZ3Z0m7uDSj/YE9sg/uNMjamvdE=";
   };
 
   bloop-fish = fetchurl {
     url = "https://github.com/scalacenter/bloop/releases/download/v${version}/fish-completions";
-    sha256 = "eFESR6iPHRDViGv+Fk3sCvPgVAhk2L1gCG4LnfXO/v4=";
+    sha256 = "sha256-eFESR6iPHRDViGv+Fk3sCvPgVAhk2L1gCG4LnfXO/v4=";
   };
 
   bloop-zsh = fetchurl {
     url = "https://github.com/scalacenter/bloop/releases/download/v${version}/zsh-completions";
-    sha256 = "WNMsPwBfd5EjeRbRtc06lCEVI2FVoLfrqL82OR0G7/c=";
+    sha256 = "sha256-WNMsPwBfd5EjeRbRtc06lCEVI2FVoLfrqL82OR0G7/c=";
   };
 
-  bloop-coursier = stdenv.mkDerivation rec {
-    name = "${pname}-coursier-${version}";
-
-    platform = if stdenv.isLinux && stdenv.isx86_64 then "x86_64-pc-linux"
-    else if stdenv.isDarwin && stdenv.isx86_64 then "x86_64-apple-darwin"
-    else throw "unsupported platform";
-
-    dontUnpack = true;
-    installPhase = ''
-      runHook preInstall
-
-      export COURSIER_CACHE=$(pwd)
-      export COURSIER_JVM_CACHE=$(pwd)
-
-      mkdir channel
-      ln -s ${bloop-coursier-channel} channel/bloop.json
-      ${coursier}/bin/cs install --install-dir . --install-platform ${platform} --default-channels=false --channel channel --only-prebuilt=true bloop
-
-      # Only keeping the binary, we'll wrap it ourselves
-      # This guarantees the output of this fixed-output derivation doesn't have references to itself
-      install -D -m 0755 .bloop.aux $out
-
-      runHook postInstall
-    '';
-
-    outputHashMode = "recursive";
-    outputHashAlgo = "sha256";
-    outputHash = if stdenv.isLinux && stdenv.isx86_64 then "sha256-AiF/ih15Jd0WuDP/0vU0vdaSo3FGjWXos+hNVBayFz4="
-    else if stdenv.isDarwin && stdenv.isx86_64 then "sha256-LD23YpcNhWfioGDMqb1plqLy87ZHzT0zvIyc4O4WP5g="
-    else throw "unsupported platform";
+  bloop-binary = fetchurl rec {
+    url = "https://github.com/scalacenter/bloop/releases/download/v${version}/bloop-${platform}";
+    sha256 =
+      if stdenv.isLinux && stdenv.isx86_64 then "0dizvvkr5dw5xb3ggil2c5xi2vfcqyb46kfxnq8whbrq8pis70pi"
+      else if stdenv.isDarwin && stdenv.isx86_64 then "1a3a90ggyhfjq58wiqlxhz4djjp5crxvl822f8gzm3pjara5xpbc"
+      else throw "unsupported platform";
   };
 
   dontUnpack = true;
@@ -74,14 +49,9 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    export COURSIER_CACHE=$(pwd)
-    export COURSIER_JVM_CACHE=$(pwd)
+    install -D -m 0755 ${bloop-binary} $out/.bloop-wrapped
 
-    install -D -m 0755 ${bloop-coursier} $out/.bloop-wrapped
-
-    makeWrapper $out/.bloop-wrapped $out/bin/bloop \
-      --set CS_NATIVE_LAUNCHER true \
-      --set IS_CS_INSTALLED_LAUNCHER true
+    makeWrapper $out/.bloop-wrapped $out/bin/bloop
 
     #Install completions
     installShellCompletion --name bloop --bash ${bloop-bash}
@@ -93,6 +63,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://scalacenter.github.io/bloop/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
     description = "A Scala build server and command-line tool to make the compile and test developer workflows fast and productive in a build-tool-agnostic way";
     platforms = [ "x86_64-linux" "x86_64-darwin" ];

@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "labwc";
-  version = "0.5.0";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "labwc";
     repo = pname;
     rev = version;
-    hash = "sha256-G0EQuXSHftl4JLXKIro+tmhbApwAhlzcjPEL7DP6LHk=";
+    hash = "sha256-YD2bGxa7uss6KRvOGM0kn8dM+277ubaYeOB7ugRZCcY=";
   };
 
   nativeBuildInputs = [

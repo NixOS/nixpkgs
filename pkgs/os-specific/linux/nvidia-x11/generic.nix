@@ -2,6 +2,7 @@
 , url ? null
 , sha256_32bit ? null
 , sha256_64bit
+, openSha256 ? null
 , settingsSha256
 , settingsVersion ? version
 , persistencedSha256
@@ -27,13 +28,14 @@
   disable32Bit ? false
   # 32 bit libs only version of this package
 , lib32 ? null
+  # Whether to extract the GSP firmware
+, firmware ? openSha256 != null
 }:
 
 with lib;
 
 assert !libsOnly -> kernel != null;
 assert versionOlder version "391" -> sha256_32bit != null;
-assert versionAtLeast version "391" -> stdenv.hostPlatform.system == "x86_64-linux";
 
 let
   nameSuffix = optionalString (!libsOnly) "-${kernel.version}";
@@ -72,7 +74,8 @@ let
 
     outputs = [ "out" ]
         ++ optional i686bundled "lib32"
-        ++ optional (!libsOnly) "bin";
+        ++ optional (!libsOnly) "bin"
+        ++ optional (!libsOnly && firmware) "firmware";
     outputDev = if libsOnly then null else "bin";
 
     kernel = if libsOnly then null else kernel.dev;
@@ -100,6 +103,10 @@ let
     disallowedReferences = optional (!libsOnly) [ kernel.dev ];
 
     passthru = {
+      open = mapNullable (hash: callPackage ./open.nix {
+        inherit hash broken;
+        nvidia_x11 = self;
+      }) openSha256;
       settings = (if settings32Bit then pkgsi686Linux.callPackage else callPackage) (import ./settings.nix self settingsSha256) {
         withGtk2 = preferGtk2;
         withGtk3 = !preferGtk2;

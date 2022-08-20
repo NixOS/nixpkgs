@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "QtRVSim";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "cvut";
     repo = "qtrvsim";
     rev = "refs/tags/v${version}";
-    sha256 = "B1l+ysrodeDbxYfdLLMF8yk4/uPXTcDrTaMtYm89HuU=";
+    sha256 = "BV/nHRvimPaBtY1nfK1PZ2yJ9xWZpNlwiTRfI/9KQec=";
   };
 
   nativeBuildInputs = [ cmake wrapQtAppsHook ];

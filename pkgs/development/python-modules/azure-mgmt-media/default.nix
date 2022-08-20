@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-media";
-  version = "9.0.0";
+  version = "10.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    hash = "sha256-TI7l8sSQ2QUgPqiE3Cu/F67Wna+KHbQS3fuIjOb95ZM=";
+    hash = "sha256-KKUeibEAUqKsjjjqpzYBFaQUGniY3rbe+lfCnL0+lpY=";
   };
 
   propagatedBuildInputs = [

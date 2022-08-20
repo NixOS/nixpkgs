@@ -78,6 +78,9 @@ stdenv.mkDerivation rec {
 
   mesonFlags = lib.optionals (!systemdSupport) [
     "-D_systemd=false"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # -Bsymbolic-functions is not supported on darwin
+    "-D_b_symbolic_functions=false"
   ];
 
   postPatch = ''

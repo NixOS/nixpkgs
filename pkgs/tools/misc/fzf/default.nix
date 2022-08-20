@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "fzf";
-  version = "0.30.0";
+  version = "0.32.1";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    sha256 = "sha256-7E6fj/Sjew+zz+iMFkiSJjVn2rymKRvZtEJZH65INxk=";
+    sha256 = "sha256-gtRMoUEQEVoQXtA2PnVMLqrENUh5Jv8QiolqmeX5naQ=";
   };
 
-  vendorSha256 = "sha256-omvCzM5kH3nAE57S33NV0OFRJmU+Ty7hhriaG/Dc0o0=";
+  vendorSha256 = "sha256-3ry93xV3KKtFoFGt2yxzMd4jx3QG2+8TBrEEywj7HPQ=";
 
   outputs = [ "out" "man" ];
 
@@ -34,8 +34,6 @@ buildGoModule rec {
 
     # Has a sneaky dependency on perl
     # Include first args to make sure we're patching the right thing
-    substituteInPlace shell/key-bindings.zsh \
-      --replace " perl -ne " " ${perl}/bin/perl -ne "
     substituteInPlace shell/key-bindings.bash \
       --replace " perl -n " " ${perl}/bin/perl -n "
   '';

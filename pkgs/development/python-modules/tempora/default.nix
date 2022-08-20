@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "tempora";
-  version = "5.0.1";
+  version = "5.0.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-y6Dxl6ZIg78+c2V++8AyTVvxcXnndpsThbTXXSbNkSc=";
+    sha256 = "sha256-MfpbszsmQQJiEfI+gI64vTUZAZiLFn1F8yPI9FDs8hE=";
   };
 
   nativeBuildInputs = [

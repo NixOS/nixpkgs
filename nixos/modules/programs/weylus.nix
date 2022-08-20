@@ -12,7 +12,7 @@ in
     openFirewall = mkOption {
       type = bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Open ports needed for the functionality of the program.
       '';
     };
@@ -20,7 +20,7 @@ in
      users = mkOption {
       type = listOf str;
       default = [ ];
-      description = ''
+      description = lib.mdDoc ''
         To enable stylus and multi-touch support, the user you're going to use must be added to this list.
         These users can synthesize input events system-wide, even when another user is logged in - untrusted users should not be added.
       '';
@@ -30,7 +30,7 @@ in
       type = package;
       default = pkgs.weylus;
       defaultText = "pkgs.weylus";
-      description = "Weylus package to install.";
+      description = lib.mdDoc "Weylus package to install.";
     };
   };
   config = mkIf cfg.enable {

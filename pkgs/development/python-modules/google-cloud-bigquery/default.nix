@@ -16,16 +16,20 @@
 , proto-plus
 , psutil
 , pyarrow
+, pytest-xdist
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery";
-  version = "3.0.1";
+  version = "3.3.1";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-UmW6BEV44Ucdg/hUGSQk/kyDnB+Hsyx4q3AXTQe89hI=";
+    hash = "sha256-S2gYVMAaQnK4AmHd8biofYAvxVmM7UTc/HuDPLAsDhg=";
   };
 
   propagatedBuildInputs = [
@@ -47,6 +51,7 @@ buildPythonPackage rec {
     google-cloud-datacatalog
     google-cloud-storage
     pytestCheckHook
+    pytest-xdist
   ];
 
   # prevent google directory from shadowing google imports
@@ -77,6 +82,7 @@ buildPythonPackage rec {
     "test__initiate_resumable_upload"
     "test__initiate_resumable_upload_mtls"
     "test__initiate_resumable_upload_with_retry"
+    "test_table_clones"
   ];
 
   disabledTestPaths = [

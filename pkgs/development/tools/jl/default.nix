@@ -5,21 +5,8 @@
 }:
 mkDerivation rec {
   pname = "jl";
-  version = "0.0.5";
-  src = fetchFromGitHub {
-    owner = "chrisdone";
-    repo = "jl";
-    rev = "v${version}";
-    sha256 = "1hlnwsl4cj0l4x8dxwda2fcnk789cwlphl9gv9cfrivl43mgkgar";
-  };
-  patches = [
-    # MonadFail compatibility patch. Should be removed with the next release
-    (fetchpatch {
-      url = "https://github.com/chrisdone/jl/commit/6d40308811cbc22a96b47ebe69ec308b4e9fd356.patch";
-      sha256 = "1pg92ffkg8kim5r8rz8js6fjqyjisg1266sf7p9jyxjgsskwpa4g";
-    })
-  ];
-
+  version = "0.1.0";
+  sha256 = "15vvn3swjpc5qmdng1fcd8m9nif4qnjmpmxc9hdw5cswzl055lkj";
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [
@@ -34,10 +21,4 @@ mkDerivation rec {
   description = "Functional sed for JSON";
   maintainers = with lib.maintainers; [ fgaz ];
   homepage = "https://github.com/chrisdone/jl";
-
-  # jl needs to be updated to work with aeson-2.0.
-  # As far as I can tell, there is unfortunately no where to report issues upstream
-  # for us to be able to track when upstream adds aeson-2.0 support.
-  hydraPlatforms = lib.platforms.none;
-  broken = true;
 }

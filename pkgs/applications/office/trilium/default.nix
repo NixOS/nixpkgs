@@ -1,42 +1,31 @@
-{ lib, stdenv, nixosTests, fetchurl, autoPatchelfHook, atomEnv, makeWrapper, makeDesktopItem, gtk3, libxshmfence, wrapGAppsHook }:
+{ lib, stdenv, nixosTests, fetchurl, autoPatchelfHook, atomEnv, makeWrapper, makeDesktopItem, copyDesktopItems, libxshmfence, wrapGAppsHook }:
 
 let
-  description = "Trilium Notes is a hierarchical note taking application with focus on building large personal knowledge bases";
-  desktopItem = makeDesktopItem {
-    name = "Trilium";
-    exec = "trilium";
-    icon = "trilium";
-    comment = description;
-    desktopName = "Trilium Notes";
-    categories = [ "Office" ];
-  };
-
-  meta = with lib; {
-    inherit description;
+  metaCommon = with lib; {
+    description = "Hierarchical note taking application with focus on building large personal knowledge bases";
     homepage = "https://github.com/zadam/trilium";
     license = licenses.agpl3Plus;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ fliegendewurst ];
   };
 
-  version = "0.50.3";
+  version = "0.54.2";
 
-  desktopSource = {
-    url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
-    sha256 = "sha256-0N2+NcdZGxaj4LcG5edyd3ry+0dSQSfUQRqZEYFfWqQ=";
-  };
+  desktopSource.url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
+  desktopSource.sha256 = "15wbag2hk5pa6ds56ikxn9rj405jgbg6w1y896vl60sa02lm20df";
 
-  serverSource = {
-    url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz";
-    sha256 = "sha256-za32yRhusReoGIRdbfx30CPH63BVXz2Z7jkhxtb7XSo=";
-  };
+  serverSource.url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz";
+  serverSource.sha256 = "03z7z0jr1s132f10lagj786fr198l2xvpr72x2325brqlny5fzng";
 
 in {
 
   trilium-desktop = stdenv.mkDerivation rec {
     pname = "trilium-desktop";
     inherit version;
-    inherit meta;
+    meta = metaCommon // {
+      mainProgram = "trilium";
+    };
 
     src = fetchurl desktopSource;
 
@@ -44,21 +33,32 @@ in {
       autoPatchelfHook
       makeWrapper
       wrapGAppsHook
+      copyDesktopItems
     ];
 
-    buildInputs = atomEnv.packages ++ [ gtk3 libxshmfence ];
+    buildInputs = atomEnv.packages ++ [ libxshmfence ];
+
+    desktopItems = [
+      (makeDesktopItem {
+        name = "Trilium";
+        exec = "trilium";
+        icon = "trilium";
+        comment = meta.description;
+        desktopName = "Trilium Notes";
+        categories = [ "Office" ];
+      })
+    ];
 
     installPhase = ''
       runHook preInstall
       mkdir -p $out/bin
       mkdir -p $out/share/trilium
-      mkdir -p $out/share/{applications,icons/hicolor/128x128/apps}
+      mkdir -p $out/share/icons/hicolor/128x128/apps
 
       cp -r ./* $out/share/trilium
       ln -s $out/share/trilium/trilium $out/bin/trilium
 
       ln -s $out/share/trilium/icon.png $out/share/icons/hicolor/128x128/apps/trilium.png
-      cp ${desktopItem}/share/applications/* $out/share/applications
       runHook postInstall
     '';
 
@@ -68,13 +68,15 @@ in {
     '';
 
     dontStrip = true;
+
+    passthru.updateScript = ./update.sh;
   };
 
 
   trilium-server = stdenv.mkDerivation rec {
     pname = "trilium-server";
     inherit version;
-    inherit meta;
+    meta = metaCommon;
 
     src = fetchurl serverSource;
 

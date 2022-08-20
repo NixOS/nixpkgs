@@ -10,28 +10,27 @@ in {
       options.confinement.enable = lib.mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           If set, all the required runtime store paths for this service are
-          bind-mounted into a <literal>tmpfs</literal>-based <citerefentry>
-            <refentrytitle>chroot</refentrytitle>
-            <manvolnum>2</manvolnum>
-          </citerefentry>.
+          bind-mounted into a `tmpfs`-based
+          {manpage}`chroot(2)`.
         '';
       };
 
       options.confinement.fullUnit = lib.mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to include the full closure of the systemd unit file into the
           chroot, instead of just the dependencies for the executables.
 
-          <warning><para>While it may be tempting to just enable this option to
+          ::: {.warning}
+          While it may be tempting to just enable this option to
           make things work quickly, please be aware that this might add paths
           to the closure of the chroot that you didn't anticipate. It's better
-          to use <option>confinement.packages</option> to <emphasis
-          role="strong">explicitly</emphasis> add additional store paths to the
-          chroot.</para></warning>
+          to use {option}`confinement.packages` to **explicitly** add additional store paths to the
+          chroot.
+          :::
         '';
       };
 
@@ -62,16 +61,13 @@ in {
         default = toplevelConfig.environment.binsh;
         defaultText = lib.literalExpression "config.environment.binsh";
         example = lib.literalExpression ''"''${pkgs.dash}/bin/dash"'';
-        description = ''
-          The program to make available as <filename>/bin/sh</filename> inside
-          the chroot. If this is set to <literal>null</literal>, no
-          <filename>/bin/sh</filename> is provided at all.
+        description = lib.mdDoc ''
+          The program to make available as {file}`/bin/sh` inside
+          the chroot. If this is set to `null`, no
+          {file}`/bin/sh` is provided at all.
 
           This is useful for some applications, which for example use the
-          <citerefentry>
-            <refentrytitle>system</refentrytitle>
-            <manvolnum>3</manvolnum>
-          </citerefentry> library function to execute commands.
+          {manpage}`system(3)` library function to execute commands.
         '';
       };
 
@@ -87,10 +83,8 @@ in {
           name space.
 
           If this is set to <literal>chroot-only</literal>, only the file
-          system name space is set up along with the call to <citerefentry>
-            <refentrytitle>chroot</refentrytitle>
-            <manvolnum>2</manvolnum>
-          </citerefentry>.
+          system name space is set up along with the call to
+          <citerefentry><refentrytitle>chroot</refentrytitle><manvolnum>2</manvolnum></citerefentry>.
 
           <note><para>This doesn't cover network namespaces and is solely for
           file system level isolation.</para></note>

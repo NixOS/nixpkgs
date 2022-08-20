@@ -1,14 +1,22 @@
-{ lib, stdenv, fetchFromGitHub , gtk3, adwaita-icon-theme, breeze-icons, hicolor-icon-theme }:
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, gtk3
+, adwaita-icon-theme
+, breeze-icons
+, hicolor-icon-theme
+, gitUpdater
+}:
 
-stdenv.mkDerivation rec  {
+stdenvNoCC.mkDerivation rec  {
   pname = "kora-icon-theme";
-  version = "1.5.1";
+  version = "1.5.3";
 
   src = fetchFromGitHub  {
     owner = "bikass";
     repo = "kora";
     rev = "v${version}";
-    sha256 = "sha256-3TKjd2Lblb+/zFq7rkdgnD1dJU3kis7QZi7Ui74IWzA=";
+    sha256 = "sha256-j4W9w/icGjfkbbb0xYF3NfSFsp5RkNCc805E089JaFQ=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +35,8 @@ stdenv.mkDerivation rec  {
     runHook preInstall
 
     mkdir -p $out/share/icons
-    mv kora* $out/share/icons/
+    cp -a kora* $out/share/icons/
+    rm $out/share/icons/kora*/create-new-icon-theme.cache.sh
 
     for theme in $out/share/icons/*; do
       gtk-update-icon-cache -f $theme
@@ -36,11 +45,16 @@ stdenv.mkDerivation rec  {
     runHook postInstall
   '';
 
+  passthru.updateScript = gitUpdater {
+    inherit pname version;
+    rev-prefix = "v";
+  };
+
   meta = with lib; {
     description = "An SVG icon theme in four variants";
     homepage = "https://github.com/bikass/kora";
     license = with licenses; [ gpl3Only ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bloomvdomino ];
+    maintainers = with maintainers; [ romildo ];
   };
 }

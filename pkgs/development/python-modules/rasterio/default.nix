@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
@@ -17,6 +18,7 @@
 , matplotlib
 , numpy
 , snuggs
+, setuptools
 
 # tests
 , hypothesis
@@ -28,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "rasterio";
-  version = "1.2.10"; # not x.y[ab]z, those are alpha/beta versions
+  version = "1.3.0"; # not x.y[ab]z, those are alpha/beta versions
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
@@ -36,8 +38,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rasterio";
     repo = "rasterio";
-    rev = version;
-    hash = "sha256-xVGwQfQvxsqYihUYXENJAz9Qp9xBkhsGc/RheRTJxgo=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-CBnG1zNMOL3rAmnErv7XZZ2Cu9W+DnRPcjtKdmYXHUA=";
   };
 
   nativeBuildInputs = [
@@ -55,6 +57,7 @@ buildPythonPackage rec {
     matplotlib
     numpy
     snuggs
+    setuptools # needs pkg_resources at runtime
   ];
 
   preCheck = ''
@@ -73,9 +76,18 @@ buildPythonPackage rec {
     "-m 'not network'"
   ];
 
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "test_reproject_error_propagation"
+  ];
+
   pythonImportsCheck = [
     "rasterio"
   ];
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/rio --version | grep ${version} > /dev/null
+  '';
 
   meta = with lib; {
     description = "Python package to read and write geospatial raster data";

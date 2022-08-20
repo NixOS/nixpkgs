@@ -10,7 +10,7 @@ with lib;
 
   inherit version;
   defaultVersion = with versions; switch [coq.coq-version ssreflect.version] [
-    { cases = [(isGe "8.11") (isGe "1.12.0") ]; out = "0.3.1"; }
+    { cases = [(range "8.11" "8.15") (isGe "1.12.0") ]; out = "0.3.1"; }
     { cases = [(range "8.11" "8.14") (isLe "1.12.0") ]; out = "0.3.0"; }
     { cases = [(range "8.10" "8.12") (isLe "1.12.0") ]; out = "0.2.2"; }
   ] null;

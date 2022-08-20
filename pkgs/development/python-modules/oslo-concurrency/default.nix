@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , bash
@@ -17,12 +18,12 @@
 
 buildPythonPackage rec {
   pname = "oslo-concurrency";
-  version = "4.5.0";
+  version = "5.0.0";
 
   src = fetchPypi {
     pname = "oslo.concurrency";
     inherit version;
-    sha256 = "1h76pq9p1bpwcs6jl9m2w4280wcp2w3is88qlaqknqkd3pdaixwr";
+    sha256 = "sha256-n0aUbp+KcqBvFP49xBiaTT3TmGKDFSU5OjEZvbvniX4=";
   };
 
   postPatch = ''
@@ -62,6 +63,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "oslo_concurrency" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Oslo Concurrency library";
     homepage = "https://github.com/openstack/oslo.concurrency";
     license = licenses.asl20;

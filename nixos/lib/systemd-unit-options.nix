@@ -20,10 +20,15 @@ in rec {
     merge = loc: defs:
       let
         defs' = filterOverrides defs;
-        defs'' = getValues defs';
       in
-        if isList (head defs'')
-        then concatLists defs''
+        if isList (head defs').value
+        then concatMap (def:
+          if builtins.typeOf def.value == "list"
+          then def.value
+          else
+            throw "The definitions for systemd unit options should be either all lists, representing repeatable options, or all non-lists, but for the option ${showOption loc}, the definitions are a mix of list and non-list ${lib.options.showDefs defs'}"
+        ) defs'
+
         else mergeEqualOption loc defs';
   };
 
@@ -198,6 +203,15 @@ in rec {
         description = ''
           A list of one or more units that are activated when
           this unit enters the "failed" state.
+        '';
+      };
+
+      onSuccess = mkOption {
+        default = [];
+        type = types.listOf unitNameType;
+        description = ''
+          A list of one or more units that are activated when
+          this unit enters the "inactive" state.
         '';
       };
 

@@ -16,32 +16,32 @@ in
       http.ip = mkOption {
         type = types.str;
         default = "127.0.0.1";
-        description = "The ip address of the http server.";
+        description = lib.mdDoc "The ip address of the http server.";
       };
 
       http.port = mkOption {
         type = types.port;
         default = 1080;
-        description = "The port address of the http server.";
+        description = lib.mdDoc "The port address of the http server.";
       };
 
       http.path = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = "Prefix to all HTTP paths.";
+        description = lib.mdDoc "Prefix to all HTTP paths.";
         example = "/mailcatcher";
       };
 
       smtp.ip = mkOption {
         type = types.str;
         default = "127.0.0.1";
-        description = "The ip address of the smtp server.";
+        description = lib.mdDoc "The ip address of the smtp server.";
       };
 
       smtp.port = mkOption {
         type = types.port;
         default = 1025;
-        description = "The port address of the smtp server.";
+        description = lib.mdDoc "The port address of the smtp server.";
       };
     };
 

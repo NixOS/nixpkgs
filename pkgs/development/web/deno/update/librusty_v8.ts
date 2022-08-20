@@ -1,3 +1,4 @@
+import * as toml from "https://deno.land/std@0.148.0/encoding/toml.ts";
 import {
   genValueRegExp,
   getExistingVersion,
@@ -6,6 +7,7 @@ import {
   versionRegExp,
   write,
 } from "./common.ts";
+
 
 const log = logger("librusty_v8");
 
@@ -25,7 +27,7 @@ const getLibrustyV8Version = async (
 ) =>
   fetch(`https://github.com/${owner}/${repo}/raw/${version}/core/Cargo.toml`)
     .then((res) => res.text())
-    .then((txt) => txt.match(genValueRegExp("v8", versionRegExp))?.shift());
+    .then((txt) => mod.parse(txt).dependencies.v8.version);
 
 const fetchArchShaTasks = (version: string, arches: Architecture[]) =>
   arches.map(

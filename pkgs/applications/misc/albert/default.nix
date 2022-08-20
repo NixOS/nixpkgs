@@ -1,45 +1,75 @@
-{ mkDerivation, lib, fetchFromGitHub, makeWrapper, qtbase,
-  qtdeclarative, qtsvg, qtx11extras, muparser, cmake, python3,
-  qtcharts }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, muparser
+, python3
+, qtbase
+, qtcharts
+, qtdeclarative
+, qtgraphicaleffects
+, qtsvg
+, qtx11extras
+, wrapQtAppsHook
+, nix-update-script
+}:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "albert";
-  version = "0.17.2";
+  version = "0.17.3";
 
   src = fetchFromGitHub {
-    owner  = "albertlauncher";
-    repo   = "albert";
-    rev    = "v${version}";
-    sha256 = "0lpp8rqx5b6rwdpcdldfdlw5327harr378wnfbc6rp3ajmlb4p7w";
+    owner = "albertlauncher";
+    repo = "albert";
+    rev = "v${version}";
+    sha256 = "sha256-UIG6yLkIcdf5IszhNPwkBcSfZe4/CyI5shK/QPOmpPE=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake makeWrapper ];
+  nativeBuildInputs = [
+    cmake
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [ qtbase qtdeclarative qtsvg qtx11extras muparser python3 qtcharts ];
-
-  # We don't have virtualbox sdk so disable plugin
-  cmakeFlags = [ "-DBUILD_VIRTUALBOX=OFF" "-DCMAKE_INSTALL_LIBDIR=libs" ];
+  buildInputs = [
+    muparser
+    python3
+    qtbase
+    qtcharts
+    qtdeclarative
+    qtgraphicaleffects
+    qtsvg
+    qtx11extras
+  ];
 
   postPatch = ''
-    sed -i "/QStringList dirs = {/a    \"$out/libs\"," \
-      src/app/main.cpp
+    find -type f -name CMakeLists.txt -exec sed -i {} -e '/INSTALL_RPATH/d' \;
+
+    sed -i src/app/main.cpp \
+      -e "/QStringList dirs = {/a    QFileInfo(\"$out/lib\").canonicalFilePath(),"
   '';
 
-  preBuild = ''
-    mkdir -p "$out/"
-    ln -s "$PWD/lib" "$out/lib"
+  postFixup = ''
+    for i in $out/{bin/.albert-wrapped,lib/albert/plugins/*.so}; do
+      patchelf $i --add-rpath $out/lib/albert
+    done
   '';
 
-  postBuild = ''
-    rm "$out/lib"
-  '';
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
 
   meta = with lib; {
-    homepage    = "https://albertlauncher.github.io/";
-    description = "Desktop agnostic launcher";
-    license     = licenses.gpl3Plus;
+    description = "A fast and flexible keyboard launcher";
+    longDescription = ''
+      Albert is a desktop agnostic launcher. Its goals are usability and beauty,
+      performance and extensibility. It is written in C++ and based on the Qt
+      framework.
+    '';
+    homepage = "https://albertlauncher.github.io";
+    changelog = "https://github.com/albertlauncher/albert/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ericsagnes synthetica ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

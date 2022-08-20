@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ygrek/ocaml-extlib";
     description = "Enhancements to the OCaml Standard Library modules";
     license = lib.licenses.lgpl21Only;
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
     maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

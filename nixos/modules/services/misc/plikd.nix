@@ -16,14 +16,14 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = "Open ports in the firewall for the plikd.";
+        description = lib.mdDoc "Open ports in the firewall for the plikd.";
       };
 
       settings = mkOption {
         type = format.type;
         default = {};
-        description = ''
-          Configuration for plikd, see <link xlink:href="https://github.com/root-gg/plik/blob/master/server/plikd.cfg"/>
+        description = lib.mdDoc ''
+          Configuration for plikd, see <https://github.com/root-gg/plik/blob/master/server/plikd.cfg>
           for supported values.
         '';
       };

@@ -15,7 +15,7 @@ in {
         type = types.package;
         default = pkgs.rmfakecloud;
         defaultText = literalExpression "pkgs.rmfakecloud";
-        description = ''
+        description = lib.mdDoc ''
           rmfakecloud package to use.
 
           The default does not include the web user interface.
@@ -25,7 +25,7 @@ in {
       storageUrl = mkOption {
         type = types.str;
         example = "https://local.appspot.com";
-        description = ''
+        description = lib.mdDoc ''
           URL used by the tablet to access the rmfakecloud service.
         '';
       };
@@ -33,7 +33,7 @@ in {
       port = mkOption {
         type = types.port;
         default = 3000;
-        description = ''
+        description = lib.mdDoc ''
           Listening port number.
         '';
       };
@@ -41,7 +41,7 @@ in {
       logLevel = mkOption {
         type = types.enum [ "info" "debug" "warn" "error" ];
         default = "info";
-        description = ''
+        description = lib.mdDoc ''
           Logging level.
         '';
       };
@@ -50,7 +50,7 @@ in {
         type = with types; attrsOf str;
         default = { };
         example = { DATADIR = "/custom/path/for/rmfakecloud/data"; };
-        description = ''
+        description = lib.mdDoc ''
           Extra settings in the form of a set of key-value pairs.
           For tokens and secrets, use `environmentFile` instead.
 
@@ -63,7 +63,7 @@ in {
         type = with types; nullOr path;
         default = null;
         example = "/etc/secrets/rmfakecloud.env";
-        description = ''
+        description = lib.mdDoc ''
           Path to an environment file loaded for the rmfakecloud service.
 
           This can be used to securely store tokens and secrets outside of the

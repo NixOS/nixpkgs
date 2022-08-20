@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, brotli
 , brotlicffi
 , buildPythonPackage
 , certifi
@@ -8,22 +7,22 @@
 , charset-normalizer
 , fetchPypi
 , idna
-, isPy27
-, isPy3k
 , pysocks
 , pytest-mock
 , pytest-xdist
 , pytestCheckHook
+, pythonOlder
 , urllib3
 }:
 
 buildPythonPackage rec {
   pname = "requests";
-  version = "2.27.1";
+  version = "2.28.1";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aNfFb9WomZiHco7zBKbRLtx7508c+kdxT8i0FFJcmmE=";
+    hash = "sha256-fFWZsQL+3apmHIJsVqtP7ii/0X9avKHrvj5/GdfJeYM=";
   };
 
   patches = [
@@ -32,26 +31,29 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    brotlicffi
     certifi
+    charset-normalizer
     idna
     urllib3
-    chardet
-  ] ++ lib.optionals isPy3k [
-    brotlicffi
-    charset-normalizer
-  ] ++ lib.optionals isPy27 [
-    brotli
   ];
 
+  passthru.optional-dependencies = {
+    security = [];
+    socks = [
+      pysocks
+    ];
+    use_chardet_on_py3 = [
+      chardet
+    ];
+  };
+
   checkInputs = [
-    pysocks
     pytest-mock
     pytest-xdist
     pytestCheckHook
-  ];
-
-  # AttributeError: 'KeywordMapping' object has no attribute 'get'
-  doCheck = !isPy27;
+  ]
+  ++ passthru.optional-dependencies.socks;
 
   disabledTests = [
     # Disable tests that require network access and use httpbin

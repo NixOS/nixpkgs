@@ -1,24 +1,25 @@
 { lib
 , buildPythonPackage
-, coverage
 , django
 , factory_boy
 , fetchFromGitHub
-, isPy3k
 , pylint-plugin-utils
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pylint-django";
-  version = "2.5.2";
-  disabled = !isPy3k;
+  version = "2.5.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-VgGdV1T154LauclGo6jpLPUrYn5vTOWwvO4IXQ9se7c=";
+    hash = "sha256-5xEXjNMkOetRM9NDz0S4DsC6v39YQi34s2s+Fs56hYU=";
   };
 
   propagatedBuildInputs = [
@@ -27,17 +28,16 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    coverage
     factory_boy
     pytestCheckHook
   ];
 
   disabledTests = [
-    # Skip outdated tests and the one with a missing dependency (django_tables2)
+    # AttributeError, AssertionError
     "external_django_tables2_noerror_meta_class"
-    "external_factory_boy_noerror"
-    "func_noerror_foreign_key_attributes"
-    "func_noerror_foreign_key_key_cls_unbound"
+    "external_tastypie_noerror_foreign_key"
+    "func_noerror_model_unicode_lambda"
+    "0001_noerror_initial"
   ];
 
   pythonImportsCheck = [

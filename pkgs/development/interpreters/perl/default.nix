@@ -27,6 +27,7 @@ let
       inherit sha256;
     };
 
+    strictDeps = true;
     # TODO: Add a "dev" output containing the header files.
     outputs = [ "out" "man" "devdoc" ] ++
       optional crossCompiling "mini";
@@ -197,14 +198,14 @@ let
       priority = 6; # in `buildEnv' (including the one inside `perl.withPackages') the library files will have priority over files in `perl`
     };
   } // optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
-    crossVersion = "1.3.7"; # Mar 15, 2022
+    crossVersion = "c876045741f5159318085d2737b0090f35a842ca"; # June 5, 2022
 
     perl-cross-src = fetchFromGitHub {
-      name = "perl-cross-${crossVersion}";
+      name = "perl-cross-unstable-${crossVersion}";
       owner = "arsv";
       repo = "perl-cross";
       rev = crossVersion;
-      sha256 = "sha256-F7Vi3RAgIE/3NPlbD5zQ3Q8Ex9ddXTC4zoCRaOxXK0A=";
+      sha256 = "sha256-m9UCoTQgXBxSgk9Q1Zv6wl3Qnd0aZm/jEPXkcMKti8U=";
     };
 
     depsBuildBuild = [ buildPackages.stdenv.cc makeWrapper ];
@@ -222,14 +223,6 @@ let
   });
 in {
   # Maint version
-  perl532 = common {
-    perl = pkgs.perl532;
-    buildPerl = buildPackages.perl532;
-    version = "5.32.1";
-    sha256 = "0b7brakq9xs4vavhg391as50nbhzryc7fy5i65r81bnq3j897dh3";
-  };
-
-  # Maint version
   perl534 = common {
     perl = pkgs.perl534;
     buildPerl = buildPackages.perl534;
@@ -237,11 +230,19 @@ in {
     sha256 = "sha256-NXlRpJGwuhzjYRJjki/ux4zNWB3dwkpEawM+JazyQqE=";
   };
 
+  # Maint version
+  perl536 = common {
+    perl = pkgs.perl536;
+    buildPerl = buildPackages.perl536;
+    version = "5.36.0";
+    sha256 = "sha256-4mCFr4rDlvYq3YpTPDoOqMhJfYNvBok0esWr17ek4Ao=";
+  };
+
   # the latest Devel version
   perldevel = common {
     perl = pkgs.perldevel;
     buildPerl = buildPackages.perldevel;
-    version = "5.35.9";
-    sha256 = "sha256-/nmSCIIXHXoC68DxFM9b5GM2AKU4WlLbfWLgduanL7U=";
+    version = "5.37.0";
+    sha256 = "sha256-8RQO6gtH+WmghqzRafbqAH1MhKv/vJCcvysi7/+T9XI=";
   };
 }

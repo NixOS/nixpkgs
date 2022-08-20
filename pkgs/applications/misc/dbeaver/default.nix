@@ -23,16 +23,16 @@
   inherit maven; # use overridden maven version (see dbeaver's entry in all-packages.nix)
 }) rec {
   pname = "dbeaver";
-  version = "22.0.2"; # When updating also update mvnSha256
+  version = "22.1.4"; # When updating also update mvnSha256
 
   src = fetchFromGitHub {
     owner = "dbeaver";
     repo = "dbeaver";
     rev = version;
-    sha256 = "sha256-3tIxHw4734ggIUDjZO2EGIMbyPNP3yvy9QgnMLw+/fc=";
+    sha256 = "sha256-5s2SFquB0i5X2deBO0FStudReB4wGhQkhR39PHPBEAM=";
   };
 
-  mvnSha256 = "os3eb+In8XreHwdZMacXafIVgOAeSSfCIkO5pwaO6MI=";
+  mvnSha256 = "YIeKSL5scU8NxEIf+jK1g9cdFDOBVh14ruKMqUuz1Ts=";
   mvnParameters = "-P desktop,all-platforms";
 
   nativeBuildInputs = [
@@ -73,6 +73,7 @@
       productTargetPath = "product/community/target/products/org.jkiss.dbeaver.core.product";
 
       platformMap = {
+        aarch64-darwin = "aarch64";
         aarch64-linux = "aarch64";
         x86_64-darwin = "x86_64";
         x86_64-linux  = "x86_64";
@@ -126,8 +127,12 @@
       PostgreSQL, MariaDB, SQLite, Oracle, DB2, SQL Server, Sybase, MS Access,
       Teradata, Firebird, Derby, etc.
     '';
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # dependencies from maven
+    ];
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
     maintainers = with maintainers; [ jojosch mkg20001 ];
   };
 }

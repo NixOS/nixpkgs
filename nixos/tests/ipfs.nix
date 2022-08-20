@@ -14,6 +14,14 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     };
   };
 
+  nodes.fuse = { ... }: {
+    services.ipfs = {
+      enable = true;
+      apiAddress = "/ip4/127.0.0.1/tcp/2324";
+      autoMount = true;
+    };
+  };
+
   testScript = ''
     start_all()
 
@@ -40,5 +48,14 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     # Test if setting dataDir works properly with the hardened systemd unit
     machine.succeed("test -e /mnt/ipfs/config")
     machine.succeed("test ! -e /var/lib/ipfs/")
+
+    # Test FUSE mountpoint
+    ipfs_hash = fuse.succeed(
+        "echo fnord3 | ipfs --api /ip4/127.0.0.1/tcp/2324 add --quieter"
+    )
+
+    # The FUSE mount functionality is broken as of v0.13.0.
+    # See https://github.com/ipfs/kubo/issues/9044.
+    # fuse.succeed(f"cat /ipfs/{ipfs_hash.strip()} | grep fnord3")
   '';
 })

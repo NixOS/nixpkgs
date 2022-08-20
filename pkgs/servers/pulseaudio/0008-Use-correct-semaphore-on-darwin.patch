@@ -1,0 +1,31 @@
+From 1a840b6e517004c902dfbea3d358b344c9588978 Mon Sep 17 00:00:00 2001
+From: Andrew Childs <andrew.childs@bibo.com.ph>
+Date: Tue, 19 Apr 2022 17:49:08 +0900
+Subject: [PATCH 8/8] Use correct semaphore on darwin
+
+---
+ src/meson.build | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/src/meson.build b/src/meson.build
+index 5bd68cb12..041e2fab4 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -183,9 +183,13 @@ else
+   libpulsecommon_sources += [
+     'pulsecore/mutex-posix.c',
+     'pulsecore/poll-posix.c',
+-    'pulsecore/semaphore-posix.c',
+     'pulsecore/thread-posix.c'
+   ]
++  if host_machine.system() == 'darwin'
++    libpulsecommon_sources += [ 'pulsecore/semaphore-osx.c' ]
++  else
++    libpulsecommon_sources += [ 'pulsecore/semaphore-posix.c' ]
++  endif
+ endif
+ # FIXME: Do SIMD things
+ 
+-- 
+2.35.1
+

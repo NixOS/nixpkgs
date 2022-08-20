@@ -8,6 +8,7 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "@chemzqm/neovim": "5.7.9",
     "log4js": "3.0.6",
     "neovim": "4.2.1",
     "socket.io": "2.1.1",

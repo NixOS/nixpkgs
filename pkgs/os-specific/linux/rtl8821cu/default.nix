@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rtl8821cu";
-  version = "${kernel.version}-unstable-2022-03-08";
+  version = "${kernel.version}-unstable-2022-05-07";
 
   src = fetchFromGitHub {
     owner = "morrownr";
     repo = "8821cu-20210118";
-    rev = "4bdd7c8668562e43564cd5d786055633e591ad4d";
-    sha256 = "sha256-dfvDpjsra/nHwIGywOkZICTEP/Ex7ooH4zzkXqAaDkI=";
+    rev = "e3cf788e1dddaba3273190755ce424f93fe593e4";
+    hash = "sha256-VUZU/oFSaxewy/BF/2k4OssAi4AWSWweqXYZPHmsQvY=";
   };
 
   hardeningDisable = [ "pic" ];

@@ -81,19 +81,6 @@ setKV containerdSha256 ${CONTAINERD_SHA256}
 
 setKV criCtlVersion ${CRI_CTL_VERSION}
 
-setKV k3sServerVendorSha256 "0000000000000000000000000000000000000000000000000000"
-
-set +e
-K3S_SERVER_VENDOR_SHA256=$(nix-build ${NIXPKGS_ROOT} --no-out-link -A k3s 2>&1 >/dev/null | grep "got:" | cut -d':' -f2 | sed 's| ||g')
-set -e
-
-if [ -n "${K3S_SERVER_VENDOR_SHA256:-}" ]; then
-    setKV k3sServerVendorSha256 ${K3S_SERVER_VENDOR_SHA256}
-else
-    echo "Update failed. K3S_SERVER_VENDOR_SHA256 is empty."
-    exit 1
-fi
-
 set +e
 K3S_VENDOR_SHA256=$(nix-prefetch -I nixpkgs=${NIXPKGS_ROOT} "{ sha256 }: (import ${NIXPKGS_ROOT}. {}).k3s.go-modules.overrideAttrs (_: { vendorSha256 = sha256; })")
 set -e

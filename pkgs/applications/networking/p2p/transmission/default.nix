@@ -86,8 +86,6 @@ in stdenv.mkDerivation {
   ++ lib.optionals stdenv.isLinux [ inotify-tools ]
   ;
 
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework CoreFoundation";
-
   postInstall = ''
     mkdir $apparmor
     cat >$apparmor/bin.transmission-daemon <<EOF

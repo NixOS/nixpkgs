@@ -29,7 +29,7 @@ let
     , xcbuild
 
     , version
-    , sha256
+    , hash
     , extraPatches ? [ ]
     , packageOverrides ? (final: prev: { })
     , phpAttrsOverrides ? (attrs: { })
@@ -223,8 +223,7 @@ let
             [ "--disable-all" ]
 
             # PCRE
-            ++ lib.optionals (lib.versionAtLeast version "7.4") [ "--with-external-pcre=${pcre2.dev}" ]
-            ++ [ "PCRE_LIBDIR=${pcre2}" ]
+            ++ [ "--with-external-pcre=${pcre2.dev}" ]
 
 
             # Enable sapis
@@ -232,10 +231,6 @@ let
             ++ lib.optional (!cliSupport) "--disable-cli"
             ++ lib.optional fpmSupport "--enable-fpm"
             ++ lib.optional pearSupport [ "--with-pear" "--enable-xml" "--with-libxml" ]
-            ++ lib.optionals (pearSupport && (lib.versionOlder version "7.4")) [
-              "--enable-libxml"
-              "--with-libxml-dir=${libxml2.dev}"
-            ]
             ++ lib.optional pharSupport "--enable-phar"
             ++ lib.optional (!phpdbgSupport) "--disable-phpdbg"
 
@@ -270,14 +265,7 @@ let
               done
 
               export EXTENSION_DIR=$out/lib/php/extensions
-            ''
-            # PKG_CONFIG need not be a relative path
-            + lib.optionalString (lib.versionOlder version "7.4") ''
-              for i in $(find . -type f -name "*.m4"); do
-                substituteInPlace $i \
-                  --replace 'test -x "$PKG_CONFIG"' 'type -P "$PKG_CONFIG" >/dev/null'
-              done
-            '' + ''
+
               ./buildconf --copy --force
 
               if test -f $src/genfiles; then
@@ -302,7 +290,7 @@ let
 
           src = fetchurl {
             url = "https://www.php.net/distributions/php-${version}.tar.bz2";
-            inherit sha256;
+            inherit hash;
           };
 
           patches = [ ./fix-paths-php7.patch ] ++ extraPatches;

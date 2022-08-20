@@ -11,8 +11,8 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
   mktplcRef = {
     name = "rescript-vscode";
     publisher = "chenglou92";
-    version = "1.1.3";
-    sha256 = "1c1ipxgm0f0a3vlnhr0v85jr5l3rwpjzh9w8nv2jn5vgvpas0b2a";
+    version = "1.3.0";
+    sha256 = "sha256-Sgi7FFOpI/XOeyPOrDhwZdZ+43ilUz7oQ49yB7tiMXk=";
   };
   postPatch = ''
     rm -r ${analysisDir}

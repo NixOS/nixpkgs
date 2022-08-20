@@ -29,7 +29,7 @@ in {
     ip = mkOption {
       type = types.str;
       default = "localhost";
-      description = ''
+      description = lib.mdDoc ''
         IP address Jupyter will be listening on.
       '';
     };
@@ -41,7 +41,7 @@ in {
       # saving a rebuild.
       default = pkgs.python3.pkgs.notebook;
       defaultText = literalExpression "pkgs.python3.pkgs.notebook";
-      description = ''
+      description = lib.mdDoc ''
         Jupyter package to use.
       '';
     };
@@ -50,7 +50,7 @@ in {
       type = types.str;
       default = "jupyter-notebook";
       example = "jupyter-lab";
-      description = ''
+      description = lib.mdDoc ''
         Which command the service runs. Note that not all jupyter packages
         have all commands, e.g. jupyter-lab isn't present in the default package.
        '';
@@ -59,7 +59,7 @@ in {
     port = mkOption {
       type = types.int;
       default = 8888;
-      description = ''
+      description = lib.mdDoc ''
         Port number Jupyter will be listening on.
       '';
     };
@@ -67,7 +67,7 @@ in {
     notebookDir = mkOption {
       type = types.str;
       default = "~/";
-      description = ''
+      description = lib.mdDoc ''
         Root directory for notebooks.
       '';
     };
@@ -75,7 +75,7 @@ in {
     user = mkOption {
       type = types.str;
       default = "jupyter";
-      description = ''
+      description = lib.mdDoc ''
         Name of the user used to run the jupyter service.
         For security reason, jupyter should really not be run as root.
         If not set (jupyter), the service will create a jupyter user with appropriate settings.
@@ -86,7 +86,7 @@ in {
     group = mkOption {
       type = types.str;
       default = "jupyter";
-      description = ''
+      description = lib.mdDoc ''
         Name of the group used to run the jupyter service.
         Use this if you want to create a group of users that are able to view the notebook directory's content.
       '';
@@ -95,7 +95,7 @@ in {
 
     password = mkOption {
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Password to use with notebook.
         Can be generated using:
           In [1]: from notebook.auth import passwd
@@ -112,7 +112,7 @@ in {
     notebookConfig = mkOption {
       type = types.lines;
       default = "";
-      description = ''
+      description = lib.mdDoc ''
         Raw jupyter config.
       '';
     };
@@ -143,16 +143,20 @@ in {
             language = "python";
             logo32 = "''${env.sitePackages}/ipykernel/resources/logo-32x32.png";
             logo64 = "''${env.sitePackages}/ipykernel/resources/logo-64x64.png";
+            extraPaths = {
+              "cool.txt" = pkgs.writeText "cool" "cool content";
+            };
           };
         }
       '';
-      description = "Declarative kernel config
+      description = lib.mdDoc ''
+        Declarative kernel config.
 
-      Kernels can be declared in any language that supports and has the required
-      dependencies to communicate with a jupyter server.
-      In python's case, it means that ipykernel package must always be included in
-      the list of packages of the targeted environment.
-      ";
+        Kernels can be declared in any language that supports and has the required
+        dependencies to communicate with a jupyter server.
+        In python's case, it means that ipykernel package must always be included in
+        the list of packages of the targeted environment.
+      '';
     };
   };
 

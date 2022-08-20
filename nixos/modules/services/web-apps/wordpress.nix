@@ -82,13 +82,13 @@ let
           type = types.package;
           default = pkgs.wordpress;
           defaultText = literalExpression "pkgs.wordpress";
-          description = "Which WordPress package to use.";
+          description = lib.mdDoc "Which WordPress package to use.";
         };
 
         uploadsDir = mkOption {
           type = types.path;
           default = "/var/lib/wordpress/${name}/uploads";
-          description = ''
+          description = lib.mdDoc ''
             This directory is used for uploads of pictures. The directory passed here is automatically
             created and permissions adjusted as required.
           '';
@@ -152,47 +152,47 @@ let
           host = mkOption {
             type = types.str;
             default = "localhost";
-            description = "Database host address.";
+            description = lib.mdDoc "Database host address.";
           };
 
           port = mkOption {
             type = types.port;
             default = 3306;
-            description = "Database host port.";
+            description = lib.mdDoc "Database host port.";
           };
 
           name = mkOption {
             type = types.str;
             default = "wordpress";
-            description = "Database name.";
+            description = lib.mdDoc "Database name.";
           };
 
           user = mkOption {
             type = types.str;
             default = "wordpress";
-            description = "Database user.";
+            description = lib.mdDoc "Database user.";
           };
 
           passwordFile = mkOption {
             type = types.nullOr types.path;
             default = null;
             example = "/run/keys/wordpress-dbpassword";
-            description = ''
+            description = lib.mdDoc ''
               A file containing the password corresponding to
-              <option>database.user</option>.
+              {option}`database.user`.
             '';
           };
 
           tablePrefix = mkOption {
             type = types.str;
             default = "wp_";
-            description = ''
+            description = lib.mdDoc ''
               The $table_prefix is the value placed in the front of your database tables.
               Change the value if you want to use something other than wp_ for your database
               prefix. Typically this is changed if you are installing multiple WordPress blogs
               in the same database.
 
-              See <link xlink:href='https://codex.wordpress.org/Editing_wp-config.php#table_prefix'/>.
+              See <https://codex.wordpress.org/Editing_wp-config.php#table_prefix>.
             '';
           };
 
@@ -200,13 +200,13 @@ let
             type = types.nullOr types.path;
             default = null;
             defaultText = literalExpression "/run/mysqld/mysqld.sock";
-            description = "Path to the unix socket file to use for authentication.";
+            description = lib.mdDoc "Path to the unix socket file to use for authentication.";
           };
 
           createLocally = mkOption {
             type = types.bool;
             default = true;
-            description = "Create the database and database user locally.";
+            description = lib.mdDoc "Create the database and database user locally.";
           };
         };
 
@@ -219,8 +219,8 @@ let
               enableACME = true;
             }
           '';
-          description = ''
-            Apache configuration can be done by adapting <option>services.httpd.virtualHosts</option>.
+          description = lib.mdDoc ''
+            Apache configuration can be done by adapting {option}`services.httpd.virtualHosts`.
           '';
         };
 
@@ -234,8 +234,8 @@ let
             "pm.max_spare_servers" = 4;
             "pm.max_requests" = 500;
           };
-          description = ''
-            Options for the WordPress PHP pool. See the documentation on <literal>php-fpm.conf</literal>
+          description = lib.mdDoc ''
+            Options for the WordPress PHP pool. See the documentation on `php-fpm.conf`
             for details on configuration directives.
           '';
         };
@@ -243,10 +243,10 @@ let
         extraConfig = mkOption {
           type = types.lines;
           default = "";
-          description = ''
+          description = lib.mdDoc ''
             Any additional text to be appended to the wp-config.php
             configuration file. This is a PHP script. For configuration
-            settings, see <link xlink:href='https://codex.wordpress.org/Editing_wp-config.php'/>.
+            settings, see <https://codex.wordpress.org/Editing_wp-config.php>.
           '';
           example = ''
             define( 'AUTOSAVE_INTERVAL', 60 ); // Seconds
@@ -265,20 +265,20 @@ in
       sites = mkOption {
         type = types.attrsOf (types.submodule siteOpts);
         default = {};
-        description = "Specification of one or more WordPress sites to serve";
+        description = lib.mdDoc "Specification of one or more WordPress sites to serve";
       };
 
       webserver = mkOption {
         type = types.enum [ "httpd" "nginx" "caddy" ];
         default = "httpd";
-        description = ''
+        description = lib.mdDoc ''
           Whether to use apache2 or nginx for virtual host management.
 
-          Further nginx configuration can be done by adapting <literal>services.nginx.virtualHosts.&lt;name&gt;</literal>.
-          See <xref linkend="opt-services.nginx.virtualHosts"/> for further information.
+          Further nginx configuration can be done by adapting `services.nginx.virtualHosts.<name>`.
+          See [](#opt-services.nginx.virtualHosts) for further information.
 
-          Further apache2 configuration can be done by adapting <literal>services.httpd.virtualHosts.&lt;name&gt;</literal>.
-          See <xref linkend="opt-services.httpd.virtualHosts"/> for further information.
+          Further apache2 configuration can be done by adapting `services.httpd.virtualHosts.<name>`.
+          See [](#opt-services.httpd.virtualHosts) for further information.
         '';
       };
 

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, espeak-ng }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, espeak-ng }:
 
 buildPythonPackage rec {
   pname = "pyttsx3";
@@ -16,6 +16,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Offline text-to-speech synthesis library";
     homepage = "https://github.com/nateshmbhat/pyttsx3";
     license = licenses.mpl20;

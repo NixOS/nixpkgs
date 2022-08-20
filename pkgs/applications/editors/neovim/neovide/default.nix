@@ -25,16 +25,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "neovide";
-  version = "0.8.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "Kethku";
     repo = "neovide";
     rev = version;
-    sha256 = "sha256-pbniOWjEw1Z+PoXqbbFOUkW5Ii1UDOMoZpAvVF1uNEg=";
+    sha256 = "sha256-PViSiK6+H79MLIOFe26cNqUZ6gZdqDC/S+ksTrbOm54=";
   };
 
-  cargoSha256 = "sha256-7o7uJXH68pvfuiG1eSNmbPx8OO8QJjCe+oEFl38bFm4=";
+  cargoSha256 = "sha256-GvueDUY4Hzfih/MyEfhdz/QNVd9atTC8SCF+PyuJJic=";
 
   SKIA_SOURCE_DIR =
     let
@@ -42,8 +42,8 @@ rustPlatform.buildRustPackage rec {
         owner = "rust-skia";
         repo = "skia";
         # see rust-skia:skia-bindings/Cargo.toml#package.metadata skia
-        rev = "m93-0.42.0";
-        sha256 = "sha256-F1DWLm7bdKnuCu5tMMekxSyaGq8gPRNtZwcRVXJxjZQ=";
+        rev = "m103-0.51.1";
+        sha256 = "sha256-w5dw/lGm40gKkHPR1ji/L82Oa808Kuh8qaCeiqBLkLw=";
       };
       # The externals for skia are taken from skia/DEPS
       externals = lib.mapAttrs (n: fetchgit) (lib.importJSON ./skia-externals.json);

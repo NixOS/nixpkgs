@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "09lqav1mz5zajklr3xa0iaivhpykv3azkjb7yj9wyp0hq3vymp8i";
   };
 
+  strictDeps = true;
   installPhase = ''
     install -D zsh-system-clipboard.zsh $out/share/zsh/${pname}/zsh-system-clipboard.zsh
   '';

@@ -26,7 +26,8 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/steve-m/kalibrate-rtl";
     license = licenses.bsd2;
-    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ bjornfor viraptor ];
+    mainProgram = "kal";
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -17,14 +17,14 @@ let
   shas =
     if enableUnfree
     then {
-      x86_64-linux  = "1vm53alq9q1qy2jcsjg9z339xrkac5r9qqpdafp53ny4zsv1n7vj";
-      x86_64-darwin = "0hhjyl04h3gd66rdk22272rj419br4v2i59lyrmaj6hmnsqbv968";
-      aarch64-linux = "0yjaki7gjffrz86hvqgn1gzhd9dc9llcj50g2x1sgpyn88zk0z0p";
+      x86_64-linux  = "35e50e05fba0240aa5b138bc1c81f67addaf557701f8df41c682b5bc708f7455";
+      x86_64-darwin = "698b6000788e123b647c988993f710c6d9bc44eb8c8e6f97d6b18a695a61f0a6";
+      aarch64-linux = "69694856fde11836eb1613bf3a2ba31fbdc933f58c8527b6180f6122c8bb528b";
     }
     else {
-      x86_64-linux  = "1f3659vcgczm7v03q3fvsmp1ndp6wm3i7r2b2vbl4xq7hf9v7azk";
-      x86_64-darwin = "10zw9qc0lc0x9in0nkxc1aiazhyd69l8sya2ni46ivyyjwf0sqsn";
-      aarch64-linux = "1czhgmky2zf3mqykn5ww4257yfhd36mi4x6dq569ymly83pivf8v";
+      x86_64-linux  = "3a2da2e63bc08ee1886db29c80103c669d3ed6960290b8b97d771232769f282e";
+      x86_64-darwin = "655ab873e16257827f884f67b66d62c4da40a895d06206faa435615ad0a56796";
+      aarch64-linux = "235cf57afb619801808d5fe1bff7e01a4a9b29f77723566e5371b5f3b2bf8fad";
     };
   this = stdenv.mkDerivation rec {
     version = elk7Version;
@@ -68,6 +68,11 @@ let
     meta = with lib; {
       description = "Logstash is a data pipeline that helps you process logs and other event data from a variety of systems";
       homepage = "https://www.elastic.co/products/logstash";
+      sourceProvenance = with sourceTypes; [
+        fromSource
+        binaryBytecode  # source bundles dependencies as jars
+        binaryNativeCode  # bundled jruby includes native code
+      ];
       license = if enableUnfree then licenses.elastic else licenses.asl20;
       platforms = platforms.unix;
       maintainers = with maintainers; [ wjlroe offline basvandijk ];

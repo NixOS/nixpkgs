@@ -86,7 +86,7 @@ in
       default = pkgs.caddy;
       defaultText = literalExpression "pkgs.caddy";
       type = types.package;
-      description = ''
+      description = lib.mdDoc ''
         Caddy package to use.
       '';
     };
@@ -133,9 +133,9 @@ in
       example = literalExpression ''
         mkForce "level INFO";
       '';
-      description = ''
+      description = lib.mdDoc ''
         Configuration for the default logger. See
-        <link xlink:href="https://caddyserver.com/docs/caddyfile/options#log"/>
+        <https://caddyserver.com/docs/caddyfile/options#log>
         for details.
       '';
     };
@@ -153,7 +153,7 @@ in
           file_server
         ''';
       '';
-      description = ''
+      description = lib.mdDoc ''
         Override the configuration file used by Caddy. By default,
         NixOS generates one automatically.
       '';
@@ -178,8 +178,8 @@ in
     resume = mkOption {
       default = false;
       type = types.bool;
-      description = ''
-        Use saved config, if any (and prefer over any specified configuration passed with <literal>--config</literal>).
+      description = lib.mdDoc ''
+        Use saved config, if any (and prefer over any specified configuration passed with `--config`).
       '';
     };
 
@@ -194,11 +194,11 @@ in
           }
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Additional lines of configuration appended to the global config section
-        of the <literal>Caddyfile</literal>.
+        of the `Caddyfile`.
 
-        Refer to <link xlink:href="https://caddyserver.com/docs/caddyfile/options#global-options"/>
+        Refer to <https://caddyserver.com/docs/caddyfile/options#global-options>
         for details on supported values.
       '';
     };
@@ -213,9 +213,9 @@ in
           root /srv/http
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Additional lines of configuration appended to the automatically
-        generated <literal>Caddyfile</literal>.
+        generated `Caddyfile`.
       '';
     };
 
@@ -233,7 +233,7 @@ in
           };
         };
       '';
-      description = ''
+      description = lib.mdDoc ''
         Declarative specification of virtual hosts served by Caddy.
       '';
     };
@@ -242,11 +242,11 @@ in
       default = "https://acme-v02.api.letsencrypt.org/directory";
       example = "https://acme-staging-v02.api.letsencrypt.org/directory";
       type = with types; nullOr str;
-      description = ''
+      description = lib.mdDoc ''
         The URL to the ACME CA's directory. It is strongly recommended to set
         this to Let's Encrypt's staging endpoint for testing or development.
 
-        Set it to <literal>null</literal> if you want to write a more
+        Set it to `null` if you want to write a more
         fine-grained configuration manually.
       '';
     };
@@ -254,7 +254,7 @@ in
     email = mkOption {
       default = null;
       type = with types; nullOr str;
-      description = ''
+      description = lib.mdDoc ''
         Your email address. Mainly used when creating an ACME account with your
         CA, and is highly recommended in case there are problems with your
         certificates.
@@ -299,7 +299,7 @@ in
         # https://www.freedesktop.org/software/systemd/man/systemd.service.html#ExecStart=
         # If the empty string is assigned to this option, the list of commands to start is reset, prior assignments of this option will have no effect.
         ExecStart = [ "" "${cfg.package}/bin/caddy run --config ${cfg.configFile} --adapter ${cfg.adapter} ${optionalString cfg.resume "--resume"}" ];
-        ExecReload = [ "" "${cfg.package}/bin/caddy reload --config ${cfg.configFile} --adapter ${cfg.adapter}" ];
+        ExecReload = [ "" "${cfg.package}/bin/caddy reload --config ${cfg.configFile} --adapter ${cfg.adapter} --force" ];
 
         ExecStartPre = "${cfg.package}/bin/caddy validate --config ${cfg.configFile} --adapter ${cfg.adapter}";
         User = cfg.user;

@@ -1,4 +1,15 @@
-{ lib, buildGoModule, makeWrapper, fetchFromGitHub, pythonPackages, pkg-config, systemd, hostname, extraTags ? [] }:
+{ lib
+, stdenv
+, buildGoModule
+, makeWrapper
+, fetchFromGitHub
+, pythonPackages
+, pkg-config
+, systemd
+, hostname
+, withSystemd ? stdenv.isLinux
+, extraTags ? [ ]
+}:
 
 let
   # keep this in sync with github.com/DataDog/agent-payload dependency
@@ -10,15 +21,15 @@ let
 
 in buildGoModule rec {
   pname = "datadog-agent";
-  version = "7.35.0";
+  version = "7.36.0";
 
   src = fetchFromGitHub {
     inherit owner repo;
     rev = version;
-    sha256 = "sha256-N/IiixWOLLzFXqTePVVdaNtUYE3ZRk0NlXkaqNQm6ms=";
+    sha256 = "sha256-pkbgYE58T9QzV7nCzvfBoTt6Ue8cCMUBSuCBeDtdkzo=";
   };
 
-  vendorSha256 = "sha256-3Sg8A3uVt6/aVih042P41CzfkmdryM4WSHyWQK0qhOs=";
+  vendorSha256 = "sha256-SxdSoZtRAdl3evCpb+3BHWf/uPYJJKgw0CL9scwNfGA=";
 
   subPackages = [
     "cmd/agent"
@@ -30,19 +41,28 @@ in buildGoModule rec {
 
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
-  buildInputs = [ systemd ];
+  buildInputs = lib.optionals withSystemd [ systemd ];
   PKG_CONFIG_PATH = "${python}/lib/pkgconfig";
 
-  preBuild = let
-    ldFlags = lib.concatStringsSep " " [
-      "-X ${goPackagePath}/pkg/version.Commit=${src.rev}"
-      "-X ${goPackagePath}/pkg/version.AgentVersion=${version}"
-      "-X ${goPackagePath}/pkg/serializer.AgentPayloadVersion=${payloadVersion}"
-      "-X ${goPackagePath}/pkg/collector/py.pythonHome=${python}"
-      "-r ${python}/lib"
-    ];
-  in ''
-    buildFlagsArray=( "-tags" "ec2 systemd cpython process log secrets ${lib.concatStringsSep " " extraTags}" "-ldflags" "${ldFlags}")
+  tags = [
+    "ec2"
+    "cpython"
+    "process"
+    "log"
+    "secrets"
+  ]
+  ++ lib.optionals withSystemd [ "systemd" ]
+  ++ extraTags;
+
+  ldflags = [
+    "-X ${goPackagePath}/pkg/version.Commit=${src.rev}"
+    "-X ${goPackagePath}/pkg/version.AgentVersion=${version}"
+    "-X ${goPackagePath}/pkg/serializer.AgentPayloadVersion=${payloadVersion}"
+    "-X ${goPackagePath}/pkg/collector/py.pythonHome=${python}"
+    "-r ${python}/lib"
+  ];
+
+  preBuild = ''
     # Keep directories to generate in sync with tasks/go.py
     go generate ./pkg/status ./cmd/agent/gui
   '';
@@ -66,7 +86,7 @@ in buildGoModule rec {
     cp -R $src/pkg/status/templates $out/share/datadog-agent
 
     wrapProgram "$out/bin/agent" \
-      --set PYTHONPATH "$out/${python.sitePackages}" \
+      --set PYTHONPATH "$out/${python.sitePackages}"'' + lib.optionalString withSystemd '' \
       --prefix LD_LIBRARY_PATH : ${lib.getLib systemd}/lib
   '';
 
@@ -77,6 +97,6 @@ in buildGoModule rec {
     '';
     homepage    = "https://www.datadoghq.com";
     license     = licenses.bsd3;
-    maintainers = with maintainers; [ thoughtpolice domenkozar rvl ];
+    maintainers = with maintainers; [ thoughtpolice domenkozar rvl viraptor ];
   };
 }

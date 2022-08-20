@@ -32,7 +32,7 @@
 , channel ? "stable"
 
 # Necessary for USB audio devices.
-, pulseSupport ? true, libpulseaudio ? null
+, pulseSupport ? true, libpulseaudio
 
 # Only needed for getting information about upstream binaries
 , chromium
@@ -63,7 +63,7 @@ let
     dbus gdk-pixbuf gcc-unwrapped.lib
     systemd
     libexif pciutils
-    liberation_ttf curl util-linux xdg-utils wget
+    liberation_ttf curl util-linux wget
     flac harfbuzz icu libpng opusWithCustomModes snappy speechd
     bzip2 libcap at-spi2-atk at-spi2-core
     libkrb5 libdrm libglvnd mesa coreutils
@@ -145,6 +145,7 @@ in stdenv.mkDerivation {
     makeWrapper "$out/share/google/$appname/google-$appname" "$exe" \
       --prefix LD_LIBRARY_PATH : "$rpath" \
       --prefix PATH            : "$binpath" \
+      --suffix PATH            : "${lib.makeBinPath [ xdg-utils ]}" \
       --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:${addOpenGLRunpath.driverLink}/share" \
       --set CHROME_WRAPPER  "google-chrome-$dist" \
       --add-flags ${escapeShellArg commandLineArgs} \
@@ -162,6 +163,7 @@ in stdenv.mkDerivation {
     description = "A freeware web browser developed by Google";
     homepage = "https://www.google.com/chrome/browser/";
     license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ primeos ];
     # Note from primeos: By updating Chromium I also update Google Chrome and
     # will try to merge PRs and respond to issues but I'm not actually using

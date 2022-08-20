@@ -25,7 +25,6 @@
   "tree-sitter-ruby",
   "tree-sitter-rust",
   "tree-sitter-scala",
-  "tree-sitter-swift",
   "tree-sitter-typescript",
   "tree-sitter-verilog",
   "tree-sitter-zig"

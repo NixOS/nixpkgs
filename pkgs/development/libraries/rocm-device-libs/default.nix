@@ -3,28 +3,26 @@
 , writeScript
 , cmake
 , clang
-, clang-unwrapped
-, lld
 , llvm
 }:
 
 stdenv.mkDerivation rec {
   pname = "rocm-device-libs";
-  version = "5.0.2";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCm-Device-Libs";
     rev = "rocm-${version}";
-    hash = "sha256-eZdy9+BfuUVzPO6huvqcwCog96qMVTYoY3l6J0YMUZQ=";
+    hash = "sha256-TBCSznHyiaiOcBR9irybCnOgfqPiNNn4679PCQwrLhA=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ clang lld llvm ];
+  buildInputs = [ clang llvm ];
 
   cmakeFlags = [
-    "-DCMAKE_PREFIX_PATH=${llvm}/lib/cmake/llvm;${clang-unwrapped}/lib/cmake/clang"
+    "-DCMAKE_PREFIX_PATH=${llvm}/lib/cmake/llvm;${llvm}/lib/cmake/clang"
     "-DLLVM_TARGETS_TO_BUILD='AMDGPU;X86'"
     "-DCLANG=${clang}/bin/clang"
   ];

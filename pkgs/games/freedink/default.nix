@@ -54,7 +54,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/freedink/"; # Formerly http://www.freedink.org
     license = lib.licenses.gpl3Plus;
 
-    maintainers = [ lib.maintainers.bjg ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     hydraPlatforms = lib.platforms.linux; # sdl-config times out on darwin
   };

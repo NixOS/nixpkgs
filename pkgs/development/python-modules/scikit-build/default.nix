@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , distro
 , packaging
 , python
@@ -24,20 +23,13 @@
 
 buildPythonPackage rec {
   pname = "scikit-build";
-  version = "0.14.1";
+  version = "0.15.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Fwc9g3tWVRvt6Pa++utOuj2UM15ZAjmELjZg8HY6CRo=";
+    sha256 = "sha256-5yPNDzSJoEI3C56piLu5z9dyXoslsgyhx5gYIfz2X7k=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/scikit-build/scikit-build/commit/59cf7a5b09a71d418947db3c9d487471c4573a24.patch";
-      sha256 = "sha256-oQllX3qzwWwllczXUMObrwndCfvMdS5FulEhbBORAks=";
-    })
-  ];
 
   propagatedBuildInputs = [
     distro

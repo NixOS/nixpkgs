@@ -45,6 +45,15 @@
 stdenv.mkDerivation rec {
   inherit pname version src;
 
+  # Replace icons licensed under CC BY-ND 3.0 with free ones to allow
+  # for binary redistribution: https://github.com/yuzu-emu/yuzu/pull/8104
+  # The patch hosted on GitHub has the binary information in git format, which
+  # can’t be applied with patch(1), so it has been regenerated with
+  # "git format-patch --text --full-index --binary".
+  # Because pineapple strips all files beginning with a dot, the patch needs to
+  # be edited manually afterwards to remove all changes to those.
+  patches = [ ./yuzu-free-icons.patch ];
+
   nativeBuildInputs = [
     cmake
     doxygen
@@ -145,10 +154,11 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     license = with licenses; [
       gpl3Plus
-      # Icons
-      cc-by-nd-30 cc0
+      # Icons. Note that this would be cc0 and cc-by-nd-30 without the "yuzu-free-icons" patch
+      asl20 mit cc0
     ];
     maintainers = with maintainers; [
+      ashley
       ivar
       joshuafern
       sbruder

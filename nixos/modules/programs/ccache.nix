@@ -9,13 +9,13 @@ in {
     enable = mkEnableOption "CCache";
     cacheDir = mkOption {
       type = types.path;
-      description = "CCache directory";
+      description = lib.mdDoc "CCache directory";
       default = "/var/cache/ccache";
     };
     # target configuration
     packageNames = mkOption {
       type = types.listOf types.str;
-      description = "Nix top-level packages to be compiled using CCache";
+      description = lib.mdDoc "Nix top-level packages to be compiled using CCache";
       default = [];
       example = [ "wxGTK30" "ffmpeg" "libav_all" ];
     };

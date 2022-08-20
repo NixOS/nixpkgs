@@ -167,6 +167,9 @@ in stdenv.mkDerivation rec {
     "-DDISABLE_DYNAMIC_LOADING_FFMPEG=ON"
     "-Daudacity_conan_enabled=Off"
     "-Daudacity_use_ffmpeg=loaded"
+
+    # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];
 
   doCheck = false; # Test fails

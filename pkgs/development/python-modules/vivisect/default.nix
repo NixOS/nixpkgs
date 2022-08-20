@@ -21,11 +21,11 @@
 
 buildPythonPackage rec {
   pname = "vivisect";
-  version = "1.0.7";
+  version = "1.0.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "727a27ac1eb95d5a41f4430f6912e79940525551314fe68a2811fc9d51eaf2e9";
+    sha256 = "sha256-Y8y6sAQJa9baPPdhtuR9Jv1tJkNWJsS1hJ1lknkHWU4=";
   };
 
   postPatch = ''
@@ -43,9 +43,9 @@ buildPythonPackage rec {
     cxxfilt
     msgpack
     pycparser
-  ] ++ lib.optionals (withGui) passthru.extras-require.gui;
+  ] ++ lib.optionals (withGui) passthru.optional-dependencies.gui;
 
-  passthru.extras-require.gui = [
+  passthru.optional-dependencies.gui = [
     pyqt5
     pyqtwebengine
   ];

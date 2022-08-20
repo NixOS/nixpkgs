@@ -137,25 +137,25 @@ let
         example = "Spam";
         default = name;
         readOnly = true;
-        description = "The name of the mailbox.";
+        description = lib.mdDoc "The name of the mailbox.";
       };
       auto = mkOption {
         type = types.enum [ "no" "create" "subscribe" ];
         default = "no";
         example = "subscribe";
-        description = "Whether to automatically create or create and subscribe to the mailbox or not.";
+        description = lib.mdDoc "Whether to automatically create or create and subscribe to the mailbox or not.";
       };
       specialUse = mkOption {
         type = types.nullOr (types.enum [ "All" "Archive" "Drafts" "Flagged" "Junk" "Sent" "Trash" ]);
         default = null;
         example = "Junk";
-        description = "Null if no special use flag is set. Other than that every use flag mentioned in the RFC is valid.";
+        description = lib.mdDoc "Null if no special use flag is set. Other than that every use flag mentioned in the RFC is valid.";
       };
       autoexpunge = mkOption {
         type = types.nullOr types.str;
         default = null;
         example = "60d";
-        description = ''
+        description = lib.mdDoc ''
           To automatically remove all email from the mailbox which is older than the
           specified time.
         '';
@@ -180,26 +180,26 @@ in
     protocols = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = "Additional listeners to start when Dovecot is enabled.";
+      description = lib.mdDoc "Additional listeners to start when Dovecot is enabled.";
     };
 
     user = mkOption {
       type = types.str;
       default = "dovecot2";
-      description = "Dovecot user name.";
+      description = lib.mdDoc "Dovecot user name.";
     };
 
     group = mkOption {
       type = types.str;
       default = "dovecot2";
-      description = "Dovecot group name.";
+      description = lib.mdDoc "Dovecot group name.";
     };
 
     extraConfig = mkOption {
       type = types.lines;
       default = "";
       example = "mail_debug = yes";
-      description = "Additional entries to put verbatim into Dovecot's config file.";
+      description = lib.mdDoc "Additional entries to put verbatim into Dovecot's config file.";
     };
 
     mailPlugins =
@@ -209,7 +209,7 @@ in
             enable = mkOption {
               type = types.listOf types.str;
               default = [];
-              description = "mail plugins to enable as a list of strings to append to the ${hint} <literal>$mail_plugins</literal> configuration variable";
+              description = lib.mdDoc "mail plugins to enable as a list of strings to append to the ${hint} `$mail_plugins` configuration variable";
             };
           };
         };
@@ -218,20 +218,20 @@ in
           type = with types; submodule {
             options = {
               globally = mkOption {
-                description = "Additional entries to add to the mail_plugins variable for all protocols";
+                description = lib.mdDoc "Additional entries to add to the mail_plugins variable for all protocols";
                 type = plugins "top-level";
                 example = { enable = [ "virtual" ]; };
                 default = { enable = []; };
               };
               perProtocol = mkOption {
-                description = "Additional entries to add to the mail_plugins variable, per protocol";
+                description = lib.mdDoc "Additional entries to add to the mail_plugins variable, per protocol";
                 type = attrsOf (plugins "corresponding per-protocol");
                 default = {};
                 example = { imap = [ "imap_acl" ]; };
               };
             };
           };
-          description = "Additional entries to add to the mail_plugins variable, globally and per protocol";
+          description = lib.mdDoc "Additional entries to add to the mail_plugins variable, globally and per protocol";
           example = {
             globally.enable = [ "acl" ];
             perProtocol.imap.enable = [ "imap_acl" ];
@@ -242,7 +242,7 @@ in
     configFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = "Config file used for the whole dovecot configuration.";
+      description = lib.mdDoc "Config file used for the whole dovecot configuration.";
       apply = v: if v != null then v else pkgs.writeText "dovecot.conf" dovecotConf;
     };
 
@@ -250,7 +250,7 @@ in
       type = types.str;
       default = "maildir:/var/spool/mail/%u"; /* Same as inbox, as postfix */
       example = "maildir:~/mail:INBOX=/var/spool/mail/%u";
-      description = ''
+      description = lib.mdDoc ''
         Location that dovecot will use for mail folders. Dovecot mail_location option.
       '';
     };
@@ -258,13 +258,13 @@ in
     mailUser = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = "Default user to store mail for virtual users.";
+      description = lib.mdDoc "Default user to store mail for virtual users.";
     };
 
     mailGroup = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = "Default group to store mail for virtual users.";
+      description = lib.mdDoc "Default group to store mail for virtual users.";
     };
 
     createMailUser = mkEnableOption ''automatically creating the user
@@ -275,7 +275,7 @@ in
       type = types.listOf types.package;
       default = [];
       example = literalExpression "[ pkgs.dovecot_pigeonhole ]";
-      description = ''
+      description = lib.mdDoc ''
         Symlinks the contents of lib/dovecot of every given package into
         /etc/dovecot/modules. This will make the given modules available
         if a dovecot package with the module_dir patch applied is being used.
@@ -285,19 +285,19 @@ in
     sslCACert = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = "Path to the server's CA certificate key.";
+      description = lib.mdDoc "Path to the server's CA certificate key.";
     };
 
     sslServerCert = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = "Path to the server's public key.";
+      description = lib.mdDoc "Path to the server's public key.";
     };
 
     sslServerKey = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = "Path to the server's private key.";
+      description = lib.mdDoc "Path to the server's private key.";
     };
 
     enablePAM = mkEnableOption "creating a own Dovecot PAM service and configure PAM user logins." // { default = true; };
@@ -307,7 +307,7 @@ in
     sieveScripts = mkOption {
       type = types.attrsOf types.path;
       default = {};
-      description = "Sieve scripts to be executed. Key is a sequence, e.g. 'before2', 'after' etc.";
+      description = lib.mdDoc "Sieve scripts to be executed. Key is a sequence, e.g. 'before2', 'after' etc.";
     };
 
     showPAMFailure = mkEnableOption "showing the PAM failure message on authentication error (useful for OTPW).";
@@ -323,7 +323,7 @@ in
           Spam = { specialUse = "Junk"; auto = "create"; };
         }
       '';
-      description = "Configure mailboxes and auto create or subscribe them.";
+      description = lib.mdDoc "Configure mailboxes and auto create or subscribe them.";
     };
 
     enableQuota = mkEnableOption "the dovecot quota service.";
@@ -331,7 +331,7 @@ in
     quotaPort = mkOption {
       type = types.str;
       default = "12340";
-      description = ''
+      description = lib.mdDoc ''
         The Port the dovecot quota service binds to.
         If using postfix, add check_policy_service inet:localhost:12340 to your smtpd_recipient_restrictions in your postfix config.
       '';
@@ -340,7 +340,7 @@ in
       type = types.str;
       default = "100G";
       example = "10G";
-      description = "Quota limit for the user in bytes. Supports suffixes b, k, M, G, T and %.";
+      description = lib.mdDoc "Quota limit for the user in bytes. Supports suffixes b, k, M, G, T and %.";
     };
 
   };

@@ -25,7 +25,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-h7zcHCOxe1h7HRB6idtjf4HUBEoHC4V2pqbN9hpe00g=";
   };
 
-  nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.isDarwin llvmPackages.openmp;
+  nativeBuildInputs = [
+    cmake
+  ] ++ lib.optionals stdenv.isDarwin [
+    llvmPackages.openmp
+  ] ++ lib.optionals cudaSupport [
+    cudaPackages.autoAddOpenGLRunpathHook
+  ];
 
   buildInputs = [ gtest ] ++ lib.optional cudaSupport cudaPackages.cudatoolkit
                 ++ lib.optional ncclSupport cudaPackages.nccl;
@@ -36,6 +42,12 @@ stdenv.mkDerivation rec {
     ++ lib.optionals ncclSupport [ "-DUSE_NCCL=ON" ];
 
   inherit doCheck;
+
+  # By default, cmake build will run ctests with all checks enabled
+  # If we're building with cuda, we run ctest manually so that we can skip the GPU tests
+  checkPhase = lib.optionalString cudaSupport ''
+    ctest --force-new-ctest-process ${lib.optionalString cudaSupport "-E TestXGBoostLib"}
+  '';
 
   installPhase = let
     libname = "libxgboost${stdenv.hostPlatform.extensions.sharedLibrary}";

@@ -2,31 +2,40 @@
 
 stdenv.mkDerivation {
   pname = "disk-indicator";
-  version = "unstable-2014-05-19";
+  version = "unstable-2018-12-18";
 
   src = fetchFromGitHub {
     owner = "MeanEYE";
     repo = "Disk-Indicator";
-    rev = "51ef4afd8141b8d0659cbc7dc62189c56ae9c2da";
-    sha256 = "sha256-bRaVEe18VUmyftXzMNmGuL5gZ/dKCipuEDYrnHo1XYI=";
+    rev = "ec2d2f6833f038f07a72d15e2d52625c23e10b12";
+    sha256 = "sha256-cRqgIxF6H1WyJs5hhaAXVdWAlv6t22BZLp3p/qRlCSM=";
   };
 
   buildInputs = [ libX11 ];
 
-  patchPhase = ''
-    substituteInPlace ./makefile --replace "COMPILER=c99" "COMPILER=gcc -std=c99"
-    substituteInPlace ./makefile --replace "COMPILE_FLAGS=" "COMPILE_FLAGS=-O2 "
+  postPatch = ''
+    # avoid -Werror
+    substituteInPlace Makefile --replace "-Werror" ""
+    # avoid host-specific options
+    substituteInPlace Makefile --replace "-march=native" ""
   '';
 
-  buildPhase = "make -f makefile";
+  postConfigure = ''
+    patchShebangs ./configure.sh
+    ./configure.sh --all
+  '';
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
-
-  hardeningDisable = [ "fortify" ];
+  makeFlags = [
+    "COMPILER=${stdenv.cc.targetPrefix}cc"
+  ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     cp ./disk_indicator "$out/bin/"
+
+    runHook postInstall
   '';
 
   meta = {

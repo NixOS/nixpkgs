@@ -1,0 +1,12 @@
+diff --git c/Cargo.lock i/Cargo.lock
+index 9b8929c..8e1e923 100644
+--- c/Cargo.lock
++++ i/Cargo.lock
+@@ -303,6 +303,7 @@ dependencies = [
+  "lodepng",
+  "loop9",
+  "natord",
++ "num-traits",
+  "pbr",
+  "quick-error",
+  "resize",

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, gnumake, pkg-config, wget, unzip, gawk
+{ stdenv, lib, fetchFromGitHub, pkg-config, wget, unzip
 , sqlite, which, lua, installShellFiles, makeWrapper
 }:
 let
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gnumake pkg-config wget unzip gawk sqlite which installShellFiles makeWrapper
+    pkg-config wget unzip sqlite which installShellFiles makeWrapper
   ];
 
   buildInputs = [ luaEnv ];
@@ -49,10 +49,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage    = "https://github.com/rhaberkorn/openrussian-cli";
     description = "Offline Console Russian Dictionary (based on openrussian.org)";
+    homepage    = "https://github.com/rhaberkorn/openrussian-cli";
     license     = with licenses; [ gpl3Only mit cc-by-sa-40 ];
     maintainers = with maintainers; [ zane ];
+    mainProgram = "openrussian";
     platforms   = platforms.unix;
   };
 }

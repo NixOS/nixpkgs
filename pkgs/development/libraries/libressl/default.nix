@@ -12,13 +12,13 @@ let
     then "DYLD_LIBRARY_PATH"
     else "LD_LIBRARY_PATH";
 
-  generic = { version, sha256, patches ? [] }: stdenv.mkDerivation rec {
+  generic = { version, hash, patches ? [] }: stdenv.mkDerivation rec {
     pname = "libressl";
     inherit version;
 
     src = fetchurl {
       url = "mirror://openbsd/LibreSSL/${pname}-${version}.tar.gz";
-      inherit sha256;
+      inherit hash;
     };
 
     nativeBuildInputs = [ cmake ];
@@ -71,10 +71,8 @@ let
       moveToOutput "bin/nc" "$nc"
       moveToOutput "bin/openssl" "$bin"
       moveToOutput "bin/ocspcheck" "$bin"
-      moveToOutput "share/man/man1/nc.1${lib.optionalString (dontGzipMan==null) ".gz"}" "$nc"
+      moveToOutput "share/man/man1/nc.1.gz" "$nc"
     '';
-
-    dontGzipMan = if stdenv.isDarwin then true else null; # not sure what's wrong
 
     meta = with lib; {
       description = "Free TLS/SSL implementation";
@@ -88,6 +86,20 @@ let
 in {
   libressl_3_4 = generic {
     version = "3.4.3";
-    sha256 = "sha256-/4i//jVIGLPM9UXjyv5FTFAxx6dyFwdPUzJx1jw38I0=";
+    hash = "sha256-/4i//jVIGLPM9UXjyv5FTFAxx6dyFwdPUzJx1jw38I0=";
+  };
+
+  libressl_3_5 = generic {
+    version = "3.5.3";
+    hash = "sha256-OrXl6u9pziDGsXDuZNeFtCI19I8uYrCV/KXXtmcriyg=";
+
+    patches = [
+      # Fix endianness detection on aarch64-darwin, issue #181187
+      (fetchpatch {
+        name = "fix-endian-header-detection.patch";
+        url = "https://patch-diff.githubusercontent.com/raw/libressl-portable/portable/pull/771.patch";
+        sha256 = "sha256-in5U6+sl0HB9qMAtUL6Py4X2rlv0HsqRMIQhhM1oThE=";
+      })
+    ];
   };
 }

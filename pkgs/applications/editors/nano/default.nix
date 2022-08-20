@@ -16,11 +16,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "nano";
-  version = "6.2";
+  version = "6.4";
 
   src = fetchurl {
     url = "mirror://gnu/nano/${pname}-${version}.tar.xz";
-    sha256 = "K8oYBL6taq9K15H3VuR0m7Ve2GDuwQWpf7qGS8anfLM=";
+    sha256 = "QZmujKeKd5beVt4aQbgh3EeRLAMH6YFrVswxffNGYcA=";
   };
 
   nativeBuildInputs = [ texinfo ] ++ optional enableNls gettext;
@@ -41,9 +41,7 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru = {
-    tests = {
-      expect = callPackage ./test-with-expect.nix {};
-    };
+    tests = { expect = callPackage ./test-with-expect.nix { }; };
 
     updateScript = writeScript "update.sh" ''
       #!${stdenv.shell}

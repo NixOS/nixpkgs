@@ -19,7 +19,7 @@ in {
           xclock bitmap xlsfonts xfd xrefresh xload xwininfo xdpyinfo xwd xwud
         ]
       '';
-      description = ''
+      description = lib.mdDoc ''
         Extra packages to be installed system wide.
       '';
     };

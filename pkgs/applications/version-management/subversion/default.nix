@@ -6,6 +6,7 @@
 , javahlBindings ? false
 , saslSupport ? false
 , lib, stdenv, fetchurl, apr, aprutil, zlib, sqlite, openssl, lz4, utf8proc
+, CoreServices, Security
 , autoconf, libtool
 , apacheHttpd ? null, expat, swig ? null, jdk ? null, python3 ? null, py3c ? null, perl ? null
 , sasl ? null, serf ? null
@@ -38,7 +39,8 @@ let
       ++ lib.optional httpSupport serf
       ++ lib.optionals pythonBindings [ python3 py3c ]
       ++ lib.optional perlBindings perl
-      ++ lib.optional saslSupport sasl;
+      ++ lib.optional saslSupport sasl
+      ++ lib.optional stdenv.hostPlatform.isDarwin [ CoreServices Security ];
 
     patches = [ ./apr-1.patch ] ++ extraPatches;
 
@@ -57,7 +59,6 @@ let
       (lib.withFeatureAs (pythonBindings || perlBindings) "swig" swig)
       (lib.withFeatureAs saslSupport "sasl" sasl)
       (lib.withFeatureAs httpSupport "serf" serf)
-      "--disable-keychain"
       "--with-zlib=${zlib.dev}"
       "--with-sqlite=${sqlite.dev}"
     ] ++ lib.optionals javahlBindings [
@@ -119,11 +120,6 @@ let
   });
 
 in {
-  subversion_1_10 = common {
-    version = "1.10.8";
-    sha256 = "sha256-CnO6MSe1ov/7j+4rcCmE8qgI3nEKjbKLfdQBDYvlDlo=";
-  };
-
   subversion = common {
     version = "1.14.2";
     sha256 = "sha256-yRMOjQt1copm8OcDj8dwUuZxgw14W1YWqtU7SBDTzCg=";

@@ -23,11 +23,11 @@
 
 buildPythonPackage rec {
   pname = "virtualenv";
-  version = "20.14.0";
+  version = "20.15.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-jltAIDcocSboHM3pQyuVqL5bGdNlhPZJVwYKNIjBHKg=";
+    sha256 = "sha256-KIFxE0ov87+xovVPEZ53zRuBwp/BJlojVvPo0Ux9WMQ=";
   };
 
   nativeBuildInputs = [
@@ -72,6 +72,9 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # Network access
+    "test_create_no_seed"
+    "test_seed_link_via_app_data"
     # Permission Error
     "test_bad_exe_py_info_no_raise"
   ] ++ lib.optionals isPy27 [

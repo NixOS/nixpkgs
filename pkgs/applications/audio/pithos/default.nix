@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, meson, ninja, pkg-config, appstream-glib
+{ stdenv, lib, fetchFromGitHub, meson, ninja, pkg-config, appstream-glib
 , wrapGAppsHook, pythonPackages, gtk3, gnome, gobject-introspection
 , libnotify, libsecret, gst_all_1 }:
 
@@ -28,6 +28,7 @@ pythonPackages.buildPythonApplication rec {
     (with pythonPackages; [ pygobject3 pylast ]);
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Pandora Internet Radio player for GNOME";
     homepage = "https://pithos.github.io/";
     license = licenses.gpl3;

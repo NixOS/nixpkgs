@@ -22,6 +22,15 @@ let
   '' + concatStringsSep "\n" (mapAttrsToList
     (n: v: "${n}=${cfgToString v}") cfg.serverProperties));
 
+  stopScript = pkgs.writeShellScript "minecraft-server-stop" ''
+    echo stop > ${config.systemd.sockets.minecraft-server.socketConfig.ListenFIFO}
+
+    # Wait for the PID of the minecraft server to disappear before
+    # returning, so systemd doesn't attempt to SIGKILL it.
+    while kill -0 "$1" 2> /dev/null; do
+      sleep 1s
+    done
+  '';
 
   # To be able to open the firewall, we need to read out port values in the
   # server properties, but fall back to the defaults when those don't exist.
@@ -45,21 +54,21 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           If enabled, start a Minecraft Server. The server
           data will be loaded from and saved to
-          <option>services.minecraft-server.dataDir</option>.
+          {option}`services.minecraft-server.dataDir`.
         '';
       };
 
       declarative = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to use a declarative Minecraft server configuration.
-          Only if set to <literal>true</literal>, the options
-          <option>services.minecraft-server.whitelist</option> and
-          <option>services.minecraft-server.serverProperties</option> will be
+          Only if set to `true`, the options
+          {option}`services.minecraft-server.whitelist` and
+          {option}`services.minecraft-server.serverProperties` will be
           applied.
         '';
       };
@@ -67,18 +76,18 @@ in {
       eula = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether you agree to
-          <link xlink:href="https://account.mojang.com/documents/minecraft_eula">
-          Mojangs EULA</link>. This option must be set to
-          <literal>true</literal> to run Minecraft server.
+          [
+          Mojangs EULA](https://account.mojang.com/documents/minecraft_eula). This option must be set to
+          `true` to run Minecraft server.
         '';
       };
 
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/minecraft";
-        description = ''
+        description = lib.mdDoc ''
           Directory to store Minecraft database and other state/data files.
         '';
       };
@@ -86,7 +95,7 @@ in {
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to open ports in the firewall for the server.
         '';
       };
@@ -99,14 +108,14 @@ in {
             };
           in types.attrsOf minecraftUUID;
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           Whitelisted players, only has an effect when
-          <option>services.minecraft-server.declarative</option> is
-          <literal>true</literal> and the whitelist is enabled
-          via <option>services.minecraft-server.serverProperties</option> by
-          setting <literal>white-list</literal> to <literal>true</literal>.
+          {option}`services.minecraft-server.declarative` is
+          `true` and the whitelist is enabled
+          via {option}`services.minecraft-server.serverProperties` by
+          setting `white-list` to `true`.
           This is a mapping from Minecraft usernames to UUIDs.
-          You can use <link xlink:href="https://mcuuid.net/"/> to get a
+          You can use <https://mcuuid.net/> to get a
           Minecraft UUID for a username.
         '';
         example = literalExpression ''
@@ -132,11 +141,11 @@ in {
             "rcon.password" = "hunter2";
           }
         '';
-        description = ''
+        description = lib.mdDoc ''
           Minecraft server properties for the server.properties file. Only has
-          an effect when <option>services.minecraft-server.declarative</option>
-          is set to <literal>true</literal>. See
-          <link xlink:href="https://minecraft.gamepedia.com/Server.properties#Java_Edition_3"/>
+          an effect when {option}`services.minecraft-server.declarative`
+          is set to `true`. See
+          <https://minecraft.gamepedia.com/Server.properties#Java_Edition_3>
           for documentation on these values.
         '';
       };
@@ -146,7 +155,7 @@ in {
         default = pkgs.minecraft-server;
         defaultText = literalExpression "pkgs.minecraft-server";
         example = literalExpression "pkgs.minecraft-server_1_12_2";
-        description = "Version of minecraft-server to run.";
+        description = lib.mdDoc "Version of minecraft-server to run.";
       };
 
       jvmOpts = mkOption {
@@ -156,7 +165,7 @@ in {
         example = "-Xms4092M -Xmx4092M -XX:+UseG1GC -XX:+CMSIncrementalPacing "
           + "-XX:+CMSClassUnloadingEnabled -XX:ParallelGCThreads=2 "
           + "-XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10";
-        description = "JVM options for the Minecraft server.";
+        description = lib.mdDoc "JVM options for the Minecraft server.";
       };
     };
   };
@@ -172,16 +181,35 @@ in {
     };
     users.groups.minecraft = {};
 
+    systemd.sockets.minecraft-server = {
+      bindsTo = [ "minecraft-server.service" ];
+      socketConfig = {
+        ListenFIFO = "/run/minecraft-server.stdin";
+        SocketMode = "0660";
+        SocketUser = "minecraft";
+        SocketGroup = "minecraft";
+        RemoveOnStop = true;
+        FlushPending = true;
+      };
+    };
+
     systemd.services.minecraft-server = {
       description   = "Minecraft Server Service";
       wantedBy      = [ "multi-user.target" ];
-      after         = [ "network.target" ];
+      requires      = [ "minecraft-server.socket" ];
+      after         = [ "network.target" "minecraft-server.socket" ];
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/minecraft-server ${cfg.jvmOpts}";
+        ExecStop = "${stopScript} $MAINPID";
         Restart = "always";
         User = "minecraft";
         WorkingDirectory = cfg.dataDir;
+
+        StandardInput = "socket";
+        StandardOutput = "journal";
+        StandardError = "journal";
+
         # Hardening
         CapabilityBoundingSet = [ "" ];
         DeviceAllow = [ "" ];

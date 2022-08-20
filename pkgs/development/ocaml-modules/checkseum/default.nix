@@ -39,9 +39,10 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = {
-    homepage = "https://github.com/mirage/checkseum";
     description = "ADLER-32 and CRC32C Cyclic Redundancy Check";
+    homepage = "https://github.com/mirage/checkseum";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
+    mainProgram = "checkseum.checkseum";
   };
 }

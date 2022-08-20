@@ -44,27 +44,27 @@ in
 
       enable = mkOption {
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to configure zsh as an interactive shell. To enable zsh for
-          a particular user, use the <option>users.users.&lt;name?&gt;.shell</option>
+          a particular user, use the {option}`users.users.<name?>.shell`
           option for that user. To enable zsh system-wide use the
-          <option>users.defaultUserShell</option> option.
+          {option}`users.defaultUserShell` option.
         '';
         type = types.bool;
       };
 
       shellAliases = mkOption {
         default = { };
-        description = ''
-          Set of aliases for zsh shell, which overrides <option>environment.shellAliases</option>.
-          See <option>environment.shellAliases</option> for an option format description.
+        description = lib.mdDoc ''
+          Set of aliases for zsh shell, which overrides {option}`environment.shellAliases`.
+          See {option}`environment.shellAliases` for an option format description.
         '';
         type = with types; attrsOf (nullOr (either str path));
       };
 
       shellInit = mkOption {
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Shell script code called during zsh shell initialisation.
         '';
         type = types.lines;
@@ -72,7 +72,7 @@ in
 
       loginShellInit = mkOption {
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Shell script code called during zsh login shell initialisation.
         '';
         type = types.lines;
@@ -80,7 +80,7 @@ in
 
       interactiveShellInit = mkOption {
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Shell script code called during interactive zsh shell initialisation.
         '';
         type = types.lines;
@@ -94,7 +94,7 @@ in
           # a lot of different prompt variables.
           autoload -U promptinit && promptinit && prompt suse && setopt prompt_sp
         '';
-        description = ''
+        description = lib.mdDoc ''
           Shell script code used to initialise the zsh prompt.
         '';
         type = types.lines;
@@ -102,7 +102,7 @@ in
 
       histSize = mkOption {
         default = 2000;
-        description = ''
+        description = lib.mdDoc ''
           Change history size.
         '';
         type = types.int;
@@ -110,7 +110,7 @@ in
 
       histFile = mkOption {
         default = "$HOME/.zsh_history";
-        description = ''
+        description = lib.mdDoc ''
           Change history file.
         '';
         type = types.str;
@@ -124,15 +124,15 @@ in
           "HIST_FCNTL_LOCK"
         ];
         example = [ "EXTENDED_HISTORY" "RM_STAR_WAIT" ];
-        description = ''
+        description = lib.mdDoc ''
           Configure zsh options. See
-          <citerefentry><refentrytitle>zshoptions</refentrytitle><manvolnum>1</manvolnum></citerefentry>.
+          {manpage}`zshoptions(1)`.
         '';
       };
 
       enableCompletion = mkOption {
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Enable zsh completion for all interactive zsh shells.
         '';
         type = types.bool;
@@ -140,7 +140,7 @@ in
 
       enableBashCompletion = mkOption {
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable compatibility with bash's programmable completion system.
         '';
         type = types.bool;
@@ -149,11 +149,11 @@ in
       enableGlobalCompInit = mkOption {
         default = cfg.enableCompletion;
         defaultText = literalExpression "config.${opt.enableCompletion}";
-        description = ''
+        description = lib.mdDoc ''
           Enable execution of compinit call for all interactive zsh shells.
 
           This option can be disabled if the user wants to extend its
-          <literal>fpath</literal> and a custom <literal>compinit</literal>
+          `fpath` and a custom `compinit`
           call in the local config is required.
         '';
         type = types.bool;

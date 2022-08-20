@@ -58,7 +58,7 @@ in {
         type = types.package;
         default = pkgs.redis;
         defaultText = literalExpression "pkgs.redis";
-        description = "Which Redis derivation to use.";
+        description = lib.mdDoc "Which Redis derivation to use.";
       };
 
       vmOverCommit = mkEnableOption ''
@@ -84,14 +84,14 @@ in {
               defaultText = literalExpression ''
                 if name == "" then "redis" else "redis-''${name}"
               '';
-              description = "The username and groupname for redis-server.";
+              description = lib.mdDoc "The username and groupname for redis-server.";
             };
 
             port = mkOption {
               type = types.port;
               default = if name == "" then 6379 else 0;
               defaultText = literalExpression ''if name == "" then 6379 else 0'';
-              description = ''
+              description = lib.mdDoc ''
                 The TCP port to accept connections.
                 If port 0 is specified Redis will not listen on a TCP socket.
               '';
@@ -100,7 +100,7 @@ in {
             openFirewall = mkOption {
               type = types.bool;
               default = false;
-              description = ''
+              description = lib.mdDoc ''
                 Whether to open ports in the firewall for the server.
               '';
             };
@@ -108,9 +108,9 @@ in {
             bind = mkOption {
               type = with types; nullOr str;
               default = "127.0.0.1";
-              description = ''
+              description = lib.mdDoc ''
                 The IP interface to bind to.
-                <literal>null</literal> means "all interfaces".
+                `null` means "all interfaces".
               '';
               example = "192.0.2.1";
             };
@@ -121,13 +121,13 @@ in {
               defaultText = literalExpression ''
                 if name == "" then "/run/redis/redis.sock" else "/run/redis-''${name}/redis.sock"
               '';
-              description = "The path to the socket to bind to.";
+              description = lib.mdDoc "The path to the socket to bind to.";
             };
 
             unixSocketPerm = mkOption {
               type = types.int;
               default = 660;
-              description = "Change permissions for the socket";
+              description = lib.mdDoc "Change permissions for the socket";
               example = 600;
             };
 
@@ -135,38 +135,42 @@ in {
               type = types.str;
               default = "notice"; # debug, verbose, notice, warning
               example = "debug";
-              description = "Specify the server verbosity level, options: debug, verbose, notice, warning.";
+              description = lib.mdDoc "Specify the server verbosity level, options: debug, verbose, notice, warning.";
             };
 
             logfile = mkOption {
               type = types.str;
               default = "/dev/null";
-              description = "Specify the log file name. Also 'stdout' can be used to force Redis to log on the standard output.";
+              description = lib.mdDoc "Specify the log file name. Also 'stdout' can be used to force Redis to log on the standard output.";
               example = "/var/log/redis.log";
             };
 
             syslog = mkOption {
               type = types.bool;
               default = true;
-              description = "Enable logging to the system logger.";
+              description = lib.mdDoc "Enable logging to the system logger.";
             };
 
             databases = mkOption {
               type = types.int;
               default = 16;
-              description = "Set the number of databases.";
+              description = lib.mdDoc "Set the number of databases.";
             };
 
             maxclients = mkOption {
               type = types.int;
               default = 10000;
-              description = "Set the max number of connected clients at the same time.";
+              description = lib.mdDoc "Set the max number of connected clients at the same time.";
             };
 
             save = mkOption {
               type = with types; listOf (listOf int);
               default = [ [900 1] [300 10] [60 10000] ];
-              description = "The schedule in which data is persisted to disk, represented as a list of lists where the first element represent the amount of seconds and the second the number of changes.";
+              description = mdDoc ''
+                The schedule in which data is persisted to disk, represented as a list of lists where the first element represent the amount of seconds and the second the number of changes.
+
+                If set to the empty list (`[]`) then RDB persistence will be disabled (useful if you are using AOF or don't want any persistence).
+              '';
             };
 
             slaveOf = mkOption {
@@ -174,27 +178,27 @@ in {
                 options = {
                   ip = mkOption {
                     type = str;
-                    description = "IP of the Redis master";
+                    description = lib.mdDoc "IP of the Redis master";
                     example = "192.168.1.100";
                   };
 
                   port = mkOption {
                     type = port;
-                    description = "port of the Redis master";
+                    description = lib.mdDoc "port of the Redis master";
                     default = 6379;
                   };
                 };
               }));
 
               default = null;
-              description = "IP and port to which this redis instance acts as a slave.";
+              description = lib.mdDoc "IP and port to which this redis instance acts as a slave.";
               example = { ip = "192.168.1.100"; port = 6379; };
             };
 
             masterAuth = mkOption {
               type = with types; nullOr str;
               default = null;
-              description = ''If the master is password protected (using the requirePass configuration)
+              description = lib.mdDoc ''If the master is password protected (using the requirePass configuration)
               it is possible to tell the slave to authenticate before starting the replication synchronization
               process, otherwise the master will refuse the slave request.
               (STORED PLAIN TEXT, WORLD-READABLE IN NIX STORE)'';
@@ -203,7 +207,7 @@ in {
             requirePass = mkOption {
               type = with types; nullOr str;
               default = null;
-              description = ''
+              description = lib.mdDoc ''
                 Password for database (STORED PLAIN TEXT, WORLD-READABLE IN NIX STORE).
                 Use requirePassFile to store it outside of the nix store in a dedicated file.
               '';
@@ -213,42 +217,42 @@ in {
             requirePassFile = mkOption {
               type = with types; nullOr path;
               default = null;
-              description = "File with password for the database.";
+              description = lib.mdDoc "File with password for the database.";
               example = "/run/keys/redis-password";
             };
 
             appendOnly = mkOption {
               type = types.bool;
               default = false;
-              description = "By default data is only periodically persisted to disk, enable this option to use an append-only file for improved persistence.";
+              description = lib.mdDoc "By default data is only periodically persisted to disk, enable this option to use an append-only file for improved persistence.";
             };
 
             appendFsync = mkOption {
               type = types.str;
               default = "everysec"; # no, always, everysec
-              description = "How often to fsync the append-only log, options: no, always, everysec.";
+              description = lib.mdDoc "How often to fsync the append-only log, options: no, always, everysec.";
             };
 
             slowLogLogSlowerThan = mkOption {
               type = types.int;
               default = 10000;
-              description = "Log queries whose execution take longer than X in milliseconds.";
+              description = lib.mdDoc "Log queries whose execution take longer than X in milliseconds.";
               example = 1000;
             };
 
             slowLogMaxLen = mkOption {
               type = types.int;
               default = 128;
-              description = "Maximum number of items to keep in slow log.";
+              description = lib.mdDoc "Maximum number of items to keep in slow log.";
             };
 
             settings = mkOption {
               # TODO: this should be converted to freeformType
               type = with types; attrsOf (oneOf [ bool int str (listOf str) ]);
               default = {};
-              description = ''
+              description = lib.mdDoc ''
                 Redis configuration. Refer to
-                <link xlink:href="https://redis.io/topics/config"/>
+                <https://redis.io/topics/config>
                 for details on supported values.
               '';
               example = literalExpression ''
@@ -268,7 +272,11 @@ in {
               syslog-enabled = config.syslog;
               databases = config.databases;
               maxclients = config.maxclients;
-              save = map (d: "${toString (builtins.elemAt d 0)} ${toString (builtins.elemAt d 1)}") config.save;
+              save = if config.save == []
+                then ''""'' # Disable saving with `save = ""`
+                else map
+                  (d: "${toString (builtins.elemAt d 0)} ${toString (builtins.elemAt d 1)}")
+                  config.save;
               dbfilename = "dump.rdb";
               dir = "/var/lib/${redisName name}";
               appendOnly = config.appendOnly;
@@ -286,7 +294,7 @@ in {
             (mkIf (config.requirePass != null) { requirepass = config.requirePass; })
           ];
         }));
-        description = "Configuration of multiple <literal>redis-server</literal> instances.";
+        description = lib.mdDoc "Configuration of multiple `redis-server` instances.";
         default = {};
       };
     };

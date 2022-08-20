@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rt";
-  version = "5.0.1";
+  version = "5.0.3";
 
   src = fetchFromGitHub {
     repo = pname;
     rev = "${pname}-${version}";
     owner = "bestpractical";
-    sha256 = "1qqh6w094x7dljz001va802v4s6mixs9lkhs2cs47lf5ph3vwq2q";
+    hash = "sha256-ZitlueLEbV3mGJg0aDrLa5IReJiOVaEf+JicbA9zUS4=";
   };
 
   patches = [
@@ -88,6 +88,7 @@ stdenv.mkDerivation rec {
         MozillaCA
         NetCIDR
         NetIP
+        ParallelForkManager
         PathDispatcher
         PerlIOeol
         Plack
@@ -119,8 +120,7 @@ stdenv.mkDerivation rec {
   ];
 
   preAutoreconf = ''
-    substituteInPlace configure.ac \
-      --replace "rt-3.9.EXPORTED" "rt-${version}"
+    echo rt-${version} > .tag
   '';
   preConfigure = ''
     configureFlags="$configureFlags --with-web-user=$UID"

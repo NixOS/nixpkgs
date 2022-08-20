@@ -9,19 +9,18 @@
 
 buildDotnetModule rec {
   pname = "jackett";
-  version = "0.20.709";
+  version = "0.20.1473";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "Gx1VHjs37XBcvw20pQNrA/meLuVmogdGIzroRXvTv5Q=";
+    sha256 = "5HrdlBk/MKBW1Y5WsKRRxF1vYagsQnCBo5a1lhMDklE=";
   };
 
   projectFile = "src/Jackett.Server/Jackett.Server.csproj";
   nugetDeps = ./deps.nix;
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
   dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
 
   dotnetInstallFlags = [ "-p:TargetFramework=net6.0" ];

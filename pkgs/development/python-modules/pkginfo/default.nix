@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "pkginfo";
-  version = "1.8.2";
+  version = "1.8.3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-VC4NC2dQ4uIcIBeYA+QKtQWY2AZtUQl6Djgsup6wK/8=";
+    sha256 = "sha256-qE2kMY3Yb4cKlEeoyYNAqgYha/xvK3vcS4dmmErhhnw=";
   };
 
   checkInputs = [

@@ -21,11 +21,11 @@ let
 
   self = python3Packages.buildPythonApplication rec {
     pname = "mercurial${lib.optionalString fullBuild "-full"}";
-    version = "6.1.1";
+    version = "6.2.1";
 
     src = fetchurl {
       url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-      sha256 = "sha256-V7ikYdDOE9muOBfYqL35Ay407fqsPbzLO2a4NdzpM4g=";
+      sha256 = "sha256-isXXog0cKtVNTCY9E0FkZG3DSo46a+1pz76rr404gto=";
     };
 
     format = "other";
@@ -35,7 +35,7 @@ let
     cargoDeps = if rustSupport then rustPlatform.fetchCargoTarball {
       inherit src;
       name = "mercurial-${version}";
-      sha256 = "sha256-HYH7+OD11kdZdxFrx1KVle1NesS3fAgwVXJpAeiXDTo=";
+      sha256 = "sha256-shmeTQSCpQLrRUbL5bu9nAiPideZUe31YNCrClLM1eI=";
       sourceRoot = "mercurial-${version}/rust";
     } else null;
     cargoRoot = if rustSupport then "rust" else null;
@@ -91,7 +91,7 @@ let
       homepage = "https://www.mercurial-scm.org";
       downloadPage = "https://www.mercurial-scm.org/release/";
       license = licenses.gpl2Plus;
-      maintainers = with maintainers; [ eelco lukegb pacien ];
+      maintainers = with maintainers; [ eelco lukegb pacien techknowlogick ];
       platforms = platforms.unix;
     };
   };
@@ -151,6 +151,8 @@ let
     EOF
 
     export HGTEST_REAL_HG="${mercurial}/bin/hg"
+    # include tests for native components
+    export HGMODULEPOLICY="rust+c"
     # extended timeout necessary for tests to pass on the busy CI workers
     export HGTESTFLAGS="--blacklist blacklists/nix --timeout 1800 -j$NIX_BUILD_CORES ${flags}"
     make check

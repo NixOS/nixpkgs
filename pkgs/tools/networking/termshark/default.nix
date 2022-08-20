@@ -30,6 +30,6 @@ buildGoModule rec {
     homepage = "https://termshark.io/";
     description = "A terminal UI for wireshark-cli, inspired by Wireshark";
     license = licenses.mit;
-    maintainers = with maintainers; [ winpat elseym ];
+    maintainers = with maintainers; [ winpat ];
   };
 }

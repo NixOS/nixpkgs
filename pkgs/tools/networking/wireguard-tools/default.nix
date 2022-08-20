@@ -37,7 +37,10 @@ stdenv.mkDerivation rec {
       --replace /usr/bin $out/bin
   '' + lib.optionalString stdenv.isLinux ''
     for f in $out/bin/*; do
-      wrapProgram $f --prefix PATH : ${lib.makeBinPath [ procps iproute2 iptables openresolv ]}
+      # allow users to provide their own resolvconf implementation, e.g. the one provided by systemd-resolved
+      wrapProgram $f \
+        --prefix PATH : ${lib.makeBinPath [ procps iproute2 iptables ]} \
+        --suffix PATH : ${lib.makeBinPath [ openresolv ]}
     done
   '';
 
@@ -58,7 +61,7 @@ stdenv.mkDerivation rec {
     downloadPage = "https://git.zx2c4.com/wireguard-tools/refs/";
     homepage = "https://www.wireguard.com/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ elseym ericsagnes zx2c4 globin ma27 d-xo ];
+    maintainers = with maintainers; [ ericsagnes zx2c4 globin ma27 d-xo ];
     platforms = platforms.unix;
   };
 }

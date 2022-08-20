@@ -14,15 +14,15 @@ in
 
     port = mkOption {
       type = types.port;
-      description = "The port to listen on.";
+      description = lib.mdDoc "The port to listen on.";
       default = 8000;
     };
 
     settings = mkOption {
       type = format.type;
-      description = ''
-        Your <filename>pinnwand.toml</filename> as a Nix attribute set. Look up
-        possible options in the <link xlink:href="https://github.com/supakeen/pinnwand/blob/master/pinnwand.toml-example">pinnwand.toml-example</link>.
+      description = lib.mdDoc ''
+        Your {file}`pinnwand.toml` as a Nix attribute set. Look up
+        possible options in the [pinnwand.toml-example](https://github.com/supakeen/pinnwand/blob/master/pinnwand.toml-example).
       '';
       default = {};
     };

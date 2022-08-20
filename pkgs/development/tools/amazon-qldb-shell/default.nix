@@ -1,10 +1,12 @@
-{ lib
+{ stdenv
+, lib
 , clang
 , cmake
 , fetchFromGitHub
 , llvmPackages
 , rustPlatform
 , testers
+, Security
 }:
 
 let
@@ -21,7 +23,8 @@ let
     };
 
     nativeBuildInputs = [ clang cmake ];
-    buildInputs = [ llvmPackages.libclang ];
+    buildInputs = [ llvmPackages.libclang ]
+      ++ lib.optional stdenv.isDarwin Security;
 
     cargoSha256 = "sha256-y3dNEa2U9mwsENPda44zweszlk4UJXGtfeH+er8mi0U=";
 

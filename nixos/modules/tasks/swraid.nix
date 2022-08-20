@@ -10,7 +10,7 @@ in {
     };
 
     mdadmConf = lib.mkOption {
-      description = "Contents of <filename>/etc/mdadm.conf</filename> in initrd.";
+      description = lib.mdDoc "Contents of {file}`/etc/mdadm.conf` in initrd.";
       type = lib.types.lines;
       default = "";
     };

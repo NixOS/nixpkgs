@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sway-launcher-desktop";
-  version = "1.5.4";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "Biont";
     repo = "sway-launcher-desktop";
     rev = "v${version}";
-    sha256 = "0i19igj30jyszqb63ibq0b0zxzvjw3z1zikn9pbk44ig1c0v61aa";
+    sha256 = "HCGUFXrj6b9Pb6b5y9yupBumFLQyH1QVMrfoBM4HbMg=";
   };
 
   postPatch = ''
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/Biont/sway-launcher-desktop/releases/tag/v${version}";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.mrhedgehog ];
+    maintainers = [ maintainers.thehedgeh0g ];
     mainProgram = "${pname}";
   };
 }

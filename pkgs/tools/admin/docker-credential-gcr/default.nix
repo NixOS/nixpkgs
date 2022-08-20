@@ -1,16 +1,41 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch, testers, docker-credential-gcr }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "docker-credential-gcr";
-  version = "2.0.5";
-
-  goPackagePath = "github.com/GoogleCloudPlatform/docker-credential-gcr";
+  version = "2.1.5";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "docker-credential-gcr";
     rev = "v${version}";
-    sha256 = "sha256-WrcGTXy5SMWDHJWddXUuvUvEWjOsJcoB1zBg02p5ggY=";
+    sha256 = "sha256-NUFSnegLVGNUc6f/WSyIk1U6UQorxRykqojhgE/maw8=";
+  };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-TestGet_GCRCredentials.patch";
+      url = "https://github.com/GoogleCloudPlatform/docker-credential-gcr/commit/a0c080e58bbfdeb0aa24e66551c4e8b0359bf178.patch";
+      sha256 = "sha256-aXp/1kNaxqQDPszC7pO+qP7ZBWHjpVljUHiKFnnDWuM=";
+    })
+  ];
+
+  postPatch = ''
+    rm -rf ./test
+  '';
+
+  vendorSha256 = "sha256-e7XNTizZYp/tS7KRvB9KxY3Yurphnm6Ehz4dHZNReK8=";
+
+  CGO_ENABLED = 0;
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/GoogleCloudPlatform/docker-credential-gcr/config.Version=${version}"
+  ];
+
+  passthru.tests.version = testers.testVersion {
+    package = docker-credential-gcr;
+    command = "docker-credential-gcr version";
   };
 
   meta = with lib; {

@@ -8,18 +8,19 @@
 , pyserial-asyncio
 , setuptools
 , pytestCheckHook
+, pythonAtLeast
 }:
 
 buildPythonPackage rec {
   pname = "rflink";
-  version = "0.0.62";
+  version = "0.0.63";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "aequitas";
     repo = "python-rflink";
-    rev = version;
-    sha256 = "sha256-dEzkYE8xtUzvdsnPaSiQR8960WLOEcr/QhwDiQlobcs=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-BNKcXtsBB90KQe4HXmfJ7H3yepk1dEkozSEy5v8KSAA=";
   };
 
   propagatedBuildInputs = [
@@ -32,6 +33,11 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
+  ];
+
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.10") [
+    # https://github.com/aequitas/python-rflink/issues/65
+    "tests/test_proxy.py"
   ];
 
   postPatch = ''

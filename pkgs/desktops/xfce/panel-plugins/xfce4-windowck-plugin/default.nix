@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     description = "Xfce plugins which allows to put the maximized window title and buttons on the panel";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ volth ] ++ teams.xfce.members;
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

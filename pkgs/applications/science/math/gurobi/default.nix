@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gurobi";
-  version = "9.5.0";
+  version = "9.5.1";
 
   src = fetchurl {
     url = "https://packages.gurobi.com/${lib.versions.majorMinor version}/gurobi${version}_linux64.tar.gz";
-    sha256 = "sha256-u1QuWl0WhfbjZOrwXqbFVySF/8N6IkUWnPPLQCiLwp4=";
+    sha256 = "sha256-+oKFnTPwj7iuudpmsPvZFxjtVzxTT1capSNyyd64kdo=";
   };
 
   sourceRoot = "gurobi${builtins.replaceStrings ["."] [""] version}/linux64";
@@ -46,6 +46,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Optimization solver for mathematical programming";
     homepage = "https://www.gurobi.com";
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ jfrankenau ];

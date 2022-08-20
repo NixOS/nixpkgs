@@ -10,6 +10,7 @@
 , openssl
 , libdrm
 , libevent
+, libyaml
 , lttng-ust
 , gst_all_1
 , gtest
@@ -22,12 +23,12 @@
 
 stdenv.mkDerivation {
   pname = "libcamera";
-  version = "unstable-2022-01-03";
+  version = "unstable-2022-07-15";
 
   src = fetchgit {
     url = "https://git.libcamera.org/libcamera/libcamera.git";
-    rev = "1db1e31e664c1f613dc964d8519fe75d67b154b6";
-    hash = "sha256-pXYPIU9xDWA870Gp1Jgizi5xnUHRvTqEq/ofFXdVZdg=";
+    rev = "e9b6b362820338d0546563444e7b1767f5c7044c";
+    hash = "sha256-geqFcMBHcVe7dPdVOal8V2pVItYUdoC+5isISqRG4Wc=";
   };
 
   postPatch = ''
@@ -54,6 +55,9 @@ stdenv.mkDerivation {
 
     # lttng tracing
     lttng-ust
+
+    # yamlparser
+    libyaml
 
     gtest
   ];

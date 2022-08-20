@@ -50,12 +50,13 @@ stdenv.mkDerivation rec {
   preFixup = ''
     makeWrapper ${jdk}/bin/java $out/bin/bluej \
       "''${gappsWrapperArgs[@]}" \
-      --add-flags "-Djavafx.embed.singleThread=true -Dawt.useSystemAAFontSettings=on -Xmx512M -cp \"$out/share/bluej/bluej.jar\" bluej.Boot"
+      --add-flags "-Djavafx.embed.singleThread=true -Dawt.useSystemAAFontSettings=on -Xmx512M -cp $out/share/bluej/bluej.jar bluej.Boot"
   '';
 
   meta = with lib; {
     description = "A simple integrated development environment for Java";
     homepage = "https://www.bluej.org/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl2ClasspathPlus;
     maintainers = with maintainers; [ chvp ];
     platforms = platforms.unix;

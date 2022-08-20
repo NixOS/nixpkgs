@@ -116,6 +116,7 @@ rec {
 
     alpha    = { bits = 64; significantByte = littleEndian; family = "alpha"; };
 
+    rx       = { bits = 32; significantByte = littleEndian; family = "rx"; };
     msp430   = { bits = 16; significantByte = littleEndian; family = "msp430"; };
     avr      = { bits = 8; family = "avr"; };
 
@@ -147,8 +148,10 @@ rec {
   #   Every CPU is compatible with itself.
   # - (transitivity)
   #   If A is compatible with B and B is compatible with C then A is compatible with C.
-  # - (compatible under multiple endianness)
-  #   CPUs with multiple modes of endianness are pairwise compatible.
+  #
+  # Note: Since 22.11 the archs of a mode switching CPU are no longer considered
+  # pairwise compatible. Mode switching implies that binaries built for A
+  # and B respectively can't be executed at the same time.
   isCompatible = a: b: with cpuTypes; lib.any lib.id [
     # x86
     (b == i386 && isCompatible a i486)
@@ -190,22 +193,13 @@ rec {
     (b == aarch64 && a == armv8a)
     (b == armv8a && isCompatible a aarch64)
 
-    (b == aarch64 && a == aarch64_be)
-    (b == aarch64_be && isCompatible a aarch64)
-
     # PowerPC
     (b == powerpc && isCompatible a powerpc64)
-    (b == powerpcle && isCompatible a powerpc)
-    (b == powerpc && a == powerpcle)
-    (b == powerpc64le && isCompatible a powerpc64)
-    (b == powerpc64 && a == powerpc64le)
+    (b == powerpcle && isCompatible a powerpc64le)
 
     # MIPS
     (b == mips && isCompatible a mips64)
-    (b == mips && a == mipsel)
-    (b == mipsel && isCompatible a mips)
-    (b == mips64 && a == mips64el)
-    (b == mips64el && isCompatible a mips64)
+    (b == mipsel && isCompatible a mips64el)
 
     # RISCV
     (b == riscv32 && isCompatible a riscv64)

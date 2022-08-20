@@ -77,7 +77,7 @@ where the builder can do anything it wants, but typically starts with
 source $stdenv/setup
 ```
 
-to let `stdenv` set up the environment (e.g., process the `buildInputs`). If you want, you can still use `stdenv`’s generic builder:
+to let `stdenv` set up the environment (e.g. by resetting `PATH` and populating it from build inputs). If you want, you can still use `stdenv`’s generic builder:
 
 ```bash
 source $stdenv/setup
@@ -316,6 +316,60 @@ The script will be usually run from the root of the Nixpkgs repository but you s
 :::
 
 For information about how to run the updates, execute `nix-shell maintainers/scripts/update.nix`.
+
+### Recursive attributes in `mkDerivation` {#mkderivation-recursive-attributes}
+
+If you pass a function to `mkDerivation`, it will receive as its argument the final arguments, including the overrides when reinvoked via `overrideAttrs`. For example:
+
+```nix
+mkDerivation (finalAttrs: {
+  pname = "hello";
+  withFeature = true;
+  configureFlags =
+    lib.optionals finalAttrs.withFeature ["--with-feature"];
+})
+```
+
+Note that this does not use the `rec` keyword to reuse `withFeature` in `configureFlags`.
+The `rec` keyword works at the syntax level and is unaware of overriding.
+
+Instead, the definition references `finalAttrs`, allowing users to change `withFeature`
+consistently with `overrideAttrs`.
+
+`finalAttrs` also contains the attribute `finalPackage`, which includes the output paths, etc.
+
+Let's look at a more elaborate example to understand the differences between
+various bindings:
+
+```nix
+# `pkg` is the _original_ definition (for illustration purposes)
+let pkg =
+  mkDerivation (finalAttrs: {
+    # ...
+
+    # An example attribute
+    packages = [];
+
+    # `passthru.tests` is a commonly defined attribute.
+    passthru.tests.simple = f finalAttrs.finalPackage;
+
+    # An example of an attribute containing a function
+    passthru.appendPackages = packages':
+      finalAttrs.finalPackage.overrideAttrs (newSelf: super: {
+        packages = super.packages ++ packages';
+      });
+
+    # For illustration purposes; referenced as
+    # `(pkg.overrideAttrs(x)).finalAttrs` etc in the text below.
+    passthru.finalAttrs = finalAttrs;
+    passthru.original = pkg;
+  });
+in pkg
+```
+
+Unlike the `pkg` binding in the above example, the `finalAttrs` parameter always references the final attributes. For instance `(pkg.overrideAttrs(x)).finalAttrs.finalPackage` is identical to `pkg.overrideAttrs(x)`, whereas `(pkg.overrideAttrs(x)).original` is the same as the original `pkg`.
+
+See also the section about [`passthru.tests`](#var-meta-tests).
 
 ## Phases {#sec-stdenv-phases}
 
@@ -644,12 +698,12 @@ Hook executed at the end of the install phase.
 
 ### The fixup phase {#ssec-fixup-phase}
 
-The fixup phase performs some (Nix-specific) post-processing actions on the files installed under `$out` by the install phase. The default `fixupPhase` does the following:
+The fixup phase performs (Nix-specific) post-processing actions on the files installed under `$out` by the install phase. The default `fixupPhase` does the following:
 
 - It moves the `man/`, `doc/` and `info/` subdirectories of `$out` to `share/`.
 - It strips libraries and executables of debug information.
 - On Linux, it applies the `patchelf` command to ELF executables and libraries to remove unused directories from the `RPATH` in order to prevent unnecessary runtime dependencies.
-- It rewrites the interpreter paths of shell scripts to paths found in `PATH`. E.g., `/usr/bin/perl` will be rewritten to `/nix/store/some-perl/bin/perl` found in `PATH`.
+- It rewrites the interpreter paths of shell scripts to paths found in `PATH`. E.g., `/usr/bin/perl` will be rewritten to `/nix/store/some-perl/bin/perl` found in `PATH`. See [](#patch-shebangs.sh) for details.
 
 #### Variables controlling the fixup phase {#variables-controlling-the-fixup-phase}
 
@@ -677,6 +731,10 @@ If set, files in `$out/sbin` are not moved to `$out/bin`. By default, they are.
 
 List of directories to search for libraries and executables from which *all* symbols should be stripped. By default, it’s empty. Stripping all symbols is risky, since it may remove not just debug symbols but also ELF information necessary for normal execution.
 
+##### `stripAllListTarget` {#var-stdenv-stripAllListTarget}
+
+Like `stripAllList`, but only applies to packages’ target platform. By default, it’s empty. Useful when supporting cross compilation.
+
 ##### `stripAllFlags` {#var-stdenv-stripAllFlags}
 
 Flags passed to the `strip` command applied to the files in the directories listed in `stripAllList`. Defaults to `-s` (i.e. `--strip-all`).
@@ -684,6 +742,10 @@ Flags passed to the `strip` command applied to the files in the directories list
 ##### `stripDebugList` {#var-stdenv-stripDebugList}
 
 List of directories to search for libraries and executables from which only debugging-related symbols should be stripped. It defaults to `lib lib32 lib64 libexec bin sbin`.
+
+##### `stripDebugListTarget` {#var-stdenv-stripDebugListTarget}
+
+Like `stripDebugList`, but only applies to packages’ target platform. By default, it’s empty. Useful when supporting cross compilation.
 
 ##### `stripDebugFlags` {#var-stdenv-stripDebugFlags}
 
@@ -695,7 +757,7 @@ If set, the `patchelf` command is not used to remove unnecessary `RPATH` entries
 
 ##### `dontPatchShebangs` {#var-stdenv-dontPatchShebangs}
 
-If set, scripts starting with `#!` do not have their interpreter paths rewritten to paths in the Nix store.
+If set, scripts starting with `#!` do not have their interpreter paths rewritten to paths in the Nix store. See [](#patch-shebangs.sh) on how patching shebangs works.
 
 ##### `dontPruneLibtoolFiles` {#var-stdenv-dontPruneLibtoolFiles}
 
@@ -809,13 +871,28 @@ Constructs a wrapper for a program with various possible arguments. It is define
 # adds `FOOBAR=baz` to `$out/bin/foo`’s environment
 makeWrapper $out/bin/foo $wrapperfile --set FOOBAR baz
 
-# prefixes the binary paths of `hello` and `git`
+# Prefixes the binary paths of `hello` and `git`
+# and suffixes the binary path of `xdg-utils`.
 # Be advised that paths often should be patched in directly
 # (via string replacements or in `configurePhase`).
-makeWrapper $out/bin/foo $wrapperfile --prefix PATH : ${lib.makeBinPath [ hello git ]}
+makeWrapper $out/bin/foo $wrapperfile \
+  --prefix PATH : ${lib.makeBinPath [ hello git ]} \
+  --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
 ```
 
-There’s many more kinds of arguments, they are documented in `nixpkgs/pkgs/build-support/setup-hooks/make-wrapper.sh` for the `makeWrapper` implementation and in `nixpkgs/pkgs/build-support/setup-hooks/make-binary-wrapper.sh` for the `makeBinaryWrapper` implementation.
+Packages may expect or require other utilities to be available at runtime.
+`makeWrapper` can be used to add packages to a `PATH` environment variable local to a wrapper.
+
+Use `--prefix` to explicitly set dependencies in `PATH`.
+
+:::{note}
+`--prefix` essentially hard-codes dependencies into the wrapper.
+They cannot be overridden without rebuilding the package.
+:::
+
+If dependencies should be resolved at runtime, use `--suffix` to append fallback values to `PATH`.
+
+There’s many more kinds of arguments, they are documented in `nixpkgs/pkgs/build-support/setup-hooks/make-wrapper.sh` for the `makeWrapper` implementation and in `nixpkgs/pkgs/build-support/setup-hooks/make-binary-wrapper/make-binary-wrapper.sh` for the `makeBinaryWrapper` implementation.
 
 `wrapProgram` is a convenience function you probably want to use most of the time, implemented by both `makeWrapper` and `makeBinaryWrapper`.
 
@@ -859,9 +936,9 @@ substitute ./foo.in ./foo.out \
     --subst-var someVar
 ```
 
-### `substituteInPlace` \<file\> \<subs\> {#fun-substituteInPlace}
+### `substituteInPlace` \<multiple files\> \<subs\> {#fun-substituteInPlace}
 
-Like `substitute`, but performs the substitutions in place on the file \<file\>.
+Like `substitute`, but performs the substitutions in place on the files passed.
 
 ### `substituteAll` \<infile\> \<outfile\> {#fun-substituteAll}
 
@@ -929,7 +1006,7 @@ addEnvHooks "$hostOffset" myBashFunction
 
 The *existence* of setups hooks has long been documented and packages inside Nixpkgs are free to use this mechanism. Other packages, however, should not rely on these mechanisms not changing between Nixpkgs versions. Because of the existing issues with this system, there’s little benefit from mandating it be stable for any period of time.
 
-First, let’s cover some setup hooks that are part of Nixpkgs default stdenv. This means that they are run for every package built using `stdenv.mkDerivation`. Some of these are platform specific, so they may run on Linux but not Darwin or vice-versa.
+First, let’s cover some setup hooks that are part of Nixpkgs default `stdenv`. This means that they are run for every package built using `stdenv.mkDerivation` or when using a custom builder that has `source $stdenv/setup`. Some of these are platform specific, so they may run on Linux but not Darwin or vice-versa.
 
 ### `move-docs.sh` {#move-docs.sh}
 
@@ -945,7 +1022,70 @@ This runs the strip command on installed binaries and libraries. This removes un
 
 ### `patch-shebangs.sh` {#patch-shebangs.sh}
 
-This setup hook patches installed scripts to use the full path to the shebang interpreter. A shebang interpreter is the first commented line of a script telling the operating system which program will run the script (e.g `#!/bin/bash`). In Nix, we want an exact path to that interpreter to be used. This often replaces `/bin/sh` with a path in the Nix store.
+This setup hook patches installed scripts to add Nix store paths to their shebang interpreter as found in the build environment. The [shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)) line tells a Unix-like operating system which interpreter to use to execute the script's contents.
+
+::: note
+The [generic builder][generic-builder] populates `PATH` from inputs of the derivation.
+:::
+
+[generic-builder]: https://github.com/NixOS/nixpkgs/blob/19d4f7dc485f74109bd66ef74231285ff797a823/pkgs/stdenv/generic/builder.sh
+
+#### Invocation {#patch-shebangs.sh-invocation}
+
+Multiple paths can be specified.
+
+```
+patchShebangs [--build | --host] PATH...
+```
+
+##### Flags
+
+`--build`
+: Look up commands available at build time
+
+`--host`
+: Look up commands available at run time
+
+##### Examples
+
+```sh
+patchShebangs --host /nix/store/<hash>-hello-1.0/bin
+```
+
+```sh
+patchShebangs --build configure
+```
+
+`#!/bin/sh` will be rewritten to `#!/nix/store/<hash>-some-bash/bin/sh`.
+
+`#!/usr/bin/env` gets special treatment: `#!/usr/bin/env python` is rewritten to `/nix/store/<hash>/bin/python`.
+
+Interpreter paths that point to a valid Nix store location are not changed.
+
+::: note
+A script file must be marked as executable, otherwise it will not be
+considered.
+:::
+
+This mechanism ensures that the interpreter for a given script is always found and is exactly the one specified by the build.
+
+It can be disabled by setting [`dontPatchShebangs`](#var-stdenv-dontPatchShebangs):
+
+```nix
+stdenv.mkDerivation {
+  # ...
+  dontPatchShebangs = true;
+  # ...
+}
+```
+
+The file [`patch-shebangs.sh`][patch-shebangs.sh] defines the [`patchShebangs`][patchShebangs] function. It is used to implement [`patchShebangsAuto`][patchShebangsAuto], the [setup hook](#ssec-setup-hooks) that is registered to run during the [fixup phase](#ssec-fixup-phase) by default.
+
+If you need to run `patchShebangs` at build time, it must be called explicitly within [one of the build phases](#sec-stdenv-phases).
+
+[patch-shebangs.sh]: https://github.com/NixOS/nixpkgs/blob/19d4f7dc485f74109bd66ef74231285ff797a823/pkgs/build-support/setup-hooks/patch-shebangs.sh
+[patchShebangs]: https://github.com/NixOS/nixpkgs/blob/19d4f7dc485f74109bd66ef74231285ff797a823/pkgs/build-support/setup-hooks/patch-shebangs.sh#L24-L105
+[patchShebangsAuto]: https://github.com/NixOS/nixpkgs/blob/19d4f7dc485f74109bd66ef74231285ff797a823/pkgs/build-support/setup-hooks/patch-shebangs.sh#L107-L119
 
 ### `audit-tmpdir.sh` {#audit-tmpdir.sh}
 
@@ -1101,7 +1241,7 @@ The `validatePkgConfig` hook validates all pkg-config (`.pc`) files in a package
 
 ### cmake {#cmake}
 
-Overrides the default configure phase to run the CMake command. By default, we use the Make generator of CMake. In addition, dependencies are added automatically to CMAKE_PREFIX_PATH so that packages are correctly detected by CMake. Some additional flags are passed in to give similar behavior to configure-based packages. You can disable this hook’s behavior by setting configurePhase to a custom value, or by setting dontUseCmakeConfigure. cmakeFlags controls flags passed only to CMake. By default, parallel building is enabled as CMake supports parallel building almost everywhere. When Ninja is also in use, CMake will detect that and use the ninja generator.
+Overrides the default configure phase to run the CMake command. By default, we use the Make generator of CMake. In addition, dependencies are added automatically to `CMAKE_PREFIX_PATH` so that packages are correctly detected by CMake. Some additional flags are passed in to give similar behavior to configure-based packages. You can disable this hook’s behavior by setting `configurePhase` to a custom value, or by setting `dontUseCmakeConfigure`. `cmakeFlags` controls flags passed only to CMake. By default, parallel building is enabled as CMake supports parallel building almost everywhere. When Ninja is also in use, CMake will detect that and use the ninja generator.
 
 ### xcbuildHook {#xcbuildhook}
 
@@ -1262,7 +1402,7 @@ If the libraries lack `-fPIE`, you will get the error `recompile with -fPIE`.
 
 [^footnote-stdenv-ignored-build-platform]: The build platform is ignored because it is a mere implementation detail of the package satisfying the dependency: As a general programming principle, dependencies are always *specified* as interfaces, not concrete implementation.
 [^footnote-stdenv-native-dependencies-in-path]: Currently, this means for native builds all dependencies are put on the `PATH`. But in the future that may not be the case for sake of matching cross: the platforms would be assumed to be unique for native and cross builds alike, so only the `depsBuild*` and `nativeBuildInputs` would be added to the `PATH`.
-[^footnote-stdenv-propagated-dependencies]: Nix itself already takes a package’s transitive dependencies into account, but this propagation ensures nixpkgs-specific infrastructure like setup hooks (mentioned above) also are run as if the propagated dependency.
+[^footnote-stdenv-propagated-dependencies]: Nix itself already takes a package’s transitive dependencies into account, but this propagation ensures nixpkgs-specific infrastructure like [setup hooks](#ssec-setup-hooks) also are run as if it were a propagated dependency.
 [^footnote-stdenv-find-inputs-location]: The `findInputs` function, currently residing in `pkgs/stdenv/generic/setup.sh`, implements the propagation logic.
 [^footnote-stdenv-sys-lib-search-path]: It clears the `sys_lib_*search_path` variables in the Libtool script to prevent Libtool from using libraries in `/usr/lib` and such.
 [^footnote-stdenv-build-time-guessing-impurity]: Eventually these will be passed building natively as well, to improve determinism: build-time guessing, as is done today, is a risk of impurity.

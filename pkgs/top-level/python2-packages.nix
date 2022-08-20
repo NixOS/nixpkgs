@@ -5,6 +5,7 @@
 self: super:
 
 with self; with super; {
+  attrs = callPackage ../development/python2-modules/attrs { };
 
   bootstrapped-pip = callPackage ../development/python2-modules/bootstrapped-pip { };
 
@@ -18,8 +19,6 @@ with self; with super; {
 
   cheetah = callPackage ../development/python2-modules/cheetah { };
 
-  click = callPackage ../development/python2-modules/click { };
-
   configparser = callPackage ../development/python2-modules/configparser { };
 
   construct = callPackage ../development/python2-modules/construct { };
@@ -28,17 +27,9 @@ with self; with super; {
 
   coverage = callPackage ../development/python2-modules/coverage { };
 
-  cryptography = callPackage ../development/python2-modules/cryptography { };
-
-  decorator = callPackage ../development/python2-modules/decorator { };
-
   enum = callPackage ../development/python2-modules/enum { };
 
   filelock =  callPackage ../development/python2-modules/filelock { };
-
-  flask = callPackage ../development/python2-modules/flask { };
-
-  freezegun = callPackage ../development/python2-modules/freezegun { };
 
   futures = callPackage ../development/python2-modules/futures { };
 
@@ -54,15 +45,7 @@ with self; with super; {
 
   importlib-metadata = callPackage ../development/python2-modules/importlib-metadata { };
 
-  ipaddr = callPackage ../development/python2-modules/ipaddr { };
-
-  itsdangerous = callPackage ../development/python2-modules/itsdangerous { };
-
   jinja2 = callPackage ../development/python2-modules/jinja2 { };
-
-  libcloud = callPackage ../development/python2-modules/libcloud { };
-
-  lpod = callPackage ../development/python2-modules/lpod { };
 
   marisa = callPackage ../development/python2-modules/marisa {
     inherit (pkgs) marisa;
@@ -109,8 +92,6 @@ with self; with super; {
   };
 
   pygtk = callPackage ../development/python2-modules/pygtk { };
-
-  pyjwt = callPackage ../development/python2-modules/pyjwt { };
 
   pyparsing = callPackage ../development/python2-modules/pyparsing { };
 
@@ -159,20 +140,6 @@ with self; with super; {
   TurboCheetah = callPackage ../development/python2-modules/TurboCheetah { };
 
   typing = callPackage ../development/python2-modules/typing { };
-
-  urllib3 = callPackage ../development/python2-modules/urllib3 { };
-
-  werkzeug = callPackage ../development/python2-modules/werkzeug { };
-
-  wsproto = callPackage ../development/python2-modules/wsproto { };
-
-  wxPython30 = callPackage ../development/python2-modules/wxPython {
-    wxGTK = pkgs.wxGTK30;
-  };
-
-  wxPython = self.wxPython30;
-
-  vcrpy = callPackage ../development/python2-modules/vcrpy { };
 
   zeek = disabled super.zeek;
 

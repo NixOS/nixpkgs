@@ -13,17 +13,22 @@ let
     then "hedgedoc"
     else "codimd";
 
+  settingsFormat = pkgs.formats.json {};
+
   prettyJSON = conf:
     pkgs.runCommandLocal "hedgedoc-config.json" {
       nativeBuildInputs = [ pkgs.jq ];
     } ''
-      echo '${builtins.toJSON conf}' | jq \
-        '{production:del(.[]|nulls)|del(.[][]?|nulls)}' > $out
+      jq '{production:del(.[]|nulls)|del(.[][]?|nulls)}' \
+        < ${settingsFormat.generate "hedgedoc-ugly.json" cfg.settings} \
+        > $out
     '';
 in
 {
   imports = [
     (mkRenamedOptionModule [ "services" "codimd" ] [ "services" "hedgedoc" ])
+    (mkRenamedOptionModule
+      [ "services" "hedgedoc" "configuration" ] [ "services" "hedgedoc" "settings" ])
   ];
 
   options.services.hedgedoc = {
@@ -32,7 +37,7 @@ in
     groups = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         Groups to which the service user should be added.
       '';
     };
@@ -40,18 +45,18 @@ in
     workDir = mkOption {
       type = types.path;
       default = "/var/lib/${name}";
-      description = ''
+      description = lib.mdDoc ''
         Working directory for the HedgeDoc service.
       '';
     };
 
-    configuration = {
+    settings = let options = {
       debug = mkEnableOption "debug mode";
       domain = mkOption {
         type = types.nullOr types.str;
         default = null;
         example = "hedgedoc.org";
-        description = ''
+        description = lib.mdDoc ''
           Domain name for the HedgeDoc instance.
         '';
       };
@@ -59,14 +64,14 @@ in
         type = types.nullOr types.str;
         default = null;
         example = "/url/path/to/hedgedoc";
-        description = ''
+        description = lib.mdDoc ''
           Path under which HedgeDoc is accessible.
         '';
       };
       host = mkOption {
         type = types.str;
         default = "localhost";
-        description = ''
+        description = lib.mdDoc ''
           Address to listen on.
         '';
       };
@@ -74,7 +79,7 @@ in
         type = types.int;
         default = 3000;
         example = 80;
-        description = ''
+        description = lib.mdDoc ''
           Port to listen on.
         '';
       };
@@ -82,7 +87,7 @@ in
         type = types.nullOr types.str;
         default = null;
         example = "/run/hedgedoc.sock";
-        description = ''
+        description = lib.mdDoc ''
           Specify where a UNIX domain socket should be placed.
         '';
       };
@@ -90,44 +95,44 @@ in
         type = types.listOf types.str;
         default = [];
         example = [ "localhost" "hedgedoc.org" ];
-        description = ''
+        description = lib.mdDoc ''
           List of domains to whitelist.
         '';
       };
       useSSL = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable to use SSL server. This will also enable
-          <option>protocolUseSSL</option>.
+          {option}`protocolUseSSL`.
         '';
       };
       hsts = {
         enable = mkOption {
           type = types.bool;
           default = true;
-          description = ''
+          description = lib.mdDoc ''
             Whether to enable HSTS if HTTPS is also enabled.
           '';
         };
         maxAgeSeconds = mkOption {
           type = types.int;
           default = 31536000;
-          description = ''
+          description = lib.mdDoc ''
             Max duration for clients to keep the HSTS status.
           '';
         };
         includeSubdomains = mkOption {
           type = types.bool;
           default = true;
-          description = ''
+          description = lib.mdDoc ''
             Whether to include subdomains in HSTS.
           '';
         };
         preload = mkOption {
           type = types.bool;
           default = true;
-          description = ''
+          description = lib.mdDoc ''
             Whether to allow preloading of the site's HSTS status.
           '';
         };
@@ -145,62 +150,68 @@ in
             addDefaults = true;
           }
         '';
-        description = ''
+        description = lib.mdDoc ''
           Specify the Content Security Policy which is passed to Helmet.
-          For configuration details see <link xlink:href="https://helmetjs.github.io/docs/csp/"
-          >https://helmetjs.github.io/docs/csp/</link>.
+          For configuration details see <https://helmetjs.github.io/docs/csp/>.
         '';
       };
       protocolUseSSL = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable to use TLS for resource paths.
-          This only applies when <option>domain</option> is set.
+          This only applies when {option}`domain` is set.
         '';
       };
       urlAddPort = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable to add the port to callback URLs.
-          This only applies when <option>domain</option> is set
+          This only applies when {option}`domain` is set
           and only for ports other than 80 and 443.
         '';
       };
       useCDN = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to use CDN resources or not.
         '';
       };
       allowAnonymous = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to allow anonymous usage.
         '';
       };
       allowAnonymousEdits = mkOption {
         type = types.bool;
         default = false;
-        description = ''
-          Whether to allow guests to edit existing notes with the `freely' permission,
-          when <option>allowAnonymous</option> is enabled.
+        description = lib.mdDoc ''
+          Whether to allow guests to edit existing notes with the `freely` permission,
+          when {option}`allowAnonymous` is enabled.
         '';
       };
       allowFreeURL = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to allow note creation by accessing a nonexistent note URL.
+        '';
+      };
+      requireFreeURLAuthentication = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Whether to require authentication for FreeURL mode style note creation.
         '';
       };
       defaultPermission = mkOption {
         type = types.enum [ "freely" "editable" "limited" "locked" "private" ];
         default = "editable";
-        description = ''
+        description = lib.mdDoc ''
           Default permissions for notes.
           This only applies for signed-in users.
         '';
@@ -211,12 +222,12 @@ in
         example = ''
           postgres://user:pass@host:5432/dbname
         '';
-        description = ''
+        description = lib.mdDoc ''
           Specify which database to use.
           HedgeDoc supports mysql, postgres, sqlite and mssql.
-          See <link xlink:href="https://sequelize.readthedocs.io/en/v3/">
-          https://sequelize.readthedocs.io/en/v3/</link> for more information.
-          Note: This option overrides <option>db</option>.
+          See [
+          https://sequelize.readthedocs.io/en/v3/](https://sequelize.readthedocs.io/en/v3/) for more information.
+          Note: This option overrides {option}`db`.
         '';
       };
       db = mkOption {
@@ -228,52 +239,52 @@ in
             storage = "/var/lib/${name}/db.${name}.sqlite";
           }
         '';
-        description = ''
+        description = lib.mdDoc ''
           Specify the configuration for sequelize.
           HedgeDoc supports mysql, postgres, sqlite and mssql.
-          See <link xlink:href="https://sequelize.readthedocs.io/en/v3/">
-          https://sequelize.readthedocs.io/en/v3/</link> for more information.
-          Note: This option overrides <option>db</option>.
+          See [
+          https://sequelize.readthedocs.io/en/v3/](https://sequelize.readthedocs.io/en/v3/) for more information.
+          Note: This option overrides {option}`db`.
         '';
       };
       sslKeyPath= mkOption {
         type = types.nullOr types.str;
         default = null;
         example = "/var/lib/hedgedoc/hedgedoc.key";
-        description = ''
-          Path to the SSL key. Needed when <option>useSSL</option> is enabled.
+        description = lib.mdDoc ''
+          Path to the SSL key. Needed when {option}`useSSL` is enabled.
         '';
       };
       sslCertPath = mkOption {
         type = types.nullOr types.str;
         default = null;
         example = "/var/lib/hedgedoc/hedgedoc.crt";
-        description = ''
-          Path to the SSL cert. Needed when <option>useSSL</option> is enabled.
+        description = lib.mdDoc ''
+          Path to the SSL cert. Needed when {option}`useSSL` is enabled.
         '';
       };
       sslCAPath = mkOption {
         type = types.listOf types.str;
         default = [];
         example = [ "/var/lib/hedgedoc/ca.crt" ];
-        description = ''
-          SSL ca chain. Needed when <option>useSSL</option> is enabled.
+        description = lib.mdDoc ''
+          SSL ca chain. Needed when {option}`useSSL` is enabled.
         '';
       };
       dhParamPath = mkOption {
         type = types.nullOr types.str;
         default = null;
         example = "/var/lib/hedgedoc/dhparam.pem";
-        description = ''
-          Path to the SSL dh params. Needed when <option>useSSL</option> is enabled.
+        description = lib.mdDoc ''
+          Path to the SSL dh params. Needed when {option}`useSSL` is enabled.
         '';
       };
       tmpPath = mkOption {
         type = types.str;
         default = "/tmp";
-        description = ''
+        description = lib.mdDoc ''
           Path to the temp directory HedgeDoc should use.
-          Note that <option>serviceConfig.PrivateTmp</option> is enabled for
+          Note that {option}`serviceConfig.PrivateTmp` is enabled for
           the HedgeDoc systemd service by default.
           (Non-canonical paths are relative to HedgeDoc's base directory)
         '';
@@ -281,7 +292,7 @@ in
       defaultNotePath = mkOption {
         type = types.nullOr types.str;
         default = "./public/default.md";
-        description = ''
+        description = lib.mdDoc ''
           Path to the default Note file.
           (Non-canonical paths are relative to HedgeDoc's base directory)
         '';
@@ -289,7 +300,7 @@ in
       docsPath = mkOption {
         type = types.nullOr types.str;
         default = "./public/docs";
-        description = ''
+        description = lib.mdDoc ''
           Path to the docs directory.
           (Non-canonical paths are relative to HedgeDoc's base directory)
         '';
@@ -297,7 +308,7 @@ in
       indexPath = mkOption {
         type = types.nullOr types.str;
         default = "./public/views/index.ejs";
-        description = ''
+        description = lib.mdDoc ''
           Path to the index template file.
           (Non-canonical paths are relative to HedgeDoc's base directory)
         '';
@@ -305,7 +316,7 @@ in
       hackmdPath = mkOption {
         type = types.nullOr types.str;
         default = "./public/views/hackmd.ejs";
-        description = ''
+        description = lib.mdDoc ''
           Path to the hackmd template file.
           (Non-canonical paths are relative to HedgeDoc's base directory)
         '';
@@ -314,7 +325,7 @@ in
         type = types.nullOr types.str;
         default = null;
         defaultText = literalExpression "./public/views/error.ejs";
-        description = ''
+        description = lib.mdDoc ''
           Path to the error template file.
           (Non-canonical paths are relative to HedgeDoc's base directory)
         '';
@@ -323,7 +334,7 @@ in
         type = types.nullOr types.str;
         default = null;
         defaultText = literalExpression "./public/views/pretty.ejs";
-        description = ''
+        description = lib.mdDoc ''
           Path to the pretty template file.
           (Non-canonical paths are relative to HedgeDoc's base directory)
         '';
@@ -332,7 +343,7 @@ in
         type = types.nullOr types.str;
         default = null;
         defaultText = literalExpression "./public/views/slide.hbs";
-        description = ''
+        description = lib.mdDoc ''
           Path to the slide template file.
           (Non-canonical paths are relative to HedgeDoc's base directory)
         '';
@@ -341,21 +352,21 @@ in
         type = types.str;
         default = "${cfg.workDir}/uploads";
         defaultText = literalExpression "/var/lib/${name}/uploads";
-        description = ''
+        description = lib.mdDoc ''
           Path under which uploaded files are saved.
         '';
       };
       sessionName = mkOption {
         type = types.str;
         default = "connect.sid";
-        description = ''
+        description = lib.mdDoc ''
           Specify the name of the session cookie.
         '';
       };
       sessionSecret = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Specify the secret used to sign the session cookie.
           If unset, one will be generated on startup.
         '';
@@ -363,56 +374,56 @@ in
       sessionLife = mkOption {
         type = types.int;
         default = 1209600000;
-        description = ''
+        description = lib.mdDoc ''
           Session life time in milliseconds.
         '';
       };
       heartbeatInterval = mkOption {
         type = types.int;
         default = 5000;
-        description = ''
+        description = lib.mdDoc ''
           Specify the socket.io heartbeat interval.
         '';
       };
       heartbeatTimeout = mkOption {
         type = types.int;
         default = 10000;
-        description = ''
+        description = lib.mdDoc ''
           Specify the socket.io heartbeat timeout.
         '';
       };
       documentMaxLength = mkOption {
         type = types.int;
         default = 100000;
-        description = ''
+        description = lib.mdDoc ''
           Specify the maximum document length.
         '';
       };
       email = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable email sign-in.
         '';
       };
       allowEmailRegister = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable email registration.
         '';
       };
       allowGravatar = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to use gravatar as profile picture source.
         '';
       };
       imageUploadType = mkOption {
         type = types.enum [ "imgur" "s3" "minio" "filesystem" ];
         default = "filesystem";
-        description = ''
+        description = lib.mdDoc ''
           Specify where to upload images.
         '';
       };
@@ -421,85 +432,85 @@ in
           options = {
             accessKey = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Minio access key.
               '';
             };
             secretKey = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Minio secret key.
               '';
             };
-            endpoint = mkOption {
+            endPoint = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Minio endpoint.
               '';
             };
             port = mkOption {
               type = types.int;
               default = 9000;
-              description = ''
+              description = lib.mdDoc ''
                 Minio listen port.
               '';
             };
             secure = mkOption {
               type = types.bool;
               default = true;
-              description = ''
+              description = lib.mdDoc ''
                 Whether to use HTTPS for Minio.
               '';
             };
           };
         });
         default = null;
-        description = "Configure the minio third-party integration.";
+        description = lib.mdDoc "Configure the minio third-party integration.";
       };
       s3 = mkOption {
         type = types.nullOr (types.submodule {
           options = {
             accessKeyId = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 AWS access key id.
               '';
             };
             secretAccessKey = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 AWS access key.
               '';
             };
             region = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 AWS S3 region.
               '';
             };
           };
         });
         default = null;
-        description = "Configure the s3 third-party integration.";
+        description = lib.mdDoc "Configure the s3 third-party integration.";
       };
       s3bucket = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
-          Specify the bucket name for upload types <literal>s3</literal> and <literal>minio</literal>.
+        description = lib.mdDoc ''
+          Specify the bucket name for upload types `s3` and `minio`.
         '';
       };
       allowPDFExport = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable PDF exports.
         '';
       };
       imgur.clientId = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Imgur API client ID.
         '';
       };
@@ -508,13 +519,13 @@ in
           options = {
             connectionString = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Azure Blob Storage connection string.
               '';
             };
             container = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Azure Blob Storage container name.
                 It will be created if non-existent.
               '';
@@ -522,162 +533,162 @@ in
           };
         });
         default = null;
-        description = "Configure the azure third-party integration.";
+        description = lib.mdDoc "Configure the azure third-party integration.";
       };
       oauth2 = mkOption {
         type = types.nullOr (types.submodule {
           options = {
             authorizationURL = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Specify the OAuth authorization URL.
               '';
             };
             tokenURL = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Specify the OAuth token URL.
               '';
             };
             baseURL = mkOption {
               type = with types; nullOr str;
               default = null;
-              description = ''
+              description = lib.mdDoc ''
                 Specify the OAuth base URL.
               '';
             };
             userProfileURL = mkOption {
               type = with types; nullOr str;
               default = null;
-              description = ''
+              description = lib.mdDoc ''
                 Specify the OAuth userprofile URL.
               '';
             };
             userProfileUsernameAttr = mkOption {
               type = with types; nullOr str;
               default = null;
-              description = ''
+              description = lib.mdDoc ''
                 Specify the name of the attribute for the username from the claim.
               '';
             };
             userProfileDisplayNameAttr = mkOption {
               type = with types; nullOr str;
               default = null;
-              description = ''
+              description = lib.mdDoc ''
                 Specify the name of the attribute for the display name from the claim.
               '';
             };
             userProfileEmailAttr = mkOption {
               type = with types; nullOr str;
               default = null;
-              description = ''
+              description = lib.mdDoc ''
                 Specify the name of the attribute for the email from the claim.
               '';
             };
             scope = mkOption {
               type = with types; nullOr str;
               default = null;
-              description = ''
+              description = lib.mdDoc ''
                 Specify the OAuth scope.
               '';
             };
             providerName = mkOption {
               type = with types; nullOr str;
               default = null;
-              description = ''
+              description = lib.mdDoc ''
                 Specify the name to be displayed for this strategy.
               '';
             };
             rolesClaim = mkOption {
               type = with types; nullOr str;
               default = null;
-              description = ''
+              description = lib.mdDoc ''
                 Specify the role claim name.
               '';
             };
             accessRole = mkOption {
               type = with types; nullOr str;
               default = null;
-              description = ''
+              description = lib.mdDoc ''
                 Specify role which should be included in the ID token roles claim to grant access
               '';
             };
             clientID = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Specify the OAuth client ID.
               '';
             };
             clientSecret = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Specify the OAuth client secret.
               '';
             };
           };
         });
         default = null;
-        description = "Configure the OAuth integration.";
+        description = lib.mdDoc "Configure the OAuth integration.";
       };
       facebook = mkOption {
         type = types.nullOr (types.submodule {
           options = {
             clientID = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Facebook API client ID.
               '';
             };
             clientSecret = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Facebook API client secret.
               '';
             };
           };
         });
         default = null;
-        description = "Configure the facebook third-party integration";
+        description = lib.mdDoc "Configure the facebook third-party integration";
       };
       twitter = mkOption {
         type = types.nullOr (types.submodule {
           options = {
             consumerKey = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Twitter API consumer key.
               '';
             };
             consumerSecret = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Twitter API consumer secret.
               '';
             };
           };
         });
         default = null;
-        description = "Configure the Twitter third-party integration.";
+        description = lib.mdDoc "Configure the Twitter third-party integration.";
       };
       github = mkOption {
         type = types.nullOr (types.submodule {
           options = {
             clientID = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 GitHub API client ID.
               '';
             };
             clientSecret = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Github API client secret.
               '';
             };
           };
         });
         default = null;
-        description = "Configure the GitHub third-party integration.";
+        description = lib.mdDoc "Configure the GitHub third-party integration.";
       };
       gitlab = mkOption {
         type = types.nullOr (types.submodule {
@@ -685,27 +696,27 @@ in
             baseURL = mkOption {
               type = types.str;
               default = "";
-              description = ''
+              description = lib.mdDoc ''
                 GitLab API authentication endpoint.
                 Only needed for other endpoints than gitlab.com.
               '';
             };
             clientID = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 GitLab API client ID.
               '';
             };
             clientSecret = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 GitLab API client secret.
               '';
             };
             scope = mkOption {
               type = types.enum [ "api" "read_user" ];
               default = "api";
-              description = ''
+              description = lib.mdDoc ''
                 GitLab API requested scope.
                 GitLab snippet import/export requires api scope.
               '';
@@ -713,79 +724,79 @@ in
           };
         });
         default = null;
-        description = "Configure the GitLab third-party integration.";
+        description = lib.mdDoc "Configure the GitLab third-party integration.";
       };
       mattermost = mkOption {
         type = types.nullOr (types.submodule {
           options = {
             baseURL = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Mattermost authentication endpoint.
               '';
             };
             clientID = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Mattermost API client ID.
               '';
             };
             clientSecret = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Mattermost API client secret.
               '';
             };
           };
         });
         default = null;
-        description = "Configure the Mattermost third-party integration.";
+        description = lib.mdDoc "Configure the Mattermost third-party integration.";
       };
       dropbox = mkOption {
         type = types.nullOr (types.submodule {
           options = {
             clientID = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Dropbox API client ID.
               '';
             };
             clientSecret = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Dropbox API client secret.
               '';
             };
             appKey = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Dropbox app key.
               '';
             };
           };
         });
         default = null;
-        description = "Configure the Dropbox third-party integration.";
+        description = lib.mdDoc "Configure the Dropbox third-party integration.";
       };
       google = mkOption {
         type = types.nullOr (types.submodule {
           options = {
             clientID = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Google API client ID.
               '';
             };
             clientSecret = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Google API client secret.
               '';
             };
           };
         });
         default = null;
-        description = "Configure the Google third-party integration.";
+        description = lib.mdDoc "Configure the Google third-party integration.";
       };
       ldap = mkOption {
         type = types.nullOr (types.submodule {
@@ -793,76 +804,78 @@ in
             providerName = mkOption {
               type = types.str;
               default = "";
-              description = ''
+              description = lib.mdDoc ''
                 Optional name to be displayed at login form, indicating the LDAP provider.
               '';
             };
             url = mkOption {
               type = types.str;
               example = "ldap://localhost";
-              description = ''
+              description = lib.mdDoc ''
                 URL of LDAP server.
               '';
             };
             bindDn = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Bind DN for LDAP access.
               '';
             };
             bindCredentials = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Bind credentials for LDAP access.
               '';
             };
             searchBase = mkOption {
               type = types.str;
               example = "o=users,dc=example,dc=com";
-              description = ''
+              description = lib.mdDoc ''
                 LDAP directory to begin search from.
               '';
             };
             searchFilter = mkOption {
               type = types.str;
               example = "(uid={{username}})";
-              description = ''
+              description = lib.mdDoc ''
                 LDAP filter to search with.
               '';
             };
             searchAttributes = mkOption {
-              type = types.listOf types.str;
+              type = types.nullOr (types.listOf types.str);
+              default = null;
               example = [ "displayName" "mail" ];
-              description = ''
+              description = lib.mdDoc ''
                 LDAP attributes to search with.
               '';
             };
             userNameField = mkOption {
               type = types.str;
               default = "";
-              description = ''
+              description = lib.mdDoc ''
                 LDAP field which is used as the username on HedgeDoc.
-                By default <option>useridField</option> is used.
+                By default {option}`useridField` is used.
               '';
             };
             useridField = mkOption {
               type = types.str;
               example = "uid";
-              description = ''
+              description = lib.mdDoc ''
                 LDAP field which is a unique identifier for users on HedgeDoc.
               '';
             };
             tlsca = mkOption {
               type = types.str;
+              default = "/etc/ssl/certs/ca-certificates.crt";
               example = "server-cert.pem,root.pem";
-              description = ''
+              description = lib.mdDoc ''
                 Root CA for LDAP TLS in PEM format.
               '';
             };
           };
         });
         default = null;
-        description = "Configure the LDAP integration.";
+        description = lib.mdDoc "Configure the LDAP integration.";
       };
       saml = mkOption {
         type = types.nullOr (types.submodule {
@@ -870,21 +883,21 @@ in
             idpSsoUrl = mkOption {
               type = types.str;
               example = "https://idp.example.com/sso";
-              description = ''
+              description = lib.mdDoc ''
                 IdP authentication endpoint.
               '';
             };
             idpCert = mkOption {
               type = types.path;
               example = "/path/to/cert.pem";
-              description = ''
+              description = lib.mdDoc ''
                 Path to IdP certificate file in PEM format.
               '';
             };
             issuer = mkOption {
               type = types.str;
               default = "";
-              description = ''
+              description = lib.mdDoc ''
                 Optional identity of the service provider.
                 This defaults to the server URL.
               '';
@@ -892,7 +905,7 @@ in
             identifierFormat = mkOption {
               type = types.str;
               default = "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress";
-              description = ''
+              description = lib.mdDoc ''
                 Optional name identifier format.
               '';
             };
@@ -900,7 +913,7 @@ in
               type = types.str;
               default = "";
               example = "memberOf";
-              description = ''
+              description = lib.mdDoc ''
                 Optional attribute name for group list.
               '';
             };
@@ -908,7 +921,7 @@ in
               type = types.listOf types.str;
               default = [];
               example = [ "Temporary-staff" "External-users" ];
-              description = ''
+              description = lib.mdDoc ''
                 Excluded group names.
               '';
             };
@@ -916,7 +929,7 @@ in
               type = types.listOf types.str;
               default = [];
               example = [ "Hedgedoc-Users" ];
-              description = ''
+              description = lib.mdDoc ''
                 Required group names.
               '';
             };
@@ -924,7 +937,7 @@ in
               id = mkOption {
                 type = types.str;
                 default = "";
-                description = ''
+                description = lib.mdDoc ''
                   Attribute map for `id'.
                   Defaults to `NameID' of SAML response.
                 '';
@@ -932,7 +945,7 @@ in
               username = mkOption {
                 type = types.str;
                 default = "";
-                description = ''
+                description = lib.mdDoc ''
                   Attribute map for `username'.
                   Defaults to `NameID' of SAML response.
                 '';
@@ -940,10 +953,10 @@ in
               email = mkOption {
                 type = types.str;
                 default = "";
-                description = ''
-                  Attribute map for `email'.
-                  Defaults to `NameID' of SAML response if
-                  <option>identifierFormat</option> has
+                description = lib.mdDoc ''
+                  Attribute map for `email`.
+                  Defaults to `NameID` of SAML response if
+                  {option}`identifierFormat` has
                   the default value.
                 '';
               };
@@ -951,8 +964,18 @@ in
           };
         });
         default = null;
-        description = "Configure the SAML integration.";
+        description = lib.mdDoc "Configure the SAML integration.";
       };
+    }; in lib.mkOption {
+      type = lib.types.submodule {
+        freeformType = settingsFormat.type;
+        inherit options;
+      };
+      description = lib.mdDoc ''
+        HedgeDoc configuration, see
+        <https://docs.hedgedoc.org/configuration/>
+        for documentation.
+      '';
     };
 
     environmentFile = mkOption {
@@ -960,9 +983,7 @@ in
       default = null;
       example = "/var/lib/hedgedoc/hedgedoc.env";
       description = ''
-        Environment file as defined in <citerefentry>
-        <refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum>
-        </citerefentry>.
+        Environment file as defined in <citerefentry><refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
 
         Secrets may be passed to the service without adding them to the world-readable
         Nix store, by specifying placeholder variables as the option value in Nix and
@@ -989,16 +1010,17 @@ in
       type = types.package;
       default = pkgs.hedgedoc;
       defaultText = literalExpression "pkgs.hedgedoc";
-      description = ''
+      description = lib.mdDoc ''
         Package that provides HedgeDoc.
       '';
     };
+
   };
 
   config = mkIf cfg.enable {
     assertions = [
-      { assertion = cfg.configuration.db == {} -> (
-          cfg.configuration.dbURL != "" && cfg.configuration.dbURL != null
+      { assertion = cfg.settings.db == {} -> (
+          cfg.settings.dbURL != "" && cfg.settings.dbURL != null
         );
         message = "Database configuration for HedgeDoc missing."; }
     ];
@@ -1019,10 +1041,12 @@ in
       preStart = ''
         ${pkgs.envsubst}/bin/envsubst \
           -o ${cfg.workDir}/config.json \
-          -i ${prettyJSON cfg.configuration}
+          -i ${prettyJSON cfg.settings}
+        mkdir -p ${cfg.settings.uploadsPath}
       '';
       serviceConfig = {
         WorkingDirectory = cfg.workDir;
+        StateDirectory = [ cfg.workDir cfg.settings.uploadsPath ];
         ExecStart = "${cfg.package}/bin/hedgedoc";
         EnvironmentFile = mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
         Environment = [

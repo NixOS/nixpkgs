@@ -20,8 +20,6 @@
 , zlib
 }:
 
-assert stdenv ? glibc;
-
 stdenv.mkDerivation rec {
   pname = "yoshimi";
   version = "2.1.2.2";
@@ -60,7 +58,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  cmakeFlags = [ "-DFLTK_MATH_LIBRARY=${stdenv.glibc.out}/lib/libm.so" ];
+  cmakeFlags = [ "-DFLTK_MATH_LIBRARY=${stdenv.cc.libc}/lib/libm.so" ];
 
   meta = with lib; {
     description = "High quality software synthesizer based on ZynAddSubFX";

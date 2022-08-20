@@ -39,7 +39,7 @@ buildPythonPackage rec {
     websocket-client
   ];
 
-  passthru.extras-require = {
+  passthru.optional-dependencies = {
     async = [
       aiohttp
       websockets
@@ -55,8 +55,8 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ]
-  ++ passthru.extras-require.async
-  ++ passthru.extras-require.encrypted;
+  ++ passthru.optional-dependencies.async
+  ++ passthru.optional-dependencies.encrypted;
 
   pythonImportsCheck = [ "samsungtvws" ];
 

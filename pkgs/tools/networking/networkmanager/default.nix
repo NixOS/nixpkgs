@@ -34,6 +34,7 @@
 , iputils
 , kmod
 , jansson
+, elfutils
 , gtk-doc
 , libxslt
 , docbook_xsl
@@ -43,22 +44,24 @@
 , openconnect
 , curl
 , meson
+, mesonEmulatorHook
 , ninja
 , libpsl
 , mobile-broadband-provider-info
 , runtimeShell
+, buildPackages
 }:
 
 let
-  pythonForDocs = python3.withPackages (pkgs: with pkgs; [ pygobject3 ]);
+  pythonForDocs = python3.pythonForBuild.withPackages (pkgs: with pkgs; [ pygobject3 ]);
 in
 stdenv.mkDerivation rec {
   pname = "networkmanager";
-  version = "1.36.4";
+  version = "1.38.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/${lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
-    sha256 = "YTBOk33ZJkcdVnFb3t57q3zKyCc1bmfycA00MxfNPFk=";
+    sha256 = "sha256-hB9k1Bd2qt2SsVH0flD2K+igYRqQVv5r+BiBAk5qlsU=";
   };
 
   outputs = [ "out" "dev" "devdoc" "man" "doc" ];
@@ -102,7 +105,9 @@ stdenv.mkDerivation rec {
     "-Ddhcpcanon=no"
 
     # Miscellaneous
-    "-Ddocs=true"
+    # almost cross-compiles, however fails with
+    # ** (process:9234): WARNING **: Failed to load shared library '/nix/store/...-networkmanager-aarch64-unknown-linux-gnu-1.38.2/lib/libnm.so.0' referenced by the typelib: /nix/store/...-networkmanager-aarch64-unknown-linux-gnu-1.38.2/lib/libnm.so.0: cannot open shared object file: No such file or directory
+    "-Ddocs=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
     # We don't use firewalld in NixOS
     "-Dfirewalld_zone=false"
     "-Dtests=no"
@@ -122,6 +127,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    gobject-introspection
     systemd
     libselinux
     audit
@@ -134,12 +140,12 @@ stdenv.mkDerivation rec {
     mobile-broadband-provider-info
     bluez5
     dnsmasq
-    gobject-introspection
     modemmanager
     readline
     newt
     libsoup
     jansson
+    dbus # used to get directory paths with pkg-config during configuration
   ];
 
   propagatedBuildInputs = [ gnutls libgcrypt ];
@@ -151,7 +157,7 @@ stdenv.mkDerivation rec {
     pkg-config
     vala
     gobject-introspection
-    dbus
+    elfutils # used to find jansson soname
     # Docs
     gtk-doc
     libxslt
@@ -160,6 +166,8 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_42
     docbook_xml_dtd_43
     pythonForDocs
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   doCheck = false; # requires /sys, the net
@@ -167,6 +175,10 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs ./tools
     patchShebangs libnm/generate-setting-docs.py
+
+    # TODO: submit upstream
+    substituteInPlace meson.build \
+      --replace "'vala', req" "'vala', native: false, req"
   '';
 
   preBuild = ''
@@ -176,6 +188,11 @@ stdenv.mkDerivation rec {
     # We are using a symlink that will be overridden during installation.
     mkdir -p ${placeholder "out"}/lib
     ln -s $PWD/src/libnm-client-impl/libnm.so.0 ${placeholder "out"}/lib/libnm.so.0
+  '';
+
+  postFixup = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    cp -r ${buildPackages.networkmanager.devdoc} $devdoc
+    cp -r ${buildPackages.networkmanager.man} $man
   '';
 
   passthru = {

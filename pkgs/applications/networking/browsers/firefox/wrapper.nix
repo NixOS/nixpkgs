@@ -1,5 +1,5 @@
-{ stdenv, lib, makeDesktopItem, makeWrapper, lndir, config
-, replace, fetchurl, zip, unzip, jq, xdg-utils, writeText
+{ stdenv, lib, makeDesktopItem, makeWrapper, makeBinaryWrapper, lndir, config
+, fetchurl, zip, unzip, jq, xdg-utils, writeText
 
 ## various stuff that can be plugged in
 , ffmpeg, xorg, alsa-lib, libpulseaudio, libcanberra-gtk3, libglvnd, libnotify, opensc
@@ -13,6 +13,8 @@
 , mesa # firefox wants gbm for drm+dmabuf
 , cups
 , pciutils
+, sndio
+, libjack2
 }:
 
 ## configurability of the wrapper itself
@@ -53,6 +55,8 @@ let
       gssSupport = browser.gssSupport or false;
       alsaSupport = browser.alsaSupport or false;
       pipewireSupport = browser.pipewireSupport or false;
+      sndioSupport = browser.sndioSupport or false;
+      jackSupport = browser.jackSupport or false;
       # PCSC-Lite daemon (services.pcscd) also must be enabled for firefox to access smartcards
       smartcardSupport = cfg.smartcardSupport or false;
 
@@ -76,9 +80,13 @@ let
             (with xorg; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsa-lib zlib ])
             ++ lib.optional (config.pulseaudio or true) libpulseaudio
             ++ lib.optional alsaSupport alsa-lib
+            ++ lib.optional sndioSupport sndio
+            ++ lib.optional jackSupport libjack2
             ++ lib.optional smartcardSupport opensc
             ++ pkcs11Modules;
       gtk_modules = [ libcanberra-gtk3 ];
+
+      launcherName = "${applicationName}${nameSuffix}";
 
       #########################
       #                       #
@@ -91,12 +99,15 @@ let
 
       nameArray = builtins.map(a: a.name) (if usesNixExtensions then nixExtensions else []);
 
+      requiresSigning = browser ? MOZ_REQUIRE_SIGNING
+                     -> toString browser.MOZ_REQUIRE_SIGNING != "";
+
       # Check that every extension has a unqiue .name attribute
       # and an extid attribute
       extensions = if nameArray != (lib.unique nameArray) then
         throw "Firefox addon name needs to be unique"
-      else if ! (lib.hasSuffix "esr" browser.name) then
-        throw "Nix addons are only supported in Firefox ESR"
+      else if requiresSigning && !lib.hasSuffix "esr" browser.name then
+        throw "Nix addons are only supported without signature enforcement (eg. Firefox ESR)"
       else builtins.map (a:
         if ! (builtins.hasAttr "extid" a) then
         throw "nixExtensions has an invalid entry. Missing extid attribute. Please use fetchfirefoxaddon"
@@ -112,28 +123,27 @@ let
         lib.optionalAttrs usesNixExtensions {
           ExtensionSettings = {
             "*" = {
-                blocked_install_message = "You can't have manual extension mixed with nix extensions";
-                installation_mode = "blocked";
-              };
-
+              blocked_install_message = "You can't have manual extension mixed with nix extensions";
+              installation_mode = "blocked";
+            };
           } // lib.foldr (e: ret:
-              ret // {
-                "${e.extid}" = {
-                  installation_mode = "allowed";
-                };
-              }
-            ) {} extensions;
-          } // lib.optionalAttrs usesNixExtensions {
-            Extensions = {
-              Install = lib.foldr (e: ret:
-                ret ++ [ "${e.outPath}/${e.extid}.xpi" ]
-                ) [] extensions;
-            };
-          } // lib.optionalAttrs smartcardSupport {
-            SecurityDevices = {
-              "OpenSC PKCS#11 Module" = "onepin-opensc-pkcs11.so";
-            };
-          }
+            ret // {
+              "${e.extid}" = {
+                installation_mode = "allowed";
+              };
+            }
+          ) {} extensions;
+
+          Extensions = {
+            Install = lib.foldr (e: ret:
+              ret ++ [ "${e.outPath}/${e.extid}.xpi" ]
+            ) [] extensions;
+          };
+        } // lib.optionalAttrs smartcardSupport {
+          SecurityDevices = {
+            "OpenSC PKCS#11 Module" = "opensc-pkcs11.so";
+          };
+        }
         // extraPolicies;
       };
 
@@ -159,7 +169,7 @@ let
 
       desktopItem = makeDesktopItem {
         name = applicationName;
-        exec = "${applicationName}${nameSuffix} %U";
+        exec = "${launcherName} %U";
         inherit icon;
         desktopName = "${desktopName}${nameSuffix}${lib.optionalString forceWayland " (Wayland)"}";
         genericName = "Web Browser";
@@ -174,9 +184,23 @@ let
           "x-scheme-handler/ftp"
         ];
         startupWMClass = wmClass;
+        actions = {
+          new-window = {
+            name = "New Window";
+            exec = "${launcherName} --new-window %U";
+          };
+          new-private-window = {
+            name = "New Private Window";
+            exec = "${launcherName} --private-window %U";
+          };
+          profile-manager-window = {
+            name = "Profile Manager";
+            exec = "${launcherName} --ProfileManger";
+          };
+        };
       };
 
-      nativeBuildInputs = [ makeWrapper lndir replace jq ];
+      nativeBuildInputs = [ makeWrapper lndir jq ];
       buildInputs = [ browser.gtk3 ];
 
 
@@ -206,61 +230,62 @@ let
         done
 
         # fix links and absolute references
-        cd "${browser}"
 
         find . -type l -print0 | while read -d $'\0' l; do
-          target="$(readlink "$l" | replace-literal -es -- "${browser}" "$out")"
+          target="$(readlink "$l")"
+          target=''${target/#"${browser}"/"$out"}
           ln -sfT "$target" "$out/$l"
         done
 
-        # This will not patch binaries, only "text" files.
-        # Its there for the wrapper mostly.
         cd "$out"
-        replace-literal -esfR -- "${browser}" "$out"
 
         # create the wrapper
 
         executablePrefix="$out/bin"
         executablePath="$executablePrefix/${applicationName}"
+        oldWrapperArgs=()
 
-        if [ ! -x "$executablePath" ]
-        then
-            echo "cannot find executable file \`${browser}/bin/${applicationName}'"
-            exit 1
-        fi
-
-        if [ ! -L "$executablePath" ]
-        then
-          # Careful here, the file at executablePath may already be
-          # a wrapper. That is why we postfix it with -old instead
-          # of -wrapped.
-          oldExe="$executablePrefix"/".${applicationName}"-old
-          mv "$executablePath" "$oldExe"
-        else
+        if [[ -L $executablePath ]]; then
+          # Symbolic link: wrap the link's target.
           oldExe="$(readlink -v --canonicalize-existing "$executablePath")"
+          rm "$executablePath"
+        elif wrapperCmd=$(${makeBinaryWrapper.extractCmd} "$executablePath"); [[ $wrapperCmd ]]; then
+          # If the executable is a binary wrapper, we need to update its target to
+          # point to $out, but we can't just edit the binary in-place because of length
+          # issues. So we extract the command used to create the wrapper and add the
+          # arguments to our wrapper.
+          parseMakeCWrapperCall() {
+            shift # makeCWrapper
+            oldExe=$1; shift
+            oldWrapperArgs=("$@")
+          }
+          eval "parseMakeCWrapperCall ''${wrapperCmd//"${browser}"/"$out"}"
+          rm "$executablePath"
+        else
+          if read -rn2 shebang < "$executablePath" && [[ $shebang == '#!' ]]; then
+            # Shell wrapper: patch in place to point to $out.
+            sed -i "s@${browser}@$out@g" "$executablePath"
+          fi
+          # Suffix the executable with -old, because -wrapped might already be used by the old wrapper.
+          oldExe="$executablePrefix/.${applicationName}"-old
+          mv "$executablePath" "$oldExe"
         fi
 
-        if [ ! -x "${browser}/bin/${applicationName}" ]
-        then
-            echo "cannot find executable file \`${browser}/bin/${applicationName}'"
-            exit 1
-        fi
-
+        # make xdg-open overrideable at runtime
         makeWrapper "$oldExe" \
-          "$out/bin/${applicationName}${nameSuffix}" \
+          "''${executablePath}${nameSuffix}" \
             --prefix LD_LIBRARY_PATH ':' "$libs" \
             --suffix-each GTK_PATH ':' "$gtk_modules" \
-            --prefix PATH ':' "${xdg-utils}/bin" \
+            --suffix PATH ':' "${xdg-utils}/bin" \
             --suffix PATH ':' "$out/bin" \
-            --set MOZ_APP_LAUNCHER "${applicationName}${nameSuffix}" \
+            --set MOZ_APP_LAUNCHER "${launcherName}" \
             --set MOZ_SYSTEM_DIR "$out/lib/mozilla" \
             --set MOZ_LEGACY_PROFILES 1 \
             --set MOZ_ALLOW_DOWNGRADE 1 \
             --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
             --suffix XDG_DATA_DIRS : '${gnome.adwaita-icon-theme}/share' \
-            ${lib.optionalString forceWayland ''
-              --set MOZ_ENABLE_WAYLAND "1" \
-            ''}
+            ${lib.optionalString forceWayland "--set MOZ_ENABLE_WAYLAND 1"} \
+            "''${oldWrapperArgs[@]}"
         #############################
         #                           #
         #   END EXTRA PREF CHANGES  #

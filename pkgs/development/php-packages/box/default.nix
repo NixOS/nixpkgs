@@ -1,14 +1,14 @@
 { mkDerivation, fetchurl, makeWrapper, lib, php }:
 let
   pname = "box";
-  version = "2.7.5";
+  version = "3.16.0";
 in
 mkDerivation {
   inherit pname version;
 
   src = fetchurl {
-    url = "https://github.com/box-project/box2/releases/download/${version}/box-${version}.phar";
-    sha256 = "1zmxdadrv0i2l8cz7xb38gnfmfyljpsaz2nnkjzqzksdmncbgd18";
+    url = "https://github.com/box-project/box/releases/download/${version}/box.phar";
+    sha256 = "sha256-9QjijzCdfpWjGb3NXxPc+7GOuRy3psrJtpvHeZ14vfk=";
   };
 
   dontUnpack = true;
@@ -27,7 +27,7 @@ mkDerivation {
   meta = with lib; {
     description = "An application for building and managing Phars";
     license = licenses.mit;
-    homepage = "https://box-project.github.io/box2/";
+    homepage = "https://github.com/box-project/box";
     maintainers = with maintainers; [ jtojnar ] ++ teams.php.members;
   };
 }

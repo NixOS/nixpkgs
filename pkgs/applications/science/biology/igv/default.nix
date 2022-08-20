@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "igv";
-  version = "2.8.13";
+  version = "2.13.2";
   src = fetchzip {
-    url = "https://data.broadinstitute.org/igv/projects/downloads/2.8/IGV_${version}.zip";
-    sha256 = "0sab478jq96iw3fv0560hrrj8qbh40r8m4ncypdb7991j9haxl09";
+    url = "https://data.broadinstitute.org/igv/projects/downloads/${lib.versions.majorMinor version}/IGV_${version}.zip";
+    sha256 = "sha256-S0EoZAqjElrM/bp1p69jLuclXeUzSIuH8VsgCO6F04U=";
   };
 
   installPhase = ''

@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchFromGitHub, pytestCheckHook, pytest-cov, pytest-dependency, aspell-python, aspellDicts, chardet }:
+{ lib, buildPythonApplication, fetchFromGitHub, pytestCheckHook, pytest-dependency, aspell-python, aspellDicts, chardet }:
 
 buildPythonApplication rec {
   pname = "codespell";
@@ -11,7 +11,13 @@ buildPythonApplication rec {
     sha256 = "sha256-BhYVztSr2MalILEcOcvMl07CObYa73o3kW8S/idqAO8=";
   };
 
-  checkInputs = [ aspell-python chardet pytestCheckHook pytest-cov pytest-dependency ];
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--cov=codespell_lib" "" \
+      --replace "--cov-report=" ""
+  '';
+
+  checkInputs = [ aspell-python chardet pytestCheckHook pytest-dependency ];
 
   preCheck = ''
     export ASPELL_CONF="dict-dir ${aspellDicts.en}/lib/aspell"

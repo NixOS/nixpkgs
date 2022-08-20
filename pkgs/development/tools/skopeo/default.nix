@@ -15,13 +15,13 @@
 
 buildGoModule rec {
   pname = "skopeo";
-  version = "1.7.0";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "containers";
     repo = "skopeo";
-    sha256 = "sha256-sbe16IcHkhsiBznsMKtG/xYJYJfJS6aZ34++QhkGTTc=";
+    sha256 = "sha256-F2kIFBsLhjV8Ecof05Ii5TzneEUdl9dmCZ2NhOABdmc=";
   };
 
   outputs = [ "out" "man" ];
@@ -38,15 +38,14 @@ buildGoModule rec {
   buildPhase = ''
     runHook preBuild
     patchShebangs .
-    make bin/skopeo docs
+    make bin/skopeo completions docs
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    install -Dm755 bin/skopeo -t $out/bin
-    installManPage docs/*.[1-9]
-    installShellCompletion --bash completions/bash/skopeo
+    PREFIX=$out make install-binary install-completions
+    PREFIX=$man make install-docs
   '' + lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/skopeo \
       --prefix PATH : ${lib.makeBinPath [ fuse-overlayfs ]}

@@ -19,7 +19,9 @@ in
     ./evilwm.nix
     ./exwm.nix
     ./fluxbox.nix
-    ./fvwm.nix
+    ./fvwm2.nix
+    ./fvwm3.nix
+    ./hackedbox.nix
     ./herbstluftwm.nix
     ./i3.nix
     ./jwm.nix

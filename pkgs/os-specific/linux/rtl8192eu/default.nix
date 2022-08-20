@@ -6,13 +6,13 @@ let modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wi
 
 in stdenv.mkDerivation rec {
   pname = "rtl8192eu";
-  version = "${kernel.version}-4.4.1.20220313";
+  version = "${kernel.version}-4.4.1.20220614";
 
   src = fetchFromGitHub {
     owner = "Mange";
     repo = "rtl8192eu-linux-driver";
-    rev = "e0f967cea1d0037c730246c572f7fef000865ff7";
-    sha256 = "sha256-Wgp1MZ/z8AxbZPYsmR6t7Q4nsL0TFEqTEsrkkWPI6gI=";
+    rev = "6ba1f320963376f15ea216238c0b62ff3e71fa82";
+    sha256 = "sha256-c5swRxSjWT1tCcR7tfFKdAdVVmAEYgMZuOwUxGYYESI=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://github.com/Mange/rtl8192eu-linux-driver";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    broken = stdenv.hostPlatform.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64 || kernel.kernelAtLeast "5.18";
     maintainers = with maintainers; [ troydm ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, lib, python3, fetchFromGitHub, which, findutils, coreutils
+{ stdenv, lib, python3, fetchFromGitHub, which, coreutils
 , perl, installShellFiles
 , doCheck ? true
 }: stdenv.mkDerivation rec {
@@ -52,7 +52,6 @@
     python3
     (with python3.pkgs; [ beautifulsoup4 markdown ])
     which
-    findutils
     installShellFiles
   ];
 

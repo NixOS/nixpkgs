@@ -6,11 +6,11 @@
 let
 self = stdenv.mkDerivation rec {
   pname = "mysql";
-  version = "8.0.28";
+  version = "8.0.30";
 
   src = fetchurl {
     url = "https://dev.mysql.com/get/Downloads/MySQL-${self.mysqlVersion}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-2Gk2nrbeTyuy2407Mbe3OWjjVuX/xDVPS5ZlirHkiyI=";
+    sha256 = "sha256-yYjVxrqaVmkqbNbpgTRltfyTaO1LRh35cFmi/BYMi4Q=";
   };
 
   nativeBuildInputs = [ bison cmake pkg-config ]
@@ -20,8 +20,6 @@ self = stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace cmake/libutils.cmake --replace /usr/bin/libtool libtool
     substituteInPlace cmake/os/Darwin.cmake --replace /usr/bin/libtool libtool
-    substituteInPlace cmake/fido2.cmake \
-    --replace ''$\{MY_PKG_CONFIG_EXECUTABLE\} "${pkg-config}/bin/pkg-config"
   '';
 
   buildInputs = [
@@ -36,7 +34,6 @@ self = stdenv.mkDerivation rec {
   outputs = [ "out" "static" ];
 
   cmakeFlags = [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF" # To run libmysql/libmysql_api_test during build.
     "-DFORCE_UNSUPPORTED_COMPILER=1" # To configure on Darwin.
     "-DWITH_ROUTER=OFF" # It may be packaged separately.
     "-DWITH_SYSTEM_LIBS=ON"

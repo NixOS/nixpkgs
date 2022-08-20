@@ -7,7 +7,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "adguardhome";
-  version = "0.107.6";
+  version = "0.107.9";
   src = sources.${system} or (throw "Source for ${pname} is not available for ${system}");
 
   installPhase = ''
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     description = "Network-wide ads & trackers blocking DNS server";
     platforms = builtins.attrNames sources;
     maintainers = with maintainers; [ numkem iagoq ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3Only;
   };
 }

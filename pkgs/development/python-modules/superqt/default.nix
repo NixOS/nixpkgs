@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "superqt";
-  version = "0.3.1";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "napari";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-DPjJxOgybNvZ3YvYHr48fmx59Puck61Dzm2G4M9qKo4=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-Ns3AFUL0BReIwTHfrlfXr/2GLtLvT7hfSjjh+r7btcY=";
   };
   format = "pyproject";
   nativeBuildInputs = [ setuptools-scm ];

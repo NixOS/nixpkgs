@@ -1,19 +1,25 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, makeBinaryWrapper, ffmpeg }:
 
 buildGoModule rec {
   pname = "ytarchive";
-  version = "unstable-2022-02-16";
+  version = "unstable-2022-05-28";
 
   src = fetchFromGitHub {
     owner = "Kethsar";
     repo = "ytarchive";
-    rev = "66a1ca003de7302c99bda943500257d5fd374199";
-    sha256 = "sha256-6eLNyInqXB+LWbZ18DvXbTdpRpiCDMGwJaiyQfZZ4xM=";
+    rev = "8d48052f432ec6f78c6aed326e8a1db31ee8e706";
+    sha256 = "sha256-IsG0YPVBzsbHLNs1m/AruDmm0n7vwN9Fj1KMOoQJQ+c=";
   };
 
   vendorSha256 = "sha256-r9fDFSCDItQ7YSj9aTY1LXRrFE9T3XD0X36ywCfu0R8=";
 
-  ldflags = [ "-s" "-w" ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
+
+  ldflags = [ "-s" "-w" "-X main.Commit=-${src.rev}" ];
+
+  postInstall = ''
+    wrapProgram $out/bin/ytarchive --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/Kethsar/ytarchive";

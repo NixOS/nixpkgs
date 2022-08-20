@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "matrix-conduit";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitLab {
     owner = "famedly";
     repo = "conduit";
     rev = "v${version}";
-    sha256 = "sha256-jCBvenwXPgYms5Tbu16q/F8UNpvaw0Shao9kLEZLbHM=";
+    sha256 = "sha256-QTXDIvGz12ZxsWmPiMiJ8mBUWoJ2wnaeTZdXcwBh35o=";
   };
 
-  cargoSha256 = "sha256-fpjzc2HiWP6nV8YZOwxsIOhy4ht/tQqcvCkcLMIFUaQ=";
+  cargoSha256 = "sha256-vE44I8lQ5VAfZB4WKLRv/xudoZJaFJGTT/UuumTePBU=";
 
   nativeBuildInputs = with pkgs; [
     rustPlatform.bindgenHook
@@ -25,6 +25,7 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = "--bin conduit";
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A Matrix homeserver written in Rust";
     homepage = "https://conduit.rs/";
     license = licenses.asl20;

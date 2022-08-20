@@ -56,6 +56,7 @@ stdenv.mkDerivation (rec {
 
   meta = {
     description = "Open Source, Distributed, RESTful Search Engine";
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = if enableUnfree then licenses.elastic else licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ apeschar basvandijk ];

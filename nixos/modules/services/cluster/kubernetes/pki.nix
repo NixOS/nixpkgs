@@ -44,13 +44,13 @@ in
     enable = mkEnableOption "easyCert issuer service";
 
     certs = mkOption {
-      description = "List of certificate specs to feed to cert generator.";
+      description = lib.mdDoc "List of certificate specs to feed to cert generator.";
       default = {};
       type = attrs;
     };
 
     genCfsslCACert = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Whether to automatically generate cfssl CA certificate and key,
         if they don't exist.
       '';
@@ -59,7 +59,7 @@ in
     };
 
     genCfsslAPICerts = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Whether to automatically generate cfssl API webserver TLS cert and key,
         if they don't exist.
       '';
@@ -68,7 +68,7 @@ in
     };
 
     cfsslAPIExtraSANs = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Extra x509 Subject Alternative Names to be added to the cfssl API webserver TLS cert.
       '';
       default = [];
@@ -77,7 +77,7 @@ in
     };
 
     genCfsslAPIToken = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Whether to automatically generate cfssl API-token secret,
         if they doesn't exist.
       '';
@@ -86,13 +86,13 @@ in
     };
 
     pkiTrustOnBootstrap = mkOption {
-      description = "Whether to always trust remote cfssl server upon initial PKI bootstrap.";
+      description = lib.mdDoc "Whether to always trust remote cfssl server upon initial PKI bootstrap.";
       default = true;
       type = bool;
     };
 
     caCertPathPrefix = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Path-prefrix for the CA-certificate to be used for cfssl signing.
         Suffixes ".pem" and "-key.pem" will be automatically appended for
         the public and private keys respectively.
@@ -103,7 +103,7 @@ in
     };
 
     caSpec = mkOption {
-      description = "Certificate specification for the auto-generated CAcert.";
+      description = lib.mdDoc "Certificate specification for the auto-generated CAcert.";
       default = {
         CN = "kubernetes-cluster-ca";
         O = "NixOS";

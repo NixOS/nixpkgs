@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "keycloak";
-  version = "17.0.1";
+  version = "18.0.0";
 
   src = fetchzip {
     url = "https://github.com/keycloak/keycloak/releases/download/${version}/keycloak-${version}.zip";
-    sha256 = "sha256-z1LfTUoK+v4oQxdyIQruFhl5O333zirSrkPoTFgVfmI=";
+    sha256 = "0fxf9m50hpjplj077z2zjp0qibixz5y4lbc8159cnxbd4gzpkaaf";
   };
 
   nativeBuildInputs = [ makeWrapper jre ];
@@ -57,8 +57,8 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    substituteInPlace $out/bin/kc.sh --replace '-Dkc.home.dir=$DIRNAME/../' '-Dkc.home.dir=$KC_HOME_DIR'
-    substituteInPlace $out/bin/kc.sh --replace '-Djboss.server.config.dir=$DIRNAME/../conf' '-Djboss.server.config.dir=$KC_CONF_DIR'
+    substituteInPlace $out/bin/kc.sh --replace ${lib.escapeShellArg "-Dkc.home.dir='$DIRNAME'/../"} '-Dkc.home.dir=$KC_HOME_DIR'
+    substituteInPlace $out/bin/kc.sh --replace ${lib.escapeShellArg "-Djboss.server.config.dir='$DIRNAME'/../conf"} '-Djboss.server.config.dir=$KC_CONF_DIR'
 
     for script in $(find $out/bin -type f -executable); do
       wrapProgram "$script" --set JAVA_HOME ${jre} --prefix PATH : ${jre}/bin
@@ -74,6 +74,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.keycloak.org/";
     description = "Identity and access management for modern applications and services";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     platforms = jre.meta.platforms;
     maintainers = with maintainers; [ ngerstle talyz ];

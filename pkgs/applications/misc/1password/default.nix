@@ -12,12 +12,12 @@ let
     if extension == "zip" then fetchzip args else fetchurl args;
 
   pname = "1password-cli";
-  version = "2.1.0";
+  version = "2.6.1";
   sources = rec {
-    aarch64-linux = fetch "linux_arm64" "sha256-DTYWqhawyAQBIxMUksZheyN8WSVPyhCghZC8orxKsBk=" "zip";
-    i686-linux = fetch "linux_386" "sha256-JBjiKxbJnFILSOVnOUIcY3GpbOT2UOJlasTSPRyYz4I=" "zip";
-    x86_64-linux = fetch "linux_amd64" "sha256-PfVOvUF8Rls29VzfIj1U6/VFv1H6lj2K3Dz6DWmh2fs=" "zip";
-    aarch64-darwin = fetch "apple_universal" "sha256-Cn3/+Dvk5hW9rvxu4I9ghHSS1yWSAeQq3gx+6dvFiIk=" "pkg";
+    aarch64-linux = fetch "linux_arm64" "sha256-udKcojp7CUz5mXIFeLiXKJ7X1A/fejoeLUc+2zlnlKo=" "zip";
+    i686-linux = fetch "linux_386" "sha256-gJpwZrtgzC+fD8dqc2hgfsAiYmVkAY3xSmIQnsC5naw=" "zip";
+    x86_64-linux = fetch "linux_amd64" "sha256-X+VyoXg7HRq70b9qRhk2N/UvBlhIkvCWM6kadaGDhsU=" "zip";
+    aarch64-darwin = fetch "apple_universal" "sha256-Z8MKp9fQBsvg1nQ0QSrnMV0Bxy6LmnwHb5WIrhGjxv8=" "pkg";
     x86_64-darwin = aarch64-darwin;
   };
   platforms = builtins.attrNames sources;
@@ -48,6 +48,7 @@ stdenv.mkDerivation {
   '';
 
   postInstall = ''
+    HOME=$TMPDIR
     installShellCompletion --cmd ${mainProgram} \
       --bash <($out/bin/${mainProgram} completion bash) \
       --fish <($out/bin/${mainProgram} completion fish) \
@@ -67,6 +68,7 @@ stdenv.mkDerivation {
     homepage = "https://developer.1password.com/docs/cli/";
     downloadPage = "https://app-updates.agilebits.com/product_history/CLI2";
     maintainers = with maintainers; [ joelburget marsam ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     inherit mainProgram platforms;
   };

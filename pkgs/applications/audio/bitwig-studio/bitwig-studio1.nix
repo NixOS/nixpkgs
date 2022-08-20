@@ -27,10 +27,6 @@ stdenv.mkDerivation rec {
     libxkbfile pixman xcbutil xcbutilwm zlib
   ];
 
-  binPath = lib.makeBinPath [
-    xdg-utils zenity ffmpeg
-  ];
-
   installPhase = ''
     mkdir -p $out
     cp -r opt/bitwig-studio $out/libexec
@@ -77,7 +73,8 @@ stdenv.mkDerivation rec {
       -not -path '*/resources/*' | \
     while IFS= read -r f ; do
       wrapProgram $f \
-        --prefix PATH : "${binPath}" \
+        --suffix PATH : "${lib.makeBinPath [ ffmpeg zenity ]}" \
+        --prefix PATH : "${lib.makeBinPath [ xdg-utils ]}" \
         "''${gappsWrapperArgs[@]}" \
         --set LD_PRELOAD "${libxkbcommon.out}/lib/libxkbcommon.so" || true
     done

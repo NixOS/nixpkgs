@@ -20,12 +20,12 @@
 }:
 
 let
-  defaultVersion = "2022.01";
+  defaultVersion = "2022.07";
   defaultSrc = fetchurl {
     url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    hash = "sha256-gbRUMifbIowD+KG/XdvIE7C7j2VVzkYGTvchpvxoBBM=";
+    hash = "sha256-krCOtJwk2hTBrb9wpxro83zFPutCMOhZrYtnM9E9z14=";
   };
-  buildUBoot = {
+  buildUBoot = lib.makeOverridable ({
     version ? null
   , src ? null
   , filesToInstall
@@ -114,7 +114,7 @@ let
       license = licenses.gpl2;
       maintainers = with maintainers; [ bartsch dezgeg samueldr lopsided98 ];
     } // extraMeta;
-  } // removeAttrs args [ "extraMeta" ]);
+  } // removeAttrs args [ "extraMeta" ]));
 in {
   inherit buildUBoot;
 
@@ -362,6 +362,13 @@ in {
 
   ubootQemuRiscv64Smode = buildUBoot {
     defconfig = "qemu-riscv64_smode_defconfig";
+    extraPatches = [
+      # https://patchwork.ozlabs.org/project/uboot/patch/20220128134713.2322800-1-alexandre.ghiti@canonical.com/
+      (fetchpatch {
+        url = "https://patchwork.ozlabs.org/series/283391/mbox/";
+        sha256 = "sha256-V0jDpx6O4bFzuaOQejdrRnLiWb5LBTx47T0TZqNtMXk=";
+      })
+    ];
     extraMeta.platforms = ["riscv64-linux"];
     filesToInstall = ["u-boot.bin"];
   };

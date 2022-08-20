@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
     description = "A language independent, scalable, open extension to CG";
     homepage = "https://fastcgi-archives.github.io/"; # Formerly http://www.fastcgi.com/
     license = "FastCGI see LICENSE.TERMS";
+    mainProgram = "cgi-fcgi";
     platforms = platforms.all;
   };
 }

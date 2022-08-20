@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, kernel }:
+{ lib, stdenv, fetchFromGitHub, kernel }:
 
 stdenv.mkDerivation rec {
   pname = "digimend";
-  version = "unstable-2019-06-18";
+  version = "10";
 
   src = fetchFromGitHub {
     owner = "digimend";
     repo = "digimend-kernel-drivers";
-    rev = "8b228a755e44106c11f9baaadb30ce668eede5d4";
-    sha256 = "1l54j85540386a8aypqka7p5hy1b63cwmpsscv9rmmf10f78v8mm";
+    rev = "v${version}";
+    sha256 = "0lifd6cx6aa6hcms4zn4hlla3alra08r0svj5x1l8nlsv0ydnl6i";
   };
 
   postPatch = ''
@@ -16,14 +16,8 @@ stdenv.mkDerivation rec {
     sed 's/depmod /true /' -i Makefile
   '';
 
-  patches = [
-    # Fix build on Linux kernel >= 5.4
-    # https://github.com/DIGImend/digimend-kernel-drivers/pull/331
-    (fetchpatch {
-      url = "https://github.com/DIGImend/digimend-kernel-drivers/commit/fb8a2eb6a9198bb35aaccb81e22dd5ebe36124d1.patch";
-      sha256 = "1j7l5hsk59gccydpf7n6xx1ki4rm6aka7k879a7ah5jn8p1ylgw9";
-    })
-  ];
+  # Fix build on Linux kernel >= 5.18
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=implicit-fallthrough" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 

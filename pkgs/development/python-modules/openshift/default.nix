@@ -44,8 +44,8 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    # requires docker
-    "test/functional"
+    # requires kubeconfig
+    "test/integration"
   ];
 
   meta = with lib; {

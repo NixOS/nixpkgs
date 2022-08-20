@@ -9,14 +9,14 @@ let
     options = {
       name = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Name of this overlay
         '';
       };
 
       dtsFile = mkOption {
         type = types.nullOr types.path;
-        description = ''
+        description = lib.mdDoc ''
           Path to .dts overlay file, overlay is applied to
           each .dtb file matching "compatible" of the overlay.
         '';
@@ -27,7 +27,7 @@ let
       dtsText = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Literal DTS contents, overlay is applied to
           each .dtb file matching "compatible" of the overlay.
         '';
@@ -36,14 +36,11 @@ let
           /plugin/;
           / {
                   compatible = "raspberrypi";
-                  fragment@0 {
-                          target-path = "/soc";
-                          __overlay__ {
-                                  pps {
-                                          compatible = "pps-gpio";
-                                          status = "okay";
-                                  };
-                          };
+          };
+          &{/soc} {
+                  pps {
+                          compatible = "pps-gpio";
+                          status = "okay";
                   };
           };
         '';
@@ -52,7 +49,7 @@ let
       dtboFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Path to .dtbo compiled overlay file.
         '';
       };
@@ -88,13 +85,14 @@ let
 
   # Compile single Device Tree overlay source
   # file (.dts) into its compiled variant (.dtbo)
-  compileDTS = name: f: pkgs.callPackage({ dtc }: pkgs.stdenv.mkDerivation {
+  compileDTS = name: f: pkgs.callPackage({ stdenv, dtc }: stdenv.mkDerivation {
     name = "${name}-dtbo";
 
     nativeBuildInputs = [ dtc ];
 
     buildCommand = ''
-      dtc -I dts ${f} -O dtb -@ -o $out
+      $CC -E -nostdinc -I${getDev cfg.kernelPackage}/lib/modules/${cfg.kernelPackage.modDirVersion}/source/scripts/dtc/include-prefixes -undef -D__DTS__ -x assembler-with-cpp ${f} | \
+        dtc -I dts -O dtb -@ -o $out
     '';
   }) {};
 
@@ -117,7 +115,7 @@ in
         enable = mkOption {
           default = pkgs.stdenv.hostPlatform.linux-kernel.DTB or false;
           type = types.bool;
-          description = ''
+          description = lib.mdDoc ''
             Build device tree files. These are used to describe the
             non-discoverable hardware of a system.
           '';
@@ -128,7 +126,7 @@ in
           defaultText = literalExpression "config.boot.kernelPackages.kernel";
           example = literalExpression "pkgs.linux_latest";
           type = types.path;
-          description = ''
+          description = lib.mdDoc ''
             Kernel package containing the base device-tree (.dtb) to boot. Uses
             device trees bundled with the Linux kernel by default.
           '';
@@ -138,7 +136,7 @@ in
           default = null;
           example = "some-dtb.dtb";
           type = types.nullOr types.str;
-          description = ''
+          description = lib.mdDoc ''
             The name of an explicit dtb to be loaded, relative to the dtb base.
             Useful in extlinux scenarios if the bootloader doesn't pick the
             right .dtb file from FDTDIR.
@@ -149,7 +147,7 @@ in
           type = types.nullOr types.str;
           default = null;
           example = "*rpi*.dtb";
-          description = ''
+          description = lib.mdDoc ''
             Only include .dtb files matching glob expression.
           '';
         };
@@ -169,7 +167,7 @@ in
             name = baseNameOf path;
             dtboFile = path;
           }) overlayType);
-          description = ''
+          description = lib.mdDoc ''
             List of overlays to apply to base device-tree (.dtb) files.
           '';
         };

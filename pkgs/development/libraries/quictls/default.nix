@@ -7,17 +7,18 @@
 # This will cause c_rehash to refer to perl via the environment, but otherwise
 # will produce a perfectly functional openssl binary and library.
 , withPerl ? stdenv.hostPlatform == stdenv.buildPlatform
+, removeReferencesTo
 }:
 
 stdenv.mkDerivation rec {
   pname = "quictls";
-  version = "3.0.2+quick_unstable-2022-03.15";
+  version = "3.0.5+quick_unstable-2022-07.05";
 
   src = fetchFromGitHub {
     owner = "quictls";
     repo = "openssl";
-    rev = "7f2ab56a2b842b8e6fefc7b9d20eb5ff9c6ef151";
-    sha256 = "sha256-We4ow0mGJFXqYM4PqbGn8qY5IYH/MtNaefrSaJreoRA=";
+    rev = "75e940831d0570d6b020cfebf128ae500f424867";
+    sha256 = "sha256-1HBGKafcCbM0RZWLvyl3vpSfGBsAcGDgjz1Nm/qclWM=";
   };
 
   patches = [
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
     !(stdenv.hostPlatform.useLLVM or false) &&
     stdenv.cc.isGNU;
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ perl removeReferencesTo ];
   buildInputs = lib.optional withCryptodev cryptodev
     # perl is included to allow the interpreter path fixup hook to set the
     # correct interpreter in c_rehash.
@@ -68,6 +69,12 @@ stdenv.mkDerivation rec {
       x86_64-linux = "./Configure linux-x86_64";
       x86_64-solaris = "./Configure solaris64-x86_64-gcc";
       riscv64-linux = "./Configure linux64-riscv64";
+      mips64el-linux =
+        if stdenv.hostPlatform.isMips64n64
+        then "./Configure linux64-mips64"
+        else if stdenv.hostPlatform.isMips64n32
+        then "./Configure linux-mips64"
+        else throw "unsupported ABI for ${stdenv.hostPlatform.system}";
     }.${stdenv.hostPlatform.system} or (
       if stdenv.hostPlatform == stdenv.buildPlatform
         then "./config"
@@ -105,7 +112,11 @@ stdenv.mkDerivation rec {
     # OpenSSL needs a specific `no-shared` configure flag.
     # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
     # for a comprehensive list of configuration options.
-    ++ lib.optional static "no-shared";
+    ++ lib.optional static "no-shared"
+    # This introduces a reference to the CTLOG_FILE which is undesired when
+    # trying to build binaries statically.
+    ++ lib.optional static "no-ct"
+    ;
 
   makeFlags = [
     "MANDIR=$(man)/share/man"
@@ -118,13 +129,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  postInstall = lib.optionalString (!static) ''
+  postInstall = (if static then ''
+    # OPENSSLDIR has a reference to self
+    ${removeReferencesTo}/bin/remove-references-to -t $out $out/lib/*.a
+  '' else ''
     # If we're building dynamic libraries, then don't install static
     # libraries.
     if [ -n "$(echo $out/lib/*.so $out/lib/*.dylib $out/lib/*.dll)" ]; then
         rm "$out/lib/"*.a
     fi
-  '' + lib.optionalString (!stdenv.hostPlatform.isWindows)
+  '') + lib.optionalString (!stdenv.hostPlatform.isWindows)
     # Fix bin/c_rehash's perl interpreter line
     #
     # - openssl 1_0_2: embeds a reference to buildPackages.perl
@@ -156,7 +170,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://quictls.github.io/openssl/";
+    homepage = "https://quictls.github.io";
     description = "TLS/SSL and crypto library with QUIC APIs";
     license = licenses.openssl;
     platforms = platforms.all;

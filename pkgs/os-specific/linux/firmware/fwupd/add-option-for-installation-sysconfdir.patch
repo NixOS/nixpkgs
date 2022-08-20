@@ -1,66 +1,66 @@
 diff --git a/data/meson.build b/data/meson.build
-index 2ae29ce5..342cac92 100644
+index d8494020d..7c896fa0d 100644
 --- a/data/meson.build
 +++ b/data/meson.build
 @@ -26,7 +26,7 @@ endif
  
  if build_standalone
    install_data(['daemon.conf'],
--    install_dir : join_paths(sysconfdir, 'fwupd')
-+    install_dir : join_paths(sysconfdir_install, 'fwupd')
+-    install_dir: join_paths(sysconfdir, 'fwupd')
++    install_dir: join_paths(sysconfdir_install, 'fwupd')
    )
-   install_data(['power.quirk', 'cfi.quirk'],
-     install_dir: join_paths(datadir, 'fwupd', 'quirks.d'))
+   plugin_quirks += join_paths(meson.current_source_dir(), 'power.quirk')
+   plugin_quirks += join_paths(meson.current_source_dir(), 'cfi.quirk')
 diff --git a/data/pki/meson.build b/data/pki/meson.build
-index 2a7d0f24..091981f7 100644
+index 3649fecea..c3462744b 100644
 --- a/data/pki/meson.build
 +++ b/data/pki/meson.build
 @@ -12,13 +12,13 @@ install_data([
      'GPG-KEY-Linux-Foundation-Firmware',
      'GPG-KEY-Linux-Vendor-Firmware-Service',
    ],
--  install_dir : join_paths(sysconfdir, 'pki', 'fwupd')
-+  install_dir : join_paths(sysconfdir_install, 'pki', 'fwupd')
+-  install_dir: join_paths(sysconfdir, 'pki', 'fwupd')
++  install_dir: join_paths(sysconfdir_install, 'pki', 'fwupd')
  )
  install_data([
      'GPG-KEY-Linux-Foundation-Metadata',
      'GPG-KEY-Linux-Vendor-Firmware-Service',
    ],
--  install_dir : join_paths(sysconfdir, 'pki', 'fwupd-metadata')
-+  install_dir : join_paths(sysconfdir_install, 'pki', 'fwupd-metadata')
+-  install_dir: join_paths(sysconfdir, 'pki', 'fwupd-metadata')
++  install_dir: join_paths(sysconfdir_install, 'pki', 'fwupd-metadata')
  )
  endif
  
-@@ -26,11 +26,11 @@ if supported_pkcs7 == '1'
+@@ -26,11 +26,11 @@ if supported_pkcs7
  install_data([
      'LVFS-CA.pem',
    ],
--  install_dir : join_paths(sysconfdir, 'pki', 'fwupd')
-+  install_dir : join_paths(sysconfdir_install, 'pki', 'fwupd')
+-  install_dir: join_paths(sysconfdir, 'pki', 'fwupd')
++  install_dir: join_paths(sysconfdir_install, 'pki', 'fwupd')
  )
  install_data([
      'LVFS-CA.pem',
    ],
--  install_dir : join_paths(sysconfdir, 'pki', 'fwupd-metadata')
-+  install_dir : join_paths(sysconfdir_install, 'pki', 'fwupd-metadata')
+-  install_dir: join_paths(sysconfdir, 'pki', 'fwupd-metadata')
++  install_dir: join_paths(sysconfdir_install, 'pki', 'fwupd-metadata')
  )
  endif
 diff --git a/data/remotes.d/meson.build b/data/remotes.d/meson.build
-index 02d8777b..2c89d593 100644
+index 1d1698a7e..5469d00a6 100644
 --- a/data/remotes.d/meson.build
 +++ b/data/remotes.d/meson.build
 @@ -2,7 +2,7 @@ if build_standalone and get_option('lvfs') != 'false'
    install_data([
        'lvfs-testing.conf',
      ],
--    install_dir : join_paths(sysconfdir, 'fwupd', 'remotes.d')
-+    install_dir : join_paths(sysconfdir_install, 'fwupd', 'remotes.d')
+-    install_dir: join_paths(sysconfdir, 'fwupd', 'remotes.d')
++    install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d')
    )
    con3 = configuration_data()
    if get_option('lvfs') == 'disabled'
 @@ -15,7 +15,7 @@ if build_standalone and get_option('lvfs') != 'false'
-     output : 'lvfs.conf',
-     configuration : con3,
+     output: 'lvfs.conf',
+     configuration: con3,
      install: true,
 -    install_dir: join_paths(sysconfdir, 'fwupd', 'remotes.d'),
 +    install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
@@ -68,25 +68,25 @@ index 02d8777b..2c89d593 100644
    i18n.merge_file(
      input: 'lvfs.metainfo.xml',
 @@ -49,12 +49,12 @@ configure_file(
-   output : 'vendor.conf',
-   configuration : con2,
+   output: 'vendor.conf',
+   configuration: con2,
    install: true,
 -  install_dir: join_paths(sysconfdir, 'fwupd', 'remotes.d'),
 +  install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
  )
  configure_file(
-   input : 'vendor-directory.conf',
-   output : 'vendor-directory.conf',
-   configuration : con2,
+   input: 'vendor-directory.conf',
+   output: 'vendor-directory.conf',
+   configuration: con2,
    install: true,
 -  install_dir: join_paths(sysconfdir, 'fwupd', 'remotes.d'),
 +  install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
  )
 diff --git a/meson.build b/meson.build
-index 394f40fa..7b602c73 100644
+index e6b717078..f8a7a7455 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -187,6 +187,12 @@ endif
+@@ -195,6 +195,12 @@ endif
  mandir = join_paths(prefix, get_option('mandir'))
  localedir = join_paths(prefix, get_option('localedir'))
  
@@ -97,87 +97,87 @@ index 394f40fa..7b602c73 100644
 +endif
 +
  diffcmd = find_program('diff')
- gio = dependency('gio-2.0', version : '>= 2.45.8')
- giounix = dependency('gio-unix-2.0', version : '>= 2.45.8', required: false)
+ gio = dependency('gio-2.0', version: '>= 2.45.8')
+ giounix = dependency('gio-unix-2.0', version: '>= 2.45.8', required: false)
 diff --git a/meson_options.txt b/meson_options.txt
-index c1b483cb..047dbdd8 100644
+index 06d242371..d9e517fc0 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
 @@ -1,3 +1,4 @@
 +option('sysconfdir_install', type: 'string', value: '', description: 'sysconfdir to use during installation')
  option('build', type : 'combo', choices : ['all', 'standalone', 'library'], value : 'all', description : 'build type')
- option('consolekit', type : 'boolean', value : true, description : 'enable ConsoleKit support')
+ option('consolekit', type : 'feature', description : 'ConsoleKit support', deprecated: {'true': 'enabled', 'false': 'disabled'})
  option('static_analysis', type : 'boolean', value : false, description : 'enable GCC static analysis support')
 diff --git a/plugins/dell-esrt/meson.build b/plugins/dell-esrt/meson.build
-index e9f12879..a0126dbb 100644
+index 67bd3b9d9..ad04a91b6 100644
 --- a/plugins/dell-esrt/meson.build
 +++ b/plugins/dell-esrt/meson.build
 @@ -38,6 +38,6 @@ configure_file(
-   output : 'dell-esrt.conf',
-   configuration : con2,
+   output: 'dell-esrt.conf',
+   configuration: con2,
    install: true,
 -  install_dir: join_paths(sysconfdir, 'fwupd', 'remotes.d'),
 +  install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
  )
  endif
 diff --git a/plugins/msr/meson.build b/plugins/msr/meson.build
-index 3ea47456..40dbd116 100644
+index 13f03ccd4..9235ebe33 100644
 --- a/plugins/msr/meson.build
 +++ b/plugins/msr/meson.build
-@@ -12,7 +12,7 @@ install_data(['fwupd-msr.conf'],
+@@ -10,7 +10,7 @@ install_data(['fwupd-msr.conf'],
  endif
  
  install_data(['msr.conf'],
--  install_dir:  join_paths(sysconfdir, 'fwupd')
-+  install_dir:  join_paths(sysconfdir_install, 'fwupd')
+-  install_dir: join_paths(sysconfdir, 'fwupd')
++  install_dir: join_paths(sysconfdir_install, 'fwupd')
  )
  shared_module('fu_plugin_msr',
    fu_hash,
 diff --git a/plugins/redfish/meson.build b/plugins/redfish/meson.build
-index 4a0a8664..7d9ba77d 100644
+index 95606e478..e5355e520 100644
 --- a/plugins/redfish/meson.build
 +++ b/plugins/redfish/meson.build
-@@ -53,7 +53,7 @@ shared_module('fu_plugin_redfish',
+@@ -43,7 +43,7 @@ shared_module('fu_plugin_redfish',
  )
  
  install_data(['redfish.conf'],
--  install_dir:  join_paths(sysconfdir, 'fwupd'),
-+  install_dir:  join_paths(sysconfdir_install, 'fwupd'),
+-  install_dir: join_paths(sysconfdir, 'fwupd'),
++  install_dir: join_paths(sysconfdir_install, 'fwupd'),
  )
  
  if get_option('tests')
 diff --git a/plugins/thunderbolt/meson.build b/plugins/thunderbolt/meson.build
-index 1ba9562f..c074f770 100644
+index 5f8ffbf90..9ba323e75 100644
 --- a/plugins/thunderbolt/meson.build
 +++ b/plugins/thunderbolt/meson.build
-@@ -37,7 +37,7 @@ fu_plugin_thunderbolt = shared_module('fu_plugin_thunderbolt',
+@@ -32,7 +32,7 @@ fu_plugin_thunderbolt = shared_module('fu_plugin_thunderbolt',
  )
  
  install_data(['thunderbolt.conf'],
--  install_dir:  join_paths(sysconfdir, 'fwupd')
-+  install_dir:  join_paths(sysconfdir_install, 'fwupd')
+-  install_dir: join_paths(sysconfdir, 'fwupd')
++  install_dir: join_paths(sysconfdir_install, 'fwupd')
  )
  # we use functions from 2.52 in the tests
- if get_option('tests') and umockdev.found() and gio.version().version_compare('>= 2.52')
+ if get_option('tests') and run_sanitize_unsafe_tests and umockdev.found() and gio.version().version_compare('>= 2.52')
 diff --git a/plugins/uefi-capsule/meson.build b/plugins/uefi-capsule/meson.build
-index 04cbd51a..9a8c43de 100644
+index ef38dc03e..78ff65e1d 100644
 --- a/plugins/uefi-capsule/meson.build
 +++ b/plugins/uefi-capsule/meson.build
-@@ -21,7 +21,7 @@ if host_machine.system() == 'linux'
-     output : '35_fwupd',
-     configuration : con2,
+@@ -20,7 +20,7 @@ if host_machine.system() == 'linux'
+     output: '35_fwupd',
+     configuration: con2,
      install: true,
 -    install_dir: join_paths(sysconfdir, 'grub.d')
 +    install_dir: join_paths(sysconfdir_install, 'grub.d')
    )
  elif host_machine.system() == 'freebsd'
    backend_srcs += 'fu-uefi-backend-freebsd.c'
-@@ -114,7 +114,7 @@ if get_option('compat_cli') and get_option('man')
+@@ -110,7 +110,7 @@ if get_option('compat_cli') and get_option('man')
  endif
  
  install_data(['uefi_capsule.conf'],
--  install_dir:  join_paths(sysconfdir, 'fwupd')
-+  install_dir:  join_paths(sysconfdir_install, 'fwupd')
+-  install_dir: join_paths(sysconfdir, 'fwupd')
++  install_dir: join_paths(sysconfdir_install, 'fwupd')
  )
  
  # add all the .po files as inputs to watch

@@ -1,78 +1,84 @@
 diff --git a/setuptools/_distutils/cygwinccompiler.py b/setuptools/_distutils/cygwinccompiler.py
-index c5c86d8f..b879e447 100644
+index 445e2e51..2fdbdcca 100644
 --- a/setuptools/_distutils/cygwinccompiler.py
 +++ b/setuptools/_distutils/cygwinccompiler.py
-@@ -124,14 +124,19 @@ class CygwinCCompiler(UnixCCompiler):
+@@ -131,14 +131,19 @@ class CygwinCCompiler(UnixCCompiler):
          self.cxx = os.environ.get('CXX', 'g++')
  
          self.linker_dll = self.cc
 +        self.linker_dll_cxx = self.cxx
          shared_option = "-shared"
  
-         self.set_executables(compiler='%s -mcygwin -O -Wall' % self.cc,
-                              compiler_so='%s -mcygwin -mdll -O -Wall' % self.cc,
-                              compiler_cxx='%s -mcygwin -O -Wall' % self.cxx,
-+                             compiler_so_cxx='%s -mcygwin -mdll -O -Wall' % self.cxx,
-                              linker_exe='%s -mcygwin' % self.cc,
-                              linker_so=('%s -mcygwin %s' %
--                                        (self.linker_dll, shared_option)))
-+                                        (self.linker_dll, shared_option)),
-+                             linker_exe_cxx='%s -mcygwin' % self.cxx,
-+                             linker_so_cxx=('%s -mcygwin %s' %
-+                                            (self.linker_dll_cxx, shared_option)))
+         self.set_executables(
+             compiler='%s -mcygwin -O -Wall' % self.cc,
+             compiler_so='%s -mcygwin -mdll -O -Wall' % self.cc,
+             compiler_cxx='%s -mcygwin -O -Wall' % self.cxx,
++            compiler_so_cxx='%s -mcygwin -mdll -O -Wall' % self.cxx,
+             linker_exe='%s -mcygwin' % self.cc,
+             linker_so=('%s -mcygwin %s' % (self.linker_dll, shared_option)),
++            linker_exe_cxx='%s -mcygwin' % self.cxx,
++            linker_so_cxx=('%s -mcygwin %s' %
++                (self.linker_dll_cxx, shared_option)),
+         )
  
          # Include the appropriate MSVC runtime library if Python was built
-         # with MSVC 7.0 or later.
-@@ -162,8 +167,12 @@ class CygwinCCompiler(UnixCCompiler):
+@@ -170,9 +175,12 @@ class CygwinCCompiler(UnixCCompiler):
                  raise CompileError(msg)
-         else: # for other files use the C-compiler
+         else:  # for other files use the C-compiler
              try:
--                self.spawn(self.compiler_so + cc_args + [src, '-o', obj] +
--                           extra_postargs)
+-                self.spawn(
+-                    self.compiler_so + cc_args + [src, '-o', obj] + extra_postargs
+-                )
 +                if self.detect_language(src) == 'c++':
 +                    self.spawn(self.compiler_so_cxx + cc_args + [src, '-o', obj] +
-+                               extra_postargs)
++                                   extra_postargs)
 +                else:
-+                    self.spawn(self.compiler_so + cc_args + [src, '-o', obj] +
-+                               extra_postargs)
++                    self.spawn(
++                        self.compiler_so + cc_args + [src, '-o', obj] + extra_postargs)
              except DistutilsExecError as msg:
                  raise CompileError(msg)
  
-@@ -279,9 +288,13 @@ class Mingw32CCompiler(CygwinCCompiler):
-         self.set_executables(compiler='%s -O -Wall' % self.cc,
-                              compiler_so='%s -mdll -O -Wall' % self.cc,
-                              compiler_cxx='%s -O -Wall' % self.cxx,
-+                             compiler_so_cxx='%s -mdll -O -Wall' % self.cxx,
-                              linker_exe='%s' % self.cc,
-                              linker_so='%s %s'
--                                        % (self.linker_dll, shared_option))
-+                                        % (self.linker_dll, shared_option),
-+                             linker_exe_cxx='%s' % self.cxx,
-+                             linker_so_cxx='%s %s'
-+                                        % (self.linker_dll_cxx, shared_option))
+@@ -323,9 +331,12 @@ class Mingw32CCompiler(CygwinCCompiler):
+         self.set_executables(
+             compiler='%s -O -Wall' % self.cc,
+             compiler_so='%s -mdll -O -Wall' % self.cc,
++            compiler_so_cxx='%s -mdll -O -Wall' % self.cxx,
+             compiler_cxx='%s -O -Wall' % self.cxx,
+             linker_exe='%s' % self.cc,
+             linker_so='%s %s' % (self.linker_dll, shared_option),
++            linker_exe_cxx='%s' % self.cxx,
++            linker_so_cxx='%s %s' % (self.linker_dll_cxx, shared_option)
+         )
  
          # Maybe we should also append -mthreads, but then the finished
-         # dlls need another dll (mingwm10.dll see Mingw32 docs)
 diff --git a/setuptools/_distutils/sysconfig.py b/setuptools/_distutils/sysconfig.py
-index 9fad3835..889e2595 100644
+index e41d51ee..f7ded14b 100644
 --- a/setuptools/_distutils/sysconfig.py
 +++ b/setuptools/_distutils/sysconfig.py
-@@ -216,9 +216,11 @@ def customize_compiler(compiler):
-                 _osx_support.customize_compiler(_config_vars)
-                 _config_vars['CUSTOMIZED_OSX_COMPILER'] = 'True'
+@@ -280,6 +280,7 @@ def customize_compiler(compiler):
+             cflags,
+             ccshared,
+             ldshared,
++            ldcxxshared,
+             shlib_suffix,
+             ar,
+             ar_flags,
+@@ -289,11 +290,14 @@ def customize_compiler(compiler):
+             'CFLAGS',
+             'CCSHARED',
+             'LDSHARED',
++            'LDCXXSHARED',
+             'SHLIB_SUFFIX',
+             'AR',
+             'ARFLAGS',
+         )
  
--        (cc, cxx, cflags, ccshared, ldshared, shlib_suffix, ar, ar_flags) = \
--            get_config_vars('CC', 'CXX', 'CFLAGS',
--                            'CCSHARED', 'LDSHARED', 'SHLIB_SUFFIX', 'AR', 'ARFLAGS')
-+        (cc, cxx, cflags, ccshared, ldshared, ldcxxshared, shlib_suffix, ar, ar_flags) = \
-+            get_config_vars('CC', 'CXX', 'CFLAGS', 'CCSHARED', 'LDSHARED', 'LDCXXSHARED',
-+                            'SHLIB_SUFFIX', 'AR', 'ARFLAGS')
-+
 +        cxxflags = cflags
- 
++
          if 'CC' in os.environ:
              newcc = os.environ['CC']
-@@ -232,19 +234,27 @@ def customize_compiler(compiler):
+             if 'LDSHARED' not in os.environ and ldshared.startswith(cc):
+@@ -305,19 +309,27 @@ def customize_compiler(compiler):
              cxx = os.environ['CXX']
          if 'LDSHARED' in os.environ:
              ldshared = os.environ['LDSHARED']
@@ -81,7 +87,7 @@ index 9fad3835..889e2595 100644
          if 'CPP' in os.environ:
              cpp = os.environ['CPP']
          else:
-             cpp = cc + " -E"           # not always
+             cpp = cc + " -E"  # not always
          if 'LDFLAGS' in os.environ:
              ldshared = ldshared + ' ' + os.environ['LDFLAGS']
 +            ldcxxshared = ldcxxshared + ' ' + os.environ['LDFLAGS']
@@ -101,7 +107,7 @@ index 9fad3835..889e2595 100644
          if 'AR' in os.environ:
              ar = os.environ['AR']
          if 'ARFLAGS' in os.environ:
-@@ -253,13 +263,17 @@ def customize_compiler(compiler):
+@@ -326,13 +338,17 @@ def customize_compiler(compiler):
              archiver = ar + ' ' + ar_flags
  
          cc_cmd = cc + ' ' + cflags
@@ -114,61 +120,46 @@ index 9fad3835..889e2595 100644
 +            compiler_cxx=cxx_cmd,
 +            compiler_so_cxx=cxx_cmd + ' ' + ccshared,
              linker_so=ldshared,
-             linker_exe=cc,
 +            linker_so_cxx=ldcxxshared,
+             linker_exe=cc,
 +            linker_exe_cxx=cxx,
-             archiver=archiver)
+             archiver=archiver,
+         )
  
-         if 'RANLIB' in os.environ and compiler.executables.get('ranlib', None):
 diff --git a/setuptools/_distutils/unixccompiler.py b/setuptools/_distutils/unixccompiler.py
-index 715408f5..6125a1eb 100644
+index 4be74fdf..66f95aef 100644
 --- a/setuptools/_distutils/unixccompiler.py
 +++ b/setuptools/_distutils/unixccompiler.py
-@@ -110,14 +110,17 @@ class UnixCCompiler(CCompiler):
-     # are pretty generic; they will probably have to be set by an outsider
-     # (eg. using information discovered by the sysconfig about building
-     # Python extensions).
--    executables = {'preprocessor' : None,
--                   'compiler'     : ["cc"],
--                   'compiler_so'  : ["cc"],
--                   'compiler_cxx' : ["cc"],
--                   'linker_so'    : ["cc", "-shared"],
--                   'linker_exe'   : ["cc"],
--                   'archiver'     : ["ar", "-cr"],
--                   'ranlib'       : None,
-+    executables = {'preprocessor'    : None,
-+                   'compiler'        : ["cc"],
-+                   'compiler_so'     : ["cc"],
-+                   'compiler_cxx'    : ["c++"],
-+                   'compiler_so_cxx' : ["c++"],
-+                   'linker_so'       : ["cc", "-shared"],
-+                   'linker_exe'      : ["cc"],
-+                   'linker_so_cxx'   : ["c++", "-shared"],
-+                   'linker_exe_cxx'  : ["c++"],
-+                   'archiver'        : ["ar", "-cr"],
-+                   'ranlib'          : None,
-                   }
+@@ -112,9 +112,12 @@ class UnixCCompiler(CCompiler):
+         'preprocessor': None,
+         'compiler': ["cc"],
+         'compiler_so': ["cc"],
+-        'compiler_cxx': ["cc"],
++        'compiler_cxx': ["c++"],
++        'compiler_so_cxx': ["c++"],
+         'linker_so': ["cc", "-shared"],
++        'linker_so_cxx': ["c++", "-shared"],
+         'linker_exe': ["cc"],
++        'linker_exe_cxx': ["c++", "-shared"],
+         'archiver': ["ar", "-cr"],
+         'ranlib': None,
+     }
+@@ -174,8 +177,13 @@ class UnixCCompiler(CCompiler):
  
-     if sys.platform[:6] == "darwin":
-@@ -169,9 +172,15 @@ class UnixCCompiler(CCompiler):
      def _compile(self, obj, src, ext, cc_args, extra_postargs, pp_opts):
-         compiler_so = compiler_fixup(
-             self.compiler_so, cc_args + extra_postargs)
-+        compiler_so_cxx = compiler_fixup(
-+            self.compiler_so_cxx, cc_args + extra_postargs)
+         compiler_so = compiler_fixup(self.compiler_so, cc_args + extra_postargs)
++        compiler_so_cxx = compiler_fixup(self.compiler_so_cxx, cc_args + extra_postargs)
          try:
--            self.spawn(compiler_so + cc_args + [src, '-o', obj] +
--                       extra_postargs)
+-            self.spawn(compiler_so + cc_args + [src, '-o', obj] + extra_postargs)
 +            if self.detect_language(src) == 'c++':
 +                self.spawn(compiler_so_cxx + cc_args + [ src, '-o', obj] +
-+                           extra_postargs)
++                               extra_postargs)
 +            else:
-+                self.spawn(compiler_so + cc_args + [src, '-o', obj] +
-+                           extra_postargs)
++                self.spawn(compiler_so + cc_args + [src, '-o', obj] + extra_postargs)
          except DistutilsExecError as msg:
              raise CompileError(msg)
  
-@@ -233,7 +242,8 @@ class UnixCCompiler(CCompiler):
+@@ -243,7 +251,8 @@ class UnixCCompiler(CCompiler):
                  # building an executable or linker_so (with shared options)
                  # when building a shared library.
                  building_exe = target_desc == CCompiler.EXECUTABLE

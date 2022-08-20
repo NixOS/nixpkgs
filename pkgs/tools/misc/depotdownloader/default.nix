@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , fetchFromGitHub
 , buildDotnetModule
 }:
@@ -18,6 +19,7 @@ buildDotnetModule rec {
   nugetDeps = ./deps.nix;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Steam depot downloader utilizing the SteamKit2 library";
     license = licenses.gpl2Only;
     maintainers = [ maintainers.babbaj ];

@@ -127,5 +127,6 @@ in stdenv.mkDerivation rec {
     description = "Web browser";
     platforms = [ "x86_64-linux" ];
     license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

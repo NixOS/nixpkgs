@@ -19,7 +19,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to run the AMule daemon. You need to manually run "amuled --ec-config" to configure the service for the first time.
         '';
       };
@@ -30,7 +30,7 @@ in
         defaultText = literalExpression ''
           "/home/''${config.${opt.user}}/"
         '';
-        description = ''
+        description = lib.mdDoc ''
           The directory holding configuration, incoming and temporary files.
         '';
       };
@@ -38,7 +38,7 @@ in
       user = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           The user the AMule daemon should run as.
         '';
       };

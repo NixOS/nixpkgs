@@ -1,20 +1,21 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, numpy
 , astropy
 , astropy-helpers
+, buildPythonPackage
+, cython
+, fetchpatch
+, fetchPypi
 , matplotlib
-, reproject
+, numpy
+, pillow
 , pyavm
 , pyregion
-, pillow
-, scikitimage
-, cython
-, shapely
-, pytest
 , pytest-astropy
+, pytestCheckHook
+, pythonOlder
+, reproject
+, scikitimage
+, shapely
 }:
 
 buildPythonPackage rec {
@@ -22,36 +23,48 @@ buildPythonPackage rec {
   version = "2.1.0";
   format = "pyproject";
 
+  disabled = pythonOlder "3.6";
+
   src = fetchPypi {
     pname = "aplpy";
     inherit version;
-    sha256 = "sha256-KCdmBwQWt7IfHsjq7pWlbSISEpfQZDyt+SQSTDaUCV4=";
+    hash = "sha256-KCdmBwQWt7IfHsjq7pWlbSISEpfQZDyt+SQSTDaUCV4=";
   };
 
+  nativeBuildInputs = [
+    astropy-helpers
+  ];
+
   propagatedBuildInputs = [
-    numpy
-    cython
     astropy
+    cython
     matplotlib
-    reproject
+    numpy
+    pillow
     pyavm
     pyregion
-    pillow
+    reproject
     scikitimage
     shapely
   ];
 
-  nativeBuildInputs = [ astropy-helpers ];
-  checkInputs = [ pytest pytest-astropy ];
+  checkInputs = [
+    pytest-astropy
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-    OPENMP_EXPECTED=0 pytest aplpy
+  preCheck = ''
+    OPENMP_EXPECTED=0
   '';
+
+  pythonImportsCheck = [
+    "aplpy"
+  ];
 
   meta = with lib; {
     description = "The Astronomical Plotting Library in Python";
     homepage = "http://aplpy.github.io";
     license = licenses.mit;
-    maintainers = [ maintainers.smaret ];
+    maintainers = with maintainers; [ smaret ];
   };
 }

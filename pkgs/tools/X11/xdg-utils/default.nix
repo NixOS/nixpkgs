@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   };
 
   # just needed when built from git
-  buildInputs = [ libxslt docbook_xml_dtd_412 docbook_xsl xmlto w3m ];
+  nativeBuildInputs = [ libxslt docbook_xml_dtd_412 docbook_xsl xmlto w3m ];
 
   postInstall = lib.optionalString mimiSupport ''
     cp ${mimisrc}/xdg-open $out/bin/xdg-open

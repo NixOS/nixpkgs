@@ -11,10 +11,9 @@ let
     auth_unix_rw = "polkit"
     ${cfg.extraConfig}
   '';
-  ovmfFilePrefix = if pkgs.stdenv.isAarch64 then "AAVMF" else "OVMF";
   qemuConfigFile = pkgs.writeText "qemu.conf" ''
     ${optionalString cfg.qemu.ovmf.enable ''
-      nvram = [ "/run/libvirt/nix-ovmf/${ovmfFilePrefix}_CODE.fd:/run/libvirt/nix-ovmf/${ovmfFilePrefix}_VARS.fd" ]
+      nvram = [ "/run/libvirt/nix-ovmf/AAVMF_CODE.fd:/run/libvirt/nix-ovmf/AAVMF_VARS.fd", "/run/libvirt/nix-ovmf/OVMF_CODE.fd:/run/libvirt/nix-ovmf/OVMF_VARS.fd" ]
     ''}
     ${optionalString (!cfg.qemu.runAsRoot) ''
       user = "qemu-libvirtd"
@@ -30,19 +29,26 @@ let
       enable = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Allows libvirtd to take advantage of OVMF when creating new
           QEMU VMs with UEFI boot.
         '';
       };
 
+      # mkRemovedOptionModule does not work in submodules, do it manually
       package = mkOption {
-        type = types.package;
-        default = pkgs.OVMF;
-        defaultText = literalExpression "pkgs.OVMF";
-        example = literalExpression "pkgs.OVMFFull";
-        description = ''
-          OVMF package to use.
+        type = types.nullOr types.package;
+        default = null;
+        internal = true;
+      };
+
+      packages = mkOption {
+        type = types.listOf types.package;
+        default = [ pkgs.OVMF.fd ];
+        defaultText = literalExpression "[ pkgs.OVMF.fd ]";
+        example = literalExpression "[ pkgs.OVMFFull.fd pkgs.pkgsCross.aarch64-multiplatform.OVMF.fd ]";
+        description = lib.mdDoc ''
+          List of OVMF packages to use. Each listed package must contain files names FV/OVMF_CODE.fd and FV/OVMF_VARS.fd or FV/AAVMF_CODE.fd and FV/AAVMF_VARS.fd
         '';
       };
     };
@@ -53,7 +59,7 @@ let
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Allows libvirtd to use swtpm to create an emulated TPM.
         '';
       };
@@ -62,7 +68,7 @@ let
         type = types.package;
         default = pkgs.swtpm;
         defaultText = literalExpression "pkgs.swtpm";
-        description = ''
+        description = lib.mdDoc ''
           swtpm package to use.
         '';
       };
@@ -75,7 +81,7 @@ let
         type = types.package;
         default = pkgs.qemu;
         defaultText = literalExpression "pkgs.qemu";
-        description = ''
+        description = lib.mdDoc ''
           Qemu package to use with libvirt.
           `pkgs.qemu` can emulate alien architectures (e.g. aarch64 on x86)
           `pkgs.qemu_kvm` saves disk space allowing to emulate only host architectures.
@@ -85,7 +91,7 @@ let
       runAsRoot = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           If true,  libvirtd runs qemu as root.
           If false, libvirtd runs qemu as unprivileged user qemu-libvirtd.
           Changing this option to false may cause file permission issues
@@ -99,7 +105,7 @@ let
         default = ''
           namespaces = []
         '';
-        description = ''
+        description = lib.mdDoc ''
           Contents written to the qemu configuration file, qemu.conf.
           Make sure to include a proper namespace configuration when
           supplying custom configuration.
@@ -109,7 +115,7 @@ let
       ovmf = mkOption {
         type = ovmfModule;
         default = { };
-        description = ''
+        description = lib.mdDoc ''
           QEMU's OVMF options.
         '';
       };
@@ -117,7 +123,7 @@ let
       swtpm = mkOption {
         type = swtpmModule;
         default = { };
-        description = ''
+        description = lib.mdDoc ''
           QEMU's swtpm options.
         '';
       };
@@ -141,9 +147,9 @@ in
     (mkRenamedOptionModule
       [ "virtualisation" "libvirtd" "qemuOvmf" ]
       [ "virtualisation" "libvirtd" "qemu" "ovmf" "enable" ])
-    (mkRenamedOptionModule
+    (mkRemovedOptionModule
       [ "virtualisation" "libvirtd" "qemuOvmfPackage" ]
-      [ "virtualisation" "libvirtd" "qemu" "ovmf" "package" ])
+      "If this option was set to `foo`, set the option `virtualisation.libvirtd.qemu.ovmf.packages' to `[foo.fd]` instead.")
     (mkRenamedOptionModule
       [ "virtualisation" "libvirtd" "qemuSwtpm" ]
       [ "virtualisation" "libvirtd" "qemu" "swtpm" "enable" ])
@@ -156,11 +162,11 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         This option enables libvirtd, a daemon that manages
         virtual machines. Users in the "libvirtd" group can interact with
         the daemon (e.g. to start or stop VMs) using the
-        <command>virsh</command> command line tool, among others.
+        {command}`virsh` command line tool, among others.
       '';
     };
 
@@ -168,7 +174,7 @@ in
       type = types.package;
       default = pkgs.libvirt;
       defaultText = literalExpression "pkgs.libvirt";
-      description = ''
+      description = lib.mdDoc ''
         libvirt package to use.
       '';
     };
@@ -176,7 +182,7 @@ in
     extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = ''
+      description = lib.mdDoc ''
         Extra contents appended to the libvirtd configuration file,
         libvirtd.conf.
       '';
@@ -186,7 +192,7 @@ in
       type = types.listOf types.str;
       default = [ ];
       example = [ "--verbose" ];
-      description = ''
+      description = lib.mdDoc ''
         Extra command line arguments passed to libvirtd on startup.
       '';
     };
@@ -194,7 +200,7 @@ in
     onBoot = mkOption {
       type = types.enum [ "start" "ignore" ];
       default = "start";
-      description = ''
+      description = lib.mdDoc ''
         Specifies the action to be done to / on the guests when the host boots.
         The "start" option starts all guests that were running prior to shutdown
         regardless of their autostart settings. The "ignore" option will not
@@ -206,7 +212,7 @@ in
     onShutdown = mkOption {
       type = types.enum [ "shutdown" "suspend" ];
       default = "suspend";
-      description = ''
+      description = lib.mdDoc ''
         When shutting down / restarting the host what method should
         be used to gracefully halt the guests. Setting to "shutdown"
         will cause an ACPI shutdown of each guest. "suspend" will
@@ -217,7 +223,7 @@ in
     allowedBridges = mkOption {
       type = types.listOf types.str;
       default = [ "virbr0" ];
-      description = ''
+      description = lib.mdDoc ''
         List of bridge devices that can be used by qemu:///session
       '';
     };
@@ -225,7 +231,7 @@ in
     qemu = mkOption {
       type = qemuModule;
       default = { };
-      description = ''
+      description = lib.mdDoc ''
         QEMU related options.
       '';
     };
@@ -238,12 +244,15 @@ in
 
     assertions = [
       {
-        assertion = config.security.polkit.enable;
-        message = "The libvirtd module currently requires Polkit to be enabled ('security.polkit.enable = true').";
+        assertion = config.virtualisation.libvirtd.qemu.ovmf.package == null;
+        message = ''
+        The option virtualisation.libvirtd.qemu.ovmf.package is superseded by virtualisation.libvirtd.qemu.ovmf.packages.
+        If this option was set to `foo`, set the option `virtualisation.libvirtd.qemu.ovmf.packages' to `[foo.fd]` instead.
+        '';
       }
       {
-        assertion = builtins.elem "fd" cfg.qemu.ovmf.package.outputs;
-        message = "The option 'virtualisation.libvirtd.qemuOvmfPackage' needs a package that has an 'fd' output.";
+        assertion = config.security.polkit.enable;
+        message = "The libvirtd module currently requires Polkit to be enabled ('security.polkit.enable = true').";
       }
     ];
 
@@ -284,7 +293,7 @@ in
         # Copy default libvirt network config .xml files to /var/lib
         # Files modified by the user will not be overwritten
         for i in $(cd ${cfg.package}/var/lib && echo \
-            libvirt/qemu/networks/*.xml libvirt/qemu/networks/autostart/*.xml \
+            libvirt/qemu/networks/*.xml \
             libvirt/nwfilter/*.xml );
         do
             mkdir -p /var/lib/$(dirname $i) -m 755
@@ -303,10 +312,18 @@ in
           ln -s --force ${cfg.qemu.package}/$helper /run/${dirName}/nix-helpers/
         done
 
-        ${optionalString cfg.qemu.ovmf.enable ''
-          ln -s --force ${cfg.qemu.ovmf.package.fd}/FV/${ovmfFilePrefix}_CODE.fd /run/${dirName}/nix-ovmf/
-          ln -s --force ${cfg.qemu.ovmf.package.fd}/FV/${ovmfFilePrefix}_VARS.fd /run/${dirName}/nix-ovmf/
-        ''}
+        ${optionalString cfg.qemu.ovmf.enable (let
+          ovmfpackage = pkgs.buildEnv {
+            name = "qemu-ovmf";
+            paths = cfg.qemu.ovmf.packages;
+          };
+        in
+          ''
+          ln -s --force ${ovmfpackage}/FV/AAVMF_CODE.fd /run/${dirName}/nix-ovmf/
+          ln -s --force ${ovmfpackage}/FV/OVMF_CODE.fd /run/${dirName}/nix-ovmf/
+          ln -s --force ${ovmfpackage}/FV/AAVMF_VARS.fd /run/${dirName}/nix-ovmf/
+          ln -s --force ${ovmfpackage}/FV/OVMF_VARS.fd /run/${dirName}/nix-ovmf/
+        '')}
       '';
 
       serviceConfig = {

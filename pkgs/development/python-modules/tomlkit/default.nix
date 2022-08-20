@@ -1,24 +1,32 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, enum34, functools32, typing ? null
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy27
+, enum34
+, functools32, typing ? null
+, pytestCheckHook
+, pyaml
 }:
 
 buildPythonPackage rec {
   pname = "tomlkit";
-  version = "0.10.1";
+  version = "0.11.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-PFF4lOre9T6QctND035EJ7jwtiAKcLfJoZsuvR9TuVE=";
+    sha256 = "sha256-YZAfgf9AF5URGc0NHtm3rzHIIdaEXIxHdYe73NXlhU4=";
   };
 
   propagatedBuildInputs =
     lib.optionals isPy27 [ enum34 functools32 ]
     ++ lib.optional isPy27 typing;
 
-  # The Pypi tarball doesn't include tests, and the GitHub source isn't
-  # buildable until we bootstrap poetry, see
-  # https://github.com/NixOS/nixpkgs/pull/53599#discussion_r245855665
-  doCheck = false;
+  checkInputs = [
+    pyaml
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "tomlkit" ];
 
   meta = with lib; {
     homepage = "https://github.com/sdispater/tomlkit";

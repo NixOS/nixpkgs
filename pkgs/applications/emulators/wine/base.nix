@@ -6,7 +6,7 @@
   patches,
   vkd3dArches,
   moltenvk,
-  buildScript ? null, configureFlags ? []
+  buildScript ? null, configureFlags ? [], mainProgram ? "wine"
 }:
 
 with import ./util.nix { inherit lib; };
@@ -191,9 +191,13 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
     inherit version;
     homepage = "https://www.winehq.org/";
     license = with lib.licenses; [ lgpl21Plus ];
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryNativeCode  # mono, gecko
+    ];
     description = if supportFlags.waylandSupport then "An Open Source implementation of the Windows API on top of OpenGL and Unix (with experimental Wayland support)" else "An Open Source implementation of the Windows API on top of X, OpenGL, and Unix";
     platforms = if supportFlags.waylandSupport then (lib.remove "x86_64-darwin" prevPlatforms) else prevPlatforms;
     maintainers = with lib.maintainers; [ avnik raskin bendlas jmc-figueira ];
-    mainProgram = "wine";
+    inherit mainProgram;
   };
 })

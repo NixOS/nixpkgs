@@ -1,38 +1,48 @@
-{ lib, stdenv, fetchFromGitHub, openssl, sqlite }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, openssl, sqlite }:
 
 stdenv.mkDerivation rec {
   pname = "signalbackup-tools";
-  version = "20220425";
+  version = "20220810";
 
   src = fetchFromGitHub {
     owner = "bepaald";
     repo = pname;
     rev = version;
-    sha256 = "sha256-FWW4rVaoShT55ZWN/siFHoTTNcarnfTa2h/J2GWxLW8=";
+    sha256 = "sha256-z/RAvNUss9rNuBQvxjJQl66ZMrlxvmS9at8L/vSG0XU=";
   };
 
-  # Remove when Apple SDK is >= 10.13
-  patches = lib.optional (stdenv.system == "x86_64-darwin") ./apple-sdk-missing-utimensat.patch;
+  # TODO: Remove when updating to next release.
+  patches = [
+    (fetchpatch {
+      name = "fix-platform-checks.patch";
+      url = "https://github.com/bepaald/signalbackup-tools/compare/20220810..a81baf25b6ba63da7d30d9a239e5b4bbc8d1ab4f.patch";
+      sha256 = "sha256-i7fuPBil8zB+V3wHHdcbmP79OZoTfG2ZpXPQ3m7X06c=";
+    })
+  ];
+
+  postPatch = ''
+    patchShebangs BUILDSCRIPT_MULTIPROC.bash44
+  '';
 
   buildInputs = [ openssl sqlite ];
-  buildFlags = [
-    "-Wall"
-    "-Wextra"
-    "-Wshadow"
-    "-Wold-style-cast"
-    "-Woverloaded-virtual"
-    "-pedantic"
-    "-std=c++2a"
-    "-O3"
-    "-march=native"
-  ];
+
+  # Manually define `CXXFLAGS` and `LDFLAGS` on Darwin since the build scripts includes flags
+  # that don't work on Darwin.
   buildPhase = ''
-    $CXX $buildFlags */*.cc *.cc -lcrypto -lsqlite3 -o signalbackup-tools
+    runHook preBuild
+  '' + lib.optionalString stdenv.isDarwin ''
+    export CXXFLAGS="-Wall -Wextra -Wshadow -Wold-style-cast -Woverloaded-virtual -pedantic -O3"
+    export LDFLAGS="-Wall -Wextra -O3"
+  '' + ''
+    ./BUILDSCRIPT_MULTIPROC.bash44
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     cp signalbackup-tools $out/bin/
+    runHook postInstall
   '';
 
   meta = with lib; {

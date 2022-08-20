@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Java Foreign Function Interface ";
     homepage = "https://github.com/jnr/jffi";
     platforms = platforms.unix;

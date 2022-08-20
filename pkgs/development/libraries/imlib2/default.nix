@@ -2,9 +2,22 @@
 # Image file formats
 , libjpeg, libtiff, giflib, libpng, libwebp
 # imlib2 can load images from ID3 tags.
-, libid3tag
+, libid3tag, librsvg, libheif
 , freetype , bzip2, pkg-config
 , x11Support ? true, xlibsWrapper ? null
+# Compilation error on Darwin with librsvg. For more information see:
+# https://github.com/NixOS/nixpkgs/pull/166452#issuecomment-1090725613
+, svgSupport ? !stdenv.isDarwin
+, heifSupport ? !stdenv.isDarwin
+
+# for passthru.tests
+, libcaca
+, diffoscopeMinimal
+, feh
+, icewm
+, openbox
+, fluxbox
+, enlightenment
 }:
 
 let
@@ -12,17 +25,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "imlib2";
-  version = "1.7.5";
+  version = "1.9.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/enlightenment/${pname}-${version}.tar.xz";
-    hash = "sha256-RY2DAKp6bUzjU1GDi7pdn9+wiES9WxU8WTjs/kP/Ngo=";
+    hash = "sha256-SiJAOL//vl1NJQxE4F9O5a4k3P74OVsWd8cVxY92TUM=";
   };
 
   buildInputs = [
     libjpeg libtiff giflib libpng libwebp
     bzip2 freetype libid3tag
-  ] ++ optional x11Support xlibsWrapper;
+  ] ++ optional x11Support xlibsWrapper
+    ++ optional heifSupport libheif
+    ++ optional svgSupport librsvg;
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -31,9 +46,22 @@ stdenv.mkDerivation rec {
   # Do not build amd64 assembly code on Darwin, because it fails to compile
   # with unknow directive errors
   configureFlags = optional stdenv.isDarwin "--enable-amd64=no"
+    ++ optional (!svgSupport) "--without-svg"
+    ++ optional (!heifSupport) "--without-heif"
     ++ optional (!x11Support) "--without-x";
 
   outputs = [ "bin" "out" "dev" ];
+
+  passthru.tests = {
+    inherit
+      libcaca
+      diffoscopeMinimal
+      feh
+      icewm
+      openbox
+      fluxbox
+      enlightenment;
+  };
 
   meta = with lib; {
     description = "Image manipulation library";

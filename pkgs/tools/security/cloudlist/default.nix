@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "cloudlist";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-o5xJwbdYeFF3jWTy/zvswB9dFp/fxtgZB5a+c7cc2OQ=";
+    sha256 = "sha256-CYEQ+hHFKSHuW2U//59g+oHkxRzVOZzipkOB6KueHvA=";
   };
 
-  vendorSha256 = "sha256-rzbf/au2qrdoBowsw7DbeCcBbF42bqJDnuKC1sSFxho=";
+  vendorSha256 = "sha256-pZsRpvSDGpfEVgszB52cZS5Kk+REeLnw3qsyGGVZoa0=";
 
   meta = with lib; {
     description = "Tool for listing assets from multiple cloud providers";

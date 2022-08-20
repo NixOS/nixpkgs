@@ -1,4 +1,4 @@
-{ lib, bundlerEnv, ruby, buildGoPackage, fetchFromGitHub }:
+{ lib, bundlerEnv, ruby, buildGoModule, fetchFromGitHub }:
 let
   # needed for manpage generation
   gems = bundlerEnv {
@@ -6,27 +6,27 @@ let
     gemdir = ./.;
     inherit ruby;
   };
-in buildGoPackage rec {
+in
+buildGoModule rec {
   pname = "ejson";
-  version = "1.2.1";
-  rev = "v${version}";
-
-  nativeBuildInputs = [ gems ];
-
-  goPackagePath = "github.com/Shopify/ejson";
-  subPackages = [ "cmd/ejson" ];
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = "ejson";
-    inherit rev;
-    sha256 = "09356kp059hbzmqpzlz4b3agg93yqqygh5l5ddbxcsaqx4qiwdr7";
+    rev = "v${version}";
+    sha256 = "sha256-M2Gk+/l1tNlIAe1/fR1WLEOey+tjCUmMAujc76gmeZA=";
   };
+
+  vendorSha256 = "sha256-9+x7HrbXRoS/7ZADWwhsbynQLr3SyCbcsp9QnSubov0=";
+
+  nativeBuildInputs = [ gems ];
+
+  ldflags = [ "-s" "-w" ];
 
   # set HOME, otherwise bundler will insert stuff in the manpages
   postBuild = ''
-    cd go/src/$goPackagePath
-    HOME=$PWD make man
+    HOME=$PWD make man SHELL=$SHELL
   '';
 
   postInstall = ''
@@ -38,7 +38,6 @@ in buildGoPackage rec {
     description = "A small library to manage encrypted secrets using asymmetric encryption";
     license = licenses.mit;
     homepage = "https://github.com/Shopify/ejson";
-    platforms = platforms.unix;
     maintainers = [ maintainers.manveru ];
   };
 }

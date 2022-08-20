@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "tensorboard";
-  version = "2.8.0";
+  version = "2.9.1";
   format = "wheel";
   disabled = pythonOlder "3.6" || pythonAtLeast "3.11";
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     inherit pname version format;
     dist = "py3";
     python = "py3";
-    hash = "sha256-ZaM45EJOkHnyYEkjvb4wF5KtzirOG+aNprPd8AUXDe8=";
+    hash = "sha256-uqcn95F3b55YQdNHEncgzu1LvVnDa0BgS5X7KuYCknY=";
   };
 
   postPatch = ''

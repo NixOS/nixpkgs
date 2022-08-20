@@ -2,6 +2,8 @@
 
 lib.makeScope newScope (self: with self; {
 
+  autopair-fish = callPackage ./autopair-fish.nix { };
+
   buildFishPlugin = callPackage ./build-fish-plugin.nix { };
 
   clownfish = callPackage ./clownfish.nix { };
@@ -18,6 +20,8 @@ lib.makeScope newScope (self: with self; {
   forgit = callPackage ./forgit.nix { };
 
   fzf-fish = callPackage ./fzf-fish.nix { };
+
+  grc = callPackage ./grc.nix { };
 
   hydro = callPackage ./hydro.nix { };
 

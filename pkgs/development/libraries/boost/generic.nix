@@ -15,6 +15,7 @@
 , enableNumpy ? false
 , taggedLayout ? ((enableRelease && enableDebug) || (enableSingleThreaded && enableMultiThreaded) || (enableShared && enableStatic))
 , patches ? []
+, boostBuildPatches ? []
 , useMpi ? false
 , mpi
 , extraB2Args ? []
@@ -168,6 +169,10 @@ stdenv.mkDerivation {
       stdenv.hostPlatform.isMips64n32 ||
       # the patch above does not apply cleanly to pre-1.65 boost
       (stdenv.hostPlatform.isMips64n64 && (versionOlder version "1.65"));
+  };
+
+  passthru = {
+    inherit boostBuildPatches;
   };
 
   preConfigure = optionalString useMpi ''

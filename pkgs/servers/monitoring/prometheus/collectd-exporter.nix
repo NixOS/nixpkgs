@@ -20,7 +20,7 @@ buildGoPackage rec {
     description = "Relay server for exporting metrics from collectd to Prometheus";
     homepage = "https://github.com/prometheus/collectd_exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ benley fpletz ];
+    maintainers = with maintainers; [ benley ];
     platforms = platforms.unix;
   };
 }

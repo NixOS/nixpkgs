@@ -14,6 +14,8 @@ self: super: {
 
     pg_ed25519 = super.callPackage ./ext/pg_ed25519.nix { };
 
+    pg_hint_plan = super.callPackage ./ext/pg_hint_plan.nix { };
+
     pg_rational = super.callPackage ./ext/pg_rational.nix { };
 
     pg_repack = super.callPackage ./ext/pg_repack.nix { };
@@ -65,4 +67,6 @@ self: super: {
     repmgr = super.callPackage ./ext/repmgr.nix { };
 
     rum = super.callPackage ./ext/rum.nix { };
+
+    wal2json = super.callPackage ./ext/wal2json.nix { };
 }

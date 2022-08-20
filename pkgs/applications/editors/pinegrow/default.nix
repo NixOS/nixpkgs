@@ -14,11 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pinegrow";
-  version = "6.5";
+  # deactivate auto update, because an old 6.21 version is getting mixed up
+  # see e.g. https://github.com/NixOS/nixpkgs/pull/184460
+  version = "6.6"; # nixpkgs-update: no auto update
 
   src = fetchurl {
-    url = "https://github.com/Pinegrow/PinegrowReleases/releases/download/pg${version}/PinegrowLinux64.${version}.zip";
-    sha256 = "1l7cf5jgidpykaf68mzf92kywl1vxwl3fg43ibgr2rg4cnl1g82b";
+    url = "https://download.pinegrow.com/PinegrowLinux64.${version}.zip";
+    sha256 = "sha256-a3SwUNcMXl42+Gy3wjcx/KvVprgFAO0D0lFPohPV3Tk=";
   };
 
   nativeBuildInputs = [
@@ -74,6 +76,7 @@ stdenv.mkDerivation rec {
     homepage = "https://pinegrow.com";
     description = "UI Web Editor";
     platforms = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = with licenses; [ unfreeRedistributable ];
     maintainers = with maintainers; [ gador ];
   };

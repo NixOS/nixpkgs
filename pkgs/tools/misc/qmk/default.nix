@@ -10,11 +10,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "qmk";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-2mLuxzxFSMw3sLm+OTcgLcOjAdwvJmNhDsynUaYQ+co=";
+    sha256 = "sha256-dxV3yeaOt/4IlpurNq60IHE6UlBi3OUqBu2kDajNpeE=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -36,6 +36,7 @@ python3.pkgs.buildPythonApplication rec {
     milc
     pygments
     pyusb
+    pillow
   ] ++ [ # Binaries need to be in the path so this is in propagatedBuildInputs
     avrdude
     dfu-programmer

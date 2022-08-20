@@ -1,4 +1,8 @@
-declare -a projectFile testProjectFile dotnetRestoreFlags dotnetFlags
+declare -a projectFile testProjectFile
+
+# Inherit arguments from derivation
+dotnetFlags=( ${dotnetFlags[@]-} )
+dotnetRestoreFlags=( ${dotnetRestoreFlags[@]-} )
 
 dotnetConfigureHook() {
     echo "Executing dotnetConfigureHook"
@@ -16,8 +20,8 @@ dotnetConfigureHook() {
                 -p:Deterministic=true \
                 --source "@nugetSource@/lib" \
                 ${parallelFlag-} \
-                "${dotnetRestoreFlags[@]}" \
-                "${dotnetFlags[@]}"
+                ${dotnetRestoreFlags[@]} \
+                ${dotnetFlags[@]}
     done
 
     runHook postConfigure

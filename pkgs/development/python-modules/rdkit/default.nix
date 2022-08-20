@@ -27,21 +27,20 @@ let
     yaehmop = fetchFromGitHub {
       owner = "greglandrum";
       repo = "yaehmop";
-      rev = "1b13b52e2738a77715b1bad876e3b4e93f2b5269";
-      sha256 = "1jp7wz8win4mgwxkaz2gnrgsaaqgln04n2lwgfr96isdv1klf62d";
+      rev = "cfb5aeebbdf5ae93c4f4eeb14c7a507dea54ae9e";
+      sha256 = "sha256-QMnc5RyHlY3giw9QmrkGntiA+Srs7OhCIKs9GGo5DfQ=";
     };
-    freesasa = fetchFromGitHub
-      {
-        owner = "mittinatten";
-        repo = "freesasa";
-        rev = "2.0.3";
-        sha256 = "0x686zm9fpyg5647fdgxnxgbwav99nc6ymh4bmkr2063yyda4kzc";
-      };
+    freesasa = fetchFromGitHub {
+      owner = "mittinatten";
+      repo = "freesasa";
+      rev = "2.1.1";
+      sha256 = "sha256-fUJvLDTVhpBWl9MavZwp0kAO5Df1QuHEKqe20CXNfcg=";
+    };
   };
 in
 buildPythonPackage rec {
   pname = "rdkit";
-  version = "2020.09.5";
+  version = "2022.03.4";
 
   src =
     let
@@ -51,7 +50,7 @@ buildPythonPackage rec {
       owner = pname;
       repo = pname;
       rev = "Release_${versionTag}";
-      sha256 = "1ycbjia223d0w9xiwk36x2vkdidsx198rzkfyxz48cbax9vvklzq";
+      sha256 = "13aga2fy1hgldb229n16niv30n3lwlypd7xv16smpbgw0cp1xpp2";
     };
 
   unpackPhase = ''
@@ -114,6 +113,7 @@ buildPythonPackage rec {
     "-DEIGEN3_INCLUDE_DIR=${eigen}/include/eigen3"
     "-DRDK_INSTALL_INTREE=OFF"
     "-DRDK_INSTALL_STATIC_LIBS=OFF"
+    "-DRDK_INSTALL_COMIC_FONTS=OFF"
     "-DRDK_BUILD_INCHI_SUPPORT=ON"
     "-DRDK_BUILD_AVALON_SUPPORT=ON"
     "-DRDK_BUILD_FREESASA_SUPPORT=ON"
@@ -133,6 +133,7 @@ buildPythonPackage rec {
     "-DBOOST_ROOT=${boost}"
     "-DBoost_NO_SYSTEM_PATHS=ON"
     "-DBoost_NO_BOOST_CMAKE=TRUE"
+    "-DCMAKE_SKIP_BUILD_RPATH=ON" # fails to find libs in pythonImportsCheckPhase otherwise
   ];
 
   checkPhase = ''

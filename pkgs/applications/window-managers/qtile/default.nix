@@ -52,6 +52,7 @@ let
       setuptools
       python-dateutil
       dbus-python
+      dbus-next
       mpd2
       psutil
       pyxdg

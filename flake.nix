@@ -11,9 +11,7 @@
 
       lib = import ./lib;
 
-      systems = lib.systems.supported.hydra;
-
-      forAllSystems = f: lib.genAttrs systems (system: f system);
+      forAllSystems = f: lib.genAttrs lib.systems.flakeExposed (system: f system);
 
     in
     {
@@ -22,13 +20,20 @@
         nixos = import ./nixos/lib { lib = final; };
 
         nixosSystem = args:
-          import ./nixos/lib/eval-config.nix (args // {
-            modules = args.modules ++ [ {
-              system.nixos.versionSuffix =
-                ".${final.substring 0 8 (self.lastModifiedDate or self.lastModified or "19700101")}.${self.shortRev or "dirty"}";
-              system.nixos.revision = final.mkIf (self ? rev) self.rev;
-            } ];
-          });
+          import ./nixos/lib/eval-config.nix (
+            args // {
+              modules = args.modules ++ [{
+                system.nixos.versionSuffix =
+                  ".${final.substring 0 8 (self.lastModifiedDate or self.lastModified or "19700101")}.${self.shortRev or "dirty"}";
+                system.nixos.revision = final.mkIf (self ? rev) self.rev;
+              }];
+            } // lib.optionalAttrs (! args?system) {
+              # Allow system to be set modularly in nixpkgs.system.
+              # We set it to null, to remove the "legacy" entrypoint's
+              # non-hermetic default.
+              system = null;
+            }
+          );
       });
 
       checks.x86_64-linux.tarball = jobs.tarball;

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "dapr-cli";
-  version = "1.7.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "dapr";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-+P1oXG+uvnFDGis5pz9VUQ4n1C7mjuetXz1OtN7IIrg=";
+    sha256 = "sha256-NzHg/pn0Gek3JhcdOBFilmmw0xaKtjTote11LLr4oj8=";
   };
 
-  vendorSha256 = "sha256-EvOyOy7DFQtFavOC9eBUZRJsj3pNdx7jumVmZ/THdaM=";
+  vendorSha256 = "sha256-ZsuDaFcBPZuyt5rmjeBkzkrphCCcraLZCrMiQ2FtAUc=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -28,9 +28,10 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    homepage = "https://dapr.io";
     description = "A CLI for managing Dapr, the distributed application runtime";
+    homepage = "https://dapr.io";
     license = licenses.mit;
     maintainers = with maintainers; [ lucperkins ];
+    mainProgram = "dapr";
   };
 }

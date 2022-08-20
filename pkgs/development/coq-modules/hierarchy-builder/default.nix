@@ -1,11 +1,11 @@
-{ lib, mkCoqDerivation, which, coq, coq-elpi, version ? null }:
+{ lib, mkCoqDerivation, coq, coq-elpi, version ? null }:
 
 with lib; let hb = mkCoqDerivation {
   pname = "hierarchy-builder";
   owner = "math-comp";
   inherit version;
   defaultVersion = with versions; switch coq.coq-version [
-    { case = isGe "8.15"; out = "1.2.1"; }
+    { case = range "8.15" "8.16"; out = "1.2.1"; }
     { case = range "8.13" "8.14"; out = "1.2.0"; }
     { case = range "8.12" "8.13"; out = "1.1.0"; }
     { case = isEq "8.11";         out = "0.10.0"; }
@@ -17,13 +17,10 @@ with lib; let hb = mkCoqDerivation {
   release."0.10.0".sha256 = "1a3vry9nzavrlrdlq3cys3f8kpq3bz447q8c4c7lh2qal61wb32h";
   releaseRev = v: "v${v}";
 
-  extraNativeBuildInputs = [ which ];
-
   propagatedBuildInputs = [ coq-elpi ];
 
   mlPlugin = true;
 
-  installFlags = [ "DESTDIR=$(out)" "COQMF_COQLIB=lib/coq/${coq.coq-version}" ];
   extraInstallFlags = [ "VFILES=structures.v" ];
 
   meta = {
@@ -35,4 +32,7 @@ with lib; let hb = mkCoqDerivation {
 hb.overrideAttrs (o:
   optionalAttrs (versions.isGe "1.2.0" o.version || o.version == "dev")
     { buildPhase = "make build"; }
+  //
+  optionalAttrs (versions.isGe "1.1.0" o.version || o.version == "dev")
+  { installFlags = [ "DESTDIR=$(out)" ] ++ o.installFlags; }
 )

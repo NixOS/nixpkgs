@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     description = "C library to access data on a CDDB server (freedb.org)";
     homepage = "http://libcddb.sourceforge.net/";
     license = licenses.lgpl2Plus;
+    mainProgram = "cddb_query";
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "bashcompdir=\${out}/share/bash-completion/completions" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://csl.name/jp2a/";
     description = "A small utility that converts JPG images to ASCII";
     license = licenses.gpl2Only;

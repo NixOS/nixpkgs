@@ -51,6 +51,6 @@ mkDerivation rec {
     description = "Crossplatform tool for fast making screenshots";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

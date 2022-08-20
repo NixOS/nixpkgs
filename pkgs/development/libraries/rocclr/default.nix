@@ -1,19 +1,30 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , writeScript
 , rocm-comgr
 }:
 
 stdenv.mkDerivation rec {
   pname = "rocclr";
-  version = "5.0.2";
+  version = "5.2.1";
 
   src = fetchFromGitHub {
     owner = "ROCm-Developer-Tools";
     repo = "ROCclr";
     rev = "rocm-${version}";
-    hash = "sha256-x6XwYxgiCoy6Q7gIevSTEWgUQ0aEjPFhKSqMqQahHig=";
+    hash = "sha256-bNIc1JF8f88xC18BheKZCZYjWb4gUZOMWlt/5198iGE=";
   };
+
+  patches = [
+    # Enable support for gfx8 again
+    # See the upstream issue: https://github.com/RadeonOpenCompute/ROCm/issues/1659
+    # And the arch patch: https://github.com/rocm-arch/rocm-arch/pull/742
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/John-Gee/rocm-arch/d6812d308fee3caf2b6bb01b4d19fe03a6a0e3bd/rocm-opencl-runtime/enable-gfx800.patch";
+      hash = "sha256-59jFDIIsTTZcNns9RyMVWPRUggn/bSlAGrky4quu8B4=";
+    })
+  ];
 
   prePatch = ''
     substituteInPlace device/comgrctx.cpp \

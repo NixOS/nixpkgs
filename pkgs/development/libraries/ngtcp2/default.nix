@@ -1,20 +1,22 @@
 { lib, stdenv, fetchFromGitHub
-, autoreconfHook, pkg-config
-, cunit, file, ncurses
+, autoreconfHook, pkg-config, file
 , libev, nghttp3, quictls
+, cunit, ncurses
 , withJemalloc ? false, jemalloc
 }:
 
 stdenv.mkDerivation rec {
   pname = "ngtcp2";
-  version = "unstable-2022-04-11";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
     repo = pname;
-    rev = "825899c051ea2a1f06a0c4617f41782f37009a18";
-    sha256 = "sha256-VoSy0tyIXWNTmcVdsaiM9ijXLq41AOaPBajvsEIrfjo=";
+    rev = "v${version}";
+    sha256 = "sha256-REAN5TW0miWXI3HFxtW3znTKTrhsBbNqu1VfjC2w0no=";
   };
+
+  outputs = [ "out" "dev" "doc" ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config file ];
   buildInputs = [ libev nghttp3 quictls ] ++ lib.optional withJemalloc jemalloc;
@@ -23,8 +25,6 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file
   '';
-
-  outputs = [ "out" "dev" ];
 
   doCheck = true;
   enableParallelBuilding = true;

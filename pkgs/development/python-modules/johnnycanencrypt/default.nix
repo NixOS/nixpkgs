@@ -91,6 +91,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "johnnycanencrypt" ];
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     homepage = "https://github.com/kushaldas/johnnycanencrypt";
     description = "Python module for OpenPGP written in Rust";
     license = licenses.gpl3Plus;

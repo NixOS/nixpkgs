@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "setuptools-rust";
-  version = "1.2.0";
+  version = "1.4.1";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-CkraR56Mfj2L18tW4aKazCsruYwjJQUbDNy1fX8Fbeg=";
+    sha256 = "sha256-GP+FCDH1juIdV4OCXJn61jLaIeR2RelCf9fewEgCnnY=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

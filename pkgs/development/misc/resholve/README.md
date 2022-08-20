@@ -53,13 +53,13 @@ Here's a simple example of how `resholve.mkDerivation` is already used in nixpkg
 
 resholve.mkDerivation rec {
   pname = "dgoss";
-  version = "0.3.16";
+  version = "0.3.18";
 
   src = fetchFromGitHub {
     owner = "aelsabbahy";
     repo = "goss";
     rev = "v${version}";
-    sha256 = "1m5w5vwmc9knvaihk61848rlq7qgdyylzpcwi64z84rkw8qdnj6p";
+    sha256 = "01ssc7rnnwpyhjv96qy8drsskghbfpyxpsahk8s62lh8pxygynhv";
   };
 
   dontConfigure = true;
@@ -75,8 +75,8 @@ resholve.mkDerivation rec {
       scripts = [ "bin/dgoss" ];
       interpreter = "${bash}/bin/bash";
       inputs = [ coreutils which ];
-      fake = {
-        external = [ "docker" ];
+      keep = {
+        "$CONTAINER_RUNTIME" = true;
       };
     };
   };
@@ -279,7 +279,7 @@ execer = [
 ];
 
 # --wrapper '${gnugrep}/bin/egrep:${gnugrep}/bin/grep'
-execer = [
+wrapper = [
   /*
     This is the same verdict binlore will
     come up with. It's a no-op just to demo

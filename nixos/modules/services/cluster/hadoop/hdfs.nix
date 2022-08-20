@@ -11,7 +11,7 @@ let
     enable = mkEnableOption serviceName;
     restartIfChanged = mkOption {
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         Automatically restart the service on config change.
         This can be set to false to defer restarts on clusters running critical applications.
         Please consider the security implications of inadvertently running an older version,
@@ -22,7 +22,7 @@ let
     extraFlags = mkOption{
       type = with types; listOf str;
       default = [];
-      description = "Extra command line flags to pass to ${serviceName}";
+      description = lib.mdDoc "Extra command line flags to pass to ${serviceName}";
       example = [
         "-Dcom.sun.management.jmxremote"
         "-Dcom.sun.management.jmxremote.port=8010"
@@ -31,13 +31,13 @@ let
     extraEnv = mkOption{
       type = with types; attrsOf str;
       default = {};
-      description = "Extra environment variables for ${serviceName}";
+      description = lib.mdDoc "Extra environment variables for ${serviceName}";
     };
   } // (optionalAttrs firewallOption {
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = "Open firewall ports for ${serviceName}.";
+      description = lib.mdDoc "Open firewall ports for ${serviceName}.";
     };
   }) // (optionalAttrs (extraOpts != null) extraOpts);
 
@@ -83,12 +83,12 @@ in
       formatOnInit = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Format HDFS namenode on first start. This is useful for quickly spinning up
           ephemeral HDFS clusters with a single namenode.
           For HA clusters, initialization involves multiple steps across multiple nodes.
           Follow this guide to initialize an HA cluster manually:
-          <link xlink:href="https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HDFSHighAvailabilityWithQJM.html"/>
+          <https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HDFSHighAvailabilityWithQJM.html>
         '';
       };
     };
@@ -96,19 +96,19 @@ in
     datanode = hadoopServiceOption { serviceName = "HDFS DataNode"; } // {
       dataDirs = mkOption {
         default = null;
-        description = "Tier and path definitions for datanode storage.";
+        description = lib.mdDoc "Tier and path definitions for datanode storage.";
         type = with types; nullOr (listOf (submodule {
           options = {
             type = mkOption {
               type = enum [ "SSD" "DISK" "ARCHIVE" "RAM_DISK" ];
-              description = ''
+              description = lib.mdDoc ''
                 Storage types ([SSD]/[DISK]/[ARCHIVE]/[RAM_DISK]) for HDFS storage policies.
               '';
             };
             path = mkOption {
               type = path;
               example = [ "/var/lib/hadoop/hdfs/dn" ];
-              description = "Determines where on the local filesystem a data node should store its blocks.";
+              description = lib.mdDoc "Determines where on the local filesystem a data node should store its blocks.";
             };
           };
         }));
@@ -126,7 +126,7 @@ in
       tempPath = mkOption {
         type = types.path;
         default = "/tmp/hadoop/httpfs";
-        description = "HTTPFS_TEMP path used by HTTPFS";
+        description = lib.mdDoc "HTTPFS_TEMP path used by HTTPFS";
       };
     };
 
@@ -158,8 +158,8 @@ in
         50010 # datanode.address
         50020 # datanode.ipc.address
       ];
-      extraConfig.services.hadoop.hdfsSiteInternal."dfs.datanode.data.dir" = let d = cfg.hdfs.datanode.dataDirs; in
-        if (d!= null) then (concatMapStringsSep "," (x: "["+x.type+"]file://"+x.path) cfg.hdfs.datanode.dataDirs) else d;
+      extraConfig.services.hadoop.hdfsSiteInternal."dfs.datanode.data.dir" = mkIf (cfg.hdfs.datanode.dataDirs!= null)
+        (concatMapStringsSep "," (x: "["+x.type+"]file://"+x.path) cfg.hdfs.datanode.dataDirs);
     })
 
     (hadoopServiceConfig {

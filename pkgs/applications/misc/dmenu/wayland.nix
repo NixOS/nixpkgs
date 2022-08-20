@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     description = "dmenu for wayland-compositors";
     homepage = "https://github.com/nyyManni/dmenu-wayland";
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

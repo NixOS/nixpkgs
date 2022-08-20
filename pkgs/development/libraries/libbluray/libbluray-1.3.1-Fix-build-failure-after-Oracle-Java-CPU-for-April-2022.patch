@@ -1,0 +1,25 @@
+From 8f26777b1ce124ff761f80ef52d6be10bcea323e Mon Sep 17 00:00:00 2001
+From: Fridrich Strba <fstrba@suse.com>
+Date: Mon, 25 Apr 2022 14:28:58 +0300
+Subject: [PATCH] Fix build failure after Oracle Java CPU for April 2022
+
+--- a/src/libbluray/bdj/java/java/io/BDFileSystem.java
++++ b/src/libbluray/bdj/java/java/io/BDFileSystem.java
+@@ -227,6 +227,17 @@ public abstract class BDFileSystem extends FileSystem {
+         return fs.isAbsolute(f);
+     }
+ 
++    public boolean isInvalid(File f) {
++        try {
++            Method m = fs.getClass().getDeclaredMethod("isInvalid", new Class[] { File.class });
++            Object[] args = new Object[] {(Object)f};
++            Boolean result = (Boolean)m.invoke(fs, args);
++            return result.booleanValue();
++        } finally {
++            return false;
++        }
++    }
++
+     public String resolve(File f) {
+         if (!booted)
+             return fs.resolve(f);

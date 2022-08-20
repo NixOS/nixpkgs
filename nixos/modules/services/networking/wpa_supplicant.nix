@@ -114,7 +114,7 @@ let
 
       script =
       ''
-        ${optionalString configIsGenerated ''
+        ${optionalString (configIsGenerated && !cfg.allowAuxiliaryImperativeNetworks) ''
           if [ -f /etc/wpa_supplicant.conf ]; then
             echo >&2 "<3>/etc/wpa_supplicant.conf present but ignored. Generated ${configFile} is used instead."
           fi
@@ -183,23 +183,23 @@ in {
       driver = mkOption {
         type = types.str;
         default = "nl80211,wext";
-        description = "Force a specific wpa_supplicant driver.";
+        description = lib.mdDoc "Force a specific wpa_supplicant driver.";
       };
 
       allowAuxiliaryImperativeNetworks = mkEnableOption "support for imperative & declarative networks" // {
         description = ''
           Whether to allow configuring networks "imperatively" (e.g. via
-          <package>wpa_supplicant_gui</package>) and declaratively via
-          <xref linkend="opt-networking.wireless.networks" />.
+          <literal>wpa_supplicant_gui</literal>) and declaratively via
+          <xref linkend="opt-networking.wireless.networks"/>.
 
-          Please note that this adds a custom patch to <package>wpa_supplicant</package>.
+          Please note that this adds a custom patch to <literal>wpa_supplicant</literal>.
         '';
       };
 
       scanOnLowSignal = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to periodically scan for (better) networks when the signal of
           the current one is low. This will make roaming between access points
           faster, but will consume more power.
@@ -209,7 +209,7 @@ in {
       fallbackToWPA2 = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to fall back to WPA2 authentication protocols if WPA3 failed.
           This allows old wireless cards (that lack recent features required by
           WPA3) to connect to mixed WPA2/WPA3 access points.
@@ -226,9 +226,7 @@ in {
           File consisting of lines of the form <literal>varname=value</literal>
           to define variables for the wireless configuration.
 
-          See section "EnvironmentFile=" in <citerefentry>
-          <refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum>
-          </citerefentry> for a syntax reference.
+          See section "EnvironmentFile=" in <citerefentry><refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum></citerefentry> for a syntax reference.
 
           Secrets (PSKs, passwords, etc.) can be provided without adding them to
           the world-readable Nix store by defining them in the environment file and
@@ -331,9 +329,9 @@ in {
                 "OWE"
                 "DPP"
               ]);
-              description = ''
+              description = lib.mdDoc ''
                 The list of authentication protocols accepted by this network.
-                This corresponds to the <literal>key_mgmt</literal> option in wpa_supplicant.
+                This corresponds to the `key_mgmt` option in wpa_supplicant.
               '';
             };
 
@@ -348,10 +346,7 @@ in {
               description = ''
                 Use this option to configure advanced authentication methods like EAP.
                 See
-                <citerefentry>
-                  <refentrytitle>wpa_supplicant.conf</refentrytitle>
-                  <manvolnum>5</manvolnum>
-                </citerefentry>
+                <citerefentry><refentrytitle>wpa_supplicant.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>
                 for example configurations.
 
                 <warning><para>
@@ -369,8 +364,8 @@ in {
             hidden = mkOption {
               type = types.bool;
               default = false;
-              description = ''
-                Set this to <literal>true</literal> if the SSID of the network is hidden.
+              description = lib.mdDoc ''
+                Set this to `true` if the SSID of the network is hidden.
               '';
               example = literalExpression ''
                 { echelon = {
@@ -384,7 +379,7 @@ in {
             priority = mkOption {
               type = types.nullOr types.int;
               default = null;
-              description = ''
+              description = lib.mdDoc ''
                 By default, all networks will get same priority group (0). If some of the
                 networks are more desirable, this field can be used to change the order in
                 which wpa_supplicant goes through the networks when selecting a BSS. The
@@ -401,22 +396,19 @@ in {
               example = ''
                 bssid_blacklist=02:11:22:33:44:55 02:22:aa:44:55:66
               '';
-              description = ''
+              description = lib.mdDoc ''
                 Extra configuration lines appended to the network block.
                 See
-                <citerefentry>
-                  <refentrytitle>wpa_supplicant.conf</refentrytitle>
-                  <manvolnum>5</manvolnum>
-                </citerefentry>
+                {manpage}`wpa_supplicant.conf(5)`
                 for available options.
               '';
             };
 
           };
         });
-        description = ''
+        description = lib.mdDoc ''
           The network definitions to automatically connect to when
-           <command>wpa_supplicant</command> is running. If this
+           {command}`wpa_supplicant` is running. If this
            parameter is left empty wpa_supplicant will use
           /etc/wpa_supplicant.conf as the configuration file.
         '';
@@ -443,7 +435,7 @@ in {
         enable = mkOption {
           type = types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Allow normal users to control wpa_supplicant through wpa_gui or wpa_cli.
             This is useful for laptop users that switch networks a lot and don't want
             to depend on a large package such as NetworkManager just to pick nearby
@@ -458,7 +450,7 @@ in {
           type = types.str;
           default = "wheel";
           example = "network";
-          description = "Members of this group can control wpa_supplicant.";
+          description = lib.mdDoc "Members of this group can control wpa_supplicant.";
         };
       };
 
@@ -466,7 +458,7 @@ in {
         type = types.bool;
         default = lib.length cfg.interfaces < 2;
         defaultText = literalExpression "length config.${opt.interfaces} < 2";
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the DBus control interface.
           This is only needed when using NetworkManager or connman.
         '';
@@ -478,13 +470,10 @@ in {
         example = ''
           p2p_disabled=1
         '';
-        description = ''
+        description = lib.mdDoc ''
           Extra lines appended to the configuration file.
           See
-          <citerefentry>
-            <refentrytitle>wpa_supplicant.conf</refentrytitle>
-            <manvolnum>5</manvolnum>
-          </citerefentry>
+          {manpage}`wpa_supplicant.conf(5)`
           for available options.
         '';
       };

@@ -5,10 +5,10 @@ let
   };
 in rec {
   openconnect = common rec {
-    version = "8.20";
+    version = "9.01";
     src = fetchurl {
       url = "ftp://ftp.infradead.org/pub/openconnect/openconnect-${version}.tar.gz";
-      sha256 = "sha256-wUUjhMb3lrruRdTpGa4b/CgdbIiGLh9kaizFE/xE5Ys=";
+      sha256 = "sha256-s9f6+DDpeTKZ1qQegdhM1KPieJwUjJ5ZjkWFAQCQ5Mc=";
     };
   };
 

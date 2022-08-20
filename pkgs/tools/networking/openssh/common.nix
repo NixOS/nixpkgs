@@ -21,7 +21,7 @@
 , pam
 , libredirect
 , etcDir ? null
-, withKerberos ? !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
+, withKerberos ? true
 , libkrb5
 , libfido2
 , hostname

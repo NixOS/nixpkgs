@@ -1,6 +1,5 @@
 { lib
 , fetchurl
-, fetchpatch
 , nixosTests
 , python3
 , ghostscript
@@ -12,14 +11,34 @@
 , tesseract4
 , unpaper
 , liberation_ttf
+, fetchFromGitHub
 }:
 
 let
+  # Use specific package versions required by paperless-ngx
   py = python3.override {
     packageOverrides = self: super: {
-      django = super.django_3;
+      django = super.django_4;
 
-      # Incompatible with aioredis 2
+      # use paperless-ngx version of django-q
+      # see https://github.com/paperless-ngx/paperless-ngx/pull/1014
+      django-q = super.django-q.overridePythonAttrs (oldAttrs: rec {
+        src = fetchFromGitHub {
+          owner = "paperless-ngx";
+          repo = "django-q";
+          sha256 = "sha256-aoDuPig8Nf8fLzn7GjBn69aF2zH2l8gxascAu9lIG3U=";
+          rev = "71abc78fdaec029cf71e9849a3b0fa084a1678f7";
+        };
+        # due to paperless-ngx modification of the pyproject.toml file
+        # the patch is not needed any more
+        patches = [];
+      });
+
+      # django-extensions 3.1.5 is required, but its tests are incompatible with Django 4
+      django-extensions = super.django-extensions.overridePythonAttrs (_: {
+        doCheck = false;
+      });
+
       aioredis = super.aioredis.overridePythonAttrs (oldAttrs: rec {
         version = "1.3.1";
         src = oldAttrs.src.override {
@@ -34,11 +53,12 @@ let
 in
 py.pkgs.pythonPackages.buildPythonApplication rec {
   pname = "paperless-ngx";
-  version = "1.6.0";
+  version = "1.8.0";
 
+  # Fetch the release tarball instead of a git ref because it contains the prebuilt fontend
   src = fetchurl {
-    url = "https://github.com/paperless-ngx/paperless-ngx/releases/download/ngx-${version}/${pname}-${version}.tar.xz";
-    sha256 = "07mrxbwahkm00n9nvssd6d13p80w333g84cd38bzp0l34nzim5zl";
+    url = "https://github.com/paperless-ngx/paperless-ngx/releases/download/v${version}/${pname}-v${version}.tar.xz";
+    hash = "sha256-BLfhh04RvBJFRQiPXkMl8XlWqZOWKmjjl+6lZ326stU=";
   };
 
   format = "other";
@@ -92,7 +112,8 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
     numpy
     ocrmypdf
     pathvalidate
-    pdfminer
+    pdf2image
+    pdfminer-six
     pikepdf
     pillow
     pluggy
@@ -106,9 +127,10 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
     python-dotenv
     python-gnupg
     python-Levenshtein
-    python_magic
+    python-magic
     pytz
     pyyaml
+    pyzbar
     redis
     regex
     reportlab
@@ -122,7 +144,7 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
     threadpoolctl
     tika
     tqdm
-    twisted.extras.tls
+    twisted.optional-dependencies.tls
     txaio
     tzlocal
     urllib3
@@ -136,6 +158,13 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
     whoosh
     zope_interface
   ];
+
+  # paperless-ngx includes the bundled django-q version. This will
+  # conflict with the tests and is not needed since we overrode the
+  # django-q version with the paperless-ngx version
+  postPatch = ''
+    rm -rf src/django-q
+  '';
 
   # Compile manually because `pythonRecompileBytecodeHook` only works for
   # files in `python.sitePackages`
@@ -189,6 +218,6 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
     description = "A supercharged version of paperless: scan, index, and archive all of your physical documents";
     homepage = "https://paperless-ngx.readthedocs.io/en/latest/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ lukegb ];
+    maintainers = with maintainers; [ lukegb gador erikarvstedt ];
   };
 }

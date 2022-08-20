@@ -18,11 +18,11 @@
 
 buildPythonPackage rec {
   pname = "vowpalwabbit";
-  version = "9.0.1";
+  version = "9.3.0";
 
   src = fetchPypi{
     inherit pname version;
-    sha256 = "sha256-rDUgOjroY8S73+s+MWyBl86u+8XCH4O8KMCo9zUlqAs=";
+    sha256 = "sha256-lIvSpgnXHiFEMrdObAODh5/T/J8rXsPVIRyWCnt2w7Q=";
   };
 
   nativeBuildInputs = [

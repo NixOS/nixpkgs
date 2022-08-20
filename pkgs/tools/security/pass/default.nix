@@ -1,6 +1,6 @@
 { stdenv, lib, pkgs, fetchurl, buildEnv
 , coreutils, findutils, gnugrep, gnused, getopt, git, tree, gnupg, openssl
-, which, procps , qrencode , makeWrapper, pass, symlinkJoin
+, which, openssh, procps, qrencode, makeWrapper, pass, symlinkJoin
 
 , xclip ? null, xdotool ? null, dmenu ? null
 , x11Support ? !stdenv.isDarwin , dmenuSupport ? (x11Support || waylandSupport)
@@ -91,8 +91,9 @@ stdenv.mkDerivation rec {
     gnused
     tree
     which
-    qrencode
+    openssh
     procps
+    qrencode
   ] ++ optional stdenv.isDarwin openssl
     ++ optional x11Support xclip
     ++ optional waylandSupport wl-clipboard

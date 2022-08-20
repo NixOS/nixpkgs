@@ -28,11 +28,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-terminal";
-  version = "3.44.0";
+  version = "3.44.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-terminal/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "qpZxie62CUWebApGigHqcMuMRTDaHVALLT9PxDi4/io=";
+    sha256 = "+28g7h/yMamq7asT1dxuWmTJVXESJISLeQCG6IlZ03s=";
   };
 
   nativeBuildInputs = [

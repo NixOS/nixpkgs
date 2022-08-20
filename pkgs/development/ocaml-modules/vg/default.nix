@@ -57,8 +57,9 @@ stdenv.mkDerivation {
     module. An API allows to implement new renderers.
     '';
     homepage = webpage;
-    inherit (ocaml.meta) platforms;
     license = licenses.isc;
     maintainers = [ maintainers.jirkamarsik ];
+    mainProgram = "vecho";
+    inherit (ocaml.meta) platforms;
   };
 }

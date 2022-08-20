@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "allegro";
-  version = "5.2.7.0";
+  version = "5.2.8.0";
 
   src = fetchFromGitHub {
     owner = "liballeg";
     repo = "allegro5";
     rev = version;
-    sha256 = "sha256-JdnzEW+qAhAljR+WfmgE3P9xeR2HvjS64tFgCC0tNA0=";
+    sha256 = "sha256-uNcaeTelFNfg+YjPYc7nK4TrFDxJsEuPhsF8x1cvIYQ=";
   };
 
   nativeBuildInputs = [ cmake ];

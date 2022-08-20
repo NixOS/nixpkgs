@@ -22,8 +22,10 @@
 # /lib will link to /lib32
 
 let
-  is64Bit = stdenv.hostPlatform.parsed.cpu.bits == 64;
-  isMultiBuild  = multiPkgs != null && is64Bit;
+  inherit (stdenv) is64bit;
+
+  # use of glibc_multi is only supported on x86_64-linux
+  isMultiBuild  = multiPkgs != null && stdenv.isx86_64 && stdenv.isLinux;
   isTargetBuild = !isMultiBuild;
 
   # list of packages (usually programs) which are only be installed for the
@@ -50,7 +52,8 @@ let
     ];
 
   ldconfig = writeShellScriptBin "ldconfig" ''
-    exec ${pkgs.glibc.bin}/bin/ldconfig -f /etc/ld.so.conf -C /etc/ld.so.cache "$@"
+    # due to a glibc bug, 64-bit ldconfig complains about patchelf'd 32-bit libraries, so we're using 32-bit ldconfig
+    exec ${pkgsi686Linux.glibc.bin}/bin/ldconfig -f /etc/ld.so.conf -C /etc/ld.so.cache "$@"
   '';
   etcProfile = writeText "profile" ''
     export PS1='${name}-chrootenv:\u@\h:\w\$ '
@@ -138,7 +141,7 @@ let
   setupLibDirsTarget = ''
     # link content of targetPaths
     cp -rsHf ${staticUsrProfileTarget}/lib lib
-    ln -s lib lib${if is64Bit then "64" else "32"}
+    ln -s lib lib${if is64bit then "64" else "32"}
   '';
 
   # setup /lib, /lib32 and /lib64

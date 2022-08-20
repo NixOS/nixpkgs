@@ -35,13 +35,13 @@ let
     address = mkOption {
       type = types.str;
       default = "localhost";
-      description = "Address to bind to for ${descr}";
+      description = lib.mdDoc "Address to bind to for ${descr}";
     };
 
     port = mkOption {
       type = types.port;
       default = defaultPort;
-      description = "Port to bind to for ${descr}";
+      description = lib.mdDoc "Port to bind to for ${descr}";
     };
   };
 in
@@ -80,50 +80,50 @@ in
       join = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = "The addresses for connecting the node to a cluster.";
+        description = lib.mdDoc "The addresses for connecting the node to a cluster.";
       };
 
       insecure = mkOption {
         type = types.bool;
         default = false;
-        description = "Run in insecure mode.";
+        description = lib.mdDoc "Run in insecure mode.";
       };
 
       certsDir = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = "The path to the certificate directory.";
+        description = lib.mdDoc "The path to the certificate directory.";
       };
 
       user = mkOption {
         type = types.str;
         default = "cockroachdb";
-        description = "User account under which CockroachDB runs";
+        description = lib.mdDoc "User account under which CockroachDB runs";
       };
 
       group = mkOption {
         type = types.str;
         default = "cockroachdb";
-        description = "User account under which CockroachDB runs";
+        description = lib.mdDoc "User account under which CockroachDB runs";
       };
 
       openPorts = mkOption {
         type = types.bool;
         default = false;
-        description = "Open firewall ports for cluster communication by default";
+        description = lib.mdDoc "Open firewall ports for cluster communication by default";
       };
 
       cache = mkOption {
         type = types.str;
         default = "25%";
-        description = ''
+        description = lib.mdDoc ''
           The total size for caches.
 
           This can be a percentage, expressed with a fraction sign or as a
           decimal-point number, or any bytes-based unit. For example,
-          <literal>"25%"</literal>, <literal>"0.25"</literal> both represent
+          `"25%"`, `"0.25"` both represent
           25% of the available system memory. The values
-          <literal>"1000000000"</literal> and <literal>"1GB"</literal> both
+          `"1000000000"` and `"1GB"` both
           represent 1 gigabyte of memory.
 
         '';
@@ -132,15 +132,15 @@ in
       maxSqlMemory = mkOption {
         type = types.str;
         default = "25%";
-        description = ''
+        description = lib.mdDoc ''
           The maximum in-memory storage capacity available to store temporary
           data for SQL queries.
 
           This can be a percentage, expressed with a fraction sign or as a
           decimal-point number, or any bytes-based unit. For example,
-          <literal>"25%"</literal>, <literal>"0.25"</literal> both represent
+          `"25%"`, `"0.25"` both represent
           25% of the available system memory. The values
-          <literal>"1000000000"</literal> and <literal>"1GB"</literal> both
+          `"1000000000"` and `"1GB"` both
           represent 1 gigabyte of memory.
         '';
       };
@@ -149,7 +149,7 @@ in
         type = types.package;
         default = pkgs.cockroachdb;
         defaultText = literalExpression "pkgs.cockroachdb";
-        description = ''
+        description = lib.mdDoc ''
           The CockroachDB derivation to use for running the service.
 
           This would primarily be useful to enable Enterprise Edition features
@@ -162,9 +162,9 @@ in
         type = types.listOf types.str;
         default = [];
         example = [ "--advertise-addr" "[fe80::f6f2:::]" ];
-        description = ''
-          Extra CLI arguments passed to <command>cockroach start</command>.
-          For the full list of supported argumemnts, check <link xlink:href="https://www.cockroachlabs.com/docs/stable/cockroach-start.html#flags"/>
+        description = lib.mdDoc ''
+          Extra CLI arguments passed to {command}`cockroach start`.
+          For the full list of supported argumemnts, check <https://www.cockroachlabs.com/docs/stable/cockroach-start.html#flags>
         '';
       };
     };

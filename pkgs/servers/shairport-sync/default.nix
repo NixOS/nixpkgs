@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, openssl, avahi, alsa-lib
-, libdaemon, popt, pkg-config, libconfig, libpulseaudio, soxr }:
+{ lib, stdenv, fetchFromGitHub
+, autoreconfHook, pkg-config
+, openssl, avahi, alsa-lib, glib, libdaemon, popt, libconfig, libpulseaudio, soxr
+, enableDbus ? stdenv.isLinux
+, enableMetadata ? false
+, enableMpris ? stdenv.isLinux
+}:
 
+with lib;
 stdenv.mkDerivation rec {
   version = "3.3.9";
   pname = "shairport-sync";
@@ -23,7 +29,12 @@ stdenv.mkDerivation rec {
     libconfig
     libpulseaudio
     soxr
-  ];
+  ] ++ optional stdenv.isLinux glib;
+
+  prePatch = ''
+    sed -i -e 's/G_BUS_TYPE_SYSTEM/G_BUS_TYPE_SESSION/g' dbus-service.c
+    sed -i -e 's/G_BUS_TYPE_SYSTEM/G_BUS_TYPE_SESSION/g' mpris-service.c
+  '';
 
   enableParallelBuilding = true;
 
@@ -32,7 +43,10 @@ stdenv.mkDerivation rec {
     "--with-avahi" "--with-ssl=openssl" "--with-soxr"
     "--without-configfiles"
     "--sysconfdir=/etc"
-  ];
+  ]
+    ++ optional enableDbus "--with-dbus-interface"
+    ++ optional enableMetadata "--with-metadata"
+    ++ optional enableMpris "--with-mpris-interface";
 
   meta = with lib; {
     inherit (src.meta) homepage;

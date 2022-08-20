@@ -56,6 +56,12 @@ stdenv.mkDerivation rec {
     xorg.libXxf86vm
   ];
 
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: AboutDlg.o:/build/pcsxr/gui/Linux.h:42: multiple definition of `cfgfile';
+  #     LnxMain.o:/build/pcsxr/gui/Linux.h:42: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   dynarecTarget =
    if stdenv.isx86_64 then "x86_64"
    else if stdenv.isi686 then "x86"
@@ -80,8 +86,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Playstation 1 emulator";
-    homepage = "https://pcsxr.codeplex.com/";
+    homepage = "https://github.com/iCatButler/pcsxr";
     maintainers = with maintainers; [ rardiol ];
     license = licenses.gpl2Plus;
     platforms = platforms.all;

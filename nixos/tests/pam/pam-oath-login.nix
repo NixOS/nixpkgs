@@ -7,7 +7,7 @@ let
   # how many passwords have been made. In this env, we'll always be on
   # the 0th counter, so the password is static.
   #
-  # Generated in nix-shell -p oathToolkit
+  # Generated in nix-shell -p oath-toolkit
   # via: oathtool -v -d6 -w10 cdd4083ef8ff1fa9178c6d46bfb1a3
   # and picking a the first 4:
   oathSnakeOilPassword1 = "143349";
@@ -77,28 +77,28 @@ in
     machine.screenshot("postboot")
 
     with subtest("Invalid password"):
-        switch_to_tty(2)
-        enter_user_alice(2)
+        switch_to_tty("2")
+        enter_user_alice("2")
 
         machine.send_chars("${oathSnakeOilPassword1}\n")
-        machine.wait_until_tty_matches(2, "Password: ")
+        machine.wait_until_tty_matches("2", "Password: ")
         machine.send_chars("blorg\n")
-        machine.wait_until_tty_matches(2, "Login incorrect")
+        machine.wait_until_tty_matches("2", "Login incorrect")
 
     with subtest("Invalid oath token"):
-        switch_to_tty(3)
-        enter_user_alice(3)
+        switch_to_tty("3")
+        enter_user_alice("3")
 
         machine.send_chars("000000\n")
-        machine.wait_until_tty_matches(3, "Login incorrect")
-        machine.wait_until_tty_matches(3, "login:")
+        machine.wait_until_tty_matches("3", "Login incorrect")
+        machine.wait_until_tty_matches("3", "login:")
 
     with subtest("Happy path: Both passwords are mandatory to get us in"):
-        switch_to_tty(4)
-        enter_user_alice(4)
+        switch_to_tty("4")
+        enter_user_alice("4")
 
         machine.send_chars("${oathSnakeOilPassword2}\n")
-        machine.wait_until_tty_matches(4, "Password: ")
+        machine.wait_until_tty_matches("4", "Password: ")
         machine.send_chars("${alicePassword}\n")
 
         machine.wait_until_succeeds("pgrep -u alice bash")

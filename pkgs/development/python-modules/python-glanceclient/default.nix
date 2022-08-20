@@ -11,6 +11,7 @@
 , oslo-i18n
 , wrapt
 , pyopenssl
+, pythonOlder
 , stestr
 , testscenarios
 , ddt
@@ -19,11 +20,14 @@
 
 buildPythonApplication rec {
   pname = "python-glanceclient";
-  version = "3.6.0";
+  version = "4.0.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-gi1IYtWJL2pltoKTRy5gsHTRwHlp0GHoBMbh1UP5g9o=";
+    hash = "sha256-pfQnIvrZFw16eRF2kPxmthWpY7qWkBu9SUavQnXO8zQ=";
   };
 
   postPatch = ''
@@ -54,7 +58,9 @@ buildPythonApplication rec {
     stestr run
   '';
 
-  pythonImportsCheck = [ "glanceclient" ];
+  pythonImportsCheck = [
+    "glanceclient"
+  ];
 
   meta = with lib; {
     description = "Python bindings for the OpenStack Images API";

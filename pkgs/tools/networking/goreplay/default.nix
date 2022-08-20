@@ -1,20 +1,23 @@
-{ lib, buildGoPackage, fetchFromGitHub, libpcap }:
+{ lib, buildGoModule, fetchFromGitHub, libpcap }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "goreplay";
-  version = "1.1.0";
-  rev = "v${version}";
-
-  goPackagePath = "github.com/buger/goreplay";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
-    inherit rev;
-    owner  = "buger";
-    repo   = "goreplay";
-    sha256 = "07nsrx5hwmk6l8bqp48gqk40i9bxf0g4fbmpqbngx6j5f7lpbk2n";
+    owner = "buger";
+    repo = "goreplay";
+    rev = version;
+    sha256 = "sha256-FiY9e5FgpPu+K8eoO8TsU3xSaSoPPDxYEu0oi/S8Q1w=";
   };
 
+  vendorSha256 = "sha256-jDMAtcq3ZowFdky5BdTkVNxq4ltkhklr76nXYJgGALg=";
+
+  ldflags = [ "-s" "-w" ];
+
   buildInputs = [ libpcap ];
+
+  doCheck = false;
 
   meta = {
     homepage = "https://github.com/buger/goreplay";

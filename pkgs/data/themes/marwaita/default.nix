@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "marwaita";
-  version = "13.0";
+  version = "14.0";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = pname;
     rev = version;
-    sha256 = "sha256-aP/zPM7M8Oru/2AA8w6rKU/AVJJ0bAEC01C60yi2SbM=";
+    sha256 = "sha256-G8oarWGx4DQ8ftmaWYpzV94cabDXbiJcVVgs70AG0Gs=";
   };
 
   buildInputs = [
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater {inherit pname version; };
+  passthru.updateScript = gitUpdater { inherit pname version; };
 
   meta = with lib; {
     description = "GTK theme supporting Budgie, Pantheon, Mate, Xfce4 and GNOME desktops";

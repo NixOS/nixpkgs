@@ -2,22 +2,25 @@
 , stdenv
 , buildGoModule
 , fetchFromGitHub
+, installShellFiles
 }:
 
 buildGoModule rec {
   pname = "arkade";
-  version = "0.8.23";
+  version = "0.8.34";
 
   src = fetchFromGitHub {
     owner = "alexellis";
     repo = "arkade";
     rev = version;
-    sha256 = "sha256-y3NsYPGVlWA/N2AYw3EQKUwLeGYwRI29tC9iTPeyU3Q=";
+    sha256 = "sha256-nGAR+CYVE2acXRRJCl6nWTrjpbX6HArsys9Df8D/hEE=";
   };
 
   CGO_ENABLED = 0;
 
-  vendorSha256 = "sha256-E+fjDW7UIAYDiDI8Eb8atAtccEIRcV5hqYdSxRYM9fc=";
+  nativeBuildInputs = [ installShellFiles ];
+
+  vendorSha256 = "sha256-6EnhO4zYYdsTKvNQApZxXo8x6oFKsmuMvOI3zPHAQLs=";
 
   # Exclude pkg/get: tests downloading of binaries which fail when sandbox=true
   subPackages = [
@@ -37,6 +40,13 @@ buildGoModule rec {
     "-X github.com/alexellis/arkade/cmd.GitCommit=ref/tags/${version}"
     "-X github.com/alexellis/arkade/cmd.Version=${version}"
   ];
+
+  postInstall = ''
+    installShellCompletion --cmd arkade \
+      --bash <($out/bin/arkade completion bash) \
+      --zsh <($out/bin/arkade completion zsh) \
+      --fish <($out/bin/arkade completion fish)
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/alexellis/arkade";

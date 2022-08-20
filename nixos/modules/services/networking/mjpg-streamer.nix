@@ -17,7 +17,7 @@ in {
       inputPlugin = mkOption {
         type = types.str;
         default = "input_uvc.so";
-        description = ''
+        description = lib.mdDoc ''
           Input plugin. See plugins documentation for more information.
         '';
       };
@@ -25,8 +25,8 @@ in {
       outputPlugin = mkOption {
         type = types.str;
         default = "output_http.so -w @www@ -n -p 5050";
-        description = ''
-          Output plugin. <literal>@www@</literal> is substituted for default mjpg-streamer www directory.
+        description = lib.mdDoc ''
+          Output plugin. `@www@` is substituted for default mjpg-streamer www directory.
           See plugins documentation for more information.
         '';
       };
@@ -34,13 +34,13 @@ in {
       user = mkOption {
         type = types.str;
         default = "mjpg-streamer";
-        description = "mjpg-streamer user name.";
+        description = lib.mdDoc "mjpg-streamer user name.";
       };
 
       group = mkOption {
         type = types.str;
         default = "video";
-        description = "mjpg-streamer group name.";
+        description = lib.mdDoc "mjpg-streamer group name.";
       };
 
     };

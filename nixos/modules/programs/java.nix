@@ -35,7 +35,7 @@ in
       package = mkOption {
         default = pkgs.jdk;
         defaultText = literalExpression "pkgs.jdk";
-        description = ''
+        description = lib.mdDoc ''
           Java package to install. Typical values are pkgs.jdk or pkgs.jre.
         '';
         type = types.package;

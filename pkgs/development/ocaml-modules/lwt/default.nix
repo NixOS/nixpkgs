@@ -8,15 +8,13 @@ let inherit (lib) optional versionOlder; in
 
 buildDunePackage rec {
   pname = "lwt";
-  version = "5.4.1";
-
-  useDune2 = true;
+  version = "5.5.0";
 
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "lwt";
     rev = version;
-    sha256 = "sha256-XpoRKcdNo2j05Gxm5wmKSdwqimFDSWvmLyooPYTHAjM=";
+    sha256 = "sha256:1jbjz2rsz3j56k8vh5qlmm87hhkr250bs2m3dvpy9vsri8rkzj9z";
   };
 
   strictDeps = true;

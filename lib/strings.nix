@@ -254,7 +254,7 @@ rec {
       => false
   */
   hasInfix = infix: content:
-    builtins.match ".*${escapeRegex infix}.*" content != null;
+    builtins.match ".*${escapeRegex infix}.*" "${content}" != null;
 
   /* Convert a string to a list of characters (i.e. singleton strings).
      This allows you to, e.g., map a function over each character.  However,
@@ -339,9 +339,10 @@ rec {
 
   /* Translate a Nix value into a shell variable declaration, with proper escaping.
 
-     Supported value types are strings (mapped to regular variables), lists of strings
-     (mapped to Bash-style arrays) and attribute sets of strings (mapped to Bash-style
-     associative arrays). Note that "strings" include string-coercible values like paths.
+     The value can be a string (mapped to a regular variable), a list of strings
+     (mapped to a Bash-style array) or an attribute set of strings (mapped to a
+     Bash-style associative array). Note that "string" includes string-coercible
+     values like paths or derivations.
 
      Strings are translated into POSIX sh-compatible code; lists and attribute sets
      assume a shell that understands Bash syntax (e.g. Bash or ZSH).
@@ -356,7 +357,7 @@ rec {
   */
   toShellVar = name: value:
     lib.throwIfNot (isValidPosixName name) "toShellVar: ${name} is not a valid shell variable name" (
-    if isAttrs value then
+    if isAttrs value && ! isCoercibleToString value then
       "declare -A ${name}=(${
         concatStringsSep " " (lib.mapAttrsToList (n: v:
           "[${escapeShellArg n}]=${escapeShellArg v}"

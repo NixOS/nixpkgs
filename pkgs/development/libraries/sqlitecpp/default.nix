@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  checkInputs = [ cppcheck gtest ];
-  buildInputs = [ sqlite ];
+  checkInputs = [ cppcheck ];
+  buildInputs = [ sqlite gtest ];
   doCheck = true;
 
   cmakeFlags = [

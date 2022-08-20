@@ -1,25 +1,24 @@
-{ buildPythonPackage
-, lib
-, isPy27
+{ lib
+, buildPythonPackage
+, pythonOlder
 , nixosTests
 , fetchPypi
 , alembic
 , aniso8601
-, Babel
+, babel
 , blinker
 , cachetools
 , click
 , dnspython
-, email_validator
+, email-validator
 , flask
 , flask-babel
 , flask-cors
 , flask_mail
 , flask_migrate
 , flask-restful
-, flask_sqlalchemy
 , flask-talisman
-, flask_wtf
+, flask-wtf
 , debts
 , idna
 , itsdangerous
@@ -29,7 +28,6 @@
 , python-dateutil
 , pytz
 , requests
-, six
 , sqlalchemy
 , sqlalchemy-utils
 , sqlalchemy-continuum
@@ -37,83 +35,85 @@
 , werkzeug
 , wtforms
 , psycopg2 # optional, for postgresql support
-, flask_testing
+, flask-testing
 , pytestCheckHook
-, fetchpatch
 }:
 
 buildPythonPackage rec {
   pname = "ihatemoney";
-  version = "5.1.1";
+  version = "5.2.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0gsqba9qbs1dpmfys8qpiahy4pbn4khcc6mgmdnhssmkjsb94sx6";
+    sha256 = "sha256-uQgZBbpqqbZYHpR+GwHWX0c7di2rVvEz0jPRY6+BkkQ=";
   };
-
-  disabled = isPy27;
 
   propagatedBuildInputs = [
     aniso8601
-    Babel
+    babel
     blinker
     cachetools
     click
+    debts
     dnspython
-    email_validator
+    email-validator
     flask
-    flask-babel
-    flask-cors
     flask_mail
     flask_migrate
+    flask-wtf
+    flask-babel
+    flask-cors
     flask-restful
     flask-talisman
-    flask_wtf
     idna
     itsdangerous
     jinja2
     Mako
     markupsafe
+    psycopg2
     python-dateutil
     pytz
     requests
-    six
+    sqlalchemy
     sqlalchemy-continuum
     werkzeug
     wtforms
-    psycopg2
-    debts
-  ];
-
-  patches = [
-    # fix build with wtforms 3. remove with next release
-    (fetchpatch {
-      url = "https://github.com/spiral-project/ihatemoney/commit/40ce32d9fa58a60d26a4d0df547b8deb709c330d.patch";
-      sha256 = "sha256-2ewOu21qhq/AOZaE9qrF5J6HH0h6ohFgjDb+BYjJnuQ=";
-      excludes = [ "setup.cfg" ];
-    })
   ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "cachetools>=4.1,<5" "cachetools>=4.1" \
-      --replace "Flask-WTF>=0.14.3,<1" "Flask-WTF>=0.14.3,<2" \
       --replace "SQLAlchemy>=1.3.0,<1.4" "SQLAlchemy>=1.3.0,<1.5" \
-      --replace "WTForms>=2.3.1,<2.4" "WTForms" \
-      --replace "Flask-Talisman>=0.8,<1" "Flask-Talisman>=0.8,<2" # https://github.com/spiral-project/ihatemoney/pull/1006
+      --replace "WTForms>=2.3.1,<3.1" "WTForms"
   '';
 
   checkInputs = [
-    flask_testing
+    flask-testing
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "ihatemoney" ];
+  pythonImportsCheck = [
+    "ihatemoney"
+  ];
 
   disabledTests = [
-    "test_notifications"  # requires running service.
-    "test_invite"         # requires running service.
-    "test_invitation_email_failure" # requires dns resolution
+    # Requires running service
+    "test_notifications"
+    "test_invite"
+    "test_access_other_projects"
+    "test_authentication"
+    "test_manage_bills"
+    "test_member_delete_method"
+    "test_membership"
+    "test_bill_add_remove_add"
+    "test_clear_ip_records"
+    "test_disable_clear_no_new_records"
+    "test_logs_for_common_actions"
+    # Requires DNS resolution
+    "test_invitation_email_failure"
   ];
 
   passthru.tests = {
@@ -121,9 +121,9 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
+    description = "Shared budget manager web application";
     homepage = "https://ihatemoney.org";
-    description = "A simple shared budget manager web application";
     license = licenses.beerware;
-    maintainers = [ maintainers.symphorien ];
+    maintainers = with maintainers; [ symphorien ];
   };
 }

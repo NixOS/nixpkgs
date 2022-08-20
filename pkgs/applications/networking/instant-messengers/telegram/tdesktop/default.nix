@@ -1,5 +1,4 @@
-{ mkDerivation
-, lib
+{ lib
 , fetchFromGitHub
 , callPackage
 , pkg-config
@@ -10,9 +9,11 @@
 , wrapQtAppsHook
 , extra-cmake-modules
 , qtbase
+, qtwayland
+, qtsvg
 , qtimageformats
+, qt5compat
 , gtk3
-, kwayland
 , libdbusmenu
 , lz4
 , xxHash
@@ -22,6 +23,7 @@
 , libopus
 , alsa-lib
 , libpulseaudio
+, pipewire
 , range-v3
 , tl-expected
 , hunspell
@@ -34,6 +36,7 @@
 , util-linuxMinimal
 , pcre
 , libpthreadstubs
+, libXdamage
 , libXdmcp
 , libselinux
 , libsepol
@@ -70,7 +73,7 @@ let
 in
 env.mkDerivation rec {
   pname = "telegram-desktop";
-  version = "3.6.0";
+  version = "4.1.0";
   # Note: Update via pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
 
   # Telegram-Desktop with submodules
@@ -79,16 +82,8 @@ env.mkDerivation rec {
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "0zcjm08nfdlxrsv0fi6dqg3lk52bcvsxnsf6jm5fv6gf5v9ia3hq";
+    sha256 = "06va1b5dac7a2av6vc0xin27y1hfnf4xbafy10myv33am8l5222m";
   };
-
-  patches = [
-    # fix build with KWayland 5.94+
-    # cf. https://invent.kde.org/frameworks/kwayland/-/commit/de442e4a94e249a29cf2e005db8e0a5e4a6a13ed
-    # upstream bug: https://github.com/telegramdesktop/tdesktop/issues/24375
-    # FIXME remove when no longer necessary
-    ./kf594.diff
-  ];
 
   postPatch = ''
     substituteInPlace Telegram/CMakeLists.txt \
@@ -120,9 +115,11 @@ env.mkDerivation rec {
 
   buildInputs = [
     qtbase
+    qtwayland
+    qtsvg
     qtimageformats
+    qt5compat
     gtk3
-    kwayland
     libdbusmenu
     lz4
     xxHash
@@ -132,6 +129,7 @@ env.mkDerivation rec {
     libopus
     alsa-lib
     libpulseaudio
+    pipewire
     range-v3
     tl-expected
     hunspell
@@ -144,6 +142,7 @@ env.mkDerivation rec {
     util-linuxMinimal # Required for libmount thus not nativeBuildInputs.
     pcre
     libpthreadstubs
+    libXdamage
     libXdmcp
     libselinux
     libsepol
@@ -166,8 +165,6 @@ env.mkDerivation rec {
     "-DTDESKTOP_API_HASH=d524b414d21f4d37f08684c1df41ac9c"
     # See: https://github.com/NixOS/nixpkgs/pull/130827#issuecomment-885212649
     "-DDESKTOP_APP_USE_PACKAGED_FONTS=OFF"
-    # TODO: Remove once QT6 is available in nixpkgs
-    "-DDESKTOP_APP_QT6=OFF"
   ];
 
   postFixup = ''
@@ -176,7 +173,7 @@ env.mkDerivation rec {
     wrapProgram $out/bin/telegram-desktop \
       "''${gappsWrapperArgs[@]}" \
       "''${qtWrapperArgs[@]}" \
-      --prefix PATH : ${lib.makeBinPath [ xdg-utils]} \
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils]} \
       --set XDG_RUNTIME_DIR "XDG-RUNTIME-DIR"
     sed -i $out/bin/telegram-desktop \
       -e "s,'XDG-RUNTIME-DIR',\"\''${XDG_RUNTIME_DIR:-/run/user/\$(id --user)}\","

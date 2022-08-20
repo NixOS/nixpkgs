@@ -1,21 +1,28 @@
-declare -a projectFile dotnetInstallFlags dotnetFlags
+# inherit arguments from derivation
+dotnetInstallFlags=( ${dotnetInstallFlags[@]-} )
 
 dotnetInstallHook() {
     echo "Executing dotnetInstallHook"
 
     runHook preInstall
 
+    if [ "${selfContainedBuild-}" ]; then
+        dotnetInstallFlags+=("--self-contained")
+    else
+        dotnetInstallFlags+=("--no-self-contained")
+    fi
+
     for project in ${projectFile[@]}; do
         env \
             dotnet publish "$project" \
                 -p:ContinuousIntegrationBuild=true \
                 -p:Deterministic=true \
+                -p:UseAppHost=true \
                 --output "$out/lib/${pname}" \
                 --configuration "@buildType@" \
                 --no-build \
-                --no-self-contained \
-                "${dotnetInstallFlags[@]}"  \
-                "${dotnetFlags[@]}"
+                ${dotnetInstallFlags[@]}  \
+                ${dotnetFlags[@]}
     done
 
     if [[ "${packNupkg-}" ]]; then
@@ -27,8 +34,8 @@ dotnetInstallHook() {
                     --output "$out/share" \
                     --configuration "@buildType@" \
                     --no-build \
-                    "${dotnetPackFlags[@]}"  \
-                    "${dotnetFlags[@]}"
+                    ${dotnetPackFlags[@]}  \
+                    ${dotnetFlags[@]}
         done
     fi
 

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "certigo";
-  version = "1.15.1";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "square";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-XGR6xIXdFLnJTFd+mJneRb/WkLmi0Jscta9Bj3paM1M=";
+    sha256 = "sha256-+j1NeQJPDwQxXVYnHNmL49Li2IMH+9ehS0HSM3kqyxU=";
   };
 
-  vendorSha256 = "sha256-qS/tIi6umSuQcl43SI4LyL0k5eWfRWs7kVybRPGKcbs=";
+  vendorSha256 = "sha256-G9YpMF4qyL8eJPnai81ihVTDK9E4meKxdpk+rjISnIM=";
 
   meta = with lib; {
     description = "A utility to examine and validate certificates in a variety of formats";

@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "channels";
-  version = "3.0.4";
+  version = "3.0.5";
 
   src = fetchFromGitHub {
     owner = "django";
     repo = pname;
     rev = version;
-    sha256 = "0jdylcb77n04rqyzg9v6qfzaxp1dnvdvnxddwh3x1qazw3csi5y2";
+    sha256 = "sha256-bKrPLbD9zG7DwIYBst1cb+zkDsM8B02wh3D80iortpw=";
   };
 
   propagatedBuildInputs = [
@@ -30,6 +30,10 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-django
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
   ];
 
   pythonImportsCheck = [ "channels" ];

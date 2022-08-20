@@ -10,6 +10,10 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ dune-glob dune-private-libs ];
 
+  preBuild = ''
+    rm -r vendor/csexp
+  '';
+
   meta = with lib; {
     inherit (dune_3.meta) homepage;
     description = "API for writing dynamic Dune actions";

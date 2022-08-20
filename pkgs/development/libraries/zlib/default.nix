@@ -42,8 +42,15 @@ stdenv.mkDerivation (rec {
 
   patches = [
     ./fix-configure-issue-cross.patch
+    # Starting zlib 1.2.12, zlib is stricter to incorrect CRC inputs
+    # with bits set above the low 32.
+    # see https://github.com/madler/zlib/issues/618
+    # TODO: remove the patch if upstream releases https://github.com/madler/zlib/commit/ec3df00224d4b396e2ac6586ab5d25f673caa4c2
+    # see https://github.com/NixOS/nixpkgs/issues/170539 for history.
+    ./comprehensive-crc-validation-for-wrong-implementations.patch
   ];
 
+  strictDeps = true;
   outputs = [ "out" "dev" ]
     ++ lib.optional splitStaticOutput "static";
   setOutputFlags = false;

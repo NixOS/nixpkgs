@@ -13,12 +13,14 @@
 , pythonSupport ? true
 , withpcre2 ? true
 , sendEmailSupport ? false
-, darwin
+, Security, CoreServices
 , nixosTests
 , withLibsecret ? false
 , pkg-config, glib, libsecret
 , gzip # needed at runtime by gitweb.cgi
 , withSsh ? false
+, doInstallCheck ? !stdenv.isDarwin  # extremely slow on darwin
+, tests
 }:
 
 assert osxkeychainSupport -> stdenv.isDarwin;
@@ -26,12 +28,12 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.35.3";
+  version = "2.37.1";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "git"
     + lib.optionalString svnSupport "-with-svn"
     + lib.optionalString (!svnSupport && !guiSupport && !sendEmailSupport && !withManual && !pythonSupport && !withpcre2) "-minimal";
@@ -39,7 +41,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "sha256-FenbT5vy7Z//MMtioAxcfAkBAV9asEjNtOiwTd7gD6I=";
+    sha256 = "sha256-yBYsa4uPHF23BqsBtO4p4xBhGCE13CfEhgIkquwbNQA=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -79,7 +81,7 @@ stdenv.mkDerivation {
     ++ lib.optionals perlSupport [ perlPackages.perl ]
     ++ lib.optionals guiSupport [tcl tk]
     ++ lib.optionals withpcre2 [ pcre2 ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.Security ]
+    ++ lib.optionals stdenv.isDarwin [ Security CoreServices ]
     ++ lib.optionals withLibsecret [ pkg-config glib libsecret ];
 
   # required to support pthread_cancel()
@@ -280,7 +282,7 @@ stdenv.mkDerivation {
   ## InstallCheck
 
   doCheck = false;
-  doInstallCheck = true;
+  inherit doInstallCheck;
 
   installCheckTarget = "test";
 
@@ -354,6 +356,8 @@ stdenv.mkDerivation {
     disable_test t9902-completion
     # not ok 1 - populate workdir (with 2.33.1 on x86_64-darwin)
     disable_test t5003-archive-zip
+  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    disable_test t7527-builtin-fsmonitor
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     # Test fails (as of 2.17.0, musl 1.1.19)
     disable_test t3900-i18n-commit
@@ -367,8 +371,11 @@ stdenv.mkDerivation {
   passthru = {
     shellPath = "/bin/git-shell";
     tests = {
+      withInstallCheck = finalAttrs.finalPackage.overrideAttrs (_: {
+        doInstallCheck = true;
+      });
       buildbot-integration = nixosTests.buildbot;
-    };
+    } // tests.fetchgit;
   };
 
   meta = {
@@ -385,4 +392,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ primeos wmertens globin ];
   };
-}
+})

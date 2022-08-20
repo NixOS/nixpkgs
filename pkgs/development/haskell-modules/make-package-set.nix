@@ -538,4 +538,44 @@ in package-set { inherit pkgs lib callPackage; } self // {
       withHoogle = self.ghcWithHoogle;
     };
 
+    /*
+      Run `cabal sdist` on a source.
+
+      Unlike `haskell.lib.sdistTarball`, this does not require any dependencies
+      to be present, as it uses `cabal-install` instead of building `Setup.hs`.
+      This makes `cabalSdist` faster than `sdistTarball`.
+    */
+    cabalSdist = {
+      src,
+      name ? if src?name then "${src.name}-sdist.tar.gz" else "source.tar.gz"
+    }:
+      pkgs.runCommandLocal name
+        {
+          inherit src;
+          nativeBuildInputs = [ buildHaskellPackages.cabal-install ];
+          dontUnpack = false;
+        } ''
+        unpackPhase
+        cd "''${sourceRoot:-.}"
+        patchPhase
+        mkdir out
+        HOME=$PWD cabal sdist --output-directory out
+        mv out/*.tar.gz $out
+      '';
+
+    /*
+      Like `haskell.lib.buildFromSdist`, but using `cabal sdist` instead of
+      building `./Setup`.
+
+      Unlike `haskell.lib.buildFromSdist`, this does not require any dependencies
+      to be present. This makes `buildFromCabalSdist` faster than `haskell.lib.buildFromSdist`.
+    */
+    buildFromCabalSdist = pkg:
+      haskellLib.overrideSrc
+        {
+          src = self.cabalSdist { inherit (pkg) src; };
+          version = pkg.version;
+        }
+        pkg;
+
   }

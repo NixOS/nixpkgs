@@ -84,6 +84,7 @@
 , libxml2
 , srt
 , vo-aacenc
+, libfreeaptx
 , VideoToolbox
 , AudioToolbox
 , AVFoundation
@@ -92,17 +93,18 @@
 , Foundation
 , MediaToolbox
 , enableGplPlugins ? true
+, bluezSupport ? stdenv.isLinux
 }:
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-bad";
-  version = "1.20.0";
+  version = "1.20.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-AVuNTZo5Xr9ETUCHaGeiA03TMEs61IvDoN0MHucdwR0=";
+    sha256 = "0j1q89dl8369djibc5p27lyj8y8p4maplmdzlryvrw0ib77w5lq9";
   };
 
   nativeBuildInputs = [
@@ -119,11 +121,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    gobject-introspection
     gst-plugins-base
     orc
-    # gobject-introspection has to be in both nativeBuildInputs and
-    # buildInputs. The build tries to link against libgirepository-1.0.so
-    gobject-introspection
     json-glib
     ldacbt
     libass
@@ -170,6 +170,7 @@ stdenv.mkDerivation rec {
     libintl
     srt
     vo-aacenc
+    libfreeaptx
   ] ++ lib.optionals enableZbar [
     zbar
   ] ++ lib.optionals faacSupport [
@@ -179,8 +180,9 @@ stdenv.mkDerivation rec {
     mjpegtools
     faad2
     x265
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals bluezSupport [
     bluez
+  ] ++ lib.optionals stdenv.isLinux [
     libva # vaapi requires libva -> libdrm -> libpciaccess, which is Linux-only in nixpkgs
     wayland
     wayland-protocols
@@ -261,13 +263,13 @@ stdenv.mkDerivation rec {
     "-Disac=disabled" # depends on `webrtc-audio-coding-1` not compatible with 0.3
     "-Dgs=disabled" # depends on `google-cloud-cpp`
     "-Donnx=disabled" # depends on `libonnxruntime` not packaged in nixpkgs as of writing
-    "-Dopenaptx=disabled" # depends on older version of `libopenaptx` due to licensing conflict https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/merge_requests/2235
+    "-Dopenaptx=enabled" # since gstreamer-1.20.1 `libfreeaptx` is supported for circumventing the dubious license conflict with `libopenaptx`
+    "-Dbluez=${if bluezSupport then "enabled" else "disabled"}"
   ]
   ++ lib.optionals (!stdenv.isLinux) [
     "-Dva=disabled" # see comment on `libva` in `buildInputs`
   ]
   ++ lib.optionals stdenv.isDarwin [
-    "-Dbluez=disabled"
     "-Dchromaprint=disabled"
     "-Ddirectfb=disabled"
     "-Dflite=disabled"
@@ -290,8 +292,6 @@ stdenv.mkDerivation rec {
     # `applemedia/videotexturecache.h` requires `gst/gl/gl.h`,
     # but its meson build system does not declare the dependency.
     "-Dapplemedia=disabled"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-Dintrospection=disabled"
   ] ++ (if enableGplPlugins then [
     "-Dgpl=enabled"
   ] else [

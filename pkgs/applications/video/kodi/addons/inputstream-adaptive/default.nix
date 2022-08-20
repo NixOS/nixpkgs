@@ -2,13 +2,13 @@
 buildKodiBinaryAddon rec {
   pname = "inputstream-adaptive";
   namespace = "inputstream.adaptive";
-  version = "19.0.3";
+  version = "19.0.7";
 
   src = fetchFromGitHub {
     owner = "xbmc";
     repo = "inputstream.adaptive";
     rev = "${version}-${rel}";
-    sha256 = "sha256-YYIPPxM8zVIugqLz0YntVZt1N+dReH+7V1Lkeif2wIY=";
+    sha256 = "sha256-2bQVTSMznh7soeL1VJJpXrlZd4ONmP9wq9pYLnwPnZE=";
   };
 
   extraNativeBuildInputs = [ gtest ];

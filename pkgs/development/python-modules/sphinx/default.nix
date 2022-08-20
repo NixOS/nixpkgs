@@ -3,8 +3,9 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, fetchpatch
 # propagatedBuildInputs
-, Babel
+, babel
 , alabaster
 , docutils
 , imagesize
@@ -30,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "sphinx";
-  version = "4.5.0";
+  version = "5.0.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -38,9 +39,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sphinx-doc";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-Lw9yZWCQpt02SL/McWPcyFRfVhQHC0TejcYRbVw+VxY=";
-    extraPostFetch = ''
+    rev = "refs/tags/v${version}";
+    hash = "sha256-kdwznYvs4szhC+qoL2Zsib9cU69fag1KhCXl8qIGkZU=";
+    postFetch = ''
       cd $out
       mv tests/roots/test-images/testimäge.png \
         tests/roots/test-images/testimæge.png
@@ -48,13 +49,28 @@ buildPythonPackage rec {
     '';
   };
 
+  patches = [
+    # https://github.com/sphinx-doc/sphinx/pull/10624
+    (fetchpatch {
+      name = "avoid-deprecated-docutils-0.19-api.patch";
+      sha256 = "sha256-QIrLkxnexNcfuI00UOeCpAamMLqqt4wxoVY1VA72jIw=";
+      url = "https://github.com/sphinx-doc/sphinx/commit/8d99168794ab8be0de1e6281d1b76af8177acd3d.patch";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "docutils>=0.14,<0.18" "docutils>=0.14"
+      --replace "docutils>=0.14,<0.19" "docutils>=0.14"
+
+    # remove impurity caused by date inclusion
+    # https://github.com/sphinx-doc/sphinx/blob/master/setup.cfg#L4-L6
+    substituteInPlace setup.cfg \
+      --replace "tag_build = .dev" "" \
+      --replace "tag_date = true" ""
   '';
 
   propagatedBuildInputs = [
-    Babel
+    babel
     alabaster
     docutils
     imagesize

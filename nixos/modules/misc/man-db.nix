@@ -23,11 +23,11 @@ in
             ++ lib.optionals config.documentation.dev.enable [ "devman" ];
           ignoreCollisions = true;
         };
-        defaultText = lib.literalDocBook "all man pages in <option>config.environment.systemPackages</option>";
-        description = ''
-          The manual pages to generate caches for if <option>documentation.man.generateCaches</option>
+        defaultText = lib.literalMD "all man pages in {option}`config.environment.systemPackages`";
+        description = lib.mdDoc ''
+          The manual pages to generate caches for if {option}`documentation.man.generateCaches`
           is enabled. Must be a path to a directory with man pages under
-          <literal>/share/man</literal>; see the source for an example.
+          `/share/man`; see the source for an example.
           Advanced users can make this a content-addressed derivation to save a few rebuilds.
         '';
       };
@@ -36,8 +36,8 @@ in
         type = lib.types.package;
         default = pkgs.man-db;
         defaultText = lib.literalExpression "pkgs.man-db";
-        description = ''
-          The <literal>man-db</literal> derivation to use. Useful to override
+        description = lib.mdDoc ''
+          The `man-db` derivation to use. Useful to override
           configuration options used for the package.
         '';
       };

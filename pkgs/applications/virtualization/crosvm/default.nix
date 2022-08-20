@@ -1,61 +1,76 @@
 { stdenv, lib, rustPlatform, fetchgit
-, pkg-config, wayland-scanner, libcap, minijail, wayland, wayland-protocols
-, linux
+, minijail-tools, pkg-config, protobuf, wayland-scanner
+, libcap, libdrm, libepoxy, minijail, virglrenderer, wayland, wayland-protocols
 }:
 
 let
+  src = fetchgit {
+    url = "https://chromium.googlesource.com/crosvm/crosvm";
+    rev = "265aab613b1eb31598ea0826f04810d9f010a2c6";
+    sha256 = "OzbtPHs6BWK83RZ/6eCQHA61X6SY8FoBkaN70a37pvc=";
+    fetchSubmodules = true;
+  };
 
-  upstreamInfo = with builtins; fromJSON (readFile ./upstream-info.json);
-
-  arch = with stdenv.hostPlatform;
-    if isAarch64 then "arm"
-    else if isx86_64 then "x86_64"
-    else throw "no seccomp policy files available for host platform";
-
+  # use vendored virglrenderer
+  virglrenderer' = virglrenderer.overrideAttrs (oa: {
+    src = "${src}/third_party/virglrenderer";
+  });
 in
 
-  rustPlatform.buildRustPackage rec {
-    pname = "crosvm";
-    inherit (upstreamInfo) version;
+rustPlatform.buildRustPackage rec {
+  pname = "crosvm";
+  version = "104.0";
 
-    src = fetchgit (builtins.removeAttrs upstreamInfo.src [ "date" "path" ]);
+  inherit src;
 
-    patches = [
-      ./default-seccomp-policy-dir.diff
-    ];
+  separateDebugInfo = true;
 
-    cargoLock.lockFile = ./Cargo.lock;
+  patches = [
+    ./default-seccomp-policy-dir.diff
+  ];
 
-    nativeBuildInputs = [ pkg-config wayland-scanner ];
+  cargoLock.lockFile = ./Cargo.lock;
 
-    buildInputs = [ libcap minijail wayland wayland-protocols ];
+  nativeBuildInputs = [ minijail-tools pkg-config protobuf wayland-scanner ];
 
-    postPatch = ''
-      cp ${./Cargo.lock} Cargo.lock
-      sed -i "s|/usr/share/policy/crosvm/|$out/share/policy/|g" \
-             seccomp/*/*.policy
-    '';
+  buildInputs = [
+    libcap libdrm libepoxy minijail virglrenderer' wayland wayland-protocols
+  ];
 
-    preBuild = ''
-      export DEFAULT_SECCOMP_POLICY_DIR=$out/share/policy
-    '';
+  arch = stdenv.hostPlatform.parsed.cpu.name;
 
-    postInstall = ''
-      mkdir -p $out/share/policy/
-      cp seccomp/${arch}/* $out/share/policy/
-    '';
+  postPatch = ''
+    cp ${cargoLock.lockFile} Cargo.lock
+    sed -i "s|/usr/share/policy/crosvm/|$PWD/seccomp/$arch/|g" \
+        seccomp/$arch/*.policy
+  '';
 
-    CROSVM_CARGO_TEST_KERNEL_BINARY =
-      lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform)
-        "${linux}/${stdenv.hostPlatform.linux-kernel.target}";
+  preBuild = ''
+    export DEFAULT_SECCOMP_POLICY_DIR=$out/share/policy
 
-    passthru.updateScript = ./update.py;
+    for policy in seccomp/$arch/*.policy; do
+        compile_seccomp_policy \
+            --default-action trap $policy ''${policy%.policy}.bpf
+    done
 
-    meta = with lib; {
-      description = "A secure virtual machine monitor for KVM";
-      homepage = "https://chromium.googlesource.com/chromiumos/platform/crosvm/";
-      maintainers = with maintainers; [ qyliss ];
-      license = licenses.bsd3;
-      platforms = [ "aarch64-linux" "x86_64-linux" ];
-    };
-  }
+    substituteInPlace seccomp/$arch/*.policy \
+      --replace "@include $(pwd)/seccomp/$arch/" "@include $out/share/policy/"
+  '';
+
+  buildFeatures = [ "default" "virgl_renderer" "virgl_renderer_next" ];
+
+  postInstall = ''
+    mkdir -p $out/share/policy/
+    cp -v seccomp/$arch/*.{policy,bpf} $out/share/policy/
+  '';
+
+  passthru.updateScript = ./update.py;
+
+  meta = with lib; {
+    description = "A secure virtual machine monitor for KVM";
+    homepage = "https://chromium.googlesource.com/crosvm/crosvm/";
+    maintainers = with maintainers; [ qyliss ];
+    license = licenses.bsd3;
+    platforms = [ "aarch64-linux" "x86_64-linux" ];
+  };
+}

@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ lib, pkgs, ... }: {
   name = "systemd-initrd-simple";
 
-  machine = { pkgs, ... }: {
+  nodes.machine = { pkgs, ... }: {
     boot.initrd.systemd = {
       enable = true;
       emergencyAccess = true;

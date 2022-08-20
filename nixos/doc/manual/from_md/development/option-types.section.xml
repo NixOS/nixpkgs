@@ -427,6 +427,43 @@
           </itemizedlist>
         </listitem>
       </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>types.deferredModule</literal>
+        </term>
+        <listitem>
+          <para>
+            Whereas <literal>submodule</literal> represents an option
+            tree, <literal>deferredModule</literal> represents a module
+            value, such as a module file or a configuration.
+          </para>
+          <para>
+            It can be set multiple times.
+          </para>
+          <para>
+            Module authors can use its value in
+            <literal>imports</literal>, in
+            <literal>submoduleWith</literal><quote>s
+            <literal>modules</literal> or in
+            <literal>evalModules</literal></quote>
+            <literal>modules</literal> parameter, among other places.
+          </para>
+          <para>
+            Note that <literal>imports</literal> must be evaluated
+            before the module fixpoint. Because of this, deferred
+            modules can only be imported into <quote>other</quote>
+            fixpoints, such as submodules.
+          </para>
+          <para>
+            One use case for this type is the type of a
+            <quote>default</quote> module that allow the user to affect
+            all submodules in an <literal>attrsOf submodule</literal> at
+            once. This is more convenient and discoverable than
+            expecting the module user to type-merge with the
+            <literal>attrsOf submodule</literal> option.
+          </para>
+        </listitem>
+      </varlistentry>
     </variablelist>
   </section>
   <section xml:id="sec-option-types-composed">
@@ -616,6 +653,12 @@
       submodule</link>) or as reference
       (<link linkend="ex-submodule-reference">Example: Submodule defined
       as a reference</link>).
+    </para>
+    <para>
+      Note that even if your submodule’s options all have a default
+      value, you will still need to provide a default value (e.g. an
+      empty attribute set) if you want to allow users to leave it
+      undefined.
     </para>
     <anchor xml:id="ex-submodule-direct" />
     <para>

@@ -1,4 +1,4 @@
-{ rustPlatform }:
+{ rustPlatform, lib, makeWrapper, patchelf, glibc, binutils }:
 
 rustPlatform.buildRustPackage {
   pname = "make-initrd-ng";
@@ -6,4 +6,12 @@ rustPlatform.buildRustPackage {
 
   src = ./make-initrd-ng;
   cargoLock.lockFile = ./make-initrd-ng/Cargo.lock;
+
+  passthru.updateScript = ./make-initrd-ng/update.sh;
+
+  meta = {
+    description = "Tool for copying binaries and their dependencies";
+    maintainers = with lib.maintainers; [ das_j elvishjerricco k900 lheckemann ];
+    license = lib.licenses.mit;
+  };
 }

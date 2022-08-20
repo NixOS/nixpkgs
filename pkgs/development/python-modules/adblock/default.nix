@@ -16,23 +16,23 @@
 
 buildPythonPackage rec {
   pname = "adblock";
-  version = "0.5.2";
+  version = "0.6.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   # Pypi only has binary releases
   src = fetchFromGitHub {
     owner = "ArniDagur";
     repo = "python-adblock";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-6FH+AVK7+Yg1a6oKbFV80TuGGE4Y7I3mMVzwVHdHYO4=";
+    hash = "sha256-5g5xdUzH/RTVwu4Vfb5Cb1t0ruG0EXgiXjrogD/+JCU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-JI/C+Woi/dJWUGUum8daecjFWiQgxY6BFYZ5MpTcRvU=";
+    hash = "sha256-1xmYmF5P7a5O9MilxDy+CVhmWMGRetdM2fGvTPy7JmM=";
   };
 
   nativeBuildInputs = [
@@ -75,7 +75,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python wrapper for Brave's adblocking library";
     homepage = "https://github.com/ArniDagur/python-adblock/";
-    maintainers = with maintainers; [ petabyteboy dotlambda ];
+    maintainers = with maintainers; [ dotlambda ];
     license = with licenses; [ asl20 /* or */ mit ];
   };
 }

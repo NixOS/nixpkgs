@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-QWWqC10bENemG5FYEog87tT7IxDaBJUDqu6j/sO3sYE=";
   };
 
-  buildFlags = lib.optional stdenv.isDarwin "LDFLAGS= CFLAGS_EXTRA=";
+  buildFlags = lib.optional stdenv.isDarwin "LDFLAGS= LDFLAGS_EXTRA= CFLAGS_EXTRA=";
 
   installFlags = [ "PREFIX=$(out)" ];
   installTargets = lib.optional stdenv.isDarwin "install-osx";

@@ -1,22 +1,26 @@
-{ lib, buildPythonPackage, fetchPypi
-, nose
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "persisting-theory";
-  version = "0.2.1";
+  version = "1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02hcg7js23yjyw6gwxqzvyv2b1wfjrypk98cfxfgf7s8iz67vzq0";
+    sha256 = "sha256-D4QPoiJHvKpRQJTafzsmxgI1lCmrEtLNiL4GtJozYpA=";
   };
 
-  checkInputs = [ nose ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  checkPhase = "nosetests";
+  pythonImportsCheck = [ "persisting_theory" ];
 
   meta = with lib; {
-    homepage = "https://code.eliotberriot.com/eliotberriot/persisting-theory";
+    homepage = "https://code.agate.blue/agate/persisting-theory";
     description = "Automate data discovering and access inside a list of packages";
     license = licenses.bsd3;
     maintainers = with maintainers; [ mmai ];

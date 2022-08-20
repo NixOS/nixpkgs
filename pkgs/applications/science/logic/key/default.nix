@@ -115,6 +115,7 @@ in stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2;
     maintainers = with maintainers; [ fgaz ];
+    mainProgram = executable-name;
     platforms = platforms.all;
   };
 }

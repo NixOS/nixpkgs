@@ -17,8 +17,8 @@ let
 
       compressCmd = getAttr cfg.compression {
         "none" = "cat";
-        "gzip" = "${pkgs.gzip}/bin/gzip -c";
-        "zstd" = "${pkgs.zstd}/bin/zstd -c";
+        "gzip" = "${pkgs.gzip}/bin/gzip -c -${toString cfg.compressionLevel}";
+        "zstd" = "${pkgs.zstd}/bin/zstd -c -${toString cfg.compressionLevel}";
       };
 
       mkSqlPath = prefix: suffix: "${cfg.location}/${db}${prefix}.sql${suffix}";
@@ -76,8 +76,8 @@ in {
       startAt = mkOption {
         default = "*-*-* 01:15:00";
         type = with types; either (listOf str) str;
-        description = ''
-          This option defines (see <literal>systemd.time</literal> for format) when the
+        description = lib.mdDoc ''
+          This option defines (see `systemd.time` for format) when the
           databases should be dumped.
           The default is to update at 01:15 (at night) every day.
         '';
@@ -87,10 +87,10 @@ in {
         default = cfg.databases == [];
         defaultText = literalExpression "services.postgresqlBackup.databases == []";
         type = lib.types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Backup all databases using pg_dumpall.
           This option is mutual exclusive to
-          <literal>services.postgresqlBackup.databases</literal>.
+          `services.postgresqlBackup.databases`.
           The resulting backup dump will have the name all.sql.gz.
           This option is the default if no databases are specified.
         '';
@@ -99,7 +99,7 @@ in {
       databases = mkOption {
         default = [];
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           List of database names to dump.
         '';
       };
@@ -107,7 +107,7 @@ in {
       location = mkOption {
         default = "/var/backup/postgresql";
         type = types.path;
-        description = ''
+        description = lib.mdDoc ''
           Path of directory where the PostgreSQL database dumps will be placed.
         '';
       };
@@ -115,9 +115,9 @@ in {
       pgdumpOptions = mkOption {
         type = types.separatedString " ";
         default = "-C";
-        description = ''
+        description = lib.mdDoc ''
           Command line options for pg_dump. This options is not used
-          if <literal>config.services.postgresqlBackup.backupAll</literal> is enabled.
+          if `config.services.postgresqlBackup.backupAll` is enabled.
           Note that config.services.postgresqlBackup.backupAll is also active,
           when no databases where specified.
         '';
@@ -126,8 +126,17 @@ in {
       compression = mkOption {
         type = types.enum ["none" "gzip" "zstd"];
         default = "gzip";
-        description = ''
+        description = lib.mdDoc ''
           The type of compression to use on the generated database dump.
+        '';
+      };
+
+      compressionLevel = mkOption {
+        type = types.ints.between 1 19;
+        default = 6;
+        description = lib.mdDoc ''
+          The compression level used when compression is enabled.
+          gzip accepts levels 1 to 9. zstd accepts levels 1 to 19.
         '';
       };
     };
@@ -136,10 +145,18 @@ in {
 
   config = mkMerge [
     {
-      assertions = [{
-        assertion = cfg.backupAll -> cfg.databases == [];
-        message = "config.services.postgresqlBackup.backupAll cannot be used together with config.services.postgresqlBackup.databases";
-      }];
+      assertions = [
+        {
+          assertion = cfg.backupAll -> cfg.databases == [];
+          message = "config.services.postgresqlBackup.backupAll cannot be used together with config.services.postgresqlBackup.databases";
+        }
+        {
+          assertion = cfg.compression == "none" ||
+            (cfg.compression == "gzip" && cfg.compressionLevel >= 1 && cfg.compressionLevel <= 9) ||
+            (cfg.compression == "zstd" && cfg.compressionLevel >= 1 && cfg.compressionLevel <= 19);
+          message = "config.services.postgresqlBackup.compressionLevel must be set between 1 and 9 for gzip and 1 and 19 for zstd";
+        }
+      ];
     }
     (mkIf cfg.enable {
       systemd.tmpfiles.rules = [

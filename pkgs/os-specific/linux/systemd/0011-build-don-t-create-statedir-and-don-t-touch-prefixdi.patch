@@ -1,17 +1,17 @@
-From 3bc3462165cd72de93a1c71f03e6c4150726b159 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Franz Pletz <fpletz@fnordicwalking.de>
 Date: Sun, 11 Feb 2018 04:37:44 +0100
-Subject: [PATCH 11/19] build: don't create statedir and don't touch prefixdir
+Subject: [PATCH] build: don't create statedir and don't touch prefixdir
 
 ---
  meson.build | 3 ---
  1 file changed, 3 deletions(-)
 
 diff --git a/meson.build b/meson.build
-index c0cbadecb1..8266bf57de 100644
+index 9c170acc0a..818b7a3eb5 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -3729,9 +3729,6 @@ install_data('LICENSE.GPL2',
+@@ -3928,9 +3928,6 @@ install_data('LICENSE.GPL2',
  install_subdir('LICENSES',
                 install_dir : docdir)
  
@@ -21,6 +21,3 @@ index c0cbadecb1..8266bf57de 100644
  ############################################################
  
  # Ensure that changes to the docs/ directory do not break the
--- 
-2.34.0
-

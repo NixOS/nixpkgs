@@ -19,12 +19,14 @@
 , qtquickcontrols2
 , qtgraphicaleffects
 , qtwayland
+, nix-update-script
 }:
 let
-  version = "1.0.1";
+  pname = "qFlipper";
+  version = "1.1.2";
+  sha256 = "sha256-llbsyzRXJnaX53wnJ1j5X88nucq6qoRljVIGGyYuxuA=";
   timestamp = "99999999999";
   commit = "nix-${version}";
-  hash = "sha256-vHBlrtQ06kjjXXGL/jSdpAPHgqb7Vn1c6jXZVXwxHPQ=";
 
   udev_rules = ''
     #Flipper Zero serial port
@@ -35,15 +37,14 @@ let
 
 in
 mkDerivation {
-  pname = "qFlipper";
-  inherit version;
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "flipperdevices";
     repo = "qFlipper";
     rev = version;
-    inherit hash;
     fetchSubmodules = true;
+    inherit sha256;
   };
 
   nativeBuildInputs = [
@@ -96,7 +97,12 @@ mkDerivation {
     EOF
   '';
 
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
+
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Cross-platform desktop tool to manage your flipper device";
     homepage = "https://flipperzero.one/";
     license = licenses.gpl3Only;

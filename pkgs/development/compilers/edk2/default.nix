@@ -7,10 +7,11 @@
 , bc
 , llvmPackages_9
 , lib
+, buildPackages
 }:
 
 let
-  pythonEnv = python3.withPackages (ps: [ps.tkinter]);
+  pythonEnv = buildPackages.python3.withPackages (ps: [ps.tkinter]);
 
 targetArch = if stdenv.isi686 then
   "IA32"
@@ -35,6 +36,14 @@ edk2 = buildStdenv.mkDerivation {
   pname = "edk2";
   version = "202202";
 
+  patches = [
+    # pass targetPrefix as an env var
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/edk2/raw/08f2354cd280b4ce5a7888aa85cf520e042955c3/f/0021-Tweak-the-tools_def-to-support-cross-compiling.patch";
+      sha256 = "sha256-E1/fiFNVx0aB1kOej2DJ2DlBIs9tAAcxoedym2Zhjxw=";
+    })
+  ];
+
   # submodules
   src = fetchFromGitHub {
     owner = "tianocore";
@@ -44,7 +53,12 @@ edk2 = buildStdenv.mkDerivation {
     sha256 = "0srmhi6c27n5vyl01nhh0fq8k4vngbwn79siyjvcacjbj2ivhh8d";
   };
 
-  buildInputs = [ libuuid pythonEnv ];
+  nativeBuildInputs = [ pythonEnv ];
+  depsBuildBuild = [ buildPackages.stdenv.cc buildPackages.util-linux buildPackages.bash ];
+  strictDeps = true;
+
+  # trick taken from https://src.fedoraproject.org/rpms/edk2/blob/08f2354cd280b4ce5a7888aa85cf520e042955c3/f/edk2.spec#_319
+  ${"GCC5_${targetArch}_PREFIX"}=stdenv.cc.targetPrefix;
 
   makeFlags = [ "-C BaseTools" ]
     ++ lib.optional (stdenv.cc.isClang) [ "BUILD_CC=clang BUILD_CXX=clang++ BUILD_AS=clang" ];
@@ -57,6 +71,10 @@ edk2 = buildStdenv.mkDerivation {
     mkdir -vp $out
     mv -v BaseTools $out
     mv -v edksetup.sh $out
+    # patchShebangs fails to see these when cross compiling
+    for i in $out/BaseTools/BinWrappers/PosixLike/*; do
+      substituteInPlace $i --replace '/usr/bin/env bash' ${buildPackages.bash}/bin/bash
+    done
   '';
 
   enableParallelBuilding = true;
@@ -72,7 +90,11 @@ edk2 = buildStdenv.mkDerivation {
     mkDerivation = projectDscPath: attrs: buildStdenv.mkDerivation ({
       inherit (edk2) src;
 
-      buildInputs = [ bc pythonEnv ] ++ attrs.buildInputs or [];
+      depsBuildBuild = [ buildPackages.stdenv.cc ] ++ attrs.depsBuildBuild or [];
+      nativeBuildInputs = [ bc pythonEnv ] ++ attrs.nativeBuildInputs or [];
+      strictDeps = true;
+
+      ${"GCC5_${targetArch}_PREFIX"}=stdenv.cc.targetPrefix;
 
       prePatch = ''
         rm -rf BaseTools
@@ -97,7 +119,7 @@ edk2 = buildStdenv.mkDerivation {
         mv -v Build/*/* $out
         runHook postInstall
       '';
-    } // removeAttrs attrs [ "buildInputs" ]);
+    } // removeAttrs attrs [ "nativeBuildInputs" "depsBuildBuild" ]);
   };
 };
 

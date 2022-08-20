@@ -10,7 +10,7 @@ in
       type = types.package;
       default = pkgs.openwebrx;
       defaultText = literalExpression "pkgs.openwebrx";
-      description = "OpenWebRX package to use for the service";
+      description = lib.mdDoc "OpenWebRX package to use for the service";
     };
   };
 
@@ -19,6 +19,10 @@ in
       wantedBy = [ "multi-user.target" ];
       path = with pkgs; [
         csdr
+        digiham
+        codec2
+        js8call
+        m17-cxx-demod
         alsaUtils
         netcat
       ];

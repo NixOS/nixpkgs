@@ -1,0 +1,22 @@
+diff --git a/psycopg/psycopg/pq/_pq_ctypes.py b/psycopg/psycopg/pq/_pq_ctypes.py
+index bf04d560..9e79fc3f 100644
+--- a/psycopg/psycopg/pq/_pq_ctypes.py
++++ b/psycopg/psycopg/pq/_pq_ctypes.py
+@@ -13,16 +13,7 @@ from typing import List, Optional, Tuple
+ 
+ from ..errors import NotSupportedError
+ 
+-if sys.platform == "win32":
+-    libname = ctypes.util.find_library("libpq.dll")
+-elif sys.platform == "darwin":
+-    libname = ctypes.util.find_library("libpq.dylib")
+-else:
+-    libname = ctypes.util.find_library("pq")
+-if not libname:
+-    raise ImportError("libpq library not found")
+-
+-pq = ctypes.cdll.LoadLibrary(libname)
++pq = ctypes.cdll.LoadLibrary("@libpq@")
+ 
+ # Get the libpq version to define what functions are available.
+ 

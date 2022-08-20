@@ -23,7 +23,6 @@ let
 
       cmakeFlags = [
         "-DBUILD_SHARED_LIBS=${if enableShared then "ON" else "OFF"}"
-        "-DCMAKE_SKIP_BUILD_RPATH=OFF" # for tests
       ];
 
       doCheck = true;
@@ -49,7 +48,7 @@ in
   };
 
   fmt_8 = generic {
-    version = "8.0.1";
-    sha256 = "1mnvxqsan034d2jiqnw2yvkljl7lwvhakmj5bscwp1fpkn655bbw";
+    version = "8.1.1";
+    sha256 = "sha256-leb2800CwdZMJRWF5b1Y9ocK0jXpOX/nwo95icDf308=";
   };
 }

@@ -4,7 +4,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
-, pylint
 , pytest-aiohttp
 , pytest-asyncio
 , pytestCheckHook
@@ -31,7 +30,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
-    pylint
   ];
 
   checkInputs = [
