@@ -535,6 +535,13 @@ in
   # built but not started by default?
   config = mkIf cfg.enable {
 
+    warnings =
+      if (config.services.firewall.enable && config.virtualisation.docker.enable)
+      then [
+        ''You have enabled `networking.firewall` and `virtualisation.docker`. Be aware that `docker`
+        does not abide by the network firewall policies and may expose ports.''
+      ] else [ ];
+
     networking.firewall.trustedInterfaces = [ "lo" ];
 
     environment.systemPackages = [ cfg.package ] ++ cfg.extraPackages;
