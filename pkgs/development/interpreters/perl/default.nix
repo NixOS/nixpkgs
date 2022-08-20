@@ -39,6 +39,9 @@ let
       [
         # Do not look in /usr etc. for dependencies.
         ./no-sys-dirs-5.31.patch
+
+        # Enable TLS/SSL verification in HTTP::Tiny by default
+        ./http-tiny-verify-ssl-by-default.patch
       ]
       ++ optional stdenv.isSunOS ./ld-shared.patch
       ++ optionals stdenv.isDarwin [ ./cpp-precomp.patch ./sw_vers.patch ]
