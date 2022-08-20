@@ -153,6 +153,34 @@ let
       specialMount "${mount.device}" "${mount.mountPoint}" "${concatStringsSep "," mount.options}" "${mount.fsType}"
     '') mounts);
 
+  makeFstabEntries =
+    let
+      fsToSkipCheck = [ "none" "bindfs" "btrfs" "zfs" "tmpfs" "nfs" "vboxsf" "glusterfs" "apfs" "9p" "cifs" "prl_fs" "vmhgfs" ];
+      isBindMount = fs: builtins.elem "bind" fs.options;
+      skipCheck = fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck || isBindMount fs;
+      # https://wiki.archlinux.org/index.php/fstab#Filepath_spaces
+      escape = string: builtins.replaceStrings [ " " "\t" ] [ "\\040" "\\011" ] string;
+    in fstabFileSystems: { rootPrefix ? "", excludeChecks ? false, extraOpts ? (fs: []) }: concatMapStrings (fs:
+      (optionalString (isBindMount fs) (escape rootPrefix))
+      + (if fs.device != null then escape fs.device
+         else if fs.label != null then "/dev/disk/by-label/${escape fs.label}"
+         else throw "No device specified for mount point ‘${fs.mountPoint}’.")
+      + " " + escape (rootPrefix + fs.mountPoint)
+      + " " + fs.fsType
+      + " " + builtins.concatStringsSep "," (fs.options ++ (extraOpts fs))
+      + " " + (optionalString (!excludeChecks)
+        ("0 " + (if skipCheck fs then "0" else if fs.mountPoint == "/" then "1" else "2")))
+      + "\n"
+    ) fstabFileSystems;
+
+    initrdFstab = pkgs.writeText "initrd-fstab" (makeFstabEntries (filter utils.fsNeededForBoot fileSystems) {
+      rootPrefix = "/sysroot";
+      excludeChecks = true;
+      extraOpts = fs:
+        (optional fs.autoResize "x-systemd.growfs")
+        ++ (optional fs.autoFormat "x-systemd.makefs");
+    });
+
 in
 
 {
@@ -278,11 +306,6 @@ in
 
     environment.etc.fstab.text =
       let
-        fsToSkipCheck = [ "none" "bindfs" "btrfs" "zfs" "tmpfs" "nfs" "vboxsf" "glusterfs" "apfs" "9p" "cifs" "prl_fs" "vmhgfs" ];
-        isBindMount = fs: builtins.elem "bind" fs.options;
-        skipCheck = fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck || isBindMount fs;
-        # https://wiki.archlinux.org/index.php/fstab#Filepath_spaces
-        escape = string: builtins.replaceStrings [ " " "\t" ] [ "\\040" "\\011" ] string;
         swapOptions = sw: concatStringsSep "," (
           sw.options
           ++ optional (sw.priority != null) "pri=${toString sw.priority}"
@@ -297,24 +320,15 @@ in
         # <file system> <mount point>   <type>  <options>       <dump>  <pass>
 
         # Filesystems.
-        ${concatMapStrings (fs:
-            (if fs.device != null then escape fs.device
-             else if fs.label != null then "/dev/disk/by-label/${escape fs.label}"
-             else throw "No device specified for mount point ‘${fs.mountPoint}’.")
-            + " " + escape fs.mountPoint
-            + " " + fs.fsType
-            + " " + builtins.concatStringsSep "," fs.options
-            + " 0"
-            + " " + (if skipCheck fs then "0" else
-                     if fs.mountPoint == "/" then "1" else "2")
-            + "\n"
-        ) fileSystems}
+        ${makeFstabEntries fileSystems {}}
 
         # Swap devices.
         ${flip concatMapStrings config.swapDevices (sw:
             "${sw.realDevice} none swap ${swapOptions sw}\n"
         )}
       '';
+
+    boot.initrd.systemd.contents."/etc/fstab".source = initrdFstab;
 
     # Provide a target that pulls in all filesystems.
     systemd.targets.fs =
