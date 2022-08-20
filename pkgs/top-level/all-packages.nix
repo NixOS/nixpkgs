@@ -32399,7 +32399,7 @@ with pkgs;
 
   gotypist = callPackage ../games/gotypist { };
 
-  heroic = callPackage ../games/heroic { };
+  heroic-unwrapped = callPackage ../games/heroic { };
 
   julius = callPackage ../games/julius { };
 
