@@ -696,6 +696,8 @@ in {
 
   aria2p = callPackage ../development/python-modules/aria2p { };
 
+  arnparse = callPackage ../development/python-modules/arnparse { };
+
   arrayqueues = callPackage ../development/python-modules/arrayqueues { };
 
   arris-tg2492lg = callPackage ../development/python-modules/arris-tg2492lg { };

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "mdformat";
-  version = "0.7.14";
+  version = "0.7.15";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "executablebooks";
     repo = pname;
     rev = version;
-    sha256 = "sha256-bImBW6r8g/4MQ9yNrBBhk7AGqKRXFyAew6HHEmqelxw=";
+    sha256 = "sha256-Okkkc7cv4OROQ7tP1YMcdXbK6o6wvuzYFLTCqVu/4ck=";
   };
 
   nativeBuildInputs = [

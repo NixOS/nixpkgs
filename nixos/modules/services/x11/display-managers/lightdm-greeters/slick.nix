@@ -27,7 +27,7 @@ in
     services.xserver.displayManager.lightdm.greeters.slick = {
       enable = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         description = lib.mdDoc ''
           Whether to enable lightdm-slick-greeter as the lightdm greeter.
         '';
