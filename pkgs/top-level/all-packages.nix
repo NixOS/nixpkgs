@@ -8253,9 +8253,9 @@ with pkgs;
 
   nodenv = callPackage ../development/tools/nodenv { };
 
-  nodejs = hiPrio nodejs-16_x;
+  nodejs = hiPrio nodejs-18_x;
 
-  nodejs-slim = nodejs-slim-16_x;
+  nodejs-slim = nodejs-slim-18_x;
 
   nodejs-14_x = callPackage ../development/web/nodejs/v14.nix { };
   nodejs-slim-14_x = callPackage ../development/web/nodejs/v14.nix {
