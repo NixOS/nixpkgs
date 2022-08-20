@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildDunePackage, ocaml, js_of_ocaml, ppxlib, js_of_ocaml-ppx, gen_js_api, ojs }:
+{ lib, fetchurl, buildDunePackage, ocaml, js_of_ocaml, ppxlib, js_of_ocaml-ppx, gen_js_api }:
 
 let
   owner = "mnxn";
@@ -20,7 +20,6 @@ buildDunePackage rec {
     js_of_ocaml-ppx
     gen_js_api
   ];
-  propagatedBuildInputs = [ ojs ];
 
   meta = {
     homepage = "https://github.com/${owner}/${pname}";
