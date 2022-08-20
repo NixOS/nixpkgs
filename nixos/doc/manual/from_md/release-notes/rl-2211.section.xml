@@ -275,6 +275,26 @@
       </listitem>
       <listitem>
         <para>
+          Disk layout in NixOS tests has changed when using bootloaders:
+          instead of two disks <literal>/dev/vda</literal> and
+          <literal>/dev/vdb</literal>, there is only a unified
+          <literal>/dev/vda</literal> with multiple partitions.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>hardware.nvidia</literal> has a new option
+          <literal>open</literal> that can be used to opt in the
+          opensource version of NVIDIA kernel driver. Note that the
+          driver’s support for GeForce and Workstation GPUs is still
+          alpha quality, see
+          <link xlink:href="https://developer.nvidia.com/blog/nvidia-releases-open-source-gpu-kernel-modules/">NVIDIA
+          Releases Open-Source GPU Kernel Modules</link> for the
+          official announcement.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Cinnamon has been updated to 5.4, and the Cinnamon module now
           defaults to Blueman as the Bluetooth manager and slick-greeter
           as the LightDM greeter, to match upstream.
@@ -359,6 +379,21 @@
           Please convert any uses to
           <link linkend="opt-services.logrotate.settings">services.logrotate.settings</link>
           instead.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Disk layout in NixOS tests has changed when using bootloaders:
+          instead of two disks <literal>/dev/vda</literal> and
+          <literal>/dev/vdb</literal>, there is only a unified
+          <literal>/dev/vda</literal> with multiple partitions. This
+          require you to change <literal>/dev/vdc</literal> to
+          <literal>/dev/vdb</literal> and so on if you were using
+          <literal>emptyDiskImages</literal> which creates disks in
+          order, as <literal>/dev/vdb</literal> has disappeared, every
+          disk has to start over from <literal>/dev/vdb</literal> rather
+          than <literal>/dev/vdc</literal>, see the #191665 PR in
+          nixpkgs to learn about examples for your migration.
         </para>
       </listitem>
       <listitem>
@@ -1052,7 +1087,24 @@ services.github-runner.serviceOverrides.SupplementaryGroups = [
       </listitem>
       <listitem>
         <para>
-          Synapse’s systemd unit has been hardened.
+          <literal>pkgs.OVMF.fd</literal> exposes
+          <literal>firmware</literal> and <literal>variables</literal>
+          which points to your host architecture binaries for the
+          correspoding UEFI artifacts.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>nixos/lib/make-disk-image.nix</literal> can now
+          mutate EFI variables, run user-provided EFI firmware or
+          variable templates. As a result, NixOS tests have better
+          support of UEFI platforms tests such as SecureBoot tests.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>services.matrix-synapse</literal> systemd unit
+          has been hardened.
         </para>
       </listitem>
       <listitem>
