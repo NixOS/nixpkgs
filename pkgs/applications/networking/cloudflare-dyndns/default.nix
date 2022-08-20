@@ -59,7 +59,7 @@ buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    description = " CloudFlare Dynamic DNS client ";
+    description = "CloudFlare Dynamic DNS client";
     homepage = "https://github.com/kissgyorgy/cloudflare-dyndns";
     license = licenses.mit;
     maintainers = with maintainers; [ lovesegfault ];
