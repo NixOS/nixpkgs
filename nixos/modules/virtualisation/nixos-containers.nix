@@ -536,13 +536,13 @@ in
               type = types.path;
               default = pkgs.path;
               defaultText = literalExpression "pkgs.path";
-              description = ''
+              description = lib.mdDoc ''
                 A path to the nixpkgs that provide the modules, pkgs and lib for evaluating the container.
 
-                To only change the <literal>pkgs</literal> argument used inside the container modules,
-                set the <literal>nixpkgs.*</literal> options in the container <option>config</option>.
-                Setting <literal>config.nixpkgs.pkgs = pkgs</literal> speeds up the container evaluation
-                by reusing the system pkgs, but the <literal>nixpkgs.config</literal> option in the
+                To only change the `pkgs` argument used inside the container modules,
+                set the `nixpkgs.*` options in the container {option}`config`.
+                Setting `config.nixpkgs.pkgs = pkgs` speeds up the container evaluation
+                by reusing the system pkgs, but the `nixpkgs.config` option in the
                 container config is ignored in this case.
               '';
             };

@@ -60,7 +60,7 @@ in {
     package = mkOption {
       default = pkgs.datadog-agent;
       defaultText = literalExpression "pkgs.datadog-agent";
-      description = ''
+      description = lib.mdDoc ''
         Which DataDog v7 agent package to use. Note that the provided
         package is expected to have an overridable `pythonPackages`-attribute
         which configures the Python environment with the Datadog
@@ -168,7 +168,7 @@ in {
     };
 
     checks = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Configuration for all Datadog checks. Keys of this attribute
         set will be used as the name of the check to create the
         appropriate configuration in `conf.d/$check.d/conf.yaml`.

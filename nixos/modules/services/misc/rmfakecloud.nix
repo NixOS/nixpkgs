@@ -50,7 +50,7 @@ in {
         type = with types; attrsOf str;
         default = { };
         example = { DATADIR = "/custom/path/for/rmfakecloud/data"; };
-        description = ''
+        description = lib.mdDoc ''
           Extra settings in the form of a set of key-value pairs.
           For tokens and secrets, use `environmentFile` instead.
 

@@ -123,7 +123,7 @@ in
       extraOptions = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Additional options that will be copied verbatim in `gnunet.conf'.
           See `gnunet.conf(5)' for details.
         '';

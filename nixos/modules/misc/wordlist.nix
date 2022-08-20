@@ -23,7 +23,7 @@ in
           }
         '';
 
-        description = ''
+        description = lib.mdDoc ''
           A set with the key names being the environment variable you'd like to
           set and the values being a list of paths to text documents containing
           lists of words. The various files will be merged, sorted, duplicates

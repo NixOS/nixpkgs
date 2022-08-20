@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
     # Wrap the startup command
     makeWrapper $out/opt/ArmCord/armcord $out/bin/armcord \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath buildInputs}" \
-      --prefix PATH : ${lib.makeBinPath [ xdg-utils ]} \
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
       "''${gappsWrapperArgs[@]}"
 
     # Fix desktop link

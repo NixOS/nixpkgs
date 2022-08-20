@@ -81,11 +81,11 @@ in
 
     settings = mkOption {
       type = format.type;
-      description = ''
-        The ASF.json file, all the options are documented <link xlink:href="https://github.com/JustArchiNET/ArchiSteamFarm/wiki/Configuration#global-config">here</link>.
+      description = lib.mdDoc ''
+        The ASF.json file, all the options are documented [here](https://github.com/JustArchiNET/ArchiSteamFarm/wiki/Configuration#global-config).
         Do note that `AutoRestart`  and `UpdateChannel` is always to `false` respectively `0` because NixOS takes care of updating everything.
         `Headless` is also always set to `true` because there is no way to provide inputs via a systemd service.
-        You should try to keep ASF up to date since upstream does not provide support for anything but the latest version and you're exposing yourself to all kinds of issues - as is outlined <link xlink:href="https://github.com/JustArchiNET/ArchiSteamFarm/wiki/Configuration#updateperiod">here</link>.
+        You should try to keep ASF up to date since upstream does not provide support for anything but the latest version and you're exposing yourself to all kinds of issues - as is outlined [here](https://github.com/JustArchiNET/ArchiSteamFarm/wiki/Configuration#updateperiod).
       '';
       example = {
         Statistics = false;
