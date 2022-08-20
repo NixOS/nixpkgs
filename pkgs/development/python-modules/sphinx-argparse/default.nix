@@ -15,7 +15,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    # Fix tests for python-3.10 and add 3.10 to CI matrix 
+    # Fix tests for python-3.10 and add 3.10 to CI matrix
     # Should be fixed in versions > 0.3.1
     # https://github.com/ashb/sphinx-argparse/pull/3
     substituteInPlace sphinxarg/parser.py \
