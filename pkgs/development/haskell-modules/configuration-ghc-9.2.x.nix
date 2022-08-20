@@ -73,8 +73,8 @@ self: super: {
   assoc = doJailbreak super.assoc;
   async = doJailbreak super.async;
   base64-bytestring = doJailbreak super.base64-bytestring;
-  base-compat = self.base-compat_0_12_1;
-  base-compat-batteries = self.base-compat-batteries_0_12_1;
+  base-compat = self.base-compat_0_12_2;
+  base-compat-batteries = self.base-compat-batteries_0_12_2;
   binary-instances = doJailbreak super.binary-instances;
   ChasingBottoms = doJailbreak super.ChasingBottoms;
   constraints = doJailbreak super.constraints;
