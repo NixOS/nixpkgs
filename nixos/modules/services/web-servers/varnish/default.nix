@@ -27,43 +27,43 @@ in
       http_address = mkOption {
         type = types.str;
         default = "*:6081";
-        description = "
+        description = lib.mdDoc ''
           HTTP listen address and port.
-        ";
+        '';
       };
 
       config = mkOption {
         type = types.lines;
-        description = "
+        description = lib.mdDoc ''
           Verbatim default.vcl configuration.
-        ";
+        '';
       };
 
       stateDir = mkOption {
         type = types.path;
         default = "/var/spool/varnish/${config.networking.hostName}";
         defaultText = literalExpression ''"/var/spool/varnish/''${config.networking.hostName}"'';
-        description = "
+        description = lib.mdDoc ''
           Directory holding all state for Varnish to run.
-        ";
+        '';
       };
 
       extraModules = mkOption {
         type = types.listOf types.package;
         default = [];
         example = literalExpression "[ pkgs.varnishPackages.geoip ]";
-        description = "
+        description = lib.mdDoc ''
           Varnish modules (except 'std').
-        ";
+        '';
       };
 
       extraCommandLine = mkOption {
         type = types.str;
         default = "";
         example = "-s malloc,256M";
-        description = "
+        description = lib.mdDoc ''
           Command line switches for varnishd (run 'varnishd -?' to get list of options)
-        ";
+        '';
       };
     };
 

@@ -251,7 +251,7 @@ let
       authorization = mkOption {
         type = types.nullOr types.attrs;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Sets the `Authorization` header on every scrape request with the configured credentials.
         '';
       };
@@ -664,7 +664,7 @@ let
   promTypes.dockerswarm_sd_config = mkDockerSdConfigModule {
     role = mkOption {
       type = types.enum [ "services" "tasks" "nodes" ];
-      description = ''
+      description = lib.mdDoc ''
         Role of the targets to retrieve. Must be `services`, `tasks`, or `nodes`.
       '';
     };
@@ -1222,7 +1222,7 @@ let
 
       role = mkOption {
         type = types.enum [ "instance" "baremetal" ];
-        description = ''
+        description = lib.mdDoc ''
           Role of the targets to retrieve. Must be `instance` or `baremetal`.
         '';
       };
@@ -1729,16 +1729,15 @@ in
       type = with types; either bool (enum [ "syntax-only" ]);
       default = true;
       example = "syntax-only";
-      description = ''
-        Check configuration with <literal>promtool
-        check</literal>. The call to <literal>promtool</literal> is
+      description = lib.mdDoc ''
+        Check configuration with `promtool check`. The call to `promtool` is
         subject to sandboxing by Nix.
 
         If you use credentials stored in external files
-        (<literal>password_file</literal>, <literal>bearer_token_file</literal>, etc),
-        they will not be visible to <literal>promtool</literal>
+        (`password_file`, `bearer_token_file`, etc),
+        they will not be visible to `promtool`
         and it will report errors, despite a correct configuration.
-        To resolve this, you may set this option to <literal>"syntax-only"</literal>
+        To resolve this, you may set this option to `"syntax-only"`
         in order to only syntax check the Prometheus configuration.
       '';
     };

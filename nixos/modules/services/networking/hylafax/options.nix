@@ -235,9 +235,9 @@ in
         InternationalPrefix = "00";
         LongDistancePrefix = "0";
       };
-      description = ''
+      description = lib.mdDoc ''
         Attribute set of default values for
-        modem config files <filename>etc/config.*</filename>.
+        modem config files {file}`etc/config.*`.
         ${commonDescr}
         Think twice before changing
         paths of fax-processing scripts.

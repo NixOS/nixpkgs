@@ -6599,6 +6599,8 @@ with pkgs;
 
   ghrepo-stats = with python3Packages; toPythonApplication ghrepo-stats;
 
+  ghz = callPackage ../tools/networking/ghz { };
+
   gibberish-detector = with python3Packages; toPythonApplication gibberish-detector;
 
   gibo = callPackage ../tools/misc/gibo { };
@@ -26430,6 +26432,8 @@ with pkgs;
   };
 
   blender-with-packages = callPackage ../applications/misc/blender/wrapper.nix {};
+
+  blender-hip = blender.override { hipSupport = true; };
 
   blflash = callPackage ../tools/misc/blflash { };
 

@@ -36,9 +36,9 @@ in
       package = mkOption {
         type = types.package;
         example = literalExpression "pkgs.mariadb";
-        description = "
+        description = lib.mdDoc ''
           Which MySQL derivation to use. MariaDB packages are supported too.
-        ";
+        '';
       };
 
       user = mkOption {

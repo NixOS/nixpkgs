@@ -15,7 +15,7 @@ in
     enable = mkEnableOption ''
       the desktop portal for the LXQt desktop environment.
 
-      This will add the <package>lxqt.xdg-desktop-portal-lxqt</package>
+      This will add the <literal>lxqt.xdg-desktop-portal-lxqt</literal>
       package (with the extra Qt styles) into the
       <option>xdg.portal.extraPortals</option> option
     '';
@@ -29,9 +29,9 @@ in
         pkgs.qtcurve
       ];
       '';
-      description = ''
+      description = lib.mdDoc ''
         Extra Qt styles that will be available to the
-        <package>lxqt.xdg-desktop-portal-lxqt</package>.
+        `lxqt.xdg-desktop-portal-lxqt`.
       '';
     };
   };

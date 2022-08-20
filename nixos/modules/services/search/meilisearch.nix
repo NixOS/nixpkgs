@@ -68,7 +68,7 @@ in
     };
 
     logLevel = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Defines how much detail should be present in MeiliSearch's logs.
         MeiliSearch currently supports four log levels, listed in order of increasing verbosity:
         - 'ERROR': only log unexpected events indicating MeiliSearch is not functioning as expected

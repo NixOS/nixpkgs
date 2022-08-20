@@ -23,7 +23,7 @@ in
       cacheURL = mkOption {
         type = types.str;
         default = "https://cache.nixos.org/";
-        description = ''
+        description = lib.mdDoc ''
           Binary cache URL to connect to.
 
           The URL format is compatible with the nix remote url style, such as:

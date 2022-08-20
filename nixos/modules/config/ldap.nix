@@ -186,16 +186,16 @@ in
         policy = mkOption {
           default = "hard_open";
           type = types.enum [ "hard_open" "hard_init" "soft" ];
-          description = ''
+          description = lib.mdDoc ''
             Specifies the policy to use for reconnecting to an unavailable
-            LDAP server. The default is <literal>hard_open</literal>, which
+            LDAP server. The default is `hard_open`, which
             reconnects if opening the connection to the directory server
-            failed. By contrast, <literal>hard_init</literal> reconnects if
+            failed. By contrast, `hard_init` reconnects if
             initializing the connection failed. Initializing may not
             actually contact the directory server, and it is possible that
             a malformed configuration file will trigger reconnection. If
-            <literal>soft</literal> is specified, then
-            <package>nss_ldap</package> will return immediately on server
+            `soft` is specified, then
+            `nss_ldap` will return immediately on server
             failure. All hard reconnect policies block with exponential
             backoff before retrying.
           '';

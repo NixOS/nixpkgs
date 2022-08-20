@@ -15,9 +15,9 @@ let
         DisabledPlugins=${lib.concatStringsSep ";" cfg.disabledPlugins}
       '';
     };
-    "fwupd/uefi.conf" = {
-      source = pkgs.writeText "uefi.conf" ''
-        [uefi]
+    "fwupd/uefi_capsule.conf" = {
+      source = pkgs.writeText "uefi_capsule.conf" ''
+        [uefi_capsule]
         OverrideESPMountPoint=${config.boot.loader.efi.efiSysMountPoint}
       '';
     };
@@ -124,8 +124,6 @@ in {
     services.dbus.packages = [ cfg.package ];
 
     services.udev.packages = [ cfg.package ];
-
-    services.udisks2.enable = true;
 
     systemd.packages = [ cfg.package ];
   };

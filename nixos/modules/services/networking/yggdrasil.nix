@@ -31,29 +31,28 @@ in {
             "tcp://0.0.0.0:xxxxx"
           ];
         };
-        description = ''
+        description = lib.mdDoc ''
           Configuration for yggdrasil, as a Nix attribute set.
 
           Warning: this is stored in the WORLD-READABLE Nix store!
           Therefore, it is not appropriate for private keys. If you
-          wish to specify the keys, use <option>configFile</option>.
+          wish to specify the keys, use {option}`configFile`.
 
-          If the <option>persistentKeys</option> is enabled then the
+          If the {option}`persistentKeys` is enabled then the
           keys that are generated during activation will override
-          those in <option>config</option> or
-          <option>configFile</option>.
+          those in {option}`config` or
+          {option}`configFile`.
 
           If no keys are specified then ephemeral keys are generated
           and the Yggdrasil interface will have a random IPv6 address
           each time the service is started, this is the default.
 
-          If both <option>configFile</option> and <option>config</option>
+          If both {option}`configFile` and {option}`config`
           are supplied, they will be combined, with values from
-          <option>configFile</option> taking precedence.
+          {option}`configFile` taking precedence.
 
-          You can use the command <literal>nix-shell -p yggdrasil --run
-          "yggdrasil -genconf"</literal> to generate default
-          configuration values with documentation.
+          You can use the command `nix-shell -p yggdrasil --run "yggdrasil -genconf"`
+          to generate default configuration values with documentation.
         '';
       };
 

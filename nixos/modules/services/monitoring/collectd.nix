@@ -52,7 +52,7 @@ in {
 
     buildMinimalPackage = mkOption {
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Build a minimal collectd package with only the configured `services.collectd.plugins`
       '';
       type = bool;

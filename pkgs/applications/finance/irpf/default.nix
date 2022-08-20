@@ -44,11 +44,12 @@ stdenvNoCC.mkDerivation rec {
     install -Dm755 irpf.jar "$BASEDIR/${pname}.jar"
     install -Dm644 Leia-me.htm offline.png online.png pgd-updater.jar "$BASEDIR"
 
+    # make xdg-open overrideable at runtime
     makeWrapper ${jdk11}/bin/java $out/bin/${pname} \
       --add-flags "-Dawt.useSystemAAFontSettings=on" \
       --add-flags "-Dswing.aatext=true" \
       --add-flags "-jar $BASEDIR/${pname}.jar" \
-      --prefix PATH : ${lib.makeBinPath [ xdg-utils ]} \
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
       --set _JAVA_AWT_WM_NONREPARENTING 1 \
       --set AWT_TOOLKIT MToolkit
 

@@ -55,7 +55,7 @@ in
         type = lib.types.package;
         default = pkgs.syncstorage-rs;
         defaultText = lib.literalExpression "pkgs.syncstorage-rs";
-        description = ''
+        description = lib.mdDoc ''
           Package to use.
         '';
       };
@@ -66,16 +66,16 @@ in
         # behavior ever change.
         type = lib.types.strMatching "[a-z_][a-z0-9_]*";
         default = defaultDatabase;
-        description = ''
+        description = lib.mdDoc ''
           Database to use for storage. Will be created automatically if it does not exist
-          and <literal>config.${opt.database.createLocally}</literal> is set.
+          and `config.${opt.database.createLocally}` is set.
         '';
       };
 
       database.user = lib.mkOption {
         type = lib.types.str;
         default = defaultUser;
-        description = ''
+        description = lib.mdDoc ''
           Username for database connections.
         '';
       };
@@ -83,8 +83,8 @@ in
       database.host = lib.mkOption {
         type = lib.types.str;
         default = "localhost";
-        description = ''
-          Database host name. <literal>localhost</literal> is treated specially and inserts
+        description = lib.mdDoc ''
+          Database host name. `localhost` is treated specially and inserts
           systemd dependencies, other hostnames or IP addresses of the local machine do not.
         '';
       };
@@ -92,7 +92,7 @@ in
       database.createLocally = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to create database and user on the local machine if they do not exist.
           This includes enabling unix domain socket authentication for the configured user.
         '';
@@ -101,19 +101,19 @@ in
       logLevel = lib.mkOption {
         type = lib.types.str;
         default = "error";
-        description = ''
-          Log level to run with. This can be a simple log level like <literal>error</literal>
-          or <literal>trace</literal>, or a more complicated logging expression.
+        description = lib.mdDoc ''
+          Log level to run with. This can be a simple log level like `error`
+          or `trace`, or a more complicated logging expression.
         '';
       };
 
       secrets = lib.mkOption {
         type = lib.types.path;
-        description = ''
+        description = lib.mdDoc ''
           A file containing the various secrets. Should be in the format expected by systemd's
-          <literal>EnvironmentFile</literal> directory. Two secrets are currently available:
-          <literal>SYNC_MASTER_SECRET</literal> and
-          <literal>SYNC_TOKENSERVER__FXA_METRICS_HASH_SECRET</literal>.
+          `EnvironmentFile` directory. Two secrets are currently available:
+          `SYNC_MASTER_SECRET` and
+          `SYNC_TOKENSERVER__FXA_METRICS_HASH_SECRET`.
         '';
       };
 
@@ -126,7 +126,7 @@ in
 
         hostname = lib.mkOption {
           type = lib.types.str;
-          description = ''
+          description = lib.mdDoc ''
             Host name to use for this service.
           '';
         };
@@ -134,7 +134,7 @@ in
         capacity = lib.mkOption {
           type = lib.types.ints.unsigned;
           default = 10;
-          description = ''
+          description = lib.mdDoc ''
             How many sync accounts are allowed on this server. Setting this value
             equal to or less than the number of currently active accounts will
             effectively deny service to accounts not yet registered here.
@@ -147,7 +147,7 @@ in
           defaultText = lib.literalExpression ''
             ''${if cfg.singleNode.enableTLS then "https" else "http"}://''${config.${opt.singleNode.hostname}}
           '';
-          description = ''
+          description = lib.mdDoc ''
             URL of the host. If you are not using the automatic webserver proxy setup you will have
             to change this setting or your sync server may not be functional.
           '';
@@ -162,7 +162,7 @@ in
             port = lib.mkOption {
               type = lib.types.port;
               default = 5000;
-              description = ''
+              description = lib.mdDoc ''
                 Port to bind to.
               '';
             };
@@ -170,21 +170,21 @@ in
             tokenserver.enabled = lib.mkOption {
               type = lib.types.bool;
               default = true;
-              description = ''
+              description = lib.mdDoc ''
                 Whether to enable the token service as well.
               '';
             };
           };
         };
         default = { };
-        description = ''
+        description = lib.mdDoc ''
           Settings for the sync server. These take priority over values computed
           from NixOS options.
 
-          See the doc comments on the <literal>Settings</literal> structs in
-          <link xlink:href="https://github.com/mozilla-services/syncstorage-rs/blob/master/syncstorage/src/settings.rs" />
+          See the doc comments on the `Settings` structs in
+          <https://github.com/mozilla-services/syncstorage-rs/blob/master/syncstorage/src/settings.rs>
           and
-          <link xlink:href="https://github.com/mozilla-services/syncstorage-rs/blob/master/syncstorage/src/tokenserver/settings.rs" />
+          <https://github.com/mozilla-services/syncstorage-rs/blob/master/syncstorage/src/tokenserver/settings.rs>
           for available options.
         '';
       };
