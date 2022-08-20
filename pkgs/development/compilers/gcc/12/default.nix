@@ -228,7 +228,7 @@ stdenv.mkDerivation ({
     (if profiledCompiler then "profiledbootstrap" else "bootstrap");
 
   inherit
-    (import ../common/strip-attributes.nix { inherit stdenv; })
+    (import ../common/strip-attributes.nix { inherit lib stdenv langJit; })
     stripDebugList
     stripDebugListTarget
     preFixup;

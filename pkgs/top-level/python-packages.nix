@@ -258,6 +258,8 @@ in {
 
   aioairzone = callPackage ../development/python-modules/aioairzone { };
 
+  aioairq = callPackage ../development/python-modules/aioairq { };
+
   aioaladdinconnect = callPackage ../development/python-modules/aioaladdinconnect { };
 
   aioambient = callPackage ../development/python-modules/aioambient { };
@@ -2481,6 +2483,8 @@ in {
   django-discover-runner = callPackage ../development/python-modules/django-discover-runner { };
 
   django-dynamic-preferences = callPackage ../development/python-modules/django-dynamic-preferences { };
+
+  django-encrypted-model-fields = callPackage ../development/python-modules/django-encrypted-model-fields { };
 
   django-environ = callPackage ../development/python-modules/django_environ { };
 
@@ -10999,6 +11003,8 @@ in {
   tumpa = callPackage ../development/python-modules/tumpa {
     inherit (pkgs.libsForQt5) wrapQtAppsHook;
   };
+
+  turnt = callPackage ../development/python-modules/turnt { };
 
   tuya-iot-py-sdk = callPackage ../development/python-modules/tuya-iot-py-sdk { };
 

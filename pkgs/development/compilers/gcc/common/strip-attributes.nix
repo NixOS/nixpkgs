@@ -1,4 +1,4 @@
-{ stdenv }:
+{ lib, stdenv, langJit }:
 
 {
   # Note [Cross-compiler stripping]
@@ -48,7 +48,8 @@
         lib{,32,64}/gcc/${stdenv.targetPlatform.config}/*/*.{a,o,so*}
       )
       popd
-
+  '' + lib.optionalString (!langJit) ''
+    ${/*keep indentation*/ ""}
       pushd $lib
       local -ar libHostFiles=(
         lib{,32,64}/*.{a,o,so*}
@@ -58,6 +59,7 @@
       )
       popd
 
+  '' + ''
       eval "$oldOpts"
 
       stripDebugList="$stripDebugList ''${outHostFiles[*]} ''${libHostFiles[*]}"
