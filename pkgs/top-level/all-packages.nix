@@ -35601,6 +35601,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  rars = callPackage ../development/tools/rars { };
+
   rargs = callPackage ../tools/misc/rargs { };
 
   rancher = callPackage ../applications/networking/cluster/rancher { };
