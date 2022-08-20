@@ -17,7 +17,7 @@
   # either "efi" or "hybrid"
   # This will be undersized slightly, as this is actually the offset of
   # the end of the partition. Generally it will be 1MiB smaller.
-  bootSize ? "256M"
+  bootSize ? "256MiB"
 
 , # The files and directories to be placed in the target file system.
   # This is a list of attribute sets {source, target, mode, user, group} where
@@ -47,6 +47,18 @@
 , # Whether to invoke `switch-to-configuration boot` during image creation
   installBootLoader ? true
 
+, # Whether to output have EFIVARS available in $out/efi-vars.fd and use it during disk creation
+  touchEFIVars ? false
+
+, # OVMF firmware derivation, defaults to `pkgs.OVMF.fd`
+  OVMF ? pkgs.OVMF.fd
+
+, # EFI firmware
+  efiFirmware ? OVMF.firmware
+
+, # EFI variables
+  efiVariables ? OVMF.variables
+
 , # The root file system type.
   fsType ? "ext4"
 
@@ -70,6 +82,13 @@
 , # Disk image format, one of qcow2, qcow2-compressed, vdi, vpc, raw.
   format ? "raw"
 
+  # Whether to fix partitions GUIDs/UUIDs to arbitrary values.
+  # Also, to fix last time checked of the ext4 partition if fsType = ext4.
+, deterministic ? true
+
+  # GUID used for root partition
+, rootGUID ? "F222513B-DED1-49FA-B591-20CE86A2FE7F"
+
 , # Whether a nix channel based on the current source tree should be
   # made available inside the image. Useful for interactive use of nix
   # utils, but changes the hash of the image when the sources are
@@ -87,8 +106,14 @@ assert partitionTableType != "none" -> fsType == "ext4";
 assert lib.all
          (attrs: ((attrs.user  or null) == null)
               == ((attrs.group or null) == null))
-         contents;
+        contents;
+
+# If only Nix store image, then: contents must be empty, configFile must be unset, and we should no install bootloader.
 assert onlyNixStore -> contents == [] && configFile == null && !installBootLoader;
+
+# EFI variables manipulation can be done only on a partiion table supporting UEFI.
+# TODO: legacy+gpt is it a good idea?
+assert touchEFIVars -> partitionTableType == "hybrid" || partitionTableType == "efi" || partitionTableType == "legacy+gpt";
 
 with lib;
 
@@ -127,6 +152,14 @@ let format' = format; in let
         mkpart primary ext4 2MB -1 \
         align-check optimal 2 \
         print
+      ${optionalString deterministic ''
+          sgdisk \
+          --disk-guid=97FD5997-D90B-4AA3-8D16-C1723AEA73C \
+          --partition-guid=1:1C06F03B-704E-4657-B9CD-681A087A2FDC \
+          --partition-guid=2:970C694F-AFD0-4B99-B750-CDB7A329AB6F \
+          --partition-guid=3:${rootGUID} \
+          $diskImage
+      ''}
     '';
     efi = ''
       parted --script $diskImage -- \
@@ -134,6 +167,13 @@ let format' = format; in let
         mkpart ESP fat32 8MiB ${bootSize} \
         set 1 boot on \
         mkpart primary ext4 ${bootSize} -1
+      ${optionalString deterministic ''
+          sgdisk \
+          --disk-guid=97FD5997-D90B-4AA3-8D16-C1723AEA73C \
+          --partition-guid=1:1C06F03B-704E-4657-B9CD-681A087A2FDC \
+          --partition-guid=2:${rootGUID} \
+          $diskImage
+      ''}
     '';
     hybrid = ''
       parted --script $diskImage -- \
@@ -143,9 +183,19 @@ let format' = format; in let
         mkpart no-fs 0 1024KiB \
         set 2 bios_grub on \
         mkpart primary ext4 ${bootSize} -1
+      ${optionalString deterministic ''
+          sgdisk \
+          --disk-guid=97FD5997-D90B-4AA3-8D16-C1723AEA73C \
+          --partition-guid=1:1C06F03B-704E-4657-B9CD-681A087A2FDC \
+          --partition-guid=2:970C694F-AFD0-4B99-B750-CDB7A329AB6F \
+          --partition-guid=3:${rootGUID} \
+          $diskImage
+      ''}
     '';
     none = "";
   }.${partitionTableType};
+
+  useEFIBoot = touchEFIVars;
 
   nixpkgs = cleanSource pkgs.path;
 
@@ -165,6 +215,7 @@ let format' = format; in let
     [ rsync
       util-linux
       parted
+      gptfdisk
       e2fsprogs
       lkl
       config.system.build.nixos-install
@@ -368,11 +419,21 @@ let format' = format; in let
     diskImage=$out/${filename}
   '';
 
+  createEFIVars = ''
+    efiVars=$out/efi-vars.fd
+    cp ${efiVariables} $efiVars
+    chmod 0644 $efiVars
+  '';
+
   buildImage = pkgs.vmTools.runInLinuxVM (
     pkgs.runCommand name {
-      preVM = prepareImage;
+      preVM = prepareImage + lib.optionalString touchEFIVars createEFIVars;
       buildInputs = with pkgs; [ util-linux e2fsprogs dosfstools ];
       postVM = moveOrConvertImage + postVM;
+      QEMU_OPTS =
+        concatStringsSep " " (lib.optional useEFIBoot "-drive if=pflash,format=raw,unit=0,readonly=on,file=${efiFirmware}"
+        ++ lib.optional touchEFIVars "-drive if=pflash,format=raw,unit=1,file=$efiVars"
+      );
       memSize = 1024;
     } ''
       export PATH=${binPath}:$PATH
@@ -396,6 +457,8 @@ let format' = format; in let
         mkdir -p /mnt/boot
         mkfs.vfat -n ESP /dev/vda1
         mount /dev/vda1 /mnt/boot
+
+        ${optionalString touchEFIVars "mount -t efivarfs efivarfs /sys/firmware/efi/efivars"}
       ''}
 
       # Install a configuration.nix
@@ -405,7 +468,17 @@ let format' = format; in let
       ''}
 
       ${lib.optionalString installBootLoader ''
-        # Set up core system link, GRUB, etc.
+        # In this throwaway resource, we only have /dev/vda, but the actual VM may refer to another disk for bootloader, e.g. /dev/vdb
+        # Use this option to create a symlink from vda to any arbitrary device you want.
+        ${optionalString (config.boot.loader.grub.device != "/dev/vda") ''
+            ln -s /dev/vda ${config.boot.loader.grub.device}
+        ''}
+        # TODO: needed?
+        # For GRUB 0.97 compatibility
+        mkdir -p /mnt/boot/grub
+        echo '(hd0) /dev/vda' > /mnt/boot/grub/device.map
+
+        # Set up core system link, bootloader (sd-boot, GRUB, uboot, etc.), etc.
         NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root $mountPoint -- /nix/var/nix/profiles/system/bin/switch-to-configuration boot
 
         # The above scripts will generate a random machine-id and we don't want to bake a single ID into all our images
@@ -432,8 +505,12 @@ let format' = format; in let
       # Make sure resize2fs works. Note that resize2fs has stricter criteria for resizing than a normal
       # mount, so the `-c 0` and `-i 0` don't affect it. Setting it to `now` doesn't produce deterministic
       # output, of course, but we can fix that when/if we start making images deterministic.
+      # In deterministic mode, this is fixed to 1970-01-01 (UNIX timestamp 0).
+      # This two-step approach is necessary otherwise `tune2fs` will want a fresher filesystem to perform
+      # some changes.
       ${optionalString (fsType == "ext4") ''
-        tune2fs -T now -c 0 -i 0 $rootDisk
+        tune2fs -T now ${optionalString deterministic "-U ${rootGUID}"} -c 0 -i 0 $rootDisk
+        ${optionalString deterministic "tune2fs -f -T 19700101 $rootDisk"}
       ''}
     ''
   );
