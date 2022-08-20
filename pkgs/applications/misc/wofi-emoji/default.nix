@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace build.sh \
       --replace 'curl ${emojiJSON.url}' 'cat emoji-en-US.json'
-      '';
+  '';
 
   buildPhase = ''
     runHook preBuild
