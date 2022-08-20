@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   pname = "rrsync";
-  inherit (rsync) version srcs;
+  inherit (rsync) version src;
 
   buildInputs = [ rsync perl ];
 
