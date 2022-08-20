@@ -4102,6 +4102,18 @@ final: prev:
     meta.homepage = "https://github.com/folke/lsp-colors.nvim/";
   };
 
+  lsp-format-nvim = buildVimPluginFrom2Nix {
+    pname = "lsp-format.nvim";
+    version = "2022-05-21";
+    src = fetchFromGitHub {
+      owner = "lukas-reineke";
+      repo = "lsp-format.nvim";
+      rev = "a5a54eeb36d7001b4a6f0874dde6afd167319ac9";
+      sha256 = "0lj40p9ykj5f0d3sl4g0g0gjbfwx1vm6y5q613zphimpjgs3wl64";
+    };
+    meta.homepage = "https://github.com/lukas-reineke/lsp-format.nvim/";
+  };
+
   lsp-rooter-nvim = buildVimPluginFrom2Nix {
     pname = "lsp-rooter.nvim";
     version = "2021-08-13";
