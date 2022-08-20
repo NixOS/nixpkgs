@@ -31740,6 +31740,8 @@ with pkgs;
 
   inherit (xorg) xcompmgr;
 
+  x-create-mouse-void = callPackage ../applications/window-managers/x-create-mouse-void { };
+
   picom = callPackage ../applications/window-managers/picom {};
 
   picom-next = callPackage ../applications/window-managers/picom/picom-next.nix { };
