@@ -4,12 +4,12 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "pynitrokey";
-  version = "0.4.26";
+  version = "0.4.27";
   format = "flit";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-OuLR6txvoOpOUYpkjA5UkXUIIa1hYCwTmmPuUC3i4zM=";
+    sha256 = "sha256-aWQhMvATcDtyBtj38mGnypkKIqKQgneBzWDh5o/5Wkc=";
   };
 
   propagatedBuildInputs = [

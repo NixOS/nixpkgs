@@ -8253,9 +8253,9 @@ with pkgs;
 
   nodenv = callPackage ../development/tools/nodenv { };
 
-  nodejs = hiPrio nodejs-16_x;
+  nodejs = hiPrio nodejs-18_x;
 
-  nodejs-slim = nodejs-slim-16_x;
+  nodejs-slim = nodejs-slim-18_x;
 
   nodejs-14_x = callPackage ../development/web/nodejs/v14.nix { };
   nodejs-slim-14_x = callPackage ../development/web/nodejs/v14.nix {
@@ -16192,6 +16192,8 @@ with pkgs;
 
   gnum4 = callPackage ../development/tools/misc/gnum4 { };
   m4 = gnum4;
+
+  om4 = callPackage ../development/tools/misc/om4 { };
 
   gnumake = callPackage ../development/tools/build-managers/gnumake { };
   gnumake42 = callPackage ../development/tools/build-managers/gnumake/4.2 { };
@@ -35600,6 +35602,8 @@ with pkgs;
   rates = callPackage ../tools/misc/rates {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  rars = callPackage ../development/tools/rars { };
 
   rargs = callPackage ../tools/misc/rargs { };
 

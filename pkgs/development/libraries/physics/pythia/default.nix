@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, boost, fastjet, hepmc, lhapdf, rsync, zlib }:
+{ lib, stdenv, fetchurl, boost, fastjet, fixDarwinDylibNames, hepmc, lhapdf, rsync, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "pythia";
@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-5bFNRKpZQzMuMt1d2poY/dGgCFxxmOKNhA4EFn+mAT0=";
   };
 
-  nativeBuildInputs = [ rsync ];
+  nativeBuildInputs = [ rsync ]
+    ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
   buildInputs = [ boost fastjet hepmc zlib lhapdf ];
 
   preConfigure = ''
