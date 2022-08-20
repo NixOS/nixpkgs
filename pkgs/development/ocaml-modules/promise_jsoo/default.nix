@@ -7,7 +7,7 @@ buildDunePackage rec {
   pname = "promise_jsoo";
   version = "0.3.1";
   minimumOCamlVersion = "4.08";
-  useDune2 = lib.versionAtLeast ocaml.version "4.08";
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/${owner}/${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
