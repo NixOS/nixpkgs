@@ -11,18 +11,32 @@
 , libjpeg
 , gsl
 , fftw
+, libev
+, bash
 }:
 
 stdenv.mkDerivation rec {
   pname = "indilib";
-  version = "1.9.5";
+  version = "1.9.7";
 
   src = fetchFromGitHub {
     owner = "indilib";
     repo = "indi";
     rev = "v${version}";
-    sha256 = "sha256-mj9rnPn85Fbc7Y8qRndqPVANzBrk3al+vDJagLTDJ04=";
+    sha256 = "sha256-HyV7JzDzYO80fgZFpIvIumYbC2yaT8C8UikxFrP6kzo=";
   };
+
+  postPatch = ''
+    for f in drivers/*/*.rules;
+    do
+      substituteInPlace $f \
+        --replace "/lib/udev/rules.d" "lib/udev/rules.d" \
+        --replace "/etc/udev/rules.d" "lib/udev/rules.d" \
+        --replace "/lib/firmware" "lib/firmware" \
+        --replace "/bin/sh" "${bash}/bin/sh"
+    done
+  '';
+
 
   nativeBuildInputs = [
     cmake
@@ -38,6 +52,7 @@ stdenv.mkDerivation rec {
     libjpeg
     gsl
     fftw
+    libev
   ];
 
   cmakeFlags = [
@@ -50,7 +65,7 @@ stdenv.mkDerivation rec {
     description = "Implementation of the INDI protocol for POSIX operating systems";
     changelog = "https://github.com/indilib/indi/releases/tag/v${version}";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ hjones2199 ];
+    maintainers = with maintainers; [ hjones2199 spacekitteh ];
     platforms = platforms.linux;
   };
 }

@@ -16,7 +16,10 @@
 , libftdi1
 , libdc1394
 , gpsd
+, fxload
+, coreutils
 , ffmpeg
+, bash
 , version
 , src
 }:
@@ -30,7 +33,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     indilib libnova curl cfitsio libusb1 zlib boost gsl gpsd
-    libjpeg libgphoto2 libraw libftdi1 libdc1394 ffmpeg fftw
+    libjpeg libgphoto2 libraw libftdi1 libdc1394 ffmpeg fftw fxload
   ];
 
   cmakeFlags = [
@@ -45,9 +48,19 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    for f in libfishcamp/CMakeLists.txt libsbig/CMakeLists.txt
+    for f in \
+     */CMakeLists.txt \
+     */*.rules;
     do
-      substituteInPlace $f --replace "/lib/firmware" "lib/firmware"
+      substituteInPlace $f \
+        --replace "/lib/udev/rules.d" "lib/udev/rules.d" \
+        --replace "/etc/udev/rules.d" "lib/udev/rules.d" \
+        --replace "/lib/firmware" "$out/lib/firmware" \
+        --replace "/sbin/fxload" "${fxload}/bin/fxload" \
+        --replace "/bin/sleep" "${coreutils}/bin/sleep" \
+        --replace "/bin/sh" "${bash}/bin/sh" \
+        --replace "/bin/echo" "echo" \
+        --replace "lib/firmware/qhy" "lib/firmware"
     done
   '';
 
@@ -60,7 +73,7 @@ stdenv.mkDerivation rec {
     description = "Third party firmware for the INDI astronomical software suite";
     changelog = "https://github.com/indilib/indi-3rdparty/releases/tag/v${version}";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ hjones2199 ];
+    maintainers = with maintainers; [ hjones2199 spacekitteh ];
     platforms = platforms.linux;
   };
 }
