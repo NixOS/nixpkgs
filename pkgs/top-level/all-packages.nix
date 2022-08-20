@@ -678,6 +678,8 @@ with pkgs;
 
   dispad = callPackage ../tools/X11/dispad { };
 
+  diswall = callPackage ../applications/networking/diswall { };
+
   dupeguru = callPackage ../applications/misc/dupeguru { };
 
   dump1090 = callPackage ../applications/radio/dump1090 { };
