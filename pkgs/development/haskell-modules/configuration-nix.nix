@@ -1024,4 +1024,31 @@ self: super: builtins.intersectAttrs super {
 
   # Wants to execute cabal-install to (re-)build itself
   hint = dontCheck super.hint;
+
+  # cabal-install switched to build type simple in 3.2.0.0
+  # as a result, the cabal(1) man page is no longer installed
+  # automatically. Instead we need to use the `cabal man`
+  # command which generates the man page on the fly and
+  # install it to $out/share/man/man1 ourselves in this
+  # override.
+  # The commit that introduced this change:
+  # https://github.com/haskell/cabal/commit/91ac075930c87712eeada4305727a4fa651726e7
+  # Since cabal-install 3.8, the cabal man (without the raw) command
+  # uses nroff(1) instead of man(1) for macOS/BSD compatibility. That utility
+  # is not commonly installed on systems, so we add it to PATH. Closure size
+  # penalty is about 10MB at the time of writing this (2022-08-20).
+  cabal-install = overrideCabal (old: {
+    executableToolDepends = [
+      pkgs.buildPackages.makeWrapper
+    ] ++ old.buildToolDepends or [];
+    postInstall = old.postInstall + ''
+      mkdir -p "$out/share/man/man1"
+      "$out/bin/cabal" man --raw > "$out/share/man/man1/cabal.1"
+
+      wrapProgram "$out/bin/cabal" \
+        --prefix PATH : "${pkgs.lib.makeBinPath [ pkgs.groff ]}"
+    '';
+    hydraPlatforms = pkgs.lib.platforms.all;
+    broken = false;
+  }) super.cabal-install;
 }

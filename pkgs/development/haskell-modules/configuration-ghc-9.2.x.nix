@@ -55,9 +55,11 @@ self: super: {
   # 0.30 introduced support for GHC 9.2.
   cryptonite = doDistribute self.cryptonite_0_30;
 
-  # cabal-install needs more recent versions of Cabal
-  cabal-install = (doJailbreak super.cabal-install).overrideScope (self: super: {
-    Cabal = self.Cabal_3_6_3_0;
+  # cabal-install needs most recent versions of Cabal and Cabal-syntax
+  cabal-install = super.cabal-install.overrideScope (self: super: {
+    Cabal = self.Cabal_3_8_1_0;
+    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
+    process = self.process_1_6_15_0;
   });
 
   doctest = dontCheck (doJailbreak super.doctest);
