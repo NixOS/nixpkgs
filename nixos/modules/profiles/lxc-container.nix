@@ -24,11 +24,15 @@
   };
 
   # Add the overrides from lxd distrobuilder
+  # https://github.com/lxc/distrobuilder/blob/f15eec09df7b04f1bede66b0f31354da66748c9a/distrobuilder/main.go#L622
   systemd.extraConfig = ''
     [Service]
+    ProcSubset=all
     ProtectProc=default
     ProtectControlGroups=no
     ProtectKernelTunables=no
+    NoNewPrivileges=no
+    LoadCredential=
   '';
 
   system.activationScripts.installInitScript = lib.mkForce ''
