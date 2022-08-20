@@ -329,6 +329,7 @@ stdenv.mkDerivation ({
     maintainers = with lib.maintainers; [ veprbl ];
 
     platforms = lib.platforms.unix;
+    badPlatforms = [ "aarch64-darwin" ];
   };
 }
 
