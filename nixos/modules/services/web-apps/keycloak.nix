@@ -20,7 +20,7 @@ let
     mkDefault
     literalExpression
     isAttrs
-    literalDocBook
+    literalMD
     maintainers
     catAttrs
     collect
@@ -165,7 +165,7 @@ in
           mkOption {
             type = port;
             default = dbPorts.${cfg.database.type};
-            defaultText = literalDocBook "default port of selected database";
+            defaultText = literalMD "default port of selected database";
             description = lib.mdDoc ''
               Port of the database to connect to.
             '';

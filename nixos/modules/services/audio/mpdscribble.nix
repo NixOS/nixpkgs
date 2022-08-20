@@ -128,9 +128,9 @@ in {
           mpdCfg.credentials).passwordFile
       else
         null;
-      defaultText = literalDocBook ''
+      defaultText = literalMD ''
         The first password file with read access configured for MPD when using a local instance,
-        otherwise <literal>null</literal>.
+        otherwise `null`.
       '';
       type = types.nullOr types.str;
       description = lib.mdDoc ''

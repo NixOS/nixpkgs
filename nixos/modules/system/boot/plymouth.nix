@@ -75,10 +75,10 @@ in
 
       themePackages = mkOption {
         default = lib.optional (cfg.theme == "breeze") nixosBreezePlymouth;
-        defaultText = literalDocBook ''
+        defaultText = literalMD ''
           A NixOS branded variant of the breeze theme when
-          <literal>config.${opt.theme} == "breeze"</literal>, otherwise
-          <literal>[ ]</literal>.
+          `config.${opt.theme} == "breeze"`, otherwise
+          `[ ]`.
         '';
         type = types.listOf types.package;
         description = lib.mdDoc ''

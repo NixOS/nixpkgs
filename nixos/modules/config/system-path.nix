@@ -78,10 +78,11 @@ in
       defaultPackages = mkOption {
         type = types.listOf types.package;
         default = defaultPackages;
-        defaultText = literalDocBook ''
-          these packages, with their <literal>meta.priority</literal> numerically increased
+        defaultText = literalMD ''
+          these packages, with their `meta.priority` numerically increased
           (thus lowering their installation priority):
-          <programlisting>${defaultPackagesText}</programlisting>
+
+              ${defaultPackagesText}
         '';
         example = [];
         description = lib.mdDoc ''
