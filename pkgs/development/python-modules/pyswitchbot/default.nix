@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyswitchbot";
-  version = "0.18.11";
+  version = "0.18.12";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
