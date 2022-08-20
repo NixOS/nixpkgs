@@ -28,6 +28,9 @@
 , rdkafka
 , udev
 , libevdev
+, alsaLib
+, libxkbcommon
+, shaderc
 , ...
 }:
 
@@ -35,6 +38,11 @@ let
   inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
 in
 {
+  alsa-sys = attrs: {
+    buildInputs = [ alsaLib ];
+    nativeBuildInputs = [ pkg-config ];
+  };
+
   cairo-rs = attrs: {
     buildInputs = [ cairo ];
   };
@@ -119,7 +127,7 @@ in
   libgit2-sys = attrs: {
     LIBGIT2_SYS_USE_PKG_CONFIG = true;
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ openssl zlib libgit2 ];
+    buildInputs = [ openssl zlib libgit2 libssh2 ];
   };
 
   libsqlite3-sys = attrs: {
@@ -219,6 +227,10 @@ in
     buildInputs = [ freetype ];
   };
 
+  shaderc-sys = attrs: {
+    SHADERC_LIB_DIR = "${shaderc.lib}/lib";
+  };
+
   thrussh-libsodium = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ libsodium ];
@@ -226,5 +238,10 @@ in
 
   xcb = attrs: {
     buildInputs = [ python3 ];
+  };
+
+  xkbcommon-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ libxkbcommon ];
   };
 }
