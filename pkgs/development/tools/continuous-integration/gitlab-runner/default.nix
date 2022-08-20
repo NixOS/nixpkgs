@@ -1,7 +1,7 @@
 { lib, buildGoModule, fetchFromGitLab, fetchurl }:
 
 let
-  version = "15.2.1";
+  version = "15.3.0";
 in
 buildGoModule rec {
   inherit version;
@@ -20,7 +20,7 @@ buildGoModule rec {
     owner = "gitlab-org";
     repo = "gitlab-runner";
     rev = "v${version}";
-    sha256 = "sha256-HaFxMNREHTtnbIuQUXCinhd4lhcnkLkacLczeySsfWQ=";
+    sha256 = "sha256-mxpe64uXhk0Kf65xnS+uG8DSE+AxUr9+9xjiocRtYzc=";
   };
 
   patches = [
