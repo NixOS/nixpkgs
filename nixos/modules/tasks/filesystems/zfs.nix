@@ -209,7 +209,7 @@ in
         readOnly = true;
         type = types.bool;
         default = inInitrd || inSystem;
-        defaultText = literalDocBook "<literal>true</literal> if ZFS filesystem support is enabled";
+        defaultText = literalMD "`true` if ZFS filesystem support is enabled";
         description = lib.mdDoc "True if ZFS filesystem support is enabled";
       };
 

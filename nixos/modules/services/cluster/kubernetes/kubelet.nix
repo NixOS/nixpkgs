@@ -40,7 +40,7 @@ let
       key = mkOption {
         description = lib.mdDoc "Key of taint.";
         default = name;
-        defaultText = literalDocBook "Name of this submodule.";
+        defaultText = literalMD "Name of this submodule.";
         type = str;
       };
       value = mkOption {

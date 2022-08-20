@@ -281,9 +281,9 @@ in
         type = types.path;
         internal = true;
         default = etcSlurm;
-        defaultText = literalDocBook ''
+        defaultText = literalMD ''
           Directory created from generated config files and
-          <literal>config.${opt.extraConfigPaths}</literal>.
+          `config.${opt.extraConfigPaths}`.
         '';
         description = ''
           Path to directory with slurm config files. This option is set by default from the

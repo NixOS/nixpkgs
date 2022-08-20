@@ -285,7 +285,7 @@ in
             defaultSessionFromLegacyOptions
           else
             null;
-        defaultText = literalDocBook ''
+        defaultText = literalMD ''
           Taken from display manager settings or window manager settings, if either is set.
         '';
         example = "gnome";

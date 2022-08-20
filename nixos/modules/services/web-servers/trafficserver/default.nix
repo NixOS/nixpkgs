@@ -62,7 +62,7 @@ in
     ipAllow = mkOption {
       type = types.nullOr yaml.type;
       default = lib.importJSON ./ip_allow.json;
-      defaultText = literalDocBook "upstream defaults";
+      defaultText = literalMD "upstream defaults";
       example = literalExpression ''
         {
           ip_allow = [{
@@ -85,7 +85,7 @@ in
     logging = mkOption {
       type = types.nullOr yaml.type;
       default = lib.importJSON ./logging.json;
-      defaultText = literalDocBook "upstream defaults";
+      defaultText = literalMD "upstream defaults";
       example = { };
       description = lib.mdDoc ''
         Configure logs.
