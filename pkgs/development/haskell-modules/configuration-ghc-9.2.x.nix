@@ -102,7 +102,7 @@ self: super: {
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_2_4_20220729;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_2_1_1;
   hackage-security = doJailbreak super.hackage-security;
-  hashable = super.hashable_1_4_0_2;
+  hashable = super.hashable_1_4_1_0;
   hashable-time = doJailbreak super.hashable-time;
   # 1.1.1 introduced support for GHC 9.2.x, so when this assert fails, the jailbreak can be removed
   hedgehog = assert super.hedgehog.version == "1.0.5"; doJailbreak super.hedgehog;
