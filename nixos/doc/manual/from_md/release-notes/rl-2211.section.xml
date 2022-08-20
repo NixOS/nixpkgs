@@ -125,7 +125,9 @@
       </listitem>
       <listitem>
         <para>
-          Cinnamon has been updated to 5.4.
+          Cinnamon has been updated to 5.4. While at it, the cinnamon
+          module now defaults to blueman as bluetooth manager and
+          slick-greeter as lightdm greeter to match upstream.
         </para>
       </listitem>
       <listitem>
