@@ -6,7 +6,7 @@ in
 buildDunePackage rec {
   pname = "promise_jsoo";
   version = "0.3.1";
-  minimumOCamlVersion = "4.02";
+  minimumOCamlVersion = "4.08";
   useDune2 = lib.versionAtLeast ocaml.version "4.08";
 
   src = fetchurl {
