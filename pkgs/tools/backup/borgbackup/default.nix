@@ -120,7 +120,7 @@ python3.pkgs.buildPythonApplication rec {
     inherit (nixosTests) borgbackup;
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" "doc" "man" ];
 
   meta = with lib; {
     description = "Deduplicating archiver with compression and encryption";
