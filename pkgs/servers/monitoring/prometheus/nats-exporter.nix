@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "prometheus-nats-exporter";
-  version = "0.9.3";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "nats-io";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-2+nkWwa5n7DyVitnJ8gt7b72Y6XiiLM7ddTM2Cp9/LQ=";
+    sha256 = "sha256-qUnlPGniqStU5jVg+5SR8aYO7BLo7+d+UWPPm13ov0I=";
   };
 
-  vendorSha256 = "sha256-bsk6htRnb4NiaJXTHNjPGN9NEy8owRJujancK3nVIsA=";
+  vendorSha256 = "sha256-hlC/s0pYhNHMv3i7Nmu4r6jnXGpc6raScv5dO32+tfQ=";
 
   meta = with lib; {
     description = "Exporter for NATS metrics";
