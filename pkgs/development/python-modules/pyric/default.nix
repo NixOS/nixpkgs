@@ -1,22 +1,26 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyric";
-  version = "0.1.6";
+  version = "0.1.6.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchFromGitHub {
-    owner = "wraith-wireless";
-    repo = pname;
-    rev = version;
-    hash = "sha256-NAuGgYViMYxzJDQw666cT1WaaNNKh3Ik/tNYJ/tPjbY=";
+  src = fetchPypi {
+    pname = "PyRIC";
+    inherit version;
+    hash = "sha256-tTmwHK/r0kBsAAl/lFJeoPjs0d2S93MfQ+rA7xbCzMk=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "__version__ = '0.0.3'" "__version__ = '${version}'"
+  '';
 
   # Tests are outdated
   doCheck = false;
