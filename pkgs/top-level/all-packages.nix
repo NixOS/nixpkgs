@@ -514,6 +514,8 @@ with pkgs;
 
   resolve-march-native = callPackage ../development/tools/resolve-march-native { };
 
+  riot-redis = callPackage ../development/tools/riot-redis { };
+
   ptouch-print = callPackage ../misc/ptouch-print { };
 
   demoit = callPackage ../servers/demoit { };
