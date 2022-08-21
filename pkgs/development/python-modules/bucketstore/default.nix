@@ -19,11 +19,12 @@ buildPythonPackage rec {
     sha256 = "sha256-BtoyGqFbeBhGQeXnmeSfiuJLZtXFrK26WO0SDlAtKG4=";
   };
 
+  propagatedBuildInputs = [ boto3 ];
+
   checkInputs = [
     pytestCheckHook
     moto
   ];
-  propagatedBuildInputs = [ boto3 ];
 
   pythonImportsCheck = [
     "bucketstore"
