@@ -8,6 +8,7 @@
 , markdown
 , setuptools-git
 , setuptools-scm
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -38,6 +39,22 @@ buildPythonPackage rec {
     Mako
     markdown
   ];
+
+  pytestFlagsArray = [
+    "--pyargs" "test"
+  ];
+
+  disabledTests = [
+    # AssertionError: assert len(warnings.filters) == orig_filter_len - 2
+    "test_unload"
+    "test_unlink"
+    "test_temp_dir__path_none"
+    "test_temp_dir__forked_child"
+    # AssertionError: self.assertEqual(len(messages), 0, messages)
+    "test_ignored_deprecations_are_silent"
+  ];
+
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
