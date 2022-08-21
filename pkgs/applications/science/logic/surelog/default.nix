@@ -24,15 +24,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-  ];
-
-  buildInputs = [
-    libuuid
     openjdk11
     (python3.withPackages (p: with p; [
       psutil
       orderedmultidict
     ]))
+  ];
+
+  buildInputs = [
+    libuuid
     gperftools
   ];
 
