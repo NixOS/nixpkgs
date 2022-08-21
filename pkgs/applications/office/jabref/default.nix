@@ -1,11 +1,12 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, makeWrapper
+, wrapGAppsHook
 , makeDesktopItem
 , copyDesktopItems
 , unzip
 , xdg-utils
+, gtk3
 , jdk
 , gradle
 , perl
@@ -78,10 +79,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     jdk
     gradle
-    makeWrapper
+    wrapGAppsHook
     copyDesktopItems
     unzip
   ];
+
+  buildInputs = [ gtk3 ];
 
   buildPhase = ''
     runHook preBuild
@@ -118,15 +121,20 @@ stdenv.mkDerivation rec {
     tar xf build/distributions/JabRef-${version}.tar -C $out --strip-components=1
     unzip $out/lib/javafx-web-18-linux${lib.optionalString stdenv.isAarch64 "-aarch64"}.jar libjfxwebkit.so -d $out/lib/
 
-    wrapProgram $out/bin/JabRef \
-      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
-      --set JAVA_HOME "${jdk}" \
-      --set JAVA_OPTS "-Djava.library.path=$out/lib/ --patch-module org.jabref=$out/share/java/jabref/resources/main"
-
     # lowercase alias (for convenience and required for browser extensions)
     ln -sf $out/bin/JabRef $out/bin/jabref
 
+    rm $out/bin/JabRef.bat
+
     runHook postInstall
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
+      --set JAVA_HOME "${jdk}"
+      --set JAVA_OPTS "-Djava.library.path=$out/lib/ --patch-module org.jabref=$out/share/java/jabref/resources/main"
+    )
   '';
 
   meta = with lib; {
