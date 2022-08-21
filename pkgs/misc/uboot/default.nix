@@ -1,15 +1,18 @@
 { stdenv
 , lib
-, fetchurl
-, fetchpatch
-, fetchFromGitHub
 , bc
 , bison
 , dtc
+, fetchFromGitHub
+, fetchpatch
+, fetchurl
 , flex
+, gnutls
+, libuuid
+, meson-tools
+, ncurses
 , openssl
 , swig
-, meson-tools
 , which
 , armTrustedFirmwareAllwinner
 , armTrustedFirmwareAllwinnerH616
@@ -70,6 +73,12 @@ let
       which # for scripts/dtc-version.sh
     ];
     depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+    buildInputs = [
+      ncurses # tools/kwboot
+      libuuid # tools/mkeficapsule
+      gnutls # tools/mkeficapsule
+    ];
 
     hardeningDisable = [ "all" ];
 
