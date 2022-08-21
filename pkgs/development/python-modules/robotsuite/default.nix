@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi
-, unittest2, lxml, robotframework
+{ lib
+, buildPythonPackage
+, fetchPypi
+, unittest2
+, lxml
+, robotframework
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -11,13 +16,23 @@ buildPythonPackage rec {
     sha256 = "sha256-iugVKUPl6HTTO8K1EbSqAk1fl/fsEPoOcsOnnAgcEas=";
   };
 
-  buildInputs = [ unittest2 ];
-  propagatedBuildInputs = [ robotframework lxml ];
+  buildInputs = [
+    unittest2
+  ];
+
+  propagatedBuildInputs = [
+    robotframework
+    lxml
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace robotframework-python3 robotframework
   '';
+
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "Python unittest test suite for Robot Framework";
