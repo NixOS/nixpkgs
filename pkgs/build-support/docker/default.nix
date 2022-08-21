@@ -119,12 +119,22 @@ rec {
     # These parameters are no longer needed
     , os ? null
     , arch ? null
-    , variant ? null
     }:
 
-    assert os != null -> throw "`os` parameter is no longer needed by `pullImage` function";
-    assert arch != null -> throw "`arch` parameter is no longer needed by `pullImage` function";
-    assert variant != null -> throw "`variant` parameter is no longer needed by `pullImage` function";
+
+    let
+      # This function is just here to avoid having to maintain 2 pretty big error messages that are nearly identical
+      crossCompilError = parameter:
+        ''
+          The `${parameter}` parameter formerly used in the `pullImage` function to cross compile container is now deprecated in favor of native nix cross compilation.
+          As a quick fix you may want to replace 'pkgs.dockerTools.pullImage' by 'pkgs.pkgsCross.<platform>.dockerTools.pullImage' where <platform> is a valid nixpkgs host platforms.
+          For more information, see the following links:
+            - The official nix guide about cross compilation (https://nixos.org/guides/cross-compilation.html)
+            - The `pullImage` function doc (https://nixos.org/manual/nixpkgs/stable/#ssec-pkgs-dockerTools-fetchFromRegistry)
+        '';
+    in
+      assert os != null -> throw (crossCompilError "os");
+      assert arch != null -> throw (crossCompilError "arch");
 
     runCommand name
       {
