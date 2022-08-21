@@ -1,42 +1,50 @@
 { lib
 , mkDerivationWith
+, appdirs
 , buildPythonPackage
+, cachey
+, dask
+, docstring-parser
 , fetchFromGitHub
+, imageio
+, jsonschema
+, magicgui
+, napari-console
+, napari-npe2
+, napari-svg
+, numpydoc
+, pint
+, psutil
+, pydantic
+, pyopengl
+, pillow
+, pythonOlder
+, pyyaml
+, scikitimage
+, scipy
 , setuptools-scm
 , superqt
-, typing-extensions
 , tifffile
-, napari-npe2
-, pint
-, pyyaml
-, numpydoc
-, dask
-, magicgui
-, docstring-parser
-, appdirs
-, imageio
-, pyopengl
-, cachey
-, napari-svg
-, psutil
-, napari-console
-, wrapt
-, pydantic
+, toolz
 , tqdm
-, jsonschema
-, scipy
+, typing-extensions
+, vispy
 , wrapQtAppsHook
-}: mkDerivationWith buildPythonPackage rec {
+, wrapt
+}:
+
+mkDerivationWith buildPythonPackage rec {
   pname = "napari";
   version = "0.4.16";
-
   format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "napari";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-Fx3DoTIb2ev5wMP/gmprPIoxeF2f+Cbac6pnWB/zTTw=";
+    hash = "sha256-Fx3DoTIb2ev5wMP/gmprPIoxeF2f+Cbac6pnWB/zTTw=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -45,38 +53,50 @@
     setuptools-scm
     wrapQtAppsHook
   ];
+
   propagatedBuildInputs = [
-    napari-npe2
-    cachey
-    napari-svg
-    napari-console
-    superqt
-    magicgui
-    typing-extensions
-    tifffile
-    pint
-    pyyaml
-    numpydoc
-    dask
-    docstring-parser
     appdirs
+    cachey
+    dask.optional-dependencies.array
+    docstring-parser
     imageio
-    pyopengl
-    psutil
-    wrapt
-    pydantic
-    tqdm
     jsonschema
+    magicgui
+    napari-console
+    napari-npe2
+    napari-svg
+    numpydoc
+    pint
+    pillow
+    psutil
+    pydantic
+    pyopengl
+    pyyaml
+    scikitimage
     scipy
+    superqt
+    tifffile
+    toolz
+    tqdm
+    typing-extensions
+    vispy
+    wrapt
   ];
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "scikit-image>=0.19.1" "scikit-image" \
+      --replace "vispy>=0.10.0,<0.11" "vispy"
+  '';
+
   dontUseSetuptoolsCheck = true;
+
   postFixup = ''
     wrapQtApp $out/bin/napari
   '';
 
   meta = with lib; {
-    description = "A fast, interactive, multi-dimensional image viewer for python";
+    description = "A fast, interactive, multi-dimensional image viewer";
     homepage = "https://github.com/napari/napari";
     license = licenses.bsd3;
     maintainers = with maintainers; [ SomeoneSerge ];
