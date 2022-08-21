@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "klaus";
-  version = "1.5.2";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "jonashaag";
     repo = pname;
     rev = version;
-    sha256 = "12b96jgiv9y7zmkqqj3dh0fbbm3ps8gbqk925qrhh56zqjl66kx2";
+    sha256 = "sha256-GyWlIFmP78t+cyPWjjB/EgA/L+2QqHPnmfJ64W5gsf8=";
   };
 
   prePatch = ''
