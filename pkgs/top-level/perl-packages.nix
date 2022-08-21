@@ -1349,6 +1349,17 @@ let
 
     meta = {
       description = "AutoDia, create UML diagrams from source code";
+      longDescription = ''
+        AutoDia is a modular application that parses source code, XML or data
+        and produces an XML document in Dia format (or images via graphviz
+        and vcg).  Its goal is to be a UML / DB Schema diagram autocreation
+        package.  The diagrams its creates are standard UML diagrams showing
+        dependencies, superclasses, packages, classes and inheritances, as
+        well as the methods, etc of each class.
+
+        AutoDia supports any language that a Handler has been written for,
+        which includes C, C++, Java, Perl, Python, and more.
+      '';
       homepage = "http://www.aarontrevena.co.uk/opensource/autodia/";
       license = with lib.licenses; [ gpl2Plus ];
       mainProgram = "autodia.pl";
@@ -2918,6 +2929,10 @@ let
       url = "mirror://cpan/authors/id/J/JS/JSWARTZ/CHI-0.60.tar.gz";
       sha256 = "c7f1a2b3570a8fede484e933f89ba1729e0abd05935791d146c522dd120ee851";
     };
+    preConfigure = ''
+      # fix error 'Unescaped left brace in regex is illegal here in regex'
+      substituteInPlace lib/CHI/t/Driver/Subcache/l1_cache.pm --replace 'qr/CHI stats: {' 'qr/CHI stats: \{'
+    '';
     buildInputs = [ TestClass TestDeep TestException TestWarn TimeDate ];
     propagatedBuildInputs = [ CarpAssert ClassLoad DataUUID DigestJHash HashMoreUtils JSONMaybeXS ListMoreUtils LogAny Moo MooXTypesMooseLikeNumeric StringRewritePrefix TaskWeaken TimeDuration TimeDurationParse ];
     meta = {
@@ -3238,6 +3253,10 @@ let
       url = "mirror://cpan/authors/id/E/EV/EVO/Class-MakeMethods-1.01.tar.gz";
       sha256 = "0ricb0mn0i06ngfhq5y035yx8i7ahlx83yyqwixqmv6hg4p79b5c";
     };
+    preConfigure = ''
+      # fix error 'Unescaped left brace in regex is illegal here in regex'
+      substituteInPlace tests/xemulator/class_methodmaker/Test.pm --replace 's/(TEST\s{)/$1/g' 's/(TEST\s\{)/$1/g'
+    '';
   };
 
   ClassMethodMaker = buildPerlPackage {
@@ -7910,6 +7929,7 @@ let
     preCheck = if stdenv.isCygwin then ''
       sed -i"" -e "s@plan tests => 13@plan tests => 10@" t/env.t
       sed -i"" -e "s@ok(env(\"\\\x@#ok(env(\"\\\x@" t/env.t
+      sed -i"" -e "s@ok(\$ENV{\"\\\x@#ok(\$ENV{\"\\\x@" t/env.t
     '' else null;
     meta = {
       description = "Determine the locale encoding";
@@ -10933,7 +10953,9 @@ let
     };
     meta = {
       license = with lib.licenses; [ unfree ];
-      broken = stdenv.isi686 || stdenv.isDarwin; # loadable library and perl binaries are mismatched (got handshake key 0x7d40080, needed 0x7dc0080)
+      broken = 
+        stdenv.isi686 # loadable library and perl binaries are mismatched (got handshake key 0x7d40080, needed 0x7dc0080)
+        || stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.HTTPHeaderParserXS.x86_64-darwin
     };
   };
 
@@ -11847,6 +11869,17 @@ let
 
     meta = with lib; {
       description = "A tool to read, write and edit EXIF meta information";
+      longDescription = ''
+        ExifTool is a platform-independent Perl library plus a command-line
+        application for reading, writing and editing meta information in a wide
+        variety of files. ExifTool supports many different metadata formats
+        including EXIF, GPS, IPTC, XMP, JFIF, GeoTIFF, ICC Profile, Photoshop
+        IRB, FlashPix, AFCP and ID3, as well as the maker notes of many digital
+        cameras by Canon, Casio, DJI, FLIR, FujiFilm, GE, GoPro, HP,
+        JVC/Victor, Kodak, Leaf, Minolta/Konica-Minolta, Motorola, Nikon,
+        Nintendo, Olympus/Epson, Panasonic/Leica, Pentax/Asahi, Phase One,
+        Reconyx, Ricoh, Samsung, Sanyo, Sigma/Foveon and Sony.
+      '';
       homepage = "https://exiftool.org/";
 
       license = with licenses; [ gpl1Plus /* or */ artistic2 ];
@@ -11865,6 +11898,12 @@ let
     buildInputs = [ TestWarn ];
     meta = {
       description = "Write Perl Subroutines in Other Programming Languages";
+      longDescription = ''
+        The Inline module allows you to put source code from other
+        programming languages directly "inline" in a Perl script or
+        module. The code is automatically compiled as needed, and then loaded
+        for immediate access from Perl.
+      '';
       homepage = "https://github.com/ingydotnet/inline-pm";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -11910,6 +11949,13 @@ let
 
     meta = {
       description = "Write Perl classes in Java";
+      longDescription = ''
+        The Inline::Java module allows you to put Java source code directly
+        "inline" in a Perl script or module.  A Java compiler is launched and
+        the Java code is compiled.  Then Perl asks the Java classes what
+        public methods have been defined.  These classes and methods are
+        available to the Perl program as if they had been written in Perl.
+      '';
       license = with lib.licenses; [ artistic2 ];
       broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.InlineJava.x86_64-darwin
     };
@@ -13385,6 +13431,15 @@ let
     meta = {
       description = "Object Oriented Authentication-Results Headers";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  MailMaildir = buildPerlPackage {
+    version = "1.0.0";
+    pname = "Mail-Maildir";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Z/ZE/ZEROALTI/Mail-Maildir-100/Mail-Maildir-1.0.0.tar.bz2";
+      sha256 = "1krkqfps6q3ifrhi9450l5gm9199qyfcm6vidllr0dv65kdaqpj4";
     };
   };
 
@@ -15263,6 +15318,10 @@ let
     };
     propagatedBuildInputs = [ ClassAccessor ConfigTiny MathCalcUnits ParamsValidate ];
     meta = {
+      description = ''
+        A family of perl modules to streamline writing Naemon,
+        Nagios, Icinga or Shinken (and compatible) plugins
+      '';
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -21422,6 +21481,29 @@ let
       license = with lib.licenses; [ gpl2Plus ];
       maintainers = [ maintainers.pSub ];
     };
+  };
+
+  SysCPU = buildPerlPackage {
+    pname = "Sys-CPU";
+    version = "0.61";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MZ/MZSANFORD/Sys-CPU-0.61.tar.gz";
+      sha256 = "1r6976bs86j7zp51m5vh42xlyah951jgdlkimv202413kjvqc2i5";
+    };
+    patches = [
+      # Bug #95400 for Sys-CPU: Tests fail on ARM and AArch64 Linux
+      # https://rt.cpan.org/Public/Bug/Display.html?id=95400
+      (fetchpatch {
+        url = "https://rt.cpan.org/Ticket/Attachment/1359669/721669/0001-Add-support-for-cpu_type-on-ARM-and-AArch64-Linux-pl.patch";
+        sha256 = "0rmazzdy34znksdhh8drc83lk754slhjgvnk4kk27z3kw5gm10m0";
+      })
+      (fetchpatch {
+        url = "https://rt.cpan.org/Ticket/Attachment/1388036/737125/0002-cpu_clock-can-be-undefined-on-an-ARM.patch";
+        sha256 = "0z3wqfahc9av7y34aqp6biq3sf8v8q4yynx7bv290vds50dsjb4w";
+      })
+    ];
+    buildInputs = lib.optional stdenv.isDarwin pkgs.darwin.apple_sdk.frameworks.Carbon;
+    doCheck = !stdenv.isAarch64;
   };
 
   SysHostnameLong = buildPerlPackage {
