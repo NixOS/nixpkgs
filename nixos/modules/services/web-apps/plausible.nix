@@ -188,7 +188,11 @@ in {
           inherit (pkgs.plausible.meta) description;
           documentation = [ "https://plausible.io/docs/self-hosting" ];
           wantedBy = [ "multi-user.target" ];
-          after = optionals cfg.database.postgres.setup [ "postgresql.service" "plausible-postgres.service" ];
+          after = optional cfg.database.clickhouse.setup "clickhouse.service"
+          ++ optionals cfg.database.postgres.setup [
+              "postgresql.service"
+              "plausible-postgres.service"
+            ];
           requires = optional cfg.database.clickhouse.setup "clickhouse.service"
             ++ optionals cfg.database.postgres.setup [
               "postgresql.service"

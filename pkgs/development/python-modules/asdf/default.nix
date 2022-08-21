@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "asdf";
-  version = "2.12.1";
+  version = "2.13.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0qXRYWXKC17JiL1D+jjuGVoOGAJuGbJje7OZyd2k3o8=";
+    hash = "sha256-MuKmmlPRcB/EYW6AD7Pa/4G7rYAYMqe/Vj47Ycn+Pf4=";
   };
 
   nativeBuildInputs = [

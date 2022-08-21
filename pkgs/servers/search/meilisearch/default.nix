@@ -30,11 +30,11 @@ rustPlatform.buildRustPackage {
     meilisearch = nixosTests.meilisearch;
   };
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = (stdenv.isDarwin && stdenv.isx86_64);
     description = "Powerful, fast, and an easy to use search engine ";
     homepage = "https://docs.meilisearch.com/";
     license = licenses.mit;
     maintainers = with maintainers; [ happysalada ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "aarch64-darwin" "x86_64-linux" "x86_64-darwin" ];
   };
 }

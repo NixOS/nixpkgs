@@ -1516,6 +1516,8 @@ in {
 
   btrfsutil = toPythonModule (pkgs.btrfs-progs.override { python3 = self.python; });
 
+  bucketstore = callPackage ../development/python-modules/bucketstore { };
+
   bugsnag = callPackage ../development/python-modules/bugsnag { };
 
   bugwarrior = callPackage ../development/python-modules/bugwarrior { };
@@ -1731,6 +1733,8 @@ in {
   charset-normalizer = callPackage ../development/python-modules/charset-normalizer { };
 
   chart-studio = callPackage ../development/python-modules/chart-studio { };
+
+  chat-downloader = callPackage ../development/python-modules/chat-downloader { };
 
   check-manifest = callPackage ../development/python-modules/check-manifest { };
 
@@ -2401,6 +2405,8 @@ in {
   dill = callPackage ../development/python-modules/dill { };
 
   dingz = callPackage ../development/python-modules/dingz { };
+
+  dinghy = callPackage ../development/python-modules/dinghy { };
 
   diofant = callPackage ../development/python-modules/diofant { };
 
@@ -5244,6 +5250,8 @@ in {
   livestreamer = callPackage ../development/python-modules/livestreamer { };
 
   livestreamer-curses = callPackage ../development/python-modules/livestreamer-curses { };
+
+  lizard = callPackage ../development/python-modules/lizard { };
 
   llfuse = callPackage ../development/python-modules/llfuse {
     inherit (pkgs) fuse;
@@ -9512,6 +9520,8 @@ in {
   rig = callPackage ../development/python-modules/rig { };
 
   ring-doorbell = callPackage ../development/python-modules/ring-doorbell { };
+
+  ripe-atlas-cousteau = callPackage ../development/python-modules/ripe-atlas-cousteau { };
 
   riprova = callPackage ../development/python-modules/riprova { };
 
