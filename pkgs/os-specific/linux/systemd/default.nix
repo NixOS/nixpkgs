@@ -83,7 +83,7 @@
 , withHostnamed ? true
 , withHwdb ? true
 , withImportd ? !stdenv.hostPlatform.isMusl
-, withLibBPF ? false # currently fails while generating BPF objects
+, withLibBPF ? true
 , withLocaled ? true
 , withLogind ? true
 , withMachined ? true
@@ -207,6 +207,10 @@ stdenv.mkDerivation {
       --replace \
       "run_command(cc.cmd_array(), '-print-prog-name=objcopy', check: true).stdout().strip()" \
       "'${stdenv.cc.bintools.targetPrefix}objcopy'"
+  '' + lib.optionalString withLibBPF ''
+    # BPF does not work with stack protector
+    substituteInPlace src/core/bpf/meson.build \
+      --replace "clang_flags = [" "clang_flags = [ '-fno-stack-protector',"
   '' + (
     let
       # The following patches references to dynamic libraries to ensure that
