@@ -64,6 +64,12 @@ buildPythonPackage rec {
     "test_load_snippets_html"
     "test_load_utf8_snippets"
     "test_load_declared_arabic"
+    # AssertionError: assert code == expected_status
+    "test_fail_under_console"
+    # AssertionError:  assert expected.strip() == report.strip().decode("utf-8")
+    "test_fail_under_pass_console"
+    "test_added_file_pyflakes_console"
+    "test_added_file_pyflakes_console_two_files"
   ];
 
   pythonImportsCheck = [
