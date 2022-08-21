@@ -1,7 +1,8 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -i bash -p nix
 
-BASE_URL="https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk"
+CHANNEL_URL="https://dl.google.com/dl/cloudsdk/channels/rapid"
+BASE_URL="$CHANNEL_URL/downloads/google-cloud-sdk"
 
 # Version of Google Cloud SDK from
 # https://cloud.google.com/sdk/docs/release-notes
@@ -17,6 +18,15 @@ function genMainSrc() {
     echo "      };"
 }
 
+function genComponentsSrc() {
+    local url="${CHANNEL_URL}/components-v${VERSION}.json"
+    local sha256
+    sha256=$(nix-prefetch-url "$url")
+    echo "      {"
+    echo "        url = \"${url}\";"
+    echo "        sha256 = \"${sha256}\";"
+    echo "      };"
+}
 {
     cat <<EOF
 # DO NOT EDIT! This file is generated automatically by update.sh
@@ -40,6 +50,9 @@ EOF
 
     echo "    i686-linux ="
     genMainSrc "linux" "x86"
+
+    echo "    components ="
+    genComponentsSrc
 
     echo "  };"
     echo "}"
