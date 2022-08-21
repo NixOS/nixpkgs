@@ -34,6 +34,14 @@ stdenv.mkDerivation rec {
     ]))
   ];
 
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+    make -j $NIX_BUILD_CORES UnitTests
+    ctest --output-on-failure
+    runHook postCheck
+  '';
+
   postInstall = ''
     mv $out/lib/surelog/* $out/lib/
     rm -rf $out/lib/surelog
