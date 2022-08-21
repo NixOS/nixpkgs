@@ -115,6 +115,12 @@
     githubId = 7414843;
     name = "Nicholas von Klitzing";
   };
+  _360ied = {
+    name = "Brian Zhu";
+    email = "therealbarryplayer@gmail.com";
+    github = "360ied";
+    githubId = 19516527;
+  };
   _13r0ck = {
     name = "Brock Szuszczewicz";
     email = "bnr@tuta.io";

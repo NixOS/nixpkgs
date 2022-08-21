@@ -8581,6 +8581,8 @@ with pkgs;
 
   lzip = callPackage ../tools/compression/lzip { };
 
+  plzip = callPackage ../tools/compression/plzip { };
+
   lziprecover = callPackage ../tools/compression/lziprecover { };
 
   luxcorerender = callPackage ../tools/graphics/luxcorerender {
