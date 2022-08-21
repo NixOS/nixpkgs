@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyswitchbot";
-  version = "0.18.12";
+  version = "0.18.13";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "pySwitchbot";
     rev = "refs/tags/${version}";
-    hash = "sha256-9eg66+LbUr2px5jVcEopC5UIwZZU51bicDn8lMuDR6U=";
+    hash = "sha256-ii9ExMCTLF2eG9NWwvFLUmwMvmyCJ2PclL4Ig/79ny4=";
   };
 
   propagatedBuildInputs = [
