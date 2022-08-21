@@ -12,10 +12,6 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  postPatch = ''
-    sed '1i#include <stdint.h>' -i src/xdr_sizeof.c
-  '';
-
   KRB5_CONFIG = "${libkrb5.dev}/bin/krb5-config";
   nativeBuildInputs = [ autoreconfHook ];
   propagatedBuildInputs = [ libkrb5 ];
@@ -24,7 +20,9 @@ stdenv.mkDerivation rec {
     sed -es"|/etc/netconfig|$out/etc/netconfig|g" -i doc/Makefile.in tirpc/netconfig.h
   '';
 
-  preInstall = "mkdir -p $out/etc";
+  preInstall = ''
+    mkdir -p $out/etc
+  '';
 
   doCheck = true;
 
