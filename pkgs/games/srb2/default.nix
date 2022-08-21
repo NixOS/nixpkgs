@@ -26,7 +26,7 @@ let
 
   # Normal assets found on the official release
   assets = stdenv.mkDerivation rec {
-    pname = "srb2kart-data";
+    pname = "srb2-data";
     inherit version;
     nativeBuildInputs = [ unzip ];
     src = fetchurl {
@@ -138,5 +138,4 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ zeratax ];
   };
-
 }
