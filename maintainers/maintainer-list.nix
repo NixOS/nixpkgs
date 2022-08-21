@@ -6979,12 +6979,6 @@
       fingerprint = "8992 44FC D291 5CA2 0A97  802C 156C 88A5 B0A0 4B2A";
     }];
   };
-  kiyengar = {
-    email = "hello@kiyengar.net";
-    github = "karthikiyengar";
-    githubId = 8260207;
-    name = "Karthik Iyengar";
-  };
   kjeremy = {
     email = "kjeremy@gmail.com";
     name = "Jeremy Kolb";
