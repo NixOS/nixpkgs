@@ -4,6 +4,8 @@
 , rustPlatform
 , pkg-config
 , openssl
+, CoreServices
+, Security
 }:
 rustPlatform.buildRustPackage rec {
   pname = "zine";
@@ -23,9 +25,8 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     pkg-config
   ];
-  buildInputs = [
-    openssl
-  ];
+
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
   meta = with lib; {
     description = "A simple and opinionated tool to build your own magazine";
