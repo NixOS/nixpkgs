@@ -14,7 +14,6 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-3mrNS0zNgsG7mX3RileFLi5iw3SrlEQC96FSANjpKT8=";
 
   meta = with lib; {
-    broken = true; # since 2021-07-05 on hydra
     description = "CLI tool to inspect Parquet files";
     homepage = "https://github.com/manojkarthick/pqrs";
     license = with licenses; [ mit /* or */ asl20 ];
