@@ -100,6 +100,10 @@ in stdenv.mkDerivation rec {
   NIX_LDFLAGS = lib.optionalString x11Support "-lX11 -lXext "
     + lib.optionalString stdenv.isDarwin "-framework CoreFoundation";
 
+  # These flags are not supported and cause the build
+  # to fail, even when cross compilation itself works.
+  dontAddWafCrossFlags = true;
+
   wafConfigureFlags = [
     "--enable-libmpv-shared"
     "--enable-manpage-build"
