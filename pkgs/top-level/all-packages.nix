@@ -30088,7 +30088,7 @@ with pkgs;
   thunderbird-bin = thunderbird-bin-91;
   thunderbird-bin-unwrapped = thunderbird-bin-91-unwrapped;
 
-  thunderbird-bin-102 = wrapThunderbird thunderbird-bin-unwrapped {
+  thunderbird-bin-102 = wrapThunderbird thunderbird-bin-102-unwrapped {
     applicationName = "thunderbird";
     pname = "thunderbird-bin";
     desktopName = "Thunderbird";
