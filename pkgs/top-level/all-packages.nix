@@ -294,6 +294,8 @@ with pkgs;
 
   breakpad = callPackage ../development/misc/breakpad { };
 
+  brev-cli = callPackage ../development/misc/brev-cli { };
+
   buf = callPackage ../development/tools/buf { };
 
   cbfmt = callPackage ../development/tools/cbfmt { };
