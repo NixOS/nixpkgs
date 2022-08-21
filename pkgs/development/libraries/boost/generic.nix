@@ -84,7 +84,7 @@ let
 
     # TODO: make this unconditional
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform ||
-                  # required; see this line's `git blame` for an explanation
+                  # required on mips; see 61d9f201baeef4c4bb91ad8a8f5f89b747e0dfe4
                   (stdenv.hostPlatform.isMips && versionAtLeast version "1.79")) [
     "address-model=${toString stdenv.hostPlatform.parsed.cpu.bits}"
     "architecture=${if stdenv.hostPlatform.isMips64
