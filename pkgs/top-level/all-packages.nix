@@ -23136,6 +23136,8 @@ with pkgs;
     tpmSupport = true;
   };
 
+  ops = callPackage ../applications/virtualization/ops { };
+
   seabios = callPackage ../applications/virtualization/seabios { };
 
   vmfs-tools = callPackage ../tools/filesystems/vmfs-tools { };
@@ -31563,6 +31565,8 @@ with pkgs;
 
   webmacs = libsForQt5.callPackage ../applications/networking/browsers/webmacs {};
 
+  websploit = python3Packages.callPackage ../tools/security/websploit {};
+
   webssh = with python3Packages; toPythonApplication webssh;
 
   webtorrent_desktop = callPackage ../applications/video/webtorrent_desktop {};
@@ -36118,6 +36122,8 @@ with pkgs;
     libpng = libpng12;
     sane-backends = sane-backends.override { libpng = libpng12; };
   };
+
+  xsser = python3Packages.callPackage ../tools/security/xsser { };
 
   xsw = callPackage ../applications/misc/xsw {
     # Enable the next line to use this in terminal.
