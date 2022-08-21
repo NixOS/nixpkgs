@@ -19,12 +19,12 @@ buildPythonPackage rec {
     sha256 = "sha256-4jq6gXpI1hFtX7ka2c/qQ+S6vZCThKOGhQwJ2FOYItY=";
   };
 
+  propagatedBuildInputs = [ jinja2 ];
+
   checkInputs = [
     pytestCheckHook
     mock
   ];
-
-  propagatedBuildInputs = [ jinja2 ];
 
   pythonImportsCheck = [
     "lizard"
