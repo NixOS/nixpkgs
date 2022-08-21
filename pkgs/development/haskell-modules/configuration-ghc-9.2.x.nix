@@ -148,7 +148,7 @@ self: super: {
   }) (doJailbreak super.hpack);
 
   # lens >= 5.1 supports 9.2.1
-  lens = doDistribute self.lens_5_1_1;
+  lens = doDistribute self.lens_5_2;
 
   # Syntax error in tests fixed in https://github.com/simonmar/alex/commit/84b29475e057ef744f32a94bc0d3954b84160760
   alex = dontCheck super.alex;
