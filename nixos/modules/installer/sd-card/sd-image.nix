@@ -233,14 +233,15 @@ in
 
         find firmware -exec touch --date=2000-01-01 {} +
         # Copy the populated /boot/firmware into the SD image
-        (cd firmware;
+        cd firmware
         # Force a fixed order in mcopy for better determinism, and avoid file globbing
         for d in $(find . -type d -mindepth 1 | sort); do
           faketime "2000-01-01 00:00:00" mmd -i ../firmware_part.img "::/$d"
         done
         for f in $(find . -type f | sort); do
           mcopy -pvm -i ../firmware_part.img "$f" "::/$f"
-        done)
+        done
+        cd ..
 
         # Verify the FAT partition before copying it.
         fsck.vfat -vn firmware_part.img
