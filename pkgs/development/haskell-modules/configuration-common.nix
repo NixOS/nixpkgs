@@ -2402,10 +2402,6 @@ self: super: {
     }))
   ];
 
-  # 2022-02-25: Not compatible with relude 1.0
-  ema = assert super.ema.version == "0.6.0.0";
-    super.ema.overrideScope (self: super: { relude = doJailbreak self.relude_0_7_0_0; });
-
   glirc = super.glirc.override {
     vty = self.vty_5_35_1;
   };
