@@ -103,6 +103,6 @@ mkDerivation rec {
     homepage = "https://www.lesbonscomptes.com/recoll/";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ jcumming kiyengar ];
+    maintainers = with maintainers; [ jcumming ];
   };
 }
