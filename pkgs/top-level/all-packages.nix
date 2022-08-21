@@ -36119,6 +36119,8 @@ with pkgs;
     sane-backends = sane-backends.override { libpng = libpng12; };
   };
 
+  xsser = python3Packages.callPackage ../tools/security/xsser { };
+
   xsw = callPackage ../applications/misc/xsw {
     # Enable the next line to use this in terminal.
     # Note that it requires sixel capable terminals such as mlterm
