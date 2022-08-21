@@ -103,6 +103,9 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
+    substituteInPlace $out/share/applications/tidal-hifi.desktop \
+          --replace "Exec=/opt/tidal-hifi/tidal-hifi" "Exec=$out/bin/tidal-hifi" \
+
     makeWrapper $out/opt/tidal-hifi/tidal-hifi $out/bin/tidal-hifi \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath buildInputs}" \
       "''${gappsWrapperArgs[@]}"
