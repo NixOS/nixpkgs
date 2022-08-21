@@ -16,27 +16,21 @@
 , unzip
 , makeWrapper
 , makeDesktopItem
+, copyDesktopItems
 , customAssets ? false
 }:
 
 let
 
-  # Common info
-  mainName = "srb2";
   version = "2.2.10";
-  owner = "STJr";
-  repo = "SRB2";
-  fixVersion = builtins.replaceStrings ["."] [""] version;
-  description = "Sonic Robo Blast 2 is a 3D Sonic the Hedgehog fangame based on a modified version of Doom Legacy";
 
   # Normal assets found on the official release
   assets = stdenv.mkDerivation rec {
-    pname = "${mainName}-data";
+    pname = "srb2kart-data";
     inherit version;
     nativeBuildInputs = [ unzip ];
-    buildInputs = [ unzip ];
     src = fetchurl {
-      url = "https://github.com/${owner}/${repo}/releases/download/${repo}_release_${version}/${repo}-v${fixVersion}-Full.zip";
+      url = "https://github.com/STJr/SRB2/releases/download/SRB2_release_${version}/SRB2-v${lib.replaceStrings ["."] [""] version}-Full.zip";
       sha256 = "sha256-5prFysyG+F7quhRkSjfK2TL31wMbZniS0vm6m/tDfSU=";
     };
     sourceRoot = ".";
@@ -47,26 +41,24 @@ let
   };
 
   # Custom assets from mazmazz
-  mVersion = "2.2.5";
-  mAssets = {
-    main = fetchurl {
-      url = "https://github.com/mazmazz/SRB2/releases/download/SRB2_assets_220/srb2-${mVersion}-assets.7z";
-      sha256 = "1m9xf3vraq9nipsi09cyvvfa4i37gzfxg970rnqfswd86z9v6v00";
-    };
-    optional = fetchurl {
-      url = "https://github.com/mazmazz/SRB2/releases/download/SRB2_assets_220/srb2-${mVersion}-optional-assets.7z";
-      sha256 = "1j29jrd0r1k2bb11wyyl6yv9b90s2i6jhrslnh77qkrhrwnwcdz4";
-    };
-  };
   mazmazzAssets = stdenv.mkDerivation rec {
-    pname = "${mainName}-mazmazz-data";
-    version = mVersion;
+    pname = "srb2-mazmazz-data";
+    version = "2.2.5";
     nativeBuildInputs = [ p7zip ];
-    buildInputs = [ p7zip ];
-    srcs = [ mAssets.main mAssets.optional ];
-    unpackPhase = ''
-      7z x "${mAssets.main}"
-      7z x "${mAssets.optional}"
+    unpackPhase = let
+      mazmazzAssetsPacks = {
+        main = fetchurl {
+          url = "https://github.com/mazmazz/SRB2/releases/download/SRB2_assets_220/srb2-${version}-assets.7z";
+          sha256 = "1m9xf3vraq9nipsi09cyvvfa4i37gzfxg970rnqfswd86z9v6v00";
+        };
+        optional = fetchurl {
+          url = "https://github.com/mazmazz/SRB2/releases/download/SRB2_assets_220/srb2-${version}-optional-assets.7z";
+          sha256 = "1j29jrd0r1k2bb11wyyl6yv9b90s2i6jhrslnh77qkrhrwnwcdz4";
+        };
+      };
+    in ''
+      7z x "${mazmazzAssetsPacks.main}"
+      7z x "${mazmazzAssetsPacks.optional}"
     '';
     installPhase = ''
       mkdir -p $out/share/srb2
@@ -76,13 +68,14 @@ let
 
 in stdenv.mkDerivation rec {
 
-  pname = mainName;
+  pname = "srb2";
   inherit version;
 
   chosenAsset = if customAssets then mazmazzAssets else assets;
 
   src = fetchFromGitHub {
-    inherit owner repo;
+    owner = "STJr";
+    repo = "SRB2";
     rev = "SRB2_release_${version}";
     sha256 = "03388n094d2yr5si6ngnggbqhm8b2l0s0qvfnkz49li9bd6a81gg";
   };
@@ -91,6 +84,8 @@ in stdenv.mkDerivation rec {
     cmake
     nasm
     p7zip
+    makeWrapper
+    copyDesktopItems
   ];
 
   buildInputs = [
@@ -101,7 +96,6 @@ in stdenv.mkDerivation rec {
     SDL2
     SDL2_mixer
     zlib
-    makeWrapper
   ];
 
   cmakeFlags = [
@@ -113,30 +107,32 @@ in stdenv.mkDerivation rec {
   ];
 
   # Desktop icon
-  desktopLink = makeDesktopItem rec {
-    name = "Sonic Robo Blast 2";
-    exec = mainName;
-    icon = mainName;
-    comment = description;
-    desktopName = name;
-    genericName = name;
-    categories = [ "Game" ];
-  };
+  desktopItems = [
+    (makeDesktopItem rec {
+      name = "Sonic Robo Blast 2";
+      exec = pname;
+      icon = pname;
+      comment = meta.description;
+      desktopName = name;
+      genericName = name;
+      categories = [ "Game" ];
+    })
+  ];
 
   installPhase = ''
-    mkdir -p $out/bin $out/share $out/share/applications $out/share/pixmaps $out/share/icons
+    mkdir -p $out/bin $out/share/applications $out/share/pixmaps $out/share/icons
 
-    ln -s ${desktopLink}/share/applications/* $out/share/applications
+    copyDesktopItems
 
-    cp /build/source/srb2.png $out/share/pixmaps/.
-    cp /build/source/srb2.png $out/share/icons/.
+    cp ../srb2.png $out/share/pixmaps/.
+    cp ../srb2.png $out/share/icons/.
 
     cp bin/lsdlsrb2-${version} $out/bin/srb2
     wrapProgram $out/bin/srb2 --set SRB2WADDIR "${chosenAsset}/share/srb2"
   '';
 
   meta = with lib; {
-    inherit description;
+    description = "Sonic Robo Blast 2 is a 3D Sonic the Hedgehog fangame based on a modified version of Doom Legacy";
     homepage = "https://www.srb2.org/";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
