@@ -3,7 +3,7 @@
 buildDunePackage rec {
   pname = "ocaml-vdom";
   version = "0.2";
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
   duneVersion = "3";
 
   src = fetchurl {
