@@ -29,7 +29,7 @@ let
 
   net-conflist = pkgs.runCommand "87-podman-bridge.conflist"
     {
-      nativeBuildInputs = [ pkgs.jq ];
+      nativeBuildInputs = with pkgs; [ gnused jq ];
       extraPlugins = builtins.toJSON cfg.defaultNetwork.extraPlugins;
       jqScript = ''
         . + { "plugins": (.plugins + $extraPlugins) }
@@ -38,6 +38,7 @@ let
     jq <${cfg.package}/etc/cni/net.d/87-podman-bridge.conflist \
       --argjson extraPlugins "$extraPlugins" \
       "$jqScript" \
+      | sed -e 's/10.88.0/${cfg.defaultNetwork.network}/g' \
       >$out
   '';
 
@@ -119,14 +120,23 @@ in
       '';
     };
 
-    defaultNetwork.extraPlugins = lib.mkOption {
-      type = types.listOf json.type;
-      default = [ ];
-      description = lib.mdDoc ''
-        Extra CNI plugin configurations to add to podman's default network.
-      '';
-    };
+    defaultNetwork = {
+      extraPlugins = lib.mkOption {
+        type = types.listOf json.type;
+        default = [ ];
+        description = lib.mdDoc ''
+          Extra CNI plugin configurations to add to podman's default network.
+        '';
+      };
 
+      network = lib.mkOption {
+        type = types.str;
+        default = "10.88.0";
+        description = lib.mdDoc ''
+          Network segment for podman's default network.
+        '';
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable (lib.mkMerge [
