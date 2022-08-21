@@ -126,9 +126,10 @@ rec {
       # This function is just here to avoid having to maintain 2 pretty big error messages that are nearly identical
       crossCompilError = parameter:
         ''
-          The `${parameter}` parameter formerly used in the `pullImage` function to cross compile container is now deprecated in favor of native nix cross compilation.
-          As a quick fix you may want to replace 'pkgs.dockerTools.pullImage' by 'pkgs.pkgsCross.<platform>.dockerTools.pullImage' where <platform> is a valid nixpkgs host platforms.
-          For more information, see the following links:
+          The `${parameter}` parameter formerly used in the `pullImage` function to cross compile container is now deprecated in favor of Nixpkgs cross compilation.
+          One way to migrate is to change 'pkgs.dockerTools.pullImage' to 'pkgs.pkgsCross.<platform>.dockerTools.pullImage' where <platform> corresponds to the correct ${parameter}.
+          For more information, including how to obtain `pkgs` for any combinations of parameters,
+          see the following links:
             - The official nix guide about cross compilation (https://nixos.org/guides/cross-compilation.html)
             - The `pullImage` function doc (https://nixos.org/manual/nixpkgs/stable/#ssec-pkgs-dockerTools-fetchFromRegistry)
         '';
