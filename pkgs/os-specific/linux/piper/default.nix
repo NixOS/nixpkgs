@@ -1,6 +1,6 @@
 { lib, meson, ninja, pkg-config, gettext, fetchFromGitHub, python3
 , wrapGAppsHook, gtk3, glib, desktop-file-utils, appstream-glib, gnome
-, gobject-introspection }:
+, gobject-introspection, librsvg }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "piper";
@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [ meson ninja gettext pkg-config wrapGAppsHook desktop-file-utils appstream-glib gobject-introspection ];
   buildInputs = [
-    gtk3 glib gnome.adwaita-icon-theme python3
+    gtk3 glib gnome.adwaita-icon-theme python3 librsvg
   ];
   propagatedBuildInputs = with python3.pkgs; [ lxml evdev pygobject3 ] ++ [
     gobject-introspection # fixes https://github.com/NixOS/nixpkgs/issues/56943 for now
