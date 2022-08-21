@@ -8,6 +8,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 }:
+
 buildPythonPackage rec {
   pname = "ripe-atlas-cousteau";
   version = "1.5.1";
