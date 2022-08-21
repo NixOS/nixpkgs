@@ -25,11 +25,6 @@ buildPythonPackage rec {
     lxml
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace robotframework-python3 robotframework
-  '';
-
   checkInputs = [
     pytestCheckHook
   ];
