@@ -76,9 +76,9 @@ in
 
       initialOpts = mkOption {
         type = types.attrs;
-        description = ''
+        description = lib.mdDoc ''
           Default preferences to be set at first startup.
-          <link xlink:href="https://support.google.com/chrome/a/answer/187948?hl=en">https://support.google.com/chrome/a/answer/187948?hl=en</link>
+          <https://support.google.com/chrome/a/answer/187948>
         '';
         default = {};
         example = literalExpression ''
@@ -119,8 +119,7 @@ in
       recommendedOpts = mkOption {
         type = types.attrs;
         description = ''
-          Recommended chromium policy options.
-          Recommended policies can be changed by the user.
+          Recommended chromium policy options which can be changed by the user.
         '';
         default = {};
         example = literalExpression ''
@@ -132,7 +131,6 @@ in
           }
         '';
       };
-
     };
   };
 
@@ -166,10 +164,8 @@ in
           folder:
             lib.mapAttrsToList (name: value: { name = "${folder}/${name}"; inherit value; }) commonStructure
         ) baseFolders;
-      in builtins.listToAttrs (lib.flatten fullListFiles);
+      in listToAttrs (lib.flatten fullListFiles);
 
     in allFiles;
-
   };
-
 }
