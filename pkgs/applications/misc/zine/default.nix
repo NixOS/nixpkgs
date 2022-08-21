@@ -26,7 +26,8 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
   meta = with lib; {
     description = "A simple and opinionated tool to build your own magazine";
