@@ -8228,6 +8228,8 @@ in {
 
   pyres = callPackage ../development/python-modules/pyres { };
 
+  pyric = callPackage ../development/python-modules/pyric { };
+
   pyrisco = callPackage ../development/python-modules/pyrisco { };
 
   pyrituals = callPackage ../development/python-modules/pyrituals { };
