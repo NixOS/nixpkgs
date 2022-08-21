@@ -81,6 +81,9 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin"
     cp bin/godot.* $out/bin/godot
 
+    wrapProgram "$out/bin/godot" \
+      --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib
+
     mkdir "$dev"
     cp -r modules/gdnative/include $dev
 
@@ -93,9 +96,6 @@ stdenv.mkDerivation rec {
     cp icon.png "$out/share/icons/godot.png"
     substituteInPlace "$out/share/applications/org.godotengine.Godot.desktop" \
       --replace "Exec=godot" "Exec=$out/bin/godot"
-
-    makeWrapper $out/bin/godot $out/bin/godot \
-      --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib
   '';
 
   meta = with lib; {

@@ -2,6 +2,7 @@
 , lib, fetchFromGitHub, neovimUtils, wrapNeovimUnstable
 , neovim-unwrapped
 , fetchFromGitLab
+, runCommandLocal
 , pkgs
 }:
 let
@@ -18,6 +19,24 @@ let
       '';
     }
   ];
+
+  packagesWithSingleLineConfigs = with vimPlugins; [
+    {
+      plugin = vim-obsession;
+      config = ''map <Leader>$ <Cmd>Obsession<CR>'';
+    }
+    {
+      plugin = trouble-nvim;
+      config = ''" placeholder config'';
+    }
+  ];
+
+  nvimConfSingleLines = makeNeovimConfig {
+    plugins = packagesWithSingleLineConfigs;
+    customRC = ''
+      " just a comment
+    '';
+  };
 
   nvimConfNix = makeNeovimConfig {
     inherit plugins;
@@ -47,8 +66,9 @@ let
     sha256 = "1ykcvyx82nhdq167kbnpgwkgjib8ii7c92y3427v986n2s5lsskc";
   };
 
+  # neovim-drv must be a wrapped neovim
   runTest = neovim-drv: buildCommand:
-    pkgs.runCommandLocal "test-${neovim-drv.name}" ({
+    runCommandLocal "test-${neovim-drv.name}" ({
       nativeBuildInputs = [ ];
       meta.platforms = neovim-drv.meta.platforms;
     }) (''
@@ -67,6 +87,12 @@ rec {
   ### neovim tests
   ##################
   nvim_with_plugins = wrapNeovim2 "-with-plugins" nvimConfNix;
+
+  singlelinesconfig = runTest (wrapNeovim2 "-single-lines" nvimConfSingleLines) ''
+      assertFileContent \
+        "$vimrcGeneric" \
+        "${./init-single-lines.vim}"
+  '';
 
   nvim_via_override = neovim.override {
     extraName = "-via-override";
@@ -131,7 +157,7 @@ rec {
   nvim_via_override-test = runTest nvim_via_override ''
       assertFileContent \
         "$vimrcGeneric" \
-        "${./neovim-override.vim}"
+        "${./init-override.vim}"
   '';
 
 

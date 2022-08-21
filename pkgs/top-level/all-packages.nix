@@ -9898,6 +9898,8 @@ with pkgs;
 
   podiff = callPackage ../tools/text/podiff { };
 
+  pocketbase = callPackage ../servers/pocketbase { };
+
   podman = callPackage ../applications/virtualization/podman/wrapper.nix { };
   podman-unwrapped = callPackage ../applications/virtualization/podman { };
 
@@ -11038,6 +11040,8 @@ with pkgs;
   su-exec = callPackage ../tools/security/su-exec {};
 
   subberthehut = callPackage ../tools/misc/subberthehut { };
+
+  subedit = callPackage ../tools/text/subedit { };
 
   subgit = callPackage ../applications/version-management/git-and-tools/subgit { };
 
@@ -20834,6 +20838,7 @@ with pkgs;
   flatbuffers = callPackage ../development/libraries/flatbuffers { };
 
   nanopb = callPackage ../development/libraries/nanopb { };
+  nanopbMalloc = callPackage ../development/libraries/nanopb { mallocBuild = true; };
 
   gnupth = callPackage ../development/libraries/pth { };
   pth = if stdenv.hostPlatform.isMusl then npth else gnupth;
@@ -31734,6 +31739,8 @@ with pkgs;
   xchm = callPackage ../applications/misc/xchm { };
 
   inherit (xorg) xcompmgr;
+
+  x-create-mouse-void = callPackage ../applications/window-managers/x-create-mouse-void { };
 
   picom = callPackage ../applications/window-managers/picom {};
 
