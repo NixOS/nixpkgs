@@ -180,8 +180,8 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.kanata;
-      defaultText = lib.literalExpression "pkgs.kanata";
-      example = lib.literalExpression "pkgs.kanata-with-cmd";
+      defaultText = literalExpression "pkgs.kanata";
+      example = literalExpression "pkgs.kanata-with-cmd";
       description = mdDoc ''
         The kanata package to use.
 
@@ -198,7 +198,7 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = mkIf cfg.enable {
     hardware.uinput.enable = true;
 
     systemd = {
@@ -211,5 +211,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ linj ];
+  meta.maintainers = with maintainers; [ linj ];
 }
