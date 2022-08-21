@@ -4,7 +4,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "piper";
-  version = "0.5.1";
+  version = "0.7";
 
   format = "other";
 
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
     owner  = "libratbag";
     repo   = "piper";
     rev    =  version;
-    sha256 = "1nfjnsiwg2rs6gkjsxzhr2708i6di149dgwq3cf6l12rxqpb8arj";
+    sha256 = "0jsvfy0ihdcgnqljfgs41lys1nlz18qvsa0a8ndx3pyr41f8w8wf";
   };
 
   nativeBuildInputs = [ meson ninja gettext pkg-config wrapGAppsHook desktop-file-utils appstream-glib gobject-introspection ];
@@ -23,9 +23,14 @@ python3.pkgs.buildPythonApplication rec {
     gobject-introspection # fixes https://github.com/NixOS/nixpkgs/issues/56943 for now
   ];
 
+  mesonFlags = [
+    "-Druntime-dependency-checks=false"
+    "-Dtests=false"
+  ];
+
   postPatch = ''
     chmod +x meson_install.sh # patchShebangs requires executable file
-    patchShebangs meson_install.sh
+    patchShebangs meson_install.sh data/generate-piper-gresource.xml.py
   '';
 
   meta = with lib; {
