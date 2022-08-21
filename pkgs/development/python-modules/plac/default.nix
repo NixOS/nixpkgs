@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, unittestCheckHook
+, fetchFromGitHub
+, python
 , pythonOlder
 }:
 
@@ -12,14 +12,23 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-OL3YZNBFD7dIGTqoF7nEWKj1MZ+/l7ImEVHPwKWBIJA=";
+  src = fetchFromGitHub {
+    owner = "ialbert";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-U3k97YJhQjulYNWcKVx96/5zND5VfsRjA3ZZHWhcDNg=";
   };
 
-  checkInputs = [ unittestCheckHook ];
+  # tests are broken, see https://github.com/ialbert/plac/issues/74
+  doCheck = false;
 
-  unittestFlagsArray = [ "-s" "doc" "-p" "*test_plac*" ];
+  checkPhase = ''
+    runHook preCheck
+
+    ${python.interpreter} doc/test_plac.py
+
+    runHook postCheck
+  '';
 
   pythonImportsCheck = [
     "plac"
