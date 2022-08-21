@@ -6355,6 +6355,16 @@
     }];
     name = "Ioannis Koutras";
   };
+  jonaenz = {
+    name = "Jona Enzinger";
+    email = "5xt3zyy5l@mozmail.com";
+    matrix = "@jona:matrix.jonaenz.de";
+    github = "jonaenz";
+    githubId = 57130301;
+    keys = [{
+      fingerprint = "1CC5 B67C EB9A 13A5 EDF6 F10E 0B4A 3662 FC58 9202";
+    }];
+  };
   jonafato = {
     email = "jon@jonafato.com";
     github = "jonafato";
