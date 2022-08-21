@@ -25,12 +25,9 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python3.pkgs; [
     ripe-atlas-cousteau
     ripe-atlas-sagan
-
     ujson
-
     sphinx
     sphinx_rtd_theme
-
     ipy
     python-dateutil
     requests
