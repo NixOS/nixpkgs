@@ -11,6 +11,18 @@ let
     };
 
   commonOptions = {
+    frequent_period = mkOption {
+      description = lib.mdDoc "Period duration (in minutes) for frequent (sub-hourly) snapshots.";
+      type = with types; nullOr ints.unsigned;
+      default = null;
+    };
+
+    frequently = mkOption {
+      description = lib.mdDoc "Number of frequent (sub-hourly) snapshots.";
+      type = with types; nullOr ints.unsigned;
+      default = null;
+    };
+
     hourly = mkOption {
       description = lib.mdDoc "Number of hourly snapshots.";
       type = with types; nullOr ints.unsigned;
