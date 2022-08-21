@@ -9,7 +9,7 @@
 
 let
   version = "1.9.1";
-  pname = "session-desktop-appimage";
+  pname = "session-desktop";
 
   src = fetchurl {
     url = "https://github.com/oxen-io/session-desktop/releases/download/v${version}/session-desktop-linux-x86_64-${version}.AppImage";
@@ -33,7 +33,7 @@ stdenvNoCC.mkDerivation {
       name = "Session";
       desktopName = "Session";
       comment = "Onion routing based messenger";
-      exec = "${appimage}/bin/session-desktop-appimage-${version}";
+      exec = "${appimage}/bin/session-desktop-${version}";
       icon = "${appimage-contents}/session-desktop.png";
       terminal = false;
       type = "Application";
@@ -44,10 +44,12 @@ stdenvNoCC.mkDerivation {
   installPhase = ''
     runHook preInstall
 
+    mv bin/session-desktop-${version} bin/session-desktop
+
     mkdir -p $out/
     cp -r bin $out/bin
 
-    wrapProgram $out/bin/session-desktop-appimage-${version} \
+    wrapProgram $out/bin/session-desktop \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
 
     runHook postInstall
