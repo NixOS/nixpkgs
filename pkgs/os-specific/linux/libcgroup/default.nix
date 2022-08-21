@@ -8,8 +8,8 @@ stdenv.mkDerivation rec {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-o9eXbsgtGhODEbpbEn30RbYfYpXo6xkU5ptU1och5tU=";
     fetchSubmodules = true;
+    hash = "sha256-o9eXbsgtGhODEbpbEn30RbYfYpXo6xkU5ptU1och5tU=";
   };
 
   buildInputs = [ pam bison flex ];
