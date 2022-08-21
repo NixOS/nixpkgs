@@ -248,16 +248,16 @@ let
         done
         substituteInPlace ../output/external/org_tensorflow/tensorflow/compiler/xla/python/pprof_profile_builder.cc \
           --replace "status.message()" "std::string{status.message()}"
-        substituteInPlace ../output/external/rules_cc/cc/private/toolchain/osx_cc_wrapper.sh.tpl \
-          --replace "/usr/bin/install_name_tool" "${cctools}/bin/install_name_tool"
-        substituteInPlace ../output/external/rules_cc/cc/private/toolchain/unix_cc_configure.bzl \
-          --replace "/usr/bin/libtool" "${cctools}/bin/libtool"
       '' + lib.optionalString cudaSupport ''
         patchShebangs ../output/external/org_tensorflow/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
       '' + lib.optionalString stdenv.isDarwin ''
         # Framework search paths aren't added by bintools hook
         # https://github.com/NixOS/nixpkgs/pull/41914
         export NIX_LDFLAGS+=" -F${IOKit}/Library/Frameworks"
+        substituteInPlace ../output/external/rules_cc/cc/private/toolchain/osx_cc_wrapper.sh.tpl \
+          --replace "/usr/bin/install_name_tool" "${cctools}/bin/install_name_tool"
+        substituteInPlace ../output/external/rules_cc/cc/private/toolchain/unix_cc_configure.bzl \
+          --replace "/usr/bin/libtool" "${cctools}/bin/libtool"
       '' + (if stdenv.cc.isGNU then ''
         sed -i 's@-lprotobuf@-l:libprotobuf.a@' ../output/external/org_tensorflow/third_party/systemlibs/protobuf.BUILD
         sed -i 's@-lprotoc@-l:libprotoc.a@' ../output/external/org_tensorflow/third_party/systemlibs/protobuf.BUILD

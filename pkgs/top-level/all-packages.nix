@@ -226,7 +226,9 @@ with pkgs;
 
   anders = callPackage ../applications/science/logic/anders { };
 
-  ankisyncd = callPackage ../servers/ankisyncd { };
+  ankisyncd = callPackage ../servers/ankisyncd {
+    python3 = python39;
+  };
 
   ani-cli = callPackage ../applications/video/ani-cli { };
 
@@ -5920,6 +5922,8 @@ with pkgs;
   zeek = callPackage ../applications/networking/ids/zeek { };
 
   zoekt = callPackage ../tools/text/zoekt { };
+
+  zonemaster-cli = perlPackages.ZonemasterCLI;
 
   zoxide = callPackage ../tools/misc/zoxide { };
 
@@ -14564,7 +14568,9 @@ with pkgs;
   tbb = callPackage ../development/libraries/tbb { };
 
   terra = callPackage ../development/compilers/terra {
-    llvmPackages = llvmPackages_10;
+    llvmPackages = llvmPackages_11;
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) Cocoa Foundation;
   };
 
   teyjus = callPackage ../development/compilers/teyjus (
@@ -32021,7 +32027,9 @@ with pkgs;
 
   zim = callPackage ../applications/office/zim { };
 
-  zine = callPackage ../applications/misc/zine { };
+  zine = callPackage ../applications/misc/zine {
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+  };
 
   zita-ajbridge = callPackage ../applications/audio/zita-ajbridge { };
 
@@ -32499,7 +32507,7 @@ with pkgs;
 
   angband = callPackage ../games/angband { };
 
-  anki = python3Packages.callPackage ../games/anki {
+  anki = python39Packages.callPackage ../games/anki {
     inherit (darwin.apple_sdk.frameworks) CoreAudio;
   };
   anki-bin = callPackage ../games/anki/bin.nix { buildFHSUserEnv = buildFHSUserEnvBubblewrap; };

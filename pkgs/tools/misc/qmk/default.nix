@@ -18,9 +18,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   nativeBuildInputs = with python3.pkgs; [
-    flake8
     nose2
-    pep8-naming
     setuptools-scm
     yapf
   ];
