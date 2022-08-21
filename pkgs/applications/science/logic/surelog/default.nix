@@ -6,6 +6,7 @@
 , pkg-config
 , libuuid
 , openjdk11
+, gperftools
 }:
 
 stdenv.mkDerivation rec {
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
       psutil
       orderedmultidict
     ]))
+    gperftools
   ];
 
   doCheck = true;
