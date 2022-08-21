@@ -16,7 +16,6 @@ python3.pkgs.buildPythonApplication rec {
 
   checkInputs = with python3.pkgs; [
     sphinx
-    flake8
     pytestCheckHook
   ];
 
