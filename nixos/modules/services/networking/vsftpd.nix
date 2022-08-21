@@ -27,7 +27,8 @@ let
       type = types.bool;
       name = nixosName;
       value = mkOption {
-        inherit description default;
+        description = lib.mdDoc description;
+        inherit default;
         type = types.bool;
       };
     };
@@ -68,16 +69,16 @@ let
       Whether users are included.
     '')
     (yesNoOption "userlistDeny" "userlist_deny" false ''
-      Specifies whether <option>userlistFile</option> is a list of user
+      Specifies whether {option}`userlistFile` is a list of user
       names to allow or deny access.
-      The default <literal>false</literal> means whitelist/allow.
+      The default `false` means whitelist/allow.
     '')
     (yesNoOption "forceLocalLoginsSSL" "force_local_logins_ssl" false ''
-      Only applies if <option>sslEnable</option> is true. Non anonymous (local) users
+      Only applies if {option}`sslEnable` is true. Non anonymous (local) users
       must use a secure SSL connection to send a password.
     '')
     (yesNoOption "forceLocalDataSSL" "force_local_data_ssl" false ''
-      Only applies if <option>sslEnable</option> is true. Non anonymous (local) users
+      Only applies if {option}`sslEnable` is true. Non anonymous (local) users
       must use a secure SSL connection for sending/receiving data on data connection.
     '')
     (yesNoOption "portPromiscuous" "port_promiscuous" false ''
@@ -86,17 +87,17 @@ let
       know what you are doing!
     '')
     (yesNoOption "ssl_tlsv1" "ssl_tlsv1" true  ''
-      Only applies if <option>ssl_enable</option> is activated. If
+      Only applies if {option}`ssl_enable` is activated. If
       enabled, this option will permit TLS v1 protocol connections.
       TLS v1 connections are preferred.
     '')
     (yesNoOption "ssl_sslv2" "ssl_sslv2" false ''
-      Only applies if <option>ssl_enable</option> is activated. If
+      Only applies if {option}`ssl_enable` is activated. If
       enabled, this option will permit SSL v2 protocol connections.
       TLS v1 connections are preferred.
     '')
     (yesNoOption "ssl_sslv3" "ssl_sslv3" false ''
-      Only applies if <option>ssl_enable</option> is activated. If
+      Only applies if {option}`ssl_enable` is activated. If
       enabled, this option will permit SSL v3 protocol connections.
       TLS v1 connections are preferred.
     '')
@@ -184,9 +185,9 @@ in
         type = types.nullOr types.str;
         example = "/etc/vsftpd/userDb";
         default = null;
-        description = ''
-          Only applies if <option>enableVirtualUsers</option> is true.
-          Path pointing to the <literal>pam_userdb</literal> user
+        description = lib.mdDoc ''
+          Only applies if {option}`enableVirtualUsers` is true.
+          Path pointing to the `pam_userdb` user
           database used by vsftpd to authenticate the virtual users.
 
           This user list should be stored in the Berkeley DB database
@@ -194,21 +195,21 @@ in
 
           To generate a new user database, create a text file, add
           your users using the following format:
-          <programlisting>
+          ```
           user1
           password1
           user2
           password2
-          </programlisting>
+          ```
 
-          You can then install <literal>pkgs.db</literal> to generate
+          You can then install `pkgs.db` to generate
           the Berkeley DB using
-          <programlisting>
+          ```
           db_load -T -t hash -f logins.txt userDb.db
-          </programlisting>
+          ```
 
-          Caution: <literal>pam_userdb</literal> will automatically
-          append a <literal>.db</literal> suffix to the filename you
+          Caution: `pam_userdb` will automatically
+          append a `.db` suffix to the filename you
           provide though this option. This option shouldn't include
           this filetype suffix.
         '';
