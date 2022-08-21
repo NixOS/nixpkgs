@@ -2,17 +2,21 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "itanium-demangler";
-  version = "1.0"; # pulled from pypi version
+  version = "1.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "whitequark";
     repo = "python-itanium_demangler";
-    rev = "29c77860be48e6dafe3496e4d9d0963ce414e366";
-    hash = "sha256-3fXwHO8JZgE0QSWScMKgRKDX5380cYPSMNMKUgwtqWI=";
+    rev = "v${version}";
+    hash = "sha256-I6NUfckt2cocQt5dZSFadpshTCuA/6bVNauNXypWh+A=";
   };
 
   checkInputs = [
@@ -31,6 +35,6 @@ buildPythonPackage rec {
     description = "Python parser for the Itanium C++ ABI symbol mangling language";
     homepage = "https://github.com/whitequark/python-itanium_demangler";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ pamplemousse ];
+    maintainers = with maintainers; [ fab pamplemousse ];
   };
 }
