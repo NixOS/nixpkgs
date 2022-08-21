@@ -3706,7 +3706,6 @@ with pkgs;
   '';
 
   element-web = callPackage ../applications/networking/instant-messengers/element/element-web.nix {
-    inherit (yarn2nix-moretea-openssl_1_1) mkYarnPackage fixup_yarn_lock;
     conf = config.element-web.conf or {};
   };
 
