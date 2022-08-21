@@ -8,7 +8,7 @@
   (fetchNuGet { pname = "CommandLineParser"; version = "2.8.0"; sha256 = "1m32xyilv2b7k55jy8ddg08c20glbcj2yi545kxs9hj2ahanhrbb"; })
   (fetchNuGet { pname = "coverlet.msbuild"; version = "3.1.0"; sha256 = "1rx5x2zks2aryy6mbly86a83gxzm0y7bbx9834b3224673rs7ra0"; })
   (fetchNuGet { pname = "DotNet4.SocksProxy"; version = "1.4.0.1"; sha256 = "1ig2a9ism041a6qrqkxa9xhvp19yxzcadlap5i1kz97f05a2msvb"; })
-  (fetchNuGet { pname = "FlareSolverrSharp"; version = "2.2.4"; sha256 = "17q1nwvlwzg8qhrzdwliwijz9sd68jrwwf2alh8kc0sxx3zaj4l5"; })
+  (fetchNuGet { pname = "FlareSolverrSharp"; version = "2.2.6"; sha256 = "0ls35kkmwh83xz6aw3506213p6nq1c6x7y0asa09i2nwvh1yfbpv"; })
   (fetchNuGet { pname = "FluentAssertions"; version = "6.2.0"; sha256 = "10zhr7hgzm9w0gfg0sa0h2qdlna0w7n2jl72s4j7hi6mf68px2xm"; })
   (fetchNuGet { pname = "Microsoft.AspNetCore"; version = "2.2.0"; sha256 = "0vsv7hcsmnsgqhs67zp207n7m9ix3dbwm1p2ch3dizkcdvz235f9"; })
   (fetchNuGet { pname = "Microsoft.AspNetCore.Antiforgery"; version = "2.2.0"; sha256 = "026wjdwjx0lgccqv0xi5gxylxzgz5ifgxf25p5pqakgrhkz0a59l"; })
