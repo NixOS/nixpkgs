@@ -1,0 +1,22 @@
+https://hg.mozilla.org/projects/nss/raw-rev/21e7aaa1f7d94bca15d997e5b4c2329b32fad21a
+--- nss/cpputil/databuffer.h
++++ nss/cpputil/databuffer.h
+@@ -6,16 +6,17 @@
+ 
+ #ifndef databuffer_h__
+ #define databuffer_h__
+ 
+ #include <algorithm>
+ #include <cstring>
+ #include <iomanip>
+ #include <iostream>
++#include <cstdint>
+ 
+ namespace nss_test {
+ 
+ class DataBuffer {
+  public:
+   DataBuffer() : data_(nullptr), len_(0) {}
+   DataBuffer(const uint8_t* d, size_t l) : data_(nullptr), len_(0) {
+     Assign(d, l);
+

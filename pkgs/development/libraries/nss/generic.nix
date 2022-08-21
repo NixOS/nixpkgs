@@ -47,6 +47,8 @@ stdenv.mkDerivation rec {
       ./85_security_load_3.77+.patch
     )
     ./fix-cross-compilation.patch
+  ] ++ lib.optionals (lib.versionOlder version "3.82") [
+    ./gcc-13.patch
   ];
 
   patchFlags = [ "-p0" ];
