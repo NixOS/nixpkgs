@@ -17,11 +17,8 @@
 , polkit
 , protobuf
 , audit
-, libgcrypt
 , libsodium
 }:
-
-assert libgcrypt != null -> libsodium == null;
 
 stdenv.mkDerivation rec {
   version = "1.1.1";
@@ -51,21 +48,19 @@ stdenv.mkDerivation rec {
     libcap_ng
     libqb
     libseccomp
+    libsodium
     polkit
     protobuf
     audit
-  ]
-  ++ (lib.optional (libgcrypt != null) libgcrypt)
-  ++ (lib.optional (libsodium != null) libsodium);
+  ];
 
   configureFlags = [
     "--with-bundled-catch"
     "--with-bundled-pegtl"
     "--with-dbus"
+    "--with-crypto-library=sodium"
     "--with-polkit"
-  ]
-  ++ (lib.optional (libgcrypt != null) "--with-crypto-library=gcrypt")
-  ++ (lib.optional (libsodium != null) "--with-crypto-library=sodium");
+  ];
 
   enableParallelBuilding = true;
 
