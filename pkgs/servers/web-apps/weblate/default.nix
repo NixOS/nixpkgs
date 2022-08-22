@@ -4,8 +4,8 @@
   src = fetchFromGitHub {
     owner = "WeblateOrg";
     repo = "weblate";
-    rev = "weblate-4.13.1";
-    sha256 = "sha256-N5q0Tzrxd90mLI5wLFh83DiaUwLK1pAPNjTeAq3loC8=";
+    rev = "weblate-4.14";
+    sha256 = "sha256-PsFYL/yKu90QQ0/XdbVFHY1uTU/6H+YfitqFb6Ic4E8=";
   };
   pyproject = ./pyproject.toml;
   poetrylock = ./poetry.lock;
@@ -50,6 +50,15 @@
           substituteInPlace setup.py \
             --replace "pyyaml ~= 5.4.0" "pyyaml~=6.0"
         '';
+      });
+      jarowinkler = super.jarowinkler.overridePythonAttrs (old: {
+        nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ self.scikit-build ];
+      });
+      rapidfuzz = super.rapidfuzz.overridePythonAttrs (old: {
+        nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ self.scikit-build ];
+      });
+      jsonschema = super.jsonschema.overridePythonAttrs (old: {
+        nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ self.hatch-fancy-pypi-readme ];
       });
     }
   );
