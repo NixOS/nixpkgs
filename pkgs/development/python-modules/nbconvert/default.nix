@@ -9,7 +9,7 @@
 , jupyterlab-pygments
 , lib
 , markupsafe
-, mistune
+, mistune_2_0
 , nbclient
 , pandocfilters
 , pyppeteer
@@ -56,7 +56,7 @@ buildPythonPackage rec {
     jinja2
     jupyterlab-pygments
     markupsafe
-    mistune
+    mistune_2_0
     nbclient
     pandocfilters
     tinycss2
