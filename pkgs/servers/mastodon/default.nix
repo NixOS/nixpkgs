@@ -1,6 +1,7 @@
 { lib, stdenv, nodejs-slim, mkYarnPackage, fetchFromGitHub, bundlerEnv, nixosTests
 , yarn, callPackage, imagemagick, ffmpeg, file, ruby_3_0, writeShellScript
 , fetchYarnDeps, fixup_yarn_lock
+, brotli
 
   # Allow building a fork or custom version of Mastodon:
 , pname ? "mastodon"
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-fuU92fydoazSXBHwA+DG//gRgWVYQ1M3m2oNS2iwv4I=";
     };
 
-    nativeBuildInputs = [ fixup_yarn_lock nodejs-slim yarn mastodonGems mastodonGems.wrappedRuby ];
+    nativeBuildInputs = [ fixup_yarn_lock nodejs-slim yarn mastodonGems mastodonGems.wrappedRuby brotli ];
 
     RAILS_ENV = "production";
     NODE_ENV = "production";
@@ -69,6 +70,17 @@ stdenv.mkDerivation rec {
         rails assets:precompile
       yarn cache clean --offline
       rm -rf ~/node_modules/.cache
+
+      # Create missing static gzip and brotli files
+      gzip -9 -n -c ~/public/assets/500.html > ~/public/assets/500.html.gz
+      gzip -9 -n -c ~/public/packs/report.html > ~/public/packs/report.html.gz
+      find ~/public/assets -maxdepth 1 -type f -name ".*.json" | while read file; do
+        gzip -9 -n -c $file > $file.gz
+      done
+      brotli --best -f ~/public/packs/report.html -o ~/public/packs/report.html.br
+      find ~/public/assets -type f -regextype posix-extended -iregex '.*\.(css|js|json|html)' | while read file; do
+        brotli --best -f $file -o $file.br
+      done
     '';
 
     installPhase = ''
@@ -94,6 +106,22 @@ stdenv.mkDerivation rec {
         ln -s $mastodonGems/bin/$b bin/$b
       fi
     done
+
+    # Create missing static gzip and brotli files
+    find public -maxdepth 1 -type f -regextype posix-extended -iregex '.*\.(css|js|svg|txt|xml)' | while read file; do
+      gzip -9 -n -c $file > $file.gz
+      brotli --best -f $file -o $file.br
+    done
+    find public/emoji -type f -name "*.svg" | while read file; do
+      gzip -9 -n -c $file > $file.gz
+      brotli --best -f $file -o $file.br
+    done
+    ln -s assets/500.html.gz public/500.html.gz
+    ln -s assets/500.html.br public/500.html.br
+    ln -s packs/sw.js.gz public/sw.js.gz
+    ln -s packs/sw.js.br public/sw.js.br
+    ln -s packs/sw.js.map.gz public/sw.js.map.gz
+    ln -s packs/sw.js.map.br public/sw.js.map.br
 
     rm -rf log
     ln -s /var/log/mastodon log
