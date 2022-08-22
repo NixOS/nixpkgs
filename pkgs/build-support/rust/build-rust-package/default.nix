@@ -7,7 +7,6 @@
 , cacert
 , git
 , cargoBuildHook
-, cargoBuildHookOffline
 , cargoCheckHook
 , cargoInstallHook
 , cargoNextestHook
@@ -44,6 +43,11 @@
 , checkFeatures ? buildFeatures
 , useNextest ? false
 , depsExtraArgs ? {}
+, cargoPurityFlag ? "--frozen"
+
+# You must use "--offline" instead of "--frozen" if `Cargo.lock` is
+# valid-but-outdated, for example when adding a `[patch]` stanza to
+# `Cargo.toml` without regenerating `Cargo.lock`.
 , cargoPurityFlag ? "--frozen"
 
 # Toggles whether a custom sysroot is created when the target is a .json file.
@@ -120,11 +124,7 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
   nativeBuildInputs = nativeBuildInputs ++ [
     cacert
     git
-    cargoBuildHook
-    ({ "--frozen"  = cargoBuildHook;
-       "--offline" = cargoBuildHookOffline;
-    }.${cargoPurityFlag}
-      or (throw "unrecognized cargoPurityFlag \"${cargoPurityFlag}\""))
+    (cargoBuildHook.override { inherit cargoPurityFlag; })
     (if useNextest then cargoNextestHook else cargoCheckHook)
     cargoInstallHook
     cargoSetupHook

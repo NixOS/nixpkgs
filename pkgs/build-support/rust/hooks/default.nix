@@ -27,7 +27,8 @@ let
   rustBuildPlatform = rust.toRustTarget stdenv.buildPlatform;
   rustTargetPlatform = rust.toRustTarget stdenv.hostPlatform;
   rustTargetPlatformSpec = rust.toRustTargetSpec stdenv.hostPlatform;
-  cargoBuildHookFlexible = { cargoPurityFlag }: callPackage ({ }:
+in {
+  cargoBuildHook = callPackage ({ cargoPurityFlag ? "--frozen" }:
     makeSetupHook {
       name = "cargo-build-hook.sh";
       deps = [ cargo ];
@@ -36,20 +37,6 @@ let
           rustBuildPlatform rustTargetPlatform rustTargetPlatformSpec;
       };
     } ./cargo-build-hook.sh) {};
-in {
-
-  # "requires that the Cargo.lock file is up-to-date. If the lock file
-  # is missing, or it needs to be updated, Cargo will exit with an
-  # error. The --frozen flag also prevents Cargo from attempting to
-  # access the network to determine if it is out-of-date."
-  cargoBuildHook = cargoBuildHookFlexible { cargoPurityFlag = "--frozen"; };
-
-  # "Prevents Cargo from accessing the network for any reason.  Beware
-  # that this may result in different dependency resolution than
-  # online mode. Cargo will restrict itself to crates that are
-  # downloaded locally, even if there might be a newer version as
-  # indicated in the local copy of the index."
-  cargoBuildHookOffline = cargoBuildHookFlexible { cargoPurityFlag = "--offline"; };
 
   cargoCheckHook = callPackage ({ }:
     makeSetupHook {
