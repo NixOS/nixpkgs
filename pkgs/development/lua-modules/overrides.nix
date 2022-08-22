@@ -29,7 +29,7 @@ with prev;
     '';
   });
 
-  cqueues = (prev.lib.overrideLuarocks prev.cqueues (drv: {
+  cqueues = (prev.luaLib.overrideLuarocks prev.cqueues (drv: {
     externalDeps = [
       { name = "CRYPTO"; dep = pkgs.openssl_1_1; }
       { name = "OPENSSL"; dep = pkgs.openssl_1_1; }
@@ -63,7 +63,7 @@ with prev;
     '';
   });
 
-  cyrussasl = prev.lib.overrideLuarocks prev.cyrussasl (drv: {
+  cyrussasl = prev.luaLib.overrideLuarocks prev.cyrussasl (drv: {
     externalDeps = [
       { name = "LIBSASL"; dep = pkgs.cyrus_sasl; }
     ];
@@ -83,7 +83,7 @@ with prev;
     */
   });
 
-  ldbus = prev.lib.overrideLuarocks prev.ldbus (drv: {
+  ldbus = prev.luaLib.overrideLuarocks prev.ldbus (drv: {
     extraVariables = {
       DBUS_DIR="${pkgs.dbus.lib}";
       DBUS_ARCH_INCDIR="${pkgs.dbus.lib}/lib/dbus-1.0/include";
@@ -94,7 +94,7 @@ with prev;
     ];
   });
 
-  ljsyscall = prev.lib.overrideLuarocks prev.ljsyscall (drv: rec {
+  ljsyscall = prev.luaLib.overrideLuarocks prev.ljsyscall (drv: rec {
     version = "unstable-20180515";
     # package hasn't seen any release for a long time
     src = pkgs.fetchFromGitHub {
@@ -135,7 +135,7 @@ with prev;
     '';
   });
 
-  lmathx = prev.lib.overrideLuarocks prev.lmathx (drv:
+  lmathx = prev.luaLib.overrideLuarocks prev.lmathx (drv:
     if luaAtLeast "5.1" && luaOlder "5.2" then {
       version = "20120430.51-1";
       knownRockspec = (pkgs.fetchurl {
@@ -167,7 +167,7 @@ with prev;
       '';
     });
 
-  lmpfrlib = prev.lib.overrideLuarocks prev.lmpfrlib (drv: {
+  lmpfrlib = prev.luaLib.overrideLuarocks prev.lmpfrlib (drv: {
     externalDeps = [
       { name = "GMP"; dep = pkgs.gmp; }
       { name = "MPFR"; dep = pkgs.mpfr; }
@@ -177,25 +177,25 @@ with prev;
     '';
   });
 
-  lrexlib-gnu = prev.lib.overrideLuarocks prev.lrexlib-gnu (drv: {
+  lrexlib-gnu = prev.luaLib.overrideLuarocks prev.lrexlib-gnu (drv: {
     buildInputs = [
       pkgs.gnulib
     ];
   });
 
-  lrexlib-pcre = prev.lib.overrideLuarocks prev.lrexlib-pcre (drv: {
+  lrexlib-pcre = prev.luaLib.overrideLuarocks prev.lrexlib-pcre (drv: {
     externalDeps = [
       { name = "PCRE"; dep = pkgs.pcre; }
     ];
   });
 
-  lrexlib-posix = prev.lib.overrideLuarocks prev.lrexlib-posix (drv: {
+  lrexlib-posix = prev.luaLib.overrideLuarocks prev.lrexlib-posix (drv: {
     buildInputs = [
       pkgs.glibc.dev
     ];
   });
 
-  lua-iconv = prev.lib.overrideLuarocks prev.lua-iconv (drv: {
+  lua-iconv = prev.luaLib.overrideLuarocks prev.lua-iconv (drv: {
     buildInputs = [
       pkgs.libiconv
     ];
@@ -209,14 +209,14 @@ with prev;
     '';
   });
 
-  lua-zlib = prev.lib.overrideLuarocks prev.lua-zlib (drv: {
+  lua-zlib = prev.luaLib.overrideLuarocks prev.lua-zlib (drv: {
     buildInputs = [
       pkgs.zlib.dev
     ];
     disabled = luaOlder "5.1" || luaAtLeast "5.4";
   });
 
-  luadbi-mysql = prev.lib.overrideLuarocks prev.luadbi-mysql (drv: {
+  luadbi-mysql = prev.luaLib.overrideLuarocks prev.luadbi-mysql (drv: {
     extraVariables = {
       # Can't just be /include and /lib, unfortunately needs the trailing 'mysql'
       MYSQL_INCDIR="${pkgs.libmysqlclient.dev}/include/mysql";
@@ -228,19 +228,19 @@ with prev;
     ];
   });
 
-  luadbi-postgresql = prev.lib.overrideLuarocks prev.luadbi-postgresql (drv: {
+  luadbi-postgresql = prev.luaLib.overrideLuarocks prev.luadbi-postgresql (drv: {
     buildInputs = [
       pkgs.postgresql
     ];
   });
 
-  luadbi-sqlite3 = prev.lib.overrideLuarocks prev.luadbi-sqlite3 (drv: {
+  luadbi-sqlite3 = prev.luaLib.overrideLuarocks prev.luadbi-sqlite3 (drv: {
     externalDeps = [
       { name = "SQLITE"; dep = pkgs.sqlite; }
     ];
   });
 
-  luaevent = prev.lib.overrideLuarocks prev.luaevent (drv: {
+  luaevent = prev.luaLib.overrideLuarocks prev.luaevent (drv: {
     propagatedBuildInputs = [
       luasocket
     ];
@@ -250,7 +250,7 @@ with prev;
     disabled = luaOlder "5.1" || luaAtLeast "5.4";
   });
 
-  luaexpat = prev.lib.overrideLuarocks prev.luaexpat (drv: {
+  luaexpat = prev.luaLib.overrideLuarocks prev.luaexpat (drv: {
     externalDeps = [
       { name = "EXPAT"; dep = pkgs.expat; }
     ];
@@ -258,7 +258,7 @@ with prev;
 
   # TODO Somehow automatically amend buildInputs for things that need luaffi
   # but are in luajitPackages?
-  luaffi = prev.lib.overrideLuarocks prev.luaffi (drv: {
+  luaffi = prev.luaLib.overrideLuarocks prev.luaffi (drv: {
     # The packaged .src.rock version is pretty old, and doesn't work with Lua 5.3
     src = pkgs.fetchFromGitHub {
       owner = "facebook"; repo = "luaffifb";
@@ -269,7 +269,7 @@ with prev;
     disabled = luaOlder "5.1" || luaAtLeast "5.4" || isLuaJIT;
   });
 
-  luaossl = prev.lib.overrideLuarocks prev.luaossl (drv: {
+  luaossl = prev.luaLib.overrideLuarocks prev.luaossl (drv: {
     externalDeps = [
       # https://github.com/wahern/luaossl/pull/199
       { name = "CRYPTO"; dep = pkgs.openssl_1_1; }
@@ -277,41 +277,41 @@ with prev;
     ];
   });
 
-  luasec = prev.lib.overrideLuarocks prev.luasec (drv: {
+  luasec = prev.luaLib.overrideLuarocks prev.luasec (drv: {
     externalDeps = [
       { name = "OPENSSL"; dep = pkgs.openssl_1_1; }
     ];
   });
 
-  luasql-sqlite3 = prev.lib.overrideLuarocks prev.luasql-sqlite3 (drv: {
+  luasql-sqlite3 = prev.luaLib.overrideLuarocks prev.luasql-sqlite3 (drv: {
     externalDeps = [
       { name = "SQLITE"; dep = pkgs.sqlite; }
     ];
   });
 
-  luasystem = prev.lib.overrideLuarocks prev.luasystem (drv: pkgs.lib.optionalAttrs pkgs.stdenv.isLinux {
+  luasystem = prev.luaLib.overrideLuarocks prev.luasystem (drv: pkgs.lib.optionalAttrs pkgs.stdenv.isLinux {
     buildInputs = [ pkgs.glibc.out ];
   });
 
-  luazip = prev.lib.overrideLuarocks prev.luazip (drv: {
+  luazip = prev.luaLib.overrideLuarocks prev.luazip (drv: {
     buildInputs = [
       pkgs.zziplib
     ];
   });
 
-  lua-yajl = prev.lib.overrideLuarocks prev.lua-yajl (drv: {
+  lua-yajl = prev.luaLib.overrideLuarocks prev.lua-yajl (drv: {
     buildInputs = [
       pkgs.yajl
     ];
   });
 
-  luaunbound = prev.lib.overrideLuarocks prev.luaunbound(drv: {
+  luaunbound = prev.luaLib.overrideLuarocks prev.luaunbound(drv: {
     externalDeps = [
       { name = "libunbound"; dep = pkgs.unbound; }
     ];
   });
 
-  luuid = (prev.lib.overrideLuarocks prev.luuid (drv: {
+  luuid = (prev.luaLib.overrideLuarocks prev.luuid (drv: {
     externalDeps = [
       { name = "LIBUUID"; dep = pkgs.libuuid; }
     ];
@@ -361,7 +361,7 @@ with prev;
         ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [ pkgs.fixDarwinDylibNames ];
   };
 
-  luv = prev.lib.overrideLuarocks prev.luv (drv: {
+  luv = prev.luaLib.overrideLuarocks prev.luv (drv: {
 
     buildInputs = [ pkgs.pkg-config pkgs.libuv ];
 
@@ -381,13 +381,13 @@ with prev;
 
   });
 
-  lyaml = prev.lib.overrideLuarocks prev.lyaml (oa: {
+  lyaml = prev.luaLib.overrideLuarocks prev.lyaml (oa: {
     buildInputs = [
       pkgs.libyaml
     ];
   });
 
-  mpack = prev.lib.overrideLuarocks prev.mpack (drv: {
+  mpack = prev.luaLib.overrideLuarocks prev.mpack (drv: {
     buildInputs = [ pkgs.libmpack ];
     # the rockspec doesn't use the makefile so you may need to export more flags
     USE_SYSTEM_LUA = "yes";
@@ -401,7 +401,7 @@ with prev;
     '';
   });
 
-  readline = (prev.lib.overrideLuarocks prev.readline (drv: {
+  readline = (prev.luaLib.overrideLuarocks prev.readline (drv: {
     unpackCmd = ''
       unzip "$curSrc"
       tar xf *.tar.gz
@@ -418,7 +418,7 @@ with prev;
     '';
   });
 
-  sqlite = prev.lib.overrideLuarocks  prev.sqlite (drv: {
+  sqlite = prev.luaLib.overrideLuarocks  prev.sqlite (drv: {
 
     doCheck = true;
     checkInputs = [ final.plenary-nvim pkgs.neovim-unwrapped ];

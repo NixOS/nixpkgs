@@ -1,6 +1,7 @@
 { self, callPackage, lib }:
 callPackage ./default.nix {
   inherit self;
+  packagesAttr = "luajit_2_0.pkgs";
   version = "2.0.5-2022-03-13";
   rev = "93a65d3cc263aef2d2feb3d7ff2206aca3bee17e";
   isStable = true;

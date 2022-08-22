@@ -1,10 +1,12 @@
 # Generic builder for lua packages
 { lib
 , lua
+, buildPackages
 , wrapLua
+, luarocks
 # Whether the derivation provides a lua module or not.
-, toLuaModule
 , luarocksCheckHook
+, luaLib
 }:
 
 {
@@ -82,7 +84,7 @@ let
   # configured trees)
   luarocks_config = "luarocks-config.lua";
   luarocks_content = let
-    generatedConfig = lua.pkgs.lib.generateLuarocksConfig {
+    generatedConfig = luaLib.generateLuarocksConfig {
       externalDeps = externalDeps ++ externalDepsGenerated;
       inherit extraVariables;
       inherit rocksSubdir;
@@ -107,14 +109,14 @@ let
     );
   externalDeps' = lib.filter (dep: !lib.isDerivation dep) externalDeps;
 
-  luarocksDrv = toLuaModule ( lua.stdenv.mkDerivation (
+  luarocksDrv = luaLib.toLuaModule ( lua.stdenv.mkDerivation (
 builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps" "extraVariables"] // {
 
   name = namePrefix + pname + "-" + version;
 
   nativeBuildInputs = [
     wrapLua
-    lua.pkgs.luarocks
+    luarocks
   ]
     ++ buildInputs
     ++ lib.optionals doCheck ([ luarocksCheckHook ] ++ checkInputs)
@@ -156,7 +158,7 @@ builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps" "extraVariab
 
     nix_debug "Using LUAROCKS_CONFIG=$LUAROCKS_CONFIG"
 
-    LUAROCKS=${lua.pkgs.luarocks}/bin/luarocks
+    LUAROCKS=luarocks
     if (( ''${NIX_DEBUG:-0} >= 1 )); then
         LUAROCKS="$LUAROCKS --verbose"
     fi

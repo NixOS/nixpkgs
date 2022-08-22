@@ -7,6 +7,7 @@
 , hash
 , rev
 , version
+, packagesAttr
 , extraMeta ? { }
 , callPackage
 , self
@@ -27,7 +28,11 @@ assert enableJITDebugModule -> enableJIT;
 assert enableGDBJITSupport -> enableJIT;
 assert enableValgrindSupport -> valgrind != null;
 let
-  luaPackages = callPackage ../../lua-modules { lua = self; overrides = packageOverrides; };
+  luaPackages = callPackage ../../lua-modules {
+    lua = self;
+    overrides = packageOverrides;
+    inherit packagesAttr;
+  };
 
   XCFLAGS = with lib;
     optional (!enableFFI) "-DLUAJIT_DISABLE_FFI"
@@ -93,10 +98,10 @@ stdenv.mkDerivation rec {
     ln -s "$out"/bin/luajit-* "$out"/bin/luajit
   '';
 
-  LuaPathSearchPaths    = luaPackages.lib.luaPathList;
-  LuaCPathSearchPaths   = luaPackages.lib.luaCPathList;
+  LuaPathSearchPaths    = luaPackages.luaLib.luaPathList;
+  LuaCPathSearchPaths   = luaPackages.luaLib.luaCPathList;
 
-  setupHook = luaPackages.lua-setup-hook luaPackages.lib.luaPathList luaPackages.lib.luaCPathList;
+  setupHook = luaPackages.lua-setup-hook luaPackages.luaLib.luaPathList luaPackages.luaLib.luaCPathList;
 
   passthru = rec {
     buildEnv = callPackage ../lua-5/wrapper.nix {

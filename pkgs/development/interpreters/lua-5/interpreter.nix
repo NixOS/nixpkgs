@@ -11,9 +11,12 @@
 , staticOnly ? stdenv.hostPlatform.isStatic
 }:
 let
+  luaversion = with sourceVersion; "${major}.${minor}";
+
   luaPackages = callPackage ../../lua-modules {
     lua = self;
     overrides = packageOverrides;
+    packagesAttr = "lua${lib.replaceChars ["."] ["_"] luaversion}.pkgs";
   };
 
 plat = if (stdenv.isLinux && lib.versionOlder self.luaversion "5.4") then "linux"
@@ -28,7 +31,6 @@ plat = if (stdenv.isLinux && lib.versionOlder self.luaversion "5.4") then "linux
 
 self = stdenv.mkDerivation rec {
   pname = "lua";
-  luaversion = with sourceVersion; "${major}.${minor}";
   version = "${luaversion}.${sourceVersion.patch}";
 
   src = fetchurl {
@@ -36,8 +38,8 @@ self = stdenv.mkDerivation rec {
     sha256 = hash;
   };
 
-  LuaPathSearchPaths    = luaPackages.lib.luaPathList;
-  LuaCPathSearchPaths   = luaPackages.lib.luaCPathList;
+  LuaPathSearchPaths    = luaPackages.luaLib.luaPathList;
+  LuaCPathSearchPaths   = luaPackages.luaLib.luaCPathList;
   setupHook = luaPackages.lua-setup-hook LuaPathSearchPaths LuaCPathSearchPaths;
 
   nativeBuildInputs = [ makeWrapper ];
@@ -124,6 +126,7 @@ self = stdenv.mkDerivation rec {
   '';
 
   passthru = rec {
+    inherit luaversion;
     buildEnv = callPackage ./wrapper.nix {
       lua = self;
       inherit makeWrapper;

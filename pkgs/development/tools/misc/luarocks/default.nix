@@ -1,4 +1,4 @@
-{lib, stdenv, fetchFromGitHub
+{lib, stdenv, fetchFromGitHub, buildPackages
 , curl, makeWrapper, which, unzip
 , lua
 # for 'luarocks pack'
@@ -43,12 +43,13 @@ stdenv.mkDerivation rec {
     fi
   '';
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  nativeBuildInputs = [ makeWrapper installShellFiles lua unzip ];
 
-  buildInputs = [ lua curl which ];
+  buildInputs = [ curl which ];
 
   postInstall = ''
     sed -e "1s@.*@#! ${lua}/bin/lua$LUA_SUFFIX@" -i "$out"/bin/*
+
     for i in "$out"/bin/*; do
         test -L "$i" || {
             wrapProgram "$i" \
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
               --suffix LUA_CPATH ";" "$(echo "$out"/share/lua/*/)?/init.lua"
         }
     done
-
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd luarocks --bash <($out/bin/luarocks completion bash)
     installShellCompletion --cmd luarocks --zsh <($out/bin/luarocks completion zsh)
   '';
