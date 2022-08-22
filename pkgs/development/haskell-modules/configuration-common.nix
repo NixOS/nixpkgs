@@ -2402,6 +2402,9 @@ self: super: {
     }))
   ];
 
+  # Tests require ghc-9.2.
+  ema = dontCheck super.ema;
+
   glirc = super.glirc.override {
     vty = self.vty_5_35_1;
   };
