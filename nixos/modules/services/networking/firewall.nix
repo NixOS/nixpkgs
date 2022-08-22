@@ -536,7 +536,7 @@ in
   config = mkIf cfg.enable {
 
     warnings =
-      if (config.services.networking.firewall.enable && config.virtualisation.docker.enable)
+      if config.virtualisation.docker.enable
       then [
         ''You have enabled `networking.firewall` and `virtualisation.docker`. Be aware that `docker`
         does not abide by the network firewall policies and may expose ports.''
