@@ -36,6 +36,7 @@
 , xhtml1
 , yajl
 , writeScript
+, nixosTests
 
   # Linux
 , acl ? null
@@ -348,6 +349,8 @@ stdenv.mkDerivation rec {
     update-source-version python3Packages.${pname} "$libvirtVersion"
     update-source-version perlPackages.SysVirt "$sysvirtVersion" --file="pkgs/top-level/perl-packages.nix"
   '';
+
+  passthru.tests.libvirtd = nixosTests.libvirtd;
 
   meta = {
     homepage = "https://libvirt.org/";
