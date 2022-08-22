@@ -1013,6 +1013,8 @@ let
 
     ocaml-syntax-shims = callPackage ../development/ocaml-modules/ocaml-syntax-shims { };
 
+    ocaml-vdom = callPackage ../development/ocaml-modules/ocaml-vdom { };
+
     syslog = callPackage ../development/ocaml-modules/syslog { };
 
     syslog-message = callPackage ../development/ocaml-modules/syslog-message { };
