@@ -693,6 +693,11 @@ in mkLicense lset) ({
     fullName = "SIL Open Font License 1.1";
   };
 
+  oml = {
+    spdxId = "OML";
+    fullName = "Open Market License";
+  };
+
   openldap = {
     spdxId = "OLDAP-2.8";
     fullName = "Open LDAP Public License v2.8";
@@ -822,6 +827,11 @@ in mkLicense lset) ({
   tcltk = {
     spdxId = "TCL";
     fullName = "TCL/TK License";
+  };
+
+  ucd = {
+    fullName = "Unicode Character Database License";
+    url = "https://fedoraproject.org/wiki/Licensing:UCD";
   };
 
   ufl = {
