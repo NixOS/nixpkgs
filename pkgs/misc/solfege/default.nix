@@ -43,6 +43,6 @@ buildPythonApplication rec {
     homepage = "https://www.gnu.org/software/solfege/";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bjornfor orivej ];
+    maintainers = with maintainers; [ bjornfor orivej anthonyroussel ];
   };
 }
