@@ -27899,5 +27899,5 @@ let
   SubExporterUtil = self.SubExporter;
   version = self.Version;
 
-  #Gtk2GladeXML = throw "Gtk2GladeXML has been removed"; # 2022-01-15
+  Gtk2GladeXML = throw "Gtk2GladeXML has been removed"; # 2022-01-15
 }; in self
