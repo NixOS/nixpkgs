@@ -24787,9 +24787,7 @@ with pkgs;
 
   upower = callPackage ../os-specific/linux/upower { };
 
-  usbguard = callPackage ../os-specific/linux/usbguard {
-    libgcrypt = null;
-  };
+  usbguard = callPackage ../os-specific/linux/usbguard { };
 
   usbrelay = callPackage ../os-specific/linux/usbrelay { };
   usbrelayd = callPackage ../os-specific/linux/usbrelay/daemon.nix { };
