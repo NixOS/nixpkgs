@@ -2,7 +2,7 @@ diff --git a/src/elan-dist/src/component/package.rs b/src/elan-dist/src/componen
 index c51e76d..ae8159e 100644
 --- a/src/elan-dist/src/component/package.rs
 +++ b/src/elan-dist/src/component/package.rs
-@@ -56,6 +56,30 @@ fn unpack_without_first_dir<R: Read>(archive: &mut tar::Archive<R>, path: &Path)
+@@ -56,6 +56,35 @@ fn unpack_without_first_dir<R: Read>(archive: &mut tar::Archive<R>, path: &Path)
          entry
              .unpack(&full_path)
              .chain_err(|| ErrorKind::ExtractingPackage)?;
@@ -30,6 +30,11 @@ index c51e76d..ae8159e 100644
 +LEAN_CC="${{LEAN_CC:-@cc@}}" exec -a "$0" {} "$@" -L {}/lib  # use bundled libraries, but not bundled compiler that doesn't know about NIX_LDFLAGS
 +"#, new_path.to_str().unwrap(), dest_path.parent().unwrap().parent().unwrap().to_str().unwrap()))?;
 +        ::std::fs::set_permissions(dest_path, ::std::fs::Permissions::from_mode(0o755))?;
++    }
++
++    if dest_path.file_name() == Some(::std::ffi::OsStr::new("llvm-ar")) {
++        ::std::fs::remove_file(dest_path)?;
++        ::std::os::unix::fs::symlink("@ar@", dest_path)?;
      }
  
      Ok(())
