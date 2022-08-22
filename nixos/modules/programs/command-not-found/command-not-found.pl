@@ -39,7 +39,12 @@ if ($len == 0) {
                 }
             }
         }
-        exec("nix-shell", "-p", $package, "--run", shell_quote("exec", @ARGV));
+        if ($ENV{"NIX_AUTO_RUN_FLAKE"} // "") {
+            # relies on flake registry
+            exec("nix", "shell", "nixpkgs#" . $package, "--command", shell_quote(@ARGV));
+        } else {
+            exec("nix-shell", "-p", $package, "--run", shell_quote("exec", @ARGV));
+        }
     } else {
         print STDERR <<EOF;
 The program '$program' is not in your PATH. You can make it available in an
@@ -61,8 +66,14 @@ EOF
             # so we start from 1
             $choice = <STDIN> + 0;
             if (1 <= $choice && $choice <= $len) {
-                exec("nix-shell", "-p", @$res[$choice - 1]->{package},
-                    "--run", shell_quote("exec", @ARGV));
+                if ($ENV{"NIX_AUTO_RUN_FLAKE"} // "") {
+                    # relies on flake registry
+                    exec("nix", "shell", "nixpkgs#" . @$res[$choice - 1]->{package},
+                        "--command", shell_quote(@ARGV));
+                } else {
+                    exec("nix-shell", "-p", @$res[$choice - 1]->{package},
+                        "--run", shell_quote("exec", @ARGV));
+                }
             }
         }
     } else {
