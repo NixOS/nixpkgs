@@ -8273,7 +8273,7 @@ let
     nativeBuildInputs = [ pkgs.ld-is-cc-hook ];
     meta = {
       description = "An Encode::Encoding subclass that detects the encoding of data";
-      license = with lib.licenses; [ free ];
+      license = with lib.licenses; [ mpl11 gpl2Plus lgpl2Plus ]; # taken from fedora
     };
   };
 
@@ -8607,7 +8607,7 @@ let
     propagatedBuildInputs = [ Expect ];
     meta = {
       description = "Wrapper around the Expect module";
-      license = with lib.licenses; [ free ];
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -10106,7 +10106,7 @@ let
     propagatedBuildInputs = [ Error ];
     meta = {
       description = "This is the Git.pm, plus the other files in the perl/Git directory, from github's git/git";
-      license = with lib.licenses; [ free ];
+      license = with lib.licenses; [ gpl2Plus ];
       maintainers = teams.deshaw.members;
     };
   };
@@ -10582,7 +10582,7 @@ let
     doCheck = false;
     meta = {
       description = "Perl bindings for the GtkImageView widget";
-      license = with lib.licenses; [ free ];
+      license = with lib.licenses; [ lgpl3Plus ];
     };
   };
 
@@ -13484,7 +13484,7 @@ let
     };
     meta = {
       description = "Maketext from already interpolated strings";
-      license = with lib.licenses; [ free ];
+      license = with lib.licenses; [ cc0 ];
     };
   };
 
@@ -14677,7 +14677,7 @@ let
     propagatedBuildInputs = [ ObjectInsideOut ];
     meta = {
       description = "Auto-seeded Mersenne Twister PRNGs";
-      license = with lib.licenses; [ free ];
+      license = with lib.licenses; [ bsd3 ];
     };
   };
 
@@ -17852,7 +17852,7 @@ let
     };
     meta = {
       description = "Minimal MQTT version 3 interface";
-      license = with lib.licenses; [ free ];
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -19722,7 +19722,7 @@ let
     meta = {
       description = "Determine minimum Perl version of POD directives";
       homepage = "https://user42.tuxfamily.org/pod-minimumversion/index.html";
-      license = with lib.licenses; [ free ];
+      license = with lib.licenses; [ gpl3Plus ];
       mainProgram = "pod-minimumversion";
     };
   };
@@ -20730,7 +20730,7 @@ let
     meta = {
       description = "Date and time regexps";
       homepage = "https://github.com/manwar/Regexp-Common-time";
-      license = with lib.licenses; [ free ];
+      license = with lib.licenses; [ artistic2 mit bsd3 ];
       maintainers = [ maintainers.artturin ];
     };
   };
@@ -21685,7 +21685,7 @@ let
     propagatedBuildInputs = [ NumberFormat ];
     meta = {
       description = "A collection of very basic statistics modules";
-      license = with lib.licenses; [ free ];
+      license = with lib.licenses; [ lgpl2Only ];
     };
   };
 
@@ -24931,7 +24931,7 @@ let
     meta = {
       description = "Module to align text";
       homepage = "https://metacpan.org/release/Text-Aligner";
-      license = with lib.licenses; [ free ];
+      license = with lib.licenses; [ isc ];
     };
   };
 
@@ -25687,7 +25687,7 @@ let
     };
     meta = {
       description = "Extract collocations and Ngrams from text";
-      license = with lib.licenses; [ free ];
+      license = with lib.licenses; [ gpl2Plus ];
       maintainers = [ maintainers.bzizou ];
     };
   };
