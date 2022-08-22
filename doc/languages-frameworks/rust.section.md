@@ -15,7 +15,7 @@ For other versions such as daily builds (beta and nightly),
 use either `rustup` from nixpkgs (which will manage the rust installation in your home directory),
 or use a community maintained [Rust overlay](#using-community-rust-overlays).
 
-## Compiling Rust applications with Cargo {#compiling-rust-applications-with-cargo}
+## `buildRustPackage`: Compiling Rust applications with Cargo {#compiling-rust-applications-with-cargo}
 
 Rust applications are packaged by using the `buildRustPackage` helper from `rustPlatform`:
 
@@ -596,7 +596,7 @@ buildPythonPackage rec {
 }
 ```
 
-## Compiling Rust crates using Nix instead of Cargo {#compiling-rust-crates-using-nix-instead-of-cargo}
+## `buildRustCrate`: Compiling Rust crates using Nix instead of Cargo {#compiling-rust-crates-using-nix-instead-of-cargo}
 
 ### Simple operation {#simple-operation}
 
