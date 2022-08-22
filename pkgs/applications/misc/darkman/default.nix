@@ -3,7 +3,6 @@
 buildGoModule rec {
   pname = "darkman";
   version = "1.3.1";
-  nativeBuildInputs = [ scdoc ];
 
   src = fetchFromGitLab {
     owner = "WhyNotHugo";
@@ -13,6 +12,8 @@ buildGoModule rec {
   };
 
   vendorSha256 = "09rjqw6v1jaf0mhmycw9mcay9q0y1fya2azj8216gdgkl48ics08";
+
+  nativeBuildInputs = [ scdoc ];
 
   postPatch = ''
     substituteInPlace darkman.service \
@@ -40,8 +41,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description =
-      "Framework for dark-mode and light-mode transitions on Linux desktop";
+    description = "Framework for dark-mode and light-mode transitions on Linux desktop";
     homepage = "https://gitlab.com/WhyNotHugo/darkman";
     license = licenses.isc;
     maintainers = [ maintainers.ajgrf ];
