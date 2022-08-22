@@ -24184,11 +24184,7 @@ with pkgs;
 
   libcap = callPackage ../os-specific/linux/libcap { };
 
-  libcap_ng = callPackage ../os-specific/linux/libcap-ng {
-    swig = null; # Currently not using the python2/3 bindings
-    python2 = null; # Currently not using the python2 bindings
-    python3 = null; # Currently not using the python3 bindings
-  };
+  libcap_ng = callPackage ../os-specific/linux/libcap-ng { };
 
   libnotify = callPackage ../development/libraries/libnotify { };
 
