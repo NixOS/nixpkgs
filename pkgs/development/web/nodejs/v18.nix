@@ -1,4 +1,4 @@
-{ callPackage, python3, fetchpatch, enableNpm ? true, ... }:
+{ callPackage, python3, fetchpatch, enableNpm ? true }:
 
 let
   buildNodejs = callPackage ./nodejs.nix {
