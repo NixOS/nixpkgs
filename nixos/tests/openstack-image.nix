@@ -9,20 +9,23 @@ with pkgs.lib;
 with import common/ec2.nix { inherit makeTest pkgs; };
 
 let
-  image = (import ../lib/eval-config.nix {
-    inherit system;
-    modules = [
-      ../maintainers/scripts/openstack/openstack-image.nix
-      ../modules/testing/test-instrumentation.nix
-      ../modules/profiles/qemu-guest.nix
-      {
-        # Needed by nixos-rebuild due to lack of network access.
-        system.extraDependencies = with pkgs; [
-          stdenv
-        ];
-      }
-    ];
-  }).config.system.build.openstackImage + "/nixos.qcow2";
+  image = {
+    path = (import ../lib/eval-config.nix {
+      inherit system;
+      modules = [
+        ../maintainers/scripts/openstack/openstack-image.nix
+        ../modules/testing/test-instrumentation.nix
+        ../modules/profiles/qemu-guest.nix
+        {
+          # Needed by nixos-rebuild due to lack of network access.
+          system.extraDependencies = with pkgs; [
+            stdenv
+          ];
+        }
+      ];
+    }).config.system.build.openstackImage + "/nixos.qcow2";
+    format = "qcow2";
+  };
 
   sshKeys = import ./ssh-keys.nix pkgs;
   snakeOilPrivateKey = sshKeys.snakeOilPrivateKey.text;

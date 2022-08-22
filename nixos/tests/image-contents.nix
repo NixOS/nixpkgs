@@ -23,18 +23,23 @@ let
       }
     ];
   }).config;
-  image = (import ../lib/make-disk-image.nix {
-    inherit pkgs config;
-    lib = pkgs.lib;
+  image = let
     format = "qcow2";
-    contents = [{
-      source = pkgs.writeText "testFile" "contents";
-      target = "/testFile";
-      user = "1234";
-      group = "5678";
-      mode = "755";
-    }];
-  }) + "/nixos.qcow2";
+  in
+  {
+    path = (import ../lib/make-disk-image.nix {
+      inherit pkgs config format;
+      lib = pkgs.lib;
+      contents = [{
+        source = pkgs.writeText "testFile" "contents";
+        target = "/testFile";
+        user = "1234";
+        group = "5678";
+        mode = "755";
+      }];
+    }) + "/nixos.${format}";
+    inherit format;
+  };
 
 in makeEc2Test {
   name = "image-contents";
