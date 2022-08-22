@@ -3,7 +3,7 @@
 buildDunePackage rec {
   pname = "promise_jsoo";
   version = "0.3.1";
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
   duneVersion = "3";
 
   src = fetchurl {
