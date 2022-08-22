@@ -25,12 +25,10 @@ let
   # Convert an archicecture + OS to a Nix platform
   toNixPlatform = arch: os:
     let
-      arch' = builtins.getAttr arch arches;
-      os' = builtins.getAttr os oses;
+      arch' = arches.${arch} or (throw "unsupported architecture '${arch}'");
+      os' = oses.${os} or (throw "unsupported OS '${os}'");
     in
-    if (builtins.hasAttr arch arches && builtins.hasAttr os oses)
-    then "${arch'}-${os'}"
-    else throw "unsupported architecture '${arch}' and/or os '${os}'";
+    "${arch'}-${os'}";
 
   # All architectures that are supported
   allArches = builtins.attrValues arches;
