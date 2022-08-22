@@ -3906,7 +3906,7 @@ let
     };
     meta = {
       description = "Interface to LZMA decompression library";
-      license = with lib.licenses; [ artistic1 gpl1Plus gpl21Plus ];
+      license = with lib.licenses; [ artistic1 gpl1Plus lgpl21Plus ];
     };
   };
 
@@ -9206,7 +9206,7 @@ let
     propagatedBuildInputs = [ TextGlob ];
     meta = {
       description = "Nice wrapper for File::Find ala find(1)";
-      license = with lib.licenses; [ artistic1 gpl1Pluartistic1 gpl1Plus ];
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -10262,7 +10262,7 @@ let
     propagatedBuildInputs = [ pkgs.gnome2.gnome_vfs Glib ];
     meta = {
       description = "(DEPRECATED) Perl interface to the 2.x series of the GNOME VFS";
-      license = with lib.licenses; [ gpl21Plus ];
+      license = with lib.licenses; [ lgpl21Plus ];
     };
   };
 
@@ -15143,7 +15143,7 @@ let
     };
     meta = {
       description = "Temporarily set Config or XSConfig values";
-      license = with lib.licenses; [ artistic1 gpl1Plusartistic1 gpl1Plus  artistic2 ];
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -27224,7 +27224,7 @@ let
     propagatedBuildInputs = [ XMLLibXML ];
     meta = {
       description = "Interface to the GNOME libxslt library";
-      license = [ artistic1 gpl1Plus ];
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
