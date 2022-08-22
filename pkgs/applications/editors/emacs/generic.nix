@@ -30,7 +30,7 @@
 , withAthena ? false
 , withToolkitScrollBars ? true
 , withPgtk ? false
-, withXinput2 ? false
+, withXinput2 ? withX && lib.versionAtLeast version "29"
 , withImageMagick ? lib.versionOlder version "27" && (withX || withNS)
 , toolkit ? (
   if withGTK2 then "gtk2"
