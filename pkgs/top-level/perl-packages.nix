@@ -3660,7 +3660,7 @@ let
     meta = {
       description = "Subroutines for making simple command line scripts";
       homepage = "https://github.com/reyjrar/CLI-Helpers";
-      license = with lib.licenses; [ bsd ];
+      license = with lib.licenses; [ bsd3 ];
     };
   };
 
@@ -25286,7 +25286,7 @@ let
     '';
     meta = {
       description = "Convert Markdown syntax to (X)HTML";
-      license = with lib.licenses; [ bsd ];
+      license = with lib.licenses; [ bsd3 ];
       mainProgram = "Markdown.pl";
     };
   };
