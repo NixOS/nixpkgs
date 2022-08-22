@@ -1307,6 +1307,8 @@ let
 
     progress = callPackage ../development/ocaml-modules/progress { };
 
+    promise_jsoo = callPackage ../development/ocaml-modules/promise_jsoo { };
+
     ptmap = callPackage ../development/ocaml-modules/ptmap { };
 
     ptset = callPackage ../development/ocaml-modules/ptset { };
