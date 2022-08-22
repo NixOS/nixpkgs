@@ -150,6 +150,9 @@ with lib;
         rm $diskImage
         ${pkgs.zstd}/bin/zstd "vzdump-qemu-${cfg.filenameSuffix}.vma"
         mv "vzdump-qemu-${cfg.filenameSuffix}.vma.zst" $out/
+
+        mkdir -p $out/nix-support
+        echo "file vma $out/vzdump-qemu-${cfg.filenameSuffix}.vma.zst" >> $out/nix-support/hydra-build-products
       '';
       format = "raw";
       inherit config lib pkgs;
