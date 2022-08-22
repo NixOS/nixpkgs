@@ -16,9 +16,16 @@
 , enableZstd ? true
 , zstd
 , nixosTests
+, enableCopyDevicesPatch ? false
 }:
 
-stdenv.mkDerivation rec {
+let
+  mkDerivation = lib.warnIf
+    enableCopyDevicesPatch
+    "enableCopyDevicesPatch in pkgs.rsync is not needed anymore"
+    stdenv.mkDerivation;
+in
+mkDerivation rec {
   pname = "rsync";
   version = "3.2.5";
 
