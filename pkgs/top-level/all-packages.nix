@@ -7462,9 +7462,7 @@ with pkgs;
 
   hwinfo = callPackage ../tools/system/hwinfo { };
 
-  hw-probe = perlPackages.callPackage ../tools/system/hw-probe {
-    vulkan-utils = haskell.lib.compose.justStaticExecutables haskellPackages.vulkan-utils;
-  };
+  hw-probe = perlPackages.callPackage ../tools/system/hw-probe { };
 
   hybridreverb2 = callPackage ../applications/audio/hybridreverb2 {
     stdenv = gcc8Stdenv;
@@ -21876,6 +21874,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
   };
   vulkan-tools-lunarg = callPackage ../tools/graphics/vulkan-tools-lunarg { };
+  vulkan-utils = haskell.lib.compose.justStaticExecutables haskellPackages.vulkan-utils;
   vulkan-validation-layers = callPackage ../development/tools/vulkan-validation-layers { };
 
   vxl = callPackage ../development/libraries/vxl { };
