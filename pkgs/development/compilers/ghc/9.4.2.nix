@@ -1,4 +1,4 @@
-# Preliminary GHC 9.4.1 expression using the make build system.
+# Preliminary GHC 9.4.2 expression using the make build system.
 # TODO(@sternenseemann): port to hadrian, so we are prepared for 9.6
 # where make support will be dropped.
 { lib, stdenv, pkgsBuildTarget, pkgsHostTarget, targetPackages
@@ -177,28 +177,18 @@ assert buildTargetLlvmPackages.llvm == llvmPackages.llvm;
 assert stdenv.targetPlatform.isDarwin -> buildTargetLlvmPackages.clang == llvmPackages.clang;
 
 stdenv.mkDerivation (rec {
-  version = "9.4.1";
+  version = "9.4.2";
   pname = "${targetPrefix}ghc${variantSuffix}";
 
   src = fetchurl {
     url = "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz";
-    sha256 = "sha256-y/7UZAvfAl4zulVDPa+M32mPTgSZrnqADd5EqC5zluM=";
+    sha256 = "7227ef3b5e15a0d70b8f1a43aec32867e2a9b2d857cc0ed556aeed172d4db3a5";
   };
 
   enableParallelBuilding = true;
 
   outputs = [ "out" "doc" ];
 
-
-  patches = [
-    # add missing profiling targets in make build system
-    (fetchpatch {
-      name = "ghc-9.4.1-fix-bootstrapping-with-profiling-1.patch";
-      url = "https://gitlab.haskell.org/ghc/ghc/-/commit/47b4fea08bd0ef1476b8d134c7baf06157fe5fa5.diff";
-      sha256 = "sha256-oYQWg9cK0RNL9I+kap8KER+iiKim73zG6URQs8BeAXU=";
-    })
-    ./ghc-9.4.1-fix-bootstrapping-with-profiling-2.patch
-  ];
 
   postPatch = "patchShebangs .";
 
