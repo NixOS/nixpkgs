@@ -1089,7 +1089,7 @@ let
     propagatedBuildInputs = [ FileWhich IPCRun LogLog4perl ];
     meta = {
       description = "API wrapper around the 'tar' utility";
-      license = with lib.licenses; [ gpl3 ];
+      license = with lib.licenses; [ gpl3Plus ];
     };
   };
 
@@ -1118,7 +1118,7 @@ let
     meta = {
       description = "Object-oriented interface to FITS HDUs";
       homepage = "https://github.com/timj/perl-Astro-FITS-Header";
-      license = with lib.licenses; [ gpl3 ];
+      license = with lib.licenses; [ gpl3Plus ];
     };
   };
 
@@ -1147,7 +1147,7 @@ let
     NIX_CFLAGS_LINK = "-L${pkgs.zlib.out}/lib -lz";
     meta = {
       description = "Fast C metadata and tag reader for all common audio file formats";
-      license = with lib.licenses; [ gpl2 ];
+      license = with lib.licenses; [ gpl2Plus ];
     };
   };
 
@@ -1453,7 +1453,7 @@ let
     meta = {
       description = "Perl interface to the ZBar Barcode Reader";
       homepage = "https://metacpan.org/pod/Barcode::ZBar";
-      license = with lib.licenses; [ lgpl21 ];
+      license = with lib.licenses; [ lgpl21Plus ];
     };
   };
 
@@ -1633,7 +1633,7 @@ let
     };
     meta = {
       description = "Lists of reserved barewords and symbol names";
-      license = with lib.licenses; [ artistic1 gpl2 ];
+      license = with lib.licenses; [ artistic1 gpl2Only ];
     };
   };
 
@@ -1996,7 +1996,7 @@ let
     meta = {
       description = "Perl interface to the cairo 2d vector graphics library";
       homepage = "http://gtk2-perl.sourceforge.net";
-      license = with lib.licenses; [ lgpl21 ];
+      license = with lib.licenses; [ lgpl21Only ];
     };
   };
 
@@ -2012,7 +2012,7 @@ let
     meta = {
       description = "Integrate Cairo into the Glib type system";
       homepage = "http://gtk2-perl.sourceforge.net";
-      license = with lib.licenses; [ lgpl21 ];
+      license = with lib.licenses; [ lgpl21Only ];
     };
   };
 
@@ -4880,7 +4880,7 @@ let
     meta = {
       description = "Parse PKCS #10 certificate requests";
       homepage = "https://github.com/openxpki/Crypt-PKCS10";
-      license = with lib.licenses; [ gpl1 ];
+      license = with lib.licenses; [ gpl1Only ];
     };
   };
 
@@ -5589,7 +5589,7 @@ let
     };
     meta = {
       description = "Make binary data human-readable";
-      license = with lib.licenses; [ artistic1 gpl2 ];
+      license = with lib.licenses; [ artistic1 gpl2Only ];
     };
   };
 
@@ -9249,7 +9249,7 @@ let
     meta = {
       description = "FileHandle which supports multi-byte unget";
       homepage = "https://github.com/coppit/filehandle-unget";
-      license = with lib.licenses; [ gpl2 ];
+      license = with lib.licenses; [ gpl2Only ];
       maintainers = with maintainers; [ romildo ];
     };
   };
@@ -10187,7 +10187,7 @@ let
     meta = {
       description = "Perl wrappers for the GLib utility and Object libraries";
       homepage = "http://gtk2-perl.sourceforge.net";
-      license = with lib.licenses; [ lgpl21 ];
+      license = with lib.licenses; [ lgpl21Only ];
     };
   };
 
@@ -10215,7 +10215,7 @@ let
     meta = {
       description = "Dynamically create Perl language bindings";
       homepage = "http://gtk2-perl.sourceforge.net";
-      license = with lib.licenses; [ lgpl21 ];
+      license = with lib.licenses; [ lgpl21Only ];
     };
   };
 
@@ -10480,7 +10480,7 @@ let
     meta = {
       description = "Search mailboxes for mail matching a regular expression";
       homepage = "https://github.com/coppit/grepmail";
-      license = with lib.licenses; [ gpl2 ];
+      license = with lib.licenses; [ gpl2Only ];
       maintainers = with maintainers; [ romildo ];
     };
   };
@@ -10545,7 +10545,7 @@ let
     propagatedBuildInputs = [ pkgs.gtk2 Gtk2 ];
     meta = {
       description = "(DEPRECATED) Perl interface to the EggTrayIcon library";
-      license = with lib.licenses; [ gpl2 ];
+      license = with lib.licenses; [ gpl2Plus ];
       broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.Gtk2TrayIcon.x86_64-darwin
     };
   };
@@ -13086,7 +13086,7 @@ let
     propagatedBuildInputs = [ HTMLParser LinguaStem MemoizeExpireLRU ];
     meta = {
       description = "Part-of-speech tagger for English natural language processing";
-      license = with lib.licenses; [ gpl3 ];
+      license = with lib.licenses; [ gpl3Only ];
     };
   };
 
@@ -14151,7 +14151,7 @@ let
     meta = {
       description = "A fast and simple mbox folder reader";
       homepage = "https://github.com/coppit/mail-mbox-messageparser";
-      license = with lib.licenses; [ gpl2 ];
+      license = with lib.licenses; [ gpl2Only ];
       maintainers = with maintainers; [ romildo ];
     };
   };
@@ -14380,7 +14380,7 @@ let
     };
     meta = {
       description = "Human-readable unit-aware calculator";
-      license = with lib.licenses; [ artistic1 gpl2 ];
+      license = with lib.licenses; [ artistic1 gpl2Only ];
       mainProgram = "ucalc";
     };
   };
@@ -14569,7 +14569,7 @@ let
     };
     meta = {
       description = "Perl interface to PARI";
-      license = with lib.licenses; [ artistic1 gpl1Plus gpl2 ];
+      license = with lib.licenses; [ artistic1 gpl1Plus gpl2Only ];
     };
   };
 
@@ -14663,7 +14663,7 @@ let
     meta = {
       description = "Perl interface to the ISAAC PRNG algorithm";
       homepage = "https://search.cpan.org/dist/Math-Random-ISAAC";
-      license = with lib.licenses; [ publicDomain mit artistic2 gpl3 ];
+      license = with lib.licenses; [ publicDomain mit artistic2 gpl1Plus ];
     };
   };
 
@@ -14933,7 +14933,7 @@ let
       homepage = "https://www.mhonarc.org/";
       description = "A mail-to-HTML converter";
       mainProgram = "mhonarc";
-      license = with lib.licenses; [ gpl2 ];
+      license = with lib.licenses; [ gpl2Only ];
     };
   };
 
@@ -16696,7 +16696,7 @@ let
     meta = {
       description = "Mark overload code symbols as methods";
       homepage = "https://metacpan.org/release/MooseX-MarkAsMethods";
-      license = with lib.licenses; [ lgpl21 ];
+      license = with lib.licenses; [ lgpl21Only ];
     };
   };
 
@@ -18294,7 +18294,7 @@ let
     meta = {
       description = "Large suite of perl modules for parsing and dealing with phone numbers";
       homepage = "https://github.com/DrHyde/perl-modules-Number-Phone";
-      license = with lib.licenses; [ artistic1 gpl2 ];
+      license = with lib.licenses; [ artistic1 gpl2Only asl20 ];
     };
   };
 
@@ -18497,7 +18497,7 @@ let
     propagatedBuildInputs = [ ArchiveZip XMLTwig ];
     meta = {
       description = "The Perl Open OpenDocument Connector";
-      license = with lib.licenses; [ lgpl21 ];
+      license = with lib.licenses; [ lgpl21Only ];
       maintainers = [ maintainers.wentasah ];
     };
   };
@@ -21927,7 +21927,7 @@ let
     propagatedBuildInputs = [ SubExporter ];
     meta = {
       description = "Build sprintf-like functions of your own";
-      license = with lib.licenses; [ gpl2 ];
+      license = with lib.licenses; [ gpl2Only ];
     };
   };
 
@@ -22027,7 +22027,7 @@ let
     doCheck = true;
     meta = {
       description = "Calculate the similarity of two strings";
-      license = with lib.licenses; [ gpl2 ];
+      license = with lib.licenses; [ gpl2Only ];
     };
   };
 
@@ -22612,7 +22612,7 @@ let
     meta = {
       description = "Libvirt Perl API";
       homepage = "https://libvirt.org";
-      license = with lib.licenses; [ gpl1 ];
+      license = with lib.licenses; [ gpl2Plus artistic1 ];
       broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.SysVirt.x86_64-darwin
     };
   };
@@ -22840,7 +22840,7 @@ let
     propagatedBuildInputs = [ TemplateToolkit ];
     meta = {
       description = "Rudimentary profiling for Template Toolkit";
-      license = with lib.licenses; [ artistic2 gpl3 ];
+      license = with lib.licenses; [ artistic2 gpl3Only ];
     };
   };
 
@@ -24174,7 +24174,7 @@ let
     };
     meta = {
       description = "Make sure you didn't emit any warnings while testing";
-      license = with lib.licenses; [ lgpl21 ];
+      license = with lib.licenses; [ lgpl21Only ];
     };
   };
 
@@ -24230,7 +24230,7 @@ let
     propagatedBuildInputs = [ MCE PerlCritic ];
     meta = {
       description = "Use Perl::Critic in test programs";
-      license = with lib.licenses; [ artistic1 gpl1 ];
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -25401,7 +25401,7 @@ let
     propagatedBuildInputs = [ TextDiff ];
     meta = {
       description = "Patches text with given patch";
-      license = with lib.licenses; [ gpl2 ];
+      license = with lib.licenses; [ gpl2Only ];
     };
   };
 
@@ -25749,7 +25749,7 @@ let
     '';
     meta = {
       description = "Line wrapping module with support for multibyte, fullwidth, and combining characters and languages without whitespaces between words";
-      license = with lib.licenses; [ artistic1 gpl2 ];
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
