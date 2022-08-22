@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-WvB96YK6ZY/ZGgMXDJRfmclx9pVbx53zJmVENz45hpw=";
   };
 
+  patches = [ ./CVE-2022-35737.patch ];
+
   outputs = [ "bin" "dev" "out" ];
   separateDebugInfo = stdenv.isLinux;
 
