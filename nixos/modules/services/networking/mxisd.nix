@@ -49,9 +49,9 @@ in {
       environmentFile = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Path to an environment-file which may contain secrets to be
-          substituted via <package>envsubst</package>.
+          substituted via `envsubst`.
         '';
       };
 

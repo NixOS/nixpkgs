@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "debuglater";
-  version = "1.4.1";
+  version = "1.4.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "ploomber";
     repo = pname;
     rev = version;
-    hash = "sha256-n/Q6yt3q/+6QCGWNmaFrUK/phba6IVu42DMcvVj4vb0=";
+    hash = "sha256-6XIBPnH2LWc3GpSS8Eh2VG21v8+Em7cmvmQIJKzFi6M=";
   };
 
   propagatedBuildInputs = [

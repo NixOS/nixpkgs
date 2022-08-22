@@ -126,10 +126,10 @@ in {
           psycopg2
         ];
       '';
-      description = ''
+      description = lib.mdDoc ''
         List of packages to add to propagatedBuildInputs.
 
-        A popular example is <package>python3Packages.psycopg2</package>
+        A popular example is `python3Packages.psycopg2`
         for PostgreSQL support in the recorder component.
       '';
     };

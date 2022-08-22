@@ -92,13 +92,15 @@ self: super: {
   mime-string = disableOptimization super.mime-string;
 
   # Older compilers need the latest ghc-lib to build this package.
-  hls-hlint-plugin = addBuildDepend self.ghc-lib (overrideCabal (drv: {
-      # Workaround for https://github.com/haskell/haskell-language-server/issues/2728
-      postPatch = ''
-        sed -i 's/(GHC.RealSrcSpan x,/(GHC.RealSrcSpan x Nothing,/' src/Ide/Plugin/Hlint.hs
-      '';
-    })
-     super.hls-hlint-plugin);
+  # Fix build with ghc-lib >= 9.0 and ghc <= 8.10.7
+  # https://github.com/haskell/haskell-language-server/issues/2728
+  hls-hlint-plugin = addBuildDepend self.ghc-lib (appendPatch (pkgs.fetchpatch {
+    name = "hls-hlint-plugin-workaround.patch";
+    url = "https://github.com/haskell/haskell-language-server/pull/2854.patch";
+    hash = "sha256-bLGu0OQtXsmMF3rZM+R6k7bsZm4Vgf2r0ert5Wunong=";
+    stripLen = 2;
+    includes = ["src/Ide/Plugin/Hlint.hs"];
+  }) super.hls-hlint-plugin);
 
   haskell-language-server = appendConfigureFlags [
       "-f-stylishhaskell"

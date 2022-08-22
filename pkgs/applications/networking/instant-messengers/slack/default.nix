@@ -164,11 +164,12 @@ let
         patchelf --set-rpath ${rpath}:$out/lib/slack $file || true
       done
 
-      # Replace the broken bin/slack symlink with a startup wrapper
+      # Replace the broken bin/slack symlink with a startup wrapper.
+      # Make xdg-open overrideable at runtime.
       rm $out/bin/slack
       makeWrapper $out/lib/slack/slack $out/bin/slack \
         --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH \
-        --prefix PATH : ${lib.makeBinPath [xdg-utils]} \
+        --suffix PATH : ${lib.makeBinPath [xdg-utils]} \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
 
       # Fix the desktop link

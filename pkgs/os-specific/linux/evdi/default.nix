@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "evdi";
-  version = "1.11.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "DisplayLink";
     repo = pname;
     rev = "v${version}";
-    sha256 = "12n2xbpw2901cvzw467saqqsgs4mwrzp7fs5j2vlyl7kwpcr0pj0";
+    sha256 = "sha256-JZKZ7+1OMbBtUA7pAZ41TzeDDyiD0h7yTXJINJ5FjN4=";
   };
 
   NIX_CFLAGS_COMPILE = "-Wno-error -Wno-error=sign-compare";

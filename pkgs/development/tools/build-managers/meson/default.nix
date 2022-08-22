@@ -29,6 +29,14 @@ python3.pkgs.buildPythonApplication rec {
     # https://github.com/mesonbuild/meson/pull/6827
     ./more-env-vars.patch
 
+    # Use more binutils variables, so we don't have to define them in stdenv.
+    # pr has been merged
+    # https://github.com/mesonbuild/meson/pull/10640
+    (fetchpatch {
+      url = "https://github.com/mesonbuild/meson/commit/8a8ab9a8e0c2cefb6faa0734e52803c74790576c.patch";
+      sha256 = "sha256-BdBf1NB4SZLFyFRDzD0p//XUgUeAHpo6XXUtsHdCgKE=";
+    })
+
     # Unlike libtool, vanilla Meson does not pass any information
     # about the path library will be installed to to g-ir-scanner,
     # breaking the GIR when path other than ${!outputLib}/lib is used.

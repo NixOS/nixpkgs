@@ -12,7 +12,7 @@
 , pkg-config
 , python3
 , readline
-, systemd
+, systemdMinimal
 , udev
 , withExperimental ? false
 }: let
@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
     python3.pkgs.wrapPython
   ];
 
-  outputs = [ "out" "dev" ] ++ lib.optional doCheck "test";
+  outputs = [ "out" "dev" "test" ];
 
   patches = [
     # https://github.com/bluez/bluez/commit/0905a06410d4a5189f0be81e25eb3c3e8a2199c5
@@ -63,7 +63,7 @@ in stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace tools/hid2hci.rules \
-      --replace /sbin/udevadm ${systemd}/bin/udevadm \
+      --replace /sbin/udevadm ${systemdMinimal}/bin/udevadm \
       --replace "hid2hci " "$out/lib/udev/hid2hci "
     # Disable some tests:
     # - test-mesh-crypto depends on the following kernel settings:
@@ -107,7 +107,7 @@ in stdenv.mkDerivation rec {
 
   doCheck = stdenv.hostPlatform.isx86_64;
 
-  postInstall = lib.optionalString doCheck ''
+  postInstall = ''
     mkdir -p $test/{bin,test}
     cp -a test $test
     pushd $test/test

@@ -23,7 +23,7 @@ in
       autoMountShares = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Control prlfsmountd service. When this service is running, shares can not be manually
           mounted through `mount -t prl_fs ...` as this service will remount and trample any set options.
           Recommended to enable for simple file sharing, but extended share use such as for code should

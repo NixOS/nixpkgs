@@ -241,7 +241,7 @@ in
       nixos.extraModules = mkOption {
         type = types.listOf types.raw;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           Modules for which to show options even when not imported.
         '';
       };

@@ -45,7 +45,7 @@ in {
       services = {
 
         tuptime = {
-          description = "the total uptime service";
+          description = "The total uptime service";
           documentation = [ "man:tuptime(1)" ];
           after = [ "time-sync.target" ];
           wantedBy = [ "multi-user.target" ];
@@ -59,10 +59,9 @@ in {
           };
         };
 
-        tuptime-oneshot = mkIf cfg.timer.enable {
-          description = "the tuptime scheduled execution unit";
+        tuptime-sync = mkIf cfg.timer.enable {
+          description = "Tuptime scheduled sync service";
           serviceConfig = {
-            StateDirectory = "tuptime";
             Type = "oneshot";
             User = "_tuptime";
             ExecStart = "${pkgs.tuptime}/bin/tuptime -x";
@@ -70,8 +69,8 @@ in {
         };
       };
 
-      timers.tuptime = mkIf cfg.timer.enable {
-        description = "the tuptime scheduled execution timer";
+      timers.tuptime-sync = mkIf cfg.timer.enable {
+        description = "Tuptime scheduled sync timer";
         # this timer should be started if the service is started
         # even if the timer was previously stopped
         wantedBy = [ "tuptime.service" "timers.target" ];
@@ -80,7 +79,7 @@ in {
         timerConfig = {
           OnBootSec = "1min";
           OnCalendar = cfg.timer.period;
-          Unit = "tuptime-oneshot.service";
+          Unit = "tuptime-sync.service";
         };
       };
     };

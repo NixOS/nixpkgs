@@ -36,6 +36,9 @@ buildImage {
     WorkingDir = "/data";
     Volumes = { "/data" = { }; };
   };
+
+  diskSize = 1024;
+  buildVMMemorySize = 512;
 }
 ```
 
@@ -58,6 +61,10 @@ The above example will build a Docker image `redis/latest` from the given base i
 > **_NOTE:_** Using this parameter requires the `kvm` device to be available.
 
 - `config` is used to specify the configuration of the containers that will be started off the built image in Docker. The available options are listed in the [Docker Image Specification v1.2.0](https://github.com/moby/moby/blob/master/image/spec/v1.2.md#image-json-field-descriptions).
+
+- `diskSize` is used to specify the disk size of the VM used to build the image in megabytes. By default it's 1024 MiB.
+
+- `buildVMMemorySize` is used to specify the memory size of the VM to build the image in megabytes. By default it's 512 MiB.
 
 After the new layer has been created, its closure (to which `contents`, `config` and `runAsRoot` contribute) will be copied in the layer itself. Only new dependencies that are not already in the existing layers will be copied.
 

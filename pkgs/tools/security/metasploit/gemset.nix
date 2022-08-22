@@ -104,10 +104,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1wv819cag3bhq07d4xjspinakqdfw97chpd9s6qqr70xicpl43zn";
+      sha256 = "0vgbfpxpybq5hr87knpc65ha0cyckbq2i00y8wd8sc3j663sffm2";
       type = "gem";
     };
-    version = "1.618.0";
+    version = "1.619.0";
   };
   aws-sdk-core = {
     groups = ["default"];
@@ -124,10 +124,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0gdqf0dfkqk4q6x9rz9dq0sliqmybdfkbfzyifm4y2pvqaiybgir";
+      sha256 = "1x9wcq89bp8785qqx8jlj4isbqq5w5kisfdd275r6p2chmm1mw47";
       type = "gem";
     };
-    version = "1.327.0";
+    version = "1.328.0";
   };
   aws-sdk-iam = {
     groups = ["default"];
@@ -614,12 +614,12 @@
     platforms = [];
     source = {
       fetchSubmodules = false;
-      rev = "38794f11b8a4c685c1f90b832a9a77974f5e0471";
-      sha256 = "0kqizq4k16r8v599hj3rc1pz31b0ypxwmygf4qg17lnk3574z2i8";
+      rev = "6241267e515db4b2902831fda1bc41773fb24529";
+      sha256 = "10d380b4584q1k5zid3cldzzvpqk0gdcq9lmwanwswd3ly5bv4gp";
       type = "git";
       url = "https://github.com/rapid7/metasploit-framework";
     };
-    version = "6.2.12";
+    version = "6.2.13";
   };
   metasploit-model = {
     groups = ["default"];
@@ -686,10 +686,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "14a9ign0hj3z3j4cpfplj2djaskx3skzyx4fl3x53d7saxmhrgn1";
+      sha256 = "0516ypqlx0mlcfn5xh7qppxqc3xndn1fnadxawa8wld5dkcimy30";
       type = "gem";
     };
-    version = "5.16.2";
+    version = "5.16.3";
   };
   mqtt = {
     groups = ["default"];
@@ -1447,10 +1447,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0792pfxr0n143r424ibl4ahpd5yl9yxnnwifiy8qdc14j2c7bsz8";
+      sha256 = "0k62nrh30sinsfbs17w8cahydf3vm3j14l0l0ba78vfh429cv4i3";
       type = "gem";
     };
-    version = "1.2022.2";
+    version = "1.2022.3";
   };
   unf = {
     groups = ["default"];

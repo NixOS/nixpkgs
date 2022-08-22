@@ -189,10 +189,10 @@ in {
       allowAuxiliaryImperativeNetworks = mkEnableOption "support for imperative & declarative networks" // {
         description = ''
           Whether to allow configuring networks "imperatively" (e.g. via
-          <package>wpa_supplicant_gui</package>) and declaratively via
+          <literal>wpa_supplicant_gui</literal>) and declaratively via
           <xref linkend="opt-networking.wireless.networks"/>.
 
-          Please note that this adds a custom patch to <package>wpa_supplicant</package>.
+          Please note that this adds a custom patch to <literal>wpa_supplicant</literal>.
         '';
       };
 

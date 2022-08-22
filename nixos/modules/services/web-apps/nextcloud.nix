@@ -254,6 +254,14 @@ in {
       '';
     };
 
+    fastcgiTimeout = mkOption {
+      type = types.int;
+      default = 120;
+      description = lib.mdDoc ''
+        FastCGI timeout for database connection in seconds.
+      '';
+    };
+
     database = {
 
       createLocally = mkOption {
@@ -532,7 +540,7 @@ in {
         here because it has the side-effect that personal information is even accessible to
         unauthenticated users by default.
 
-        By default, the following properties are set to <quote>Show to everyone</quote>
+        By default, the following properties are set to “Show to everyone”
         if this flag is enabled:
         <itemizedlist>
         <listitem><para>About</para></listitem>
@@ -569,10 +577,10 @@ in {
     secretFile = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Secret options which will be appended to nextcloud's config.php file (written as JSON, in the same
-        form as the <xref linkend="opt-services.nextcloud.extraOptions"/> option), for example
-        <programlisting>{"redis":{"password":"secret"}}</programlisting>.
+        form as the [](#opt-services.nextcloud.extraOptions) option), for example
+        `{"redis":{"password":"secret"}}`.
       '';
     };
 
@@ -1032,7 +1040,7 @@ in {
               fastcgi_pass unix:${fpm.socket};
               fastcgi_intercept_errors on;
               fastcgi_request_buffering off;
-              fastcgi_read_timeout 120s;
+              fastcgi_read_timeout ${builtins.toString cfg.fastcgiTimeout}s;
             '';
           };
           "~ \\.(?:css|js|woff2?|svg|gif|map)$".extraConfig = ''

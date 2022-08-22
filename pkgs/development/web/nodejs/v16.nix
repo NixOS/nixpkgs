@@ -8,8 +8,8 @@ let
 in
   buildNodejs {
     inherit enableNpm;
-    version = "16.16.0";
-    sha256 = "sha256-FFFR7/Oyql6+czhACcUicag3QK5oepPJjGKM19UnNus=";
+    version = "16.17.0";
+    sha256 = "sha256-HSjChWheRGmFkhvJY1ZcqcDF9P2pdV5InAaAjql5VkU=";
     patches = [
       ./disable-darwin-v8-system-instrumentation.patch
       # Fix npm silently fail without a HOME directory https://github.com/npm/cli/issues/4996

@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "ailment";
-  version = "9.2.13";
+  version = "9.2.14";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "angr";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-fnCeNW0Rccu6e1WrmLeHgUnlxMHh9t1q10DtzyVymP8=";
+    hash = "sha256-Axjyqn1TtZbYdgaC6hOhIQM3FBs0a1oHNK8wLuWQLHM=";
   };
 
   propagatedBuildInputs = [

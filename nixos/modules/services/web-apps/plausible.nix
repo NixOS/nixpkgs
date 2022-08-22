@@ -49,8 +49,8 @@ in {
         url = mkOption {
           default = "http://localhost:8123/default";
           type = types.str;
-          description = ''
-            The URL to be used to connect to <package>clickhouse</package>.
+          description = lib.mdDoc ''
+            The URL to be used to connect to `clickhouse`.
           '';
         };
       };
@@ -66,8 +66,8 @@ in {
         socket = mkOption {
           default = "/run/postgresql";
           type = types.str;
-          description = ''
-            Path to the UNIX domain-socket to communicate with <package>postgres</package>.
+          description = lib.mdDoc ''
+            Path to the UNIX domain-socket to communicate with `postgres`.
           '';
         };
       };
@@ -188,7 +188,11 @@ in {
           inherit (pkgs.plausible.meta) description;
           documentation = [ "https://plausible.io/docs/self-hosting" ];
           wantedBy = [ "multi-user.target" ];
-          after = optionals cfg.database.postgres.setup [ "postgresql.service" "plausible-postgres.service" ];
+          after = optional cfg.database.clickhouse.setup "clickhouse.service"
+          ++ optionals cfg.database.postgres.setup [
+              "postgresql.service"
+              "plausible-postgres.service"
+            ];
           requires = optional cfg.database.clickhouse.setup "clickhouse.service"
             ++ optionals cfg.database.postgres.setup [
               "postgresql.service"

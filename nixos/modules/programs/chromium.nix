@@ -76,10 +76,10 @@ in
 
       extraOpts = mkOption {
         type = types.attrs;
-        description = ''
+        description = lib.mdDoc ''
           Extra chromium policy options. A list of available policies
           can be found in the Chrome Enterprise documentation:
-          <link xlink:href="https://cloud.google.com/docs/chrome-enterprise/policies/">https://cloud.google.com/docs/chrome-enterprise/policies/</link>
+          <https://cloud.google.com/docs/chrome-enterprise/policies/>
           Make sure the selected policy is supported on Linux and your browser version.
         '';
         default = {};

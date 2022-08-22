@@ -108,9 +108,9 @@
 /pkgs/top-level/haskell-packages.nix          @cdepillabout @sternenseemann @maralorn
 
 # Perl
-/pkgs/development/interpreters/perl @stigtsp @zakame
-/pkgs/top-level/perl-packages.nix   @stigtsp @zakame
-/pkgs/development/perl-modules      @stigtsp @zakame
+/pkgs/development/interpreters/perl @stigtsp @zakame @dasJ
+/pkgs/top-level/perl-packages.nix   @stigtsp @zakame @dasJ
+/pkgs/development/perl-modules      @stigtsp @zakame @dasJ
 
 # R
 /pkgs/applications/science/math/R   @jbedo

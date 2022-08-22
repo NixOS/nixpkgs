@@ -44,6 +44,12 @@ in {
             encryption = {
               allow = true;
               default = true;
+
+              verification_levels = {
+                receive = "cross-signed-tofu";
+                send = "cross-signed-tofu";
+                share = "cross-signed-tofu";
+              };
             };
             username_template = "facebook_{userid}";
           };
@@ -116,6 +122,8 @@ in {
   };
 
   config = mkIf cfg.enable {
+    users.groups.mautrix-facebook = {};
+
     users.users.mautrix-facebook = {
       group = "mautrix-facebook";
       isSystemUser = true;

@@ -121,7 +121,7 @@ let
         It's possible to work around the issue with a config like this:
         <programlisting>
         {
-          <link linkend="opt-services.rspamd.locals._name_.text">services.rspamd.locals."multimap.conf".text</link> = '''
+          services.rspamd.locals."multimap.conf".text = '''
             ALLOWLIST_PROMETHEUS {
               filter = "email:domain:tld";
               type = "from";

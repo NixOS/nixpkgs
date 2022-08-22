@@ -81,7 +81,7 @@ let
         type = types.package;
         default = pkgs.qemu;
         defaultText = literalExpression "pkgs.qemu";
-        description = ''
+        description = lib.mdDoc ''
           Qemu package to use with libvirt.
           `pkgs.qemu` can emulate alien architectures (e.g. aarch64 on x86)
           `pkgs.qemu_kvm` saves disk space allowing to emulate only host architectures.
@@ -293,7 +293,7 @@ in
         # Copy default libvirt network config .xml files to /var/lib
         # Files modified by the user will not be overwritten
         for i in $(cd ${cfg.package}/var/lib && echo \
-            libvirt/qemu/networks/*.xml libvirt/qemu/networks/autostart/*.xml \
+            libvirt/qemu/networks/*.xml \
             libvirt/nwfilter/*.xml );
         do
             mkdir -p /var/lib/$(dirname $i) -m 755

@@ -46,7 +46,7 @@ in
       type = types.package;
       default = pkgs.sudo;
       defaultText = literalExpression "pkgs.sudo";
-      description = ''
+      description = lib.mdDoc ''
         Which package to use for `sudo`.
       '';
     };

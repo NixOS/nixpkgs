@@ -7,7 +7,6 @@
 , libjpeg
 , libGL
 , libX11
-, libXxf86vm
 , withTouchSupport ? false
 , libXi
 , libXext
@@ -43,7 +42,6 @@ stdenv.mkDerivation rec {
     libjpeg
     libGL
     libX11
-    libXxf86vm
   ] ++ lib.optionals withTouchSupport [
     libXi
     libXext

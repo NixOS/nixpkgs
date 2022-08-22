@@ -1502,6 +1502,7 @@ dont-distribute-packages:
  - gbu
  - gdax
  - gdiff-ig
+ - gedcom
  - geek
  - geek-server
  - gelatin-freetype2
@@ -2544,6 +2545,7 @@ dont-distribute-packages:
  - lol-cpp
  - lol-repa
  - lol-tests
+ - lol-typing
  - loli
  - loop-effin
  - looper
@@ -2827,7 +2829,6 @@ dont-distribute-packages:
  - numhask-hedgehog
  - numhask-range
  - numhask-test
- - nvim-hs-ghcid
  - nyan
  - nyan-interpolation
  - nyan-interpolation-simple
@@ -3395,6 +3396,7 @@ dont-distribute-packages:
  - servant-streaming-server
  - servant-swagger-tags
  - servant-to-elm
+ - servant-util-beam-pg
  - servant-waargonaut
  - servant-zeppelin-client
  - servant-zeppelin-server
@@ -3634,6 +3636,7 @@ dont-distribute-packages:
  - syntaxnet-haskell
  - synthesizer-llvm
  - sys-process
+ - systemstats
  - t3-client
  - ta
  - tag-stream
@@ -3841,6 +3844,7 @@ dont-distribute-packages:
  - urbit-airlock
  - urbit-api
  - ureader
+ - urembed
  - uri-enumerator
  - uri-enumerator-file
  - usb

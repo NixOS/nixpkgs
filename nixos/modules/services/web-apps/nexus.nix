@@ -93,7 +93,7 @@ in
           '''
         '';
 
-        description = ''
+        description = lib.mdDoc ''
           Options for the JVM written to `nexus.jvmopts`.
           Please refer to the docs (https://help.sonatype.com/repomanager3/installation/configuring-the-runtime-environment)
           for further information.

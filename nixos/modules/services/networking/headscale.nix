@@ -216,7 +216,7 @@ in
         magicDns = mkOption {
           type = types.bool;
           default = true;
-          description = ''
+          description = lib.mdDoc ''
             Whether to use [MagicDNS](https://tailscale.com/kb/1081/magicdns/).
             Only works if there is at least a nameserver defined.
           '';

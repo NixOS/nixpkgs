@@ -532,15 +532,15 @@ in
     boot.initrd.luks.reusePassphrases = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         When opening a new LUKS device try reusing last successful
         passphrase.
 
         Useful for mounting a number of devices that use the same
         passphrase without retyping it several times.
 
-        Such setup can be useful if you use <command>cryptsetup
-        luksSuspend</command>. Different LUKS devices will still have
+        Such setup can be useful if you use {command}`cryptsetup luksSuspend`.
+        Different LUKS devices will still have
         different master keys even when using the same passphrase.
       '';
     };

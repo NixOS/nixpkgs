@@ -3,7 +3,7 @@
 , glib, gtk3, gnome, gsettings-desktop-schemas, gn, fetchgit
 , libva, pipewire, wayland
 , gcc, nspr, nss, runCommand
-, lib
+, lib, libkrb5
 
 # package customization
 # Note: enable* flags should not require full rebuilds (i.e. only affect the wrapper)
@@ -169,13 +169,16 @@ in stdenv.mkDerivation {
 
     # needed for XDG_ICON_DIRS
     gnome.adwaita-icon-theme
+
+    # Needed for kerberos at runtime
+    libkrb5
   ];
 
   outputs = ["out" "sandbox"];
 
   buildCommand = let
     browserBinary = "${chromiumWV}/libexec/chromium/chromium";
-    libPath = lib.makeLibraryPath [ libva pipewire wayland gtk3 ];
+    libPath = lib.makeLibraryPath [ libva pipewire wayland gtk3 libkrb5 ];
 
   in with lib; ''
     mkdir -p "$out/bin"

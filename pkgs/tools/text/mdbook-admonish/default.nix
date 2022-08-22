@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-admonish";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-GH4T7arBabm+DXIJa3seP6L13DBleoNqYwzxhoCZJgI=";
+    sha256 = "sha256-QvFHpAsQ+S7q/Ye0YEf0phZcVvAs1a80Hd3eIGZBsrI=";
   };
 
-  cargoSha256 = "sha256-v0usxkGWs/qzUPU6ZwtTpUD7hXdSBZGYQifMZnr7sfI=";
+  cargoSha256 = "sha256-v7MGJlDm5nvydjFAZZS94afZY2OVUjJQ9eXYaY9JxBs=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 

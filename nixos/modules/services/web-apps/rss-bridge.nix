@@ -66,10 +66,10 @@ in
             "Twitter"
           ]
         '';
-        description = ''
+        description = lib.mdDoc ''
           List of bridges to be whitelisted.
           If the list is empty, rss-bridge will use whitelist.default.txt.
-          Use <literal>[ "*" ]</literal> to whitelist all.
+          Use `[ "*" ]` to whitelist all.
         '';
       };
     };

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pypoolstation";
-  version = "0.4.8";
+  version = "0.4.9";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyPoolstation";
     inherit version;
-    sha256 = "sha256-6Fdam/LS3Nicrhe5jHHvaKCpE0HigfOVszjb5c1VM3Y=";
+    sha256 = "sha256-2smgsR5f2fzmutr4EjhyrFWrO9odTba0ux+0B6k3+9Y=";
   };
 
   nativeBuildInputs = [

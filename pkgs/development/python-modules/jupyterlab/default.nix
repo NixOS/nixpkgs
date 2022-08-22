@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab";
-  version = "3.4.4";
+  version = "3.4.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-WioP3SK9hiitRbYY41IDh8MqSBjjrxEtutH2STBN/CA=";
+    sha256 = "sha256-Ry9reZbHX2mRWSSDwm2f4gWlmnHMvOFYQkABVdxk9Zs=";
   };
 
   nativeBuildInputs = [

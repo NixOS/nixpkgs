@@ -160,9 +160,9 @@ in
       domains = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           Authenticate emails with the specified domains. Use
-          <literal>*</literal> to authenticate any email.
+          `*` to authenticate any email.
         '';
       };
 
@@ -347,7 +347,7 @@ in
       domain = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Optional cookie domains to force cookies to (ie: `.yourcompany.com`).
           The longest domain matching the request's host will be used (or the shortest
           cookie domain if there is no match).

@@ -85,9 +85,9 @@ in
       bindInterface = mkOption {
         default = true;
         type = types.bool;
-        description = ''
-          Binds <package>captive-browser</package> to the network interface declared in
-          <literal>cfg.interface</literal>. This can be used to avoid collisions
+        description = lib.mdDoc ''
+          Binds `captive-browser` to the network interface declared in
+          `cfg.interface`. This can be used to avoid collisions
           with private subnets.
         '';
       };

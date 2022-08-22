@@ -35,6 +35,10 @@ buildPythonPackage rec {
   doCheck = isPy3k;
   checkInputs = [ dbus.out pygobject3 ];
 
+  postInstall = ''
+    cp -r dbus_python.egg-info $out/${python.sitePackages}/
+  '';
+
   meta = with lib; {
     description = "Python DBus bindings";
     license = licenses.mit;

@@ -20,11 +20,11 @@ in {
     apiKeyFile = mkOption {
       type = types.path;
       example = "/run/keys/mackerel-api-key";
-      description = ''
+      description = lib.mdDoc ''
         Path to file containing the Mackerel API key. The file should contain a
         single line of the following form:
 
-        <literallayout>apikey = "EXAMPLE_API_KEY"</literallayout>
+        `apikey = "EXAMPLE_API_KEY"`
       '';
     };
 

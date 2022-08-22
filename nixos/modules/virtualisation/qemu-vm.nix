@@ -739,10 +739,10 @@ in
         type = types.nullOr types.package;
         default = null;
         description =
-          ''
-            An alternate BIOS (such as <package>qboot</package>) with which to start the VM.
-            Should contain a file named <literal>bios.bin</literal>.
-            If <literal>null</literal>, QEMU's builtin SeaBIOS will be used.
+          lib.mdDoc ''
+            An alternate BIOS (such as `qboot`) with which to start the VM.
+            Should contain a file named `bios.bin`.
+            If `null`, QEMU's builtin SeaBIOS will be used.
           '';
       };
 
