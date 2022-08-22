@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, ant, jdk }:
+{ stdenv, lib, fetchFromGitHub, ant, jdk, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "javacc";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-tDtstF3ivKjG01vOZ8Ga1zTjIZFSTWt5QPY1VQvyFMU=";
   };
 
-  nativeBuildInputs = [ ant jdk ];
+  nativeBuildInputs = [ ant jdk makeWrapper ];
 
   buildPhase = ''
     ant jar
@@ -21,7 +21,14 @@ stdenv.mkDerivation rec {
     mkdir -p $out/target
     mv scripts $out/bin
     mv target/javacc.jar $out/target/
+    find -L "$out/bin" -type f -executable -print0 \
+      | while IFS= read -r -d ''' file; do
+      wrapProgram "$file" --suffix PATH : ${jre}/bin
+    done
   '';
+
+  doCheck = true;
+  checkPhase = "ant test";
 
   meta = with lib; {
     homepage = "https://javacc.github.io/javacc";
