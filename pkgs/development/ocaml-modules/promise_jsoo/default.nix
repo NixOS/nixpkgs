@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildDunePackage, ocaml, js_of_ocaml, ppxlib, js_of_ocaml-ppx, gen_js_api }:
+{ lib, fetchurl, buildDunePackage, ocaml, js_of_ocaml, ppxlib, js_of_ocaml-ppx, gen_js_api, ojs }:
 
 buildDunePackage rec {
   pname = "promise_jsoo";
@@ -19,6 +19,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [
     js_of_ocaml
+    ojs
   ];
 
   meta = {
