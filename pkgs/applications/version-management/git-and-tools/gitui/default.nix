@@ -12,7 +12,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gitui";
-  version = "0.20.1";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "extrawurst";
