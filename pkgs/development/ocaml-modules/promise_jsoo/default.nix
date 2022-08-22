@@ -12,10 +12,13 @@ buildDunePackage rec {
   };
 
   buildInputs = [
-    js_of_ocaml
     ppxlib
     js_of_ocaml-ppx
     gen_js_api
+  ];
+
+  propagatedBuildInputs = [
+    js_of_ocaml
   ];
 
   meta = {
