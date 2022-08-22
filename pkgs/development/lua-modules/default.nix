@@ -17,13 +17,13 @@ let
   generatedPackages = if (builtins.pathExists ./generated-packages.nix) then
     (final: prev: pkgs.callPackage ./generated-packages.nix { inherit (final) callPackage; } final prev) else (final: prev: {});
 
-  extensible-self = lib.makeExtensible
-    (extends overrides
-        (extends overridenPackages
-          (extends generatedPackages
-              initialPackages
-              )
-          )
-    );
+  extensions = lib.composeManyExtensions [
+    generatedPackages
+    overridenPackages
+    overrides
+  ];
+
+  extensible-self = lib.makeExtensible (lib.extends extensions initialPackages);
+
 in
   extensible-self
