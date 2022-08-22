@@ -22,7 +22,7 @@ let
     data.googleCloudSdkPkgs.${system} or (throw "Unsupported system: ${system}");
 
   components = callPackage ./components.nix {
-    snapshotPath = builtins.fetchurl data.googleCloudSdkPkgs.components;
+    snapshotPath = ./components.json;
   };
 
   withExtraComponents = callPackage ./withExtraComponents.nix { inherit components; };

@@ -28,10 +28,5 @@
         url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-397.0.0-linux-x86.tar.gz";
         sha256 = "1xw4jzl85didin26q9sg7j1pip4bmap5d0ac9ywbj0vni71mqx26";
       };
-    components =
-      {
-        url = "https://dl.google.com/dl/cloudsdk/channels/rapid/components-v397.0.0.json";
-        sha256 = "1bm3z63lh0z8scfsvjxwvprbrbl5iciz6pbl1hkklxhbc0k9axbc";
-      };
   };
 }
