@@ -87,7 +87,11 @@ edk2 = buildStdenv.mkDerivation {
   };
 
   passthru = {
-    mkDerivation = projectDscPath: attrs: buildStdenv.mkDerivation ({
+    mkDerivation = projectDscPath: attrsOrFun: buildStdenv.mkDerivation (finalAttrs:
+    let
+      attrs = if lib.isFunction attrsOrFun then (attrsOrFun finalAttrs) else attrsOrFun;
+    in
+    {
       inherit (edk2) src;
 
       depsBuildBuild = [ buildPackages.stdenv.cc ] ++ attrs.depsBuildBuild or [];
