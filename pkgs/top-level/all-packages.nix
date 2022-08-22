@@ -4649,34 +4649,35 @@ with pkgs;
   rsbep = callPackage ../tools/backup/rsbep { };
 
   rsyslog = callPackage ../tools/system/rsyslog {
-    hadoop = null; # Currently Broken
-    libksi = null; # Currently Broken
+    withHadoop = false; # Currently Broken
+    withKsi = false; # Currently Broken
   };
 
   rsyslog-light = rsyslog.override {
-    libkrb5 = null;
-    systemd = null;
-    jemalloc = null;
-    libmysqlclient = null;
-    postgresql = null;
-    libdbi = null;
-    net-snmp = null;
-    libuuid = null;
-    gnutls = null;
-    libgcrypt = null;
-    liblognorm = null;
-    openssl = null;
-    librelp = null;
-    libksi = null;
-    liblogging = null;
-    libnet = null;
-    hadoop = null;
-    rdkafka = null;
-    libmongo-client = null;
-    czmq = null;
-    rabbitmq-c = null;
-    hiredis = null;
-    libmaxminddb = null;
+    withKrb5 = false;
+    withSystemd = false;
+    withJemalloc = false;
+    withMysql = false;
+    withPostgres = false;
+    withDbi = false;
+    withNetSnmp = false;
+    withUuid = false;
+    withCurl = false;
+    withGnutls = false;
+    withGcrypt = false;
+    withLognorm = false;
+    withMaxminddb = false;
+    withOpenssl = false;
+    withRelp = false;
+    withKsi = false;
+    withLogging = false;
+    withNet = false;
+    withHadoop = false;
+    withRdkafka = false;
+    withMongo = false;
+    withCzmq = false;
+    withRabbitmq = false;
+    withHiredis = false;
   };
 
   rtrtr = callPackage ../servers/rtrtr {
