@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zint";
-  version = "2.11.0";
+  version = "2.11.1";
 
   src = fetchFromGitHub {
     owner = "woo-j";
     repo = "zint";
     rev = version;
-    sha256 = "sha256-DtfyXBBEDcltGUAutHl/ksRTTYmS7Ll9kjfgD7NmBbA=";
+    sha256 = "sha256-ozhXy7ftmGz1XvmF8AS1ifWJ3Q5hLSsysB8qLUP60n8=";
   };
 
   outputs = [ "out" "dev" ];
