@@ -294,6 +294,52 @@
       </listitem>
       <listitem>
         <para>
+          The
+          <link xlink:href="https://nixos.org/manual/nixpkgs/stable/#ssec-pkgs-dockerTools-fetchFromRegistry"><literal>pkgs.dockerTools.pullImage</literal></link>
+          function drop support for <literal>arch</literal> and
+          <literal>os</literal> parameters in favor of Nixpkgs cross
+          compilation. One way to migrate is to change
+          <literal>pkgs.dockerTools.pullImage</literal> to
+          <literal>pkgs.pkgsCross.&lt;platform&gt;.dockerTools.pullImage</literal>
+          where <literal>&lt;platform&gt;</literal> corresponds to the
+          correct parameters used before as in the example below.
+        </para>
+        <para>
+          Before
+        </para>
+        <programlisting language="bash">
+{
+  myDockerImage = pkgs.dockerTools.pullImage {
+    imageName = &quot;nixos/nix&quot;;
+    imageDigest =
+      &quot;sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b&quot;;
+    sha256 = &quot;0mqjy3zq2v6rrhizgb9nvhczl87lcfphq9601wcprdika2jz7qh8&quot;;
+    os = &quot;linux&quot;;
+    arch = &quot;amd64&quot;;
+  };
+}
+</programlisting>
+        <para>
+          After
+        </para>
+        <programlisting language="bash">
+{
+  myDockerImage = pkgs.pkgsCross.armv7l-hf-multiplatform.dockerTools.pullImage {
+    imageName = &quot;docker.io/library/busybox&quot;;
+    imageDigest = &quot;sha256:ef320ff10026a50cf5f0213d35537ce0041ac1d96e9b7800bafd8bc9eff6c693&quot;;
+    sha256 = &quot;sha256-9T6tP/xnZwaTH+qkbkVuXhCk+qZGE3WBY8T+Ug4qCmc=&quot;;
+  };
+}
+</programlisting>
+        <para>
+          For more information on how to obtain <literal>pkgs</literal>
+          for any combinations of parameters, see
+          <link xlink:href="https://nixos.org/guides/cross-compilation.html">the
+          official nix guide about cross compilation</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           riak package removed along with
           <literal>services.riak</literal> module, due to lack of
           maintainer to update the package.
