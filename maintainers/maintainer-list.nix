@@ -115,6 +115,12 @@
     githubId = 7414843;
     name = "Nicholas von Klitzing";
   };
+  _360ied = {
+    name = "Brian Zhu";
+    email = "therealbarryplayer@gmail.com";
+    github = "360ied";
+    githubId = 19516527;
+  };
   _13r0ck = {
     name = "Brock Szuszczewicz";
     email = "bnr@tuta.io";
@@ -6978,12 +6984,6 @@
     keys = [{
       fingerprint = "8992 44FC D291 5CA2 0A97  802C 156C 88A5 B0A0 4B2A";
     }];
-  };
-  kiyengar = {
-    email = "hello@kiyengar.net";
-    github = "karthikiyengar";
-    githubId = 8260207;
-    name = "Karthik Iyengar";
   };
   kjeremy = {
     email = "kjeremy@gmail.com";
@@ -13963,6 +13963,15 @@
     email = "wsh@2x.cz";
     github = "wentasah";
     githubId = 140542;
+  };
+  wesnel = {
+    name = "Wesley Nelson";
+    email = "wgn@wesnel.dev";
+    github = "wesnel";
+    githubId = 43357387;
+    keys = [{
+      fingerprint = "F844 80B2 0CA9 D6CC C7F5  2479 A776 D2AD 099E 8BC0";
+    }];
   };
   wheelsandmetal = {
     email = "jakob@schmutz.co.uk";

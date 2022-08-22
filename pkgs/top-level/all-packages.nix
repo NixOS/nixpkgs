@@ -240,6 +240,8 @@ with pkgs;
 
   aeskeyfind = callPackage ../tools/security/aeskeyfind { };
 
+  asn = callPackage ../applications/networking/asn { };
+
   astrolog = callPackage ../applications/science/astronomy/astrolog { };
 
   atkinson-hyperlegible = callPackage ../data/fonts/atkinson-hyperlegible { };
@@ -277,6 +279,8 @@ with pkgs;
   bacnet-stack = callPackage ../tools/networking/bacnet-stack {};
 
   bada-bib = callPackage ../applications/science/misc/bada-bib {};
+
+  banana-accounting = callPackage ../applications/office/banana-accounting {};
 
   bakelite = callPackage ../tools/backup/bakelite { };
 
@@ -511,6 +515,8 @@ with pkgs;
   ptags = callPackage ../development/tools/misc/ptags { };
 
   resolve-march-native = callPackage ../development/tools/resolve-march-native { };
+
+  riot-redis = callPackage ../development/tools/riot-redis { };
 
   ptouch-print = callPackage ../misc/ptouch-print { };
 
@@ -8579,6 +8585,8 @@ with pkgs;
 
   lzip = callPackage ../tools/compression/lzip { };
 
+  plzip = callPackage ../tools/compression/plzip { };
+
   lziprecover = callPackage ../tools/compression/lziprecover { };
 
   luxcorerender = callPackage ../tools/graphics/luxcorerender {
@@ -11599,6 +11607,10 @@ with pkgs;
 
   tuir = callPackage ../applications/misc/tuir { };
 
+  tuifeed = callPackage ../applications/networking/feedreaders/tuifeed {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   tunnelto = callPackage ../tools/networking/tunnelto {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -11788,6 +11800,8 @@ with pkgs;
   video2midi = callPackage ../tools/audio/video2midi {
     pythonPackages = python3Packages;
   };
+
+  video-trimmer = callPackage ../applications/video/video-trimmer { };
 
   via = callPackage ../tools/misc/via {};
 
@@ -15798,9 +15812,7 @@ with pkgs;
 
   cloud-nuke = callPackage ../development/tools/cloud-nuke { };
 
-  cloudcompare = libsForQt5.callPackage ../applications/graphics/cloudcompare {
-    pdal = pdal_2_3;
-  };
+  cloudcompare = libsForQt5.callPackage ../applications/graphics/cloudcompare { };
 
   cloudflare-warp = callPackage ../tools/networking/cloudflare-warp { };
 
@@ -20737,8 +20749,6 @@ with pkgs;
   pcre2 = callPackage ../development/libraries/pcre2 { };
 
   pdal = callPackage ../development/libraries/pdal { } ;
-
-  pdal_2_3 = callPackage ../development/libraries/pdal/2_3.nix { } ;
 
   pdf2xml = callPackage ../development/libraries/pdf2xml {} ;
 
@@ -27535,6 +27545,16 @@ with pkgs;
 
   fractal-next = callPackage ../applications/networking/instant-messengers/fractal-next {
     inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-bad;
+    libadwaita = libadwaita.overrideAttrs (finalAtts: rec {
+      version = "1.2.alpha";
+      src = fetchFromGitLab {
+        domain = "gitlab.gnome.org";
+        owner = "GNOME";
+        repo = "libadwaita";
+        rev = version;
+        hash = "sha256-JMxUeIOUPp9k5pImQqWLVkQ2GHaKvopvg6ol9pvA+Bk=";
+      };
+    });
   };
 
   fragments = callPackage ../applications/networking/p2p/fragments { };

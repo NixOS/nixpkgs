@@ -30,7 +30,7 @@ mkDerivation rec {
     description = "Lightweight unofficial Spotify client using Qt";
     homepage = "https://github.com/kraxarn/spotify-qt";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ kiyengar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
    };
 }

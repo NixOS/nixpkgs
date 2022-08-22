@@ -1,25 +1,26 @@
 { lib
-, bluetooth-sensor-state-data
+, async-timeout
+, btsocket
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
+, pyric
 , pytestCheckHook
 , pythonOlder
-, sensor-state-data
 }:
 
 buildPythonPackage rec {
-  pname = "qingping-ble";
-  version = "0.3.0";
+  pname = "bluetooth-auto-recovery";
+  version = "0.2.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
-    owner = "bluetooth-devices";
+    owner = "Bluetooth-Devices";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-EZH6G/dvXU1sVH3pYoJeQQkJD1xMKuqb3omCVhHTS0A=";
+    hash = "sha256-Td7LT5C7ho/fIT2gnkPA0LLXHtzDjbYAopE4ECTfFKQ=";
   };
 
   nativeBuildInputs = [
@@ -27,8 +28,9 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    bluetooth-sensor-state-data
-    sensor-state-data
+    async-timeout
+    btsocket
+    pyric
   ];
 
   checkInputs = [
@@ -37,16 +39,16 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=qingping_ble --cov-report=term-missing:skip-covered" ""
+      --replace " --cov=bluetooth_auto_recovery --cov-report=term-missing:skip-covered" ""
   '';
 
   pythonImportsCheck = [
-    "qingping_ble"
+    "bluetooth_auto_recovery"
   ];
 
   meta = with lib; {
-    description = "Library for Qingping BLE devices";
-    homepage = "https://github.com/bluetooth-devices/qingping-ble";
+    description = "Library for recovering Bluetooth adapters";
+    homepage = "https://github.com/Bluetooth-Devices/bluetooth-auto-recovery";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
