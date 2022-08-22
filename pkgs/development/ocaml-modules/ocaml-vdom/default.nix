@@ -14,6 +14,9 @@ buildDunePackage rec {
   buildInputs = [
     js_of_ocaml-compiler
     gen_js_api
+  ];
+
+  propagatedBuildInputs = [
     ojs
   ];
 
