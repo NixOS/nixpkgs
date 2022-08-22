@@ -1507,6 +1507,20 @@ let
     };
   };
 
+  BHooksOPAnnotation = buildPerlPackage {
+    pname = "B-Hooks-OP-Annotation";
+    version = "0.44";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CH/CHOCOLATE/B-Hooks-OP-Annotation-0.44.tar.gz";
+      sha256 = "6e26f99367f4ea944169cf6e05cf4d067832082424ca8ecefccb7b5a63217b16";
+    };
+    propagatedBuildInputs = [ ExtUtilsDepends ];
+    meta = {
+      description = "Annotate and delegate hooked OPs";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   BHooksOPCheck = buildPerlPackage {
     pname = "B-Hooks-OP-Check";
     version = "0.22";
@@ -14588,6 +14602,21 @@ let
     };
   };
 
+  ModuleInstallXSUtil = buildPerlPackage {
+    pname = "Module-Install-XSUtil";
+    version = "0.45";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GF/GFUJI/Module-Install-XSUtil-0.45.tar.gz";
+      sha256 = "fe71e53320bee13197749a0b17609aa263f71ff46e5e2c130e94742ea6abdf56";
+    };
+    buildInputs = [ BHooksOPAnnotation ];
+    propagatedBuildInputs = [ ModuleInstall ];
+    meta = {
+      description = "Utility functions for XS modules";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ModuleManifest = buildPerlPackage {
     pname = "Module-Manifest";
     version = "1.09";
@@ -23968,6 +23997,19 @@ let
     buildInputs = [ TestException ];
   };
 
+  TextReflow = buildPerlPackage {
+    pname = "Text-Reflow";
+    version = "1.17";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MW/MWARD/Text-Reflow-1.17.tar.gz";
+      sha256 = "4bf2139ff617d6e59cc0e59cdecd7cb723ecfd28d5ac387afb553ffdc071b860";
+    };
+    meta = {
+      description = "Reflow text files using Knuth's paragraphing algorithm";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TextReform = buildPerlModule {
     pname = "Text-Reform";
     version = "1.20";
@@ -26061,6 +26103,73 @@ let
     meta = {
       description = "Provides access to the W3C's online Markup validator";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  ZonemasterCLI = buildPerlPackage {
+    pname = "Zonemaster-CLI";
+    version = "4.0.1";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-CLI-v4.0.1.tar.gz";
+      sha256 = "edd34f7b8137e492e6ce8474c45a550572dca5056abdefc45c076df9d6965ca0";
+    };
+    propagatedBuildInputs = [
+      JSONXS
+      MooseXGetopt
+      TextReflow
+      ZonemasterEngine
+      ZonemasterLDNS
+      libintl-perl
+    ];
+
+    preConfigure = ''
+      patchShebangs script/
+    '';
+
+    meta = {
+      description = "Run Zonemaster tests from the command line";
+      license = lib.licenses.bsd3;
+      maintainers = with lib.maintainers; [ qbit ];
+    };
+  };
+
+  ZonemasterEngine = buildPerlPackage {
+    pname = "Zonemaster-Engine";
+    version = "4.5.1";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-Engine-v4.5.1.tar.gz";
+      sha256 = "45d204c6dad7cd90176084bf2427baa8ce503684a5699ebeb236e4d33bc0ba86";
+    };
+    buildInputs = [ PodCoverage TestDifferences TestException TestFatal TestNoWarnings TestPod ];
+    propagatedBuildInputs = [ ClassAccessor Clone EmailValid FileShareDir FileSlurp IOSocketInet6 ListMoreUtils ModuleFind Moose MooseXSingleton NetIP Readonly TextCSV ZonemasterLDNS libintl-perl ];
+
+    preCheck = ''
+      # disable dnssec test as it fails
+      rm -f t/Test-dnssec.t t/manifest.t
+    '';
+
+    meta = {
+      description = "A tool to check the quality of a DNS zone";
+      license = lib.licenses.bsd3;
+    };
+  };
+
+  ZonemasterLDNS = buildPerlPackage {
+    pname = "Zonemaster-LDNS";
+    version = "2.2.2";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-LDNS-2.2.2.tar.gz";
+      sha256 = "e0a71c3e35aa761909be323d4101823d7fc1f2f4541b0f75794520c611e4efcf";
+    };
+    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include -I${pkgs.libidn2}.dev}/include";
+    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.libidn2}/lib -lcrypto -lidn2";
+
+    makeMakerFlags = "--prefix-openssl=${pkgs.openssl.dev}";
+
+    buildInputs = [ DevelChecklib ModuleInstall ModuleInstallXSUtil TestFatal pkgs.ldns pkgs.libidn2 pkgs.openssl pkgs.pkg-config ];
+    meta = {
+      description = "Perl wrapper for the ldns DNS library";
+      license = lib.licenses.bsd3;
     };
   };
 

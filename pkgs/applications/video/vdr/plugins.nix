@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, fetchgit, vdr, alsa-lib, fetchFromGitHub
-, libvdpau, libxcb, xcbutilwm, graphicsmagick, libav, pcre, xorgserver, ffmpeg
+{ lib, stdenv, fetchurl, fetchgit, vdr, fetchFromGitHub
+, graphicsmagick, libav, pcre, xorgserver, ffmpeg
 , libiconv, boost, libgcrypt, perl, util-linux, groff, libva, xorg, ncurses
 , callPackage
 }: let
@@ -11,6 +11,10 @@
     installFlags = [ "DESTDIR=$(out)" ];
   };
 in {
+
+  softhddevice = callPackage ./softhddevice {};
+
+  streamdev = callPackage ./streamdev {};
 
   xineliboutput = callPackage ./xineliboutput {};
 
@@ -47,57 +51,21 @@ in {
 
   };
 
-  vaapidevice = stdenv.mkDerivation {
-    pname = "vdr-vaapidevice";
-    version = "20190525";
-
-    buildInputs = [
-      vdr libxcb xcbutilwm ffmpeg
-      alsa-lib
-      libvdpau # vdpau
-      libva # va-api
-    ] ++ (with xorg; [ libxcb libX11 ]);
-
-    makeFlags = [ "DESTDIR=$(out)" ];
-
-    postPatch = ''
-      substituteInPlace vaapidev.c --replace /usr/bin/X ${xorgserver}/bin/X
-      # https://github.com/rofafor/vdr-plugin-vaapidevice/issues/5
-      substituteInPlace Makefile --replace libva libva-x11
-    '';
-
-    src = fetchFromGitHub {
-      owner = "pesintta";
-      repo = "vdr-plugin-vaapidevice";
-      sha256 = "1gwjp15kjki9x5742fhaqk3yc2bbma74yp2vpn6wk6kj46nbnwp6";
-      rev = "d19657bae399e79df107e316ca40922d21393f80";
-    };
-
-    meta = with lib; {
-      homepage = "https://github.com/pesintta/vdr-plugin-vaapidevice";
-      description = "VDR SoftHDDevice Plug-in (with VA-API VPP additions)";
-      maintainers = [ maintainers.ck3d ];
-      license = licenses.gpl2;
-      platforms = [ "i686-linux" "x86_64-linux" ];
-    };
-
-  };
-
-
   markad = stdenv.mkDerivation rec {
     pname = "vdr-markad";
-    version = "unstable-2017-03-13";
+    version = "2.0.4";
 
-    src = fetchgit {
-      url = "git://projects.vdr-developer.org/vdr-plugin-markad.git";
-      sha256 = "0jvy70r8bcmbs7zdqilfz019z5xkz5c6rs57h1dsgv8v6x86c2i4";
-      rev = "ea2e182ec798375f3830f8b794e7408576f139ad";
+    src = fetchFromGitHub {
+      repo = "vdr-plugin-markad";
+      owner = "jbrundiers";
+      sha256 = "sha256-Y4KsEtUq+KoUooXiw9O9RokBxNwWBkiGB31GncmHkYM=";
+      rev = "288e3dae93421b0176f4f62b68ea4b39d98e8793";
     };
 
     buildInputs = [ vdr libav ];
 
     postPatch = ''
-      substituteInPlace command/Makefile --replace '$(DESTDIR)/usr' '$(DESTDIR)'
+      substituteInPlace command/Makefile --replace '/usr' ""
 
       substituteInPlace plugin/markad.cpp \
         --replace "/usr/bin" "$out/bin" \
@@ -107,22 +75,19 @@ in {
         --replace "/var/lib/markad" "$out/var/lib/markad"
     '';
 
-    preBuild = ''
-      mkdir -p $out/lib/vdr
-    '';
-
     buildFlags = [
       "DESTDIR=$(out)"
-      "LIBDIR=$(out)/lib/vdr"
+      "LIBDIR=/lib/vdr"
+      "APIVERSION=${vdr.version}"
       "VDRDIR=${vdr.dev}/include/vdr"
-      "LOCALEDIR=$(DESTDIR)/share/locale"
+      "LOCDIR=/share/locale"
     ];
 
     installFlags = buildFlags;
 
     meta = with lib; {
-      homepage = "https://projects.vdr-developer.org/projects/plg-markad";
-      description = "Ein Programm zum automatischen Setzen von Schnittmarken bei Werbeeinblendungen während einer Sendung.";
+      homepage = "https://github.com/jbrundiers/vdr-plugin-markad";
+      description = "MarkAd marks advertisements in VDR recordings.";
       maintainers = [ maintainers.ck3d ];
       license = licenses.gpl2;
       platforms = [ "i686-linux" "x86_64-linux" ];

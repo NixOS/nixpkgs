@@ -226,7 +226,9 @@ with pkgs;
 
   anders = callPackage ../applications/science/logic/anders { };
 
-  ankisyncd = callPackage ../servers/ankisyncd { };
+  ankisyncd = callPackage ../servers/ankisyncd {
+    python3 = python39;
+  };
 
   ani-cli = callPackage ../applications/video/ani-cli { };
 
@@ -237,6 +239,8 @@ with pkgs;
   aesfix = callPackage ../tools/security/aesfix { };
 
   aeskeyfind = callPackage ../tools/security/aeskeyfind { };
+
+  asn = callPackage ../applications/networking/asn { };
 
   astrolog = callPackage ../applications/science/astronomy/astrolog { };
 
@@ -275,6 +279,8 @@ with pkgs;
   bacnet-stack = callPackage ../tools/networking/bacnet-stack {};
 
   bada-bib = callPackage ../applications/science/misc/bada-bib {};
+
+  banana-accounting = callPackage ../applications/office/banana-accounting {};
 
   bakelite = callPackage ../tools/backup/bakelite { };
 
@@ -509,6 +515,8 @@ with pkgs;
   ptags = callPackage ../development/tools/misc/ptags { };
 
   resolve-march-native = callPackage ../development/tools/resolve-march-native { };
+
+  riot-redis = callPackage ../development/tools/riot-redis { };
 
   ptouch-print = callPackage ../misc/ptouch-print { };
 
@@ -5921,6 +5929,8 @@ with pkgs;
 
   zoekt = callPackage ../tools/text/zoekt { };
 
+  zonemaster-cli = perlPackages.ZonemasterCLI;
+
   zoxide = callPackage ../tools/misc/zoxide { };
 
   zzuf = callPackage ../tools/security/zzuf { };
@@ -8574,6 +8584,8 @@ with pkgs;
   lzham = callPackage ../tools/compression/lzham { };
 
   lzip = callPackage ../tools/compression/lzip { };
+
+  plzip = callPackage ../tools/compression/plzip { };
 
   lziprecover = callPackage ../tools/compression/lziprecover { };
 
@@ -11595,6 +11607,10 @@ with pkgs;
 
   tuir = callPackage ../applications/misc/tuir { };
 
+  tuifeed = callPackage ../applications/networking/feedreaders/tuifeed {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   tunnelto = callPackage ../tools/networking/tunnelto {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -11784,6 +11800,8 @@ with pkgs;
   video2midi = callPackage ../tools/audio/video2midi {
     pythonPackages = python3Packages;
   };
+
+  video-trimmer = callPackage ../applications/video/video-trimmer { };
 
   via = callPackage ../tools/misc/via {};
 
@@ -14564,7 +14582,9 @@ with pkgs;
   tbb = callPackage ../development/libraries/tbb { };
 
   terra = callPackage ../development/compilers/terra {
-    llvmPackages = llvmPackages_10;
+    llvmPackages = llvmPackages_11;
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) Cocoa Foundation;
   };
 
   teyjus = callPackage ../development/compilers/teyjus (
@@ -15163,6 +15183,8 @@ with pkgs;
     inherit (darwin) libobjc;
   };
   defaultGemConfig = callPackage ../development/ruby-modules/gem-config {
+    # recent v8 doesn't build on nixpkgs Darwin yet. https://github.com/NixOS/nixpkgs/issues/158076
+    v8 = if stdenv.isDarwin then v8_8_x else v8;
     inherit (darwin) DarwinTools cctools;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
@@ -15790,9 +15812,7 @@ with pkgs;
 
   cloud-nuke = callPackage ../development/tools/cloud-nuke { };
 
-  cloudcompare = libsForQt5.callPackage ../applications/graphics/cloudcompare {
-    pdal = pdal_2_3;
-  };
+  cloudcompare = libsForQt5.callPackage ../applications/graphics/cloudcompare { };
 
   cloudflare-warp = callPackage ../tools/networking/cloudflare-warp { };
 
@@ -20730,8 +20750,6 @@ with pkgs;
 
   pdal = callPackage ../development/libraries/pdal { } ;
 
-  pdal_2_3 = callPackage ../development/libraries/pdal/2_3.nix { } ;
-
   pdf2xml = callPackage ../development/libraries/pdf2xml {} ;
 
   pe-parse = callPackage ../development/libraries/pe-parse { };
@@ -23130,6 +23148,8 @@ with pkgs;
     tpmSupport = true;
   };
 
+  ops = callPackage ../applications/virtualization/ops { };
+
   seabios = callPackage ../applications/virtualization/seabios { };
 
   vmfs-tools = callPackage ../tools/filesystems/vmfs-tools { };
@@ -23236,6 +23256,7 @@ with pkgs;
   prometheus-smartctl-exporter = callPackage ../servers/monitoring/prometheus/smartctl-exporter { };
   prometheus-smokeping-prober = callPackage ../servers/monitoring/prometheus/smokeping-prober.nix { };
   prometheus-snmp-exporter = callPackage ../servers/monitoring/prometheus/snmp-exporter.nix { };
+  prometheus-speedtest-exporter = callPackage ../servers/monitoring/prometheus/speedtest-exporter.nix { };
   prometheus-statsd-exporter = callPackage ../servers/monitoring/prometheus/statsd-exporter.nix { };
   prometheus-surfboard-exporter = callPackage ../servers/monitoring/prometheus/surfboard-exporter.nix { };
   prometheus-sql-exporter = callPackage ../servers/monitoring/prometheus/sql-exporter.nix { };
@@ -26825,6 +26846,11 @@ with pkgs;
 
   denemo = callPackage ../applications/audio/denemo { };
 
+  dexed = darwin.apple_sdk_11_0.callPackage ../applications/audio/dexed {
+    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa WebKit MetalKit DiscRecording CoreAudioKit;
+    inherit (darwin.apple_sdk_11_0.libs) simd;
+  };
+
   dvdauthor = callPackage ../applications/video/dvdauthor { };
 
   dvdbackup = callPackage ../applications/video/dvdbackup { };
@@ -27519,6 +27545,16 @@ with pkgs;
 
   fractal-next = callPackage ../applications/networking/instant-messengers/fractal-next {
     inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-bad;
+    libadwaita = libadwaita.overrideAttrs (finalAtts: rec {
+      version = "1.2.alpha";
+      src = fetchFromGitLab {
+        domain = "gitlab.gnome.org";
+        owner = "GNOME";
+        repo = "libadwaita";
+        rev = version;
+        hash = "sha256-JMxUeIOUPp9k5pImQqWLVkQ2GHaKvopvg6ol9pvA+Bk=";
+      };
+    });
   };
 
   fragments = callPackage ../applications/networking/p2p/fragments { };
@@ -31557,6 +31593,8 @@ with pkgs;
 
   webmacs = libsForQt5.callPackage ../applications/networking/browsers/webmacs {};
 
+  websploit = python3Packages.callPackage ../tools/security/websploit {};
+
   webssh = with python3Packages; toPythonApplication webssh;
 
   webtorrent_desktop = callPackage ../applications/video/webtorrent_desktop {};
@@ -32021,7 +32059,9 @@ with pkgs;
 
   zim = callPackage ../applications/office/zim { };
 
-  zine = callPackage ../applications/misc/zine { };
+  zine = callPackage ../applications/misc/zine {
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+  };
 
   zita-ajbridge = callPackage ../applications/audio/zita-ajbridge { };
 
@@ -32499,7 +32539,7 @@ with pkgs;
 
   angband = callPackage ../games/angband { };
 
-  anki = python3Packages.callPackage ../games/anki {
+  anki = python39Packages.callPackage ../games/anki {
     inherit (darwin.apple_sdk.frameworks) CoreAudio;
   };
   anki-bin = callPackage ../games/anki/bin.nix { buildFHSUserEnv = buildFHSUserEnvBubblewrap; };
@@ -36110,6 +36150,8 @@ with pkgs;
     libpng = libpng12;
     sane-backends = sane-backends.override { libpng = libpng12; };
   };
+
+  xsser = python3Packages.callPackage ../tools/security/xsser { };
 
   xsw = callPackage ../applications/misc/xsw {
     # Enable the next line to use this in terminal.
