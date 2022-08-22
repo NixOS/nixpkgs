@@ -1,4 +1,5 @@
 {lib, stdenv, fetchFromGitHub, buildPackages
+, fetchpatch
 , curl, makeWrapper, which, unzip
 , lua
 # for 'luarocks pack'
@@ -20,7 +21,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-i0NmF268aK5lr4zjYyhk4TPUO7Zyz0Cl0fSW43Pmd1Q=";
   };
 
-  patches = [ ./darwin-3.7.0.patch ];
+  patches = [
+    ./darwin-3.7.0.patch
+    # follow standard environmental variables
+    # https://github.com/luarocks/luarocks/pull/1433
+    (fetchpatch {
+      url = "https://github.com/luarocks/luarocks/commit/d719541577a89909185aa8de7a33cf73b7a63ac3.diff";
+      sha256 = "sha256-rMnhZFqLEul0wnsxvw9nl6JXVanC5QgOZ+I/HJ0vRCM=";
+    })
+  ];
 
   postPatch = lib.optionalString stdenv.targetPlatform.isDarwin ''
     substituteInPlace src/luarocks/core/cfg.lua --subst-var-by 'darwinMinVersion' '${stdenv.targetPlatform.darwinMinVersion}'
