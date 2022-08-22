@@ -7,7 +7,7 @@
 
 { config
 , stdenv, lib, buildPackages, pkgs, darwin
-, fetchurl, fetchgit, fetchpatch, fetchFromGitHub, fetchFromGitLab
+, fetchurl, fetchpatch, fetchFromGitHub, fetchFromGitLab
 , perl, overrides, buildPerl, shortenPerlShebang
 , nixosTests
 }:
@@ -96,7 +96,7 @@ let
 
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PETDANCE/ack-v3.5.0.tar.gz";
-      sha256 = "sha256-ZgU+iE6AM4egLd7g1oq/KhAjn6tlQ2TaszKHMJpyVSE=";
+      hash = "sha256-ZgU+iE6AM4egLd7g1oq/KhAjn6tlQ2TaszKHMJpyVSE=";
     };
 
     outputs = ["out" "man"];
@@ -122,7 +122,7 @@ let
     version = "0.1";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HANGY/Action-CircuitBreaker-0.1.tar.gz";
-      sha256 = "3f8f5d726fae537ab336e00a6819ae4a8596e4c5f243e772a536ef2eb6e606b1";
+      hash = "sha256-P49dcm+uU3qzNuAKaBmuSoWW5MXyQ+dypTbvLrbmBrE=";
     };
     buildInputs = [ ActionRetry TryTiny ];
     propagatedBuildInputs = [ Moo ];
@@ -138,7 +138,7 @@ let
     version = "0.24";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAMS/Action-Retry-0.24.tar.gz";
-      sha256 = "a3759742c5bef2d1975ab73d35499d8113324919b24936130255cff07d0294f7";
+      hash = "sha256-o3WXQsW+8tGXWrc9NUmdgRMySRmySTYTAlXP8H0ClPc=";
     };
     propagatedBuildInputs = [ MathFibonacci ModuleRuntime Moo ];
     meta = {
@@ -152,7 +152,7 @@ let
     version = "0.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CL/CLKAO/Algorithm-Annotate-0.10.tar.gz";
-      sha256 = "1y92k4nqkscfwpriv8q7c90rjfj85lvwq1k96niv2glk8d37dcf9";
+      hash = "sha256-ybF2RkOTPrGjNWkGzDctSDqZQWIHox3z5Y7piS2ZIvk=";
     };
     propagatedBuildInputs = [ AlgorithmDiff ];
     meta = {
@@ -166,7 +166,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/Algorithm-C3-0.11.tar.gz";
-      sha256 = "02ck52cf0yyk57354rd1rp5l0kbfwi1pvg2lh3jadvjxfrkq9x5a";
+      hash = "sha256-qvSEZ3Zd7qbkgFS8fUPkbk1Ay82hZVLGKdN74Jgokwk=";
     };
     meta = {
       description = "A module for merging hierarchies using the C3 algorithm";
@@ -179,7 +179,7 @@ let
     version = "1.3.5";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MAMAWE/Algorithm-CheckDigits-v1.3.5.tar.gz";
-      sha256 = "a956d0517180d6d9042f47d73aa6a2728b75fcbd546940d2dbe0a7e7cf428f73";
+      hash = "sha256-qVbQUXGA1tkEL0fXOqaicot1/L1UaUDS2+Cn589Cj3M=";
     };
     buildInputs = [ ProbePerl ];
     meta = {
@@ -194,7 +194,7 @@ let
     version = "1.1903";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TY/TYEMQ/Algorithm-Diff-1.1903.tar.gz";
-      sha256 = "0l8pk7ziz72d022hsn4xldhhb9f5649j5cgpjdibch0xng24ms1h";
+      hash = "sha256-MOhKxLMdQLZik/exIhMxxaUFYaOdWA2FAE2cH/+ZF1E=";
     };
     buildInputs = [ pkgs.unzip ];
     meta = {
@@ -208,7 +208,7 @@ let
     version = "0.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JF/JFREEMAN/Algorithm-LCSS-0.01.tar.gz";
-      sha256 = "0y0zc3sq283zpv67vy7a3h3dyvjn5svjxwknanmp38a2g36fyz3i";
+      hash = "sha256-cXzvzHhCoXGrVXbyLrcuVm7fBhzq+H3Mvn8ggfVgH3g=";
     };
     propagatedBuildInputs = [ AlgorithmDiff ];
     meta = {
@@ -223,7 +223,7 @@ let
     version = "0.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JS/JSMITH/Algorithm-Merge-0.08.tar.gz";
-      sha256 = "1kqn13wd0lfjrf6h19b9kgdqqwp7k2d9yfq5i0wvii0xi8jqh1lw";
+      hash = "sha256-nAaIJYodxLg5iAU7n5qY53KM25tppQCNy9JR0PgIFs8=";
     };
     propagatedBuildInputs = [ AlgorithmDiff ];
     meta = {
@@ -237,7 +237,7 @@ let
     version = "1.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PL/PLICEASE/Alien-Base-ModuleBuild-1.15.tar.gz";
-      sha256 = "13c9432cf41b34cb14df2454a03e540e2bd5dc9eb9c82824b6ad0f4c67793afd";
+      hash = "sha256-E8lDLPQbNMsU3yRUoD5UDivV3J65yCgktq0PTGd5Ov0=";
     };
     buildInputs = [ Test2Suite ];
     propagatedBuildInputs = [ AlienBuild ArchiveExtract CaptureTiny Filechdir PathTiny ShellConfigGenerate ShellGuess SortVersions URI ];
@@ -253,7 +253,7 @@ let
     version = "2.37";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PL/PLICEASE/Alien-Build-2.37.tar.gz";
-      sha256 = "0lgdr4d4hpv9q6i8lzs5lrilrwj8zm1cxzxwdgvl69j8k2zbq01h";
+      hash = "sha256-MAC8vphIJkP3a7z/zkL9SPJMY6ZFf4qiwWlfSBrJ7VE=";
     };
     propagatedBuildInputs = [ CaptureTiny FFICheckLib FileWhich Filechdir PathTiny PkgConfig ];
     buildInputs = [ DevelHide Test2Suite ];
@@ -269,7 +269,7 @@ let
     version = "1.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PL/PLICEASE/Alien-GMP-1.16.tar.gz";
-      sha256 = "199x24pl6jnqshgnl066lhdf2fkqa6l1fml9g3qn5grmwn7d8309";
+      hash = "sha256-CQzUjuU1v2LxeIlWF6hReDrhGqTGAGof1NhKQy8RPaU=";
     };
     propagatedBuildInputs = [ AlienBuild ];
     buildInputs = [ pkgs.gmp Alienm4 DevelChecklib IOSocketSSL MojoDOM58 NetSSLeay SortVersions Test2Suite URI ];
@@ -285,7 +285,7 @@ let
     version = "0.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RU/RUZ/Alien-LibGumbo-0.05.tar.gz";
-      sha256 = "0fbe916ab11f680e5c28cd1ac800372323e2a0e06affc6c8b36279fc64d76517";
+      hash = "sha256-D76RarEfaA5cKM0ayAA3IyPioOBq/8bIs2J5/GTXZRc=";
     };
     buildInputs = [ AlienBaseModuleBuild ];
     propagatedBuildInputs = [ AlienBuild FileShareDir PathClass ];
@@ -301,7 +301,7 @@ let
     version = "0.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PL/PLICEASE/Alien-Libxml2-0.17.tar.gz";
-      sha256 = "1cwdqspbq0r0bmw0079z4qzc7chs5aw6jdf3699nxhxmy1255d3k";
+      hash = "sha256-c7RSRPC1w25TMsM1abgqGrLDPiY/HQB4XSADvK7GjbM=";
     };
     propagatedBuildInputs = [ AlienBuild ];
     buildInputs = [ pkgs.libxml2 MojoDOM58 SortVersions Test2Suite URI ];
@@ -317,7 +317,7 @@ let
     version = "0.34";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/aliased-0.34.tar.gz";
-      sha256 = "1syyqzy462501kn5ma9gl6xbmcahqcn4qpafhsmpz0nd0x2m4l63";
+      hash = "sha256-w1BSRQfNgn+rhk5dTCzDULG6uqEvqVrsDKAIQ/zH3us=";
     };
     buildInputs = [ ModuleBuildTiny ];
     meta = {
@@ -331,7 +331,7 @@ let
     version = "1.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/asa-1.04.tar.gz";
-      sha256 = "0pk783s1h2f45zbmm6a62yfgy71w4sqh8ppgs4cyxfikwxs3p0z5";
+      hash = "sha256-5YM7dOczuu4Z0e9eBLEmPBz/nBdGmVrXL8QJGPRAZ14=";
     };
     meta = {
       description = "Lets your class/object say it works like something else";
@@ -345,7 +345,7 @@ let
     version = "1.446";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FR/FROGGS/Alien-SDL-1.446.tar.gz";
-      sha256 = "c9aa2c9dc3c63d89773c7d7203f2a46d1b924d0c72d9f801af147a3dc8bc512a";
+      hash = "sha256-yaosncPGPYl3PH1yA/KkbRuSTQxy2fgBrxR6Pci8USo=";
     };
     patches = [ ../development/perl-modules/alien-sdl.patch ];
 
@@ -366,7 +366,7 @@ let
     version = "1.4.7";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KM/KMX/Alien-Tidyp-v1.4.7.tar.gz";
-      sha256 = "0raapwp4155lqag1kzhsd20z4if10hav9wx4d7mc1xpvf7dcnr5r";
+      hash = "sha256-uWTL2nH79sDqaaTztBUEwUXygWga/hmewrSUQC6/SmU=";
     };
 
     buildInputs = [ ArchiveExtract ];
@@ -383,7 +383,7 @@ let
     version = "0.69";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MD/MDOOTSON/Alien-wxWidgets-0.69.tar.gz";
-      sha256 = "0jg2dmkzhj03f6b0vmv597yryfw9cclsdn9ynvvlrzzgpd5lw8jk";
+      hash = "sha256-UyJOS7vv/0z3tj7ZpiljiTuf/Ull1w2WcQNI+Gdt4kk=";
     };
     propagatedBuildInputs = [ pkgs.pkg-config pkgs.gtk2 pkgs.wxGTK30 ModulePluggable ];
     buildInputs = [ LWPProtocolHttps ];
@@ -398,7 +398,7 @@ let
     version = "0.19";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PL/PLICEASE/Alien-m4-0.19.tar.gz";
-      sha256 = "1xnh8qa99dcvqcqzbpy0s5jrxvn7wa5ydz3lfd56n358l5jfzns9";
+      hash = "sha256-SdvvZKGoDGtKc3T85ovix+6eZdHA3/Uxw5u1lBRG0PY=";
     };
     propagatedBuildInputs = [ AlienBuild ];
     buildInputs = [ pkgs.gnum4 Alienpatch IOSocketSSL MojoDOM58 NetSSLeay SortVersions Test2Suite URI ];
@@ -414,7 +414,7 @@ let
     version = "0.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PL/PLICEASE/Alien-patch-0.15.tar.gz";
-      sha256 = "1l00mq56596wn09nn7fv552j2aa7sgh46bvx5xlncsnrn8jp5mpy";
+      hash = "sha256-/tZyJbLZamZpL30vQ+DTRykhRSnbHWsTsNykYgquANA=";
     };
     propagatedBuildInputs = [ AlienBuild ];
     buildInputs = [ IOSocketSSL MojoDOM58 NetSSLeay SortVersions Test2Suite URI ];
@@ -430,7 +430,7 @@ let
     version = "0.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DANAJ/Alt-Crypt-RSA-BigInt-0.06.tar.gz";
-      sha256 = "76f434cab36999cdf09811345bb39d6b7cbed7e085b02338328c7f46e08b38f3";
+      hash = "sha256-dvQ0yrNpmc3wmBE0W7Oda3y+1+CFsCM4Mox/RuCLOPM=";
     };
     propagatedBuildInputs = [ ClassLoader ConvertASCIIArmour DataBuffer DigestMD2 MathBigIntGMP MathPrimeUtil SortVersions TieEncryptedHash ];
     meta = {
@@ -446,7 +446,7 @@ let
     version = "7.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/AnyEvent-7.17.tar.gz";
-      sha256 = "50beea689c098fe4aaeb83806c40b9fe7f946d5769acf99f849f099091a4b985";
+      hash = "sha256-UL7qaJwJj+Sq64OAbEC5/n+UbVdprPmfhJ8JkJGkuYU=";
     };
     buildInputs = [ CanaryStability ];
     meta = {
@@ -460,7 +460,7 @@ let
     version = "1.1";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/AnyEvent-AIO-1.1.tar.gz";
-      sha256 = "0svh0mlp17g0ypq8bgs3h3axg8v7h0z45hryacgn6q8mcj65n43b";
+      hash = "sha256-axBbjGQVYWMfUz7DQj6AZ6PX1YBDv4Xw9eCdcGkFcGs=";
     };
     propagatedBuildInputs = [ AnyEvent IOAIO ];
     meta = {
@@ -474,7 +474,7 @@ let
     version = "1.1";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${pname}-${version}.tar.gz";
-      sha256 = "93e36010940464626e5f31b9faedd65e12ed8d1abf16ce052febf23f495aefc8";
+      hash = "sha256-k+NgEJQEZGJuXzG5+u3WXhLtjRq/Fs4FL+vyP0la78g=";
     };
     buildInputs = [ CanaryStability ];
     propagatedBuildInputs = [ BDB AnyEvent ];
@@ -489,7 +489,7 @@ let
     version = "0.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PO/POTYL/AnyEvent-CacheDNS-0.08.tar.gz";
-      sha256 = "41c1faf183b61806b55889ceea1237750c1f61b9ce2735fdf33dc05536712dae";
+      hash = "sha256-QcH68YO2GAa1WInO6hI3dQwfYbnOJzX98z3AVTZxLa4=";
     };
     propagatedBuildInputs = [ AnyEvent ];
     doCheck = false; # does an DNS lookup
@@ -505,7 +505,7 @@ let
     version = "2.1";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/AnyEvent-FastPing-2.1.tar.gz";
-      sha256 = "0b3ha864nw0qk22ybhzfgz0r0p69iyj01bi500x9hp6kga7ip4p5";
+      hash = "sha256-5ZIbj3rTXJg6ACWuAKSPyVyQwX/uw+WFmBhwSwxScCw=";
     };
     propagatedBuildInputs = [ AnyEvent commonsense ];
     meta = {
@@ -520,7 +520,7 @@ let
     version = "2.25";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/AnyEvent-HTTP-2.25.tar.gz";
-      sha256 = "5cfa53416124176f6f4cd32b00ea8ca79a2d5df51258683989cd04fe86e25013";
+      hash = "sha256-XPpTQWEkF29vTNMrAOqMp5otXfUSWGg5ic0E/obiUBM=";
     };
     propagatedBuildInputs = [ AnyEvent commonsense ];
     meta = {
@@ -534,7 +534,7 @@ let
     version = "0.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSTPLBG/AnyEvent-I3-0.17.tar.gz";
-      sha256 = "5382c984c9f138395f29f0c00af81aa0c8f4b765582055c73ede4b13f04a6d63";
+      hash = "sha256-U4LJhMnxODlfKfDACvgaoMj0t2VYIFXHPt5LE/BKbWM=";
     };
     propagatedBuildInputs = [ AnyEvent JSONXS ];
     meta = {
@@ -548,7 +548,7 @@ let
     version = "0.97";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EL/ELMEX/${pname}-${version}.tar.gz";
-      sha256 = "bfd7cf645c3c8c611471057128611447e20f1adf01516c69624cbd8bc77f5bf0";
+      hash = "sha256-v9fPZFw8jGEUcQVxKGEUR+IPGt8BUWxpYky9i8d/W/A=";
     };
     propagatedBuildInputs = [ AnyEvent ObjectEvent commonsense ];
     meta = {
@@ -562,7 +562,7 @@ let
     version = "1.22";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DL/DLAMBLEY/AnyEvent-RabbitMQ-1.22.tar.gz";
-      sha256 = "98c52a1fe700710f3e5bc55a38b25de625e9b2e8341d278dcf9e1b3f3d19acee";
+      hash = "sha256-mMUqH+cAcQ8+W8VaOLJd5iXpsug0HSeNz54bPz0ZrO4=";
     };
     buildInputs = [ FileShareDirInstall TestException ];
     propagatedBuildInputs = [ AnyEvent DevelGlobalDestruction FileShareDir ListMoreUtils NetAMQP Readonly namespaceclean ];
@@ -577,7 +577,7 @@ let
     version = "0.27";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Any-Moose-0.27.tar.gz";
-      sha256 = "0dc55mpayrixwx8dwql0vj0jalg4rlb3k64rprc84bl0z8vkx9m8";
+      hash = "sha256-qKY+N/qALoJYvpmYORbN5FElgdyAYt5Q5z1mr24thTU=";
     };
     propagatedBuildInputs = [ Moose Mouse ];
     meta = {
@@ -591,7 +591,7 @@ let
     version = "0.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PH/PHRED/Any-URI-Escape-0.01.tar.gz";
-      sha256 = "0k4c20bmw32yxksgkc2i44j4vfmzhqcqrq36pv0ab3qhkzn3r0g3";
+      hash = "sha256-44E87J8Qj6XAvmbgjBmGv7pNJCFRsPn07F4MXhcQjEw=";
     };
     propagatedBuildInputs = [ URI ];
     meta = {
@@ -605,7 +605,7 @@ let
     version = "0.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DANKOGAI/URI-Escape-XS-0.14.tar.gz";
-      sha256 = "c39ac50c6c2b831ae4bf08692e6ca5d4a3f9c57dc4d7f9c4cb0663e2c86c2759";
+      hash = "sha256-w5rFDGwrgxrkvwhpLmyl1KP5xX3E1/nEywZj4shsJ1k=";
     };
     meta = {
       description = "Drop-In replacement for URI::Escape";
@@ -618,7 +618,7 @@ let
     version = "3.30";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSCHOUT/Apache-AuthCookie-3.30.tar.gz";
-      sha256 = "1f71b94d3d55a950a4b32dae4e90f6e76c8157508a7e2aee50621b179aadb1fb";
+      hash = "sha256-H3G5TT1VqVCksy2uTpD252yBV1CKfiruUGIbF5qtsfs=";
     };
     buildInputs = [ ApacheTest ];
     propagatedBuildInputs = [ ClassLoad HTTPBody HashMultiValue WWWFormUrlEncoded ];
@@ -639,7 +639,7 @@ let
     version = "0.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LZ/LZE/Apache-DB-0.18.tar.gz";
-      sha256 = "6527f4f1598270bea07bec787b71bdf0ec2b572548be7438cf74f2b9a600bfed";
+      hash = "sha256-ZSf08VmCcL6ge+x4e3G98OwrVyVIvnQ4z3TyuaYAv+0=";
     };
     meta = {
       description = "Run the interactive Perl debugger under mod_perl";
@@ -652,7 +652,7 @@ let
     version = "0.36";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KA/KAZEBURO/Apache-LogFormat-Compiler-0.36.tar.gz";
-      sha256 = "05xcl7j65vakx7x79jqjikyw0nzf60bc2w6hhc0q5sklxq1ral4l";
+      hash = "sha256-lFCVA+506oIBg9BwwRYw7lvA/YwSy3T66VPtYuShrBc=";
     };
     buildInputs = [ HTTPMessage ModuleBuildTiny TestMockTime TestRequires TryTiny URI ];
     propagatedBuildInputs = [ POSIXstrftimeCompiler ];
@@ -670,7 +670,7 @@ let
     version = "1.94";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CH/CHORNY/Apache-Session-1.94.tar.gz";
-      sha256 = "17z9cdsk3vxah1dlix1pi68dlnjplymf4bdqwn50psdgk5lbfsgy";
+      hash = "sha256-/mm3aJmv6QuK5bgt4qqnV1rakIk39EhbgKrvMXVj6Z8=";
     };
     buildInputs = [ TestDeep TestException ];
     meta = {
@@ -684,7 +684,7 @@ let
     version = "1.42";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHAY/Apache-Test-1.42.tar.gz";
-      sha256 = "1sxk7dmpg3ib1dkl58ddh7zffnv5danwba7qxp82k54agmyz1086";
+      hash = "sha256-BoHwfX2KlCnQ7fioxa1qZVvn/oGtoUJnCyuOd2s7s+s=";
     };
     doCheck = false;
     meta = {
@@ -698,7 +698,7 @@ let
     version = "0.50";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PT/PTC/App-CLI-0.50.tar.gz";
-      sha256 = "0ick5agl02rx2pjfxl97d0f9qksy8pjn0asmwm3gn6dm7a1zblsi";
+      hash = "sha256-UdP1gzq1GftG5VUrYOVFXk+cHGgn0e7kFT0LQJ8qk0U=";
     };
     propagatedBuildInputs = [ CaptureTiny ClassLoad ];
     buildInputs = [ TestKwalitee TestPod ];
@@ -713,7 +713,7 @@ let
     version = "4.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DU/DUNCS/App-ClusterSSH-4.16.tar.gz";
-      sha256 = "0y2mzprv47ff4sig2fkvd10jwz2h4x6srncbvx528mk8c2mvhz0v";
+      hash = "sha256-G3y4q2BoViRK34vZrE0nUHwuQWh7OvGiJs4dsvP9VXg=";
     };
     propagatedBuildInputs = [ ExceptionClass Tk X11ProtocolOther XMLSimple ];
     buildInputs = [ DataDump FileWhich Readonly TestDifferences TestTrap ];
@@ -740,7 +740,7 @@ let
     version = "0.331";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/App-Cmd-0.331.tar.gz";
-      sha256 = "4a5d3df0006bd278880d01f4957aaa652a8f91fe8f66e93adf70fba0c3ecb680";
+      hash = "sha256-Sl098ABr0niIDQH0lXqqZSqPkf6PZuk633D7oMPstoA=";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ CaptureTiny ClassLoad GetoptLongDescriptive IOTieCombine ModulePluggable StringRewritePrefix ];
@@ -756,7 +756,7 @@ let
     version = "1.71";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/AppConfig-1.71.tar.gz";
-      sha256 = "03vvi3mk4833mx2c6dkm9zhvakf02mb2b7wz9pk9xc7c4mq04xqi";
+      hash = "sha256-EXcCcCXssJ7mTZ+fJVYVwE214U91NsNEr2MgMuuIew8=";
     };
     buildInputs = [ TestPod ];
     meta = {
@@ -770,7 +770,7 @@ let
     version = "0.010008";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSTROUT/App-FatPacker-0.010008.tar.gz";
-      sha256 = "1kzcbpsf1p7ww45d9fl2w0nfn5jj5pz0r0c649c1lrj5r1nv778j";
+      hash = "sha256-Ep2zbchFZhpYIoaBDP4tUhbrLOCCutQK4fzc4PRd7M8=";
     };
     meta = {
       description = "Pack your dependencies onto your script file";
@@ -784,7 +784,7 @@ let
     version = "1.7045";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/App-cpanminus-1.7045.tar.gz";
-      sha256 = "1779w07zxlgfk35s24ksr7k9azd5yl8sbb48y1aaph7y4gf4lkmc";
+      hash = "sha256-rE5K3CP+wKtU8IispRH1pX2V5sl6EqHLmO7R/g/g6Zw=";
     };
     # Use TLS endpoints for downloads and metadata by default
     preConfigure = ''
@@ -808,7 +808,7 @@ let
     version = "0.997011";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SK/SKAJI/App-cpm-0.997011.tar.gz";
-      sha256 = "sha256-YyECxuZ958nP9R1vqg2dA7/vvtNbXMXZaRn3uSAlAck=";
+      hash = "sha256-YyECxuZ958nP9R1vqg2dA7/vvtNbXMXZaRn3uSAlAck=";
     };
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [ CPAN02PackagesSearch CPANCommonIndex CPANDistnameInfo ClassTiny CommandRunner ExtUtilsInstall ExtUtilsInstallPaths FileCopyRecursive Filepushd HTTPTinyish MenloLegacy Modulecpmfile ModuleCPANfile ParsePMFile ParallelPipes locallib ];
@@ -830,7 +830,7 @@ let
     version = "0.22";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Applify-0.22.tar.gz";
-      sha256 = "0y644rr7gl49awn27xj556q9i86fddkkn26gnfn52wm19d7aa94a";
+      hash = "sha256-iiSlTkuhclGss88IO2drzqCYsClF9iMsV4nQd3ImxHg=";
     };
     meta = {
       description = "Write object oriented scripts with ease";
@@ -845,7 +845,7 @@ let
     version = "0.977";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JV/JV/App-Music-ChordPro-0.977.tar.gz";
-      sha256 = "0ggip43cddi5f6rylb07f56dhkfhbcbm621lvcnjfadnn9lrbwqh";
+      hash = "sha256-EPOVabK2KSct2zQIUxdb0E3YTHEHLOqzcSW2xga58T0=";
     };
     buildInputs = [ PodParser ];
     propagatedBuildInputs = [ AppPackager FileLoadLines IOString ImageInfo PDFAPI2 StringInterpolateNamed TextLayout ]
@@ -868,7 +868,7 @@ let
     version = "1.430.1";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JV/JV/App-Packager-1.430.1.tar.gz";
-      sha256 = "57f4d014458387f9e2ed2dfd8615d1e2545b8a6504b10af22486578d8be374a3";
+      hash = "sha256-V/TQFEWDh/ni7S39hhXR4lRbimUEsQryJIZXjYvjdKM=";
     };
     meta = {
       description = "Abstraction for Packagers";
@@ -881,7 +881,7 @@ let
     version = "0.89";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GU/GUGOD/App-perlbrew-0.89.tar.gz";
-      sha256 = "00krymnsvz5qx7fkn4hpfqlgrqmbkbf45f9jr3vl4yqcyrsmiyhg";
+      hash = "sha256-D/pYdfYMe0L3yDK5Qtyaq+L8KHYXEjvd6bj8rW31eQI=";
     };
     buildInputs = [ pkgs.curl FileWhich IOAll ModuleBuildTiny PathClass TestException TestNoWarnings TestOutput TestSpec TestTempDirTiny ];
     propagatedBuildInputs = [ CPANPerlReleases CaptureTiny DevelPatchPerl PodParser locallib ];
@@ -900,7 +900,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/Archive-Any-Lite-0.11.tar.gz";
-      sha256 = "0w2i50fd81ip674zmnrb15nadw162fdpiw4rampbd94k74jqih8m";
+      hash = "sha256-FcGIJTmTpLZuVZnweJsTJvCmbAkr2/rJMTcG1BwoUXA=";
     };
     propagatedBuildInputs = [ ArchiveZip ];
     buildInputs = [ ExtUtilsMakeMakerCPANfile TestUseAllModules ];
@@ -915,7 +915,7 @@ let
     pname = "App-Sqitch";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DW/DWHEELER/App-Sqitch-v1.1.0.tar.gz";
-      sha256 = "ee146cd75d6300837e6ca559bb0bde247d42123c96b2c5d4b2800f38d3e3d1ab";
+      hash = "sha256-7hRs111jAIN+bKVZuwveJH1CEjyWssXUsoAPONPj0as=";
     };
     buildInputs = [ CaptureTiny TestDeep TestDir TestException TestFile TestFileContents TestMockModule TestMockObject TestNoWarnings TestWarn ];
     propagatedBuildInputs = [ Clone ConfigGitLike DBI DateTime EncodeLocale HashMerge IOPager IPCRun3 IPCSystemSimple ListMoreUtils PathClass PerlIOutf8_strict PodParser StringFormatter StringShellQuote TemplateTiny Throwable TypeTiny URIdb libintl-perl ];
@@ -933,7 +933,7 @@ let
     version = "1.1.4";
     src = fetchurl {
       url = "https://github.com/nferraz/st/archive/v1.1.4.tar.gz";
-      sha256 = "1f4bqm4jiazcxgzzja1i48671za96621k0s3ln87cdacgvv1can0";
+      hash = "sha256-wCoW9n5MNXaQpUODGYQxSf1wDCIxKPn/6+yrKEnFi7g=";
     };
     postInstall =
       ''
@@ -953,7 +953,7 @@ let
     version = "1.21";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/Attribute-Params-Validate-1.21.tar.gz";
-      sha256 = "586b939ceffdb37188b7c461dd1a8f9f35695184c8703b05c35f6d508c8090f5";
+      hash = "sha256-WGuTnO/9s3GIt8Rh3RqPnzVpUYTIcDsFw19tUIyAkPU=";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ ParamsValidate ];
@@ -970,7 +970,7 @@ let
     version = "3.0.7";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAVECROSS/Array-Compare-v3.0.7.tar.gz";
-      sha256 = "1p2kv4p2p5i6a665ax4b8iq1wal4x0g259yv32cc2ypbk7v11qs4";
+      hash = "sha256-ROMQ9pnresGYGNunIh7ohCoecESLdFWMUSaWKy7ZU9w=";
     };
 
     buildInputs = [ TestNoWarnings ];
@@ -986,7 +986,7 @@ let
     version = "0.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/Array-Diff-0.09.tar.gz";
-      sha256 = "0xsh8k312spzl90xds075qprcaz4r0b93g1bgi9l3rv1k0p3j1l0";
+      hash = "sha256-gAY5Lphh50FTfCu8kRbI5CuWLy4H6NZBov9qEcZEUHc=";
     };
     propagatedBuildInputs = [ AlgorithmDiff ClassAccessor ];
     meta = {
@@ -1001,7 +1001,7 @@ let
     version = "0.13";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DB/DBURKE/Array-FIFO-0.13.tar.gz";
-      sha256 = "be2aeb5f5a9af1a96f0033508a569ca93ad19ad15dc7c6b998e6d7bc740c66f7";
+      hash = "sha256-virrX1qa8alvADNQilacqTrRmtFdx8a5mObXvHQMZvc=";
     };
     buildInputs = [ TestDeep TestSpec TestTrap ];
     propagatedBuildInputs = [ Moose namespaceautoclean ];
@@ -1017,7 +1017,7 @@ let
     version = "1.00";
     src = fetchurl {
       url = "mirror://cpan/authors/id//G/GA/GAAS/Array-RefElem-1.00.tar.gz";
-      sha256 = "sha256-U7iAo67AQ+TjcM4SaCtHVt5F3XQtq1cpT+IaFUU87+M=";
+      hash = "sha256-U7iAo67AQ+TjcM4SaCtHVt5F3XQtq1cpT+IaFUU87+M=";
     };
     meta = {
       description = "Set up array elements as aliases";
@@ -1030,7 +1030,7 @@ let
     version = "2016.1207";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XI/XINFWANG/AsyncPing-2016.1207.tar.gz";
-      sha256 = "0nn9k79gihzr9wfksi03jmdgc2ihsb4952ddz1v70xvsq7z9mgkg";
+      hash = "sha256-b76a/sF6d3B2+K2JksjSMAr2WpUDRD0dT/nD+NKZyVo=";
     };
     meta = {
       description = "Ping a huge number of servers in several seconds";
@@ -1043,7 +1043,7 @@ let
     version = "0.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PI/PIXEL/Archive-Cpio-0.10.tar.gz";
-      sha256 = "246fb31669764e78336b2191134122e07c44f2d82dc4f37d552ab28f8668bed3";
+      hash = "sha256-JG+zFml2TngzayGRE0Ei4HxE8tgtxPN9VSqyj4ZovtM=";
     };
     meta = {
       description = "Module for manipulations of cpio archives";
@@ -1057,7 +1057,7 @@ let
     version = "0.86";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BINGOS/Archive-Extract-0.86.tar.gz";
-      sha256 = "9acd09cdb8e8cf0b6d08210a3b80342300c89a359855319bf6b00c14c4aab687";
+      hash = "sha256-ms0JzbjozwttCCEKO4A0IwDImjWYVTGb9rAMFMSqtoc=";
     };
     meta = {
       description = "Generic archive extracting mechanism";
@@ -1070,7 +1070,7 @@ let
     version = "2.38";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BINGOS/Archive-Tar-2.38.tar.gz";
-      sha256 = "c5e48f53514288185830ced93bf3e16fbdf5cddce97ded1d1d8a9b0a21ea287b";
+      hash = "sha256-xeSPU1FCiBhYMM7ZO/Phb731zdzpfe0dHYqbCiHqKHs=";
     };
     meta = {
       description = "Manipulates TAR archives";
@@ -1084,7 +1084,7 @@ let
     version = "0.38";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AR/ARFREITAS/Archive-Tar-Wrapper-0.38.tar.gz";
-      sha256 = "0ymknznhk5ky7f835l0l5wfkx8kl0vfm0hvhijvgyp5rm3dd1wqr";
+      hash = "sha256-GfPQ2qi5XP+2jHBDUN0GdKI+HS8U0DKQO36WCe23s3o=";
     };
     propagatedBuildInputs = [ FileWhich IPCRun LogLog4perl ];
     meta = {
@@ -1098,7 +1098,7 @@ let
     version = "1.68";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PH/PHRED/Archive-Zip-1.68.tar.gz";
-      sha256 = "0l663s3a68p8r2qjy4pn1g05lx0i8js8wpz7qqln3bsvg1fihklq";
+      hash = "sha256-mE4YXXhbr2EpxudfjrREEXRawAv2Ei+xyOgio4YexlA=";
     };
     buildInputs = [ TestMockModule ];
     meta = {
@@ -1113,7 +1113,7 @@ let
     version = "3.07";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TJ/TJENNESS/${pname}-${version}.tar.gz";
-      sha256 = "530d59ef0c0935f9862d187187a2d7583b12c639bb67db14f983322b161892d9";
+      hash = "sha256-Uw1Z7wwJNfmGLRhxh6LXWDsSxjm7Z9sU+YMyKxYYktk=";
     };
     meta = {
       description = "Object-oriented interface to FITS HDUs";
@@ -1127,7 +1127,7 @@ let
     version = "2.4";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DANIEL/Audio-FLAC-Header-2.4.tar.gz";
-      sha256 = "fba5911d6c22d81506565cd9a1438e8605420ff7986cf03d1a12d006a4070543";
+      hash = "sha256-+6WRHWwi2BUGVlzZoUOOhgVCD/eYbPA9GhLQBqQHBUM=";
     };
     meta = {
       description = "Interface to FLAC header metadata";
@@ -1140,7 +1140,7 @@ let
     version = "1.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AG/AGRUNDMA/Audio-Scan-1.01.tar.gz";
-      sha256 = "0jk3djnk6yf0jsjh8qk3mj8bkx4avp6i4czcpr5xrbf7f41744l3";
+      hash = "sha256-gxJyAnHHrdxLvuwzEs3divS5kKxjYgSllsB5M61sY0o=";
     };
     buildInputs = [ pkgs.zlib TestWarn ];
     NIX_CFLAGS_COMPILE = "-I${pkgs.zlib.dev}/include";
@@ -1156,7 +1156,7 @@ let
     version = "2.007";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Authen-DecHpwd-2.007.tar.gz";
-      sha256 = "f43a93bb02b41f7327d92f9e963b69505f67350a52e8f50796f98afc4fb3f177";
+      hash = "sha256-9DqTuwK0H3Mn2S+eljtpUF9nNQpS6PUHlvmK/E+z8Xc=";
     };
     perlPreHook = lib.optionalString stdenv.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
     propagatedBuildInputs = [ DataInteger DigestCRC ScalarString ];
@@ -1171,7 +1171,7 @@ let
     version = "0.171";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSTROUT/Authen-Htpasswd-0.171.tar.gz";
-      sha256 = "0rw06hwpxg388d26l0jvirczx304f768ijvc20l4b2ll7xzg9ymm";
+      hash = "sha256-tfr0fj+UikUoEGzLiMxxBIz+WY5bAmpEQ2i8fjk0gGc=";
     };
     propagatedBuildInputs = [ ClassAccessor CryptPasswdMD5 DigestSHA1 IOLockedFile ];
     meta = {
@@ -1185,7 +1185,7 @@ let
     version = "1.905";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IO/IOANR/Authen-Krb5-1.905.tar.gz";
-      sha256 = "0kgpl0x1qxq1p2ccxy8qqkrvqba2gq6aq6p931qnz9812nxh0yyp";
+      hash = "sha256-13sAuxUBpW9xGOkarAx+Qi2888QY+c6YuAF3HDqg900=";
     };
     perlPreHook = "export LD=$CC";
     propagatedBuildInputs = [ pkgs.libkrb5 ];
@@ -1201,7 +1201,7 @@ let
     version = "0.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SJ/SJQUINNEY/Authen-Krb5-Admin-0.17.tar.gz";
-      sha256 = "5dd49cacd983efd61a8c3f1a56571bb73785eb155908b5d7bec97eed78df0c54";
+      hash = "sha256-XdScrNmD79YajD8aVlcbtzeF6xVZCLXXvsl+7XjfDFQ=";
     };
     propagatedBuildInputs = [ pkgs.krb5Full.dev AuthenKrb5 ];
     # The following ENV variables are required by Makefile.PL to find
@@ -1229,7 +1229,7 @@ let
     version = "0.1.1";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AG/AGORDON/Authen-ModAuthPubTkt-0.1.1.tar.gz";
-      sha256 = "7996e1a42c51216003ccf03c4b5250286b4c55684257971851f5ece9161dc7dd";
+      hash = "sha256-eZbhpCxRIWADzPA8S1JQKGtMVWhCV5cYUfXs6RYdx90=";
     };
     propagatedBuildInputs = [ pkgs.openssl IPCRun3 ];
     patchPhase = ''
@@ -1249,7 +1249,7 @@ let
     version = "2.0.1";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OA/OALDERS/Authen-OATH-2.0.1.tar.gz";
-      sha256 = "1a813dbdc05c3fbd9dd39dbcfd85e2cfb0ba3d0f652cf6b26ec83ab8146ddc77";
+      hash = "sha256-GoE9vcBcP72d0528/YXiz7C6PQ9lLPaybsg6uBRt3Hc=";
     };
     buildInputs = [ TestNeeds ];
     propagatedBuildInputs = [ DigestHMAC Moo TypeTiny ];
@@ -1266,7 +1266,7 @@ let
     version = "0.008";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Authen-Passphrase-0.008.tar.gz";
-      sha256 = "55db4520617d859d88c0ee54965da815b7226d792b8cdc8debf92073559e0463";
+      hash = "sha256-VdtFIGF9hZ2IwO5Ull2oFbcibXkrjNyN6/kgc1WeBGM=";
     };
     propagatedBuildInputs = [ AuthenDecHpwd CryptDES CryptEksblowfish CryptMySQL CryptPasswdMD5 CryptUnixCryptXS DataEntropy DigestMD4 ModuleRuntime ];
     meta = {
@@ -1280,7 +1280,7 @@ let
     version = "0.32";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PO/PORTAONE/Authen-Radius-0.32.tar.gz";
-      sha256 = "0h0p4djscwixpbgbxrs9vsyx1vl7cm9r4j15cx11hfn86yc8y83v";
+      hash = "sha256-eyCPmDfIOhhCZyVIklNlh+7Qvd5J577euj1ypmUjF0A=";
     };
     buildInputs = [ TestNoWarnings ];
     propagatedBuildInputs = [ DataHexDump NetIP ];
@@ -1295,7 +1295,7 @@ let
     version = "2.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GB/GBARR/Authen-SASL-2.16.tar.gz";
-      sha256 = "02afhlrdq5hh5g8b32fa79fqq5i76qzwfqqvfi9zi57h31szl536";
+      hash = "sha256-ZhT6dRjwlPhTdBtjxz82JxaMXTrKibHQKxAW3DKFTgk=";
     };
     propagatedBuildInputs = [ DigestHMAC ];
     meta = {
@@ -1309,7 +1309,7 @@ let
     version = "1.100";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CF/CFAERBER/Authen-SASL-SASLprep-1.100.tar.gz";
-      sha256 = "a4cccc34bb3f53acf0ba78c9fc61af8d156d109d1c10487ba5988a55077d1f70";
+      hash = "sha256-pMzMNLs/U6zwunjJ/GGvjRVtEJ0cEEh7pZiKVQd9H3A=";
     };
     buildInputs = [ TestNoWarnings ];
     propagatedBuildInputs = [ UnicodeStringprep ];
@@ -1325,7 +1325,7 @@ let
     version = "0.011";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/Authen-SCRAM-0.011.tar.gz";
-      sha256 = "45108c239a7373d00941dcf0d171acd03e7c16a63ce6f7d9568ff052b17cf5a8";
+      hash = "sha256-RRCMI5pzc9AJQdzw0XGs0D58FqY85vfZVo/wUrF89ag=";
     };
     buildInputs = [ TestFailWarnings TestFatal ];
     propagatedBuildInputs = [ AuthenSASLSASLprep CryptURandom Moo PBKDF2Tiny TypeTiny namespaceclean ];
@@ -1342,7 +1342,7 @@ let
     version = "0.5";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CH/CHANSEN/Authen-Simple-0.5.tar.gz";
-      sha256 = "02cddab47f8bf1a1cbd4c9bf8d258f6d05111499c33f8315e7244812f72613aa";
+      hash = "sha256-As3atH+L8aHL1Mm/jSWPbQURFJnDP4MV5yRIEvcmE6o=";
     };
     propagatedBuildInputs = [ ClassAccessor ClassDataInheritable CryptPasswdMD5 ParamsValidate ];
     meta = {
@@ -1356,7 +1356,7 @@ let
     version = "0.6";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CH/CHANSEN/Authen-Simple-Passwd-0.6.tar.gz";
-      sha256 = "1ckl2ry9r5nb1rcn1ik2l5b5pp1i3g4bmllsmzb0zpwy4lvbqmfg";
+      hash = "sha256-z1W8NiWe3w/Wr5rSusgbMdxbVqFixmBZDsuWnHwWdLI=";
     };
     propagatedBuildInputs = [ AuthenSimple ];
     meta = {
@@ -1370,7 +1370,7 @@ let
     version = "3.0.1";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CH/CHOCOLATE/autobox-v3.0.1.tar.gz";
-      sha256 = "c303b7fccfaa1ff4d4c429ab3f15e5ca2a77554ef8c9fc3b8c62ba859e874c98";
+      hash = "sha256-wwO3/M+qH/TUxCmrPxXlyip3VU74yfw7jGK6hZ6HTJg=";
     };
     propagatedBuildInputs = [ ScopeGuard ];
     buildInputs = [ IPCSystemSimple TestFatal ];
@@ -1385,7 +1385,7 @@ let
     version = "2.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TE/TEEJAY/Autodia-2.14.tar.gz";
-      sha256 = "08pl5y18nsvy8ihfzdsbd8rz6a8al09wqfna07zdjfdyib42b0dc";
+      hash = "sha256-rIElyIq+Odn+Aco6zBOgCinzM2pLt+9gRH5ri4Iv9CI=";
     };
     propagatedBuildInputs = [ TemplateToolkit XMLSimple ];
     buildInputs = [ DBI ];
@@ -1414,7 +1414,7 @@ let
     version = "1.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LD/LDS/AWS-Signature4-1.02.tar.gz";
-      sha256 = "20bbc16cb3454fe5e8cf34fe61f1a91fe26c3f17e449ff665fcbbb92ab443ebd";
+      hash = "sha256-ILvBbLNFT+XozzT+YfGpH+JsPxfkSf9mX8u7kqtEPr0=";
     };
     propagatedBuildInputs = [ LWP TimeDate URI ];
     meta = {
@@ -1428,7 +1428,7 @@ let
     version = "0.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/V/VP/VPIT/autovivification-0.18.tar.gz";
-      sha256 = "01giacr2sx6b9bgfz6aqw7ndcnf08j8n6kwhm7880a94hmb9g69d";
+      hash = "sha256-LZmXVoUkKYDQqZBPY5FEwFnW7OFYme/eSst0LTJT8QU=";
     };
     meta = {
       description = "Lexically disable autovivification";
@@ -1462,7 +1462,7 @@ let
     version = "1.57";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RU/RURBAN/B-C-1.57.tar.gz";
-      sha256 = "1zs9a4gl63icja055kncgyny6xk1nsk6payfbzczkba3sc8sclh4";
+      hash = "sha256-BFKmEdNDrfnZX86ra6a2YXbjrX/MzlKAkiwOQx9RSf8=";
     };
     propagatedBuildInputs = [ BFlags IPCRun Opcodes ];
     doCheck = false; /* test fails */
@@ -1479,7 +1479,7 @@ let
     version = "0.004";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AT/ATOOMIC/B-COW-0.004.tar.gz";
-      sha256 = "0lazb25jzhdha4dmrkdxn1pw1crc6iqzspvcq315p944xmsvgbzw";
+      hash = "sha256-/K+3de2EpFvCwGxf/XE0LLPAb7C9zVwbUbDBL4tYX1E=";
     };
     meta = {
       description = "B::COW additional B helpers to check COW status";
@@ -1492,7 +1492,7 @@ let
     version = "0.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RU/RURBAN/B-Flags-0.17.tar.gz";
-      sha256 = "1chhgkaw2h3qniz71dykynggqp0r6b6mi2f4nh4x3ghm2g89gny1";
+      hash = "sha256-wduX0BMVvtEJtMSJWM0yGVz8nvXTt3B+tHhAwdV8ELI=";
     };
     meta = {
       description = "Friendlier flags for B";
@@ -1505,7 +1505,7 @@ let
     version = "1.07";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GB/GBARR/Beanstalk-Client-1.07.tar.gz";
-      sha256 = "3188ab1127f2caba97df65c84f69db0ec70c64e5d70f296f9a2674fa79c112cc";
+      hash = "sha256-MYirESfyyrqX32XIT2nbDscMZOXXDylvmiZ0+nnBEsw=";
     };
     propagatedBuildInputs = [ ClassAccessor YAMLSyck ];
     meta = {
@@ -1520,7 +1520,7 @@ let
 
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PM/PMQS/BerkeleyDB-0.64.tar.gz";
-      sha256 = "0jvllgyk7ai8zxziaxpxar0n2054y01dq3qn40xc86lwakl8ap2k";
+      hash = "sha256-U1yF6FScGsQ6IBYP3ALwpABhQVb9dhV//yiqM/2jdEs=";
     };
 
     preConfigure = ''
@@ -1538,7 +1538,7 @@ let
     version = "1.92";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${pname}-${version}.tar.gz";
-      sha256 = "a3f2ca9d2baefc1aaa40908b2f9cb9292fda3e7d797e38bbd78eabb9d9daeb6b";
+      hash = "sha256-o/LKnSuu/BqqQJCLL5y5KS/aPn15fji7146rudna62s=";
     };
     NIX_CFLAGS_COMPILE = "-I${pkgs.db4.dev}/include";
     NIX_CFLAGS_LINK = "-L${pkgs.db4.out}/lib -ldb";
@@ -1555,7 +1555,7 @@ let
     version = "0.24";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/B-Hooks-EndOfScope-0.24.tar.gz";
-      sha256 = "1imcqxp23yc80a7p0h56sja9glbrh4qyhgzljqd4g9habpz3vah3";
+      hash = "sha256-A6o9/l0KpkcalvQ/6DGBedGXlNSmQHCPAoj5IW7HrMY=";
     };
     propagatedBuildInputs = [ ModuleImplementation SubExporterProgressive ];
     meta = {
@@ -1570,7 +1570,7 @@ let
     version = "0.44";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CH/CHOCOLATE/B-Hooks-OP-Annotation-0.44.tar.gz";
-      sha256 = "6e26f99367f4ea944169cf6e05cf4d067832082424ca8ecefccb7b5a63217b16";
+      hash = "sha256-bib5k2f06pRBac9uBc9NBngyCCQkyo7O/Mt7WmMhexY=";
     };
     propagatedBuildInputs = [ ExtUtilsDepends ];
     meta = {
@@ -1584,7 +1584,7 @@ let
     version = "0.22";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/B-Hooks-OP-Check-0.22.tar.gz";
-      sha256 = "1kfdv25gn6yik8jrwik4ajp99gi44s6idcvyyrzhiycyynzd3df7";
+      hash = "sha256-x7XRvvWe+Qh/9n6zFo0mJL6UrlRkRp4lmtEb+4rYzc0=";
     };
     buildInputs = [ ExtUtilsDepends ];
     meta = {
@@ -1599,7 +1599,7 @@ let
     version = "1.7.8";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CJ/CJFIELDS/BioPerl-1.7.8.tar.gz";
-      sha256 = "c490a3be7715ea6e4305efd9710e5edab82dabc55fd786b6505b550a30d71738";
+      hash = "sha256-xJCjvncV6m5DBe/ZcQ5e2rgtq8Vf14a2UFtVCjDXFzg=";
     };
     buildInputs = [ ModuleBuild TestMemoryCycle TestWeaken TestDeep TestWarn TestException TestDifferences ];
     propagatedBuildInputs = [ DataStag Error Graph HTTPMessage IOString IOStringy IPCRun LWP ListMoreUtils SetScalar TestMost TestRequiresInternet URI XMLDOM XMLLibXML XMLSAX XMLSAXBase XMLSAXWriter XMLTwig XMLWriter YAML DBFile libxml_perl ];
@@ -1615,7 +1615,7 @@ let
     version = "7.4";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/ST/STBEY/Bit-Vector-7.4.tar.gz";
-      sha256 = "09m96p8c0ipgz42li2ywdgy0vxb57mb5nf59j9gw7yzc3xkslv9w";
+      hash = "sha256-PG2qZx/s+8Nfkqk4W1Y9ZfUN/Gvci0gF+e9GwNA1qSY=";
     };
     propagatedBuildInputs = [ CarpClan ];
     meta = {
@@ -1629,7 +1629,7 @@ let
     version = "1.24";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RU/RURBAN/B-Keywords-1.24.tar.gz";
-      sha256 = "sha256-pc9rsoXQbRfO4id4O3I7snQhP9QVOl3uMR0kDhFpYG4=";
+      hash = "sha256-pc9rsoXQbRfO4id4O3I7snQhP9QVOl3uMR0kDhFpYG4=";
     };
     meta = {
       description = "Lists of reserved barewords and symbol names";
@@ -1642,7 +1642,7 @@ let
     version = "0.46";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IN/INGY/boolean-0.46.tar.gz";
-      sha256 = "95c088085c3e83bf680fe6ce16d8264ec26310490f7d1680e416ea7a118f156a";
+      hash = "sha256-lcCICFw+g79oD+bOFtgmTsJjEEkPfRaA5BbqehGPFWo=";
     };
     meta = {
       description = "Boolean support for Perl";
@@ -1656,7 +1656,7 @@ let
     version = "0.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AA/AAR/Boost-Geometry-Utils-0.15.tar.gz";
-      sha256 = "1jnihz3029x51a455nxa0jx2z125x38q3vkkggsgdlrvawzxsm00";
+      hash = "sha256-AFTdP1c70/b0e3PugdHoRYQvugSq21KICqUnAcaH0co=";
     };
     patches = [
       # Fix out of memory error on Perl 5.19.4 and later.
@@ -1675,7 +1675,7 @@ let
     version = "0.07";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AV/AVAR/Bot-Training-0.07.tar.gz";
-      sha256 = "ee66bbf814f0dc3d1e80680e050fad10b1e018fed7929f653ed40e088b2aa295";
+      hash = "sha256-7ma7+BTw3D0egGgOBQ+tELHgGP7Xkp9lPtQOCIsqopU=";
     };
     buildInputs = [ FileSlurp ];
     propagatedBuildInputs = [ ClassLoad DirSelf FileShareDir ModulePluggable MooseXGetopt namespaceclean  ];
@@ -1692,7 +1692,7 @@ let
     version = "0.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AV/AVAR/Bot-Training-MegaHAL-0.03.tar.gz";
-      sha256 = "956072aff04f216e5c3b8196965b5d80d4d47695d77ecaabd56e59d65f22bf60";
+      hash = "sha256-lWByr/BPIW5cO4GWlltdgNTUdpXXfsqr1W5Z1l8iv2A=";
     };
     buildInputs = [ FileShareDirInstall ];
     propagatedBuildInputs = [ BotTraining ];
@@ -1708,7 +1708,7 @@ let
     version = "0.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AV/AVAR/Bot-Training-StarCraft-0.03.tar.gz";
-      sha256 = "e7ceb8d01c62e732dd89bfe5f4d83e781c1cd912542d177c22e761b7c8614d5e";
+      hash = "sha256-58640Bxi5zLdib/l9Ng+eBwc2RJULRd8Iudht8hhTV4=";
     };
     buildInputs = [ FileShareDirInstall ];
     propagatedBuildInputs = [ BotTraining ];
@@ -1724,7 +1724,7 @@ let
     version = "1.2911";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JH/JHI/BSD-Resource-1.2911.tar.gz";
-      sha256 = "0g8c7825ng2m0yz5sy6838rvfdl8j3vm29524wjgf66ccfhgn74x";
+      hash = "sha256-nRz7oGPMGPckJ6IkUfeQiDa3MxrIeF2+B1U8WwQ6DD0=";
     };
     meta = {
       description = "BSD process resource limit and priority functions";
@@ -1738,7 +1738,7 @@ let
     version = "1.12.2";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MO/MONGODB/BSON-v1.12.2.tar.gz";
-      sha256 = "f4612c0c354310741b99ab6d26451226823150ca27109b1b391232d5cfdda6db";
+      hash = "sha256-9GEsDDVDEHQbmattJkUSJoIxUMonEJsbORIy1c/dpts=";
     };
     buildInputs = [ JSONMaybeXS PathTiny TestDeep TestFatal ];
     propagatedBuildInputs = [ CryptURandom Moo TieIxHash boolean namespaceclean ];
@@ -1754,7 +1754,7 @@ let
     version = "0.8.4";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MO/MONGODB/BSON-XS-v0.8.4.tar.gz";
-      sha256 = "28f7d338fd78b6f9c9a6080be9de3f5cb23d888b96ebf6fcbface9f2966aebf9";
+      hash = "sha256-KPfTOP14tvnJpggL6d4/XLI9iIuW6/b8v6zp8pZq6/k=";
     };
     buildInputs = [ ConfigAutoConf JSONMaybeXS PathTiny TestDeep TestFatal TieIxHash ];
     propagatedBuildInputs = [ BSON boolean JSONXS JSONPP CpanelJSONXS ];
@@ -1771,7 +1771,7 @@ let
     version = "0.27";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/B-Utils-0.27.tar.gz";
-      sha256 = "1spzhmk3z6c4blmra3kn84nq20fira2b3vjg86m0j085lgv56zzr";
+      hash = "sha256-+X9T9qMFAQmqQU/usYTK0QGBLUF2DpUrXYSZP2aF/+o=";
     };
     propagatedBuildInputs = [ TaskWeaken ];
     buildInputs = [ ExtUtilsDepends ];
@@ -1787,7 +1787,7 @@ let
     version = "0.13";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BP/BPS/Business-Hours-0.13.tar.gz";
-      sha256 = "1hiybixagj3i1hsnfr134jgs9wv4azkwq6kijr9zlkxqzczzw1x8";
+      hash = "sha256-qAf+P/u4T/pTlnEazOdXZPOknyQjZGc1DHHIp3pcPsI=";
     };
     propagatedBuildInputs = [ SetIntSpan ];
     meta = {
@@ -1801,7 +1801,7 @@ let
     version = "3.005";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BD/BDFOY/Business-ISBN-3.005.tar.gz";
-      sha256 = "0aifzqj3xvxi8x0103ddpb2bagfsz15c71k69vdpcqy582pgnc35";
+      hash = "sha256-ZTD7rkDFY3bbTmaGw0r42j21xLqtDRBAR7HvPiT+Lio=";
     };
     propagatedBuildInputs = [ BusinessISBNData ];
     meta = {
@@ -1816,7 +1816,7 @@ let
     version = "20191107";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BD/BDFOY/Business-ISBN-Data-20191107.tar.gz";
-      sha256 = "03faqnxx7qxgr2dcdra2iq60ziilpkas2ra41cs8klwky5j4yk44";
+      hash = "sha256-hExPZPGT04k0C0RlodW8NMYPDI5C5caayK/j07vFyg0=";
     };
     meta = {
       description = "Data pack for Business::ISBN";
@@ -1830,7 +1830,7 @@ let
     version = "1.201";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BD/BDFOY/Business-ISMN-1.201.tar.gz";
-      sha256 = "1cpcfyaz1fl6fnm076jx2jsphw147wj6aszj2yzqrgsncjhk2cja";
+      hash = "sha256-SjIxoWRWv4y/F/JrZSQ/JHB4tRRdmgOqdYa68JV37LI=";
     };
     propagatedBuildInputs = [ TieCycle ];
     meta = {
@@ -1845,7 +1845,7 @@ let
     version = "1.004";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BD/BDFOY/Business-ISSN-1.004.tar.gz";
-      sha256 = "97ecab15d24d11e2852bf0b28f84c8798bd38402a0a69e17be0e6689b272715e";
+      hash = "sha256-l+yrFdJNEeKFK/Cyj4TIeYvThAKgpp4Xvg5mibJycV4=";
     };
     meta = {
       description = "Perl extension for International Standard Serial Numbers";
@@ -1859,7 +1859,7 @@ let
     version = "0.29";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAVIDO/Bytes-Random-Secure-0.29.tar.gz";
-      sha256 = "53bbd339e6a11efca07c619a615c7c188a68bb2be849a1cb7efc3dd4d9ae85ae";
+      hash = "sha256-U7vTOeahHvygfGGaYVx8GIpouyvoSaHLfvw91Nmuha4=";
     };
     propagatedBuildInputs = [ CryptRandomSeed MathRandomISAAC ];
     meta = {
@@ -1874,7 +1874,7 @@ let
     version = "1.011";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAVIDO/Bytes-Random-Secure-Tiny-1.011.tar.gz";
-      sha256 = "03d967b5f82846909137d5ab9984ac570ac10a4401e0c602f3d2208c465ac982";
+      hash = "sha256-A9lntfgoRpCRN9WrmYSsVwrBCkQB4MYC89IgjEZayYI=";
     };
     meta = {
       description = "A tiny Perl extension to generate cryptographically-secure random bytes";
@@ -1888,7 +1888,7 @@ let
     version = "1.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Cache-Cache-1.08.tar.gz";
-      sha256 = "1s6i670dc3yb6ngvdk48y6szdk5n1f4icdcjv2vi1l2xp9fzviyj";
+      hash = "sha256-0sf9Xbpd0BC32JI1FokLtsz2tfGIzLafNcsP1sAx0eg=";
     };
     propagatedBuildInputs = [ DigestSHA1 Error IPCShareLite ];
     doCheck = false; # randomly fails
@@ -1903,7 +1903,7 @@ let
     version = "1.54";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RO/ROBM/Cache-FastMmap-1.54.tar.gz";
-      sha256 = "0lkrsr582h714jpmh5dv4szz5f7rm466xqxbavj7l9w0p40f4him";
+      hash = "sha256-NULiALmAJ3rkVqvjbgyp+bjyvya7FVivJOFAgUrWeVI=";
     };
     buildInputs = [ TestDeep ];
     meta = {
@@ -1917,7 +1917,7 @@ let
     version = "0.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/Cache-KyotoTycoon-0.16.tar.gz";
-      sha256 = "0z4lnc3jfqx8rykm998q2jy5wkhb8p5pir80g9lqpi4lb0ilic6c";
+      hash = "sha256-zLBII1iUxItpegDleMtFC05evBQYpVSnz6hjJwezlHw=";
     };
     propagatedBuildInputs = [ Furl URI ];
     buildInputs = [ FileWhich TestRequires TestSharedFork TestTCP ];
@@ -1934,7 +1934,7 @@ let
     src = fetchurl {
       url =
       "mirror://cpan/authors/id/D/DO/DORMANDO/Cache-Memcached-1.30.tar.gz";
-      sha256 = "1aa2mjn5767b13063nnsrwcikrnbspby7j1c5q007bzaq0gcbcri";
+      hash = "sha256-MbPFHsDqrwMALizI49fVy+YZGc/a2mHACOuYU6ysQqk=";
     };
     propagatedBuildInputs = [ StringCRC32 ];
     meta = {
@@ -1948,7 +1948,7 @@ let
     version = "0.26";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RA/RAZ/Cache-Memcached-Fast-0.26.tar.gz";
-      sha256 = "16m0xafidycrlcvbv3zmbr5pzvqyqyr2qb0khpry99nc4bcld3jy";
+      hash = "sha256-Xo5G2SLMpuTzhRMsLLLHHu9/S171j702o5n5Fp3qoJo=";
     };
     meta = {
       description = "Perl client for memcached, in C language";
@@ -1961,7 +1961,7 @@ let
     version = "2.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Cache-2.11.tar.gz";
-      sha256 = "14m513f4g02daklmnvdm7vqh3w3ick65wvmvqnmnc4cqfybdilp1";
+      hash = "sha256-4dLYlneYEWarxbtuXsxkcfAB8T61bVvpVE2AR9wIpZI=";
     };
     propagatedBuildInputs = [ DBFile FileNFSLock HeapFibonacci IOString TimeDate ];
     doCheck = false; # can time out
@@ -1976,7 +1976,7 @@ let
     version = "0.27";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JE/JESSE/Cache-Simple-TimedExpiry-0.27.tar.gz";
-      sha256 = "4e78b7e4dd231b5571a48cd0ee1b63953f5e34790c9d020e1595a7c7d0abbe49";
+      hash = "sha256-Tni35N0jG1VxpIzQ7htjlT9eNHkMnQIOFZWnx9Crvkk=";
     };
     meta = {
       description = "A lightweight cache with timed expiration";
@@ -1989,7 +1989,7 @@ let
     version = "1.108";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/Cairo-1.108.tar.gz";
-      sha256 = "1nh5iya63q6j2w0cdi24x2ygpi8k8wwccnbh8cisnx8nqmywnhk0";
+      hash = "sha256-YELLfcUWdasjQ3BZxjhHE8X7vOhExMYAF9LgYZSPBdo=";
     };
     buildInputs = [ pkgs.cairo ];
     propagatedBuildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig ];
@@ -2005,7 +2005,7 @@ let
     version = "1.005";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/Cairo-GObject-1.005.tar.gz";
-      sha256 = "0l2wcz77ndmbgvxx34gdm919a3dxh9fixqr47p50n78ysx2692cd";
+      hash = "sha256-jYlkRNceHQvKPSTjHl2CvQ2VQqrtkdH7fqs2e85nXFA=";
     };
     buildInputs = [ pkgs.cairo ];
     propagatedBuildInputs = [ Cairo Glib ];
@@ -2021,7 +2021,7 @@ let
     version = "0.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FE/FELIPE/Call-Context-0.03.tar.gz";
-      sha256 = "0ee6bf46bc72755adb7a6b08e79d12e207de5f7809707b3c353b58cb2f0b5a26";
+      hash = "sha256-Dua/RrxydVrbemsI550S4gfeX3gJcHs8NTtYyy8LWiY=";
     };
     meta = {
       description = "Sanity-check calling context";
@@ -2035,7 +2035,7 @@ let
     version = "1.60";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CD/CDOLAN/CAM-PDF-1.60.tar.gz";
-      sha256 = "12dv5ssf3y7yjz9mrrqnfzx8nf4ydk1qijf5fx59495671zzqsp7";
+      hash = "sha256-52r8fzimJJJKd8XJiMNsnjiL+ncW51zTl/744bQuu4k=";
     };
     propagatedBuildInputs = [ CryptRC4 TextPDF ];
     meta = {
@@ -2049,7 +2049,7 @@ let
     version = "0.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/capitalization-0.03.tar.gz";
-      sha256 = "0g7fpckydzxsf8mjkfbyj0pv42dzym4hwbizqahnh7wlfbaicdgi";
+      hash = "sha256-8TUW1XKUH2ihwj8uDkn1vwmyL5B+uSkrcrr/5ie77jw=";
     };
     propagatedBuildInputs = [ DevelSymdump ];
     meta = {
@@ -2063,7 +2063,7 @@ let
     version = "2013";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/Canary-Stability-2013.tar.gz";
-      sha256 = "a5c91c62cf95fcb868f60eab5c832908f6905221013fea2bce3ff57046d7b6ea";
+      hash = "sha256-pckcYs+V/Lho9g6rXIMpCPaQUiEBP+orzj/1cEbXtuo=";
     };
     meta = {
       description = "Canary to check perl compatibility for schmorp's modules";
@@ -2076,7 +2076,7 @@ let
     version = "0.99";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SU/SUNNYP/Captcha-reCaptcha-0.99.tar.gz";
-      sha256 = "14j3lk6fhfzda5d3d7z6f373ng3fzxazzwpjyziysrhic1v3b4mq";
+      hash = "sha256-uJI1dmARZu3j9/Ly/1X/bjw7znDmnzZaUe076MykQ5I=";
     };
     propagatedBuildInputs = [ HTMLTiny LWP ];
     meta = {
@@ -2090,7 +2090,7 @@ let
     version = "0.48";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/Capture-Tiny-0.48.tar.gz";
-      sha256 = "069yrikrrb4vqzc3hrkkfj96apsh7q0hg8lhihq97lxshwz128vc";
+      hash = "sha256-bCMRPoe605MwjJCiBwE+UF9lknRzZjjYx5usnGfMPhk=";
     };
     meta = {
       description = "Capture STDOUT and STDERR from Perl, XS or external programs";
@@ -2104,7 +2104,7 @@ let
     version = "0.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FE/FERREIRA/Carp-Always-0.16.tar.gz";
-      sha256 = "1wb6b0qjga7kvn4p8df6k4g1pl2yzaqiln1713xidh3i454i3alq";
+      hash = "sha256-mKoRSSFxwBb7CCdYGrH6XtAbHpnGNXSJ3fOoJzFYZvE=";
     };
     buildInputs = [ TestBase ];
     meta = {
@@ -2118,7 +2118,7 @@ let
     version = "0.21";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/Carp-Assert-0.21.tar.gz";
-      sha256 = "0km5fc6r6whxh6h5yd7g1j0bi96sgk0gkda6cardicrw9qmqwkwj";
+      hash = "sha256-kk+OK048s9iyYka1+cB82qS4gAzvNF+ggR1ykw1zpU4=";
     };
     meta = {
       description = "Executable comments";
@@ -2131,7 +2131,7 @@ let
     version = "1.24";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PETDANCE/Carp-Assert-More-1.24.tar.gz";
-      sha256 = "0axjfl1hp7s4lcfxjj41zcp397dzhjqzd95innzxnz914xkc2p5s";
+      hash = "sha256-ulzBZichfdu/tbGk9rGEv500LvuBSNkdo0SfCwN1sis=";
     };
     propagatedBuildInputs = [ CarpAssert ];
     buildInputs = [ TestException ];
@@ -2146,7 +2146,7 @@ let
     version = "6.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Carp-Clan-6.08.tar.gz";
-      sha256 = "0237xx3rqa72sr4vdvws9r1m453h5f25bl85mdjmmk128kir4py7";
+      hash = "sha256-x1+S40QizFplqwXRVYQrcBRSQ06a77ZJ1uIonEfvZwg=";
     };
     meta = {
       description = "Report errors from perspective of caller of a \"clan\" of modules";
@@ -2160,7 +2160,7 @@ let
     version = "1.0.34";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Carton-v1.0.34.tar.gz";
-      sha256 = "77d42b92732bcfc18a59d341e56ce476205b1c4d380eab3a07224f5745c23e45";
+      hash = "sha256-d9QrknMrz8GKWdNB5WzkdiBbHE04Dqs6ByJPV0XCPkU=";
     };
     propagatedBuildInputs = [ MenloLegacy PathTiny TryTiny ];
     meta = {
@@ -2176,7 +2176,7 @@ let
     version = "0.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BO/BOBTFISH/Catalyst-Action-RenderView-0.16.tar.gz";
-      sha256 = "8565203950a057d43ecd64e9593715d565c2fbd8b02c91f43c53b2111acd3948";
+      hash = "sha256-hWUgOVCgV9Q+zWTpWTcV1WXC+9iwLJH0PFOyERrNOUg=";
     };
     propagatedBuildInputs = [ CatalystRuntime DataVisitor ];
     buildInputs = [ HTTPRequestAsCGI ];
@@ -2191,7 +2191,7 @@ let
     version = "1.21";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JJ/JJNAPIORK/Catalyst-Action-REST-1.21.tar.gz";
-      sha256 = "ccf81bba5200d3a0ad6901f923af173a3d4416618aea08a6938baaffdef4cb20";
+      hash = "sha256-zPgbulIA06CtaQH5I68XOj1EFmGK6gimk4uq/970yyA=";
     };
     buildInputs = [ TestRequires ];
     propagatedBuildInputs = [ CatalystRuntime URIFind ];
@@ -2206,7 +2206,7 @@ let
     version = "1.018";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Catalyst-Authentication-Credential-HTTP-1.018.tar.gz";
-      sha256 = "0ad5clfiyllnf37an99n139cxhhxf5g5rh8cxashsjv4xrnq38bg";
+      hash = "sha256-b6GBbe5kSw216gzBXF5xHcLO0gg2JavOcJZSHx1lpSk=";
     };
     buildInputs = [ ModuleBuildTiny TestException TestMockObject TestNeeds ];
     propagatedBuildInputs = [ CatalystPluginAuthentication ClassAccessor DataUUID StringEscape ];
@@ -2222,7 +2222,7 @@ let
     version = "1.006";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Catalyst-Authentication-Store-Htpasswd-1.006.tar.gz";
-      sha256 = "0kw0w2g1qmym896bgnqr1bfhvgb6xja39mv10701ipp8fmi8bzf7";
+      hash = "sha256-x/2FYnXo3hjAAWHXNJTsZr0N3QoZ27dMQtVXHJ7ggE8=";
     };
     buildInputs = [ ModuleBuildTiny TestLongString TestSimple13 TestWWWMechanize TestWWWMechanizeCatalyst ];
     propagatedBuildInputs = [ AuthenHtpasswd CatalystPluginAuthentication ];
@@ -2237,7 +2237,7 @@ let
     version = "0.1506";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IL/ILMARI/Catalyst-Authentication-Store-DBIx-Class-0.1506.tar.gz";
-      sha256 = "0i5ja7690fs9nhxcij6lw51j804sm8s06m5mvk1n8pi8jljrymvw";
+      hash = "sha256-fFefJZUoXmTD3LVUAzSqmgAkQ+HUyMg6tEk7kMxRskQ=";
     };
     propagatedBuildInputs = [ CatalystModelDBICSchema CatalystPluginAuthentication ];
     buildInputs = [ TestWarn ];
@@ -2252,7 +2252,7 @@ let
     version = "1.016";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IL/ILMARI/Catalyst-Authentication-Store-LDAP-1.016.tar.gz";
-      sha256 = "0cm399vxqqf05cjgs1j5v3sk4qc6nmws5nfhf52qvpbwc4m82mq8";
+      hash = "sha256-CFeBKmF83Y1FcdDZonm1hmEy9dhFBv0kK8Bh3HdKozI=";
     };
     propagatedBuildInputs = [ perlldap CatalystPluginAuthentication ClassAccessor ];
     buildInputs = [ TestMockObject TestException NetLDAPServerTest ];
@@ -2268,7 +2268,7 @@ let
     version = "0.001001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GR/GRODITI/Catalyst-Component-InstancePerContext-0.001001.tar.gz";
-      sha256 = "7f63f930e1e613f15955c9e6d73873675c50c0a3bc2a61a034733361ed26d271";
+      hash = "sha256-f2P5MOHmE/FZVcnm1zhzZ1xQwKO8KmGgNHMzYe0m0nE=";
     };
     propagatedBuildInputs = [ CatalystRuntime ];
     meta = {
@@ -2282,7 +2282,7 @@ let
     version = "2.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NI/NIGELM/Catalyst-Controller-HTML-FormFu-2.04.tar.gz";
-      sha256 = "f13fb9b3b3b00b35f06abc31614461c8d7346fbe07fb569c71e8d586e5eb5ddc";
+      hash = "sha256-8T+5s7OwCzXwarwxYURhyNc0b74H+1accejVhuXrXdw=";
     };
     buildInputs = [ CatalystActionRenderView CatalystPluginSession CatalystPluginSessionStateCookie CatalystPluginSessionStoreFile CatalystViewTT CodeTidyAllPluginPerlAlignMooseAttributes PodCoverageTrustPod PodTidy TemplateToolkit TestCPANMeta TestDifferences TestEOL TestKwalitee TestLongString TestMemoryCycle TestNoTabs TestPAUSEPermissions TestPod TestPodCoverage TestWWWMechanize TestWWWMechanizeCatalyst ];
     propagatedBuildInputs = [ CatalystComponentInstancePerContext HTMLFormFuMultiForm RegexpAssemble ];
@@ -2299,7 +2299,7 @@ let
     version = "1.0.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PERLER/Catalyst-Controller-POD-1.0.0.tar.gz";
-      sha256 = "ee2a4bb3ed78baa1464335408f284345b6ba0ef6576ad7bfbd7b656c788a39f9";
+      hash = "sha256-7ipLs+14uqFGQzVAjyhDRba6DvZXate/vXtlbHiKOfk=";
     };
     buildInputs = [ ModuleInstall TestLongString TestWWWMechanize TestWWWMechanizeCatalyst ];
     propagatedBuildInputs = [ CatalystPluginStaticSimple ClassAccessor FileSlurp JSONXS ListMoreUtils PodPOMViewTOC XMLSimple ];
@@ -2315,7 +2315,7 @@ let
     version = "1.42";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/Catalyst-Devel-1.42.tar.gz";
-      sha256 = "1gcaqivyxwsdq87v9za1ijjibh6llirzqsbpwjbw1f5mravg1iky";
+      hash = "sha256-fsbwtsq1uMCX5Hdp/HOk1MAVpYxB/bQPwk3z7nfEir0=";
     };
     buildInputs = [ FileShareDirInstall TestFatal ];
     propagatedBuildInputs = [ CatalystActionRenderView CatalystPluginConfigLoader CatalystPluginStaticSimple ConfigGeneral FileChangeNotify FileCopyRecursive ModuleInstall TemplateToolkit ];
@@ -2331,7 +2331,7 @@ let
     version = "5.90035";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MG/MGRIMES/Catalyst-DispatchType-Regex-5.90035.tar.gz";
-      sha256 = "06jq1lmpq88rmp9zik5gqczg234xac0hiyc3l698iif7zsgcyb80";
+      hash = "sha256-AC3Pnv7HxYiSoYP5CAFTnQzxPsOvzPjTrRkhfCsNWBo=";
     };
     propagatedBuildInputs = [ CatalystRuntime ];
     meta = {
@@ -2345,7 +2345,7 @@ let
     version = "5.9011";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/Catalyst-Manual-5.9011.tar.gz";
-      sha256 = "0g61za6844ya0lk0bpvw43sj0jd553aks3hqw21hbh03b6b377mk";
+      hash = "sha256-s54zllkDwAWD4BgOPdUopUkg9SB83wUmBcoTgoz6wTw=";
     };
     meta = {
       description = "The Catalyst developer's manual";
@@ -2358,7 +2358,7 @@ let
     version = "0.65";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GB/GBJK/Catalyst-Model-DBIC-Schema-0.65.tar.gz";
-      sha256 = "26a911ef5ef7ffc81b6ce65c3156f71fb35083c456ad27e6d82d2dc02493eeea";
+      hash = "sha256-JqkR7173/8gbbOZcMVb3H7NQg8RWrSfm2C0twCST7uo=";
     };
     buildInputs = [ DBDSQLite TestException TestRequires ];
     propagatedBuildInputs = [ CatalystComponentInstancePerContext CatalystXComponentTraits DBIxClassSchemaLoader MooseXMarkAsMethods MooseXNonMoose MooseXTypesLoadableClass TieIxHash ];
@@ -2373,7 +2373,7 @@ let
     version = "5.90128";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/Catalyst-Runtime-5.90128.tar.gz";
-      sha256 = "1yb0caagdrl7c1ldkwaz6w2qpgj8wcibzhqh6yscarjzmw6kppx6";
+      hash = "sha256-pt87Da9fZsW0NxDDvyLjSL6LBTdf8dloYIfm9pRiYPk=";
     };
     buildInputs = [ TestFatal TypeTiny ];
     propagatedBuildInputs = [ CGISimple CGIStruct ClassC3AdoptNEXT DataDump HTTPBody ModulePluggable MooseXEmulateClassAccessorFast MooseXGetopt MooseXMethodAttributes MooseXRoleWithOverloading PathClass PerlIOutf8_strict PlackMiddlewareFixMissingBodyInRedirect PlackMiddlewareMethodOverride PlackMiddlewareRemoveRedundantBody PlackMiddlewareReverseProxy PlackTestExternalServer SafeIsa StringRewritePrefix TaskWeaken TextSimpleTable TreeSimpleVisitorFactory URIws ];
@@ -2390,7 +2390,7 @@ let
     version = "1.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AR/ARODLAND/Catalyst-Plugin-AccessLog-1.10.tar.gz";
-      sha256 = "873db8e4e72a994e3e17aeb53d2b837e6d524b4b8b0f3539f262135c88cc2120";
+      hash = "sha256-hz245OcqmU4+F661PSuDfm1SS0uLDzU58mITXIjMISA=";
     };
     propagatedBuildInputs = [ CatalystRuntime DateTime ];
     meta = {
@@ -2405,7 +2405,7 @@ let
     version = "0.10023";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BO/BOBTFISH/Catalyst-Plugin-Authentication-0.10023.tar.gz";
-      sha256 = "0v6hb4r1wv3djrnqvnjcn3xx1scgqzx8nyjdg9lfc1ybvamrl0rn";
+      hash = "sha256-NgOaq9rLB+Zoek16i/rHj+nQ+7BM2o1tlm1sHjJZ0Gw=";
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ CatalystPluginSession ];
@@ -2420,7 +2420,7 @@ let
     version = "0.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RK/RKITOVER/Catalyst-Plugin-Authorization-ACL-0.16.tar.gz";
-      sha256 = "0z4328rr6l9xi45hyv6q9pwwamp0864q6skcp29jrz9f919ycdra";
+      hash = "sha256-KjfmU0gu/SyTuGxqg4lB4FbF+U3YbA8LiT1RkzMSg3w=";
     };
     propagatedBuildInputs = [ CatalystRuntime ClassThrowable ];
     buildInputs = [ CatalystPluginAuthentication CatalystPluginAuthorizationRoles CatalystPluginSession CatalystPluginSessionStateCookie TestWWWMechanizeCatalyst ];
@@ -2435,7 +2435,7 @@ let
     version = "0.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BO/BOBTFISH/Catalyst-Plugin-Authorization-Roles-0.09.tar.gz";
-      sha256 = "0l83lkwmq0lngwh8b1rv3r719pn8w1gdbyhjqm74rnd0wbjl8h7f";
+      hash = "sha256-7kBE5eKg2UxOxRL61V7gyN4UTh47h4Ugf5YCXPmkA1E=";
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ CatalystPluginAuthentication SetObject UNIVERSALisa ];
@@ -2450,7 +2450,7 @@ let
     version = "0.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BO/BOBTFISH/Catalyst-Plugin-Cache-0.12.tar.gz";
-      sha256 = "1q23aipvrl888h06ldr4mmjbykz0j4rqwipxg1jv094kki2fspr9";
+      hash = "sha256-KV/tRJyTJLBleP1GjjOR4E+/ZK0kN2oARAjRvG9UQ+A=";
     };
     buildInputs = [ ClassAccessor TestDeep TestException ];
     propagatedBuildInputs = [ CatalystRuntime ];
@@ -2465,7 +2465,7 @@ let
     version = "0.001000";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GR/GRAF/Catalyst-Plugin-Cache-HTTP-0.001000.tar.gz";
-      sha256 = "0v5iphbq4csc4r6wkvxnqlh97p8g0yhjky9qqmsdyqczn87agbba";
+      hash = "sha256-aq2nDrKfYd90xTj5KaEHD92TIMW278lNJkwzghe8sWw=";
     };
     buildInputs = [ CatalystRuntime TestLongString TestSimple13 TestWWWMechanize TestWWWMechanizeCatalyst ];
     propagatedBuildInputs = [ ClassAccessor HTTPMessage MROCompat ];
@@ -2480,7 +2480,7 @@ let
     version = "0.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DI/DIEGOK/Catalyst-Plugin-Captcha-0.04.tar.gz";
-      sha256 = "0llyj3v5nx9cx46jdbbvxf1lc9s9cxq5ml22xmx3wkb201r5qgaa";
+      hash = "sha256-Sj1ccgBiTT567ULQWnBnSSdGg+t7rSYN6Sx1W/aQnlI=";
     };
     propagatedBuildInputs = [ CatalystPluginSession GDSecurityImage ];
     meta = {
@@ -2494,7 +2494,7 @@ let
     version = "0.35";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/Catalyst-Plugin-ConfigLoader-0.35.tar.gz";
-      sha256 = "0w8r3bbxqnlykvra6sx3sh3wh8ylkj914xg5ql6nw11ddy56jaly";
+      hash = "sha256-nippim8tBG4NxeV1EpKc1CPIB9Sja6Pynp5a3NcaGXE=";
     };
     propagatedBuildInputs = [ CatalystRuntime ConfigAny DataVisitor ];
     meta = {
@@ -2508,7 +2508,7 @@ let
     version = "0.094";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DH/DHOSS/Catalyst-Plugin-FormValidator-0.094.tar.gz";
-      sha256 = "5834f11bf5c9f4b5d336d65c7ce6639b76ce7bfe7a2875eb048d7ea1c82ce05a";
+      hash = "sha256-WDTxG/XJ9LXTNtZcfOZjm3bOe/56KHXrBI1+ocgs4Fo=";
     };
     propagatedBuildInputs = [ CatalystRuntime DataFormValidator ];
     meta = {
@@ -2522,7 +2522,7 @@ let
     version = "0.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DH/DHOSS/Catalyst-Plugin-FormValidator-Simple-0.15.tar.gz";
-      sha256 = "486c6a0e8f410fd017279f4804ab9e35ba46321d33a0a9721fe1e08a391de7a0";
+      hash = "sha256-SGxqDo9BD9AXJ59IBKueNbpGMh0zoKlyH+Hgijkd56A=";
     };
     propagatedBuildInputs = [ CatalystPluginFormValidator FormValidatorSimple ];
     meta = {
@@ -2536,7 +2536,7 @@ let
     version = "0.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEPE/Catalyst-Plugin-Log-Handler-0.08.tar.gz";
-      sha256 = "0db3c3a57b4ee3d789ba5129890e2858913fef00d8185bdc9c5d7fde31e043ef";
+      hash = "sha256-DbPDpXtO49eJulEpiQ4oWJE/7wDYGFvcnF1/3jHgQ+8=";
     };
     propagatedBuildInputs = [ ClassAccessor LogHandler MROCompat ];
     meta = {
@@ -2550,7 +2550,7 @@ let
     version = "0.006";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SY/SYSPETE/Catalyst-Plugin-PrometheusTiny-0.006.tar.gz";
-      sha256 = "1hd2nv21c2mq3yvhsys4a276bdwr5igs4b73m99v7ymzpabvjf9b";
+      hash = "sha256-Kzm5l7q/+rNTquMsol8smbdljlBEew23H7gKFsS2osE=";
     };
     buildInputs = [ HTTPMessage Plack SubOverride TestDeep ];
     propagatedBuildInputs = [ CatalystRuntime Moose PrometheusTiny PrometheusTinyShared ];
@@ -2566,7 +2566,7 @@ let
     version = "0.41";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JJ/JJNAPIORK/Catalyst-Plugin-Session-0.41.tar.gz";
-      sha256 = "0a451997zc2vjx7rvndgx1ldbrpic8sfbddyvncynh0zr8bhlqc5";
+      hash = "sha256-hWEKF8ofQOuZ3b615TRi8ebVaOiv2Z1Pl1uwf1IKhSg=";
     };
     buildInputs = [ TestDeep TestException TestWWWMechanizePSGI ];
     propagatedBuildInputs = [ CatalystRuntime ObjectSignature ];
@@ -2581,7 +2581,7 @@ let
     version = "0.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BO/BOBTFISH/Catalyst-Plugin-Session-DynamicExpiry-0.04.tar.gz";
-      sha256 = "7707c56734cdb1512f733dc400fadf6f4c53cb217b58207857824dad6780a079";
+      hash = "sha256-dwfFZzTNsVEvcz3EAPrfb0xTyyF7WCB4V4JNrWeAoHk=";
     };
     propagatedBuildInputs = [ CatalystPluginSession ];
     meta = {
@@ -2595,7 +2595,7 @@ let
     version = "0.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/Catalyst-Plugin-Session-State-Cookie-0.18.tar.gz";
-      sha256 = "1skvw3i9wv02kz1bz937zh7wfxvhf54i8zppln3ly6bcp6rcgcg9";
+      hash = "sha256-6bHHsrlsGU+Hpfd+FElxcHfHD/xnpL/CnwJsnuLge+o=";
     };
     propagatedBuildInputs = [ CatalystPluginSession ];
     meta = {
@@ -2609,7 +2609,7 @@ let
     version = "0.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BO/BOBTFISH/Catalyst-Plugin-Session-Store-FastMmap-0.16.tar.gz";
-      sha256 = "0x3j6zv3wr41jlwr6yb2jpmcx019ibyn11y8653ffnwhpzbpzsxs";
+      hash = "sha256-uut/17+QW+dGMciHYP2KKYDO6pVieZM5lYFkPvY3cnQ=";
     };
     propagatedBuildInputs = [ CacheFastMmap CatalystPluginSession ];
     meta = {
@@ -2623,7 +2623,7 @@ let
     version = "0.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FL/FLORA/Catalyst-Plugin-Session-Store-File-0.18.tar.gz";
-      sha256 = "54738e3ce76f8be8b66947092d28973c73d79d1ee19b5d92b057552f8ff09b4f";
+      hash = "sha256-VHOOPOdvi+i2aUcJLSiXPHPXnR7hm12SsFdVL4/wm08=";
     };
     propagatedBuildInputs = [ CacheCache CatalystPluginSession ClassDataInheritable ];
     meta = {
@@ -2637,7 +2637,7 @@ let
     version = "0.041";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RK/RKITOVER/Catalyst-Plugin-SmartURI-0.041.tar.gz";
-      sha256 = "0msz3w2vfdb5w4ixi5llq66xlhm0181gjz9xj8yj0lalk232326b";
+      hash = "sha256-y4ghhphUUSA9kj19+QIKoELajcGUltgj4WU1twUfX1c=";
     };
     propagatedBuildInputs = [ CatalystRuntime ClassC3Componentised ];
     buildInputs = [ CatalystActionREST TestWarnings TimeOut URISmartURI ];
@@ -2652,7 +2652,7 @@ let
     version = "0.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BO/BOBTFISH/Catalyst-Plugin-StackTrace-0.12.tar.gz";
-      sha256 = "1b2ksz74cpigxqzf63rddar3vfmnbpwpdcbs11v0ml89pb8ar79j";
+      hash = "sha256-Mp2s0LoJ0Qp2CHqxdvldtro9smotD+M+7i9eRs7XU6w=";
     };
     propagatedBuildInputs = [ CatalystRuntime ];
     meta = {
@@ -2666,7 +2666,7 @@ let
     version = "0.36";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IL/ILMARI/Catalyst-Plugin-Static-Simple-0.36.tar.gz";
-      sha256 = "0m4l627p2fvzr4i6sgdxhdvsx4wpa6qmaibsbxlg5x5yjs7k7drn";
+      hash = "sha256-Nrczj5a+9PJoX3pFVbFRl5Oud4O9PW0iyX87cY8wlFQ=";
     };
     patches = [ ../development/perl-modules/catalyst-plugin-static-simple-etag.patch ];
     propagatedBuildInputs = [ CatalystRuntime MIMETypes MooseXTypes ];
@@ -2681,7 +2681,7 @@ let
     version = "1.002000";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HK/HKCLARK/Catalyst-Plugin-StatusMessage-1.002000.tar.gz";
-      sha256 = "649c894ab16f9f48ada8f9cc599a7ecbb8891ab3761ff6fd510520c6de407c1f";
+      hash = "sha256-ZJyJSrFvn0itqPnMWZp+y7iJGrN2H/b9UQUgxt5AfB8=";
     };
     propagatedBuildInputs = [ CatalystRuntime strictures ];
     meta = {
@@ -2695,7 +2695,7 @@ let
     version = "1.7";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MC/MCB/Catalyst-View-CSV-1.7.tar.gz";
-      sha256 = "e41326b6099891f244b432921ed10096ac619f32b8c4f8b41633313bd54662db";
+      hash = "sha256-5BMmtgmYkfJEtDKSHtEAlqxhnzK4xPi0FjMxO9VGYts=";
     };
     buildInputs = [ CatalystActionRenderView CatalystModelDBICSchema CatalystPluginConfigLoader CatalystXComponentTraits ConfigGeneral DBDSQLite DBIxClass TestException ];
     propagatedBuildInputs = [ CatalystRuntime TextCSV ];
@@ -2710,7 +2710,7 @@ let
     version = "0.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GA/GAUDEON/Catalyst-View-Download-0.09.tar.gz";
-      sha256 = "1qgq6y9iwfbhbkbgpw9czang2ami6z8jk1zlagrzdisy4igqzkvs";
+      hash = "sha256-es+PXyRex/bzU/SHKdE3sSrxrPos8fvWXHA5HpM3+OE=";
     };
     buildInputs = [ CatalystRuntime TestLongString TestSimple13 TestWWWMechanize TestWWWMechanizeCatalyst TextCSV XMLSimple ];
     meta = {
@@ -2724,7 +2724,7 @@ let
     version = "0.37";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/Catalyst-View-JSON-0.37.tar.gz";
-      sha256 = "1v4xkzazs743sc7cd1kxkbi99cf00a4dadyyancckcbpi9p3znn5";
+      hash = "sha256-xdo/bop3scmYVd431YgCwLGU4pp9hsYO04Mc/dWfnew=";
     };
     propagatedBuildInputs = [ CatalystRuntime ];
     meta = {
@@ -2738,7 +2738,7 @@ let
     version = "0.45";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/Catalyst-View-TT-0.45.tar.gz";
-      sha256 = "0jzgpkgq5pwq82zlb0nykdyk40dfpsyn9ilz91d0wpixgi9i5pr8";
+      hash = "sha256-KN8SU3w9Xg5aSJ/GZL2+rgEyfZvegkW/QJjfgt+870s=";
     };
     propagatedBuildInputs = [ CatalystRuntime ClassAccessor TemplateTimer ];
     meta = {
@@ -2752,7 +2752,7 @@ let
     version = "0.19";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RK/RKITOVER/CatalystX-Component-Traits-0.19.tar.gz";
-      sha256 = "0iq4ci8m6g2c4g01fvdl568y7pjz28f3widk986v3pyhr7ll8j88";
+      hash = "sha256-CElE6cnQ37ENSrNFPhwSX97jkSm0bRfAI0w8U1FkBEc=";
     };
     propagatedBuildInputs = [ CatalystRuntime MooseXTraitsPluggable ];
     meta = {
@@ -2766,7 +2766,7 @@ let
     version = "0.005";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HD/HDP/CatalystX-RoleApplicator-0.005.tar.gz";
-      sha256 = "0vwaapxn8g5hs2xp63c4dwv9jmapmji4272fakssvgc9frklg3p2";
+      hash = "sha256-4o5HZ3aJva31VE4cQaKsV1WZNm+EDXO70LA8ZPtVim8=";
     };
     propagatedBuildInputs = [ CatalystRuntime MooseXRelatedClassRoles ];
     meta = {
@@ -2780,7 +2780,7 @@ let
     version = "0.000005";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BO/BOBTFISH/Catalyst-TraitFor-Request-ProxyBase-0.000005.tar.gz";
-      sha256 = "a7bf0faa7e12ca5df625d9f5fc710f11bfd16ba5385837e48d42b3d286c9710a";
+      hash = "sha256-p78Pqn4Syl32Jdn1/HEPEb/Ra6U4WDfkjUKz0obJcQo=";
     };
     buildInputs = [ CatalystRuntime CatalystXRoleApplicator HTTPMessage ];
     propagatedBuildInputs = [ Moose URI namespaceautoclean ];
@@ -2795,7 +2795,7 @@ let
     version = "0.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AB/ABRAXXA/CatalystX-Script-Server-Starman-0.03.tar.gz";
-      sha256 = "08jvibq4v8xjj0c3cr93h0w8w0c88ajwjn37xjy7ygxl9krlffp6";
+      hash = "sha256-5jpH80y0P3+87GdYyaVCiAGOOIAjZTYYkLKjTfCKWyI=";
     };
     patches = [
       # See Nixpkgs issues #16074 and #17624
@@ -2814,7 +2814,7 @@ let
     version = "1.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TODDR/CDB_File-1.05.tar.gz";
-      sha256 = "0jzbm59b9q51k00djr1b8c4vjvjkwb577r946vi5s09rasfq8r45";
+      hash = "sha256-hWSEnVY5AV3iNiTlc8riU265CUMrZNkAmKHgtFKp60s=";
     };
     buildInputs = [ TestFatal TestWarnings ];
     propagatedBuildInputs = [ BCOW ];
@@ -2830,7 +2830,7 @@ let
     version = "1.2013";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NI/NICS/Catmandu-1.2013.tar.gz";
-      sha256 = "0sh4qqjh53rhqcpbvq3pyg0k1ybs8qxivhc1an6w5hjar2bihwiq";
+      hash = "sha256-OHIYl8hKwsKNVYHBHTtGevkwwfN34L0uwzCPAiXGBGo=";
     };
     propagatedBuildInputs = [ AnyURIEscape AppCmd CGIExpand ConfigOnion CpanelJSONXS DataCompare DataUtil IOHandleUtil LWP ListMoreUtils LogAny MIMETypes ModuleInfo MooXAliases ParserMGC PathIteratorRule PathTiny StringCamelCase TextCSV TextHogan Throwable TryTinyByClass URITemplate UUIDTiny YAMLLibYAML namespaceclean ];
     buildInputs = [ LogAnyAdapterLog4perl LogLog4perl TestDeep TestException TestLWPUserAgent TestPod ];
@@ -2847,7 +2847,7 @@ let
     version = "2.28";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FO/FONKIE/CDDB_get-2.28.tar.gz";
-      sha256 = "1jfrwvfasylcafbvb0jjm94ad4v6k99a7rf5i4qwzhg4m0gvmk5x";
+      hash = "sha256-vcy6H6jkwc8xicXlo1KaZpOmSKpSgrWXU4x6rdzm2ck=";
     };
     meta = {
       description = "Get the CDDB info for an audio cd";
@@ -2862,7 +2862,7 @@ let
     version = "1.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TM/TMTM/CDDB-File-1.05.tar.gz";
-      sha256 = "1jf7xhd4w9iwabhz2wajh6fid3nyvkid9q5gdhyff52w86f45rpb";
+      hash = "sha256-6+ZCnEFcFOc8bK/g1OLc3o4WnYFScfHhUjwmThrsx8k=";
     };
     meta = {
       description = "Parse a CDDB/freedb data file";
@@ -2876,7 +2876,7 @@ let
     version = "4.51";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEEJO/CGI-4.51.tar.gz";
-      sha256 = "02k0p8zwbn0fz9r39rg8jvbmky8fwdg6kznklzk557rg07kiblhb";
+      hash = "sha256-C9IV5wEvn1Lmp9P+aV7jDvlZ15bo5TRy+g7YxT+6YAo=";
     };
     buildInputs = [ TestDeep TestNoWarnings TestWarn ];
     propagatedBuildInputs = [ HTMLParser ];
@@ -2892,7 +2892,7 @@ let
     version = "0.25";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RK/RKITOVER/CGI-Compile-0.25.tar.gz";
-      sha256 = "198f94r9xjxgn0hvwy5f93xfa8jlw7d9v3v8z7qbh7mxvzp78jzl";
+      hash = "sha256-9Et07t+9Hrjw+WiPndrhVCLl+kiueL4hsK/LnjJJDqU=";
     };
     propagatedBuildInputs = [ Filepushd SubName ];
     buildInputs = [ CGI CaptureTiny ModuleBuildTiny SubIdentify Switch TestNoWarnings TestRequires TryTiny ];
@@ -2908,7 +2908,7 @@ let
     version = "0.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AG/AGENT/CGI-Cookie-XS-0.18.tar.gz";
-      sha256 = "1iixvnm0l1q24vdlnayb4vd8fns2bdlhm6zb7fpi884ppm5cp6a6";
+      hash = "sha256-RpnLSr2XIBSvO+ubCmlbQluH2ibLK0vbJgIHCqrdPcY=";
     };
     meta = {
       description = "HTTP Cookie parser in pure C";
@@ -2921,7 +2921,7 @@ let
     version = "0.23";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/CGI-Emulate-PSGI-0.23.tar.gz";
-      sha256 = "dd5b6c353f08fba100dae09904284f7f73f8328d31f6a67b2c136fad728d158b";
+      hash = "sha256-3VtsNT8I+6EA2uCZBChPf3P4Mo0x9qZ7LBNvrXKNFYs=";
     };
     buildInputs = [ TestRequires ];
     propagatedBuildInputs = [ CGI ];
@@ -2937,7 +2937,7 @@ let
     version = "2.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BO/BOWMANBS/CGI-Expand-2.05.tar.gz";
-      sha256 = "1ad48nd067j5irjampxpw3zvzpg8wpnpan6szkdc5h64wccd30kf";
+      hash = "sha256-boLRGOPEwMLa/NpYde3l6N2//+C336pkjkUeA5pFpKk=";
     };
     buildInputs = [ TestException ];
     meta = {
@@ -2951,7 +2951,7 @@ let
     version = "2.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEEJO/CGI-Fast-2.15.tar.gz";
-      sha256 = "e5342df3dc593edfb724c7afe850b1a0ee753f4d733f5193e037b04633dfeece";
+      hash = "sha256-5TQt89xZPt+3JMev6FCxoO51P01zP1GT4DewRjPf7s4=";
     };
     propagatedBuildInputs = [ CGI FCGI ];
     doCheck = false;
@@ -2967,7 +2967,7 @@ let
     version = "3.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BIGPRESH/CGI-FormBuilder-3.10.tar.gz";
-      sha256 = "163ixq9kninqq094z2rnkg9pv3bcmvjphlww4vksfrzhq3h9pjdf";
+      hash = "sha256-rsmb4MDwZ6fnJpxTeOWubI1905s2i08SwNhGOxPucZg=";
     };
 
     propagatedBuildInputs = [ CGI ];
@@ -2982,7 +2982,7 @@ let
     version = "1.30";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SN/SNOWHARE/CGI-Minimal-1.30.tar.gz";
-      sha256 = "b94d50821b02611da6ee5423193145078c4dbb282f2b162a4b0d58094997bc47";
+      hash = "sha256-uU1QghsCYR2m7lQjGTFFB4xNuygvKxYqSw1YCUmXvEc=";
     };
     meta = {
       description = "A lightweight CGI form processing package";
@@ -2996,7 +2996,7 @@ let
     version = "0.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/CGI-PSGI-0.15.tar.gz";
-      sha256 = "c50dcb10bf8486a9843baed032ad89d879ff2f41c993342dead62f947a598d91";
+      hash = "sha256-xQ3LEL+EhqmEO67QMq2J2Hn/L0HJkzQt6tYvlHpZjZE=";
     };
     propagatedBuildInputs = [ CGI ];
     meta = {
@@ -3010,7 +3010,7 @@ let
     version = "4.48";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MARKSTOS/CGI-Session-4.48.tar.gz";
-      sha256 = "1xsl2pz1jrh127pq0b01yffnj4mnp9nvkp88h5mndrscq9hn8xa6";
+      hash = "sha256-RnVkYcJM52ZrgQjduW26thJpnfMBLIDvEQFmGf4VVPc=";
     };
     propagatedBuildInputs = [ CGI ];
     meta = {
@@ -3024,7 +3024,7 @@ let
     version = "1.25";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MANWAR/CGI-Simple-1.25.tar.gz";
-      sha256 = "0zpl7sa8jvv3zba2vcxf3qsrjk7kk2vcznfdpmxydw06x8vczrp5";
+      hash = "sha256-5ebPNuoG8OZ7vc3Zz7aY80yZNR6usy3U+mNviZQ+9H4=";
     };
     propagatedBuildInputs = [ IOStringy ];
     buildInputs = [ TestException TestNoWarnings ];
@@ -3039,7 +3039,7 @@ let
     version = "1.21";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FU/FULLERMD/CGI-Struct-1.21.tar.gz";
-      sha256 = "d13d8da7fdcd6d906054e4760fc28a718aec91bd3cf067a58927fb7cb1c09d6c";
+      hash = "sha256-0T2Np/3NbZBgVOR2D8KKcYrskb088GeliSf7fLHAnWw=";
     };
     buildInputs = [ TestDeep ];
     meta = {
@@ -3053,7 +3053,7 @@ let
     version = "0.60";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JS/JSWARTZ/CHI-0.60.tar.gz";
-      sha256 = "c7f1a2b3570a8fede484e933f89ba1729e0abd05935791d146c522dd120ee851";
+      hash = "sha256-x/Gis1cKj+3khOkz+Juhcp4KvQWTV5HRRsUi3RIO6FE=";
     };
     preConfigure = ''
       # fix error 'Unescaped left brace in regex is illegal here in regex'
@@ -3072,7 +3072,7 @@ let
     version = "2.4.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CH/CHARTGRP/Chart-2.4.10.tar.gz";
-      sha256 = "84bd99a1a0ce72477b15e35881e6120398bb3f553aeeb5e8d72b088520e4f6bf";
+      hash = "sha256-hL2ZoaDOckd7FeNYgeYSA5i7P1U67rXo1ysIhSDk9r8=";
     };
     propagatedBuildInputs = [ GD ];
     meta = {
@@ -3086,7 +3086,7 @@ let
     version = "0.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MR/MRPALMER/Cisco-IPPhone-0.05.tar.gz";
-      sha256 = "b03ca263f8f41a6ec545c5393213a3146d36bd45335ade99af51dd42ab6ee16d";
+      hash = "sha256-sDyiY/j0Gm7FRcU5MhOjFG02vUUzWt6Zr1HdQqtu4W0=";
     };
     meta = {
       description = "Package for creating Cisco IPPhone XML objects";
@@ -3099,7 +3099,7 @@ let
     version = "1.00";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSCHWERN/CLASS-1.00.tar.gz";
-      sha256 = "c5185620815701b3fec21314ccd8c5693e6bfd519431527da3370a8164220671";
+      hash = "sha256-xRhWIIFXAbP+whMUzNjFaT5r/VGUMVJ9ozcKgWQiBnE=";
     };
     meta = {
       description = "Alias for __PACKAGE__";
@@ -3114,7 +3114,7 @@ let
     version = "0.51";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KA/KASEI/Class-Accessor-0.51.tar.gz";
-      sha256 = "07215zzr4ydf49832vn54i3gf2q5b97lydkv8j56wb2svvjs64mz";
+      hash = "sha256-vxKj5d5aLG6KRHs2T09aBQv3RiTFbjFQIq55kv8vQRw=";
     };
     meta = {
       description = "Automated accessor generation";
@@ -3127,7 +3127,7 @@ let
     version = "0.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RC/RCLAMP/Class-Accessor-Chained-0.01.tar.gz";
-      sha256 = "1lilrjy1s0q5hyr0888kf0ifxjyl2iyk4vxil4jsv0sgh39lkgx5";
+      hash = "sha256-pb9J04BPg60lobFvMn0U1MvuInATIQSyhwUDHbzMNNI=";
     };
     propagatedBuildInputs = [ ClassAccessor ];
     meta = {
@@ -3141,7 +3141,7 @@ let
     version = "0.10014";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/Class-Accessor-Grouped-0.10014.tar.gz";
-      sha256 = "35d5b03efc09f67f3a3155c9624126c3e162c8e3ca98ff826db358533a44c4bb";
+      hash = "sha256-NdWwPvwJ9n86MVXJYkEmw+FiyOPKmP+CbbNYUzpExLs=";
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ ModuleRuntime ];
@@ -3157,7 +3157,7 @@ let
     version = "0.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KA/KAZUHO/Class-Accessor-Lite-0.08.tar.gz";
-      sha256 = "75b3b8ec8efe687677b63f0a10eef966e01f60735c56656ce75cbb44caba335a";
+      hash = "sha256-dbO47I7+aHZ3tj8KEO75ZuAfYHNcVmVs51y7RMq6M1o=";
     };
     meta = {
       description = "A minimalistic variant of Class::Accessor";
@@ -3170,7 +3170,7 @@ let
     version = "2.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AD/ADAMK/Class-Autouse-2.01.tar.gz";
-      sha256 = "c05b3236c05719d819c20db0fdeb6d0954747e43d7a738294eed7fbcf36ecf1b";
+      hash = "sha256-wFsyNsBXGdgZwg2w/ettCVR0fkPXpzgpTu1/vPNuzxs=";
     };
     meta = {
       description = "Run-time load a class the first time you call a method in it";
@@ -3183,7 +3183,7 @@ let
     version = "0.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Y/YA/YANICK/Class-Base-0.09.tar.gz";
-      sha256 = "117dmsrb30a09zlrv919fb5h5rg8r4asa24i99k04n2habgbv9g1";
+      hash = "sha256-4aW93lJQWAJmSpEIpRXJ6OUCy3IppJ3pT0CBsbKu7YQ=";
     };
     propagatedBuildInputs = [ Clone ];
     meta = {
@@ -3197,7 +3197,7 @@ let
     version = "0.35";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/Class-C3-0.35.tar.gz";
-      sha256 = "0gp3czp6y0jxx4448kz37f7gdxq4vw514bvc0l98rk4glvqkq1c4";
+      hash = "sha256-hAU88aaPzIwSBWwvEgrfBPf2jjvjT0QI6V0Cb+5n4z4=";
     };
     propagatedBuildInputs = [ AlgorithmC3 ];
     meta = {
@@ -3212,7 +3212,7 @@ let
     version = "0.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Class-C3-Adopt-NEXT-0.14.tar.gz";
-      sha256 = "1xsbydmiskpa1qbmnf6n39cb83nlb432xgkad9kfhxnvm8jn4rw5";
+      hash = "sha256-hWdiJarbduhmamq+LgZZ1A60WBrWOFsXDupOHWvzS/c=";
     };
     buildInputs = [ ModuleBuildTiny TestException ];
     propagatedBuildInputs = [ MROCompat ];
@@ -3228,7 +3228,7 @@ let
     version = "1.001002";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/Class-C3-Componentised-1.001002.tar.gz";
-      sha256 = "14wn1g45z3b5apqq7dcai5drk01hfyqydsd2m6hsxzhyvi3b2l9h";
+      hash = "sha256-MFGxRtwe/q6hqaLp5rF3MICZW4mKtYPxVWWNX8gLlpM=";
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ ClassC3 ClassInspector MROCompat ];
@@ -3243,7 +3243,7 @@ let
     version = "3.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSCHLUE/Class-Classgen-classgen-3.03.tar.gz";
-      sha256 = "9b65d41b991538992e816b32cc4fa9b4a4a0bb3e9c10e7eebeff82658dbbc8f6";
+      hash = "sha256-m2XUG5kVOJkugWsyzE+ptKSguz6cEOfuvv+CZY27yPY=";
     };
     meta = {
       description = "Simplifies creation, manipulation and usage of complex objects.";
@@ -3257,7 +3257,7 @@ let
     version = "0.13";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KW/KWILLIAMS/Class-Container-0.13.tar.gz";
-      sha256 = "f5d495b1dfb826d5c0c45d03b4d0e6b6047cbb06cdbf6be15fd4dc902aeeb70b";
+      hash = "sha256-9dSVsd+4JtXAxF0DtNDmtgR8uwbNv2vhX9TckCrutws=";
     };
     propagatedBuildInputs = [ ParamsValidate ];
     meta = {
@@ -3271,7 +3271,7 @@ let
     version = "0.04004";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CL/CLACO/Class-Data-Accessor-0.04004.tar.gz";
-      sha256 = "0578m3rplk41059rkkjy1009xrmrdivjnv8yxadwwdk1vzidc8n1";
+      hash = "sha256-wSLW4t9hNs6b6h5tK3dsueaeAAhezplTAYFMevOo6BQ=";
     };
     meta = {
       description = "Inheritable, overridable class and instance data accessor creation";
@@ -3284,7 +3284,7 @@ let
     version = "0.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TM/TMTM/Class-Data-Inheritable-0.08.tar.gz";
-      sha256 = "0jpi38wy5xh6p1mg2cbyjjw76vgbccqp46685r27w8hmxb7gwrwr";
+      hash = "sha256-mWf+zuoVIn5ELsgYcjFj621zuJR+MfFquAb24jka8Uo=";
     };
     meta = {
       description = "Inheritable, overridable class data";
@@ -3297,7 +3297,7 @@ let
     version = "2.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CO/CORLISS/Class-EHierarchy/Class-EHierarchy-2.01.tar.gz";
-      sha256 = "637ab76beb3832a9b071b999a1b15bf05d297df6a662ccb1a8004f2987308382";
+      hash = "sha256-Y3q3a+s4MqmwcbmZobFb8F0pffamYsyxqABPKYcwg4I=";
     };
     meta = {
       description = "Base class for hierarchally ordered objects";
@@ -3311,7 +3311,7 @@ let
     version = "1.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PH/PHRED/Class-Factory-1.06.tar.gz";
-      sha256 = "c37a2d269eb935f36a23e113480ae0946fa7c12a12781396a1226c8e435f30f5";
+      hash = "sha256-w3otJp65NfNqI+ETSArglG+nwSoSeBOWoSJsjkNfMPU=";
     };
     meta = {
       description = "Base class for dynamic factory classes";
@@ -3324,7 +3324,7 @@ let
     version = "1.7";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/Class-Factory-Util-1.7.tar.gz";
-      sha256 = "09ifd6v0c94vr20n9yr1dxgcp7hyscqq851szdip7y24bd26nlbc";
+      hash = "sha256-bFFrRFtE+HNj+zoUhDHTHp7LXm8h+2SByJskBrZpLiY=";
     };
     meta = {
       description = "Provide utility methods for factory classes";
@@ -3337,7 +3337,7 @@ let
     version = "1.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GO/GOMOR/Class-Gomor-1.03.tar.gz";
-      sha256 = "02r0zylv8c5cb34j0w2kmf8hfw6g6bymfif7z65skzz9kkm3rns7";
+      hash = "sha256-R9s86pzp/6mL+cdFV/0yz3AHkatTcCDJWKwwtKn/IAs=";
     };
     meta = {
       description = "Another class and object builder";
@@ -3350,7 +3350,7 @@ let
     version = "1.36";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PL/PLICEASE/Class-Inspector-1.36.tar.gz";
-      sha256 = "0kk900bp8iq7bw5jyllfb31gvf93mmp24n4x90j7qs3jlhimsafc";
+      hash = "sha256-zCldI6RyaHwkSJ1YIm6tI7n9wliOUi8LXwdHdBcAaU4=";
     };
     meta = {
       description = "Get information about a class and its structure";
@@ -3364,7 +3364,7 @@ let
     version = "0.36";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SM/SMUELLER/Class-ISA-0.36.tar.gz";
-      sha256 = "0r5r574i6wgxm8zsq4bc34d0dzprrh6h6mpp1nhlks1qk97g65l8";
+      hash = "sha256-iBbzTpo46EmhDfdWAw3M+f4GGhlsEaw/qv1xE8kpuWQ=";
     };
     meta = {
       description = "Report the search path for a class's ISA tree";
@@ -3377,7 +3377,7 @@ let
     version = "0.3";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TE/TEXMEC/Class-Iterator-0.3.tar.gz";
-      sha256 = "db1ba87ca9107f161fe9c1e9e7e267c0026defc26fe3e73bcad8ab8ffc18ef9d";
+      hash = "sha256-2xuofKkQfxYf6cHp5+JnwAJt78Jv4+c7ytirj/wY750=";
     };
     meta = {
       description = "Iterator class";
@@ -3390,7 +3390,7 @@ let
     version = "2.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/V/VI/VIPUL/Class-Loader-2.03.tar.gz";
-      sha256 = "4fef2076ead60423454ff1f4e82859a9a9b9942b5fb8eee0c98b9c63c9f2b8e7";
+      hash = "sha256-T+8gdurWBCNFT/H06ChZqam5lCtfuO7gyYucY8nyuOc=";
     };
     meta = {
       description = "Load modules and create objects on demand";
@@ -3403,7 +3403,7 @@ let
     version = "1.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EV/EVO/Class-MakeMethods-1.01.tar.gz";
-      sha256 = "0ricb0mn0i06ngfhq5y035yx8i7ahlx83yyqwixqmv6hg4p79b5c";
+      hash = "sha256-rKx0LnnQ7Ip75Nj7gTqF6kTUfRnAFwzdswZEYCtYLGY=";
     };
     preConfigure = ''
       # fix error 'Unescaped left brace in regex is illegal here in regex'
@@ -3420,7 +3420,7 @@ let
     version = "2.24";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SC/SCHWIGON/class-methodmaker/Class-MethodMaker-2.24.tar.gz";
-      sha256 = "0a03i4k3a33qqwhykhz5k437ld5mag2vq52vvsy03gbynb65ivsy";
+      hash = "sha256-Xu9YzLJ+vQG83lsUvMVTtTR6Bpnlw+khx3gMNSaJAyg=";
     };
     # Remove unnecessary, non-autoconf, configure script.
     prePatch = "rm configure";
@@ -3435,7 +3435,7 @@ let
     version = "2.13";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Class-Method-Modifiers-2.13.tar.gz";
-      sha256 = "0qzx83mgd71hlc2m1kpw15dqsjzjq7b2cj3sdgg45a0q23vhfn5b";
+      hash = "sha256-q1gH9xAYqELea3pIJtbB8kuNWwn8zlAFozCc9upA/WM=";
     };
     buildInputs = [ TestFatal TestNeeds ];
     meta = {
@@ -3450,7 +3450,7 @@ let
     version = "0.006";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Class-Mix-0.006.tar.gz";
-      sha256 = "8747f643893914f8c44979f1716d0c1ec8a41394796555447944e860f1ff7c0b";
+      hash = "sha256-h0f2Q4k5FPjESXnxcW0MHsikE5R5ZVVEeUToYPH/fAs=";
     };
     propagatedBuildInputs = [ ParamsClassify ];
     meta = {
@@ -3464,7 +3464,7 @@ let
     version = "0.55";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JE/JESSE/Class-ReturnValue-0.55.tar.gz";
-      sha256 = "ed3836885d78f734ccd7a98550ec422a616df7c31310c1b7b1f6459f5fb0e4bd";
+      hash = "sha256-7Tg2iF149zTM16mFUOxCKmFt98MTEMG3sfZFn1+w5L0=";
     };
     propagatedBuildInputs = [ DevelStackTrace ];
     meta = {
@@ -3479,7 +3479,7 @@ let
     version = "1.6";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHAY/Class-Singleton-1.6.tar.gz";
-      sha256 = "1942j9g0b4c88nvs3jghh3y31mlhbpwrx35xdcb2jaaiv7q17fi7";
+      hash = "sha256-J7oT8NlRKSkWa72MnvldkNYw/IDwyaG3RYiRBV6SgqQ=";
     };
     meta = {
       description = "Implementation of a 'Singleton' class";
@@ -3492,7 +3492,7 @@ let
     version = "0.13";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KM/KMX/Class-Throwable-0.13.tar.gz";
-      sha256 = "1kmwzdxvp9ca2z44vl0ygkfygdbxqkilzjd8vqhc4vdmvbh136nw";
+      hash = "sha256-3JoR4Nq1bcIg3qjJT+PEfbXn3Xwe0E3IF4qlu3v7vM4=";
     };
     meta = {
       description = "A minimal lightweight exception class";
@@ -3505,7 +3505,7 @@ let
     version = "1.008";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/Class-Tiny-1.008.tar.gz";
-      sha256 = "05anh4hn8va46xwbdx7rqxnhb8i1lingb614lywzr89gj5iql1gf";
+      hash = "sha256-7gWKY5Evofy5pySY9WykIaIFbcf59LZ4N0RtZCGBVhU=";
     };
     meta = {
       description = "Minimalist class construction";
@@ -3519,7 +3519,7 @@ let
     version = "0.25";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Class-Load-0.25.tar.gz";
-      sha256 = "2a48fa779b5297e56156380e8b32637c6c58decb4f4a7f3c7350523e11275f8f";
+      hash = "sha256-Kkj6d5tSl+VhVjgOizJjfGxY3stPSn88c1BSPhEnX48=";
     };
     buildInputs = [ TestFatal TestNeeds ];
     propagatedBuildInputs = [ DataOptList PackageStash ];
@@ -3535,7 +3535,7 @@ let
     version = "0.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Class-Load-XS-0.10.tar.gz";
-      sha256 = "5bc22cf536ebfd2564c5bdaf42f0d8a4cee3d1930fc8b44b7d4a42038622add1";
+      hash = "sha256-W8Is9Tbr/SVkxb2vQvDYpM7j0ZMPyLRLfUpCA4YirdE=";
     };
     buildInputs = [ TestFatal TestNeeds ];
     propagatedBuildInputs = [ ClassLoad ];
@@ -3551,7 +3551,7 @@ let
     version = "1.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CW/CWINTERS/Class-Observable-1.04.tar.gz";
-      sha256 = "3ef18733a0f03c113f3bcf8ac50476e09ca1fe6234f4aaacaa24dfca95168094";
+      hash = "sha256-PvGHM6DwPBE/O8+KxQR24Jyh/mI09KqsqiTfypUWgJQ=";
     };
     propagatedBuildInputs = [ ClassISA ];
     meta = {
@@ -3565,7 +3565,7 @@ let
     version = "0.013";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CH/CHORNY/Class-Std-0.013.tar.gz";
-      sha256 = "bcd6d82f6c8af0fe069fced7dd165a4795b0b6e92351c7d4e5a1ab9a14fc35c6";
+      hash = "sha256-vNbYL2yK8P4Gn87X3RZaR5WwtukjUcfU5aGrmhT8NcY=";
     };
     meta = {
       description = "Support for creating standard 'inside-out' classes";
@@ -3578,7 +3578,7 @@ let
     version = "0.0.8";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AC/ACID/Class-Std-Fast-v0.0.8.tar.gz";
-      sha256 = "1057rz95jsr66gam472i4zdv04v7bmzph3m3jwq1hwx3qrikgm0v";
+      hash = "sha256-G9Q3Y8ajcxgwl6MOeH9dZxOw2ydRHFLVMyZrWdLPp4A=";
     };
     propagatedBuildInputs = [ ClassStd ];
     checkInputs = [ TestPod TestPodCoverage ];
@@ -3593,7 +3593,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IL/ILMARI/Class-Unload-0.11.tar.gz";
-      sha256 = "0pqa98z3ij6a3v9wkmvc8b410kv30y0xxqf0i6if3lp4lx3rgqjj";
+      hash = "sha256-UuKXR6fk0uGiicDh3oEHY08QyEJs18nTHsrIOD5KCl8=";
     };
     propagatedBuildInputs = [ ClassInspector ];
     buildInputs = [ TestRequires ];
@@ -3608,7 +3608,7 @@ let
     version = "0.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSCHWERN/Class-Virtual-0.08.tar.gz";
-      sha256 = "c6499b42d3b4e5c6488a5e82fbc28698e6c9860165072dddfa6749355a9cfbb2";
+      hash = "sha256-xkmbQtO05cZIil6C+8KGmObJhgFlBy3d+mdJNVqc+7I=";
     };
     propagatedBuildInputs = [ CarpAssert ClassDataInheritable ClassISA ];
     meta = {
@@ -3623,7 +3623,7 @@ let
     version = "1.19";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SM/SMUELLER/Class-XSAccessor-1.19.tar.gz";
-      sha256 = "1wm6013il899jnm0vn50a7iv9v6r4nqywbqzj0csyf8jbwwnpicr";
+      hash = "sha256-mcVrOV8SOa8ZkB8v7rEl2ey041Gg2A2qlSkhGkcApvI=";
     };
     meta = {
       description = "Generate fast XS accessors without runtime compilation";
@@ -3636,7 +3636,7 @@ let
     version = "0.19";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PA/PATCH/CLDR-Number-0.19.tar.gz";
-      sha256 = "c6716488e65fe779ff79a83f0f2036ad94463efe3d0f349c6b99112975bd85fc";
+      hash = "sha256-xnFkiOZf53n/eag/DyA2rZRGPv49DzSca5kRKXW9hfw=";
     };
     buildInputs = [ SoftwareLicense TestDifferences TestException TestWarn ];
     propagatedBuildInputs =
@@ -3653,7 +3653,7 @@ let
     version = "1.8";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BL/BLHOTSKY/CLI-Helpers-1.8.tar.gz";
-      sha256 = "1hgiynpy7q4gbx1d9pwnzdzil36k13vjxhscalj710ikcddvjz92";
+      hash = "sha256-In25W2MzgnAkVUzDLvcI0wwaf/uW39RCX4/g46/18cE=";
     };
     buildInputs = [ PodCoverageTrustPod TestPerlCritic ];
     propagatedBuildInputs = [ CaptureTiny RefUtil SubExporter TermReadKey YAML ];
@@ -3669,7 +3669,7 @@ let
     version = "0.26";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Clipboard-0.26.tar.gz";
-      sha256 = "886ae43dc8538f9bfc4e07fdbcf09b7fbd6ee59c31f364618c859de14953c58a";
+      hash = "sha256-iGrkPchTj5v8Tgf9vPCbf71u5Zwx82RhjIWd4UlTxYo=";
     };
     propagatedBuildInputs = [ CGI ];
     # Disable test on darwin because MacPasteboard fails when not logged in interactively.
@@ -3690,7 +3690,7 @@ let
     version = "0.45";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AT/ATOOMIC/Clone-0.45.tar.gz";
-      sha256 = "1rm9g68fklni63jdkrlgqq6yfj95fm33p2bq90p475gsi8sfxdnb";
+      hash = "sha256-y7buNIr6lUMuSHiJO0Z1JUnnDcaP5tnkMNHS6ZB5qeY=";
     };
     buildInputs = [ BCOW ];
     meta = {
@@ -3704,7 +3704,7 @@ let
     version = "0.010";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HE/HERMES/Clone-Choose-0.010.tar.gz";
-      sha256 = "0cin2bjn5z8xhm9v4j7pwlkx88jnvz8al0njdjwyvs6fb0glh8sn";
+      hash = "sha256-ViNIH1jO6O25bNICqtDfViLUJ+X3SLJThR39YuUSNjI=";
     };
     buildInputs = [ Clone ClonePP TestWithoutModule ];
     meta = {
@@ -3719,7 +3719,7 @@ let
     version = "1.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/Clone-PP-1.08.tar.gz";
-      sha256 = "0y7m25fksiavzg4xj4cm9zkz8rmnk4iqy7lm01m4nmyqlna3082p";
+      hash = "sha256-VyAwlKXYV0tqAJUejyOZtmb050+VEdnJ+1tFPV0R9Xg=";
     };
     meta = {
       description = "Recursively copy Perl datatypes";
@@ -3732,7 +3732,7 @@ let
     version = "0.78";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/Code-TidyAll-0.78.tar.gz";
-      sha256 = "1dmr6zkgcnc6cam204f00g5yly46cplbn9k45ginw02rv10vnpij";
+      hash = "sha256-Ml67QdhZAG7jK2Qmu+hlhnjqywPAESCqYoZZ9uY3ubY=";
     };
     propagatedBuildInputs = [ CaptureTiny ConfigINI FileWhich Filepushd IPCRun3 IPCSystemSimple ListCompare ListSomeUtils LogAny Moo ScopeGuard SpecioLibraryPathTiny TextDiff TimeDate TimeDurationParse ];
     buildInputs = [ TestClass TestClassMost TestDeep TestDifferences TestException TestFatal TestMost TestWarn TestWarnings librelative ];
@@ -3749,7 +3749,7 @@ let
     version = "0.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JS/JSWARTZ/Code-TidyAll-Plugin-Perl-AlignMooseAttributes-0.01.tar.gz";
-      sha256 = "1r8w5kfm17j1dyrrsjhwww423zzdzhx1i3d3brl32wzhasgf47cd";
+      hash = "sha256-jR3inlbwczFoXqONGDr87f8hCOccSp2zb0GeUN0sHOU=";
     };
     propagatedBuildInputs = [ CodeTidyAll TextAligner ];
     meta = {
@@ -3763,7 +3763,7 @@ let
     version = "0.021";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RO/ROKR/Color-Library-0.021.tar.gz";
-      sha256 = "58cbf7e333d3a4a40297abc43412b321da449c6816020e4fa6625ab079fc90a5";
+      hash = "sha256-WMv34zPTpKQCl6vENBKzIdpEnGgWAg5PpmJasHn8kKU=";
     };
     buildInputs = [ TestMost TestWarn TestException TestDeep TestDifferences ModulePluggable ];
     propagatedBuildInputs = [ ClassAccessor ClassDataInheritable ];
@@ -3778,7 +3778,7 @@ let
     version = "0.200";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SK/SKAJI/Command-Runner-0.200.tar.gz";
-      sha256 = "sha256-WtJtBhEb/s1TyPW7XeqUvyAl9seOlfbYAS5M+oninyY=";
+      hash = "sha256-WtJtBhEb/s1TyPW7XeqUvyAl9seOlfbYAS5M+oninyY=";
     };
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [ CaptureTiny Filepushd StringShellQuote Win32ShellQuote ];
@@ -3795,7 +3795,7 @@ let
     version = "3.75";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/common-sense-3.75.tar.gz";
-      sha256 = "0zhfp8f0czg69ycwn7r6ayg6idm5kyh2ai06g5s6s07kli61qsm8";
+      hash = "sha256-qGocTKTzAG10eQZEJaCfpbZonlcmH8uZT+Z9Bhy6Dn4=";
     };
     meta = {
       description = "Implements some sane defaults for Perl programs";
@@ -3808,7 +3808,7 @@ let
     version = "2.28";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RU/RURBAN/Compress-Bzip2-2.28.tar.gz";
-      sha256 = "859f835c3f5c998810d8b2a6f9e282ff99d6cb66ccfa55cae7e66dafb035116e";
+      hash = "sha256-hZ+DXD9cmYgQ2LKm+eKC/5nWy2bM+lXK5+Ztr7A1EW4=";
     };
     meta = {
       description = "Interface to Bzip2 compression library";
@@ -3821,7 +3821,7 @@ let
     version = "3.8";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${pname}-${version}.tar.gz";
-      sha256 = "5d1f5df48ce13b4dee1cc9f278ecdbf8177877b0b98815a4eb3c91c3466716f2";
+      hash = "sha256-XR9d9IzhO03uHMnyeOzb+Bd4d7C5iBWk6zyRw0ZnFvI=";
     };
     meta = {
       description = "Extremely light-weight Lempel-Ziv-Free compression";
@@ -3834,7 +3834,7 @@ let
     version = "2.101";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PM/PMQS/Compress-Raw-Bzip2-2.101.tar.gz";
-      sha256 = "1n5q01akpsw1skn59c3nivwjfqcn00wzdj8gx4q0wac8sd7i76qc";
+      hash = "sha256-DJsTT9OIKQ4w6Q/J9jkAlmEn+Y52sFTs1IHrO1UAuNg=";
     };
 
     # Don't build a private copy of bzip2.
@@ -3854,7 +3854,7 @@ let
     version = "2.101";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PM/PMQS/Compress-Raw-Lzma-2.101.tar.gz";
-      sha256 = "bb267fd31981eda11f444038f8a0fca4b94a51ae61b2db71246abf6a4d322a36";
+      hash = "sha256-uyZ/0xmB7aEfREA4+KD8pLlKUa5hsttxJGq/ak0yKjY=";
     };
     preConfigure = ''
       cat > config.in <<EOF
@@ -3875,7 +3875,7 @@ let
 
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PM/PMQS/Compress-Raw-Zlib-2.103.tar.gz";
-      sha256 = "sha256-1p0mIMoCTcG0JPf0Io/hFpsrd0FrswMQ6JDTvn2kff8=";
+      hash = "sha256-1p0mIMoCTcG0JPf0Io/hFpsrd0FrswMQ6JDTvn2kff8=";
     };
 
     preConfigure = ''
@@ -3902,7 +3902,7 @@ let
     version = "0.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FE/FERREIRA/Compress-unLZMA-0.05.tar.gz";
-      sha256 = "1f0pcpcjjj60whqc5sc5jd0dd7z3si4fnp268w4ykmcjini03s2d";
+      hash = "sha256-TegBoo2S1ekJR0Zc60jU45/WQJOF6cIw5MBIKdllF7g=";
     };
     meta = {
       description = "Interface to LZMA decompression library";
@@ -3915,7 +3915,7 @@ let
     version = "0.32";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/Config-Any-0.32.tar.gz";
-      sha256 = "0l31sg7dwh4dwwnql42hp7arkhcm15bhsgfg4i6xvbjzy9f2mnk8";
+      hash = "sha256-aNoqXPJfrt1NJM89DVcJlcGZ1blQEIot541A3s7TYVA=";
     };
     propagatedBuildInputs = [ ModulePluggable ];
     meta = {
@@ -3929,7 +3929,7 @@ let
     version = "0.319";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RE/REHSACK/Config-AutoConf-0.319.tar.gz";
-      sha256 = "0gm3l0qyrgiia67lsmzjfb6ihgbdx1lidli7w47lq9jk4v66ckrh";
+      hash = "sha256-ME9mzCZTJkwP4SfSFmnobT0YzXLyV02PUTG+7DGgoz4=";
     };
     propagatedBuildInputs = [ CaptureTiny ];
     meta = {
@@ -3944,7 +3944,7 @@ let
     version = "2.63";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TL/TLINDEN/Config-General-2.63.tar.gz";
-      sha256 = "1bbg3wp0xcpj04cmm86j1x0j5968jqi5s2c87qs7dgmap1vzk6qa";
+      hash = "sha256-Cpv5d7iqvnY0PogJXSKWyKQiQQ/SoFoZAfKyDi4fb60=";
     };
     meta = {
       description = "Generic Config Module";
@@ -3957,7 +3957,7 @@ let
     version = "1.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AL/ALEXMV/Config-GitLike-1.18.tar.gz";
-      sha256 = "f7ae7440f3adab5b9ff9aa57216d84fd4a681009b9584e32da42f8bb71e332c5";
+      hash = "sha256-9650QPOtq1uf+apXIW2E/UpoEAm5WE4y2kL4u3HjMsU=";
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ Moo MooXTypesMooseLike ];
@@ -3972,7 +3972,7 @@ let
     version = "1.13";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DS/DSCHWEI/Config-Grammar-1.13.tar.gz";
-      sha256 = "a8b3a3a2c9c8c43b92dc401bf2709d6514f15b467fd4f72c48d356335771d6e3";
+      hash = "sha256-qLOjosnIxDuS3EAb8nCdZRTxW0Z/1PcsSNNWM1dx1uM=";
     };
     meta = {
       description = "A grammar-based, user-friendly config parser";
@@ -3986,7 +3986,7 @@ let
     version = "0.025";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Config-INI-0.025.tar.gz";
-      sha256 = "628bf76d5b91f89dde22d4813ec033026ebf71b772bb61ccda909da00c869732";
+      hash = "sha256-Yov3bVuR+J3eItSBPsAzAm6/cbdyu2HM2pCdoAyGlzI=";
     };
     propagatedBuildInputs = [ MixinLinewise ];
     meta = {
@@ -4001,7 +4001,7 @@ let
     version = "0.0019";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/Config-Identity-0.0019.tar.gz";
-      sha256 = "1a0jx12pxwpbnkww4xg4lav8j6ls89hrdimhj4a697k56zdhnli9";
+      hash = "sha256-KVIL2zdlnmQUkbDGlmFCmhqJtqLkdcL5tOvyfkXoEqg=";
     };
     propagatedBuildInputs = [ FileHomeDir IPCRun ];
     buildInputs = [ TestDeep ];
@@ -4017,7 +4017,7 @@ let
     version = "3.000003";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Config-IniFiles-3.000003.tar.gz";
-      sha256 = "3c457b65d98e5ff40bdb9cf814b0d5983eb0c53fb8696bda3ba035ad2acd6802";
+      hash = "sha256-PEV7ZdmOX/QL25z4FLDVmD6wxT+4aWvaO6A1rSrNaAI=";
     };
     propagatedBuildInputs = [ IOStringy ];
     meta = {
@@ -4033,7 +4033,7 @@ let
     version = "1.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DRTECH/Config-Merge-1.04.tar.gz";
-      sha256 = "a932477b43ae5fb04a16f071a891da7bd2086c10c680592f2888fa9d9972cccf";
+      hash = "sha256-qTJHe0OuX7BKFvBxqJHae9IIbBDGgFkvKIj6nZlyzM8=";
     };
     buildInputs = [ YAML ];
     propagatedBuildInputs = [ ConfigAny ];
@@ -4048,7 +4048,7 @@ let
     version = "1.007";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DS/DSHEROH/Config-Onion-1.007.tar.gz";
-      sha256 = "1bx81nakvgj9m7x1q7pnra2cm1rzfdyf7fm2wmlj92qkivvdszrj";
+      hash = "sha256-Mn/d9o4TiyRp5aK643xzP4fKhMr2Hhz6qUm+PZUNqK8=";
     };
     propagatedBuildInputs = [ ConfigAny HashMergeSimple Moo ];
     buildInputs = [ TestException YAML ];
@@ -4063,7 +4063,7 @@ let
     version = "2.200011";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Config-MVP-2.200011.tar.gz";
-      sha256 = "23c95666fc43c4adaebcc093b1b56091efc2a6aa2d75366a216d18eda96ad716";
+      hash = "sha256-I8lWZvxDxK2uvMCTsbVgke/CpqotdTZqIW0Y7alq1xY=";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ ModulePluggable MooseXOneArgNew RoleHasMessage RoleIdentifiable Throwable TieIxHash ];
@@ -4079,7 +4079,7 @@ let
     version = "2.101463";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Config-MVP-Reader-INI-2.101463.tar.gz";
-      sha256 = "0iflnsh0sgihff3ra8sr7awiiscmqvrp1anaskkwksqi6yzidab9";
+      hash = "sha256-aakWvzcR68nn1MqqcPPGlekYuTpZI5WHczA+DaC21EU=";
     };
     propagatedBuildInputs = [ ConfigINI ConfigMVP ];
     meta = {
@@ -4094,7 +4094,7 @@ let
     version = "1.80";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SA/SALVA/Config-Properties-1.80.tar.gz";
-      sha256 = "5d04395be7e14e970a03ea952fb7629ae304d97c031f90cc1c29bd0a6a62fc40";
+      hash = "sha256-XQQ5W+fhTpcKA+qVL7dimuME2XwDH5DMHCm9Cmpi/EA=";
     };
     meta = {
       description = "Read and write property files";
@@ -4107,7 +4107,7 @@ let
     version = "4.58";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHERZODR/Config-Simple-4.58.tar.gz";
-      sha256 = "1d7dhvis1i03xlj8z3g5l8mz88kf7dn13zngbjhq94qgdxq9b6fx";
+      hash = "sha256-3ZmVcG8Pk4ShXM/+EWw7biL0K6LljY8k7QPEoOOG7bQ=";
     };
     meta = {
       description = "Simple configuration file class";
@@ -4120,7 +4120,7 @@ let
     version = "0.903";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BR/BRICKER/Config-Std-0.903.tar.gz";
-      sha256 = "b7709ff663bd279d264ab9c2f51e9e9588479a3367a8c4cfc18659c2a11480fe";
+      hash = "sha256-t3Cf9mO9J50mSrnC9R6elYhHmjNnqMTPwYZZwqEUgP4=";
     };
     propagatedBuildInputs = [ ClassStd ];
     meta = {
@@ -4134,7 +4134,7 @@ let
     version = "2.24";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RS/RSAVAGE/Config-Tiny-2.24.tgz";
-      sha256 = "0cjj2f0pj9y3cx1lgk2qp6arsnyaacf7kj6v33iqczn59f798r0h";
+      hash = "sha256-EGSUjkvFfobjGNvIeRxTyludlblYzEdDZ8MneYETUjI=";
     };
     buildInputs = [ TestPod ];
     meta = {
@@ -4148,7 +4148,7 @@ let
     version = "1.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MR/MRSCOTTY/Config-Versioned-1.01.tar.gz";
-      sha256 = "bc9a4ae3738bd89f86a07bca673627ca3c92ba969737cd6dbc7ab7ad17cd2348";
+      hash = "sha256-vJpK43OL2J+GoHvKZzYnyjySupaXN81tvHq3rRfNI0g=";
     };
     propagatedBuildInputs = [ ConfigStd GitPurePerl ];
     doCheck = false;
@@ -4164,7 +4164,7 @@ let
     version = "1.35";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MR/MRSCOTTY/Connector-1.35.tar.gz";
-      sha256 = "0jnwcvjibywdfq4x5n3np9fxvpsgqq6vjpn72sfa2xfdwrp7dna1";
+      hash = "sha256-Qdl2bubNdaGcFsdeuQ3GT9/dXbp22NIJdo37FeVm3Eo=";
     };
     buildInputs = [ ConfigMerge ConfigStd ConfigVersioned DBDSQLite DBI IOSocketSSL JSON LWP LWPProtocolHttps ProcSafeExec TemplateToolkit YAML ];
     propagatedBuildInputs = [ LogLog4perl Moose ];
@@ -4185,7 +4185,7 @@ let
     version = "0.014";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEONT/Const-Fast-0.014.tar.gz";
-      sha256 = "1nwlldgrx86yn7y6a53cqgvzm2ircsvxg1addahlcy6510x9a1gq";
+      hash = "sha256-+AWVOgjFeEahak2F17dmOYr698NsFGX8sd6gnl+jlNs=";
     };
     propagatedBuildInputs = [ SubExporterProgressive ];
     buildInputs = [ ModuleBuildTiny TestFatal ];
@@ -4200,7 +4200,7 @@ let
     version = "1.4";
     src = fetchurl {
       url = "mirror://cpan/authors/id/V/VI/VIPUL/Convert-ASCII-Armour-1.4.tar.gz";
-      sha256 = "97e8acb6eb2a2a91af7d6cf0d2dff6fa42aaf939fc7d6d1c6057a4f0df52c904";
+      hash = "sha256-l+istusqKpGvfWzw0t/2+kKq+Tn8fW0cYFek8N9SyQQ=";
     };
     meta = {
       description = "Convert binary octets into ASCII armoured messages";
@@ -4214,7 +4214,7 @@ let
     version = "0.33";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TI/TIMLEGGE/Convert-ASN1-0.33.tar.gz";
-      sha256 = "0xk0s2rnwjb7ydhwfinpjcbw25im54b8cs7r9hj3m7n7412h1pqz";
+      hash = "sha256-H98ARSDHnjokTPlohhYpNRbBF5PXRsdh82dJbrPQYHY=";
     };
     meta = {
       description = "ASN.1 Encode/Decode library";
@@ -4227,7 +4227,7 @@ let
     version = "0.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IK/IKEGAMI/Convert-Base32-0.06.tar.gz";
-      sha256 = "4ba82c167c41f455aa8284738727e4c94a2ebcb1c4ce797f6fda07245a642115";
+      hash = "sha256-S6gsFnxB9FWqgoRzhyfkyUouvLHEznl/b9oHJFpkIRU=";
     };
     buildInputs = [ TestException ];
     meta = {
@@ -4242,7 +4242,7 @@ let
     version = "1.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OR/ORCLEV/Convert-Bencode-1.03.tar.gz";
-      sha256 = "0v2ywj18px67mg97xnrdq9mnlzgqvj92pr2g47g9c9b9cpw3v7r6";
+      hash = "sha256-Jp89+GVpJZbeIU/kK5Lc+H1qa8It237Sq8f0i4LkXmw=";
     };
     meta = {
       description = "Functions for converting to/from bencoded strings";
@@ -4255,7 +4255,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/Convert-Color-0.11.tar.gz";
-      sha256 = "b41217c72931034ba4417d7a9e1e2999f04580d4e6b31c70993fedccc2440d38";
+      hash = "sha256-tBIXxykxA0ukQX16nh4pmfBFgNTmsxxwmT/tzMJEDTg=";
     };
     buildInputs = [ TestNumberDelta ];
     propagatedBuildInputs = [ ListUtilsBy ModulePluggable ];
@@ -4270,7 +4270,7 @@ let
     version = "0.5201";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AN/ANDK/Convert-UU-0.5201.tar.gz";
-      sha256 = "92329ce1c32b5952c48e1223db018c8c58ceafef03bfa0fd4817cd89c355a3bd";
+      hash = "sha256-kjKc4cMrWVLEjhIj2wGMjFjOr+8Dv6D9SBfNicNVo70=";
     };
     meta = {
       description = "Perl module for uuencode and uudecode";
@@ -4283,7 +4283,7 @@ let
     version = "0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DE/DEXTER/constant-boolean-0.02.tar.gz";
-      sha256 = "1s8gxfg4xqp543aqanv5lbp64vqqyw6ic4x3fm4imkk1h3amjb6d";
+      hash = "sha256-zSxZ1YBhzhpJdaMTFg33GG9i7qJlW4XVIOXiTp7rD+k=";
     };
     propagatedBuildInputs = [ SymbolUtil ];
     meta = {
@@ -4297,7 +4297,7 @@ let
     version = "1.001000";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSTROUT/curry-1.001000.tar.gz";
-      sha256 = "1m2n3w67cskh8ic6vf6ik0fmap9zma875kr5rhyznr1041wn064b";
+      hash = "sha256-ixhgeSAgZPs9zCXPcpCqP11VHZjRuG1YRHBqdgwfVtQ=";
     };
     meta = {
       description = "Create automatic curried method call closures for any class or object";
@@ -4310,7 +4310,7 @@ let
     version = "6";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KR/KRYDE/constant-defer-6.tar.gz";
-      sha256 = "1ykgk0rd05p7kyrdxbv047fj7r0b4ix9ibpkzxp6h8nak0qjc8bv";
+      hash = "sha256-eyEmMZjKImhu//OumHokC+Qj3SFgr96yn+cW0DKYb/o=";
     };
     meta = {
       description = "Constant subs with deferred value calculation";
@@ -4323,7 +4323,7 @@ let
     version = "0.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Context-Preserve-0.03.tar.gz";
-      sha256 = "07zxgmb11bn4zj3w9g1zwbb9iv4jyk5q7hc0nv59knvv5i64m489";
+      hash = "sha256-CZFKTCx725nKtoDBg8v0kuyY1uI/vMSH/MSuEFZ9/R8=";
     };
     buildInputs = [ TestException TestSimple13 ];
     meta = {
@@ -4337,7 +4337,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KA/KAZEBURO/Cookie-Baker-0.11.tar.gz";
-      sha256 = "59275f474e07c0aa3611e3e684b894e7db913333d8214420be63f12ec18cd7ab";
+      hash = "sha256-WSdfR04HwKo2EePmhLiU59uRMzPYIUQgvmPxLsGM16s=";
     };
     buildInputs = [ ModuleBuildTiny TestTime ];
     propagatedBuildInputs = [ URI ];
@@ -4353,7 +4353,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AG/AGENT/Cookie-XS-0.11.tar.gz";
-      sha256 = "1616rcn2qn1cwiv3rxb8mq5fmwxpj4gya1lxxxq2w952h03p3fd3";
+      hash = "sha256-o7lxB4CiJC5w750G5R+Rt/PqCq5o9Tx25CxYLCzLJpg=";
     };
     propagatedBuildInputs = [ CGICookieXS ];
     meta = {
@@ -4367,7 +4367,7 @@ let
     version = "6.57";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/Coro-6.57.tar.gz";
-      sha256 = "1ihl2zaiafr2k5jzj46j44j8vxqs23fqcsahypmi23jl6f0f8a0r";
+      hash = "sha256-GSjkgDNUDhHr9VBpht0QGveNJCHSEPllmSI7FdUXFMY=";
     };
     propagatedBuildInputs = [ AnyEvent Guard commonsense ];
     buildInputs = [ CanaryStability ];
@@ -4382,7 +4382,7 @@ let
     version = "6.55";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/Coro-${version}.tar.gz";
-      sha256 = "43d79c027170fcda4ca0ee92734605bc95e122686f5071b94d90764c81ae8a30";
+      hash = "sha256-Q9ecAnFw/NpMoO6Sc0YFvJXhImhvUHG5TZB2TIGuijA=";
     };
     buildInputs = [ CanaryStability ];
     propagatedBuildInputs = [ AnyEvent Coro EV Guard commonsense ];
@@ -4400,7 +4400,7 @@ let
     version = "0.1004";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Corona-0.1004.tar.gz";
-      sha256 = "0g5gpma3998rn61qfjv5csv2nrdi4sc84ipkb4k6synyhfgd3xgz";
+      hash = "sha256-//XRnoPeem0mWfNGgpgmsWUrtmZlS4eDsRmlNFS9rzw=";
     };
     propagatedBuildInputs = [ NetServerCoro Plack ];
     buildInputs = [ TestSharedFork TestTCP ];
@@ -4416,7 +4416,7 @@ let
     version = "2.29";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AN/ANDK/CPAN-2.29.tar.gz";
-      sha256 = "1f55672efd505a9baacfa1924d115362120aa6bf8efab7a17c7cb090b17ccc41";
+      hash = "sha256-H1VnLv1QWpuqz6GSTRFTYhIKpr+O+rehfHywkLF8zEE=";
     };
     propagatedBuildInputs = [ ArchiveZip CPANChecksums CPANPerlReleases CompressBzip2 Expect FileHomeDir FileWhich LWP LogLog4perl ModuleSignature TermReadKey TextGlob YAML YAMLLibYAML YAMLSyck IOSocketSSL ];
     meta = {
@@ -4431,7 +4431,7 @@ let
     version = "1.111016";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/CPAN-Mini-1.111016.tar.gz";
-      sha256 = "5a297afc3e367ad80811464d4eb7e4dd3caff8ba499cdd2b558f6279443a7657";
+      hash = "sha256-Wil6/D42etgIEUZNTrfk3Tyv+LpJnN0rVY9ieUQ6dlc=";
     };
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [ FileHomeDir LWPProtocolHttps ];
@@ -4453,7 +4453,7 @@ let
     version = "4.31";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.31.tar.gz";
-      sha256 = "sha256-AqZ6zuPeJKcow5ZIaADiojVZGlQ9B5REmtOI/j1c/yk=";
+      hash = "sha256-AqZ6zuPeJKcow5ZIaADiojVZGlQ9B5REmtOI/j1c/yk=";
     };
     meta = {
       description = "CPanel fork of JSON::XS, fast and correct serializing";
@@ -4467,7 +4467,7 @@ let
     version = "0.001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SK/SKAJI/CPAN-02Packages-Search-0.001.tar.gz";
-      sha256 = "02dgqplar99a2i2b08pnapznyp4il70wsvpm8163ywwfwqn1ap37";
+      hash = "sha256-Z1wVLOaOcz9MQPVuzcGhkVxv/1X2IrBEFCqlrOjFrwk=";
     };
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [ TieHandleOffset ];
@@ -4484,7 +4484,7 @@ let
     version = "0.400002";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/CPAN-Changes-0.400002.tar.gz";
-      sha256 = "01eedea90d07468cb58e4a50bfa3bb1d4eeda9073596add1118fc359153abe8d";
+      hash = "sha256-Ae7eqQ0HRoy1jkpQv6O7HU7tqQc1lq3REY/DWRU6vo0=";
     };
     meta = {
       description = "Read and write Changes files";
@@ -4498,7 +4498,7 @@ let
     version = "2.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AN/ANDK/CPAN-Checksums-2.14.tar.gz";
-      sha256 = "4080716c5da7e03b504e3cc0ea1fd5ef9ed6915f6fb737564e9e13d355a89e39";
+      hash = "sha256-QIBxbF2n4DtQTjzA6h/V757WkV9vtzdWTp4T01Wonjk=";
     };
     propagatedBuildInputs = [ CompressBzip2 DataCompare ModuleSignature ];
     meta = {
@@ -4512,7 +4512,7 @@ let
     version = "0.010";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/CPAN-Common-Index-0.010.tar.gz";
-      sha256 = "c43ddbb22fd42b06118fe6357f53700fbd77f531ba3c427faafbf303cbf4eaf0";
+      hash = "sha256-xD3bsi/UKwYRj+Y1f1NwD7139TG6PEJ/qvvzA8v06vA=";
     };
     buildInputs = [ TestDeep TestFailWarnings TestFatal ];
     propagatedBuildInputs = [ CPANDistnameInfo ClassTiny TieHandleOffset URI ];
@@ -4528,7 +4528,7 @@ let
     version = "0.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GB/GBARR/CPAN-DistnameInfo-0.12.tar.gz";
-      sha256 = "0d94kx596w7k328cvq4y96z1gz12hdhn3z1mklkbrb7fyzlzn91g";
+      hash = "sha256-LyT76ffurLwmnTX8YWGDIvwXvkme4M2QGPNwk0qfJDU=";
     };
     meta = {
       description = "Extract distribution name and version from a distribution filename";
@@ -4541,7 +4541,7 @@ let
     version = "0.014";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEONT/CPAN-Meta-Check-0.014.tar.gz";
-      sha256 = "07rmdbz1rbnb7w33vswn1wixlyh947sqr93xrvcph1hwzhmmg818";
+      hash = "sha256-KKBXK/wcBnjZzn2kjPUhCXraIw+W6z0GP8uuHP5qNR8=";
     };
     buildInputs = [ TestDeep ];
     meta = {
@@ -4555,7 +4555,7 @@ let
     version = "5.20201120";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BINGOS/CPAN-Perl-Releases-5.20201120.tar.gz";
-      sha256 = "1qsjm26556kqxyvj85c7j37mh2xw78fm3i7f58mpqkfawxip4q3k";
+      hash = "sha256-c2ByY+fKTXwrKu7EUR06vAtYz5CHFSS373iaUoyoUuM=";
     };
     meta = {
       description = "Mapping Perl releases on CPAN to the location of the tarballs";
@@ -4569,7 +4569,7 @@ let
     version = "0.9908";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BINGOS/CPANPLUS-0.9908.tar.gz";
-      sha256 = "1m4xas67fax947kahvg4jsnsr2r1i58c5g3f1bixh7krgnsarxjq";
+      hash = "sha256-WPastH15HtjjCm68wlCJIYusrZbkbajmIakrd4xWndQ=";
     };
     propagatedBuildInputs = [ ArchiveExtract ModulePluggable ObjectAccessor PackageConstants TermUI ];
     meta = {
@@ -4585,7 +4585,7 @@ let
     version = "0.103015";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/CPAN-Uploader-0.103015.tar.gz";
-      sha256 = "1idvkxqzc53hjs808gc6z6873bg4gn6zz499df0wppi56vz7w24f";
+      hash = "sha256-jgh+/jYl3suBaymR/4195K1xkPmGPQSQlnAU9nGfu8U=";
     };
     propagatedBuildInputs = [ FileHomeDir GetoptLongDescriptive LWPProtocolHttps TermReadKey ];
     meta = {
@@ -4601,7 +4601,7 @@ let
     version = "0.010";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Argon2-0.010.tar.gz";
-      sha256 = "3ea1c006f10ef66fd417e502a569df15c4cc1c776b084e35639751c41ce6671a";
+      hash = "sha256-PqHABvEO9m/UF+UCpWnfFcTMHHdrCE41Y5dRxBzmZxo=";
     };
     nativeBuildInputs = [ pkgs.ld-is-cc-hook ];
     meta = {
@@ -4615,7 +4615,7 @@ let
     version = "2.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DP/DPARIS/Crypt-Blowfish-2.14.tar.gz";
-      sha256 = "1cb7g8cyfs9alrfdykxhs8m6azj091fmcycz6p5vkxbbzcgl7cs6";
+      hash = "sha256-RrNDH/tr9bnLNZ95Vl1IQH5lKtKwT99cpipp5xl6Z7E=";
     };
     meta = {
       description = "Perl Blowfish encryption module";
@@ -4628,7 +4628,7 @@ let
     version = "1.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BO/BOBMATH/Crypt-CAST5_PP-1.04.tar.gz";
-      sha256 = "cba98a80403fb898a14c928f237f44816b4848641840ce2517363c2c071b5327";
+      hash = "sha256-y6mKgEA/uJihTJKPI39EgWtISGQYQM4lFzY8LAcbUyc=";
     };
     meta = {
       description = "CAST5 block cipher in pure Perl";
@@ -4642,7 +4642,7 @@ let
     version = "2.33";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LD/LDS/Crypt-CBC-2.33.tar.gz";
-      sha256 = "0ig698lmpjz7fslnznxm0609lvlnvf4f3s370082nzycnqhxww3a";
+      hash = "sha256-anDeIbbMfysQAGfo4Yjblm6agAG122+pdufLWylK5kU=";
     };
     meta = {
       description = "Encrypt Data with Cipher Block Chaining Mode";
@@ -4655,12 +4655,12 @@ let
     version = "0.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AJ/AJGB/Crypt-Curve25519-0.06.tar.gz";
-      sha256 = "1ir0gfxm8i7r9zyfs2zvil5jgwirl7j6cb9cm1p2kjpfnhyp0j4z";
+      hash = "sha256-n0hwPbTuyiluqCwtZuShOfInC437C+38T/lEVLt7IMc=";
     };
     patches = [
       (fetchpatch {
         url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-perl/Crypt-Curve25519/files/Crypt-Curve25519-0.60.0-fmul-fixedvar.patch?id=cec727ad614986ca1e6b9468eea7f1a5a9183382";
-        sha256 = "0l005jzxp6q6vyl3p43ji47if0v9inscnjl0vxaqzf6c17akgbhf";
+        hash = "sha256-Dq431QnMuI9V34BKy7SNaQMXD4lykDuo3wab278sAFA=";
       })
     ];
     meta = {
@@ -4675,7 +4675,7 @@ let
     version = "2.07";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DP/DPARIS/Crypt-DES-2.07.tar.gz";
-      sha256 = "1rypxlhpd1jc0c327aghgl9y6ls47drmpvn0a40b4k3vhfsypc9d";
+      hash = "sha256-LbHrtYN7TLIAUcDuW3M7RFPjE33wqSMGA0yGdiHt1+c=";
     };
     meta = {
       description = "Perl DES encryption module";
@@ -4688,7 +4688,7 @@ let
     version = "0.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BT/BTROTT/Crypt-DES_EDE3-0.01.tar.gz";
-      sha256 = "9cb2e04b625e9cc0833cd499f76fd12556583ececa782a9758a55e3f969748d6";
+      hash = "sha256-nLLgS2JenMCDPNSZ92/RJVZYPs7KeCqXWKVeP5aXSNY=";
     };
     propagatedBuildInputs = [ CryptDES ];
     meta = {
@@ -4703,7 +4703,7 @@ let
     version = "0.07";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MITHALDU/Crypt-DH-0.07.tar.gz";
-      sha256 = "0pvzlgwpx8fzdy64ki15155vhsj30i9zxmw6i4p7irh17d1g7368";
+      hash = "sha256-yIzzQjsB5nguiYbX/lMEQ2q4SwklxEmMb9+hfvmjf18=";
     };
     propagatedBuildInputs = [ MathBigIntGMP ];
     meta = {
@@ -4717,7 +4717,7 @@ let
     version = "0.00012";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DM/DMAKI/Crypt-DH-GMP-0.00012.tar.gz";
-      sha256 = "0f5gdprcql4kwzgxl2s6ngcfg1jl45lzcqh7dkv5bkwlwmxa9rsi";
+      hash = "sha256-UeekeuWUz1X2bAdi9mkhVIbn2LNGC9rf55NQzPJtrzg=";
     };
     buildInputs = [ pkgs.gmp DevelChecklib TestRequires ];
     NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
@@ -4733,7 +4733,7 @@ let
     version = "1.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AD/ADAMK/Crypt-DSA-1.17.tar.gz";
-      sha256 = "d1b8585f6bf746f76e5dc5da3641d325ed656bc2e5f344b54514b55c31009a03";
+      hash = "sha256-0bhYX2v3RvduXcXaNkHTJe1la8Ll80S1RRS1XDEAmgM=";
     };
     propagatedBuildInputs = [ DataBuffer DigestSHA1 FileWhich ];
     meta = {
@@ -4748,7 +4748,7 @@ let
     version = "2.22";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AP/APPEL/Crypt-ECB-2.22.tar.gz";
-      sha256 = "f5af62e908cd31a34b2b813135a0718016fd003ffa0021ffbdd84c50158267aa";
+      hash = "sha256-9a9i6QjNMaNLK4ExNaBxgBb9AD/6ACH/vdhMUBWCZ6o=";
     };
     meta = {
       description = "Use block ciphers using ECB mode";
@@ -4761,7 +4761,7 @@ let
     version = "0.009";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Crypt-Eksblowfish-0.009.tar.gz";
-      sha256 = "3cc7126d5841107237a9be2dc5c7fbc167cf3c4b4ce34678a8448b850757014c";
+      hash = "sha256-PMcSbVhBEHI3qb4txcf7wWfPPEtM40Z4qESLhQdXAUw=";
     };
     propagatedBuildInputs = [ ClassMix ];
     perlPreHook = lib.optionalString (stdenv.isi686 || stdenv.isDarwin) "export LD=$CC";
@@ -4776,7 +4776,7 @@ let
     version = "0.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FE/FELIPE/Crypt-Format-0.10.tar.gz";
-      sha256 = "89ddc010a6c91d5be7a1874a528eed6eda39f2c401c18e63d80ddfbf7127e2dd";
+      hash = "sha256-id3AEKbJHVvnoYdKUo7tbto58sQBwY5j2A3fv3En4t0=";
     };
     buildInputs = [ TestException TestFailWarnings ];
     meta = {
@@ -4791,7 +4791,7 @@ let
     version = "1.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DP/DPARIS/Crypt-IDEA-1.10.tar.gz";
-      sha256 = "0690lzlyjqgmnb94dq7dm5n6pgybg10fkpgfycgzr814370pig9k";
+      hash = "sha256-M714wRkkoPwf8+7d6UB4y79rbKnt4EbSsvVh6emnIBk=";
     };
     meta = {
       description = "Perl interface to IDEA block cipher";
@@ -4804,7 +4804,7 @@ let
     version = "0.029";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIK/Crypt-JWT-0.029.tar.gz";
-      sha256 = "0fccff29065a0098eef151deeb33c12c0d68e16a1cb4e7465b26ebbd4c18cd2f";
+      hash = "sha256-D8z/KQZaAJju8VHe6zPBLA1o4WoctOdGWybrvUwYzS8=";
     };
     propagatedBuildInputs = [ CryptX JSON ];
     meta = {
@@ -4818,7 +4818,7 @@ let
     version = "0.003";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Passphrase-0.003.tar.gz";
-      sha256 = "685aa090f8179a86d6896212ccf8ccfde7a79cce857199bb14e2277a10d240ad";
+      hash = "sha256-aFqgkPgXmobWiWISzPjM/eennM6FcZm7FOInehDSQK0=";
     };
     meta = {
       description = "A module for managing passwords in a cryptographically agile manner";
@@ -4831,7 +4831,7 @@ let
     version = "0.003";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Passphrase-Argon2-0.003.tar.gz";
-      sha256 = "sha256-cCkLtb3GfBcBKN8+UWexfQS7eTkzqubAWnWGfao/OTg=";
+      hash = "sha256-cCkLtb3GfBcBKN8+UWexfQS7eTkzqubAWnWGfao/OTg=";
     };
     propagatedBuildInputs = with perlPackages; [ CryptArgon2 CryptPassphrase ];
     meta = {
@@ -4845,7 +4845,7 @@ let
     version = "0.001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Passphrase-Bcrypt-0.001.tar.gz";
-      sha256 = "sha256-M44nA4RH/eAjznyaC1dPR+4zeQRKDAgxrJRx8UMNxMU=";
+      hash = "sha256-M44nA4RH/eAjznyaC1dPR+4zeQRKDAgxrJRx8UMNxMU=";
     };
     propagatedBuildInputs = [ CryptEksblowfish CryptPassphrase ];
     meta = {
@@ -4860,7 +4860,7 @@ let
     version = "1.40";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RS/RSAVAGE/Crypt-PasswdMD5-1.40.tgz";
-      sha256 = "0j0r74f18nk63phddzqbf7wqma2ci4p4bxvrwrxsy0aklbp6lzdp";
+      hash = "sha256-t31q7qJTAa975nn3RS6JTKiK+XEL/9bgHWZaFBw5GUg=";
     };
     meta = {
       description = "Provide interoperable MD5-based crypt() functions";
@@ -4873,7 +4873,7 @@ let
     version = "2.001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MR/MRSCOTTY/Crypt-PKCS10-2.001.tar.gz";
-      sha256 = "f7945b76a2d8f4d8ecf627b2eb8ea4f41d001e6a915efe82e71d6b97fea3ffa9";
+      hash = "sha256-95RbdqLY9Njs9iey646k9B0AHmqRXv6C5x1rl/6j/6k=";
     };
     buildInputs = [ pkgs.unzip ModuleBuildTiny ];
     propagatedBuildInputs = [ ConvertASN1 ];
@@ -4889,7 +4889,7 @@ let
     version = "0.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DANAJ/Crypt-Random-Seed-0.03.tar.gz";
-      sha256 = "593da54b522c09cc26bbcc0e4e49c1c8e688a6fd33b0726af801d722a5c8d0f1";
+      hash = "sha256-WT2lS1IsCcwmu8wOTknByOaIpv0zsHJq+AHXIqXI0PE=";
     };
     propagatedBuildInputs = [ CryptRandomTESHA2 ];
     meta = {
@@ -4905,7 +4905,7 @@ let
     version = "1.52";
     src = fetchurl {
       url = "mirror://cpan/authors/id/V/VI/VIPUL/Crypt-Random-1.52.tar.gz";
-      sha256 = "a93c06de409e6f2eb2e9868ea6d4e653d99f2f7900b2c1831e1f65ace0c4ef84";
+      hash = "sha256-qTwG3kCeby6y6YaOptTmU9mfL3kAssGDHh9lrODE74Q=";
     };
     propagatedBuildInputs = [ ClassLoader MathPari StatisticsChiSquare ];
     meta = {
@@ -4920,7 +4920,7 @@ let
     version = "0.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Crypt-Random-Source-0.14.tar.gz";
-      sha256 = "1rpdds3sy5l1fhngnkrsgwsmwd54wpicx3i9ds69blcskwkcwkpc";
+      hash = "sha256-7E7OJp+a0ZWMbimOzuLlpDReNX86T/ssdIEWr4du7eY=";
     };
     buildInputs = [ ModuleBuildTiny TestFatal TestSimple13 ];
     propagatedBuildInputs = [ CaptureTiny ModuleFind Moo SubExporter TypeTiny namespaceclean ];
@@ -4936,7 +4936,7 @@ let
     version = "0.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DANAJ/Crypt-Random-TESHA2-0.01.tar.gz";
-      sha256 = "a0912b42c52be173da528d5527e40d967324bc04ac78d9fc2ddc91ff16fe9633";
+      hash = "sha256-oJErQsUr4XPaUo1VJ+QNlnMkvASseNn8LdyR/xb+ljM=";
     };
     meta = {
       description = "Random numbers using timer/schedule entropy, aka userspace voodoo entropy";
@@ -4950,7 +4950,7 @@ let
     version = "2.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SI/SIFUKURT/Crypt-RC4-2.02.tar.gz";
-      sha256 = "1sp099cws0q225h6j4y68hmfd1lnv5877gihjs40f8n2ddf45i2y";
+      hash = "sha256-XsRCXGvCIgeIljC+c1DZlobmKkTGE2lgEQIDzVlK4Oo=";
     };
     meta = {
       description = "Perl implementation of the RC4 encryption algorithm";
@@ -4963,7 +4963,7 @@ let
     version = "0.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/Crypt-RandPasswd-0.06.tar.gz";
-      sha256 = "0ca8544371wp4vvqsa19lnhl02hczpkbwkgsgm65ziwwim3r1gdi";
+      hash = "sha256-sb2QR42cx19MffpNvub9DApAoaUpKI33JpeHMwgpSDE=";
     };
     meta = {
       description = "Random password generator based on FIPS-181";
@@ -4976,7 +4976,7 @@ let
     version = "0.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TODDR/Crypt-RIPEMD160-0.08.tar.gz";
-      sha256 = "0cmj620kfg08yvh81bq1sbabdyyc3g9pc6vlngxdxjgn0xvcil9l";
+      hash = "sha256-NNHIdgf2yd76s3QbdtMbzPu21NIBr4Dg9gg8N4EwsjI=";
     };
     meta = {
       description = "Perl extension for the RIPEMD-160 Hash function";
@@ -4991,7 +4991,7 @@ let
     version = "0.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IK/IKEBE/Crypt-MySQL-0.04.tar.gz";
-      sha256 = "93ebdfaaefcfe9ab683f0121c85f24475d8197f0bcec46018219e4111434dde3";
+      hash = "sha256-k+vfqu/P6atoPwEhyF8kR12Bl/C87EYBghnkERQ03eM=";
     };
     propagatedBuildInputs = [ DigestSHA1 ];
     perlPreHook = lib.optionalString (stdenv.isi686 || stdenv.isDarwin) "export LD=$CC";
@@ -5006,7 +5006,7 @@ let
     version = "1.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Rijndael-1.15.tar.gz";
-      sha256 = "0qs1b6ma4sj0ip5d8544fzgc1bbankc4qlmznp8hay8dk5arp650";
+      hash = "sha256-oJibVZkNeQXRtb9STNi0aq3A3neEFNTKjUBqoqpZQWM=";
     };
     meta = {
       description = "Crypt::CBC compliant Rijndael encryption module";
@@ -5019,7 +5019,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BO/BORISZ/Crypt-UnixCrypt_XS-0.11.tar.gz";
-      sha256 = "1ajg3x6kwxy4x9p3nw1j36qjxpjvdpi9wkca5gfd86y9q8939sv2";
+      hash = "sha256-Yus0EsLJG9TcK4pNnuJtW94usRkycDtu6sR3Pk0fT6o=";
     };
     meta = {
       description = "Perl xs interface for a portable traditional crypt function";
@@ -5032,7 +5032,7 @@ let
     version = "0.36";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DD/DDICK/Crypt-URandom-0.36.tar.gz";
-      sha256 = "81fec9921adc5d3c91cbe0ad8cb2bb89b045c4fb0de9cb3c43f17e58e477f8a1";
+      hash = "sha256-gf7JkhrcXTyRy+CtjLK7ibBFxPsN6cs8Q/F+WOR3+KE=";
     };
     meta = {
       description = "Provide non blocking randomness";
@@ -5046,7 +5046,7 @@ let
     version = "0.010";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIK/Crypt-ScryptKDF-0.010.tar.gz";
-      sha256 = "7d16ee95cce3eb54c174673a7299f4c086fba3ac85f847d0e134feed5f776017";
+      hash = "sha256-fRbulczj61TBdGc6cpn0wIb7o6yF+EfQ4TT+7V93YBc=";
     };
     propagatedBuildInputs = [ CryptOpenSSLRandom ];
     perlPreHook = "export LD=$CC";
@@ -5063,7 +5063,7 @@ let
     version = "0.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BJ/BJKUIT/Crypt-SmbHash-0.12.tar.gz";
-      sha256 = "0dxivcqmabkhpz5xzph6rzl8fvq9xjy26b2ci77pv5gsmdzari38";
+      hash = "sha256-aMSsfqv6lX3PiUwsI7zsCW+H6M8G3t/Lv3AuVTHbsTc=";
     };
     meta = {
       description = "Perl-only implementation of lanman and nt md4 hash functions, for use in Samba style smbpasswd entries";
@@ -5076,7 +5076,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MG/MGREGORO/Crypt-Sodium-0.11.tar.gz";
-      sha256 = "0y3c24zv4iwnvlf9zwxambk8ddram54fm6l1m5yhbskc0nhp6z4h";
+      hash = "sha256-kHxzoQVs6gV9qYGa6kipKreG5qqq858c3ZZHsj8RbHg=";
     };
     NIX_CFLAGS_COMPILE = "-I${pkgs.libsodium.dev}/include";
     NIX_CFLAGS_LINK = "-L${pkgs.libsodium.out}/lib -lsodium";
@@ -5093,7 +5093,7 @@ let
     version = "2.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AM/AMS/Crypt-Twofish-2.18.tar.gz";
-      sha256 = "00fms8v94wr3lmn1nqjcfw30p5scsyr4s3dah8ijm5w7c5fmb0aq";
+      hash = "sha256-WIFVXWGHlyojgqoNTbLXTJcLBndMYhtspSNzkjbS1QE=";
     };
     meta = {
       description = "The Twofish Encryption Algorithm";
@@ -5107,7 +5107,7 @@ let
     version = "1.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SR/SROMANOV/Crypt-OpenPGP-1.12.tar.gz";
-      sha256 = "e8a7ff2a993b76a69ad6dffdbe55755be5678b84e6ec494dcd9ab966f766f50e";
+      hash = "sha256-6Kf/Kpk7dqaa1t/9vlV1W+Vni4Tm7ElNzZq5Zvdm9Q4=";
     };
     patches = [
       # See https://github.com/NixOS/nixpkgs/pull/93599
@@ -5136,7 +5136,7 @@ let
     version = "0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TT/TTAR/Crypt-OpenSSL-AES-0.02.tar.gz";
-      sha256 = "b66fab514edf97fc32f58da257582704a210c2b35e297d5c31b7fa2ffd08e908";
+      hash = "sha256-tm+rUU7fl/wy9Y2iV1gnBKIQwrNeKX1cMbf6L/0I6Qg=";
     };
     NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
     NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
@@ -5151,7 +5151,7 @@ let
     version = "0.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KM/KMX/Crypt-OpenSSL-Bignum-0.09.tar.gz";
-      sha256 = "1p22znbajq91lbk2k3yg12ig7hy5b4vy8igxwqkmbm4nhgxp4ki3";
+      hash = "sha256-I05y+4OW1FUn5v1F5DdZxcPzogjPjynmoiFhqZb9Qtw=";
     };
     NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
     NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
@@ -5166,7 +5166,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AK/AKIYM/Crypt-OpenSSL-Guess-0.11.tar.gz";
-      sha256 = "0rvi9l4ljcbhwwvspq019nfq2h2v746dk355h2nwnlmqikiihsxa";
+      hash = "sha256-qmsY44y4UsutgKWM2Qw5W0CBnU0B4Ks353AxSQlNcWc=";
     };
     meta = {
       description = "Guess OpenSSL include path";
@@ -5180,7 +5180,7 @@ let
     version = "0.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RU/RURBAN/Crypt-OpenSSL-Random-0.15.tar.gz";
-      sha256 = "1x6ffps8q7mnawmcfq740llzy7i10g3319vap0wiw4d33fm6z1zh";
+      hash = "sha256-8IdvqhujER45uGqnMMYDIR7/KQXkYMcqV7YejPR1zvQ=";
     };
     NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
     NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
@@ -5197,7 +5197,7 @@ let
     version = "0.31";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TODDR/Crypt-OpenSSL-RSA-0.31.tar.gz";
-      sha256 = "4173403ad4cf76732192099f833fbfbf3cd8104e0246b3844187ae384d2c5436";
+      hash = "sha256-QXNAOtTPdnMhkgmfgz+/vzzYEE4CRrOEQYeuOE0sVDY=";
     };
     propagatedBuildInputs = [ CryptOpenSSLRandom ];
     NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
@@ -5214,7 +5214,7 @@ let
     version = "1.813";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JO/JONASBN/Crypt-OpenSSL-X509-1.813.tar.gz";
-      sha256 = "684bd888d2ed4c748f8f6dd8e87c14afa2974b12ee01faa082ad9cfa1e321e62";
+      hash = "sha256-aEvYiNLtTHSPj23Y6HwUr6KXSxLuAfqggq2c+h4yHmI=";
     };
     NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
     NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
@@ -5231,7 +5231,7 @@ let
     version = "0.161520";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AR/ARODLAND/Crypt-PBKDF2-0.161520.tar.gz";
-      sha256 = "97dfa79a309a086e184a4e61047f8a10ffb3db051025e7d222a25f19130ba417";
+      hash = "sha256-l9+nmjCaCG4YSk5hBH+KEP+z2wUQJefSIqJfGRMLpBc=";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ DigestHMAC DigestSHA3 Moo TypeTiny namespaceautoclean strictures ];
@@ -5248,7 +5248,7 @@ let
     version = "0.34";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FE/FELIPE/Crypt-Perl-0.34.tar.gz";
-      sha256 = "0e1cb223df0041f6d9b010f11e6f97a97ab55a118a273938eb4fe85d403f1b11";
+      hash = "sha256-DhyyI98AQfbZsBDxHm+XqXq1WhGKJzk460/oXUA/GxE=";
     };
     checkInputs = [ pkgs.openssl MathBigIntGMP ];
     buildInputs = [ CallContext FileSlurp FileWhich TestClass TestDeep TestException TestFailWarnings TestNoWarnings ];
@@ -5265,7 +5265,7 @@ let
     version = "1.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/Crypt-Ed25519-1.04.tar.gz";
-      sha256 = "1jwh6b8b2ppvzxaljz287zakj4q3ip4zq121i23iwh26wxhlll2q";
+      hash = "sha256-WFBKYedGQB6HiEEE/MmNAxM51T9IfElV//tesdAykMs=";
     };
 
     nativeBuildInputs = [ CanaryStability ];
@@ -5283,7 +5283,7 @@ let
     version = "0.73_06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NA/NANIS/Crypt-SSLeay-0.73_06.tar.gz";
-      sha256 = "0b159lw3ia5r87qsgff3qhdnz3l09xcz04rbk4ji7fbyr12wmv7q";
+      hash = "sha256-+OzKRch+uRMlmSsT8FlPgI5vG8TDuafxQbmoODhNJSw=";
     };
 
     makeMakerFlags = "--libpath=${lib.getLib pkgs.openssl}/lib --incpath=${pkgs.openssl.dev}/include";
@@ -5300,7 +5300,7 @@ let
     version = "0.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SP/SPROUT/CSS-DOM-0.17.tar.gz";
-      sha256 = "09phb6c9czpcp9imq06khm54kspsx6hnvfrjxramx663ygmpifb5";
+      hash = "sha256-Zbl46/PDmF5V7jK7baHp+upJSoXTAFxjuux+lphZ8CY=";
     };
     propagatedBuildInputs = [ Clone ];
     meta = {
@@ -5314,7 +5314,7 @@ let
     version = "0.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PM/PMICHAUX/CSS-Minifier-0.01.tar.gz";
-      sha256 = "0Kk0m46LfoOrcM+IVM+7Qv8pwfbHyCmPIlfdIaoMf+8=";
+      hash = "sha256-0Kk0m46LfoOrcM+IVM+7Qv8pwfbHyCmPIlfdIaoMf+8=";
     };
     meta = {
       description = "Perl extension for minifying CSS";
@@ -5328,7 +5328,7 @@ let
     version = "0.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GT/GTERMARS/CSS-Minifier-XS-0.09.tar.gz";
-      sha256 = "1myswrmh0sqp5xjpp03x45z8arfmgkjx0srl3r6kjsyzl1zrk9l8";
+      hash = "sha256-iKaZf6DfazlNHjRr0OV81WWFfiF9gHtlLxdrAGvm2tc=";
     };
     perlPreHook = lib.optionalString (stdenv.isi686 || stdenv.isDarwin) "export LD=$CC";
     meta = {
@@ -5343,7 +5343,7 @@ let
     version = "0.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TS/TSIBLEY/CSS-Squish-0.10.tar.gz";
-      sha256 = "65fc0d69acd1fa33d9a4c3b09cce0fbd737d747b1fcc4e9d87ebd91050cbcb4e";
+      hash = "sha256-ZfwNaazR+jPZpMOwnM4PvXN9dHsfzE6dh+vZEFDLy04=";
     };
     buildInputs = [ TestLongString ];
     propagatedBuildInputs = [ URI ];
@@ -5358,7 +5358,7 @@ let
     version = "1.37";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GI/GIRAFFED/Curses-1.37.tar.gz";
-      sha256 = "086vaj4wh5473hbp5f4amk6l0yzm66yxdcd2znz5pcqrmpiplw3l";
+      hash = "sha256-dHB6460Zs1u+/aKx1r0x9XtAzayKuHIXHIcUyIlU2yA=";
     };
     propagatedBuildInputs = [ pkgs.ncurses ];
     NIX_CFLAGS_LINK = "-lncurses";
@@ -5373,7 +5373,7 @@ let
     version = "0.9609";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MD/MDXI/Curses-UI-0.9609.tar.gz";
-      sha256 = "1bqf4h8z70f78nzqq5yj4ahvsbhxxal6bc2g301l9qdn2fjjgf0a";
+      hash = "sha256-CrgnpRO24UQDGE+wZajqHS69oSLSF4y/RceB8xEkDq8=";
     };
     propagatedBuildInputs = [ Curses TermReadKey ];
     meta = {
@@ -5387,7 +5387,7 @@ let
     version = "0.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AD/ADRIANWIT/Curses-UI-Grid-0.15.tar.gz";
-      sha256 = "0820ca4a9fb949ba8faf97af574018baeffb694e980c5087bb6522aa70b9dbec";
+      hash = "sha256-CCDKSp+5SbqPr5evV0AYuu/7aU6YDFCHu2UiqnC52+w=";
     };
     propagatedBuildInputs = [ CursesUI TestPod TestPodCoverage ];
     meta = {
@@ -5401,7 +5401,7 @@ let
     version = "0.076";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIK/CryptX-0.076.tar.gz";
-      sha256 = "sha256-u4SsASQ4x87NtRpab/+08f7jsOrgAi6WzrwuFnUiYhw=";
+      hash = "sha256-u4SsASQ4x87NtRpab/+08f7jsOrgAi6WzrwuFnUiYhw=";
     };
     meta = {
       description = "Cryptographic toolkit";
@@ -5414,7 +5414,7 @@ let
     version = "0.53";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MR/MRSCOTTY/Crypt-X509-0.53.tar.gz";
-      sha256 = "d2ff614f9457dc87ab277b81bced3532c3ed309b73b9a61aaefbe9488c9e660f";
+      hash = "sha256-0v9hT5RX3IerJ3uBvO01MsPtMJtzuaYarvvpSIyeZg8=";
     };
     propagatedBuildInputs = [ ConvertASN1 ];
     meta = {
@@ -5428,7 +5428,7 @@ let
     version = "0.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KA/KAZEBURO/Cwd-Guard-0.05.tar.gz";
-      sha256 = "0xwf4rmii55k3lp19mpbh00mbgby7rxdk2lk84148bjhp6i7rz3s";
+      hash = "sha256-evx8orlQLkQCQZOK2Xo+fr1VAYDr1hQuHbOUGGsmjnc=";
     };
     buildInputs = [ TestRequires ];
     meta = {
@@ -5442,7 +5442,7 @@ let
     version = "0.004";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GF/GFUJI/Data-Clone-0.004.tar.gz";
-      sha256 = "0g1qhi5qyk4fp0pwyaw90vxiyyn8las0i8ghzrnr4srai1wy3r9g";
+      hash = "sha256-L+XheYgqa5Jt/vChCLSiyHof+waJK88vuI5Mj0uEODw=";
     };
     buildInputs = [ TestRequires ];
     meta = {
@@ -5456,7 +5456,7 @@ let
     version = "1.27";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DC/DCANTRELL/Data-Compare-1.27.tar.gz";
-      sha256 = "1gg8rqbv3x6a1lrpabv6vnlab53zxmpwz2ygad9fcx4gygqj12l1";
+      hash = "sha256-gYog8fOPdOZSU8+Lz2/tf5SlqN1mL3UzDcr0sRfO6L0=";
     };
     propagatedBuildInputs = [ Clone FileFindRule ];
     meta = {
@@ -5470,7 +5470,7 @@ let
     version = "1.23";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GA/GAAS/Data-Dump-1.23.tar.gz";
-      sha256 = "0r9ba52b7p8nnn6nw0ygm06lygi8g68piri78jmlqyrqy5gb0lxg";
+      hash = "sha256-r1OwXvE4e0yrRCfmeJF5KD5PDajPA26NtRbds0RRK2U=";
     };
     meta = {
       description = "Pretty printing of data structures";
@@ -5483,7 +5483,7 @@ let
     version = "1.00";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BA/BAYASHI/Data-Dumper-AutoEncode-1.00.tar.gz";
-      sha256 = "2d9a0262ad443d321dc489ef6dfa7b3eed11a2708a75d397d371bb2585e5eca1";
+      hash = "sha256-LZoCYq1EPTIdxInvbfp7Pu0RonCKddOX03G7JYXl7KE=";
     };
     buildInputs = [ ModuleBuildPluggable ModuleBuildPluggableCPANfile ];
     propagatedBuildInputs = [ IOInteractiveTiny ];
@@ -5499,7 +5499,7 @@ let
     version = "2.023";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Data-Dumper-Concise-2.023.tar.gz";
-      sha256 = "a6c22f113caf31137590def1b7028a7e718eface3228272d0672c25e035d5853";
+      hash = "sha256-psIvETyvMRN1kN7xtwKKfnGO+s4yKCctBnLCXgNdWFM=";
     };
     meta = {
       description = "Less indentation and newlines plus sub deparsing";
@@ -5512,7 +5512,7 @@ let
     version = "0.007";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Data-Entropy-0.007.tar.gz";
-      sha256 = "2611c4a1a3038594d79ea4ed14d9e15a9af8f77105f51667795fe4f8a53427e4";
+      hash = "sha256-JhHEoaMDhZTXnqTtFNnhWpr493EF9RZneV/k+KU0J+Q=";
     };
     propagatedBuildInputs = [ CryptRijndael DataFloat HTTPLite ParamsClassify ];
     meta = {
@@ -5526,7 +5526,7 @@ let
     version = "0.013";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Data-Float-0.013.tar.gz";
-      sha256 = "e2b1523d858930b8bbdbd196f08235f5e678b84919ba87712e26313b9c27518a";
+      hash = "sha256-4rFSPYWJMLi729GW8II19eZ4uEkZuodxLiYxO5wnUYo=";
     };
     meta = {
       description = "Details of the floating point data type";
@@ -5539,7 +5539,7 @@ let
     version = "4.88";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DF/DFARRELL/Data-FormValidator-4.88.tar.gz";
-      sha256 = "c1a539f91c92cbcd8a8d83597ec9a7643fcd8ccf5a94e15382c3765289170066";
+      hash = "sha256-waU5+RySy82KjYNZfsmnZD/NjM9alOFTgsN2UokXAGY=";
     };
     propagatedBuildInputs = [ DateCalc EmailValid FileMMagic ImageSize MIMETypes RegexpCommon ];
     buildInputs = [ CGI ];
@@ -5554,7 +5554,7 @@ let
     version = "0.049";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Data-GUID-0.049.tar.gz";
-      sha256 = "0yx7d4qwsr9n85gslip0y3mdwr5fkncfbwxz7si2a17x95yl7bxq";
+      hash = "sha256-uK9DfUn9BCWiPr/z5ZidrmTe6vDgRqpfQTZlzTFpp3s=";
     };
     propagatedBuildInputs = [ DataUUID SubExporter ];
     meta = {
@@ -5569,7 +5569,7 @@ let
     version = "0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FT/FTASSIN/Data-HexDump-0.02.tar.gz";
-      sha256 = "1a9d843e7f667c1c6f77c67af5d77e7462ff23b41937cb17454d03535cd9be70";
+      hash = "sha256-Gp2EPn9mfBxvd8Z69dd+dGL/I7QZN8sXRU0DU1zZvnA=";
     };
     meta = {
       description = "Hexadecial Dumper";
@@ -5585,7 +5585,7 @@ let
     version = "3.0001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DC/DCANTRELL/Data-Hexdumper-3.0001.tar.gz";
-      sha256 = "f9243cbe8affed5045fe4df505726a7a7289471e30c51ac065b3ed6ce0d1a604";
+      hash = "sha256-+SQ8vor/7VBF/k31BXJqenKJRx4wxRrAZbPtbODRpgQ=";
     };
     meta = {
       description = "Make binary data human-readable";
@@ -5598,7 +5598,7 @@ let
     version = "0.34";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CL/CLKAO/Data-Hierarchy-0.34.tar.gz";
-      sha256 = "1vfrkygdaq0k7006i83jwavg9wgszfcyzbl9b7fp37z2acmyda5k";
+      hash = "sha256-s6jmK1Pin3HdWYmu75n7+vH0tuJyoGgAOBNg1Z6f2e0=";
     };
     buildInputs = [ TestException ];
     meta = {
@@ -5612,7 +5612,7 @@ let
     version = "0.24";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BP/BPS/Data-ICal-0.24.tar.gz";
-      sha256 = "7331c7c84886c53337c0db823615e0e7134a8f13efd284e5c20726d5bcd52dff";
+      hash = "sha256-czHHyEiGxTM3wNuCNhXg5xNKjxPv0oTlwgcm1bzVLf8=";
     };
     buildInputs = [ TestLongString TestNoWarnings TestWarn ];
     propagatedBuildInputs = [ ClassReturnValue TextvFileasData ];
@@ -5627,7 +5627,7 @@ let
     version = "0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MAXMIND/Data-IEEE754-0.02.tar.gz";
-      sha256 = "07b73dlxd0qmxgkkrpa2xr61y18v3adlf1qgnl9k90kj8q9spx66";
+      hash = "sha256-xvSrE0ZygjQTtQ8HR5saGwUfTO5C3Tzn6xWD1mkbZx0=";
     };
     buildInputs = [ TestBits ];
     meta = {
@@ -5642,7 +5642,7 @@ let
     version = "0.006";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Data-Integer-0.006.tar.gz";
-      sha256 = "0m53zxhx9sn49yqh7azlpyy9m65g54v8cd2ha98y77337gg7xdv3";
+      hash = "sha256-Y7d+3jtjnONRUlA0hjYpr5iavL/0qwOxT8Tq1GH/o1Q=";
     };
     meta = {
       description = "Details of the native integer data type";
@@ -5655,7 +5655,7 @@ let
     version = "1.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SY/SYOHEX/Data-MessagePack-1.01.tar.gz";
-      sha256 = "8fa0ed0101d04e661821a7b78e8d62ce3e19b299275bbfed178e2ba8912663ea";
+      hash = "sha256-j6DtAQHQTmYYIae3jo1izj4ZspknW7/tF44rqJEmY+o=";
     };
     buildInputs = [ ModuleBuildXSUtil TestRequires ];
     meta = {
@@ -5672,7 +5672,7 @@ let
     version = "0.110";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Data-OptList-0.110.tar.gz";
-      sha256 = "1hzmgr2imdg1fc3hmwx0d56fhsdfyrgmgx7jb4jkyiv6575ifq9n";
+      hash = "sha256-NmEXyylmRz8lWfL0V1/2rmnoTGmg8woHc+G1GkV+9cM=";
     };
     propagatedBuildInputs = [ ParamsUtil SubInstall ];
     meta = {
@@ -5687,7 +5687,7 @@ let
     version = "2.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Data-Page-2.03.tar.gz";
-      sha256 = "12rxrr2b11qjk0c437cisw2kfqkafw1awcng09cv6yhzglb55yif";
+      hash = "sha256-LvpSFn0ferNZAs8yrgJ3amI3BdeRnUEYmBKHsETOPYs=";
     };
     propagatedBuildInputs = [ ClassAccessorChained ];
     buildInputs = [ TestException ];
@@ -5702,7 +5702,7 @@ let
     version = "1.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CH/CHUNZI/Data-Page-Pageset-1.02.tar.gz";
-      sha256 = "142isi8la383dbjxj7lfgcbmmrpzwckcc4wma6rdl8ryajsipb6f";
+      hash = "sha256-zqwbtVQ+I9qyUZUTxibj/+ZaF3uOHtnlagMNRVHUUZA=";
     };
     buildInputs = [ ClassAccessor DataPage TestException ];
     meta = {
@@ -5716,7 +5716,7 @@ let
     version = "1.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RA/RAZINF/Data-Password-1.12.tar.gz";
-      sha256 = "830cde81741ff384385412e16faba55745a54a7cc019dd23d7ed4f05d551a961";
+      hash = "sha256-gwzegXQf84Q4VBLhb6ulV0WlSnzAGd0j1+1PBdVRqWE=";
     };
     meta = {
       description = "Perl extension for assessing password quality";
@@ -5729,7 +5729,7 @@ let
     version = "0.002011";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TOBYINK/Data-Perl-0.002011.tar.gz";
-      sha256 = "8d34dbe314cfa2d99bd9aae546bbde94c38bb05b74b07c89bde1673a6f6c55f4";
+      hash = "sha256-jTTb4xTPotmb2arlRrvelMOLsFt0sHyJveFnOm9sVfQ=";
     };
     buildInputs = [ TestDeep TestFatal TestOutput ];
     propagatedBuildInputs = [ ClassMethodModifiers ListMoreUtils ModuleRuntime RoleTiny strictures ];
@@ -5745,7 +5745,7 @@ let
     version = "0.40";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GA/GARU/Data-Printer-0.40.tar.gz";
-      sha256 = "0njjh8zp5afc4602jrnmg89icj7gfsil6i955ypcqxc2gl830sb0";
+      hash = "sha256-YGkwEH2CdcyuLyVFQ6N270gWE3rVZimAIcypcj+CUlo=";
     };
     propagatedBuildInputs = [ ClonePP FileHomeDir PackageStash SortNaturally ];
     meta = {
@@ -5759,7 +5759,7 @@ let
     version = "0.13";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BA/BAREFOOT/Data-Random-0.13.tar.gz";
-      sha256 = "eb590184a8db28a7e49eab09e25f8650c33f1f668b6a472829de74a53256bfc0";
+      hash = "sha256-61kBhKjbKKfknqsJ4l+GUMM/H2aLakcoKd50pTJWv8A=";
     };
     buildInputs = [ FileShareDirInstall TestMockTime ];
     meta = {
@@ -5773,7 +5773,7 @@ let
     version = "0.200007";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Data-Section-0.200007.tar.gz";
-      sha256 = "1pmlxca0a8sv2jjwvhwgqavq6iwys6kf457lby4anjp3f1dpx4yd";
+      hash = "sha256-zZN+W3DjSquIX/QU4qbRnkeDt8KPw82lFFsjBRTrtN4=";
     };
     propagatedBuildInputs = [ MROCompat SubExporter ];
     buildInputs = [ TestFailWarnings ];
@@ -5789,7 +5789,7 @@ let
     version = "0.07";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Data-Section-Simple-0.07.tar.gz";
-      sha256 = "0b3035ffdb909aa1f7ded6b608fa9d894421c82c097d51e7171170d67579a9cb";
+      hash = "sha256-CzA1/9uQmqH33ta2CPqdiUQhyCwJfVHnFxFw1nV5qcs=";
     };
     buildInputs = [ TestRequires ];
     meta = {
@@ -5804,7 +5804,7 @@ let
     version = "0.65";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEELY/Data-Serializer-0.65.tar.gz";
-      sha256 = "048zjy8valnil8yawa3vrxr005rz95gpfwvmy2jq0g830195l58j";
+      hash = "sha256-EhVaUgADPYCl8HVzd19JPxcAcs97KK48otFStZGXHxE=";
     };
     meta = {
       description = "Modules that serialize data structures";
@@ -5818,7 +5818,7 @@ let
     version = "0.41";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NELHAGE/Data-SExpression-0.41.tar.gz";
-      sha256 = "8162426a4285a094385fdfaf6d09ced106d5af57553f953acb1d56867dd0149b";
+      hash = "sha256-gWJCakKFoJQ4X9+vbQnO0QbVr1dVP5U6yx1Whn3QFJs=";
     };
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ ClassAccessor ];
@@ -5833,7 +5833,7 @@ let
     version = "0.1.2";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KN/KNEW/Data-SpreadPagination-0.1.2.tar.gz";
-      sha256 = "74ebfd847132c38cc9e835e14e82c43f1809a95cbc98bb84d1f7ce2e4ef487e3";
+      hash = "sha256-dOv9hHEyw4zJ6DXhToLEPxgJqVy8mLuE0ffOLk70h+M=";
     };
     propagatedBuildInputs = [ DataPage MathRound ];
     meta = {
@@ -5847,7 +5847,7 @@ let
     version = "0.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CM/CMUNGALL/Data-Stag-0.14.tar.gz";
-      sha256 = "4ab122508d2fb86d171a15f4006e5cf896d5facfa65219c0b243a89906258e59";
+      hash = "sha256-SrEiUI0vuG0XGhX0AG5c+JbV+s+mUhnAskOomQYljlk=";
     };
     propagatedBuildInputs = [ IOString ];
     meta = {
@@ -5861,7 +5861,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DO/DOY/Data-Stream-Bulk-0.11.tar.gz";
-      sha256 = "06e08432a6b97705606c925709b99129ad926516e477d58e4461e4b3d9f30917";
+      hash = "sha256-BuCEMqa5dwVgbJJXCbmRKa2SZRbkd9WORGHks9nzCRc=";
     };
     buildInputs = [ TestRequires ];
     propagatedBuildInputs = [ Moose PathClass namespaceclean ];
@@ -5877,7 +5877,7 @@ let
     version = "0.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AN/ANDYA/Data-Structure-Util-0.16.tar.gz";
-      sha256 = "9cd42a13e65cb15f3a76296eb9a134da220168ec747c568d331a50ae7a2ddbc6";
+      hash = "sha256-nNQqE+ZcsV86diluuaE02iIBaOx0fFaNMxpQrnot28Y=";
     };
     buildInputs = [ TestPod ];
     meta = {
@@ -5891,7 +5891,7 @@ let
     version = "0.96";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIKO/Data-Taxi-0.96.tar.gz";
-      sha256 = "0y4wls4jlwd6prvd77szymddhq9sfj06kaqnk4frlvd0zh83djxb";
+      hash = "sha256-q8s2EPygbZodmRaraYB0OmHYWvVfn9N2vqZxKommnHg=";
     };
     buildInputs = [ DebugShowStuff ];
     meta = {
@@ -5905,7 +5905,7 @@ let
     version = "1.0.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BA/BALDUR/Data-ULID-1.0.0.tar.gz";
-      sha256 = "4d757475893dbad5165f0a65c446d38b47f39019d36f77da9d29c98cbf27206f";
+      hash = "sha256-TXV0dYk9utUWXwplxEbTi0fzkBnTb3fanSnJjL8nIG8=";
     };
     propagatedBuildInputs = [ DateTime EncodeBase32GMP MathRandomSecure ];
     meta = {
@@ -5921,7 +5921,7 @@ let
     version = "0.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MW/MWX/Data-Uniqid-0.12.tar.gz";
-      sha256 = "b6919ba49b9fe98bfdf3e8accae7b9b7f78dc9e71ebbd0b7fef7a45d99324ccb";
+      hash = "sha256-tpGbpJuf6Yv98+isyue5t/eNyeceu9C3/vekXZkyTMs=";
     };
     meta = {
       description = "Perl extension for simple genrating of unique id's";
@@ -5934,7 +5934,7 @@ let
     version = "0.66";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SY/SYOHEX/Data-Util-0.66.tar.gz";
-      sha256 = "1x662pqjg9p0wcigi7pwf969b2ymk66ncm2vd5dfm5i08pdkjpf3";
+      hash = "sha256-w10520UglupaaVtUZo2Z1YuVTHL8nvgi4+CmJ/EVxvQ=";
     };
     buildInputs = [ HashUtilFieldHashCompat ModuleBuildXSUtil ScopeGuard TestException ];
     perlPreHook = lib.optionalString stdenv.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
@@ -5951,7 +5951,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RH/RHANDOM/Data-URIEncode-0.11.tar.gz";
-      sha256 = "51c9efbf8423853616eaa24841e4d1996b2db0036900617fb1dbc76c75a1f360";
+      hash = "sha256-Ucnvv4QjhTYW6qJIQeTRmWstsANpAGF/sdvHbHWh82A=";
     };
     meta = {
       description = "Allow complex data structures to be encoded using flat URIs";
@@ -5964,7 +5964,7 @@ let
     version = "1.226";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Data-UUID-1.226.tar.gz";
-      sha256 = "0lv4k4ibxwkw7zz9hw97s34za9nvjxb4kbmgmx5sj4fll3zmfg89";
+      hash = "sha256-CT1X/6DUEalLr6+uSVaX2yb1ydAncZj+P3zyviKZZFM=";
     };
     meta = {
       description = "Globally/Universally Unique Identifiers (GUIDs/UUIDs)";
@@ -5977,7 +5977,7 @@ let
     version = "1.001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/Data-UUID-MT-1.001.tar.gz";
-      sha256 = "0bb7qibq1c5lhaihxa1sck9pb744p8c7172jgx5zh4c32ac4nk1h";
+      hash = "sha256-MExLmBKDEfhLf1KccBi6hJx102Q6qA6jgrSwgFfEZy0=";
     };
     buildInputs = [ ListAllUtils ];
     propagatedBuildInputs = [ MathRandomMTAuto ];
@@ -5993,7 +5993,7 @@ let
     version = "0.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/Data-Validate-Domain-0.14.tar.gz";
-      sha256 = "4470f253b8d2720a4dd3fa3ae550995417c2269f3be7ff030e01afa04a3a9421";
+      hash = "sha256-RHDyU7jScgpN0/o65VCZVBfCJp875/8DDgGvoEo6lCE=";
     };
     buildInputs = [ Test2Suite ];
     propagatedBuildInputs = [ NetDomainTLD ];
@@ -6009,7 +6009,7 @@ let
     version = "0.27";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/Data-Validate-IP-0.27.tar.gz";
-      sha256 = "e1aa92235dcb9c6fd9b6c8cda184d1af73537cc77f4f83a0f88207a8bfbfb7d6";
+      hash = "sha256-4aqSI13LnG/ZtsjNoYTRr3NTfMd/T4Og+IIHqL+/t9Y=";
     };
     buildInputs = [ TestRequires ];
     propagatedBuildInputs = [ NetAddrIP ];
@@ -6025,7 +6025,7 @@ let
     version = "0.07";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SO/SONNEN/Data-Validate-URI-0.07.tar.gz";
-      sha256 = "f06418d2a4603913d1b6ce52b167dd13e787e13bf2be325a065df7d408f79c60";
+      hash = "sha256-8GQY0qRgORPRts5SsWfdE+eH4TvyvjJaBl331Aj3nGA=";
     };
     propagatedBuildInputs = [ DataValidateDomain DataValidateIP ];
     meta = {
@@ -6039,7 +6039,7 @@ let
     version = "0.31";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Data-Visitor-0.31.tar.gz";
-      sha256 = "0vjcsc2hbhml1w126673z31z9rr0hxz64f5rvk7drlmwicr6kc9b";
+      hash = "sha256-K7FpMou80tzO3Lk4Yn6HIOf0w/jjGCMCD7TCBQXTTG4=";
     };
     buildInputs = [ TestNeeds ];
     propagatedBuildInputs = [ Moose TieToObject namespaceclean ];
@@ -6054,7 +6054,7 @@ let
     version = "6.4";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/ST/STBEY/Date-Calc-6.4.tar.gz";
-      sha256 = "1barz0jgdaan3jm7ciphs5n3ahwkl42imprs3y8c1dwpwyr3gqbw";
+      hash = "sha256-fOE3sueXt8CQHzrfGgWhk0M1bNHwRnaqHFap9iT4Wa0=";
     };
     propagatedBuildInputs = [ BitVector ];
     doCheck = false; # some of the checks rely on the year being <2015
@@ -6069,7 +6069,7 @@ let
     version = "0.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AL/ALEXMV/Date-Extract-0.06.tar.gz";
-      sha256 = "bc7658d5c50c3525ec0efcb55236a5de2d5d4fc06fc147fa3929c8f0953cda2b";
+      hash = "sha256-vHZY1cUMNSXsDvy1Ujal3i1dT8BvwUf6OSnI8JU82is=";
     };
     buildInputs = [ TestMockTime ];
     propagatedBuildInputs = [ DateTimeFormatNatural ];
@@ -6084,7 +6084,7 @@ let
     version = "6.83";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SB/SBECK/Date-Manip-6.83.tar.gz";
-      sha256 = "1ylrj6g1sccnyd5k0dq3xl3l40y1jgcbpcb3jnjj5hknv3hv54gl";
+      hash = "sha256-9JGy4dh2wiKllWOxu9iTwQNCB+0DNzBL85YxHZ6Rmfo=";
     };
     # for some reason, parsing /etc/localtime does not work anymore - make sure that the fallback "/bin/date +%Z" will work
     patchPhase = ''
@@ -6104,7 +6104,7 @@ let
     version = "3.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IZ/IZUT/Date-Simple-3.03.tar.gz";
-      sha256 = "29a1926314ce1681a312d6155c29590c771ddacf91b7485873ce449ef209dd04";
+      hash = "sha256-KaGSYxTOFoGjEtYVXClZDHcd2s+Rt0hYc85EnvIJ3QQ=";
     };
     meta = {
       description = "A simple date object";
@@ -6117,7 +6117,7 @@ let
     version = "1.54";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-1.54.tar.gz";
-      sha256 = "1rxjagwmkdlmksz1cbxwx2ad51pv5q7dri2djqkz44q7j1nxlbmi";
+      hash = "sha256-sS7abZAHE/Inlk3E3A4u+4bSlOi8Lxa+npW2WflTsuc=";
     };
     buildInputs = [ CPANMetaCheck TestFatal TestWarnings ];
     propagatedBuildInputs = [ DateTimeLocale DateTimeTimeZone ];
@@ -6133,7 +6133,7 @@ let
     version = "0.102";
     src = fetchurl {
       url = "mirror://cpan/authors/id/W/WY/WYANT/DateTime-Calendar-Julian-0.102.tar.gz";
-      sha256 = "0j95dhma66spjyb04zi6rwy7l33hibnrx02mn0znd9m89aiq52s6";
+      hash = "sha256-RouCo0qopmY/sFWAnu2KcAx6PM8mfgKWl1cboypsJUk=";
     };
     propagatedBuildInputs = [ DateTime ];
     meta = {
@@ -6147,7 +6147,7 @@ let
     version = "0.13";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FG/FGLOCK/DateTime-Event-ICal-0.13.tar.gz";
-      sha256 = "1skmykxbrf98ldi72d5s1v6228gfdr5iy4y0gpl0xwswxy247njk";
+      hash = "sha256-U9pDhO9c8w7ofcATH0tu7iEhzA66NHFioyi5vPr0deo=";
     };
     propagatedBuildInputs = [ DateTimeEventRecurrence ];
     meta = {
@@ -6161,7 +6161,7 @@ let
     version = "0.19";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FG/FGLOCK/DateTime-Event-Recurrence-0.19.tar.gz";
-      sha256 = "f9408789a461107766ca1a232bb3ec1e702eec7ca8167401ea6ec3f4b6d0b5a5";
+      hash = "sha256-+UCHiaRhEHdmyhojK7PsHnAu7HyoFnQB6m7D9LbQtaU=";
     };
     propagatedBuildInputs = [ DateTimeSet ];
     meta = {
@@ -6175,7 +6175,7 @@ let
     version = "0.83";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-Format-Builder-0.83.tar.gz";
-      sha256 = "61ffb23d85b3ca1786b2da3289e99b57e0625fe0e49db02a6dc0cb62c689e2f2";
+      hash = "sha256-Yf+yPYWzyheGstoyiembV+BiX+DknbAqbcDLYsaJ4vI=";
     };
     propagatedBuildInputs = [ DateTimeFormatStrptime ParamsValidate ];
     meta = {
@@ -6190,7 +6190,7 @@ let
     version = "0.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JH/JHOBLITT/DateTime-Format-DateParse-0.05.tar.gz";
-      sha256 = "f6eca4c8be66ce9992ee150932f8fcf07809fd3d1664caf200b8a5fd3a7e5ebc";
+      hash = "sha256-9uykyL5mzpmS7hUJMvj88HgJ/T0WZMryALil/Tp+Xrw=";
     };
     propagatedBuildInputs = [ DateTime TimeDate ];
     meta = {
@@ -6204,7 +6204,7 @@ let
     version = "0.32";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TH/THINC/DateTime-Format-Flexible-0.32.tar.gz";
-      sha256 = "50a7b9feb287bb14b27323a53c2324486181a3ab6cb3f4c7662d42be901ad8ee";
+      hash = "sha256-UKe5/rKHuxSycyOlPCMkSGGBo6tss/THZi1CvpAa2O4=";
     };
     propagatedBuildInputs = [ DateTimeFormatBuilder ListMoreUtils ModulePluggable ];
     buildInputs = [ TestException TestMockTime TestNoWarnings ];
@@ -6219,7 +6219,7 @@ let
     version = "0.42";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CK/CKRAS/DateTime-Format-HTTP-0.42.tar.gz";
-      sha256 = "0h6qqdg1yzqkdxp7hqlp0qa7d1y64nilgimxs79dys2ryjfpcknh";
+      hash = "sha256-0E52nfRZaN/S0b3GR6Mlxod2FAaXYnhubxN/H17D2EA=";
     };
     propagatedBuildInputs = [ DateTime HTTPDate ];
     meta = {
@@ -6233,7 +6233,7 @@ let
     version = "0.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-Format-ICal-0.09.tar.gz";
-      sha256 = "8b09f6539f5e9c0df0e6135031699ed4ef9eef8165fc80aefeecc817ef997c33";
+      hash = "sha256-iwn2U59enA3w5hNQMWme1O+e74Fl/ICu/uzIF++ZfDM=";
     };
     propagatedBuildInputs = [ DateTimeEventICal ];
     meta = {
@@ -6247,7 +6247,7 @@ let
     version = "0.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-Format-ISO8601-0.15.tar.gz";
-      sha256 = "1afslsr2axkamdfjqk6i3w092hp20dznqffk4lgpxmxrd31ni5ql";
+      hash = "sha256-FJdow2i5134fJdM5bH8D4kKRAB/RTCxdq2p2JbKm2qk=";
     };
     propagatedBuildInputs = [ DateTimeFormatBuilder ];
     buildInputs = [ Test2Suite ];
@@ -6263,7 +6263,7 @@ let
     version = "0.403";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BO/BOOK/DateTime-Format-Mail-0.403.tar.gz";
-      sha256 = "8df8e35c4477388ff5c7ce8b3e8b6ae4ed30209c7a5051d41737bd14d755fcb0";
+      hash = "sha256-jfjjXER3OI/1x86LPotq5O0wIJx6UFHUFze9FNdV/LA=";
     };
     propagatedBuildInputs = [ DateTime ParamsValidate ];
     meta = {
@@ -6277,7 +6277,7 @@ let
     version = "1.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SC/SCHUBIGER/DateTime-Format-Natural-1.11.tar.gz";
-      sha256 = "0lj5yh1k4dl06p9ydyscd4ic330w8ygz88m38bhzlbz42kxv13vk";
+      hash = "sha256-c4+w+xTkL/rhQqMi9J9HHIzBImlM++bTNYA2MgP0RVI=";
     };
     buildInputs = [ ModuleUtil TestMockTime ];
     propagatedBuildInputs = [ Clone DateTime ListMoreUtils ParamsValidate boolean ];
@@ -6293,7 +6293,7 @@ let
     version = "0.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XM/XMIKEW/DateTime-Format-MySQL-0.06.tar.gz";
-      sha256 = "07cgz60gxvrv7xqvngyll60pa8cx93h3jyx9kc9wdkn95qbd864q";
+      hash = "sha256-mBjUFi7JzsYTm6l7OeBInSF1gaHUP7txPzvv/oD5jx0=";
     };
     propagatedBuildInputs = [ DateTimeFormatBuilder ];
     meta = {
@@ -6307,7 +6307,7 @@ let
     version = "0.16013";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DM/DMAKI/DateTime-Format-Pg-0.16013.tar.gz";
-      sha256 = "16siw0f3a0ilzv5fnfas5s9n92drjy271yf6qvmmpm0vwnjjx1kz";
+      hash = "sha256-f4YupeUb1Fvrxsb5cISXuYlkky5aOevK/jQCNRzgUZs=";
     };
     propagatedBuildInputs = [ DateTimeFormatBuilder ];
     buildInputs = [ ModuleBuildTiny ];
@@ -6323,7 +6323,7 @@ let
     version = "1.77";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-Format-Strptime-1.77.tar.gz";
-      sha256 = "2fa43c838ecf5356f221a91a41c81dba22e7860c5474b4a61723259898173e4a";
+      hash = "sha256-L6Q8g47PU1byIakaQcgduiLnhgxUdLSmFyMlmJgXPko=";
     };
     buildInputs = [ TestFatal TestWarnings ];
     propagatedBuildInputs = [ DateTime ];
@@ -6339,7 +6339,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CF/CFAERBER/DateTime-Format-SQLite-0.11.tar.gz";
-      sha256 = "cc1f4e0ae1d39b0d4c3dddccfd7423c77c67a70950c4b5ecabf8ca553ab294b4";
+      hash = "sha256-zB9OCuHTmw1MPd3M/XQjx3xnpwlQxLXsq/jKVTqylLQ=";
     };
     propagatedBuildInputs = [ DateTimeFormatBuilder ];
     meta = {
@@ -6353,7 +6353,7 @@ let
     version = "0.07";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GW/GWILLIAMS/DateTime-Format-W3CDTF-0.07.tar.gz";
-      sha256 = "69a02b661bbf1daa14a4813cb6786eaa66dbdf2743f0b3f458e30234c3a26268";
+      hash = "sha256-aaArZhu/HaoUpIE8tnhuqmbb3ydD8LP0WOMCNMOiYmg=";
     };
     propagatedBuildInputs = [ DateTime ];
     meta = {
@@ -6368,7 +6368,7 @@ let
     version = "1.28";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-Locale-1.28.tar.gz";
-      sha256 = "6c604d8c5c9c2739b78e0538a402283b82b1df419e60bef20b04843e4584bade";
+      hash = "sha256-bGBNjFycJzm3jgU4pAIoO4Kx30GeYL7yCwSEPkWEut4=";
     };
     buildInputs = [ CPANMetaCheck FileShareDirInstall IPCSystemSimple PathTiny Test2PluginNoWarnings Test2Suite TestFileShareDir ];
     propagatedBuildInputs = [ FileShareDir ParamsValidationCompiler Specio namespaceautoclean ];
@@ -6384,7 +6384,7 @@ let
     version = "1.2.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IK/IKEGAMI/DateTime-Format-RFC3339-v${version}.tar.gz";
-      sha256 = "1xqdbbiksy6kapc3mv3ayjahmxxlzmb5x7rad4by1iii9hif2vhk";
+      hash = "sha256-E27hIkwxxuAXaSqfXlb9tPcKlfRq7DrYVdN4PeNaDfc=";
     };
     propagatedBuildInputs = [ DateTime ];
     meta = {
@@ -6399,7 +6399,7 @@ let
     version = "0.3900";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FG/FGLOCK/DateTime-Set-0.3900.tar.gz";
-      sha256 = "94f41c3924aafde4ef7fa6b58e0595d4038d8ac5ffd62ba111b13c5f4dbc0946";
+      hash = "sha256-lPQcOSSq/eTvf6a1jgWV1AONisX/1iuhEbE8X028CUY=";
     };
     propagatedBuildInputs = [ DateTime ParamsValidate SetInfinite ];
     meta = {
@@ -6413,7 +6413,7 @@ let
     version = "2.44";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-TimeZone-2.44.tar.gz";
-      sha256 = "09j5rqid1mv0cgm1vc89l2anbb3q8w4bzlm7sqrkiz9dk82x8gap";
+      hash = "sha256-Vz3UBZot/Tgz1qfSvwhHeKxllaAJsR3qY2DX0CLORSY=";
     };
     buildInputs = [ TestFatal TestRequires ];
     propagatedBuildInputs = [ ClassSingleton ParamsValidationCompiler Specio namespaceautoclean ];
@@ -6429,7 +6429,7 @@ let
     version = "0.089";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RO/ROKR/DateTimeX-Easy-0.089.tar.gz";
-      sha256 = "17e6d202e7ac6049523048e97bb8f195e3c79208570da1504f4313584e487a79";
+      hash = "sha256-F+bSAuesYElSMEjpe7jxlePHkghXDaFQT0MTWE5Ienk=";
     };
     buildInputs = [ TestMost ];
     propagatedBuildInputs = [ DateTimeFormatFlexible DateTimeFormatICal DateTimeFormatNatural TimeDate ];
@@ -6445,7 +6445,7 @@ let
     version = "1.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIKO/Debug-ShowStuff-1.16.tar.gz";
-      sha256 = "1drcrnji3yrd0s3xb69bxnqa51s19c13w68vhvjad3nvswn5vpd4";
+      hash = "sha256-pN1dLNfbjqbkhhsZPgJLQYeisO0rmdWHBi37EaXNLLc=";
     };
     propagatedBuildInputs = [ ClassISA DevelStackTrace StringUtil TermReadKey TextTabularDisplay TieIxHash ];
     meta = {
@@ -6459,7 +6459,7 @@ let
     version = "2.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${pname}-${version}.tar.gz";
-      sha256 = "2716d9b1f05627d60942ce0634b9c1a25109b164818285d45b609ae8596e2b17";
+      hash = "sha256-JxbZsfBWJ9YJQs4GNLnBolEJsWSBgoXUW2Ca6FluKxc=";
     };
     propagatedBuildInputs = [ AnyEvent CompressLZF JSONXS commonsense ];
     meta = {
@@ -6473,7 +6473,7 @@ let
     version = "2.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RC/RCLAMP/Devel-Caller-2.06.tar.gz";
-      sha256 = "1pxpimifzmnjnvf4icclx77myc15ahh0k56sj1djad1855mawwva";
+      hash = "sha256-anOuaikoNCVbkNqUCSBUJTBfz+mUsUjcttLW72KNt98=";
     };
     propagatedBuildInputs = [ PadWalker ];
     meta = {
@@ -6487,7 +6487,7 @@ let
     version = "0.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/Devel-CheckBin-0.04.tar.gz";
-      sha256 = "1r735yzgvsxkj4m6ks34xva5m21cfzp9qiis2d4ivv99kjskszqm";
+      hash = "sha256-FX89tZwp7R1JEzpGnO53LIha1O5k6GkqkbPr/b4v4+Q=";
     };
     meta = {
       description = "Check that a command is available";
@@ -6501,7 +6501,7 @@ let
     version = "0.07";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SY/SYOHEX/Devel-CheckCompiler-0.07.tar.gz";
-      sha256 = "1db973a4dbyknjxq608hywil5ai6vplnayshqxrd7m5qnjbpd2vn";
+      hash = "sha256-dot2l7S41NNyx1B7ZendJqpCI/cQAYO7tNOvRtQ4abU=";
     };
     buildInputs = [ ModuleBuildTiny ];
     meta = {
@@ -6516,7 +6516,7 @@ let
     version = "1.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MATTN/Devel-CheckLib-1.14.tar.gz";
-      sha256 = "15621qh5gaan1sgmk9y9svl70nm8viw17x5h1kf0zknkk8lmw77j";
+      hash = "sha256-8hxeKZrTzg/cDLD0E3jcqFpw6NbJp1mfDlapVyAOwpQ=";
     };
     buildInputs = [ CaptureTiny MockConfig ];
     meta = {
@@ -6530,7 +6530,7 @@ let
     version = "1.85";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DC/DCANTRELL/Devel-CheckOS-1.85.tar.gz";
-      sha256 = "1jjqwrx8mydyhqwwjlgimribz0yq0b6q66xnr6mgvyn63pdajhvg";
+      hash = "sha256-b0Op2h3G+v2qybYbg80C2IO/Yq7xUck5hr75inrmWMo=";
     };
     propagatedBuildInputs = [ FileFindRule ];
     meta = {
@@ -6544,7 +6544,7 @@ let
     version = "0.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NI/NI-S/Devel-Leak-0.03.tar.gz";
-      sha256 = "0lkj2xwc3lhxv7scl43r8kfmls4am0b98sqf5vmf7d72257w6hkg";
+      hash = "sha256-b0LDTxHitOPqLg5rlBaoimha3UR5EMr02R3SwXgXclI=";
     };
     meta = {
       description = "Utility for looking for perl objects that are not reclaimed";
@@ -6558,7 +6558,7 @@ let
     version = "2.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BINGOS/Devel-PatchPerl-2.08.tar.gz";
-      sha256 = "06bl2qqf5mv53l7k81xgynfx99in5fa8yi3ykn7403r62rqfkik9";
+      hash = "sha256-acbpcBYmD0COnX5Ej5QrNqbUnfWvBzQPHWXX4jAWdBk=";
     };
     propagatedBuildInputs = [ Filepushd ModulePluggable ];
     meta = {
@@ -6574,7 +6574,7 @@ let
     version = "0.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/Devel-Refcount-0.10.tar.gz";
-      sha256 = "0jnaraqkigyinhwz4nqk1ndq7ssjizr98nd1dd183a6icdlx8m5n";
+      hash = "sha256-tlTUaWPRqIFCa6FZlPKPUuuDmw0TW/I5tNG/OLHKyko=";
     };
     buildInputs = [ TestFatal ];
     meta = {
@@ -6588,7 +6588,7 @@ let
     version = "3.62";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AT/ATOOMIC/Devel-PPPort-3.62.tar.gz";
-      sha256 = "16w1mmx304bhql27mgy0l1qjwjr86vn7j0133i0hln9fdz2097gi";
+      hash = "sha256-8Z0ExG8uWQpBHCMAeew2KEsucaDAv3oExXARMHqtgZs=";
     };
     meta = {
       description = "Perl/Pollution/Portability";
@@ -6601,7 +6601,7 @@ let
     version = "0.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MJ/MJD/Devel-Trace-0.12.tar.gz";
-      sha256 = "0s1q1a05gk3xvwqkya3k05vqjk13rvb489g0frprhzpzfvvwl0gm";
+      hash = "sha256-9QHK93b/fphvduAlRNbOI0yJdwFzKD8x333MV4AKOGg=";
     };
     meta = {
       description = "Print out each line before it is executed (like sh -x)";
@@ -6614,7 +6614,7 @@ let
     version = "1.00";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JA/JASONK/Device-MAC-1.00.tar.gz";
-      sha256 = "c42182a9a8489a314cbfe6e1c8452f32b3b626aa6c89fee1d8925e6dfb64fad5";
+      hash = "sha256-xCGCqahImjFMv+bhyEUvMrO2Jqpsif7h2JJebftk+tU=";
     };
     buildInputs = [ TestDeep TestDifferences TestException TestMost TestWarn ];
     propagatedBuildInputs = [ DeviceOUI Moose ];
@@ -6630,7 +6630,7 @@ let
     version = "1.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JA/JASONK/Device-OUI-1.04.tar.gz";
-      sha256 = "4b367e61b1fadde77fb6fb729f3cd5acd1d46e71218d96f406bcba38d43b4bef";
+      hash = "sha256-SzZ+YbH63ed/tvtynzzVrNHUbnEhjZb0Bry6ONQ7S+8=";
     };
     buildInputs = [ TestException ];
     patches = [ ../development/perl-modules/Device-OUI-1.04-hash.patch ];
@@ -6647,7 +6647,7 @@ let
     version = "0.56";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HM/HMBRAND/DBD-CSV-0.56.tgz";
-      sha256 = "16rhgchwlnnvjklca0d4sa3lmlj29zc0iwclk41y5fz6kg8c2qjs";
+      hash = "sha256-WmLB0Jvmu+IDmZTxCNhPQtJKh9KkAcXolNtayiF7MJs=";
     };
     propagatedBuildInputs = [ DBI SQLStatement TextCSV_XS ];
     meta = {
@@ -6661,7 +6661,7 @@ let
     version = "1.58";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JL/JLCOOPER/DBD-Mock-1.58.tar.gz";
-      sha256 = "0g67r5i5qad5knjph4ybfpqxabgi2h7svpl3pgjrc4qh4h0vy7mv";
+      hash = "sha256-ux6/ASQQE5blu4PerQ8U8S3V8XXLE3ilnaUpXGLJxzw=";
     };
     propagatedBuildInputs = [ DBI ];
     buildInputs = [ ModuleBuildTiny TestException ];
@@ -6677,7 +6677,7 @@ let
 
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/DBD-SQLite-1.70.tar.gz";
-      sha256 = "0gpyv89p3yfwifbm005bz5ci8c63jikkfvafg8x7f3lyaggqvza0";
+      hash = "sha256-QP2N31OeDnc6ek5tN2eUwzAUWfmrAFCXi9z5cRPa/j4=";
     };
 
     propagatedBuildInputs = [ DBI ];
@@ -6691,7 +6691,7 @@ let
       (fetchpatch {
         name = "sqlite-3.37-compat.patch";
         url = "https://github.com/DBD-SQLite/DBD-SQLite/commit/ba4f472e7372dbf453444c7764d1c342e7af12b8.patch";
-        sha256 = "02lg1y6px7h89pfvgrf23anhbl3v050gn0kmaajvv5h6layhjzly";
+        hash = "sha256-nn4JvaIGlr2lUnUC+0ABe9AFrRrC5bfdTQiefo0Pjwo=";
       })
     ];
 
@@ -6716,7 +6716,7 @@ let
     version = "1.22";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PA/PALI/DBD-MariaDB-1.22.tar.gz";
-      sha256 = "sha256-C2j9VCuWU/FbIFhXgZhjSNcehafjhD8JGZdwR6F5scY=";
+      hash = "sha256-C2j9VCuWU/FbIFhXgZhjSNcehafjhD8JGZdwR6F5scY=";
     };
     buildInputs = [ pkgs.mariadb-connector-c DevelChecklib TestDeep TestDistManifest TestPod ];
     propagatedBuildInputs = [ DBI ];
@@ -6734,7 +6734,7 @@ let
 
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DV/DVEEDEN/DBD-mysql-4.050.tar.gz";
-      sha256 = "0y4djb048i09dk19av7mzfb3khr72vw11p3ayw2p82jsy4gm8j2g";
+      hash = "sha256-T0hUH/FaCnQF92rcEPgWJ8M5lvv1bJXCbAlERMCSjXg=";
     };
 
     buildInputs = [ pkgs.libmysqlclient DevelChecklib TestDeep TestDistManifest TestPod ];
@@ -6755,7 +6755,7 @@ let
 
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MJ/MJEVANS/DBD-Oracle-1.80.tar.gz";
-      sha256 = "1rza36dywbsaync99ibscpqdp53m0yg2748bbib16gbf4cl2apph";
+      hash = "sha256-8F4lKCNuPRNWXAuRI54HdZTb8GV6xZSY9Uov7psZ6uc=";
     };
 
     ORACLE_HOME = "${pkgs.oracle-instantclient.lib}/lib";
@@ -6778,7 +6778,7 @@ let
 
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TU/TURNSTEP/DBD-Pg-3.14.2.tar.gz";
-      sha256 = "0kcfqq7g3832wiix0sbyvlc885qghjrp2ah3akn7h2lnb22fjwy9";
+      hash = "sha256-yXPphFiWCnjsVAMqcbOEDxeEGN1+adBj5GKg8Q7Gjk0=";
     };
 
     buildInputs = [ pkgs.postgresql ];
@@ -6803,7 +6803,7 @@ let
 
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/ME/MEWP/DBD-Sybase-1.16.tar.gz";
-      sha256 = "1k6n261nrrcll9wxn5xwi4ibpavqv1il96687k62mbpznzl2gx37";
+      hash = "sha256-Z/Qn6Lf/rirMPMiYRGPYeKu7Iom8F9t5opTlbIMR1sw=";
     };
 
     SYBASE = pkgs.freetds;
@@ -6826,7 +6826,7 @@ let
 
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PM/PMQS/DB_File-1.855.tar.gz";
-      sha256 = "0q599h7g4jkzks5dxf1zifx9k7l9vif26r2dlgkzxkg6bfif5zyr";
+      hash = "sha256-2f/iolvmzf7no01kI1zciZ6Zuos/uN6Knn9K8g5MqWA=";
     };
 
     preConfigure = ''
@@ -6848,7 +6848,7 @@ let
     version = "1.643";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TI/TIMB/DBI-1.643.tar.gz";
-      sha256 = "8a2b993db560a2c373c174ee976a51027dd780ec766ae17620c20393d2e836fa";
+      hash = "sha256-iiuZPbVgosNzwXTul2pRAn3XgOx2auF2IMIDk9LoNvo=";
     };
     postInstall = lib.optionalString (perl ? crossVersion) ''
       mkdir -p $out/${perl.libPrefix}/cross_perl/${perl.version}/DBI
@@ -6900,7 +6900,7 @@ let
     version = "0.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JR/JROCKWAY/DBICx-TestDatabase-0.05.tar.gz";
-      sha256 = "8e3bc2530b01216188c3aa65acdbd2f59c4e631f3ae085dfc439abd89f8f0acf";
+      hash = "sha256-jjvCUwsBIWGIw6plrNvS9ZxOYx864IXfxDmr2J+PCs8=";
     };
     buildInputs = [ DBIxClass TestSimple13 ];
     propagatedBuildInputs = [ DBDSQLite SQLTranslator ];
@@ -6917,7 +6917,7 @@ let
     version = "0.082843";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RI/RIBASUSHI/DBIx-Class-0.082843.tar.gz";
-      sha256 = "sha256-NB4Lbssp2MSRdKbAnXxtvzhym6QBXuf9cDYKT/7h8lE=";
+      hash = "sha256-NB4Lbssp2MSRdKbAnXxtvzhym6QBXuf9cDYKT/7h8lE=";
     };
     buildInputs = [ DBDSQLite TestDeep TestException TestWarn ];
     propagatedBuildInputs = [ ClassAccessorGrouped ClassC3Componentised ConfigAny ContextPreserve DBI DataDumperConcise DataPage DevelGlobalDestruction ModuleFind PathClass SQLAbstractClassic ScopeGuard SubName namespaceclean ];
@@ -6934,7 +6934,7 @@ let
     version = "0.005003";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FR/FREW/DBIx-Class-Candy-0.005003.tar.gz";
-      sha256 = "b8a229a7b15f559095d4561cf8220460128541ba7fc3545ed35869923d46565c";
+      hash = "sha256-uKIpp7FfVZCV1FYc+CIEYBKFQbp/w1Re01hpkj1GVlw=";
     };
     buildInputs = [ TestDeep TestFatal ];
     propagatedBuildInputs = [ DBIxClass LinguaENInflect SubExporter ];
@@ -6950,7 +6950,7 @@ let
     version = "1.001004";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AR/ARCANEZ/DBIx-Class-Cursor-Cached-1.001004.tar.gz";
-      sha256 = "09b2jahn2x12qm4f7qm1jzsxbz7qn1czp6a3fnl5l2i3l4r5421p";
+      hash = "sha256-NwhSMqEjClqodUOZ+1mw+PzV9Zeh4uNIxSJ0YaGSYiU=";
     };
     buildInputs = [ CacheCache DBDSQLite ];
     propagatedBuildInputs = [ CarpClan DBIxClass ];
@@ -6965,7 +6965,7 @@ let
     version = "0.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSTROUT/DBIx-Class-DynamicDefault-0.04.tar.gz";
-      sha256 = "228f51ab224642584b4dc63db6de2667c5bfae2a894a9376b210a104806a5afb";
+      hash = "sha256-Io9RqyJGQlhLTcY9tt4mZ8W/riqJSpN2shChBIBqWvs=";
     };
     buildInputs = [ DBICxTestDatabase ];
     propagatedBuildInputs = [ DBIxClass ];
@@ -6982,7 +6982,7 @@ let
     version = "0.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AN/ANDREMAR/DBIx-Class-HTMLWidget-0.16.tar.gz";
-      sha256 = "05zhniyzl31nq410ywhxm0vmvac53h7ax42hjs9mmpvf45ipahj1";
+      hash = "sha256-QUJ1YyFu31qTllCQrg4chaldN6gdcg8CwTYM+n208Bc=";
     };
     propagatedBuildInputs = [ DBIxClass HTMLWidget ];
     meta = {
@@ -6996,7 +6996,7 @@ let
     version = "2.036000";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FR/FREW/DBIx-Class-Helpers-2.036000.tar.gz";
-      sha256 = "b7b8b4891a983c034ef0b45f4112404a0a40550c4e217daeb7a22ca16861efdb";
+      hash = "sha256-t7i0iRqYPANO8LRfQRJASgpAVQxOIX2ut6IsoWhh79s=";
     };
     buildInputs = [ DBDSQLite DateTimeFormatSQLite TestDeep TestFatal TestRoo aliased ];
     propagatedBuildInputs = [ CarpClan DBIxClassCandy DBIxIntrospector SafeIsa TextBrew ];
@@ -7012,7 +7012,7 @@ let
     version = "0.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MR/MRUIZ/DBIx-Class-InflateColumn-Serializer-0.09.tar.gz";
-      sha256 = "6262b4871db6a6c45a0cbe7cde8f1b890b22c291add4ecc40caaeeab5a3a6f50";
+      hash = "sha256-YmK0hx22psRaDL583o8biQsiwpGt1OzEDKruq1o6b1A=";
     };
     buildInputs = [ DBDSQLite TestException ];
     propagatedBuildInputs = [ DBIxClass JSONMaybeXS YAML ];
@@ -7029,7 +7029,7 @@ let
     version = "0.001002";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IL/ILMARI/DBIx-Class-IntrospectableM2M-0.001002.tar.gz";
-      sha256 = "c6baafb4241693fdb34b29ebd906993add364bf31aafa4462f3e062204cc87f0";
+      hash = "sha256-xrqvtCQWk/2zSynr2QaZOt02S/Mar6RGLz4GIgTMh/A=";
     };
     propagatedBuildInputs = [ DBIxClass ];
     meta = {
@@ -7043,7 +7043,7 @@ let
     version = "0.07049";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IL/ILMARI/DBIx-Class-Schema-Loader-0.07049.tar.gz";
-      sha256 = "e869cdde1378cfebccf229b0cde58d2746dc6080b75f56d072aa5f1fce76a764";
+      hash = "sha256-6GnN3hN4z+vM8imwzeWNJ0bcYIC3X1bQcqpfH852p2Q=";
     };
     buildInputs = [ DBDSQLite TestDeep TestDifferences TestException TestWarn ];
     propagatedBuildInputs = [ CarpClan ClassUnload DBIxClass DataDump StringToIdentifierEN curry ];
@@ -7059,7 +7059,7 @@ let
     version = "0.56";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DW/DWHEELER/DBIx-Connector-0.56.tar.gz";
-      sha256 = "57c08d2c1951486cb95cfb83f518f462a3dbf20d353f3eee4f46af44fa19c359";
+      hash = "sha256-V8CNLBlRSGy5XPuD9Rj0YqPb8g01Pz7uT0avRPoZw1k=";
     };
     buildInputs = [ TestMockModule ];
     propagatedBuildInputs = [ DBI ];
@@ -7074,7 +7074,7 @@ let
     version = "0.45";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IV/IVAN/DBIx-DBSchema-0.45.tar.gz";
-      sha256 = "7a2a978fb6d9feaa3e4b109c71c963b26a008a2d130c5876ecf24c5a72338a1d";
+      hash = "sha256-eiqXj7bZ/qo+SxCcccljsmoAii0TDFh27PJMWnIzih0=";
     };
     propagatedBuildInputs = [ DBI ];
     meta = {
@@ -7088,7 +7088,7 @@ let
     version = "1.71";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BP/BPS/DBIx-SearchBuilder-1.71.tar.gz";
-      sha256 = "1ga2sjis6lg51z58il8q165klc38dmb3wj3phyxjfjg6yskdsbz4";
+      hash = "sha256-5C/dpvbmSSe7h3dIPlZtaDA6iwkY0YjKD+VRo6PUQr0=";
     };
     buildInputs = [ DBDSQLite ];
     propagatedBuildInputs = [ CacheSimpleTimedExpiry ClassAccessor ClassReturnValue Clone DBIxDBSchema Want capitalization ];
@@ -7103,7 +7103,7 @@ let
     version = "1.37";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JU/JUERD/DBIx-Simple-1.37.tar.gz";
-      sha256 = "46d311aa2ce08907401c56119658426dbb044c5a40de73d9a7b79bf50390cae3";
+      hash = "sha256-RtMRqizgiQdAHFYRllhCbbsETFpA3nPZp7eb9QOQyuM=";
     };
     propagatedBuildInputs = [ DBI ];
     meta = {
@@ -7117,7 +7117,7 @@ let
     version = "2.0016";
     src = fetchurl {
       url = "https://cpan.metacpan.org/authors/id/S/SP/SPROUT/DBM-Deep-2.0016.tar.gz";
-      sha256 = "sha256-kCp8eqBIjY0KDops89oOlrQJOuRx5rdy8MbViY5HDk0=";
+      hash = "sha256-kCp8eqBIjY0KDops89oOlrQJOuRx5rdy8MbViY5HDk0=";
     };
     buildInputs = [ TestDeep TestException TestPod TestPodCoverage TestWarn ];
     meta = {
@@ -7132,7 +7132,7 @@ let
     version = "0.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SN/SNKWATT/Data-Binary-0.01.tar.gz";
-      sha256 = "0wwdrgkz4yqpzdmfvid63v5v10b9hwdsg15jvks0hwdc23ga48a8";
+      hash = "sha256-SCGi3hCscQj03LKEpxuHaYGwyx6mxe1q+xd78ufLjXM=";
     };
     meta = {
       description = "Simple detection of binary versus text in strings";
@@ -7145,7 +7145,7 @@ let
     version = "0.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BT/BTROTT/Data-Buffer-0.04.tar.gz";
-      sha256 = "2b3d09b7bcf389fc116207b283bee250e348d44c9c63460bee67efab4dd21bb4";
+      hash = "sha256-Kz0Jt7zzifwRYgeyg77iUONI1EycY0YL7mfvq03SG7Q=";
     };
     meta = {
       description = "Read/write buffer class";
@@ -7159,7 +7159,7 @@ let
     version = "0.001005";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FR/FREW/DBIx-Introspector-0.001005.tar.gz";
-      sha256 = "0fp6h71xv4pgb8l815rs6ad4camzhjqf64s1sf7zmhchqqn4vacn";
+      hash = "sha256-lqlNLMaQwfqP00ET47CEvypGmjI6l4AoWu+S3cOB5jo=";
     };
 
     propagatedBuildInputs = [ DBI Moo ];
@@ -7175,7 +7175,7 @@ let
     version = "2021.2";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HU/HURRICUP/Devel-Camelcadedb-v2021.2.tar.gz";
-      sha256 = "88a1d9e95d398ffe4d4114861e21c36f7c22315b3d03e7f764ccbce018ab3e47";
+      hash = "sha256-iKHZ6V05j/5NQRSGHiHDb3wiMVs9A+f3ZMy84BirPkc=";
     };
     propagatedBuildInputs = [ HashStoredIterator JSONXS PadWalker ];
     perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
@@ -7190,7 +7190,7 @@ let
     version = "1.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LD/LDS/Devel-Cycle-1.12.tar.gz";
-      sha256 = "1hhb77kz3dys8yaik452j22cm3510zald2mpvfyv5clqv326aczx";
+      hash = "sha256-/TNlxNiYsrK927eKRtUHoYzKhJCikBmVR9q38ec5C8I=";
     };
     meta = {
       description = "Find memory cycles in objects";
@@ -7203,7 +7203,7 @@ let
     version = "0.006022";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Devel-Declare-0.006022.tar.gz";
-      sha256 = "72f29ca35646a593be98311ffddb72033ae1e8a9d8254c62aa248bd6260e596e";
+      hash = "sha256-cvKco1ZGpZO+mDEf/dtyAzrh6KnYJUxiqiSL1iYOWW4=";
     };
     buildInputs = [ ExtUtilsDepends TestRequires ];
     propagatedBuildInputs = [ BHooksEndOfScope BHooksOPCheck SubName ];
@@ -7218,7 +7218,7 @@ let
     version = "0.015";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEONT/Devel-FindPerl-0.015.tar.gz";
-      sha256 = "1z1xfj3178w632mqddyklk355a19bsgzkilznrng3rvg4bfbfxaj";
+      hash = "sha256-UnW33CJv5/Fstp/G+Z9eKahSxqTTt4arGIajE4Z0Pfw=";
     };
     meta = {
       description = "Find the path to your perl";
@@ -7231,7 +7231,7 @@ let
     version = "0.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/Devel-GlobalDestruction-0.14.tar.gz";
-      sha256 = "1aslj6myylsvzr0vpqry1cmmvzbmpbdcl4v9zrl18ccik7rabf1l";
+      hash = "sha256-NLil8pmRMRRo/mkTytq6df1dKws+47tB/ltT76uRVKs=";
     };
     propagatedBuildInputs = [ SubExporterProgressive ];
     meta = {
@@ -7246,7 +7246,7 @@ let
     version = "0.003003";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/Devel-GlobalPhase-0.003003.tar.gz";
-      sha256 = "1x9jzy3l7gwikj57swzl94qsq03j9na9h1m69azzs7d7ghph58wd";
+      hash = "sha256-jaMCL3ynHf2/SqYGmJRNcgCsMUn0c32KnJG/Q4f/MvU=";
     };
     meta = {
       description = "Detect perl's global phase on older perls";
@@ -7259,7 +7259,7 @@ let
     version = "0.0013";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DC/DCANTRELL/Devel-Hide-0.0013.tar.gz";
-      sha256 = "1jvyy3yasiwyjsn9ay9sja3ch4wcjc4wk5l22vjsclq29z7vphvg";
+      hash = "sha256-b8O7z08CU6blFoKWyQmTjBPIhpI6eZWslp5Hrfzwfss=";
     };
     meta = {
       description = "Forces the unavailability of specified Perl modules (for testing)";
@@ -7272,7 +7272,7 @@ let
     version = "6.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JK/JKEENAN/Devel-NYTProf-6.10.tar.gz";
-      sha256 = "24ac4174f1f01322063fa4e119b247d371d3260ddca6e778c6c1a0e3f905f58e";
+      hash = "sha256-JKxBdPHwEyIGP6ThGbJH03HTJg3cpud4xsGg4/kF9Y4=";
     };
     propagatedBuildInputs = [ FileWhich JSONMaybeXS ];
     buildInputs = [ CaptureTiny TestDifferences ];
@@ -7292,7 +7292,7 @@ let
     version = "0.005";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IL/ILMARI/Devel-OverloadInfo-0.005.tar.gz";
-      sha256 = "1rx6g8pyhi7lx6z130b7vlf8syzrq92w9ky8mpw4d6bwlkzy5zcb";
+      hash = "sha256-i/3i/6R8mUb4rcjPxEXC+XuNHN1ngRG+6fRE6C96puc=";
     };
     propagatedBuildInputs = [ MROCompat PackageStash SubIdentify ];
     buildInputs = [ TestFatal ];
@@ -7307,7 +7307,7 @@ let
     version = "0.20";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Devel-PartialDump-0.20.tar.gz";
-      sha256 = "01yrsdpn9ns9iwwc92bhjn2605b7ys7i3198gjb935lsllzgzw5f";
+      hash = "sha256-rvD/PqWalpGWfCiFEY/2ZxVghJVwicQ4j0nbZG/T2Qc=";
     };
     propagatedBuildInputs = [ ClassTiny SubExporter namespaceclean ];
     buildInputs = [ TestSimple13 TestWarnings ];
@@ -7322,7 +7322,7 @@ let
     version = "2.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/Devel-StackTrace-2.04.tar.gz";
-      sha256 = "cd3c03ed547d3d42c61fa5814c98296139392e7971c092e09a431f2c9f5d6855";
+      hash = "sha256-zTwD7VR9PULGH6WBTJgpYTk5LnlxwJLgmkMfLJ9daFU=";
     };
     meta = {
       description = "An object representing a stack trace";
@@ -7336,7 +7336,7 @@ let
     version = "0.83";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NW/NWCLARK/Devel-Size-0.83.tar.gz";
-      sha256 = "757a67e0aa59ae103ea5ca092cbecc025644ebdc326731688ffab6f8823ef4b3";
+      hash = "sha256-dXpn4KpZrhA+pcoJLL7MAlZE69wyZzFoj/q2+II+9LM=";
     };
     meta = {
       description = "Perl extension for finding the memory usage of Perl variables";
@@ -7349,7 +7349,7 @@ let
     version = "0.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Devel-StackTrace-AsHTML-0.15.tar.gz";
-      sha256 = "0iri5nb2lb76qv5l9z0vjpfrq5j2fyclkd64kh020bvy37idp0v2";
+      hash = "sha256-YoPb4hl+LyAAnMS0SZl3Qhac3ZUb/ETLxuYsKpYtMUc=";
     };
     propagatedBuildInputs = [ DevelStackTrace ];
     meta = {
@@ -7364,7 +7364,7 @@ let
     version = "2.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AN/ANDK/Devel-Symdump-2.18.tar.gz";
-      sha256 = "826f81a107f5592a2516766ed43beb47e10cc83edc9ea48090b02a36040776c0";
+      hash = "sha256-gm+BoQf1WSolFnZu1DvrR+EMyD7cnqSAkLAqNgQHdsA=";
     };
     meta = {
       description = "Dump symbol names or the symbol table";
@@ -7377,7 +7377,7 @@ let
     version = "0.22.2";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OL/OLIMAUL/Digest-CRC-0.22.2.tar.gz";
-      sha256 = "112b50f7fbc6f6baf5d4584ee97f542ced6c9ec03a3147f7902c84b8b26778cb";
+      hash = "sha256-EStQ9/vG9rr11FhO6X9ULO1snsA6MUf3kCyEuLJneMs=";
     };
     meta = {
       description = "Module that calculates CRC sums of all sorts";
@@ -7390,7 +7390,7 @@ let
     version = "1.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GA/GAAS/Digest-HMAC-1.03.tar.gz";
-      sha256 = "0naavabbm1c9zgn325ndy66da4insdw9l3mrxwxdfi7i7xnjrirv";
+      hash = "sha256-O8csbT/xRNc677kOmnjTNhLVjPHNFjHs+4mFupbaSlk=";
     };
     meta = {
       description = "Keyed-Hashing for Message Authentication";
@@ -7404,7 +7404,7 @@ let
     version = "0.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Digest-JHash-0.10.tar.gz";
-      sha256 = "c746cf0a861a004090263cd54d7728d0c7595a0cf90cbbfd8409b396ee3b0063";
+      hash = "sha256-x0bPCoYaAECQJjzVTXco0MdZWgz5DLv9hAmzlu47AGM=";
     };
     meta = {
       description = "Perl extension for 32 bit Jenkins Hashing Algorithm";
@@ -7417,7 +7417,7 @@ let
     version = "2.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GA/GAAS/Digest-MD2-2.04.tar.gz";
-      sha256 = "d0aabf4834c20ac411bea427c4a308b59a5fcaa327679ef5294c1d68ab71eed3";
+      hash = "sha256-0Kq/SDTCCsQRvqQnxKMItZpfyqMnZ571KUwdaKtx7tM=";
     };
     meta = {
       description = "Perl interface to the MD2 Algorithm";
@@ -7431,7 +7431,7 @@ let
     version = "1.9";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIKEM/DigestMD4/Digest-MD4-1.9.tar.gz";
-      sha256 = "19ma1hmvgiznq95ngzvm6v4dfxc9zmi69k8iyfcg6w14lfxi0lb6";
+      hash = "sha256-ZlEQu6MkcPOY8xHNZGL9iXXXyDZ1/2dLwvbHtysMqqY=";
     };
     meta = {
       description = "Perl interface to the MD4 Algorithm";
@@ -7444,7 +7444,7 @@ let
     version = "0.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DM/DMUEY/Digest-MD5-File-0.08.tar.gz";
-      sha256 = "060jzf45dlwysw5wsm7av1wvpl06xgk415kwwpvv89r6wda3md5d";
+      hash = "sha256-rbQ6VOMmJ7T35XyWQObrBtC7edjqVM0L157TVoj7Ehg=";
     };
     propagatedBuildInputs = [ LWP ];
     meta = {
@@ -7458,7 +7458,7 @@ let
     version = "1.9";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DE/DELTA/Digest-Perl-MD5-1.9.tar.gz";
-      sha256 = "7100cba1710f45fb0e907d8b1a7bd8caef35c64acd31d7f225aff5affeecd9b1";
+      hash = "sha256-cQDLoXEPRfsOkH2LGnvYyu81xkrNMdfyJa/1r/7s2bE=";
     };
     meta = {
       description = "Perl Implementation of Rivest's MD5 algorithm";
@@ -7471,7 +7471,7 @@ let
     version = "2.13";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GA/GAAS/Digest-SHA1-2.13.tar.gz";
-      sha256 = "1k23p5pjk42vvzg8xcn4iwdii47i0qm4awdzgbmz08bl331dmhb8";
+      hash = "sha256-aMHawhh0IfDrer9xRSoG8ZAYG4/Eso7e31uQKW+5Q8w=";
     };
     meta = {
       description = "Perl interface to the SHA-1 algorithm";
@@ -7484,7 +7484,7 @@ let
     version = "1.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSHELOR/Digest-SHA3-1.04.tar.gz";
-      sha256 = "4a68b67c5034f40fbb1344b304cd66caaa5e320eb523005201cc24f76d470c14";
+      hash = "sha256-Smi2fFA09A+7E0SzBM1myqpeMg61IwBSAcwk921HDBQ=";
     };
     meta = {
       description = "Perl extension for SHA-3";
@@ -7500,7 +7500,7 @@ let
     version = "0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAUKEX/Digest-SRI-0.02.tar.gz";
-      sha256 = "sha256-VITN/m68OYwkZfeBx3w++1OKOULNSyDWiBjG//kHT8c=";
+      hash = "sha256-VITN/m68OYwkZfeBx3w++1OKOULNSyDWiBjG//kHT8c=";
     };
     meta = {
       description = "Calculate and verify Subresource Integrity hashes (SRI)";
@@ -7514,7 +7514,7 @@ let
     version = "0.6.1";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Dir-Manifest-0.6.1.tar.gz";
-      sha256 = "01g54wlvp647zvhn0sxl2pqajly17044qd3pxib8cpixhwk75zw4";
+      hash = "sha256-hP9yJoc9XoZW7Hc0TAg4wVOp8BW0a2Dh/oeYuykn5QU=";
     };
     propagatedBuildInputs = [ Moo PathTiny ];
     meta = {
@@ -7529,7 +7529,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MAUKE/Dir-Self-0.11.tar.gz";
-      sha256 = "e251a51abc7d9ba3e708f73c2aa208e09d47a0c528d6254710fa78cc8d6885b5";
+      hash = "sha256-4lGlGrx9m6PnCPc8KqII4J1HoMUo1iVHEPp4zI1ohbU=";
     };
     meta = {
       description = "A __DIR__ constant for the directory your source file is in";
@@ -7543,7 +7543,7 @@ let
     version = "0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MAUKE/Dispatch-Class-0.02.tar.gz";
-      sha256 = "10k5l4n2mp0hfn9jwn785k211n75y56zwny1zx3bvs7r38xv8kfp";
+      hash = "sha256-1020Oxr56L1G/8Fb/k3x5dgQxCzoWC6TdRDcKiyhZYI=";
     };
     propagatedBuildInputs = [ ExporterTiny ];
     meta = {
@@ -7557,7 +7557,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DO/DOY/Dist-CheckConflicts-0.11.tar.gz";
-      sha256 = "1i7dr9jpdiy2nijl2p4q5zg2q2s9ckbj2hs4kmnnckf9hsb4p17a";
+      hash = "sha256-6oRLlobJTWZtnURDIddkSQss3i+YXEFltMLHdmXK7cQ=";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ ModuleRuntime ];
@@ -7573,7 +7573,7 @@ let
     version = "6.017";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Dist-Zilla-6.017.tar.gz";
-      sha256 = "1vkg5cyazhy2kdffwlcr2k52awlyfzxgr0vggs9mx2xc6g7313aw";
+      hash = "sha256-XI0wzjOsi16Tfm+D/Pp3nnIlyhSZUe5cm8LDrzwrb+4=";
     };
     buildInputs = [ CPANMetaCheck TestDeep TestFailWarnings TestFatal TestFileShareDir ];
     propagatedBuildInputs = [ AppCmd CPANUploader ConfigMVPReaderINI DateTime FileCopyRecursive FileFindRule FileShareDirInstall Filepushd LogDispatchouli MooseXLazyRequire MooseXSetOnce MooseXTypesPerl PathTiny PerlPrereqScanner SoftwareLicense TermEncoding TermUI YAMLTiny ];
@@ -7595,7 +7595,7 @@ let
     version = "0.25";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DO/DOHERTY/Dist-Zilla-PluginBundle-TestingMania-0.25.tar.gz";
-      sha256 = "072rsilh88xnk18ldbr8d0svji72r79sabyird6xc3ql1z0b42sy";
+      hash = "sha256-XguywA8UD9ZNy9EvpdPJ4kS5NWgor0ZRmLYjBGnUWRw=";
     };
     buildInputs = [ MooseAutobox TestCPANMeta TestPerlCritic TestVersion ];
     propagatedBuildInputs = [ DistZillaPluginMojibakeTests DistZillaPluginTestCPANChanges DistZillaPluginTestCPANMetaJSON DistZillaPluginTestCompile DistZillaPluginTestDistManifest DistZillaPluginTestEOL DistZillaPluginTestKwalitee DistZillaPluginTestMinimumVersion DistZillaPluginTestNoTabs DistZillaPluginTestPerlCritic DistZillaPluginTestPodLinkCheck DistZillaPluginTestPortability DistZillaPluginTestSynopsis DistZillaPluginTestUnusedVars DistZillaPluginTestVersion PodCoverageTrustPod ];
@@ -7612,7 +7612,7 @@ let
     version = "0.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FA/FAYLAND/Dist-Zilla-Plugin-CheckChangeLog-0.05.tar.gz";
-      sha256 = "b0b34d6d70b56f1944d03c5f0dc3b8f6f24474c816d07b657a116c692c2e052a";
+      hash = "sha256-sLNNbXC1bxlE0DxfDcO49vJEdMgW0HtlehFsaSwuBSo=";
     };
     propagatedBuildInputs = [ DistZilla ];
     buildInputs = [ PathClass PodCoverage PodCoverageTrustPod PodMarkdown TestDeep TestException TestPod TestPodCoverage ];
@@ -7627,7 +7627,7 @@ let
     version = "0.8";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SY/SYP/Dist-Zilla-Plugin-MojibakeTests-0.8.tar.gz";
-      sha256 = "f1fff547ea24a8f7a483406a72ed6c4058d746d9dae963725502ddba025ab380";
+      hash = "sha256-8f/1R+okqPekg0Bqcu1sQFjXRtna6WNyVQLdugJas4A=";
     };
     propagatedBuildInputs = [ DistZilla ];
     buildInputs = [ TestMojibake ];
@@ -7643,7 +7643,7 @@ let
     version = "4.008";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Dist-Zilla-Plugin-PodWeaver-4.008.tar.gz";
-      sha256 = "0ff1i26s54z292j8w8vm3gw3p7w1yq35wi8g978c84ia7y1y7n8z";
+      hash = "sha256-H9njgz8qEsTQSQ9FXgb2gZ87+Bt1I46kSOKToo2IwTk=";
     };
     propagatedBuildInputs = [ DistZilla PodElementalPerlMunger PodWeaver ];
     meta = {
@@ -7658,7 +7658,7 @@ let
     version = "0.163250";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RT/RTHOMPSON/Dist-Zilla-Plugin-ReadmeAnyFromPod-0.163250.tar.gz";
-      sha256 = "d44f2799922f78b2a7961ed89123e11bdd77abfe85ba2040d82b80ad72ed13bc";
+      hash = "sha256-1E8nmZIveLKnlh7YkSPhG913q/6FuiBA2CuArXLtE7w=";
     };
     buildInputs = [ TestDeep TestDifferences TestException TestFatal TestMost TestRequires TestSharedFork TestWarn ];
     propagatedBuildInputs = [ DistZillaRoleFileWatcher MooseXHasSugar PodMarkdownGithub ];
@@ -7674,7 +7674,7 @@ let
     version = "0.141140";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RT/RTHOMPSON/Dist-Zilla-Plugin-ReadmeMarkdownFromPod-0.141140.tar.gz";
-      sha256 = "9caad7b366ea59119ad73cdd99dcdd53f877a515bd0164fc28b339c01739a801";
+      hash = "sha256-nKrXs2bqWRGa1zzdmdzdU/h3pRW9AWT8KLM5wBc5qAE=";
     };
     buildInputs = [ TestDeep TestDifferences TestException TestMost TestWarn ];
     propagatedBuildInputs = [ DistZillaPluginReadmeAnyFromPod ];
@@ -7690,7 +7690,7 @@ let
     version = "0.012";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DO/DOHERTY/Dist-Zilla-Plugin-Test-CPAN-Changes-0.012.tar.gz";
-      sha256 = "215b3a5c3c58c8bab0ea27130441bbdaec737eecc00f0670937f608bdbf64806";
+      hash = "sha256-IVs6XDxYyLqw6icTBEG72uxzfuzADwZwk39gi9v2SAY=";
     };
     buildInputs = [ CPANChanges TestDeep ];
     propagatedBuildInputs = [ DistZilla ];
@@ -7706,7 +7706,7 @@ let
     version = "0.004";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DO/DOHERTY/Dist-Zilla-Plugin-Test-CPAN-Meta-JSON-0.004.tar.gz";
-      sha256 = "0a573e1d5640374e6ee4d56d4fb94a3c67d4e75d52b3ddeae70cfa6450e1af22";
+      hash = "sha256-Clc+HVZAN05u5NVtT7lKPGfU511Ss93q5wz6ZFDhryI=";
     };
     buildInputs = [ MooseAutobox TestCPANMetaJSON TestDeep ];
     propagatedBuildInputs = [ DistZilla ];
@@ -7722,7 +7722,7 @@ let
     version = "2.058";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Dist-Zilla-Plugin-Test-Compile-2.058.tar.gz";
-      sha256 = "d0cf93e525f102eca0f7f3967124d2e59d0a212f738ce54c1ddd91dda268d88a";
+      hash = "sha256-0M+T5SXxAuyg9/OWcSTS5Z0KIS9zjOVMHd2R3aJo2Io=";
     };
     buildInputs = [ CPANMetaCheck ModuleBuildTiny TestDeep TestMinimumVersion TestWarnings ];
     propagatedBuildInputs = [ DistZilla ];
@@ -7738,7 +7738,7 @@ let
     version = "2.000005";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DO/DOHERTY/Dist-Zilla-Plugin-Test-DistManifest-2.000005.tar.gz";
-      sha256 = "4f0af27bb38745d2dec7d941bcf749e6d7fbeaf8e7bcf8a79a1310a9639b0f65";
+      hash = "sha256-Twrye7OHRdLex9lBvPdJ5tf76vjnvPinmhMQqWObD2U=";
     };
     buildInputs = [ TestDeep TestDistManifest TestOutput ];
     propagatedBuildInputs = [ DistZilla ];
@@ -7754,7 +7754,7 @@ let
     version = "0.19";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Dist-Zilla-Plugin-Test-EOL-0.19.tar.gz";
-      sha256 = "0f23g931azz1k41xdfxw7kayy4snhw4qdr9ysknk5k1cl33mkfd2";
+      hash = "sha256-orlZx6AszDLt1D7lhgmHVhPv1Ty8u9YDmeF/FUZ6Qzg=";
     };
     buildInputs = [ ModuleBuildTiny TestDeep TestEOL TestWarnings ];
     propagatedBuildInputs = [ DistZilla ];
@@ -7770,7 +7770,7 @@ let
     version = "2.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Dist-Zilla-Plugin-Test-Kwalitee-2.12.tar.gz";
-      sha256 = "bddbcfcc75e8eb2d2d9c8611552f00cdc1b051f0f00798623b8692ff5030af2f";
+      hash = "sha256-vdvPzHXo6y0tnIYRVS8AzcGwUfDwB5hiO4aS/1Awry8=";
     };
     buildInputs = [ ModuleBuildTiny TestDeep TestFatal TestKwalitee ];
     propagatedBuildInputs = [ DistZilla ];
@@ -7785,7 +7785,7 @@ let
     version = "2.000010";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Dist-Zilla-Plugin-Test-MinimumVersion-2.000010.tar.gz";
-      sha256 = "b8b71f4b64b689f4b647a3a87d6aaaae45a68892d35e36baa976f605736370fb";
+      hash = "sha256-uLcfS2S2ifS2R6OofWqqrkWmiJLTXja6qXb2BXNjcPs=";
     };
     buildInputs = [ ModuleBuildTiny TestDeep TestMinimumVersion TestOutput ];
     propagatedBuildInputs = [ DistZilla ];
@@ -7800,7 +7800,7 @@ let
     version = "0.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Dist-Zilla-Plugin-Test-NoTabs-0.15.tar.gz";
-      sha256 = "196hchmn8y591533v3p7kl75nlhpaygbfdiw2iqbnab9j510qq8v";
+      hash = "sha256-G2EMQpFpKbtwFDw2t55XF1JbDp3njj1GCal4ZCtk0KQ=";
     };
     propagatedBuildInputs = [ DistZilla ];
     buildInputs = [ ModuleBuildTiny TestDeep TestNoTabs TestRequires ];
@@ -7816,7 +7816,7 @@ let
     version = "3.001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Dist-Zilla-Plugin-Test-Perl-Critic-3.001.tar.gz";
-      sha256 = "9250b59d5dc1ae4c6893ba783bd3f05131b14ff9e91afb4555314f55268a3825";
+      hash = "sha256-klC1nV3Brkxok7p4O9PwUTGxT/npGvtFVTFPVSaKOCU=";
     };
     buildInputs = [ ModuleBuildTiny TestDeep TestPerlCritic ];
     propagatedBuildInputs = [ DistZilla ];
@@ -7831,7 +7831,7 @@ let
     version = "1.004";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RW/RWSTAUNER/Dist-Zilla-Plugin-Test-Pod-LinkCheck-1.004.tar.gz";
-      sha256 = "325d236da0940388d2aa86ec5c1326516b4ad45adef8e7a4f83bb91d5ee15490";
+      hash = "sha256-Ml0jbaCUA4jSqobsXBMmUWtK1Fre+Oek+Du5HV7hVJA=";
     };
     # buildInputs = [ TestPodLinkCheck ];
     propagatedBuildInputs = [ DistZilla ];
@@ -7848,7 +7848,7 @@ let
     version = "2.001000";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Dist-Zilla-Plugin-Test-Portability-2.001000.tar.gz";
-      sha256 = "e08ff5bd9e24cf9503055330148913808d91a3dfe320a2bdf8b0fc638719b179";
+      hash = "sha256-4I/1vZ4kz5UDBVMwFIkTgI2Ro9/jIKK9+LD8Y4cZsXk=";
     };
     buildInputs = [ ModuleBuildTiny TestDeep TestPortabilityFiles TestWarnings ];
     propagatedBuildInputs = [ DistZilla ];
@@ -7864,7 +7864,7 @@ let
     version = "2.000007";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DO/DOHERTY/Dist-Zilla-Plugin-Test-Synopsis-2.000007.tar.gz";
-      sha256 = "e7d5e2530cd8a5bb5aadf3e1669a653aaa96e32cad7bd6b9caba6b425ceab563";
+      hash = "sha256-59XiUwzYpbtarfPhZpplOqqW4yyte9a5yrprQlzqtWM=";
     };
     buildInputs = [ TestDeep TestOutput TestSynopsis ];
     propagatedBuildInputs = [ DistZilla ];
@@ -7879,7 +7879,7 @@ let
     version = "2.000007";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DO/DOHERTY/Dist-Zilla-Plugin-Test-UnusedVars-2.000007.tar.gz";
-      sha256 = "ea0199a3a0043213ddc132508b9ed9b131ef717735b8f93d78291191d04b43c2";
+      hash = "sha256-6gGZo6AEMhPdwTJQi57ZsTHvcXc1uPk9eCkRkdBLQ8I=";
     };
     buildInputs = [ TestDeep TestOutput TestVars ];
     propagatedBuildInputs = [ DistZilla ];
@@ -7895,7 +7895,7 @@ let
     version = "1.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PL/PLICEASE/Dist-Zilla-Plugin-Test-Version-1.09.tar.gz";
-      sha256 = "7240508731bc1bf6dfad7701ec65450a18ef9245a521ab26ebd6acb39a9ebe17";
+      hash = "sha256-ckBQhzG8G/bfrXcB7GVFChjvkkWlIasm69ass5qevhc=";
     };
     buildInputs = [ Filechdir TestDeep TestEOL TestNoTabs TestScript TestVersion ];
     propagatedBuildInputs = [ DistZilla ];
@@ -7910,7 +7910,7 @@ let
     version = "0.006";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Dist-Zilla-Role-FileWatcher-0.006.tar.gz";
-      sha256 = "15jfpr257xxp27gz156npgpj7kh2dchzgfmvzivi5bvdb2wl8fpy";
+      hash = "sha256-/jpEuVhtrxJ3/Lu69yFrAs4j77vWlPDfEbf3U0S+TpY=";
     };
     propagatedBuildInputs = [ DistZilla SafeIsa ];
     buildInputs = [ ModuleBuildTiny TestDeep TestFatal ];
@@ -7926,7 +7926,7 @@ let
     version = "0.002";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BO/BOOK/Dotenv-0.002.tar.gz";
-      sha256 = "04c7a7cc4511617d7a70c4ca410d10707dc496248cdad20240ae242223212454";
+      hash = "sha256-BMenzEURYX16cMTKQQ0QcH3EliSM2tICQK4kIiMhJFQ=";
     };
     buildInputs = [ TestCPANMeta TestPod TestPodCoverage ];
     propagatedBuildInputs = [ PathTiny ];
@@ -7941,7 +7941,7 @@ let
     version = "0.111";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BD/BDFOY/Dumbbench-0.111.tar.gz";
-      sha256 = "1ixjb9y9d0k1vd4mzbi4sgvr99ay4z9jkgychf0r5gbjsskkq7fk";
+      hash = "sha256-0x08p9ZyvZKBg8y/KdMnXqWU99Mkrl9J22GClnxassc=";
     };
     propagatedBuildInputs = [ CaptureTiny ClassXSAccessor DevelCheckOS NumberWithError StatisticsCaseResampling ];
     meta = {
@@ -7957,7 +7957,7 @@ let
     version = "3.008";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-Abstract-3.008.tar.gz";
-      sha256 = "fc7169acb6c43df7f005e7ef6ad08ee8ca6eb6796b5d1604593c997337cc8240";
+      hash = "sha256-/HFprLbEPffwBefvatCO6MputnlrXRYEWTyZczfMgkA=";
     };
     propagatedBuildInputs = [ EmailSimple MROCompat ModulePluggable ];
     meta = {
@@ -7972,7 +7972,7 @@ let
     version = "1.912";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-Address-1.912.tar.gz";
-      sha256 = "1vzr0vx4zsw4zbc9xdffc31wnkc1raqmyfiyws06fbyck197i8qg";
+      hash = "sha256-D6N4UpjML2eA5j46X7HKgU3Lw2DOtZ7Y+oTrT/oG+e8=";
     };
     meta = {
       description = "RFC 2822 Address Parsing and Creation";
@@ -7986,7 +7986,7 @@ let
     version = "0.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BP/BPS/Email-Address-List-0.06.tar.gz";
-      sha256 = "305b94c778011cee70d9f21514d92e985fa9dccbb84c64798f0c1f0b24eb870e";
+      hash = "sha256-MFuUx3gBHO5w2fIVFNkumF+p3Mu4TGR5jwwfCyTrhw4=";
     };
     buildInputs = [ JSON ];
     propagatedBuildInputs = [ EmailAddress ];
@@ -8001,7 +8001,7 @@ let
     version = "1.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PA/PALI/Email-Address-XS-1.04.tar.gz";
-      sha256 = "0gjrrl81z3sfwavgx5kwjd87gj44mlnbbqsm3dgdv1xllw26spwr";
+      hash = "sha256-mV9tBKe0h91eG1XjtSythMh3UJN8lv624k6PHxDNWT4=";
     };
     meta = {
       description = "Parse and format RFC 5322 email addresses and groups";
@@ -8014,7 +8014,7 @@ let
     version = "1.005";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-Date-Format-1.005.tar.gz";
-      sha256 = "579c617e303b9d874411c7b61b46b59d36f815718625074ae6832e7bb9db5104";
+      hash = "sha256-V5xhfjA7nYdEEce2G0a1nTb4FXGGJQdK5oMue7nbUQQ=";
     };
     meta = {
       description = "Produce RFC 2822 date strings";
@@ -8028,7 +8028,7 @@ let
     version = "1.204";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-Reply-1.204.tar.gz";
-      sha256 = "ba4fd80ac5017d6d132e0358c786b0ecd1c7adcbeee5c19fb3da2964791a56f0";
+      hash = "sha256-uk/YCsUBfW0TLgNYx4aw7NHHrcvu5cGfs9opZHkaVvA=";
     };
     propagatedBuildInputs = [ EmailAbstract EmailAddress EmailMIME ];
     meta = {
@@ -8043,7 +8043,7 @@ let
     version = "1.406";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-MessageID-1.406.tar.gz";
-      sha256 = "1f22sdnfq169qw1l0lg7y74pmiam7j9v95bggjnf3q4mygdmshpc";
+      hash = "sha256-7EJd2/OV4OGsfG+VtJM8VcV6yfHnUUADx8kE7GzTQrg=";
     };
     meta = {
       description = "Generate world unique message-ids";
@@ -8057,7 +8057,7 @@ let
     version = "1.949";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-MIME-1.949.tar.gz";
-      sha256 = "3b0adf6bb413cfe51d75f8ba79aca80deafc98dc1179aa7b2d7a79aff5a6ab9c";
+      hash = "sha256-Owrfa7QTz+Uddfi6eayoDer8mNwReap7LXp5r/Wmq5w=";
     };
     propagatedBuildInputs = [ EmailAddressXS EmailMIMEContentType EmailMIMEEncodings EmailMessageID EmailSimple MIMETypes ModuleRuntime ];
     meta = {
@@ -8074,8 +8074,8 @@ let
     propagatedBuildInputs = [ EmailAbstract EmailMIME ];
 
     src = fetchurl {
-        url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-MIME-Attachment-Stripper-1.317.tar.gz";
-        sha256 = "dcb98b09dc3e8f757ec3882a4234548108bb2d12e3cfadf95a26cef381a9e789";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-MIME-Attachment-Stripper-1.317.tar.gz";
+      hash = "sha256-3LmLCdw+j3V+w4gqQjRUgQi7LRLjz635WibO84Gp54k=";
     };
     meta = {
       description = "Strip the attachments from an email";
@@ -8089,7 +8089,7 @@ let
     version = "1.024";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-MIME-ContentType-1.024.tar.gz";
-      sha256 = "42d164ac7ff4dc2ea848e710fe21fa85509a3bcbb91ed2d356e4aba951ed8835";
+      hash = "sha256-QtFkrH/03C6oSOcQ/iH6hVCaO8u5HtLTVuSrqVHtiDU=";
     };
     propagatedBuildInputs = [ TextUnidecode ];
     meta = {
@@ -8104,7 +8104,7 @@ let
     version = "1.315";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-MIME-Encodings-1.315.tar.gz";
-      sha256 = "4c71045507b31ec853dd60152b40e33ba3741779c0f49bb143b50cf8d243ab5c";
+      hash = "sha256-THEEVQezHshT3WAVK0DjO6N0F3nA9JuxQ7UM+NJDq1w=";
     };
     buildInputs = [ CaptureTiny ];
     meta = {
@@ -8119,7 +8119,7 @@ let
     version = "2.201";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-Send-2.201.tar.gz";
-      sha256 = "4bbec933558d7cc9b8152bad86dd313de277a21a89b4ea83d84e61587e95dbc6";
+      hash = "sha256-S77JM1WNfMm4FSutht0xPeJ3ohqJtOqD2E5hWH6V28Y=";
     };
     propagatedBuildInputs = [ EmailAbstract EmailAddress ReturnValue ];
     buildInputs = [ MIMETools MailTools ];
@@ -8135,7 +8135,7 @@ let
     version = "0.920";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MV/MVZ/Email-Outlook-Message-0.920.tar.gz";
-      sha256 = "1063wpdf90k1f6vcqvs92cwm93zvmh3l09pfnrrsp6vqkyah48lj";
+      hash = "sha256-kiIClZ94m6tztu4mQAes+49UORNJb8y2cWGC5Nrlw4A=";
     };
     propagatedBuildInputs = [ EmailMIME EmailSender IOAll IOString OLEStorage_Lite ];
     preCheck = "rm t/internals.t t/plain_jpeg_attached.t"; # these tests expect EmailMIME version 1.946 and fail with 1.949 (the output difference in benign)
@@ -8153,7 +8153,7 @@ let
     version = "1.300035";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-Sender-1.300035.tar.gz";
-      sha256 = "0yfssp3rqdx1dmgvnygarzgkpkhqm28r5sd0gh87ksk8yxndhjql";
+      hash = "sha256-FEvYbPdo6nkQfKDpkpGoGM4738/qebtfbaE3nMfV2nk=";
     };
     buildInputs = [ CaptureTiny ];
     propagatedBuildInputs = [ EmailAbstract EmailAddress MooXTypesMooseLike SubExporter Throwable TryTiny ];
@@ -8176,7 +8176,7 @@ let
     version = "2.216";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-Simple-2.216.tar.gz";
-      sha256 = "d85f63cd1088d11311103676a8cf498fff564a201b538de52cd753b5e5ca8bd4";
+      hash = "sha256-2F9jzRCI0RMREDZ2qM9Jj/9WSiAbU43lLNdTteXKi9Q=";
     };
     propagatedBuildInputs = [ EmailDateFormat ];
     meta = {
@@ -8191,7 +8191,7 @@ let
     version = "0.018";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-Stuffer-0.018.tar.gz";
-      sha256 = "02wapphmcqbl1sg32x2az863lz5bb2dlckibxfqrjdlny27a406h";
+      hash = "sha256-0ACijvCWNpmx6ytORptYq3w6DPpKdDGeDnRhVuG9igs=";
     };
     buildInputs = [ Moo TestFatal ];
     propagatedBuildInputs = [ EmailMIME EmailSender ModuleRuntime ParamsUtil ];
@@ -8208,7 +8208,7 @@ let
     version = "1.202";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-Valid-1.202.tar.gz";
-      sha256 = "18hkmhddzbd23s6ak64d4j6q8ijykjyp5nxbr2hfcq1acsdhh8fh";
+      hash = "sha256-0CEIm2YqYOagyKvbcr2cXkaEjSSNmKmMHqKt3xqsE6I=";
     };
     propagatedBuildInputs = [ IOCaptureOutput MailTools NetDNS NetDomainTLD ];
     doCheck = false;
@@ -8223,7 +8223,7 @@ let
     version = "0.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Email-Valid-Loose-0.05.tar.gz";
-      sha256 = "e718e76eddee240251c999e139c8cbe6f2cc80192da5af875cbd12fa8ab93a59";
+      hash = "sha256-5xjnbt3uJAJRyZnhOcjL5vLMgBktpa+HXL0S+oq5Olk=";
     };
     propagatedBuildInputs = [ EmailValid ];
     meta = {
@@ -8237,7 +8237,7 @@ let
     version = "3.19";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DANKOGAI/Encode-3.19.tar.gz";
-      sha256 = "sha256-kWP4SO72nk1MyIODl/CGH9nqft4AERfb2WlPjZUFLvU=";
+      hash = "sha256-kWP4SO72nk1MyIODl/CGH9nqft4AERfb2WlPjZUFLvU=";
     };
     meta = {
       description = "Character encodings in Perl";
@@ -8251,7 +8251,7 @@ let
     version = "0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JW/JWANG/Encode-Base32-GMP-0.02.tar.gz";
-      sha256 = "454206fa7d82e55e03274698732341b607150f00e8e2aec58f35326a030832dc";
+      hash = "sha256-RUIG+n2C5V4DJ0aYcyNBtgcVDwDo4q7FjzUyagMIMtw=";
     };
     buildInputs = [ TestBase ];
     propagatedBuildInputs = [ MathGMPz ];
@@ -8268,7 +8268,7 @@ let
     version = "1.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JG/JGMYERS/Encode-Detect-1.01.tar.gz";
-      sha256 = "834d893aa7db6ce3f158afbd0e432d6ed15a276e0940db0a74be13fd9c4bbbf1";
+      hash = "sha256-g02JOqfbbOPxWK+9DkMtbtFaJ24JQNsKdL4T/ZxLu/E=";
     };
     nativeBuildInputs = [ pkgs.ld-is-cc-hook ];
     meta = {
@@ -8283,7 +8283,7 @@ let
     version = "0.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEZUMI/Encode-EUCJPASCII-0.03.tar.gz";
-      sha256 = "f998d34d55fd9c82cf910786a0448d1edfa60bf68e2c2306724ca67c629de861";
+      hash = "sha256-+ZjTTVX9nILPkQeGoESNHt+mC/aOLCMGckymfGKd6GE=";
     };
     outputs = [ "out" ];
     meta = {
@@ -8297,7 +8297,7 @@ let
     version = "0.23";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AU/AUDREYT/Encode-HanExtra-0.23.tar.gz";
-      sha256 = "1fd4b06cada70858003af153f94c863b3b95f2e3d03ba18d0451a81d51db443a";
+      hash = "sha256-H9SwbK2nCFgAOvFT+UyGOzuV8uPQO6GNBFGoHVHbRDo=";
     };
     meta = {
       description = "Extra sets of Chinese encodings";
@@ -8310,7 +8310,7 @@ let
     version = "0.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DANKOGAI/Encode-JIS2K-0.03.tar.gz";
-      sha256 = "1ec84d72db39deb4dad6fca95acfcc21033f45a24d347c20f9a1a696896c35cc";
+      hash = "sha256-HshNcts53rTa1vypWs/MIQM/RaJNNHwg+aGmlolsNcw=";
     };
     outputs = [ "out" ];
     meta = {
@@ -8324,7 +8324,7 @@ let
     version = "1.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GA/GAAS/Encode-Locale-1.05.tar.gz";
-      sha256 = "176fa02771f542a4efb1dbc2a4c928e8f4391bf4078473bd6040d8f11adb0ec1";
+      hash = "sha256-F2+gJ3H1QqTvsdvCpMko6PQ5G/QHhHO9YEDY8RrbDsE=";
     };
     preCheck = if stdenv.isCygwin then ''
       sed -i"" -e "s@plan tests => 13@plan tests => 10@" t/env.t
@@ -8342,7 +8342,7 @@ let
     version = "0.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/Encode-Newlines-0.05.tar.gz";
-      sha256 = "1gipd3wnma28w5gjbzycfkpi6chksy14lhxkp4hwizf8r351zcrl";
+      hash = "sha256-NLMfysjI/cghubNDSoLXEzIT73TM/yVf4UioavloN74=";
     };
     meta = {
       description = "Normalize line ending sequences";
@@ -8356,7 +8356,7 @@ let
     version = "1.002";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CF/CFAERBER/Encode-Punycode-1.002.tar.gz";
-      sha256 = "ca3aceecdb80b5d45aa10e1cde8fec4e90b4f8c9189c7504dd8658f071f77194";
+      hash = "sha256-yjrO7NuAtdRaoQ4c3o/sTpC0+MkYnHUE3YZY8HH3cZQ=";
     };
     buildInputs = [ TestNoWarnings ];
     propagatedBuildInputs = [ NetIDNEncode ];
@@ -8372,7 +8372,7 @@ let
     version = "1.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/enum-1.11.tar.gz";
-      sha256 = "d2f36b5015f1e35f640159867b60bf5d5cd66b56cd5e42d33f531be68e5eee35";
+      hash = "sha256-0vNrUBXx419kAVmGe2C/XVzWa1bNXkLTP1Mb5o5e7jU=";
     };
     meta = {
       description = "C style enumerated types and bitmask flags in Perl";
@@ -8386,7 +8386,7 @@ let
     version = "1.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FL/FLORA/Env-1.04.tar.gz";
-      sha256 = "d94a3d412df246afdc31a2199cbd8ae915167a3f4684f7b7014ce1200251ebb0";
+      hash = "sha256-2Uo9QS3yRq/cMaIZnL2K6RUWej9GhPe3AUzhIAJR67A=";
     };
     meta = {
       description = "Perl module that imports environment variables as scalars or arrays";
@@ -8400,7 +8400,7 @@ let
     version = "0.19";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DS/DSB/Env-Path-0.19.tar.gz";
-      sha256 = "1qhmj15a66h90pjl2dgnxsb9jj3b1r5mpvnr87cafcl8g69z0jr4";
+      hash = "sha256-JEvwk3mIMqfYQdnuW0sOa0iZlu72NUHlBQkao0qQFeI=";
     };
     meta = {
       description = "Advanced operations on path variables";
@@ -8414,7 +8414,7 @@ let
     version = "1.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BINGOS/Env-Sanctify-1.12.tar.gz";
-      sha256 = "0prj51c9w4k6nrpnpfw6an96953vna74g698kyk78m163ikbbqr0";
+      hash = "sha256-IOO1ZhwmVHSmnyiZR46ye5RkklWGu2tvtmYSnlgoMl8=";
     };
     meta = {
       description = "Lexically scoped sanctification of %ENV";
@@ -8428,7 +8428,7 @@ let
     version = "0.17029";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Error-0.17029.tar.gz";
-      sha256 = "1p3spyarrh8y14d3j9s71xcndjlr70x3f8c3nvaddbij628zf8qs";
+      hash = "sha256-GiP3kTAyrtbUtoMhNzo4mcpmWQ9HJzkaCR7BnJW/etw=";
     };
     meta = {
       description = "Error/exception handling in an OO-ish way";
@@ -8441,7 +8441,7 @@ let
     version = "4.33";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/EV-4.33.tar.gz";
-      sha256 = "4aee8391b88113b42187f91fd49245fdc8e9b193a15ac202f519caae2aa8ea35";
+      hash = "sha256-Su6DkbiBE7Qhh/kf1JJF/cjpsZOhWsIC9RnKriqo6jU=";
     };
     buildInputs = [ CanaryStability ];
     propagatedBuildInputs = [ commonsense ];
@@ -8456,7 +8456,7 @@ let
     version = "0.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DO/DOY/Eval-Closure-0.14.tar.gz";
-      sha256 = "1bcc47r6zm3hfr6ccsrs72kgwxm3wkk07mgnpsaxi67cypr482ga";
+      hash = "sha256-6glE8vXsmNiVvvbVA+bko3b+pjg6a8ZMdnDUb/IhjK0=";
     };
     buildInputs = [ TestFatal TestRequires ];
     meta = {
@@ -8471,7 +8471,7 @@ let
     version = "1.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JM/JMCNAMARA/Excel-Writer-XLSX-1.09.tar.gz";
-      sha256 = "d679c6ac19e93c32ab77594c793e41b948c7bb3873b600e70ad637d093dca187";
+      hash = "sha256-1nnGrBnpPDKrd1lMeT5BuUjHuzhztgDnCtY30JPcoYc=";
     };
     propagatedBuildInputs = [ ArchiveZip ];
     meta = {
@@ -8487,7 +8487,7 @@ let
     version = "0.2501";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DE/DEXTER/Exception-Base-0.2501.tar.gz";
-      sha256 = "5723dd78f4ac0b4d262a05ea46af663ea00d8096b2e9c0a43515c210760e1e75";
+      hash = "sha256-VyPdePSsC00mKgXqRq9mPqANgJay6cCkNRXCEHYOHnU=";
     };
     buildInputs = [ TestUnitLite ];
     meta = {
@@ -8501,7 +8501,7 @@ let
     version = "1.44";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/Exception-Class-1.44.tar.gz";
-      sha256 = "03gf4cdgrjnljgrlxkvbh2cahsyzn0zsh2zcli7b1lrqn7wgpwrk";
+      hash = "sha256-M/P7+LE407BOpOwLqD+w32uomIBrz07zk9TK/Boj7g0=";
     };
     propagatedBuildInputs = [ ClassDataInheritable DevelStackTrace ];
     meta = {
@@ -8515,7 +8515,7 @@ let
     version = "0.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DE/DEXTER/Exception-Died-0.06.tar.gz";
-      sha256 = "1dcajw2m3x5m76fpi3fvy9fjkmfrd171pnx087i5fkgx5ay41i1m";
+      hash = "sha256-NcRAvCr9TVfiQaDbG05o2dUpXfLbjXidObX0UQWXirU=";
     };
     buildInputs = [ TestAssert TestUnitLite ];
     propagatedBuildInputs = [ ExceptionBase constantboolean ];
@@ -8530,7 +8530,7 @@ let
     version = "0.0401";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DE/DEXTER/Exception-Warning-0.0401.tar.gz";
-      sha256 = "1a6k3sbhkxmz00wrmhv70f9kxjf7fklp1y6mnprfvcdmrsk9qdkv";
+      hash = "sha256-ezacps61se3ytdX4cOl0x8k+kwNnw5o5AL/2CZce06g=";
     };
     buildInputs = [ TestAssert TestUnitLite ];
     propagatedBuildInputs = [ ExceptionBase ];
@@ -8545,7 +8545,7 @@ let
     version = "0.114";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EX/EXODIST/Exporter-Declare-0.114.tar.gz";
-      sha256 = "4bd70d6ca76f6f6ba7e4c618d4ac93b8593a58f1233ccbe18b10f5f204f1d4e4";
+      hash = "sha256-S9cNbKdvb2un5MYY1KyTuFk6WPEjPMvhixD18gTx1OQ=";
     };
     buildInputs = [ FennecLite TestException ];
     propagatedBuildInputs = [ MetaBuilder aliased ];
@@ -8561,7 +8561,7 @@ let
     version = "0.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/Exporter-Lite-0.08.tar.gz";
-      sha256 = "1hns15imih8z2h6zv3m1wwmv9fiysacsb52y94v6zf2cmw4kjny0";
+      hash = "sha256-wFs5Ca9MuG82SV6UpZnSPrq0K+ehjv0NFB/BWGMJ2sI=";
     };
     meta = {
       description = "Lightweight exporting of functions and variables";
@@ -8574,7 +8574,7 @@ let
     version = "1.002002";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TOBYINK/Exporter-Tiny-1.002002.tar.gz";
-      sha256 = "00f0b95716b18157132c6c118ded8ba31392563d19e490433e9a65382e707101";
+      hash = "sha256-APC5VxaxgVcTLGwRje2LoxOSVj0Z5JBDPpplOC5wcQE=";
     };
     meta = {
       description = "An exporter with the features of Sub::Exporter but only core dependencies";
@@ -8588,7 +8588,7 @@ let
     version = "1.35";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JA/JACOBY/Expect-1.35.tar.gz";
-      sha256 = "09d92761421decd495853103379165a99efbf452c720f30277602cf23679fd06";
+      hash = "sha256-CdknYUId7NSVhTEDN5FlqZ779FLHIPMCd2As8jZ5/QY=";
     };
     propagatedBuildInputs = [ IOTty ];
     meta = {
@@ -8602,7 +8602,7 @@ let
     version = "0.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DJ/DJERIUS/Expect-Simple-0.04.tar.gz";
-      sha256 = "af83b92185e642695913ff138efe819752e80857759996deafcaab2700ad5db5";
+      hash = "sha256-r4O5IYXmQmlZE/8Tjv6Bl1LoCFd1mZber8qrJwCtXbU=";
     };
     propagatedBuildInputs = [ Expect ];
     meta = {
@@ -8616,7 +8616,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/ExtUtils-CChecker-0.11.tar.gz";
-      sha256 = "1x8vafpff5nma18svxp1h3mp069fjmzlsdvnbcgn3z1pgrkkcxqi";
+      hash = "sha256-EXc2Z343/GEfW3Y3TX+VLhlw64Dh9q1RUNUW565TG/U=";
     };
     buildInputs = [ TestFatal ];
     meta = {
@@ -8630,7 +8630,7 @@ let
     version = "0.008";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEONT/ExtUtils-Config-0.008.tar.gz";
-      sha256 = "ae5104f634650dce8a79b7ed13fb59d67a39c213a6776cfdaa3ee749e62f1a8c";
+      hash = "sha256-rlEE9jRlDc6KebftE/tZ1no5whOmd2z9qj7nSeYvGow=";
     };
     meta = {
       description = "A wrapper for perl's configuration";
@@ -8643,7 +8643,7 @@ let
     version = "0.25";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NW/NWCLARK/ExtUtils-Constant-0.25.tar.gz";
-      sha256 = "6933d0e963b62281ef7561068e6aecac8c4ac2b476b2bba09ab0b90fbac9d757";
+      hash = "sha256-aTPQ6WO2IoHvdWEGjmrsrIxKwrR2srugmrC5D7rJ11c=";
     };
     meta = {
       description = "Generate XS code to import C header constants";
@@ -8656,7 +8656,7 @@ let
     version = "0.21";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETJ/ExtUtils-CppGuess-0.21.tar.gz";
-      sha256 = "0ls1y9bb2nff9djli91s86541r7ajcjp22gqhcdmj7hs69w92qpz";
+      hash = "sha256-/2KReDIaHlkbg/gJcSWT6uRAikE6pEhlS85ZsVbyQVM=";
     };
     doCheck = !stdenv.isDarwin;
     nativeBuildInputs = [ pkgs.ld-is-cc-hook ];
@@ -8673,7 +8673,7 @@ let
     version = "0.8000";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/ExtUtils-Depends-0.8000.tar.gz";
-      sha256 = "165y1cjirbq64w39svkz82cb5jjqkjm8f4c0wqi2lk6050hzf3vq";
+      hash = "sha256-eA/3ISjATCoi5oARh6qcWMqymEB/bp0GJwavHCULvpg=";
     };
     meta = {
       description = "Easily build XS extensions that depend on XS extensions";
@@ -8686,7 +8686,7 @@ let
     version = "1.24";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KG/KGB/ExtUtils-F77-1.24.tar.gz";
-      sha256 = "355878a4a7f901eb18d21f9e21be8c8bfc6aaf9665d34b241bc1d43e32c5b730";
+      hash = "sha256-NVh4pKf5AesY0h+eIb6Mi/xqr5Zl00skG8HUPjLFtzA=";
     };
     buildInputs = [ pkgs.gfortran ];
     propagatedBuildInputs = [ FileWhich ];
@@ -8701,7 +8701,7 @@ let
     version = "0.026";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEONT/ExtUtils-Helpers-0.026.tar.gz";
-      sha256 = "05ilqcj1rg5izr09dsqmy5di4fvq6ph4k0chxks7qmd4j1kip46y";
+      hash = "sha256-3pAbZ5CkVXz07JCBSeA1eDsSW/EV65ZA/rG8HCTDNBY=";
     };
     meta = {
       description = "Various portability utilities for module builders";
@@ -8714,7 +8714,7 @@ let
     version = "2.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BINGOS/ExtUtils-Install-2.18.tar.gz";
-      sha256 = "1i9hgvk3wcyshigfwvlrm2qilh8xvb7lfk3qdjrbnrrvl9xqgpg5";
+      hash = "sha256-5d2He6I7Z7uybHhMR8/aHUEasaiZbu5ehNozPuZ+MMU=";
     };
     meta = {
       description = "Install files from here to there";
@@ -8728,7 +8728,7 @@ let
     version = "0.012";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEONT/ExtUtils-InstallPaths-0.012.tar.gz";
-      sha256 = "1v9lshfhm9ck4p0v77arj5f7haj1mmkqal62lgzzvcds6wq5www4";
+      hash = "sha256-hHNeMDe6sf3/o8JQhWetQSp4XJFZnbPBJZOlCh3UNO0=";
     };
     propagatedBuildInputs = [ ExtUtilsConfig ];
     meta = {
@@ -8742,7 +8742,7 @@ let
     version = "0.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AM/AMBS/ExtUtils-LibBuilder-0.08.tar.gz";
-      sha256 = "1lmmfcjxvsvhn4f3v2lyylgr8dzcf5j7mnd1pkq3jc75dph724f5";
+      hash = "sha256-xRFx4G3lMDnwvKHZemRx7DeUH/Weij0csXDr3SVztdI=";
     };
     perlPreHook = "export LD=$CC";
     meta = {
@@ -8756,7 +8756,7 @@ let
     version = "7.62";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BINGOS/ExtUtils-MakeMaker-7.62.tar.gz";
-      sha256 = "5022ad857fd76bd3f6b16af099fe2324639d9932e08f21e891fb313d9cae1705";
+      hash = "sha256-UCKthX/Xa9P2sWrwmf4jJGOdmTLgjyHokfsxPZyuFwU=";
     };
     meta = {
       description = "Create a module Makefile";
@@ -8771,7 +8771,7 @@ let
     version = "0.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/ExtUtils-MakeMaker-CPANfile-0.09.tar.gz";
-      sha256 = "0xg2z100vjhcndwaz9m3mmi90rb8h5pggpvlj1b0i8dhsh3pc1rc";
+      hash = "sha256-LAd2B9SwoQhWkHTf926BaGWQYq2jpq94swzKDUD44nU=";
     };
     propagatedBuildInputs = [ ModuleCPANfile ];
     meta = {
@@ -8785,7 +8785,7 @@ let
     version = "1.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/ExtUtils-PkgConfig-1.16.tar.gz";
-      sha256 = "bbeaced995d7d8d10cfc51a3a5a66da41ceb2bc04fedcab50e10e6300e801c6e";
+      hash = "sha256-u+rO2ZXX2NEM/FGjpaZtpBzrK8BP7cq1DhDmMA6AHG4=";
     };
     nativeBuildInputs = [ buildPackages.pkg-config ];
     propagatedBuildInputs = [ pkgs.pkg-config ];
@@ -8817,7 +8817,7 @@ let
     version = "1.00";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SM/SMUELLER/ExtUtils-Typemap-1.00.tar.gz";
-      sha256 = "1iqz0xlscg655gnwb2h1wrjj70llblps1zznl29qn1mv5mvibc5i";
+      hash = "sha256-sbAVdy27BouToPb/oC9dlIIjZeYBisXtK8U8pmkHH8c=";
     };
     meta = {
       description = "Read/Write/Modify Perl/XS typemap files";
@@ -8830,7 +8830,7 @@ let
     version = "1.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SM/SMUELLER/ExtUtils-Typemaps-Default-1.05.tar.gz";
-      sha256 = "1phmha0ks95kvzl00r1kgnd5hvg7qb1q9jmzjmw01p5zgs1zbyix";
+      hash = "sha256-Pfr1g36/3AB4lb/KhMPC521Ymn0zZADo37MkPYGCFd4=";
     };
     meta = {
       description = "A set of useful typemaps";
@@ -8843,7 +8843,7 @@ let
     version = "0.28";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GR/GRICHTER/ExtUtils-XSBuilder-0.28.tar.gz";
-      sha256 = "8cced386e3d544c5ec2deb3aed055b72ebcfc2ea9a6c807da87c4245272fe80a";
+      hash = "sha256-jM7ThuPVRMXsLes67QVbcuvPwuqabIB9qHxCRScv6Ao=";
     };
     propagatedBuildInputs = [ ParseRecDescent TieIxHash ];
     meta = {
@@ -8857,7 +8857,7 @@ let
     version = "0.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SM/SMUELLER/ExtUtils-XSpp-0.18.tar.gz";
-      sha256 = "1zx84f93lkymqz7qa4d63gzlnhnkxm5i3gvsrwkvvqr9cxjasxli";
+      hash = "sha256-kXatZGcp470nz3q/EUvt00JL/xumEYXPx9VPOpIjqP8=";
     };
     buildInputs = [ TestBase TestDifferences ];
     meta = {
@@ -8872,7 +8872,7 @@ let
     version = "0.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DE/DEXTER/Fatal-Exception-0.05.tar.gz";
-      sha256 = "0kzfwc44vpxla3j637kfmnwmv57g6x4899ijqb4ljamk7whms298";
+      hash = "sha256-KAldIT+zKknJwjKmhEg375Rdua1unmHkULTfTQjj7k8=";
     };
     buildInputs = [ ExceptionWarning TestAssert TestUnitLite ];
     propagatedBuildInputs = [ ExceptionDied ];
@@ -8887,7 +8887,7 @@ let
     version = "0.79";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/FCGI-0.79.tar.gz";
-      sha256 = "1r1lzd74lzzdl2brcanw4n70m37nd8n6gv9clb55m3gv2hdlxylc";
+      hash = "sha256-jPpOGxT7jVrKoiztZyxq9owKjiXcKpaXoO1/Sk77NOQ=";
     };
     postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
       sed -i '/use IO::File/d' Makefile.PL
@@ -8903,7 +8903,7 @@ let
     version = "0.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/FCGI-Client-0.09.tar.gz";
-      sha256 = "1s11casbv0jmkcl5dk8i2vhfy1nc8rg43d3bg923zassrq4wndym";
+      hash = "sha256-1TfLCc5aqz9Eemu0QV5GzAbv4BYRzVYom1WCvbRiIeg=";
     };
     propagatedBuildInputs = [ Moo TypeTiny ];
     buildInputs = [ ModuleBuildTiny ];
@@ -8919,7 +8919,7 @@ let
     version = "0.28";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AR/ARODLAND/FCGI-ProcManager-0.28.tar.gz";
-      sha256 = "e1c958c042427a175e051e0008f2025e8ec80613d3c7750597bf8e529b04420e";
+      hash = "sha256-4clYwEJCehdeBR4ACPICXo7IBhPTx3UFl7+OUpsEQg4=";
     };
     meta = {
       description = "A perl-based FastCGI process manager";
@@ -8932,7 +8932,7 @@ let
     version = "0.27";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PL/PLICEASE/FFI-CheckLib-0.27.tar.gz";
-      sha256 = "0x1dk4hlhvcbgwivf345phbqz0v5hawxxnby21h8bkagq93jfi4d";
+      hash = "sha256-jUQnR8JPzYVgEH7Z3rmCZYOPF7yFDLcjf4ttSCGZLXQ=";
     };
     buildInputs = [ Test2Suite ];
     meta = {
@@ -8947,7 +8947,7 @@ let
     version = "0.004";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EX/EXODIST/Fennec-Lite-0.004.tar.gz";
-      sha256 = "dce28e3932762c2ff92aa52d90405c06e898e81cb7b164ccae8966ae77f1dcab";
+      hash = "sha256-3OKOOTJ2LC/5KqUtkEBcBuiY6By3sWTMrolmrnfx3Ks=";
     };
     meta = {
       description = "Minimalist Fennec, the commonly used bits";
@@ -8961,7 +8961,7 @@ let
     version = "0.31";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/File-ChangeNotify-0.31.tar.gz";
-      sha256 = "192bdb1ce76266c6a694a8e962d039e3adeeb829b6ac1e23f5057f2b506392bd";
+      hash = "sha256-GSvbHOdiZsamlKjpYtA5463uuCm2rB4j9QV/K1Bjkr0=";
     };
     buildInputs = [ Test2Suite TestRequires TestWithoutModule ];
     propagatedBuildInputs = [ ModulePluggable Moo TypeTiny namespaceautoclean ];
@@ -8976,7 +8976,7 @@ let
     version = "0.1010";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/File-chdir-0.1010.tar.gz";
-      sha256 = "009b8p2fzj4nhl03fpkhrn0rsh7myxqbrf69iqpzd86p1gs23hgg";
+      hash = "sha256-78Eh9AvXoPYvjsm4vHD39UCdgc1wXjcAhZbI78RFKwE=";
     };
     meta = {
       description = "A more sensible way to change directories";
@@ -8989,7 +8989,7 @@ let
     pname = "File-BaseDir";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KI/KIMRYAN/File-BaseDir-0.08.tar.gz";
-      sha256 = "c065fcd3e2f22ae769937bcc971b91f80294d5009fac140bfba83bf7d35305e3";
+      hash = "sha256-wGX80+LyKudpk3vMlxuR+AKU1QCfrBQL+6g799NTBeM=";
     };
     configurePhase = ''
       runHook preConfigure
@@ -9008,7 +9008,7 @@ let
     version = "0.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MATTLAW/File-BOM-0.18.tar.gz";
-      sha256 = "28edc43fcb118e11bc458c9ae889d56d388c1d9bc29997b00b1dffd8573823a3";
+      hash = "sha256-KO3EP8sRjhG8RYya6InVbTiMHZvCmZewCx3/2Fc4I6M=";
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ Readonly ];
@@ -9023,7 +9023,7 @@ let
     version = "4.42";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/File-CheckTree-4.42.tar.gz";
-      sha256 = "66fb417f8ff8a5e5b7ea25606156e70e204861c59fa8c3831925b4dd3f155f8a";
+      hash = "sha256-ZvtBf4/4peW36iVgYVbnDiBIYcWfqMODGSW03T8VX4o=";
     };
     meta = {
       description = "Run many filetest checks on a tree";
@@ -9037,7 +9037,7 @@ let
     version = "0.42";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XE/XENO/File-chmod-0.42.tar.gz";
-      sha256 = "6cafafff68bc84215168b55ede0d191dcb57f9a3201b51d61edb2858a2407795";
+      hash = "sha256-bK+v/2i8hCFRaLVe3g0ZHctX+aMgG1HWHtsoWKJAd5U=";
     };
     meta = {
       description = "Implements symbolic and ls chmod modes";
@@ -9051,7 +9051,7 @@ let
     version = "1.0.3";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MITHUN/File-chmod-Recursive-v1.0.3.tar.gz";
-      sha256 = "9348ca5c5b88deadcc483b9399ef7c2e0fc2504f9058db65f3c3c53c41139aa7";
+      hash = "sha256-k0jKXFuI3q3MSDuTme98Lg/CUE+QWNtl88PFPEETmqc=";
     };
     propagatedBuildInputs = [ Filechmod ];
     meta = {
@@ -9066,7 +9066,7 @@ let
     version = "0.45";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DM/DMUEY/File-Copy-Recursive-0.45.tar.gz";
-      sha256 = "0mqivx4nbzagl3s2kxka72050sfb75xvn25j8a0f6ic3ibvir5yk";
+      hash = "sha256-05cc94qDReOAQrIIu3s5y2lQgDhq9in0oE/9ZUnfEVc=";
     };
     buildInputs = [ PathTiny TestDeep TestFatal TestFile TestWarnings ];
     meta = {
@@ -9080,7 +9080,7 @@ let
     version = "0.006";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JK/JKEENAN/File-Copy-Recursive-Reduced-0.006.tar.gz";
-      sha256 = "0b3yf33bahaf4ipfqipn8y5z4296k3vgzzsqbhh5ahwzls9zj676";
+      hash = "sha256-5hj5k6afQ1UgXFj///aYJgnyi0f2RuxuJE5BtcZwfiw=";
     };
     buildInputs = [ CaptureTiny PathTiny ];
     meta = {
@@ -9095,7 +9095,7 @@ let
     version = "0.0.3";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MO/MORITZ/File-CountLines-v0.0.3.tar.gz";
-      sha256 = "cfd97cce7c9613e4e569d47874a2b5704f1be9eced2f0739c870725694382a62";
+      hash = "sha256-z9l8znyWE+TladR4dKK1cE8b6eztLwc5yHByVpQ4KmI=";
     };
     meta = {
       description = "Efficiently count the number of line breaks in a file";
@@ -9108,7 +9108,7 @@ let
     pname = "File-DesktopEntry";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MICHIELB/File-DesktopEntry-0.22.tar.gz";
-      sha256 = "169c01e3dae2f629767bec1a9f1cdbd6ec6d713d1501e0b2786e4dd1235635b8";
+      hash = "sha256-FpwB49ri9il2e+wanxzb1uxtcT0VAeCyeG5N0SNWNbg=";
     };
     propagatedBuildInputs = [ FileBaseDir URI ];
     meta = {
@@ -9122,7 +9122,7 @@ let
     version = "0.4";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TE/TEXMEC/File-Find-Iterator-0.4.tar.gz";
-      sha256 = "a2b87ab9756a2e5bb674adbd39937663ed20c28c716bf5a1095a3ca44d54ab2c";
+      hash = "sha256-orh6uXVqLlu2dK29OZN2Y+0gwoxxa/WhCVo8pE1Uqyw=";
     };
     propagatedBuildInputs = [ ClassIterator ];
     meta = {
@@ -9136,7 +9136,7 @@ let
     version = "0.3.5";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/File-Find-Object-0.3.5.tar.gz";
-      sha256 = "dc4124abe64dc1274e8e8a5e5bf9e17a2a9269debace458115b57469f1e16a91";
+      hash = "sha256-3EEkq+ZNwSdOjopeW/nheiqSad66zkWBFbV0afHhapE=";
     };
     propagatedBuildInputs = [ ClassXSAccessor ];
     meta = {
@@ -9151,7 +9151,7 @@ let
     version = "0.0312";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/File-Find-Object-Rule-0.0312.tar.gz";
-      sha256 = "3e0b6c8dadf6362e65f2310530b1be637ed6aac113399d10c6f9129e734afff9";
+      hash = "sha256-Pgtsja32Ni5l8jEFMLG+Y37WqsETOZ0QxvkSnnNK//k=";
     };
     propagatedBuildInputs = [ FileFindObject NumberCompare TextGlob ];
     # restore t/sample-data which is corrupted by patching shebangs
@@ -9171,7 +9171,7 @@ let
     version = "0.34";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RC/RCLAMP/File-Find-Rule-0.34.tar.gz";
-      sha256 = "1znachnhmi1w5pdqx8dzgfa892jb7x8ivrdy4pzjj7zb6g61cvvy";
+      hash = "sha256-fm8WzDPrHyn/Jb7lHVE/S4qElHu/oY7bLTzECi1kyv4=";
     };
     propagatedBuildInputs = [ NumberCompare TextGlob ];
     meta = {
@@ -9186,7 +9186,7 @@ let
     version = "1.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/File-Find-Rule-Perl-1.15.tar.gz";
-      sha256 = "9a48433f86e08ce18e03526e2982de52162eb909d19735460f07eefcaf463ea6";
+      hash = "sha256-mkhDP4bgjOGOA1JuKYLeUhYuuQnRlzVGDwfu/K9GPqY=";
     };
     propagatedBuildInputs = [ FileFindRule ParamsUtil ];
     meta = {
@@ -9201,7 +9201,7 @@ let
     version = "0.53";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/ME/MERLYN/File-Finder-0.53.tar.gz";
-      sha256 = "2ecbc19ac67a9e635c872a807a8d3eaaff5babc054f15a191d47cdfc5f176a74";
+      hash = "sha256-LsvBmsZ6nmNchyqAeo0+qv9bq8BU8VoZHUfN/F8XanQ=";
     };
     propagatedBuildInputs = [ TextGlob ];
     meta = {
@@ -9215,7 +9215,7 @@ let
     version = "0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MJ/MJP/File-FnMatch-0.02.tar.gz";
-      sha256 = "05p9m7kpmjv8bmmbs5chb5fqyshcgmskbbzq5c9qpskbx2w5894n";
+      hash = "sha256-liRUuOhr6osTK/ivNXV9DGqPXVmQFb1qXWjLeuep6RY=";
     };
     meta = {
       description = "Simple filename and pathname matching";
@@ -9229,7 +9229,7 @@ let
     version = "0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MN/MNEYLON/File-Grep-0.02.tar.gz";
-      sha256 = "462e15274eb6278521407ea302d9eea7252cd44cab2382871f7de833d5f85632";
+      hash = "sha256-Ri4VJ062J4UhQH6jAtnupyUs1EyrI4KHH33oM9X4VjI=";
     };
     meta = {
       description = "Find matches to a pattern in a series of files and related functions";
@@ -9243,7 +9243,7 @@ let
     version = "0.1634";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DC/DCOPPIT/FileHandle-Unget-0.1634.tar.gz";
-      sha256 = "380f34ad3ce5e9ec661d4c468bb3392231c162317d4172df378146b42aab1785";
+      hash = "sha256-OA80rTzl6exmHUxGi7M5IjHBYjF9QXLfN4FGtCqrF4U=";
     };
     buildInputs = [ FileSlurper TestCompile UNIVERSALrequire URI ];
     meta = {
@@ -9259,7 +9259,7 @@ let
     version = "1.006";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RE/REHSACK/File-HomeDir-1.006.tar.gz";
-      sha256 = "0ll8akqmwrh9q3nkxhv2caxlaya1fr20nbhjsjsxmxph5p33fdsr";
+      hash = "sha256-WTc3xi3w9tq11BIuC0R2QXlFu2Jiwz7twAlmXvFUiFI=";
     };
     propagatedBuildInputs = [ FileWhich ];
     preCheck = "export HOME=$TMPDIR";
@@ -9276,7 +9276,7 @@ let
     version = "2.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RH/RHANDOM/File-KeePass-2.03.tar.gz";
-      sha256 = "c30c688027a52ff4f58cd69d6d8ef35472a7cf106d4ce94eb73a796ba7c7ffa7";
+      hash = "sha256-wwxogCelL/T1jNadbY7zVHKnzxBtTOlOtzp5a6fH/6c=";
     };
     propagatedBuildInputs = [ CryptRijndael ];
     meta = {
@@ -9290,7 +9290,7 @@ let
     version = "0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/File-lchown-0.02.tar.gz";
-      sha256 = "a02fbf285406a8a4d9399284f032f2d55c56975154c2e1674bd109837b8096ec";
+      hash = "sha256-oC+/KFQGqKTZOZKE8DLy1VxWl1FUwuFnS9EJg3uAluw=";
     };
     buildInputs = [ ExtUtilsCChecker ];
     perlPreHook = lib.optionalString (stdenv.isi686 || stdenv.isDarwin) "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
@@ -9305,7 +9305,7 @@ let
     version = "1.23";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/File-LibMagic-1.23.tar.gz";
-      sha256 = "52e6b1dc7cb2d87a4cdf439ba145e0b9e8cf28cc26a48a3cf9977c83463967ee";
+      hash = "sha256-Uuax3Hyy2HpM30OboUXguejPKMwmpIo8+Zd8g0Y5Z+4=";
     };
     buildInputs = [ pkgs.file ConfigAutoConf TestFatal ];
     makeMakerFlags = "--lib=${pkgs.file}/lib";
@@ -9326,7 +9326,7 @@ let
     version = "6.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PL/PLICEASE/File-Listing-6.14.tar.gz";
-      sha256 = "1zs8gfngqsd6jbsqajf95kql3bshsis1nf16y8v4l5i33s3s9cqm";
+      hash = "sha256-FbOkhx4jFko28iY4G3TUUK9B8SzJSYX1kqZp/Kx7SP8=";
     };
     propagatedBuildInputs = [ HTTPDate ];
     meta = {
@@ -9340,7 +9340,7 @@ let
     version = "1.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JV/JV/File-LoadLines-1.01.tar.gz";
-      sha256 = "1lar8s1mc4d36lhxgqyk3hpwdc1bk6j6dfdzzacbjz4zlim6x33f";
+      hash = "sha256-boxuaqSffLmY+r+5ZqSZK7DGLxzT49chNaMRVoNGWdE=";
     };
     buildInputs = [ TestException ];
     meta = {
@@ -9354,7 +9354,7 @@ let
     version = "0.30";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MICHIELB/File-MimeInfo-0.30.tar.gz";
-      sha256 = "0wm87gpagb35d7c4nyaf9z3ry0jb3g5xpyjfzcxqcfxyj2zy9ip2";
+      hash = "sha256-4sbkv5C+O4Y7+07628sbSwKfx09OeUvYaWWsp+47qHI=";
     };
     doCheck = false; # Failed test 'desktop file is the right one'
     buildInputs = [ FileBaseDir FileDesktopEntry EncodeLocale ];
@@ -9369,7 +9369,7 @@ let
     version = "1.30";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KN/KNOK/File-MMagic-1.30.tar.gz";
-      sha256 = "cf0c1b1eb29705c02d97c2913648009c0be42ce93ec24b36c696bf2d4f5ebd7e";
+      hash = "sha256-zwwbHrKXBcAtl8KRNkgAnAvkLOk+wks2xpa/LU9evX4=";
     };
     meta = {
       description = "Guess file type from contents";
@@ -9382,7 +9382,7 @@ let
     version = "0.67";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEONT/File-Map-0.67.tar.gz";
-      sha256 = "1hpv4aprgypjxjx1kzbjnf6r29a98rw7mndlinixzk62vyz5sy0j";
+      hash = "sha256-Enhdvt/CzN+jjbTZenhGSSWRjbNy/Rm67PL6l68i+8I=";
     };
     perlPreHook = "export LD=$CC";
     propagatedBuildInputs = [ PerlIOLayers SubExporterProgressive ];
@@ -9398,7 +9398,7 @@ let
     version = "0.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/File-Modified-0.10.tar.gz";
-      sha256 = "6b50b1aab6ec6998a017f6403c2735b3bc1e1cf46187bd134d7eb6df3fc45144";
+      hash = "sha256-a1CxqrbsaZigF/ZAPCc1s7weHPRhh70TTX623z/EUUQ=";
     };
     meta = {
       description = "Checks intelligently if files have changed";
@@ -9412,7 +9412,7 @@ let
     version = "1.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PETDANCE/File-Next-1.18.tar.gz";
-      sha256 = "1vy2dqpc1nbjrnga08xr2hcxxfzifc5s2lfam5lf3djya0wwn07r";
+      hash = "sha256-+QDLOVBetuFoqcpRoQtz8bveGRS5I6CezXLZwC5uwu8=";
     };
     meta = {
       description = "File-finding iterator";
@@ -9425,7 +9425,7 @@ let
     version = "1.29";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BB/BBB/File-NFSLock-1.29.tar.gz";
-      sha256 = "0dzssj15faz9cn1w3xi7jwm64gyjyazapv4bkgglw5l1njcibm31";
+      hash = "sha256-YdQVmbSBFk7fm4vsq77y0j9iKpcn9sGDZekrV4LU+jc=";
     };
     meta = {
       description = "Perl module to do NFS (or not) locking";
@@ -9438,7 +9438,7 @@ let
     version = "2.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JK/JKEENAN/File-Path-2.18.tar.gz";
-      sha256 = "1pddss5hwzng0rxgsi8cz3hcsaarkxzkayydx53dylxkxlbhl3wq";
+      hash = "sha256-mA8KF+2zU99G6c17NX+fWSnN4PgMRf16Bs9+DovWrd0=";
     };
     meta = {
       description = "Create or remove directory trees";
@@ -9451,12 +9451,12 @@ let
     version = "1.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CW/CWEST/File-Pid-1.01.tar.gz";
-      sha256 = "bafeee8fdc96eb06306a0c58bbdb7209b6de45f850e75fdc6b16db576e05e422";
+      hash = "sha256-uv7uj9yW6wYwagxYu9tyCbbeRfhQ51/caxbbV24F5CI=";
     };
     patches = [(fetchpatch {
       name = "missing-pidfile.patch";
       url = "https://sources.debian.org/data/main/libf/libfile-pid-perl/1.01-2/debian/patches/missing-pidfile.patch";
-      sha256 = "1wvax2qdpfs9mgksnc12dhby9b9w19isp50dc55wd3d741ihh6sl";
+      hash = "sha256-VBsIYyCnjcZLYQ2Uq2MKPK3kF2wiMKvnq0m727DoavM=";
     })];
     propagatedBuildInputs = [ ClassAccessor ];
     meta = {
@@ -9471,7 +9471,7 @@ let
     version = "1.016";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/File-pushd-1.016.tar.gz";
-      sha256 = "d73a7f09442983b098260df3df7a832a5f660773a313ca273fa8b56665f97cdc";
+      hash = "sha256-1zp/CUQpg7CYJg3z33qDKl9mB3OjE8onP6i1ZmX5fNw=";
     };
     meta = {
       description = "Change directory temporarily for a limited scope";
@@ -9485,7 +9485,7 @@ let
     version = "1.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/U/UR/URI/File-ReadBackwards-1.05.tar.gz";
-      sha256 = "82b261af87507cc3e7e66899c457104ebc8d1c09fb85c53f67c1f90f70f18d6e";
+      hash = "sha256-grJhr4dQfMPn5miZxFcQTryNHAn7hcU/Z8H5D3DxjW4=";
     };
     meta = {
       description = "Read a file backwards by lines";
@@ -9499,7 +9499,7 @@ let
     version = "1.60";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/File-Remove-1.60.tar.gz";
-      sha256 = "19lc9xr8w38i4bq3mbr0hadmyjm1dgyh6587gmlxbipdzx02lvp8";
+      hash = "sha256-6G4qQP/txtVpfQcVA/1roUpfm4IgrzrwIhENjnJPjKY=";
     };
     meta = {
       description = "Remove files and directories";
@@ -9512,7 +9512,7 @@ let
     version = "0.25";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IN/INGY/File-Share-0.25.tar.gz";
-      sha256 = "0w3h800qqcf1sn79h84zngnn788rg2jx4jjb70l44f6419p2b7cf";
+      hash = "sha256-jp0lbgrEOEIoOEtK0qV4GaFj7bOfIJiO1cExjAFAcHA=";
     };
     propagatedBuildInputs = [ FileShareDir ];
     meta = {
@@ -9527,7 +9527,7 @@ let
     version = "1.118";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RE/REHSACK/File-ShareDir-1.118.tar.gz";
-      sha256 = "0n69h793jxz1zkp8ng6yqjwdh0yr0py0c8sg1bf5iyaxlc5s5civ";
+      hash = "sha256-O7KiC6Nd+VjcCk8jBvwF2QPYuMTePIvu/OF3OdKByVg=";
     };
     propagatedBuildInputs = [ ClassInspector ];
     buildInputs = [ FileShareDirInstall ];
@@ -9543,7 +9543,7 @@ let
     version = "0.13";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/File-ShareDir-Install-0.13.tar.gz";
-      sha256 = "1yc0wlkav2l2wr36a53n4mnhsy2zv29z5nm14mygxgjwv7qgvgj5";
+      hash = "sha256-Rb798Nlcvv58JaHa8pPYX3gNbSV2FGVG5oKKrSblgPk=";
     };
     meta = {
       description = "Install shared files";
@@ -9557,7 +9557,7 @@ let
     version = "0.92";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IG/IGUTHRIE/Filesys-Df-0.92.tar.gz";
-      sha256 = "fe89cbb427e0e05f1cd97c2dd6d3866ac6b21bc7a85734ede159bdc35479552a";
+      hash = "sha256-/onLtCfg4F8c2Xwt1tOGasayG8eoVzTt4Vm9w1R5VSo=";
     };
     meta = {
       description = "Perl extension for filesystem disk space information.";
@@ -9570,7 +9570,7 @@ let
     version = "0.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Filesys-Notify-Simple-0.14.tar.gz";
-      sha256 = "192m0l4cnfskdmhgaxk3bm1rvbmzxzwgcdgdb60qdqd59cnp3nhz";
+      hash = "sha256-H9pxLUul4YaBWe019vjvv66dQ11jdvVgbVM7ywgFVaQ=";
     };
     buildInputs = [ TestSharedFork ];
     meta = {
@@ -9585,7 +9585,7 @@ let
     version = "0.13";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MANWAR/Filesys-DiskUsage-0.13.tar.gz";
-      sha256 = "fd3e52c6f6241271a281348d1d43c44154c2f61a32543db46aa9e15692d1b713";
+      hash = "sha256-/T5SxvYkEnGigTSNHUPEQVTC9hoyVD20aqnhVpLRtxM=";
     };
     buildInputs = [ TestWarn ];
     meta = {
@@ -9600,7 +9600,7 @@ let
     version = "9999.32";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CA/CAPOEIRAB/File-Slurp-9999.32.tar.gz";
-      sha256 = "1c655gxs0pjm5yd50rcx4rbq1lr77p4a6x6xg4xbwhlx5acj2g2c";
+      hash = "sha256-TDwhmSqdQr46ed10o8g9J9OAVyadZVCaL1VeoPsrxbA=";
     };
     meta = {
       description = "Simple and Efficient Reading/Writing/Modifying of Complete Files";
@@ -9613,7 +9613,7 @@ let
     version = "0.012";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEONT/File-Slurper-0.012.tar.gz";
-      sha256 = "4efb2ea416b110a1bda6f8133549cc6ea3676402e3caf7529fce0313250aa578";
+      hash = "sha256-TvsupBaxEKG9pvgTNUnMbqNnZALjyvdSn84DEyUKpXg=";
     };
     buildInputs = [ TestWarnings ];
     meta = {
@@ -9627,7 +9627,7 @@ let
     version = "0.004";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEONT/File-Slurp-Tiny-0.004.tar.gz";
-      sha256 = "452995beeabf0e923e65fdc627a725dbb12c9e10c00d8018c16d10ba62757f1e";
+      hash = "sha256-RSmVvuq/DpI+Zf3GJ6cl27EsnhDADYAYwW0QumJ1fx4=";
     };
     meta = {
       description = "A simple, sane and efficient file slurper [DISCOURAGED]";
@@ -9640,7 +9640,7 @@ let
     version = "1.3";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MG/MGRABNAR/File-Tail-1.3.tar.gz";
-      sha256 = "1ixg6kn4h330xfw3xgvqcbzfc3v2wlzjim9803jflhvfhf0rzl16";
+      hash = "sha256-JtCfgYNuQ+rkACjVKD/lYg/m/mJ4vz6462AMSOw0r8c=";
     };
     meta = {
       description = "Perl extension for reading from continously updated files";
@@ -9654,7 +9654,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/File-Touch-0.11.tar.gz";
-      sha256 = "e379a5ff89420cf39906e5ceff309b8ce958f99f9c3e57ad52b5002a3982d93c";
+      hash = "sha256-43ml/4lCDPOZBuXO/zCbjOlY+Z+cPletUrUAKjmC2Tw=";
     };
     meta = {
       description = "Update file access and modification times, optionally creating files if needed";
@@ -9669,7 +9669,7 @@ let
     version = "0.22";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PM/PMISON/File-Type-0.22.tar.gz";
-      sha256 = "0hfkaafp6wb0nw19x47wc6wc9mwlw8s2rxiii3ylvzapxxgxjp6k";
+      hash = "sha256-01zZX+9X/U39iDH2LDTilNfEuGH8kJ4Ct2Bxc51S00E=";
     };
     meta = {
       description = "Uses magic numbers (typically at the start of a file) to determine the MIME type of that file";
@@ -9682,7 +9682,7 @@ let
     version = "4.201720";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TOMMY/File-Util-4.201720.tar.gz";
-      sha256 = "d4491021850d5c5cbd702c7e4744858079841d2fa93f1c2d09ddc9a7863608df";
+      hash = "sha256-1EkQIYUNXFy9cCx+R0SFgHmEHS+pPxwtCd3Jp4Y2CN8=";
     };
     buildInputs = [ TestNoWarnings ];
     meta = {
@@ -9697,7 +9697,7 @@ let
     version = "0.034";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PERLANCAR/File-Util-Tempdir-0.034.tar.gz";
-      sha256 = "076wdwbvqsg64wr5np8j6pnmmhs9li64g9mw2h33zbbgbv7f47fi";
+      hash = "sha256-0R3izl5vrT8GFLymR0ykScNa7TUSXVsyJ+ZpvBdv3Bw=";
     };
     buildInputs = [ Perlosnames TestException ];
     meta = {
@@ -9713,7 +9713,7 @@ let
     version = "1.23";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PL/PLICEASE/File-Which-1.23.tar.gz";
-      sha256 = "b79dc2244b2d97b6f27167fc3b7799ef61a179040f3abd76ce1e0a3b0bc4e078";
+      hash = "sha256-t53CJEstl7bycWf8O3eZ72GheQQPOr12zh4KOwvE4Hg=";
     };
     meta = {
       description = "Perl implementation of the which utility as an API";
@@ -9727,7 +9727,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/File-Zglob-0.11.tar.gz";
-      sha256 = "16v61rn0yimpv5kp6b20z2f1c93n5kpsyjvr0gq4w2dc43gfvc8w";
+      hash = "sha256-HLHt3iCsCU7wA3lLr+8sdiQWnPhALHNn2bdGD2wOZps=";
     };
     meta = {
       description = "Extended globs";
@@ -9740,7 +9740,7 @@ let
     version = "1.60";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RU/RURBAN/Filter-1.60.tar.gz";
-      sha256 = "e11ef2f2ee8727b7f666fd249a3226f768e6eadfd51d9cdb49b3c3f1a35464f9";
+      hash = "sha256-4R7y8u6HJ7f2Zv0kmjIm92jm6t/VHZzbSbPD8aNUZPk=";
     };
     meta = {
       description = "Source Filters";
@@ -9753,7 +9753,7 @@ let
     version = "1.49";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EC/ECOCODE/Finance-Quote-1.49.tar.gz";
-      sha256 = "0lxz9fsm4ld3l900zxh2w91wjygk0ifn4miw6q5k4mm67d2c9nwm";
+      hash = "sha256-ldvERDumVjILNjxWYl0E83nJQ+IC9g9AoqNRUrVLv1M=";
     };
     propagatedBuildInputs = [ CGI DateTimeFormatStrptime HTMLTableExtract JSON JSONParse LWPProtocolHttps StringUtil TextTemplate ];
     buildInputs = [ TestPod ];
@@ -9769,7 +9769,7 @@ let
     version = "1.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Y/YA/YANNK/Find-Lib-1.04.tar.gz";
-      sha256 = "0lg88v0sqfpq4d3jwvk6c9blqnpxbz8f4s22zr3b1qb160g94wqx";
+      hash = "sha256-HXOSHjBh4bBG/kJo4tBf/VpMV2Jmbi5HI/g6rMFG6FE=";
     };
     meta = {
       description = "Helper to smartly find libs to use in the filesystem tree";
@@ -9782,7 +9782,7 @@ let
     version = "1.20";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GA/GAAS/Font-AFM-1.20.tar.gz";
-      sha256 = "32671166da32596a0f6baacd0c1233825a60acaf25805d79c81a3f18d6088bc1";
+      hash = "sha256-MmcRZtoyWWoPa6rNDBIzglpgrK8lgF15yBo/GNYIi8E=";
     };
     meta = {
       description = "Interface to Adobe Font Metrics files";
@@ -9795,7 +9795,7 @@ let
     version = "1.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BH/BHALLISSY/Font-TTF-1.06.tar.gz";
-      sha256 = "4b697d444259759ea02d2c442c9bffe5ffe14c9214084a01f743693a944cc293";
+      hash = "sha256-S2l9REJZdZ6gLSxELJv/5f/hTJIUCEoB90NpOpRMwpM=";
     };
     buildInputs = [ IOString ];
     meta = {
@@ -9809,7 +9809,7 @@ let
     version = "0.97";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MO/MOB/Forks-Super-0.97.tar.gz";
-      sha256 = "0kias11b4zchxy5x9ns2wwjzvzxlzsbap8sq587z9micw5bl7nrk";
+      hash = "sha256-M9tDV+Es1vQPKlijq5b+tP/9JedC29SL75B9skLQKk4=";
     };
     doCheck = false;
     propagatedBuildInputs = [ URI ];
@@ -9824,7 +9824,7 @@ let
     version = "0.29";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LY/LYOKATO/FormValidator-Simple-0.29.tar.gz";
-      sha256 = "fc3a63dc54b962d74586070176adaf5be869f09b561bb30f5fd32ef531792666";
+      hash = "sha256-/Dpj3FS5YtdFhgcBdq2vW+hp8JtWG7MPX9Mu9TF5JmY=";
     };
     propagatedBuildInputs = [ ClassAccessor ClassDataAccessor DateCalc DateTimeFormatStrptime EmailValidLoose ListMoreUtils TieIxHash UNIVERSALrequire YAML ];
     buildInputs = [ CGI ];
@@ -9839,7 +9839,7 @@ let
     version = "0.5001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IL/ILYAZ/modules/FreezeThaw-0.5001.tar.gz";
-      sha256 = "0h8gakd6b9770n2xhld1hhqghdar3hrq2js4mgiwxy86j4r0hpiw";
+      hash = "sha256-PF4IMpEG+c7jq0RLgTMcWTX4MIShUdiFBeekZdpUD0E=";
     };
     doCheck = false;
     meta = {
@@ -9853,7 +9853,7 @@ let
     version = "2.001003";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MAUKE/Function-Parameters-2.001003.tar.gz";
-      sha256 = "eaa22c6b43c02499ec7db0758c2dd218a3b2ab47a714b2bdf8010b5ee113c242";
+      hash = "sha256-6qIsa0PAJJnsfbB1jC3SGKOyq0enFLK9+AELXuETwkI=";
     };
     buildInputs = [ DirSelf TestFatal ];
     meta = {
@@ -9867,7 +9867,7 @@ let
     version = "3.13";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/Furl-3.13.tar.gz";
-      sha256 = "1wxa2v9yjzvnzp62p1jvcx8x61z5qvlvzyah853vvaywpjxwyyl8";
+      hash = "sha256-iHrPu7zcq71HQVD5v+nG5QfTUWdbhivM/XZ/6dMWqvM=";
     };
     propagatedBuildInputs = [ ClassAccessorLite HTTPParserXS MozillaCA ];
     buildInputs = [ HTTPCookieJar HTTPProxy ModuleBuildTiny Plack Starlet TestFakeHTTPD TestRequires TestSharedFork TestTCP TestValgrind URI ];
@@ -9883,7 +9883,7 @@ let
     version = "0.48";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-0.48.tar.gz";
-      sha256 = "sha256-D+ixXBQvKjBKMXGKIKEFA6m0TMASw69eN7i34koHUqM=";
+      hash = "sha256-D+ixXBQvKjBKMXGKIKEFA6m0TMASw69eN7i34koHUqM=";
     };
     buildInputs = [ TestFatal TestIdentity TestRefcount ];
     meta = {
@@ -9897,7 +9897,7 @@ let
     version = "0.58";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-AsyncAwait-0.58.tar.gz";
-      sha256 = "sha256-OLtJ9jabBUrAUuaNomR/4i0Io605rgNuJ6KRELtOQi4=";
+      hash = "sha256-OLtJ9jabBUrAUuaNomR/4i0Io605rgNuJ6KRELtOQi4=";
     };
     buildInputs = [ TestRefcount TestFatal ];
     propagatedBuildInputs = [ Future XSParseKeyword XSParseSublike ];
@@ -9914,7 +9914,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-IO-0.11.tar.gz";
-      sha256 = "sha256-dVM2JvgfdoxfIxyXAhBsJbV3KotplcqixYvMSsyRB8k=";
+      hash = "sha256-dVM2JvgfdoxfIxyXAhBsJbV3KotplcqixYvMSsyRB8k=";
     };
     buildInputs = [ TestIdentity ];
     propagatedBuildInputs = [ Future StructDumb ];
@@ -9931,7 +9931,7 @@ let
     version = "0.2403";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Games-Solitaire-Verify-0.2403.tar.gz";
-      sha256 = "e5ab475c82ba1cb088ad28f423ca514d46944d6ae3c3eb55e9636e9e7f1dc893";
+      hash = "sha256-5atHXIK6HLCIrSj0I8pRTUaUTWrjw+tV6WNunn8dyJM=";
     };
     buildInputs = [ DirManifest TestDifferences ];
     propagatedBuildInputs = [ ClassXSAccessor ExceptionClass PathTiny ];
@@ -9948,7 +9948,7 @@ let
     version = "2.73";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RU/RURBAN/GD-2.73.tar.gz";
-      sha256 = "0arjpa8id6k5yjxfq0j2hsinhhjzjch5lwk6gscf48l54drrw729";
+      hash = "sha256-SRyecyOFIuKYfmZyWiCTX0Joo4ZCAuy69GWaFpG6Mis=";
     };
 
     buildInputs = [ pkgs.gd pkgs.libjpeg pkgs.zlib pkgs.freetype pkgs.libpng pkgs.fontconfig pkgs.xorg.libXpm ExtUtilsPkgConfig TestFork ];
@@ -9970,7 +9970,7 @@ let
     version = "1.54";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RU/RUZ/GDGraph-1.54.tar.gz";
-      sha256 = "0kzsdc07ycxjainmz0dnsclb15w2j1y7g8b5mcb7vhannq85qvxr";
+      hash = "sha256-uW9cELZWwX0Wq2Whd3yQgpewKNO2gV9tVLIzfwBr+k8=";
     };
     propagatedBuildInputs = [ GDText ];
     buildInputs = [ CaptureTiny TestException ];
@@ -9985,7 +9985,7 @@ let
     version = "1.75";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BU/BURAK/GD-SecurityImage-1.75.tar.gz";
-      sha256 = "19lf1kzdavrkkx3f900jnpynr55d5kjd2sdmwpfir5dsmkcj9pix";
+      hash = "sha256-Pd4k2ay6lRzd5bVp0eQsrZRs/bUSgORGnzNv1f4MjqY=";
     };
     propagatedBuildInputs = [ GD ];
     meta = {
@@ -9999,7 +9999,7 @@ let
     version = "0.86";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MV/MVERB/GDTextUtil-0.86.tar.gz";
-      sha256 = "1g0nc7fz4d672ag7brlrrcz7ibm98x49qs75bq9z957ybkwcnvl8";
+      hash = "sha256-iG7L+Fz+lPQTXuVonEhHqa54PsuZ5nWeEsc08t1hFrw=";
     };
     propagatedBuildInputs = [ GD ];
     meta = {
@@ -10013,7 +10013,7 @@ let
     version = "1.51";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MAXMIND/Geo-IP-1.51.tar.gz";
-      sha256 = "1fka8fr7fw6sh3xa9glhs1zjg3s2gfkhi7n7da1l2m2wblqj0c0n";
+      hash = "sha256-FjAgMV1cVEGDaseeCKd7Qo8nf9CQvqT6gNpwd7JDaro=";
     };
     makeMakerFlags = "LIBS=-L${pkgs.geoip}/lib INC=-I${pkgs.geoip}/include";
     doCheck = false; # seems to access the network
@@ -10028,7 +10028,7 @@ let
     version = "2.006002";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MAXMIND/GeoIP2-2.006002.tar.gz";
-      sha256 = "0d4qq0k0pd0xd83iykr0jkyizl499ii6ajwwwl93rgg9xsl44189";
+      hash = "sha256-CQVCqO7pvTwS5ZxLZWJMidAf/ZQgTx8Hah20CybAmDQ=";
     };
     propagatedBuildInputs = [ JSONMaybeXS LWPProtocolHttps MaxMindDBReader ParamsValidate Throwable ];
     buildInputs = [ PathClass TestFatal TestNumberDelta ];
@@ -10045,7 +10045,7 @@ let
     version = "1.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JS/JSTENZEL/Getopt-ArgvFile-1.11.tar.gz";
-      sha256 = "3709aa513ce6fd71d1a55a02e34d2f090017d5350a9bd447005653c9b0835b22";
+      hash = "sha256-NwmqUTzm/XHRpVoC400vCQAX1TUKm9RHAFZTybCDWyI=";
     };
     meta = {
       description = "Interpolates script options from files into @ARGV or another array";
@@ -10059,7 +10059,7 @@ let
     version = "2.52";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JV/JV/Getopt-Long-2.52.tar.gz";
-      sha256 = "1yh5fykxrw68pvdvhvjh3wfs7a1s29xqwm5fxw2mqg9mfg1sgiwx";
+      hash = "sha256-ncenw3M1PVwF765UjnsSOqijHR9Qbrjbvsjw3Kd3Bfo=";
     };
     meta = {
       description = "Extended processing of command line options";
@@ -10072,7 +10072,7 @@ let
     version = "0.105";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Getopt-Long-Descriptive-0.105.tar.gz";
-      sha256 = "a71cdbcf4043588b26a42a13d151c243f6eccf38e8fc0b18ffb5b53651ab8c15";
+      hash = "sha256-pxzbz0BDWIsmpCoT0VHCQ/bszzjo/AsY/7W1NlGrjBU=";
     };
     buildInputs = [ CPANMetaCheck TestFatal TestWarnings ];
     propagatedBuildInputs = [ ParamsValidate SubExporter ];
@@ -10088,7 +10088,7 @@ let
     version = "0.3";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GW/GWARD/Getopt-Tabular-0.3.tar.gz";
-      sha256 = "0xskl9lcj07sdfx5dkma5wvhhgf5xlsq0khgh8kk34dm6dv0dpwv";
+      hash = "sha256-m98GdjO1kTEngg9OgDXtxT0INy+qzla6a/oAyWiiU3c=";
     };
     meta = {
       description = "Table-driven argument parsing for Perl 5";
@@ -10101,7 +10101,7 @@ let
     version = "0.42";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSOUTH/Git-0.42.tar.gz";
-      sha256 = "9469a9f398f3a2bf2b0500566ee41d3ff6fae460412a137185767a1cc4783a6d";
+      hash = "sha256-lGmp85jzor8rBQBWbuQdP/b65GBBKhNxhXZ6HMR4Om0=";
     };
     propagatedBuildInputs = [ Error ];
     meta = {
@@ -10116,7 +10116,7 @@ let
     version = "0.003001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TORBIAK/App-Git-Autofixup-0.003001.tar.gz";
-      sha256 = "1q7im0zj238k5agwi7d1mz26a8r0wrxwfwp1l8n5k777gx3b5xhp";
+      hash = "sha256-F/ayRn/nnFksouFyx3vmICNlxK+hncifKhMNIT+o8eA=";
     };
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
     postInstall = lib.optionalString stdenv.isDarwin ''
@@ -10135,7 +10135,7 @@ let
     version = "0.53";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BR/BROQ/Git-PurePerl-0.53.tar.gz";
-      sha256 = "987c74366cc4c37ee084050f985fa254359c89c12507f5b8bfc6607de538d5a8";
+      hash = "sha256-mHx0NmzEw37ghAUPmF+iVDWcicElB/W4v8ZgfeU41ag=";
     };
     buildInputs = [ Testutf8 ];
     propagatedBuildInputs = [ ArchiveExtract ConfigGitLike DataStreamBulk DateTime FileFindRule IODigest MooseXStrictConstructor MooseXTypesPathClass ];
@@ -10151,7 +10151,7 @@ let
     version = "1.324";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BO/BOOK/Git-Repository-1.324.tar.gz";
-      sha256 = "814dfad104a9546349f9e0fd492c86137de827ebc284017a91a5267c120ad4f6";
+      hash = "sha256-gU360QSpVGNJ+eD9SSyGE33oJ+vChAF6kaUmfBIK1PY=";
     };
     buildInputs = [ TestRequiresGit ];
     propagatedBuildInputs = [ GitVersionCompare SystemCommand namespaceclean ];
@@ -10166,7 +10166,7 @@ let
     version = "1.004";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BO/BOOK/Git-Version-Compare-1.004.tar.gz";
-      sha256 = "63e8264ed351cb2371b47852a72366214164b5f3fad9dbd68309c7fc63d06491";
+      hash = "sha256-Y+gmTtNRyyNxtHhSpyNmIUFktfP62dvWgwnH/GPQZJE=";
     };
     buildInputs = [ TestNoWarnings ];
     meta = {
@@ -10180,7 +10180,7 @@ let
     version = "1.3293";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/Glib-1.3293.tar.gz";
-      sha256 = "005m3inz12xcsd5sr056cm1kbhmxsx2ly88ifbdv6p6cwz0s05kk";
+      hash = "sha256-cxagwefMXLPbchEhT0XXvcI1Q2WmgKxL06yL8G0ctQA=";
     };
     buildInputs = [ pkgs.glib ];
     propagatedBuildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig ];
@@ -10196,7 +10196,7 @@ let
     version = "0.049";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/Glib-Object-Introspection-0.049.tar.gz";
-      sha256 = "0mxg6pz8qfyipw0ypr54alij0c4adzg94f62702b2a6hkp5jhij6";
+      hash = "sha256-RkYoy53QKLEEOMI4kt5vijAgI1Wk5OsBv9E7jP41r1c=";
     };
     checkInputs = [ pkgs.cairo CairoGObject ];
     propagatedBuildInputs = [ pkgs.gobject-introspection Glib ];
@@ -10224,7 +10224,7 @@ let
     version = "1.047";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/Gnome2-1.047.tar.gz";
-      sha256 = "ccc85c5dc3c14f915ed1a186d238681d83fef3d17eed1c20001499ff56b6390c";
+      hash = "sha256-zMhcXcPBT5Fe0aGG0jhoHYP+89F+7RwgABSZ/1a2OQw=";
     };
     buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig Glib Gnome2Canvas Gnome2VFS Gtk2 ];
     propagatedBuildInputs = [ pkgs.gnome2.libgnomeui ];
@@ -10241,7 +10241,7 @@ let
     version = "1.004";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/Gnome2-Canvas-1.004.tar.gz";
-      sha256 = "0g42bfmqq5395m55np95pfj4i1qbrmx2ml4zhi4cw4sx4fdv7drr";
+      hash = "sha256-ObezmyNdE85IhJ/QKnrNC4dIpLslXVtKLWkUjKtbgjw=";
     };
     buildInputs = [ pkgs.gnome2.libgnomecanvas ];
     propagatedBuildInputs = [ Gtk2 ];
@@ -10257,7 +10257,7 @@ let
     version = "1.083";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/Gnome2-VFS-1.083.tar.gz";
-      sha256 = "eca974669df4e7f21b4fcedb96c8a328422369c68b8c2cd99b9ce9cc5d7a7979";
+      hash = "sha256-7Kl0Zp305/IbT87blsijKEIjacaLjCzZm5zpzF16eXk=";
     };
     propagatedBuildInputs = [ pkgs.gnome2.gnome_vfs Glib ];
     meta = {
@@ -10271,7 +10271,7 @@ let
     version = "0.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TS/TSCH/Gnome2-Wnck-0.16.tar.gz";
-      sha256 = "604a8ece88ac29f132d59b0caac27657ec31371c1606a4698a2160e88ac586e5";
+      hash = "sha256-YEqOzoisKfEy1ZsMqsJ2V+wxNxwWBqRpiiFg6IrFhuU=";
     };
     buildInputs = [ pkgs.libwnck2 pkgs.glib pkgs.gtk2 ];
     propagatedBuildInputs = [ Gtk2 ];
@@ -10286,7 +10286,7 @@ let
     version = "0.19";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Y/YA/YANICK/GnuPG-0.19.tar.gz";
-      sha256 = "af53f2d3f63297e046676eae14a76296afdd2910e09723b6b113708622b7989b";
+      hash = "sha256-r1Py0/Yyl+BGZ26uFKdilq/dKRDglyO2sRNwhiK3mJs=";
     };
     buildInputs = [ pkgs.gnupg1orig ];
     doCheck = false;
@@ -10302,7 +10302,7 @@ let
     version = "1.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BP/BPS/GnuPG-Interface-1.02.tar.gz";
-      sha256 = "c27a48c3d48e1a9205e362eeea66d46b032bd84637991fdf0b13828bcafdd3e6";
+      hash = "sha256-wnpIw9SOGpIF42Lu6mbUawMr2EY3mR/fCxOCi8r90+Y=";
     };
     buildInputs = [ pkgs.which pkgs.gnupg1compat ];
     propagatedBuildInputs = [ MooXHandlesVia MooXlate ];
@@ -10318,7 +10318,7 @@ let
     version = "1.017";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TI/TIMB/GoferTransport-http-1.017.tar.gz";
-      sha256 = "f73effe3ea7afa1907ce8977c87387abb0d4404f85a724ae2637b29a73154a9b";
+      hash = "sha256-9z7/4+p6+hkHzol3yHOHq7DUQE+FpySuJjeymnMVSps=";
     };
     propagatedBuildInputs = [ DBI LWP mod_perl2 ];
     doCheck = false; # no make target 'test'
@@ -10333,7 +10333,7 @@ let
     version = "0.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Y/YE/YEWENBIN/Goo-Canvas-0.06.tar.gz";
-      sha256 = "0c588c507eed5e62d12ed1cc1e491c6ff3a1f59c4fb3d435e14214b37ab39251";
+      hash = "sha256-DFiMUH7tXmLRLtHMHkkcb/Oh9ZxPs9Q14UIUs3qzklE=";
     };
     propagatedBuildInputs = [ pkgs.goocanvas pkgs.gtk2 Gtk2 ];
     meta = {
@@ -10347,7 +10347,7 @@ let
     version = "0.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PERLMAX/GooCanvas2-0.06.tar.gz";
-      sha256 = "0l1vsvyv9hjxhsxrahq4h64axh7qmk50kiz2spa3s1hr7s3qfk72";
+      hash = "sha256-4kyHhz4ZBj3U1eLHCcqs+MCuiIEEQ5W7hl3CtP3WO1A=";
     };
     buildInputs = [ pkgs.gtk3 ];
     propagatedBuildInputs = [ pkgs.goocanvas2 Gtk3 ];
@@ -10362,7 +10362,7 @@ let
     version = "0.001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AS/ASOKOLOV/GooCanvas2-CairoTypes-${version}.tar.gz";
-      sha256 = "sha256-uoBnNuvMnePYFBp2Omgr3quxy4cCveKZrf1XSs6HUFI=";
+      hash = "sha256-uoBnNuvMnePYFBp2Omgr3quxy4cCveKZrf1XSs6HUFI=";
     };
     propagatedBuildInputs = [ pkgs.goocanvas2 Gtk3 ];
     meta = {
@@ -10376,7 +10376,7 @@ let
     version = "0.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SA/SAXJAZMAN/protobuf/Google-ProtocolBuffers-0.12.tar.gz";
-      sha256 = "0wad56n12h9yhnrq1m1z3jna1ch3mg3mqj41wkfi49ws1g34k15k";
+      hash = "sha256-s4RJxguaJxLd5IFIXMerA7KgrBw/1ICzhT5BEawpTXE=";
     };
     propagatedBuildInputs = [ ClassAccessor ParseRecDescent ];
     patches =
@@ -10394,7 +10394,7 @@ let
     version = "0.005";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EX/EXODIST/goto-file-0.005.tar.gz";
-      sha256 = "c6cdd5ee4a6cdcbdbf314d92a4f9985dbcdf9e4258048cae76125c052aa31f77";
+      hash = "sha256-xs3V7kps3L2/MU2SpPmYXbzfnkJYBIyudhJcBSqjH3c=";
     };
     buildInputs = [ Test2Suite ];
     meta = {
@@ -10408,7 +10408,7 @@ let
     version = "0.9722";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETJ/Graph-0.9722.tar.gz";
-      sha256 = "c113633833f3a1bef8fa8eb96680be36d00e41ef404bddd7fc0bb98703e28d4d";
+      hash = "sha256-wRNjODPzob74+o65ZoC+NtAOQe9AS93X/Au5hwPijU0=";
     };
     propagatedBuildInputs = [ HeapFibonacci SetObject ];
     meta = {
@@ -10422,7 +10422,7 @@ let
     version = "0.31";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GP/GPHAT/Graphics-Color-0.31.tar.gz";
-      sha256 = "faa8fed5b2d80e5160af976e5db2242c0b3555542ce1042575ff6b694587a33d";
+      hash = "sha256-+qj+1bLYDlFgr5duXbIkLAs1VVQs4QQldf9raUWHoz0=";
     };
     buildInputs = [ TestNumberDelta ModulePluggable ];
     propagatedBuildInputs = [ ColorLibrary Moose MooseXAliases MooseXClone MooseXStorage MooseXTypes ];
@@ -10438,7 +10438,7 @@ let
     version = "16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RA/RATCLIFFE/Graphics-TIFF-9.tar.gz";
-      sha256 = "Kv0JTCBGnvp8+cMmDjzuqd4Qw9r+BjOo0eJC405OOdg=";
+      hash = "sha256-Kv0JTCBGnvp8+cMmDjzuqd4Qw9r+BjOo0eJC405OOdg=";
     };
     buildInputs = [ pkgs.libtiff ExtUtilsDepends ExtUtilsPkgConfig ];
     propagatedBuildInputs = [ Readonly ];
@@ -10454,7 +10454,7 @@ let
     version = "2.24";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RS/RSAVAGE/GraphViz-2.24.tgz";
-      sha256 = "1bgm4a8kan53r30qiknr4kasvhar1khf7vq064l1inzfrp2glpnr";
+      hash = "sha256-2V76xM3u2xgoMQDv4+AMWcGt1STZzojByKNYNZEi9a0=";
     };
 
     # XXX: It'd be nicer it `GraphViz.pm' could record the path to graphviz.
@@ -10472,7 +10472,7 @@ let
     version = "5.3111";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DC/DCOPPIT/grepmail-5.3111.tar.gz";
-      sha256 = "d0984e3f7a1be17ae014575f70c1678151a5bcc9622185dc5a052cb63271a761";
+      hash = "sha256-0JhOP3ob4XrgFFdfcMFngVGlvMliIYXcWgUstjJxp2E=";
     };
     buildInputs = [ FileHomeDir FileSlurper TestCompile UNIVERSALrequire URI ];
     propagatedBuildInputs = [ MailMboxMessageParser TimeDate ];
@@ -10490,7 +10490,7 @@ let
     version = "0.21";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MATTN/Growl-GNTP-0.21.tar.gz";
-      sha256 = "0gq8ypam6ifp8f3s2mf5d6sw53m7h3ki1zfahh2p41kl8a77yy98";
+      hash = "sha256-KHl/jkJ0BnIFhMr9EOeAp47CtWnFVaGHQ9dFU9X1CD8=";
     };
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [ CryptCBC DataUUID ];
@@ -10505,7 +10505,7 @@ let
     version = "0.28";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AG/AGROLMS/GSSAPI-0.28.tar.gz";
-      sha256 = "1mkhwxjjlhr58pd770i9gnf7zy7jj092iv6jfbnb8bvnc5xjr3vx";
+      hash = "sha256-fY8se2F2L7TsctLsKBKQ8vh/nH0pgnPaRSVDKmXncNY=";
     };
     propagatedBuildInputs = [ pkgs.krb5Full.dev ];
     makeMakerFlags = "--gssapiimpl ${pkgs.krb5Full.dev}";
@@ -10521,7 +10521,7 @@ let
     version = "1.24993";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/Gtk2-1.24993.tar.gz";
-      sha256 = "0ry9jfvfgdwzalxcvwsgr7plhk3agx7p40l0fqdf3vrf7ds47i29";
+      hash = "sha256-ScRDdDsu7+EadoACck9/akxI78lP8806VZ+357aTyWc=";
     };
     buildInputs = [ pkgs.gtk2 ];
     # https://rt.cpan.org/Public/Bug/Display.html?id=130742
@@ -10540,7 +10540,7 @@ let
     version = "0.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BO/BORUP/Gtk2-TrayIcon-0.06.tar.gz";
-      sha256 = "cbb7632b75d7f41554dfe8ee9063dbfd1d8522291077c65d0d82e9ceb5e94ae2";
+      hash = "sha256-y7djK3XX9BVU3+jukGPb/R2FIikQd8ZdDYLpzrXpSuI=";
     };
     propagatedBuildInputs = [ pkgs.gtk2 Gtk2 ];
     meta = {
@@ -10555,7 +10555,7 @@ let
     version = "0.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OE/OESTERHOL/Gtk2-AppIndicator-0.15.tar.gz";
-      sha256 = "a25cb071e214fb89b4450aa4605031eae89b7961e149b0d6e8f491c19c14a90a";
+      hash = "sha256-olywceIU+4m0RQqkYFAx6uibeWHhSbDW6PSRwZwUqQo=";
     };
     propagatedBuildInputs = [ pkgs.libappindicator-gtk2 pkgs.libdbusmenu-gtk2 pkgs.gtk2 pkgs.pkg-config Gtk2 ];
     # Tests fail due to no display:
@@ -10572,7 +10572,7 @@ let
     version = "0.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RA/RATCLIFFE/Gtk2-ImageView-0.05.tar.gz";
-      sha256 = "087186c3693acf196451cf59cc8b7f5cf9a7b05abe20d32dcbcba0822953fb80";
+      hash = "sha256-CHGGw2k6zxlkUc9ZzIt/XPmnsFq+INMty8uggilT+4A=";
     };
     buildInputs = [ pkgs.gtkimageview pkgs.gtk2 ];
     propagatedBuildInputs = [ Gtk2 ];
@@ -10591,7 +10591,7 @@ let
     version = "0.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PO/POTYL/Gtk2-Unique-0.05.tar.gz";
-      sha256 = "ae8dfb0f6844ddaa2ce7b5b44553419490c8e83c24fd35c431406a58f6be0f4f";
+      hash = "sha256-ro37D2hE3aos57W0RVNBlJDI6Dwk/TXEMUBqWPa+D08=";
     };
     propagatedBuildInputs = [ pkgs.libunique pkgs.gtk2 Gtk2 ];
     meta = {
@@ -10606,7 +10606,7 @@ let
     version = "0.038";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/Gtk3-${version}.tar.gz";
-      sha256 = "sha256-cNxL8qp0mBx54V/SmNmY4FqS66SBHxrVyfH03jdzesw=";
+      hash = "sha256-cNxL8qp0mBx54V/SmNmY4FqS66SBHxrVyfH03jdzesw=";
     };
     propagatedBuildInputs = [ pkgs.gtk3 CairoGObject GlibObjectIntrospection ];
     preCheck = lib.optionalString stdenv.isDarwin "rm t/overrides.t"; # Currently failing on macOS
@@ -10621,7 +10621,7 @@ let
     version = "10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AS/ASOKOLOV/Gtk3-ImageView-${version}.tar.gz";
-      sha256 = "sha256-vHfnBgaeZPK7hBgZcP1KjepG+IvsDE3XwrH9U4xoN+Y=";
+      hash = "sha256-vHfnBgaeZPK7hBgZcP1KjepG+IvsDE3XwrH9U4xoN+Y=";
     };
     buildInputs = [ pkgs.gtk3 ];
     propagatedBuildInputs = [ Readonly Gtk3 ];
@@ -10642,7 +10642,7 @@ let
     version = "0.21";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TV/TVIGNAUD/Gtk3-SimpleList-0.21.tar.gz";
-      sha256 = "1158mnr2ldq02098hqbkwfv64d83zl3a8scll9s09g7k1c86ai0x";
+      hash = "sha256-HURlEAvzvAR0opRppAb9AzVituNzYYgSEAA3KrKtqIQ=";
     };
     propagatedBuildInputs = [ Gtk3 ];
     meta = {
@@ -10657,7 +10657,7 @@ let
     version = "1.023";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/Guard-1.023.tar.gz";
-      sha256 = "34c4ddf91fc93d1090d86da14df706d175b1610c67372c01e12ce9555d4dd1dc";
+      hash = "sha256-NMTd+R/JPRCQ2G2hTfcG0XWxYQxnNywB4SzpVV1N0dw=";
     };
     meta = {
       description = "Safe cleanup blocks";
@@ -10670,7 +10670,7 @@ let
     version = "1.21";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HE/HESSU/Ham-APRS-FAP-1.21.tar.gz";
-      sha256 = "e01b455d46f44710dbcf21b6fa843f09358ce60eee1c4141bc74e0a204d3a020";
+      hash = "sha256-4BtFXUb0RxDbzyG2+oQ/CTWM5g7uHEFBvHTgogTToCA=";
     };
     propagatedBuildInputs = [ DateCalc ];
     meta = {
@@ -10685,7 +10685,7 @@ let
     version = "0.75";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AV/AVAR/Hailo-0.75.tar.gz";
-      sha256 = "bba99cb0cfa3ee8632dd89906c6e6fa05fe6bb367f2282e88909cefd8f9174c2";
+      hash = "sha256-u6mcsM+j7oYy3YmQbG5voF/muzZ/IoLoiQnO/Y+RdMI=";
     };
     buildInputs = [ BotTrainingMegaHAL BotTrainingStarCraft DataSection FileSlurp PodSection TestException TestExpect TestOutput TestScript TestScriptRun ];
     propagatedBuildInputs = [ ClassLoad DBDSQLite DataDump DirSelf FileCountLines GetoptLongDescriptive IOInteractive IPCSystemSimple ListMoreUtils Moose MooseXGetopt MooseXStrictConstructor MooseXTypes RegexpCommon TermSk namespaceclean ];
@@ -10709,7 +10709,7 @@ let
     version = "0.010";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BO/BOLAV/Hash-Diff-0.010.tar.gz";
-      sha256 = "1ig0l859gq00k0r9l85274r2lbvwl7wsndcy52c0m3y9isilm6mw";
+      hash = "sha256-vJpKo47JjwqYKJ41q/mhfC8qMjmiIJoymADglwqi4MU=";
     };
     propagatedBuildInputs = [ HashMerge ];
     buildInputs = [ TestSimple13 ];
@@ -10728,7 +10728,7 @@ let
     version = "1.19";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BB/BBC/Hash-Flatten-1.19.tar.gz";
-      sha256 = "162b9qgkr19f97w4pic6igyk3zd0sbnrhl3s8530fikciffw9ikh";
+      hash = "sha256-cMbEnYtsRgdGQXpQmO3SoP0x/YuGxUv4SS6FPB9OS5g=";
     };
     buildInputs = [ TestAssertions ];
     propagatedBuildInputs = [ LogTrace ];
@@ -10743,7 +10743,7 @@ let
     version = "0.302";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HE/HERMES/Hash-Merge-0.302.tar.gz";
-      sha256 = "0i46agids6pk445gfck80f8z7q3pjvkp0ip1vmhqnq1rcpvj41df";
+      hash = "sha256-rgUi92U5YIth3eFGcOeWd+DzkQNoMvcKIfMa3eJThkQ=";
     };
     propagatedBuildInputs = [ CloneChoose ];
     buildInputs = [ Clone ClonePP ];
@@ -10759,7 +10759,7 @@ let
     version = "0.051";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RO/ROKR/Hash-Merge-Simple-0.051.tar.gz";
-      sha256 = "1c56327873d2f04d5722777f044863d968910466997740d55a754071c6287b73";
+      hash = "sha256-HFYyeHPS8E1XInd/BEhj2WiRBGaZd0DVWnVAccYoe3M=";
     };
     buildInputs = [ TestDeep TestDifferences TestException TestMost TestWarn ];
     propagatedBuildInputs = [ Clone ];
@@ -10774,7 +10774,7 @@ let
     version = "0.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RE/REHSACK/Hash-MoreUtils-0.06.tar.gz";
-      sha256 = "db9a8fb867d50753c380889a5e54075651b5e08c9b3b721cb7220c0883547de8";
+      hash = "sha256-25qPuGfVB1PDgIiaXlQHVlG14IybO3IctyIMCINUfeg=";
     };
     meta = {
       description = "Provide the stuff missing in Hash::Util";
@@ -10788,7 +10788,7 @@ let
     version = "0.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AR/ARISTOTLE/Hash-MultiValue-0.16.tar.gz";
-      sha256 = "1x3k7h542xnigz0b8vsfiq580p5r325wi5b8mxppiqk8mbvis636";
+      hash = "sha256-Zhgd96po4nhvr2iVyIsYuVyACo5Ob7TAf9F2QQo8c/Q=";
     };
     meta = {
       description = "Store multiple values per key";
@@ -10802,7 +10802,7 @@ let
     version = "0.005";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Hash-SharedMem-0.005.tar.gz";
-      sha256 = "324776808602f7bdc44adaa937895365454029a926fa611f321c9bf6b940bb5e";
+      hash = "sha256-Mkd2gIYC973EStqpN4lTZUVAKakm+mEfMhyb9rlAu14=";
     };
     buildInputs = [ ScalarString ];
     meta = {
@@ -10817,7 +10817,7 @@ let
     version = "0.008";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSCHWERN/Hash-StoredIterator-0.008.tar.gz";
-      sha256 = "b9cbc4dcd8233e8d1d7f1481ddb79a4a5f9db7180cb3ef02b4bcbee05e65ea0c";
+      hash = "sha256-ucvE3NgjPo0dfxSB3beaSl+dtxgMs+8CtLy+4F5l6gw=";
     };
     buildInputs = [ Test2Suite ];
     perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
@@ -10832,7 +10832,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Hash-Util-FieldHash-Compat-0.11.tar.gz";
-      sha256 = "06vlygjyk7rkkw0di3252mma141w801qn3xk40aa2yskbfklcbk4";
+      hash = "sha256-ZC5Gp1tTe6EUILMPiwNAPJCgahVFjNgAnzOf6eXzdBs=";
     };
     meta = {
       description = "Use Hash::Util::FieldHash or ties, depending on availability";
@@ -10845,7 +10845,7 @@ let
     version = "0.80";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JM/JMM/Heap-0.80.tar.gz";
-      sha256 = "1plv2djbyhvkdcw2ic54rdqb745cwksxckgzvw7ssxiir7rjknnc";
+      hash = "sha256-zNop88kxdq0P3/9N1vXkrJCzcMuksCg4a3NDv2QTm94=";
     };
     meta = {
       description = "Perl extensions for keeping data partially sorted";
@@ -10858,7 +10858,7 @@ let
     version = "0.26";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Hook-LexWrap-0.26.tar.gz";
-      sha256 = "b60bdc5f98f94f9294b06adef82b1d996da192d5f183f9f434b610fd1137ec2d";
+      hash = "sha256-tgvcX5j5T5KUsGre+CsdmW2hktXxg/n0NLYQ/RE37C0=";
     };
     buildInputs = [ pkgs.unzip ];
     meta = {
@@ -10873,7 +10873,7 @@ let
     version = "1.4";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AZ/AZJADFTRE/HTML-Clean-1.4.tar.gz";
-      sha256 = "01l7g2hr0kjbh1wk7cv03ijmpjlbm1vm661m99mkrz2ilyyllzd6";
+      hash = "sha256-pn1KvadR/DxrSjUYU3eoi8pbZRxgszN5gEtOkKF4hwY=";
     };
     meta = {
       description = "Cleans up HTML code for web browsers, not humans";
@@ -10887,7 +10887,7 @@ let
     version = "1.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSISK/HTML-Element-Extended-1.18.tar.gz";
-      sha256 = "f3ef1af108f27fef15ebec66479f251ce08aa49bd00b0462c9c80c86b4b6b32b";
+      hash = "sha256-8+8a8Qjyf+8V6+xmR58lHOCKpJvQCwRiycgMhrS2sys=";
     };
     propagatedBuildInputs = [ HTMLTree ];
     meta = {
@@ -10901,7 +10901,7 @@ let
     version = "1.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/HTML-Escape-1.10.tar.gz";
-      sha256 = "b1cbac4157ad8dedac6914e1628855e05b8dc885a4007d2e4df8177c6a9b70fb";
+      hash = "sha256-scusQVetje2saRThYohV4FuNyIWkAH0uTfgXfGqbcPs=";
     };
     buildInputs = [ ModuleBuildPluggablePPPort TestRequires ];
     perlPreHook = lib.optionalString stdenv.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
@@ -10918,7 +10918,7 @@ let
     version = "2.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NU/NUFFIN/HTML-FromANSI-2.03.tar.gz";
-      sha256 = "21776345ed701b2c04c7b09380af943f9984cc7f99624087aea45db5fc09c359";
+      hash = "sha256-IXdjRe1wGywEx7CTgK+UP5mEzH+ZYkCHrqRdtfwJw1k=";
     };
     propagatedBuildInputs = [ HTMLParser TermVT102Boundless ];
     meta = {
@@ -10933,7 +10933,7 @@ let
     version = "6.07";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OA/OALDERS/HTML-Form-6.07.tar.gz";
-      sha256 = "09v29cdzwjm139c67y1np3kvx2ymg3s8n723qc0ma07lmxz8rakx";
+      hash = "sha256-faqMfq/0AFUBw0Mci/R41Yu+57g2+GNYGqFK/htLYic=";
     };
     propagatedBuildInputs = [ HTMLParser ];
     meta = {
@@ -10948,7 +10948,7 @@ let
     version = "2.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NI/NIGELM/HTML-Formatter-2.16.tar.gz";
-      sha256 = "cb0a0dd8aa5e8ba9ca214ce451bf4df33aa09c13e907e8d3082ddafeb30151cc";
+      hash = "sha256-ywoN2Kpei6nKIUzkUb9N8zqgnBPpB+jTCC3a/rMBUcw=";
     };
     buildInputs = [ FileSlurper TestWarnings ];
     propagatedBuildInputs = [ FontAFM HTMLTree ];
@@ -10964,7 +10964,7 @@ let
     version = "26";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KR/KRYDE/HTML-FormatExternal-26.tar.gz";
-      sha256 = "3c59f233d0b10686a85aed0c994011cec68626da0128dea90b5c4fdc1746cfc3";
+      hash = "sha256-PFnyM9CxBoaoWu0MmUARzsaGJtoBKN6pC1xP3BdGz8M=";
     };
     propagatedBuildInputs = [ IPCRun URI constant-defer ];
     meta = {
@@ -10979,7 +10979,7 @@ let
     version = "0.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/ST/STRUAN/HTML-FormatText-WithLinks-0.15.tar.gz";
-      sha256 = "7fcc1ab79eb58fb97d43e5bdd14e21791a250a204998918c62d6a171131833b1";
+      hash = "sha256-f8wat561j7l9Q+W90U4heRolCiBJmJGMYtahcRMYM7E=";
     };
     propagatedBuildInputs = [ HTMLFormatter ];
     meta = {
@@ -10993,7 +10993,7 @@ let
     version = "0.07";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DALEEVANS/HTML-FormatText-WithLinks-AndTables-0.07.tar.gz";
-      sha256 = "809ee2f11705706b33c54312b5c7bee674838f2beaaedaf8cb945e702aae39b6";
+      hash = "sha256-gJ7i8RcFcGszxUMStce+5nSDjyvqrtr4y5RecCquObY=";
     };
     propagatedBuildInputs = [ HTMLFormatTextWithLinks ];
     meta = {
@@ -11007,7 +11007,7 @@ let
     version = "2.07";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CF/CFRANKS/HTML-FormFu-2.07.tar.gz";
-      sha256 = "0cpbcrip95rvihc7i8dywca6lx9ws67ch1hjx6vgnm47g9zh2bsg";
+      hash = "sha256-Ty8Bf3qHVPu26RIGyI7RPHVqFOO+oXgYjDuXdGNm6zI=";
     };
     buildInputs = [ CGI FileShareDirInstall RegexpAssemble TestException TestMemoryCycle TestRequiresInternet ];
     propagatedBuildInputs = [ ConfigAny DataVisitor DateTimeFormatBuilder DateTimeFormatNatural EmailValid HTMLScrubber HTMLTokeParserSimple HashFlatten JSONMaybeXS MooseXAliases MooseXAttributeChained NumberFormat PathClass Readonly RegexpCommon TaskWeaken YAMLLibYAML ];
@@ -11023,7 +11023,7 @@ let
     version = "1.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NI/NIGELM/HTML-FormFu-MultiForm-1.03.tar.gz";
-      sha256 = "17qm94hwhn6jyhd2am4gqxq7yrlhv3jv0ayx17df95mqdgbhrw1n";
+      hash = "sha256-NvAM12u4luTaCd0rsOXYkGZ/cMePVCUa9NJYyCFJFZ8=";
     };
     propagatedBuildInputs = [ CryptCBC CryptDES HTMLFormFu ];
     meta = {
@@ -11038,7 +11038,7 @@ let
     version = "0.40068";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GS/GSHANK/HTML-FormHandler-0.40068.tar.gz";
-      sha256 = "09z8rpb3avdd8984rm6j6gd2igbzjz9rc0ycig654mqjlgfphyzb";
+      hash = "sha256-63t43aMSV1LMi8wDltOXf70o2jPS1ExQQq1tNdbN6Cc=";
     };
     # a single test is failing on perl 5.20
     doCheck = false;
@@ -11055,7 +11055,7 @@ let
     version = "0.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RU/RUZ/HTML-Gumbo-0.18.tar.gz";
-      sha256 = "bf50b61c24656cc3fc958602d80a9c7d017247af38d8dbfa0e9dec5b75425d5f";
+      hash = "sha256-v1C2HCRlbMP8lYYC2AqcfQFyR6842Nv6Dp3sW3VCXV8=";
     };
     propagatedBuildInputs = [ AlienLibGumbo ];
     meta = {
@@ -11069,7 +11069,7 @@ let
     version = "1.59";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/HTML-Mason-1.59.tar.gz";
-      sha256 = "95bed2a6c488370046aa314be4b592bd65a6522f8845da8b36a6aff9a8b439d0";
+      hash = "sha256-lb7SpsSINwBGqjFL5LWSvWWmUi+IRdqLNqav+ai0OdA=";
     };
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ CGI CacheCache ClassContainer ExceptionClass LogAny ];
@@ -11085,7 +11085,7 @@ let
     version = "0.53";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RU/RUZ/HTML-Mason-PSGIHandler-0.53.tar.gz";
-      sha256 = "eafd7c7655dfa8261df3446b931a283d30306877b83ac4671c49cff74ea7f00b";
+      hash = "sha256-6v18dlXfqCYd80RrkxooPTAwaHe4OsRnHEnP906n8As=";
     };
     buildInputs = [ Plack ];
     propagatedBuildInputs = [ CGIPSGI HTMLMason ];
@@ -11101,7 +11101,7 @@ let
     version = "3.75";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CA/CAPOEIRAB/HTML-Parser-3.75.tar.gz";
-      sha256 = "1ack2799azfciyiw3vccq126gaxrbz2927i0hm4gaynzm0jmwsxc";
+      hash = "sha256-rGteJajfevVIhSAekcRfuatnRMCM7cGjj8x9ldIRk6k=";
     };
     propagatedBuildInputs = [ HTMLTagset HTTPMessage ];
     meta = {
@@ -11116,7 +11116,7 @@ let
     version = "0.38";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RO/ROBERTSD/HTML-TagCloud-0.38.tar.gz";
-      sha256 = "05bhnrwwlwd6cj3cn91zw5r99xddvy142bznid26p1pg5m3rk029";
+      hash = "sha256-SYCZRy3vhmtEi/YvQYLfrfWUcuE/JMuGZKZxynm2cBU=";
     };
     meta = {
       description = "Generate An HTML Tag Cloud";
@@ -11129,7 +11129,7 @@ let
     version = "0.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TS/TSIBLEY/HTML-Quoted-0.04.tar.gz";
-      sha256 = "8b41f313fdc1812f02f6f6c37d58f212c84fdcf7827f7fd4b030907f39dc650c";
+      hash = "sha256-i0HzE/3BgS8C9vbDfVjyEshP3PeCf3/UsDCQfzncZQw=";
     };
     propagatedBuildInputs = [ HTMLParser ];
     meta = {
@@ -11143,7 +11143,7 @@ let
     version = "0.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TS/TSIBLEY/HTML-RewriteAttributes-0.05.tar.gz";
-      sha256 = "1808ec7cdf40d2708575fe6155a88f103b17fec77973a5831c2f24c250e7a58c";
+      hash = "sha256-GAjsfN9A0nCFdf5hVaiPEDsX/sd5c6WDHC8kwlDnpYw=";
     };
     propagatedBuildInputs = [ HTMLParser ];
     meta = {
@@ -11157,7 +11157,7 @@ let
     version = "0.25";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CO/CORION/HTML-Selector-XPath-0.25.tar.gz";
-      sha256 = "1qbad8ayffpx7wj76ip05p6rh9p1lkir6qknpl76zy679ghlsp8s";
+      hash = "sha256-Gl1N4UvH+G8OvXZik+Ok4SaYzS3gRnMkP/065xVqauE=";
     };
     buildInputs = [ TestBase ];
     meta = {
@@ -11171,7 +11171,7 @@ let
     version = "0.19";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NI/NIGELM/HTML-Scrubber-0.19.tar.gz";
-      sha256 = "1c9b4r9x96a8fbz2zy52fxgq7djp9dq38hiyqra92psnz1w5aa5f";
+      hash = "sha256-rihVePhWX5FUxj5CNHBLV7aDX3ei+C/+ckiZ1FMmK7E=";
     };
     propagatedBuildInputs = [ HTMLParser ];
     buildInputs = [ TestDifferences TestMemoryCycle ];
@@ -11186,7 +11186,7 @@ let
     version = "1.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DRTECH/HTML-StripScripts-1.06.tar.gz";
-      sha256 = "222bfb7ec1fdfa465e32da3dc4abed2edc7364bbe19e8e3c513c7d585b0109ad";
+      hash = "sha256-Iiv7fsH9+kZeMto9xKvtLtxzZLvhno48UTx9WFsBCa0=";
     };
     meta = {
       description = "Strip scripting constructs out of HTML";
@@ -11199,7 +11199,7 @@ let
     version = "1.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DRTECH/HTML-StripScripts-Parser-1.03.tar.gz";
-      sha256 = "478c1a4e46eb77fa7bce96ba288168f0b98c27f250e00dc6312365081aed3407";
+      hash = "sha256-R4waTkbrd/p7zpa6KIFo8LmMJ/JQ4A3GMSNlCBrtNAc=";
     };
     propagatedBuildInputs = [ HTMLParser HTMLStripScripts ];
     meta = {
@@ -11213,7 +11213,7 @@ let
     version = "2.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSISK/HTML-TableExtract-2.15.tar.gz";
-      sha256 = "1kry9igbcjyiwpwivq5in41dmx02zfhgaqjyv9sa2g6sb2frric6";
+      hash = "sha256-hsWcnVjaPKF02l5i9aD7AvTaArGx4B355dFLtl5MPs8=";
     };
     preCheck = ''
       # https://rt.cpan.org/Public/Bug/Display.html?id=121920
@@ -11231,7 +11231,7 @@ let
     version = "3.20";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PETDANCE/HTML-Tagset-3.20.tar.gz";
-      sha256 = "1qh8249wgr4v9vgghq77zh1d2zs176bir223a8gh3k9nksn7vcdd";
+      hash = "sha256-rbF9rJ42zQEfUkOIHJc5QX/RAvznYPjeTpvkxxMRCOI=";
     };
     meta = {
       description = "Data tables useful in parsing HTML";
@@ -11244,7 +11244,7 @@ let
     version = "2.97";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SA/SAMTREGAR/HTML-Template-2.97.tar.gz";
-      sha256 = "17qjw8swj2q4b1ic285pndgrkmvpsqw0j68nhqzpk1daydhsyiv5";
+      hash = "sha256-ZUevYfOqhXk/hhYZCTjWd9eZX7O3IMFiWAQLyTXiEp8=";
     };
     propagatedBuildInputs = [ CGI ];
     buildInputs = [ TestPod ];
@@ -11259,7 +11259,7 @@ let
     version = "1.60";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PETDANCE/HTML-Tidy-1.60.tar.gz";
-      sha256 = "1iyp2fd6j75cn1xvcwl2lxr8qpjxssy2360cyqn6g3kzd1fzdyxw";
+      hash = "sha256-vPv2XWh/jmcs9gyYIbzWXV6McqeCcrZ7sKwcaZoT18c=";
     };
 
     patchPhase = ''
@@ -11280,7 +11280,7 @@ let
     version = "1.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AN/ANDYA/HTML-Tiny-1.05.tar.gz";
-      sha256 = "d7cdc9d5985e2e44ceba10b756acf1e0d3a1b3ee3b516e5b54adb850fe79fda3";
+      hash = "sha256-183J1ZheLkTOuhC3Vqzx4NOhs+47UW5bVK24UP55/aM=";
     };
     meta = {
       description = "Lightweight, dependency free HTML/XML generation";
@@ -11293,7 +11293,7 @@ let
     version = "3.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OV/OVID/HTML-TokeParser-Simple-3.16.tar.gz";
-      sha256 = "17aa1v62sp8ycxcicwhankmj4brs6nnfclk9z7mf1rird1f164gd";
+      hash = "sha256-7RETXGg55uDq+WlS5qw1Oi8i67QKchZZZx5dLcwOSp0=";
     };
     propagatedBuildInputs = [ HTMLParser SubOverride ];
     meta = {
@@ -11307,7 +11307,7 @@ let
     version = "5.07";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KE/KENTNL/HTML-Tree-5.07.tar.gz";
-      sha256 = "1gyvm4qlwm9y6hczkpnrdfl303ggbybr0nqxdjw09hii8yw4sdzh";
+      hash = "sha256-8DdNuEcxwgS4bB1bkJdf7w0wqGvZ3vkZND5VTjGp278=";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ HTMLParser ];
@@ -11323,7 +11323,7 @@ let
     version = "0.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIROD/HTML-TreeBuilder-XPath-0.14.tar.gz";
-      sha256 = "1wx4i1scng20n405fp3a4vrwvvq9bvbmg977wnd5j2ja8jrbvsr5";
+      hash = "sha256-Jeu9skRKClma5eekV9deCe/N8yZqXFcAsUA8y3SIpPM=";
     };
     propagatedBuildInputs = [ HTMLTree XMLXPathEngine ];
     meta = {
@@ -11337,7 +11337,7 @@ let
     version = "1.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CF/CFRANKS/HTML-Widget-1.11.tar.gz";
-      sha256 = "02w21rd30cza094m5xs9clzw8ayigbhg2ddzl6jycp4jam0dyhmy";
+      hash = "sha256-vkLfQFWSXOalob818eB60SvEP2VJ91JJAuozMFoOggs=";
     };
     doCheck = false;
     propagatedBuildInputs = [ ClassAccessorChained ClassDataAccessor DateCalc EmailValid HTMLScrubber HTMLTree ModulePluggableFast ];
@@ -11353,7 +11353,7 @@ let
     version = "0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Y/YA/YAPPO/HTTP-AcceptLanguage-0.02.tar.gz";
-      sha256 = "1bs29r72ibp0kmr3l1ypzszflpcw7z4yxxcgaijspsy99rb5yq1f";
+      hash = "sha256-LmBfVk7J66tlVI/17sk/nF3qvv7XBzpyneCuKE5OQq8=";
     };
     buildInputs = [ ModuleBuildTiny ];
     meta = {
@@ -11368,7 +11368,7 @@ let
     version = "1.22";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GE/GETTY/HTTP-Body-1.22.tar.gz";
-      sha256 = "fc0d2c585b3bd1532d92609965d589e0c87cd380e7cca42fb9ad0a1311227297";
+      hash = "sha256-/A0sWFs70VMtkmCZZdWJ4Mh804DnzKQvua0KExEicpc=";
     };
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ HTTPMessage ];
@@ -11383,7 +11383,7 @@ let
     version = "0.010";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/HTTP-CookieJar-0.010.tar.gz";
-      sha256 = "1l7mqsca4fmls7agzwmp6yq1x16y9jwq4114i6i75n654gl37qsn";
+      hash = "sha256-VuMz6CPF2HKiiSQEgrlM3oQesDe38v/U0bQ6opjG9dA=";
     };
     propagatedBuildInputs = [ HTTPDate ];
     buildInputs = [ TestDeep TestRequires URI ];
@@ -11401,7 +11401,7 @@ let
     version = "6.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Cookies-6.09.tar.gz";
-      sha256 = "1q0z3n3bl5lg5z0bhvk3zgmw536cri7c3vwhrjcqbdx5z9x02gwh";
+      hash = "sha256-kD8Bevqlt4WZzJDvwU7MzIzC6/tjbrjAL48WuoYdH+A=";
     };
     propagatedBuildInputs = [ HTTPMessage ];
     meta = {
@@ -11416,23 +11416,23 @@ let
     version = "6.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Daemon-6.14.tar.gz";
-      sha256 = "sha256-8HZ+fzy7gLITE8dh8HrY7SU7zp+i0LqAaz+3LTCbLh0=";
+      hash = "sha256-8HZ+fzy7gLITE8dh8HrY7SU7zp+i0LqAaz+3LTCbLh0=";
     };
     patches = [
       # Patches for CVE-2022-3108, from upstream pre 6.15
       (fetchpatch {
         url = "https://github.com/libwww-perl/HTTP-Daemon/commit/331d5c1d1f0e48e6b57ef738c2a8509b1eb53376.patch";
-        sha256 = "sha256-vRSyiO38jnsSeKeGbCnKi+VLaTqQSB349eybl1Wa8SQ=";
+        hash = "sha256-vRSyiO38jnsSeKeGbCnKi+VLaTqQSB349eybl1Wa8SQ=";
         name = "HTTP-Daemon-CVE-2022-3108-pre.patch";
       })
       (fetchpatch {
         url = "https://github.com/libwww-perl/HTTP-Daemon/commit/e84475de51d6fd7b29354a997413472a99db70b2.patch";
-        sha256 = "sha256-z8RXcbVEpjSZcm8dUZcDWYeQHtVZODOGCdcDTfXQpfA=";
+        hash = "sha256-z8RXcbVEpjSZcm8dUZcDWYeQHtVZODOGCdcDTfXQpfA=";
         name = "HTTP-Daemon-CVE-2022-3108-1.patch";
       })
       (fetchpatch {
         url = "https://github.com/libwww-perl/HTTP-Daemon/commit/8dc5269d59e2d5d9eb1647d82c449ccd880f7fd0.patch";
-        sha256 = "sha256-e1lxt+AJGfbjNOZoKj696H2Ftkx9wlTF557WkZCLE5Q=";
+        hash = "sha256-e1lxt+AJGfbjNOZoKj696H2Ftkx9wlTF557WkZCLE5Q=";
         name = "HTTP-Daemon-CVE-2022-3108-2.patch";
       })
     ];
@@ -11450,7 +11450,7 @@ let
     version = "6.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Date-6.05.tar.gz";
-      sha256 = "0awjdbz7x0jd5pna55dwxhs3k6xp3sw6b2zg3p2yndxxvya64p9n";
+      hash = "sha256-Nl1ilN+9N+vFHe+LZbget5s5NOy8laLsLU2Cfv5qkis=";
     };
     propagatedBuildInputs = [ TimeDate ];
     meta = {
@@ -11465,7 +11465,7 @@ let
     version = "0.25";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KA/KAZEBURO/HTTP-Entity-Parser-0.25.tar.gz";
-      sha256 = "0fpchgj6jgxmjkmljjnrpmyj9anz85rjvs2fq3c7rld3rgcd131s";
+      hash = "sha256-OozQ2Muj0XzYwE7oLXNB36okfb3ZSknrlLU/aeSD7Do=";
     };
     propagatedBuildInputs = [ HTTPMultiPartParser HashMultiValue JSONMaybeXS StreamBuffered WWWFormUrlEncoded ];
     buildInputs = [ HTTPMessage ModuleBuildTiny ];
@@ -11481,7 +11481,7 @@ let
     version = "0.49";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CO/COSIMO/HTTP-DAV-0.49.tar.gz";
-      sha256 = "0z4mgb8mc6l5nfsm3ihndjqgpk43q39x1kq9hryy6v8hxkwrscrk";
+      hash = "sha256-MzOd+ewQbeN9hgnP0NPAg8z7sGwWxlG1s4UaVtF6lXw=";
     };
     propagatedBuildInputs = [ XMLDOM ];
     meta = {
@@ -11496,7 +11496,7 @@ let
     version = "0.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/HTTP-Headers-ActionPack-0.09.tar.gz";
-      sha256 = "c78111ab857e48c69824903d4b6ce8293feffc6b5d670db550a767f853acc7da";
+      hash = "sha256-x4ERq4V+SMaYJJA9S2zoKT/v/GtdZw21UKdn+FOsx9o=";
     };
     buildInputs = [ TestFatal TestWarnings ];
     propagatedBuildInputs = [ HTTPDate HTTPMessage ModuleRuntime SubExporter URI ];
@@ -11511,7 +11511,7 @@ let
     version = "0.20";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MARKSMITH/HTTP-HeaderParser-XS-0.20.tar.gz";
-      sha256 = "1vs6sw431nnlnbdy6jii9vqlz30ndlfwdpdgm8a1m6fqngzhzq59";
+      hash = "sha256-qeAP/7PYmRoUqq/dxh1tFoxP8U4xSuPbstTaMAjXRu8=";
     };
     meta = {
       description = "An XS extension for processing HTTP headers";
@@ -11527,7 +11527,7 @@ let
     version = "0.22";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/HTTP-Headers-Fast-0.22.tar.gz";
-      sha256 = "cc431db68496dd884db4bc0c0b7112c1f4a4f1dc68c4f5a3caa757a1e7481b48";
+      hash = "sha256-zEMdtoSW3YhNtLwMC3ESwfSk8dxoxPWjyqdXoedIG0g=";
     };
     buildInputs = [ ModuleBuildTiny TestRequires ];
     propagatedBuildInputs = [ HTTPDate ];
@@ -11543,7 +11543,7 @@ let
     version = "2.44";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/HTTP-Lite-2.44.tar.gz";
-      sha256 = "0z77nflj8zdcfg70kc93glq5kmd6qxn2nf7h70x4xhfg25wkvr1q";
+      hash = "sha256-OOQ9eRHPwU46OPA4K2zHptVZMH0jsQnOc6x9JKmz53w=";
     };
     buildInputs = [ CGI ];
     meta = {
@@ -11557,7 +11557,7 @@ let
     version = "6.26";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Message-6.26.tar.gz";
-      sha256 = "1q952w7r1yj4s2v2cly5zzir7v45nj4h2fbad63bphvmvrcw7rkc";
+      hash = "sha256-bObDWd51w7uGaWo5AYm0heyT4//FUya20ET6kA8XJeE=";
     };
     buildInputs = [ TryTiny ];
     propagatedBuildInputs = [ EncodeLocale HTTPDate IOHTML LWPMediaTypes URI ];
@@ -11573,7 +11573,7 @@ let
     version = "0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CH/CHANSEN/HTTP-MultiPartParser-0.02.tar.gz";
-      sha256 = "04hbs0b1lzv2c8dqfcc9qjm5akh25fn40903is36zlalkwaxmpay";
+      hash = "sha256-Xt3aFZ9U0W+GjgMkQKwrAk5VqsSJMYcbYmJ/GhbQCxI=";
     };
     buildInputs = [ TestDeep ];
     meta = {
@@ -11587,7 +11587,7 @@ let
     version = "6.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GA/GAAS/HTTP-Negotiate-6.01.tar.gz";
-      sha256 = "05p053vjs5g91v5cmjnny7a3xzddz5k7vnjw81wfh01ilqg9qwhw";
+      hash = "sha256-HHKcHqYxAOh4QFzafWb5rf0+1PHWysrKDukVLfco4BY=";
     };
     propagatedBuildInputs = [ HTTPMessage ];
     meta = {
@@ -11601,7 +11601,7 @@ let
     version = "0.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KA/KAZUHO/HTTP-Parser-XS-0.17.tar.gz";
-      sha256 = "02d84xq1mm53c7jl33qyb7v5w4372vydp74z6qj0vc96wcrnhkkr";
+      hash = "sha256-eU5oM+MmsQ0kNp+c2/wWZxBe9lkej0HlYaPUGnAnqAk=";
     };
     meta = {
       description = "A fast, primitive HTTP request parser";
@@ -11614,7 +11614,7 @@ let
     version = "0.304";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BO/BOOK/HTTP-Proxy-0.304.tar.gz";
-      sha256 = "b05290534ec73625c21a0565fc35170890dab163843d95331c292c23f504c69d";
+      hash = "sha256-sFKQU07HNiXCGgVl/DUXCJDasWOEPZUzHCksI/UExp0=";
     };
     propagatedBuildInputs = [ LWP ];
     # tests fail because they require network access
@@ -11630,7 +11630,7 @@ let
     version = "1.2";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FL/FLORA/HTTP-Request-AsCGI-1.2.tar.gz";
-      sha256 = "1smwmiarwcgq7vjdblnb6ldi2x1s5sk5p15p7xvm5byiqq3znnwl";
+      hash = "sha256-lFv7B8bRr1J3P7eEW6YuOnQRGzXL0tXkPvgxnlWsvOo=";
     };
     propagatedBuildInputs = [ ClassAccessor HTTPMessage ];
     meta = {
@@ -11644,7 +11644,7 @@ let
     version = "0.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DANKOGAI/HTTP-Response-Encoding-0.06.tar.gz";
-      sha256 = "1am8lis8107s5npca1xgazdy5sknknzcqyhdmc220s4a4f77n5hh";
+      hash = "sha256-EBZ7jiOKaCAEqw16zL6dduri21evB8WuLfqAgHSkqKo=";
     };
     propagatedBuildInputs = [ HTTPMessage ];
     buildInputs = [ LWP ];
@@ -11659,7 +11659,7 @@ let
     version = "0.52";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BP/BPS/HTTP-Server-Simple-0.52.tar.gz";
-      sha256 = "0k6bg7k6mjixfzxdkkdrhqvaqmdhjszx0zsk8g0bimiby6j9z4yq";
+      hash = "sha256-2JOfpPEr1rjAQ1N/0L+WsFWsNoa5zdn6dz3KauZ5y0w=";
     };
     doCheck = false;
     propagatedBuildInputs = [ CGI ];
@@ -11674,7 +11674,7 @@ let
     version = "0.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/HTTP-Server-Simple-Authen-0.04.tar.gz";
-      sha256 = "2dddc8ab9dc8986980151e4ba836a6bbf091f45cf195be1768ebdb4a993ed59b";
+      hash = "sha256-Ld3Iq53ImGmAFR5LqDamu/CR9Fzxlb4XaOvbSpk+1Zs=";
     };
     propagatedBuildInputs = [ AuthenSimple HTTPServerSimple ];
     meta = {
@@ -11688,7 +11688,7 @@ let
     version = "0.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JE/JESSE/HTTP-Server-Simple-Mason-0.14.tar.gz";
-      sha256 = "b7a49d8e6e55bff0b1f0278d951685466b143243b6f9e59e071f5472ca2a025a";
+      hash = "sha256-t6Sdjm5Vv/Cx8CeNlRaFRmsUMkO2+eWeBx9UcsoqAlo=";
     };
     propagatedBuildInputs = [ HTMLMason HTTPServerSimple HookLexWrap ];
     meta = {
@@ -11702,7 +11702,7 @@ let
     version = "0.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/HTTP-Server-Simple-PSGI-0.16.tar.gz";
-      sha256 = "1fhx2glycd66m4l4m1gja81ixq8nh4r5g9wjhhkrffq4af2cnz2z";
+      hash = "sha256-X3zLhFMEO5cnhJKnVzKBFuEeA1LyhUooqcY05ukTHbo=";
     };
     propagatedBuildInputs = [ HTTPServerSimple ];
     meta = {
@@ -11717,7 +11717,7 @@ let
     version = "0.002";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PERLANCAR/HTTP-Tiny-Cache-0.002.tar.gz";
-      sha256 = "08c6274x7fxl9r7cw1yiq21wv2mjgxw7db0wv5r80dyw377vfzbk";
+      hash = "sha256-c323zxncN4By2Rysdnh/sorNg8DRB85OTrS708kRhiE=";
     };
     propagatedBuildInputs = [ FileUtilTempdir Logger ];
     meta = {
@@ -11733,7 +11733,7 @@ let
     version = "0.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/HTTP-Tinyish-0.17.tar.gz";
-      sha256 = "47bd111e474566d733c41870e2374c81689db5e0b5a43adc48adb665d89fb067";
+      hash = "sha256-R70RHkdFZtczxBhw4jdMgWidteC1pDrcSK22ZdifsGc=";
     };
     propagatedBuildInputs = [ FileWhich IPCRun3 ];
     meta = {
@@ -11748,7 +11748,7 @@ let
     version = "1.21";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RI/RIXED/iCal-Parser-1.21.tar.gz";
-      sha256 = "0d7939a644a8e67017ec7239d3d9604f3986bb9a4ff80be68fe7299ebfd2270c";
+      hash = "sha256-DXk5pkSo5nAX7HI509lgTzmGu5pP+Avmj+cpnr/SJww=";
     };
     propagatedBuildInputs = [ DateTimeFormatICal FreezeThaw IOString TextvFileasData ];
     meta = {
@@ -11762,7 +11762,7 @@ let
     version = "0.57";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BK/BKB/Image-PNG-Libpng-0.56.tar.gz";
-      sha256 = "+vu/6/9CP3u4XvJ6MEH7YpG1AzbHpYIiSlysQzHDx9k=";
+      hash = "sha256-+vu/6/9CP3u4XvJ6MEH7YpG1AzbHpYIiSlysQzHDx9k=";
     };
     buildInputs = [ pkgs.libpng ];
     meta = {
@@ -11778,7 +11778,7 @@ let
     version = "1.019";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TONYC/Imager-1.019.tar.gz";
-      sha256 = "sha256-dNRNcBwfFPxLmE+toelVcmtQTC2LBtJl56hh+llDy0g=";
+      hash = "sha256-dNRNcBwfFPxLmE+toelVcmtQTC2LBtJl56hh+llDy0g=";
     };
     buildInputs = [ pkgs.freetype pkgs.fontconfig pkgs.libjpeg pkgs.libpng ];
     makeMakerFlags = "--incpath ${pkgs.libjpeg.dev}/include --libpath ${pkgs.libjpeg.out}/lib --incpath ${pkgs.libpng.dev}/include --libpath ${pkgs.libpng.out}/lib";
@@ -11794,7 +11794,7 @@ let
     version = "0.035";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KU/KURIHARA/Imager-QRCode-0.035.tar.gz";
-      sha256 = "2a848deba29eb3942c44709a6853e318acab0c468cbfedbb9baae54760032513";
+      hash = "sha256-KoSN66Kes5QsRHCaaFPjGKyrDEaMv+27m6rlR2ADJRM=";
     };
     propagatedBuildInputs = [ Imager ];
     meta = {
@@ -11809,7 +11809,7 @@ let
     version = "1.42";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SR/SREZIC/Image-Info-1.42.tar.gz";
-      sha256 = "2bca560c3f71b3c1cd63ac3a974e62f3baeb986b7ffaa026b929081b914a8f4f";
+      hash = "sha256-K8pWDD9xs8HNY6w6l05i87rrmGt/+qAmuSkIG5FKj08=";
     };
     propagatedBuildInputs = [ IOStringy ];
     meta = {
@@ -11823,7 +11823,7 @@ let
     version = "5";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RA/RATCLIFFE/Image-Sane-5.tar.gz";
-      sha256 = "229aa0e9f049efa760f3c2f6e61d9d539af43d8f764b50a6e03064b4729a35ff";
+      hash = "sha256-Ipqg6fBJ76dg88L25h2dU5r0PY92S1Cm4DBktHKaNf8=";
     };
     buildInputs = [ pkgs.sane-backends ExtUtilsDepends ExtUtilsPkgConfig TestRequires TryTiny ];
     propagatedBuildInputs = [ ExceptionClass Readonly ];
@@ -11838,7 +11838,7 @@ let
     version = "0.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AG/AGRUNDMA/Image-Scale-0.14.tar.gz";
-      sha256 = "f09c5f0663b87738365ac2819e186b909abeb9ed85d83bc15ee76872c947cdf8";
+      hash = "sha256-8JxfBmO4dzg2WsKBnhhrkJq+ue2F2DvBXudocslHzfg=";
     };
     buildInputs = [ pkgs.libpng pkgs.libjpeg TestNoWarnings ];
     propagatedBuildInputs = [ pkgs.zlib ];
@@ -11854,7 +11854,7 @@ let
     version = "3.300";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJRAY/Image-Size-3.300.tar.gz";
-      sha256 = "0sq2kwdph55h4adx50fmy86brjkkv8grsw33xrhf1k9icpwb3jak";
+      hash = "sha256-U8mx+GUxzeBg7mNwnR/ac8q8DPLVgdKbIrAUeBufAms=";
     };
     buildInputs = [ ModuleBuild ];
     meta = {
@@ -11870,7 +11870,7 @@ let
     version = "1.26";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEOCHARRE/Image-OCR-Tesseract-1.26.tar.gz";
-      sha256 = "98d904266a7062f09c9b46f77c4e94529e1fe99339e3f83fda1f92013f007cea";
+      hash = "sha256-mNkEJmpwYvCcm0b3fE6UUp4f6ZM54/g/2h+SAT8AfOo=";
     };
     nativeBuildInputs = [ pkgs.which pkgs.makeWrapper pkgs.tesseract pkgs.imagemagick ];
     propagatedBuildInputs = [ FileFindRule FileWhich LEOCHARRECLI StringShellQuote ];
@@ -11894,7 +11894,7 @@ let
     version = "0.13";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CO/CONTEB/IMAP-Client-0.13.tar.gz";
-      sha256 = "15fa4hpw2rqg2iadyz10rnv99hns78wph5qlh3257a3mbfjjyyla";
+      hash = "sha256-inovpVt1qFPEgBQXeDk62sKUts0gfN9UFA9nwS8kypU=";
     };
     doCheck = false; # nondeterministic
     meta = {
@@ -11908,7 +11908,7 @@ let
     version = "0.026";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EX/EXODIST/Importer-0.026.tar.gz";
-      sha256 = "e08fa84e13cb998b7a897fc8ec9c3459fcc1716aff25cc343e36ef875891b0ef";
+      hash = "sha256-4I+oThPLmYt6iX/I7Jw0WfzBcWr/Jcw0Pjbvh1iRsO8=";
     };
     meta = {
       description = "Alternative but compatible interface to modules that export symbols";
@@ -11921,7 +11921,7 @@ let
     version = "1.002005";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/Import-Into-1.002005.tar.gz";
-      sha256 = "0rq5kz7c270q33jq6hnrv3xgkvajsc62ilqq7fs40av6zfipg7mx";
+      hash = "sha256-vZ53o/tmK0C0OxjTKAzTUu35+tjZQoPlGBgcwc6fBWc=";
     };
     propagatedBuildInputs = [ ModuleRuntime ];
     meta = {
@@ -11935,7 +11935,7 @@ let
     version = "1.42";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TODDR/IO-1.42.tar.gz";
-      sha256 = "eec5cc33a6cddba8b5d2425b60752882add7e4d41b7431a0ea4dcd73cc1f8cca";
+      hash = "sha256-7sXMM6bN26i10kJbYHUogq3X5NQbdDGg6k3Nc8wfjMo=";
     };
     doCheck = false;
     meta = {
@@ -11949,7 +11949,7 @@ let
     version = "4.73";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/IO-AIO-4.73.tar.gz";
-      sha256 = "0nmcwj385zdk65z8b9ivsvbm1d7a3d5gfnhy7mkbgyi4h33lfnws";
+      hash = "sha256-mltHx4Ak+rdmPR5a90ob6rRQ19Y7poV+MbP9gobkrFo=";
     };
     buildInputs = [ CanaryStability ];
     propagatedBuildInputs = [ commonsense ];
@@ -11969,7 +11969,7 @@ let
     version = "0.87";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FR/FREW/IO-All-0.87.tar.gz";
-      sha256 = "0nsd9knlbd7if2v6zwj4q978axq0w5hk8ymp61z14a821hjivqjl";
+      hash = "sha256-VOIdJQwCKRJ+MLd6NGHhAHeFTsJE8m+2cPG0Re1MTVs=";
     };
     meta = {
       description = "IO::All of it to Graham and Damian!";
@@ -11983,7 +11983,7 @@ let
     version = "0.801";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/IO-Async-0.801.tar.gz";
-      sha256 = "sha256-ieRZuhe3alcrsbS7EgMBVB6MyTJCQXFmI2tsbbDhybk=";
+      hash = "sha256-ieRZuhe3alcrsbS7EgMBVB6MyTJCQXFmI2tsbbDhybk=";
     };
     preCheck = "rm t/50resolver.t"; # this test fails with "Temporary failure in name resolution" in sandbox
     propagatedBuildInputs = [ Future StructDumb ];
@@ -11999,7 +11999,7 @@ let
     version = "0.23";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/IO-Async-SSL-0.23.tar.gz";
-      sha256 = "sha256-0vyuFuJ+F6yjkDpK1aK/L7wmjQZRzn8ARabQVG9YTy4=";
+      hash = "sha256-0vyuFuJ+F6yjkDpK1aK/L7wmjQZRzn8ARabQVG9YTy4=";
     };
     buildInputs = [ TestIdentity ];
     propagatedBuildInputs = [ Future IOAsync IOSocketSSL ];
@@ -12015,7 +12015,7 @@ let
     version = "0.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RE/REYNOLDS/IO-Capture-0.05.tar.gz";
-      sha256 = "c2c15a254ca74fb8c57d25d7b6cbcaff77a3b4fb5695423f1f80bb423abffea9";
+      hash = "sha256-wsFaJUynT7jFfSXXtsvK/3ejtPtWlUI/H4C7Qjq//qk=";
     };
     meta = {
       description = "Abstract Base Class to build modules to capture output";
@@ -12028,7 +12028,7 @@ let
     version = "1.1105";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/IO-CaptureOutput-1.1105.tar.gz";
-      sha256 = "ae99009fca1273800f169ecb82f4ed1cc6c76795f156bee5c0093005d572f487";
+      hash = "sha256-rpkAn8oSc4APFp7LgvTtHMbHZ5XxVr7lwAkwBdVy9Ic=";
     };
     meta = {
       description = "(DEPRECATED) capture STDOUT and STDERR from Perl code, subprocesses or XS";
@@ -12042,7 +12042,7 @@ let
     version = "2.102";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PM/PMQS/IO-Compress-2.102.tar.gz";
-      sha256 = "193jvi4800cbcac5n1swj9zgwwqck9c47g0g592ldr7fbfd7zynn";
+      hash = "sha256-1vp/mlvu5EZFKg+8Q1iaDHP+fpJcB1uYYosBgEjccqQ=";
     };
     propagatedBuildInputs = [ CompressRawBzip2 CompressRawZlib ];
     # Same as CompressRawZlib
@@ -12060,7 +12060,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CL/CLKAO/IO-Digest-0.11.tar.gz";
-      sha256 = "14kz7z4xw179aya3116wxac29l4y2wmwrba087lya4v2gxdgiz4g";
+      hash = "sha256-j/z4Wn9iE+XpQUCtzCsXntAkmOrchDCUV+kE3sk/f5I=";
     };
     propagatedBuildInputs = [ PerlIOviadynamic ];
     meta = {
@@ -12074,7 +12074,7 @@ let
     version = "1.004";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CJ/CJM/IO-HTML-1.004.tar.gz";
-      sha256 = "1xcbplf8rxb3z4wz66h5w7vy1g83bkxksxwnjp1z5fv3jksjsyy8";
+      hash = "sha256-yHst9ZRju/LDlZZ3PftcA73g9+EFGvM5+WP1jBy9i/U=";
     };
     meta = {
       description = "Open an HTML file with automatic charset detection";
@@ -12087,7 +12087,7 @@ let
     version = "0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/IO-Handle-Util-0.02.tar.gz";
-      sha256 = "1vncvsx53iiw1yy3drlk44hzx2pk5cial0h74djf9i6s2flndfcd";
+      hash = "sha256-jblmqRPaxORkIwcCqiIr84r+ISGT5ja8DzzGUbrezO4=";
     };
     propagatedBuildInputs = [ IOString SubExporter asa ];
     buildInputs = [ ModuleBuildTiny TestSimple13 ];
@@ -12103,7 +12103,7 @@ let
     version = "1.022";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BD/BDFOY/IO-Interactive-1.022.tar.gz";
-      sha256 = "0ed53b8ae93ae877e98e0d89b7b429e29ccd1ee4c28e952c4ea9aa73d01febdc";
+      hash = "sha256-DtU7iuk66Hfpjg2Jt7Qp4pzNHuTCjpUsTqmqc9Af69w=";
     };
     meta = {
       description = "Utilities for interactive I/O";
@@ -12117,7 +12117,7 @@ let
     version = "0.2";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DM/DMUEY/IO-Interactive-Tiny-0.2.tar.gz";
-      sha256 = "45c0696505c7e4347845f5cd2512b7b1bc78fbce4cbed2b58008283fc95ea5f9";
+      hash = "sha256-RcBpZQXH5DR4RfXNJRK3sbx4+85MvtK1gAgoP8lepfk=";
     };
     meta = {
       description = "Is_interactive() without large deps";
@@ -12130,7 +12130,7 @@ let
     version = "0.23";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RA/RANI/IO-LockedFile-0.23.tar.gz";
-      sha256 = "1dgq8zfkaszisdb5hz8jgcl0xc3qpv7bbv562l31xgpiddm7xnxi";
+      hash = "sha256-sdt+amvxvh4GFabstc6+eLAOKHsSfVhW0/FrNd1H+LU=";
     };
     meta = {
       description = "Supply object methods for locking files";
@@ -12143,7 +12143,7 @@ let
     version = "1.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BB/BBB/IO-Multiplex-1.16.tar.gz";
-      sha256 = "74d22c44b5ad2e7190e2786e8a17d74bbf4cef89b4d1157ba33598b5a2720dad";
+      hash = "sha256-dNIsRLWtLnGQ4nhuihfXS79M74m00RV7ozWYtaJyDa0=";
     };
     meta = {
       description = "Supply object methods for locking files";
@@ -12156,7 +12156,7 @@ let
     pname = "IO-Pager";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JP/JPIERCE/IO-Pager-2.10.tgz";
-      sha256 = "15dimh3i61y6kybhbap91kwh9837xfww072rh95h7j40sb1did5w";
+      hash = "sha256-vLTYwtKAyANLglkcwLnrZ6AE+QzpqgWXn8YHEwessZU=";
     };
     propagatedBuildInputs = [ pkgs.more FileWhich TermReadKey ]; # `more` used in tests
     meta = {
@@ -12171,7 +12171,7 @@ let
     version = "1.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TODDR/IO-Tty-1.16.tar.gz";
-      sha256 = "sha256-jxoJwHBzitxpXfkD8uf3QwjdjZkbkUwLw5Cg5gISlN0=";
+      hash = "sha256-jxoJwHBzitxpXfkD8uf3QwjdjZkbkUwLw5Cg5gISlN0=";
     };
     buildPhase = "make";
     checkPhase = "make test";
@@ -12188,7 +12188,7 @@ let
     version = "0.997004";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DC/DCONWAY/IO-Prompt-0.997004.tar.gz";
-      sha256 = "f17bb305ee6ac8b5b203e6d826eb940c4f3f6d6f4bfe719c3b3a225f46f58615";
+      hash = "sha256-8XuzBe5qyLWyA+bYJuuUDE8/bW9L/nGcOzoiX0b1hhU=";
     };
     propagatedBuildInputs = [ TermReadKey Want ];
     doCheck = false; # needs access to /dev/tty
@@ -12203,7 +12203,7 @@ let
     version = "1.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PH/PHRED/IO-SessionData-1.03.tar.gz";
-      sha256 = "1p9d77pqy9a8dbgw7h7vmmkg0rlckk19dchd4c8gvcyv7qm73934";
+      hash = "sha256-ZKRxKj7bs/0QIw2ylsKcjGbwZq37wMPfakglj+85Ld0=";
     };
     outputs = [ "out" "dev" ]; # no "devdoc"
     meta = {
@@ -12217,7 +12217,7 @@ let
     version = "2.72";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/IO-Socket-INET6-2.72.tar.gz";
-      sha256 = "1fqypz6qa5rw2d5y2zq7f49frwra0aln13nhq5gi514j2zx21q45";
+      hash = "sha256-heAg+heShBJfwdCOYKkCKvPsEnEHf+FLEzwXhc2/Hrs=";
     };
     propagatedBuildInputs = [ Socket6 ];
     doCheck = false;
@@ -12232,7 +12232,7 @@ let
     version = "2.068";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SU/SULLR/IO-Socket-SSL-2.068.tar.gz";
-      sha256 = "4420fc0056f1827b4dd1245eacca0da56e2182b4ef6fc078f107dc43c3fb8ff9";
+      hash = "sha256-RCD8AFbxgntN0SRerMoNpW4hgrTvb8B48QfcQ8P7j/k=";
     };
     propagatedBuildInputs = [ MozillaCA NetSSLeay ];
     # Fix path to default certificate store.
@@ -12253,7 +12253,7 @@ let
     version = "0.32";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAMS/IO-Socket-Timeout-0.32.tar.gz";
-      sha256 = "edf915d6cc66bee43503aa6dc2b373366f38eaff701582183dad10cb8adf2972";
+      hash = "sha256-7fkV1sxmvuQ1A6ptwrNzNm846v9wFYIYPa0Qy4rfKXI=";
     };
     buildInputs = [ ModuleBuildTiny TestSharedFork TestTCP ];
     propagatedBuildInputs = [ PerlIOviaTimeout ];
@@ -12268,7 +12268,7 @@ let
     version = "1.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GA/GAAS/IO-String-1.08.tar.gz";
-      sha256 = "2a3f4ad8442d9070780e58ef43722d19d1ee21a803bf7c8206877a10482de5a0";
+      hash = "sha256-Kj9K2EQtkHB4DljvQ3ItGdHuIagDv3yCBod6EEgt5aA=";
     };
     meta = {
       description = "Emulate file interface for in-core strings";
@@ -12281,7 +12281,7 @@ let
     version = "2.113";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CA/CAPOEIRAB/IO-Stringy-2.113.tar.gz";
-      sha256 = "0kpycb56l6ilvmdx9swx9wpj1x3vfnqdflfjd6dn6spnz750y8ji";
+      hash = "sha256-USIPyvn2amObadJR17B1e/QgL0+d69Rb3TQaaspi/k4=";
     };
     meta = {
       description = "I/O on in-core objects like strings and arrays";
@@ -12294,7 +12294,7 @@ let
     version = "0.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TODDR/IO-Stty-0.04.tar.gz";
-      sha256 = "sha256-XJUJ8ahpPYKH+gE97wv4eqZM2ScThGHvjetVUDxmUcI=";
+      hash = "sha256-XJUJ8ahpPYKH+gE97wv4eqZM2ScThGHvjetVUDxmUcI=";
     };
     buildPhase = "make";
     checkPhase = "make test";
@@ -12311,7 +12311,7 @@ let
     version = "0.66";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/IO-Tee-0.66.tar.gz";
-      sha256 = "1q2jhp02rywrbyhvl2lv6qp70dcv5cfalrx3cc4c7y8nclhfg71d";
+      hash = "sha256-LZznIGUW+cMIY6NnqhwrmzVwLjabCrqhX5n7LMCFUuA=";
     };
     meta = {
       description = "Multiplex output to multiple output handles";
@@ -12324,7 +12324,7 @@ let
     version = "1.005";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/IO-TieCombine-1.005.tar.gz";
-      sha256 = "1bv9ampayf4bvyxg4ivy18l8k79jvq55x6gl68b2fg8b62w4sba0";
+      hash = "sha256-QC1NuDALPScWMvSZXgreMp2JKAp+R/K634s4r25Vaa8=";
     };
     meta = {
       description = "Produce tied (and other) separate but combined variables";
@@ -12338,7 +12338,7 @@ let
     version = "1.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TODDR/IO-Tty-1.15.tar.gz";
-      sha256 = "06mmyr4fkkix1z0j8hnhrccn93isnabf3408kqavn2v2hw7wrya3";
+      hash = "sha256-Q/nMD4diC7sVngiQ4ZayOo5kGcvQQiTBDz3O6Uj2tRo=";
     };
     doCheck = !stdenv.isDarwin;  # openpty fails in the sandbox
     meta = {
@@ -12352,7 +12352,7 @@ let
     version = "0.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MATTK/IPC-ConcurrencyLimit-0.17.tar.gz";
-      sha256 = "sha256-Lk11vlLpD8YFg31ajp+yacCofdPTYfMBLA/5Sl+9z+8=";
+      hash = "sha256-Lk11vlLpD8YFg31ajp+yacCofdPTYfMBLA/5Sl+9z+8=";
     };
     buildInputs = [ ExtUtilsMakeMaker ];
     propagatedBuildInputs = [ FilePath IO ];
@@ -12367,7 +12367,7 @@ let
     version = "2.28";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NW/NWETTERS/IP-Country-2.28.tar.gz";
-      sha256 = "88db833a5ab22ed06cb53d6f205725e3b5371b254596053738885e91fa105f75";
+      hash = "sha256-iNuDOlqyLtBstT1vIFcl47U3GyVFlgU3OIhekfoQX3U=";
     };
     propagatedBuildInputs = [ GeographyCountries ];
     meta = {
@@ -12382,7 +12382,7 @@ let
     version = "2009041301";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AB/ABIGAIL/Geography-Countries-2009041301.tar.gz";
-      sha256 = "48c42e40e8281ba7c981743a854c48e6def2d51eb0925ea6c96e25c74497f20f";
+      hash = "sha256-SMQuQOgoG6fJgXQ6hUxI5t7y1R6wkl6myW4lx0SX8g8=";
     };
     meta = {
       description = "2-letter, 3-letter, and numerical codes for countries";
@@ -12396,7 +12396,7 @@ let
     version = "20200505.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TODDR/IPC-Run-20200505.0.tar.gz";
-      sha256 = "00f9wjvhn55zbk3n9il76xvsqy7ddk60lg6phg2rkpx0gwhvyvl1";
+      hash = "sha256-gW6/IX+g35nFg9c8Csxs7XisdzeHxmTHXL8UC7fkyQE=";
     };
     doCheck = false; /* attempts a network connection to localhost */
     propagatedBuildInputs = [ IOTty ];
@@ -12412,7 +12412,7 @@ let
     version = "0.048";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/IPC-Run3-0.048.tar.gz";
-      sha256 = "0r9m8q78bg7yycpixd7738jm40yz71p2q7inm766kzsw3g6c709x";
+      hash = "sha256-PYHDzBtc/2nMqTYeLG443wNSJRrntB4v8/68hQ5GNWU=";
     };
     meta = {
       description = "Run a subprocess with input/ouput redirection";
@@ -12425,7 +12425,7 @@ let
     version = "0.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AN/ANDYA/IPC-ShareLite-0.17.tar.gz";
-      sha256 = "1gz7dbwxrzbzdsjv11kb49jlf9q6lci2va6is0hnavd93nwhdm0l";
+      hash = "sha256-FNQGuR2pbWUh0NGoLSKjBidHZSJrhrClbn/93Plq578=";
     };
     meta = {
       description = "Lightweight interface to shared memory";
@@ -12438,7 +12438,7 @@ let
     version = "1.30";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JK/JKEENAN/IPC-System-Simple-1.30.tar.gz";
-      sha256 = "22e6f5222b505ee513058fdca35ab7a1eab80539b98e5ca4a923a70a8ae9ba9e";
+      hash = "sha256-Iub1IitQXuUTBY/co1q3oeq4BTm5jlykqSOnCorpup4=";
     };
     meta = {
       description = "Run commands simply, with detailed diagnostics";
@@ -12452,7 +12452,7 @@ let
     version = "2.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MH/MHX/IPC-SysV-2.09.tar.gz";
-      sha256 = "1g9ddlba4w2jpasn4sh5v1spag4x87rhfv7b0w8gsj6mfhf595qq";
+      hash = "sha256-GJdUHHTVSP0QB+tsB/NBnTx1ddgFamK1ulJwohZtLb0=";
     };
     meta = {
       description = "System V IPC constants and system calls";
@@ -12465,7 +12465,7 @@ let
     version = "0.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HI/HINRIK/IRC-Utils-0.12.tar.gz";
-      sha256 = "c7d6311eb6c79e983833c9e6b4e8d426d07a9874d20f4bc641b313b99c9bc8a0";
+      hash = "sha256-x9YxHrbHnpg4M8nmtOjUJtB6mHTSD0vGQbMTuZybyKA=";
     };
     meta = {
       description = "Common utilities for IRC-related tasks";
@@ -12481,7 +12481,7 @@ let
 
     src = fetchurl {
       url = "https://exiftool.org/Image-ExifTool-${version}.tar.gz";
-      sha256 = "sha256-QDq1KTpEcl8EWj9a/bxF0TwghUulH30O5yDV0wsxy6I=";
+      hash = "sha256-QDq1KTpEcl8EWj9a/bxF0TwghUulH30O5yDV0wsxy6I=";
     };
 
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
@@ -12515,7 +12515,7 @@ let
     version = "0.86";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IN/INGY/Inline-0.86.tar.gz";
-      sha256 = "510a7de2d011b0db80b0874e8c0f7390010991000ae135cff7474df1e6d51e3a";
+      hash = "sha256-UQp94tARsNuAsIdOjA9zkAEJkQAK4TXP90dN8ebVHjo=";
     };
     buildInputs = [ TestWarn ];
     meta = {
@@ -12536,7 +12536,7 @@ let
     version = "0.81";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TI/TINITA/Inline-C-0.81.tar.gz";
-      sha256 = "f185258d9050d7f79b4f00f12625cc469c2f700ff62d3e831cb18d80d2c87aac";
+      hash = "sha256-8YUljZBQ1/ebTwDxJiXMRpwvcA/2LT6DHLGNgNLIeqw=";
     };
     buildInputs = [ FileCopyRecursive TestWarn YAMLLibYAML ];
     propagatedBuildInputs = [ Inline ParseRecDescent Pegex ];
@@ -12558,7 +12558,7 @@ let
 
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETJ/Inline-Java-0.66.tar.gz";
-      sha256 = "0j6r6gxdn3wzx36cgcx4znj4ihp5fjl4gzk1623vvwgnwrlf0hy7";
+      hash = "sha256-x0PgaOb28b2HMGH+R6h05cJIpP2ks8fM6J8P2/oz2Ug=";
     };
 
     propagatedBuildInputs = [ Inline ];
@@ -12588,7 +12588,7 @@ let
     version = "1.00";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RO/ROSCH/IPC-Signal-1.00.tar.gz";
-      sha256 = "1l3g0zrcwf2whwjhbpwdcridb7c77mydwxvfykqg1h6hqb4gj8bw";
+      hash = "sha256-fCH5yMLQwPDw9G533nw9h53VYmaN3wUlh1w4zvIHb9A=";
     };
     meta = {
       description = "Utility functions dealing with signals";
@@ -12601,7 +12601,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GT/GTERMARS/JavaScript-Minifier-XS-0.11.tar.gz";
-      sha256 = "1vlyhckpjbrg2v4dy9szsxxl0q44n0y1xl763mg2y2ym9g5144hm";
+      hash = "sha256-FRISykvVCy9eHebQHjywhGBAe9dfJ9/IFi8veSeDnu4=";
     };
     perlPreHook = lib.optionalString (stdenv.isi686 || stdenv.isDarwin) "export LD=$CC";
     meta = {
@@ -12616,7 +12616,7 @@ let
     version = "0.07";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KA/KAZEBURO/JavaScript-Value-Escape-0.07.tar.gz";
-      sha256 = "1p5365lvnax8kbcfrj169lx05af3i3qi5wg5x9mizqgd10vxmjws";
+      hash = "sha256-msvaNwjt4R9r6uXxEvGIw6kCOk0myOzYmqgru2kxo9w=";
     };
     meta = {
       description = "Avoid XSS with JavaScript value interpolation";
@@ -12630,7 +12630,7 @@ let
     version = "4.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/JSON-4.02.tar.gz";
-      sha256 = "0z32x2lijij28c9fhmzgxc41i9nw24fyvd2a8ajs5zw9b9sqhjj4";
+      hash = "sha256-REqIdVqJ/6KlQkq07R0R3KYYCOvvV+gSQ0JGGanoYnw=";
     };
     # Do not abort cross-compilation on failure to load native JSON module into host perl
     preConfigure = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
@@ -12648,7 +12648,7 @@ let
     version = "1.39";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/JSON-Any-1.39.tar.gz";
-      sha256 = "1hspg6khjb38syn59cysnapc1q77qgavfym3fqr6l2kiydf7ajdf";
+      hash = "sha256-rkl1XPNxCmoydqN6t9XD5+DArrLas1Ss12gsCad5V8M=";
     };
     buildInputs = [ TestFatal TestRequires TestWarnings TestWithoutModule ];
     meta = {
@@ -12663,7 +12663,7 @@ let
     version = "0.35";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BK/BKB/JSON-Create-0.35.tar.gz";
-      sha256 = "5faefe0d833b8132568865308f3239d3cdaa1b8a1ecc9b5624dcf1efbe10683e";
+      hash = "sha256-X67+DYM7gTJWiGUwjzI5082qG4oezJtWJNzx774QaD4=";
     };
     propagatedBuildInputs = [ JSONParse UnicodeUTF8 ];
     meta = {
@@ -12677,7 +12677,7 @@ let
     version = "1.004003";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/JSON-MaybeXS-1.004003.tar.gz";
-      sha256 = "1grg8saa318bs4x2wqnww7y0nra7azrzg35bk5pgvkwxzwbkpvjv";
+      hash = "sha256-W+47F/+dz/1umauM9/NXR2UL/OHcYi460QuFoZRGL78=";
     };
     buildInputs = [ TestNeeds ];
     meta = {
@@ -12691,7 +12691,7 @@ let
     version = "4.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/JSON-PP-4.05.tar.gz";
-      sha256 = "1kphifz5zzyjnn4s9d8dynvinm76bbsf1b7a7bs48kfgpjkbr8nm";
+      hash = "sha256-1aK8przPTUT0Ouqs4PRa5lQbt/UNtaSJtdL/X76L8M4=";
     };
     meta = {
       description = "JSON::XS compatible pure-Perl module";
@@ -12705,7 +12705,7 @@ let
     version = "1.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MAKAMAKA/JSON-PP-Compat5006-1.09.tar.gz";
-      sha256 = "197030df52635f9bbe25af10742eea5bd74971473118c11311fcabcb62e3716a";
+      hash = "sha256-GXAw31JjX5u+Ja8QdC7qW9dJcUcxGMETEfyry2LjcWo=";
     };
     meta = {
       description = "Helper module in using JSON::PP in Perl 5.6";
@@ -12718,7 +12718,7 @@ let
     version = "0.61";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BK/BKB/JSON-Parse-0.61.tar.gz";
-      sha256 = "ce8e55e70bef9bcbba2e96af631d10a605900961a22cad977e71aab56c3f2806";
+      hash = "sha256-zo5V5wvvm8u6LpavYx0QpgWQCWGiLK2XfnGqtWw/KAY=";
     };
     meta = {
       description = "Parse JSON";
@@ -12732,7 +12732,7 @@ let
     version = "5.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/JSON-Validator-5.08.tar.gz";
-      sha256 = "sha256-QPaWjtcfxv1Ij6Q1Ityhk5NDhUCSth/eZgHwcWZHeFg=";
+      hash = "sha256-QPaWjtcfxv1Ij6Q1Ityhk5NDhUCSth/eZgHwcWZHeFg=";
     };
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ DataValidateDomain DataValidateIP Mojolicious NetIDNEncode YAMLLibYAML ];
@@ -12749,7 +12749,7 @@ let
     version = "0.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAICRON/JSON-WebToken-0.10.tar.gz";
-      sha256 = "77c182a98528f1714d82afc548d5b3b4dc93e67069128bb9b9413f24cf07248b";
+      hash = "sha256-d8GCqYUo8XFNgq/FSNWztNyT5nBpEou5uUE/JM8HJIs=";
     };
     buildInputs = [ TestMockGuard TestRequires ];
     propagatedBuildInputs = [ JSON ModuleRuntime ];
@@ -12765,7 +12765,7 @@ let
     version = "4.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/JSON-XS-4.03.tar.gz";
-      sha256 = "0s4hdfjwi1sq3cx4bjxrg8k1s4nhb0vm6948iklag89gbzs3cmai";
+      hash = "sha256-UVU29F8voafojIgkUzdY0BIdJnq5y0U6G1iHyKVrkGg=";
     };
     propagatedBuildInputs = [ TypesSerialiser ];
     buildInputs = [ CanaryStability ];
@@ -12781,7 +12781,7 @@ let
     version = "0.31";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LB/LBROCARD/JSON-XS-VersionOneAndTwo-0.31.tar.gz";
-      sha256 = "e6092c4d961fae777acf7fe99fb3cd6e5b710fec85765a6b90417480e4c94a34";
+      hash = "sha256-5gksTZYfrnd6z3/pn7PNbltxD+yFdlprkEF0gOTJSjQ=";
     };
     propagatedBuildInputs = [ JSONXS ];
     meta = {
@@ -12795,7 +12795,7 @@ let
     pname = "Object-Realize-Later";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MARKOV/Object-Realize-Later-0.21.tar.gz";
-      sha256 = "1nfqssld7pcdw9sj4mkfnh75w51wl14i1h7npj9fld4fri09cywg";
+      hash = "sha256-j3uWQMyONOqSvPbAEEmgPBReDrRuViJ14o3d06jW2Nk=";
     };
     meta = {
       description = "Delayed creation of objects";
@@ -12808,14 +12808,14 @@ let
     version = "0.8.6";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BR/BRMILLER/${pname}-${version}.tar.gz";
-      sha256 = "1ccvdq7asxq6iw8x8ihwf5xs2mp7fkwm467xy7g8spkznr8wcacm";
+      hash = "sha256-lSnGUbZ/Xo3e8f0YUvl051ahe3EcRtQRjwZ3rQ5um7E=";
     };
     patches = [
       (fetchpatch {
         # https://github.com/brucemiller/LaTeXML/issues/1669
         name = "downgrade-security-FileTemp.patch";
         url = "https://github.com/brucemiller/LaTeXML/commit/c3d6b9b88f9eafce6eee52b1634ea33085ba9ec6.patch";
-        sha256 = "12w6nfv0bkj2mr4xwcqzkdngrpbq4fn52n85r9njdg913cvfirm7";
+        hash = "sha256-p+boNhshvSZtygVZUawjeN38bJsfM95JrkLOBbazhos=";
       })
     ];
     outputs = [ "out" "tex" ];
@@ -12854,7 +12854,7 @@ let
     version = "1.19";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEOCHARRE/LEOCHARRE-CLI-1.19.tar.gz";
-      sha256 = "37835f11ee35326241b4d30368ae1bc195a50414b3662db3e13b865bd52fcde9";
+      hash = "sha256-N4NfEe41MmJBtNMDaK4bwZWlBBSzZi2z4TuGW9Uvzek=";
     };
     propagatedBuildInputs = [ FileWhich Filechmod LEOCHARREDebug Linuxusermod YAML ];
     meta = {
@@ -12868,7 +12868,7 @@ let
     version = "1.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEOCHARRE/LEOCHARRE-Debug-1.03.tar.gz";
-      sha256 = "c1665aa3abd457cc8624b8c418c6f8bdf58fb3a686f8eed515cf7e93514df192";
+      hash = "sha256-wWZao6vUV8yGJLjEGMb4vfWPs6aG+O7VFc9+k1FN8ZI=";
     };
     meta = {
       description = "Debug sub";
@@ -12881,7 +12881,7 @@ let
     version = "0.0011";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Lexical-SealRequireHints-0.011.tar.gz";
-      sha256 = "sha256-npGO0RjvaF1uCdqxzW5m7gox13b+JLumPlJDkG9WATo=";
+      hash = "sha256-npGO0RjvaF1uCdqxzW5m7gox13b+JLumPlJDkG9WATo=";
     };
     meta = {
       description = "Prevent leakage of lexical hints";
@@ -12894,7 +12894,7 @@ let
     version = "2.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHAY/libapreq2-2.16.tar.gz";
-      sha256 = "e04c855a3ea070b8863569fbae02fe828f534ac88755b23e24d3863cc9598349";
+      hash = "sha256-4EyFWj6gcLiGNWn7rgL+go9TSsiHVbI+JNOGPMlZg0k=";
     };
     outputs = [ "out" ];
     buildInputs = [ pkgs.apacheHttpd pkgs.apr pkgs.aprutil ApacheTest ExtUtilsXSBuilder ];
@@ -12945,7 +12945,7 @@ let
     version = "1.32";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GU/GUIDO/libintl-perl-1.32.tar.gz";
-      sha256 = "19gbbh9w3rl805mv6mg1q80fsrg610h098qhf7ycnkjnyac84440";
+      hash = "sha256-gBCCmPJWTsv8cRCjBCAI5mXtAMLhVbNrAYjmwRNc66U=";
     };
     meta = {
       description = "Portable l10n and i10n functions";
@@ -12958,13 +12958,13 @@ let
     version = "3.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHAY/libnet-3.13.tar.gz";
-      sha256 = "sha256-WjX7Hy1KopFoDrGvOImfq0U8IsKOcffHvTdHtaPbNIw=";
+      hash = "sha256-WjX7Hy1KopFoDrGvOImfq0U8IsKOcffHvTdHtaPbNIw=";
     };
     patches = [
       (fetchpatch {
         name = "deterministic-libnet.cfg";
         url = "https://github.com/steve-m-hay/perl-libnet/commit/7d076c4352f67ee4ed64092cfad3963a2321bd53.patch";
-        sha256 = "0pg9w2m08janqn5nrp4x9w5hbcsyxz87hfskd21zzfrzjk8z28qv";
+        hash = "sha256-GyPx0ZQ/u/+DaFM7eNDvXrMFC0+d3GyLxVZJBKrg6V0=";
       })
     ];
     meta = {
@@ -12978,7 +12978,7 @@ let
     version = "1.000";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DB/DBOOK/lib-relative-1.000.tar.gz";
-      sha256 = "1mvcdl87d3kyrdx4y6x79k3n5qdd1x5m1hp8lwjxvgfqbw0cgq6z";
+      hash = "sha256-3+DHAF/Yvd0lp+jCUEsPreFix0ynG096y36OdhBtbNc=";
     };
     meta = {
       description = "Add paths relative to the current file to @INC";
@@ -12992,7 +12992,7 @@ let
     version = "0.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KM/KMACLEOD/libxml-perl-0.08.tar.gz";
-      sha256 = "1jy9af0ljyzj7wakqli0437zb2vrbplqj4xhab7bfj2xgfdhawa5";
+      hash = "sha256-RXEFm3tdSLfOUrATieldeYv1zyAgUjwVP/J7SYFTycs=";
     };
     propagatedBuildInputs = [ XMLParser ];
     meta = {
@@ -13006,7 +13006,7 @@ let
     version = "1.32";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/Lingua-EN-FindNumber-1.32.tar.gz";
-      sha256 = "1d176d1c863fb9844bd19d2c2a4e68a0ed73da158f724a89405b90db7e8dbd04";
+      hash = "sha256-HRdtHIY/uYRL0Z0sKk5ooO1z2hWPckqJQFuQ236NvQQ=";
     };
     propagatedBuildInputs = [ LinguaENWords2Nums ];
     meta = {
@@ -13021,7 +13021,7 @@ let
     version = "1.905";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DC/DCONWAY/Lingua-EN-Inflect-1.905.tar.gz";
-      sha256 = "15ij4rk1nznnd9hyg2hzy1ydpi9h1cdii8hdlq9j6mrf931rxhh5";
+      hash = "sha256-BcKew0guVyMTpg2iGBsLMMXbfPAfiudhatZ+G2YmMpY=";
     };
     meta = {
       description = "Convert singular to plural. Select 'a' or 'an'";
@@ -13034,7 +13034,7 @@ let
     version = "1.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/Lingua-EN-Inflect-Number-1.12.tar.gz";
-      sha256 = "66fb33838512746f5c597e80264fea66643f7f26570ec2f9205b6135ad67acbf";
+      hash = "sha256-Zvszg4USdG9cWX6AJk/qZmQ/fyZXDsL5IFthNa1nrL8=";
     };
     propagatedBuildInputs = [ LinguaENInflect ];
     meta = {
@@ -13049,7 +13049,7 @@ let
     version = "0.20";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RK/RKITOVER/Lingua-EN-Inflect-Phrase-0.20.tar.gz";
-      sha256 = "55058911a99f1755de3eb449a99ffbeb92d88c01ff5dc60511a24679050ddea8";
+      hash = "sha256-VQWJEamfF1XePrRJqZ/765LYjAH/XcYFEaJGeQUN3qg=";
     };
     buildInputs = [ TestNoWarnings ];
     propagatedBuildInputs = [ LinguaENInflectNumber LinguaENNumberIsOrdinal LinguaENTagger ];
@@ -13065,7 +13065,7 @@ let
     version = "0.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RK/RKITOVER/Lingua-EN-Number-IsOrdinal-0.05.tar.gz";
-      sha256 = "28d5695400c0f4e2bd209793cb74f6da2b9257356aacb2947c603425e09618d6";
+      hash = "sha256-KNVpVADA9OK9IJeTy3T22iuSVzVqrLKUfGA0JeCWGNY=";
     };
     buildInputs = [ TestFatal TryTiny ];
     propagatedBuildInputs = [ LinguaENFindNumber ];
@@ -13081,7 +13081,7 @@ let
     version = "0.31";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AC/ACOBURN/Lingua-EN-Tagger-0.31.tar.gz";
-      sha256 = "14z9fbl3mf6lxhp0v2apdlxy1fw1y07j4ydrjsh7p3w0wj3qr7ll";
+      hash = "sha256-lJ6Mh+SAj3uglrl5Ig/wgbvgO21XiQ0u7NS4Ouhy6ZM=";
     };
     propagatedBuildInputs = [ HTMLParser LinguaStem MemoizeExpireLRU ];
     meta = {
@@ -13095,7 +13095,7 @@ let
     version = "0.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JO/JOEY/Lingua-EN-Words2Nums-0.18.tar.gz";
-      sha256 = "686556797cd2a4eaa066f19bbf03ab25c06278292c9ead2f187dfd9031ea1d85";
+      hash = "sha256-aGVWeXzSpOqgZvGbvwOrJcBieCksnq0vGH39kDHqHYU=";
     };
     meta = {
       description = "Convert English text to numbers";
@@ -13108,7 +13108,7 @@ let
     version = "0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/Lingua-PT-Stemmer-0.02.tar.gz";
-      sha256 = "17c48sfbgwd2ivlgf59sr6jdhwa3aim8750f8pyzz7xpi8gz0var";
+      hash = "sha256-WW3wH4q3n//9RQ6Ug2pUQ3HYpMk6FffojqLxt5xGhJ0=";
     };
     meta = {
       description = "Portuguese language stemming";
@@ -13122,7 +13122,7 @@ let
     version = "2.31";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SN/SNOWHARE/Lingua-Stem-2.31.tar.gz";
-      sha256 = "0r02cf5p09r09ivxhn4xmsgmbk041p6qq6p6af15jzj2nqr9j6ma";
+      hash = "sha256-qhqZMrZCflmCU+YajM0NBMxVn66dWNh3TCAncItjAmQ=";
     };
     doCheck = false;
     propagatedBuildInputs = [ LinguaPTStemmer LinguaStemFr LinguaStemIt LinguaStemRu LinguaStemSnowballDa SnowballNorwegian SnowballSwedish TextGerman ];
@@ -13137,7 +13137,7 @@ let
     version = "0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SD/SDP/Lingua-Stem-Fr-0.02.tar.gz";
-      sha256 = "0vyrspwzaqjxm5mqshf4wvwa3938mkajd1918d9ii2l9m2rn8kwx";
+      hash = "sha256-nU9ks6iJihhTQyGFJtWsaKSh+ObEQY1rqV1i9fnV2W8=";
     };
     meta = {
       description = "Perl French Stemming";
@@ -13150,7 +13150,7 @@ let
     version = "0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AC/ACALPINI/Lingua-Stem-It-0.02.tar.gz";
-      sha256 = "1207r183s5hlh4mfwa6p46vzm0dhvrs2dnss5s41a0gyfkxp7riq";
+      hash = "sha256-OOZz+3T+ARWILlrbJnTesIH6tyHXKO4qgRQWPVDIB4g=";
     };
     meta = {
       description = "Porter's stemming algorithm for Italian";
@@ -13163,7 +13163,7 @@ let
     version = "0.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/Lingua-Stem-Ru-0.04.tar.gz";
-      sha256 = "0a2jmdz7jn32qj5hyiw5kbv8fvlpmws8i00a6xcbkzb48yvwww0j";
+      hash = "sha256-EnDOt0dk/blYNwqAiDSvl26H9pqFRw+LxGJYeX6rUig=";
     };
     meta = {
       description = "Porter's stemming algorithm for Russian (KOI8-R only)";
@@ -13177,7 +13177,7 @@ let
     version = "1.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CI/CINE/Lingua-Stem-Snowball-Da-1.01.tar.gz";
-      sha256 = "0mm0m7glm1s6i9f6a78jslw6wh573208arxhq93yriqmw17bwf9f";
+      hash = "sha256-Ljm+TuAVx+xHwrBnhYAYp0BuONUSHWVcikaHSt+poFY=";
     };
     meta = {
       description = "Porters stemming algorithm for Denmark";
@@ -13190,7 +13190,7 @@ let
     version = "0.28";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AL/ALINKE/Lingua-Translit-0.28.tar.gz";
-      sha256 = "113f91d8fc2c630437153a49fb7a52b023af8f6278ed96c070b1f60824b8eae1";
+      hash = "sha256-ET+R2PwsYwQ3FTpJ+3pSsCOvj2J47ZbAcLH2CCS46uE=";
     };
     doCheck = false;
     meta = {
@@ -13205,7 +13205,7 @@ let
     version = "1.20";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/LinkEmbedder-1.20.tar.gz";
-      sha256 = "19fwr3y8dd1bya2z86x3904s4dxfx15h7b777529j8n74m78ppmi";
+      hash = "sha256-sd6LTiXHIplEOeesA0vorjeiCUijG/SF8iu0hvzI3KU=";
     };
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ Mojolicious ];
@@ -13222,7 +13222,7 @@ let
     version = "0.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NA/NAZAROV/Linux-ACL-0.05.tar.gz";
-      sha256 = "312940c1f60f47c4fc93fa0a9d2a626425faa837040c8c2f1ad58ee09f62f371";
+      hash = "sha256-MSlAwfYPR8T8k/oKnSpiZCX6qDcEDIwvGtWO4J9i83E=";
     };
     buildInputs = [ pkgs.acl ];
     NIX_CFLAGS_LINK = "-L${pkgs.acl.out}/lib -lacl";
@@ -13238,7 +13238,7 @@ let
     version = "0.25";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TR/TRIZEN/Linux-DesktopFiles-0.25.tar.gz";
-      sha256 = "60377a74fba90fa465200ee1c7430dbdde69d454d85f9ee101c039803a07e5f5";
+      hash = "sha256-YDd6dPupD6RlIA7hx0MNvd5p1FTYX57hAcA5gDoH5fU=";
     };
     meta = {
       description = "Fast parsing of the Linux desktop files";
@@ -13252,7 +13252,7 @@ let
     version = "0.23";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CH/CHORNY/Linux-Distribution-0.23.tar.gz";
-      sha256 = "603e27da607b3e872a669d7a66d75982f0969153eab2d4b20c341347b4ebda5f";
+      hash = "sha256-YD4n2mB7PocqZp16ZtdZgvCWkVPqstSyDDQTR7Tr2l8=";
     };
     # The tests fail if the distro it's built on isn't in the supported list.
     # This includes NixOS.
@@ -13269,7 +13269,7 @@ let
     version = "0.011";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEONT/Linux-FD-0.011.tar.gz";
-      sha256 = "6bb579d47644cb0ed35626ff77e909ae69063073c6ac09aa0614fef00fa37356";
+      hash = "sha256-a7V51HZEyw7TVib/d+kJrmkGMHPGrAmqBhT+8A+jc1Y=";
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ SubExporter ];
@@ -13286,7 +13286,7 @@ let
     version = "2.2";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/Linux-Inotify2-2.2.tar.gz";
-      sha256 = "0crlxmaa4lsgdjm5p9ib8rdxiy70qj1s68za3q3v57v8ll6s4hfx";
+      hash = "sha256-3UGiDaVon7IHHuojo4PE4PjYW0YrpluqbE9TolTtNDM=";
     };
     propagatedBuildInputs = [ commonsense ];
 
@@ -13302,7 +13302,7 @@ let
     version = "0.69";
     src = fetchurl {
       url = "mirror://cpan/authors/id/V/VI/VIDUL/Linux-usermod-0.69.tar.gz";
-      sha256 = "97ca186a3c416bf69ed62da046f1a60d88d89b8e6ed25008b2f96e787dee9d60";
+      hash = "sha256-l8oYajxBa/ae1i2gRvGmDYjYm45u0lAIsvlueH3unWA=";
     };
     meta = {
       description = "This module adds, removes and modify user and group accounts according to the passwd and shadow files syntax";
@@ -13316,7 +13316,7 @@ let
     version = "0.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/List-AllUtils-0.18.tar.gz";
-      sha256 = "b7c4bf80090b281c4a1560c76a1a819094c3a1294302f77afb8c60ca4862ecf9";
+      hash = "sha256-t8S/gAkLKBxKFWDHahqBkJTDoSlDAvd6+4xgykhi7Pk=";
     };
     propagatedBuildInputs = [ ListSomeUtils ListUtilsBy ];
     meta = {
@@ -13331,7 +13331,7 @@ let
     version = "0.25";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAVIDO/List-BinarySearch-0.25.tar.gz";
-      sha256 = "0ap8y9rsjxg75887klgij90mf459f8dwy0dbx1g06h30pmqk04f8";
+      hash = "sha256-yBEwcb1gQANe6KsBzxtyqRBXQZLx0XkQKud1qXPy6Co=";
     };
     meta = {
       description = "Binary Search within a sorted array";
@@ -13344,7 +13344,7 @@ let
     version = "0.55";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JK/JKEENAN/List-Compare-0.55.tar.gz";
-      sha256 = "cc719479836579d52b02bc328ed80a98f679df043a99b5710ab2c191669eb837";
+      hash = "sha256-zHGUeYNledUrArwyjtgKmPZ53wQ6mbVxCrLBkWaeuDc=";
     };
     buildInputs = [ CaptureTiny ];
     meta = {
@@ -13359,7 +13359,7 @@ let
     version = "0.430";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RE/REHSACK/List-MoreUtils-0.430.tar.gz";
-      sha256 = "09v5cipjf634a1176wy2wicibzz51lry0d0yim9rnbfl5j2ggcb3";
+      hash = "sha256-Y7H3hCzULZtTjR404DMN5f8VWeTCc3NCUGQYJ29kZSc=";
     };
     propagatedBuildInputs = [ ExporterTiny ListMoreUtilsXS ];
     buildInputs = [ TestLeakTrace ];
@@ -13374,7 +13374,7 @@ let
     version = "0.430";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RE/REHSACK/List-MoreUtils-XS-0.430.tar.gz";
-      sha256 = "0hmjkhmk1qlzbg8skq7g1zral07k1x0fk4w2fpcfr7hpgkaldkp8";
+      hash = "sha256-6M5G1XwXnuzYdYKT6UAP8wCq8g/v4KnRW5/iMCucskI=";
     };
     preConfigure = ''
       export LD=$CC
@@ -13391,7 +13391,7 @@ let
     version = "0.58";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/List-SomeUtils-0.58.tar.gz";
-      sha256 = "96eafb359339d22bf2a2de421298847a3c40f6a28b6d44005d0965da86a5469d";
+      hash = "sha256-lur7NZM50ivyot5CEpiEejxA9qKLbUQAXQll2oalRp0=";
     };
     buildInputs = [ TestLeakTrace ];
     propagatedBuildInputs = [ ModuleImplementation ];
@@ -13407,7 +13407,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/List-UtilsBy-0.11.tar.gz";
-      sha256 = "0nkpylkqccxanr8wc7j9wg6jdrizybjjd6p8q3jbh7f29cxz9pgs";
+      hash = "sha256-+t30O0vCHbjkwOiaJuXyP+YmzeNJHsZRtqozhif1d1o=";
     };
     meta = {
       description = "Higher-order list utility functions";
@@ -13420,7 +13420,7 @@ let
     version = "3.66";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SB/SBECK/Locale-Codes-3.66.tar.gz";
-      sha256 = "1rspbig3zb7l7s1mlsk9n0rrisy8qrzwn0ix6a7sd372arnwvylr";
+      hash = "sha256-mfrNbVbijKaPMj0Cy3/GyOuYM7BpalqDPvSsP15cV+c=";
     };
     buildInputs = [ TestInter ];
     meta = {
@@ -13437,7 +13437,7 @@ let
     buildInputs = [ pkgs.gettext ];
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PV/PVANDRY/gettext-1.07.tar.gz";
-      sha256 = "05cwqjxxary11di03gg3fm6j9lbvg1dr2wpr311c1rwp8salg7ch";
+      hash = "sha256-kJ1HlUaX58BCGPlykVt4e9EkTXXjvQFiC8Fn1bvEnBU=";
     };
     LANG="C";
     meta = {
@@ -13451,7 +13451,7 @@ let
     version = "0.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SA/SAPER/Locale-Maketext-Lexicon-Getcontext-0.05.tar.gz";
-      sha256 = "75cb33df9472a5962de54082f42c6a76b260fc405ba10ca53246fb1f82c09208";
+      hash = "sha256-dcsz35RypZYt5UCC9CxqdrJg/EBboQylMkb7H4LAkgg=";
     };
     propagatedBuildInputs = [ LocaleMaketextLexicon ];
     meta = {
@@ -13465,7 +13465,7 @@ let
     version = "0.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/ST/STEFFENW/Locale-MO-File-0.09.tar.gz";
-      sha256 = "0gsaaqimsh5bdhns2v67j1nvb178hx2536lxmr971cwxy31ns0wp";
+      hash = "sha256-lwNtw/Cds3BSrp2aUUSH6IS1bZDHbKEtbKtAXSNWSj8=";
     };
     propagatedBuildInputs = [ ConstFast MooXStrictConstructor MooXTypesMooseLike ParamsValidate namespaceautoclean ];
     buildInputs = [ TestDifferences TestException TestHexDifferences TestNoWarnings ];
@@ -13480,7 +13480,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AU/AUDREYT/Locale-Maketext-Fuzzy-0.11.tar.gz";
-      sha256 = "3785171ceb78cc7671319a3a6d8ced9b190e097dfcd9b2a9ebc804cd1a282f96";
+      hash = "sha256-N4UXHOt4zHZxMZo6bYztmxkOCX382bKp68gEzRooL5Y=";
     };
     meta = {
       description = "Maketext from already interpolated strings";
@@ -13493,7 +13493,7 @@ let
     version = "1.00";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DRTECH/Locale-Maketext-Lexicon-1.00.tar.gz";
-      sha256 = "b73f6b04a58d3f0e38ebf2115a4c1532f1a4eef6fac5c6a2a449e4e14c1ddc7c";
+      hash = "sha256-tz9rBKWNPw446/IRWkwVMvGk7vb6xcaipEnk4Uwd3Hw=";
     };
     meta = {
       description = "Use other catalog formats in Maketext";
@@ -13508,7 +13508,7 @@ let
     version = "0.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AZ/AZAWAWI/Locale-Msgfmt-0.15.tar.gz";
-      sha256 = "c3276831cbeecf58be02081bcc180bd348daa35da21a7737b7b038a59f643ab4";
+      hash = "sha256-wydoMcvuz1i+AggbzBgL00jao12iGnc3t7A4pZ9kOrQ=";
     };
     meta = {
       description = "Compile .po files to .mo files";
@@ -13521,7 +13521,7 @@ let
     version = "0.27";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CO/COSIMO/Locale-PO-0.27.tar.gz";
-      sha256 = "3c994a4b63e6e4e836c6f79a93f51921cab77c90c9753fe0f8b5429220d516b9";
+      hash = "sha256-PJlKS2Pm5Og2xveak/UZIcq3fJDJdT/g+LVCkiDVFrk=";
     };
     propagatedBuildInputs = [ FileSlurp ];
     meta = {
@@ -13535,7 +13535,7 @@ let
     version = "1.036";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/ST/STEFFENW/Locale-TextDomain-OO-1.036.tar.gz";
-      sha256 = "0f0fajq4k1sgyywsb7qypsf6xa1sxjx4agm8l8z2284nm3hq65xm";
+      hash = "sha256-tReD4aiWICE+oqg+RbrsOqhunL4en6W590+HSbBUDjg=";
     };
     propagatedBuildInputs = [ ClassLoad Clone JSON LocaleMOFile LocalePO LocaleTextDomainOOUtil LocaleUtilsPlaceholderBabelFish LocaleUtilsPlaceholderMaketext LocaleUtilsPlaceholderNamed MooXSingleton PathTiny TieSub ];
     buildInputs = [ TestDifferences TestException TestNoWarnings ];
@@ -13550,7 +13550,7 @@ let
     version = "4.002";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/ST/STEFFENW/Locale-TextDomain-OO-Util-4.002.tar.gz";
-      sha256 = "1826pl11vr9p7zv7vqs7kcd8y5218086l90dw8lw0xzdcmzs0prw";
+      hash = "sha256-PF+gf2Xtd8Ap4g0kahBAQRSPGptH4332PzflHQK9RqA=";
     };
     propagatedBuildInputs = [ namespaceautoclean ];
     buildInputs = [ TestDifferences TestException TestNoWarnings ];
@@ -13565,7 +13565,7 @@ let
     version = "0.006";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/ST/STEFFENW/Locale-Utils-PlaceholderBabelFish-0.006.tar.gz";
-      sha256 = "1k54njj8xz19c8bjb0iln1mnfq55j3pvbff7samyrab3k59h071f";
+      hash = "sha256-LhwAU5ljqeyr0se5te+QpWBna7A0giUXYin8jqS0pMw=";
     };
     propagatedBuildInputs = [ HTMLParser MooXStrictConstructor MooXTypesMooseLike namespaceautoclean ];
     buildInputs = [ TestDifferences TestException TestNoWarnings ];
@@ -13580,7 +13580,7 @@ let
     version = "1.005";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/ST/STEFFENW/Locale-Utils-PlaceholderMaketext-1.005.tar.gz";
-      sha256 = "1srlbp8sfnzhndgh9s4d8bglpzw0vb8gnab9r8r8sggkv15n0a2h";
+      hash = "sha256-UChgS9jzPY0yymkp+9DagP9L30KN6ARfs/Bbp9FdNOs=";
     };
     propagatedBuildInputs = [ MooXStrictConstructor MooXTypesMooseLike namespaceautoclean ];
     buildInputs = [ TestDifferences TestException TestNoWarnings ];
@@ -13595,7 +13595,7 @@ let
     version = "1.004";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/ST/STEFFENW/Locale-Utils-PlaceholderNamed-1.004.tar.gz";
-      sha256 = "1gd68lm5w5c6ndcilx91rn84zviqyrk3fx92jjx5khxm76i8xmvg";
+      hash = "sha256-b9eOojm1w1m6lCJ1N2b2OO5PkM0hdRpZs4YVXipFpr0=";
     };
     propagatedBuildInputs = [ MooXStrictConstructor MooXTypesMooseLike namespaceautoclean ];
     buildInputs = [ TestDifferences TestException TestNoWarnings ];
@@ -13610,7 +13610,7 @@ let
     version = "2.000024";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/local-lib-2.000024.tar.gz";
-      sha256 = "01cav7m6qc1x96wna1viiw6n212f94ks7cik4vj1a1lasixr36rf";
+      hash = "sha256-LpuRe9SKBhXkJjOyoydJTgRhDY9xB2W5ST0wbOrZigU=";
     };
     propagatedBuildInputs = [ ModuleBuild ];
     meta = {
@@ -13624,7 +13624,7 @@ let
     version = "0.208";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SC/SCHWIGON/lockfile-simple/LockFile-Simple-0.208.tar.gz";
-      sha256 = "18pk5a030dsg1h6wd8c47wl8pzrpyh9zi9h2c9gs9855nab7iis5";
+      hash = "sha256-Rcd4lrKloKRfYgKm+BP0N/+LKD+EocYNDE83MIAq86I=";
     };
     meta = {
       description = "Simple file locking scheme";
@@ -13637,7 +13637,7 @@ let
     version = "1.708";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PR/PREACTION/Log-Any-1.708.tar.gz";
-      sha256 = "e1407759dc9462ab096d4ddc89feaac8abb341c5429e38cf6f7b8a996a35ecd9";
+      hash = "sha256-4UB3WdyUYqsJbU3cif6qyKuzQcVCnjjPb3uKmWo17Nk=";
     };
     # Syslog test fails.
     preCheck = "rm t/syslog.t";
@@ -13653,7 +13653,7 @@ let
     version = "0.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PR/PREACTION/Log-Any-Adapter-Log4perl-0.09.tar.gz";
-      sha256 = "19f1drqnzr6g4xwjm6jk4iaa3zmiax8bzxqch04f4jr12bjd75qi";
+      hash = "sha256-EZfT5BIhS+IIgAz3v1BXsf6hVCRTmip5J8/kb3FuwaU=";
     };
     propagatedBuildInputs = [ LogAny LogLog4perl ];
     meta = {
@@ -13668,7 +13668,7 @@ let
     version = "0.003003";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NERDVANA/Log-Any-Adapter-TAP-0.003003.tar.gz";
-      sha256 = "131f0689b2b42b1b31449714c6eda8f811dd96a7c86748f1e03b239cfd0121c0";
+      hash = "sha256-Ex8GibK0KxsxRJcUxu2o+BHdlqfIZ0jx4DsjnP0BIcA=";
     };
     propagatedBuildInputs = [ LogAny TryTiny ];
     meta = {
@@ -13683,7 +13683,7 @@ let
     version = "0.008001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FR/FREW/Log-Contextual-0.008001.tar.gz";
-      sha256 = "b93cbcfbb8796d51c836e3b00243cda5630808c152c14eee5f20ca09c9451993";
+      hash = "sha256-uTy8+7h5bVHINuOwAkPNpWMICMFSwU7uXyDKCclFGZM=";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ DataDumperConcise ExporterDeclare Moo ];
@@ -13699,7 +13699,7 @@ let
     version = "2.70";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/Log-Dispatch-2.70.tar.gz";
-      sha256 = "089z5723lwa8jhl57xa5b901xmvj8kgz60rid33a7lv74k2irnd3";
+      hash = "sha256-o9kcxSRn06PGaDED899EctceQFpF9VMolEhxOsQpPyE=";
     };
     propagatedBuildInputs = [ DevelGlobalDestruction ParamsValidationCompiler Specio namespaceautoclean ];
     buildInputs = [ IPCRun3 TestFatal TestNeeds ];
@@ -13715,7 +13715,7 @@ let
     version = "1.36";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSCHOUT/Log-Dispatch-FileRotate-1.36.tar.gz";
-      sha256 = "0vlmi17p7fky3x58rs7r5mdxi6l5jla8zhlb55kvssxc1w5v2b27";
+      hash = "sha256-RyyxCw+sa71nKYvCjxSVhZrYWy356IxKH366c0+IlW4=";
     };
     propagatedBuildInputs = [ DateManip LogDispatch ];
     buildInputs = [ PathTiny TestWarn ];
@@ -13731,7 +13731,7 @@ let
     version = "0.037";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PERLANCAR/Log-ger-0.037.tar.gz";
-      sha256 = "0f5078g8lkyw09ijpz7dna5xw6yvpd0m283fdrw3s152xmr43qn2";
+      hash = "sha256-wuJBcu2iBD14bm4gUUG72xvei7Lt/CtjAtxPih46oDg=";
     };
     meta = {
       description = "A lightweight, flexible logging framework";
@@ -13746,7 +13746,7 @@ let
     version = "0.90";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BL/BLOONIX/Log-Handler-0.90.tar.gz";
-      sha256 = "0kgp3frz0y51j8kw67d6b4yyrrbh7syqraxchc7pfm442bkq0p1s";
+      hash = "sha256-OlyA5xKEVHcPg6yrjL0+cOXsPVmmHcMnkqF48LMb900=";
     };
     propagatedBuildInputs = [ ParamsValidate ];
     meta = {
@@ -13760,7 +13760,7 @@ let
     version = "0.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BINGOS/Log-Message-0.08.tar.gz";
-      sha256 = "bd697dd62aaf26d118e9f0a0813429deb1c544e4501559879b61fcbdfe99fe46";
+      hash = "sha256-vWl91iqvJtEY6fCggTQp3rHFRORQFVmHm2H8vf6Z/kY=";
     };
     meta = {
       description = "Powerful and flexible message logging mechanism";
@@ -13773,7 +13773,7 @@ let
     version = "0.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BINGOS/Log-Message-Simple-0.10.tar.gz";
-      sha256 = "15nxi935nfrf8dkdrgvcrf2qlai4pbz03yj8sja0n9mcq2jd24ma";
+      hash = "sha256-qhLRpMCsJguU1Ej6Af66JCqKhctsv9xmQy47W0aK3ZY=";
     };
     propagatedBuildInputs = [ LogMessage ];
     meta = {
@@ -13787,7 +13787,7 @@ let
     version = "1.070";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BB/BBC/Log-Trace-1.070.tar.gz";
-      sha256 = "1qrnxn9b05cqyw1286djllnj8wzys10754glxx6z5hihxxc85jwy";
+      hash = "sha256-nsuCWO8wwvJN7/SRckDQ/nMkLaWyGSQC95gVsJLtNuM=";
     };
     meta = {
       description = "Provides a unified approach to tracing";
@@ -13800,7 +13800,7 @@ let
     version = "1.874";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MARIOROY/MCE-1.874.tar.gz";
-      sha256 = "1l6khsmwzfr88xb81kdvmdskxgz3pm4yz2ybxkbml4bmhh0y62fq";
+      hash = "sha256-2AnjAYR1EVrX7MuL70m9478+dau7zYBWRyi7z6uG09A=";
     };
     meta = {
       description = "Many-Core Engine for Perl providing parallel processing capabilities";
@@ -13814,7 +13814,7 @@ let
     version = "1.53";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETJ/Log-Log4perl-1.53.tar.gz";
-      sha256 = "13n39byny3yif3x6nrj9iriw8jhbhxqavwrrlm277v3f066v9gwg";
+      hash = "sha256-j7+0jQFu7HNEpTnzrXCHC0rEY45JZmv6cNEPb/1Kw44=";
     };
     meta = {
       description = "Log4j implementation for Perl";
@@ -13829,7 +13829,7 @@ let
     version = "1.003";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Log-Dispatch-Array-1.003.tar.gz";
-      sha256 = "0dvzp0gsh17jqg02460ndchyapr1haahndq1p9v6mwkv5wf9680c";
+      hash = "sha256-DCCTHC978mp2ugE3C5WCIV/lIWsWGCLAw/IEqB+4fzc=";
     };
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ LogDispatch ];
@@ -13845,7 +13845,7 @@ let
     version = "2.022";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Log-Dispatchouli-2.022.tar.gz";
-      sha256 = "2a2a4176adafb85a1eb9c9dc389052919e8c2c9df99aaba538c06b8da964a5df";
+      hash = "sha256-KipBdq2vuFoeucncOJBSkZ6MLJ35mqulOMBrjalkpd8=";
     };
     buildInputs = [ TestDeep TestFatal ];
     propagatedBuildInputs = [ LogDispatchArray StringFlogger SubExporterGlobExporter ];
@@ -13861,7 +13861,7 @@ let
     version = "0.30";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LK/LKUNDRAK/Log-Journald-0.30.tar.gz";
-      sha256 = "55992cf9a1e1fb833f428300525bfa7cf7ed46b83ec414f82a091789b37d08a3";
+      hash = "sha256-VZks+aHh+4M/QoMAUlv6fPftRrg+xBT4KgkXibN9CKM=";
     };
     buildInputs = [ pkgs.pkg-config pkgs.systemd ];
     postPatch = ''
@@ -13879,7 +13879,7 @@ let
     version = "0.82";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RA/RANI/Log-LogLite-0.82.tar.gz";
-      sha256 = "0sqsa4750wvhw4cjmxpxqg30i1jjcddadccflisrdb23qn5zn285";
+      hash = "sha256-BQn7i8VDrJZ1pI6xplpjUoYIxsP99ioZ4XBzUA5RGms=";
     };
     propagatedBuildInputs = [ IOLockedFile ];
     meta = {
@@ -13893,7 +13893,7 @@ let
     version = "0.000001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EX/EXODIST/Long-Jump-0.000001.tar.gz";
-      sha256 = "d5d6456d86992b559d8f66fc90960f919292cd3803c13403faac575762c77af4";
+      hash = "sha256-1dZFbYaZK1Wdj2b8kJYPkZKSzTgDwTQD+qxXV2LHevQ=";
     };
     buildInputs = [ Test2Suite ];
     meta = {
@@ -13907,7 +13907,7 @@ let
     version = "6.67";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OA/OALDERS/libwww-perl-6.67.tar.gz";
-      sha256 = "sha256-lu7ECj/QqhvYNBF75eshxDj3MJTYYaGn5XdPCxImtyM=";
+      hash = "sha256-lu7ECj/QqhvYNBF75eshxDj3MJTYYaGn5XdPCxImtyM=";
     };
     propagatedBuildInputs = [ FileListing HTMLParser HTTPCookies HTTPNegotiate NetHTTP TryTiny WWWRobotRules ];
     # support cross-compilation by avoiding using `has_module` which does not work in miniperl (it requires B native module)
@@ -13927,7 +13927,7 @@ let
     version = "1.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TI/TIMBRODY/LWP-Authen-OAuth-1.02.tar.gz";
-      sha256 = "e78e0bd7de8002cfb4760073258d555ef55b2c27c07a94b3d8a2166a17fd96bc";
+      hash = "sha256-544L196AAs+0dgBzJY1VXvVbLCfAepSz2KIWahf9lrw=";
     };
     propagatedBuildInputs = [ LWP ];
     meta = {
@@ -13941,7 +13941,7 @@ let
     version = "6.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OA/OALDERS/LWP-MediaTypes-6.04.tar.gz";
-      sha256 = "1n8rg6csv3dsvymg06cmxipimr6cb1g9r903ghm1qsmiv89cl6wg";
+      hash = "sha256-jxvKEtqxahwqfAOknF5YzOQab+yVGfCq37qNrZl5Gdk=";
     };
     buildInputs = [ TestFatal ];
     meta = {
@@ -13956,7 +13956,7 @@ let
     version = "6.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BE/BENNING/LWP-Protocol-connect-6.09.tar.gz";
-      sha256 = "9f252394775e23aa42c3176611e5930638ab528d5190110b4731aa5b0bf35a15";
+      hash = "sha256-nyUjlHdeI6pCwxdmEeWTBjirUo1RkBELRzGqWwvzWhU=";
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ LWPProtocolHttps ];
@@ -13971,7 +13971,7 @@ let
     version = "6.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OA/OALDERS/LWP-Protocol-https-6.09.tar.gz";
-      sha256 = "14pm785cgyrnppks6ccasb2vkqifh0a8fz36nmnhc2v926jy3kqn";
+      hash = "sha256-Fs/hpRFpCwZttWZ8hxSALuK5xdKKMaPnvTb7xwo69ZI=";
     };
     patches = [ ../development/perl-modules/lwp-protocol-https-cert-file.patch ];
     propagatedBuildInputs = [ IOSocketSSL LWP ];
@@ -13989,7 +13989,7 @@ let
     version = "6.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GA/GAAS/LWP-Protocol-http10-6.03.tar.gz";
-      sha256 = "1lxq40qfwfai9ryhzhsdnycc4189c8kfl43rf7qq34fmz48skzzk";
+      hash = "sha256-8/+pEfnVkYHxcXkQ6iZiCQXCmLdNww99TlE57jAguNM=";
     };
     propagatedBuildInputs = [ LWP ];
     meta = {
@@ -14017,7 +14017,7 @@ let
     version = "0.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MASAKI/LWP-UserAgent-DNS-Hosts-0.14.tar.gz";
-      sha256 = "07w741r98synwnrh9hkv47wr67arhr2bmnvb6s5zqvq87x27jscr";
+      hash = "sha256-mWl5RD8Ib/yLNmvbukSGWR2T+SF7wgSz5dZrlHIghx8=";
     };
     propagatedBuildInputs = [ LWP ScopeGuard ];
     buildInputs = [ ModuleBuildTiny TestFakeHTTPD TestSharedFork TestTCP TestUseAllModules ];
@@ -14033,7 +14033,7 @@ let
     version = "1.07";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AL/ALEXMV/LWP-UserAgent-Determined-1.07.tar.gz";
-      sha256 = "06d8d50e8cd3692a11cb4fb44a2f84e5476a98f0e2e6a4a0dfce9f67e55ddb53";
+      hash = "sha256-BtjVDozTaSoRy0+0Si+E5UdqmPDi5qSg386fZ+Vd21M=";
     };
     propagatedBuildInputs = [ LWP ];
     meta = {
@@ -14047,7 +14047,7 @@ let
     version = "1.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MJ/MJEMMESON/LWP-UserAgent-Mockable-1.18.tar.gz";
-      sha256 = "0923ahl22c0gdzrihj7dqnrawia9hmcl462asf4ry8d5wd84z1i5";
+      hash = "sha256-JYZPUOOlIZ+J00oYQlmFSUWussXtSBjzbw8wIShUQyQ=";
     };
     propagatedBuildInputs = [ HookLexWrap LWP SafeIsa ];
     # Tests require network connectivity
@@ -14066,7 +14066,7 @@ let
     version = "1.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SA/SAXJAZMAN/lwp/LWPx-ParanoidAgent-1.12.tar.gz";
-      sha256 = "0gfhw3jbs25yya2dryv8xvyn9myngcfcmsybj7gkq62fnznil16c";
+      hash = "sha256-zAQa7bdOGDzfkcvryhx71tdk/e5o+9yE8r4IveTg0D0=";
     };
     doCheck = false; # 3 tests fail, probably because they try to connect to the network
     propagatedBuildInputs = [ LWP NetDNS ];
@@ -14083,7 +14083,7 @@ let
     version = "0.011";
     src = fetchurl {
       url = "mirror://cpan/authors/id/W/WY/WYANT/Mac-Pasteboard-0.011.tar.gz";
-      sha256 = "1a82pacp6pph3y2agdihzr4vc0phx85mq5am9czc81g8n484b35x";
+      hash = "sha256-vYxFELHoBcQ+S1UVXAvq8AK2Sf4wtqeEH/Bec5m6Aqk=";
     };
     buildInputs = [ pkgs.darwin.apple_sdk.frameworks.ApplicationServices ];
     meta = {
@@ -14099,7 +14099,7 @@ let
     version = "1.20200824.1";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MB/MBRADSHAW/Mail-AuthenticationResults-1.20200824.1.tar.gz";
-      sha256 = "16hyl631yk1d5g3jns0n4mkjawlzqnf003brnk6qc3mbkziaifik";
+      hash = "sha256-M7qo4p+rDobNtHkNAJzFn3IlZyUWaCvHKy1MH4ahHpo=";
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ JSON ];
@@ -14114,7 +14114,7 @@ let
     pname = "Mail-Maildir";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Z/ZE/ZEROALTI/Mail-Maildir-100/Mail-Maildir-1.0.0.tar.bz2";
-      sha256 = "1krkqfps6q3ifrhi9450l5gm9199qyfcm6vidllr0dv65kdaqpj4";
+      hash = "sha256-RF6s2ixmN5ApbXGbypzHKYVUX6GgkBRhdnFgo6/DM88=";
     };
     meta = {
       description = "Handle Maildir folders";
@@ -14127,7 +14127,7 @@ let
     pname = "Mail-Box";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MARKOV/Mail-Box-3.009.tar.gz";
-      sha256 = "0rcig7mzp8c5r4dxnynjaryyv4claljraxl44gn1kj8l1rmj31ci";
+      hash = "sha256-kYUhaw4UyRnsI4R2lSVVlJHtfVbSetsbyYWh++t5kWU=";
     };
 
     doCheck = false;
@@ -14144,7 +14144,7 @@ let
     version = "1.5111";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DC/DCOPPIT/Mail-Mbox-MessageParser-1.5111.tar.gz";
-      sha256 = "5723c0aa9cc10bab9ed1e3bfd9d5c95f7159e71c1a475414eb1af1dee3a46237";
+      hash = "sha256-VyPAqpzBC6ue0eO/2dXJX3FZ5xwaR1QU6xrx3uOkYjc=";
     };
     buildInputs = [ FileSlurper TestCompile TestPod TestPodCoverage TextDiff UNIVERSALrequire URI ];
     propagatedBuildInputs = [ FileHandleUnget ];
@@ -14161,7 +14161,7 @@ let
     version = "3.010";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MARKOV/Mail-Message-3.010.tar.gz";
-      sha256 = "04wblxrkcjwn7hw6vkvf307lbpc9blj1glqmm59q3642wcd4nhaq";
+      hash = "sha256-WEFLGuOCmIFTqRXTFyRdid1FDxhuz204PJZLNnOnixM=";
     };
     propagatedBuildInputs = [ IOStringy MIMETypes MailTools URI UserIdentity ];
     meta = {
@@ -14176,7 +14176,7 @@ let
     version = "1.20200907";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MB/MBRADSHAW/Mail-DKIM-1.20200907.tar.gz";
-      sha256 = "1x8v4pa0447c1xqri1jn96i8vlyjpl6jmz63nb1vifbp16yi3zxb";
+      hash = "sha256-q/8RvQl3ubjDssP8Kg290tONoklWhphxD+wQAtQlG/U=";
     };
     propagatedBuildInputs = [ CryptOpenSSLRSA MailAuthenticationResults MailTools NetDNS ];
     doCheck = false; # tries to access the domain name system
@@ -14192,7 +14192,7 @@ let
     version = "3.42";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PL/PLOBBES/Mail-IMAPClient-3.42.tar.gz";
-      sha256 = "0znf035ikaxyfishv507qq6g691xvbnziqlcwfikkj2l1kan88hw";
+      hash = "sha256-HCJk1QxUyDmj44zi+O3aPSTzDMYHlA11dL6rGcsAzn4=";
     };
     propagatedBuildInputs = [ ParseRecDescent ];
     meta = {
@@ -14206,7 +14206,7 @@ let
     version = "2.19";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SD/SDOWD/Mail-POP3Client-2.19.tar.gz";
-      sha256 = "1142d6247a93cb86b23ed8835553bb2d227ff8213ee2743e4155bb93f47acb59";
+      hash = "sha256-EULWJHqTy4ayPtiDVVO7LSJ/+CE+4nQ+QVW7k/R6y1k=";
     };
     meta = {
       description = "Perl 5 module to talk to a POP3 (RFC1939) server";
@@ -14219,7 +14219,7 @@ let
     version = "0.3";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PD/PDWARREN/Mail-RFC822-Address-0.3.tar.gz";
-      sha256 = "351ef4104ecb675ecae69008243fae8243d1a7e53c681eeb759e7b781684c8a7";
+      hash = "sha256-NR70EE7LZ17K5pAIJD+ugkPRp+U8aB7rdZ57eBaEyKc=";
     };
     meta = {
       description = "Perl extension for validating email addresses according to RFC822";
@@ -14232,7 +14232,7 @@ let
     version = "0.903";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CA/CAPOEIRAB/Mail-Sender-0.903.tar.gz";
-      sha256 = "4413eb49f520a8318151811ccb05a8d542973aada20aa503ad32f9ffc98a39bf";
+      hash = "sha256-RBPrSfUgqDGBUYEcywWo1UKXOq2iCqUDrTL5/8mKOb8=";
     };
     meta = {
       description = "(DEPRECATED) module for sending mails with attachments through an SMTP server";
@@ -14246,7 +14246,7 @@ let
     version = "0.80";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/Mail-Sendmail-0.80.tar.gz";
-      sha256 = "1r38qbkj7jwj8cqy1rnqzkk81psxi08b1aiq392817f3bk5ri2jv";
+      hash = "sha256-W4qYy1zDnYBEGjiqsBCIXd+A5vzY5uAxQ5LLI+fCaOQ=";
     };
     # The test suite simply loads the module and attempts to send an email to
     # the module's author, the latter of which is a) more of an integration
@@ -14268,7 +14268,7 @@ let
     version = "2.9.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JM/JMEHNLE/mail-spf/Mail-SPF-v2.9.0.tar.gz";
-      sha256 = "61cb5915f1c7acc7a931ffc1bfc1291bdfac555e2a46eb2391b995ea9ecb6162";
+      hash = "sha256-YctZFfHHrMepMf/Bv8EpG9+sVV4qRusjkbmV6p7LYWI=";
     };
     # remove this patch patches = [ ../development/perl-modules/Mail-SPF.patch ];
 
@@ -14291,7 +14291,7 @@ let
     version = "2.21";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MARKOV/MailTools-2.21.tar.gz";
-      sha256 = "1js43bp2dnd8n2rv8clsv749166jnyqnc91k4wkkmw5n4rlbvnaa";
+      hash = "sha256-Stm9aCa28DonJzMkZrG30piQyNmaMrSzsKjZJu4aRMs=";
     };
     propagatedBuildInputs = [ TimeDate ];
     meta = {
@@ -14306,7 +14306,7 @@ let
     version = "3.005";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MARKOV/Mail-Transport-3.005.tar.gz";
-      sha256 = "18wna71iyrgn63l7samacvnx2a5ydpcffkg313c8a4jwf0zvkp6h";
+      hash = "sha256-0Ny5P3BcEoXYCONN59htvijR7WaqKn3oMPZlH8NRlqM=";
     };
     propagatedBuildInputs = [ MailMessage ];
     meta = {
@@ -14321,7 +14321,7 @@ let
     version = "0.4";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PT/PTC/Math-Base85-0.4.tar.gz";
-      sha256 = "03cbp5ls98zcj183wjzlzjcrhbc96mw3p1hagzy1yplj1xh5ia4y";
+      hash = "sha256-nqhYYA+SXh/8fwqGO3g1iS2Ymfz0Sz5QkOyjpGm5iw0=";
     };
     meta = {
       description = "Perl extension for base 85 numbers, as referenced by RFC 1924";
@@ -14334,7 +14334,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIKER/Math-Base-Convert-0.11.tar.gz";
-      sha256 = "8c0971355f24c93b79e77ad54a4570090a1a598fcb9b86f5c17eba42f38b40e0";
+      hash = "sha256-jAlxNV8kyTt553rVSkVwCQoaWY/Lm4b1wX66QvOLQOA=";
     };
     meta = {
       description = "Very fast base to base conversion";
@@ -14347,7 +14347,7 @@ let
     version = "1.00";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DS/DSLEWART/Math-Libm-1.00.tar.gz";
-      sha256 = "0xn2a950mzzs5q1c4q98ckysn9dz20x7r35g02zvk35chgr0klxz";
+      hash = "sha256-v9MJ8oOsjLm/AK+MfDoQvyWr/WQoYcICLvr/CkpSwnY=";
     };
     meta = {
       description = "Perl extension for the C math library, libm";
@@ -14360,7 +14360,7 @@ let
     version = "1.005";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DB/DBOOK/Math-Calc-Parser-1.005.tar.gz";
-      sha256 = "afc3eb496ab3a3a301b3437af07e197eb743c06090f0101dacf820302f2b7f75";
+      hash = "sha256-r8PrSWqzo6MBs0N68H4ZfrdDwGCQ8BAdrPggMC8rf3U=";
     };
     buildInputs = [ TestNeeds ];
     meta = {
@@ -14376,7 +14376,7 @@ let
     version = "1.07";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SF/SFINK/Math-Calc-Units-1.07.tar.gz";
-      sha256 = "13wgbxv2fmigdj0vf7nwkq1y2q07jgfj8wdrpqkywfxv4zdwzqv1";
+      hash = "sha256-YePP2ye7O+4nvrlxJN2TB2DhA57cHreBbC9WJ3Zfj48=";
     };
     meta = {
       description = "Human-readable unit-aware calculator";
@@ -14390,7 +14390,7 @@ let
     version = "1.999818";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/Math-BigInt-1.999818.tar.gz";
-      sha256 = "b27634356ce2af9b7c0123ac8395a89a32fb15aeae82fcd39de8156cad278c15";
+      hash = "sha256-snY0NWzir5t8ASOsg5WomjL7Fa6ugvzTnegVbK0njBU=";
     };
     meta = {
       description = "Arbitrary size integer/float math package";
@@ -14403,7 +14403,7 @@ let
     version = "1.6007";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/Math-BigInt-GMP-1.6007.tar.gz";
-      sha256 = "07y0akadx2nm1bsp17v12785s3ni1l5qyqkk4q3pxcyc41nmwwjx";
+      hash = "sha256-XXJebSDMs34HJnNijwsN0Q5d0BFhn3D1CtWK3tRUwB8=";
     };
     buildInputs = [ pkgs.gmp ];
     doCheck = false;
@@ -14421,7 +14421,7 @@ let
     version = "0.19";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/Math-BigInt-Lite-0.19.tar.gz";
-      sha256 = "06hm4vgihxr7m4jrq558phnnxy4am6ifba447j0h4p6jym5h7xih";
+      hash = "sha256-MPYDS/XSXAKBPISo5aKpivhuLbyoFJwlqSd3GN8mFRo=";
     };
     propagatedBuildInputs = [ MathBigInt ];
     meta = {
@@ -14435,7 +14435,7 @@ let
     version = "1.29";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHELDRAKE/Math-Clipper-1.29.tar.gz";
-      sha256 = "14vmz1x8hwnlk239dcsh0n39kd7cd7v5g1iikgbyjvc66gqw89sk";
+      hash = "sha256-UyfE8TOGbenXmzGGV/Zp7LSZhgVQs5aGmNRyiHr4dZM=";
     };
     nativeBuildInputs = [ pkgs.ld-is-cc-hook ];
     buildInputs = [ ExtUtilsCppGuess ExtUtilsTypemapsDefault ExtUtilsXSpp ModuleBuildWithXSpp TestDeep ];
@@ -14450,7 +14450,7 @@ let
     version = "0.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SM/SMUELLER/Math-ConvexHull-MonotoneChain-0.01.tar.gz";
-      sha256 = "1xcl7cz62ydddji9qzs4xsfxss484jqjlj4iixa4aci611cw92r8";
+      hash = "sha256-KIvEWQgmMkVUj5FIKrEkiGjdne5Ef5yibK15YT47lPU=";
     };
     meta = {
       description = "Andrew's monotone chain algorithm for finding a convex hull in 2D";
@@ -14463,7 +14463,7 @@ let
     version = "1.5";
     src = fetchurl {
       url = "mirror://cpan/authors/id/V/VI/VIPUL/Math-Fibonacci-1.5.tar.gz";
-      sha256 = "70a8286e94558df99dc92f52d83e1e20a7b8f7852bcc3a1de7d9e338260b99ba";
+      hash = "sha256-cKgobpRVjfmdyS9S2D4eIKe494UrzDod59njOCYLmbo=";
     };
     meta = {
       description = "This module provides a few functions related to Fibonacci numbers";
@@ -14476,7 +14476,7 @@ let
     version = "2.20";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Math-GMP-2.20.tar.gz";
-      sha256 = "0psmpj3j8cw02b5bzb7qnkd4rcpxm82891rwpdi2hx2jxy0mznhn";
+      hash = "sha256-Ftpfge9SdChiuzyHhASq/bJM2rT4rL/KEoAzJIe8VV8=";
     };
     buildInputs = [ pkgs.gmp AlienGMP ];
     NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
@@ -14492,7 +14492,7 @@ let
     version = "0.48";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SI/SISYPHUS/Math-GMPz-0.48.tar.gz";
-      sha256 = "f4459ed32fb9bb793e2504fd442c515fd468a4a34d2a1f98e46ca41e275c73cb";
+      hash = "sha256-9EWe0y+5u3k+JQT9RCxRX9RopKNNKh+Y5GykHidcc8s=";
     };
     buildInputs = [ pkgs.gmp ];
     NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
@@ -14509,7 +14509,7 @@ let
     version = "1.3";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SA/SAMTREGAR/Math-Geometry-Voronoi-1.3.tar.gz";
-      sha256 = "0b206k2q5cznld45cjhgm0as0clc9hk135ds8qafbkl3k175w1vj";
+      hash = "sha256-cgdeTpiDzuUURrqVESZMjDKgFagPSlZIo/azgsU0QCw=";
     };
     propagatedBuildInputs = [ ClassAccessor ParamsValidate ];
     meta = {
@@ -14523,7 +14523,7 @@ let
     version = "0.22";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SA/SALVA/Math-Int128-0.22.tar.gz";
-      sha256 = "1g0ra7ldv4fz3kqqg45dlrfavi2abfmlhf0py5ank1jk2x0clc56";
+      hash = "sha256-pjDKQBdThmlV8Rc4SKtbSsStXKatkIfxHN+R3ehRGbw=";
     };
     propagatedBuildInputs = [ MathInt64 ];
     meta = {
@@ -14539,7 +14539,7 @@ let
     version = "0.54";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SA/SALVA/Math-Int64-0.54.tar.gz";
-      sha256 = "0lfkc0cry65lnsi28gjyz2kvdkanbhhpc0pyrswsczj3k3k53z6w";
+      hash = "sha256-3PxR5phDfqa5zv4CdiFcVs22p/hePiSitrQYnxlg01E=";
     };
     meta = {
       description = "Manipulate 64 bits integers in Perl";
@@ -14555,7 +14555,7 @@ let
     pariversion = "2.1.7";
     pari_tgz = fetchurl {
       url = "https://pari.math.u-bordeaux.fr/pub/pari/OLD/2.1/pari-${pariversion}.tgz";
-      sha256 = "1yjml5z1qdn258qh6329v7vib2gyx6q2np0s5ybci0rhmz6z4hli";
+      hash = "sha256-kULyza8wg8iWLxpcK7Dp/okV99lJDAMxKsI2HH6hVfo=";
     };
     # Workaround build failure on -fno-common toolchains:
     #   ld: libPARI/libPARI.a(compat.o):(.bss+0x8): multiple definition of
@@ -14565,7 +14565,7 @@ let
     makeMakerFlags = "pari_tgz=pari-${pariversion}.tgz";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IL/ILYAZ/modules/Math-Pari-2.030518.zip";
-      sha256 = "dc38955a9690be6bafa8de2526212377c3ec9fe8da5ec02263a9caf94b58bb91";
+      hash = "sha256-3DiVWpaQvmuvqN4lJiEjd8Psn+jaXsAiY6nK+UtYu5E=";
     };
     meta = {
       description = "Perl interface to PARI";
@@ -14578,7 +14578,7 @@ let
     version = "129";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KR/KRYDE/Math-PlanePath-129.tar.gz";
-      sha256 = "0zirgq9n422wc1j95pijkr88wwmzhll5nxh3sb2vcxsh9l75v8cd";
+      hash = "sha256-jaFdDk1Qd7bF0gN2WyiFv3KOUJ4y3pJkYFwIYhN+OX4=";
     };
     propagatedBuildInputs = [ MathLibm constant-defer ];
     buildInputs = [ DataFloat MathBigIntLite NumberFraction ];
@@ -14593,7 +14593,7 @@ let
     version = "0.73";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DANAJ/Math-Prime-Util-0.73.tar.gz";
-      sha256 = "4afa6dd8cdb97499bd4eca6925861812c29d9f5a0f1ac27ad9d2d9c9b5602894";
+      hash = "sha256-Svpt2M25dJm9TsppJYYYEsKdn1oPGsJ62dLZybVgKJQ=";
     };
     propagatedBuildInputs = [ MathPrimeUtilGMP ];
     buildInputs = [ TestWarn ];
@@ -14610,7 +14610,7 @@ let
     version = "0.52";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DANAJ/Math-Prime-Util-GMP-0.52.tar.gz";
-      sha256 = "2697c7fd5c7e35fdec7f50ed56a67be807a2f22657589e637dad3592744003be";
+      hash = "sha256-JpfH/Vx+Nf3sf1DtVqZ76Aei8iZXWJ5jfa01knRAA74=";
     };
     buildInputs = [ pkgs.gmp ];
     NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
@@ -14628,7 +14628,7 @@ let
     version = "0.045";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FE/FELIPE/Math-ProvablePrime-0.045.tar.gz";
-      sha256 = "32dce42861ce065a875a91ec14c6557e89af07df10cc450d1c4ded13dcbe3dd5";
+      hash = "sha256-MtzkKGHOBlqHWpHsFMZVfomvB98QzEUNHE3tE9y+PdU=";
     };
     buildInputs = [ FileWhich TestClass TestDeep TestException TestNoWarnings ];
     propagatedBuildInputs = [ BytesRandomSecureTiny ];
@@ -14644,7 +14644,7 @@ let
     version = "0.72";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GR/GROMMEL/Math-Random-0.72.tar.gz";
-      sha256 = "0k15pk2qx9wrp5xqzhymm1ph4nb314ysrsyr0pjnvn8ii0r241dy";
+      hash = "sha256-vgUiMogR2W3lBdnrrD0JY1kCb6jVw497uZmnjsW8JUw=";
     };
     meta = {
       description = "Random Number Generators";
@@ -14657,7 +14657,7 @@ let
     version = "1.004";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JA/JAWNSY/Math-Random-ISAAC-1.004.tar.gz";
-      sha256 = "0z1b3xbb3xz71h25fg6jgsccra7migq7s0vawx2rfzi0pwpz0wr7";
+      hash = "sha256-J3PwL78gfpdF52oDffCL9ajMmH7SPFcEDOf3sVYfK3w=";
     };
     buildInputs = [ TestNoWarnings ];
     meta = {
@@ -14672,7 +14672,7 @@ let
     version = "6.23";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JD/JDHEDDEN/Math-Random-MT-Auto-6.23.tar.gz";
-      sha256 = "04v3fxbqg6bs7dpljw64v62jqb10l2xdrln4l3slz5k266nvbg2q";
+      hash = "sha256-WLy1rTFilk/1oMTS3LqgICwshdnEcElvO3qZh1d3YxM=";
     };
     propagatedBuildInputs = [ ObjectInsideOut ];
     meta = {
@@ -14686,7 +14686,7 @@ let
     version = "0.080001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FR/FREW/Math-Random-Secure-0.080001.tar.gz";
-      sha256 = "0dgbf4ncll4kmgkyb9fsaxn0vf2smc9dmwqzgh3259zc2zla995z";
+      hash = "sha256-v6Sk6BfspyIGfB/z2hKrWrgNbFfapeXnq5NQyixx6zU=";
     };
     buildInputs = [ ListMoreUtils TestSharedFork TestWarn ];
     propagatedBuildInputs = [ CryptRandomSource MathRandomISAAC ];
@@ -14702,7 +14702,7 @@ let
     version = "0.07";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GR/GROMMEL/Math-Round-0.07.tar.gz";
-      sha256 = "09wkvqj4hfq9y0fimri967rmhnq90dc2wf20lhlmqjp5hsd359vk";
+      hash = "sha256-c6cymoblSlwppEA4LlgDCVtY8zEp5hod8Ak7SCTekyc=";
     };
     meta = {
       description = "Perl extension for rounding numbers";
@@ -14715,7 +14715,7 @@ let
     version = "0.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AS/ASPINELLI/Math-VecStat-0.08.tar.gz";
-      sha256 = "03bdcl9pn2bc9b50c50nhnr7m9wafylnb3v21zlch98h9c78x6j0";
+      hash = "sha256-QJqODksQJcjoD2KPZal3iqd6soUWFAbKSmwJexNlbQ0=";
     };
     meta = {
       description = "Some basic numeric stats on vectors";
@@ -14728,7 +14728,7 @@ let
     version = "0.040001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MAXMIND/MaxMind-DB-Common-0.040001.tar.gz";
-      sha256 = "1mqvnabskhyvi2f10f602gisfk39ws51ky55lixd0033sd5xzikb";
+      hash = "sha256-a8bfS9NjANB6pKX4GYrmaUyn4xPAOBCciNvDqZeyG9c=";
     };
     propagatedBuildInputs = [ DataDumperConcise DateTime ListAllUtils MooXStrictConstructor ];
     meta = {
@@ -14743,7 +14743,7 @@ let
     version = "1.000014";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MAXMIND/MaxMind-DB-Reader-1.000014.tar.gz";
-      sha256 = "1a9rrvarw3q6378w3sqv632w36a9bsh0r90yfa49lzwnkj7hf81q";
+      hash = "sha256-OCAHj5yWf5qIch6kDKBeSZnBxTAb68HRGQYPntXOOak=";
     };
     propagatedBuildInputs = [ DataIEEE754 DataPrinter DataValidateIP MaxMindDBCommon ];
     buildInputs = [ PathClass TestBits TestFatal TestNumberDelta TestRequires ];
@@ -14759,7 +14759,7 @@ let
     version = "1.000008";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MAXMIND/MaxMind-DB-Reader-XS-1.000008.tar.gz";
-      sha256 = "11y71m77y38mi68gw5dqx54z9syvax42x3m9v7mgx35c5z4gpal4";
+      hash = "sha256-hKr7yC+sjP7q2amOLkhX2+v0Sem4Ff6QiRUNf04Nx4c=";
     };
     propagatedBuildInputs = [ pkgs.libmaxminddb MathInt128 MaxMindDBReader ];
     buildInputs = [ NetWorks PathClass TestFatal TestNumberDelta TestRequires ];
@@ -14776,7 +14776,7 @@ let
     version = "0.300003";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MAXMIND/MaxMind-DB-Writer-0.300003.tar.gz";
-      sha256 = "0gpbrlmxjl45k0wg5v9ghw415hd0fns9fk8ncxzlfyjzjsxgalxs";
+      hash = "sha256-ulP1upZfekd/ZxZNl7R1oMESCIcv7fI4mIVQ2SvN6z4=";
     };
     propagatedBuildInputs = [ DigestSHA1 MaxMindDBReader MooseXParamsValidate MooseXStrictConstructor NetWorks SerealDecoder SerealEncoder ];
     buildInputs = [ DevelRefcount JSON TestBits TestDeep TestFatal TestHexDifferences TestRequires TestWarnings ];
@@ -14794,7 +14794,7 @@ let
     version = "1.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MJ/MJD/Memoize-1.03.tgz";
-      sha256 = "5239cc5f644a50b0de9ffeaa51fa9991eb06ecb1bf4678873e3ab89af9c0daf3";
+      hash = "sha256-UjnMX2RKULDen/6qUfqZkesG7LG/RniHPjq4mvnA2vM=";
     };
     meta = {
       description = "Make functions faster by trading space for time";
@@ -14807,7 +14807,7 @@ let
     version = "0.56";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/Memoize-ExpireLRU-0.56.tar.gz";
-      sha256 = "1xnp3jqabl4il5kfadlqimbxhzsbm7gpwrgw0m5s5fdsrc0n70zf";
+      hash = "sha256-7oNjAcu6uaJLBfxlft+pS3/YV42YNuVmoZHQpbAc1/Y=";
     };
     meta = {
       description = "Expiry plug-in for Memoize that adds LRU cache expiration";
@@ -14821,7 +14821,7 @@ let
     version = "1.9019";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Menlo-1.9019.tar.gz";
-      sha256 = "3b573f68e7b3a36a87c860be258599330fac248b518854dfb5657ac483dca565";
+      hash = "sha256-O1c/aOezo2qHyGC+JYWZMw+sJItRiFTftWV6xIPcpWU=";
     };
     propagatedBuildInputs = [ CPANCommonIndex CPANMetaCheck CaptureTiny ExtUtilsHelpers ExtUtilsInstallPaths Filepushd HTTPTinyish ModuleCPANfile ParsePMFile StringShellQuote Win32ShellQuote locallib ];
     meta = {
@@ -14836,7 +14836,7 @@ let
     version = "1.9022";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Menlo-Legacy-1.9022.tar.gz";
-      sha256 = "a6acac3fee318a804b439de54acbc7c27f0b44cfdad8551bbc9cd45986abc201";
+      hash = "sha256-pqysP+4xioBLQ53lSsvHwn8LRM/a2FUbvJzUWYarwgE=";
     };
     propagatedBuildInputs = [ Menlo ];
     meta = {
@@ -14851,7 +14851,7 @@ let
     version = "0.004";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EX/EXODIST/Meta-Builder-0.004.tar.gz";
-      sha256 = "acb499aa7206eb9db21eb85357a74521bfe3bdae4a6416d50a7c75b939cf56fe";
+      hash = "sha256-rLSZqnIG652yHrhTV6dFIb/jva5KZBbVCnx1uTnPVv4=";
     };
     buildInputs = [ FennecLite TestException ];
     meta = {
@@ -14865,7 +14865,7 @@ let
     version = "2.029000";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MICKEY/MetaCPAN-Client-2.029000.tar.gz";
-      sha256 = "0z75qzrr6r9ijp469majavq8la2jbgn1dq02vdm5m6ip7f887n65";
+      hash = "sha256-xdiDkDs3mlpq2wLgFuxbUiiK8FZS1WTIlTFlk/PH5Xw=";
     };
 
     # Most tests are online, so we only include offline tests
@@ -14890,7 +14890,7 @@ let
     version = "1.07";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RH/RHESA/Method-Signatures-Simple-1.07.tar.gz";
-      sha256 = "1p6sf6iyyn73pc89mfr65bzxvbw1ibcsp4j10iv8ik3p353pvkf8";
+      hash = "sha256-yM19Rxl3zIh2BEGSq9mKga/d/yomu5oQu+NY76Nx2tw=";
     };
     propagatedBuildInputs = [ DevelDeclare ];
     meta = {
@@ -14904,7 +14904,7 @@ let
     version = "0.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/Metrics-Any-0.06.tar.gz";
-      sha256 = "0dwqzd40f6isb2sxn7lymsp0ism7s4xwfhb2ilavnxx2x3w9sllw";
+      hash = "sha256-nFKd+Oiid7sVjWJBxzvRp+oIrq6eHtu1WDoaB0j7mDc=";
     };
     buildInputs = [ TestFatal ];
     meta = {
@@ -14920,7 +14920,7 @@ let
 
     src = fetchurl {
       url = "https://www.mhonarc.org/release/MHonArc/tar/MHonArc-${version}.tar.gz";
-      sha256 = "0ll3v93yji334zqp6xfzfxc0127pmjcznmai1l5q6dzawrs2igzq";
+      hash = "sha256-+L8odObqN4MLDVFV+5ms94gAWHffdXPxJ2NE6Ufag1I=";
     };
 
     patches = [ ../development/perl-modules/mhonarc.patch ];
@@ -14942,7 +14942,7 @@ let
     version = "1.012.2";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEZUMI/MIME-Charset-1.012.2.tar.gz";
-      sha256 = "878c779c0256c591666bd06c0cde4c0d7820eeeb98fd1183082aee9a1e7b1d13";
+      hash = "sha256-h4x3nAJWxZFma9BsDN5MDXgg7uuY/RGDCCrumh57HRM=";
     };
     meta = {
       description = "Charset Information for MIME";
@@ -14955,7 +14955,7 @@ let
     version = "1.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RO/ROSCH/mime-construct-1.11.tar.gz";
-      sha256 = "00wk9950i9q6qwp1vdq9xdddgk54lqd0bhcq2hnijh8xnmhvpmsc";
+      hash = "sha256-TNe7YbUdQRktFJjBBRqmpMzXWusJtx0uxwanCEpKkwM=";
     };
     outputs = [ "out" ];
     buildInputs = [ ProcWaitStat ];
@@ -14970,7 +14970,7 @@ let
     version = "1.014.3";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEZUMI/MIME-EncWords-1.014.3.tar.gz";
-      sha256 = "e9afb548611d4e7e6c50b7f06bbd2b1bb2808e37a810deefb537c67af5485238";
+      hash = "sha256-6a+1SGEdTn5sULfwa70rG7KAjjeoEN7vtTfGevVIUjg=";
     };
     propagatedBuildInputs = [ MIMECharset ];
     meta = {
@@ -14986,7 +14986,7 @@ let
     version = "3.031";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/MIME-Lite-3.031.tar.gz";
-      sha256 = "f1235866482b67f00858b3edaa4ff4cf909ef900f1d15d889948bf9c03a591e0";
+      hash = "sha256-8SNYZkgrZ/AIWLPtqk/0z5Ce+QDx0V2ImUi/nAOlkeA=";
     };
     propagatedBuildInputs = [ EmailDateFormat ];
     meta = {
@@ -15000,7 +15000,7 @@ let
     version = "1.24";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AL/ALIAN/MIME-Lite-HTML-1.24.tar.gz";
-      sha256 = "db603ccbf6653bcd28cfa824d72e511ead019fc8afb9f1854ec872db2d3cd8da";
+      hash = "sha256-22A8y/ZlO80oz6gk1y5RHq0Bn8ivufGFTshy2y082No=";
     };
     doCheck = false;
     propagatedBuildInputs = [ LWP MIMELite ];
@@ -15015,7 +15015,7 @@ let
     version = "5.509";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DS/DSKOLL/MIME-tools-5.509.tar.gz";
-      sha256 = "0wv9rzx5j1wjm01c3dg48qk9wlbm6iyf91j536idk09xj869ymv4";
+      hash = "sha256-ZFefDJI9gdmiGUWG5Hw0dVGeJkbktcECqJIHWfrPaXM=";
     };
     propagatedBuildInputs = [ MailTools ];
     buildInputs = [ TestDeep ];
@@ -15030,7 +15030,7 @@ let
     version = "2.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MARKOV/MIME-Types-2.18.tar.gz";
-      sha256 = "1glml03gyj5xkadn3vcxzm06bvi343j1jg6ksz69is9a3yj3bjii";
+      hash = "sha256-Mco1pB8q6ZjM19M8GeQgI+5lQP2d7WGbmr1I/waglb4=";
     };
     meta = {
       description = "Definition of MIME types";
@@ -15044,7 +15044,7 @@ let
     version = "10.25";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SR/SRI/Minion-10.25.tar.gz";
-      sha256 = "sha256-C+CoN1N2iJ2gRgRpY4TAz5iyYh0mUNnrAwf25LlAra0=";
+      hash = "sha256-C+CoN1N2iJ2gRgRpY4TAz5iyYh0mUNnrAwf25LlAra0=";
     };
     propagatedBuildInputs = [ Mojolicious YAMLLibYAML ];
     meta = {
@@ -15060,7 +15060,7 @@ let
     version = "5.0.6";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DB/DBOOK/Minion-Backend-SQLite-v5.0.6.tar.gz";
-      sha256 = "sha256-/uDUEe9WsAkru8BTN5InaH3hQZUoy2t0T3U9vcH7FNk=";
+      hash = "sha256-/uDUEe9WsAkru8BTN5InaH3hQZUoy2t0T3U9vcH7FNk=";
     };
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [ Minion MojoSQLite ];
@@ -15077,7 +15077,7 @@ let
     version = "1.000";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PR/PREACTION/Minion-Backend-mysql-1.000.tar.gz";
-      sha256 = "sha256-cGS+CHHxmbSwTl1yQprfNbLkr2qHGorM0Mm1wqP9E00=";
+      hash = "sha256-cGS+CHHxmbSwTl1yQprfNbLkr2qHGorM0Mm1wqP9E00=";
     };
     buildInputs = [ Testmysqld ];
     propagatedBuildInputs = [ Minion Mojomysql ];
@@ -15094,7 +15094,7 @@ let
     version = "0.108";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Mixin-Linewise-0.108.tar.gz";
-      sha256 = "7df20678474c0973930a472b0c55e3f8e85b7790b68ab18ef618f9c453c8aef2";
+      hash = "sha256-ffIGeEdMCXOTCkcrDFXj+Ohbd5C2irGO9hj5xFPIrvI=";
     };
     propagatedBuildInputs = [ PerlIOutf8_strict SubExporter ];
     meta = {
@@ -15109,7 +15109,7 @@ let
     version = "2.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CH/CHORNY/MLDBM-2.05.tar.gz";
-      sha256 = "586880ed0c20801abbf6734747e13e0203edefece6ebc4f20ddb5059f02a17a2";
+      hash = "sha256-WGiA7QwggBq79nNHR+E+AgPt7+zm68TyDdtQWfAqF6I=";
     };
     meta = {
       description = "Store multi-level Perl hash structure in single level tied hash";
@@ -15124,7 +15124,7 @@ let
     version = "0.40";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TI/TINITA/Mo-0.40.tar.gz";
-      sha256 = "1fff81awg9agfawf3wxx0gpf6vgav8w920rmxsbjg30z75943lli";
+      hash = "sha256-kdJBUjkfjCeX7jUDkTja6m3j7gO98+G4ck+lx1VAzrk=";
     };
     meta = {
       description = "Micro Objects. Mo is less";
@@ -15139,7 +15139,7 @@ let
     version = "0.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RU/RURBAN/Mock-Config-0.03.tar.gz";
-      sha256 = "06q0xkg5cwdwafzmb9rkaa305ddv7vli9gpm6n9jnkyaaxbk9f55";
+      hash = "sha256-pbg0V1fKTyuTNfW+FOk+u7UChlIzp1W/U7xxVt7sABs=";
     };
     meta = {
       description = "Temporarily set Config or XSConfig values";
@@ -15153,7 +15153,7 @@ let
 
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CH/CHROMATIC/Modern-Perl-1.20200211.tar.gz";
-      sha256 = "da1c83cee84fab9edb9e31d7f7abac43e1337b2e66015191ec4b6da59298c480";
+      hash = "sha256-2hyDzuhPq57bnjHX96usQ+Ezey5mAVGR7EttpZKYxIA=";
     };
     meta = {
       description = "Enable all of the features of Modern Perl with one import";
@@ -15167,7 +15167,7 @@ let
     version = "0.002";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SK/SKAJI/Module-cpmfile-0.002.tar.gz";
-      sha256 = "18dxc5wgds1way0dvd6dx5rhc2siyaa38nhpy4gb5v7ldnj3yjc8";
+      hash = "sha256-iEk/pG307LIe8RdaNJTyUQsGc+nNtN2AVzzo9nhhvaE=";
     };
     buildInputs = [ ModuleBuildTiny ModuleCPANfile Test2Suite ];
     propagatedBuildInputs = [ YAMLPP ];
@@ -15184,7 +15184,7 @@ let
     version = "0.4231";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEONT/Module-Build-0.4231.tar.gz";
-      sha256 = "05xpn8qg814y49vrih16zfr9iiwb7pmdf57ahjnc2h0p5illq3vy";
+      hash = "sha256-fg9MaSwXQMGshOoU1+o9i8eYsvsmwJh3Ip4E9DCytxc=";
     };
     meta = {
       description = "Build and install Perl modules";
@@ -15198,7 +15198,7 @@ let
     version = "0.4210";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEONT/Module-Build-Deprecated-0.4210.tar.gz";
-      sha256 = "be089313fc238ee2183473aca8c86b55fb3cf44797312cbe9b892d6362621703";
+      hash = "sha256-vgiTE/wjjuIYNHOsqMhrVfs89EeXMSy+m4ktY2JiFwM=";
     };
     doCheck = false;
     meta = {
@@ -15212,7 +15212,7 @@ let
     version = "0.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/Module-Build-Pluggable-0.10.tar.gz";
-      sha256 = "e5bb2acb117792c984628812acb0fec376cb970caee8ede57535e04d762b0e40";
+      hash = "sha256-5bsqyxF3ksmEYogSrLD+w3bLlwyu6O3ldTXgTXYrDkA=";
     };
     propagatedBuildInputs = [ ClassAccessorLite ClassMethodModifiers DataOptList ];
     buildInputs = [ TestSharedFork ];
@@ -15228,7 +15228,7 @@ let
     version = "0.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KA/KAZEBURO/Module-Build-Pluggable-CPANfile-0.05.tar.gz";
-      sha256 = "4aec6cba240cb6e78016406b6a3a875634cc2aec08ffc5f1572da1cdc40e1e7c";
+      hash = "sha256-SuxsuiQMtueAFkBrajqHVjTMKuwI/8XxVy2hzcQOHnw=";
     };
     buildInputs = [ CaptureTiny TestRequires TestSharedFork ];
     propagatedBuildInputs = [ ModuleBuildPluggable ModuleCPANfile ];
@@ -15244,7 +15244,7 @@ let
     version = "0.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/Module-Build-Pluggable-PPPort-0.04.tar.gz";
-      sha256 = "44084ba3d8815f343bd391585ac5d8339a4807ce5c0dd84c98db8f310b64c0ea";
+      hash = "sha256-RAhLo9iBXzQ705FYWsXYM5pIB85cDdhMmNuPMQtkwOo=";
     };
     buildInputs = [ TestRequires TestSharedFork ];
     propagatedBuildInputs = [ ModuleBuildPluggable ];
@@ -15259,7 +15259,7 @@ let
     version = "0.039";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEONT/Module-Build-Tiny-0.039.tar.gz";
-      sha256 = "7d580ff6ace0cbe555bf36b86dc8ea232581530cbeaaea09bccb57b55797f11c";
+      hash = "sha256-fVgP9qzgy+VVvza4bcjqIyWBUwy+quoJvMtXtVeX8Rw=";
     };
     buildInputs = [ FileShareDir ];
     propagatedBuildInputs = [ ExtUtilsHelpers ExtUtilsInstallPaths ];
@@ -15274,7 +15274,7 @@ let
     version = "0.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SM/SMUELLER/Module-Build-WithXSpp-0.14.tar.gz";
-      sha256 = "0d39fjg9c0n820bk3fb50vvlwhdny4hdl69xmlyzql5xzp4cicsk";
+      hash = "sha256-U7PIyP29UPw9rT0Z2iDxtkFO9wZluTEXEMgClp50aTQ=";
     };
     propagatedBuildInputs = [ ExtUtilsCppGuess ExtUtilsXSpp ];
     meta = {
@@ -15288,7 +15288,7 @@ let
     version = "0.19";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HI/HIDEAKIO/Module-Build-XSUtil-0.19.tar.gz";
-      sha256 = "004ly9xxjlsbrr2vhxsa1n84z3034gxrzr7z0wl45szd8v1v6qwh";
+      hash = "sha256-kGOzw0bt60IoB//kn/sjA4xPkA1Kd7hFzktT2XvylAA=";
     };
     buildInputs = [ CaptureTiny CwdGuard FileCopyRecursiveReduced ];
     propagatedBuildInputs = [ DevelCheckCompiler ];
@@ -15305,7 +15305,7 @@ let
     version = "0.38";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IN/INGY/Module-Compile-0.38.tar.gz";
-      sha256 = "8090cfbb61123437eefec3e3bed86005d1f7c5a529fb6fda2ebebc6564b9aa10";
+      hash = "sha256-gJDPu2ESNDfu/sPjvthgBdH3xaUp+2/aLr68ZWS5qhA=";
     };
     propagatedBuildInputs = [ CaptureTiny DigestSHA1 ];
     meta = {
@@ -15320,7 +15320,7 @@ let
     version = "1.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/Module-CPANTS-Analyse-1.01.tar.gz";
-      sha256 = "0jf83v9ylw7s9i2zv0l1v11gafp3k4389asc52r6s6q5s2j0p6dx";
+      hash = "sha256-vZkLpNAFG22yKEyrhAaZ4zr1QtiBgv1FTPpw6tMeyEk=";
     };
     propagatedBuildInputs = [ ArchiveAnyLite ArrayDiff DataBinary FileFindObject PerlPrereqScannerNotQuiteLite SoftwareLicense ];
     buildInputs = [ ExtUtilsMakeMakerCPANfile TestFailWarnings ];
@@ -15336,7 +15336,7 @@ let
     version = "1.1004";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Module-CPANfile-1.1004.tar.gz";
-      sha256 = "08a9a5mybf0llwlfvk7n0q7az6lrrzgzwc3432mcwbb4k8pbxvw8";
+      hash = "sha256-iO++LppkLc6qGGQw/t/PmZqvDgb2zO0opxS45WtRSSE=";
     };
     buildInputs = [ Filepushd ];
     meta = {
@@ -15351,7 +15351,7 @@ let
     version = "0.343";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DO/DOMM/Module-ExtractUse-0.343.tar.gz";
-      sha256 = "00hcggwnqk953s4zbvkcabd5mfidg60hawlqsw6146in91dlclj8";
+      hash = "sha256-SFJGW0g2GhIM15hyBYF5Lbpa2lJs7vWJHiVNbPl7DAI=";
     };
     propagatedBuildInputs = [ ParseRecDescent PodStrip ];
     buildInputs = [ TestDeep TestNoWarnings ];
@@ -15366,7 +15366,7 @@ let
     version = "0.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CR/CRENZ/Module-Find-0.15.tar.gz";
-      sha256 = "0pm8v398rv4sy7sn7zzfbq4szxw6p1q4963ancsi17iyzskq4m2w";
+      hash = "sha256-XFSCp/4+nhA1s2qYRHC4hvevCV7u/2P18ZrsjNLYqF4=";
     };
     meta = {
       description = "Find and use installed modules in a (sub)category";
@@ -15379,7 +15379,7 @@ let
     version = "0.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/Module-Implementation-0.09.tar.gz";
-      sha256 = "0vfngw4dbryihqhi7g9ks360hyw8wnpy3hpkzyg0q4y2y091lpy1";
+      hash = "sha256-wV8aEvDCEwye//PC4a/liHsIzNAzvRMhhtHn1Qh/1m0=";
     };
     buildInputs = [ TestFatal TestRequires ];
     propagatedBuildInputs = [ ModuleRuntime TryTiny ];
@@ -15395,7 +15395,7 @@ let
     version = "0.37";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/Module-Info-0.37.tar.gz";
-      sha256 = "0j143hqxgdkdpj5qssppq72gjr0n73c4f7is6wgrrcchjx905a4f";
+      hash = "sha256-jqgCUpeQsZwfNzoeR9g4FmT5xMH3ao2LvG221zEcJEg=";
     };
     buildInputs = [ TestPod TestPodCoverage ];
     propagatedBuildInputs = [ BUtils ];
@@ -15411,7 +15411,7 @@ let
     version = "1.19";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Module-Install-1.19.tar.gz";
-      sha256 = "06q12cm97yh4p7qbm0a2p96996ii6ss59qy57z0f7f9svy6sflqs";
+      hash = "sha256-GlOnjd86uePAP8XjVLQ2MZqUTLpCgbrwuQT6kyoTARs=";
     };
     propagatedBuildInputs = [ FileRemove ModuleBuild ModuleScanDeps YAMLTiny ];
     meta = {
@@ -15425,7 +15425,7 @@ let
     version = "0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FL/FLORA/Module-Install-AuthorRequires-0.02.tar.gz";
-      sha256 = "1v2ciw75dj5y8lh10d1vrhwmjx266gpqavr8m21jlpblgm9j2qyc";
+      hash = "sha256-zGMhU310XSqDqChvhe8zRnRZOcw7NBAgRb7IVg6PTOw=";
     };
     propagatedBuildInputs = [ ModuleInstall ];
     meta = {
@@ -15439,7 +15439,7 @@ let
     version = "0.002";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Module-Install-AuthorTests-0.002.tar.gz";
-      sha256 = "121dyggy38316xss06v1zkwx4b59gl7b00c5q99xyzimwqnp49a0";
+      hash = "sha256-QCVyLeY1ft9TwoUBsA59qSzS+fxhG6B1N2Gg4d/zLYg=";
     };
     propagatedBuildInputs = [ ModuleInstall ];
     meta = {
@@ -15453,7 +15453,7 @@ let
     version = "0.30";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BINGOS/Module-Install-GithubMeta-0.30.tar.gz";
-      sha256 = "2ead44c973c748d72d9f199e41c44dc1801fe9ae06b0fadc59447693a3c98281";
+      hash = "sha256-Lq1EyXPHSNctnxmeQcRNwYAf6a4GsPrcWUR2k6PJgoE=";
     };
     buildInputs = [ CaptureTiny ];
     propagatedBuildInputs = [ ModuleInstall ];
@@ -15470,7 +15470,7 @@ let
     version = "0.30";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BINGOS/Module-Install-ReadmeFromPod-0.30.tar.gz";
-      sha256 = "79f6df5536619faffbda696bdd25ccad17c469bf32e51cd3e613366d49400169";
+      hash = "sha256-efbfVTZhn6/72mlr3SXMrRfEab8y5RzT5hM2bUlAAWk=";
     };
     buildInputs = [ TestInDistDir ];
     propagatedBuildInputs = [ CaptureTiny IOAll ModuleInstall PodMarkdown ];
@@ -15487,7 +15487,7 @@ let
     version = "0.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MATTN/Module-Install-ReadmeMarkdownFromPod-0.04.tar.gz";
-      sha256 = "300b2e244f83b9a54a95f8404c1cd3af0635b4fae974ca65390ee428ec668591";
+      hash = "sha256-MAsuJE+DuaVKlfhATBzTrwY1tPrpdMplOQ7kKOxmhZE=";
     };
     buildInputs = [ URI ];
     propagatedBuildInputs = [ ModuleInstall PodMarkdown ];
@@ -15504,7 +15504,7 @@ let
     version = "0.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Module-Install-Repository-0.06.tar.gz";
-      sha256 = "00e2590d09339ccccbdaa328d12ad8ec77e831a38c9ad663705e59ecbb18722b";
+      hash = "sha256-AOJZDQkznMzL2qMo0SrY7HfoMaOMmtZjcF5Z7LsYcis=";
     };
     buildInputs = [ PathClass ];
     meta = {
@@ -15519,7 +15519,7 @@ let
     version = "0.45";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GF/GFUJI/Module-Install-XSUtil-0.45.tar.gz";
-      sha256 = "fe71e53320bee13197749a0b17609aa263f71ff46e5e2c130e94742ea6abdf56";
+      hash = "sha256-/nHlMyC+4TGXdJoLF2CaomP3H/RuXiwTDpR0Lqar31Y=";
     };
     buildInputs = [ BHooksOPAnnotation ];
     propagatedBuildInputs = [ ModuleInstall ];
@@ -15534,7 +15534,7 @@ let
     version = "1.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Module-Manifest-1.09.tar.gz";
-      sha256 = "a395f80ff15ea0e66fd6c453844b6787ed4a875a3cd8df9f7e29280250bd539b";
+      hash = "sha256-o5X4D/FeoOZv1sRThEtnh+1Kh1o82N+ffikoAlC9U5s=";
     };
     buildInputs = [ TestException TestWarn ];
     propagatedBuildInputs = [ ParamsUtil ];
@@ -15550,7 +15550,7 @@ let
     version = "0.19";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/Module-Path-0.19.tar.gz";
-      sha256 = "b33179ce4dd73dfcde7d46808804b9ffbb11db0245fe455a7d001747562feaca";
+      hash = "sha256-szF5zk3XPfzefUaAiAS5/7sR2wJF/kVafQAXR1Yv6so=";
     };
     buildInputs = [ DevelFindPerl ];
     meta = {
@@ -15566,7 +15566,7 @@ let
     version = "5.2";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SI/SIMONW/Module-Pluggable-5.2.tar.gz";
-      sha256 = "b3f2ad45e4fd10b3fb90d912d78d8b795ab295480db56dc64e86b9fa75c5a6df";
+      hash = "sha256-s/KtReT9ELP7kNkS142LeVqylUgNtW3GToa5+nXFpt8=";
     };
     patches = [
       # !!! merge this patch into Perl itself (which contains Module::Pluggable as well)
@@ -15584,7 +15584,7 @@ let
     version = "0.19";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MR/MRAMBERG/Module-Pluggable-Fast-0.19.tar.gz";
-      sha256 = "0pq758wlasmh77xyd2xh75m5b2x14s8pnsv63g5356gib1q5gj08";
+      hash = "sha256-CMhXcFjxmTLKG2Zre5EmoYtVajmwi+b7ObBqRTkqB18=";
     };
     propagatedBuildInputs = [ UNIVERSALrequire ];
     meta = {
@@ -15598,7 +15598,7 @@ let
     version = "0.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AL/ALEXMV/Module-Refresh-0.17.tar.gz";
-      sha256 = "6b30a6ceddc6512ab4490c16372ecf309a259f2ca147d622e478ac54e08511c3";
+      hash = "sha256-azCmzt3GUSq0SQwWNy7PMJolnyyhR9Yi5HisVOCFEcM=";
     };
     buildInputs = [ PathClass ];
     meta = {
@@ -15612,7 +15612,7 @@ let
     version = "0.016";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Module-Runtime-0.016.tar.gz";
-      sha256 = "097hy2czwkxlppri32m599ph0xfvfsbf0a5y23a4fdc38v32wc38";
+      hash = "sha256-aDAuxkaDNUfUEL4o4JZ223UAb0qlihHzvbRP/pnw8CQ=";
     };
     meta = {
       description = "Runtime module handling";
@@ -15625,7 +15625,7 @@ let
     version = "0.003";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Module-Runtime-Conflicts-0.003.tar.gz";
-      sha256 = "707cdc75038c70fe91779b888ac050f128565d3967ba96680e1b1c7cc9733875";
+      hash = "sha256-cHzcdQOMcP6Rd5uIisBQ8ShWXTlnupZoDhscfMlzOHU=";
     };
     propagatedBuildInputs = [ DistCheckConflicts ];
     meta = {
@@ -15640,7 +15640,7 @@ let
     version = "1.29";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RS/RSCHUPP/Module-ScanDeps-1.29.tar.gz";
-      sha256 = "0kl8p0006j52vq4bd59fyv7pm3yyv0h7pwaalrkn4brs6n8wxc7f";
+      hash = "sha256-7rDOkTU6L2JnpkrxeyDY3o96z/YulbYI3qJIAwC4iE4=";
     };
     buildInputs = [ TestRequires ];
     meta = {
@@ -15655,7 +15655,7 @@ let
     version = "0.87";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AU/AUDREYT/Module-Signature-0.87.tar.gz";
-      sha256 = "214e8055c50fec371a95743520fe26940004e76169063b2b44ec90a0d45d6982";
+      hash = "sha256-IU6AVcUP7DcalXQ1IP4mlAAE52FpBjsrROyQoNRdaYI=";
     };
     buildInputs = [ IPCRun ];
     meta = {
@@ -15670,7 +15670,7 @@ let
     version = "1.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MATTLAW/Module-Util-1.09.tar.gz";
-      sha256 = "6cfbcb6a45064446ec8aa0ee1a7dddc420b54469303344187aef84d2c7f3e2c6";
+      hash = "sha256-bPvLakUGREbsiqDuGn3dxCC1RGkwM0QYeu+E0sfz4sY=";
     };
     meta = {
       description = "Module name tools and transformations";
@@ -15684,7 +15684,7 @@ let
     version = "0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TH/THW/Module-Versions-0.02.zip";
-      sha256 = "0g7qs6vqg91xpwg1cdy91m3kh9m1zbkzyz1qsy453b572xdscf0d";
+      hash = "sha256-DTimWxenrFGI1zh8/+f6oSY4Rw3JNxYevz2kh7fR+Dw=";
     };
     buildInputs = [ pkgs.unzip ];
     meta = {
@@ -15698,7 +15698,7 @@ let
     version = "1.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JE/JESSE/Module-Versions-Report-1.06.tar.gz";
-      sha256 = "a3261d0d84b17678d8c4fd55eb0f892f5144d81ca53ea9a38d75d1a00ad9796a";
+      hash = "sha256-oyYdDYSxdnjYxP1V6w+JL1FE2BylPqmjjXXRoArZeWo=";
     };
     meta = {
       description = "Report versions of all modules in memory";
@@ -15711,7 +15711,7 @@ let
     version = "2.000";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DB/DBOOK/Mojo-DOM58-2.000.tar.gz";
-      sha256 = "1wsy0j6jpd06gc1ay6isyzqh5cdc834g5w0amslqcjgvf4snlk46";
+      hash = "sha256-hkxqNXH7SYaprgrw8shArLEC8fc6Gq8Cewa0K40EXvM=";
     };
     meta = {
       description = "Minimalistic HTML/XML DOM parser with CSS selectors";
@@ -15725,7 +15725,7 @@ let
     version = "2.0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHAY/mod_perl-2.0.11.tar.gz";
-      sha256 = "0x3gq4nz96y202cymgrf56n8spm7bffkd1p74dh9q3zrrlc9wana";
+      hash = "sha256-yiqeGM35D5xgI+eGNp1bp16NrCkuv+qZAMKb9C3Bb3Q=";
     };
 
     patches = [
@@ -15749,7 +15749,7 @@ let
     version = "9.26";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-9.26.tar.gz";
-      sha256 = "sha256-nkKMVRJpjwXhUTONj6Eq7eKHqzpeQp7D04yApKgsjYg=";
+      hash = "sha256-nkKMVRJpjwXhUTONj6Eq7eKHqzpeQp7D04yApKgsjYg=";
     };
     meta = {
       description = "Real-time web framework";
@@ -15765,7 +15765,7 @@ let
     version = "2.13";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-Plugin-AssetPack-2.13.tar.gz";
-      sha256 = "1254yy70c7wv3p64pjyxc2h1p9czs65jm6lzl42qmn1x19i8fggj";
+      hash = "sha256-8j2HYgo92IoFoZ+aKovRn6UboGDdy0vMHZsfBo73pIg=";
     };
     propagatedBuildInputs = [ FileWhich IPCRun3 Mojolicious ];
     meta = {
@@ -15781,7 +15781,7 @@ let
     version = "0.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KO/KOORCHIK/Mojolicious-Plugin-Gravatar-0.04.tar.gz";
-      sha256 = "a49f970c6c70f9930b304a752163cb95f1d998712f79cb13640832e4b7b675dd";
+      hash = "sha256-pJ+XDGxw+ZMLMEp1IWPLlfHZmHEvecsTZAgy5Le2dd0=";
     };
     propagatedBuildInputs = [ Mojolicious ];
     meta = {
@@ -15796,7 +15796,7 @@ let
     version = "1.5";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHARIFULN/Mojolicious-Plugin-Mail-1.5.tar.gz";
-      sha256 = "56f0d341ebc3a7acf3919f5add43e98216ea1285aa0d87e7fb00c02bb0eff146";
+      hash = "sha256-VvDTQevDp6zzkZ9a3UPpghbqEoWqDYfn+wDAK7Dv8UY=";
     };
     propagatedBuildInputs = [ MIMEEncWords MIMELite Mojolicious ];
     meta = {
@@ -15812,7 +15812,7 @@ let
     version = "5.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-OpenAPI-5.05.tar.gz";
-      sha256 = "sha256-xH+I0c434/YT9uizV9grenEEX/wKSXOVUS67zahlYV0=";
+      hash = "sha256-xH+I0c434/YT9uizV9grenEEX/wKSXOVUS67zahlYV0=";
     };
     propagatedBuildInputs = [ JSONValidator ];
     meta = {
@@ -15828,7 +15828,7 @@ let
     version = "1.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-Plugin-Status-1.17.tar.gz";
-      sha256 = "1d475ch43vbfn3h4lsmr3n6rhgxgz670xqj4rcdjd4g1wfpiyasc";
+      hash = "sha256-TCsfr+PhkSYby0TiDo75rz+YjR25akrgsG7tQSArh7Q=";
     };
     propagatedBuildInputs = [ BSDResource CpanelJSONXS FileMap Mojolicious Sereal ];
     meta = {
@@ -15844,7 +15844,7 @@ let
     version = "0.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-Syslog-0.06.tar.gz";
-      sha256 = "sha256-IuxL9TYwDseyAYuoV3C9g2ZFDBAwVDZ9srFp9Mh3QRM=";
+      hash = "sha256-IuxL9TYwDseyAYuoV3C9g2ZFDBAwVDZ9srFp9Mh3QRM=";
     };
     propagatedBuildInputs = [ Mojolicious ];
     meta = {
@@ -15860,7 +15860,7 @@ let
     version = "0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MR/MRAMBERG/Mojolicious-Plugin-TextExceptions-0.02.tar.gz";
-      sha256 = "0x7qkd9nmarzb7kvk4dvhka4s44mfcd026zz3ikfwk3qql2p86rs";
+      hash = "sha256-Oht0BcV4TO5mHP8bARpzlRBN1IS7kbnnWT+ralOb+HQ=";
     };
     propagatedBuildInputs = [ Mojolicious ];
     meta = {
@@ -15876,7 +15876,7 @@ let
     version = "1.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-Webpack-1.01.tar.gz";
-      sha256 = "1w6dr7yb8lvvx5z2xsmshp2cf4b7dynv05yhq0rk7zwif5v6gsvm";
+      hash = "sha256-detndnGR/zMzwNAXsK1vZxHHxIW66i5+6XtTtPzJzfA=";
     };
     propagatedBuildInputs = [ Mojolicious Filechdir ];
     meta = {
@@ -15892,7 +15892,7 @@ let
     version = "3.29";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojo-Redis-3.29.tar.gz";
-      sha256 = "sha256-oDMZpF0uYTpsfS1ZrAD9SwtHiGVi5ish3pG0r4llgII=";
+      hash = "sha256-oDMZpF0uYTpsfS1ZrAD9SwtHiGVi5ish3pG0r4llgII=";
     };
     propagatedBuildInputs = [ Mojolicious ProtocolRedisFaster ];
     meta = {
@@ -15908,7 +15908,7 @@ let
     version = "0.07";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JB/JBERGER/Mojo-SAML-0.07.tar.gz";
-      sha256 = "03biykpz281z9nmd846jlxwzbaqlqwvh987aw9spl7bgvfn4rhkj";
+      hash = "sha256-csJMrNtvHXp14uqgBDfHFKv1eafSENSqTT8g8e/0cQ0=";
     };
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [ CryptOpenSSLRSA CryptOpenSSLX509 DataGUID Mojolicious XMLCanonicalizeXML ];
@@ -15924,7 +15924,7 @@ let
     version = "3.005";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DB/DBOOK/Mojo-SQLite-3.005.tar.gz";
-      sha256 = "0appzyhr5adzdfxns31lj568hz18bkmxmcv7fpafrx67b98cpza1";
+      hash = "sha256-Qf3LUFrH9OzUdWez2utcKHyITJE0DG27a7+pkqH/9yo=";
     };
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [ DBDSQLite Mojolicious SQLAbstract URIdb ];
@@ -15941,7 +15941,7 @@ let
     version = "1.25";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojo-mysql-1.25.tar.gz";
-      sha256 = "sha256-YC14GXw0HdCPLLH1XZg31P3gFHQz1k2+vxloaAtVzMs=";
+      hash = "sha256-YC14GXw0HdCPLLH1XZg31P3gFHQz1k2+vxloaAtVzMs=";
     };
     propagatedBuildInputs = [ DBDmysql Mojolicious SQLAbstract ];
     buildInputs = [ TestDeep ];
@@ -15958,7 +15958,7 @@ let
     version = "8.76";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JB/JBERGER/Mojo-IOLoop-Delay-8.76.tar.gz";
-      sha256 = "1vd9s1r82wfxh8y1g2ninsyvzkawx7n6ncll8lhdj89p91hw1jwf";
+      hash = "sha256-jsvAYUg3IdkgRZQya+zpXM2/vbbRihc8gt1xgXLQqe0=";
     };
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [ Mojolicious ];
@@ -15975,7 +15975,7 @@ let
     version = "0.21";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JB/JBERGER/Mojo-IOLoop-ForkCall-0.21.tar.gz";
-      sha256 = "sha256-8dpdh4RxvdhvAcQjhQgAgE9ttCtUU8IW8Jslt5RYS3g=";
+      hash = "sha256-8dpdh4RxvdhvAcQjhQgAgE9ttCtUU8IW8Jslt5RYS3g=";
     };
     propagatedBuildInputs = [ IOPipely Mojolicious MojoIOLoopDelay ];
     preBuild = ''
@@ -15996,7 +15996,7 @@ let
     version = "0.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JB/JBERGER/Mojo-JWT-0.09.tar.gz";
-      sha256 = "11jqm2sbgf5nikkb0d56xxwrd74757ks53nh8p72nvqc7sc06kn0";
+      hash = "sha256-wE4DmD4MbyvORdCOoucph5yWee+mNLDmjLa4t7SoWIY=";
     };
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [ Mojolicious ];
@@ -16013,7 +16013,7 @@ let
     version = "4.27";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SR/SRI/Mojo-Pg-4.27.tar.gz";
-      sha256 = "sha256-oyLI3wDj5WVf300LernXmSiTIOKfZP6ZrHrxJEhO+dg=";
+      hash = "sha256-oyLI3wDj5WVf300LernXmSiTIOKfZP6ZrHrxJEhO+dg=";
     };
     propagatedBuildInputs = [ DBDPg Mojolicious SQLAbstractPg ];
     buildInputs = [ TestDeep ];
@@ -16030,7 +16030,7 @@ let
     version = "1.19";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NI/NICOMEN/Mojo-UserAgent-Cached-1.19.tar.gz";
-      sha256 = "sha256-wlmZ2qqCHkZUhLWjINFVqlJZAMh4Ml2aiSAfSnWBxd8=";
+      hash = "sha256-wlmZ2qqCHkZUhLWjINFVqlJZAMh4Ml2aiSAfSnWBxd8=";
     };
     buildInputs = [ ModuleInstall ];
     propagatedBuildInputs = [ AlgorithmLCSS CHI DataSerializer DevelStackTrace Mojolicious Readonly StringTruncate ];
@@ -16048,7 +16048,7 @@ let
     version = "2.2.2";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MO/MONGODB/MongoDB-v2.2.2.tar.gz";
-      sha256 = "201935f92dac94f39c35de73661e8b252439e496f228657db85ff93257c3268f";
+      hash = "sha256-IBk1+S2slPOcNd5zZh6LJSQ55JbyKGV9uF/5MlfDJo8=";
     };
     buildInputs = [ JSONMaybeXS PathTiny TestDeep TestFatal TimeMoment ];
     propagatedBuildInputs = [ AuthenSASLSASLprep AuthenSCRAM BSON IOSocketSSL NetSSLeay ClassXSAccessor BSONXS TypeTinyXS MozillaCA Moo NetDNS SafeIsa SubQuote TieIxHash TypeTiny UUIDURandom boolean namespaceclean ];
@@ -16064,7 +16064,7 @@ let
     version = "0.40";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NI/NIERLEIN/Monitoring-Plugin-0.40.tar.gz";
-      sha256 = "0vr3wwdn3zs246qwi04bqk8jir6l88j5m59jk97hmfyj4xz6pfpq";
+      hash = "sha256-+LprfifSuwpPmjKVWiRC1OQo0cSLgMixIUL/YRvnI28=";
     };
     propagatedBuildInputs = [ ClassAccessor ConfigTiny MathCalcUnits ParamsValidate ];
     meta = {
@@ -16081,7 +16081,7 @@ let
     version = "0.005";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RC/RCAPUTO/IO-Pipely-0.005.tar.gz";
-      sha256 = "e33b6cf5cb2b46ee308513f51e623987a50a89901e81bf19701dce35179f2e74";
+      hash = "sha256-4zts9csrRu4whRP1HmI5h6UKiZAegb8ZcB3ONRefLnQ=";
     };
     meta = {
       description = "Portably create pipe() or pipe-like handles, one way or another";
@@ -16095,7 +16095,7 @@ let
     version = "2.004004";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/Moo-2.004004.tar.gz";
-      sha256 = "0ii2rzzs0wfc697d7v3s76fi1y3kl7p1hvxbv330i1vq2nqpfjvi";
+      hash = "sha256-cUt3sRV4hwjG2KtvGO6hc/gQnTl67NNOMsxxoP/PIkY=";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ ClassMethodModifiers ModuleRuntime RoleTiny SubQuote ];
@@ -16110,7 +16110,7 @@ let
     version = "2.2013";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Moose-2.2013.tar.gz";
-      sha256 = "df74dc78088921178edf72d827017d6c92737c986659f2dadc533ae24675e77c";
+      hash = "sha256-33TceAiJIReO33LYJwF9bJJzfJhmWfLa3FM64kZ153w=";
     };
     buildInputs = [ CPANMetaCheck TestCleanNamespaces TestFatal TestRequires ];
     propagatedBuildInputs = [ ClassLoadXS DevelGlobalDestruction DevelOverloadInfo DevelStackTrace EvalClosure ModuleRuntimeConflicts PackageDeprecationManager PackageStashXS SubExporter ];
@@ -16131,7 +16131,7 @@ let
     version = "0.001009";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TOBYINK/MooX-HandlesVia-0.001009.tar.gz";
-      sha256 = "04kcyflg49rclxa1nm035c05jpyvhdacjyy1wklbgv4li3im6qvi";
+      hash = "sha256-cWNT44iU7Lfo5MF7yVSD219ZACsDVBtUpywn8qjzbBI=";
     };
     buildInputs = [ MooXTypesMooseLike TestException TestFatal ];
     propagatedBuildInputs = [ DataPerl Moo ];
@@ -16146,7 +16146,7 @@ let
     version = "0.001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RE/REHSACK/MooX-Locale-Passthrough-0.001.tar.gz";
-      sha256 = "04h5xhqdvydd4xk9ckb6a79chn0ygf915ix55vg1snmba9z841bs";
+      hash = "sha256-egWCflKrWh3eLqXHEpJ7HljI0lFmTZZmJ6353TDsBRI=";
     };
     propagatedBuildInputs = [ Moo ];
     meta = {
@@ -16161,7 +16161,7 @@ let
     version = "0.001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RE/REHSACK/MooX-Locale-TextDomain-OO-0.001.tar.gz";
-      sha256 = "0g8pwj45ccqrzvs9cqyhw29nm68vai1vj46ad39rajnqzp7m53jv";
+      hash = "sha256-W45Sz/3YSpXTaMoQuUNUG5lqk+DQY5b0/hkzVojkFz0=";
     };
     propagatedBuildInputs = [ LocaleTextDomainOO MooXLocalePassthrough ];
     meta = {
@@ -16176,7 +16176,7 @@ let
     version = "4.103";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RE/REHSACK/MooX-Options-4.103.tar.gz";
-      sha256 = "0v9j0wxx4f6z6lrmdqf2k084b2c2f2jbvh86pwib0vgjz1sdbyad";
+      hash = "sha256-TfnVdPjybbAivwbBvaRwgolFEJjC4VYzNd840jsHMm0=";
     };
     propagatedBuildInputs = [ GetoptLongDescriptive MROCompat MooXLocalePassthrough PathClass UnicodeLineBreak strictures ];
     buildInputs = [ Mo MooXCmd MooXLocaleTextDomainOO Moose TestTrap ];
@@ -16193,7 +16193,7 @@ let
     version = "1.20";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AJ/AJGB/MooX-Singleton-1.20.tar.gz";
-      sha256 = "03i1wfag279ldjjkwi9gvpfs8fgi05my47icq5ggi66yzxpn5mzp";
+      hash = "sha256-99dib//emPhewSwe4msB8Tmk3d0vRT6lbDQd8ZTjIQ4=";
     };
     propagatedBuildInputs = [ RoleTiny ];
     buildInputs = [ Moo ];
@@ -16209,7 +16209,7 @@ let
     version = "0.011";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HARTZELL/MooX-StrictConstructor-0.011.tar.gz";
-      sha256 = "1qjkqrmzgz7lxhv14klsv0v9v6blf8js86d47ah24kpw5y12yf6s";
+      hash = "sha256-2jgvgi/8TiKgOqQZpCVydJmdNtiaThI27PT892vGU+I=";
     };
     propagatedBuildInputs = [ Moo strictures ];
     buildInputs = [ TestFatal ];
@@ -16225,7 +16225,7 @@ let
     version = "0.29";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MATEU/MooX-Types-MooseLike-0.29.tar.gz";
-      sha256 = "1d6jg9x3p7gm2r0xmbcag374a44gf5pcga2swvxhlhzakfm80dqx";
+      hash = "sha256-HTeAqpvqQwr75lqox25xjxBFzniKrdpBFvWdO3p60rQ=";
     };
     propagatedBuildInputs = [ ModuleRuntime ];
     buildInputs = [ Moo TestFatal ];
@@ -16240,7 +16240,7 @@ let
     version = "1.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MATEU/MooX-Types-MooseLike-Numeric-1.03.tar.gz";
-      sha256 = "16adeb617b963d010179922c2e4e8762df77c75232e17320b459868c4970c44b";
+      hash = "sha256-Fq3rYXuWPQEBeZIsLk6HYt93x1Iy4XMgtFmGjElwxEs=";
     };
     buildInputs = [ Moo TestFatal ];
     propagatedBuildInputs = [ MooXTypesMooseLike ];
@@ -16255,7 +16255,7 @@ let
     version = "0.002003";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/MooX-TypeTiny-0.002003.tar.gz";
-      sha256 = "d81e26ff6f8db10261f0087f96dc54367dcb49a9f3de8d53238f834ece19624b";
+      hash = "sha256-2B4m/2+NsQJh8Ah/ltxUNn3LSanz3o1TI4+DTs4ZYks=";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ Moo TypeTiny ];
@@ -16271,7 +16271,7 @@ let
     version = "0.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Moose-Autobox-0.16.tar.gz";
-      sha256 = "0mbhd0p7gf6qdhaylldl0ahq59zghs0vd5n1iqcbfkj8ryj1sh4j";
+      hash = "sha256-kkAdpM9ITrcYjsGWtoGG76eCoQK0UeoVbNi4dy5ocFU=";
     };
     buildInputs = [ ModuleBuildTiny TestException ];
     propagatedBuildInputs = [ ListMoreUtils Moose SyntaxKeywordJunction autobox namespaceautoclean ];
@@ -16287,7 +16287,7 @@ let
     version = "0.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DO/DOY/MooseX-ABC-0.06.tar.gz";
-      sha256 = "1sky0dpi22wrymmkjmqba4k966zn7vrbpx918wn2nmg48swyrgjf";
+      hash = "sha256-Tr7suUbkVSssRyH1u/I+9huTJlELVzlr9ZkLEW8Dfuo=";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ Moose ];
@@ -16303,7 +16303,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DO/DOY/MooseX-Aliases-0.11.tar.gz";
-      sha256 = "0j07zqczjfmng3md6nkha7560i786d0cp3gdmrx49hr64jbhz1f4";
+      hash = "sha256-xIUPlyQmw0R6ru2Ny0Az6ERgylFwWtPqeLY6+Rn+B0g=";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ Moose ];
@@ -16318,7 +16318,7 @@ let
     version = "0.32";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-App-Cmd-0.32.tar.gz";
-      sha256 = "2e3bbf7283a4bee72d91d26eb204436030992bbe55cbd35ec33a546f16f973ff";
+      hash = "sha256-Lju/coOkvuctkdJusgRDYDCZK75Vy9NewzpUbxb5c/8=";
     };
     buildInputs = [ ModuleBuildTiny MooseXConfigFromFile TestOutput YAML ];
     propagatedBuildInputs = [ AppCmd MooseXGetopt MooseXNonMoose ];
@@ -16334,7 +16334,7 @@ let
     version = "0.093093";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/MooseX-Storage-Format-JSONpm-0.093093.tar.gz";
-      sha256 = "ebe0407a7eb1870270e0e2579f097dfd7df2aea3307fb71f324fb69e242cc58f";
+      hash = "sha256-6+BAen6xhwJw4OJXnwl9/X3yrqMwf7cfMk+2niQsxY8=";
     };
     buildInputs = [ Moose TestDeepJSON TestWithoutModule DigestHMAC MooseXTypes ];
     propagatedBuildInputs = [ JSON MooseXRoleParameterized MooseXStorage namespaceautoclean ];
@@ -16350,7 +16350,7 @@ let
     version = "0.101";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GE/GETTY/MooX-0.101.tar.gz";
-      sha256 = "2ff91a656e78aae0aca42293829d7a7e5acb9bf22b0401635b2ab6c870de32d5";
+      hash = "sha256-L/kaZW54quCspCKTgp16flrLm/IrBAFjWyq2yHDeMtU=";
     };
     propagatedBuildInputs = [ DataOptList ImportInto Moo ];
     meta = {
@@ -16365,7 +16365,7 @@ let
     version = "0.001006";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/MooX-Aliases-0.001006.tar.gz";
-      sha256 = "0rrqqsm8i6rckzxgzcj2p2s4cfszzddzwbcm04yjcqdcihkk2q01";
+      hash = "sha256-AWAxJ4ysYSY9AZUt/lv7XztGtLhCsv/6nyybiKrGOGc=";
     };
     propagatedBuildInputs = [ Moo strictures ];
     buildInputs = [ TestFatal ];
@@ -16380,7 +16380,7 @@ let
     version = "0.017";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RE/REHSACK/MooX-Cmd-0.017.tar.gz";
-      sha256 = "1xbhmq07v9z371ygkyghva9aryhc22kwbzn5qwkp72c0ma6z4gwl";
+      hash = "sha256-lD/yjaqAiXMnx8X+xacQDPqsktrw+fl8OOOnfQCucPU=";
     };
     propagatedBuildInputs = [ ListMoreUtils ModulePluggable Moo PackageStash ParamsUtil RegexpCommon ];
     buildInputs = [ CaptureTiny ];
@@ -16396,7 +16396,7 @@ let
     version = "0.100";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TOBYINK/MooX-late-0.100.tar.gz";
-      sha256 = "2ae5b1e3da5abc0e4006278ecbcfa8fa7c224ea5529a6a688acbb229c09e6a5f";
+      hash = "sha256-KuWx49pavA5ABieOy8+o+nwiTqVSmmpoisuyKcCeal8=";
     };
     buildInputs = [ TestFatal TestRequires ];
     propagatedBuildInputs = [ Moo SubHandlesVia ];
@@ -16412,7 +16412,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MJ/MJGARDNER/MouseX-SimpleConfig-0.11.tar.gz";
-      sha256 = "257f384091d33d340373a6153947039c698dc449d1ef989335644fc3d2da0069";
+      hash = "sha256-JX84QJHTPTQDc6YVOUcDnGmNxEnR75iTNWRPw9LaAGk=";
     };
     propagatedBuildInputs = [ ConfigAny MouseXConfigFromFile ];
     meta = {
@@ -16426,7 +16426,7 @@ let
     version = "1.29";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TJ/TJC/Test-PostgreSQL-1.29.tar.gz";
-      sha256 = "sha256-GKz35YnKTMqc3kdgm1NsnYI8hWLRqlIQwWjl6xuOT54=";
+      hash = "sha256-GKz35YnKTMqc3kdgm1NsnYI8hWLRqlIQwWjl6xuOT54=";
     };
     buildInputs = [ ModuleBuildTiny TestSharedFork pkgs.postgresql ];
     propagatedBuildInputs = [ DBDPg DBI FileWhich FunctionParameters Moo TieHashMethod TryTiny TypeTiny ];
@@ -16445,7 +16445,7 @@ let
     version = "0.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/Test-UseAllModules-0.17.tar.gz";
-      sha256 = "a71f2fe8b96ab8bfc2760aa1d3135ea049a5b20dcb105457b769a1195c7a2509";
+      hash = "sha256-px8v6LlquL/Cdgqh0xNeoEmlsg3LEFRXt2mhGVx6JQk=";
     };
     meta = {
       description = "Do use_ok() for all the MANIFESTed modules";
@@ -16458,7 +16458,7 @@ let
     version = "1.19";
     src = fetchurl {
       url = "mirror://cpan/authors/id/V/VP/VPIT/Test-Valgrind-1.19.tar.gz";
-      sha256 = "06w1c0ddmmdkhhvv9pxq2nv5i40nbqf4cssfkq38yypfbyhsff0q";
+      hash = "sha256-GDinoV/ueo8Gnk5rRhxeFpBYthW437Q3hLPV2hpggRs=";
     };
     propagatedBuildInputs = [ EnvSanctify FileHomeDir PerlDestructLevel XMLTwig ];
     meta = {
@@ -16473,7 +16473,7 @@ let
     version = "0.07";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MASAKI/MouseX-Types-Path-Class-0.07.tar.gz";
-      sha256 = "228d4b4f3f0ed9547278691d0b7c5fe53d90874a69df709a49703c6af87c09de";
+      hash = "sha256-Io1LTz8O2VRyeGkdC3xf5T2Qh0pp33CaSXA8avh8Cd4=";
     };
     buildInputs = [ TestUseAllModules ];
     propagatedBuildInputs = [ MouseXTypes PathClass ];
@@ -16488,7 +16488,7 @@ let
     version = "0.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GF/GFUJI/MouseX-Types-0.06.tar.gz";
-      sha256 = "77288441fdadd15beeec9a0813ece8aec1542f1d8ceaaec14755b3f316fbcf8b";
+      hash = "sha256-dyiEQf2t0Vvu7JoIE+zorsFULx2M6q7BR1Wz8xb7z4s=";
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ AnyMoose ];
@@ -16503,7 +16503,7 @@ let
     version = "0.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MASAKI/MouseX-ConfigFromFile-0.05.tar.gz";
-      sha256 = "921b31cb13fc1f982a602f8e23815b7add23a224257e43790e287504ce879534";
+      hash = "sha256-khsxyxP8H5gqYC+OI4Fbet0joiQlfkN5Dih1BM6HlTQ=";
     };
     buildInputs = [ TestUseAllModules ];
     propagatedBuildInputs = [ MouseXTypesPathClass ];
@@ -16518,7 +16518,7 @@ let
     version = "0.38";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GF/GFUJI/MouseX-Getopt-0.38.tar.gz";
-      sha256 = "de3ea8ef452dd9501ea8c4eda8744b7224602602b04692607edd7d62b79f038f";
+      hash = "sha256-3j6o70Ut2VAeqMTtqHRLciRgJgKwRpJgft19YrefA48=";
     };
     buildInputs = [ ModuleBuildTiny MouseXConfigFromFile MouseXSimpleConfig TestException TestWarn ];
     propagatedBuildInputs = [ GetoptLongDescriptive Mouse ];
@@ -16534,7 +16534,7 @@ let
     version = "1.0.3";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TOMHUKINS/MooseX-Attribute-Chained-1.0.3.tar.gz";
-      sha256 = "0kjydmkxh8hpkbbmsgd5wrkhgq7w69lgfg6lx4s5g2xpqfkqmqz7";
+      hash = "sha256-5+OKp8O3i1c06dQ892gy/OAHZ+alPV3Xmhci2GdtXk4=";
     };
     propagatedBuildInputs = [ Moose ];
     meta = {
@@ -16548,7 +16548,7 @@ let
     version = "0.25";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-AttributeHelpers-0.25.tar.gz";
-      sha256 = "b0c819ec83999b258b248f82059fa5975a0cee365423abbee0efaca5401c5ec6";
+      hash = "sha256-sMgZ7IOZmyWLJI+CBZ+ll1oM7jZUI6u+4O+spUAcXsY=";
     };
     buildInputs = [ ModuleBuildTiny TestException ];
     propagatedBuildInputs = [ Moose ];
@@ -16564,7 +16564,7 @@ let
     version = "0.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-Clone-0.06.tar.gz";
-      sha256 = "19wd74dihybnz1lbbsqn0clwxzb6y0aa0i25a8zhajz7p5fq5myb";
+      hash = "sha256-y9eCXbnnSwU/UkVEoBTwZv3OKQMW67Vo+HZ5GBs5jac=";
     };
     propagatedBuildInputs = [ DataVisitor HashUtilFieldHashCompat namespaceautoclean ];
     buildInputs = [ ModuleBuildTiny ];
@@ -16579,7 +16579,7 @@ let
     version = "0.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-ConfigFromFile-0.14.tar.gz";
-      sha256 = "9ad343cd9f86d714be9b54b9c68a443d8acc6501b6ad6b15e9ca0130b2e96f08";
+      hash = "sha256-mtNDzZ+G1xS+m1S5xopEPYrMZQG2rWsV6coBMLLpbwg=";
     };
     buildInputs = [ ModuleBuildTiny TestDeep TestFatal TestRequires TestWithoutModule ];
     propagatedBuildInputs = [ MooseXTypesPathTiny ];
@@ -16595,7 +16595,7 @@ let
     version = "0.22";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-Daemonize-0.22.tar.gz";
-      sha256 = "8a7fb999dca9b802a85136a10141b2d3378a3ecde0527c1df73d55edb28e59b3";
+      hash = "sha256-in+5mdypuAKoUTahAUGy0zeKPs3gUnwd9z1V7bKOWbM=";
     };
     buildInputs = [ DevelCheckOS ModuleBuildTiny TestFatal ];
     propagatedBuildInputs = [ MooseXGetopt MooseXTypesPathClass ];
@@ -16611,7 +16611,7 @@ let
     version = "0.009032";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/MooseX-Emulate-Class-Accessor-Fast-0.009032.tar.gz";
-      sha256 = "153r30nggcyyx7ai15dbnba2h5145f8jdsh6wj54298d3zpvgvl2";
+      hash = "sha256-gu637x8NJUGK5AbqJpErJBQo1LKrlRDV6d6z9ywYeZQ=";
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ Moose namespaceclean ];
@@ -16626,7 +16626,7 @@ let
     version = "0.74";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-Getopt-0.74.tar.gz";
-      sha256 = "1de0df3b431ebe9f3563bdf4569eacd7e07e865a8397f2a990d0cb57d4cb2c24";
+      hash = "sha256-HeDfO0Mevp81Y730Vp6s1+B+hlqDl/KpkNDLV9TLLCQ=";
     };
     buildInputs = [ ModuleBuildTiny MooseXStrictConstructor PathTiny TestDeep TestFatal TestNeeds TestTrap TestWarnings ];
     propagatedBuildInputs = [ GetoptLongDescriptive MooseXRoleParameterized ];
@@ -16642,7 +16642,7 @@ let
     version = "0.003";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PS/PSHANGOV/MooseX-Has-Options-0.003.tar.gz";
-      sha256 = "07c21cf8ed500b272020ff8da19f194728bb414e0012a2f0cc54ef2ef6222a68";
+      hash = "sha256-B8Ic+O1QCycgIP+NoZ8ZRyi7QU4AEqLwzFTvLvYiKmg=";
     };
     buildInputs = [ Moose TestDeep TestDifferences TestException TestMost TestWarn namespaceautoclean ];
     propagatedBuildInputs = [ ClassLoad ListMoreUtils StringRewritePrefix ];
@@ -16658,7 +16658,7 @@ let
     version = "1.000006";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KE/KENTNL/MooseX-Has-Sugar-1.000006.tar.gz";
-      sha256 = "efeed3ddb3a8ea18f416d485f3c2b0427145d267e63368c651d488eaa8c28d09";
+      hash = "sha256-7+7T3bOo6hj0FtSF88KwQnFF0mfmM2jGUdSI6qjCjQk=";
     };
     buildInputs = [ TestFatal namespaceclean ];
     propagatedBuildInputs = [ SubExporterProgressive ];
@@ -16674,7 +16674,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-LazyRequire-0.11.tar.gz";
-      sha256 = "ef620c1e019daf9cf3f23a943d25a94c91e93ab312bcd63be2e9740ec0b94288";
+      hash = "sha256-72IMHgGdr5zz8jqUPSWpTJHpOrMSvNY74ul0DsC5Qog=";
     };
     buildInputs = [ ModuleBuildTiny TestFatal ];
     propagatedBuildInputs = [ Moose aliased namespaceautoclean ];
@@ -16690,7 +16690,7 @@ let
     version = "0.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RS/RSRCHBOY/MooseX-MarkAsMethods-0.15.tar.gz";
-      sha256 = "1y3yxwcjjajm66pvca54cv9fax7a6dy36xqr92x7vzyhfqrw3v69";
+      hash = "sha256-yezBM3bQ/326SBl3M3wz6nTl0makKLavMVUqKRnvfvg=";
     };
     propagatedBuildInputs = [ Moose namespaceautoclean ];
     meta = {
@@ -16705,7 +16705,7 @@ let
     version = "0.32";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-MethodAttributes-0.32.tar.gz";
-      sha256 = "0yqrihv609j2q0hrmpmvgpn0mnxc0z3ws39cqhwxvlmpfijqhcyb";
+      hash = "sha256-yzOIZXS30t05xCwNzccHrNsK7H273pohwEImYDaMGXs=";
     };
     buildInputs = [ MooseXRoleParameterized TestFatal TestNeeds ];
     propagatedBuildInputs = [ Moose namespaceautoclean ];
@@ -16721,7 +16721,7 @@ let
     version = "0.26";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DO/DOY/MooseX-NonMoose-0.26.tar.gz";
-      sha256 = "0zdaiphc45s5xj0ax5mkijf5d8v6w6yccb3zplgj6f30y7n55gnb";
+      hash = "sha256-y75S7PFgOCMfvX8sxrzhZqNWnIyzlq6A7EUXwuCNqn0=";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ ListMoreUtils Moose ];
@@ -16737,7 +16737,7 @@ let
     version = "0.005";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/MooseX-OneArgNew-0.005.tar.gz";
-      sha256 = "0gqhqdkwsnxmni0xv43iplplgp6g55khdwc5117j9i569r3wykvy";
+      hash = "sha256-fk/PR06mxCRPCIXxBmcpz9xHL71xkN1BtLVbzWfDED8=";
     };
     propagatedBuildInputs = [ MooseXRoleParameterized ];
     meta = {
@@ -16752,7 +16752,7 @@ let
     version = "0.004";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HD/HDP/MooseX-RelatedClassRoles-0.004.tar.gz";
-      sha256 = "17vynkf6m5d039qkr4in1c9lflr8hnwp1fgzdwhj4q6jglipmnrh";
+      hash = "sha256-MNt6I33SYCIhb/+5cLmFKFNHEws2kjxxGqCVaty0fp8=";
     };
     propagatedBuildInputs = [ MooseXRoleParameterized ];
     meta = { description = "Apply roles to a class related to yours";
@@ -16765,7 +16765,7 @@ let
     version = "0.21";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/MooseX-Params-Validate-0.21.tar.gz";
-      sha256 = "1n9ry6gnskkp9ir6s7d5jirn3mh14ydgpmwqz6wcp6d9md358ac8";
+      hash = "sha256-iClURqupmcu4+ZjX+5onAdZhc5SlHW1yTHdObZ/xOdk=";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ DevelCaller Moose ParamsValidate ];
@@ -16780,7 +16780,7 @@ let
     version = "1.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-Role-Parameterized-1.11.tar.gz";
-      sha256 = "17pc5dly7ba0p50p2xcmp7bar8m262jcqgbkgyswl3kzbmn7dzhw";
+      hash = "sha256-HP52bF1/Dsq1f3M9zKQwoqKs1rmVdXFBuUCt42kr7J4=";
     };
     buildInputs = [ CPANMetaCheck ModuleBuildTiny TestFatal TestNeeds ];
     propagatedBuildInputs = [ Moose namespaceautoclean ];
@@ -16796,7 +16796,7 @@ let
     version = "0.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-Role-WithOverloading-0.17.tar.gz";
-      sha256 = "0rb8k0dp1a55bm2pr6r0vsi5msvjl1dslfidxp1gj80j7zbrbc4j";
+      hash = "sha256-krCV1z8SIPnC7S06qlugcutaot4gm3xFXaWocBuYaGU=";
     };
     propagatedBuildInputs = [ Moose aliased namespaceautoclean ];
     meta = {
@@ -16811,7 +16811,7 @@ let
     version = "0.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-Runnable-0.10.tar.gz";
-      sha256 = "40d8fd1b5524ae965965a1f144d7a0a0c850594c524402b2319b24d5c4af1199";
+      hash = "sha256-QNj9G1UkrpZZZaHxRNegoMhQWUxSRAKyMZsk1cSvEZk=";
     };
     buildInputs = [ ModuleBuildTiny TestFatal TestSimple13 TestTableDriven ];
     propagatedBuildInputs = [ ListSomeUtils MooseXTypesPathTiny ];
@@ -16828,7 +16828,7 @@ let
     version = "0.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/MooseX-SemiAffordanceAccessor-0.10.tar.gz";
-      sha256 = "1mdil9ckgmgr78z59p8wfa35ixn5855ndzx14y01dvfxpiv5gf55";
+      hash = "sha256-pbhXdrzd7RaAJ6H/ZktBxfZYhnIc3VQ+OvnVN1misdU=";
     };
     propagatedBuildInputs = [ Moose ];
     meta = {
@@ -16842,7 +16842,7 @@ let
     version = "0.200002";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/MooseX-SetOnce-0.200002.tar.gz";
-      sha256 = "0ndnl8dj7nh8lvckl6r3jw31d0dmq30qf2pqkgcz0lykzjvhdvfb";
+      hash = "sha256-y+0Gt/zTU/DZm/gKh8HAtYEWBpcjGzrZpgjaIxuitlk=";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ Moose ];
@@ -16857,7 +16857,7 @@ let
     version = "0.30";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-Singleton-0.30.tar.gz";
-      sha256 = "0hb5s1chsgbx2nlb0f112mdh2v1zwww8f4i3gvfvcghx3grv5135";
+      hash = "sha256-ZYSy8xsdPrbdfiMShzjnP2wBWxUhOLCoFX09DVnQZUE=";
     };
     buildInputs = [ ModuleBuildTiny TestFatal TestRequires TestWarnings ];
     propagatedBuildInputs = [ Moose ];
@@ -16872,7 +16872,7 @@ let
     version = "0.53";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-Storage-0.53.tar.gz";
-      sha256 = "8704bfe505f66b340f62e85c9ff319c19e9670b26d4b012c91f4e103b1daace0";
+      hash = "sha256-hwS/5QX2azQPYuhcn/MZwZ6WcLJtSwEskfThA7HarOA=";
     };
     buildInputs = [ TestDeep TestDeepType TestFatal TestNeeds TestDeepJSON TestWithoutModule DigestHMAC MooseXTypes ];
     propagatedBuildInputs = [ ModuleRuntime Moose MooseXRoleParameterized PodCoverage StringRewritePrefix namespaceautoclean IOStringy JSON JSONXS JSONMaybeXS CpanelJSONXS YAML YAMLOld YAMLTiny YAMLLibYAML YAMLSyck ];
@@ -16888,7 +16888,7 @@ let
     version = "0.21";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/MooseX-StrictConstructor-0.21.tar.gz";
-      sha256 = "c72a5ae9583706ccdec71d401dcb3054013a7536b750df1436613d858ea2920d";
+      hash = "sha256-xypa6Vg3Bszexx1AHcswVAE6dTa3UN8UNmE9hY6ikg0=";
     };
     buildInputs = [ Moo TestFatal TestNeeds ];
     propagatedBuildInputs = [ Moose namespaceautoclean ];
@@ -16904,7 +16904,7 @@ let
     version = "0.13";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-Traits-0.13.tar.gz";
-      sha256 = "74afe0c4faf4e3b97c57f289437caa60becca34cd5821f489dd4cc9da4fbe29a";
+      hash = "sha256-dK/gxPr047l8V/KJQ3yqYL7Mo0zVgh9IndTMnaT74po=";
     };
     buildInputs = [ ModuleBuildTiny MooseXRoleParameterized TestFatal TestRequires TestSimple13 ];
     propagatedBuildInputs = [ Moose namespaceautoclean ];
@@ -16920,7 +16920,7 @@ let
     version = "0.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RK/RKITOVER/MooseX-Traits-Pluggable-0.12.tar.gz";
-      sha256 = "1jjqmcidy4kdgp5yffqqwxrsab62mbhbpvnzdy1rpwnb1savg5mb";
+      hash = "sha256-q5a3lQ7L8puDb9/uu+Cqwiylc+cYO+fLfW0S3yKrWMo=";
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ ListMoreUtils Moose namespaceautoclean ];
@@ -16935,7 +16935,7 @@ let
     version = "0.50";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-Types-0.50.tar.gz";
-      sha256 = "9cd87b3492cbf0be9d2df9317b2adf9fc30663770e69906654bea3f41b17cb08";
+      hash = "sha256-nNh7NJLL8L6dLfkxeyrfn8MGY3cOaZBmVL6j9BsXywg=";
     };
     buildInputs = [ ModuleBuildTiny TestFatal TestRequires ];
     propagatedBuildInputs = [ CarpClan Moose SubExporterForMethods namespaceautoclean ];
@@ -16951,7 +16951,7 @@ let
     version = "0.001014";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-Types-Common-0.001014.tar.gz";
-      sha256 = "ef93718b6d2f240d50b5c3acb1a74b4c2a191869651470001a82be1f35d0ef0f";
+      hash = "sha256-75Nxi20vJA1QtcOssadLTCoZGGllFHAAGoK+HzXQ7w8=";
     };
     buildInputs = [ ModuleBuildTiny TestDeep TestWarnings ];
     propagatedBuildInputs = [ MooseXTypes ];
@@ -16967,7 +16967,7 @@ let
     version = "0.13";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-Types-DateTime-0.13.tar.gz";
-      sha256 = "b89fa26636f6a17eaa3868b4514340472b68bbdc2161a1d79a22a1bf5b1d39c6";
+      hash = "sha256-uJ+iZjb2oX6qOGi0UUNARytou9whYaHXmiKhv1sdOcY=";
     };
     buildInputs = [ ModuleBuildTiny TestFatal TestSimple13 ];
     propagatedBuildInputs = [ DateTime MooseXTypes ];
@@ -16983,7 +16983,7 @@ let
     version = "0.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-Types-DateTime-MoreCoercions-0.15.tar.gz";
-      sha256 = "21bb3a597719888edb6ceaa132418d5cf92ecb92a50cce37b94259a55e0e3796";
+      hash = "sha256-Ibs6WXcZiI7bbOqhMkGNXPkuy5KlDM43uUJZpV4ON5Y=";
     };
     buildInputs = [ ModuleBuildTiny TestFatal TestSimple13 ];
     propagatedBuildInputs = [ DateTimeXEasy MooseXTypesDateTime TimeDurationParse ];
@@ -16999,7 +16999,7 @@ let
     version = "0.015";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-Types-LoadableClass-0.015.tar.gz";
-      sha256 = "e037d3778253dcf92946435715bada0e6449c0a2808fa3ff32a965064d5a3bf4";
+      hash = "sha256-4DfTd4JT3PkpRkNXFbraDmRJwKKAj6P/MqllBk1aO/Q=";
     };
     buildInputs = [ ModuleBuildTiny TestFatal ];
     propagatedBuildInputs = [ MooseXTypes ];
@@ -17015,7 +17015,7 @@ let
     version = "0.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-Types-Path-Class-0.09.tar.gz";
-      sha256 = "0zpgwzxj6d9k2lbg6v6zd1bcbzjz2h336rm816krbblq6ssvm177";
+      hash = "sha256-54S6tTaYrpWnCahmMwYUX/7FVmjfbPMWFTM1I/vn734=";
     };
     propagatedBuildInputs = [ MooseXTypes PathClass ];
     buildInputs = [ ModuleBuildTiny TestNeeds ];
@@ -17030,7 +17030,7 @@ let
     version = "0.012";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-Types-Path-Tiny-0.012.tar.gz";
-      sha256 = "19eede02dd654e70f73e34cd7af0063765173bcaefeeff1bdbe21318ecfd9158";
+      hash = "sha256-Ge7eAt1lTnD3PjTNevAGN2UXO8rv7v8b2+ITGOz9kVg=";
     };
     buildInputs = [ Filepushd ModuleBuildTiny TestFatal ];
     propagatedBuildInputs = [ MooseXGetopt MooseXTypesStringlike PathTiny ];
@@ -17046,7 +17046,7 @@ let
     version = "0.101343";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/MooseX-Types-Perl-0.101343.tar.gz";
-      sha256 = "0nijy676q27bvjb8swxrb1j4lq2xq8jbqkaxs1l9q81k7jpvx17h";
+      hash = "sha256-8IS+rzwzIJxo0F1NvCTCXWBKZFi5c42W3OsIbI7xMlo=";
     };
     propagatedBuildInputs = [ MooseXTypes ];
     meta = {
@@ -17061,7 +17061,7 @@ let
     version = "0.003";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/MooseX-Types-Stringlike-0.003.tar.gz";
-      sha256 = "06fgamdiz0n7cgghb8ycjd5mcidj8w769zs2gws6z6jjbkn4kqrf";
+      hash = "sha256-LuNJ7FxSmm80f0L/ZA5HskVWS5PMowXfY8eCH1tVzxk=";
     };
     propagatedBuildInputs = [ MooseXTypes ];
     meta = {
@@ -17076,7 +17076,7 @@ let
     version = "0.36";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-Types-Structured-0.36.tar.gz";
-      sha256 = "0mrxc00sid7526c6brrnjr6288468sszic3wazij71v3z59bdka3";
+      hash = "sha256-Q822UvljhyPjV3yw+LVGhiAkTJY252WYEeW0qAFgPVc=";
     };
     buildInputs = [ DateTime ModuleBuildTiny MooseXTypesDateTime TestFatal TestNeeds ];
     propagatedBuildInputs = [ DevelPartialDump MooseXTypes ];
@@ -17092,7 +17092,7 @@ let
     version = "0.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-Types-URI-0.08.tar.gz";
-      sha256 = "d310d20fa361fe2dff758236df87949cc7bf98e5cf3a7c79115365eccde6ccc1";
+      hash = "sha256-0xDSD6Nh/i3/dYI234eUnMe/mOXPOnx5EVNl7M3mzME=";
     };
     buildInputs = [ ModuleBuildTiny TestSimple13 ];
     propagatedBuildInputs = [ MooseXTypesPathClass URIFromHash ];
@@ -17108,7 +17108,7 @@ let
     version = "1.26";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JM/JMERELO/MP3-Info-1.26.tar.gz";
-      sha256 = "1rwbrsdw6y6jgcjvrlji6fbcvwl4wlka3mkhlw12a7s2683k8qjp";
+      hash = "sha256-V2I0BzJCHyUCp3DWoSblhPLNljNR0rwle9J4w5vOi+c=";
     };
     meta = {
       description = "Manipulate / fetch info from MP3 audio files";
@@ -17121,7 +17121,7 @@ let
     version = "1.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IL/ILYAZ/modules/MP3-Tag-1.15.zip";
-      sha256 = "1lanbwv97sfsb7h4vsg1v0dv3yghpz01nf3rzl4a9p3ycgs4ib5a";
+      hash = "sha256-qqxI9GN+3KQI/Xk4G8C/8PmxG9jh6U3gWdrpkzZfVtE=";
     };
     buildInputs = [ pkgs.unzip ];
 
@@ -17143,7 +17143,7 @@ let
     version = "2.5.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SK/SKAJI/Mouse-v2.5.10.tar.gz";
-      sha256 = "1vijm8wkyws1jhnqmx104585q3srw9z1crcpy1zlcfhm8qww53ff";
+      hash = "sha256-zo3COUYVOkZ/8JdlFn7iWQ9cUCEg9IotlEFzPzmqMu4=";
     };
     buildInputs = [ ModuleBuildXSUtil TestException TestFatal TestLeakTrace TestOutput TestRequires TryTiny ];
     perlPreHook = "export LD=$CC";
@@ -17160,7 +17160,7 @@ let
     version = "1.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GF/GFUJI/MouseX-NativeTraits-1.09.tar.gz";
-      sha256 = "0pnbchkxfz9fwa8sniyjqp0mz75b3k2fafq9r09znbbh51dbz9gq";
+      hash = "sha256-+KW/WihwLfsTyAk75cQcq5xfwcXSR6uR4i591ydky14=";
     };
     buildInputs = [ AnyMoose TestFatal ];
     propagatedBuildInputs = [ Mouse ];
@@ -17175,7 +17175,7 @@ let
     version = "20200520";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AB/ABH/Mozilla-CA-20200520.tar.gz";
-      sha256 = "b3ca0002310bf24a16c0d5920bdea97a2f46e77e7be3e7377e850d033387c726";
+      hash = "sha256-s8oAAjEL8koWwNWSC96pei9G53574+c3foUNAzOHxyY=";
     };
 
     postPatch = ''
@@ -17196,7 +17196,7 @@ let
     version = "0.13";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/MRO-Compat-0.13.tar.gz";
-      sha256 = "1y547lr6zccf7919vx01v22zsajy528psanhg5aqschrrin3nb4a";
+      hash = "sha256-iiw7bMwZMo1VedAqfZEoXir9hdgB9J1COo6xbzI9pPg=";
     };
     meta = {
       description = "Mro::* interface compatibility for Perls < 5.9.5";
@@ -17210,7 +17210,7 @@ let
     version = "0.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NJ/NJH/MusicBrainz-DiscID-0.06.tar.gz";
-      sha256 = "1azc91jnwa3gdmy9pc8mflakgvsvf69ywwlqllxmdzwpk386w2xs";
+      hash = "sha256-ugtu0JiX/1Y7pZhy7pNxW+83FXUVsZt8bW8obmVI7Ks=";
     };
     perlPreHook = lib.optionalString stdenv.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
     # Makefile.PL in this package uses which to find pkg-config -- make it use path instead
@@ -17229,7 +17229,7 @@ let
     version = "1.0.5";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BF/BFAIST/WebService-MusicBrainz-1.0.5.tar.gz";
-      sha256 = "16chs1l58cf000d5kalkyph3p31ci73p1rlyx98mfv10d2cq6fsj";
+      hash = "sha256-UjuDmWggbFdR6p7mcMeJLIw74PWTqlkaAMAxVGjQkJk=";
     };
     propagatedBuildInputs = [ Mojolicious ];
     doCheck = false; # Test performs network access.
@@ -17244,7 +17244,7 @@ let
     version = "1.3.6";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CM/CMS/Mustache-Simple-v1.3.6.tar.gz";
-      sha256 = "51db5d51ff4b25a670d8bfabe3902b6d45434ecf78b29bc1fff19af6e7383003";
+      hash = "sha256-UdtdUf9LJaZw2L+r45ArbUVDTs94spvB//Ga9uc4MAM=";
     };
     propagatedBuildInputs = [ YAMLLibYAML ];
     meta = {
@@ -17258,7 +17258,7 @@ let
     version = "0.60";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ES/ESTRABD/MySQL-Diff-0.60.tar.gz";
-      sha256 = "5d7080a4bd5714ff9ef536aa774a7adb3c6f0e760215ca6c39d8a3545344f956";
+      hash = "sha256-XXCApL1XFP+e9Taqd0p62zxvDnYCFcpsOdijVFNE+VY=";
     };
     propagatedBuildInputs = [ pkgs.mariadb.client FileSlurp StringShellQuote ];
     meta = {
@@ -17275,7 +17275,7 @@ let
     version = "0.29";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/namespace-autoclean-0.29.tar.gz";
-      sha256 = "45ebd8e64a54a86f88d8e01ae55212967c8aa8fed57e814085def7608ac65804";
+      hash = "sha256-RevY5kpUqG+I2OAa5VISlnyKqP7VfoFAhd73YIrGWAQ=";
     };
     buildInputs = [ TestNeeds ];
     propagatedBuildInputs = [ SubIdentify namespaceclean ];
@@ -17291,7 +17291,7 @@ let
     version = "0.27";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RI/RIBASUSHI/namespace-clean-0.27.tar.gz";
-      sha256 = "8a10a83c3e183dc78f9e7b7aa4d09b47c11fb4e7d3a33b9a12912fd22e31af9d";
+      hash = "sha256-ihCoPD4YPcePnnt6pNCbR8EftOfTozuaEpEv0i4xr50=";
     };
     propagatedBuildInputs = [ BHooksEndOfScope PackageStash ];
     meta = {
@@ -17306,7 +17306,7 @@ let
     version = "1.25";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TODDR/Net-Ident-1.25.tar.gz";
-      sha256 = "2e5bd58b01c2a66e8049a2f8d9c93e1b5f6dce53e0ee3a481ce6a6f411f2c8f8";
+      hash = "sha256-LlvViwHCpm6ASaL42ck+G19tzlPg7jpIHOam9BHyyPg=";
     };
     meta = {
       description = "Lookup the username on the remote end of a TCP/IP connection";
@@ -17320,7 +17320,7 @@ let
     version = "0.604";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SU/SULLR/Net-INET6Glue-0.604.tar.gz";
-      sha256 = "05xvbdrqq88npzg14bjm9wmjykzplwirzcm8rp61852hz6c67hwh";
+      hash = "sha256-kMNjmPlQFBTMzaiynyOn908vK09VLhLevxYhjHNbuxc=";
     };
     meta = {
       description = "Make common modules IPv6 ready by hotpatching";
@@ -17334,7 +17334,7 @@ let
     version = "4.079";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIKER/NetAddr-IP-4.079.tar.gz";
-      sha256 = "ec5a82dfb7028bcd28bb3d569f95d87dd4166cc19867f2184ed3a59f6d6ca0e7";
+      hash = "sha256-7FqC37cCi80ouz1Wn5XYfdQWbMGYZ/IYTtOln21soOc=";
     };
     meta = {
       description = "Manages IPv4 and IPv6 addresses and subnets";
@@ -17347,7 +17347,7 @@ let
     version = "0.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NA/NATON/Net-Amazon-AWSSign-0.12.tar.gz";
-      sha256 = "0gpdjz5095hd3y1xhnbv45m6q2shw0c9r7spj1jvb8hy7dmhq10x";
+      hash = "sha256-HQQMazseorVlkFefnBjgUAtsaiF7WdiDHw2WBMqX7T4=";
     };
     propagatedBuildInputs = [ URI ];
     meta = {
@@ -17361,7 +17361,7 @@ let
     version = "0.36";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MALLEN/Net-Amazon-EC2-0.36.tar.gz";
-      sha256 = "1wbjgmxjzr8mjpwj3mglan9hyh327cz27sfsir0w4rphwy93ca2f";
+      hash = "sha256-Tig2kufwZsJBjtrpIz47YkAPk1X01SH5lRXlL3t9cvE=";
     };
     propagatedBuildInputs = [ LWPProtocolHttps Moose ParamsValidate XMLSimple ];
     buildInputs = [ TestException ];
@@ -17377,7 +17377,7 @@ let
     version = "1.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MT/MTURK/Net-Amazon-MechanicalTurk-1.02.tar.gz";
-      sha256 = "13hgggfchhp4m3l2rn3d1v6g6ccwmwf9xiyc9izv5570930mw2cd";
+      hash = "sha256-jQlewUjglLJ/TMzHnhyvnDHzzA5t2CzoqORCyNx7D44=";
     };
     patches =
       [ ../development/perl-modules/net-amazon-mechanicalturk.patch ];
@@ -17394,7 +17394,7 @@ let
     version = "0.97";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BA/BARNEY/Net-Amazon-S3-0.97.tar.gz";
-      sha256 = "0d6yg0l6r6ziqjvgsswr484l66nznmj0b9rx4jnsygj8s1vmdn03";
+      hash = "sha256-A9hWd9BIPq+tJD2nBWS13xpDCSKZa/22xPGbbCh43jQ=";
     };
     buildInputs = [ TestDeep TestException TestLWPUserAgent TestMockTime TestWarnings ];
     propagatedBuildInputs = [ DataStreamBulk DateTimeFormatHTTP DigestHMAC DigestMD5File FileFindRule LWPUserAgentDetermined MIMETypes MooseXRoleParameterized MooseXStrictConstructor MooseXTypesDateTimeMoreCoercions RefUtil RegexpCommon SafeIsa SubOverride TermEncoding TermProgressBarSimple XMLLibXML ];
@@ -17410,7 +17410,7 @@ let
     version = "0.1.6";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PO/POLETTIX/Net-Amazon-S3-Policy-0.1.6.tar.gz";
-      sha256 = "056rhq6vsdpwi2grbmxj8341qjrz0258civpnhs78j37129nxcfj";
+      hash = "sha256-0rFukwhnSHQ0tHdHhooAP0scyECy15WfiPw2vQ2G2RQ=";
     };
     propagatedBuildInputs = [ JSON ];
     meta = {
@@ -17424,7 +17424,7 @@ let
     version = "0.48";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/Net-Async-HTTP-0.48.tar.gz";
-      sha256 = "0gpp46lg7sr5xpsjhqkb022f9v88wy73carsrn5pvbmwjpwxcjwx";
+      hash = "sha256-nUvW+ZW8rn2LzTorNo7nCO3khABrYij17SXr86gh9z4=";
     };
     buildInputs = [ HTTPCookies TestIdentity TestMetricsAny TestRefcount ];
     propagatedBuildInputs = [ Future HTTPMessage IOAsync MetricsAny StructDumb URI ];
@@ -17445,7 +17445,7 @@ let
     version = "0.004001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AB/ABRAXXA/Net-Async-Ping-0.004001.tar.gz";
-      sha256 = "0nz9i9fp7wp620f4i9z8fip1zhcaz34ckhd00ymksw8cfr8fhmwh";
+      hash = "sha256-kFfoUHYMcT2rB6DBycj4isEfbnTop0gcEObyc12K6Vs=";
     };
     propagatedBuildInputs = [ IOAsync Moo NetFrameLayerIPv6 namespaceclean ];
     buildInputs = [ TestFatal ];
@@ -17462,7 +17462,7 @@ let
     version = "0.13";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/Net-Async-WebSocket-0.13.tar.gz";
-      sha256 = "000nw7gnj7ks55nib3fiikxx9bfmbla6fimxrbn2z2n7sd187b0d";
+      hash = "sha256-DayDQtPHii/syr1GZxRd1a3U+4zRjRVtKXoead/hFgA=";
     };
     propagatedBuildInputs = [ IOAsync ProtocolWebSocket URI ];
     preCheck = lib.optionalString stdenv.isDarwin ''
@@ -17481,7 +17481,7 @@ let
     version = "0.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CH/CHIPS/Net-AMQP-0.06.tar.gz";
-      sha256 = "0b2ba7de2cd7ddd5fe102a2e2ae7aeba21eaab1078bf3bfd3c5a722937256380";
+      hash = "sha256-Cyun3izX3dX+ECouKueuuiHqqxB4vzv9PFpyKTclY4A=";
     };
     doCheck = false; # failures on 32bit
     buildInputs = [ TestDeep ];
@@ -17497,7 +17497,7 @@ let
     version = "0.20";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MR/MRSAM/Net-CIDR-0.20.tar.gz";
-      sha256 = "c75edc6818bb360d71c139169fd64ad65c35fff6d2b9fac7b9f9e6c467f187b5";
+      hash = "sha256-x17caBi7Ng1xwTkWn9ZK1lw1//bSufrHufnmxGfxh7U=";
     };
     meta = {
       description = "Manipulate IPv4/IPv6 netblocks in CIDR notation";
@@ -17511,7 +17511,7 @@ let
     version = "0.22";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/ST/STIGTSP/Net-CIDR-Lite-0.22.tar.gz";
-      sha256 = "05w57db2lx4djb4vixzdr6qgrzyzkk047nl812g7nq8s6k5xh5s3";
+      hash = "sha256-QxfYyzQaYXueCIjaQ8Cc3//8sMnt97jJko10KlY7hRc=";
     };
     meta = {
       description = "Perl extension for merging IPv4 or IPv6 CIDR addresses";
@@ -17525,7 +17525,7 @@ let
     version = "1.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CY/CYCLES/Net-CoverArtArchive-1.02.tar.gz";
-      sha256 = "1lfx8lrjgb3s11fcm243jp5sghngd9svkgmg7xmssmj34q4f49ap";
+      hash = "sha256-VyXiCCZDVq1rP6++uXVqz8Kny5WDiMpcCHqsJzNF3dE=";
     };
     buildInputs = [ FileFindRule ];
     propagatedBuildInputs = [ JSONAny LWP Moose namespaceautoclean ];
@@ -17541,7 +17541,7 @@ let
     version = "1.2.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DANBERR/Net-DBus-1.2.0.tar.gz";
-      sha256 = "e7a1ac9ef4a1235b3fdbd5888f86c347182306467bd79abc9b0756a64b441cbc";
+      hash = "sha256-56GsnvShI1s/29WIj4bDRxgjBkZ715q8mwdWpktEHLw=";
     };
     nativeBuildInputs = [ buildPackages.pkg-config ];
     buildInputs = [ pkgs.dbus TestPod TestPodCoverage ];
@@ -17550,7 +17550,7 @@ let
     # https://gitlab.com/berrange/perl-net-dbus/-/merge_requests/19
     patches = fetchpatch {
       url = "https://gitlab.com/berrange/perl-net-dbus/-/commit/6bac8f188fb06e5e5edd27aee672d66b7c28caa4.patch";
-      sha256 = "19nf4xn9xhyd0sd2az9iliqldjj0k6ah2dmkyqyvq4rp2d9k5jgb";
+      hash = "sha256-68kyUxM3E7w99rM2AZWZQMpGcaQxfSWaBs3DnmwnzqY=";
     };
 
     postPatch = ''
@@ -17569,7 +17569,7 @@ let
     version = "1.29";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NL/NLNETLABS/Net-DNS-1.29.tar.gz";
-      sha256 = "1ia35l9bdnwic6fb5knkvn6bl939np5q2r824d1023cggvl6wbc5";
+      hash = "sha256-hS1u6H6PDQFCIwJlgcu1aSS6jN3TzrKcYZHbthItQ8U=";
     };
     propagatedBuildInputs = [ DigestHMAC ];
     makeMakerFlags = "--noonline-tests";
@@ -17584,7 +17584,7 @@ let
     version = "1.20200215";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MB/MBRADSHAW/Net-DNS-Resolver-Mock-1.20200215.tar.gz";
-      sha256 = "1rv745c16l3m3w6xx2hjmmgzkdklmzm9imdfiddmdr9hwm8g3xxy";
+      hash = "sha256-vvfxUOUw5VZbi67VmOqvdLb5X60Sit4NH3VQE1ghZ+c=";
     };
     propagatedBuildInputs = [ NetDNS ];
     buildInputs = [ TestException ];
@@ -17599,7 +17599,7 @@ let
     version = "1.75";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AL/ALEXP/Net-Domain-TLD-1.75.tar.gz";
-      sha256 = "4c37f811184d68ac4179d48c10ea31922dd5fca2c1bffcdcd95c5a2a3b4002ee";
+      hash = "sha256-TDf4ERhNaKxBedSMEOoxki3V/KLBv/zc2VxaKjtAAu4=";
     };
     meta = {
       description = "Work with TLD names";
@@ -17612,7 +17612,7 @@ let
     version = "0.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CH/CHANSEN/Net-FastCGI-0.14.tar.gz";
-      sha256 = "0sjrnlzci21sci5m52zz0x9bf889j67i6vnhrjlypsfm9w5914qi";
+      hash = "sha256-EZOQCk/V6eupzNBuE4+RCSG3Ugf/i1JLZDqIyD61WWo=";
     };
     buildInputs = [ TestException TestHexString ];
     meta = {
@@ -17626,7 +17626,7 @@ let
     version = "1.21";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GO/GOMOR/Net-Frame-1.21.tar.gz";
-      sha256 = "0ffphcw52dgn07k7q02di77zq2zzc0p3vlv2gnphr7v3ifi5gcxw";
+      hash = "sha256-vLNXootjnwyvfWLTPS5g/wv8z4lNAHzmAfY1UTiD1zk=";
     };
     propagatedBuildInputs = [ BitVector ClassGomor NetIPv6Addr ];
     preCheck = "rm t/13-gethostsubs.t"; # it performs DNS queries
@@ -17641,7 +17641,7 @@ let
     version = "1.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GO/GOMOR/Net-Frame-Layer-IPv6-1.08.tar.gz";
-      sha256 = "1mzp778jmjn23990gj0mibhr9mrwmaw85nh7wf25hzzkx0mqabds";
+      hash = "sha256-ui2FK+jzf1iE4wfagriqPNeU4YoVyAdSGsLKKtE599c=";
     };
     propagatedBuildInputs = [ NetFrame ];
     meta = {
@@ -17655,7 +17655,7 @@ let
     version = "0.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DS/DSHULTZ/Net-FreeDB-0.10.tar.gz";
-      sha256 = "11dfi14qnzsnmr71cygir85zfj15n08b7d5g0i4cj5pb70if2hzp";
+      hash = "sha256-90PhIjjrFslIBK+0sxCwJUj3C8rxeRZOrlZ/i0mIroU=";
     };
     buildInputs = [ TestDeep TestDifferences TestException TestMost TestWarn ];
     propagatedBuildInputs = [ CDDBFile Moo ];
@@ -17671,7 +17671,7 @@ let
     version = "6.19";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OA/OALDERS/Net-HTTP-6.19.tar.gz";
-      sha256 = "52b76ec13959522cae64d965f15da3d99dcb445eddd85d2ce4e4f4df385b2fc4";
+      hash = "sha256-UrduwTlZUiyuZNll8V2j2Z3LRF7d2F0s5OT03zhbL8Q=";
     };
     propagatedBuildInputs = [ URI ];
     __darwinAllowLocalNetworking = true;
@@ -17688,7 +17688,7 @@ let
     version = "0.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OL/OLEG/Net-HTTPS-NB-0.15.tar.gz";
-      sha256 = "0kwc4z8pqnbc396wjnlgdmri10zdh91f2bi6saxkpfjzlm7wysba";
+      hash = "sha256-amnPT6Vfuju70iYu4UKC7YMQc22PWslNGmxZfNEnjE8=";
     };
     propagatedBuildInputs = [ IOSocketSSL NetHTTP ];
     meta = {
@@ -17703,7 +17703,7 @@ let
     version = "2.500";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CF/CFAERBER/Net-IDN-Encode-2.500.tar.gz";
-      sha256 = "1aiy7adirk3wpwlczd8sldi9k1dray0jrg1lbcrcw97zwcrkciam";
+      hash = "sha256-VUU2M+P/JM4yWzS8LIFXuYWZYqMatc8ov3zMHJs6Pqo=";
     };
     buildInputs = [ TestNoWarnings ];
     perlPreHook = "export LD=$CC";
@@ -17719,7 +17719,7 @@ let
     version = "0.9505";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GA/GANGLION/Net-IMAP-Client-0.9505.tar.gz";
-      sha256 = "d3f6a608b85e09a8080a67a9933837aae6f2cd0e8ee39df3380123dc5e3de912";
+      hash = "sha256-0/amCLheCagICmepkzg3qubyzQ6O453zOAEj3F496RI=";
     };
     propagatedBuildInputs = [ IOSocketSSL ListMoreUtils ];
     meta = {
@@ -17733,7 +17733,7 @@ let
     version = "1.26";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MANU/Net-IP-1.26.tar.gz";
-      sha256 = "0ffn2xqqbkfi7v303sp5dwgbv36jah3vg8r4nxhxfiv60vric3q4";
+      hash = "sha256-BA8W8wZmR9dhtySjtwdU0oy9Hm/l6gHGPtHNhXEX1jk=";
     };
     meta = {
       description = "Perl extension for manipulating IPv4/IPv6 addresses";
@@ -17746,7 +17746,7 @@ let
     version = "0.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AL/ALEXKOM/Net-IP-Lite-0.03.tar.gz";
-      sha256 = "c9916e6cfaa53be275379ce4b2a550ae176ddfab50dad43b43ed43e8267802a9";
+      hash = "sha256-yZFubPqlO+J1N5zksqVQrhdt36tQ2tQ7Q+1D6CZ4Aqk=";
     };
     buildInputs = [ TestException ];
     meta = {
@@ -17762,7 +17762,7 @@ let
     version = "0.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FR/FRAJULAC/Net-IPv4Addr-0.10.tar.gz";
-      sha256 = "1zk3591822dg187sgkwjjvg18qmvkn3yib1c34mq8z5i617xwi9q";
+      hash = "sha256-OEXeTzCxfIQrGSys6Iedu2IU3paSz6cPCq8JgUIqY/4=";
     };
     meta = {
       description = "Perl extension for manipulating IPv4 addresses";
@@ -17776,7 +17776,7 @@ let
     version = "1.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BK/BKB/Net-IPv6Addr-1.01.tar.gz";
-      sha256 = "008blh52k8g3syfk4dlmg7wclhdmksqkb5vk2qaxjpxmzq1pzqi7";
+      hash = "sha256-J+J/A/61X9kVFnOXNbGetUHK+HmVNjKd1+OhKQqkCwE=";
     };
     propagatedBuildInputs = [ MathBase85 NetIPv4Addr ];
     meta = {
@@ -17790,7 +17790,7 @@ let
     version = "0.43";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AA/AAR/Net-LDAP-Server-0.43.tar.gz";
-      sha256 = "0qmh3cri3fpccmwz6bhwp78yskrb3qmalzvqn0a23hqbsfs4qv6x";
+      hash = "sha256-3WxMtNMLwyEUsHh/qioeK0/t0bkcLvN5Zey6ETMbsGI=";
     };
     propagatedBuildInputs = [ perlldap ConvertASN1 ];
     meta = {
@@ -17804,7 +17804,7 @@ let
     version = "0.001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KA/KARMAN/Net-LDAP-SID-0.001.tar.gz";
-      sha256 = "1mnnpkmj8kpb7qw50sm8h4sd8py37ssy2xi5hhxzr5whcx0cvhm8";
+      hash = "sha256-qMLNQGeQl/w7hCV24bU+w1/UNIGoalA4PutOJOu81tY=";
     };
     meta = {
       description = "Active Directory Security Identifier manipulation";
@@ -17818,7 +17818,7 @@ let
     version = "0.22";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KA/KARMAN/Net-LDAP-Server-Test-0.22.tar.gz";
-      sha256 = "13idip7jky92v4adw60jn2gcc3zf339gsdqlnc9nnvqzbxxp285i";
+      hash = "sha256-sSBxe18fb2sTsxQ3/dIY7g/GnrASGN4U2SL5Kc+NLY4=";
     };
     propagatedBuildInputs = [ perlldap NetLDAPServer DataDump NetLDAPSID ];
     meta = {
@@ -17833,7 +17833,7 @@ let
     version = "2.0001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JM/JMASLAK/Net-Netmask-2.0001.tar.gz";
-      sha256 = "0waiix46wv93a5zzjjv7ypdnfdf7lizwrhx12128rcvzcvw6wd8p";
+      hash = "sha256-FzVu+GZ/s4xEEKHDzH+kxzVn2/VnS/l/USNtbkiPUXE=";
     };
     buildInputs = [ Test2Suite TestUseAllModules ];
     meta = {
@@ -17848,7 +17848,7 @@ let
     version = "1.26";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JU/JUERD/Net-MQTT-Simple-1.26.tar.gz";
-      sha256 = "sha256-ERxNNnu1AgXci8AjFfDGuw3mDRwwfQLnUuQuwRtPiLQ=";
+      hash = "sha256-ERxNNnu1AgXci8AjFfDGuw3mDRwwfQLnUuQuwRtPiLQ=";
     };
     meta = {
       description = "Minimal MQTT version 3 interface";
@@ -17861,7 +17861,7 @@ let
     version = "0.28";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KG/KGRENNAN/Net-OAuth-0.28.tar.gz";
-      sha256 = "0k4h4a5048h7qgyx25ih64x0l4airx8a6d9gjq08wmxcl2fk3z3v";
+      hash = "sha256-e/wxnaCsV44Ali81o1DPUREKOjEwFtH9wwciAooikEw=";
     };
     buildInputs = [ TestWarn ];
     propagatedBuildInputs = [ ClassAccessor ClassDataInheritable DigestHMAC DigestSHA1 LWP ];
@@ -17876,7 +17876,7 @@ let
     version = "1.22";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GR/GRUBER/Net-Patricia-1.22.tar.gz";
-      sha256 = "70835a926e1c5a8d0324c72fffee82eeb7ec6c141dee04fd446820b64f71c552";
+      hash = "sha256-cINakm4cWo0DJMcv/+6C7rfsbBQd7gT9RGggtk9xxVI=";
     };
     propagatedBuildInputs = [ NetCIDRLite Socket6 ];
     meta = {
@@ -17890,7 +17890,7 @@ let
     version = "2.74";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RU/RURBAN/Net-Ping-2.74.tar.gz";
-      sha256 = "04bxfglhxvffbwcg32rm1bzv54h183jyazhih5apqppdpdcqjami";
+      hash = "sha256-sSqJWbvtXnxVgRF+5eVAAZKy/wo1i/EYX87tDulzfRE=";
     };
     meta = {
       description = "Check a remote host for reachability";
@@ -17903,7 +17903,7 @@ let
     version = "0.009";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BIGPRESH/Net-DNS-Resolver-Programmable-0.009.tar.gz";
-      sha256 = "8080a2ab776629585911af1179bdb7c4dc2bebfd4b5efd77b11d1dac62454bf8";
+      hash = "sha256-gICiq3dmKVhZEa8Reb23xNwr6/1LXv13sR0drGJFS/g=";
     };
     propagatedBuildInputs = [ NetDNS ];
     meta = {
@@ -17918,7 +17918,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/Net-Prometheus-0.11.tar.gz";
-      sha256 = "0skjkz6q68y8g9blm7i03k4wprac3djq15akmlv1kmgag3i0ky12";
+      hash = "sha256-IvgJ4njq1Rk2rVOVgGUbTOXLyRwgnkpXesgjg82fcmo=";
     };
     propagatedBuildInputs = [ RefUtil StructDumb URI ];
     buildInputs = [ HTTPMessage TestFatal ];
@@ -17933,7 +17933,7 @@ let
     version = "0.08.reprise";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IV/IVAN/Net-SCP-0.08.reprise.tar.gz";
-      sha256 = "88a9b2df69e769e5855a408b19f61915b82e8fe070ab5cf4d525dd3b8bbe31c1";
+      hash = "sha256-iKmy32nnaeWFWkCLGfYZFbguj+Bwq1z01SXdO4u+McE=";
     };
     propagatedBuildInputs = [ pkgs.openssl ];
     patchPhase = ''
@@ -17951,7 +17951,7 @@ let
     version = "2.009";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RH/RHANDOM/Net-Server-2.009.tar.gz";
-      sha256 = "0gw1k9gcw7habbkxvsfa2gz34brlbwcidk6khgsf1qjm0dbccrw2";
+      hash = "sha256-gmfGVgNV4uD0g9PMFhlfNC8y/hPK6d3nWgoezl6agT8=";
     };
     doCheck = false; # seems to hang waiting for connections
     meta = {
@@ -17966,7 +17966,7 @@ let
     version = "1.91";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SA/SALVA/Net-SFTP-Foreign-1.91.tar.gz";
-      sha256 = "b7395081314f26f3b93c857d65e9c80a04a63709df698583f22a360ffce7e178";
+      hash = "sha256-tzlQgTFPJvO5PIV9ZenICgSmNwnfaYWD8io2D/zn4Xg=";
     };
     propagatedBuildInputs = [ pkgs.openssl ];
     patchPhase = ''
@@ -17983,7 +17983,7 @@ let
     version = "1.3";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AL/ALEXMV/Net-Server-Coro-1.3.tar.gz";
-      sha256 = "11pvfxsi0q37kd17z597wb8r9dv3r96fiagq57kc746k1lmp06hy";
+      hash = "sha256-HhpwKw3TkMPmKfip6EzKY7eU0eInlX9Cm2dgEHV3+4Y=";
     };
     propagatedBuildInputs = [ Coro NetServer ];
     meta = {
@@ -17999,7 +17999,7 @@ let
       owner = "kazuho";
       repo = "p5-Net-Server-SS-PreFork";
       rev = "5fccc0c270e25c65ef634304630af74b48807d21";
-      sha256 = "0z02labw0dd76sdf301bhrmgnsjds0ddsg22138g8ys4az49bxx6";
+      hash = "sha256-pveVyFdEe/TQCEI83RrQTWr7aoYrgOGaNqc1wJeiAnw=";
     };
     checkInputs = [ HTTPMessage LWP TestSharedFork HTTPServerSimple TestTCP TestUNIXSock ];
     buildInputs = [ ModuleInstall ];
@@ -18015,7 +18015,7 @@ let
     version = "1.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Net-SMTP-SSL-1.04.tar.gz";
-      sha256 = "001a6dcfahf7kkyirqkc8jd4fh4fkal7n7vm9c4dblqrvmdc8abv";
+      hash = "sha256-eynEWt0Z09UIS3Ufe6iajkBHmkRs4hz9nMdB5VgzKgA=";
     };
     propagatedBuildInputs = [ IOSocketSSL ];
     meta = {
@@ -18029,7 +18029,7 @@ let
     version = "0.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AW/AWESTHOLM/Net-SMTP-TLS-0.12.tar.gz";
-      sha256 = "19g48kabj22v66jbf69q78xplhi7r1y2kdbddfwh4xy3g9k75rzg";
+      hash = "sha256-7+dyZnrDdwK5a221KXzIJ0J6Ozo4GbekMVsIudRE5KU=";
     };
     propagatedBuildInputs = [ DigestHMAC IOSocketSSL ];
     meta = {
@@ -18043,7 +18043,7 @@ let
     version = "0.24";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FA/FAYLAND/Net-SMTP-TLS-ButMaintained-0.24.tar.gz";
-      sha256 = "0vi5cv7f9i96hgp3q3jpxzn1ysn802kh5xc304f8b7apf67w15bb";
+      hash = "sha256-a5XAj3FXnYUcAYP1AqcAyGof7O9XDjzugybF5M5mJW4=";
     };
     propagatedBuildInputs = [ DigestHMAC IOSocketSSL ];
     meta = {
@@ -18057,7 +18057,7 @@ let
     version = "6.0.1";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DT/DTOWN/Net-SNMP-v6.0.1.tar.gz";
-      sha256 = "0hdpn1cw52x8cw24m9ayzpf4rwarm0khygn1sv3wvwxkrg0pphql";
+      hash = "sha256-FMN7wcuz883H1sE+DyeoWfFM3P1epUoEZ6iLwlmwt0E=";
     };
     doCheck = false; # The test suite fails, see https://rt.cpan.org/Public/Bug/Display.html?id=85799
     meta = {
@@ -18072,7 +18072,7 @@ let
     version = "1.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TOBEYA/Net-SNPP-1.17.tar.gz";
-      sha256 = "06b851d64596625e866359fb017dd0d08973e0ebc50c323f4a1d50ecdd868e76";
+      hash = "sha256-BrhR1kWWYl6GY1n7AX3Q0Ilz4OvFDDI/Sh1Q7N2GjnY=";
     };
 
     doCheck = false;
@@ -18087,7 +18087,7 @@ let
     version = "0.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IV/IVAN/Net-SSH-0.09.tar.gz";
-      sha256 = "7c71c7c3cbe953234dfe25bcc1ad7edb0e1f5a0578601f5523bc6070262a3817";
+      hash = "sha256-fHHHw8vpUyNN/iW8wa1+2w4fWgV4YB9VI7xgcCYqOBc=";
     };
     propagatedBuildInputs = [ pkgs.openssl ];
     patchPhase = ''
@@ -18104,7 +18104,7 @@ let
     version = "2.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SC/SCHWIGON/Net-SSH-Perl-2.14.tar.gz";
-      sha256 = "2b5d1bb13590b5870116704e7f1dce9a9823c4f80ff5461b97bb26a317393017";
+      hash = "sha256-K10bsTWQtYcBFnBOfx3OmpgjxPgP9UYbl7smoxc5MBc=";
     };
     propagatedBuildInputs = [ CryptCurve25519 CryptIDEA CryptX FileHomeDir MathGMP StringCRC32 ];
     preCheck = "export HOME=$TMPDIR";
@@ -18120,7 +18120,7 @@ let
     version = "1.92";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CH/CHRISN/Net-SSLeay-1.92.tar.gz";
-      sha256 = "sha256-R8LyswDy5xYtcdaZ9jPdajWwYloAy9qMUKwBFEqTlqk=";
+      hash = "sha256-R8LyswDy5xYtcdaZ9jPdajWwYloAy9qMUKwBFEqTlqk=";
     };
     buildInputs = [ pkgs.openssl pkgs.zlib ];
     doCheck = false; # Test performs network access.
@@ -18142,7 +18142,7 @@ let
     version = "0.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CO/COSIMO/Net-Statsd-0.12.tar.gz";
-      sha256 = "63e453603da165bc6d1c4ca0b55eda3d2204f040c59304a47782c5aa7886565c";
+      hash = "sha256-Y+RTYD2hZbxtHEygtV7aPSIE8EDFkwSkd4LFqniGVlw=";
     };
     meta = {
       description = "Perl client for Etsy's statsd daemon";
@@ -18156,7 +18156,7 @@ let
     version = "3.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JR/JROGERS/Net-Telnet-3.04.tar.gz";
-      sha256 = "e64d567a4e16295ecba949368e7a6b8b5ae2a16b3ad682121d9b007dc5d2a37a";
+      hash = "sha256-5k1Wek4WKV7LqUk2jnpri1rioWs61oISHZsAfcXSo3o=";
     };
     meta = {
       description = "Interact with TELNET port or other TCP ports";
@@ -18169,7 +18169,7 @@ let
     version = "0.12008";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MM/MMIMS/Net-Twitter-Lite-0.12008.tar.gz";
-      sha256 = "13j69a6nqq8mh5b4qk021db55rkfnk1ppwk0rpg68b1z58gvxsmj";
+      hash = "sha256-suq+Hyo/LGTezWDye8O0buZSVgsCTExWgRVhbI1KRo4=";
     };
     buildInputs = [ ModuleBuildTiny TestFatal ];
     propagatedBuildInputs = [ JSON LWPProtocolHttps ];
@@ -18186,7 +18186,7 @@ let
     version = "1.19";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BS/BSCHMITZ/Net-Whois-IP-1.19.tar.gz";
-      sha256 = "08kj2h9qiyfvv3jfz619xl796j93cslg7d96919mnrnjy6hdz6zh";
+      hash = "sha256-8JvfoPHSZltTSCa186hmI0mTDu0pmO/k2Nv5iBMUciI=";
     };
     doCheck = false;
 
@@ -18206,7 +18206,7 @@ let
     version = "0.22";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MAXMIND/Net-Works-0.22.tar.gz";
-      sha256 = "1zz91vn1kdxljnlwllf4dzdsm4v6pja5694vf8l4w66azcyv5j8a";
+      hash = "sha256-CsmyPfvKGE4ocpskU5S8ZpOq22/EUcqplbS3GewO6f8=";
     };
     propagatedBuildInputs = [ ListAllUtils MathInt128 Moo namespaceautoclean ];
     buildInputs = [ TestFatal ];
@@ -18221,7 +18221,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FE/FERREIRA/Number-Bytes-Human-0.11.tar.gz";
-      sha256 = "0b3gprpbcrdwc2gqalpys5m2ngilh5injhww8y0gf3dln14rrisz";
+      hash = "sha256-X8ecSbC0DfeAR5xDaWOBND4ratH+UoWfYLxltm6+byw=";
     };
     meta = {
       description = "Convert byte count to human readable format";
@@ -18234,7 +18234,7 @@ let
     version = "0.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RC/RCLAMP/Number-Compare-0.03.tar.gz";
-      sha256 = "09q8i0mxvr7q9vajwlgawsi0hlpc119gnhq4hc933d03x0vkfac3";
+      hash = "sha256-gyk3N+gDtDESgwRD+1II7FIIoubqUS7VTvjk3SuICCc=";
     };
     meta = {
       description = "Numeric comparisons";
@@ -18247,7 +18247,7 @@ let
     version = "1.75";
     src = fetchurl {
       url = "mirror://cpan/authors/id/W/WR/WRW/Number-Format-1.75.tar.gz";
-      sha256 = "82d659cb16461764fd44d11a9ce9e6a4f5e8767dc1069eb03467c6e55de257f3";
+      hash = "sha256-gtZZyxZGF2T9RNEanOnmpPXodn3BBp6wNGfG5V3iV/M=";
     };
     meta = {
       description = "Perl extension for formatting numbers";
@@ -18260,7 +18260,7 @@ let
     version = "3.0.3";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAVECROSS/Number-Fraction-v3.0.3.tar.gz";
-      sha256 = "1vqhd6ngrxhfykf4qz358divjhcnp9v688fp3zi6n5757x1sl01v";
+      hash = "sha256-OwCqQz/lFGviH9chZHa6lkG5Y0NlfEzc9A72/KxpEO8=";
     };
     propagatedBuildInputs = [ Moo MooXTypesMooseLike ];
     meta = {
@@ -18274,7 +18274,7 @@ let
     version = "1.2";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIKO/Number-Misc-1.2.tar.gz";
-      sha256 = "1n4ivj4ydplanwbxn3jbsfyfcl91ngn2d0addzqrq1hac26bdfbp";
+      hash = "sha256-d7m2jGAKBpzxb02BJuyzIVHmvNNLDtsXt4re5onckdg=";
     };
     meta = {
       description = "Number::Misc - handy utilities for numbers";
@@ -18287,7 +18287,7 @@ let
     version = "3.8004";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DC/DCANTRELL/Number-Phone-3.8004.tar.gz";
-      sha256 = "sha256-ZY7hyNGXTvSwV+B4L0mTi/PelA6QY/2bYecY6siwO+8=";
+      hash = "sha256-ZY7hyNGXTvSwV+B4L0mTi/PelA6QY/2bYecY6siwO+8=";
     };
     buildInputs = [ DevelHide FileShareDirInstall ParallelForkManager TestDifferences TestPod TestPodCoverage TestWarnings ];
     propagatedBuildInputs = [ DataDumperConcise DBMDeep DevelCheckOS FileFindRule FileShareDir ];
@@ -18303,7 +18303,7 @@ let
     version = "1.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SM/SMUELLER/Number-WithError-1.01.tar.gz";
-      sha256 = "0m7my372rcj2d3j8xvhqdlhnnvxqabasvpvvhdkyli3qgrra1xnz";
+      hash = "sha256-3/agcn54ROpng3vfrdVSuG9rIW0Y7o7kaEKyLM7w9VQ=";
     };
     propagatedBuildInputs = [ ParamsUtil prefork ];
     buildInputs = [ TestLectroTest ];
@@ -18318,7 +18318,7 @@ let
     version = "1.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NB/NBEBOUT/NTLM-1.09.tar.gz";
-      sha256 = "c823e30cda76bc15636e584302c960e2b5eeef9517c2448f7454498893151f85";
+      hash = "sha256-yCPjDNp2vBVjblhDAslg4rXu75UXwkSPdFRJiJMVH4U=";
     };
     propagatedBuildInputs = [ DigestHMAC ];
     meta = {
@@ -18333,7 +18333,7 @@ let
     version = "0.48";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BINGOS/Object-Accessor-0.48.tar.gz";
-      sha256 = "76cb824a27b6b4e560409fcf6fd5b3bfbbd38b72f1f3d37ed0b54bd9c0baeade";
+      hash = "sha256-dsuCSie2tOVgQJ/Pb9Wzv7vTi3Lx89N+0LVL2cC66t4=";
     };
     meta = {
       description = "Per object accessors";
@@ -18346,7 +18346,7 @@ let
     version = "1.23";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EL/ELMEX/${pname}-${version}.tar.gz";
-      sha256 = "ab6bb80508f4fddaf2d51b20ca876aab038582a86b5228e6435411348af53c82";
+      hash = "sha256-q2u4BQj0/dry1RsgyodqqwOFgqhrUijmQ1QRNIr1PII=";
     };
     propagatedBuildInputs = [ AnyEvent commonsense ];
     meta = {
@@ -18360,7 +18360,7 @@ let
     version = "4.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JD/JDHEDDEN/Object-InsideOut-4.05.tar.gz";
-      sha256 = "1i6aif37ji91nsyncp5d0d3q29clf009sxdn1rz38917hai6rzcx";
+      hash = "sha256-nf1sooInJDR+DrZ1nQBwlCWBRwOtXGa9tiFFeYaLysQ=";
     };
     propagatedBuildInputs = [ ExceptionClass ];
     meta = {
@@ -18374,7 +18374,7 @@ let
     version = "0.68";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/Object-Pad-0.68.tar.gz";
-      sha256 = "sha256-xN5jBIQxMJZNrskozF99HphTnu/X7azHvn4Yg0XhnXE=";
+      hash = "sha256-xN5jBIQxMJZNrskozF99HphTnu/X7azHvn4Yg0XhnXE=";
     };
     buildInputs = [ TestFatal TestRefcount ];
     perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
@@ -18391,7 +18391,7 @@ let
     version = "1.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Object-Signature-1.08.tar.gz";
-      sha256 = "12k90c19ly93ib1p6sm3k7sbnr2h5dbywkdmnff2ngm99p4m68c4";
+      hash = "sha256-hCFTyU2pPiucs7VN7lcrUGS79JmjanPDiiN5mgIDaYo=";
     };
     meta = {
       description = "Generate cryptographic signatures for objects";
@@ -18405,7 +18405,7 @@ let
     version = "1.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAVECROSS/Ogg-Vorbis-Header-PurePerl-1.05.tar.gz";
-      sha256 = "0gm5zl1zdi7wra64qz5mm93rkhypwvmaccvcn2k24w9dyh43h7aj";
+      hash = "sha256-Uh04CPQtcSKmsGwzpurm18OZR6q1fEyMyvzE9gP9pT4=";
     };
 
     # The testing mechanism is erorrneous upstream. See http://matrix.cpantesters.org/?dist=Ogg-Vorbis-Header-PurePerl+1.0
@@ -18421,7 +18421,7 @@ let
     version = "0.20";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JM/JMCNAMARA/OLE-Storage_Lite-0.20.tar.gz";
-      sha256 = "1fpqhhgb8blj4hhs97fsbnbhk29s9yms057a9s9yl20f3hbsc65b";
+      hash = "sha256-qximFxwOCOqTTuoUoKtPOokJl13anaQhJJIutB6E+Lo=";
     };
     meta = {
       description = "Read and write OLE storage files";
@@ -18434,7 +18434,7 @@ let
     version = "0.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RU/RURBAN/Opcodes-0.14.tar.gz";
-      sha256 = "7f7365447e4d1c5b87b43091448f0488e67c9f036b26c022a5409cd73d343893";
+      hash = "sha256-f3NlRH5NHFuHtDCRRI8EiOZ8nwNrJsAipUCc1z00OJM=";
     };
     meta = {
       description = "More Opcodes information from opnames.h and opcode.h";
@@ -18447,7 +18447,7 @@ let
     version = "1.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/OpenAPI-Client-1.04.tar.gz";
-      sha256 = "sha256-szo5AKzdLO5hAHu5MigNjDzslJkpnUNyud+Yd0vXTAo=";
+      hash = "sha256-szo5AKzdLO5hAHu5MigNjDzslJkpnUNyud+Yd0vXTAo=";
     };
     propagatedBuildInputs = [ MojoliciousPluginOpenAPI ];
     meta = {
@@ -18463,7 +18463,7 @@ let
     version = "0.70";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CH/CHM/OpenGL-0.70.tar.gz";
-      sha256 = "1q3lz168q081iwl9jg21fbzhp9la79gav9mv6nmh2jab83s2l3mj";
+      hash = "sha256-sg4q9EBLSQGrNbumrV46iqYL/3JBPJkojwEBjEz4dOA=";
     };
 
     # FIXME: try with libGL + libGLU instead of libGLU libGL
@@ -18492,7 +18492,7 @@ let
     version = "2.125";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JM/JMGDOC/OpenOffice-OODoc-2.125.tar.gz";
-      sha256 = "1dnsj63svxq0hi3aci4x7binql8kr754inlkks5jmi4k0sblh561";
+      hash = "sha256-wRRIlwaTxCqLnpPaSMrJE1Fs4zqdRKZGhAD3rYeR2rY=";
     };
     propagatedBuildInputs = [ ArchiveZip XMLTwig ];
     meta = {
@@ -18507,7 +18507,7 @@ let
     version = "1.20";
     src = fetchurl {
       url = "mirror://cpan/authors/id/W/WR/WROG/Net-OpenID-Common-1.20.tar.gz";
-      sha256 = "1jdbkp18ka2m4akjp9b0dbw2lqnzgwpq435cnh6hwwa79bbrfkmb";
+      hash = "sha256-q06X10pHcQ4NtKwMgi9/32Iq+GpgpSunIlWoicKdq8k=";
     };
     propagatedBuildInputs = [ CryptDHGMP XMLSimple ];
     meta = {
@@ -18521,7 +18521,7 @@ let
     version = "1.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/W/WR/WROG/Net-OpenID-Consumer-1.18.tar.gz";
-      sha256 = "0f2g6sczvbpyjmy14pabmrj0d48hlsndqswrvmqk1161wxpkh70f";
+      hash = "sha256-Dhw4b+fBhDBx3Zlr3KymEJEGZK5LXRJ8lf6u/Zk2Tzg=";
     };
     propagatedBuildInputs = [ JSON NetOpenIDCommon ];
     buildInputs = [ CGI ];
@@ -18536,7 +18536,7 @@ let
     version = "0.80";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SA/SALVA/Net-OpenSSH-0.80.tar.gz";
-      sha256 = "1cxfipxfmgzfwpn1i0gf39gbrr56i2aqb0i9593n3czjgmjr7q7y";
+      hash = "sha256-/uCTZX3ys2FHKimChZWIpuS8XhrugRjs5e6/6vqNrrM=";
     };
     meta = {
       description = "Perl SSH client package implemented on top of OpenSSH";
@@ -18551,7 +18551,7 @@ let
       owner = "mark-5";
       repo = "p5-net-zookeeper";
       rev = "66e1a360aff9c39af728c36092b540a4b6045f70";
-      sha256 = "0xl8lcv9gfv0nn8vrrxa4az359whqdhmzw4r51nn3add8pn3s9ip";
+      hash = "sha256-NyY97EWtqWFtKJnwX2HDkKcyviKq57yRtWC7lzajiHY=";
     };
     buildInputs = [ pkgs.zookeeper_mt ];
     # fix "error: format not a string literal and no format arguments [-Werror=format-security]"
@@ -18581,7 +18581,7 @@ let
     version = "0.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BINGOS/Package-Constants-0.06.tar.gz";
-      sha256 = "0b58be78706ccc4e4bd9bbad41767470427fd7b2cfad749489de101f85bc5df5";
+      hash = "sha256-C1i+eHBszE5L2butQXZ0cEJ/17LPrXSUid4QH4W8XfU=";
     };
     meta = {
       description = "List constants defined in a package";
@@ -18594,7 +18594,7 @@ let
     version = "0.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/Package-DeprecationManager-0.17.tar.gz";
-      sha256 = "1d743ada482b5c9871d894966e87d4c20edc96931bb949fb2638b000ddd6684b";
+      hash = "sha256-HXQ62kgrXJhx2JSWbofUwg7clpMbuUn7JjiwAN3WaEs=";
     };
     buildInputs = [ TestFatal TestWarnings ];
     propagatedBuildInputs = [ PackageStash ParamsUtil SubInstall SubName ];
@@ -18610,7 +18610,7 @@ let
     version = "0.9.6";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TM/TMANNERM/PatchReader-0.9.6.tar.gz";
-      sha256 = "b8de37460347bb5474dc01916ccb31dd2fe0cd92242c4a32d730e8eb087c323c";
+      hash = "sha256-uN43RgNHu1R03AGRbMsx3S/gzZIkLEoy1zDo6wh8Mjw=";
     };
     meta = {
       description = "Utilities to read and manipulate patches and CVS";
@@ -18623,7 +18623,7 @@ let
     version = "0.39";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Package-Stash-0.39.tar.gz";
-      sha256 = "1d914qnnpiyimfi57crzb6r31nl613g2k48frs9h821f25azarci";
+      hash = "sha256-kWX1VREuCASTzg6RKd4Ihtowslk/s1Oiq9HHay0mIbU=";
     };
     buildInputs = [ CPANMetaCheck TestFatal TestNeeds TestRequires ];
     propagatedBuildInputs = [ DistCheckConflicts ModuleImplementation ];
@@ -18640,7 +18640,7 @@ let
     version = "0.29";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Package-Stash-XS-0.29.tar.gz";
-      sha256 = "1akqk10qxwk798qppajqbczwmhy4cs9g0lg961m3vq218slnnryk";
+      hash = "sha256-02drqUZB4D1qMOlR8JJmxMPKP1tYqnsxSmfyjkGYeKo=";
     };
     buildInputs = [ TestFatal TestRequires ];
     meta = {
@@ -18655,7 +18655,7 @@ let
     version = "1.227";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/Pango-1.227.tar.gz";
-      sha256 = "0wdcidnfnb6nm79fzfs39ivawj3x8m98a147fmcxgv1zvwia9c1l";
+      hash = "sha256-NLCkIt8/7NdZdYcEhVJFfUiudkxDu+/SqdYs62yLrHE=";
     };
     buildInputs = [ pkgs.pango ];
     propagatedBuildInputs = [ Cairo Glib ];
@@ -18671,7 +18671,7 @@ let
     version = "2.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Y/YA/YANICK/Parallel-ForkManager-2.02.tar.gz";
-      sha256 = "c1b2970a8bb666c3de7caac4a8f4dbcc043ab819bbc337692ec7bf27adae4404";
+      hash = "sha256-wbKXCou2ZsPefKrEqPTbzAQ6uBm7wzdpLse/J62uRAQ=";
     };
     buildInputs = [ TestWarn ];
     propagatedBuildInputs = [ Moo ];
@@ -18687,7 +18687,7 @@ let
     version = "0.102";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SK/SKAJI/Parallel-Pipes-0.102.tar.gz";
-      sha256 = "sha256-JjZfgQXcYGsUC9HUX41w1cMFQ5D3Xk/bdISj5ZHL+pc=";
+      hash = "sha256-JjZfgQXcYGsUC9HUX41w1cMFQ5D3Xk/bdISj5ZHL+pc=";
     };
     buildInputs = [ ModuleBuildTiny ];
     meta = {
@@ -18703,7 +18703,7 @@ let
     version = "0.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KA/KAZUHO/Parallel-Prefork-0.18.tar.gz";
-      sha256 = "f1c1f48f1ae147a58bc88f9cb2f570d6bb15ea4c0d589abd4c3084ddc961596e";
+      hash = "sha256-8cH0jxrhR6WLyI+csvVw1rsV6kwNWJq9TDCE3clhWW4=";
     };
     buildInputs = [ TestRequires TestSharedFork ];
     propagatedBuildInputs = [ ClassAccessorLite ListMoreUtils ProcWait3 ScopeGuard SignalMask ];
@@ -18718,7 +18718,7 @@ let
     version = "0.015";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Params-Classify-0.015.tar.gz";
-      sha256 = "052r198xyrsv8wz21gijdigz2cgnidsa37nvyfzdiz4rv1fc33ir";
+      hash = "sha256-OY7BXNiZ/Ni+89ueoXSL9jHxX2wyviA+R1tn31EKWRQ=";
     };
     perlPreHook = lib.optionalString stdenv.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
     meta = {
@@ -18732,7 +18732,7 @@ let
     version = "1.102";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RE/REHSACK/Params-Util-1.102.tar.gz";
-      sha256 = "00kl154zisf2zsl8yl6xa6yw54nhd9cja5d5fyigs96vhasb36s9";
+      hash = "sha256-SZuxtILbJP2id6UVJVlq0JLCvVHdUI+o/sLp+EkJdAI=";
     };
     meta = {
       description = "Simple, compact and correct param-checking functions";
@@ -18746,7 +18746,7 @@ let
     version = "1.30";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/Params-Validate-1.30.tar.gz";
-      sha256 = "04nqfgib2w529na6wjfxfrp54zdyyn91yb40iizd099i7mc3afls";
+      hash = "sha256-mjo1WD0xJdB+jIAsH5L1vn1SbnbdSW6UTaJwseJz2BI=";
     };
     buildInputs = [ TestFatal TestRequires ];
     propagatedBuildInputs = [ ModuleImplementation ];
@@ -18763,7 +18763,7 @@ let
     version = "0.30";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/Params-ValidationCompiler-0.30.tar.gz";
-      sha256 = "1jqn1l4m4i341g14kmjsf3a1kn7vv6z89cix0xjjgr1v70iywnyw";
+      hash = "sha256-3FvuIzg75CdlBz2yhL7Z+9gZ1HBa1knCC2REUgkNFss=";
     };
     propagatedBuildInputs = [ EvalClosure ExceptionClass ];
     buildInputs = [ Specio Test2PluginNoWarnings Test2Suite TestWithoutModule ];
@@ -18779,7 +18779,7 @@ let
     version = "2.07";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CO/CORLISS/Paranoid/Paranoid-2.07.tar.gz";
-      sha256 = "b55cfd8c6d5f181e218efd012f711a50cd14e4dbc8804650b95477178f43b7fc";
+      hash = "sha256-tVz9jG1fGB4hjv0BL3EaUM0U5NvIgEZQuVR3F49Dt/w=";
     };
     patches = [ ../development/perl-modules/Paranoid-blessed-path.patch ];
     preConfigure = ''
@@ -18799,7 +18799,7 @@ let
     version = "0.51";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RS/RSCHUPP/PAR-Dist-0.51.tar.gz";
-      sha256 = "1y6z6fpp6wclmk4x3nzsxv869i56668y1i74828g72dnz4nhchnj";
+      hash = "sha256-0kIGLfm2ifOQQOTE4JExpsRk0O7629HJrJRxc68z3/g=";
     };
     meta = {
       description = "Create and manipulate PAR distributions";
@@ -18812,7 +18812,7 @@ let
     version = "0.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/PAUSE-Permissions-0.17.tar.gz";
-      sha256 = "021ink414w4mdk6rd54cc1f23kfqg0zk4njx4ngr0bw3wc6r4kks";
+      hash = "sha256-ek6SDeODL5CfJV1aMj942M0hXGCMlJbNbJVwEsi0MQg=";
     };
     propagatedBuildInputs = [ FileHomeDir HTTPDate MooXOptions TimeDurationParse ];
     buildInputs = [ PathTiny ];
@@ -18829,7 +18829,7 @@ let
     version = "0.238";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CO/CORION/parent-0.238.tar.gz";
-      sha256 = "1lfjqjxsvgpsn6ycah4z0qygkykj4v8ca3cdki61k2p2ygg8zx9q";
+      hash = "sha256-OPWP3vPiihlMnI0NxdAmcvr5PAafQMW8sfq+rbvE0tE=";
     };
     meta = {
       description = "Establish an ISA relationship with base classes at compile time";
@@ -18842,7 +18842,7 @@ let
     version = "2.005";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JA/JAYBONCI/Parse-DebControl-2.005.tar.gz";
-      sha256 = "0ad78qri4sg9agghqdm83xsjgks94yvffs23kppy7mqjy8gwwjxn";
+      hash = "sha256-tkvOH/IS1+PvnUNo57YnSc8ndR+oNgzfU+lpEjNGpyk=";
     };
     propagatedBuildInputs = [ IOStringy LWP ];
     meta = {
@@ -18856,7 +18856,7 @@ let
     version = "1.22";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BINGOS/Parse-IRC-1.22.tar.gz";
-      sha256 = "457b09897f37d38a7054f9563247365427fe24101622ed4c7f054723a45b58d5";
+      hash = "sha256-RXsJiX8304pwVPlWMkc2VCf+JBAWIu1MfwVHI6RbWNU=";
     };
     meta = {
       description = "A parser for the IRC protocol";
@@ -18871,7 +18871,7 @@ let
     version = "0.19";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/Parse-LocalDistribution-0.19.tar.gz";
-      sha256 = "17p92nj4k3acrqqjnln1j5x8hbra9jkx5hdcybrq37ld9qnc62vb";
+      hash = "sha256-awvDLE6NnoHz8qzB0qdMKi+IepHBUisxzkyNSaQV6Z4=";
     };
     propagatedBuildInputs = [ ParsePMFile ];
     buildInputs = [ ExtUtilsMakeMakerCPANfile TestUseAllModules ];
@@ -18886,7 +18886,7 @@ let
     version = "3.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CO/CORLISS/Parse-PlainConfig/Parse-PlainConfig-3.05.tar.gz";
-      sha256 = "6b78a8552398b0d2d7063505c93b3cfed0432c5b2cf6e00b8e51febf411c1efa";
+      hash = "sha256-a3ioVSOYsNLXBjUFyTs8/tBDLFss9uALjlH+v0EcHvo=";
     };
     propagatedBuildInputs = [ ClassEHierarchy Paranoid ];
     meta = {
@@ -18901,7 +18901,7 @@ let
     version = "0.43";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/Parse-PMFile-0.43.tar.gz";
-      sha256 = "08q6j1lw5l49yhzx8gm4zal7zp1gk58iacpda86cyf27403yhqdy";
+      hash = "sha256-vmHoByBHOM8MUu0yFVGZL9x/qPqkPtQ/9InQwmmQBiM=";
     };
     buildInputs = [ ExtUtilsMakeMakerCPANfile ];
     meta = {
@@ -18915,7 +18915,7 @@ let
     version = "1.967015";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JT/JTBRAUN/Parse-RecDescent-1.967015.tar.gz";
-      sha256 = "1943336a4cb54f1788a733f0827c0c55db4310d5eae15e542639c9dd85656e37";
+      hash = "sha256-GUMzaky1TxeIpzPwgnwMVdtDENXq4V5UJjnJ3YVlbjc=";
     };
     meta = {
       description = "Generate Recursive-Descent Parsers";
@@ -18928,7 +18928,7 @@ let
     version = "1.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DS/DSCHWEI/Parse-Syslog-1.10.tar.gz";
-      sha256 = "659a2145441ef36d9835decaf83da308fcd03f49138cb3d90928e8bfc9f139d9";
+      hash = "sha256-ZZohRUQe822YNd7K+D2jCPzQP0kTjLPZCSjov8nxOdk=";
     };
     meta = {
       description = "Parse Unix syslog files";
@@ -18941,7 +18941,7 @@ let
     version = "0.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/Parser-MGC-0.16.tar.gz";
-      sha256 = "14bv2fwg59q4s3kv0vf11hh222anlm181ig87cph2f68y32n2i3l";
+      hash = "sha256-dERhxfDIOAEvO+jFgEKlVgkhIAzBbbDn0ASn8rgTe5E=";
     };
     propagatedBuildInputs = [ FileSlurpTiny ];
     meta = {
@@ -18955,7 +18955,7 @@ let
     version = "1.21";
     src = fetchurl {
       url = "mirror://cpan/authors/id/W/WB/WBRASWELL/Parse-Yapp-1.21.tar.gz";
-      sha256 = "1r8kbyk0qd4ficmabj753kjpq0ib0csk01169w7jxflg62cfj41q";
+      hash = "sha256-OBDpmDCPui4PTyYEMDUDKwJ85RzlyKUqi440DKZfE+U=";
     };
     meta = {
       description = "Perl extension for generating and using LALR parsers";
@@ -18969,7 +18969,7 @@ let
     version = "0.37";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KW/KWILLIAMS/Path-Class-0.37.tar.gz";
-      sha256 = "1kj8q8dmd8jci94w5arav59nkp0pkxrkliz4n8n6yf02hsa82iv5";
+      hash = "sha256-ZUeBlIYCOG8ssuRHOnOfF9xpU9kqq8JJikyiVhvCSM4=";
     };
     meta = {
       description = "Cross-platform path specification manipulation";
@@ -18982,7 +18982,7 @@ let
     version = "1.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Path-Dispatcher-1.08.tar.gz";
-      sha256 = "79a9f61c27408b4fd1ed234dac246974ddeafa7fe635a18fe41ec7783130ae2a";
+      hash = "sha256-ean2HCdAi0/R7SNNrCRpdN3q+n/mNaGP5B7HeDEwrio=";
     };
     buildInputs = [ ModuleBuildTiny TestFatal ];
     propagatedBuildInputs = [ Moo MooXTypeTiny TryTiny TypeTiny ];
@@ -18998,7 +18998,7 @@ let
     version = "1.014";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/Path-Iterator-Rule-1.014.tar.gz";
-      sha256 = "19mik0r5v1cmxfxm0h4lwqyj0nmq6jgnvvq96hqcjgylpvc02x1z";
+      hash = "sha256-P3QB2L7UP8kwNAnvbZ80uFogPeaUQFC765WFXTKYsaY=";
     };
     propagatedBuildInputs = [ NumberCompare TextGlob TryTiny ];
     buildInputs = [ Filepushd PathTiny TestDeep TestFilename ];
@@ -19014,7 +19014,7 @@ let
     version = "0.114";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/Path-Tiny-0.114.tar.gz";
-      sha256 = "cd0f88f37a58fc3667ec065767fe01e73ee6efa18a112bfd3508cf6579ca00e1";
+      hash = "sha256-zQ+I83pY/DZn7AZXZ/4B5z7m76GKESv9NQjPZXnKAOE=";
     };
     preConfigure =
       ''
@@ -19039,7 +19039,7 @@ let
     '';
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XS/XSAWYERX/PathTools-3.75.tar.gz";
-      sha256 = "a558503aa6b1f8c727c0073339081a77888606aa701ada1ad62dd9d8c3f945a2";
+      hash = "sha256-pVhQOqax+McnwAczOQgad4iGBqpwGtoa1i3Z2MP5RaI=";
     };
     meta = {
       description = "Get pathname of current working directory";
@@ -19052,7 +19052,7 @@ let
     version = "0.005";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/PBKDF2-Tiny-0.005.tar.gz";
-      sha256 = "b4e21dc59b30265eaaa41b705087ec03447d9c655a14ac40ff46e4de29eabf8e";
+      hash = "sha256-tOIdxZswJl6qpBtwUIfsA0R9nGVaFKxA/0bk3inqv44=";
     };
     meta = {
       description = "Minimalist PBKDF2 (RFC 2898) with HMAC-SHA1 or HMAC-SHA2";
@@ -19067,7 +19067,7 @@ let
     version = "1.4.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/W/WH/WHOM/pcsc-perl-1.4.14.tar.bz2";
-      sha256 = "17f6i16jv6ci6459vh6y3sz94vgcvykjjszcl4xsykryakjvf8i7";
+      hash = "sha256-JyK35VQ+T687oexrKaff7G2Svh7ewJ0KMZGZLU2Ixp0=";
     };
     buildInputs = [ pkgs.pcsclite ];
     nativeBuildInputs = [ pkgs.pkg-config ];
@@ -19088,7 +19088,7 @@ let
     version = "2.042";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SS/SSIMMS/PDF-API2-2.042.tar.gz";
-      sha256 = "0p9wsnn60mcxr4032ahai0d56x8gw76ydym2l4qxq086a10jk6db";
+      hash = "sha256-q5kpQVAGAdwxoaL65s3hD3VTGogKKjEAyZ1VYKzVPF0=";
     };
     buildInputs = [ TestException TestMemoryCycle ];
     propagatedBuildInputs = [ FontTTF ];
@@ -19103,7 +19103,7 @@ let
     version = "3.023";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PM/PMPERRY/PDF-Builder-3.022.tar.gz";
-      sha256 = "SCskaQxxhfLn+7r5pIKz0SieJduAC/SPKVn1Epl3yjE=";
+      hash = "sha256-SCskaQxxhfLn+7r5pIKz0SieJduAC/SPKVn1Epl3yjE=";
     };
     checkInputs = [ TestException TestMemoryCycle ];
     propagatedBuildInputs = [ FontTTF ];
@@ -19119,7 +19119,7 @@ let
     version = "2.025";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETJ/PDL-2.025.tar.gz";
-      sha256 = "1mlab95ij5a4q5pkrmgfas8x46cms2vqwzyjvaajsxr7mmz1cnhv";
+      hash = "sha256-G1oWfq0ndy2V2tJ/jrfQlRnSkVbu1TxvwUQVGUtaitY=";
     };
     patchPhase = ''
       substituteInPlace perldl.conf \
@@ -19165,7 +19165,7 @@ let
     version = "0.75";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IN/INGY/Pegex-0.75.tar.gz";
-      sha256 = "4dc8d335de80b25247cdb3f946f0d10d9ba0b3c34b0ed7d00316fd068fd05edc";
+      hash = "sha256-TcjTNd6AslJHzbP5RvDRDZugs8NLDtfQAxb9Bo/QXtw=";
     };
     buildInputs = [ TestPod TieIxHash ];
     propagatedBuildInputs = [ FileShareDirInstall XXX ];
@@ -19183,7 +19183,7 @@ let
     version = "1.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NO/NOBULL/perl5lib-1.02.tar.gz";
-      sha256 = "1b6fgs8wy2a7ff8rr1qdvdghhvlpr1pv760k4i2c8lq1hhjnkf94";
+      hash = "sha256-JLlpJYQBU8REJBOYs2/Il24IX9sNh5yRc0cJz5F+zqw=";
     };
     meta = {
       description = "Honour PERL5LIB even in taint mode";
@@ -19196,7 +19196,7 @@ let
     version = "0.122";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PERLANCAR/Perl-osnames-0.122.tar.gz";
-      sha256 = "7075939d747e375178d00348d00c52ff9db2cebb18bae7473dcb09df825118a0";
+      hash = "sha256-cHWTnXR+N1F40ANI0AxS/52yzrsYuudHPcsJ34JRGKA=";
     };
     meta = {
       description = "List possible $^O ($OSNAME) values, with description";
@@ -19210,7 +19210,7 @@ let
     version = "1.140";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PETDANCE/Perl-Critic-1.140.tar.gz";
-      sha256 = "1nzxpn71mrpp85yxrxlraj52q2skvf9ja887ls11d57h6smg1vmz";
+      hash = "sha256-v+7wqjbwlBaCpgchJZPbUwssilSZ9tx9QffmGo69/ds=";
     };
     buildInputs = [ TestDeep ];
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
@@ -19231,7 +19231,7 @@ let
     version = "1.0.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DB/DBOOK/Perl-Critic-Community-v1.0.0.tar.gz";
-      sha256 = "311b775da4193e9de94cf5225e993cc54dd096ae1e7ef60738cdae1d9b8854e7";
+      hash = "sha256-MRt3XaQZPp3pTPUiXpk8xU3Qlq4efvYHOM2uHZuIVOc=";
     };
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [ PPI PathTiny PerlCritic PerlCriticPolicyVariablesProhibitLoopOnHash PerlCriticPulp ];
@@ -19247,7 +19247,7 @@ let
     version = "1.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/Perl-Critic-Moose-${version}.tar.gz";
-      sha256 = "0092z583c3q3gqry693ck3ibkzby04a1g8lpw9zz2hr6qhi8xssj";
+      hash = "sha256-UuuOIsQmQ/F/4peiFxQBfv254phsJOMzfgMPNlD5IgE=";
     };
     propagatedBuildInputs = [ PerlCritic Readonly namespaceautoclean ];
     meta = {
@@ -19262,7 +19262,7 @@ let
     version = "0.008";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XS/XSAWYERX/Perl-Critic-Policy-Variables-ProhibitLoopOnHash-0.008.tar.gz";
-      sha256 = "12f5f0be96ea1bdc7828058577bd1c5c63ca23c17fac9c3709452b3dff5b84e0";
+      hash = "sha256-EvXwvpbqG9x4KAWFd70cXGPKI8F/rJw3CUUrPf9bhOA=";
     };
     propagatedBuildInputs = [ PerlCritic ];
     meta = {
@@ -19276,7 +19276,7 @@ let
     version = "99";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KR/KRYDE/Perl-Critic-Pulp-99.tar.gz";
-      sha256 = "b8fda842fcbed74d210257c0a284b6dc7b1d0554a47a3de5d97e7d542e23e7fe";
+      hash = "sha256-uP2oQvy+100hAlfAooS23HsdBVSkej3l2X59VC4j5/4=";
     };
     propagatedBuildInputs = [ IOString ListMoreUtils PPI PerlCritic PodMinimumVersion ];
     meta = {
@@ -19291,7 +19291,7 @@ let
     version = "0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RG/RGARCIA/Perl-Destruct-Level-0.02.tar.gz";
-      sha256 = "0fyiysrq874ncscgdjg522fs29gvqads6ynyhwxwwq1b545srd20";
+      hash = "sha256-QLSsCykrYM47h956o5vC+yWhnRDlyfaYZpYchLP20Ts=";
     };
     meta = {
       description = "Allow to change perl's destruction level";
@@ -19304,7 +19304,7 @@ let
     version = "0.012";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEONT/PerlIO-Layers-0.012.tar.gz";
-      sha256 = "1psaq3kwlk7g9rxvgsacfjk2mh6cscqf4xl7ggfkzfrnz91aabal";
+      hash = "sha256-VC2lQvo2uz/de4d24jDTzMAqpnRM6bd7Tu9MyufASt8=";
     };
     perlPreHook = "export LD=$CC";
     meta = {
@@ -19318,7 +19318,7 @@ let
     version = "0.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/PerlIO-eol-0.17.tar.gz";
-      sha256 = "1fayp27vcmypqyzcd4003036h3g5zy6jk1ia25frdca58pzcpk6f";
+      hash = "sha256-zszL/kVFsZZdESqGKY3/5Q1oBhgAkMa+x9dXto+4Xrk=";
     };
     meta = {
       description = "PerlIO layer for normalizing line endings";
@@ -19331,7 +19331,7 @@ let
     version = "0.20";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NW/NWCLARK/PerlIO-gzip-0.20.tar.gz";
-      sha256 = "4848679a3f201e3f3b0c5f6f9526e602af52923ffa471a2a3657db786bd3bdc5";
+      hash = "sha256-SEhnmj8gHj87DF9vlSbmAq9Skj/6RxoqNlfbeGvTvcU=";
     };
     buildInputs = [ pkgs.zlib ];
     NIX_CFLAGS_LINK = "-L${pkgs.zlib.out}/lib -lz";
@@ -19346,7 +19346,7 @@ let
     version = "0.008";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEONT/PerlIO-utf8_strict-0.008.tar.gz";
-      sha256 = "0ngl9p3kh7as1yx1az66yhbxhrh664vzhl3qnlhx9iywa3nqsyaz";
+      hash = "sha256-X3mN7VDcx9QhtXhQ+DcxBmbYF/TGfBW6D1odOMdN9Fk=";
     };
     buildInputs = [ TestException ];
     meta = {
@@ -19360,7 +19360,7 @@ let
     version = "0.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AL/ALEXMV/PerlIO-via-dynamic-0.14.tar.gz";
-      sha256 = "0jbb3xpbqzmr625blvnjszd69l3cwxzi7bhmkj5x48dgv3s7mkca";
+      hash = "sha256-is169NivIdKLnBWuE3/nbNBk2tfSbrqKMLl+vG4fa0k=";
     };
     meta = {
       description = "Dynamic PerlIO layers";
@@ -19373,7 +19373,7 @@ let
     version = "0.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CL/CLKAO/PerlIO-via-symlink-0.05.tar.gz";
-      sha256 = "0lidddcaz9anddqrpqk4zwm550igv6amdhj86i2jjdka9b1x81s1";
+      hash = "sha256-QQfUw0pqNilFNEjCVpXZL4JSKv9k4ptxa1alr1hrLVI=";
     };
 
     buildInputs = [ ModuleInstall ];
@@ -19394,7 +19394,7 @@ let
     version = "0.32";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAMS/PerlIO-via-Timeout-0.32.tar.gz";
-      sha256 = "9278f9ef668850d913d98fa4c0d7e7d667cff3503391f4a4eae73a246f2e7916";
+      hash = "sha256-knj572aIUNkT2Y+kwNfn1mfP81AzkfSk6uc6JG8ueRY=";
     };
     buildInputs = [ ModuleBuildTiny TestSharedFork TestTCP ];
     meta = {
@@ -19408,7 +19408,7 @@ let
     version = "0.66";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MARSCHAP/perl-ldap-0.66.tar.gz";
-      sha256 = "09263ce6166e80c98d689d41d09995b813389fd069b784601f6dc57f8e2b4102";
+      hash = "sha256-CSY85hZugMmNaJ1B0JmVuBM4n9Bpt4RgH23Ff44rQQI=";
     };
     buildInputs = [ TextSoundex ];
     propagatedBuildInputs = [ ConvertASN1 ];
@@ -19426,7 +19426,7 @@ let
     version = "7.0.11-1";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JC/JCRISTY/Image-Magick-${version}.tar.gz";
-      sha256 = "sha256-c0vuFmVq9bypQABBnZElGIQrpkYKwtD/B+PloBAycuI=";
+      hash = "sha256-c0vuFmVq9bypQABBnZElGIQrpkYKwtD/B+PloBAycuI=";
     };
     buildInputs = [ pkgs.imagemagick ];
     preConfigure =
@@ -19444,7 +19444,7 @@ let
     version = "20211029";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHANCOCK/Perl-Tidy-20211029.tar.gz";
-      sha256 = "1nhfi3gb8gif9p34m4ycqw0k8992yy42c21hk9b99l2pdbiv20zc";
+      hash = "sha256-7AOx42pX0JRWmjAIJoj3IiU0AcfMk0rGTS4+tN6IDto=";
     };
     meta = {
       description = "Indent and reformat perl scripts";
@@ -19458,7 +19458,7 @@ let
     version = "0.34";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BO/BOBTFISH/PHP-Serialization-0.34.tar.gz";
-      sha256 = "0yphqsgg7zrar2ywk2j2fnjxmi9rq32yf0p5ln8m9fmfx4kd84mr";
+      hash = "sha256-uRLUJumuulSRpeUC58XAOcXapXVCism9yCr/857G8Ho=";
     };
     meta = {
       description = "Simple flexible means of converting the output of PHP's serialize() into the equivalent Perl memory structure, and vice versa";
@@ -19471,7 +19471,7 @@ let
     version = "0.25026";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PL/PLICEASE/PkgConfig-0.25026.tar.gz";
-      sha256 = "1862hzlkibqsgynrnwg43acycp4rlsv19gsybjwq39nnqb9mxfjd";
+      hash = "sha256-Tbpe08LWpoG5XF6/FLammVzmmRrkcZutfxqvOOmHwqA=";
     };
     # support cross-compilation by simplifying the way we get version during build
     postPatch = ''
@@ -19493,7 +19493,7 @@ let
     version = "1.0048";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-1.0048.tar.gz";
-      sha256 = "19j2wnzsl0wl31ww4c2p1pahidwsr9hnylm2as8qadxl35gg5x9h";
+      hash = "sha256-MPXyXhm0N4WRVqJSb2HKmrcI1Q1XMMJ5GJQDqr/lQqY=";
     };
     buildInputs = [ AuthenSimplePasswd CGIEmulatePSGI FileShareDirInstall HTTPRequestAsCGI HTTPServerSimplePSGI IOHandleUtil LWP LWPProtocolhttp10 LogDispatchArray MIMETypes TestMockTimeHiRes TestRequires TestSharedFork TestTCP ];
     propagatedBuildInputs = [ ApacheLogFormatCompiler CookieBaker DevelStackTraceAsHTML FileShareDir FilesysNotifySimple HTTPEntityParser HTTPHeadersFast HTTPMessage TryTiny ];
@@ -19510,7 +19510,7 @@ let
     version = "0.29";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEEDO/Plack-App-Proxy-0.29.tar.gz";
-      sha256 = "03x6yb6ykz1ms90jp1s0pq19yplf7wswljvhzqkr16jannfrmah4";
+      hash = "sha256-BKqanbVKmpAn/nBLyjU/jl6fAr5AhytB0jX86c3ypg8=";
     };
     propagatedBuildInputs = [ AnyEventHTTP LWP Plack ];
     buildInputs = [ TestRequires TestSharedFork TestTCP ];
@@ -19525,7 +19525,7 @@ let
     version = "0.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-Middleware-Auth-Digest-0.05.tar.gz";
-      sha256 = "1sqm23kfsl3ac4060zcclc3r86x1vxzhsgvgzg6mxk9njj93zgcs";
+      hash = "sha256-mr0/kpQ2zV7N+28/DX/foRuUB6OMfWAAYWpQ7eYQFes=";
     };
     propagatedBuildInputs = [ DigestHMAC Plack ];
     buildInputs = [ LWP ModuleBuildTiny TestSharedFork TestTCP ];
@@ -19541,7 +19541,7 @@ let
     version = "0.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-Middleware-ConsoleLogger-0.05.tar.gz";
-      sha256 = "1ngvhwdw9ll4cwnvf0i89ppa9pbyiwng6iba04scrqjda353lrsm";
+      hash = "sha256-VWc6ylBN4sw0AWpF8yyPft2k7k0oArctZ4TSxBuH+9k=";
     };
     propagatedBuildInputs = [ JavaScriptValueEscape Plack ];
     buildInputs = [ ModuleBuildTiny TestRequires ];
@@ -19557,7 +19557,7 @@ let
     version = "0.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-Middleware-Debug-0.18.tar.gz";
-      sha256 = "192ef79e521c90c6eff6f4149ad2e4bfc911d2c95df78935855e90d659e9ac9a";
+      hash = "sha256-GS73nlIckMbv9vQUmtLkv8kR0sld94k1hV6Q1lnprJo=";
     };
     buildInputs = [ ModuleBuildTiny TestRequires ];
     propagatedBuildInputs = [ ClassMethodModifiers DataDump DataDumperConcise Plack TextMicroTemplate ];
@@ -19573,7 +19573,7 @@ let
     version = "0.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KA/KAZEBURO/Plack-Middleware-Deflater-0.12.tar.gz";
-      sha256 = "0xf2visi16hgwgyp9q0cjr10ikbn474hjia5mj8mb2scvbkrbni8";
+      hash = "sha256-KNqV59pMi1WRrEVFCckhds0IQpYM4HT94w+aEHXcwnU=";
     };
     propagatedBuildInputs = [ Plack ];
     buildInputs = [ TestRequires TestSharedFork TestTCP ];
@@ -19588,7 +19588,7 @@ let
     version = "0.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SW/SWEETKID/Plack-Middleware-FixMissingBodyInRedirect-0.12.tar.gz";
-      sha256 = "6c22d069f5a57ac206d4659b28b8869bb9270640bb955efddd451dcc58cdb391";
+      hash = "sha256-bCLQafWlesIG1GWbKLiGm7knBkC7lV793UUdzFjNs5E=";
     };
     propagatedBuildInputs = [ HTMLParser Plack ];
     meta = {
@@ -19603,7 +19603,7 @@ let
     version = "0.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CH/CHIBA/Plack-Middleware-Header-0.04.tar.gz";
-      sha256 = "0pjxxbnilphn38s3mmv0fmg9q2hm4z02ngp2a1lxblzjfbzvkdjy";
+      hash = "sha256-Xra5/3Ly09VpUOI+K8AnFQqcXnVg1zo0GhZeGu3qXV4=";
     };
     propagatedBuildInputs = [ Plack ];
     meta = {
@@ -19617,7 +19617,7 @@ let
     version = "0.20";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-Middleware-MethodOverride-0.20.tar.gz";
-      sha256 = "dbfb5a2efb48bfeb01cb3ae1e1c677e155dc7bfe210c7e7f221bae3cb6aab5f1";
+      hash = "sha256-2/taLvtIv+sByzrh4cZ34VXce/4hDH5/IhuuPLaqtfE=";
     };
     propagatedBuildInputs = [ Plack ];
     meta = {
@@ -19631,7 +19631,7 @@ let
     version = "0.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SW/SWEETKID/Plack-Middleware-RemoveRedundantBody-0.09.tar.gz";
-      sha256 = "80d45f93d6b7290b0bd8b3cedd84a37fc501456cc3dec02ec7aad81c0018087e";
+      hash = "sha256-gNRfk9a3KQsL2LPO3YSjf8UBRWzD3sAux6rYHAAYCH4=";
     };
     propagatedBuildInputs = [ Plack ];
     meta = {
@@ -19646,7 +19646,7 @@ let
     version = "0.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-Middleware-ReverseProxy-0.16.tar.gz";
-      sha256 = "0a512n62pnk5ayj3zdzyj50iy1qi8nwh6ygks2h7nrh7gp9k2jc7";
+      hash = "sha256-h0kx030HZnug0PN5A7lFEQcfQZH+tz+kV2XaK4wVoSg=";
     };
     propagatedBuildInputs = [ Plack ];
     meta = {
@@ -19661,7 +19661,7 @@ let
     version = "0.33";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-Middleware-Session-0.33.tar.gz";
-      sha256 = "1vm4a66civdzh7xvl5hy5wn1w8j1vndppwyz8ndh9n4as74s5yag";
+      hash = "sha256-T/miydGK2ASbRd/ze5vdQSIeLC8eFrr7gb/tyIxRpO4=";
     };
     propagatedBuildInputs = [ DigestHMAC Plack ];
     buildInputs = [ HTTPCookies LWP ModuleBuildTiny TestFatal TestRequires TestSharedFork TestTCP ];
@@ -19677,7 +19677,7 @@ let
     version = "0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Plack-Test-ExternalServer-0.02.tar.gz";
-      sha256 = "5baf5c57fe0c06412deec9c5abe7952ab8a04f8c47b4bbd8e9e9982268903ed0";
+      hash = "sha256-W69cV/4MBkEt7snFq+eVKrigT4xHtLvY6emYImiQPtA=";
     };
     buildInputs = [ Plack TestSharedFork TestTCP ];
     propagatedBuildInputs = [ LWP ];
@@ -19693,7 +19693,7 @@ let
     version = "0.897";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MR/MREISNER/PLS-0.897.tar.gz";
-      sha256 = "0278anidj7bgassj32g20cbki2kkqakkr3axyq4k90nj4snw7p6x";
+      hash = "sha256-3dzDrSbSgjQJ9l2NPKfCc4o4FwPiiSG1Vm8d2aJV6Ag=";
     };
     propagatedBuildInputs = [ Future IOAsync PPI PPR PathTiny PerlCritic PerlTidy PodMarkdown URI ];
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
@@ -19716,7 +19716,7 @@ let
     version = "50";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KR/KRYDE/Pod-MinimumVersion-50.tar.gz";
-      sha256 = "0bd2812d9aacbd99bb71fa103a4bb129e955c138ba7598734207dc9fb67b5a6f";
+      hash = "sha256-C9KBLZqsvZm7cfoQOkuxKelVwTi6dZhzQgfcn7Z7Wm8=";
     };
     propagatedBuildInputs = [ IOString PodParser ];
     meta = {
@@ -19732,7 +19732,7 @@ let
     version = "1.368";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BINGOS/POE-1.368.tar.gz";
-      sha256 = "08g1vzxamqg0gmkirdcx7fycq3pwv9vbajc30qwqpm1n3rvdrcdp";
+      hash = "sha256-t7Hcdh421Is5BoNJtXba/A7MvDudtRxnfeDhqvrf4SE=";
     };
     # N.B. removing TestPodLinkCheck from buildInputs because tests requiring
     # this module don't disable themselves when "run_network_tests" is
@@ -19767,7 +19767,7 @@ let
     version = "1.360";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RC/RCAPUTO/POE-Test-Loops-1.360.tar.gz";
-      sha256 = "0yx4wsljfmdzsiv0ni98x6lw975cm82ahngbwqvzv60wx5pwkl5y";
+      hash = "sha256-vtDJb+kcmP035utZqASqrJzEqekoRQt21L9VJ6nmpHs=";
     };
     meta = {
       description = "Reusable tests for POE::Loop authors";
@@ -19783,7 +19783,7 @@ let
     version = "1.270";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MITHALDU/PPI-1.270.tar.gz";
-      sha256 = "622a698c781bb85d2bdf7bbfe040fe70d33b79774c9ae01fce2375dc73faf457";
+      hash = "sha256-YippjHgbuF0r33u/4ED+cNM7eXdMmuAfziN13HP69Fc=";
     };
     buildInputs = [ ClassInspector TestDeep TestNoWarnings TestObject TestSubCalls ];
     propagatedBuildInputs = [ Clone IOString ParamsUtil TaskWeaken ];
@@ -19804,7 +19804,7 @@ let
     version = "0.013";
     src = fetchurl {
       url = "mirror://cpan/authors/id/W/WY/WYANT/PPIx-QuoteLike-0.013.tar.gz";
-      sha256 = "05qq5lk7a91jzn2vld906nvrpqbhxvy40s2qdymm5lkqha1k67ld";
+      hash = "sha256-jR4zg4J40lKrb1hoQPzucOGbtzUgNbqF/TIkdSYtGBc=";
     };
     propagatedBuildInputs = [ PPI Readonly ];
     meta = {
@@ -19818,7 +19818,7 @@ let
     version = "0.076";
     src = fetchurl {
       url = "mirror://cpan/authors/id/W/WY/WYANT/PPIx-Regexp-0.076.tar.gz";
-      sha256 = "0jh1g83s4m7qlj6c99myvbqayfd9nkff37y0chvlp33j4a9psq0h";
+      hash = "sha256-EGB9kyJyjEs3ZMCf4dy0qTmv8Nq+psSMpPhUogd6AUo=";
     };
     propagatedBuildInputs = [ PPI ];
     meta = {
@@ -19832,7 +19832,7 @@ let
     version = "1.001000";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EL/ELLIOTJS/PPIx-Utilities-1.001000.tar.gz";
-      sha256 = "03a483386fd6a2c808f09778d44db06b02c3140fb24ba4bf12f851f46d3bcb9b";
+      hash = "sha256-A6SDOG/WosgI8Jd41E2wawLDFA+yS6S/EvhR9G07y5s=";
     };
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ ExceptionClass PPI Readonly ];
@@ -19847,7 +19847,7 @@ let
     version = "0.000028";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DC/DCONWAY/PPR-0.000028.tar.gz";
-      sha256 = "1adrd189rnfl1fgv14inchvrgjqjbpnviisqsz3y8ds3gisafzfk";
+      hash = "sha256-032ndHxDN+TH11jHuO1dEsuXN2Q2krCfC9TZnFBouak=";
     };
     meta = {
       description = "Pattern-based Perl Recognizer";
@@ -19861,7 +19861,7 @@ let
     version = "1.21";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NERDVANA/Proc-Background-1.21.tar.gz";
-      sha256 = "91b6a5aeb841b1c313498c78fad08e37d17595702dc6205b5ad38ef69949b7ee";
+      hash = "sha256-kbalrrhBscMTSYx4+tCON9F1lXAtxiBbWtOO9plJt+4=";
     };
     meta = {
       description = "Run asynchronous child processes under Unix or Windows";
@@ -19875,7 +19875,7 @@ let
     version = "0.59";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JW/JWB/Proc-ProcessTable-0.59.tar.gz";
-      sha256 = "f8cc5054d78c35a0ce39fb75430b4ef402e2a99013d2ec37e7997f316594606c";
+      hash = "sha256-+MxQVNeMNaDOOft1QwtO9ALiqZAT0uw355l/MWWUYGw=";
     };
     meta = {
       description = "Perl extension to access the unix process table";
@@ -19888,7 +19888,7 @@ let
     version = "0.051";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PERLANCAR/Proc-Find-0.051.tar.gz";
-      sha256 = "64d39071ec94d7b66a7cab5a950246f0fff013b5a200a63d1176432987e5a135";
+      hash = "sha256-ZNOQceyU17ZqfKtalQJG8P/wE7WiAKY9EXZDKYfloTU=";
     };
     propagatedBuildInputs = [ ProcProcessTable ];
     meta = {
@@ -19903,7 +19903,7 @@ let
     version = "1.5";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BILBO/Proc-SafeExec-1.5.tar.gz";
-      sha256 = "1b4d0908bcac563d34a7e5be61c5da3eee98e4a6c7fa68c2670cc5844b5a2d78";
+      hash = "sha256-G00JCLysVj00p+W+YcXaPu6Y5KbH+mjCZwzFhEtaLXg=";
     };
     meta = {
       description = "Convenient utility for executing external commands in various ways";
@@ -19916,7 +19916,7 @@ let
     version = "1.32";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSCHILLI/Proc-Simple-1.32.tar.gz";
-      sha256 = "4c8f0a924b19ad78a13da73fe0fb306d32a7b9d10a332c523087fc83a209a8c4";
+      hash = "sha256-TI8KkksZrXihPac/4PswbTKnudEKMyxSMIf8g6IJqMQ=";
     };
     meta = {
       description = "Launch and control background processes";
@@ -19929,7 +19929,7 @@ let
     version = "0.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CT/CTILMES/Proc-Wait3-0.05.tar.gz";
-      sha256 = "1a907f5db6933dc2939bbfeffe19eeae7ed39ef1b97a2bc9b723f2f25f81caf3";
+      hash = "sha256-GpB/XbaTPcKTm7/v/hnurn7TnvG5eivJtyPy8l+ByvM=";
     };
     meta = {
       description = "Perl extension for wait3 system call";
@@ -19942,7 +19942,7 @@ let
     version = "1.00";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RO/ROSCH/Proc-WaitStat-1.00.tar.gz";
-      sha256 = "1g3l8jzx06x4l4p0x7fyn4wvg6plfzl420irwwb9v447wzsn6xfh";
+      hash = "sha256-0HVj9eeHkJ0W5zkCQeh39Jq3ObHenQ4uoaQb0L9EdLw=";
     };
     propagatedBuildInputs = [ IPCSignal ];
     meta = {
@@ -19956,7 +19956,7 @@ let
     version = "0.008";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RO/ROBN/Prometheus-Tiny-0.008.tar.gz";
-      sha256 = "17d7b69chkcq8fprww6m15glndyb0lms2l0xjbnbw04q7f8ncskk";
+      hash = "sha256-c2pmkTuYAL7skh1QoSsFyzdLXwnVcJ6vQ5hNyJJZp50=";
     };
     buildInputs = [ HTTPMessage Plack TestException ];
     meta = {
@@ -19971,7 +19971,7 @@ let
     version = "0.024";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RO/ROBN/Prometheus-Tiny-Shared-0.024.tar.gz";
-      sha256 = "02w24r4amk8dqlavg6abxap48hzxrbda48f1pmrqypgx1cz59g4g";
+      hash = "sha256-j7xUPgv9XY9zvcEhotrK/UNErupLmbcVxQ3Nqkgmggs=";
     };
     buildInputs = [ DataRandom HTTPMessage Plack TestDifferences TestException ];
     propagatedBuildInputs = [ HashSharedMem JSONXS PrometheusTiny ];
@@ -19987,7 +19987,7 @@ let
     version = "1.0011";
     src = fetchurl {
       url = "mirror://cpan/authors/id/U/UN/UNDEF/Protocol-Redis-1.0011.tar.gz";
-      sha256 = "7ceb6bd80067c904465d4fd1f1715724388c9bdc37c6c2c003a20ce569b7f4e8";
+      hash = "sha256-fOtr2ABnyQRGXU/R8XFXJDiMm9w3xsLAA6IM5Wm39Og=";
     };
     meta = {
       description = "Redis protocol parser/encoder with asynchronous capabilities";
@@ -20002,7 +20002,7 @@ let
     version = "0.003";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DB/DBOOK/Protocol-Redis-Faster-0.003.tar.gz";
-      sha256 = "6b9afb3de94ec1ccd7db4f9e6a2eaba254a57790301c17bcb13bb3edfe1850b7";
+      hash = "sha256-a5r7PelOwczX20+eai6rolSld5AwHBe8sTuz7f4YULc=";
     };
     propagatedBuildInputs = [ ProtocolRedis ];
     meta = {
@@ -20018,7 +20018,7 @@ let
     version = "0.26";
     src = fetchurl {
       url = "mirror://cpan/authors/id/V/VT/VTI/Protocol-WebSocket-0.26.tar.gz";
-      sha256 = "08jmazvrmvp8jn15p2n3c1h3f2cbkr07xjzy197jb8x724vx0dsq";
+      hash = "sha256-WDfQNxGnoyVPCv7LfkCeiwk3YGDDiluClejumvdXVSI=";
     };
     buildInputs = [ ModuleBuildTiny ];
     meta = {
@@ -20033,7 +20033,7 @@ let
 
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CR/CRUX/Protocol-HTTP2-1.10.tar.gz";
-      sha256 = "0jm6jq1wszjrrcypyi642m2i8wgni50wdnzh9dzfkyjazdc00sn2";
+      hash = "sha256-wmoAWPtK+ul+S/DbxkGJ9nEURRXERH89y1l+zQOWpko=";
     };
     buildInputs = [ AnyEvent ModuleBuildTiny NetSSLeay TestLeakTrace TestSharedFork TestTCP ];
     meta = {
@@ -20047,7 +20047,7 @@ let
     version = "1.102";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/PSGI-1.102.tar.gz";
-      sha256 = "0iqzxs8fv63510knm3zr3jr3ky4x7diwd7y24mlshzci81kl8v55";
+      hash = "sha256-pWxEZ0CRfahpJcKfxmM7nfg5shz5j2onCGWY7ZDuH0c=";
     };
     meta = {
       description = "Perl Web Server Gateway Interface Specification";
@@ -20060,7 +20060,7 @@ let
     version = "2.5";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RO/ROBIN/PadWalker-2.5.tar.gz";
-      sha256 = "1l0cga0ny43x5xpqw9nrdwbznvqpj35ni39a0wrayihihjxnmch7";
+      hash = "sha256-B7Jqu4QRRq8yByqNaMuQF2/7F2/ZJo5vL30Qb4F6DNA=";
     };
     meta = {
       description = "Play with other peoples' lexical variables";
@@ -20073,7 +20073,7 @@ let
     version = "1.60000";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CF/CFRANKS/Perl6-Junction-1.60000.tar.gz";
-      sha256 = "0r3in9pyrm6wfrhcvxbq5w1617x8x5537lxj9hdzks4pa7l7a8yh";
+      hash = "sha256-0CN16FGX6PkbTLLTM0rpqJ9gAi949c1gdtzU7G+ycWQ=";
     };
     meta = {
       description = "Perl6 style Junction operators in Perl5";
@@ -20086,7 +20086,7 @@ let
     version = "1.38";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/Perl-MinimumVersion-1.38.tar.gz";
-      sha256 = "478b5824791b87fc74c94a892180682bd06ad2cdf34034b1a4b859273927802a";
+      hash = "sha256-R4tYJHkbh/x0yUqJIYBoK9Bq0s3zQDSxpLhZJzkngCo=";
     };
     buildInputs = [ TestScript ];
     propagatedBuildInputs = [ FileFindRulePerl PerlCritic ];
@@ -20103,7 +20103,7 @@ let
     version = "1.023";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Perl-PrereqScanner-1.023.tar.gz";
-      sha256 = "280a1c4710390865fb9f310a861a34720b28b4cbe50609c841af5cf2d3a2bced";
+      hash = "sha256-KAocRxA5CGX7nzEKhho0cgsotMvlBgnIQa9c8tOivO0=";
     };
     propagatedBuildInputs = [ GetoptLongDescriptive ListMoreUtils ModulePath Moose PPI StringRewritePrefix namespaceautoclean ];
     meta = {
@@ -20119,7 +20119,7 @@ let
     version = "0.9913";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/Perl-PrereqScanner-NotQuiteLite-0.9913.tar.gz";
-      sha256 = "13alrwwh36wsqn0gliwdpp2a9kymjk8gx30gfkqw0f29w72ry3cp";
+      hash = "sha256-lw2fxeFJOMDxdA+M/tCU1c+kxL2NR/qAxZqbATnPVI0=";
     };
     propagatedBuildInputs = [ DataDump ModuleCPANfile ModuleFind RegexpTrie URIcpan ];
     buildInputs = [ ExtUtilsMakeMakerCPANfile TestFailWarnings TestUseAllModules ];
@@ -20135,7 +20135,7 @@ let
     version = "1.013";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BD/BDFOY/Perl-Version-1.013.tar.gz";
-      sha256 = "1887414d1c8689d864c840114101e043e99d7dd5b9cca69369a60e821e3ad0f7";
+      hash = "sha256-GIdBTRyGidhkyEARQQHgQ+mdfdW5zKaTaaYOgh460Pc=";
     };
     propagatedBuildInputs = [ FileSlurpTiny ];
     meta = {
@@ -20150,7 +20150,7 @@ let
     version = "0.20";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BL/BLILBURNE/Pod-Abstract-0.20.tar.gz";
-      sha256 = "956ef7bb884c55456e2fb6e7f229f9a87dd50a61d700500c738db8f2ba277f87";
+      hash = "sha256-lW73u4hMVUVuL7bn8in5qH3VCmHXAFAMc4248ronf4c=";
     };
     propagatedBuildInputs = [ IOString TaskWeaken PodParser ];
     meta = {
@@ -20165,7 +20165,7 @@ let
     version = "1.74";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MAREKR/Pod-Checker-1.74.tar.gz";
-      sha256 = "12559997r7wbhhs0p6cdxdzv7rzviv0nx1hq0dby8q481apn489f";
+      hash = "sha256-LiFirwqIYORXAxiGbsGO++ezf+uNmQs0hIuffFJKpYg=";
     };
     meta = {
       description = "Verifies POD documentation contents for compliance with the POD format specifications";
@@ -20179,7 +20179,7 @@ let
     version = "0.23";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RC/RCLAMP/Pod-Coverage-0.23.tar.gz";
-      sha256 = "01xifj83dv492lxixijmg6va02rf3ydlxly0a9slmx22r6qa1drh";
+      hash = "sha256-MLegsMlC9Ep1UsDTTpsfLgugtnlVxh47FYnsNpB0sQc=";
     };
     propagatedBuildInputs = [ DevelSymdump PodParser ];
     meta = {
@@ -20194,7 +20194,7 @@ let
     version = "0.100005";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Pod-Coverage-TrustPod-0.100005.tar.gz";
-      sha256 = "08bk6lfimr2pwi6c92xg5cw1cxmi5fqhls3yasqzpjnd4if86s3c";
+      hash = "sha256-bGiDXCTNyvuxVn5oCrErsXYWOCuvi8RM5FfkGh01cyE=";
     };
     propagatedBuildInputs = [ PodCoverage PodEventual ];
     meta = {
@@ -20209,7 +20209,7 @@ let
     version = "0.103005";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Pod-Elemental-0.103005.tar.gz";
-      sha256 = "824336ec18326e3b970e7815922b3921b0a821d2ee0e50b0c5b2bc327f99615e";
+      hash = "sha256-gkM27BgybjuXDngVkis5IbCoIdLuDlCwxbK8Mn+ZYV4=";
     };
     buildInputs = [ TestDeep TestDifferences ];
     propagatedBuildInputs = [ MooseXTypes PodEventual StringRewritePrefix StringTruncate ];
@@ -20225,7 +20225,7 @@ let
     version = "0.200006";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Pod-Elemental-PerlMunger-0.200006.tar.gz";
-      sha256 = "09fd3b5d53119437a01dced66b42eafdcd53895b3c32a2b0f781f36fda0f665b";
+      hash = "sha256-Cf07XVMRlDegHc7Wa0Lq/c1TiVs8MqKw94Hzb9oPZls=";
     };
     buildInputs = [ TestDifferences ];
     propagatedBuildInputs = [ PPI PodElemental ];
@@ -20241,7 +20241,7 @@ let
     version = "0.094001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Pod-Eventual-0.094001.tar.gz";
-      sha256 = "be9fb8910b108e5d1a66f002b659ad22576e88d779b703dff9d15122c3f80834";
+      hash = "sha256-vp+4kQsQjl0aZvACtlmtIlduiNd5twPf+dFRIsP4CDQ=";
     };
     propagatedBuildInputs = [ MixinLinewise ];
     buildInputs = [ TestDeep ];
@@ -20257,7 +20257,7 @@ let
     version = "1.63";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MAREKR/Pod-Parser-1.63.tar.gz";
-      sha256 = "dbe0b56129975b2f83a02841e8e0ed47be80f060686c66ea37e529d97aa70ccd";
+      hash = "sha256-2+C1YSmXWy+DoChB6ODtR76A8GBobGbqN+Up2XqnDM0=";
     };
     meta = {
       description = "Modules for parsing/translating POD format documents";
@@ -20271,7 +20271,7 @@ let
     version = "2.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/Pod-POM-2.01.tar.gz";
-      sha256 = "1b50fba9bbdde3ead192beeba0eaddd0c614e3afb1743fa6fff805f57c56f7f4";
+      hash = "sha256-G1D7qbvd4+rRkr7roOrd0MYU46+xdD+m//gF9XxW9/Q=";
     };
     buildInputs = [ FileSlurper TestDifferences TextDiff ];
     meta = {
@@ -20287,7 +20287,7 @@ let
     version = "0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PERLER/Pod-POM-View-TOC-0.02.tar.gz";
-      sha256 = "ccb42272c7503379cb1131394620ee50276d72844e0e80eb4b007a9d58f87623";
+      hash = "sha256-zLQicsdQM3nLETE5RiDuUCdtcoRODoDrSwB6nVj4diM=";
     };
     propagatedBuildInputs = [ PodPOM ];
     meta = {
@@ -20301,7 +20301,7 @@ let
     version = "0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KT/KTAT/Pod-Section-0.02.tar.gz";
-      sha256 = "c9d1d75292f321881184ec56983c16f408fd2d312d5a720f8fb0d2cafa729238";
+      hash = "sha256-ydHXUpLzIYgRhOxWmDwW9Aj9LTEtWnIPj7DSyvpykjg=";
     };
     propagatedBuildInputs = [ PodAbstract ];
     meta = {
@@ -20317,7 +20317,7 @@ let
     version = "0.61";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TJ/TJENNESS/Pod-LaTeX-0.61.tar.gz";
-      sha256 = "15a840ea1c8a76cd3c865fbbf2fec33b03615c0daa50f9c800c54e0cf0659d46";
+      hash = "sha256-FahA6hyKds08hl+78v7DOwNhXA2qUPnIAMVODPBlnUY=";
     };
     propagatedBuildInputs = [ PodParser ];
     meta = {
@@ -20333,7 +20333,7 @@ let
     version = "4.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RR/RRA/podlators-4.14.tar.gz";
-      sha256 = "10hgvdyp0969a1222hk1y5n2p72lhxrrv8h0yyzlsbjbwcfw9wbs";
+      hash = "sha256-evHEHeNLLk2/9wCinXOHVJwrbPFhQiFEUMkkcH3bD4I=";
     };
     preCheck = ''
       # remove failing spdx check
@@ -20351,7 +20351,7 @@ let
     version = "15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KR/KRYDE/podlinkcheck-15.tar.gz";
-      sha256 = "4e3bebec1bf82dbf850a94ae26a253644cf5806ec41afc74e43e1710a37321db";
+      hash = "sha256-Tjvr7Bv4Lb+FCpSuJqJTZEz1gG7EGvx05D4XEKNzIds=";
     };
     propagatedBuildInputs = [ FileFindIterator FileHomeDir IPCRun PodParser constant-defer libintl-perl ];
     meta = {
@@ -20366,7 +20366,7 @@ let
     version = "1.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/prefork-1.05.tar.gz";
-      sha256 = "01ckn45ij3nbrsc0yc4wl4z0wndn36jh6247zbycwa1vlvgvr1vd";
+      hash = "sha256-bYe836Y7KM78+ocIA6UZtlkOPqGcMA+YzssOGQuxkwU=";
     };
     meta = {
       description = "Optimized module loading for forking or non-forking processes";
@@ -20380,7 +20380,7 @@ let
     version = "3.28";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MALLEN/Pod-Perldoc-3.28.tar.gz";
-      sha256 = "0kf6xwdha8jl0nxv60r2v7xsfnvv6i3gy135xsl40g71p02ychfc";
+      hash = "sha256-zEHmBbjhPECo7mUE/0Y0e1un+9kiA7O7BVQiBRvvxk0=";
     };
     meta = {
       description = "Look up Perl documentation in Pod format";
@@ -20394,7 +20394,7 @@ let
     version = "1.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RM/RMBARKER/Pod-Plainer-1.04.tar.gz";
-      sha256 = "1bbfbf7d1d4871e5a83bab2137e22d089078206815190eb1d5c1260a3499456f";
+      hash = "sha256-G7+/fR1IceWoO6shN+ItCJB4IGgVGQ6x1cEmCjSZRW8=";
     };
     propagatedBuildInputs = [ PodParser ];
     meta = {
@@ -20408,7 +20408,7 @@ let
     version = "3.300";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RW/RWSTAUNER/Pod-Markdown-3.300.tar.gz";
-      sha256 = "0y8vk7wprair2fjqbkjl7g9jv0dn7rv58l7b9yf7819nia8fjygc";
+      hash = "sha256-7HnpkIo2BXScT+tQVHY+toEt0ztUzoWlEzmqfPmZG3k=";
     };
     buildInputs = [ TestDifferences ];
     propagatedBuildInputs = [ URI ];
@@ -20425,7 +20425,7 @@ let
     version = "0.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MINIMAL/Pod-Markdown-Github-0.04.tar.gz";
-      sha256 = "04y67c50hpf1vb9cwsza3fbj4rshdqa47vi3zcj4kkjckh02yzmk";
+      hash = "sha256-s34vAJxMzkkk+yPuQxRuUGcilxvqa87S2sFdCAo7xhM=";
     };
     propagatedBuildInputs = [ PodMarkdown ];
     buildInputs = [ TestDifferences ];
@@ -20441,7 +20441,7 @@ let
     version = "3.42";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KH/KHW/Pod-Simple-3.42.tar.gz";
-      sha256 = "1icagrjqw1azmff82h17cbrhqgql7rg21gz64mjpiqqq0cpfpz59";
+      hash = "sha256-qfzrLgMY43hlJea/IF4+FD8M82InQIGcq18FjmV+isU=";
     };
     meta = {
       description = "Framework for parsing Pod";
@@ -20454,7 +20454,7 @@ let
     version = "1.20";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DO/DOLMEN/Pod-Spell-1.20.tar.gz";
-      sha256 = "6383f7bfe22bc0d839a08057a0ce780698b046184aea935be4833d94986dd03c";
+      hash = "sha256-Y4P3v+IrwNg5oIBXoM54BpiwRhhK6pNb5IM9lJht0Dw=";
     };
     propagatedBuildInputs = [ ClassTiny FileShareDir LinguaENInflect PathTiny PodParser ];
     buildInputs = [ FileShareDirInstall TestDeep ];
@@ -20471,7 +20471,7 @@ let
     version = "1.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DO/DOMM/Pod-Strip-1.02.tar.gz";
-      sha256 = "1zsjfw2cjq1bd3ppl67fdvrx46vj9lina0c3cv9qgk5clzvaq3fq";
+      hash = "sha256-2A2s9qeszIfTZoMBZSNNchvS827uGHrvaCtgyQR3Uv8=";
     };
     meta = {
       description = "Remove POD from Perl code";
@@ -20485,7 +20485,7 @@ let
     version = "0.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JH/JHOBLITT/Pod-Tidy-0.10.tar.gz";
-      sha256 = "1gcxjplgksnc5iggi8dzbkbkcryii5wjhypd7fs3kmbwx91y2vl8";
+      hash = "sha256-iG7hQ+p81Tm0O+16KHmJ0Wc211y/ofheLMzq+eiVnb0=";
     };
     propagatedBuildInputs = [ EncodeNewlines IOString PodWrap TextGlob ];
     buildInputs = [ TestCmd ];
@@ -20501,7 +20501,7 @@ let
     version = "4.015";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Pod-Weaver-4.015.tar.gz";
-      sha256 = "5af25b29a55783e495a9df5ef6293240e2c9ab02764613d79f1ed50b12dec5ae";
+      hash = "sha256-WvJbKaVXg+SVqd9e9ikyQOLJqwJ2RhPXnx7VCxLexa4=";
     };
     buildInputs = [ PPI SoftwareLicense TestDifferences ];
     propagatedBuildInputs = [ ConfigMVPReaderINI DateTime ListMoreUtils LogDispatchouli PodElemental ];
@@ -20517,7 +20517,7 @@ let
     version = "0.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NU/NUFFIN/Pod-Wrap-0.01.tar.gz";
-      sha256 = "0qwb5hp26f85xnb3zivf8ccfdplabiyl5sd53c6wgdgvzzicpjjh";
+      hash = "sha256-UMrL4v/7tccNG6XpQn1cit7mGENuxz+W7QU5Iy4si2M=";
     };
     propagatedBuildInputs = [ PodParser ];
     meta = {
@@ -20532,7 +20532,7 @@ let
     version = "0.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KW/KWILLIAMS/Probe-Perl-0.03.tar.gz";
-      sha256 = "0c9wiaz0mqqknafr4jdr0g2gdzxnn539182z0icqaqvp5qgd5r6r";
+      hash = "sha256-2eTSHi53Y4VZBF+gkEaxtv/2xAO5SZKdshPjCr6KPDE=";
     };
     meta = {
       description = "Information about the currently running perl";
@@ -20545,7 +20545,7 @@ let
     version = "0.04";
     src = fetchurl {
       url = "mirror://cpan/authors//id/N/NI/NIKOLAS/POSIX-AtFork-0.04.tar.gz";
-      sha256 = "sha256-wuIpOobUhxRLyPe6COfEt2sRsOTf3EGAmEXTDvoH5g4=";
+      hash = "sha256-wuIpOobUhxRLyPe6COfEt2sRsOTf3EGAmEXTDvoH5g4=";
     };
     buildInputs = [ TestSharedFork ];
     meta = {
@@ -20559,7 +20559,7 @@ let
     version = "0.44";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KA/KAZEBURO/POSIX-strftime-Compiler-0.44.tar.gz";
-      sha256 = "dfd3c97398dcfe51c8236b85e3dc28035667b76531f7aa0a6535f3aa5405b35a";
+      hash = "sha256-39PJc5jc/lHII2uF49woA1Znt2Ux96oKZTXzqlQFs1o=";
     };
     # We cannot change timezones on the fly.
     prePatch = "rm t/04_tzset.t";
@@ -20576,7 +20576,7 @@ let
     version = "1.4";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SY/SYP/App-rainbarf-1.4.tar.gz";
-      sha256 = "4f139ad35faaf2de0623dc0bb1dd89fa5a431e548bfec87dee194cf0e25cc97d";
+      hash = "sha256-TxOa01+q8t4GI9wLsd2J+lpDHlSL/sh97hlM8OJcyX0=";
     };
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
     postInstall = lib.optionalString stdenv.isDarwin ''
@@ -20595,7 +20595,7 @@ let
     version = "2.86";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TODDR/Razor2-Client-Agent-2.86.tar.gz";
-      sha256 = "5e062e02ebb65e24b708e7eefa5300c43d6f657bf20d08fec4ca8a0a3b94845f";
+      hash = "sha256-XgYuAuu2XiS3COfu+lMAxD1vZXvyDQj+xMqKCjuUhF8=";
     };
     propagatedBuildInputs = [ DigestSHA1 URI ];
     meta = {
@@ -20611,7 +20611,7 @@ let
     version = "2.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SA/SANKO/Readonly-2.05.tar.gz";
-      sha256 = "4b23542491af010d44a5c7c861244738acc74ababae6b8838d354dfb19462b5e";
+      hash = "sha256-SyNUJJGvAQ1EpcfIYSRHOKzHSrq65riDjTVN+xlGK14=";
     };
     buildInputs = [ ModuleBuildTiny ];
     meta = {
@@ -20626,7 +20626,7 @@ let
     version = "1.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SA/SANKO/ReadonlyX-1.04.tar.gz";
-      sha256 = "81bb97dba93ac6b5ccbce04a42c3590eb04557d75018773ee18d5a30fcf48188";
+      hash = "sha256-gbuX26k6xrXMvOBKQsNZDrBFV9dQGHc+4Y1aMPz0gYg=";
     };
     buildInputs = [ ModuleBuildTiny TestFatal ];
     meta = {
@@ -20641,7 +20641,7 @@ let
     version = "1.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RO/ROODE/Readonly-XS-1.05.tar.gz";
-      sha256 = "8ae5c4e85299e5c8bddd1b196f2eea38f00709e0dc0cb60454dc9114ae3fff0d";
+      hash = "sha256-iuXE6FKZ5ci93RsZby7qOPAHCeDcDLYEVNyRFK4//w0=";
     };
     propagatedBuildInputs = [ Readonly ];
     meta = {
@@ -20655,7 +20655,7 @@ let
     version = "1.998";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAMS/Redis-1.998.tar.gz";
-      sha256 = "59f3bb176c3a7a54cb3779497b89a7bae1fb217565c68711d585fc1f09d79c87";
+      hash = "sha256-WfO7F2w6elTLN3lJe4mnuuH7IXVlxocR1YX8HwnXnIc=";
     };
     buildInputs = [ IOString ModuleBuildTiny TestDeep TestFatal TestSharedFork TestTCP ];
     propagatedBuildInputs = [ IOSocketTimeout TryTiny ];
@@ -20671,7 +20671,7 @@ let
     version = "0.204";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AR/ARC/Ref-Util-0.204.tar.gz";
-      sha256 = "1q85y5lzgl8wz5qnz3j6mch2fmllr668h54wszaz6i6gp8ysfps1";
+      hash = "sha256-QV+nPbrPRPPV15wUiIzJlFYnIKtGjm9x+RzR92nxBeE=";
     };
     meta = {
       description = "Utility functions for checking references";
@@ -20684,7 +20684,7 @@ let
     version = "0.38";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RS/RSAVAGE/Regexp-Assemble-0.38.tgz";
-      sha256 = "0hp4v8mghmpflq9l9fqrkjg4cw0d3ha2nrmnsnzwjwqvmvwyfsx0";
+      hash = "sha256-oGvn+a4bc8m/1bZmKxQcDXBGnpwZu0QTpu5W+Cra5EI=";
     };
     meta = {
       description = "Assemble multiple Regular Expressions into a single RE";
@@ -20697,7 +20697,7 @@ let
     version = "2017060201";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AB/ABIGAIL/Regexp-Common-2017060201.tar.gz";
-      sha256 = "ee07853aee06f310e040b6bf1a0199a18d81896d3219b9b35c9630d0eb69089b";
+      hash = "sha256-7geFOu4G8xDgQLa/GgGZoY2BiW0yGbmzXJYw0OtpCJs=";
     };
     meta = {
       description = "Provide commonly requested regular expressions";
@@ -20710,7 +20710,7 @@ let
     version = "0.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BP/BPS/Regexp-Common-net-CIDR-0.03.tar.gz";
-      sha256 = "39606a57aab20d4f4468300f2ec3fa2ab557fcc9cb7880ec7c6e07d80162da33";
+      hash = "sha256-OWBqV6qyDU9EaDAPLsP6KrVX/MnLeIDsfG4H2AFi2jM=";
     };
     propagatedBuildInputs = [ RegexpCommon ];
     meta = {
@@ -20724,7 +20724,7 @@ let
     version = "0.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MANWAR/Regexp-Common-time-0.16.tar.gz";
-      sha256 = "1jjay5gybbls3xn5ihc6q5ig3kf4i28nq4gvg2zp4p5m1ajhg08w";
+      hash = "sha256-HIEHpQq1XHK/ePsRbJGIxM3xYsGGwVhsH5qu5V/xSso=";
     };
     propagatedBuildInputs = [ RegexpCommon ];
     meta = {
@@ -20740,7 +20740,7 @@ let
     version = "1.057";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DC/DCONWAY/Regexp-Grammars-1.057.tar.gz";
-      sha256 = "af53c19818461cd701aeb57c49dffdb463edc4bf8f658d9ea4e6d534ac177041";
+      hash = "sha256-r1PBmBhGHNcBrrV8Sd/9tGPtxL+PZY2epObVNKwXcEE=";
     };
     meta = {
       description = "Add grammatical parsing features to Perl 5.10 regexes";
@@ -20753,7 +20753,7 @@ let
     version = "0.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SA/SALVA/Regexp-IPv6-0.03.tar.gz";
-      sha256 = "d542d17d75ce93631de8ba2156da0e0b58a755c409cd4a0d27a3873a26712ce2";
+      hash = "sha256-1ULRfXXOk2Md6LohVtoOC1inVcQJzUoNJ6OHOiZxLOI=";
     };
     meta = {
       description = "Regular expression for IPv6 addresses";
@@ -20766,7 +20766,7 @@ let
     version = "0.23";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TODDR/Regexp-Parser-0.23.tar.gz";
-      sha256 = "f739dab8df2b06aae5c48f9971251b73704464a32d07d8d025f3c0f869544e89";
+      hash = "sha256-9znauN8rBqrlxI+ZcSUbc3BEZKMtB9jQJfPA+GlUTok=";
     };
     meta = {
       description = "Base class for parsing regexes";
@@ -20780,7 +20780,7 @@ let
     version = "0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DANKOGAI/Regexp-Trie-0.02.tar.gz";
-      sha256 = "1yn5l6x3xyic9jxw9jggqsbggcv7rc8ggj4zbnlz9hfvv17gjazv";
+      hash = "sha256-+yv5TtjbwfSpXZ/I9xDLZ7P3lsbvycS7TCz6Prqhxfo=";
     };
     meta = {
       description = "Builds trie-ized regexp";
@@ -20793,7 +20793,7 @@ let
     version = "273";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KK/KKANE/REST-Client-273.tar.gz";
-      sha256 = "a8652a2214308faff2c68be5ce64c904dcccc5e86be7f32376c1590869d01844";
+      hash = "sha256-qGUqIhQwj6/yxovlzmTJBNzMxehr5/MjdsFZCGnQGEQ=";
     };
     propagatedBuildInputs = [ LWPProtocolHttps ];
     meta = {
@@ -20808,7 +20808,7 @@ let
     version = "0.6";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JA/JALDHAR/REST-Utils-0.6.tar.gz";
-      sha256 = "1zdrf3315rp2b8r9dwwj5h93xky7i33iawf4hzszwcddhzflmsfl";
+      hash = "sha256-1OlK3YetMf71h8RxFceIx88+EiyS85YyWuLmEsZwuf0=";
     };
     buildInputs = [ TestLongString TestWWWMechanize TestWWWMechanizeCGI ];
     meta = {
@@ -20823,7 +20823,7 @@ let
     version = "0.80";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJRAY/RPC-XML-0.80.tar.gz";
-      sha256 = "1xvy9hs7bqsjnk0663kf7zk2qjg0pzv96n6z2wlc2w5bgal7q3ga";
+      hash = "sha256-6g18qHqrcMEoF99Yk/a/4Eks5j9uDmPAtFLjdTRMfvc=";
     };
     propagatedBuildInputs = [ XMLParser ];
     doCheck = false;
@@ -20840,7 +20840,7 @@ let
     version = "1.666005";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Return-Value-1.666005.tar.gz";
-      sha256 = "1b2hfmdl19zi1z3npzv9wf6dh1g0xd88i70b4233ds9icnln08lf";
+      hash = "sha256-jiJgqWUx6TaGIAuciFDr4AXYjONp/2vHD/GnQFt1UKw=";
     };
     meta = {
       description = "Create context-sensitive return values";
@@ -20853,7 +20853,7 @@ let
     version = "0.13";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OV/OVID/Role-Basic-0.13.tar.gz";
-      sha256 = "38a0959ef9f193ff76e72c325a9e9211bc4868689bd0e2b005778f53f8b6f36a";
+      hash = "sha256-OKCVnvnxk/925ywyWp6SEbxIaGib0OKwBXePU/i282o=";
     };
     meta = {
       description = "Just roles. Nothing else";
@@ -20866,7 +20866,7 @@ let
     version = "0.006";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Role-HasMessage-0.006.tar.gz";
-      sha256 = "1lylfvarjfy6wy34dfny3032pc6r33mjby5yzzhmxybg8zhdp9pn";
+      hash = "sha256-9qbb4Edv+V7h/774JesY2bArBhjeukaG58Y7mdV21NM=";
     };
     propagatedBuildInputs = [ MooseXRoleParameterized StringErrf ];
     meta = {
@@ -20881,7 +20881,7 @@ let
     version = "0.007";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Role-Identifiable-0.007.tar.gz";
-      sha256 = "1bbkj2wqpbfdw1cbm99vg9d94rvzba19m18xhnylaym0l78lc4sn";
+      hash = "sha256-VhNG0aGgekW9hR2FmoJaf2eSWno7pbpY4M2ti7mQc60=";
     };
     propagatedBuildInputs = [ Moose ];
     meta = {
@@ -20896,7 +20896,7 @@ let
     version = "2.001004";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/Role-Tiny-2.001004.tar.gz";
-      sha256 = "92ba5712850a74102c93c942eb6e7f62f7a4f8f483734ed289d08b324c281687";
+      hash = "sha256-krpXEoUKdBAsk8lC625/Yvek+PSDc07SidCLMkwoFoc=";
     };
     meta = {
       description = "Roles: a nouvelle cuisine portion size slice of Moose";
@@ -20909,7 +20909,7 @@ let
     version = "0.0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KI/KIWANAMI/RPC-EPC-Service-v0.0.11.tar.gz";
-      sha256 = "975f4134365258fb47fa921919053513adb9101f2bd420fcefe345f209128be3";
+      hash = "sha256-l19BNDZSWPtH+pIZGQU1E625EB8r1CD87+NF8gkSi+M=";
     };
     propagatedBuildInputs = [ AnyEvent DataSExpression ];
     meta = {
@@ -20923,7 +20923,7 @@ let
     version = "1.4";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LK/LKUNDRAK/RPM2-1.4.tar.gz";
-      sha256 = "5ecb42aa69324e6f4088abfae07313906e5aabf2f46f1204f3f1de59155bb636";
+      hash = "sha256-XstCqmkyTm9AiKv64HMTkG5aq/L0bxIE8/HeWRVbtjY=";
     };
     buildInputs = [ pkgs.pkg-config pkgs.rpm ];
     doCheck = false; # Tries to open /var/lib/rpm
@@ -20939,7 +20939,7 @@ let
     version = "0.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TF/TFPBL/RSS-Parser-Lite-0.12.tar.gz";
-      sha256 = "1fcmp4qp7q3xr2mw7clqqwph45icbvgfs2n41gp9zamim2y39p49";
+      hash = "sha256-idw0vKixqp/uC8QK7d5eLBYCL8eYssOryH3gczG5lbk=";
     };
     propagatedBuildInputs = [ locallib ];
     doCheck = false; /* creates files in HOME */
@@ -20954,7 +20954,7 @@ let
     version = "0.60";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DJ/DJZORT/RT-Client-REST-0.60.tar.gz";
-      sha256 = "0e6f2da3d96903491b43b19c61221cbeea88414264f907312f277daaf144248b";
+      hash = "sha256-Dm8to9lpA0kbQ7GcYSIcvuqIQUJk+QcxLyd9qvFEJIs=";
     };
     buildInputs = [ CGI HTTPServerSimple TestException ];
     propagatedBuildInputs = [ DateTimeFormatDateParse Error LWP ParamsValidate ];
@@ -20970,7 +20970,7 @@ let
     version = "1.000010";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Safe-Isa-1.000010.tar.gz";
-      sha256 = "0sm6p1kw98s7j6n92vvxjqf818xggnmjwci34xjmw7gzl2519x47";
+      hash = "sha256-h/QUiqD/HV5lJyMyLqt9r6OAHJZ9b5GskUejxGe4pmo=";
     };
     meta = {
       description = "Call isa, can, does and DOES safely on things that may not be objects";
@@ -20983,7 +20983,7 @@ let
     version = "1.55";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/Scalar-List-Utils-1.55.tar.gz";
-      sha256 = "4d2bdc1c72a7bc4d69d6a5cc85bc7566497c3b183c6175b832784329d58feb4b";
+      hash = "sha256-TSvcHHKnvE1p1qXMhbx1Zkl8Oxg8YXW4MnhDKdWP60s=";
     };
     meta = {
       description = "Common Scalar and List utility subroutines";
@@ -20996,7 +20996,7 @@ let
     version = "0.003";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Scalar-String-0.003.tar.gz";
-      sha256 = "f54a17c9b78713b02cc43adfadf60b49467e7634d31317e8b9e9e97c26d68b52";
+      hash = "sha256-9UoXybeHE7AsxDrfrfYLSUZ+djTTExfouenpfCbWi1I=";
     };
     meta = {
       description = "String aspects of scalars";
@@ -21009,7 +21009,7 @@ let
     version = "0.6";
     src = fetchurl {
       url = "mirror://cpan/authors/id/V/VI/VIPERCODE/SCGI-0.6.tar.gz";
-      sha256 = "196rj47mh4fq2vlnw595q391zja5v6qg7s3sy0vy8igfyid8rdsq";
+      hash = "sha256-WLeMWvTuReQ38Hro87DZRckf0sAlFW7pFtgRWA+R2aQ=";
     };
     preConfigure = "export HOME=$(mktemp -d)";
     meta = {
@@ -21023,7 +21023,7 @@ let
     version = "0.21";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CH/CHOCOLATE/Scope-Guard-0.21.tar.gz";
-      sha256 = "0y6jfzvxiz8h5yfz701shair0ilypq2mvimd7wn8wi2nbkm1p6wc";
+      hash = "sha256-jJsb6lxWRI4sP63GXQW+nkaQo4I6gPOdLxD92Pd30ng=";
     };
     meta = {
       description = "Lexically-scoped resource management";
@@ -21036,7 +21036,7 @@ let
     version = "0.33";
     src = fetchurl {
       url = "mirror://cpan/authors/id/V/VP/VPIT/Scope-Upper-0.33.tar.gz";
-      sha256 = "sha256-XzO+Aa1o/L7G74HusDs1EaL18HUq1RPZk6TBOl+xpkg=";
+      hash = "sha256-XzO+Aa1o/L7G74HusDs1EaL18HUq1RPZk6TBOl+xpkg=";
     };
     meta = {
       description = "Act on upper scopes";
@@ -21050,7 +21050,7 @@ let
     version = "2.548";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FR/FROGGS/SDL-2.548.tar.gz";
-      sha256 = "252a192bfa9c2070a4883707d139c3a45d9c4518ccd66a1e699b5b7959bd4fb5";
+      hash = "sha256-JSoZK/qcIHCkiDcH0TnDpF2cRRjM1moeaZtbeVm9T7U=";
     };
     perlPreHook = "export LD=$CC";
     preCheck = "rm t/core_audiospec.t";
@@ -21067,7 +21067,7 @@ let
     version = "1.2.25.4";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OL/OLLY/Search-Xapian-1.2.25.4.tar.gz";
-      sha256 = "1pbl8pbgmbs3i8yik4p63g4pd9bhn0dp3d7l667dkvw0kccl66c7";
+      hash = "sha256-hxlDGZuA79mOMfS0cRuwcKV2yRvmkhk9ikOv+tZFdN0=";
     };
     buildInputs = [ pkgs.xapian DevelLeak ];
     meta = {
@@ -21082,7 +21082,7 @@ let
     version = "4.025";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Y/YV/YVES/Sereal-Decoder-4.025.tar.gz";
-      sha256 = "sha256-jg47mprxp3i33iFQb6MHl/sbUg3NAC8/KebctSRG3qU=";
+      hash = "sha256-jg47mprxp3i33iFQb6MHl/sbUg3NAC8/KebctSRG3qU=";
     };
     buildInputs = [ TestDeep TestDifferences TestLongString TestWarn ];
     preBuild = "ls";
@@ -21099,7 +21099,7 @@ let
     version = "4.025";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Y/YV/YVES/Sereal-Encoder-4.025.tar.gz";
-      sha256 = "sha256-D9UbpggwJmUNCFJnWCYRc8GKuCNMVSb6x+25GtnGAm4=";
+      hash = "sha256-D9UbpggwJmUNCFJnWCYRc8GKuCNMVSb6x+25GtnGAm4=";
     };
     buildInputs = [ SerealDecoder TestDeep TestDifferences TestLongString TestWarn ];
     meta = {
@@ -21115,7 +21115,7 @@ let
     version = "4.025";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Y/YV/YVES/Sereal-4.025.tar.gz";
-      sha256 = "sha256-C+X+VStQtnhjk+Q+qczldzpItf80o6zyopWqdgmgYrk=";
+      hash = "sha256-C+X+VStQtnhjk+Q+qczldzpItf80o6zyopWqdgmgYrk=";
     };
     buildInputs = [ TestDeep TestLongString TestWarn ];
     propagatedBuildInputs = [ SerealDecoder SerealEncoder ];
@@ -21131,7 +21131,7 @@ let
     version = "1.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CO/COOK/Device-SerialPort-1.04.tar.gz";
-      sha256 = "1mz9a2qzkz6fbz76wcwmp48h6ckjxpcazb70q03acklvndy5d4nk";
+      hash = "sha256-05JWfLObTqYGwOCsr9jtcjIDEbmVM27OX878+bFQ6dc=";
     };
     meta = {
       description = "Linux/POSIX emulation of Win32::SerialPort functions.";
@@ -21145,7 +21145,7 @@ let
     version = "0.35";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KA/KAZUHO/Server-Starter-0.35.tar.gz";
-      sha256 = "676dc0d6cff4648538332c63c32fb88ad09ed868213ea9e62e3f19fad41b9c40";
+      hash = "sha256-Z23A1s/0ZIU4Myxjwy+4itCe2GghPqnmLj8Z+tQbnEA=";
     };
     buildInputs = [ TestRequires TestSharedFork TestTCP ];
     meta = {
@@ -21161,7 +21161,7 @@ let
     version = "1.503";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FR/FRACTAL/Session-Token-1.503.tar.gz";
-      sha256 = "32c3df96ef455c71870363acd950ddc4fbc848c594f4bc55b21b44cf979f79a1";
+      hash = "sha256-MsPflu9FXHGHA2Os2VDdxPvISMWU9LxVshtEz5efeaE=";
     };
     meta = {
       description = "Secure, efficient, simple random session token generation";
@@ -21176,7 +21176,7 @@ let
     version = "0.65";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FG/FGLOCK/Set-Infinite-0.65.tar.gz";
-      sha256 = "07bc880734492de40b4a3a8b5a331762f64e69b4629029fd9a9d357b25b87e1f";
+      hash = "sha256-B7yIBzRJLeQLSjqLWjMXYvZOabRikCn9mp01eyW4fh8=";
     };
     meta = {
       description = "Infinite Sets math";
@@ -21189,7 +21189,7 @@ let
     version = "1.19";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SW/SWMCD/Set-IntSpan-1.19.tar.gz";
-      sha256 = "1l6znd40ylzvfwl02rlqzvakv602rmvwgm2xd768fpgc2fdm9dqi";
+      hash = "sha256-EbdUmxPsXYfMaV3Ux3fNApg91f6YZgEod/tTD0iz39A=";
     };
 
     meta = {
@@ -21203,7 +21203,7 @@ let
     version = "1.40";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RU/RURBAN/Set-Object-1.40.tar.gz";
-      sha256 = "1c4d8464c13e6d94957cf021ce603c961b08f52db6a9eaf5a5b0d37868cd37b7";
+      hash = "sha256-HE2EZME+bZSVfPAhzmA8lhsI9S22qer1pbDTeGjNN7c=";
     };
     meta = {
       description = "Unordered collections (sets) of Perl Objects";
@@ -21216,7 +21216,7 @@ let
     version = "1.29";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAVIDO/Set-Scalar-1.29.tar.gz";
-      sha256 = "07aiqkyi1p22drpcyrrmv7f8qq6fhrxh007achy2vryxyck1bp53";
+      hash = "sha256-o9wVJvPd5y08ZOoAAHuGzmCM3Nk1Z89ubkLcEP3EUR0=";
     };
     meta = {
       description = "Basic set operations";
@@ -21229,7 +21229,7 @@ let
     version = "1.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/Smart-Comments-1.06.tar.gz";
-      sha256 = "dcf8a312134a7c6b82926a0115d93b692472a662d28cdc3a9bdf28984ada9ee3";
+      hash = "sha256-3PijEhNKfGuCkmoBFdk7aSRypmLSjNw6m98omEranuM=";
     };
     meta = {
       description = "Comments that do more than just sit there";
@@ -21244,7 +21244,7 @@ let
     version = "1.1";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RA/RAAB/SGMLSpm-1.1.tar.gz";
-      sha256 = "1gdjf3mcz2bxir0l9iljxiz6qqqg3a9gg23y5wjg538w552r432m";
+      hash = "sha256-VQySRSkcjfIkL36I95IaD2NsfuySxkRBjn2Jz+pwsr0=";
     };
     meta = {
       description = "Library for parsing the output from SGMLS and NSGMLS parsers";
@@ -21258,7 +21258,7 @@ let
     version = "0.008";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEONT/Signal-Mask-0.008.tar.gz";
-      sha256 = "043d995b6b249d9ebc04c467db31bb7ddc2e55faa08e885bdb050b1f2336b73f";
+      hash = "sha256-BD2ZW2sknZ68BMRn2zG7fdwuVfqgjohb2wULHyM2tz8=";
     };
     propagatedBuildInputs = [ IPCSignal ];
     meta = {
@@ -21272,7 +21272,7 @@ let
     version = "1.2";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AS/ASKSH/Snowball-Norwegian-1.2.tar.gz";
-      sha256 = "0675v45bbsh7vr7kpf36xs2q79g02iq1kmfw22h20xdk4rzqvkqx";
+      hash = "sha256-Hc+NfyazdSCgENzVGXAU4KWDhe5muDtP3gfqtQrZ5Rg=";
     };
     meta = {
       description = "Porters stemming algorithm for norwegian";
@@ -21286,7 +21286,7 @@ let
     version = "1.2";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AS/ASKSH/Snowball-Swedish-1.2.tar.gz";
-      sha256 = "0agwc12jk5kmabnpsplw3wf4ii5w1zb159cpin44x3srb0sr5apg";
+      hash = "sha256-76qSNVhZj06IjZelEtYPvMRIHB+cXn3tUnWWKUVg/Ck=";
     };
     meta = {
       description = "Porters stemming algorithm for swedish";
@@ -21300,7 +21300,7 @@ let
     version = "1.27";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PH/PHRED/SOAP-Lite-1.27.tar.gz";
-      sha256 = "00fkvmnxiy5mr45rj5qmxmflw0xdkw2gihm48iha2i8smdmi0ng3";
+      hash = "sha256-41kQa6saRaFgRKTC+ASfrQNOXe0VF5kLybX42G3d0wE=";
     };
     propagatedBuildInputs = [ ClassInspector IOSessionData LWPProtocolHttps TaskWeaken XMLParser ];
     buildInputs = [ TestWarn XMLParserLite ];
@@ -21316,7 +21316,7 @@ let
     version = "0.29";
     src = fetchurl {
       url = "mirror://cpan/authors/id/U/UM/UMEMOTO/Socket6-0.29.tar.gz";
-      sha256 = "468915fa3a04dcf6574fc957eff495915e24569434970c91ee8e4e1459fc9114";
+      hash = "sha256-RokV+joE3PZXT8lX7/SVkV4kVpQ0lwyR7o5OFFn8kRQ=";
     };
     setOutputFlags = false;
     buildInputs = [ pkgs.which ];
@@ -21332,7 +21332,7 @@ let
     version = "0.103014";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEONT/Software-License-0.103014.tar.gz";
-      sha256 = "eb45ea602d75006683789fbba57a01c0a1f7037371de95ea54b91577535d1789";
+      hash = "sha256-60XqYC11AGaDeJ+7pXoBwKH3A3Nx3pXqVLkVd1NdF4k=";
     };
     buildInputs = [ TryTiny ];
     propagatedBuildInputs = [ DataSection TextTemplate ];
@@ -21348,7 +21348,7 @@ let
     version = "1.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BB/BBYRD/Software-License-CCpack-1.11.tar.gz";
-      sha256 = "1cakbn7am8mhalwas5h33l7c6avdqpg42z478p6rav11pim5qksr";
+      hash = "sha256-WU9carwhbJXNRYd8Qd7FbSvDDh0DFq04VbCiqo5dU7E=";
     };
     propagatedBuildInputs = [ SoftwareLicense ];
     buildInputs = [ TestCheckDeps ];
@@ -21364,7 +21364,7 @@ let
     version = "1.33";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SA/SALVA/Sort-Key-1.33.tar.gz";
-      sha256 = "1kqs10s2plj6c96srk0j8d7xj8dxk1704r7mck8rqk09mg7lqspd";
+      hash = "sha256-7WpMz6sJTJzRZPVkAk6YvSHZT0MSzKxNYkbSKzQIGs8=";
     };
     meta = {
       description = "The fastest way to sort anything in Perl";
@@ -21377,7 +21377,7 @@ let
     version = "1.62";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/Sort-Versions-1.62.tar.gz";
-      sha256 = "1aifzm79ky03gi2lwxyx4mk6yky8x215j0kz4f0jbgkf803k6pxz";
+      hash = "sha256-v18zB0BuviWBI38CWYLoyE9vZiXdd05FfAP4mU79Lqo=";
     };
     meta = {
       description = "A perl 5 module for sorting of revision-like numbers";
@@ -21390,7 +21390,7 @@ let
     version = "0.46";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/Specio-0.46.tar.gz";
-      sha256 = "15lmxffbzj1gq7n9m80a3ka8nqxmmk3p4azp33y6wv872shjmx0b";
+      hash = "sha256-C/QqoRYHbW78GPcrcsestWOL1BwKoJrswS/Iv5zrlZY=";
     };
     propagatedBuildInputs = [ DevelStackTrace EvalClosure MROCompat ModuleRuntime RoleTiny SubQuote TryTiny ];
     buildInputs = [ TestFatal TestNeeds ];
@@ -21406,7 +21406,7 @@ let
     version = "0.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/Specio-Library-Path-Tiny-0.04.tar.gz";
-      sha256 = "0cyfx8gigsgisdwynjamh8jkpad23sr8v6a98hq285zmibm16s7g";
+      hash = "sha256-72gT6or1FyQwREmZjbIeoqk7JYJVSet50/HpFx/qzjM=";
     };
     propagatedBuildInputs = [ PathTiny Specio ];
     buildInputs = [ Filepushd TestFatal ];
@@ -21422,7 +21422,7 @@ let
     version = "0.46";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IN/INGY/Spiffy-0.46.tar.gz";
-      sha256 = "18qxshrjh0ibpzjm2314157mxlibh3smyg64nr4mq990hh564n4g";
+      hash = "sha256-j1hiCoQgJVxJtsQ8X/WAK9JeTwkkDFHlvysCKDPUHaM=";
     };
     meta = {
       description = "Spiffy Perl Interface Framework For You";
@@ -21435,7 +21435,7 @@ let
     version = "0.20";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DD/DDICK/Spreadsheet-CSV-0.20.tar.gz";
-      sha256 = "070bb252a8fe8b938a1ce4fc90525f833d4e619b6d4673b0ae0a23408d514ab6";
+      hash = "sha256-BwuyUqj+i5OKHOT8kFJfgz1OYZttRnOwrgojQI1RSrY=";
     };
     nativeBuildInputs = [ CGI ];
     propagatedBuildInputs = [ ArchiveZip SpreadsheetParseExcel TextCSV_XS XMLParser ];
@@ -21450,7 +21450,7 @@ let
     version = "0.65";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DO/DOUGW/Spreadsheet-ParseExcel-0.65.tar.gz";
-      sha256 = "6ec4cb429bd58d81640fe12116f435c46f51ff1040c68f09cc8b7681c1675bec";
+      hash = "sha256-bsTLQpvVjYFkD+EhFvQ1xG9R/xBAxo8JzIt2gcFnW+w=";
     };
     propagatedBuildInputs = [ CryptRC4 DigestPerlMD5 IOStringy OLEStorage_Lite ];
     meta = {
@@ -21465,7 +21465,7 @@ let
     version = "2.40";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JM/JMCNAMARA/Spreadsheet-WriteExcel-2.40.tar.gz";
-      sha256 = "e356aad6866cf135731268ee0e979a197443c15a04878e9cf3e80d022ad6c07e";
+      hash = "sha256-41aq1oZs8TVzEmjuDpeaGXRDwVoEh46c8+gNAirWwH4=";
     };
     propagatedBuildInputs = [ OLEStorage_Lite ParseRecDescent ];
     meta = {
@@ -21480,7 +21480,7 @@ let
     version = "2.000001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSTROUT/SQL-Abstract-2.000001.tar.gz";
-      sha256 = "sha256-NaZCZiw0lCDUS+bg732HZep0PrEq0UOZqjojK7lObpo=";
+      hash = "sha256-NaZCZiw0lCDUS+bg732HZep0PrEq0UOZqjojK7lObpo=";
     };
     buildInputs = [ DataDumperConcise TestDeep TestException TestWarn ];
     propagatedBuildInputs = [ HashMerge MROCompat Moo ];
@@ -21495,7 +21495,7 @@ let
     version = "1.91";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RI/RIBASUSHI/SQL-Abstract-Classic-1.91.tar.gz";
-      sha256 = "0a7g13hs3kdxrjn43sfli09mgsi9d6w0dfw6hlk268av17yisgaf";
+      hash = "sha256-Tj0d/QlbISMmhYa7BrhpKepXE4jU6UGszL3NoeEI7yg=";
     };
     buildInputs = [ TestDeep TestException TestWarn ];
     propagatedBuildInputs = [ SQLAbstract ];
@@ -21510,7 +21510,7 @@ let
     version = "0.143";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AS/ASB/SQL-Abstract-Limit-0.143.tar.gz";
-      sha256 = "sha256-0Yr9eIk72DC6JGXArmozQlRgFZADhk3tO1rc9RGJyuk=";
+      hash = "sha256-0Yr9eIk72DC6JGXArmozQlRgFZADhk3tO1rc9RGJyuk=";
     };
     propagatedBuildInputs = [ DBI SQLAbstract ];
     buildInputs = [ TestDeep TestException ];
@@ -21525,7 +21525,7 @@ let
     version = "1.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SR/SRI/SQL-Abstract-Pg-1.0.tar.gz";
-      sha256 = "sha256-Pic2DfN7jYjzxS2smwNJP5vT7v9sjYj5sIbScRVT9Uc=";
+      hash = "sha256-Pic2DfN7jYjzxS2smwNJP5vT7v9sjYj5sIbScRVT9Uc=";
     };
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ SQLAbstract ];
@@ -21541,7 +21541,7 @@ let
     version = "1.00020";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EM/EMAZEP/SQL-SplitStatement-1.00020.tar.gz";
-      sha256 = "0bqg45k4c9qkb2ypynlwhpvzsl4ssfagmsalys18s5c79ps30z7p";
+      hash = "sha256-93ww9E2HFY2C9lTp+pTTmlD994WcWn+9WBMnRmYhDy8=";
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ ClassAccessor ListMoreUtils RegexpCommon SQLTokenizer ];
@@ -21557,7 +21557,7 @@ let
     version = "1.414";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RE/REHSACK/SQL-Statement-1.414.tar.gz";
-      sha256 = "0j8sg36wc3nwfb2gj3fv75f0iv7s7q7vl6b5l3fywdm1lv7vvs6x";
+      hash = "sha256-3ei9z6ahNu7doGUZug8++uwIXDnbDfnEctwOxs14Gkk=";
     };
     buildInputs = [ MathBaseConvert TestDeep TextSoundex ];
     propagatedBuildInputs = [ Clone ModuleRuntime ParamsUtil ];
@@ -21572,7 +21572,7 @@ let
     version = "0.24";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IZ/IZUT/SQL-Tokenizer-0.24.tar.gz";
-      sha256 = "1qa2dfbzdlr5qqdam9yn78z5w3al5r8577x06qan8wv58ay6ka7s";
+      hash = "sha256-+qhpvEJlc2QVNqCfU1AuVA1ePjrWp6oaxiXT9pdrQuE=";
     };
     meta = {
       description = "A simple SQL tokenizer";
@@ -21585,7 +21585,7 @@ let
     version = "1.62";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IL/ILMARI/SQL-Translator-1.62.tar.gz";
-      sha256 = "096fq62iphmxgcfcayg4i0wf09y1rl1ar6hrcxfqsbrsmkwlzk8a";
+      hash = "sha256-Cs1P+aw6L41dZxmarALNwSfgOIjkecUce73CG4XBziQ=";
     };
     buildInputs = [ FileShareDirInstall JSONMaybeXS TestDifferences TestException XMLWriter YAML ];
     propagatedBuildInputs = [ CarpClan DBI FileShareDir Moo PackageVariant ParseRecDescent TryTiny GraphViz GD ];
@@ -21613,7 +21613,7 @@ let
     version = "1.003002";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSTROUT/Package-Variant-1.003002.tar.gz";
-      sha256 = "b2ed849d2f4cdd66467512daa3f143266d6df810c5fae9175b252c57bc1536dc";
+      hash = "sha256-su2EnS9M3WZGdRLao/FDJm1t+BDF+ukXWyUsV7wVNtw=";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ ImportInto strictures ];
@@ -21628,7 +21628,7 @@ let
     version = "1.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BINGOS/Sort-Naturally-1.03.tar.gz";
-      sha256 = "eaab1c5c87575a7826089304ab1f8ffa7f18e6cd8b3937623e998e865ec1e746";
+      hash = "sha256-6qscXIdXWngmCJMEqx+P+n8Y5s2LOTdiPpmOhl7B50Y=";
     };
     meta = {
       description = "Sort lexically, but sort numeral parts numerically";
@@ -21641,7 +21641,7 @@ let
     version = "0.31";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KA/KAZUHO/Starlet-0.31.tar.gz";
-      sha256 = "b9603b8e62880cb4582f6a7939eafec65e6efd3d900f2c7dd342e5f4c68d62d8";
+      hash = "sha256-uWA7jmKIDLRYL2p5Oer+xl5u/T2QDyx900Ll9MaNYtg=";
     };
     buildInputs = [ LWP TestSharedFork TestTCP ];
     propagatedBuildInputs = [ ParallelPrefork Plack ServerStarter ];
@@ -21657,7 +21657,7 @@ let
     version = "0.4015";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Starman-0.4015.tar.gz";
-      sha256 = "1y1kn4929k299fbf6sw9lxcsdlq9fvq777p6yrzk591rr9xhkx8h";
+      hash = "sha256-EPUJe8o5pDJ/9uaec/B2CdOmWaeJa+OWS0nMJBKxM/g=";
     };
     buildInputs = [ LWP ModuleBuildTiny TestRequires TestTCP ];
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
@@ -21680,7 +21680,7 @@ let
     version = "1.6611";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JE/JETTERO/Statistics-Basic-1.6611.tar.gz";
-      sha256 = "1ywl398z42hz9w1k0waf1caa6agz8jzsjlf4rzs1lgpx2mbcwmb8";
+      hash = "sha256-aFXOVhX9Phr0z8RRqb9E/ymjFAtOcTADTx8K8lEalPs=";
     };
     propagatedBuildInputs = [ NumberFormat ];
     meta = {
@@ -21694,7 +21694,7 @@ let
     version = "0.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SM/SMUELLER/Statistics-CaseResampling-0.15.tar.gz";
-      sha256 = "11whlh2dl7l6wrrnfmpbsg7ldcn316iccl1aaa4j5lqhdyyl6745";
+      hash = "sha256-hRxDvW8Q0yKJUipQxqIJw7JGz9PrVmdz5oYe2gSkkIc=";
     };
     meta = {
       description = "Efficient resampling and calculation of medians with confidence intervals";
@@ -21707,7 +21707,7 @@ let
     version = "1.0000";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DC/DCANTRELL/Statistics-ChiSquare-1.0000.tar.gz";
-      sha256 = "255a5a38336d048ddb9077222691e000984e907aae09a4ea695a9cfd49a1ddd0";
+      hash = "sha256-JVpaODNtBI3bkHciJpHgAJhOkHquCaTqaVqc/Umh3dA=";
     };
     meta = {
       description = "Implements the Chi Squared test, using pre-computed tables";
@@ -21720,7 +21720,7 @@ let
     version = "3.0800";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Statistics-Descriptive-3.0800.tar.gz";
-      sha256 = "0fgrjr79ai5dn92kypslsi97y7r8iiwmd682lrd47vdz4vmdwkmh";
+      hash = "sha256-sE7e6ia/7UNapgKZVnmMKB9/UtRUXz9Fsq1ElU6W+Tk=";
     };
     propagatedBuildInputs = [ ListMoreUtils ];
     meta = {
@@ -21735,7 +21735,7 @@ let
     version = "1.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIKEK/Statistics-Distributions-1.02.tar.gz";
-      sha256 = "1j1kswl98f4i9dn176f9aa3y9bissx2sscga5jm3gjl4pxm3k7zr";
+      hash = "sha256-+Z85ar+EyjeqLOoxrUXXOq7kh1LJmRNsS5E4lCjXM8g=";
     };
     meta = {
       description = "Perl module for calculating critical values and upper probabilities of common statistical distributions";
@@ -21748,7 +21748,7 @@ let
     version = "1.1.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Y/YU/YUNFANG/Statistics-TTest-1.1.0.tar.gz";
-      sha256 = "0rkifgzm4rappiy669dyi6lyxn2sdqaf0bl6gndlfa67b395kndj";
+      hash = "sha256-stlZ0ljHKEebfYYu4BRuWtjuqYm+JWN8vFdlUv9zcWY=";
     };
     propagatedBuildInputs = [ StatisticsDescriptive StatisticsDistributions ];
     meta = {
@@ -21762,7 +21762,7 @@ let
     version = "0.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DO/DOY/Stream-Buffered-0.03.tar.gz";
-      sha256 = "0fs2n9zw6isfkha2kbqrvl9mwg572x1x0jlfaps0qsyynn846bcv";
+      hash = "sha256-my1DkLXeawz0VY5K0EMXpzxeE90ZrykUnE5Hw3+yQjs=";
     };
     meta = {
       description = "Temporary buffer to save bytes";
@@ -21776,7 +21776,7 @@ let
     version = "2.000006";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/strictures-2.000006.tar.gz";
-      sha256 = "0mwd9xqz4n8qfpi5h5581lbm33qhf7agww18h063icnilrs7km89";
+      hash = "sha256-CdV5dKbRsjgMgChw/tRxEI9RFw2oFFjidRhZ8nFPjVc=";
     };
     meta = {
       description = "Turn on strict and make most warnings fatal";
@@ -21790,7 +21790,7 @@ let
     version = "3.28";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JH/JHI/String-Approx-3.28.tar.gz";
-      sha256 = "43201e762d8699cb0ac2c0764a5454bdc2306c0771014d6c8fba821480631342";
+      hash = "sha256-QyAedi2GmcsKwsB2SlRUvcIwbAdxAU1sj7qCFIBjE0I=";
     };
     meta = {
       description = "Perl extension for approximate matching (fuzzy matching)";
@@ -21803,7 +21803,7 @@ let
     version = "0.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HI/HIO/String-CamelCase-0.04.tar.gz";
-      sha256 = "1a8i4yzv586svd0pbxls7642vvmyiwzh4x2xyij8gbnfxsydxhw9";
+      hash = "sha256-icPevO7Orodk9F10Aj+Pvu4tiDma9nVB29qgsr8nEak=";
     };
     meta = {
       description = "Camelcase, de-camelcase";
@@ -21816,7 +21816,7 @@ let
     version = "0.321";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FR/FRACTAL/String-Compare-ConstantTime-0.321.tar.gz";
-      sha256 = "0b26ba2b121d8004425d4485d1d46f59001c83763aa26624dff6220d7735d7f7";
+      hash = "sha256-Cya6KxIdgARCXUSF0dRvWQAcg3Y6omYk3/YiDXc11/c=";
     };
     meta = {
       description = "Timing side-channel protected string compare";
@@ -21829,7 +21829,7 @@ let
     version = "2";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEEJO/String-CRC32-2.tar.gz";
-      sha256 = "0bfrpnkgfakd4apv366p63z4vzypzvhj3yyqaw9dg7zca2pgxdzd";
+      hash = "sha256-7bf+rlDsn9cSV9j7IeH+1/9N/jDXmLGvIm0q96a92S0=";
     };
     meta = {
       description = "Perl interface for cyclic redundancy check generation";
@@ -21842,12 +21842,12 @@ let
     version = "0.07";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Y/YA/YAPPO/String-Diff-0.07.tar.gz";
-      sha256 = "7215b67cbc3226e2d0e18b38ec58c93be0bf6090278698bef955348826cd0af3";
+      hash = "sha256-chW2fLwyJuLQ4Ys47FjJO+C/YJAnhpi++VU0iCbNCvM=";
     };
     patches = [
       (fetchpatch {
         url = "https://salsa.debian.org/perl-team/modules/packages/libstring-diff-perl/-/raw/d8120a93f73f4d4aa40d10819b2f0a312608ca9b/debian/patches/0001-Fix-the-test-suite-for-YAML-1.21-compatibility.patch";
-        sha256 = "0rggwcp7rfnp3zhnxpn5pb878v2dhpk3x6682w9dnsym92gjrij5";
+        hash = "sha256-RcYsn0jVa9sSF8iYPuaFTWx00LrF3m7hH9e6fC7j72U=";
       })
     ];
     buildInputs = [ TestBase ModuleBuildTiny ModuleInstallGithubMeta ModuleInstallRepository ModuleInstallReadmeFromPod ModuleInstallReadmeMarkdownFromPod YAML ];
@@ -21865,7 +21865,7 @@ let
     version = "0.008";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/String-Errf-0.008.tar.gz";
-      sha256 = "1nyn9s52jgbffrsv0m7rhcx1awjj43n68bfjlap8frdc7mw6y4xf";
+      hash = "sha256-rhNveD2sZYeuotItZOwgUnIVOoP5VLB1dm49KYpO1ts=";
     };
     buildInputs = [ JSONMaybeXS TimeDate ];
     propagatedBuildInputs = [ StringFormatter ];
@@ -21880,8 +21880,8 @@ let
     pname = "String-Escape";
     version = "2010.002";
     src = fetchurl {
-        url = "mirror://cpan/authors/id/E/EV/EVO/String-Escape-2010.002.tar.gz";
-        sha256 = "12ls7f7847i4qcikkp3skwraqvjphjiv2zxfhl5d49326f5myr7x";
+      url = "mirror://cpan/authors/id/E/EV/EVO/String-Escape-2010.002.tar.gz";
+      hash = "sha256-/WRfizNiJNIKha5/saOEV26sMp963DkjwyQego47moo=";
     };
     meta = {
       description = "Backslash escapes, quoted phrase, word elision, etc";
@@ -21894,7 +21894,7 @@ let
     version = "1.101245";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/String-Flogger-1.101245.tar.gz";
-      sha256 = "aa03c08e01f802a358c175c6093c02adf9688659a087a8ddefdc3e9cef72640b";
+      hash = "sha256-qgPAjgH4AqNYwXXGCTwCrflohlmgh6jd79w+nO9yZAs=";
     };
     propagatedBuildInputs = [ JSONMaybeXS SubExporter ];
     meta = {
@@ -21909,7 +21909,7 @@ let
     version = "1.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SR/SREZIC/String-Format-1.18.tar.gz";
-      sha256 = "0y77frxzjifd4sw0j19cc346ysas1mya84rdxaz279lyin7plhcy";
+      hash = "sha256-nkF6j42epiO+6i0TpHwNWmlvyGAsBQm4Js1F+Xt253g=";
     };
     meta = {
       description = "sprintf-like string formatting capabilities with arbitrary format definitions";
@@ -21922,7 +21922,7 @@ let
     version = "0.102084";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/String-Formatter-0.102084.tar.gz";
-      sha256 = "0mlwm0rirv46gj4h072q8gdync5zxxsxy8p028gdyrhczl942dc3";
+      hash = "sha256-gzVBEv0MZt8eEuAi33XvvzDr20NYHACJfIbsHDOonFY=";
     };
     propagatedBuildInputs = [ SubExporter ];
     meta = {
@@ -21936,7 +21936,7 @@ let
     version = "0.32";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/String-Interpolate-0.32.tar.gz";
-      sha256 = "15fwbpz3jdpdgmz794iw9hz2caxrnrw9pdwprxxkanpm92cdhaf7";
+      hash = "sha256-xynYmEj1WjV7z5e3m3i2uSsmPkw8knR+fe02Of5d3JU=";
     };
     meta = {
       # https://metacpan.org/pod/String::Interpolate
@@ -21951,7 +21951,7 @@ let
     version = "1.00";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JV/JV/String-Interpolate-Named-1.00.tar.gz";
-      sha256 = "727299fa69258b604770e059ec4da906bfde71861fdd1e3e89e30677371c5a80";
+      hash = "sha256-cnKZ+mkli2BHcOBZ7E2pBr/ecYYf3R4+ieMGdzccWoA=";
     };
     meta = {
       description = "Interpolated named arguments in string";
@@ -21964,7 +21964,7 @@ let
     version = "0.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CG/CGRAU/String-MkPasswd-0.05.tar.gz";
-      sha256 = "15lvcc8c9hp6mg3jx02wd3b85aphn8yl5db62q3pam04c0sgh42k";
+      hash = "sha256-UxD4NGAEVHUHFma1Qj2y8KqC1mhcgC7Hq+bCxBBjm5Y=";
     };
     meta = {
       description = "Random password generator";
@@ -21979,7 +21979,7 @@ let
     version = "0.31";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/String-Random-0.31.tar.gz";
-      sha256 = "0p4pmf3k6c01j8clfx54167rva9mf82bkh9aj5qdrix2cgpd2jjb";
+      hash = "sha256-S0rR7mOix9xwkSrBuQRyNamdjwmkdEcZkgEwM4erl1w=";
     };
     meta = {
       description = "Perl module to generate random strings based on a pattern";
@@ -21992,7 +21992,7 @@ let
     version = "0.008";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/String-RewritePrefix-0.008.tar.gz";
-      sha256 = "1sq8way03gxb990n232y201grnh0jj0xhj7g4b3mz3sfj7b32np4";
+      hash = "sha256-5Fox1pFOj1/HIu9I2IGUANr8AhBeDGFBSqu/AbziCOs=";
     };
     propagatedBuildInputs = [ SubExporter ];
     meta = {
@@ -22007,7 +22007,7 @@ let
     version = "1.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RO/ROSCH/String-ShellQuote-1.04.tar.gz";
-      sha256 = "0dfxhr6hxc2majkkrm0qbx3qcbykzpphbj2ms93dc86f7183c1p6";
+      hash = "sha256-5gY2UDjOINZG0lXIBe/90y+GR18Y1DynVFWwDk2G3TU=";
     };
     doCheck = !stdenv.isDarwin;
     meta = {
@@ -22022,7 +22022,7 @@ let
     version = "1.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/String-Similarity-1.04.tar.gz";
-      sha256 = "0i9j3hljxw7j6yiii9nsscfj009vw6zv1q8cxwd75jxvj0idm3hz";
+      hash = "sha256-H47aIpC7y3Ia7wzhsL/hOwEgHdPaphijN/LwLikcMkU=";
     };
     doCheck = true;
     meta = {
@@ -22036,7 +22036,7 @@ let
     version = "0.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FL/FLORA/Shell-Command-0.06.tar.gz";
-      sha256 = "1lgc2rb3b5a4lxvbq0cbg08qk0n2i88srxbsz93bwi3razpxxr7k";
+      hash = "sha256-8+Te71d5RL5G+nr1rBGKwoKJEXiLAbx2p0SVNVYW7NE=";
     };
     meta = {
       description = "Cross-platform functions emulating common shell commands";
@@ -22049,7 +22049,7 @@ let
     version = "0.34";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PL/PLICEASE/Shell-Config-Generate-0.34.tar.gz";
-      sha256 = "84f451f22215dd68e9c18aa3f7ddb03a82007d166cfada003d0f166f571e0562";
+      hash = "sha256-hPRR8iIV3WjpwYqj992wOoIAfRZs+toAPQ8Wb1ceBWI=";
     };
     buildInputs = [ Test2Suite ];
     propagatedBuildInputs = [ ShellGuess ];
@@ -22065,7 +22065,7 @@ let
     version = "0.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PL/PLICEASE/Shell-Guess-0.09.tar.gz";
-      sha256 = "4069fa2637e443118ed956d710231d166823d23b2a64eb87b8a46872e865a12b";
+      hash = "sha256-QGn6JjfkQxGO2VbXECMdFmgj0jsqZOuHuKRocuhloSs=";
     };
     meta = {
       description = "Make an educated guess about the shell in use";
@@ -22079,7 +22079,7 @@ let
     version = "0.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RK/RKITOVER/String-ToIdentifier-EN-0.12.tar.gz";
-      sha256 = "12nw7h2yiybhdw0vnnpc7bif8ylhsn6kqf6s39dsrf9h54iq9yrs";
+      hash = "sha256-OvuEIykwuaxbGto4PI3VkHrk4jrsWrsBb3D56AU83Io=";
     };
     propagatedBuildInputs = [ LinguaENInflectPhrase TextUnidecode namespaceclean ];
     meta = {
@@ -22093,7 +22093,7 @@ let
     version = "1.100602";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/String-Truncate-1.100602.tar.gz";
-      sha256 = "0vjz4fd4cvcy12gk5bdha7z73ifmfpmk748khha94dhiq3pd98xa";
+      hash = "sha256-qqPU7sARNpIUhBORM+t11cVx/lGwrTKfCJ5tRpojX24=";
     };
     propagatedBuildInputs = [ SubExporter ];
     meta = {
@@ -22108,7 +22108,7 @@ let
     version = "0.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BO/BOBTFISH/String-TT-0.03.tar.gz";
-      sha256 = "1asjr79wqcl9wk96afxrm1yhpj8lk9bk8kyz78yi5ypr0h55yq7p";
+      hash = "sha256-92BfCgT5+hI9Ot9PNFeaFMkLfai5O2XS5IkyzNPJUqs=";
     };
     buildInputs = [ TestException TestSimple13 TestTableDriven ];
     propagatedBuildInputs = [ PadWalker SubExporter TemplateToolkit ];
@@ -22123,7 +22123,7 @@ let
     version = "1.31";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BA/BAKERSCOT/String-Util-1.31.tar.gz";
-      sha256 = "0vfjvy04y71f8jsjg0yll28wqlpgn7gbkcrb0i72k0qcliz9mg7v";
+      hash = "sha256-+7yafqQMgylOBCuzud6x71LMkaDUgye1RC4cT4Df0m0=";
     };
     buildInputs = [ ModuleBuildTiny ];
     meta = {
@@ -22140,7 +22140,7 @@ let
     version = "0.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/Struct-Dumb-0.12.tar.gz";
-      sha256 = "0wvzcpil9xc2wkibq3sj8i5bgq4iadx2k7hfqb8jm5p66g271kjj";
+      hash = "sha256-Us5wxDPmlirRwg6eKXpTkeC3SkRSD7zi5IL1RONlf3M=";
     };
     buildInputs = [ TestFatal ];
     meta = {
@@ -22154,7 +22154,7 @@ let
     version = "0.987";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Sub-Exporter-0.987.tar.gz";
-      sha256 = "1ml3n1ck4ln9qjm2mcgkczj1jb5n1fkscz9c4x23v4db0glb4g2l";
+      hash = "sha256-VDyy6AOrkT1EJyx9pqcLtiwZ5GfzsSqqxMlSMlmwg9Y=";
     };
     propagatedBuildInputs = [ DataOptList ];
     meta = {
@@ -22169,7 +22169,7 @@ let
     version = "0.100052";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Sub-Exporter-ForMethods-0.100052.tar.gz";
-      sha256 = "421fbba4f6ffcf13c4335f2c20630d709e6fa659c07545d094dbc5a558ad3006";
+      hash = "sha256-Qh+7pPb/zxPEM18sIGMNcJ5vplnAdUXQlNvFpVitMAY=";
     };
     buildInputs = [ namespaceautoclean ];
     propagatedBuildInputs = [ SubExporter SubName ];
@@ -22185,7 +22185,7 @@ let
     version = "0.005";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Sub-Exporter-GlobExporter-0.005.tar.gz";
-      sha256 = "0qvsvfvfyk69v2ygjnyd5sh3bgbzd6f7k7mgv0zws1yywvpmxi1g";
+      hash = "sha256-L8Re7+beB80/2K+eeZxpf701oC7NW/m82MlM77bbemM=";
     };
     propagatedBuildInputs = [ SubExporter ];
     meta = {
@@ -22200,7 +22200,7 @@ let
     version = "0.001013";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FR/FREW/Sub-Exporter-Progressive-0.001013.tar.gz";
-      sha256 = "0mn0x8mkh36rrsr58s1pk4srwxh2hbwss7sv630imnk49navfdfm";
+      hash = "sha256-1TW3lU1k2hrBMFsfrfmCAnaeNZk3aFSyztkMOCvqwFY=";
     };
     meta = {
       description = "Only use Sub::Exporter if you need it";
@@ -22214,7 +22214,7 @@ let
     version = "0.016";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TOBYINK/Sub-HandlesVia-0.016.tar.gz";
-      sha256 = "1mgr5igbr0zj8kzlfq7ayh5912i6mz47cx3605s04927wm5d9pk9";
+      hash = "sha256-ad7USuVHJAJ0AWZ0dsivJoqQCvTqYEf/RPKDvF4s+dU=";
     };
     propagatedBuildInputs = [ ClassMethodModifiers ClassTiny RoleTiny ScalarListUtils TypeTiny ];
     buildInputs = [ TestFatal TestRequires ];
@@ -22230,7 +22230,7 @@ let
     version = "0.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RG/RGARCIA/Sub-Identify-0.14.tar.gz";
-      sha256 = "068d272086514dd1e842b6a40b1bedbafee63900e5b08890ef6700039defad6f";
+      hash = "sha256-Bo0nIIZRTdHoQrakCxvtuv7mOQDlsIiQ72cAA53vrW8=";
     };
     meta = {
       description = "Retrieve names of code references";
@@ -22243,7 +22243,7 @@ let
     version = "0.002";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EX/EXODIST/Sub-Info-0.002.tar.gz";
-      sha256 = "ea3056d696bdeff21a99d340d5570887d39a8cc47bff23adfc82df6758cdd0ea";
+      hash = "sha256-6jBW1pa97/IamdNA1VcIh9OajMR7/yOt/ILfZ1jN0Oo=";
     };
     propagatedBuildInputs = [ Importer ];
     meta = {
@@ -22257,7 +22257,7 @@ let
     version = "0.928";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Sub-Install-0.928.tar.gz";
-      sha256 = "03zgk1yh128gciyx3q77zxzxg9kf8yy2gm46gdxqi24mcykngrb1";
+      hash = "sha256-YeVnp2eViIh7e4bUJ7xHbqbXf//n4NF9ZA+JAH2Y7w8=";
     };
     meta = {
       description = "Install subroutines into packages easily";
@@ -22271,7 +22271,7 @@ let
     version = "0.26";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Sub-Name-0.26.tar.gz";
-      sha256 = "2d2f2d697d516c89547e7c4307f1e79441641cae2c7395e7319b306d390df105";
+      hash = "sha256-LS8taX1RbIlUfnxDB/HnlEFkHK4sc5XnMZswbTkN8QU=";
     };
     buildInputs = [ BC DevelCheckBin ];
     meta = {
@@ -22286,7 +22286,7 @@ let
     version = "0.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OV/OVID/Sub-Override-0.09.tar.gz";
-      sha256 = "1d955qn44brkcfif3gi0q2vvvqahny6rax0vr068x5i9yz0ng6lk";
+      hash = "sha256-k5pnwfcplo4MyBt0lY23UOG9t8AgvuGiYzMvQiwuJbU=";
     };
     buildInputs = [ TestFatal ];
     meta = {
@@ -22300,7 +22300,7 @@ let
     version = "2.006006";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/Sub-Quote-2.006006.tar.gz";
-      sha256 = "6e4e2af42388fa6d2609e0e82417de7cc6be47223f576592c656c73c7524d89d";
+      hash = "sha256-bk4q9COI+m0mCeDoJBfefMa+RyI/V2WSxlbHPHUk2J0=";
     };
     buildInputs = [ TestFatal ];
     meta = {
@@ -22314,7 +22314,7 @@ let
     version = "0.005";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Sub-StrictDecl-0.005.tar.gz";
-      sha256 = "sha256-oSfa52RcGpVwzZopcMbcST1SL/BzGKNKOeQJCY9pESU=";
+      hash = "sha256-oSfa52RcGpVwzZopcMbcST1SL/BzGKNKOeQJCY9pESU=";
     };
     propagatedBuildInputs = [ LexicalSealRequireHints ];
     perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
@@ -22329,7 +22329,7 @@ let
     version = "0.2800";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/Sub-Uplevel-0.2800.tar.gz";
-      sha256 = "14z2xjiw931wizcx3mblmby753jspvfm321d6chs907nh0xzdwxl";
+      hash = "sha256-tPP2O4D2gKQhMy2IUd2+Wo5y/Kp01dHZjzyMxKPs4pM=";
     };
     meta = {
       description = "Apparently run a function in a higher stack frame";
@@ -22343,7 +22343,7 @@ let
     version = "0.28";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CL/CLKAO/SVN-Simple-0.28.tar.gz";
-      sha256 = "1ysgi38zx236cxz539k6d6rw5z0vc70rrglsaf5fk6rnwilw2g6n";
+      hash = "sha256-1jzBaeQ2m+mKU5q+nMFhG/zCs2lmplF+Z2aI/tGIT/s=";
     };
     propagatedBuildInputs = [ (pkgs.subversionClient.override { inherit perl; }) ];
     meta = {
@@ -22357,7 +22357,7 @@ let
     version = "0.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TODDR/Safe-Hole-0.14.tar.gz";
-      sha256 = "01gc2lfli282dj6a2pkpxb0vmpyavs323cbdw15gxi06pn5nxxgl";
+      hash = "sha256-9PVui70GxP5K4G2xIYbeyt+6wep3XqGMbAKJSB0V7AU=";
     };
     meta = {
       description = "Lib/Safe/Hole.pm";
@@ -22372,7 +22372,7 @@ let
     version = "0.1.48";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IN/INGY/Swim-0.1.48.tar.gz";
-      sha256 = "a5f72fd2f22917fa2b4acbb2ee2c3d32903d97ee5b0e449b0f387018c77f4f0c";
+      hash = "sha256-pfcv0vIpF/orSsuy7iw9MpA9l+5bDkSbDzhwGMd/Tww=";
     };
     propagatedBuildInputs = [ HTMLEscape HashMerge IPCRun Pegex TextAutoformat YAMLLibYAML ];
     meta = {
@@ -22388,7 +22388,7 @@ let
     version = "2.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CH/CHORNY/Switch-2.17.tar.gz";
-      sha256 = "0xbdjdgzfj9zwa4j3ipr8bfk7bcici4hk89hq5d27rhg2isljd9i";
+      hash = "sha256-MTVJdRQP5iNawTChCUlkka0z3UL5xiGJ4j9J91+TbXU=";
     };
     doCheck = false;                             # FIXME: 2/293 test failures
     meta = {
@@ -22402,7 +22402,7 @@ let
     version = "0.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FE/FELIPE/Symbol-Get-0.10.tar.gz";
-      sha256 = "0ee5568c5ae3573ca874e09e4d0524466cfc1ad9a2c24d0bc91d4c7b06f21d9c";
+      hash = "sha256-DuVWjFrjVzyodOCeTQUkRmz8Gtmiwk0LyR1MewbyHZw=";
     };
     buildInputs = [ TestDeep TestException ];
     propagatedBuildInputs = [ CallContext ];
@@ -22418,7 +22418,7 @@ let
     version = "0.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AL/ALEXMV/Symbol-Global-Name-0.05.tar.gz";
-      sha256 = "0f7623e9d724760aa64040222da1d82f1188586791329261cc60dad1d60d6a92";
+      hash = "sha256-D3Yj6dckdgqmQEAiLaHYLxGIWGeRMpJhzGDa0dYNapI=";
     };
     meta = {
       description = "Finds name and type of a global variable";
@@ -22431,7 +22431,7 @@ let
     version = "0.0203";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DE/DEXTER/Symbol-Util-0.0203.tar.gz";
-      sha256 = "0cnwwrd5d6i80f33s7n2ak90rh4s53ss7q57wndrpkpr4bfn3djm";
+      hash = "sha256-VbZh3SL5zpub5afgo/UomsAM0lTCHj2GAyiaVlrm3DI=";
     };
     meta = {
       description = "Additional utils for Perl symbols manipulation";
@@ -22444,7 +22444,7 @@ let
     version = "0.004";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PH/PHAYLON/syntax-0.004.tar.gz";
-      sha256 = "fe19b6da8a8f43a5aa2ee571441bc0e339fb156d0081c157a1a24e9812c7d365";
+      hash = "sha256-/hm22oqPQ6WqLuVxRBvA4zn7FW0AgcFXoaJOmBLH02U=";
     };
     propagatedBuildInputs = [ DataOptList namespaceclean ];
     meta = {
@@ -22459,7 +22459,7 @@ let
     version = "0.003008";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FR/FREW/Syntax-Keyword-Junction-0.003008.tar.gz";
-      sha256 = "8b4975f21b1992a7e6c2df5dcc92b254c61925595eddcdfaf0b1498717aa95ef";
+      hash = "sha256-i0l18hsZkqfmwt9dzJKyVMYZJVle3c368LFJhxeqle8=";
     };
     buildInputs = [ TestRequires ];
     propagatedBuildInputs = [ syntax ];
@@ -22475,7 +22475,7 @@ let
     version = "0.27";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/Syntax-Keyword-Try-0.27.tar.gz";
-      sha256 = "sha256-JG4bAz4/8i/VQgVQ1Lbg1WtDjNy7nTXL6LG1uhV03iM=";
+      hash = "sha256-JG4bAz4/8i/VQgVQ1Lbg1WtDjNy7nTXL6LG1uhV03iM=";
     };
     propagatedBuildInputs = [ XSParseKeyword ];
     perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
@@ -22491,7 +22491,7 @@ let
     version = "0.20";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TODDR/Sys-Mmap-0.20.tar.gz";
-      sha256 = "1kz22l7sh2mibliixyshc9958bqlkzsb13agcibp7azii4ncw80q";
+      hash = "sha256-GCDOLInxq3NXZE+NsPSfFC9UUmJQ+x4jXbEKqA8V4s8=";
     };
     meta = {
       description = "Use mmap to map in a file as a Perl variable";
@@ -22505,7 +22505,7 @@ let
     version = "0.99";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SC/SCRESTO/Sys-MemInfo-0.99.tar.gz";
-      sha256 = "0786319d3a3a8bae5d727939244bf17e140b714f52734d5e9f627203e4cf3e3b";
+      hash = "sha256-B4YxnTo6i65dcnk5JEvxfhQLcU9Sc01en2JyA+TPPjs=";
     };
     meta = {
       description = "Memory information";
@@ -22519,18 +22519,18 @@ let
     version = "0.61";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MZ/MZSANFORD/Sys-CPU-0.61.tar.gz";
-      sha256 = "1r6976bs86j7zp51m5vh42xlyah951jgdlkimv202413kjvqc2i5";
+      hash = "sha256-JQqGt5wjEAHErnHS9mQoCSpPuyBwlxrK/UcapJc5yeQ=";
     };
     patches = [
       # Bug #95400 for Sys-CPU: Tests fail on ARM and AArch64 Linux
       # https://rt.cpan.org/Public/Bug/Display.html?id=95400
       (fetchpatch {
         url = "https://rt.cpan.org/Ticket/Attachment/1359669/721669/0001-Add-support-for-cpu_type-on-ARM-and-AArch64-Linux-pl.patch";
-        sha256 = "0rmazzdy34znksdhh8drc83lk754slhjgvnk4kk27z3kw5gm10m0";
+        hash = "sha256-oIJQX+Fz/CPmJNPuJyHVpJxJB2K5IQibnvaT4dv/qmY=";
       })
       (fetchpatch {
         url = "https://rt.cpan.org/Ticket/Attachment/1388036/737125/0002-cpu_clock-can-be-undefined-on-an-ARM.patch";
-        sha256 = "0z3wqfahc9av7y34aqp6biq3sf8v8q4yynx7bv290vds50dsjb4w";
+        hash = "sha256-nCypGyi6bZDEXqdb7wlGGzk9cFzmYkWGP1slBpXDfHw=";
       })
     ];
     buildInputs = lib.optional stdenv.isDarwin pkgs.darwin.apple_sdk.frameworks.Carbon;
@@ -22546,7 +22546,7 @@ let
     version = "1.5";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SC/SCOTT/Sys-Hostname-Long-1.5.tar.gz";
-      sha256 = "1jv5n8jv48c1p8svjsigyxndv1ygsq8wgwj9c7ypx1vaf3rns679";
+      hash = "sha256-6Rht83Bqh379YUnyxxHWz4fdbPcvark1uoEhsiWyZcs=";
     };
     doCheck = false; # no `hostname' in stdenv
     meta = {
@@ -22560,7 +22560,7 @@ let
     version = "0.23";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LB/LBAXTER/Sys-SigAction-0.23.tar.gz";
-      sha256 = "c4ef6c9345534031fcbbe2adc347fc7194d47afc945e7a44fac7e9563095d353";
+      hash = "sha256-xO9sk0VTQDH8u+Ktw0f8cZTUevyUXnpE+sfpVjCV01M=";
     };
     doCheck = !stdenv.isAarch64; # it hangs on Aarch64
     meta = {
@@ -22574,7 +22574,7 @@ let
     version = "0.36";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SA/SAPER/Sys-Syslog-0.36.tar.gz";
-      sha256 = "ed42a9e5ba04ad4856cc0cb5d38d289c3c5d3764543ec04efafc4af7e3378df8";
+      hash = "sha256-7UKp5boErUhWzAy1040onDxdN2RUPsBO+vxK9+M3jfg=";
     };
     meta = {
       description = "Perl interface to the UNIX syslog(3) calls";
@@ -22587,7 +22587,7 @@ let
     version = "1.121";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BO/BOOK/System-Command-1.121.tar.gz";
-      sha256 = "43de5ecd20c1da46e8a6f4fceab29e04697a2890a99bf6a91b3ca004a468a241";
+      hash = "sha256-Q95ezSDB2kbopvT86rKeBGl6KJCpm/apGzygBKRookE=";
     };
     propagatedBuildInputs = [ IPCRun ];
     buildInputs = [ PodCoverageTrustPod TestCPANMeta TestPod TestPodCoverage ];
@@ -22604,7 +22604,7 @@ let
       owner = "libvirt";
       repo = "libvirt-perl";
       rev = "v${version}";
-      sha256 = "sha256-VuM4rPrG15vXnF5e1MBSGB76zLI+8nkSiJmwWg8aJgE=";
+      hash = "sha256-VuM4rPrG15vXnF5e1MBSGB76zLI+8nkSiJmwWg8aJgE=";
     };
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [ pkgs.libvirt CPANChanges TestPod TestPodCoverage XMLXPath ];
@@ -22622,7 +22622,7 @@ let
     version = "3.35";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DW/DWHEELER/TAP-Parser-SourceHandler-pgTAP-3.35.tar.gz";
-      sha256 = "1655337l1cyd7q62007wrk87q2gbbwfq9xjy1wgx3hyflxpkkvl4";
+      hash = "sha256-hO45b6fOw9EfD172hB1f6wl80Mz8ACAMPs2zQM8YpZg=";
     };
     doCheck = !stdenv.isDarwin;
     meta = {
@@ -22637,7 +22637,7 @@ let
     version = "0.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MR/MRAMBERG/Task-Catalyst-Tutorial-0.06.tar.gz";
-      sha256 = "75b1b2d96155647842587146cefd0de30943b85195e8e3eca51e0f0b8642d61e";
+      hash = "sha256-dbGy2WFVZHhCWHFGzv0N4wlDuFGV6OPspR4PC4ZC1h4=";
     };
     propagatedBuildInputs = [ CatalystAuthenticationStoreDBIxClass CatalystControllerHTMLFormFu CatalystDevel CatalystManual CatalystPluginAuthorizationACL CatalystPluginAuthorizationRoles CatalystPluginSessionStateCookie CatalystPluginSessionStoreFastMmap CatalystPluginStackTrace CatalystViewTT ];
     doCheck = false; /* fails with 'open3: exec of .. perl .. failed: Argument list too long at .../TAP/Parser/Iterator/Process.pm line 165.' */
@@ -22652,7 +22652,7 @@ let
     version = "0.0.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Task-FreecellSolver-Testing-0.0.12.tar.gz";
-      sha256 = "19wkz5ii8h90i9gmh692kvw9rz7k9bmpi53pw331fm0jmsvi069x";
+      hash = "sha256-PRkQt64SVBfG4HeUeOtK8/yc+J4iGVhfiiBBFGP5k6c=";
     };
     buildInputs = [ CodeTidyAll TestDataSplit TestDifferences TestPerlTidy TestRunPluginTrimDisplayedFilenames TestRunValgrind TestTrailingSpace TestTrap ];
     propagatedBuildInputs = [ EnvPath FileWhich GamesSolitaireVerify InlineC ListMoreUtils MooX StringShellQuote TaskTestRunAllPlugins TemplateToolkit YAMLLibYAML ];
@@ -22668,7 +22668,7 @@ let
     version = "0.28";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Task-Plack-0.28.tar.gz";
-      sha256 = "0ajwkyr9nwn11afi6fz6kx4bi7a3p8awjsldmsakz3sl0s42pmbr";
+      hash = "sha256-edUriAZUjz+Vro1qyRW6Q524SJ/mOxOdCsFym7KfXCo=";
     };
     propagatedBuildInputs = [ CGICompile CGIEmulatePSGI CGIPSGI Corona FCGI FCGIClient FCGIProcManager HTTPServerSimplePSGI IOHandleUtil NetFastCGI PSGI PlackAppProxy PlackMiddlewareAuthDigest PlackMiddlewareConsoleLogger PlackMiddlewareDebug PlackMiddlewareDeflater PlackMiddlewareHeader PlackMiddlewareReverseProxy PlackMiddlewareSession Starlet Starman Twiggy ];
     buildInputs = [ ModuleBuildTiny TestSharedFork ];
@@ -22683,7 +22683,7 @@ let
     version = "0.0106";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Task-Test-Run-AllPlugins-0.0106.tar.gz";
-      sha256 = "0y6fgldb59mc96lkghmd8n0gdbqaal6hz0cqqadna1jqi3q0p38v";
+      hash = "sha256-G40L8IhYBmWbwpiBDw1VCq/2gEWtwjepSaymshp9zng=";
     };
     buildInputs = [ TestRun TestRunCmdLine TestRunPluginAlternateInterpreters TestRunPluginBreakOnFailure TestRunPluginColorFileVerdicts TestRunPluginColorSummary TestRunPluginTrimDisplayedFilenames ];
     meta = {
@@ -22698,7 +22698,7 @@ let
     version = "1.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Task-Weaken-1.06.tar.gz";
-      sha256 = "1gk6rmnp4x50lzr0vfng41khf0f8yzxlm0pad1j69vxskpdzx0r3";
+      hash = "sha256-I4P+252672RkaOqCSvv3yAEHZyDPug3yp6B0cm3NZr4=";
     };
     meta = {
       description = "Ensure that a platform has weaken support";
@@ -22712,7 +22712,7 @@ let
     version = "1.27";
     src = fetchurl {
       url = "mirror://cpan/authors/id/V/VK/VKON/Tcl-1.27.tar.gz";
-      sha256 = "sha256-+DhYd6Sp7Z89OQPS0PfNcPrDzmgyxg9gCmghzuP7WHI=";
+      hash = "sha256-+DhYd6Sp7Z89OQPS0PfNcPrDzmgyxg9gCmghzuP7WHI=";
     };
     propagatedBuildInputs = [
       pkgs.bwidget
@@ -22734,7 +22734,7 @@ let
     version = "1.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CA/CAC/Tcl-pTk-1.09.tar.gz";
-      sha256 = "sha256-LR+YBlKS9+W7mBBy9/EkAOjxGVVe4MC5zToPr/pXl24=";
+      hash = "sha256-LR+YBlKS9+W7mBBy9/EkAOjxGVVe4MC5zToPr/pXl24=";
     };
     propagatedBuildInputs = [
       ClassISA
@@ -22763,7 +22763,7 @@ let
     version = "2.77";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KA/KARMAN/Template-Plugin-Autoformat-2.77.tar.gz";
-      sha256 = "bddfb4919f0abb2a2be7a9665333e0d4e098032f0e383dbaf04c4d896c7486ed";
+      hash = "sha256-vd+0kZ8Kuyor56lmUzPg1OCYAy8OOD268ExNiWx0hu0=";
     };
     propagatedBuildInputs = [ TemplateToolkit TextAutoformat ];
     meta = {
@@ -22778,7 +22778,7 @@ let
     version = "0.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RC/RCLAMP/Template-Plugin-Class-0.14.tar.gz";
-      sha256 = "1hq7jy6zg1iaslsyi05afz0i944y9jnv3nb4krkxjfmzwy5gw106";
+      hash = "sha256-BgT+iue/OtlnnmTZsa1MnpAUwXeqgOg11SqG942XB8M=";
     };
     propagatedBuildInputs = [ TemplateToolkit ];
     meta = {
@@ -22792,7 +22792,7 @@ let
     version = "0.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XE/XERN/Template-Plugin-IO-All-0.01.tar.gz";
-      sha256 = "1f7445422a21932e09bbef935766e0af6b7cceb088e9d8e030cd7a84bcdc5ee4";
+      hash = "sha256-H3RFQiohky4Ju++TV2bgr2t8zrCI6djgMM16hLzcXuQ=";
     };
     propagatedBuildInputs = [ IOAll TemplateToolkit ];
     meta = {
@@ -22807,7 +22807,7 @@ let
     version = "0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Template-Plugin-JavaScript-0.02.tar.gz";
-      sha256 = "1mqqqs0dhfr6bp1305j9ns05q4pq1n3f561l6p8848k5ml3dh87a";
+      hash = "sha256-6iDYBq1lIoLQNTSY4oYN+BJcgLZJFjDCXSY72IDGGNc=";
     };
     propagatedBuildInputs = [ TemplateToolkit ];
     meta = {
@@ -22821,7 +22821,7 @@ let
     version = "0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NA/NANTO/Template-Plugin-JSON-Escape-0.02.tar.gz";
-      sha256 = "051a8b1d3bc601d58fc51e246067d36450cfe970278a0456e8ab61940f13cd86";
+      hash = "sha256-BRqLHTvGAdWPxR4kYGfTZFDP6XAnigRW6KthlA8TzYY=";
     };
     propagatedBuildInputs = [ JSON TemplateToolkit ];
     meta = {
@@ -22835,7 +22835,7 @@ let
     version = "1.00";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PETDANCE/Template-Timer-1.00.tar.gz";
-      sha256 = "1d3pbcx1kz73ncg8s8lx3ifwphz838qy0m40gdar7790cnrlqcdp";
+      hash = "sha256-tzFMs2UgnZNVe4BU4DEa6MPLXRydIo0es+P8GTpbd7Q=";
     };
     propagatedBuildInputs = [ TemplateToolkit ];
     meta = {
@@ -22849,7 +22849,7 @@ let
     version = "1.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AD/ADAMK/Template-Tiny-1.12.tar.gz";
-      sha256 = "073e062c630b51dfb725cd6485a329155cb72d5c596e8cb698eb67c4566f0a4a";
+      hash = "sha256-Bz4GLGMLUd+3Jc1khaMpFVy3LVxZboy2mOtnxFZvCko=";
     };
     meta = {
       description = "Template Toolkit reimplemented in as little code as possible";
@@ -22863,7 +22863,7 @@ let
     version = "3.009";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AT/ATOOMIC/Template-Toolkit-3.009.tar.gz";
-      sha256 = "1dpmy62x1yshf7kwslj85sc8bcgw1m30dh0szmfrp99pysxj7bfn";
+      hash = "sha256-1q0ju/Y3pZtd/RrABkYN/LGFmC5IUs3ncVD70IXx9bY=";
     };
     doCheck = !stdenv.isDarwin;
     propagatedBuildInputs = [ AppConfig ];
@@ -22880,7 +22880,7 @@ let
     version = "2.66";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AB/ABW/Template-GD-2.66.tar.gz";
-      sha256 = "98523c8192f2e8184042e5a2e172bd767ac289dd2e480f35f680dce32160905b";
+      hash = "sha256-mFI8gZLy6BhAQuWi4XK9dnrCid0uSA819oDc4yFgkFs=";
     };
     propagatedBuildInputs = [ GD TemplateToolkit ];
     meta = {
@@ -22894,7 +22894,7 @@ let
     version = "0.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Term-Encoding-0.03.tar.gz";
-      sha256 = "95ba9687d735d25a3cbe64508d7894f009c7fa2a1726c3e786e9e21da2251d0b";
+      hash = "sha256-lbqWh9c10lo8vmRQjXiU8AnH+ioXJsPnhuniHaIlHQs=";
     };
     meta = {
       description = "Detect encoding of the current terminal";
@@ -22908,7 +22908,7 @@ let
     version = "2.22";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MANWAR/Term-ProgressBar-2.22.tar.gz";
-      sha256 = "2642ecca5b0b038c14812bcad3a9611ff7911dc59c9104d220797f837a880c49";
+      hash = "sha256-JkLsylsLA4wUgSvK06lhH/eRHcWckQTSIHl/g3qIDEk=";
     };
     buildInputs = [ CaptureTiny TestException TestWarnings ];
     propagatedBuildInputs = [ ClassMethodMaker TermReadKey ];
@@ -22923,7 +22923,7 @@ let
     version = "0.31";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LB/LBROCARD/Term-ProgressBar-Quiet-0.31.tar.gz";
-      sha256 = "25675292f588bc29d32e710cf3667da9a2a1751e139801770a9fdb18cd2184a6";
+      hash = "sha256-JWdSkvWIvCnTLnEM82Z9qaKhdR4TmAF3Cp/bGM0hhKY=";
     };
     propagatedBuildInputs = [ IOInteractive TermProgressBar ];
     buildInputs = [ TestMockObject ];
@@ -22938,7 +22938,7 @@ let
     version = "0.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EV/EVDB/Term-ProgressBar-Simple-0.03.tar.gz";
-      sha256 = "a20db3c67d5bdfd0c1fab392c6d1c26880a7ee843af602af4f9b53a7043579a6";
+      hash = "sha256-og2zxn1b39DB+rOSxtHCaICn7oQ69gKvT5tTpwQ1eaY=";
     };
     propagatedBuildInputs = [ TermProgressBarQuiet ];
     buildInputs = [ TestMockObject ];
@@ -22955,7 +22955,7 @@ let
     version = "2.38";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JS/JSTOWE/TermReadKey-2.38.tar.gz";
-      sha256 = "143jlibah1g14bym7sj3gphvqkpj1w4vn7sqc4vc62jpviw5hr2s";
+      hash = "sha256-WmRYeNxXCsM2YVgfuwkP8k684X1D6lP9IuEFqFakcpA=";
     };
 
     # use native libraries from the host when running build commands
@@ -22983,7 +22983,7 @@ let
     version = "1.36";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAYASHI/Term-ReadLine-Gnu-1.36.tar.gz";
-      sha256 = "9a08f7a4013c9b865541c10dbba1210779eb9128b961250b746d26702bab6925";
+      hash = "sha256-mgj3pAE8m4ZVQcENu6EhB3nrkSi5YSULdG0mcCuraSU=";
     };
     buildInputs = [ pkgs.readline pkgs.ncurses ];
     NIX_CFLAGS_LINK = "-lreadline -lncursesw";
@@ -23015,7 +23015,7 @@ let
     version = "1.4";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CK/CKAISER/Term-ReadLine-TTYtter-1.4.tar.gz";
-      sha256 = "14xcqhg1vrwgv65nd2z8xzn0wgb18i17pzkkh8m15cp1rqrk2dxc";
+      hash = "sha256-rDcxM87hshIqgnP+e0JEYT0O7O/oi2aL2Y/nHR7ErJM=";
     };
 
     outputs = [ "out" ];
@@ -23032,7 +23032,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PH/PHOENIX/${pname}-${version}.tar.gz";
-      sha256 = "08s3zdqbr01qf4h8ryc900qq1cjcdlyy2dq0gppzzy9mbcs6da71";
+      hash = "sha256-4ahmNFs1+f/vfQA34T1tTLKAMQCJ+YwgcTiAvHD7QyM=";
     };
 
     outputs = [ "out" ];
@@ -23048,7 +23048,7 @@ let
     version = "0.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Term-Shell-0.12.tar.gz";
-      sha256 = "1mrx7g74qvkdis7x7zq1zs0b7q2fsz59g4hxvg140r8bq1wzav3x";
+      hash = "sha256-fWz1ecALZUDC2x2Sl8rXTuCzgP4B/9OPjm1uTM47Pdc=";
     };
     propagatedBuildInputs = [ TermReadKey TextAutoformat ];
     meta = {
@@ -23063,7 +23063,7 @@ let
     version = "0.92";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BR/BRONSON/Term-ShellUI-0.92.tar.gz";
-      sha256 = "3279c01c76227335eeff09032a40f4b02b285151b3576c04cacd15be05942bdb";
+      hash = "sha256-MnnAHHYiczXu/wkDKkD0sCsoUVGzV2wEys0VvgWUK9s=";
     };
     meta = {
       description = "A fully-featured shell-like command line environment";
@@ -23076,7 +23076,7 @@ let
     version = "0.002";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FE/FERREIRA/Term-Size-Any-0.002.tar.gz";
-      sha256 = "64fa5fdb1ae3a823134aaa95aec75354bc17bdd9ca12ba0a7ae34a7e51b3ded2";
+      hash = "sha256-ZPpf2xrjqCMTSqqVrsdTVLwXvdnKEroKeuNKflGz3tI=";
     };
     propagatedBuildInputs = [ DevelHide TermSizePerl ];
     meta = {
@@ -23090,7 +23090,7 @@ let
     version = "0.031";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FE/FERREIRA/Term-Size-Perl-0.031.tar.gz";
-      sha256 = "ae9a6746cb1b305ddc8f8d8ca46878552b9c1123628971e13a275183822f209e";
+      hash = "sha256-rppnRssbMF3cj42MpGh4VSucESNiiXHhOidRg4IvIJ4=";
     };
     meta = {
       description = "Perl extension for retrieving terminal size (Perl version)";
@@ -23103,7 +23103,7 @@ let
     version = "0.015";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EX/EXODIST/Term-Table-0.015.tar.gz";
-      sha256 = "d8a18b2801f91f0e5d747147ce786964a76f91d18568652908a3dc06a9b948d5";
+      hash = "sha256-2KGLKAH5Hw5ddHFHznhpZKdvkdGFaGUpCKPcBqm5SNU=";
     };
     propagatedBuildInputs = [ Importer ];
     meta = {
@@ -23117,7 +23117,7 @@ let
     version = "0.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KE/KEICHNER/Term-Sk-0.18.tar.gz";
-      sha256 = "f2e491796061205b08688802b287792d7d803b08972339fb1070ba05612af885";
+      hash = "sha256-8uSReWBhIFsIaIgCsod5LX2AOwiXIzn7EHC6BWEq+IU=";
     };
     meta = {
       description = "Perl extension for displaying a progress indicator on a terminal";
@@ -23130,7 +23130,7 @@ let
     version = "0.46";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BINGOS/Term-UI-0.46.tar.gz";
-      sha256 = "19p92za5cx1v7g57pg993amprcvm1az3pp7y9g5b1aplsy06r54i";
+      hash = "sha256-kZRsgNf0qrDKS/7cO74KdbN8qxopvXvKOzt0VtQX6aY=";
     };
     propagatedBuildInputs = [ LogMessageSimple ];
     meta = {
@@ -23144,7 +23144,7 @@ let
     version = "0.91";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AJ/AJWOOD/Term-VT102-0.91.tar.gz";
-      sha256 = "f954e0310941d45c0fc3eb4a40f5d3a00d68119e277d303a1e6af11ded6fbd94";
+      hash = "sha256-+VTgMQlB1FwPw+tKQPXToA1oEZ4nfTA6HmrxHe1vvZQ=";
     };
     meta = {
       description = "A class to emulate a DEC VT102 terminal";
@@ -23157,7 +23157,7 @@ let
     version = "0.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FB/FBARRIOS/Term-VT102-Boundless-0.05.tar.gz";
-      sha256 = "e1ded85ae3d76b59c03b8697f4a6cb01ae31bd62a9354f5bb7d18f9e927b485f";
+      hash = "sha256-4d7YWuPXa1nAO4aX9KbLAa4xvWKpNU9bt9GPnpJ7SF8=";
     };
     propagatedBuildInputs = [ TermVT102 ];
     meta = {
@@ -23171,7 +23171,7 @@ let
     version = "2.6";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KB/KBAUCOM/Term-Animation-2.6.tar.gz";
-      sha256 = "7d5c3c2d4f9b657a8b1dce7f5e2cbbe02ada2e97c72f3a0304bf3c99d084b045";
+      hash = "sha256-fVw8LU+bZXqLHc5/Xiy74CraLpfHLzoDBL88mdCEsEU=";
     };
     propagatedBuildInputs = [ Curses ];
     meta = {
@@ -23185,7 +23185,7 @@ let
     version = "1.000042";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EX/EXODIST/Test2-Harness-1.000042.tar.gz";
-      sha256 = "aaf231a68af1a6ffd6a11188875fcf572e373e43c8285945227b9d687b43db2d";
+      hash = "sha256-qvIxporxpv/WoRGIh1/PVy43PkPIKFlFInudaHtD2y0=";
     };
 
     checkPhase = ''
@@ -23207,7 +23207,7 @@ let
     version = "0.002003";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EX/EXODIST/Test2-Plugin-MemUsage-0.002003.tar.gz";
-      sha256 = "5e0662d5a823ae081641f5ce82843111eec1831cd31f883a6c6de54afdf87c25";
+      hash = "sha256-XgZi1agjrggWQfXOgoQxEe7BgxzTH4g6bG3lSv34fCU=";
     };
     buildInputs = [ Test2Suite ];
     meta = {
@@ -23221,7 +23221,7 @@ let
     version = "0.002001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EX/EXODIST/Test2-Plugin-UUID-0.002001.tar.gz";
-      sha256 = "4c6c8d484d7153d8779dc155a992b203095b5c5aa1cfb1ee8bcedcd0601878c9";
+      hash = "sha256-TGyNSE1xU9h3ncFVqZKyAwlbXFqhz7Hui87c0GAYeMk=";
     };
     buildInputs = [ Test2Suite ];
     propagatedBuildInputs = [ DataUUID ];
@@ -23236,7 +23236,7 @@ let
     version = "0.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/Test2-Plugin-NoWarnings-0.09.tar.gz";
-      sha256 = "0x7vy9r5gyxqg3qy966frj8ywkckkv7mc83xy4mkdvrf0h0dhgdy";
+      hash = "sha256-vj3YAAQu7zYr8X0gVs+ek03ukczOmOTxeLj7V3Ly+3Q=";
     };
     buildInputs = [ IPCRun3 Test2Suite ];
     propagatedBuildInputs = [ TestSimple13 ];
@@ -23252,7 +23252,7 @@ let
     version = "0.000138";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EX/EXODIST/Test2-Suite-0.000138.tar.gz";
-      sha256 = "0x887d8y657k7072k5f5ly36f067ldafm27xbd9lh5nirvr2vxqc";
+      hash = "sha256-DPct8s7RFkhTW/2I6lSjxwBnhqfFlSkOOPMU41E7CHU=";
     };
     propagatedBuildInputs = [ ModulePluggable ScopeGuard SubInfo TermTable TestSimple13 ];
     meta = {
@@ -23266,7 +23266,7 @@ let
     version = "0.002";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Test-Abortable-0.002.tar.gz";
-      sha256 = "0v97y31j56f4mxw0vxyjbdprq4951h4wcdh4acnfm63np7wvg44p";
+      hash = "sha256-l5C3+bl2mOosUwQ2xgkMJRGcb1vS9w14r8SZIsPwJ20=";
     };
     propagatedBuildInputs = [ SubExporter ];
     buildInputs = [ TestNeeds ];
@@ -23282,7 +23282,7 @@ let
     version = "0.0504";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DE/DEXTER/Test-Assert-0.0504.tar.gz";
-      sha256 = "194bzflmzc0cw5727kznbj1zwzj7gnj7nx1643zk2hshdjlnv8yg";
+      hash = "sha256-z6NtqWxQQzH/ICZ0e6R9R37+g1z2zyNO4QywX6n7i6Q=";
     };
     buildInputs = [ ClassInspector TestUnitLite ];
     propagatedBuildInputs = [ ExceptionBase constantboolean ];
@@ -23297,7 +23297,7 @@ let
     version = "1.054";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BB/BBC/Test-Assertions-1.054.tar.gz";
-      sha256 = "10026w4r3yv6k3vc6cby7d61mxddlqh0ls6z39c82f17awfy9p7w";
+      hash = "sha256-/NzkHVcnOIFYGt9oCiCmrfUaTDt+McP2mGb7kQk3AoA=";
     };
     propagatedBuildInputs = [ LogTrace ];
     meta = {
@@ -23311,7 +23311,7 @@ let
     version = "0.375";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RW/RWSTAUNER/Test-Aggregate-0.375.tar.gz";
-      sha256 = "c6cc0abfd0d4fce85371acca93ec245381841d32b4caa2d6475e4bc8130427d1";
+      hash = "sha256-xswKv9DU/OhTcazKk+wkU4GEHTK0yqLWR15LyBMEJ9E=";
     };
     buildInputs = [ TestMost TestNoWarnings TestTrap ];
     meta = {
@@ -23327,7 +23327,7 @@ let
     version = "0.89";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IN/INGY/Test-Base-0.89.tar.gz";
-      sha256 = "056hibgg3i2b89mwr76vyxi6ayb3hqjqcwicvn3s5lximsma3517";
+      hash = "sha256-J5Shqq6x06KH3SxyhiWGY3llYvfbnMxrQkvE8d6K0BQ=";
     };
     propagatedBuildInputs = [ Spiffy ];
     buildInputs = [ AlgorithmDiff TextDiff ];
@@ -23342,7 +23342,7 @@ let
     version = "0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/Test-Bits-0.02.tar.gz";
-      sha256 = "1hqbvqlkj3k9ys4zq3f1fl1y6crni8r0ynan673f49rs91b6z0m9";
+      hash = "sha256-qYJvVkg6J+LGMVZZDzKKNjPjA3XBDfyJ9mkOOSneC8M=";
     };
     propagatedBuildInputs = [ ListAllUtils ];
     buildInputs = [ TestFatal ];
@@ -23358,7 +23358,7 @@ let
     version = "0.010";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEONT/Test-CheckDeps-0.010.tar.gz";
-      sha256 = "1vjinlixxdx6gfcw8y1dw2rla8bfhi8nmgcqr3nffc7kqskcrz36";
+      hash = "sha256-ZvzMpsbzMOfsyJi9alGEbiFFs+AteMSZe6a33iO1Ue4=";
     };
     propagatedBuildInputs = [ CPANMetaCheck ];
     meta = {
@@ -23372,7 +23372,7 @@ let
     version = "0.50";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Test-Class-0.50.tar.gz";
-      sha256 = "099154ed8caf3ff97c71237fab952264ac1c03d9270737a56071cabe65991350";
+      hash = "sha256-CZFU7YyvP/l8cSN/q5UiZKwcA9knBzelYHHKvmWZE1A=";
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ MROCompat ModuleRuntime TryTiny ];
@@ -23387,7 +23387,7 @@ let
     version = "0.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OV/OVID/Test-Class-Most-0.08.tar.gz";
-      sha256 = "1zvx9hil0mg0pnb8xfa4m0xgjpvh8s5gnbyprq3xwpdsdgcdwk33";
+      hash = "sha256-Y0ze2Gu6Xd4Hztcv+4pGcF/5OqhEuY6WveBVQCNMff8=";
     };
     buildInputs = [ TestClass TestDeep TestDifferences TestException TestMost TestWarn ];
     meta = {
@@ -23401,7 +23401,7 @@ let
     version = "0.24";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Test-CleanNamespaces-0.24.tar.gz";
-      sha256 = "338d5569e8e89a654935f843ec0bc84aaa486fe8dd1898fb9cab3eccecd5327a";
+      hash = "sha256-M41VaejommVJNfhD7AvISqpIb+jdGJj7nKs+zOzVMno=";
     };
     buildInputs = [ Filepushd Moo Mouse RoleTiny SubExporter TestDeep TestNeeds TestWarnings namespaceclean ];
     propagatedBuildInputs = [ PackageStash SubIdentify ];
@@ -23417,7 +23417,7 @@ let
     version = "1.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/Test-Cmd-1.09.tar.gz";
-      sha256 = "114nfafwfxxn7kig265b7lg0znb5ybvc282sjjwf14g7vpn20cyg";
+      hash = "sha256-zzMg7N3nkeC4lFogwfbyZdkPHj2rGPHiPLZ3x51yloQ=";
     };
       doCheck = false; /* test fails */
     meta = {
@@ -23432,7 +23432,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DANBOO/Test-Command-0.11.tar.gz";
-      sha256 = "0cwm3c4d49mdrbm6vgh78b3x8mk730l0zg8i7xb9z8bkx9pzr8r8";
+      hash = "sha256-KKP8b+pzoZ9WPxG9DygYZ1bUx0IHvm3qyq0m0ggblTM=";
     };
     meta = {
       description = "Test routines for external commands";
@@ -23446,7 +23446,7 @@ let
     version = "2.4.1";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EG/EGILES/Test-Compile-v2.4.1.tar.gz";
-      sha256 = "56a7a3459db5de0f92419029cf1b4d51c44dd02d4690cff3c4eedf666f6d8d46";
+      hash = "sha256-VqejRZ213g+SQZApzxtNUcRN0C1GkM/zxO7fZm9tjUY=";
     };
     propagatedBuildInputs = [ UNIVERSALrequire ];
     meta = {
@@ -23460,7 +23460,7 @@ let
     version = "0.25";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BA/BARBIE/Test-CPAN-Meta-0.25.tar.gz";
-      sha256 = "f55b4f9cf6bc396d0fe8027267685cb2ac4affce897d0967a317fac6db5a8db5";
+      hash = "sha256-9VtPnPa8OW0P6AJyZ2hcsqxK/86JfQlnoxf6xttajbU=";
     };
     meta = {
       description = "Validate your CPAN META.json files";
@@ -23473,7 +23473,7 @@ let
     version = "0.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BA/BARBIE/Test-CPAN-Meta-JSON-0.16.tar.gz";
-      sha256 = "1jg9ka50ixwq083wd4k12rhdjq87w0ihb34gd8jjn7gvvyd51b37";
+      hash = "sha256-Z6xQmt/7HSslao+MBSPgB2HZYBZhksYHApj3CIqa6ck=";
     };
     propagatedBuildInputs = [ JSON ];
     meta = {
@@ -23487,7 +23487,7 @@ let
     version = "0.2.2";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-Data-Split-0.2.2.tar.gz";
-      sha256 = "08l0h9xkikj6ggm24dark2hp9wffypanjdbha3gdfc5dmn83h275";
+      hash = "sha256-5Qg4kK2tMNfeUHA1adX1zvF0oZhZNSLqe0bOOHuCgCI=";
     };
     buildInputs = [ TestDifferences ];
     propagatedBuildInputs = [ IOAll ListMoreUtils MooX MooXlate ];
@@ -23503,7 +23503,7 @@ let
     version = "1.130";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Test-Deep-1.130.tar.gz";
-      sha256 = "0mkw18q5agr30djxr1y68rcfw8aq20ws872hmv88f9gnynag8r20";
+      hash = "sha256-QGT0lPX2JYfQrlAcpDkQWCHuWEbGh9xlAyM/VTAKfFY=";
     };
     meta = {
       description = "Extremely flexible deep comparison";
@@ -23517,7 +23517,7 @@ let
     version = "0.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MO/MOTEMEN/Test-Deep-JSON-0.05.tar.gz";
-      sha256 = "aec8571b9e31b7301e26132c132c6800952dc089c645d76954a3ad1a6b350858";
+      hash = "sha256-rshXG54xtzAeJhMsEyxoAJUtwInGRddpVKOtGms1CFg=";
     };
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [ ExporterLite JSONMaybeXS TestDeep ];
@@ -23533,7 +23533,7 @@ let
     version = "0.008";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Test-Deep-Type-0.008.tar.gz";
-      sha256 = "6e7bea1a2f1e75319a22d1c51996ebac50ca5e3663d1bc223130887e62e959f1";
+      hash = "sha256-bnvqGi8edTGaItHFGZbrrFDKXjZj0bwiMTCIfmLpWfE=";
     };
     buildInputs = [ TestFatal TestNeeds ];
     propagatedBuildInputs = [ TestDeep TryTiny ];
@@ -23549,7 +23549,7 @@ let
     version = "1.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MT/MTHURN/Test-Dir-1.16.tar.gz";
-      sha256 = "7332b323913eb6a2684d094755196304b2f8606f70eaab913654ca91f273eac2";
+      hash = "sha256-czKzI5E+tqJoTQlHVRljBLL4YG9w6quRNlTKkfJz6sI=";
     };
     meta = {
       description = "Test directory attributes";
@@ -23562,7 +23562,7 @@ let
     version = "0.67";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DC/DCANTRELL/Test-Differences-0.67.tar.gz";
-      sha256 = "c88dbbb48b934b069284874f33abbaaa438aa31204aa3fa73bfc2f4aeac878da";
+      hash = "sha256-yI27tIuTSwaShIdPM6u6qkOKoxIEqj+nO/wvSurIeNo=";
     };
     propagatedBuildInputs = [ CaptureTiny TextDiff ];
     meta = {
@@ -23576,7 +23576,7 @@ let
     version = "1.014";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Test-DistManifest-1.014.tar.gz";
-      sha256 = "3d26c20df42628981cbfcfa5b1ca028c6ceadb344c1dcf97a25ad6a88b73d7c5";
+      hash = "sha256-PSbCDfQmKJgcv8+lscoCjGzq2zRMHc+XolrWqItz18U=";
     };
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [ ModuleManifest ];
@@ -23592,7 +23592,7 @@ let
     version = "2.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Test-EOL-2.02.tar.gz";
-      sha256 = "1i5g40bx72fh0nszxh75v042bp66f4jv3xva4bi7z017zgbrjc98";
+      hash = "sha256-KDGZ1/sngH/iImr3sSVxxtwlCNjlwP61BdCJ0xcgr8Q=";
     };
     meta = {
       description = "Check the correct line endings in your project";
@@ -23606,7 +23606,7 @@ let
     version = "0.43";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EX/EXODIST/Test-Exception-0.43.tar.gz";
-      sha256 = "0cxm7s4bg0xpxa6l6996a6iq3brr4j7p4hssnkc6dxv4fzq16sqm";
+      hash = "sha256-FWsT8Hdk92bYtFpDco8kOa+Bo1EmJUON6reDt4g+tTM=";
     };
     propagatedBuildInputs = [ SubUplevel ];
     meta = {
@@ -23620,7 +23620,7 @@ let
     version = "0.34";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BP/BPS/Test-Expect-0.34.tar.gz";
-      sha256 = "2628fcecdda5f649bd25323f646b96a1a07e4557cadcb327c9bad4dc41bbb999";
+      hash = "sha256-Jij87N2l9km9JTI/ZGuWoaB+RVfK3LMnybrU3EG7uZk=";
     };
     propagatedBuildInputs = [ ClassAccessorChained ExpectSimple ];
     meta = {
@@ -23634,7 +23634,7 @@ let
     version = "0.008";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/Test-FailWarnings-0.008.tar.gz";
-      sha256 = "0vx9chcp5x8m0chq574p9fnfckh5gl94j7904rh9v17n568fyd6s";
+      hash = "sha256-2jTvkCn2hJ1gJiAdSRJ9BU7mrEuXnIIhAxX1chlkqW8=";
     };
     buildInputs = [ CaptureTiny ];
     meta = {
@@ -23649,7 +23649,7 @@ let
     version = "0.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MASAKI/Test-Fake-HTTPD-0.09.tar.gz";
-      sha256 = "07iddzxkgxk0ym2gz3scmrw9gmnk755qwksmpvlj42d9cyq9rxql";
+      hash = "sha256-FPecsGepCSLpvlVPjks509aXeK5Mj/9E9WD2N/tvLR4=";
     };
     propagatedBuildInputs = [ HTTPDaemon Plack ];
     buildInputs = [ LWP ModuleBuildTiny TestException TestSharedFork TestTCP TestUseAllModules ];
@@ -23665,7 +23665,7 @@ let
     version = "0.016";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Test-Fatal-0.016.tar.gz";
-      sha256 = "7283d430f2ba2030b8cd979ae3039d3f1b2ec3dde1a11ca6ae09f992a66f788f";
+      hash = "sha256-coPUMPK6IDC4zZea4wOdPxsuw93hoRymrgn5kqZveI8=";
     };
     propagatedBuildInputs = [ TryTiny ];
     meta = {
@@ -23680,7 +23680,7 @@ let
     version = "1.443";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BD/BDFOY/Test-File-1.443.tar.gz";
-      sha256 = "61b4a6ab8f617c8c7b5975164cf619468dc304b6baaaea3527829286fa58bcd5";
+      hash = "sha256-YbSmq49hfIx7WXUWTPYZRo3DBLa6quo1J4KShvpYvNU=";
     };
     buildInputs = [ Testutf8 ];
     meta = {
@@ -23695,7 +23695,7 @@ let
     version = "0.23";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DW/DWHEELER/Test-File-Contents-0.23.tar.gz";
-      sha256 = "cd6fadfb910b34b4b53991ff231dad99929ca8850abec3ad0e2810c4bd7b1f3d";
+      hash = "sha256-zW+t+5ELNLS1OZH/Ix2tmZKcqIUKvsOtDigQxL17Hz0=";
     };
     propagatedBuildInputs = [ TextDiff ];
     meta = {
@@ -23709,7 +23709,7 @@ let
     version = "1.001002";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KE/KENTNL/Test-File-ShareDir-1.001002.tar.gz";
-      sha256 = "b33647cbb4b2f2fcfbde4f8bb4383d0ac95c2f89c4c5770eb691f1643a337aad";
+      hash = "sha256-szZHy7Sy8vz73k+LtDg9CslcL4nExXcOtpHxZDozeq0=";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ ClassTiny FileCopyRecursive FileShareDir PathTiny ScopeGuard ];
@@ -23725,7 +23725,7 @@ let
     version = "0.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/Test-Filename-0.03.tar.gz";
-      sha256 = "1gpw4mjw68gnby8s4cifvbz6g2923xsc189jkw9d27i8qv20qiba";
+      hash = "sha256-akUMxMYoHtESnzKhwHQfIoln/touMqKRX/Yhw2Ul/L4=";
     };
     propagatedBuildInputs = [ PathTiny ];
     meta = {
@@ -23740,7 +23740,7 @@ let
     version = "0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSCHWERN/Test-Fork-0.02.tar.gz";
-      sha256 = "0gnh8m81fdrwmzy1fix12grfq7sf7nn0gbf24zlap1gq4kxzpzpw";
+      hash = "sha256-/P77+yT4havoJ8KtB6w9Th/s8hOhRxf8rzw3F1BF0D4=";
     };
     meta = {
       description = "Test code which forks";
@@ -23753,7 +23753,7 @@ let
     version = "0.30";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSCHWERN/Test-Harness-Straps-0.30.tar.gz";
-      sha256 = "8b00efaa35723c1a35c8c8f5fa46a99e4bc528dfa520352b54ac418ef6d1cfa8";
+      hash = "sha256-iwDvqjVyPBo1yMj1+kapnkvFKN+lIDUrVKxBjvbRz6g=";
     };
     meta = {
       description = "Detailed analysis of test results";
@@ -23766,7 +23766,7 @@ let
     version = "1.001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/ST/STEFFENW/Test-HexDifferences-1.001.tar.gz";
-      sha256 = "18lh6shpfx567gjikrid4hixydgv1hi3mycl20qzq2j2vpn4afd6";
+      hash = "sha256-pjlF7N1CCvwxEJT5OiIM+zXfIyQt5hnlO6Z0d6E2kKI=";
     };
     propagatedBuildInputs = [ SubExporter TextDiff ];
     buildInputs = [ TestDifferences TestNoWarnings ];
@@ -23781,7 +23781,7 @@ let
     version = "0.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/Test-HexString-0.03.tar.gz";
-      sha256 = "0h1zl2l1ljlcxsn0xvin9dwiymnhyhnfnxgzg3f9899g37f4qk3x";
+      hash = "sha256-fUxM3BkvJZTceP916yz00FYfeUs27g6s7oxKGqigP0A=";
     };
     meta = {
       description = "Test binary strings with hex dump diagnostics";
@@ -23794,7 +23794,7 @@ let
     version = "0.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/Test-Identity-0.01.tar.gz";
-      sha256 = "08szivpqfwxnf6cfh0f0rfs4f7xbaxis3bra31l2c5gdk800a0ig";
+      hash = "sha256-LwIFAJrtFSZoGCqvoWNXqx9HtMvAAeiYcbZzh++OXyM=";
     };
     meta = {
       description = "Assert the referential identity of a reference";
@@ -23807,7 +23807,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AL/ALEXMV/Test-HTTP-Server-Simple-0.11.tar.gz";
-      sha256 = "85c97ebd4deb805291b17277032da48807228f24f89b1ce2fb3c09f7a896bb78";
+      hash = "sha256-hcl+vU3rgFKRsXJ3Ay2kiAcijyT4mxzi+zwJ96iWu3g=";
     };
     propagatedBuildInputs = [ HTTPServerSimple ];
     meta = {
@@ -23821,7 +23821,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OV/OVID/Test-JSON-0.11.tar.gz";
-      sha256 = "1cyp46w3q7dg89qkw31ik2h2a6mdx6pzdz2lmp8m0a61zjr8mh07";
+      hash = "sha256-B8CKsvzBKFDRrVT89q/prRoloJgxDD5xQq8dPLgh17M=";
     };
     propagatedBuildInputs = [ JSONAny ];
     buildInputs = [ TestDifferences ];
@@ -23836,7 +23836,7 @@ let
     version = "1.28";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Test-Kwalitee-1.28.tar.gz";
-      sha256 = "18s3c8qfr3kmmyxmsn5la2zgbdsgpnkmscnl68i7fnavfpfnqlxl";
+      hash = "sha256-tFNs3XVbWXciMtQyXae9T7f1vlC0WF27r3WO7DBiQ6M=";
     };
     propagatedBuildInputs = [ ModuleCPANTSAnalyse ];
     buildInputs = [ CPANMetaCheck TestDeep TestWarnings ];
@@ -23853,7 +23853,7 @@ let
     version = "0.036";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Test-LWP-UserAgent-0.036.tar.gz";
-      sha256 = "sha256-BTJ1MNNGuAphpulD+9dJmGvcqJIRpOswHAjC0XkxThE=";
+      hash = "sha256-BTJ1MNNGuAphpulD+9dJmGvcqJIRpOswHAjC0XkxThE=";
     };
     propagatedBuildInputs = [ LWP SafeIsa namespaceclean ];
     buildInputs = [ PathTiny Plack TestDeep TestFatal TestNeeds TestRequiresInternet TestWarnings ];
@@ -23869,7 +23869,7 @@ let
     version = "0.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEEJO/Test-LeakTrace-0.16.tar.gz";
-      sha256 = "00z4hcjra5nk700f3fgpy8fs036d7ry7glpn8g3wh7jzj7nrw22z";
+      hash = "sha256-Xwie7ZFfHsjHQ/bSd3w+zQygHfL3ueEAONMWlSWD5AM=";
     };
     meta = {
       description = "Traces memory leaks";
@@ -23883,7 +23883,7 @@ let
     version = "0.5001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TM/TMOERTEL/Test-LectroTest-0.5001.tar.gz";
-      sha256 = "0dfpkvn06499gczch4gfmdb05fdj82vlqy7cl6hz36l9jl6lyaxc";
+      hash = "sha256-rCtPDZWJmvGhoex4TLdAsrkCVqvuEcg+eykRA+ye1zU=";
     };
     meta = {
       description = "Easy, automatic, specification-based tests";
@@ -23896,7 +23896,7 @@ let
     version = "0.022";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KI/KITANO/Test-LoadAllModules-0.022.tar.gz";
-      sha256 = "1zjwbqk1ns9m8srrhyj3i5zih976i4d2ibflh5s8lr10a1aiz1hv";
+      hash = "sha256-G4YfVVAgZIp0gdStKBqJ5iQYf4lDepizRjVpGyZeXP4=";
     };
     propagatedBuildInputs = [ ListMoreUtils ModulePluggable ];
     meta = {
@@ -23910,7 +23910,7 @@ let
     version = "0.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RG/RGARCIA/Test-LongString-0.17.tar.gz";
-      sha256 = "0kwp7rfr1i2amz4ckigkv13ah7jr30q6l5k4wk0vxl84myg39i5b";
+      hash = "sha256-q8Q0nq8E0b7B5GQWajAYWR6oRtjzxcnIr0rEkF0+l08=";
     };
     meta = {
       description = "Tests strings for equality, with more helpful failures";
@@ -23923,7 +23923,7 @@ let
     version = "1.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PETDANCE/Test-Memory-Cycle-1.06.tar.gz";
-      sha256 = "9d53ddfdc964cd8454cb0da4c695b6a3ae47b45839291c34cb9d8d1cfaab3202";
+      hash = "sha256-nVPd/clkzYRUyw2kxpW2o65HtFg5KRw0y52NHPqrMgI=";
     };
     propagatedBuildInputs = [ DevelCycle PadWalker ];
     meta = {
@@ -23937,7 +23937,7 @@ let
     version = "0.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/Test-MemoryGrowth-0.04.tar.gz";
-      sha256 = "1l1f7mwjyfgfbhad13p4wgavnb3mdjs6v3xr2m0rxm5ba8kqard0";
+      hash = "sha256-oGWFJ1Kr1J5BFbmPbbRsdSy71ePkjtAUXO45L3k9LtA=";
     };
     meta = {
       description = "Assert that code does not cause growth in memory usage";
@@ -23951,7 +23951,7 @@ let
     version = "0.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/Test-Metrics-Any-0.01.tar.gz";
-      sha256 = "0s744lv997g1wr4i4vg1d7zpzjfw334hdy45215jf6xj9s6wh1i5";
+      hash = "sha256-JQbIjU6yGydLEIX4BskY3Ml//2nhbRJJ5uGdlDYl5Gg=";
     };
     propagatedBuildInputs = [ MetricsAny ];
     meta = {
@@ -23965,7 +23965,7 @@ let
     version = "0.0303";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DE/DEXTER/Test-Mock-Class-0.0303.tar.gz";
-      sha256 = "00pkfqcz7b34q1mvx15k46sbxs22zcrvrbv15rnbn2na57z54bnd";
+      hash = "sha256-zS5S/inKCrtsLmGvvDP7Qui+tCGzhL5rwGSs8xl28wI=";
     };
     buildInputs = [ ClassInspector TestAssert TestUnitLite ];
     propagatedBuildInputs = [ FatalException Moose namespaceclean ];
@@ -23980,7 +23980,7 @@ let
     version = "0.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAICRON/Test-Mock-Guard-0.10.tar.gz";
-      sha256 = "7f228a63f8d6ceb92aa784080a13e85073121b2835eca06d794f9709950dbd3d";
+      hash = "sha256-fyKKY/jWzrkqp4QIChPoUHMSGyg17KBteU+XCZUNvT0=";
     };
     propagatedBuildInputs = [ ClassLoad ];
     meta = {
@@ -23995,7 +23995,7 @@ let
     version = "0.002";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OD/ODYNIEC/Test-Mock-HTTP-Tiny-0.002.tar.gz";
-      sha256 = "sha256-+c+tfYUEZQvtNJO8bSyoLXuRvDcTyGxDXnXriKxb5eY=";
+      hash = "sha256-+c+tfYUEZQvtNJO8bSyoLXuRvDcTyGxDXnXriKxb5eY=";
     };
     propagatedBuildInputs = [ TestDeep URI ];
     meta = {
@@ -24010,7 +24010,7 @@ let
     version = "0.175.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GF/GFRANKS/Test-MockModule-v0.175.0.tar.gz";
-      sha256 = "1zpf8p04and7jj33pc919g2pfg0scaqwqq1cnk8wx0nx2gbq9ch7";
+      hash = "sha256-B7KE1xPdgs7RtCxgzLFiGjx3xUshsTuGlKdZRcBF7v4=";
     };
     propagatedBuildInputs = [ SUPER ];
     buildInputs = [ TestWarnings ];
@@ -24025,7 +24025,7 @@ let
     version = "1.20190531";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CH/CHROMATIC/SUPER-1.20190531.tar.gz";
-      sha256 = "685d1ee76e7f0e9006942923bf7df8b11c107132992917593dcf7397d417d39a";
+      hash = "sha256-aF0e525/DpAGlCkjv334sRwQcTKZKRdZPc9zl9QX05o=";
     };
     propagatedBuildInputs = [ SubIdentify ];
     meta = {
@@ -24040,7 +24040,7 @@ let
     version = "1.20200122";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CH/CHROMATIC/Test-MockObject-1.20200122.tar.gz";
-      sha256 = "2b7f80da87f5a6fe0360d9ee521051053017442c3a26e85db68dfac9f8307623";
+      hash = "sha256-K3+A2of1pv4DYNnuUhBRBTAXRCw6Juhdto36yfgwdiM=";
     };
     buildInputs = [ TestException TestWarn ];
     propagatedBuildInputs = [ UNIVERSALcan UNIVERSALisa ];
@@ -24055,7 +24055,7 @@ let
     version = "0.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DD/DDICK/Test-MockTime-0.17.tar.gz";
-      sha256 = "1y820qsq7yf7r6smy5c6f0mpf2cis2q24vwmpim1svv0n8cf2qrk";
+      hash = "sha256-M2PhGLJgbx1qvJVvIrDQkQl3K3CGFV+1ycf5gzUGAvk=";
     };
     meta = {
       description = "Replaces actual time with simulated time";
@@ -24068,7 +24068,7 @@ let
     version = "0.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TA/TARAO/Test-MockTime-HiRes-0.08.tar.gz";
-      sha256 = "1hfykcjrls6ywgbd49w29c7apj3nq4wlyx7jzpd2glwmz2pgfjaz";
+      hash = "sha256-X0n3rviV0yfa/fJ0TznBdsirDkuCJ9LW495omiWb3sE=";
     };
     buildInputs = [ AnyEvent ModuleBuildTiny TestClass TestMockTime TestRequires ];
     meta = {
@@ -24083,7 +24083,7 @@ let
     version = "1.3";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SY/SYP/Test-Mojibake-1.3.tar.gz";
-      sha256 = "0cqvbwddgh0pfzmh989gkysi9apqj7dp7jkxfa428db9kgzpbzlg";
+      hash = "sha256-j/51/5tpNSSIcn3Kc9uR+KoUtZ8voQTrdxfA1xpfGzM=";
     };
     meta = {
       description = "Check your source for encoding misbehavior";
@@ -24098,7 +24098,7 @@ let
     version = "0.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MO/MONS/Test-More-UTF8-0.05.tar.gz";
-      sha256 = "016fs77lmw8xxrcnapvp6wq4hjwgsdfi3l9ylpxgxkcpdarw9wdr";
+      hash = "sha256-ufHEs2qXzf76pT7REV3Tj0tIMDd3X2VZ7h3xSs/RzgQ=";
     };
     meta = {
       description = "Enhancing Test::More for UTF8-based projects";
@@ -24111,7 +24111,7 @@ let
     version = "0.37";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OV/OVID/Test-Most-0.37.tar.gz";
-      sha256 = "1isg8z6by113zn08l044w6k04y5m5bnns3rqmks8rwdr3qa70csk";
+      hash = "sha256-UzNwFB658Yz0rDgPbe0qtXgCpuGEAIqA/SMEv8xHT8c=";
     };
     propagatedBuildInputs = [ ExceptionClass ];
     buildInputs = [ TestDeep TestDifferences TestException TestWarn ];
@@ -24126,7 +24126,7 @@ let
     version = "1.0013";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SO/SONGMU/Test-mysqld-1.0013.tar.gz";
-      sha256 = "1vrybrh3is3xfwqdhxr1mvmmdyjhz9p0f6n8hasn7japj2h43bap";
+      hash = "sha256-V61BoJBXyWO1gsgaB276UPpW664hd9gwd33oOGBePu8=";
     };
     buildInputs = [ pkgs.which ModuleBuildTiny TestSharedFork ];
     propagatedBuildInputs = [ ClassAccessorLite DBDmysql FileCopyRecursive ];
@@ -24143,7 +24143,7 @@ let
     version = "0.002006";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/Test-Needs-0.002006.tar.gz";
-      sha256 = "77f9fff0c96c5e09f34d0416b3533c3319f7cd0bb1f7fe8f8072ad59f433f0e5";
+      hash = "sha256-d/n/8MlsXgnzTQQWs1M8Mxn3zQux9/6PgHKtWfQz8OU=";
     };
     meta = {
       description = "Skip tests when modules not available";
@@ -24156,7 +24156,7 @@ let
     version = "2.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Test-NoTabs-2.02.tar.gz";
-      sha256 = "0c306p9qdpa2ycii3c50hml23mwy6bjxpry126g1dw11hyiwcxgv";
+      hash = "sha256-+3XGo4ch8BaeEcHn2+UyntchaIWgsBEj80LdhtM1YDA=";
     };
     meta = {
       description = "Check the presence of tabs in your project";
@@ -24170,7 +24170,7 @@ let
     version = "1.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AD/ADAMK/Test-NoWarnings-1.04.tar.gz";
-      sha256 = "0v385ch0hzz9naqwdw2az3zdqi15gka76pmiwlgsy6diiijmg2k3";
+      hash = "sha256-Y4pXZYyxGa8f5bFec9R8JUTc/vhK8Maxsul/CCAraGw=";
     };
     meta = {
       description = "Make sure you didn't emit any warnings while testing";
@@ -24183,7 +24183,7 @@ let
     version = "0.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Test-Object-0.08.tar.gz";
-      sha256 = "65278964147837313f4108e55b59676e8a364d6edf01b3dc198aee894ab1d0bb";
+      hash = "sha256-ZSeJZBR4NzE/QQjlW1lnboo2TW7fAbPcGYruiUqx0Ls=";
     };
     meta = {
       description = "Thoroughly testing objects via registered handlers";
@@ -24196,7 +24196,7 @@ let
     version = "1.031";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BD/BDFOY/Test-Output-1.031.tar.gz";
-      sha256 = "193y1xjvgc1p9pdgdwps2127knvpz9wc1xh6gmr74y3ihmqz7f7q";
+      hash = "sha256-+LjzcYVxeHJyfQb2wHj6d9t5RBD68vbaTTewt2UPfqQ=";
     };
     propagatedBuildInputs = [ CaptureTiny ];
     meta = {
@@ -24210,7 +24210,7 @@ let
     version = "0.07";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SK/SKAJI/Test-PAUSE-Permissions-0.07.tar.gz";
-      sha256 = "0gh7f67g1y30yggmwj1pq6xgrx3cfjibj2378nl3gilvyaxw2w2m";
+      hash = "sha256-VXDBu/KbxjeoRWcIuaJ0bPT8usE3SF7f82D48I5xBz4=";
     };
     propagatedBuildInputs = [ ConfigIdentity PAUSEPermissions ParseLocalDistribution ];
     buildInputs = [ ExtUtilsMakeMakerCPANfile TestUseAllModules ];
@@ -24225,7 +24225,7 @@ let
     version = "1.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PETDANCE/Test-Perl-Critic-1.04.tar.gz";
-      sha256 = "28f806b5412c7908b56cf1673084b8b44ce1cb54c9417d784d91428e1a04096e";
+      hash = "sha256-KPgGtUEseQi1bPFnMIS4tEzhy1TJQX14TZFCjhoECW4=";
     };
     propagatedBuildInputs = [ MCE PerlCritic ];
     meta = {
@@ -24239,7 +24239,7 @@ let
     version = "20200930";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-PerlTidy-${version}.tar.gz";
-      sha256 = "1djpfi57s1j6mqb0ii2ca1sj3ym7jjab018inp6vdmsyfjcnhvwz";
+      hash = "sha256-n29omXRe17bNtREFsJSUp/ohdVBMxAgWrkYGfUp0V7Y=";
     };
     propagatedBuildInputs = [ PathTiny PerlTidy TextDiff ];
     buildInputs = [ TestPerlCritic ];
@@ -24255,7 +24255,7 @@ let
     version = "1.52";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Test-Pod-1.52.tar.gz";
-      sha256 = "1z75x1pxwp8ajwq9iazlg2c3wd7rdlim08yclpdg32qnc36dpa30";
+      hash = "sha256-YKjbzGAWi/HapcwjUCNt+TQ+mHj0q5gwlwpd3m/o5fw=";
     };
     meta = {
       description = "Check for POD errors in files";
@@ -24269,7 +24269,7 @@ let
     version = "1.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/Test-Pod-Coverage-1.10.tar.gz";
-      sha256 = "1m203mhgfilz7iqc8mxaw4lw02fz391mni3n25sfx7nryylwrja8";
+      hash = "sha256-SMnMqffZnu50EXZEW0Ma3wnAKeGqV8RwPJ9G92AdQNQ=";
     };
     propagatedBuildInputs = [ PodCoverage ];
     meta = {
@@ -24283,7 +24283,7 @@ let
     version = "0.008";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AP/APOCAL/Test-Pod-LinkCheck-0.008.tar.gz";
-      sha256 = "2bfe771173c38b69eeb089504e3f76511b8e45e6a9e6dac3e616e400ea67bcf0";
+      hash = "sha256-K/53EXPDi2nusIlQTj92URuOReap5trD5hbkAOpnvPA=";
     };
     buildInputs = [ ModuleBuildTiny TestPod ];
     propagatedBuildInputs = [ CaptureTiny Moose podlinkcheck ];
@@ -24299,7 +24299,7 @@ let
     version = "0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AP/APOCAL/Test-Pod-No404s-0.02.tar.gz";
-      sha256 = "0ycfghsyl9f31kxdppjwx2g5iajrqh3fyywz0x7d8ayndw2hdihi";
+      hash = "sha256-EcYGBW/WK9ROB5977wbEWapYnuhc3tv6DMMl6jV8jnk=";
     };
     propagatedBuildInputs = [ LWP URIFind ];
     buildInputs = [ ModuleBuildTiny TestPod ];
@@ -24315,7 +24315,7 @@ let
     version = "0.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AB/ABRAXXA/Test-Portability-Files-0.10.tar.gz";
-      sha256 = "08e4b432492dc1b44b55d5db57952eb76379c7f434ee8f16aca64d491f401a16";
+      hash = "sha256-COS0MkktwbRLVdXbV5Uut2N5x/Q07o8WrKZNSR9AGhY=";
     };
     meta = {
       description = "Check file names portability";
@@ -24328,7 +24328,7 @@ let
     version = "0.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/Test-Refcount-0.10.tar.gz";
-      sha256 = "1chf6zizi7x128l3qm1bdqzwjjqm2j4gzajgghaksisn945c4mq4";
+      hash = "sha256-BFfCCklWRz0VfE+q/4gUFUvJP24rVDwoEqGf+OM3DrI=";
     };
     meta = {
       description = "Assert reference counts on objects";
@@ -24341,7 +24341,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/Test-Requires-0.11.tar.gz";
-      sha256 = "03q49vi09b4n31kpnmq4v2dga5ja438a8f1wgkgwvvlpjmadx22b";
+      hash = "sha256-S4jeVJWX7s3ffDw4pNAgShb1mtgEV3tnGJasBOJOBA8=";
     };
     meta = {
       description = "Checks to see if the module can be loaded";
@@ -24355,7 +24355,7 @@ let
     version = "1.008";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BO/BOOK/Test-Requires-Git-1.008.tar.gz";
-      sha256 = "70916210970d84d7491451159ab8b67e15251c8c0dae7c3df6c8d88542ea42a6";
+      hash = "sha256-cJFiEJcNhNdJFFEVmri2fhUlHIwNrnw99sjYhULqQqY=";
     };
     propagatedBuildInputs = [ GitVersionCompare ];
     meta = {
@@ -24369,7 +24369,7 @@ let
     version = "0.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MALLEN/Test-RequiresInternet-0.05.tar.gz";
-      sha256 = "0gl33vpj9bb78pzyijp884b66sbw6jkh1ci0xki8rmf03hmb79xv";
+      hash = "sha256-u6ezKhzA1Yzi7CCyAKc0fGljFkHoyuj/RWetJO8egz4=";
     };
     meta = {
       description = "Easily test network connectivity";
@@ -24383,7 +24383,7 @@ let
     version = "1.004";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/Test-Roo-1.004.tar.gz";
-      sha256 = "1mnym49j1lj7gzylma5b6nr4vp75rmgz2v71904v01xmxhy9l4i1";
+      hash = "sha256-IRKaPOy1B7AJSOFs8V/N5dxNsjWrqEr9f0fSIBOp3tY=";
     };
 
     propagatedBuildInputs = [ Moo MooXTypesMooseLike SubInstall strictures ];
@@ -24399,7 +24399,7 @@ let
     version = "0.027";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Test-Routine-0.027.tar.gz";
-      sha256 = "0n6k310v2py787lkvhzrn8vndws9icdf8mighgl472k0x890xm5s";
+      hash = "sha256-utQOEupgikPogy9W5BqLSfNmN7L5wz3pQcdfsUEY01g=";
     };
     buildInputs = [ TestAbortable TestFatal ];
     propagatedBuildInputs = [ Moose namespaceautoclean ];
@@ -24415,7 +24415,7 @@ let
     version = "0.0305";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-Run-0.0305.tar.gz";
-      sha256 = "0j62hzh7k4lvk390pm8581nhjnayxp4pf0g6x1vagqpqc3fp36pq";
+      hash = "sha256-+Jpx3WD44qd26OYBd8ntXlkJbUAF1QvSmJuSeeCHwkg=";
     };
     buildInputs = [ TestTrap ];
     propagatedBuildInputs = [ IPCSystemSimple ListMoreUtils MooseXStrictConstructor TextSprintfNamed UNIVERSALrequire ];
@@ -24431,7 +24431,7 @@ let
     version = "0.0132";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-Run-CmdLine-0.0132.tar.gz";
-      sha256 = "01x7rzscj3f06kpv0bd9dwx4wg9bmn7b5gyqfvy7wmv3ak6r3hxj";
+      hash = "sha256-ssORzVRjV378dti/so6tKz1OOm+pLbDvNMANyfTPpwc=";
     };
     buildInputs = [ TestRun TestTrap ];
     propagatedBuildInputs = [ MooseXGetopt UNIVERSALrequire YAMLLibYAML ];
@@ -24449,7 +24449,7 @@ let
     version = "0.0125";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-Run-Plugin-AlternateInterpreters-0.0125.tar.gz";
-      sha256 = "1fwr687h05fg6xn6vsfx9ll2ha8c7brmqbiz18biz0jx2jdnihsj";
+      hash = "sha256-UsNomxRdgh8XCj8uXPM6DCkoKE3d6W1sN88VAA8ymbs=";
     };
     buildInputs = [ TestRun TestRunCmdLine TestTrap YAMLLibYAML ];
     propagatedBuildInputs = [ Moose ];
@@ -24465,7 +24465,7 @@ let
     version = "0.0.6";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-Run-Plugin-BreakOnFailure-v0.0.6.tar.gz";
-      sha256 = "1a8k9p89s31wrax0yk8p0zsvj40mjgi0bnjmj0949hghwbihw650";
+      hash = "sha256-oBgO4+LwwUQSkFXaBeKTFRC59QcXTQ+6yjwMndBNE6k=";
     };
     buildInputs = [ TestRun TestRunCmdLine TestTrap YAMLLibYAML ];
     propagatedBuildInputs = [ Moose ];
@@ -24481,7 +24481,7 @@ let
     version = "0.0125";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-Run-Plugin-ColorFileVerdicts-0.0125.tar.gz";
-      sha256 = "0ihy5rzhc7472kh8931i7fbqf36nixl6yjrf8x5ndzd62hn1l90w";
+      hash = "sha256-HCQaLBSm/WZLRy5Lb2iP1gyHlzsxjITgFIccBn8uHkY=";
     };
     buildInputs = [ TestRun TestRunCmdLine TestTrap ];
     propagatedBuildInputs = [ Moose ];
@@ -24499,7 +24499,7 @@ let
     version = "0.0203";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-Run-Plugin-ColorSummary-0.0203.tar.gz";
-      sha256 = "1zca7w360m0vf3srf8af1s2k9k8hi85w1cavql7m2sr9kcvpknbv";
+      hash = "sha256-e9l5N5spa1EPxVuxwAuKEM00hQ5OIZf1cBtUYAY/iv0=";
     };
     buildInputs = [ TestRun TestRunCmdLine TestTrap ];
     moreInputs = [ TestTrap ]; # Added because tests were failing without it
@@ -24516,7 +24516,7 @@ let
     version = "0.0126";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-Run-Plugin-TrimDisplayedFilenames-0.0126.tar.gz";
-      sha256 = "0a4hxbsbhsnkx99h3d01fchv7ip0c1np2jmf6xvqm657qv1lk1la";
+      hash = "sha256-ioZJw8anmIp3N65KcW1g4MazIXMBtAFT6tNquPTqkCg=";
     };
     buildInputs = [ TestRun TestRunCmdLine TestTrap YAMLLibYAML ];
     propagatedBuildInputs = [ Moose ];
@@ -24532,7 +24532,7 @@ let
     version = "0.2.2";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-RunValgrind-0.2.2.tar.gz";
-      sha256 = "1vm5iw5sy0mhjjypaaviil9qgqixmkaghdbjbcyb4lf2mm6d24v9";
+      hash = "sha256-aRPRTK3CUbI8W3I1+NSsPeKHE41xK3W9lLACrwuPpe4=";
     };
     buildInputs = [ TestTrap ];
     propagatedBuildInputs = [ PathTiny ];
@@ -24548,7 +24548,7 @@ let
     version = "1.26";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PL/PLICEASE/Test-Script-1.26.tar.gz";
-      sha256 = "1dvkb8dvidnycd6ws2h2iy262h37fjakflv6z90xrw72xix26hkd";
+      hash = "sha256-bUIjeuzi8NxB+mZTN5V0Z0BhhI8CCs1NY962uBtac7c=";
     };
 
     buildInputs = [ Test2Suite ];
@@ -24565,7 +24565,7 @@ let
     version = "0.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SU/SUNNAVY/Test-Script-Run-0.08.tar.gz";
-      sha256 = "1fef216e70bc425ace3e2c4370dfcdddb5e798b099efba2679244a4d5bc1ab0a";
+      hash = "sha256-H+8hbnC8QlrOPixDcN/N3bXnmLCZ77omeSRKTVvBqwo=";
     };
     propagatedBuildInputs = [ IPCRun3 TestException ];
     meta = {
@@ -24579,7 +24579,7 @@ let
     version = "0.35";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EX/EXODIST/Test-SharedFork-0.35.tar.gz";
-      sha256 = "17y52j20k1bs9dgf4n6rhh9dn4cfxxbnfn2cfs7pb00fc5jyhci9";
+      hash = "sha256-KTLoZWEOgHWPdkxYZ1fvjhHbEoTZWOJeS3qFCYQUxZ8=";
     };
     buildInputs = [ TestRequires ];
     meta = {
@@ -24594,7 +24594,7 @@ let
     version = "1.302183";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EX/EXODIST/Test-Simple-1.302183.tar.gz";
-      sha256 = "1zq6841yrwxmrmhgzmzx0njlymsv9mzl6l5njabfl2j2xjjvs0ws";
+      hash = "sha256-mgO9pexCCuqWkrZQQ39NW1dPpQX91/9gzbXz7ANBBv8=";
     };
     meta = {
       description = "Basic utilities for writing tests";
@@ -24607,7 +24607,7 @@ let
     version = "0.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETJ/Test-Snapshot-0.06.tar.gz";
-      sha256 = "f4dd7a9a55baa2247540ae34210cd05a04f9d1061befec97a1c90eda95bfae45";
+      hash = "sha256-9N16mlW6oiR1QK40IQzQWgT50QYb7+yXockO2pW/rkU=";
     };
     buildInputs = [ CaptureTiny ];
     propagatedBuildInputs = [ TextDiff ];
@@ -24622,7 +24622,7 @@ let
     version = "0.54";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AK/AKZHAN/Test-Spec-0.54.tar.gz";
-      sha256 = "1lk5l69bm6yl1zxzz5v6mizzqfinpdhasmi4qjxr1vnwcl9cyc8a";
+      hash = "sha256-CjHPEmXc7pC7xCRWrWC7Njr8f6xml//7D9SbupKhZdI=";
     };
     propagatedBuildInputs = [ DevelGlobalPhase PackageStash TieIxHash ];
     buildInputs = [ TestDeep TestTrap ];
@@ -24637,7 +24637,7 @@ let
     version = "1.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Test-SubCalls-1.10.tar.gz";
-      sha256 = "cbc1e9b35a05e71febc13e5ef547a31c8249899bb6011dbdc9d9ff366ddab6c2";
+      hash = "sha256-y8Hps1oF5x/rwT5e9UejHIJJiZu2AR29ydn/Nm3atsI=";
     };
     propagatedBuildInputs = [ HookLexWrap ];
     meta = {
@@ -24651,7 +24651,7 @@ let
     version = "0.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Z/ZO/ZOFFIX/Test-Synopsis-0.16.tar.gz";
-      sha256 = "09891vnkw9i8v074rswaxbrp6x2d8j8r90gqc306497ppiryq4qv";
+      hash = "sha256-GxPsc7z3JGLAYPiBlJFETXRz8+qK60wO2CgmPu0OCSU=";
     };
     meta = {
       description = "Test your SYNOPSIS code";
@@ -24665,7 +24665,7 @@ let
     version = "0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JR/JROCKWAY/Test-TableDriven-0.02.tar.gz";
-      sha256 = "16l5n6sx3yqdir1rqq21d41znpwzbs8v34gqr93y051arypphn22";
+      hash = "sha256-Qlh4r88qFOBHyviRsZFen1/7A2lBYJxDjg370bWxhZo=";
     };
     meta = {
       description = "Write tests, not scripts that run them";
@@ -24678,7 +24678,7 @@ let
     version = "0.018";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/Test-TempDir-Tiny-0.018.tar.gz";
-      sha256 = "10ay3zbihyxn4nbb1f0fmr4szag8iy8pd27v8j6idq6cgzys3dyp";
+      hash = "sha256-17eh/X/M4BaNRPuIdpGP6KmvSa4OuLCWJbZ7GNcfXoE=";
     };
     meta = {
       description = "Temporary directories that stick around when tests fail";
@@ -24692,7 +24692,7 @@ let
     version = "2.22";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Test-TCP-2.22.tar.gz";
-      sha256 = "0mvv9rqwrwlcfh8qrs0s47p85rhlnw15d4gbpyi802bddp0c6lry";
+      hash = "sha256-PlPDwG1tCYCiv+uRVgK3FOaC7iEa6IwRdIzyzHFOe1c=";
     };
     buildInputs = [ TestSharedFork ];
     meta = {
@@ -24707,7 +24707,7 @@ let
     version = "0.4";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FU/FUJIWARA/${pname}-${version}.tar.gz";
-      sha256 = "0gwgd2w16dsppmf1r6yc17ipvs8b62ybsiz2dyzwy4il236b8c1p";
+      hash = "sha256-NzC0zBA0Es+/b+JHvbwwC+l94wnMmxxcvVc3E7hojz8=";
     };
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [ TestSharedFork TestTCP ];
@@ -24723,7 +24723,7 @@ let
     version = "0.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SA/SATOH/Test-Time-0.08.tar.gz";
-      sha256 = "b8bc3b074bb2247e8588399c1e55d071f049cf6ce1c8b4192c38cf3c24559548";
+      hash = "sha256-uLw7B0uyJH6FiDmcHlXQcfBJz2zhyLQZLDjPPCRVlUg=";
     };
     meta = {
       description = "Overrides the time() and sleep() core functions for testing";
@@ -24737,7 +24737,7 @@ let
     version = "0.4";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIKO/Test-Toolbox-0.4.tar.gz";
-      sha256 = "1hxx9rhvncvn7wvzhzx4sk00w0xq2scgspfhhyqwjnm1yg3va820";
+      hash = "sha256-QCC1x/OhWsmxh9Bd/ZgWuAMOwNSkf/g3P3Yzu2FOvcM=";
     };
     meta = {
       description = "Test::Toolbox - tools for testing";
@@ -24750,7 +24750,7 @@ let
     version = "0.0600";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-TrailingSpace-0.0600.tar.gz";
-      sha256 = "f09d263adec06700a43a24e29f5484cf6d2939914c607dec51590f4bb8fa5a11";
+      hash = "sha256-8J0mOt7AZwCkOiTin1SEz20pOZFMYH3sUVkPS7j6WhE=";
     };
     propagatedBuildInputs = [ FileFindObjectRule ];
     meta = {
@@ -24765,7 +24765,7 @@ let
     version = "0.1202";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DE/DEXTER/Test-Unit-Lite-0.1202.tar.gz";
-      sha256 = "1a5jym9hjcpdf0rwyn7gwrzsx4xqzwgzx59rgspqlqiif7p2a79m";
+      hash = "sha256-NR0l7nExYoqvfjmV/h//uJOuf+bvWM8zcO0yCVP1sqg=";
     };
     meta = {
       description = "Unit testing without external dependencies";
@@ -24778,7 +24778,7 @@ let
     version = "0.36";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BIGJ/Test-Warn-0.36.tar.gz";
-      sha256 = "1nkc7jzxff0w4x9axbpsgxrksqdjnf70rb74q39zikkrsd3a7g7c";
+      hash = "sha256-7LyjRtN5zvjTwOSsDI6zsmE9c3/6rq5SJxw41788bNo=";
     };
     propagatedBuildInputs = [ SubUplevel ];
     meta = {
@@ -24792,7 +24792,7 @@ let
     version = "0.030";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Test-Warnings-0.030.tar.gz";
-      sha256 = "89a4947ddf1564ae01122275584433d7f6c4370370bcf3768922d796956ae24f";
+      hash = "sha256-iaSUfd8VZK4BEiJ1WEQz1/bENwNwvPN2iSLXlpVq4k8=";
     };
     buildInputs = [ CPANMetaCheck PadWalker ];
     meta = {
@@ -24807,7 +24807,7 @@ let
     version = "3.022000";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KR/KRYDE/Test-Weaken-3.022000.tar.gz";
-      sha256 = "2631a87121310262e0e96107a6fa0ed69487b7701520773bee5fa9accc295f5b";
+      hash = "sha256-JjGocSExAmLg6WEHpvoO1pSHt3AVIHc77l+prMwpX1s=";
     };
     propagatedBuildInputs = [ ScalarListUtils ];
     meta = {
@@ -24821,7 +24821,7 @@ let
     version = "0.20";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CO/CORION/Test-Without-Module-0.20.tar.gz";
-      sha256 = "8e9aeb7c32a6c6d0b8a93114db2a8c072721273a9d9a2dd4f9ca86cfd28aa524";
+      hash = "sha256-jprrfDKmxtC4qTEU2yqMBychJzqdmi3U+cqGz9KKpSQ=";
     };
     meta = {
       description = "Test fallback behaviour in absence of modules";
@@ -24834,7 +24834,7 @@ let
     version = "1.54";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PETDANCE/Test-WWW-Mechanize-1.54.tar.gz";
-      sha256 = "1z4s8fijwx8p74fw29435d2c2l6c1sgzz0n7lrdby5212xdqpa6w";
+      hash = "sha256-3KiLWxdBFL9apseC/58OzFDBRCuDJMEdORd1LqNDmvw=";
     };
     buildInputs = [ TestLongString ];
     propagatedBuildInputs = [ CarpAssertMore HTTPServerSimple WWWMechanize ];
@@ -24850,7 +24850,7 @@ let
     version = "0.62";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSTROUT/Test-WWW-Mechanize-Catalyst-0.62.tar.gz";
-      sha256 = "1cdc2q16vs6fb335pzaislz2rx1ph9acaxyp7v5hv9xbwwddwfqq";
+      hash = "sha256-GDveGuerpw3LPtd3xVSCN/QsPtVR/VvGWM7obQIWrLE=";
     };
     doCheck = false; # listens on an external port
     propagatedBuildInputs = [ CatalystRuntime WWWMechanize ];
@@ -24866,7 +24866,7 @@ let
     version = "0.1";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MR/MRAMBERG/Test-WWW-Mechanize-CGI-0.1.tar.gz";
-      sha256 = "0bwwdk0iai5dlvvfpja971qpgvmf6yq67iag4z4szl9v5sra0xm5";
+      hash = "sha256-pXagsi470a/JJ0/FY7A3ru53cThJyev2pq1EFcFsnC8=";
     };
     propagatedBuildInputs = [ WWWMechanizeCGI ];
     buildInputs = [ TestLongString TestWWWMechanize ];
@@ -24881,7 +24881,7 @@ let
     version = "0.39";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OA/OALDERS/Test-WWW-Mechanize-PSGI-0.39.tar.gz";
-      sha256 = "0n4rhyyags3cwqb0gb1pr6gccd2x3l190j8gd96lwlvxnjrklss7";
+      hash = "sha256-R2s6s7R9U05Nag9JkAIdXTTGnsk3rAcW5mzop7yHmVg=";
     };
     buildInputs = [ CGI TestLongString TestWWWMechanize ];
     propagatedBuildInputs = [ Plack ];
@@ -24897,7 +24897,7 @@ let
     version = "0.19";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MANWAR/Test-XPath-0.19.tar.gz";
-      sha256 = "1wy0488yg15kahfafnlmlhppxik7d0z00wxwj9fszrsq2h6crz6y";
+      hash = "sha256-3vzMDBRY569dkrxzAD5oZ8Z+L6SVWqccVLOE5xEiwPM=";
     };
     propagatedBuildInputs = [ XMLLibXML ];
     meta = {
@@ -24911,7 +24911,7 @@ let
     version = "1.07";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TI/TINITA/Test-YAML-1.07.tar.gz";
-      sha256 = "0pwrrnwi1qaiy3c5522vy0kzncxc9g02r4b056wqqaa69w1hsc0z";
+      hash = "sha256-HzANA09GKYy5KWCRLMBLrDP7J/BbiFLY8FHhELnNmV8=";
     };
     buildInputs = [ TestBase ];
     meta = {
@@ -24926,7 +24926,7 @@ let
     version = "0.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Text-Aligner-0.16.tar.gz";
-      sha256 = "09ap457vrlqvw2544j907fbb5crs08hd7sy4syipzxc6wny7v1aw";
+      hash = "sha256-XIV9vOWG9X+j18Tr0yACOrOyljsgSUKK4BvTvE8hVyU=";
     };
     meta = {
       description = "Module to align text";
@@ -24940,7 +24940,7 @@ let
     version = "0.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HANK/Text-Aspell-0.09.tar.gz";
-      sha256 = "0r9g31rd55934mp6n45b96g934ck4qns8x9i7qckn9wfy44k5sib";
+      hash = "sha256-K+oyCfGOJzsZPjF1pC0mk5GRnkmrEGtuJSOV0nIYL2U=";
     };
     propagatedBuildInputs = [ pkgs.aspell ];
     ASPELL_CONF = "dict-dir ${pkgs.aspellDicts.en}/lib/aspell";
@@ -24957,7 +24957,7 @@ let
     version = "1.75";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/Text-Autoformat-1.75.tar.gz";
-      sha256 = "9dd4f4ce3daec4b4dbf5b59dac4568a8946aed12c28b4e5988c8e8c602c6b771";
+      hash = "sha256-ndT0zj2uxLTb9bWdrEVoqJRq7RLCi05ZiMjoxgLGt3E=";
     };
     propagatedBuildInputs = [ TextReform ];
     meta = {
@@ -24972,7 +24972,7 @@ let
     version = "2.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHAY/Text-Balanced-2.04.tar.gz";
-      sha256 = "1qp7whrampvdzb4nbdvbzp02vlmyk5ssha2lg1iaf2y8hn5l177l";
+      hash = "sha256-9JxAi4XIC6dieFQoqHWZvtItwP1rt2XJ+m3fqjLk5+I=";
     };
     meta = {
       description = "Extract delimited text sequences from strings";
@@ -24986,7 +24986,7 @@ let
     buildInputs = [ CaptureTiny ConfigAutoConf ExtUtilsLibBuilder ];
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AM/AMBS/Text-BibTeX-0.88.tar.gz";
-      sha256 = "0b7lmjvfmypps1nw6nsdikgaakm0n0g4186glaqazg5xd1p5h55h";
+      hash = "sha256-sBRYbmi9vK+wos+gQB6woE6l3oxNW8Nt0Pf66ras9Cw=";
     };
     # libbtparse.so: cannot open shared object file (aarch64 only)
     patches = [ ../development/perl-modules/TextBibTeX-use-lib-on-aarch64.patch ];
@@ -25012,7 +25012,7 @@ let
     version = "0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KC/KCIVEY/Text-Brew-0.02.tar.gz";
-      sha256 = "0k7nxglbx5pxl693zrj1fsi094sf1a3vqsrn73inzz7r3j28a6xa";
+      hash = "sha256-qhuFhBz5/G/jODZrvIcKTpMEonZB5j+Sof2Wvujr9kw=";
     };
     meta = {
       description = "An implementation of the Brew edit distance";
@@ -25025,7 +25025,7 @@ let
     version = "0.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KU/KUBOTA/Text-CharWidth-0.04.tar.gz";
-      sha256 = "abded5f4fdd9338e89fd2f1d8271c44989dae5bf50aece41b6179d8e230704f8";
+      hash = "sha256-q97V9P3ZM46J/S8dgnHESYna5b9Qrs5BthedjiMHBPg=";
     };
     meta = {
       description = "Get number of occupied columns of a string on terminal";
@@ -25038,7 +25038,7 @@ let
     version = "2.00";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/Text-CSV-2.00.tar.gz";
-      sha256 = "8ccbd9195805222d995844114d0e595bb24ce188f85284dbf256080311cbb2c2";
+      hash = "sha256-jMvZGVgFIi2ZWEQRTQ5ZW7JM4Yj4UoTb8lYIAxHLssI=";
     };
     meta = {
       description = "Comma-separated values manipulator (using XS or PurePerl)";
@@ -25051,7 +25051,7 @@ let
     version = "0.25";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Z/ZA/ZARQUON/Text-CSV-Encoded-0.25.tar.gz";
-      sha256 = "1l5rwlmnpnhjszb200a94lwvkwslsvyxm24ycf37gm8dla1mk2i4";
+      hash = "sha256-JIpZg6IN1XeGY56I2v3WVPO5OSVJASDW1xLaayvludA=";
     };
     propagatedBuildInputs = [ TextCSV ];
     meta = {
@@ -25066,7 +25066,7 @@ let
     version = "1.44";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HM/HMBRAND/Text-CSV_XS-1.44.tgz";
-      sha256 = "c4812ddca8e2654736c44bc2ce60b27a428a1bc4d5364b0ed1fad3609c8f9bc4";
+      hash = "sha256-xIEt3KjiZUc2xEvCzmCyekKKG8TVNksO0frTYJyPm8Q=";
     };
     meta = {
       description = "Comma-Separated Values manipulation routines";
@@ -25080,7 +25080,7 @@ let
     version = "1.45";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/Text-Diff-1.45.tar.gz";
-      sha256 = "013g13prdghxvrp5754gyc7rmv1syyxrhs33yc5f0lrz3dxs1fp8";
+      hash = "sha256-6Lqgexs/U+AK82NomLv3OuyaD/OPlFNu3h2+lu8IbwQ=";
     };
     propagatedBuildInputs = [ AlgorithmDiff ];
     meta = {
@@ -25094,7 +25094,7 @@ let
     version = "0.62";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Text-Format-0.62.tar.gz";
-      sha256 = "0104z7jjv46kqh77rnx8kvmsbr5dy0s56xm01dckq4ly65br0hkx";
+      hash = "sha256-fUKQVzGeEjxZC6B2UzTwreSl656o23wOxNOQLeX5BAQ=";
     };
     meta = {
       description = "Various subroutines to format text";
@@ -25109,7 +25109,7 @@ let
     version = "0.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AM/AMBS/Text-Diff-FormattedHTML-0.08.tar.gz";
-      sha256 = "39ab775a5c056745f2abd8cc7c1cbc5496dfef7e52a9f4bd8ada6aa6c9c7b70d";
+      hash = "sha256-Oat3WlwFZ0Xyq9jMfBy8VJbf735SqfS9itpqpsnHtw0=";
     };
     propagatedBuildInputs = [ FileSlurp StringDiff ];
     meta = {
@@ -25124,7 +25124,7 @@ let
     version = "0.29";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BK/BKB/Text-Fuzzy-0.29.tar.gz";
-      sha256 = "3df5cfd2ca1a4c5ca7ff7bab3cc8d53ad2064e134cbf11004f3cf8c4b9055bff";
+      hash = "sha256-PfXP0soaTFyn/3urPMjVOtIGThNMvxEATzz4xLkFW/8=";
     };
     meta = {
       description = "Partial string matching using edit distances";
@@ -25137,7 +25137,7 @@ let
     version = "0.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/U/UL/ULPFR/Text-German-0.06.tar.gz";
-      sha256 = "1p87pgap99lw0nv62i3ghvsi7yg90lhn8vsa3yqp75rd04clybcj";
+      hash = "sha256-ki1PGQEtl3OxH0pvZCEF6fkT9YZvRGG2BZymdNW7B90=";
     };
     meta = {
       description = "German grundform reduction";
@@ -25150,7 +25150,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RC/RCLAMP/Text-Glob-0.11.tar.gz";
-      sha256 = "11sj62fynfgwrlgkv5a051cq6yn0pagxqjsz27dxx8phsd4wv706";
+      hash = "sha256-BpzNSdPwot7bEV9L3J+6wHqDWShAlT0fzfw5650wUoc=";
     };
     meta = {
       description = "Match globbing patterns against text";
@@ -25163,7 +25163,7 @@ let
     version = "2.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KA/KAORU/Text-Hogan-2.03.tar.gz";
-      sha256 = "0yk1qn457jqknds4g2khlhi5vk2li1njbfwvxy44i665wknj7naq";
+      hash = "sha256-WNkj7eTFmEiI75u7JW2IVMxdIqRwikd0sxPLU4jFYXo=";
     };
     propagatedBuildInputs = [ Clone RefUtil TextTrim ];
     buildInputs = [ DataVisitor PathTiny TryTiny YAML ];
@@ -25178,7 +25178,7 @@ let
     version = "1.7";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MP/MPIOTR/Text-Iconv-1.7.tar.gz";
-      sha256 = "5b80b7d5e709d34393bcba88971864a17b44a5bf0f9e4bcee383d029e7d2d5c3";
+      hash = "sha256-W4C31ecJ00OTvLqIlxhkoXtEpb8PnkvO44PQKefS1cM=";
     };
     meta = {
       description = "Perl interface to iconv() codeset conversion function";
@@ -25192,7 +25192,7 @@ let
     version = "1.112071";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MITHALDU/Test-InDistDir-1.112071.tar.gz";
-      sha256 = "922c5c63314f406f4cbb35ec423ac2154d2c2b71a65addb7732c9d240a83fefb";
+      hash = "sha256-kixcYzFPQG9MuzXsQjrCFU0sK3GmWt23cyydJAqD/vs=";
     };
     meta = {
       description = "Test environment setup for development with IDE";
@@ -25207,7 +25207,7 @@ let
     version = "1.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SB/SBECK/Test-Inter-1.09.tar.gz";
-      sha256 = "1e9f129cc1a001fb95449d385253b38afabf5b466e3b3bd33e4e430f216e177a";
+      hash = "sha256-Hp8SnMGgAfuVRJ04UlOzivq/W0ZuOzvTPk5DDyFuF3o=";
     };
     buildInputs = [ FileFindRule TestPod TestPodCoverage ];
     meta = {
@@ -25221,7 +25221,7 @@ let
     version = "0.019";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JV/JV/Text-Layout-0.019.tar.gz";
-      sha256 = "a043f2a89e113b29c523a9efa71fa8398ed75edd482193901b38d08dd4a4108e";
+      hash = "sha256-oEPyqJ4ROynFI6nvpx+oOY7XXt1IIZOQGzjQjdSkEI4=";
     };
     buildInputs = [ PDFAPI2 ];
     meta = {
@@ -25235,7 +25235,7 @@ let
     version = "0.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JG/JGOLDBERG/Text-LevenshteinXS-0.03.tar.gz";
-      sha256 = "sha256-43T/eyN5Gc5eqSRfNW0ctSzIf9JrOlo4s/Pl/4KgFJE=";
+      hash = "sha256-43T/eyN5Gc5eqSRfNW0ctSzIf9JrOlo4s/Pl/4KgFJE=";
     };
     meta = {
       description = "Levenshtein edit distance in a XS way";
@@ -25248,7 +25248,7 @@ let
     version = "0.3";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AD/ADEOLA/Text-Lorem-0.3.tar.gz";
-      sha256 = "64bb636fb21213101a646b414ecbdc1b55edf905cbcdc7f5d24774ec5061fe2d";
+      hash = "sha256-ZLtjb7ISExAaZGtBTsvcG1Xt+QXLzcf10kd07FBh/i0=";
     };
     meta = {
       description = "Generate random Latin looking text";
@@ -25263,7 +25263,7 @@ let
     version = "2.021";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BD/BDFOY/Test-Manifest-2.021.tar.gz";
-      sha256 = "a47aaad71c580e16e6e63d8c037cdddcd919876754beb2c95d9a88682dd332d9";
+      hash = "sha256-pHqq1xxYDhbm5j2MA3zd3NkZh2dUvrLJXZqIaC3TMtk=";
     };
     meta = {
       description = "Interact with a t/test_manifest file";
@@ -25277,7 +25277,7 @@ let
     version = "1.000031";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BO/BOBTFISH/Text-Markdown-1.000031.tar.gz";
-      sha256 = "06y79lla8adkqhrs41xdddqjs81dcrh266b50mfbg37bxkawd4f1";
+      hash = "sha256-wZHG1ezrjLdcBWUZI2BmLSAtcWutB6IzxLMppChNxxs=";
     };
     nativeBuildInputs = [ shortenPerlShebang ];
     checkInputs = [ ListMoreUtils TestDifferences TestException ];
@@ -25296,7 +25296,7 @@ let
     version = "1.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/Text-Markdown-Hoedown-1.03.tar.gz";
-      sha256 = "sha256-U6cw/29IgrmavYVW8mqRH1gvZ1tZ8OFnJe0ey8CE7lA=";
+      hash = "sha256-U6cw/29IgrmavYVW8mqRH1gvZ1tZ8OFnJe0ey8CE7lA=";
     };
     buildInputs = [ Filepushd ];
     perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
@@ -25312,7 +25312,7 @@ let
     version = "0.101082";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Test-MinimumVersion-0.101082.tar.gz";
-      sha256 = "3fba4e8fcf74806259aa639be7d90e70346ad0e0e4b8b619593490e378241970";
+      hash = "sha256-P7pOj890gGJZqmOb59kOcDRq0ODkuLYZWTSQ43gkGXA=";
     };
     propagatedBuildInputs = [ PerlMinimumVersion ];
     meta = {
@@ -25327,7 +25327,7 @@ let
     version = "0.24";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KA/KAZUHO/Text-MicroTemplate-0.24.tar.gz";
-      sha256 = "1j5ljx7hs4k29732nr5f2m4kssz4rqjw3kknsnhams2yydqix01j";
+      hash = "sha256-MoAecfNe6Kqg1XbOwSXO5Gs9SRWuZCvGSWISDU+XtMg=";
     };
     meta = {
       description = "Micro template engine with Perl5 language";
@@ -25340,7 +25340,7 @@ let
     version = "1.000035";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BO/BOBTFISH/Text-MultiMarkdown-1.000035.tar.gz";
-      sha256 = "2467dd13751dc2979d7c880b24e762952130fdf42a1ed3ee04fdf72d4b52646a";
+      hash = "sha256-JGfdE3UdwpedfIgLJOdilSEw/fQqHtPuBP33LUtSZGo=";
     };
     buildInputs = [ ListMoreUtils TestException ];
     propagatedBuildInputs = [ HTMLParser TextMarkdown ];
@@ -25356,7 +25356,7 @@ let
     version = "1.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/Test-Number-Delta-1.06.tar.gz";
-      sha256 = "535430919e6fdf6ce55ff76e9892afccba3b7d4160db45f3ac43b0f92ffcd049";
+      hash = "sha256-U1QwkZ5v32zlX/dumJKvzLo7fUFg20XzrEOw+S/80Ek=";
     };
     meta = {
       description = "Compare the difference between numbers against a given tolerance";
@@ -25383,7 +25383,7 @@ let
     version = "0.30";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TS/TSIBLEY/Text-Password-Pronounceable-0.30.tar.gz";
-      sha256 = "c186a50256e0bedfafb17e7ce157e7c52f19503bb79e18ebf06255911f6ead1a";
+      hash = "sha256-wYalAlbgvt+vsX584VfnxS8ZUDu3nhjr8GJVkR9urRo=";
     };
     meta = {
       description = "Generate pronounceable passwords";
@@ -25396,7 +25396,7 @@ let
     version = "1.8";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CA/CADE/Text-Patch-1.8.tar.gz";
-      sha256 = "eaf18e61ba6a3e143846a7cc66f08ce58a0c4fbda92acb31aede25cb3b5c3dcc";
+      hash = "sha256-6vGOYbpqPhQ4RqfMZvCM5YoMT72pKssxrt4lyztcPcw=";
     };
     propagatedBuildInputs = [ TextDiff ];
     meta = {
@@ -25410,7 +25410,7 @@ let
     version = "0.31";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BH/BHALLISSY/Text-PDF-0.31.tar.gz";
-      sha256 = "0s5cimfr4wwzgv15k30x83ncg1257jwsvmbmb86lp02rw5g537yz";
+      hash = "sha256-359RXuFZgEsNWnXVrbk8RYTH7EAdjFnCfp9zkl2NrGg=";
     };
     meta = {
       description = "Module for manipulating PDF files";
@@ -25423,7 +25423,7 @@ let
     version = "2.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BP/BPS/Text-Quoted-2.10.tar.gz";
-      sha256 = "081bf95ec9220af26cec89161e61bf73f9fbcbfeee1d9af15139e5d7b708f445";
+      hash = "sha256-CBv5XskiCvJs7IkWHmG/c/n7y/7uHZrxUTnl17cI9EU=";
     };
     propagatedBuildInputs = [ TextAutoformat ];
     meta = {
@@ -25437,7 +25437,7 @@ let
     version = "1.6.5";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KC/KCLARK/Text-RecordParser-1.6.5.tar.gz";
-      sha256 = "0nn33c058bl957v38xhqig4ld34lifl4arqiilhxky339i0q2fys";
+      hash = "sha256-2juBQUxj+NkhjRFnRaiLlIxGyYsYdjT2KYkuVAAbw1o=";
     };
 
     # In a NixOS chroot build, the tests fail because the font configuration
@@ -25457,7 +25457,7 @@ let
     version = "1.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MW/MWARD/Text-Reflow-1.17.tar.gz";
-      sha256 = "4bf2139ff617d6e59cc0e59cdecd7cb723ecfd28d5ac387afb553ffdc071b860";
+      hash = "sha256-S/ITn/YX1uWcwOWc3s18tyPs/SjVrDh6+1U//cBxuGA=";
     };
     meta = {
       description = "Reflow text files using Knuth's paragraphing algorithm";
@@ -25470,7 +25470,7 @@ let
     version = "1.20";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CH/CHORNY/Text-Reform-1.20.tar.gz";
-      sha256 = "a8792dd8c1aac97001032337b36a356be96e2d74c4f039ef9a363b641db4ae61";
+      hash = "sha256-qHkt2MGqyXABAyM3s2o1a+luLXTE8DnvmjY7ZB20rmE=";
     };
     meta = {
       description = "Manual text wrapping and reformatting";
@@ -25483,7 +25483,7 @@ let
     version = "3.5";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SY/SYP/Text-Roman-3.5.tar.gz";
-      sha256 = "0sh47svzz0wm993ywfgpn0fvhajl2sj5hcnf5zxjz02in6ihhjnb";
+      hash = "sha256-y0oIo7FRgC/7L84yWKQWVCq4HbD3Oe5HSpWD/7c+BGo=";
     };
     meta = {
       description = "Allows conversion between Roman and Arabic algarisms";
@@ -25497,7 +25497,7 @@ let
     version = "2.07";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MR/MRAMBERG/Text-SimpleTable-2.07.tar.gz";
-      sha256 = "1v8r8qpzg283p2pqqr8dqrak2bxray1b2jmib0qk75jffqw3yv95";
+      hash = "sha256-JW0/OHZOljMxWLFKsYJXuS8xVcYNZYyvuAOJ9y9GGe0=";
     };
     propagatedBuildInputs = [ UnicodeLineBreak ];
     meta = {
@@ -25511,7 +25511,7 @@ let
     version = "3.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Text-Soundex-3.05.tar.gz";
-      sha256 = "f6dd55b4280b25dea978221839864382560074e1d6933395faee2510c2db60ed";
+      hash = "sha256-9t1VtCgLJd6peCIYOYZDglYAdOHWkzOV+u4lEMLbYO0=";
     };
     meta = {
       description = "Implementation of the soundex algorithm";
@@ -25524,7 +25524,7 @@ let
     version = "0.0405";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Text-Sprintf-Named-0.0405.tar.gz";
-      sha256 = "1z0glxrmbc6pgjs5bkmp1wiifd4xdcrin8wqz6rhmi6gzxw0siwv";
+      hash = "sha256-m0cNeP/PxAqz+ZgjGzNrnTQXIw+3zlW0fNewVXOnD/w=";
     };
     buildInputs = [ TestWarn ];
     meta = {
@@ -25539,7 +25539,7 @@ let
     version = "1.134";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Text-Table-1.134.tar.gz";
-      sha256 = "02yigisvgshpgfyqwj0xad4jg473cd80a6c210nb5h5p32dl5kxs";
+      hash = "sha256-us9Cmxi3wLIsCIIZBVBj45AnSVMdSI69exfqt3V80Qs=";
     };
     propagatedBuildInputs = [ TextAligner ];
     meta = {
@@ -25554,7 +25554,7 @@ let
     version = "1.38";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DARREN/Text-TabularDisplay-1.38.tar.gz";
-      sha256 = "1s46s4pg5mpfllx3icf4vnqz9iadbbdbsr5p7pr6gdjnzbx902gb";
+      hash = "sha256-6wmQ+vpWtmfyPbdkvdpaTcX0sd3EsTg6pe7W8i7Rhug=";
     };
     meta = {
       description = "Display text in formatted table output";
@@ -25567,7 +25567,7 @@ let
     version = "1.59";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSCHOUT/Text-Template-1.59.tar.gz";
-      sha256 = "1dd2c788c05303ed9a970e1881109642151fa93e02c7a80d4c70608276bab1ee";
+      hash = "sha256-HdLHiMBTA+2alw4YgRCWQhUfqT4Cx6gNTHBggna6se4=";
     };
     buildInputs = [ TestMoreUTF8 TestWarnings ];
     meta = {
@@ -25581,7 +25581,7 @@ let
     version = "0.3.4";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EB/EBHANSSEN/Test-Trap-v0.3.4.tar.gz";
-      sha256 = "1qjs2080kcc66s4d7499br5lw2qmhr9gxky4xsl6vjdn6dpna10b";
+      hash = "sha256-CwRlbzO2yW2o7sTP/lKGFQtOS14pkdOINoaxCRAQWuI=";
     };
     propagatedBuildInputs = [ DataDump ];
     meta = {
@@ -25595,7 +25595,7 @@ let
     version = "0.014";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/Test-Vars-0.014.tar.gz";
-      sha256 = "0qr8q0ksr925ycwbsyxjwgz4p9r7a8vkxpn33vy23zbijwpa3xx7";
+      hash = "sha256-p/ehLpdx/SH8HsPePjdSJ6dL/uOye70480WkrCfAKGM=";
     };
 
     buildInputs = [ ModuleBuildTiny ];
@@ -25612,7 +25612,7 @@ let
     version = "2.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PL/PLICEASE/Test-Version-2.09.tar.gz";
-      sha256 = "9ce1dd2897a5f30e1b7f8966ec66f57d8d8f280f605f28c7ca221fa79aca38e0";
+      hash = "sha256-nOHdKJel8w4bf4lm7Gb1fY2PKA9gXyjHyiIfp5rKOOA=";
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ FileFindRulePerl ];
@@ -25627,7 +25627,7 @@ let
     version = "1.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJT/Text-Trim-1.03.tar.gz";
-      sha256 = "0ks9afvx9c1b6px98wwzhbyhd2y6hdg7884814fc9pnx8qfzrz50";
+      hash = "sha256-oPz8HUbd3sQcCYggdF6DxosG/YKfc5T6NSuw1LdTSU8=";
     };
     meta = {
       description = "Remove leading and/or trailing whitespace from strings";
@@ -25640,7 +25640,7 @@ let
     version = "1.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LD/LDACHARY/Text-Unaccent-1.08.tar.gz";
-      sha256 = "0avk50kia78kxryh2whmaj5l18q2wvmkdyqyjsf6kwr4kgy6x3i7";
+      hash = "sha256-J45u/Jsk82mclh77NuvmAqNAi1QVcgF97hMdFScocys=";
     };
     # https://rt.cpan.org/Public/Bug/Display.html?id=124815
     NIX_CFLAGS_COMPILE = "-DHAS_VPRINTF";
@@ -25656,7 +25656,7 @@ let
     version = "1.30";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SB/SBURKE/Text-Unidecode-1.30.tar.gz";
-      sha256 = "1imii0p6wvhrxsr5z2zhazpx5vl4l4ybf1y2c5hy480xvi6z293c";
+      hash = "sha256-bCTxTdwdIOJhYcIHtzyhhO7S71fwi1+y7hlubi6IscY=";
     };
     meta = {
       description = "Plain ASCII transliterations of Unicode tex";
@@ -25669,7 +25669,7 @@ let
     version = "1.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MARKF/Test-utf8-1.02.tar.gz";
-      sha256 = "df82f09c5940830b25a49f1c8162fa24d371e602880edef8d9a4d4bfd66b8bd7";
+      hash = "sha256-34LwnFlAgwslpJ8cgWL6JNNx5gKIDt742aTUv9Zri9c=";
     };
     meta = {
       description = "Handy utf8 tests";
@@ -25683,7 +25683,7 @@ let
     version = "1.31";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TP/TPEDERSE/Text-NSP-1.31.tar.gz";
-      sha256 = "a01201beb29636b3e41ecda2a6cf6522fd265416bd6d994fad02f59fb49cf595";
+      hash = "sha256-oBIBvrKWNrPkHs2ips9lIv0mVBa9bZlPrQL1n7Sc9ZU=";
     };
     meta = {
       description = "Extract collocations and Ngrams from text";
@@ -25697,7 +25697,7 @@ let
     version = "0.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RC/RCLAMP/Text-vFile-asData-0.08.tar.gz";
-      sha256 = "b291ab5e0f987c5172560a692234711a75e4596d83475f72d01278369532f82a";
+      hash = "sha256-spGrXg+YfFFyVgppIjRxGnXkWW2DR19y0BJ4NpUy+Co=";
     };
     propagatedBuildInputs = [ ClassAccessorChained ];
     meta = {
@@ -25711,7 +25711,7 @@ let
     version = "0.81";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CY/CYCLES/Text-WikiFormat-0.81.tar.gz";
-      sha256 = "0cxbgx879bsskmnhjzamgsa5862ddixyx4yr77lafmwimnaxjg74";
+      hash = "sha256-5DzZla2RV6foOdmT7ntsTRhUlH5VfQltnVqvdFB/qzM=";
     };
     propagatedBuildInputs = [ URI ];
     meta = {
@@ -25725,7 +25725,7 @@ let
     version = "0.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TI/TIMK/Text-WordDiff-0.09.tar.gz";
-      sha256 = "fee699ca763adca2f4e18f4a8a836fd2102bc2820af708f8eb43356d5ae0d50e";
+      hash = "sha256-/uaZynY63KL04Y9KioNv0hArwoIK9wj460M1bVrg1Q4=";
     };
     propagatedBuildInputs = [ AlgorithmDiff HTMLParser ];
     meta = {
@@ -25740,7 +25740,7 @@ let
     version = "0.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KU/KUBOTA/Text-WrapI18N-0.06.tar.gz";
-      sha256 = "4bd29a17f0c2c792d12c1005b3c276f2ab0fae39c00859ae1741d7941846a488";
+      hash = "sha256-S9KaF/DCx5LRLBAFs8J28qsPrjnACFmuF0HXlBhGpIg=";
     };
     buildInputs = [ pkgs.glibcLocales ];
     propagatedBuildInputs = [ TextCharWidth ];
@@ -25758,7 +25758,7 @@ let
     version = "1.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CJ/CJM/Text-Wrapper-1.05.tar.gz";
-      sha256 = "64268e15983a9df47e1d9199a491f394e89f542e54afb33f4b78f3f318e09ab9";
+      hash = "sha256-ZCaOFZg6nfR+HZGZpJHzlOifVC5Ur7M/S3jz8xjgmrk=";
     };
     buildInputs = [ TestDifferences ];
     meta = {
@@ -25772,7 +25772,7 @@ let
     version = "0.200013";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Throwable-0.200013.tar.gz";
-      sha256 = "184gdcwxqwnkrx5md968v1ny70pq6blzpkihccm3bpdxnpgd11wr";
+      hash = "sha256-mYfQ3rW93TUqYzDO++ky+ILjbdjIpFZLz9Ny3Dlrj6A=";
     };
     propagatedBuildInputs = [ DevelStackTrace Moo ];
     meta = {
@@ -25787,7 +25787,7 @@ let
     version = "20150301";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSCHWERN/Tie-Cache-LRU-20150301.tar.gz";
-      sha256 = "1bf740450d3a6d7c12b48c25f7da5964e44e7cc38b28572cfb76ff22464f4469";
+      hash = "sha256-G/dARQ06bXwStIwl99pZZOROfMOLKFcs+3b/IkZPRGk=";
     };
     propagatedBuildInputs = [ ClassVirtual enum ];
     meta = {
@@ -25801,7 +25801,7 @@ let
     version = "0.55";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OE/OESTERHOL/Tie-Cache-LRU-Expires-0.55.tar.gz";
-      sha256 = "b316d849acd25f24346d55a9950d281fee0746398767c601234122159573eb9a";
+      hash = "sha256-sxbYSazSXyQ0bVWplQ0oH+4HRjmHZ8YBI0EiFZVz65o=";
     };
     propagatedBuildInputs = [ TieCacheLRU ];
     meta = {
@@ -25815,7 +25815,7 @@ let
     version = "1.225";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BD/BDFOY/Tie-Cycle-1.225.tar.gz";
-      sha256 = "0i9xq2qm50p2ih24265jndp2x8hfq7ap0d88nrlv5yaad4hxhc7k";
+      hash = "sha256-8zDYIWlK+bJptgg1cNXBDqIubrOyGEEEjOKCUrHAPUU=";
     };
     meta = {
       description = "Cycle through a list of values via a scalar";
@@ -25829,7 +25829,7 @@ let
     version = "1.24";
     src = fetchurl {
       url = "mirror://cpan/authors/id/V/VI/VIPUL/Tie-EncryptedHash-1.24.tar.gz";
-      sha256 = "aa9a083a231e4046170a5894644e3c59679c7dbd0aa2d1217dc85150df2c1e21";
+      hash = "sha256-qpoIOiMeQEYXCliUZE48WWecfb0KotEhfchRUN8sHiE=";
     };
     propagatedBuildInputs = [ CryptBlowfish CryptCBC CryptDES ];
     meta = {
@@ -25844,7 +25844,7 @@ let
     version = "1.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TODDR/Tie-File-1.05.tar.gz";
-      sha256 = "8a980b577ff4b10fe11062ed8c774857fa8c9833c5305f2e8bfb3347af63f139";
+      hash = "sha256-ipgLV3/0sQ/hEGLtjHdIV/qMmDPFMF8ui/szR69j8Tk=";
     };
     meta = {
       description = "Access the lines of a disk file via a Perl array";
@@ -25857,7 +25857,7 @@ let
     version = "1.23";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CH/CHORNY/Tie-IxHash-1.23.tar.gz";
-      sha256 = "0mmg9iyh42syal3z1p2pn9airq65yrkfs66cnqs9nz76jy60pfzs";
+      hash = "sha256-+rsLjJfmfJs0tswY7Wb2xeAcVbJX3PAHVV4LAn1Mr1Y=";
     };
     meta = {
       description = "Ordered associative arrays for Perl";
@@ -25870,7 +25870,7 @@ let
     version = "0.004";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/Tie-Handle-Offset-0.004.tar.gz";
-      sha256 = "ee9f39055dc695aa244a252f56ffd37f8be07209b337ad387824721206d2a89e";
+      hash = "sha256-7p85BV3GlaokSiUvVv/Tf4vgcgmzN604eCRyEgbSqJ4=";
     };
     meta = {
       description = "Tied handle that hides the beginning of a file";
@@ -25884,7 +25884,7 @@ let
     version = "0.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MH/MHX/Tie-Hash-Indexed-0.08.tar.gz";
-      sha256 = "043v98xaid6sjch2x9c39s475wm9i13vzf8jg73qm12sby0n5g1p";
+      hash = "sha256-N7xigV9ahIrHeRK5v0eIqfJyiE6DpS4gk9q0qDpKexA=";
     };
     doCheck = false; /* test fails on some machines */
     meta = {
@@ -25898,7 +25898,7 @@ let
     version = "0.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Y/YV/YVES/Tie-Hash-Method-0.02.tar.gz";
-      sha256 = "d513fbb51413f7ca1e64a1bdce6194df7ec6076dea55066d67b950191eec32a9";
+      hash = "sha256-1RP7tRQT98oeZKG9zmGU337GB23qVQZtZ7lQGR7sMqk=";
     };
     meta = {
       description = "Tied hash with specific methods overriden by callbacks";
@@ -25911,7 +25911,7 @@ let
     version = "1.40";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Tie-RefHash-1.40.tar.gz";
-      sha256 = "1mvyjab8pv1yfimvlh4gxxpm3xzny4pinymdr8hgdd9gim8izkss";
+      hash = "sha256-Ws8fUY0vtfYgyq16Gy/x9vdRb++PQLprdD7si5aSftc=";
     };
     meta = {
       description = "Use references as hash keys";
@@ -25924,7 +25924,7 @@ let
     version = "0.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AL/ALTREUS/Tie-RegexpHash-0.17.tar.gz";
-      sha256 = "0c207850e77efb16618e0aa015507926a3425b34aad5aa6e3e40d83989a085a3";
+      hash = "sha256-DCB4UOd++xZhjgqgFVB5JqNCWzSq1apuPkDYOYmghaM=";
     };
     meta = {
       description = "Use regular expressions as hash keys";
@@ -25937,7 +25937,7 @@ let
     version = "1.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HANENKAMP/Tie-Simple-1.04.tar.gz";
-      sha256 = "29e9e2133951046c78f205f1b3e8df62c90e114f0e08fa06b817766a0f808b12";
+      hash = "sha256-KeniEzlRBGx48gXxs+jfYskOEU8OCPoGuBd2ag+AixI=";
     };
     meta = {
       description = "Variable ties made much easier: much, much, much easier..";
@@ -25950,7 +25950,7 @@ let
     version = "1.001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/ST/STEFFENW/Tie-Sub-1.001.tar.gz";
-      sha256 = "1cgiyj85hhw2m4x2iv4zgaj3hzf3fghircpcfqmjndni4r4a0wgg";
+      hash = "sha256-73GgSCbRNisrduyyHOFzw304pHqf7Cg6qYJDWJD08bE=";
     };
     propagatedBuildInputs = [ ParamsValidate ];
     buildInputs = [ ModuleBuild TestDifferences TestException TestNoWarnings ];
@@ -25965,7 +25965,7 @@ let
     version = "0.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NU/NUFFIN/Tie-ToObject-0.03.tar.gz";
-      sha256 = "1x1smn1kw383xc5h9wajxk9dlx92bgrbf7gk4abga57y6120s6m3";
+      hash = "sha256-oxoNRDD+FPWWIvMdt/JbInXa0uxS8QQL6wMNPoOtOvQ=";
     };
     meta = {
       description = "Tie to an existing object";
@@ -25978,7 +25978,7 @@ let
     version = "2.33";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AT/ATOOMIC/TimeDate-2.33.tar.gz";
-      sha256 = "1cjyc0yi873597r7xcp9yz0l1c46ik2kxwfrn00zbrlx0d5rrdn0";
+      hash = "sha256-wLacSwOd5vUBsNnxPsWMhrBAwffpsn7ySWUcFD1gXrI=";
     };
     meta = {
       description = "Miscellaneous timezone manipulations routines";
@@ -25991,7 +25991,7 @@ let
     version = "1.21";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/Time-Duration-1.21.tar.gz";
-      sha256 = "1f59z2svfydxgd1gzrb5k3hl6d432kzmskk7jhv2dyb5hyx0wd7y";
+      hash = "sha256-/jQOuodl+SY2lGdOXf8UgzRD4Zhl5f9Ce715t7X4qbg=";
     };
     meta = {
       description = "Rounded or exact English expression of durations";
@@ -26005,7 +26005,7 @@ let
     version = "0.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/Time-Duration-Parse-0.15.tar.gz";
-      sha256 = "10g39bbrxkabbsfq4rv7f5b5x7h3jba08j4pg8gwr0b9iqx19n31";
+      hash = "sha256-YdgUOo5pgcwfepdIBNSSA55eVnFnZ4KdXkvNntdK44E=";
     };
     buildInputs = [ TimeDuration ];
     propagatedBuildInputs = [ ExporterLite ];
@@ -26021,7 +26021,7 @@ let
     version = "1.30";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/Time-Local-1.30.tar.gz";
-      sha256 = "c7744f6b2986b946d3e2cf034df371bee16cdbafe53e945abb1a542c4f8920cb";
+      hash = "sha256-x3RPaymGuUbT4s8DTfNxvuFs26/lPpRauxpULE+JIMs=";
     };
     meta = {
       description = "Efficiently compute time from local and GMT time";
@@ -26035,7 +26035,7 @@ let
     version = "0.44";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CH/CHANSEN/Time-Moment-0.44.tar.gz";
-      sha256 = "64acfa042f634fcef8dadf55e7f42ba4eaab8aaeb7d5212eb89815a31f78f6fd";
+      hash = "sha256-ZKz6BC9jT8742t9V5/QrpOqriq631SEuuJgVox949v0=";
     };
     buildInputs = [ TestFatal TestNumberDelta TestRequires ];
     meta = {
@@ -26049,7 +26049,7 @@ let
     version = "0.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PA/PATL/Time-Out-0.11.tar.gz";
-      sha256 = "1lhmx1x8j6z1k9vn32bcsw7g44cg22icshnnc37djlnlixlxm5lk";
+      hash = "sha256-k5baaY/UUtnOYNZCzaIQjxHyDtdsiWF3muEbiXroFdI=";
     };
     meta = {
       description = "Easily timeout long running operations";
@@ -26062,7 +26062,7 @@ let
     version = "2015.103";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MU/MUIR/modules/Time-ParseDate-2015.103.tar.gz";
-      sha256 = "2c1a06235bf811813caac9eaa9daa71af758667cdf7b082cb59863220fcaeed1";
+      hash = "sha256-LBoGI1v4EYE8qsnqqdqnGvdYZnzfewgstZhjIg/K7tE=";
     };
     doCheck = false;
     meta = {
@@ -26076,7 +26076,7 @@ let
     version = "1.25";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PB/PBOYD/Time-Period-1.25.tar.gz";
-      sha256 = "d07fa580529beac6a9c8274c6bf220b4c3aade685df65c1669d53339bf6ef1e8";
+      hash = "sha256-0H+lgFKb6sapyCdMa/IgtMOq3mhd9lwWadUzOb9u8eg=";
     };
     meta = {
       description = "A Perl module to deal with time periods";
@@ -26090,7 +26090,7 @@ let
     version = "1.3401";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ES/ESAYM/Time-Piece-1.3401.tar.gz";
-      sha256 = "4b55b7bb0eab45cf239a54dfead277dfa06121a43e63b3fce0853aecfdb04c27";
+      hash = "sha256-S1W3uw6rRc8jmlTf6tJ336BhIaQ+Y7P84IU67P2wTCc=";
     };
     meta = {
       description = "Object Oriented time objects";
@@ -26105,10 +26105,10 @@ let
     version = "0.6.1";
 
     src = fetchFromGitHub {
-      owner  = "openstreetmap";
-      repo   = "tirex";
-      rev    = "v${version}";
-      sha256 = "0dskf50qm6yh3rx6j2nqydr1if71x6ik85hxsa2r9qgldcby2rgh";
+      owner = "openstreetmap";
+      repo = "tirex";
+      rev = "v${version}";
+      hash = "sha256-8GXhF2v04ZSF0h0WNKPp4bgYcvPYCml6HtCbikFxUzc=";
     };
 
     buildInputs = [
@@ -26141,7 +26141,7 @@ let
     version = "804.035";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SR/SREZIC/Tk-804.035.tar.gz";
-      sha256 = "4d2b80291ba6de34d8ec886a085a6dbd2b790b926035a087e99025614c5ffdd4";
+      hash = "sha256-TSuAKRum3jTY7IhqCFptvSt5C5JgNaCH6ZAlYUxf/dQ=";
     };
     makeMakerFlags = "X11INC=${pkgs.xorg.libX11.dev}/include X11LIB=${pkgs.xorg.libX11.out}/lib";
     buildInputs = [ pkgs.xorg.libX11 pkgs.libpng ];
@@ -26157,7 +26157,7 @@ let
     version = "0.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AS/ASB/Tk-ToolBar-0.12.tar.gz";
-      sha256 = "sha256-Rj4oTsRxN+fEJclpGwKo3sXOJytY6h9jWa6AQaI53Q8=";
+      hash = "sha256-Rj4oTsRxN+fEJclpGwKo3sXOJytY6h9jWa6AQaI53Q8=";
     };
     makeMakerFlags = "X11INC=${pkgs.xorg.libX11.dev}/include X11LIB=${pkgs.xorg.libX11.out}/lib";
     buildInputs = [ Tk ];
@@ -26173,7 +26173,7 @@ let
     version = "1.31";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RS/RSAVAGE/Tree-DAG_Node-1.31.tgz";
-      sha256 = "016kr76azxzfcpxjkhqp2piyyl6529shjis20mc3g2snfabsd2qw";
+      hash = "sha256-HIuml3JWizdYBUJHCXUSxVDv4xUXwyn7Ze73r8zJ0wQ=";
     };
     propagatedBuildInputs = [ FileSlurpTiny ];
     meta = {
@@ -26187,7 +26187,7 @@ let
     version = "1.33";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RS/RSAVAGE/Tree-Simple-1.33.tgz";
-      sha256 = "1alnwb6c7n4al91m9cyknvcyvdz521lh22dz1hyk4v7c50adffnv";
+      hash = "sha256-2zrXFCjsbDI9DL8JAWkQ5bft2bbTs1RDoorYw8zilqo=";
     };
     buildInputs = [ TestException ];
     meta = {
@@ -26201,7 +26201,7 @@ let
     version = "0.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RS/RSAVAGE/Tree-Simple-VisitorFactory-0.15.tgz";
-      sha256 = "06y2vazkl307k59hnkp9h5bp3p7711kgmp1qdhb2lgnfwzn84zin";
+      hash = "sha256-Nn6C7OfOPioWbDjc+mYI59xxV4HpTgtTmQcMOr/awhs=";
     };
     propagatedBuildInputs = [ TreeSimple ];
     buildInputs = [ TestException ];
@@ -26216,7 +26216,7 @@ let
     version = "0.30";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Try-Tiny-0.30.tar.gz";
-      sha256 = "da5bd0d5c903519bbf10bb9ba0cb7bcac0563882bcfe4503aee3fb143eddef6b";
+      hash = "sha256-2lvQ1ckDUZu/ELuboMt7ysBWOIK8/kUDruP7FD7d72s=";
     };
     buildInputs = [ CPANMetaCheck CaptureTiny ];
     meta = {
@@ -26231,7 +26231,7 @@ let
     version = "0.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MAUKE/Try-Tiny-ByClass-0.01.tar.gz";
-      sha256 = "0ipif12ix6vnmlyar4gh89libfadbsd9kvqg52f2cpr957slx3h3";
+      hash = "sha256-A45O9SkpXyacKA/vmZpeTbkVaULwkaw8rXabHkVw8UY=";
     };
     propagatedBuildInputs = [ DispatchClass TryTiny ];
     meta = {
@@ -26245,7 +26245,7 @@ let
     version = "0.1025";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Twiggy-0.1025.tar.gz";
-      sha256 = "1a57knbwync7rlzhsz1kdc0sd380xnaccwgiy1qwj5d87abdynnp";
+      hash = "sha256-11rfljqoFclx8PFxxpTtAI2mAWszfA0/zYdZz5edp6g=";
     };
     propagatedBuildInputs = [ AnyEvent Plack ];
     buildInputs = [ TestRequires TestSharedFork TestTCP ];
@@ -26262,7 +26262,7 @@ let
     version = "1.012000";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TOBYINK/Type-Tiny-1.012000.tar.gz";
-      sha256 = "147axzi07g5akpzbzd2npvdyh9pmzv22a8la1dmylahw2qh15nyk";
+      hash = "sha256-09sSIBYcKuprC4oiJcT+9Sbo275WtL/+naq8A+Lv6pA=";
     };
     propagatedBuildInputs = [ ExporterTiny ];
     buildInputs = [ TestMemoryCycle ];
@@ -26278,7 +26278,7 @@ let
     version = "0.022";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TOBYINK/Type-Tiny-XS-0.022.tar.gz";
-      sha256 = "bcc34a31f7dc1d30cc803889b5c8f90e4773b73b5becbdb3860f5abe7e22ff00";
+      hash = "sha256-vMNKMffcHTDMgDiJtcj5Dkdztztb7L2zhg9avn4i/wA=";
     };
     meta = {
       description = "Provides an XS boost for some of Type::Tiny's built-in type constraints";
@@ -26292,7 +26292,7 @@ let
     version = "1.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/Types-Serialiser-1.01.tar.gz";
-      sha256 = "104a7292pwwg57rswpkiaq1cgj7hcsrpf818azcy7l0l14xigizq";
+      hash = "sha256-+McXOwkU0OPZVyggd7Nm8MjHAlZxXq7zKY/zK5I4ioA=";
     };
     propagatedBuildInputs = [ commonsense ];
     meta = {
@@ -26306,7 +26306,7 @@ let
     version = "1.20140328";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CH/CHROMATIC/UNIVERSAL-can-1.20140328.tar.gz";
-      sha256 = "522da9f274786fe2cba99bc77cc1c81d2161947903d7fad10bd62dfb7f11990f";
+      hash = "sha256-Ui2p8nR4b+LLqZvHfMHIHSFhlHkD1/rRC9Yt+38RmQ8=";
     };
     meta = {
       description = "Work around buggy code calling UNIVERSAL::can() as a function";
@@ -26320,7 +26320,7 @@ let
     version = "1.20171012";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/UNIVERSAL-isa-1.20171012.tar.gz";
-      sha256 = "0avzv9j32aab6l0rd63n92v0pgliz1p4yabxxjfq275hdh1mcsfi";
+      hash = "sha256-0WlWA2ywHIGd7H0pT274kb4Ltkh2mJYBNUspMWTafys=";
     };
     meta = {
       description = "Attempt to recover from people calling UNIVERSAL::isa as a function";
@@ -26334,7 +26334,7 @@ let
     version = "0.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEILB/UNIVERSAL-require-0.18.tar.gz";
-      sha256 = "b2a736a87967a143dab58c8a110501d5235bcdd2c8b2a3bfffcd3c0bd06b38ed";
+      hash = "sha256-sqc2qHlnoUPatYyKEQUB1SNbzdLIsqO//808C9BrOO0=";
     };
     meta = {
       description = "Require() modules from a variable [deprecated]";
@@ -26347,7 +26347,7 @@ let
     version = "1.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AR/ARODLAND/Unicode-CaseFold-1.01.tar.gz";
-      sha256 = "418a212808f9d0b8bb330ac905096d2dd364976753d4c71534dab9836a63194d";
+      hash = "sha256-QYohKAj50Li7MwrJBQltLdNkl2dT1McVNNq5g2pjGU0=";
     };
     perlPreHook = lib.optionalString stdenv.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
     meta = {
@@ -26362,7 +26362,7 @@ let
     version = "1.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BR/BRADFITZ/Unicode-CheckUTF8-1.03.tar.gz";
-      sha256 = "97f84daf033eb9b49cd8fe31db221fef035a5c2ee1d757f3122c88cf9762414c";
+      hash = "sha256-l/hNrwM+ubSc2P4x2yIf7wNaXC7h11fzEiyIz5diQUw=";
     };
     meta = {
       description = "Checks if scalar is valid UTF-8";
@@ -26375,7 +26375,7 @@ let
     version = "2019.001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEZUMI/Unicode-LineBreak-2019.001.tar.gz";
-      sha256 = "12iinva5gqc9g7qzxrvmh45n714z0ad9g7wq2dxwgp6drbj64rs8";
+      hash = "sha256-SGdi5MrN3Md7E5ifl5oCn4RjC4F15/7xeYnhV9S2MYo=";
     };
     propagatedBuildInputs = [ MIMECharset ];
     meta = {
@@ -26389,7 +26389,7 @@ let
     version = "2.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GA/GAAS/GAAS/Unicode-String-2.10.tar.gz";
-      sha256 = "0s4vp8k7ag7z9lsnnkpa9mnch83kxhp9gh7yiapld5a7rq712jl9";
+      hash = "sha256-iUoRDs5HlUaviv7Aly7scyDIbE3qTms1Tf88dSa6m2g=";
     };
     meta = {
       description = "String of Unicode characters (UTF-16BE)";
@@ -26402,7 +26402,7 @@ let
     version = "1.105";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CF/CFAERBER/Unicode-Stringprep-1.105.tar.gz";
-      sha256 = "e6bebbc58408231fd1317db9102449b3e7da4fa437e79f637382d36313efd011";
+      hash = "sha256-5r67xYQIIx/RMX25ECRJs+faT6Q3559jc4LTYxPv0BE=";
     };
     buildInputs = [ TestNoWarnings ];
     meta = {
@@ -26417,7 +26417,7 @@ let
     version = "0.62";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CH/CHANSEN/Unicode-UTF8-0.62.tar.gz";
-      sha256 = "fa8722d0b74696e332fddd442994436ea93d3bfc7982d4babdcedfddd657d0f6";
+      hash = "sha256-+oci0LdGluMy/d1EKZRDbqk9O/x5gtS6vc7f3dZX0PY=";
     };
     buildInputs = [ TestFatal ];
     meta = {
@@ -26433,7 +26433,7 @@ let
     version = "0.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TA/TAFFY/Unix-Getrusage-0.03.tar.gz";
-      sha256 = "76cde1cee2453260b85abbddc27cdc9875f01d2457e176e03dcabf05fb444d12";
+      hash = "sha256-ds3hzuJFMmC4WrvdwnzcmHXwHSRX4XbgPcq/BftETRI=";
     };
     meta = {
       description = "Perl interface to the Unix getrusage system call";
@@ -26446,7 +26446,7 @@ let
     version = "5.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OA/OALDERS/URI-5.05.tar.gz";
-      sha256 = "1v3r3ck67w272kzfgm1nd3wb41av1hlnza56vkxxj1i7s3917hd5";
+      hash = "sha256-pcET0tAnBtn73KaobykMWwWy+Gg21Of+FEfwYyYbeew=";
     };
     buildInputs = [ TestNeeds ];
     meta = {
@@ -26461,7 +26461,7 @@ let
     version = "0.19";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DW/DWHEELER/URI-db-0.19.tar.gz";
-      sha256 = "c4999deaf451652216032c8e327ff6e6d655539eac379095bb69b0c369efa658";
+      hash = "sha256-xJmd6vRRZSIWAyyOMn/25tZVU56sN5CVu2mww2nvplg=";
     };
     propagatedBuildInputs = [ URINested ];
     meta = {
@@ -26476,7 +26476,7 @@ let
     version = "20160806";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSCHWERN/URI-Find-20160806.tar.gz";
-      sha256 = "1mk3jv8x0mcq3ajrn9garnxd0jc7sw4pkwqi88r5apqvlljs84z2";
+      hash = "sha256-4hOkJaUbX1UyQhHzeQnXh0nQus3qJZulGphV0NGWY9Y=";
     };
     propagatedBuildInputs = [ URI ];
     meta = {
@@ -26492,7 +26492,7 @@ let
     version = "0.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/URI-FromHash-0.05.tar.gz";
-      sha256 = "1l3g5ygv83vn9y1zpwjdqq5cs4ip2q058q0gmpcf5wp9rsycbjm7";
+      hash = "sha256-p8rFvM7p8uLYrQ9gVAAWNxLNCsZN8vuDT3YPtJ8vb9A=";
     };
     propagatedBuildInputs = [ ParamsValidate URI ];
     buildInputs = [ TestFatal ];
@@ -26508,7 +26508,7 @@ let
     version = "1.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GA/GAAS/URI-GoogleChart-1.02.tar.gz";
-      sha256 = "00hq5cpsk7sa04n0wg52qhpqf9i2849yyvw2zk83ayh1qqpc50js";
+      hash = "sha256-WoLCLsYBejXQ/IJv7xNBIiaHL8SiPA4sAUqfqS8rGAI=";
     };
     propagatedBuildInputs = [ URI ];
     meta = {
@@ -26522,7 +26522,7 @@ let
     version = "1.00";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MARKOV/User-Identity-1.00.tar.gz";
-      sha256 = "0jlzishg33848qvl5x7nsrnlpnx7lfg5hr4m1qrjddzy3hkv86cj";
+      hash = "sha256-khm0Jxz+tyYzDpVkWJ6jp9tLbdb29EI3RgSN8aCOn0o=";
     };
     meta = {
       description = "Collect information about a user";
@@ -26536,7 +26536,7 @@ let
     version = "1.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CW/CWEST/URI-imap-1.01.tar.gz";
-      sha256 = "0bdv6mrdijcq46r3lmz801rscs63f8p9qqliy2safd6fds4rj55v";
+      hash = "sha256-uxSZiW7ONKe08JFinC5yw2imcwDoVzqyIZjJ2HI1uy0=";
     };
     propagatedBuildInputs = [ URI ];
     meta = {
@@ -26550,7 +26550,7 @@ let
     version = "0.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DW/DWHEELER/URI-Nested-0.10.tar.gz";
-      sha256 = "e1971339a65fbac63ab87142d4b59d3d259d51417753c77cb58ea31a8233efaf";
+      hash = "sha256-4ZcTOaZfusY6uHFC1LWdPSWdUUF3U8d8tY6jGoIz768=";
     };
     propagatedBuildInputs = [ URI ];
     meta = {
@@ -26565,7 +26565,7 @@ let
     version = "0.032";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RK/RKITOVER/URI-SmartURI-0.032.tar.gz";
-      sha256 = "0b2grkmkbnp37q85wj7jpj5zr93vdbisgxlls2vl5q928rwln5zb";
+      hash = "sha256-6xdLeUYi4UK30JT2p+Nqe6T8i7zySF4QPuPaNevMTyw=";
     };
     propagatedBuildInputs = [ ClassC3Componentised FileFindRule ListMoreUtils Moose URI namespaceclean ];
     buildInputs = [ TestFatal TestNoWarnings ];
@@ -26580,7 +26580,7 @@ let
     version = "0.24";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BR/BRICAS/URI-Template-0.24.tar.gz";
-      sha256 = "1phibcmam2hklrddzj79l43va1gcqpyszbw21ynxq53ynmhjvbk8";
+      hash = "sha256-aK4tYbV+FNytD4Kvr/3F7AW1B6HpyN9aphOKqipbEd4=";
     };
     propagatedBuildInputs = [ URI ];
     meta = {
@@ -26594,7 +26594,7 @@ let
     version = "1.007";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/URI-cpan-1.007.tar.gz";
-      sha256 = "1lsjw7m9c3vyq1h9pqzngww18yq23mn4jxv9d7i4a2ifcsa16nhj";
+      hash = "sha256-EloTlGYuCkXiaWl3SWwdAnsUOH/245tgwH4PlurhUtM=";
     };
     propagatedBuildInputs = [ CPANDistnameInfo URI ];
     meta = {
@@ -26609,7 +26609,7 @@ let
     version = "0.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PL/PLICEASE/URI-ws-0.03.tar.gz";
-      sha256 = "6e6b0e4172acb6a53c222639c000608c2dd61d50848647482ac8600d50e541ef";
+      hash = "sha256-bmsOQXKstqU8IiY5wABgjC3WHVCEhkdIKshgDVDlQe8=";
     };
     propagatedBuildInputs = [ URI ];
     meta = {
@@ -26624,7 +26624,7 @@ let
     version = "0.002";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CV/CVLIBRARY/UUID4-Tiny-0.002.tar.gz";
-      sha256 = "e7535b31e386d432dec7adde214348389e1d5cf753e7ed07f1ae04c4360840cf";
+      hash = "sha256-51NbMeOG1DLex63eIUNIOJ4dXPdT5+0H8a4ExDYIQM8=";
     };
     postPatch = lib.optionalString (stdenv.isAarch64) ''
       # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/uapi/asm-generic/unistd.h
@@ -26644,7 +26644,7 @@ let
     version = "1.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CA/CAUGUSTIN/UUID-Tiny-1.04.tar.gz";
-      sha256 = "6dcd92604d64e96cc6c188194ae16a9d3a46556224f77b6f3d1d1312b68f9a3d";
+      hash = "sha256-bc2SYE1k6WzGwYgZSuFqnTpGVWIk93tvPR0TEraPmj0=";
     };
     meta = {
       description = "Pure Perl UUID Support With Functional Interface";
@@ -26657,7 +26657,7 @@ let
     version = "0.001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/UUID-URandom-0.001.tar.gz";
-      sha256 = "3f13631b13b9604fb489e2989490c99f103743a837239bdafae9d6baf55f8f46";
+      hash = "sha256-PxNjGxO5YE+0ieKYlJDJnxA3Q6g3I5va+unWuvVfj0Y=";
     };
     propagatedBuildInputs = [ CryptURandom ];
     meta = {
@@ -26672,7 +26672,7 @@ let
     version = "0.62";
     src = fetchurl {
       url = "mirror://cpan/authors/id/V/VP/VPIT/Variable-Magic-0.62.tar.gz";
-      sha256 = "3f9a18517e33f006a9c2fc4f43f01b54abfe6ff2eae7322424f31069296b615c";
+      hash = "sha256-P5oYUX4z8AapwvxPQ/AbVKv+b/Lq5zIkJPMQaSlrYVw=";
     };
     meta = {
       description = "Associate user-defined magic to variables from Perl";
@@ -26686,7 +26686,7 @@ let
     version = "0.9928";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEONT/version-0.9928.tar.gz";
-      sha256 = "13mabl07rhwwlshj72hvp1j43q3ygxf7wp7qxx3nbqbnrf6i83i4";
+      hash = "sha256-JA4Ujct24WVH7/hcflx/fuBBZLgbiiOhppzDfABdqo4=";
     };
     meta = {
       description = "Structured version objects";
@@ -26699,7 +26699,7 @@ let
     version = "0.050";
     src = fetchurl {
       url = "mirror://cpan/authors/id/W/WO/WOLDRICH/App-vidir-0.050.tar.gz";
-      sha256 = "1xa3vabbkxaqa8pnyl0dblr1m4g2229m1fzl8c9q74f06i00hikh";
+      hash = "sha256-cEYIQDTAkYMTQ/S7UJMQ4pEaMl0NUG8vUlj1uZbaQ/U=";
     };
     outputs = [ "out" ];
     meta = {
@@ -26715,7 +26715,7 @@ let
     version = "1.28";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LD/LDS/VM-EC2-1.28.tar.gz";
-      sha256 = "b2b6b31745c57431fca0efb9b9d0b8f168d6081755e048fd9d6c4469bd108acd";
+      hash = "sha256-srazF0XFdDH8oO+5udC48WjWCBdV4Ej9nWxEab0Qis0=";
     };
     propagatedBuildInputs = [ AnyEventCacheDNS AnyEventHTTP JSON StringApprox XMLSimple ];
     meta = {
@@ -26729,7 +26729,7 @@ let
     version = "0.25";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RC/RCONOVER/VM-EC2-Security-CredentialCache-0.25.tar.gz";
-      sha256 = "fc7e9c152ff2b721ccb221ac40089934775cf58366aedb5cc1693609f840937b";
+      hash = "sha256-/H6cFS/ytyHMsiGsQAiZNHdc9YNmrttcwWk2CfhAk3s=";
     };
     propagatedBuildInputs = [ DateTimeFormatISO8601 VMEC2 ];
     meta = {
@@ -26744,7 +26744,7 @@ let
     version = "4.81";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SC/SCOP/W3C-LinkChecker-4.81.tar.gz";
-      sha256 = "6239f61b20d91dce7b21e4d4f626ab93a8f1e2f207da5015590d508cf6c66a65";
+      hash = "sha256-Yjn2GyDZHc57IeTU9iark6jx4vIH2lAVWQ1QjPbGamU=";
     };
     outputs = [ "out" ];
     propagatedBuildInputs = [ CGI CSSDOM ConfigGeneral LWP LocaleCodes NetIP TermReadKey ];
@@ -26761,12 +26761,12 @@ let
     version = "4.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SZ/SZBALINT/WWW-Curl-4.17.tar.gz";
-      sha256 = "1fmp9aib1kaps9vhs4dwxn7b15kgnlz9f714bxvqsd1j1q8spzsj";
+      hash = "sha256-Uv+rEQ4yNI13XyQclz61b5awju28EQ130lfNsKJKt7o=";
     };
     patches = [
       (fetchpatch {
         url = "https://aur.archlinux.org/cgit/aur.git/plain/curl-7.71.0.patch?h=perl-www-curl&id=261d84887d736cc097abef61164339216fb79180";
-        sha256 = "1hiw5lkflfa93z5d6k8fnnml0r08c653bbvvb8zx6gcrlbrdalfs";
+        hash = "sha256-2lHV8qKZPdM/WnuvNYphCGRAq7UOTdPKH0k56iYtPMI=";
         name = "WWWCurl-curl-7.71.0.patch";
       })
     ];
@@ -26784,7 +26784,7 @@ let
     version = "0.26";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KA/KAZEBURO/WWW-Form-UrlEncoded-0.26.tar.gz";
-      sha256 = "1x4h5m5fkwaa0gbn6zp9mjrhr3r989w8wyrjxiii3dqm3xghnj60";
+      hash = "sha256-wEgLXx8VtxFj7DJ7jnhCKY8Ms6zpfmPXA0rx6UotkPQ=";
     };
     meta = {
       description = "Parser and builder for application/x-www-form-urlencoded";
@@ -26798,7 +26798,7 @@ let
     version = "2.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OA/OALDERS/WWW-Mechanize-2.03.tar.gz";
-      sha256 = "0pl4jc6hmkhzkswka62dij7l0378qvn9dwbh08n54q8xyr6xf79z";
+      hash = "sha256-Px3XTfYdYVIsAnDxluzG6AxAj4xNGDW5nh/OCg2ThF4=";
     };
     propagatedBuildInputs = [ HTMLForm HTMLTree LWP ];
     doCheck = false;
@@ -26816,7 +26816,7 @@ let
     version = "0.3";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MR/MRAMBERG/WWW-Mechanize-CGI-0.3.tar.gz";
-      sha256 = "046jm18liq7rwkdawdh9520cnalkfrk26yqryp7xgw71y65lvq61";
+      hash = "sha256-weBNi/Hh8NfP9Rl7I2Z2kyrLgCgJNq7a5PngSFGo0hA=";
     };
     propagatedBuildInputs = [ HTTPRequestAsCGI WWWMechanize ];
     preConfigure = ''
@@ -26835,7 +26835,7 @@ let
     version = "6.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GA/GAAS/WWW-RobotRules-6.02.tar.gz";
-      sha256 = "07m50dp5n5jxv3m93i55qvnd67a6g7cvbvlik115kmc8lbkh5da6";
+      hash = "sha256-RrUC56KI1VlCmJHutdl5Rh3T7MalxJHq2F0WW24DpR4=";
     };
     propagatedBuildInputs = [ URI ];
     meta = {
@@ -26849,7 +26849,7 @@ let
     version = "0.21";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SC/SCOTTW/WWW-Twilio-API-0.21.tar.gz";
-      sha256 = "582db53a091f8da3670c037733314f2510af5e8ee0ba42a0e391e2f2e3ca7734";
+      hash = "sha256-WC21OgkfjaNnDAN3MzFPJRCvXo7gukKg45Hi8uPKdzQ=";
     };
     prePatch = "rm examples.pl";
     propagatedBuildInputs = [ LWPProtocolHttps ];
@@ -26866,7 +26866,7 @@ let
     version = "0.29";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RO/ROBIN/Want-0.29.tar.gz";
-      sha256 = "1xsjylbxxcbkjazqms49ipi94j1hd2ykdikk29cq7dscil5p9r5l";
+      hash = "sha256-tOR0C41Mt4NZEnPGNr1oMEiS4o2J6Iq/knOx3hf1Uvc=";
     };
     meta = {
       description = "A generalisation of wantarray";
@@ -26879,7 +26879,7 @@ let
     version = "0.003001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/Win32-ShellQuote-0.003001.tar.gz";
-      sha256 = "aa74b0e3dc2d41cd63f62f853e521ffd76b8d823479a2619e22edb4049b4c0dc";
+      hash = "sha256-qnSw49wtQc1j9i+FPlIf/Xa42CNHmiYZ4i7bQEm0wNw=";
     };
     meta = {
       description = "Quote argument lists for Win32";
@@ -26892,7 +26892,7 @@ let
     version = "1.48";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JO/JONASBN/Workflow-1.48.tar.gz";
-      sha256 = "0bz6gil9mygh5ikh8mf86ids9xb1dbgx9hqc1g68qn9ffsyb012f";
+      hash = "sha256-TgSwvHYuWYzMCwzD1N9qYfWkWzTIVQRnLPD5mmh85i8=";
     };
     buildInputs = [ DBDMock ListMoreUtils PodCoverageTrustPod TestException TestKwalitee TestPod TestPodCoverage ];
     propagatedBuildInputs = [ ClassAccessor ClassFactory ClassObservable DBI DataUUID DateTimeFormatStrptime FileSlurp LogDispatch LogLog4perl XMLSimple ];
@@ -26908,7 +26908,7 @@ let
     version = "0.9932";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MD/MDOOTSON/Wx-0.9932.tar.gz";
-      sha256 = "0w0vcpk8bmklh16c0z1vxgipnmvdw7cckcmay7k7cihgb99vdz8w";
+      hash = "sha256-HP22U1oPRnbm8aqyydjhbVd74+s7fMBMgHTWheZlG3A=";
     };
     propagatedBuildInputs = [ AlienWxWidgets ];
     # Testing requires an X server:
@@ -26926,7 +26926,7 @@ let
     version = "0.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MB/MBARBON/Wx-GLCanvas-0.09.tar.gz";
-      sha256 = "1q4gvj4gdx4l8k4mkgiix24p9mdfy1miv7abidf0my3gy2gw5lka";
+      hash = "sha256-atLCn/Bv+Apci0udHWvwrtV0iegxvlnJRJT09ojcj+A=";
     };
     propagatedBuildInputs = [ pkgs.libGLU Wx ];
     doCheck = false;
@@ -26941,7 +26941,7 @@ let
     version = "0.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AW/AWENDT/X11-IdleTime-0.09.tar.gz";
-      sha256 = "0j27cb9yy9ymni8cbiyxplbg086b8lv6b330nwqyx0briq3xrzfq";
+      hash = "sha256-2P3cB455ge4xt2CMZTZFyyDwFr3dx8VQtNUn79NiR0g=";
     };
     buildInputs = [ pkgs.xorg.libXext pkgs.xorg.libXScrnSaver pkgs.xorg.libX11 ];
     propagatedBuildInputs = [ InlineC ];
@@ -26957,7 +26957,7 @@ let
     version = "0.56";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SM/SMCCAM/X11-Protocol-0.56.tar.gz";
-      sha256 = "1dq89bh6fqv7l5mbffqcismcljpq5f869bx7g8lg698zgindv5ny";
+      hash = "sha256-3pbdbHwfJfMoeqevZJAr+ErKqo4MO7dqoWdjZ+BKCLc=";
     };
     buildInputs = [ pkgs.xlibsWrapper ];
     NIX_CFLAGS_LINK = "-lX11";
@@ -26973,7 +26973,7 @@ let
     version = "31";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KR/KRYDE/X11-Protocol-Other-31.tar.gz";
-      sha256 = "1x3kvic52jgp2mvd5wzrqrprqi82cdk8l4075v8b33ksvj9mjqiw";
+      hash = "sha256-PGJZk9x6jrHQLgcQimZjAkWcb8b589J2FfdJUVjcc/Q=";
     };
     propagatedBuildInputs = [ X11Protocol ];
     buildInputs = [ EncodeHanExtra ModuleUtil ];
@@ -26989,7 +26989,7 @@ let
     version = "0.28";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CT/CTRONDLP/X11-GUITest-0.28.tar.gz";
-      sha256 = "0jznws68skdzkhgkgcgjlj40qdyh9i75r7fw8bqzy406f19xxvnw";
+      hash = "sha256-3O7eU3AGEP/xQtydXE5M0DcMiKTysTcfnL9NjYzm9ks=";
     };
     buildInputs = [ pkgs.xlibsWrapper pkgs.xorg.libXtst pkgs.xorg.libXi ];
     NIX_CFLAGS_LINK = "-lX11 -lXext -lXtst";
@@ -27005,13 +27005,13 @@ let
     version = "0.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSTPLBG/X11-XCB-0.18.tar.gz";
-      sha256 = "1cjpghw7cnackw20lbd7yzm222kz5bnrwz52f8ay24d1f4pwrnxf";
+      hash = "sha256-rtvML3GhEeEVcqJ8nu0qfwoh6venLQoEn0xZdjh8V7I=";
     };
     patches = [
       # Pull upstream fix for parallel build failure
       (fetchpatch {
         url = "https://github.com/stapelberg/X11-XCB/commit/813608dacdae1ae35c9eb0f171a958617e014520.patch";
-        sha256 = "017f5r4fyryhzgp99lw3csrl21r27hmqv483vp9fdz9xkvrmh743";
+        hash = "sha256-gxxY8549/ebS3QORjSs8IgdBs2aD05Tu+9Bn70gu7gQ=";
       })
     ];
     AUTOMATED_TESTING = false;
@@ -27031,7 +27031,7 @@ let
     version = "0.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SJ/SJZASADA/XML-CanonicalizeXML-0.10.tar.gz";
-      sha256 = "1vl6wbqmq91mc0hkgfwlndbxcv2jm01hj7kpzprw3d6bh144ca77";
+      hash = "sha256-5yhGSIDLtMHz/XceCQOoUmzWV7OUuzchYDUkXPHihu4=";
     };
     buildInputs = [ pkgs.libxml2 ];
     meta = {
@@ -27046,7 +27046,7 @@ let
     version = "1.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AN/ANDYA/XML-Descent-1.04.tar.gz";
-      sha256 = "0l5xmw2hd95ypppz3lyvp4sn02ccsikzjwacli3ydxfdz1bbh4d7";
+      hash = "sha256-pxG4VvjN9eZHpExx+WfUjAlgNbnb0/Hvvb6kBgWvvVA=";
     };
     buildInputs = [ TestDifferences ];
     propagatedBuildInputs = [ XMLTokeParser ];
@@ -27061,7 +27061,7 @@ let
     version = "2.11";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHAY/XML-Encoding-2.11.tar.gz";
-      sha256 = "a50e41af0a79b882d48816b95681f38a55af1e6a88828dcd96374a8bde2305a1";
+      hash = "sha256-pQ5Brwp5uILUiBa5VoHzilWvHmqIgo3NljdKi94jBaE=";
     };
     propagatedBuildInputs = [ XMLParser ];
     meta = {
@@ -27075,7 +27075,7 @@ let
     version = "1.46";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TJ/TJMATHER/XML-DOM-1.46.tar.gz";
-      sha256 = "0phpkc4li43m2g44hdcvyxzy9pymqwlqhh5hwp2xc0cv8l5lp8lb";
+      hash = "sha256-i6JLC0WbAdbF5bBAiCnH1d/kf/ebNUjIE3WQSAmbF14=";
     };
     propagatedBuildInputs = [ XMLRegExp libxml_perl ];
     meta = {
@@ -27089,7 +27089,7 @@ let
     version = "0.95";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MARKOV/XML-FeedPP-0.95.tar.gz";
-      sha256 = "1x5806xwmbqxr1dkdhalb6d7n31s3ya776klkai7c2x6y6drbhwh";
+      hash = "sha256-kMOVm/GmC3aimnSac5QfOgx7mllUwTZbyB2vyrsBqPQ=";
     };
     propagatedBuildInputs = [ XMLTreePP ];
     meta = {
@@ -27104,7 +27104,7 @@ let
     version = "1.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RB/RBERJON/XML-Filter-BufferText-1.01.tar.gz";
-      sha256 = "8fd2126d3beec554df852919f4739e689202cbba6a17506e9b66ea165841a75c";
+      hash = "sha256-j9ISbTvuxVTfhSkZ9HOeaJICy7pqF1Bum2bqFlhBp1w=";
     };
     doCheck = false;
     meta = {
@@ -27118,7 +27118,7 @@ let
     version = "1.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSERGEANT/XML-Filter-XInclude-1.0.tar.gz";
-      sha256 = "98746f3c1f6f049491fec203d455bb8f8c9c6e250f041904dda5d78e21187f93";
+      hash = "sha256-mHRvPB9vBJSR/sID1FW7j4ycbiUPBBkE3aXXjiEYf5M=";
     };
     doCheck = false;
     meta = {
@@ -27132,7 +27132,7 @@ let
     version = "1.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GR/GRANTM/XML-Filter-Sort-1.01.tar.gz";
-      sha256 = "sha256-UQWF85pJFszV+o1UXpYXnJHq9vx8l6QBp1aOhBFi+l8=";
+      hash = "sha256-UQWF85pJFszV+o1UXpYXnJHq9vx8l6QBp1aOhBFi+l8=";
     };
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [
@@ -27154,7 +27154,7 @@ let
     version = "0.46alpha";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KM/KMACLEOD/XML-Grove-0.46alpha.tar.gz";
-      sha256 = "05yis1ms7cgwjh57k57whrmalb3ha0bjr9hyvh7cnadcyiynvdpw";
+      hash = "sha256-/LZtffSsKcsO3B6mLBdQcCyqaob8lHkKlPyxo2vQ0Rc=";
     };
     buildInputs = [ pkgs.libxml2 ];
     propagatedBuildInputs = [ libxml_perl ];
@@ -27172,7 +27172,7 @@ let
     version = "0.23";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KR/KRAEHE/XML-Handler-YAWriter-0.23.tar.gz";
-      sha256 = "11d45a1sz862va9rry3p2m77pwvq3kpsvgwhc5ramh9mbszbnk77";
+      hash = "sha256-50y7vl41wapyYZC/re8cePN7ThV3+JyT2sKgr4MqpIU=";
     };
     propagatedBuildInputs = [ libxml_perl ];
     meta = {
@@ -27187,7 +27187,7 @@ let
     version = "2.0207";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/XML-LibXML-2.0207.tar.gz";
-      sha256 = "sha256-kDQ2yYWYdb71WTJDquhc7TKa0PtLV7v0WXXjJUfFDBU=";
+      hash = "sha256-kDQ2yYWYdb71WTJDquhc7TKa0PtLV7v0WXXjJUfFDBU=";
     };
     SKIP_SAX_INSTALL = 1;
     buildInputs = [ AlienBuild AlienLibxml2 ]
@@ -27204,7 +27204,7 @@ let
     version = "1.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MARKOV/XML-LibXML-Simple-1.01.tar.gz";
-      sha256 = "cd98c8104b70d7672bfa26b4513b78adf2b4b9220e586aa8beb1a508500365a6";
+      hash = "sha256-zZjIEEtw12cr+ia0UTt4rfK0uSIOWGqovrGlCFADZaY=";
     };
     propagatedBuildInputs = [ XMLLibXML ];
     meta = {
@@ -27218,7 +27218,7 @@ let
     version = "1.99";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/XML-LibXSLT-1.99.tar.gz";
-      sha256 = "1w7pn0wb88nma6biy4h05ak3j4ykma6vz1wbkrxy8qgvfyl1fzhj";
+      hash = "sha256-En4XqHf7YeR7nouHv42q0xM5pioAEh+XUdUitDiw9/A=";
     };
     buildInputs = [ pkgs.pkg-config pkgs.zlib pkgs.libxml2 pkgs.libxslt ];
     propagatedBuildInputs = [ XMLLibXML ];
@@ -27233,7 +27233,7 @@ let
     version = "1.38";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PD/PDEEGAN/XML-Mini-1.38.tar.gz";
-      sha256 = "af803d38036a3184e124a682e5466f1bc107f48a89ef35b0c7647e11a073fe2d";
+      hash = "sha256-r4A9OANqMYThJKaC5UZvG8EH9IqJ7zWwx2R+EaBz/i0=";
     };
     meta = {
       description = "Perl implementation of the XML::Mini XML create/parse interface";
@@ -27246,7 +27246,7 @@ let
     version = "1.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PERIGRIN/XML-NamespaceSupport-1.12.tar.gz";
-      sha256 = "1vz5pbi4lm5fhq2slrs2hlp6bnk29863abgjlcx43l4dky2rbsa7";
+      hash = "sha256-R+mVhZ+N0EE6o/ItNQxKYtplLoVCZ6oFhq5USuK65e8=";
     };
     meta = {
       description = "A simple generic namespace processor";
@@ -27259,7 +27259,7 @@ let
     version = "2.46";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TODDR/XML-Parser-2.46.tar.gz";
-      sha256 = "0pai3ik47q7rgnix9644c673fwydz52gqkxr9kxwq765j4j36cfk";
+      hash = "sha256-0zEzJJHFHMz7TLlP/ET5zXM3jmGEmNSjffngQ2YcUV0=";
     };
     patches = [ ../development/perl-modules/xml-parser-0001-HACK-Assumes-Expat-paths-are-good.patch ];
     postPatch = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
@@ -27280,7 +27280,7 @@ let
     version = "0.722";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PH/PHRED/XML-Parser-Lite-0.722.tar.gz";
-      sha256 = "1vk3jwh1kfcsmc5kvxzqdnb1cllvf0yf27fg0ra0w6jkw4ks143g";
+      hash = "sha256-b5CgJ+FTGg5UBs8d4Txwm1IWlm349z0Lq5q5GSCXY+4=";
     };
     buildInputs = [ TestRequires ];
     meta = {
@@ -27294,7 +27294,7 @@ let
     version = "1.44";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MANWAR/XML-XPath-1.44.tar.gz";
-      sha256 = "1cc9110705165dc09dd09974dd7c0b6709c9351d6b6b1cef5a711055f891dd0f";
+      hash = "sha256-HMkRBwUWXcCd0Jl03XwLZwnJNR1raxzvWnEQVfiR3Q8=";
     };
     buildInputs = [ PathTiny ];
     propagatedBuildInputs = [ XMLParser ];
@@ -27310,7 +27310,7 @@ let
     version = "0.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIROD/XML-XPathEngine-0.14.tar.gz";
-      sha256 = "0r72na14bmsxfd16s9nlza155amqww0k8wsa9x2a3sqbpp5ppznj";
+      hash = "sha256-0v57y70L66FET0pzNAHnuKpSgvrUJm1Cc13XRYKy4mQ=";
     };
     meta = {
       description = "A re-usable XPath engine for DOM-like trees";
@@ -27323,7 +27323,7 @@ let
     version = "0.04";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TJ/TJMATHER/XML-RegExp-0.04.tar.gz";
-      sha256 = "0m7wj00a2kik7wj0azhs1zagwazqh3hlz4255n75q21nc04r06fz";
+      hash = "sha256-3xmQCWA2CFyOLUWQT+GA+Cv+1A8afgUkPzNOoQCQ/FQ=";
     };
     meta = {
       description = "Regular expressions for XML tokens";
@@ -27336,7 +27336,7 @@ let
     version = "0.717";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PH/PHRED/XMLRPC-Lite-0.717.tar.gz";
-      sha256 = "0925md6jhzgpsibwgny4my461b2wngm8dhxlcry8pbqzrgrab7rs";
+      hash = "sha256-Op+l8ssfr4t8ZrTDhuqzXKxgiK/E28dX1Pd9KE2rRSQ=";
     };
     propagatedBuildInputs = [ SOAPLite ];
     # disable tests that require network
@@ -27352,7 +27352,7 @@ let
     version = "1.62";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/XML-RSS-1.62.tar.gz";
-      sha256 = "0klb8ghd405pdkmn25lp3i4j2lfydz8w581sk51p3zy788s0c9yk";
+      hash = "sha256-0ycGNELH/3FDmTqgwtFv3lEhSRyXFmHrbLcA0uBDi04=";
     };
     propagatedBuildInputs = [ DateTimeFormatMail DateTimeFormatW3CDTF XMLParser ];
     meta = {
@@ -27367,7 +27367,7 @@ let
     version = "1.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JE/JENDA/XML-Rules-1.16.tar.gz";
-      sha256 = "3788255c07afe4195a0de72ce050652320d817528ff2d10c611f6e392043868b";
+      hash = "sha256-N4glXAev5BlaDecs4FBlIyDYF1KP8tEMYR9uOSBDhos=";
     };
     propagatedBuildInputs = [ XMLParser ];
     meta = {
@@ -27381,7 +27381,7 @@ let
     version = "1.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GR/GRANTM/XML-SAX-1.02.tar.gz";
-      sha256 = "0am13vnv8qsjafr5ljakwnkhlwpk15sga02z8mxsg9is0j3w61j5";
+      hash = "sha256-RQbDhwQ6pqd7RV8A9XQJ83IKp+VTSVqyU1JjtO0eoSo=";
     };
     propagatedBuildInputs = [ XMLNamespaceSupport XMLSAXBase ];
     postInstall = ''
@@ -27398,7 +27398,7 @@ let
     version = "1.09";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GR/GRANTM/XML-SAX-Base-1.09.tar.gz";
-      sha256 = "66cb355ba4ef47c10ca738bd35999723644386ac853abbeb5132841f5e8a2ad0";
+      hash = "sha256-Zss1W6TvR8EMpzi9NZmXI2RDhqyFOrvrUTKEH16KKtA=";
     };
     meta = {
       description = "Base class for SAX Drivers and Filters";
@@ -27412,7 +27412,7 @@ let
     version = "0.51";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BJ/BJOERN/XML-SAX-Expat-0.51.tar.gz";
-      sha256 = "0gy8h2bvvvlxychwsb99ikdh5cqpk6sqc073jk2b4zffs09n40ac";
+      hash = "sha256-TAFiE9DOfbLElOMAhrWZF7MC24wpLc0h853uvZeAyD8=";
     };
     propagatedBuildInputs = [ XMLParser XMLSAX ];
     # Avoid creating perllocal.pod, which contains a timestamp
@@ -27428,7 +27428,7 @@ let
     version = "0.57";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PERIGRIN/XML-SAX-Writer-0.57.tar.gz";
-      sha256 = "3d61d07ef43b0126f5b4de4f415a256fa859fa88dc4fdabaad70b7be7c682cf0";
+      hash = "sha256-PWHQfvQ7ASb1tN5PQVolb6hZ+ojcT9q6rXC3vnxoLPA=";
     };
     propagatedBuildInputs = [ XMLFilterBufferText XMLNamespaceSupport XMLSAXBase ];
     meta = {
@@ -27443,7 +27443,7 @@ let
     version = "1.0007";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PERIGRIN/XML-SemanticDiff-1.0007.tar.gz";
-      sha256 = "1xd00821y795fy2rag8aizb5wsbbzfxgmdf9qwpvdxn3pgpyzz85";
+      hash = "sha256-Bf3v77vD9rYvx8m1+rr7a2le1o8KPZWFdyUdHwQCoPU=";
     };
     propagatedBuildInputs = [ XMLParser ];
     meta = {
@@ -27457,7 +27457,7 @@ let
     version = "2.25";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GR/GRANTM/XML-Simple-2.25.tar.gz";
-      sha256 = "1y6vh328zrh085d40852v4ij2l4g0amxykswxd1nfhd2pspds7sk";
+      hash = "sha256-Ux/drr6iQWdD61xP36sCj1AhI9miIEBaQQDmj8SA2/g=";
     };
     propagatedBuildInputs = [ XMLSAXExpat ];
     meta = {
@@ -27471,7 +27471,7 @@ let
     version = "0.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PO/PODMASTER/XML-TokeParser-0.05.tar.gz";
-      sha256 = "1hnpwb3lh6cbgwvjjgqzcp6jm4mp612qn6ili38adc9nhkwv8fc5";
+      hash = "sha256-hTm0+YQ2sabQiDQai0Uwt5IqzWUfPyk3f4sZSMfi18I=";
     };
     propagatedBuildInputs = [ XMLParser ];
     meta = {
@@ -27485,7 +27485,7 @@ let
     version = "0.43";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KA/KAWASAKI/XML-TreePP-0.43.tar.gz";
-      sha256 = "7fbe2d6430860059894aeeebf75d4cacf1bf8d7b75294eb87d8e1502f81bd760";
+      hash = "sha256-f74tZDCGAFmJSu7r911MrPG/jXt1KU64fY4VAvgb12A=";
     };
     propagatedBuildInputs = [ LWP ];
     meta = {
@@ -27499,7 +27499,7 @@ let
     version = "3.52";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIROD/XML-Twig-3.52.tar.gz";
-      sha256 = "1bc0hrz4jp6199hi29sdxmb9gyy45whla9hd19yqfasgq8k5ixzy";
+      hash = "sha256-/vdYJsJPK4d9Cg0mRSEvxPuXVu1NJxFhSsFcSX6GgK0=";
     };
     postInstall = ''
       mkdir -p $out/bin
@@ -27519,7 +27519,7 @@ let
     version = "1.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SA/SAMTREGAR/XML-Validator-Schema-1.10.tar.gz";
-      sha256 = "6142679580150a891f7d32232b5e31e2b4e5e53e8a6fa9cbeecb5c23814f1422";
+      hash = "sha256-YUJnlYAVCokffTIjK14x4rTl5T6Kb6nL7stcI4FPFCI=";
     };
     propagatedBuildInputs = [ TreeDAGNode XMLFilterBufferText XMLSAX ];
     meta = {
@@ -27533,7 +27533,7 @@ let
     version = "0.900";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JO/JOSEPHW/XML-Writer-0.900.tar.gz";
-      sha256 = "07qd806kcs7si7qakx3x5p68xq2jdmkxdrns987kaayg7syzbj3k";
+      hash = "sha256-c8j1vT7PKzUPStrm1mdtUuCOzC199KnwifpoNg1ADR8=";
     };
     meta = {
       description = "Module for creating a XML document object oriented with on the fly validating towards the given DTD";
@@ -27546,7 +27546,7 @@ let
     version = "0.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/XS-Object-Magic-0.05.tar.gz";
-      sha256 = "0njyy4y0zax4zz55y82dlm9cly1pld1lcxb281s12bp9rrhf9j9x";
+      hash = "sha256-PcnkYM7pLhF0QGJ1RkOjN3jKUqVNIF/K/6SrDzzxXlo=";
     };
     buildInputs = [ ExtUtilsDepends TestFatal TestSimple13 ];
     meta = {
@@ -27561,7 +27561,7 @@ let
     version = "0.25";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Keyword-0.25.tar.gz";
-      sha256 = "sha256-9e2zDPfH8iDQxsMdwetVQDKECpnHwpgxT1zD/vZscsc=";
+      hash = "sha256-9e2zDPfH8iDQxsMdwetVQDKECpnHwpgxT1zD/vZscsc=";
     };
     buildInputs = [ ExtUtilsCChecker ];
     perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
@@ -27577,7 +27577,7 @@ let
     version = "0.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Sublike-0.16.tar.gz";
-      sha256 = "sha256-IV5AmzmFgdJfDv8DeFBjvCUTu4YbrL6Z/m1VNTRvZt8=";
+      hash = "sha256-IV5AmzmFgdJfDv8DeFBjvCUTu4YbrL6Z/m1VNTRvZt8=";
     };
     buildInputs = [ TestFatal ];
     perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
@@ -27593,7 +27593,7 @@ let
     version = "0.35";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IN/INGY/XXX-0.35.tar.gz";
-      sha256 = "1azk2h3d2vxc84zpa34gr0dvhvf5qkwbaidy3ks0gkkx9463crm6";
+      hash = "sha256-pmY2DEl9zgf0HL5FtfjExW24G8iPDHU/Qaxv0QYU86s=";
     };
     propagatedBuildInputs = [ YAMLPP ];
     meta = {
@@ -27608,7 +27608,7 @@ let
     version = "1.30";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TI/TINITA/YAML-1.30.tar.gz";
-      sha256 = "1kbrfksjg4k4vmx1i337m5n69m00m0m5bgsh61c15bzzrgbacc2h";
+      hash = "sha256-UDCm1sv/rxJYMFC/VSqoANRkbKlnjBh63WSSJ/V0ec0=";
     };
 
     buildInputs = [ TestBase TestDeep TestYAML ];
@@ -27625,7 +27625,7 @@ let
     version = "1.23";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IN/INGY/YAML-Old-1.23.tar.gz";
-      sha256 = "fa546fcd9acc5a39bc8871902f7fc1eba50e7dc781c5cd5c0abf1aece6d17ecd";
+      hash = "sha256-+lRvzZrMWjm8iHGQL3/B66UOfceBxc1cCr8a7ObRfs0=";
     };
     buildInputs = [ TestYAML TestBase ];
     meta = {
@@ -27640,7 +27640,7 @@ let
     version = "1.34";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TODDR/YAML-Syck-1.34.tar.gz";
-      sha256 = "0na1wg3d7ykzy5i44w6i1s37ymq6x0cvcc9gzvmri9xxmv65d4fc";
+      hash = "sha256-zJFWzK69p5jr/i8xthnoBld/hg7RcEJi8X/608bjQVk=";
     };
     perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
     meta = {
@@ -27655,7 +27655,7 @@ let
     version = "1.73";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/YAML-Tiny-1.73.tar.gz";
-      sha256 = "0i3p4nz8ysrsrs6vlzc6gkjcfpcaf05xjc7lwbjkw7lg5shmycdw";
+      hash = "sha256-vDFfoS6PHj7l4vQw2Qtwil3H5HyGfbqNzjprj74ld0Q=";
     };
     meta = {
       description = "Read/Write YAML files with as little code as possible";
@@ -27668,7 +27668,7 @@ let
     version = "0.83";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TI/TINITA/YAML-LibYAML-0.83.tar.gz";
-      sha256 = "sha256-tHF1tP85etdaT3eB09g8CGN9pv8LrjJq87OJ2FS+xJA=";
+      hash = "sha256-tHF1tP85etdaT3eB09g8CGN9pv8LrjJq87OJ2FS+xJA=";
     };
     meta = {
       description = "Perl YAML Serialization using XS and libyaml";
@@ -27681,7 +27681,7 @@ let
     version = "0.026";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TI/TINITA/YAML-PP-0.026.tar.gz";
-      sha256 = "1ss5b8ny00pvg6bfx562hy7z5hj02w1yh224qpn6dsgk3ikqx1ab";
+      hash = "sha256-S4WOZxzz6WbsxUQI6AMXQMLyj4fClO6WefsC4C1aRes=";
     };
     buildInputs = [ TestDeep TestWarn ];
     meta = {
@@ -27695,7 +27695,7 @@ let
     version = "0.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/Web-Machine-0.17.tar.gz";
-      sha256 = "f139d2b3114c549e91847daaab8b75cb699e57daf5bbf0dbd13293f33fe5e22a";
+      hash = "sha256-8TnSsxFMVJ6RhH2qq4t1y2meV9r1u/Db0TKT8z/l4io=";
     };
     buildInputs = [ NetHTTP TestFailWarnings TestFatal ];
     propagatedBuildInputs = [ HTTPHeadersActionPack HTTPMessage HashMultiValue IOHandleUtil ModuleRuntime Plack SubExporter TryTiny ];
@@ -27711,7 +27711,7 @@ let
     version = "0.29";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIKEGRB/WebService-Linode-0.29.tar.gz";
-      sha256 = "103aab245304f08e9e87ac7bc884ddb44a630de6bac077dc921f716d71154922";
+      hash = "sha256-EDqrJFME8I6eh6x7yITdtEpjDea6wHfckh9xbXEVSSI=";
     };
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [ JSON LWPProtocolHttps ];
@@ -27727,7 +27727,7 @@ let
     version = "0.28";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/ST/STRUAN/WebService-Validator-HTML-W3C-0.28.tar.gz";
-      sha256 = "sha256-zLB60zegOuyBob6gqJzSlUaR/1uzZ9+aMrnZEw8XURA=";
+      hash = "sha256-zLB60zegOuyBob6gqJzSlUaR/1uzZ9+aMrnZEw8XURA=";
     };
     buildInputs = [ ClassAccessor LWP ];
     meta = {
@@ -27741,7 +27741,7 @@ let
     version = "4.0.1";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-CLI-v4.0.1.tar.gz";
-      sha256 = "edd34f7b8137e492e6ce8474c45a550572dca5056abdefc45c076df9d6965ca0";
+      hash = "sha256-7dNPe4E35JLmzoR0xFpVBXLcpQVqve/EXAdt+daWXKA=";
     };
     propagatedBuildInputs = [
       JSONXS
@@ -27768,7 +27768,7 @@ let
     version = "4.5.1";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-Engine-v4.5.1.tar.gz";
-      sha256 = "45d204c6dad7cd90176084bf2427baa8ce503684a5699ebeb236e4d33bc0ba86";
+      hash = "sha256-RdIExtrXzZAXYIS/JCe6qM5QNoSlaZ6+sjbk0zvAuoY=";
     };
     buildInputs = [ PodCoverage TestDifferences TestException TestFatal TestNoWarnings TestPod ];
     propagatedBuildInputs = [ ClassAccessor Clone EmailValid FileShareDir FileSlurp IOSocketInet6 ListMoreUtils ModuleFind Moose MooseXSingleton NetIP Readonly TextCSV ZonemasterLDNS libintl-perl ];
@@ -27789,7 +27789,7 @@ let
     version = "2.2.2";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-LDNS-2.2.2.tar.gz";
-      sha256 = "e0a71c3e35aa761909be323d4101823d7fc1f2f4541b0f75794520c611e4efcf";
+      hash = "sha256-4KccPjWqdhkJvjI9QQGCPX/B8vRUGw91eUUgxhHk788=";
     };
     NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include -I${pkgs.libidn2}.dev}/include";
     NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.libidn2}/lib -lcrypto -lidn2";
