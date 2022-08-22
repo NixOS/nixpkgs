@@ -212,6 +212,7 @@ let
     };
     propagatedBuildInputs = [ AlgorithmDiff ];
     meta = {
+      description = "Perl extension for getting the Longest Common Sub-Sequence";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.sgo ];
     };
@@ -449,6 +450,7 @@ let
     };
     buildInputs = [ CanaryStability ];
     meta = {
+      description = "The DBI of event loop programming";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -477,6 +479,7 @@ let
     buildInputs = [ CanaryStability ];
     propagatedBuildInputs = [ BDB AnyEvent ];
     meta = {
+      description = "Truly asynchronous berkeley db access";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -1542,6 +1545,7 @@ let
     buildInputs = [ pkgs.db4 ];
     propagatedBuildInputs = [ commonsense ];
     meta = {
+      description = "Asynchronous Berkeley DB access";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -2062,6 +2066,7 @@ let
       sha256 = "a5c91c62cf95fcb868f60eab5c832908f6905221013fea2bce3ff57046d7b6ea";
     };
     meta = {
+      description = "Canary to check perl compatibility for schmorp's modules";
       license = with lib.licenses; [ gpl1Plus ];
     };
   };
@@ -2116,6 +2121,7 @@ let
       sha256 = "0km5fc6r6whxh6h5yd7g1j0bi96sgk0gkda6cardicrw9qmqwkwj";
     };
     meta = {
+      description = "Executable comments";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -2130,6 +2136,7 @@ let
     propagatedBuildInputs = [ CarpAssert ];
     buildInputs = [ TestException ];
     meta = {
+      description = "Convenience assertions for common situations";
       license = with lib.licenses; [ artistic2 ];
     };
   };
@@ -2707,6 +2714,7 @@ let
     };
     buildInputs = [ CatalystRuntime TestLongString TestSimple13 TestWWWMechanize TestWWWMechanizeCatalyst TextCSV XMLSimple ];
     meta = {
+      description = "A view module to help in the convenience of downloading data into many supportable formats";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -2948,6 +2956,7 @@ let
     propagatedBuildInputs = [ CGI FCGI ];
     doCheck = false;
     meta = {
+      description = "CGI Interface for Fast CGI";
       homepage = "https://metacpan.org/module/CGI::Fast";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -3108,6 +3117,7 @@ let
       sha256 = "07215zzr4ydf49832vn54i3gf2q5b97lydkv8j56wb2svvjs64mz";
     };
     meta = {
+      description = "Automated accessor generation";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -3370,6 +3380,7 @@ let
       sha256 = "db1ba87ca9107f161fe9c1e9e7e267c0026defc26fe3e73bcad8ab8ffc18ef9d";
     };
     meta = {
+      description = "Iterator class";
       license = with lib.licenses; [ unfree ];
     };
   };
@@ -3711,6 +3722,7 @@ let
       sha256 = "0y7m25fksiavzg4xj4cm9zkz8rmnk4iqy7lm01m4nmyqlna3082p";
     };
     meta = {
+      description = "Recursively copy Perl datatypes";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -3812,6 +3824,7 @@ let
       sha256 = "5d1f5df48ce13b4dee1cc9f278ecdbf8177877b0b98815a4eb3c91c3466716f2";
     };
     meta = {
+      description = "Extremely light-weight Lempel-Ziv-Free compression";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -3878,6 +3891,7 @@ let
     doCheck = !stdenv.isDarwin;
 
     meta = {
+      description = "Low-Level Interface to zlib or zlib-ng compression library";
       homepage = "https://github.com/pmqs/Compress-Raw-Zlib";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -3933,6 +3947,7 @@ let
       sha256 = "1bbg3wp0xcpj04cmm86j1x0j5968jqi5s2c87qs7dgmap1vzk6qa";
     };
     meta = {
+      description = "Generic Config Module";
       license = with lib.licenses; [ artistic2 ];
     };
   };
@@ -4357,6 +4372,7 @@ let
     propagatedBuildInputs = [ AnyEvent Guard commonsense ];
     buildInputs = [ CanaryStability ];
     meta = {
+      description = "The only real threads in perl";
       license = with lib.licenses; [ unfree ];
     };
   };
@@ -4374,6 +4390,7 @@ let
       cd EV
     '';
     meta = {
+      description = "Do events the coro-way, with EV";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -4485,6 +4502,7 @@ let
     };
     propagatedBuildInputs = [ CompressBzip2 DataCompare ModuleSignature ];
     meta = {
+      description = "Write a CHECKSUMS file for a directory as on CPAN";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -5168,6 +5186,7 @@ let
     NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
     buildInputs = [ CryptOpenSSLGuess ];
     meta = {
+      description = "OpenSSL/LibreSSL pseudo-random number generator access";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       broken = stdenv.isDarwin && stdenv.isAarch64; # errors with: 74366 Abort trap: 6
     };
@@ -5804,6 +5823,7 @@ let
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ ClassAccessor ];
     meta = {
+      description = "Parse Lisp S-Expressions into perl data structures";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -5817,6 +5837,7 @@ let
     };
     propagatedBuildInputs = [ DataPage MathRound ];
     meta = {
+      description = "Page numbering and spread pagination";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -5933,6 +5954,7 @@ let
       sha256 = "51c9efbf8423853616eaa24841e4d1996b2db0036900617fb1dbc76c75a1f360";
     };
     meta = {
+      description = "Allow complex data structures to be encoded using flat URIs";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -6085,6 +6107,7 @@ let
       sha256 = "29a1926314ce1681a312d6155c29590c771ddacf91b7485873ce449ef209dd04";
     };
     meta = {
+      description = "A simple date object";
       license = with lib.licenses; [ artistic1 gpl2Plus ];
     };
   };
@@ -6440,6 +6463,7 @@ let
     };
     propagatedBuildInputs = [ AnyEvent CompressLZF JSONXS commonsense ];
     meta = {
+      description = "Deliantra suppport module to read/write archetypes, maps etc";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -7315,6 +7339,7 @@ let
       sha256 = "757a67e0aa59ae103ea5ca092cbecc025644ebdc326731688ffab6f8823ef4b3";
     };
     meta = {
+      description = "Perl extension for finding the memory usage of Perl variables";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -8202,6 +8227,7 @@ let
     };
     propagatedBuildInputs = [ EmailValid ];
     meta = {
+      description = "Email::Valid which allows dot before at mark";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -8288,6 +8314,7 @@ let
     };
     outputs = [ "out" ];
     meta = {
+      description = "JIS X 0212 (aka JIS 2000) Encodings";
       license = with lib.licenses; [ unfree ];
     };
   };
@@ -8419,6 +8446,7 @@ let
     buildInputs = [ CanaryStability ];
     propagatedBuildInputs = [ commonsense ];
     meta = {
+      description = "Perl interface to libev, a high performance full-featured event loop";
       license = with lib.licenses; [ gpl1Plus ];
     };
   };
@@ -8536,6 +8564,7 @@ let
       sha256 = "1hns15imih8z2h6zv3m1wwmv9fiysacsb52y94v6zf2cmw4kjny0";
     };
     meta = {
+      description = "Lightweight exporting of functions and variables";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -8647,7 +8676,7 @@ let
       sha256 = "165y1cjirbq64w39svkz82cb5jjqkjm8f4c0wqi2lk6050hzf3vq";
     };
     meta = {
-      homepage = "http://gtk2-perl.sourceforge.net";
+      description = "Easily build XS extensions that depend on XS extensions";
       license = with lib.licenses; [ artistic1 gpl1Plus artistic1 gpl1Plus ];
     };
   };
@@ -9097,6 +9126,7 @@ let
     };
     propagatedBuildInputs = [ ClassIterator ];
     meta = {
+      description = "Iterator interface for search files";
       license = with lib.licenses; [ unfree ];
     };
   };
@@ -9175,6 +9205,7 @@ let
     };
     propagatedBuildInputs = [ TextGlob ];
     meta = {
+      description = "Nice wrapper for File::Find ala find(1)";
       license = with lib.licenses; [ artistic1 gpl1Pluartistic1 gpl1Plus ];
     };
   };
@@ -10017,6 +10048,7 @@ let
       sha256 = "3709aa513ce6fd71d1a55a02e34d2f090017d5350a9bd447005653c9b0835b22";
     };
     meta = {
+      description = "Interpolates script options from files into @ARGV or another array";
       license = with lib.licenses; [ artistic1 ];
       maintainers = [ maintainers.pSub ];
     };
@@ -10380,6 +10412,7 @@ let
     };
     propagatedBuildInputs = [ HeapFibonacci SetObject ];
     meta = {
+      description = "GRaph data structures and algorithms";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -11481,8 +11514,9 @@ let
       sha256 = "1vs6sw431nnlnbdy6jii9vqlz30ndlfwdpdgm8a1m6fqngzhzq59";
     };
     meta = {
+      description = "An XS extension for processing HTTP headers";
       license = with lib.licenses; [ unfree ];
-      broken = 
+      broken =
         stdenv.isi686 # loadable library and perl binaries are mismatched (got handshake key 0x7d40080, needed 0x7dc0080)
         || stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.HTTPHeaderParserXS.x86_64-darwin
     };
@@ -11644,6 +11678,7 @@ let
     };
     propagatedBuildInputs = [ AuthenSimple HTTPServerSimple ];
     meta = {
+      description = "Authentication plugin for HTTP::Server::Simple";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -11717,6 +11752,7 @@ let
     };
     propagatedBuildInputs = [ DateTimeFormatICal FreezeThaw IOString TextvFileasData ];
     meta = {
+      description = "Parse iCalendar files into a data structure";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -11982,6 +12018,7 @@ let
       sha256 = "c2c15a254ca74fb8c57d25d7b6cbcaff77a3b4fb5695423f1f80bb423abffea9";
     };
     meta = {
+      description = "Abstract Base Class to build modules to capture output";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -12748,6 +12785,7 @@ let
     };
     propagatedBuildInputs = [ JSONXS ];
     meta = {
+      description = "Support versions 1 and 2 of JSON::XS";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -12897,6 +12935,7 @@ let
     '';
     doCheck = false; # test would need to start apache httpd
     meta = {
+      description = "Wrapper for libapreq2's module/handle API";
       license = with lib.licenses; [ asl20 ];
     };
   };
@@ -13101,6 +13140,7 @@ let
       sha256 = "0vyrspwzaqjxm5mqshf4wvwa3938mkajd1918d9ii2l9m2rn8kwx";
     };
     meta = {
+      description = "Perl French Stemming";
       license = with lib.licenses; [ unfree ];
     };
   };
@@ -13113,6 +13153,7 @@ let
       sha256 = "1207r183s5hlh4mfwa6p46vzm0dhvrs2dnss5s41a0gyfkxp7riq";
     };
     meta = {
+      description = "Porter's stemming algorithm for Italian";
       license = with lib.licenses; [ unfree ];
     };
   };
@@ -13139,6 +13180,7 @@ let
       sha256 = "0mm0m7glm1s6i9f6a78jslw6wh573208arxhq93yriqmw17bwf9f";
     };
     meta = {
+      description = "Porters stemming algorithm for Denmark";
       license = with lib.licenses; [ unfree ];
     };
   };
@@ -14383,6 +14425,7 @@ let
     };
     propagatedBuildInputs = [ MathBigInt ];
     meta = {
+      description = "What Math::BigInts are before they become big";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -14604,6 +14647,7 @@ let
       sha256 = "0k15pk2qx9wrp5xqzhymm1ph4nb314ysrsyr0pjnvn8ii0r241dy";
     };
     meta = {
+      description = "Random Number Generators";
       license = with lib.licenses; [ unfree ];
     };
   };
@@ -15694,6 +15738,7 @@ let
     doCheck = false; # would try to start Apache HTTP server
     passthru.tests = nixosTests.mod_perl;
     meta = {
+      description = "Embed a Perl interpreter in the Apache/2.x HTTP server";
       license = with lib.licenses; [ asl20 ];
       mainProgram = "mp2bug";
     };
@@ -18277,6 +18322,7 @@ let
     };
     propagatedBuildInputs = [ DigestHMAC ];
     meta = {
+      description = "An NTLM authentication module";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.pSub ];
     };
@@ -18523,6 +18569,7 @@ let
       rm t/45_class.t
     '';
     meta = {
+      description = "Perl extension for Apache ZooKeeper";
       homepage = "https://github.com/mark-5/p5-net-zookeeper";
       license = with lib.licenses; [ asl20 ];
       maintainers = teams.deshaw.members ++ [ maintainers.ztzg ];
@@ -18799,6 +18846,7 @@ let
     };
     propagatedBuildInputs = [ IOStringy LWP ];
     meta = {
+      description = "Easy OO parsing of debian control-like files";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -19246,6 +19294,7 @@ let
       sha256 = "0fyiysrq874ncscgdjg522fs29gvqads6ynyhwxwwq1b545srd20";
     };
     meta = {
+      description = "Allow to change perl's destruction level";
       license = with lib.licenses; [ unfree ];
     };
   };
@@ -19870,6 +19919,7 @@ let
       sha256 = "4c8f0a924b19ad78a13da73fe0fb306d32a7b9d10a332c523087fc83a209a8c4";
     };
     meta = {
+      description = "Launch and control background processes";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -20471,6 +20521,7 @@ let
     };
     propagatedBuildInputs = [ PodParser ];
     meta = {
+      description = "Wrap pod paragraphs, leaving verbatim text and code alone";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       mainProgram = "podwrap";
     };
@@ -20663,6 +20714,7 @@ let
     };
     propagatedBuildInputs = [ RegexpCommon ];
     meta = {
+      description = "Provide patterns for CIDR blocks";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -20731,6 +20783,7 @@ let
       sha256 = "1yn5l6x3xyic9jxw9jggqsbggcv7rc8ggj4zbnlz9hfvv17gjazv";
     };
     meta = {
+      description = "Builds trie-ized regexp";
       license = with lib.licenses; [ unfree ];
     };
   };
@@ -21166,6 +21219,7 @@ let
       sha256 = "07aiqkyi1p22drpcyrrmv7f8qq6fhrxh007achy2vryxyck1bp53";
     };
     meta = {
+      description = "Basic set operations";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -21630,6 +21684,7 @@ let
     };
     propagatedBuildInputs = [ NumberFormat ];
     meta = {
+      description = "A collection of very basic statistics modules";
       license = with lib.licenses; [ free ];
     };
   };
@@ -22873,6 +22928,7 @@ let
     propagatedBuildInputs = [ IOInteractive TermProgressBar ];
     buildInputs = [ TestMockObject ];
     meta = {
+      description = "Provide a progress meter if run interactively";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -23091,6 +23147,7 @@ let
       sha256 = "f954e0310941d45c0fc3eb4a40f5d3a00d68119e277d303a1e6af11ded6fbd94";
     };
     meta = {
+      description = "A class to emulate a DEC VT102 terminal";
       license = with lib.licenses; [ unfree ];
     };
   };
@@ -23449,6 +23506,7 @@ let
       sha256 = "0mkw18q5agr30djxr1y68rcfw8aq20ws872hmv88f9gnynag8r20";
     };
     meta = {
+      description = "Extremely flexible deep comparison";
       homepage = "https://github.com/rjbs/Test-Deep";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -23713,6 +23771,7 @@ let
     propagatedBuildInputs = [ SubExporter TextDiff ];
     buildInputs = [ TestDifferences TestNoWarnings ];
     meta = {
+      description = "Test binary as hexadecimal string";
       license = with lib.licenses; [ unfree ];
     };
   };
@@ -25081,6 +25140,7 @@ let
       sha256 = "1p87pgap99lw0nv62i3ghvsi7yg90lhn8vsa3yqp75rd04clybcj";
     };
     meta = {
+      description = "German grundform reduction";
       license = with lib.licenses; [ unfree ];
     };
   };
@@ -25121,6 +25181,7 @@ let
       sha256 = "5b80b7d5e709d34393bcba88971864a17b44a5bf0f9e4bcee383d029e7d2d5c3";
     };
     meta = {
+      description = "Perl interface to iconv() codeset conversion function";
       license = with lib.licenses; [ unfree ];
       broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.TextIconv.x86_64-darwin
     };
@@ -25325,6 +25386,7 @@ let
       sha256 = "c186a50256e0bedfafb17e7ce157e7c52f19503bb79e18ebf06255911f6ead1a";
     };
     meta = {
+      description = "Generate pronounceable passwords";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -25583,6 +25645,7 @@ let
     # https://rt.cpan.org/Public/Bug/Display.html?id=124815
     NIX_CFLAGS_COMPILE = "-DHAS_VPRINTF";
     meta = {
+      description = "Remove accents from a string";
       license = with lib.licenses; [ unfree ];
       broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.TextUnaccent.x86_64-darwin
     };
@@ -25742,6 +25805,7 @@ let
     };
     propagatedBuildInputs = [ TieCacheLRU ];
     meta = {
+      description = "Extends Tie::Cache::LRU with expiring";
       license = with lib.licenses; [ artistic1 ];
     };
   };
@@ -25863,6 +25927,7 @@ let
       sha256 = "0c207850e77efb16618e0aa015507926a3425b34aad5aa6e3e40d83989a085a3";
     };
     meta = {
+      description = "Use regular expressions as hash keys";
       license = with lib.licenses; [ artistic1 ];
     };
   };
@@ -25987,6 +26052,7 @@ let
       sha256 = "1lhmx1x8j6z1k9vn32bcsw7g44cg22icshnnc37djlnlixlxm5lk";
     };
     meta = {
+      description = "Easily timeout long running operations";
       license = with lib.licenses; [ unfree ];
     };
   };
@@ -26169,6 +26235,7 @@ let
     };
     propagatedBuildInputs = [ DispatchClass TryTiny ];
     meta = {
+      description = "Selectively catch exceptions by class name";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -26229,6 +26296,7 @@ let
     };
     propagatedBuildInputs = [ commonsense ];
     meta = {
+      description = "Simple data types for common serialisation formats";
       license = with lib.licenses; [ unfree ];
     };
   };
@@ -26756,6 +26824,7 @@ let
         --replace '#!/usr/bin/perl' '#!${perl}/bin/perl'
     '';
     meta = {
+      description = "Use WWW::Mechanize with CGI applications";
       license = with lib.licenses; [ unfree ];
       broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.WWWMechanizeCGI.x86_64-darwin
     };
