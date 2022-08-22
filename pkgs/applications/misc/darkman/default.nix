@@ -31,7 +31,7 @@ buildGoModule rec {
 
   installPhase = ''
     runHook preInstall
-    make DESTDIR=$out PREFIX=/ install
+    make PREFIX=$out install
     runHook postInstall
   '';
 
