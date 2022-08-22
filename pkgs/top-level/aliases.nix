@@ -1549,6 +1549,7 @@ mapAliases ({
   youtubeDL = throw "'youtubeDL' has been renamed to/replaced by 'youtube-dl'"; # Converted to throw 2022-02-22
   ytop = throw "ytop has been abandoned by upstream. Consider switching to bottom instead";
   yubikey-neo-manager = throw "yubikey-neo-manager has been removed because it was broken. Use yubikey-manager-qt instead"; # Added 2021-03-08
+  yuzu-ea = yuzu-early-access; # Added 2022-08-18
   yuzu = yuzu-mainline; # Added 2021-01-25
 
   ### Z ###
