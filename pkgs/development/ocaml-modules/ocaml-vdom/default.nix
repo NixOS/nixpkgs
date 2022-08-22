@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildDunePackage, js_of_ocaml-compiler , gen_js_api }:
+{ lib, fetchurl, buildDunePackage, js_of_ocaml-compiler , gen_js_api, ojs }:
 
 buildDunePackage rec {
   pname = "ocaml-vdom";
@@ -14,6 +14,7 @@ buildDunePackage rec {
   buildInputs = [
     js_of_ocaml-compiler
     gen_js_api
+    ojs
   ];
 
   meta = {
