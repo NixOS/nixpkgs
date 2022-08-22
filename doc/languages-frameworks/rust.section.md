@@ -1,5 +1,14 @@
 # Rust {#rust}
 
+## Overview
+* Nixpkgs includes packages for the Rust compiler and Cargo build tool, described in [the next section](#compiling-rustc-and-cargo).
+* Nixpkgs includes two low-level primitives for packaging Rust crate:
+  * [`buildRustPackage`](#compiling-rust-applications-with-cargo) creates a single monolithic Nix derivation which invokes Cargo.
+  * [`buildRustCrate`](#compiling-rust-crates-using-nix-instead-of-cargo) creates a separate Nix derivation for each crate dependency; these derivations invoke `rustc` directly.
+* There are also several [community-maintained alternative overlays](#using-community-rust-overlays).
+
+## Compiling `rustc` and `cargo` {#compiling-rustc-and-cargo}
+
 To install the rust compiler and cargo put
 
 ```nix
