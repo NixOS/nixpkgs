@@ -7,7 +7,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "latex-rubber";
     repo = "rubber";
-    rev = "${version}";
+    rev = version;
     hash = "sha256-7sv9N3PES5N41yYyXNWfaZ6IhLW6SqMiCHdamsSPQzg=";
   };
 
