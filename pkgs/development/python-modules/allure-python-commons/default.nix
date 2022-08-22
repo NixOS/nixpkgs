@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "allure-python-commons";
-  version = "2.9.45";
+  version = "2.10.0";
 
   disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "17alymsivw8fs89j6phbqgrbprasw8kj72kxa5y8qpn3xa5d4f62";
+    sha256 = "sha256-1NMTRLDwA3pKEeFrkbKM8O6yP/oOUMJ/z8aqvnIhLTw=";
   };
 
   nativeBuildInputs = [
