@@ -33,7 +33,7 @@ cargoBuildHook() {
       "CXX_@rustTargetPlatform@=@cxxForHost@" \
       cargo build -j $NIX_BUILD_CORES \
         --target @rustTargetPlatformSpec@ \
-        --frozen \
+        @cargoPurityFlag@ \
         ${cargoBuildProfileFlag} \
         ${cargoBuildNoDefaultFeaturesFlag} \
         ${cargoBuildFeaturesFlag} \

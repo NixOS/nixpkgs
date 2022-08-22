@@ -7,6 +7,7 @@
 , cacert
 , git
 , cargoBuildHook
+, cargoBuildHookOffline
 , cargoCheckHook
 , cargoInstallHook
 , cargoNextestHook
@@ -43,6 +44,7 @@
 , checkFeatures ? buildFeatures
 , useNextest ? false
 , depsExtraArgs ? {}
+, cargoPurityFlag ? "--frozen"
 
 # Toggles whether a custom sysroot is created when the target is a .json file.
 , __internal_dontAddSysroot ? false
@@ -119,6 +121,10 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
     cacert
     git
     cargoBuildHook
+    ({ "--frozen"  = cargoBuildHook;
+       "--offline" = cargoBuildHookOffline;
+    }.${cargoPurityFlag}
+      or (throw "unrecognized cargoPurityFlag \"${cargoPurityFlag}\""))
     (if useNextest then cargoNextestHook else cargoCheckHook)
     cargoInstallHook
     cargoSetupHook
