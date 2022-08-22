@@ -18,8 +18,10 @@
 , withDevdoc ? false
 , doxygen
 , dblatex # Extra developer documentation
+, withNcurses
 , ncurses # Extra ncurses utilities. Needed for debugging and monitoring.
-, tsmbac ? null # Tivoli Storage Manager Backup Client from IBM
+, withTsm ? false
+, tsm-client # Tivoli Storage Manager Backup Client from IBM
 }:
 
 with (import ./srcs.nix { inherit fetchurl; });
@@ -45,7 +47,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ libkrb5 ncurses ];
 
-  patches = [ ./bosserver.patch ./cross-build.patch ] ++ optional (tsmbac != null) ./tsmbac.patch;
+  patches = [ ./bosserver.patch ./cross-build.patch ]
+    ++ optional withTsm ./tsmbac.patch;
 
   outputs = [ "out" "dev" "man" "doc" ] ++ optional withDevdoc "devdoc";
 
@@ -80,12 +83,12 @@ stdenv.mkDerivation {
       "--disable-kernel-module"
       "--disable-fuse-client"
       "--with-docbook-stylesheets=${docbook_xsl}/share/xml/docbook-xsl"
-      ${optionalString (tsmbac != null) "--enable-tivoli-tsm"}
-      ${optionalString (ncurses == null) "--disable-gtx"}
+      ${optionalString withTsm "--enable-tivoli-tsm"}
+      ${optionalString withNcurses "--disable-gtx"}
       "--disable-linux-d_splice-alias-extra-iput"
     )
-  '' + optionalString (tsmbac != null) ''
-    export XBSA_CFLAGS="-Dxbsa -DNEW_XBSA -I${tsmbac}/lib64/sample -DXBSA_TSMLIB=\\\"${tsmbac}/lib64/libApiTSM64.so\\\""
+  '' + optionalString withTsm ''
+    export XBSA_CFLAGS="-Dxbsa -DNEW_XBSA -I${tsm-client}/lib64/sample -DXBSA_TSMLIB=\\\"${tsm-client}/lib64/libApiTSM64.so\\\""
     export XBSA_XLIBS="-ldl"
   '';
 

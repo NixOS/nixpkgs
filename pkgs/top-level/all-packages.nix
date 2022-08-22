@@ -22876,9 +22876,7 @@ with pkgs;
 
   openbgpd = callPackage ../servers/openbgpd { };
 
-  openafs_1_8 = callPackage ../servers/openafs/1.8 { tsmbac = null; ncurses = null; };
-  # Current stable release; don't backport release updates!
-  openafs = openafs_1_8;
+  openafs = callPackage ../servers/openafs/1.8 { };
 
   openresty = callPackage ../servers/http/openresty {
     withPerl = false;
