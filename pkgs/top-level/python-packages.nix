@@ -3281,6 +3281,8 @@ in {
 
   flask-babelex = callPackage ../development/python-modules/flask-babelex { };
 
+  flask-basicauth = callPackage ../development/python-modules/flask-basicauth { };
+
   flask-bcrypt = callPackage ../development/python-modules/flask-bcrypt { };
 
   flask-bootstrap = callPackage ../development/python-modules/flask-bootstrap { };
@@ -5654,6 +5656,7 @@ in {
   mkdocs-material-extensions = callPackage ../development/python-modules/mkdocs-material/mkdocs-material-extensions.nix { };
   mkdocs-minify = callPackage ../development/python-modules/mkdocs-minify { };
   mkdocs-redirects = callPackage ../development/python-modules/mkdocs-redirects { };
+  mkdocs-swagger-ui-tag = callPackage ../development/python-modules/mkdocs-swagger-ui-tag { };
 
   mkdocstrings = callPackage ../development/python-modules/mkdocstrings { };
 

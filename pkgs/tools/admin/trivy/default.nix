@@ -13,7 +13,9 @@ buildGoModule rec {
     rev = "v${version}";
     sha256 = "sha256-4QNnZHFPyAAQOGRKse4cCc34FgMpelHj+MFTuHLUodE=";
   };
-  vendorSha256 = "sha256-IO8QOUKTHXeinOW1Wrg2gl2z0u1/TCcPOHmX0G3ONrc=";
+  # hash missmatch on across linux and darwin
+  proxyVendor = true;
+  vendorSha256 = "sha256-Kc7M0wetqAfjoosUYW7v0ZLJ7bb/4z6gG6G83D072Dc=";
 
   excludedPackages = "misc";
 
