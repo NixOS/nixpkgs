@@ -15,13 +15,13 @@ stdenv.mkDerivation rec {
   # versions. See
   #  * https://github.com/NixOS/nixpkgs/pull/119838#issuecomment-822100428
   #  * https://github.com/NixOS/nixpkgs/commit/0ee02a9d42b5fe1825b0f7cee7a9986bb4ba975d
-  version = "2.28.0"; # nixpkgs-update: no auto update
+  version = "3.2.1"; # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "ARMmbed";
     repo = "mbedtls";
     rev = "${pname}-${version}";
-    sha256 = "sha256-VDoIUBaK2e0E5nkwU1u3Wvxc+s6OzBSdIeHsJKJuZ2g=";
+    sha256 = "sha256-+M36NvFe4gw2PRbld/2JV3yBGrqK6soWcmrSEkUNcrc=";
   };
 
   nativeBuildInputs = [ cmake ninja perl python3 ];
