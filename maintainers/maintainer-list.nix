@@ -1186,6 +1186,15 @@
     githubId = 12923;
     name = "Astro";
   };
+  astrobeastie = {
+    email = "fischervincent98@gmail.com";
+    github = "astrobeastie";
+    githubId = 26362368;
+    name = "Vincent Fischer";
+    keys = [{
+      fingerprint = "BF47 81E1 F304 1ADF 18CE  C401 DE16 C7D1 536D A72F";
+    }];
+  };
   astsmtl = {
     email = "astsmtl@yandex.ru";
     github = "astsmtl";
