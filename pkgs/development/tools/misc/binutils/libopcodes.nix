@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   outputs = [ "out" "dev" ];
 
   patches = binutils-unwrapped.patches ++ [
-    ../../tools/misc/binutils/build-components-separately.patch
+    ./build-components-separately.patch
   ];
 
   # We just want to build libopcodes
