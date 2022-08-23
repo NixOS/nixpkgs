@@ -9326,6 +9326,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  onetun = callPackage ../tools/networking/onetun { };
+
   opencorsairlink = callPackage ../tools/misc/opencorsairlink { };
 
   openfpgaloader = callPackage ../development/embedded/fpga/openfpgaloader { };
@@ -9358,6 +9360,8 @@ with pkgs;
   ofono-phonesim = libsForQt5.callPackage ../development/tools/ofono-phonesim { };
 
   ogdf = callPackage ../development/libraries/ogdf { };
+
+  oh-my-posh = callPackage ../development/tools/oh-my-posh {};
 
   oh-my-zsh = callPackage ../shells/zsh/oh-my-zsh { };
 
@@ -9866,6 +9870,8 @@ with pkgs;
   platinum-searcher = callPackage ../tools/text/platinum-searcher { };
 
   playbar2 = libsForQt5.callPackage ../applications/audio/playbar2 { };
+
+  plecost = callPackage ../tools/security/plecost { };
 
   plujain-ramp = callPackage ../applications/audio/plujain-ramp { };
 
@@ -36613,6 +36619,8 @@ with pkgs;
   xsos = callPackage ../os-specific/linux/xsos { };
 
   xmcp = callPackage ../tools/X11/xmcp { };
+
+  ymuse = callPackage ../applications/audio/ymuse { };
 
   zk = callPackage ../applications/office/zk {};
 
