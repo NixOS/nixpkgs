@@ -19,6 +19,7 @@ let
         src = oldAttrs.src.override {
           inherit version;
           hash = "sha256-yKhbKNN3zHc35G4tnytPRO48Dh3qxr9G3e/HGH0weXo=";
+          sha256 = "";
         };
 
         SETUPTOOLS_SCM_PRETEND_VERSION = version;
