@@ -20452,6 +20452,8 @@ with pkgs;
 
   nlohmann_json = callPackage ../development/libraries/nlohmann_json { };
 
+  nng = callPackage ../development/libraries/nng { };
+
   nntp-proxy = callPackage ../applications/networking/nntp-proxy { };
 
   non = callPackage ../applications/audio/non { stdenv = gcc10StdenvCompat; };
