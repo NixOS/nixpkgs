@@ -185,6 +185,10 @@ stdenv.mkDerivation rec {
     # argument if it's found to be an empty string.
     ../trim-last-argument-to-gcc-if-empty.patch
 
+    # `java_proto_library` ignores `strict_proto_deps`
+    # https://github.com/bazelbuild/bazel/pull/16146
+    ./strict_proto_deps.patch
+
     # On Darwin, using clang 6 to build fails because of a linker error (see #105573),
     # but using clang 7 fails because libarclite_macosx.a cannot be found when linking
     # the xcode_locator tool.
@@ -218,7 +222,7 @@ stdenv.mkDerivation rec {
       src = ../bazel_rc.patch;
       bazelSystemBazelRCPath = bazelRC;
     })
-  ] ++ lib.optional enableNixHacks ../nix-hacks.patch;
+  ] ++ lib.optional enableNixHacks ./nix-hacks.patch;
 
 
   # Additional tests that check bazel’s functionality. Execute
@@ -472,6 +476,8 @@ stdenv.mkDerivation rec {
       build --verbose_failures
       build --curses=no
       build --features=-layering_check
+      build --experimental_strict_java_deps=off
+      build --strict_proto_deps=off
       EOF
 
       cat >> third_party/grpc/bazel_1.41.0.patch <<EOF
@@ -501,6 +507,8 @@ stdenv.mkDerivation rec {
           -e "/\$command \\\\$/a --verbose_failures \\\\" \
           -e "/\$command \\\\$/a --curses=no \\\\" \
           -e "/\$command \\\\$/a --features=-layering_check \\\\" \
+          -e "/\$command \\\\$/a --experimental_strict_java_deps=off \\\\" \
+          -e "/\$command \\\\$/a --strict_proto_deps=off \\\\" \
           -i scripts/bootstrap/compile.sh
 
       # This is necessary to avoid:
@@ -575,7 +583,7 @@ stdenv.mkDerivation rec {
     cd ./bazel_src
     # build execlog tooling
     export HOME=$(mktemp -d)
-    ./output/bazel build  src/tools/execlog:parser_deploy.jar
+    ./output/bazel build src/tools/execlog:parser_deploy.jar
     cd -
 
     runHook postBuild
