@@ -74,6 +74,7 @@ in runCommand podman.name {
   ln -s ${podman-unwrapped}/lib $out/lib
   ln -s ${podman-unwrapped}/share $out/share
   makeWrapper ${podman-unwrapped}/bin/podman $out/bin/podman \
+    --argv0 $out/bin/podman \
     --set CONTAINERS_HELPER_BINARY_DIR ${helpersBin}/bin \
     --prefix PATH : ${lib.escapeShellArg binPath}
 ''
