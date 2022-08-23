@@ -4,6 +4,9 @@
 , python
 , stdenv
 
+# Native build inputs
+, patchelf
+
 # Propagated build inputs
 , portalocker
 , pytorch
@@ -31,12 +34,26 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7" || pythonAtLeast "3.11";
 
+  nativeBuildInputs = [
+    patchelf
+  ];
+
   propagatedBuildInputs = [
     pytorch
     requests
     portalocker
     urllib3
   ];
+
+  postFixup = let
+    rpath = lib.makeLibraryPath [ zlib ];
+  in ''
+    find $out/${python.sitePackages}/torchdata -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
+      echo "setting rpath for $lib..."
+      patchelf --set-rpath "${rpath}:$out/${python.sitePackages}/torch/lib" "$lib"
+    done
+  '';
+
 
   pythonImportsCheck = [ "torchdata" ];
 
