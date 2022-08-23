@@ -1,38 +1,51 @@
 { lib
 , buildPythonPackage
-, python-dateutil
-, pytz
 , cryptography
-, pytest
-, pytestCheckHook
 , fetchFromGitHub
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, pytz
+, ujson
 }:
 
 buildPythonPackage rec {
   pname = "ripe-atlas-sagan";
   version = "1.3.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "RIPE-NCC";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-xIBIKsQvDmVBa/C8/7Wr3WKeepHaGhoXlgatXSUtWLA=";
+    hash = "sha256-xIBIKsQvDmVBa/C8/7Wr3WKeepHaGhoXlgatXSUtWLA=";
   };
 
   propagatedBuildInputs = [
+    cryptography
     python-dateutil
     pytz
-    cryptography
   ];
+
+  passthru.optional-dependencies = {
+    fast = [
+      ujson
+    ];
+  };
 
   checkInputs = [
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/*.py" ];
+  pytestFlagsArray = [
+    "tests/*.py"
+  ];
 
   disabledTests = [
-    "test_invalid_country_code"  # This test fail for unknown reason, I suspect it to be flaky.
+    # This test fail for unknown reason, I suspect it to be flaky.
+    "test_invalid_country_code"
   ];
 
   pythonImportsCheck = [
