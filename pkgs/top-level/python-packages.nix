@@ -6500,6 +6500,8 @@ in {
 
   paramz = callPackage ../development/python-modules/paramz { };
 
+  paranoid-crypto = callPackage ../development/python-modules/paranoid-crypto { };
+
   parfive = callPackage ../development/python-modules/parfive { };
 
   parquet = callPackage ../development/python-modules/parquet { };
