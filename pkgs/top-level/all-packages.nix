@@ -36618,6 +36618,8 @@ with pkgs;
 
   xmcp = callPackage ../tools/X11/xmcp { };
 
+  ymuse = callPackage ../applications/audio/ymuse { };
+
   zk = callPackage ../applications/office/zk {};
 
   zktree = callPackage ../applications/misc/zktree {};
