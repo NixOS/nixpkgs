@@ -2,7 +2,7 @@
 , buildPythonApplication, pycairo, pygobject3
 , gobject-introspection, gtk3, librsvg
 , alsa-utils, timidity, mpg123, vorbis-tools, csound, lilypond
-, automake, autoconf
+, automake, autoconf, txt2man
 }:
 
 buildPythonApplication rec {
@@ -33,6 +33,7 @@ buildPythonApplication rec {
     gettext
     pkg-config
     texinfo
+    txt2man
 
     # https://github.com/NixOS/nixpkgs/issues/56943#issuecomment-1131643663
     gobject-introspection
