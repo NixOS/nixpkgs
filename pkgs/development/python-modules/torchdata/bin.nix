@@ -46,7 +46,7 @@ buildPythonPackage rec {
   ];
 
   postFixup = let
-    rpath = lib.makeLibraryPath [ zlib ];
+    rpath = lib.makeLibraryPath [ stdenv.cc.cc.lib zlib ];
   in ''
     find $out/${python.sitePackages}/torchdata -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
       echo "setting rpath for $lib..."
