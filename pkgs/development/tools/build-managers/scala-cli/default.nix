@@ -53,7 +53,9 @@ stdenv.mkDerivation {
   '' + ''
     # hack to ensure the completion function looks right
     # as $0 is used to generate the compdef directive
-    PATH="$out/bin:$PATH"
+    mkdir temp
+    cp $out/bin/.scala-cli-wrapped temp/scala-cli
+    PATH="./temp:$PATH"
 
     installShellCompletion --cmd scala-cli \
       --bash <(scala-cli completions bash) \
