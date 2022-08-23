@@ -11216,6 +11216,8 @@ with pkgs;
 
   svtplay-dl = callPackage ../tools/misc/svtplay-dl { };
 
+  surrealdb = callPackage ../servers/nosql/surrealdb { };
+
   sycl-info = callPackage ../development/libraries/sycl-info { };
 
   symengine = callPackage ../development/libraries/symengine { };
