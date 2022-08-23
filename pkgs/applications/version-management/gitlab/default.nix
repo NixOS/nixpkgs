@@ -136,6 +136,9 @@ stdenv.mkDerivation {
   patches = [
     # Change hardcoded paths to the NixOS equivalent
     ./remove-hardcoded-locations.patch
+
+    # Bump pg to 1.4.3 (see https://github.com/NixOS/nixpkgs/pull/187946)
+    ./update-pg.patch
   ];
 
   postPatch = ''
