@@ -71,7 +71,7 @@ in buildFHSUserEnv rec {
     EXECUTABLES="${lib.concatStringsSep " " (quartusExecutables ++ qsysExecutables ++ modelsimExecutables)}"
     for executable in $EXECUTABLES; do
         echo "#!${stdenv.shell}" >> $out/$executable
-        echo "$WRAPPER ${unwrapped}/$executable \$@" >> $out/$executable
+        echo "$WRAPPER ${unwrapped}/$executable \"\$@\"" >> $out/$executable
     done
 
     cd $out
@@ -81,6 +81,6 @@ in buildFHSUserEnv rec {
   '';
 
   runScript = writeScript "${name}-wrapper" ''
-    exec $@
+    exec "$@"
   '';
 }
