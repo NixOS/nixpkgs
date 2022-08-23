@@ -50,7 +50,7 @@ let
   inherit (cudaPackages) cudatoolkit cudnn nccl;
 
   pname = "jaxlib";
-  version = "0.3.0";
+  version = "0.3.15";
 
   meta = with lib; {
     description = "JAX is Autograd and XLA, brought together for high-performance machine learning research.";
@@ -228,7 +228,7 @@ let
         if cudaSupport then
           "sha256-Ald+vplRx/DDG/7TfHAqD4Gktb1BGnf7FSCCJzSI0eo="
         else
-          "sha256-eK5IjTAncDarkWYKnXrEo7kw7J7iOH7in2L2GabnFYo=";
+          "sha256-6acSbBNcUBw177HMVOmpV7pUfP1aFSe5cP6/zWFdGFo=";
     };
 
     buildAttrs = {
