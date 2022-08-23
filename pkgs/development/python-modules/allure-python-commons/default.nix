@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "allure-python-commons";
   version = "2.10.0";
 
-  disabled = pythonOlder "3.4";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
