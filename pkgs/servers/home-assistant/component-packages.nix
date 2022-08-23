@@ -2719,7 +2719,8 @@
       tailscale
     ];
     "tank_utility" = ps: with ps; [
-    ]; # missing inputs: tank_utility
+      tank-utility
+    ];
     "tankerkoenig" = ps: with ps; [
       pytankerkoenig
     ];
