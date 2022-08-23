@@ -6,22 +6,24 @@
 , which
 , makeWrapper
 , libao
-, libbencodetools
+, bencodetools
 , sox
 , lame
 , flac
 , vorbis-tools
+# https://gitlab.com/uade-music-player/uade/-/issues/38
+, withWriteAudio ? !stdenv.hostPlatform.isDarwin
 }:
 
 stdenv.mkDerivation rec {
-  pname = "uade123";
-  version = "3.01";
+  pname = "uade";
+  version = "3.02";
 
   src = fetchFromGitLab {
     owner = "uade-music-player";
     repo = "uade";
     rev = "uade-${version}";
-    sha256 = "0fam3g8mlzrirrac3iwcwsz9jmsqwdy7lkwwdr2q4pkq9cpmh8m5";
+    sha256 = "sha256-skPEXBQwyr326zCmZ2jwGxcBoTt3Y/h2hagDeeqbMpw=";
   };
 
   postPatch = ''
@@ -31,30 +33,41 @@ stdenv.mkDerivation rec {
     substituteInPlace src/frontends/mod2ogg/mod2ogg2.sh.in \
       --replace '-e stat' '-n stat' \
       --replace '/usr/local' "$out"
+    substituteInPlace python/uade/generate_oscilloscope_view.py \
+      --replace "default='uade123'" "default='$out/bin/uade123'"
+    # https://gitlab.com/uade-music-player/uade/-/issues/37
+    substituteInPlace write_audio/Makefile.in \
+      --replace 'g++' '${stdenv.cc.targetPrefix}c++'
   '';
 
   nativeBuildInputs = [
     pkg-config
     which
     makeWrapper
+  ] ++ lib.optionals withWriteAudio [
     python3
   ];
 
   buildInputs = [
     libao
-    libbencodetools
+    bencodetools
     sox
     lame
     flac
     vorbis-tools
+  ] ++ lib.optionals withWriteAudio [
     (python3.withPackages (p: with p; [
       pillow
       tqdm
+      more-itertools
     ]))
   ];
 
   configureFlags = [
-    "--bencode-tools-prefix=${libbencodetools}"
+    "--bencode-tools-prefix=${bencodetools}"
+    "--with-text-scope"
+  ] ++ lib.optionals (!withWriteAudio) [
+    "--without-write-audio"
   ];
 
   enableParallelBuilding = true;
@@ -66,6 +79,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : $out/bin:${lib.makeBinPath [ sox lame flac vorbis-tools ]}
     # This is an old script, don't break expectations by renaming it
     ln -s $out/bin/mod2ogg2{.sh,}
+  '' + lib.optionalString withWriteAudio ''
     wrapProgram $out/bin/generate_amiga_oscilloscope_view \
       --prefix PYTHONPATH : "$PYTHONPATH:$out/${python3.sitePackages}"
   '';
@@ -79,6 +93,7 @@ stdenv.mkDerivation rec {
     # Let's make it easy and flag the whole package as unfree.
     license = licenses.unfree;
     maintainers = with maintainers; [ OPNA2608 ];
+    mainProgram = "uade123";
     platforms = platforms.unix;
   };
 }

@@ -17348,6 +17348,8 @@ with pkgs;
 
   belr = callPackage ../development/libraries/belr { };
 
+  bencodetools = callPackage ../development/libraries/bencodetools { };
+
   beignet = callPackage ../development/libraries/beignet {
     inherit (llvmPackages_6) libllvm libclang;
   };
@@ -18943,8 +18945,6 @@ with pkgs;
   libbass_fx = (callPackage ../development/libraries/audio/libbass { }).bass_fx;
 
   libbde = callPackage ../development/libraries/libbde { };
-
-  libbencodetools = callPackage ../development/libraries/libbencodetools { };
 
   libbdplus = callPackage ../development/libraries/libbdplus { };
 
@@ -30478,7 +30478,7 @@ with pkgs;
     inherit (gnome) zenity;
   };
 
-  uade123 = callPackage ../applications/audio/uade123 {};
+  uade = callPackage ../applications/audio/uade {};
 
   udevil = callPackage ../applications/misc/udevil {};
 
