@@ -29,5 +29,6 @@ buildPythonPackage rec {
     description = "Markdown to reStructuredText converter";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
+    broken = versionAtLeast mistune.version "2";
   };
 }

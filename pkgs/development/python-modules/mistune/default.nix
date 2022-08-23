@@ -11,5 +11,5 @@ self: rec {
     sha256 = "sha256-nuCmYFPiJnq6dyxx4GiR+o8a9tSwHV6E4me0Vw1NmAg=";
     format = "pyproject";
   };
-  mistune = mistune_0_8;
+  mistune = mistune_2_0;
 }

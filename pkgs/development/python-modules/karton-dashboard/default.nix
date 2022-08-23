@@ -43,5 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/CERT-Polska/karton-dashboard";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
+    broken = versionAtLeast mistune.version "2";
   };
 }

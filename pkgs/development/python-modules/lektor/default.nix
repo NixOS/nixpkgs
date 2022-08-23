@@ -79,5 +79,6 @@ buildPythonPackage rec {
     homepage = "https://www.getlektor.com/";
     license = licenses.bsd0;
     maintainers = with maintainers; [ costrouc ];
+    broken = true;
   };
 }

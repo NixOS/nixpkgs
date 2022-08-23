@@ -53,5 +53,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/common-workflow-language/schema_salad";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ veprbl ];
+    broken = true;
   };
 }
