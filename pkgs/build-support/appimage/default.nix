@@ -156,11 +156,13 @@ rec {
       wayland
       mesa
       libxkbcommon
+      vulkan-loader
 
       flac
       freeglut
       libjpeg
       libpng12
+      libpulseaudio
       libsamplerate
       libmikmod
       libtheora
