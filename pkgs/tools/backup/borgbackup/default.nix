@@ -8,6 +8,7 @@
 , openssl
 , python3
 , zstd
+, installShellFiles
 , nixosTests
 }:
 
@@ -30,9 +31,13 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = with python3.pkgs; [
     cython
     setuptools-scm
-    # For building documentation:
+
+    # docs
     sphinx
     guzzle_sphinx_theme
+
+    # shell completions
+    installShellFiles
   ];
 
   buildInputs = [
@@ -70,14 +75,10 @@ python3.pkgs.buildPythonApplication rec {
     mkdir -p $out/share/man
     cp -R docs/_build/man $out/share/man/man1
 
-    mkdir -p $out/share/bash-completion/completions
-    cp scripts/shell_completions/bash/borg $out/share/bash-completion/completions/
-
-    mkdir -p $out/share/fish/vendor_completions.d
-    cp scripts/shell_completions/fish/borg.fish $out/share/fish/vendor_completions.d/
-
-    mkdir -p $out/share/zsh/site-functions
-    cp scripts/shell_completions/zsh/_borg $out/share/zsh/site-functions/
+    installShellCompletion --cmd borg \
+      --bash scripts/shell_completions/bash/borg \
+      --fish scripts/shell_completions/fish/borg.fish \
+      --zsh scripts/shell_completions/zsh/_borg
   '';
 
   checkInputs = with python3.pkgs; [
