@@ -15060,4 +15060,10 @@
     github = "yisuidenghua";
     githubId = 102890144;
   };
+  Ob11stan = {
+    email = "tristan@tic.sh";
+    name = "Tristan Pinaudeau";
+    github = "0b11stan";
+    githubId = 27831931;
+  };
 }
