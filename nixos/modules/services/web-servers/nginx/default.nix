@@ -187,22 +187,15 @@ let
         brotli_buffers 32 8k;
       ''}
 
+      # https://docs.nginx.com/nginx/admin-guide/web-server/compression/
       ${optionalString cfg.recommendedGzipSettings ''
         gzip on;
-        gzip_proxied any;
-        gzip_comp_level 5;
-        gzip_types
-          application/atom+xml
-          application/javascript
-          application/json
-          application/xml
-          application/xml+rss
-          image/svg+xml
-          text/css
-          text/javascript
-          text/plain
-          text/xml;
+        gzip_static on;
         gzip_vary on;
+        gzip_comp_level 5;
+        gzip_min_length 256;
+        gzip_proxied expired no-cache no-store private auth;
+        gzip_types ${lib.concatStringsSep " " compressMimeTypes};
       ''}
 
       ${optionalString cfg.recommendedProxySettings ''
