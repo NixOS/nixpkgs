@@ -5150,6 +5150,14 @@ with pkgs;
     inherit (xorg) libXaw;
   };
 
+  netbird = callPackage ../tools/networking/netbird {
+    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa IOKit Kernel UserNotifications WebKit;
+  };
+
+  netbird-ui = netbird.override {
+    ui = true;
+  };
+
   netevent = callPackage ../tools/inputmethods/netevent { };
 
   netplan = callPackage ../tools/admin/netplan { };
@@ -20371,6 +20379,8 @@ with pkgs;
 
   movit = callPackage ../development/libraries/movit { };
 
+  moserial = callPackage ../tools/misc/moserial { };
+
   mosquitto = callPackage ../servers/mqtt/mosquitto { };
 
   mps = callPackage ../development/libraries/mps { stdenv = gcc10StdenvCompat; };
@@ -20492,6 +20502,8 @@ with pkgs;
   nikto = callPackage ../tools/networking/nikto { };
 
   nlohmann_json = callPackage ../development/libraries/nlohmann_json { };
+
+  nng = callPackage ../development/libraries/nng { };
 
   nntp-proxy = callPackage ../applications/networking/nntp-proxy { };
 

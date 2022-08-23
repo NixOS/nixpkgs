@@ -1,18 +1,19 @@
 {
-  "version": "15.2.2",
-  "repo_hash": "sha256-Rb6u47Ehx1Kee3FFsoFa6ZqpU7c00ToEelvfjyG3aiI=",
-  "yarn_hash": "154akdngdagwfn8s90aw6sajw058i507shv5wzdn8l0vy3badgkv",
+  "version": "15.3.1",
+  "repo_hash": "sha256-WSo1yh/stYzbNWS1XOO4wf4Jg4vvfGn3ugje1kMTtiA=",
+  "yarn_hash": "1cmz4815vfrgnh6khnx1hi0nnkz5xcrx8cqd9dxyd66pzwlyllx0",
   "owner": "gitlab-org",
   "repo": "gitlab",
-  "rev": "v15.2.2-ee",
+  "rev": "v15.3.1-ee",
   "passthru": {
-    "GITALY_SERVER_VERSION": "15.2.2",
-    "GITLAB_PAGES_VERSION": "1.61.1",
-    "GITLAB_SHELL_VERSION": "14.9.0",
-    "GITLAB_WORKHORSE_VERSION": "15.2.2"
+    "GITALY_SERVER_VERSION": "15.3.1",
+    "GITLAB_PAGES_VERSION": "1.62.0",
+    "GITLAB_SHELL_VERSION": "14.10.0",
+    "GITLAB_WORKHORSE_VERSION": "15.3.1"
   },
   "vendored_gems": [
     "devise-pbkdf2-encryptable",
+    "omniauth-cas3",
     "omniauth-gitlab",
     "omniauth_crowd",
     "mail-smtp_pool",
