@@ -10382,6 +10382,8 @@ with pkgs;
 
   reftools = callPackage ../development/tools/reftools { };
 
+  redwax-tool = callPackage ../tools/security/redwax-tool { };
+
   regpg = callPackage ../tools/security/regpg { };
 
   remote-touchpad = callPackage ../tools/inputmethods/remote-touchpad { };
