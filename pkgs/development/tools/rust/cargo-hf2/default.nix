@@ -5,6 +5,7 @@
 , libusb1
 , pkg-config
 , rustfmt
+, AppKit
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,7 +26,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-5aTqiJ23XuY9MNIt3lVMIJ+33BZkcS02HbctIJrnEfo=";
 
   nativeBuildInputs = [ pkg-config rustfmt ];
-  buildInputs = [ libusb1 ];
+
+  buildInputs = [ libusb1 ] ++ lib.optionals stdenv.isDarwin [ AppKit ];
 
   meta = with lib; {
     description = "Cargo Subcommand for Microsoft HID Flashing Library for UF2 Bootloaders ";

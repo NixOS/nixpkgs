@@ -14389,7 +14389,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security CoreFoundation;
   };
 
-  cargo-hf2 = callPackage ../development/tools/rust/cargo-hf2 { };
+  cargo-hf2 = callPackage ../development/tools/rust/cargo-hf2 {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
   cargo-inspect = callPackage ../development/tools/rust/cargo-inspect {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
