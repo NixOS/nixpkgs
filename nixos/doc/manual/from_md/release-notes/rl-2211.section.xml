@@ -257,6 +257,11 @@
     <itemizedlist>
       <listitem>
         <para>
+          Nixpkgs now requires Nix 2.3 or newer.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>isCompatible</literal> predicate checking CPU
           compatibility is no longer exposed by the platform sets
           generated using <literal>lib.systems.elaborate</literal>. In
