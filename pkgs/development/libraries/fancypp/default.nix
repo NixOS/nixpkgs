@@ -5,7 +5,7 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "fancypp";
-  version = "2021-04-08";
+  version = "unstable-2021-04-08";
 
   src = fetchFromGitHub {
     owner = "Curve";
