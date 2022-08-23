@@ -160,6 +160,10 @@ let
       ./patches/no-build-timestamps.patch
       # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags:
       ./patches/widevine-79.patch
+      # for declarative extension installation
+      # (search for extensions at CHROMIUM_EXTENSION_DIRECTORY instead of 
+      # /usr/share/chromium/extensions)
+      ./patches/extension-search-path.patch
     ];
 
     postPatch = ''
