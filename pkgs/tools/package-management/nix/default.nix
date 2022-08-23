@@ -53,7 +53,20 @@ in lib.makeExtensible (self: {
 
   nix_2_6 = throw "nixVersions.nix_2_6 has been removed";
 
-  nix_2_7 = throw "nixVersions.nix_2_7 has been removed";
+  nix_2_7 = common {
+    version = "2.7.0";
+    sha256 = "sha256-m8tqCS6uHveDon5GSro5yZor9H+sHeh+v/veF1IGw24=";
+    patches = [
+      # remove when there's a 2.7.1 release
+      # https://github.com/NixOS/nix/pull/6297
+      # https://github.com/NixOS/nix/issues/6243
+      # https://github.com/NixOS/nixpkgs/issues/163374
+      (fetchpatch {
+        url = "https://github.com/NixOS/nix/commit/c9afca59e87afe7d716101e6a75565b4f4b631f7.patch";
+        sha256 = "sha256-xz7QnWVCI12lX1+K/Zr9UpB93b10t1HS9y/5n5FYf8Q=";
+      })
+    ];
+  };
 
   nix_2_8 = common {
     version = "2.8.1";
