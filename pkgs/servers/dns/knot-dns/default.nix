@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl, pkg-config, gnutls, liburcu, lmdb, libcap_ng, libidn2, libunistring
 , systemd, nettle, libedit, zlib, libiconv, libintl, libmaxminddb, libbpf, nghttp2, libmnl
 , autoreconfHook, nixosTests, knot-resolver
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -21,6 +22,11 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
+    (fetchpatch {
+      name = "test-32bit-xdp.patch";
+      url = "https://gitlab.nic.cz/knot/knot-dns/-/commit/325dfeefdfd8a3dd318cfe0ab52cd7efbf839ccd.diff";
+      sha256 = "E5J2Jf4/m5H59Xn6TyATu2gKs3CgShYlMF2Qj1SW1zw=";
+    })
     # Don't try to create directories like /var/lib/knot at build time.
     # They are later created from NixOS itself.
     ./dont-create-run-time-dirs.patch
