@@ -36635,4 +36635,6 @@ with pkgs;
   swift-corelibs-libdispatch = callPackage ../development/libraries/swift-corelibs-libdispatch { };
 
   swaysettings = callPackage ../applications/misc/swaysettings { };
+
+  mdfmt = callPackage ../development/tools/mdfmt { };
 }
