@@ -1,4 +1,4 @@
-{ lib, stdenv, applyPatches, fetchurl, fetchFromGitHub, fetchYarnDeps, nixosTests
+{ lib, stdenv, callPackage, applyPatches, fetchurl, fetchFromGitHub, fetchYarnDeps, nixosTests
 , fixup_yarn_lock, jq, nodejs, yarn
 }:
 let
@@ -107,7 +107,10 @@ in stdenv.mkDerivation rec {
     mv ~/{config,scripts,support,CREDITS.md,FAQ.md,LICENSE,README.md,package.json,tsconfig.json,yarn.lock} $out
   '';
 
-  passthru.tests.peertube = nixosTests.peertube;
+  passthru = {
+    plugins = callPackage ./plugins { };
+    tests.peertube = nixosTests.peertube;
+  };
 
   meta = with lib; {
     description = "A free software to take back control of your videos";

@@ -1,0 +1,17 @@
+diff --git a/dist/server/index.js b/dist/server/index.js
+index 83ebadc..4363015 100644
+--- a/dist/server/index.js
++++ b/dist/server/index.js.patched
+@@ -34,9 +34,10 @@ async function register({ registerHook, registerSetting, peertubeHelpers: { logg
+         perf_hooks_1.performance.clearMarks();
+     });
+     // We consider that one CPU will be required by PeerTube. This will be refined in further versions.
+-    const availableCpus = os_1.default.cpus().length - 1;
++    const nbCpus = os_1.default.cpus().length;
++    const availableCpus = nbCpus === 1 || nbCpus === 0 ? 0 : nbCpus - 1;
+     if (availableCpus <= 0) {
+-        throw new Error(`There won't be enough CPUs available to process the transcription requests.`);
++        logger.error(`There won't be enough CPUs available (${availableCpus}/${nbCpus}) to process the transcription requests.`);
+     }
+     const pool = new TranscriptionWorkerPool_1.TranscriptionWorkerPool(availableCpus, dataPath, logger, transcriptionPerformanceObserver);
+     const videoController = new Controller_1.VideoController(logger, languageModelManager, peerTubeApi, peertubeVideosHelpers, pool);
