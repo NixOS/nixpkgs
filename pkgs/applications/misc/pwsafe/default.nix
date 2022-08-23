@@ -2,19 +2,18 @@
 , cmake, pkg-config, zip, gettext, perl
 , wxGTK30, libXext, libXi, libXt, libXtst, xercesc
 , qrencode, libuuid, libyubikey, yubikey-personalization
-, curl, openssl, file
+, curl, openssl, file, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "pwsafe";
-  version = "1.14.0"; # do NOT update to 3.x Windows releases
-  # nixpkgs-update: no auto update
+  version = "1.15.0"; # do NOT update to 3.x Windows releases
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    hash = "sha256-s3IXe4gTwUOzQslNfWrcN/srrG9Jv02zfkGgiZN3C1s=";
+    hash = "sha256-EyyQHp2MlGgUnikClgvP7I313Bh6H3yVPXel8Z/U6gQ=";
   };
 
   nativeBuildInputs = [
@@ -52,6 +51,12 @@ stdenv.mkDerivation rec {
   '';
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  passthru.updateScript = gitUpdater {
+    inherit pname version;
+    ignoredVersions = "^([^1]|1[^.])"; # ignore anything other than 1.x
+    url = src.gitRepoUrl;
+  };
 
   meta = with lib; {
     description = "A password database utility";
