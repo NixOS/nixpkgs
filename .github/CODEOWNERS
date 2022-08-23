@@ -122,8 +122,6 @@
 
 # Rust
 /pkgs/development/compilers/rust @Mic92 @LnL7 @zowoq
-/pkgs/build-support/rust @zowoq
-/doc/languages-frameworks/rust.section.md @zowoq
 
 # C compilers
 /pkgs/development/compilers/gcc @matthewbauer

@@ -1013,6 +1013,8 @@ let
 
     ocaml-syntax-shims = callPackage ../development/ocaml-modules/ocaml-syntax-shims { };
 
+    ocaml-vdom = callPackage ../development/ocaml-modules/ocaml-vdom { };
+
     syslog = callPackage ../development/ocaml-modules/syslog { };
 
     syslog-message = callPackage ../development/ocaml-modules/syslog-message { };
@@ -1304,6 +1306,8 @@ let
     prof_spacetime = callPackage ../development/ocaml-modules/prof_spacetime { };
 
     progress = callPackage ../development/ocaml-modules/progress { };
+
+    promise_jsoo = callPackage ../development/ocaml-modules/promise_jsoo { };
 
     ptmap = callPackage ../development/ocaml-modules/ptmap { };
 

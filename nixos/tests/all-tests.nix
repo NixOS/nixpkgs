@@ -284,6 +284,7 @@ in {
   libreswan = handleTest ./libreswan.nix {};
   librewolf = handleTest ./firefox.nix { firefoxPackage = pkgs.librewolf; };
   libuiohook = handleTest ./libuiohook.nix {};
+  libvirtd = handleTest ./libvirtd.nix {};
   lidarr = handleTest ./lidarr.nix {};
   lightdm = handleTest ./lightdm.nix {};
   lighttpd = handleTest ./lighttpd.nix {};

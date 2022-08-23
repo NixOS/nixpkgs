@@ -595,6 +595,17 @@ with pkgs;
   dotnet-sdk_3 = dotnetCorePackages.sdk_3_1;
   dotnet-sdk_5 = dotnetCorePackages.sdk_5_0;
   dotnet-sdk_6 = dotnetCorePackages.sdk_6_0;
+  dotnet-sdk_7 = dotnetCorePackages.sdk_7_0;
+
+  dotnet-runtime_3 = dotnetCorePackages.runtime_3_1;
+  dotnet-runtime_5 = dotnetCorePackages.runtime_5_0;
+  dotnet-runtime_6 = dotnetCorePackages.runtime_6_0;
+  dotnet-runtime_7 = dotnetCorePackages.runtime_7_0;
+
+  dotnet-aspnetcore_3 = dotnetCorePackages.aspnetcore_3_1;
+  dotnet-aspnetcore_5 = dotnetCorePackages.aspnetcore_5_0;
+  dotnet-aspnetcore_6 = dotnetCorePackages.aspnetcore_6_0;
+  dotnet-aspnetcore_7 = dotnetCorePackages.aspnetcore_7_0;
 
   dotnet-sdk = dotnetCorePackages.sdk_6_0;
   dotnet-runtime = dotnetCorePackages.runtime_6_0;
@@ -1645,12 +1656,14 @@ with pkgs;
 
   ### APPLICATIONS/EMULATORS/YUZU
 
-  yuzu-mainline = callPackage ../applications/emulators/yuzu {
+  yuzu-mainline = import ../applications/emulators/yuzu {
     branch = "mainline";
+    inherit libsForQt5 fetchFromGitHub fetchurl;
   };
 
-  yuzu-ea = callPackage ../applications/emulators/yuzu {
+  yuzu-early-access = import ../applications/emulators/yuzu {
     branch = "early-access";
+    inherit libsForQt5 fetchFromGitHub fetchurl;
   };
 
   ### APPLICATIONS/EMULATORS/COMMANDERX16
@@ -5892,6 +5905,8 @@ with pkgs;
   vorta = libsForQt5.callPackage ../applications/backup/vorta { };
 
   vowpal-wabbit = callPackage ../applications/science/machine-learning/vowpal-wabbit { };
+
+  vt-cli = callPackage ../tools/security/vt-cli { };
 
   utahfs = callPackage ../applications/networking/utahfs { };
 
@@ -17333,6 +17348,8 @@ with pkgs;
 
   belr = callPackage ../development/libraries/belr { };
 
+  bencodetools = callPackage ../development/libraries/bencodetools { };
+
   beignet = callPackage ../development/libraries/beignet {
     inherit (llvmPackages_6) libllvm libclang;
   };
@@ -18928,8 +18945,6 @@ with pkgs;
   libbass_fx = (callPackage ../development/libraries/audio/libbass { }).bass_fx;
 
   libbde = callPackage ../development/libraries/libbde { };
-
-  libbencodetools = callPackage ../development/libraries/libbencodetools { };
 
   libbdplus = callPackage ../development/libraries/libbdplus { };
 
@@ -22871,6 +22886,8 @@ with pkgs;
   oauth2-proxy = callPackage ../servers/oauth2-proxy { };
 
   onlyoffice-documentserver = callPackage ../servers/onlyoffice-documentserver { };
+
+  outline = callPackage ../servers/web-apps/outline { };
 
   openbgpd = callPackage ../servers/openbgpd { };
 
@@ -30461,7 +30478,7 @@ with pkgs;
     inherit (gnome) zenity;
   };
 
-  uade123 = callPackage ../applications/audio/uade123 {};
+  uade = callPackage ../applications/audio/uade {};
 
   udevil = callPackage ../applications/misc/udevil {};
 

@@ -1,4 +1,4 @@
-{ rustPlatform, fetchFromGitHub, lib }:
+{ rustPlatform, fetchFromGitHub, lib, stdenv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmtime";
@@ -14,7 +14,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-DnThste0SbBdpGAUYhmwbdQFNEB3LozyDf0X8r2A90Q=";
 
-  doCheck = true;
+  # We disable tests on x86_64-darwin because Hydra runners do not
+  # support SSE3, SSSE3, SSE4.1 and SSE4.2 at this time. This is
+  # required by wasmtime. Given this is very specific to Hydra
+  # runners, just disable tests on this platform, so we don't get
+  # false positives of this package being broken due to failed runs on
+  # Hydra (e.g. https://hydra.nixos.org/build/187667794/)
+  doCheck = (stdenv.system != "x86_64-darwin");
   checkFlags = [
     "--skip=cli_tests::run_cwasm"
     "--skip=commands::compile::test::test_unsupported_flags_compile"
