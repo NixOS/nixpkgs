@@ -5150,6 +5150,14 @@ with pkgs;
     inherit (xorg) libXaw;
   };
 
+  netbird = callPackage ../tools/networking/netbird {
+    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa IOKit Kernel UserNotifications WebKit;
+  };
+
+  netbird-ui = netbird.override {
+    ui = true;
+  };
+
   netevent = callPackage ../tools/inputmethods/netevent { };
 
   netplan = callPackage ../tools/admin/netplan { };
