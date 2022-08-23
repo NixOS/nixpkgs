@@ -5,8 +5,11 @@
 , stdenv
 
 # Propagated build inputs
+, portalocker
 , pytorch
 , requests
+, urllib3
+, zlib
 
 # Python version
 , pythonOlder
@@ -31,6 +34,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     pytorch
     requests
+    portalocker
+    urllib3
   ];
 
   pythonImportsCheck = [ "torchdata" ];
