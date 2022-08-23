@@ -2405,9 +2405,9 @@ self: super: {
   # Tests require ghc-9.2.
   ema = dontCheck super.ema;
 
-  glirc = super.glirc.override {
+  glirc = doJailbreak (super.glirc.override {
     vty = self.vty_5_35_1;
-  };
+  });
 
   # 2022-02-25: Unmaintained and to strict upper bounds
   paths = doJailbreak super.paths;
