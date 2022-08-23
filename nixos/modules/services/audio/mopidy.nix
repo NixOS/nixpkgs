@@ -31,7 +31,7 @@ in {
       dataDir = mkOption {
         default = "/var/lib/mopidy";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The directory where Mopidy stores its state.
         '';
       };
@@ -40,7 +40,7 @@ in {
         default = [];
         type = types.listOf types.package;
         example = literalExpression "[ pkgs.mopidy-spotify ]";
-        description = ''
+        description = lib.mdDoc ''
           Mopidy extensions that should be loaded by the service.
         '';
       };
@@ -48,7 +48,7 @@ in {
       configuration = mkOption {
         default = "";
         type = types.lines;
-        description = ''
+        description = lib.mdDoc ''
           The configuration that Mopidy should use.
         '';
       };
@@ -56,7 +56,7 @@ in {
       extraConfigFiles = mkOption {
         default = [];
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           Extra config file read by Mopidy when the service starts.
           Later files in the list overrides earlier configuration.
         '';

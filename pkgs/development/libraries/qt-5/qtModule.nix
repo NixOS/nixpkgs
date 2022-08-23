@@ -14,7 +14,7 @@ in
 
 mkDerivation (args // {
   inherit pname version src;
-  patches = args.patches or patches.${pname} or [];
+  patches = (args.patches or []) ++ (patches.${pname} or []);
 
   nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ perl self.qmake ];
   propagatedBuildInputs = args.qtInputs ++ (args.propagatedBuildInputs or []);
@@ -68,7 +68,7 @@ mkDerivation (args // {
   '';
 
   meta = {
-    homepage = "http://www.qt.io";
+    homepage = "https://www.qt.io";
     description = "A cross-platform application framework for C++";
     license = with licenses; [ fdl13 gpl2 lgpl21 lgpl3 ];
     maintainers = with maintainers; [ qknight ttuegel periklis bkchr ];

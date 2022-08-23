@@ -8,10 +8,11 @@
 , gtk3
 , atk
 , gobject-introspection
-, spidermonkey_78
+, spidermonkey_91
 , pango
 , cairo
 , readline
+, libsysprof-capture
 , glib
 , libxml2
 , dbus
@@ -30,13 +31,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "gjs";
-  version = "1.70.0";
+  version = "1.72.1";
 
   outputs = [ "out" "dev" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gjs/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-SwYpNBoxigI3ThE6uX+anzMlQjJp/B4LBDpf+wGGHF8=";
+    sha256 = "sha256-F8Cx7D8JZnH/i/q6bku/FBmMcBPGBL/Wd6mFjaB5wKs=";
   };
 
   patches = [
@@ -60,7 +61,8 @@ in stdenv.mkDerivation rec {
     gobject-introspection
     cairo
     readline
-    spidermonkey_78
+    libsysprof-capture
+    spidermonkey_91
     dbus # for dbus-run-session
   ];
 
@@ -73,7 +75,6 @@ in stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dprofiler=disabled"
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
   ];
 

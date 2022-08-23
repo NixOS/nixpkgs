@@ -87,8 +87,11 @@ let
       drv = if lib.isFunction fn then fn else import fn;
       auto = builtins.intersectAttrs (lib.functionArgs drv) scope;
 
+      # Converts a returned function to a functor attribute set if necessary
+      ensureAttrs = v: if builtins.isFunction v then { __functor = _: v; } else v;
+
       # this wraps the `drv` function to add a `overrideScope` function to the result.
-      drvScope = allArgs: drv allArgs // {
+      drvScope = allArgs: ensureAttrs (drv allArgs) // {
         overrideScope = f:
           let newScope = mkScope (fix' (extends f scope.__unfix__));
           # note that we have to be careful here: `allArgs` includes the auto-arguments that
@@ -117,29 +120,21 @@ let
   defaultScope = mkScope self;
   callPackage = drv: args: callPackageWithScope defaultScope drv args;
 
-  withPackages = packages: buildPackages.callPackage ./with-packages-wrapper.nix {
-    inherit (self) ghc llvmPackages;
-    inherit packages;
-  };
-
   # Use cabal2nix to create a default.nix for the package sources found at 'src'.
   haskellSrc2nix = { name, src, sha256 ? null, extraCabal2nixOptions ? "" }:
     let
       sha256Arg = if sha256 == null then "--sha256=" else ''--sha256="${sha256}"'';
-    in buildPackages.stdenv.mkDerivation {
-      name = "cabal2nix-${name}";
+    in buildPackages.runCommand "cabal2nix-${name}" {
       nativeBuildInputs = [ buildPackages.cabal2nix-unwrapped ];
       preferLocalBuild = true;
       allowSubstitutes = false;
-      phases = ["installPhase"];
       LANG = "en_US.UTF-8";
       LOCALE_ARCHIVE = pkgs.lib.optionalString (buildPlatform.libc == "glibc") "${buildPackages.glibcLocales}/lib/locale/locale-archive";
-      installPhase = ''
-        export HOME="$TMP"
-        mkdir -p "$out"
-        cabal2nix --compiler=${self.ghc.haskellCompilerName} --system=${hostPlatform.config} ${sha256Arg} "${src}" ${extraCabal2nixOptions} > "$out/default.nix"
-      '';
-  };
+    } ''
+      export HOME="$TMP"
+      mkdir -p "$out"
+      cabal2nix --compiler=${self.ghc.haskellCompilerName} --system=${hostPlatform.config} ${sha256Arg} "${src}" ${extraCabal2nixOptions} > "$out/default.nix"
+    '';
 
   all-cabal-hashes-component = name: version: buildPackages.runCommand "all-cabal-hashes-component-${name}-${version}" {} ''
     tar --wildcards -xzvf ${all-cabal-hashes} \*/${name}/${version}/${name}.{json,cabal}
@@ -266,22 +261,53 @@ in package-set { inherit pkgs lib callPackage; } self // {
            then (modifier drv).envFunc {inherit withHoogle;}
            else modifier drv;
 
-    ghcWithPackages = selectFrom: withPackages (selectFrom self);
+    # This can be used to easily create a derivation containing GHC and the specified set of Haskell packages.
+    #
+    # Example:
+    #   $ nix-shell -p 'haskellPackages.ghcWithPackages (hpkgs: [ hpkgs.mtl hpkgs.lens ])'
+    #   $ ghci    # in the nix-shell
+    #   Prelude > import Control.Lens
+    #
+    # GHC is setup with a package database with all the specified Haskell packages.
+    #
+    # ghcWithPackages :: (HaskellPkgSet -> [ HaskellPkg ]) -> Derivation
+    ghcWithPackages = self.callPackage ./with-packages-wrapper.nix {
+      haskellPackages = self;
+    };
+
 
     # Put 'hoogle' into the derivation's PATH with a database containing all
     # the package's dependencies; run 'hoogle server --local' in a shell to
     # host a search engine for the dependencies.
     #
+    # Example usage:
+    #  $ nix-shell -p 'haskellPackages.hoogleWithPackages (p: [ p.mtl p.lens ])'
+    #  [nix-shell] $ hoogle server
+    #
+    # hoogleWithPackages :: (HaskellPkgSet -> [ HaskellPkg ]) -> Derivation
+    #
     # To reload the Hoogle server automatically on .cabal file changes try
     # this:
     # echo *.cabal | entr -r -- nix-shell --run 'hoogle server --local'
-    ghcWithHoogle = selectFrom:
-      let
-        packages = selectFrom self;
-        hoogle = callPackage ./hoogle.nix {
-          inherit packages;
-        };
-      in withPackages (packages ++ [ hoogle ]);
+    hoogleWithPackages = self.callPackage ./hoogle.nix {
+      haskellPackages = self;
+    };
+    hoogleLocal =
+      { packages ? [] }:
+      lib.warn "hoogleLocal is deprecated, use hoogleWithPackages instead" (
+        self.hoogleWithPackages (_: packages)
+      );
+    # This is like a combination of ghcWithPackages and hoogleWithPackages.
+    # It provides a derivation containing both GHC and Hoogle with an index of
+    # the given Haskell package database.
+    #
+    # Example:
+    #   $ nix-shell -p 'haskellPackages.ghcWithHoogle (hpkgs: [ hpkgs.conduit hpkgs.lens ])'
+    #
+    # ghcWithHoogle :: (HaskellPkgSet -> [ HaskellPkg ]) -> Derivation
+    ghcWithHoogle = self.ghcWithPackages.override {
+      withHoogle = true;
+    };
 
     # Returns a derivation whose environment contains a GHC with only
     # the dependencies of packages listed in `packages`, not the
@@ -358,6 +384,18 @@ in package-set { inherit pkgs lib callPackage; } self // {
         # for the "shellFor" environment (ensuring that any test/benchmark
         # dependencies for "foo" will be available within the nix-shell).
       , genericBuilderArgsModifier ? (args: args)
+
+        # Extra dependencies, in the form of cabal2nix build attributes.
+        #
+        # An example use case is when you have Haskell scripts that use
+        # libraries that don't occur in your packages' dependencies.
+        #
+        # Example:
+        #
+        #   extraDependencies = p: {
+        #     libraryHaskellDepends = [ p.releaser ];
+        #   };
+      , extraDependencies ? p: {}
       , ...
       } @ args:
       let
@@ -448,7 +486,7 @@ in package-set { inherit pkgs lib callPackage; } self // {
         # See the Note in `zipperCombinedPkgs` for what gets filtered out from
         # each of these dependency lists.
         packageInputs =
-          pkgs.lib.zipAttrsWith (_name: zipperCombinedPkgs) cabalDepsForSelected;
+          pkgs.lib.zipAttrsWith (_name: zipperCombinedPkgs) (cabalDepsForSelected ++ [ (extraDependencies self) ]);
 
         # A attribute set to pass to `haskellPackages.mkDerivation`.
         #
@@ -488,7 +526,7 @@ in package-set { inherit pkgs lib callPackage; } self // {
         # pkgWithCombinedDepsDevDrv :: Derivation
         pkgWithCombinedDepsDevDrv = pkgWithCombinedDeps.envFunc { inherit withHoogle; };
 
-        mkDerivationArgs = builtins.removeAttrs args [ "genericBuilderArgsModifier" "packages" "withHoogle" "doBenchmark" ];
+        mkDerivationArgs = builtins.removeAttrs args [ "genericBuilderArgsModifier" "packages" "withHoogle" "doBenchmark" "extraDependencies" ];
 
       in pkgWithCombinedDepsDevDrv.overrideAttrs (old: mkDerivationArgs // {
         nativeBuildInputs = old.nativeBuildInputs ++ mkDerivationArgs.nativeBuildInputs or [];
@@ -499,5 +537,45 @@ in package-set { inherit pkgs lib callPackage; } self // {
       withPackages = self.ghcWithPackages;
       withHoogle = self.ghcWithHoogle;
     };
+
+    /*
+      Run `cabal sdist` on a source.
+
+      Unlike `haskell.lib.sdistTarball`, this does not require any dependencies
+      to be present, as it uses `cabal-install` instead of building `Setup.hs`.
+      This makes `cabalSdist` faster than `sdistTarball`.
+    */
+    cabalSdist = {
+      src,
+      name ? if src?name then "${src.name}-sdist.tar.gz" else "source.tar.gz"
+    }:
+      pkgs.runCommandLocal name
+        {
+          inherit src;
+          nativeBuildInputs = [ buildHaskellPackages.cabal-install ];
+          dontUnpack = false;
+        } ''
+        unpackPhase
+        cd "''${sourceRoot:-.}"
+        patchPhase
+        mkdir out
+        HOME=$PWD cabal sdist --output-directory out
+        mv out/*.tar.gz $out
+      '';
+
+    /*
+      Like `haskell.lib.buildFromSdist`, but using `cabal sdist` instead of
+      building `./Setup`.
+
+      Unlike `haskell.lib.buildFromSdist`, this does not require any dependencies
+      to be present. This makes `buildFromCabalSdist` faster than `haskell.lib.buildFromSdist`.
+    */
+    buildFromCabalSdist = pkg:
+      haskellLib.overrideSrc
+        {
+          src = self.cabalSdist { inherit (pkg) src; };
+          version = pkg.version;
+        }
+        pkg;
 
   }

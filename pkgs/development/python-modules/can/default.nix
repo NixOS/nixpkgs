@@ -1,39 +1,80 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, pythonOlder
-, aenum
-, wrapt
-, typing ? null
-, pyserial
-, nose
-, mock
-, hypothesis
+, fetchFromGitHub
 , future
-, pytest
- }:
+, hypothesis
+, packaging
+, parameterized
+, msgpack
+, pyserial
+, pytest-timeout
+, pytestCheckHook
+, pythonOlder
+, typing-extensions
+, wrapt
+}:
 
 buildPythonPackage rec {
   pname = "python-can";
-  version = "3.3.4";
+  version = "4.0.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "2d3c223b7adc4dd46ce258d4a33b7e0dbb6c339e002faa40ee4a69d5fdce9449";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "hardbyte";
+    repo = pname;
+    rev = version;
+    hash = "sha256-/z7zBfVbO7x4UtzWOXolH2YrtYWgsvRLObWwz8sqOEc=";
   };
 
-  propagatedBuildInputs = [ wrapt pyserial aenum ] ++ lib.optional (pythonOlder "3.5") typing;
-  checkInputs = [ nose mock pytest hypothesis future ];
+  propagatedBuildInputs = [
+    msgpack
+    packaging
+    pyserial
+    typing-extensions
+    wrapt
+  ];
 
-  # Add the scripts to PATH
-  checkPhase = ''
-    PATH=$out/bin:$PATH pytest -c /dev/null
+  checkInputs = [
+    future
+    hypothesis
+    parameterized
+    pytest-timeout
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace tox.ini \
+      --replace " --cov=can --cov-config=tox.ini --cov-report=xml --cov-report=term" ""
   '';
 
+  disabledTestPaths = [
+    # We don't support all interfaces
+    "test/test_interface_canalystii.py"
+  ];
+
+  disabledTests = [
+    # Tests require access socket
+    "BasicTestUdpMulticastBusIPv4"
+    "BasicTestUdpMulticastBusIPv6"
+    # pytest.approx is not supported in a boolean context (since pytest7)
+    "test_pack_unpack"
+    "test_receive"
+  ];
+
+  preCheck = ''
+    export PATH="$PATH:$out/bin";
+  '';
+
+  pythonImportsCheck = [
+    "can"
+  ];
+
   meta = with lib; {
-    homepage = "https://github.com/hardbyte/python-can";
     description = "CAN support for Python";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ sorki ];
+    homepage = "https://python-can.readthedocs.io";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ fab sorki ];
   };
 }

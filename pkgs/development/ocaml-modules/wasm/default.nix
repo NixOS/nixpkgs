@@ -1,18 +1,18 @@
 { stdenv, lib, fetchFromGitHub, ocaml, findlib, ocamlbuild }:
 
-if !lib.versionAtLeast ocaml.version "4.02"
+if lib.versionOlder ocaml.version "4.08"
 then throw "wasm is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-wasm-${version}";
-  version = "1.1.1";
+  pname = "ocaml${ocaml.version}-wasm";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "spec";
     rev = "opam-${version}";
-    sha256 = "1kp72yv4k176i94np0m09g10cviqp2pnpm7jmiq6ik7fmmbknk7c";
+    sha256 = "sha256:09s0v79x0ymzcp2114zkm3phxavdfnkkq67qz1ndnknbkziwqf3v";
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild ];

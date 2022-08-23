@@ -5,37 +5,41 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "faraday-cli";
-  version = "2.0.2";
-
-  disabled = python3.pythonOlder "3.7";
+  version = "2.1.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1jq8sim0b6k830lv1qzbrd1mx0nc2x1jq24fbama76gzqlb2axi7";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ofL3tRYV2bwF+RYGoLpg/UQPg9HwrCepWAQxXiJkV2E=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
+    arrow
     click
+    cmd2
     colorama
     faraday-plugins
     jsonschema
-    pyyaml
-    simple-rest-client
-    tabulate
-    validators
-    spinners
-    termcolor
-    cmd2
     log-symbols
-    arrow
+    luddite
+    packaging
+    pyyaml
+    py-sneakers
+    simple-rest-client
+    spinners
+    tabulate
+    termcolor
+    validators
   ];
 
   # Tests requires credentials
   doCheck = false;
 
-  pythonImportsCheck = [ "faraday_cli" ];
+  pythonImportsCheck = [
+    "faraday_cli"
+  ];
 
   meta = with lib; {
     description = "Command Line Interface for Faraday";

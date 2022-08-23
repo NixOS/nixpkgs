@@ -1,0 +1,43 @@
+diff --git a/src/tscore/unit_tests/test_History.cc b/src/tscore/unit_tests/test_History.cc
+index 3e699139da0..7505f10aa4c 100644
+--- a/src/tscore/unit_tests/test_History.cc
++++ b/src/tscore/unit_tests/test_History.cc
+@@ -59,10 +59,10 @@ TEST_CASE("History", "[libts][History]")
+   REQUIRE(history[2].reentrancy == static_cast<short>(NO_REENTRANT));
+ 
+   history[0].location.str(buf, sizeof(buf));
+-  REQUIRE(string_view{buf} == "test_History.cc:48 (____C_A_T_C_H____T_E_S_T____0)");
++  REQUIRE(string_view{buf} == "test_History.cc:48 (C_A_T_C_H_T_E_S_T_0)");
+ 
+   history[1].location.str(buf, sizeof(buf));
+-  REQUIRE(string_view{buf} == "test_History.cc:49 (____C_A_T_C_H____T_E_S_T____0)");
++  REQUIRE(string_view{buf} == "test_History.cc:49 (C_A_T_C_H_T_E_S_T_0)");
+ 
+   ts::LocalBufferWriter<128> w;
+   SM<HISTORY_DEFAULT_SIZE> *sm = new SM<HISTORY_DEFAULT_SIZE>;
+@@ -71,10 +71,10 @@ TEST_CASE("History", "[libts][History]")
+   SM_REMEMBER(sm, 3, NO_REENTRANT);
+ 
+   w.print("{}", sm->history[0].location);
+-  REQUIRE(w.view() == "test_History.cc:69 (____C_A_T_C_H____T_E_S_T____0)");
++  REQUIRE(w.view() == "test_History.cc:69 (C_A_T_C_H_T_E_S_T_0)");
+ 
+   w.reset().print("{}", sm->history[1].location);
+-  REQUIRE(w.view() == "test_History.cc:70 (____C_A_T_C_H____T_E_S_T____0)");
++  REQUIRE(w.view() == "test_History.cc:70 (C_A_T_C_H_T_E_S_T_0)");
+ 
+   REQUIRE(sm->history[0].event == 1);
+   REQUIRE(sm->history[0].reentrancy == 1);
+@@ -106,10 +106,10 @@ TEST_CASE("History", "[libts][History]")
+   REQUIRE(sm2->history.overflowed() == true);
+ 
+   w.reset().print("{}", sm2->history[0].location);
+-  REQUIRE(w.view() == "test_History.cc:103 (____C_A_T_C_H____T_E_S_T____0)");
++  REQUIRE(w.view() == "test_History.cc:103 (C_A_T_C_H_T_E_S_T_0)");
+ 
+   w.reset().print("{}", sm2->history[1].location);
+-  REQUIRE(w.view() == "test_History.cc:98 (____C_A_T_C_H____T_E_S_T____0)");
++  REQUIRE(w.view() == "test_History.cc:98 (C_A_T_C_H_T_E_S_T_0)");
+ 
+   sm2->history.clear();
+   REQUIRE(sm2->history.size() == 0);

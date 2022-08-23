@@ -16,7 +16,7 @@ in
       user = mkOption {
         type = types.str;
         default = "nginx";
-        description = ''
+        description = lib.mdDoc ''
           User account under which both the service and the web-application run.
         '';
       };
@@ -24,7 +24,7 @@ in
       group = mkOption {
         type = types.str;
         default = "nginx";
-        description = ''
+        description = lib.mdDoc ''
           Group under which the web-application run.
         '';
       };
@@ -32,7 +32,7 @@ in
       pool = mkOption {
         type = types.str;
         default = poolName;
-        description = ''
+        description = lib.mdDoc ''
           Name of existing phpfpm pool that is used to run web-application.
           If not specified a pool will be created automatically with
           default values.
@@ -42,16 +42,16 @@ in
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/rss-bridge";
-        description = ''
+        description = lib.mdDoc ''
           Location in which cache directory will be created.
-          You can put <literal>config.ini.php</literal> in here.
+          You can put `config.ini.php` in here.
         '';
       };
 
       virtualHost = mkOption {
         type = types.nullOr types.str;
         default = "rss-bridge";
-        description = ''
+        description = lib.mdDoc ''
           Name of the nginx virtualhost to use and setup. If null, do not setup any virtualhost.
         '';
       };
@@ -66,10 +66,10 @@ in
             "Twitter"
           ]
         '';
-        description = ''
+        description = lib.mdDoc ''
           List of bridges to be whitelisted.
           If the list is empty, rss-bridge will use whitelist.default.txt.
-          Use <literal>[ "*" ]</literal> to whitelist all.
+          Use `[ "*" ]` to whitelist all.
         '';
       };
     };
@@ -111,7 +111,7 @@ in
 
           locations."~ ^/index.php(/|$)" = {
             extraConfig = ''
-              include ${pkgs.nginx}/conf/fastcgi_params;
+              include ${config.services.nginx.package}/conf/fastcgi_params;
               fastcgi_split_path_info ^(.+\.php)(/.+)$;
               fastcgi_pass unix:${config.services.phpfpm.pools.${cfg.pool}.socket};
               fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;

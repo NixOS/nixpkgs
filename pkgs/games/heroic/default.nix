@@ -1,16 +1,17 @@
-{ lib, fetchurl, appimageTools, python }:
+{ lib, fetchurl, appimageTools }:
 
 let
   pname = "heroic";
-  version = "1.10.3";
+  version = "2.2.6";
   name = "${pname}-${version}";
   src = fetchurl {
     url = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases/download/v${version}/Heroic-${version}.AppImage";
-    sha256 = "sha256-0VQ5rSGGsEAsOLB4H/Hn2w7wCOrCSoVFzCBqNV5NyVE=";
+    sha256 = "sha256-kL30/G4DpDPwGN7PvbWest7TcgL4Rd1c2OM4nRCT3bg=";
   };
   appimageContents = appimageTools.extractType2 { inherit name src; };
 
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit name src;
 
   extraInstallCommands = ''

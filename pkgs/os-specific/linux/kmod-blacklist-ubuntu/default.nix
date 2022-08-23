@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gnugrep, findutils }:
+{ lib, stdenv, fetchurl }:
 
 let
   version = "28-1ubuntu4"; # impish 2021-06-24
@@ -26,8 +26,8 @@ in stdenv.mkDerivation {
       --replace /sbin/lsmod /run/booted-system/sw/bin/lsmod \
       --replace /sbin/rmmod /run/booted-system/sw/bin/rmmod \
       --replace /sbin/modprobe /run/booted-system/sw/bin/modprobe \
-      --replace " grep " " ${gnugrep}/bin/grep " \
-      --replace " xargs " " ${findutils}/bin/xargs "
+      --replace " grep " " /run/booted-system/sw/bin/grep " \
+      --replace " xargs " " /run/booted-system/sw/bin/xargs "
   '';
 
   meta = with lib; {

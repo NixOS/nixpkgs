@@ -3,7 +3,7 @@ import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... }:
 {
   name = "disable-installer-tools";
 
-  machine =
+  nodes.machine =
     { pkgs, lib, ... }:
     {
         system.disableInstallerTools = true;

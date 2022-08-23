@@ -1,26 +1,25 @@
 { lib
-, buildPythonPackage
-, fetchPypi
 , boto3
 , botocore
+, buildPythonPackage
+, fetchPypi
 , pandas
+, pythonOlder
 , tenacity
 }:
 
 buildPythonPackage rec {
   pname = "pyathena";
-  version = "2.3.2";
+  version = "2.14.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "PyAthena";
     inherit version;
-    sha256 = "20a473c52e76a211c427d2f711af0a04804a70fc036ab884780e42e0dc2025f7";
+    hash = "sha256-1DeqvlHlOt781nObnPdgZo3JqjwcK8lSREXqUNoKhhU=";
   };
-
-  # Nearly all tests depend on a working AWS Athena instance,
-  # therefore deactivating them.
-  # https://github.com/laughingman7743/PyAthena/#testing
-  doCheck = false;
 
   propagatedBuildInputs = [
     boto3
@@ -29,10 +28,19 @@ buildPythonPackage rec {
     tenacity
   ];
 
+  # Nearly all tests depend on a working AWS Athena instance,
+  # therefore deactivating them.
+  # https://github.com/laughingman7743/PyAthena/#testing
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "pyathena"
+  ];
+
   meta = with lib; {
+    description = "Python DB API 2.0 (PEP 249) client for Amazon Athena";
     homepage = "https://github.com/laughingman7743/PyAthena/";
     license = licenses.mit;
-    description = "Python DB API 2.0 (PEP 249) client for Amazon Athena";
     maintainers = with maintainers; [ turion ];
   };
 }

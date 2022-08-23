@@ -1,19 +1,21 @@
 { lib, stdenv
 , substituteAll
 , fetchFromGitHub
+, fetchpatch
 , libpulseaudio
 , python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-sound-output-device-chooser";
-  version = "39";
+  # For gnome 42 support many commits not tagged yet are needed.
+  version = "unstable-2022-03-29";
 
   src = fetchFromGitHub {
     owner = "kgshank";
     repo = "gse-sound-output-device-chooser";
-    rev = version;
-    sha256 = "sha256-RFdBdpKsz2MjdzxWX4UFwah+e68dqrkvm7ql0RAZZwg=";
+    rev = "76f7f59d23f5ffcd66555c7662f43c9cc1ce4742";
+    sha256 = "sha256-iPc95LmDsYizLg45wpU+vFx/N6MR2hewSHqoRsePC/4=";
   };
 
   patches = [

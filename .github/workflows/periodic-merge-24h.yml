@@ -14,8 +14,14 @@ on:
     # Merge every 24 hours
     - cron:  '0 0 * * *'
 
+permissions:
+  contents: read
+
 jobs:
   periodic-merge:
+    permissions:
+      contents: write  # for devmasx/merge-branch to merge branches
+      issues: write  # for peter-evans/create-or-update-comment to create or update comment
     if: github.repository_owner == 'NixOS'
     runs-on: ubuntu-latest
     strategy:
@@ -28,17 +34,13 @@ jobs:
         pairs:
           - from: master
             into: haskell-updates
-          - from: release-21.05
-            into: staging-next-21.05
-          - from: staging-next-21.05
-            into: staging-21.05
-          - from: release-21.11
-            into: staging-next-21.11
-          - from: staging-next-21.11
-            into: staging-21.11
+          - from: release-22.05
+            into: staging-next-22.05
+          - from: staging-next-22.05
+            into: staging-22.05
     name: ${{ matrix.pairs.from }} → ${{ matrix.pairs.into }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: ${{ matrix.pairs.from }} → ${{ matrix.pairs.into }}
         uses: devmasx/merge-branch@1.4.0
@@ -49,7 +51,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Comment on failure
-        uses: peter-evans/create-or-update-comment@v1
+        uses: peter-evans/create-or-update-comment@v2
         if: ${{ failure() }}
         with:
           issue-number: 105153

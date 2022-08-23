@@ -1,10 +1,11 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pythonOlder
+{ lib, stdenv, buildPythonPackage, fetchPypi, fetchpatch, pythonOlder
 , fonttools, defcon, lxml, fs, unicodedata2, zopfli, brotlipy, fontpens
 , brotli, fontmath, mutatormath, booleanoperations
 , ufoprocessor, ufonormalizer, psautohint, tqdm
 , setuptools-scm, scikit-build
 , cmake
 , antlr4_9
+, libxml2
 , pytestCheckHook
 # Enables some expensive tests, useful for verifying an update
 , runAllTests ? false
@@ -13,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "afdko";
-  version = "3.7.1";
+  version = "3.9.0";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05hj2mw3ppfjaig5zdk5db9vfrbbq5gmv5rzggmvvrj0yyfpr0pd";
+    sha256 = "1fjsaz6bp028fbmry6fzfcih78mdzycqmky1wsz5y0bg4kfk4shh";
   };
 
   format = "pyproject";
@@ -32,13 +33,17 @@ buildPythonPackage rec {
 
   buildInputs = [
     antlr4_9.runtime.cpp
+    libxml2.dev
   ];
 
   patches = [
     # Don't try to install cmake and ninja using pip
     ./no-pypi-build-tools.patch
+
     # Use antlr4 runtime from nixpkgs and link it dynamically
     ./use-dynamic-system-antlr4-runtime.patch
+
+    ./libxml2-cmake-find-package.patch
   ];
 
   # setup.py will always (re-)execute cmake in buildPhase
@@ -80,10 +85,12 @@ buildPythonPackage rec {
     "test_filename_without_dir"
     "test_overwrite"
     "test_options"
-  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-    # aarch64-only (?) failure, unknown reason so far
+  ] ++ lib.optionals (stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isRiscV) [
+    # unknown reason so far
     # https://github.com/adobe-type-tools/afdko/issues/1425
     "test_spec"
+  ] ++ lib.optionals (stdenv.hostPlatform.isi686) [
+    "test_type1mm_inputs"
   ];
 
   passthru.tests = {

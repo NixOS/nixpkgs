@@ -12,7 +12,8 @@ let
      "-x86-64";
 in
 stdenv.mkDerivation {
-  name = if enableX11 then "mit-scheme-x11-${version}" else "mit-scheme-${version}";
+  pname = "mit-scheme" + lib.optionalString enableX11 "-x11";
+  inherit version;
 
   # MIT/GNU Scheme is not bootstrappable, so it's recommended to compile from
   # the platform-specific tarballs, which contain pre-built binaries.  It

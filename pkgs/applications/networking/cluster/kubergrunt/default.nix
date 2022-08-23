@@ -2,22 +2,20 @@
 
 buildGoModule rec {
   pname = "kubergrunt";
-  version = "0.7.11";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "gruntwork-io";
     repo = "kubergrunt";
     rev = "v${version}";
-    sha256 = "1224ssqdz9ak0vylyfbr9c2w0yfdp4hw9jh99qmfi2j5nhw9kzcc";
+    sha256 = "sha256-2uMPj4/jluBW0N2+AyDb7QmuVwlCavfQZ3i2fg32m8o=";
   };
 
-  vendorSha256 = "1hbb3hn8mzz9h9p1rl35izz3l6c2rqsg8aq6dgpbpsf5krp3zs3v";
+  vendorSha256 = "sha256-9hWX6INN5HWXyeFQRjkqr+BsGv56lInVYacvT6Imahw=";
 
   # Disable tests since it requires network access and relies on the
   # presence of certain AWS infrastructure
   doCheck = false;
-
-  runVend = true;
 
   postInstall = ''
     # The binary is named kubergrunt

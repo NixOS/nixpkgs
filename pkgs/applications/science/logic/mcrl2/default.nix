@@ -1,13 +1,13 @@
 {lib, stdenv, fetchurl, cmake, libGLU, libGL, qt5, boost}:
 
 stdenv.mkDerivation rec {
-  version = "201707";
+  version = "202206";
   build_nr = "1";
   pname = "mcrl2";
 
   src = fetchurl {
     url = "https://www.mcrl2.org/download/release/mcrl2-${version}.${build_nr}.tar.gz";
-    sha256 = "1c8h94ja7271ph61zrcgnjgblxppld6v22f7f900prjgzbcfy14m";
+    sha256 = "KoLt8IU/vCdYqzJukNuaZfl8bWiOKB0UxWHEdQj3buU=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A toolset for model-checking concurrent systems and protocols";
     longDescription = ''
       A formal specification language with an associated toolset,

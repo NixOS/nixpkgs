@@ -10,38 +10,30 @@
 , inih
 , systemd
 , appstream
+, makeWrapper
+, findutils
+, gawk
+, procps
 }:
 
 stdenv.mkDerivation rec {
   pname = "gamemode";
-  version = "1.6.1";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "FeralInteractive";
     repo = pname;
     rev = version;
-    sha256 = "sha256-P00OnZiPZyxBu9zuG+3JNorXHBhJZy+cKPjX+duZrJ0=";
+    sha256 = "sha256-DIFcmWFkoZOklo1keYcCl6n2GJgzWKC8usHFcJmfarU=";
   };
 
   outputs = [ "out" "dev" "lib" "man" "static" ];
 
   patches = [
-    # Run executables from PATH instead of /usr/bin
-    # See https://github.com/FeralInteractive/gamemode/pull/323
-    (fetchpatch {
-      url = "https://github.com/FeralInteractive/gamemode/commit/be44b7091baa33be6dda60392e4c06c2f398ee72.patch";
-      sha256 = "TlDUETs4+N3pvrVd0FQGlGmC+6ByhJ2E7gKXa7suBtE=";
-    })
-
-    # Fix loading shipped config when using a prefix other than /usr
-    # See https://github.com/FeralInteractive/gamemode/pull/324
-    (fetchpatch {
-      url = "https://github.com/FeralInteractive/gamemode/commit/b29aa903ce5acc9141cfd3960c98ccb047eca872.patch";
-      sha256 = "LwBzBJQ7dfm2mFVSOSPjJP+skgV5N6h77i66L1Sq+ZM=";
-    })
-
     # Add @libraryPath@ template variable to fix loading the PRELOAD library
     ./preload-nix-workaround.patch
+    # Do not install systemd sysusers configuration
+    ./no-install-systemd-sysusers.patch
   ];
 
   postPatch = ''
@@ -55,6 +47,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
+    makeWrapper
     meson
     ninja
     pkg-config
@@ -85,13 +78,20 @@ stdenv.mkDerivation rec {
     moveToOutput lib/*.a "$static"
   '';
 
-  # Add $lib/lib to gamemoded & gamemode-simulate-game's rpath since
-  # they use dlopen to load libgamemode. Can't use makeWrapper since
-  # it would break the security wrapper in the NixOS module.
   postFixup = ''
+    # Add $lib/lib to gamemoded & gamemode-simulate-game's rpath since
+    # they use dlopen to load libgamemode. Can't use makeWrapper since
+    # it would break the security wrapper in the NixOS module.
     for bin in "$out/bin/gamemoded" "$out/bin/gamemode-simulate-game"; do
       patchelf --set-rpath "$lib/lib:$(patchelf --print-rpath "$bin")" "$bin"
     done
+
+    wrapProgram "$out/bin/gamemodelist" \
+      --prefix PATH : ${lib.makeBinPath [
+        findutils
+        gawk
+        procps
+      ]}
   '';
 
   meta = with lib; {

@@ -24,6 +24,7 @@ DEB_URL = 'https://dl.google.com/linux/chrome/deb/pool/main/g'
 BUCKET_URL = 'https://commondatastorage.googleapis.com/chromium-browser-official'
 
 JSON_PATH = dirname(abspath(__file__)) + '/upstream-info.json'
+UNGOOGLED_FLAGS_PATH = dirname(abspath(__file__)) + '/ungoogled-flags.toml'
 COMMIT_MESSAGE_SCRIPT = dirname(abspath(__file__)) + '/get-commit-message.py'
 
 
@@ -68,7 +69,8 @@ def get_matching_chromedriver(version):
         return {
             'version': chromedriver_version,
             'sha256_linux': nix_prefetch_url(get_chromedriver_url('linux64')),
-            'sha256_darwin': nix_prefetch_url(get_chromedriver_url('mac64'))
+            'sha256_darwin': nix_prefetch_url(get_chromedriver_url('mac64')),
+            'sha256_darwin_aarch64': nix_prefetch_url(get_chromedriver_url('mac64_m1'))
         }
 
 
@@ -105,6 +107,12 @@ def get_latest_ungoogled_chromium_build():
         'version': version,
         'ungoogled_tag': tag
     }
+
+
+def get_ungoogled_chromium_gn_flags(revision):
+    """Returns ungoogled-chromium's GN build flags for the given revision."""
+    gn_flags_url = f'https://raw.githubusercontent.com/Eloston/ungoogled-chromium/{revision}/flags.gn'
+    return urlopen(gn_flags_url).read().decode()
 
 
 def channel_name_to_attr_name(channel_name):
@@ -207,6 +215,8 @@ with urlopen(HISTORY_URL) as resp:
                 'rev': build['ungoogled_tag'],
                 'sha256': nix_prefetch_git(ungoogled_repo_url, build['ungoogled_tag'])['sha256']
             }
+            with open(UNGOOGLED_FLAGS_PATH, 'w') as out:
+                out.write(get_ungoogled_chromium_gn_flags(build['ungoogled_tag']))
 
         channels[channel_name] = channel
 
@@ -226,6 +236,8 @@ if len(sys.argv) == 2 and sys.argv[1] == '--commit':
             if channel_name == 'stable':
                 body = subprocess.check_output([COMMIT_MESSAGE_SCRIPT, version_new]).decode('utf-8')
                 commit_message += '\n\n' + body
+            elif channel_name == 'ungoogled-chromium':
+                subprocess.run(['git', 'add', UNGOOGLED_FLAGS_PATH], check=True)
             subprocess.run(['git', 'add', JSON_PATH], check=True)
             subprocess.run(['git', 'commit', '--file=-'], input=commit_message.encode(), check=True)
 else:

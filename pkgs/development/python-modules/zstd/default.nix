@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "zstd";
-  version = "1.5.0.2";
+  version = "1.5.2.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8d3388a15135c481b28ca67d079cb5fd79a9691626fd9979e6b4ec00eabb9e79";
+    sha256 = "sha256-PEKbFmo7MksJg7/1OuCSi5dkxpOgF/Yv+2sg5hNeM48=";
   };
 
   postPatch = ''

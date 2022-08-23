@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "indilib";
-  version = "1.9.3";
+  version = "1.9.5";
 
   src = fetchFromGitHub {
     owner = "indilib";
     repo = "indi";
     rev = "v${version}";
-    sha256 = "sha256-Ik62kbOetA2vSMpnwrSiNRNJqOgmqlCB2+KNhpBo9TA=";
+    sha256 = "sha256-mj9rnPn85Fbc7Y8qRndqPVANzBrk3al+vDJagLTDJ04=";
   };
 
   nativeBuildInputs = [

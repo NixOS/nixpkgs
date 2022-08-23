@@ -15,6 +15,7 @@
 , enableNumpy ? false
 , taggedLayout ? ((enableRelease && enableDebug) || (enableSingleThreaded && enableMultiThreaded) || (enableShared && enableStatic))
 , patches ? []
+, boostBuildPatches ? []
 , useMpi ? false
 , mpi
 , extraB2Args ? []
@@ -31,8 +32,8 @@ assert enableShared || enableStatic;
 assert enablePython -> stdenv.hostPlatform == stdenv.buildPlatform;
 assert enableNumpy -> enablePython;
 
-# Boost <1.69 can't be build with clang >8, because pth was removed
-assert with lib; ((toolset == "clang" && !(versionOlder stdenv.cc.version "8.0.0")) -> !(versionOlder version "1.69"));
+# Boost <1.69 can't be built on linux with clang >8, because pth was removed
+assert with lib; (stdenv.isLinux && toolset == "clang" && versionAtLeast stdenv.cc.version "8.0.0") -> versionAtLeast version "1.69";
 
 with lib;
 let
@@ -68,7 +69,7 @@ let
     else
       "$NIX_BUILD_CORES";
 
-  needUserConfig = stdenv.hostPlatform != stdenv.buildPlatform || useMpi || stdenv.isDarwin;
+  needUserConfig = stdenv.hostPlatform != stdenv.buildPlatform || useMpi || (stdenv.isDarwin && enableShared);
 
   b2Args = concatStringsSep " " ([
     "--includedir=$dev/include"
@@ -84,7 +85,9 @@ let
     # TODO: make this unconditional
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "address-model=${toString stdenv.hostPlatform.parsed.cpu.bits}"
-    "architecture=${toString stdenv.hostPlatform.parsed.cpu.family}"
+    "architecture=${if stdenv.hostPlatform.isMips64
+                    then if versionOlder version "1.78" then "mips1" else "mips"
+                    else toString stdenv.hostPlatform.parsed.cpu.family}"
     "binary-format=${toString stdenv.hostPlatform.parsed.kernel.execFormat.name}"
     "target-os=${toString stdenv.hostPlatform.parsed.kernel.name}"
 
@@ -92,7 +95,8 @@ let
     # https://www.boost.org/doc/libs/1_66_0/libs/context/doc/html/context/architectures.html
     "abi=${if stdenv.hostPlatform.parsed.cpu.family == "arm" then "aapcs"
            else if stdenv.hostPlatform.isWindows then "ms"
-           else if stdenv.hostPlatform.isMips then "o32"
+           else if stdenv.hostPlatform.isMips32 then "o32"
+           else if stdenv.hostPlatform.isMips64n64 then "n64"
            else "sysv"}"
   ] ++ optional (link != "static") "runtime-link=${runtime-link}"
     ++ optional (variant == "release") "debug-symbols=off"
@@ -126,8 +130,27 @@ stdenv.mkDerivation {
     stripLen = 1;
     extraPrefix = "libs/context/";
   })
-  ++ optional (and (versionAtLeast version "1.70") (!versionAtLeast version "1.73")) ./cmake-paths.patch
-  ++ optional (versionAtLeast version "1.73") ./cmake-paths-173.patch;
+  # Fix compiler warning with GCC >= 8; TODO: patch may apply to older versions
+  ++ optional (versionAtLeast version "1.65" && versionOlder version "1.67")
+    (fetchpatch {
+      url = "https://github.com/boostorg/mpl/commit/f48fd09d021db9a28bd7b8452c175897e1af4485.patch";
+      sha256 = "15d2a636hhsb1xdyp44x25dyqfcaws997vnp9kl1mhzvxjzz7hb0";
+      stripLen = 1;
+    })
+  ++ optional (versionAtLeast version "1.65" && versionOlder version "1.70") (fetchpatch {
+    # support for Mips64n64 appeared in boost-context 1.70; this patch won't apply to pre-1.65 cleanly
+    url = "https://github.com/boostorg/context/commit/e3f744a1862164062d579d1972272d67bdaa9c39.patch";
+    sha256 = "sha256-qjQy1b4jDsIRrI+UYtcguhvChrMbGWO0UlEzEJHYzRI=";
+    stripLen = 1;
+    extraPrefix = "libs/context/";
+  })
+  ++ optional (versionAtLeast version "1.70" && versionOlder version "1.73") ./cmake-paths.patch
+  ++ optional (versionAtLeast version "1.73") ./cmake-paths-173.patch
+  ++ optional (version == "1.77.0") (fetchpatch {
+    url = "https://github.com/boostorg/math/commit/7d482f6ebc356e6ec455ccb5f51a23971bf6ce5b.patch";
+    relative = "include";
+    sha256 = "sha256-KlmIbixcds6GyKYt1fx5BxDIrU7msrgDdYo9Va/KJR4=";
+  });
 
   meta = {
     homepage = "http://boost.org/";
@@ -138,6 +161,18 @@ stdenv.mkDerivation {
                  ++ optional ((versionOlder version "1.57") || version == "1.58") "x86_64-darwin"
                  ++ optionals (versionOlder version "1.73") lib.platforms.riscv;
     maintainers = with maintainers; [ hjones2199 ];
+
+    broken =
+      # boost-context lacks support for the N32 ABI on mips64.  The build
+      # will succeed, but packages depending on boost-context will fail with
+      # a very cryptic error message.
+      stdenv.hostPlatform.isMips64n32 ||
+      # the patch above does not apply cleanly to pre-1.65 boost
+      (stdenv.hostPlatform.isMips64n64 && (versionOlder version "1.65"));
+  };
+
+  passthru = {
+    inherit boostBuildPatches;
   };
 
   preConfigure = optionalString useMpi ''

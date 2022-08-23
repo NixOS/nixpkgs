@@ -27,6 +27,11 @@ buildPythonPackage rec {
     sha256 = "sha256-Q65OSE4qckpvaIvZULBR434i7hwuVM97eSq1Blb1oIU=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'ujson = ">=1.35,<5.0"' 'ujson = "*"'
+  '';
+
   nativeBuildInputs = [
     poetry-core
   ];

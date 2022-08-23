@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
     export IC_NNS_COMMON_PROTO_INCLUDES=${ic}/rs/nns/common/proto
     export PROTOC=${buildPackages.protobuf}/bin/protoc
     export OPENSSL_DIR=${openssl.dev}
-    export OPENSSL_LIB_DIR=${openssl.out}/lib
+    export OPENSSL_LIB_DIR=${lib.getLib openssl}/lib
   '';
 
   cargoSha256 = "sha256-YxuBABGaZ+ti31seEYR6bB+OMgrSvl1lZyu4bqdxPIk=";

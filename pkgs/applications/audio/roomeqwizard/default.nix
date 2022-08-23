@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "roomeqwizard";
-  version = "5.20.4";
+  version = "5.20.5";
 
   src = fetchurl {
     url = "https://www.roomeqwizard.com/installers/REW_linux_${lib.replaceChars [ "." ] [ "_" ] version}.sh";
-    sha256 = "0m2b5hwazy4vyjk51cmayys250rircs3c0v7bv5mn28h7hyq29s8";
+    sha256 = "NYTRiOZmwkni4k+jI2SV84z5umO7+l+eKpwPCdlDD3U=";
   };
 
   dontUnpack = true;
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     icon = pname;
     desktopName = "REW";
     genericName = "Software for audio measurements";
-    categories = "AudioVideo;";
+    categories = [ "AudioVideo" ];
   };
 
   responseFile = writeTextFile {

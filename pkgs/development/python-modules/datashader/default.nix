@@ -15,6 +15,7 @@
 , pyct
 , scipy
 , pytestCheckHook
+, pythonOlder
 , nbsmoke
 , fastparquet
 , nbconvert
@@ -24,19 +25,15 @@
 
 buildPythonPackage rec {
   pname = "datashader";
-  version = "0.13.0";
+  version = "0.14.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-6JscHm1QjDmXOLLa83qhAvY/xwvlPM6duQ1lSxnCVV8=";
+    hash = "sha256-q8aOpuJD6aX9m9jPm9PY5vZGBJL6Jpf+pPHbcQVOJLg=";
   };
-
-  # the complete extra is for usage with conda, which we
-  # don't care about
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "dask[complete]" "dask"
-  '';
 
   propagatedBuildInputs = [
     dask
@@ -52,31 +49,38 @@ buildPythonPackage rec {
     param
     pyct
     scipy
-  ];
+  ] ++ dask.optional-dependencies.complete;
 
   checkInputs = [
     pytestCheckHook
-    pytest-xdist # not needed
+    pytest-xdist
     nbsmoke
     fastparquet
     nbconvert
     netcdf4
   ];
 
+  # The complete extra is for usage with conda, which we
+  # don't care about
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "dask[complete]" "dask" \
+      --replace "xarray >=0.9.6" "xarray"
+  '';
+
   preCheck = ''
     export HOME=$TMPDIR
   '';
 
   pytestFlagsArray = [
-    "-n $NIX_BUILD_CORES"
     "datashader"
   ];
 
   disabledTests = [
-    # not compatible with current version of bokeh
+    # Not compatible with current version of bokeh
     # see: https://github.com/holoviz/datashader/issues/1031
     "test_interactive_image_update"
-    # latest dask broken array marshalling
+    # Latest dask broken array marshalling
     # see: https://github.com/holoviz/datashader/issues/1032
     "test_raster_quadmesh_autorange_reversed"
   ];
@@ -86,10 +90,14 @@ buildPythonPackage rec {
     "datashader/tests/test_datatypes.py"
   ];
 
+  pythonImportsCheck = [
+    "datashader"
+  ];
+
   meta = with lib;{
     description = "Data visualization toolchain based on aggregating into a grid";
     homepage = "https://datashader.org";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

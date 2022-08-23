@@ -1,31 +1,40 @@
 { lib
-
 , buildGoModule
 , fetchFromGitHub
 , sqlite
+, installShellFiles
 }:
 
 buildGoModule rec {
   pname = "expenses";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "manojkarthick";
     repo = "expenses";
     rev = "v${version}";
-    sha256 = "sha256-CaIbLtP7ziv9UBQE+QsNnqX65OV+6GIvkLwKm1G++iY=";
+    sha256 = "sha256-sqsogF2swMvYZL7Kj+ealrB1AAgIe7ZXXDLRdHL6Q+0=";
   };
 
-  vendorSha256 = "sha256-NWTFxF4QCH1q1xx+hmVmpvDeOlqH5Ai2+0ParE5px9M=";
+  vendorSha256 = "sha256-rIcwZUOi6bdfiWZEsRF4kl1reNPPQNuBPHDOo7RQgYo=";
 
-  # package does not contain any tests as of v0.2.2
+  # package does not contain any tests as of v0.2.3
   doCheck = false;
+
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [ sqlite ];
 
   ldflags = [
     "-s" "-w" "-X github.com/manojkarthick/expenses/cmd.Version=${version}"
   ];
+
+  postInstall = ''
+    installShellCompletion --cmd expenses \
+      --bash <($out/bin/expenses completion bash) \
+      --zsh <($out/bin/expenses completion zsh) \
+      --fish <($out/bin/expenses completion fish)
+  '';
 
   meta = with lib; {
    description = "An interactive command line expense logger";

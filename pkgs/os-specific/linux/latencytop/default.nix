@@ -1,10 +1,16 @@
-{ lib, stdenv, fetchurl, ncurses, glib, pkg-config, gtk2 }:
+{ lib, stdenv, fetchurl, ncurses, glib, pkg-config, gtk2, util-linux }:
 
 stdenv.mkDerivation rec {
   pname = "latencytop";
   version = "0.5";
 
-  patchPhase = "sed -i s,/usr,$out, Makefile";
+  postPatch = ''
+    sed -i s,/usr,$out, Makefile
+
+    # Fix #171609
+    substituteInPlace fsync.c --replace /bin/mount ${util-linux}/bin/mount
+  '';
+
   preInstall = "mkdir -p $out/sbin";
 
   src = fetchurl {

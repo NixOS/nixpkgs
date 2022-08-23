@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "globalarrays";
-  version = "5.8";
+  version = "5.8.1";
 
   src = fetchFromGitHub {
     owner = "GlobalArrays";
     repo = "ga";
     rev = "v${version}";
-    sha256 = "0bky91ncz6vy0011ps9prsnq9f4a5s5xwr23kkmi39xzg0417mnd";
+    sha256 = "sha256-IyHdeIUHu/T4lb/etGGnNB2guIspual8/v9eS807Qco=";
   };
 
   nativeBuildInputs = [ autoreconfHook gfortran ];

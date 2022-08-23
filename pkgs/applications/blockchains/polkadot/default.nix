@@ -4,21 +4,44 @@
 , llvmPackages
 , protobuf
 , rustPlatform
+, stdenv
+, writeShellScriptBin
+, Security
 }:
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
-  version = "0.9.14";
+  version = "0.9.27";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot";
     rev = "v${version}";
-    sha256 = "sha256-SCi+hpdMUTX1NLF1RUce0d/2G19sVfJ5IsmM1xcAUKo=";
+    sha256 = "sha256-abDkDkFXBG4C7lvE9g6cvUYTfQt7ObZ+Ya8V0W7ASBE=";
+
+    # the build process of polkadot requires a .git folder in order to determine
+    # the git commit hash that is being built and add it to the version string.
+    # since having a .git folder introduces reproducibility issues to the nix
+    # build, we check the git commit hash after fetching the source and save it
+    # into a .git_commit file, and then delete the .git folder. we can then use
+    # this file to populate an environment variable with the commit hash, which
+    # is picked up by polkadot's build process.
+    leaveDotGit = true;
+    postFetch = ''
+      ( cd $out; git rev-parse --short HEAD > .git_commit )
+      rm -rf $out/.git
+    '';
   };
 
-  cargoSha256 = "sha256-ZcIsbMI96qX0LLJXmkCRS9g40ccZOH/upPbAA7XEZIw=";
+  cargoSha256 = "sha256-xDjHu6JARIFy2fVQMGhkdU9Qcz/aqumBFe4MjlH0TCY=";
+
+  buildInputs = lib.optional stdenv.isDarwin [ Security ];
 
   nativeBuildInputs = [ clang ];
+
+  preBuild = ''
+    export SUBSTRATE_CLI_GIT_COMMIT_HASH=$(cat .git_commit)
+    rm .git_commit
+  '';
 
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
   PROTOC = "${protobuf}/bin/protoc";
@@ -37,6 +60,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://polkadot.network";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ akru andresilva asymmetric FlorianFranzen RaghavSood ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

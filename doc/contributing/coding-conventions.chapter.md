@@ -214,17 +214,17 @@ Most of the time, these are the same. For instance, the package `e2fsprogs` has 
 
 There are a few naming guidelines:
 
-- The `name` attribute _should_ be identical to the upstream package name.
+- The `pname` attribute _should_ be identical to the upstream package name.
 
-- The `name` attribute _must not_ contain uppercase letters — e.g., `"mplayer-1.0rc2"` instead of `"MPlayer-1.0rc2"`.
+- The `pname` and the `version` attribute _must not_ contain uppercase letters — e.g., `"mplayer" instead of `"MPlayer"`.
 
-- The version part of the `name` attribute _must_ start with a digit (following a dash) — e.g., `"hello-0.3.1rc2"`.
+- The `version` attribute _must_ start with a digit e.g`"0.3.1rc2".
 
-- If a package is not a release but a commit from a repository, then the version part of the name _must_ be the date of that (fetched) commit. The date _must_ be in `"YYYY-MM-DD"` format. Also append `"unstable"` to the name - e.g., `"pkgname-unstable-2014-09-23"`.
+- If a package is not a release but a commit from a repository, then the `version` attribute _must_ be the date of that (fetched) commit. The date _must_ be in `"unstable-YYYY-MM-DD"` format.
 
-- Dashes in the package name _should_ be preserved in new variable names, rather than converted to underscores or camel cased — e.g., `http-parser` instead of `http_parser` or `httpParser`. The hyphenated style is preferred in all three package names.
+- Dashes in the package `pname` _should_ be preserved in new variable names, rather than converted to underscores or camel cased — e.g., `http-parser` instead of `http_parser` or `httpParser`. The hyphenated style is preferred in all three package names.
 
-- If there are multiple versions of a package, this _should_ be reflected in the variable names in `all-packages.nix`, e.g. `json-c-0-9` and `json-c-0-11`. If there is an obvious “default” version, make an attribute like `json-c = json-c-0-9;`. See also [](#sec-versioning)
+- If there are multiple versions of a package, this _should_ be reflected in the variable names in `all-packages.nix`, e.g. `json-c_0_9` and `json-c_0_11`. If there is an obvious “default” version, make an attribute like `json-c = json-c_0_9;`. See also [](#sec-versioning)
 
 ## File naming and organisation {#sec-organisation}
 
@@ -338,6 +338,10 @@ A (typically large) program with a distinct user interface, primarily used inter
 
   - `applications/terminal-emulators` (e.g. `alacritty` or `rxvt` or `termite`)
 
+- **If it’s a _file manager_:**
+
+  - `applications/file-managers` (e.g. `mc` or `ranger` or `pcmanfm`)
+
 - **If it’s for _video playback / editing_:**
 
   - `applications/video` (e.g. `vlc`)
@@ -449,7 +453,7 @@ In the file `pkgs/top-level/all-packages.nix` you can find fetch helpers, these 
   }
   ```
 
-  Find the value to put as `sha256` by running `nix run -f '<nixpkgs>' nix-prefetch-github -c nix-prefetch-github --rev 1f795f9f44607cc5bec70d1300150bfefcef2aae NixOS nix` or `nix-prefetch-url --unpack https://github.com/NixOS/nix/archive/1f795f9f44607cc5bec70d1300150bfefcef2aae.tar.gz`.
+Find the value to put as `sha256` by running `nix-shell -p nix-prefetch-github --run "nix-prefetch-github --rev 1f795f9f44607cc5bec70d1300150bfefcef2aae NixOS nix"`. 
 
 ## Obtaining source hash {#sec-source-hashes}
 
@@ -511,6 +515,8 @@ patches = [
 
 Otherwise, you can add a `.patch` file to the `nixpkgs` repository. In the interest of keeping our maintenance burden to a minimum, only patches that are unique to `nixpkgs` should be added in this way.
 
+If a patch is available online but does not cleanly apply, it can be modified in some fixed ways by using additional optional arguments for `fetchpatch`. Check [](#fetchpatch) for details.
+
 ```nix
 patches = [ ./0001-changes.patch ];
 ```
@@ -537,16 +543,6 @@ If you do need to do create this sort of patch file, one way to do so is with gi
     ```ShellSession
     $ git diff -a > nixpkgs/pkgs/the/package/0001-changes.patch
     ```
-
-If a patch is available online but does not cleanly apply, it can be modified in some fixed ways by using additional optional arguments for `fetchpatch`:
-
-- `stripLen`: Remove the first `stripLen` components of pathnames in the patch.
-- `extraPrefix`: Prefix pathnames by this string.
-- `excludes`: Exclude files matching this pattern.
-- `includes`: Include only files matching this pattern.
-- `revert`: Revert the patch.
-
-Note that because the checksum is computed after applying these effects, using or modifying these arguments will have no effect unless the `sha256` argument is changed as well.
 
 ## Package tests {#sec-package-tests}
 

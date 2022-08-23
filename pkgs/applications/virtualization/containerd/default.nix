@@ -10,15 +10,13 @@
 
 buildGoModule rec {
   pname = "containerd";
-  version = "1.5.8";
-
-  outputs = [ "out" "man" ];
+  version = "1.6.8";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    sha256 = "sha256-XIAByE2/eVG8DAZXstKs51LQYdVPcPQuIlST3xCclrU=";
+    sha256 = "sha256-0UiPhkTWV61DnAF5kWd1FctX8i0sXaJ1p/xCMznY/A8=";
   };
 
   vendorSha256 = null;
@@ -32,14 +30,13 @@ buildGoModule rec {
   buildPhase = ''
     runHook preBuild
     patchShebangs .
-    make binaries man "VERSION=v${version}" "REVISION=${src.rev}"
+    make binaries "VERSION=v${version}" "REVISION=${src.rev}"
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
     install -Dm555 bin/* -t $out/bin
-    installManPage man/*.[1-9]
     installShellCompletion --bash contrib/autocomplete/ctr
     installShellCompletion --zsh --name _ctr contrib/autocomplete/zsh_autocomplete
     runHook postInstall
@@ -51,7 +48,7 @@ buildGoModule rec {
     homepage = "https://containerd.io/";
     description = "A daemon to control runC";
     license = licenses.asl20;
-    maintainers = with maintainers; [ offline vdemeester ];
+    maintainers = with maintainers; [ offline vdemeester endocrimes zowoq ];
     platforms = platforms.linux;
   };
 }

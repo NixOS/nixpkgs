@@ -2,6 +2,7 @@
 , lib
 , rustPlatform
 , fetchFromGitLab
+, fetchpatch
 , meson
 , ninja
 , gettext
@@ -21,20 +22,30 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-podcasts";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "podcasts";
     rev = version;
-    hash = "sha256-Jk++/QrQt/fjOz2OaEIr1Imq2DmqTjcormCebjO4/Kk=";
+    sha256 = "00vy1qkkpn76jdpybsq9qp8s6fh1ih10j73p2x43sl97m5g8944h";
   };
+
+  patches = [
+    # Fix build with meson 0.61, can be removed on next release.
+    # podcasts-gtk/resources/meson.build:5:0: ERROR: Function does not take positional arguments.
+    # podcasts-gtk/resources/meson.build:30:0: ERROR: Function does not take positional arguments.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/World/podcasts/-/commit/6614bb62ecbec7c3b18ea7fe44beb50fe7942b27.patch";
+      sha256 = "3TVKFV9V6Ofdajgkdc+j+yxsU21C4JWSc6GjLExSM00=";
+    })
+  ];
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-jlXpeVabc1h2GU1j9Ff6GZJec+JgFyOdJzsOtdkrEWI=";
+    sha256 = "0y34b5rnr75h7dxbx93mafrmwsh187wq5js7fmkb1m1yyybj1v1x";
   };
 
   nativeBuildInputs = [
@@ -79,5 +90,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/gnome-podcasts.x86_64-darwin
   };
 }

@@ -13,9 +13,9 @@ in {
       extraConfig = mkOption {
         type = types.lines;
         default = "launch=bind";
-        description = ''
+        description = lib.mdDoc ''
           PowerDNS configuration. Refer to
-          <link xlink:href="https://doc.powerdns.com/authoritative/settings.html"/>
+          <https://doc.powerdns.com/authoritative/settings.html>
           for details on supported values.
         '';
       };
@@ -24,14 +24,14 @@ in {
 
   config = mkIf cfg.enable {
 
-    systemd.packages = [ pkgs.powerdns ];
+    systemd.packages = [ pkgs.pdns ];
 
     systemd.services.pdns = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" "mysql.service" "postgresql.service" "openldap.service" ];
 
       serviceConfig = {
-        ExecStart = [ "" "${pkgs.powerdns}/bin/pdns_server --config-dir=${configDir} --guardian=no --daemon=no --disable-syslog --log-timestamp=no --write-pid=no" ];
+        ExecStart = [ "" "${pkgs.pdns}/bin/pdns_server --config-dir=${configDir} --guardian=no --daemon=no --disable-syslog --log-timestamp=no --write-pid=no" ];
       };
     };
 

@@ -2,7 +2,7 @@
  autoconf, automake, libtool, pkg-config, zlib, libaio, libxml2, acl, sqlite,
  liburcu, liburing, attr, makeWrapper, coreutils, gnused, gnugrep, which,
  openssh, gawk, findutils, util-linux, lvm2, btrfs-progs, e2fsprogs, xfsprogs, systemd,
- rsync, glibc, rpcsvc-proto, libtirpc, gperftools
+ rsync, glibc, rpcsvc-proto, libtirpc, gperftools, nixosTests
 }:
 let
   # NOTE: On each glusterfs release, it should be checked if gluster added
@@ -15,7 +15,7 @@ let
 
   buildInputs = [
     fuse bison flex openssl ncurses readline
-    autoconf automake libtool pkg-config zlib libaio libxml2
+    libtool pkg-config zlib libaio libxml2
     acl sqlite liburcu attr makeWrapper util-linux libtirpc gperftools
     liburing
     (python3.withPackages (pkgs: [
@@ -55,15 +55,26 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "glusterfs";
-  version = "10.0";
+  version = "10.1";
 
   src = fetchFromGitHub {
     owner = "gluster";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-n6HdXs5kLbEI8Gaw2KBtO3i8hhadb+MsshUve/DOYg0=";
+    sha256 = "sha256-vVFC2kQNneaOwrezPehOX32dpJb88ZhGHBApEXc9MOg=";
   };
   inherit buildInputs propagatedBuildInputs;
+
+  patches = [
+    # Upstream invokes `openssl version -d` to derive the canonical system path
+    # for certificates, which resolves to a nix store path, so this patch
+    # statically sets the configure.ac value. There's probably a less-brittle
+    # way to do this! (this will likely fail on a version bump)
+    # References:
+    # - https://github.com/gluster/glusterfs/issues/3234
+    # - https://github.com/gluster/glusterfs/commit/a7dc43f533ad4b8ff68bf57704fefc614da65493
+    ./ssl_cert_path.patch
+  ];
 
   postPatch = ''
     sed -e '/chmod u+s/d' -i contrib/fuse-util/Makefile.am
@@ -85,6 +96,7 @@ in stdenv.mkDerivation rec {
   # but fails when the version is empty.
   # See upstream GlusterFS bug https://bugzilla.redhat.com/show_bug.cgi?id=1452705
   preConfigure = ''
+    patchShebangs build-aux/pkg-version
     echo "v${version}" > VERSION
     ./autogen.sh
     export PYTHON=${python3}/bin/python
@@ -94,7 +106,7 @@ in stdenv.mkDerivation rec {
     "--localstatedir=/var"
   ];
 
-  nativeBuildInputs = [ rpcsvc-proto ];
+  nativeBuildInputs = [ rpcsvc-proto autoconf automake ];
 
   makeFlags = [ "DESTDIR=$(out)" ];
 
@@ -180,6 +192,10 @@ in stdenv.mkDerivation rec {
     # this gets falsely loaded as module by glusterfind
     rm -r $out/bin/conf.py
   '';
+
+  passthru.tests = {
+    glusterfs = nixosTests.glusterfs;
+  };
 
   meta = with lib; {
     description = "Distributed storage system";

@@ -30,21 +30,21 @@ in
       user = mkOption {
         type = types.str;
         default = "nzbget";
-        description = "User account under which NZBGet runs";
+        description = lib.mdDoc "User account under which NZBGet runs";
       };
 
       group = mkOption {
         type = types.str;
         default = "nzbget";
-        description = "Group under which NZBGet runs";
+        description = lib.mdDoc "Group under which NZBGet runs";
       };
 
       settings = mkOption {
         type = with types; attrsOf (oneOf [ bool int str ]);
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           NZBGet configuration, passed via command line using switch -o. Refer to
-          <link xlink:href="https://github.com/nzbget/nzbget/blob/master/nzbget.conf"/>
+          <https://github.com/nzbget/nzbget/blob/master/nzbget.conf>
           for details on supported values.
         '';
         example = {

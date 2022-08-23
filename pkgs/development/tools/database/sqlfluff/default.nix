@@ -5,19 +5,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sqlfluff";
-  version = "0.8.2";
-  disabled = python3.pythonOlder "3.6";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "sha256-0FlXHUjoeZ7XfmOSlY30b13i2t/4vyWwhDKXquXKaJE=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-IPBq1jFUCJXG/XW1M1AoD3pfj2/jnGR1NLgbO5zcqFg=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
     appdirs
     cached-property
+    chardet
     click
     colorama
     configparser
@@ -26,12 +26,16 @@ python3.pkgs.buildPythonApplication rec {
     oyaml
     pathspec
     pytest
+    regex
     tblib
     toml
     tqdm
     typing-extensions
   ] ++ lib.optionals (pythonOlder "3.7") [
     dataclasses
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    backports.cached-property
+    importlib_metadata
   ];
 
   checkInputs = with python3.pkgs; [
@@ -53,7 +57,9 @@ python3.pkgs.buildPythonApplication rec {
     "test__rules__std_file_dbt"
   ];
 
-  pythonImportsCheck = [ "sqlfluff" ];
+  pythonImportsCheck = [
+    "sqlfluff"
+  ];
 
   meta = with lib; {
     description = "SQL linter and auto-formatter";

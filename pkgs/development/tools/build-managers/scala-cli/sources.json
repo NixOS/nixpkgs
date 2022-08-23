@@ -1,0 +1,13 @@
+{
+  "version": "0.1.11",
+  "assets": {
+    "x86_64-darwin": {
+      "asset": "scala-cli-x86_64-apple-darwin.gz",
+      "sha256": "1s87knvvxbsikxbiza3hybykp437ba5j1amymlis20yf826k5sh7"
+    },
+    "x86_64-linux": {
+      "asset": "scala-cli-x86_64-pc-linux.gz",
+      "sha256": "1by463daq5sa0bpd8hc5knj5gj30c4c8mbgmiq6fj3612220gc4c"
+    }
+  }
+}

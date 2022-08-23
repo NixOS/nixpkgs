@@ -1,26 +1,33 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "gotop";
-  version = "4.1.2";
+  version = "4.1.4";
 
   src = fetchFromGitHub {
     owner = "xxxserxxx";
     repo = pname;
     rev = "v${version}";
-    sha256 = "15bsxaxqxp17wsr0p9fkpvgfyqnhhwm3j8jxkvcs4cdw73qaxdsy";
+    hash = "sha256-jAUlaj9Nv/ipzxAkG2myd9DIboHj7IarNMVk/FQ274g=";
   };
 
-  runVend = true;
-  vendorSha256 = "06hl1npwmy9dvpf4kljvw8lwwiigm52wf106lmf9k6k2gi5ikprz";
+  proxyVendor = true;
+  vendorSha256 = "sha256-y4hVouvqMYUrdF7fowsvJLp0FCGCZDeVGUQXG8z8Lyg=";
 
   ldflags = [ "-s" "-w" "-X main.Version=v${version}" ];
+
+  nativeBuildInputs = [ installShellFiles ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
   doCheck = !stdenv.isDarwin;
+
+  postInstall = ''
+    $out/bin/gotop --create-manpage > gotop.1
+    installManPage gotop.1
+  '';
 
   meta = with lib; {
     description = "A terminal based graphical activity monitor inspired by gtop and vtop";

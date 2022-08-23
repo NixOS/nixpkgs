@@ -7,18 +7,21 @@
 , virtualenv
 , pretend
 , pytest
+
+# coupled downsteam dependencies
+, pip-tools
 }:
 
 buildPythonPackage rec {
   pname = "pip";
-  version = "21.1.3";
+  version = "22.1.2";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = pname;
     rev = version;
-    sha256 = "sha256-zfMz9p4I6Kmw849xuvnmGWHmWtajDntFW1jjDilKkgk=";
+    sha256 = "sha256-Id/oz0e59WWpafR1cIYIogvOgxKGKVqrwNON32BU9zU=";
     name = "${pname}-${version}-source";
   };
 
@@ -31,6 +34,8 @@ buildPythonPackage rec {
   checkInputs = [ mock scripttest virtualenv pretend pytest ];
   # Pip wants pytest, but tests are not distributed
   doCheck = false;
+
+  passthru.tests = { inherit pip-tools; };
 
   meta = {
     description = "The PyPA recommended tool for installing Python packages";

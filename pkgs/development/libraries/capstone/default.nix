@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "capstone";
   version = "4.0.2";
 
-  src = fetchurl {
-    url    = "https://github.com/aquynh/capstone/archive/${version}.tar.gz";
-    sha256 = "0sjjbqps48az4map0kmai7j7dak3gy0xcq0sgx8fg09g0acdg0bw";
+  src = fetchFromGitHub {
+    owner = "aquynh";
+    repo = "capstone";
+    rev = version;
+    sha256 = "sha256-XMwQ7UaPC8YYu4yxsE4bbR3leYPfBHu5iixSLz05r3g=";
   };
 
   # replace faulty macos detection
@@ -37,7 +39,8 @@ stdenv.mkDerivation rec {
     description = "Advanced disassembly library";
     homepage    = "http://www.capstone-engine.org";
     license     = lib.licenses.bsd3;
-    platforms   = lib.platforms.unix;
     maintainers = with lib.maintainers; [ thoughtpolice ris ];
+    mainProgram = "cstool";
+    platforms   = lib.platforms.unix;
   };
 }

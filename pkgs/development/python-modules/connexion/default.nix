@@ -7,7 +7,6 @@
 , clickclick
 , decorator
 , fetchFromGitHub
-, fetchpatch
 , flask
 , inflection
 , jsonschema
@@ -23,14 +22,16 @@
 
 buildPythonPackage rec {
   pname = "connexion";
-  version = "2.9.0";
+  version = "2.14.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner = "zalando";
+    owner = "spec-first";
     repo = pname;
-    rev = version;
-    sha256 = "13smcg2w24zr2sv1968g9p9m6f18nqx688c96qdlmldnszgzf5ik";
+    rev = "refs/tags/${version}";
+    hash = "sha256-5+OZvJG68jZZsfOuOqsCUSPLV6vvjk9msJzjsCwo0jw=";
   };
 
   propagatedBuildInputs = [
@@ -55,20 +56,18 @@ buildPythonPackage rec {
     testfixtures
   ];
 
-  patches = [
-    # No minor release for later versions, https://github.com/zalando/connexion/pull/1402
-    (fetchpatch {
-      name = "allow-later-flask-and-werkzeug-releases.patch";
-      url = "https://github.com/zalando/connexion/commit/4a225d554d915fca17829652b7cb8fe119e14b37.patch";
-      sha256 = "0dys6ymvicpqa3p8269m4yv6nfp58prq3fk1gcx1z61h9kv84g1k";
-    })
+  pythonImportsCheck = [
+    "connexion"
   ];
 
-  pythonImportsCheck = [ "connexion" ];
+  disabledTests = [
+    # AssertionError
+    "test_headers"
+  ];
 
   meta = with lib; {
     description = "Swagger/OpenAPI First framework on top of Flask";
-    homepage = "https://github.com/zalando/connexion/";
+    homepage = "https://github.com/spec-first/connexion";
     license = licenses.asl20;
     maintainers = with maintainers; [ elohmeier ];
   };

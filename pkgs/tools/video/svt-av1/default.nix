@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "svt-av1";
-  version = "0.8.7";
+  version = "1.2.0";
 
   src = fetchFromGitLab {
     owner = "AOMediaCodec";
     repo = "SVT-AV1";
     rev = "v${version}";
-    sha256 = "1xlxb6kn6hqz9dxz0nd905m4i2mwjwq1330rbabwzmg4b66cdslg";
+    sha256 = "sha256-mUWWYaExEd/WkIYb1d8AduioHBxGp4Nn7Trhe2vv6Z0=";
   };
 
   nativeBuildInputs = [ cmake nasm ];
@@ -26,14 +26,11 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     changelog = "https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/v${version}/CHANGELOG.md";
     license = with licenses; [
-      bsd2
-      {
-        fullName = "Alliance for Open Media Patent License 1.0";
-        url = "https://aomedia.org/license/patent-license/";
-      }
+      aom
+      bsd3
     ];
     platforms = platforms.unix;
     broken = stdenv.isAarch64; # undefined reference to `cpuinfo_arm_linux_init'
-    maintainers = with maintainers; [ chiiruno ];
+    maintainers = with maintainers; [ Madouura ];
   };
 }

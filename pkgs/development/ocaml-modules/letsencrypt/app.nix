@@ -12,6 +12,7 @@
 , bos
 , fpath
 , randomconv
+, cstruct
 }:
 
 buildDunePackage {
@@ -37,9 +38,11 @@ buildDunePackage {
     bos
     fpath
     randomconv
+    cstruct
   ];
 
   meta = letsencrypt.meta // {
     description = "An ACME client implementation of the ACME protocol (RFC 8555) for OCaml";
+    mainProgram = "oacmel";
   };
 }

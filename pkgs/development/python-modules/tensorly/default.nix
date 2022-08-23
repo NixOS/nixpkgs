@@ -1,51 +1,61 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pytest
-, nose
-, isPy27
 , numpy
+, pytestCheckHook
+, pythonOlder
 , scipy
 , sparse
-, pytorch
 }:
 
 buildPythonPackage rec {
   pname = "tensorly";
-  version = "0.4.5";
-  disabled = isPy27;
+  version = "0.7.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "1ml91yaxwx4msisxbm92yf22qfrscvk58f3z2r1jhi96pw2k4i7x";
+    sha256 = "sha256-VcX3pCczZQUYZaD7xrrkOcj0QPJt28cYTwpZm5D/X3c=";
   };
 
-  propagatedBuildInputs = [ numpy scipy sparse ]
-    ++ lib.optionals (!doCheck) [ nose ]; # upstream added nose to install_requires
+  propagatedBuildInputs = [
+    numpy
+    scipy
+    sparse
+  ];
 
-  checkInputs = [ pytest nose pytorch ];
-  # also has a cupy backend, but the tests are currently broken
-  # (e.g. attempts to access cupy.qr instead of cupy.linalg.qr)
-  # and this backend also adds a non-optional CUDA dependence,
-  # as well as tensorflow and mxnet backends, but the tests don't
-  # seem to exercise these backend by default
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  # uses >= 140GB of ram to test
-  doCheck = false;
-  checkPhase = ''
-    runHook preCheck
-    nosetests -e "test_cupy"
-    runHook postCheck
+  postPatch = ''
+    # nose is not actually required for anything
+    # (including testing with the minimal dependencies)
+    substituteInPlace setup.py \
+      --replace ", 'nose'" ""
   '';
 
-  pythonImportsCheck = [ "tensorly" ];
+  pythonImportsCheck = [
+    "tensorly"
+  ];
+
+  pytestFlagsArray = [
+    "tensorly"
+  ];
+
+  disabledTests = [
+    # AssertionError: Partial_SVD took too long, maybe full_matrices set wrongly
+    "test_svd_time"
+  ];
 
   meta = with lib; {
     description = "Tensor learning in Python";
     homepage = "https://tensorly.org/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.bcdarwin ];
+    maintainers = with maintainers; [ bcdarwin ];
   };
 }

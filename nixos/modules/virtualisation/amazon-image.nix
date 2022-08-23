@@ -37,6 +37,9 @@ in
       { assertion = cfg.efi -> cfg.hvm;
         message = "EC2 instances using EFI must be HVM instances.";
       }
+      { assertion = versionOlder config.boot.kernelPackages.kernel.version "5.17";
+        message = "ENA driver fails to build with kernel >= 5.17";
+      }
     ];
 
     boot.growPartition = cfg.hvm;
@@ -155,7 +158,7 @@ in
     systemd.services."serial-getty@ttyS0".enable = true;
 
     # Creates symlinks for block device names.
-    services.udev.packages = [ pkgs.ec2-utils ];
+    services.udev.packages = [ pkgs.amazon-ec2-utils ];
 
     # Force getting the hostname from EC2.
     networking.hostName = mkDefault "";

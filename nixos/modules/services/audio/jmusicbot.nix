@@ -9,9 +9,16 @@ in
     services.jmusicbot = {
       enable = mkEnableOption "jmusicbot, a Discord music bot that's easy to set up and run yourself";
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.jmusicbot;
+        defaultText = literalExpression "pkgs.jmusicbot";
+        description = lib.mdDoc "JMusicBot package to use";
+      };
+
       stateDir = mkOption {
         type = types.path;
-        description = ''
+        description = lib.mdDoc ''
           The directory where config.txt and serversettings.json is saved.
           If left as the default value this directory will automatically be created before JMusicBot starts, otherwise the sysadmin is responsible for ensuring the directory exists with appropriate ownership and permissions.
           Untouched by the value of this option config.txt needs to be placed manually into this directory.
@@ -27,7 +34,7 @@ in
       after = [ "network-online.target" ];
       description = "Discord music bot that's easy to set up and run yourself!";
       serviceConfig = mkMerge [{
-        ExecStart = "${pkgs.jmusicbot}/bin/JMusicBot";
+        ExecStart = "${cfg.package}/bin/JMusicBot";
         WorkingDirectory = cfg.stateDir;
         Restart = "always";
         RestartSec = 20;

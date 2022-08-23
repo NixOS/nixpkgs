@@ -1,20 +1,24 @@
 { lib
 , python3
+, pkgsCross
+, avrdude
+, dfu-programmer
+, dfu-util
+, gcc-arm-embedded
+, teensy-loader-cli
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "qmk";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-2mLuxzxFSMw3sLm+OTcgLcOjAdwvJmNhDsynUaYQ+co=";
+    sha256 = "sha256-dxV3yeaOt/4IlpurNq60IHE6UlBi3OUqBu2kDajNpeE=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
-    flake8
     nose2
-    pep8-naming
     setuptools-scm
     yapf
   ];
@@ -30,6 +34,17 @@ python3.pkgs.buildPythonApplication rec {
     milc
     pygments
     pyusb
+    pillow
+  ] ++ [ # Binaries need to be in the path so this is in propagatedBuildInputs
+    avrdude
+    dfu-programmer
+    dfu-util
+    teensy-loader-cli
+    gcc-arm-embedded
+    pkgsCross.avr.buildPackages.binutils
+    pkgsCross.avr.buildPackages.binutils.bintools
+    pkgsCross.avr.buildPackages.gcc8
+    pkgsCross.avr.libcCross
   ];
 
   # buildPythonApplication requires setup.py; the setup.py file crafted below
@@ -61,6 +76,6 @@ python3.pkgs.buildPythonApplication rec {
       - ... and many more!
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ bhipple babariviere ];
+    maintainers = with maintainers; [ bhipple babariviere ekleog ];
   };
 }

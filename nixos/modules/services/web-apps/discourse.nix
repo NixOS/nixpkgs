@@ -6,7 +6,7 @@ let
   cfg = config.services.discourse;
   opt = options.services.discourse;
 
-  # Keep in sync with https://github.com/discourse/discourse_docker/blob/master/image/base/Dockerfile#L5
+  # Keep in sync with https://github.com/discourse/discourse_docker/blob/main/image/base/slim.Dockerfile#L5
   upstreamPostgresqlVersion = lib.getVersion pkgs.postgresql_13;
 
   postgresqlPackage = if config.services.postgresql.enable then
@@ -35,7 +35,7 @@ in
           plugins = lib.unique (p.enabledPlugins ++ cfg.plugins);
         };
         defaultText = lib.literalExpression "pkgs.discourse";
-        description = ''
+        description = lib.mdDoc ''
           The discourse package to use.
         '';
       };
@@ -48,7 +48,7 @@ in
                     config.networking.hostName;
         defaultText = lib.literalExpression "config.networking.fqdn";
         example = "discourse.example.com";
-        description = ''
+        description = lib.mdDoc ''
           The hostname to serve Discourse on.
         '';
       };
@@ -81,7 +81,7 @@ in
         type = with lib.types; nullOr path;
         default = null;
         example = "/run/keys/ssl.cert";
-        description = ''
+        description = lib.mdDoc ''
           The path to the server SSL certificate. Set this to enable
           SSL.
         '';
@@ -91,7 +91,7 @@ in
         type = with lib.types; nullOr path;
         default = null;
         example = "/run/keys/ssl.key";
-        description = ''
+        description = lib.mdDoc ''
           The path to the server SSL certificate key. Set this to
           enable SSL.
         '';
@@ -104,7 +104,7 @@ in
           <literal>true</literal>, unless <option>services.discourse.sslCertificate</option>
           and <option>services.discourse.sslCertificateKey</option> are set.
         '';
-        description = ''
+        description = lib.mdDoc ''
           Whether an ACME certificate should be used to secure
           connections to the server.
         '';
@@ -121,17 +121,16 @@ in
             max_reqs_per_ip_mode = "warn+block";
           };
         '';
-        description = ''
+        description = lib.mdDoc ''
           Additional settings to put in the
-          <filename>discourse.conf</filename> file.
+          {file}`discourse.conf` file.
 
           Look in the
-          <link xlink:href="https://github.com/discourse/discourse/blob/master/config/discourse_defaults.conf">discourse_defaults.conf</link>
+          [discourse_defaults.conf](https://github.com/discourse/discourse/blob/master/config/discourse_defaults.conf)
           file in the upstream distribution to find available options.
 
-          Setting an option to <literal>null</literal> means
-          <quote>define variable, but leave right-hand side
-          empty</quote>.
+          Setting an option to `null` means
+          “define variable, but leave right-hand side empty”.
         '';
       };
 
@@ -151,26 +150,26 @@ in
             };
           };
         '';
-        description = ''
+        description = lib.mdDoc ''
           Discourse site settings. These are the settings that can be
           changed from the UI. This only defines their default values:
           they can still be overridden from the UI.
 
           Available settings can be found by looking in the
-          <link xlink:href="https://github.com/discourse/discourse/blob/master/config/site_settings.yml">site_settings.yml</link>
+          [site_settings.yml](https://github.com/discourse/discourse/blob/master/config/site_settings.yml)
           file of the upstream distribution. To find a setting's path,
           you only need to care about the first two levels; i.e. its
           category and name. See the example.
 
           Settings containing secret data should be set to an
           attribute set containing the attribute
-          <literal>_secret</literal> - a string pointing to a file
+          `_secret` - a string pointing to a file
           containing the value the option should be set to. See the
           example to get a better picture of this: in the resulting
-          <filename>config/nixos_site_settings.json</filename> file,
-          the <literal>login.github_client_secret</literal> key will
+          {file}`config/nixos_site_settings.json` file,
+          the `login.github_client_secret` key will
           be set to the contents of the
-          <filename>/run/keys/discourse_github_client_secret</filename>
+          {file}`/run/keys/discourse_github_client_secret`
           file.
         '';
       };
@@ -179,7 +178,7 @@ in
         skipCreate = lib.mkOption {
           type = lib.types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Do not create the admin account, instead rely on other
             existing admin accounts.
           '';
@@ -188,7 +187,7 @@ in
         email = lib.mkOption {
           type = lib.types.str;
           example = "admin@example.com";
-          description = ''
+          description = lib.mdDoc ''
             The admin user email address.
           '';
         };
@@ -196,21 +195,21 @@ in
         username = lib.mkOption {
           type = lib.types.str;
           example = "admin";
-          description = ''
+          description = lib.mdDoc ''
             The admin user username.
           '';
         };
 
         fullName = lib.mkOption {
           type = lib.types.str;
-          description = ''
+          description = lib.mdDoc ''
             The admin user's full name.
           '';
         };
 
         passwordFile = lib.mkOption {
           type = lib.types.path;
-          description = ''
+          description = lib.mdDoc ''
             A path to a file containing the admin user's password.
 
             This should be a string, not a nix path, since nix paths are
@@ -222,8 +221,8 @@ in
       nginx.enable = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = ''
-          Whether an <literal>nginx</literal> virtual host should be
+        description = lib.mdDoc ''
+          Whether an `nginx` virtual host should be
           set up to serve Discourse. Only disable if you're planning
           to use a different web server, which is not recommended.
         '';
@@ -233,7 +232,7 @@ in
         pool = lib.mkOption {
           type = lib.types.int;
           default = 8;
-          description = ''
+          description = lib.mdDoc ''
             Database connection pool size.
           '';
         };
@@ -241,16 +240,16 @@ in
         host = lib.mkOption {
           type = with lib.types; nullOr str;
           default = null;
-          description = ''
-            Discourse database hostname. <literal>null</literal> means <quote>prefer
-            local unix socket connection</quote>.
+          description = lib.mdDoc ''
+            Discourse database hostname. `null` means
+            “prefer local unix socket connection”.
           '';
         };
 
         passwordFile = lib.mkOption {
           type = with lib.types; nullOr path;
           default = null;
-          description = ''
+          description = lib.mdDoc ''
             File containing the Discourse database user password.
 
             This should be a string, not a nix path, since nix paths are
@@ -261,18 +260,18 @@ in
         createLocally = lib.mkOption {
           type = lib.types.bool;
           default = true;
-          description = ''
+          description = lib.mdDoc ''
             Whether a database should be automatically created on the
-            local host. Set this to <literal>false</literal> if you plan
+            local host. Set this to `false` if you plan
             on provisioning a local database yourself. This has no effect
-            if <option>services.discourse.database.host</option> is customized.
+            if {option}`services.discourse.database.host` is customized.
           '';
         };
 
         name = lib.mkOption {
           type = lib.types.str;
           default = "discourse";
-          description = ''
+          description = lib.mdDoc ''
             Discourse database name.
           '';
         };
@@ -280,7 +279,7 @@ in
         username = lib.mkOption {
           type = lib.types.str;
           default = "discourse";
-          description = ''
+          description = lib.mdDoc ''
             Discourse database user.
           '';
         };
@@ -288,10 +287,10 @@ in
         ignorePostgresqlVersion = lib.mkOption {
           type = lib.types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Whether to allow other versions of PostgreSQL than the
             recommended one. Only effective when
-            <option>services.discourse.database.createLocally</option>
+            {option}`services.discourse.database.createLocally`
             is enabled.
           '';
         };
@@ -301,7 +300,7 @@ in
         host = lib.mkOption {
           type = lib.types.str;
           default = "localhost";
-          description = ''
+          description = lib.mdDoc ''
             Redis server hostname.
           '';
         };
@@ -309,7 +308,7 @@ in
         passwordFile = lib.mkOption {
           type = with lib.types; nullOr path;
           default = null;
-          description = ''
+          description = lib.mdDoc ''
             File containing the Redis password.
 
             This should be a string, not a nix path, since nix paths are
@@ -320,7 +319,7 @@ in
         dbNumber = lib.mkOption {
           type = lib.types.int;
           default = 0;
-          description = ''
+          description = lib.mdDoc ''
             Redis database number.
           '';
         };
@@ -329,7 +328,7 @@ in
           type = lib.types.bool;
           default = cfg.redis.host != "localhost";
           defaultText = lib.literalExpression ''config.${opt.redis.host} != "localhost"'';
-          description = ''
+          description = lib.mdDoc ''
             Connect to Redis with SSL.
           '';
         };
@@ -342,8 +341,8 @@ in
           defaultText = lib.literalExpression ''
             "''${if config.services.discourse.mail.incoming.enable then "notifications" else "noreply"}@''${config.services.discourse.hostname}"
           '';
-          description = ''
-            The <literal>from:</literal> email address used when
+          description = lib.mdDoc ''
+            The `from:` email address used when
             sending all essential system emails. The domain specified
             here must have SPF, DKIM and reverse PTR records set
             correctly for email to arrive.
@@ -353,10 +352,10 @@ in
         contactEmailAddress = lib.mkOption {
           type = lib.types.str;
           default = "";
-          description = ''
+          description = lib.mdDoc ''
             Email address of key contact responsible for this
             site. Used for critical notifications, as well as on the
-            <literal>/about</literal> contact form for urgent matters.
+            `/about` contact form for urgent matters.
           '';
         };
 
@@ -364,7 +363,7 @@ in
           serverAddress = lib.mkOption {
             type = lib.types.str;
             default = "localhost";
-            description = ''
+            description = lib.mdDoc ''
               The address of the SMTP server Discourse should use to
               send email.
             '';
@@ -373,7 +372,7 @@ in
           port = lib.mkOption {
             type = lib.types.port;
             default = 25;
-            description = ''
+            description = lib.mdDoc ''
               The port of the SMTP server Discourse should use to
               send email.
             '';
@@ -382,7 +381,7 @@ in
           username = lib.mkOption {
             type = with lib.types; nullOr str;
             default = null;
-            description = ''
+            description = lib.mdDoc ''
               The username of the SMTP server.
             '';
           };
@@ -390,7 +389,7 @@ in
           passwordFile = lib.mkOption {
             type = lib.types.nullOr lib.types.path;
             default = null;
-            description = ''
+            description = lib.mdDoc ''
               A file containing the password of the SMTP server account.
 
               This should be a string, not a nix path, since nix paths
@@ -402,7 +401,7 @@ in
             type = lib.types.str;
             default = cfg.hostname;
             defaultText = lib.literalExpression "config.${opt.hostname}";
-            description = ''
+            description = lib.mdDoc ''
               HELO domain to use for outgoing mail.
             '';
           };
@@ -410,7 +409,7 @@ in
           authentication = lib.mkOption {
             type = with lib.types; nullOr (enum ["plain" "login" "cram_md5"]);
             default = null;
-            description = ''
+            description = lib.mdDoc ''
               Authentication type to use, see http://api.rubyonrails.org/classes/ActionMailer/Base.html
             '';
           };
@@ -418,7 +417,7 @@ in
           enableStartTLSAuto = lib.mkOption {
             type = lib.types.bool;
             default = true;
-            description = ''
+            description = lib.mdDoc ''
               Whether to try to use StartTLS.
             '';
           };
@@ -426,7 +425,7 @@ in
           opensslVerifyMode = lib.mkOption {
             type = lib.types.str;
             default = "peer";
-            description = ''
+            description = lib.mdDoc ''
               How OpenSSL checks the certificate, see http://api.rubyonrails.org/classes/ActionMailer/Base.html
             '';
           };
@@ -434,7 +433,7 @@ in
           forceTLS = lib.mkOption {
             type = lib.types.bool;
             default = false;
-            description = ''
+            description = lib.mdDoc ''
               Force implicit TLS as per RFC 8314 3.3.
             '';
           };
@@ -444,7 +443,7 @@ in
           enable = lib.mkOption {
             type = lib.types.bool;
             default = false;
-            description = ''
+            description = lib.mdDoc ''
               Whether to set up Postfix to receive incoming mail.
             '';
           };
@@ -453,7 +452,7 @@ in
             type = lib.types.str;
             default = "%{reply_key}@${cfg.hostname}";
             defaultText = lib.literalExpression ''"%{reply_key}@''${config.services.discourse.hostname}"'';
-            description = ''
+            description = lib.mdDoc ''
               Template for reply by email incoming email address, for
               example: %{reply_key}@reply.example.com or
               replies+%{reply_key}@example.com
@@ -464,7 +463,7 @@ in
             type = lib.types.package;
             default = pkgs.discourse-mail-receiver;
             defaultText = lib.literalExpression "pkgs.discourse-mail-receiver";
-            description = ''
+            description = lib.mdDoc ''
               The discourse-mail-receiver package to use.
             '';
           };
@@ -472,10 +471,10 @@ in
           apiKeyFile = lib.mkOption {
             type = lib.types.nullOr lib.types.path;
             default = null;
-            description = ''
+            description = lib.mdDoc ''
               A file containing the Discourse API key used to add
               posts and messages from mail. If left at its default
-              value <literal>null</literal>, one will be automatically
+              value `null`, one will be automatically
               generated.
 
               This should be a string, not a nix path, since nix paths
@@ -494,17 +493,15 @@ in
             discourse-github
           ];
         '';
-        description = ''
-          Plugins to install as part of
-          <productname>Discourse</productname>, expressed as a list of
-          derivations.
+        description = lib.mdDoc ''
+          Plugins to install as part of Discourse, expressed as a list of derivations.
         '';
       };
 
       sidekiqProcesses = lib.mkOption {
         type = lib.types.int;
         default = 1;
-        description = ''
+        description = lib.mdDoc ''
           How many Sidekiq processes should be spawned.
         '';
       };
@@ -512,7 +509,7 @@ in
       unicornTimeout = lib.mkOption {
         type = lib.types.int;
         default = 30;
-        description = ''
+        description = lib.mdDoc ''
           Time in seconds before a request to Unicorn times out.
 
           This can be raised if the system Discourse is running on is
@@ -604,11 +601,11 @@ in
       cors_origin = "";
       serve_static_assets = false;
       sidekiq_workers = 5;
-      rtl_css = false;
       connection_reaper_age = 30;
       connection_reaper_interval = 30;
       relative_url_root = null;
       message_bus_max_backlog_size = 100;
+      message_bus_clear_every = 50;
       secret_key_base = cfg.secretKeyBaseFile;
       fallback_assets_path = null;
 
@@ -655,7 +652,12 @@ in
       long_polling_interval = null;
     };
 
-    services.redis.enable = lib.mkDefault (cfg.redis.host == "localhost");
+    services.redis.servers.discourse =
+      lib.mkIf (lib.elem cfg.redis.host [ "localhost" "127.0.0.1" ]) {
+        enable = true;
+        bind = cfg.redis.host;
+        port = cfg.backendSettings.redis_port;
+      };
 
     services.postgresql = lib.mkIf databaseActuallyCreateLocally {
       enable = true;
@@ -696,12 +698,12 @@ in
     systemd.services.discourse = {
       wantedBy = [ "multi-user.target" ];
       after = [
-        "redis.service"
+        "redis-discourse.service"
         "postgresql.service"
         "discourse-postgresql.service"
       ];
       bindsTo = [
-        "redis.service"
+        "redis-discourse.service"
       ] ++ lib.optionals (cfg.database.host == null) [
         "postgresql.service"
         "discourse-postgresql.service"
@@ -934,7 +936,6 @@ in
                   proxy_cache discourse;
                   proxy_cache_key "$scheme,$host,$request_uri";
                   proxy_cache_valid 200 301 302 7d;
-                  proxy_cache_valid any 1m;
                 '';
               };
               "/message-bus/" = proxy {

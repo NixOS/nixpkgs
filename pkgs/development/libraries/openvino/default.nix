@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     cd ../build
   '';
 
-  autoPatchelfIgnoreMissingDeps = true;
+  autoPatchelfIgnoreMissingDeps = [ "libngraph_backend.so" ];
 
   nativeBuildInputs = [
     cmake
@@ -129,6 +129,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://docs.openvinotoolkit.org/";
     license = with licenses; [ asl20 ];
+    platforms = platforms.all;
+    broken = stdenv.isDarwin; # Cannot find macos sdk
     maintainers = with maintainers; [ tfmoraes ];
   };
 }

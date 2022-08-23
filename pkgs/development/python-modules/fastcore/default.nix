@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "fastcore";
-  version = "1.3.27";
+  version = "1.5.18";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fastai";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-ogCNDh18FHP9KY0q0BIbsjPH5vGGioGh4FFUUb3c3Jc=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-Ur12ewTfJyUUzrQyTP8qydzjxnHFcJDAw9xChN+mZ1Y=";
   };
 
   propagatedBuildInputs = [

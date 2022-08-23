@@ -1,6 +1,6 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
-, substituteAll
 , asciidoc
 , docbook-xsl-nons
 , docbook_xml_dtd_45
@@ -47,11 +47,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker-miners";
-  version = "3.2.1";
+  version = "3.3.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "RDafU+Lt70FDdAbb7s1Hepf4qa/dkTSDLqRdG6KqLEc=";
+    sha256 = "Pt3G0nLAKWn6TCwV360MSddtAh8aJ+xwi2m+gCU1PJQ=";
   };
 
   nativeBuildInputs = [
@@ -80,7 +80,11 @@ stdenv.mkDerivation rec {
     totem-pl-parser
     tracker
     gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
     gst_all_1.gstreamer
+    gst_all_1.gst-libav
     icu
     json-glib
     libcue
@@ -113,13 +117,6 @@ stdenv.mkDerivation rec {
     "-Dminer_rss=false"
   ];
 
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit asciidoc;
-    })
-  ];
-
   postInstall = ''
     glib-compile-schemas "$out/share/glib-2.0/schemas"
   '';
@@ -127,7 +124,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
-      versionPolicy = "none";
     };
   };
 

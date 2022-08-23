@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "socid-extractor";
-  version = "0.0.22";
+  version = "0.0.23";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "soxoj";
     repo = pname;
     rev = "v${version}";
-    sha256 = "kHF9CBlUKrD/DRVwJveenpFMr7pIrxEBNkFHHLa46KQ=";
+    hash = "sha256-tDKwYgW1vEyPzuouPGK9tdTf3vNr+UaosHtQe23srG0=";
   };
 
   propagatedBuildInputs = [
@@ -26,6 +26,12 @@ buildPythonPackage rec {
     python-dateutil
     requests
   ];
+
+  postPatch = ''
+    # https://github.com/soxoj/socid-extractor/pull/125
+    substituteInPlace requirements.txt \
+      --replace "beautifulsoup4~=4.10.0" "beautifulsoup4>=4.10.0"
+  '';
 
   # Test require network access
   doCheck = false;

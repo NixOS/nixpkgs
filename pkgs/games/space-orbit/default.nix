@@ -38,6 +38,7 @@ EOF
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A space combat simulator";
     license = licenses.gpl2;
     platforms = platforms.all;

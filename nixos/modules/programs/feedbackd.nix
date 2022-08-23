@@ -13,7 +13,7 @@ in {
         Your user needs to be in the `feedbackd` group to trigger effects.
       '';
       package = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Which feedbackd package to use.
         '';
         type = types.package;

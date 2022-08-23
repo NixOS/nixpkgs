@@ -14,12 +14,19 @@ in
 
   options.hardware.facetimehd.enable = mkEnableOption "facetimehd kernel module";
 
-  config = mkIf cfg.enable {
+  options.hardware.facetimehd.withCalibration = mkOption {
+    default = false;
+    example = true;
+    type = types.bool;
+    description = lib.mdDoc ''
+      Whether to include sensor calibration files for facetimehd.
+      This makes colors look much better but is experimental, see
+      <https://github.com/patjak/facetimehd/wiki/Extracting-the-sensor-calibration-files>
+      for details.
+    '';
+  };
 
-    assertions = singleton {
-      assertion = versionAtLeast kernelPackages.kernel.version "3.19";
-      message = "facetimehd is not supported for kernels older than 3.19";
-    };
+  config = mkIf cfg.enable {
 
     boot.kernelModules = [ "facetimehd" ];
 
@@ -27,7 +34,8 @@ in
 
     boot.extraModulePackages = [ kernelPackages.facetimehd ];
 
-    hardware.firmware = [ pkgs.facetimehd-firmware ];
+    hardware.firmware = [ pkgs.facetimehd-firmware ]
+      ++ optional cfg.withCalibration pkgs.facetimehd-calibration;
 
     # unload module during suspend/hibernate as it crashes the whole system
     powerManagement.powerDownCommands = ''

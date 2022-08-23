@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "cloud-nuke";
-  version = "0.7.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "gruntwork-io";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-gW7uunW7gE/5umBQNjx+k2FIAryKka7yLMqnd6ewv6I=";
+    sha256 = "sha256-8rp0bfgqPl48RHIPSp3rpDAmPQ0eZnvAbO66jbp6TCk=";
   };
 
-  vendorSha256 = "sha256-GDXkrrE0KgFJHXCDZH83/nQAexKhmGed/QGZ1aSXnpg=";
+  vendorSha256 = "sha256-4Hm8zqeRNhIX2aN7JdEX1GruqbEafpBjY1r/vijPs8M=";
 
   ldflags = [ "-s" "-w" "-X main.VERSION=${version}" ];
 

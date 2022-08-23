@@ -14,6 +14,8 @@ in
 stdenvNoCC.mkDerivation {
   name = "nuke-references";
 
+  strictDeps = true;
+  enableParallelBuilding = true;
   dontUnpack = true;
   dontConfigure = true;
   dontBuild = true;

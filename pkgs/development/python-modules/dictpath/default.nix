@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, six
 }:
 
 buildPythonPackage rec {
@@ -21,6 +22,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
+    six
   ];
 
   pythonImportsCheck = [ "dictpath" ];

@@ -1,13 +1,14 @@
 #!/usr/bin/env python
-# Patch out special dependencies (git and path) from a pyproject.json file
+# Patch out special dependencies (git and path) from a pyproject.toml file
 
 import argparse
-import json
 import sys
+
+import tomlkit
 
 
 def main(input, output, fields_to_remove):
-    data = json.load(input)
+    data = tomlkit.loads(input.read())
 
     try:
         deps = data["tool"]["poetry"]["dependencies"]
@@ -22,7 +23,7 @@ def main(input, output, fields_to_remove):
                 if any_removed:
                     dep["version"] = "*"
 
-    json.dump(data, output, separators=(",", ":"))
+    output.write(tomlkit.dumps(data))
 
 
 if __name__ == "__main__":
@@ -32,20 +33,20 @@ if __name__ == "__main__":
         "--input",
         type=argparse.FileType("r"),
         default=sys.stdin,
-        help="Location from which to read input JSON",
+        help="Location from which to read input TOML",
     )
     p.add_argument(
         "-o",
         "--output",
         type=argparse.FileType("w"),
         default=sys.stdout,
-        help="Location to write output JSON",
+        help="Location to write output TOML",
     )
     p.add_argument(
         "-f",
         "--fields-to-remove",
         nargs="+",
-        help="The fields to remove from the dependency's JSON",
+        help="The fields to remove from the dependency's TOML",
     )
 
     args = p.parse_args()

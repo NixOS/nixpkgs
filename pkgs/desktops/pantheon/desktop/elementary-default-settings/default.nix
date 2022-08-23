@@ -17,11 +17,9 @@ stdenv.mkDerivation rec {
   pname = "elementary-default-settings";
   version = "6.0.2";
 
-  repoName = "default-settings";
-
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "default-settings";
     rev = version;
     sha256 = "sha256-qaPj/Qp7RYzHgElFdM8bHV42oiPUbCMTC9Q+MUj4Q6Y=";
   };
@@ -49,8 +47,7 @@ stdenv.mkDerivation rec {
   '';
 
   preInstall = ''
-    # Install our override for plank dockitems as Appcenter is not ready to be preinstalled.
-    # See: https://github.com/NixOS/nixpkgs/issues/70214.
+    # Install our override for plank dockitems as the desktop file path is different.
     schema_dir=$out/share/glib-2.0/schemas
     install -D ${./overrides/plank-dockitems.gschema.override} $schema_dir/plank-dockitems.gschema.override
 

@@ -18,8 +18,8 @@ in
   # determines the default: later modules (if enabled) are preferred.
   # E.g., if Plasma 5 is enabled, it supersedes xterm.
   imports = [
-    ./none.nix ./xterm.nix ./xfce.nix ./plasma5.nix ./lumina.nix
-    ./lxqt.nix ./enlightenment.nix ./gnome.nix ./kodi.nix
+    ./none.nix ./xterm.nix ./phosh.nix ./xfce.nix ./plasma5.nix ./lumina.nix
+    ./lxqt.nix ./enlightenment.nix ./gnome.nix ./retroarch.nix ./kodi.nix
     ./mate.nix ./pantheon.nix ./surf-display.nix ./cde.nix
     ./cinnamon.nix
   ];
@@ -33,25 +33,25 @@ in
           type = types.enum [ "center" "fill" "max" "scale" "tile" ];
           default = "scale";
           example = "fill";
-          description = ''
-            The file <filename>~/.background-image</filename> is used as a background image.
+          description = lib.mdDoc ''
+            The file {file}`~/.background-image` is used as a background image.
             This option specifies the placement of this image onto your desktop.
 
             Possible values:
-            <literal>center</literal>: Center the image on the background. If it is too small, it will be surrounded by a black border.
-            <literal>fill</literal>: Like <literal>scale</literal>, but preserves aspect ratio by zooming the image until it fits. Either a horizontal or a vertical part of the image will be cut off.
-            <literal>max</literal>: Like <literal>fill</literal>, but scale the image to the maximum size that fits the screen with black borders on one side.
-            <literal>scale</literal>: Fit the file into the background without repeating it, cutting off stuff or using borders. But the aspect ratio is not preserved either.
-            <literal>tile</literal>: Tile (repeat) the image in case it is too small for the screen.
+            `center`: Center the image on the background. If it is too small, it will be surrounded by a black border.
+            `fill`: Like `scale`, but preserves aspect ratio by zooming the image until it fits. Either a horizontal or a vertical part of the image will be cut off.
+            `max`: Like `fill`, but scale the image to the maximum size that fits the screen with black borders on one side.
+            `scale`: Fit the file into the background without repeating it, cutting off stuff or using borders. But the aspect ratio is not preserved either.
+            `tile`: Tile (repeat) the image in case it is too small for the screen.
           '';
         };
 
         combineScreens = mkOption {
           type = types.bool;
           default = false;
-          description = ''
-            When set to <literal>true</literal> the wallpaper will stretch across all screens.
-            When set to <literal>false</literal> the wallpaper is duplicated to all screens.
+          description = lib.mdDoc ''
+            When set to `true` the wallpaper will stretch across all screens.
+            When set to `false` the wallpaper is duplicated to all screens.
           '';
         };
       };
@@ -72,7 +72,9 @@ in
         apply = map (d: d // {
           manage = "desktop";
           start = d.start
+          # literal newline to ensure d.start's last line is not appended to
           + optionalString (needBGCond d) ''
+
             if [ -e $HOME/.background-image ]; then
               ${pkgs.feh}/bin/feh --bg-${cfg.wallpaper.mode} ${optionalString cfg.wallpaper.combineScreens "--no-xinerama"} $HOME/.background-image
             fi

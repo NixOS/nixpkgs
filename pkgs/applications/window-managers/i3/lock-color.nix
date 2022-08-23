@@ -56,5 +56,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
 
     platforms = platforms.all;
+    broken = stdenv.isDarwin;
   };
 }

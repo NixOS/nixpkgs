@@ -3,15 +3,20 @@ isodate, lxml, xmlsec, freezegun }:
 
 buildPythonPackage rec {
   pname = "python3-saml";
-  version = "1.12.0";
+  version = "1.14.0";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "onelogin";
     repo = "python3-saml";
     rev = "v${version}";
-    sha256 = "sha256-VPUsjuo4FIes8ti0tkR0kT3J3RdUt1wtl4QEahVsc2c=";
+    sha256 = "sha256-TAfVXh1fSKhNn/lsi7elq4wFyKCxCtCYUTrnH3ytBTw=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "lxml<4.7.1" "lxml<5"
+  '';
 
   propagatedBuildInputs = [
     isodate lxml xmlsec

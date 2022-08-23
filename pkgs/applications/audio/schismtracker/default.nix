@@ -3,25 +3,25 @@
 , fetchFromGitHub
 , autoreconfHook
 , alsa-lib
-, python
+, python3
 , SDL
 }:
 
 stdenv.mkDerivation rec {
   pname = "schismtracker";
-  version = "20211116";
+  version = "20220506";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "1kcw4rwphyqh0hwwjsydzwg484xj17rb5lc8pfsixsg77z50ayzz";
+    sha256 = "sha256-fK0FBn9e7l1Y/A7taFlaoas6ZPREFhEmskVBqjda6q0=";
   };
 
   configureFlags = [ "--enable-dependency-tracking" ]
     ++ lib.optional stdenv.isDarwin "--disable-sdltest";
 
-  nativeBuildInputs = [ autoreconfHook python ];
+  nativeBuildInputs = [ autoreconfHook python3 ];
 
   buildInputs = [ SDL ] ++ lib.optional stdenv.isLinux alsa-lib;
 

@@ -1,0 +1,208 @@
+From 19b0952b36b6b5c4bd2665cc0bd4e55a85f81b55 Mon Sep 17 00:00:00 2001
+From: Will Cohen <willcohen@users.noreply.github.com>
+Date: Tue, 29 Mar 2022 14:00:56 -0400
+Subject: [PATCH] Revert "ui/cocoa: Add clipboard support"
+
+This reverts commit 7e3e20d89129614f4a7b2451fe321cc6ccca3b76.
+---
+ include/ui/clipboard.h |   2 +-
+ ui/clipboard.c         |   2 +-
+ ui/cocoa.m             | 121 -----------------------------------------
+ 3 files changed, 2 insertions(+), 123 deletions(-)
+
+diff --git a/include/ui/clipboard.h b/include/ui/clipboard.h
+index ce76aa451f..c4e1dc4ff4 100644
+--- a/include/ui/clipboard.h
++++ b/include/ui/clipboard.h
+@@ -269,7 +269,7 @@ void qemu_clipboard_set_data(QemuClipboardPeer *peer,
+                              QemuClipboardInfo *info,
+                              QemuClipboardType type,
+                              uint32_t size,
+-                             const void *data,
++                             void *data,
+                              bool update);
+ 
+ G_DEFINE_AUTOPTR_CLEANUP_FUNC(QemuClipboardInfo, qemu_clipboard_info_unref)
+diff --git a/ui/clipboard.c b/ui/clipboard.c
+index 9079ef829b..6b9ed59e1b 100644
+--- a/ui/clipboard.c
++++ b/ui/clipboard.c
+@@ -140,7 +140,7 @@ void qemu_clipboard_set_data(QemuClipboardPeer *peer,
+                              QemuClipboardInfo *info,
+                              QemuClipboardType type,
+                              uint32_t size,
+-                             const void *data,
++                             void *data,
+                              bool update)
+ {
+     if (!info ||
+diff --git a/ui/cocoa.m b/ui/cocoa.m
+index c4e5468f9e..cd3bdf0cec 100644
+--- a/ui/cocoa.m
++++ b/ui/cocoa.m
+@@ -28,7 +28,6 @@
+ #include <crt_externs.h>
+ 
+ #include "qemu-common.h"
+-#include "ui/clipboard.h"
+ #include "ui/console.h"
+ #include "ui/input.h"
+ #include "ui/kbd-state.h"
+@@ -107,10 +106,6 @@ static void cocoa_switch(DisplayChangeListener *dcl,
+ static QemuSemaphore app_started_sem;
+ static bool allow_events;
+ 
+-static NSInteger cbchangecount = -1;
+-static QemuClipboardInfo *cbinfo;
+-static QemuEvent cbevent;
+-
+ // Utility functions to run specified code block with iothread lock held
+ typedef void (^CodeBlock)(void);
+ typedef bool (^BoolCodeBlock)(void);
+@@ -1805,105 +1800,6 @@ static void addRemovableDevicesMenuItems(void)
+     qapi_free_BlockInfoList(pointerToFree);
+ }
+ 
+-@interface QemuCocoaPasteboardTypeOwner : NSObject<NSPasteboardTypeOwner>
+-@end
+-
+-@implementation QemuCocoaPasteboardTypeOwner
+-
+-- (void)pasteboard:(NSPasteboard *)sender provideDataForType:(NSPasteboardType)type
+-{
+-    if (type != NSPasteboardTypeString) {
+-        return;
+-    }
+-
+-    with_iothread_lock(^{
+-        QemuClipboardInfo *info = qemu_clipboard_info_ref(cbinfo);
+-        qemu_event_reset(&cbevent);
+-        qemu_clipboard_request(info, QEMU_CLIPBOARD_TYPE_TEXT);
+-
+-        while (info == cbinfo &&
+-               info->types[QEMU_CLIPBOARD_TYPE_TEXT].available &&
+-               info->types[QEMU_CLIPBOARD_TYPE_TEXT].data == NULL) {
+-            qemu_mutex_unlock_iothread();
+-            qemu_event_wait(&cbevent);
+-            qemu_mutex_lock_iothread();
+-        }
+-
+-        if (info == cbinfo) {
+-            NSData *data = [[NSData alloc] initWithBytes:info->types[QEMU_CLIPBOARD_TYPE_TEXT].data
+-                                           length:info->types[QEMU_CLIPBOARD_TYPE_TEXT].size];
+-            [sender setData:data forType:NSPasteboardTypeString];
+-            [data release];
+-        }
+-
+-        qemu_clipboard_info_unref(info);
+-    });
+-}
+-
+-@end
+-
+-static QemuCocoaPasteboardTypeOwner *cbowner;
+-
+-static void cocoa_clipboard_notify(Notifier *notifier, void *data);
+-static void cocoa_clipboard_request(QemuClipboardInfo *info,
+-                                    QemuClipboardType type);
+-
+-static QemuClipboardPeer cbpeer = {
+-    .name = "cocoa",
+-    .notifier = { .notify = cocoa_clipboard_notify },
+-    .request = cocoa_clipboard_request
+-};
+-
+-static void cocoa_clipboard_update_info(QemuClipboardInfo *info)
+-{
+-    if (info->owner == &cbpeer || info->selection != QEMU_CLIPBOARD_SELECTION_CLIPBOARD) {
+-        return;
+-    }
+-
+-    if (info != cbinfo) {
+-        NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+-        qemu_clipboard_info_unref(cbinfo);
+-        cbinfo = qemu_clipboard_info_ref(info);
+-        cbchangecount = [[NSPasteboard generalPasteboard] declareTypes:@[NSPasteboardTypeString] owner:cbowner];
+-        [pool release];
+-    }
+-
+-    qemu_event_set(&cbevent);
+-}
+-
+-static void cocoa_clipboard_notify(Notifier *notifier, void *data)
+-{
+-    QemuClipboardNotify *notify = data;
+-
+-    switch (notify->type) {
+-    case QEMU_CLIPBOARD_UPDATE_INFO:
+-        cocoa_clipboard_update_info(notify->info);
+-        return;
+-    case QEMU_CLIPBOARD_RESET_SERIAL:
+-        /* ignore */
+-        return;
+-    }
+-}
+-
+-static void cocoa_clipboard_request(QemuClipboardInfo *info,
+-                                    QemuClipboardType type)
+-{
+-    NSData *text;
+-
+-    switch (type) {
+-    case QEMU_CLIPBOARD_TYPE_TEXT:
+-        text = [[NSPasteboard generalPasteboard] dataForType:NSPasteboardTypeString];
+-        if (text) {
+-            qemu_clipboard_set_data(&cbpeer, info, type,
+-                                    [text length], [text bytes], true);
+-            [text release];
+-        }
+-        break;
+-    default:
+-        break;
+-    }
+-}
+-
+ /*
+  * The startup process for the OSX/Cocoa UI is complicated, because
+  * OSX insists that the UI runs on the initial main thread, and so we
+@@ -1938,7 +1834,6 @@ static void cocoa_clipboard_request(QemuClipboardInfo *info,
+     COCOA_DEBUG("Second thread: calling qemu_main()\n");
+     status = qemu_main(gArgc, gArgv, *_NSGetEnviron());
+     COCOA_DEBUG("Second thread: qemu_main() returned, exiting\n");
+-    [cbowner release];
+     exit(status);
+ }
+ 
+@@ -2054,18 +1949,6 @@ static void cocoa_refresh(DisplayChangeListener *dcl)
+             [cocoaView setAbsoluteEnabled:YES];
+         });
+     }
+-
+-    if (cbchangecount != [[NSPasteboard generalPasteboard] changeCount]) {
+-        qemu_clipboard_info_unref(cbinfo);
+-        cbinfo = qemu_clipboard_info_new(&cbpeer, QEMU_CLIPBOARD_SELECTION_CLIPBOARD);
+-        if ([[NSPasteboard generalPasteboard] availableTypeFromArray:@[NSPasteboardTypeString]]) {
+-            cbinfo->types[QEMU_CLIPBOARD_TYPE_TEXT].available = true;
+-        }
+-        qemu_clipboard_update(cbinfo);
+-        cbchangecount = [[NSPasteboard generalPasteboard] changeCount];
+-        qemu_event_set(&cbevent);
+-    }
+-
+     [pool release];
+ }
+ 
+@@ -2105,10 +1988,6 @@ static void cocoa_display_init(DisplayState *ds, DisplayOptions *opts)
+ 
+     // register vga output callbacks
+     register_displaychangelistener(&dcl);
+-
+-    qemu_event_init(&cbevent, false);
+-    cbowner = [[QemuCocoaPasteboardTypeOwner alloc] init];
+-    qemu_clipboard_peer_register(&cbpeer);
+ }
+ 
+ static QemuDisplay qemu_display_cocoa = {
+-- 
+2.35.1
+

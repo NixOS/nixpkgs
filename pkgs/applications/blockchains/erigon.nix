@@ -2,17 +2,18 @@
 
 buildGoModule rec {
   pname = "erigon";
-  version = "2021.09.04";
+  version = "2022.07.03";
 
   src = fetchFromGitHub {
     owner = "ledgerwatch";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0l0w1badhvlh1rgqzvlmy5k7xhb1nf4f5dmhkl935a5ila08aak3";
+    sha256 = "sha256-zWygG06H5+QuG11klRq+7T2v40FNMxmYENdsK3KB+ko=";
+    fetchSubmodules = true;
   };
 
-  vendorSha256 = "1hbfmq76zm50zwmlh3jblriwq2k1mp99d8lg8xzxwy56hncgfj8k";
-  runVend = true;
+  vendorSha256 = "sha256-vxLe8uEjuQ96JiIDxlSrpVATScNl2fscXVUqFKmMPxs=";
+  proxyVendor = true;
 
   # Build errors in mdbx when format hardening is enabled:
   #   cc1: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]

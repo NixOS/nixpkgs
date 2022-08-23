@@ -2,23 +2,22 @@
 
 buildGoModule rec {
   pname = "nali";
-  version = "0.3.2";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "zu1k";
     repo = "nali";
     rev = "v${version}";
-    sha256 = "sha256-iRLoUBA+Kzv1/LZQ8HCvR79K1riYErxEWhB0OmvFy2g=";
+    sha256 = "sha256-mKZQe+VuhXm5N2SAOfHUlPK6wJPa8Cd+wgDjqSGbR7I=";
   };
 
-  vendorSha256 = "sha256-Kb2T+zDUuH+Rx8amYsTIhR5L3DIx5nGcDGqxHOn90NU=";
+  vendorSha256 = "sha256-iNgYU/OgdbKscIA9dIVKqV5tiyLaC3Q4D3W1QsW7CWg=";
   subPackages = [ "." ];
-  runVend = true;
 
   meta = with lib; {
     description = "An offline tool for querying IP geographic information and CDN provider";
     homepage = "https://github.com/zu1k/nali";
     license = licenses.mit;
-    maintainers = with maintainers; [ diffumist ];
+    maintainers = with maintainers; [ diffumist xyenon ];
   };
 }

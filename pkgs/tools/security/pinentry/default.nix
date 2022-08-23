@@ -3,7 +3,7 @@
 , ncurses, gtk2, gcr, libcap, libsecret
 , enabledFlavors ? [ "curses" "tty" "gtk2" "emacs" ]
   ++ lib.optionals stdenv.isLinux [ "gnome3" ]
-  ++ lib.optionals (stdenv.hostPlatform.system != "aarch64-darwin") [ "qt" ]
+  ++ lib.optionals (!stdenv.isDarwin) [ "qt" ]
 }:
 
 with lib;
@@ -16,18 +16,13 @@ let
       then mkDerivation
       else stdenv.mkDerivation;
 
-  mkFlag = pfxTrue: pfxFalse: cond: name:
-    "--${if cond then pfxTrue else pfxFalse}-${name}";
-  mkEnable = mkFlag "enable" "disable";
-  mkWith = mkFlag "with" "without";
-
-  mkEnablePinentry = f:
+  enableFeaturePinentry = f:
     let
       info = flavorInfo.${f};
       flag = flavorInfo.${f}.flag or null;
     in
       optionalString (flag != null)
-        (mkEnable (elem f enabledFlavors) ("pinentry-" + flag));
+        (enableFeature (elem f enabledFlavors) ("pinentry-" + flag));
 
   flavorInfo = {
     curses = { bin = "curses"; flag = "curses"; buildInputs = [ ncurses ]; };
@@ -68,9 +63,9 @@ pinentryMkDerivation rec {
   ];
 
   configureFlags = [
-    (mkWith   (libcap != null)    "libcap")
-    (mkEnable (libsecret != null) "libsecret")
-  ] ++ (map mkEnablePinentry (attrNames flavorInfo));
+    (withFeature   (libcap != null)    "libcap")
+    (enableFeature (libsecret != null) "libsecret")
+  ] ++ (map enableFeaturePinentry (attrNames flavorInfo));
 
   postInstall =
     concatStrings (flip map enabledFlavors (f:

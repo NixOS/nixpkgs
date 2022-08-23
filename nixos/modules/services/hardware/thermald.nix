@@ -4,7 +4,8 @@ with lib;
 
 let
   cfg = config.services.thermald;
-in {
+in
+{
   ###### interface
   options = {
     services.thermald = {
@@ -13,7 +14,7 @@ in {
       debug = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable debug logging.
         '';
       };
@@ -21,14 +22,14 @@ in {
       configFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = "the thermald manual configuration file.";
+        description = lib.mdDoc "the thermald manual configuration file.";
       };
 
       package = mkOption {
         type = types.package;
         default = pkgs.thermald;
         defaultText = literalExpression "pkgs.thermald";
-        description = "Which thermald package to use.";
+        description = lib.mdDoc "Which thermald package to use.";
       };
     };
   };
@@ -41,6 +42,7 @@ in {
       description = "Thermal Daemon Service";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
+        PrivateNetwork = true;
         ExecStart = ''
           ${cfg.package}/sbin/thermald \
             --no-daemon \

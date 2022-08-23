@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "dnstake";
-  version = "0.0.2";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "pwnesia";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0mjwnb0zyqnwk26f32v9vqxc9k6zcks9nn1595mf2hck5xwn86yk";
+    sha256 = "sha256-k6j7DIwK8YAKmEjn8JJO7XBcap9ui6cgUSJG7CeHAAM=";
   };
 
-  vendorSha256 = "1xhzalx1x8js449w1qs2qdwbnz2s8mmypz9maj7jzl5mqfyhlwlp";
+  vendorSha256 = "sha256-l3IKvcO10C+PVDX962tFWny7eMNC48ATIVqiHjpVH/Y=";
 
   meta = with lib; {
     description = "Tool to check missing hosted DNS zones";

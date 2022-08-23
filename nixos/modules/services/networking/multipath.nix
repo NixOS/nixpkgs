@@ -26,7 +26,7 @@ in {
 
     package = mkOption {
       type = package;
-      description = "multipath-tools package to use";
+      description = lib.mdDoc "multipath-tools package to use";
       default = pkgs.multipath-tools;
       defaultText = "pkgs.multipath-tools";
     };
@@ -44,7 +44,7 @@ in {
           }, ...
         ]
       '';
-      description = ''
+      description = lib.mdDoc ''
         This option allows you to define arrays for use in multipath
         groups.
       '';
@@ -54,62 +54,62 @@ in {
           vendor = mkOption {
             type = str;
             example = "COMPELNT";
-            description = "Regular expression to match the vendor name";
+            description = lib.mdDoc "Regular expression to match the vendor name";
           };
 
           product = mkOption {
             type = str;
             example = "Compellent Vol";
-            description = "Regular expression to match the product name";
+            description = lib.mdDoc "Regular expression to match the product name";
           };
 
           revision = mkOption {
             type = nullOr str;
             default = null;
-            description = "Regular expression to match the product revision";
+            description = lib.mdDoc "Regular expression to match the product revision";
           };
 
           product_blacklist = mkOption {
             type = nullOr str;
             default = null;
-            description = "Products with the given vendor matching this string are blacklisted";
+            description = lib.mdDoc "Products with the given vendor matching this string are blacklisted";
           };
 
           alias_prefix = mkOption {
             type = nullOr str;
             default = null;
-            description = "The user_friendly_names prefix to use for this device type, instead of the default mpath";
+            description = lib.mdDoc "The user_friendly_names prefix to use for this device type, instead of the default mpath";
           };
 
           vpd_vendor = mkOption {
             type = nullOr str;
             default = null;
-            description = "The vendor specific vpd page information, using the vpd page abbreviation";
+            description = lib.mdDoc "The vendor specific vpd page information, using the vpd page abbreviation";
           };
 
           hardware_handler = mkOption {
             type = nullOr (enum [ "emc" "rdac" "hp_sw" "alua" "ana" ]);
             default = null;
-            description = "The hardware handler to use for this device type";
+            description = lib.mdDoc "The hardware handler to use for this device type";
           };
 
           # Optional arguments
           path_grouping_policy = mkOption {
             type = nullOr (enum [ "failover" "multibus" "group_by_serial" "group_by_prio" "group_by_node_name" ]);
             default = null; # real default: "failover"
-            description = "The default path grouping policy to apply to unspecified multipaths";
+            description = lib.mdDoc "The default path grouping policy to apply to unspecified multipaths";
           };
 
           uid_attribute = mkOption {
             type = nullOr str;
             default = null;
-            description = "The udev attribute providing a unique path identifier (WWID)";
+            description = lib.mdDoc "The udev attribute providing a unique path identifier (WWID)";
           };
 
           getuid_callout = mkOption {
             type = nullOr str;
             default = null;
-            description = ''
+            description = lib.mdDoc ''
               (Superseded by uid_attribute) The default program and args to callout
               to obtain a unique path identifier. Should be specified with an absolute path.
             '';
@@ -123,13 +123,13 @@ in {
               ''"historical-service-time 0"''
             ]);
             default = null; # real default: "service-time 0"
-            description = "The default path selector algorithm to use; they are offered by the kernel multipath target";
+            description = lib.mdDoc "The default path selector algorithm to use; they are offered by the kernel multipath target";
           };
 
           path_checker = mkOption {
             type = enum [ "readsector0" "tur" "emc_clariion" "hp_sw" "rdac" "directio" "cciss_tur" "none" ];
             default = "tur";
-            description = "The default method used to determine the paths state";
+            description = lib.mdDoc "The default method used to determine the paths state";
           };
 
           prio = mkOption {
@@ -138,31 +138,31 @@ in {
               "random" "weightedpath" "path_latency" "ana" "datacore" "iet"
             ]);
             default = null; # real default: "const"
-            description = "The name of the path priority routine";
+            description = lib.mdDoc "The name of the path priority routine";
           };
 
           prio_args = mkOption {
             type = nullOr str;
             default = null;
-            description = "Arguments to pass to to the prio function";
+            description = lib.mdDoc "Arguments to pass to to the prio function";
           };
 
           features = mkOption {
             type = nullOr str;
             default = null;
-            description = "Specify any device-mapper features to be used";
+            description = lib.mdDoc "Specify any device-mapper features to be used";
           };
 
           failback = mkOption {
             type = nullOr str;
             default = null; # real default: "manual"
-            description = "Tell multipathd how to manage path group failback. Quote integers as strings";
+            description = lib.mdDoc "Tell multipathd how to manage path group failback. Quote integers as strings";
           };
 
           rr_weight = mkOption {
             type = nullOr (enum [ "priorities" "uniform" ]);
             default = null; # real default: "uniform"
-            description = ''
+            description = lib.mdDoc ''
               If set to priorities the multipath configurator will assign path weights
               as "path prio * rr_min_io".
             '';
@@ -171,13 +171,13 @@ in {
           no_path_retry = mkOption {
             type = nullOr str;
             default = null; # real default: "fail"
-            description = "Specify what to do when all paths are down. Quote integers as strings";
+            description = lib.mdDoc "Specify what to do when all paths are down. Quote integers as strings";
           };
 
           rr_min_io = mkOption {
             type = nullOr int;
             default = null; # real default: 1000
-            description = ''
+            description = lib.mdDoc ''
               Number of I/O requests to route to a path before switching to the next in the
               same path group. This is only for Block I/O (BIO) based multipath and
               only apply to round-robin path_selector.
@@ -187,7 +187,7 @@ in {
           rr_min_io_rq = mkOption {
             type = nullOr int;
             default = null; # real default: 1
-            description = ''
+            description = lib.mdDoc ''
               Number of I/O requests to route to a path before switching to the next in the
               same path group. This is only for Request based multipath and
               only apply to round-robin path_selector.
@@ -197,7 +197,7 @@ in {
           fast_io_fail_tmo = mkOption {
             type = nullOr str;
             default = null; # real default: 5
-            description = ''
+            description = lib.mdDoc ''
               Specify the number of seconds the SCSI layer will wait after a problem has been
               detected on a FC remote port before failing I/O to devices on that remote port.
               This should be smaller than dev_loss_tmo. Setting this to "off" will disable
@@ -208,7 +208,7 @@ in {
           dev_loss_tmo = mkOption {
             type = nullOr str;
             default = null; # real default: 600
-            description = ''
+            description = lib.mdDoc ''
               Specify the number of seconds the SCSI layer will wait after a problem has
               been detected on a FC remote port before removing it from the system. This
               can be set to "infinity" which sets it to the max value of 2147483647
@@ -224,7 +224,7 @@ in {
           flush_on_last_del = mkOption {
             type = nullOr (enum [ "yes" "no" ]);
             default = null; # real default: "no"
-            description = ''
+            description = lib.mdDoc ''
               If set to "yes" multipathd will disable queueing when the last path to a
               device has been deleted.
             '';
@@ -233,7 +233,7 @@ in {
           user_friendly_names = mkOption {
             type = nullOr (enum [ "yes" "no" ]);
             default = null; # real default: "no"
-            description = ''
+            description = lib.mdDoc ''
               If set to "yes", using the bindings file /etc/multipath/bindings
               to assign a persistent and unique alias to the multipath, in the
               form of mpath. If set to "no" use the WWID as the alias. In either
@@ -242,25 +242,10 @@ in {
             '';
           };
 
-          retain_attached_hw_handler = mkOption {
-            type = nullOr (enum [ "yes" "no" ]);
-            default = null; # real default: "yes"
-            description = ''
-              (Obsolete for kernels >= 4.3) If set to "yes" and the SCSI layer has
-              already attached a hardware_handler to the device, multipath will not
-              force the device to use the hardware_handler specified by mutipath.conf.
-              If the SCSI layer has not attached a hardware handler, multipath will
-              continue to use its configured hardware handler.
-
-              Important Note: Linux kernel 4.3 or newer always behaves as if
-              "retain_attached_hw_handler yes" was set.
-            '';
-          };
-
           detect_prio = mkOption {
             type = nullOr (enum [ "yes" "no" ]);
             default = null; # real default: "yes"
-            description = ''
+            description = lib.mdDoc ''
               If set to "yes", multipath will try to detect if the device supports
               SCSI-3 ALUA. If so, the device will automatically use the sysfs
               prioritizer if the required sysf attributes access_state and
@@ -272,7 +257,7 @@ in {
           detect_checker = mkOption {
             type = nullOr (enum [ "yes" "no" ]);
             default = null; # real default: "yes"
-            description = ''
+            description = lib.mdDoc ''
               If set to "yes", multipath will try to detect if the device supports
               SCSI-3 ALUA. If so, the device will automatically use the tur checker.
               If set to "no", the checker will be selected as usual.
@@ -282,7 +267,7 @@ in {
           deferred_remove = mkOption {
             type = nullOr (enum [ "yes" "no" ]);
             default = null; # real default: "no"
-            description = ''
+            description = lib.mdDoc ''
               If set to "yes", multipathd will do a deferred remove instead of a
               regular remove when the last path device has been deleted. This means
               that if the multipath device is still in use, it will be freed when
@@ -294,7 +279,7 @@ in {
           san_path_err_threshold = mkOption {
             type = nullOr str;
             default = null;
-            description = ''
+            description = lib.mdDoc ''
               If set to a value greater than 0, multipathd will watch paths and check
               how many times a path has been failed due to errors.If the number of
               failures on a particular path is greater then the san_path_err_threshold,
@@ -307,7 +292,7 @@ in {
           san_path_err_forget_rate = mkOption {
             type = nullOr str;
             default = null;
-            description = ''
+            description = lib.mdDoc ''
               If set to a value greater than 0, multipathd will check whether the path
               failures has exceeded the san_path_err_threshold within this many checks
               i.e san_path_err_forget_rate. If so we will not reinstante the path till
@@ -318,7 +303,7 @@ in {
           san_path_err_recovery_time = mkOption {
             type = nullOr str;
             default = null;
-            description = ''
+            description = lib.mdDoc ''
               If set to a value greater than 0, multipathd will make sure that when
               path failures has exceeded the san_path_err_threshold within
               san_path_err_forget_rate then the path will be placed in failed state
@@ -331,61 +316,61 @@ in {
           marginal_path_err_sample_time = mkOption {
             type = nullOr int;
             default = null;
-            description = "One of the four parameters of supporting path check based on accounting IO error such as intermittent error";
+            description = lib.mdDoc "One of the four parameters of supporting path check based on accounting IO error such as intermittent error";
           };
 
           marginal_path_err_rate_threshold = mkOption {
             type = nullOr int;
             default = null;
-            description = "The error rate threshold as a permillage (1/1000)";
+            description = lib.mdDoc "The error rate threshold as a permillage (1/1000)";
           };
 
           marginal_path_err_recheck_gap_time = mkOption {
             type = nullOr str;
             default = null;
-            description = "One of the four parameters of supporting path check based on accounting IO error such as intermittent error";
+            description = lib.mdDoc "One of the four parameters of supporting path check based on accounting IO error such as intermittent error";
           };
 
           marginal_path_double_failed_time = mkOption {
             type = nullOr str;
             default = null;
-            description = "One of the four parameters of supporting path check based on accounting IO error such as intermittent error";
+            description = lib.mdDoc "One of the four parameters of supporting path check based on accounting IO error such as intermittent error";
           };
 
           delay_watch_checks = mkOption {
             type = nullOr str;
             default = null;
-            description = "This option is deprecated, and mapped to san_path_err_forget_rate";
+            description = lib.mdDoc "This option is deprecated, and mapped to san_path_err_forget_rate";
           };
 
           delay_wait_checks = mkOption {
             type = nullOr str;
             default = null;
-            description = "This option is deprecated, and mapped to san_path_err_recovery_time";
+            description = lib.mdDoc "This option is deprecated, and mapped to san_path_err_recovery_time";
           };
 
           skip_kpartx = mkOption {
             type = nullOr (enum [ "yes" "no" ]);
             default = null; # real default: "no"
-            description = "If set to yes, kpartx will not automatically create partitions on the device";
+            description = lib.mdDoc "If set to yes, kpartx will not automatically create partitions on the device";
           };
 
           max_sectors_kb = mkOption {
             type = nullOr int;
             default = null;
-            description = "Sets the max_sectors_kb device parameter on all path devices and the multipath device to the specified value";
+            description = lib.mdDoc "Sets the max_sectors_kb device parameter on all path devices and the multipath device to the specified value";
           };
 
           ghost_delay = mkOption {
             type = nullOr int;
             default = null;
-            description = "Sets the number of seconds that multipath will wait after creating a device with only ghost paths before marking it ready for use in systemd";
+            description = lib.mdDoc "Sets the number of seconds that multipath will wait after creating a device with only ghost paths before marking it ready for use in systemd";
           };
 
           all_tg_pt = mkOption {
             type = nullOr str;
             default = null;
-            description = "Set the 'all targets ports' flag when registering keys with mpathpersist";
+            description = lib.mdDoc "Set the 'all targets ports' flag when registering keys with mpathpersist";
           };
 
         };
@@ -395,7 +380,7 @@ in {
     defaults = mkOption {
       type = nullOr str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         This section defines default values for attributes which are used
         whenever no values are given in the appropriate device or multipath
         sections.
@@ -405,7 +390,7 @@ in {
     blacklist = mkOption {
       type = nullOr str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         This section defines which devices should be excluded from the
         multipath topology discovery.
       '';
@@ -414,7 +399,7 @@ in {
     blacklist_exceptions = mkOption {
       type = nullOr str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         This section defines which devices should be included in the
         multipath topology discovery, despite being listed in the
         blacklist section.
@@ -424,7 +409,7 @@ in {
     overrides = mkOption {
       type = nullOr str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         This section defines values for attributes that should override the
         device-specific settings for all devices.
       '';
@@ -433,13 +418,13 @@ in {
     extraConfig = mkOption {
       type = nullOr str;
       default = null;
-      description = "Lines to append to default multipath.conf";
+      description = lib.mdDoc "Lines to append to default multipath.conf";
     };
 
     extraConfigFile = mkOption {
       type = nullOr str;
       default = null;
-      description = "Append an additional file's contents to /etc/multipath.conf";
+      description = lib.mdDoc "Append an additional file's contents to /etc/multipath.conf";
     };
 
     pathGroups = mkOption {
@@ -454,7 +439,7 @@ in {
           }, ...
         ]
       '';
-      description = ''
+      description = lib.mdDoc ''
         This option allows you to define multipath groups as described
         in http://christophe.varoqui.free.fr/usage.html.
       '';
@@ -464,34 +449,34 @@ in {
           alias = mkOption {
             type = int;
             example = 1001234;
-            description = "The name of the multipath device";
+            description = lib.mdDoc "The name of the multipath device";
           };
 
           wwid = mkOption {
             type = hexStr;
             example = "360080e500043b35c0123456789abcdef";
-            description = "The identifier for the multipath device";
+            description = lib.mdDoc "The identifier for the multipath device";
           };
 
           array = mkOption {
             type = str;
             default = null;
             example = "bigarray.example.com";
-            description = "The DNS name of the storage array";
+            description = lib.mdDoc "The DNS name of the storage array";
           };
 
           fsType = mkOption {
             type = nullOr str;
             default = null;
             example = "zfs";
-            description = "Type of the filesystem";
+            description = lib.mdDoc "Type of the filesystem";
           };
 
           options = mkOption {
             type = nullOr str;
             default = null;
             example = "ro";
-            description = "Options used to mount the file system";
+            description = lib.mdDoc "Options used to mount the file system";
           };
 
         };

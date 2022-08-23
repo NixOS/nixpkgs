@@ -1,23 +1,48 @@
-{ lib, buildPythonPackage, fetchFromGitHub, mock, pytestCheckHook, invoke }:
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitHub
+, invoke
+, mock
+, pytestCheckHook
+, pythonOlder
+, sphinx-rtd-theme
+}:
 
 buildPythonPackage rec {
   pname = "pydash";
-  version = "4.9.3";
+  version = "5.1.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "dgilland";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-BAyiSnILvujUOFOAkiXSgyozs2Q809pYihHwa+6BHcQ=";
+    hash = "sha256-BAyiSnILvujUOFOAkiXSgyozs2Q809pYihHwa+6BHcQ=";
   };
 
-  patches = [ ./0001-Only-build-unit-tests.patch ];
+  checkInputs = [
+    invoke
+    mock
+    sphinx-rtd-theme
+    pytestCheckHook
+  ];
 
-  checkInputs = [ mock pytestCheckHook invoke ];
+  postPatch = ''
+    sed -i "/--cov/d" setup.cfg
+    sed -i "/--no-cov/d" setup.cfg
+  '';
+
+  pythonImportsCheck = [
+    "pydash"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/dgilland/pydash";
-    description = "The kitchen sink of Python utility libraries for doing \"stuff\" in a functional way. Based on the Lo-Dash Javascript library.";
+    broken = stdenv.isDarwin;
+    description = "Python utility libraries for doing stuff in a functional way";
+    homepage = "https://pydash.readthedocs.io";
     license = licenses.mit;
     maintainers = with maintainers; [ ma27 ];
   };

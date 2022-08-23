@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://javacc.github.io/javacc";
     description = "A parser generator for building parsers from grammars";
     license = licenses.bsd2;
-    maintainers = [ teams.deshaw.members ];
+    maintainers = teams.deshaw.members;
   };
 }

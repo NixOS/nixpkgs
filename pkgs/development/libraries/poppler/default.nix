@@ -18,7 +18,8 @@
 , ninja
 , openjpeg
 , pkg-config
-, scribusUnstable
+, python3
+, scribus
 , texlive
 , zlib
 , withData ? true, poppler_data
@@ -34,19 +35,20 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "poppler-${suffix}";
-  version = "21.06.1"; # beware: updates often break cups-filters build, check texlive and scribusUnstable too!
+  version = "22.08.0"; # beware: updates often break cups-filters build, check texlive and scribus too!
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://poppler.freedesktop.org/poppler-${version}.tar.xz";
-    sha256 = "sha256-hrCeWgLeQAgaORbvhxHFEo6vSx/FnV+H0Oxm8E9ZXbQ=";
+    sha256 = "sha256-tJMyhyFALyXLdSP5zcL318WfRa2Zm951xjyQYE2w8gs=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
     pkg-config
+    python3
   ];
 
   buildInputs = [
@@ -95,7 +97,7 @@ stdenv.mkDerivation rec {
   passthru = {
     tests = {
       # These depend on internal poppler code that frequently changes.
-      inherit inkscape cups-filters texlive scribusUnstable;
+      inherit inkscape cups-filters texlive scribus;
     };
   };
 

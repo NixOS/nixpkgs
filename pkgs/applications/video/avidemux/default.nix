@@ -25,11 +25,11 @@ assert !withQT -> default != "qt5";
 
 stdenv.mkDerivation rec {
   pname = "avidemux";
-  version = "2.7.8";
+  version = "2.8.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/avidemux/avidemux/${version}/avidemux_${version}.tar.gz";
-    sha256 = "sha256-YopAT1If8oEnYHAK4+KqeOWBaw/z+2/QWsPnUkjZdAE=";
+    sha256 = "sha256-0exvUnflEijs8O4cqJ+uJMWR9SD4fOlvq+yIGNBN4zs=";
   };
 
   patches = [
@@ -66,7 +66,6 @@ stdenv.mkDerivation rec {
     cd "$sourceRoot"
     patchPhase
 
-    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${libXext}/lib"
     ${stdenv.shell} bootStrap.bash \
       --with-core \
       ${if withQT then "--with-qt" else "--without-qt"} \

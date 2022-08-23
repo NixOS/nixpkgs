@@ -16,14 +16,16 @@ let
 in
 buildPythonPackage rec {
   pname = "iso4217";
-  version = "1.7";
+  version = "1.11";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dahlia";
     repo = pname;
     rev = version;
-    hash = "sha256-Ih2l6bGM7i5TUkzJPkgx8EOOL4a3/qE28SUZS6M4sQc=";
+    hash = "sha256-zJYtEIrsuHKPwnSoRjyZC/0rgAZoNMZ0Oh8gQcIb20Q=";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.9") [

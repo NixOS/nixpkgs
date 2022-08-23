@@ -3,34 +3,17 @@
 
 stdenv.mkDerivation rec {
   pname = "confluent-platform";
-  version = "5.3.0";
-  scalaVersion = "2.12";
+  version = "7.2.1";
 
   src = fetchurl {
-    url = "http://packages.confluent.io/archive/${lib.versions.majorMinor version}/confluent-${version}-${scalaVersion}.tar.gz";
-    sha256 = "14cilq63fib5yvj40504aj6wssi7xw4f7c2jadlzdmdxzh4ixqmp";
-  };
-
-  confluentCli = fetchFromGitHub {
-    owner = "confluentinc";
-    repo = "confluent-cli";
-    rev = "v${version}";
-    sha256 = "18yvp56b8l074qfkgr4afirgd43g8b023n9ija6dnk6p6dib1f4j";
+    url = "https://packages.confluent.io/archive/${lib.versions.majorMinor version}/confluent-${version}.tar.gz";
+    sha256 = "sha256-vflWZjW8RwaDOwEFy8GHRfcmsHcRKxs8WwFfT66SIM4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jre bash ];
 
   installPhase = ''
-    cp -R $confluentCli confluent-cli
-    chmod -R +w confluent-cli
-
-    (
-      export CONFLUENT_HOME=$PWD
-      cd confluent-cli
-      make install
-    )
-
     mkdir -p $out
     cp -R bin etc share src $out
     rm -rf $out/bin/windows
@@ -56,7 +39,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.confluent.io/";
     description = "Confluent event streaming platform based on Apache Kafka";
     license = licenses.asl20;
-    maintainers = [ maintainers.offline ];
+    maintainers = with maintainers; [ zoedsoupe ];
     platforms = platforms.unix;
   };
 }

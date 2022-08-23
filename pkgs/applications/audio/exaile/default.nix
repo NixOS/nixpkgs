@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals documentationSupport [
     help2man
     python3.pkgs.sphinx
-    python3.pkgs.sphinx_rtd_theme
+    python3.pkgs.sphinx-rtd-theme
   ] ++ lib.optional translationSupport gettext;
 
   buildInputs = [
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/exaile \
       --set PYTHONPATH $PYTHONPATH \
-      ${lib.optionalString streamripperSupport "--prefix PATH : ${lib.makeBinPath [ streamripper ]}"}
+      --prefix PATH : ${lib.makeBinPath ([ python3 ] ++ lib.optionals streamripperSupport [ streamripper ]) }
   '';
 
   meta = with lib; {

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "terraformer";
-  version = "0.8.18";
+  version = "0.8.21";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = pname;
     rev = version;
-    sha256 = "sha256-F+OmeXCb0Q2Qqu0T+dqdxvUYszg4ED/zoayH9iO6PCM=";
+    sha256 = "sha256-IcxXR+EQItfUtUfBOlRi8VvxZ3y4OE8mdbch5KqG+wg=";
   };
 
-  vendorSha256 = "sha256-MCw5EkGjQDY75lpCA6iwuAhOXOAnDuDM+9L7eBnagEU=";
+  vendorSha256 = "sha256-zek9c5y6HEvY0eFdv78RDS8+Q2/++34VHRJsIONse6c=";
 
   subPackages = [ "." ];
 

@@ -1,22 +1,19 @@
-{ lib, stdenv, fetchurl, perl, rsync, fetchpatch }:
+{ stdenv, python3, rsync }:
 
-let
-  base = import ./base.nix { inherit lib fetchurl fetchpatch; };
-in
 stdenv.mkDerivation {
   pname = "rrsync";
-  version = base.version;
+  inherit (rsync) version srcs;
 
-  src = base.src;
-
-  buildInputs = [ rsync perl ];
-
+  buildInputs = [
+    rsync
+    (python3.withPackages (pythonPackages: with pythonPackages; [ braceexpand ]))
+  ];
   # Skip configure and build phases.
   # We just want something from the support directory
   dontConfigure = true;
   dontBuild = true;
 
-  patches = base.extraPatches;
+  inherit (rsync) patches;
 
   postPatch = ''
     substituteInPlace support/rrsync --replace /usr/bin/rsync ${rsync}/bin/rsync
@@ -28,8 +25,7 @@ stdenv.mkDerivation {
     chmod a+x $out/bin/rrsync
   '';
 
-  meta = base.meta // {
+  meta = rsync.meta // {
     description = "A helper to run rsync-only environments from ssh-logins";
-    maintainers = [ lib.maintainers.kampfschlaefer ];
   };
 }

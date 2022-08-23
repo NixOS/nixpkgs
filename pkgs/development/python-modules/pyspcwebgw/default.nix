@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyspcwebgw";
-  version = "0.5.0";
+  version = "0.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mbrrg";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0pc25myjc2adqcx2lbns9kw0gy17x1qjgicmfj46n6fn0c786p9v";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-Pjv8AxXuwi48Z8U+LSZZ+OhXrE3KlX7jlmnXTBLxXOs=";
   };
 
   propagatedBuildInputs = [
@@ -32,6 +32,10 @@ buildPythonPackage rec {
     aioresponses
     pytest-asyncio
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
   ];
 
   pythonImportsCheck = [ "pyspcwebgw" ];

@@ -40,5 +40,6 @@ pythonPackages.buildPythonApplication rec {
     homepage    = "https://github.com/lpechacek/cpuset";
     license     = licenses.gpl2;
     maintainers = with maintainers; [ thiagokokada wykurz ];
+    mainProgram = "cset";
   };
 }

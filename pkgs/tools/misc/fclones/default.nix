@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fclones";
-  version = "0.17.1";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "pkolaczk";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0d5an35fnz9rdr2ssm952zpzn4jynpvbfyidnqcmp0lclr60c2ir";
+    sha256 = "sha256-SmYRhOxyptY/DVc+JRT9Yn52WRHOS0B5tfmrqp05hxE=";
   };
 
-  cargoSha256 = "sha256-CtQ4grQqgMUYzPDw2Qankl8jmqwwCrawNCmaY97JPkQ=";
+  cargoSha256 = "sha256-chiKNVZg6sUN9s1fhWCk64UOsw0nXkrjopfkAFbZbwI=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     AppKit

@@ -1,90 +1,76 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, gtk-doc, intltool
-, audit, glib, libusb1, libxml2
-, wrapGAppsHook
-, gstreamer ? null
-, gst-plugins-base ? null
-, gst-plugins-good ? null
-, gst-plugins-bad ? null
-, libnotify ? null
-, gnome ? null
-, gtk3 ? null
-, enableUsb ? true
-, enablePacketSocket ? true
-, enableViewer ? true
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, gi-docgen
+, glib
+, libxml2
+, gobject-introspection
+
 , enableGstPlugin ? true
-, enableCppTest ? false
+, enableViewer ? true
+, gst_all_1
+, gtk3
+, wrapGAppsHook
+
+, enableUsb ? true
+, libusb1
+
+, enablePacketSocket ? true
 , enableFastHeartbeat ? false
-, enableAsan ? false
 }:
 
-let
-  gstreamerAtLeastVersion1 =
-    lib.all
-      (pkg: pkg != null && lib.versionAtLeast (lib.getVersion pkg) "1.0")
-      [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad ];
-in
-  assert enableGstPlugin -> lib.all (pkg: pkg != null) [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad ];
-  assert enableViewer -> enableGstPlugin;
-  assert enableViewer -> libnotify != null;
-  assert enableViewer -> gnome != null;
-  assert enableViewer -> gtk3 != null;
-  assert enableViewer -> gstreamerAtLeastVersion1;
+assert enableGstPlugin -> gst_all_1 != null;
+assert enableViewer -> enableGstPlugin;
+assert enableViewer -> gtk3 != null;
+assert enableViewer -> wrapGAppsHook != null;
 
-  stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
+  pname = "aravis";
+  version = "0.8.22";
 
-    pname = "aravis";
-    version = "0.6.4";
+  src = fetchFromGitHub {
+    owner = "AravisProject";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-S9DmXjywxNr5Rpx605zip76vGKBSrUwyerqXlBm05VI=";
+  };
 
-    src = fetchFromGitHub {
-      owner = "AravisProject";
-      repo = pname;
-      rev= "ARAVIS_${builtins.replaceStrings ["."] ["_"] version}";
-      sha256 = "18fnliks661kzc3g8v08hcaj18hjid8b180d6s9gwn0zgv4g374w";
-    };
+  outputs = [ "bin" "dev" "out" "lib" ];
 
-    outputs = [ "bin" "dev" "out" "lib" ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gi-docgen
+  ] ++ lib.optional enableViewer wrapGAppsHook;
 
-    nativeBuildInputs = [
-      autoreconfHook
-      pkg-config
-      intltool
-      gtk-doc
-    ] ++ lib.optional enableViewer wrapGAppsHook;
+  buildInputs =
+    [ glib libxml2 gobject-introspection ]
+    ++ lib.optional enableUsb libusb1
+    ++ lib.optionals (enableViewer || enableGstPlugin) (with gst_all_1; [ gstreamer gst-plugins-base (gst-plugins-good.override { gtkSupport = true; }) gst-plugins-bad ])
+    ++ lib.optionals (enableViewer) [ gtk3 ];
 
-    buildInputs =
-      [ glib libxml2 ]
-      ++ lib.optional enableUsb libusb1
-      ++ lib.optional enablePacketSocket audit
-      ++ lib.optionals (enableViewer || enableGstPlugin) [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad ]
-      ++ lib.optionals (enableViewer) [ libnotify gtk3 gnome.adwaita-icon-theme ];
+  mesonFlags = [
+  ] ++ lib.optional enableFastHeartbeat "-Dfast-heartbeat=enabled"
+  ++ lib.optional (!enableGstPlugin) "-Dgst-plugin=disabled"
+  ++ lib.optional (!enableViewer) "-Dviewer=disabled"
+  ++ lib.optional (!enableUsb) "-Dviewer=disabled"
+  ++ lib.optional (!enablePacketSocket) "-Dpacket-socket=disabled";
 
-    preAutoreconf = "./autogen.sh";
+  doCheck = true;
 
-    configureFlags =
-      lib.optional enableUsb "--enable-usb"
-        ++ lib.optional enablePacketSocket "--enable-packet-socket"
-        ++ lib.optional enableViewer "--enable-viewer"
-        ++ lib.optional enableGstPlugin
-        (if gstreamerAtLeastVersion1 then "--enable-gst-plugin" else "--enable-gst-0.10-plugin")
-        ++ lib.optional enableCppTest "--enable-cpp-test"
-        ++ lib.optional enableFastHeartbeat "--enable-fast-heartbeat"
-        ++ lib.optional enableAsan "--enable-asan";
-
-    postPatch = ''
-        ln -s ${gtk-doc}/share/gtk-doc/data/gtk-doc.make .
-      '';
-
-    doCheck = true;
-
-    meta = {
-      description = "Library for video acquisition using GenICam cameras";
-      longDescription = ''
-        Implements the gigabit ethernet and USB3 protocols used by industrial cameras.
-      '';
-      homepage = "https://aravisproject.github.io/docs/aravis-0.5";
-      license = lib.licenses.lgpl2;
-      maintainers = [];
-      platforms = lib.platforms.unix;
-    };
-  }
-
+  meta = {
+    description = "Library for video acquisition using GenICam cameras";
+    longDescription = ''
+      Implements the gigabit ethernet and USB3 protocols used by industrial cameras.
+    '';
+    # the documentation is the best working homepage that's not the Github repo
+    homepage = "https://aravisproject.github.io/docs/aravis-0.8";
+    license = lib.licenses.lgpl2;
+    maintainers = with lib.maintainers; [ tpw_rules ];
+    platforms = lib.platforms.unix;
+  };
+}

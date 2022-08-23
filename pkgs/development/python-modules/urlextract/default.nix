@@ -1,27 +1,31 @@
 { lib
-, appdirs
 , buildPythonPackage
 , dnspython
 , fetchPypi
 , filelock
 , idna
+, platformdirs
 , pytestCheckHook
+, pythonOlder
 , uritools
 }:
 
 buildPythonPackage rec {
   pname = "urlextract";
-  version = "1.4.0";
+  version = "1.6.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "669f07192584b841b49ba8868fbd6b00e7ddc28367d36a3d8ca8c8e429420748";
+    hash = "sha256-V08NjFYtN3M2pRVIQMfk7s9UwQKlOJcciX9zEwdaiIc=";
   };
 
   propagatedBuildInputs = [
-    appdirs
     filelock
     idna
+    platformdirs
     uritools
   ];
 
@@ -39,7 +43,9 @@ buildPythonPackage rec {
     "test_dns_cache_reuse"
   ];
 
-  pythonImportsCheck = [ "urlextract" ];
+  pythonImportsCheck = [
+    "urlextract"
+  ];
 
   meta = with lib; {
     description = "Collects and extracts URLs from given text";

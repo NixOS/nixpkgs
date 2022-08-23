@@ -2,7 +2,6 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, fetchpatch
 , poetry-core
 , aiohttp
 , async-upnp-client
@@ -13,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "python-songpal";
-  version = "0.13";
+  version = "0.15";
 
   format = "pyproject";
 
@@ -22,24 +21,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rytilahti";
     repo = "python-songpal";
-    rev = version;
-    sha256 = "124w6vfn992845k09bjv352havk8pg590b135m37h1x1m7fmbpwa";
+    rev = "refs/tags/${version}";
+    hash = "sha256-NoO3cgviFbXosEnx46nXdW02jYOfRPHUdc1VeCvwBsQ=";
   };
-
-  patches = [
-    # https://github.com/rytilahti/python-songpal/pull/90
-    (fetchpatch {
-      name = "switch-to-poetry-core.patch";
-      url = "https://github.com/rytilahti/python-songpal/commit/56b634790d94b2f9788d5af3d5cedff47f1e42c2.patch";
-      sha256 = "0yc0mrb91ywk77nd4mxvyc0p2kjz2w1p395755a32ls30zw2bs27";
-    })
-  ];
-
-  postPatch = ''
-    # https://github.com/rytilahti/python-songpal/issues/91
-    substituteInPlace pyproject.toml \
-      --replace 'click = "^7"' 'click = "*"'
-  '';
 
   nativeBuildInputs = [
     poetry-core

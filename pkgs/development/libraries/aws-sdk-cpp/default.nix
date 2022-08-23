@@ -1,7 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, cmake, curl, openssl, s2n-tls, zlib
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, curl
+, openssl
+, s2n-tls
+, zlib
 , aws-crt-cpp
-, aws-c-cal, aws-c-common, aws-c-event-stream, aws-c-io, aws-checksums
-, CoreAudio, AudioToolbox
+, aws-c-cal
+, aws-c-common
+, aws-c-event-stream
+, aws-c-io
+, aws-checksums
+, CoreAudio
+, AudioToolbox
 , # Allow building a limited set of APIs, e.g. ["s3" "ec2"].
   apis ? ["*"]
 , # Whether to enable AWS' custom memory management.
@@ -18,16 +31,33 @@ in
 
 stdenv.mkDerivation rec {
   pname = "aws-sdk-cpp";
-  version = "1.9.121";
+  version = if stdenv.system == "i686-linux" then "1.9.150"
+    else "1.9.238";
 
   src = fetchFromGitHub {
-    owner = "awslabs";
+    owner = "aws";
     repo = "aws-sdk-cpp";
     rev = version;
-    sha256 = "sha256-VQpWauk0tdJ1QU0HmtdTwQdKbiAuTTXXsUo2cqpqmdU=";
+    sha256 = if version == "1.9.150" then "fgLdXWQKHaCwulrw9KV3vpQ71DjnQAL4heIRW7Rk7UY="
+      else "sha256-pEmsTfZXsvJMV79dGkjDNbUVajwyoYgzE5DCsC53pGY=";
   };
 
   postPatch = ''
+    # Missing includes for GCC11
+    sed '5i#include <thread>' -i \
+      aws-cpp-sdk-cloudfront-integration-tests/CloudfrontOperationTest.cpp \
+      aws-cpp-sdk-cognitoidentity-integration-tests/IdentityPoolOperationTest.cpp \
+      aws-cpp-sdk-dynamodb-integration-tests/TableOperationTest.cpp \
+      aws-cpp-sdk-elasticfilesystem-integration-tests/ElasticFileSystemTest.cpp \
+      aws-cpp-sdk-lambda-integration-tests/FunctionTest.cpp \
+      aws-cpp-sdk-mediastore-data-integration-tests/MediaStoreDataTest.cpp \
+      aws-cpp-sdk-queues/source/sqs/SQSQueue.cpp \
+      aws-cpp-sdk-redshift-integration-tests/RedshiftClientTest.cpp \
+      aws-cpp-sdk-s3-crt-integration-tests/BucketAndObjectOperationTest.cpp \
+      aws-cpp-sdk-s3-integration-tests/BucketAndObjectOperationTest.cpp \
+      aws-cpp-sdk-s3control-integration-tests/S3ControlTest.cpp \
+      aws-cpp-sdk-sqs-integration-tests/QueueOperationTest.cpp \
+      aws-cpp-sdk-transfer-tests/TransferTests.cpp
     # Flaky on Hydra
     rm aws-cpp-sdk-core-tests/aws/auth/AWSCredentialsProviderTest.cpp
     # Includes aws-c-auth private headers, so only works with submodule build
@@ -55,7 +85,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_DEPS=OFF"
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
   ] ++ lib.optional (!customMemoryManagement) "-DCUSTOM_MEMORY_MANAGEMENT=0"
   ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "-DENABLE_TESTING=OFF"
@@ -82,14 +111,19 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./cmake-dirs.patch
-  ];
+  ]
+    ++ lib.optional (lib.versionOlder version "1.9.163")
+      (fetchpatch {
+        url = "https://github.com/aws/aws-sdk-cpp/commit/b102aaf5693c4165c84b616ab9ffb9edfb705239.diff";
+        sha256 = "sha256-38QBo3MEFpyHPb8jZEURRPkoeu4DqWhVeErJayiHKF0=";
+      });
 
   # Builds in 2+h with 2 cores, and ~10m with a big-parallel builder.
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
     description = "A C++ interface for Amazon Web Services";
-    homepage = "https://github.com/awslabs/aws-sdk-cpp";
+    homepage = "https://github.com/aws/aws-sdk-cpp";
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ eelco orivej ];

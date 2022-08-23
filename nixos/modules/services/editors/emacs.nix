@@ -67,7 +67,7 @@ in
       type = types.package;
       default = pkgs.emacs;
       defaultText = literalExpression "pkgs.emacs";
-      description = ''
+      description = lib.mdDoc ''
         emacs derivation to use.
       '';
     };
@@ -75,7 +75,7 @@ in
     defaultEditor = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         When enabled, configures emacsclient to be the default editor
         using the EDITOR environment variable.
       '';

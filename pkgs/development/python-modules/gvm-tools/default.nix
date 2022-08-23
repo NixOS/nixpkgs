@@ -4,12 +4,13 @@
 , poetry-core
 , pytestCheckHook
 , python-gvm
+, pythonAtLeast
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "gvm-tools";
-  version = "21.10.0";
+  version = "22.6.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-LGdbqkIKdmtUOGSoCme6oVG1aCbtASSxi9K9f3khafA=";
+    sha256 = "sha256-pU/KNdWt+Iy/YiIAQFFgkaGHOvXK6v4Loia9MD4qmWc=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +37,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Don't test sending
     "SendTargetTestCase"
+  ] ++ lib.optionals (pythonAtLeast "3.10") [
+    "HelpFormattingParserTestCase"
   ];
 
   pythonImportsCheck = [

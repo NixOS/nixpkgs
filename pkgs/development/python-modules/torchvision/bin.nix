@@ -5,6 +5,7 @@
 , isPy37
 , isPy38
 , isPy39
+, isPy310
 , patchelf
 , pillow
 , python
@@ -15,7 +16,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "0.11.1";
+  version = "0.12.0";
 in buildPythonPackage {
   inherit version;
 
@@ -25,7 +26,7 @@ in buildPythonPackage {
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
-  disabled = !(isPy37 || isPy38 || isPy39);
+  disabled = !(isPy37 || isPy38 || isPy39 || isPy310);
 
   nativeBuildInputs = [
     patchelf
@@ -59,6 +60,7 @@ in buildPythonPackage {
     # https://docs.nvidia.com/cuda/eula/index.html
     # https://www.intel.com/content/www/us/en/developer/articles/license/onemkl-license-faq.html
     license = licenses.bsd3;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ junjihashimoto ];
   };

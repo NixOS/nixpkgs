@@ -3,7 +3,7 @@
 
 buildGoPackage rec {
   pname = "machine";
-  version = "0.16.1";
+  version = "0.16.2";
 
   goPackagePath = "github.com/docker/machine";
 
@@ -11,7 +11,7 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "docker";
     repo = "machine";
-    sha256 = "0xxzxi5v7ji9j2k7kxhi0ah91lfa7b9rg3nywgx0lkv8dlgp8kmy";
+    sha256 = "sha256-Mo2OGpem3p6hCNJ46+RH3BfC7kmKB4yk4Vzo38K88UM=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

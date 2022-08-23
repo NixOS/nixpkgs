@@ -1,38 +1,38 @@
 {
   "EncConv": {
     "owner": "Alexey-T",
-    "rev": "2021.01.01",
-    "sha256": "18fp7yz2rl80a6xw7v4bgc4092l74fb6p6z4yf312r7gw7b8naq6"
+    "rev": "2022.06.19",
+    "sha256": "sha256-M00rHH3dG6Vx6MEALxRNlnLLfX/rRI+rdTS7riOhgeg="
   },
   "ATBinHex-Lazarus": {
     "owner": "Alexey-T",
-    "rev": "2021.07.02",
-    "sha256": "sha256-XSt2XfHMiF/ZIf07M65u+k5FjacyToL0rWbpcflKcuY="
+    "rev": "2022.06.14",
+    "sha256": "sha256-3QhARraYURW5uCf2f4MZfUbxdbsg9h7BlXUxKcz4jwA="
   },
   "ATFlatControls": {
     "owner": "Alexey-T",
-    "rev": "2021.11.11",
-    "sha256": "sha256-lbRRiA8CHWmosJefTHrP2cTgU8nlK1SmNcppG6Bl54I="
+    "rev": "2022.07.17",
+    "sha256": "sha256-KMGmimbtUQHa8i5wt4KLA/HotLbb/ISzdznmdqPXkNU="
   },
   "ATSynEdit": {
     "owner": "Alexey-T",
-    "rev": "2021.12.22",
-    "sha256": "sha256-MmRJ3XDq7b9doPFfW7njSOasHej5ut0nYcJMFj+Y/Dc="
+    "rev": "2022.07.27",
+    "sha256": "sha256-SGozuk0pvp0+PwAFbGG+QMUhQ2A6mXKr31u10WIveh0="
   },
   "ATSynEdit_Cmp": {
     "owner": "Alexey-T",
-    "rev": "2021.09.14",
-    "sha256": "sha256-6eC75zAtWbM1XEI9OM3iqy/a8Vj1l5WU7HGJBpmoQsA="
+    "rev": "2022.05.04",
+    "sha256": "sha256-6O4RijSejPogokLSBuC6pKrOpihMi/ykS06YyV64Sak="
   },
   "EControl": {
     "owner": "Alexey-T",
-    "rev": "2021.12.07",
-    "sha256": "sha256-givCklAHao26psWLI2qK246igxcAQEeIYTGH61FX6Xo="
+    "rev": "2022.07.20",
+    "sha256": "sha256-pCIt21m34BuDbWLn+CQwqsMQHVWHtctME63Bjx1B9hE="
   },
   "ATSynEdit_Ex": {
     "owner": "Alexey-T",
-    "rev": "2021.12.07",
-    "sha256": "sha256-/2Fv/vrpbHSiJro11cjbziUaT4gfwa6y5aQBoYgq3OQ="
+    "rev": "2022.07.20",
+    "sha256": "sha256-f/BdOMcx7NTpKgaFTz4MbK3O0GcUepyMPyRdhnZImjU="
   },
   "Python-for-Lazarus": {
     "owner": "Alexey-T",
@@ -41,8 +41,8 @@
   },
   "Emmet-Pascal": {
     "owner": "Alexey-T",
-    "rev": "2020.09.05",
-    "sha256": "0qfiirxnk5g3whx8y8hp54ch3h6gkkd01yf79m95bwar5qvdfybg"
+    "rev": "2022.01.17",
+    "sha256": "sha256-5yqxRW7xFJ4MwHjKnxYL8/HrCDLn30a1gyQRjGMx/qw="
   },
   "CudaText-lexers": {
     "owner": "Alexey-T",
@@ -51,7 +51,7 @@
   },
   "bgrabitmap": {
     "owner": "bgrabitmap",
-    "rev": "v11.4",
-    "sha256": "sha256-jZL8lzjua033E76IL0HIk/fihC73ifCb4LqMni7vvb0="
+    "rev": "v11.5",
+    "sha256": "sha256-Pevh+yhtN3oSSvbQfnO7SM6UHBVe0sSpbK8ss98XqcU="
   }
 }

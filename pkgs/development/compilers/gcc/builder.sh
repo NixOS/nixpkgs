@@ -147,11 +147,6 @@ if test "$noSysDirs" = "1"; then
     fi
 fi
 
-if [ -n "${targetConfig-}" ]; then
-    # if stripping gcc, include target directory too
-    stripDebugList="${stripDebugList-lib lib32 lib64 libexec bin sbin} $targetConfig"
-fi
-
 eval "$oldOpts"
 
 providedPreConfigure="$preConfigure";
@@ -169,15 +164,6 @@ preConfigure() {
         # the target libgcc as target libraries.
         # See 'configure:5370'
         rm -Rf zlib
-    fi
-
-    if test -f "$NIX_CC/nix-support/orig-libc"; then
-        # Patch the configure script so it finds glibc headers.  It's
-        # important for example in order not to get libssp built,
-        # because its functionality is in glibc already.
-        sed -i \
-            -e "s,glibc_header_dir=/usr/include,glibc_header_dir=$libc_dev/include", \
-            gcc/configure
     fi
 
     if test -n "$crossMingw" -a -n "$crossStageStatic"; then
@@ -221,6 +207,10 @@ postInstall() {
     moveToOutput "${targetConfig+$targetConfig/}lib/lib*.dylib" "${!outputLib}"
     moveToOutput "${targetConfig+$targetConfig/}lib/lib*.dll.a" "${!outputLib}"
     moveToOutput "share/gcc-*/python" "${!outputLib}"
+
+    if [ -z "$enableShared" ]; then
+        moveToOutput "${targetConfig+$targetConfig/}lib/lib*.a" "${!outputLib}"
+    fi
 
     for i in "${!outputLib}/${targetConfig}"/lib/*.{la,py}; do
         substituteInPlace "$i" --replace "$out" "${!outputLib}"

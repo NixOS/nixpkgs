@@ -9,6 +9,7 @@
 , gl2ps
 , glew
 , gsl
+, lapack
 , libX11
 , libXpm
 , libXft
@@ -19,6 +20,7 @@
 , llvm_9
 , lz4
 , xz
+, openblas
 , pcre
 , nlohmann_json
 , pkg-config
@@ -38,13 +40,27 @@
 , noSplash ? false
 }:
 
+let
+
+  _llvm_9 = llvm_9.overrideAttrs (prev: {
+    patches = (prev.patches or []) ++ [
+      (fetchpatch {
+        url = "https://github.com/root-project/root/commit/a9c961cf4613ff1f0ea50f188e4a4b0eb749b17d.diff";
+        stripLen = 3;
+        hash = "sha256-LH2RipJICEDWOr7JzX5s0QiUhEwXNMFEJihYKy9qWpo=";
+      })
+    ];
+  });
+
+in
+
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.24.06";
+  version = "6.26.06";
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    sha256 = "sha256-kH9p9LrKHk8w7rSXlZjKdZm2qoA8oEboDiW2u6oO9SI=";
+    hash = "sha256-sfc8l2pYClxWyMigFSWCod/FYLTdgOG3VFI3tl5sics=";
   };
 
   nativeBuildInputs = [ makeWrapper cmake pkg-config git ];
@@ -55,11 +71,13 @@ stdenv.mkDerivation rec {
     pcre
     zlib
     zstd
+    lapack
     libxml2
-    llvm_9
+    _llvm_9
     lz4
     xz
     gsl
+    openblas
     xxHash
     libAfterImage
     giflib
@@ -76,13 +94,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./sw_vers.patch
-
-    # Fix builtin_llvm=OFF support
-    (fetchpatch {
-      url = "https://github.com/root-project/root/commit/0cddef5d3562a89fe254e0036bb7d5ca8a5d34d2.diff";
-      excludes = [ "interpreter/cling/tools/plugins/clad/CMakeLists.txt" ];
-      sha256 = "sha256-VxWUbxRHB3O6tERFQdbGI7ypDAZD3sjSi+PYfu1OAbM=";
-    })
   ];
 
   # Fix build against vanilla LLVM 9
@@ -103,7 +114,7 @@ stdenv.mkDerivation rec {
 
     # Hardcode path to fix use with cmake
     sed -i cmake/scripts/ROOTConfig.cmake.in \
-      -e 'iset(nlohmann_json_DIR "${nlohmann_json}/lib/cmake/nlohmann_json/")'
+      -e '1iset(nlohmann_json_DIR "${nlohmann_json}/lib/cmake/nlohmann_json/")'
 
     patchShebangs build/unix/
   '' + lib.optionalString noSplash ''
@@ -116,7 +127,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-Drpath=ON"
-    "-DCMAKE_CXX_STANDARD=17"
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
@@ -153,6 +163,7 @@ stdenv.mkDerivation rec {
     "-Droot7=OFF"
     "-Dsqlite=OFF"
     "-Dssl=OFF"
+    "-Dtmva=ON"
     "-Dvdt=OFF"
     "-Dwebgui=OFF"
     "-Dxml=ON"
@@ -171,7 +182,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     for prog in rootbrowse rootcp rooteventselector rootls rootmkdir rootmv rootprint rootrm rootslimtree; do
       wrapProgram "$out/bin/$prog" \
-        --prefix PYTHONPATH : "$out/lib"
+        --set PYTHONPATH "$out/lib" \
+        --set ${lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH "$out/lib"
     done
   '';
 

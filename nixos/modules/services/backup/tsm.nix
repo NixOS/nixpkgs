@@ -5,7 +5,7 @@ let
   inherit (lib.attrsets) hasAttr;
   inherit (lib.modules) mkDefault mkIf;
   inherit (lib.options) mkEnableOption mkOption;
-  inherit (lib.types) nullOr strMatching;
+  inherit (lib.types) nonEmptyStr nullOr;
 
   options.services.tsmBackup = {
     enable = mkEnableOption ''
@@ -15,41 +15,41 @@ let
       <option>programs.tsmClient.enable</option>
     '';
     command = mkOption {
-      type = strMatching ".+";
+      type = nonEmptyStr;
       default = "backup";
       example = "incr";
-      description = ''
+      description = lib.mdDoc ''
         The actual command passed to the
-        <literal>dsmc</literal> executable to start the backup.
+        `dsmc` executable to start the backup.
       '';
     };
     servername = mkOption {
-      type = strMatching ".+";
+      type = nonEmptyStr;
       example = "mainTsmServer";
-      description = ''
+      description = lib.mdDoc ''
         Create a systemd system service
-        <literal>tsm-backup.service</literal> that starts
+        `tsm-backup.service` that starts
         a backup based on the given servername's stanza.
         Note that this server's
-        <option>passwdDir</option> will default to
-        <filename>/var/lib/tsm-backup/password</filename>
+        {option}`passwdDir` will default to
+        {file}`/var/lib/tsm-backup/password`
         (but may be overridden);
         also, the service will use
-        <filename>/var/lib/tsm-backup</filename> as
-        <literal>HOME</literal> when calling
-        <literal>dsmc</literal>.
+        {file}`/var/lib/tsm-backup` as
+        `HOME` when calling
+        `dsmc`.
       '';
     };
     autoTime = mkOption {
-      type = nullOr (strMatching ".+");
+      type = nullOr nonEmptyStr;
       default = null;
       example = "12:00";
-      description = ''
+      description = lib.mdDoc ''
         The backup service will be invoked
         automatically at the given date/time,
         which must be in the format described in
-        <citerefentry><refentrytitle>systemd.time</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
-        The default <literal>null</literal>
+        {manpage}`systemd.time(5)`.
+        The default `null`
         disables automatic backups.
       '';
     };
@@ -87,16 +87,35 @@ in
       environment.DSM_LOG = "/var/log/tsm-backup/";
       # TSM needs a HOME dir to store certificates.
       environment.HOME = "/var/lib/tsm-backup";
-      # for exit status description see
-      # https://www.ibm.com/support/knowledgecenter/en/SSEQVQ_8.1.8/client/c_sched_rtncode.html
-      serviceConfig.SuccessExitStatus = "4 8";
-      # The `-se` option must come after the command.
-      # The `-optfile` option suppresses a `dsm.opt`-not-found warning.
-      serviceConfig.ExecStart =
-        "${cfgPrg.wrappedPackage}/bin/dsmc ${cfg.command} -se='${cfg.servername}' -optfile=/dev/null";
-      serviceConfig.LogsDirectory = "tsm-backup";
-      serviceConfig.StateDirectory = "tsm-backup";
-      serviceConfig.StateDirectoryMode = "0750";
+      serviceConfig = {
+        # for exit status description see
+        # https://www.ibm.com/docs/en/spectrum-protect/8.1.13?topic=clients-client-return-codes
+        SuccessExitStatus = "4 8";
+        # The `-se` option must come after the command.
+        # The `-optfile` option suppresses a `dsm.opt`-not-found warning.
+        ExecStart =
+          "${cfgPrg.wrappedPackage}/bin/dsmc ${cfg.command} -se='${cfg.servername}' -optfile=/dev/null";
+        LogsDirectory = "tsm-backup";
+        StateDirectory = "tsm-backup";
+        StateDirectoryMode = "0750";
+        # systemd sandboxing
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        #PrivateTmp = true;  # would break backup of {/var,}/tmp
+        #PrivateUsers = true;  # would block backup of /home/*
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = "read-only";
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "noaccess";
+        ProtectSystem = "strict";
+        RestrictNamespaces = true;
+        RestrictSUIDSGID = true;
+      };
       startAt = mkIf (cfg.autoTime!=null) cfg.autoTime;
     };
   };

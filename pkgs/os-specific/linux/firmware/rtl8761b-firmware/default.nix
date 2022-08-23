@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   name = "rtl8761b-firmware";
 
   src = fetchFromGitHub {
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Firmware for Realtek RTL8761b";
     license = licenses.unfreeRedistributableFirmware;
-    maintainers = with maintainers; [ edibopp ];
+    maintainers = with maintainers; [ milibopp ];
     platforms = with platforms; linux;
   };
 }

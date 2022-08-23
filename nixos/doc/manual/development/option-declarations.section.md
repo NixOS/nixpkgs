@@ -27,9 +27,10 @@ The function `mkOption` accepts the following arguments.
 
 `type`
 
-:   The type of the option (see [](#sec-option-types)). It may be
-    omitted, but that's not advisable since it may lead to errors that
-    are hard to diagnose.
+:   The type of the option (see [](#sec-option-types)). This
+    argument is mandatory for nixpkgs modules. Setting this is highly
+    recommended for the sake of documentation and type checking. In case it is
+    not set, a fallback type with unspecified behavior is used.
 
 `default`
 
@@ -55,7 +56,88 @@ The function `mkOption` accepts the following arguments.
 `description`
 
 :   A textual description of the option, in DocBook format, that will be
-    included in the NixOS manual.
+    included in the NixOS manual. During the migration process from DocBook
+    to CommonMark the description may also be written in CommonMark, but has
+    to be wrapped in `lib.mdDoc` to differentiate it from DocBook. See
+    the nixpkgs manual for [the list of CommonMark extensions](
+    https://nixos.org/nixpkgs/manual/#sec-contributing-markup)
+    supported by NixOS documentation.
+
+    New documentation should preferably be written as CommonMark.
+
+## Utility functions for common option patterns {#sec-option-declarations-util}
+
+### `mkEnableOption` {#sec-option-declarations-util-mkEnableOption}
+
+Creates an Option attribute set for a boolean value option i.e an
+option to be toggled on or off.
+
+This function takes a single string argument, the name of the thing to be toggled.
+
+The option's description is "Whether to enable \<name\>.".
+
+For example:
+
+::: {#ex-options-declarations-util-mkEnableOption-magic .example}
+```nix
+lib.mkEnableOption "magic"
+# is like
+lib.mkOption {
+  type = lib.types.bool;
+  default = false;
+  example = true;
+  description = "Whether to enable magic.";
+}
+```
+
+### `mkPackageOption` {#sec-option-declarations-util-mkPackageOption}
+
+Usage:
+
+```nix
+mkPackageOption pkgs "name" { default = [ "path" "in" "pkgs" ]; example = "literal example"; }
+```
+
+Creates an Option attribute set for an option that specifies the package a module should use for some purpose.
+
+**Note**: You shouldn’t necessarily make package options for all of your modules. You can always overwrite a specific package throughout nixpkgs by using [nixpkgs overlays](https://nixos.org/manual/nixpkgs/stable/#chap-overlays).
+
+The default package is specified as a list of strings representing its attribute path in nixpkgs. Because of this, you need to pass nixpkgs itself as the first argument.
+
+The second argument is the name of the option, used in the description "The \<name\> package to use.". You can also pass an example value, either a literal string or a package's attribute path.
+
+You can omit the default path if the name of the option is also attribute path in nixpkgs.
+
+::: {#ex-options-declarations-util-mkPackageOption .title}
+Examples:
+
+::: {#ex-options-declarations-util-mkPackageOption-hello .example}
+```nix
+lib.mkPackageOption pkgs "hello" { }
+# is like
+lib.mkOption {
+  type = lib.types.package;
+  default = pkgs.hello;
+  defaultText = lib.literalExpression "pkgs.hello";
+  description = "The hello package to use.";
+}
+```
+
+::: {#ex-options-declarations-util-mkPackageOption-ghc .example}
+```nix
+lib.mkPackageOption pkgs "GHC" {
+  default = [ "ghc" ];
+  example = "pkgs.haskell.packages.ghc924.ghc.withPackages (hkgs: [ hkgs.primes ])";
+}
+# is like
+lib.mkOption {
+  type = lib.types.package;
+  default = pkgs.ghc;
+  defaultText = lib.literalExpression "pkgs.ghc";
+  example = lib.literalExpression "pkgs.haskell.packages.ghc924.ghc.withPackages (hkgs: [ hkgs.primes ])";
+  description = "The GHC package to use.";
+}
+```
 
 ## Extensible Option Types {#sec-option-declarations-eot}
 
@@ -71,26 +153,26 @@ As an example, we will take the case of display managers. There is a
 central display manager module for generic display manager options and a
 module file per display manager backend (sddm, gdm \...).
 
-There are two approach to this module structure:
+There are two approaches we could take with this module structure:
 
--   Managing the display managers independently by adding an enable
+-   Configuring the display managers independently by adding an enable
     option to every display manager module backend. (NixOS)
 
--   Managing the display managers in the central module by adding an
-    option to select which display manager backend to use.
+-   Configuring the display managers in the central module by adding
+    an option to select which display manager backend to use.
 
 Both approaches have problems.
 
 Making backends independent can quickly become hard to manage. For
-display managers, there can be only one enabled at a time, but the type
-system can not enforce this restriction as there is no relation between
-each backend `enable` option. As a result, this restriction has to be
-done explicitely by adding assertions in each display manager backend
-module.
+display managers, there can only be one enabled at a time, but the
+type system cannot enforce this restriction as there is no relation
+between each backend's `enable` option. As a result, this restriction
+has to be done explicitly by adding assertions in each display manager
+backend module.
 
-On the other hand, managing the display managers backends in the central
-module will require to change the central module option every time a new
-backend is added or removed.
+On the other hand, managing the display manager backends in the
+central module will require changing the central module option every
+time a new backend is added or removed.
 
 By using extensible option types, it is possible to create a placeholder
 option in the central module
@@ -101,7 +183,7 @@ and to extend it in each backend module
 
 As a result, `displayManager.enable` option values can be added without
 changing the main service module file and the type system automatically
-enforce that there can only be a single display manager enabled.
+enforces that there can only be a single display manager enabled.
 
 ::: {#ex-option-declaration-eot-service .example}
 ::: {.title}

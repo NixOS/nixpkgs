@@ -55,6 +55,12 @@ in mkLicense lset) ({
     fullName = "GNU Affero General Public License v3.0 or later";
   };
 
+  aladdin = {
+    spdxId = "Aladdin";
+    fullName = "Aladdin Free Public License";
+    free = false;
+  };
+
   amazonsl = {
     fullName = "Amazon Software License";
     url = "https://aws.amazon.com/asl/";
@@ -65,6 +71,11 @@ in mkLicense lset) ({
     fullName = "AMD License Agreement";
     url = "https://developer.amd.com/amd-license-agreement/";
     free = false;
+  };
+
+  aom = {
+    fullName = "Alliance for Open Media Patent License 1.0";
+    url = "https://aomedia.org/license/patent-license/";
   };
 
   apsl20 = {
@@ -280,6 +291,11 @@ in mkLicense lset) ({
     fullName = "DOC License";
   };
 
+  drl10 = {
+    spdxId = "DRL-1.0";
+    fullName = "Detection Rule License 1.0";
+  };
+
   eapl = {
     fullName = "EPSON AVASYS PUBLIC LICENSE";
     url = "https://avasys.jp/hp/menu000000700/hpg000000603.htm";
@@ -384,6 +400,11 @@ in mkLicense lset) ({
     free = false;
   };
 
+  generaluser = {
+    fullName = "GeneralUser GS License v2.0";
+    url = "http://www.schristiancollins.com/generaluser.php"; # license included in sources
+  };
+
   gpl1Only = {
     spdxId = "GPL-1.0-only";
     fullName = "GNU General Public License v1.0 only";
@@ -460,6 +481,11 @@ in mkLicense lset) ({
     spdxId = "imagemagick";
   };
 
+  imlib2 = {
+    spdxId = "Imlib2";
+    fullName = "Imlib2 License";
+  };
+
   inria-compcert = {
     fullName  = "INRIA Non-Commercial License Agreement for the CompCert verified compiler";
     url       = "https://compcert.org/doc/LICENSE.txt";
@@ -492,6 +518,13 @@ in mkLicense lset) ({
     fullName = "Databricks Proprietary License";
     url = "https://pypi.org/project/databricks-connect";
     free = false;
+  };
+
+  databricks-dbx = {
+    fullName = "DataBricks eXtensions aka dbx License";
+    url = "https://github.com/databrickslabs/dbx/blob/743b579a4ac44531f764c6e522dbe5a81a7dc0e4/LICENSE";
+    free = false;
+    redistributable = false;
   };
 
   issl = {
@@ -586,6 +619,21 @@ in mkLicense lset) ({
     spdxId = "MIT";
     fullName = "MIT License";
   };
+  # https://spdx.org/licenses/MIT-feh.html
+  mit-feh = {
+    spdxId = "MIT-feh";
+    fullName = "feh License";
+  };
+
+  mitAdvertising = {
+    spdxId = "MIT-advertising";
+    fullName = "Enlightenment License (e16)";
+  };
+
+  mit0 = {
+    spdxId = "MIT-0";
+    fullName = "MIT No Attribution";
+  };
 
   mpl10 = {
     spdxId = "MPL-1.0";
@@ -643,6 +691,11 @@ in mkLicense lset) ({
   ofl = {
     spdxId = "OFL-1.1";
     fullName = "SIL Open Font License 1.1";
+  };
+
+  oml = {
+    spdxId = "OML";
+    fullName = "Open Market License";
   };
 
   openldap = {
@@ -774,6 +827,11 @@ in mkLicense lset) ({
   tcltk = {
     spdxId = "TCL";
     fullName = "TCL/TK License";
+  };
+
+  ucd = {
+    fullName = "Unicode Character Database License";
+    url = "https://fedoraproject.org/wiki/Licensing:UCD";
   };
 
   ufl = {

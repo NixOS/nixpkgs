@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchpatch, pkg-config, flex, bison, libxslt, autoconf, autoreconfHook
-, gnome, graphviz, glib, libiconv, libintl, libtool, expat, substituteAll
+, gnome, graphviz, glib, libiconv, libintl, libtool, expat, substituteAll, vala
 }:
 
 let
@@ -15,24 +15,12 @@ let
     # header file isn't available at all, but that patch (./gvc-compat.patch)
     # can be shared between all versions of Vala so far.
     graphvizPatch =
-      let
-        fp = { commit, sha256 }: fetchpatch {
-          url = "https://github.com/openembedded/openembedded-core/raw/${commit}/meta/recipes-devtools/vala/vala/disable-graphviz.patch";
-          inherit sha256;
-        };
-
-      in {
-
-        # NOTE: the openembedded-core project doesn't have a patch for 0.40.12
-        # We've fixed the single merge conflict in the following patch.
-        #     0.40.12: https://github.com/openembedded/openembedded-core/raw/8553c52f174af4c8c433c543f806f5ed5c1ec48c/meta/recipes-devtools/vala/vala/disable-graphviz.patch
-        "0.40" = ./disable-graphviz-0.40.12.patch;
-
+      {
         "0.48" = ./disable-graphviz-0.46.1.patch;
 
-        "0.52" = ./disable-graphviz-0.46.1.patch;
-
         "0.54" = ./disable-graphviz-0.46.1.patch;
+
+        "0.56" = ./disable-graphviz-0.46.1.patch;
 
       }.${lib.versions.majorMinor version} or (throw "no graphviz patch for this version of vala");
 
@@ -61,7 +49,9 @@ let
     # so that it can be used to regenerate documentation.
     patches        = lib.optionals disableGraphviz [ graphvizPatch ./gvc-compat.patch ];
     configureFlags = lib.optional  disableGraphviz "--disable-graphviz";
-    preBuild       = lib.optionalString disableGraphviz "buildFlagsArray+=(\"VALAC=$(pwd)/compiler/valac\")";
+    # when cross-compiling ./compiler/valac is valac for host
+    # so add the build vala in nativeBuildInputs
+    preBuild       = lib.optionalString (disableGraphviz && (stdenv.buildPlatform == stdenv.hostPlatform)) "buildFlagsArray+=(\"VALAC=$(pwd)/compiler/valac\")";
 
     outputs = [ "out" "devdoc" ];
 
@@ -69,6 +59,7 @@ let
       pkg-config flex bison libxslt
     ] ++ lib.optional (stdenv.isDarwin && (lib.versionAtLeast version "0.38")) expat
       ++ lib.optional disableGraphviz autoreconfHook # if we changed our ./configure script, need to reconfigure
+      ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ vala ]
       ++ extraNativeBuildInputs;
 
     buildInputs = [
@@ -82,7 +73,10 @@ let
 
     passthru = {
       updateScript = gnome.updateScript {
-        attrPath = "${pname}_${lib.versions.major version}_${lib.versions.minor version}";
+        attrPath =
+          let
+            roundUpToEven = num: num + lib.mod num 2;
+          in "${pname}_${lib.versions.major version}_${builtins.toString (roundUpToEven (lib.toInt (lib.versions.minor version)))}";
         packageName = pname;
         freeze = true;
       };
@@ -98,25 +92,20 @@ let
   });
 
 in rec {
-  vala_0_40 = generic {
-    version = "0.40.25";
-    sha256 = "1pxpack8rrmywlf47v440hc6rv3vi8q9c6niwqnwikxvb2pwf3w7";
-  };
-
   vala_0_48 = generic {
-    version = "0.48.20";
-    sha256 = "sha256-RrHIF/dIUfvMOV/E+eoRlQLPh7kzPMllbhzczAvTN24=";
-  };
-
-  vala_0_52 = generic {
-    version = "0.52.8";
-    sha256 = "sha256-d3t9HLVnFewyJUXQEw5/9Y2eem0b2WtuKX6eYOgRh5M=";
+    version = "0.48.24";
+    sha256 = "NknvhFc7aGX8NHBkDuYDcgCZ65FbOfqtGbdJjeGn3yQ=";
   };
 
   vala_0_54 = generic {
-    version = "0.54.3";
-    sha256 = "7R1f5MvAzShF0N5PH/77Fa+waJLSMMfMppV4FnLo+2A=";
+    version = "0.54.8";
+    sha256 = "7fs+eUhqS/SM666pKR5X/HfakyK2lh6VSd9tlz0EvIA=";
   };
 
-  vala = vala_0_54;
+  vala_0_56 = generic {
+    version = "0.56.2";
+    sha256 = "Zslhm7F4Wf0aw6ugpXlwYT44/Soe4wVBF0JgyfuQEkw=";
+  };
+
+  vala = vala_0_56;
 }

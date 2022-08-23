@@ -19,7 +19,7 @@ tupConfigurePhase() {
     echo "${tupConfig-}" >> tup.config
 
     tup init
-    tup generate tupBuild.sh
+    tup generate --verbose tupBuild.sh
 
     runHook postConfigure
 }
@@ -33,7 +33,7 @@ tupBuildPhase() {
     runHook preBuild
 
     pushd .
-    . tupBuild.sh
+    ./tupBuild.sh
     popd
 
     runHook postBuild

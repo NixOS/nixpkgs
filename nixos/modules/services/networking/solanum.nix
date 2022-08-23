@@ -44,16 +44,16 @@ in
             default_split_user_count = 0;
           };
         '';
-        description = ''
+        description = lib.mdDoc ''
           Solanum IRC daemon configuration file.
-          check <link xlink:href="https://github.com/solanum-ircd/solanum/blob/main/doc/reference.conf"/> for all options.
+          check <https://github.com/solanum-ircd/solanum/blob/main/doc/reference.conf> for all options.
         '';
       };
 
       openFilesLimit = mkOption {
         type = types.int;
         default = 1024;
-        description = ''
+        description = lib.mdDoc ''
           Maximum number of open files. Limits the clients and server connections.
         '';
       };
@@ -61,10 +61,10 @@ in
       motd = mkOption {
         type = types.nullOr types.lines;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Solanum MOTD text.
 
-          Solanum will read its MOTD from <literal>/etc/solanum/ircd.motd</literal>.
+          Solanum will read its MOTD from `/etc/solanum/ircd.motd`.
           If set, the value of this option will be written to this path.
         '';
       };

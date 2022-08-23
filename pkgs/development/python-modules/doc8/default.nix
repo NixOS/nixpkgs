@@ -8,20 +8,25 @@
 , pytestCheckHook
 , pythonOlder
 , restructuredtext_lint
+, setuptools-scm
 , stevedore
 }:
 
 buildPythonPackage rec {
   pname = "doc8";
-  version = "0.10.1";
+  version = "0.11.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "376e50f4e70a1ae935416ddfcf93db35dd5d4cc0e557f2ec72f0667d0ace4548";
+    sha256 = "sha256-w1ojH4jxXCBGWRVO09SZ+k1ALX5j1By6e1TPXmRhI6s=";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   buildInputs = [
     pbr

@@ -3,8 +3,8 @@
 buildPecl {
   pname = "gnupg";
 
-  version = "1.5.0";
-  sha256 = "0r0akrjjf9i460z11llybdr6sg2rlcz38nwfy0yqz443ljdggxfl";
+  version = "1.5.1";
+  sha256 = "sha256-qZBvRlqyNDyy8xJ+4gnHJ2Ajh0XDSHjZu8FXZIYhklI=";
 
   buildInputs = [ gpgme ];
   checkInputs = [ gnupg ];

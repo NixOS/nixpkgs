@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "oil";
-  version = "0.9.5";
+  version = "0.12.3";
 
   src = fetchurl {
     url = "https://www.oilshell.org/download/oil-${version}.tar.xz";
-    sha256 = "sha256-2J2MCByLxTbfx7Q3uWWiZcB+JM9RQv8mshtMxKMTnjI=";
+    hash = "sha256-M8gklc9crdVkQk9vzxO4tG809O0uHOPvvq1l1tzoPt8=";
   };
 
   postPatch = ''
@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
   '';
 
+  strictDeps = true;
   buildInputs = lib.optional withReadline readline;
   configureFlags = lib.optional withReadline "--with-readline";
 

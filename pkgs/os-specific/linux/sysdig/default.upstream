@@ -1,8 +1,0 @@
-url https://github.com/draios/sysdig/releases
-ensure_choice
-version '.*/([0-9.]+)[.]tar[.].*' '\1'
-do_overwrite () {
-  ensure_hash
-  set_var_value sha256 $CURRENT_HASH
-  set_var_value version $CURRENT_VERSION
-}

@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "fontMath";
-  version = "0.8.1";
+  version = "0.9.2";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0m2z2wwbxwljfcrg8hx4xq538adzcjpc352yqbfw0czbgs5ixmrr";
+    sha256 = "sha256-TIsccR4cv0upPD0IQ5NbBmGXMTEmGvCGCL3hfeEBhAQ=";
     extension = "zip";
   };
 

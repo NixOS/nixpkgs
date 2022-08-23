@@ -1,6 +1,7 @@
 { lib
 , appdirs
 , buildPythonPackage
+, certifi
 , fetchFromGitHub
 , importlib-metadata
 , poetry-core
@@ -16,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pyppeteer";
-  version = "0.2.6";
+  version = "1.0.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -25,7 +26,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-mMFQp8GMjKUc3yyB4c8Tgxut7LkMFa2cySO3iSA/aI4=";
+    sha256 = "sha256-izMaWtJdkLHMQbyq7o7n46xB8dOHXZ5uO0UXt+twjL4=";
   };
 
   nativeBuildInputs = [
@@ -34,6 +35,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     appdirs
+    certifi
     importlib-metadata
     pyee
     tqdm
@@ -49,6 +51,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace 'pyee = "^8.1.0"' 'pyee = "*"' \
       --replace 'websockets = "^9.1"' 'websockets = "*"'
   '';
 

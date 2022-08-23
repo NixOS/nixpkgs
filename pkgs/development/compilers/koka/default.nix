@@ -4,19 +4,25 @@
 , parsec, process, regex-compat, text, time }:
 
 let
-  version = "2.3.6";
+  version = "2.4.0";
   src = fetchFromGitHub {
     owner = "koka-lang";
     repo = "koka";
     rev = "v${version}";
-    sha256 = "sha256-AibS/HudJKFQZlTxGD5LfwjBawIy1xwO2Hm8qzAUP2M=";
+    sha256 = "sha256-+evs5g0qrplUMr8zC51GvUx2JXQBYJb39IaI4rC6CSA=";
     fetchSubmodules = true;
   };
   kklib = stdenv.mkDerivation {
     pname = "kklib";
     inherit version;
     src = "${src}/kklib";
+    patches = [ ./kklib-mimalloc-macos-fix.diff ];
     nativeBuildInputs = [ cmake ];
+    outputs = [ "out" "dev" ];
+    postInstall = ''
+      mkdir -p ''${!outputDev}/share/koka/v${version}
+      cp -a ../../kklib ''${!outputDev}/share/koka/v${version}
+    '';
   };
   inherit (pkgsHostTarget.targetPackages.stdenv) cc;
   runtimeDeps = [
@@ -40,7 +46,7 @@ mkDerivation rec {
   postInstall = ''
     mkdir -p $out/share/koka/v${version}
     cp -a lib $out/share/koka/v${version}
-    cp -a kklib $out/share/koka/v${version}
+    ln -s ${kklib.dev}/share/koka/v${version}/kklib $out/share/koka/v${version}
     wrapProgram "$out/bin/koka" \
       --set CC "${lib.getBin cc}/bin/${cc.targetPrefix}cc" \
       --prefix PATH : "${lib.makeSearchPath "bin" runtimeDeps}"

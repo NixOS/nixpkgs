@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, pyparsing, robotframework, allpairspy }:
+{ stdenv, lib, fetchPypi, buildPythonPackage, pyparsing, robotframework, allpairspy }:
 
 buildPythonPackage rec {
   pname = "RoboMachine";
@@ -21,6 +21,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    broken = true;
     description = "Test data generator for Robot Framework";
     homepage = "https://github.com/mkorpela/RoboMachine";
     license = licenses.asl20;

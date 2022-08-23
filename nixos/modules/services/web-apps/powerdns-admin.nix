@@ -27,7 +27,7 @@ in
       example = literalExpression ''
         [ "-b" "127.0.0.1:8000" ]
       '';
-      description = ''
+      description = lib.mdDoc ''
         Extra arguments passed to powerdns-admin.
       '';
     };
@@ -40,9 +40,9 @@ in
         PORT = 8000
         SQLALCHEMY_DATABASE_URI = 'postgresql://powerdnsadmin@/powerdnsadmin?host=/run/postgresql'
       '';
-      description = ''
+      description = lib.mdDoc ''
         Configuration python file.
-        See <link xlink:href="https://github.com/ngoduykhanh/PowerDNS-Admin/blob/v${pkgs.powerdns-admin.version}/configs/development.py">the example configuration</link>
+        See [the example configuration](https://github.com/ngoduykhanh/PowerDNS-Admin/blob/v${pkgs.powerdns-admin.version}/configs/development.py)
         for options.
       '';
     };
@@ -50,7 +50,7 @@ in
     secretKeyFile = mkOption {
       type = types.nullOr types.path;
       example = "/etc/powerdns-admin/secret";
-      description = ''
+      description = lib.mdDoc ''
         The secret used to create cookies.
         This needs to be set, otherwise the default is used and everyone can forge valid login cookies.
         Set this to null to ignore this setting and configure it through another way.
@@ -60,7 +60,7 @@ in
     saltFile = mkOption {
       type = types.nullOr types.path;
       example = "/etc/powerdns-admin/salt";
-      description = ''
+      description = lib.mdDoc ''
         The salt used for serialization.
         This should be set, otherwise the default is used.
         Set this to null to ignore this setting and configure it through another way.
@@ -146,4 +146,7 @@ in
       group = "powerdnsadmin";
     };
   };
+
+  # uses attributes of the linked package
+  meta.buildDocsInSandbox = false;
 }

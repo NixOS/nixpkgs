@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lucky-commit";
-  version = "2.1.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "not-an-aardvark";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0vs668i1yglfcqs94jhwdk90v0lja2w5kr5gakz082wykilms0zg";
+    sha256 = "sha256-0RSNlzmwat89ewQrjdGxLcXo01d+UaPZlteaxZCBRyE=";
   };
 
-  cargoSha256 = "sha256-MvopLKhovwXaEmRgXnAzJeuhPgqnMjt0EtKUGSWFpaY=";
+  cargoSha256 = "sha256-8r/EGIiN+HTtChgLTdOS+Y7AdmjswqD4BZtYlL5UiEo=";
 
   buildInputs = lib.optional withOpenCL (if stdenv.isDarwin then OpenCL else ocl-icd);
 

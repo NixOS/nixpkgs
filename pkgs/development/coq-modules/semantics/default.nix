@@ -6,6 +6,7 @@ mkCoqDerivation rec {
   owner = "coq-community";
   releaseRev = v: "v${v}";
 
+  release."8.14.0".sha256 = "sha256-TB12C3hX9XucbsXr+UL+8jM19NOFXASW/lcytwy6uVE=";
   release."8.13.0".sha256 = "sha256-8bDr/Ovl6s8BFaRcHeS5H33/K/pYdeKfSN+krVuKulQ=";
   release."8.11.1".sha256 = "sha256-jTPgcXSNn1G2mMDC7ocFcmqs8svB7Yo1emXP15iuxiU=";
   release."8.9.0".sha256 = "sha256-UBsvzlDEZsZsVkbUI0GbFEhpxnnLCiaqlqDyWVC5I6s=";
@@ -15,7 +16,7 @@ mkCoqDerivation rec {
 
   inherit version;
   defaultVersion = with versions; switch coq.coq-version [
-    { case = range "8.10" "8.13"; out = "8.13.0"; }
+    { case = range "8.10" "8.16"; out = "8.14.0"; }
     { case = "8.9"; out = "8.9.0"; }
     { case = "8.8"; out = "8.8.0"; }
     { case = "8.7"; out = "8.7.0"; }
@@ -23,7 +24,8 @@ mkCoqDerivation rec {
   ] null;
 
   mlPlugin = true;
-  extraBuildInputs = (with coq.ocamlPackages; [ num ocamlbuild ]);
+  nativeBuildInputs = (with coq.ocamlPackages; [ ocamlbuild ]);
+  propagatedBuildInputs = (with coq.ocamlPackages; [ num ]);
 
   postPatch = ''
     for p in Make Makefile.coq.local

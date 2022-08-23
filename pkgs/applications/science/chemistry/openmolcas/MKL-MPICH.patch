@@ -1,0 +1,24 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 276ae4e..5e56176 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1304,9 +1304,9 @@ if (LINALG STREQUAL "MKL")
+       endif ()
+     else ()
+       if (ADDRMODE EQUAL 64)
+-        set (libpath "${MKLROOT}/lib/intel64")
++        set (libpath "${MKLROOT}/lib")
+       elseif (ADDRMODE EQUAL 32)
+-        set (libpath "${MKLROOT}/lib/ia32")
++        set (libpath "${MKLROOT}/lib")
+       endif ()
+     endif ()
+     set (MKL_LIBRARY_PATH ${libpath} CACHE PATH "location of MKL libraries." FORCE)
+@@ -1380,7 +1380,7 @@ if (LINALG STREQUAL "MKL")
+     find_library (LIBMKL_BLACS NAMES "mkl_blacs_intelmpi_ilp64"
+                   PATHS ${MKL_LIBRARY_PATH} NO_DEFAULT_PATH)
+   elseif (MPI_IMPLEMENTATION STREQUAL "mpich")
+-    find_library (LIBMKL_BLACS NAMES "mkl_blacs_ilp64"
++    find_library (LIBMKL_BLACS NAMES "mkl_blacs_intelmpi_ilp64"
+                   PATHS ${MKL_LIBRARY_PATH} NO_DEFAULT_PATH)
+   endif ()

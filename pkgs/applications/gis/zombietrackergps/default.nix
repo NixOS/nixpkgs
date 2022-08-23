@@ -11,13 +11,13 @@
 
 mkDerivation rec {
   pname = "zombietrackergps";
-  version = "1.03";
+  version = "1.10";
 
   src = fetchFromGitLab {
     owner = "ldutils-projects";
     repo = pname;
     rev = "v_${version}";
-    sha256 = "1rmdy6kijmcxamm4mqmz8638xqisijlnpv8mimgxywpf90h9rrwq";
+    sha256 = "sha256-qRhCAOVWyDLD3WDptPRQVq+VwyFu83XQNaL5TMsGs4Y=";
   };
 
   buildInputs = [
@@ -33,7 +33,10 @@ mkDerivation rec {
   ];
 
   prePatch = ''
-    sed -ie "s,INCLUDEPATH += /usr/include/libldutils,INCLUDEPATH += ${ldutils}," ZombieTrackerGPS.pro
+    substituteInPlace ztgps.pro --replace "../libldutils" "libldutils"
+    substituteInPlace tests.pro --replace "../libldutils" "libldutils"
+
+    ln -s ${ldutils} libldutils
   '';
 
   preConfigure = ''
@@ -41,9 +44,16 @@ mkDerivation rec {
     export INSTALL_ROOT=$out
   '';
 
-  postConfigure = ''
-    substituteInPlace Makefile --replace '$(INSTALL_ROOT)' ""
+  preInstall = ''
+    substituteInPlace Makefile.ztgps --replace '$(INSTALL_ROOT)' ""
+    substituteInPlace Makefile.art --replace '$(INSTALL_ROOT)' ""
   '';
+
+  postInstall = ''
+    install -Dm644 build/rcc/*.rcc -t $out/share/zombietrackergps
+  '';
+
+  qmakeFlags = [ "ZombieTrackerGPS.pro" ];
 
   meta = with lib; {
     description = "GPS track manager for Qt using KDE Marble maps";

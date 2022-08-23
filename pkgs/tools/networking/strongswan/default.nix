@@ -7,6 +7,7 @@
 , enableTNC            ? false, trousers, sqlite, libxml2
 , enableNetworkManager ? false, networkmanager
 , darwin
+, nixosTests
 }:
 
 # Note on curl support: If curl is built with gnutls as its backend, the
@@ -17,13 +18,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "strongswan";
-  version = "5.9.4"; # Make sure to also update <nixpkgs/nixos/modules/services/networking/strongswan-swanctl/swanctl-params.nix> when upgrading!
+  version = "5.9.7"; # Make sure to also update <nixpkgs/nixos/modules/services/networking/strongswan-swanctl/swanctl-params.nix> when upgrading!
 
   src = fetchFromGitHub {
     owner = "strongswan";
     repo = "strongswan";
     rev = version;
-    sha256 = "1y1gs232x7hsbccjga9nbkf4bbi5wxazlkg00qd2v1nz86sfy4cd";
+    sha256 = "sha256-4FOeY3a6DyftrbFtBqtY0nLxdIXPnY91wMAVIBm/KvY=";
   };
 
   dontPatchELF = true;
@@ -100,6 +101,8 @@ stdenv.mkDerivation rec {
   '';
 
   NIX_LDFLAGS = optionalString stdenv.cc.isGNU "-lgcc_s" ;
+
+  passthru.tests = { inherit (nixosTests) strongswan-swanctl; };
 
   meta = {
     description = "OpenSource IPsec-based VPN Solution";

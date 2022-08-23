@@ -15,13 +15,13 @@ in {
       extraOptions = mkOption {
         type = with types; listOf str;
         default = [];
-        description = "Extra command line options for pvfs2-client.";
+        description = lib.mdDoc "Extra command line options for pvfs2-client.";
       };
 
       fileSystems = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           The orangefs file systems to be mounted.
-          This option is prefered over using <option>fileSystems</option> directly since
+          This option is prefered over using {option}`fileSystems` directly since
           the pvfs client service needs to be running for it to be mounted.
         '';
 
@@ -36,19 +36,19 @@ in {
             mountPoint = mkOption {
               type = types.str;
               default = "/orangefs";
-              description = "Mount point.";
+              description = lib.mdDoc "Mount point.";
             };
 
             options = mkOption {
               type = with types; listOf str;
               default = [];
-              description = "Mount options";
+              description = lib.mdDoc "Mount options";
             };
 
             target = mkOption {
               type = types.str;
               example = "tcp://server:3334/orangefs";
-              description = "Target URL";
+              description = lib.mdDoc "Target URL";
             };
           };
         }));

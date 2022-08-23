@@ -22,6 +22,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "A design system for interactive fiction";
     homepage = "http://inform7.com/";
     license = licenses.artistic2;

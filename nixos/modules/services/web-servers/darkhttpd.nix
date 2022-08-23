@@ -20,7 +20,7 @@ in {
     port = mkOption {
       default = 80;
       type = types.port;
-      description = ''
+      description = lib.mdDoc ''
         Port to listen on.
         Pass 0 to let the system choose any free port for you.
       '';
@@ -29,7 +29,7 @@ in {
     address = mkOption {
       default = "127.0.0.1";
       type = str;
-      description = ''
+      description = lib.mdDoc ''
         Address to listen on.
         Pass `all` to listen on all interfaces.
       '';
@@ -37,7 +37,7 @@ in {
 
     rootDir = mkOption {
       type = path;
-      description = ''
+      description = lib.mdDoc ''
         Path from which to serve files.
       '';
     };
@@ -45,7 +45,7 @@ in {
     hideServerId = mkOption {
       type = bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Don't identify the server type in headers or directory listings.
       '';
     };
@@ -53,7 +53,7 @@ in {
     extraArgs = mkOption {
       type = listOf str;
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         Additional configuration passed to the executable.
       '';
     };

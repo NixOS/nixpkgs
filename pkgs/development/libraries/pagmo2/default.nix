@@ -5,21 +5,22 @@
 , nlopt
 , ipopt
 , boost
+, tbb
 }:
 
 stdenv.mkDerivation rec {
   pname = "pagmo2";
-  version = "2.9";
+  version = "2.18.0";
 
   src = fetchFromGitHub {
      owner = "esa";
      repo = "pagmo2";
      rev = "v${version}";
-     sha256 = "0al2i59m5qr83wz5n5408zvys0b3mc40rszf0l5b9a0gp1axj400";
+     sha256 = "0rd8scs4hj6qd8ylmn5hafncml2vr4fvcgm3agz3jrvmnc7hadrj";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ eigen nlopt ipopt boost ];
+  buildInputs = [ eigen nlopt ipopt boost tbb ];
 
   cmakeFlags = [
     "-DPAGMO_BUILD_TESTS=no"

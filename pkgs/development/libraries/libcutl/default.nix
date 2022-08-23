@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
     homepage = "https://codesynthesis.com/projects/libcutl/";
     changelog = "https://git.codesynthesis.com/cgit/libcutl/libcutl/plain/NEWS?h=${version}";
     platforms = platforms.all;
+    broken = stdenv.isDarwin;
     maintainers = with maintainers; [ ];
     license = licenses.mit;
   };
@@ -26,4 +27,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ xercesc ];
   enableParallelBuilding = true;
+
+  NIX_CFLAGS_COMPILE = [ "-std=c++14" ];
 }

@@ -1,119 +1,140 @@
 {
-  "liveHLS": [
-    {
-      "name": "720p",
-      "cmd": "%FFMPEG% -re -dual_mono_mode main -i pipe:0 -sn -threads 0 -map 0 -ignore_unknown -max_muxing_queue_size 1024 -f hls -hls_time 3 -hls_list_size 17 -hls_allow_cache 1 -hls_segment_filename %streamFileDir%/stream%streamNum%-%09d.ts -c:a aac -ar 48000 -b:a 192k -ac 2 -c:v libx264 -vf yadif,scale=-2:720 -b:v 3000k -preset veryfast -flags +loop-global_header %OUTPUT%"
+  "urlscheme": {
+    "m2ts": {
+      "ios": "vlc-x-callback://x-callback-url/stream?url=PROTOCOL://ADDRESS",
+      "android": "intent://ADDRESS#Intent;package=org.videolan.vlc;type=video;scheme=PROTOCOL;end"
     },
-    {
-      "name": "480p",
-      "cmd": "%FFMPEG% -re -dual_mono_mode main -i pipe:0 -sn -threads 0 -map 0 -ignore_unknown -max_muxing_queue_size 1024 -f hls -hls_time 3 -hls_list_size 17 -hls_allow_cache 1 -hls_segment_filename %streamFileDir%/stream%streamNum%-%09d.ts -c:a aac -ar 48000 -b:a 128k -ac 2 -c:v libx264 -vf yadif,scale=-2:480 -b:v 1500k -preset veryfast -flags +loop-global_header %OUTPUT%"
+    "video": {
+      "ios": "infuse://x-callback-url/play?url=PROTOCOL://ADDRESS",
+      "android": "intent://ADDRESS#Intent;package=com.mxtech.videoplayer.ad;type=video;scheme=PROTOCOL;end"
     },
-    {
-      "name": "180p",
-      "cmd": "%FFMPEG% -re -dual_mono_mode main -i pipe:0 -sn -threads 0 -map 0 -ignore_unknown -max_muxing_queue_size 1024 -f hls -hls_time 3 -hls_list_size 17 -hls_allow_cache 1 -hls_segment_filename %streamFileDir%/stream%streamNum%-%09d.ts -c:a aac -ar 48000 -b:a 48k -ac 2 -c:v libx264 -vf yadif,scale=-2:180 -b:v 100k -preset veryfast -maxrate 110k -bufsize 1000k -flags +loop-global_header %OUTPUT%"
+    "download": {
+      "ios": "vlc-x-callback://x-callback-url/download?url=PROTOCOL://ADDRESS&filename=FILENAME"
     }
-  ],
-  "liveMP4": [
-    {
-      "name": "720p",
-      "cmd": "%FFMPEG% -re -dual_mono_mode main -i pipe:0 -sn -threads 0 -c:a aac -ar 48000 -b:a 192k -ac 2 -c:v libx264 -vf yadif,scale=-2:720 -b:v 3000k -profile:v baseline -preset veryfast -tune fastdecode,zerolatency -movflags frag_keyframe+empty_moov+faststart+default_base_moof -y -f mp4 pipe:1"
-    },
-    {
-      "name": "480p",
-      "cmd": "%FFMPEG% -re -dual_mono_mode main -i pipe:0 -sn -threads 0 -c:a aac -ar 48000 -b:a 128k -ac 2 -c:v libx264 -vf yadif,scale=-2:480 -b:v 1500k -profile:v baseline -preset veryfast -tune fastdecode,zerolatency -movflags frag_keyframe+empty_moov+faststart+default_base_moof -y -f mp4 pipe:1"
-    }
-  ],
-  "liveWebM": [
-    {
-      "name": "720p",
-      "cmd": "%FFMPEG% -re -dual_mono_mode main -i pipe:0 -sn -threads 3 -c:a libvorbis -ar 48000 -b:a 192k -ac 2 -c:v libvpx-vp9 -vf yadif,scale=-2:720 -b:v 3000k -deadline realtime -speed 4 -cpu-used -8 -y -f webm pipe:1"
-    },
-    {
-      "name": "480p",
-      "cmd": "%FFMPEG% -re -dual_mono_mode main -i pipe:0 -sn -threads 2 -c:a libvorbis -ar 48000 -b:a 128k -ac 2 -c:v libvpx-vp9 -vf yadif,scale=-2:480 -b:v 1500k -deadline realtime -speed 4 -cpu-used -8 -y -f webm pipe:1"
-    }
-  ],
-  "mpegTsStreaming": [
-    {
-      "name": "720p",
-      "cmd": "%FFMPEG% -re -dual_mono_mode main -i pipe:0 -sn -threads 0 -c:a aac -ar 48000 -b:a 192k -ac 2 -c:v libx264 -vf yadif,scale=-2:720 -b:v 3000k -preset veryfast -y -f mpegts pipe:1"
-    },
-    {
-      "name": "480p",
-      "cmd": "%FFMPEG% -re -dual_mono_mode main -i pipe:0 -sn -threads 0 -c:a aac -ar 48000 -b:a 128k -ac 2 -c:v libx264 -vf yadif,scale=-2:480 -b:v 1500k -preset veryfast -y -f mpegts pipe:1"
-    },
-    {
-      "name": "Original"
-    }
-  ],
-  "mpegTsViewer": {
-    "ios": "vlc-x-callback://x-callback-url/stream?url=http://ADDRESS",
-    "android": "intent://ADDRESS#Intent;package=com.mxtech.videoplayer.ad;type=video;scheme=http;end"
   },
-  "recordedDownloader": {
-    "ios": "vlc-x-callback://x-callback-url/download?url=http://ADDRESS&filename=FILENAME",
-    "android": "intent://ADDRESS#Intent;package=com.dv.adm;type=video;scheme=http;end"
-  },
-  "recordedStreaming": {
-    "webm": [
-      {
-        "name": "720p",
-        "cmd": "%FFMPEG% -dual_mono_mode main %RE% -i pipe:0 -sn -threads 3 -c:a libvorbis -ar 48000 -ac 2 -c:v libvpx-vp9 -vf yadif,scale=-2:720 %VB% %VBUFFER% %AB% %ABUFFER% -deadline realtime -speed 4 -cpu-used -8 -y -f webm pipe:1",
-        "vb": "3000k",
-        "ab": "192k"
-      },
-      {
-        "name": "360p",
-        "cmd": "%FFMPEG% -dual_mono_mode main %RE% -i pipe:0 -sn -threads 2 -c:a libvorbis -ar 48000 -ac 2 -c:v libvpx-vp9 -vf yadif,scale=-2:360 %VB% %VBUFFER% %AB% %ABUFFER% -deadline realtime -speed 4 -cpu-used -8 -y -f webm pipe:1",
-        "vb": "1500k",
-        "ab": "128k"
+  "stream": {
+    "live": {
+      "ts": {
+        "m2ts": [
+          {
+            "name": "720p",
+            "cmd": "%FFMPEG% -re -dual_mono_mode main -i pipe:0 -sn -threads 0 -c:a aac -ar 48000 -b:a 192k -ac 2 -c:v libx264 -vf yadif,scale=-2:720 -b:v 3000k -preset veryfast -y -f mpegts pipe:1"
+          },
+          {
+            "name": "480p",
+            "cmd": "%FFMPEG% -re -dual_mono_mode main -i pipe:0 -sn -threads 0 -c:a aac -ar 48000 -b:a 128k -ac 2 -c:v libx264 -vf yadif,scale=-2:480 -b:v 1500k -preset veryfast -y -f mpegts pipe:1"
+          },
+          {
+            "name": "無変換"
+          }
+        ],
+        "m2tsll": [
+          {
+            "name": "720p",
+            "cmd": "%FFMPEG% -dual_mono_mode main -f mpegts -analyzeduration 500000 -i pipe:0 -map 0 -c:s copy -c:d copy -ignore_unknown -fflags nobuffer -flags low_delay -max_delay 250000 -max_interleave_delta 1 -threads 0 -c:a aac -ar 48000 -b:a 192k -ac 2 -c:v libx264 -flags +cgop -vf yadif,scale=-2:720 -b:v 3000k -preset veryfast -y -f mpegts pipe:1"
+          },
+          {
+            "name": "480p",
+            "cmd": "%FFMPEG% -dual_mono_mode main -f mpegts -analyzeduration 500000 -i pipe:0 -map 0 -c:s copy -c:d copy -ignore_unknown -fflags nobuffer -flags low_delay -max_delay 250000 -max_interleave_delta 1 -threads 0 -c:a aac -ar 48000 -b:a 128k -ac 2 -c:v libx264 -flags +cgop -vf yadif,scale=-2:480 -b:v 1500k -preset veryfast -y -f mpegts pipe:1"
+          }
+        ],
+        "webm": [
+          {
+            "name": "720p",
+            "cmd": "%FFMPEG% -re -dual_mono_mode main -i pipe:0 -sn -threads 3 -c:a libvorbis -ar 48000 -b:a 192k -ac 2 -c:v libvpx-vp9 -vf yadif,scale=-2:720 -b:v 3000k -deadline realtime -speed 4 -cpu-used -8 -y -f webm pipe:1"
+          },
+          {
+            "name": "480p",
+            "cmd": "%FFMPEG% -re -dual_mono_mode main -i pipe:0 -sn -threads 2 -c:a libvorbis -ar 48000 -b:a 128k -ac 2 -c:v libvpx-vp9 -vf yadif,scale=-2:480 -b:v 1500k -deadline realtime -speed 4 -cpu-used -8 -y -f webm pipe:1"
+          }
+        ],
+        "mp4": [
+          {
+            "name": "720p",
+            "cmd": "%FFMPEG% -re -dual_mono_mode main -i pipe:0 -sn -threads 0 -c:a aac -ar 48000 -b:a 192k -ac 2 -c:v libx264 -vf yadif,scale=-2:720 -b:v 3000k -profile:v baseline -preset veryfast -tune fastdecode,zerolatency -movflags frag_keyframe+empty_moov+faststart+default_base_moof -y -f mp4 pipe:1"
+          },
+          {
+            "name": "480p",
+            "cmd": "%FFMPEG% -re -dual_mono_mode main -i pipe:0 -sn -threads 0 -c:a aac -ar 48000 -b:a 128k -ac 2 -c:v libx264 -vf yadif,scale=-2:480 -b:v 1500k -profile:v baseline -preset veryfast -tune fastdecode,zerolatency -movflags frag_keyframe+empty_moov+faststart+default_base_moof -y -f mp4 pipe:1"
+          }
+        ],
+        "hls": [
+          {
+            "name": "720p",
+            "cmd": "%FFMPEG% -re -dual_mono_mode main -i pipe:0 -sn -map 0 -threads 0 -ignore_unknown -max_muxing_queue_size 1024 -f hls -hls_time 3 -hls_list_size 17 -hls_allow_cache 1 -hls_segment_filename %streamFileDir%/stream%streamNum%-%09d.ts -hls_flags delete_segments -c:a aac -ar 48000 -b:a 192k -ac 2 -c:v libx264 -vf yadif,scale=-2:720 -b:v 3000k -preset veryfast -flags +loop-global_header %OUTPUT%"
+          },
+          {
+            "name": "480p",
+            "cmd": "%FFMPEG% -re -dual_mono_mode main -i pipe:0 -sn -map 0 -threads 0 -ignore_unknown -max_muxing_queue_size 1024 -f hls -hls_time 3 -hls_list_size 17 -hls_allow_cache 1 -hls_segment_filename %streamFileDir%/stream%streamNum%-%09d.ts -hls_flags delete_segments -c:a aac -ar 48000 -b:a 128k -ac 2 -c:v libx264 -vf yadif,scale=-2:480 -b:v 1500k -preset veryfast -flags +loop-global_header %OUTPUT%"
+          }
+        ]
       }
-    ],
-    "mp4": [
-      {
-        "name": "720p",
-        "cmd": "%FFMPEG% -dual_mono_mode main %RE% -i pipe:0 -sn -threads 0 -c:a aac -ar 48000 -ac 2 -c:v libx264 -vf yadif,scale=-2:720 %VB% %VBUFFER% %AB% %ABUFFER% -profile:v baseline -preset veryfast -tune fastdecode,zerolatency -movflags frag_keyframe+empty_moov+faststart+default_base_moof -y -f mp4 pipe:1",
-        "vb": "3000k",
-        "ab": "192k"
-      },
-      {
-        "name": "360p",
-        "cmd": "%FFMPEG% -dual_mono_mode main %RE% -i pipe:0 -sn -threads 0 -c:a aac -ar 48000 -ac 2 -c:v libx264 -vf yadif,scale=-2:360 %VB% %VBUFFER% %AB% %ABUFFER% -profile:v baseline -preset veryfast -tune fastdecode,zerolatency -movflags frag_keyframe+empty_moov+faststart+default_base_moof -y -f mp4 pipe:1",
-        "vb": "1500k",
-        "ab": "128k"
-      }
-    ],
-    "mpegTs": [
-      {
-        "name": "720p (H.264)",
-        "cmd": "%FFMPEG% -dual_mono_mode main %RE% -i pipe:0 -sn -threads 0 -c:a aac -ar 48000 -ac 2 -c:v libx264 -vf yadif,scale=-2:720 %VB% %VBUFFER% %AB% %ABUFFER% -profile:v baseline -preset veryfast -tune fastdecode,zerolatency -y -f mpegts pipe:1",
-        "vb": "3000k",
-        "ab": "192k"
-      },
-      {
-        "name": "360p (H.264)",
-        "cmd": "%FFMPEG% -dual_mono_mode main %RE% -i pipe:0 -sn -threads 0 -c:a aac -ar 48000 -ac 2 -c:v libx264 -vf yadif,scale=-2:360 %VB% %VBUFFER% %AB% %ABUFFER% -profile:v baseline -preset veryfast -tune fastdecode,zerolatency -y -f mpegts pipe:1",
-        "vb": "1500k",
-        "ab": "128k"
-      }
-    ]
-  },
-  "recordedHLS": [
-    {
-      "name": "720p",
-      "cmd": "%FFMPEG% -dual_mono_mode main -i %INPUT% -sn -threads 0 -map 0 -ignore_unknown -max_muxing_queue_size 1024 -f hls -hls_time 3 -hls_list_size 0 -hls_allow_cache 1 -hls_segment_filename %streamFileDir%/stream%streamNum%-%09d.ts -c:a aac -ar 48000 -b:a 192k -ac 2 -c:v libx264 -vf yadif,scale=-2:720 -b:v 3000k -preset veryfast -flags +loop-global_header %OUTPUT%"
     },
-    {
-      "name": "480p",
-      "cmd": "%FFMPEG% -dual_mono_mode main -i %INPUT% -sn -threads 0 -map 0 -ignore_unknown -max_muxing_queue_size 1024 -f hls -hls_time 3 -hls_list_size 0 -hls_allow_cache 1 -hls_segment_filename %streamFileDir%/stream%streamNum%-%09d.ts -c:a aac -ar 48000 -b:a 128k -ac 2 -c:v libx264 -vf yadif,scale=-2:480 -b:v 1500k -preset veryfast -flags +loop-global_header %OUTPUT%"
-    },
-    {
-      "name": "480p(h265)",
-      "cmd": "%FFMPEG% -dual_mono_mode main -i %INPUT% -sn -map 0 -ignore_unknown -max_muxing_queue_size 1024 -f hls -hls_time 3 -hls_list_size 0 -hls_allow_cache 1 -hls_segment_type fmp4 -hls_fmp4_init_filename stream%streamNum%-init.mp4 -hls_segment_filename stream%streamNum%-%09d.m4s -c:a aac -ar 48000 -b:a 128k -ac 2 -c:v libx265 -vf yadif,scale=-2:480 -b:v 350k -preset veryfast -tag:v hvc1 %OUTPUT%"
+    "recorded": {
+      "ts": {
+        "webm": [
+          {
+            "name": "720p",
+            "cmd": "%FFMPEG% -dual_mono_mode main -i pipe:0 -sn -threads 3 -c:a libvorbis -ar 48000 -b:a 192k -ac 2 -c:v libvpx-vp9 -vf yadif,scale=-2:720 -b:v 3000k -deadline realtime -speed 4 -cpu-used -8 -y -f webm pipe:1"
+          },
+          {
+            "name": "480p",
+            "cmd": "%FFMPEG% -dual_mono_mode main -i pipe:0 -sn -threads 3 -c:a libvorbis -ar 48000 -b:a 128k -ac 2 -c:v libvpx-vp9 -vf yadif,scale=-2:480 -b:v 1500k -deadline realtime -speed 4 -cpu-used -8 -y -f webm pipe:1"
+          }
+        ],
+        "mp4": [
+          {
+            "name": "720p",
+            "cmd": "%FFMPEG% -dual_mono_mode main -i pipe:0 -sn -threads 0 -c:a aac -ar 48000 -b:a 192k -ac 2 -c:v libx264 -vf yadif,scale=-2:720 -b:v 3000k -profile:v baseline -preset veryfast -tune fastdecode,zerolatency -movflags frag_keyframe+empty_moov+faststart+default_base_moof -y -f mp4 pipe:1"
+          },
+          {
+            "name": "480p",
+            "cmd": "%FFMPEG% -dual_mono_mode main -i pipe:0 -sn -threads 0 -c:a aac -ar 48000 -b:a 128k -ac 2 -c:v libx264 -vf yadif,scale=-2:480 -b:v 1500k -profile:v baseline -preset veryfast -tune fastdecode,zerolatency -movflags frag_keyframe+empty_moov+faststart+default_base_moof -y -f mp4 pipe:1"
+          }
+        ],
+        "hls": [
+          {
+            "name": "720p",
+            "cmd": "%FFMPEG% -dual_mono_mode main -i pipe:0 -sn -map 0 -threads 0 -ignore_unknown -max_muxing_queue_size 1024 -f hls -hls_time 3 -hls_list_size 0 -hls_allow_cache 1 -hls_segment_filename %streamFileDir%/stream%streamNum%-%09d.ts -hls_flags delete_segments -c:a aac -ar 48000 -b:a 192k -ac 2 -c:v libx264 -vf yadif,scale=-2:720 -b:v 3000k -preset veryfast -flags +loop-global_header %OUTPUT%"
+          },
+          {
+            "name": "480p",
+            "cmd": "%FFMPEG% -dual_mono_mode main -i pipe:0 -sn -map 0 -threads 0 -ignore_unknown -max_muxing_queue_size 1024 -f hls -hls_time 3 -hls_list_size 0 -hls_allow_cache 1 -hls_segment_filename %streamFileDir%/stream%streamNum%-%09d.ts -hls_flags delete_segments -c:a aac -ar 48000 -b:a 128k -ac 2 -c:v libx264 -vf yadif,scale=-2:480 -b:v 1500k -preset veryfast -flags +loop-global_header %OUTPUT%"
+          }
+        ]
+      },
+      "encoded": {
+        "webm": [
+          {
+            "name": "720p",
+            "cmd": "%FFMPEG% -dual_mono_mode main -ss %SS% -i %INPUT% -sn -threads 3 -c:a libvorbis -ar 48000 -b:a 192k -ac 2 -c:v libvpx-vp9 -vf scale=-2:720 -b:v 3000k -deadline realtime -speed 4 -cpu-used -8 -y -f webm pipe:1"
+          },
+          {
+            "name": "480p",
+            "cmd": "%FFMPEG% -dual_mono_mode main -ss %SS% -i %INPUT% -sn -threads 3 -c:a libvorbis -ar 48000 -b:a 128k -ac 2 -c:v libvpx-vp9 -vf scale=-2:480 -b:v 1500k -deadline realtime -speed 4 -cpu-used -8 -y -f webm pipe:1"
+          }
+        ],
+        "mp4": [
+          {
+            "name": "720p",
+            "cmd": "%FFMPEG% -dual_mono_mode main -ss %SS% -i %INPUT% -sn -threads 0 -c:a aac -ar 48000 -b:a 192k -ac 2 -c:v libx264 -vf scale=-2:720 -b:v 3000k -profile:v baseline -preset veryfast -tune fastdecode,zerolatency -movflags frag_keyframe+empty_moov+faststart+default_base_moof -y -f mp4 pipe:1"
+          },
+          {
+            "name": "480p",
+            "cmd": "%FFMPEG% -dual_mono_mode main -ss %SS% -i %INPUT% -sn -threads 0 -c:a aac -ar 48000 -b:a 128k -ac 2 -c:v libx264 -vf scale=-2:480 -b:v 1500k -profile:v baseline -preset veryfast -tune fastdecode,zerolatency -movflags frag_keyframe+empty_moov+faststart+default_base_moof -y -f mp4 pipe:1"
+          }
+        ],
+        "hls": [
+          {
+            "name": "720p",
+            "cmd": "%FFMPEG% -dual_mono_mode main -ss %SS% -i %INPUT% -sn -threads 0 -ignore_unknown -max_muxing_queue_size 1024 -f hls -hls_time 3 -hls_list_size 0 -hls_allow_cache 1 -hls_segment_filename %streamFileDir%/stream%streamNum%-%09d.ts -hls_flags delete_segments -c:a aac -ar 48000 -b:a 192k -ac 2 -c:v libx264 -vf scale=-2:720 -b:v 3000k -preset veryfast -flags +loop-global_header %OUTPUT%"
+          },
+          {
+            "name": "480p",
+            "cmd": "%FFMPEG% -dual_mono_mode main -ss %SS% -i %INPUT% -sn -threads 0 -ignore_unknown -max_muxing_queue_size 1024 -f hls -hls_time 3 -hls_list_size 0 -hls_allow_cache 1 -hls_segment_filename %streamFileDir%/stream%streamNum%-%09d.ts -hls_flags delete_segments -c:a aac -ar 48000 -b:a 128k -ac 2 -c:v libx264 -vf scale=-2:480 -b:v 3000k -preset veryfast -flags +loop-global_header %OUTPUT%"
+          }
+        ]
+      }
     }
-  ],
-  "recordedViewer": {
-    "ios": "infuse://x-callback-url/play?url=http://ADDRESS",
-    "android": "intent://ADDRESS#Intent;package=com.mxtech.videoplayer.ad;type=video;scheme=http;end"
   }
 }

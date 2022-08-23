@@ -1,56 +1,56 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "driftctl";
-  version = "0.17";
+  version = "0.34.1";
 
   src = fetchFromGitHub {
-    owner = "cloudskiff";
+    owner = "snyk";
     repo = "driftctl";
     rev = "v${version}";
-    sha256 = "sha256-JloeRoW+1tepSJzhcOQu38TDQfY10NtG2EyeVhP26BQ=";
+    sha256 = "sha256-/tdAmu/BurCFB82i9pT2+PNOsPtHdlL/brUt4B9Q/EA=";
   };
 
-  vendorSha256 = "sha256-aaJ5fpS+BiVq1K8OxN+/CBD96wy3flGDhch8O2ACIh8=";
+  vendorSha256 = "sha256-KChEDFZj5zsZ/viOVWgC15WI8mp5cUC+SdNwkCjo6bI=";
 
-  postUnpack = ''
-    # Without this, tests fail to locate aws/3.19.0.json
-    for prefix in /                        \
-                  /pkg                     \
-                  /pkg/analyser            \
-                  /pkg/alerter             \
-                  /pkg/remote              \
-                  /pkg/middlewares         \
-                  /pkg/cmd/scan/output     \
-                  /pkg/iac/terraform/state \
-                  /pkg/iac/supplier ; do
-      mkdir -p ./source/$prefix/github.com/cloudskiff
-      ln -sf $PWD/source ./source/$prefix/github.com/cloudskiff/driftctl
-    done
+  nativeBuildInputs = [ installShellFiles ];
 
-    # Disable check for latest version and telemetry, which are opt-out.
-    # Making it out-in is quite a job, and why bother?
-    find -name '*.go' \
-      | xargs sed -i 's,https://2lvzgmrf2e.execute-api.eu-west-3.amazonaws.com/,https://0.0.0.0/,g'
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/snyk/driftctl/pkg/version.version=v${version}"
+    "-X github.com/snyk/driftctl/build.env=release"
+    "-X github.com/snyk/driftctl/build.enableUsageReporting=false"
+  ];
 
-    # and remove corresponding flags from --help, so things look tidy.
-    find -name driftctl.go | \
-      xargs sed -i -e '/("no-version-check"/ d'  -e '/("disable-telemetry"/ d'
+  postInstall = ''
+    installShellCompletion --cmd driftctl \
+      --bash <($out/bin/driftctl completion bash) \
+      --fish <($out/bin/driftctl completion fish) \
+      --zsh <($out/bin/driftctl completion zsh)
+  '';
 
-    # Presumably it can be done with ldflags, but I failed to find incantation
-    # that would work, we here we go old-school.
-    find -name version.go | xargs sed -i -e 's/"dev"/"${version}"/'
-    find -name build.go | xargs sed -i -e 's/"dev"/"release"/'
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
 
-    # Fix the tests that checks for dev-dev.
-    find -name version_test.go | xargs sed -i -e 's/"dev-dev/"${version}/'
-    find -name driftctl_test.go | xargs sed -i -e 's/"dev-dev/"${version}/'
+    $out/bin/driftctl --help
+    $out/bin/driftctl version | grep "v${version}"
+    # check there's no telemetry flag
+    $out/bin/driftctl --help | grep -vz "telemetry"
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {
-    description = "Tool to track infrastructure drift";
-    homepage = "https://github.com/cloudskiff/driftctl";
+    homepage = "https://driftctl.com/";
+    changelog = "https://github.com/snyk/driftctl/releases/tag/v${version}";
+    description = "Detect, track and alert on infrastructure drift";
+    longDescription = ''
+      driftctl is a free and open-source CLI that warns of infrastructure drift
+      and fills in the missing piece in your DevSecOps toolbox.
+    '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ kaction ];
+    maintainers = with maintainers; [ kaction jk ];
   };
 }

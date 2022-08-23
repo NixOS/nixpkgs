@@ -2,23 +2,25 @@
 , buildPythonPackage
 , fetchFromGitHub
 , click
+, pycryptodome
 , requests
 , tzlocal
 }:
 
 buildPythonPackage rec {
   pname = "micloud";
-  version = "0.4";
+  version = "0.5";
 
   src = fetchFromGitHub {
     owner = "Squachen";
     repo = "micloud";
     rev = "v_${version}";
-    sha256 = "01z1qfln6f7pnxb4ssmyygyamnfgh36fzgn85s8axdwy8wrch20x";
+    sha256 = "sha256-1qtOsEH+G5ASsRyVCa4U0WQ/9kDRn1WpPNkvuvWFovQ=";
   };
 
   propagatedBuildInputs = [
     click
+    pycryptodome
     requests
     tzlocal
   ];

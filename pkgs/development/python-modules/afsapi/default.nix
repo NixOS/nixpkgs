@@ -6,21 +6,28 @@
 , pytest-aiohttp
 , pytestCheckHook
 , pythonOlder
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "afsapi";
-  version = "0.0.4";
+  version = "0.2.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = "zhelev";
+    owner = "wlcrs";
     repo = "python-afsapi";
-    rev = version;
-    sha256 = "aevxhHuRedDs0JxeMlYSKHDQwcIs7miRm4FCtssdE0w=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-TTZk/8mfG5lBr8SyMbqSaYDskWKnUlMkAUp94DXPCKo=";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -42,7 +49,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python implementation of the Frontier Silicon API";
-    homepage = "https://github.com/zhelev/python-afsapi";
+    homepage = "https://github.com/wlcrs/python-afsapi";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

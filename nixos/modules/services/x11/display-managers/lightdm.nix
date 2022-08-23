@@ -82,6 +82,7 @@ in
     ./lightdm-greeters/enso-os.nix
     ./lightdm-greeters/pantheon.nix
     ./lightdm-greeters/tiny.nix
+    ./lightdm-greeters/slick.nix
     (mkRenamedOptionModule [ "services" "xserver" "displayManager" "lightdm" "autoLogin" "enable" ] [
       "services"
       "xserver"
@@ -105,7 +106,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable lightdm as the display manager.
         '';
       };
@@ -114,14 +115,14 @@ in
         enable = mkOption {
           type = types.bool;
           default = true;
-          description = ''
+          description = lib.mdDoc ''
             If set to false, run lightdm in greeterless mode. This only works if autologin
             is enabled and autoLogin.timeout is zero.
           '';
         };
         package = mkOption {
           type = types.package;
-          description = ''
+          description = lib.mdDoc ''
             The LightDM greeter to login via. The package should be a directory
             containing a .desktop file matching the name in the 'name' option.
           '';
@@ -129,7 +130,7 @@ in
         };
         name = mkOption {
           type = types.str;
-          description = ''
+          description = lib.mdDoc ''
             The name of a .desktop file in the directory specified
             in the 'package' option.
           '';
@@ -142,14 +143,14 @@ in
         example = ''
           user-authority-in-system-dir = true
         '';
-        description = "Extra lines to append to LightDM section.";
+        description = lib.mdDoc "Extra lines to append to LightDM section.";
       };
 
       background = mkOption {
         type = types.either types.path (types.strMatching "^#[0-9]\{6\}$");
         # Manual cannot depend on packages, we are actually setting the default in config below.
         defaultText = literalExpression "pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom.gnomeFilePath";
-        description = ''
+        description = lib.mdDoc ''
           The background image or color to use.
         '';
       };
@@ -160,14 +161,14 @@ in
         example = ''
           greeter-show-manual-login=true
         '';
-        description = "Extra lines to append to SeatDefaults section.";
+        description = lib.mdDoc "Extra lines to append to SeatDefaults section.";
       };
 
       # Configuration for automatic login specific to LightDM
       autoLogin.timeout = mkOption {
         type = types.int;
         default = 0;
-        description = ''
+        description = lib.mdDoc ''
           Show the greeter for this many seconds before automatic login occurs.
         '';
       };
@@ -267,6 +268,8 @@ in
     # Enable the accounts daemon to find lightdm's dbus interface
     environment.systemPackages = [ lightdm ];
 
+    security.polkit.enable = true;
+
     security.pam.services.lightdm.text = ''
         auth      substack      login
         account   include       login
@@ -285,7 +288,7 @@ in
 
         session  required       pam_succeed_if.so audit quiet_success user = lightdm
         session  required       pam_env.so conffile=/etc/pam/environment readenv=0
-        session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
+        session  optional       ${config.systemd.package}/lib/security/pam_systemd.so
         session  optional       pam_keyinit.so force revoke
         session  optional       pam_permit.so
     '';

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "i2p";
-  version = "1.5.0";
+  version = "1.6.1";
 
   src = fetchurl {
     url = "https://download.i2p2.de/releases/${version}/i2psource_${version}.tar.bz2";
-    sha256 = "sha256-JuX02VsaB2aHD5ezDlfJqOmGkCecO/CRmOMO/6vsxFA=";
+    sha256 = "sha256-cZYGxMtRDeT+dPJLv6U5EacFMYIfwe55op49luqhZzM=";
   };
 
   buildInputs = [ jdk ant gettext which ];
@@ -45,6 +45,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Applications and router for I2P, anonymity over the Internet";
     homepage = "https://geti2p.net";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # source bundles dependencies as jars
+    ];
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ joelmo ];

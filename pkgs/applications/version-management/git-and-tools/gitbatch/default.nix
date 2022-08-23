@@ -1,19 +1,29 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, git }:
 
-buildGoPackage rec {
-  pname = "gitbatch-unstable";
-  version = "2019-12-19";
-
-  goPackagePath = "github.com/isacikgoz/gitbatch";
-
-  goDeps = ./deps.nix;
+buildGoModule rec {
+  pname = "gitbatch";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "isacikgoz";
     repo = "gitbatch";
-    rev = "381b0df7f86056c625c0d4d2d979733c1ee5def7";
-    sha256 = "0613vfqdn3k0w7fm25rqnqdr67w9vii3i56dfslqcn1vqjfrff3q";
+    rev = "v${version}";
+    sha256 = "sha256-ovmdbyPRSebwmW6AW55jBgBKaNdY6w5/wrpUF2cMKw8=";
   };
+
+  vendorSha256 = "sha256-wwpaJO5cXMsvqFXj+qGiIm4zg/SL4YCm2mNnG/qdilw=";
+
+  ldflags = [ "-s" "-w" ];
+
+  nativeBuildInputs = [
+    git # required by unit tests
+  ];
+
+  preCheck = ''
+    HOME=$(mktemp -d)
+    # Disable tests requiring network access to gitlab.com
+    buildFlagsArray+=("-run" "[^(Test(Run|Start|(Fetch|Pull)With(Go|)Git))]")
+  '';
 
   meta = with lib; {
     description = "Running git UI commands";

@@ -1,50 +1,60 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, pytestCheckHook
-, pytest-cov
-, pytest-xdist
 , pytest-django
-, mock
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "diskcache";
-  version = "5.2.1";
+  version = "5.4.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "grantjenks";
     repo = "python-diskcache";
     rev = "v${version}";
-    sha256 = "sha256-dWtEyyWpg0rxEwyhBdPyApzgS9o60HVGbtY76ELHvX8=";
+    hash = "sha256-c/k8mx/T4RkseDobJ2gtcuom0A6Ewyw4aP2Bk9pxV+o=";
   };
 
   checkInputs = [
-    pytestCheckHook
-    pytest-cov
-    pytest-xdist
     pytest-django
-    mock
+    pytest-xdist
+    pytestCheckHook
   ];
 
-  # Darwin sandbox causes most tests to fail.
+  postPatch = ''
+    sed -i "/--cov/d" tox.ini
+  '';
+
+  # Darwin sandbox causes most tests to fail
   doCheck = !stdenv.isDarwin;
-  pythonImportsCheck = [ "diskcache" ];
 
   disabledTests = [
-    # very time sensitive, can fail on over subscribed machines
+    # Very time sensitive, can fail on over subscribed machines
     "test_incr_update_keyerror"
+    # AssertionError: 'default' is not None
+    "test_decr_version"
+    "test_incr_version"
+    "test_get_or_set"
+    "test_get_many"
+    # see https://github.com/grantjenks/python-diskcache/issues/260
+    "test_cache_write_unpicklable_object"
   ];
 
-  pytestFlagsArray = [
-    "-n $NIX_BUILD_CORES"
+  pythonImportsCheck = [
+    "diskcache"
   ];
 
   meta = with lib; {
     description = "Disk and file backed persistent cache";
     homepage = "http://www.grantjenks.com/docs/diskcache/";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

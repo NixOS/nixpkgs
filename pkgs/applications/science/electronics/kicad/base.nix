@@ -68,7 +68,6 @@ stdenv.mkDerivation rec {
   # tagged releases don't have "unknown"
   # kicad nightlies use git describe --dirty
   # nix removes .git, so its approximated here
-  # "6.99.0" doesn't have "-unknown", yet; so leaving this in case it returns
   postPatch = ''
     substituteInPlace CMakeModules/KiCadVersion.cmake \
       --replace "unknown" "${builtins.substring 0 10 src.rev}" \
@@ -76,7 +75,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = optionals (debug) [ "CFLAGS+=-Og" "CFLAGS+=-ggdb" ];
 
-  cmakeFlags = optionals (withScripting) [
+  cmakeFlags = [
+    # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+  ]
+  ++ optionals (withScripting) [
     "-DKICAD_SCRIPTING_WXPYTHON=ON"
   ]
   ++ optionals (!withScripting) [
@@ -105,7 +108,7 @@ stdenv.mkDerivation rec {
   ++ optionals (withI18n) [
     "-DKICAD_BUILD_I18N=ON"
   ]
-  ++ optionals (!withPCM) [
+  ++ optionals (!withPCM && stable) [
     "-DKICAD_PCM=OFF"
   ];
 
@@ -158,9 +161,8 @@ stdenv.mkDerivation rec {
   ;
 
   # debug builds fail all but the python test
-  #doInstallCheck = !debug;
-  # temporarily disabled until upstream issue 9888 is resolved
-  doInstallCheck = false;
+  # stable release doesn't have the fix for upstream issue 9888 yet
+  doInstallCheck = !debug && !stable;
   installCheckTarget = "test";
 
   dontStrip = debug;

@@ -1,65 +1,101 @@
 { lib
-, python3Packages
+, python3
 , fetchFromGitHub
+, fetchpatch
 , enableGoogle ? false
 , enableAWS ? false
 , enableAzure ? false
 , enableSSH ? false
 }:
 
-with python3Packages;
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "dvc";
-  version = "0.24.3";
+  version = "2.17.0";
+  format = "setuptools";
 
-  # PyPi only has wheel
   src = fetchFromGitHub {
     owner = "iterative";
-    repo = "dvc";
+    repo = pname;
     rev = version;
-    sha256 = "1wqq4i23hppilp20fx5a5nj93xwf3wwwr2f8aasvn6jkv2l22vpl";
+    hash = "sha256-2h+fy4KMxFrVtKJBtA1RmJDZv0OVm1BxO1akZzAw95Y=";
   };
 
-  propagatedBuildInputs = [
-    ply
-    configparser
-    zc_lockfile
-    future
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "grandalf==0.6" "grandalf" \
+      --replace "scmrepo==0.0.25" "scmrepo"
+    substituteInPlace dvc/daemon.py \
+      --subst-var-by dvc "$out/bin/dcv"
+  '';
+
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
+    aiohttp-retry
+    appdirs
     colorama
     configobj
-    networkx
-    pyyaml
-    GitPython
-    setuptools
-    nanotime
-    pyasn1
-    schema
-    jsonpath_rw
-    requests
-    grandalf
-    asciimatics
+    dictdiffer
+    diskcache
     distro
-    appdirs
-  ]
-  ++ lib.optional enableGoogle google-cloud-storage
-  ++ lib.optional enableAWS boto3
-  ++ lib.optional enableAzure azure-storage-blob
-  ++ lib.optional enableSSH paramiko;
+    dpath
+    dvclive
+    dvc-data
+    dvc-render
+    dvc-task
+    flatten-dict
+    flufl_lock
+    funcy
+    grandalf
+    nanotime
+    networkx
+    packaging
+    pathspec
+    ply
+    psutil
+    pydot
+    pygtrie
+    pyparsing
+    python-benedict
+    requests
+    rich
+    ruamel-yaml
+    scmrepo
+    shortuuid
+    shtab
+    tabulate
+    tomlkit
+    tqdm
+    typing-extensions
+    voluptuous
+    zc_lockfile
+  ] ++ lib.optional enableGoogle [
+    gcsfs
+    google-cloud-storage
+  ] ++ lib.optional enableAWS [
+    aiobotocore
+    boto3
+    s3fs
+  ] ++ lib.optional enableAzure [
+    azure-identity
+    knack
+  ] ++ lib.optional enableSSH [
+    bcrypt
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
+  ];
 
-  # tests require access to real cloud services
-  # nix build tests have to be isolated and run locally
+  # Tests require access to real cloud services
   doCheck = false;
-
-  patches = [ ./dvc-daemon.patch ];
-
-  postPatch = ''
-    substituteInPlace dvc/daemon.py --subst-var-by dvc "$out/bin/dcv"
-  '';
 
   meta = with lib; {
     description = "Version Control System for Machine Learning Projects";
-    license = licenses.asl20;
     homepage = "https://dvc.org";
-    maintainers = with maintainers; [ cmcdragonkai ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ cmcdragonkai fab anthonyroussel ];
   };
 }

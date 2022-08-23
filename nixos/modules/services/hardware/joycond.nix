@@ -15,20 +15,16 @@ with lib;
       type = types.package;
       default = pkgs.joycond;
       defaultText = "pkgs.joycond";
-      description = ''
+      description = lib.mdDoc ''
         The joycond package to use.
       '';
     };
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [
-      kernelPackages.hid-nintendo
-      cfg.package
-    ];
+    environment.systemPackages = [ cfg.package ];
 
-    boot.extraModulePackages = [ kernelPackages.hid-nintendo ];
-    boot.kernelModules = [ "hid_nintendo" ];
+    boot.extraModulePackages = optional (versionOlder kernelPackages.kernel.version "5.16") kernelPackages.hid-nintendo;
 
     services.udev.packages = [ cfg.package ];
 

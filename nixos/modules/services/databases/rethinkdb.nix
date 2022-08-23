@@ -24,22 +24,22 @@ in
 
       user = mkOption {
         default = "rethinkdb";
-        description = "User account under which RethinkDB runs.";
+        description = lib.mdDoc "User account under which RethinkDB runs.";
       };
 
       group = mkOption {
         default = "rethinkdb";
-        description = "Group which rethinkdb user belongs to.";
+        description = lib.mdDoc "Group which rethinkdb user belongs to.";
       };
 
       dbpath = mkOption {
         default = "/var/db/rethinkdb";
-        description = "Location where RethinkDB stores its data, 1 data directory per instance.";
+        description = lib.mdDoc "Location where RethinkDB stores its data, 1 data directory per instance.";
       };
 
       pidpath = mkOption {
         default = "/run/rethinkdb";
-        description = "Location where each instance's pid file is located.";
+        description = lib.mdDoc "Location where each instance's pid file is located.";
       };
 
       #cfgpath = mkOption {

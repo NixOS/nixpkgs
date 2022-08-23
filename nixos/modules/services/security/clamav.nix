@@ -9,7 +9,7 @@ let
   pkg = pkgs.clamav;
 
   toKeyValue = generators.toKeyValue {
-    mkKeyValue = generators.mkKeyValueDefault {} " ";
+    mkKeyValue = generators.mkKeyValueDefault { } " ";
     listsAsDuplicateKeys = true;
   };
 
@@ -30,9 +30,9 @@ in
 
         settings = mkOption {
           type = with types; attrsOf (oneOf [ bool int str (listOf str) ]);
-          default = {};
-          description = ''
-            ClamAV configuration. Refer to <link xlink:href="https://linux.die.net/man/5/clamd.conf"/>,
+          default = { };
+          description = lib.mdDoc ''
+            ClamAV configuration. Refer to <https://linux.die.net/man/5/clamd.conf>,
             for details on supported values.
           '';
         };
@@ -43,7 +43,7 @@ in
         frequency = mkOption {
           type = types.int;
           default = 12;
-          description = ''
+          description = lib.mdDoc ''
             Number of database checks per day.
           '';
         };
@@ -51,7 +51,7 @@ in
         interval = mkOption {
           type = types.str;
           default = "hourly";
-          description = ''
+          description = lib.mdDoc ''
             How often freshclam is invoked. See systemd.time(7) for more
             information about the format.
           '';
@@ -59,9 +59,9 @@ in
 
         settings = mkOption {
           type = with types; attrsOf (oneOf [ bool int str (listOf str) ]);
-          default = {};
-          description = ''
-            freshclam configuration. Refer to <link xlink:href="https://linux.die.net/man/5/freshclam.conf"/>,
+          default = { };
+          description = lib.mdDoc ''
+            freshclam configuration. Refer to <https://linux.die.net/man/5/freshclam.conf>,
             for details on supported values.
           '';
         };
@@ -104,7 +104,6 @@ in
     systemd.services.clamav-daemon = mkIf cfg.daemon.enable {
       description = "ClamAV daemon (clamd)";
       after = optional cfg.updater.enable "clamav-freshclam.service";
-      requires = optional cfg.updater.enable "clamav-freshclam.service";
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ clamdConfigFile ];
 
@@ -134,7 +133,7 @@ in
     systemd.services.clamav-freshclam = mkIf cfg.updater.enable {
       description = "ClamAV virus database updater (freshclam)";
       restartTriggers = [ freshclamConfigFile ];
-
+      after = [ "network-online.target" ];
       preStart = ''
         mkdir -m 0755 -p ${stateDir}
         chown ${clamavUser}:${clamavGroup} ${stateDir}

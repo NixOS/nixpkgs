@@ -22,14 +22,14 @@ in {
         default = pkgs.bee;
         defaultText = literalExpression "pkgs.bee";
         example = literalExpression "pkgs.bee-unstable";
-        description = "The package providing the bee binary for the service.";
+        description = lib.mdDoc "The package providing the bee binary for the service.";
       };
 
       settings = mkOption {
         type = format.type;
-        description = ''
+        description = lib.mdDoc ''
           Ethereum Swarm Bee configuration. Refer to
-          <link xlink:href="https://gateway.ethswarm.org/bzz/docs.swarm.eth/docs/installation/configuration/"/>
+          <https://gateway.ethswarm.org/bzz/docs.swarm.eth/docs/installation/configuration/>
           for details on supported values.
         '';
       };
@@ -37,7 +37,7 @@ in {
       daemonNiceLevel = mkOption {
         type = types.int;
         default = 0;
-        description = ''
+        description = lib.mdDoc ''
           Daemon process priority for bee.
           0 is the default Unix process priority, 19 is the lowest.
         '';
@@ -46,7 +46,7 @@ in {
       user = mkOption {
         type = types.str;
         default = "bee";
-        description = ''
+        description = lib.mdDoc ''
           User the bee binary should execute under.
         '';
       };
@@ -54,7 +54,7 @@ in {
       group = mkOption {
         type = types.str;
         default = "bee";
-        description = ''
+        description = lib.mdDoc ''
           Group the bee binary should execute under.
         '';
       };

@@ -13,12 +13,13 @@
 , colorlog
 , croniter
 , cryptography
+, dataclasses
 , dill
 , flask
+, flask_login
+, flask-wtf
 , flask-appbuilder
 , flask-caching
-, flask_login
-, flask_wtf
 , GitPython
 , graphviz
 , gunicorn
@@ -47,6 +48,7 @@
 , python-nvd3
 , python-slugify
 , python3-openid
+, pythonOlder
 , pyyaml
 , rich
 , setproctitle
@@ -63,14 +65,13 @@
 , mkYarnPackage
 }:
 let
-
-  version = "2.1.4";
+  version = "2.3.3";
 
   airflow-src = fetchFromGitHub rec {
     owner = "apache";
     repo = "airflow";
-    rev = version;
-    sha256 = "12nxjaz4afkq30s42x3rbsci8jiw2k5zjngsc8i190fasbacbnbs";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-N+6ljfSo6+UvSAnvDav6G0S49JZ1VJwxmaiKPV3/DjA=";
   };
 
   # airflow bundles a web interface, which is built using webpack by an undocumented shell script in airflow's source tree.
@@ -107,6 +108,8 @@ buildPythonPackage rec {
   inherit version;
   src = airflow-src;
 
+  disabled = pythonOlder "3.6";
+
   propagatedBuildInputs = [
     alembic
     argcomplete
@@ -123,14 +126,13 @@ buildPythonPackage rec {
     flask-appbuilder
     flask-caching
     flask_login
-    flask_wtf
+    flask-wtf
     GitPython
     graphviz
     gunicorn
     httpx
     iso8601
     importlib-resources
-    importlib-metadata
     inflection
     itsdangerous
     jinja2
@@ -163,6 +165,10 @@ buildPythonPackage rec {
     termcolor
     unicodecsv
     werkzeug
+  ] ++ lib.optionals (pythonOlder "3.7") [
+    dataclasses
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    importlib-metadata
   ];
 
   buildInputs = [
@@ -178,24 +184,22 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "importlib_resources~=1.4" "importlib_resources" \
-      --replace "importlib_metadata~=1.7" "importlib_metadata" \
-      --replace "tenacity~=6.2.0" "tenacity" \
-      --replace "pyjwt<2" "pyjwt" \
-      --replace "flask>=1.1.0, <2.0" "flask" \
-      --replace "flask-login>=0.3, <0.5" "flask-login" \
-      --replace "flask-wtf>=0.14.3, <0.15" "flask-wtf" \
-      --replace "jinja2>=2.10.1, <2.12.0" "jinja2" \
       --replace "attrs>=20.0, <21.0" "attrs" \
       --replace "cattrs~=1.1, <1.7.0" "cattrs" \
-      --replace "markupsafe>=1.1.1, <2.0" "markupsafe" \
+      --replace "colorlog>=4.0.2, <6.0" "colorlog" \
+      --replace "croniter>=0.3.17, <1.1" "croniter" \
       --replace "docutils<0.17" "docutils" \
-      --replace "sqlalchemy>=1.3.18, <1.4" "sqlalchemy" \
-      --replace "sqlalchemy_jsonfield~=1.0" "sqlalchemy-jsonfield" \
-      --replace "werkzeug~=1.0, >=1.0.1" "werkzeug" \
+      --replace "flask-login>=0.3, <0.5" "flask-login" \
+      --replace "flask-wtf>=0.14.3, <0.15" "flask-wtf" \
+      --replace "flask>=1.1.0, <2.0" "flask" \
+      --replace "importlib_resources~=1.4" "importlib_resources" \
       --replace "itsdangerous>=1.1.0, <2.0" "itsdangerous" \
+      --replace "markupsafe>=1.1.1, <2.0" "markupsafe" \
+      --replace "pyjwt<2" "pyjwt" \
       --replace "python-slugify>=3.0.0,<5.0" "python-slugify" \
-      --replace "colorlog>=4.0.2, <6.0" "colorlog"
+      --replace "sqlalchemy_jsonfield~=1.0" "sqlalchemy-jsonfield" \
+      --replace "tenacity~=6.2.0" "tenacity" \
+      --replace "werkzeug~=1.0, >=1.0.1" "werkzeug"
 
     substituteInPlace tests/core/test_core.py \
       --replace "/bin/bash" "${stdenv.shell}"
@@ -205,19 +209,21 @@ buildPythonPackage rec {
       --replace "/tmp/sqlite_default.db" "$TMPDIR/sqlite_default.db"
   '';
 
-  # allow for gunicorn processes to have access to python packages
-  makeWrapperArgs = [ "--prefix PYTHONPATH : $PYTHONPATH" ];
+  # allow for gunicorn processes to have access to Python packages
+  makeWrapperArgs = [
+    "--prefix PYTHONPATH : $PYTHONPATH"
+  ];
 
   preCheck = ''
-   export HOME=$(mktemp -d)
-   export AIRFLOW_HOME=$HOME
-   export AIRFLOW__CORE__UNIT_TEST_MODE=True
-   export AIRFLOW_DB="$HOME/airflow.db"
-   export PATH=$PATH:$out/bin
+    export HOME=$(mktemp -d)
+    export AIRFLOW_HOME=$HOME
+    export AIRFLOW__CORE__UNIT_TEST_MODE=True
+    export AIRFLOW_DB="$HOME/airflow.db"
+    export PATH=$PATH:$out/bin
 
-   airflow version
-   airflow db init
-   airflow db reset -y
+    airflow version
+    airflow db init
+    airflow db reset -y
   '';
 
   pytestFlagsArray = [
@@ -225,7 +231,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
-    "bash_operator_kill"  # psutil.AccessDenied
+    "bash_operator_kill" # psutil.AccessDenied
   ];
 
   postInstall = ''
@@ -237,5 +243,7 @@ buildPythonPackage rec {
     homepage = "https://airflow.apache.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ bhipple costrouc ingenieroariel ];
+    # requires extremely outdated versions of multiple dependencies
+    broken = true;
   };
 }

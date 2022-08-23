@@ -1,17 +1,18 @@
-{ fetchFromGitHub, lib, stdenv, zlib, qtbase, cmake, fixDarwinDylibNames }:
+{ fetchFromGitHub, lib, stdenv, zlib, qtbase, qt5compat ? null, cmake, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   pname = "quazip";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "stachenov";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-fsEMmbatTB1s8JnUYE18/vj2FZ2b40zHoOlL2OVplLc=";
+    sha256 = "sha256-CtjjHJgUEmGg066D/wey3wyq8boX1sJiP7fUNmpbT1o=";
   };
 
   buildInputs = [ zlib qtbase ];
+  propagatedBuildInputs = [ qt5compat ];
   nativeBuildInputs = [ cmake ]
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 

@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "nix-direnv";
-  version = "1.5.0";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-direnv";
     rev = version;
-    sha256 = "sha256-PEteip6FcaJ2wqdhSM9SqL7bJ4nimcOrC3s2pWunEIE=";
+    sha256 = "sha256-6UvOnFmohdhFenpEangbLLEdE0PeessRJjiO0mcydWI=";
   };
 
   # Substitute instead of wrapping because the resulting file is
@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://github.com/nix-community/nix-direnv";
     license     = licenses.mit;
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ mic92 ];
+    maintainers = with maintainers; [ mic92 bbenne10 ];
   };
 }

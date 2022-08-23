@@ -20,6 +20,7 @@
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableStatic ? stdenv.hostPlatform.isStatic
 , webUISupport ? false
+, extraGrammars ? { }
 }:
 
 # TODO: move to carnix or https://github.com/kolloch/crate2nix
@@ -27,10 +28,11 @@ let
   # to update:
   # 1) change all these hashes
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
-  # 3) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.20.1";
-  sha256 = "sha256-JKbL05hFWI0jhAnRT9D0SWCoRPFqoMD4+LQQ1zyWc7g=";
-  cargoSha256 = "sha256-64O+3GrDqhRGth20B2/+jNDYSnwvT3SqYVqYNthiCB0=";
+  # 3) OPTIONAL: Set GITHUB_TOKEN env variable to avoid api rate limit
+  # 4) run the ./result script that is output by that (it updates ./grammars)
+  version = "0.20.6";
+  sha256 = "sha256-zaxy8VCfJKK8NtfuFFojmmP5a19FP1zO/eB5q1EoQPw=";
+  cargoSha256 = "sha256-sOOhzm2nz+HC6dvT+8hj/wh19o+OB2zQ6Uz+H89txSA=";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
@@ -50,26 +52,28 @@ let
     runCommand "grammars" { } (''
       mkdir $out
     '' + (lib.concatStrings (lib.mapAttrsToList
-      (name: grammar: "ln -s ${fetchGrammar grammar} $out/${name}\n")
+      (name: grammar: "ln -s ${if grammar ? src then grammar.src else fetchGrammar grammar} $out/${name}\n")
       (import ./grammars { inherit lib; }))));
-
   builtGrammars =
     let
       change = name: grammar:
         callPackage ./grammar.nix { } {
-          language = name;
+          language = if grammar ? language then grammar.language else name;
           inherit version;
-          source = fetchGrammar grammar;
+          source = if grammar ? src then grammar.src else fetchGrammar grammar;
           location = if grammar ? location then grammar.location else null;
         };
-      grammars' = (import ./grammars { inherit lib; });
+      grammars' = import ./grammars { inherit lib; } // extraGrammars;
       grammars = grammars' //
         { tree-sitter-ocaml = grammars'.tree-sitter-ocaml // { location = "ocaml"; }; } //
         { tree-sitter-ocaml-interface = grammars'.tree-sitter-ocaml // { location = "interface"; }; } //
+        { tree-sitter-org-nvim = grammars'.tree-sitter-org-nvim // { language = "org"; }; } //
         { tree-sitter-typescript = grammars'.tree-sitter-typescript // { location = "typescript"; }; } //
-        { tree-sitter-tsx = grammars'.tree-sitter-typescript // { location = "tsx"; }; };
+        { tree-sitter-tsx = grammars'.tree-sitter-typescript // { location = "tsx"; }; } //
+        { tree-sitter-markdown = grammars'.tree-sitter-markdown // { location = "tree-sitter-markdown"; }; } //
+        { tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // { language = "markdown_inline"; location = "tree-sitter-markdown-inline"; }; };
     in
-    lib.mapAttrs change grammars;
+    lib.mapAttrs change (grammars);
 
   # Usage:
   # pkgs.tree-sitter.withPlugins (p: [ p.tree-sitter-c p.tree-sitter-java ... ])
@@ -90,10 +94,10 @@ let
           in
           {
             name =
-              (lib.strings.replaceStrings ["-"] ["_"]
+              (lib.strings.replaceStrings [ "-" ] [ "_" ]
                 (lib.strings.removePrefix "tree-sitter-"
                   (lib.strings.removeSuffix "-grammar" name)))
-              + stdenv.hostPlatform.extensions.sharedLibrary;
+              + ".so";
             path = "${drv}/parser";
           }
         )
@@ -164,6 +168,6 @@ rustPlatform.buildRustPackage {
       * Dependency-free so that the runtime library (which is written in pure C) can be embedded in any application
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ Profpatsch ];
+    maintainers = with maintainers; [ Profpatsch oxalica ];
   };
 }

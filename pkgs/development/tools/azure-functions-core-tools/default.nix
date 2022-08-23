@@ -11,7 +11,6 @@
 , libuuid
 , dotnetbuildhelpers
 , dotnetCorePackages
-, coreclr
 , openssl
 }:
 
@@ -24,13 +23,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-NdTEFQaG8eFengjzQr51ezehIHFvQZqmrjpjWk4vZKo=";
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
     unzip
     makeWrapper
     dotnetbuildhelpers
-  ];
-
-  nativeBuildInputs = [
     icu
     libunwind
     curl
@@ -67,6 +63,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/Azure/azure-functions-core-tools";
     description = "Command line tools for Azure Functions";
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
     license = licenses.mit;
     maintainers = with maintainers; [ jshcmpbll ];
     platforms = platforms.linux;

@@ -1,26 +1,21 @@
-{ lib, buildGoModule, fetchFromGitHub, packr, makeWrapper, installShellFiles, helm, kustomize }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "argocd";
-  version = "2.2.1";
-  commit = "122ecefc3abfe8b691a08d9f3cecf9a170cc8c37";
-  tag = "v${version}";
+  version = "2.4.10";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo-cd";
-    rev = tag;
-    sha256 = "sha256-BI4aoe9XVmuyb4oDPd2Clz5IWVzu4rAMHDi6Cb6spyE=";
+    rev = "v${version}";
+    sha256 = "sha256-qYHLK/3InkpRjMfmwmP+TE24D3OOw+glwEvYIEbxTa0=";
   };
 
-  vendorSha256 = "sha256-GeU8uQM+oMottzYsE6oQyKZL3aWB5vQgTDLQiuQdapw=";
+  vendorSha256 = "sha256-M1ZYooS22bntHXAMK4QpMAwuMvN4/tHtVu3WZW9V8TA=";
 
-  nativeBuildInputs = [ packr makeWrapper installShellFiles ];
-
-  # run packr to embed assets
-  preBuild = ''
-    packr
-  '';
+  # Set target as ./cmd per cli-local
+  # https://github.com/argoproj/argo-cd/blob/master/Makefile#L227
+  subPackages = [ "cmd" ];
 
   ldflags =
     let package_url = "github.com/argoproj/argo-cd/v2/common"; in
@@ -28,25 +23,17 @@ buildGoModule rec {
       "-s" "-w"
       "-X ${package_url}.version=${version}"
       "-X ${package_url}.buildDate=unknown"
-      "-X ${package_url}.gitCommit=${commit}"
-      "-X ${package_url}.gitTag=${tag}"
+      "-X ${package_url}.gitCommit=${src.rev}"
+      "-X ${package_url}.gitTag=${src.rev}"
       "-X ${package_url}.gitTreeState=clean"
+      "-X ${package_url}.kubectlVersion=v0.23.1"
+      # NOTE: Update kubectlVersion when upgrading this package with
+      # https://github.com/argoproj/argo-cd/blob/v${version}/go.mod#L95
+      # Per https://github.com/argoproj/argo-cd/blob/master/Makefile#L18
+      # Will need a way to automate it :P
     ];
 
-  # Test is disabled because ksonnet is missing from nixpkgs.
-  # Log: https://gist.github.com/superherointj/79cbdc869dfd44d28a10dc6746ecb3f9
-  doCheck = false;
-  checkInputs = [
-    helm
-    kustomize
-    #ksonnet
-  ];
-
-  doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/argocd version --client | grep ${tag} > /dev/null
-    $out/bin/argocd-util version --client | grep ${tag} > /dev/null
-  '';
+  nativeBuildInputs = [ installShellFiles ];
 
   installPhase = ''
     runHook preInstall
@@ -55,10 +42,12 @@ buildGoModule rec {
     runHook postInstall
   '';
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/argocd version --client | grep ${src.rev} > /dev/null
+  '';
+
   postInstall = ''
-    for appname in argocd-util argocd-server argocd-repo-server argocd-application-controller argocd-dex ; do
-      makeWrapper $out/bin/argocd $out/bin/$appname --set ARGOCD_BINARY_NAME $appname
-    done
     installShellCompletion --cmd argocd \
       --bash <($out/bin/argocd completion bash) \
       --zsh <($out/bin/argocd completion zsh)

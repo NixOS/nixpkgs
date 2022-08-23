@@ -8,22 +8,22 @@
 , ninja
 , pkg-config
 , python3
-, gtk3
-, libhandy
+, gtk4
+, libadwaita
 , glib
 , libxml2
-, wrapGAppsHook
+, wrapGAppsHook4
 , itstool
 , gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "baobab";
-  version = "41.0";
+  version = "42.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "ytYnjS3MgMhLVxBapbtY2KMM6Y1vq9dnUZ3bhshX6FU=";
+    sha256 = "Sxqr5rqxWCs/6nmigpvOfyQVu25QYvJTV67t1TF6UNw=";
   };
 
   nativeBuildInputs = [
@@ -37,20 +37,26 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook
-    # Prevents “error: Package `libhandy-1' not found in specified Vala API
+    wrapGAppsHook4
+    # Prevents “error: Package `libadwaita-1' not found in specified Vala API
     # directories or GObject-Introspection GIR directories” with strictDeps,
     # even though it should only be a runtime dependency.
-    libhandy
+    libadwaita
   ];
 
   buildInputs = [
-    gtk3
-    libhandy
+    gtk4
+    libadwaita
     glib
   ];
 
   doCheck = true;
+
+  postPatch = ''
+    # https://gitlab.gnome.org/GNOME/baobab/-/merge_requests/40
+    substituteInPlace build-aux/post-install.py \
+      --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {

@@ -26,23 +26,23 @@ in
         default = pkgs.metricbeat;
         defaultText = literalExpression "pkgs.metricbeat";
         example = literalExpression "pkgs.metricbeat7";
-        description = ''
+        description = lib.mdDoc ''
           The metricbeat package to use
         '';
       };
 
       modules = mkOption {
-        description = ''
+        description = lib.mdDoc ''
           Metricbeat modules are responsible for reading metrics from the various sources.
 
-          This is like <literal>services.metricbeat.settings.metricbeat.modules</literal>,
+          This is like `services.metricbeat.settings.metricbeat.modules`,
           but structured as an attribute set. This has the benefit that multiple
           NixOS modules can contribute settings to a single metricbeat module.
 
-          A module can be specified multiple times by choosing a different <literal>&lt;name></literal>
-          for each, but setting <xref linkend="opt-services.metricbeat.modules._name_.module"/> to the same value.
+          A module can be specified multiple times by choosing a different `<name>`
+          for each, but setting [](#opt-services.metricbeat.modules._name_.module) to the same value.
 
-          See <link xlink:href="https://www.elastic.co/guide/en/beats/metricbeat/current/metricbeat-modules.html"/>.
+          See <https://www.elastic.co/guide/en/beats/metricbeat/current/metricbeat-modules.html>.
         '';
         default = {};
         type = types.attrsOf (types.submodule ({ name, ... }: {
@@ -51,11 +51,11 @@ in
             module = mkOption {
               type = types.str;
               default = name;
-              description = ''
+              description = lib.mdDoc ''
                 The name of the module.
 
-                Look for the value after <literal>module:</literal> on the individual
-                module pages linked from <link xlink:href="https://www.elastic.co/guide/en/beats/metricbeat/current/metricbeat-modules.html"/>.
+                Look for the value after `module:` on the individual
+                module pages linked from <https://www.elastic.co/guide/en/beats/metricbeat/current/metricbeat-modules.html>.
               '';
             };
           };
@@ -80,18 +80,18 @@ in
             name = mkOption {
               type = types.str;
               default = "";
-              description = ''
+              description = lib.mdDoc ''
                 Name of the beat. Defaults to the hostname.
-                See <link xlink:href="https://www.elastic.co/guide/en/beats/metricbeat/current/configuration-general-options.html#_name"/>.
+                See <https://www.elastic.co/guide/en/beats/metricbeat/current/configuration-general-options.html#_name>.
               '';
             };
 
             tags = mkOption {
               type = types.listOf types.str;
               default = [];
-              description = ''
+              description = lib.mdDoc ''
                 Tags to place on the shipped metrics.
-                See <link xlink:href="https://www.elastic.co/guide/en/beats/metricbeat/current/configuration-general-options.html#_tags_2"/>.
+                See <https://www.elastic.co/guide/en/beats/metricbeat/current/configuration-general-options.html#_tags_2>.
               '';
             };
 
@@ -108,8 +108,8 @@ in
           };
         };
         default = {};
-        description = ''
-          Configuration for metricbeat. See <link xlink:href="https://www.elastic.co/guide/en/beats/metricbeat/current/configuring-howto-metricbeat.html"/> for supported values.
+        description = lib.mdDoc ''
+          Configuration for metricbeat. See <https://www.elastic.co/guide/en/beats/metricbeat/current/configuring-howto-metricbeat.html> for supported values.
         '';
       };
 

@@ -1,26 +1,36 @@
-{ lib, fetchFromGitHub, python3Packages, gettext, gdk-pixbuf
-, gobject-introspection, gtk3, wrapGAppsHook }:
-
-with lib;
+{ lib
+, stdenv
+, fetchFromGitHub
+, wrapGAppsHook
+, gdk-pixbuf
+, gettext
+, gobject-introspection
+, gtk3
+, python3Packages
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "nicotine-plus";
-  version = "3.2.0";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
-    owner = "Nicotine-Plus";
+    owner = "nicotine-plus";
     repo = "nicotine-plus";
     rev = version;
-    hash = "sha256-E8b2VRlnMWmBHu919QDPBYuMbrjov9t//bHi1Y/F0Ak=";
+    sha256 = "sha256-aD5LQ0l6bet/iQKiu1mta4fUeijfip9IdzbGnTkCNdQ=";
   };
 
   nativeBuildInputs = [ gettext wrapGAppsHook ];
 
-  propagatedBuildInputs = [ gtk3 gdk-pixbuf gobject-introspection ]
-    ++ (with python3Packages; [ pygobject3 ]);
+  propagatedBuildInputs = [
+    gdk-pixbuf
+    gobject-introspection
+    gtk3
+    python3Packages.pygobject3
+  ];
 
   postInstall = ''
-    mv $out/bin/nicotine $out/bin/nicotine-plus
+    ln -s $out/bin/nicotine $out/bin/nicotine-plus
   '';
 
   preFixup = ''
@@ -31,11 +41,16 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A graphical client for the SoulSeek peer-to-peer system";
+    longDescription = ''
+      Nicotine+ aims to be a pleasant, free and open source (FOSS) alternative
+      to the official Soulseek client, providing additional functionality while
+      keeping current with the Soulseek protocol.
+    '';
     homepage = "https://www.nicotine-plus.org";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ehmry klntsky ];
-    platforms = platforms.unix;
   };
 }

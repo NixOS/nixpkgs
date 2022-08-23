@@ -58,8 +58,9 @@ in rec {
   gnome38Extensions = mapUuidNames (produceExtensionsList "38");
   gnome40Extensions = mapUuidNames (produceExtensionsList "40");
   gnome41Extensions = mapUuidNames (produceExtensionsList "41");
+  gnome42Extensions = mapUuidNames (produceExtensionsList "42");
 
-  gnomeExtensions = lib.trivial.pipe (gnome40Extensions // gnome41Extensions) [
+  gnomeExtensions = lib.trivial.pipe (gnome40Extensions // gnome41Extensions // gnome42Extensions) [
     # Apply some custom patches for automatically packaged extensions
     (callPackage ./extensionOverrides.nix {})
     # Add all manually packaged extensions
@@ -68,7 +69,7 @@ in rec {
     (lib.attrValues)
     (mapReadableNames)
     # Add some aliases
-    (extensions: extensions // lib.optionalAttrs (config.allowAliases or true) {
+    (extensions: extensions // lib.optionalAttrs config.allowAliases {
       unite-shell = gnomeExtensions.unite; # added 2021-01-19
       arc-menu = gnomeExtensions.arcmenu; # added 2021-02-14
       disable-unredirect = gnomeExtensions.disable-unredirect-fullscreen-windows; # added 2021-11-20

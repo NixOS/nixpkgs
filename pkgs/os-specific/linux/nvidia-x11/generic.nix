@@ -2,6 +2,7 @@
 , url ? null
 , sha256_32bit ? null
 , sha256_64bit
+, openSha256 ? null
 , settingsSha256
 , settingsVersion ? version
 , persistencedSha256
@@ -17,7 +18,7 @@
 }@args:
 
 { lib, stdenv, callPackage, pkgs, pkgsi686Linux, fetchurl
-, kernel ? null, perl, nukeReferences
+, kernel ? null, perl, nukeReferences, which
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
   # Linux.
@@ -27,13 +28,14 @@
   disable32Bit ? false
   # 32 bit libs only version of this package
 , lib32 ? null
+  # Whether to extract the GSP firmware
+, firmware ? openSha256 != null
 }:
 
 with lib;
 
 assert !libsOnly -> kernel != null;
 assert versionOlder version "391" -> sha256_32bit != null;
-assert ! versionOlder version "391" -> stdenv.hostPlatform.system == "x86_64-linux";
 
 let
   nameSuffix = optionalString (!libsOnly) "-${kernel.version}";
@@ -72,7 +74,8 @@ let
 
     outputs = [ "out" ]
         ++ optional i686bundled "lib32"
-        ++ optional (!libsOnly) "bin";
+        ++ optional (!libsOnly) "bin"
+        ++ optional (!libsOnly && firmware) "firmware";
     outputDev = if libsOnly then null else "bin";
 
     kernel = if libsOnly then null else kernel.dev;
@@ -93,12 +96,17 @@ let
     libPath = libPathFor pkgs;
     libPath32 = optionalString i686bundled (libPathFor pkgsi686Linux);
 
+    buildInputs = [ which ];
     nativeBuildInputs = [ perl nukeReferences ]
       ++ optionals (!libsOnly) kernel.moduleBuildDependencies;
 
     disallowedReferences = optional (!libsOnly) [ kernel.dev ];
 
     passthru = {
+      open = mapNullable (hash: callPackage ./open.nix {
+        inherit hash broken;
+        nvidia_x11 = self;
+      }) openSha256;
       settings = (if settings32Bit then pkgsi686Linux.callPackage else callPackage) (import ./settings.nix self settingsSha256) {
         withGtk2 = preferGtk2;
         withGtk3 = !preferGtk2;
@@ -114,7 +122,7 @@ let
       description = "X.org driver and kernel module for NVIDIA graphics cards";
       license = licenses.unfreeRedistributable;
       platforms = [ "x86_64-linux" ] ++ optionals (!i686bundled) [ "i686-linux" ];
-      maintainers = with maintainers; [ ];
+      maintainers = with maintainers; [ jonringer ];
       priority = 4; # resolves collision with xorg-server's "lib/xorg/modules/extensions/libglx.so"
       inherit broken;
     };

@@ -110,14 +110,17 @@ let
   # and libraries path.
   # We prefetch it, patch it, and override it in a global bazelrc.
   system = if stdenv.hostPlatform.isDarwin then "darwin" else "linux";
-  arch = stdenv.hostPlatform.parsed.cpu.name;
+
+  # on aarch64 Darwin, `uname -m` returns "arm64"
+  arch = with stdenv.hostPlatform; if isDarwin && isAarch64 then "arm64" else parsed.cpu.name;
 
   remote_java_tools = stdenv.mkDerivation {
     name = "remote_java_tools_${system}";
 
     src = srcDepsSet."java_tools_javac11_${system}-v10.0.zip";
 
-    nativeBuildInputs = [ autoPatchelfHook unzip ];
+    nativeBuildInputs = [ unzip ]
+      ++ lib.optional stdenv.isLinux autoPatchelfHook;
     buildInputs = [ gcc-unwrapped ];
 
     sourceRoot = ".";
@@ -163,6 +166,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/bazelbuild/bazel/";
     description = "Build tool that builds code quickly and reliably";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # source bundles dependencies as jars
+    ];
     license = licenses.asl20;
     maintainers = lib.teams.bazel.members;
     inherit platforms;
@@ -184,6 +191,8 @@ stdenv.mkDerivation rec {
     # compile without automatic reference counting. Caveat: this leaks memory, but
     # we accept this fact because xcode_locator is only a short-lived process used during the build.
     ./no-arc.patch
+
+    ./gcc11.patch
 
     # --experimental_strict_action_env (which may one day become the default
     # see bazelbuild/bazel#2574) hardcodes the default
@@ -300,12 +309,7 @@ stdenv.mkDerivation rec {
       # fixed-output hashes of the fetch phase need to be spot-checked manually
       downstream = recurseIntoAttrs ({
         inherit bazel-watcher;
-      }
-          # dm-sonnet is only packaged for linux
-      // (lib.optionalAttrs stdenv.isLinux {
-          # TODO(timokau) dm-sonnet is broken currently
-          # dm-sonnet-linux = python3.pkgs.dm-sonnet;
-      }));
+      });
     };
 
   # update the list of workspace dependencies
@@ -613,6 +617,10 @@ stdenv.mkDerivation rec {
     # runtime dependencies.
     echo "${python27}" >> $out/nix-support/depends
     echo "${python3}" >> $out/nix-support/depends
+    # The string literal specifying the path to the bazel-rc file is sometimes
+    # stored non-contiguously in the binary due to gcc optimisations, which leads
+    # Nix to miss the hash when scanning for dependencies
+    echo "${bazelRC}" >> $out/nix-support/depends
   '' + lib.optionalString stdenv.isDarwin ''
     echo "${cctools}" >> $out/nix-support/depends
   '';

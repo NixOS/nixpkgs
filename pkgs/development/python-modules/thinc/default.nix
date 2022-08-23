@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
+, python
 , fetchPypi
 , pytestCheckHook
 , blis
@@ -29,15 +30,20 @@
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "8.0.13";
+  version = "8.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-R2YqOuM9RFp3tup7dyREgFx7uomR8SLjUNr3Le3IFxo=";
+    sha256 = "sha256-6q6pHcVsBBUWqCnEYEI6iu9TVwAWEMjWOVvOldglSgs=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "pydantic>=1.7.4,!=1.8,!=1.8.1,<1.9.0" "pydantic"
+  '';
 
   buildInputs = [
     cython
@@ -73,12 +79,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Cannot find cython modules.
-  doCheck = false;
+  # Add native extensions.
+  preCheck = ''
+    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
 
-  pytestFlagsArray = [
-    "thinc/tests"
-  ];
+    # avoid local paths, relative imports wont resolve correctly
+    mv thinc/tests tests
+    rm -r thinc
+  '';
 
   pythonImportsCheck = [
     "thinc"

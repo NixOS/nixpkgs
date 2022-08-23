@@ -2,7 +2,7 @@
 , freetype, fontconfig, dbus, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
 , libXext, libXfixes, libXrender, libX11, libXtst, libXScrnSaver, libxcb, nss, nspr
 , alsa-lib, cups, expat, udev, libpulseaudio, at-spi2-atk, at-spi2-core, libxshmfence
-, libdrm, libxkbcommon, mesa }:
+, libdrm, libxkbcommon, mesa, nixosTests}:
 
 let
   libPath = lib.makeLibraryPath [
@@ -15,11 +15,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hyper";
-  version = "3.1.4";
+  version = "3.2.3";
 
   src = fetchurl {
     url = "https://github.com/vercel/hyper/releases/download/v${version}/hyper_${version}_amd64.deb";
-    sha256 = "sha256-4C0vx4m/ojOJl5ownsbasSFiIrJ9kfJJWh0y4j/DGIQ=";
+    sha256 = "sha256-CHLkHH9u5YWlmRDa4H3ymqg1YMBYjo+kuxpu0OVv4E8=";
   };
 
   nativeBuildInputs = [ dpkg ];
@@ -43,11 +43,14 @@ stdenv.mkDerivation rec {
       --replace "/opt/Hyper/hyper" "hyper"
   '';
 
+  passthru.tests.test = nixosTests.terminal-emulators.hyper;
+
   dontPatchELF = true;
   meta = with lib; {
     description = "A terminal built on web technologies";
     homepage    = "https://hyper.is/";
-    maintainers = with maintainers; [ puffnfresh ];
+    maintainers = with maintainers; [ puffnfresh fabiangd ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license     = licenses.mit;
     platforms   = [ "x86_64-linux" ];
   };

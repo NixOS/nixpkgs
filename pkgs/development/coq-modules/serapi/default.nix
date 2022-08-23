@@ -1,22 +1,9 @@
 { lib, fetchzip, mkCoqDerivation, coq, version ? null }:
 
 let
-  ocamlPackages =
-    coq.ocamlPackages.overrideScope'
-      (self: super: {
-        ppxlib = super.ppxlib.override { version = "0.15.0"; };
-        # the following does not work
-        ppx_sexp_conv = super.ppx_sexp_conv.overrideAttrs (_: {
-          src = fetchzip {
-            url = "https://github.com/janestreet/ppx_sexp_conv/archive/v0.14.1.tar.gz";
-            sha256 = "04bx5id99clrgvkg122nx03zig1m7igg75piphhyx04w33shgkz2";
-          };
-        });
-      });
-
   release = {
-    "8.14.0+0.14.0".sha256 = "sha256:1kh80yb791yl771qbqkvwhbhydfii23a7lql0jgifvllm2k8hd8d";
-    "8.14+rc1+0.14.0".sha256 = "1w7d7anvcfx8vz51mnrf1jkw6rlpzjkjlr06avf58wlhymww7pja";
+    "8.15.0+0.15.0".sha256 = "1vh99ya2dq6a8xl2jrilgs0rpj4j227qx8zvzd2v5xylx0p4bbrp";
+    "8.14.0+0.14.0".sha256 = "1kh80yb791yl771qbqkvwhbhydfii23a7lql0jgifvllm2k8hd8d";
     "8.13.0+0.13.0".sha256 = "0k69907xn4k61w4mkhwf8kh8drw9pijk9ynijsppihw98j8w38fy";
     "8.12.0+0.12.1".sha256 = "048x3sgcq4h845hi6hm4j4dsfca8zfj70dm42w68n63qcm6xf9hn";
     "8.11.0+0.11.1".sha256 = "1phmh99yqv71vlwklqgfxiq2vj99zrzxmryj2j4qvg5vav3y3y6c";
@@ -29,9 +16,8 @@ in
   inherit version release;
 
   defaultVersion =  with versions;
-    if isGe "4.12" coq.ocamlPackages.ocaml.version then null
-    else
     switch coq.version [
+      { case = isEq "8.15"; out = "8.15.0+0.15.0"; }
       { case = isEq "8.14"; out = "8.14.0+0.14.0"; }
       { case = isEq "8.13"; out = "8.13.0+0.13.0"; }
       { case = isEq "8.12"; out = "8.12.0+0.12.1"; }
@@ -41,8 +27,10 @@ in
 
   useDune2 = true;
 
+  patches = [ ./janestreet-0.15.patch ];
+
   propagatedBuildInputs =
-    with ocamlPackages; [
+    with coq.ocamlPackages; [
       cmdliner
       findlib # run time dependency of SerAPI
       ppx_deriving
@@ -70,9 +58,6 @@ in
   let inherit (o) version; in {
   src = fetchzip {
     url =
-      if version == "8.14+rc1+0.14.0"
-      then "https://github.com/ejgallego/coq-serapi/archive/refs/tags/8.14+rc1+0.14.0.tar.gz"
-      else
         "https://github.com/ejgallego/coq-serapi/releases/download/${version}/coq-serapi-${
           if version == "8.11.0+0.11.1" then version
           else builtins.replaceStrings [ "+" ] [ "." ] version
@@ -93,5 +78,7 @@ in
     then [
       ./8.12.0+0.12.1.patch
     ]
-    else [];
+    else [
+      ./janestreet-0.15.patch
+    ];
 })

@@ -1,14 +1,15 @@
 # Build Open Dylan from source using the binary builds to bootstrap.
-{lib, stdenv, fetchgit, boehmgc, mps, gnused, opendylan-bootstrap, autoconf, automake, perl, makeWrapper, gcc }:
+{lib, stdenv, fetchFromGitHub, boehmgc, mps, gnused, opendylan-bootstrap, autoconf, automake, perl, makeWrapper, gcc }:
 
 stdenv.mkDerivation {
   pname = "opendylan";
   version = "2016.1pre";
 
-  src = fetchgit {
-    url = "https://github.com/dylan-lang/opendylan";
+  src = fetchFromGitHub {
+    owner = "dylan-lang";
+    repo = "opendylan";
     rev = "cd9a8395586d33cc43a8611c1dc0513e69ee82dd";
-    sha256 = "00r1dm7mjy5p4hfm13vc4b6qryap40zinia3y15rhvalc3i2np4b";
+    sha256 = "sha256-i1wr4mBUbZhL8ENFGz8gV/mMzSJsj1AdJLd4WU9tIQM=";
     fetchSubmodules = true;
   };
 

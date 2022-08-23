@@ -2,7 +2,8 @@
 with lib;
 
 collectd.overrideAttrs (oldAttrs: {
-  name = "libcollectdclient-${collectd.version}";
+  pname = "libcollectdclient";
+  inherit (collectd) version;
   buildInputs = [ ];
 
   configureFlags = (oldAttrs.configureFlags or []) ++ [

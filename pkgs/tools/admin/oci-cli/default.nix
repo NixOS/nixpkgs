@@ -1,59 +1,84 @@
-{ lib, fetchFromGitHub, python3Packages, locale }:
+{ lib
+, fetchFromGitHub
+, python3
+}:
 
 let
-  # https://github.com/oracle/oci-cli/issues/189
-  pinned_click = python3Packages.click.overridePythonAttrs (old: rec {
-    pname = "click";
-    version = "6.7";
-    src = python3Packages.fetchPypi {
-      inherit pname version;
-      hash = "sha256-8VUW30eNWlYYD7+A5o8gYBDm0WD8OfpQi2XgNf11Ews=";
+  py = python3.override {
+    packageOverrides = self: super: {
+
+      click = super.click.overridePythonAttrs (oldAttrs: rec {
+        version = "7.1.2";
+
+        src = oldAttrs.src.override {
+          inherit version;
+          hash = "sha256-0rUlXHxjSbwb0eWeCM0SrLvWPOZJ8liHVXg6qU37axo=";
+        };
+      });
+
+      jmespath = super.jmespath.overridePythonAttrs (oldAttrs: rec {
+        version = "0.10.0";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "b85d0567b8666149a93172712e68920734333c0ce7e89b78b3e987f71e5ed4f9";
+        };
+        doCheck = false;
+      });
+
     };
-
-    postPatch = ''
-      substituteInPlace click/_unicodefun.py \
-      --replace "'locale'" "'${locale}/bin/locale'"
-    '';
-
-    # Issue that wasn't resolved when this version was released:
-    # https://github.com/pallets/click/issues/823
-    doCheck = false;
-  });
+  };
 in
+with py.pkgs;
 
-python3Packages.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "oci-cli";
-  version = "2.23.0";
+  version = "3.14.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "oracle";
-    repo = "oci-cli";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-XRkycJrUSOZQAGiSyQZGA/SnlxnFumYL82kOkYd7s2o=";
+    hash = "sha256-yooEZuSIw2EMJVyT/Z/x4hJi8a1F674CtsMMGkMAYLg=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
-    oci arrow certifi pinned_click configparser cryptography jmespath python-dateutil
-    pytz retrying six terminaltables pyopenssl pyyaml
+  propagatedBuildInputs = [
+    arrow
+    certifi
+    click
+    cryptography
+    jmespath
+    oci
+    prompt-toolkit
+    pyopenssl
+    python-dateutil
+    pytz
+    pyyaml
+    retrying
+    six
+    terminaltables
   ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "cryptography>=3.2.1,<=37.0.2" "cryptography" \
+      --replace "pyOpenSSL>=17.5.0,<=22.0.0" "pyOpenSSL" \
+      --replace "PyYAML>=5.4,<6" "PyYAML" \
+      --replace "prompt-toolkit==3.0.29" "prompt-toolkit" \
+      --replace "terminaltables==3.1.0" "terminaltables"
+  '';
 
   # https://github.com/oracle/oci-cli/issues/187
   doCheck = false;
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "configparser==4.0.2" "configparser" \
-      --replace "cryptography==3.2.1" "cryptography" \
-      --replace "pyOpenSSL==19.1.0" "pyOpenSSL" \
-      --replace "PyYAML==5.3.1" "PyYAML" \
-      --replace "six==1.14.0" "six" \
-      --replace "arrow==0.17.0" "arrow"
-  '';
+  pythonImportsCheck = [
+    " oci_cli "
+  ];
 
   meta = with lib; {
     description = "Command Line Interface for Oracle Cloud Infrastructure";
     homepage = "https://docs.cloud.oracle.com/iaas/Content/API/Concepts/cliconcepts.htm";
+    license = with licenses; [ asl20 /* or */ upl ];
     maintainers = with maintainers; [ ilian ];
-    license = with licenses; [ asl20 upl ];
   };
 }

@@ -11,7 +11,7 @@ let
   whenPatched = lib.optionalString apngSupport;
 
 in stdenv.mkDerivation rec {
-  name = "libpng" + whenPatched "-apng" + "-${version}";
+  pname = "libpng" + whenPatched "-apng";
   version = "1.6.37";
 
   src = fetchurl {

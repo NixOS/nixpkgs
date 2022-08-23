@@ -77,6 +77,11 @@ The difference between a package being unsupported on some system and being brok
 
 ## Installing unfree packages {#sec-allow-unfree}
 
+All users of Nixpkgs are free software users, and many users (and developers) of Nixpkgs want to limit and tightly control their exposure to unfree software.
+At the same time, many users need (or want) to run some specific pieces of proprietary software.
+Nixpkgs includes some expressions for unfree software packages.
+By default unfree software cannot be installed and doesn’t show up in searches.
+
 There are several ways to tweak how Nix handles a package which has been marked as unfree.
 
 -   To temporarily allow all unfree packages, you can use an environment variable for a single invocation of the nix tools:
@@ -175,6 +180,15 @@ You can define a function called `packageOverrides` in your local `~/.config/nix
   };
 }
 ```
+
+## `config` Options Reference {#sec-config-options-reference}
+
+The following attributes can be passed in [`config`](#chap-packageconfig).
+
+```{=docbook}
+<include xmlns="http://www.w3.org/2001/XInclude" href="../doc-support/result/config-options.docbook.xml"/>
+```
+
 
 ## Declarative Package Management {#sec-declarative-package-management}
 

@@ -1,24 +1,41 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, makePythonPath
 , pythonOlder
 , python
-, click, desktop-notifier, dropbox, fasteners, keyring, keyrings-alt, packaging, pathspec, Pyro5, requests, setuptools, sdnotify, survey, watchdog
+, click
+, desktop-notifier
+, dropbox
+, fasteners
+, keyring
+, keyrings-alt
+, packaging
+, pathspec
+, Pyro5
+, requests
+, setuptools
+, sdnotify
+, survey
+, watchdog
 , importlib-metadata
 , pytestCheckHook
+, nixosTests
 }:
 
 buildPythonPackage rec {
   pname = "maestral";
-  version = "1.5.2";
+  version = "1.6.3";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral";
-    rev = "v${version}";
-    sha256 = "sha256-nFXgvFLw6ru/Sw3+LoZ7V09dyn0L21We/Dlwib2gZB8=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-JVzaWwdHAn5JOruLEN9Z2/5eV1oh3J2NQffNI3RqYfA=";
   };
+
+  format = "pyproject";
 
   propagatedBuildInputs = [
     click
@@ -41,13 +58,17 @@ buildPythonPackage rec {
 
   makeWrapperArgs = [
     # Add the installed directories to the python path so the daemon can find them
-    "--prefix" "PYTHONPATH" ":" "${lib.concatStringsSep ":" (map (p: p + "/lib/${python.libPrefix}/site-packages") (python.pkgs.requiredPythonModules propagatedBuildInputs))}"
-    "--prefix" "PYTHONPATH" ":" "$out/lib/${python.libPrefix}/site-packages"
+    "--prefix PYTHONPATH : ${makePythonPath propagatedBuildInputs}"
+    "--prefix PYTHONPATH : $out/lib/${python.libPrefix}/site-packages"
   ];
 
   checkInputs = [
     pytestCheckHook
   ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   disabledTests = [
     # We don't want to benchmark
@@ -64,10 +85,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "maestral" ];
 
+  passthru.tests.maestral = nixosTests.maestral;
+
   meta = with lib; {
     description = "Open-source Dropbox client for macOS and Linux";
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg sfrijters ];
     platforms = platforms.unix;
     homepage = "https://maestral.app";
   };

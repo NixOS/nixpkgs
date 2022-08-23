@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "moonlight-qt";
-  version = "3.1.4";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "moonlight-stream";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1sg8svb6xvkczp9slqnlm0b6k0z3bzdi4zzvwzzy21kpj6im9002";
+    sha256 = "sha256-/HRmyf4sW8rsNmKMrlgPvq1L8gAEa6VRCyG2w5TfGkI=";
     fetchSubmodules = true;
   };
 
@@ -57,5 +57,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ luc65r ];
     platforms = platforms.all;
+    mainProgram = "moonlight";
   };
 }

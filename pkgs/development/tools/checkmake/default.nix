@@ -1,17 +1,17 @@
-{ buildGoPackage, fetchFromGitHub, git, pandoc, lib }:
+{ buildGoModule, fetchFromGitHub, pandoc, lib }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "checkmake";
-  version = "0.1.0-2020.11.30";
-
-  goPackagePath = "github.com/mrtazz/checkmake";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "mrtazz";
     repo = pname;
-    rev = "575315c9924da41534a9d0ce91c3f0d19bb53ffc";
-    sha256 = "121rsl9mh3wwadgf8ggi2xnb050pak6ma68b2sw5j8clmxbrqli3";
+    rev = version;
+    sha256 = "sha256-Zkrr1BrP8ktRGf6EYhDpz3oTnX6msrSpfFqkqi9pmlc=";
   };
+
+  vendorSha256 = null;
 
   nativeBuildInputs = [ pandoc ];
 
@@ -29,10 +29,11 @@ buildGoPackage rec {
       buildFlagsArray+=("-ldflags=${buildVarsFlags}")
     '';
 
+  ldflags = [ "-s" "-w" ];
+
   postInstall = ''
-    pandoc -s -t man -o checkmake.1 go/src/${goPackagePath}/man/man1/checkmake.1.md
     mkdir -p $out/share/man/man1
-    mv checkmake.1 $out/share/man/man1/checkmake.1
+    pandoc -s -t man -o $out/share/man/man1/checkmake.1 man/man1/checkmake.1.md
   '';
 
   meta = with lib; {

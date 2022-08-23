@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , alsa-lib
 , dbus
 , ell
@@ -11,8 +12,9 @@
 , pkg-config
 , python3
 , readline
-, systemd
+, systemdMinimal
 , udev
+, withExperimental ? false
 }: let
   pythonPath = with python3.pkgs; [
     dbus-python
@@ -21,11 +23,11 @@
   ];
 in stdenv.mkDerivation rec {
   pname = "bluez";
-  version = "5.62";
+  version = "5.64";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/${pname}-${version}.tar.xz";
-    sha256 = "sha256-OAkKW3UOF/wI0+UheO2NMlTF9L0sSIMNXBlVuI47wMI=";
+    sha256 = "sha256-rkN+ZbazBwwZi8WwEJ/pzeueqjhzgOIHL53mX+ih3jQ=";
   };
 
   buildInputs = [
@@ -46,11 +48,22 @@ in stdenv.mkDerivation rec {
     python3.pkgs.wrapPython
   ];
 
-  outputs = [ "out" "dev" ] ++ lib.optional doCheck "test";
+  outputs = [ "out" "dev" "test" ];
+
+  patches = [
+    # https://github.com/bluez/bluez/commit/0905a06410d4a5189f0be81e25eb3c3e8a2199c5
+    # which fixes https://github.com/bluez/bluez/issues/329
+    # and is already merged upstream and not yet in a release.
+    (fetchpatch {
+      name = "StateDirectory_and_ConfigurationDirectory.patch";
+      url = "https://github.com/bluez/bluez/commit/0905a06410d4a5189f0be81e25eb3c3e8a2199c5.patch";
+      sha256 = "sha256-MI6yPTiDLHsSTjLvNqtWnuy2xUMYpSat1WhMbeoedSM=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace tools/hid2hci.rules \
-      --replace /sbin/udevadm ${systemd}/bin/udevadm \
+      --replace /sbin/udevadm ${systemdMinimal}/bin/udevadm \
       --replace "hid2hci " "$out/lib/udev/hid2hci "
     # Disable some tests:
     # - test-mesh-crypto depends on the following kernel settings:
@@ -84,7 +97,8 @@ in stdenv.mkDerivation rec {
     # To provide ciptool, sdptool, and rfcomm (unmaintained)
     # superseded by new D-Bus APIs
     "--enable-deprecated"
-  ];
+  ] ++ lib.optional withExperimental "--enable-experimental";
+
 
   # Work around `make install' trying to create /var/lib/bluetooth.
   installFlags = [ "statedir=$(TMPDIR)/var/lib/bluetooth" ];
@@ -93,7 +107,7 @@ in stdenv.mkDerivation rec {
 
   doCheck = stdenv.hostPlatform.isx86_64;
 
-  postInstall = lib.optionalString doCheck ''
+  postInstall = ''
     mkdir -p $test/{bin,test}
     cp -a test $test
     pushd $test/test
@@ -124,6 +138,7 @@ in stdenv.mkDerivation rec {
       filename=$(basename $files)
       install -Dm755 tools/$filename $out/bin/$filename
     done
+    install -Dm755 attrib/gatttool $out/bin/gatttool
   '';
 
   enableParallelBuilding = true;
@@ -133,6 +148,5 @@ in stdenv.mkDerivation rec {
     homepage = "http://www.bluez.org/";
     license = with licenses; [ gpl2 lgpl21 ];
     platforms = platforms.linux;
-    repositories.git = "https://git.kernel.org/pub/scm/bluetooth/bluez.git";
   };
 }

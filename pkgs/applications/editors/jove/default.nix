@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "jove";
-  version = "4.17.3.7";
+  version = "4.17.4.6";
 
   src = fetchFromGitHub {
     owner = "jonmacs";
     repo = "jove";
     rev = version;
-    sha256 = "sha256-fD87FIWZlfJE2tVX+0QaiGGqu+tJFHheXe1guJR/Hxg=";
+    sha256 = "sha256-UCjqF0i43TSvtG5uxb2SA/F9oGBeo/WdEVJlrSSHV8g=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -34,10 +34,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Jonathan's Own Version or Emacs";
+    description = "Jonathan's Own Version of Emacs";
     homepage = "https://github.com/jonmacs/jove";
     license = licenses.bsd2;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/jove.x86_64-darwin
   };
 }

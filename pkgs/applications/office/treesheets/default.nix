@@ -1,41 +1,39 @@
-{ lib, stdenv, fetchFromGitHub, wxGTK, makeWrapper }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, wxGTK
+, cmake
+, ninja
+, wrapGAppsHook
+, unstableGitUpdater
+}:
 
 stdenv.mkDerivation rec {
   pname = "treesheets";
-  version = "1.0.1";
+  version = "unstable-2022-03-12";
 
   src = fetchFromGitHub {
-    owner  = "aardappel";
-    repo   = "treesheets";
-    rev    = "v${version}";
-    sha256 = "0krsj7i5yr76imf83krz2lmlmpbsvpwqg2d4r0jwxiydjfyj4qr4";
+    owner = "aardappel";
+    repo = "treesheets";
+    rev = "120c10d4d9ea1ce76db5c1bbd6f5d705b397b57d";
+    sha256 = "oXgOvvRoZpueEeWnD3jsc6y5RIAzkXzLeEe7BSErBpw=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ wxGTK ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    wrapGAppsHook
+  ];
 
-  preConfigure = "cd src";
+  buildInputs = [
+    wxGTK
+  ];
 
-  postInstall = ''
-    mkdir "$out/share" -p
-    cp -av ../TS "$out/share/libexec"
+  NIX_CFLAGS_COMPILE = "-DPACKAGE_VERSION=\"${builtins.replaceStrings [ "unstable-" ] [ "" ] version}\"";
 
-    mkdir "$out/bin" -p
-    makeWrapper "$out/share/libexec/treesheets" "$out/bin/treesheets"
-
-    mkdir "$out/share/doc" -p
-
-    for f in readme.html docs examples
-    do
-      mv -v "$out/share/libexec/$f" "$out/share/doc"
-      ln -sv "$out/share/doc/$f" "$out/share/libexec/$f"
-    done
-
-    mkdir "$out/share/applications" -p
-    mv -v "$out/share/libexec/treesheets.desktop" "$out/share/applications"
-    substituteInPlace "$out/share/applications/treesheets.desktop" \
-      --replace "Icon=images/treesheets.svg" "Icon=$out/share/libexec/images/treesheets.svg"
-  '';
+  passthru = {
+    updateScript = unstableGitUpdater { };
+  };
 
   meta = with lib; {
     description = "Free Form Data Organizer";
@@ -49,9 +47,9 @@ stdenv.mkDerivation rec {
       planning, requirements gathering, presentation of information, etc.
     '';
 
-    homepage    = "http://strlen.com/treesheets/";
+    homepage = "https://strlen.com/treesheets/";
     maintainers = with maintainers; [ obadz avery ];
-    platforms   = platforms.linux;
-    license     = licenses.zlib;
+    platforms = platforms.linux;
+    license = licenses.zlib;
   };
 }

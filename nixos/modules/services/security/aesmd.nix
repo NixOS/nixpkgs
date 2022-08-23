@@ -1,7 +1,8 @@
-{ config, pkgs, lib, ... }:
+{ config, options, pkgs, lib, ... }:
 with lib;
 let
   cfg = config.services.aesmd;
+  opt = options.services.aesmd;
 
   sgx-psw = pkgs.sgx-psw.override { inherit (cfg) debug; };
 
@@ -22,40 +23,43 @@ in
     debug = mkOption {
       type = types.bool;
       default = false;
-      description = "Whether to build the PSW package in debug mode.";
+      description = lib.mdDoc "Whether to build the PSW package in debug mode.";
     };
     settings = mkOption {
-      description = "AESM configuration";
+      description = lib.mdDoc "AESM configuration";
       default = { };
       type = types.submodule {
         options.whitelistUrl = mkOption {
           type = with types; nullOr str;
           default = null;
           example = "http://whitelist.trustedservices.intel.com/SGX/LCWL/Linux/sgx_white_list_cert.bin";
-          description = "URL to retrieve authorized Intel SGX enclave signers.";
+          description = lib.mdDoc "URL to retrieve authorized Intel SGX enclave signers.";
         };
         options.proxy = mkOption {
           type = with types; nullOr str;
           default = null;
           example = "http://proxy_url:1234";
-          description = "HTTP network proxy.";
+          description = lib.mdDoc "HTTP network proxy.";
         };
         options.proxyType = mkOption {
           type = with types; nullOr (enum [ "default" "direct" "manual" ]);
           default = if (cfg.settings.proxy != null) then "manual" else null;
+          defaultText = literalExpression ''
+            if (config.${opt.settings}.proxy != null) then "manual" else null
+          '';
           example = "default";
-          description = ''
-            Type of proxy to use. The <literal>default</literal> uses the system's default proxy.
-            If <literal>direct</literal> is given, uses no proxy.
-            A value of <literal>manual</literal> uses the proxy from
-            <option>services.aesmd.settings.proxy</option>.
+          description = lib.mdDoc ''
+            Type of proxy to use. The `default` uses the system's default proxy.
+            If `direct` is given, uses no proxy.
+            A value of `manual` uses the proxy from
+            {option}`services.aesmd.settings.proxy`.
           '';
         };
         options.defaultQuotingType = mkOption {
           type = with types; nullOr (enum [ "ecdsa_256" "epid_linkable" "epid_unlinkable" ]);
           default = null;
           example = "ecdsa_256";
-          description = "Attestation quote type.";
+          description = lib.mdDoc "Attestation quote type.";
         };
       };
     };
@@ -68,6 +72,11 @@ in
     }];
 
     hardware.cpu.intel.sgx.provision.enable = true;
+
+    # Make sure the AESM service can find the SGX devices until
+    # https://github.com/intel/linux-sgx/issues/772 is resolved
+    # and updated in nixpkgs.
+    hardware.cpu.intel.sgx.enableDcapCompat = mkForce true;
 
     systemd.services.aesmd =
       let

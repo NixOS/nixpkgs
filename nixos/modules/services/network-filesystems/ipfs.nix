@@ -1,16 +1,16 @@
-{ config, lib, pkgs, options, ... }:
+{ config, lib, pkgs, utils, ... }:
 with lib;
 let
   cfg = config.services.ipfs;
-  opt = options.services.ipfs;
 
-  ipfsFlags = toString ([
-    (optionalString cfg.autoMount "--mount")
-    (optionalString cfg.enableGC "--enable-gc")
-    (optionalString (cfg.serviceFdlimit != null) "--manage-fdlimit=false")
-    (optionalString (cfg.defaultMode == "offline") "--offline")
-    (optionalString (cfg.defaultMode == "norouting") "--routing=none")
-  ] ++ cfg.extraFlags);
+  ipfsFlags = utils.escapeSystemdExecArgs (
+    optional cfg.autoMount "--mount" ++
+    optional cfg.enableGC "--enable-gc" ++
+    optional (cfg.serviceFdlimit != null) "--manage-fdlimit=false" ++
+    optional (cfg.defaultMode == "offline") "--offline" ++
+    optional (cfg.defaultMode == "norouting") "--routing=none" ++
+    cfg.extraFlags
+  );
 
   profile =
     if cfg.localDiscovery
@@ -58,19 +58,19 @@ in
         type = types.package;
         default = pkgs.ipfs;
         defaultText = literalExpression "pkgs.ipfs";
-        description = "Which IPFS package to use.";
+        description = lib.mdDoc "Which IPFS package to use.";
       };
 
       user = mkOption {
         type = types.str;
         default = "ipfs";
-        description = "User under which the IPFS daemon runs";
+        description = lib.mdDoc "User under which the IPFS daemon runs";
       };
 
       group = mkOption {
         type = types.str;
         default = "ipfs";
-        description = "Group under which the IPFS daemon runs";
+        description = lib.mdDoc "Group under which the IPFS daemon runs";
       };
 
       dataDir = mkOption {
@@ -84,49 +84,49 @@ in
           then "/var/lib/ipfs"
           else "/var/lib/ipfs/.ipfs"
         '';
-        description = "The data dir for IPFS";
+        description = lib.mdDoc "The data dir for IPFS";
       };
 
       defaultMode = mkOption {
         type = types.enum [ "online" "offline" "norouting" ];
         default = "online";
-        description = "systemd service that is enabled by default";
+        description = lib.mdDoc "systemd service that is enabled by default";
       };
 
       autoMount = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether IPFS should try to mount /ipfs and /ipns at startup.";
+        description = lib.mdDoc "Whether IPFS should try to mount /ipfs and /ipns at startup.";
       };
 
       autoMigrate = mkOption {
         type = types.bool;
         default = true;
-        description = "Whether IPFS should try to run the fs-repo-migration at startup.";
+        description = lib.mdDoc "Whether IPFS should try to run the fs-repo-migration at startup.";
       };
 
       ipfsMountDir = mkOption {
         type = types.str;
         default = "/ipfs";
-        description = "Where to mount the IPFS namespace to";
+        description = lib.mdDoc "Where to mount the IPFS namespace to";
       };
 
       ipnsMountDir = mkOption {
         type = types.str;
         default = "/ipns";
-        description = "Where to mount the IPNS namespace to";
+        description = lib.mdDoc "Where to mount the IPNS namespace to";
       };
 
       gatewayAddress = mkOption {
         type = types.str;
         default = "/ip4/127.0.0.1/tcp/8080";
-        description = "Where the IPFS Gateway can be reached";
+        description = lib.mdDoc "Where the IPFS Gateway can be reached";
       };
 
       apiAddress = mkOption {
         type = types.str;
         default = "/ip4/127.0.0.1/tcp/5001";
-        description = "Where IPFS exposes its API to";
+        description = lib.mdDoc "Where IPFS exposes its API to";
       };
 
       swarmAddress = mkOption {
@@ -137,25 +137,25 @@ in
           "/ip4/0.0.0.0/udp/4001/quic"
           "/ip6/::/udp/4001/quic"
         ];
-        description = "Where IPFS listens for incoming p2p connections";
+        description = lib.mdDoc "Where IPFS listens for incoming p2p connections";
       };
 
       enableGC = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable automatic garbage collection";
+        description = lib.mdDoc "Whether to enable automatic garbage collection";
       };
 
       emptyRepo = mkOption {
         type = types.bool;
         default = false;
-        description = "If set to true, the repo won't be initialized with help files";
+        description = lib.mdDoc "If set to true, the repo won't be initialized with help files";
       };
 
       extraConfig = mkOption {
         type = types.attrs;
-        description = ''
-          Attrset of daemon configuration to set using <command>ipfs config</command>, every time the daemon starts.
+        description = lib.mdDoc ''
+          Attrset of daemon configuration to set using {command}`ipfs config`, every time the daemon starts.
           These are applied last, so may override configuration set by other options in this module.
           Keep in mind that this configuration is stateful; i.e., unsetting anything in here does not reset the value to the default!
         '';
@@ -174,13 +174,13 @@ in
 
       extraFlags = mkOption {
         type = types.listOf types.str;
-        description = "Extra flags passed to the IPFS daemon";
+        description = lib.mdDoc "Extra flags passed to the IPFS daemon";
         default = [ ];
       };
 
       localDiscovery = mkOption {
         type = types.bool;
-        description = ''Whether to enable local discovery for the ipfs daemon.
+        description = lib.mdDoc ''Whether to enable local discovery for the ipfs daemon.
           This will allow ipfs to scan ports on your local network. Some hosting services will ban you if you do this.
         '';
         default = false;
@@ -189,14 +189,14 @@ in
       serviceFdlimit = mkOption {
         type = types.nullOr types.int;
         default = null;
-        description = "The fdlimit for the IPFS systemd unit or <literal>null</literal> to have the daemon attempt to manage it";
+        description = lib.mdDoc "The fdlimit for the IPFS systemd unit or `null` to have the daemon attempt to manage it";
         example = 64 * 1024;
       };
 
       startWhenNeeded = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to use socket activation to start IPFS when needed.";
+        description = lib.mdDoc "Whether to use socket activation to start IPFS when needed.";
       };
 
     };
@@ -239,7 +239,10 @@ in
       "d '${cfg.ipnsMountDir}' - ${cfg.user} ${cfg.group} - -"
     ];
 
-    systemd.packages = [ cfg.package ];
+    # The hardened systemd unit breaks the fuse-mount function according to documentation in the unit file itself
+    systemd.packages = if cfg.autoMount
+      then [ cfg.package.systemd_unit ]
+      else [ cfg.package.systemd_unit_hardened ];
 
     systemd.services.ipfs = {
       path = [ "/run/wrappers" cfg.package ];
@@ -251,37 +254,36 @@ in
         else
           # After an unclean shutdown this file may exist which will cause the config command to attempt to talk to the daemon. This will hang forever if systemd is holding our sockets open.
           rm -vf "$IPFS_PATH/api"
-
-          ipfs --offline config profile apply ${profile}
+      '' + optionalString cfg.autoMigrate ''
+        ${pkgs.ipfs-migrator}/bin/fs-repo-migrations -to '${cfg.package.repoVersion}' -y
+      '' + ''
+          ipfs --offline config profile apply ${profile} >/dev/null
         fi
       '' + optionalString cfg.autoMount ''
         ipfs --offline config Mounts.FuseAllowOther --json true
         ipfs --offline config Mounts.IPFS ${cfg.ipfsMountDir}
         ipfs --offline config Mounts.IPNS ${cfg.ipnsMountDir}
-      '' + optionalString cfg.autoMigrate ''
-        ${pkgs.ipfs-migrator}/bin/fs-repo-migrations -y
-      '' + concatStringsSep "\n" (collect
-        isString
-        (mapAttrsRecursive
-          (path: value:
-            # Using heredoc below so that the value is never improperly quoted
-            ''
-              read value <<EOF
-              ${builtins.toJSON value}
-              EOF
-              ipfs --offline config --json "${concatStringsSep "." path}" "$value"
-            '')
-          ({
-            Addresses.API = cfg.apiAddress;
-            Addresses.Gateway = cfg.gatewayAddress;
-            Addresses.Swarm = cfg.swarmAddress;
-          } //
-          cfg.extraConfig))
-      );
+      '' + ''
+        ipfs --offline config show \
+          | ${pkgs.jq}/bin/jq '. * $extraConfig' --argjson extraConfig ${
+              escapeShellArg (builtins.toJSON (
+                recursiveUpdate
+                  {
+                    Addresses.API = cfg.apiAddress;
+                    Addresses.Gateway = cfg.gatewayAddress;
+                    Addresses.Swarm = cfg.swarmAddress;
+                  }
+                  cfg.extraConfig
+              ))
+            } \
+          | ipfs --offline config replace -
+      '';
       serviceConfig = {
         ExecStart = [ "" "${cfg.package}/bin/ipfs daemon ${ipfsFlags}" ];
         User = cfg.user;
         Group = cfg.group;
+        StateDirectory = "";
+        ReadWritePaths = optionals (!cfg.autoMount) [ "" cfg.dataDir ];
       } // optionalAttrs (cfg.serviceFdlimit != null) { LimitNOFILE = cfg.serviceFdlimit; };
     } // optionalAttrs (!cfg.startWhenNeeded) {
       wantedBy = [ "default.target" ];
@@ -313,6 +315,9 @@ in
         in
         [ "" "%t/ipfs.sock" ] ++ lib.optional (fromCfg != null) fromCfg;
     };
+  };
 
+  meta = {
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

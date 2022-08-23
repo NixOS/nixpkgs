@@ -1,62 +1,90 @@
-{ lib, stdenv, fetchurl, python2Packages, pkg-config, SDL2
+{ lib, stdenv, fetchFromGitHub, python3, pkg-config, SDL2
 , libpng, ffmpeg, freetype, glew, libGL, libGLU, fribidi, zlib
-, glib
+, makeWrapper
 }:
-
-with python2Packages;
 
 stdenv.mkDerivation rec {
   pname = "renpy";
-  version = "7.3.5";
 
-  meta = with lib; {
-    description = "Ren'Py Visual Novel Engine";
-    homepage = "https://renpy.org/";
-    license = licenses.mit;
-    platforms = platforms.linux;
+  # https://renpy.org/doc/html/changelog.html#versioning
+  # base_version is of the form major.minor.patch
+  # vc_version is of the form YYMMDDCC
+  # version corresponds to the tag on GitHub
+  base_version = "8.0.1";
+  vc_version = "22070801";
+  version = "${base_version}.${vc_version}";
+
+  src = fetchFromGitHub {
+    owner = "renpy";
+    repo = "renpy";
+    rev = version;
+    sha256 = "sha256-rwRykovY8vv+boQiaSjCBoGxGpT1dF3qdEyxkykrKyk=";
   };
 
-  src = fetchurl {
-    url = "https://www.renpy.org/dl/${version}/renpy-${version}-source.tar.bz2";
-    sha256 = "1anr5cfbvbsbik4v4rvrkdkciwhg700k4lydfbs4n85raimz9mw4";
-  };
+  nativeBuildInputs = [
+    pkg-config
+    makeWrapper
+    python3.pkgs.cython
+  ];
+
+  buildInputs = [
+    SDL2 libpng ffmpeg freetype glew libGLU libGL fribidi zlib
+  ] ++ (with python3.pkgs; [
+    python pygame_sdl2 tkinter future six pefile requests
+  ]);
+
+  RENPY_DEPS_INSTALL = lib.concatStringsSep "::" (map (path: path) [
+    SDL2 SDL2.dev libpng ffmpeg.out freetype glew.dev libGLU libGL fribidi zlib
+  ]);
+
+  enableParallelBuilding = true;
 
   patches = [
-    ./launcherenv.patch
+    ./renpy-system-fribidi.diff
+    ./shutup-erofs-errors.patch
   ];
 
   postPatch = ''
-    substituteInPlace launcher/game/choose_directory.rpy --replace /usr/bin/python ${python.interpreter}
+    substituteInPlace module/setup.py \
+      --replace "@fribidi@" "${fribidi}"
+
+    cp tutorial/game/tutorial_director.rpy{m,}
+
+    cat > renpy/vc_version.py << EOF
+    vc_version = ${vc_version}
+    official = False
+    nightly = False
+    EOF
   '';
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    python cython wrapPython tkinter
-    SDL2 libpng ffmpeg freetype glew libGLU libGL fribidi zlib pygame_sdl2 glib
-  ];
-
-  pythonPath = [ pygame_sdl2 tkinter ];
-
-  RENPY_DEPS_INSTALL = lib.concatStringsSep "::" (map (path: path) [
-    SDL2 SDL2.dev libpng ffmpeg ffmpeg.out freetype glew.dev glew.out libGLU libGL fribidi zlib
-  ]);
-
-  buildPhase = ''
-    python module/setup.py build
+  buildPhase = with python3.pkgs; ''
+    runHook preBuild
+    ${python.interpreter} module/setup.py build --parallel=$NIX_BUILD_CORES
+    runHook postBuild
   '';
 
-  installPhase = ''
+  installPhase = with python3.pkgs; ''
+    runHook preInstall
+
+    ${python.interpreter} module/setup.py install --prefix=$out
     mkdir -p $out/share/renpy
-    cp -vr * $out/share/renpy
-    rm -rf $out/share/renpy/module
+    cp -vr sdk-fonts gui launcher renpy the_question tutorial renpy.py $out/share/renpy
 
-    python module/setup.py install --prefix=$out --install-lib=$out/share/renpy/module
+    makeWrapper ${python.interpreter} $out/bin/renpy \
+      --set PYTHONPATH "$PYTHONPATH:$out/${python.sitePackages}" \
+      --add-flags "$out/share/renpy/renpy.py"
 
-    makeWrapper ${python}/bin/python $out/bin/renpy \
-      --set PYTHONPATH $PYTHONPATH \
-      --set RENPY_BASE $out/share/renpy \
-      --add-flags "-O $out/share/renpy/renpy.py"
+    runHook postInstall
   '';
 
-  NIX_CFLAGS_COMPILE = "-I${pygame_sdl2}/include/${python.libPrefix}";
+  NIX_CFLAGS_COMPILE = with python3.pkgs; "-I${pygame_sdl2}/include/${python.libPrefix}";
+
+  meta = with lib; {
+    description = "Visual Novel Engine";
+    homepage = "https://renpy.org/";
+    changelog = "https://renpy.org/doc/html/changelog.html";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ shadowrz ];
+  };
 }

@@ -3,7 +3,7 @@
 , fetchPypi
 , six
 , attrs
-, pytest
+, pytestCheckHook
 , hypothesis
 , pretend
 , arpeggio
@@ -18,11 +18,27 @@ buildPythonPackage rec {
     sha256 = "c902e0653bcce927cc156a7fd9b3a51924cbce3bf3d0bfd49fc282bfd0c5dfd3";
   };
 
-  propagatedBuildInputs = [ six attrs arpeggio ];
-  checkInputs = [ pytest hypothesis pretend ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "arpeggio ~= 1.7" "arpeggio"
+  '';
 
-  meta = {
-    description = "parver allows parsing and manipulation of PEP 440 version numbers.";
-    license = lib.licenses.mit;
+  propagatedBuildInputs = [
+    six
+    attrs
+    arpeggio
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+    hypothesis
+    pretend
+  ];
+
+  meta = with lib; {
+    description = "Allows parsing and manipulation of PEP 440 version numbers";
+    homepage = "https://github.com/RazerM/parver";
+    license = licenses.mit;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

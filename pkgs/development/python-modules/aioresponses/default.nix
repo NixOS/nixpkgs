@@ -11,12 +11,14 @@
 
 buildPythonPackage rec {
   pname = "aioresponses";
-  version = "0.7.2";
+  version = "0.7.3";
+  format = "setuptools";
+
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-guSV0Ri3SJaqW01H4X7/teLMeD5RCuOVzq3l6Hyr6Jo=";
+    sha256 = "sha256-LGTtVxDujLTpWMVpGE2tEvTJzVk5E1yzj4jGqCYczrM=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +41,9 @@ buildPythonPackage rec {
     "test_pass_through_with_origin_params"
   ];
 
-  pythonImportsCheck = [ "aioresponses" ];
+  pythonImportsCheck = [
+    "aioresponses"
+  ];
 
   meta = {
     description = "A helper to mock/fake web requests in python aiohttp package";

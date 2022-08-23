@@ -66,11 +66,11 @@ in
         enable = mkOption {
           type = types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Whether to enable the slurm control daemon.
             Note that the standard authentication method is "munge".
             The "munge" service needs to be provided with a password file in order for
-            slurm to work properly (see <literal>services.munge.password</literal>).
+            slurm to work properly (see `services.munge.password`).
           '';
         };
       };
@@ -82,9 +82,9 @@ in
           type = types.str;
           default = config.networking.hostName;
           defaultText = literalExpression "config.networking.hostName";
-          description = ''
-            Hostname of the machine where <literal>slurmdbd</literal>
-            is running (i.e. name returned by <literal>hostname -s</literal>).
+          description = lib.mdDoc ''
+            Hostname of the machine where `slurmdbd`
+            is running (i.e. name returned by `hostname -s`).
           '';
         };
 
@@ -92,7 +92,7 @@ in
           type = types.str;
           default = cfg.user;
           defaultText = literalExpression "config.${opt.user}";
-          description = ''
+          description = lib.mdDoc ''
             Database user name.
           '';
         };
@@ -100,19 +100,18 @@ in
         storagePassFile = mkOption {
           type = with types; nullOr str;
           default = null;
-          description = ''
+          description = lib.mdDoc ''
             Path to file with database password. The content of this will be used to
-            create the password for the <literal>StoragePass</literal> option.
+            create the password for the `StoragePass` option.
           '';
         };
 
         extraConfig = mkOption {
           type = types.lines;
           default = "";
-          description = ''
-            Extra configuration for <literal>slurmdbd.conf</literal> See also:
-            <citerefentry><refentrytitle>slurmdbd.conf</refentrytitle>
-            <manvolnum>8</manvolnum></citerefentry>.
+          description = lib.mdDoc ''
+            Extra configuration for `slurmdbd.conf` See also:
+            {manpage}`slurmdbd.conf(8)`.
           '';
         };
       };
@@ -124,10 +123,10 @@ in
       enableStools = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to provide a slurm.conf file.
           Enable this option if you do not run a slurm daemon on this host
-          (i.e. <literal>server.enable</literal> and <literal>client.enable</literal> are <literal>false</literal>)
+          (i.e. `server.enable` and `client.enable` are `false`)
           but you still want to run slurm commands from this host.
         '';
       };
@@ -137,7 +136,7 @@ in
         default = pkgs.slurm.override { enableX11 = ! cfg.enableSrunX11; };
         defaultText = literalExpression "pkgs.slurm";
         example = literalExpression "pkgs.slurm-full";
-        description = ''
+        description = lib.mdDoc ''
           The package to use for slurm binaries.
         '';
       };
@@ -146,7 +145,7 @@ in
         type = types.nullOr types.str;
         default = null;
         example = null;
-        description = ''
+        description = lib.mdDoc ''
           The short hostname of the machine where SLURM control functions are
           executed (i.e. the name returned by the command "hostname -s", use "tux001"
           rather than "tux001.my.com").
@@ -158,7 +157,7 @@ in
         default = cfg.controlMachine;
         defaultText = literalExpression "config.${opt.controlMachine}";
         example = null;
-        description = ''
+        description = lib.mdDoc ''
           Name that ControlMachine should be referred to in establishing a
           communications path.
         '';
@@ -168,7 +167,7 @@ in
         type = types.str;
         default = "default";
         example = "myCluster";
-        description = ''
+        description = lib.mdDoc ''
           Necessary to distinguish accounting records in a multi-cluster environment.
         '';
       };
@@ -177,7 +176,7 @@ in
         type = types.listOf types.str;
         default = [];
         example = literalExpression ''[ "linux[1-32] CPUs=1 State=UNKNOWN" ];'';
-        description = ''
+        description = lib.mdDoc ''
           Name that SLURM uses to refer to a node (or base partition for BlueGene
           systems). Typically this would be the string that "/bin/hostname -s"
           returns. Note that now you have to write node's parameters after the name.
@@ -188,7 +187,7 @@ in
         type = types.listOf types.str;
         default = [];
         example = literalExpression ''[ "debug Nodes=linux[1-32] Default=YES MaxTime=INFINITE State=UP" ];'';
-        description = ''
+        description = lib.mdDoc ''
           Name by which the partition may be referenced. Note that now you have
           to write the partition's parameters after the name.
         '';
@@ -197,17 +196,17 @@ in
       enableSrunX11 = mkOption {
         default = false;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           If enabled srun will accept the option "--x11" to allow for X11 forwarding
           from within an interactive session or a batch job. This activates the
           slurm-spank-x11 module. Note that this option also enables
-          <option>services.openssh.forwardX11</option> on the client.
+          {option}`services.openssh.forwardX11` on the client.
 
           This option requires slurm to be compiled without native X11 support.
           The default behavior is to re-compile the slurm package with native X11
           support disabled if this option is set to true.
 
-          To use the native X11 support add <literal>PrologFlags=X11</literal> in <option>extraConfig</option>.
+          To use the native X11 support add `PrologFlags=X11` in {option}`extraConfig`.
           Note that this method will only work RSA SSH host keys.
         '';
       };
@@ -215,7 +214,7 @@ in
       procTrackType = mkOption {
         type = types.str;
         default = "proctrack/linuxproc";
-        description = ''
+        description = lib.mdDoc ''
           Plugin to be used for process tracking on a job step basis.
           The slurmd daemon uses this mechanism to identify all processes
           which are children of processes it spawns for a user job step.
@@ -225,7 +224,7 @@ in
       stateSaveLocation = mkOption {
         type = types.str;
         default = "/var/spool/slurmctld";
-        description = ''
+        description = lib.mdDoc ''
           Directory into which the Slurm controller, slurmctld, saves its state.
         '';
       };
@@ -233,7 +232,7 @@ in
       user = mkOption {
         type = types.str;
         default = defaultUser;
-        description = ''
+        description = lib.mdDoc ''
           Set this option when you want to run the slurmctld daemon
           as something else than the default slurm user "slurm".
           Note that the UID of this user needs to be the same
@@ -244,7 +243,7 @@ in
       extraConfig = mkOption {
         default = "";
         type = types.lines;
-        description = ''
+        description = lib.mdDoc ''
           Extra configuration options that will be added verbatim at
           the end of the slurm configuration file.
         '';
@@ -253,28 +252,28 @@ in
       extraPlugstackConfig = mkOption {
         default = "";
         type = types.lines;
-        description = ''
-          Extra configuration that will be added to the end of <literal>plugstack.conf</literal>.
+        description = lib.mdDoc ''
+          Extra configuration that will be added to the end of `plugstack.conf`.
         '';
       };
 
       extraCgroupConfig = mkOption {
         default = "";
         type = types.lines;
-        description = ''
-          Extra configuration for <literal>cgroup.conf</literal>. This file is
-          used when <literal>procTrackType=proctrack/cgroup</literal>.
+        description = lib.mdDoc ''
+          Extra configuration for `cgroup.conf`. This file is
+          used when `procTrackType=proctrack/cgroup`.
         '';
       };
 
       extraConfigPaths = mkOption {
         type = with types; listOf path;
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           Slurm expects config files for plugins in the same path
-          as <literal>slurm.conf</literal>. Add extra nix store
+          as `slurm.conf`. Add extra nix store
           paths that should be merged into same directory as
-          <literal>slurm.conf</literal>.
+          `slurm.conf`.
         '';
       };
 
@@ -361,7 +360,13 @@ in
         ++ lib.optional cfg.enableSrunX11 slurm-spank-x11;
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "systemd-tmpfiles-clean.service" ];
+      after = [
+        "systemd-tmpfiles-clean.service"
+        "munge.service"
+        "network-online.target"
+        "remote-fs.target"
+      ];
+      wants = [ "network-online.target" ];
 
       serviceConfig = {
         Type = "forking";
@@ -370,12 +375,13 @@ in
         PIDFile = "/run/slurmd.pid";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         LimitMEMLOCK = "infinity";
+        Delegate="Yes";
       };
-
-      preStart = ''
-        mkdir -p /var/spool
-      '';
     };
+
+    systemd.tmpfiles.rules = mkIf cfg.client.enable [
+      "d /var/spool/slurmd 755 root root -"
+    ];
 
     services.openssh.forwardX11 = mkIf cfg.client.enable (mkDefault true);
 

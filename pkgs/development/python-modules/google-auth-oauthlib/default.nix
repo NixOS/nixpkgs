@@ -6,21 +6,25 @@
 , mock
 , pytestCheckHook
 , google-auth
-, requests_oauthlib
+, requests-oauthlib
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-auth-oauthlib";
-  version = "0.4.6";
+  version = "0.5.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-qQoHL2mT8sMnBnv2UnAEY4TNpajssguU6ppofx8jOno=";
+    sha256 = "sha256-1emKcSAzMGmfkqJrwIhHqS6MOxuNgqAh8a80Fk2xQ64=";
   };
 
   propagatedBuildInputs = [
     google-auth
-    requests_oauthlib
+    requests-oauthlib
   ];
 
   checkInputs = [
@@ -29,7 +33,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [ "test_run_local_server" ];
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "test_run_local_server"
+  ];
+
+  pythonImportsCheck = [
+    "google_auth_oauthlib"
+  ];
 
   meta = with lib; {
     description = "Google Authentication Library: oauthlib integration";

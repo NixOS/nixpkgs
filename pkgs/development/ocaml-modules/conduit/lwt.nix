@@ -1,12 +1,12 @@
-{ buildDunePackage, ppx_sexp_conv, conduit, ocaml_lwt, sexplib }:
+{ buildDunePackage, ppx_sexp_conv, conduit, lwt, sexplib }:
 
 buildDunePackage {
   pname = "conduit-lwt";
-  inherit (conduit) version src useDune2 minimumOCamlVersion;
+  inherit (conduit) version src;
 
   buildInputs = [ ppx_sexp_conv ];
 
-  propagatedBuildInputs = [ conduit ocaml_lwt sexplib ];
+  propagatedBuildInputs = [ conduit lwt sexplib ];
 
   meta = conduit.meta // {
     description = "A network connection establishment library for Lwt";

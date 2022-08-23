@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Translator English -- C/C++ declarations";
     license = lib.licenses.publicDomain;
-    maintainers = with lib.maintainers; [joelteon];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 }

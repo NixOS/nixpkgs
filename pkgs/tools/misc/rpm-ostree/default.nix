@@ -29,7 +29,7 @@
 , bubblewrap
 , pcre
 , check
-, python
+, python3
 , json_c
 , zchunk
 , libmodulemd
@@ -40,16 +40,17 @@
 
 stdenv.mkDerivation rec {
   pname = "rpm-ostree";
-  version = "2021.9";
+  version = "2022.12";
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
     url = "https://github.com/coreos/${pname}/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-DvATvvAliJhEItbOlK1CA/ibhzImw651pkplqpRG+OQ=";
+    sha256 = "sha256-kl9TwrvrIdF/R4NIVXUP2WYDflwB6BE+0j9Rum9jTXY=";
   };
 
   nativeBuildInputs = [
+    python3
     pkg-config
     which
     autoconf
@@ -82,7 +83,6 @@ stdenv.mkDerivation rec {
     librepo
     pcre
     check
-    python
 
     # libdnf # vendored unstable branch
     # required by vendored libdnf

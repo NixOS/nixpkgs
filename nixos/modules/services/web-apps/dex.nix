@@ -11,14 +11,25 @@ let
   settingsFormat = pkgs.formats.yaml {};
   configFile = settingsFormat.generate "config.yaml" filteredSettings;
 
-  startPreScript = pkgs.writeShellScript "dex-start-pre" (''
-  '' + (concatStringsSep "\n" (builtins.map (file: ''
-    ${pkgs.replace-secret}/bin/replace-secret '${file}' '${file}' /run/dex/config.yaml
-  '') secretFiles)));
+  startPreScript = pkgs.writeShellScript "dex-start-pre"
+    (concatStringsSep "\n" (map (file: ''
+      replace-secret '${file}' '${file}' /run/dex/config.yaml
+    '')
+    secretFiles));
 in
 {
   options.services.dex = {
     enable = mkEnableOption "the OpenID Connect and OAuth2 identity provider";
+
+    environmentFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = ''
+        Environment file (see <literal>systemd.exec(5)</literal>
+        "EnvironmentFile=" section for the syntax) to define variables for dex.
+        This option can be used to safely include secret keys into the dex configuration.
+      '';
+    };
 
     settings = mkOption {
       type = settingsFormat.type;
@@ -45,9 +56,12 @@ in
           ];
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         The available options can be found in
-        <link xlink:href="https://github.com/dexidp/dex/blob/v${pkgs.dex.version}/config.yaml.dist">the example configuration</link>.
+        [the example configuration](https://github.com/dexidp/dex/blob/v${pkgs.dex.version}/config.yaml.dist).
+
+        It's also possible to refer to environment variables (defined in [services.dex.environmentFile](#opt-services.dex.environmentFile))
+        using the syntax `$VARIABLE_NAME`.
       '';
     };
   };
@@ -57,15 +71,15 @@ in
       description = "dex identity provider";
       wantedBy = [ "multi-user.target" ];
       after = [ "networking.target" ] ++ (optional (cfg.settings.storage.type == "postgres") "postgresql.service");
-
+      path = with pkgs; [ replace-secret ];
       serviceConfig = {
         ExecStart = "${pkgs.dex-oidc}/bin/dex serve /run/dex/config.yaml";
         ExecStartPre = [
           "${pkgs.coreutils}/bin/install -m 600 ${configFile} /run/dex/config.yaml"
           "+${startPreScript}"
         ];
-        RuntimeDirectory = "dex";
 
+        RuntimeDirectory = "dex";
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         BindReadOnlyPaths = [
           "/nix/store"
@@ -109,7 +123,12 @@ in
         TemporaryFileSystem = "/:ro";
         # Does not work well with the temporary root
         #UMask = "0066";
+      } // optionalAttrs (cfg.environmentFile != null) {
+        EnvironmentFile = cfg.environmentFile;
       };
     };
   };
+
+  # uses attributes of the linked package
+  meta.buildDocsInSandbox = false;
 }

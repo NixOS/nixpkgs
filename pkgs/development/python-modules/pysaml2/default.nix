@@ -3,6 +3,7 @@
 , cryptography
 , defusedxml
 , fetchFromGitHub
+, fetchPypi
 , importlib-resources
 , mock
 , pyasn1
@@ -14,15 +15,25 @@
 , pytz
 , requests
 , responses
+, setuptools
 , six
 , substituteAll
 , xmlschema
 , xmlsec
 }:
 
-buildPythonPackage rec {
+let
+  pymongo3 = pymongo.overridePythonAttrs(old: rec {
+    version = "3.12.3";
+    src = fetchPypi {
+      pname = "pymongo";
+      inherit version;
+      sha256 = "sha256-ConK3ABipeU2ZN3gQ/bAlxcrjBxfAJRJAJUoL/mZWl8=";
+    };
+  });
+in buildPythonPackage rec {
   pname = "pysaml2";
-  version = "7.1.0";
+  version = "7.1.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -31,16 +42,17 @@ buildPythonPackage rec {
     owner = "IdentityPython";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-3Yl6j6KAlw7QQYnwU7+naY6D97IqX766zguekKAuic8=";
+    sha256 = "sha256-nyQcQ1OO9PuuQROg+km2vIRF1sZ22MZhiHpmVXWl+is=";
   };
 
   propagatedBuildInputs = [
     cryptography
-    python-dateutil
     defusedxml
     pyopenssl
+    python-dateutil
     pytz
     requests
+    setuptools
     six
     xmlschema
   ] ++ lib.optionals (pythonOlder "3.9") [
@@ -50,7 +62,7 @@ buildPythonPackage rec {
   checkInputs = [
     mock
     pyasn1
-    pymongo
+    pymongo3
     pytestCheckHook
     responses
   ];

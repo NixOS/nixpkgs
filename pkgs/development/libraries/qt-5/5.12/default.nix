@@ -19,6 +19,7 @@ top-level attribute to `top-level/all-packages.nix`.
 , bison, cups ? null, harfbuzz, libGL, perl
 , gstreamer, gst-plugins-base, gtk3, dconf
 , darwin
+, buildPackages
 
   # options
 , developerBuild ? false
@@ -85,6 +86,14 @@ let
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
     qtwebengine = [
+      # glibc 2.34 compat
+      (fetchpatch {
+        url = "https://src.fedoraproject.org/rpms/qt5-qtwebengine/raw/d122c011631137b79455850c363676c655cf9e09/f/qtwebengine-everywhere-src-5.15.5-SIGSTKSZ.patch";
+        sha256 = "sha256-CJxN6sTvWdPVEwSkr0zpPrjyhUIi6tYSWb8ZyO0sY2o=";
+        excludes = [
+          "src/3rdparty/chromium/third_party/abseil-cpp/absl/debugging/failure_signal_handler.cc"
+        ];
+      })
       ./qtwebengine-no-build-skip.patch
       # https://gitlab.freedesktop.org/pulseaudio/pulseaudio/issues/707
       # https://bugreports.qt.io/browse/QTBUG-77037
@@ -108,6 +117,11 @@ let
         url = "https://github.com/qtwebkit/qtwebkit/pull/1058/commits/5b698ba3faffd4e198a45be9fe74f53307395e4b.patch";
         sha256 = "0a3xv0h4lv8wggckgy8cg8xnpkg7n9h45312pdjdnnwy87xvzss0";
       })
+      (fetchpatch {
+        name = "qtwebkit-darwin-handle.patch";
+        url = "https://github.com/qtwebkit/qtwebkit/commit/5c272a21e621a66862821d3ae680f27edcc64c19.patch";
+        sha256 = "9hjqLyABz372QDgoq7nXXXQ/3OXBGcYN1/92ekcC3WE=";
+      })
       ./qtwebkit.patch
       ./qtwebkit-icu68.patch
 
@@ -117,23 +131,23 @@ let
     qttools = [ ./qttools.patch ];
   };
 
-  qtModule =
-    import ../qtModule.nix
-    {
-      inherit perl;
-      inherit lib;
-      # Use a variant of mkDerivation that does not include wrapQtApplications
-      # to avoid cyclic dependencies between Qt modules.
-      mkDerivation =
-        import ../mkDerivation.nix
-        { inherit lib; inherit debug; wrapQtAppsHook = null; }
-        stdenv.mkDerivation;
-    }
-    { inherit self srcs patches; };
-
   addPackages = self: with self;
     let
-      callPackage = self.newScope { inherit qtCompatVersion qtModule srcs; };
+      qtModule =
+        import ../qtModule.nix
+        {
+          inherit perl;
+          inherit lib;
+          # Use a variant of mkDerivation that does not include wrapQtApplications
+          # to avoid cyclic dependencies between Qt modules.
+          mkDerivation =
+            import ../mkDerivation.nix
+            { inherit lib; inherit debug; wrapQtAppsHook = null; }
+            stdenv.mkDerivation;
+        }
+        { inherit self srcs patches; };
+
+      callPackage = self.newScope { inherit qtCompatVersion qtModule srcs stdenv; };
     in {
 
       inherit callPackage qtCompatVersion qtModule srcs;
@@ -148,9 +162,9 @@ let
         inherit (srcs.qtbase) src version;
         patches = patches.qtbase;
         inherit bison cups harfbuzz libGL;
-        withGtk3 = true; inherit dconf gtk3;
+        withGtk3 = !stdenv.isDarwin; inherit dconf gtk3;
         inherit debug developerBuild decryptSslTraffic;
-        inherit (darwin.apple_sdk.frameworks) AGL AppKit ApplicationServices Carbon Cocoa CoreAudio CoreBluetooth
+        inherit (darwin.apple_sdk.frameworks) AGL AppKit ApplicationServices AVFoundation Carbon Cocoa CoreAudio CoreBluetooth
           CoreLocation CoreServices DiskArbitration Foundation OpenGL MetalKit IOKit;
         inherit (darwin) libobjc;
       };
@@ -223,11 +237,9 @@ let
       } ../hooks/qmake-hook.sh;
 
       wrapQtAppsHook = makeSetupHook {
-        deps = [ self.qtbase.dev makeWrapper ]
+        deps = [ self.qtbase.dev buildPackages.makeWrapper ]
           ++ lib.optional stdenv.isLinux self.qtwayland.dev;
       } ../hooks/wrap-qt-apps-hook.sh;
     };
 
-   self = lib.makeScope newScope addPackages;
-
-in self
+in lib.makeScope newScope addPackages

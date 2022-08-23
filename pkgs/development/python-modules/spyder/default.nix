@@ -1,30 +1,101 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, makeDesktopItem, intervaltree,
-  jedi, pycodestyle, psutil, rope, numpy, scipy, matplotlib, pylint,
-  keyring, numpydoc, qtconsole, qtawesome, nbconvert, mccabe, pyopengl,
-  cloudpickle, pygments, spyder-kernels, qtpy, pyzmq, chardet, qdarkstyle,
-  watchdog, python-language-server, pyqtwebengine, atomicwrites, pyxdg,
-  diff-match-patch, three-merge, pyls-black, pyls-spyder, flake8, textdistance
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, makeDesktopItem
+, atomicwrites
+, chardet
+, cloudpickle
+, cookiecutter
+, diff-match-patch
+, flake8
+, intervaltree
+, jedi
+, jellyfish
+, keyring
+, matplotlib
+, mccabe
+, nbconvert
+, numpy
+, numpydoc
+, psutil
+, pygments
+, pylint
+, pyls-spyder
+, pyopengl
+, pyqtwebengine
+, python-lsp-black
+, python-lsp-server
+, pyxdg
+, pyzmq
+, pycodestyle
+, qdarkstyle
+, qstylizer
+, qtawesome
+, qtconsole
+, qtpy
+, rope
+, Rtree
+, scipy
+, spyder-kernels
+, textdistance
+, three-merge
+, watchdog
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "5.2.0";
+  version = "5.3.2";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cd04acc88426acee9c4ce6bb91f50c13fc161a437e68bca701243b3415ce9d08";
+    sha256 = "sha256-KJkamNMXr4Mi9Y6B7aKExoiqWKoExCFlELChCrQL6mQ=";
   };
 
   nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
 
   propagatedBuildInputs = [
-    intervaltree jedi pycodestyle psutil rope numpy scipy matplotlib pylint keyring
-    numpydoc qtconsole qtawesome nbconvert mccabe pyopengl cloudpickle spyder-kernels
-    pygments qtpy pyzmq chardet pyqtwebengine qdarkstyle watchdog python-language-server
-    atomicwrites pyxdg diff-match-patch three-merge pyls-black pyls-spyder
-    flake8 textdistance
+    atomicwrites
+    chardet
+    cloudpickle
+    cookiecutter
+    diff-match-patch
+    flake8
+    intervaltree
+    jedi
+    jellyfish
+    keyring
+    matplotlib
+    mccabe
+    nbconvert
+    numpy
+    numpydoc
+    psutil
+    pygments
+    pylint
+    pyls-spyder
+    pyopengl
+    pyqtwebengine
+    python-lsp-black
+    python-lsp-server
+    pyxdg
+    pyzmq
+    pycodestyle
+    qdarkstyle
+    qstylizer
+    qtawesome
+    qtconsole
+    qtpy
+    rope
+    Rtree
+    scipy
+    spyder-kernels
+    textdistance
+    three-merge
+    watchdog
   ];
 
   # There is no test for spyder
@@ -37,20 +108,15 @@ buildPythonPackage rec {
     comment = "Scientific Python Development Environment";
     desktopName = "Spyder";
     genericName = "Python IDE";
-    categories = "Development;IDE;";
+    categories = [ "Development" "IDE" ];
   };
 
   postPatch = ''
     # remove dependency on pyqtwebengine
     # this is still part of the pyqt 5.11 version we have in nixpkgs
     sed -i /pyqtwebengine/d setup.py
-    # The major version bump in watchdog is due to changes in supported
-    # platforms, not API break.
-    # https://github.com/gorakhargosh/watchdog/issues/761#issuecomment-777001518
     substituteInPlace setup.py \
-      --replace "pyqt5<5.13" "pyqt5" \
-      --replace "parso==0.7.0" "parso" \
-      --replace "watchdog>=0.10.3,<2.0.0" "watchdog>=0.10.3,<3.0.0"
+      --replace "ipython>=7.31.1,<8.0.0" "ipython"
   '';
 
   postInstall = ''

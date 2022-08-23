@@ -13,12 +13,12 @@
 , libsoup
 , gtk4
 , xvfb-run
-, unstableGitUpdater
+, gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "libshumate";
-  version = "unstable-2021-10-06";
+  version = "1.0.0.alpha.1";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "libshumate";
-    rev = "7a0a03f299881e8faaac7d904cc47b74795ae5dd";
-    sha256 = "df8ZHn/wmkzaYH0L3E6ULUtqxqU71EqL0jSgKhWqlT8=";
+    rev = version;
+    sha256 = "4kCXFUJRglh1aIBk03MNUV8jfx0mJzIFCUDM4g9tzlg=";
   };
 
   nativeBuildInputs = [
@@ -68,11 +68,14 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput share/doc/libshumate-0.0 "$devdoc"
+    moveToOutput share/doc/libshumate-1.0 "$devdoc"
   '';
 
-  passthru.updateScript = unstableGitUpdater {
-    url = meta.homepage;
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = pname;
+      versionPolicy = "none";
+    };
   };
 
   meta = with lib; {

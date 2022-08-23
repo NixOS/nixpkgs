@@ -1,20 +1,36 @@
-{ lib, buildPythonPackage, fetchFromGitHub, colorama, pytestCheckHook }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, colorama
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "simber";
-  version = "0.2.3";
+  version = "0.2.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "deepjyoti30";
     repo = pname;
     rev = version;
-    sha256 = "04dp9b4s7zb166vlacsaypc6iw1p75azqas1wf0flp570qqf3rkx";
+    hash = "sha256-P4bhxu9Di4E2Zkd0vIkyDi1S6Y0V/EQSMF4ftWoiXKE=";
   };
 
-  propagatedBuildInputs = [ colorama ];
+  propagatedBuildInputs = [
+    colorama
+  ];
 
-  checkInputs = [ pytestCheckHook ];
-  pythonImportsCheck = [ "simber" ];
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "simber"
+  ];
 
   meta = with lib; {
     description = "Simple, minimal and powerful logger for Python";

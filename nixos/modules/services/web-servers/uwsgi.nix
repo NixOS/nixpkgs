@@ -20,10 +20,11 @@ let
 
   buildCfg = name: c:
     let
-      plugins =
+      plugins' =
         if any (n: !any (m: m == n) cfg.plugins) (c.plugins or [])
         then throw "`plugins` attribute in uWSGI configuration contains plugins not in config.services.uwsgi.plugins"
         else c.plugins or cfg.plugins;
+      plugins = unique plugins';
 
       hasPython = v: filter (n: n == "python${v}") plugins != [];
       hasPython2 = hasPython "2";
@@ -48,13 +49,10 @@ let
                 pyhome = "${pythonEnv}";
                 env =
                   # Argh, uwsgi expects list of key-values there instead of a dictionary.
-                  let env' = c.env or [];
-                      getPath =
-                        x: if hasPrefix "PATH=" x
-                           then substring (stringLength "PATH=") (stringLength x) x
-                           else null;
-                      oldPaths = filter (x: x != null) (map getPath env');
-                  in env' ++ [ "PATH=${optionalString (oldPaths != []) "${last oldPaths}:"}${pythonEnv}/bin" ];
+                  let envs = partition (hasPrefix "PATH=") (c.env or []);
+                      oldPaths = map (x: substring (stringLength "PATH=") (stringLength x) x) envs.right;
+                      paths = oldPaths ++ [ "${pythonEnv}/bin" ];
+                  in [ "PATH=${concatStringsSep ":" paths}" ] ++ envs.wrong;
               }
           else if isEmperor
             then {
@@ -77,13 +75,13 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable uWSGI";
+        description = lib.mdDoc "Enable uWSGI";
       };
 
       runDir = mkOption {
         type = types.path;
         default = "/run/uwsgi";
-        description = "Where uWSGI communication sockets can live";
+        description = lib.mdDoc "Where uWSGI communication sockets can live";
       };
 
       package = mkOption {
@@ -126,37 +124,37 @@ in {
             };
           }
         '';
-        description = ''
-          uWSGI configuration. It awaits an attribute <literal>type</literal> inside which can be either
-          <literal>normal</literal> or <literal>emperor</literal>.
+        description = lib.mdDoc ''
+          uWSGI configuration. It awaits an attribute `type` inside which can be either
+          `normal` or `emperor`.
 
-          For <literal>normal</literal> mode you can specify <literal>pythonPackages</literal> as a function
-          from libraries set into a list of libraries. <literal>pythonpath</literal> will be set accordingly.
+          For `normal` mode you can specify `pythonPackages` as a function
+          from libraries set into a list of libraries. `pythonpath` will be set accordingly.
 
-          For <literal>emperor</literal> mode, you should use <literal>vassals</literal> attribute
+          For `emperor` mode, you should use `vassals` attribute
           which should be either a set of names and configurations or a path to a directory.
 
           Other attributes will be used in configuration file as-is. Notice that you can redefine
-          <literal>plugins</literal> setting here.
+          `plugins` setting here.
         '';
       };
 
       plugins = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = "Plugins used with uWSGI";
+        description = lib.mdDoc "Plugins used with uWSGI";
       };
 
       user = mkOption {
         type = types.str;
         default = "uwsgi";
-        description = "User account under which uWSGI runs.";
+        description = lib.mdDoc "User account under which uWSGI runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "uwsgi";
-        description = "Group account under which uWSGI runs.";
+        description = lib.mdDoc "Group account under which uWSGI runs.";
       };
 
       capabilities = mkOption {
@@ -181,8 +179,7 @@ in {
             <para>
               When in Emperor mode, any capability to be inherited by a vassal must
               be specified again in the vassal configuration using <literal>cap</literal>.
-              See the uWSGI <link
-              xlink:href="https://uwsgi-docs.readthedocs.io/en/latest/Capabilities.html">docs</link>
+              See the uWSGI <link xlink:href="https://uwsgi-docs.readthedocs.io/en/latest/Capabilities.html">docs</link>
               for more information.
             </para>
           </note>
@@ -225,7 +222,7 @@ in {
     };
 
     services.uwsgi.package = pkgs.uwsgi.override {
-      inherit (cfg) plugins;
+      plugins = unique cfg.plugins;
     };
   };
 }

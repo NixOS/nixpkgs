@@ -19,6 +19,6 @@ in fetchzip {
 
     license = licenses.free;
     platforms = platforms.all;
-    maintainers = with maintainers; [ volth emily ];
+    maintainers = with maintainers; [ emily ];
   };
 }

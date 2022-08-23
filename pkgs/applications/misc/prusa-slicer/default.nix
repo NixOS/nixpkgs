@@ -1,10 +1,56 @@
-{ stdenv, lib, fetchFromGitHub, cmake, copyDesktopItems, makeDesktopItem, pkg-config, wrapGAppsHook
-, boost, cereal, cgal_5, curl, dbus, eigen, expat, glew, glib, gmp, gtest, gtk3, hicolor-icon-theme
-, ilmbase, libpng, mpfr, nlopt, openvdb, pcre, qhull, systemd, tbb, wxGTK31-gtk3, xorg, fetchpatch
+{ stdenv
+, lib
+, binutils
+, fetchFromGitHub
+, cmake
+, copyDesktopItems
+, makeDesktopItem
+, pkg-config
+, wrapGAppsHook
+, boost
+, cereal
+, cgal_5
+, curl
+, dbus
+, eigen
+, expat
+, glew
+, glib
+, gmp
+, gtest
+, gtk3
+, hicolor-icon-theme
+, ilmbase
+, libpng
+, mpfr
+, nlopt
+, openvdb
+, pcre
+, qhull
+, systemd
+, tbb
+, wxGTK31-gtk3
+, xorg
+, fetchpatch
+, wxGTK31-gtk3-override ? null
 }:
+let
+  wxGTK31-gtk3-prusa = wxGTK31-gtk3.overrideAttrs (old: rec {
+    pname = "wxwidgets-prusa3d-patched";
+    version = "3.1.4";
+    src = fetchFromGitHub {
+      owner = "prusa3d";
+      repo = "wxWidgets";
+      rev = "489f6118256853cf5b299d595868641938566cdb";
+      hash = "sha256-xGL5I2+bPjmZGSTYe1L7VAmvLHbwd934o/cxg9baEvQ=";
+      fetchSubmodules = true;
+    };
+  });
+  wxGTK31-gtk3-override' = if wxGTK31-gtk3-override == null then wxGTK31-gtk3-prusa else wxGTK31-gtk3-override;
+in
 stdenv.mkDerivation rec {
   pname = "prusa-slicer";
-  version = "2.4.0";
+  version = "2.4.2";
 
   nativeBuildInputs = [
     cmake
@@ -14,6 +60,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    binutils
     boost
     cereal
     cgal_5
@@ -34,7 +81,7 @@ stdenv.mkDerivation rec {
     pcre
     systemd
     tbb
-    wxGTK31-gtk3
+    wxGTK31-gtk3-override'
     xorg.libX11
   ] ++ checkInputs;
 
@@ -43,6 +90,16 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://github.com/prusa3d/PrusaSlicer/commit/76f4d6fa98bda633694b30a6e16d58665a634680.patch";
       sha256 = "1r806ycp704ckwzgrw1940hh1l6fpz0k1ww3p37jdk6mygv53nv6";
+    })
+    # Fix compile error with boost 1.79. See https://github.com/prusa3d/PrusaSlicer/issues/8238
+    # Can be removed with the next version update
+    (fetchpatch {
+      url = "https://github.com/prusa3d/PrusaSlicer/commit/408e56f0390f20aaf793e0aa0c70c4d9544401d4.patch";
+      sha256 = "sha256-vzEPjLE3Yy5szawPn2Yp3i7MceWewpdnLUPVu9+H3W8=";
+    })
+    (fetchpatch {
+      url = "https://github.com/prusa3d/PrusaSlicer/commit/926ae0471800abd1e5335e251a5934570eb8f6ff.patch";
+      sha256 = "sha256-tAEgubeGGKFWY7r7p/6pmI2HXUGKi2TM1X5ILVZVT20=";
     })
   ];
 
@@ -69,12 +126,17 @@ stdenv.mkDerivation rec {
     # Since version 2.5.0 of nlopt we need to link to libnlopt, as libnlopt_cxx
     # now seems to be integrated into the main lib.
     sed -i 's|nlopt_cxx|nlopt|g' cmake/modules/FindNLopt.cmake
+
+    # Disable test_voronoi.cpp as the assembler hangs during build,
+    # likely due to commit e682dd84cff5d2420fcc0a40508557477f6cc9d3
+    # See issue #185808 for details.
+    sed -i 's|test_voronoi.cpp||g' tests/libslic3r/CMakeLists.txt
   '';
 
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "PrusaSlicer";
-    sha256 = "1mb7v0khrmsgy3inmh4mjn709jlhx422kvbnrhsqziph2wwak9bz";
+    sha256 = "17p56f0zmiryy8k4da02in1l6yxniz286gf9yz8s1gaz5ksqj4af";
     rev = "version_${version}";
   };
 
@@ -93,22 +155,22 @@ stdenv.mkDerivation rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = "PrusaSlicer";
+      name = "prusa-slicer";
       exec = "prusa-slicer";
       icon = "PrusaSlicer";
       comment = "G-code generator for 3D printers";
       desktopName = "PrusaSlicer";
       genericName = "3D printer tool";
-      categories = "Development;";
+      categories = [ "Development" ];
     })
     (makeDesktopItem {
-      name = "PrusaSlicer G-code Viewer";
+      name = "prusa-gcodeviewer";
       exec = "prusa-gcodeviewer";
       icon = "PrusaSlicer-gcodeviewer";
       comment = "G-code viewer for 3D printers";
       desktopName = "PrusaSlicer G-code Viewer";
       genericName = "G-code Viewer";
-      categories = "Development;";
+      categories = [ "Development" ];
     })
   ];
 

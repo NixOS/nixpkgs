@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation {
   pname = "bcachefs-tools";
-  version = "unstable-2021-12-25";
+  version = "unstable-2022-05-02";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
-    rev = "07b18011cc885f0ef5cadc299d0321322f442388";
-    sha256 = "0yvdbjasl05w1afiszygrfv7hn39fxx7kcy42vk39rb6fb3xpvzy";
+    rev = "6f5afc0c12bbf56ffdabe5b2c5297aef255c4baa";
+    sha256 = "0483zhm3gmk6fd1pn815i3fixwlwsnks3817gn7n3idbbw0kg5ng";
   };
 
   postPatch = ''
@@ -58,13 +58,16 @@ stdenv.mkDerivation {
 
   passthru.tests = {
     smoke-test = nixosTests.bcachefs;
+    inherit (nixosTests.installer) bcachefsSimple bcachefsEncrypted bcachefsMulti;
   };
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Tool for managing bcachefs filesystems";
     homepage = "https://bcachefs.org/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ davidak chiiruno ];
+    maintainers = with maintainers; [ davidak Madouura ];
     platforms = platforms.linux;
   };
 }

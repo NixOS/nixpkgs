@@ -2,14 +2,20 @@
 
 haskellPackages.mkDerivation rec {
   pname = "carp";
-  version = "0.5.3";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "carp-lang";
     repo = "Carp";
     rev = "v${version}";
-    sha256 = "08ryk30ii24qsdpdq7bqi406ynv9nr8zy2pcv9n70ar8fxfw0859";
+    sha256 = "sha256-B7SBzjegFzL2gGivIJE6BZcLD3f0Bsh8yndjScG2TZI=";
   };
+
+  # -Werror breaks build with GHC >= 9.0
+  # https://github.com/carp-lang/Carp/issues/1386
+  postPatch = ''
+    substituteInPlace CarpHask.cabal --replace "-Werror" ""
+  '';
 
   buildTools = [ makeWrapper ];
 

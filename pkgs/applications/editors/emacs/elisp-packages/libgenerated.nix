@@ -69,7 +69,10 @@ in {
           melpaBuild {
             inherit pname ename commit;
             version = if isNull version then "" else
-              lib.concatStringsSep "." (map toString version);
+              lib.concatStringsSep "." (map toString
+                # Hack: Melpa archives contains versions with parse errors such as [ 4 4 -4 413 ] which should be 4.4-413
+                # This filter method is still technically wrong, but it's computationally cheap enough and tapers over the issue
+                (builtins.filter (n: n >= 0) version));
             # TODO: Broken should not result in src being null (hack to avoid eval errors)
             src = if (isNull sha256 || broken) then null else
               lib.getAttr fetcher (fetcherGenerators args sourceArgs);

@@ -198,7 +198,7 @@ class StartCommand:
     ) -> subprocess.Popen:
         return subprocess.Popen(
             self.cmd(monitor_socket_path, shell_socket_path),
-            stdin=subprocess.DEVNULL,
+            stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             shell=True,
@@ -241,9 +241,15 @@ class LegacyStartCommand(StartCommand):
         cdrom: Optional[str] = None,
         usb: Optional[str] = None,
         bios: Optional[str] = None,
+        qemuBinary: Optional[str] = None,
         qemuFlags: Optional[str] = None,
     ):
-        self._cmd = "qemu-kvm -m 384"
+        if qemuBinary is not None:
+            self._cmd = qemuBinary
+        else:
+            self._cmd = "qemu-kvm"
+
+        self._cmd += " -m 384"
 
         # networking
         net_backend = "-netdev user,id=net0"
@@ -297,6 +303,7 @@ class Machine:
     the machine lifecycle with the help of a start script / command."""
 
     name: str
+    out_dir: Path
     tmp_dir: Path
     shared_dir: Path
     state_dir: Path
@@ -318,23 +325,28 @@ class Machine:
     # Store last serial console lines for use
     # of wait_for_console_text
     last_lines: Queue = Queue()
+    callbacks: List[Callable]
 
     def __repr__(self) -> str:
         return f"<Machine '{self.name}'>"
 
     def __init__(
         self,
+        out_dir: Path,
         tmp_dir: Path,
         start_command: StartCommand,
         name: str = "machine",
         keep_vm_state: bool = False,
         allow_reboot: bool = False,
+        callbacks: Optional[List[Callable]] = None,
     ) -> None:
+        self.out_dir = out_dir
         self.tmp_dir = tmp_dir
         self.keep_vm_state = keep_vm_state
         self.allow_reboot = allow_reboot
         self.name = name
         self.start_command = start_command
+        self.callbacks = callbacks if callbacks is not None else []
 
         # set up directories
         self.shared_dir = self.tmp_dir / "shared-xchg"
@@ -375,6 +387,7 @@ class Machine:
             cdrom=args.get("cdrom"),
             usb=args.get("usb"),
             bios=args.get("bios"),
+            qemuBinary=args.get("qemuBinary"),
             qemuFlags=args.get("qemuFlags"),
         )
 
@@ -406,6 +419,7 @@ class Machine:
             return answer
 
     def send_monitor_command(self, command: str) -> str:
+        self.run_callbacks()
         with self.nested("sending monitor command: {}".format(command)):
             message = ("{}\n".format(command)).encode()
             assert self.monitor is not None
@@ -509,12 +523,20 @@ class Machine:
     def execute(
         self, command: str, check_return: bool = True, timeout: Optional[int] = 900
     ) -> Tuple[int, str]:
+        self.run_callbacks()
         self.connect()
 
-        if timeout is not None:
-            command = "timeout {} sh -c {}".format(timeout, shlex.quote(command))
+        # Always run command with shell opts
+        command = f"set -euo pipefail; {command}"
 
-        out_command = f"( set -euo pipefail; {command} ) | (base64 --wrap 0; echo)\n"
+        timeout_str = ""
+        if timeout is not None:
+            timeout_str = f"timeout {timeout}"
+
+        out_command = (
+            f"{timeout_str} sh -c {shlex.quote(command)} | (base64 --wrap 0; echo)\n"
+        )
+
         assert self.shell
         self.shell.send(out_command.encode())
 
@@ -535,13 +557,35 @@ class Machine:
 
         Should only be used during test development, not in the production test."""
         self.connect()
-        self.log("Terminal is ready (there is no prompt):")
+        self.log("Terminal is ready (there is no initial prompt):")
 
         assert self.shell
         subprocess.run(
-            ["socat", "READLINE", f"FD:{self.shell.fileno()}"],
+            ["socat", "READLINE,prompt=$ ", f"FD:{self.shell.fileno()}"],
             pass_fds=[self.shell.fileno()],
         )
+
+    def console_interact(self) -> None:
+        """Allows you to interact with QEMU's stdin
+
+        The shell can be exited with Ctrl+D. Note that Ctrl+C is not allowed to be used.
+        QEMU's stdout is read line-wise.
+
+        Should only be used during test development, not in the production test."""
+        self.log("Terminal is ready (there is no prompt):")
+
+        assert self.process
+        assert self.process.stdin
+
+        while True:
+            try:
+                char = sys.stdin.buffer.read(1)
+            except KeyboardInterrupt:
+                break
+            if char == b"":  # ctrl+d
+                self.log("Closing connection to the console")
+                break
+            self.send_console(char.decode())
 
     def succeed(self, *commands: str, timeout: Optional[int] = None) -> str:
         """Execute each command and check that it succeeds."""
@@ -638,7 +682,7 @@ class Machine:
         with self.nested("waiting for {} to appear on tty {}".format(regexp, tty)):
             retry(tty_matches)
 
-    def send_chars(self, chars: List[str]) -> None:
+    def send_chars(self, chars: str) -> None:
         with self.nested("sending keys ‘{}‘".format(chars)):
             for char in chars:
                 self.send_key(char)
@@ -697,10 +741,9 @@ class Machine:
             self.connected = True
 
     def screenshot(self, filename: str) -> None:
-        out_dir = os.environ.get("out", os.getcwd())
         word_pattern = re.compile(r"^\w+$")
         if word_pattern.match(filename):
-            filename = os.path.join(out_dir, "{}.png".format(filename))
+            filename = os.path.join(self.out_dir, "{}.png".format(filename))
         tmp = "{}.ppm".format(filename)
 
         with self.nested(
@@ -751,7 +794,6 @@ class Machine:
         all the VMs (using a temporary directory).
         """
         # Compute the source, target, and intermediate shared file names
-        out_dir = Path(os.environ.get("out", os.getcwd()))
         vm_src = Path(source)
         with tempfile.TemporaryDirectory(dir=self.shared_dir) as shared_td:
             shared_temp = Path(shared_td)
@@ -761,7 +803,7 @@ class Machine:
             # Copy the file to the shared directory inside VM
             self.succeed(make_command(["mkdir", "-p", vm_shared_temp]))
             self.succeed(make_command(["cp", "-r", vm_src, vm_intermediate]))
-            abs_target = out_dir / target_dir / vm_src.name
+            abs_target = self.out_dir / target_dir / vm_src.name
             abs_target.parent.mkdir(exist_ok=True, parents=True)
             # Copy the file from the shared directory outside VM
             if intermediate.is_dir():
@@ -820,6 +862,12 @@ class Machine:
         key = CHAR_TO_KEY.get(key, key)
         self.send_monitor_command("sendkey {}".format(key))
         time.sleep(0.01)
+
+    def send_console(self, chars: str) -> None:
+        assert self.process
+        assert self.process.stdin
+        self.process.stdin.write(chars.encode())
+        self.process.stdin.flush()
 
     def start(self) -> None:
         if self.booted:
@@ -969,3 +1017,7 @@ class Machine:
         self.shell.close()
         self.monitor.close()
         self.serial_thread.join()
+
+    def run_callbacks(self) -> None:
+        for callback in self.callbacks:
+            callback()

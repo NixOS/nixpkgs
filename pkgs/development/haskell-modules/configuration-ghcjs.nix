@@ -18,14 +18,16 @@ self: super:
   inherit (self.ghc.bootPkgs)
     jailbreak-cabal alex happy gtk2hs-buildtools rehoo hoogle;
 
+  # Test suite fails; https://github.com/ghcjs/ghcjs-base/issues/133
   ghcjs-base = dontCheck (self.callPackage ../compilers/ghcjs/ghcjs-base.nix {
-    fetchgit = pkgs.buildPackages.fetchgit;
+    fetchFromGitHub = pkgs.buildPackages.fetchFromGitHub;
+    aeson = self.aeson_1_5_6_0;
   });
 
   # GHCJS does not ship with the same core packages as GHC.
   # https://github.com/ghcjs/ghcjs/issues/676
   stm = doJailbreak self.stm_2_5_0_2;
-  exceptions = dontCheck self.exceptions_0_10_4;
+  exceptions = dontCheck self.exceptions_0_10_5;
 
 ## OTHER PACKAGES
 
@@ -34,6 +36,9 @@ self: super:
 
   # nodejs crashes during test
   ChasingBottoms = dontCheck super.ChasingBottoms;
+
+  # runs forever
+  text-short = dontCheck super.text-short;
 
   # doctest doesn't work on ghcjs, but sometimes dontCheck doesn't seem to get rid of the dependency
   doctest = pkgs.lib.warn "ignoring dependency on doctest" null;

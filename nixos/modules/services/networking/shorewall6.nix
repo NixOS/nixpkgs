@@ -23,12 +23,12 @@ in {
         type        = types.package;
         default     = pkgs.shorewall;
         defaultText = lib.literalExpression "pkgs.shorewall";
-        description = "The shorewall package to use.";
+        description = lib.mdDoc "The shorewall package to use.";
       };
       configs = lib.mkOption {
         type        = types.attrsOf types.lines;
         default     = {};
-        description = ''
+        description = lib.mdDoc ''
           This option defines the Shorewall configs.
           The attribute name defines the name of the config,
           and the attribute value defines the content of the config.

@@ -7,6 +7,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pubnub
+, pyjwt
 , pytestCheckHook
 , python-dateutil
 , pythonOlder
@@ -16,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "yalexs";
-  version = "1.1.15";
+  version = "1.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -25,13 +26,14 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-EK9jmbU3A2rNx/H8WOsZiGA7tqzg/XJkW/DV5s+2Y3U=";
+    sha256 = "sha256-7+4Icg3E6xrWmxObNzNuDc+MXJ9rnbgBHMK4uPBJeuY=";
   };
 
   propagatedBuildInputs = [
     aiofiles
     aiohttp
     pubnub
+    pyjwt
     python-dateutil
     requests
   ];

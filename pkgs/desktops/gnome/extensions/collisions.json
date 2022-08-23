@@ -24,9 +24,17 @@
       "ShutdownTimer@neumann",
       "ShutdownTimer@deminder"
     ],
+    "bottompanel": [
+      "bottompanel@tmoer93",
+      "bottom-panel@sulincix"
+    ],
     "noannoyance": [
       "noannoyance@sindex.com",
       "noannoyance@daase.net"
+    ],
+    "somafm-internet-radio": [
+      "SomaFm-Radio@alireza6677.gmail.com",
+      "SomaFm-Radio@cajhne.gmail.com"
     ],
     "transparent-window": [
       "transparent-window@pbxqdown.github.com",
@@ -39,6 +47,10 @@
     "gnome-trash": [
       "gnome-trash@gnome-trash.b00f.gitlab.com",
       "gnome-trash@b00f.github.io"
+    ],
+    "volume-scroller": [
+      "volume_scroller@trflynn89.pm.me",
+      "volume_scroller@noskoski"
     ]
   },
   "40": {
@@ -71,6 +83,14 @@
       "noannoyance@sindex.com",
       "noannoyance@daase.net"
     ],
+    "somafm-internet-radio": [
+      "SomaFm-Radio@alireza6677.gmail.com",
+      "SomaFm-Radio@cajhne.gmail.com"
+    ],
+    "fuzzy-clock": [
+      "fuzzy-clock@keepawayfromfire.co.uk",
+      "FuzzyClock@johngoetz"
+    ],
     "panel-date-format": [
       "panel-date-format@keiii.github.com",
       "panel-date-format@atareao.es"
@@ -90,6 +110,10 @@
     "wireguard-indicator": [
       "wireguard-indicator@gregos.me",
       "wireguard-indicator@atareao.es"
+    ],
+    "volume-scroller": [
+      "volume_scroller@trflynn89.pm.me",
+      "volume_scroller@noskoski"
     ]
   },
   "41": {
@@ -101,6 +125,22 @@
       "workspace-indicator@gnome-shell-extensions.gcampax.github.com",
       "horizontal-workspace-indicator@tty2.io"
     ],
+    "lock-keys": [
+      "lockkeys@vaina.lt",
+      "lockkeys@fawtytoo"
+    ],
+    "shutdowntimer": [
+      "ShutdownTimer@neumann",
+      "ShutdownTimer@deminder"
+    ],
+    "fuzzy-clock": [
+      "fuzzy-clock@keepawayfromfire.co.uk",
+      "FuzzyClock@johngoetz"
+    ],
+    "panel-date-format": [
+      "panel-date-format@keiii.github.com",
+      "panel-date-format@atareao.es"
+    ],
     "disable-unredirect-fullscreen-windows": [
       "unredirect@vaina.lt",
       "unredirect@aunetx"
@@ -108,6 +148,40 @@
     "floating-dock": [
       "floatingDock@sun.wxg@gmail.com",
       "floating-dock@nandoferreira_prof@hotmail.com"
+    ],
+    "wireguard-indicator": [
+      "wireguard-indicator@gregos.me",
+      "wireguard-indicator@atareao.es"
+    ],
+    "volume-scroller": [
+      "volume_scroller@trflynn89.pm.me",
+      "volume_scroller@noskoski"
+    ]
+  },
+  "42": {
+    "applications-menu": [
+      "apps-menu@gnome-shell-extensions.gcampax.github.com",
+      "Applications_Menu@rmy.pobox.com"
+    ],
+    "workspace-indicator": [
+      "workspace-indicator@gnome-shell-extensions.gcampax.github.com",
+      "horizontal-workspace-indicator@tty2.io"
+    ],
+    "lock-keys": [
+      "lockkeys@vaina.lt",
+      "lockkeys@fawtytoo"
+    ],
+    "panel-date-format": [
+      "panel-date-format@keiii.github.com",
+      "panel-date-format@atareao.es"
+    ],
+    "wireguard-indicator": [
+      "wireguard-indicator@gregos.me",
+      "wireguard-indicator@atareao.es"
+    ],
+    "volume-scroller": [
+      "volume_scroller@trflynn89.pm.me",
+      "volume_scroller@noskoski"
     ]
   }
 }

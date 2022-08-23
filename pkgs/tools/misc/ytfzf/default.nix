@@ -9,37 +9,38 @@
 , gnused
 , jq
 , mpv
-, ncurses
 , ueberzug
-, youtube-dl
+, yt-dlp
 }:
 
 stdenv.mkDerivation rec {
   pname = "ytfzf";
-  version = "1.2.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "pystardust";
     repo = "ytfzf";
     rev = "v${version}";
-    sha256 = "sha256-3wbjCtRmnd9tm8kqKaIF6VmMdKsWznhOvQkEsrAJpAE=";
+    hash = "sha256-nci2VXto9LptfNHBmLGxfMXQnzbVP1+GlvllOqWFGKU=";
   };
-
-  patches = [
-    # Updates have to be installed through Nix.
-    ./no-update.patch
-  ];
 
   nativeBuildInputs = [ makeWrapper ];
 
-  makeFlags = [ "PREFIX=${placeholder "out"}/bin" ];
-
   dontBuild = true;
 
+  installFlags = [
+    "PREFIX="
+    "DESTDIR=${placeholder "out"}"
+    "doc"
+    "addons"
+  ];
+
   postInstall = ''
-    wrapProgram "$out/bin/ytfzf" --prefix PATH : ${lib.makeBinPath [
-      coreutils curl dmenu fzf gnused jq mpv ncurses ueberzug youtube-dl
-    ]}
+    wrapProgram "$out/bin/ytfzf" \
+      --prefix PATH : ${lib.makeBinPath [
+        coreutils curl dmenu fzf gnused jq mpv ueberzug yt-dlp
+      ]} \
+      --set YTFZF_SYSTEM_ADDON_DIR "$out/share/ytfzf/addons"
   '';
 
   meta = with lib; {

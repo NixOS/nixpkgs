@@ -1,25 +1,37 @@
-{ lib, buildPythonPackage, fetchFromGitHub, urllib3 }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, urllib3
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "downloader-cli";
-  version = "0.3.1";
+  version = "0.3.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "deepjyoti30";
     repo = pname;
     rev = version;
-    sha256 = "0gbbjxb9vf5g890cls3mwzl8lmcn6jkpgm5cbrif740mn2b4q228";
+    hash = "sha256-Dl5XIvdZInz+edL9uQv7V6Kc6FB+7hFAGe/nybnqvQU=";
   };
 
-  propagatedBuildInputs = [ urllib3 ];
+  propagatedBuildInputs = [
+    urllib3
+  ];
 
   # Disable checks due to networking (Errno 101)
   doCheck = false;
 
-  pythonImportsCheck = [ "downloader_cli" ];
+  pythonImportsCheck = [
+    "downloader_cli"
+  ];
 
   meta = with lib; {
-    description = "A simple downloader written in Python with an awesome customizable progressbar. ";
+    description = "Downloader with an awesome customizable progressbar";
     homepage = "https://github.com/deepjyoti30/downloader-cli";
     license = licenses.mit;
     maintainers = with maintainers; [ j0hax ];

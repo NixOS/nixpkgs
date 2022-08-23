@@ -16,31 +16,36 @@
 , hunspell
 , hyphen
 , unrarSupport ? false
-, chmlib
 , python3Packages
 , libusb1
 , libmtp
 , xdg-utils
 , removeReferencesTo
 , libstemmer
+, wrapGAppsHook
 }:
 
 mkDerivation rec {
   pname = "calibre";
-  version = "5.33.2";
+  version = "5.42.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-wtt3ucCaFq9wLk79CeCz20tMM6AbLtZ4Ln6TxOx0dvI=";
+    hash = "sha256-pob9GZl3Wiky5aMGGvcNQdDrKh19bo+n5ihdS45X+Vg=";
   };
 
-  # https://sources.debian.org/patches/calibre/5.33.2+dfsg-1
+  # https://sources.debian.org/patches/calibre/${version}+dfsg-1
   patches = [
     #  allow for plugin update check, but no calibre version check
     (fetchpatch {
       name = "0001-only-plugin-update.patch";
       url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${version}%2Bdfsg-1/debian/patches/0001-only-plugin-update.patch";
-      sha256 = "sha256-dLzO1TWP7Q4nw2a3oN7qlhGCmcA0NKJrZidUnD6hUMA=";
+      sha256 = "sha256:1h2hl4z9qm17crms4d1lq2cq44cnxbga1dv6qckhxvcg6pawxg3l";
+    })
+    (fetchpatch {
+      name = "0007-Hardening-Qt-code.patch";
+      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${version}%2Bdfsg-1/debian/patches/0007-Hardening-Qt-code.patch";
+      sha256 = "sha256:18wps7fn0cpzb7gf78f15pmbaff4vlygc9g00hq7zynfa4pcgfdg";
     })
   ]
   ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
@@ -57,10 +62,9 @@ mkDerivation rec {
 
   dontUseQmakeConfigure = true;
 
-  nativeBuildInputs = [ pkg-config qmake removeReferencesTo ];
+  nativeBuildInputs = [ pkg-config qmake removeReferencesTo wrapGAppsHook ];
 
   buildInputs = [
-    chmlib
     fontconfig
     hunspell
     hyphen
@@ -90,23 +94,29 @@ mkDerivation rec {
       feedparser
       html2text
       html5-parser
-      jeepney
       lxml
       markdown
       mechanize
       msgpack
       netifaces
       pillow
+      pychm
       pyqt-builder
       pyqt5
-      pyqtwebengine
       python
       regex
       sip
+      setuptools
       zeroconf
       jeepney
+      pycryptodome
       # the following are distributed with calibre, but we use upstream instead
       odfpy
+    ] ++ lib.optionals (lib.lists.any (p: p == stdenv.hostPlatform.system) pyqtwebengine.meta.platforms) [
+      # much of calibre's functionality is usable without a web
+      # browser, so we enable building on platforms which qtwebengine
+      # does not support by simply omitting qtwebengine.
+      pyqtwebengine
     ] ++ lib.optional (unrarSupport) unrardll
   );
 
@@ -147,7 +157,6 @@ mkDerivation rec {
 
   # Wrap manually
   dontWrapQtApps = true;
-  dontWrapGApps = true;
 
   # Remove some references to shrink the closure size. This reference (as of
   # 2018-11-06) was a single string like the following:
@@ -159,7 +168,6 @@ mkDerivation rec {
     for program in $out/bin/*; do
       wrapProgram $program \
         ''${qtWrapperArgs[@]} \
-        ''${gappsWrapperArgs[@]} \
         --prefix PYTHONPATH : $PYTHONPATH \
         --prefix PATH : ${poppler_utils.out}/bin
     done

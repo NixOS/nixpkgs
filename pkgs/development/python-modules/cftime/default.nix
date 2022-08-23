@@ -1,26 +1,23 @@
-{ buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, coveralls
-, pytest-cov
+{ lib
+, buildPythonPackage
 , cython
+, fetchPypi
 , numpy
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "cftime";
-  version = "1.5.1.1";
+  version = "1.6.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6dc4d76ec7fe5a2d3c00dbe6604c757f1319613b75ef157554ef3648bf102a50";
+    sha256 = "sha256-URIV9F7XzHnq2EAg6I4fxHa4q6cbR9L83vjmUkJAaSc=";
   };
-
-  checkInputs = [
-    pytestCheckHook
-    coveralls
-    pytest-cov
-  ];
 
   nativeBuildInputs = [
     cython
@@ -31,11 +28,22 @@ buildPythonPackage rec {
     numpy
   ];
 
-  # ERROR test/test_cftime.py - ModuleNotFoundError: No module named 'cftime._cft...
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  meta = {
+  postPatch = ''
+    sed -i "/--cov/d" setup.cfg
+  '';
+
+  pythonImportsCheck = [
+    "cftime"
+  ];
+
+  meta = with lib; {
     description = "Time-handling functionality from netcdf4-python";
+    homepage = "https://github.com/Unidata/cftime";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
-
 }

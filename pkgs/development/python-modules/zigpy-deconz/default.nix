@@ -6,19 +6,22 @@
 , pyserial-asyncio
 , pytest-asyncio
 , pytestCheckHook
+, pythonOlder
 , zigpy
 }:
 
 buildPythonPackage rec {
   pname = "zigpy-deconz";
-  version = "0.14.0";
+  version = "0.18.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-PctS09twk8SRK3pTJvQU8drsqhmrPnMge2WO+VY84U8=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-2M25g3iJWW6kT17P9PVAPD09E5QXuOJN75yjWsLY/cI=";
   };
 
   propagatedBuildInputs = [
@@ -41,7 +44,7 @@ buildPythonPackage rec {
     description = "Library which communicates with Deconz radios for zigpy";
     homepage = "https://github.com/zigpy/zigpy-deconz";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ etu mvnetbiz ];
+    maintainers = with maintainers; [ mvnetbiz ];
     platforms = platforms.linux;
   };
 }

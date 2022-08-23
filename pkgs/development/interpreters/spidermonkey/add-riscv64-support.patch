@@ -1,0 +1,123 @@
+# HG changeset patch
+# User John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+# Date 1592464269 0
+#      Thu Jun 18 07:11:09 2020 +0000
+# Node ID 5de7d747a962df5f8aefc016a62d7270ac18879e
+# Parent  e4b11f027efc1f8c2710ae3f52487a8f10a8fb39
+Bug 1318905 - build: Add riscv64 as target architecture to mozbuild r=glandium
+
+Adds the basic definitions for riscv64 to mozbuild, allowing to build Spidermonkey.
+
+Differential Revision: https://phabricator.services.mozilla.com/D78623
+
+diff -r e4b11f027efc -r 5de7d747a962 build/moz.configure/init.configure
+--- a/build/moz.configure/init.configure	Sun May 31 17:11:57 2020 +0000
++++ b/build/moz.configure/init.configure	Thu Jun 18 07:11:09 2020 +0000
+@@ -741,6 +741,9 @@
+     elif cpu.startswith('aarch64'):
+         canonical_cpu = 'aarch64'
+         endianness = 'little'
++    elif cpu in ('riscv64', 'riscv64gc'):
++        canonical_cpu = 'riscv64'
++        endianness = 'little'
+     elif cpu == 'sh4':
+         canonical_cpu = 'sh4'
+         endianness = 'little'
+diff -r e4b11f027efc -r 5de7d747a962 python/mozbuild/mozbuild/configure/constants.py
+--- a/python/mozbuild/mozbuild/configure/constants.py	Sun May 31 17:11:57 2020 +0000
++++ b/python/mozbuild/mozbuild/configure/constants.py	Thu Jun 18 07:11:09 2020 +0000
+@@ -49,6 +49,7 @@
+     'mips64': 64,
+     'ppc': 32,
+     'ppc64': 64,
++    'riscv64': 64,
+     's390': 32,
+     's390x': 64,
+     'sh4': 32,
+@@ -87,6 +88,7 @@
+     ('sparc', '__sparc__'),
+     ('mips64', '__mips64'),
+     ('mips32', '__mips__'),
++    ('riscv64', '__riscv && __riscv_xlen == 64'),
+     ('sh4', '__sh__'),
+ ))
+ 
+diff -r e4b11f027efc -r 5de7d747a962 python/mozbuild/mozbuild/test/configure/test_toolchain_configure.py
+--- a/python/mozbuild/mozbuild/test/configure/test_toolchain_configure.py	Sun May 31 17:11:57 2020 +0000
++++ b/python/mozbuild/mozbuild/test/configure/test_toolchain_configure.py	Thu Jun 18 07:11:09 2020 +0000
+@@ -1208,6 +1208,10 @@
+         'mips-unknown-linux-gnu': big_endian + {
+             '__mips__': 1,
+         },
++        'riscv64-unknown-linux-gnu': little_endian + {
++            '__riscv': 1,
++            '__riscv_xlen': 64,
++        },
+         'sh4-unknown-linux-gnu': little_endian + {
+             '__sh__': 1,
+         },
+# HG changeset patch
+# User John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+# Date 1592464269 0
+#      Thu Jun 18 07:11:09 2020 +0000
+# Node ID e3d924797cb2d508ff938414168e98ccf66f07fe
+# Parent  5de7d747a962df5f8aefc016a62d7270ac18879e
+Bug 1318905 - js:jit: Enable AtomicOperations-feeling-lucky.h on riscv64 r=lth
+
+This allows the build on riscv64 to use the atomic operations provided by GCC.
+
+Differential Revision: https://phabricator.services.mozilla.com/D78624
+
+diff -r 5de7d747a962 -r e3d924797cb2 js/src/jit/AtomicOperations.h
+--- a/js/src/jit/AtomicOperations.h	Thu Jun 18 07:11:09 2020 +0000
++++ b/js/src/jit/AtomicOperations.h	Thu Jun 18 07:11:09 2020 +0000
+@@ -391,7 +391,7 @@
+ #elif defined(__ppc__) || defined(__PPC__) || defined(__sparc__) ||     \
+     defined(__ppc64__) || defined(__PPC64__) || defined(__ppc64le__) || \
+     defined(__PPC64LE__) || defined(__alpha__) || defined(__hppa__) ||  \
+-    defined(__sh__) || defined(__s390__) || defined(__s390x__)
++    defined(__sh__) || defined(__s390__) || defined(__s390x__) || defined(__riscv)
+ #  include "jit/shared/AtomicOperations-feeling-lucky.h"
+ #else
+ #  error "No AtomicOperations support provided for this platform"
+diff -r 5de7d747a962 -r e3d924797cb2 js/src/jit/shared/AtomicOperations-feeling-lucky-gcc.h
+--- a/js/src/jit/shared/AtomicOperations-feeling-lucky-gcc.h	Thu Jun 18 07:11:09 2020 +0000
++++ b/js/src/jit/shared/AtomicOperations-feeling-lucky-gcc.h	Thu Jun 18 07:11:09 2020 +0000
+@@ -63,6 +63,11 @@
+ #  define HAS_64BIT_LOCKFREE
+ #endif
+ 
++#if defined(__riscv) && __riscv_xlen == 64
++#  define HAS_64BIT_ATOMICS
++#  define HAS_64BIT_LOCKFREE
++#endif
++
+ #ifdef __sparc__
+ #  ifdef __LP64__
+ #    define HAS_64BIT_ATOMICS
+# HG changeset patch
+# User John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+# Date 1592464269 0
+#      Thu Jun 18 07:11:09 2020 +0000
+# Node ID 3f652d12b8bc0bd213020d488ecb4d3710bb11fa
+# Parent  e3d924797cb2d508ff938414168e98ccf66f07fe
+Bug 1318905 - mfbt:tests: Define RETURN_INSTR for riscv64 in TestPoisonArea r=glandium
+
+Define RETURN_INSTR for riscv64 in TestPoisonArea, i.e. the riscv64 assembly
+opcodes for "ret ; ret".
+
+Differential Revision: https://phabricator.services.mozilla.com/D78625
+
+diff -r e3d924797cb2 -r 3f652d12b8bc mfbt/tests/TestPoisonArea.cpp
+--- a/mfbt/tests/TestPoisonArea.cpp	Thu Jun 18 07:11:09 2020 +0000
++++ b/mfbt/tests/TestPoisonArea.cpp	Thu Jun 18 07:11:09 2020 +0000
+@@ -132,6 +132,9 @@
+ #elif defined _ARCH_PPC || defined _ARCH_PWR || defined _ARCH_PWR2
+ #  define RETURN_INSTR 0x4E800020 /* blr */
+ 
++#elif defined __riscv
++#  define RETURN_INSTR 0x80828082 /* ret; ret */
++
+ #elif defined __sparc || defined __sparcv9
+ #  define RETURN_INSTR 0x81c3e008 /* retl */
+ 

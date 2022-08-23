@@ -15,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "teslajsonpy";
-  version = "1.4.2";
+  version = "2.4.2";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "zabuldon";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-oablQoumBiqDk7bz1BUpUWddxExoqOofrZzX7y618Hw=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-WVyMYmuezTS3GNcIY9Uh+/0+lcgdmoLL6o5d1SFMfvE=";
   };
 
   nativeBuildInputs = [

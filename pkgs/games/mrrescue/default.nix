@@ -16,7 +16,7 @@ let
     comment = "Arcade-style fire fighting game";
     desktopName = "Mr. Rescue";
     genericName = "mrrescue";
-    categories = "Game;";
+    categories = [ "Game" ];
   };
 
 in

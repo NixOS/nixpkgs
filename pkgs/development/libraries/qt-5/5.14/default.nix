@@ -19,6 +19,7 @@ top-level attribute to `top-level/all-packages.nix`.
 , bison, cups ? null, harfbuzz, libGL, perl
 , gstreamer, gst-plugins-base, gtk3, dconf
 , darwin
+, buildPackages
 
   # options
 , developerBuild ? false
@@ -96,6 +97,12 @@ let
         stripLen = 1;
         extraPrefix = "src/3rdparty/";
       })
+
+      # glibc 2.34 compat
+      (fetchpatch {
+        url = "https://src.fedoraproject.org/rpms/qt5-qtwebengine/raw/4cef673b2dd01ce85ce7a841cf352104bbe79668/f/qtwebengine-everywhere-5.15.2-SIGSTKSZ.patch";
+        sha256 = "sha256-2D0/FL4PBL4p6ccd6JoDAGqNtLs2aeE1OdM+PJItock=";
+      })
     ] ++ lib.optional stdenv.isDarwin ./qtwebengine-darwin-no-platform-check.patch;
     qtwebkit = [
       (fetchpatch {
@@ -108,6 +115,11 @@ let
         url = "https://github.com/qtwebkit/qtwebkit/pull/1058/commits/5b698ba3faffd4e198a45be9fe74f53307395e4b.patch";
         sha256 = "0a3xv0h4lv8wggckgy8cg8xnpkg7n9h45312pdjdnnwy87xvzss0";
       })
+      (fetchpatch {
+        name = "qtwebkit-darwin-handle.patch";
+        url = "https://github.com/qtwebkit/qtwebkit/commit/5c272a21e621a66862821d3ae680f27edcc64c19.patch";
+        sha256 = "9hjqLyABz372QDgoq7nXXXQ/3OXBGcYN1/92ekcC3WE=";
+      })
       ./qtwebkit.patch
       ./qtwebkit-icu68.patch
     ] ++ lib.optionals stdenv.isDarwin [
@@ -115,26 +127,25 @@ let
       ./qtwebkit-darwin-no-qos-classes.patch
     ];
     qttools = [ ./qttools.patch ];
-    qtwayland = [ ./qtwayland-libdrm-build.patch ];
   };
-
-  qtModule =
-    import ../qtModule.nix
-    {
-      inherit perl;
-      inherit lib;
-      # Use a variant of mkDerivation that does not include wrapQtApplications
-      # to avoid cyclic dependencies between Qt modules.
-      mkDerivation =
-        import ../mkDerivation.nix
-        { inherit lib; inherit debug; wrapQtAppsHook = null; }
-        stdenv.mkDerivation;
-    }
-    { inherit self srcs patches; };
 
   addPackages = self: with self;
     let
-      callPackage = self.newScope { inherit qtCompatVersion qtModule srcs; };
+      qtModule =
+        import ../qtModule.nix
+        {
+          inherit perl;
+          inherit lib;
+          # Use a variant of mkDerivation that does not include wrapQtApplications
+          # to avoid cyclic dependencies between Qt modules.
+          mkDerivation =
+            import ../mkDerivation.nix
+            { inherit lib; inherit debug; wrapQtAppsHook = null; }
+            stdenv.mkDerivation;
+        }
+        { inherit self srcs patches; };
+
+      callPackage = self.newScope { inherit qtCompatVersion qtModule srcs stdenv; };
     in {
 
       inherit callPackage qtCompatVersion qtModule srcs;
@@ -149,9 +160,9 @@ let
         inherit (srcs.qtbase) src version;
         patches = patches.qtbase;
         inherit bison cups harfbuzz libGL;
-        withGtk3 = true; inherit dconf gtk3;
+        withGtk3 = !stdenv.isDarwin; inherit dconf gtk3;
         inherit debug developerBuild decryptSslTraffic;
-        inherit (darwin.apple_sdk.frameworks) AGL AppKit ApplicationServices Carbon Cocoa CoreAudio CoreBluetooth
+        inherit (darwin.apple_sdk.frameworks) AGL AppKit ApplicationServices AVFoundation Carbon Cocoa CoreAudio CoreBluetooth
           CoreLocation CoreServices DiskArbitration Foundation OpenGL MetalKit IOKit;
         inherit (darwin) libobjc;
       };
@@ -167,6 +178,7 @@ let
       qtgraphicaleffects = callPackage ../modules/qtgraphicaleffects.nix {};
       qtimageformats = callPackage ../modules/qtimageformats.nix {};
       qtlocation = callPackage ../modules/qtlocation.nix {};
+      qtlottie = callPackage ../modules/qtlottie.nix {};
       qtmacextras = callPackage ../modules/qtmacextras.nix {};
       qtmultimedia = callPackage ../modules/qtmultimedia.nix {
         inherit gstreamer gst-plugins-base;
@@ -177,6 +189,7 @@ let
       qtquickcontrols2 = callPackage ../modules/qtquickcontrols2.nix {};
       qtscript = callPackage ../modules/qtscript.nix {};
       qtsensors = callPackage ../modules/qtsensors.nix {};
+      qtserialbus = callPackage ../modules/qtserialbus.nix {};
       qtserialport = callPackage ../modules/qtserialport.nix {};
       qtspeech = callPackage ../modules/qtspeech.nix {};
       qtsvg = callPackage ../modules/qtsvg.nix {};
@@ -210,7 +223,7 @@ let
         qtimageformats qtlocation qtmultimedia qtquickcontrols qtquickcontrols2
         qtscript qtsensors qtserialport qtsvg qttools qttranslations
         qtvirtualkeyboard qtwebchannel qtwebengine qtwebkit qtwebsockets
-        qtwebview qtx11extras qtxmlpatterns
+        qtwebview qtx11extras qtxmlpatterns qtlottie
       ] ++ lib.optional (!stdenv.isDarwin) qtwayland
         ++ lib.optional (stdenv.isDarwin) qtmacextras);
 
@@ -223,11 +236,9 @@ let
       } ../hooks/qmake-hook.sh;
 
       wrapQtAppsHook = makeSetupHook {
-        deps = [ self.qtbase.dev makeWrapper ]
+        deps = [ self.qtbase.dev buildPackages.makeWrapper ]
           ++ lib.optional stdenv.isLinux self.qtwayland.dev;
       } ../hooks/wrap-qt-apps-hook.sh;
     };
 
-   self = lib.makeScope newScope addPackages;
-
-in self
+in lib.makeScope newScope addPackages

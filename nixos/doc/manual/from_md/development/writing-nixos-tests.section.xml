@@ -6,15 +6,9 @@
   <programlisting language="bash">
 import ./make-test-python.nix {
 
-  # Either the configuration of a single machine:
-  machine =
-    { config, pkgs, ... }:
-    { configuration…
-    };
-
-  # Or a set of machines:
+  # One or more machines:
   nodes =
-    { machine1 =
+    { machine =
         { config, pkgs, ... }: { … };
       machine2 =
         { config, pkgs, ... }: { … };
@@ -31,18 +25,18 @@ import ./make-test-python.nix {
     The attribute <literal>testScript</literal> is a bit of Python code
     that executes the test (described below). During the test, it will
     start one or more virtual machines, the configuration of which is
-    described by the attribute <literal>machine</literal> (if you need
-    only one machine in your test) or by the attribute
-    <literal>nodes</literal> (if you need multiple machines). For
-    instance,
-    <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/login.nix"><literal>login.nix</literal></link>
-    only needs a single machine to test whether users can log in on the
-    virtual console, whether device ownership is correctly maintained
-    when switching between consoles, and so on. On the other hand,
-    <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/nfs/simple.nix"><literal>nfs/simple.nix</literal></link>,
-    which tests NFS client and server functionality in the Linux kernel
-    (including whether locks are maintained across server crashes),
-    requires three machines: a server and two clients.
+    described by the attribute <literal>nodes</literal>.
+  </para>
+  <para>
+    An example of a single-node test is
+    <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/login.nix"><literal>login.nix</literal></link>.
+    It only needs a single machine to test whether users can log in on
+    the virtual console, whether device ownership is correctly
+    maintained when switching between consoles, and so on. An
+    interesting multi-node test is
+    <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/nfs/simple.nix"><literal>nfs/simple.nix</literal></link>.
+    It uses two client nodes to test correct locking across server
+    crashes.
   </para>
   <para>
     There are a few special NixOS configuration options for test VMs:
@@ -94,9 +88,8 @@ import ./make-test-python.nix {
     various actions, such as starting VMs, executing commands in the
     VMs, and so on. Each virtual machine is represented as an object
     stored in the variable <literal>name</literal> if this is also the
-    identifier of the machine in the declarative config. If you didn't
-    specify multiple machines using the <literal>nodes</literal>
-    attribute, it is just <literal>machine</literal>. The following
+    identifier of the machine in the declarative config. If you
+    specified a node <literal>nodes.machine</literal>, the following
     example starts the machine, waits until it has finished booting,
     then executes a command and checks that the output is more-or-less
     correct:
@@ -108,7 +101,7 @@ if not &quot;Linux&quot; in machine.succeed(&quot;uname&quot;):
   raise Exception(&quot;Wrong OS&quot;)
 </programlisting>
   <para>
-    The first line is actually unnecessary; machines are implicitly
+    The first line is technically unnecessary; machines are implicitly
     started when you first execute an action on them (such as
     <literal>wait_for_unit</literal> or <literal>succeed</literal>). If
     you have multiple machines, you can speed up the test by starting
@@ -117,410 +110,462 @@ if not &quot;Linux&quot; in machine.succeed(&quot;uname&quot;):
   <programlisting language="python">
 start_all()
 </programlisting>
-  <para>
-    The following methods are available on machine objects:
-  </para>
-  <variablelist>
-    <varlistentry>
-      <term>
-        <literal>start</literal>
-      </term>
-      <listitem>
-        <para>
-          Start the virtual machine. This method is asynchronous — it
-          does not wait for the machine to finish booting.
-        </para>
-      </listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>
-        <literal>shutdown</literal>
-      </term>
-      <listitem>
-        <para>
-          Shut down the machine, waiting for the VM to exit.
-        </para>
-      </listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>
-        <literal>crash</literal>
-      </term>
-      <listitem>
-        <para>
-          Simulate a sudden power failure, by telling the VM to exit
-          immediately.
-        </para>
-      </listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>
-        <literal>block</literal>
-      </term>
-      <listitem>
-        <para>
-          Simulate unplugging the Ethernet cable that connects the
-          machine to the other machines.
-        </para>
-      </listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>
-        <literal>unblock</literal>
-      </term>
-      <listitem>
-        <para>
-          Undo the effect of <literal>block</literal>.
-        </para>
-      </listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>
-        <literal>screenshot</literal>
-      </term>
-      <listitem>
-        <para>
-          Take a picture of the display of the virtual machine, in PNG
-          format. The screenshot is linked from the HTML log.
-        </para>
-      </listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>
-        <literal>get_screen_text_variants</literal>
-      </term>
-      <listitem>
-        <para>
-          Return a list of different interpretations of what is
-          currently visible on the machine's screen using optical
-          character recognition. The number and order of the
-          interpretations is not specified and is subject to change, but
-          if no exception is raised at least one will be returned.
-        </para>
-        <note>
+  <section xml:id="ssec-machine-objects">
+    <title>Machine objects</title>
+    <para>
+      The following methods are available on machine objects:
+    </para>
+    <variablelist>
+      <varlistentry>
+        <term>
+          <literal>start</literal>
+        </term>
+        <listitem>
           <para>
-            This requires passing <literal>enableOCR</literal> to the
-            test attribute set.
+            Start the virtual machine. This method is asynchronous — it
+            does not wait for the machine to finish booting.
           </para>
-        </note>
-      </listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>
-        <literal>get_screen_text</literal>
-      </term>
-      <listitem>
-        <para>
-          Return a textual representation of what is currently visible
-          on the machine's screen using optical character recognition.
-        </para>
-        <note>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>shutdown</literal>
+        </term>
+        <listitem>
           <para>
-            This requires passing <literal>enableOCR</literal> to the
-            test attribute set.
+            Shut down the machine, waiting for the VM to exit.
           </para>
-        </note>
-      </listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>
-        <literal>send_monitor_command</literal>
-      </term>
-      <listitem>
-        <para>
-          Send a command to the QEMU monitor. This is rarely used, but
-          allows doing stuff such as attaching virtual USB disks to a
-          running machine.
-        </para>
-      </listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>
-        <literal>send_key</literal>
-      </term>
-      <listitem>
-        <para>
-          Simulate pressing keys on the virtual keyboard, e.g.,
-          <literal>send_key(&quot;ctrl-alt-delete&quot;)</literal>.
-        </para>
-      </listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>
-        <literal>send_chars</literal>
-      </term>
-      <listitem>
-        <para>
-          Simulate typing a sequence of characters on the virtual
-          keyboard, e.g.,
-          <literal>send_chars(&quot;foobar\n&quot;)</literal> will type
-          the string <literal>foobar</literal> followed by the Enter
-          key.
-        </para>
-      </listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>
-        <literal>execute</literal>
-      </term>
-      <listitem>
-        <para>
-          Execute a shell command, returning a list
-          <literal>(status, stdout)</literal>. If the command detaches,
-          it must close stdout, as <literal>execute</literal> will wait
-          for this to consume all output reliably. This can be achieved
-          by redirecting stdout to stderr <literal>&gt;&amp;2</literal>,
-          to <literal>/dev/console</literal>,
-          <literal>/dev/null</literal> or a file. Examples of detaching
-          commands are <literal>sleep 365d &amp;</literal>, where the
-          shell forks a new process that can write to stdout and
-          <literal>xclip -i</literal>, where the
-          <literal>xclip</literal> command itself forks without closing
-          stdout. Takes an optional parameter
-          <literal>check_return</literal> that defaults to
-          <literal>True</literal>. Setting this parameter to
-          <literal>False</literal> will not check for the return code
-          and return -1 instead. This can be used for commands that shut
-          down the VM and would therefore break the pipe that would be
-          used for retrieving the return code.
-        </para>
-      </listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>
-        <literal>succeed</literal>
-      </term>
-      <listitem>
-        <para>
-          Execute a shell command, raising an exception if the exit
-          status is not zero, otherwise returning the standard output.
-          Commands are run with <literal>set -euo pipefail</literal>
-          set:
-        </para>
-        <itemizedlist>
-          <listitem>
-            <para>
-              If several commands are separated by <literal>;</literal>
-              and one fails, the command as a whole will fail.
-            </para>
-          </listitem>
-          <listitem>
-            <para>
-              For pipelines, the last non-zero exit status will be
-              returned (if there is one, zero will be returned
-              otherwise).
-            </para>
-          </listitem>
-          <listitem>
-            <para>
-              Dereferencing unset variables fail the command.
-            </para>
-          </listitem>
-          <listitem>
-            <para>
-              It will wait for stdout to be closed. See
-              <literal>execute</literal> for the implications.
-            </para>
-          </listitem>
-        </itemizedlist>
-      </listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>
-        <literal>fail</literal>
-      </term>
-      <listitem>
-        <para>
-          Like <literal>succeed</literal>, but raising an exception if
-          the command returns a zero status.
-        </para>
-      </listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>
-        <literal>wait_until_succeeds</literal>
-      </term>
-      <listitem>
-        <para>
-          Repeat a shell command with 1-second intervals until it
-          succeeds.
-        </para>
-      </listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>
-        <literal>wait_until_fails</literal>
-      </term>
-      <listitem>
-        <para>
-          Repeat a shell command with 1-second intervals until it fails.
-        </para>
-      </listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>
-        <literal>wait_for_unit</literal>
-      </term>
-      <listitem>
-        <para>
-          Wait until the specified systemd unit has reached the
-          <quote>active</quote> state.
-        </para>
-      </listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>
-        <literal>wait_for_file</literal>
-      </term>
-      <listitem>
-        <para>
-          Wait until the specified file exists.
-        </para>
-      </listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>
-        <literal>wait_for_open_port</literal>
-      </term>
-      <listitem>
-        <para>
-          Wait until a process is listening on the given TCP port (on
-          <literal>localhost</literal>, at least).
-        </para>
-      </listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>
-        <literal>wait_for_closed_port</literal>
-      </term>
-      <listitem>
-        <para>
-          Wait until nobody is listening on the given TCP port.
-        </para>
-      </listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>
-        <literal>wait_for_x</literal>
-      </term>
-      <listitem>
-        <para>
-          Wait until the X11 server is accepting connections.
-        </para>
-      </listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>
-        <literal>wait_for_text</literal>
-      </term>
-      <listitem>
-        <para>
-          Wait until the supplied regular expressions matches the
-          textual contents of the screen by using optical character
-          recognition (see <literal>get_screen_text</literal> and
-          <literal>get_screen_text_variants</literal>).
-        </para>
-        <note>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>crash</literal>
+        </term>
+        <listitem>
           <para>
-            This requires passing <literal>enableOCR</literal> to the
-            test attribute set.
+            Simulate a sudden power failure, by telling the VM to exit
+            immediately.
           </para>
-        </note>
-      </listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>
-        <literal>wait_for_console_text</literal>
-      </term>
-      <listitem>
-        <para>
-          Wait until the supplied regular expressions match a line of
-          the serial console output. This method is useful when OCR is
-          not possibile or accurate enough.
-        </para>
-      </listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>
-        <literal>wait_for_window</literal>
-      </term>
-      <listitem>
-        <para>
-          Wait until an X11 window has appeared whose name matches the
-          given regular expression, e.g.,
-          <literal>wait_for_window(&quot;Terminal&quot;)</literal>.
-        </para>
-      </listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>
-        <literal>copy_from_host</literal>
-      </term>
-      <listitem>
-        <para>
-          Copies a file from host to machine, e.g.,
-          <literal>copy_from_host(&quot;myfile&quot;, &quot;/etc/my/important/file&quot;)</literal>.
-        </para>
-        <para>
-          The first argument is the file on the host. The file needs to
-          be accessible while building the nix derivation. The second
-          argument is the location of the file on the machine.
-        </para>
-      </listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>
-        <literal>systemctl</literal>
-      </term>
-      <listitem>
-        <para>
-          Runs <literal>systemctl</literal> commands with optional
-          support for <literal>systemctl --user</literal>
-        </para>
-        <programlisting language="python">
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>block</literal>
+        </term>
+        <listitem>
+          <para>
+            Simulate unplugging the Ethernet cable that connects the
+            machine to the other machines.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>unblock</literal>
+        </term>
+        <listitem>
+          <para>
+            Undo the effect of <literal>block</literal>.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>screenshot</literal>
+        </term>
+        <listitem>
+          <para>
+            Take a picture of the display of the virtual machine, in PNG
+            format. The screenshot is linked from the HTML log.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>get_screen_text_variants</literal>
+        </term>
+        <listitem>
+          <para>
+            Return a list of different interpretations of what is
+            currently visible on the machine's screen using optical
+            character recognition. The number and order of the
+            interpretations is not specified and is subject to change,
+            but if no exception is raised at least one will be returned.
+          </para>
+          <note>
+            <para>
+              This requires passing <literal>enableOCR</literal> to the
+              test attribute set.
+            </para>
+          </note>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>get_screen_text</literal>
+        </term>
+        <listitem>
+          <para>
+            Return a textual representation of what is currently visible
+            on the machine's screen using optical character recognition.
+          </para>
+          <note>
+            <para>
+              This requires passing <literal>enableOCR</literal> to the
+              test attribute set.
+            </para>
+          </note>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>send_monitor_command</literal>
+        </term>
+        <listitem>
+          <para>
+            Send a command to the QEMU monitor. This is rarely used, but
+            allows doing stuff such as attaching virtual USB disks to a
+            running machine.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>send_key</literal>
+        </term>
+        <listitem>
+          <para>
+            Simulate pressing keys on the virtual keyboard, e.g.,
+            <literal>send_key(&quot;ctrl-alt-delete&quot;)</literal>.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>send_chars</literal>
+        </term>
+        <listitem>
+          <para>
+            Simulate typing a sequence of characters on the virtual
+            keyboard, e.g.,
+            <literal>send_chars(&quot;foobar\n&quot;)</literal> will
+            type the string <literal>foobar</literal> followed by the
+            Enter key.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>send_console</literal>
+        </term>
+        <listitem>
+          <para>
+            Send keys to the kernel console. This allows interaction
+            with the systemd emergency mode, for example. Takes a string
+            that is sent, e.g.,
+            <literal>send_console(&quot;\n\nsystemctl default\n&quot;)</literal>.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>execute</literal>
+        </term>
+        <listitem>
+          <para>
+            Execute a shell command, returning a list
+            <literal>(status, stdout)</literal>.
+          </para>
+          <para>
+            Commands are run with <literal>set -euo pipefail</literal>
+            set:
+          </para>
+          <itemizedlist>
+            <listitem>
+              <para>
+                If several commands are separated by
+                <literal>;</literal> and one fails, the command as a
+                whole will fail.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                For pipelines, the last non-zero exit status will be
+                returned (if there is one; otherwise zero will be
+                returned).
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                Dereferencing unset variables fails the command.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                It will wait for stdout to be closed.
+              </para>
+            </listitem>
+          </itemizedlist>
+          <para>
+            If the command detaches, it must close stdout, as
+            <literal>execute</literal> will wait for this to consume all
+            output reliably. This can be achieved by redirecting stdout
+            to stderr <literal>&gt;&amp;2</literal>, to
+            <literal>/dev/console</literal>,
+            <literal>/dev/null</literal> or a file. Examples of
+            detaching commands are <literal>sleep 365d &amp;</literal>,
+            where the shell forks a new process that can write to stdout
+            and <literal>xclip -i</literal>, where the
+            <literal>xclip</literal> command itself forks without
+            closing stdout.
+          </para>
+          <para>
+            Takes an optional parameter <literal>check_return</literal>
+            that defaults to <literal>True</literal>. Setting this
+            parameter to <literal>False</literal> will not check for the
+            return code and return -1 instead. This can be used for
+            commands that shut down the VM and would therefore break the
+            pipe that would be used for retrieving the return code.
+          </para>
+          <para>
+            A timeout for the command can be specified (in seconds)
+            using the optional <literal>timeout</literal> parameter,
+            e.g., <literal>execute(cmd, timeout=10)</literal> or
+            <literal>execute(cmd, timeout=None)</literal>. The default
+            is 900 seconds.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>succeed</literal>
+        </term>
+        <listitem>
+          <para>
+            Execute a shell command, raising an exception if the exit
+            status is not zero, otherwise returning the standard output.
+            Similar to <literal>execute</literal>, except that the
+            timeout is <literal>None</literal> by default. See
+            <literal>execute</literal> for details on command execution.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>fail</literal>
+        </term>
+        <listitem>
+          <para>
+            Like <literal>succeed</literal>, but raising an exception if
+            the command returns a zero status.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>wait_until_succeeds</literal>
+        </term>
+        <listitem>
+          <para>
+            Repeat a shell command with 1-second intervals until it
+            succeeds. Has a default timeout of 900 seconds which can be
+            modified, e.g.
+            <literal>wait_until_succeeds(cmd, timeout=10)</literal>. See
+            <literal>execute</literal> for details on command execution.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>wait_until_fails</literal>
+        </term>
+        <listitem>
+          <para>
+            Like <literal>wait_until_succeeds</literal>, but repeating
+            the command until it fails.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>wait_for_unit</literal>
+        </term>
+        <listitem>
+          <para>
+            Wait until the specified systemd unit has reached the
+            <quote>active</quote> state.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>wait_for_file</literal>
+        </term>
+        <listitem>
+          <para>
+            Wait until the specified file exists.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>wait_for_open_port</literal>
+        </term>
+        <listitem>
+          <para>
+            Wait until a process is listening on the given TCP port (on
+            <literal>localhost</literal>, at least).
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>wait_for_closed_port</literal>
+        </term>
+        <listitem>
+          <para>
+            Wait until nobody is listening on the given TCP port.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>wait_for_x</literal>
+        </term>
+        <listitem>
+          <para>
+            Wait until the X11 server is accepting connections.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>wait_for_text</literal>
+        </term>
+        <listitem>
+          <para>
+            Wait until the supplied regular expressions matches the
+            textual contents of the screen by using optical character
+            recognition (see <literal>get_screen_text</literal> and
+            <literal>get_screen_text_variants</literal>).
+          </para>
+          <note>
+            <para>
+              This requires passing <literal>enableOCR</literal> to the
+              test attribute set.
+            </para>
+          </note>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>wait_for_console_text</literal>
+        </term>
+        <listitem>
+          <para>
+            Wait until the supplied regular expressions match a line of
+            the serial console output. This method is useful when OCR is
+            not possibile or accurate enough.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>wait_for_window</literal>
+        </term>
+        <listitem>
+          <para>
+            Wait until an X11 window has appeared whose name matches the
+            given regular expression, e.g.,
+            <literal>wait_for_window(&quot;Terminal&quot;)</literal>.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>copy_from_host</literal>
+        </term>
+        <listitem>
+          <para>
+            Copies a file from host to machine, e.g.,
+            <literal>copy_from_host(&quot;myfile&quot;, &quot;/etc/my/important/file&quot;)</literal>.
+          </para>
+          <para>
+            The first argument is the file on the host. The file needs
+            to be accessible while building the nix derivation. The
+            second argument is the location of the file on the machine.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>systemctl</literal>
+        </term>
+        <listitem>
+          <para>
+            Runs <literal>systemctl</literal> commands with optional
+            support for <literal>systemctl --user</literal>
+          </para>
+          <programlisting language="python">
 machine.systemctl(&quot;list-jobs --no-pager&quot;) # runs `systemctl list-jobs --no-pager`
 machine.systemctl(&quot;list-jobs --no-pager&quot;, &quot;any-user&quot;) # spawns a shell for `any-user` and runs `systemctl --user list-jobs --no-pager`
 </programlisting>
-      </listitem>
-    </varlistentry>
-    <varlistentry>
-      <term>
-        <literal>shell_interact</literal>
-      </term>
-      <listitem>
-        <para>
-          Allows you to directly interact with the guest shell. This
-          should only be used during test development, not in production
-          tests. Killing the interactive session with
-          <literal>Ctrl-d</literal> or <literal>Ctrl-c</literal> also
-          ends the guest session.
-        </para>
-      </listitem>
-    </varlistentry>
-  </variablelist>
-  <para>
-    To test user units declared by
-    <literal>systemd.user.services</literal> the optional
-    <literal>user</literal> argument can be used:
-  </para>
-  <programlisting language="python">
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>shell_interact</literal>
+        </term>
+        <listitem>
+          <para>
+            Allows you to directly interact with the guest shell. This
+            should only be used during test development, not in
+            production tests. Killing the interactive session with
+            <literal>Ctrl-d</literal> or <literal>Ctrl-c</literal> also
+            ends the guest session.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>console_interact</literal>
+        </term>
+        <listitem>
+          <para>
+            Allows you to directly interact with QEMU’s stdin. This
+            should only be used during test development, not in
+            production tests. Output from QEMU is only read line-wise.
+            <literal>Ctrl-c</literal> kills QEMU and
+            <literal>Ctrl-d</literal> closes console and returns to the
+            test runner.
+          </para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+    <para>
+      To test user units declared by
+      <literal>systemd.user.services</literal> the optional
+      <literal>user</literal> argument can be used:
+    </para>
+    <programlisting language="python">
 machine.start()
 machine.wait_for_x()
 machine.wait_for_unit(&quot;xautolock.service&quot;, &quot;x-session-user&quot;)
 </programlisting>
-  <para>
-    This applies to <literal>systemctl</literal>,
-    <literal>get_unit_info</literal>, <literal>wait_for_unit</literal>,
-    <literal>start_job</literal> and <literal>stop_job</literal>.
-  </para>
-  <para>
-    For faster dev cycles it's also possible to disable the code-linters
-    (this shouldn't be commited though):
-  </para>
-  <programlisting language="bash">
+    <para>
+      This applies to <literal>systemctl</literal>,
+      <literal>get_unit_info</literal>,
+      <literal>wait_for_unit</literal>, <literal>start_job</literal> and
+      <literal>stop_job</literal>.
+    </para>
+    <para>
+      For faster dev cycles it's also possible to disable the
+      code-linters (this shouldn't be commited though):
+    </para>
+    <programlisting language="bash">
 import ./make-test-python.nix {
   skipLint = true;
-  machine =
+  nodes.machine =
     { config, pkgs, ... }:
     { configuration…
     };
@@ -531,13 +576,13 @@ import ./make-test-python.nix {
     '';
 }
 </programlisting>
-  <para>
-    This will produce a Nix warning at evaluation time. To fully disable
-    the linter, wrap the test script in comment directives to disable
-    the Black linter directly (again, don't commit this within the
-    Nixpkgs repository):
-  </para>
-  <programlisting language="bash">
+    <para>
+      This will produce a Nix warning at evaluation time. To fully
+      disable the linter, wrap the test script in comment directives to
+      disable the Black linter directly (again, don't commit this within
+      the Nixpkgs repository):
+    </para>
+    <programlisting language="bash">
   testScript =
     ''
       # fmt: off
@@ -545,4 +590,103 @@ import ./make-test-python.nix {
       # fmt: on
     '';
 </programlisting>
+    <para>
+      Similarly, the type checking of test scripts can be disabled in
+      the following way:
+    </para>
+    <programlisting language="bash">
+import ./make-test-python.nix {
+  skipTypeCheck = true;
+  nodes.machine =
+    { config, pkgs, ... }:
+    { configuration…
+    };
+}
+</programlisting>
+  </section>
+  <section xml:id="ssec-failing-tests-early">
+    <title>Failing tests early</title>
+    <para>
+      To fail tests early when certain invariants are no longer met
+      (instead of waiting for the build to time out), the decorator
+      <literal>polling_condition</literal> is provided. For example, if
+      we are testing a program <literal>foo</literal> that should not
+      quit after being started, we might write the following:
+    </para>
+    <programlisting language="python">
+@polling_condition
+def foo_running():
+    machine.succeed(&quot;pgrep -x foo&quot;)
+
+
+machine.succeed(&quot;foo --start&quot;)
+machine.wait_until_succeeds(&quot;pgrep -x foo&quot;)
+
+with foo_running:
+    ...  # Put `foo` through its paces
+</programlisting>
+    <para>
+      <literal>polling_condition</literal> takes the following
+      (optional) arguments:
+    </para>
+    <para>
+      <literal>seconds_interval</literal>
+    </para>
+    <para>
+      : specifies how often the condition should be polled:
+    </para>
+    <programlisting language="python">
+@polling_condition(seconds_interval=10)
+def foo_running():
+    machine.succeed(&quot;pgrep -x foo&quot;)
+</programlisting>
+    <para>
+      <literal>description</literal>
+    </para>
+    <para>
+      : is used in the log when the condition is checked. If this is not
+      provided, the description is pulled from the docstring of the
+      function. These two are therefore equivalent:
+    </para>
+    <programlisting language="python">
+@polling_condition
+def foo_running():
+    &quot;check that foo is running&quot;
+    machine.succeed(&quot;pgrep -x foo&quot;)
+</programlisting>
+    <programlisting language="python">
+@polling_condition(description=&quot;check that foo is running&quot;)
+def foo_running():
+    machine.succeed(&quot;pgrep -x foo&quot;)
+</programlisting>
+  </section>
+  <section xml:id="ssec-python-packages-in-test-script">
+    <title>Adding Python packages to the test script</title>
+    <para>
+      When additional Python libraries are required in the test script,
+      they can be added using the parameter
+      <literal>extraPythonPackages</literal>. For example, you could add
+      <literal>numpy</literal> like this:
+    </para>
+    <programlisting language="bash">
+import ./make-test-python.nix
+{
+  extraPythonPackages = p: [ p.numpy ];
+
+  nodes = { };
+
+  # Type checking on extra packages doesn't work yet
+  skipTypeCheck = true;
+
+  testScript = ''
+    import numpy as np
+    assert str(np.zeros(4) == &quot;array([0., 0., 0., 0.])&quot;)
+  '';
+}
+</programlisting>
+    <para>
+      In that case, <literal>numpy</literal> is chosen from the generic
+      <literal>python3Packages</literal>.
+    </para>
+  </section>
 </section>

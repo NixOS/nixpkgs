@@ -1,30 +1,36 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+}:
 
 buildGoModule {
   pname = "echoip";
-  version = "unstable-2019-07-12";
+  version = "unstable-2021-08-03";
 
   src = fetchFromGitHub {
     owner = "mpolden";
     repo = "echoip";
-    rev = "fb5fac92d2173c2a5b07ed4ecc7b5fefe8484ed2";
-    sha256 = "17gkh1qfxasvxy25lmjdwk5fsjkcp7lmw9si3xzf01m7qnj5zi4b";
+    rev = "ffa6674637a5bf906d78ae6675f9a4680a78ab7b";
+    sha256 = "sha256-yN7PIwoIi2SPwwFWnHDoXnwvKohkPPf4kVsNxHLpqCE=";
   };
 
-  vendorSha256 = "0vvs717pl5gzggxpbn2vkyxmpiw5zjdfnpbh8i81xidbqvlnm22h";
+  vendorSha256 = "sha256-lXYpkeGpBK+WGHqyLxJz7kS3t7a55q55QQLTqtxzroc=";
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  postInstall = ''
+    install -D html/* -t $out/share/echoip/html
+    wrapProgram $out/bin/echoip \
+      --add-flags "-t $out/share/echoip/html"
+  '';
 
   doCheck = false;
 
-  outputs = [ "out" "index" ];
-
-  postInstall = ''
-    mkdir -p $index
-    cp $src/index.html $index/index.html
-  '';
-
   meta = with lib; {
+    description = "IP address lookup service";
     homepage = "https://github.com/mpolden/echoip";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ rvolosatovs ];
+    maintainers = with maintainers; [ rvolosatovs SuperSandro2000 ];
   };
 }

@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "pebble";
-  version = "4.6.0";
+  version = "4.6.3";
   disabled = isPy27;
 
   src = fetchPypi {
     pname = "Pebble";
     inherit version;
-    sha256 = "0a595f7mrf89xlck9b2x83bqybc9zd9jxkl0sa5cf19vax18rg8h";
+    sha256 = "694e1105db888f3576b8f00662f90b057cf3780e6f8b7f57955a568008d0f497";
   };
 
   doCheck = !stdenv.isDarwin;

@@ -27,7 +27,7 @@
 }:
 
 let
-  version = "8.0.1";
+  version = "8.1.1";
 
   ptFiles = stdenv.mkDerivation {
     name = "PacketTracer8Drv";
@@ -36,7 +36,7 @@ let
     dontUnpack = true;
     src = requireFile {
       name = "CiscoPacketTracer_${builtins.replaceStrings ["."] [""] version}_Ubuntu_64bit.deb";
-      sha256 = "77a25351b016faed7c78959819c16c7013caa89c6b1872cb888cd96edd259140";
+      sha256 = "08c53171aa0257a64ae7de1540f242214033cfa4f879fbc9fed5cc0d32232abf";
       url = "https://www.netacad.com";
     };
 
@@ -72,6 +72,7 @@ let
       libXrandr
       libXrender
       libXScrnSaver
+      libXtst
       xcbutilimage
       xcbutilkeysyms
       xcbutilrenderutil
@@ -94,7 +95,7 @@ let
     desktopName = "Cisco Packet Tracer 8";
     icon = "${ptFiles}/opt/pt/art/app.png";
     exec = "packettracer8 %f";
-    mimeType = "application/x-pkt;application/x-pka;application/x-pkz;";
+    mimeTypes = [ "application/x-pkt" "application/x-pka" "application/x-pkz" ];
   };
 
   fhs = buildFHSUserEnvBubblewrap {
@@ -124,6 +125,7 @@ in stdenv.mkDerivation {
   meta = with lib; {
     description = "Network simulation tool from Cisco";
     homepage = "https://www.netacad.com/courses/packet-tracer";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ lucasew ];
     platforms = [ "x86_64-linux" ];

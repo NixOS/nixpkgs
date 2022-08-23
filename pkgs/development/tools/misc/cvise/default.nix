@@ -1,6 +1,16 @@
-{ lib, buildPythonApplication, fetchFromGitHub, bash, cmake, flex
-, libclang, llvm, unifdef
-, chardet, pebble, psutil, pytestCheckHook, pytest-flake8
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, bash
+, cmake
+, flex
+, libclang
+, llvm
+, unifdef
+, chardet
+, pebble
+, psutil
+, pytestCheckHook
 }:
 
 buildPythonApplication rec {
@@ -19,20 +29,43 @@ buildPythonApplication rec {
     ./unifdef.patch
   ];
 
-  nativeBuildInputs = [ cmake flex llvm.dev ];
-  buildInputs = [ bash libclang llvm llvm.dev unifdef ];
-  propagatedBuildInputs = [ chardet pebble psutil ];
-  checkInputs = [ pytestCheckHook pytest-flake8 unifdef ];
-
-  # 'cvise --command=...' generates a script with hardcoded shebang.
   postPatch = ''
+    # 'cvise --command=...' generates a script with hardcoded shebang.
     substituteInPlace cvise.py \
       --replace "#!/bin/bash" "#!${bash}/bin/bash"
+
+    substituteInPlace setup.cfg \
+      --replace "--flake8" ""
   '';
+
+  nativeBuildInputs = [
+    cmake
+    flex
+    llvm.dev
+  ];
+
+  buildInputs = [
+    libclang
+    llvm
+    llvm.dev
+    unifdef
+  ];
+
+  propagatedBuildInputs = [
+    chardet
+    pebble
+    psutil
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+    unifdef
+  ];
 
   preCheck = ''
     patchShebangs cvise.py
   '';
+
   disabledTests = [
     # Needs gcc, fails when run noninteractively (without tty).
     "test_simple_reduction"

@@ -1,5 +1,7 @@
 { lib
+, aioresponses
 , buildPythonPackage
+, orjson
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
@@ -9,30 +11,37 @@
 
 buildPythonPackage rec {
   pname = "nexia";
-  version = "0.9.12";
+  version = "2.0.2";
+  format = "setuptools";
+
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-YZHAWRTYquUm3Ymi/3mSQqxYZuoxsH5Q/LZOPDftEzU=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-JbWKNM7fNhIuBnIHAvRegAxmE0OOwsTDQWaMtuDVQcc=";
   };
 
   propagatedBuildInputs = [
+    orjson
     requests
   ];
 
   checkInputs = [
+    aioresponses
     requests-mock
     pytestCheckHook
   ];
 
   postPatch = ''
-    substituteInPlace setup.py --replace '"pytest-runner",' ""
+    substituteInPlace setup.py \
+      --replace '"pytest-runner",' ""
   '';
 
-  pythonImportsCheck = [ "nexia" ];
+  pythonImportsCheck = [
+    "nexia"
+  ];
 
   meta = with lib; {
     description = "Python module for Nexia thermostats";

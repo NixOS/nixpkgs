@@ -1,17 +1,17 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, brotli
+, certifi
 , ffmpeg
 , rtmpdump
-, phantomjs2
 , atomicparsley
 , pycryptodomex
 , websockets
 , mutagen
+, atomicparsleySupport ? true
 , ffmpegSupport ? true
 , rtmpSupport ? true
-, phantomjsSupport ? false
-, hlsEncryptedSupport ? true
 , withAlias ? false # Provides bin/youtube-dl for backcompat
 }:
 
@@ -20,16 +20,14 @@ buildPythonPackage rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2021.12.25";
+  version = "2022.8.19";
 
   src = fetchPypi {
-    inherit pname;
-    version = builtins.replaceStrings [ ".0" ] [ "." ] version;
-    sha256 = "sha256-h8E1F8VVEM+sqGFyYN43YCkDXbwvhxWnQmulZS6P4hI=";
+    inherit pname version;
+    sha256 = "sha256-zCkKyKH+xiaEF2X+0S96Hr3+AXka5cXzeU7fzjXYGEM=";
   };
 
-  propagatedBuildInputs = [ websockets mutagen ]
-    ++ lib.optional hlsEncryptedSupport pycryptodomex;
+  propagatedBuildInputs = [ brotli certifi mutagen pycryptodomex websockets ];
 
   # Ensure these utilities are available in $PATH:
   # - ffmpeg: post-processing & transcoding support
@@ -37,11 +35,11 @@ buildPythonPackage rec {
   # - atomicparsley: embedding thumbnails
   makeWrapperArgs =
     let
-      packagesToBinPath = [ atomicparsley ]
+      packagesToBinPath = []
+        ++ lib.optional atomicparsleySupport atomicparsley
         ++ lib.optional ffmpegSupport ffmpeg
-        ++ lib.optional rtmpSupport rtmpdump
-        ++ lib.optional phantomjsSupport phantomjs2;
-    in
+        ++ lib.optional rtmpSupport rtmpdump;
+    in lib.optionalString (packagesToBinPath != [])
     [ ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"'' ];
 
   setupPyBuildFlags = [
@@ -52,13 +50,12 @@ buildPythonPackage rec {
   doCheck = false;
 
   postInstall = lib.optionalString withAlias ''
-      ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"
+    ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"
   '';
 
   meta = with lib; {
     homepage = "https://github.com/yt-dlp/yt-dlp/";
     description = "Command-line tool to download videos from YouTube.com and other sites (youtube-dl fork)";
-    changelog = "https://github.com/yt-dlp/yt-dlp/raw/${version}/Changelog.md";
     longDescription = ''
       yt-dlp is a youtube-dl fork based on the now inactive youtube-dlc.
 
@@ -68,6 +65,6 @@ buildPythonPackage rec {
       you can modify it, redistribute it or use it however you like.
     '';
     license = licenses.unlicense;
-    maintainers = with maintainers; [ mkg20001 ];
+    maintainers = with maintainers; [ mkg20001 SuperSandro2000 marsam ];
   };
 }

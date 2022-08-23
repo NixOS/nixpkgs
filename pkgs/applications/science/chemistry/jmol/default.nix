@@ -12,19 +12,27 @@ let
     exec = "jmol";
     desktopName = "JMol";
     genericName = "Molecular Modeler";
-    mimeType = "chemical/x-pdb;chemical/x-mdl-molfile;chemical/x-mol2;chemical/seq-aa-fasta;chemical/seq-na-fasta;chemical/x-xyz;chemical/x-mdl-sdf;";
-    categories = "Graphics;Education;Science;Chemistry;";
+    mimeTypes = [
+      "chemical/x-pdb"
+      "chemical/x-mdl-molfile"
+      "chemical/x-mol2"
+      "chemical/seq-aa-fasta"
+      "chemical/seq-na-fasta"
+      "chemical/x-xyz"
+      "chemical/x-mdl-sdf"
+    ];
+    categories = [ "Graphics" "Education" "Science" "Chemistry" ];
   };
 in
 stdenv.mkDerivation rec {
-  version = "14.32.2";
+  version = "14.32.68";
   pname = "jmol";
 
   src = let
     baseVersion = "${lib.versions.major version}.${lib.versions.minor version}";
   in fetchurl {
     url = "mirror://sourceforge/jmol/Jmol/Version%20${baseVersion}/Jmol%20${version}/Jmol-${version}-binary.tar.gz";
-    sha256 = "sha256-JETS1mxlDyWPC8ngtmYujmfWIdrW9HzkqpX/VZpIMBE=";
+    sha256 = "sha256-CCVy+24O5rlAxnd01TeYqcOhDoSrxebfR1Ez7VDDrW4=";
   };
 
   patchPhase = ''
@@ -46,6 +54,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
      description = "A Java 3D viewer for chemical structures";
      homepage = "https://sourceforge.net/projects/jmol";
+     sourceProvenance = with sourceTypes; [ binaryBytecode ];
      license = licenses.lgpl2;
      platforms = platforms.all;
      maintainers = with maintainers; [ mounium ] ++ teams.sage.members;

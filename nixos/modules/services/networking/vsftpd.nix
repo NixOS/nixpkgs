@@ -153,18 +153,19 @@ in
 
       userlist = mkOption {
         default = [];
-        description = "See <option>userlistFile</option>.";
+        type = types.listOf types.str;
+        description = lib.mdDoc "See {option}`userlistFile`.";
       };
 
       userlistFile = mkOption {
         type = types.path;
         default = pkgs.writeText "userlist" (concatMapStrings (x: "${x}\n") cfg.userlist);
         defaultText = literalExpression ''pkgs.writeText "userlist" (concatMapStrings (x: "''${x}\n") cfg.userlist)'';
-        description = ''
-          Newline separated list of names to be allowed/denied if <option>userlistEnable</option>
-          is <literal>true</literal>. Meaning see <option>userlistDeny</option>.
+        description = lib.mdDoc ''
+          Newline separated list of names to be allowed/denied if {option}`userlistEnable`
+          is `true`. Meaning see {option}`userlistDeny`.
 
-          The default is a file containing the users from <option>userlist</option>.
+          The default is a file containing the users from {option}`userlist`.
 
           If explicitely set to null userlist_file will not be set in vsftpd's config file.
         '';
@@ -173,8 +174,8 @@ in
       enableVirtualUsers = mkOption {
         type = types.bool;
         default = false;
-        description = ''
-          Whether to enable the <literal>pam_userdb</literal>-based
+        description = lib.mdDoc ''
+          Whether to enable the `pam_userdb`-based
           virtual user system
         '';
       };
@@ -217,7 +218,7 @@ in
         type = types.nullOr types.str;
         default = null;
         example = "/var/www/$USER";
-        description = ''
+        description = lib.mdDoc ''
           This option represents a directory which vsftpd will try to
           change into after a local (i.e. non- anonymous) login.
 
@@ -228,7 +229,7 @@ in
       anonymousUserHome = mkOption {
         type = types.path;
         default = "/home/ftp/";
-        description = ''
+        description = lib.mdDoc ''
           Directory to consider the HOME of the anonymous user.
         '';
       };
@@ -236,27 +237,27 @@ in
       rsaCertFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = "RSA certificate file.";
+        description = lib.mdDoc "RSA certificate file.";
       };
 
       rsaKeyFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = "RSA private key file.";
+        description = lib.mdDoc "RSA private key file.";
       };
 
       anonymousUmask = mkOption {
         type = types.str;
         default = "077";
         example = "002";
-        description = "Anonymous write umask.";
+        description = lib.mdDoc "Anonymous write umask.";
       };
 
       extraConfig = mkOption {
         type = types.lines;
         default = "";
         example = "ftpd_banner=Hello";
-        description = "Extra configuration to add at the bottom of the generated configuration file.";
+        description = lib.mdDoc "Extra configuration to add at the bottom of the generated configuration file.";
       };
 
     } // (listToAttrs (catAttrs "nixosOption" optionDescription));

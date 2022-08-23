@@ -25,7 +25,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable ALSA sound.
         '';
       };
@@ -33,7 +33,7 @@ in
       enableOSSEmulation = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable ALSA OSS emulation (with certain cards sound mixing may not work!).
         '';
       };
@@ -44,7 +44,7 @@ in
         example = ''
           defaults.pcm.!card 3
         '';
-        description = ''
+        description = lib.mdDoc ''
           Set addition configuration for system-wide alsa.
         '';
       };
@@ -54,7 +54,7 @@ in
         enable = mkOption {
           type = types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Whether to enable volume and capture control with keyboard media keys.
 
             You want to leave this disabled if you run a desktop environment
@@ -62,7 +62,7 @@ in
             You might want to enable this if you run a minimalistic desktop
             environment or work from bare linux ttys/framebuffers.
 
-            Enabling this will turn on <option>services.actkbd</option>.
+            Enabling this will turn on {option}`services.actkbd`.
           '';
         };
 
@@ -70,7 +70,7 @@ in
           type = types.str;
           default = "1";
           example = "1%";
-          description = ''
+          description = lib.mdDoc ''
             The value by which to increment/decrement volume on media keys.
 
             See amixer(1) for allowed values.

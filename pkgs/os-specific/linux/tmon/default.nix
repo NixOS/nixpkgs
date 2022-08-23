@@ -1,7 +1,8 @@
 { lib, stdenv, kernel, ncurses }:
 
 stdenv.mkDerivation {
-  name = "tmon-${kernel.version}";
+  pname = "tmon";
+  version = kernel.version;
 
   inherit (kernel) src;
 

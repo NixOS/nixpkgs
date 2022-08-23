@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "thiefmd";
-  version = "0.2.4";
+  version = "0.2.5-stability";
 
   src = fetchFromGitHub {
     owner = "kmwallio";
     repo = "ThiefMD";
-    rev = "v${version}-easypdf";
-    sha256 = "sha256-YN17o6GtpulxhXs+XYZLY36g9S8ggR6URNLrjs5PEoI=";
+    rev = "v${version}";
+    sha256 = "sha256-cUZ7NVGe4e9ZISo9gjWFuDNCyF3rsQtrDX+ureyqtwM=";
     fetchSubmodules = true;
   };
 

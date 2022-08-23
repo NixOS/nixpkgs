@@ -1,32 +1,33 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pkgs
+, espeak
+, numpy
 , python
 }:
 
 buildPythonPackage rec {
   pname = "gruut-ipa";
-  version = "0.11.0";
+  version = "0.13.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = pname;
     rev = "v${version}";
-    sha256 = "08n79v60jhkz5vhychsicjz4bhz8v4gb2djmz5dfdaivyr0h3bsf";
+    sha256 = "sha256-Q2UKELoG8OaAPxIrZNCpXgeWZ2fCzb3g3SOVzCm/gg0=";
   };
 
   postPatch = ''
-    patchShebangs bin/speak-ipa
+    patchShebangs bin/*
     substituteInPlace bin/speak-ipa \
       --replace '${"\${src_dir}:"}' "$out/lib/${python.libPrefix}/site-packages:" \
-      --replace "do espeak" "do ${pkgs.espeak}/bin/espeak"
+      --replace "do espeak" "do ${espeak}/bin/espeak"
   '';
 
-  postInstall = ''
-    install -m0755 bin/speak-ipa $out/bin/speak-ipa
-  '';
+  propagatedBuildInputs = [
+    numpy
+  ];
 
   checkPhase = ''
     runHook preCheck

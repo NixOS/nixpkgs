@@ -5,7 +5,7 @@ let
 in
 with lib;
 {
-  imports = [ ./yarn.nix ./hdfs.nix ];
+  imports = [ ./yarn.nix ./hdfs.nix ./hbase.nix ];
 
   options.services.hadoop = {
     coreSite = mkOption {
@@ -16,29 +16,55 @@ with lib;
           "fs.defaultFS" = "hdfs://localhost";
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Hadoop core-site.xml definition
-        <link xlink:href="https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/core-default.xml"/>
+        <https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/core-default.xml>
+      '';
+    };
+    coreSiteInternal = mkOption {
+      default = {};
+      type = types.attrsOf types.anything;
+      internal = true;
+      description = ''
+        Internal option to add configs to core-site.xml based on module options
       '';
     };
 
-    hdfsSite = mkOption {
+    hdfsSiteDefault = mkOption {
       default = {
         "dfs.namenode.rpc-bind-host" = "0.0.0.0";
+        "dfs.namenode.http-address" = "0.0.0.0:9870";
+        "dfs.namenode.servicerpc-bind-host" = "0.0.0.0";
+        "dfs.namenode.http-bind-host" = "0.0.0.0";
       };
+      type = types.attrsOf types.anything;
+      description = lib.mdDoc ''
+        Default options for hdfs-site.xml
+      '';
+    };
+    hdfsSite = mkOption {
+      default = {};
       type = types.attrsOf types.anything;
       example = literalExpression ''
         {
           "dfs.nameservices" = "namenode1";
         }
       '';
+      description = lib.mdDoc ''
+        Additional options and overrides for hdfs-site.xml
+        <https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml>
+      '';
+    };
+    hdfsSiteInternal = mkOption {
+      default = {};
+      type = types.attrsOf types.anything;
+      internal = true;
       description = ''
-        Hadoop hdfs-site.xml definition
-        <link xlink:href="https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml"/>
+        Internal option to add configs to hdfs-site.xml based on module options
       '';
     };
 
-    mapredSite = mkOption {
+    mapredSiteDefault = mkOption {
       default = {
         "mapreduce.framework.name" = "yarn";
         "yarn.app.mapreduce.am.env" = "HADOOP_MAPRED_HOME=${cfg.package}/lib/${cfg.package.untarDir}";
@@ -54,18 +80,25 @@ with lib;
         }
       '';
       type = types.attrsOf types.anything;
+      description = lib.mdDoc ''
+        Default options for mapred-site.xml
+      '';
+    };
+    mapredSite = mkOption {
+      default = {};
+      type = types.attrsOf types.anything;
       example = literalExpression ''
-        options.services.hadoop.mapredSite.default // {
+        {
           "mapreduce.map.java.opts" = "-Xmx900m -XX:+UseParallelGC";
         }
       '';
-      description = ''
-        Hadoop mapred-site.xml definition
-        <link xlink:href="https://hadoop.apache.org/docs/current/hadoop-mapreduce-client/hadoop-mapreduce-client-core/mapred-default.xml"/>
+      description = lib.mdDoc ''
+        Additional options and overrides for mapred-site.xml
+        <https://hadoop.apache.org/docs/current/hadoop-mapreduce-client/hadoop-mapreduce-client-core/mapred-default.xml>
       '';
     };
 
-    yarnSite = mkOption {
+    yarnSiteDefault = mkOption {
       default = {
         "yarn.nodemanager.admin-env" = "PATH=$PATH";
         "yarn.nodemanager.aux-services" = "mapreduce_shuffle";
@@ -77,17 +110,32 @@ with lib;
         "yarn.nodemanager.linux-container-executor.path" = "/run/wrappers/yarn-nodemanager/bin/container-executor";
         "yarn.nodemanager.log-dirs" = "/var/log/hadoop/yarn/nodemanager";
         "yarn.resourcemanager.bind-host" = "0.0.0.0";
-        "yarn.resourcemanager.scheduler.class" = "org.apache.hadoop.yarn.server.resourcemanager.scheduler.fifo.FifoScheduler";
+        "yarn.resourcemanager.scheduler.class" = "org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler";
       };
       type = types.attrsOf types.anything;
+      description = lib.mdDoc ''
+        Default options for yarn-site.xml
+      '';
+    };
+    yarnSite = mkOption {
+      default = {};
+      type = types.attrsOf types.anything;
       example = literalExpression ''
-        options.services.hadoop.yarnSite.default // {
+        {
           "yarn.resourcemanager.hostname" = "''${config.networking.hostName}";
         }
       '';
+      description = lib.mdDoc ''
+        Additional options and overrides for yarn-site.xml
+        <https://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-common/yarn-default.xml>
+      '';
+    };
+    yarnSiteInternal = mkOption {
+      default = {};
+      type = types.attrsOf types.anything;
+      internal = true;
       description = ''
-        Hadoop yarn-site.xml definition
-        <link xlink:href="https://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-common/yarn-default.xml"/>
+        Internal option to add configs to yarn-site.xml based on module options
       '';
     };
 
@@ -99,9 +147,9 @@ with lib;
           "hadoop.http.max.threads" = 500;
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Hadoop httpfs-site.xml definition
-        <link xlink:href="https://hadoop.apache.org/docs/current/hadoop-hdfs-httpfs/httpfs-default.html"/>
+        <https://hadoop.apache.org/docs/current/hadoop-hdfs-httpfs/httpfs-default.html>
       '';
     };
 
@@ -114,7 +162,7 @@ with lib;
       example = literalExpression ''
         "''${pkgs.hadoop}/lib/''${pkgs.hadoop.untarDir}/etc/hadoop/log4j.properties";
       '';
-      description = "log4j.properties file added to HADOOP_CONF_DIR";
+      description = lib.mdDoc "log4j.properties file added to HADOOP_CONF_DIR";
     };
 
     containerExecutorCfg = mkOption {
@@ -123,6 +171,7 @@ with lib;
         "yarn.nodemanager.linux-container-executor.group"="hadoop";
         "min.user.id"=1000;
         "feature.terminal.enabled"=1;
+        "feature.mount-cgroup.enabled" = 1;
       };
       type = types.attrsOf types.anything;
       example = literalExpression ''
@@ -130,9 +179,9 @@ with lib;
           "feature.terminal.enabled" = 0;
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Yarn container-executor.cfg definition
-        <link xlink:href="https://hadoop.apache.org/docs/r2.7.2/hadoop-yarn/hadoop-yarn-site/SecureContainer.html"/>
+        <https://hadoop.apache.org/docs/r2.7.2/hadoop-yarn/hadoop-yarn-site/SecureContainer.html>
       '';
     };
 
@@ -145,8 +194,10 @@ with lib;
           ./extraYARNConfs
         ]
       '';
-      description = "Directories containing additional config files to be added to HADOOP_CONF_DIR";
+      description = lib.mdDoc "Directories containing additional config files to be added to HADOOP_CONF_DIR";
     };
+
+    gatewayRole.enable = mkEnableOption "gateway role for deploying hadoop configs";
 
     package = mkOption {
       type = types.package;
@@ -157,20 +208,16 @@ with lib;
   };
 
 
-  config = mkMerge [
-    (mkIf (builtins.hasAttr "yarn" config.users.users ||
-           builtins.hasAttr "hdfs" config.users.users ||
-           builtins.hasAttr "httpfs" config.users.users) {
-      users.groups.hadoop = {
-        gid = config.ids.gids.hadoop;
-      };
-      environment = {
-        systemPackages = [ cfg.package ];
-        etc."hadoop-conf".source = let
-          hadoopConf = "${import ./conf.nix { inherit cfg pkgs lib; }}/";
-        in "${hadoopConf}";
-      };
-    })
-
-  ];
+  config = mkIf cfg.gatewayRole.enable {
+    users.groups.hadoop = {
+      gid = config.ids.gids.hadoop;
+    };
+    environment = {
+      systemPackages = [ cfg.package ];
+      etc."hadoop-conf".source = let
+        hadoopConf = "${import ./conf.nix { inherit cfg pkgs lib; }}/";
+      in "${hadoopConf}";
+      variables.HADOOP_CONF_DIR = "/etc/hadoop-conf/";
+    };
+  };
 }

@@ -17,21 +17,10 @@ let
   # Contains the ruby version heuristics
   rubyVersion = import ./ruby-version.nix { inherit lib; };
 
-  # Needed during postInstall
-  buildRuby =
-    if stdenv.hostPlatform == stdenv.buildPlatform
-    then "$out/bin/ruby"
-    else "${buildPackages.ruby}/bin/ruby";
-
   generic = { version, sha256 }: let
     ver = version;
     tag = ver.gitTag;
     atLeast30 = lib.versionAtLeast ver.majMin "3.0";
-    baseruby = self.override {
-      useRailsExpress = false;
-      docSupport = false;
-      rubygemsSupport = false;
-    };
     self = lib.makeOverridable (
       { stdenv, buildPackages, lib
       , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
@@ -59,19 +48,20 @@ let
       , buildEnv, bundler, bundix
       , libiconv, libobjc, libunwind, Foundation
       , makeWrapper, buildRubyGem, defaultGemConfig
+      , baseRuby ? buildPackages.ruby.override {
+          useRailsExpress = false;
+          docSupport = false;
+          rubygemsSupport = false;
+        }
+      , useBaseRuby ? stdenv.hostPlatform != stdenv.buildPlatform || useRailsExpress
       }:
       stdenv.mkDerivation rec {
         pname = "ruby";
         inherit version;
 
-        src = if useRailsExpress then fetchFromGitHub {
-          owner  = "ruby";
-          repo   = "ruby";
-          rev    = tag;
-          sha256 = sha256.git;
-        } else fetchurl {
+        src = fetchurl {
           url = "https://cache.ruby-lang.org/pub/ruby/${ver.majMin}/ruby-${ver}.tar.gz";
-          sha256 = sha256.src;
+          inherit sha256;
         };
 
         # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
@@ -81,7 +71,7 @@ let
 
         nativeBuildInputs = [ autoreconfHook bison ]
           ++ (op docSupport groff)
-          ++ op (stdenv.buildPlatform != stdenv.hostPlatform) buildPackages.ruby;
+          ++ op useBaseRuby baseRuby;
         buildInputs = [ autoconf ]
           ++ (op fiddleSupport libffi)
           ++ (ops cursesSupport [ ncurses readline ])
@@ -89,13 +79,13 @@ let
           ++ (op opensslSupport openssl)
           ++ (op gdbmSupport gdbm)
           ++ (op yamlSupport libyaml)
-          ++ (op jemallocSupport jemalloc)
           # Looks like ruby fails to build on darwin without readline even if curses
           # support is not enabled, so add readline to the build inputs if curses
           # support is disabled (if it's enabled, we already have it) and we're
           # running on darwin
           ++ op (!cursesSupport && stdenv.isDarwin) readline
           ++ ops stdenv.isDarwin [ libiconv libobjc libunwind Foundation ];
+        propagatedBuildInputs = op jemallocSupport jemalloc;
 
         enableParallelBuilding = true;
 
@@ -104,18 +94,23 @@ let
             inherit patchSet useRailsExpress ops fetchpatch;
             patchLevel = ver.patchLevel;
           }).${ver.majMinTiny}
-          ++ [ ./do-not-regenerate-revision.h.patch ]
-          ++ op (atLeast30 && useRailsExpress) ./do-not-update-gems-baseruby.patch
-          # Ruby prior to 3.0 has a bug the installer (tools/rbinstall.rb) but
-          # the resulting error was swallowed. Newer rubygems no longer swallows
-          # this error. We upgrade rubygems when rubygemsSupport is enabled, so
-          # we have to fix this bug to prevent the install step from failing.
-          # See https://github.com/ruby/ruby/pull/2930
-          ++ op (!atLeast30 && rubygemsSupport)
+          ++ op (lib.versionOlder ver.majMin "3.1") ./do-not-regenerate-revision.h.patch
+          ++ op (atLeast30 && useBaseRuby) ./do-not-update-gems-baseruby.patch
+          ++ ops (!atLeast30 && rubygemsSupport) [
+            # We upgrade rubygems to a version that isn't compatible with the
+            # ruby 2.7 installer. Backport the upstream fix.
+            ./rbinstall-new-rubygems-compat.patch
+
+            # Ruby prior to 3.0 has a bug the installer (tools/rbinstall.rb) but
+            # the resulting error was swallowed. Newer rubygems no longer swallows
+            # this error. We upgrade rubygems when rubygemsSupport is enabled, so
+            # we have to fix this bug to prevent the install step from failing.
+            # See https://github.com/ruby/ruby/pull/2930
             (fetchpatch {
               url = "https://github.com/ruby/ruby/commit/261d8dd20afd26feb05f00a560abd99227269c1c.patch";
               sha256 = "0wrii25cxcz2v8bgkrf7ibcanjlxwclzhayin578bf0qydxdm9qy";
-            });
+            })
+          ];
 
         postUnpack = opString rubygemsSupport ''
           rm -rf $sourceRoot/{lib,test}/rubygems*
@@ -133,24 +128,28 @@ let
           sed -i ext/io/console/io-console.gemspec -e '/s\.date/d'
         '';
 
-        configureFlags = ["--enable-shared" "--enable-pthread" "--with-soname=ruby-${version}"]
-          ++ op useRailsExpress "--with-baseruby=${baseruby}/bin/ruby"
-          ++ op (!jitSupport) "--disable-jit-support"
-          ++ op (!docSupport) "--disable-install-doc"
-          ++ op (jemallocSupport) "--with-jemalloc"
-          ++ ops stdenv.isDarwin [
-            # on darwin, we have /usr/include/tk.h -- so the configure script detects
-            # that tk is installed
-            "--with-out-ext=tk"
-            # on yosemite, "generating encdb.h" will hang for a very long time without this flag
-            "--with-setjmp-type=setjmp"
-          ]
-          ++ op (stdenv.hostPlatform != stdenv.buildPlatform)
-             "--with-baseruby=${buildRuby}";
+        configureFlags = [
+          (lib.enableFeature (!stdenv.hostPlatform.isStatic) "shared")
+          (lib.enableFeature true "pthread")
+          (lib.withFeatureAs true "soname" "ruby-${version}")
+          (lib.withFeatureAs useBaseRuby "baseruby" "${baseRuby}/bin/ruby")
+          (lib.enableFeature jitSupport "jit-support")
+          (lib.enableFeature docSupport "install-doc")
+          (lib.withFeature jemallocSupport "jemalloc")
+          (lib.withFeatureAs docSupport "ridir" "${placeholder "devdoc"}/share/ri")
+          # ruby enables -O3 for gcc, however our compiler hardening wrapper
+          # overrides that by enabling `-O2` which is the minimum optimization
+          # needed for `_FORTIFY_SOURCE`.
+        ] ++ lib.optional stdenv.cc.isGNU "CFLAGS=-O3" ++ [
+        ] ++ ops stdenv.isDarwin [
+          # on darwin, we have /usr/include/tk.h -- so the configure script detects
+          # that tk is installed
+          "--with-out-ext=tk"
+          # on yosemite, "generating encdb.h" will hang for a very long time without this flag
+          "--with-setjmp-type=setjmp"
+        ];
 
         preConfigure = opString docSupport ''
-          configureFlagsArray+=("--with-ridir=$devdoc/share/ri")
-
           # rdoc creates XDG_DATA_DIR (defaulting to $HOME/.local/share) even if
           # it's not going to be used.
           export HOME=$TMPDIR
@@ -171,6 +170,8 @@ let
         # Bundler tries to create this directory
         postInstall = ''
           rbConfig=$(find $out/lib/ruby -name rbconfig.rb)
+          # Remove references to the build environment from the closure
+          sed -i '/^  CONFIG\["\(BASERUBY\|SHELL\|GREP\|EGREP\|MKDIR_P\|MAKEDIRS\|INSTALL\)"\]/d' $rbConfig
           # Remove unnecessary groff reference from runtime closure, since it's big
           sed -i '/NROFF/d' $rbConfig
           ${
@@ -185,6 +186,11 @@ let
               sed -i '/CC_VERSION_MESSAGE/d' $rbConfig
             ''
           }
+          # Remove unnecessary external intermediate files created by gems
+          extMakefiles=$(find $out/lib/ruby/gems -name Makefile)
+          for makefile in $extMakefiles; do
+            make -C "$(dirname "$makefile")" distclean
+          done
           # Bundler tries to create this directory
           mkdir -p $out/nix-support
           cat > $out/nix-support/setup-hook <<EOF
@@ -208,13 +214,15 @@ let
           # Add rbconfig shim so ri can find docs
           mkdir -p $devdoc/lib/ruby/site_ruby
           cp ${./rbconfig.rb} $devdoc/lib/ruby/site_ruby/rbconfig.rb
-        '' + opString useRailsExpress ''
+        '' + opString useBaseRuby ''
           # Prevent the baseruby from being included in the closure.
-          sed -i '/^  CONFIG\["BASERUBY"\]/d' $rbConfig
-          sed -i "s|'--with-baseruby=${baseruby}/bin/ruby'||" $rbConfig
+          ${removeReferencesTo}/bin/remove-references-to \
+            -t ${baseRuby} \
+            $rbConfig $out/lib/libruby*
         '';
 
-        disallowedRequisites = op (!jitSupport) stdenv.cc.cc;
+        disallowedRequisites = op (!jitSupport) stdenv.cc.cc
+          ++ op useBaseRuby baseRuby;
 
         meta = with lib; {
           description = "The Ruby language";
@@ -227,7 +235,6 @@ let
         passthru = rec {
           version = ver;
           rubyEngine = "ruby";
-          baseRuby = baseruby;
           libPath = "lib/${rubyEngine}/${ver.libDir}";
           gemPath = "lib/${rubyEngine}/gems/${ver.libDir}";
           devEnv = import ./dev.nix {
@@ -246,24 +253,28 @@ let
           minorVersion = ver.minor;
           teenyVersion = ver.tiny;
           patchLevel = ver.patchLevel;
+        } // lib.optionalAttrs useBaseRuby {
+          inherit baseRuby;
         };
       }
     ) args; in self;
 
 in {
+  mkRubyVersion = rubyVersion;
+  mkRuby = generic;
+
   ruby_2_7 = generic {
-    version = rubyVersion "2" "7" "5" "";
-    sha256 = {
-      src = "1wc1hwmz4m6iqlmqag8liyld917p6a8dvnhnpd1v8d8jl80bjm97";
-      git = "16565fyl7141hr6q6d74myhsz46lvgam8ifnacshi68vzibwjbbh";
-    };
+    version = rubyVersion "2" "7" "6" "";
+    sha256 = "042xrdk7hsv4072bayz3f8ffqh61i8zlhvck10nfshllq063n877";
   };
 
   ruby_3_0 = generic {
-    version = rubyVersion "3" "0" "3" "";
-    sha256 = {
-      src = "1b4j39zyyvdkf1ax2c6qfa40b4mxfkr87zghhw19fmnzn8f8d1im";
-      git = "1q19w5i1jkfxn7qq6f9v9ngax9h52gxwijk7hp312dx6amwrkaim";
-    };
+    version = rubyVersion "3" "0" "4" "";
+    sha256 = "0avj4g3s2839b2y4m6pk8kid74r8nj7k0qm2rsdcwjzhg8h7rd3h";
+  };
+
+  ruby_3_1 = generic {
+    version = rubyVersion "3" "1" "2" "";
+    sha256 = "0gm84ipk6mrfw94852w5h7xxk2lqrxjbnlwb88svf0lz70933131";
   };
 }

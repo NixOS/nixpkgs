@@ -1,4 +1,5 @@
-{ lib, stdenv, buildPackages, fetchurl, pkg-config, pcre, libxml2, zlib, bzip2, which, file
+{ lib, stdenv, buildPackages, fetchurl, pkg-config, pcre2, libxml2, zlib, bzip2, which, file
+, fetchpatch
 , openssl
 , enableDbi ? false, libdbi
 , enableMagnet ? false, lua5_1
@@ -9,27 +10,32 @@
 , enableWebDAV ? false, sqlite, libuuid
 , enableExtendedAttrs ? false, attr
 , perl
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "lighttpd";
-  version = "1.4.59";
+  version = "1.4.66";
 
   src = fetchurl {
     url = "https://download.lighttpd.net/lighttpd/releases-${lib.versions.majorMinor version}.x/${pname}-${version}.tar.xz";
-    sha256 = "sha256-+5U9snPa7wjttuICVWyuij0H7tYIHJa9mQPblX0QhNU=";
+    sha256 = "sha256-R6xuYCcaoBluZUctAtAZVW3HxtCd87Zd8sGraGY0jjs=";
   };
 
   postPatch = ''
     patchShebangs tests
     # Linux sandbox has an empty hostname and not /etc/hosts, which fails some tests
     sed -ire '/[$]self->{HOSTNAME} *=/i     if(length($name)==0) { $name = "127.0.0.1" }' tests/LightyTest.pm
+    # it's difficult to prevent this test from trying to use /var/tmp (which
+    # the sandbox doesn't have) so until libredirect has support for mkstemp
+    # calls it's easiest to disable it
+    sed -i '/test_mod_ssi/d' src/t/test_mod.c
   '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ pcre pcre.dev libxml2 zlib bzip2 which file openssl ]
+  buildInputs = [ pcre2 pcre2.dev libxml2 zlib bzip2 which file openssl ]
              ++ lib.optional enableDbi libdbi
              ++ lib.optional enableMagnet lua5_1
              ++ lib.optional enableMysql libmysqlclient
@@ -51,7 +57,7 @@ stdenv.mkDerivation rec {
                 ++ lib.optional enableExtendedAttrs "--with-attr";
 
   preConfigure = ''
-    export PATH=$PATH:${pcre.dev}/bin
+    export PATH=$PATH:${pcre2.dev}/bin
     sed -i "s:/usr/bin/file:${file}/bin/file:g" configure
   '';
 
@@ -66,6 +72,10 @@ stdenv.mkDerivation rec {
     rm "$out/share/lighttpd/doc/config/conf.d/Makefile"*
     rm "$out/share/lighttpd/doc/config/vhosts.d/Makefile"*
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) lighttpd;
+  };
 
   meta = with lib; {
     description = "Lightweight high-performance web server";

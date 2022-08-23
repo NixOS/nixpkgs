@@ -13,13 +13,13 @@ in
       openPorts = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to open firewall ports for OpenArena";
+        description = lib.mdDoc "Whether to open firewall ports for OpenArena";
       };
 
       extraFlags = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = "Extra flags to pass to <command>oa_ded</command>";
+        description = lib.mdDoc "Extra flags to pass to {command}`oa_ded`";
         example = [
           "+set dedicated 2"
           "+set sv_hostname 'My NixOS OpenArena Server'"

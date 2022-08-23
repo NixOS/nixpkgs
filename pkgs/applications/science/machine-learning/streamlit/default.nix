@@ -1,23 +1,65 @@
-{   lib, buildPythonApplication, fetchPypi
-  , altair, astor, base58, blinker, boto3, botocore, click, enum-compat
-  , future, pillow, protobuf, requests, toml, tornado_5, tzlocal, validators, watchdog
-  , jinja2, setuptools
+{
+  # Nix
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+
+  # Build inputs
+  altair,
+  blinker,
+  click,
+  cachetools,
+  GitPython,
+  importlib-metadata,
+  jinja2,
+  pillow,
+  pyarrow,
+  pydeck,
+  pympler,
+  protobuf,
+  requests,
+  rich,
+  semver,
+  setuptools,
+  toml,
+  tornado,
+  tzlocal,
+  validators,
+  watchdog,
 }:
 
 buildPythonApplication rec {
   pname = "streamlit";
-  version = "0.50.2";
-  format = "wheel"; # the only distribution available
+  version = "1.11.1";
+  format = "wheel";  # source currently requires pipenv
 
   src = fetchPypi {
     inherit pname version format;
-    sha256 = "1wymv7qckafs0p2jdjlxjaf1xrhm3iyd185jkldanbb0na5n3ndz";
+    hash = "sha256-+GGuL3UngPDgLOGx9QXUdRJsTswhTg7d6zuvhpp0Mo0=";
   };
 
   propagatedBuildInputs = [
-    altair astor base58 blinker boto3 botocore click enum-compat
-    future pillow protobuf requests toml tornado_5 tzlocal validators watchdog
-    jinja2 setuptools
+    altair
+    blinker
+    cachetools
+    click
+    GitPython
+    importlib-metadata
+    jinja2
+    pillow
+    protobuf
+    pyarrow
+    pydeck
+    pympler
+    requests
+    rich
+    semver
+    setuptools
+    toml
+    tornado
+    tzlocal
+    validators
+    watchdog
   ];
 
   postInstall = ''
@@ -30,5 +72,4 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ yrashk ];
     license = licenses.asl20;
   };
-
 }

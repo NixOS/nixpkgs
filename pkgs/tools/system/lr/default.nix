@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     description = "List files recursively";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ vika_nezrimaya ];
+    maintainers = with maintainers; [ vikanezrimaya ];
   };
 }

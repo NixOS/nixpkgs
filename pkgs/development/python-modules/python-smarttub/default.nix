@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "python-smarttub";
-  version = "0.0.28";
+  version = "0.0.32";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mdz";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-dAwOi1hhjGhBGKEp5u3qW5WL1GLHBFac0drIc1Zk6ok=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-3qAs0vL6YGFDsMFC3KAhSc/axxVOll/SOswaJgVi9Hc=";
   };
 
   propagatedBuildInputs = [
@@ -37,6 +37,15 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ];
+
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pyjwt~=2.1.0" "pyjwt>=2.1.0"
+  '';
 
   pythonImportsCheck = [
     "smarttub"

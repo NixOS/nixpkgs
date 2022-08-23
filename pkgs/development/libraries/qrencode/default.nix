@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ adolfogc yegortimoshenko ];
+    maintainers = with maintainers; [ adolfogc yana ];
     platforms = platforms.all;
   };
 }

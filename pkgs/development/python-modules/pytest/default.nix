@@ -1,80 +1,58 @@
-{ lib, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, isPyPy
-, atomicwrites
+{ lib
+, buildPythonPackage
+, callPackage
+, pythonOlder
+, fetchPypi
+, isPyPy
+, writeText
+
+# build
+, setuptools-scm
+
+# propagates
 , attrs
-, hypothesis
 , iniconfig
-, more-itertools
 , packaging
-, pathlib2
 , pluggy
 , py
-, pygments
-, setuptools
-, setuptools-scm
-, six
-, toml
-, wcwidth
-, writeText
+, tomli
 }:
 
 buildPythonPackage rec {
   pname = "pytest";
-  version = "6.2.5";
-  disabled = !isPy3k;
+  version = "7.1.2";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "131b36680866a76e6781d13f101efb86cf674ebb9762eb70d3082b6f29889e89";
+    sha256 = "sha256-oGoEJUU4ZKJwvEXnH3gzMKdCje+0Iw+15qcx/eBuzUU=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "pluggy>=0.12,<1.0.0a1" "pluggy>=0.23,<2.0"
-  '';
+  outputs = [
+    "out"
+    "testout"
+  ];
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
-    atomicwrites
     attrs
     iniconfig
-    more-itertools
     packaging
     pluggy
     py
-    setuptools
-    six
-    toml
-    wcwidth
-  ] ++ lib.optionals (pythonOlder "3.6") [ pathlib2 ];
-
-  checkInputs = [
-    hypothesis
-    pygments
+    tomli
   ];
 
-  doCheck = !isPyPy; # https://github.com/pytest-dev/pytest/issues/3460
-
-  preCheck = ''
-    # don't test bash builtins
-    rm testing/test_argcomplete.py
+  postInstall = ''
+    mkdir $testout
+    cp -R testing $testout/testing
   '';
 
-  # Ignored file https://github.com/pytest-dev/pytest/pull/5605#issuecomment-522243929
-  # test_missing_required_plugins will emit deprecation warning which is treated as error
-  checkPhase = ''
-    runHook preCheck
-    $out/bin/py.test -x testing/ \
-      --ignore=testing/test_junitxml.py \
-      -k "not test_collect_pyargs_with_testpaths and not test_missing_required_plugins"
-
-    # tests leave behind unreproducible pytest binaries in the output directory, remove:
-    find $out/lib -name "*-pytest-${version}.pyc" -delete
-    # specifically testing/test_assertion.py and testing/test_assertrewrite.py leave behind those:
-    find $out/lib -name "*opt-2.pyc" -delete
-
-    runHook postCheck
-  '';
+  doCheck = false;
+  passthru.tests.pytest = callPackage ./tests.nix { };
 
   # Remove .pytest_cache when using py.test in a Nix build
   setupHook = writeText "pytest-hook" ''
@@ -91,7 +69,7 @@ buildPythonPackage rec {
     # - files are not needed after tests are finished
     pytestRemoveBytecodePhase () {
         # suffix is defined at:
-        #    https://github.com/pytest-dev/pytest/blob/6.2.5/src/_pytest/assertion/rewrite.py#L51-L53
+        #    https://github.com/pytest-dev/pytest/blob/7.1.2/src/_pytest/assertion/rewrite.py#L51-L53
         find $out -name "*-pytest-*.py[co]" -delete
     }
     preDistPhases+=" pytestRemoveBytecodePhase"

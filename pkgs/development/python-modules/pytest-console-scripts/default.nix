@@ -5,28 +5,41 @@
 , python
 , mock
 , setuptools-scm
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pytest-console-scripts";
-  version = "1.2.1";
+  version = "1.3.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c7f258025110f1337c23499c2f6674b873d4adba2438be55895edf01451c5ce3";
+    hash = "sha256-XGw9qunPn77Q5lUHISiThgAZPcACpc8bGHJIZEugKFc=";
   };
-  postPatch = ''
-    # setuptools-scm is pinned to <6 because it dropped Python 3.5
-    # support.  That's not something that affects us.
-    substituteInPlace setup.py --replace "'setuptools_scm<6'" "'setuptools_scm'"
-    # Patch the shebang of a script generated during test.
-    substituteInPlace tests/test_run_scripts.py --replace "#!/usr/bin/env python" "#!${python.interpreter}"
-  '';
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
-  nativeBuildInputs = [ setuptools-scm ];
 
-  checkInputs = [ mock pytestCheckHook ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  checkInputs = [
+    mock
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    # Patch the shebang of a script generated during test.
+    substituteInPlace tests/test_run_scripts.py \
+      --replace "#!/usr/bin/env python" "#!${python.interpreter}"
+  '';
+
+  pythonImportsCheck = [
+    "pytest_console_scripts"
+  ];
 
   meta = with lib; {
     description = "Pytest plugin for testing console scripts";

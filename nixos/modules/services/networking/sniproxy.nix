@@ -14,6 +14,8 @@ let
 
 in
 {
+  imports = [ (mkRemovedOptionModule [ "services" "sniproxy" "logDir" ] "Now done by LogsDirectory=. Set to a custom path if you log to a different folder in your config.") ];
+
   options = {
     services.sniproxy = {
       enable = mkEnableOption "sniproxy server";
@@ -21,19 +23,19 @@ in
       user = mkOption {
         type = types.str;
         default = "sniproxy";
-        description = "User account under which sniproxy runs.";
+        description = lib.mdDoc "User account under which sniproxy runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "sniproxy";
-        description = "Group under which sniproxy runs.";
+        description = lib.mdDoc "Group under which sniproxy runs.";
       };
 
       config = mkOption {
         type = types.lines;
         default = "";
-        description = "sniproxy.conf configuration excluding the daemon username and pid file.";
+        description = lib.mdDoc "sniproxy.conf configuration excluding the daemon username and pid file.";
         example = ''
           error_log {
             filename /var/log/sniproxy/error.log
@@ -50,13 +52,6 @@ in
           }
         '';
       };
-
-      logDir = mkOption {
-        type = types.str;
-        default = "/var/log/sniproxy/";
-        description = "Location of the log directory for sniproxy.";
-      };
-
     };
 
   };
@@ -66,18 +61,12 @@ in
       description = "sniproxy server";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      preStart = ''
-        test -d ${cfg.logDir} || {
-          echo "Creating initial log directory for sniproxy in ${cfg.logDir}"
-          mkdir -p ${cfg.logDir}
-          chmod 640 ${cfg.logDir}
-          }
-        chown -R ${cfg.user}:${cfg.group} ${cfg.logDir}
-      '';
 
       serviceConfig = {
         Type = "forking";
         ExecStart = "${pkgs.sniproxy}/bin/sniproxy -c ${configFile}";
+        LogsDirectory = "sniproxy";
+        LogsDirectoryMode = "0640";
         Restart = "always";
       };
     };

@@ -36,6 +36,7 @@ let
 
     # constants
     licenses = callLibs ./licenses.nix;
+    sourceTypes = callLibs ./source-types.nix;
     systems = callLibs ./systems;
 
     # serialization
@@ -66,9 +67,11 @@ let
       stringLength sub substring tail trace;
     inherit (self.trivial) id const pipe concat or and bitAnd bitOr bitXor
       bitNot boolToString mergeAttrs flip mapNullable inNixShell isFloat min max
-      importJSON importTOML warn warnIf info showWarnings nixpkgsVersion version
-      mod compare splitByAndCompare functionArgs setFunctionArgs isFunction
-      toHexString toBaseDigits;
+      importJSON importTOML warn warnIf warnIfNot throwIf throwIfNot checkListOfEnum
+      info showWarnings nixpkgsVersion version isInOldestRelease
+      mod compare splitByAndCompare
+      functionArgs setFunctionArgs isFunction toFunction
+      toHexString toBaseDigits inPureEvalMode;
     inherit (self.fixedPoints) fix fix' converge extends composeExtensions
       composeManyExtensions makeExtensible makeExtensibleWithCustomName;
     inherit (self.attrsets) attrByPath hasAttrByPath setAttrByPath
@@ -77,9 +80,10 @@ let
       mapAttrs' mapAttrsToList mapAttrsRecursive mapAttrsRecursiveCond
       genAttrs isDerivation toDerivation optionalAttrs
       zipAttrsWithNames zipAttrsWith zipAttrs recursiveUpdateUntil
-      recursiveUpdate matchAttrs overrideExisting getOutput getBin
+      recursiveUpdate matchAttrs overrideExisting showAttrPath getOutput getBin
       getLib getDev getMan chooseDevOutputs zipWithNames zip
-      recurseIntoAttrs dontRecurseIntoAttrs cartesianProductOfSets;
+      recurseIntoAttrs dontRecurseIntoAttrs cartesianProductOfSets
+      updateManyAttrsByPath;
     inherit (self.lists) singleton forEach foldr fold foldl foldl' imap0 imap1
       concatMap flatten remove findSingle findFirst any all count
       optional optionals toList range partition zipListsWith zipLists
@@ -91,7 +95,8 @@ let
       concatImapStringsSep makeSearchPath makeSearchPathOutput
       makeLibraryPath makeBinPath optionalString
       hasInfix hasPrefix hasSuffix stringToCharacters stringAsChars escape
-      escapeShellArg escapeShellArgs escapeRegex escapeXML replaceChars lowerChars
+      escapeShellArg escapeShellArgs isValidPosixName toShellVar toShellVars
+      escapeRegex escapeXML replaceChars lowerChars
       upperChars toLower toUpper addContextFrom splitString
       removePrefix removeSuffix versionOlder versionAtLeast
       getName getVersion
@@ -105,26 +110,30 @@ let
       makeScope makeScopeWithSplicing;
     inherit (self.meta) addMetaAttrs dontDistribute setName updateName
       appendToName mapDerivationAttrset setPrio lowPrio lowPrioSet hiPrio
-      hiPrioSet getLicenseFromSpdxId;
+      hiPrioSet getLicenseFromSpdxId getExe;
     inherit (self.sources) pathType pathIsDirectory cleanSourceFilter
       cleanSource sourceByRegex sourceFilesBySuffices
       commitIdFromGitRepo cleanSourceWith pathHasContext
       canCleanSource pathIsRegularFile pathIsGitRepo;
-    inherit (self.modules) evalModules unifyModuleSyntax
-      applyIfFunction mergeModules
+    inherit (self.modules) evalModules setDefaultModuleLocation
+      unifyModuleSyntax applyModuleArgsIfFunction mergeModules
       mergeModules' mergeOptionDecls evalOptionValue mergeDefinitions
       pushDownProperties dischargeProperties filterOverrides
       sortProperties fixupOptionType mkIf mkAssert mkMerge mkOverride
       mkOptionDefault mkDefault mkImageMediaOverride mkForce mkVMOverride
       mkFixStrictness mkOrder mkBefore mkAfter mkAliasDefinitions
       mkAliasAndWrapDefinitions fixMergeModules mkRemovedOptionModule
-      mkRenamedOptionModule mkMergedOptionModule mkChangedOptionModule
+      mkRenamedOptionModule mkRenamedOptionModuleWith
+      mkMergedOptionModule mkChangedOptionModule
       mkAliasOptionModule mkDerivedConfig doRename;
     inherit (self.options) isOption mkEnableOption mkSinkUndeclaredOptions
-      mergeDefaultOption mergeOneOption mergeEqualOption getValues
-      getFiles optionAttrSetToDocList optionAttrSetToDocList'
+      mergeDefaultOption mergeOneOption mergeEqualOption mergeUniqueOption
+      getValues getFiles
+      optionAttrSetToDocList optionAttrSetToDocList'
       scrubOptionValue literalExpression literalExample literalDocBook
-      showOption showFiles unknownModule mkOption;
+      showOption showOptionWithDefLocs showFiles
+      unknownModule mkOption mkPackageOption
+      mdDoc literalMD;
     inherit (self.types) isType setType defaultTypeMerge defaultFunctor
       isOptionType mkOptionType;
     inherit (self.asserts)

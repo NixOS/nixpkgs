@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gfortran, gnumake, imake, makedepend, motif, xorg }:
+{ lib, stdenv, fetchurl, gfortran, imake, makedepend, motif, xorg }:
 
 stdenv.mkDerivation rec {
   version = "2006";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with xorg; [ gfortran motif libX11 libXft libXt ];
-  nativeBuildInputs = [ gnumake imake makedepend ];
+  nativeBuildInputs = [ imake makedepend ];
   sourceRoot = ".";
 
   patches = [ ./patch.patch ./0001-Use-strerror-rather-than-sys_errlist-to-fix-compilat.patch ];
@@ -52,6 +52,11 @@ stdenv.mkDerivation rec {
   ];
 
   NIX_CFLAGS = [ "-Wno-return-type" ];
+
+  # Workaround build failure on -fno-common toolchains:
+  # ld: libpacklib.a(kedit.o):kuip/klink1.h:11: multiple definition of `klnkaddr';
+  #   libzftplib.a(zftpcdf.o):zftp/zftpcdf.c:155: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
 
   makeFlags = [
     "FORTRANOPTIONS=$(FFLAGS)"

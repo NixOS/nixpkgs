@@ -1,16 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, ninja, makeWrapper, darwin }:
+{ lib, stdenv, fetchFromGitHub, ninja, makeWrapper, CoreFoundation, Foundation }:
 let
   target = if stdenv.isDarwin then "macOS" else "Linux";
 in
 stdenv.mkDerivation rec {
   pname = "sumneko-lua-language-server";
-  version = "2.5.1";
+  version = "3.5.3";
 
   src = fetchFromGitHub {
     owner = "sumneko";
     repo = "lua-language-server";
     rev = version;
-    sha256 = "sha256-3iWD0kXbF8Rad7fQ36ppD5q8V8COacLrT+vasCkygDc=";
+    sha256 = "sha256-K/B+THEgM6pzW+VOc8pgtH+3zpWEgocEdTsuO0APoT0=";
     fetchSubmodules = true;
   };
 
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.Foundation
+    CoreFoundation
+    Foundation
   ];
 
   preBuild = ''
@@ -55,15 +55,15 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dt "$out"/share/lua-language-server/bin/${target} bin/${target}/lua-language-server
-    install -m644 -t "$out"/share/lua-language-server/bin/${target} bin/${target}/*.*
+    install -Dt "$out"/share/lua-language-server/bin bin/lua-language-server
+    install -m644 -t "$out"/share/lua-language-server/bin bin/*.*
     install -m644 -t "$out"/share/lua-language-server {debugger,main}.lua
     cp -r locale meta script "$out"/share/lua-language-server
 
     # necessary for --version to work:
     install -m644 -t "$out"/share/lua-language-server changelog.md
 
-    makeWrapper "$out"/share/lua-language-server/bin/${target}/lua-language-server \
+    makeWrapper "$out"/share/lua-language-server/bin/lua-language-server \
       $out/bin/lua-language-server \
       --add-flags "-E $out/share/lua-language-server/main.lua \
       --logpath='~/.cache/sumneko_lua/log' \
@@ -73,10 +73,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Lua Language Server coded by Lua ";
+    description = "Lua Language Server coded by Lua";
     homepage = "https://github.com/sumneko/lua-language-server";
     license = licenses.mit;
-    maintainers = with maintainers; [ mjlbach ];
+    maintainers = with maintainers; [ sei40kr ];
     platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "lua-language-server";
   };

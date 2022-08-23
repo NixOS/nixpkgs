@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     maintainers = with maintainers; [bachp ];
   };
 
-  machine = { ... }: {
+  nodes.machine = { ... }: {
     services.geth."mainnet" = {
       enable = true;
       http = {
@@ -31,7 +31,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.wait_for_open_port(18545)
 
     machine.succeed(
-        'geth attach --exec "eth.chainId()" http://localhost:8545 | grep \'"0x0"\' '
+        'geth attach --exec eth.blockNumber http://localhost:8545 | grep \'^0$\' '
     )
 
     machine.succeed(

@@ -16,13 +16,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "waydroid";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "03d87sh443kn0j2mpih1g909khkx3wgb04h605f9jhd0znskkbmw";
+    sha256 = "sha256-Sf1rl8GCSTuneuYroGqsm9Aq2rBurpyswOrfCq2mWOs=";
   };
 
   propagatedBuildInputs = with python3Packages; [

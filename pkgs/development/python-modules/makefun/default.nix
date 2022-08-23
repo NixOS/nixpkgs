@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "makefun";
-  version = "1.12.1";
+  version = "1.14.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4d0e90ca3fdbdeb6a4a0891e2da7d4b8e80386e19e6db91ce29b8aa5c876ecfe";
+    sha256 = "sha256-dwxuRY8e9HMEGFM08daG7iAXVdBhUqh44mRidTQMGB0=";
   };
 
   postPatch = ''

@@ -20,13 +20,13 @@ let
   blocklist = writeText "cacert-blocklist.txt" (lib.concatStringsSep "\n" blacklist);
   extraCertificatesBundle = writeText "cacert-extra-certificates-bundle.crt" (lib.concatStringsSep "\n\n" extraCertificateStrings);
 
-  srcVersion = "3.71";
+  srcVersion = "3.80";
   version = if nssOverride != null then nssOverride.version else srcVersion;
   meta = with lib; {
     homepage = "https://curl.haxx.se/docs/caextract.html";
     description = "A bundle of X.509 certificates of public Certificate Authorities (CA)";
     platforms = platforms.all;
-    maintainers = with maintainers; [ andir fpletz lukegb ];
+    maintainers = with maintainers; [ fpletz lukegb ];
     license = licenses.mpl20;
   };
   certdata = stdenv.mkDerivation {
@@ -35,7 +35,7 @@ let
 
     src = if nssOverride != null then nssOverride.src else fetchurl {
       url = "mirror://mozilla/security/nss/releases/NSS_${lib.replaceStrings ["."] ["_"] version}_RTM/src/nss-${version}.tar.gz";
-      sha256 = "0ly2l3dv6z5hlxs72h5x6796ni3x1bq60saavaf42ddgv4ax7b4r";
+      sha256 = "sha256-wL8f0sfimmsCswliK6r8RD7skMiTS7FV2ku5iYh4S2o=";
     };
 
     dontBuild = true;

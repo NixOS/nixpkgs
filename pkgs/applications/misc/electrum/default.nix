@@ -21,7 +21,7 @@
 }:
 
 let
-  version = "4.1.5";
+  version = "4.3.0";
 
   libsecp256k1_name =
     if stdenv.isLinux then "libsecp256k1.so.0"
@@ -30,6 +30,7 @@ let
 
   libzbar_name =
     if stdenv.isLinux then "libzbar.so.0"
+    else if stdenv.isDarwin then "libzbar.0.dylib"
     else "libzbar${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   # Not provided in official source releases, which are what upstream signs.
@@ -37,25 +38,12 @@ let
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "1ps8yaps5kfd7yv7bpdvssbwm6f5qivxcvhwn17cpddc2760a7nk";
+    sha256 = "sha256-/bYz2KB9Fggo6cnKM3hvwL/Jy4Xsw2phx1sInuqZpFg=";
 
-    extraPostFetch = ''
+    postFetch = ''
       mv $out ./all
       mv ./all/electrum/tests $out
     '';
-  };
-
-  py = python3.override {
-    packageOverrides = self: super: {
-
-      aiorpcx = super.aiorpcx.overridePythonAttrs (oldAttrs: rec {
-        version = "0.18.7";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1rswrspv27x33xa5bnhrkjqzhv0sknv5kd7pl1vidw9d2z4rx2l0";
-        };
-      });
-    };
   };
 
 in
@@ -66,7 +54,7 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "188r4zji985z8pm9b942xhmvv174yndk6jxagxl7ljk03wl2wiwi";
+    sha256 = "sha256-E941wseIQEn1+d06NWKQLQM0C+A8a0+Xxl+LzBTwEcw=";
   };
 
   postUnpack = ''
@@ -74,22 +62,9 @@ python3.pkgs.buildPythonApplication {
     cp -ar ${tests} $sourceRoot/electrum/tests
   '';
 
-  prePatch = ''
-    substituteInPlace contrib/requirements/requirements.txt \
-      --replace "dnspython>=2.0,<2.1" "dnspython>=2.0"
-  '';
-
-  patches = [
-    # trezorlib 0.13 compatibility
-    (fetchpatch {
-      url = "https://github.com/spesmilo/electrum/commit/97e61cfacdca374103e4184f0f9a07a0c5757afb.patch";
-      sha256 = "sha256-RGVBO9IskC+lQOHNGjrqH6EM/inNPJlcD9sSWedyT5E=";
-    })
-  ];
-
   nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = with py.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     aiohttp
     aiohttp-socks
     aiorpcx
@@ -116,7 +91,6 @@ python3.pkgs.buildPythonApplication {
   ];
 
   preBuild = ''
-    sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
     substituteInPlace ./electrum/ecc_fast.py \
       --replace ${libsecp256k1_name} ${secp256k1}/lib/libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}
   '' + (if enableQt then ''
@@ -127,17 +101,11 @@ python3.pkgs.buildPythonApplication {
   '');
 
   postInstall = lib.optionalString stdenv.isLinux ''
-    # Despite setting usr_share above, these files are installed under
-    # $out/nix ...
-    mv $out/${python3.sitePackages}/nix/store"/"*/share $out
-    rm -rf $out/${python3.sitePackages}/nix
-
     substituteInPlace $out/share/applications/electrum.desktop \
       --replace 'Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum %u"' \
                 "Exec=$out/bin/electrum %u" \
       --replace 'Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum --testnet %u"' \
                 "Exec=$out/bin/electrum --testnet %u"
-
   '';
 
   postFixup = lib.optionalString enableQt ''

@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "glcontext";
-  version = "2.3.3";
+  version = "2.3.6";
 
   src = fetchFromGitHub {
     owner = "moderngl";
     repo = pname;
-    rev = version;
-    sha256 = "16kwrfjijn9bnb48rk17wapmhxq6g9s59zczh65imyncb9k82wkc";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-fE1fyoKQz1jmTBcAz2CbkLjRfgN5QedpMOLMU8keIZs=";
   };
 
   disabled = !isPy3k;

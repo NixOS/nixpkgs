@@ -22,8 +22,9 @@ stdenv.mkDerivation {
   meta = {
     description = "Utility to check whether audio is truly lossless or not";
     homepage = "https://losslessaudiochecker.com";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    platforms = lib.platforms.x86_64;
+    platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ p-h ];
   };
 }

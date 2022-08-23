@@ -1,27 +1,31 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, nose
+, fetchFromGitHub
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "voluptuous";
-  version = "0.12.2";
+  version = "0.13.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-TbGsUHnbkkmCDUnIkctGYKb4yuNQSRIQq850H6v1ZRM=";
+  src = fetchFromGitHub {
+    owner = "alecthomas";
+    repo = pname;
+    rev = version;
+    hash = "sha256-cz3Bd+/yPh+VOHxzi/W+gbDh/H5Nl/n4jvxDOirmAVk=";
   };
 
   checkInputs = [
-    nose
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    nosetests
-  '';
+  pythonImportsCheck = [
+    "voluptuous"
+  ];
 
-  pythonImportsCheck = [ "voluptuous" ];
+  pytestFlagsArray = [
+    "voluptuous/tests/"
+  ];
 
   meta = with lib; {
     description = "Python data validation library";

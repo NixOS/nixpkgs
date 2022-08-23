@@ -1,12 +1,16 @@
-{ lib, stdenv, fetchurl, cmake, openssl, nss, pkg-config, nspr, bash, debug ? false }:
+{ lib, stdenv, fetchFromGitHub, cmake, openssl, nss, pkg-config, nspr, bash, debug ? false }:
 
 stdenv.mkDerivation rec {
   pname = "badvpn";
   version = "1.999.130";
-  src = fetchurl {
-    url = "https://github.com/ambrop72/badvpn/archive/${version}.tar.gz";
-    sha256 = "sha256-v9S7/r1ydLzseSVYyaL9YOOc2S4EZzglreXQQVR2YQk=";
+
+  src = fetchFromGitHub {
+    owner = "ambrop72";
+    repo = "badvpn";
+    rev = version;
+    sha256 = "sha256-bLTDpq3ohUP+KooPvhv1/AZfdo0HwB3g9QOuE2E/pmY=";
   };
+
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
     openssl

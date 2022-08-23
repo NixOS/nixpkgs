@@ -280,16 +280,22 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     objc4           = applePackage "objc4"             "osx-10.12.6"     "1cj1vhbcs9pkmag2ms8wslagicnq9bxi2qjkszmp3ys7z7ccrbwz" {};
     ppp             = applePackage "ppp"               "osx-10.12.6"     "1kcc2nc4x1kf8sz0a23i6nfpvxg381kipi0qdisrp8x9z2gbkxb8" {};
     removefile      = applePackage "removefile"        "osx-10.12.6"     "0jzjxbmxgjzhssqd50z7kq9dlwrv5fsdshh57c0f8mdwcs19bsyx" {};
-    xnu             = applePackage "xnu"               "osx-10.12.6"     "1sjb0i7qzz840v2h4z3s4jyjisad4r5yyi6sg8pakv3wd81i5fg5" {
+    xnu             = if stdenv.isx86_64 then
+    applePackage "xnu"               "osx-10.12.6"     "1sjb0i7qzz840v2h4z3s4jyjisad4r5yyi6sg8pakv3wd81i5fg5" {
       python3 = pkgs.buildPackages.buildPackages.python3; # TODO(@Ericson2314) this shouldn't be needed.
-    };
+    }
+    else macosPackages_11_0_1.xnu;
     hfs             = applePackage "hfs"               "osx-10.12.6"     "1mj3xvqpq1mgd80b6kl1s04knqnap7hccr0gz8rjphalq14rbl5g" {};
     Librpcsvc       = applePackage "Librpcsvc"         "osx-10.11.6"     "1zwfwcl9irxl1dlnf2b4v30vdybp0p0r6n6g1pd14zbdci1jcg2k" {};
     adv_cmds        = applePackage "adv_cmds"          "osx-10.11.6"    "12gbv35i09aij9g90p6b3x2f3ramw43qcb2gjrg8lzkzmwvcyw9q" {};
     basic_cmds      = applePackage "basic_cmds"        "osx-10.11.6"     "0hvab4b1v5q2x134hdkal0rmz5gsdqyki1vb0dbw4py1bqf0yaw9" {};
     developer_cmds  = applePackage "developer_cmds"    "osx-10.11.6"     "1r9c2b6dcl22diqf90x58psvz797d3lxh4r2wppr7lldgbgn24di" {};
-    diskdev_cmds    = applePackage "diskdev_cmds"      "osx-10.11.6"     "1ssdyiaq5m1zfy96yy38yyknp682ki6bvabdqd5z18fa0rv3m2ar" {};
-    network_cmds    = applePackage "network_cmds"      "osx-10.11.6"     "0lhi9wz84qr1r2ab3fb4nvmdg9gxn817n5ldg7zw9gnf3wwn42kw" {};
+    diskdev_cmds    = applePackage "diskdev_cmds"      "osx-10.11.6"     "1ssdyiaq5m1zfy96yy38yyknp682ki6bvabdqd5z18fa0rv3m2ar" {
+      macosPackages_11_0_1 = macosPackages_11_0_1;
+    };
+    network_cmds    = if stdenv.isx86_64 then
+      applePackage "network_cmds" "osx-10.11.6" "0lhi9wz84qr1r2ab3fb4nvmdg9gxn817n5ldg7zw9gnf3wwn42kw" {}
+    else macosPackages_11_0_1.network_cmds;
     file_cmds       = applePackage "file_cmds"         "osx-10.11.6"     "1zfxbmasps529pnfdjvc13p7ws2cfx8pidkplypkswyff0nff4wp" {};
     shell_cmds      = applePackage "shell_cmds"        "osx-10.11.6"     "0084k271v66h4jqp7q7rmjvv7w4mvhx3aq860qs8jbd30canm86n" {};
     system_cmds     = applePackage "system_cmds"       "osx-10.11.6"     "1h46j2c5v02pkv5d9fyv6cpgyg0lczvwicrx6r9s210cl03l77jl" {};
@@ -297,6 +303,12 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     top             = applePackage "top"               "osx-10.11.6"     "0i9120rfwapgwdvjbfg0ya143i29s1m8zbddsxh39pdc59xnsg5l" {};
     PowerManagement = applePackage "PowerManagement"   "osx-10.11.6"     "1llimhvp0gjffd47322lnjq7cqwinx0c5z7ikli04ad5srpa68mh" {};
 
+    # `configdHeaders` can’t use an override because `pkgs.darwin.configd` on aarch64-darwin will
+    # be replaced by SystemConfiguration.framework from the macOS SDK.
+    configdHeaders  = applePackage "configd"           "osx-10.8.5"      "1gxakahk8gallf16xmhxhprdxkh3prrmzxnmxfvj0slr0939mmr2" {
+      headersOnly = true;
+      Security    = null;
+    };
     libutilHeaders  = pkgs.darwin.libutil.override { headersOnly = true; };
     hfsHeaders      = pkgs.darwin.hfs.override { headersOnly = true; };
     libresolvHeaders= pkgs.darwin.libresolv.override { headersOnly = true; };

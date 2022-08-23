@@ -1,12 +1,35 @@
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Dict, Iterator, List
+from typing import Any, Dict, Iterator, List, Union, Optional, Callable, ContextManager
 import os
 import tempfile
 
 from test_driver.logger import rootlog
 from test_driver.machine import Machine, NixStartScript, retry
 from test_driver.vlan import VLan
+from test_driver.polling_condition import PollingCondition
+
+
+def get_tmp_dir() -> Path:
+    """Returns a temporary directory that is defined by TMPDIR, TEMP, TMP or CWD
+    Raises an exception in case the retrieved temporary directory is not writeable
+    See https://docs.python.org/3/library/tempfile.html#tempfile.gettempdir
+    """
+    tmp_dir = Path(tempfile.gettempdir())
+    tmp_dir.mkdir(mode=0o700, exist_ok=True)
+    if not tmp_dir.is_dir():
+        raise NotADirectoryError(
+            "The directory defined by TMPDIR, TEMP, TMP or CWD: {0} is not a directory".format(
+                tmp_dir
+            )
+        )
+    if not os.access(tmp_dir, os.W_OK):
+        raise PermissionError(
+            "The directory defined by TMPDIR, TEMP, TMP, or CWD: {0} is not writeable".format(
+                tmp_dir
+            )
+        )
+    return tmp_dir
 
 
 class Driver:
@@ -16,25 +39,30 @@ class Driver:
     tests: str
     vlans: List[VLan]
     machines: List[Machine]
+    polling_conditions: List[PollingCondition]
 
     def __init__(
         self,
         start_scripts: List[str],
         vlans: List[int],
         tests: str,
+        out_dir: Path,
         keep_vm_state: bool = False,
     ):
         self.tests = tests
+        self.out_dir = out_dir
 
-        tmp_dir = Path(os.environ.get("TMPDIR", tempfile.gettempdir()))
-        tmp_dir.mkdir(mode=0o700, exist_ok=True)
+        tmp_dir = get_tmp_dir()
 
         with rootlog.nested("start all VLans"):
+            vlans = list(set(vlans))
             self.vlans = [VLan(nr, tmp_dir) for nr in vlans]
 
         def cmd(scripts: List[str]) -> Iterator[NixStartScript]:
             for s in scripts:
                 yield NixStartScript(s)
+
+        self.polling_conditions = []
 
         self.machines = [
             Machine(
@@ -42,6 +70,8 @@ class Driver:
                 keep_vm_state=keep_vm_state,
                 name=cmd.machine_name,
                 tmp_dir=tmp_dir,
+                callbacks=[self.check_polling_conditions],
+                out_dir=self.out_dir,
             )
             for cmd in cmd(start_scripts)
         ]
@@ -56,7 +86,7 @@ class Driver:
 
     def subtest(self, name: str) -> Iterator[None]:
         """Group logs under a given test name"""
-        with rootlog.nested(name):
+        with rootlog.nested("subtest: " + name):
             try:
                 yield
                 return True
@@ -84,6 +114,7 @@ class Driver:
             retry=retry,
             serial_stdout_off=self.serial_stdout_off,
             serial_stdout_on=self.serial_stdout_on,
+            polling_condition=self.polling_condition,
             Machine=Machine,  # for typing
         )
         machine_symbols = {m.name: m for m in self.machines}
@@ -135,8 +166,8 @@ class Driver:
             "Using legacy create_machine(), please instantiate the"
             "Machine class directly, instead"
         )
-        tmp_dir = Path(os.environ.get("TMPDIR", tempfile.gettempdir()))
-        tmp_dir.mkdir(mode=0o700, exist_ok=True)
+
+        tmp_dir = get_tmp_dir()
 
         if args.get("startCommand"):
             start_command: str = args.get("startCommand", "")
@@ -148,6 +179,7 @@ class Driver:
 
         return Machine(
             tmp_dir=tmp_dir,
+            out_dir=self.out_dir,
             start_command=cmd,
             name=name,
             keep_vm_state=args.get("keep_vm_state", False),
@@ -159,3 +191,36 @@ class Driver:
 
     def serial_stdout_off(self) -> None:
         rootlog._print_serial_logs = False
+
+    def check_polling_conditions(self) -> None:
+        for condition in self.polling_conditions:
+            condition.maybe_raise()
+
+    def polling_condition(
+        self,
+        fun_: Optional[Callable] = None,
+        *,
+        seconds_interval: float = 2.0,
+        description: Optional[str] = None,
+    ) -> Union[Callable[[Callable], ContextManager], ContextManager]:
+        driver = self
+
+        class Poll:
+            def __init__(self, fun: Callable):
+                self.condition = PollingCondition(
+                    fun,
+                    seconds_interval,
+                    description,
+                )
+
+            def __enter__(self) -> None:
+                driver.polling_conditions.append(self.condition)
+
+            def __exit__(self, a, b, c) -> None:  # type: ignore
+                res = driver.polling_conditions.pop()
+                assert res is self.condition
+
+        if fun_ is None:
+            return Poll
+        else:
+            return Poll(fun_)

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "boschshcpy";
-  version = "0.2.27";
+  version = "0.2.32";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "tschamm";
     repo = pname;
     rev = version;
-    sha256 = "sha256-xlkLMCLo1tut1mLj/L9YcRn16+GVKXJSSkpClBh1ujI=";
+    sha256 = "sha256-tJlgmxa6HppLLTs4ZggnJ5H6NOH3v+C9pUfLBmxr4XY=";
   };
 
   propagatedBuildInputs = [

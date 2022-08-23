@@ -91,29 +91,9 @@ let
     SERIAL 0 115200
     TIMEOUT ${builtins.toString syslinuxTimeout}
     UI vesamenu.c32
-    MENU TITLE NixOS
     MENU BACKGROUND /isolinux/background.png
-    MENU RESOLUTION 800 600
-    MENU CLEAR
-    MENU ROWS 6
-    MENU CMDLINEROW -4
-    MENU TIMEOUTROW -3
-    MENU TABMSGROW  -2
-    MENU HELPMSGROW -1
-    MENU HELPMSGENDROW -1
-    MENU MARGIN 0
 
-    #                                FG:AARRGGBB  BG:AARRGGBB   shadow
-    MENU COLOR BORDER       30;44      #00000000    #00000000   none
-    MENU COLOR SCREEN       37;40      #FF000000    #00E2E8FF   none
-    MENU COLOR TABMSG       31;40      #80000000    #00000000   none
-    MENU COLOR TIMEOUT      1;37;40    #FF000000    #00000000   none
-    MENU COLOR TIMEOUT_MSG  37;40      #FF000000    #00000000   none
-    MENU COLOR CMDMARK      1;36;40    #FF000000    #00000000   none
-    MENU COLOR CMDLINE      37;40      #FF000000    #00000000   none
-    MENU COLOR TITLE        1;36;44    #00000000    #00000000   none
-    MENU COLOR UNSEL        37;44      #FF000000    #00000000   none
-    MENU COLOR SEL          7;37;40    #FFFFFFFF    #FF5277C3   std
+    ${config.isoImage.syslinuxTheme}
 
     DEFAULT boot
 
@@ -389,10 +369,10 @@ let
     ${lib.optionalString (refindBinary != null) ''
     # GRUB apparently cannot do "chainloader" operations on "CD".
     if [ "\$root" != "cd0" ]; then
-      # Force root to be the FAT partition
-      # Otherwise it breaks rEFInd's boot
-      search --set=root --no-floppy --fs-uuid 1234-5678
       menuentry 'rEFInd' --class refind {
+        # Force root to be the FAT partition
+        # Otherwise it breaks rEFInd's boot
+        search --set=root --no-floppy --fs-uuid 1234-5678
         chainloader (\$root)/EFI/boot/${refindBinary}
       }
     fi
@@ -420,10 +400,8 @@ let
     #   dates (cp -p, touch, mcopy -m, faketime for label), IDs (mkfs.vfat -i)
     ''
       mkdir ./contents && cd ./contents
-      cp -rp "${efiDir}"/EFI .
-      mkdir ./boot
-      cp -p "${config.boot.kernelPackages.kernel}/${config.system.boot.loader.kernelFile}" \
-        "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}" ./boot/
+      mkdir -p ./EFI/boot
+      cp -rp "${efiDir}"/EFI/boot/{grub.cfg,*.efi} ./EFI/boot
 
       # Rewrite dates for everything in the FS
       find . -exec touch --date=2000-01-01 {} +
@@ -441,11 +419,11 @@ let
       faketime "2000-01-01 00:00:00" mkfs.vfat -i 12345678 -n EFIBOOT "$out"
 
       # Force a fixed order in mcopy for better determinism, and avoid file globbing
-      for d in $(find EFI boot -type d | sort); do
+      for d in $(find EFI -type d | sort); do
         faketime "2000-01-01 00:00:00" mmd -i "$out" "::/$d"
       done
 
-      for f in $(find EFI boot -type f | sort); do
+      for f in $(find EFI -type f | sort); do
         mcopy -pvm -i "$out" "$f" "::/$f"
       done
 
@@ -476,34 +454,34 @@ in
 
     isoImage.isoName = mkOption {
       default = "${config.isoImage.isoBaseName}.iso";
-      description = ''
+      description = lib.mdDoc ''
         Name of the generated ISO image file.
       '';
     };
 
     isoImage.isoBaseName = mkOption {
       default = "nixos";
-      description = ''
+      description = lib.mdDoc ''
         Prefix of the name of the generated ISO image file.
       '';
     };
 
     isoImage.compressImage = mkOption {
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether the ISO image should be compressed using
-        <command>zstd</command>.
+        {command}`zstd`.
       '';
     };
 
     isoImage.squashfsCompression = mkOption {
       default = with pkgs.stdenv.targetPlatform; "xz -Xdict-size 100% "
-                + lib.optionalString (isx86_32 || isx86_64) "-Xbcj x86"
+                + lib.optionalString isx86 "-Xbcj x86"
                 # Untested but should also reduce size for these platforms
-                + lib.optionalString (isAarch32 || isAarch64) "-Xbcj arm"
-                + lib.optionalString (isPowerPC) "-Xbcj powerpc"
+                + lib.optionalString isAarch "-Xbcj arm"
+                + lib.optionalString (isPower && is32bit && isBigEndian) "-Xbcj powerpc"
                 + lib.optionalString (isSparc) "-Xbcj sparc";
-      description = ''
+      description = lib.mdDoc ''
         Compression settings to use for the squashfs nix store.
       '';
       example = "zstd -Xcompression-level 6";
@@ -511,7 +489,7 @@ in
 
     isoImage.edition = mkOption {
       default = "";
-      description = ''
+      description = lib.mdDoc ''
         Specifies which edition string to use in the volume ID of the generated
         ISO image.
       '';
@@ -520,7 +498,7 @@ in
     isoImage.volumeID = mkOption {
       # nixos-$EDITION-$RELEASE-$ARCH
       default = "nixos${optionalString (config.isoImage.edition != "") "-${config.isoImage.edition}"}-${config.system.nixos.release}-${pkgs.stdenv.hostPlatform.uname.processor}";
-      description = ''
+      description = lib.mdDoc ''
         Specifies the label or volume ID of the generated ISO image.
         Note that the label is used by stage 1 of the boot process to
         mount the CD, so it should be reasonably distinctive.
@@ -534,7 +512,7 @@ in
           }
         ]
       '';
-      description = ''
+      description = lib.mdDoc ''
         This option lists files to be copied to fixed locations in the
         generated ISO image.
       '';
@@ -542,7 +520,7 @@ in
 
     isoImage.storeContents = mkOption {
       example = literalExpression "[ pkgs.stdenv ]";
-      description = ''
+      description = lib.mdDoc ''
         This option lists additional derivations to be included in the
         Nix store in the generated ISO image.
       '';
@@ -550,7 +528,7 @@ in
 
     isoImage.includeSystemBuildDependencies = mkOption {
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Set this option to include all the needed sources etc in the
         image. It significantly increases image size. Use that when
         you want to be able to keep all the sources needed to build your
@@ -561,14 +539,14 @@ in
 
     isoImage.makeEfiBootable = mkOption {
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether the ISO image should be an efi-bootable volume.
       '';
     };
 
     isoImage.makeUsbBootable = mkOption {
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether the ISO image should be bootable from CD as well as USB.
       '';
     };
@@ -578,7 +556,7 @@ in
           url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/a9e05d7deb38a8e005a2b52575a3f59a63a4dba0/bootloader/efi-background.png";
           sha256 = "18lfwmp8yq923322nlb9gxrh5qikj1wsk6g5qvdh31c4h5b1538x";
         };
-      description = ''
+      description = lib.mdDoc ''
         The splash image to use in the EFI bootloader.
       '';
     };
@@ -588,7 +566,7 @@ in
           url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/a9e05d7deb38a8e005a2b52575a3f59a63a4dba0/bootloader/isolinux/bios-boot.png";
           sha256 = "1wp822zrhbg4fgfbwkr7cbkr4labx477209agzc0hr6k62fr6rxd";
         };
-      description = ''
+      description = lib.mdDoc ''
         The splash image to use in the legacy-boot bootloader.
       '';
     };
@@ -596,20 +574,51 @@ in
     isoImage.grubTheme = mkOption {
       default = pkgs.nixos-grub2-theme;
       type = types.nullOr (types.either types.path types.package);
-      description = ''
+      description = lib.mdDoc ''
         The grub2 theme used for UEFI boot.
+      '';
+    };
+
+    isoImage.syslinuxTheme = mkOption {
+      default = ''
+        MENU TITLE NixOS
+        MENU RESOLUTION 800 600
+        MENU CLEAR
+        MENU ROWS 6
+        MENU CMDLINEROW -4
+        MENU TIMEOUTROW -3
+        MENU TABMSGROW  -2
+        MENU HELPMSGROW -1
+        MENU HELPMSGENDROW -1
+        MENU MARGIN 0
+
+        #                                FG:AARRGGBB  BG:AARRGGBB   shadow
+        MENU COLOR BORDER       30;44      #00000000    #00000000   none
+        MENU COLOR SCREEN       37;40      #FF000000    #00E2E8FF   none
+        MENU COLOR TABMSG       31;40      #80000000    #00000000   none
+        MENU COLOR TIMEOUT      1;37;40    #FF000000    #00000000   none
+        MENU COLOR TIMEOUT_MSG  37;40      #FF000000    #00000000   none
+        MENU COLOR CMDMARK      1;36;40    #FF000000    #00000000   none
+        MENU COLOR CMDLINE      37;40      #FF000000    #00000000   none
+        MENU COLOR TITLE        1;36;44    #00000000    #00000000   none
+        MENU COLOR UNSEL        37;44      #FF000000    #00000000   none
+        MENU COLOR SEL          7;37;40    #FFFFFFFF    #FF5277C3   std
+      '';
+      type = types.str;
+      description = lib.mdDoc ''
+        The syslinux theme used for BIOS boot.
       '';
     };
 
     isoImage.appendToMenuLabel = mkOption {
       default = " Installer";
       example = " Live System";
-      description = ''
+      description = lib.mdDoc ''
         The string to append after the menu label for the NixOS system.
         This will be directly appended (without whitespace) to the NixOS version
-        string, like for example if it is set to <literal>XXX</literal>:
+        string, like for example if it is set to `XXX`:
 
-        <para><literal>NixOS 99.99-pre666XXX</literal></para>
+        `NixOS 99.99-pre666XXX`
       '';
     };
 
@@ -734,13 +743,13 @@ in
         { source = config.system.build.squashfsStore;
           target = "/nix-store.squashfs";
         }
-        { source = config.isoImage.splashImage;
-          target = "/isolinux/background.png";
-        }
         { source = pkgs.writeText "version" config.system.nixos.label;
           target = "/version.txt";
         }
       ] ++ optionals canx86BiosBoot [
+        { source = config.isoImage.splashImage;
+          target = "/isolinux/background.png";
+        }
         { source = pkgs.substituteAll  {
             name = "isolinux.cfg";
             src = pkgs.writeText "isolinux.cfg-in" isolinuxCfg;
@@ -761,6 +770,9 @@ in
         { source = (pkgs.writeTextDir "grub/loopback.cfg" "source /EFI/boot/grub.cfg") + "/grub";
           target = "/boot/grub";
         }
+        { source = config.isoImage.efiSplashImage;
+          target = "/EFI/boot/efi-background.png";
+        }
       ] ++ optionals (config.boot.loader.grub.memtest86.enable && canx86BiosBoot) [
         { source = "${pkgs.memtest86plus}/memtest.bin";
           target = "/boot/memtest.bin";
@@ -768,10 +780,6 @@ in
       ] ++ optionals (config.isoImage.grubTheme != null) [
         { source = config.isoImage.grubTheme;
           target = "/EFI/boot/grub-theme";
-        }
-      ] ++ [
-        { source = config.isoImage.efiSplashImage;
-          target = "/EFI/boot/efi-background.png";
         }
       ];
 

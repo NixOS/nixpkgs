@@ -8,18 +8,18 @@
 , python
 , catch
 , numpy
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pybind11";
-  version = "2.8.1";
+  version = "2.9.2";
 
   src = fetchFromGitHub {
     owner = "pybind";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Gk4ZN/g6SRWFm0ALCvyald/9zq3wBd48mGdqdGCeGYI=";
+    hash = "sha256-O3bkexUBa+gfiJEM6KSR8y/iVqHqlCFmz/9EghxdIpw=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   postBuild = ''
     # build tests
-    make
+    make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES
   '';
 
   postInstall = ''
@@ -49,19 +49,24 @@ buildPythonPackage rec {
   checkInputs = [
     catch
     numpy
-    pytest
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    runHook preCheck
-
-    make check
-
-    runHook postCheck
-  '';
+  disabledTestPaths = [
+    # require dependencies not available in nixpkgs
+    "tests/test_embed/test_trampoline.py"
+    "tests/test_embed/test_interpreter.py"
+    # numpy changed __repr__ output of numpy dtypes
+    "tests/test_numpy_dtypes.py"
+    # no need to test internal packaging
+    "tests/extra_python_package/test_files.py"
+    # tests that try to parse setuptools stdout
+    "tests/extra_setuptools/test_setuphelper.py"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/pybind/pybind11";
+    changelog = "https://github.com/pybind/pybind11/blob/${src.rev}/docs/changelog.rst";
     description = "Seamless operability between C++11 and Python";
     longDescription = ''
       Pybind11 is a lightweight header-only library that exposes

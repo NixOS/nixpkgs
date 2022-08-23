@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
+    "-DCMAKE_CXX_FLAGS=-std=c++11"
     "-DBLAS_FOUND:BOOL=TRUE"
     "-DBLAS_LIBRARIES:STRING=${blas}/lib/libblas.so"
     "-DLAPACK_FOUND:BOOL=TRUE"
@@ -38,8 +39,6 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   checkPhase = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/itpp
-    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD/itpp
     ./gtests/itpp_gtests
   '';
 
@@ -49,5 +48,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ andrew-d ];
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/itpp.x86_64-darwin
   };
 }

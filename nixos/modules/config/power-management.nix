@@ -20,7 +20,7 @@ in
         type = types.bool;
         default = true;
         description =
-          ''
+          lib.mdDoc ''
             Whether to enable power management.  This includes support
             for suspend-to-RAM and powersave features on laptops.
           '';
@@ -29,7 +29,7 @@ in
       resumeCommands = mkOption {
         type = types.lines;
         default = "";
-        description = "Commands executed after the system resumes from suspend-to-RAM.";
+        description = lib.mdDoc "Commands executed after the system resumes from suspend-to-RAM.";
       };
 
       powerUpCommands = mkOption {
@@ -39,7 +39,7 @@ in
           "''${pkgs.hdparm}/sbin/hdparm -B 255 /dev/sda"
         '';
         description =
-          ''
+          lib.mdDoc ''
             Commands executed when the machine powers up.  That is,
             they're executed both when the system first boots and when
             it resumes from suspend or hibernation.
@@ -53,7 +53,7 @@ in
           "''${pkgs.hdparm}/sbin/hdparm -B 255 /dev/sda"
         '';
         description =
-          ''
+          lib.mdDoc ''
             Commands executed when the machine powers down.  That is,
             they're executed both when the system shuts down and when
             it goes to suspend or hibernation.
@@ -91,7 +91,7 @@ in
 
     systemd.services.post-resume =
       { description = "Post-Resume Actions";
-        after = [ "suspend.target" "hibernate.target" "hybrid-sleep.target" ];
+        after = [ "suspend.target" "hibernate.target" "hybrid-sleep.target" "suspend-then-hibernate.target" ];
         script =
           ''
             /run/current-system/systemd/bin/systemctl try-restart post-resume.target

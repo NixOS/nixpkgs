@@ -1,5 +1,5 @@
 { lib
-, fetchgit
+, fetchFromSourcehut
 , fetchNodeModules
 , buildPythonPackage
 , pgpy
@@ -29,12 +29,13 @@
 
 buildPythonPackage rec {
   pname = "srht";
-  version = "0.68.13";
+  version = "0.69.0";
 
-  src = fetchgit {
-    url = "https://git.sr.ht/~sircmpwn/core.sr.ht";
+  src = fetchFromSourcehut {
+    owner = "~sircmpwn";
+    repo = "core.sr.ht";
     rev = version;
-    sha256 = "sha256-LPyEfpNlmod18Fj16xpihKOrsU/hQUfAeOmWMmUeVPQ=";
+    sha256 = "sha256-s/I0wxtPggjTkkTZnhm77PxdQjiT0Vq2MIk7JMvdupc=";
     fetchSubmodules = true;
   };
 
@@ -47,6 +48,8 @@ buildPythonPackage rec {
   patches = [
     # Disable check for npm
     ./disable-npm-install.patch
+    # Fix Unix socket support in RedisQueueCollector
+    patches/redis-socket/core/0001-Fix-Unix-socket-support-in-RedisQueueCollector.patch
   ];
 
   nativeBuildInputs = [

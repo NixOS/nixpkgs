@@ -1,31 +1,54 @@
-{ lib, buildPythonPackage, fetchFromGitHub, requests, requests_oauthlib
-, django, python3-openid, mock, coverage }:
+{ lib
+, buildPythonPackage
+, django
+, fetchFromGitHub
+, python3-openid
+, pythonOlder
+, requests
+, requests-oauthlib
+}:
 
 buildPythonPackage rec {
   pname = "django-allauth";
-  version = "0.40.0";
+  version = "0.51.0";
+  format = "setuptools";
 
-  # no tests on PyPI
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "pennersr";
     repo = pname;
     rev = version;
-    sha256 = "10id4k01p1hg5agb8cmllg8mv4kc7ryl75br10idwxabqqp4vla1";
+    hash = "sha256-o8EoayMMwxoJTrUA3Jo1Dfu1XFgC+Mcpa8yMwXlKAKY=";
   };
 
-  propagatedBuildInputs = [ requests requests_oauthlib django python3-openid ];
-
-  checkInputs = [ coverage mock ];
-
-  doCheck = false;
-  checkPhase = ''
-    cd $NIX_BUILD_TOP/$sourceRoot
-    coverage run manage.py test allauth
+  postPatch = ''
+    chmod +x manage.py
+    patchShebangs manage.py
   '';
+
+  propagatedBuildInputs = [
+    django
+    python3-openid
+    requests
+    requests-oauthlib
+  ];
+
+  checkPhase = ''
+    # test is out of date
+    rm allauth/socialaccount/providers/cern/tests.py
+
+    ./manage.py test
+  '';
+
+  pythonImportsCheck = [
+    "allauth"
+  ];
 
   meta = with lib; {
     description = "Integrated set of Django applications addressing authentication, registration, account management as well as 3rd party (social) account authentication";
     homepage = "https://www.intenct.nl/projects/django-allauth";
     license = licenses.mit;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

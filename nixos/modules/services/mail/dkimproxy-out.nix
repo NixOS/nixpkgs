@@ -15,7 +15,7 @@ in
         type = types.bool;
         default = false;
         description =
-          ''
+          lib.mdDoc ''
             Whether to enable dkimproxy_out.
 
             Note that a key will be auto-generated, and can be found in
@@ -26,19 +26,19 @@ in
       listen = mkOption {
         type = types.str;
         example = "127.0.0.1:10027";
-        description = "Address:port DKIMproxy should listen on.";
+        description = lib.mdDoc "Address:port DKIMproxy should listen on.";
       };
 
       relay = mkOption {
         type = types.str;
         example = "127.0.0.1:10028";
-        description = "Address:port DKIMproxy should forward mail to.";
+        description = lib.mdDoc "Address:port DKIMproxy should forward mail to.";
       };
 
       domains = mkOption {
         type = with types; listOf str;
         example = [ "example.org" "example.com" ];
-        description = "List of domains DKIMproxy can sign for.";
+        description = lib.mdDoc "List of domains DKIMproxy can sign for.";
       };
 
       selector = mkOption {
@@ -59,7 +59,7 @@ in
         type = types.int;
         default = 2048;
         description =
-          ''
+          lib.mdDoc ''
             Size of the RSA key to use to sign outgoing emails. Note that the
             maximum mandatorily verified as per RFC6376 is 2048.
           '';

@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i python3 -p bundix bundler nix-update nix-universal-prefetch python3 python3Packages.requests python3Packages.click python3Packages.click-log
+#! nix-shell -i python3 -p bundix bundler nix-update nix-universal-prefetch python3 python3Packages.requests python3Packages.click python3Packages.click-log prefetch-yarn-deps
 from __future__ import annotations
 
 import click
@@ -104,10 +104,17 @@ class DiscourseRepo:
 
         return self._latest_commit_sha
 
+    def get_yarn_lock_hash(self, rev: str):
+        yarnLockText = self.get_file('app/assets/javascripts/yarn.lock', rev)
+        with tempfile.NamedTemporaryFile(mode='w') as lockFile:
+            lockFile.write(yarnLockText)
+            return subprocess.check_output(['prefetch-yarn-deps', lockFile.name]).decode('utf-8').strip()
+
     def get_file(self, filepath, rev):
-        """returns file contents at a given rev :param filepath: the path to
-        the file, relative to the repo root :param rev: the rev to
-        fetch at :return:
+        """Return file contents at a given rev.
+
+        :param str filepath: the path to the file, relative to the repo root
+        :param str rev: the rev to fetch at :return:
 
         """
         r = requests.get(f'https://raw.githubusercontent.com/{self.owner}/{self.repo}/{rev}/{filepath}')
@@ -116,7 +123,7 @@ class DiscourseRepo:
 
 
 def _call_nix_update(pkg, version):
-    """calls nix-update from nixpkgs root dir"""
+    """Call nix-update from nixpkgs root dir."""
     nixpkgs_path = Path(__file__).parent / '../../../../'
     return subprocess.check_output(['nix-update', pkg, '--version', version], cwd=nixpkgs_path)
 
@@ -215,7 +222,7 @@ def print_diffs(rev, reverse):
 def update(rev):
     """Update gem files and version.
 
-    REV should be the git rev to update to ('vX.Y.Z[.betaA]') or
+    REV: the git rev to update to ('vX.Y.Z[.betaA]') or
     'latest'; defaults to 'latest'.
 
     """
@@ -241,12 +248,39 @@ def update(rev):
 
     _call_nix_update('discourse', version.version)
 
+    old_yarn_hash = _nix_eval('discourse.assets.yarnOfflineCache.outputHash')
+    new_yarn_hash = repo.get_yarn_lock_hash(version.tag)
+    click.echo(f"Updating yarn lock hash, {old_yarn_hash} -> {new_yarn_hash}")
+    with open(Path(__file__).parent / "default.nix", 'r+') as f:
+        content = f.read()
+        content = content.replace(old_yarn_hash, new_yarn_hash)
+        f.seek(0)
+        f.write(content)
+        f.truncate()
+
+
+@cli.command()
+@click.argument('rev', default='latest')
+def update_mail_receiver(rev):
+    """Update discourse-mail-receiver.
+
+    REV: the git rev to update to ('vX.Y.Z') or 'latest'; defaults to
+    'latest'.
+
+    """
+    repo = DiscourseRepo(repo="mail-receiver")
+
+    if rev == 'latest':
+        version = repo.versions[0]
+    else:
+        version = DiscourseVersion(rev)
+
+    _call_nix_update('discourse-mail-receiver', version.version)
+
 
 @cli.command()
 def update_plugins():
-    """Update plugins to their latest revision.
-
-    """
+    """Update plugins to their latest revision."""
     plugins = [
         {'name': 'discourse-assign'},
         {'name': 'discourse-calendar'},
@@ -373,6 +407,7 @@ def update_plugins():
         gemfile_text = ''
         for line in repo.get_file('plugin.rb', rev).splitlines():
             if 'gem ' in line:
+                line = ','.join(filter(lambda x: ":require_name" not in x, line.split(',')))
                 gemfile_text = gemfile_text + line + os.linesep
 
                 version_file_match = version_file_regex.match(line)

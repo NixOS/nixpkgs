@@ -1,4 +1,5 @@
-{ lib, fetchPypi, buildPythonPackage
+{ stdenv
+, lib, fetchPypi, buildPythonPackage
 , pytest
 , numpy
 , cython
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Block-oriented, in-memory buffer transformation, compression, and decompression functions";
     homepage = "https://www.lfd.uci.edu/~gohlke/";
     maintainers = [ maintainers.tbenst ];

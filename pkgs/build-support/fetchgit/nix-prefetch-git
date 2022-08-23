@@ -48,6 +48,8 @@ Options:
       --rev ref       Any sha1 or references (such as refs/heads/master)
       --hash h        Expected hash.
       --branch-name   Branch name to check out into
+      --sparse-checkout Only fetch and checkout part of the repository.
+      --non-cone-mode Use non-cone mode for sparse checkouts.
       --deepClone     Clone the entire repository.
       --no-deepClone  Make a shallow clone of just the required ref.
       --leave-dotGit  Keep the .git directories.
@@ -75,6 +77,8 @@ for arg; do
             --hash) argfun=set_hashType;;
             --branch-name) argfun=set_branchName;;
             --deepClone) deepClone=true;;
+            --sparse-checkout) argfun=set_sparseCheckout;;
+            --non-cone-mode) nonConeMode=true;;
             --quiet) QUIET=true;;
             --no-deepClone) deepClone=;;
             --leave-dotGit) leaveDotGit=true;;
@@ -96,7 +100,7 @@ for arg; do
         case $argfun in
             set_*)
                 var=${argfun#set_}
-                eval $var=$arg
+                eval "$var=$(printf %q "$arg")"
                 ;;
         esac
         argfun=""
@@ -112,6 +116,10 @@ init_remote(){
     local url=$1
     clean_git init --initial-branch=master
     clean_git remote add origin "$url"
+    if [ -n "$sparseCheckout" ]; then
+        git config remote.origin.partialclonefilter "blob:none"
+        echo "$sparseCheckout" | git sparse-checkout set --stdin ${nonConeMode:+--no-cone}
+    fi
     ( [ -n "$http_proxy" ] && clean_git config http.proxy "$http_proxy" ) || true
 }
 

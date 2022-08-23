@@ -24,50 +24,66 @@ let
     $sudo ${pkgs.php}/bin/php artisan $*
   '';
 
+  tlsEnabled = cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME;
 
 in {
+  imports = [
+    (mkRemovedOptionModule [ "services" "bookstack" "extraConfig" ] "Use services.bookstack.config instead.")
+    (mkRemovedOptionModule [ "services" "bookstack" "cacheDir" ] "The cache directory is now handled automatically.")
+  ];
+
   options.services.bookstack = {
 
     enable = mkEnableOption "BookStack";
 
     user = mkOption {
       default = "bookstack";
-      description = "User bookstack runs as.";
+      description = lib.mdDoc "User bookstack runs as.";
       type = types.str;
     };
 
     group = mkOption {
       default = "bookstack";
-      description = "Group bookstack runs as.";
+      description = lib.mdDoc "Group bookstack runs as.";
       type = types.str;
     };
 
     appKeyFile = mkOption {
-      description = ''
-        A file containing the AppKey.
-        Used for encryption where needed. Can be generated with <code>head -c 32 /dev/urandom| base64</code> and must be prefixed with <literal>base64:</literal>.
+      description = lib.mdDoc ''
+        A file containing the Laravel APP_KEY - a 32 character long,
+        base64 encoded key used for encryption where needed. Can be
+        generated with `head -c 32 /dev/urandom | base64`.
       '';
       example = "/run/keys/bookstack-appkey";
       type = types.path;
     };
 
-    appURL = mkOption {
-      description = ''
-        The root URL that you want to host BookStack on. All URLs in BookStack will be generated using this value.
-        If you change this in the future you may need to run a command to update stored URLs in the database. Command example: <code>php artisan bookstack:update-url https://old.example.com https://new.example.com</code>
+    hostname = lib.mkOption {
+      type = lib.types.str;
+      default = if config.networking.domain != null then
+                  config.networking.fqdn
+                else
+                  config.networking.hostName;
+      defaultText = lib.literalExpression "config.networking.fqdn";
+      example = "bookstack.example.com";
+      description = lib.mdDoc ''
+        The hostname to serve BookStack on.
       '';
+    };
+
+    appURL = mkOption {
+      description = lib.mdDoc ''
+        The root URL that you want to host BookStack on. All URLs in BookStack will be generated using this value.
+        If you change this in the future you may need to run a command to update stored URLs in the database. Command example: `php artisan bookstack:update-url https://old.example.com https://new.example.com`
+      '';
+      default = "http${lib.optionalString tlsEnabled "s"}://${cfg.hostname}";
+      defaultText = ''http''${lib.optionalString tlsEnabled "s"}://''${cfg.hostname}'';
       example = "https://example.com";
       type = types.str;
     };
 
-    cacheDir = mkOption {
-      description = "BookStack cache directory";
-      default = "/var/cache/bookstack";
-      type = types.path;
-    };
-
     dataDir = mkOption {
-      description = "BookStack data directory";
+      description = lib.mdDoc "BookStack data directory";
       default = "/var/lib/bookstack";
       type = types.path;
     };
@@ -76,37 +92,37 @@ in {
       host = mkOption {
         type = types.str;
         default = "localhost";
-        description = "Database host address.";
+        description = lib.mdDoc "Database host address.";
       };
       port = mkOption {
         type = types.port;
         default = 3306;
-        description = "Database host port.";
+        description = lib.mdDoc "Database host port.";
       };
       name = mkOption {
         type = types.str;
         default = "bookstack";
-        description = "Database name.";
+        description = lib.mdDoc "Database name.";
       };
       user = mkOption {
         type = types.str;
         default = user;
         defaultText = literalExpression "user";
-        description = "Database username.";
+        description = lib.mdDoc "Database username.";
       };
       passwordFile = mkOption {
         type = with types; nullOr path;
         default = null;
         example = "/run/keys/bookstack-dbpassword";
-        description = ''
+        description = lib.mdDoc ''
           A file containing the password corresponding to
-          <option>database.user</option>.
+          {option}`database.user`.
         '';
       };
       createLocally = mkOption {
         type = types.bool;
         default = false;
-        description = "Create the database and database user locally.";
+        description = lib.mdDoc "Create the database and database user locally.";
       };
     };
 
@@ -114,47 +130,47 @@ in {
       driver = mkOption {
         type = types.enum [ "smtp" "sendmail" ];
         default = "smtp";
-        description = "Mail driver to use.";
+        description = lib.mdDoc "Mail driver to use.";
       };
       host = mkOption {
         type = types.str;
         default = "localhost";
-        description = "Mail host address.";
+        description = lib.mdDoc "Mail host address.";
       };
       port = mkOption {
         type = types.port;
         default = 1025;
-        description = "Mail host port.";
+        description = lib.mdDoc "Mail host port.";
       };
       fromName = mkOption {
         type = types.str;
         default = "BookStack";
-        description = "Mail \"from\" name.";
+        description = lib.mdDoc "Mail \"from\" name.";
       };
       from = mkOption {
         type = types.str;
         default = "mail@bookstackapp.com";
-        description = "Mail \"from\" email.";
+        description = lib.mdDoc "Mail \"from\" email.";
       };
       user = mkOption {
         type = with types; nullOr str;
         default = null;
         example = "bookstack";
-        description = "Mail username.";
+        description = lib.mdDoc "Mail username.";
       };
       passwordFile = mkOption {
         type = with types; nullOr path;
         default = null;
         example = "/run/keys/bookstack-mailpassword";
-        description = ''
+        description = lib.mdDoc ''
           A file containing the password corresponding to
-          <option>mail.user</option>.
+          {option}`mail.user`.
         '';
       };
       encryption = mkOption {
         type = with types; nullOr (enum [ "tls" ]);
         default = null;
-        description = "SMTP encryption mechanism to use.";
+        description = lib.mdDoc "SMTP encryption mechanism to use.";
       };
     };
 
@@ -162,7 +178,7 @@ in {
       type = types.str;
       default = "18M";
       example = "1G";
-      description = "The maximum size for uploads (e.g. images).";
+      description = lib.mdDoc "The maximum size for uploads (e.g. images).";
     };
 
     poolConfig = mkOption {
@@ -175,8 +191,8 @@ in {
         "pm.max_spare_servers" = 4;
         "pm.max_requests" = 500;
       };
-      description = ''
-        Options for the bookstack PHP pool. See the documentation on <literal>php-fpm.conf</literal>
+      description = lib.mdDoc ''
+        Options for the bookstack PHP pool. See the documentation on `php-fpm.conf`
         for details on configuration directives.
       '';
     };
@@ -197,21 +213,64 @@ in {
           enableACME = true;
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         With this option, you can customize the nginx virtualHost settings.
       '';
     };
 
-    extraConfig = mkOption {
-      type = types.nullOr types.lines;
-      default = null;
-      example = ''
-        ALLOWED_IFRAME_HOSTS="https://example.com"
-        WKHTMLTOPDF=/home/user/bins/wkhtmltopdf
+    config = mkOption {
+      type = with types;
+        attrsOf
+          (nullOr
+            (either
+              (oneOf [
+                bool
+                int
+                port
+                path
+                str
+              ])
+              (submodule {
+                options = {
+                  _secret = mkOption {
+                    type = nullOr str;
+                    description = ''
+                      The path to a file containing the value the
+                      option should be set to in the final
+                      configuration file.
+                    '';
+                  };
+                };
+              })));
+      default = {};
+      example = literalExpression ''
+        {
+          ALLOWED_IFRAME_HOSTS = "https://example.com";
+          WKHTMLTOPDF = "/home/user/bins/wkhtmltopdf";
+          AUTH_METHOD = "oidc";
+          OIDC_NAME = "MyLogin";
+          OIDC_DISPLAY_NAME_CLAIMS = "name";
+          OIDC_CLIENT_ID = "bookstack";
+          OIDC_CLIENT_SECRET = {_secret = "/run/keys/oidc_secret"};
+          OIDC_ISSUER = "https://keycloak.example.com/auth/realms/My%20Realm";
+          OIDC_ISSUER_DISCOVER = true;
+        }
       '';
-      description = ''
-        Lines to be appended verbatim to the BookStack configuration.
-        Refer to <link xlink:href="https://www.bookstackapp.com/docs/"/> for details on supported values.
+      description = lib.mdDoc ''
+        BookStack configuration options to set in the
+        {file}`.env` file.
+
+        Refer to <https://www.bookstackapp.com/docs/>
+        for details on supported values.
+
+        Settings containing secret data should be set to an attribute
+        set containing the attribute `_secret` - a
+        string pointing to a file containing the value the option
+        should be set to. See the example to get a better picture of
+        this: in the resulting {file}`.env` file, the
+        `OIDC_CLIENT_SECRET` key will be set to the
+        contents of the {file}`/run/keys/oidc_secret`
+        file.
       '';
     };
 
@@ -227,6 +286,30 @@ in {
         message = "services.bookstack.database.passwordFile cannot be specified if services.bookstack.database.createLocally is set to true.";
       }
     ];
+
+    services.bookstack.config = {
+      APP_KEY._secret = cfg.appKeyFile;
+      APP_URL = cfg.appURL;
+      DB_HOST = db.host;
+      DB_PORT = db.port;
+      DB_DATABASE = db.name;
+      DB_USERNAME = db.user;
+      MAIL_DRIVER = mail.driver;
+      MAIL_FROM_NAME = mail.fromName;
+      MAIL_FROM = mail.from;
+      MAIL_HOST = mail.host;
+      MAIL_PORT = mail.port;
+      MAIL_USERNAME = mail.user;
+      MAIL_ENCRYPTION = mail.encryption;
+      DB_PASSWORD._secret = db.passwordFile;
+      MAIL_PASSWORD._secret = mail.passwordFile;
+      APP_SERVICES_CACHE = "/run/bookstack/cache/services.php";
+      APP_PACKAGES_CACHE = "/run/bookstack/cache/packages.php";
+      APP_CONFIG_CACHE = "/run/bookstack/cache/config.php";
+      APP_ROUTES_CACHE = "/run/bookstack/cache/routes-v7.php";
+      APP_EVENTS_CACHE = "/run/bookstack/cache/events.php";
+      SESSION_SECURE_COOKIE = tlsEnabled;
+    };
 
     environment.systemPackages = [ artisan ];
 
@@ -258,24 +341,19 @@ in {
 
     services.nginx = {
       enable = mkDefault true;
-      virtualHosts.bookstack = mkMerge [ cfg.nginx {
+      recommendedTlsSettings = true;
+      recommendedOptimisation = true;
+      recommendedGzipSettings = true;
+      virtualHosts.${cfg.hostname} = mkMerge [ cfg.nginx {
         root = mkForce "${bookstack}/public";
-        extraConfig = optionalString (cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME) "fastcgi_param HTTPS on;";
         locations = {
           "/" = {
             index = "index.php";
-            extraConfig = ''try_files $uri $uri/ /index.php?$query_string;'';
+            tryFiles = "$uri $uri/ /index.php?$query_string";
           };
-          "~ \.php$" = {
-            extraConfig = ''
-              try_files $uri $uri/ /index.php?$query_string;
-              include ${pkgs.nginx}/conf/fastcgi_params;
-              fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-              fastcgi_param REDIRECT_STATUS 200;
-              fastcgi_pass unix:${config.services.phpfpm.pools."bookstack".socket};
-              ${optionalString (cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME) "fastcgi_param HTTPS on;"}
-            '';
-          };
+          "~ \.php$".extraConfig = ''
+            fastcgi_pass unix:${config.services.phpfpm.pools."bookstack".socket};
+          '';
           "~ \.(js|css|gif|png|ico|jpg|jpeg)$" = {
             extraConfig = "expires 365d;";
           };
@@ -290,53 +368,54 @@ in {
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "oneshot";
+        RemainAfterExit = true;
         User = user;
         WorkingDirectory = "${bookstack}";
+        RuntimeDirectory = "bookstack/cache";
+        RuntimeDirectoryMode = 0700;
       };
-      script = ''
+      path = [ pkgs.replace-secret ];
+      script =
+        let
+          isSecret = v: isAttrs v && v ? _secret && isString v._secret;
+          bookstackEnvVars = lib.generators.toKeyValue {
+            mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" {
+              mkValueString = v: with builtins;
+                if isInt         v then toString v
+                else if isString v then v
+                else if true  == v then "true"
+                else if false == v then "false"
+                else if isSecret v then hashString "sha256" v._secret
+                else throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty {}) v}";
+            };
+          };
+          secretPaths = lib.mapAttrsToList (_: v: v._secret) (lib.filterAttrs (_: isSecret) cfg.config);
+          mkSecretReplacement = file: ''
+            replace-secret ${escapeShellArgs [ (builtins.hashString "sha256" file) file "${cfg.dataDir}/.env" ]}
+          '';
+          secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
+          filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! elem v [ {} null ])) cfg.config;
+          bookstackEnv = pkgs.writeText "bookstack.env" (bookstackEnvVars filteredConfig);
+        in ''
+        # error handling
+        set -euo pipefail
+
         # set permissions
         umask 077
+
         # create .env file
-        echo "
-        APP_KEY=base64:$(head -n1 ${cfg.appKeyFile})
-        APP_URL=${cfg.appURL}
-        DB_HOST=${db.host}
-        DB_PORT=${toString db.port}
-        DB_DATABASE=${db.name}
-        DB_USERNAME=${db.user}
-        MAIL_DRIVER=${mail.driver}
-        MAIL_FROM_NAME=\"${mail.fromName}\"
-        MAIL_FROM=${mail.from}
-        MAIL_HOST=${mail.host}
-        MAIL_PORT=${toString mail.port}
-        ${optionalString (mail.user != null) "MAIL_USERNAME=${mail.user};"}
-        ${optionalString (mail.encryption != null) "MAIL_ENCRYPTION=${mail.encryption};"}
-        ${optionalString (db.passwordFile != null) "DB_PASSWORD=$(head -n1 ${db.passwordFile})"}
-        ${optionalString (mail.passwordFile != null) "MAIL_PASSWORD=$(head -n1 ${mail.passwordFile})"}
-        APP_SERVICES_CACHE=${cfg.cacheDir}/services.php
-        APP_PACKAGES_CACHE=${cfg.cacheDir}/packages.php
-        APP_CONFIG_CACHE=${cfg.cacheDir}/config.php
-        APP_ROUTES_CACHE=${cfg.cacheDir}/routes-v7.php
-        APP_EVENTS_CACHE=${cfg.cacheDir}/events.php
-        ${optionalString (cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME) "SESSION_SECURE_COOKIE=true"}
-        ${toString cfg.extraConfig}
-        " > "${cfg.dataDir}/.env"
+        install -T -m 0600 -o ${user} ${bookstackEnv} "${cfg.dataDir}/.env"
+        ${secretReplacements}
+        if ! grep 'APP_KEY=base64:' "${cfg.dataDir}/.env" >/dev/null; then
+            sed -i 's/APP_KEY=/APP_KEY=base64:/' "${cfg.dataDir}/.env"
+        fi
 
         # migrate db
         ${pkgs.php}/bin/php artisan migrate --force
-
-        # clear & create caches (needed in case of update)
-        ${pkgs.php}/bin/php artisan cache:clear
-        ${pkgs.php}/bin/php artisan config:clear
-        ${pkgs.php}/bin/php artisan view:clear
-        ${pkgs.php}/bin/php artisan config:cache
-        ${pkgs.php}/bin/php artisan route:cache
-        ${pkgs.php}/bin/php artisan view:cache
       '';
     };
 
     systemd.tmpfiles.rules = [
-      "d ${cfg.cacheDir}                           0700 ${user} ${group} - -"
       "d ${cfg.dataDir}                            0710 ${user} ${group} - -"
       "d ${cfg.dataDir}/public                     0750 ${user} ${group} - -"
       "d ${cfg.dataDir}/public/uploads             0750 ${user} ${group} - -"

@@ -1,22 +1,22 @@
 { lib, stdenv, fetchFromGitHub
 , buildPythonApplication, python
-, pytestCheckHook, mock, pathpy, pyhamcrest, pytest-html
+, pytestCheckHook, mock, path, pyhamcrest, pytest-html
 , glibcLocales
 , colorama, cucumber-tag-expressions, parse, parse-type, six
 }:
 
 buildPythonApplication rec {
   pname = "behave";
-  version = "1.2.7.dev1";
+  version = "1.2.7.dev2";
 
   src = fetchFromGitHub {
     owner = "behave";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ssgixmqlg8sxsyalr83a1970njc2wg3zl8idsmxnsljwacv7qwv";
+    hash = "sha256-B8PUN1Q4UAsDWrHjPZDlpaPjCKjI/pAogCSI+BQnaWs=";
   };
 
-  checkInputs = [ pytestCheckHook mock pathpy pyhamcrest pytest-html ];
+  checkInputs = [ pytestCheckHook mock path pyhamcrest pytest-html ];
 
   # upstream tests are failing, so instead we only check if we can import it
   doCheck = false;

@@ -5,15 +5,15 @@
 , gobject-introspection, gdk-pixbuf, wrapGAppsHook
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "avizo";
-  version = "unstable-2021-07-21";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "misterdanb";
     repo = "avizo";
-    rev = "7b3874e5ee25c80800b3c61c8ea30612aaa6e8d1";
-    sha256 = "sha256-ixAdiAH22Nh19uK5GoAXtAZJeAfCGSWTcGbrvCczWYc=";
+    rev = version;
+    sha256 = "sha256-ainU4nXWFp1udVujPHZUeWIfJE4RrjU1hn9J17UuuzU=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config vala gobject-introspection wrapGAppsHook ];

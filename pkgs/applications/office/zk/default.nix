@@ -2,26 +2,24 @@
 
 buildGoModule rec {
   pname = "zk";
-  version = "0.9.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "mickael-menu";
     repo = "zk";
     rev = "v${version}";
-    sha256 = "sha256-AXKIi70evf581lMwfbfxm8hFCzsnhKRQgnIEZQFS75A=";
+    sha256 = "sha256-30Vw6RGREg/ULS+eNExulHNOsOssMjXE+/tuRBQ17kI=";
   };
 
-  vendorSha256 = "sha256-m7QGv8Vx776TsN7QHXtO+yl3U1D573UMZVyg1B4UeIk=";
+  vendorSha256 = "sha256-11GzI3aEhKKTiULoWq9uIc66E3YCrW/HJQUYXRhCaek=";
 
   doCheck = false;
-
-  buildInputs = [ icu ];
 
   CGO_ENABLED = 1;
 
   ldflags = [ "-s" "-w" "-X=main.Build=${version}" ];
 
-  tags = [ "fts5" "icu" ];
+  tags = [ "fts5" ];
 
   meta = with lib; {
     maintainers = with maintainers; [ pinpox ];

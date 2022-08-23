@@ -89,10 +89,11 @@ installPhase() {
                 sed -E "s#(libGLX_nvidia)#$i/lib/\\1#" nvidia_icd.json > nvidia_icd.json.fixed
             fi
 
-            if [ "$system" = "i686-linux" ]; then
+            # nvidia currently only supports x86_64 and i686
+            if [ "$i" == "$lib32" ]; then
                 install -Dm644 nvidia_icd.json.fixed $i/share/vulkan/icd.d/nvidia_icd.i686.json
             else
-                install -Dm644 nvidia_icd.json.fixed $i/share/vulkan/icd.d/nvidia_icd.json
+                install -Dm644 nvidia_icd.json.fixed $i/share/vulkan/icd.d/nvidia_icd.x86_64.json
             fi
         fi
 
@@ -118,6 +119,10 @@ installPhase() {
             fi
         fi
 
+        # Install libraries needed by Proton to support DLSS
+        if [ -e nvngx.dll ] && [ -e _nvngx.dll ]; then
+            install -Dm644 -t $i/lib/nvidia/wine/ nvngx.dll _nvngx.dll
+        fi
     done
 
     if [ -n "$bin" ]; then
@@ -144,6 +149,11 @@ installPhase() {
             cp nvidia-application-profiles-*-rc $bin/share/nvidia/nvidia-application-profiles-rc
             cp nvidia-application-profiles-*-key-documentation $bin/share/nvidia/nvidia-application-profiles-key-documentation
         fi
+    fi
+
+    if [ -n "$firmware" ]; then
+        # Install the GSP firmware
+        install -Dm644 firmware/gsp.bin $firmware/lib/firmware/nvidia/$version/gsp.bin
     fi
 
     # All libs except GUI-only are installed now, so fixup them.

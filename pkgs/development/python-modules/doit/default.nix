@@ -2,38 +2,56 @@
 , stdenv
 , fetchPypi
 , buildPythonPackage
+, importlib-metadata
 , isPy3k
 , mock
 , pytestCheckHook
 , cloudpickle
 , pyinotify
 , macfsevents
+, toml
+, doit-py
+, pyflakes
+, configclass
+, mergedict
 }:
 
-buildPythonPackage rec {
+let doit = buildPythonPackage rec {
   pname = "doit";
-  version = "0.33.1";
+  version = "0.36.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "37c3b35c2151647b968b2af24481112b2f813c30f695366db0639d529190a143";
+    sha256 = "sha256-cdB8zJUUyyL+WdmJmVd2ZeqrV+FvZE0EM2rgtLriNLw=";
   };
 
-  propagatedBuildInputs = [ cloudpickle ]
-    ++ lib.optional stdenv.isLinux pyinotify
+  propagatedBuildInputs = [
+    cloudpickle
+    importlib-metadata
+    toml
+  ] ++ lib.optional stdenv.isLinux pyinotify
     ++ lib.optional stdenv.isDarwin macfsevents;
 
-  # hangs on darwin
-  doCheck = !stdenv.isDarwin;
-
-  checkInputs = [ mock pytestCheckHook ];
-
-  disabledTests = [
-    # depends on doit-py, which has a circular dependency on doit
-    "test___main__.py"
+  checkInputs = [
+    configclass
+    doit-py
+    mergedict
+    mock
+    pyflakes
+    pytestCheckHook
   ];
+
+  # escape infinite recursion with doit-py
+  doCheck = false;
+
+  passthru.tests = {
+    # hangs on darwin
+    check = doit.overridePythonAttrs (_: { doCheck = !stdenv.isDarwin; });
+  };
+
+  pythonImportsCheck = [ "doit" ];
 
   meta = with lib; {
     homepage = "https://pydoit.org/";
@@ -48,4 +66,5 @@ buildPythonPackage rec {
     '';
     maintainers = with maintainers; [ pSub ];
   };
-}
+
+}; in doit

@@ -1,73 +1,109 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k
-, setuptools-scm
-, cheroot, portend, more-itertools, zc_lockfile, routes
+{ lib
+, stdenv
+, buildPythonPackage
+, cheroot
+, fetchPypi
 , jaraco_collections
-, objgraph, pytest, pytest-cov, pathpy, requests-toolbelt, pytest-services
-, fetchpatch
+, more-itertools
+, objgraph
+, path
+, portend
+, pytest-forked
+, pytest-services
+, pytestCheckHook
+, python-memcached
+, pythonAtLeast
+, pythonOlder
+, requests-toolbelt
+, routes
+, setuptools-scm
+, simplejson
+, zc_lockfile
 }:
 
 buildPythonPackage rec {
   pname = "cherrypy";
-  version = "18.6.0";
+  version = "18.7.0";
+  format = "setuptools";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "CherryPy";
     inherit version;
-    sha256 = "16f410izp2c4qhn4n3l5l3qirmkf43h2amjqms8hkl0shgfqwq2n";
+    hash = "sha256-cpRS95jKdWOQBG7zGAQ8roZKRoFN6vPmvTTclZrxmN4=";
   };
 
-  patches = [
-    # 1/3 Fix compatibility with pytest 6. Will be part of the next release after 18.6
-    (fetchpatch {
-      url = "https://github.com/cherrypy/cherrypy/pull/1897/commits/59c0e19d7df8680e36afc96756dce72435121448.patch";
-      sha256 = "1jachbvp505gndccdhny0c3grzdrmvmbzq4kw55jx93ay94ni6p0";
-    })
-    # 2/3 Fix compatibility with pytest 6. Will be part of the next release after 18.6
-    (fetchpatch {
-      url = "https://github.com/cherrypy/cherrypy/pull/1897/commits/4a6287b73539adcb7b0ae72d69644a1ced1f7eaa.patch";
-      sha256 = "0nz40qmgxknkbjsdzfzcqfxdsmsxx3v104fb0h04yvs76mqvw3i4";
-    })
-    # 3/3 Fix compatibility with pytest 6. Will be part of the next release after 18.6
-    (fetchpatch {
-      url = "https://github.com/cherrypy/cherrypy/commit/3bae7f06868553b006915f05ff14d86163f59a7d.patch";
-      sha256 = "1z0bv23ybyw87rf1i8alsdi3gc2bzmdj9d0kjsghdkvi3zdp4n8q";
-    })
+  postPatch = ''
+    # Disable doctest plugin because times out
+    substituteInPlace pytest.ini \
+      --replace "--doctest-modules" "-vvv" \
+      --replace "-p pytest_cov" "" \
+      --replace "--no-cov-on-fail" ""
+    sed -i "/--cov/d" pytest.ini
+  '';
+
+  nativeBuildInputs = [
+    setuptools-scm
   ];
 
-  nativeBuildInputs = [ setuptools-scm ];
-
   propagatedBuildInputs = [
-    # required
-    cheroot portend more-itertools zc_lockfile
+    cheroot
+    portend
+    more-itertools
+    zc_lockfile
     jaraco_collections
-    # optional
-    routes
   ];
 
   checkInputs = [
-    objgraph pytest pytest-cov pathpy requests-toolbelt pytest-services
+    objgraph
+    path
+    pytest-forked
+    pytest-services
+    pytestCheckHook
+    requests-toolbelt
   ];
 
-  # Keyboard interrupt ends test suite run
-  # daemonize and autoreload tests have issue with sockets within sandbox
-  # Disable doctest plugin because times out
-  checkPhase = ''
-    substituteInPlace pytest.ini --replace "--doctest-modules" ""
-    pytest \
-      -k 'not KeyboardInterrupt and not daemonize and not Autoreload' \
-      --deselect=cherrypy/test/test_static.py::StaticTest::test_null_bytes \
-      --deselect=cherrypy/test/test_tools.py::ToolTests::testCombinedTools \
-      ${lib.optionalString stdenv.isDarwin
-        "--deselect=cherrypy/test/test_bus.py::BusMethodTests::test_block --deselect=cherrypy/test/test_config_server.py"}
-  '';
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
+  disabledTests = [
+    # Keyboard interrupt ends test suite run
+    "KeyboardInterrupt"
+    # daemonize and autoreload tests have issue with sockets within sandbox
+    "daemonize"
+    "Autoreload"
+
+    "test_antistampede"
+    "test_file_stream"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_block"
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.isDarwin [
+    "cherrypy/test/test_config_server.py"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
+  pythonImportsCheck = [
+    "cherrypy"
+  ];
+
+  passthru.optional-dependencies = {
+    json = [ simplejson ];
+    memcached_session = [ python-memcached ];
+    routes_dispatcher = [ routes ];
+    # not packaged yet
+    xcgi = [ /* flup */ ];
+  };
+
   meta = with lib; {
+    description = "Object-oriented HTTP framework";
     homepage = "https://www.cherrypy.org";
-    description = "A pythonic, object-oriented HTTP framework";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }

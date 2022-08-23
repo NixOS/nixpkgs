@@ -1,40 +1,40 @@
 { stdenv, fetchurl, lib, libidn, openssl, makeWrapper, fetchhg
+, icu
 , lua
 , nixosTests
 , withLibevent ? true
 , withDBI ? true
 # use withExtraLibs to add additional dependencies of community modules
 , withExtraLibs ? [ ]
+, withExtraLuaPackages ? _: [ ]
 , withOnlyInstalledCommunityModules ? [ ]
 , withCommunityModules ? [ ] }:
 
 with lib;
 
-
 let
   luaEnv = lua.withPackages(p: with p; [
-      luasocket luasec luaexpat luafilesystem luabitop luadbi-sqlite3
+      luasocket luasec luaexpat luafilesystem luabitop luadbi-sqlite3 luaunbound
     ]
     ++ lib.optional withLibevent p.luaevent
     ++ lib.optional withDBI p.luadbi
+    ++ withExtraLuaPackages p
   );
 in
 stdenv.mkDerivation rec {
-  version = "0.11.10"; # also update communityModules
+  version = "0.12.0"; # also update communityModules
   pname = "prosody";
   # The following community modules are necessary for the nixos module
   # prosody module to comply with XEP-0423 and provide a working
   # default setup.
   nixosModuleDeps = [
-    "bookmarks"
     "cloud_notify"
     "vcard_muc"
-    "smacks"
     "http_upload"
   ];
   src = fetchurl {
     url = "https://prosody.im/downloads/source/${pname}-${version}.tar.gz";
-    sha256 = "1q84s9cq7cgzd295qxa2iy0r3vd3v3chbck62bdx3pd6skk19my6";
+    sha256 = "sha256-dS/zIBXaxWX8NBfCGWryaJccNY7gZuUfXZEkE1gNiJo=";
   };
 
   # A note to all those merging automated updates: Please also update this
@@ -42,16 +42,15 @@ stdenv.mkDerivation rec {
   # version.
   communityModules = fetchhg {
     url = "https://hg.prosody.im/prosody-modules";
-    rev = "64fafbeba14d";
-    sha256 = "02gj1b8sdmdvymsdmjpq47zrl7sg578jcdxbbq18s44f3njmc9q1";
+    rev = "65438e4ba563";
+    sha256 = "sha256-zHOrMzcgHOdBl7nObM+OauifbcmKEOfAuj81MDSoLMk=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
-    luaEnv libidn openssl
+    luaEnv libidn openssl icu
   ]
   ++ withExtraLibs;
-
 
   configureFlags = [
     "--ostype=linux"
@@ -68,26 +67,14 @@ stdenv.mkDerivation rec {
       ${concatMapStringsSep "\n" (module: ''
         cp -r $communityModules/mod_${module} $out/lib/prosody/modules/
       '') (lib.lists.unique(nixosModuleDeps ++ withCommunityModules ++ withOnlyInstalledCommunityModules))}
-      wrapProgram $out/bin/prosody \
-        --prefix LUA_PATH ';' "$LUA_PATH" \
-        --prefix LUA_CPATH ';' "$LUA_CPATH"
       wrapProgram $out/bin/prosodyctl \
-        --add-flags '--config "/etc/prosody/prosody.cfg.lua"' \
-        --prefix LUA_PATH ';' "$LUA_PATH" \
-        --prefix LUA_CPATH ';' "$LUA_CPATH"
-
+        --add-flags '--config "/etc/prosody/prosody.cfg.lua"'
       make -C tools/migration install
-      wrapProgram $out/bin/prosody-migrator \
-        --prefix LUA_PATH ';' "$LUA_PATH" \
-        --prefix LUA_CPATH ';' "$LUA_CPATH"
     '';
 
   passthru = {
     communityModules = withCommunityModules;
-    tests = {
-      main = nixosTests.prosody;
-      mysql = nixosTests.prosodyMysql;
-    };
+    tests = { inherit (nixosTests) prosody prosody-mysql; };
   };
 
   meta = {
@@ -95,6 +82,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     homepage = "https://prosody.im";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz globin ninjatrappeur ];
+    maintainers = with maintainers; [ globin ];
   };
 }

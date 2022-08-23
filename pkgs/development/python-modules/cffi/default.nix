@@ -4,11 +4,11 @@
 
 if isPyPy then null else buildPythonPackage rec {
   pname = "cffi";
-  version = "1.15.0";
+  version = "1.15.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "920f0d66a896c2d99f0adbb391f990a84091179542c205fa53ce5787aff87954";
+    sha256 = "sha256-1AC/uaN7E1ElPLQCZxzqfom97MKU6AFqcH9tHYrJNPk=";
   };
 
   outputs = [ "out" "dev" ];
@@ -19,11 +19,12 @@ if isPyPy then null else buildPythonPackage rec {
 
   propagatedBuildInputs = [ pycparser ];
 
-  prePatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     # Remove setup.py impurities
-    substituteInPlace setup.py --replace "'-iwithsysroot/usr/include/ffi'" ""
-    substituteInPlace setup.py --replace "'/usr/include/ffi'," ""
-    substituteInPlace setup.py --replace '/usr/include/libffi' '${lib.getDev libffi}/include'
+    substituteInPlace setup.py \
+      --replace "'-iwithsysroot/usr/include/ffi'" "" \
+      --replace "'/usr/include/ffi'," "" \
+      --replace '/usr/include/libffi' '${lib.getDev libffi}/include'
   '';
 
   # The tests use -Werror but with python3.6 clang detects some unreachable code.

@@ -1,82 +1,107 @@
-{ lib, stdenv, fetchFromGitHub, readline, libedit, bc
+{ lib
+, stdenv
+, fetchFromGitHub
+, bc
+, libedit
+, readline
 , avxSupport ? stdenv.hostPlatform.avxSupport
 }:
 
 stdenv.mkDerivation rec {
   pname = "j";
-  version = "902";
-  jtype = "release-b";
+  version = "904-beta-c";
+
   src = fetchFromGitHub {
+    name = "${pname}-source";
     owner = "jsoftware";
     repo = "jsource";
-    rev = "j${version}-${jtype}";
-    sha256 = "0j67vgikqflwjqacsdicasvyv1k54s2c8vjgwmf0ix7l41p4xqz0";
-    name = "jsource";
+    rev = "j${version}";
+    hash = "sha256-MzEO/saHEBl1JwVlFC6P2UKm9RZnV7KVrNd9h4cPV/w=";
   };
 
-  buildInputs = [ readline libedit bc ];
-  bits = if stdenv.is64bit then "64" else "32";
-  platform =
-    if (stdenv.isAarch32 || stdenv.isAarch64) then "raspberry" else
-    if stdenv.isLinux then "linux" else
-    if stdenv.isDarwin then "darwin" else
-    "unknown";
-  variant = if stdenv.isx86_64 && avxSupport then "avx" else "";
+  buildInputs = [
+    readline
+    libedit
+    bc
+  ];
 
-  j64x="j${bits}${variant}";
+  dontConfigure = true;
 
-  doCheck = true;
+  # emulating build_all.sh configuration variables
+  jplatform =
+    if stdenv.isDarwin then "darwin"
+    else if stdenv.hostPlatform.isAarch then "raspberry"
+    else if stdenv.isLinux then "linux"
+    else "unsupported";
 
-  # Causes build failure due to warning
-  hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
-
-  # Causes build failure due to warning
-  # https://github.com/jsoftware/jsource/issues/16
-  NIX_CFLAGS_COMPILE = "-Wno-error=return-local-addr";
+  j64x =
+    if stdenv.is32bit then "j32"
+    else if stdenv.isx86_64 then
+      if (stdenv.isLinux && avxSupport) then "j64avx" else "j64"
+    else if stdenv.isAarch64 then
+      if stdenv.isDarwin then "j64arm" else "j64"
+    else "unsupported";
 
   buildPhase = ''
-    export SOURCE_DIR=$(pwd)
-    export HOME=$TMPDIR
-    export JLIB=$SOURCE_DIR/jlibrary
+    runHook preBuild
 
-    echo $OUT_DIR
+    export SRCDIR=$(pwd)
+    export HOME=$TMPDIR
+    export JLIB=$SRCDIR/jlibrary
+    export CC=cc
 
     cd make2
 
     patchShebangs .
-    sed -i $JLIB/bin/profile.ijs -e "s@'/usr/share/j/.*'@'$out/share/j'@;"
 
-    j64x="${j64x}" ./build_all.sh
+    j64x="${j64x}" jplatform="${jplatform}" ./build_all.sh
 
-    cp $SOURCE_DIR/bin/${platform}/j${bits}*/* "$JLIB/bin"
+    cp -v $SRCDIR/bin/${jplatform}/${j64x}/* "$JLIB/bin"
+
+    runHook postBuild
   '';
 
-  checkPhase = ''
+  doCheck = true;
 
-    echo 'i. 5' | $JLIB/bin/jconsole | fgrep "0 1 2 3 4"
+  checkPhase = ''
+    runHook preCheck
+
+    echo "Smoke test"
+    echo 'i. 10' | $JLIB/bin/jconsole | fgrep "0 1 2 3 4 5 6 7 8 9"
 
     # Now run the real tests
-    cd $SOURCE_DIR/test
+    pushd $SRCDIR/test
     for f in *.ijs
     do
-      echo $f
+      echo -n "test $f: "
       $JLIB/bin/jconsole < $f > /dev/null || echo FAIL && echo PASS
     done
+    popd
+
+    runHook postCheck
   '';
 
   installPhase = ''
-    mkdir -p "$out"
+    runHook preInstall
 
-    mkdir -p "$out/share/j"
+    mkdir -p "$out/share/j/"
     cp -r $JLIB/{addons,system} "$out/share/j"
     cp -r $JLIB/bin "$out"
+
+    runHook postInstall
   '';
 
   meta = with lib; {
-    description = "J programming language, an ASCII-based APL successor";
-    maintainers = with maintainers; [ raskin synthetica ];
-    platforms = with platforms; linux ++ darwin;
-    license = licenses.gpl3Plus;
     homepage = "http://jsoftware.com/";
+    description = "J programming language, an ASCII-based APL successor";
+    longDescription = ''
+      J is a high-level, general-purpose programming language that is
+      particularly suited to the mathematical, statistical, and logical analysis
+      of data. It is a powerful tool for developing algorithms and exploring
+      problems that are not already well understood.
+    '';
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ raskin synthetica AndersonTorres ];
+    platforms = with platforms; unix;
   };
 }

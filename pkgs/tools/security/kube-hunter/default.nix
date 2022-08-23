@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "kube-hunter";
-  version = "0.6.3";
+  version = "0.6.8";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-OXiFWdbp6L9S57gRIROzuvXZ0R16lvKDqZR0kW0eEYQ=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-+M8P/VSF9SKPvq+yNPjokyhggY7hzQ9qLLhkiTNbJls=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -21,7 +21,6 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python3.pkgs; [
     netaddr
     netifaces
-    scapy
     requests
     prettytable
     urllib3

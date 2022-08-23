@@ -1,7 +1,9 @@
-{ lib
+{ stdenv
+, lib
 , substituteAll
 , buildPythonPackage
 , fetchPypi
+, catch2
 , cmake
 , cxxopts
 , ghc_filesystem
@@ -14,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "chiapos";
-  version = "1.0.6";
+  version = "1.0.10";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Zh5AULPgbG0oYPcBZMp/vm94MPyfdtYn4P5V+1LeMqA=";
+    sha256 = "sha256-2SqWdGzSXs53PafXnCvTGQXNJqD+5gdJnaYi2O2ABLg=";
   };
 
   patches = [
@@ -27,6 +29,7 @@ buildPythonPackage rec {
     (substituteAll {
       src = ./dont_fetch_dependencies.patch;
       inherit cxxopts ghc_filesystem;
+      catch2_src = catch2.src;
       pybind11_src = pybind11.src;
     })
   ];
@@ -45,6 +48,7 @@ buildPythonPackage rec {
   dontConfigure = true;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Chia proof of space library";
     homepage = "https://www.chia.net/";
     license = licenses.asl20;

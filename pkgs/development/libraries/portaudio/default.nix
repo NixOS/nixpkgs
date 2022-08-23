@@ -3,6 +3,7 @@
 , fetchurl
 , alsa-lib
 , pkg-config
+, which
 , AudioUnit
 , AudioToolbox
 , CoreAudio
@@ -18,7 +19,8 @@ stdenv.mkDerivation rec {
     sha256 = "1vrdrd42jsnffh6rq8ap2c6fr4g9fcld89z649fs06bwqx1bzvs7";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  strictDeps = true;
+  nativeBuildInputs = [ pkg-config which ];
   buildInputs = lib.optional (!stdenv.isDarwin) alsa-lib;
 
   configureFlags = [ "--disable-mac-universal" "--enable-cxx" ];
@@ -33,6 +35,11 @@ stdenv.mkDerivation rec {
   # Next release should address it with
   #     https://github.com/PortAudio/portaudio/commit/28d2781d9216115543aa3f0a0ffb7b4ee0fac551.patch
   enableParallelBuilding = false;
+
+  postPatch = ''
+    # workaround for the configure script which expects an absolute path
+    export AR=$(which $AR)
+  '';
 
   # not sure why, but all the headers seem to be installed by the make install
   installPhase = ''

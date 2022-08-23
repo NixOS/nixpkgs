@@ -42,7 +42,7 @@ in {
     nxagentDefaultOptions = mkOption {
       type = types.listOf types.str;
       default = [ "-extension GLX" "-nolisten tcp" ];
-      description = ''
+      description = lib.mdDoc ''
         List of default nx agent options.
       '';
     };
@@ -50,7 +50,7 @@ in {
     settings = mkOption {
       type = types.attrsOf types.attrs;
       default = {};
-      description = ''
+      description = lib.mdDoc ''
         x2goserver.conf ini configuration as nix attributes. See
         `x2goserver.conf(5)` for details
       '';

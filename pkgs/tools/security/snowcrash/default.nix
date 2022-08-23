@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
 }:
@@ -14,13 +15,11 @@ buildGoModule rec {
     sha256 = "16p1nfi9zdlcffjyrk1phrippjqrdzf3cpc51dgdy3bfr7pds2ld";
   };
 
-  vendorSha256 = "1xm2yjr4mqkara3yib6vgfj14ldh7r0v1vr2i0ks13l1rm54x840";
+  vendorSha256 = "sha256-YryQKLHwUDhR/Z7eWfCdL86Z83GrqBTvdGGj+dGKvjI";
 
   subPackages = [ "." ];
 
-  runVend = true;
-
-  postFixup = ''
+  postFixup = lib.optionals (!stdenv.isDarwin) ''
     mv $out/bin/SNOWCRASH $out/bin/${pname}
   '';
 
@@ -29,5 +28,6 @@ buildGoModule rec {
     homepage = "https://github.com/redcode-labs/SNOWCRASH";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ] ++ teams.redcodelabs.members;
+    mainProgram = "SNOWCRASH";
   };
 }

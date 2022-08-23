@@ -5,7 +5,7 @@
 
 buildPythonPackage rec {
   pname   = "construct";
-  version = "2.10.67";
+  version = "2.10.68";
 
   disabled = pythonOlder "3.6";
 
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner  = pname;
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "1nciwim745qk41l1ck4chx3vxpfr6cq4k3a4i7vfnnrd3s6szzsw";
+    sha256 = "sha256-bp/YyRFP0rrBHPyhiqnn6o1iC5l61oedShZ2phGeqaw=";
   };
 
   # not an explicit dependency, but it's imported by an entrypoint
@@ -22,11 +22,9 @@ buildPythonPackage rec {
     lz4
   ];
 
-  checkInputs = [ pytestCheckHook pytest-benchmark numpy arrow ruamel-yaml cloudpickle ];
+  checkInputs = [ pytestCheckHook numpy arrow ruamel-yaml cloudpickle ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [ "test_multiprocessing" ];
-
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  disabledTests = [ "test_benchmarks" ] ++ lib.optionals stdenv.isDarwin [ "test_multiprocessing" ];
 
   meta = with lib; {
     description = "Powerful declarative parser (and builder) for binary data";

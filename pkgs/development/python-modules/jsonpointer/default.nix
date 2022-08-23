@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "jsonpointer";
-  version = "2.2";
+  version = "2.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f09f8deecaaa5aea65b5eb4f67ca4e54e1a61f7a11c75085e360fe6feb6a48bf";
+    sha256 = "sha256-l8ulFSbIKSgiGP65nasbHmvfjv0cQ9ydV74JPA1pyZo=";
   };
 
   meta = with lib; {

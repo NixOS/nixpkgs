@@ -1,4 +1,4 @@
-{ lib, nixosTest, pkgs, writeText, hello, figlet, stdenvNoCC }:
+{ lib, testers, pkgs, writeText, hello, figlet, stdenvNoCC }:
 
 # -------------------------------------------------------------------------- #
 #
@@ -22,13 +22,13 @@ let
       lib.attrValues (import file { inherit pkgs; })
     );
 in
-nixosTest {
+testers.nixosTest {
   name = "nixpkgs-trivial-builders";
   nodes.machine = { ... }: {
     virtualisation.writableStore = true;
 
     # Test runs without network, so we don't substitute and prepare our deps
-    nix.binaryCaches = lib.mkForce [];
+    nix.settings.substituters = lib.mkForce [];
     environment.etc."pre-built-paths".source = writeText "pre-built-paths" (
       builtins.toJSON [hello figlet stdenvNoCC]
     );

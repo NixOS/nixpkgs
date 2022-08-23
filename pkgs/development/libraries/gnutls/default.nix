@@ -1,11 +1,12 @@
 { config, lib, stdenv, fetchurl, zlib, lzo, libtasn1, nettle, pkg-config, lzip
-, perl, gmp, autoconf, automake, libidn, libiconv
+, perl, gmp, autoconf, automake, libidn2, libiconv
 , unbound, dns-root-data, gettext, util-linux
 , cxxBindings ? !stdenv.hostPlatform.isStatic # tries to link libstdc++.so
 , guileBindings ? config.gnutls.guile or false, guile
 , tpmSupport ? false, trousers, which, nettools, libunistring
 , withP11-kit ? !stdenv.hostPlatform.isStatic, p11-kit
-, withSecurity ? false, Security  # darwin Security.framework
+, withSecurity ? true, Security  # darwin Security.framework
+# certificate compression - only zlib now, more possible: zstd, brotli
 }:
 
 assert guileBindings -> guile != null;
@@ -21,11 +22,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnutls";
-  version = "3.7.2";
+  version = "3.7.6";
 
   src = fetchurl {
     url = "mirror://gnupg/gnutls/v${lib.versions.majorMinor version}/gnutls-${version}.tar.xz";
-    sha256 = "646e6c5a9a185faa4cea796d378a1ba8e1148dbb197ca6605f95986a25af2752";
+    sha256 = "1zv2097v9f6f4c66q7yn3c6gggjk9jz38095ma7v3gs5lccmf1kp";
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
@@ -35,6 +36,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./nix-ssl-cert-file.patch ]
     # Disable native add_system_trust.
+    # FIXME: apparently it's not enough to drop the framework anymore; maybe related to
+    # https://gitlab.com/gnutls/gnutls/-/commit/c19cb93d492e45141bfef9b926dfeba36003261c
     ++ lib.optional (isDarwin && !withSecurity) ./no-security-framework.patch;
 
   # Skip some tests:
@@ -71,9 +74,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ lzo lzip libtasn1 libidn zlib gmp libunistring unbound gettext libiconv ]
+  buildInputs = [ lzo lzip libtasn1 libidn2 zlib gmp libunistring unbound gettext libiconv ]
     ++ lib.optional (withP11-kit) p11-kit
-    ++ lib.optional (isDarwin && withSecurity) Security
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers
     ++ lib.optional guileBindings guile;
 
@@ -81,7 +83,9 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (isDarwin && !withSecurity) [ autoconf automake ]
     ++ lib.optionals doCheck [ which nettools util-linux ];
 
-  propagatedBuildInputs = [ nettle ];
+  propagatedBuildInputs = [ nettle ]
+    # Builds dynamically linking against gnutls seem to need the framework now.
+    ++ lib.optional (isDarwin && withSecurity) Security;
 
   inherit doCheck;
   # stdenv's `NIX_SSL_CERT_FILE=/no-cert-file.crt` breaks tests.
@@ -120,7 +124,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://gnutls.org/";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ eelco fpletz ];
+    maintainers = with maintainers; [ vcunat ];
     platforms = platforms.all;
   };
 }

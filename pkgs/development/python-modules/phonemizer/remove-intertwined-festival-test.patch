@@ -1,15 +1,14 @@
 diff --git a/test/test_main.py b/test/test_main.py
-index 71d605a..0ea3c74 100644
+index b8c53e9..8f8c6d2 100644
 --- a/test/test_main.py
 +++ b/test/test_main.py
-@@ -63,17 +63,12 @@ def test_readme():
-     _test(u'hello world', u'həloʊ wɜːld ')
-     _test(u'hello world', u'həloʊ wɜːld ', '--verbose')
-     _test(u'hello world', u'həloʊ wɜːld ', '--quiet')
--    _test(u'hello world', u'hhaxlow werld', '-b festival --strip')
-     _test(u'hello world', u'həloʊ wɜːld ', '-l en-us')
-     _test(u'bonjour le monde', u'bɔ̃ʒuʁ lə mɔ̃d ', '-l fr-fr')
-     _test(u'bonjour le monde', u'b ɔ̃ ʒ u ʁ ;eword l ə ;eword m ɔ̃ d ;eword ',
+@@ -68,16 +68,11 @@ def test_readme():
+     _test('hello world', 'həloʊ wɜːld ', '--verbose')
+     _test('hello world', 'həloʊ wɜːld ', '--quiet')
+     _test('hello world', 'hello world | həloʊ wɜːld ', '--prepend-text')
+-    _test('hello world', 'hhaxlow werld', '-b festival --strip')
+     _test('bonjour le monde', 'bɔ̃ʒuʁ lə mɔ̃d ', '-l fr-fr')
+     _test('bonjour le monde', 'b ɔ̃ ʒ u ʁ ;eword l ə ;eword m ɔ̃ d ;eword ',
            '-l fr-fr -p " " -w ";eword "')
  
  
@@ -18,5 +17,87 @@ index 71d605a..0ea3c74 100644
 -    reason='festival-2.1 gives different results than further versions '
 -    'for syllable boundaries')
  def test_readme_festival_syll():
-     _test(u'hello world',
-           u'hh ax ;esyll l ow ;esyll ;eword w er l d ;esyll ;eword ',
+     _test('hello world',
+           'hh ax ;esyll l ow ;esyll ;eword w er l d ;esyll ;eword ',
+diff --git a/test/test_phonemize.py b/test/test_phonemize.py
+index d156c9e..2bbe371 100644
+--- a/test/test_phonemize.py
++++ b/test/test_phonemize.py
+@@ -213,18 +213,6 @@ def test_segments(njobs):
+         ('segments', True, True, False,
+             ['achi acho?', '', 'achi acho'],
+             [u'ʌtʃɪ ʌtʃʊ?', '', u'ʌtʃɪ ʌtʃʊ ']),
+-        ('festival', False, False, False,
+-            ['hello world!', '', 'goodbye'],
+-            ['hhaxlow werld ', 'guhdbay ']),
+-        ('festival', False, True, False,
+-            ['hello world!', '', 'goodbye'],
+-            ['hhaxlow werld!', 'guhdbay ']),
+-        ('festival', True, False, False,
+-            ['hello world!', '', 'goodbye'],
+-            ['hhaxlow werld ', '', 'guhdbay ']),
+-        ('festival', True, True, False,
+-            ['hello world!', '', 'goodbye'],
+-            ['hhaxlow werld!', '', 'guhdbay ']),
+         ('espeak', False, False, True,
+             ['hello world!', '', 'goodbye'],
+             [('hello world!', 'həloʊ wɜːld '), ('goodbye', 'ɡʊdbaɪ ')]),
+@@ -248,19 +236,7 @@ def test_segments(njobs):
+             [('achi acho?', u'ʌtʃɪ ʌtʃʊ '), ('', ''), ('achi acho', u'ʌtʃɪ ʌtʃʊ ')]),
+         ('segments', True, True, True,
+             ['achi acho?', '', 'achi acho'],
+-            [('achi acho?', u'ʌtʃɪ ʌtʃʊ?'), ('', ''), ('achi acho', u'ʌtʃɪ ʌtʃʊ ')]),
+-        ('festival', False, False, True,
+-            ['hello world!', '', 'goodbye'],
+-            [('hello world!', 'hhaxlow werld '), ('goodbye', 'guhdbay ')]),
+-        ('festival', False, True, True,
+-            ['hello world!', '', 'goodbye'],
+-            [('hello world!', 'hhaxlow werld!'), ('goodbye', 'guhdbay ')]),
+-        ('festival', True, False, True,
+-            ['hello world!', '', 'goodbye'],
+-            [('hello world!', 'hhaxlow werld '), ('', ''), ('goodbye', 'guhdbay ')]),
+-        ('festival', True, True, True,
+-            ['hello world!', '', 'goodbye'],
+-            [('hello world!', 'hhaxlow werld!'), ('', ''), ('goodbye', 'guhdbay ')])])
++            [('achi acho?', u'ʌtʃɪ ʌtʃʊ?'), ('', ''), ('achi acho', u'ʌtʃɪ ʌtʃʊ ')])])
+ def test_preserve_empty_lines(backend, empty_lines, punctuation, prepend_text, text, expected):
+     language = 'cree' if backend == 'segments' else 'en-us'
+ 
+@@ -278,11 +254,7 @@ def test_preserve_empty_lines(backend, empty_lines, punctuation, prepend_text, t
+         ('segments', False, False, [''], []),
+         ('segments', False, True, [''], []),
+         ('segments', True, False, [''], ['']),
+-        ('segments', True, True, [''], ['']),
+-        ('festival', False, False, [''], []),
+-        ('festival', False, True, [''], []),
+-        ('festival', True, False, [''], ['']),
+-        ('festival', True, True, [''], [''])])
++        ('segments', True, True, [''], [''])])
+ def test_empty_input(backend, empty_lines, punctuation, text, expected):
+     language = 'cree' if backend == 'segments' else 'en-us'
+ 
+diff --git a/test/test_punctuation.py b/test/test_punctuation.py
+index b2206ac..62e31c1 100644
+--- a/test/test_punctuation.py
++++ b/test/test_punctuation.py
+@@ -28,9 +28,6 @@ ESPEAK_150 = (EspeakBackend.version() >= (1, 50))
+ # True if we are using espeak>=1.49.3
+ ESPEAK_143 = (EspeakBackend.version() >= (1, 49, 3))
+ 
+-# True if we are using festival>=2.5
+-FESTIVAL_25 = (FestivalBackend.version() >= (2, 5))
+-
+ 
+ @pytest.mark.parametrize(
+     'inp, out', [
+@@ -179,9 +176,7 @@ def test_issue_54(text):
+         ('espeak', 'default', ['! ?', 'hey!'], ['! ?', 'heɪ!']),
+         ('espeak', '!', ['! ?', 'hey!'], ['! ', 'heɪ!']),
+         ('segments', 'default', ['! ?', 'hey!'], ['! ?', 'heːj!']),
+-        ('segments', '!', ['! ?', 'hey!'], ValueError),
+-        ('festival', 'default', ['! ?', 'hey!'], ['! ?', 'hhey!']),
+-        ('festival', '!', ['! ?', 'hey!'], ['! ', 'hhey!'])])
++        ('segments', '!', ['! ?', 'hey!'], ValueError)])
+ def test_issue55(backend, marks, text, expected):
+     if marks == 'default':
+         marks = Punctuation.default_marks()

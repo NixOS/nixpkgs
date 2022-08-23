@@ -1,19 +1,24 @@
 { lib, stdenv, fetchurl, autoPatchelfHook, installShellFiles }:
 
 let
-  version = "6.0.2";
+  version = "6.11";
+  downloadVersion = lib.replaceStrings [ "." ] [ "" ] version;
   srcUrl = {
     i686-linux = {
-      url = "https://www.rarlab.com/rar/rarlinux-${version}.tar.gz";
-      sha256 = "sha256-5iqk7eoo+hgltgscquob+wofzhuqz0m/8jf7bxdf9qa=";
+      url = "https://www.rarlab.com/rar/rarlinux-x32-${downloadVersion}.tar.gz";
+      sha256 = "sha256-7mpKkOEspGskt9yfSDrdK7CieJ0AectJKTi8TxLnbtk=";
     };
     x86_64-linux = {
-      url = "https://www.rarlab.com/rar/rarlinux-x64-${version}.tar.gz";
-      sha256 = "sha256-WAvrUGCgfwI51Mo/RYSSF0OLPPrTegUCuDEsnBeR9uQ=";
+      url = "https://www.rarlab.com/rar/rarlinux-x64-${downloadVersion}.tar.gz";
+      sha256 = "sha256-pb3QdLqdxIf3ybLfPao3MdilTHYjCB1BujYsTQuEMtE=";
+    };
+    aarch64-darwin = {
+      url = "https://www.rarlab.com/rar/rarmacos-arm-${downloadVersion}.tar.gz";
+      sha256 = "sha256-q2fC4w2/tJ+GaD3ETPP+V3SAApdlLDgr3eE2YcERQXA=";
     };
     x86_64-darwin = {
-      url = "https://www.rarlab.com/rar/rarosx-${version}.tar.gz";
-      sha256 = "sha256-baZ71vYXIGs25f7PJ0ujoGUrsWZRmFLhvDI0KoVktsg=";
+      url = "https://www.rarlab.com/rar/rarmacos-x64-${downloadVersion}.tar.gz";
+      sha256 = "sha256-yHWxAscqnLKrG9Clsaiy6wSbyVz4gpvN6AjyirCmIKQ=";
     };
   }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
   manSrc = fetchurl {
@@ -30,9 +35,10 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  buildInputs = [ stdenv.cc.cc.lib ];
+  buildInputs = lib.optionals stdenv.isLinux [ stdenv.cc.cc.lib ];
 
-  nativeBuildInputs = [ autoPatchelfHook installShellFiles ];
+  nativeBuildInputs = [ installShellFiles ]
+    ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
   installPhase = ''
     runHook preInstall
@@ -52,6 +58,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Utility for RAR archives";
     homepage = "https://www.rarlab.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ thiagokokada ];
     platforms = with platforms; linux ++ darwin;

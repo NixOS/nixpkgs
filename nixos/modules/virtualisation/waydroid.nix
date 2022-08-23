@@ -34,7 +34,7 @@ in
     system.requiredKernelConfig = with config.lib.kernelConfig; [
       (isEnabled "ANDROID_BINDER_IPC")
       (isEnabled "ANDROID_BINDERFS")
-      (isEnabled "ASHMEM")
+      (isEnabled "ASHMEM") # FIXME Needs memfd support instead on Linux 5.18 and waydroid 1.2.1
     ];
 
     /* NOTE: we always enable this flag even if CONFIG_PSI_DEFAULT_DISABLED is not on
@@ -56,8 +56,6 @@ in
 
       wantedBy = [ "multi-user.target" ];
 
-      path = with pkgs; [ getent iptables iproute kmod nftables util-linux which ];
-
       unitConfig = {
         ConditionPathExists = "/var/lib/waydroid/lxc/waydroid";
       };
@@ -68,6 +66,10 @@ in
         ExecStopPost = "${pkgs.waydroid}/bin/waydroid session stop";
       };
     };
+
+    systemd.tmpfiles.rules = [
+      "d /var/lib/misc 0755 root root -" # for dnsmasq.leases
+    ];
   };
 
 }

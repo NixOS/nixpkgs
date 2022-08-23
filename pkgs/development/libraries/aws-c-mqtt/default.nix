@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-c-mqtt";
-  version = "0.7.9";
+  version = "0.7.10";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-mqtt";
     rev = "v${version}";
-    sha256 = "sha256-YMAqK4DOFA5TkMNwLHRk1m14V8lN6X5SDAwrTYWdGMc=";
+    sha256 = "sha256-efkRr36FbLyS9tgE/ZF3tcmhQ4f5C5ySTlgzThbqv2I=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,6 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
     "-DBUILD_SHARED_LIBS=ON"
   ];
 

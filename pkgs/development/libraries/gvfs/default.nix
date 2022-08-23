@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , meson
 , ninja
@@ -17,6 +18,7 @@
 , fuse3
 , libcdio
 , libxml2
+, libsoup_3
 , libxslt
 , docbook_xsl
 , docbook_xml_dtd_42
@@ -41,11 +43,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gvfs";
-  version = "1.48.1";
+  version = "1.50.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1hlxl6368h6nyqp1888szxs9hnpcw98k3h23dgqi29xd38klzsmj";
+    sha256 = "A9crjBXvQ4EQ8M9Fe1ZVJmyLUV0EErMPTVXPoNoGrF4=";
   };
 
   postPatch = ''
@@ -89,9 +91,8 @@ stdenv.mkDerivation rec {
     libnfs
     openssh
     gsettings-desktop-schemas
-    # TODO: a ligther version of libsoup to have FTP/HTTP support?
+    libsoup_3
   ] ++ lib.optionals gnomeSupport [
-    gnome.libsoup
     gcr
     glib-networking # TLS support
     gnome-online-accounts
@@ -106,8 +107,9 @@ stdenv.mkDerivation rec {
     "-Dgcr=false"
     "-Dgoa=false"
     "-Dkeyring=false"
-    "-Dhttp=false"
     "-Dgoogle=false"
+  ] ++ lib.optionals (avahi == null) [
+    "-Ddnssd=false"
   ] ++ lib.optionals (samba == null) [
     # Xfce don't want samba
     "-Dsmb=false"

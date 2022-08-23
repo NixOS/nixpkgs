@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchpatch, fetchFromGitHub, pkg-config, autoreconfHook
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook
 , openssl, c-ares, libxml2, sqlite, zlib, libssh2
 , cppunit, sphinx
 , Security
@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ErjFfSJDIgZq0qy0Zn5uZ9bZS2AtJq4FuBVuUuQgPTI=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [ pkg-config autoreconfHook sphinx ];
 
   buildInputs = [ openssl c-ares libxml2 sqlite zlib libssh2 ] ++
@@ -25,10 +26,11 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt"
     "--enable-libaria2"
+    "--with-bashcompletiondir=${placeholder "bin"}/share/bash-completion/completions"
   ];
 
   prePatch = ''
-    patchShebangs doc/manual-src/en/mkapiref.py
+    patchShebangs --build doc/manual-src/en/mkapiref.py
   '';
 
   checkInputs = [ cppunit ];

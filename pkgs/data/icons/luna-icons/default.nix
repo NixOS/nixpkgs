@@ -1,21 +1,22 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitHub
 , gtk3
 , breeze-icons
 , hicolor-icon-theme
 , pantheon
+, gitUpdater
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "luna-icons";
-  version = "1.8";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = pname;
     rev = version;
-    sha256 = "1c317ac43ff70sxn1syx20qhs4nkccv6hbf69fmi3acswqsll1z4";
+    sha256 = "sha256-zxaay4hwKgb9WWhPNG/s9JekltAvRNYmObeoTJi6Po0=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +43,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater {inherit pname version; };
 
   meta = with lib; {
     description = "Icon pack based on marwaita and papirus icons";

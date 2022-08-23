@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, oathToolkit }:
+{ lib, stdenv, fetchFromGitHub, oath-toolkit }:
 
 stdenv.mkDerivation rec {
   pname = "pass-otp";
@@ -11,12 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "0cpqrf3939hcvwg7sd8055ghc8x964ilimlri16czzx188a9jx9v";
   };
 
-  buildInputs = [ oathToolkit ];
+  buildInputs = [ oath-toolkit ];
 
   dontBuild = true;
 
   patchPhase = ''
-    sed -i -e 's|OATH=\$(which oathtool)|OATH=${oathToolkit}/bin/oathtool|' otp.bash
+    sed -i -e 's|OATH=\$(which oathtool)|OATH=${oath-toolkit}/bin/oathtool|' otp.bash
   '';
 
   installFlags = [ "PREFIX=$(out)"

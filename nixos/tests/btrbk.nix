@@ -53,7 +53,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
         services.openssh = {
           enable = true;
           passwordAuthentication = false;
-          challengeResponseAuthentication = false;
+          kbdInteractiveAuthentication = false;
         };
         services.btrbk = {
           extraPackages = [ pkgs.lz4 ];

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "tanka";
-  version = "0.17.3";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Khu6ovtcXkqqt3W4OoJ09INgv80tw/6uDcJS+jt3y0Y=";
+    sha256 = "sha256-MMQv3/Ft6/FUueGEXGqYWAYy4zc2R6LASbh2x7eJNdQ=";
   };
 
-  vendorSha256 = "sha256-vpm2y/CxRNWkz6+AOMmmZH5AjRQWAa6WD5Fnx5lqJYw=";
+  vendorSha256 = "sha256-QwtcWzJbusa8BxtG5xmGUgqG0qCMSpkzbmes/x3lnWc=";
 
   doCheck = false;
 
@@ -31,6 +31,7 @@ buildGoModule rec {
     homepage = "https://tanka.dev";
     license = licenses.asl20;
     maintainers = with maintainers; [ mikefaille ];
+    mainProgram = "tk";
     platforms = platforms.unix;
   };
 }

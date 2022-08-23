@@ -21,7 +21,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable Upower, a DBus service that provides power
           management support to applications.
         '';
@@ -31,7 +31,7 @@ in
         type = types.package;
         default = pkgs.upower;
         defaultText = literalExpression "pkgs.upower";
-        description = ''
+        description = lib.mdDoc ''
           Which upower package to use.
         '';
       };
@@ -59,7 +59,7 @@ in
       noPollBatteries = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Don't poll the kernel for battery level changes.
 
           Some hardware will send us battery level changes through
@@ -71,7 +71,7 @@ in
       ignoreLid = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Do we ignore the lid state
 
           Some laptops are broken. The lid state is either inverted, or stuck
@@ -85,7 +85,7 @@ in
       usePercentageForPolicy = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Policy for warnings and action based on battery levels
 
           Whether battery percentage based policy should be used. The default
@@ -99,17 +99,17 @@ in
       percentageLow = mkOption {
         type = types.ints.unsigned;
         default = 10;
-        description = ''
-          When <literal>usePercentageForPolicy</literal> is
-          <literal>true</literal>, the levels at which UPower will consider the
+        description = lib.mdDoc ''
+          When `usePercentageForPolicy` is
+          `true`, the levels at which UPower will consider the
           battery low.
 
           This will also be used for batteries which don't have time information
           such as that of peripherals.
 
-          If any value (of <literal>percentageLow</literal>,
-          <literal>percentageCritical</literal> and
-          <literal>percentageAction</literal>) is invalid, or not in descending
+          If any value (of `percentageLow`,
+          `percentageCritical` and
+          `percentageAction`) is invalid, or not in descending
           order, the defaults will be used.
         '';
       };
@@ -117,17 +117,17 @@ in
       percentageCritical = mkOption {
         type = types.ints.unsigned;
         default = 3;
-        description = ''
-          When <literal>usePercentageForPolicy</literal> is
-          <literal>true</literal>, the levels at which UPower will consider the
+        description = lib.mdDoc ''
+          When `usePercentageForPolicy` is
+          `true`, the levels at which UPower will consider the
           battery critical.
 
           This will also be used for batteries which don't have time information
           such as that of peripherals.
 
-          If any value (of <literal>percentageLow</literal>,
-          <literal>percentageCritical</literal> and
-          <literal>percentageAction</literal>) is invalid, or not in descending
+          If any value (of `percentageLow`,
+          `percentageCritical` and
+          `percentageAction`) is invalid, or not in descending
           order, the defaults will be used.
         '';
       };
@@ -135,17 +135,17 @@ in
       percentageAction = mkOption {
         type = types.ints.unsigned;
         default = 2;
-        description = ''
-          When <literal>usePercentageForPolicy</literal> is
-          <literal>true</literal>, the levels at which UPower will take action
+        description = lib.mdDoc ''
+          When `usePercentageForPolicy` is
+          `true`, the levels at which UPower will take action
           for the critical battery level.
 
           This will also be used for batteries which don't have time information
           such as that of peripherals.
 
-          If any value (of <literal>percentageLow</literal>,
-          <literal>percentageCritical</literal> and
-          <literal>percentageAction</literal>) is invalid, or not in descending
+          If any value (of `percentageLow`,
+          `percentageCritical` and
+          `percentageAction`) is invalid, or not in descending
           order, the defaults will be used.
         '';
       };
@@ -153,13 +153,13 @@ in
       timeLow = mkOption {
         type = types.ints.unsigned;
         default = 1200;
-        description = ''
-          When <literal>usePercentageForPolicy</literal> is
-          <literal>false</literal>, the time remaining at which UPower will
-          consider the battery low.
+        description = lib.mdDoc ''
+          When `usePercentageForPolicy` is
+          `false`, the time remaining in seconds at which
+          UPower will consider the battery low.
 
-          If any value (of <literal>timeLow</literal>,
-          <literal>timeCritical</literal> and <literal>timeAction</literal>) is
+          If any value (of `timeLow`,
+          `timeCritical` and `timeAction`) is
           invalid, or not in descending order, the defaults will be used.
         '';
       };
@@ -167,13 +167,13 @@ in
       timeCritical = mkOption {
         type = types.ints.unsigned;
         default = 300;
-        description = ''
-          When <literal>usePercentageForPolicy</literal> is
-          <literal>false</literal>, the time remaining at which UPower will
-          consider the battery critical.
+        description = lib.mdDoc ''
+          When `usePercentageForPolicy` is
+          `false`, the time remaining in seconds at which
+          UPower will consider the battery critical.
 
-          If any value (of <literal>timeLow</literal>,
-          <literal>timeCritical</literal> and <literal>timeAction</literal>) is
+          If any value (of `timeLow`,
+          `timeCritical` and `timeAction`) is
           invalid, or not in descending order, the defaults will be used.
         '';
       };
@@ -181,13 +181,13 @@ in
       timeAction = mkOption {
         type = types.ints.unsigned;
         default = 120;
-        description = ''
-          When <literal>usePercentageForPolicy</literal> is
-          <literal>false</literal>, the time remaining at which UPower will
-          take action for the critical battery level.
+        description = lib.mdDoc ''
+          When `usePercentageForPolicy` is
+          `false`, the time remaining in seconds at which
+          UPower will take action for the critical battery level.
 
-          If any value (of <literal>timeLow</literal>,
-          <literal>timeCritical</literal> and <literal>timeAction</literal>) is
+          If any value (of `timeLow`,
+          `timeCritical` and `timeAction`) is
           invalid, or not in descending order, the defaults will be used.
         '';
       };
@@ -195,9 +195,9 @@ in
       criticalPowerAction = mkOption {
         type = types.enum [ "PowerOff" "Hibernate" "HybridSleep" ];
         default = "HybridSleep";
-        description = ''
-          The action to take when <literal>timeAction</literal> or
-          <literal>percentageAction</literal> has been reached for the batteries
+        description = lib.mdDoc ''
+          The action to take when `timeAction` or
+          `percentageAction` has been reached for the batteries
           (UPS or laptop batteries) supplying the computer
         '';
       };

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "python-izone";
-  version = "1.1.8";
+  version = "1.2.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "Swamp-Ig";
     repo = "pizone";
     rev = "v${version}";
-    sha256 = "sha256-/qPWSTO0PV4lEgwWpgcoBnbUtDUrEVItb4NF9TV2QJU=";
+    hash = "sha256-CvFOhs56dfNerK3junWElQfTJi1YXA86zMbv0tseQC8=";
   };
 
   propagatedBuildInputs = [
@@ -34,10 +34,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTestPaths = [
-    # Test are blocking
-    "tests/test_fullstack.py"
-  ];
+  doCheck = false; # most tests access network
 
   pythonImportsCheck = [
     "pizone"

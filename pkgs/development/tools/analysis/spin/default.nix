@@ -1,46 +1,42 @@
-{ stdenv, lib, fetchurl, makeWrapper, bison, gcc
-, withISpin ? true, tk, swarm, graphviz }:
+{ stdenv, lib, fetchFromGitHub, makeWrapper, bison, gcc, tk, swarm, graphviz }:
 
 let
-  binPath = lib.makeBinPath [ gcc ];
-  ibinPath = lib.makeBinPath [ gcc tk swarm graphviz tk ];
+  binPath = lib.makeBinPath [ gcc graphviz tk swarm ];
+in
 
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "spin";
-  version = "6.4.9";
-  url-version = lib.replaceChars ["."] [""] version;
+  version = "6.5.2";
 
-  src = fetchurl {
-    # The homepage is behind CloudFlare anti-DDoS protection, which blocks cURL.
-    # Dropbox mirror from developers:
-    # https://www.dropbox.com/sh/fgzipzp4wpo3qc1/AADZPqS4aoR-pjNF6OQXRLQHa
-    # (note that this URL doesn't work aross versions and hash should come from official site)
-    url = "https://www.dropbox.com/sh/fgzipzp4wpo3qc1/AABtxFePMJmPxsxSvU5cpxh8a/spin${url-version}.tar.gz?raw=1";
-    sha256 = "07b7wk3qyfnp4pgwicqd33l7i1krzyihx0cf9zkv81ywaklf5vll";
+  src = fetchFromGitHub {
+    owner = "nimble-code";
+    repo = "Spin";
+    rev = "version-${version}";
+    sha256 = "sha256-drvQXfDZCZRycBZt/VNngy8zs4XVJg+d1b4dQXVcyFU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ bison ];
 
-  sourceRoot = "Spin/Src${version}";
+  sourceRoot = "source/Src";
 
-  installPhase = ''
-    install -Dm644 ../Man/spin.1 $out/share/man/man1/spin.1
+  preBuild = ''
+    mkdir -p $out/bin
+    mkdir -p $out/share/man/man1
+  '';
 
-    install -Dm755 spin $out/bin/spin
-    wrapProgram $out/bin/spin \
-      --prefix PATH : ${binPath}
-  '' + lib.optionalString withISpin ''
-    install -Dm755 ../iSpin/ispin.tcl $out/bin/ispin
-    wrapProgram $out/bin/ispin \
-      --prefix PATH ':' "$out/bin:${ibinPath}"
+  enableParallelBuilding = true;
+  makeFlags = [ "DESTDIR=$(out)" ];
+
+  postInstall = ''
+    wrapProgram $out/bin/spin --prefix PATH : ${binPath}
   '';
 
   meta = with lib; {
     description = "Formal verification tool for distributed software systems";
     homepage = "https://spinroot.com/";
-    license = licenses.free;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ pSub ];
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ pSub siraben ];
   };
 }

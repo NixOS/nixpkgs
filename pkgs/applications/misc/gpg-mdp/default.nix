@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, ncurses, gnupg }:
+{ fetchurl, fetchpatch, lib, stdenv, ncurses, gnupg }:
 
 let version = "0.7.4";
 in stdenv.mkDerivation {
@@ -14,6 +14,15 @@ in stdenv.mkDerivation {
     url = "https://tamentis.com/projects/mdp/files/mdp-${version}.tar.gz";
     sha256 = "04mdnx4ccpxf9m2myy9nvpl9ma4jgzmv9bkrzv2b9affzss3r34g";
   };
+  patches = [
+    # Pull fix pending upstream inclusion for -fno-common toolchain support:
+    #   https://github.com/tamentis/mdp/pull/9
+    (fetchpatch {
+      name = "fno-common.patch";
+      url = "https://github.com/tamentis/mdp/commit/95c77de3beb96dc7c76ff36d3f3dfb18411d7c54.patch";
+      sha256 = "1j6yvjzkx31b758yav4arhlm5ig7phl8mgx4fcwj7lm2pfvzwcsz";
+    })
+  ];
   buildInputs = [ ncurses ];
   prePatch = ''
     substituteInPlace ./configure \

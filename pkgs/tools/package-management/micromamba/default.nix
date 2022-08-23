@@ -1,5 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake
-, cli11, nlohmann_json, curl, libarchive, libyamlcpp, libsolv, reproc
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cli11
+, cmake
+, curl
+, ghc_filesystem
+, libarchive
+, libsolv
+, libyamlcpp
+, nlohmann_json
+, python3
+, reproc
+, spdlog
+, termcolor
+, tl-expected
 }:
 
 let
@@ -9,53 +24,33 @@ let
     ];
 
     patches = [
-      # Patch added by the mamba team
+      # Apply the same patch as in the "official" boa-forge build:
+      # https://github.com/mamba-org/boa-forge/tree/master/libsolv
       (fetchpatch {
-        url = "https://raw.githubusercontent.com/mamba-org/boa-forge/f766da0cc18701c4d107a41de22417a65b53cc2d/libsolv/add_strict_repo_prio_rule.patch";
-        sha256 = "19c47i5cpyy88nxskf7k6q6r43i55w61jvnz7fc2r84hpjkcrv7r";
-      })
-      # Patch added by the mamba team
-      (fetchpatch {
-        url = "https://raw.githubusercontent.com/mamba-org/boa-forge/f766da0cc18701c4d107a41de22417a65b53cc2d/libsolv/conda_variant_priorization.patch";
+        url = "https://raw.githubusercontent.com/mamba-org/boa-forge/20530f80e2e15012078d058803b6e2c75ed54224/libsolv/conda_variant_priorization.patch";
         sha256 = "1iic0yx7h8s662hi2jqx68w5kpyrab4fr017vxd4wyxb6wyk35dd";
-      })
-      # Patch added by the mamba team
-      (fetchpatch {
-        url = "https://raw.githubusercontent.com/mamba-org/boa-forge/f766da0cc18701c4d107a41de22417a65b53cc2d/libsolv/memcpy_to_memmove.patch";
-        sha256 = "1c9ir40l6crcxllj5zwhzbrbgibwqaizyykd0vip61gywlfzss64";
       })
     ];
   });
 
-  # fails linking with yaml-cpp 0.7.x
-  libyamlcpp' = libyamlcpp.overrideAttrs (oldAttrs: rec {
-
-    version = "0.6.3";
-
-    src = fetchFromGitHub {
-      owner = "jbeder";
-      repo = "yaml-cpp";
-      rev = "yaml-cpp-${version}";
-      sha256 = "0ykkxzxcwwiv8l8r697gyqh1nl582krpvi7m7l6b40ijnk4pw30s";
-    };
-
-    patches = [
-      (fetchpatch {
-        url = "https://github.com/jbeder/yaml-cpp/commit/4f48727b365962e31451cd91027bd797bc7d2ee7.patch";
-        sha256 = "sha256-jarZAh7NgwL3xXzxijDiAQmC/EC2WYfNMkYHEIQBPhM=";
-      })
+  spdlog' = spdlog.overrideAttrs (oldAttrs: {
+    # Required for header files. See alse:
+    # https://github.com/gabime/spdlog/pull/1241 (current solution)
+    # https://github.com/gabime/spdlog/issues/1897 (previous solution)
+    cmakeFlags = oldAttrs.cmakeFlags ++ [
+      "-DSPDLOG_FMT_EXTERNAL=OFF"
     ];
   });
 in
 stdenv.mkDerivation rec {
   pname = "micromamba";
-  version = "0.15.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "mamba-org";
     repo = "mamba";
-    rev = version;
-    sha256 = "1zksp4zqj4wn9p9jb1qx1acajaz20k9xnm80yi7bab2d37y18hcw";
+    rev = "micromamba-" + version;
+    sha256 = "sha256-CszDmt3SElHo1D2sNy2tPhZ43YD3pDjT8+fp2PVk+7Y=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -65,23 +60,28 @@ stdenv.mkDerivation rec {
     nlohmann_json
     curl
     libarchive
-    libyamlcpp'
+    libyamlcpp
     libsolv'
     reproc
-    # python3Packages.pybind11 # Would be necessary if someone wants to build with bindings I guess.
+    spdlog'
+    termcolor
+    ghc_filesystem
+    python3
+    tl-expected
   ];
 
   cmakeFlags = [
-    "-DBUILD_BINDINGS=OFF" # Fails to build, I don't think it's necessary for now.
-    "-DBUILD_EXE=ON"
+    "-DBUILD_LIBMAMBA=ON"
+    "-DBUILD_SHARED=ON"
+    "-DBUILD_MICROMAMBA=ON"
+    # "-DCMAKE_VERBOSE_MAKEFILE:BOOL=ON"
   ];
-
-  CXXFLAGS = "-DMAMBA_USE_STD_FS";
 
   meta = with lib; {
     description = "Reimplementation of the conda package manager";
     homepage = "https://github.com/mamba-org/mamba";
     license = licenses.bsd3;
+    platforms = platforms.all;
     maintainers = with maintainers; [ mausch ];
   };
 }

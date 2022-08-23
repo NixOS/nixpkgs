@@ -1,13 +1,13 @@
 { stdenv, lib, git, openssl, makeWrapper, buildPythonApplication, pytestCheckHook, ps
-, fetchPypi, fetchFromGitLab }:
+, fetchPypi, fetchFromGitLab, sudo }:
 
 buildPythonApplication rec {
   pname = "pmbootstrap";
-  version = "1.39.0";
+  version = "1.45.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "13krdb0xmwgldfn8izm1x3j6i6s4n9j8n8n0p4g5kd74ygkvfczz";
+    sha256 = "sha256-75ZFzhRsczkwhiUl1upKjSvmqN0RkXaM8cKr4zLgi4w=";
   };
 
   repo = fetchFromGitLab {
@@ -15,12 +15,12 @@ buildPythonApplication rec {
     owner = "postmarketOS";
     repo = pname;
     rev = version;
-    sha256 = "0mrhgi5y3jwd922cmm2niy9ia0g8p6bsqjjxg523yandshpa3683";
+    sha256 = "sha256-tG1+vUJW9JIdYpcRn8J0fCIZh29hYo8wSlBKwTUxyMU=";
   };
 
   pmb_test = "${repo}/test";
 
-  checkInputs = [ pytestCheckHook git openssl ps ];
+  checkInputs = [ pytestCheckHook git openssl ps sudo ];
 
   # Add test dependency in PATH
   preCheck = "export PYTHONPATH=$PYTHONPATH:${pmb_test}";
@@ -81,6 +81,7 @@ buildPythonApplication rec {
     "test_run_abuild"
     "test_run_core"
     "test_shell_escape"
+    "test_skip_already_built"
     "test_switch_to_channel_branch"
     "test_version"
   ];
@@ -91,7 +92,7 @@ buildPythonApplication rec {
     description = "Sophisticated chroot/build/flash tool to develop and install postmarketOS";
     homepage = "https://gitlab.com/postmarketOS/pmbootstrap";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ payas ];
+    maintainers = with maintainers; [ onny ];
     # https://github.com/NixOS/nixpkgs/pull/146576#issuecomment-974267651
     broken = stdenv.isDarwin && stdenv.isAarch64;
   };

@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "Flask-SocketIO";
-  version = "5.0.1";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "Flask-SocketIO";
     rev = "v${version}";
-    sha256 = "01zf6cy95pgc4flgn0740z2my90l7rxwliahp6rb2xbp7rh32cng";
+    sha256 = "sha256-PnNJEtcWaisOlt6OmYUl97TlZb9cK2ORvtEcmGPxSB0=";
   };
 
   propagatedBuildInputs = [
@@ -26,6 +26,10 @@ buildPythonPackage rec {
   checkInputs = [
     coverage
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "test_socketio.py"
   ];
 
   pythonImportsCheck = [ "flask_socketio" ];

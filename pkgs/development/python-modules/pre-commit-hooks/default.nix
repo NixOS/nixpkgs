@@ -1,24 +1,26 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , git
-, pythonOlder
 , pytestCheckHook
+, pythonOlder
 , ruamel-yaml
-, stdenv
 , toml
 }:
 
 buildPythonPackage rec {
   pname = "pre-commit-hooks";
-  version = "4.0.1";
-  disabled = pythonOlder "3.6";
+  version = "4.3.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-Rg2I79r0Pp3AUgT6mD+kEdm+5CEGgdmFn6G3xcU6fnk=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-qdsSM+7ScSfxhmLAqwi1iraGHrhb5NBee/j+TKr2WUA=";
   };
 
   propagatedBuildInputs = [
@@ -42,9 +44,12 @@ buildPythonPackage rec {
 
     git config --global user.name "Nix Builder"
     git config --global user.email "nix-builder@nixos.org"
+    git init .
   '';
 
-  pythonImportsCheck = [ "pre_commit_hooks" ];
+  pythonImportsCheck = [
+    "pre_commit_hooks"
+  ];
 
   meta = with lib; {
     description = "Some out-of-the-box hooks for pre-commit";

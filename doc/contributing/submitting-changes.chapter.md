@@ -96,9 +96,9 @@ We use jbidwatcher as an example for a discontinued project here.
 
 1. Have Nixpkgs checked out locally and up to date.
 1. Create a new branch for your change, e.g. `git checkout -b jbidwatcher`
-1. Remove the actual package including its directory, e.g. `rm -rf pkgs/applications/misc/jbidwatcher`
+1. Remove the actual package including its directory, e.g. `git rm -rf pkgs/applications/misc/jbidwatcher`
 1. Remove the package from the list of all packages (`pkgs/top-level/all-packages.nix`).
-1. Add an alias for the package name in `pkgs/top-level/aliases.nix` (There is also `pkgs/misc/vim-plugins/aliases.nix`. Package sets typically do not have aliases, so we can't add them there.)
+1. Add an alias for the package name in `pkgs/top-level/aliases.nix` (There is also `pkgs/applications/editors/vim/plugins/aliases.nix`. Package sets typically do not have aliases, so we can't add them there.)
 
     For example in this case:
 
@@ -167,24 +167,30 @@ Packages with automated tests are much more likely to be merged in a timely fash
 
 ### Tested compilation of all pkgs that depend on this change using `nixpkgs-review` {#submitting-changes-tested-compilation}
 
-If you are updating a package’s version, you can use nixpkgs-review to make sure all packages that depend on the updated package still compile correctly. The `nixpkgs-review` utility can look for and build all dependencies either based on uncommited changes with the `wip` option or specifying a github pull request number.
+If you are updating a package’s version, you can use `nixpkgs-review` to make sure all packages that depend on the updated package still compile correctly. The `nixpkgs-review` utility can look for and build all dependencies either based on uncommitted changes with the `wip` option or specifying a GitHub pull request number.
 
-review changes from pull request number 12345:
+Review changes from pull request number 12345:
 
 ```ShellSession
-nix run nixpkgs.nixpkgs-review -c nixpkgs-review pr 12345
+nix-shell -p nixpkgs-review --run "nixpkgs-review pr 12345"
 ```
 
-review uncommitted changes:
+Alternatively, with flakes (and analogously for the other commands below):
 
 ```ShellSession
-nix run nixpkgs.nixpkgs-review -c nixpkgs-review wip
+nix run nixpkgs#nixpkgs-review -- pr 12345
 ```
 
-review changes from last commit:
+Review uncommitted changes:
 
 ```ShellSession
-nix run nixpkgs.nixpkgs-review -c nixpkgs-review rev HEAD
+nix-shell -p nixpkgs-review --run "nixpkgs-review wip"
+```
+
+Review changes from last commit:
+
+```ShellSession
+nix-shell -p nixpkgs-review --run "nixpkgs-review rev HEAD"
 ```
 
 ### Tested execution of all binary files (usually in `./result/bin/`) {#submitting-changes-tested-execution}
@@ -227,7 +233,7 @@ digraph {
 }
 ```
 
-[This GitHub Action](https://github.com/NixOS/nixpkgs/blob/master/.github/workflows/merge-staging.yml) brings changes from `master` to `staging-next` and from `staging-next` to `staging` every 6 hours.
+[This GitHub Action](https://github.com/NixOS/nixpkgs/blob/master/.github/workflows/periodic-merge-6h.yml) brings changes from `master` to `staging-next` and from `staging-next` to `staging` every 6 hours; these are the blue arrows in the diagram above.  The purple arrows in the diagram above are done manually and much less frequently.  You can get an idea of how often these merges occur by looking at the git history.
 
 
 ### Master branch {#submitting-changes-master-branch}
@@ -236,7 +242,7 @@ The `master` branch is the main development branch. It should only see non-break
 
 ### Staging branch {#submitting-changes-staging-branch}
 
-The `staging` branch is a development branch where mass-rebuilds go. It should only see non-breaking mass-rebuild commits. That means it is not to be used for testing, and changes must have been well tested already. If the branch is already in a broken state, please refrain from adding extra new breakages.
+The `staging` branch is a development branch where mass-rebuilds go. Mass rebuilds are commits that cause rebuilds for many packages, like more than 500 (or perhaps, if it's 'light' packages, 1000). It should only see non-breaking mass-rebuild commits. That means it is not to be used for testing, and changes must have been well tested already. If the branch is already in a broken state, please refrain from adding extra new breakages.
 
 ### Staging-next branch {#submitting-changes-staging-next-branch}
 
@@ -246,11 +252,21 @@ If the branch is already in a broken state, please refrain from adding extra new
 
 ### Stable release branches {#submitting-changes-stable-release-branches}
 
-For cherry-picking a commit to a stable release branch (“backporting”), use `git cherry-pick -x <original commit>` so that the original commit id is included in the commit.
+The same staging workflow applies to stable release branches, but the main branch is called `release-*` instead of `master`.
 
-Add a reason for the backport by using `git cherry-pick -xe <original commit>` instead when it is not obvious from the original commit message. It is not needed when it's a minor version update that includes security and bug fixes but don't add new features or when the commit fixes an otherwise broken package.
+Example branch names: `release-21.11`, `staging-21.11`, `staging-next-21.11`.
 
-For backporting Pull Requests to stable branches, assign label `backport <branch>` to the original Pull Requests and automation should take care of the rest once the Pull Requests is merged.
+Most changes added to the stable release branches are cherry-picked (“backported”) from the `master` and staging branches.
+
+#### Automatically backporting a Pull Request {#submitting-changes-stable-release-branches-automatic-backports}
+
+Assign label `backport <branch>` (e.g. `backport release-21.11`) to the PR and a backport PR is automatically created after the PR is merged.
+
+#### Manually backporting changes {#submitting-changes-stable-release-branches-manual-backports}
+
+Cherry-pick changes via `git cherry-pick -x <original commit>` so that the original commit id is included in the commit message.
+
+Add a reason for the backport when it is not obvious from the original commit message. You can do this by cherry picking with `git cherry-pick -xe <original commit>`, which allows editing the commit message. This is not needed for minor version updates that include security and bug fixes but don't add new features or when the commit fixes an otherwise broken package.
 
 Here is an example of a cherry-picked commit message with good reason description:
 

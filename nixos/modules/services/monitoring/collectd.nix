@@ -5,36 +5,15 @@ with lib;
 let
   cfg = config.services.collectd;
 
-  unvalidated_conf = pkgs.writeText "collectd-unvalidated.conf" ''
-    BaseDir "${cfg.dataDir}"
-    AutoLoadPlugin ${boolToString cfg.autoLoadPlugin}
-    Hostname "${config.networking.hostName}"
-
-    LoadPlugin syslog
-    <Plugin "syslog">
-      LogLevel "info"
-      NotifyLevel "OKAY"
-    </Plugin>
-
-    ${concatStrings (mapAttrsToList (plugin: pluginConfig: ''
-      LoadPlugin ${plugin}
-      <Plugin "${plugin}">
-      ${pluginConfig}
-      </Plugin>
-    '') cfg.plugins)}
-
-    ${concatMapStrings (f: ''
-      Include "${f}"
-    '') cfg.include}
-
-    ${cfg.extraConfig}
-  '';
+  baseDirLine = ''BaseDir "${cfg.dataDir}"'';
+  unvalidated_conf = pkgs.writeText "collectd-unvalidated.conf" cfg.extraConfig;
 
   conf = if cfg.validateConfig then
     pkgs.runCommand "collectd.conf" {} ''
       echo testing ${unvalidated_conf}
+      cp ${unvalidated_conf} collectd.conf
       # collectd -t fails if BaseDir does not exist.
-      sed '1s/^BaseDir.*$/BaseDir "."/' ${unvalidated_conf} > collectd.conf
+      substituteInPlace collectd.conf --replace ${lib.escapeShellArgs [ baseDirLine ]} 'BaseDir "."'
       ${package}/bin/collectd -t -C collectd.conf
       cp ${unvalidated_conf} $out
     '' else unvalidated_conf;
@@ -54,7 +33,7 @@ in {
 
     validateConfig = mkOption {
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Validate the syntax of collectd configuration file at build time.
         Disable this if you use the Include directive on files unavailable in
         the build sandbox, or when cross-compiling.
@@ -65,7 +44,7 @@ in {
     package = mkOption {
       default = pkgs.collectd;
       defaultText = literalExpression "pkgs.collectd";
-      description = ''
+      description = lib.mdDoc ''
         Which collectd package to use.
       '';
       type = types.package;
@@ -73,7 +52,7 @@ in {
 
     buildMinimalPackage = mkOption {
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Build a minimal collectd package with only the configured `services.collectd.plugins`
       '';
       type = bool;
@@ -81,7 +60,7 @@ in {
 
     user = mkOption {
       default = "collectd";
-      description = ''
+      description = lib.mdDoc ''
         User under which to run collectd.
       '';
       type = nullOr str;
@@ -89,7 +68,7 @@ in {
 
     dataDir = mkOption {
       default = "/var/lib/collectd";
-      description = ''
+      description = lib.mdDoc ''
         Data directory for collectd agent.
       '';
       type = path;
@@ -97,7 +76,7 @@ in {
 
     autoLoadPlugin = mkOption {
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Enable plugin autoloading.
       '';
       type = bool;
@@ -105,7 +84,7 @@ in {
 
     include = mkOption {
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         Additional paths to load config from.
       '';
       type = listOf str;
@@ -114,7 +93,7 @@ in {
     plugins = mkOption {
       default = {};
       example = { cpu = ""; memory = ""; network = "Server 192.168.1.1 25826"; };
-      description = ''
+      description = lib.mdDoc ''
         Attribute set of plugin names to plugin config segments
       '';
       type = attrsOf lines;
@@ -122,8 +101,9 @@ in {
 
     extraConfig = mkOption {
       default = "";
-      description = ''
-        Extra configuration for collectd.
+      description = lib.mdDoc ''
+        Extra configuration for collectd. Use mkBefore to add lines before the
+        default config, and mkAfter to add them below.
       '';
       type = lines;
     };
@@ -131,6 +111,30 @@ in {
   };
 
   config = mkIf cfg.enable {
+    # 1200 is after the default (1000) but before mkAfter (1500).
+    services.collectd.extraConfig = lib.mkOrder 1200 ''
+      ${baseDirLine}
+      AutoLoadPlugin ${boolToString cfg.autoLoadPlugin}
+      Hostname "${config.networking.hostName}"
+
+      LoadPlugin syslog
+      <Plugin "syslog">
+        LogLevel "info"
+        NotifyLevel "OKAY"
+      </Plugin>
+
+      ${concatStrings (mapAttrsToList (plugin: pluginConfig: ''
+        LoadPlugin ${plugin}
+        <Plugin "${plugin}">
+        ${pluginConfig}
+        </Plugin>
+      '') cfg.plugins)}
+
+      ${concatMapStrings (f: ''
+        Include "${f}"
+      '') cfg.include}
+    '';
+
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' - ${cfg.user} - - -"
     ];

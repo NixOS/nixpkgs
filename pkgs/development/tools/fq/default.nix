@@ -1,22 +1,22 @@
 { lib
-, buildGo117Module
+, buildGoModule
 , fetchFromGitHub
 , fq
-, testVersion
+, testers
 }:
 
-buildGo117Module rec {
+buildGoModule rec {
   pname = "fq";
-  version = "0.0.2";
+  version = "0.0.8";
 
   src = fetchFromGitHub {
     owner = "wader";
     repo = "fq";
     rev = "v${version}";
-    sha256 = "sha256-ykjt9MPkN5dgTaY2VhApNt5DKh9TFapMpoHwLdpOKcw=";
+    sha256 = "sha256-9ABlfA7osM1bYMwNy/pQyb32uJbwZry3s3iGHBXiQHQ=";
   };
 
-  vendorSha256 = "sha256-89rSpxhP35wreo+0AqM+rDICCPchF+yFVvrTtZ2Xwr4=";
+  vendorSha256 = "sha256-GDhaeR26MXWR23yVy4kjo/mIUR3vezEs8twjoRgzbwU=";
 
   ldflags = [
     "-s"
@@ -24,7 +24,9 @@ buildGo117Module rec {
     "-X main.version=${version}"
   ];
 
-  passthru.tests = testVersion { package = fq; };
+  subPackages = [ "." ];
+
+  passthru.tests = testers.testVersion { package = fq; };
 
   meta = with lib; {
     description = "jq for binary formats";

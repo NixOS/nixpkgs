@@ -12,12 +12,17 @@ let
     i.ipv4.addresses
     ++ optionals cfg.enableIPv6 i.ipv6.addresses;
 
+  interfaceRoutes = i:
+    i.ipv4.routes
+    ++ optionals cfg.enableIPv6 i.ipv6.routes;
+
   dhcpStr = useDHCP: if useDHCP == true || useDHCP == null then "yes" else "no";
 
   slaves =
     concatLists (map (bond: bond.interfaces) (attrValues cfg.bonds))
     ++ concatLists (map (bridge: bridge.interfaces) (attrValues cfg.bridges))
     ++ map (sit: sit.dev) (attrValues cfg.sits)
+    ++ map (gre: gre.dev) (attrValues cfg.greTunnels)
     ++ map (vlan: vlan.interface) (attrValues cfg.vlans)
     # add dependency to physical or independently created vswitch member interface
     # TODO: warn the user that any address configured on those interfaces will be useless
@@ -38,12 +43,6 @@ in
     } {
       assertion = cfg.defaultGateway6 == null || cfg.defaultGateway6.interface == null;
       message = "networking.defaultGateway6.interface is not supported by networkd.";
-    } {
-      assertion = cfg.useDHCP == false;
-      message = ''
-        networking.useDHCP is not supported by networkd.
-        Please use per interface configuration and set the global option to false.
-      '';
     } ] ++ flip mapAttrsToList cfg.bridges (n: { rstp, ... }: {
       assertion = !rstp;
       message = "networking.bridges.${n}.rstp is not supported by networkd.";
@@ -60,21 +59,58 @@ in
         genericNetwork = override:
           let gateway = optional (cfg.defaultGateway != null && (cfg.defaultGateway.address or "") != "") cfg.defaultGateway.address
             ++ optional (cfg.defaultGateway6 != null && (cfg.defaultGateway6.address or "") != "") cfg.defaultGateway6.address;
-          in optionalAttrs (gateway != [ ]) {
-            routes = override [
-              {
+              makeGateway = gateway: {
                 routeConfig = {
                   Gateway = gateway;
                   GatewayOnLink = false;
                 };
-              }
-            ];
+              };
+          in optionalAttrs (gateway != [ ]) {
+            routes = override (map makeGateway gateway);
           } // optionalAttrs (domains != [ ]) {
             domains = override domains;
           };
       in mkMerge [ {
         enable = true;
       }
+      (mkIf cfg.useDHCP {
+        networks."99-ethernet-default-dhcp" = lib.mkIf cfg.useDHCP {
+          # We want to match physical ethernet interfaces as commonly
+          # found on laptops, desktops and servers, to provide an
+          # "out-of-the-box" setup that works for common cases.  This
+          # heuristic isn't perfect (it could match interfaces with
+          # custom names that _happen_ to start with en or eth), but
+          # should be good enough to make the common case easy and can
+          # be overridden on a case-by-case basis using
+          # higher-priority networks or by disabling useDHCP.
+
+          # Type=ether matches veth interfaces as well, and this is
+          # more likely to result in interfaces being configured to
+          # use DHCP when they shouldn't.
+
+          # When wait-online.anyInterface is enabled, RequiredForOnline really
+          # means "sufficient for online", so we can enable it.
+          # Otherwise, don't block the network coming online because of default networks.
+          matchConfig.Name = ["en*" "eth*"];
+          DHCP = "yes";
+          linkConfig.RequiredForOnline =
+            lib.mkDefault config.systemd.network.wait-online.anyInterface;
+          networkConfig.IPv6PrivacyExtensions = "kernel";
+        };
+        networks."99-wireless-client-dhcp" = lib.mkIf cfg.useDHCP {
+          # Like above, but this is much more likely to be correct.
+          matchConfig.WLANInterfaceType = "station";
+          DHCP = "yes";
+          linkConfig.RequiredForOnline =
+            lib.mkDefault config.systemd.network.wait-online.anyInterface;
+          networkConfig.IPv6PrivacyExtensions = "kernel";
+          # We also set the route metric to one more than the default
+          # of 1024, so that Ethernet is preferred if both are
+          # available.
+          dhcpV4Config.RouteMetric = 1025;
+          ipv6AcceptRAConfig.RouteMetric = 1025;
+        };
+      })
       (mkMerge (forEach interfaces (i: {
         netdevs = mkIf i.virtual ({
           "40-${i.name}" = {
@@ -87,12 +123,72 @@ in
             };
           };
         });
-        networks."40-${i.name}" = mkMerge [ (genericNetwork mkDefault) {
+        networks."40-${i.name}" = mkMerge [ (genericNetwork id) {
           name = mkDefault i.name;
           DHCP = mkForce (dhcpStr
             (if i.useDHCP != null then i.useDHCP else false));
           address = forEach (interfaceIps i)
             (ip: "${ip.address}/${toString ip.prefixLength}");
+          routes = forEach (interfaceRoutes i)
+            (route: {
+              # Most of these route options have not been tested.
+              # Please fix or report any mistakes you may find.
+              routeConfig =
+                optionalAttrs (route.address != null && route.prefixLength != null) {
+                  Destination = "${route.address}/${toString route.prefixLength}";
+                } //
+                optionalAttrs (route.options ? fastopen_no_cookie) {
+                  FastOpenNoCookie = route.options.fastopen_no_cookie;
+                } //
+                optionalAttrs (route.via != null) {
+                  Gateway = route.via;
+                } //
+                optionalAttrs (route.type != null) {
+                  Type = route.type;
+                } //
+                optionalAttrs (route.options ? onlink) {
+                  GatewayOnLink = true;
+                } //
+                optionalAttrs (route.options ? initrwnd) {
+                  InitialAdvertisedReceiveWindow = route.options.initrwnd;
+                } //
+                optionalAttrs (route.options ? initcwnd) {
+                  InitialCongestionWindow = route.options.initcwnd;
+                } //
+                optionalAttrs (route.options ? pref) {
+                  IPv6Preference = route.options.pref;
+                } //
+                optionalAttrs (route.options ? mtu) {
+                  MTUBytes = route.options.mtu;
+                } //
+                optionalAttrs (route.options ? metric) {
+                  Metric = route.options.metric;
+                } //
+                optionalAttrs (route.options ? src) {
+                  PreferredSource = route.options.src;
+                } //
+                optionalAttrs (route.options ? protocol) {
+                  Protocol = route.options.protocol;
+                } //
+                optionalAttrs (route.options ? quickack) {
+                  QuickAck = route.options.quickack;
+                } //
+                optionalAttrs (route.options ? scope) {
+                  Scope = route.options.scope;
+                } //
+                optionalAttrs (route.options ? from) {
+                  Source = route.options.from;
+                } //
+                optionalAttrs (route.options ? table) {
+                  Table = route.options.table;
+                } //
+                optionalAttrs (route.options ? advmss) {
+                  TCPAdvertisedMaximumSegmentSize = route.options.advmss;
+                } //
+                optionalAttrs (route.options ? ttl-propagate) {
+                  TTLPropagate = route.options.ttl-propagate == "enabled";
+                };
+            });
           networkConfig.IPv6PrivacyExtensions = "kernel";
           linkConfig = optionalAttrs (i.macAddress != null) {
             MACAddress = i.macAddress;
@@ -241,6 +337,27 @@ in
         };
         networks = mkIf (sit.dev != null) {
           "40-${sit.dev}" = (mkMerge [ (genericNetwork (mkOverride 999)) {
+            tunnel = [ name ];
+          } ]);
+        };
+      })))
+      (mkMerge (flip mapAttrsToList cfg.greTunnels (name: gre: {
+        netdevs."40-${name}" = {
+          netdevConfig = {
+            Name = name;
+            Kind = gre.type;
+          };
+          tunnelConfig =
+            (optionalAttrs (gre.remote != null) {
+              Remote = gre.remote;
+            }) // (optionalAttrs (gre.local != null) {
+              Local = gre.local;
+            }) // (optionalAttrs (gre.ttl != null) {
+              TTL = gre.ttl;
+            });
+        };
+        networks = mkIf (gre.dev != null) {
+          "40-${gre.dev}" = (mkMerge [ (genericNetwork (mkOverride 999)) {
             tunnel = [ name ];
           } ]);
         };

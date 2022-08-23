@@ -1,18 +1,16 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , gettext
 , fetchurl
 , evolution-data-server
 , pkg-config
 , libxslt
-, docbook_xsl
+, docbook-xsl-nons
 , docbook_xml_dtd_42
-, python3
-, gtk3
+, desktop-file-utils
+, gtk4
 , glib
-, cheese
-, libchamplain
-, clutter-gtk
-, geocode-glib
+, libportal
 , gnome-desktop
 , gnome-online-accounts
 , wrapGAppsHook
@@ -23,17 +21,17 @@
 , vala
 , meson
 , ninja
-, libhandy
+, libadwaita
 , gsettings-desktop-schemas
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-contacts";
-  version = "41.0";
+  version = "42.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-contacts/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "Y+MUm10UdbeiaYAFu191DzyApzVxcWDjnfjP3+v8zfA=";
+    sha256 = "iALDj9wj9SjawSj1O9zx9sow4OHGhIxCzWyEpeIsUhY=";
   };
 
   propagatedUserEnvPkgs = [
@@ -47,34 +45,24 @@ stdenv.mkDerivation rec {
     vala
     gettext
     libxslt
-    docbook_xsl
+    docbook-xsl-nons
     docbook_xml_dtd_42
-    python3
+    desktop-file-utils
     wrapGAppsHook
   ];
 
   buildInputs = [
-    gtk3
+    gtk4
     glib
+    libportal
     evolution-data-server
     gsettings-desktop-schemas
     folks
-    libgdata # required by some dependency transitively
     gnome-desktop
-    libhandy
+    libadwaita
     libxml2
     gnome-online-accounts
-    cheese
-    gnome.adwaita-icon-theme
-    libchamplain
-    clutter-gtk
-    geocode-glib
   ];
-
-  postPatch = ''
-    chmod +x build-aux/meson_post_install.py
-    patchShebangs build-aux/meson_post_install.py
-  '';
 
   doCheck = true;
 

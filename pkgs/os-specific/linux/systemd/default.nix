@@ -15,6 +15,8 @@
 , gperf
 , getent
 , glibcLocales
+
+  # glib is only used during tests (test-bus-gvariant, test-bus-marshal)
 , glib
 , substituteAll
 , gettext
@@ -29,7 +31,6 @@
   # Optional dependencies
 , pam
 , cryptsetup
-, lvm2
 , audit
 , acl
 , lz4
@@ -61,8 +62,10 @@
 , kexec-tools
 , bashInteractive
 , libmicrohttpd
+, libfido2
+, p11-kit
 
-  # the (optional) BPF feature requires bpftool, libbpf, clang and llmv-strip to be avilable during build time.
+  # the (optional) BPF feature requires bpftool, libbpf, clang and llvm-strip to be available during build time.
   # Only libbpf should be a runtime dependency.
 , bpftools
 , libbpf
@@ -97,8 +100,8 @@
 , withTimesyncd ? true
 , withTpm2Tss ? !stdenv.hostPlatform.isMusl
 , withUserDb ? !stdenv.hostPlatform.isMusl
-, libfido2
-, p11-kit
+  # tests assume too much system access for them to be feasible for us right now
+, withTests ? false
 
   # name argument
 , pname ? "systemd"
@@ -123,7 +126,14 @@ assert withHomed -> withCryptsetup;
 assert withCryptsetup -> (cryptsetup != null);
 let
   wantCurl = withRemote || withImportd;
-  version = "249.5";
+  wantGcrypt = withResolved || withImportd;
+  version = "251.3";
+
+  # Bump this variable on every (major) version change. See below (in the meson options list) for why.
+  # command:
+  #  $ curl -s https://api.github.com/repos/systemd/systemd/releases/latest | \
+  #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
+  releaseTimestamp = "1653143108";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -134,12 +144,13 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    sha256 = "0bir2syy20rdi59sv8xp8nw1c92zl9z0wmv7ggsll8dca7niqwbp";
+    sha256 = "sha256-vcj+k/duRID2R+wGQIyq+dVRrFYNQTsjHya6k0hmZxk=";
   };
 
-  # If these need to be regenerated, `git am path/to/00*.patch` them into a
-  # systemd worktree, rebase to the more recent systemd version, and export the
-  # patches again via `git -c format.signoff=false format-patch v${version}`.
+  # On major changes, or when otherwise required, you *must* reformat the patches,
+  # `git am path/to/00*.patch` them into a systemd worktree, rebase to the more recent
+  # systemd version, and export the patches again via
+  # `git -c format.signoff=false format-patch v${version} --no-numbered --zero-commit --no-signature`.
   # Use `find . -name "*.patch" | sort` to get an up-to-date listing of all patches
   patches = [
     ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
@@ -153,72 +164,52 @@ stdenv.mkDerivation {
     ./0009-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
     ./0010-localectl-use-etc-X11-xkb-for-list-x11.patch
     ./0011-build-don-t-create-statedir-and-don-t-touch-prefixdi.patch
-    ./0012-inherit-systemd-environment-when-calling-generators.patch
-    ./0013-add-rootprefix-to-lookup-dir-paths.patch
-    ./0014-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
-    ./0015-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
-    ./0016-kmod-static-nodes.service-Update-ConditionFileNotEmp.patch
-    ./0017-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
-    ./0018-pkg-config-derive-prefix-from-prefix.patch
-
-    # In v248 or v249 we started to get in trouble due to our
-    # /etc/systemd/system being a symlink and thus being treated differently by
-    # systemd. With the below patch we mitigate that effect by special casing
-    # all our root unit dirs if they are symlinks. This does exactly what we
-    # need (AFAICT).
-    ./0019-core-handle-lookup-paths-being-symlinks.patch
-
-    # In v248 compiler weirdness and refactoring lead to the bootloader
-    # erroring out handling keyboard input on some systems. See
-    # https://github.com/systemd/systemd/issues/19191
-    # This should be redundant in v249.6 when it offically gets tagged in
-    # systemd-stable
-    ./0020-sd-boot-Unify-error-handling.patch
-    ./0021-sd-boot-Rework-console-input-handling.patch
-  ] ++ lib.optional stdenv.hostPlatform.isMusl (let
-    oe-core = fetchzip {
-      url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-14c6e5a4b72d0e4665279158a0740dd1dc21f72f.tar.bz2";
-      sha256 = "1jixya4czkr5p5rdcw3d6ips8zzr82dvnanvzvgjh67730scflya";
-    };
-    musl-patches = oe-core + "/meta/recipes-core/systemd/systemd";
-  in [
-    (musl-patches + "/0002-don-t-use-glibc-specific-qsort_r.patch")
-    (musl-patches + "/0003-missing_type.h-add-__compare_fn_t-and-comparison_fn_.patch")
-    (musl-patches + "/0004-add-fallback-parse_printf_format-implementation.patch")
-    (musl-patches + "/0005-src-basic-missing.h-check-for-missing-strndupa.patch")
-    (musl-patches + "/0006-Include-netinet-if_ether.h.patch")
-    (musl-patches + "/0007-don-t-fail-if-GLOB_BRACE-and-GLOB_ALTDIRFUNC-is-not-.patch")
-    (musl-patches + "/0008-add-missing-FTW_-macros-for-musl.patch")
-    (musl-patches + "/0009-fix-missing-of-__register_atfork-for-non-glibc-build.patch")
-    (musl-patches + "/0010-Use-uintmax_t-for-handling-rlim_t.patch")
-    (musl-patches + "/0011-test-sizeof.c-Disable-tests-for-missing-typedefs-in-.patch")
-    (musl-patches + "/0012-don-t-pass-AT_SYMLINK_NOFOLLOW-flag-to-faccessat.patch")
-    (musl-patches + "/0013-Define-glibc-compatible-basename-for-non-glibc-syste.patch")
-    (musl-patches + "/0014-Do-not-disable-buffering-when-writing-to-oom_score_a.patch")
-    (musl-patches + "/0015-distinguish-XSI-compliant-strerror_r-from-GNU-specif.patch")
-    (musl-patches + "/0016-Hide-__start_BUS_ERROR_MAP-and-__stop_BUS_ERROR_MAP.patch")
-    (musl-patches + "/0017-missing_type.h-add-__compar_d_fn_t-definition.patch")
-    (musl-patches + "/0018-avoid-redefinition-of-prctl_mm_map-structure.patch")
-    (musl-patches + "/0019-Handle-missing-LOCK_EX.patch")
-    (musl-patches + "/0021-test-json.c-define-M_PIl.patch")
-    (musl-patches + "/0022-do-not-disable-buffer-in-writing-files.patch")
-    (musl-patches + "/0025-Handle-__cpu_mask-usage.patch")
-    (musl-patches + "/0026-Handle-missing-gshadow.patch")
-    (musl-patches + "/0028-missing_syscall.h-Define-MIPS-ABI-defines-for-musl.patch")
-
-    # Being discussed upstream: https://lists.openembedded.org/g/openembedded-core/topic/86411771#157056
-    ./musl.diff
-  ]);
+    ./0012-add-rootprefix-to-lookup-dir-paths.patch
+    ./0013-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
+    ./0014-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
+    ./0015-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
+    ./0016-pkg-config-derive-prefix-from-prefix.patch
+    ./0017-inherit-systemd-environment-when-calling-generators.patch
+  ] ++ lib.optional stdenv.hostPlatform.isMusl (
+    let
+      oe-core = fetchzip {
+        url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-86a33f98a7c0d6f2c2b51d02ba9e01b63062cf98.tar.bz2";
+        sha256 = "081j01sw21hl405l7g9z4bavvq0q0k4g80365677m0ykhiqlx3am";
+      };
+      musl-patches = oe-core + "/meta/recipes-core/systemd/systemd";
+    in
+    [
+      (musl-patches + "/0003-missing_type.h-add-comparison_fn_t.patch")
+      (musl-patches + "/0004-add-fallback-parse_printf_format-implementation.patch")
+      (musl-patches + "/0005-src-basic-missing.h-check-for-missing-strndupa.patch")
+      (musl-patches + "/0007-don-t-fail-if-GLOB_BRACE-and-GLOB_ALTDIRFUNC-is-not-.patch")
+      (musl-patches + "/0008-add-missing-FTW_-macros-for-musl.patch")
+      (musl-patches + "/0010-Use-uintmax_t-for-handling-rlim_t.patch")
+      (musl-patches + "/0011-test-sizeof.c-Disable-tests-for-missing-typedefs-in-.patch")
+      (musl-patches + "/0012-don-t-pass-AT_SYMLINK_NOFOLLOW-flag-to-faccessat.patch")
+      (musl-patches + "/0013-Define-glibc-compatible-basename-for-non-glibc-syste.patch")
+      (musl-patches + "/0014-Do-not-disable-buffering-when-writing-to-oom_score_a.patch")
+      (musl-patches + "/0015-distinguish-XSI-compliant-strerror_r-from-GNU-specif.patch")
+      (musl-patches + "/0018-avoid-redefinition-of-prctl_mm_map-structure.patch")
+      (musl-patches + "/0022-do-not-disable-buffer-in-writing-files.patch")
+      (musl-patches + "/0025-Handle-__cpu_mask-usage.patch")
+      (musl-patches + "/0026-Handle-missing-gshadow.patch")
+      (musl-patches + "/0028-missing_syscall.h-Define-MIPS-ABI-defines-for-musl.patch")
+      (musl-patches + "/0001-pass-correct-parameters-to-getdents64.patch")
+      (musl-patches + "/0002-Add-sys-stat.h-for-S_IFDIR.patch")
+      (musl-patches + "/0001-Adjust-for-musl-headers.patch")
+    ]
+  );
 
   postPatch = ''
     substituteInPlace src/basic/path-util.h --replace "@defaultPathNormal@" "${placeholder "out"}/bin/"
     substituteInPlace src/boot/efi/meson.build \
       --replace \
-      "find_program('objcopy'" \
-      "find_program('${stdenv.cc.bintools.targetPrefix}objcopy'"
+      "run_command(cc.cmd_array(), '-print-prog-name=objcopy', check: true).stdout().strip()" \
+      "'${stdenv.cc.bintools.targetPrefix}objcopy'"
   '' + (
     let
-      # The folllowing patches references to dynamic libraries to ensure that
+      # The following patches references to dynamic libraries to ensure that
       # all the features that are implemented via dlopen(3) are available (or
       # explicitly deactivated) by pointing dlopen to the absolute store path
       # instead of relying on the linkers runtime lookup code.
@@ -274,7 +265,7 @@ stdenv.mkDerivation {
           { name = "libidn.so.12"; pkg = null; }
           { name = "libidn.so.11"; pkg = null; }
 
-          # journalctl --grep requires libpcre so lets provide it
+          # journalctl --grep requires libpcre so let's provide it
           { name = "libpcre2-8.so.0"; pkg = pcre2; }
 
           # Support for TPM2 in systemd-cryptsetup, systemd-repart and systemd-cryptenroll
@@ -283,6 +274,10 @@ stdenv.mkDerivation {
           { name = "libtss2-mu.so.0"; pkg = opt withTpm2Tss tpm2-tss; }
           { name = "libtss2-tcti-"; pkg = opt withTpm2Tss tpm2-tss; }
           { name = "libfido2.so.1"; pkg = opt withFido2 libfido2; }
+
+          # inspect-elf support
+          { name = "libelf.so.1"; pkg = opt withCoredump elfutils; }
+          { name = "libdw.so.1"; pkg = opt withCoredump elfutils; }
         ];
 
       patchDlOpen = dl:
@@ -301,7 +296,7 @@ stdenv.mkDerivation {
             # exceptional case, details:
             # https://github.com/systemd/systemd-stable/blob/v249-stable/src/shared/tpm2-util.c#L157
             if ! [[ "${library}" =~ .*libtss2-tcti-$ ]]; then
-              echo 'The shared library `${library}` does not exist but was given as subtitute for `${dl.name}`'
+              echo 'The shared library `${library}` does not exist but was given as substitute for `${dl.name}`'
               exit 1
             fi
           fi
@@ -324,11 +319,12 @@ stdenv.mkDerivation {
       exit 1
     fi
   ''
-  # Finally patch shebangs that might need patching.
-  # Should no longer be necessary with v250.
-  # https://github.com/systemd/systemd/pull/19638
+  # Finally, patch shebangs in scripts used at build time. This must not patch
+  # scripts that will end up in the output, to avoid build platform references
+  # when cross-compiling.
   + ''
-    patchShebangs .
+    shopt -s extglob
+    patchShebangs tools test src/!(rpm)
   '';
 
   outputs = [ "out" "man" "dev" ];
@@ -363,16 +359,16 @@ stdenv.mkDerivation {
     [
       acl
       audit
-      glib
       kmod
       libcap
-      libgcrypt
       libidn2
       libuuid
       linuxHeaders
       pam
     ]
 
+    ++ lib.optional wantGcrypt libgcrypt
+    ++ lib.optional withTests glib
     ++ lib.optional withApparmor libapparmor
     ++ lib.optional wantCurl (lib.getDev curl)
     ++ lib.optionals withCompression [ bzip2 lz4 xz zstd ]
@@ -396,6 +392,14 @@ stdenv.mkDerivation {
 
   mesonFlags = [
     "-Dversion-tag=${version}"
+    # We bump this variable on every (major) version change to ensure
+    # that we have known-good value for a timestamp that is in the (not so distant) past.
+    # This serves as a lower bound for valid system timestamps during startup. Systemd will
+    # reset the system timestamp if this date is +- 15 years from the system time.
+    # See the systemd v250 release notes for further details:
+    # https://github.com/systemd/systemd/blob/60e930fc3e6eb8a36fbc184773119eb8d2f30364/NEWS#L258-L266
+    "-Dtime-epoch=${releaseTimestamp}"
+
     "-Ddbuspolicydir=${placeholder "out"}/share/dbus-1/system.d"
     "-Ddbussessionservicedir=${placeholder "out"}/share/dbus-1/services"
     "-Ddbussystemservicedir=${placeholder "out"}/share/dbus-1/system-services"
@@ -407,11 +411,11 @@ stdenv.mkDerivation {
     "-Dsetfont-path=${kbd}/bin/setfont"
     "-Dtty-gid=3" # tty in NixOS has gid 3
     "-Ddebug-shell=${bashInteractive}/bin/bash"
-    "-Dglib=${lib.boolToString (glib != null)}"
+    "-Dglib=${lib.boolToString withTests}"
     # while we do not run tests we should also not build them. Removes about 600 targets
     "-Dtests=false"
     "-Danalyze=${lib.boolToString withAnalyze}"
-    "-Dgcrypt=${lib.boolToString (libgcrypt != null)}"
+    "-Dgcrypt=${lib.boolToString wantGcrypt}"
     "-Dimportd=${lib.boolToString withImportd}"
     "-Dlz4=${lib.boolToString withCompression}"
     "-Dhomed=${lib.boolToString withHomed}"
@@ -422,7 +426,7 @@ stdenv.mkDerivation {
     "-Dnetworkd=${lib.boolToString withNetworkd}"
     "-Doomd=${lib.boolToString withOomd}"
     "-Dpolkit=${lib.boolToString withPolkit}"
-    "-Dcryptsetup=${lib.boolToString withCryptsetup}"
+    "-Dlibcryptsetup=${lib.boolToString withCryptsetup}"
     "-Dportabled=${lib.boolToString withPortabled}"
     "-Dhwdb=${lib.boolToString withHwdb}"
     "-Dremote=${lib.boolToString withRemote}"
@@ -442,7 +446,11 @@ stdenv.mkDerivation {
     "-Dsmack=true"
     "-Db_pie=true"
     "-Dinstall-sysconfdir=false"
-    "-Defi-ld=${stdenv.cc.bintools.targetPrefix}ld"
+    "-Dsbat-distro=nixos"
+    "-Dsbat-distro-summary=NixOS"
+    "-Dsbat-distro-url=https://nixos.org/"
+    "-Dsbat-distro-pkgname=${pname}"
+    "-Dsbat-distro-version=${version}"
     /*
       As of now, systemd doesn't allow runtime configuration of these values. So
       the settings in /etc/login.defs have no effect on it. Many people think this
@@ -455,12 +463,10 @@ stdenv.mkDerivation {
     */
     "-Dsystem-uid-max=999"
     "-Dsystem-gid-max=999"
-    # "-Dtime-epoch=1"
 
     "-Dsysvinit-path="
     "-Dsysvrcnd-path="
 
-    "-Dkill-path=${coreutils}/bin/kill"
     "-Dkmod-path=${kmod}/bin/kmod"
     "-Dsulogin-path=${util-linux}/bin/sulogin"
     "-Dmount-path=${util-linux}/bin/mount"
@@ -478,7 +484,6 @@ stdenv.mkDerivation {
   ] ++ lib.optionals withEfi [
     "-Defi-libdir=${toString gnu-efi}/lib"
     "-Defi-includedir=${toString gnu-efi}/include/efi"
-    "-Defi-ldsdir=${toString gnu-efi}/lib"
   ] ++ lib.optionals (withShellCompletions == false) [
     "-Dbashcompletiondir=no"
     "-Dzshcompletiondir=no"
@@ -496,57 +501,105 @@ stdenv.mkDerivation {
     "-Dutmp=false"
     "-Didn=false"
   ];
+  preConfigure =
+    let
+      # A list of all the runtime binaries that the systemd exectuables, tests and libraries are referencing in their source code, scripts and unit files.
+      # As soon as a dependency isn't required anymore we should remove it from the list. The `where` attribute for each of the replacement patterns must be exhaustive. If another (unhandled) case is found in the source code the build fails with an error message.
+      binaryReplacements = [
+        { search = "/usr/bin/getent"; replacement = "${getent}/bin/getent"; where = [ "src/nspawn/nspawn-setuid.c" ]; }
 
-  preConfigure = ''
-    mesonFlagsArray+=(-Dntp-servers="0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
-    export LC_ALL="en_US.UTF-8";
-    # FIXME: patch this in systemd properly (and send upstream).
-    # already fixed in f00929ad622c978f8ad83590a15a765b4beecac9: (u)mount
-    for i in \
-      src/core/mount.c \
-      src/core/swap.c \
-      src/cryptsetup/cryptsetup-generator.c \
-      src/journal/cat.c \
-      src/nspawn/nspawn.c \
-      src/remount-fs/remount-fs.c \
-      src/shared/generator.c \
-      src/shutdown/shutdown.c \
-      units/emergency.service.in \
-      units/modprobe@.service \
-      units/rescue.service.in \
-      units/systemd-logind.service.in \
-      units/systemd-nspawn@.service.in; \
-    do
-      test -e $i
-      substituteInPlace $i \
-        --replace /usr/bin/getent ${getent}/bin/getent \
-        --replace /sbin/mkswap ${lib.getBin util-linux}/sbin/mkswap \
-        --replace /sbin/swapon ${lib.getBin util-linux}/sbin/swapon \
-        --replace /sbin/swapoff ${lib.getBin util-linux}/sbin/swapoff \
-        --replace /bin/echo ${coreutils}/bin/echo \
-        --replace /bin/cat ${coreutils}/bin/cat \
-        --replace /sbin/sulogin ${lib.getBin util-linux}/sbin/sulogin \
-        --replace /sbin/modprobe ${lib.getBin kmod}/sbin/modprobe \
-        --replace /usr/lib/systemd/systemd-fsck $out/lib/systemd/systemd-fsck \
-        --replace /bin/plymouth /run/current-system/sw/bin/plymouth # To avoid dependency
-    done
+        {
+          search = "/sbin/mkswap";
+          replacement = "${lib.getBin util-linux}/sbin/mkswap";
+          where = [
+            "man/systemd-makefs@.service.xml"
+          ];
+        }
+        { search = "/sbin/swapon"; replacement = "${lib.getBin util-linux}/sbin/swapon"; where = [ "src/core/swap.c" "src/basic/unit-def.h" ]; }
+        { search = "/sbin/swapoff"; replacement = "${lib.getBin util-linux}/sbin/swapoff"; where = [ "src/core/swap.c" ]; }
+        {
+          search = "/bin/echo";
+          replacement = "${coreutils}/bin/echo";
+          where = [
+            "man/systemd-analyze.xml"
+            "man/systemd.service.xml"
+            "src/analyze/test-verify.c"
+            "src/test/test-env-file.c"
+            "src/test/test-fileio.c"
+            "src/test/test-load-fragment.c"
+          ];
+        }
+        {
+          search = "/bin/cat";
+          replacement = "${coreutils}/bin/cat";
+          where = [ "test/create-busybox-container" "test/test-execute/exec-noexecpaths-simple.service" "src/journal/cat.c" ];
+        }
+        { search = "/sbin/modprobe"; replacement = "${lib.getBin kmod}/sbin/modprobe"; where = [ "units/modprobe@.service" ]; }
+        {
+          search = "/usr/lib/systemd/systemd-fsck";
+          replacement = "$out/lib/systemd/systemd-fsck";
+          where = [
+            "man/systemd-fsck@.service.xml"
+          ];
+        }
+      ] ++ lib.optionals withImportd [
+        {
+          search = "\"gpg\"";
+          replacement = "\\\"${gnupg}/bin/gpg\\\"";
+          where = [ "src/import/pull-common.c" ];
+        }
+        {
+          search = "\"tar\"";
+          replacement = "\\\"${gnutar}/bin/tar\\\"";
+          where = [
+            "src/import/export-tar.c"
+            "src/import/import-common.c"
+            "src/import/import-tar.c"
+          ];
+          ignore = [
+            # occurences here refer to the tar sub command
+            "src/sysupdate/sysupdate-resource.c"
+            "src/sysupdate/sysupdate-transfer.c"
+            "src/import/pull.c"
+            "src/import/export.c"
+            "src/import/import.c"
+            "src/import/importd.c"
+            # runs `tar` but also also creates a temporary directory with the string
+            "src/import/pull-tar.c"
+          ];
+        }
+      ];
 
-    for dir in tools src/resolve test src/test src/shared; do
-      patchShebangs $dir
-    done
+      # { replacement, search, where } -> List[str]
+      mkSubstitute = { replacement, search, where, ignore ? [] }:
+        map (path: "substituteInPlace ${path} --replace '${search}' \"${replacement}\"") where;
+      mkEnsureSubstituted = { replacement, search, where, ignore ? [] }:
+      let
+        ignore' = lib.concatStringsSep "|" (ignore ++ ["^test" "NEWS"]);
+      in ''
+        set +e
+        search=$(grep '${search}' -r | grep -v "${replacement}" | grep -Ev "${ignore'}")
+        set -e
+        if [[ -n "$search" ]]; then
+          echo "Not all references to '${search}' have been replaced. Found the following matches:"
+          echo "$search"
+          exit 1
+        fi
+      '';
+    in
+    ''
+      mesonFlagsArray+=(-Dntp-servers="0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
+      export LC_ALL="en_US.UTF-8";
 
-    # absolute paths to gpg & tar
-    substituteInPlace src/import/pull-common.c \
-      --replace '"gpg"' '"${gnupg}/bin/gpg"'
-    for file in src/import/{{export,import,pull}-tar,import-common}.c; do
-      substituteInPlace $file \
-        --replace '"tar"' '"${gnutar}/bin/tar"'
-    done
+      ${lib.concatStringsSep "\n" (lib.flatten (map mkSubstitute binaryReplacements))}
+      ${lib.concatMapStringsSep "\n" mkEnsureSubstituted binaryReplacements}
 
+      substituteInPlace src/libsystemd/sd-journal/catalog.c \
+        --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
 
-    substituteInPlace src/libsystemd/sd-journal/catalog.c \
-      --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
-  '';
+      substituteInPlace src/import/pull-tar.c \
+        --replace 'wait_for_terminate_and_check("tar"' 'wait_for_terminate_and_check("${gnutar}/bin/tar"'
+    '';
 
   # These defines are overridden by CFLAGS and would trigger annoying
   # warning messages
@@ -554,7 +607,7 @@ stdenv.mkDerivation {
     substituteInPlace config.h \
       --replace "POLKIT_AGENT_BINARY_PATH" "_POLKIT_AGENT_BINARY_PATH" \
       --replace "SYSTEMD_BINARY_PATH" "_SYSTEMD_BINARY_PATH" \
-      --replace "SYSTEMD_CGROUP_AGENT_PATH" "_SYSTEMD_CGROUP_AGENT_PATH"
+      --replace "SYSTEMD_CGROUP_AGENTS_PATH" "_SYSTEMD_CGROUP_AGENT_PATH"
   '';
 
   NIX_CFLAGS_COMPILE = toString ([
@@ -566,8 +619,8 @@ stdenv.mkDerivation {
     # Set the release_agent on /sys/fs/cgroup/systemd to the
     # currently running systemd (/run/current-system/systemd) so
     # that we don't use an obsolete/garbage-collected release agent.
-    "-USYSTEMD_CGROUP_AGENT_PATH"
-    "-DSYSTEMD_CGROUP_AGENT_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
+    "-USYSTEMD_CGROUP_AGENTS_PATH"
+    "-DSYSTEMD_CGROUP_AGENTS_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
 
     "-USYSTEMD_BINARY_PATH"
     "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
@@ -584,12 +637,6 @@ stdenv.mkDerivation {
   '';
 
   postInstall = ''
-    # sysinit.target: Don't depend on
-    # systemd-tmpfiles-setup.service. This interferes with NixOps's
-    # send-keys feature (since sshd.service depends indirectly on
-    # sysinit.target).
-    mv $out/lib/systemd/system/sysinit.target.wants/systemd-tmpfiles-setup-dev.service $out/lib/systemd/system/multi-user.target.wants/
-
     mkdir -p $out/example/systemd
     mv $out/lib/{modules-load.d,binfmt.d,sysctl.d,tmpfiles.d} $out/example
     mv $out/lib/systemd/{system,user} $out/example/systemd
@@ -609,16 +656,32 @@ stdenv.mkDerivation {
     rm -rf $out/share/doc
   '';
 
-  # The interface version prevents NixOS from switching to an
-  # incompatible systemd at runtime.  (Switching across reboots is
-  # fine, of course.)  It should be increased whenever systemd changes
-  # in a backwards-incompatible way.  If the interface version of two
-  # systemd builds is the same, then we can switch between them at
-  # runtime; otherwise we can't and we need to reboot.
-  passthru.interfaceVersion = 2;
+  # Avoid *.EFI binary stripping. At least on aarch64-linux strip
+  # removes too much from PE32+ files:
+  #   https://github.com/NixOS/nixpkgs/issues/169693
+  # The hack is to move EFI file out of lib/ before doStrip
+  # run and return it after doStrip run.
+  preFixup = lib.optionalString withEfi ''
+    mv $out/lib/systemd/boot/efi $out/dont-strip-me
+  '';
+  postFixup = lib.optionalString withEfi ''
+    mv $out/dont-strip-me $out/lib/systemd/boot/efi
+  '';
 
-  passthru.tests = {
-    inherit (nixosTests) switchTest;
+  passthru = {
+    # The interface version prevents NixOS from switching to an
+    # incompatible systemd at runtime.  (Switching across reboots is
+    # fine, of course.)  It should be increased whenever systemd changes
+    # in a backwards-incompatible way.  If the interface version of two
+    # systemd builds is the same, then we can switch between them at
+    # runtime; otherwise we can't and we need to reboot.
+    interfaceVersion = 2;
+
+    inherit withCryptsetup withHostnamed withImportd withLocaled withMachined withTimedated util-linux kmod kbd;
+
+    tests = {
+      inherit (nixosTests) switchTest;
+    };
   };
 
   meta = with lib; {
@@ -626,7 +689,9 @@ stdenv.mkDerivation {
     description = "A system and service manager for Linux";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
+    # https://github.com/systemd/systemd/issues/20600#issuecomment-912338965
+    broken = stdenv.hostPlatform.isStatic;
     priority = 10;
-    maintainers = with maintainers; [ andir eelco flokli kloenk ];
+    maintainers = with maintainers; [ flokli kloenk mic92 ];
   };
 }

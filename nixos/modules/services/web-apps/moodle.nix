@@ -56,7 +56,7 @@ let
   mysqlLocal = cfg.database.createLocally && cfg.database.type == "mysql";
   pgsqlLocal = cfg.database.createLocally && cfg.database.type == "pgsql";
 
-  phpExt = pkgs.php74.withExtensions
+  phpExt = pkgs.php81.withExtensions
         ({ enabled, all }: with all; [ iconv mbstring curl openssl tokenizer xmlrpc soap ctype zip gd simplexml dom  intl json sqlite3 pgsql pdo_sqlite pdo_pgsql pdo_odbc pdo_mysql pdo mysqli session zlib xmlreader fileinfo filter opcache ]);
 in
 {
@@ -68,13 +68,13 @@ in
       type = types.package;
       default = pkgs.moodle;
       defaultText = literalExpression "pkgs.moodle";
-      description = "The Moodle package to use.";
+      description = lib.mdDoc "The Moodle package to use.";
     };
 
     initialPassword = mkOption {
       type = types.str;
       example = "correcthorsebatterystaple";
-      description = ''
+      description = lib.mdDoc ''
         Specifies the initial password for the admin, i.e. the password assigned if the user does not already exist.
         The password specified here is world-readable in the Nix store, so it should be changed promptly.
       '';
@@ -84,18 +84,18 @@ in
       type = mkOption {
         type = types.enum [ "mysql" "pgsql" ];
         default = "mysql";
-        description = "Database engine to use.";
+        description = lib.mdDoc "Database engine to use.";
       };
 
       host = mkOption {
         type = types.str;
         default = "localhost";
-        description = "Database host address.";
+        description = lib.mdDoc "Database host address.";
       };
 
       port = mkOption {
         type = types.int;
-        description = "Database host port.";
+        description = lib.mdDoc "Database host port.";
         default = {
           mysql = 3306;
           pgsql = 5432;
@@ -106,22 +106,22 @@ in
       name = mkOption {
         type = types.str;
         default = "moodle";
-        description = "Database name.";
+        description = lib.mdDoc "Database name.";
       };
 
       user = mkOption {
         type = types.str;
         default = "moodle";
-        description = "Database user.";
+        description = lib.mdDoc "Database user.";
       };
 
       passwordFile = mkOption {
         type = types.nullOr types.path;
         default = null;
         example = "/run/keys/moodle-dbpassword";
-        description = ''
+        description = lib.mdDoc ''
           A file containing the password corresponding to
-          <option>database.user</option>.
+          {option}`database.user`.
         '';
       };
 
@@ -132,13 +132,13 @@ in
           else if pgsqlLocal then "/run/postgresql"
           else null;
         defaultText = literalExpression "/run/mysqld/mysqld.sock";
-        description = "Path to the unix socket file to use for authentication.";
+        description = lib.mdDoc "Path to the unix socket file to use for authentication.";
       };
 
       createLocally = mkOption {
         type = types.bool;
         default = true;
-        description = "Create the database and database user locally.";
+        description = lib.mdDoc "Create the database and database user locally.";
       };
     };
 
@@ -152,9 +152,9 @@ in
           enableACME = true;
         }
       '';
-      description = ''
-        Apache configuration can be done by adapting <option>services.httpd.virtualHosts</option>.
-        See <xref linkend="opt-services.httpd.virtualHosts"/> for further information.
+      description = lib.mdDoc ''
+        Apache configuration can be done by adapting {option}`services.httpd.virtualHosts`.
+        See [](#opt-services.httpd.virtualHosts) for further information.
       '';
     };
 
@@ -168,8 +168,8 @@ in
         "pm.max_spare_servers" = 4;
         "pm.max_requests" = 500;
       };
-      description = ''
-        Options for the Moodle PHP pool. See the documentation on <literal>php-fpm.conf</literal>
+      description = lib.mdDoc ''
+        Options for the Moodle PHP pool. See the documentation on `php-fpm.conf`
         for details on configuration directives.
       '';
     };
@@ -177,10 +177,10 @@ in
     extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = ''
+      description = lib.mdDoc ''
         Any additional text to be appended to the config.php
         configuration file. This is a PHP script. For configuration
-        details, see <link xlink:href="https://docs.moodle.org/37/en/Configuration_file"/>.
+        details, see <https://docs.moodle.org/37/en/Configuration_file>.
       '';
       example = ''
         $CFG->disableupdatenotifications = true;

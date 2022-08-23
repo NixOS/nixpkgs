@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "rclone";
-  version = "1.57.0";
+  version = "1.59.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0pwbprbkx5y0c93b61k8znan4aimk7dkssapjhkhzw4c38xd4lza";
+    sha256 = "sha256-eblCMe9ywJztjsWmngUkB/IE2ePI9Yin2jkxBW0tTbQ=";
   };
 
-  vendorSha256 = "0353pff07lwpa1jmi095kb2izcw09z73x6nninnnpyqppwzas6ha";
+  vendorSha256 = "sha256-MZ5RtB4UGHPlMxyQ0VbX5iPpZw98oUuEhuMBDZcYiw8=";
 
   subPackages = [ "." ];
 
@@ -40,8 +40,13 @@ buildGoModule rec {
         ${rcloneBin}/bin/rclone genautocomplete $shell rclone.$shell
         installShellCompletion rclone.$shell
       done
-    '' + lib.optionalString (enableCmount && !stdenv.isDarwin) ''
-      wrapProgram $out/bin/rclone --prefix LD_LIBRARY_PATH : "${fuse}/lib"
+    '' + lib.optionalString (enableCmount && !stdenv.isDarwin)
+      # use --suffix here to ensure we don't shadow /run/wrappers/bin/fusermount,
+      # as the setuid wrapper is required as non-root on NixOS.
+      ''
+      wrapProgram $out/bin/rclone \
+                  --suffix PATH : "${lib.makeBinPath [ fuse ] }" \
+                  --prefix LD_LIBRARY_PATH : "${fuse}/lib"
     '';
 
   meta = with lib; {

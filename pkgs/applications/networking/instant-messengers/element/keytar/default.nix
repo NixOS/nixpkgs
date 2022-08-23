@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, nodejs-14_x, python3, callPackage
+{ lib, stdenv, fetchFromGitHub, nodejs, python3, callPackage, removeReferencesTo
 , fixup_yarn_lock, yarn, pkg-config, libsecret, xcbuild, Security, AppKit, fetchYarnDeps }:
 
 let
@@ -15,12 +15,12 @@ in stdenv.mkDerivation rec {
     sha256 = pinData.srcHash;
   };
 
-  nativeBuildInputs = [ nodejs-14_x python3 yarn pkg-config ]
+  nativeBuildInputs = [ nodejs python3 yarn pkg-config ]
     ++ lib.optional  stdenv.isDarwin xcbuild;
   buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
     ++ lib.optionals stdenv.isDarwin [ Security AppKit ];
 
-  npm_config_nodedir = nodejs-14_x;
+  npm_config_nodedir = nodejs;
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = ./yarn.lock;
@@ -28,6 +28,7 @@ in stdenv.mkDerivation rec {
   };
 
   buildPhase = ''
+    runHook preBuild
     cp ${./yarn.lock} ./yarn.lock
     chmod u+w . ./yarn.lock
     export HOME=$PWD/tmp
@@ -37,16 +38,22 @@ in stdenv.mkDerivation rec {
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
     node_modules/.bin/node-gyp rebuild
+    runHook postBuild
   '';
 
   doCheck = false;
 
   installPhase = ''
+    runHook preInstall
     shopt -s extglob
     rm -rf node_modules
     rm -rf $HOME
     mkdir -p $out
     cp -r ./!(build) $out
     install -D -t $out/build/Release build/Release/keytar.node
+    ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc.cc} $out/build/Release/keytar.node
+    runHook postInstall
   '';
+
+  disallowedReferences = [ stdenv.cc.cc ];
 }

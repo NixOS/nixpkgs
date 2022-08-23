@@ -11,7 +11,7 @@ let
     (builtins.attrNames (builtins.removeAttrs variantHashes [ "iosevka" ]));
 in stdenv.mkDerivation rec {
   pname = "${name}-bin";
-  version = "10.1.0";
+  version = "15.6.3";
 
   src = fetchurl {
     url = "https://github.com/be5invis/Iosevka/releases/download/v${version}/ttc-${name}-${version}.zip";
@@ -30,7 +30,8 @@ in stdenv.mkDerivation rec {
     unzip -d $out/share/fonts/truetype $src
   '';
 
-  meta = iosevka.meta // {
+  meta = {
+    inherit (iosevka.meta) homepage downloadPage description license platforms;
     maintainers = with lib.maintainers; [
       cstrahan
     ];

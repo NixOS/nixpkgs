@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -14,6 +15,7 @@
 , glib
 , gtk3
 , gnome
+, gnome-desktop
 , gcr
 , pam
 , systemd
@@ -30,7 +32,7 @@
 
 stdenv.mkDerivation rec {
   pname = "phosh";
-  version = "0.14.1";
+  version = "0.17.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -39,7 +41,7 @@ stdenv.mkDerivation rec {
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true; # including gvc and libcall-ui which are designated as subprojects
-    sha256 = "sha256-FILSNVBYpWSPXeDb1Vc4jZ7zJMg0Gj6EY5yoc81gUr0=";
+    sha256 = "sha256-o/0NJZo1EPpXguN/tkUc+/9XaVTQWaLGe+2pU0B91Cg=";
   };
 
   nativeBuildInputs = [
@@ -63,7 +65,7 @@ stdenv.mkDerivation rec {
     networkmanager
     polkit
     gnome.gnome-control-center
-    gnome.gnome-desktop
+    gnome-desktop
     gnome.gnome-session
     gtk3
     pam
@@ -82,6 +84,19 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   mesonFlags = [ "-Dsystemd=true" "-Dcompositor=${phoc}/bin/phoc" ];
+
+  patches = [
+    # build: Adjust to polkit version changes
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/World/Phosh/phosh/-/commit/16b46e295b86cbf1beaccf8218cf65ebb4b7a6f1.patch";
+      sha256 = "sha256-Db1OEdiI1QBHGEBs1Coi7LTF9bCScdDgxmovpBdIY/g=";
+    })
+    # polkit-auth-agent: Scope cleanup function for PolkitAgentListener
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/World/Phosh/phosh/-/commit/b864653df50bfd8f34766fc6b37a3bf32cfbdfa4.patch";
+      sha256 = "sha256-YCw3tGk94NAa6PPTmA1lCJVzzi9GC74BmvtTcvuHPh0=";
+    })
+  ];
 
   postPatch = ''
     chmod +x build-aux/post_install.py
@@ -108,13 +123,11 @@ stdenv.mkDerivation rec {
   postFixup = ''
     mkdir -p $out/share/wayland-sessions
     ln -s $out/share/applications/sm.puri.Phosh.desktop $out/share/wayland-sessions/
-    # The OSK0.desktop points to a dummy stub that's not needed
-    rm $out/share/applications/sm.puri.OSK0.desktop
   '';
 
   passthru = {
     providedSessions = [
-     "sm.puri.Phosh"
+      "sm.puri.Phosh"
     ];
   };
 

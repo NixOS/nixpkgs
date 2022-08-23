@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "tumpa";
-  version = "0.1.1";
+  version = "0.1.2";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "kushaldas";
     repo = "tumpa";
     rev = "v${version}";
-    sha256 = "1wvs64s0jxn4p8zr643d2hcczw3a175r6ib3481gdhjx38kgxjbq";
+    sha256 = "17nhdildapgic5l05f3q1wf5jvz3qqdjv543c8gij1x9rdm8hgxi";
   };
 
   propagatedBuildInputs = [

@@ -14,32 +14,32 @@ in
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/jackett/.config/Jackett";
-        description = "The directory where Jackett stores its data files.";
+        description = lib.mdDoc "The directory where Jackett stores its data files.";
       };
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = "Open ports in the firewall for the Jackett web interface.";
+        description = lib.mdDoc "Open ports in the firewall for the Jackett web interface.";
       };
 
       user = mkOption {
         type = types.str;
         default = "jackett";
-        description = "User account under which Jackett runs.";
+        description = lib.mdDoc "User account under which Jackett runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "jackett";
-        description = "Group under which Jackett runs.";
+        description = lib.mdDoc "Group under which Jackett runs.";
       };
 
       package = mkOption {
         type = types.package;
         default = pkgs.jackett;
         defaultText = literalExpression "pkgs.jackett";
-        description = "Jackett package to use.";
+        description = lib.mdDoc "Jackett package to use.";
       };
     };
   };

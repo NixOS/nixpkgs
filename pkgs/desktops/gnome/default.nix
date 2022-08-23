@@ -3,21 +3,6 @@
 lib.makeScope pkgs.newScope (self: with self; {
   updateScript = callPackage ./update.nix { };
 
-  /* Remove packages of packagesToRemove from packages, based on their names
-
-     Type:
-       removePackagesByName :: [package] -> [package] -> [package]
-
-     Example:
-       removePackagesByName [ nautilus file-roller ] [ file-roller totem ]
-       => [ nautilus ]
-  */
-  removePackagesByName = packages: packagesToRemove:
-    let
-      namesToRemove = map lib.getName packagesToRemove;
-    in
-      lib.filter (x: !(builtins.elem (lib.getName x) namesToRemove)) packages;
-
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
   libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
 
@@ -48,6 +33,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-bluetooth = callPackage ./core/gnome-bluetooth { };
 
+  gnome-bluetooth_1_0 = callPackage ./core/gnome-bluetooth/1.0 { };
+
   gnome-color-manager = callPackage ./core/gnome-color-manager { };
 
   gnome-contacts = callPackage ./core/gnome-contacts { };
@@ -57,8 +44,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome-calculator = callPackage ./core/gnome-calculator { };
 
   gnome-common = callPackage ./core/gnome-common { };
-
-  gnome-desktop = callPackage ./core/gnome-desktop { };
 
   gnome-dictionary = callPackage ./core/gnome-dictionary { };
 
@@ -255,8 +240,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gitg = callPackage ./misc/gitg { };
 
-  libgnome-games-support = callPackage ./misc/libgnome-games-support { };
-
   gnome-applets = callPackage ./misc/gnome-applets { };
 
   gnome-flashback = callPackage ./misc/gnome-flashback { };
@@ -280,89 +263,131 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome-autoar = callPackage ./misc/gnome-autoar { };
 
   gnome-packagekit = callPackage ./misc/gnome-packagekit { };
-} // lib.optionalAttrs (config.allowAliases or true) {
-#### Legacy aliases
+}) // lib.optionalAttrs config.allowAliases {
+#### Legacy aliases. They need to be outside the scope or they will shadow the attributes from parent scope.
 
-  bijiben = gnome-notes; # added 2018-09-26
-  evolution_data_server = evolution-data-server; # added 2018-02-25
-  geocode_glib = pkgs.geocode-glib; # added 2018-02-25
-  glib_networking = pkgs.glib-networking; # added 2018-02-25
-  gnome_common = gnome-common; # added 2018-02-25
-  gnome_control_center = gnome-control-center; # added 2018-02-25
-  gnome_desktop = gnome-desktop; # added 2018-02-25
-  gnome_keyring = gnome-keyring; # added 2018-02-25
-  gnome_online_accounts = gnome-online-accounts; # added 2018-02-25
-  gnome_session = gnome-session; # added 2018-02-25
-  gnome_settings_daemon = gnome-settings-daemon; # added 2018-02-25
-  gnome_shell = gnome-shell; # added 2018-02-25
-  gnome_terminal = gnome-terminal; # added 2018-02-25
-  gnome-themes-standard = gnome-themes-extra; # added 2018-03-14
-  gnome_themes_standard = gnome-themes-standard; # added 2018-02-25
-  gnome-tweak-tool = gnome-tweaks; # added 2018-03-21
-  gsettings_desktop_schemas = gsettings-desktop-schemas; # added 2018-02-25
-  libgames-support = libgnome-games-support; # added 2018-03-14
-  libgnome_keyring = libgnome-keyring; # added 2018-02-25
-  inherit (pkgs) rarian; # added 2018-04-25
-  networkmanager_fortisslvpn = networkmanager-fortisslvpn; # added 2018-02-25
-  networkmanager_iodine = networkmanager-iodine; # added 2018-02-25
-  networkmanager_l2tp = networkmanager-l2tp; # added 2018-02-25
-  networkmanager_openconnect = networkmanager-openconnect; # added 2018-02-25
-  networkmanager_openvpn = networkmanager-openvpn; # added 2018-02-25
-  networkmanager_vpnc = networkmanager-vpnc; # added 2018-02-25
-  yelp_xsl = yelp-xsl; # added 2018-02-25
-  yelp_tools = yelp-tools; # added 2018-02-25
+  gnome-desktop = pkgs.gnome-desktop; # added 2022-03-16
+  libgnome-games-support = pkgs.libgnome-games-support; # added 2022-02-19
 
-  # added 2019-02-08
-  inherit (pkgs) atk glib gobject-introspection gspell webkitgtk gtk3 gtkmm3
-      libgtop libgudev libhttpseverywhere librsvg libsecret gdk-pixbuf gtksourceview gtksourceviewmm gtksourceview4
-      easytag meld orca rhythmbox shotwell gnome-usage
-      clutter clutter-gst clutter-gtk cogl gtk-vnc libdazzle libgda libgit2-glib libgxps libgdata libgepub libpeas libgee geocode-glib libgweather librest libzapojit libmediaart gfbgraph gexiv2 folks totem-pl-parser gcr gsound libgnomekbd vte vte_290 gnome-menus gdl;
-  inherit (pkgs) gsettings-desktop-schemas; # added 2019-04-16
-  inherit (pkgs) gnome-video-effects; # added 2019-08-19
-  inherit (pkgs) gnome-online-accounts grilo grilo-plugins tracker tracker-miners gnome-photos; # added 2019-08-23
-  inherit (pkgs) glib-networking; # added 2019-09-02
-  inherit (pkgs) nemiver; # added 2019-09-09
+  bijiben = throw "The ‘gnome.bijiben’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-notes’ directly."; # added 2018-09-26
+  evolution_data_server = throw "The ‘gnome.evolution_data_server’ alias was removed on 2022-01-13. Please use ‘gnome.evolution-data-server’ directly."; # added 2018-02-25
+  geocode_glib = throw "The ‘gnome.geocode_glib’ alias was removed on 2022-01-13. Please use ‘pkgs.geocode-glib’ directly."; # added 2018-02-25
+  glib_networking = throw "The ‘gnome.glib_networking’ alias was removed on 2022-01-13. Please use ‘pkgs.glib-networking’ directly."; # added 2018-02-25
+  gnome_common = throw "The ‘gnome.gnome_common’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-common’ directly."; # added 2018-02-25
+  gnome_control_center = throw "The ‘gnome.gnome_control_center’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-control-center’ directly."; # added 2018-02-25
+  gnome_desktop = throw "The ‘gnome.gnome_desktop’ alias was removed on 2022-01-13. Please use pkgs.gnome-desktop’ directly."; # added 2018-02-25
+  gnome_keyring = throw "The ‘gnome.gnome_keyring’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-keyring’ directly."; # added 2018-02-25
+  gnome_online_accounts = throw "The ‘gnome.gnome_online_accounts’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-online-accounts’ directly."; # added 2018-02-25
+  gnome_session = throw "The ‘gnome.gnome_session’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-session’ directly."; # added 2018-02-25
+  gnome_settings_daemon = throw "The ‘gnome.gnome_settings_daemon’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-settings-daemon’ directly."; # added 2018-02-25
+  gnome_shell = throw "The ‘gnome.gnome_shell’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-shell’ directly."; # added 2018-02-25
+  gnome_terminal = throw "The ‘gnome.gnome_terminal’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-terminal’ directly."; # added 2018-02-25
+  gnome-themes-standard = throw "The ‘gnome.gnome-themes-standard’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-themes-extra’ directly."; # added 2018-03-14
+  gnome_themes_standard = throw "The ‘gnome.gnome_themes_standard’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-themes-standard’ directly."; # added 2018-02-25
+  gnome-tweak-tool = throw "The ‘gnome.gnome-tweak-tool’ alias was removed on 2022-01-13. Please use ‘gnome.gnome-tweaks’ directly."; # added 2018-03-21
+  gsettings_desktop_schemas = throw "The ‘gnome.gsettings_desktop_schemas’ alias was removed on 2022-01-13. Please use ‘gnome.gsettings-desktop-schemas’ directly."; # added 2018-02-25
+  libgames-support = throw "The ‘gnome.libgames-support’ alias was removed on 2022-01-13. Please use ‘pkgs.libgnome-games-support’ directly."; # added 2018-03-14
+  libgnome_keyring = throw "The ‘gnome.libgnome_keyring’ alias was removed on 2022-01-13. Please use ‘gnome.libgnome-keyring’ directly."; # added 2018-02-25
+  rarian = throw "The ‘gnome.rarian’ alias was removed on 2022-01-13. Please use ‘pkgs.rarian’ directly."; # added 2018-04-25
+  networkmanager_fortisslvpn = throw "The ‘gnome.networkmanager_fortisslvpn’ alias was removed on 2022-01-13. Please use ‘gnome.networkmanager-fortisslvpn’ directly."; # added 2018-02-25
+  networkmanager_iodine = throw "The ‘gnome.networkmanager_iodine’ alias was removed on 2022-01-13. Please use ‘gnome.networkmanager-iodine’ directly."; # added 2018-02-25
+  networkmanager_l2tp = throw "The ‘gnome.networkmanager_l2tp’ alias was removed on 2022-01-13. Please use ‘gnome.networkmanager-l2tp’ directly."; # added 2018-02-25
+  networkmanager_openconnect = throw "The ‘gnome.networkmanager_openconnect’ alias was removed on 2022-01-13. Please use ‘gnome.networkmanager-openconnect’ directly."; # added 2018-02-25
+  networkmanager_openvpn = throw "The ‘gnome.networkmanager_openvpn’ alias was removed on 2022-01-13. Please use ‘gnome.networkmanager-openvpn’ directly."; # added 2018-02-25
+  networkmanager_vpnc = throw "The ‘gnome.networkmanager_vpnc’ alias was removed on 2022-01-13. Please use ‘gnome.networkmanager-vpnc’ directly."; # added 2018-02-25
+  yelp_xsl = throw "The ‘gnome.yelp_xsl’ alias was removed on 2022-01-13. Please use ‘gnome.yelp-xsl’ directly."; # added 2018-02-25
+  yelp_tools = throw "The ‘gnome.yelp_tools’ alias was removed on 2022-01-13. Please use ‘gnome.yelp-tools’ directly."; # added 2018-02-25
 
-  defaultIconTheme = adwaita-icon-theme;
-  gtk = gtk3;
-  gtkmm = gtkmm3;
-  rest = librest;
+  atk = throw "The ‘gnome.atk’ alias was removed on 2022-01-13. Please use ‘pkgs.atk’ directly."; # added 2019-02-08
+  glib = throw "The ‘gnome.glib’ alias was removed on 2022-01-13. Please use ‘pkgs.glib’ directly."; # added 2019-02-08
+  gobject-introspection = throw "The ‘gnome.gobject-introspection’ alias was removed on 2022-01-13. Please use ‘pkgs.gobject-introspection’ directly."; # added 2019-02-08
+  gspell = throw "The ‘gnome.gspell’ alias was removed on 2022-01-13. Please use ‘pkgs.gspell’ directly."; # added 2019-02-08
+  webkitgtk = throw "The ‘gnome.webkitgtk’ alias was removed on 2022-01-13. Please use ‘pkgs.webkitgtk’ directly."; # added 2019-02-08
+  gtk3 = throw "The ‘gnome.gtk3’ alias was removed on 2022-01-13. Please use ‘pkgs.gtk3’ directly."; # added 2019-02-08
+  gtkmm3 = throw "The ‘gnome.gtkmm3’ alias was removed on 2022-01-13. Please use ‘pkgs.gtkmm3’ directly."; # added 2019-02-08
+  libgtop = throw "The ‘gnome.libgtop’ alias was removed on 2022-01-13. Please use ‘pkgs.libgtop’ directly."; # added 2019-02-08
+  libgudev = throw "The ‘gnome.libgudev’ alias was removed on 2022-01-13. Please use ‘pkgs.libgudev’ directly."; # added 2019-02-08
+  libhttpseverywhere = throw "The ‘gnome.libhttpseverywhere’ alias was removed on 2022-01-13. Please use ‘pkgs.libhttpseverywhere’ directly."; # added 2019-02-08
+  librsvg = throw "The ‘gnome.librsvg’ alias was removed on 2022-01-13. Please use ‘pkgs.librsvg’ directly."; # added 2019-02-08
+  libsecret = throw "The ‘gnome.libsecret’ alias was removed on 2022-01-13. Please use ‘pkgs.libsecret’ directly."; # added 2019-02-08
+  gdk-pixbuf = throw "The ‘gnome.gdk-pixbuf’ alias was removed on 2022-01-13. Please use ‘pkgs.gdk-pixbuf’ directly."; # added 2019-02-08
+  gtksourceview = throw "The ‘gnome.gtksourceview’ alias was removed on 2022-01-13. Please use ‘pkgs.gtksourceview’ directly."; # added 2019-02-08
+  gtksourceviewmm = throw "The ‘gnome.gtksourceviewmm’ alias was removed on 2022-01-13. Please use ‘pkgs.gtksourceviewmm’ directly."; # added 2019-02-08
+  gtksourceview4 = throw "The ‘gnome.gtksourceview4’ alias was removed on 2022-01-13. Please use ‘pkgs.gtksourceview4’ directly."; # added 2019-02-08
+  easytag = throw "The ‘gnome.easytag’ alias was removed on 2022-01-13. Please use ‘pkgs.easytag’ directly."; # added 2019-02-08
+  meld = throw "The ‘gnome.meld’ alias was removed on 2022-01-13. Please use ‘pkgs.meld’ directly."; # added 2019-02-08
+  orca = throw "The ‘gnome.orca’ alias was removed on 2022-01-13. Please use ‘pkgs.orca’ directly."; # added 2019-02-08
+  rhythmbox = throw "The ‘gnome.rhythmbox’ alias was removed on 2022-01-13. Please use ‘pkgs.rhythmbox’ directly."; # added 2019-02-08
+  shotwell = throw "The ‘gnome.shotwell’ alias was removed on 2022-01-13. Please use ‘pkgs.shotwell’ directly."; # added 2019-02-08
+  gnome-usage = throw "The ‘gnome.gnome-usage’ alias was removed on 2022-01-13. Please use ‘pkgs.gnome-usage’ directly."; # added 2019-02-08
+  clutter = throw "The ‘gnome.clutter’ alias was removed on 2022-01-13. Please use ‘pkgs.clutter’ directly."; # added 2019-02-08
+  clutter-gst = throw "The ‘gnome.clutter-gst’ alias was removed on 2022-01-13. Please use ‘pkgs.clutter-gst’ directly."; # added 2019-02-08
+  clutter-gtk = throw "The ‘gnome.clutter-gtk’ alias was removed on 2022-01-13. Please use ‘pkgs.clutter-gtk’ directly."; # added 2019-02-08
+  cogl = throw "The ‘gnome.cogl’ alias was removed on 2022-01-13. Please use ‘pkgs.cogl’ directly."; # added 2019-02-08
+  gtk-vnc = throw "The ‘gnome.gtk-vnc’ alias was removed on 2022-01-13. Please use ‘pkgs.gtk-vnc’ directly."; # added 2019-02-08
+  libdazzle = throw "The ‘gnome.libdazzle’ alias was removed on 2022-01-13. Please use ‘pkgs.libdazzle’ directly."; # added 2019-02-08
+  libgda = throw "The ‘gnome.libgda’ alias was removed on 2022-01-13. Please use ‘pkgs.libgda’ directly."; # added 2019-02-08
+  libgit2-glib = throw "The ‘gnome.libgit2-glib’ alias was removed on 2022-01-13. Please use ‘pkgs.libgit2-glib’ directly."; # added 2019-02-08
+  libgxps = throw "The ‘gnome.libgxps’ alias was removed on 2022-01-13. Please use ‘pkgs.libgxps’ directly."; # added 2019-02-08
+  libgdata = throw "The ‘gnome.libgdata’ alias was removed on 2022-01-13. Please use ‘pkgs.libgdata’ directly."; # added 2019-02-08
+  libgepub = throw "The ‘gnome.libgepub’ alias was removed on 2022-01-13. Please use ‘pkgs.libgepub’ directly."; # added 2019-02-08
+  libpeas = throw "The ‘gnome.libpeas’ alias was removed on 2022-01-13. Please use ‘pkgs.libpeas’ directly."; # added 2019-02-08
+  libgee = throw "The ‘gnome.libgee’ alias was removed on 2022-01-13. Please use ‘pkgs.libgee’ directly."; # added 2019-02-08
+  geocode-glib = throw "The ‘gnome.geocode-glib’ alias was removed on 2022-01-13. Please use ‘pkgs.geocode-glib’ directly."; # added 2019-02-08
+  libgweather = throw "The ‘gnome.libgweather’ alias was removed on 2022-01-13. Please use ‘pkgs.libgweather’ directly."; # added 2019-02-08
+  librest = throw "The ‘gnome.librest’ alias was removed on 2022-01-13. Please use ‘pkgs.librest’ directly."; # added 2019-02-08
+  libzapojit = throw "The ‘gnome.libzapojit’ alias was removed on 2022-01-13. Please use ‘pkgs.libzapojit’ directly."; # added 2019-02-08
+  libmediaart = throw "The ‘gnome.libmediaart’ alias was removed on 2022-01-13. Please use ‘pkgs.libmediaart’ directly."; # added 2019-02-08
+  gfbgraph = throw "The ‘gnome.gfbgraph’ alias was removed on 2022-01-13. Please use ‘pkgs.gfbgraph’ directly."; # added 2019-02-08
+  gexiv2 = throw "The ‘gnome.gexiv2’ alias was removed on 2022-01-13. Please use ‘pkgs.gexiv2’ directly."; # added 2019-02-08
+  folks = throw "The ‘gnome.folks’ alias was removed on 2022-01-13. Please use ‘pkgs.folks’ directly."; # added 2019-02-08
+  totem-pl-parser = throw "The ‘gnome.totem-pl-parser’ alias was removed on 2022-01-13. Please use ‘pkgs.totem-pl-parser’ directly."; # added 2019-02-08
+  gcr = throw "The ‘gnome.gcr’ alias was removed on 2022-01-13. Please use ‘pkgs.gcr’ directly."; # added 2019-02-08
+  gsound = throw "The ‘gnome.gsound’ alias was removed on 2022-01-13. Please use ‘pkgs.gsound’ directly."; # added 2019-02-08
+  libgnomekbd = throw "The ‘gnome.libgnomekbd’ alias was removed on 2022-01-13. Please use ‘pkgs.libgnomekbd’ directly."; # added 2019-02-08
+  vte = throw "The ‘gnome.vte’ alias was removed on 2022-01-13. Please use ‘pkgs.vte’ directly."; # added 2019-02-08
+  vte_290 = throw "The ‘gnome.vte_290’ alias was removed on 2022-01-13. Please use ‘pkgs.vte_290’ directly."; # added 2019-02-08
+  gnome-menus = throw "The ‘gnome.gnome-menus’ alias was removed on 2022-01-13. Please use ‘pkgs.gnome-menus’ directly."; # added 2019-02-08
+  gdl = throw "The ‘gnome.gdl’ alias was removed on 2022-01-13. Please use ‘pkgs.gdl’ directly."; # added 2019-02-08
 
-  pidgin-im-gnome-shell-extension = pkgs.gnomeExtensions.pidgin-im-integration; # added 2019-08-01
 
-  # added 2019-08-25
-  corePackages = throw "gnome.corePackages is removed since 2019-08-25: please use `services.gnome.core-shell.enable`";
-  optionalPackages = throw "gnome.optionalPackages is removed since 2019-08-25: please use `services.gnome.core-utilities.enable`";
-  gamesPackages = throw "gnome.gamesPackages is removed since 2019-08-25: please use `services.gnome.games.enable`";
+  gsettings-desktop-schemas = throw "The ‘gnome.gsettings-desktop-schemas’ alias was removed on 2022-01-13. Please use ‘pkgs.gsettings-desktop-schemas’ directly."; # added 2019-04-16
+  gnome-video-effects = throw "The ‘gnome.gnome-video-effects’ alias was removed on 2022-01-13. Please use ‘pkgs.gnome-video-effects’ directly."; # added 2019-08-19
+  gnome-online-accounts = throw "The ‘gnome.gnome-online-accounts’ alias was removed on 2022-01-13. Please use ‘pkgs.gnome-online-accounts’ directly."; # added 2019-08-23
+  grilo = throw "The ‘gnome.grilo’ alias was removed on 2022-01-13. Please use ‘pkgs.grilo’ directly."; # added 2019-08-23
+  grilo-plugins = throw "The ‘gnome.grilo-plugins’ alias was removed on 2022-01-13. Please use ‘pkgs.grilo-plugins’ directly."; # added 2019-08-23
+  tracker = throw "The ‘gnome.tracker’ alias was removed on 2022-01-13. Please use ‘pkgs.tracker’ directly."; # added 2019-08-23
+  tracker-miners = throw "The ‘gnome.tracker-miners’ alias was removed on 2022-01-13. Please use ‘pkgs.tracker-miners’ directly."; # added 2019-08-23
+  gnome-photos = throw "The ‘gnome.gnome-photos’ alias was removed on 2022-01-13. Please use ‘pkgs.gnome-photos’ directly."; # added 2019-08-23
+  glib-networking = throw "The ‘gnome.glib-networking’ alias was removed on 2022-01-13. Please use ‘pkgs.glib-networking’ directly."; # added 2019-09-02
+  nemiver = throw "The ‘gnome.nemiver’ alias was removed on 2022-01-13. Please use ‘pkgs.nemiver’ directly."; # added 2019-09-09
 
-  nautilus-sendto = throw "nautilus-sendto is removed since 2019-09-17: abandoned upstream";
+  defaultIconTheme = throw "The ‘gnome.defaultIconTheme’ alias was removed on 2022-01-13. Please use ‘gnome.adwaita-icon-theme’ directly."; # added 2019-02-08
+  gtk = throw "The ‘gnome.gtk’ alias was removed on 2022-01-13. Please use ‘pkgs.gtk3’ directly."; # added 2019-02-08
+  gtkmm = throw "The ‘gnome.gtkmm’ alias was removed on 2022-01-13. Please use ‘pkgs.gtkmm3’ directly."; # added 2019-02-08
+  rest = throw "The ‘gnome.rest’ alias was removed on 2022-01-13. Please use ‘pkgs.librest’ directly."; # added 2019-02-08
 
-  inherit (pkgs) vala; # added 2019-10-10
+  pidgin-im-gnome-shell-extension = throw "The ‘gnome.pidgin-im-gnome-shell-extension’ alias was removed on 2022-01-13. Please use ‘pkgs.gnomeExtensions.pidgin-im-integration’ directly."; # added 2019-08-01
 
-  inherit (pkgs) gnome-user-docs; # added 2019-11-20
+  vala = throw "The ‘gnome.vala’ alias was removed on 2022-01-13. Please use ‘pkgs.vala’ directly."; # added 2019-10-10
 
-  inherit (pkgs) gjs; # added 2019-01-05
+  gnome-user-docs = throw "The ‘gnome.gnome-user-docs’ alias was removed on 2022-01-13. Please use ‘pkgs.gnome-user-docs’ directly."; # added 2019-11-20
 
-  inherit (pkgs) yelp-tools; # added 2019-11-20
+  gjs = throw "The ‘gnome.gjs’ alias was removed on 2022-01-13. Please use ‘pkgs.gjs’ directly."; # added 2019-01-05
 
-  inherit (pkgs) dconf; # added 2019-11-30
+  yelp-tools = throw "The ‘gnome.yelp-tools’ alias was removed on 2022-01-13. Please use ‘pkgs.yelp-tools’ directly."; # added 2019-11-20
 
-  inherit (pkgs) networkmanagerapplet; # added 2019-12-12
+  dconf = throw "The ‘gnome.dconf’ alias was removed on 2022-01-13. Please use ‘pkgs.dconf’ directly."; # added 2019-11-30
 
-  inherit (pkgs) glade; # added 2020-05-15
+  networkmanagerapplet = throw "The ‘gnome.networkmanagerapplet’ alias was removed on 2022-01-13. Please use ‘pkgs.networkmanagerapplet’ directly."; # added 2019-12-12
 
-  vino = throw "vino is deprecated, use gnome-remote-desktop instead."; # added 2020-03-13
+  glade = throw "The ‘gnome.glade’ alias was removed on 2022-01-13. Please use ‘pkgs.glade’ directly."; # added 2020-05-15
 
-  gnome-screensaver = throw "gnome-screensaver is deprecated. If you are using GNOME Flashback, it now has a built-in lock screen. If you are using it elsewhere, you can try xscreenlock or other alternatives."; # added 2020-03-19
-
-  maintainers = lib.teams.gnome.members;
+  maintainers = throw "The ‘gnome.maintainers’ alias was removed on 2022-01-13. Please use ‘lib.teams.gnome.members’ directly."; # added 2020-04-01
 
   mutter328 = throw "Removed as Pantheon is upgraded to mutter338.";
 
   mutter334 = throw "Removed as Pantheon is upgraded to mutter338.";
 
   gnome-getting-started-docs = throw "Removed in favour of gnome-tour.";
-
-  # Added 2021-05-07
-  gnome3 = self // { recurseForDerivations = false; };
-})
+}

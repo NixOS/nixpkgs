@@ -16,11 +16,12 @@
 
 # tests
 , python3
+, arrow-cpp
 }:
 
 stdenv.mkDerivation rec {
   pname = "grpc";
-  version = "1.43.0"; # N.B: if you change this, please update:
+  version = "1.48.0"; # N.B: if you change this, please update:
     # pythonPackages.grpcio-tools
     # pythonPackages.grpcio-status
 
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    sha256 = "sha256-NPyCQsrmD/gBs4UHPGbBACmGRTNQDj6WfnfLNdWulK4=";
+    hash = "sha256-cR+K3po/9XpYWe+sRXGwzvNAPChrWzYu5D4ygBTKKIQ=";
     fetchSubmodules = true;
   };
 
@@ -61,7 +62,6 @@ stdenv.mkDerivation rec {
     "-DgRPC_PROTOBUF_PROVIDER=package"
     "-DgRPC_ABSL_PROVIDER=package"
     "-DBUILD_SHARED_LIBS=ON"
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-D_gRPC_PROTOBUF_PROTOC_EXECUTABLE=${buildPackages.protobuf}/bin/protoc"
   ] ++ lib.optionals ((stdenv.hostPlatform.useLLVM or false) && lib.versionOlder stdenv.cc.cc.version "11.0") [
@@ -93,6 +93,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     inherit (python3.pkgs) grpcio-status grpcio-tools;
+    inherit arrow-cpp;
   };
 
   meta = with lib; {

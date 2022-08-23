@@ -41,11 +41,11 @@
 
 stdenv.mkDerivation rec {
   pname = "shotwell";
-  version = "0.30.14";
+  version = "0.30.16";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-McLkgzkI02GcssNnWgXw2lnCuqduKLkFOF/VbADBKJU=";
+    sha256 = "sha256-yYgs+9rTA8uBYbFJrLtMYX++fKn2q24i0XTiRH51GPo=";
   };
 
   nativeBuildInputs = [
@@ -71,7 +71,9 @@ stdenv.mkDerivation rec {
     sqlite
     webkitgtk
     gst_all_1.gstreamer
+    gst_all_1.gst-libav
     gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
     libgee
     libgudev
     gexiv2

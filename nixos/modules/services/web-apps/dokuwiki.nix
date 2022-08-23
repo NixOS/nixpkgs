@@ -1,19 +1,13 @@
 { config, pkgs, lib, ... }:
 
-let
-  inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption types maintainers recursiveUpdate;
-  inherit (lib) any attrValues concatMapStrings concatMapStringsSep flatten literalExpression;
-  inherit (lib) filterAttrs mapAttrs mapAttrs' mapAttrsToList nameValuePair optional optionalAttrs optionalString;
+with lib;
 
-  cfg = migrateOldAttrs config.services.dokuwiki;
+let
+  cfg = config.services.dokuwiki;
   eachSite = cfg.sites;
   user = "dokuwiki";
   webserver = config.services.${cfg.webserver};
   stateDir = hostName: "/var/lib/dokuwiki/${hostName}/data";
-
-  # Migrate config.services.dokuwiki.<hostName> to config.services.dokuwiki.sites.<hostName>
-  oldSites = filterAttrs (o: _: o != "sites" && o != "webserver");
-  migrateOldAttrs = cfg: cfg // { sites = cfg.sites // oldSites cfg; };
 
   dokuwikiAclAuthConfig = hostName: cfg: pkgs.writeText "acl.auth-${hostName}.php" ''
     # acl.auth.php
@@ -72,21 +66,21 @@ let
           type = types.package;
           default = pkgs.dokuwiki;
           defaultText = literalExpression "pkgs.dokuwiki";
-          description = "Which DokuWiki package to use.";
+          description = lib.mdDoc "Which DokuWiki package to use.";
         };
 
         stateDir = mkOption {
           type = types.path;
           default = "/var/lib/dokuwiki/${name}/data";
-          description = "Location of the DokuWiki state directory.";
+          description = lib.mdDoc "Location of the DokuWiki state directory.";
         };
 
         acl = mkOption {
           type = types.nullOr types.lines;
           default = null;
           example = "*               @ALL               8";
-          description = ''
-            Access Control Lists: see <link xlink:href="https://www.dokuwiki.org/acl"/>
+          description = lib.mdDoc ''
+            Access Control Lists: see <https://www.dokuwiki.org/acl>
             Mutually exclusive with services.dokuwiki.aclFile
             Set this to a value other than null to take precedence over aclFile option.
 
@@ -98,11 +92,11 @@ let
         aclFile = mkOption {
           type = with types; nullOr str;
           default = if (config.aclUse && config.acl == null) then "/var/lib/dokuwiki/${name}/acl.auth.php" else null;
-          description = ''
+          description = lib.mdDoc ''
             Location of the dokuwiki acl rules. Mutually exclusive with services.dokuwiki.acl
             Mutually exclusive with services.dokuwiki.acl which is preferred.
-            Consult documentation <link xlink:href="https://www.dokuwiki.org/acl"/> for further instructions.
-            Example: <link xlink:href="https://github.com/splitbrain/dokuwiki/blob/master/conf/acl.auth.php.dist"/>
+            Consult documentation <https://www.dokuwiki.org/acl> for further instructions.
+            Example: <https://github.com/splitbrain/dokuwiki/blob/master/conf/acl.auth.php.dist>
           '';
           example = "/var/lib/dokuwiki/${name}/acl.auth.php";
         };
@@ -110,7 +104,7 @@ let
         aclUse = mkOption {
           type = types.bool;
           default = true;
-          description = ''
+          description = lib.mdDoc ''
             Necessary for users to log in into the system.
             Also limits anonymous users. When disabled,
             everyone is able to create and edit content.
@@ -125,7 +119,7 @@ let
             $plugins['authmysql'] = 0;
             $plugins['authpgsql'] = 0;
           '';
-          description = ''
+          description = lib.mdDoc ''
             List of the dokuwiki (un)loaded plugins.
           '';
         };
@@ -133,10 +127,10 @@ let
         superUser = mkOption {
           type = types.nullOr types.str;
           default = "@admin";
-          description = ''
+          description = lib.mdDoc ''
             You can set either a username, a list of usernames (“admin1,admin2”),
             or the name of a group by prepending an @ char to the groupname
-            Consult documentation <link xlink:href="https://www.dokuwiki.org/config:superuser"/> for further instructions.
+            Consult documentation <https://www.dokuwiki.org/config:superuser> for further instructions.
           '';
         };
 
@@ -156,9 +150,9 @@ let
           type = types.nullOr types.str;
           default = "";
           example = "search,register";
-          description = ''
+          description = lib.mdDoc ''
             Disable individual action modes. Refer to
-            <link xlink:href="https://www.dokuwiki.org/config:action_modes"/>
+            <https://www.dokuwiki.org/config:action_modes>
             for details on supported values.
           '';
         };
@@ -228,8 +222,8 @@ let
             "pm.max_spare_servers" = 4;
             "pm.max_requests" = 500;
           };
-          description = ''
-            Options for the DokuWiki PHP pool. See the documentation on <literal>php-fpm.conf</literal>
+          description = lib.mdDoc ''
+            Options for the DokuWiki PHP pool. See the documentation on `php-fpm.conf`
             for details on configuration directives.
           '';
         };
@@ -241,9 +235,9 @@ let
             $conf['title'] = 'My Wiki';
             $conf['userewrite'] = 1;
           '';
-          description = ''
+          description = lib.mdDoc ''
             DokuWiki configuration. Refer to
-            <link xlink:href="https://www.dokuwiki.org/config"/>
+            <https://www.dokuwiki.org/config>
             for details on supported values.
           '';
         };
@@ -255,36 +249,29 @@ in
 {
   # interface
   options = {
-    services.dokuwiki = mkOption {
-      type = types.submodule {
-        # Used to support old interface
-        freeformType = types.attrsOf (types.submodule siteOpts);
+    services.dokuwiki = {
 
-        # New interface
-        options.sites = mkOption {
-          type = types.attrsOf (types.submodule siteOpts);
-          default = {};
-          description = "Specification of one or more DokuWiki sites to serve";
-        };
-
-        options.webserver = mkOption {
-          type = types.enum [ "nginx" "caddy" ];
-          default = "nginx";
-          description = ''
-            Whether to use nginx or caddy for virtual host management.
-
-            Further nginx configuration can be done by adapting <literal>services.nginx.virtualHosts.&lt;name&gt;</literal>.
-            See <xref linkend="opt-services.nginx.virtualHosts"/> for further information.
-
-            Further apache2 configuration can be done by adapting <literal>services.httpd.virtualHosts.&lt;name&gt;</literal>.
-            See <xref linkend="opt-services.httpd.virtualHosts"/> for further information.
-          '';
-        };
+      sites = mkOption {
+        type = types.attrsOf (types.submodule siteOpts);
+        default = {};
+        description = lib.mdDoc "Specification of one or more DokuWiki sites to serve";
       };
-      default = {};
-      description = "DokuWiki configuration";
-    };
 
+      webserver = mkOption {
+        type = types.enum [ "nginx" "caddy" ];
+        default = "nginx";
+        description = lib.mdDoc ''
+          Whether to use nginx or caddy for virtual host management.
+
+          Further nginx configuration can be done by adapting `services.nginx.virtualHosts.<name>`.
+          See [](#opt-services.nginx.virtualHosts) for further information.
+
+          Further apache2 configuration can be done by adapting `services.httpd.virtualHosts.<name>`.
+          See [](#opt-services.httpd.virtualHosts) for further information.
+        '';
+      };
+
+    };
   };
 
   # implementation
@@ -301,16 +288,12 @@ in
     }
     ]) eachSite);
 
-    warnings = mapAttrsToList (hostName: _: ''services.dokuwiki."${hostName}" is deprecated use services.dokuwiki.sites."${hostName}"'') (oldSites cfg);
-
     services.phpfpm.pools = mapAttrs' (hostName: cfg: (
       nameValuePair "dokuwiki-${hostName}" {
         inherit user;
         group = webserver.group;
 
-        # Not yet compatible with php 8 https://www.dokuwiki.org/requirements
-        # https://github.com/splitbrain/dokuwiki/issues/3545
-        phpPackage = pkgs.php74;
+        phpPackage = pkgs.php81;
         phpEnv = {
           DOKUWIKI_LOCAL_CONFIG = "${dokuwikiLocalConfig hostName cfg}";
           DOKUWIKI_PLUGINS_LOCAL_CONFIG = "${dokuwikiPluginsLocalConfig hostName cfg}";
@@ -391,7 +374,7 @@ in
           "~ \\.php$" = {
             extraConfig = ''
               try_files $uri $uri/ /doku.php;
-              include ${pkgs.nginx}/conf/fastcgi_params;
+              include ${config.services.nginx.package}/conf/fastcgi_params;
               fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
               fastcgi_param REDIRECT_STATUS 200;
               fastcgi_pass unix:${config.services.phpfpm.pools."dokuwiki-${hostName}".socket};

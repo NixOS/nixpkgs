@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "m-cli";
-  version = "0.2.5";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "rgcr";
-    repo = "m-cli";
+    repo = pname;
     rev = "v${version}";
-    sha512 = "0mkcx7jq91pbfs8327qc8434gj73fvjgdfdsrza0lyd9wns6jhsqsf0585klzl68aqscvksgzi2asdnim4va35cdkp2fdzl0g3sm4kd";
+    sha256 = "sha256-KzlE1DdVMLnGmcOS1a2HK4pASofD1EHpdqbzVVIxeb4=";
   };
 
   dontBuild = true;
@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Swiss Army Knife for macOS";
     inherit (src.meta) homepage;
-    repositories.git = "git://github.com/rgcr/m-cli.git";
 
     license = licenses.mit;
 
     platforms = platforms.darwin;
     maintainers = with maintainers; [];
+    mainProgram = "m";
   };
 }

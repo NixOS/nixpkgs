@@ -13,7 +13,7 @@ in {
 
     bindAddress = mkOption {
       type = types.str;
-      description = "Port (and optionally address) to listen on.";
+      description = lib.mdDoc "Port (and optionally address) to listen on.";
       default = ":4050";
     };
 
@@ -21,25 +21,25 @@ in {
       type = types.nullOr types.path;
       default = null;
       example = "/run/keys/go-neb.env";
-      description = ''
+      description = lib.mdDoc ''
         Environment variables from this file will be interpolated into the
-        final config file using envsubst with this syntax: <literal>$ENVIRONMENT</literal>
-        or <literal>''${VARIABLE}</literal>.
-        The file should contain lines formatted as <literal>SECRET_VAR=SECRET_VALUE</literal>.
+        final config file using envsubst with this syntax: `$ENVIRONMENT`
+        or `''${VARIABLE}`.
+        The file should contain lines formatted as `SECRET_VAR=SECRET_VALUE`.
         This is useful to avoid putting secrets into the nix store.
       '';
     };
 
     baseUrl = mkOption {
       type = types.str;
-      description = "Public-facing endpoint that can receive webhooks.";
+      description = lib.mdDoc "Public-facing endpoint that can receive webhooks.";
     };
 
     config = mkOption {
       inherit (settingsFormat) type;
-      description = ''
-        Your <filename>config.yaml</filename> as a Nix attribute set.
-        See <link xlink:href="https://github.com/matrix-org/go-neb/blob/master/config.sample.yaml">config.sample.yaml</link>
+      description = lib.mdDoc ''
+        Your {file}`config.yaml` as a Nix attribute set.
+        See [config.sample.yaml](https://github.com/matrix-org/go-neb/blob/master/config.sample.yaml)
         for possible options.
       '';
     };

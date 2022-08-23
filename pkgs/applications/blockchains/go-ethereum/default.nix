@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, libobjc, IOKit }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, libobjc, IOKit, nixosTests }:
 
 let
   # A list of binaries to put into separate outputs
@@ -9,17 +9,16 @@ let
 
 in buildGoModule rec {
   pname = "go-ethereum";
-  version = "1.10.11";
+  version = "1.10.21";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-8kPaa2wRKUQBn4LFDnc7tEbLR62f99NS1HIVDeHHzto=";
+    sha256 = "sha256-qaM1I3ytMZN+5v/Oj47n3Oc21Jk7DtjfWA/xDprbn/M=";
   };
 
-  runVend = true;
-  vendorSha256 = "sha256-i2FOAN1ng3WNOWaFowiSSuYR4LA1Bo3tjkvgcClBXSU=";
+  vendorSha256 = "sha256-Dj+xN8lr98LJyYr2FwJ7yUIJkUeUrr1fkcbj4hShJI0=";
 
   doCheck = false;
 
@@ -50,6 +49,8 @@ in buildGoModule rec {
   # Fix for usb-related segmentation faults on darwin
   propagatedBuildInputs =
     lib.optionals stdenv.isDarwin [ libobjc IOKit ];
+
+  passthru.tests = { inherit (nixosTests) geth; };
 
   meta = with lib; {
     homepage = "https://geth.ethereum.org/";

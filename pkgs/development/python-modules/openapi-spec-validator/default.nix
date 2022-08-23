@@ -1,20 +1,72 @@
-{ lib, buildPythonPackage, isPy27, fetchPypi
-, jsonschema, openapi-schema-validator, pyyaml, six, pathlib
-, mock, pytest, pytest-cov, pytest-flake8, tox, setuptools }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+
+# propagates
+, jsonschema
+, openapi-schema-validator
+, pyyaml
+
+# optional
+, requests
+
+# tests
+, mock
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "openapi-spec-validator";
-  version = "0.3.1";
+  version = "0.4.0";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "3d70e6592754799f7e77a45b98c6a91706bdd309a425169d17d8e92173e198a2";
+  # no tests via pypi sdist
+  src = fetchFromGitHub {
+    owner = "p1c2u";
+    repo = pname;
+    rev = version;
+    hash = "sha256-mGgHlDZTUo72RNZ/448gkGdza4EntYU9YoBpSKDUCeA=";
   };
 
-  propagatedBuildInputs = [ jsonschema openapi-schema-validator pyyaml six setuptools ]
-    ++ (lib.optionals (isPy27) [ pathlib ]);
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'openapi-schema-validator = "^0.2.0"' 'openapi-schema-validator = "*"'
+  '';
 
-  checkInputs = [ mock pytest pytest-cov pytest-flake8 tox ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
+  propagatedBuildInputs = [
+    jsonschema
+    openapi-schema-validator
+    pyyaml
+  ];
+
+  passthru.optional-dependencies.requests = [
+    requests
+  ];
+
+  preCheck = ''
+    sed -i '/--cov/d' pyproject.toml
+  '';
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # network access
+    "test_default_valid"
+    "test_urllib_valid"
+    "test_valid"
+  ];
+
+  pythonImportsCheck = [
+    "openapi_spec_validator"
+    "openapi_spec_validator.readers"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/p1c2u/openapi-spec-validator";

@@ -1,22 +1,22 @@
 { stdenv, lib, fetchFromGitHub, libtool, pkg-config, perl, ncurses }:
 
 stdenv.mkDerivation rec {
-  pname = "unibilium-unstable";
-
-  version = "20190811";
+  pname = "unibilium";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "neovim";
     repo = "unibilium";
-    rev = "92d929fabaf94ea4feb48149bbc3bbea77c4fab0";
-    sha256 = "1l8p3fpdymba62x1f5d990v72z3m5f5g2yf505g0rlf2ysc5r1di";
+    rev = "v${version}";
+    sha256 = "sha256-A/WECvma7u/Mmecvzi0cP168dt4v+zwC8CiFBkqWezA=";
   };
 
-  makeFlags = [ "PREFIX=$(out)" ]
-    ++ lib.optional stdenv.isDarwin "LIBTOOL=${libtool}/bin/libtool";
+  makeFlags = [ "PREFIX=$(out)" "LIBTOOL=${libtool}/bin/libtool" ];
 
-  nativeBuildInputs = [ pkg-config perl ];
-  buildInputs = [ libtool ncurses ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ pkg-config perl libtool ];
+  buildInputs = [ ncurses ];
 
   meta = with lib; {
     description = "A very basic terminfo library";

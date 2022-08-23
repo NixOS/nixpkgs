@@ -1,26 +1,35 @@
-{ lib, supportedGhcVersions ? [ "884" "8107" "901" ], stdenv, haskellPackages
-, haskell }:
+{ lib
+, stdenv
+, supportedGhcVersions ? [ "884" "8107" "902" "924" ]
+, dynamic ? false
+, haskellPackages
+, haskell
+}:
 #
 # The recommended way to override this package is
 #
-# pkgs.haskell-language-server.override { supportedGhcVersions = [ "901" ]; }
+# pkgs.haskell-language-server.override { supportedGhcVersions = [ "902" ]; }
 #
 # for example. Read more about this in the haskell-language-server section of the nixpkgs manual.
 #
 let
-  inherit (lib) concatStringsSep concatMapStringsSep take splitString;
+  inherit (lib) concatStringsSep concatMapStringsSep take splitString pipe optionals;
+  inherit (haskell.lib.compose) justStaticExecutables overrideCabal enableCabalFlag disableCabalFlag;
   getPackages = version: haskell.packages."ghc${version}";
   tunedHls = hsPkgs:
-    haskell.lib.compose.justStaticExecutables
-    (haskell.lib.compose.overrideCabal (old: {
-      postInstall = ''
-        remove-references-to -t ${hsPkgs.ghc} $out/bin/haskell-language-server
-        remove-references-to -t ${hsPkgs.shake.data} $out/bin/haskell-language-server
-        remove-references-to -t ${hsPkgs.js-jquery.data} $out/bin/haskell-language-server
-        remove-references-to -t ${hsPkgs.js-dgtable.data} $out/bin/haskell-language-server
-        remove-references-to -t ${hsPkgs.js-flot.data} $out/bin/haskell-language-server
-      '';
-    }) hsPkgs.haskell-language-server);
+    lib.pipe hsPkgs.haskell-language-server ([
+      (haskell.lib.compose.overrideCabal (old: {
+        enableSharedExecutables = dynamic;
+        ${if !dynamic then "postInstall" else null} = ''
+          ${old.postInstall or ""}
+
+          remove-references-to -t ${hsPkgs.ghc} $out/bin/haskell-language-server
+        '';
+      }))
+      ((if dynamic then enableCabalFlag else disableCabalFlag) "dynamic")
+    ] ++ optionals (!dynamic) [
+      justStaticExecutables
+    ]);
   targets = version:
     let packages = getPackages version;
     in [

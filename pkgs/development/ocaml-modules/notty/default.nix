@@ -4,7 +4,8 @@
 
 with lib;
 
-if !versionAtLeast ocaml.version "4.05"
+if versionOlder ocaml.version "4.05"
+|| versionAtLeast ocaml.version "4.14"
 then throw "notty is not available for OCaml ${ocaml.version}"
 else
 
@@ -12,16 +13,19 @@ let withLwt = lwt != null; in
 
 stdenv.mkDerivation rec {
   version = "0.2.2";
-  name = "ocaml${ocaml.version}-notty-${version}";
+  pname = "ocaml${ocaml.version}-notty";
 
   src = fetchurl {
     url = "https://github.com/pqwy/notty/releases/download/v${version}/notty-${version}.tbz";
     sha256 = "1y3hx8zjri3x50nyiqal5gak1sw54gw3xssrqbj7srinvkdmrz1q";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg ocb-stubblr ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
+  buildInputs = [ ocb-stubblr topkg ocamlbuild ];
   propagatedBuildInputs = [ result uucp uuseg uutf ] ++
                           optional withLwt lwt;
+
+  strictDeps = true;
 
   buildPhase = topkg.buildPhase
   + " --with-lwt ${boolToString withLwt}";

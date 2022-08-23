@@ -4,13 +4,15 @@
 , freetype, fontconfig, libXft, libXrender, libxcb, expat
 , libuuid
 , libxml2
-, glib, gtk3, pango, gdk-pixbuf, cairo, atk, at-spi2-atk, at-spi2-core, gnome2
+, glib, gtk3, pango, gdk-pixbuf, cairo, atk, at-spi2-atk, at-spi2-core
 , libdrm, mesa
 , nss, nspr
 , patchelf, makeWrapper
 , isSnapshot ? false
 , proprietaryCodecs ? false, vivaldi-ffmpeg-codecs ? null
 , enableWidevine ? false, vivaldi-widevine ? null
+, commandLineArgs ? ""
+, pulseSupport ? stdenv.isLinux, libpulseaudio
 }:
 
 let
@@ -18,11 +20,11 @@ let
   vivaldiName = if isSnapshot then "vivaldi-snapshot" else "vivaldi";
 in stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "5.0.2497.32-1";
+  version = "5.4.2753.37-1";
 
   src = fetchurl {
     url = "https://downloads.vivaldi.com/${branch}/vivaldi-${branch}_${version}_amd64.deb";
-    sha256 = "1l333q002z9rr08np0r0j89j26shmsl8y2clyqwh54h22h7hmypz";
+    sha256 = "05aaprv1bqnb7iml1m6vlzv038dizy05ycwkrgb5nw1wiz9w6cyw";
   };
 
   unpackPhase = ''
@@ -37,9 +39,10 @@ in stdenv.mkDerivation rec {
     libXi libXft libXcursor libXfixes libXScrnSaver libXcomposite libXdamage libXtst libXrandr
     atk at-spi2-atk at-spi2-core alsa-lib dbus cups gtk3 gdk-pixbuf libexif ffmpeg systemd libva
     freetype fontconfig libXrender libuuid expat glib nss nspr
-    libxml2 pango cairo gnome2.GConf
+    libxml2 pango cairo
     libdrm mesa
-  ] ++ lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs;
+  ] ++ lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs
+    ++ lib.optional pulseSupport libpulseaudio;
 
   libPath = lib.makeLibraryPath buildInputs
     + lib.optionalString (stdenv.is64bit)
@@ -85,6 +88,7 @@ in stdenv.mkDerivation rec {
         "$out"/share/icons/hicolor/''${d}x''${d}/apps/vivaldi.png
     done
     wrapProgram "$out/bin/vivaldi" \
+      --add-flags ${lib.escapeShellArg commandLineArgs} \
       --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/ \
       ${lib.optionalString enableWidevine "--suffix LD_LIBRARY_PATH : ${libPath}"}
   '' + lib.optionalString enableWidevine ''
@@ -97,6 +101,7 @@ in stdenv.mkDerivation rec {
     description = "A Browser for our Friends, powerful and personal";
     homepage    = "https://vivaldi.com";
     license     = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ otwieracz badmutex ];
     platforms   = [ "x86_64-linux" ];
   };

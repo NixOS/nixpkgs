@@ -36,7 +36,10 @@ stdenv.mkDerivation rec {
     ++ lib.optional (!stdenv.isLinux) libiconv
     ++ lib.optionals enableOcr [ leptonica tesseract4 ffmpeg ];
 
-  cmakeFlags = lib.optionals enableOcr [ "-DWITH_OCR=on" "-DWITH_HARDSUBX=on" ];
+  cmakeFlags = [
+    # file RPATH_CHANGE could not write new RPATH:
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+  ] ++ lib.optionals enableOcr [ "-DWITH_OCR=on" "-DWITH_HARDSUBX=on" ];
 
   postInstall = lib.optionalString enableOcr ''
     wrapProgram "$out/bin/ccextractor" \

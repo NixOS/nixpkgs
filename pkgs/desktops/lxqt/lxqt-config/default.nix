@@ -13,19 +13,20 @@
 , libkscreen
 , liblxqt
 , libqtxdg
+, xkeyboard_config
 , xorg
 , lxqtUpdateScript
 }:
 
 mkDerivation rec {
   pname = "lxqt-config";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "0yllqjmj4xbqi5681ffjxmlwlf9k9bpy3hgs7li6lnn90yy46qmr";
+    sha256 = "ncoJLpKzE1tqOV+KuUiGLDWiDvzJg0le4m4BMKFw6Mg=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +58,10 @@ mkDerivation rec {
     substituteInPlace lxqt-config-appearance/configothertoolkits.cpp \
       --replace 'QStringLiteral("gsettings' \
                 'QStringLiteral("${glib.bin}/bin/gsettings'
+
+    substituteInPlace lxqt-config-input/keyboardlayoutconfig.h \
+      --replace '/usr/share/X11/xkb/rules/base.lst' \
+                '${xkeyboard_config}/share/X11/xkb/rules/base.lst'
   '';
 
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
@@ -66,7 +71,7 @@ mkDerivation rec {
     description = "Tools to configure LXQt and the underlying operating system";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 
 }

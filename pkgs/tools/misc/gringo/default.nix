@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
       --replace \
         "env['LIBPATH']        = []" \
         "env['LIBPATH']        = ['${lib.getLib libcxx}/lib']"
+  '' + ''
+    sed '1i#include <limits>' -i libgringo/gringo/{control,term}.hh
   '';
 
   buildPhase = ''

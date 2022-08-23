@@ -9,22 +9,23 @@
 , krb5
 , lib
 , libtasn1
+, lttng-ust_2_12
 , makeWrapper
-, stdenv
 , openssl
+, stdenv
 }:
-stdenv.mkDerivation rec {
+let
+  version = "1.8-1021";
+  urlVersion = builtins.replaceStrings [ "." "-" ] [ "00" "0" ] version;
+in
+stdenv.mkDerivation {
   pname = "roon-server";
-  version = "1.8-880";
+  inherit version;
 
-  src =
-    let
-      urlVersion = builtins.replaceStrings [ "." "-" ] [ "00" "00" ] version;
-    in
-    fetchurl {
-      url = "http://download.roonlabs.com/builds/RoonServer_linuxx64_${urlVersion}.tar.bz2";
-      sha256 = "sha256-Td3iRYGmTg8Vx9c4e4ugIIbAqhDFPax9vR2BsCIQCZA=";
-    };
+  src = fetchurl {
+    url = "https://download.roonlabs.com/builds/RoonServer_linuxx64_${urlVersion}.tar.bz2";
+    hash = "sha256-obG6e/6AxNvUZkZzgS2QAxoSbJIM2pwuQDI0O2B90J8=";
+  };
 
   dontConfigure = true;
   dontBuild = true;
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
     freetype
     krb5
     libtasn1
+    lttng-ust_2_12
     stdenv.cc.cc.lib
   ];
 
@@ -61,7 +63,7 @@ stdenv.mkDerivation rec {
             --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ alsa-lib icu66 ffmpeg openssl ]}" \
             --prefix PATH : "$dotnetDir" \
             --prefix PATH : "${lib.makeBinPath [ alsa-utils cifs-utils ffmpeg ]}" \
-            --run "cd $binDir" \
+            --chdir "$binDir" \
             --set DOTNET_ROOT "$dotnetDir"
         )
       '';
@@ -80,11 +82,7 @@ stdenv.mkDerivation rec {
       ${wrapBin "$out/Server/RoonServer"}
 
       mkdir -p $out/bin
-      makeWrapper "$out/Server/RoonServer" "$out/bin/RoonServer" --run "cd $out"
-
-      # This is unused and depends on an ancient version of lttng-ust, so we
-      # just patch it out
-      patchelf --remove-needed liblttng-ust.so.0 $out/RoonDotnet/shared/Microsoft.NETCore.App/5.0.0/libcoreclrtraceptprovider.so
+      makeWrapper "$out/Server/RoonServer" "$out/bin/RoonServer" --chdir "$out"
 
       runHook postInstall
     '';
@@ -93,6 +91,7 @@ stdenv.mkDerivation rec {
     description = "The music player for music lovers";
     changelog = "https://community.roonlabs.com/c/roon/software-release-notes/18";
     homepage = "https://roonlabs.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ lovesegfault steell ];
     platforms = [ "x86_64-linux" ];

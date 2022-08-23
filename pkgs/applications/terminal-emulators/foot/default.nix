@@ -27,7 +27,7 @@
 }:
 
 let
-  version = "1.10.3";
+  version = "1.13.0";
 
   # build stimuli file for PGO build and the script to generate it
   # independently of the foot's build, so we can cache the result
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
     owner = "dnkl";
     repo = pname;
     rev = version;
-    sha256 = "13v6xqaw3xn1x84dn4gnkiimcsllb19mrbvcdj2fnm8klnrys3gs";
+    sha256 = "0cc262jpqp8l25p04pcqh3w671gw0p1d2zrr3d34ch8k9c6s4nzq";
   };
 
   depsBuildBuild = [
@@ -153,6 +153,8 @@ stdenv.mkDerivation rec {
     "-Ddefault-terminfo=foot"
     # Tell foot to set TERMINFO and where to install the terminfo files
     "-Dcustom-terminfo-install-location=${terminfoDir}"
+    # Install systemd user units for foot-server
+    "-Dsystemd-units-dir=${placeholder "out"}/lib/systemd/user"
   ];
 
   # build and run binary generating PGO profiles,
@@ -163,6 +165,7 @@ stdenv.mkDerivation rec {
     # make sure there is _some_ profiling data on all binaries
     ./footclient --version
     ./foot --version
+    ./tests/test-config
     # generate pgo data of wayland independent code
     ./pgo ${stimuliFile} ${stimuliFile} ${stimuliFile}
     meson configure -Db_pgo=use

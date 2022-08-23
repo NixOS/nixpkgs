@@ -1,5 +1,5 @@
 { lib, stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget
-, llvmShared, llvmSharedForBuild, llvmSharedForHost, llvmSharedForTarget, llvmPackagesForBuild
+, llvmShared, llvmSharedForBuild, llvmSharedForHost, llvmSharedForTarget, llvmPackages
 , fetchurl, file, python3
 , darwin, cmake, rust, rustPlatform
 , pkg-config, openssl
@@ -100,6 +100,9 @@ in stdenv.mkDerivation rec {
     "${setHost}.musl-root=${pkgsBuildHost.targetPackages.stdenv.cc.libc}"
   ] ++ optionals stdenv.targetPlatform.isMusl [
     "${setTarget}.musl-root=${pkgsBuildTarget.targetPackages.stdenv.cc.libc}"
+  ] ++ optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    # https://github.com/rust-lang/rust/issues/92173
+    "--set rust.jemalloc"
   ];
 
   # The bootstrap.py will generated a Makefile that then executes the build.
@@ -176,7 +179,7 @@ in stdenv.mkDerivation rec {
 
   passthru = {
     llvm = llvmShared;
-    llvmPackages = llvmPackagesForBuild;
+    inherit llvmPackages;
   };
 
   meta = with lib; {
@@ -185,5 +188,8 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ madjar cstrahan globin havvy ];
     license = [ licenses.mit licenses.asl20 ];
     platforms = platforms.linux ++ platforms.darwin;
+    # rustc can't generate binaries for dynamically linked Musl.
+    # https://github.com/NixOS/nixpkgs/issues/179242
+    broken = stdenv.targetPlatform.isMusl && !stdenv.targetPlatform.isStatic;
   };
 }

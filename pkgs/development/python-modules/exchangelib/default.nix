@@ -1,5 +1,4 @@
 { lib
-, backports-datetime-fromisoformat
 , backports-zoneinfo
 , buildPythonPackage
 , cached-property
@@ -18,7 +17,7 @@
 , pyyaml
 , requests
 , requests_ntlm
-, requests_oauthlib
+, requests-oauthlib
 , requests-kerberos
 , requests-mock
 , tzdata
@@ -27,16 +26,16 @@
 
 buildPythonPackage rec {
   pname = "exchangelib";
-  version = "4.6.2";
+  version = "4.7.6";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ecederstrand";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1vax4xqjav6nr3kfkz390ism3cs69dxnbx6sc0f9ci4mn3rxjwdy";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Oarmdc2PuE4kQ/qUqQhuzdTpIrrMFCK72CrVmoSH1DI=";
   };
 
   propagatedBuildInputs = [
@@ -49,14 +48,12 @@ buildPythonPackage rec {
     pygments
     requests
     requests_ntlm
-    requests_oauthlib
+    requests-oauthlib
     requests-kerberos
     tzdata
     tzlocal
   ] ++ lib.optionals (pythonOlder "3.9") [
     backports-zoneinfo
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    backports-datetime-fromisoformat
   ];
 
   checkInputs = [

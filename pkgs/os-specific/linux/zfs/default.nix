@@ -16,11 +16,12 @@
 , enablePython ? true
 
 # for determining the latest compatible linuxPackages
-, linuxPackages_5_15 ? pkgs.linuxKernel.packages.linux_5_15
+, linuxPackages_5_18 ? pkgs.linuxKernel.packages.linux_5_18
 }:
 
-with lib;
 let
+  inherit (lib) any optionalString optionals optional makeBinPath;
+
   smartmon = smartmontools.override { inherit enableMail; };
 
   buildKernel = any (n: n == configFile) [ "kernel" "all" ];
@@ -113,7 +114,7 @@ let
       configureFlags = [
         "--with-config=${configFile}"
         "--with-tirpc=1"
-        (withFeatureAs (buildUser && enablePython) "python" python3.interpreter)
+        (lib.withFeatureAs (buildUser && enablePython) "python" python3.interpreter)
       ] ++ optionals buildUser [
         "--with-dracutdir=$(out)/lib/dracut"
         "--with-udevdir=$(out)/lib/udev"
@@ -200,9 +201,9 @@ let
         '';
         homepage = "https://github.com/openzfs/zfs";
         changelog = "https://github.com/openzfs/zfs/releases/tag/zfs-${version}";
-        license = licenses.cddl;
-        platforms = platforms.linux;
-        maintainers = with maintainers; [ hmenke jcumming jonringer wizeman fpletz globin ];
+        license = lib.licenses.cddl;
+        platforms = lib.platforms.linux;
+        maintainers = with lib.maintainers; [ hmenke jcumming jonringer wizeman globin ];
         mainProgram = "zfs";
         # If your Linux kernel version is not yet supported by zfs, try zfsUnstable.
         # On NixOS set the option boot.zfs.enableUnstable.
@@ -215,28 +216,28 @@ in {
   # to be adapted
   zfsStable = common {
     # check the release notes for compatible kernels
-    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.16";
-    latestCompatibleLinuxPackages = linuxPackages_5_15;
+    kernelCompatible = kernel.kernelOlder "5.19";
+    latestCompatibleLinuxPackages = linuxPackages_5_18;
 
     # this package should point to the latest release.
-    version = "2.1.2";
+    version = "2.1.5";
 
-    sha256 = "sha256-7oSFZlmjCr+egImIVf429GrFOKn3L3r4SMnK3LHHmL8=";
+    sha256 = "sha256-a9rmuPO8R8UfxdHvwjfFuYRGn97a1MPmLZRvr3l0swE=";
   };
 
   zfsUnstable = common {
     # check the release notes for compatible kernels
-    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.16";
-    latestCompatibleLinuxPackages = linuxPackages_5_15;
+    kernelCompatible = kernel.kernelOlder "5.19";
+    latestCompatibleLinuxPackages = linuxPackages_5_18;
 
     # this package should point to a version / git revision compatible with the latest kernel release
     # IMPORTANT: Always use a tagged release candidate or commits from the
     # zfs-<version>-staging branch, because this is tested by the OpenZFS
     # maintainers.
-    version = "2.1.2";
+    version = "2.1.5";
     # rev = "0000000000000000000000000000000000000000";
 
-    sha256 = "sha256-7oSFZlmjCr+egImIVf429GrFOKn3L3r4SMnK3LHHmL8=";
+    sha256 = "sha256-a9rmuPO8R8UfxdHvwjfFuYRGn97a1MPmLZRvr3l0swE=";
 
     isUnstable = true;
   };

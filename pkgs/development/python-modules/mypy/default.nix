@@ -14,29 +14,24 @@
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "unstable-2021-11-14";
+  version = "0.961";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "python";
     repo = "mypy";
-    rev = "053a1beb94ee4e5b3260725594315d1b6776e42f";
-    sha256 = "sha256-q2ntj3y3GgXrw4v+yMvcqWFv4y/6YwunIj3bNzU9CH0=";
+    rev = "v${version}";
+    hash = "sha256-K6p73+/SeWniMSD/mP09qwqFOBr/Pqohl+PaTDVpvZI=";
   };
 
   patches = [
     # FIXME: Remove patch after upstream has decided the proper solution.
     #        https://github.com/python/mypy/pull/11143
     (fetchpatch {
-      url = "https://github.com/python/mypy/commit/f1755259d54330cd087cae763cd5bbbff26e3e8a.patch";
-      sha256 = "sha256-5gPahX2X6+/qUaqDQIGJGvh9lQ2EDtks2cpQutgbOHk=";
+      url = "https://github.com/python/mypy/commit/2004ae023b9d3628d9f09886cbbc20868aee8554.patch";
+      hash = "sha256-y+tXvgyiECO5+66YLvaje8Bz5iPvfWNIBJcsnZ2nOdI=";
     })
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "tomli>=1.1.0,<1.2.0" "tomli"
-  '';
 
   buildInputs = [
     types-typed-ast

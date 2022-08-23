@@ -17,7 +17,7 @@ in {
 
     configuration = mkOption {
       type = (pkgs.formats.json {}).type;
-      description = ''
+      description = lib.mdDoc ''
         Specify the configuration for Promtail in Nix.
       '';
     };
@@ -26,7 +26,7 @@ in {
       type = listOf str;
       default = [];
       example = [ "--server.http-listen-port=3101" ];
-      description = ''
+      description = lib.mdDoc ''
         Specify a list of additional command line flags,
         which get escaped and are then passed to Loki.
       '';
@@ -45,7 +45,7 @@ in {
         Restart = "on-failure";
         TimeoutStopSec = 10;
 
-        ExecStart = "${pkgs.grafana-loki}/bin/promtail -config.file=${prettyJSON cfg.configuration} ${escapeShellArgs cfg.extraFlags}";
+        ExecStart = "${pkgs.promtail}/bin/promtail -config.file=${prettyJSON cfg.configuration} ${escapeShellArgs cfg.extraFlags}";
 
         ProtectSystem = "strict";
         ProtectHome = true;

@@ -2,27 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "irqbalance";
-  version = "1.8.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "irqbalance";
     repo = "irqbalance";
     rev = "v${version}";
-    sha256 = "sha256-K+Nv6HqBZb0pwfNV127QDq+suaUD7TTV413S6j8NdUU=";
+    sha256 = "sha256-OifGlOUT/zFz5gussEmLL24w4AovGeyNfbg/yCfzerw=";
   };
 
-  patches = [
-    # pull pending upstream inclusion fix for ncurses-6.3:
-    #  https://github.com/Irqbalance/irqbalance/pull/194
-    (fetchpatch {
-      name = "ncurses-6.3.patch";
-      url = "https://github.com/Irqbalance/irqbalance/commit/f8bdd0e64284d841544fd3ebe22f4652902ba8d2.patch";
-      sha256 = "sha256-QJIXr8BiKmn/81suuhNJsBRhY2as19/e480lsp2wd6g=";
-    })
-  ];
-
   nativeBuildInputs = [ autoreconfHook pkg-config ];
-
   buildInputs = [ glib ncurses libcap_ng ];
 
   LDFLAGS = "-lncurses";

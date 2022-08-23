@@ -10,13 +10,17 @@
 
 buildPythonPackage rec {
   pname = "feedgenerator";
-  version = "1.9.2";
+  version = "2.0.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-sG1pQej9aiyecXkQeehsvno3iMciRKzAbwWTtJzaN5s=";
+    sha256 = "6836d456b8b0edbc5b6d3a42d1be852cebd43d2f28af4ff51789eb295f1860e2";
   };
+
+  postPatch = ''
+    sed -i '/cov/d' setup.cfg
+  '';
 
   buildInputs = [
     glibcLocales

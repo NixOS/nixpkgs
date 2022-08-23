@@ -1,21 +1,23 @@
-{ stdenv, lib, fetchurl, python3, makeWrapper
-, libtorrent-rasterbar-1_2_x, qt5
+{ lib
+, stdenv
+, fetchurl
+, python3
+, makeWrapper
+, libtorrent-rasterbar-1_2_x
+, qt5
 }:
 
 let
   libtorrent = (python3.pkgs.toPythonModule (
     libtorrent-rasterbar-1_2_x.override { python = python3; })).python;
-
-  aiohttp-apispec = python3.pkgs.callPackage 
-    ../../../../development/python-modules/aiohttp-apispec/unstable.nix { };
 in
 stdenv.mkDerivation rec {
   pname = "tribler";
-  version = "7.10.0";
+  version = "7.11.0";
 
   src = fetchurl {
     url = "https://github.com/Tribler/tribler/releases/download/v${version}/Tribler-v${version}.tar.xz";
-    sha256 = "1x45z23d1cqf0lai7wg5ki7gi2vba5hqk0swhggzplcjwma4wmh9";
+    sha256 = "0ffh8chb47iaar8872gvalgm84fjzyxph16nixsxknnprqdxyrkx";
   };
 
   nativeBuildInputs = [
@@ -30,40 +32,38 @@ stdenv.mkDerivation rec {
   pythonPath = [
     libtorrent
   ] ++ (with python3.pkgs; [
-    twisted
-    netifaces
-    pycrypto
-    pyasn1
-    requests
-    m2crypto
-    pyqt5
-    chardet
-    cherrypy
-    cryptography
-    libnacl
-    configobj
-    decorator
-    feedparser
-    service-identity
-    psutil
-    pillow
-    networkx
-    pony
-    lz4
-    pyqtgraph
-    pyyaml
     aiohttp
     aiohttp-apispec
+    asynctest
+    chardet
+    cherrypy
+    configobj
+    cryptography
+    decorator
     faker
-    sentry-sdk
+    feedparser
+    libnacl
+    lz4
+    m2crypto
+    netifaces
+    networkx
+    pillow
+    pony
+    psutil
+    pyasn1
+    pycrypto
+    pyqt5
+    pyqtgraph
     pytest-asyncio
     pytest-timeout
-    asynctest
+    pyyaml
+    requests
+    sentry-sdk
+    service-identity
+    twisted
     yappi
-
-    # there is a BTC feature, but it requires some unclear version of
-    # bitcoinlib, so this doesn't work right now.
-    # bitcoinlib
+    pydantic
+    anyio
   ]);
 
   installPhase = ''
@@ -73,22 +73,30 @@ stdenv.mkDerivation rec {
     cp -prvd ./* $out/
     makeWrapper ${python3.pkgs.python}/bin/python $out/bin/tribler \
         --set QT_QPA_PLATFORM_PLUGIN_PATH ${qt5.qtbase.bin}/lib/qt-*/plugins/platforms \
-        --set _TRIBLERPATH $out/src \
+        --set QT_PLUGIN_PATH "${qt5.qtsvg.bin}/${qt5.qtbase.qtPluginPrefix}" \
+        --set _TRIBLERPATH "$out/src" \
         --set PYTHONPATH $out/src/tribler-core:$out/src/tribler-common:$out/src/tribler-gui:$program_PYTHONPATH \
         --set NO_AT_BRIDGE 1 \
-        --run 'cd $_TRIBLERPATH' \
+        --chdir "$out/src" \
         --add-flags "-O $out/src/run_tribler.py"
 
     mkdir -p $out/share/applications $out/share/icons
-    cp $out/build/debian/tribler/usr/share/applications/tribler.desktop $out/share/applications/tribler.desktop
+    cp $out/build/debian/tribler/usr/share/applications/org.tribler.Tribler.desktop $out/share/applications/
     cp $out/build/debian/tribler/usr/share/pixmaps/tribler_big.xpm $out/share/icons/tribler.xpm
   '';
 
+  shellHook = ''
+    wrapPythonPrograms || true
+    export QT_QPA_PLATFORM_PLUGIN_PATH=$(echo ${qt5.qtbase.bin}/lib/qt-*/plugins/platforms)
+    export PYTHONPATH=./tribler-core:./tribler-common:./tribler-gui:$program_PYTHONPATH
+    export QT_PLUGIN_PATH="${qt5.qtsvg.bin}/${qt5.qtbase.qtPluginPrefix}"
+  '';
+
   meta = with lib; {
-    maintainers = with maintainers; [ xvapx viric ];
+    description = "Decentralised P2P filesharing client based on the Bittorrent protocol";
     homepage = "https://www.tribler.org/";
-    description = "A completely decentralised P2P filesharing client based on the Bittorrent protocol";
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ xvapx viric ];
     platforms = platforms.linux;
   };
 }

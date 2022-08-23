@@ -2,22 +2,24 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, importlib-resources
 , pydsdl
 , pyyaml
 }:
 
  buildPythonPackage rec {
   pname = "nunavut";
-  version = "1.5.2";
+  version = "1.8.3";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "12703306872404be556648ab2282dc1566f4e77bfb9f14747fb13294c9235081";
+    sha256 = "sha256-JI+0IpQWikE6vXfpZHWsVjx3JPaVJ/f4oAjTSNs1Wuk=";
   };
 
   propagatedBuildInputs = [
+    importlib-resources
     pydsdl
     pyyaml
   ];

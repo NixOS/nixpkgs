@@ -1,0 +1,542 @@
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-release-22.11">
+  <title>Release 22.11 (“Raccoon”, 2022.11/??)</title>
+  <para>
+    Support is planned until the end of June 2023, handing over to
+    23.05.
+  </para>
+  <section xml:id="sec-release-22.11-highlights">
+    <title>Highlights</title>
+    <para>
+      In addition to numerous new and upgraded packages, this release
+      has the following highlights:
+    </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          During cross-compilation, tests are now executed if the test
+          suite can be executed by the build platform. This is the case
+          when doing “native” cross-compilation where the build and host
+          platforms are largely the same, but the nixpkgs’ cross
+          compilation infrastructure is used, e.g.
+          <literal>pkgsStatic</literal> and <literal>pkgsLLVM</literal>.
+          Another possibility is that the build platform is a superset
+          of the host platform, e.g. when cross-compiling from
+          <literal>x86_64-unknown-linux</literal> to
+          <literal>i686-unknown-linux</literal>. The predicate gating
+          test suite execution is the newly added
+          <literal>canExecute</literal> predicate: You can e.g. check if
+          <literal>stdenv.buildPlatform</literal> can execute binaries
+          built for <literal>stdenv.hostPlatform</literal> (i.e.
+          produced by <literal>stdenv.cc</literal>) by evaluating
+          <literal>stdenv.buildPlatform.canExecute stdenv.hostPlatform</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>nixpkgs.hostPlatform</literal> and
+          <literal>nixpkgs.buildPlatform</literal> options have been
+          added. These cover and override the
+          <literal>nixpkgs.{system,localSystem,crossSystem}</literal>
+          options.
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              <literal>hostPlatform</literal> is the platform or
+              <quote><literal>system</literal></quote> string of the
+              NixOS system described by the configuration.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>buildPlatform</literal> is the platform that is
+              responsible for building the NixOS configuration. It
+              defaults to the <literal>hostPlatform</literal>, for a
+              non-cross build configuration. To cross compile, set
+              <literal>buildPlatform</literal> to a different value.
+            </para>
+          </listitem>
+        </itemizedlist>
+        <para>
+          The new options convey the same information, but with fewer
+          options, and following the Nixpkgs terminology.
+        </para>
+        <para>
+          The existing options
+          <literal>nixpkgs.{system,localSystem,crossSystem}</literal>
+          have not been formally deprecated, to allow for evaluation of
+          the change and to allow for a transition period so that in
+          time the ecosystem can switch without breaking compatibility
+          with any supported NixOS release.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>emacs</literal> enables native compilation which
+          means:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              emacs packages from nixpkgs, builtin or not, will do
+              native compilation ahead of time so you can enjoy the
+              benefit of native compilation without compiling them on
+              you machine;
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              emacs packages from somewhere else, e.g.
+              <literal>package-install</literal>, will do asynchronously
+              deferred native compilation. If you do not want this,
+              maybe to avoid CPU consumption for compilation, you can
+              use
+              <literal>(setq native-comp-deferred-compilation nil)</literal>
+              to disable it while still enjoy the benefit of native
+              compilation for packages from nixpkgs.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>nixos-generate-config</literal> now generates
+          configurations that can be built in pure mode. This is
+          achieved by setting the new
+          <literal>nixpkgs.hostPlatform</literal> option.
+        </para>
+        <para>
+          You may have to unset the <literal>system</literal> parameter
+          in <literal>lib.nixosSystem</literal>, or similarly remove
+          definitions of the
+          <literal>nixpkgs.{system,localSystem,crossSystem}</literal>
+          options.
+        </para>
+        <para>
+          Alternatively, you can remove the
+          <literal>hostPlatform</literal> line and use NixOS like you
+          would in NixOS 22.05 and earlier.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          PHP now defaults to PHP 8.1, updated from 8.0.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Cinnamon has been updated to 5.4. While at it, the cinnamon
+          module now defaults to blueman as bluetooth manager and
+          slick-greeter as lightdm greeter to match upstream.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>hardware.nvidia</literal> has a new option
+          <literal>open</literal> that can be used to opt in the
+          opensource version of NVIDIA kernel driver. Note that the
+          driver’s support for GeForce and Workstation GPUs is still
+          alpha quality, see
+          <link xlink:href="https://developer.nvidia.com/blog/nvidia-releases-open-source-gpu-kernel-modules/">NVIDIA
+          Releases Open-Source GPU Kernel Modules</link> for the
+          official announcement.
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
+  <section xml:id="sec-release-22.11-new-services">
+    <title>New Services</title>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/jollheef/appvm">appvm</link>,
+          Nix based app VMs. Available as
+          <link xlink:href="options.html#opt-virtualisation.appvm.enable">virtualisation.appvm</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/mozilla-services/syncstorage-rs">syncstorage-rs</link>,
+          a self-hostable sync server for Firefox. Available as
+          <link xlink:href="options.html#opt-services.firefox-syncserver.enable">services.firefox-syncserver</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://dragonflydb.io/">dragonflydb</link>,
+          a modern replacement for Redis and Memcached. Available as
+          <link linkend="opt-services.dragonflydb.enable">services.dragonflydb</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://komga.org/">Komga</link>, a free and
+          open source comics/mangas media server. Available as
+          <link linkend="opt-services.komga.enable">services.komga</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://hbase.apache.org/">HBase
+          cluster</link>, a distributed, scalable, big data store.
+          Available as
+          <link xlink:href="options.html#opt-services.hadoop.hbase.enable">services.hadoop.hbase</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/leetronics/infnoise">infnoise</link>,
+          a hardware True Random Number Generator dongle. Available as
+          <link xlink:href="options.html#opt-services.infnoise.enable">services.infnoise</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/jtroo/kanata">kanata</link>,
+          a tool to improve keyboard comfort and usability with advanced
+          customization. Available as
+          <link xlink:href="options.html#opt-services.kanata.enable">services.kanata</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.getoutline.com/">Outline</link>,
+          a wiki and knowledge base similar to Notion. Available as
+          <link linkend="opt-services.outline.enable">services.outline</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/aiberia/persistent-evdev">persistent-evdev</link>,
+          a daemon to add virtual proxy devices that mirror a physical
+          input device but persist even if the underlying hardware is
+          hot-plugged. Available as
+          <link linkend="opt-services.persistent-evdev.enable">services.persistent-evdev</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://schleuder.org/">schleuder</link>, a
+          mailing list manager with PGP support. Enable using
+          <link linkend="opt-services.schleuder.enable">services.schleuder</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.expressvpn.com">expressvpn</link>,
+          the CLI client for ExpressVPN. Available as
+          <link linkend="opt-services.expressvpn.enable">services.expressvpn</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.grafana.com/oss/tempo/">Grafana
+          Tempo</link>, a distributed tracing store. Available as
+          <link linkend="opt-services.tempo.enable">services.tempo</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/zalando/patroni">Patroni</link>,
+          a template for PostgreSQL HA with ZooKeeper, etcd or Consul.
+          Available as
+          <link xlink:href="options.html#opt-services.patroni.enable">services.patroni</link>.
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
+  <section xml:id="sec-release-22.11-incompatibilities">
+    <title>Backward Incompatibilities</title>
+    <itemizedlist>
+      <listitem>
+        <para>
+          The <literal>isCompatible</literal> predicate checking CPU
+          compatibility is no longer exposed by the platform sets
+          generated using <literal>lib.systems.elaborate</literal>. In
+          most cases you will want to use the new
+          <literal>canExecute</literal> predicate instead which also
+          considers the kernel / syscall interface. It is briefly
+          described in the release’s
+          <link linkend="sec-release-22.11-highlights">highlights
+          section</link>.
+          <literal>lib.systems.parse.isCompatible</literal> still
+          exists, but has changed semantically: Architectures with
+          differing endianness modes are <emphasis>no longer considered
+          compatible</emphasis>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>ngrok</literal> has been upgraded from 2.3.40 to
+          3.0.4. Please see
+          <link xlink:href="https://ngrok.com/docs/guides/upgrade-v2-v3">the
+          upgrade guide</link> and
+          <link xlink:href="https://ngrok.com/docs/ngrok-agent/changelog">changelog</link>.
+          Notably, breaking changes are that the config file format has
+          changed and support for single hypen arguments was dropped.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>i18n.supportedLocales</literal> is now by default
+          only generated with the locales set in
+          <literal>i18n.defaultLocale</literal> and
+          <literal>i18n.extraLocaleSettings</literal>. This got
+          partially copied over from the minimal profile and reduces the
+          final system size by up to 200MB. If you require all locales
+          installed set the option to
+          <literal>[ &quot;all&quot; ]</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>isPowerPC</literal> predicate, found on
+          <literal>platform</literal> attrsets
+          (<literal>hostPlatform</literal>,
+          <literal>buildPlatform</literal>,
+          <literal>targetPlatform</literal>, etc) has been removed in
+          order to reduce confusion. The predicate was was defined such
+          that it matches only the 32-bit big-endian members of the
+          POWER/PowerPC family, despite having a name which would imply
+          a broader set of systems. If you were using this predicate,
+          you can replace <literal>foo.isPowerPC</literal> with
+          <literal>(with foo; isPower &amp;&amp; is32bit &amp;&amp; isBigEndian)</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>fetchgit</literal> fetcher now uses
+          <link xlink:href="https://www.git-scm.com/docs/git-sparse-checkout/2.37.0#_internalscone_mode_handling">cone
+          mode</link> by default for sparse checkouts.
+          <link xlink:href="https://www.git-scm.com/docs/git-sparse-checkout/2.37.0#_internalsnon_cone_problems">Non-cone
+          mode</link> can be enabled by passing
+          <literal>nonConeMode = true</literal>, but note that non-cone
+          mode is deprecated and this option may be removed alongside a
+          future Git update without notice.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>bsp-layout</literal> no longer uses the command
+          <literal>cycle</literal> to switch to other window layouts, as
+          it got replaced by the commands <literal>previous</literal>
+          and <literal>next</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The Barco ClickShare driver/client package
+          <literal>pkgs.clickshare-csc1</literal> and the option
+          <literal>programs.clickshare-csc1.enable</literal> have been
+          removed, as it requires <literal>qt4</literal>, which reached
+          its end-of-life 2015 and will no longer be supported by
+          nixpkgs.
+          <link xlink:href="https://www.barco.com/de/support/knowledge-base/4380-can-i-use-linux-os-with-clickshare-base-units">According
+          to Barco</link> many of their base unit models can be used
+          with Google Chrome and the Google Cast extension.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.hbase</literal> has been renamed to
+          <literal>services.hbase-standalone</literal>. For production
+          HBase clusters, use <literal>services.hadoop.hbase</literal>
+          instead.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          PHP 7.4 is no longer supported due to upstream not supporting
+          this version for the entire lifecycle of the 22.11 release.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.cosign</literal> does not provide the
+          <literal>cosigned</literal> binary anymore.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          riak package removed along with
+          <literal>services.riak</literal> module, due to lack of
+          maintainer to update the package.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          xow package removed along with the
+          <literal>hardware.xow</literal> module, due to the project
+          being deprecated in favor of <literal>xone</literal>, which is
+          available via the <literal>hardware.xone</literal> module.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          virtlyst package and <literal>services.virtlyst</literal>
+          module removed, due to lack of maintainers.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>services.graphite.api</literal> and
+          <literal>services.graphite.beacon</literal> NixOS options, and
+          the <literal>python3.pkgs.graphite_api</literal>,
+          <literal>python3.pkgs.graphite_beacon</literal> and
+          <literal>python3.pkgs.influxgraph</literal> packages, have
+          been removed due to lack of upstream maintenance.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>meta.mainProgram</literal> attribute of packages
+          in <literal>wineWowPackages</literal> now defaults to
+          <literal>&quot;wine64&quot;</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          (Neo)Vim can not be configured with
+          <literal>configure.pathogen</literal> anymore to reduce
+          maintainance burden. Use <literal>configure.packages</literal>
+          instead.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>k3s</literal> no longer supports docker as runtime
+          due to upstream dropping support.
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
+  <section xml:id="sec-release-22.11-notable-changes">
+    <title>Other Notable Changes</title>
+    <itemizedlist>
+      <listitem>
+        <para>
+          The <literal>xplr</literal> package has been updated from
+          0.18.0 to 0.19.0, which brings some breaking changes. See the
+          <link xlink:href="https://github.com/sayanarijit/xplr/releases/tag/v0.19.0">upstream
+          release notes</link> for more details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>github-runner</literal> gained support for ephemeral
+          runners and registrations using a personal access token (PAT)
+          instead of a registration token. See
+          <literal>services.github-runner.ephemeral</literal> and
+          <literal>services.github-runner.tokenFile</literal> for
+          details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          A new module was added for the Saleae Logic device family,
+          providing the options
+          <literal>hardware.saleae-logic.enable</literal> and
+          <literal>hardware.saleae-logic.package</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The Redis module now disables RDB persistence when
+          <literal>services.redis.servers.&lt;name&gt;.save = []</literal>
+          instead of using the Redis default.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Neo4j was updated from version 3 to version 4. See this
+          <link xlink:href="https://neo4j.com/docs/upgrade-migration-guide/current/">migration
+          guide</link> on how to migrate your Neo4j instance.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Matrix Synapse now requires entries in the
+          <literal>state_group_edges</literal> table to be unique, in
+          order to prevent accidentally introducing duplicate
+          information (for example, because a database backup was
+          restored multiple times). If your Synapse database already has
+          duplicate rows in this table, this could fail with an error
+          and require manual remediation.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>dockerTools.buildImage</literal> deprecates the
+          misunderstood <literal>contents</literal> parameter, in favor
+          of <literal>copyToRoot</literal>. Use
+          <literal>copyToRoot = buildEnv { ... };</literal> or similar
+          if you intend to add packages to <literal>/bin</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          memtest86+ was updated from 5.00-coreboot-002 to 6.00-beta2.
+          It is now the upstream version from https://www.memtest.org/,
+          as coreboot’s fork is no longer available.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The udisks2 service, available at
+          <literal>services.udisks2.enable</literal>, is now disabled by
+          default. It will automatically be enabled through services and
+          desktop environments as needed. This also means that polkit
+          will now actually be disabled by default. The default for
+          <literal>security.polkit.enable</literal> was already flipped
+          in the previous release, but udisks2 being enabled by default
+          re-enabled it.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Add udev rules for the Teensy family of microcontrollers.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>pass-secret-service</literal> package now
+          includes systemd units from upstream, so adding it to the
+          NixOS <literal>services.dbus.packages</literal> option will
+          make it start automatically as a systemd user service when an
+          application tries to talk to the libsecret D-Bus API.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          There is a new module for AMD SEV CPU functionality, which
+          grants access to the hardware.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          There is a new module for the <literal>thunar</literal>
+          program (the Xfce file manager), which depends on the
+          <literal>xfconf</literal> dbus service, and also has a dbus
+          service and a systemd unit. The option
+          <literal>services.xserver.desktopManager.xfce.thunarPlugins</literal>
+          has been renamed to
+          <literal>programs.thunar.plugins</literal>, and in a future
+          release it may be removed.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          There is a new module for the <literal>xfconf</literal>
+          program (the Xfce configuration storage system), which has a
+          dbus service.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>nomad</literal> package now defaults to 1.3,
+          which no longer has a downgrade path to releases 1.2 or older.
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
+</section>

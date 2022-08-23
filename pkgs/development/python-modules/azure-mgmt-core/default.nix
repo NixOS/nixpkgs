@@ -2,20 +2,22 @@
 , buildPythonPackage
 , fetchPypi
 , azure-core
+, typing-extensions
 }:
 
 buildPythonPackage rec {
-  version = "1.3.0";
+  version = "1.3.1";
   pname = "azure-mgmt-core";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "3ffb7352b39e5495dccc2d2b47254f4d82747aff4735e8bf3267c335b0c9bb40";
+    sha256 = "sha256-yJ6/GMInvJih7sypVGC4p+IwWQ1FbI+pwtWs3GcPeAg=";
   };
 
   propagatedBuildInputs = [
     azure-core
+    typing-extensions
   ];
 
   pythonNamespaces = "azure.mgmt";

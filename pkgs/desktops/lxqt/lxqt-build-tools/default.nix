@@ -13,20 +13,25 @@
 
 mkDerivation rec {
   pname = "lxqt-build-tools";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1hb04zgpalxv6da3myf1dxsbjix15dczzfq8a24g5dg2zfhwpx21";
+    sha256 = "vzppKTDwADBG5pOaluT858cWCKFFRaSbHz2Qhe6799E=";
   };
 
-  # Nix clang on darwin identifies as 'Clang', not 'AppleClang'
-  # Without this, dependants fail to link.
   postPatch = ''
+    # Nix clang on darwin identifies as 'Clang', not 'AppleClang'
+    # Without this, dependants fail to link.
     substituteInPlace cmake/modules/LXQtCompilerSettings.cmake \
       --replace AppleClang Clang
+
+    # GLib 2.72 moved the file from gio-unix-2.0 to gio-2.0.
+    # https://github.com/lxqt/lxqt-build-tools/pull/74
+    substituteInPlace cmake/find-modules/FindGLIB.cmake \
+      --replace gio/gunixconnection.h gio/gunixfdlist.h
   '';
 
   nativeBuildInputs = [
@@ -61,6 +66,6 @@ mkDerivation rec {
     description = "Various packaging tools and scripts for LXQt applications";
     license = licenses.lgpl21Plus;
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

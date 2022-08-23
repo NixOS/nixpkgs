@@ -38,9 +38,11 @@ options = {
       <listitem>
         <para>
           The type of the option (see
-          <xref linkend="sec-option-types" />). It may be omitted, but
-          that’s not advisable since it may lead to errors that are hard
-          to diagnose.
+          <xref linkend="sec-option-types" />). This argument is
+          mandatory for nixpkgs modules. Setting this is highly
+          recommended for the sake of documentation and type checking.
+          In case it is not set, a fallback type with unspecified
+          behavior is used.
         </para>
       </listitem>
     </varlistentry>
@@ -92,130 +94,244 @@ options = {
       <listitem>
         <para>
           A textual description of the option, in DocBook format, that
-          will be included in the NixOS manual.
+          will be included in the NixOS manual. During the migration
+          process from DocBook to CommonMark the description may also be
+          written in CommonMark, but has to be wrapped in
+          <literal>lib.mdDoc</literal> to differentiate it from DocBook.
+          See the nixpkgs manual for
+          <link xlink:href="https://nixos.org/nixpkgs/manual/#sec-contributing-markup">the
+          list of CommonMark extensions</link> supported by NixOS
+          documentation.
+        </para>
+        <para>
+          New documentation should preferably be written as CommonMark.
         </para>
       </listitem>
     </varlistentry>
   </variablelist>
-  <section xml:id="sec-option-declarations-eot">
-    <title>Extensible Option Types</title>
-    <para>
-      Extensible option types is a feature that allow to extend certain
-      types declaration through multiple module files. This feature only
-      work with a restricted set of types, namely
-      <literal>enum</literal> and <literal>submodules</literal> and any
-      composed forms of them.
-    </para>
-    <para>
-      Extensible option types can be used for <literal>enum</literal>
-      options that affects multiple modules, or as an alternative to
-      related <literal>enable</literal> options.
-    </para>
-    <para>
-      As an example, we will take the case of display managers. There is
-      a central display manager module for generic display manager
-      options and a module file per display manager backend (sddm, gdm
-      ...).
-    </para>
-    <para>
-      There are two approach to this module structure:
-    </para>
-    <itemizedlist>
-      <listitem>
+  <section xml:id="sec-option-declarations-util">
+    <title>Utility functions for common option patterns</title>
+    <section xml:id="sec-option-declarations-util-mkEnableOption">
+      <title><literal>mkEnableOption</literal></title>
+      <para>
+        Creates an Option attribute set for a boolean value option i.e
+        an option to be toggled on or off.
+      </para>
+      <para>
+        This function takes a single string argument, the name of the
+        thing to be toggled.
+      </para>
+      <para>
+        The option’s description is <quote>Whether to enable
+        &lt;name&gt;.</quote>.
+      </para>
+      <para>
+        For example:
+      </para>
+      <anchor xml:id="ex-options-declarations-util-mkEnableOption-magic" />
+      <programlisting language="bash">
+lib.mkEnableOption &quot;magic&quot;
+# is like
+lib.mkOption {
+  type = lib.types.bool;
+  default = false;
+  example = true;
+  description = &quot;Whether to enable magic.&quot;;
+}
+</programlisting>
+      <section xml:id="sec-option-declarations-util-mkPackageOption">
+        <title><literal>mkPackageOption</literal></title>
         <para>
-          Managing the display managers independently by adding an
-          enable option to every display manager module backend. (NixOS)
+          Usage:
         </para>
-      </listitem>
-      <listitem>
+        <programlisting language="bash">
+mkPackageOption pkgs &quot;name&quot; { default = [ &quot;path&quot; &quot;in&quot; &quot;pkgs&quot; ]; example = &quot;literal example&quot;; }
+</programlisting>
         <para>
-          Managing the display managers in the central module by adding
-          an option to select which display manager backend to use.
+          Creates an Option attribute set for an option that specifies
+          the package a module should use for some purpose.
         </para>
-      </listitem>
-    </itemizedlist>
-    <para>
-      Both approaches have problems.
-    </para>
-    <para>
-      Making backends independent can quickly become hard to manage. For
-      display managers, there can be only one enabled at a time, but the
-      type system can not enforce this restriction as there is no
-      relation between each backend <literal>enable</literal> option. As
-      a result, this restriction has to be done explicitely by adding
-      assertions in each display manager backend module.
-    </para>
-    <para>
-      On the other hand, managing the display managers backends in the
-      central module will require to change the central module option
-      every time a new backend is added or removed.
-    </para>
-    <para>
-      By using extensible option types, it is possible to create a
-      placeholder option in the central module
-      (<link linkend="ex-option-declaration-eot-service">Example:
-      Extensible type placeholder in the service module</link>), and to
-      extend it in each backend module
-      (<link linkend="ex-option-declaration-eot-backend-gdm">Example:
-      Extending
-      <literal>services.xserver.displayManager.enable</literal> in the
-      <literal>gdm</literal> module</link>,
-      <link linkend="ex-option-declaration-eot-backend-sddm">Example:
-      Extending
-      <literal>services.xserver.displayManager.enable</literal> in the
-      <literal>sddm</literal> module</link>).
-    </para>
-    <para>
-      As a result, <literal>displayManager.enable</literal> option
-      values can be added without changing the main service module file
-      and the type system automatically enforce that there can only be a
-      single display manager enabled.
-    </para>
-    <anchor xml:id="ex-option-declaration-eot-service" />
-    <para>
-      <emphasis role="strong">Example: Extensible type placeholder in
-      the service module</emphasis>
-    </para>
-    <programlisting language="bash">
+        <para>
+          <emphasis role="strong">Note</emphasis>: You shouldn’t
+          necessarily make package options for all of your modules. You
+          can always overwrite a specific package throughout nixpkgs by
+          using
+          <link xlink:href="https://nixos.org/manual/nixpkgs/stable/#chap-overlays">nixpkgs
+          overlays</link>.
+        </para>
+        <para>
+          The default package is specified as a list of strings
+          representing its attribute path in nixpkgs. Because of this,
+          you need to pass nixpkgs itself as the first argument.
+        </para>
+        <para>
+          The second argument is the name of the option, used in the
+          description <quote>The &lt;name&gt; package to use.</quote>.
+          You can also pass an example value, either a literal string or
+          a package’s attribute path.
+        </para>
+        <para>
+          You can omit the default path if the name of the option is
+          also attribute path in nixpkgs.
+        </para>
+        <anchor xml:id="ex-options-declarations-util-mkPackageOption" />
+        <para>
+          Examples:
+        </para>
+        <anchor xml:id="ex-options-declarations-util-mkPackageOption-hello" />
+        <programlisting language="bash">
+lib.mkPackageOption pkgs &quot;hello&quot; { }
+# is like
+lib.mkOption {
+  type = lib.types.package;
+  default = pkgs.hello;
+  defaultText = lib.literalExpression &quot;pkgs.hello&quot;;
+  description = &quot;The hello package to use.&quot;;
+}
+</programlisting>
+        <anchor xml:id="ex-options-declarations-util-mkPackageOption-ghc" />
+        <programlisting language="bash">
+lib.mkPackageOption pkgs &quot;GHC&quot; {
+  default = [ &quot;ghc&quot; ];
+  example = &quot;pkgs.haskell.packages.ghc924.ghc.withPackages (hkgs: [ hkgs.primes ])&quot;;
+}
+# is like
+lib.mkOption {
+  type = lib.types.package;
+  default = pkgs.ghc;
+  defaultText = lib.literalExpression &quot;pkgs.ghc&quot;;
+  example = lib.literalExpression &quot;pkgs.haskell.packages.ghc924.ghc.withPackages (hkgs: [ hkgs.primes ])&quot;;
+  description = &quot;The GHC package to use.&quot;;
+}
+</programlisting>
+        <section xml:id="sec-option-declarations-eot">
+          <title>Extensible Option Types</title>
+          <para>
+            Extensible option types is a feature that allow to extend
+            certain types declaration through multiple module files.
+            This feature only work with a restricted set of types,
+            namely <literal>enum</literal> and
+            <literal>submodules</literal> and any composed forms of
+            them.
+          </para>
+          <para>
+            Extensible option types can be used for
+            <literal>enum</literal> options that affects multiple
+            modules, or as an alternative to related
+            <literal>enable</literal> options.
+          </para>
+          <para>
+            As an example, we will take the case of display managers.
+            There is a central display manager module for generic
+            display manager options and a module file per display
+            manager backend (sddm, gdm ...).
+          </para>
+          <para>
+            There are two approaches we could take with this module
+            structure:
+          </para>
+          <itemizedlist>
+            <listitem>
+              <para>
+                Configuring the display managers independently by adding
+                an enable option to every display manager module
+                backend. (NixOS)
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                Configuring the display managers in the central module
+                by adding an option to select which display manager
+                backend to use.
+              </para>
+            </listitem>
+          </itemizedlist>
+          <para>
+            Both approaches have problems.
+          </para>
+          <para>
+            Making backends independent can quickly become hard to
+            manage. For display managers, there can only be one enabled
+            at a time, but the type system cannot enforce this
+            restriction as there is no relation between each backend’s
+            <literal>enable</literal> option. As a result, this
+            restriction has to be done explicitly by adding assertions
+            in each display manager backend module.
+          </para>
+          <para>
+            On the other hand, managing the display manager backends in
+            the central module will require changing the central module
+            option every time a new backend is added or removed.
+          </para>
+          <para>
+            By using extensible option types, it is possible to create a
+            placeholder option in the central module
+            (<link linkend="ex-option-declaration-eot-service">Example:
+            Extensible type placeholder in the service module</link>),
+            and to extend it in each backend module
+            (<link linkend="ex-option-declaration-eot-backend-gdm">Example:
+            Extending
+            <literal>services.xserver.displayManager.enable</literal> in
+            the <literal>gdm</literal> module</link>,
+            <link linkend="ex-option-declaration-eot-backend-sddm">Example:
+            Extending
+            <literal>services.xserver.displayManager.enable</literal> in
+            the <literal>sddm</literal> module</link>).
+          </para>
+          <para>
+            As a result, <literal>displayManager.enable</literal> option
+            values can be added without changing the main service module
+            file and the type system automatically enforces that there
+            can only be a single display manager enabled.
+          </para>
+          <anchor xml:id="ex-option-declaration-eot-service" />
+          <para>
+            <emphasis role="strong">Example: Extensible type placeholder
+            in the service module</emphasis>
+          </para>
+          <programlisting language="bash">
 services.xserver.displayManager.enable = mkOption {
   description = &quot;Display manager to use&quot;;
   type = with types; nullOr (enum [ ]);
 };
 </programlisting>
-    <anchor xml:id="ex-option-declaration-eot-backend-gdm" />
-    <para>
-      <emphasis role="strong">Example: Extending
-      <literal>services.xserver.displayManager.enable</literal> in the
-      <literal>gdm</literal> module</emphasis>
-    </para>
-    <programlisting language="bash">
+          <anchor xml:id="ex-option-declaration-eot-backend-gdm" />
+          <para>
+            <emphasis role="strong">Example: Extending
+            <literal>services.xserver.displayManager.enable</literal> in
+            the <literal>gdm</literal> module</emphasis>
+          </para>
+          <programlisting language="bash">
 services.xserver.displayManager.enable = mkOption {
   type = with types; nullOr (enum [ &quot;gdm&quot; ]);
 };
 </programlisting>
-    <anchor xml:id="ex-option-declaration-eot-backend-sddm" />
-    <para>
-      <emphasis role="strong">Example: Extending
-      <literal>services.xserver.displayManager.enable</literal> in the
-      <literal>sddm</literal> module</emphasis>
-    </para>
-    <programlisting language="bash">
+          <anchor xml:id="ex-option-declaration-eot-backend-sddm" />
+          <para>
+            <emphasis role="strong">Example: Extending
+            <literal>services.xserver.displayManager.enable</literal> in
+            the <literal>sddm</literal> module</emphasis>
+          </para>
+          <programlisting language="bash">
 services.xserver.displayManager.enable = mkOption {
   type = with types; nullOr (enum [ &quot;sddm&quot; ]);
 };
 </programlisting>
-    <para>
-      The placeholder declaration is a standard
-      <literal>mkOption</literal> declaration, but it is important that
-      extensible option declarations only use the
-      <literal>type</literal> argument.
-    </para>
-    <para>
-      Extensible option types work with any of the composed variants of
-      <literal>enum</literal> such as
-      <literal>with types; nullOr (enum [ &quot;foo&quot; &quot;bar&quot; ])</literal>
-      or
-      <literal>with types; listOf (enum [ &quot;foo&quot; &quot;bar&quot; ])</literal>.
-    </para>
+          <para>
+            The placeholder declaration is a standard
+            <literal>mkOption</literal> declaration, but it is important
+            that extensible option declarations only use the
+            <literal>type</literal> argument.
+          </para>
+          <para>
+            Extensible option types work with any of the composed
+            variants of <literal>enum</literal> such as
+            <literal>with types; nullOr (enum [ &quot;foo&quot; &quot;bar&quot; ])</literal>
+            or
+            <literal>with types; listOf (enum [ &quot;foo&quot; &quot;bar&quot; ])</literal>.
+          </para>
+        </section>
+      </section>
+    </section>
   </section>
 </section>

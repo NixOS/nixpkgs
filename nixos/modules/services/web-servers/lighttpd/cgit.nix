@@ -23,7 +23,7 @@ in
     enable = mkOption {
       default = false;
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         If true, enable cgit (fast web interface for git repositories) as a
         sub-service in lighttpd.
       '';
@@ -33,7 +33,7 @@ in
       default = "cgit";
       example = "";
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         The subdirectory in which to serve cgit. The web application will be
         accessible at http://yourserver/''${subdir}
       '';
@@ -50,7 +50,7 @@ in
         '''
       '';
       type = types.lines;
-      description = ''
+      description = lib.mdDoc ''
         Verbatim contents of the cgit runtime configuration file. Documentation
         (with cgitrc example file) is available in "man cgitrc". Or online:
         http://git.zx2c4.com/cgit/tree/cgitrc.5.txt

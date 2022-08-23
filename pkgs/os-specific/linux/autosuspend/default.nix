@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "autosuspend";
-  version = "4.0.1";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "languitar";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "149b4qn3nmz48ydnlcgks3as3zzzzn3f5cvj3kdxqxjy4c052lpz";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-aIWqE422xfAzAyF+4hARYOcomZHraTrtxtw2YfAxJ1M=";
   };
 
   postPatch = ''

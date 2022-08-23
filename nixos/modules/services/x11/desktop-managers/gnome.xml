@@ -249,14 +249,5 @@ services.xserver.desktopManager.gnome = {
     See <link xlink:href="https://github.com/NixOS/nixpkgs/issues/56342">this issue.</link>
    </para>
   </section>
-
-  <section xml:id="sec-gnome-faq-nixos-rebuild-switch-kills-session">
-   <title>Why does <literal>nixos-rebuild switch</literal> sometimes kill my session?</title>
-
-   <para>
-    This is a known <link xlink:href="https://github.com/NixOS/nixpkgs/issues/44344">issue</link> without any workarounds.
-    If you are doing a fairly large upgrade, it is probably safer to use <literal>nixos-rebuild boot</literal>.
-   </para>
-  </section>
  </section>
 </chapter>

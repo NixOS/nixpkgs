@@ -11,12 +11,12 @@
 , pillow
 , pytorch
 , pytest
-, cudatoolkit
-, cudnn
 , cudaSupport ? pytorch.cudaSupport or false # by default uses the value from pytorch
 }:
 
 let
+  inherit (pytorch.cudaPackages) cudatoolkit cudnn;
+
   cudatoolkit_joined = symlinkJoin {
     name = "${cudatoolkit.name}-unsplit";
     paths = [ cudatoolkit.out cudatoolkit.lib ];
@@ -24,13 +24,13 @@ let
   cudaArchStr = lib.optionalString cudaSupport lib.strings.concatStringsSep ";" pytorch.cudaArchList;
 in buildPythonPackage rec {
   pname = "torchvision";
-  version = "0.11.2";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "vision";
-    rev = "v${version}";
-    sha256 = "136w9pqyfdsxxc7337q3x42gsr17gs0i0af2swfhzqhz6hd5139i";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-nIE1HvmAhRh3Hvj3qlF52sN9LGIorLiXlLtN7tzQxqU=";
   };
 
   nativeBuildInputs = [ libpng ninja which ]

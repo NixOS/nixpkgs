@@ -1,20 +1,34 @@
-{ lib, stdenv, fetchurl, pkg-config, gtk2, libglade, openbox,
-  imlib2, libstartup_notification, makeWrapper, libSM }:
+{ lib, stdenv, fetchgit, autoreconfHook, pkg-config, gtk3, openbox,
+  imlib2, libxml2, libstartup_notification, makeWrapper, libSM }:
 
 stdenv.mkDerivation rec {
   pname = "obconf";
-  version = "2.0.4";
+  version = "unstable-2015-02-13";
 
-  src = fetchurl {
-    url = "http://openbox.org/dist/obconf/obconf-${version}.tar.gz";
-    sha256 = "1fanjdmd8727kk74x5404vi8v7s4kpq48l583d12fsi4xvsfb8vi";
+  src = fetchgit {
+    url = "git://git.openbox.org/dana/obconf";
+    rev = "63ec47c5e295ad4f09d1df6d92afb7e10c3fec39";
+    sha256 = "sha256-qwm66VA/ueRMFtSUcrmuObNkz+KYgWRnmR7TnQwpxiE=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    gtk2 libglade libSM openbox imlib2 libstartup_notification
+  nativeBuildInputs = [
+    autoreconfHook
     makeWrapper
+    pkg-config
   ];
+
+  buildInputs = [
+    gtk3
+    imlib2
+    libSM
+    libstartup_notification
+    libxml2
+    openbox
+  ];
+
+  postPatch = ''
+    substituteInPlace configure.ac --replace 2.0.4 ${version}
+  '';
 
   postInstall = ''
     wrapProgram $out/bin/obconf --prefix XDG_DATA_DIRS : ${openbox}/share/
@@ -23,8 +37,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "GUI configuration tool for openbox";
     homepage = "http://openbox.org/wiki/ObConf";
-    license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.lhvwb ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.sfrijters ];
     platforms = lib.platforms.linux;
   };
 }

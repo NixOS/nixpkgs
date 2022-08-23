@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, libewf, afflib, openssl, zlib, openjdk, perl, ant }:
 
 stdenv.mkDerivation rec {
-  version = "4.11.0";
+  version = "4.11.1";
   pname = "sleuthkit";
 
   sleuthsrc = fetchFromGitHub {
     owner = "sleuthkit";
     repo = "sleuthkit";
     rev = "${pname}-${version}";
-    sha256 = "1dh06k8grrj3wcx3h9m490p69bw41dz6cv8j5j1drpldmv67k3ki";
+    sha256 = "sha256-TM8My4dAZigukwMUNDnP3aVCQ8JDdVv/KNkchDvCl9I=";
   };
 
   # Fetch libraries using a fixed output derivation
@@ -84,6 +84,10 @@ stdenv.mkDerivation rec {
     homepage = "https://www.sleuthkit.org/";
     maintainers = with maintainers; [ raskin gfrascadorio ];
     platforms = platforms.linux;
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # dependencies
+    ];
     license = licenses.ipl10;
   };
 }

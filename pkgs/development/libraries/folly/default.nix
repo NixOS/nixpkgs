@@ -1,31 +1,34 @@
 { lib, stdenv
 , fetchFromGitHub
-, cmake
 , boost
-, libevent
+, cmake
 , double-conversion
-, glog
+, fetchpatch
+, fmt_8
 , gflags
+, glog
+, libevent
 , libiberty
+, libunwind
 , lz4
-, xz
-, zlib
-, jemalloc
 , openssl
 , pkg-config
-, libunwind
-, fmt
+, xz
+, zlib
+, zstd
+, jemalloc
+, follyMobile ? false
 }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   pname = "folly";
-  version = "2021.10.25.00";
+  version = "2022.08.15.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "folly";
     rev = "v${version}";
-    sha256 = "sha256-+di8Dzt5NRbqIydBR4sB6bUbQrZZ8URUosdP2JGQMec=";
+    sha256 = "sha256-GJYjilN2nwKEpuWj2NJQ25hT9lI2pdkWzgfLBph5mmU=";
   };
 
   nativeBuildInputs = [
@@ -45,11 +48,15 @@ stdenv.mkDerivation (rec {
     lz4
     xz
     zlib
-    jemalloc
     libunwind
-    fmt
-  ];
+    fmt_8
+    zstd
+  ] ++ lib.optional stdenv.isLinux jemalloc;
 
+  # jemalloc headers are required in include/folly/portability/Malloc.h
+  propagatedBuildInputs = lib.optional stdenv.isLinux jemalloc;
+
+  NIX_CFLAGS_COMPILE = [ "-DFOLLY_MOBILE=${if follyMobile then "1" else "0"}" "-fpermissive" ];
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
   meta = with lib; {
@@ -57,9 +64,7 @@ stdenv.mkDerivation (rec {
     homepage = "https://github.com/facebook/folly";
     license = licenses.asl20;
     # 32bit is not supported: https://github.com/facebook/folly/issues/103
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" ];
     maintainers = with maintainers; [ abbradar pierreis ];
   };
-} // lib.optionalAttrs stdenv.isDarwin {
-  LDFLAGS = "-ljemalloc";
-})
+}

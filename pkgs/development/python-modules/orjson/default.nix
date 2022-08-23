@@ -4,6 +4,7 @@
 , rustPlatform
 , fetchFromGitHub
 , buildPythonPackage
+, cffi
 , libiconv
 , numpy
 , psutil
@@ -15,28 +16,30 @@
 
 buildPythonPackage rec {
   pname = "orjson";
-  version = "3.6.4";
+  version = "3.7.8";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ijl";
     repo = pname;
     rev = version;
-    sha256 = "0xpna70s5v7d4lwsb6ijc0f2rm6p7jqmac9yayx9qb1dasbki6zd";
+    hash = "sha256-K/hLNzwwEeGN6S33Xkfh+ocDHmTmh6yZYcN4vxaAvoQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "0m4f8lc0zwxh4lmxkpxvdd2lc2g3lkq0ymllqbyr31sbxvwnxk56";
+    hash = "sha256-kwZg1bC1O6XBI5HBgzahph/0k/RUKEkFIQMMuA1xe4w=";
   };
 
   format = "pyproject";
 
-  nativeBuildInputs = with rustPlatform; [
+  nativeBuildInputs = [
+    cffi
+  ] ++ (with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
-  ];
+  ]);
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 

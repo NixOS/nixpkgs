@@ -1,15 +1,14 @@
 { lib, stdenv, fetchFromGitHub, glib, pkg-config, xorg, dbus }:
 
-let rev = "1.0.0"; in
-
-stdenv.mkDerivation {
-  name = "xssproxy-${rev}";
+stdenv.mkDerivation rec {
+  pname = "xssproxy";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "timakro";
     repo = "xssproxy";
-    rev = "v${rev}";
-    sha256 = "0c83wmipnsdnbihc5niyczs7jrkss2s8n6iwwjdia7hkjzbd0hl7";
+    rev = "v${version}";
+    sha256 = "sha256-xaFr+AM5GdTZQsN1g8QsXgzsfve9GoteiXHpoMvwEBg=";
   };
 
   nativeBuildInputs = [ pkg-config ];

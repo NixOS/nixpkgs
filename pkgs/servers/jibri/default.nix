@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   version = "8.0-93-g51fe7a2";
   src = fetchurl {
     url = "https://download.jitsi.org/stable/${pname}_${version}-1_all.deb";
-    sha256 = "1w78aa3rfdc4frb68ymykrbazxqrcv8mcdayqmcb72q1aa854c7j";
+    sha256 = "8jBSkFIBi7NYxV41VtFmGfevVp6+emRWdoQ1l4dS6PA=";
   };
 
   dontBuild = true;
@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
       supported on a single jibri.
     '';
     homepage = "https://github.com/jitsi/jibri";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     maintainers = teams.jitsi.members;
     platforms = platforms.linux;

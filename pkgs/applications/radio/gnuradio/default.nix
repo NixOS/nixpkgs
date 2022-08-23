@@ -9,7 +9,7 @@
 , cppunit
 , orc
 , boost
-, log4cpp
+, spdlog
 , mpir
 , doxygen
 , python
@@ -18,6 +18,8 @@
 , fftwFloat
 , alsa-lib
 , libjack2
+, libiio
+, libad9361
 , CoreAudio
 , uhd
 , SDL
@@ -45,14 +47,14 @@
 , overrideSrc ? {}
 , pname ? "gnuradio"
 , versionAttr ? {
-  major = "3.9";
-  minor = "4";
+  major = "3.10";
+  minor = "3";
   patch = "0";
 }
 }:
 
 let
-  sourceSha256 = "sha256-O+37CyF0IVPdUB1e68HsaXD0T2VsOLPXOpLNlRYEXUk=";
+  sourceSha256 = "sha256-pH0nvZBUto9jXSN6fXD5vP1lIBwCMuFAvF2qT5dYsHU=";
   featuresInfo = {
     # Needed always
     basic = {
@@ -64,7 +66,7 @@ let
       runtime = [
         volk
         boost
-        log4cpp
+        spdlog
         mpir
       ]
         # when gr-qtgui is disabled, icu needs to be included, otherwise
@@ -134,6 +136,12 @@ let
       ];
       cmakeEnableFlag = "GRC";
     };
+    jsonyaml_blocks = {
+      pythonRuntime = [
+        python.pkgs.jsonschema
+      ];
+      cmakeEnableFlag = "JSONYAML_BLOCKS";
+    };
     gr-blocks = {
       cmakeEnableFlag = "GR_BLOCKS";
     };
@@ -171,6 +179,22 @@ let
     gr-channels = {
       cmakeEnableFlag = "GR_CHANNELS";
     };
+    gr-pdu = {
+      cmakeEnableFlag = "GR_PDU";
+      runtime = [
+        libiio
+        libad9361
+      ];
+    };
+    gr-iio = {
+      cmakeEnableFlag = "GR_IIO";
+      runtime = [
+        libiio
+      ];
+    };
+    common-precompiled-headers = {
+      cmakeEnableFlag = "COMMON_PCH";
+    };
     gr-qtgui = {
       runtime = [ qt5.qtbase libsForQt5.qwt ];
       pythonRuntime = [ python.pkgs.pyqt5 ];
@@ -203,6 +227,7 @@ let
         setuptools
         click
         click-plugins
+        pygccxml
       ];
       cmakeEnableFlag = "GR_MODTOOL";
     };
@@ -275,9 +300,15 @@ stdenv.mkDerivation rec {
   ];
   passthru = shared.passthru // {
     # Deps that are potentially overriden and are used inside GR plugins - the same version must
-    inherit boost volk;
+    inherit
+      boost
+      volk
+      spdlog
+    ;
   } // lib.optionalAttrs (hasFeature "gr-uhd") {
     inherit uhd;
+  } // lib.optionalAttrs (hasFeature "gr-pdu") {
+    inherit libiio libad9361;
   } // lib.optionalAttrs (hasFeature "gr-qtgui") {
     inherit (libsForQt5) qwt;
   };

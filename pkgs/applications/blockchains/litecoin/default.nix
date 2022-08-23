@@ -11,8 +11,7 @@
 with lib;
 
 mkDerivation rec {
-
-  name = "litecoin" + (toString (optional (!withGui) "d")) + "-" + version;
+  pname = "litecoin" + optionalString (!withGui) "d";
   version = "0.18.1";
 
   src = fetchFromGitHub {
@@ -36,6 +35,7 @@ mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "A lite version of Bitcoin using scrypt as a proof-of-work algorithm";
     longDescription= ''
       Litecoin is a peer-to-peer Internet currency that enables instant payments
@@ -49,7 +49,6 @@ mkDerivation rec {
     homepage = "https://litecoin.org/";
     platforms = platforms.unix;
     license = licenses.mit;
-    broken = stdenv.isDarwin;
     maintainers = with maintainers; [ offline ];
   };
 }

@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kbs2";
-  version = "0.4.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "woodruffw";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1bipphrzfz4dfzaqn1q60qazs7ylcx0b34gyl4q6d6jivsrhi8a4";
+    sha256 = "sha256-clbd4xHHGpFIr4s3Jocw4oQ3GbyGWMxZEVgj6JpVK94=";
   };
 
-  cargoSha256 = "0r254k85hqf2v8kdhwld8k7b350qjvkwfw2v22ikk2b41b2g4gbw";
+  cargoSha256 = "sha256-gfrC9TOs/Vz3K1gVr6MJ1QAKCE5WOD8VZ/tjOw3Y1uI=";
 
   nativeBuildInputs = [ installShellFiles ]
     ++ lib.optionals stdenv.isLinux [ python3 ];
@@ -30,10 +30,10 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     mkdir -p $out/share/kbs2
     cp -r contrib/ $out/share/kbs2
-    for shell in bash fish zsh; do
-      $out/bin/kbs2 --completions $shell > kbs2.$shell
-      installShellCompletion kbs2.$shell
-    done
+    installShellCompletion --cmd kbs2 \
+      --bash <($out/bin/kbs2 --completions bash) \
+      --fish <($out/bin/kbs2 --completions fish) \
+      --zsh <($out/bin/kbs2 --completions zsh)
   '';
 
   meta = with lib; {

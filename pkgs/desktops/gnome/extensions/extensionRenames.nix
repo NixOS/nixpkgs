@@ -9,29 +9,35 @@
   "apps-menu@gnome-shell-extensions.gcampax.github.com" = "applications-menu";
   "Applications_Menu@rmy.pobox.com" = "frippery-applications-menu";
 
-  "floatingDock@sun.wxg@gmail.com" = "floating-dock-2";
-  "floating-dock@nandoferreira_prof@hotmail.com" = "floating-dock";
+  "lockkeys@vaina.lt" = "lock-keys";
+  "lockkeys@fawtytoo" = "lock-keys-2";
+
+  "panel-date-format@keiii.github.com" = "panel-date-format";
+  "panel-date-format@atareao.es" = "panel-date-format-2";
+
+  "volume_scroller@trflynn89.pm.me" = "volume-scroller";
+  "volume_scroller@noskoski" = "volume-scroller-2";
+
+  "wireguard-indicator@gregos.me" = "wireguard-indicator-2";
+  "wireguard-indicator@atareao.es" = "wireguard-indicator";
 
   "workspace-indicator@gnome-shell-extensions.gcampax.github.com" = "workspace-indicator";
   "horizontal-workspace-indicator@tty2.io" = "workspace-indicator-2";
-
-  "unredirect@vaina.lt" = "disable-unredirect-fullscreen-windows";
-  "unredirect@aunetx" = "disable-unredirect-fullscreen-windows-2";
 
   # ############################################################################
   # These are conflicts for older extensions (i.e. they don't support the latest GNOME version).
   # Make sure to move them up once they are updated
 
-  # ####### GNOME 40 #######
+  # ####### GNOME 41 #######
 
-  "lockkeys@vaina.lt" = "lock-keys";
-  "lockkeys@fawtytoo" = "lock-keys-2";
+  "floatingDock@sun.wxg@gmail.com" = "floating-dock-2";
+  "floating-dock@nandoferreira_prof@hotmail.com" = "floating-dock";
 
-  "system-monitor@paradoxxx.zero.gmail.com" = "system-monitor"; # manually packaged
-  "System_Monitor@bghome.gmail.com" = "system-monitor-2";
+  "unredirect@vaina.lt" = "disable-unredirect-fullscreen-windows";
+  "unredirect@aunetx" = "disable-unredirect-fullscreen-windows-2";
 
-  "Hide_Activities@shay.shayel.org" = "hide-activities-button";
-  "hide-activities-button@nmingori.gnome-shell-extensions.org" = "hide-activities-button-2";
+  "fuzzy-clock@keepawayfromfire.co.uk" = "fuzzy-clock-2";
+  "FuzzyClock@johngoetz" = "fuzzy-clock";
 
   # At the moment, ShutdownTimer@deminder is a fork of ShutdownTimer@neumann which adds new features
   # there seem to be upstream plans, so this should be checked periodically:
@@ -40,19 +46,27 @@
   "shutdown-timer-gnome-shell-extension" = "shutdowntimer-2";
   "ShutdownTimer@deminder" = "shutdowntimer";
 
+  # ####### GNOME 40 #######
+
+  "system-monitor@paradoxxx.zero.gmail.com" = "system-monitor"; # manually packaged
+  "System_Monitor@bghome.gmail.com" = "system-monitor-2";
+
+  "Hide_Activities@shay.shayel.org" = "hide-activities-button";
+  "hide-activities-button@nmingori.gnome-shell-extensions.org" = "hide-activities-button-2";
+
   "noannoyance@sindex.com" = "noannoyance";
   "noannoyance@daase.net" = "noannoyance-2";
 
-  "panel-date-format@keiii.github.com" = "panel-date-format";
-  "panel-date-format@atareao.es" = "panel-date-format-2";
-
-  "wireguard-indicator@gregos.me" = "wireguard-indicator-2";
-  "wireguard-indicator@atareao.es" = "wireguard-indicator";
+  "SomaFm-Radio@alireza6677.gmail.com" = "somafm-internet-radio";
+  "SomaFm-Radio@cajhne.gmail.com" = "somafm-internet-radio-2";
 
   "extension-list@tu.berry" = "extension-list";
   "screen-lock@garciabaameiro.com" = "screen-lock"; # Don't know why they got 'extension-list' as slug
 
   # ####### GNOME 3.38 #######
+
+  "bottompanel@tmoer93" = "bottompanel";
+  "bottom-panel@sulincix" = "bottompanel-2";
 
   # See https://github.com/pbxqdown/gnome-shell-extension-transparent-window/issues/12#issuecomment-800765381
   "transparent-window@pbxqdown.github.com" = "transparent-window";

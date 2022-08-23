@@ -4,7 +4,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "webgl";
+  pname = "webgl";
   version = "2017-05-08";
 
   idrisDeps = [ idrisscript ];

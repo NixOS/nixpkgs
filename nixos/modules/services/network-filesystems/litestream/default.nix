@@ -11,15 +11,15 @@ in
     enable = mkEnableOption "litestream";
 
     package = mkOption {
-      description = "Package to use.";
+      description = lib.mdDoc "Package to use.";
       default = pkgs.litestream;
       defaultText = literalExpression "pkgs.litestream";
       type = types.package;
     };
 
     settings = mkOption {
-      description = ''
-        See the <link xlink:href="https://litestream.io/reference/config/">documentation</link>.
+      description = lib.mdDoc ''
+        See the [documentation](https://litestream.io/reference/config/).
       '';
       type = settingsFormat.type;
       example = {
@@ -41,9 +41,7 @@ in
       default = null;
       example = "/run/secrets/litestream";
       description = ''
-        Environment file as defined in <citerefentry>
-        <refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum>
-        </citerefentry>.
+        Environment file as defined in <citerefentry><refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
 
         Secrets may be passed to the service without adding them to the
         world-readable Nix store, by specifying placeholder variables as

@@ -1,5 +1,5 @@
 diff --git a/src/protontricks/cli/main.py b/src/protontricks/cli/main.py
-index bd651aa..2b82aea 100755
+index 8be6c71..f5772df 100755
 --- a/src/protontricks/cli/main.py
 +++ b/src/protontricks/cli/main.py
 @@ -14,8 +14,8 @@ import sys
@@ -10,7 +10,7 @@ index bd651aa..2b82aea 100755
 -                     find_steam_path, get_steam_apps, get_steam_lib_paths)
 +from ..steam import (find_proton_app, find_steam_path, get_steam_apps,
 +                     get_steam_lib_paths)
- from ..util import is_flatpak_sandbox, run_command
+ from ..util import get_running_flatpak_version, FLATPAK_BWRAP_COMPATIBLE_VERSION, run_command
  from ..winetricks import get_winetricks_path
  from .util import (CustomArgumentParser, cli_error_handler, enable_logging,
 @@ -60,8 +60,7 @@ def main(args=None):
@@ -23,7 +23,7 @@ index bd651aa..2b82aea 100755
              "PROTONTRICKS_GUI: GUI provider to use, accepts either 'yad' "
              "or 'zenity'"
          ),
-@@ -147,17 +146,9 @@ def main(args=None):
+@@ -151,17 +150,9 @@ def main(args=None):
      if not steam_path:
          exit_("Steam installation directory could not be found.")
  
@@ -43,7 +43,7 @@ index bd651aa..2b82aea 100755
      else:
          use_steam_runtime = False
          logger.info("Steam Runtime disabled.")
-@@ -218,7 +209,6 @@ def main(args=None):
+@@ -222,7 +213,6 @@ def main(args=None):
              proton_app=proton_app,
              steam_app=steam_app,
              use_steam_runtime=use_steam_runtime,
@@ -51,7 +51,7 @@ index bd651aa..2b82aea 100755
              command=[str(winetricks_path), "--gui"],
              use_bwrap=use_bwrap
          )
-@@ -286,7 +276,6 @@ def main(args=None):
+@@ -290,7 +280,6 @@ def main(args=None):
              proton_app=proton_app,
              steam_app=steam_app,
              use_steam_runtime=use_steam_runtime,
@@ -59,7 +59,7 @@ index bd651aa..2b82aea 100755
              use_bwrap=use_bwrap,
              command=[str(winetricks_path)] + args.winetricks_command
          )
-@@ -297,7 +286,6 @@ def main(args=None):
+@@ -301,7 +290,6 @@ def main(args=None):
              steam_app=steam_app,
              command=args.command,
              use_steam_runtime=use_steam_runtime,
@@ -68,7 +68,7 @@ index bd651aa..2b82aea 100755
              # Pass the command directly into the shell *without*
              # escaping it
 diff --git a/src/protontricks/steam.py b/src/protontricks/steam.py
-index be5322b..552f894 100644
+index a291762..8af06c5 100644
 --- a/src/protontricks/steam.py
 +++ b/src/protontricks/steam.py
 @@ -12,8 +12,8 @@ from .util import lower_dict, is_flatpak_sandbox
@@ -82,7 +82,7 @@ index be5322b..552f894 100644
      "find_proton_app", "get_steam_lib_paths", "get_compat_tool_dirs",
      "get_custom_compat_tool_installations_in_dir", "get_custom_compat_tool_installations",
      "find_current_steamid3", "get_appid_from_shortcut",
-@@ -318,37 +318,6 @@ def find_steam_path():
+@@ -326,37 +326,6 @@ def find_steam_path():
      return None, None
  
  
@@ -121,31 +121,27 @@ index be5322b..552f894 100644
  APPINFO_STRUCT_SECTION = "<LLLLQ20sL"
  
 diff --git a/src/protontricks/util.py b/src/protontricks/util.py
-index f2482fc..f9c1c33 100644
+index cb531fd..9f35aba 100644
 --- a/src/protontricks/util.py
 +++ b/src/protontricks/util.py
-@@ -5,15 +5,14 @@ import shutil
+@@ -5,13 +5,13 @@ import shlex
+ import shutil
  import stat
- 
  from pathlib import Path
--from subprocess import check_output, run, PIPE
-+from subprocess import run, PIPE
+-from subprocess import PIPE, check_output, run
++from subprocess import PIPE, run
  
  __all__ = (
-     "SUPPORTED_STEAM_RUNTIMES", "is_flatpak_sandbox", "lower_dict",
+     "SUPPORTED_STEAM_RUNTIMES", "is_flatpak_sandbox",
+     "get_running_flatpak_version", "lower_dict",
 -    "get_legacy_runtime_library_paths", "get_host_library_paths",
 -    "RUNTIME_ROOT_GLOB_PATTERNS", "get_runtime_library_paths",
--    "WINE_SCRIPT_RUNTIME_V1_TEMPLATE",
--    "WINE_SCRIPT_RUNTIME_V2_TEMPLATE",
--    "create_wine_bin_dir", "run_command"
 +    "get_host_library_paths", "RUNTIME_ROOT_GLOB_PATTERNS",
-+    "get_runtime_library_paths", "WINE_SCRIPT_RUNTIME_V1_TEMPLATE",
-+    "WINE_SCRIPT_RUNTIME_V2_TEMPLATE", "create_wine_bin_dir",
-+    "run_command"
- )
- 
- logger = logging.getLogger("protontricks")
-@@ -47,24 +46,6 @@ def lower_dict(d):
++    "get_runtime_library_paths",
+     "WINE_SCRIPT_RUNTIME_V1_TEMPLATE",
+     "WINE_SCRIPT_RUNTIME_V2_TEMPLATE",
+     "create_wine_bin_dir", "run_command"
+@@ -81,24 +81,6 @@ def lower_dict(d):
      return {k.lower(): _lower_value(v) for k, v in d.items()}
  
  
@@ -170,7 +166,7 @@ index f2482fc..f9c1c33 100644
  def get_host_library_paths():
      """
      Get host library paths to use when creating the LD_LIBRARY_PATH environment
-@@ -76,7 +57,7 @@ def get_host_library_paths():
+@@ -110,7 +92,7 @@ def get_host_library_paths():
      # Since that command is unavailable with newer Steam Runtime releases,
      # do it ourselves here.
      result = run(
@@ -179,7 +175,7 @@ index f2482fc..f9c1c33 100644
          check=True, stdout=PIPE, stderr=PIPE
      )
      lines = result.stdout.decode("utf-8").split("\n")
-@@ -94,7 +75,7 @@ RUNTIME_ROOT_GLOB_PATTERNS = (
+@@ -128,7 +110,7 @@ RUNTIME_ROOT_GLOB_PATTERNS = (
  )
  
  
@@ -188,7 +184,7 @@ index f2482fc..f9c1c33 100644
      """
      Get LD_LIBRARY_PATH value to use when running a command using Steam Runtime
      """
-@@ -117,7 +98,7 @@ def get_runtime_library_paths(proton_app, use_bwrap=True):
+@@ -151,7 +133,7 @@ def get_runtime_library_paths(proton_app, use_bwrap=True):
              )
          )
  
@@ -197,7 +193,7 @@ index f2482fc..f9c1c33 100644
          return "".join([
              str(proton_app.proton_dist_path / "lib"), os.pathsep,
              str(proton_app.proton_dist_path / "lib64"), os.pathsep
-@@ -133,14 +114,19 @@ def get_runtime_library_paths(proton_app, use_bwrap=True):
+@@ -167,14 +149,19 @@ def get_runtime_library_paths(proton_app, use_bwrap=True):
      ])
  
  
@@ -224,7 +220,7 @@ index f2482fc..f9c1c33 100644
  # Helper script created by Protontricks to run Wine binaries using Steam Runtime
  set -o errexit
  
-@@ -208,7 +194,9 @@ if [[ -n "$PROTONTRICKS_INSIDE_STEAM_RUNTIME" ]]; then
+@@ -242,7 +229,9 @@ if [[ -n "$PROTONTRICKS_INSIDE_STEAM_RUNTIME" ]]; then
    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH":"$PROTON_LD_LIBRARY_PATH"
    "$PROTON_DIST_PATH"/bin/{name} "$@"
  else
@@ -235,7 +231,7 @@ index f2482fc..f9c1c33 100644
    "${{mount_params[@]}}" -- \
    env PROTONTRICKS_INSIDE_STEAM_RUNTIME=1 \
    "$PROTONTRICKS_PROXY_SCRIPT_PATH" "$@"
-@@ -274,7 +262,6 @@ def create_wine_bin_dir(proton_app, use_bwrap=True):
+@@ -308,7 +297,6 @@ def create_wine_bin_dir(proton_app, use_bwrap=True):
  def run_command(
          winetricks_path, proton_app, steam_app, command,
          use_steam_runtime=False,
@@ -243,7 +239,7 @@ index f2482fc..f9c1c33 100644
          use_bwrap=True,
          **kwargs):
      """Run an arbitrary command with the correct environment variables
-@@ -353,7 +340,7 @@ def run_command(
+@@ -387,7 +375,7 @@ def run_command(
              os.environ["STEAM_RUNTIME_PATH"] = \
                  str(proton_app.required_tool_app.install_path)
              os.environ["PROTON_LD_LIBRARY_PATH"] = \
@@ -252,7 +248,7 @@ index f2482fc..f9c1c33 100644
  
              runtime_name = proton_app.required_tool_app.name
              logger.info(
-@@ -374,11 +361,8 @@ def run_command(
+@@ -408,11 +396,8 @@ def run_command(
                      "Current Steam Runtime not recognized by Protontricks."
                  )
          else:
@@ -265,7 +261,7 @@ index f2482fc..f9c1c33 100644
  
          # When Steam Runtime is enabled, create a set of helper scripts
          # that load the underlying Proton Wine executables with Steam Runtime
-@@ -386,8 +370,6 @@ def run_command(
+@@ -420,8 +405,6 @@ def run_command(
          wine_bin_dir = create_wine_bin_dir(
              proton_app=proton_app, use_bwrap=use_bwrap
          )
@@ -275,7 +271,7 @@ index f2482fc..f9c1c33 100644
          os.environ["PATH"] = "".join([
              str(wine_bin_dir), os.pathsep, os.environ["PATH"]
 diff --git a/tests/cli/test_main.py b/tests/cli/test_main.py
-index 605ae26..4bf7e80 100644
+index 8b62a61..cc27f9b 100644
 --- a/tests/cli/test_main.py
 +++ b/tests/cli/test_main.py
 @@ -116,15 +116,10 @@ class TestCLIRun:

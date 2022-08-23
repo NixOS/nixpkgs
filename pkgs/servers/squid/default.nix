@@ -1,20 +1,20 @@
 { lib, stdenv, fetchurl, perl, openldap, pam, db, cyrus_sasl, libcap
-, expat, libxml2, openssl, pkg-config
+, expat, libxml2, openssl, pkg-config, systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "squid";
-  version = "4.17";
+  version = "5.6";
 
   src = fetchurl {
-    url = "http://www.squid-cache.org/Versions/v4/${pname}-${version}.tar.xz";
-    sha256 = "sha256-y5KKwIx8hrFRscj4J6vhqE2DGBoqhuDVEihhY+HjFBg=";
+    url = "http://www.squid-cache.org/Versions/v5/${pname}-${version}.tar.xz";
+    sha256 = "sha256-ONJzOKNHWXzg6T0MO+bl9mtnUEF8R0yofuDWG7bRSNs=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     perl openldap db cyrus_sasl expat libxml2 openssl
-  ] ++ lib.optionals stdenv.isLinux [ libcap pam ];
+  ] ++ lib.optionals stdenv.isLinux [ libcap pam systemd ];
 
   configureFlags = [
     "--enable-ipv6"
@@ -26,13 +26,15 @@ stdenv.mkDerivation rec {
     "--enable-removal-policies=lru,heap"
     "--enable-delay-pools"
     "--enable-x-accelerator-vary"
-  ] ++ lib.optional (stdenv.isLinux && !stdenv.hostPlatform.isMusl) "--enable-linux-netfilter";
+    "--enable-htcp"
+  ] ++ lib.optional (stdenv.isLinux && !stdenv.hostPlatform.isMusl)
+    "--enable-linux-netfilter";
 
   meta = with lib; {
     description = "A caching proxy for the Web supporting HTTP, HTTPS, FTP, and more";
     homepage = "http://www.squid-cache.org";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz raskin ];
+    maintainers = with maintainers; [ raskin ];
   };
 }

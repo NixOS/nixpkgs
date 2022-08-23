@@ -1,23 +1,26 @@
 { lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, backports_ssl_match_hostname
 , brotli
+, buildPythonPackage
 , certifi
-, gevent
-, six
 , dpkt
+, fetchPypi
+, gevent
 , pytestCheckHook
+, pythonOlder
+, six
+, urllib3
 }:
 
 buildPythonPackage rec {
   pname = "geventhttpclient";
-  version = "1.5.3";
+  version = "2.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d80ec9ff42b7219f33558185499d0b4365597fc55ff886207b45f5632e099780";
+    hash = "sha256-SegzLaon80HeCNk4h4KJs7dzaVzblvIpZRjC1uPr7JI=";
   };
 
   propagatedBuildInputs = [
@@ -25,17 +28,16 @@ buildPythonPackage rec {
     certifi
     gevent
     six
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    backports_ssl_match_hostname
   ];
 
   checkInputs = [
     dpkt
     pytestCheckHook
+    urllib3
   ];
 
   disabledTests = [
-    # socket.gaierror: [Errno -2] Name or service not known
+    # socket.gaierror: [Errno -3] Temporary failure in name resolution
     "test_client_simple"
     "test_client_without_leading_slas"
     "test_request_with_headers"
@@ -45,11 +47,14 @@ buildPythonPackage rec {
     "test_multi_queries_greenlet_safe"
   ];
 
+  pythonImportsCheck = [
+    "geventhttpclient"
+  ];
+
   meta = with lib; {
-    homepage = "https://github.com/gwik/geventhttpclient";
-    description = "HTTP client library for gevent";
+    homepage = "https://github.com/geventhttpclient/geventhttpclient";
+    description = "High performance, concurrent HTTP client library using gevent";
     license = licenses.mit;
     maintainers = with maintainers; [ koral ];
   };
-
 }

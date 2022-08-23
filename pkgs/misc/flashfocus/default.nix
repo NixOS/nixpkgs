@@ -1,4 +1,4 @@
-{ lib, python3 }:
+{ lib, python3, netcat-openbsd }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "flashfocus";
@@ -8,6 +8,14 @@ python3.pkgs.buildPythonApplication rec {
     inherit pname version;
     sha256 = "0cn44hryvz2wl7xklaslxsb3l2i3f8jkgmml0n9v2ks22j5l4r4h";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pyyaml>=5.1,<6.0" "pyyaml>=5.1"
+
+    substituteInPlace bin/nc_flash_window \
+      --replace "nc" "${lib.getExe netcat-openbsd}"
+  '';
 
   nativeBuildInputs = with python3.pkgs; [
     pytest-runner

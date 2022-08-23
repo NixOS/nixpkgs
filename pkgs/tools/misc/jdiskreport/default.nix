@@ -4,10 +4,9 @@ let
   desktopItem = makeDesktopItem {
     desktopName = "JDiskReport";
     genericName = "A graphical utility to visualize disk usage";
-    categories = "Utility;";
+    categories = [ "Utility" ];
     exec = "jdiskreport";
     name = "jdiskreport";
-    type = "Application";
   };
 in
 stdenv.mkDerivation rec {
@@ -47,6 +46,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.jgoodies.com/freeware/jdiskreport/";
     description = "A graphical utility to visualize disk usage";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfreeRedistributable; #TODO freedist, libs under BSD-3
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ kylesferrazza ];

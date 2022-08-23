@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "oh";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "michaelmacinnis";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0sdpk77i5mfamkdqldybl9znzz92hqgi4xvby5j28m0a5gw46kj0";
+    sha256 = "sha256-DMxC5fv5ZLDv7gMajC/eyJd2YpO+OXFdvwAPYotnczw=";
   };
 
-  vendorSha256 = "12vlvh37hvi8c1i9arppm5wj4v9c98s7myxra10q6qpdqssgc8a0";
+  vendorSha256 = "sha256-f4rqXOu6yXUzNsseSaV9pb8c2KXItYOalB5pfH3Acnc=";
 
   meta = with lib; {
     homepage = "https://github.com/michaelmacinnis/oh";

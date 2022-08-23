@@ -2,6 +2,8 @@ self: super: {
 
     age = super.callPackage ./ext/age.nix { };
 
+    jsonb_deep_sum = super.callPackage ./ext/jsonb_deep_sum.nix { };
+
     periods = super.callPackage ./ext/periods.nix { };
 
     postgis = super.callPackage ./ext/postgis.nix { };
@@ -11,6 +13,8 @@ self: super: {
     pg_bigm = super.callPackage ./ext/pg_bigm.nix { };
 
     pg_ed25519 = super.callPackage ./ext/pg_ed25519.nix { };
+
+    pg_hint_plan = super.callPackage ./ext/pg_hint_plan.nix { };
 
     pg_rational = super.callPackage ./ext/pg_rational.nix { };
 
@@ -27,9 +31,7 @@ self: super: {
     plr = super.callPackage ./ext/plr.nix { };
 
     plv8 = super.callPackage ./ext/plv8.nix {
-        v8 = super.callPackage ../../../development/libraries/v8/plv8_6_x.nix {
-            python = self.python2;
-        };
+      v8 = self.v8_8_x;
     };
 
     pgjwt = super.callPackage ./ext/pgjwt.nix { };
@@ -63,4 +65,8 @@ self: super: {
     pg_safeupdate = super.callPackage ./ext/pg_safeupdate.nix { };
 
     repmgr = super.callPackage ./ext/repmgr.nix { };
+
+    rum = super.callPackage ./ext/rum.nix { };
+
+    wal2json = super.callPackage ./ext/wal2json.nix { };
 }

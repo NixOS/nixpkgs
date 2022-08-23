@@ -9,6 +9,7 @@
 , ezjsonm
 , hmap
 , sexplib
+, fieldslib
 }:
 
 buildDunePackage rec {
@@ -31,7 +32,7 @@ buildDunePackage rec {
   ];
 
   propagatedBuildInputs = [
-    hmap cohttp-lwt ezjsonm sexplib
+    hmap cohttp-lwt ezjsonm sexplib fieldslib
   ];
 
   meta = {

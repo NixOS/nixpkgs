@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gvm-libs";
-  version = "21.4.2";
+  version = "21.4.4";
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = pname;
     rev = "v${version}";
-    sha256 = "14v7z8ynd20s4pkhp2nc19n6gbmbh8yrn39yi2fbfm7gj28b52sx";
+    sha256 = "sha256-Ps8J9JuLKcrowl9wgZ3Wm7JTXyiejQPDr4OV/IvDy+I=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +48,10 @@ stdenv.mkDerivation rec {
     libuuid
     libxml2
     zlib
+  ];
+
+  cmakeFlags = [
+    "-DGVM_RUN_DIR=$out/run/gvm"
   ];
 
   meta = with lib; {

@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "httpx-socks";
-  version = "0.7.2";
+  version = "0.7.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -28,19 +28,20 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "romis2012";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1wigmkhn4ymfr12z9vhdaimjcma9llicwrr29q0cc8xmy23f3445";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-+eWGmCHkXQA+JaEgofqUeFyGyMxSctal+jsqsShFM58=";
   };
 
   propagatedBuildInputs = [
-    async-timeout
-    curio
-    httpcore
     httpx
+    httpcore
     python-socks
-    sniffio
-    trio
   ];
+
+  passthru.optional-dependencies = {
+    asyncio = [ async-timeout ];
+    trio = [ trio ];
+  };
 
   checkInputs = [
     flask
@@ -54,6 +55,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "httpx_socks"
+  ];
+
+  disabledTests = [
+    # Tests don't work in the sandbox
+    "test_proxy"
+    "test_secure_proxy"
   ];
 
   meta = with lib; {

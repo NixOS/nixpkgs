@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , pkg-config
 , meson
@@ -13,7 +14,6 @@
 , libgee
 , libhandy
 , libcanberra
-, elementary-icon-theme
 , wrapGAppsHook
 }:
 
@@ -28,6 +28,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-n+L08C/W5YnHZ5P3F1NGUYE2SH94sc4+kr1x+wXZ+cw=";
   };
 
+  patches = [
+    # Fix build with meson 0.61
+    # https://github.com/elementary/screenshot/pull/241
+    (fetchpatch {
+      url = "https://github.com/elementary/screenshot/commit/80a5d942e813dd098e1ef0f6629b81d2ccef05ae.patch";
+      sha256 = "sha256-jOQuzUJvsjqytplLcW9BeIxzi9+/k2GFa4hHVZ3+wts=";
+    })
+  ];
+
   nativeBuildInputs = [
     desktop-file-utils
     meson
@@ -39,7 +48,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    elementary-icon-theme
     granite
     gtk3
     libcanberra
@@ -61,7 +69,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Screenshot tool designed for elementary OS";
     homepage = "https://github.com/elementary/screenshot";
-    license = licenses.lgpl3;
+    license = licenses.lgpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
     mainProgram = "io.elementary.screenshot";

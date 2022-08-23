@@ -29,6 +29,7 @@ let
     "blackbox"
     "buildkite-agent"
     "collectd"
+    "dmarc"
     "dnsmasq"
     "domain"
     "dovecot"
@@ -55,6 +56,7 @@ let
     "postfix"
     "postgres"
     "process"
+    "pve"
     "py-air-control"
     "redis"
     "rspamd"
@@ -82,28 +84,28 @@ let
     port = mkOption {
       type = types.port;
       default = port;
-      description = ''
+      description = lib.mdDoc ''
         Port to listen on.
       '';
     };
     listenAddress = mkOption {
       type = types.str;
       default = "0.0.0.0";
-      description = ''
+      description = lib.mdDoc ''
         Address to listen on.
       '';
     };
     extraFlags = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         Extra commandline options to pass to the ${name} exporter.
       '';
     };
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Open port in firewall for incoming connections.
       '';
     };
@@ -122,14 +124,14 @@ let
     user = mkOption {
       type = types.str;
       default = "${name}-exporter";
-      description = ''
+      description = lib.mdDoc ''
         User name under which the ${name} exporter shall be run.
       '';
     };
     group = mkOption {
       type = types.str;
       default = "${name}-exporter";
-      description = ''
+      description = lib.mdDoc ''
         Group under which the ${name} exporter shall be run.
       '';
     };
@@ -225,7 +227,7 @@ in
     type = types.submodule {
       options = (mkSubModules);
     };
-    description = "Prometheus exporter configuration";
+    description = lib.mdDoc "Prometheus exporter configuration";
     default = {};
     example = literalExpression ''
       {

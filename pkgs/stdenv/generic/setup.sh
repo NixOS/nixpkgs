@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+__nixpkgs_setup_set_original=$-
 set -eu
 set -o pipefail
 shopt -s inherit_errexit
@@ -141,14 +143,14 @@ exitHandler() {
             echo "build failed with exit code $exitCode (ignored)"
             mkdir -p "$out/nix-support"
             printf "%s" "$exitCode" > "$out/nix-support/failed"
-            exit 0
+            return 0
         fi
 
     else
         runHook exitHook
     fi
 
-    exit "$exitCode"
+    return "$exitCode"
 }
 
 trap "exitHandler" EXIT
@@ -769,9 +771,18 @@ substitute() {
 }
 
 substituteInPlace() {
-    local fileName="$1"
-    shift
-    substitute "$fileName" "$fileName" "$@"
+    local -a fileNames=()
+    for arg in "$@"; do
+        if [[ "$arg" = "--"* ]]; then
+            break
+        fi
+        fileNames+=("$arg")
+        shift
+    done
+
+    for file in "${fileNames[@]}"; do
+        substitute "$file" "$file" "$@"
+    done
 }
 
 _allFlags() {
@@ -1019,6 +1030,21 @@ configurePhase() {
             echo "fixing libtool script $i"
             fixLibtool "$i"
         done
+
+        # replace `/usr/bin/file` with `file` in any `configure`
+        # scripts with vendored libtool code.  Preserve mtimes to
+        # prevent some packages (e.g. libidn2) from spontaneously
+        # autoreconf'ing themselves
+        CONFIGURE_MTIME_REFERENCE=$(mktemp configure.mtime.reference.XXXXXX)
+        find . \
+          -executable \
+          -type f \
+          -name configure \
+          -exec grep -l 'GNU Libtool is free software; you can redistribute it and/or modify' {} \; \
+          -exec touch -r {} "$CONFIGURE_MTIME_REFERENCE" \; \
+          -exec sed -i s_/usr/bin/file_file_g {} \;    \
+          -exec touch -r "$CONFIGURE_MTIME_REFERENCE" {} \;
+        rm -f "$CONFIGURE_MTIME_REFERENCE"
     fi
 
     if [[ -z "${dontAddPrefix:-}" && -n "$prefix" ]]; then
@@ -1303,6 +1329,23 @@ showPhaseHeader() {
 }
 
 
+showPhaseFooter() {
+    local phase="$1"
+    local startTime="$2"
+    local endTime="$3"
+    local delta=$(( endTime - startTime ))
+    (( $delta < 30 )) && return
+
+    local H=$((delta/3600))
+    local M=$((delta%3600/60))
+    local S=$((delta%60))
+    echo -n "$phase completed in "
+    (( $H > 0 )) && echo -n "$H hours "
+    (( $M > 0 )) && echo -n "$M minutes "
+    echo "$S seconds"
+}
+
+
 genericBuild() {
     if [ -f "${buildCommandPath:-}" ]; then
         source "$buildCommandPath"
@@ -1338,11 +1381,20 @@ genericBuild() {
         showPhaseHeader "$curPhase"
         dumpVars
 
+        local startTime=$(date +"%s")
+
         # Evaluate the variable named $curPhase if it exists, otherwise the
         # function named $curPhase.
         eval "${!curPhase:-$curPhase}"
 
+        local endTime=$(date +"%s")
+
+        showPhaseFooter "$curPhase" "$startTime" "$endTime"
+
         if [ "$curPhase" = unpackPhase ]; then
+            # make sure we can cd into the directory
+            [ -z "${sourceRoot}" ] || chmod +x "${sourceRoot}"
+
             cd "${sourceRoot:-.}"
         fi
     done
@@ -1361,5 +1413,7 @@ runHook userHook
 
 dumpVars
 
-# Disable nounset for nix-shell.
-set +u
+# Restore the original options for nix-shell
+[[ $__nixpkgs_setup_set_original == *e* ]] || set +e
+[[ $__nixpkgs_setup_set_original == *u* ]] || set +u
+unset -v __nixpkgs_setup_set_original

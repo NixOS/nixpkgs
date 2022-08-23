@@ -2,24 +2,23 @@
 , lib
 , fetchFromGitHub
 , unstableGitUpdater
+, dosbox
 
 # Docs cause an immense increase in build time, up to 2 additional hours
 , withDocs ? false
-, dosbox
 , ghostscript
 , withGUI ? false
 }:
 
 stdenv.mkDerivation rec {
-  pname = "open-watcom-v2";
-  version = "unstable-2021-12-10";
-  name = "${pname}-unwrapped-${version}";
+  pname = "${passthru.prettyName}-unwrapped";
+  version = "unstable-2022-08-02";
 
   src = fetchFromGitHub {
     owner = "open-watcom";
     repo = "open-watcom-v2";
-    rev = "ca685c1b780149f7210426f0bb78dd7b67b19e6d";
-    sha256 = "1nmmj94z5hips2426rcdqdcsm8015jjj51rm9fnx81qagdj52j5d";
+    rev = "4bdb73995b871982dd106838296903701ded29c2";
+    sha256 = "sha256-Ay/f+gnj8EklN8T/uP0a+Zji6HEHAoPLdkrSTQaC9Rs=";
   };
 
   postPatch = ''
@@ -41,8 +40,7 @@ stdenv.mkDerivation rec {
       --replace '-static' ""
   '';
 
-  nativeBuildInputs = [ ]
-    ++ lib.optional (withDocs || withGUI) dosbox
+  nativeBuildInputs = [ dosbox ]
     ++ lib.optional withDocs ghostscript;
 
   configurePhase = ''
@@ -55,7 +53,7 @@ stdenv.mkDerivation rec {
     export OWGUINOBUILD=${if withGUI then "0" else "1"}
     export OWNOBUILD=
     export OWDISTRBUILD=0
-    export OWDOSBOX=${lib.optionalString (withDocs || withGUI) "${dosbox}/bin/dosbox"}
+    export OWDOSBOX=${dosbox}/bin/dosbox
     export OWVERBOSE=0
     export OWRELROOT=$out
 
@@ -83,8 +81,11 @@ stdenv.mkDerivation rec {
   # Stripping breaks many tools
   dontStrip = true;
 
-  passthru.updateScript = unstableGitUpdater {
-    url = "https://github.com/open-watcom/open-watcom-v2.git";
+  passthru = {
+    prettyName = "open-watcom-v2";
+    updateScript = unstableGitUpdater {
+      url = "https://github.com/open-watcom/open-watcom-v2.git";
+    };
   };
 
   meta = with lib; {

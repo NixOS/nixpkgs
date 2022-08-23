@@ -1,13 +1,18 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python-dateutil
+
+# propagtes
 , sigtools
 , six
 , attrs
 , od
 , docutils
-, repeated_test
+
+# extras: datetime
+, python-dateutil
+
+# tests
 , pygments
 , unittest2
 , pytestCheckHook
@@ -22,13 +27,10 @@ buildPythonPackage rec {
     sha256 = "3177a028e4169d8865c79af82bdd441b24311d4bd9c0ae8803641882d340a51d";
   };
 
-  checkInputs = [
-    pytestCheckHook
-    python-dateutil
-    pygments
-    repeated_test
-    unittest2
-  ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "docutils ~= 0.17.0" "docutils"
+  '';
 
   propagatedBuildInputs = [
     attrs
@@ -36,6 +38,22 @@ buildPythonPackage rec {
     od
     sigtools
     six
+  ];
+
+  passthru.optional-dependencies = {
+    datetime = [
+      python-dateutil
+    ];
+  };
+
+  # repeated_test no longer exists in nixpkgs
+  # also see: https://github.com/epsy/clize/issues/74
+  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+    python-dateutil
+    pygments
+    unittest2
   ];
 
   pythonImportsCheck = [ "clize" ];

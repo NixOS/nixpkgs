@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "netdata";
-  version = "1.0.1";
+  version = "1.0.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "home-assistant-ecosystem";
     repo = "python-netdata";
     rev = version;
-    sha256 = "sha256-4+cTIqytHrCPG7lUZv1IhL7Bk5GlTEveQTtuCkFIepo=";
+    sha256 = "sha256-D0W+zOpD2+iynhHMZh4obUSJJKmP3DnzA7blNWi6eHk=";
   };
 
   nativeBuildInputs = [

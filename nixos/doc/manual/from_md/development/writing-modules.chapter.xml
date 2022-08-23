@@ -122,6 +122,25 @@
     services) and <literal>systemd.timers</literal> (the list of
     commands to be executed periodically by <literal>systemd</literal>).
   </para>
+  <para>
+    Care must be taken when writing systemd services using
+    <literal>Exec*</literal> directives. By default systemd performs
+    substitution on <literal>%&lt;char&gt;</literal> specifiers in these
+    directives, expands environment variables from
+    <literal>$FOO</literal> and <literal>${FOO}</literal>, splits
+    arguments on whitespace, and splits commands on
+    <literal>;</literal>. All of these must be escaped to avoid
+    unexpected substitution or splitting when interpolating into an
+    <literal>Exec*</literal> directive, e.g. when using an
+    <literal>extraArgs</literal> option to pass additional arguments to
+    the service. The functions
+    <literal>utils.escapeSystemdExecArg</literal> and
+    <literal>utils.escapeSystemdExecArgs</literal> are provided for
+    this, see <link linkend="exec-escaping-example">Example: Escaping in
+    Exec directives</link> for an example. When using these functions
+    system environment substitution should <emphasis>not</emphasis> be
+    disabled explicitly.
+  </para>
   <anchor xml:id="locate-example" />
   <para>
     <emphasis role="strong">Example: NixOS Module for the
@@ -182,6 +201,36 @@ in {
         timerConfig.OnCalendar = cfg.interval;
       };
   };
+}
+</programlisting>
+  <anchor xml:id="exec-escaping-example" />
+  <para>
+    <emphasis role="strong">Example: Escaping in Exec
+    directives</emphasis>
+  </para>
+  <programlisting language="bash">
+{ config, lib, pkgs, utils, ... }:
+
+with lib;
+
+let
+  cfg = config.services.echo;
+  echoAll = pkgs.writeScript &quot;echo-all&quot; ''
+    #! ${pkgs.runtimeShell}
+    for s in &quot;$@&quot;; do
+      printf '%s\n' &quot;$s&quot;
+    done
+  '';
+  args = [ &quot;a%Nything&quot; &quot;lang=\${LANG}&quot; &quot;;&quot; &quot;/bin/sh -c date&quot; ];
+in {
+  systemd.services.echo =
+    { description = &quot;Echo to the journal&quot;;
+      wantedBy = [ &quot;multi-user.target&quot; ];
+      serviceConfig.Type = &quot;oneshot&quot;;
+      serviceConfig.ExecStart = ''
+        ${echoAll} ${utils.escapeSystemdExecArgs args}
+      '';
+    };
 }
 </programlisting>
   <xi:include href="option-declarations.section.xml" />

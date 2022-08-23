@@ -11,7 +11,7 @@ with lib;
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable this option to support USB WWAN adapters.
         '';
       };

@@ -14,6 +14,7 @@
 , nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , propagateDoc ? cc != null && cc ? man
 , extraTools ? [], extraPackages ? [], extraBuildCommands ? ""
+, nixSupport ? {}
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
 , buildPackages ? {}
 , libcxx ? null
@@ -155,10 +156,13 @@ stdenv.mkDerivation {
             (setenv "NIX_CFLAGS_COMPILE_${suffixSalt}" (concat (getenv "NIX_CFLAGS_COMPILE_${suffixSalt}") " -isystem " arg "/include"))))
         '(${concatStringsSep " " (map (pkg: "\"${pkg}\"") pkgs)}))
     '';
+
+    inherit nixSupport;
   };
 
   dontBuild = true;
   dontConfigure = true;
+  enableParallelBuilding = true;
 
   unpackPhase = ''
     src=$PWD
@@ -245,12 +249,19 @@ stdenv.mkDerivation {
       wrap ${targetPrefix}gdc $wrapper $ccPath/${targetPrefix}gdc
     ''
 
-    + optionalString cc.langFortran or false ''
+    + optionalString cc.langFortran or false (''
       wrap ${targetPrefix}gfortran $wrapper $ccPath/${targetPrefix}gfortran
       ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}g77
       ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}f77
       export named_fc=${targetPrefix}gfortran
     ''
+    # Darwin aarch64 fortran compilations seem to fail otherwise, see:
+    # https://github.com/NixOS/nixpkgs/issues/140041
+    + (if (stdenvNoCC.isDarwin && stdenvNoCC.isAarch64) then ''
+      export fortran_hardening="pic strictoverflow relro bindnow"
+    '' else ''
+      export fortran_hardening="pic strictoverflow relro bindnow stackprotector"
+    ''))
 
     + optionalString cc.langJava or false ''
       wrap ${targetPrefix}gcj $wrapper $ccPath/${targetPrefix}gcj
@@ -291,14 +302,6 @@ stdenv.mkDerivation {
       if [[ -f "$bintools/nix-support/dynamic-linker-m32" ]]; then
         ln -s "$bintools/nix-support/dynamic-linker-m32" "$out/nix-support"
       fi
-    ''
-
-    ##
-    ## General Clang support
-    ##
-    + optionalString isClang ''
-
-      echo "-target ${targetPlatform.config}" >> $out/nix-support/cc-cflags
     ''
 
     ##
@@ -378,7 +381,6 @@ stdenv.mkDerivation {
     + optionalString (libcxx.isLLVM or false) (''
       echo "-isystem ${lib.getDev libcxx}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
       echo "-stdlib=libc++" >> $out/nix-support/libcxx-ldflags
-    '' + lib.optionalString stdenv.targetPlatform.isLinux ''
       echo "-lc++abi" >> $out/nix-support/libcxx-ldflags
     '')
 
@@ -478,7 +480,7 @@ stdenv.mkDerivation {
       hardening_unsupported_flags+=" stackprotector fortify"
     '' + optionalString targetPlatform.isAvr ''
       hardening_unsupported_flags+=" stackprotector pic"
-    '' + optionalString (targetPlatform.libc == "newlib") ''
+    '' + optionalString (targetPlatform.libc == "newlib" || targetPlatform.libc == "newlib-nano") ''
       hardening_unsupported_flags+=" stackprotector fortify pie pic"
     '' + optionalString (targetPlatform.libc == "musl" && targetPlatform.isx86_32) ''
       hardening_unsupported_flags+=" stackprotector"
@@ -487,6 +489,8 @@ stdenv.mkDerivation {
     '' + optionalString cc.langAda or false ''
       hardening_unsupported_flags+=" format stackprotector strictoverflow"
     '' + optionalString cc.langD or false ''
+      hardening_unsupported_flags+=" format"
+    '' + optionalString cc.langFortran or false ''
       hardening_unsupported_flags+=" format"
     '' + optionalString targetPlatform.isWasm ''
       hardening_unsupported_flags+=" stackprotector fortify pie pic"
@@ -519,9 +523,22 @@ stdenv.mkDerivation {
     ''
 
     ##
+    ## General Clang support
+    ## Needs to go after ^ because the for loop eats \n and makes this file an invalid script
+    ##
+    + optionalString isClang ''
+      export defaultTarget=${targetPlatform.config}
+      substituteAll ${./add-clang-cc-cflags-before.sh} $out/nix-support/add-local-cc-cflags-before.sh
+    ''
+
+    ##
     ## Extra custom steps
     ##
-    + extraBuildCommands;
+    + extraBuildCommands
+    + lib.strings.concatStringsSep "; "
+      (lib.attrsets.mapAttrsToList
+        (name: value: "echo ${toString value} >> $out/nix-support/${name}")
+        nixSupport);
 
   inherit expand-response-params;
 

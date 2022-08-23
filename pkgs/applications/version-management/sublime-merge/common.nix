@@ -121,6 +121,7 @@ in stdenv.mkDerivation (rec {
     description = "Git client from the makers of Sublime Text";
     homepage = "https://www.sublimemerge.com";
     maintainers = with maintainers; [ zookatron ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
   };

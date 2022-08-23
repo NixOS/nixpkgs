@@ -2,7 +2,6 @@
 , autoPatchelfHook
 , callPackage
 , fetchzip
-, gnome2
 , gtk2
 , gtk3
 , lib
@@ -17,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cypress";
-  version = "9.1.1";
+  version = "10.3.1";
 
   src = fetchzip {
     url = "https://cdn.cypress.io/desktop/${version}/linux-x64/cypress.zip";
-    sha256 = "sha256-zJi4fNsj2MM7sv5zb3B3a03tmkhzsb9sTTqEhpd7z+w=";
+    sha256 = "sha256-LfvTnvOGFFZn7tUQ150fCO0gw7TK6JJj+Ys75VjJJ2M=";
   };
 
   # don't remove runtime deps
@@ -38,7 +37,6 @@ stdenv.mkDerivation rec {
     nss
     gtk2
     alsa-lib
-    gnome2.GConf
     gtk3
     mesa # for libgbm
   ];
@@ -72,8 +70,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Fast, easy and reliable testing for anything that runs in a browser";
     homepage = "https://www.cypress.io";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ tweber mmahut ];
+    maintainers = with maintainers; [ tweber mmahut Crafter ];
   };
 }

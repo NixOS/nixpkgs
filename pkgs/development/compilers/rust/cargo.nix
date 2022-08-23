@@ -5,7 +5,7 @@
 }:
 
 rustPlatform.buildRustPackage {
-  name = "cargo-${rustc.version}";
+  pname = "cargo";
   inherit (rustc) version src;
 
   # the rust source tarball already has all the dependencies vendored, no need to fetch them again

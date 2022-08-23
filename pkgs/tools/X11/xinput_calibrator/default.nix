@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh --with-gui=X11";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ xorgproto libXi autoconf automake libtool m4 xlibsWrapper ];
+  nativeBuildInputs = [ pkg-config autoconf automake ];
+  buildInputs = [ xorgproto libXi libtool m4 xlibsWrapper ];
 
   meta = {
     homepage = "https://github.com/tias/xinput_calibrator";

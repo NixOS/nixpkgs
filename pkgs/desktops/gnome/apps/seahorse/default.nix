@@ -27,11 +27,11 @@
 
 stdenv.mkDerivation rec {
   pname = "seahorse";
-  version = "41.0";
+  version = "42.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-5u7AnoEESClfVH8YwdV3K2XD7cHZ5aJZXxC13eaJKfU=";
+    hash = "sha256-xQys6/jeen4uXx2uC5gjIRR0Epar6NVD45I9YqFT1jA=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +51,6 @@ stdenv.mkDerivation rec {
     gcr
     gsettings-desktop-schemas
     gnupg
-    gnome.adwaita-icon-theme
     gpgme
     libsecret
     avahi
@@ -73,9 +72,16 @@ stdenv.mkDerivation rec {
     # Add “org.gnome.crypto.pgp” GSettings schema to path
     # to make it available for “gpgme-backend” test.
     # It is used by Seahorse’s internal “common” library.
-    addToSearchPath XDG_DATA_DIRS "${glib.getSchemaPath gcr}/../.."
+    addToSearchPath XDG_DATA_DIRS "${glib.getSchemaDataDirPath gcr}"
     # The same test also requires home directory so that it can store settings.
     export HOME=$TMPDIR
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # Pick up icons from Gcr
+      --prefix XDG_DATA_DIRS : "${gcr}/share"
+    )
   '';
 
   passthru = {

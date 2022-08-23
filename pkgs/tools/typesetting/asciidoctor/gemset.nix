@@ -35,10 +35,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "10h4pmmkbcrpy7bn76wxzkb0hriabh1k3ii1g8lm0mdji5drlhq2";
+      sha256 = "0g8gn3g6qy4bzjv1b14sj283kqynjgwq62bgq569jr4dkqwmwnzd";
       type = "gem";
     };
-    version = "2.0.16";
+    version = "2.0.17";
   };
   asciidoctor-pdf = {
     dependencies = ["asciidoctor" "concurrent-ruby" "prawn" "prawn-icon" "prawn-svg" "prawn-table" "prawn-templates" "safe_yaml" "treetop"];
@@ -46,10 +46,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "17d3fa6ix6r5ikydqz41r620mm98s076wdg4w6ydsr655r7mvnpk";
+      sha256 = "1inl7cykm542jb7a6kraxkgfqn4y3185wrabh5pd5m68rdv56f04";
       type = "gem";
     };
-    version = "1.6.1";
+    version = "1.6.2";
   };
   coderay = {
     groups = ["default"];
@@ -77,10 +77,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1q8gj3wkc2mbzsqw5zcsr3kyzrrb2pda03pi769rjbvqr94g3bm5";
+      sha256 = "1qbdgp36dhcyljhmfxrvbgp1ha9yqxhxgyg3sdm48y9m371jd2an";
       type = "gem";
     };
-    version = "1.10.0";
+    version = "1.11.0";
   };
   hashery = {
     groups = ["default"];
@@ -108,10 +108,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0zgv9pp9cqd1cf8bwk7pb5lkm81gn7znnan0a7s42wd0qavs4nnz";
+      sha256 = "18vsmybpvyi0favlabjipznpc8hgprsm7jpw3s7xr01c3lpjli7y";
       type = "gem";
     };
-    version = "2.6.0";
+    version = "2.8.0";
   };
   polyglot = {
     groups = ["default"];
@@ -193,10 +193,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1mshqjh8v0v8k29f8annqfr4qlgkp39nbwx3sgm69aymv4skfddb";
+      sha256 = "047mjyzz8v4kkgi1ap6fsjf7kcp6dwirpnigif00ss0hxsxchhac";
       type = "gem";
     };
-    version = "2.2.0";
+    version = "2.3.0";
   };
   rexml = {
     groups = ["default"];
@@ -213,10 +213,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "197k0vskf72wxx0gzwld2jzg27bb7982xlvnzy9adlvkzp7nh8vf";
+      sha256 = "0530ri0p60km0bg0ib6swkhfnas427cva7vcdmnwl8df52a10y1k";
       type = "gem";
     };
-    version = "3.26.1";
+    version = "3.27.0";
   };
   ruby-rc4 = {
     groups = ["default"];

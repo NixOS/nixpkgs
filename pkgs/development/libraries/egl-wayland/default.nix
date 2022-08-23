@@ -42,7 +42,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "egl-wayland";
-  version = "1.1.9";
+  version = "1.1.10";
 
   outputs = [ "out" "dev" ];
 
@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
     owner = "Nvidia";
     repo = pname;
     rev = version;
-    sha256 = "sha256-rcmGVEcOtKTR8sVkHV7Xb+8NuKWUapYn+/Fswi4z6Mc=";
+    sha256 = "sha256-dbcEMtPnzF2t7O8YtKVUGSvJqb5WPMmmW+SyqOFnDY4=";
   };
 
   depsBuildBuild = [

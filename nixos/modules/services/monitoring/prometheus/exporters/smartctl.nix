@@ -24,15 +24,16 @@ in {
       example = literalExpression ''
         [ "/dev/sda", "/dev/nvme0n1" ];
       '';
-      description = ''
-        Paths to disks that will be monitored.
+      description = lib.mdDoc ''
+        Paths to the disks that will be monitored. Will autodiscover
+        all disks if none given.
       '';
     };
     maxInterval = mkOption {
       type = types.str;
       default = "60s";
       example = "2m";
-      description = ''
+      description = lib.mdDoc ''
         Interval that limits how often a disk can be queried.
       '';
     };
@@ -41,13 +42,23 @@ in {
   serviceOpts = {
     serviceConfig = {
       AmbientCapabilities = [
+        "CAP_SYS_RAWIO"
         "CAP_SYS_ADMIN"
       ];
       CapabilityBoundingSet = [
+        "CAP_SYS_RAWIO"
         "CAP_SYS_ADMIN"
       ];
       DevicePolicy = "closed";
-      DeviceAllow = lib.mkForce cfg.devices;
+      DeviceAllow = lib.mkOverride 100 (
+        if cfg.devices != [] then
+          cfg.devices
+        else [
+          "block-blkext rw"
+          "block-sd rw"
+          "char-nvme rw"
+        ]
+      );
       ExecStart = ''
         ${pkgs.prometheus-smartctl-exporter}/bin/smartctl_exporter -config ${configFile}
       '';

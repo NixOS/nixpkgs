@@ -1,4 +1,6 @@
 { lib
+, buildLuarocksPackage
+, callPackage
 , vimUtils
 , nodejs
 , neovim-unwrapped
@@ -9,21 +11,18 @@
 , wrapNeovimUnstable
 }:
 let
-  # returns everything needed for the caller to wrap its own neovim:
-  # - the generated content of the future init.vim
-  # - the arguments to wrap neovim with
-  # The caller is responsible for writing the init.vim and adding it to the wrapped
-  # arguments (["-u" writeText "init.vim" GENERATEDRC)]).
-  # This makes it possible to write the config anywhere: on a per-project basis
-  # .nvimrc or in $XDG_CONFIG_HOME/nvim/init.vim to avoid sideeffects.
-  # Indeed, note that wrapping with `-u init.vim` has sideeffects like .nvimrc wont be loaded
-  # anymore, $MYVIMRC wont be set etc
+   /* returns everything needed for the caller to wrap its own neovim:
+   - the generated content of the future init.vim
+   - the arguments to wrap neovim with
+   The caller is responsible for writing the init.vim and adding it to the wrapped
+   arguments (["-u" writeText "init.vim" GENERATEDRC)]).
+   This makes it possible to write the config anywhere: on a per-project basis
+   .nvimrc or in $XDG_CONFIG_HOME/nvim/init.vim to avoid sideeffects.
+   Indeed, note that wrapping with `-u init.vim` has sideeffects like .nvimrc wont be loaded
+   anymore, $MYVIMRC wont be set etc
+   */
   makeNeovimConfig =
-    {
-    withPython2 ? false
-    /* the function you would have passed to python.withPackages */
-    , extraPython2Packages ? (_: [ ])
-    , withPython3 ? true
+    { withPython3 ? true
     /* the function you would have passed to python3.withPackages */
     , extraPython3Packages ? (_: [ ])
     , withNodeJs ? false
@@ -34,10 +33,8 @@ let
     # expects a list of plugin configuration
     # expects { plugin=far-vim; config = "let g:far#source='rg'"; optional = false; }
     , plugins ? []
-    # forwarded to configure.customRC
+    # custom viml config appended after plugin-specific config
     , customRC ? ""
-    # same values as in vimUtils.vimrcContent
-    , configure ? { }
 
     # for forward compability, when adding new environments, haskell etc.
     , ...
@@ -52,25 +49,25 @@ let
       };
 
       # transform all plugins into an attrset
-      pluginsNormalized = map (x: if x ? plugin then { optional = false; } // x else { plugin = x; optional = false;}) plugins;
+      # { optional = bool; plugin = package; }
+      pluginsNormalized = let
+        defaultPlugin = {
+          plugin = null;
+          config = null;
+          optional = false;
+        };
+      in
+        map (x: defaultPlugin // (if (x ? plugin) then x else { plugin = x; })) plugins;
 
+      pluginRC = lib.foldl (acc: p: if p.config != null then acc ++ [p.config] else acc) []  pluginsNormalized;
 
-      configurePatched = configure // {
-        customRC = pluginRc + customRC + (configure.customRC or "");
-      };
-
-      # A function to get the configuration string (if any) from an element of 'plugins'
-      pluginConfig = p:
-        if (p.config or "") != "" then ''
-          " ${p.plugin.pname or p.plugin.name} {{{
-          ${p.config}
-          " }}}
-        '' else "";
-
-      pluginRc = lib.concatMapStrings pluginConfig pluginsNormalized;
-
-      requiredPlugins = vimUtils.requiredPlugins configurePatched;
+      pluginsPartitioned = lib.partition (x: x.optional == true) pluginsNormalized;
+      requiredPlugins = vimUtils.requiredPluginsForPackage myVimPackage;
       getDeps = attrname: map (plugin: plugin.${attrname} or (_: [ ]));
+      myVimPackage = {
+            start = map (x: x.plugin) pluginsPartitioned.wrong;
+            opt = map (x: x.plugin) pluginsPartitioned.right;
+      };
 
       pluginPython3Packages = getDeps "python3Dependencies" requiredPlugins;
       python3Env = python3Packages.python.withPackages (ps:
@@ -100,15 +97,19 @@ let
         let
           binPath = lib.makeBinPath (lib.optionals withRuby [ rubyEnv ] ++ lib.optionals withNodeJs [ nodejs ]);
 
-          flags = lib.concatLists (lib.mapAttrsToList (
-              prog: withProg: [
-                "--cmd" (genProviderSettings prog withProg)
-              ]
-            )
-            hostprog_check_table);
+          hostProviderViml = lib.mapAttrsToList genProviderSettings hostprog_check_table;
+
+          # as expected by packdir
+          packDirArgs.myNeovimPackages = myVimPackage;
+
+          # vim accepts a limited number of commands so we join them all
+          flags = [
+            "--cmd" (lib.intersperse "|" hostProviderViml)
+            "--cmd" "set packpath^=${vimUtils.packDir packDirArgs}"
+            ];
         in
         [
-          "--argv0" "$0" "--add-flags" (lib.escapeShellArgs flags)
+          "--inherit-argv0" "--add-flags" (lib.escapeShellArgs flags)
         ] ++ lib.optionals withRuby [
           "--set" "GEM_HOME" "${rubyEnv}/${rubyEnv.ruby.gemPath}"
         ] ++ lib.optionals (binPath != "") [
@@ -118,11 +119,14 @@ let
           "--prefix" "LUA_CPATH" ";" (neovim-unwrapped.lua.pkgs.lib.genLuaCPathAbsStr luaEnv)
         ];
 
-
-      manifestRc = vimUtils.vimrcContent (configurePatched // { customRC = ""; }) ;
-      neovimRcContent = vimUtils.vimrcContent configurePatched;
+      manifestRc = vimUtils.vimrcContent ({ customRC = ""; }) ;
+      # we call vimrcContent without 'packages' to avoid the init.vim generation
+      neovimRcContent = vimUtils.vimrcContent ({
+        beforePlugins = "";
+        customRC = lib.concatStringsSep "\n" (pluginRC ++ [customRC]);
+        packages = null;
+      });
     in
-    assert withPython2 -> throw "Python2 support has been removed from neovim, please remove withPython2 and extraPython2Packages.";
 
     builtins.removeAttrs args ["plugins"] // {
       wrapperArgs = makeWrapperArgs;
@@ -142,10 +146,9 @@ let
         "let g:loaded_${prog}_provider=0"
     ;
 
-  # to keep backwards compatibility
+  # to keep backwards compatibility for people using neovim.override
   legacyWrapper = neovim: {
     extraMakeWrapperArgs ? ""
-    , withPython ? false
     /* the function you would have passed to python.withPackages */
     , extraPythonPackages ? (_: [])
     /* the function you would have passed to python.withPackages */
@@ -160,22 +163,25 @@ let
     , extraName ? ""
   }:
     let
-      /* for compatibility with passing extraPythonPackages as a list; added 2018-07-11 */
-      compatFun = funOrList: (if builtins.isList funOrList then
-        (_: lib.warn "passing a list as extraPythonPackages to the neovim wrapper is deprecated, pass a function as to python.withPackages instead" funOrList)
-      else funOrList);
+
+      # we convert from the old configure.format to
+      plugins = if builtins.hasAttr "plug" configure then
+          throw "The neovim legacy wrapper doesn't support configure.plug anymore, please setup your plugins via 'configure.packages' instead"
+        else
+          lib.flatten (lib.mapAttrsToList genPlugin (configure.packages or {}));
+      genPlugin = packageName: {start ? [], opt?[]}:
+        start ++ opt;
 
       res = makeNeovimConfig {
         inherit withPython3;
-        extraPython3Packages = compatFun extraPython3Packages;
+        inherit extraPython3Packages;
         inherit extraLuaPackages;
         inherit withNodeJs withRuby viAlias vimAlias;
-        inherit configure;
+        customRC = configure.customRC or "";
+        inherit plugins;
         inherit extraName;
       };
     in
-    assert withPython -> throw "Python2 support has been removed from neovim, please remove withPython and extraPythonPackages.";
-
     wrapNeovimUnstable neovim (res // {
       wrapperArgs = lib.escapeShellArgs res.wrapperArgs + " " + extraMakeWrapperArgs;
       wrapRc = (configure != {});
@@ -184,4 +190,9 @@ in
 {
   inherit makeNeovimConfig;
   inherit legacyWrapper;
+
+  buildNeovimPluginFrom2Nix = callPackage ./build-neovim-plugin.nix {
+    inherit (vimUtils) buildVimPluginFrom2Nix toVimPlugin;
+    inherit buildLuarocksPackage;
+  };
 }

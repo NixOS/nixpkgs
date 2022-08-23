@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     description = "Small weblog engine written in Bash for the command line";
     homepage = "http://nanoblogger.sourceforge.net/";
     license = lib.licenses.gpl2;
+    mainProgram = "nb";
     platforms = lib.platforms.unix;
   };
 }

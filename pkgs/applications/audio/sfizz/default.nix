@@ -1,16 +1,17 @@
 { lib, stdenv, fetchFromGitHub, libjack2, libsndfile, xorg, freetype
 , libxkbcommon, cairo, glib, gnome, flac, libogg, libvorbis, libopus, cmake
-, pango, pkg-config }:
+, pango, pkg-config, catch2
+}:
 
 stdenv.mkDerivation rec {
   pname = "sfizz";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "sfztools";
     repo = pname;
     rev = version;
-    sha256 = "1gzpbns89j6ggzfjjvyhgigynsv20synrs7lmc32hwp4g73l0j7n";
+    sha256 = "sha256-biHsB49Ym9NU4tMOVnUNuIxPtpcIi6oCAS7JBPhxwec=";
     fetchSubmodules = true;
   };
 
@@ -40,6 +41,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   postPatch = ''
+    cp ${catch2}/include/catch2/catch.hpp tests/catch2/catch.hpp
+
     substituteInPlace plugins/editor/external/vstgui4/vstgui/lib/platform/linux/x11fileselector.cpp \
       --replace 'zenitypath = "zenity"' 'zenitypath = "${gnome.zenity}/bin/zenity"'
     substituteInPlace plugins/editor/src/editor/NativeHelpers.cpp \
@@ -47,6 +50,8 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" "-DSFIZZ_TESTS=ON" ];
+
+  doCheck = true;
 
   meta = with lib; {
     homepage = "https://github.com/sfztools/sfizz";

@@ -2,9 +2,11 @@
 , buildPythonPackage
 , docopt
 , fetchFromGitHub
+, fetchpatch
 , hypothesis
 , passlib
 , poetry-core
+, pytest-logdog
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
@@ -15,23 +17,21 @@
 
 buildPythonPackage rec {
   pname = "amqtt";
-  version = "0.10.0";
+  version = "unstable-2022-05-29";
   format = "pyproject";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Yakifo";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-27LmNR1KC8w3zRJ7YBlBolQ4Q70ScTPqypMCpU6fO+I=";
+    rev = "09ac98d39a711dcff0d8f22686916e1c2495144b";
+    hash = "sha256-8T1XhBSOiArlUQbQ41LsUogDgOurLhf+M8mjIrrAC4s=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'websockets = "^9.0"' 'websockets = "^10.0"'
-  '';
-
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     docopt
@@ -43,22 +43,28 @@ buildPythonPackage rec {
 
   checkInputs = [
     hypothesis
+    pytest-logdog
     pytest-asyncio
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
+  ];
+
   disabledTestPaths = [
     # Test are not ported from hbmqtt yet
-    "tests/test_cli.py"
     "tests/test_client.py"
   ];
 
-  disabledTests = [
-    # Requires network access
-    "test_connect_tcp"
-  ];
+  preCheck = ''
+    # Some tests need amqtt
+    export PATH=$out/bin:$PATH
+  '';
 
-  pythonImportsCheck = [ "amqtt" ];
+  pythonImportsCheck = [
+    "amqtt"
+  ];
 
   meta = with lib; {
     description = "Python MQTT client and broker implementation";

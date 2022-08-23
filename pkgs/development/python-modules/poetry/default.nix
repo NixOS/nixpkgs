@@ -1,20 +1,28 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27, pythonOlder, fetchpatch
+{ lib
+, buildPythonPackage
 , cachecontrol
 , cachy
 , cleo
 , clikit
+, crashtest
+, dataclasses
+, entrypoints
+, fetchFromGitHub
+, fetchpatch
 , html5lib
 , httpretty
 , importlib-metadata
 , intreehooks
 , keyring
 , lockfile
+, packaging
 , pexpect
 , pkginfo
 , poetry-core
-, pytestCheckHook
-, pytest-cov
 , pytest-mock
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
 , requests
 , requests-toolbelt
 , shellingham
@@ -24,34 +32,41 @@
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "1.1.12";
+  version = "1.1.14";
   format = "pyproject";
-  disabled = isPy27;
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = pname;
     rev = version;
-    sha256 = "1fm4yj6wxr24v7b77gmf63j7xsgszhbhzw2i9fvlfi0p9l0q34pm";
+    sha256 = "sha256-n/GZOUoIMxWlULDqOe59Gt7Hz/+Mc4QcZT+1+HtQovs=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-     --replace 'importlib-metadata = {version = "^1.6.0", python = "<3.8"}' \
+      --replace 'importlib-metadata = {version = "^1.6.0", python = "<3.8"}' \
        'importlib-metadata = {version = ">=1.6", python = "<3.8"}' \
-     --replace 'version = "^21.2.0"' 'version = ">=21.2"'
+      --replace 'version = "^21.2.0"' 'version = ">=21.2"' \
+      --replace 'packaging = "^20.4"' 'packaging = "*"'
   '';
 
-  nativeBuildInputs = [ intreehooks ];
+  nativeBuildInputs = [
+    intreehooks
+  ];
 
   propagatedBuildInputs = [
     cachecontrol
     cachy
     cleo
     clikit
+    crashtest
+    entrypoints
     html5lib
     keyring
     lockfile
+    packaging
     pexpect
     pkginfo
     poetry-core
@@ -60,7 +75,11 @@ buildPythonPackage rec {
     shellingham
     tomlkit
     virtualenv
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ] ++ lib.optionals (pythonOlder "3.7") [
+    dataclasses
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ];
 
   postInstall = ''
     mkdir -p "$out/share/bash-completion/completions"
@@ -71,8 +90,16 @@ buildPythonPackage rec {
     "$out/bin/poetry" completions fish > "$out/share/fish/vendor_completions.d/poetry.fish"
   '';
 
-  checkInputs = [ pytestCheckHook httpretty pytest-mock pytest-cov ];
-  preCheck = "export HOME=$TMPDIR";
+  checkInputs = [
+    pytestCheckHook
+    httpretty
+    pytest-mock
+  ];
+
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
+
   disabledTests = [
     # touches network
     "git"
@@ -87,11 +114,14 @@ buildPythonPackage rec {
     "lock"
     # fs permission errors
     "test_builder_should_execute_build_scripts"
+  ] ++ lib.optionals (pythonAtLeast "3.10") [
+    # RuntimeError: 'auto_spec' might be a typo; use unsafe=True if this is intended
+    "test_info_setup_complex_pep517_error"
   ];
 
   patches = [
     # The following patch addresses a minor incompatibility with
-    # pytest-mock.  This is addressed upstream in
+    # pytest-mock. This is addressed upstream in
     # https://github.com/python-poetry/poetry/pull/3457
     (fetchpatch {
       url = "https://github.com/python-poetry/poetry/commit/8ddceb7c52b3b1f35412479707fa790e5d60e691.diff";
@@ -99,8 +129,10 @@ buildPythonPackage rec {
     })
   ];
 
-  # allow for package to use pep420's native namespaces
-  pythonNamespaces = [ "poetry" ];
+  # Allow for package to use pep420's native namespaces
+  pythonNamespaces = [
+    "poetry"
+  ];
 
   meta = with lib; {
     homepage = "https://python-poetry.org/";

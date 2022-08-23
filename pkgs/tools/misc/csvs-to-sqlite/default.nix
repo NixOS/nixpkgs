@@ -7,7 +7,14 @@ let
   # Workaround the issue by providing click 7 explicitly.
   python = python3.override {
     packageOverrides = self: super: {
-      click = self.callPackage ../../../development/python-modules/click/7.nix { };
+      # Use click 7
+      click = super.click.overridePythonAttrs (old: rec {
+        version = "7.1.2";
+        src = old.src.override {
+          inherit version;
+          sha256 = "d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a";
+        };
+      });
     };
   };
 in with python.pkgs; buildPythonApplication rec {

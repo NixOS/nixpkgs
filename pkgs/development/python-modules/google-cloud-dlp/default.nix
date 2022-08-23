@@ -9,20 +9,34 @@
 , pytest-asyncio
 , pytz
 , mock
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-dlp";
-  version = "3.4.0";
+  version = "3.8.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0b249fa87deb57f5c7107a7d5d303673590a6524a7f113fc95f87493f3328606";
+    hash = "sha256-xidZ7EteyDUFxxXOXgSg6OUkzlIzEgnAMRledha0s/Y=";
   };
 
-  propagatedBuildInputs = [ google-api-core libcst proto-plus pytz ];
+  propagatedBuildInputs = [
+    google-api-core
+    libcst
+    proto-plus
+    pytz
+  ];
 
-  checkInputs = [ google-cloud-testutils mock pytestCheckHook pytest-asyncio ];
+  checkInputs = [
+    google-cloud-testutils
+    mock
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
   disabledTests = [
     # requires credentials

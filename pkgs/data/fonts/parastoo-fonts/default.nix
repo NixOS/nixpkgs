@@ -2,7 +2,7 @@
 
 let
   pname = "parastoo-fonts";
-  version = "1.0.0-alpha5";
+  version = "2.0.1";
 in fetchFromGitHub {
   name = "${pname}-${version}";
 
@@ -14,13 +14,13 @@ in fetchFromGitHub {
     tar xf $downloadedFile --strip=1
     find . -name '*.ttf' -exec install -m444 -Dt $out/share/fonts/parastoo-fonts {} \;
   '';
-  sha256 = "10jbii6rskcy4akjl5yfcqv4mfwk3nqnx36l6sbxks43va9l04f4";
+  sha256 = "sha256-4smobLS43DB7ISmbWDWX0IrtaeiyXpi1QpAiL8NyXoQ=";
 
   meta = with lib; {
     homepage = "https://github.com/rastikerdar/parastoo-font";
     description = "A Persian (Farsi) Font - فونت ( قلم ) فارسی پرستو";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = [ maintainers.linarcx ];
+    maintainers = [ ];
   };
 }

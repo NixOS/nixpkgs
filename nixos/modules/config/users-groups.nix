@@ -6,12 +6,6 @@ let
   ids = config.ids;
   cfg = config.users;
 
-  isPasswdCompatible = str: !(hasInfix ":" str || hasInfix "\n" str);
-  passwdEntry = type: lib.types.addCheck type isPasswdCompatible // {
-    name = "passwdEntry ${type.name}";
-    description = "${type.description}, not containing newlines or colons";
-  };
-
   # Check whether a password hash will allow login.
   allowsLogin = hash:
     hash == "" # login without password
@@ -48,7 +42,7 @@ let
     services such as SSH, or indirectly via <command>su</command> or
     <command>sudo</command>). This should only be used for e.g. bootable
     live systems. Note: this is different from setting an empty password,
-    which ca be achieved using <option>users.users.&lt;name?&gt;.password</option>.
+    which can be achieved using <option>users.users.&lt;name?&gt;.password</option>.
 
     If set to <literal>null</literal> (default) this user will not
     be able to log in using a password (i.e. via <command>login</command>
@@ -60,29 +54,29 @@ let
     options = {
 
       name = mkOption {
-        type = passwdEntry types.str;
+        type = types.passwdEntry types.str;
         apply = x: assert (builtins.stringLength x < 32 || abort "Username '${x}' is longer than 31 characters which is not allowed!"); x;
-        description = ''
+        description = lib.mdDoc ''
           The name of the user account. If undefined, the name of the
           attribute set will be used.
         '';
       };
 
       description = mkOption {
-        type = passwdEntry types.str;
+        type = types.passwdEntry types.str;
         default = "";
         example = "Alice Q. User";
-        description = ''
+        description = lib.mdDoc ''
           A short description of the user account, typically the
           user's full name.  This is actually the “GECOS” or “comment”
-          field in <filename>/etc/passwd</filename>.
+          field in {file}`/etc/passwd`.
         '';
       };
 
       uid = mkOption {
         type = with types; nullOr int;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           The account UID. If the UID is null, a free UID is picked on
           activation.
         '';
@@ -91,32 +85,32 @@ let
       isSystemUser = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Indicates if the user is a system user or not. This option
-          only has an effect if <option>uid</option> is
-          <option>null</option>, in which case it determines whether
+          only has an effect if {option}`uid` is
+          {option}`null`, in which case it determines whether
           the user's UID is allocated in the range for system users
           (below 500) or in the range for normal users (starting at
           1000).
-          Exactly one of <literal>isNormalUser</literal> and
-          <literal>isSystemUser</literal> must be true.
+          Exactly one of `isNormalUser` and
+          `isSystemUser` must be true.
         '';
       };
 
       isNormalUser = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Indicates whether this is an account for a “real” user. This
-          automatically sets <option>group</option> to
-          <literal>users</literal>, <option>createHome</option> to
-          <literal>true</literal>, <option>home</option> to
-          <filename>/home/<replaceable>username</replaceable></filename>,
-          <option>useDefaultShell</option> to <literal>true</literal>,
-          and <option>isSystemUser</option> to
-          <literal>false</literal>.
-          Exactly one of <literal>isNormalUser</literal> and
-          <literal>isSystemUser</literal> must be true.
+          automatically sets {option}`group` to
+          `users`, {option}`createHome` to
+          `true`, {option}`home` to
+          {file}`/home/«username»`,
+          {option}`useDefaultShell` to `true`,
+          and {option}`isSystemUser` to
+          `false`.
+          Exactly one of `isNormalUser` and
+          `isSystemUser` must be true.
         '';
       };
 
@@ -124,25 +118,31 @@ let
         type = types.str;
         apply = x: assert (builtins.stringLength x < 32 || abort "Group name '${x}' is longer than 31 characters which is not allowed!"); x;
         default = "";
-        description = "The user's primary group.";
+        description = lib.mdDoc "The user's primary group.";
       };
 
       extraGroups = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = "The user's auxiliary groups.";
+        description = lib.mdDoc "The user's auxiliary groups.";
       };
 
       home = mkOption {
-        type = passwdEntry types.path;
+        type = types.passwdEntry types.path;
         default = "/var/empty";
-        description = "The user's home directory.";
+        description = lib.mdDoc "The user's home directory.";
+      };
+
+      homeMode = mkOption {
+        type = types.strMatching "[0-7]{1,5}";
+        default = "700";
+        description = lib.mdDoc "The user's home directory mode in numeric format. See chmod(1). The mode is only applied if {option}`users.users.<name>.createHome` is true.";
       };
 
       cryptHomeLuks = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Path to encrypted luks device that contains
           the user's home directory.
         '';
@@ -151,28 +151,27 @@ let
       pamMount = mkOption {
         type = with types; attrsOf str;
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           Attributes for user's entry in
-          <filename>pam_mount.conf.xml</filename>.
-          Useful attributes might include <code>path</code>,
-          <code>options</code>, <code>fstype</code>, and <code>server</code>.
-          See <link
-          xlink:href="http://pam-mount.sourceforge.net/pam_mount.conf.5.html" />
+          {file}`pam_mount.conf.xml`.
+          Useful attributes might include `path`,
+          `options`, `fstype`, and `server`.
+          See <http://pam-mount.sourceforge.net/pam_mount.conf.5.html>
           for more information.
         '';
       };
 
       shell = mkOption {
-        type = types.nullOr (types.either types.shellPackage (passwdEntry types.path));
+        type = types.nullOr (types.either types.shellPackage (types.passwdEntry types.path));
         default = pkgs.shadow;
         defaultText = literalExpression "pkgs.shadow";
         example = literalExpression "pkgs.bashInteractive";
-        description = ''
+        description = lib.mdDoc ''
           The path to the user's shell. Can use shell derivations,
-          like <literal>pkgs.bashInteractive</literal>. Don’t
+          like `pkgs.bashInteractive`. Don’t
           forget to enable your shell in
-          <literal>programs</literal> if necessary,
-          like <code>programs.zsh.enable = true;</code>.
+          `programs` if necessary,
+          like `programs.zsh.enable = true;`.
         '';
       };
 
@@ -183,10 +182,10 @@ let
           { startUid = 1000; count = 1; }
           { startUid = 100001; count = 65534; }
         ];
-        description = ''
+        description = lib.mdDoc ''
           Subordinate user ids that user is allowed to use.
-          They are set into <filename>/etc/subuid</filename> and are used
-          by <literal>newuidmap</literal> for user namespaces.
+          They are set into {file}`/etc/subuid` and are used
+          by `newuidmap` for user namespaces.
         '';
       };
 
@@ -197,17 +196,27 @@ let
           { startGid = 100; count = 1; }
           { startGid = 1001; count = 999; }
         ];
-        description = ''
+        description = lib.mdDoc ''
           Subordinate group ids that user is allowed to use.
-          They are set into <filename>/etc/subgid</filename> and are used
-          by <literal>newgidmap</literal> for user namespaces.
+          They are set into {file}`/etc/subgid` and are used
+          by `newgidmap` for user namespaces.
+        '';
+      };
+
+      autoSubUidGidRange = mkOption {
+        type = types.bool;
+        default = false;
+        example = true;
+        description = lib.mdDoc ''
+          Automatically allocate subordinate user and group ids for this user.
+          Allocated range is currently always of size 65536.
         '';
       };
 
       createHome = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to create the home directory and ensure ownership as well as
           permissions to match the user.
         '';
@@ -216,9 +225,9 @@ let
       useDefaultShell = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           If true, the user's shell will be set to
-          <option>users.defaultUserShell</option>.
+          {option}`users.defaultUserShell`.
         '';
       };
 
@@ -274,13 +283,13 @@ let
       initialPassword = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Specifies the initial password for the user, i.e. the
           password assigned if the user does not already exist. If
-          <option>users.mutableUsers</option> is true, the password
+          {option}`users.mutableUsers` is true, the password
           can be changed subsequently using the
-          <command>passwd</command> command. Otherwise, it's
-          equivalent to setting the <option>password</option>
+          {command}`passwd` command. Otherwise, it's
+          equivalent to setting the {option}`password`
           option. The same caveat applies: the password specified here
           is world-readable in the Nix store, so it should only be
           used for guest accounts or passwords that will be changed
@@ -292,9 +301,9 @@ let
         type = types.listOf types.package;
         default = [];
         example = literalExpression "[ pkgs.firefox pkgs.thunderbird ]";
-        description = ''
+        description = lib.mdDoc ''
           The set of packages that should be made available to the user.
-          This is in contrast to <option>environment.systemPackages</option>,
+          This is in contrast to {option}`environment.systemPackages`,
           which adds packages to all users.
         '';
       };
@@ -309,6 +318,7 @@ let
           group = mkDefault "users";
           createHome = mkDefault true;
           home = mkDefault "/home/${config.name}";
+          homeMode = mkDefault "700";
           useDefaultShell = mkDefault true;
           isSystemUser = mkDefault false;
         })
@@ -320,6 +330,9 @@ let
         (mkIf (!cfg.mutableUsers && config.initialHashedPassword != null) {
           hashedPassword = mkDefault config.initialHashedPassword;
         })
+        (mkIf (config.isNormalUser && config.subUidRanges == [] && config.subGidRanges == []) {
+          autoSubUidGidRange = mkDefault true;
+        })
       ];
 
   };
@@ -329,8 +342,8 @@ let
     options = {
 
       name = mkOption {
-        type = passwdEntry types.str;
-        description = ''
+        type = types.passwdEntry types.str;
+        description = lib.mdDoc ''
           The name of the group. If undefined, the name of the attribute set
           will be used.
         '';
@@ -339,7 +352,7 @@ let
       gid = mkOption {
         type = with types; nullOr int;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           The group GID. If the GID is null, a free GID is picked on
           activation.
         '';
@@ -348,9 +361,9 @@ let
       members = mkOption {
         type = with types; listOf (passwdEntry str);
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           The user names of the group members, added to the
-          <literal>/etc/group</literal> file.
+          `/etc/group` file.
         '';
       };
 
@@ -370,7 +383,7 @@ let
     options = {
       startUid = mkOption {
         type = types.int;
-        description = ''
+        description = lib.mdDoc ''
           Start of the range of subordinate user ids that user is
           allowed to use.
         '';
@@ -378,7 +391,7 @@ let
       count = mkOption {
         type = types.int;
         default = 1;
-        description = "Count of subordinate user ids";
+        description = lib.mdDoc "Count of subordinate user ids";
       };
     };
   };
@@ -387,7 +400,7 @@ let
     options = {
       startGid = mkOption {
         type = types.int;
-        description = ''
+        description = lib.mdDoc ''
           Start of the range of subordinate group ids that user is
           allowed to use.
         '';
@@ -395,7 +408,7 @@ let
       count = mkOption {
         type = types.int;
         default = 1;
-        description = "Count of subordinate group ids";
+        description = lib.mdDoc "Count of subordinate group ids";
       };
     };
   };
@@ -417,9 +430,9 @@ let
     inherit (cfg) mutableUsers;
     users = mapAttrsToList (_: u:
       { inherit (u)
-          name uid group description home createHome isSystemUser
+          name uid group description home homeMode createHome isSystemUser
           password passwordFile hashedPassword
-          isNormalUser subUidRanges subGidRanges
+          autoSubUidGidRange subUidRanges subGidRanges
           initialPassword initialHashedPassword;
         shell = utils.toShellPath u.shell;
       }) cfg.users;
@@ -436,16 +449,10 @@ in {
   imports = [
     (mkAliasOptionModule [ "users" "extraUsers" ] [ "users" "users" ])
     (mkAliasOptionModule [ "users" "extraGroups" ] [ "users" "groups" ])
-    (mkChangedOptionModule
-      [ "security" "initialRootPassword" ]
-      [ "users" "users" "root" "initialHashedPassword" ]
-      (cfg: if cfg.security.initialRootPassword == "!"
-            then null
-            else cfg.security.initialRootPassword))
+    (mkRenamedOptionModule ["security" "initialRootPassword"] ["users" "users" "root" "initialHashedPassword"])
   ];
 
   ###### interface
-
   options = {
 
     users.mutableUsers = mkOption {
@@ -476,7 +483,7 @@ in {
     users.enforceIdUniqueness = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether to require that no two users/groups share the same uid/gid.
       '';
     };
@@ -495,7 +502,7 @@ in {
           shell = "/bin/sh";
         };
       };
-      description = ''
+      description = lib.mdDoc ''
         Additional user accounts to be created automatically by the system.
         This can also be used to set options for root.
       '';
@@ -508,11 +515,22 @@ in {
           hackers = { };
         };
       type = with types; attrsOf (submodule groupOpts);
-      description = ''
+      description = lib.mdDoc ''
         Additional groups to be created automatically by the system.
       '';
     };
 
+
+    users.allowNoPasswordLogin = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Disable checking that at least the `root` user or a user in the `wheel` group can log in using
+        a password or an SSH key.
+
+        WARNING: enabling this can lock you out of your system. Enable this only if you know what are you doing.
+      '';
+    };
   };
 
 
@@ -527,6 +545,7 @@ in {
         home = "/root";
         shell = mkDefault cfg.defaultUserShell;
         group = "root";
+        initialHashedPassword = mkDefault "!";
       };
       nobody = {
         uid = ids.uids.nobody;
@@ -603,9 +622,11 @@ in {
         # there is at least one "privileged" account that has a
         # password or an SSH authorized key. Privileged accounts are
         # root and users in the wheel group.
-        assertion = !cfg.mutableUsers ->
-          any id ((mapAttrsToList (_: cfg:
-            (cfg.name == "root"
+        # The check does not apply when users.disableLoginPossibilityAssertion
+        # The check does not apply when users.mutableUsers
+        assertion = !cfg.mutableUsers -> !cfg.allowNoPasswordLogin ->
+          any id (mapAttrsToList (name: cfg:
+            (name == "root"
              || cfg.group == "wheel"
              || elem "wheel" cfg.extraGroups)
             &&
@@ -614,12 +635,16 @@ in {
              || cfg.passwordFile != null
              || cfg.openssh.authorizedKeys.keys != []
              || cfg.openssh.authorizedKeys.keyFiles != [])
-          ) cfg.users) ++ [
+          ) cfg.users ++ [
             config.security.googleOsLogin.enable
           ]);
         message = ''
           Neither the root account nor any wheel user has a password or SSH authorized key.
-          You must set one to prevent being locked out of your system.'';
+          You must set one to prevent being locked out of your system.
+          If you really want to be locked out of your system, set users.allowNoPasswordLogin = true;
+          However you are most probably better off by setting users.mutableUsers = true; and
+          manually running passwd root to set the root password.
+          '';
       }
     ] ++ flatten (flip mapAttrsToList cfg.users (name: user:
       [

@@ -5,14 +5,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.02r5";
-  pname = "llibhomfly";
+  version = "1.02r6";
+  pname = "libhomfly";
 
   src = fetchFromGitHub {
     owner = "miguelmarco";
     repo = "libhomfly";
     rev = version;
-    sha256 = "1szv8iwlhvmy3saigi15xz8vgch92p2lbsm6440v5s8vxj455bvd";
+    sha256 = "sha256-s1Hgy6S9+uREKsgjOVQdQfnds6oSLo5UWTrt5DJnY2s=";
   };
 
   buildInputs = [

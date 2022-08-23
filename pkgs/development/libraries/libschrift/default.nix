@@ -2,22 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libschrift";
-  version = "0.10.0";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "tomolt";
     repo = pname;
-    rev = "c207585486b3e78ec5506f55f5d56178f421a53c";
-    sha256 = "13qrplsi2a53s84giwnzqmn0zbslyaagvjn89wsn9fd90m2v2bs1";
+    rev = "v" + version;
+    sha256 = "01hgvkcb46kr9jzc4ah0js0jy9kr0ll18j2k0c5zil55l3a9rqw1";
   };
-
-  # fix a compilation failure related to darwin integers, remove at next release
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/tomolt/libschrift/commit/1b1292f2cf4b582d66b2f6c87105997391f9fa08.patch";
-      sha256 = "076l3n28famgi74nr5bz47yn192bm76p8c8558fm5zj5c21pcfsv";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace config.mk \

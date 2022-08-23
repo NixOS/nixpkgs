@@ -4,21 +4,21 @@ let
   common = { stname, target, postInstall ? "" }:
     buildGoModule rec {
       pname = stname;
-      version = "1.18.5";
+      version = "1.20.4";
 
       src = fetchFromGitHub {
-        owner  = "syncthing";
-        repo   = "syncthing";
-        rev    = "v${version}";
-        sha256 = "sha256-qGPAfNsl20+k5Gn0w6aY8VFSOmpPk7S5u4FHPrSCz80=";
+        owner = "syncthing";
+        repo = "syncthing";
+        rev = "v${version}";
+        hash = "sha256-umnlYvCtT+76Yer17T7ZvWJ5sUdXu+7kiRikrmWrIM8=";
       };
 
-      vendorSha256 = "sha256-klbAVOHLefxG33zpEYFlPezrKrXfuWOaE+UnIsu462M=";
+      vendorSha256 = "sha256-CJFKY69Iz8GrVpvUdDveMQQFj6RXApfgYjP7B1wfgfo=";
 
       doCheck = false;
 
-      BUILD_USER="nix";
-      BUILD_HOST="nix";
+      BUILD_USER = "nix";
+      BUILD_HOST = "nix";
 
       buildPhase = ''
         runHook preBuild
@@ -34,9 +34,8 @@ let
 
       inherit postInstall;
 
-      passthru.tests = with nixosTests; {
-        init = syncthing-init;
-        relay = syncthing-relay;
+      passthru.tests = {
+        inherit (nixosTests) syncthing syncthing-init syncthing-relay;
       };
 
       meta = with lib; {
@@ -45,11 +44,13 @@ let
         changelog = "https://github.com/syncthing/syncthing/releases/tag/v${version}";
         license = licenses.mpl20;
         maintainers = with maintainers; [ joko peterhoeg andrew-d ];
+        mainProgram = target;
         platforms = platforms.unix;
       };
     };
 
-in {
+in
+{
   syncthing = common {
     stname = "syncthing";
     target = "syncthing";

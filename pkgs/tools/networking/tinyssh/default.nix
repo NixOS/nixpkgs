@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tinyssh";
-  version = "20210601";
+  version = "20220801";
 
   src = fetchFromGitHub {
     owner = "janmojzis";
     repo = "tinyssh";
     rev = version;
-    sha256 = "sha256-+THoPiD6dW5ZuiQmmLckOJGyjhzdF3qF0DgC51zjGY8=";
+    sha256 = "sha256-y01Uq7SyIsFX3KL3V+fF6x3ukrUTuijxwwhPBE3ehI0=";
   };
 
   preConfigure = ''

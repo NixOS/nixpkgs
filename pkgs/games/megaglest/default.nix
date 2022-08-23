@@ -1,7 +1,7 @@
 { lib, stdenv, cmake, pkg-config, git, curl, SDL2, xercesc, openal, lua, libvlc
 , libjpeg, wxGTK, cppunit, ftgl, glew, libogg, libvorbis, buildEnv, libpng
 , fontconfig, freetype, xorg, makeWrapper, bash, which, gnome, libGLU, glib
-, fetchFromGitHub
+, fetchFromGitHub, fetchpatch
 }:
 let
   version = "3.13.0";
@@ -28,6 +28,15 @@ stdenv.mkDerivation {
     sha256 = "0fb58a706nic14ss89zrigphvdiwy5s9dwvhscvvgrfvjpahpcws";
   };
 
+  patches = [
+    # Pull upstream fix for -fno-common toolchains
+    (fetchpatch {
+      name = "fno-common.patch";
+      url = "https://github.com/MegaGlest/megaglest-source/commit/5a3520540276a6fd06f7c88e571b6462978e3eab.patch";
+      sha256 = "0y554kjw56dikq87vs709pmq97hdx9hvqsk27f81v4g90m3b3qhi";
+    })
+  ];
+
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ git curl SDL2 xercesc openal lua libpng libjpeg libvlc wxGTK
     glib cppunit fontconfig freetype ftgl glew libogg libvorbis makeWrapper libGLU ];
@@ -51,7 +60,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "An entertaining free (freeware and free software) and open source cross-platform 3D real-time strategy (RTS) game";
     license = licenses.gpl3;
-    homepage = "http://megaglest.org/";
+    homepage = "https://megaglest.org/";
     maintainers = [ maintainers.matejc ];
     platforms = platforms.linux;
   };

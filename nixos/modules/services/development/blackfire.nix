@@ -18,7 +18,7 @@ in {
     services.blackfire-agent = {
       enable = lib.mkEnableOption "Blackfire profiler agent";
       settings = lib.mkOption {
-        description = ''
+        description = lib.mdDoc ''
           See https://blackfire.io/docs/up-and-running/configuration/agent
         '';
         type = lib.types.submodule {
@@ -27,7 +27,7 @@ in {
           options = {
             server-id = lib.mkOption {
               type = lib.types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Sets the server id used to authenticate with Blackfire
 
                 You can find your personal server-id at https://blackfire.io/my/settings/credentials
@@ -36,7 +36,7 @@ in {
 
             server-token = lib.mkOption {
               type = lib.types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Sets the server token used to authenticate with Blackfire
 
                 You can find your personal server-token at https://blackfire.io/my/settings/credentials

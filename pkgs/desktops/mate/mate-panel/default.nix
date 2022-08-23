@@ -1,12 +1,29 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, glib, libwnck, librsvg, libxml2, dconf, gtk3, mate, hicolor-icon-theme, gobject-introspection, wrapGAppsHook, mateUpdateScript }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, itstool
+, glib
+, libwnck
+, librsvg
+, libxml2
+, dconf
+, gtk3
+, mate
+, hicolor-icon-theme
+, gobject-introspection
+, wrapGAppsHook
+, mateUpdateScript
+}:
 
 stdenv.mkDerivation rec {
   pname = "mate-panel";
-  version = "1.26.1";
+  version = "1.26.2";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "038irkjl9ap7kqacf1c0i74h0rwkcpaw685vyml50vj5hg23hc38";
+    sha256 = "rsT5jInFnnbMBlbtBILx2CkS9N7MZg8hyNAE5JPgVBA=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +53,13 @@ stdenv.mkDerivation rec {
     "INTROSPECTION_GIRDIR=$(out)/share/gir-1.0/"
     "INTROSPECTION_TYPELIBDIR=$(out)/lib/girepository-1.0"
   ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # Workspace switcher settings, works only when passed after gtk3 schemas in the wrapper for some reason
+      --prefix XDG_DATA_DIRS : "${glib.getSchemaDataDirPath mate.marco}"
+    )
+  '';
 
   enableParallelBuilding = true;
 

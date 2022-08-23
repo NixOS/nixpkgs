@@ -20,16 +20,20 @@ let
                  optionalString fixBinary "F";
   in ":${name}:${type}:${offset'}:${magicOrExtension}:${mask'}:${interpreter}:${flags}";
 
-  activationSnippet = name: { interpreter, ... }: ''
+  activationSnippet = name: { interpreter, wrapInterpreterInShell, ... }: if wrapInterpreterInShell then ''
     rm -f /run/binfmt/${name}
     cat > /run/binfmt/${name} << 'EOF'
     #!${pkgs.bash}/bin/sh
     exec -- ${interpreter} "$@"
     EOF
     chmod +x /run/binfmt/${name}
+  '' else ''
+    rm -f /run/binfmt/${name}
+    ln -s ${interpreter} /run/binfmt/${name}
   '';
 
   getEmulator = system: (lib.systems.elaborate { inherit system; }).emulator pkgs;
+  getQemuArch = system: (lib.systems.elaborate { inherit system; }).qemuArch;
 
   # Mapping of systems to “magicOrExtension” and “mask”. Mostly taken from:
   # - https://github.com/cleverca22/nixos-configs/blob/master/qemu.nix
@@ -149,7 +153,7 @@ in {
       registrations = mkOption {
         default = {};
 
-        description = ''
+        description = lib.mdDoc ''
           Extra binary formats to register with the kernel.
           See https://www.kernel.org/doc/html/latest/admin-guide/binfmt-misc.html for more details.
         '';
@@ -158,30 +162,30 @@ in {
           options = {
             recognitionType = mkOption {
               default = "magic";
-              description = "Whether to recognize executables by magic number or extension.";
+              description = lib.mdDoc "Whether to recognize executables by magic number or extension.";
               type = types.enum [ "magic" "extension" ];
             };
 
             offset = mkOption {
               default = null;
-              description = "The byte offset of the magic number used for recognition.";
+              description = lib.mdDoc "The byte offset of the magic number used for recognition.";
               type = types.nullOr types.int;
             };
 
             magicOrExtension = mkOption {
-              description = "The magic number or extension to match on.";
+              description = lib.mdDoc "The magic number or extension to match on.";
               type = types.str;
             };
 
             mask = mkOption {
               default = null;
               description =
-                "A mask to be ANDed with the byte sequence of the file before matching";
+                lib.mdDoc "A mask to be ANDed with the byte sequence of the file before matching";
               type = types.nullOr types.str;
             };
 
             interpreter = mkOption {
-              description = ''
+              description = lib.mdDoc ''
                 The interpreter to invoke to run the program.
 
                 Note that the actual registration will point to
@@ -193,7 +197,7 @@ in {
 
             preserveArgvZero = mkOption {
               default = false;
-              description = ''
+              description = lib.mdDoc ''
                 Whether to pass the original argv[0] to the interpreter.
 
                 See the description of the 'P' flag in the kernel docs
@@ -204,7 +208,7 @@ in {
 
             openBinary = mkOption {
               default = config.matchCredentials;
-              description = ''
+              description = lib.mdDoc ''
                 Whether to pass the binary to the interpreter as an open
                 file descriptor, instead of a path.
               '';
@@ -213,7 +217,7 @@ in {
 
             matchCredentials = mkOption {
               default = false;
-              description = ''
+              description = lib.mdDoc ''
                 Whether to launch with the credentials and security
                 token of the binary, not the interpreter (e.g. setuid
                 bit).
@@ -228,7 +232,7 @@ in {
 
             fixBinary = mkOption {
               default = false;
-              description = ''
+              description = lib.mdDoc ''
                 Whether to open the interpreter file as soon as the
                 registration is loaded, rather than waiting for a
                 relevant file to be invoked.
@@ -238,6 +242,25 @@ in {
               '';
               type = types.bool;
             };
+
+            wrapInterpreterInShell = mkOption {
+              default = true;
+              description = lib.mdDoc ''
+                Whether to wrap the interpreter in a shell script.
+
+                This allows a shell command to be set as the interpreter.
+              '';
+              type = types.bool;
+            };
+
+            interpreterSandboxPath = mkOption {
+              internal = true;
+              default = null;
+              description = ''
+                Path of the interpreter to expose in the build sandbox.
+              '';
+              type = types.nullOr types.path;
+            };
           };
         }));
       };
@@ -245,7 +268,7 @@ in {
       emulatedSystems = mkOption {
         default = [];
         example = [ "wasm32-wasi" "x86_64-windows" "aarch64-linux" ];
-        description = ''
+        description = lib.mdDoc ''
           List of systems to emulate. Will also configure Nix to
           support your new systems.
           Warning: the builder can execute all emulated systems within the same build, which introduces impurities in the case of cross compilation.
@@ -258,16 +281,34 @@ in {
   config = {
     boot.binfmt.registrations = builtins.listToAttrs (map (system: {
       name = system;
-      value = {
+      value = let
         interpreter = getEmulator system;
+        qemuArch = getQemuArch system;
+
+        preserveArgvZero = "qemu-${qemuArch}" == baseNameOf interpreter;
+        interpreterReg = let
+          wrapperName = "qemu-${qemuArch}-binfmt-P";
+          wrapper = pkgs.wrapQemuBinfmtP wrapperName interpreter;
+        in
+          if preserveArgvZero then "${wrapper}/bin/${wrapperName}"
+          else interpreter;
+      in {
+        inherit preserveArgvZero;
+
+        interpreter = interpreterReg;
+        wrapInterpreterInShell = !preserveArgvZero;
+        interpreterSandboxPath = dirOf (dirOf interpreterReg);
       } // (magics.${system} or (throw "Cannot create binfmt registration for system ${system}"));
     }) cfg.emulatedSystems);
-    # TODO: add a nix.extraPlatforms option to NixOS!
-    nix.extraOptions = lib.mkIf (cfg.emulatedSystems != []) ''
-      extra-platforms = ${toString (cfg.emulatedSystems ++ lib.optional pkgs.stdenv.hostPlatform.isx86_64 "i686-linux")}
-    '';
-    nix.sandboxPaths = lib.mkIf (cfg.emulatedSystems != [])
-      ([ "/run/binfmt" "${pkgs.bash}" ] ++ (map (system: dirOf (dirOf (getEmulator system))) cfg.emulatedSystems));
+    nix.settings = lib.mkIf (cfg.emulatedSystems != []) {
+      extra-platforms = cfg.emulatedSystems ++ lib.optional pkgs.stdenv.hostPlatform.isx86_64 "i686-linux";
+      extra-sandbox-paths = let
+        ruleFor = system: cfg.registrations.${system};
+        hasWrappedRule = lib.any (system: (ruleFor system).wrapInterpreterInShell) cfg.emulatedSystems;
+      in [ "/run/binfmt" ]
+        ++ lib.optional hasWrappedRule "${pkgs.bash}"
+        ++ (map (system: (ruleFor system).interpreterSandboxPath) cfg.emulatedSystems);
+    };
 
     environment.etc."binfmt.d/nixos.conf".source = builtins.toFile "binfmt_nixos.conf"
       (lib.concatStringsSep "\n" (lib.mapAttrsToList makeBinfmtLine config.boot.binfmt.registrations));

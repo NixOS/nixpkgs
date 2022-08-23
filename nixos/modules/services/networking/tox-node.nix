@@ -8,12 +8,7 @@ let
   homeDir = "/var/lib/tox-node";
 
   configFile = let
-    # fetchurl should be switched to getting this file from tox-node.src once
-    # the dpkg directory is in a release
-    src = pkgs.fetchurl {
-      url = "https://raw.githubusercontent.com/tox-rs/tox-node/master/dpkg/config.yml";
-      sha256 = "1431wzpzm786mcvyzk1rp7ar418n45dr75hdggxvlm7pkpam31xa";
-    };
+    src = "${pkg.src}/dpkg/config.yml";
     confJSON = pkgs.writeText "config.json" (
       builtins.toJSON {
         log-type = cfg.logType;
@@ -38,42 +33,42 @@ in {
     logType = mkOption {
       type = types.enum [ "Stderr" "Stdout" "Syslog" "None" ];
       default = "Stderr";
-      description = "Logging implementation.";
+      description = lib.mdDoc "Logging implementation.";
     };
     keysFile = mkOption {
       type = types.str;
       default = "${homeDir}/keys";
-      description = "Path to the file where DHT keys are stored.";
+      description = lib.mdDoc "Path to the file where DHT keys are stored.";
     };
     udpAddress = mkOption {
       type = types.str;
       default = "0.0.0.0:33445";
-      description = "UDP address to run DHT node.";
+      description = lib.mdDoc "UDP address to run DHT node.";
     };
     tcpAddresses = mkOption {
       type = types.listOf types.str;
       default = [ "0.0.0.0:33445" ];
-      description = "TCP addresses to run TCP relay.";
+      description = lib.mdDoc "TCP addresses to run TCP relay.";
     };
     tcpConnectionLimit = mkOption {
       type = types.int;
       default = 8192;
-      description = "Maximum number of active TCP connections relay can hold";
+      description = lib.mdDoc "Maximum number of active TCP connections relay can hold";
     };
     lanDiscovery = mkOption {
       type = types.bool;
       default = true;
-      description = "Enable local network discovery.";
+      description = lib.mdDoc "Enable local network discovery.";
     };
     threads = mkOption {
       type = types.int;
       default = 1;
-      description = "Number of threads for execution";
+      description = lib.mdDoc "Number of threads for execution";
     };
     motd = mkOption {
       type = types.str;
       default = "Hi from tox-rs! I'm up {{uptime}}. TCP: incoming {{tcp_packets_in}}, outgoing {{tcp_packets_out}}, UDP: incoming {{udp_packets_in}}, outgoing {{udp_packets_out}}";
-      description = "Message of the day";
+      description = lib.mdDoc "Message of the day";
     };
   };
 

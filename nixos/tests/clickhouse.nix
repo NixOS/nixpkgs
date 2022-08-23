@@ -2,7 +2,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   name = "clickhouse";
   meta.maintainers = with pkgs.lib.maintainers; [ ma27 ];
 
-  machine = {
+  nodes.machine = {
     services.clickhouse.enable = true;
     virtualisation.memorySize = 4096;
   };

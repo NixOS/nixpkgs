@@ -48,8 +48,8 @@ containers.database = {
     <literal>configuration.nix</literal> and run
     <literal>nixos-rebuild switch</literal>. Note that this will not
     delete the root directory of the container in
-    <literal>/var/lib/containers</literal>. Containers can be destroyed
-    using the imperative method:
+    <literal>/var/lib/nixos-containers</literal>. Containers can be
+    destroyed using the imperative method:
     <literal>nixos-container destroy foo</literal>.
   </para>
   <para>

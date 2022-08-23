@@ -1,7 +1,7 @@
-{ mkDerivation, SDL2_image, SDL2_ttf, SDL2_net, fpc, ghcWithPackages, ffmpeg, freeglut
+{ stdenv, SDL2_image, SDL2_ttf, SDL2_net, fpc, ghcWithPackages, ffmpeg, freeglut
 , lib, fetchurl, cmake, pkg-config, lua5_1, SDL2, SDL2_mixer
 , zlib, libpng, libGL, libGLU, physfs
-, qtbase, qttools
+, qtbase, qttools, wrapQtAppsHook
 , llvm
 , withServer ? true
 }:
@@ -14,7 +14,7 @@ let
         ]);
 
 in
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "hedgewars";
   version = "1.0.0";
 
@@ -23,7 +23,7 @@ mkDerivation rec {
     sha256 = "0nqm9w02m0xkndlsj6ys3wr0ik8zc14zgilq7k6fwjrf3zk385i1";
   };
 
-  nativeBuildInputs = [ cmake pkg-config qttools ];
+  nativeBuildInputs = [ cmake pkg-config qttools wrapQtAppsHook ];
 
   buildInputs = [
     SDL2_ttf SDL2_net SDL2 SDL2_mixer SDL2_image
@@ -32,6 +32,10 @@ mkDerivation rec {
     ffmpeg freeglut physfs
     qtbase
   ] ++ lib.optional withServer ghc;
+
+  patches = [
+    ./qt515.patch
+  ];
 
   postPatch = ''
     substituteInPlace gameServer/CMakeLists.txt \
@@ -103,5 +107,8 @@ mkDerivation rec {
        all movement on the battlefield has ceased).'';
     maintainers = with maintainers; [ kragniz fpletz ];
     inherit (fpc.meta) platforms;
+    # https://github.com/NixOS/nixpkgs/pull/185755#issuecomment-1219024584
+    broken = true;
+    hydraPlatforms = platforms.none;
   };
 }

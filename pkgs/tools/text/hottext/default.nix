@@ -12,21 +12,14 @@ nimPackages.buildNimPackage rec {
   };
 
   buildInputs = with nimPackages; [
-    bumpy
-    chroma
-    flatty
-    nimsimd
     pixie
     sdl2
-    typography
-    vmath
-    zippy
   ];
 
   HOTTEXT_FONT_PATH = "${gentium}/share/fonts/truetype/GentiumPlus-Regular.ttf";
 
   desktopItem = makeDesktopItem {
-    categories = "Utility;";
+    categories = [ "Utility" ];
     comment = meta.description;
     desktopName = pname;
     exec = pname;
@@ -38,6 +31,7 @@ nimPackages.buildNimPackage rec {
   '';
 
   meta = with lib; {
+    broken = true; # Needs to be updated to latest Pixie API.
     description = "Simple RSVP speed-reading utility";
     license = licenses.unlicense;
     homepage = "https://git.sr.ht/~ehmry/hottext";

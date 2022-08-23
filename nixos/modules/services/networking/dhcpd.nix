@@ -7,7 +7,7 @@ let
   cfg4 = config.services.dhcpd4;
   cfg6 = config.services.dhcpd6;
 
-  writeConfig = cfg: pkgs.writeText "dhcpd.conf"
+  writeConfig = postfix: cfg: pkgs.writeText "dhcpd.conf"
     ''
       default-lease-time 600;
       max-lease-time 7200;
@@ -21,7 +21,9 @@ let
           (machine: ''
             host ${machine.hostName} {
               hardware ethernet ${machine.ethernetAddress};
-              fixed-address ${machine.ipAddress};
+              fixed-address${
+                optionalString (postfix == "6") postfix
+              } ${machine.ipAddress};
             }
           '')
           cfg.machines
@@ -33,7 +35,7 @@ let
       configFile =
         if cfg.configFile != null
           then cfg.configFile
-          else writeConfig cfg;
+          else writeConfig postfix cfg;
       leaseFile = "/var/lib/dhcpd${postfix}/dhcpd.leases";
       args = [
         "@${pkgs.dhcp}/sbin/dhcpd" "dhcpd${postfix}" "-${postfix}"
@@ -75,7 +77,7 @@ let
       hostName = mkOption {
         type = types.str;
         example = "foo";
-        description = ''
+        description = lib.mdDoc ''
           Hostname which is assigned statically to the machine.
         '';
       };
@@ -83,7 +85,7 @@ let
       ethernetAddress = mkOption {
         type = types.str;
         example = "00:16:76:9a:32:1d";
-        description = ''
+        description = lib.mdDoc ''
           MAC address of the machine.
         '';
       };
@@ -91,7 +93,7 @@ let
       ipAddress = mkOption {
         type = types.str;
         example = "192.168.1.10";
-        description = ''
+        description = lib.mdDoc ''
           IP address of the machine.
         '';
       };
@@ -104,7 +106,7 @@ let
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable the DHCPv${postfix} server.
       '';
     };
@@ -122,7 +124,7 @@ let
           range 192.168.1.100 192.168.1.200;
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Extra text to be appended to the DHCP server configuration
         file. Currently, you almost certainly need to specify something
         there, such as the options specifying the subnet mask, DNS servers,
@@ -133,7 +135,7 @@ let
     extraFlags = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         Additional command line flags to be passed to the dhcpd daemon.
       '';
     };
@@ -141,7 +143,7 @@ let
     configFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         The path of the DHCP server configuration file.  If no file
         is specified, a file is generated using the other options.
       '';
@@ -150,7 +152,7 @@ let
     interfaces = mkOption {
       type = types.listOf types.str;
       default = ["eth0"];
-      description = ''
+      description = lib.mdDoc ''
         The interfaces on which the DHCP server should listen.
       '';
     };
@@ -168,7 +170,7 @@ let
           ipAddress = "192.168.1.11";
         }
       ];
-      description = ''
+      description = lib.mdDoc ''
         A list mapping Ethernet addresses to IPv${postfix} addresses for the
         DHCP server.
       '';
@@ -177,7 +179,7 @@ let
     authoritative = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether the DHCP server shall send DHCPNAK messages to misconfigured
         clients. If this is not done, clients may be unable to get a correct
         IP address after changing subnets until their old lease has expired.

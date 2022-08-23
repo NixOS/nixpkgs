@@ -7,14 +7,21 @@
 
 buildPythonPackage rec {
   pname = "widgetsnbextension";
-  version = "3.5.2";
+  version = "3.6.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e0731a60ba540cd19bbbefe771a9076dcd2dde90713a8f87f27f53f2d1db7727";
+    hash = "sha256-nISuZMKJPHy+Lqr8dQUiGnlcJ9aJOEVANKxIcxmnWxA=";
   };
 
-  propagatedBuildInputs = [ notebook ];
+  # setup.py claims to require notebook, but the source doesn't have any imports
+  # in it.
+  postPatch = ''
+    substituteInPlace setup.py --replace "'notebook>=4.4.1'," ""
+  '';
+
+  propagatedBuildInputs = [ ];
 
   # No tests in archive
   doCheck = false;

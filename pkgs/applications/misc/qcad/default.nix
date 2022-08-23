@@ -1,29 +1,31 @@
-{ boost
+{ lib
+, stdenv
+, mkDerivation
 , fetchFromGitHub
-, libGLU
-, mkDerivationWith
-, muparser
+, installShellFiles
 , pkg-config
-, qtbase
 , qmake
+, qttools
+, boost
+, libGLU
+, muparser
+, qtbase
 , qtscript
 , qtsvg
 , qtxmlpatterns
-, qttools
-, lib
-, stdenv
-, installShellFiles
+, qtmacextras
 }:
 
-mkDerivationWith stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "qcad";
-  version = "3.26.4.10";
+  version = "3.27.6.7";
 
   src = fetchFromGitHub {
+    name = "qcad-${version}-src";
     owner = "qcad";
     repo = "qcad";
     rev = "v${version}";
-    sha256 = "sha256-dWpItV18lYjdwUsn2wwA//AUHU5ICGfmih2cJWihvn0=";
+    sha256 = "sha256-PGGm7XhjGngj2oD8NNh8aQOKRgcdx9qiQu/4ZYBceG8=";
   };
 
   patches = [
@@ -40,26 +42,56 @@ mkDerivationWith stdenv.mkDerivation rec {
     fi
   '';
 
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+    qmake
+    qttools
+  ];
+
+  buildInputs = [
+    boost
+    libGLU
+    muparser
+    qtbase
+    qtscript
+    qtsvg
+    qtxmlpatterns
+  ] ++ lib.optionals stdenv.isDarwin [
+    qtmacextras
+  ];
+
   qmakeFlags = [
     "MUPARSER_DIR=${muparser}"
     "INSTALLROOT=$(out)"
     "BOOST_DIR=${boost.dev}"
   ];
 
+  qtWrapperArgs =
+    lib.optionals stdenv.isLinux [ "--prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib" ]
+    ++
+    lib.optionals stdenv.isDarwin [ "--prefix DYLD_LIBRARY_PATH : ${placeholder "out"}/lib" ];
+
   installPhase = ''
     runHook preInstall
 
-    install -Dm555 -t $out/bin release/qcad-bin
-    install -Dm555 -t $out/lib release/libspatialindexnavel.so
-    install -Dm555 -t $out/lib release/libqcadcore.so
-    install -Dm555 -t $out/lib release/libqcadentity.so
-    install -Dm555 -t $out/lib release/libqcadgrid.so
-    install -Dm555 -t $out/lib release/libqcadsnap.so
-    install -Dm555 -t $out/lib release/libqcadoperations.so
-    install -Dm555 -t $out/lib release/libqcadstemmer.so
-    install -Dm555 -t $out/lib release/libqcadspatialindex.so
-    install -Dm555 -t $out/lib release/libqcadgui.so
-    install -Dm555 -t $out/lib release/libqcadecmaapi.so
+  '' + lib.optionalString stdenv.isLinux ''
+    install -Dm555 release/qcad-bin $out/bin/qcad
+  '' + lib.optionalString stdenv.isDarwin ''
+    install -Dm555 release/QCAD.app/Contents/MacOS/QCAD $out/bin/qcad
+    mkdir -p $out/lib
+  '' +
+  ''
+    install -Dm555 -t $out/lib release/libspatialindexnavel${stdenv.hostPlatform.extensions.sharedLibrary}
+    install -Dm555 -t $out/lib release/libqcadcore${stdenv.hostPlatform.extensions.sharedLibrary}
+    install -Dm555 -t $out/lib release/libqcadentity${stdenv.hostPlatform.extensions.sharedLibrary}
+    install -Dm555 -t $out/lib release/libqcadgrid${stdenv.hostPlatform.extensions.sharedLibrary}
+    install -Dm555 -t $out/lib release/libqcadsnap${stdenv.hostPlatform.extensions.sharedLibrary}
+    install -Dm555 -t $out/lib release/libqcadoperations${stdenv.hostPlatform.extensions.sharedLibrary}
+    install -Dm555 -t $out/lib release/libqcadstemmer${stdenv.hostPlatform.extensions.sharedLibrary}
+    install -Dm555 -t $out/lib release/libqcadspatialindex${stdenv.hostPlatform.extensions.sharedLibrary}
+    install -Dm555 -t $out/lib release/libqcadgui${stdenv.hostPlatform.extensions.sharedLibrary}
+    install -Dm555 -t $out/lib release/libqcadecmaapi${stdenv.hostPlatform.extensions.sharedLibrary}
 
     install -Dm444 -t $out/share/applications qcad.desktop
     install -Dm644 -t $out/share/pixmaps      scripts/qcad_icon.png
@@ -88,23 +120,6 @@ mkDerivationWith stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
-
-  buildInputs = [
-    boost
-    muparser
-    libGLU
-    qtbase
-    qtscript
-    qtsvg
-    qtxmlpatterns
-  ];
-
-  nativeBuildInputs = [
-    pkg-config
-    qmake
-    qttools
-    installShellFiles
-  ];
 
   meta = with lib; {
     description = "2D CAD package based on Qt";

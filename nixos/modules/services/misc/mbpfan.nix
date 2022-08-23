@@ -5,6 +5,8 @@ with lib;
 let
   cfg = config.services.mbpfan;
   verbose = if cfg.verbose then "v" else "";
+  settingsFormat = pkgs.formats.ini {};
+  settingsFile = settingsFormat.generate "mbpfan.ini" cfg.settings;
 
 in {
   options.services.mbpfan = {
@@ -14,83 +16,73 @@ in {
       type = types.package;
       default = pkgs.mbpfan;
       defaultText = literalExpression "pkgs.mbpfan";
-      description = ''
+      description = lib.mdDoc ''
         The package used for the mbpfan daemon.
-      '';
-    };
-
-    minFanSpeed = mkOption {
-      type = types.int;
-      default = 2000;
-      description = ''
-        The minimum fan speed.
-      '';
-    };
-
-    maxFanSpeed = mkOption {
-      type = types.int;
-      default = 6200;
-      description = ''
-        The maximum fan speed.
-      '';
-    };
-
-    lowTemp = mkOption {
-      type = types.int;
-      default = 63;
-      description = ''
-        The low temperature.
-      '';
-    };
-
-    highTemp = mkOption {
-      type = types.int;
-      default = 66;
-      description = ''
-        The high temperature.
-      '';
-    };
-
-    maxTemp = mkOption {
-      type = types.int;
-      default = 86;
-      description = ''
-        The maximum temperature.
-      '';
-    };
-
-    pollingInterval = mkOption {
-      type = types.int;
-      default = 7;
-      description = ''
-        The polling interval.
       '';
     };
 
     verbose = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         If true, sets the log level to verbose.
       '';
     };
+
+    settings = mkOption {
+      default = {};
+      description = lib.mdDoc "INI configuration for Mbpfan.";
+      type = types.submodule {
+        freeformType = settingsFormat.type;
+
+        options.general.min_fan1_speed = mkOption {
+          type = types.nullOr types.int;
+          default = 2000;
+          description = ''
+            You can check minimum and maximum fan limits with
+            "cat /sys/devices/platform/applesmc.768/fan*_min" and
+            "cat /sys/devices/platform/applesmc.768/fan*_max" respectively.
+            Setting to null implies using default value from applesmc.
+          '';
+        };
+        options.general.low_temp = mkOption {
+          type = types.int;
+          default = 55;
+          description = lib.mdDoc "If temperature is below this, fans will run at minimum speed.";
+        };
+        options.general.high_temp = mkOption {
+          type = types.int;
+          default = 58;
+          description = lib.mdDoc "If temperature is above this, fan speed will gradually increase.";
+        };
+        options.general.max_temp = mkOption {
+          type = types.int;
+          default = 86;
+          description = lib.mdDoc "If temperature is above this, fans will run at maximum speed.";
+        };
+        options.general.polling_interval = mkOption {
+          type = types.int;
+          default = 1;
+          description = lib.mdDoc "The polling interval.";
+        };
+      };
+    };
   };
+
+  imports = [
+    (mkRenamedOptionModule [ "services" "mbpfan" "pollingInterval" ] [ "services" "mbpfan" "settings" "general" "polling_interval" ])
+    (mkRenamedOptionModule [ "services" "mbpfan" "maxTemp" ] [ "services" "mbpfan" "settings" "general" "max_temp" ])
+    (mkRenamedOptionModule [ "services" "mbpfan" "lowTemp" ] [ "services" "mbpfan" "settings" "general" "low_temp" ])
+    (mkRenamedOptionModule [ "services" "mbpfan" "highTemp" ] [ "services" "mbpfan" "settings" "general" "high_temp" ])
+    (mkRenamedOptionModule [ "services" "mbpfan" "minFanSpeed" ] [ "services" "mbpfan" "settings" "general" "min_fan1_speed" ])
+    (mkRenamedOptionModule [ "services" "mbpfan" "maxFanSpeed" ] [ "services" "mbpfan" "settings" "general" "max_fan1_speed" ])
+  ];
 
   config = mkIf cfg.enable {
     boot.kernelModules = [ "coretemp" "applesmc" ];
 
-    environment = {
-      etc."mbpfan.conf".text = ''
-        [general]
-        min_fan_speed = ${toString cfg.minFanSpeed}
-        max_fan_speed = ${toString cfg.maxFanSpeed}
-        low_temp = ${toString cfg.lowTemp}
-        high_temp = ${toString cfg.highTemp}
-        max_temp = ${toString cfg.maxTemp}
-        polling_interval = ${toString cfg.pollingInterval}
-      '';
-      systemPackages = [ cfg.package ];
-    };
+    environment.etc."mbpfan.conf".source = settingsFile;
+    environment.systemPackages = [ cfg.package ];
 
     systemd.services.mbpfan = {
       description = "A fan manager daemon for MacBook Pro";

@@ -6,15 +6,20 @@
 
 let chia = python3Packages.buildPythonApplication rec {
   pname = "chia";
-  version = "1.2.11";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "Chia-Network";
     repo = "chia-blockchain";
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-hRpZce8ydEsyq7htNfzlRSKPwMAOUurC3uiQpX6WiB8=";
+    hash = "sha256-OlaAnUy16QBff81XMoYQaZA0wKnsr+/3XEQLBP8IMug=";
   };
+
+  patches = [
+    # chia tries to put lock files in the python modules directory
+    ./dont_lock_in_store.patch
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -31,6 +36,7 @@ let chia = python3Packages.buildPythonApplication rec {
   SETUPTOOLS_SCM_PRETEND_VERSION = "v${version}";
 
   propagatedBuildInputs = with python3Packages; [
+    aiofiles
     aiohttp
     aiosqlite
     bitstring
@@ -38,16 +44,20 @@ let chia = python3Packages.buildPythonApplication rec {
     chiapos
     chiavdf
     chiabip158
+    chia-rs
     click
     clvm
     clvm-rs
     clvm-tools
+    clvm-tools-rs
     colorama
     colorlog
     concurrent-log-handler
     cryptography
+    dnslib
     dnspythonchia
     fasteners
+    filelock
     keyrings-cryptfile
     pyyaml
     setproctitle
@@ -55,6 +65,7 @@ let chia = python3Packages.buildPythonApplication rec {
     sortedcontainers
     watchdog
     websockets
+    zstd
   ];
 
   checkInputs = with python3Packages; [

@@ -60,15 +60,15 @@ in
   options.virtualisation.azure.agent = {
     enable = mkOption {
       default = false;
-      description = "Whether to enable the Windows Azure Linux Agent.";
+      description = lib.mdDoc "Whether to enable the Windows Azure Linux Agent.";
     };
     verboseLogging = mkOption {
       default = false;
-      description = "Whether to enable verbose logging.";
+      description = lib.mdDoc "Whether to enable verbose logging.";
     };
     mountResourceDisk = mkOption {
       default = true;
-      description = "Whether the agent should format (ext4) and mount the resource disk to /mnt/resource.";
+      description = lib.mdDoc "Whether the agent should format (ext4) and mount the resource disk to /mnt/resource.";
     };
   };
 
@@ -146,15 +146,11 @@ in
 
     services.logrotate = {
       enable = true;
-      extraConfig = ''
-        /var/log/waagent.log {
-            compress
-            monthly
-            rotate 6
-            notifempty
-            missingok
-        }
-      '';
+      settings."/var/log/waagent.log" = {
+        compress = true;
+        frequency = "monthly";
+        rotate = 6;
+      };
     };
 
     systemd.targets.provisioned = {

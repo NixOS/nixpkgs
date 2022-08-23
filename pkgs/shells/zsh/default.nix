@@ -1,34 +1,39 @@
-{ lib, stdenv, fetchurl, fetchpatch, ncurses, pcre, buildPackages }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, yodl
+, perl
+, groff
+, util-linux
+, texinfo
+, ncurses
+, pcre
+, buildPackages }:
 
 let
-  version = "5.8";
-
-  documentation = fetchurl {
-    url = "mirror://sourceforge/zsh/zsh-${version}-doc.tar.xz";
-    sha256 = "1i6wdzq6rfjx5yjrpzan1jf50hk2pfzy5qib9mb7cnnbjfar6klv";
-  };
+  version = "5.9";
 in
 
 stdenv.mkDerivation {
   pname = "zsh";
   inherit version;
+  outputs = [ "out" "doc" "info" "man" ];
 
   src = fetchurl {
     url = "mirror://sourceforge/zsh/zsh-${version}.tar.xz";
-    sha256 = "09yyaadq738zlrnlh1hd3ycj1mv3q5hh4xl1ank70mjnqm6bbi6w";
+    sha256 = "sha256-m40ezt1bXoH78ZGOh2dSp92UjgXBoNuhCrhjhC1FrNU=";
   };
 
   patches = [
     # fix location of timezone data for TZ= completion
     ./tz_completion.patch
-    # This commit will be released with the next version of zsh
-    (fetchpatch {
-      name = "fix-git-stash-drop-completions.patch";
-      url = "https://github.com/zsh-users/zsh/commit/754658aff38e1bdf487c58bec6174cbecd019d11.patch";
-      sha256 = "sha256-ud/rLD+SqvyTzT6vwOr+MWH+LY5o5KACrU1TpmL15Lo=";
-      excludes = [ "ChangeLog" ];
-    })
   ];
+
+  strictDeps = true;
+  nativeBuildInputs = [ autoreconfHook perl groff texinfo pcre]
+                      ++ lib.optionals stdenv.isLinux [ util-linux yodl ];
 
   buildInputs = [ ncurses pcre ];
 
@@ -47,10 +52,7 @@ stdenv.mkDerivation {
 
   # XXX: think/discuss about this, also with respect to nixos vs nix-on-X
   postInstall = ''
-    mkdir -p $out/share/info
-    tar xf ${documentation} -C $out/share
-    ln -s $out/share/zsh-*/Doc/zsh.info* $out/share/info/
-
+    make install.info install.html
     mkdir -p $out/etc/
     cat > $out/etc/zprofile <<EOF
 if test -e /etc/NIXOS; then
@@ -80,6 +82,10 @@ EOF
       ${lib.getBin buildPackages.zsh}/bin/zsh -c "zcompile $out/etc/zprofile"
     ''}
     mv $out/etc/zprofile $out/etc/zprofile_zwc_is_used
+
+    rm $out/bin/zsh-${version}
+    mkdir -p $out/share/doc/
+    mv $out/share/zsh/htmldoc $out/share/doc/zsh-$version
   '';
   # XXX: patch zsh to take zwc if newer _or equal_
 
@@ -95,7 +101,7 @@ EOF
     '';
     license = "MIT-like";
     homepage = "https://www.zsh.org/";
-    maintainers = with lib.maintainers; [ pSub ];
+    maintainers = with lib.maintainers; [ pSub artturin ];
     platforms = lib.platforms.unix;
   };
 

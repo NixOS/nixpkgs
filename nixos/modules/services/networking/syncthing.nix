@@ -30,15 +30,22 @@ let
   updateConfig = pkgs.writers.writeDash "merge-syncthing-config" ''
     set -efu
 
+    # be careful not to leak secrets in the filesystem or in process listings
+
+    umask 0077
+
     # get the api key by parsing the config.xml
     while
-        ! api_key=$(${pkgs.libxml2}/bin/xmllint \
+        ! ${pkgs.libxml2}/bin/xmllint \
             --xpath 'string(configuration/gui/apikey)' \
-            ${cfg.configDir}/config.xml)
+            ${cfg.configDir}/config.xml \
+            >"$RUNTIME_DIRECTORY/api_key"
     do sleep 1; done
 
+    (printf "X-API-Key: "; cat "$RUNTIME_DIRECTORY/api_key") >"$RUNTIME_DIRECTORY/headers"
+
     curl() {
-        ${pkgs.curl}/bin/curl -sSLk -H "X-API-Key: $api_key" \
+        ${pkgs.curl}/bin/curl -sSLk -H "@$RUNTIME_DIRECTORY/headers" \
             --retry 1000 --retry-delay 1 --retry-all-errors \
             "$@"
     }
@@ -72,39 +79,39 @@ in {
       cert = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
-          Path to the <literal>cert.pem</literal> file, which will be copied into Syncthing's
-          <link linkend="opt-services.syncthing.configDir">configDir</link>.
+        description = mdDoc ''
+          Path to the `cert.pem` file, which will be copied into Syncthing's
+          [configDir](#opt-services.syncthing.configDir).
         '';
       };
 
       key = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
-          Path to the <literal>key.pem</literal> file, which will be copied into Syncthing's
-          <link linkend="opt-services.syncthing.configDir">configDir</link>.
+        description = mdDoc ''
+          Path to the `key.pem` file, which will be copied into Syncthing's
+          [configDir](#opt-services.syncthing.configDir).
         '';
       };
 
       overrideDevices = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = mdDoc ''
           Whether to delete the devices which are not configured via the
-          <link linkend="opt-services.syncthing.devices">devices</link> option.
-          If set to <literal>false</literal>, devices added via the web
+          [devices](#opt-services.syncthing.devices) option.
+          If set to `false`, devices added via the web
           interface will persist and will have to be deleted manually.
         '';
       };
 
       devices = mkOption {
         default = {};
-        description = ''
+        description = mdDoc ''
           Peers/devices which Syncthing should communicate with.
 
           Note that you can still add devices manually, but those changes
-          will be reverted on restart if <link linkend="opt-services.syncthing.overrideDevices">overrideDevices</link>
+          will be reverted on restart if [overrideDevices](#opt-services.syncthing.overrideDevices)
           is enabled.
         '';
         example = {
@@ -119,7 +126,7 @@ in {
             name = mkOption {
               type = types.str;
               default = name;
-              description = ''
+              description = lib.mdDoc ''
                 The name of the device.
               '';
             };
@@ -127,7 +134,7 @@ in {
             addresses = mkOption {
               type = types.listOf types.str;
               default = [];
-              description = ''
+              description = lib.mdDoc ''
                 The addresses used to connect to the device.
                 If this is left empty, dynamic configuration is attempted.
               '';
@@ -135,27 +142,27 @@ in {
 
             id = mkOption {
               type = types.str;
-              description = ''
-                The device ID. See <link xlink:href="https://docs.syncthing.net/dev/device-ids.html"/>.
+              description = mdDoc ''
+                The device ID. See <https://docs.syncthing.net/dev/device-ids.html>.
               '';
             };
 
             introducer = mkOption {
               type = types.bool;
               default = false;
-              description = ''
+              description = mdDoc ''
                 Whether the device should act as an introducer and be allowed
                 to add folders on this computer.
-                See <link xlink:href="https://docs.syncthing.net/users/introducer.html"/>.
+                See <https://docs.syncthing.net/users/introducer.html>.
               '';
             };
 
             autoAcceptFolders = mkOption {
               type = types.bool;
               default = false;
-              description = ''
+              description = mdDoc ''
                 Automatically create or share folders that this device advertises at the default path.
-                See <link xlink:href="https://docs.syncthing.net/users/config.html?highlight=autoaccept#config-file-format"/>.
+                See <https://docs.syncthing.net/users/config.html?highlight=autoaccept#config-file-format>.
               '';
             };
 
@@ -166,21 +173,21 @@ in {
       overrideFolders = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = mdDoc ''
           Whether to delete the folders which are not configured via the
-          <link linkend="opt-services.syncthing.folders">folders</link> option.
-          If set to <literal>false</literal>, folders added via the web
+          [folders](#opt-services.syncthing.folders) option.
+          If set to `false`, folders added via the web
           interface will persist and will have to be deleted manually.
         '';
       };
 
       folders = mkOption {
         default = {};
-        description = ''
+        description = mdDoc ''
           Folders which should be shared by Syncthing.
 
-          Note that you can still add devices manually, but those changes
-          will be reverted on restart if <link linkend="opt-services.syncthing.overrideDevices">overrideDevices</link>
+          Note that you can still add folders manually, but those changes
+          will be reverted on restart if [overrideFolders](#opt-services.syncthing.overrideFolders)
           is enabled.
         '';
         example = literalExpression ''
@@ -197,7 +204,7 @@ in {
             enable = mkOption {
               type = types.bool;
               default = true;
-              description = ''
+              description = lib.mdDoc ''
                 Whether to share this folder.
                 This option is useful when you want to define all folders
                 in one place, but not every machine should share all folders.
@@ -207,7 +214,7 @@ in {
             path = mkOption {
               type = types.str;
               default = name;
-              description = ''
+              description = lib.mdDoc ''
                 The path to the folder which should be shared.
               '';
             };
@@ -215,7 +222,7 @@ in {
             id = mkOption {
               type = types.str;
               default = name;
-              description = ''
+              description = lib.mdDoc ''
                 The ID of the folder. Must be the same on all devices.
               '';
             };
@@ -223,7 +230,7 @@ in {
             label = mkOption {
               type = types.str;
               default = name;
-              description = ''
+              description = lib.mdDoc ''
                 The label of the folder.
               '';
             };
@@ -231,18 +238,18 @@ in {
             devices = mkOption {
               type = types.listOf types.str;
               default = [];
-              description = ''
+              description = mdDoc ''
                 The devices this folder should be shared with. Each device must
-                be defined in the <link linkend="opt-services.syncthing.devices">devices</link> option.
+                be defined in the [devices](#opt-services.syncthing.devices) option.
               '';
             };
 
             versioning = mkOption {
               default = null;
-              description = ''
+              description = mdDoc ''
                 How to keep changed/deleted files with Syncthing.
                 There are 4 different types of versioning with different parameters.
-                See <link xlink:href="https://docs.syncthing.net/users/versioning.html"/>.
+                See <https://docs.syncthing.net/users/versioning.html>.
               '';
               example = literalExpression ''
                 [
@@ -284,17 +291,17 @@ in {
                 options = {
                   type = mkOption {
                     type = enum [ "external" "simple" "staggered" "trashcan" ];
-                    description = ''
+                    description = mdDoc ''
                       The type of versioning.
-                      See <link xlink:href="https://docs.syncthing.net/users/versioning.html"/>.
+                      See <https://docs.syncthing.net/users/versioning.html>.
                     '';
                   };
                   params = mkOption {
                     type = attrsOf (either str path);
-                    description = ''
+                    description = mdDoc ''
                       The parameters for versioning. Structure depends on
-                      <link linkend="opt-services.syncthing.folders._name_.versioning.type">versioning.type</link>.
-                      See <link xlink:href="https://docs.syncthing.net/users/versioning.html"/>.
+                      [versioning.type](#opt-services.syncthing.folders._name_.versioning.type).
+                      See <https://docs.syncthing.net/users/versioning.html>.
                     '';
                   };
                 };
@@ -304,7 +311,7 @@ in {
             rescanInterval = mkOption {
               type = types.int;
               default = 3600;
-              description = ''
+              description = lib.mdDoc ''
                 How often the folder should be rescanned for changes.
               '';
             };
@@ -312,7 +319,7 @@ in {
             type = mkOption {
               type = types.enum [ "sendreceive" "sendonly" "receiveonly" ];
               default = "sendreceive";
-              description = ''
+              description = lib.mdDoc ''
                 Whether to only send changes for this folder, only receive them
                 or both.
               '';
@@ -321,7 +328,7 @@ in {
             watch = mkOption {
               type = types.bool;
               default = true;
-              description = ''
+              description = lib.mdDoc ''
                 Whether the folder should be watched for changes by inotify.
               '';
             };
@@ -329,7 +336,7 @@ in {
             watchDelay = mkOption {
               type = types.int;
               default = 10;
-              description = ''
+              description = lib.mdDoc ''
                 The delay after an inotify event is triggered.
               '';
             };
@@ -337,7 +344,7 @@ in {
             ignorePerms = mkOption {
               type = types.bool;
               default = true;
-              description = ''
+              description = lib.mdDoc ''
                 Whether to ignore permission changes.
               '';
             };
@@ -345,9 +352,9 @@ in {
             ignoreDelete = mkOption {
               type = types.bool;
               default = false;
-              description = ''
+              description = mdDoc ''
                 Whether to skip deleting files that are deleted by peers.
-                See <link xlink:href="https://docs.syncthing.net/advanced/folder-ignoredelete.html"/>.
+                See <https://docs.syncthing.net/advanced/folder-ignoredelete.html>.
               '';
             };
           };
@@ -357,9 +364,9 @@ in {
       extraOptions = mkOption {
         type = types.addCheck (pkgs.formats.json {}).type isAttrs;
         default = {};
-        description = ''
+        description = mdDoc ''
           Extra configuration options for Syncthing.
-          See <link xlink:href="https://docs.syncthing.net/users/config.html"/>.
+          See <https://docs.syncthing.net/users/config.html>.
         '';
         example = {
           options.localAnnounceEnabled = false;
@@ -370,7 +377,7 @@ in {
       guiAddress = mkOption {
         type = types.str;
         default = "127.0.0.1:8384";
-        description = ''
+        description = lib.mdDoc ''
           The address to serve the web interface at.
         '';
       };
@@ -378,7 +385,7 @@ in {
       systemService = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether to auto-launch Syncthing as a system service.
         '';
       };
@@ -387,9 +394,9 @@ in {
         type = types.str;
         default = defaultUser;
         example = "yourUser";
-        description = ''
+        description = mdDoc ''
           The user to run Syncthing as.
-          By default, a user named <literal>${defaultUser}</literal> will be created.
+          By default, a user named `${defaultUser}` will be created.
         '';
       };
 
@@ -397,9 +404,9 @@ in {
         type = types.str;
         default = defaultGroup;
         example = "yourGroup";
-        description = ''
+        description = mdDoc ''
           The group to run Syncthing under.
-          By default, a group named <literal>${defaultGroup}</literal> will be created.
+          By default, a group named `${defaultGroup}` will be created.
         '';
       };
 
@@ -407,11 +414,11 @@ in {
         type = with types; nullOr str;
         default = null;
         example = "socks5://address.com:1234";
-        description = ''
+        description = mdDoc ''
           Overwrites the all_proxy environment variable for the Syncthing process to
           the given value. This is normally used to let Syncthing connect
           through a SOCKS5 proxy server.
-          See <link xlink:href="https://docs.syncthing.net/users/proxying.html"/>.
+          See <https://docs.syncthing.net/users/proxying.html>.
         '';
       };
 
@@ -419,7 +426,7 @@ in {
         type = types.path;
         default = "/var/lib/syncthing";
         example = "/home/yourUser";
-        description = ''
+        description = lib.mdDoc ''
           The path where synchronised directories will exist.
         '';
       };
@@ -428,29 +435,17 @@ in {
         cond = versionAtLeast config.system.stateVersion "19.03";
       in mkOption {
         type = types.path;
-        description = ''
+        description = lib.mdDoc ''
           The path where the settings and keys will exist.
         '';
         default = cfg.dataDir + optionalString cond "/.config/syncthing";
-        defaultText = literalDocBook ''
-          <variablelist>
-            <varlistentry>
-              <term><literal>stateVersion >= 19.03</literal></term>
-              <listitem>
-                <programlisting>
-                  config.${opt.dataDir} + "/.config/syncthing"
-                </programlisting>
-              </listitem>
-            </varlistentry>
-            <varlistentry>
-              <term>otherwise</term>
-              <listitem>
-                <programlisting>
-                  config.${opt.dataDir}
-                </programlisting>
-              </listitem>
-            </varlistentry>
-          </variablelist>
+        defaultText = literalMD ''
+          * if `stateVersion >= 19.03`:
+
+                config.${opt.dataDir} + "/.config/syncthing"
+          * otherwise:
+
+                config.${opt.dataDir}
         '';
       };
 
@@ -458,7 +453,7 @@ in {
         type = types.listOf types.str;
         default = [];
         example = [ "--reset-deltas" ];
-        description = ''
+        description = lib.mdDoc ''
           Extra flags passed to the syncthing command in the service definition.
         '';
       };
@@ -467,8 +462,8 @@ in {
         type = types.bool;
         default = false;
         example = true;
-        description = ''
-          Whether to open the default ports in the firewall: TCP 22000 for transfers
+        description = lib.mdDoc ''
+          Whether to open the default ports in the firewall: TCP/UDP 22000 for transfers
           and UDP 21027 for discovery.
 
           If multiple users are running Syncthing on this machine, you will need
@@ -482,7 +477,7 @@ in {
         type = types.package;
         default = pkgs.syncthing;
         defaultText = literalExpression "pkgs.syncthing";
-        description = ''
+        description = lib.mdDoc ''
           The Syncthing package to use.
         '';
       };
@@ -504,7 +499,7 @@ in {
 
     networking.firewall = mkIf cfg.openDefaultPorts {
       allowedTCPPorts = [ 22000 ];
-      allowedUDPPorts = [ 21027 ];
+      allowedUDPPorts = [ 21027 22000 ];
     };
 
     systemd.packages = [ pkgs.syncthing ];
@@ -588,6 +583,7 @@ in {
         serviceConfig = {
           User = cfg.user;
           RemainAfterExit = true;
+          RuntimeDirectory = "syncthing-init";
           Type = "oneshot";
           ExecStart = updateConfig;
         };

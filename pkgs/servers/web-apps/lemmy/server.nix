@@ -6,6 +6,8 @@
 , postgresql
 , libiconv
 , Security
+, protobuf
+, rustfmt
 }:
 let
   pinData = lib.importJSON ./pin.json;
@@ -20,6 +22,7 @@ rustPlatform.buildRustPackage rec {
     repo = "lemmy";
     rev = version;
     sha256 = pinData.serverSha256;
+    fetchSubmodules = true;
   };
 
   cargoSha256 = pinData.serverCargoSha256;
@@ -31,8 +34,12 @@ rustPlatform.buildRustPackage rec {
   # As of version 0.10.35 rust-openssl looks for openssl on darwin
   # with a hardcoded path to /usr/lib/libssl.x.x.x.dylib
   # https://github.com/sfackler/rust-openssl/blob/master/openssl-sys/build/find_normal.rs#L115
-  OPENSSL_LIB_DIR = "${openssl.out}/lib";
+  OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
   OPENSSL_INCLUDE_DIR = "${openssl.dev}/include";
+
+  PROTOC = "${protobuf}/bin/protoc";
+  PROTOC_INCLUDE = "${protobuf}/include";
+  nativeBuildInputs = [ protobuf rustfmt ];
 
   passthru.updateScript = ./update.sh;
 
@@ -40,6 +47,7 @@ rustPlatform.buildRustPackage rec {
     description = "🐀 Building a federated alternative to reddit in rust";
     homepage = "https://join-lemmy.org/";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ happysalada ];
+    maintainers = with maintainers; [ happysalada billewanick ];
+    mainProgram = "lemmy_server";
   };
 }

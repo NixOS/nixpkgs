@@ -1,25 +1,26 @@
-{ lib, stdenv, fetchurl, fetchpatch, pcre, pcre2, libxslt, groff, ncurses, pkg-config, readline, libedit, coreutils
-, python3, makeWrapper }:
+{ lib, stdenv, fetchurl, fetchpatch, pcre, pcre2, jemalloc, libxslt, groff, ncurses, pkg-config, readline, libedit
+, coreutils, python3, makeWrapper }:
 
 let
-  common = { version, sha256, extraNativeBuildInputs ? [] }:
+  common = { version, hash, extraNativeBuildInputs ? [] }:
     stdenv.mkDerivation rec {
       pname = "varnish";
       inherit version;
 
       src = fetchurl {
         url = "https://varnish-cache.org/_downloads/${pname}-${version}.tgz";
-        inherit sha256;
+        inherit hash;
       };
 
       passthru.python = python3;
 
-      nativeBuildInputs = with python3.pkgs; [ pkg-config docutils sphinx ];
+      nativeBuildInputs = with python3.pkgs; [ pkg-config docutils sphinx makeWrapper];
       buildInputs = [
-        libxslt groff ncurses readline libedit makeWrapper python3
+        libxslt groff ncurses readline libedit python3
       ]
       ++ lib.optional (lib.versionOlder version "7") pcre
-      ++ lib.optional (lib.versionAtLeast version "7") pcre2;
+      ++ lib.optional (lib.versionAtLeast version "7") pcre2
+      ++ lib.optional stdenv.hostPlatform.isLinux jemalloc;
 
       buildFlags = [ "localstatedir=/var/spool" ];
 
@@ -37,28 +38,22 @@ let
       outputs = [ "out" "dev" "man" ];
 
       meta = with lib; {
+        broken = stdenv.isDarwin;
         description = "Web application accelerator also known as a caching HTTP reverse proxy";
         homepage = "https://www.varnish-cache.org";
         license = licenses.bsd2;
-        maintainers = with maintainers; [ fpletz ];
+        maintainers = with maintainers; [ ajs124 ];
         platforms = platforms.unix;
       };
     };
 in
 {
   varnish60 = common {
-    version = "6.0.9";
-    sha256 = "1g0pwyckc0xh6ag6wj082x9wn4q6p6krjgc16fkw1arl71c18wsh";
+    version = "6.0.10";
+    hash = "sha256-a4W/dI7jeaoI43UE+G6tS6fgzEDqsXI8CUv+Wh4HJus=";
   };
-  varnish70 = (common {
-    version = "7.0.1";
-    sha256 = "0q265fzarz5530g8lasvfpgks8z1kq1yh7rn88bn2qfly3pmpry4";
-  }).overrideAttrs (oA: {
-    patches = [
-      (fetchpatch {
-        url = "https://github.com/varnishcache/varnish-cache/commit/20e007a5b17c1f68f70ab42080de384f9e192900.patch";
-        sha256 = "0vvihbjknb0skdv2ksn2lz89pwmn4f2rjmb6q65cvgnnjfj46s82";
-      })
-    ];
-  });
+  varnish71 = common {
+    version = "7.1.1";
+    hash = "sha256-LK++JZDn1Yp7rIrZm+kuRA/k04raaBbdiDbyL6UToZA=";
+  };
 }

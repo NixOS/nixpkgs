@@ -25,7 +25,7 @@ in
     adminPasswordSha256 = mkOption {
       type = types.str;
       default = "";
-      description = ''
+      description = lib.mdDoc ''
         SHA-256 of the desired administration password. Leave blank/unset for no password.
       '';
     };
@@ -33,7 +33,7 @@ in
     dataDir = mkOption {
       type = types.path;
       default = "/var/lib/jirafeau/data/";
-      description = "Location of Jirafeau storage directory.";
+      description = lib.mdDoc "Location of Jirafeau storage directory.";
     };
 
     enable = mkEnableOption "Jirafeau file upload application.";
@@ -58,13 +58,13 @@ in
     hostName = mkOption {
       type = types.str;
       default = "localhost";
-      description = "URL of instance. Must have trailing slash.";
+      description = lib.mdDoc "URL of instance. Must have trailing slash.";
     };
 
     maxUploadSizeMegabytes = mkOption {
       type = types.int;
       default = 0;
-      description = "Maximum upload size of accepted files.";
+      description = lib.mdDoc "Maximum upload size of accepted files.";
     };
 
     maxUploadTimeout = mkOption {
@@ -89,14 +89,14 @@ in
           serverAliases = [ "wiki.''${config.networking.domain}" ];
         }
       '';
-      description = "Extra configuration for the nginx virtual host of Jirafeau.";
+      description = lib.mdDoc "Extra configuration for the nginx virtual host of Jirafeau.";
     };
 
     package = mkOption {
       type = types.package;
       default = pkgs.jirafeau;
       defaultText = literalExpression "pkgs.jirafeau";
-      description = "Jirafeau package to use";
+      description = lib.mdDoc "Jirafeau package to use";
     };
 
     poolConfig = mkOption {
@@ -109,8 +109,8 @@ in
         "pm.max_spare_servers" = 4;
         "pm.max_requests" = 500;
       };
-      description = ''
-        Options for Jirafeau PHP pool. See documentation on <literal>php-fpm.conf</literal> for
+      description = lib.mdDoc ''
+        Options for Jirafeau PHP pool. See documentation on `php-fpm.conf` for
         details on configuration directives.
       '';
     };
@@ -136,7 +136,7 @@ in
               '';
             locations = {
               "~ \\.php$".extraConfig = ''
-                include ${pkgs.nginx}/conf/fastcgi_params;
+                include ${config.services.nginx.package}/conf/fastcgi_params;
                 fastcgi_split_path_info ^(.+\.php)(/.+)$;
                 fastcgi_index index.php;
                 fastcgi_pass unix:${config.services.phpfpm.pools.jirafeau.socket};
@@ -167,4 +167,7 @@ in
       "d ${cfg.dataDir}/async/ 0750 ${user} ${group} - -"
     ];
   };
+
+  # uses attributes of the linked package
+  meta.buildDocsInSandbox = false;
 }

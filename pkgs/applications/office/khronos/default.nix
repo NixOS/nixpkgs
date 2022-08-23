@@ -7,7 +7,6 @@
 , vala
 , pkg-config
 , desktop-file-utils
-, python3
 , glib
 , gtk4
 , json-glib
@@ -18,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "khronos";
-  version = "3.6.6";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "lainsce";
     repo = pname;
     rev = version;
-    sha256 = "sha256-EFoW/2IZuCo6sg7q87XRrJJ7dmYtVZr2bJQUEiiMiVI=";
+    sha256 = "sha256-k3U8ICnwMbR6vN+gELWytI2Etri5lvbE6AX6lUpr7dQ=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +32,6 @@ stdenv.mkDerivation rec {
     ninja
     vala
     pkg-config
-    python3
     wrapGAppsHook4
   ];
 
@@ -44,11 +42,6 @@ stdenv.mkDerivation rec {
     libadwaita
     libgee
   ];
-
-  postPatch = ''
-    chmod +x build-aux/post_install.py
-    patchShebangs build-aux/post_install.py
-  '';
 
   passthru = {
     updateScript = nix-update-script {

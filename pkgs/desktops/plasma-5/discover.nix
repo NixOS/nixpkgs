@@ -32,7 +32,7 @@
 }:
 
 mkDerivation {
-  name = "discover";
+  pname = "discover";
   nativeBuildInputs = [ extra-cmake-modules gettext kdoctools python3 ];
   buildInputs = [
     # discount is needed for libmarkdown

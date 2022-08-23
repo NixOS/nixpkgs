@@ -12,7 +12,7 @@
 mkDerivation {
   pname = "kbreakout";
   meta = {
-    homepage = "KBreakOut";
+    homepage = "https://apps.kde.org/kbreakout/";
     description = "Breakout-like game";
     license = with lib.licenses; [ lgpl21 gpl3 ];
   };

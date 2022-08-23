@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , pkg-config
 , meson
@@ -13,7 +14,6 @@
 , granite
 , libgee
 , libhandy
-, elementary-icon-theme
 , wrapGAppsHook
 }:
 
@@ -21,14 +21,21 @@ stdenv.mkDerivation rec {
   pname = "elementary-shortcut-overlay";
   version = "1.2.1";
 
-  repoName = "shortcut-overlay";
-
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "shortcut-overlay";
     rev = version;
     sha256 = "sha256-qmqzGCM3cVM6y80pzjm5CCyG6BO6XlKZiODAAEnwVrM=";
   };
+
+  patches = [
+    # Fix build with meson 0.61
+    # https://github.com/elementary/shortcut-overlay/pull/113
+    (fetchpatch {
+      url = "https://github.com/elementary/shortcut-overlay/commit/130f78eb4b7770586ea98ba0a5fdbbf5bb116f3f.patch";
+      sha256 = "sha256-XXWq9CEv3Z2B8ogcFQAJZCfy19XxNHs3c8NToE2m/aA=";
+    })
+  ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -41,7 +48,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    elementary-icon-theme
     glib
     granite
     gtk3

@@ -24,8 +24,8 @@ in
       fileSystems = mkOption {
         type = types.listOf types.path;
         example = [ "/" ];
-        description = ''
-          List of paths to btrfs filesystems to regularily call <command>btrfs scrub</command> on.
+        description = lib.mdDoc ''
+          List of paths to btrfs filesystems to regularily call {command}`btrfs scrub` on.
           Defaults to all mount points with btrfs filesystems.
           If you mount a filesystem multiple times or additionally mount subvolumes,
           you need to manually specify this list to avoid scrubbing multiple times.
@@ -36,14 +36,12 @@ in
         default = "monthly";
         type = types.str;
         example = "weekly";
-        description = ''
+        description = lib.mdDoc ''
           Systemd calendar expression for when to scrub btrfs filesystems.
           The recommended period is a month but could be less
-          (<citerefentry><refentrytitle>btrfs-scrub</refentrytitle>
-          <manvolnum>8</manvolnum></citerefentry>).
+          ({manpage}`btrfs-scrub(8)`).
           See
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry>
+          {manpage}`systemd.time(7)`
           for more information on the syntax.
         '';
       };
@@ -66,19 +64,19 @@ in
         ]
       );
 
-      boot.initrd.extraUtilsCommands = mkIf inInitrd
+      boot.initrd.extraUtilsCommands = mkIf (inInitrd && !config.boot.initrd.systemd.enable)
       ''
         copy_bin_and_libs ${pkgs.btrfs-progs}/bin/btrfs
         ln -sv btrfs $out/bin/btrfsck
         ln -sv btrfsck $out/bin/fsck.btrfs
       '';
 
-      boot.initrd.extraUtilsCommandsTest = mkIf inInitrd
+      boot.initrd.extraUtilsCommandsTest = mkIf (inInitrd && !config.boot.initrd.systemd.enable)
       ''
         $out/bin/btrfs --version
       '';
 
-      boot.initrd.postDeviceCommands = mkIf inInitrd
+      boot.initrd.postDeviceCommands = mkIf (inInitrd && !config.boot.initrd.systemd.enable)
       ''
         btrfs device scan
       '';

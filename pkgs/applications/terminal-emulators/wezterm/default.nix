@@ -22,20 +22,21 @@
 , Cocoa
 , Foundation
 , libiconv
+, UserNotifications
+, nixosTests
+, runCommand
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "20211204-082213-a66c61ee9";
-
-  outputs = [ "out" "terminfo" ];
+  version = "20220807-113146-c2fee766";
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-QKtnOpAW4exDQEFSN0b04hA6TYuC+/C5nIYHCNzfuso=";
+    sha256 = "sha256-2krngcANqcwq8wNQZSz01srJ6yEOkk03QnO2sL7SuJA=";
   };
 
   postPatch = ''
@@ -45,7 +46,7 @@ rustPlatform.buildRustPackage rec {
     rm -r wezterm-ssh/tests
   '';
 
-  cargoSha256 = "sha256-qSThjV6oBD6joDM0Eppo7z0SL8GHV5SaCaAwXmUIT3I=";
+  cargoSha256 = "sha256-ZkDGCR86VSCuvVlo4Pf9Ifax2BZuBicZpB/K/7bIMls=";
 
   nativeBuildInputs = [
     pkg-config
@@ -71,13 +72,12 @@ rustPlatform.buildRustPackage rec {
     CoreGraphics
     Foundation
     libiconv
+    UserNotifications
   ];
 
   postInstall = ''
-    # terminfo
-    mkdir -p $terminfo/share/terminfo/w $out/nix-support
-    tic -x -o $terminfo/share/terminfo termwiz/data/wezterm.terminfo
-    echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+    mkdir -p $out/nix-support
+    echo "${passthru.terminfo}" >> $out/nix-support/propagated-user-env-packages
 
     # desktop icon
     install -Dm644 assets/icon/terminal.png $out/share/icons/hicolor/128x128/apps/org.wezfurlong.wezterm.png
@@ -99,13 +99,27 @@ rustPlatform.buildRustPackage rec {
     ln -s $out/bin/{wezterm,wezterm-mux-server,wezterm-gui,strip-ansi-escapes} "$OUT_APP"
   '';
 
+  passthru = {
+    tests = {
+      all-terminfo = nixosTests.allTerminfo;
+      terminal-emulators = nixosTests.terminal-emulators.wezterm;
+    };
+    terminfo = runCommand "wezterm-terminfo"
+      {
+        nativeBuildInputs = [
+          ncurses
+        ];
+      } ''
+      mkdir -p $out/share/terminfo $out/nix-support
+      tic -x -o $out/share/terminfo ${src}/termwiz/data/wezterm.terminfo
+    '';
+  };
+
   meta = with lib; {
     description = "A GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust";
     homepage = "https://wezfurlong.org/wezterm";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
     platforms = platforms.unix;
-    # Fails on missing UserNotifications framework while linking
-    broken = stdenv.isDarwin;
   };
 }

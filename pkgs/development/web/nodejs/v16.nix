@@ -1,4 +1,4 @@
-{ callPackage, fetchpatch, openssl, python3, enableNpm ? true }:
+{ callPackage, openssl, python3, fetchpatch, enableNpm ? true }:
 
 let
   buildNodejs = callPackage ./nodejs.nix {
@@ -8,15 +8,17 @@ let
 in
   buildNodejs {
     inherit enableNpm;
-    version = "16.13.1";
-    sha256 = "1bb3rjb2xxwn6f4grjsa7m1pycp0ad7y6vz7v2d7kbsysx7h08sc";
+    version = "16.17.0";
+    sha256 = "sha256-HSjChWheRGmFkhvJY1ZcqcDF9P2pdV5InAaAjql5VkU=";
     patches = [
       ./disable-darwin-v8-system-instrumentation.patch
-      # Fixes node incorrectly building vendored OpenSSL when we want system OpenSSL.
-      # https://github.com/nodejs/node/pull/40965
+      # Fix npm silently fail without a HOME directory https://github.com/npm/cli/issues/4996
       (fetchpatch {
-        url = "https://github.com/nodejs/node/commit/65119a89586b94b0dd46b45f6d315c9d9f4c9261.patch";
-        sha256 = "sha256-dihKYEdK68sQIsnfTRambJ2oZr0htROVbNZlFzSAL+I=";
+        url = "https://github.com/npm/cli/commit/9905d0e24c162c3f6cc006fa86b4c9d0205a4c6f.patch";
+        sha256 = "sha256-RlabXWtjzTZ5OgrGf4pFkolonvTDIPlzPY1QcYDd28E=";
+        includes = [ "deps/npm/lib/npm.js" "deps/npm/lib/utils/log-file.js" ];
+        stripLen = 1;
+        extraPrefix = "deps/npm/";
       })
     ];
   }

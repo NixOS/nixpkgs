@@ -7,20 +7,21 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-c-common";
-  version = "0.6.17";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+FzTEpotxco4+9gLVUL+rkCWoMjRCorKQ47JINHsnNA=";
+    sha256 = "sha256-DKorZUVUDEP4IRPchzaW35fPLmYoJRcfLMdPHrBrol8=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF" # for tests
+  ] ++ lib.optionals stdenv.hostPlatform.isRiscV [
+    "-DCMAKE_C_FLAGS=-fasynchronous-unwind-tables"
   ];
 
   # aws-c-common misuses cmake modules, so we need

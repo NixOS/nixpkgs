@@ -1,9 +1,10 @@
 { lib
 , buildPythonPackage
-, isPy3k
+, pythonOlder
 , fetchFromGitHub
 , setuptools-scm
 , pydantic
+, toml
 , typeguard
 , mock
 , pytest-asyncio
@@ -12,14 +13,16 @@
 
 buildPythonPackage rec {
   pname = "pygls";
-  version = "0.11.3";
-  disabled = !isPy3k;
+  version = "0.12.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "openlawlibrary";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-/nmDaA67XzrrmfwlBm5syTS4hn25m30Zb3gvOdL+bR8=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-L2KTNiI+I+r2fF88B1NSunowokrDzGCw3PXbxekg/oE=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -27,6 +30,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pydantic
+    toml
     typeguard
   ];
 

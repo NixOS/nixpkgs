@@ -1,16 +1,15 @@
 { lib
-, resholvePackage
+, resholve
 , fetchFromGitHub
 , asciidoc
 , bash
 , coreutils
 , gawk
 , gnum4
-, testVersion
 , util-linux
 }:
 
-resholvePackage rec {
+resholve.mkDerivation rec {
   pname = "arch-install-scripts";
   version = "24";
 
@@ -43,7 +42,7 @@ resholvePackage rec {
       # the only *required* arguments are the 3 below
 
       # Specify 1 or more $out-relative script paths. Unlike many
-      # builders, resholvePackage modifies the output files during
+      # builders, resholve.mkDerivation modifies the output files during
       # fixup (to correctly resolve in-package sourcing).
       scripts = [ "bin/arch-chroot" "bin/genfstab" "bin/pacstrap" ];
 

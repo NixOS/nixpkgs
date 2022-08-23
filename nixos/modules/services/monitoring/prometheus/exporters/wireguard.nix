@@ -17,13 +17,13 @@ in {
       type = with types; nullOr (either path str);
       default = null;
 
-      description = ''
+      description = lib.mdDoc ''
         Path to the Wireguard Config to
-        <link xlink:href="https://github.com/MindFlavor/prometheus_wireguard_exporter/tree/2.0.0#usage">add the peer's name to the stats of a peer</link>.
+        [add the peer's name to the stats of a peer](https://github.com/MindFlavor/prometheus_wireguard_exporter/tree/2.0.0#usage).
 
-        Please note that <literal>networking.wg-quick</literal> is required for this feature
-        as <literal>networking.wireguard</literal> uses
-        <citerefentry><refentrytitle>wg</refentrytitle><manvolnum>8</manvolnum></citerefentry>
+        Please note that `networking.wg-quick` is required for this feature
+        as `networking.wireguard` uses
+        {manpage}`wg(8)`
         to set the peers up.
       '';
     };
@@ -31,18 +31,18 @@ in {
     singleSubnetPerField = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         By default, all allowed IPs and subnets are comma-separated in the
-        <literal>allowed_ips</literal> field. With this option enabled,
-        a single IP and subnet will be listed in fields like <literal>allowed_ip_0</literal>,
-        <literal>allowed_ip_1</literal> and so on.
+        `allowed_ips` field. With this option enabled,
+        a single IP and subnet will be listed in fields like `allowed_ip_0`,
+        `allowed_ip_1` and so on.
       '';
     };
 
     withRemoteIp = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether or not the remote IP of a WireGuard peer should be exposed via prometheus.
       '';
     };
@@ -57,9 +57,9 @@ in {
         ${pkgs.prometheus-wireguard-exporter}/bin/prometheus_wireguard_exporter \
           -p ${toString cfg.port} \
           -l ${cfg.listenAddress} \
-          ${optionalString cfg.verbose "-v"} \
-          ${optionalString cfg.singleSubnetPerField "-s"} \
-          ${optionalString cfg.withRemoteIp "-r"} \
+          ${optionalString cfg.verbose "-v true"} \
+          ${optionalString cfg.singleSubnetPerField "-s true"} \
+          ${optionalString cfg.withRemoteIp "-r true"} \
           ${optionalString (cfg.wireguardConfig != null) "-n ${escapeShellArg cfg.wireguardConfig}"}
       '';
       RestrictAddressFamilies = [

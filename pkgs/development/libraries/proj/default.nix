@@ -1,51 +1,51 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , pkg-config
+, buildPackages
 , sqlite
 , libtiff
 , curl
 , gtest
+, nlohmann_json
 }:
 
 stdenv.mkDerivation rec {
   pname = "proj";
-  version = "8.1.1";
+  version = "9.0.0";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "PROJ";
     rev = version;
-    sha256 = "sha256-Z2nruyowC3NG4Wb8AFBL0PME/zp9D7SwQdMSl6VjH/w=";
+    sha256 = "sha256-zMP+WzC65BFz8g8mF5t7toqxmxCJePysd6WJuqpe8yg=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "Make-CApi-test-cross-platform.patch";
-      url = "https://github.com/OSGeo/PROJ/commit/ac113a8898cded7f5359f1edd3abc17a78eee9b4.patch";
-      sha256 = "0gz2xa5nxzck5c0yr7cspv3kw4cz3fxb2yic76w7qfvxidi7z1s1";
-    })
-  ];
-
-  outputs = [ "out" "dev"];
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ sqlite libtiff curl ];
+  buildInputs = [ sqlite libtiff curl nlohmann_json ];
 
   checkInputs = [ gtest ];
 
   cmakeFlags = [
     "-DUSE_EXTERNAL_GTEST=ON"
     "-DRUN_NETWORK_DEPENDENT_TESTS=OFF"
+    "-DNLOHMANN_JSON_ORIGIN=external"
+    "-DEXE_SQLITE3=${buildPackages.sqlite}/bin/sqlite3"
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-    export TMP=$TMPDIR
-  '';
+  preCheck =
+    let
+      libPathEnvVar = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+    in
+      ''
+        export HOME=$TMPDIR
+        export TMP=$TMPDIR
+        export ${libPathEnvVar}=$PWD/lib
+      '';
 
   doCheck = true;
 
@@ -54,6 +54,6 @@ stdenv.mkDerivation rec {
     homepage = "https://proj.org/";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ vbgl dotlambda ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

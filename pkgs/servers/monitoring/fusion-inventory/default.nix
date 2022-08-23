@@ -63,6 +63,7 @@ perlPackages.buildPerlPackage rec {
 
     cp -r bin $out
     cp -r lib $out
+    cp -r share $out
 
     for cur in $out/bin/*; do
       if [ -x "$cur" ]; then

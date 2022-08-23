@@ -2,19 +2,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "handlr";
-  version = "0.6.4";
+  version = "unstable-2021-08-29";
 
   src = fetchFromGitHub {
     owner = "chmln";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-UYcJtBwbUDqDiRoj5PmO+urURfd7S7fSx2XhQRBrKTE=";
+    rev = "90e78ba92d0355cb523abf268858f3123fd81238";
+    sha256 = "sha256-wENhlUBwfNg/r7yMKa1cQI1fbFw+qowwK8EdO912Yys=";
   };
 
-  cargoSha256 = "sha256-xDQV8wVlzItz0lzR1nVRPVsg7nSf/khUhevDlGgSO3g=";
+  cargoSha256 = "sha256-30fSOzWq1CoIabPWGWndi/SaCN/ckxjlbtzuwV8rk6M=";
 
   nativeBuildInputs = [ installShellFiles shared-mime-info ];
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   preCheck = ''
     export HOME=$TEMPDIR
@@ -23,6 +23,7 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     installShellCompletion \
       --zsh  completions/_handlr \
+      --bash  completions/handlr \
       --fish completions/handlr.fish
   '';
 
@@ -30,6 +31,6 @@ rustPlatform.buildRustPackage rec {
     description = "Alternative to xdg-open to manage default applications with ease";
     homepage = "https://github.com/chmln/handlr";
     license = licenses.mit;
-    maintainers = with maintainers; [ mredaelli ];
+    maintainers = with maintainers; [ mredaelli artturin ];
   };
 }

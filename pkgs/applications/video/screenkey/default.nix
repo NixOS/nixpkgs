@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    Babel
+    babel
     pycairo
     pygobject3
   ];

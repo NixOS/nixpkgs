@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation rec {
   pname = "github-desktop";
-  version = "2.9.6";
+  version = "3.0.5";
 
   src = fetchurl {
     url = "https://github.com/shiftkey/desktop/releases/download/release-${version}-linux1/GitHubDesktop-linux-${version}-linux1.deb";
-    sha256 = "sha256-YL3Gc76jWfQvY96pAlS5JB7BwSOUklNvGR0tOBdQHuE=";
+    sha256 = "sha256-7Sk2jDNZtOA04hkl/J+Up2yMGT8+FcXGPiUMcHhb7iY=";
   };
 
   nativeBuildInputs = [
@@ -66,6 +66,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "GUI for managing Git and GitHub.";
     homepage = "https://desktop.github.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     maintainers = with maintainers; [ dan4ik605743 ];
     platforms = platforms.linux;

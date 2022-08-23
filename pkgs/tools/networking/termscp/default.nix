@@ -5,6 +5,8 @@
 , openssl
 , pkg-config
 , rustPlatform
+, AppKit
+, Cocoa
 , Foundation
 , Security
 , stdenv
@@ -12,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "termscp";
-  version = "0.7.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "veeso";
     repo = pname;
     rev = "v${version}";
-    sha256 = "131kij6pnw9r0p2a28g00z85dh758h4rm9ic09qmp61cq7dphkc1";
+    sha256 = "sha256-iazp3Qx2AivuL+S1Ma/64BLJtE46tc33dq5qsgw+a6Q=";
   };
 
-  cargoSha256 = "1k2vwmfy6dczgs3bz8k4j24cc8l7l9fdh3ymp79ril4rp1v6kfp2";
+  cargoSha256 = "sha256-FBW3Hl67Efnc/sNGM1LQw6msWHCYRj3KwfmSD2lpbUc=";
 
   nativeBuildInputs = [
     pkg-config
@@ -32,8 +34,14 @@ rustPlatform.buildRustPackage rec {
     libssh
     openssl
   ] ++ lib.optional stdenv.isDarwin [
+    AppKit
+    Cocoa
     Foundation
     Security
+  ];
+
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [
+    "-framework" "AppKit"
   ];
 
   # Requires network access

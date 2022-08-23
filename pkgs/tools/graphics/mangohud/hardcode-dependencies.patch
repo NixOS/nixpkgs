@@ -1,57 +1,57 @@
 diff --git a/src/dbus.cpp b/src/dbus.cpp
-index 44ffafc..9baf57b 100644
+index 3b3cccb..1405725 100644
 --- a/src/dbus.cpp
 +++ b/src/dbus.cpp
-@@ -162,7 +162,7 @@ bool dbus_manager::init(const std::string& requested_player) {
-         return true;
-     }
+@@ -152,7 +152,7 @@ bool dbus_manager::get_media_player_metadata(metadata& meta, std::string name) {
+ }
  
+ bool dbus_manager::init_internal() {
 -    if (!m_dbus_ldr.IsLoaded() && !m_dbus_ldr.Load("libdbus-1.so.3")) {
 +    if (!m_dbus_ldr.IsLoaded() && !m_dbus_ldr.Load("@libdbus@/lib/libdbus-1.so.3")) {
-         std::cerr << "MANGOHUD: Could not load libdbus-1.so.3\n";
+         SPDLOG_ERROR("Could not load libdbus-1.so.3");
          return false;
      }
 diff --git a/src/loaders/loader_x11.cpp b/src/loaders/loader_x11.cpp
-index 25c65bf..87488d5 100644
+index 4db6f78..c60d08c 100644
 --- a/src/loaders/loader_x11.cpp
 +++ b/src/loaders/loader_x11.cpp
-@@ -88,4 +88,4 @@ void libx11_loader::CleanUp(bool unload) {
+@@ -89,4 +89,4 @@ void libx11_loader::CleanUp(bool unload) {
  
  }
  
 -std::shared_ptr<libx11_loader> g_x11(new libx11_loader("libX11.so.6"));
 +std::shared_ptr<libx11_loader> g_x11(new libx11_loader("@libX11@/lib/libX11.so.6"));
 diff --git a/src/logging.cpp b/src/logging.cpp
-index ee8600b..c7c91a0 100644
+index 1668226..f0c8df5 100644
 --- a/src/logging.cpp
 +++ b/src/logging.cpp
-@@ -19,7 +19,10 @@ string exec(string command) {
- #ifdef __gnu_linux__
- 
-    // Open pipe to file
-+   char* originalPath = getenv("PATH");
-+   setenv("PATH", "@path@", 1);
-    FILE* pipe = popen(command.c_str(), "r");
-+   setenv("PATH", originalPath, 1);
-    if (!pipe) {
+@@ -24,7 +24,11 @@ string exec(string command) {
+ #endif
+     std::array<char, 128> buffer;
+     std::string result;
++
++    char* originalPath = getenv("PATH");
++    setenv("PATH", "@path@", 1);
+     std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(command.c_str(), "r"), pclose);
++    setenv("PATH", originalPath, 1);
+     if (!pipe) {
        return "popen failed!";
-    }
+     }
 diff --git a/src/pci_ids.cpp b/src/pci_ids.cpp
-index 4e2a6d2..9490869 100644
+index feec222..6baa707 100644
 --- a/src/pci_ids.cpp
 +++ b/src/pci_ids.cpp
-@@ -22,12 +22,9 @@ std::istream& get_uncommented_line(std::istream& is, std::string &line)
- 
+@@ -24,11 +24,9 @@ std::istream& get_uncommented_line(std::istream& is, std::string &line)
  void parse_pciids()
  {
--    std::ifstream file("/usr/share/hwdata/pci.ids");
-+    std::ifstream file("@hwdata@/share/hwdata/pci.ids");
-     if(file.fail()){
--        std::ifstream file("/usr/share/misc/pci.ids");
+     std::ifstream file;
+-    file.open("/usr/share/hwdata/pci.ids");
++    file.open("@hwdata@/share/hwdata/pci.ids");
+     if (file.fail()){
+-        file.open("/usr/share/misc/pci.ids");
 -        if (file.fail())
--            printf("MANGOHUD: can't find file pci.ids\n");
--        
-+        printf("MANGOHUD: can't find file pci.ids\n");
+-            SPDLOG_ERROR("can't find file pci.ids");
++        SPDLOG_ERROR("can't find file pci.ids");
      }
  
      std::string line;

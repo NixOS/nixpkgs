@@ -6,8 +6,6 @@
 , callPackage
 }:
 
-assert stdenv ? glibc;
-
 # https://download.eclipse.org/eclipse/downloads/ is the main place to
 # find the downloads needed for new versions
 #
@@ -16,11 +14,11 @@ assert stdenv ? glibc;
 
 let
   platform_major = "4";
-  platform_minor = "22";
-  year = "2021";
-  month = "12"; #release month
-  buildmonth = "11"; #sometimes differs from release month
-  timestamp = "${year}${buildmonth}241800";
+  platform_minor = "24";
+  year = "2022";
+  month = "06"; #release month
+  buildmonth = "06"; #sometimes differs from release month
+  timestamp = "${year}${buildmonth}070700";
   gtk = gtk3;
 in rec {
 
@@ -40,7 +38,7 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-cpp-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
-        hash = "sha512-Lniaw8aUptHI0a75olTNHaMba+ugUdJKf9sJ0hGzKqY94vvfU3N2TH5eQBeXb1MyQdRdBL1D8Vs3+LD9lWlTMg==";
+        hash = "sha512-mqoeP6BwmTWGy6qp/+BSfjTaMfAEKtlyqHwn1GrihRCXQyDNeVWRkBNa7JTCUs+yve2rokgisZNVSwpgAqqHYQ==";
       };
   };
 
@@ -52,7 +50,7 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-modeling-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
-        hash = "sha512-F/5yroFDbrSclmUP5vTNSkYR+OZ1dkPv2FPZT1XM5HFoynitYkDxnj+uTcJIBOWv3Zu1plU4yweW0DF1E9jLcg==";
+        hash = "sha512-RbvqIUnJ00/qvqsw1s5mcZ2SQhhT2y+S9J9xOB+t8bK+1SOhUOFvU/HcDAmHBl88L1qBCF0ckAKd7jETYPeXnw==";
       };
   };
 
@@ -64,7 +62,7 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops${platform_major}/R-${platform_major}.${platform_minor}-${timestamp}/eclipse-platform-${platform_major}.${platform_minor}-linux-gtk-x86_64.tar.gz";
-        hash = "sha512-3XsBk8/KHtTjit/WMneOghuOkqEHOIdLwof7718dsrDP4vfgcfhb47V7fPYDOw2eld88pHk+85mTGpZOTTywxw==";
+        hash = "sha512-PPgFti6UUSkIDEUBGY4tDVfnaFXxTUIRIvfMOVXVxIr+ciGK2dOHpQ7K9hcYnWqoIulxa/fV+TXQI3hzcIRVAA==";
       };
   };
 
@@ -90,7 +88,7 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops${platform_major}/R-${platform_major}.${platform_minor}-${timestamp}/eclipse-SDK-${platform_major}.${platform_minor}-linux-gtk-x86_64.tar.gz";
-        hash = "sha512-7bTYIFnX8oUPaqDrMOlGNnpyC+xvDQsNmgZUps/epGkzM9Fjlc2lPr75VR7UaezBCoAuNTSHCYtG5d6TJOKjmQ==";
+        hash = "sha512-IVSdZI4QnMtj7HdWAXATeJSQt950qNkiSL7n/+f9bPioCA2NtNbDUlBBxnownMKnr+C+iJH2phzPabT9Ar6plA==";
       };
   };
 
@@ -102,7 +100,7 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-java-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
-        hash = "sha512-ahykujYH9RLvxVMPFlFILGYJO0LXHvuhnILifeAo5v5Tp5ktGVlZWG461iZHETlt8Zr76liGAqm1ytQcuzCyQA==";
+        hash = "sha512-ace+zpz5tjLA89gHLyBrjldKU7+kb85uJX4y4IQdVkrskrA+uCv0z9lzB/qbgrH51ZFN2xz04z1nFLJd09WacA==";
       };
   };
 
@@ -114,7 +112,7 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-jee-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
-        hash = "sha512-CuKxjcnvkROURtavZJN0AhCuA0x7NayZTpIOn9oE21rUzVqR0p7x7C5RPtMZ9gS4ZMWcYyQDJ0BVgRHBoKsYqQ==";
+        hash = "sha512-Xo1dk8+BLUoUVrnMm9XC+IBzoS9bKde2waRaYxjCRBOykUiZ4npGgquh3bEbsk1GZ3cKlwuxLxr9Y9+RGw3UTA==";
       };
   };
 
@@ -126,7 +124,7 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-committers-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
-        hash = "sha512-CqUbxUUMIJsXsx4XEOQ1d2L3U22VpAfQP+R8HNoVetDawhR+b2tyDVnTQRKTL4dJ0fjLXDeoHvTlPm1EXi/ahA==";
+        hash = "sha512-rkjLwexI352G8CYkaF/1dl26wF58IuPMan76gR/3Fx/CMywtv25Tueu8NWZGkHd6Zwdpv/h25D8fu9tbM2NExg==";
       };
   };
 
@@ -138,7 +136,7 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-rcp-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
-        hash = "sha256-ys3MjIBr2hLZC/GB8Am/Qlto4+dSzOoK9p7QF+GS0Eg=";
+        hash = "sha256-8FaVTzjvtT17pYUYfKJgVd55nd2ngrsLY+7AJnXu/BI=";
       };
   };
 

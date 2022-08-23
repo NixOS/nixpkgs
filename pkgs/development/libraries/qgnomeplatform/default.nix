@@ -15,13 +15,13 @@
 
 mkDerivation rec {
   pname = "qgnomeplatform";
-  version = "0.8.3";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "FedoraQt";
     repo = "QGnomePlatform";
     rev = version;
-    sha256 = "sha256-950VEcxhJeBPSQToC8KpBx/KSneARN6Y8X7CAuFyRjo=";
+    sha256 = "sha256-DaIBtWmce+58OOhqFG5802c3EprBAtDXhjiSPIImoOM=";
   };
 
   patches = [

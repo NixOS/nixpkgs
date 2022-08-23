@@ -11,6 +11,7 @@
 , yajl
 , nixosTests
 , criu
+, fetchpatch
 }:
 
 let
@@ -18,6 +19,7 @@ let
   disabledTests = [
     "test_capabilities.py"
     "test_cwd.py"
+    "test_delete.py"
     "test_detach.py"
     "test_exec.py"
     "test_hooks.py"
@@ -37,13 +39,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "crun";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = version;
-    sha256 = "sha256-hO3gOZ0AaSvymIDvoylHzlHscoN1+G7wDXTCP1c5uIw=";
+    sha256 = "sha256-eirCENgt25VRPub7c9cxYQ1uFxYbzm75cJ1v4r6O/+k=";
     fetchSubmodules = true;
   };
 
@@ -54,6 +56,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional (lib.elem stdenv.hostPlatform.system criu.meta.platforms) criu;
 
   enableParallelBuilding = true;
+  strictDeps = true;
 
   # we need this before autoreconfHook does its thing in order to initialize
   # config.h with the correct values

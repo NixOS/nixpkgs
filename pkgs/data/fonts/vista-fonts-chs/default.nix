@@ -5,7 +5,7 @@ stdenvNoCC.mkDerivation {
   version = "1";
 
   src = fetchurl {
-    url = "http://web.archive.org/web/20161221192937if_/http://download.microsoft.com/download/d/6/e/d6e2ff26-5821-4f35-a18b-78c963b1535d/VistaFont_CHS.EXE";
+    url = "https://web.archive.org/web/20161221192937if_/http://download.microsoft.com/download/d/6/e/d6e2ff26-5821-4f35-a18b-78c963b1535d/VistaFont_CHS.EXE";
     # Alternative mirror:
     # http://www.eeo.cn/download/font/VistaFont_CHS.EXE
     sha256 = "1qwm30b8aq9piyqv07hv8b5bac9ms40rsdf8pwix5dyk8020i8xi";

@@ -3,9 +3,16 @@
 with lib;
 
 let
+
   name = "maddy";
+
   cfg = config.services.maddy;
+
   defaultConfig = ''
+    # Minimal configuration with TLS disabled, adapted from upstream example
+    # configuration here https://github.com/foxcpp/maddy/blob/master/maddy.conf
+    # Do not use this in production!
+
     tls off
 
     auth.pass_table local_authdb {
@@ -131,22 +138,34 @@ let
 in {
   options = {
     services.maddy = {
+
       enable = mkEnableOption "Maddy, a free an open source mail server";
 
       user = mkOption {
         default = "maddy";
         type = with types; uniq string;
         description = ''
-          Name of the user under which maddy will run. If not specified, a
-          default user will be created.
+          User account under which maddy runs.
+
+          <note><para>
+          If left as the default value this user will automatically be created
+          on system activation, otherwise the sysadmin is responsible for
+          ensuring the user exists before the maddy service starts.
+          </para></note>
         '';
       };
+
       group = mkOption {
         default = "maddy";
         type = with types; uniq string;
         description = ''
-          Name of the group under which maddy will run. If not specified, a
-          default group will be created.
+          Group account under which maddy runs.
+
+          <note><para>
+          If left as the default value this group will automatically be created
+          on system activation, otherwise the sysadmin is responsible for
+          ensuring the group exists before the maddy service starts.
+          </para></note>
         '';
       };
 
@@ -154,18 +173,20 @@ in {
         default = "localhost";
         type = with types; uniq string;
         example = ''example.com'';
-        description = ''
+        description = lib.mdDoc ''
           Hostname to use. It should be FQDN.
         '';
       };
+
       primaryDomain = mkOption {
         default = "localhost";
         type = with types; uniq string;
         example = ''mail.example.com'';
-        description = ''
+        description = lib.mdDoc ''
           Primary MX domain to use. It should be FQDN.
         '';
       };
+
       localDomains = mkOption {
         type = with types; listOf str;
         default = ["$(primary_domain)"];
@@ -174,22 +195,29 @@ in {
           "example.com"
           "other.example.com"
         ];
-        description = ''
+        description = lib.mdDoc ''
           Define list of allowed domains.
         '';
       };
+
       config = mkOption {
         type = with types; nullOr lines;
         default = defaultConfig;
         description = ''
-          Server configuration.
+          Server configuration, see
+          <link xlink:href="https://maddy.email">https://maddy.email</link> for
+          more information. The default configuration of this module will setup
+          minimal maddy instance for mail transfer without TLS encryption.
+          <note><para>
+          This should not be used in a production environment.
+          </para></note>
         '';
       };
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Open the configured incoming and outgoing mail server ports.
         '';
       };
@@ -203,9 +231,11 @@ in {
       packages = [ pkgs.maddy ];
       services.maddy = {
         serviceConfig = {
-          User = "${cfg.user}";
-          Group = "${cfg.group}";
+          User = cfg.user;
+          Group = cfg.group;
+          StateDirectory = [ "maddy" ];
         };
+        restartTriggers = [ config.environment.etc."maddy/maddy.conf".source ];
         wantedBy = [ "multi-user.target" ];
       };
     };
@@ -220,20 +250,16 @@ in {
       '';
     };
 
-    users.users = optionalAttrs (cfg.user == "maddy") {
-      maddy = {
-        description = "Maddy service user";
-        group = cfg.group;
-        home = "/var/lib/maddy";
-        createHome = true;
+    users.users = optionalAttrs (cfg.user == name) {
+      ${name} = {
         isSystemUser = true;
+        group = cfg.group;
+        description = "Maddy mail transfer agent user";
       };
     };
 
-    users.groups = mkIf (cfg.group == "maddy") {
-      maddy = pkgs.lib.mkForce {
-        name = cfg.group;
-      };
+    users.groups = optionalAttrs (cfg.group == name) {
+      ${cfg.group} = { };
     };
 
     networking.firewall = mkIf cfg.openFirewall {

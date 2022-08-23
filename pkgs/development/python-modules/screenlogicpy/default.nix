@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "screenlogicpy";
-  version = "0.5.3";
+  version = "0.5.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dieselrabbit";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1ic19l0xr2wlnc8q6nhvv747k0f4j9k94ix14zkrwpp9nl09sm8j";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-1tBr7k7RutCHvea/56J7drl9P+WZ5bQpDeQwhgktc1s=";
   };
 
   checkInputs = [

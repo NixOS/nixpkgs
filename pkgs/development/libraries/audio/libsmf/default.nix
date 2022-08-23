@@ -1,11 +1,14 @@
-{ lib, stdenv, fetchurl, autoreconfHook, glib, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, glib, pkg-config }:
 
 stdenv.mkDerivation rec {
   version = "1.3";
   pname = "libsmf";
-  src = fetchurl {
-    url = "https://github.com/stump/libsmf/archive/${pname}-${version}.tar.gz";
-    sha256 = "1527pcc1vd0l5iks2yw8m0bymcrnih2md5465lwpzw0wgy4rky7n";
+
+  src = fetchFromGitHub {
+    owner = "stump";
+    repo = "libsmf";
+    rev = "libsmf-${version}";
+    sha256 = "sha256-OJXJkXvbM2GQNInZXU2ldObquKHhqkdu1zqUDnVZN0Y=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -16,6 +19,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/stump/libsmf";
     license = licenses.bsd2;
     maintainers = [ maintainers.goibhniu ];
+    mainProgram = "smfsh";
     platforms = platforms.unix;
   };
 }

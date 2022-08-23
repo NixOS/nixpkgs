@@ -16,13 +16,14 @@ merging is handled.
 
 `types.path`
 
-:   A filesystem path, defined as anything that when coerced to a string
-    starts with a slash. Even if derivations can be considered as path,
-    the more specific `types.package` should be preferred.
+:   A filesystem path is anything that starts with a slash when
+    coerced to a string. Even if derivations can be considered as
+    paths, the more specific `types.package` should be preferred.
 
 `types.package`
 
-:   A derivation or a store path.
+:   A top-level store path. This can be an attribute set pointing
+    to a store path, like a derivation or a flake input.
 
 `types.anything`
 
@@ -62,6 +63,24 @@ merging is handled.
     }
     ```
     :::
+
+`types.raw`
+
+:   A type which doesn't do any checking, merging or nested evaluation. It
+    accepts a single arbitrary value that is not recursed into, making it
+    useful for values coming from outside the module system, such as package
+    sets or arbitrary data. Options of this type are still evaluated according
+    to priorities and conditionals, so `mkForce`, `mkIf` and co. still work on
+    the option value itself, but not for any value nested within it. This type
+    should only be used when checking, merging and nested evaluation are not
+    desirable.
+
+`types.optionType`
+
+:   The type of an option's type. Its merging operation ensures that nested
+    options have the correct file location annotated, and that if possible,
+    multiple option definitions are correctly merged together. The main use
+    case is as the type of the `_module.freeformType` option.
 
 `types.attrs`
 
@@ -201,6 +220,25 @@ Value types are types that take a value parameter.
         requires using a function:
         `the-submodule = { ... }: { options = { ... }; }`.
 
+`types.deferredModule`
+
+:   Whereas `submodule` represents an option tree, `deferredModule` represents
+    a module value, such as a module file or a configuration.
+
+    It can be set multiple times.
+
+    Module authors can use its value in `imports`, in `submoduleWith`'s `modules`
+    or in `evalModules`' `modules` parameter, among other places.
+
+    Note that `imports` must be evaluated before the module fixpoint. Because
+    of this, deferred modules can only be imported into "other" fixpoints, such
+    as submodules.
+
+    One use case for this type is the type of a "default" module that allow the
+    user to affect all submodules in an `attrsOf submodule` at once. This is
+    more convenient and discoverable than expecting the module user to
+    type-merge with the `attrsOf submodule` option.
+
 ## Composed Types {#sec-option-types-composed}
 
 Composed types are types that take a type as parameter. `listOf
@@ -250,6 +288,12 @@ Composed types are types that take a type as parameter. `listOf
 :   Ensures that type *`t`* cannot be merged. It is used to ensure option
     definitions are declared only once.
 
+`types.unique` `{ message = m }` *`t`*
+
+:   Ensures that type *`t`* cannot be merged. Prints the message *`m`*, after
+    the line `The option <option path> is defined multiple times.` and before
+    a list of definition locations.
+
 `types.either` *`t1 t2`*
 
 :   Type *`t1`* or type *`t2`*, e.g. `with types; either int str`.
@@ -282,6 +326,10 @@ modularity.
 The option set can be defined directly
 ([Example: Directly defined submodule](#ex-submodule-direct)) or as reference
 ([Example: Submodule defined as a reference](#ex-submodule-reference)).
+
+Note that even if your submodule’s options all have a default value,
+you will still need to provide a default value (e.g. an empty attribute set)
+if you want to allow users to leave it undefined.
 
 ::: {#ex-submodule-direct .example}
 ::: {.title}

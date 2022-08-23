@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "arpa2cm";
-  version = "0.9.0";
+  version = "1.0.4";
 
   src = fetchFromGitLab {
-    sha256 = "sha256-1z0fH8vZJiPkY/C654us9s2BULM1tlvvYcszNqk34yI=";
-    rev = "v${version}";
-    repo = pname;
     owner = "arpa2";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-2vb/7UL+uWGrQNh8yOZ3gih5G1/eOp064hF78SDsPGk=";
   };
 
   nativeBuildInputs = [ cmake ];

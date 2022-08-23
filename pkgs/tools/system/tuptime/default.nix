@@ -1,16 +1,18 @@
 { lib, stdenv, fetchFromGitHub
 , makeWrapper, installShellFiles
-, python3, sqlite }:
+, python3, sqlite
+, nixosTests
+}:
 
 stdenv.mkDerivation rec {
   pname = "tuptime";
-  version = "5.0.2";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "rfrail3";
     repo = "tuptime";
     rev = version;
-    sha256 = "sha256-2Q1czKvwdVq+2+64k4SOghw05CUlT5HdZpvKMRbGdDY=";
+    sha256 = "sha256-s0VtKOaSPQlF58/2m/DwYDuHHPGnHVAJMA/p3hISTNE=";
   };
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
@@ -34,9 +36,12 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${lib.makeBinPath [ sqlite ]}"
   '';
 
+  passthru.tests = nixosTests.tuptime;
+
   meta = with lib; {
     description = "Total uptime & downtime statistics utility";
     homepage = "https://github.com/rfrail3/tuptime";
+    changelog = "https://github.com/rfrail3/tuptime/blob/master/CHANGELOG";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.evils ];

@@ -1,37 +1,48 @@
-{ lib, stdenv, fetchFromGitHub, cmake
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
 , alsaSupport ? !stdenv.isDarwin, alsa-lib
+, dbusSupport ? !stdenv.isDarwin, dbus
+, pipewireSupport ? !stdenv.isDarwin, pipewire
 , pulseSupport ? !stdenv.isDarwin, libpulseaudio
 , CoreServices, AudioUnit, AudioToolbox
 }:
 
 stdenv.mkDerivation rec {
   pname = "openal-soft";
-  version = "1.21.1";
+  version = "1.22.2";
 
   src = fetchFromGitHub {
     owner = "kcat";
     repo = "openal-soft";
     rev = version;
-    sha256 = "sha256-rgc6kjXaZb6sCR+e9Gu7BEEHIiCHMygpLIeSqgWkuAg=";
+    sha256 = "sha256-MVM0qCZDWcO7/Hnco+0dBqzBLcWD279xjx0slxxlc4w=";
   };
 
   # this will make it find its own data files (e.g. HRTF profiles)
   # without any other configuration
   patches = [ ./search-out.patch ];
   postPatch = ''
-    substituteInPlace alc/helpers.cpp \
+    substituteInPlace core/helpers.cpp \
       --replace "@OUT@" $out
   '';
 
-  nativeBuildInputs = [ cmake ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = lib.optional alsaSupport alsa-lib
+    ++ lib.optional dbusSupport dbus
+    ++ lib.optional pipewireSupport pipewire
     ++ lib.optional pulseSupport libpulseaudio
     ++ lib.optionals stdenv.isDarwin [ CoreServices AudioUnit AudioToolbox ];
 
-  NIX_LDFLAGS = toString (
-    lib.optional alsaSupport "-lasound"
-    ++ lib.optional pulseSupport "-lpulse");
+  cmakeFlags = [
+    # Automatically links dependencies without having to rely on dlopen, thus
+    # removes the need for NIX_LDFLAGS.
+    "-DALSOFT_DLOPEN=OFF"
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # https://github.com/NixOS/nixpkgs/issues/183774
+    "-DOSS_INCLUDE_DIR=${stdenv.cc.libc}/include"
+  ];
 
   meta = with lib; {
     description = "OpenAL alternative";

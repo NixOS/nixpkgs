@@ -1,17 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, jdk8 }:
+{ lib, stdenv, fetchFromGitHub, jdk, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "async-profiler";
-  version = "2.0";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "jvm-profiling-tools";
     repo = "async-profiler";
     rev = "v${version}";
-    sha256 = "sha256-vSBueRNraMgLcaprPsBUriX3WZ7N0UrllnSVLL2F738=";
+    sha256 = "sha256-TbsLYPAaL2nzzRxvCD+7oaIf0s9X2s6BHIT/KD6CN74=";
   };
 
-  buildInputs = [ jdk8 ];
+  nativeBuildInputs = [ makeWrapper ];
+
+  buildInputs = [ jdk ];
 
   installPhase = ''
     runHook preInstall
@@ -22,17 +24,14 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  patches = [
-    # https://github.com/jvm-profiling-tools/async-profiler/pull/428
-    ./0001-Fix-darwin-build.patch
-  ];
-
   fixupPhase = ''
     substituteInPlace $out/bin/async-profiler \
       --replace 'JATTACH=$SCRIPT_DIR/build/jattach' \
                 'JATTACH=${placeholder "out"}/bin/jattach' \
       --replace 'PROFILER=$SCRIPT_DIR/build/libasyncProfiler.so' \
                 'PROFILER=${placeholder "out"}/lib/libasyncProfiler.so'
+
+    wrapProgram $out/bin/async-profiler --prefix PATH : ${lib.makeBinPath [ jdk ]}
   '';
 
   meta = with lib; {

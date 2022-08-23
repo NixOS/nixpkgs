@@ -1,9 +1,9 @@
 { lib
+, stdenv
 , async-timeout
 , buildPythonPackage
 , fetchPypi
 , pytest-asyncio
-, pytest-cov
 , pytestCheckHook
 , pythonOlder
 , siosocks
@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "aioftp";
-  version = "0.20.0";
+  version = "0.21.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-N8qiKsWPaFT/t5p1eSHS0BydoXv4AL6y8gP4z4P9fsE=";
+    sha256 = "sha256-xtrlCzqgfwlbLZOoN9Y23ZPyNaqv5Ure+Cvg+OVWf9I=";
   };
 
   propagatedBuildInputs = [
@@ -29,9 +29,17 @@ buildPythonPackage rec {
   checkInputs = [
     async-timeout
     pytest-asyncio
-    pytest-cov
     pytestCheckHook
     trustme
+  ];
+
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # uses 127.0.0.2, which macos doesn't like
+    "test_pasv_connection_pasv_forced_response_address"
   ];
 
   pythonImportsCheck = [

@@ -27,8 +27,8 @@ in
             };
           }
           '';
-        description = ''
-          kime configuration. Refer to <link xlink:href="https://github.com/Riey/kime/blob/v${pkgs.kime.version}/docs/CONFIGURATION.md"/> for details on supported values.
+        description = lib.mdDoc ''
+          kime configuration. Refer to <https://github.com/Riey/kime/blob/v${pkgs.kime.version}/docs/CONFIGURATION.md> for details on supported values.
         '';
       };
     };
@@ -45,5 +45,7 @@ in
 
     environment.etc."xdg/kime/config.yaml".text = replaceStrings [ "\\\\" ] [ "\\" ] (builtins.toJSON cfg.config);
   };
-}
 
+  # uses attributes of the linked package
+  meta.buildDocsInSandbox = false;
+}

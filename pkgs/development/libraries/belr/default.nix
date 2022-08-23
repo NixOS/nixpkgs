@@ -1,12 +1,13 @@
 { bctoolbox
 , cmake
 , fetchFromGitLab
-, lib, stdenv
+, lib
+, stdenv
 }:
 
 stdenv.mkDerivation rec {
   pname = "belr";
-  version = "4.5.3";
+  version = "5.1.12";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -14,7 +15,7 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "sha256-TTfBOhnyyAvQe+HXfr2GkuDTx07cHLqcsssW0dA7GlQ=";
+    sha256 = "sha256-0JDwNKqPkzbXqDhgMV+okPMHPFJwmLwLsDrdD55Jcs4=";
   };
 
   buildInputs = [ bctoolbox ];
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DENABLE_STATIC=NO" ];
 
   meta = with lib; {
-    description = "Belledonne Communications' language recognition library";
+    description = "Belledonne Communications' language recognition library. Part of the Linphone project.";
     homepage = "https://gitlab.linphone.org/BC/public/belr";
     license = licenses.gpl3Plus;
     platforms = platforms.all;

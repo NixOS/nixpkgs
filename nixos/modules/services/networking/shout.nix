@@ -28,32 +28,32 @@ in {
     private = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Make your shout instance private. You will need to configure user
-        accounts by adding entries in <filename>${shoutHome}/users</filename>.
+        accounts by adding entries in {file}`${shoutHome}/users`.
       '';
     };
 
     listenAddress = mkOption {
       type = types.str;
       default = "0.0.0.0";
-      description = "IP interface to listen on for http connections.";
+      description = lib.mdDoc "IP interface to listen on for http connections.";
     };
 
     port = mkOption {
       type = types.port;
       default = 9000;
-      description = "TCP port to listen on for http connections.";
+      description = lib.mdDoc "TCP port to listen on for http connections.";
     };
 
     configFile = mkOption {
       type = types.nullOr types.lines;
       default = null;
-      description = ''
-        Contents of Shout's <filename>config.js</filename> file.
+      description = lib.mdDoc ''
+        Contents of Shout's {file}`config.js` file.
 
         Used for backward compatibility, recommended way is now to use
-        the <literal>config</literal> option.
+        the `config` option.
 
         Documentation: http://shout-irc.com/docs/server/configuration.html
       '';
@@ -70,8 +70,8 @@ in {
           port = 6697;
         };
       };
-      description = ''
-        Shout <filename>config.js</filename> contents as attribute set (will be
+      description = lib.mdDoc ''
+        Shout {file}`config.js` contents as attribute set (will be
         converted to JSON to generate the configuration file).
 
         The options defined here will be merged to the default configuration file.

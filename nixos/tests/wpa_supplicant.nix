@@ -5,7 +5,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
     maintainers = [ rnhmjoj ];
   };
 
-  machine = { ... }: {
+  nodes.machine = { ... }: {
     imports = [ ../modules/profiles/minimal.nix ];
 
     # add a virtual wlan interface
@@ -27,8 +27,19 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
       enable = lib.mkOverride 0 true;
       userControlled.enable = true;
       interfaces = [ "wlan1" ];
+      fallbackToWPA2 = true;
 
       networks = {
+        # test WPA2 fallback
+        mixed-wpa = {
+          psk = "password";
+          authProtocols = [ "WPA-PSK" "SAE" ];
+        };
+        sae-only = {
+          psk = "password";
+          authProtocols = [ "SAE" ];
+        };
+
         # test network
         nixos-test.psk = "@PSK_NIXOS_TEST@";
 
@@ -64,8 +75,12 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
           machine.succeed(f"grep -q @PSK_MISSING@ {config_file}")
           machine.succeed(f"grep -q P@ssowrdWithSome@tSymbol {config_file}")
 
-          # save file for manual inspection
-          machine.copy_from_vm(config_file)
+      with subtest("WPA2 fallbacks have been generated"):
+          assert int(machine.succeed(f"grep -c sae-only {config_file}")) == 1
+          assert int(machine.succeed(f"grep -c mixed-wpa {config_file}")) == 2
+
+      # save file for manual inspection
+      machine.copy_from_vm(config_file)
 
       with subtest("Daemon is running and accepting connections"):
           machine.wait_for_unit("wpa_supplicant-wlan1.service")

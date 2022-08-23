@@ -22,13 +22,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "amdvlk";
-  version = "2021.Q4.2";
+  version = "2022.Q2.2";
 
   src = fetchRepoProject {
     name = "${pname}-src";
     manifest = "https://github.com/GPUOpen-Drivers/AMDVLK.git";
     rev = "refs/tags/v-${version}";
-    sha256 = "DpylZjIqWmCnUI0lEvd/HQcY+lr8asMurt1K9MI3qQw=";
+    sha256 = "4LV6g2snT1usY+Ic9Hb/IwXAJQ97I9DigZCah6mwewA=";
   };
 
   buildInputs = [
@@ -87,11 +87,11 @@ in stdenv.mkDerivation rec {
     #!nix-shell -i bash -p coreutils curl gnused jq common-updater-scripts
 
     function setHash() {
-      sed -i "pkgs/development/libraries/amdvlk/default.nix" -e 's,sha256 = "[^.'"'"']*",sha256 = "'"$1"'",'
+      sed -i "pkgs/development/libraries/amdvlk/default.nix" -e 's,sha256 = "[^'"'"'"]*",sha256 = "'"$1"'",'
     }
 
     version="$(curl -sL "https://api.github.com/repos/GPUOpen-Drivers/AMDVLK/releases?per_page=1" | jq '.[0].tag_name | split("-") | .[1]' --raw-output)"
-    sed -i "pkgs/development/libraries/amdvlk/default.nix" -e 's/version = "[^.'"'"']*"/version = "'"$version"'"/'
+    sed -i "pkgs/development/libraries/amdvlk/default.nix" -e 's/version = "[^'"'"'"]*"/version = "'"$version"'"/'
 
     setHash "$(nix-instantiate --eval -A lib.fakeSha256 | xargs echo)"
     hash="$(nix to-base64 $(nix-build -A amdvlk 2>&1 | tail -n3 | grep 'got:' | cut -d: -f2- | xargs echo || true))"

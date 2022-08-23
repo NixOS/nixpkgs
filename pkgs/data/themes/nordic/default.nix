@@ -1,76 +1,83 @@
-{ lib, stdenv, fetchFromGitHub, gtk-engine-murrine }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, gtk-engine-murrine
+, jdupes
+}:
 
 stdenv.mkDerivation rec {
   pname = "nordic";
-  version = "2.1.0";
+  version = "unstable-2022-06-21";
 
   srcs = [
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = pname;
-      rev = "0112af91943b8819f7a1af9a508cda7fe3d74051";
-      sha256 = "sha256-ccOA5/jXTx20495NpTgVu7DvsjfTEULqL3IyJ+Pd/ug";
+      rev = "bb5e31ec1488b1fd5641aa10f65f36d8714b5dba";
+      sha256 = "sha256-wTWHdao/1RLqUmqh/9gEyhERGymFWHqiC97JD28LSgk=";
       name = "Nordic";
     })
 
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = pname;
-      rev = "b30d2c844cc6ef5d020308f1c02791de45b607a7";
-      sha256 = "sha256-g5yCCFXzipZLmUat+1r6QWHB7DWQvMKhMexHPV/DJHM";
+      rev = "e1fb044a14b5c7fe1f6c2de42bfb5fdfb1448415";
+      sha256 = "sha256-oWwc+bzeAf0NoYfA2r2oGpeciVUWFC7yJzlUAYfpdTY=";
       name = "Nordic-standard-buttons";
     })
 
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = pname;
-      rev = "6d38d6af363528f42619f663e3ecd4c08dfd2411";
-      sha256 = "sha256-jaRiSE6yfTltzZ2vr8w4d+YtSz7REOcL7vOOhQvIMlQ";
+      rev = "4c7c9f2d670a6f0c9cff1ec31fab67c826fdcc0f";
+      sha256 = "sha256-txKClsygX2IUGF8oOG6gDY6Y3v28kJthjdPrPEOZarQ=";
       name = "Nordic-darker";
     })
 
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = pname;
-      rev = "4142817c14c27b371d42796445bedc84dc94672c";
-      sha256 = "sha256-FAb1+EREcwYrfSxAl6LrPaJtkHMt67NV3bG87g1cFT4";
+      rev = "8abe28ff07c190b8c343aacb6a0ce58e62abbd74";
+      sha256 = "sha256-tk9VZtwpIuBcWu1ERJLnlhM71pkrNEUzu8PDb+IEnpw=";
       name = "Nordic-darker-standard-buttons";
     })
 
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = pname;
-      rev = "2a91d6f3db70412b0a80ed33546fbe93075627d8";
-      sha256 = "sha256-Su+amS7moc2IDONNvqw3bjL6Q0WLJWzHu6WvfcVDcDY";
+      rev = "9764e0f1af100731f77bf7f15792639d0032e5ed";
+      sha256 = "sha256-3vxrbxUhPj6PKWpjyCruhFxYz9nPfo1DHferYUD7enU=";
       name = "Nordic-bluish-accent";
     })
 
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = pname;
-      rev = "3ebd334f97d638fdc888b16d69851e3ee31131f2";
-      sha256 = "sha256-h0IXtWcdDvAEVi/1cLZF4Vacdl6VAY+5uo0LGPNe0bg";
+      rev = "407316a3fd5e07d183474aea4cae28bb958afa6c";
+      sha256 = "sha256-SvLTqDXjy8c4rZo0cZ83kfuiGd2+hyGvwILxVCz65jQ=";
       name = "Nordic-bluish-accent-standard-buttons";
     })
 
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = "${pname}-polar";
-      rev = "803926882f8178c72b433466a377aaa33c5b372a";
-      sha256 = "sha256-G7Vu03PoFOEU9uxb5JiHR4Tr8qk47fPo7Gg7Vt9Zzns";
+      rev = "1ffa167c4807e4b22e0934aee41403721877bc56";
+      sha256 = "sha256-Xat5YWnxTBnvnUfs1o5EhdmDezmOXtqry97Yc8O+WYM=";
       name = "Nordic-Polar";
     })
 
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = "${pname}-polar";
-      rev = "988cb8a16ece3901b8b0e7a5b86503400491cb1e";
-      sha256 = "sha256-Zx1mrzJm5o4wQwOR8ZU2OEcjD3/6UXwLrBYpMtCkQbg";
+      rev = "9bc68223edf7ad9dc83032d7d51ccc53f9440337";
+      sha256 = "sha256-XjGjijBky/iPcoUGDRrwwoZ5f2gbLchmQizkQN+Opjg=";
       name = "Nordic-Polar-standard-buttons";
     })
   ];
 
   sourceRoot = ".";
+
+  nativeBuildInputs = [ jdupes ];
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
@@ -100,6 +107,10 @@ stdenv.mkDerivation rec {
     mv -v $out/share/themes/Nordic/kde/plasma/look-and-feel $out/share/plasma/
     mv -v $out/share/themes/Nordic/kde/sddm/* $out/share/sddm/themes/Nordic/
     rm -rf $out/share/themes/Nordic/kde
+
+    # Replace duplicate files with hardlinks to the first file in each
+    # set of duplicates, reducing the installed size in about 65%
+    jdupes -L -r $out/share
 
     runHook postInstall
   '';

@@ -1,101 +1,44 @@
 diff --git a/Cargo.lock b/Cargo.lock
-index ef25833..d9de212 100644
+index 4d699f11..1eb894fc 100644
 --- a/Cargo.lock
 +++ b/Cargo.lock
-@@ -41,9 +41,9 @@ checksum = "f8aac770f1885fd7e387acedd76065302551364496e46b3dd00860b2f8359b9d"
- 
- [[package]]
- name = "az"
--version = "0.3.1"
-+version = "1.0.0"
+@@ -875,15 +875,6 @@ version = "0.1.4"
  source = "registry+https://github.com/rust-lang/crates.io-index"
--checksum = "41a6b78289a33e09b00818ca8c90ab17c5dabb6e74f4b29a6de679c0e0886ade"
-+checksum = "e9bcd47d94aa4eb8c076b50fc61a75020789394ffb9bd74a180b3379130f6569"
- 
- [[package]]
- name = "base64"
-@@ -384,9 +384,9 @@ dependencies = [
- 
- [[package]]
- name = "gmp-mpfr-sys"
--version = "1.2.2"
-+version = "1.4.0"
- source = "registry+https://github.com/rust-lang/crates.io-index"
--checksum = "63d7f805cf9df081683d463f62864bda8b8e3ce7162a8e11cd0c49f27b8ce89b"
-+checksum = "ad4e8e85ec9fb902b4564deeb17b1a263d3ba1334bef56154418aa045b159508"
- dependencies = [
-  "libc",
-  "winapi 0.3.8",
-@@ -485,9 +487,9 @@ dependencies = [
- 
- [[package]]
- name = "lexical-core"
--version = "0.4.6"
-+version = "0.4.8"
- source = "registry+https://github.com/rust-lang/crates.io-index"
--checksum = "2304bccb228c4b020f3a4835d247df0a02a7c4686098d4167762cfbbe4c5cb14"
-+checksum = "34449d00c5d4066537f4dc72320b18e3aa421e8e92669250eecd664c618fefce"
- dependencies = [
-  "arrayvec 0.4.12",
-  "cfg-if",
-@@ -766,15 +766,6 @@ version = "0.1.2"
- source = "registry+https://github.com/rust-lang/crates.io-index"
- checksum = "77af24da69f9d9341038eba93a073b1fdaaa1b788221b00a69bce9e762cb32de"
+ checksum = "28988d872ab76095a6e6ac88d99b54fd267702734fd7ffe610ca27f533ddb95a"
  
 -[[package]]
 -name = "openssl-src"
--version = "111.9.0+1.1.1g"
+-version = "300.0.2+3.0.0"
 -source = "registry+https://github.com/rust-lang/crates.io-index"
--checksum = "a2dbe10ddd1eb335aba3780eb2eaa13e1b7b441d2562fd962398740927f39ec4"
+-checksum = "14a760a11390b1a5daf72074d4f6ff1a6e772534ae191f999f57e9ee8146d1fb"
 -dependencies = [
 - "cc",
 -]
 -
  [[package]]
  name = "openssl-sys"
- version = "0.9.58"
-@@ -784,7 +775,6 @@ dependencies = [
-  "autocfg 1.0.0",
+ version = "0.9.70"
+@@ -893,7 +884,6 @@ dependencies = [
+  "autocfg 1.0.1",
   "cc",
   "libc",
 - "openssl-src",
   "pkg-config",
   "vcpkg",
  ]
-@@ -1159,9 +1149,9 @@ dependencies = [
- 
- [[package]]
- name = "rug"
--version = "1.8.0"
-+version = "1.11.0"
- source = "registry+https://github.com/rust-lang/crates.io-index"
--checksum = "72315b6d9cb7d886fb99724330c47ceb29e923df657c31da3849fe88c0ded710"
-+checksum = "e538d00da450a8e48aac7e6322e67b2dc86ec71a1feeac0e3954c4f07f01bc45"
- dependencies = [
-  "az",
-  "gmp-mpfr-sys",
-@@ -1232,7 +1222,7 @@ checksum = "d29ab0c6d3fc0ee92fe66e2d99f700eab17a8d57d1c1d3b748380fb20baa78cd"
- 
- [[package]]
- name = "scryer-prolog"
--version = "0.8.126"
-+version = "0.8.127"
- dependencies = [
-  "base64 0.12.3",
-  "blake2",
-@@ -1243,6 +1233,7 @@ dependencies = [
+@@ -1432,6 +1422,7 @@ dependencies = [
   "divrem",
-  "downcast",
+  "fxhash",
   "git-version",
 + "gmp-mpfr-sys",
   "hostname",
   "indexmap",
-  "lazy_static",
+  "instructions-template",
 diff --git a/Cargo.toml b/Cargo.toml
-index c359e1b..75c4325 100644
+index 8e81a947..d21a8d49 100644
 --- a/Cargo.toml
 +++ b/Cargo.toml
-@@ -41,10 +41,14 @@ ring = "0.16.13"
+@@ -55,7 +55,7 @@ ring = "0.16.13"
  ripemd160 = "0.8.0"
  sha3 = "0.8.2"
  blake2 = "0.8.1"
@@ -104,10 +47,20 @@ index c359e1b..75c4325 100644
  native-tls = "0.2.4"
  chrono = "0.4.11"
  select = "0.4.3"
- roxmltree = "0.11.0"
- base64 = "0.12.3"
- sodiumoxide = "0.2.6"
-+
+@@ -66,10 +66,14 @@ sodiumoxide = "0.2.6"
+ static_assertions = "1.1.0"
+ slice-deque = "0.3.0"
+ 
 +[dependencies.gmp-mpfr-sys]
 +version = "1.4"
 +features = ["use-system-libs"]
++
+ [dev-dependencies]
+ assert_cmd = "1.0.3"
+ predicates-core = "1.0.2"
+ serial_test = "0.5.1"
+ 
+ [profile.release]
+-debug = true
+\ No newline at end of file
++debug = true

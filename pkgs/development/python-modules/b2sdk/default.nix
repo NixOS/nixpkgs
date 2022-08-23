@@ -3,8 +3,8 @@
 , buildPythonPackage
 , fetchPypi
 , importlib-metadata
-, isPy27
 , logfury
+, pyfakefs
 , pytestCheckHook
 , pytest-lazy-fixture
 , pytest-mock
@@ -16,12 +16,14 @@
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "1.14.0";
-  disabled = isPy27;
+  version = "1.17.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "900da60f9e569e02405b85db35541a79e1cac776ace5d054498b107982ea443c";
+    hash = "sha256-pyPjjdQ8wzvQitlchGlfNTPwqs0PH6xgplSPUWpjtwM=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +43,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-lazy-fixture
     pytest-mock
+    pyfakefs
   ];
 
   postPatch = ''
@@ -49,6 +52,11 @@ buildPythonPackage rec {
     substituteInPlace requirements.txt \
       --replace 'arrow>=0.8.0,<1.0.0' 'arrow'
   '';
+
+  disabledTestPaths = [
+    # requires aws s3 auth
+    "test/integration/test_download.py"
+  ];
 
   disabledTests = [
     # Test requires an API key
@@ -65,5 +73,6 @@ buildPythonPackage rec {
     description = "Client library and utilities for access to B2 Cloud Storage (backblaze)";
     homepage = "https://github.com/Backblaze/b2-sdk-python";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "snapmaker-luban";
-  version = "4.1.1";
+  version = "4.1.4";
 
   src = fetchurl {
     url = "https://github.com/Snapmaker/Luban/releases/download/v${version}/snapmaker-luban-${version}-linux-x64.tar.gz";
-    sha256 = "sha256-M+e3dNK1Z1Nkswac04TkuYHFX/Y/Cz4Z6P1xGv99kOo=";
+    sha256 = "sha256-hbqIwX6YCrUQAjvKKWFAUjHvcZycnIA6v6l6qmAMuUI=";
   };
 
   nativeBuildInputs = [
@@ -74,13 +74,14 @@ stdenv.mkDerivation rec {
       icon = "snapmaker-luban";
       desktopName = "Snapmaker Luban";
       genericName = meta.description;
-      categories = "Office;Printing;";
+      categories = [ "Office" "Printing" ];
     })
   ];
 
   meta = with lib; {
     description = "Snapmaker Luban is an easy-to-use 3-in-1 software tailor-made for Snapmaker machines";
     homepage = "https://github.com/Snapmaker/Luban";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3;
     maintainers = [ maintainers.simonkampe ];
     platforms = [ "x86_64-linux" ];

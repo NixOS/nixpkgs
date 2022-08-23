@@ -1,18 +1,18 @@
 { lib, stdenv, fetchFromGitHub
 , autoreconfHook, pkg-config, docbook_xsl, libxslt, docbook_xml_dtd_45
 , acl, attr, boost, btrfs-progs, dbus, diffutils, e2fsprogs, libxml2
-, lvm2, pam, python, util-linux, json_c, nixosTests
+, lvm2, pam, util-linux, json_c, nixosTests
 , ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "snapper";
-  version = "0.9.1";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "snapper";
     rev = "v${version}";
-    sha256 = "1ci5mdsph2n5cqad51zf4sank35yj741adsqy2gg7vqwxrhpm8mj";
+    sha256 = "0x9anracaa19yqkc0x8wangrkdrx01kdy07c55lvlqrjyimfm4ih";
   };
 
   nativeBuildInputs = [
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     acl attr boost btrfs-progs dbus diffutils e2fsprogs libxml2
-    lvm2 pam python util-linux json_c ncurses
+    lvm2 pam util-linux json_c ncurses
   ];
 
   passthru.tests.snapper = nixosTests.snapper;
@@ -63,6 +63,6 @@ stdenv.mkDerivation rec {
     homepage = "http://snapper.io";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tstrobel markuskowa ];
+    maintainers = with maintainers; [ markuskowa ];
   };
 }

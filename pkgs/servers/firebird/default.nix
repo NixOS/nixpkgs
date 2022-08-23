@@ -5,6 +5,7 @@ let base = {
 
   meta = with lib; {
     description = "SQL relational database management system";
+    downloadPage = "https://github.com/FirebirdSQL/firebird/";
     homepage = "https://firebirdsql.org/";
     changelog = "https://github.com/FirebirdSQL/firebird/blob/master/CHANGELOG.md";
     license = [ "IDPL" "Interbase-1.0" ];
@@ -54,13 +55,13 @@ let base = {
   });
 
   firebird_3 = stdenv.mkDerivation (base // rec {
-    version = "3.0.7";
+    version = "3.0.9";
 
     src = fetchFromGitHub {
       owner = "FirebirdSQL";
       repo = "firebird";
-      rev = "R${builtins.replaceStrings [ "." ] [ "_" ] version}";
-      sha256 = "sha256-8nGan10qjW8dFF89BL/tUWtwMGhahBiODbOqRrHSrbs=";
+      rev = "v${version}";
+      sha256 = "0axgw4zzb7f7yszr8s7svnspv3mgyvpbkb0b3w6c70fnj10hw21c";
     };
 
     buildInputs = base.buildInputs ++ [ zlib libtommath ];
@@ -69,13 +70,13 @@ let base = {
   });
 
   firebird_4 = stdenv.mkDerivation (base // rec {
-    version = "4.0.0";
+    version = "4.0.1";
 
     src = fetchFromGitHub {
       owner = "FirebirdSQL";
       repo = "firebird";
       rev = "v${version}";
-      sha256 = "sha256-a4ex19FMfiJsUEhWUYd2YXKgJ24Jnpoab2t6x9sUuyQ=";
+      sha256 = "sha256-0XUu1g/VTrklA3vCpX6HWr7sdW2eQupnelpFNSGcouM=";
     };
 
     buildInputs = base.buildInputs ++ [ zlib unzip libtommath libtomcrypt ];

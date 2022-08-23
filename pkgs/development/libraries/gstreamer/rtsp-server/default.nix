@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , meson
 , ninja
@@ -12,26 +13,17 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-rtsp-server";
-  version = "1.18.4";
+  version = "1.20.1";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "153c78klvzlmi86d0gmdf7w9crv11rkd4y82b14a0wdr83gbhsx4";
+    sha256 = "028maajlvfn96v3gqk2ws1k6w9hjfk7dsxnm84d73pnpi99bqia7";
   };
 
   outputs = [
     "out"
     "dev"
     # "devdoc" # disabled until `hotdoc` is packaged in nixpkgs
-  ];
-
-  patches = [
-    # To use split outputs, we need this so double prefix won't be used in the
-    # pkg-config files. Hopefully, this won't be needed on the next release,
-    # _if_
-    # https://gitlab.freedesktop.org/gstreamer/gst-rtsp-server/merge_requests/1
-    # will be merged. For the current release, this merge request won't apply.
-    ./fix_pkgconfig_includedir.patch
   ];
 
   nativeBuildInputs = [
@@ -49,13 +41,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gst-plugins-base
     gst-plugins-bad
+    gobject-introspection
   ];
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
     "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-Dintrospection=disabled"
   ];
 
   postPatch = ''

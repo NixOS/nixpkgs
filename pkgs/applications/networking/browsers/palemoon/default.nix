@@ -6,7 +6,7 @@
 , dbus
 , dbus-glib
 , desktop-file-utils
-, fetchzip
+, fetchFromGitea
 , ffmpeg
 , fontconfig
 , freetype
@@ -31,25 +31,29 @@
 , zip
 , zlib
 , withGTK3 ? true, gtk3, gtk2
+, testers
+, palemoon
 }:
 
 # Only specific GCC versions are supported with branding
 # https://developer.palemoon.org/build/linux/
 assert stdenv.cc.isGNU;
 assert with lib.strings; (
-  versionAtLeast stdenv.cc.version "4.9"
-  && !hasPrefix "6" stdenv.cc.version
-  && versionOlder stdenv.cc.version "11"
+  versionAtLeast stdenv.cc.version "7.1"
+  && versionOlder stdenv.cc.version "12"
 );
 
 stdenv.mkDerivation rec {
   pname = "palemoon";
-  version = "29.4.3";
+  version = "31.2.0.1";
 
-  src = fetchzip {
-    name = "${pname}-${version}";
-    url = "http://archive.palemoon.org/source/${pname}-${version}.source.tar.xz";
-    sha256 = "sha256-9Qut7zgzDrU6T/sWbSF2Me7E02VJVL/B2bzJw14KWFs=";
+  src = fetchFromGitea {
+    domain = "repo.palemoon.org";
+    owner = "MoonchildProductions";
+    repo = "Pale-Moon";
+    rev = "${version}_Release";
+    fetchSubmodules = true;
+    sha256 = "sha256-ytJC3QW9grbI6DusYITACc40+xUJ94+ATVGaOzWAwHU=";
   };
 
   nativeBuildInputs = [
@@ -109,6 +113,13 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     runHook preConfigure
 
+    # Too many cores can lead to build flakiness
+    # https://forum.palemoon.org/viewtopic.php?f=5&t=28480
+    export jobs=$(($NIX_BUILD_CORES<=20 ? $NIX_BUILD_CORES : 20))
+    if [ -z "$enableParallelBuilding" ]; then
+      jobs=1
+    fi
+
     export MOZCONFIG=$PWD/mozconfig
     export MOZ_NOSPAM=1
 
@@ -116,7 +127,7 @@ stdenv.mkDerivation rec {
     export gtkversion=${if withGTK3 then "3" else "2"}
     export xlibs=${lib.makeLibraryPath [ xorg.libX11 ]}
     export prefix=$out
-    export mozmakeflags="-j${if enableParallelBuilding then "$NIX_BUILD_CORES" else "1"}"
+    export mozmakeflags="-j$jobs"
     export autoconf=${autoconf213}/bin/autoconf
 
     substituteAll ${./mozconfig} $MOZCONFIG
@@ -137,14 +148,9 @@ stdenv.mkDerivation rec {
 
     ./mach install
 
-    # Fix missing icon due to wrong WMClass
-    # https://forum.palemoon.org/viewtopic.php?f=3&t=26746&p=214221#p214221
-    substituteInPlace ./palemoon/branding/official/palemoon.desktop \
-      --replace 'StartupWMClass="pale moon"' 'StartupWMClass=Pale moon'
+    # Install official branding stuff
     desktop-file-install --dir=$out/share/applications \
       ./palemoon/branding/official/palemoon.desktop
-
-    # Install official branding icons
     for iconname in default{16,22,24,32,48,256} mozicon128; do
       n=''${iconname//[^0-9]/}
       size=$n"x"$n
@@ -153,7 +159,7 @@ stdenv.mkDerivation rec {
 
     # Remove unneeded SDK data from installation
     # https://forum.palemoon.org/viewtopic.php?f=37&t=26796&p=214676#p214729
-    rm -rf $out/{include,share/idl,lib/palemoon-devel-${version}}
+    rm -r $out/{include,share/idl,lib/palemoon-devel-${version}}
 
     runHook postInstall
   '';
@@ -194,18 +200,23 @@ stdenv.mkDerivation rec {
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 
-  passthru.updateScript = writeScript "update-${pname}" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p common-updater-scripts curl libxml2
+  passthru = {
+    updateScript = writeScript "update-${pname}" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p common-updater-scripts curl libxml2
 
-    set -eu -o pipefail
+      set -eu -o pipefail
 
-    # Only release note announcement == finalized release
-    version="$(
-      curl -s 'http://www.palemoon.org/releasenotes.shtml' |
-      xmllint --html --xpath 'html/body/table/tbody/tr/td/h3/text()' - 2>/dev/null | head -n1 |
-      sed 's/v\(\S*\).*/\1/'
-    )"
-    update-source-version ${pname} "$version"
-  '';
+      # Only release note announcement == finalized release
+      version="$(
+        curl -s 'http://www.palemoon.org/releasenotes.shtml' |
+        xmllint --html --xpath 'html/body/table/tbody/tr/td/h3/text()' - 2>/dev/null | head -n1 |
+        sed 's/v\(\S*\).*/\1/'
+      )"
+      update-source-version ${pname} "$version"
+    '';
+    tests.version = testers.testVersion {
+      package = palemoon;
+    };
+  };
 }

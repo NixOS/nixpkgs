@@ -53,6 +53,8 @@ in
       "autoLogin"
       "user"
     ])
+
+    (mkRemovedOptionModule [ "services" "xserver" "displayManager" "gdm" "nvidiaWayland" ] "We defer to GDM whether Wayland should be enabled.")
   ];
 
   meta = {
@@ -73,7 +75,7 @@ in
       autoLogin.delay = mkOption {
         type = types.int;
         default = 0;
-        description = ''
+        description = lib.mdDoc ''
           Seconds of inactivity after which the autologin will be performed.
         '';
       };
@@ -81,25 +83,14 @@ in
       wayland = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Allow GDM to run on Wayland instead of Xserver.
-          Note to enable Wayland with Nvidia the <option>nvidiaWayland</option>
-          must not be disabled.
-        '';
-      };
-
-      nvidiaWayland = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Whether to allow wayland to be used with the proprietary
-          NVidia graphics driver.
         '';
       };
 
       autoSuspend = mkOption {
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           On the GNOME Display Manager login screen, suspend the machine after inactivity.
           (Does not affect automatic suspend while logged in, or at lock screen.)
         '';
@@ -112,9 +103,9 @@ in
         example = {
           debug.enable = true;
         };
-        description = ''
+        description = lib.mdDoc ''
           Options passed to the gdm daemon.
-          See <link xlink:href="https://help.gnome.org/admin/gdm/stable/configuration.html.en#daemonconfig">here</link> for supported options.
+          See [here](https://help.gnome.org/admin/gdm/stable/configuration.html.en#daemonconfig) for supported options.
         '';
       };
 
@@ -149,7 +140,13 @@ in
         environment = {
           GDM_X_SERVER_EXTRA_ARGS = toString
             (filter (arg: arg != "-terminate") cfg.xserverArgs);
-          XDG_DATA_DIRS = "${cfg.sessionData.desktops}/share/";
+          XDG_DATA_DIRS = lib.makeSearchPath "share" [
+            gdm # for gnome-login.session
+            cfg.sessionData.desktops
+            pkgs.gnome.gnome-control-center # for accessibility icon
+            pkgs.gnome.adwaita-icon-theme
+            pkgs.hicolor-icon-theme # empty icon theme as a base
+          ];
         } // optionalAttrs (xSessionWrapper != null) {
           # Make GDM use this wrapper before running the session, which runs the
           # configured setupCommands. This relies on a patched GDM which supports
@@ -230,19 +227,6 @@ in
 
     services.dbus.packages = [ gdm ];
 
-    # We duplicate upstream's udev rules manually to make wayland with nvidia configurable
-    services.udev.extraRules = ''
-      # disable Wayland on Cirrus chipsets
-      ATTR{vendor}=="0x1013", ATTR{device}=="0x00b8", ATTR{subsystem_vendor}=="0x1af4", ATTR{subsystem_device}=="0x1100", RUN+="${gdm}/libexec/gdm-runtime-config set daemon WaylandEnable false"
-      # disable Wayland on Hi1710 chipsets
-      ATTR{vendor}=="0x19e5", ATTR{device}=="0x1711", RUN+="${gdm}/libexec/gdm-runtime-config set daemon WaylandEnable false"
-      ${optionalString (!cfg.gdm.nvidiaWayland) ''
-        DRIVER=="nvidia", RUN+="${gdm}/libexec/gdm-runtime-config set daemon WaylandEnable false"
-      ''}
-      # disable Wayland when modesetting is disabled
-      IMPORT{cmdline}="nomodeset", RUN+="${gdm}/libexec/gdm-runtime-config set daemon WaylandEnable false"
-    '';
-
     systemd.user.services.dbus.wantedBy = [ "default.target" ];
 
     programs.dconf.profiles.gdm =
@@ -319,7 +303,7 @@ in
 
         session  required       pam_succeed_if.so audit quiet_success user = gdm
         session  required       pam_env.so conffile=/etc/pam/environment readenv=0
-        session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
+        session  optional       ${config.systemd.package}/lib/security/pam_systemd.so
         session  optional       pam_keyinit.so force revoke
         session  optional       pam_permit.so
       '';

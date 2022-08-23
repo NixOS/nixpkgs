@@ -35,12 +35,6 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
-
   nativeBuildInputs = [
     meson
     ninja
@@ -56,6 +50,12 @@ stdenv.mkDerivation rec {
     libhandy
     wingpanel
   ];
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     description = "Session Indicator for Wingpanel";

@@ -4,7 +4,6 @@
 , python-dateutil
 , jmespath
 , docutils
-, ordereddict
 , simplejson
 , mock
 , nose
@@ -13,18 +12,17 @@
 
 buildPythonPackage rec {
   pname = "botocore";
-  version = "1.23.14"; # N.B: if you change this, change boto3 and awscli to a matching version
+  version = "1.27.42"; # N.B: if you change this, change boto3 and awscli to a matching version
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-6NUsvy5zxiaM8sIH9H48+z7eCYP5PotZZ0tUYo5+8fE=";
+    sha256 = "sha256-OKGApmZsWpsGmnXsPPN0/ypkw+kMnySpFoWLzesERW0=";
   };
 
   propagatedBuildInputs = [
     python-dateutil
     jmespath
     docutils
-    ordereddict
     simplejson
     urllib3
   ];

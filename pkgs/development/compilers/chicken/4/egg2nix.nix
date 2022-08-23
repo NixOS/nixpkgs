@@ -1,18 +1,19 @@
-{ lib, eggDerivation, fetchurl, chickenEggs }:
+{ lib, eggDerivation, fetchFromGitHub, chickenEggs }:
 
 # Note: This mostly reimplements the default.nix already contained in
 # the tarball. Is there a nicer way than duplicating code?
 
-let
+eggDerivation rec {
+  name = "egg2nix-${version}";
   version = "0.5";
-in
-eggDerivation {
-  src = fetchurl {
-    url = "https://github.com/the-kenny/egg2nix/archive/${version}.tar.gz";
-    sha256 = "0adal428v4i7h9lzs7sfq75q2mxhsbf1qqwzrsjv8j41paars20y";
+
+  src = fetchFromGitHub {
+    owner = "the-kenny";
+    repo = "egg2nix";
+    rev = version;
+    sha256 = "sha256-5ov2SWVyTUQ6NHnZNPRywd9e7oIxHlVWv4uWbsNaj/s=";
   };
 
-  name = "egg2nix-${version}";
   buildInputs = with chickenEggs; [
     matchable http-client
   ];

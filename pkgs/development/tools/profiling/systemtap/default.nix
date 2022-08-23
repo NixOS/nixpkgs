@@ -1,5 +1,5 @@
 { lib, fetchgit, pkg-config, gettext, runCommand, makeWrapper
-, elfutils, kernel, gnumake, python2, python2Packages
+, cpio, elfutils, kernel, gnumake, python3
 }:
 
 let
@@ -16,8 +16,8 @@ let
     pname = "systemtap";
     inherit version;
     src = fetchgit { inherit url rev sha256; };
-    nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ elfutils gettext python2 python2Packages.setuptools ];
+    nativeBuildInputs = [ pkg-config cpio python3 python3.pkgs.setuptools ];
+    buildInputs = [ elfutils gettext ];
     enableParallelBuilding = true;
   };
 
@@ -33,14 +33,13 @@ let
     done
   '';
 
-  pypkgs = with python2Packages; makePythonPath [ pyparsing ];
+  pypkgs = with python3.pkgs; makePythonPath [ pyparsing ];
 
 in runCommand "systemtap-${kernel.version}-${version}" {
   inherit stapBuild kernelBuildDir;
   nativeBuildInputs = [ makeWrapper ];
   meta = {
     homepage = "https://sourceware.org/systemtap/";
-    repositories.git = url;
     description = "Provides a scripting language for instrumentation on a live kernel plus user-space";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;

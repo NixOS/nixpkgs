@@ -11,13 +11,13 @@
 
 mkDerivation rec {
   pname = "cutter";
-  version = "2.0.3";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "rizinorg";
     repo = "cutter";
     rev = "v${version}";
-    sha256 = "sha256-OC04d3j8Dfsob1dUjNBc1pSQFxJlexzWJ4v0V3QNkno=";
+    sha256 = "sha256-JfJQuEUeLXCjzm4d0ZNHRVazF0Bk6fVAsNvBb+okoXs=";
     fetchSubmodules = true;
   };
 

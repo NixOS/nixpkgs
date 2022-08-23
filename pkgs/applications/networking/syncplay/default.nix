@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildPythonApplication, pyside2, shiboken2, twisted, certifi, qt5 }:
+{ lib, fetchFromGitHub, buildPythonApplication, pyside2, twisted, certifi, qt5, enableGUI ? true }:
 
 buildPythonApplication rec {
   pname = "syncplay";
@@ -13,12 +13,14 @@ buildPythonApplication rec {
     sha256 = "0qm3qn4a1nahhs7q81liz514n9blsi107g9s9xfw2i8pzi7v9v0v";
   };
 
-  propagatedBuildInputs = [ pyside2 shiboken2 twisted certifi ] ++ twisted.extras.tls;
-  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
+  propagatedBuildInputs = [ twisted certifi ]
+    ++ twisted.optional-dependencies.tls
+    ++ lib.optional enableGUI pyside2;
+  nativeBuildInputs = lib.optionals enableGUI [ qt5.wrapQtAppsHook ];
 
   makeFlags = [ "DESTDIR=" "PREFIX=$(out)" ];
 
-  postFixup = ''
+  postFixup = lib.optionalString enableGUI ''
     wrapQtApp $out/bin/syncplay
   '';
 

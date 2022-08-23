@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pynetdicom";
-  version = "2.0.0";
+  version = "2.0.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "pydicom";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Kfcfk76au2ymbX+nl0PhuuCd+t6dYRbTurGlW6msv3Y=";
+    hash = "sha256-/JWQUtFBW4uqCbs/nUxj1pRBfTCXV4wcqTkqvzpdFrM=";
   };
 
   propagatedBuildInputs = [
@@ -40,19 +40,29 @@ buildPythonPackage rec {
     "TestAEGoodAssociation"
     "TestEchoSCP"
     "TestEchoSCPCLI"
+    "TestEventHandlingAcceptor"
+    "TestEventHandlingRequestor"
     "TestFindSCP"
     "TestFindSCPCLI"
     "TestGetSCP"
     "TestGetSCPCLI"
     "TestMoveSCP"
     "TestMoveSCPCLI"
+    "TestPrimitive_N_GET"
     "TestQRGetServiceClass"
     "TestQRMoveServiceClass"
+    "TestSearch"
+    "TestState"
+    "TestStorageServiceClass"
     "TestStoreSCP"
     "TestStoreSCPCLI"
     "TestStoreSCU"
     "TestStoreSCUCLI"
-    "TestState"
+  ];
+
+  disabledTestPaths = [
+    # Ignore apps tests
+    "pynetdicom/apps/tests/"
   ];
 
   pythonImportsCheck = [

@@ -1,4 +1,5 @@
 { lib, stdenv, fetchurl, lua, pkg-config, nixosTests
+, tcl, which, ps
 , withSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isStatic, systemd
 # dependency ordering is broken at the moment when building with openssl
 , tlsSupport ? !stdenv.hostPlatform.isStatic, openssl
@@ -6,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "redis";
-  version = "6.2.6";
+  version = "7.0.4";
 
   src = fetchurl {
     url = "https://download.redis.io/releases/${pname}-${version}.tar.gz";
-    sha256 = "1ariw5x33hmmm3d5al0j3307l5kf3vhmn78wpyaz67hia1x8nasv";
+    sha256 = "sha256-8OZf2nTESj3U+p1RLU1Ngz3Qk5yTTpRqXGIqYw0Ffy8=";
   };
 
   # Cross-compiling fixes
@@ -44,7 +45,32 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isClang [ "-std=c11" ];
 
-  doCheck = false; # needs tcl
+  # darwin currently lacks a pure `pgrep` which is extensively used here
+  doCheck = !stdenv.isDarwin;
+  checkInputs = [ which tcl ps ];
+  checkPhase = ''
+    runHook preCheck
+
+    # disable test "Connect multiple replicas at the same time": even
+    # upstream find this test too timing-sensitive
+    substituteInPlace tests/integration/replication.tcl \
+      --replace 'foreach mdl {no yes}' 'foreach mdl {}'
+
+    substituteInPlace tests/support/server.tcl \
+      --replace 'exec /usr/bin/env' 'exec env'
+
+    sed -i '/^proc wait_load_handlers_disconnected/{n ; s/wait_for_condition 50 100/wait_for_condition 50 500/; }' \
+      tests/support/util.tcl
+
+    ./runtest \
+      --no-latency \
+      --timeout 2000 \
+      --clients $NIX_BUILD_CORES \
+      --tags -leaks \
+      --skipunit integration/failover # flaky and slow
+
+    runHook postCheck
+  '';
 
   passthru.tests.redis = nixosTests.redis;
 

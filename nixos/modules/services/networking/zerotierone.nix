@@ -12,7 +12,7 @@ in
     default = [];
     example = [ "a8a2c3c10c1a68de" ];
     type = types.listOf types.str;
-    description = ''
+    description = lib.mdDoc ''
       List of ZeroTier Network IDs to join on startup
     '';
   };
@@ -20,7 +20,7 @@ in
   options.services.zerotierone.port = mkOption {
     default = 9993;
     type = types.int;
-    description = ''
+    description = lib.mdDoc ''
       Network port used by ZeroTier.
     '';
   };
@@ -29,7 +29,7 @@ in
     default = pkgs.zerotierone;
     defaultText = literalExpression "pkgs.zerotierone";
     type = types.package;
-    description = ''
+    description = lib.mdDoc ''
       ZeroTier One package to use.
     '';
   };

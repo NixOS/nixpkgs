@@ -1,47 +1,106 @@
-{ lib, stdenv, fetchurl, fetchpatch, glib, pkg-config, gettext, libxslt, python3
-, docbook_xsl, docbook_xml_dtd_42 , libgcrypt, gobject-introspection, vala
-, gtk-doc, gnome, gjs, libintl, dbus, xvfb-run }:
+{ stdenv
+, lib
+, fetchurl
+, glib
+, meson
+, ninja
+, pkg-config
+, gettext
+, libxslt
+, python3
+, docbook-xsl-nons
+, docbook_xml_dtd_42
+, libgcrypt
+, gobject-introspection
+, vala
+, gi-docgen
+, gnome
+, gjs
+, libintl
+, dbus
+}:
 
 stdenv.mkDerivation rec {
   pname = "libsecret";
-  version = "0.20.4";
-
-  src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0a4xnfmraxchd9cq5ai66j12jv2vrgjmaaxz25kl031jvda4qnij";
-  };
-
-  postPatch = ''
-    patchShebangs .
-  '';
+  version = "0.20.5";
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  propagatedBuildInputs = [ glib ];
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "P7PONA/NfbVNh8iT5pv8Kx9uTUsnkGX/5m2snw/RK00=";
+  };
+
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
-    pkg-config gettext libxslt docbook_xsl docbook_xml_dtd_42 libintl
-    gobject-introspection vala gtk-doc glib
-  ];
-  buildInputs = [ libgcrypt ];
-  # optional: build docs with gtk-doc? (probably needs a flag as well)
-
-  configureFlags = [
-    "--with-libgcrypt-prefix=${libgcrypt.dev}"
-  ];
-
-  enableParallelBuilding = true;
-
-  installCheckInputs = [
-    python3 python3.pkgs.dbus-python python3.pkgs.pygobject3 xvfb-run dbus gjs
+    meson
+    ninja
+    pkg-config
+    gettext
+    libxslt # for xsltproc for building man pages
+    docbook-xsl-nons
+    docbook_xml_dtd_42
+    libintl
+    gobject-introspection
+    vala
+    gi-docgen
+    glib
   ];
 
-  # needs to run after install because typelibs point to absolute paths
-  doInstallCheck = false; # Failed to load shared library '/force/shared/libmock_service.so.0' referenced by the typelib
-  installCheckPhase = ''
-    export NO_AT_BRIDGE=1
-    xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
+  buildInputs = [
+    libgcrypt
+    gobject-introspection
+  ];
+
+  propagatedBuildInputs = [
+    glib
+  ];
+
+  checkInputs = [
+    python3
+    python3.pkgs.dbus-python
+    python3.pkgs.pygobject3
+    dbus
+    gjs
+  ];
+
+  doCheck = stdenv.isLinux;
+
+  postPatch = ''
+    patchShebangs ./tool/test-*.sh
+  '';
+
+  preCheck = ''
+    # Our gobject-introspection patches make the shared library paths absolute
+    # in the GIR files. When running tests, the library is not yet installed,
+    # though, so we need to replace the absolute path with a local one during build.
+    # We are using a symlink that will be overwitten during installation.
+    mkdir -p $out/lib $out/lib
+    ln -s "$PWD/libsecret/libmock-service.so" "$out/lib/libmock-service.so"
+    ln -s "$PWD/libsecret/libsecret-1.so.0" "$out/lib/libsecret-1.so.0"
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+
+    dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
-      make check
+      meson test --print-errorlogs
+
+    runHook postCheck
+  '';
+
+  postCheck = ''
+    # This is test-only so it won’t be overwritten during installation.
+    rm "$out/lib/libmock-service.so"
+  '';
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {
@@ -56,6 +115,7 @@ stdenv.mkDerivation rec {
     description = "A library for storing and retrieving passwords and other secrets";
     homepage = "https://wiki.gnome.org/Projects/Libsecret";
     license = lib.licenses.lgpl21Plus;
+    mainProgram = "secret-tool";
     inherit (glib.meta) platforms maintainers;
   };
 }

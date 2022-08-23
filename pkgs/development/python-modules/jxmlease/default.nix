@@ -18,6 +18,10 @@ buildPythonPackage rec {
     lxml
   ];
 
+  # tests broken in expat bump
+  # https://github.com/Juniper/jxmlease/issues/26
+  doCheck = false;
+
   checkPhase = ''
     runHook preCheck
     ${python.interpreter} -m unittest discover -v

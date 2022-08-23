@@ -1,0 +1,22 @@
+diff --git a/src/type.ml b/src/type.ml
+index 8a9e648..3f3b0e9 100644
+--- a/src/type.ml
++++ b/src/type.ml
+@@ -31,12 +31,12 @@ let of_type_desc type_desc ~env =
+     | Tunivar _ -> Or_error.error_string "not handled: Tunivar"
+     | Tvariant _ -> Or_error.error_string "not handled: Tvariant"
+     | Tnil -> Or_error.error_string "not handled: Tnil"
+-    | Tobject (_, _) -> Or_error.error_string "not handled: Tobject"
+-    | Tfield (_, _, _, _) -> Or_error.error_string "not handled: Tfield"
+-    | Tpackage (_, _, _) -> Or_error.error_string "not handled: Tpackage"
+-    | Tpoly (_, _) -> Or_error.error_string "not handled: Tpoly"
++    | Tobject _ -> Or_error.error_string "not handled: Tobject"
++    | Tfield _ -> Or_error.error_string "not handled: Tfield"
++    | Tpackage _ -> Or_error.error_string "not handled: Tpackage"
++    | Tpoly _ -> Or_error.error_string "not handled: Tpoly"
+     | Tlink e -> walk e.desc
+-    | Tsubst e -> walk e.desc
++    | Tsubst (e, _) -> walk e.desc
+     | Ttuple es ->
+       let%bind tuple = List.map es ~f:(fun e -> walk e.desc) |> Or_error.all in
+       (match tuple with

@@ -3,11 +3,10 @@ let
     wayland = { pkgs, ... }: {
       imports = [ ./common/wayland-cage.nix ];
 
-      services.cage.program = ''
-        ${pkgs.vscodium}/bin/codium \
-          --enable-features=UseOzonePlatform \
-          --ozone-platform=wayland
-      '';
+      services.cage.program = "${pkgs.vscodium}/bin/codium";
+
+      environment.variables.NIXOS_OZONE_WL = "1";
+      environment.variables.DISPLAY = "do not use";
 
       fonts.fonts = with pkgs; [ dejavu_fonts ];
     };
@@ -33,37 +32,55 @@ let
         maintainers = [ synthetica turion ];
       };
       enableOCR = true;
+
+      # testScriptWithTypes:55: error: Item "function" of
+      # "Union[Callable[[Callable[..., Any]], ContextManager[Any]], ContextManager[Any]]"
+      # has no attribute "__enter__"
+      #     with codium_running:
+      #          ^
+      skipTypeCheck = true;
+
       testScript = ''
+        @polling_condition
+        def codium_running():
+            machine.succeed('pgrep -x codium')
+
+
         start_all()
 
         machine.wait_for_unit('graphical.target')
         machine.wait_until_succeeds('pgrep -x codium')
 
-        # Wait until vscodium is visible. "File" is in the menu bar.
-        machine.wait_for_text('File')
-        machine.screenshot('start_screen')
+        with codium_running:
+            # Wait until vscodium is visible. "File" is in the menu bar.
+            machine.wait_for_text('Get Started')
+            machine.screenshot('start_screen')
 
-        test_string = 'testfile'
+            test_string = 'testfile'
 
-        # Create a new file
-        machine.send_key('ctrl-n')
-        machine.wait_for_text('Untitled')
-        machine.screenshot('empty_editor')
+            # Create a new file
+            machine.send_key('ctrl-n')
+            machine.wait_for_text('Untitled')
+            machine.screenshot('empty_editor')
 
-        # Type a string
-        machine.send_chars(test_string)
-        machine.wait_for_text(test_string)
-        machine.screenshot('editor')
+            # Type a string
+            machine.send_chars(test_string)
+            machine.wait_for_text(test_string)
+            machine.screenshot('editor')
 
-        # Save the file
-        machine.send_key('ctrl-s')
-        machine.wait_for_text('Save')
-        machine.screenshot('save_window')
-        machine.send_key('ret')
+            # Save the file
+            machine.send_key('ctrl-s')
+            machine.wait_for_text('Save')
+            machine.screenshot('save_window')
+            machine.send_key('ret')
 
-        # (the default filename is the first line of the file)
-        machine.wait_for_file(f'/home/alice/{test_string}')
+            # (the default filename is the first line of the file)
+            machine.wait_for_file(f'/home/alice/{test_string}')
+
+        machine.send_key('ctrl-q')
+        machine.wait_until_fails('pgrep -x codium')
       '';
     });
 
-in builtins.mapAttrs (k: v: mkTest k v { }) tests
+in
+builtins.mapAttrs (k: v: mkTest k v { }) tests

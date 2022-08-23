@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "ephem";
-  version = "4.1.1";
+  version = "4.1.3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-26ngXHjOkQrnWgY1GlWSR5GRqNxXCsDNbRinfpgTiHM=";
+    sha256 = "sha256-f6GGhZgbpSjt1QQFKp1SEqCapb8VwRpzTtxqhuiotWo=";
   };
 
   checkInputs = [

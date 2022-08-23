@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchurl
+, writeText
 
 , cmake
 , pkg-config
@@ -18,6 +18,7 @@
 , libuuid
 , wayland-protocols
 , Carbon
+, CoreServices
 # optionals
 , opencl-headers
 , OpenCL
@@ -26,30 +27,19 @@
 , nixosTests
 }:
 
-# cmake 3.21 inserts invalid `ldd` and `-Wl,--no-as-needed` calls, apparently
-# related to
-# https://cmake.org/cmake/help/v3.21/prop_tgt/LINK_WHAT_YOU_USE.html
-let cmake3_22 = cmake.overrideAttrs (old: {
-  version = "3.22.0";
-  src = fetchurl {
-    url = "https://cmake.org/files/v3.22/cmake-3.22.0.tar.gz";
-    sha256 = "sha256-mYx7o0d40t/bPfimlUaeJLEeK/oh++QbNho/ReHJNF4=";
-  };
-});
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "vengi-tools";
-  version = "0.0.14";
+  version = "0.0.20";
 
   src = fetchFromGitHub {
     owner = "mgerhardy";
-    repo = "engine";
+    repo = "vengi";
     rev = "v${version}";
-    sha256 = "sha256-v82hKskTSwM0NDgLVHpHZNRQW6tWug4pPIt91MrUwUo=";
+    sha256 = "sha256-WsG6mjO90QQNsAarxdupZvXubdy06JjQmVYUzygl8l4=";
   };
 
   nativeBuildInputs = [
-    cmake3_22
+    cmake
     pkg-config
     ninja
     python3
@@ -69,7 +59,7 @@ in stdenv.mkDerivation rec {
     #libpqxx
     #mosquitto
   ] ++ lib.optional stdenv.isLinux wayland-protocols
-    ++ lib.optionals stdenv.isDarwin [ Carbon OpenCL ]
+    ++ lib.optionals stdenv.isDarwin [ Carbon CoreServices OpenCL ]
     ++ lib.optional (!stdenv.isDarwin) opencl-headers;
 
   cmakeFlags = [
@@ -82,7 +72,7 @@ in stdenv.mkDerivation rec {
     "-DGAMES=OFF"
     "-DMAPVIEW=OFF"
     "-DAIDEBUG=OFF"
-  ];
+  ] ++ lib.optional stdenv.isDarwin "-DCORESERVICES_LIB=${CoreServices}";
 
   # Set the data directory for each executable. We cannot set it at build time
   # with the PKGDATADIR cmake variable because each executable needs a specific
@@ -98,6 +88,7 @@ in stdenv.mkDerivation rec {
 
   passthru.tests = {
     voxconvert-roundtrip = callPackage ./test-voxconvert-roundtrip.nix {};
+    voxconvert-all-formats = callPackage ./test-voxconvert-all-formats.nix {};
     run-voxedit = nixosTests.vengi-tools;
   };
 
@@ -110,10 +101,12 @@ in stdenv.mkDerivation rec {
       filemanager and a command line tool to convert between several voxel
       formats.
     '';
-    homepage = "https://mgerhardy.github.io/engine/";
-    downloadPage = "https://github.com/mgerhardy/engine/releases";
+    homepage = "https://mgerhardy.github.io/vengi/";
+    downloadPage = "https://github.com/mgerhardy/vengi/releases";
     license = [ licenses.mit licenses.cc-by-sa-30 ];
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
+    # Requires SDK 10.14 https://github.com/NixOS/nixpkgs/issues/101229
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

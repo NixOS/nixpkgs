@@ -2,17 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libkeyfinder";
-  version = "2.2.5";
+  version = "2.2.6";
 
   src = fetchFromGitHub {
     owner = "mixxxdj";
     repo = "libkeyfinder";
     rev = "v${version}";
-    sha256 = "sha256-4jbnsKMGJKUIRfRPymGGgqPgwPyLInc6rLvCXnOcQ5g=";
+    sha256 = "sha256-7w/Wc9ncLinbnM2q3yv5DBtFoJFAM2e9xAUTsqvE9mg=";
   };
-
-  # needed for finding libkeyfinder.so to link it into keyfinder-tests executable
-  cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=OFF" ];
 
   nativeBuildInputs = [ cmake ];
 

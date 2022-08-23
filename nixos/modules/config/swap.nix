@@ -14,7 +14,7 @@ let
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Encrypt swap device with a random key. This way you won't have a persistent swap device.
 
           WARNING: Don't try to hibernate when you have at least one swap partition with
@@ -31,7 +31,7 @@ let
         default = "aes-xts-plain64";
         example = "serpent-xts-plain64";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Use specified cipher for randomEncryption.
 
           Hint: Run "cryptsetup benchmark" to see which one is fastest on your machine.
@@ -42,7 +42,7 @@ let
         default = "/dev/urandom";
         example = "/dev/random";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Define the source of randomness to obtain a random key for encryption.
         '';
       };
@@ -50,7 +50,7 @@ let
       allowDiscards = mkOption {
         default = false;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Whether to allow TRIM requests to the underlying device. This option
           has security implications; please read the LUKS documentation before
           activating it.
@@ -67,7 +67,7 @@ let
       device = mkOption {
         example = "/dev/sda3";
         type = types.str;
-        description = "Path of the device or swap file.";
+        description = lib.mdDoc "Path of the device or swap file.";
       };
 
       label = mkOption {
@@ -82,7 +82,7 @@ let
         default = null;
         example = 2048;
         type = types.nullOr types.int;
-        description = ''
+        description = lib.mdDoc ''
           If this option is set, ‘device’ is interpreted as the
           path of a swapfile that will be created automatically
           with the indicated size (in megabytes).
@@ -93,7 +93,7 @@ let
         default = null;
         example = 2048;
         type = types.nullOr types.int;
-        description = ''
+        description = lib.mdDoc ''
           Specify the priority of the swap device. Priority is a value between 0 and 32767.
           Higher numbers indicate higher priority.
           null lets the kernel choose a priority, which will show up as a negative value.
@@ -108,7 +108,7 @@ let
           source = "/dev/random";
         };
         type = types.coercedTo types.bool randomEncryptionCoerce (types.submodule randomEncryptionOpts);
-        description = ''
+        description = lib.mdDoc ''
           Encrypt swap device with a random key. This way you won't have a persistent swap device.
 
           HINT: run "cryptsetup benchmark" to test cipher performance on your machine.
@@ -127,7 +127,7 @@ let
         default = null;
         example = "once";
         type = types.nullOr (types.enum ["once" "pages" "both" ]);
-        description = ''
+        description = lib.mdDoc ''
           Specify the discard policy for the swap device. If "once", then the
           whole swap space is discarded at swapon invocation. If "pages",
           asynchronous discard on freed pages is performed, before returning to
@@ -140,7 +140,7 @@ let
         default = [ "defaults" ];
         example = [ "nofail" ];
         type = types.listOf types.nonEmptyStr;
-        description = ''
+        description = lib.mdDoc ''
           Options used to mount the swap.
         '';
       };
@@ -181,13 +181,13 @@ in
         { device = "/var/swapfile"; }
         { label = "bigswap"; }
       ];
-      description = ''
+      description = lib.mdDoc ''
         The swap devices and swap files.  These must have been
-        initialised using <command>mkswap</command>.  Each element
+        initialised using {command}`mkswap`.  Each element
         should be an attribute set specifying either the path of the
-        swap device or file (<literal>device</literal>) or the label
-        of the swap device (<literal>label</literal>, see
-        <command>mkswap -L</command>).  Using a label is
+        swap device or file (`device`) or the label
+        of the swap device (`label`, see
+        {command}`mkswap -L`).  Using a label is
         recommended.
       '';
 

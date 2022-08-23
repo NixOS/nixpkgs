@@ -2,103 +2,117 @@
 , lib
 , go
 , pkgs
-, nodejs-14_x
-, nodePackages
 , buildGoModule
 , fetchFromGitHub
-, mkYarnPackage
+, fetchurl
 , nixosTests
-, fetchpatch
+, enableAWS ? true
+, enableAzure ? true
+, enableConsul ? true
+, enableDigitalOcean ? true
+, enableDNS ? true
+, enableEureka ? true
+, enableGCE ? true
+, enableHetzner ? true
+, enableIONOS ? true
+, enableKubernetes ? true
+, enableLinode ? true
+, enableMarathon ? true
+, enableMoby ? true
+, enableOpenstack ? true
+, enablePuppetDB ? true
+, enableScaleway ? true
+, enableTriton ? true
+, enableUyuni ? true
+, enableVultr ? true
+, enableXDS ? true
+, enableZookeeper ? true
 }:
 
 let
-  version = "2.30.3";
+  version = "2.36.0";
+  webUiStatic = fetchurl {
+    url = "https://github.com/prometheus/prometheus/releases/download/v${version}/prometheus-web-ui-${version}.tar.gz";
+    sha256 = "sha256-C+Np2mqAYQ1RUqYmql0eudPD/SpWmxdMQLe85SenIA4=";
+  };
+in
+buildGoModule rec {
+  pname = "prometheus";
+  inherit version;
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "prometheus";
     repo = "prometheus";
-    sha256 = "1as6x5bsp7mxa4rp7jhyjlpcvzqm1zngnwvp73rc4rwhz8w8vm3k";
+    sha256 = "sha256-FJXNCGIVj1OVWXwbXY6k65lXJCe1MqiqK7tw8nGWrEg=";
   };
 
-  goPackagePath = "github.com/prometheus/prometheus";
-
-  codemirrorNode = import ./webui/codemirror-promql {
-    inherit pkgs;
-    nodejs = nodejs-14_x;
-    inherit (stdenv.hostPlatform) system;
-  };
-  webuiNode = import ./webui/webui {
-    inherit pkgs;
-    nodejs = nodejs-14_x;
-    inherit (stdenv.hostPlatform) system;
-  };
-
-  codemirror = stdenv.mkDerivation {
-    name = "prometheus-webui-codemirror-promql";
-    src = "${src}/web/ui/module/codemirror-promql";
-
-    buildInputs = [ nodejs-14_x nodePackages.typescript codemirrorNode.nodeDependencies ];
-
-    configurePhase = ''
-      ln -s ${codemirrorNode.nodeDependencies}/lib/node_modules node_modules
-    '';
-    buildPhase = ''
-      PUBLIC_URL=. npm run build
-    '';
-    installPhase = ''
-      mkdir -p $out
-      mv lib dist $out
-    '';
-    distPhase = ":";
-  };
-
-
-  webui = stdenv.mkDerivation {
-    name = "prometheus-webui";
-    src = "${src}/web/ui/react-app";
-
-    buildInputs = [ nodejs-14_x webuiNode.nodeDependencies ];
-
-    # create `node_modules/.cache` dir (we need writeable .cache)
-    # and then copy the rest over.
-    configurePhase = ''
-      mkdir -p node_modules/{.cache,.bin}
-      cp -a ${webuiNode.nodeDependencies}/lib/node_modules/. node_modules
-    '';
-    buildPhase = "PUBLIC_URL=. npm run build";
-    installPhase = "mv build $out";
-    distPhase = "true";
-  };
-in
-buildGoModule rec {
-  pname = "prometheus";
-  inherit src version;
-
-  vendorSha256 = "0qyv8vybx5wg8k8hwvrpp4hz9wv6g4kf9sq5v5qc2bxx6apc0s9r";
+  vendorSha256 = "sha256-kmAQGRFmGRJ3LuGLMcSc0bJuwMsKhYVUIqQ9vDSH0Cc=";
 
   excludedPackages = [ "documentation/prometheus-mixin" ];
 
-  nativeBuildInputs = [ nodejs-14_x ];
-
   postPatch = ''
-    # we don't want this anyways, as we
-    # build modules for them
-    echo "exit 0" > web/ui/module/build.sh
+    tar -C web/ui -xzf ${webUiStatic}
 
-    ln -s ${webuiNode.nodeDependencies}/lib/node_modules web/ui/react-app/node_modules
-    ln -s ${webui} web/ui/static/react
+    patchShebangs scripts
 
-    # webui-codemirror
-    ln -s ${codemirror}/dist web/ui/module/codemirror-promql/dist
-    ln -s ${codemirror}/lib web/ui/module/codemirror-promql/lib
+    # Enable only select service discovery to shrink binaries.
+    (
+      true  # prevent bash syntax error when all plugins are disabled
+    ${lib.optionalString (enableAWS)
+      "echo - github.com/prometheus/prometheus/discovery/aws"}
+    ${lib.optionalString (enableAzure)
+      "echo - github.com/prometheus/prometheus/discovery/azure"}
+    ${lib.optionalString (enableConsul)
+      "echo - github.com/prometheus/prometheus/discovery/consul"}
+    ${lib.optionalString (enableDigitalOcean)
+      "echo - github.com/prometheus/prometheus/discovery/digitalocean"}
+    ${lib.optionalString (enableDNS)
+      "echo - github.com/prometheus/prometheus/discovery/dns"}
+    ${lib.optionalString (enableEureka)
+      "echo - github.com/prometheus/prometheus/discovery/eureka"}
+    ${lib.optionalString (enableGCE)
+      "echo - github.com/prometheus/prometheus/discovery/gce"}
+    ${lib.optionalString (enableHetzner)
+      "echo - github.com/prometheus/prometheus/discovery/hetzner"}
+    ${lib.optionalString (enableIONOS)
+      "echo - github.com/prometheus/prometheus/discovery/ionos"}
+    ${lib.optionalString (enableKubernetes)
+      "echo - github.com/prometheus/prometheus/discovery/kubernetes"}
+    ${lib.optionalString (enableLinode)
+      "echo - github.com/prometheus/prometheus/discovery/linode"}
+    ${lib.optionalString (enableMarathon)
+      "echo - github.com/prometheus/prometheus/discovery/marathon"}
+    ${lib.optionalString (enableMoby)
+      "echo - github.com/prometheus/prometheus/discovery/moby"}
+    ${lib.optionalString (enableOpenstack)
+      "echo - github.com/prometheus/prometheus/discovery/openstack"}
+    ${lib.optionalString (enablePuppetDB)
+      "echo - github.com/prometheus/prometheus/discovery/puppetdb"}
+    ${lib.optionalString (enableScaleway)
+      "echo - github.com/prometheus/prometheus/discovery/scaleway"}
+    ${lib.optionalString (enableTriton)
+      "echo - github.com/prometheus/prometheus/discovery/triton"}
+    ${lib.optionalString (enableUyuni)
+      "echo - github.com/prometheus/prometheus/discovery/uyuni"}
+    ${lib.optionalString (enableVultr)
+      "echo - github.com/prometheus/prometheus/discovery/vultr"}
+    ${lib.optionalString (enableXDS)
+      "echo - github.com/prometheus/prometheus/discovery/xds"}
+    ${lib.optionalString (enableZookeeper)
+      "echo - github.com/prometheus/prometheus/discovery/zookeeper"}
+    ) > plugins.yml
+  '';
+
+  preBuild = ''
+    if [[ -d vendor ]]; then make -o assets assets-compress plugins; fi
   '';
 
   tags = [ "builtinassets" ];
 
   ldflags =
     let
-      t = "${goPackagePath}/vendor/github.com/prometheus/common/version";
+      t = "github.com/prometheus/common/version";
     in
     [
       "-X ${t}.Version=${version}"
@@ -109,20 +123,13 @@ buildGoModule rec {
       "-X ${t}.GoVersion=${lib.getVersion go}"
     ];
 
-  # only run this in the real build, not during the vendor build
-  # this should probably be fixed in buildGoModule
-  preBuild = ''
-    if [ -d vendor ]; then make assets; fi
-  '';
-
   preInstall = ''
     mkdir -p "$out/share/doc/prometheus" "$out/etc/prometheus"
     cp -a $src/documentation/* $out/share/doc/prometheus
     cp -a $src/console_libraries $src/consoles $out/etc/prometheus
   '';
 
-  # doCheck = !stdenv.isDarwin; # https://hydra.nixos.org/build/130673870/nixlog/1
-  doCheck = false;
+  doCheck = !stdenv.isDarwin; # https://hydra.nixos.org/build/130673870/nixlog/1
 
   passthru.tests = { inherit (nixosTests) prometheus; };
 

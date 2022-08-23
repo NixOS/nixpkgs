@@ -32,8 +32,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://schemaspy.org";
+    homepage = "https://schemaspy.org";
     description = "Document your database simply and easily";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
     maintainers = with maintainers; [ jraygauthier ];
   };

@@ -33,27 +33,27 @@ let
       mountPoint = mkOption {
         example = "/mnt/usb";
         type = nonEmptyWithoutTrailingSlash;
-        description = "Location of the mounted the file system.";
+        description = lib.mdDoc "Location of the mounted the file system.";
       };
 
       device = mkOption {
         default = null;
         example = "/dev/sda";
         type = types.nullOr nonEmptyStr;
-        description = "Location of the device.";
+        description = lib.mdDoc "Location of the device.";
       };
 
       fsType = mkOption {
         default = "auto";
         example = "ext3";
         type = nonEmptyStr;
-        description = "Type of the file system.";
+        description = lib.mdDoc "Type of the file system.";
       };
 
       options = mkOption {
         default = [ "defaults" ];
         example = [ "data=journal" ];
-        description = "Options used to mount the file system.";
+        description = lib.mdDoc "Options used to mount the file system.";
         type = types.listOf nonEmptyStr;
       };
 
@@ -61,13 +61,13 @@ let
         default = [ ];
         example = [ "/persist" ];
         type = types.listOf nonEmptyWithoutTrailingSlash;
-        description = ''
+        description = lib.mdDoc ''
           List of paths that should be mounted before this one. This filesystem's
-          <option>device</option> and <option>mountPoint</option> are always
+          {option}`device` and {option}`mountPoint` are always
           checked and do not need to be included explicitly. If a path is added
           to this list, any other filesystem whose mount point is a parent of
           the path will be mounted before this filesystem. The paths do not need
-          to actually be the <option>mountPoint</option> of some other filesystem.
+          to actually be the {option}`mountPoint` of some other filesystem.
         '';
       };
 
@@ -88,25 +88,25 @@ let
         default = null;
         example = "root-partition";
         type = types.nullOr nonEmptyStr;
-        description = "Label of the device (if any).";
+        description = lib.mdDoc "Label of the device (if any).";
       };
 
       autoFormat = mkOption {
         default = false;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           If the device does not currently contain a filesystem (as
-          determined by <command>blkid</command>, then automatically
+          determined by {command}`blkid`, then automatically
           format it with the filesystem type specified in
-          <option>fsType</option>.  Use with caution.
+          {option}`fsType`.  Use with caution.
         '';
       };
 
       formatOptions = mkOption {
         default = "";
         type = types.str;
-        description = ''
-          If <option>autoFormat</option> option is set specifies
+        description = lib.mdDoc ''
+          If {option}`autoFormat` option is set specifies
           extra options passed to mkfs.
         '';
       };
@@ -114,7 +114,7 @@ let
       autoResize = mkOption {
         default = false;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           If set, the filesystem is grown to its maximum size before
           being mounted. (This is typically the size of the containing
           partition.) This is currently only supported for ext2/3/4
@@ -125,7 +125,7 @@ let
       noCheck = mkOption {
         default = false;
         type = types.bool;
-        description = "Disable running fsck on this filesystem.";
+        description = lib.mdDoc "Disable running fsck on this filesystem.";
       };
 
     };
@@ -153,6 +153,34 @@ let
       specialMount "${mount.device}" "${mount.mountPoint}" "${concatStringsSep "," mount.options}" "${mount.fsType}"
     '') mounts);
 
+  makeFstabEntries =
+    let
+      fsToSkipCheck = [ "none" "bindfs" "btrfs" "zfs" "tmpfs" "nfs" "vboxsf" "glusterfs" "apfs" "9p" "cifs" "prl_fs" "vmhgfs" ];
+      isBindMount = fs: builtins.elem "bind" fs.options;
+      skipCheck = fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck || isBindMount fs;
+      # https://wiki.archlinux.org/index.php/fstab#Filepath_spaces
+      escape = string: builtins.replaceStrings [ " " "\t" ] [ "\\040" "\\011" ] string;
+    in fstabFileSystems: { rootPrefix ? "", excludeChecks ? false, extraOpts ? (fs: []) }: concatMapStrings (fs:
+      (optionalString (isBindMount fs) (escape rootPrefix))
+      + (if fs.device != null then escape fs.device
+         else if fs.label != null then "/dev/disk/by-label/${escape fs.label}"
+         else throw "No device specified for mount point ‘${fs.mountPoint}’.")
+      + " " + escape (rootPrefix + fs.mountPoint)
+      + " " + fs.fsType
+      + " " + builtins.concatStringsSep "," (fs.options ++ (extraOpts fs))
+      + " " + (optionalString (!excludeChecks)
+        ("0 " + (if skipCheck fs then "0" else if fs.mountPoint == "/" then "1" else "2")))
+      + "\n"
+    ) fstabFileSystems;
+
+    initrdFstab = pkgs.writeText "initrd-fstab" (makeFstabEntries (filter utils.fsNeededForBoot fileSystems) {
+      rootPrefix = "/sysroot";
+      excludeChecks = true;
+      extraOpts = fs:
+        (optional fs.autoResize "x-systemd.growfs")
+        ++ (optional fs.autoFormat "x-systemd.makefs");
+    });
+
 in
 
 {
@@ -175,21 +203,20 @@ in
         }
       '';
       type = types.attrsOf (types.submodule [coreFileSystemOpts fileSystemOpts]);
-      description = ''
+      description = lib.mdDoc ''
         The file systems to be mounted.  It must include an entry for
-        the root directory (<literal>mountPoint = "/"</literal>).  Each
+        the root directory (`mountPoint = "/"`).  Each
         entry in the list is an attribute set with the following fields:
-        <literal>mountPoint</literal>, <literal>device</literal>,
-        <literal>fsType</literal> (a file system type recognised by
-        <command>mount</command>; defaults to
-        <literal>"auto"</literal>), and <literal>options</literal>
-        (the mount options passed to <command>mount</command> using the
-        <option>-o</option> flag; defaults to <literal>[ "defaults" ]</literal>).
+        `mountPoint`, `device`,
+        `fsType` (a file system type recognised by
+        {command}`mount`; defaults to
+        `"auto"`), and `options`
+        (the mount options passed to {command}`mount` using the
+        {option}`-o` flag; defaults to `[ "defaults" ]`).
 
-        Instead of specifying <literal>device</literal>, you can also
-        specify a volume label (<literal>label</literal>) for file
-        systems that support it, such as ext2/ext3 (see <command>mke2fs
-        -L</command>).
+        Instead of specifying `device`, you can also
+        specify a volume label (`label`) for file
+        systems that support it, such as ext2/ext3 (see {command}`mke2fs -L`).
       '';
     };
 
@@ -203,7 +230,7 @@ in
       default = [ ];
       example = [ "btrfs" ];
       type = types.listOf types.str;
-      description = "Names of supported filesystem types.";
+      description = lib.mdDoc "Names of supported filesystem types.";
     };
 
     boot.specialFileSystems = mkOption {
@@ -215,6 +242,35 @@ in
       '';
     };
 
+    boot.devSize = mkOption {
+      default = "5%";
+      example = "32m";
+      type = types.str;
+      description = lib.mdDoc ''
+        Size limit for the /dev tmpfs. Look at mount(8), tmpfs size option,
+        for the accepted syntax.
+      '';
+    };
+
+    boot.devShmSize = mkOption {
+      default = "50%";
+      example = "256m";
+      type = types.str;
+      description = lib.mdDoc ''
+        Size limit for the /dev/shm tmpfs. Look at mount(8), tmpfs size option,
+        for the accepted syntax.
+      '';
+    };
+
+    boot.runSize = mkOption {
+      default = "25%";
+      example = "256m";
+      type = types.str;
+      description = lib.mdDoc ''
+        Size limit for the /run tmpfs. Look at mount(8), tmpfs size option,
+        for the accepted syntax.
+      '';
+    };
   };
 
 
@@ -250,10 +306,6 @@ in
 
     environment.etc.fstab.text =
       let
-        fsToSkipCheck = [ "none" "bindfs" "btrfs" "zfs" "tmpfs" "nfs" "vboxsf" "glusterfs" ];
-        skipCheck = fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck;
-        # https://wiki.archlinux.org/index.php/fstab#Filepath_spaces
-        escape = string: builtins.replaceStrings [ " " "\t" ] [ "\\040" "\\011" ] string;
         swapOptions = sw: concatStringsSep "," (
           sw.options
           ++ optional (sw.priority != null) "pri=${toString sw.priority}"
@@ -268,24 +320,15 @@ in
         # <file system> <mount point>   <type>  <options>       <dump>  <pass>
 
         # Filesystems.
-        ${concatMapStrings (fs:
-            (if fs.device != null then escape fs.device
-             else if fs.label != null then "/dev/disk/by-label/${escape fs.label}"
-             else throw "No device specified for mount point ‘${fs.mountPoint}’.")
-            + " " + escape fs.mountPoint
-            + " " + fs.fsType
-            + " " + builtins.concatStringsSep "," fs.options
-            + " 0"
-            + " " + (if skipCheck fs then "0" else
-                     if fs.mountPoint == "/" then "1" else "2")
-            + "\n"
-        ) fileSystems}
+        ${makeFstabEntries fileSystems {}}
 
         # Swap devices.
         ${flip concatMapStrings config.swapDevices (sw:
             "${sw.realDevice} none swap ${swapOptions sw}\n"
         )}
       '';
+
+    boot.initrd.systemd.contents."/etc/fstab".source = initrdFstab;
 
     # Provide a target that pulls in all filesystems.
     systemd.targets.fs =
@@ -323,7 +366,7 @@ in
             unitConfig.DefaultDependencies = false; # needed to prevent a cycle
             serviceConfig.Type = "oneshot";
           };
-      in listToAttrs (map formatDevice (filter (fs: fs.autoFormat) fileSystems)) // {
+      in listToAttrs (map formatDevice (filter (fs: fs.autoFormat && !(utils.fsNeededForBoot fs)) fileSystems)) // {
     # Mount /sys/fs/pstore for evacuating panic logs and crashdumps from persistent storage onto the disk using systemd-pstore.
     # This cannot be done with the other special filesystems because the pstore module (which creates the mount point) is not loaded then.
         "mount-pstore" = {

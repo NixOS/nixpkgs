@@ -27,7 +27,7 @@
 }:
 let
   basename = "streamlink-twitch-gui";
-  runtimeLibs = lib.makeLibraryPath [ libudev0-shim ];
+  runtimeLibs = lib.makeLibraryPath [ gtk3-x11 libudev0-shim ];
   runtimeBins = lib.makeBinPath [ streamlink ];
   arch =
     if stdenv.hostPlatform.system == "x86_64-linux"
@@ -39,16 +39,16 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "${basename}-bin";
-  version = "1.11.0";
+  version = "2.1.0";
 
   src = fetchurl {
     url = "https://github.com/streamlink/${basename}/releases/download/v${version}/${basename}-v${version}-${arch}.tar.gz";
-    sha256 =
+    hash =
       if arch == "linux64"
       then
-        "0y96nziavvpdvrpn58p6a175kaa8cgadp19rnbm250x9cypn1d9y"
+        "sha256-kfCGhIgKMI0siDqnmIHSMk6RMHFlW6uwVsW48aiRua0="
       else
-        "0sfmhqf55w7wavqy4idsqpkf5p7l8sapjxap6xvyzpz4z5z6xr7y";
+        "sha256-+jgTpIYb4BPM7Ixmo+YUeOX5OlQlMaRVEXf3WzS2lAI=";
   };
 
   nativeBuildInputs = with xorg; [
@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
     icon = basename;
     desktopName = "Streamlink Twitch GUI";
     genericName = meta.description;
-    categories = "AudioVideo;Network;";
+    categories = [ "AudioVideo" "Network" ];
   };
 
   meta = with lib; {
@@ -124,6 +124,7 @@ stdenv.mkDerivation rec {
     longDescription = "Browse Twitch.tv and watch streams in your videoplayer of choice";
     homepage = "https://streamlink.github.io/streamlink-twitch-gui/";
     downloadPage = "https://github.com/streamlink/streamlink-twitch-gui/releases";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     maintainers = with maintainers; [ rileyinman ];
     platforms = [ "x86_64-linux" "i686-linux" ];

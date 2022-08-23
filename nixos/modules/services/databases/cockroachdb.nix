@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
@@ -6,46 +6,44 @@ let
   cfg = config.services.cockroachdb;
   crdb = cfg.package;
 
-  escape    = builtins.replaceStrings ["%"] ["%%"];
-  ifNotNull = v: s: optionalString (v != null) s;
-
-  startupCommand = lib.concatStringsSep " "
-    [ # Basic startup
-      "${crdb}/bin/cockroach start"
+  startupCommand = utils.escapeSystemdExecArgs
+    ([
+      # Basic startup
+      "${crdb}/bin/cockroach"
+      "start"
       "--logtostderr"
       "--store=/var/lib/cockroachdb"
-      (ifNotNull cfg.locality "--locality='${cfg.locality}'")
 
       # WebUI settings
-      "--http-addr='${cfg.http.address}:${toString cfg.http.port}'"
+      "--http-addr=${cfg.http.address}:${toString cfg.http.port}"
 
       # Cluster listen address
-      "--listen-addr='${cfg.listen.address}:${toString cfg.listen.port}'"
+      "--listen-addr=${cfg.listen.address}:${toString cfg.listen.port}"
 
-      # Cluster configuration
-      (ifNotNull cfg.join "--join=${cfg.join}")
-
-      # Cache and memory settings. Must be escaped.
-      "--cache='${escape cfg.cache}'"
-      "--max-sql-memory='${escape cfg.maxSqlMemory}'"
+      # Cache and memory settings.
+      "--cache=${cfg.cache}"
+      "--max-sql-memory=${cfg.maxSqlMemory}"
 
       # Certificate/security settings.
       (if cfg.insecure then "--insecure" else "--certs-dir=${cfg.certsDir}")
-    ];
+    ]
+    ++ lib.optional (cfg.join != null) "--join=${cfg.join}"
+    ++ lib.optional (cfg.locality != null) "--locality=${cfg.locality}"
+    ++ cfg.extraArgs);
 
-    addressOption = descr: defaultPort: {
-      address = mkOption {
-        type = types.str;
-        default = "localhost";
-        description = "Address to bind to for ${descr}";
-      };
-
-      port = mkOption {
-        type = types.port;
-        default = defaultPort;
-        description = "Port to bind to for ${descr}";
-      };
+  addressOption = descr: defaultPort: {
+    address = mkOption {
+      type = types.str;
+      default = "localhost";
+      description = lib.mdDoc "Address to bind to for ${descr}";
     };
+
+    port = mkOption {
+      type = types.port;
+      default = defaultPort;
+      description = lib.mdDoc "Port to bind to for ${descr}";
+    };
+  };
 in
 
 {
@@ -82,50 +80,50 @@ in
       join = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = "The addresses for connecting the node to a cluster.";
+        description = lib.mdDoc "The addresses for connecting the node to a cluster.";
       };
 
       insecure = mkOption {
         type = types.bool;
         default = false;
-        description = "Run in insecure mode.";
+        description = lib.mdDoc "Run in insecure mode.";
       };
 
       certsDir = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = "The path to the certificate directory.";
+        description = lib.mdDoc "The path to the certificate directory.";
       };
 
       user = mkOption {
         type = types.str;
         default = "cockroachdb";
-        description = "User account under which CockroachDB runs";
+        description = lib.mdDoc "User account under which CockroachDB runs";
       };
 
       group = mkOption {
         type = types.str;
         default = "cockroachdb";
-        description = "User account under which CockroachDB runs";
+        description = lib.mdDoc "User account under which CockroachDB runs";
       };
 
       openPorts = mkOption {
         type = types.bool;
         default = false;
-        description = "Open firewall ports for cluster communication by default";
+        description = lib.mdDoc "Open firewall ports for cluster communication by default";
       };
 
       cache = mkOption {
         type = types.str;
         default = "25%";
-        description = ''
+        description = lib.mdDoc ''
           The total size for caches.
 
           This can be a percentage, expressed with a fraction sign or as a
           decimal-point number, or any bytes-based unit. For example,
-          <literal>"25%"</literal>, <literal>"0.25"</literal> both represent
+          `"25%"`, `"0.25"` both represent
           25% of the available system memory. The values
-          <literal>"1000000000"</literal> and <literal>"1GB"</literal> both
+          `"1000000000"` and `"1GB"` both
           represent 1 gigabyte of memory.
 
         '';
@@ -134,15 +132,15 @@ in
       maxSqlMemory = mkOption {
         type = types.str;
         default = "25%";
-        description = ''
+        description = lib.mdDoc ''
           The maximum in-memory storage capacity available to store temporary
           data for SQL queries.
 
           This can be a percentage, expressed with a fraction sign or as a
           decimal-point number, or any bytes-based unit. For example,
-          <literal>"25%"</literal>, <literal>"0.25"</literal> both represent
+          `"25%"`, `"0.25"` both represent
           25% of the available system memory. The values
-          <literal>"1000000000"</literal> and <literal>"1GB"</literal> both
+          `"1000000000"` and `"1GB"` both
           represent 1 gigabyte of memory.
         '';
       };
@@ -151,12 +149,22 @@ in
         type = types.package;
         default = pkgs.cockroachdb;
         defaultText = literalExpression "pkgs.cockroachdb";
-        description = ''
+        description = lib.mdDoc ''
           The CockroachDB derivation to use for running the service.
 
           This would primarily be useful to enable Enterprise Edition features
           in your own custom CockroachDB build (Nixpkgs CockroachDB binaries
           only contain open source features and open source code).
+        '';
+      };
+
+      extraArgs = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        example = [ "--advertise-addr" "[fe80::f6f2:::]" ];
+        description = lib.mdDoc ''
+          Extra CLI arguments passed to {command}`cockroach start`.
+          For the full list of supported argumemnts, check <https://www.cockroachlabs.com/docs/stable/cockroach-start.html#flags>
         '';
       };
     };

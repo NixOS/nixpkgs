@@ -1,7 +1,7 @@
 { mkDerivation, extra-cmake-modules, qtbase }:
 
 mkDerivation {
-  name = "attica";
+  pname = "attica";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ qtbase ];
   outputs = [ "out" "dev" ];

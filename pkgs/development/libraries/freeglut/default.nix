@@ -1,22 +1,13 @@
-{ lib, stdenv, fetchurl, fetchpatch, libXi, libXrandr, libXxf86vm, libGL, libGLU, xlibsWrapper, cmake }:
+{ lib, stdenv, fetchurl, libXi, libXrandr, libXxf86vm, libGL, libGLU, xlibsWrapper, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "freeglut";
-  version = "3.2.1";
+  version = "3.2.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/freeglut/freeglut-${version}.tar.gz";
-    sha256 = "0s6sk49q8ijgbsrrryb7dzqx2fa744jhx1wck5cz5jia2010w06l";
+    sha256 = "sha256-xZRKCC3wu6lrV1bd2x910M1yzie1OVxsHd6Fwv8pelA=";
   };
-
-  patches = [
-    (fetchpatch {
-      # upstream build fix against -fno-common compilers like >=gcc-10
-      url = "https://github.com/dcnieho/FreeGLUT/commit/b9998bbc1e1c329f6bf69c24606a2be7a4973b8c.patch";
-      sha256 = "0j43vrnm22mz3r3c43szgcnil19cx9vcydzky9gwzqlyacr51swd";
-      stripLen = 2;
-    })
-  ];
 
   outputs = [ "out" "dev" ];
 

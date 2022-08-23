@@ -1,8 +1,8 @@
 { lib, stdenv, fetchurl, unzip, makeWrapper
 , cairo, fontconfig, freetype, gdk-pixbuf, glib
-, glibc, gtk2, libX11, nspr, nss, pango, gconf
+, glibc, gtk2, libX11, nspr, nss, pango
 , libxcb, libXi, libXrender, libXext, dbus
-, testVersion, chromedriver
+, testers, chromedriver
 }:
 
 let
@@ -17,6 +17,11 @@ let
       system = "mac64";
       sha256 = upstream-info.sha256_darwin;
     };
+
+    aarch64-darwin = {
+      system = "mac64_m1";
+      sha256 = upstream-info.sha256_darwin_aarch64;
+    };
   };
 
   spec = allSpecs.${stdenv.hostPlatform.system}
@@ -25,9 +30,9 @@ let
   libs = lib.makeLibraryPath [
     stdenv.cc.cc.lib
     cairo fontconfig freetype
-    gdk-pixbuf glib gtk2 gconf
+    gdk-pixbuf glib gtk2
     libX11 nspr nss pango libXrender
-    gconf libxcb libXext libXi
+    libxcb libXext libXi
     dbus
   ];
 
@@ -51,7 +56,7 @@ in stdenv.mkDerivation rec {
     wrapProgram "$out/bin/chromedriver" --prefix LD_LIBRARY_PATH : "${libs}"
   '';
 
-  passthru.tests.version = testVersion { package = chromedriver; };
+  passthru.tests.version = testers.testVersion { package = chromedriver; };
 
   meta = with lib; {
     homepage = "https://chromedriver.chromium.org/";
@@ -62,6 +67,7 @@ in stdenv.mkDerivation rec {
       input, JavaScript execution, and more. ChromeDriver is a standalone
       server that implements the W3C WebDriver standard.
     '';
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.bsd3;
     maintainers = with maintainers; [ goibhniu marsam primeos ];
     # Note from primeos: By updating Chromium I also update Google Chrome and

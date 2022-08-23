@@ -14,10 +14,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ zlib kmod which ] ++
-    lib.optional stdenv.hostPlatform.isDarwin IOKit;
+  buildInputs = [ which zlib ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ kmod ];
 
-  preConfigure = if stdenv.cc.isGNU then null else ''
+  preConfigure = lib.optionalString (!stdenv.cc.isGNU) ''
     substituteInPlace Makefile --replace 'CC=$(CROSS_COMPILE)gcc' ""
   '';
 
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://mj.ucw.cz/pciutils.html";
+    homepage = "https://mj.ucw.cz/sw/pciutils/";
     description = "A collection of programs for inspecting and manipulating configuration of PCI devices";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

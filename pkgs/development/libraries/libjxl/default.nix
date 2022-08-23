@@ -1,49 +1,75 @@
 { stdenv, lib, fetchFromGitHub
-, asciidoc
+, fetchpatch
 , brotli
 , cmake
-, graphviz
-, doxygen
 , giflib
 , gperftools
 , gtest
+, libhwy
 , libjpeg
 , libpng
 , libwebp
 , openexr
 , pkg-config
-, python3
 , zlib
+, buildDocs ? true
+, asciidoc
+, graphviz
+, doxygen
+, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "libjxl";
-  version = "0.5";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "libjxl";
     repo = "libjxl";
     rev = "v${version}";
-    sha256 = "0grljgmy6cfhm8zni9d1mdn01qzc49k1pl75vhr7qcd3sp4r8lxm";
+    sha256 = "sha256-fTK5hyU9PZ6nigMsfzVugwviihgAXfEcLF+l+n5h+54=";
     # There are various submodules in `third_party/`.
     fetchSubmodules = true;
   };
 
-  # hydra's darwin machines run into https://github.com/libjxl/libjxl/issues/408
-  # unless we disable highway's tests
-  postPatch = lib.optional stdenv.isDarwin ''
-    substituteInPlace third_party/highway/CMakeLists.txt \
-      --replace 'if(BUILD_TESTING)' 'if(false)'
-  '';
+  patches = [
+    # present in master, remove after 0.7?
+    (fetchpatch {
+      name = "fix-link-lld-macho.patch";
+      url = "https://github.com/libjxl/libjxl/commit/88fe3fff3dc70c72405f57c69feffd9823930034.patch";
+      sha256 = "1419fyiq4srpj72cynwyvqy8ldi7vn9asvkp5fsbmiqkyhb15jpk";
+    })
+
+    # "robust statistics" have been removed in upstream mainline as they are
+    # conidered to cause "interoperability problems". sure enough the tests
+    # fail with precision issues on aarch64.
+    (fetchpatch {
+      name = "remove-robust-and-descriptive-statistics.patch";
+      url = "https://github.com/libjxl/libjxl/commit/204f87a5e4d684544b13900109abf040dc0b402b.patch";
+      sha256 = "sha256-DoAaYWLmQ+R9GZbHMTYGe0gBL9ZesgtB+2WhmbARna8=";
+    })
+
+    # fix build with asciidoc wrapped in shell script
+    (fetchpatch {
+      url = "https://github.com/libjxl/libjxl/commit/b8ec58c58c6281987f42ebec892f513824c0cc0e.patch";
+      hash = "sha256-g8U+YVhLfgSHJ+PWJgvVOI66+FElJSC8IgSRodNnsMw=";
+    })
+    (fetchpatch {
+      url = "https://github.com/libjxl/libjxl/commit/ca8e276aacf63a752346a6a44ba673b0af993237.patch";
+      excludes = [ "AUTHORS" ];
+      hash = "sha256-9VXy1LdJ0JhYbCGPNMySpnGLBxUrr8BYzE+oU3LnUGw=";
+    })
+  ];
 
   nativeBuildInputs = [
-    asciidoc # for docs
     cmake
-    graphviz # for docs via doxygen component `dot`
-    doxygen # for docs
     gtest
     pkg-config
-    python3 # for docs
+  ] ++ lib.optionals buildDocs [
+    asciidoc
+    graphviz
+    doxygen
+    python3
   ];
 
   # Functionality not currently provided by this package
@@ -63,7 +89,6 @@ stdenv.mkDerivation rec {
   # conclusively in its README or otherwise; they can best be determined
   # by checking the CMake output for "Could NOT find".
   buildInputs = [
-    brotli
     giflib
     gperftools # provides `libtcmalloc`
     libjpeg
@@ -73,6 +98,11 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
+  propagatedBuildInputs = [
+    brotli
+    libhwy
+  ];
+
   cmakeFlags = [
     # For C dependencies like brotli, which are dynamically linked,
     # we want to use the system libraries, so that we don't have to care about
@@ -80,6 +110,9 @@ stdenv.mkDerivation rec {
     # The other C++ dependencies are statically linked in, so there
     # using the vendorered ones is easier.
     "-DJPEGXL_FORCE_SYSTEM_BROTLI=ON"
+
+    # Use our version of highway, though it is still statically linked in
+    "-DJPEGXL_FORCE_SYSTEM_HWY=ON"
 
     # TODO: Update this package to enable this (overridably via an option):
     # Viewer tools for evaluation.
@@ -92,15 +125,9 @@ stdenv.mkDerivation rec {
     # "-DJPEGXL_ENABLE_PLUGINS=ON"
   ];
 
-  doCheck = true;
+  LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
 
-  # The test driver runs a test `LibraryCLinkageTest` which without
-  # LD_LIBRARY_PATH setting errors with:
-  #     /build/source/build/tools/tests/libjxl_test: error while loading shared libraries: libjxl.so.0
-  # The required file is in the build directory (`$PWD`).
-  preCheck = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD
-  '';
+  doCheck = !stdenv.hostPlatform.isi686;
 
   meta = with lib; {
     homepage = "https://github.com/libjxl/libjxl";
@@ -108,6 +135,5 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ nh2 ];
     platforms = platforms.all;
-    broken = stdenv.hostPlatform.isAarch64; # `internal compiler error`, see https://github.com/NixOS/nixpkgs/pull/103160#issuecomment-866388610
   };
 }

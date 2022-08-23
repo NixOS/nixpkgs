@@ -3,17 +3,19 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, fetchpatch
 # propagatedBuildInputs
-, Babel
+, babel
 , alabaster
 , docutils
 , imagesize
+, importlib-metadata
 , jinja2
 , packaging
 , pygments
 , requests
-, setuptools
 , snowballstemmer
+, sphinxcontrib-apidoc
 , sphinxcontrib-applehelp
 , sphinxcontrib-devhelp
 , sphinxcontrib-htmlhelp
@@ -29,15 +31,17 @@
 
 buildPythonPackage rec {
   pname = "sphinx";
-  version = "4.3.1";
-  disabled = pythonOlder "3.5";
+  version = "5.0.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "sphinx-doc";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-8Yj6cPZFG8ycbbZtMR+fsIAOX0brxroi6nYjP+WhnxA=";
-    extraPostFetch = ''
+    rev = "refs/tags/v${version}";
+    hash = "sha256-kdwznYvs4szhC+qoL2Zsib9cU69fag1KhCXl8qIGkZU=";
+    postFetch = ''
       cd $out
       mv tests/roots/test-images/testimäge.png \
         tests/roots/test-images/testimæge.png
@@ -45,8 +49,28 @@ buildPythonPackage rec {
     '';
   };
 
+  patches = [
+    # https://github.com/sphinx-doc/sphinx/pull/10624
+    (fetchpatch {
+      name = "avoid-deprecated-docutils-0.19-api.patch";
+      sha256 = "sha256-QIrLkxnexNcfuI00UOeCpAamMLqqt4wxoVY1VA72jIw=";
+      url = "https://github.com/sphinx-doc/sphinx/commit/8d99168794ab8be0de1e6281d1b76af8177acd3d.patch";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "docutils>=0.14,<0.19" "docutils>=0.14"
+
+    # remove impurity caused by date inclusion
+    # https://github.com/sphinx-doc/sphinx/blob/master/setup.cfg#L4-L6
+    substituteInPlace setup.cfg \
+      --replace "tag_build = .dev" "" \
+      --replace "tag_date = true" ""
+  '';
+
   propagatedBuildInputs = [
-    Babel
+    babel
     alabaster
     docutils
     imagesize
@@ -54,7 +78,6 @@ buildPythonPackage rec {
     packaging
     pygments
     requests
-    setuptools
     snowballstemmer
     sphinxcontrib-applehelp
     sphinxcontrib-devhelp
@@ -64,6 +87,11 @@ buildPythonPackage rec {
     sphinxcontrib-serializinghtml
     # extra[docs]
     sphinxcontrib-websupport
+
+    # extra plugins which are otherwise not found by sphinx-build
+    sphinxcontrib-apidoc
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
   ];
 
   checkInputs = [
@@ -87,9 +115,11 @@ buildPythonPackage rec {
     # Due to lack of network sandboxing can't guarantee port 7777 isn't bound
     "test_inspect_main_url"
     "test_auth_header_uses_first_match"
+    "test_linkcheck_allowed_redirects"
     "test_linkcheck_request_headers"
     "test_linkcheck_request_headers_no_slash"
     "test_follows_redirects_on_HEAD"
+    "test_get_after_head_raises_connection_error"
     "test_invalid_ssl"
     "test_connect_to_selfsigned_with_tls_verify_false"
     "test_connect_to_selfsigned_with_tls_cacerts"
@@ -114,6 +144,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://www.sphinx-doc.org";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = teams.sphinx.members;
   };
 }

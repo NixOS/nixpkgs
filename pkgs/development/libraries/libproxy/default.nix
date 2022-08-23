@@ -1,12 +1,14 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
+, fetchpatch
 , pkg-config
 , cmake
 , zlib
 , dbus
 , networkmanager
-, enableJavaScript ? stdenv.isDarwin || lib.meta.availableOn stdenv.hostPlatform spidermonkey_68
-, spidermonkey_68
+, enableJavaScript ? stdenv.isDarwin || lib.meta.availableOn stdenv.hostPlatform duktape
+, duktape
 , pcre
 , gsettings-desktop-schemas
 , glib
@@ -17,18 +19,24 @@
 , JavaScriptCore
 }:
 
-let
-  jsRuntime = if stdenv.hostPlatform.isDarwin then JavaScriptCore else spidermonkey_68;
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "libproxy";
-  version = "0.4.17";
+  version = "0.4.18";
 
   src = fetchFromGitHub {
     owner = "libproxy";
     repo = "libproxy";
     rev = version;
-    sha256 = "0v8q4ln0pd5231kidpi8wpwh0chcjwcmawcki53czlpdrc09z96r";
+    hash = "sha256-pqj1LwRdOK2CUu3hYIsogQIXxWzShDuKEbDTbtWkgnQ=";
   };
+
+  patches = lib.optionals stdenv.isDarwin [
+    # https://github.com/libproxy/libproxy/pull/189
+    (fetchpatch {
+      url = "https://github.com/libproxy/libproxy/commit/4331b9db427ce2c25ff5eeb597bec4bc35ed1a0b.patch";
+      sha256 = "sha256-uTh3rYVvEke1iWVHsT3Zj2H1F+gyLrffcmyt0JEKaCA=";
+    })
+  ];
 
   outputs = [ "out" "dev" "py3" ];
 
@@ -43,7 +51,7 @@ in stdenv.mkDerivation rec {
     python3
     zlib
   ] ++ lib.optionals enableJavaScript [
-    jsRuntime
+    (if stdenv.hostPlatform.isDarwin then JavaScriptCore else duktape)
   ] ++ (if stdenv.hostPlatform.isDarwin then [
     SystemConfiguration
     CoreFoundation

@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyevilgenius";
-  version = "1.0.0";
+  version = "2.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = pname;
     rev = version;
-    sha256 = "06xnl93sqklg7gx0z50vm79xwww0yyw05c1yynajc9aijfi8cmi3";
+    sha256 = "sha256-wjC32oq/lW3Z4XB+4SILRKIOuCgBKk1gruOo4uc/4/o=";
   };
 
   propagatedBuildInputs = [

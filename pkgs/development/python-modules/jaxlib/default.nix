@@ -4,24 +4,21 @@
 
   # Build-time dependencies:
 , addOpenGLRunpath
-, bazel_4
+, bazel_5
 , binutils
 , buildBazelPackage
 , buildPythonPackage
+, cctools
 , cython
 , fetchFromGitHub
 , git
+, IOKit
 , jsoncpp
 , pybind11
 , setuptools
 , symlinkJoin
 , wheel
 , which
-
-  # Build-time and runtime CUDA dependencies:
-, cudatoolkit ? null
-, cudnn ? null
-, nccl ? null
 
   # Python dependencies:
 , absl-py
@@ -42,6 +39,7 @@
   # CUDA flags:
 , cudaCapabilities ? [ "sm_35" "sm_50" "sm_60" "sm_70" "sm_75" "compute_80" ]
 , cudaSupport ? false
+, cudaPackages ? {}
 
   # MKL:
 , mklSupport ? true
@@ -49,14 +47,21 @@
 
 let
 
+  inherit (cudaPackages) cudatoolkit cudnn nccl;
+
   pname = "jaxlib";
-  version = "0.1.75";
+  version = "0.3.0";
 
   meta = with lib; {
     description = "JAX is Autograd and XLA, brought together for high-performance machine learning research.";
     homepage = "https://github.com/google/jax";
     license = licenses.asl20;
     maintainers = with maintainers; [ ndl ];
+    platforms = platforms.unix;
+    # aarch64-darwin is broken because of https://github.com/bazelbuild/rules_cc/pull/136
+    # however even with that fix applied, it doesn't work for everyone:
+    # https://github.com/NixOS/nixpkgs/pull/184395#issuecomment-1207287129
+    broken = stdenv.isAarch64;
   };
 
   cudatoolkit_joined = symlinkJoin {
@@ -82,13 +87,13 @@ let
   bazel-build = buildBazelPackage {
     name = "bazel-build-${pname}-${version}";
 
-    bazel = bazel_4;
+    bazel = bazel_5;
 
     src = fetchFromGitHub {
       owner = "google";
       repo = "jax";
       rev = "${pname}-v${version}";
-      sha256 = "01ks4djbpjsxjy2zwdwv3h00sgwi4ps3jz75swddrw2f56zjdmw4";
+      sha256 = "0ndpngx5k6lf6jqjck82bbp0gs943z0wh7vs9gwbyk2bw0da7w72";
     };
 
     nativeBuildInputs = [
@@ -117,6 +122,8 @@ let
     ] ++ lib.optionals cudaSupport [
       cudatoolkit
       cudnn
+    ] ++ lib.optionals stdenv.isDarwin [
+      IOKit
     ];
 
     postPatch = ''
@@ -201,9 +208,7 @@ let
 
     # Make sure Bazel knows about our configuration flags during fetching so that the
     # relevant dependencies can be downloaded.
-    bazelFetchFlags = bazel-build.bazelBuildFlags;
-
-    bazelBuildFlags = [
+    bazelFlags = [
       "-c opt"
     ] ++ lib.optional (stdenv.targetPlatform.isx86_64 && stdenv.targetPlatform.isUnix) [
       "--config=avx_posix"
@@ -211,14 +216,19 @@ let
       "--config=cuda"
     ] ++ lib.optional mklSupport [
       "--config=mkl_open_source_only"
+    ] ++ lib.optionals stdenv.cc.isClang [
+      # bazel depends on the compiler frontend automatically selecting these flags based on file
+      # extension but our clang doesn't.
+      # https://github.com/NixOS/nixpkgs/issues/150655
+      "--cxxopt=-x" "--cxxopt=c++" "--host_cxxopt=-x" "--host_cxxopt=c++"
     ];
 
     fetchAttrs = {
       sha256 =
         if cudaSupport then
-          "1lyipbflqd1y5cdj4hdml5h1inbr0wwfgp6xw5p5623qv3im16lh"
+          "sha256-Ald+vplRx/DDG/7TfHAqD4Gktb1BGnf7FSCCJzSI0eo="
         else
-          "09kapzpfwnlr6ghmgwac232bqf2a57mm1brz4cvfx8mlg8bbaw63";
+          "sha256-eK5IjTAncDarkWYKnXrEo7kw7J7iOH7in2L2GabnFYo=";
     };
 
     buildAttrs = {
@@ -226,18 +236,35 @@ let
 
       # Note: we cannot do most of this patching at `patch` phase as the deps are not available yet.
       # 1) Fix pybind11 include paths.
-      # 2) Force static protobuf linkage to prevent crashes on loading multiple extensions
-      #    in the same python program due to duplicate protobuf DBs.
+      # 2) Link protobuf from nixpkgs (through TF_SYSTEM_LIBS when using gcc) to prevent crashes on
+      #    loading multiple extensions in the same python program due to duplicate protobuf DBs.
       # 3) Patch python path in the compiler driver.
+      # 4) Patch tensorflow sources to work with later versions of protobuf. See
+      #    https://github.com/google/jax/issues/9534. Note that this should be
+      #    removed on the next release after 0.3.0.
       preBuild = ''
         for src in ./jaxlib/*.{cc,h}; do
           sed -i 's@include/pybind11@pybind11@g' $src
         done
-        sed -i 's@-lprotobuf@-l:libprotobuf.a@' ../output/external/org_tensorflow/third_party/systemlibs/protobuf.BUILD
-        sed -i 's@-lprotoc@-l:libprotoc.a@' ../output/external/org_tensorflow/third_party/systemlibs/protobuf.BUILD
+        substituteInPlace ../output/external/org_tensorflow/tensorflow/compiler/xla/python/pprof_profile_builder.cc \
+          --replace "status.message()" "std::string{status.message()}"
       '' + lib.optionalString cudaSupport ''
         patchShebangs ../output/external/org_tensorflow/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
-      '';
+      '' + lib.optionalString stdenv.isDarwin ''
+        # Framework search paths aren't added by bintools hook
+        # https://github.com/NixOS/nixpkgs/pull/41914
+        export NIX_LDFLAGS+=" -F${IOKit}/Library/Frameworks"
+        substituteInPlace ../output/external/rules_cc/cc/private/toolchain/osx_cc_wrapper.sh.tpl \
+          --replace "/usr/bin/install_name_tool" "${cctools}/bin/install_name_tool"
+        substituteInPlace ../output/external/rules_cc/cc/private/toolchain/unix_cc_configure.bzl \
+          --replace "/usr/bin/libtool" "${cctools}/bin/libtool"
+      '' + (if stdenv.cc.isGNU then ''
+        sed -i 's@-lprotobuf@-l:libprotobuf.a@' ../output/external/org_tensorflow/third_party/systemlibs/protobuf.BUILD
+        sed -i 's@-lprotoc@-l:libprotoc.a@' ../output/external/org_tensorflow/third_party/systemlibs/protobuf.BUILD
+      '' else if stdenv.cc.isClang then ''
+        sed -i 's@-lprotobuf@${pkgs.protobuf}/lib/libprotobuf.a@' ../output/external/org_tensorflow/third_party/systemlibs/protobuf.BUILD
+        sed -i 's@-lprotoc@${pkgs.protobuf}/lib/libprotoc.a@' ../output/external/org_tensorflow/third_party/systemlibs/protobuf.BUILD
+      '' else throw "Unsupported stdenv.cc: ${stdenv.cc}");
 
       installPhase = ''
         ./bazel-bin/build/build_wheel --output_path=$out --cpu=${stdenv.targetPlatform.linuxArch}
@@ -246,15 +273,29 @@ let
 
     inherit meta;
   };
+  platformTag =
+    if stdenv.targetPlatform.isLinux then
+      "manylinux2010_${stdenv.targetPlatform.linuxArch}"
+    else if stdenv.system == "x86_64-darwin" then
+      "macosx_10_9_${stdenv.targetPlatform.linuxArch}"
+    else if stdenv.system == "aarch64-darwin" then
+      "macosx_11_0_${stdenv.targetPlatform.linuxArch}"
+    else throw "Unsupported target platform: ${stdenv.targetPlatform}";
 
 in
 buildPythonPackage {
   inherit meta pname version;
   format = "wheel";
 
-  src = "${bazel-build}/jaxlib-${version}-cp${builtins.replaceStrings ["."] [""] python.pythonVersion}-none-manylinux2010_${stdenv.targetPlatform.linuxArch}.whl";
+  src = "${bazel-build}/jaxlib-${version}-cp${builtins.replaceStrings ["."] [""] python.pythonVersion}-none-${platformTag}.whl";
 
+  # Note that cudatoolkit is necessary since jaxlib looks for "ptxas" in $PATH.
+  # See https://github.com/NixOS/nixpkgs/pull/164176#discussion_r828801621 for
+  # more info.
   postInstall = lib.optionalString cudaSupport ''
+    mkdir -p $out/bin
+    ln -s ${cudatoolkit}/bin/ptxas $out/bin/ptxas
+
     find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
       addOpenGLRunpath "$lib"
       patchelf --set-rpath "${cudatoolkit}/lib:${cudatoolkit.lib}/lib:${cudnn}/lib:${nccl}/lib:$(patchelf --print-rpath "$lib")" "$lib"

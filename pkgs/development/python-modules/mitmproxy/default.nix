@@ -45,14 +45,14 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "7.0.4";
+  version = "8.1.1";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-424WNG9Yj+Zfo1UTh7emknZ7xTtpFPz7Ph+FpE149FM=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-nW/WfiY6uF67qNa95tvNvSv/alP2WmzTk34LEBma/04=";
   };
 
   propagatedBuildInputs = [
@@ -74,7 +74,6 @@ buildPythonPackage rec {
     passlib
     protobuf
     publicsuffix2
-    pyasn1
     pyopenssl
     pyparsing
     pyperclip
@@ -87,8 +86,6 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    beautifulsoup4
-    glibcLocales
     hypothesis
     parver
     pytest-asyncio
@@ -97,8 +94,6 @@ buildPythonPackage rec {
     pytestCheckHook
     requests
   ];
-
-  doCheck = !stdenv.isDarwin;
 
   postPatch = ''
     # remove dependency constraints
@@ -115,7 +110,10 @@ buildPythonPackage rec {
     # https://github.com/mitmproxy/mitmproxy/commit/36ebf11916704b3cdaf4be840eaafa66a115ac03
     # Tests require terminal
     "test_integration"
+    "test_contentview_flowview"
+    "test_flowview"
   ];
+  dontUsePytestXdist = true;
 
   pythonImportsCheck = [ "mitmproxy" ];
 
@@ -123,6 +121,6 @@ buildPythonPackage rec {
     description = "Man-in-the-middle proxy";
     homepage = "https://mitmproxy.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ fpletz kamilchm ];
+    maintainers = with maintainers; [ kamilchm SuperSandro2000 ];
   };
 }

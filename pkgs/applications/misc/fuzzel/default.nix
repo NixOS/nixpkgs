@@ -23,14 +23,14 @@
 
 stdenv.mkDerivation rec {
   pname = "fuzzel";
-  version = "1.6.5";
+  version = "1.7.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "fuzzel";
     rev = version;
-    sha256 = "SWt46YSXI6Dsv0ed3H4sN8kbEzQDL4U6jxFSbMyspJ0=";
+    sha256 = "1261gwxiky37pvzmmbrpml1psa22kkglb141ybj1fbnwg6j7jvlf";
   };
 
   nativeBuildInputs = [
@@ -59,6 +59,8 @@ stdenv.mkDerivation rec {
     "-Dpng-backend=${withPNGBackend}"
     "-Dsvg-backend=${withSVGBackend}"
   ];
+
+  CFLAGS = "-Wno-error=comment"; # https://gitlab.gnome.org/GNOME/librsvg/-/issues/856
 
   meta = with lib; {
     description = "Wayland-native application launcher, similar to rofi’s drun mode";

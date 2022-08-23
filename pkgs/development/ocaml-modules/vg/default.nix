@@ -8,14 +8,14 @@
 with lib;
 
 let
-  inherit (lib) optionals versionAtLeast;
+  inherit (lib) optionals versionOlder;
 
   pname = "vg";
   version = "0.9.4";
   webpage = "https://erratique.ch/software/${pname}";
 in
 
-if !versionAtLeast ocaml.version "4.03"
+if versionOlder ocaml.version "4.03"
 then throw "vg is not available for OCaml ${ocaml.version}"
 else
 
@@ -28,11 +28,14 @@ stdenv.mkDerivation {
     sha256 = "181sz6l5xrj5jvwg4m2yqsjzwp2s5h8v0mwhjcwbam90kdfx2nak";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
+  buildInputs = [ topkg ];
 
   propagatedBuildInputs = [ uchar result gg ]
                           ++ optionals pdfBackend [ uutf otfm ]
                           ++ optionals htmlcBackend [ js_of_ocaml js_of_ocaml-ppx ];
+
+  strictDeps = true;
 
   buildPhase = topkg.buildPhase
     + " --with-uutf ${boolToString pdfBackend}"
@@ -54,8 +57,9 @@ stdenv.mkDerivation {
     module. An API allows to implement new renderers.
     '';
     homepage = webpage;
-    inherit (ocaml.meta) platforms;
     license = licenses.isc;
     maintainers = [ maintainers.jirkamarsik ];
+    mainProgram = "vecho";
+    inherit (ocaml.meta) platforms;
   };
 }

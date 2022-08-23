@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution-ews";
-  version = "3.42.1";
+  version = "3.44.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "nCvGMSfDS0GUQfF8zomVq+gKf9H72X896zptRy9/Xy0=";
+    sha256 = "hcysooh6+FvwSORzx7bELF9WQasFpbxM/Oo04rb1vhc=";
   };
 
   nativeBuildInputs = [ cmake gettext intltool pkg-config ];
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Evolution connector for Microsoft Exchange Server protocols";
     homepage = "https://gitlab.gnome.org/GNOME/evolution-ews";
-    license = "LGPL-2.1-only OR LGPL-3.0-only"; # https://gitlab.gnome.org/GNOME/evolution-ews/issues/111
+    license = licenses.lgpl21Plus; # https://gitlab.gnome.org/GNOME/evolution-ews/issues/111
     maintainers = [ maintainers.dasj19 ];
     platforms = platforms.linux;
   };

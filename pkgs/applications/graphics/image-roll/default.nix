@@ -4,25 +4,33 @@
 , glib
 , pkg-config
 , wrapGAppsHook
-, gtk3
+, gtk4
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "image-roll";
-  version = "1.4.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "weclaw1";
     repo = pname;
     rev = version;
-    sha256 = "sha256-NhZ0W9WBOIRe2nE4jQJ9WgfduKhHd+222feUCay4atw=";
+    sha256 = "sha256-CC40TU38bJFnbJl2EHqeB9RBvbVUrBmRdZVS2GxqGu4=";
   };
 
-  cargoSha256 = "sha256-7sV8v/npmdOgTMtnww/VoK1Kp4Na9Go95XLcfdgkTik=";
+  cargoSha256 = "sha256-cUE2IZOunR/NIo/qytORRfNqCsf87LfpKA8o/v4Nkhk=";
 
   nativeBuildInputs = [ glib pkg-config wrapGAppsHook ];
 
-  buildInputs = [ gtk3 ];
+  buildInputs = [ gtk4 ];
+
+  checkFlags = [
+    # fails in the sandbox
+    "--skip=file_list::tests"
+
+    # sometimes fails on darwin
+    "image_list::tests::save_current_image_overwrites_image_at_current_image_path_when_filename_is_set_to_none"
+  ];
 
   postInstall = ''
     install -Dm444 src/resources/com.github.weclaw1.ImageRoll.desktop -t $out/share/applications/

@@ -4,11 +4,15 @@
 , pythonOlder
 
 # Python dependencies
+, numpy
 , openpyxl
 , pandas
 , pandas-stubs
 , requests
+, scikit-learn
+, tenacity
 , tqdm
+, wandb
 
 # Check dependencies
 , pytest-mock
@@ -17,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "0.11.5";
+  version = "0.22.1";
 
   disabled = pythonOlder "3.7.1";
 
@@ -26,15 +30,19 @@ buildPythonPackage rec {
     owner = "openai";
     repo = "openai-python";
     rev = "v${version}";
-    sha256 = "sha256-6eL3/vDWyIOVjRQo4OO3OgyUG3t8dKPtxzMMTxPCglM=";
+    sha256 = "sha256-QUnsm0ui1BFlLqAlH1bp7uDbhiRigePrAPAkSRjftM4=";
   };
 
   propagatedBuildInputs = [
+    numpy
     openpyxl
     pandas
     pandas-stubs
     requests
+    scikit-learn
+    tenacity
     tqdm
+    wandb
   ];
 
   pythonImportsCheck = [ "openai" ];

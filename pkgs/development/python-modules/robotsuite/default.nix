@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "robotsuite";
-  version = "2.2.1";
+  version = "2.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8764e01990ac6774e0c983579bcb9cb79f44373a61ad47fbae9a1dc7eedbdd61";
+    sha256 = "sha256-iugVKUPl6HTTO8K1EbSqAk1fl/fsEPoOcsOnnAgcEas=";
   };
 
   buildInputs = [ unittest2 ];

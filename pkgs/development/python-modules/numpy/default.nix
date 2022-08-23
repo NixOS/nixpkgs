@@ -6,6 +6,7 @@
 , gfortran
 , hypothesis
 , pytest
+, typing-extensions
 , blas
 , lapack
 , writeTextFile
@@ -40,14 +41,19 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.21.4";
+
+  # Attention! v1.22.0 breaks scipy and by extension scikit-learn, so
+  # build both to verify they don't break.
+  # https://github.com/scipy/scipy/issues/15414
+  version = "1.23.1";
+
   format = "pyproject.toml";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    sha256 = "e6c76a87633aa3fa16614b61ccedfae45b91df2767cf097aa9c933932a7ed1e0";
+    extension = "tar.gz";
+    hash = "sha256-10jvNJv+8uEZS1naN+1aKcGeqNfmNCAZkhuiuk/YtiQ=";
   };
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
@@ -78,6 +84,7 @@ in buildPythonPackage rec {
   checkInputs = [
     pytest
     hypothesis
+    typing-extensions
   ];
 
   checkPhase = ''

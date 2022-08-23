@@ -4,7 +4,6 @@
 , libxml2
 , libxslt
 , pango
-, pangoxsl
 , perl
 , pkg-config
 , popt
@@ -26,7 +25,6 @@ stdenv.mkDerivation rec {
     libxml2
     libxslt
     pango
-    pangoxsl
     gtk2
     popt
   ];

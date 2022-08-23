@@ -23,6 +23,7 @@
 , libxcb
 , libxkbfile
 , libxshmfence
+, libxcvt
 , mesa
 , meson
 , ninja
@@ -41,12 +42,12 @@
 , defaultFontPath ? "" }:
 
 stdenv.mkDerivation rec {
-
   pname = "xwayland";
-  version = "21.1.3";
+  version = "22.1.3";
+
   src = fetchurl {
     url = "mirror://xorg/individual/xserver/${pname}-${version}.tar.xz";
-    sha256 = "sha256-68J1fzn9TH2xZU/YZZFYnCEaogFy1DpU93rlZ87b+KI=";
+    sha256 = "sha256-pxLre84yzZNN82gUtd0EaqZwiZwW/pjyr7ADV4+GocU=";
   };
 
   depsBuildBuild = [
@@ -82,6 +83,7 @@ stdenv.mkDerivation rec {
     libxcb
     libxkbfile
     libxshmfence
+    libxcvt
     mesa
     openssl
     pixman

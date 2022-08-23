@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "scottdraves";
     repo = pname;
     rev = "37ba0fd692d6581f8fe009ed11c9650cd8174123";
-    sha256 = "1z49l53j1lhk7ahdy96lm9r0pklwpf2i5s6y2l2rn6l4z8dxkjmk";
+    sha256 = "sha256-v/+2dxOY/p6wNAywcFHUAfsZEJw31Syu2MacN/KeyWg=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Electric Sheep, a distributed screen saver for evolving artificial organisms";
     homepage = "https://electricsheep.org/";
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
     license = licenses.gpl1;
   };

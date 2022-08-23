@@ -7,15 +7,15 @@
 
 buildPythonPackage rec {
   pname = "smbus2";
-  version = "0.4.1";
+  version = "0.4.2";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "kplindegaard";
     repo = pname;
-    rev = version;
-    sha256 = "0xgqs7bzhr8y3irc9gq3dnw1l3f5gc1yv4r2v4qxj95i3vvzpg5s";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-6JzFbhUq8XR1nYkadPeYqItcLZDIFAwTe3BriEW2nVI=";
   };
 
   checkInputs = [

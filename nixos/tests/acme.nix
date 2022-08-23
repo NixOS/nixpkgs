@@ -54,14 +54,14 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: let
     baseConfig = { nodes, config, specialConfig ? {} }: lib.mkMerge [
       {
         security.acme = {
-          defaults = (dnsConfig nodes) // {
-            inherit group;
-          };
+          defaults = (dnsConfig nodes);
           # One manual wildcard cert
           certs."example.test" = {
             domain = "*.example.test";
           };
         };
+
+        users.users."${config.services."${server}".user}".extraGroups = ["acme"];
 
         services."${server}" = {
           enable = true;
@@ -252,14 +252,14 @@ in {
       } // (let
         baseCaddyConfig = { nodes, config, ... }: {
           security.acme = {
-            defaults = (dnsConfig nodes) // {
-              group = config.services.caddy.group;
-            };
+            defaults = (dnsConfig nodes);
             # One manual wildcard cert
             certs."example.test" = {
               domain = "*.example.test";
             };
           };
+
+          users.users."${config.services.caddy.user}".extraGroups = ["acme"];
 
           services.caddy = {
             enable = true;
@@ -578,7 +578,7 @@ in {
               webserver.wait_for_unit(f"acme-finished-{test_domain}.target")
               wait_for_server()
               check_connection(client, test_domain)
-              rc, _ = client.execute(
+              rc, _s = client.execute(
                   f"openssl s_client -CAfile /tmp/ca.crt -connect {test_alias}:443"
                   " </dev/null 2>/dev/null | openssl x509 -noout -text"
                   f" | grep DNS: | grep {test_alias}"

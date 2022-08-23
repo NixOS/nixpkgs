@@ -17,8 +17,8 @@ let
         then value
         else { executable = value; profile = null; extraArgs = []; };
         args = lib.escapeShellArgs (
-          (optional (opts.profile != null) "--profile=${toString opts.profile}")
-          ++ opts.extraArgs
+          opts.extraArgs
+          ++ (optional (opts.profile != null) "--profile=${toString opts.profile}")
           );
       in
       ''
@@ -69,13 +69,14 @@ in {
           };
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Wrap the binaries in firejail and place them in the global path.
-        </para>
-        <para>
+
         You will get file collisions if you put the actual application binary in
-        the global environment and applications started via .desktop files are
-        not wrapped if they specify the absolute path to the binary.
+        the global environment (such as by adding the application package to
+        `environment.systemPackages`), and applications started via
+        .desktop files are not wrapped if they specify the absolute path to the
+        binary.
       '';
     };
   };

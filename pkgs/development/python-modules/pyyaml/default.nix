@@ -1,32 +1,32 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
 , cython
 , libyaml
-, isPy27
 , python
 }:
 
 buildPythonPackage rec {
-  pname = "PyYAML";
-  version = "5.4.1.1";
+  pname = "pyyaml";
+  version = "6.0";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "yaml";
     repo = "pyyaml";
     rev = version;
-    sha256 = "1v386gzdvsjg0mgix6v03rd0cgs9dl81qvn3m547849jm8r41dx8";
+    sha256 = "sha256-wcII32mRgRRmAgojntyxBMQkjvxU2jylCgVzlHAj2Xc=";
   };
 
   nativeBuildInputs = [ cython ];
 
   buildInputs = [ libyaml ];
 
-  checkPhase = let
-    testdir = if isPy27 then "tests/lib" else "tests/lib3";
-  in ''
+  checkPhase = ''
     runHook preCheck
-    PYTHONPATH="${testdir}:$PYTHONPATH" ${python.interpreter} -m test_all
+    PYTHONPATH="tests/lib:$PYTHONPATH" ${python.interpreter} -m test_all
     runHook postCheck
   '';
 

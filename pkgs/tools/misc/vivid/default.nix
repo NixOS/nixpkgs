@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "vivid";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-2rdNjpJrBuj6toLFzFJScNh6od5qUhkSaZF+NbPBlQA=";
+    sha256 = "sha256-83ff0T2P5aRQ6cM9z7IEuoi7syvJldIuzzdiTrygckA=";
   };
 
-  cargoSha256 = "sha256-1aox1eiF3hu5guBjRcM3qb6mHJOutI+yargW7X4cFfg=";
+  cargoSha256 = "sha256-W1tLQTTMOKB/BR9P3y3goPIdOe12Qdkf4wYPlhbQjzY=";
 
   meta = with lib; {
     description = "A generator for LS_COLORS with support for multiple color themes";

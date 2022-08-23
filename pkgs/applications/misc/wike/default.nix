@@ -7,20 +7,18 @@
 , libhandy, webkitgtk, glib-networking
 , gnome, dconf
 }:
-let
-  pythonEnv = python3.withPackages (p: with p; [
-    pygobject3
-    requests
-  ]);
-in stdenv.mkDerivation rec {
+
+python3.pkgs.buildPythonApplication rec {
   pname = "wike";
-  version = "1.6.3";
+  version = "1.7.1";
+  format = "other";
+  strictDeps = false; # https://github.com/NixOS/nixpkgs/issues/56943
 
   src = fetchFromGitHub {
     owner = "hugolabe";
     repo = "Wike";
     rev = version;
-    sha256 = "sha256-yyifRUf7oITV9lpnHnadZwHOKHr0Z+4bjCV/WoYs6vY=";
+    sha256 = "sha256-QLhfzGRrc2En0Hu+UdtPM572PdtXqOFL0W3LoAki4jI=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +33,6 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    pythonEnv
     gtk3
     libhandy
     webkitgtk
@@ -44,10 +41,13 @@ in stdenv.mkDerivation rec {
     dconf
   ];
 
+  propagatedBuildInputs = with python3.pkgs; [
+    requests
+    pygobject3
+  ];
+
   postPatch = ''
     patchShebangs build-aux/meson/postinstall.py
-    substituteInPlace src/wike.in    --replace "@PYTHON@" "${pythonEnv}/bin/python"
-    substituteInPlace src/wike-sp.in --replace "@PYTHON@" "${pythonEnv}/bin/python"
   '';
 
   meta = with lib; {

@@ -55,11 +55,18 @@ let
       substituteInPlace $out/dry-activate --subst-var out
       chmod u+x $out/activate $out/dry-activate
       unset activationScript dryActivationScript
-      ${pkgs.stdenv.shell} -n $out/activate
-      ${pkgs.stdenv.shell} -n $out/dry-activate
 
-      cp ${config.system.build.bootStage2} $out/init
-      substituteInPlace $out/init --subst-var-by systemConfig $out
+      ${if config.boot.initrd.systemd.enable then ''
+        cp ${config.system.build.bootStage2} $out/prepare-root
+        substituteInPlace $out/prepare-root --subst-var-by systemConfig $out
+        # This must not be a symlink or the abs_path of the grub builder for the tests
+        # will resolve the symlink and we end up with a path that doesn't point to a
+        # system closure.
+        cp "$systemd/lib/systemd/systemd" $out/init
+      '' else ''
+        cp ${config.system.build.bootStage2} $out/init
+        substituteInPlace $out/init --subst-var-by systemConfig $out
+      ''}
 
       ln -s ${config.system.build.etc}/etc $out/etc
       ln -s ${config.system.path} $out/sw
@@ -109,9 +116,7 @@ let
     utillinux = pkgs.util-linux;
 
     kernelParams = config.boot.kernelParams;
-    installBootLoader =
-      config.system.build.installBootLoader
-      or "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
+    installBootLoader = config.system.build.installBootLoader;
     activationScript = config.system.activationScripts.script;
     dryActivationScript = config.system.dryActivationScript;
     nixosLabel = config.system.nixos.label;
@@ -119,7 +124,7 @@ let
     configurationName = config.boot.loader.grub.configurationName;
 
     # Needed by switch-to-configuration.
-    perl = pkgs.perl.withPackages (p: with p; [ FileSlurp NetDBus XMLParser XMLTwig ]);
+    perl = pkgs.perl.withPackages (p: with p; [ ConfigIniFiles FileSlurp ]);
   };
 
   # Handle assertions and warnings
@@ -135,28 +140,30 @@ let
       pkgs.replaceDependency { inherit oldDependency newDependency drv; }
     ) baseSystemAssertWarn config.system.replaceRuntimeDependencies;
 
+  /* Workaround until https://github.com/NixOS/nixpkgs/pull/156533
+     Call can be replaced by argument when that's merged.
+  */
+  tmpFixupSubmoduleBoundary = subopts:
+    lib.mkOption {
+      type = lib.types.submoduleWith {
+        modules = [ { options = subopts; } ];
+      };
+    };
+
 in
 
 {
   imports = [
+    ../build.nix
     (mkRemovedOptionModule [ "nesting" "clone" ] "Use `specialisation.«name» = { inheritParentConfig = true; configuration = { ... }; }` instead.")
     (mkRemovedOptionModule [ "nesting" "children" ] "Use `specialisation.«name».configuration = { ... }` instead.")
   ];
 
   options = {
 
-    system.build = mkOption {
-      internal = true;
-      default = {};
-      type = types.attrs;
-      description = ''
-        Attribute set of derivations used to setup the system.
-      '';
-    };
-
     specialisation = mkOption {
       default = {};
-      example = lib.literalExpression "{ fewJobsManyCores.configuration = { nix.buildCores = 0; nix.maxJobs = 1; }; }";
+      example = lib.literalExpression "{ fewJobsManyCores.configuration = { nix.settings = { core = 0; max-jobs = 1; }; }; }";
       description = ''
         Additional configurations to build. If
         <literal>inheritParentConfig</literal> is true, the system
@@ -178,12 +185,12 @@ in
           options.inheritParentConfig = mkOption {
             type = types.bool;
             default = true;
-            description = "Include the entire system's configuration. Set to false to make a completely differently configured system.";
+            description = lib.mdDoc "Include the entire system's configuration. Set to false to make a completely differently configured system.";
           };
 
           options.configuration = mkOption {
             default = {};
-            description = ''
+            description = lib.mdDoc ''
               Arbitrary NixOS configuration.
 
               Anything you can add to a normal NixOS configuration, you can add
@@ -224,14 +231,47 @@ in
       '';
     };
 
+    system.build = tmpFixupSubmoduleBoundary {
+      installBootLoader = mkOption {
+        internal = true;
+        # "; true" => make the `$out` argument from switch-to-configuration.pl
+        #             go to `true` instead of `echo`, hiding the useless path
+        #             from the log.
+        default = "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
+        description = ''
+          A program that writes a bootloader installation script to the path passed in the first command line argument.
+
+          See <literal>nixos/modules/system/activation/switch-to-configuration.pl</literal>.
+        '';
+        type = types.unique {
+          message = ''
+            Only one bootloader can be enabled at a time. This requirement has not
+            been checked until NixOS 22.05. Earlier versions defaulted to the last
+            definition. Change your configuration to enable only one bootloader.
+          '';
+        } (types.either types.str types.package);
+      };
+
+      toplevel = mkOption {
+        type = types.package;
+        readOnly = true;
+        description = lib.mdDoc ''
+          This option contains the store path that typically represents a NixOS system.
+
+          You can read this path in a custom deployment tool for example.
+        '';
+      };
+    };
+
+
     system.copySystemConfiguration = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         If enabled, copies the NixOS configuration file
-        (usually <filename>/etc/nixos/configuration.nix</filename>)
+        (usually {file}`/etc/nixos/configuration.nix`)
         and links it from the resulting system
-        (getting to <filename>/run/current-system/configuration.nix</filename>).
+        (getting to {file}`/run/current-system/configuration.nix`).
         Note that only this single file is copied, even if it imports others.
       '';
     };
@@ -248,7 +288,7 @@ in
     system.extraDependencies = mkOption {
       type = types.listOf types.package;
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         A list of packages that should be included in the system
         closure but not otherwise made available to users. This is
         primarily used by the installation tests.
@@ -262,12 +302,12 @@ in
         { ... }: {
           options.original = mkOption {
             type = types.package;
-            description = "The original package to override.";
+            description = lib.mdDoc "The original package to override.";
           };
 
           options.replacement = mkOption {
             type = types.package;
-            description = "The replacement package.";
+            description = lib.mdDoc "The replacement package.";
           };
         })
       );
@@ -275,7 +315,7 @@ in
         oldDependency = original;
         newDependency = replacement;
       });
-      description = ''
+      description = lib.mdDoc ''
         List of packages to override without doing a full rebuild.
         The original derivation and replacement derivation must have the same
         name length, and ideally should have close-to-identical directory layout.
@@ -293,11 +333,11 @@ in
         then "unnamed"
         else config.networking.hostName;
       '';
-      description = ''
-        The name of the system used in the <option>system.build.toplevel</option> derivation.
-        </para><para>
+      description = lib.mdDoc ''
+        The name of the system used in the {option}`system.build.toplevel` derivation.
+
         That derivation has the following name:
-        <literal>"nixos-system-''${config.system.name}-''${config.system.nixos.label}"</literal>
+        `"nixos-system-''${config.system.name}-''${config.system.nixos.label}"`
       '';
     };
 
@@ -317,4 +357,6 @@ in
 
   };
 
+  # uses extendModules to generate a type
+  meta.buildDocsInSandbox = false;
 }

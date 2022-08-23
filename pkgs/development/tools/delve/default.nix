@@ -1,22 +1,35 @@
-{ lib, buildGoPackage, fetchFromGitHub, makeWrapper }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, stdenv }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "delve";
-  version = "1.7.3";
-
-  goPackagePath = "github.com/go-delve/delve";
-  excludedPackages = "\\(_fixtures\\|scripts\\|service/test\\)";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "go-delve";
     repo = "delve";
     rev = "v${version}";
-    sha256 = "sha256-cqIU4nzS8l1JgW3DWRLpyCISDf2uPgw6CbVGyyvx0mg=";
+    sha256 = "sha256-paNr9aiRG6NP6DIGUojl7VPPPMTeJRpDW8ThDNOQhWM=";
   };
+
+  vendorSha256 = null;
 
   subPackages = [ "cmd/dlv" ];
 
   nativeBuildInputs = [ makeWrapper ];
+
+  hardeningDisable = [ "fortify" ];
+
+  preCheck = ''
+    XDG_CONFIG_HOME=$(mktemp -d)
+  '';
+
+  # Disable tests on Darwin as they require various workarounds.
+  #
+  # - Tests requiring local networking fail with or without sandbox,
+  #   even with __darwinAllowLocalNetworking allowed.
+  # - CGO_FLAGS warnings break tests' expected stdout/stderr outputs.
+  # - DAP test binaries exit prematurely.
+  doCheck = !stdenv.isDarwin;
 
   postInstall = ''
     # fortify source breaks build since delve compiles with -O0
@@ -30,9 +43,8 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "debugger for the Go programming language";
-    homepage = "https://github.com/derekparker/delve";
+    homepage = "https://github.com/go-delve/delve";
     maintainers = with maintainers; [ SuperSandro2000 vdemeester ];
     license = licenses.mit;
-    platforms = [ "x86_64-linux" ] ++ platforms.darwin;
   };
 }

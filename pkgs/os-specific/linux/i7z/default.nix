@@ -49,7 +49,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A better i7 (and now i3, i5) reporting tool for Linux";
     homepage = "https://github.com/DimitryAndric/i7z";
-    repositories.git = "https://github.com/DimitryAndric/i7z.git";
     license = licenses.gpl2;
     maintainers = with maintainers; [ bluescreen303 ];
     # broken on ARM

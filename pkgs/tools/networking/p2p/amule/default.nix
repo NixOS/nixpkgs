@@ -7,10 +7,11 @@
 , lib
 , cmake
 , zlib
-, wxGTK
+, wxGTK30-gtk3 # WxGTK 3.0 must be used because aMule does not yet work well with 3.1
 , perl
 , cryptopp
 , libupnp
+, boost # Not using boost leads to crashes with gtk3
 , gettext
 , libpng
 , autoreconfHook
@@ -19,8 +20,13 @@
 , libX11
 }:
 
+# daemon and client are not build monolithic
+assert monolithic || (!monolithic && (enableDaemon || client));
+
 stdenv.mkDerivation rec {
-  pname = "amule";
+  pname = "amule"
+    + lib.optionalString enableDaemon "-daemon"
+    + lib.optionalString client "-gui";
   version = "2.3.3";
 
   src = fetchFromGitHub {
@@ -33,9 +39,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake gettext makeWrapper pkg-config ];
 
   buildInputs = [
-    zlib wxGTK perl cryptopp.dev libupnp
+    zlib
+    wxGTK30-gtk3
+    perl
+    cryptopp.dev
+    libupnp
+    boost
   ] ++ lib.optional httpServer libpng
-    ++ lib.optional client libX11;
+  ++ lib.optional client libX11;
 
   cmakeFlags = [
     "-DBUILD_MONOLITHIC=${if monolithic then "ON" else "OFF"}"
@@ -69,6 +80,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;
     # cmake fails: Cannot specify link libraries for target "wxWidgets::ADV" which is not built by this project.
-    broken = enableDaemon;
+    broken = enableDaemon || stdenv.isDarwin;
   };
 }

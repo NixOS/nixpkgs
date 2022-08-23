@@ -84,7 +84,6 @@ in {
       interface eth0
       {
         AdvSendAdvert on;
-        AdvDefaultLifetime 0;
         prefix ${prefix}::/64 {
           AdvOnLink on;
           AdvAutonomous on;

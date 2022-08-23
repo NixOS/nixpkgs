@@ -1,11 +1,8 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, docbook-xsl-nons
 , gi-docgen
-, gtk-doc
-, libxml2
-, meson_0_60
+, meson
 , ninja
 , pkg-config
 , sassc
@@ -17,11 +14,13 @@
 , gnome
 , gsettings-desktop-schemas
 , xvfb-run
+, AppKit
+, Foundation
 }:
 
 stdenv.mkDerivation rec {
   pname = "libadwaita";
-  version = "1.0.0.alpha.4";
+  version = "1.1.4";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
@@ -31,15 +30,12 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "libadwaita";
     rev = version;
-    sha256 = "sha256-3aVeBaKSl6SaPQLodsyJHwnNOlXlWfIaLnbbl3+mlDA=";
+    hash = "sha256-xxnLgPKPOND/ITvDC6SOD2GlkzlIX3BzBbt6p2AEjgY=";
   };
 
   nativeBuildInputs = [
-    docbook-xsl-nons
     gi-docgen
-    gtk-doc
-    libxml2 # for xmllint
-    meson_0_60
+    meson
     ninja
     pkg-config
     sassc
@@ -48,20 +44,33 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=true"
+  ] ++ lib.optionals (!doCheck) [
+    "-Dtests=false"
   ];
 
   buildInputs = [
     fribidi
     gobject-introspection
+  ] ++ lib.optionals stdenv.isDarwin [
+    AppKit
+    Foundation
+  ];
+
+  propagatedBuildInputs = [
     gtk4
   ];
 
   checkInputs = [
     gnome.adwaita-icon-theme
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     xvfb-run
   ];
 
-  doCheck = true;
+  # Tests had to be disabled on Darwin because they fail with the same error as https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=264947 on Hydra:
+  #
+  # In file included from ../tests/test-style-manager.c:10:
+  # ../src/adw-settings-private.h:16:10: fatal error: 'adw-enums-private.h' file not found
+  doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
     runHook preCheck
@@ -73,26 +82,33 @@ stdenv.mkDerivation rec {
       # AdwSettings needs to be initialized from “org.gnome.desktop.interface” GSettings schema when portal is not used for color scheme.
       # It will not actually be used since the “color-scheme” key will only have been introduced in GNOME 42, falling back to detecting theme name.
       # See adw_settings_constructed function in https://gitlab.gnome.org/GNOME/libadwaita/commit/60ec69f0a5d49cad8a6d79e4ecefd06dc6e3db12
-      "XDG_DATA_DIRS=${glib.getSchemaPath gsettings-desktop-schemas}/../.."
+      "XDG_DATA_DIRS=${glib.getSchemaDataDirPath gsettings-desktop-schemas}"
 
       # Tests need a cache directory
       "HOME=$TMPDIR"
     )
-    env "''${testEnvironment[@]}" xvfb-run \
+    env "''${testEnvironment[@]}" ${lib.optionalString (!stdenv.isDarwin) "xvfb-run"} \
       meson test --print-errorlogs
 
     runHook postCheck
   '';
 
-  postInstall = ''
-    mv $out/share/{doc,gtk-doc}
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
+
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = with lib; {
     description = "Library to help with developing UI for mobile devices using GTK/GNOME";
     homepage = "https://gitlab.gnome.org/GNOME/libadwaita";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ dotlambda ];
-    platforms = platforms.linux;
+    maintainers = teams.gnome.members ++ (with maintainers; [ dotlambda ]);
+    platforms = platforms.unix;
   };
 }

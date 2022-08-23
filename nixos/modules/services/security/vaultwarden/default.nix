@@ -44,7 +44,7 @@ in {
     dbBackend = mkOption {
       type = enum [ "sqlite" "mysql" "postgresql" ];
       default = "sqlite";
-      description = ''
+      description = lib.mdDoc ''
         Which database backend vaultwarden will be using.
       '';
     };
@@ -52,7 +52,7 @@ in {
     backupDir = mkOption {
       type = nullOr str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         The directory under which vaultwarden will backup its persistent data.
       '';
     };
@@ -62,20 +62,52 @@ in {
       default = {};
       example = literalExpression ''
         {
-          domain = "https://bw.domain.tld:8443";
-          signupsAllowed = true;
-          rocketPort = 8222;
-          rocketLog = "critical";
+          DOMAIN = "https://bitwarden.example.com";
+          SIGNUPS_ALLOWED = false;
+
+          # Vaultwarden currently recommends running behind a reverse proxy
+          # (nginx or similar) for TLS termination, see
+          # https://github.com/dani-garcia/vaultwarden/wiki/Hardening-Guide#reverse-proxying
+          # > you should avoid enabling HTTPS via vaultwarden's built-in Rocket TLS support,
+          # > especially if your instance is publicly accessible.
+          #
+          # A suitable NixOS nginx reverse proxy example config might be:
+          #
+          #     services.nginx.virtualHosts."bitwarden.example.com" = {
+          #       enableACME = true;
+          #       forceSSL = true;
+          #       locations."/" = {
+          #         proxyPass = "http://127.0.0.1:''${toString config.services.vaultwarden.config.ROCKET_PORT}";
+          #       };
+          #     };
+          ROCKET_ADDRESS = "127.0.0.1";
+          ROCKET_PORT = 8222;
+
+          ROCKET_LOG = "critical";
+
+          # This example assumes a mailserver running on localhost,
+          # thus without transport encryption.
+          # If you use an external mail server, follow:
+          #   https://github.com/dani-garcia/vaultwarden/wiki/SMTP-configuration
+          SMTP_HOST = "127.0.0.1";
+          SMTP_PORT = 25;
+          SMTP_SSL = false;
+
+          SMTP_FROM = "admin@bitwarden.example.com";
+          SMTP_FROM_NAME = "example.com Bitwarden server";
         }
       '';
       description = ''
         The configuration of vaultwarden is done through environment variables,
-        therefore the names are converted from camel case (e.g. disable2FARemember)
-        to upper case snake case (e.g. DISABLE_2FA_REMEMBER).
+        therefore it is recommended to use upper snake case (e.g. <envar>DISABLE_2FA_REMEMBER</envar>).
+
+        However, camel case (e.g. <literal>disable2FARemember</literal>) is also supported:
+        The NixOS module will convert it automatically to
+        upper case snake case (e.g. <envar>DISABLE_2FA_REMEMBER</envar>).
         In this conversion digits (0-9) are handled just like upper case characters,
-        so foo2 would be converted to FOO_2.
-        Names already in this format remain unchanged, so FOO2 remains FOO2 if passed as such,
-        even though foo2 would have been converted to FOO_2.
+        so <literal>foo2</literal> would be converted to <envar>FOO_2</envar>.
+        Names already in this format remain unchanged, so <literal>FOO2</literal> remains <literal>FOO2</literal> if passed as such,
+        even though <literal>foo2</literal> would have been converted to <envar>FOO_2</envar>.
         This allows working around any potential future conflicting naming conventions.
 
         Based on the attributes passed to this config option an environment file will be generated
@@ -83,23 +115,41 @@ in {
 
         The available configuration options can be found in
         <link xlink:href="https://github.com/dani-garcia/vaultwarden/blob/${vaultwarden.version}/.env.template">the environment template file</link>.
+
+        See <xref linkend="opt-services.vaultwarden.environmentFile"/> for how
+        to set up access to the Admin UI to invite initial users.
       '';
     };
 
     environmentFile = mkOption {
       type = with types; nullOr path;
       default = null;
-      example = "/root/vaultwarden.env";
+      example = "/var/lib/vaultwarden.env";
       description = ''
-        Additional environment file as defined in <citerefentry>
-        <refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum>
-        </citerefentry>.
+        Additional environment file as defined in <citerefentry><refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
 
         Secrets like <envar>ADMIN_TOKEN</envar> and <envar>SMTP_PASSWORD</envar>
         may be passed to the service without adding them to the world-readable Nix store.
 
         Note that this file needs to be available on the host on which
         <literal>vaultwarden</literal> is running.
+
+        As a concrete example, to make the Admin UI available
+        (from which new users can be invited initially),
+        the secret <envar>ADMIN_TOKEN</envar> needs to be defined as described
+        <link xlink:href="https://github.com/dani-garcia/vaultwarden/wiki/Enabling-admin-page">here</link>.
+        Setting <literal>environmentFile</literal> to <literal>/var/lib/vaultwarden.env</literal>
+        and ensuring permissions with e.g.
+        <literal>chown vaultwarden:vaultwarden /var/lib/vaultwarden.env</literal>
+        (the <literal>vaultwarden</literal> user will only exist after activating with
+        <literal>enable = true;</literal> before this), we can set the contents of the file to have
+        contents such as:
+
+<programlisting>
+# Admin secret token, see
+# https://github.com/dani-garcia/vaultwarden/wiki/Enabling-admin-page
+ADMIN_TOKEN=...copy-paste a unique generated secret token here...
+</programlisting>
       '';
     };
 
@@ -107,14 +157,14 @@ in {
       type = package;
       default = pkgs.vaultwarden;
       defaultText = literalExpression "pkgs.vaultwarden";
-      description = "Vaultwarden package to use.";
+      description = lib.mdDoc "Vaultwarden package to use.";
     };
 
     webVaultPackage = mkOption {
       type = package;
       default = pkgs.vaultwarden-vault;
       defaultText = literalExpression "pkgs.vaultwarden-vault";
-      description = "Web vault package to use.";
+      description = lib.mdDoc "Web vault package to use.";
     };
   };
 
@@ -131,7 +181,7 @@ in {
     users.groups.vaultwarden = { };
 
     systemd.services.vaultwarden = {
-      aliases = [ "bitwarden_rs" ];
+      aliases = [ "bitwarden_rs.service" ];
       after = [ "network.target" ];
       path = with pkgs; [ openssl ];
       serviceConfig = {
@@ -151,7 +201,7 @@ in {
     };
 
     systemd.services.backup-vaultwarden = mkIf (cfg.backupDir != null) {
-      aliases = [ "backup-bitwarden_rs" ];
+      aliases = [ "backup-bitwarden_rs.service" ];
       description = "Backup vaultwarden";
       environment = {
         DATA_FOLDER = "/var/lib/bitwarden_rs";
@@ -169,7 +219,7 @@ in {
     };
 
     systemd.timers.backup-vaultwarden = mkIf (cfg.backupDir != null) {
-      aliases = [ "backup-bitwarden_rs" ];
+      aliases = [ "backup-bitwarden_rs.service" ];
       description = "Backup vaultwarden on time";
       timerConfig = {
         OnCalendar = mkDefault "23:00";
@@ -179,4 +229,7 @@ in {
       wantedBy = [ "multi-user.target" ];
     };
   };
+
+  # uses attributes of the linked package
+  meta.buildDocsInSandbox = false;
 }

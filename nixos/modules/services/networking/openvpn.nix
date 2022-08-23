@@ -115,12 +115,12 @@ in
         }
       '';
 
-      description = ''
+      description = lib.mdDoc ''
         Each attribute of this option defines a systemd service that
         runs an OpenVPN instance.  These can be OpenVPN servers or
         clients.  The name of each systemd service is
-        <literal>openvpn-<replaceable>name</replaceable>.service</literal>,
-        where <replaceable>name</replaceable> is the corresponding
+        `openvpn-«name».service`,
+        where «name» is the corresponding
         attribute name.
       '';
 
@@ -130,20 +130,20 @@ in
 
           config = mkOption {
             type = types.lines;
-            description = ''
+            description = lib.mdDoc ''
               Configuration of this OpenVPN instance.  See
-              <citerefentry><refentrytitle>openvpn</refentrytitle><manvolnum>8</manvolnum></citerefentry>
+              {manpage}`openvpn(8)`
               for details.
 
               To import an external config file, use the following definition:
-              <literal>config = "config /path/to/config.ovpn"</literal>
+              `config = "config /path/to/config.ovpn"`
             '';
           };
 
           up = mkOption {
             default = "";
             type = types.lines;
-            description = ''
+            description = lib.mdDoc ''
               Shell commands executed when the instance is starting.
             '';
           };
@@ -151,7 +151,7 @@ in
           down = mkOption {
             default = "";
             type = types.lines;
-            description = ''
+            description = lib.mdDoc ''
               Shell commands executed when the instance is shutting down.
             '';
           };
@@ -159,13 +159,13 @@ in
           autoStart = mkOption {
             default = true;
             type = types.bool;
-            description = "Whether this OpenVPN instance should be started automatically.";
+            description = lib.mdDoc "Whether this OpenVPN instance should be started automatically.";
           };
 
           updateResolvConf = mkOption {
             default = false;
             type = types.bool;
-            description = ''
+            description = lib.mdDoc ''
               Use the script from the update-resolv-conf package to automatically
               update resolv.conf with the DNS information provided by openvpn. The
               script will be run after the "up" commands and before the "down" commands.
@@ -174,7 +174,7 @@ in
 
           authUserPass = mkOption {
             default = null;
-            description = ''
+            description = lib.mdDoc ''
               This option can be used to store the username / password credentials
               with the "auth-user-pass" authentication method.
 
@@ -184,12 +184,12 @@ in
 
               options = {
                 username = mkOption {
-                  description = "The username to store inside the credentials file.";
+                  description = lib.mdDoc "The username to store inside the credentials file.";
                   type = types.str;
                 };
 
                 password = mkOption {
-                  description = "The password to store inside the credentials file.";
+                  description = lib.mdDoc "The password to store inside the credentials file.";
                   type = types.str;
                 };
               };

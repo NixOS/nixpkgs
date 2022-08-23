@@ -1,22 +1,58 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, django, requests, oauthlib
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+
+# propagates
+, django
+, jwcrypto
+, requests
+, oauthlib
+
+# tests
+, djangorestframework
+, pytest-django
+, pytest-xdist
+, pytest-mock
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "django-oauth-toolkit";
-  version = "1.2.0";
+  version = "2.1.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = pname;
-    rev = version;
-    sha256 = "1zbksxrcxlqnapmlvx4rgvpqc4plgnq0xnf45cjwzwi1626zs8g6";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-c78QYlU/gB4Lt04TlQFjtsS6pyjDm/fURBMa9hXLpLI=";
   };
 
-  propagatedBuildInputs = [ django requests oauthlib ];
+  postPatch = ''
+    sed -i '/cov/d' tox.ini
+  '';
 
-  # django.core.exceptions.ImproperlyConfigured: Requested setting OAUTH2_PROVIDER, but settings are not configured. You must either define the environment variable DJANGO_SETTINGS_MODULE or call settings.configure() before accessing settings
-  doCheck = false;
+  propagatedBuildInputs = [
+    django
+    jwcrypto
+    oauthlib
+    requests
+  ];
+
+  DJANGO_SETTINGS_MODULE = "tests.settings";
+
+  checkInputs = [
+    djangorestframework
+    pytest-django
+    pytest-xdist
+    pytest-mock
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Failed to get a valid response from authentication server. Status code: 404, Reason: Not Found.
+    "test_response_when_auth_server_response_return_404"
+  ];
 
   meta = with lib; {
     description = "OAuth2 goodies for the Djangonauts";

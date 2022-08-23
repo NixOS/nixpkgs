@@ -2,58 +2,89 @@
 , lib
 , buildPythonPackage
 , fetchPypi
-, pytestCheckHook
 , cachetools
+, pyasn1-modules
+, rsa
+, six
+, aiohttp
+, cryptography
+, pyopenssl
+, pyu2f
+, requests
+, aioresponses
+, asynctest
 , flask
 , freezegun
+, grpcio
 , mock
 , oauth2client
-, pyasn1-modules
-, pyu2f
+, pytest-asyncio
 , pytest-localserver
+, pytestCheckHook
 , responses
-, rsa
-, pyopenssl
+, urllib3
 }:
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "2.3.3";
+  version = "2.9.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d83570a664c10b97a1dc6f8df87e5fdfff012f48f62be131e449c20dfc32630e";
+    sha256 = "sha256-FCkvo0KfK7HpmGJVTN4e5zDWhA664GeBTT0V2FScCIg=";
   };
 
   propagatedBuildInputs = [
     cachetools
     pyasn1-modules
     rsa
-    pyopenssl
-    pyu2f
+    six
   ];
 
+  passthru.optional-dependencies = {
+    aiohttp = [
+      aiohttp
+      requests
+    ];
+    enterprise_cert = [
+      cryptography
+      pyopenssl
+    ];
+    pyopenssl = [
+      pyopenssl
+    ];
+    reauth = [
+      pyu2f
+    ];
+  };
+
   checkInputs = [
+    aioresponses
+    asynctest
     flask
     freezegun
+    grpcio
     mock
     oauth2client
-    pytestCheckHook
+    pytest-asyncio
     pytest-localserver
+    pytestCheckHook
     responses
-  ];
+    urllib3
+  ] ++ passthru.optional-dependencies.aiohttp
+  ++ passthru.optional-dependencies.enterprise_cert
+  ++ passthru.optional-dependencies.reauth;
 
   pythonImportsCheck = [
     "google.auth"
     "google.oauth2"
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
-    "test_request_with_timeout_success"
-    "test_request_with_timeout_failure"
-    "test_request_headers"
-    "test_request_error"
-    "test_request_basic"
+  disabledTestPaths = [
+    # Disable tests related to pyopenssl
+    "tests/transport/test__mtls_helper.py"
+    "tests/transport/test_requests.py"
+    "tests/transport/test_urllib3.py"
   ];
 
   meta = with lib; {

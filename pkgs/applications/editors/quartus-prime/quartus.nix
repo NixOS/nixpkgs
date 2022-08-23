@@ -89,6 +89,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     inherit homepage;
     description = "FPGA design and simulation software";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = platforms.linux;
     hydraPlatforms = [ ]; # requireFile srcs cannot be fetched by hydra, ignore

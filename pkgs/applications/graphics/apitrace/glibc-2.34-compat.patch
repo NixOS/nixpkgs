@@ -1,0 +1,13 @@
+diff --git a/wrappers/dlsym.cpp b/wrappers/dlsym.cpp
+index 2eda082..0c0c8ee 100644
+--- a/wrappers/dlsym.cpp
++++ b/wrappers/dlsym.cpp
+@@ -34,7 +34,7 @@
+ #include "os.hpp"
+ 
+ 
+-#ifdef __GLIBC__
++#if defined(__GLIBC__) && __GLIBC__ == 2 && __GLIBC_MINOR__ < 34
+ 
+ 
+ #include <dlfcn.h>

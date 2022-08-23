@@ -1,0 +1,11 @@
+--- a/linodecli/cli.py
++++ b/linodecli/cli.py
+@@ -555,7 +555,7 @@
+         if self.debug_request:
+             self.print_response_debug_info(result)
+ 
+-        if not self.suppress_warnings:
++        if False:
+             # check the major/minor version API reported against what we were built
+             # with to see if an upgrade should be available
+             api_version_higher = False

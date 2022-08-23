@@ -2,25 +2,22 @@
 
 stdenv.mkDerivation rec {
   pname = "janet";
-  version = "1.16.1";
+  version = "1.24.0";
 
   src = fetchFromGitHub {
     owner = "janet-lang";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-TzJbHmHIySlf3asQ02HOdehMR+s0KkPifBiaQ4FvFCg=";
+    sha256 = "sha256-scc29tS3jiGacHp90tGmn/qnbLscJ4sAOCm8IteXfh4=";
   };
 
-  # we don't have /usr/bin/env in the sandbox, so substitute for a proper,
-  # absolute path to janet
-  postPatch = ''
-    substituteInPlace jpm \
-      --replace '/usr/bin/env janet' $out/bin/janet \
-      --replace /usr/local/lib/janet $out/lib \
-      --replace /usr/local           $out
+  # This release fails the test suite on darwin, remove when debugged.
+  # See https://github.com/NixOS/nixpkgs/pull/150618 for discussion.
+  patches = lib.optionals stdenv.isDarwin ./darwin-remove-net-test.patch;
 
+  postPatch = ''
     substituteInPlace janet.1 \
-      --replace /usr/local/lib/janet $out/lib
+      --replace /usr/local/ $out/
   '';
 
   nativeBuildInputs = [ meson ninja ];
@@ -29,11 +26,19 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    $out/bin/janet --help
+  '';
+
   meta = with lib; {
     description = "Janet programming language";
     homepage = "https://janet-lang.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ andrewchambers peterhoeg ];
     platforms = platforms.all;
+    # Marked as broken when patch is applied, see comment above patch.
+    broken = stdenv.isDarwin;
   };
 }

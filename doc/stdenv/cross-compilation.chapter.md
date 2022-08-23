@@ -78,21 +78,46 @@ If both the dependency and depending packages aren't compilers or other machine-
 
 Finally, if the depending package is a compiler or other machine-code-producing tool, it might need dependencies that run at "emit time". This is for compilers that (regrettably) insist on being built together with their source languages' standard libraries. Assuming build != host != target, a run-time dependency of the standard library cannot be run at the compiler's build time or run time, but only at the run time of code emitted by the compiler.
 
-Putting this all together, that means we have dependencies in the form "host → target", in at most the following six combinations:
+Putting this all together, that means that we have dependency types of the form "X→ E", which means that the dependency executes on X and emits code for E; each of X and E can be `build`, `host`, or `target`, and E can be `*` to indicate that the dependency is not a compiler-like package.
+
+Dependency types describe the relationships that a package has with each of its transitive dependencies.  You could think of attaching one or more dependency types to each of the formal parameters at the top of a package's `.nix` file, as well as to all of *their* formal parameters, and so on.   Triples like `(foo, bar, baz)`, on the other hand, are a property of an instantiated derivation -- you could would attach a triple `(mips-linux, mips-linux, sparc-solaris)` to a `.drv` file in `/nix/store`.
+
+Only nine dependency types matter in practice:
 
 #### Possible dependency types {#possible-dependency-types}
 
-| Dependency’s host platform | Dependency’s target platform |
-|----------------------------|------------------------------|
-| build                      | build                        |
-| build                      | host                         |
-| build                      | target                       |
-| host                       | host                         |
-| host                       | target                       |
-| target                     | target                       |
+| Dependency type | Dependency’s host platform | Dependency’s target platform |
+|-----------------|----------------------------|------------------------------|
+| build → *       | build                      | (none)                       |
+| build → build   | build                      | build                        |
+| build → host    | build                      | host                         |
+| build → target  | build                      | target                       |
+| host → *        | host                       | (none)                       |
+| host → host     | host                       | host                         |
+| host → target   | host                       | target                       |
+| target → *      | target                     | (none)                       |
+| target → target | target                     | target                       |
 
+Let's use `g++` as an example to make this table clearer.  `g++` is a C++ compiler written in C.  Suppose we are building `g++` with a `(build, host, target)` platform triple of `(foo, bar, baz)`.  This means we are using a `foo`-machine to build a copy of `g++` which will run on a `bar`-machine and emit binaries for the `baz`-machine.
 
-Some examples will make this table clearer. Suppose there's some package that is being built with a `(build, host, target)` platform triple of `(foo, bar, baz)`. If it has a build-time library dependency, that would be a "host → build" dependency with a triple of `(foo, foo, *)` (the target platform is irrelevant). If it needs a compiler to be built, that would be a "build → host" dependency with a triple of `(foo, foo, *)` (the target platform is irrelevant). That compiler, would be built with another compiler, also "build → host" dependency, with a triple of `(foo, foo, foo)`.
+* `g++` links against the host platform's `glibc` C library, which is a "host→ *" dependency with a triple of `(bar, bar, *)`.  Since it is a library, not a compiler, it has no "target".
+
+* Since `g++` is written in C, the `gcc` compiler used to compile it is a "build→ host" dependency of `g++` with a triple of `(foo, foo, bar)`.  This compiler runs on the build platform and emits code for the host platform.
+
+* `gcc` links against the build platform's `glibc` C library, which is a "build→ *" dependency with a triple of `(foo, foo, *)`.  Since it is a library, not a compiler, it has no "target".
+
+* This `gcc` is itself compiled by an *earlier* copy of `gcc`.  This earlier copy of `gcc` is a "build→ build" dependency of `g++` with a triple of `(foo, foo, foo)`.  This "early `gcc`" runs on the build platform and emits code for the build platform.
+
+* `g++` is bundled with `libgcc`, which includes a collection of target-machine routines for exception handling and
+software floating point emulation.  `libgcc` would be a "target→ *" dependency with triple `(foo, baz, *)`, because it consists of machine code which gets linked against the output of the compiler that we are building.  It is a library, not a compiler, so it has no target of its own.
+
+* `libgcc` is written in C and compiled with `gcc`.  The `gcc` that compiles it will be a "build→ target" dependency with triple `(foo, foo, baz)`.  It gets compiled *and run* at `g++`-build-time (on platform `foo`), but must emit code for the `baz`-platform.
+
+* `g++` allows inline assembler code, so it depends on access to a copy of the `gas` assembler.  This would be a "host→ target" dependency with triple `(foo, bar, baz)`.
+
+* `g++` (and `gcc`) include a library `libgccjit.so`, which wrap the compiler in a library to create a just-in-time compiler.  In nixpkgs, this library is in the `libgccjit` package; if C++ required that programs have access to a JIT, `g++` would need to add a "target→ target" dependency for `libgccjit` with triple `(foo, baz, baz)`.  This would ensure that the compiler ships with a copy of `libgccjit` which both executes on and generates code for the `baz`-platform.
+
+* If `g++` itself linked against `libgccjit.so` (for example, to allow compile-time-evaluated C++ expressions), then the `libgccjit` package used to provide this functionality would be a "host→ host" dependency of `g++`: it is code which runs on the `host` and emits code for execution on the `host`.
 
 ### Cross packaging cookbook {#ssec-cross-cookbook}
 
@@ -127,6 +152,24 @@ Add the following to your `mkDerivation` invocation.
 ```nix
 doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 ```
+
+#### Package using Meson needs to run binaries for the host platform during build. {#cross-meson-runs-host-code}
+
+Add `mesonEmulatorHook` to `nativeBuildInputs` conditionally on if the target binaries can be executed.
+
+e.g.
+
+```
+nativeBuildInputs = [
+  meson
+] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  mesonEmulatorHook
+];
+```
+
+Example of an error which this fixes.
+
+`[Errno 8] Exec format error: './gdk3-scan'`
 
 ## Cross-building packages {#sec-cross-usage}
 

@@ -14,7 +14,10 @@
 , libobjc
 , rustPlatform
 , rustc
+, rust
 , cargo
+, gi-docgen
+, python3Packages
 , gnome
 , vala
 , withIntrospection ? stdenv.hostPlatform == stdenv.buildPlatform
@@ -24,13 +27,15 @@
 
 stdenv.mkDerivation rec {
   pname = "librsvg";
-  version = "2.52.3";
+  version = "2.54.4";
 
-  outputs = [ "out" "dev" "installedTests" ];
+  outputs = [ "out" "dev" "installedTests" ] ++ lib.optionals withIntrospection [
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Nuf1vIjXhgjqf2wF5K/krMFga5rxPChF1DhQc9CCuKQ=";
+    sha256 = "6hUqJD9qQ8DgNqKMcN4/y83qVmTGgRx4WSvCKezCSDM=";
   };
 
   cargoVendorDir = "vendor";
@@ -44,10 +49,12 @@ stdenv.mkDerivation rec {
     pkg-config
     rustc
     cargo
+    python3Packages.docutils
     vala
     rustPlatform.cargoSetupHook
   ] ++ lib.optionals withIntrospection [
     gobject-introspection
+    gi-docgen
   ];
 
   buildInputs = [
@@ -78,7 +85,8 @@ stdenv.mkDerivation rec {
 
     "--enable-installed-tests"
     "--enable-always-build-tests"
-  ] ++ lib.optional stdenv.isDarwin "--disable-Bsymbolic";
+  ] ++ lib.optional stdenv.isDarwin "--disable-Bsymbolic"
+    ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "RUST_TARGET=${rust.toRustTarget stdenv.hostPlatform}";
 
   makeFlags = [
     "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/RSVG"
@@ -117,6 +125,11 @@ stdenv.mkDerivation rec {
     mv $GDK_PIXBUF/loaders.cache.tmp $GDK_PIXBUF/loaders.cache
   '';
 
+  postFixup = lib.optionalString withIntrospection ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
+  '';
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
@@ -133,6 +146,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Projects/LibRsvg";
     license = licenses.lgpl2Plus;
     maintainers = teams.gnome.members;
+    mainProgram = "rsvg-convert";
     platforms = platforms.unix;
   };
 }

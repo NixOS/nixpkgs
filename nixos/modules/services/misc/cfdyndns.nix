@@ -18,7 +18,7 @@ in
 
       email = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The email address to use to authenticate to CloudFlare.
         '';
       };
@@ -26,7 +26,7 @@ in
       apikeyFile = mkOption {
         default = null;
         type = types.nullOr types.str;
-        description = ''
+        description = lib.mdDoc ''
           The path to a file containing the API Key
           used to authenticate with CloudFlare.
         '';
@@ -36,7 +36,7 @@ in
         default = [];
         example = [ "host.tld" ];
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           The records to update in CloudFlare.
         '';
       };

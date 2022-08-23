@@ -1,0 +1,55 @@
+name: "Update terraform-providers"
+
+on:
+  schedule:
+    - cron: "14 3 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tf-providers:
+    permissions:
+      contents: write  # for peter-evans/create-pull-request to create branch
+      issues: write  # for peter-evans/create-or-update-comment to create or update comment
+      pull-requests: write  # for peter-evans/create-pull-request to create a PR
+    if: github.repository_owner == 'NixOS' && github.ref == 'refs/heads/master' # ensure workflow_dispatch only runs on master
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: cachix/install-nix-action@v17
+      - name: setup
+        id: setup
+        run: |
+          echo ::set-output name=title::"terraform-providers: update $(date -u +"%Y-%m-%d")"
+      - name: update terraform-providers
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          pushd pkgs/applications/networking/cluster/terraform-providers
+          ./update-all-providers --no-build
+          git commit -m "${{ steps.setup.outputs.title }}" providers.json
+          popd
+      - name: create PR
+        uses: peter-evans/create-pull-request@v4
+        with:
+          body: |
+            Automatic update by [update-terraform-providers](https://github.com/NixOS/nixpkgs/blob/master/.github/workflows/update-terraform-providers.yml) action.
+
+            Check that all providers build with:
+            ```
+            @ofborg build terraform.full
+            ```
+          branch: terraform-providers-update
+          delete-branch: false
+          labels: "2.status: work-in-progress"
+          title: ${{ steps.setup.outputs.title }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: comment on failure
+        uses: peter-evans/create-or-update-comment@v2
+        if: ${{ failure() }}
+        with:
+          issue-number: 153416
+          body: |
+            Automatic update of terraform providers [failed](https://github.com/NixOS/nixpkgs/actions/runs/${{ github.run_id }}).

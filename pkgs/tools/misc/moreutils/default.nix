@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchgit, libxml2, libxslt, docbook-xsl, docbook_xml_dtd_44, perlPackages, makeWrapper, darwin }:
+{ lib
+, stdenv
+, fetchgit
+, libxml2
+, libxslt
+, docbook-xsl
+, docbook_xml_dtd_44
+, perlPackages
+, makeWrapper
+, perl # for pod2man
+, darwin
+}:
 
 with lib;
 stdenv.mkDerivation rec {
@@ -15,9 +26,9 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace /usr/share/xml/docbook/stylesheet/docbook-xsl ${docbook-xsl}/xml/xsl/docbook
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ libxml2 libxslt docbook-xsl docbook_xml_dtd_44 ]
-    ++ optional stdenv.isDarwin darwin.cctools;
+  strictDeps = true;
+  nativeBuildInputs = [ makeWrapper perl libxml2 libxslt docbook-xsl docbook_xml_dtd_44 ];
+  buildInputs = optional stdenv.isDarwin darwin.cctools;
 
   propagatedBuildInputs = with perlPackages; [ perl IPCRun TimeDate TimeDuration ];
 

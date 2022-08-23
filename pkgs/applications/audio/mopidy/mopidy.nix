@@ -4,13 +4,13 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "mopidy";
     repo = "mopidy";
-    rev = "v${version}";
-    sha256 = "1l1rya48ykiq156spm8pfsm6li8apz66ppz7gs4s91fv7g7l5x2f";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-F0fIl9DrludZZdzsrl/xsp7TLMgTPbVGtGvMHyD52Yw=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -34,6 +34,10 @@ pythonPackages.buildPythonApplication rec {
       tornado
     ] ++ lib.optional (!stdenv.isDarwin) dbus-python
   );
+
+  propagatedNativeBuildInputs = [
+    gobject-introspection
+  ];
 
   # There are no tests
   doCheck = false;

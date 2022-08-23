@@ -14,20 +14,20 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Start SSH service during initrd boot. It can be used to debug failing
         boot on a remote server, enter pasphrase for an encrypted partition etc.
         Service is killed when stage-1 boot is finished.
 
         The sshd configuration is largely inherited from
-        <option>services.openssh</option>.
+        {option}`services.openssh`.
       '';
     };
 
     port = mkOption {
       type = types.int;
       default = 22;
-      description = ''
+      description = lib.mdDoc ''
         Port on which SSH initrd service should listen.
       '';
     };
@@ -35,7 +35,7 @@ in
     shell = mkOption {
       type = types.str;
       default = "/bin/ash";
-      description = ''
+      description = lib.mdDoc ''
         Login shell of the remote user. Can be used to limit actions user can do.
       '';
     };
@@ -79,7 +79,7 @@ in
       type = types.listOf types.str;
       default = config.users.users.root.openssh.authorizedKeys.keys;
       defaultText = literalExpression "config.users.users.root.openssh.authorizedKeys.keys";
-      description = ''
+      description = lib.mdDoc ''
         Authorized keys for the root user on initrd.
       '';
     };
@@ -87,7 +87,7 @@ in
     extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = "Verbatim contents of <filename>sshd_config</filename>.";
+      description = lib.mdDoc "Verbatim contents of {file}`sshd_config`.";
     };
   };
 

@@ -1,4 +1,17 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, gupnp, mate, imagemagick, wrapGAppsHook, mateUpdateScript }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, gtk3
+, gupnp
+, mate
+, imagemagick
+, wrapGAppsHook
+, mateUpdateScript
+, glib
+, substituteAll
+}:
 
 stdenv.mkDerivation rec {
   pname = "caja-extensions";
@@ -23,7 +36,22 @@ stdenv.mkDerivation rec {
     imagemagick
   ];
 
+  patches = [
+    (substituteAll {
+      src = ./hardcode-gsettings.patch;
+      CAJA_GSETTINGS_PATH = glib.getSchemaPath mate.caja;
+      TERM_GSETTINGS_PATH = glib.getSchemaPath mate.mate-terminal;
+    })
+  ];
+
   postPatch = ''
+    substituteInPlace open-terminal/caja-open-terminal.c --subst-var-by \
+      GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"}
+    substituteInPlace sendto/caja-sendto-command.c --subst-var-by \
+      GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"}
+    substituteInPlace wallpaper/caja-wallpaper-extension.c --subst-var-by \
+      GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"}
+
     for f in image-converter/caja-image-{resizer,rotator}.c; do
       substituteInPlace $f --replace "/usr/bin/convert" "${imagemagick}/bin/convert"
     done

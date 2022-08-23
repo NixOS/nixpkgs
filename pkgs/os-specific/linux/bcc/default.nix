@@ -2,11 +2,12 @@
 , makeWrapper, cmake, llvmPackages
 , flex, bison, elfutils, python, luajit, netperf, iperf, libelf
 , bash, libbpf, nixosTests
+, audit
 }:
 
 python.pkgs.buildPythonApplication rec {
   pname = "bcc";
-  version = "0.23.0";
+  version = "0.24.0";
 
   disabled = !stdenv.isLinux;
 
@@ -14,7 +15,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "iovisor";
     repo = "bcc";
     rev = "v${version}";
-    sha256 = "sha256-iLVUwJTDQ8Bn38sgHOcIR8TYxIB+gIlfTgr9+gPU0gE=";
+    sha256 = "sha256-5Nq6LmphiyiiIyru/P2rCCmA25cwJIWn08oK1+eM3cQ=";
   };
   format = "other";
 
@@ -41,9 +42,16 @@ python.pkgs.buildPythonApplication rec {
     "-DCMAKE_USE_LIBBPF_PACKAGE=ON"
   ];
 
+  # to replace this executable path:
+  # https://github.com/iovisor/bcc/blob/master/src/python/bcc/syscall.py#L384
+  ausyscall = "${audit}/bin/ausyscall";
+
   postPatch = ''
     substituteAll ${./libbcc-path.patch} ./libbcc-path.patch
     patch -p1 < libbcc-path.patch
+
+    substituteAll ${./absolute-ausyscall.patch} ./absolute-ausyscall.patch
+    patch -p1 < absolute-ausyscall.patch
   '';
 
   postInstall = ''
@@ -68,6 +76,8 @@ python.pkgs.buildPythonApplication rec {
   postFixup = ''
     wrapPythonProgramsIn "$out/share/bcc/tools" "$out $pythonPath"
   '';
+
+  outputs = [ "out" "man" ];
 
   passthru.tests = {
     bpf = nixosTests.bpf;

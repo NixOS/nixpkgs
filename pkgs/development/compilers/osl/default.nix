@@ -1,45 +1,76 @@
-{ clangStdenv, lib, fetchFromGitHub, cmake, zlib, openexr,
-openimageio, llvm, boost165, flex, bison, partio, pugixml,
-util-linux, python3
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, clang
+, libclang
+, zlib
+, openexr
+, openimageio2
+, llvm
+, boost
+, flex
+, bison
+, partio
+, pugixml
+, util-linux
+, python3
 }:
 
-let boost_static = boost165.override { enableStatic = true; };
-in clangStdenv.mkDerivation rec {
-  # In theory this could use GCC + Clang rather than just Clang,
-  # but https://github.com/NixOS/nixpkgs/issues/29877 stops this
-  name = "openshadinglanguage-${version}";
-  version = "1.10.9";
+let
+
+  boost_static = boost.override { enableStatic = true; };
+
+in stdenv.mkDerivation rec {
+  pname = "openshadinglanguage";
+  version = "1.11.17.0";
 
   src = fetchFromGitHub {
-    owner = "imageworks";
+    owner = "AcademySoftwareFoundation";
     repo = "OpenShadingLanguage";
-    rev = "Release-1.10.9";
-    sha256 = "1dwf10f2fpxc55pymwkapql20nc462mq61hv21c527994c2qp1ll";
+    rev = "v${version}";
+    sha256 = "sha256-2OOkLnHLz+vmSeEDQl12SrJBTuWwbnvoTatnvm8lpbA=";
   };
 
   cmakeFlags = [
     "-DUSE_BOOST_WAVE=ON"
-    "-DENABLERTTI=ON"
+    "-DENABLE_RTTI=ON"
 
     # Build system implies llvm-config and llvm-as are in the same directory.
     # Override defaults.
     "-DLLVM_DIRECTORY=${llvm}"
     "-DLLVM_CONFIG=${llvm.dev}/bin/llvm-config"
+
+    # Set C++11 to C++14 required for LLVM10+
+    "-DCMAKE_CXX_STANDARD=14"
   ];
 
   preConfigure = "patchShebangs src/liboslexec/serialize-bc.bash ";
 
-  nativeBuildInputs = [ cmake boost_static flex bison];
-  buildInputs = [
-     zlib openexr openimageio llvm
-     partio pugixml
-     util-linux # needed just for hexdump
-     python3 # CMake doesn't check this?
+  nativeBuildInputs = [
+    bison
+    clang
+    cmake
+    flex
   ];
-  # TODO: How important is partio? CMake doesn't seem to find it
+
+  buildInputs = [
+    boost_static
+    libclang
+    llvm
+    openexr
+    openimageio2
+    partio
+    pugixml
+    python3.pkgs.pybind11
+    util-linux # needed just for hexdump
+    zlib
+  ];
+
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Advanced shading language for production GI renderers";
-    homepage = "http://opensource.imageworks.com/?p=osl";
+    homepage = "https://opensource.imageworks.com/osl.html";
     maintainers = with maintainers; [ hodapp ];
     license = licenses.bsd3;
     platforms = platforms.linux;
