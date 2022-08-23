@@ -9532,6 +9532,8 @@ in {
 
   ripe-atlas-cousteau = callPackage ../development/python-modules/ripe-atlas-cousteau { };
 
+  ripe-atlas-sagan = callPackage ../development/python-modules/ripe-atlas-sagan { };
+
   riprova = callPackage ../development/python-modules/riprova { };
 
   ripser = callPackage ../development/python-modules/ripser { };
