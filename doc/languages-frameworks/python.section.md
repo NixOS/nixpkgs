@@ -744,6 +744,53 @@ with the exception of `other` (see `format` in
   unittestFlags = [ "-s" "tests" "-v" ];
 ```
 
+##### Using sphinxHook {#using-sphinxhook}
+
+The `sphinxHook` is a helpful tool to build documentation and manpages
+using the popular Sphinx documentation generator.
+It is setup to automatically find common documentation source paths and
+render them using the default `html` style.
+
+```
+  outputs = [
+    "out"
+    "doc"
+  ];
+
+  nativeBuildInputs = [
+    sphinxHook
+  ];
+```
+
+The hook will automatically build and install the artifact into the
+`doc` output, if it exists. It also provides an automatic diversion
+for the artifacts of the `man` builder into the `man` target.
+
+```
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
+
+  # Use multiple builders
+  sphinxBuilders = [
+    "singlehtml"
+    "man"
+  ];
+```
+
+Overwrite `sphinxRoot` when the hook is unable to find your
+documentation source root.
+
+```
+  # Configure sphinxRoot for uncommon paths
+  sphinxRoot = "weird/docs/path";
+```
+
+The hook is also available to packages outside the python ecosystem by
+referencing it using `python3.pkgs.sphinxHook`.
+
 ### Develop local package {#develop-local-package}
 
 As a Python developer you're likely aware of [development mode](http://setuptools.readthedocs.io/en/latest/setuptools.html#development-mode)
@@ -1273,6 +1320,7 @@ are used in `buildPythonPackage`.
 - `pythonRemoveBinBytecode` to remove bytecode from the `/bin` folder.
 - `setuptoolsBuildHook` to build a wheel using `setuptools`.
 - `setuptoolsCheckHook` to run tests with `python setup.py test`.
+- `sphinxHook` to build documentation and manpages using Sphinx.
 - `venvShellHook` to source a Python 3 `venv` at the `venvDir` location. A
   `venv` is created if it does not yet exist. `postVenvCreation` can be used to
   to run commands only after venv is first created.

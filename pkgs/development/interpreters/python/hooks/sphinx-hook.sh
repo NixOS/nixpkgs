@@ -1,16 +1,3 @@
-# This hook automatically finds Sphinx documentation, builds it in html format
-# and installs it.
-#
-# This hook knows about several popular locations in which subdirectory
-# documentation may be, but in very unusual cases $sphinxRoot directory can be
-# set explicitly.
-#
-# Name of the directory relative to ${doc:-$out}/share/doc is normally also
-# deduced automatically, but can be overridden with $sphinxOutdir variable.
-#
-# Sphinx build system can depend on arbitrary amount of python modules, client
-# code is responsible for ensuring that all dependencies are present.
-
 # shellcheck shell=bash
 echo "Sourcing sphinx-hook"
 
