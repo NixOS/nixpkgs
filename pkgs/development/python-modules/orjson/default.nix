@@ -49,6 +49,13 @@ buildPythonPackage rec {
     xxhash
   ];
 
+  disabledTests = [
+    # https://github.com/ijl/orjson/issues/293
+    # The upstream patch doesn't apply to our orjson version.
+    "test_datetime_partial_second_zoneinfo"
+    "test_datetime_partial_second_pytz"
+  ];
+
   pythonImportsCheck = [ pname ];
 
   meta = with lib; {
