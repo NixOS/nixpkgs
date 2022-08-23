@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gtest }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, gtest }:
 
 stdenv.mkDerivation rec {
   pname = "gbenchmark";
@@ -12,6 +12,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/google/benchmark/commit/2a78e8cbe9b104834d96c78ccc9f9513a29f8c71.patch";
+      sha256 = "sha256-Y4OhSi3ceXgpUvYJUJ3NJBFN51j8gEg9AcyXBNtcIRo=";
+    })
+  ];
 
   postPatch = ''
     cp -r ${gtest.src} googletest
