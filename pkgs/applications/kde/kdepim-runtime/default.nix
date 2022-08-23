@@ -24,6 +24,6 @@ mkDerivation {
     qca-qt5 qtkeychain qtnetworkauth qtspeech qtxmlpatterns
   ];
   qtWrapperArgs = [
-    "--prefix SASL_PATH : ${cyrus_sasl}/lib/sasl2:${libkgapi}/lib/sasl2"
+    "--prefix SASL_PATH : ${lib.makeSearchPath "lib/sasl2" [ cyrus_sasl libkgapi ]}"
   ];
 }
