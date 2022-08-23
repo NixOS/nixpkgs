@@ -16,7 +16,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "0.12.0";
+  version = "0.13.1";
 in buildPythonPackage {
   inherit version;
 

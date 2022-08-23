@@ -17,9 +17,9 @@ url_and_key_list=(
   "x86_64-darwin-38 $darwin_bucket/torchvision-${version}-cp38-cp38-macosx_10_9_x86_64.whl torchvision-${version}-cp38-cp38-macosx_10_9_x86_64.whl"
   "x86_64-darwin-39 $darwin_bucket/torchvision-${version}-cp39-cp39-macosx_10_9_x86_64.whl torchvision-${version}-cp39-cp39-macosx_10_9_x86_64.whl"
   "x86_64-darwin-310 $darwin_bucket/torchvision-${version}-cp310-cp310-macosx_10_9_x86_64.whl torchvision-${version}-cp310-cp310-macosx_10_9_x86_64.whl"
-  "aarch64-darwin-38 $darwin_bucket/torchvision-${version}-cp38-cp38-macosx_11_0_arm64.whl torchvision-${version}-cp38-cp38-macosx_11_0_arm64.whl"
-  "aarch64-darwin-39 $darwin_bucket/torchvision-${version}-cp39-cp39-macosx_11_0_arm64.whl torchvision-${version}-cp39-cp39-macosx_11_0_arm64.whl"
-  "aarch64-darwin-310 $darwin_bucket/torchvision-${version}-cp310-cp310-macosx_11_0_arm64.whl torchvision-${version}-cp310-cp310-macosx_11_0_arm64.whl"
+  "aarch64-darwin-38 $darwin_bucket/cpu/torchvision-${version}-cp38-cp38-macosx_11_0_arm64.whl torchvision-${version}-cp38-cp38-macosx_11_0_arm64.whl"
+  "aarch64-darwin-39 $darwin_bucket/cpu/torchvision-${version}-cp39-cp39-macosx_11_0_arm64.whl torchvision-${version}-cp39-cp39-macosx_11_0_arm64.whl"
+  "aarch64-darwin-310 $darwin_bucket/cpu/torchvision-${version}-cp310-cp310-macosx_11_0_arm64.whl torchvision-${version}-cp310-cp310-macosx_11_0_arm64.whl"
 )
 
 hashfile="binary-hashes-$version.nix"
