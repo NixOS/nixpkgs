@@ -7059,6 +7059,8 @@ in {
 
   plumbum = callPackage ../development/python-modules/plumbum { };
 
+  plux = callPackage ../development/python-modules/plux { };
+
   ply = callPackage ../development/python-modules/ply { };
 
   plyer = callPackage ../development/python-modules/plyer { };
