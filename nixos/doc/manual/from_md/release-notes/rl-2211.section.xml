@@ -200,6 +200,15 @@
       </listitem>
       <listitem>
         <para>
+          [xray] (https://github.com/XTLS/Xray-core), a fully compatible
+          v2ray-core replacement. Features XTLS, which when enabled on
+          server and client, brings UDP FullCone NAT to proxy setups.
+          Available as
+          <link xlink:href="options.html#opt-services.xray.enable">services.xray</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/mozilla-services/syncstorage-rs">syncstorage-rs</link>,
           a self-hostable sync server for Firefox. Available as
           <link xlink:href="options.html#opt-services.firefox-syncserver.enable">services.firefox-syncserver</link>.
