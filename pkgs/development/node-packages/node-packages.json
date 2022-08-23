@@ -234,6 +234,7 @@
 , "npm-merge-driver"
 , "nrm"
 , "ocaml-language-server"
+, "orval"
 , "parcel-bundler"
 , "parcel"
 , "parsoid"
