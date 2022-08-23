@@ -18,6 +18,7 @@ let
     sha256 = "sha256-0dtLev4JjeHsS259+qOgg19rz4yjkeX4D3ooUgS4RTI=";
     name = "smartmontools-drivedb.h";
   };
+  scriptPath = lib.makeBinPath ([ gnused ] ++ lib.optional enableMail [ inetutils mailutils ]);
 
 in
 stdenv.mkDerivation rec {
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
     cp -v ${driverdb} drivedb.h
   '';
 
-  configureFlags = lib.optional enableMail "--with-scriptpath=${lib.makeBinPath [ gnused inetutils mailutils ]}";
+  configureFlags = [ "--with-scriptpath=${scriptPath}" ];
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = lib.optionals stdenv.isDarwin [ IOKit ApplicationServices ];
