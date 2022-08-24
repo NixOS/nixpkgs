@@ -20,12 +20,11 @@ buildPythonPackage rec {
     cython
   ];
 
-  # ModuleNotFoundError: No module named 'cymem.cymem'
-  doCheck = false;
-
   checkInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "cymem" ];
+  preCheck = ''
+    cd cymem
+  '';
 
   meta = with lib; {
     description = "Cython memory pool for RAII-style memory management";
