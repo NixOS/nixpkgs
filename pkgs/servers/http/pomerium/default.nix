@@ -20,6 +20,9 @@ buildGoModule rec {
     "cmd/pomerium"
   ];
 
+  # patch pomerium to allow use of external envoy
+  patches = [ ./external-envoy.diff ];
+
   ldflags = let
     # Set a variety of useful meta variables for stamping the build with.
     setVars = {
@@ -29,7 +32,7 @@ buildGoModule rec {
         ProjectName = "pomerium";
         ProjectURL = "github.com/pomerium/pomerium";
       };
-      "github.com/pomerium/pomerium/internal/envoy" = {
+      "github.com/pomerium/pomerium/pkg/envoy" = {
         OverrideEnvoyPath = "${envoy}/bin/envoy";
       };
     };
@@ -49,8 +52,8 @@ buildGoModule rec {
     # Replace embedded envoy with nothing.
     # We set OverrideEnvoyPath above, so rawBinary should never get looked at
     # but we still need to set a checksum/version.
-    rm internal/envoy/files/files_{darwin,linux}*.go
-    cat <<EOF >internal/envoy/files/files_generic.go
+    rm pkg/envoy/files/files_{darwin,linux}*.go
+    cat <<EOF >pkg/envoy/files/files_external.go
     package files
 
     import _ "embed" // embed
@@ -63,8 +66,8 @@ buildGoModule rec {
     //go:embed envoy.version
     var rawVersion string
     EOF
-    sha256sum '${envoy}/bin/envoy' > internal/envoy/files/envoy.sha256
-    echo '${envoy.version}' > internal/envoy/files/envoy.version
+    sha256sum '${envoy}/bin/envoy' > pkg/envoy/files/envoy.sha256
+    echo '${envoy.version}' > pkg/envoy/files/envoy.version
 
     # put the built UI files where they will be picked up as part of binary build
     cp -r ${pomerium-ui} ui
