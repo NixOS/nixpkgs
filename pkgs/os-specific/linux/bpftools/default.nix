@@ -1,15 +1,20 @@
 { lib, stdenv
-, libopcodes, libbfd, elfutils, readline
+, libopcodes, libopcodes_2_38
+, libbfd, libbfd_2_38
+, elfutils, readline
 , linuxPackages_latest, zlib
 , python3, bison, flex
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "bpftools";
   inherit (linuxPackages_latest.kernel) version src;
 
   nativeBuildInputs = [ python3 bison flex ];
-  buildInputs = [ libopcodes libbfd elfutils zlib readline ];
+  buildInputs = (if (lib.versionAtLeast version "5.20")
+                 then [ libopcodes libbfd ]
+                 else [ libopcodes_2_38 libbfd_2_38 ])
+    ++ [ elfutils zlib readline ];
 
   preConfigure = ''
     patchShebangs scripts/bpf_doc.py
