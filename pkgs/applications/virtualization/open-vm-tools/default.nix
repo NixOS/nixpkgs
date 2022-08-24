@@ -2,7 +2,7 @@
 , bash, fuse3, libmspack, openssl, pam, xercesc, icu, libdnet, procps, libtirpc, rpcsvc-proto
 , libX11, libXext, libXinerama, libXi, libXrender, libXrandr, libXtst
 , pkg-config, glib, gdk-pixbuf-xlib, gtk3, gtkmm3, iproute2, dbus, systemd, which
-, libdrm, udev
+, libdrm, udev, util-linux
 , withX ? true
 }:
 
@@ -51,6 +51,13 @@ stdenv.mkDerivation rec {
 
      # Make reboot work, shutdown is not in /sbin on NixOS
      sed -i 's,/sbin/shutdown,shutdown,' lib/system/systemLinux.c
+
+     # Fix paths to fuse3 (we do not use fuse2 so that is not modified)
+     sed -i 's,/bin/fusermount3,${fuse3}/bin/fusermount3,' vmhgfs-fuse/config.c
+
+     substituteInPlace services/plugins/vix/foundryToolsDaemon.c \
+      --replace "/usr/bin/vmhgfs-fuse" "${placeholder "out"}/bin/vmhgfs-fuse" \
+      --replace "/bin/mount" "${util-linux}/bin/mount"
   '';
 
   configureFlags = [
