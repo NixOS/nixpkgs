@@ -137,9 +137,15 @@ let
     '';
 
   all-cabal-hashes-component = name: version: buildPackages.runCommand "all-cabal-hashes-component-${name}-${version}" {} ''
-    tar --wildcards -xzvf ${all-cabal-hashes} \*/${name}/${version}/${name}.{json,cabal}
     mkdir -p $out
-    mv */${name}/${version}/${name}.{json,cabal} $out
+    if [ -d ${all-cabal-hashes} ]
+    then
+      cp ${all-cabal-hashes}/${name}/${version}/${name}.json $out
+      cp ${all-cabal-hashes}/${name}/${version}/${name}.cabal $out
+    else
+      tar --wildcards -xzvf ${all-cabal-hashes} \*/${name}/${version}/${name}.{json,cabal}
+      mv */${name}/${version}/${name}.{json,cabal} $out
+    fi
   '';
 
   hackage2nix = name: version: let component = all-cabal-hashes-component name version; in self.haskellSrc2nix {
