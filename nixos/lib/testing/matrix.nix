@@ -7,6 +7,7 @@ let
   extend = module: config.callTest ((extendModule module).config.result);
 
   decisionModule = decision@{ name, ... }: {
+    imports = [ boolModule ];
     options = {
       choice = mkOption {
         type = types.lazyAttrsOf (types.submodule (choiceModule decision.name extendModules));
@@ -159,6 +160,29 @@ let
         matrixIsRoot = false;
       };
     };
+
+  boolModule = { config, ... }: {
+    options = {
+      isBool = lib.mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Convenience option to define the choices as `true` and `false`.
+
+          Equivalent to
+
+          ```nix
+          choice.true.value = true;
+          choice.false.value = false;
+          ```
+        '';
+      };
+    };
+    config = lib.mkIf config.isBool {
+      choice.true.value = true;
+      choice.false.value = false;
+    };
+  };
 
 in
 {
