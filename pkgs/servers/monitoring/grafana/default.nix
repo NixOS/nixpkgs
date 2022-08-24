@@ -28,8 +28,8 @@ buildGoModule rec {
     wire gen -tags oss ./pkg/server
     wire gen -tags oss ./pkg/cmd/grafana-cli/runner
 
-    go generate ./pkg/framework/coremodel
-    go generate ./public/app/plugins
+    GOARCH= CGO_ENABLED=0 go generate ./pkg/framework/coremodel
+    GOARCH= CGO_ENABLED=0 go generate ./public/app/plugins
 
     # The testcase makes an API call against grafana.com:
     #
