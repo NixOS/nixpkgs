@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python -p "python38.withPackages (ps: [ps.PyGithub])" git gnupg
+#! nix-shell -i python -p "python3.withPackages (ps: [ps.PyGithub])" git gnupg
 
 # This is automatically called by ../update.sh.
 
@@ -201,7 +201,7 @@ for filename in os.listdir(NIXPKGS_KERNEL_PATH):
             (callPackage {NIXPKGS_KERNEL_PATH / filename} {{}}).version
         """
         kernel_version_json = run(
-            "nix-instantiate", "--eval", "--json", "--expr", nix_version_expr,
+            "nix-instantiate", "--eval", "--system", "x86_64-linux", "--json", "--expr", nix_version_expr,
         ).stdout
         kernel_version = parse_version(json.loads(kernel_version_json))
         if kernel_version < MIN_KERNEL_VERSION:
