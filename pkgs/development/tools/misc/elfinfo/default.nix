@@ -20,7 +20,7 @@ buildGoModule rec {
     description = "Small utility for showing information about ELF files";
     homepage = "https://elfinfo.roboticoverlords.org/";
     changelog = "https://github.com/xyproto/elfinfo/releases/tag/${version}";
-    license = licenses.mit;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ dtzWill ];
   };
 }
