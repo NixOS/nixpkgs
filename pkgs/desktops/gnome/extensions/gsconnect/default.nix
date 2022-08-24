@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-gsconnect";
-  version = "50";
+  version = "53";
 
   outputs = [ "out" "installedTests" ];
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "GSConnect";
     repo = "gnome-shell-extension-gsconnect";
     rev = "v${version}";
-    hash = "sha256-uUpdjBsVeS99AYDpGlXP9fMqGxWj+XfVubNoGJs76G0=";
+    hash = "sha256-u14OVv3iyQbLEmqLgMdEUD2iC4nsYVCOr4ua66T3TBk=";
   };
 
   patches = [
