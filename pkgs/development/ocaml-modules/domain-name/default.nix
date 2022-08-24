@@ -1,26 +1,21 @@
-{ lib, buildDunePackage, fetchurl
+{ lib, buildDunePackage, ocaml, fetchurl
 , alcotest
-, astring, fmt
 }:
 
 buildDunePackage rec {
   pname = "domain-name";
-  version = "0.3.0";
-
-  useDune2 = true;
+  version = "0.4.0";
 
   src = fetchurl {
-    url = "https://github.com/hannesm/domain-name/releases/download/v${version}/domain-name-v${version}.tbz";
-    sha256 = "12kc9p2a2fi1ipc2hyhbzivxpph3npglxwdgvhd6v20rqqdyvnad";
+    url = "https://github.com/hannesm/domain-name/releases/download/v${version}/domain-name-${version}.tbz";
+    sha256 = "sha256-pcBuIoRYlSAZc+gS/jAZJ00duBwKeHPabIAHxK0hCMU=";
   };
 
-  minimumOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.04";
 
   checkInputs = [ alcotest ];
 
-  propagatedBuildInputs = [ astring fmt ];
-
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.05";
 
   meta = {
     homepage = "https://github.com/hannesm/domain-name";

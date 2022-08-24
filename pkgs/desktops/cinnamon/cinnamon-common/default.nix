@@ -9,7 +9,6 @@
 , cjs
 , clutter
 , fetchFromGitHub
-, fetchpatch
 , gdk-pixbuf
 , gettext
 , libgnomekbd
@@ -55,31 +54,18 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-common";
-  version = "5.4.10";
+  version = "5.4.11";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon";
     rev = version;
-    hash = "sha256-yNjFP32+0LXqHfJUxm1A+CTuwny5/IxxT08689f7VlE=";
+    hash = "sha256-3uQ4t+WXauCM3jV44pSz1yqLxXwLBWv7xMvP7ug3AY0=";
   };
 
   patches = [
     ./use-sane-install-dir.patch
     ./libdir.patch
-    # Re-add libsoup 2.4 as dependency - needed by some applets.
-    # Can be removed on next update.
-    (fetchpatch {
-      url = "https://github.com/linuxmint/cinnamon/commit/76224fe409d074f8a44c70e4fd5e1289f92800b9.patch";
-      sha256 = "sha256-nDt4kkK1kVstxbij63XxTJ2L/TM9Q1P6feok3xlPQOM=";
-    })
-    # keybindings.js: Use bindings.get().
-    # Can be removed on next update.
-    # https://github.com/linuxmint/cinnamon/issues/11055
-    (fetchpatch {
-      url = "https://github.com/linuxmint/cinnamon/commit/7724e4146baf8431bc1fb55dce60984e77adef5a.patch";
-      sha256 = "sha256-idGtkBa13nmoEprtmAr6OssO16wJwBd16r2ZbbhrYDQ=";
-    })
   ];
 
   buildInputs = [

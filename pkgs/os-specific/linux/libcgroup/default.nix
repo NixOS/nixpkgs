@@ -2,13 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libcgroup";
-  version = "0.42.2";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1h8s70lm6g7r0wj7j3xgj2g3j9fifvsy2pna6w0j3i5hh42qfms4";
+    fetchSubmodules = true;
+    hash = "sha256-o9eXbsgtGhODEbpbEn30RbYfYpXo6xkU5ptU1och5tU=";
   };
 
   buildInputs = [ pam bison flex ];
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Library and tools to manage Linux cgroups";
-    homepage    = "http://libcg.sourceforge.net/";
+    homepage    = "https://github.com/libcgroup/libcgroup";
     license     = lib.licenses.lgpl2;
     platforms   = lib.platforms.linux;
     maintainers = [ lib.maintainers.thoughtpolice ];

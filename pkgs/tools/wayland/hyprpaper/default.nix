@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hyprpaper";
-  version = "unstable-2022-07-04";
+  version = "unstable-2022-07-24";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = pname;
-    rev = "e15912e9817d79bb988085c88e313fac5ab60940";
-    sha256 = "sha256-UZSRcj+CckUDllBtmlIcwA+xXUonpJZl3zC151IV3f0=";
+    rev = "f75fcf01d1f652d55f79032a40d821d2ff78520e";
+    sha256 = "sha256-M2g4NeDoYt32j02cimCR4vWzAzauIzQVQaWgBWXDAtk=";
   };
 
   nativeBuildInputs = [

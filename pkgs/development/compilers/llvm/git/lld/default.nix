@@ -25,16 +25,14 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./gnu-install-dirs.patch
-    # On Darwin the llvm-config is perhaps not working fine as the
-    # LLVM_MAIN_SRC_DIR is not getting set correctly, and the build fails as
-    # the include path is not correct.
-    ./fix-root-src-dir.patch
   ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libllvm libxml2 ];
 
-  cmakeFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  cmakeFlags = [
+    "-DLLD_INSTALL_PACKAGE_DIR=${placeholder "dev"}/lib/cmake/lld"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen"
   ];
 

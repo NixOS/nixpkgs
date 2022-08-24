@@ -11,13 +11,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "irpf";
-  version = "2022-1.6";
+  version = "2022-1.7";
 
   src = let
     year = lib.head (lib.splitVersion version);
   in fetchzip {
     url = "https://downloadirpf.receita.fazenda.gov.br/irpf/${year}/irpf/arquivos/IRPF${version}.zip";
-    sha256 = "sha256-/4dND4CMl4xnGGIb+FWqgL0wbt7fqUE78m737U0kAdw=";
+    sha256 = "sha256-EHuka0HzWoqjvT/DcuJ9LWSrWl0PW5FyS+7/PdCgrNQ=";
   };
 
   nativeBuildInputs = [ unzip makeWrapper copyDesktopItems ];

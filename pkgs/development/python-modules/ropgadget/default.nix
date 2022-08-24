@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "ropgadget";
-  version = "6.8";
+  version = "6.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "JonathanSalwan";
     repo = "ROPgadget";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hnqjyZC3RJNQf8JdtaQ5L3PU+96p4cxdd+P4YlW9jjI=";
+    hash = "sha256-qq38NJR27f6lBq5WeR6j6CQrMu4iA7i7zWJ9gWsqbDI=";
   };
 
   propagatedBuildInputs = [

@@ -42,7 +42,7 @@
 buildPythonPackage rec {
   pname = "Nikola";
   version = "8.2.3";
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

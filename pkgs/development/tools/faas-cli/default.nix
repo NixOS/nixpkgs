@@ -15,13 +15,13 @@ let
 in
 buildGoModule rec {
   pname = "faas-cli";
-  version = "0.14.5";
+  version = "0.14.6";
 
   src = fetchFromGitHub {
     owner = "openfaas";
     repo = "faas-cli";
     rev = version;
-    sha256 = "sha256-nHpsScpVQhSoqvNZ+xTv2cA3lV1MyPZAgNLZRuyvksE=";
+    sha256 = "sha256-R9nusKdZpKZmUcEUchZlj7Jd5sM/Z2SScdK6kO6Ht2o=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

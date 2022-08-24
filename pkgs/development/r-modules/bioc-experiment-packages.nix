@@ -42,7 +42,7 @@ in with self; {
   ConnectivityMap = derive2 { name="ConnectivityMap"; version="1.32.0"; sha256="1lfp54kics0lkdhwyr78fdpwhyf3ziw9hq2mf648a0dinrd8m9k3"; depends=[]; };
   CopyNeutralIMA = derive2 { name="CopyNeutralIMA"; version="1.14.0"; sha256="0xvj4z8vh2sv3gl5nkrkmjdvvallixdf0dyqbnpg7q03kfvbnw44"; depends=[ExperimentHub Rdpack]; };
   CopyhelpeR = derive2 { name="CopyhelpeR"; version="1.28.0"; sha256="0klrnxck0q14birnpwzkiwmj77hwdn6gazvdg0lqn9y6j5mbkyx1"; depends=[]; };
-  DAPARdata = derive2 { name="DAPARdata"; version="1.26.0"; sha256="0ijq9aadqvlnbgw72y0dkxsyn3giain32kjx7ghfyj104pfh8dxm"; depends=[knitr MSnbase]; };
+  DAPARdata = derive2 { name="DAPARdata"; version="1.26.5"; sha256="0jyvz7pcnxl7vc0b6rnwcc19pwijk6h26s364jskwvxk051ribsw"; depends=[MSnbase]; };
   DExMAdata = derive2 { name="DExMAdata"; version="1.4.0"; sha256="1bdc40cyfkwk3y5ab8qnql0g2k5cz025fh4n6bisil3372jick53"; depends=[Biobase]; };
   DLBCL = derive2 { name="DLBCL"; version="1.36.0"; sha256="1s9j6ssxhbb5vcik7rdkfkm1y9la1g3ys91xdfyc6hpxmzxckgvk"; depends=[Biobase]; };
   DMRcatedata = derive2 { name="DMRcatedata"; version="2.14.0"; sha256="0abmnnawn06m4dyh6hs5hcdlhwx5l5bmlygzizcy6968d9x5l4w9"; depends=[ExperimentHub GenomicFeatures Gviz IlluminaHumanMethylation450kanno_ilmn12_hg19 IlluminaHumanMethylationEPICanno_ilm10b4_hg19 plyr readxl rtracklayer]; };
@@ -314,7 +314,7 @@ in with self; {
   hgu133plus2barcodevecs = derive2 { name="hgu133plus2barcodevecs"; version="1.34.0"; sha256="1q8a5away3iz8skc093djn85sakixhijr2i0yfhbl50y1jpfxn9c"; depends=[]; };
   hgu2beta7 = derive2 { name="hgu2beta7"; version="1.36.0"; sha256="0zmhxv5fjyfjxd7rqcr79yb8vkk014hinphmq604pzcdym29dmaa"; depends=[]; };
   humanStemCell = derive2 { name="humanStemCell"; version="0.36.0"; sha256="1i6gn462x09g9c6fb98bgchs7hwnrv5wanbpy41zcird6a8jb205"; depends=[Biobase hgu133plus2_db]; };
-  imcdatasets = derive2 { name="imcdatasets"; version="1.4.0"; sha256="1l5g0biw9nnfy3zbbfd5bir12yy7s88q12mdx4vb7x184855sk7k"; depends=[cytomapper DelayedArray ExperimentHub HDF5Array S4Vectors SingleCellExperiment]; };
+  imcdatasets = derive2 { name="imcdatasets"; version="1.4.1"; sha256="0ck6fyra8jj8v3x1pckl90m4a9ch51xgjs6nlpva5pkwffjldzq9"; depends=[cytomapper DelayedArray ExperimentHub HDF5Array S4Vectors SingleCellExperiment]; };
   kidpack = derive2 { name="kidpack"; version="1.38.0"; sha256="0pwrf9h1qgfb20jjd5izy6f01v14bzg43k2d8mmx3553ha9w1xi4"; depends=[Biobase]; };
   leeBamViews = derive2 { name="leeBamViews"; version="1.32.0"; sha256="0nqrg0k5g62kqbmhq0y795afx34zxzlmgsjszs8byfdhd8gbpz14"; depends=[Biobase BSgenome GenomicAlignments GenomicRanges IRanges Rsamtools S4Vectors]; };
   leukemiasEset = derive2 { name="leukemiasEset"; version="1.32.0"; sha256="1hzwdcfv0w4y877h4ahr2cmvv0svkjv73l77d7m309ikfbzmdqax"; depends=[Biobase]; };
@@ -376,7 +376,7 @@ in with self; {
   restfulSEData = derive2 { name="restfulSEData"; version="1.18.0"; sha256="095iv7hvdl26y2mbwa3cv0gdr7gn3irgwm72cvz4y5lkr4ifyafx"; depends=[DelayedArray ExperimentHub HDF5Array SummarizedExperiment]; };
   rheumaticConditionWOLLBOLD = derive2 { name="rheumaticConditionWOLLBOLD"; version="1.34.0"; sha256="1yc5vz3cvpwk449lga3f5w1x1xjp8a7c17k30z3wim4iv6g8ag9x"; depends=[]; };
   sampleClassifierData = derive2 { name="sampleClassifierData"; version="1.20.0"; sha256="1sg4h9pw3lwa1k01s9nhbh1l0w8w81q6m254hqs1ga8k8kawkvap"; depends=[SummarizedExperiment]; };
-  scATAC_Explorer = derive2 { name="scATAC.Explorer"; version="1.2.0"; sha256="01m728vbpbxnn2zzwhv4baf0xjqld1d6ak6cv0kcjwk66wn4r3vf"; depends=[BiocFileCache data_table Matrix S4Vectors SingleCellExperiment]; };
+  scATAC_Explorer = derive2 { name="scATAC.Explorer"; version="1.2.1"; sha256="1ks9fh82jqg9kcfkb1ys6b42j1074zffp1lyb3h287dw6yv8zxx5"; depends=[BiocFileCache data_table Matrix S4Vectors SingleCellExperiment]; };
   scRNAseq = derive2 { name="scRNAseq"; version="2.10.0"; sha256="131x1q69grn16rr7lr6vyphds5mdx5z3kc6nhpfisrxjia9dly0x"; depends=[AnnotationDbi AnnotationHub BiocGenerics ensembldb ExperimentHub GenomicFeatures GenomicRanges S4Vectors SingleCellExperiment SummarizedExperiment]; };
   scTHI_data = derive2 { name="scTHI.data"; version="1.8.0"; sha256="1awrjw0fhypxlz7s4lj0fvhmj0av8xgh191zz5imqvimfzjvf985"; depends=[]; };
   scanMiRData = derive2 { name="scanMiRData"; version="1.2.0"; sha256="06d91vwbirp75f5aaflny7ngfhnz834a1750vah2x1jwikd427zg"; depends=[scanMiR]; };
@@ -391,7 +391,7 @@ in with self; {
   signatureSearchData = derive2 { name="signatureSearchData"; version="1.10.0"; sha256="1wq9pk2g4zriijrlc6bqizi4rvmag3m0nrnml3qhqhn1jcc065g3"; depends=[affy Biobase dplyr ExperimentHub limma magrittr R_utils rhdf5]; };
   simpIntLists = derive2 { name="simpIntLists"; version="1.32.0"; sha256="07jscl1yd3dix0igsxw1fsyhsgqhqf0la6p6958jypy2chih4wp8"; depends=[]; };
   spatialDmelxsim = derive2 { name="spatialDmelxsim"; version="1.2.0"; sha256="126agbyablnn3b2gh4fkvlqf1mm1krvk01bxl0x41f6l4dm5gj6a"; depends=[ExperimentHub SummarizedExperiment]; };
-  spatialLIBD = derive2 { name="spatialLIBD"; version="1.8.3"; sha256="0p8zxpqgrjmqd6laikdvf3pgddnn9nibmk0bfn57y6f9dsdcldz0"; depends=[AnnotationHub benchmarkme BiocFileCache BiocGenerics cowplot DT ExperimentHub fields GenomicRanges ggplot2 golem IRanges jsonlite magick Matrix paletteer plotly png RColorBrewer rtracklayer S4Vectors scater sessioninfo shiny shinyWidgets SingleCellExperiment SpatialExperiment SummarizedExperiment tibble viridisLite]; };
+  spatialLIBD = derive2 { name="spatialLIBD"; version="1.8.10"; sha256="11h39570h2rpxa3dw93wf16i574928gjyf4wzb5a3y6b3avzn4yg"; depends=[AnnotationHub benchmarkme BiocFileCache BiocGenerics cowplot DT ExperimentHub fields GenomicRanges ggplot2 golem IRanges jsonlite magick Matrix paletteer plotly png RColorBrewer rtracklayer S4Vectors scater sessioninfo shiny shinyWidgets SingleCellExperiment SpatialExperiment SummarizedExperiment tibble viridisLite]; };
   spqnData = derive2 { name="spqnData"; version="1.8.0"; sha256="190jkvra5zsml0hxmw96nxg3fz5cnq6apcxcqsncq9raz30w8qqq"; depends=[SummarizedExperiment]; };
   stemHypoxia = derive2 { name="stemHypoxia"; version="1.32.0"; sha256="0rfnka092sd0qb6vs7yawwkjw763rdaayyr7bv4618qqx2i6kllz"; depends=[]; };
   stjudem = derive2 { name="stjudem"; version="1.36.0"; sha256="0a7qrs9r76zlzd6kmfid8wzvv3k47y3w95ydqphd5pic9c6r56a3"; depends=[]; };

@@ -14,6 +14,15 @@ let
         '';
       };
 
+      filter = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "*rpi*.dtb";
+        description = lib.mdDoc ''
+          Only apply to .dtb files matching glob expression.
+        '';
+      };
+
       dtsFile = mkOption {
         type = types.nullOr types.path;
         description = lib.mdDoc ''
@@ -56,23 +65,6 @@ let
     };
   };
 
-  # this requires kernel package
-  dtbsWithSymbols = pkgs.stdenv.mkDerivation {
-    name = "dtbs-with-symbols";
-    inherit (cfg.kernelPackage) src nativeBuildInputs depsBuildBuild;
-    patches = map (patch: patch.patch) cfg.kernelPackage.kernelPatches;
-    buildPhase = ''
-      patchShebangs scripts/*
-      substituteInPlace scripts/Makefile.lib \
-        --replace 'DTC_FLAGS += $(DTC_FLAGS_$(basetarget))' 'DTC_FLAGS += $(DTC_FLAGS_$(basetarget)) -@'
-      make ${pkgs.stdenv.hostPlatform.linux-kernel.baseConfig} ARCH="${pkgs.stdenv.hostPlatform.linuxArch}"
-      make dtbs ARCH="${pkgs.stdenv.hostPlatform.linuxArch}"
-    '';
-    installPhase = ''
-      make dtbs_install INSTALL_DTBS_PATH=$out/dtbs  ARCH="${pkgs.stdenv.hostPlatform.linuxArch}"
-    '';
-  };
-
   filterDTBs = src: if isNull cfg.filter
     then "${src}/dtbs"
     else
@@ -82,6 +74,8 @@ let
         find . -type f -name '${cfg.filter}' -print0 \
           | xargs -0 cp -v --no-preserve=mode --target-directory $out --parents
       '';
+
+  filteredDTBs = filterDTBs cfg.kernelPackage;
 
   # Compile single Device Tree overlay source
   # file (.dts) into its compiled variant (.dtbo)
@@ -165,6 +159,7 @@ in
           '';
           type = types.listOf (types.coercedTo types.path (path: {
             name = baseNameOf path;
+            filter = null;
             dtboFile = path;
           }) overlayType);
           description = lib.mdDoc ''
@@ -197,7 +192,7 @@ in
     };
 
     hardware.deviceTree.package = if (cfg.overlays != [])
-      then pkgs.deviceTree.applyOverlays (filterDTBs dtbsWithSymbols) (withDTBOs cfg.overlays)
-      else (filterDTBs cfg.kernelPackage);
+      then pkgs.deviceTree.applyOverlays filteredDTBs (withDTBOs cfg.overlays)
+      else filteredDTBs;
   };
 }

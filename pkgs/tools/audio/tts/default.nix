@@ -21,7 +21,8 @@ let
       # TypeError: mel() takes 0 positional arguments but 2 positional arguments (and 3 keyword-only arguments) were given
       librosa = super.librosa.overridePythonAttrs (oldAttrs: rec {
         version = "0.8.1";
-        src = oldAttrs.src.override {
+        src = super.fetchPypi {
+          pname = "librosa";
           inherit version;
           sha256 = "c53d05e768ae4a3e553ae21c2e5015293e5efbfd5c12d497f1104cb519cca6b3";
         };

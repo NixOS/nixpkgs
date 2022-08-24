@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , unittestCheckHook
 }:
 
@@ -14,6 +15,14 @@ buildPythonPackage rec {
     rev = "bitstring-${version}";
     sha256 = "0y2kcq58psvl038r6dhahhlhp1wjgr5zsms45wyz1naq6ri8x9qa";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-running-unit-tests-using-unittest-hook.patch";
+      url = "https://github.com/scott-griffiths/bitstring/commit/e5ee3fd41cad2ea761f4450b13b0424ae7262331.patch";
+      hash = "sha256-+ZGywIfQQcYXJlYZBi402ONnysYm66G5zE4duJE40h8=";
+    })
+  ];
 
   checkInputs = [ unittestCheckHook ];
 

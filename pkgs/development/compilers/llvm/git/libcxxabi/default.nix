@@ -1,5 +1,5 @@
 { lib, stdenv, llvm_meta, cmake, python3
-, monorepoSrc, runCommand
+, monorepoSrc, runCommand, fetchpatch
 , cxx-headers, libunwind, version
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
@@ -18,9 +18,11 @@ stdenv.mkDerivation rec {
     cp -r ${monorepoSrc}/libcxx/src/include "$out/libcxx/src"
     mkdir -p "$out/llvm"
     cp -r ${monorepoSrc}/llvm/cmake "$out/llvm"
+    cp -r ${monorepoSrc}/llvm/utils "$out/llvm"
+    cp -r ${monorepoSrc}/runtimes "$out"
   '';
 
-  sourceRoot = "${src.name}/${pname}";
+  sourceRoot = "${src.name}/runtimes";
 
   outputs = [ "out" "dev" ];
 
@@ -30,14 +32,31 @@ stdenv.mkDerivation rec {
     patch -p1 -d llvm -i ${./wasm.patch}
   '';
 
+  prePatch = ''
+    cd ../${pname}
+    chmod -R u+w .
+  '';
+
   patches = [
     ./gnu-install-dirs.patch
+
+    # https://reviews.llvm.org/D132298, Allow building libcxxabi alone
+    (fetchpatch {
+      url = "https://github.com/llvm/llvm-project/commit/e6a0800532bb409f6d1c62f3698bdd6994a877dc.patch";
+      sha256 = "1xyjd56m4pfwq8p3xh6i8lhkk9kq15jaml7qbhxdf87z4jjkk63a";
+      stripLen = 1;
+    })
   ];
+
+  postPatch = ''
+    cd ../runtimes
+  '';
 
   nativeBuildInputs = [ cmake python3 ];
   buildInputs = lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD && !stdenv.hostPlatform.isWasm) libunwind;
 
   cmakeFlags = [
+    "-DLLVM_ENABLE_RUNTIMES=libcxxabi"
     "-DLIBCXXABI_LIBCXX_INCLUDES=${cxx-headers}/include/c++/v1"
   ] ++ lib.optionals (stdenv.hostPlatform.useLLVM or false) [
     "-DLLVM_ENABLE_LIBCXX=ON"
@@ -61,7 +80,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mkdir -p "$dev/include"
-    install -m 644 ../include/${if stdenv.isDarwin then "*" else "cxxabi.h"} "$dev/include"
+    install -m 644 ../../${pname}/include/${if stdenv.isDarwin then "*" else "cxxabi.h"} "$dev/include"
   '';
 
   meta = llvm_meta // {

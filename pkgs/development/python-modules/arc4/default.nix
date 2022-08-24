@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "arc4";
-  version = "0.2.0";
+  version = "0.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "manicmaniac";
     repo = pname;
     rev = version;
-    hash = "sha256-1VgPYLyBQkxyuUO7KZv5sqYIEieV1RkBtlLVkLUUO4w=";
+    hash = "sha256-z8zj46/xX/gXtWzlmnHuAsnK3xYCL4NM5/xpYcH+Qlo=";
   };
 
   checkInputs = [

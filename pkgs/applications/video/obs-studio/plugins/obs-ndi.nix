@@ -16,7 +16,15 @@ stdenv.mkDerivation rec {
 
   patches = [ ./fix-search-path.patch ./hardcode-ndi-path.patch ];
 
-  postPatch = "sed -i -e s,@NDI@,${ndi},g src/obs-ndi.cpp";
+  postPatch = ''
+    # Add path (variable added in hardcode-ndi-path.patch)
+    sed -i -e s,@NDI@,${ndi},g src/obs-ndi.cpp
+
+    # Replace bundled NDI SDK with the upstream version
+    # (This fixes soname issues)
+    rm -rf lib/ndi
+    ln -s ${ndi}/include lib/ndi
+  '';
 
   cmakeFlags = [
     "-DLIBOBS_INCLUDE_DIR=${obs-studio}/include/obs"
