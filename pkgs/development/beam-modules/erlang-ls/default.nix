@@ -12,7 +12,9 @@ let
         configurePhase = "true";
       });
       redbug = super.redbug.overrideAttrs (_: {
-        patchPhase = "sed -i 's/, warnings_as_errors//' rebar.config";
+        patchPhase = ''
+          substituteInPlace rebar.config --replace ", warnings_as_errors" ""
+          '';
       });
     });
   };
