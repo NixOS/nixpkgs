@@ -8540,6 +8540,8 @@ with pkgs;
 
   lmp = callPackage ../tools/security/lmp { };
 
+  localstack = with python3Packages; toPythonApplication localstack;
+
   localtime = callPackage ../tools/system/localtime { };
 
   log4j-detect = callPackage ../tools/security/log4j-detect { };
