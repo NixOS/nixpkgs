@@ -117,11 +117,11 @@ builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps" "extraVariab
   nativeBuildInputs = [
     wrapLua
     luarocks
-  ]
-    ++ buildInputs
-    ++ lib.optionals doCheck ([ luarocksCheckHook ] ++ checkInputs)
-    ++ (map (d: d.dep) externalDeps')
-    ;
+  ] ++ lib.optionals doCheck ([ luarocksCheckHook ] ++ checkInputs);
+
+  buildInputs = buildInputs
+    ++ (map (d: d.dep) externalDeps');
+
 
   # propagate lua to active setup-hook in nix-shell
   propagatedBuildInputs = propagatedBuildInputs ++ [ lua ];
