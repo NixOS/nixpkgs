@@ -22,6 +22,7 @@ let common = { version, sha256, patches ? [ ] }:
   stdenv.mkDerivation rec {
     pname = "z3";
     inherit version sha256 patches;
+
     src = fetchFromGitHub {
       owner = "Z3Prover";
       repo = pname;
@@ -29,12 +30,24 @@ let common = { version, sha256, patches ? [ ] }:
       sha256 = sha256;
     };
 
-    nativeBuildInputs = optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
-    buildInputs = [ python ]
-      ++ optional javaBindings jdk
-      ++ optionals ocamlBindings [ ocaml findlib zarith ]
-    ;
-    propagatedBuildInputs = [ python.pkgs.setuptools ];
+    nativeBuildInputs = optional stdenv.hostPlatform.isDarwin [
+      fixDarwinDylibNames
+    ];
+
+    buildInputs = [
+      python
+    ] ++ optional javaBindings [
+      jdk
+    ] ++ optionals ocamlBindings [
+      ocaml
+      findlib
+      zarith
+    ];
+
+    propagatedBuildInputs = [
+      python.pkgs.setuptools
+    ];
+
     enableParallelBuilding = true;
 
     postPatch = optionalString ocamlBindings ''
@@ -51,9 +64,12 @@ let common = { version, sha256, patches ? [ ] }:
       ) + "\n" + "cd build";
 
     doCheck = true;
+
     checkPhase = ''
+      runHook preCheck
       make test
       ./test-z3 -a
+      runHook postCheck
     '';
 
     postInstall = ''
@@ -70,9 +86,16 @@ let common = { version, sha256, patches ? [ ] }:
       moveToOutput "lib/libz3java.${stdenv.hostPlatform.extensions.sharedLibrary}" "$java"
     '';
 
-    outputs = [ "out" "lib" "dev" "python" ]
-      ++ optional javaBindings "java"
-      ++ optional ocamlBindings "ocaml";
+    outputs = [
+      "out"
+      "lib"
+      "dev"
+      "python"
+    ] ++ optional javaBindings [
+      "java"
+    ] ++ optional ocamlBindings [
+      "ocaml"
+    ];
 
     meta = with lib; {
       description = "A high-performance theorem prover and SMT solver";
@@ -84,6 +107,14 @@ let common = { version, sha256, patches ? [ ] }:
   };
 in
 {
+  z3_4_11 = common {
+    version = "4.11.0";
+    sha256 = "sha256-ItmtZHDhCeLAVtN7K80dqyAh20o7TM4xk2sTb9QgHvk=";
+  };
+  z3_4_10 = common {
+    version = "4.10.2";
+    sha256 = "sha256-xCDQ2PrpyU7/LzOWRgCAGI1k/HO1gAkE5iYejyeNUqw=";
+  };
   z3_4_8 = common {
     version = "4.8.15";
     sha256 = "0xkwqz0y5d1lfb6kfqy8wn8n2dqalzf4c8ghmjsajc1bpdl70yc5";
