@@ -7,7 +7,7 @@ packages:
 #         3. Something else?
 let cli = builtins.head packages;
 in
-assert lib.assertMsg ((builtins.length packages) < 1)
+assert lib.assertMsg ((builtins.length packages) > 0)
     ''You must include at least one package, e.g
       `with dotnetCorePackages; combinePackages [
           sdk_3_1 aspnetcore_5_0
