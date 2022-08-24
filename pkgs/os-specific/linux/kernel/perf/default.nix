@@ -1,6 +1,6 @@
 { lib, stdenv, fetchpatch, kernel, elfutils, python2, python3, perl, newt, slang, asciidoc, xmlto, makeWrapper
 , docbook_xsl, docbook_xml_dtd_45, libxslt, flex, bison, pkg-config, libunwind, binutils-unwrapped
-, libiberty, audit, libbfd, libopcodes, openssl, systemtap, numactl
+, libiberty, audit, libbfd, libbfd_2_38, libopcodes, libopcodes_2_38, openssl, systemtap, numactl
 , zlib
 , withGtk ? false, gtk2
 , withZstd ? true, zstd
@@ -45,9 +45,12 @@ stdenv.mkDerivation {
     flex bison libiberty audit makeWrapper pkg-config python3
   ];
   buildInputs = [
-    elfutils newt slang libunwind libbfd zlib openssl systemtap.stapBuild numactl
-    libopcodes python3 perl
-  ] ++ lib.optional withGtk gtk2
+    elfutils newt slang libunwind zlib openssl systemtap.stapBuild numactl
+    python3 perl
+  ] ++ (if (lib.versionAtLeast kernel.version "5.19")
+            then [ libbfd libopcodes ]
+            else [ libbfd_2_38 libopcodes_2_38 ])
+    ++ lib.optional withGtk gtk2
     ++ (if (lib.versionAtLeast kernel.version "4.19") then [ python3 ] else [ python2 ])
     ++ lib.optional withZstd zstd
     ++ lib.optional withLibcap libcap;
