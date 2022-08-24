@@ -86,7 +86,7 @@ let
     };
   };
 
-  choiceModule = decisionName: extendModules: { name, ... }: {
+  choiceModule = decisionName: extendModules: { config, name, ... }: {
     options = {
       enable = mkOption {
         description = mdDoc ''
@@ -125,17 +125,36 @@ let
           NixOS-level options can be specified in the {option}`nodes.<name>` and {option}`defaults` sub-options.
         '';
         example = { defaults.services.foo.backend = "xyz"; };
-        type = (extendModules { modules = [ (inMatrixModule decisionName name) ]; }).type;
+        type = (extendModules { modules = [ (inMatrixModule decisionName name config.value) ]; }).type;
         default = { };
         visible = "shallow";
+      };
+      value = mkOption {
+        type = types.raw;
+        description = mdDoc ''
+          A value for the module argument that has the name of the decision name.
+
+          Example:
+
+          ```nix
+          { package, ... }:
+          {
+            matrix.package.choice.hello.value = pkgs.hello;
+
+            nodes.machine = f (package.version);
+          }
+          ```
+        '';
+        defaultText = lib.literalMD "The name of the choice as a string.";
+        default = name;
       };
     };
   };
 
-  inMatrixModule = decisionName: choiceName:
+  inMatrixModule = decisionName: choiceName: choiceValue:
     {
       config = {
-        _module.args.${decisionName} = lib.mkDefault choiceName;
+        _module.args.${decisionName} = lib.mkDefault choiceValue;
         matrixDecisionsMade.${decisionName} = choiceName;
         matrixIsRoot = false;
       };

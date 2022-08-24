@@ -17,8 +17,8 @@ in
 
   name = "hostname-${fqdn}";
 
-  matrix.domain.choice.explicit.module._module.args.domain = "adomain";
-  matrix.domain.choice.implicit.module._module.args.domain = null;
+  matrix.domain.choice.explicit.value = "adomain";
+  matrix.domain.choice.implicit.value = null;
 
   nodes.machine = { lib, pkgs, ... }: {
     networking.hostName = hostName;

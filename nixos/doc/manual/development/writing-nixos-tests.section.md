@@ -523,7 +523,7 @@ It has picked up on the `matrix` and only returns the derivations constructed fo
 
 The arguments to the test module, which is called by `runTest` to create each configuration in the matrix, are built up as follows:
  - `<decision>` in `matrix.<decision>` corresponds to the argument name to the test module.
- - `<choice>` in `choice.<choice>` corresponds to the named argument's value as a string. Non-string values can be set with `_module.args` or other options inside [`choice.<choice>.module`](#opt-matrix._name_.choice._name_.module).
+ - `<choice>` in `choice.<choice>` corresponds to the named argument's value as a string by default. A different value can be set with [`choice.<choice>.value`](#opt-matrix._name_.choice._name_.value) or by adding configuration via [`choice.<choice>.module`](#opt-matrix._name_.choice._name_.module).
 
 `runTest` works by invoking the module system to lazily produce all option values, and then extracts only specific values from it.
 This means that some options exist, but are never evaluated.
