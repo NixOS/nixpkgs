@@ -17,7 +17,7 @@ buildPythonPackage rec {
   version = "1.0.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -52,6 +52,6 @@ buildPythonPackage rec {
     description = "Style checker for Sphinx (or other) RST documentation";
     homepage = "https://github.com/pycqa/doc8";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ onny ];
   };
 }
