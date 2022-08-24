@@ -28,7 +28,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config gettext ];
   buildInputs = [ dbus dbus-glib libgaminggear libgudev lua ];
-  runtimeDeps = [ coreutils kmod ];
 
   cmakeFlags = [
     "-DUDEVDIR=\${out}/lib/udev/rules.d"
