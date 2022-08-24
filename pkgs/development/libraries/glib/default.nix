@@ -154,6 +154,16 @@ stdenv.mkDerivation rec {
     patchShebangs glib/gen-unicode-tables.pl
     patchShebangs glib/tests/gen-casefold-txt.py
     patchShebangs glib/tests/gen-casemap-txt.py
+
+    # Needs machine-id, comment the test
+    sed -e '/\/gdbus\/codegen-peer-to-peer/ s/^\/*/\/\//' -i gio/tests/gdbus-peer.c
+    sed -e '/g_test_add_func/ s/^\/*/\/\//' -i gio/tests/gdbus-address-get-session.c
+    # All gschemas fail to pass the test, upstream bug?
+    sed -e '/g_test_add_data_func/ s/^\/*/\/\//' -i gio/tests/gschema-compile.c
+    # Cannot reproduce the failing test_associations on hydra
+    sed -e '/\/appinfo\/associations/d' -i gio/tests/appinfo.c
+    # Needed because of libtool wrappers
+    sed -e '/g_subprocess_launcher_set_environ (launcher, envp);/a g_subprocess_launcher_setenv (launcher, "PATH", g_getenv("PATH"), TRUE);' -i gio/tests/gsubprocess.c
   '' + lib.optionalString stdenv.hostPlatform.isWindows ''
     substituteInPlace gio/win32/meson.build \
       --replace "libintl, " ""
@@ -204,16 +214,6 @@ stdenv.mkDerivation rec {
     export G_TEST_DBUS_DAEMON="${dbus.daemon}/bin/dbus-daemon"
     export PATH="$PATH:$(pwd)/gobject"
     echo "PATH=$PATH"
-
-    # Needs machine-id, comment the test
-    sed -e '/\/gdbus\/codegen-peer-to-peer/ s/^\/*/\/\//' -i ../gio/tests/gdbus-peer.c
-    sed -e '/g_test_add_func/ s/^\/*/\/\//' -i ../gio/tests/gdbus-address-get-session.c
-    # All gschemas fail to pass the test, upstream bug?
-    sed -e '/g_test_add_data_func/ s/^\/*/\/\//' -i ../gio/tests/gschema-compile.c
-    # Cannot reproduce the failing test_associations on hydra
-    sed -e '/\/appinfo\/associations/d' -i ../gio/tests/appinfo.c
-    # Needed because of libtool wrappers
-    sed -e '/g_subprocess_launcher_set_environ (launcher, envp);/a g_subprocess_launcher_setenv (launcher, "PATH", g_getenv("PATH"), TRUE);' -i ../gio/tests/gsubprocess.c
   '';
 
   inherit doCheck;
