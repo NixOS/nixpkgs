@@ -5333,6 +5333,8 @@ in {
 
   localimport = callPackage ../development/python-modules/localimport { };
 
+  localstack = callPackage ../development/python-modules/localstack { };
+
   localstack-client = callPackage ../development/python-modules/localstack-client { };
 
   localstack-ext = callPackage ../development/python-modules/localstack-ext { };
