@@ -1,16 +1,16 @@
 { lib, stdenv, buildPackages
-, autoreconfHook, bison, binutils-unwrapped
-, libiberty, libbfd
+, autoreconfHook, bison, binutils-unwrapped_2_38
+, libiberty, libbfd_2_38
 }:
 
 stdenv.mkDerivation {
   pname = "libopcodes";
-  inherit (binutils-unwrapped) version src;
+  inherit (binutils-unwrapped_2_38) version src;
 
   outputs = [ "out" "dev" ];
 
-  patches = binutils-unwrapped.patches ++ [
-    ../../tools/misc/binutils/build-components-separately.patch
+  patches = binutils-unwrapped_2_38.patches ++ [
+    ./build-components-separately.patch
   ];
 
   # We just want to build libopcodes
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ autoreconfHook bison ];
   buildInputs = [ libiberty ];
   # dis-asm.h includes bfd.h
-  propagatedBuildInputs = [ libbfd ];
+  propagatedBuildInputs = [ libbfd_2_38 ];
 
   configurePlatforms = [ "build" "host" ];
   configureFlags = [
