@@ -1,26 +1,21 @@
 { buildGoModule
 , fetchFromGitHub
+, callPackage
 , lib
 , envoy
-, zip
 , nixosTests
+, pomerium-ui
 , pomerium-cli
 }:
 
 let
   inherit (lib) concatStringsSep concatMap id mapAttrsToList;
+  common = callPackage ./common.nix { };
 in
 buildGoModule rec {
+  inherit (common) version src vendorSha256 meta;
   pname = "pomerium";
-  version = "0.17.1";
-  src = fetchFromGitHub {
-    owner = "pomerium";
-    repo = "pomerium";
-    rev = "v${version}";
-    hash = "sha256:0b9mdzyfn7c6gwgslqk787yyrrcmdjf3282vx2zvhcr3psz0xqwx";
-  };
 
-  vendorSha256 = "sha256:1cq4m5a7z64yg3v1c68d15ilw78il6p53vaqzxgn338zjggr3kig";
   subPackages = [
     "cmd/pomerium"
   ];
@@ -70,6 +65,9 @@ buildGoModule rec {
     EOF
     sha256sum '${envoy}/bin/envoy' > internal/envoy/files/envoy.sha256
     echo '${envoy.version}' > internal/envoy/files/envoy.version
+
+    # put the built UI files where they will be picked up as part of binary build
+    cp -r ${pomerium-ui} ui
   '';
 
   installPhase = ''
@@ -79,13 +77,5 @@ buildGoModule rec {
   passthru.tests = {
     inherit (nixosTests) pomerium;
     inherit pomerium-cli;
-  };
-
-  meta = with lib; {
-    homepage = "https://pomerium.io";
-    description = "Authenticating reverse proxy";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lukegb ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }
