@@ -207,6 +207,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://netbird.io">netbird</link>, a zero
+          configuration VPN. Available as
+          <link xlink:href="options.html#opt-services.netbird.enable">services.netbird</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/aiberia/persistent-evdev">persistent-evdev</link>,
           a daemon to add virtual proxy devices that mirror a physical
           input device but persist even if the underlying hardware is

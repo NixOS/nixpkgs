@@ -28,13 +28,13 @@
 let
   hip = stdenv.mkDerivation rec {
     pname = "hip";
-    version = "5.2.1";
+    version = "5.2.3";
 
     src = fetchFromGitHub {
       owner = "ROCm-Developer-Tools";
       repo = "HIP";
       rev = "rocm-${version}";
-      hash = "sha256-aXI55bdhAuPUEdQZukKAdtLWA+8UIxjPJ4LTamR/ENk=";
+      hash = "sha256-QaN666Rku2Tkio2Gm5/3RD8D5JgmCZLe0Yun1fGxa8U=";
     };
 
     # - fix bash paths
@@ -100,13 +100,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hip";
-  version = "5.2.1";
+  version = "5.2.3";
 
   src = fetchFromGitHub {
     owner = "ROCm-Developer-Tools";
     repo = "hipamd";
     rev = "rocm-${version}";
-    hash = "sha256-YsvM+HjoBiukXAMCdE/dpQNMnpP6XRXDuxV1487rok0=";
+    hash = "sha256-9YZBFn1jpOiX0X9rcpsFDNhas9vfxNkNnbsWSi7unPU=";
   };
 
   nativeBuildInputs = [ cmake python3 makeWrapper perl ];
