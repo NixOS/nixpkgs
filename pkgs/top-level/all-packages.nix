@@ -9882,9 +9882,8 @@ with pkgs;
   inherit (callPackage ../servers/plik { })
     plik plikd;
 
-  plex = callPackage ../servers/plex {
-    buildFHSUserEnv = buildFHSUserEnvBubblewrap;
-  };
+  plex = callPackage ../servers/plex { };
+
   plexRaw = callPackage ../servers/plex/raw.nix { };
 
   psitransfer = callPackage ../servers/psitransfer { };
