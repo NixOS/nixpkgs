@@ -45,7 +45,7 @@ python3Packages.buildPythonApplication rec {
     description = "Command line tool for the desktop trash can";
     maintainers = [ maintainers.rycee ];
     platforms = platforms.unix;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     mainProgram = "trash";
   };
 }
