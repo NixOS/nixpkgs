@@ -11,6 +11,9 @@ let
       proper = super.proper.overrideAttrs (_: {
         configurePhase = "true";
       });
+      redbug = super.redbug.overrideAttrs (_: {
+        patchPhase = "sed -i 's/, warnings_as_errors//' rebar.config";
+      });
     });
   };
 in
