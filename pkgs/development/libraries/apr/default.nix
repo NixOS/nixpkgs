@@ -27,6 +27,13 @@ stdenv.mkDerivation rec {
       url = "https://github.com/apache/apr/commit/866e1df66be6704a584feaf5c3d241e3d631d03a.patch";
       sha256 = "0hhm5v5wx985c28dq6d9ngnyqihpsphq4mw7rwylk39k2p90ppcm";
     })
+
+    # Cross fix. Patch the /dev/zero mmapable detection logic. https://bugs.gentoo.org/show_bug.cgi?id=830833
+    (fetchpatch {
+      url = "https://830833.bugs.gentoo.org/attachment.cgi?id=761676";
+      name = "cross-assume-dev-zero-mmappable.patch";
+      sha256 = "sha256-rsouJp1o7p0d+AJ5KvyhUU79vAJOcVHEuwSEKaCEGa8=";
+    })
   ] ++ lib.optionals stdenv.isDarwin [ ./is-this-a-compiler-bug.patch ];
 
   # This test needs the net
@@ -43,9 +50,27 @@ stdenv.mkDerivation rec {
     '';
 
   configureFlags = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # For cross builds, provide answers to the configure time tests.
+    # These answers are valid on x86_64-linux and aarch64-linux.
     "ac_cv_file__dev_zero=yes"
-    "ac_cv_func_setpgrp_void=0"
-    "apr_cv_tcp_nodelay_with_cork=1"
+    "ac_cv_func_setpgrp_void=yes"
+    "apr_cv_tcp_nodelay_with_cork=yes"
+    "ac_cv_define_PTHREAD_PROCESS_SHARED=yes"
+    "apr_cv_process_shared_works=yes"
+    "apr_cv_mutex_robust_shared=yes"
+    "ap_cv_atomic_builtins=yes"
+    "apr_cv_mutex_recursive=yes"
+    "apr_cv_epoll=yes"
+    "apr_cv_epoll_create1=yes"
+    "apr_cv_dup3=yes"
+    "apr_cv_accept4=yes"
+    "apr_cv_sock_cloexec=yes"
+    "ac_cv_struct_rlimit=yes"
+    "ac_cv_func_sem_open=yes"
+    "ac_cv_negative_eai=yes"
+    "apr_cv_gai_addrconfig=yes"
+    "ac_cv_o_nonblock_inherited=no"
+    "apr_cv_pthreads_lib=-lpthread"
     "CC_FOR_BUILD=${buildPackages.stdenv.cc}/bin/cc"
   ] ++ lib.optionals (stdenv.hostPlatform.system == "i686-cygwin") [
     # Including the Windows headers breaks unistd.h.
