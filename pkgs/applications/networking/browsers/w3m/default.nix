@@ -26,13 +26,13 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "w3m";
-  version = "0.5.3+git20190105";
+  version = "0.5.3+git20220429";
 
   src = fetchFromGitHub {
     owner = "tats";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1fbg2p8qh2gvi3g4iz4q6vc0k70pf248r4yndi5lcn2m3mzvjx0i";
+    sha256 = "sha256-aPPLZjjL3A5Tk0hv0NoAwJnjemC7a5RUoubhUr3lQE4=";
   };
 
   NIX_LDFLAGS = optionalString stdenv.isSunOS "-lsocket -lnsl";
@@ -90,11 +90,11 @@ in stdenv.mkDerivation rec {
   # see: https://bbs.archlinux.org/viewtopic.php?id=196093
   LIBS = optionalString x11Support "-lX11";
 
-  meta = {
+  meta = with lib; {
     homepage = "http://w3m.sourceforge.net/";
     description = "A text-mode web browser";
-    maintainers = [ maintainers.cstrahan ];
-    platforms = lib.platforms.unix;
-    license = lib.licenses.mit;
+    maintainers = with maintainers; [ cstrahan ];
+    platforms = platforms.unix;
+    license = licenses.mit;
   };
 }
