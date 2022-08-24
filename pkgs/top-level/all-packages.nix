@@ -3483,6 +3483,8 @@ with pkgs;
 
   cucumber = callPackage ../development/tools/cucumber {};
 
+  cutemarked-ng = libsForQt5.callPackage ../applications/office/cutemarked-ng { };
+
   dabet = callPackage ../tools/misc/dabet { };
 
   dabtools = callPackage ../applications/radio/dabtools { };
