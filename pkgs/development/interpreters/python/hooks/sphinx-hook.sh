@@ -6,7 +6,7 @@ declare -a __sphinxBuilders
 buildSphinxPhase() {
     echo "Executing buildSphinxPhase"
 
-    local __sphinxRoot="" o
+    local __sphinxRoot=""
     runHook preBuildSphinx
 
     if [[ -n "${sphinxRoot:-}" ]] ; then  # explicit root
@@ -16,10 +16,10 @@ buildSphinxPhase() {
         fi
         __sphinxRoot=$sphinxRoot
     else
-        for o in doc docs doc/source docs/source ; do
-            if [[ -f "$o/conf.py" ]] ; then
-                echo "Sphinx documentation found in $o"
-                __sphinxRoot=$o
+        for candidate in doc docs doc/source docs/source ; do
+            if [[ -f "$candidate/conf.py" ]] ; then
+                echo "Sphinx documentation found in $candidate"
+                __sphinxRoot=$candidate
                 break
             fi
         done
