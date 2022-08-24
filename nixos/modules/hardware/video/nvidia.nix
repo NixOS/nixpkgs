@@ -260,8 +260,6 @@ in
     # - Configure the display manager to run specific `xrandr` commands which will
     #   configure/enable displays connected to the Intel iGPU / AMD APU.
 
-    services.xserver.useGlamor = mkDefault offloadCfg.enable;
-
     services.xserver.drivers = let
     in optional primeEnabled {
       name = igpuDriver;
