@@ -87,7 +87,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://w3m.sourceforge.net/";
     description = "A text-mode web browser";
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ cstrahan anthonyroussel ];
     platforms = platforms.unix;
     license = licenses.mit;
   };
