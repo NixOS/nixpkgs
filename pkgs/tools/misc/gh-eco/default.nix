@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "gh-eco";
-  version = "0.1.0";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "coloradocolby";
     repo = "gh-eco";
     rev = "v${version}";
-    sha256 = "sha256-rJG1k8lOyXQSP3FgyyHZvVrQkn2yEtAcgg9CpbPvCwY=";
+    sha256 = "sha256-P/s7uSD5MWwiw0ScRVHAlu68GflrGxgPNpVAMdpxYcs=";
   };
 
   vendorSha256 = "sha256-Qx/QGIurjKGFcIdCot1MFPatbGHfum48JOoHlvqA64c=";
