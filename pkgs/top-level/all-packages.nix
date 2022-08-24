@@ -27007,6 +27007,9 @@ with pkgs;
     pkgs' = pkgs;  # default pkgs used for bootstrapping the emacs package set
   };
 
+  # This alias should live in aliases.nix but that would cause Hydra not to evaluate/build the packages.
+  emacsPackages = emacs.pkgs;
+
   inherit (gnome) empathy;
 
   enhanced-ctorrent = callPackage ../applications/networking/enhanced-ctorrent { };

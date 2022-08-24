@@ -384,7 +384,6 @@ mapAliases ({
   emacs28Packages = emacs28.pkgs; # Added 2021-10-04
   emacs28WithPackages = emacs28.pkgs.withPackages; # Added 2021-10-04
   emacsNativeComp = emacs28NativeComp; # Added 2022-06-08
-  emacsPackages = emacs.pkgs; # Added 2020-12-18
   emacsPackagesGen = throw "'emacsPackagesGen' has been renamed to/replaced by 'emacsPackagesFor'"; # Converted to throw 2022-02-22
   emacsPackagesNg = emacs.pkgs; # Added 2019-08-07
   emacsPackagesNgFor = emacsPackagesFor; # Added 2019-08-07
