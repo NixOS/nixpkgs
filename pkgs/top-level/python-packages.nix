@@ -1306,6 +1306,8 @@ in {
 
   betamax-serializers = callPackage ../development/python-modules/betamax-serializers { };
 
+  betterproto = callPackage ../development/python-modules/betterproto { };
+
   bibtexparser = callPackage ../development/python-modules/bibtexparser { };
 
   bidict = callPackage ../development/python-modules/bidict { };
