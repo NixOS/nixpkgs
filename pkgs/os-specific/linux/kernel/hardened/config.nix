@@ -45,7 +45,7 @@ assert (versionAtLeast version "4.9");
   DEBUG_SG              = yes;
   SCHED_STACK_END_CHECK = yes;
 
-  REFCOUNT_FULL = whenBetween "4.13" "5.5" yes;
+  REFCOUNT_FULL = whenBetween "4.13" "5.4" yes;
 
   # Randomize page allocator when page_alloc.shuffle=1
   SHUFFLE_PAGE_ALLOCATOR = whenAtLeast "5.2" yes;
