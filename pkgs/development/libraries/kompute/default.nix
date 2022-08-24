@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , vulkan-headers
 , vulkan-loader
@@ -19,6 +20,13 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-OkVGYh8QrD7JNqWFBLrDTYlk6IYHdvt4i7UtC4sQTzo=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/KomputeProject/kompute/commit/9a791b161dd58ca927fe090f65fa2b0e5e85e7ca.diff";
+      sha256 = "OtFTN8sgPlyiMmVzUnqzCkVMKj6DWxbCXtYwkRdEprY=";
+    })
+  ];
 
   cmakeFlags = [
     "-DKOMPUTE_OPT_INSTALL=1"
