@@ -5,7 +5,7 @@ with prev;
   ##########################################3
   #### manual fixes for generated packages
   ##########################################3
-  bit32 = prev.bit32.overrideAttrs(oa: {
+  bit32 = prev.bit32.overrideAttrs (oa: {
     # Small patch in order to no longer redefine a Lua 5.2 function that Luajit
     # 2.1 also provides, see https://github.com/LuaJIT/LuaJIT/issues/325 for
     # more
@@ -14,7 +14,7 @@ with prev;
     ];
   });
 
-  busted = prev.busted.overrideAttrs(oa: {
+  busted = prev.busted.overrideAttrs (oa: {
     nativeBuildInputs = oa.nativeBuildInputs ++ [
       pkgs.installShellFiles
     ];
@@ -35,14 +35,15 @@ with prev;
       { name = "OPENSSL"; dep = pkgs.openssl_1_1; }
     ];
     disabled = luaOlder "5.1" || luaAtLeast "5.4";
-  })).overrideAttrs(oa: rec {
+  })).overrideAttrs (oa: rec {
     # Parse out a version number without the Lua version inserted
     version = with pkgs.lib; let
       version' = prev.cqueues.version;
       rel = splitVersion version';
       date = head rel;
       rev = last (splitString "-" (last rel));
-    in "${date}-${rev}";
+    in
+    "${date}-${rev}";
 
     nativeBuildInputs = oa.nativeBuildInputs ++ [
       pkgs.gnum4
@@ -50,17 +51,18 @@ with prev;
 
     # Upstream rockspec is pointlessly broken into separate rockspecs, per Lua
     # version, which doesn't work well for us, so modify it
-    postConfigure = let inherit (prev.cqueues) pname; in ''
-      # 'all' target auto-detects correct Lua version, which is fine for us as
-      # we only have the right one available :)
-      sed -Ei ''${rockspecFilename} \
-        -e 's|lua == 5.[[:digit:]]|lua >= 5.1, <= 5.3|' \
-        -e 's|build_target = "[^"]+"|build_target = "all"|' \
-        -e 's|version = "[^"]+"|version = "${version}"|'
-      specDir=$(dirname ''${rockspecFilename})
-      cp ''${rockspecFilename} "$specDir/${pname}-${version}.rockspec"
-      rockspecFilename="$specDir/${pname}-${version}.rockspec"
-    '';
+    postConfigure = let inherit (prev.cqueues) pname; in
+      ''
+        # 'all' target auto-detects correct Lua version, which is fine for us as
+        # we only have the right one available :)
+        sed -Ei ''${rockspecFilename} \
+          -e 's|lua == 5.[[:digit:]]|lua >= 5.1, <= 5.3|' \
+          -e 's|build_target = "[^"]+"|build_target = "all"|' \
+          -e 's|version = "[^"]+"|version = "${version}"|'
+        specDir=$(dirname ''${rockspecFilename})
+        cp ''${rockspecFilename} "$specDir/${pname}-${version}.rockspec"
+        rockspecFilename="$specDir/${pname}-${version}.rockspec"
+      '';
   });
 
   cyrussasl = prev.luaLib.overrideLuarocks prev.cyrussasl (drv: {
@@ -69,7 +71,7 @@ with prev;
     ];
   });
 
-  http = prev.http.overrideAttrs(oa: {
+  http = prev.http.overrideAttrs (oa: {
     patches = [
       (pkgs.fetchpatch {
         name = "invalid-state-progression.patch";
@@ -78,16 +80,16 @@ with prev;
       })
     ];
     /* TODO: separate docs derivation? (pandoc is heavy)
-    nativeBuildInputs = [ pandoc ];
-    makeFlags = [ "-C doc" "lua-http.html" "lua-http.3" ];
+      nativeBuildInputs = [ pandoc ];
+      makeFlags = [ "-C doc" "lua-http.html" "lua-http.3" ];
     */
   });
 
   ldbus = prev.luaLib.overrideLuarocks prev.ldbus (drv: {
     extraVariables = {
-      DBUS_DIR="${pkgs.dbus.lib}";
-      DBUS_ARCH_INCDIR="${pkgs.dbus.lib}/lib/dbus-1.0/include";
-      DBUS_INCDIR="${pkgs.dbus.dev}/include/dbus-1.0";
+      DBUS_DIR = "${pkgs.dbus.lib}";
+      DBUS_ARCH_INCDIR = "${pkgs.dbus.lib}/lib/dbus-1.0/include";
+      DBUS_INCDIR = "${pkgs.dbus.dev}/include/dbus-1.0";
     };
     buildInputs = with pkgs; [
       dbus
@@ -139,33 +141,33 @@ with prev;
     if luaAtLeast "5.1" && luaOlder "5.2" then {
       version = "20120430.51-1";
       knownRockspec = (pkgs.fetchurl {
-        url    = "https://luarocks.org/lmathx-20120430.51-1.rockspec";
+        url = "https://luarocks.org/lmathx-20120430.51-1.rockspec";
         sha256 = "148vbv2g3z5si2db7rqg5bdily7m4sjyh9w6r3jnx3csvfaxyhp0";
       }).outPath;
       src = pkgs.fetchurl {
-        url    = "https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/5.1/lmathx.tar.gz";
+        url = "https://web.tecgraf.puc-rio.br/~lhf/ftp/lua/5.1/lmathx.tar.gz";
         sha256 = "0sa553d0zlxhvpsmr4r7d841f16yq4wr3fg7i07ibxkz6yzxax51";
       };
     } else
-    if luaAtLeast "5.2" && luaOlder "5.3" then {
-      version = "20120430.52-1";
-      knownRockspec = (pkgs.fetchurl {
-        url    = "https://luarocks.org/lmathx-20120430.52-1.rockspec";
-        sha256 = "14rd625sipakm72wg6xqsbbglaxyjba9nsajsfyvhg0sz8qjgdya";
-      }).outPath;
-      src = pkgs.fetchurl {
-        url    = "http://www.tecgraf.puc-rio.br/~lhf/ftp/lua/5.2/lmathx.tar.gz";
-        sha256 = "19dwa4z266l2njgi6fbq9rak4rmx2fsx1s0p9sl166ar3mnrdwz5";
-      };
-    } else
-    {
-      disabled = luaOlder "5.1" || luaAtLeast "5.5";
-      # works fine with 5.4 as well
-      postConfigure = ''
-        substituteInPlace ''${rockspecFilename} \
-          --replace 'lua ~> 5.3' 'lua >= 5.3, < 5.5'
-      '';
-    });
+      if luaAtLeast "5.2" && luaOlder "5.3" then {
+        version = "20120430.52-1";
+        knownRockspec = (pkgs.fetchurl {
+          url = "https://luarocks.org/lmathx-20120430.52-1.rockspec";
+          sha256 = "14rd625sipakm72wg6xqsbbglaxyjba9nsajsfyvhg0sz8qjgdya";
+        }).outPath;
+        src = pkgs.fetchurl {
+          url = "http://www.tecgraf.puc-rio.br/~lhf/ftp/lua/5.2/lmathx.tar.gz";
+          sha256 = "19dwa4z266l2njgi6fbq9rak4rmx2fsx1s0p9sl166ar3mnrdwz5";
+        };
+      } else
+        {
+          disabled = luaOlder "5.1" || luaAtLeast "5.5";
+          # works fine with 5.4 as well
+          postConfigure = ''
+            substituteInPlace ''${rockspecFilename} \
+              --replace 'lua ~> 5.3' 'lua >= 5.3, < 5.5'
+          '';
+        });
 
   lmpfrlib = prev.luaLib.overrideLuarocks prev.lmpfrlib (drv: {
     externalDeps = [
@@ -201,7 +203,7 @@ with prev;
     ];
   });
 
-  lua-lsp = prev.lua-lsp.overrideAttrs(oa: {
+  lua-lsp = prev.lua-lsp.overrideAttrs (oa: {
     # until Alloyed/lua-lsp#28
     postConfigure = ''
       substituteInPlace ''${rockspecFilename} \
@@ -219,8 +221,8 @@ with prev;
   luadbi-mysql = prev.luaLib.overrideLuarocks prev.luadbi-mysql (drv: {
     extraVariables = {
       # Can't just be /include and /lib, unfortunately needs the trailing 'mysql'
-      MYSQL_INCDIR="${pkgs.libmysqlclient.dev}/include/mysql";
-      MYSQL_LIBDIR="${pkgs.libmysqlclient}/lib/mysql";
+      MYSQL_INCDIR = "${pkgs.libmysqlclient.dev}/include/mysql";
+      MYSQL_LIBDIR = "${pkgs.libmysqlclient}/lib/mysql";
     };
     buildInputs = [
       pkgs.mariadb.client
@@ -261,7 +263,8 @@ with prev;
   luaffi = prev.luaLib.overrideLuarocks prev.luaffi (drv: {
     # The packaged .src.rock version is pretty old, and doesn't work with Lua 5.3
     src = pkgs.fetchFromGitHub {
-      owner = "facebook"; repo = "luaffifb";
+      owner = "facebook";
+      repo = "luaffifb";
       rev = "532c757e51c86f546a85730b71c9fef15ffa633d";
       sha256 = "1nwx6sh56zfq99rcs7sph0296jf6a9z72mxknn0ysw9fd7m1r8ig";
     };
@@ -305,7 +308,7 @@ with prev;
     ];
   });
 
-  luaunbound = prev.luaLib.overrideLuarocks prev.luaunbound(drv: {
+  luaunbound = prev.luaLib.overrideLuarocks prev.luaunbound (drv: {
     externalDeps = [
       { name = "libunbound"; dep = pkgs.unbound; }
     ];
@@ -316,7 +319,7 @@ with prev;
       { name = "LIBUUID"; dep = pkgs.libuuid; }
     ];
     disabled = luaOlder "5.1" || (luaAtLeast "5.4");
-  })).overrideAttrs(oa: {
+  })).overrideAttrs (oa: {
     meta = oa.meta // {
       platforms = pkgs.lib.platforms.linux;
     };
@@ -329,9 +332,10 @@ with prev;
     patches = [
       ./luuid.patch
     ];
-    postConfigure = let inherit (prev.luuid) version pname; in ''
-      sed -Ei ''${rockspecFilename} -e 's|lua >= 5.2|lua >= 5.1,|'
-    '';
+    postConfigure = let inherit (prev.luuid) version pname; in
+      ''
+        sed -Ei ''${rockspecFilename} -e 's|lua >= 5.2|lua >= 5.1,|'
+      '';
   });
 
 
@@ -342,23 +346,23 @@ with prev;
     pname = "libluv";
     inherit (prev.luv) version meta src;
 
-      cmakeFlags = [
-        "-DBUILD_SHARED_LIBS=ON"
-        "-DBUILD_MODULE=OFF"
-        "-DWITH_SHARED_LIBUV=ON"
-        "-DLUA_BUILD_TYPE=System"
-        "-DWITH_LUA_ENGINE=${if isLuaJIT then "LuaJit" else "Lua"}"
-      ];
+    cmakeFlags = [
+      "-DBUILD_SHARED_LIBS=ON"
+      "-DBUILD_MODULE=OFF"
+      "-DWITH_SHARED_LIBUV=ON"
+      "-DLUA_BUILD_TYPE=System"
+      "-DWITH_LUA_ENGINE=${if isLuaJIT then "LuaJit" else "Lua"}"
+    ];
 
-      # to make sure we dont use bundled deps
-      postUnpack = ''
-        rm -rf deps/lua deps/libuv
-      '';
+    # to make sure we dont use bundled deps
+    postUnpack = ''
+      rm -rf deps/lua deps/libuv
+    '';
 
-      buildInputs = [ pkgs.libuv final.lua ];
+    buildInputs = [ pkgs.libuv final.lua ];
 
-      nativeBuildInputs = [ pkgs.pkg-config pkgs.cmake ]
-        ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [ pkgs.fixDarwinDylibNames ];
+    nativeBuildInputs = [ pkgs.pkg-config pkgs.cmake ]
+      ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [ pkgs.fixDarwinDylibNames ];
   };
 
   luv = prev.luaLib.overrideLuarocks prev.luv (drv: {
@@ -394,7 +398,7 @@ with prev;
     USE_SYSTEM_MPACK = "yes";
   });
 
-  rapidjson = prev.rapidjson.overrideAttrs(oa: {
+  rapidjson = prev.rapidjson.overrideAttrs (oa: {
     preBuild = ''
       sed -i '/set(CMAKE_CXX_FLAGS/d' CMakeLists.txt
       sed -i '/set(CMAKE_C_FLAGS/d' CMakeLists.txt
@@ -418,7 +422,7 @@ with prev;
     '';
   });
 
-  sqlite = prev.luaLib.overrideLuarocks  prev.sqlite (drv: {
+  sqlite = prev.luaLib.overrideLuarocks prev.sqlite (drv: {
 
     doCheck = true;
     checkInputs = [ final.plenary-nvim pkgs.neovim-unwrapped ];
@@ -435,14 +439,14 @@ with prev;
 
   });
 
-  std-_debug = prev.std-_debug.overrideAttrs(oa: {
+  std-_debug = prev.std-_debug.overrideAttrs (oa: {
     # run make to generate lib/std/_debug/version.lua
     preConfigure = ''
       make all
     '';
   });
 
-  std-normalize = prev.std-normalize.overrideAttrs(oa: {
+  std-normalize = prev.std-normalize.overrideAttrs (oa: {
     # run make to generate lib/std/_debug/version.lua
     preConfigure = ''
       make all
@@ -451,8 +455,8 @@ with prev;
 
   # TODO just while testing, remove afterwards
   # toVimPlugin should do it instead
-  gitsigns-nvim = prev.gitsigns-nvim.overrideAttrs(oa: {
-    nativeBuildInputs = oa.nativeBuildInputs or [] ++ [ pkgs.vimUtils.vimGenDocHook ];
+  gitsigns-nvim = prev.gitsigns-nvim.overrideAttrs (oa: {
+    nativeBuildInputs = oa.nativeBuildInputs or [ ] ++ [ pkgs.vimUtils.vimGenDocHook ];
   });
 
   # aliases
