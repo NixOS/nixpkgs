@@ -172,6 +172,12 @@ with prev;
       })
     ];
 
+    # https://github.com/lgi-devs/lgi/pull/300
+    postPatch = ''
+      substituteInPlace lgi/Makefile tests/Makefile \
+        --replace 'PKG_CONFIG =' 'PKG_CONFIG ?='
+    '';
+
     # there is only a rockspec.in in the repo, the actual rockspec must be generated
     preConfigure = ''
       make rock
