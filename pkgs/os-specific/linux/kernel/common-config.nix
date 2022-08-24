@@ -846,6 +846,8 @@ let
       MOUSE_PS2_VMMOUSE  = yes;
       MTRR_SANITIZER     = yes;
       NET_FC             = yes; # Fibre Channel driver support
+      # Needed for touchpads to work on some AMD laptops
+      PINCTRL_AMD        = whenAtLeast "5.19" yes;
       # GPIO on Intel Bay Trail, for some Chromebook internal eMMC disks
       PINCTRL_BAYTRAIL   = yes;
       # GPIO for Braswell and Cherryview devices
