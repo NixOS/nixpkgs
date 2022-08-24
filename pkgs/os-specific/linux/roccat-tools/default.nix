@@ -1,4 +1,4 @@
-{ lib, pkgs, stdenv, fetchurl, cmake, pkg-config, gettext
+{ lib, stdenv, fetchurl, cmake, pkg-config, gettext
 , dbus, dbus-glib, libgaminggear, libgudev, lua
 , harfbuzz, runtimeShell, coreutils, kmod
 }:
