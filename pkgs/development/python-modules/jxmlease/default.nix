@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , lxml
-, python
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -22,11 +22,9 @@ buildPythonPackage rec {
   # https://github.com/Juniper/jxmlease/issues/26
   doCheck = false;
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} -m unittest discover -v
-    runHook postCheck
-  '';
+  checkInputs = [ unittestCheckHook ];
+
+  unittestFlagsArray = [ "-v" ];
 
   meta = with lib; {
     description = "Converts between XML and intelligent Python data structures";

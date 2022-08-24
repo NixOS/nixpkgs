@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, python
+, unittestCheckHook
 , pythonOlder
 , fetchFromGitLab
 , substituteAll
@@ -17,7 +17,8 @@
 , mutagen
 , pygobject3
 , pycairo
-, dolphinIntegration ? false, plasma5Packages
+, dolphinIntegration ? false
+, plasma5Packages
 }:
 
 buildPythonPackage rec {
@@ -92,9 +93,9 @@ buildPythonPackage rec {
     install -Dm 444 dolphin/mat2.desktop -t "$out/share/kservices5/ServiceMenus"
   '';
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover -v
-  '';
+  checkInputs = [ unittestCheckHook ];
+
+  unittestFlagsArray = [ "-v" ];
 
   meta = with lib; {
     description = "A handy tool to trash your metadata";

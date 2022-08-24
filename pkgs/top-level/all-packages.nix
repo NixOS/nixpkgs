@@ -14086,7 +14086,7 @@ with pkgs;
     stdenv = gcc7Stdenv;
   }));
 
-  llvmPackages_latest = llvmPackages_13;
+  llvmPackages_latest = llvmPackages_14;
 
   llvmPackages_rocm = recurseIntoAttrs (callPackage ../development/compilers/llvm/rocm { });
 
@@ -14292,18 +14292,18 @@ with pkgs;
     inherit (darwin) apple_sdk;
   };
 
-  rust_1_62 = callPackage ../development/compilers/rust/1_62.nix {
+  rust_1_63 = callPackage ../development/compilers/rust/1_63.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
     llvm_14 = llvmPackages_14.libllvm;
   };
-  rust = rust_1_62;
+  rust = rust_1_63;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
   mrustc-bootstrap = callPackage ../development/compilers/mrustc/bootstrap.nix { stdenv = gcc10StdenvCompat; };
 
-  rustPackages_1_62 = rust_1_62.packages.stable;
-  rustPackages = rustPackages_1_62;
+  rustPackages_1_63 = rust_1_63.packages.stable;
+  rustPackages = rustPackages_1_63;
 
   inherit (rustPackages) cargo clippy rustc rustPlatform;
 
@@ -19010,7 +19010,7 @@ with pkgs;
   libcamera = callPackage ../development/libraries/libcamera { };
 
   libcanberra = callPackage ../development/libraries/libcanberra {
-    inherit (darwin.apple_sdk.frameworks) Carbon CoreServices;
+    inherit (darwin.apple_sdk.frameworks) Carbon CoreServices AppKit;
   };
   libcanberra-gtk2 = pkgs.libcanberra.override {
     gtkSupport = "gtk2";
@@ -22995,7 +22995,7 @@ with pkgs;
   hsphfpd = callPackage ../servers/pulseaudio/hsphfpd.nix { };
 
   pulseaudio = callPackage ../servers/pulseaudio {
-    inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
+    inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa CoreAudio;
   };
 
   qpaeq = libsForQt5.callPackage ../servers/pulseaudio/qpaeq.nix { };

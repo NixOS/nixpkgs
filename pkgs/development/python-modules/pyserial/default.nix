@@ -2,7 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, python
+, unittestCheckHook
 , pythonOlder
 , isPy3k
 }:
@@ -27,11 +27,9 @@ buildPythonPackage rec {
 
   doCheck = !stdenv.hostPlatform.isDarwin; # broken on darwin
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} -m unittest discover -s test
-    runHook postCheck
-  '';
+  checkInputs = [ unittestCheckHook ];
+
+  unittestFlagsArray = [ "-s" "test" ];
 
   pythonImportsCheck = [
     "serial"

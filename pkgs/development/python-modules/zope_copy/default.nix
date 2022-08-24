@@ -5,6 +5,7 @@
 , zope_interface
 , zope_location
 , zope_schema
+, unittestCheckHook
 }:
 
 
@@ -20,11 +21,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ zope_interface ];
 
   doCheck = !isPy27; # namespace conflicts
-  checkInputs = [ zope_location zope_schema ];
+  checkInputs = [ unittestCheckHook zope_location zope_schema ];
 
-  checkPhase = ''
-    python -m unittest discover -s src/zope/copy
-  '';
+  unittestFlagsArray = [ "-s" "src/zope/copy" ];
 
   meta = {
     maintainers = with lib.maintainers; [ domenkozar ];

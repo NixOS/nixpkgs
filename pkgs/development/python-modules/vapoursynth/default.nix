@@ -1,4 +1,4 @@
-{ vapoursynth, cython, buildPythonPackage, python }:
+{ vapoursynth, cython, buildPythonPackage, unittestCheckHook }:
 
 buildPythonPackage {
   pname = "vapoursynth";
@@ -13,9 +13,11 @@ buildPythonPackage {
     vapoursynth
   ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover -s $src/test -p "*test.py"
-  '';
+  checkInputs = [
+    unittestCheckHook
+  ];
+
+  unittestFlagsArray = [ "-s" "$src/test" "-p" "'*test.py'" ];
 
   inherit (vapoursynth) meta;
 }

@@ -5,6 +5,7 @@
 , python
 , pythonOlder
 , pytest
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -26,11 +27,8 @@ buildPythonPackage rec {
     })
   ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover
-  '';
-
   checkInputs = [
+    unittestCheckHook
     pytest
   ];
 

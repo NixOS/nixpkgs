@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, wrapGAppsHook, autoreconfHook, bison, flex
+{ stdenv, lib, fetchgit, fetchurl, wrapGAppsHook, autoreconfHook, bison, flex
 , curl, gtk3, pkg-config, python3, shared-mime-info
 , glib-networking, gsettings-desktop-schemas
 
@@ -110,6 +110,11 @@ in stdenv.mkDerivation rec {
 
   patches = [
     ./mime.patch
+    # fix build with perl 5.36+
+    (fetchurl {
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/packages/claws-mail/trunk/20cope_with_fix_for_1009149.patch";
+      hash = "sha256-/WBslmoFvja2v2GEBntxvNtG0I3xtkUUqXO5gl5pqqs=";
+    })
   ];
 
   preConfigure = ''

@@ -734,6 +734,16 @@ work in any of the formats supported by `buildPythonPackage` currently,
 with the exception of `other` (see `format` in
 [`buildPythonPackage` parameters](#buildpythonpackage-parameters) for more details).
 
+### Using unittestCheckHook {#using-unittestcheckhook}
+
+`unittestCheckHook` is a hook which will substitute the setuptools `test` command for a `checkPhase` which runs `python -m unittest discover`:
+
+```
+  checkInputs = [ unittestCheckHook ];
+
+  unittestFlags = [ "-s" "tests" "-v" ];
+```
+
 ### Develop local package {#develop-local-package}
 
 As a Python developer you're likely aware of [development mode](http://setuptools.readthedocs.io/en/latest/setuptools.html#development-mode)
@@ -1270,6 +1280,7 @@ are used in `buildPythonPackage`.
   with the `pipInstallHook`.
 - `pythonRelaxDepsHook` will relax Python dependencies restrictions for the package.
   See [example usage](#using-pythonrelaxdepshook).
+- `unittestCheckHook` will run tests with `python -m unittest discover`. See [example usage](#using-unittestcheckhook).
 
 ### Development mode {#development-mode}
 

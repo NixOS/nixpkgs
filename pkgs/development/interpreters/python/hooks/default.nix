@@ -164,6 +164,14 @@ in rec {
       };
     } ./setuptools-check-hook.sh) {};
 
+  unittestCheckHook = callPackage ({ }:
+    makeSetupHook {
+      name = "unittest-check-hook";
+      substitutions = {
+        inherit pythonCheckInterpreter;
+      };
+    } ./unittest-check-hook.sh) {};
+
   venvShellHook = disabledIf (!isPy3k) (callPackage ({ }:
     makeSetupHook {
       name = "venv-shell-hook";

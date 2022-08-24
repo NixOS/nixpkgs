@@ -157,6 +157,8 @@ stdenv.mkDerivation {
         '(${concatStringsSep " " (map (pkg: "\"${pkg}\"") pkgs)}))
     '';
 
+    inherit expand-response-params;
+
     inherit nixSupport;
   };
 
@@ -540,7 +542,6 @@ stdenv.mkDerivation {
         (name: value: "echo ${toString value} >> $out/nix-support/${name}")
         nixSupport);
 
-  inherit expand-response-params;
 
   # for substitution in utils.bash
   expandResponseParams = "${expand-response-params}/bin/expand-response-params";

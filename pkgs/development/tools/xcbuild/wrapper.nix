@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, writeText, runCommand
+{ lib, stdenv, makeWrapper, writeText, writeShellScriptBin, runCommand
 , CoreServices, ImageIO, CoreGraphics
 , runtimeShell, callPackage
 , xcodePlatform ? stdenv.targetPlatform.xcodePlatform or "MacOSX"
@@ -9,6 +9,7 @@ let
 
   toolchainName = "com.apple.dt.toolchain.XcodeDefault";
   sdkName = "${xcodePlatform}${sdkVer}";
+  xcrunSdkName = lib.toLower xcodePlatform;
 
   # TODO: expose MACOSX_DEPLOYMENT_TARGET in nix so we can use it here.
   sdkBuildVersion = "17E189";
@@ -50,12 +51,27 @@ while [ $# -gt 0 ]; do
 done
   '';
 
-  xcrun = writeText "xcrun" ''
-#!${runtimeShell}
+  xcrun = writeShellScriptBin "xcrun" ''
+args=( "$@" )
+
+# If an SDK was requested, check that it matches.
+for ((i = 0; i < ''${#args[@]}; i++)); do
+  case "''${args[i]}" in
+    --sdk | -sdk)
+      i=$((i + 1))
+      if [[ "''${args[i]}" != '${xcrunSdkName}' ]]; then
+        echo >&2 "xcodebuild: error: SDK \"''${args[i]}\" cannot be located."
+        exit 1
+      fi
+      ;;
+  esac
+done
+
 while [ $# -gt 0 ]; do
    case "$1" in
          --sdk | -sdk) shift ;;
-         --find | -find)
+         --toolchain | -toolchain) shift ;;
+         --find | -find | -f)
            shift
            command -v $1 ;;
          --log | -log) ;; # noop
@@ -74,6 +90,7 @@ while [ $# -gt 0 ]; do
     esac
     shift
 done
+
 if ! [[ -z "$@" ]]; then
    exec "$@"
 fi
@@ -89,7 +106,7 @@ runCommand "xcodebuild-${xcbuild.version}" {
   propagatedBuildInputs = [ "${toolchains}/XcodeDefault.xctoolchain" ];
 
   passthru = {
-    inherit xcbuild;
+    inherit xcbuild xcrun;
     toolchain = "${toolchains}/XcodeDefault.xctoolchain";
     sdk = "${sdks}/${sdkName}";
     platform = "${platforms}/${xcodePlatform}.platform";
@@ -126,8 +143,7 @@ runCommand "xcodebuild-${xcbuild.version}" {
     --subst-var-by DEVELOPER_DIR $out/Applications/Xcode.app/Contents/Developer
   chmod +x $out/bin/xcode-select
 
-  substitute ${xcrun} $out/bin/xcrun
-  chmod +x $out/bin/xcrun
+  cp ${xcrun}/bin/xcrun $out/bin/xcrun
 
   for bin in PlistBuddy actool builtin-copy builtin-copyPlist \
              builtin-copyStrings builtin-copyTiff \

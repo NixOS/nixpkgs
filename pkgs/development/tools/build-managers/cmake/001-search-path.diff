@@ -1,5 +1,5 @@
 diff --git a/Modules/Platform/UnixPaths.cmake b/Modules/Platform/UnixPaths.cmake
-index b9381c3d7d..cecc40a89e 100644
+index b9381c3d7d..5e944640b5 100644
 --- a/Modules/Platform/UnixPaths.cmake
 +++ b/Modules/Platform/UnixPaths.cmake
 @@ -26,9 +26,6 @@ get_filename_component(_CMAKE_INSTALL_DIR "${_CMAKE_INSTALL_DIR}" PATH)
@@ -12,7 +12,7 @@ index b9381c3d7d..cecc40a89e 100644
    # CMake install location
    "${_CMAKE_INSTALL_DIR}"
    )
-@@ -47,24 +44,19 @@ endif()
+@@ -47,48 +44,46 @@ endif()
  
  # Non "standard" but common install prefixes
  list(APPEND CMAKE_SYSTEM_PREFIX_PATH
@@ -22,43 +22,61 @@ index b9381c3d7d..cecc40a89e 100644
    )
  
  # List common include file locations not under the common prefixes.
++if(IS_DIRECTORY $ENV{NIX_CC})
++  file(STRINGS "$ENV{NIX_CC}/nix-support/orig-libc" _nix_cmake_libc)
++  file(STRINGS "$ENV{NIX_CC}/nix-support/orig-libc-dev" _nix_cmake_libc_dev)
++else()
++  set(_nix_cmake_libc @libc_lib@)
++  set(_nix_cmake_libc_dev @libc_dev@)
++endif()
++
  list(APPEND CMAKE_SYSTEM_INCLUDE_PATH
 -  # X11
 -  /usr/include/X11
-+  @libc_dev@/include
++  "${_nix_cmake_libc_dev}/include"
    )
  
  list(APPEND CMAKE_SYSTEM_LIBRARY_PATH
 -  # X11
 -  /usr/lib/X11
-+  @libc_lib@/lib
++  "${_nix_cmake_libc}/lib"
    )
  
  list(APPEND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES
 -  /lib /lib32 /lib64 /usr/lib /usr/lib32 /usr/lib64
-+  @libc_lib@/lib
++  "${_nix_cmake_libc}/lib"
    )
  
- if(CMAKE_SYSROOT_COMPILE)
-@@ -77,15 +69,15 @@ endif()
+-if(CMAKE_SYSROOT_COMPILE)
+-  set(_cmake_sysroot_compile "${CMAKE_SYSROOT_COMPILE}")
+-else()
+-  set(_cmake_sysroot_compile "${CMAKE_SYSROOT}")
+-endif()
+-
+ # Default per-language values.  These may be later replaced after
  # parsing the implicit directory information from compiler output.
  set(_CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES_INIT
    ${CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES}
 -  "${_cmake_sysroot_compile}/usr/include"
-+  @libc_dev@/include
++  "${_nix_cmake_libc_dev}/include"
    )
  set(_CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES_INIT
    ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES}
 -  "${_cmake_sysroot_compile}/usr/include"
-+  @libc_dev@/include
++  "${_nix_cmake_libc_dev}/include"
    )
  set(_CMAKE_CUDA_IMPLICIT_INCLUDE_DIRECTORIES_INIT
    ${CMAKE_CUDA_IMPLICIT_INCLUDE_DIRECTORIES}
 -  "${_cmake_sysroot_compile}/usr/include"
-+  @libc_dev@/include
++  "${_nix_cmake_libc_dev}/include"
    )
  
- unset(_cmake_sysroot_compile)
+-unset(_cmake_sysroot_compile)
++unset(_nix_cmake_libc)
++unset(_nix_cmake_libc_dev)
+ 
+ # Reminder when adding new locations computed from environment variables
+ # please make sure to keep Help/variable/CMAKE_SYSTEM_PREFIX_PATH.rst
 diff --git a/Modules/Platform/WindowsPaths.cmake b/Modules/Platform/WindowsPaths.cmake
 index b9e2f17979..ab517cd4a7 100644
 --- a/Modules/Platform/WindowsPaths.cmake
