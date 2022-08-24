@@ -3,6 +3,7 @@
 , lua
 , packagesAttr
 , stdenv
+, callPackage
 , overrides ? (final: prev: {})
 }:
 
@@ -14,10 +15,10 @@ let
     inherit lua pkgs lib stdenv;
   };
 
-  overridenPackages = import ./overrides.nix { inherit pkgs; };
+  overridenPackages = callPackage ./overrides.nix { };
 
   generatedPackages = if (builtins.pathExists ./generated-packages.nix) then
-    (final: prev: pkgs.callPackage ./generated-packages.nix { inherit (final) callPackage; } final prev) else (final: prev: {});
+    (final: prev: callPackage ./generated-packages.nix { inherit (final) callPackage; } final prev) else (final: prev: {});
 
   extensions = lib.composeManyExtensions [
     generatedPackages
