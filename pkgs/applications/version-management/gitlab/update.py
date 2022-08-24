@@ -17,7 +17,7 @@ import requests
 
 # Always keep this in sync with the GitLaab version you're updating to.
 # If you see any errors about vendored dependencies during an update, check the Gemfile.
-VENDORED_GEMS = ['devise-pbkdf2-encryptable', 'omniauth-gitlab', 'omniauth_crowd', 'mail-smtp_pool', 'ipynbdiff', 'error_tracking_open_api']
+VENDORED_GEMS = ['devise-pbkdf2-encryptable', 'omniauth-cas3', 'omniauth-gitlab', 'omniauth_crowd', 'mail-smtp_pool', 'ipynbdiff', 'error_tracking_open_api']
 logger = logging.getLogger(__name__)
 
 
@@ -145,6 +145,11 @@ def update_rubyenv():
 
     gemfile = repo.get_file('Gemfile', rev)
     gemfile_lock = repo.get_file('Gemfile.lock', rev)
+
+    if "pg (1.4.1)" in gemfile_lock:
+        gemfile_lock = gemfile_lock.replace("pg (1.4.1)", "pg (1.4.3)")
+    else:
+        logger.info("Looks like pg was updated! Please remove update-pg.patch, as this will cause a build failure")
 
     with open(rubyenv_dir / 'Gemfile', 'w') as f:
         f.write(re.sub(f'.*({"|".join(VENDORED_GEMS)}).*', "", gemfile))
