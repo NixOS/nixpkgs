@@ -94,6 +94,10 @@ commonOptions = packageSettings: rec { # attributes common to both builds
     # to pass in java explicitly.
     "-DCONNECT_WITH_JDBC=OFF"
     "-DCURSES_LIBRARY=${ncurses.out}/lib/libncurses.dylib"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    # revisit this if nixpkgs supports any architecture whose stack grows upwards
+    "-DSTACK_DIRECTION=-1"
+    "-DCMAKE_CROSSCOMPILING_EMULATOR=${stdenv.hostPlatform.emulator buildPackages}"
   ];
 
   postInstall = ''
@@ -211,10 +215,6 @@ in stdenv.mkDerivation (common // {
     "-DPLUGIN_AUTH_PAM_V1=NO"
     "-DWITHOUT_OQGRAPH=1"
     "-DWITHOUT_PLUGIN_S3=1"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    # revisit this if nixpkgs supports any architecture whose stack grows upwards
-    "-DSTACK_DIRECTION=-1"
-    "-DCMAKE_CROSSCOMPILING_EMULATOR=${stdenv.hostPlatform.emulator buildPackages}"
   ];
 
   preConfigure = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
@@ -234,6 +234,7 @@ in stdenv.mkDerivation (common // {
   '';
 
   CXXFLAGS = lib.optionalString stdenv.hostPlatform.isi686 "-fpermissive";
+  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
 });
 in {
   mariadb_104 = mariadbPackage {
