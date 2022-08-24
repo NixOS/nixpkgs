@@ -1,3 +1,4 @@
+# run tests by building `neovim.tests`
 { vimUtils, vim_configurable, writeText, neovim, vimPlugins
 , lib, fetchFromGitHub, neovimUtils, wrapNeovimUnstable
 , neovim-unwrapped
@@ -66,6 +67,15 @@ let
     sha256 = "1ykcvyx82nhdq167kbnpgwkgjib8ii7c92y3427v986n2s5lsskc";
   };
 
+  # this plugin checks that it's ftplugin/vim.tex is loaded before $VIMRUNTIME/ftplugin/vim.tex
+  # the answer is store in `plugin_was_loaded_too_late` in the cwd
+  texFtplugin = pkgs.runCommandLocal "tex-ftplugin" {} ''
+    mkdir -p $out/ftplugin
+    echo 'call system("echo ". exists("b:did_ftplugin") . " > plugin_was_loaded_too_late")' > $out/ftplugin/tex.vim
+    echo ':q!' >> $out/ftplugin/tex.vim
+    echo '\documentclass{article}' > $out/main.tex
+  '';
+
   # neovim-drv must be a wrapped neovim
   runTest = neovim-drv: buildCommand:
     runCommandLocal "test-${neovim-drv.name}" ({
@@ -126,6 +136,25 @@ rec {
   run_nvim_with_plug = runTest nvim_with_plug ''
     export HOME=$TMPDIR
     ${nvim_with_plug}/bin/nvim -i NONE -c 'color base16-tomorrow-night'  +quit! -e
+  '';
+
+  nvim_with_ftplugin = neovim.override {
+    extraName = "-with-ftplugin";
+    configure.packages.plugins = with pkgs.vimPlugins; {
+      start = [
+        texFtplugin
+      ];
+    };
+  };
+
+  # regression test that ftplugin files from plugins are loaded before the ftplugin
+  # files from $VIMRUNTIME
+  run_nvim_with_ftplugin = runTest nvim_with_ftplugin ''
+    export HOME=$TMPDIR
+    ${nvim_with_ftplugin}/bin/nvim ${texFtplugin}/main.tex
+    result="$(cat plugin_was_loaded_too_late)"
+    echo $result
+    [ "$result" = 0 ]
   '';
 
 
