@@ -24032,6 +24032,8 @@ with pkgs;
 
   jujuutils = callPackage ../os-specific/linux/jujuutils { };
 
+  karabiner-elements = callPackage ../os-specific/darwin/karabiner-elements { };
+
   kbd = callPackage ../os-specific/linux/kbd { };
 
   kbdlight = callPackage ../os-specific/linux/kbdlight { };
