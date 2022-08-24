@@ -69,5 +69,4 @@ installSphinxPhase() {
     runHook postInstallSphinx
 }
 
-preDistPhases+=" buildSphinxPhase"
-postPhases+=" installSphinxPhase"
+preDistPhases+=" buildSphinxPhase installSphinxPhase"
