@@ -59,6 +59,13 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [ "-DFOLLY_MOBILE=${if follyMobile then "1" else "0"}" "-fpermissive" ];
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
+  # folly-config.cmake, will `find_package` these, thus there should be
+  # a way to ensure abi compatibility.
+  passthru = {
+    inherit boost;
+    fmt = fmt_8;
+  };
+
   meta = with lib; {
     description = "An open-source C++ library developed and used at Facebook";
     homepage = "https://github.com/facebook/folly";

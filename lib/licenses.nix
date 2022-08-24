@@ -148,6 +148,11 @@ in mkLicense lset) ({
     fullName = ''BSD 4-clause "Original" or "Old" License'';
   };
 
+  bsdOriginalShortened = {
+    spdxId = "BSD-4-Clause-Shortened";
+    fullName = "BSD 4 Clause Shortened";
+  };
+
   bsdOriginalUC = {
     spdxId = "BSD-4-Clause-UC";
     fullName = "BSD 4-Clause University of California-Specific";

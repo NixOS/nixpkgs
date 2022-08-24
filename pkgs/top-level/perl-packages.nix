@@ -4619,7 +4619,7 @@ let
     };
     meta = {
       description = "Perl Blowfish encryption module";
-      license = with lib.licenses; [ unfreeRedistributable ];
+      license = with lib.licenses; [ bsdOriginalShortened ];
     };
   };
 
@@ -4679,7 +4679,7 @@ let
     };
     meta = {
       description = "Perl DES encryption module";
-      license = with lib.licenses; [ unfreeRedistributable ];
+      license = with lib.licenses; [ bsdOriginalShortened ];
     };
   };
 
@@ -4795,7 +4795,7 @@ let
     };
     meta = {
       description = "Perl interface to IDEA block cipher";
-      license = with lib.licenses; [ unfreeRedistributable ];
+      license = with lib.licenses; [ bsdOriginalShortened ];
     };
   };
 
