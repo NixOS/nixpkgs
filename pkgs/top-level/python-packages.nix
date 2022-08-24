@@ -4551,6 +4551,8 @@ self: super: with self; {
 
   intreehooks = callPackage ../development/python-modules/intreehooks { };
 
+  invisible-watermark = callPackage ../development/python-modules/invisible-watermark { };
+
   invocations = callPackage ../development/python-modules/invocations { };
 
   invoke = callPackage ../development/python-modules/invoke { };
