@@ -159,6 +159,10 @@ stdenv.mkDerivation rec {
       --replace "libintl, " ""
   '';
 
+  postConfigure = ''
+    patchShebangs gio/gdbus-2.0/codegen/gdbus-codegen gobject/glib-{genmarshal,mkenums}
+  '';
+
   DETERMINISTIC_BUILD = 1;
 
   postInstall = ''
