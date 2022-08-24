@@ -267,8 +267,8 @@ in
         EnvironmentFile = [ "/var/lib/jitsi-meet/secrets-env" ];
         SupplementaryGroups = [ "jitsi-meet" ];
       };
+      reloadIfChanged = true;
     };
-    systemd.services.prosody.reloadIfChanged = mkIf cfg.prosody.enable true;
 
     users.groups.jitsi-meet = {};
     systemd.tmpfiles.rules = [
