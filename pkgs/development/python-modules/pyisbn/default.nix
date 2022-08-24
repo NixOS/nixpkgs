@@ -1,10 +1,9 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchPypi
 , hypothesis
 , pythonOlder
 , pytestCheckHook
-, lib
-, pytest
 }:
 
 buildPythonPackage rec {
@@ -24,14 +23,19 @@ buildPythonPackage rec {
       --replace "--cov pyisbn --cov-report term-missing --no-cov-on-fail" ""
   '';
 
-  checkInputs = [ pytestCheckHook hypothesis ];
+  checkInputs = [
+    hypothesis
+    pytestCheckHook
+  ];
 
-  pythonImportsCheck = [ "pyisbn" ];
+  pythonImportsCheck = [
+    "pyisbn"
+  ];
 
   meta = with lib; {
-    license = licenses.gpl3Plus;
-    homepage = "https://github.com/JNRowe/pyisbn";
     description = "Python module for working with 10- and 13-digit ISBNs";
+    homepage = "https://github.com/JNRowe/pyisbn";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ eigengrau ];
   };
 }
