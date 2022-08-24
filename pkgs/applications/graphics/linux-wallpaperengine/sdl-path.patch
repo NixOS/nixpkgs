@@ -1,0 +1,20 @@
+--- source/main.cpp.bak	2022-08-02 18:17:47.102786517 +0200
++++ source/main.cpp	2022-08-02 18:17:58.708923529 +0200
+@@ -2,8 +2,8 @@
+ #include <getopt.h>
+ #include <stdlib.h>
+ #include <unistd.h>
+-#include <SDL_mixer.h>
+-#include <SDL.h>
++#include <SDL/SDL_mixer.h>
++#include <SDL/SDL.h>
+ #include <FreeImage.h>
+ #include <sys/stat.h>
+ #include <GL/glew.h>
+@@ -432,4 +432,4 @@
+     delete context;
+ 
+     return 0;
+-}
+\ Pas de fin de ligne à la fin du fichier
++}

@@ -1367,6 +1367,8 @@ with pkgs;
 
   linux-router-without-wifi = linux-router.override { useWifiDependencies = false; };
 
+  linux-wallpaperengine = callPackage ../applications/graphics/linux-wallpaperengine { };
+
   metapixel = callPackage ../tools/graphics/metapixel { };
 
   midimonster = callPackage ../tools/audio/midimonster { };
