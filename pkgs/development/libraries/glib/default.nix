@@ -90,6 +90,13 @@ stdenv.mkDerivation rec {
     # 3. Tools for desktop environment that cannot go to $bin due to $out depending on them ($out)
     #    * gio-launch-desktop
     ./split-dev-programs.patch
+
+    # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/2866
+    (fetchpatch {
+      name = "tests-skip-g-file-info-test-if-atime-unsupported.patch";
+      url = "https://gitlab.gnome.org/qyliss/glib/-/commit/339a06d66685107280ca6bdca5da5d96b8222fb5.patch";
+      sha256 = "sha256-/NdFkuiJvyass3jTDEJPeciA2Lwe53IUd3kAnKAvTaw=";
+    })
   ] ++ optional doCheck ./skip-timer-test.patch;
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
