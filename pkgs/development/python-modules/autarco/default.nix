@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "autarco";
-  version = "0.1.0";
+  version = "0.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "klaasnicolaas";
     repo = "python-autarco";
     rev = "v${version}";
-    hash = "sha256-ID1lCGfF6XHVv8Azd34a30hcsX17uMXo22stAhYH1Uo=";
+    hash = "sha256-3f6N4b6WZPAUUQTuGeb20q0f7ZqDR+O24QRze5RpRlw=";
   };
 
   nativeBuildInputs = [

@@ -9,6 +9,7 @@
 , meson
 , ninja
 , xmlto
+, python3
 
 , gitUpdater
 }:
@@ -27,6 +28,8 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ docbook_xml_dtd_44 docbook_xsl meson ninja pkg-config xmlto ];
   buildInputs = [ libcap ];
+  # Needed for lddtree
+  propagatedBuildInputs = [ (python3.withPackages (p: with p; [ pyelftools ])) ];
 
   passthru.updateScript = gitUpdater {
     inherit pname version;

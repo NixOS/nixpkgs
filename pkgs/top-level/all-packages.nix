@@ -10052,6 +10052,8 @@ with pkgs;
 
   progress = callPackage ../tools/misc/progress { };
 
+  ps3-disc-dumper = callPackage ../tools/games/ps3-disc-dumper { };
+
   ps3netsrv = callPackage ../servers/ps3netsrv { };
 
   pscircle = callPackage ../os-specific/linux/pscircle { };
@@ -10381,6 +10383,8 @@ with pkgs;
   recoverjpeg = callPackage ../tools/misc/recoverjpeg { };
 
   reftools = callPackage ../development/tools/reftools { };
+
+  redwax-tool = callPackage ../tools/security/redwax-tool { };
 
   regpg = callPackage ../tools/security/regpg { };
 
