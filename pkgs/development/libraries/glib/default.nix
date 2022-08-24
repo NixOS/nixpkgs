@@ -201,8 +201,6 @@ stdenv.mkDerivation rec {
     export PATH="$PATH:$(pwd)/gobject"
     echo "PATH=$PATH"
 
-    substituteInPlace gio/tests/desktop-files/home/applications/epiphany-weather-for-toronto-island-9c6a4e022b17686306243dada811d550d25eb1fb.desktop \
-      --replace "Exec=/bin/true" "Exec=${coreutils}/bin/true"
     # Needs machine-id, comment the test
     sed -e '/\/gdbus\/codegen-peer-to-peer/ s/^\/*/\/\//' -i gio/tests/gdbus-peer.c
     sed -e '/g_test_add_func/ s/^\/*/\/\//' -i gio/tests/gdbus-unix-addresses.c
