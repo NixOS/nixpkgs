@@ -10201,6 +10201,8 @@ with pkgs;
 
   qmk = callPackage ../tools/misc/qmk { };
 
+  qmarkdowntextedit = libsForQt5.callPackage  ../development/libraries/qmarkdowntextedit { };
+
   qodem = callPackage ../tools/networking/qodem { };
 
   qosmic = libsForQt5.callPackage ../applications/graphics/qosmic { };
