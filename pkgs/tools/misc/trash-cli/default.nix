@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "trash-cli";
-  version = "0.22.4.16";
+  version = "0.22.8.21";
 
   src = fetchFromGitHub {
     owner = "andreafrancia";
     repo = "trash-cli";
     rev = version;
-    sha256 = "0j8iwr6cdc24gp5raxrq5483d7sfsyi8sy947w4hr2sc4j738dg5";
+    hash = "sha256-jNjM84xl+gS3l11XgYidLKZskQxx55kw051FIsJQExs=";
   };
 
   propagatedBuildInputs = [ python3Packages.psutil ];
