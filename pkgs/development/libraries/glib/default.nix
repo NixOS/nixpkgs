@@ -202,14 +202,14 @@ stdenv.mkDerivation rec {
     echo "PATH=$PATH"
 
     # Needs machine-id, comment the test
-    sed -e '/\/gdbus\/codegen-peer-to-peer/ s/^\/*/\/\//' -i gio/tests/gdbus-peer.c
-    sed -e '/g_test_add_func/ s/^\/*/\/\//' -i gio/tests/gdbus-unix-addresses.c
+    sed -e '/\/gdbus\/codegen-peer-to-peer/ s/^\/*/\/\//' -i ../gio/tests/gdbus-peer.c
+    sed -e '/g_test_add_func/ s/^\/*/\/\//' -i ../gio/tests/gdbus-address-get-session.c
     # All gschemas fail to pass the test, upstream bug?
-    sed -e '/g_test_add_data_func/ s/^\/*/\/\//' -i gio/tests/gschema-compile.c
+    sed -e '/g_test_add_data_func/ s/^\/*/\/\//' -i ../gio/tests/gschema-compile.c
     # Cannot reproduce the failing test_associations on hydra
-    sed -e '/\/appinfo\/associations/d' -i gio/tests/appinfo.c
+    sed -e '/\/appinfo\/associations/d' -i ../gio/tests/appinfo.c
     # Needed because of libtool wrappers
-    sed -e '/g_subprocess_launcher_set_environ (launcher, envp);/a g_subprocess_launcher_setenv (launcher, "PATH", g_getenv("PATH"), TRUE);' -i gio/tests/gsubprocess.c
+    sed -e '/g_subprocess_launcher_set_environ (launcher, envp);/a g_subprocess_launcher_setenv (launcher, "PATH", g_getenv("PATH"), TRUE);' -i ../gio/tests/gsubprocess.c
   '';
 
   inherit doCheck;
