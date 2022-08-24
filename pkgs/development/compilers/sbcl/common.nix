@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
       url = "https://github.com/sbcl/sbcl/commit/8fa3f76fba2e8572e86ac6fc5754e6b2954fc774.patch";
       sha256 = "1ic531pjnws1k3xd03a5ixbq8cn10dlh2nfln59k0vbm0253g3lv";
     })
-  ++ lib.optionals (lib.versionAtLeast version "2.1.10") [
-      # Fix pending upstream inclusion on -fno-common toolchains:
+  ++ lib.optionals (lib.versionAtLeast version "2.1.10" && lib.versionOlder version "2.2.9") [
+      # Fix included in SBCL trunk since 2.2.9:
       #   https://bugs.launchpad.net/sbcl/+bug/1980570
       (fetchpatch {
         name = "darwin-fno-common.patch";
