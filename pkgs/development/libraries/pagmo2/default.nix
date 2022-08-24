@@ -6,6 +6,8 @@
 , ipopt
 , boost
 , tbb
+ # tests pass but take 30+ minutes
+, runTests ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -20,24 +22,29 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ eigen nlopt ipopt boost tbb ];
+  buildInputs = [ eigen nlopt boost tbb ] ++ lib.optional (!stdenv.isDarwin) ipopt;
 
   cmakeFlags = [
-    "-DPAGMO_BUILD_TESTS=no"
+    "-DPAGMO_BUILD_TESTS=${if runTests then "ON" else "OFF"}"
     "-DPAGMO_WITH_EIGEN3=yes"
     "-DPAGMO_WITH_NLOPT=yes"
-    "-DNLOPT_LIBRARY=${nlopt}/lib/libnlopt.so"
+    "-DNLOPT_LIBRARY=${nlopt}/lib/libnlopt${stdenv.hostPlatform.extensions.sharedLibrary}"
+  ] ++ lib.optionals stdenv.isLinux [
     "-DPAGMO_WITH_IPOPT=yes"
     "-DCMAKE_CXX_FLAGS='-fuse-ld=gold'"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # FIXME: fails ipopt test with Invalid_Option on darwin, so disable.
+    "-DPAGMO_WITH_IPOPT=no"
+    "-DLLVM_USE_LINKER=gold"
   ];
 
-  # tests pass but take 30+ minutes
-  doCheck = false;
+  doCheck = runTests;
 
   meta = with lib; {
     homepage = "https://esa.github.io/pagmo2/";
     description = "Scientific library for massively parallel optimization";
     license = licenses.gpl3Plus;
+    platforms = platforms.unix;
     maintainers = [ maintainers.costrouc ];
   };
 }
