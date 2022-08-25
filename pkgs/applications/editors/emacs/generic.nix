@@ -11,7 +11,7 @@
 , libtiff, librsvg, libwebp, gconf, libxml2, imagemagick, gnutls, libselinux
 , alsa-lib, cairo, acl, gpm, AppKit, GSS, ImageIO, m17n_lib, libotf
 , sigtool, jansson, harfbuzz, sqlite, nixosTests
-, dontRecurseIntoAttrs, emacsPackagesFor
+, recurseIntoAttrs, emacsPackagesFor
 , libgccjit, targetPlatform, makeWrapper # native-comp params
 , fetchFromSavannah
 , systemd ? null
@@ -216,7 +216,7 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
 
   passthru = {
     inherit nativeComp;
-    pkgs = dontRecurseIntoAttrs (emacsPackagesFor emacs);
+    pkgs = recurseIntoAttrs (emacsPackagesFor emacs);
     tests = { inherit (nixosTests) emacs-daemon; };
   };
 

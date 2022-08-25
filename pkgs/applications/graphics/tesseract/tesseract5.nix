@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tesseract";
-  version = "5.1.0";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "tesseract-ocr";
     repo = "tesseract";
     rev = version;
-    sha256 = "sha256-B1x3wxr9Sn2rsG8AHncPTEErhDo7YtpDRxfW9ZOPWoU=";
+    sha256 = "sha256-SvnV6sY+66ozOvgznTE6Gd/GFx/NfugpkpgeANMoUTU=";
   };
 
   enableParallelBuilding = true;
