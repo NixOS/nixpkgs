@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ bison boost cmake makeWrapper pkg-config ];
 
   buildInputs = [
-    curl cyrus_sasl libaio libedit libev libevent libgcrypt libgpg-error lz4
+    (curl.override { inherit openssl; }) cyrus_sasl libaio libedit libev libevent libgcrypt libgpg-error lz4
     ncurses numactl openssl protobuf valgrind xxd zlib
   ] ++ (with perlPackages; [ perl DBI DBDmysql ]);
 

@@ -56,6 +56,8 @@ buildPythonPackage rec {
     sha256 = "sha256-oEeZD1ffrh4L0rffJSbU8W3NyEN3TcEIt4xS8qXxNoA=";
   };
 
+  __darwinAllowLocalNetworking = true;
+
   propagatedBuildInputs = [
     attrs
     automat

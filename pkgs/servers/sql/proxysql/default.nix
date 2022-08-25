@@ -20,7 +20,7 @@
 , libuuid
 , lz4
 , nlohmann_json
-, openssl_3
+, openssl
 , pcre
 , perl
 , python2
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bison
-    (curl.override { openssl = openssl_3; })
+    curl
     flex
     gnutls
     libgcrypt
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
         { f = "libev"; p = libev; }
         { f = "libinjection"; p = libinjection; }
         { f = "libmicrohttpd"; p = libmicrohttpd_0_9_70; }
-        { f = "libssl"; p = openssl_3; }
+        { f = "libssl"; p = openssl; }
         { f = "lz4"; p = lz4; }
         { f = "pcre"; p = pcre; }
         { f = "re2"; p = re2; }

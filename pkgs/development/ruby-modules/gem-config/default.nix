@@ -20,7 +20,7 @@
 { lib, fetchurl, writeScript, ruby, libkrb5, libxml2, libxslt, python2, stdenv, which
 , libiconv, postgresql, v8, clang, sqlite, zlib, imagemagick, lasem
 , pkg-config , ncurses, xapian, gpgme, util-linux, tzdata, icu, libffi
-, cmake, libssh2, openssl, libmysqlclient, git, perl, pcre, gecode_3, curl
+, cmake, libssh2, openssl, openssl_1_1, libmysqlclient, git, perl, pcre, gecode_3, curl
 , msgpack, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
 , cairo, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
@@ -478,7 +478,8 @@ in
   };
 
   openssl = attrs: {
-    buildInputs = [ openssl ];
+    # https://github.com/ruby/openssl/issues/369
+    buildInputs = [ openssl_1_1 ];
   };
 
   opus-ruby = attrs: {

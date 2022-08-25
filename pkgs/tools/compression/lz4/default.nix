@@ -1,31 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, valgrind, fetchpatch
+{ lib, stdenv, fetchFromGitHub, valgrind
 , enableStatic ? stdenv.hostPlatform.isStatic
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
 stdenv.mkDerivation rec {
   pname = "lz4";
-  version = "1.9.3";
+  version = "1.9.4";
 
   src = fetchFromGitHub {
-    sha256 = "1w02kazh1fps3sji2sn89fz862j1199c5ajrqcgl1bnlxj09kcbz";
+    sha256 = "sha256-YiMCD3vvrG+oxBUghSrCmP2LAfAGZrEaKz0YoaQJhpI=";
     rev = "v${version}";
     repo = pname;
     owner = pname;
   };
-
-  patches = [
-    (fetchpatch { # https://github.com/lz4/lz4/pull/972
-      name = "CVE-2021-3520.patch";
-      url = "https://github.com/lz4/lz4/commit/8301a21773ef61656225e264f4f06ae14462bca7.patch";
-      sha256 = "0r1cwpqdkdc8im0pf2r5jp7mwwn69xcw405rrk7rc0mpjcp5ydfk";
-    })
-    (fetchpatch { # https://github.com/lz4/lz4/pull/973
-      name = "avoid-null-pointer-dereference.patch";
-      url = "https://github.com/lz4/lz4/commit/29a6a1f4941e7243241fe00d6c13b749fd6b60c2.patch";
-      sha256 = "0v5yl5hd3qrfm3xm7m06j4b21qwllb4cqkjn2az7x1vnzqgpf8y7";
-    })
-  ];
 
   # TODO(@Ericson2314): Separate binaries and libraries
   outputs = [ "bin" "out" "dev" ];

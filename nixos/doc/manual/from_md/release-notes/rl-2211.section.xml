@@ -132,6 +132,11 @@
       </listitem>
       <listitem>
         <para>
+          OpenSSL now defaults to OpenSSL 3, updated from 1.1.1.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>hardware.nvidia</literal> has a new option
           <literal>open</literal> that can be used to opt in the
           opensource version of NVIDIA kernel driver. Note that the

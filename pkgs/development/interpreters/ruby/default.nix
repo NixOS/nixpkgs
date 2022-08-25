@@ -1,9 +1,10 @@
 { stdenv, buildPackages, lib
 , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
-, zlib, openssl, gdbm, ncurses, readline, groff, libyaml, libffi, jemalloc, autoreconfHook, bison
+, zlib, gdbm, ncurses, readline, groff, libyaml, libffi, jemalloc, autoreconfHook, bison
 , autoconf, libiconv, libobjc, libunwind, Foundation
 , buildEnv, bundler, bundix
 , makeWrapper, buildRubyGem, defaultGemConfig, removeReferencesTo
+, openssl, openssl_1_1
 } @ args:
 
 let
@@ -26,7 +27,7 @@ let
       , useRailsExpress ? true
       , rubygemsSupport ? true
       , zlib, zlibSupport ? true
-      , openssl, opensslSupport ? true
+      , openssl, openssl_1_1, opensslSupport ? true
       , gdbm, gdbmSupport ? true
       , ncurses, readline, cursesSupport ? true
       , groff, docSupport ? true
@@ -75,7 +76,8 @@ let
           ++ (op fiddleSupport libffi)
           ++ (ops cursesSupport [ ncurses readline ])
           ++ (op zlibSupport zlib)
-          ++ (op opensslSupport openssl)
+          ++ (op (lib.versionOlder ver.majMin "3.0" && opensslSupport) openssl_1_1)
+          ++ (op (atLeast30 && opensslSupport) openssl_1_1)
           ++ (op gdbmSupport gdbm)
           ++ (op yamlSupport libyaml)
           # Looks like ruby fails to build on darwin without readline even if curses

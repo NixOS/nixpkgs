@@ -35,12 +35,7 @@ stdenv.mkDerivation rec {
     automake --add-missing -Wno-portability
 
     ./configure --prefix=$out
-    '';
-
-  installPhase = ''
-    mkdir -p $out
-    make install
-    '';
+  '';
 
   meta = with lib; {
     description = "Tools for maintaining UEFI signature databases";
@@ -50,4 +45,3 @@ stdenv.mkDerivation rec {
     license     = licenses.gpl3;
   };
 }
-

@@ -1,4 +1,5 @@
 { beam, callPackage, wxGTK30, buildPackages, stdenv
+, openssl_1_1
 , wxSupport ? true
 , systemdSupport ? stdenv.isLinux
 }:
@@ -51,6 +52,7 @@ with beam; {
 
     # R23
     erlangR23 = lib.callErlang ../development/interpreters/erlang/R23.nix {
+      openssl = openssl_1_1;
       wxGTK = wxGTK30;
       # Can be enabled since the bug has been fixed in https://github.com/erlang/otp/pull/2508
       parallelBuild = true;
@@ -66,6 +68,7 @@ with beam; {
 
     # R22
     erlangR22 = lib.callErlang ../development/interpreters/erlang/R22.nix {
+      openssl = openssl_1_1;
       wxGTK = wxGTK30;
       # Can be enabled since the bug has been fixed in https://github.com/erlang/otp/pull/2508
       parallelBuild = true;
@@ -81,6 +84,7 @@ with beam; {
 
     # R21
     erlangR21 = lib.callErlang ../development/interpreters/erlang/R21.nix {
+      openssl = openssl_1_1;
       wxGTK = wxGTK30;
       autoconf = buildPackages.autoconf269;
       inherit wxSupport systemdSupport;
