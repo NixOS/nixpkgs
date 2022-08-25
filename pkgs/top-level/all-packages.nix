@@ -7505,6 +7505,8 @@ with pkgs;
 
   hockeypuck-web = callPackage ../servers/hockeypuck/web.nix { };
 
+  holochain-launcher = callPackage ../applications/misc/holochain-launcher { };
+
   homesick = callPackage ../tools/misc/homesick { };
 
   honcho = callPackage ../tools/system/honcho { };
