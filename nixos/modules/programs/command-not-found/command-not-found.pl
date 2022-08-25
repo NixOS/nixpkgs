@@ -27,7 +27,7 @@ sub nix_shell_run {
     my ($package, $ARGV) = @_;
     if ($ENV{"NIX_AUTO_RUN_FLAKE"} // "") {
         # relies on flake registry
-        exec("nix", "shell", "nixpkgs#" . $package, "--command", shell_quote("exec", @ARGV));
+        exec("nix", "shell", "nixpkgs#" . $package, "--command", @ARGV);
     } else {
         exec("nix-shell", "-p", $package, "--run", shell_quote("exec", @ARGV));
     }
