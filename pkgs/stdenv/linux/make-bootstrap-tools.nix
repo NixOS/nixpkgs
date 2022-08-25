@@ -230,25 +230,18 @@ in with pkgs; rec {
   };
 
   bootstrapTools =
-    let extraAttrs = lib.optionalAttrs
-      config.contentAddressedByDefault
-      {
+    import ({
+      glibc = ./bootstrap-tools;
+      musl  = ./bootstrap-tools-musl;
+    }.${stdenv.hostPlatform.libc} or (throw "unsupported libc")) ({
+      inherit bootstrapFiles;
+      inherit (stdenv.buildPlatform) system;
+      extraAttrs = lib.optionalAttrs config.contentAddressedByDefault {
         __contentAddressed = true;
         outputHashAlgo = "sha256";
         outputHashMode = "recursive";
       };
-    in
-    if (stdenv.hostPlatform.libc == "glibc") then
-    import ./bootstrap-tools {
-      inherit (stdenv.buildPlatform) system; # Used to determine where to build
-      inherit bootstrapFiles extraAttrs;
-    }
-    else if (stdenv.hostPlatform.libc == "musl") then
-    import ./bootstrap-tools-musl {
-      inherit (stdenv.buildPlatform) system; # Used to determine where to build
-      inherit bootstrapFiles extraAttrs;
-    }
-    else throw "unsupported libc";
+    });
 
   test = derivation {
     name = "test-bootstrap-tools";
