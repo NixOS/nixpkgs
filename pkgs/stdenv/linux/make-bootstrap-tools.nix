@@ -229,6 +229,9 @@ in with pkgs; rec {
     bootstrapTools = runCommand "bootstrap-tools.tar.xz" {} "cp ${build}/on-server/bootstrap-tools.tar.xz $out";
   };
 
+  # Unpack the bootstrapFiles tarball using the bootstrapFiles' own
+  # busybox binary.  This will fail unless the buildPlatform is
+  # capable of executing hostPlatform binaries.
   bootstrapTools =
     import ({
       glibc = ./bootstrap-tools;
