@@ -6,6 +6,7 @@
 , isPy3k
 , ensureNewerSourcesForZipFilesHook
 , findutils
+, installShellFiles
 }:
 
 let
@@ -190,6 +191,6 @@ in rec {
   sphinxHook = callPackage ({ sphinx }:
     makeSetupHook {
       name = "python${python.pythonVersion}-sphinx-hook";
-      deps = [ sphinx ];
+      deps = [ sphinx installShellFiles ];
     } ./sphinx-hook.sh) {};
 }

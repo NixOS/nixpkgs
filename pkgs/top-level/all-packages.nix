@@ -3487,6 +3487,8 @@ with pkgs;
 
   cucumber = callPackage ../development/tools/cucumber {};
 
+  cutemarked-ng = libsForQt5.callPackage ../applications/office/cutemarked-ng { };
+
   dabet = callPackage ../tools/misc/dabet { };
 
   dabtools = callPackage ../applications/radio/dabtools { };
@@ -5856,6 +5858,8 @@ with pkgs;
 
   soupault = callPackage ../tools/typesetting/soupault { };
 
+  stratisd = callPackage ../tools/filesystems/stratisd { };
+
   strawberry = libsForQt5.callPackage ../applications/audio/strawberry { };
 
   schildichat-desktop = callPackage ../applications/networking/instant-messengers/schildichat/schildichat-desktop.nix {
@@ -7286,6 +7290,8 @@ with pkgs;
   haproxy = callPackage ../tools/networking/haproxy { };
 
   hackertyper = callPackage ../tools/misc/hackertyper { };
+
+  hackneyed = callPackage ../data/icons/hackneyed { };
 
   haveged = callPackage ../tools/security/haveged { };
 
@@ -9914,9 +9920,8 @@ with pkgs;
   inherit (callPackage ../servers/plik { })
     plik plikd;
 
-  plex = callPackage ../servers/plex {
-    buildFHSUserEnv = buildFHSUserEnvBubblewrap;
-  };
+  plex = callPackage ../servers/plex { };
+
   plexRaw = callPackage ../servers/plex/raw.nix { };
 
   psitransfer = callPackage ../servers/psitransfer { };
@@ -10234,6 +10239,8 @@ with pkgs;
   qjoypad = libsForQt5.callPackage ../tools/misc/qjoypad { };
 
   qmk = callPackage ../tools/misc/qmk { };
+
+  qmarkdowntextedit = libsForQt5.callPackage  ../development/libraries/qmarkdowntextedit { };
 
   qodem = callPackage ../tools/networking/qodem { };
 
@@ -18437,7 +18444,7 @@ with pkgs;
     # these things are only used for tests, they don't get into the closure
     shared-mime-info = shared-mime-info.override { glib = glib-untested; };
     desktop-file-utils = desktop-file-utils.override { glib = glib-untested; };
-    dbus = dbus.override { systemd = null; };
+    dbus = dbus.override { enableSystemd = false; };
   });
 
   glibmm = callPackage ../development/libraries/glibmm { };
@@ -21840,10 +21847,7 @@ with pkgs;
 
   utmps = skawarePackages.utmps;
 
-  ucommon = callPackage ../development/libraries/ucommon {
-    openssl = null;
-    zlib = null;
-  };
+  ucommon = callPackage ../development/libraries/ucommon { };
 
   v8 = callPackage ../development/libraries/v8 { };
 
@@ -26850,6 +26854,8 @@ with pkgs;
   }) (haskell.lib.compose.justStaticExecutables haskellPackages.darcs);
 
   darcs-to-git = callPackage ../applications/version-management/git-and-tools/darcs-to-git { };
+
+  darkman = callPackage ../applications/misc/darkman { };
 
   darktable = callPackage ../applications/graphics/darktable {
     lua = lua5_4;
