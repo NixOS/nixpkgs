@@ -17,6 +17,7 @@ rec {
     isAarch32      = { cpu = { family = "arm"; bits = 32; }; };
     isAarch64      = { cpu = { family = "arm"; bits = 64; }; };
     isAarch        = { cpu = { family = "arm"; }; };
+    isMicroBlaze   = { cpu = { family = "microblaze"; }; };
     isMips         = { cpu = { family = "mips"; }; };
     isMips32       = { cpu = { family = "mips"; bits = 32; }; };
     isMips64       = { cpu = { family = "mips"; bits = 64; }; };

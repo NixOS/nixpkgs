@@ -121,6 +121,8 @@ rec {
         else if final.isAarch64 then "arm64"
         else if final.isx86_32 then "i386"
         else if final.isx86_64 then "x86_64"
+        # linux kernel does not distinguish microblaze/microblazeel
+        else if final.isMicroBlaze then "microblaze"
         else if final.isMips32 then "mips"
         else if final.isMips64 then "mips"    # linux kernel does not distinguish mips32/mips64
         else if final.isPower then "powerpc"

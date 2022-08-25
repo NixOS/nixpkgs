@@ -1,7 +1,8 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -i bash -p nix
 
-BASE_URL="https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk"
+CHANNEL_URL="https://dl.google.com/dl/cloudsdk/channels/rapid"
+BASE_URL="$CHANNEL_URL/downloads/google-cloud-sdk"
 
 # Version of Google Cloud SDK from
 # https://cloud.google.com/sdk/docs/release-notes
@@ -45,3 +46,5 @@ EOF
     echo "}"
 
 } >data.nix
+
+curl "${CHANNEL_URL}/components-v${VERSION}.json" > components.json
