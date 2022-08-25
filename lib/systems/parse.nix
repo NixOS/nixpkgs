@@ -88,6 +88,9 @@ rec {
     i686     = { bits = 32; significantByte = littleEndian; family = "x86"; arch = "i686"; };
     x86_64   = { bits = 64; significantByte = littleEndian; family = "x86"; arch = "x86-64"; };
 
+    microblaze   = { bits = 32; significantByte = bigEndian;    family = "microblaze"; };
+    microblazeel = { bits = 32; significantByte = littleEndian; family = "microblaze"; };
+
     mips     = { bits = 32; significantByte = bigEndian;    family = "mips"; };
     mipsel   = { bits = 32; significantByte = littleEndian; family = "mips"; };
     mips64   = { bits = 64; significantByte = bigEndian;    family = "mips"; };

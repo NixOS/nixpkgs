@@ -489,6 +489,8 @@ stdenv.mkDerivation {
       hardening_unsupported_flags+=" format"
     '' + optionalString targetPlatform.isWasm ''
       hardening_unsupported_flags+=" stackprotector fortify pie pic"
+    '' + optionalString targetPlatform.isMicroBlaze ''
+      hardening_unsupported_flags+=" stackprotector"
     ''
 
     + optionalString (libc != null && targetPlatform.isAvr) ''
