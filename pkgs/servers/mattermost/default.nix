@@ -39,7 +39,7 @@ buildGoModule rec {
     find $out/{client,i18n,fonts,templates,config} -type f -exec chmod -x {} \;
   '';
 
-  passthru.tests.mattermost = nixosTests.mattermost;
+  passthru.test = nixosTests.mattermost;
 
   meta = with lib; {
     description = "Mattermost is an open source platform for secure collaboration across the entire software development lifecycle";
