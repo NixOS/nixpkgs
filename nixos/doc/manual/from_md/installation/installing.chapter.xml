@@ -247,6 +247,15 @@ OK
         </listitem>
         <listitem>
           <para>
+            Set the <emphasis>root</emphasis> partition’s boot flag to
+            on. This allows the disk to be booted from.
+          </para>
+          <programlisting>
+# parted /dev/sda -- set 1 boot on
+</programlisting>
+        </listitem>
+        <listitem>
+          <para>
             Finally, add a <emphasis>swap</emphasis> partition. The size
             required will vary according to needs, here a 8GiB one is
             created.
