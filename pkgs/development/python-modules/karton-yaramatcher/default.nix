@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , karton-core
-, python
+, unittestCheckHook
 , yara-python
 }:
 
@@ -22,11 +22,7 @@ buildPythonPackage rec {
     yara-python
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} -m unittest discover
-    runHook postCheck
-  '';
+  checkInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "karton.yaramatcher" ];
 

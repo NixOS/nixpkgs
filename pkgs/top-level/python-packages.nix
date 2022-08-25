@@ -125,6 +125,7 @@ in {
     pythonRemoveTestsDirHook
     setuptoolsBuildHook
     setuptoolsCheckHook
+    unittestCheckHook
     venvShellHook
     wheelUnpackHook;
 
@@ -1305,6 +1306,8 @@ in {
 
   betamax-serializers = callPackage ../development/python-modules/betamax-serializers { };
 
+  betterproto = callPackage ../development/python-modules/betterproto { };
+
   bibtexparser = callPackage ../development/python-modules/bibtexparser { };
 
   bidict = callPackage ../development/python-modules/bidict { };
@@ -1585,6 +1588,8 @@ in {
     pythonSupport = true;
     inherit (self) python numpy boost;
   });
+
+  cairo-lang = callPackage ../development/python-modules/cairo-lang { };
 
   cairocffi = callPackage ../development/python-modules/cairocffi { };
 
@@ -6499,6 +6504,8 @@ in {
   paramiko = callPackage ../development/python-modules/paramiko { };
 
   paramz = callPackage ../development/python-modules/paramz { };
+
+  paranoid-crypto = callPackage ../development/python-modules/paranoid-crypto { };
 
   parfive = callPackage ../development/python-modules/parfive { };
 
@@ -11521,6 +11528,8 @@ in {
   wcwidth = callPackage ../development/python-modules/wcwidth { };
 
   weasyprint = callPackage ../development/python-modules/weasyprint { };
+
+  web3 = callPackage ../development/python-modules/web3 { };
 
   webargs = callPackage ../development/python-modules/webargs { };
 

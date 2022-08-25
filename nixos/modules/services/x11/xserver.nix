@@ -151,8 +151,10 @@ in
       (mkRemovedOptionModule
         [ "services" "xserver" "startDbusSession" ]
         "The user D-Bus session is now always socket activated and this option can safely be removed.")
-      (mkRemovedOptionModule ["services" "xserver" "useXFS" ]
+      (mkRemovedOptionModule [ "services" "xserver" "useXFS" ]
         "Use services.xserver.fontPath instead of useXFS")
+      (mkRemovedOptionModule [ "services" "xserver" "useGlamor" ]
+        "Option services.xserver.useGlamor was removed because it is unnecessary. Drivers that uses Glamor will use it automatically.")
     ];
 
 
@@ -555,15 +557,6 @@ in
         '';
       };
 
-      useGlamor = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc ''
-          Whether to use the Glamor module for 2D acceleration,
-          if possible.
-        '';
-      };
-
       enableCtrlAltBackspace = mkOption {
         type = types.bool;
         default = false;
@@ -794,13 +787,6 @@ in
           '')}
         EndSection
 
-        ${if cfg.useGlamor then ''
-          Section "Module"
-            Load "dri2"
-            Load "glamoregl"
-          EndSection
-        '' else ""}
-
         # For each supported driver, add a "Device" and "Screen"
         # section.
         ${flip concatMapStrings cfg.drivers (driver: ''
@@ -808,7 +794,6 @@ in
           Section "Device"
             Identifier "Device-${driver.name}[0]"
             Driver "${driver.driverName or driver.name}"
-            ${if cfg.useGlamor then ''Option "AccelMethod" "glamor"'' else ""}
           ${indent cfg.deviceSection}
           ${indent (driver.deviceSection or "")}
           ${indent xrandrDeviceSection}

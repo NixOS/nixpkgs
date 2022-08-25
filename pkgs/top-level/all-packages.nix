@@ -3483,6 +3483,8 @@ with pkgs;
 
   cucumber = callPackage ../development/tools/cucumber {};
 
+  cutemarked-ng = libsForQt5.callPackage ../applications/office/cutemarked-ng { };
+
   dabet = callPackage ../tools/misc/dabet { };
 
   dabtools = callPackage ../applications/radio/dabtools { };
@@ -4648,6 +4650,8 @@ with pkgs;
   ripasso-cursive = callPackage ../tools/security/ripasso/cursive.nix {
     inherit (darwin.apple_sdk.frameworks) AppKit Security;
   };
+
+  ripe-atlas-tools = callPackage ../tools/networking/ripe-atlas-tools { };
 
   roundcube = callPackage ../servers/roundcube { };
 
@@ -5846,6 +5850,8 @@ with pkgs;
   sonobuoy = callPackage ../applications/networking/cluster/sonobuoy { };
 
   soupault = callPackage ../tools/typesetting/soupault { };
+
+  stratisd = callPackage ../tools/filesystems/stratisd { };
 
   strawberry = libsForQt5.callPackage ../applications/audio/strawberry { };
 
@@ -7268,6 +7274,8 @@ with pkgs;
   haproxy = callPackage ../tools/networking/haproxy { };
 
   hackertyper = callPackage ../tools/misc/hackertyper { };
+
+  hackneyed = callPackage ../data/icons/hackneyed { };
 
   haveged = callPackage ../tools/security/haveged { };
 
@@ -9878,9 +9886,8 @@ with pkgs;
   inherit (callPackage ../servers/plik { })
     plik plikd;
 
-  plex = callPackage ../servers/plex {
-    buildFHSUserEnv = buildFHSUserEnvBubblewrap;
-  };
+  plex = callPackage ../servers/plex { };
+
   plexRaw = callPackage ../servers/plex/raw.nix { };
 
   psitransfer = callPackage ../servers/psitransfer { };
@@ -10198,6 +10205,8 @@ with pkgs;
   qjoypad = libsForQt5.callPackage ../tools/misc/qjoypad { };
 
   qmk = callPackage ../tools/misc/qmk { };
+
+  qmarkdowntextedit = libsForQt5.callPackage  ../development/libraries/qmarkdowntextedit { };
 
   qodem = callPackage ../tools/networking/qodem { };
 
@@ -14084,7 +14093,7 @@ with pkgs;
     stdenv = gcc7Stdenv;
   }));
 
-  llvmPackages_latest = llvmPackages_13;
+  llvmPackages_latest = llvmPackages_14;
 
   llvmPackages_rocm = recurseIntoAttrs (callPackage ../development/compilers/llvm/rocm { });
 
@@ -14290,18 +14299,18 @@ with pkgs;
     inherit (darwin) apple_sdk;
   };
 
-  rust_1_62 = callPackage ../development/compilers/rust/1_62.nix {
+  rust_1_63 = callPackage ../development/compilers/rust/1_63.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
     llvm_14 = llvmPackages_14.libllvm;
   };
-  rust = rust_1_62;
+  rust = rust_1_63;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
   mrustc-bootstrap = callPackage ../development/compilers/mrustc/bootstrap.nix { stdenv = gcc10StdenvCompat; };
 
-  rustPackages_1_62 = rust_1_62.packages.stable;
-  rustPackages = rustPackages_1_62;
+  rustPackages_1_63 = rust_1_63.packages.stable;
+  rustPackages = rustPackages_1_63;
 
   inherit (rustPackages) cargo clippy rustc rustPlatform;
 
@@ -15473,6 +15482,7 @@ with pkgs;
     src = oldAttrs.src.override {
       inherit version;
       hash = "sha256-XzZuhRFZ2Pcs5o0yuMDt2lbuU3wB6faOyjgr0VEK9l0=";
+      sha256 = "";
     };
     meta.changelog = "https://github.com/ansible/ansible/blob/v${version}/changelogs/CHANGELOG-v${lib.versions.majorMinor version}.rst";
   }));
@@ -15659,6 +15669,29 @@ with pkgs;
   binutilsNoLibc = wrapBintoolsWith {
     bintools = binutils-unwrapped;
     libc = preLibcCrossHeaders;
+  };
+
+  libbfd = callPackage ../development/tools/misc/binutils/libbfd.nix {
+    autoreconfHook = buildPackages.autoreconfHook269;
+  };
+
+  libopcodes = callPackage ../development/tools/misc/binutils/libopcodes.nix {
+    autoreconfHook = buildPackages.autoreconfHook269;
+  };
+
+  # Held back 2.38 release. Remove once all dependencies are ported to 2.39.
+  binutils-unwrapped_2_38 = callPackage ../development/tools/misc/binutils/2.38 {
+    autoreconfHook = autoreconfHook269;
+    # FHS sys dirs presumably only have stuff for the build platform
+    noSysDirs = (stdenv.targetPlatform != stdenv.hostPlatform) || noSysDirs;
+  };
+
+  libbfd_2_38 = callPackage ../development/tools/misc/binutils/2.38/libbfd.nix {
+    autoreconfHook = buildPackages.autoreconfHook269;
+  };
+
+  libopcodes_2_38 = callPackage ../development/tools/misc/binutils/2.38/libopcodes.nix {
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   # Here we select the default bintools implementations to be used.  Note when
@@ -17374,13 +17407,6 @@ with pkgs;
 
   belle-sip = callPackage ../development/libraries/belle-sip { };
 
-  libbfd = callPackage ../development/libraries/libbfd {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
-
-  libopcodes = callPackage ../development/libraries/libopcodes {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
 
   bicpl = callPackage ../development/libraries/science/biology/bicpl { };
 
@@ -18377,7 +18403,7 @@ with pkgs;
     # these things are only used for tests, they don't get into the closure
     shared-mime-info = shared-mime-info.override { glib = glib-untested; };
     desktop-file-utils = desktop-file-utils.override { glib = glib-untested; };
-    dbus = dbus.override { systemd = null; };
+    dbus = dbus.override { enableSystemd = false; };
   });
 
   glibmm = callPackage ../development/libraries/glibmm { };
@@ -18991,7 +19017,7 @@ with pkgs;
   libcamera = callPackage ../development/libraries/libcamera { };
 
   libcanberra = callPackage ../development/libraries/libcanberra {
-    inherit (darwin.apple_sdk.frameworks) Carbon CoreServices;
+    inherit (darwin.apple_sdk.frameworks) Carbon CoreServices AppKit;
   };
   libcanberra-gtk2 = pkgs.libcanberra.override {
     gtkSupport = "gtk2";
@@ -21746,10 +21772,7 @@ with pkgs;
 
   utmps = skawarePackages.utmps;
 
-  ucommon = callPackage ../development/libraries/ucommon {
-    openssl = null;
-    zlib = null;
-  };
+  ucommon = callPackage ../development/libraries/ucommon { };
 
   v8 = callPackage ../development/libraries/v8 { };
 
@@ -22221,8 +22244,6 @@ with pkgs;
   go2nix = callPackage ../development/tools/go2nix { };
 
   leaps = callPackage ../development/tools/leaps { };
-
-  vgo2nix = callPackage ../development/tools/vgo2nix { };
 
   ### DEVELOPMENT / JAVA MODULES
 
@@ -22978,7 +22999,7 @@ with pkgs;
   hsphfpd = callPackage ../servers/pulseaudio/hsphfpd.nix { };
 
   pulseaudio = callPackage ../servers/pulseaudio {
-    inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
+    inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa CoreAudio;
   };
 
   qpaeq = libsForQt5.callPackage ../servers/pulseaudio/qpaeq.nix { };
@@ -26737,6 +26758,8 @@ with pkgs;
 
   darcs-to-git = callPackage ../applications/version-management/git-and-tools/darcs-to-git { };
 
+  darkman = callPackage ../applications/misc/darkman { };
+
   darktable = callPackage ../applications/graphics/darktable {
     lua = lua5_4;
     pugixml = pugixml.override { shared = true; };
@@ -29372,6 +29395,8 @@ with pkgs;
   wrapMpv = callPackage ../applications/video/mpv/wrapper.nix { };
   mpv = wrapMpv mpv-unwrapped {};
 
+  mpvpaper = callPackage ../tools/wayland/mpvpaper { };
+
   mpvScripts = recurseIntoAttrs {
     autoload = callPackage ../applications/video/mpv/scripts/autoload.nix {};
     convert = callPackage ../applications/video/mpv/scripts/convert.nix {};
@@ -29581,7 +29606,9 @@ with pkgs;
 
   qemacs = callPackage ../applications/editors/qemacs { };
 
-  roxctl = callPackage ../applications/networking/cluster/roxctl { };
+  roxctl = callPackage ../applications/networking/cluster/roxctl {
+    buildGoModule = buildGo117Module;
+  };
 
   rqbit = callPackage ../applications/networking/p2p/rqbit {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -30749,7 +30776,7 @@ with pkgs;
     jre = openjdk11;
   };
 
-  smartdeblur = callPackage ../applications/graphics/smartdeblur { };
+  smartdeblur = libsForQt5.callPackage ../applications/graphics/smartdeblur { };
 
   snapper = callPackage ../tools/misc/snapper { };
   snapper-gui = callPackage ../applications/misc/snapper-gui { };

@@ -65,11 +65,17 @@ rec {
         # is why we use the more obscure "bfd" and not "binutils" for this
         # choice.
         else                                     "bfd";
-      extensions = {
+      extensions = rec {
         sharedLibrary =
           /**/ if final.isDarwin  then ".dylib"
           else if final.isWindows then ".dll"
           else                         ".so";
+        staticLibrary =
+          /**/ if final.isWindows then ".lib"
+          else                         ".a";
+        library =
+          /**/ if final.isStatic then staticLibrary
+          else                        sharedLibrary;
         executable =
           /**/ if final.isWindows then ".exe"
           else                         "";

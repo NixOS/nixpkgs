@@ -95,8 +95,9 @@ let
     (self: super: {
       pytest-aiohttp = super.pytest-aiohttp.overridePythonAttrs (oldAttrs: rec {
         version = "0.3.0";
-        src = oldAttrs.src.override {
+        src = self.fetchPypi {
           inherit version;
+          pname = "pytest-aiohttp";
           hash = "sha256-ySmFQzljeXc3WDhwO2L+9jUoWYvAqdRRY566lfSqpE8=";
         };
         propagatedBuildInputs = with python3.pkgs; [ aiohttp pytest ];
@@ -142,7 +143,16 @@ let
     })
 
     # Pinned due to API changes in 0.1.0
-    (mkOverride "poolsense" "0.0.8" "sha256-17MHrYRmqkH+1QLtgq2d6zaRtqvb9ju9dvPt9gB2xCc=")
+    (self: super: {
+      poolsense = super.poolsense.overridePythonAttrs (oldAttrs: rec {
+        version = "0.0.8";
+        src = super.fetchPypi {
+          pname = "poolsense";
+          inherit version;
+          hash = "sha256-17MHrYRmqkH+1QLtgq2d6zaRtqvb9ju9dvPt9gB2xCc=";
+        };
+      });
+    })
 
     # Pinned due to API changes >0.3.5.3
     (self: super: {
@@ -273,16 +283,6 @@ let
       home-assistant-frontend = self.callPackage ./frontend.nix { };
     })
   ];
-
-  mkOverride = attrName: version: hash:
-    self: super: {
-      ${attrName} = super.${attrName}.overridePythonAttrs (oldAttrs: {
-        inherit version;
-        src = oldAttrs.src.override {
-          inherit version hash;
-        };
-      });
-    };
 
   python = python3.override {
     # Put packageOverrides at the start so they are applied after defaultOverrides

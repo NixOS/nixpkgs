@@ -10,32 +10,18 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "0.61.2";
+  version = "0.63.1";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    hash = "sha256-AjOn+NlZB5MY9gUrCTnCf2il3oa6YB8lye5oaftfWIk=";
+    sha256 = "Bv4TKXIT1v8BIcXVqrJaVu+Tj/7FdBTtYIb9onLLZek=";
   };
 
   patches = [
-    # Upstream insists on not allowing bindir and other dir options
-    # outside of prefix for some reason:
-    # https://github.com/mesonbuild/meson/issues/2561
-    # We remove the check so multiple outputs can work sanely.
-    ./allow-dirs-outside-of-prefix.patch
-
     # Meson is currently inspecting fewer variables than autoconf does, which
     # makes it harder for us to use setup hooks, etc.  Taken from
     # https://github.com/mesonbuild/meson/pull/6827
     ./more-env-vars.patch
-
-    # Use more binutils variables, so we don't have to define them in stdenv.
-    # pr has been merged
-    # https://github.com/mesonbuild/meson/pull/10640
-    (fetchpatch {
-      url = "https://github.com/mesonbuild/meson/commit/8a8ab9a8e0c2cefb6faa0734e52803c74790576c.patch";
-      sha256 = "sha256-BdBf1NB4SZLFyFRDzD0p//XUgUeAHpo6XXUtsHdCgKE=";
-    })
 
     # Unlike libtool, vanilla Meson does not pass any information
     # about the path library will be installed to to g-ir-scanner,
@@ -67,16 +53,24 @@ python3.pkgs.buildPythonApplication rec {
     # https://github.com/NixOS/nixpkgs/issues/86131#issuecomment-711051774
     ./boost-Do-not-add-system-paths-on-nix.patch
 
-    # https://github.com/mesonbuild/meson/pull/9841
-    # cross-compilation fix
+    # Prevent Meson from passing -O0 in buildtype=plain.
+    # Nixpkgs enables fortifications which do not work without optimizations.
+    # https://github.com/mesonbuild/meson/pull/10593
     (fetchpatch {
-      url = "https://github.com/mesonbuild/meson/commit/266e8acb5807b38a550cb5145cea0e19545a21d7.patch";
-      sha256 = "sha256-1GdKsm2xvq2GxTNeTyBH5O73hxboL0YI+w2BCoUeWXM=";
+      url = "https://github.com/mesonbuild/meson/commit/f9bfeb2add70973113ab4a98454a5c5d7e3a26ae.patch";
+      revert = true;
+      sha256 = "VKXUwdS+zMp1y+5GrV2inESUpUUp+OL3aI4wOXHxOeo=";
     })
-  ] ++ lib.optionals withDarwinFrameworksGtkDocPatch [
-    # Fix building gtkdoc for GLib
-    # https://github.com/mesonbuild/meson/pull/10186
-    ./fix-gtkdoc-when-using-multiple-apple-frameworks.patch
+
+    # Fix passing multiple --define-variable arguments to pkg-config.
+    # https://github.com/mesonbuild/meson/pull/10670
+    (fetchpatch {
+      url = "https://github.com/mesonbuild/meson/commit/d5252c5d4cf1c1931fef0c1c98dd66c000891d21.patch";
+      sha256 = "GiUNVul1N5Fl8mfqM7vA/r1FdKqImiDYLXMVDt77gvw=";
+      excludes = [
+        "docs/yaml/objects/dep.yaml"
+      ];
+    })
   ];
 
   setupHook = ./setup-hook.sh;

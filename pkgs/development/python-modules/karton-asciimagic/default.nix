@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , karton-core
-, python
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -20,11 +20,7 @@ buildPythonPackage rec {
     karton-core
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} -m unittest discover
-    runHook postCheck
-  '';
+  checkInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "karton.asciimagic" ];
 

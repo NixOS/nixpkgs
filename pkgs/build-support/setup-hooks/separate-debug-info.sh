@@ -2,7 +2,6 @@ export NIX_SET_BUILD_ID=1
 export NIX_LDFLAGS+=" --compress-debug-sections=zlib"
 export NIX_CFLAGS_COMPILE+=" -ggdb -Wa,--compress-debug-sections"
 export RUSTFLAGS+=" -g"
-dontStrip=1
 
 fixupOutputHooks+=(_separateDebugInfo)
 
@@ -35,7 +34,6 @@ _separateDebugInfo() {
         # firmware blobs in QEMU.)
         (
             $OBJCOPY --only-keep-debug "$i" "$dst/${id:0:2}/${id:2}.debug"
-            $STRIP --strip-debug "$i"
 
             # Also a create a symlink <original-name>.debug.
             ln -sfn ".build-id/${id:0:2}/${id:2}.debug" "$dst/../$(basename "$i")"

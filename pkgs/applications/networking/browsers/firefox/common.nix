@@ -531,7 +531,6 @@ buildStdenv.mkDerivation ({
             header "separating debug info from $i (build ID $id)"
             mkdir -p "$dst/''${id:0:2}"
             $OBJCOPY --only-keep-debug "$i" "$dst/''${id:0:2}/''${id:2}.debug"
-            $STRIP --strip-debug "$i"
 
             # Also a create a symlink <original-name>.debug.
             ln -sfn ".build-id/''${id:0:2}/''${id:2}.debug" "$dst/../$(basename "$i")"
