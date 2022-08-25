@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   outputs = [ "out" "nautilusExtension" ];
 
   src = fetchurl {
-    url = "https://linux.dropboxstatic.com/packages/nautilus-dropbox-${version}.tar.bz2";
+    url = "https://linux.dropbox.com/packages/nautilus-dropbox-${version}.tar.bz2";
     sha256 = "1jjc835n2j61d23kvygdb4n4jsrw33r9mbwxrm4fqin6x01l2w7k";
   };
 
