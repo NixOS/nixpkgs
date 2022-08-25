@@ -5,7 +5,7 @@
 , blas
 , lapack
 , gfortran
-, enableAMPL ? stdenv.isLinux, libamplsolver
+, enableAMPL ? true, libamplsolver
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
