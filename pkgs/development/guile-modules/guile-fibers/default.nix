@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , autoreconfHook
+, gettext
 , guile
 , pkg-config
 , texinfo
@@ -20,6 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
+    gettext
     texinfo
     pkg-config
   ];
