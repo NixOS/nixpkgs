@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ethtool";
-  version = "5.18";
+  version = "5.19";
 
   src = fetchurl {
     url = "mirror://kernel/software/network/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-lXey/7znELZZ+yOVmOySvO0cpADKDxKGdiv6ROR4QnA=";
+    sha256 = "sha256-O3UqMymCeQesOBLygx3+z1HIxBxV0tac+5xTygZEn8Y=";
   };
 
   nativeBuildInputs = [
