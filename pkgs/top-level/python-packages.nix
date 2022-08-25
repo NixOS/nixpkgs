@@ -1719,6 +1719,8 @@ self: super: with self; {
 
   cfgv = callPackage ../development/python-modules/cfgv { };
 
+  cfg_diag = callPackage ../development/python-modules/cfg_diag { };
+
   cfn-flip = callPackage ../development/python-modules/cfn-flip { };
 
   cfn-lint = callPackage ../development/python-modules/cfn-lint { };
