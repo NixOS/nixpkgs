@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchgit, autoreconfHook, pkg-config, gtk3, openbox,
-  imlib2, libxml2, libstartup_notification, wrapGAppsHook, libSM }:
+{ lib
+, stdenv
+, fetchgit
+, autoreconfHook
+, pkg-config
+, wrapGAppsHook
+, gtk3
+, imlib2
+, libSM
+, libstartup_notification
+, libxml2
+, openbox
+}:
 
 stdenv.mkDerivation rec {
   pname = "obconf";
