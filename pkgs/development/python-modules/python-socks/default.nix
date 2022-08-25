@@ -19,6 +19,8 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6.1";
 
+  __darwinAllowLocalNetworking = true;
+
   src = fetchFromGitHub {
     owner = "romis2012";
     repo = pname;
