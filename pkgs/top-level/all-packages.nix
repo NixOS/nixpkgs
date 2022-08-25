@@ -16121,6 +16121,8 @@ with pkgs;
 
   easypdkprog = callPackage ../development/embedded/easypdkprog { };
 
+  eclint = callPackage ../development/tools/eclint { };
+
   editorconfig-checker = callPackage ../development/tools/misc/editorconfig-checker { };
 
   editorconfig-core-c = callPackage ../development/tools/misc/editorconfig-core-c { };
