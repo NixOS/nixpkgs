@@ -169,6 +169,11 @@ in mkLicense lset) ({
     free = false;
   };
 
+  cal10 = {
+    fullName = "Cryptographic Autonomy License version 1.0 (CAL-1.0)";
+    url = "https://opensource.org/licenses/CAL-1.0";
+  };
+
   capec = {
     fullName = "Common Attack Pattern Enumeration and Classification";
     url = "https://capec.mitre.org/about/termsofuse.html";
