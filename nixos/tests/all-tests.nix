@@ -116,6 +116,7 @@ in {
   airsonic = handleTest ./airsonic.nix {};
   akkoma = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./akkoma.nix {};
   akkoma-confined = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./akkoma.nix { confined = true; };
+  alertmanager-executor = handleTest ./alertmanager-executor.nix {};
   alice-lg = handleTest ./alice-lg.nix {};
   alloy = handleTest ./alloy.nix {};
   allTerminfo = handleTest ./all-terminfo.nix {};

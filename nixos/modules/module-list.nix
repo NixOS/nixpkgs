@@ -898,6 +898,7 @@
   ./services/monitoring/alerta.nix
   ./services/monitoring/alloy.nix
   ./services/monitoring/amazon-cloudwatch-agent.nix
+  ./services/monitoring/alertmanager-executor.nix
   ./services/monitoring/apcupsd.nix
   ./services/monitoring/arbtt.nix
   ./services/monitoring/below.nix
