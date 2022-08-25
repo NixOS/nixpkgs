@@ -2285,11 +2285,16 @@ let
         mktplcRef = {
           name = "svelte-vscode";
           publisher = "svelte";
-          version = "105.3.0";
-          sha256 = "11plqsj3c4dv0xg2d76pxrcn382qr9wbh1lhln2x8mzv840icvwr";
+          version = "105.21.0";
+          sha256 = "12p6msv8wi773piqm1y5zik3ky652bdaw9s83ffwnlndsh87s9n5";
         };
         meta = {
+          changelog = "https://github.com/sveltejs/language-tools/releases";
+          description = "Svelte language support for VS Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode";
+          homepage = "https://github.com/sveltejs/language-tools#readme";
           license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ fabianhauser ];
         };
       };
 
