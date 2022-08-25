@@ -10948,6 +10948,12 @@
     githubId = 7226587;
     name = "Théophane Hufschmitt";
   };
+  rehno-lindeque = {
+    email = "rehno.lindeque+code@gmail.com";
+    github = "rehno-lindeque";
+    githubId = 337811;
+    name = "Rehno Lindeque";
+  };
   relrod = {
     email = "ricky@elrod.me";
     github = "relrod";
