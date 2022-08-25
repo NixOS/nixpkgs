@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mill";
-  version = "0.10.6";
+  version = "0.10.7";
 
   src = fetchurl {
     url = "https://github.com/com-lihaoyi/mill/releases/download/${version}/${version}-assembly";
-    hash = "sha256-4lbW755RLgWyihjeb/KB5CwQsBwXBzDT4PUSyBQiSpE=";
+    hash = "sha256-pRyuTxQWRnGBTasdskIZ0F1LGgwE+Y5ksHsE1Rmp1Bg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
