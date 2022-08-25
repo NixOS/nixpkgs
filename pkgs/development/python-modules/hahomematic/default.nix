@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "hahomematic";
-  version = "2022.8.14";
+  version = "2022.8.15";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
