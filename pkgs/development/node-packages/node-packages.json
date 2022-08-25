@@ -215,6 +215,7 @@
 , "mastodon-bot"
 , "mathjax"
 , "meat"
+, "mermaid-filter"
 , "@mermaid-js/mermaid-cli"
 , "mocha"
 , "multi-file-swagger"

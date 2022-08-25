@@ -310,6 +310,17 @@ final: prev: {
     '';
   });
 
+  mermaid-filter = prev.mermaid-filter.override {
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    prePatch = ''
+      export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
+    '';
+    postInstall = ''
+      wrapProgram $out/bin/mermaid-filter \
+        --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
+    '';
+  };
+
   near-cli = prev.near-cli.override {
     nativeBuildInputs = with pkgs; [
       libusb1
