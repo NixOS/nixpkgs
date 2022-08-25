@@ -800,10 +800,12 @@ let
 
       sectionDHCPServer = checkUnitConfig "DHCPServer" [
         (assertOnlyFields [
+          "ServerAddress"
           "PoolOffset"
           "PoolSize"
           "DefaultLeaseTimeSec"
           "MaxLeaseTimeSec"
+          "UplinkInterface"
           "EmitDNS"
           "DNS"
           "EmitNTP"
@@ -817,10 +819,15 @@ let
           "EmitLPR"
           "LPR"
           "EmitRouter"
+          "Router"
           "EmitTimezone"
           "Timezone"
           "SendOption"
           "SendVendorOption"
+          "BindToInterface"
+          "RelayTarget"
+          "RelayAgentCircuitId"
+          "RelayAgentRemoteId"
         ])
         (assertInt "PoolOffset")
         (assertMinimum "PoolOffset" 0)
@@ -834,6 +841,7 @@ let
         (assertValueOneOf "EmitLPR" boolValues)
         (assertValueOneOf "EmitRouter" boolValues)
         (assertValueOneOf "EmitTimezone" boolValues)
+        (assertValueOneOf "BindToInterface" boolValues)
       ];
 
       sectionIPv6SendRA = checkUnitConfig "IPv6SendRA" [
@@ -842,6 +850,7 @@ let
           "OtherInformation"
           "RouterLifetimeSec"
           "RouterPreference"
+          "UplinkInterface"
           "EmitDNS"
           "DNS"
           "EmitDomains"
