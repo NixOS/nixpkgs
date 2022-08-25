@@ -10348,6 +10348,8 @@ in {
 
   sphinx-navtree = callPackage ../development/python-modules/sphinx-navtree { };
 
+  sphinx-mdinclude = callPackage ../development/python-modules/sphinx-mdinclude { };
+
   sphinx_pypi_upload = callPackage ../development/python-modules/sphinx_pypi_upload { };
 
   sphinx-rtd-theme = callPackage ../development/python-modules/sphinx-rtd-theme { };
