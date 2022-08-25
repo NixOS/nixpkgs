@@ -105,7 +105,7 @@ buildGoModule rec {
   '';
 
   preBuild = ''
-    if [[ -d vendor ]]; then make -o assets assets-compress plugins; fi
+    if [[ -d vendor ]]; then GOARCH= make -o assets assets-compress plugins; fi
   '';
 
   tags = [ "builtinassets" ];
