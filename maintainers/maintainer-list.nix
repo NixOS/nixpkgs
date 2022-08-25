@@ -9686,6 +9686,12 @@
     githubId = 3359345;
     name = "obadz";
   };
+  oberblastmeister = {
+    email = "littlebubu.shu@gmail.com";
+    github = "oberblastmeister";
+    githubId = 61095988;
+    name = "Brian Shu";
+  };
   obsidian-systems-maintenance = {
     name = "Obsidian Systems Maintenance";
     email = "maintainer@obsidian.systems";

@@ -11593,6 +11593,8 @@ with pkgs;
 
   trash-cli = callPackage ../tools/misc/trash-cli { };
 
+  trashy = callPackage ../tools/misc/trashy { };
+
   trenchbroom = libsForQt5.callPackage ../applications/misc/trenchbroom {
     inherit (xorg) libXxf86vm;
   };
