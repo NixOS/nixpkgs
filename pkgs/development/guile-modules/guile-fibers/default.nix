@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
+    texinfo
     pkg-config
   ];
   buildInputs = [
     guile
-    texinfo
   ];
 
   autoreconfPhase = "./autogen.sh";
