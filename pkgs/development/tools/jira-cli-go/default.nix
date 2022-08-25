@@ -33,6 +33,9 @@ buildGoModule rec {
     installShellCompletion --cmd jira \
       --bash <($out/bin/jira completion bash) \
       --zsh <($out/bin/jira completion zsh)
+
+    $out/bin/jira man --generate --output man
+    installManPage man/*
   '';
 
   meta = with lib; {
