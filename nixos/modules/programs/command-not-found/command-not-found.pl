@@ -24,7 +24,7 @@ my $res = $dbh->selectall_arrayref(
 my $len = !defined $res ? 0 : scalar @$res;
 
 sub nix_shell_run {
-    my ($package, $ARGV) = @_;
+    my ($package, @ARGV) = @_;
     if ($ENV{"NIX_AUTO_RUN_FLAKE"} // "") {
         # relies on flake registry
         exec("nix", "shell", "nixpkgs#" . $package, "--command", @ARGV);
@@ -49,7 +49,7 @@ if ($len == 0) {
                 }
             }
         }
-        nix_shell_run($package, $ARGV);
+        nix_shell_run($package, @ARGV);
     } else {
         print STDERR <<EOF;
 The program '$program' is not in your PATH. You can make it available in an
@@ -71,7 +71,7 @@ EOF
             # so we start from 1
             $choice = <STDIN> + 0;
             if (1 <= $choice && $choice <= $len) {
-                nix_shell_run(@$res[$choice - 1]->{package}, $ARGV);
+                nix_shell_run(@$res[$choice - 1]->{package}, @ARGV);
             }
         }
     } else {
