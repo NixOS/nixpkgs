@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       name = "cross-assume-dev-zero-mmappable.patch";
       sha256 = "sha256-rsouJp1o7p0d+AJ5KvyhUU79vAJOcVHEuwSEKaCEGa8=";
     })
-  ] ++ lib.optionals stdenv.isDarwin [ ./is-this-a-compiler-bug.patch ];
+  ];
 
   # This test needs the net
   postPatch = ''
