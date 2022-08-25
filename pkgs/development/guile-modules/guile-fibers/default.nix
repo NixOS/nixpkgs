@@ -19,6 +19,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-jJKA5JEHsmqQ/IKb1aNmOtoVaGKNjcgTKyo5VCiJbXM=";
   };
 
+  makeFlags = [
+    "GUILE_AUTO_COMPILE=0"
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     gettext
