@@ -154,7 +154,7 @@
  *  Darwin frameworks
  */
 , Cocoa, CoreAudio, CoreServices, AVFoundation, MediaToolbox
-, VideoDecodeAcceleration
+, VideoDecodeAcceleration, VideoToolbox
 }:
 
 /* Maintainer notes:
@@ -454,7 +454,7 @@ stdenv.mkDerivation rec {
     ++ optional (nvdec || nvenc) nv-codec-headers
     ++ optional cuda-llvm clang
     ++ optionals stdenv.isDarwin [ Cocoa CoreServices CoreAudio AVFoundation
-                                   MediaToolbox VideoDecodeAcceleration
+                                   MediaToolbox VideoDecodeAcceleration VideoToolbox
                                    libiconv ];
 
   buildFlags = [ "all" ]

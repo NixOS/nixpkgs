@@ -18217,7 +18217,7 @@ with pkgs;
     samba = if stdenv.isDarwin then null else samba;
     inherit (darwin.apple_sdk.frameworks)
       Cocoa CoreServices CoreAudio AVFoundation MediaToolbox
-      VideoDecodeAcceleration;
+      VideoDecodeAcceleration VideoToolbox;
   };
 
   ffmpeg_5-full = ffmpeg-full.override {
