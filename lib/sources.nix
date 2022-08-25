@@ -229,6 +229,57 @@ let
 
   canCleanSource = src: src ? _isLibCleanSourceWith || !(pathHasContext (toString src));
 
+  /*
+    Get all files and symlinks that pass a filter function, by scanning
+    directories recursively, unconditionally. Unlike other source filtering
+    functions, this will not include empty directories in the final derivation.
+
+    Type: (String -> Bool) -> sourceLike -> Source
+
+    Example:
+      filterFiles ./. (lib.hasSuffix ".html")
+  */
+  filterFiles = filter: src:
+    let
+      pathToList = path: lib.splitString "/" (builtins.toString path);
+      dirDepth = builtins.length (pathToList src);
+      dropCommon = path: lib.drop dirDepth (pathToList path);
+
+      includedPaths =
+        builtins.filter
+          filter
+          (lib.filesystem.listFilesRecursive src);
+
+      dirs =
+        let
+          f = dir: filter':
+            builtins.foldl'
+              (acc: { name, value }:
+                if value == "directory" then
+                  let recurse = f (dir + "/${name}") filter'; in
+                  if recurse == {}
+                  then acc
+                  else acc // { ${name} = recurse; }
+                else if filter' name then
+                  acc // { ${name} = value; }
+                else
+                  acc
+              )
+              {}
+              (lib.mapAttrsToList lib.nameValuePair (builtins.readDir dir));
+        in
+        f src filter;
+    in
+    cleanSourceWith {
+      inherit src;
+      name = "source";
+
+      filter = path: type:
+        if type == "directory"
+        then lib.hasAttrByPath (dropCommon path) dirs
+        else filter path;
+    };
+
   # -------------------------------------------------------------------------- #
   # Internal functions
   #
@@ -278,6 +329,8 @@ in {
 
     sourceByRegex
     sourceFilesBySuffices
+
+    filterFiles
 
     trace
     ;
