@@ -289,6 +289,10 @@ let
       rtc_use_pipewire = true;
       # Disable PGO because the profile data requires a newer compiler version (LLVM 14 isn't sufficient):
       chrome_pgo_phase = 0;
+    } // optionalAttrs (chromiumVersionAtLeast "105") {
+      # https://bugs.chromium.org/p/chromium/issues/detail?id=1334390:
+      use_system_libwayland = false;
+      use_system_wayland_scanner = false;
     } // optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;
