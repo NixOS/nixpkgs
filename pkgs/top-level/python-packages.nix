@@ -2490,6 +2490,8 @@ in {
 
   django-cors-headers = callPackage ../development/python-modules/django-cors-headers { };
 
+  django-cryptography = callPackage ../development/python-modules/django-cryptography { };
+
   django-csp = callPackage ../development/python-modules/django-csp { };
 
   django-debug-toolbar = callPackage ../development/python-modules/django-debug-toolbar { };
@@ -4872,6 +4874,8 @@ in {
   Kajiki = callPackage ../development/python-modules/kajiki { };
 
   kaldi-active-grammar = callPackage ../development/python-modules/kaldi-active-grammar { };
+
+  kanidm = callPackage ../development/python-modules/kanidm { };
 
   kaptan = callPackage ../development/python-modules/kaptan { };
 

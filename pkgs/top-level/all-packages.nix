@@ -7326,7 +7326,7 @@ with pkgs;
   halibut = callPackage ../tools/typesetting/halibut { };
 
   halide = callPackage ../development/compilers/halide {
-    llvmPackages = llvmPackages_9;
+    llvmPackages = llvmPackages_14;
   };
 
   harePackages = recurseIntoAttrs (callPackage ../development/compilers/hare { });
@@ -7479,6 +7479,8 @@ with pkgs;
   hut = callPackage ../applications/version-management/git-and-tools/hut { };
 
   hwinfo = callPackage ../tools/system/hwinfo { };
+
+  hw-probe = perlPackages.callPackage ../tools/system/hw-probe { };
 
   hybridreverb2 = callPackage ../applications/audio/hybridreverb2 {
     stdenv = gcc8Stdenv;
@@ -9147,7 +9149,7 @@ with pkgs;
     buildGoModule = buildGo117Module;
   };
   nomad_1_3 = callPackage ../applications/networking/cluster/nomad/1.3.nix {
-    buildGoModule = buildGo118Module;
+    buildGoModule = buildGo119Module;
   };
 
   nomad-autoscaler = callPackage ../applications/networking/cluster/nomad-autoscaler { };
@@ -21947,6 +21949,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
   };
   vulkan-tools-lunarg = callPackage ../tools/graphics/vulkan-tools-lunarg { };
+  vulkan-utils = haskell.lib.compose.justStaticExecutables haskellPackages.vulkan-utils;
   vulkan-validation-layers = callPackage ../development/tools/vulkan-validation-layers { };
 
   vxl = callPackage ../development/libraries/vxl { };
@@ -31158,7 +31161,9 @@ with pkgs;
 
   termtosvg = callPackage ../tools/misc/termtosvg { };
 
-  inherit (callPackage ../applications/graphics/tesseract {})
+  inherit (callPackage ../applications/graphics/tesseract {
+    inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
+  })
     tesseract3
     tesseract4
     tesseract5;
