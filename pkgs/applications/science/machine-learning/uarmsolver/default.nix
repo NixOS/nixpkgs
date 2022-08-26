@@ -22,11 +22,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-   description = "universal Association Rule Mining Solver";
-   homepage    = "https://github.com/firefly-cpp/uARMSolver";
-   license     = licenses.mit;
-   platforms   = platforms.all;
-   maintainers = with maintainers; [ firefly-cpp ];
+    description = "universal Association Rule Mining Solver";
+    homepage    = "https://github.com/firefly-cpp/uARMSolver";
+    license     = licenses.mit;
+    platforms   = platforms.all;
+    maintainers = with maintainers; [ firefly-cpp ];
   };
-
 }
