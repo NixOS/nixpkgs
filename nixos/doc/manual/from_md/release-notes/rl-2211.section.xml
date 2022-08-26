@@ -478,6 +478,14 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>diamond</literal> package has been update from
+          0.8.36 to 2.0.15. See the
+          <link xlink:href="https://github.com/bbuchfink/diamond/releases">upstream
+          release notes</link> for more details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>dockerTools.buildImage</literal> deprecates the
           misunderstood <literal>contents</literal> parameter, in favor
           of <literal>copyToRoot</literal>. Use

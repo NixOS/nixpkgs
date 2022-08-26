@@ -36,7 +36,7 @@ let
       modDirVersion' = builtins.replaceStrings [ kernel.version ] [ version ] kernel.modDirVersion;
     in kernel.override {
       structuredExtraConfig = import ../os-specific/linux/kernel/hardened/config.nix {
-        inherit lib version;
+        inherit stdenv lib version;
       };
       argsOverride = {
         inherit version;
@@ -364,9 +364,12 @@ in {
     nvidia_x11_production  = nvidiaPackages.production;
     nvidia_x11_vulkan_beta = nvidiaPackages.vulkan_beta;
 
-    # this is not a replacement for nvidia_x11
+    # this is not a replacement for nvidia_x11*
     # only the opensource kernel driver exposed for hydra to build
-    nvidia_x11_beta_open   = nvidiaPackages.beta.open;
+    nvidia_x11_beta_open         = nvidiaPackages.beta.open;
+    nvidia_x11_production_open   = nvidiaPackages.production.open;
+    nvidia_x11_stable_open       = nvidiaPackages.stable.open;
+    nvidia_x11_vulkan_beta_open  = nvidiaPackages.vulkan_beta.open;
 
     openrazer = callPackage ../os-specific/linux/openrazer/driver.nix { };
 

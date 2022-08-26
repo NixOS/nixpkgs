@@ -3,8 +3,6 @@
 , binutils
 , fetchFromGitHub
 , cmake
-, copyDesktopItems
-, makeDesktopItem
 , pkg-config
 , wrapGAppsHook
 , boost
@@ -54,7 +52,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    copyDesktopItems
     pkg-config
     wrapGAppsHook
   ];
@@ -152,27 +149,6 @@ stdenv.mkDerivation rec {
     ln -s "$out/share/PrusaSlicer/icons/PrusaSlicer.png" "$out/share/pixmaps/PrusaSlicer.png"
     ln -s "$out/share/PrusaSlicer/icons/PrusaSlicer-gcodeviewer_192px.png" "$out/share/pixmaps/PrusaSlicer-gcodeviewer.png"
   '';
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "prusa-slicer";
-      exec = "prusa-slicer";
-      icon = "PrusaSlicer";
-      comment = "G-code generator for 3D printers";
-      desktopName = "PrusaSlicer";
-      genericName = "3D printer tool";
-      categories = [ "Development" ];
-    })
-    (makeDesktopItem {
-      name = "prusa-gcodeviewer";
-      exec = "prusa-gcodeviewer";
-      icon = "PrusaSlicer-gcodeviewer";
-      comment = "G-code viewer for 3D printers";
-      desktopName = "PrusaSlicer G-code Viewer";
-      genericName = "G-code Viewer";
-      categories = [ "Development" ];
-    })
-  ];
 
   meta = with lib; {
     description = "G-code generator for 3D printer";

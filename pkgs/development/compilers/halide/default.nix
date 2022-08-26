@@ -15,22 +15,16 @@ assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 
 llvmPackages.stdenv.mkDerivation rec {
   pname = "halide";
-  version = "10.0.0";
+  version = "14.0.0";
 
   src = fetchFromGitHub {
     owner = "halide";
     repo = "Halide";
     rev = "v${version}";
-    sha256 = "0il71rppjp76m7zd420siidvhs76sqiq26h60ywk812sj9mmgxj6";
+    sha256 = "sha256-/7U2TBcpSAKeEyWncAbtW6Vk/cP+rp1CXtbIjvQMmZA=";
   };
 
-  # clang fails to compile intermediate code because
-  # of unused "--gcc-toolchain" option
-  postPatch = ''
-    sed -i "s/-Werror//" src/CMakeLists.txt
-  '';
-
-  cmakeFlags = [ "-DWARNINGS_AS_ERRORS=OFF" "-DWITH_PYTHON_BINDINGS=OFF" ];
+  cmakeFlags = [ "-DWARNINGS_AS_ERRORS=OFF" "-DWITH_PYTHON_BINDINGS=OFF" "-DTARGET_WEBASSEMBLY=OFF" ];
 
   # Note: only openblas and not atlas part of this Nix expression
   # see pkgs/development/libraries/science/math/liblapack/3.5.0.nix
@@ -54,6 +48,6 @@ llvmPackages.stdenv.mkDerivation rec {
     homepage = "https://halide-lang.org";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.ck3d ];
+    maintainers = with maintainers; [ ck3d atila ];
   };
 }

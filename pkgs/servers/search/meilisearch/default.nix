@@ -23,11 +23,9 @@ rustPlatform.buildRustPackage {
   # Default features include mini dashboard which downloads something from the internet.
   buildNoDefaultFeatures = true;
   buildInputs = lib.optionals stdenv.isDarwin [ Security DiskArbitration Foundation ];
-  # Test fail at the moment.
-  # > Test "create index" failed with error: "index wasn't created"
-  # passthru.tests = {
-  #   meilisearch = nixosTests.meilisearch;
-  # };
+  passthru.tests = {
+    meilisearch = nixosTests.meilisearch;
+  };
 
   # Tests will try to compile with mini-dashboard features which downloads something from the internet.
   doCheck = false;

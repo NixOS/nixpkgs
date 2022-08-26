@@ -10,16 +10,18 @@
 
 buildPythonPackage rec {
   pname = "whitenoise";
-  version = "6.0.0";
+  version = "6.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
+
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "evansd";
     repo = pname;
     rev = version;
-    hash = "sha256-mUjyX4eQOiMweje6UPyfyJsiHwzF5OQ93KuxFedWxbQ=";
+    hash = "sha256-HcWWWMIuU8kfcOnntgXUnHD3pFogq8OEAd3wRtCnXjQ=";
   };
 
   propagatedBuildInputs = [
@@ -50,7 +52,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Radically simplified static file serving for WSGI applications";
-    homepage = "http://whitenoise.evans.io/";
+    homepage = "https://whitenoise.evans.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
