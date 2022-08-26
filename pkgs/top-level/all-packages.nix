@@ -25063,6 +25063,8 @@ with pkgs;
 
   charis-sil = callPackage ../data/fonts/charis-sil { };
 
+  changie = callPackage ../development/tools/changie { };
+
   cherry = callPackage ../data/fonts/cherry { inherit (xorg) fonttosfnt mkfontdir; };
 
   chonburi-font = callPackage ../data/fonts/chonburi { };
