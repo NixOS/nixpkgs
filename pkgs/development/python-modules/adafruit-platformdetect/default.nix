@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "adafruit-platformdetect";
-  version = "3.27.1";
+  version = "3.27.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Adafruit-PlatformDetect";
     inherit version;
-    hash = "sha256-HAymQ08RauE8oATYzKE+UaqMsmNK3O+VyLLd6w/jPFc=";
+    hash = "sha256-bsehvoX625Lr+5/ieYnIBUMUpkCv3mlDDCCf2UyXsMk=";
   };
 
   nativeBuildInputs = [
