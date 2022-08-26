@@ -14,7 +14,7 @@ let
         description = ''
           An attribute set where each attribute name corresponds to a choice; a single outcome of a decision.
 
-          When you define `matrix.foo.choice.bar`, it creates a copy of the test configuration inside `matrix.foo.choice.bar.module`, where the module argument `foo` will be set to `bar`.
+          When you define `matrix.foo.choice.bar`, it creates a copy of the test configuration inside `matrix.foo.choice.bar.extraConfig`, where the module argument `foo` will be set to `bar`.
 
           `runTest` will traverse all matrix choices, so that in all the final test configurations it returns, a choice for `foo` has been made.
         '';
@@ -25,7 +25,7 @@ let
           decisions to make first.
 
           Instead of reading for example
-          `matrix.bar.choice.qux.module.matrix.foo.choice.xyz`,
+          `matrix.bar.choice.qux.extraConfig.matrix.foo.choice.xyz`,
           you can define
 
           ```
@@ -33,7 +33,7 @@ let
           ```
 
           so that `runTest` will read
-          `matrix.foo.choice.xyz.module.matrix.bar.choice.qux` instead.
+          `matrix.foo.choice.xyz.extraConfig.matrix.bar.choice.qux` instead.
 
           This would usually amount to the same thing, unless you want the set
           of `choice` attributes to be affected by the value of `foo`, which
@@ -76,9 +76,9 @@ let
 
               # Neither choice module will be applied when static linking is enabled.
               # If static linking does need some extra settings, set them in
-              # `matrix.linking.choice.static.module` instead.
-              choice.rest.module = ...;
-              choice.smtp.module = ...;
+              # `matrix.linking.choice.static.extraConfig` instead.
+              choice.rest.extraConfig = ...;
+              choice.smtp.extraConfig = ...;
             };
           }
           ```
@@ -110,7 +110,7 @@ let
               # The SMTP backend does not support transactions.
               enable = backend != "smtp";
 
-              module = ...;
+              extraConfig = ...;
             };
             matrix.testsuite.choice.login = ...;
           }
@@ -119,7 +119,7 @@ let
         type = types.bool;
         default = true;
       };
-      module = mkOption {
+      extraConfig = mkOption {
         description = mdDoc ''
           The effects of making a choice. You can specify any test-level option here.
 
@@ -198,7 +198,7 @@ in
         This option constructs a hierarchy of options, where each decision to be made is represented by `<...>.matrix.<name>`.
         These options themselves contain `choice.<name>`, which represent the possible values for each decision.
 
-        The `module` submodule is special, because it duplicates and extends the entire test configuration that existed before making the decision.
+        The `extraConfig` submodule is special, because it duplicates and extends the entire test configuration that existed before making the decision.
         When you define option values in it, those will only apply when `runTest` reads that specific choice.
 
         For a more hands-on introduction, see [Constructing a test matrix](#sec-nixos-test-matrix).
@@ -290,7 +290,7 @@ in
             by adding the module parameter to the submodule definition itself.
             For example:
 
-                matrix.foo.choice.bar.module = { config, lib, ${k}, ... }: {
+                matrix.foo.choice.bar.extraConfig = { config, lib, ${k}, ... }: {
                   xyz = f ${k};
                 }
 
@@ -328,7 +328,7 @@ in
         lib.recurseIntoAttrs
           (
             lib.mapAttrs'
-              (k: v: lib.nameValuePair "${nextDecision}-${k}" v.module.result)
+              (k: v: lib.nameValuePair "${nextDecision}-${k}" v.extraConfig.result)
               (lib.filterAttrs
                 (k: v: v.enable)
                 config.matrix.${nextDecision}.choice

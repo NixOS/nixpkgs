@@ -49,10 +49,10 @@ in
   };
 
   matrix.version.choice = {
-    cassandra_2_1.module = { _module.args.testPackage = pkgs.cassandra_2_1; };
-    cassandra_2_2.module = { _module.args.testPackage = pkgs.cassandra_2_2; };
-    cassandra_3_0.module = { _module.args.testPackage = pkgs.cassandra_3_0; };
-    cassandra_3_11.module = { _module.args.testPackage = pkgs.cassandra_3_11; };
+    cassandra_2_1.extraConfig = { _module.args.testPackage = pkgs.cassandra_2_1; };
+    cassandra_2_2.extraConfig = { _module.args.testPackage = pkgs.cassandra_2_2; };
+    cassandra_3_0.extraConfig = { _module.args.testPackage = pkgs.cassandra_3_0; };
+    cassandra_3_11.extraConfig = { _module.args.testPackage = pkgs.cassandra_3_11; };
   };
 
   defaults = {
