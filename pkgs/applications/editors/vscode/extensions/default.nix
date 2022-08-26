@@ -544,15 +544,15 @@ let
         mktplcRef = {
           name = "path-intellisense";
           publisher = "christian-kohler";
-          version = "2.8.0";
-          sha256 = "sha256-VPzy9o0DeYRkNwTGphC51vzBTNgQwqKg+t7MpGPLahM=";
+          version = "2.8.1";
+          sha256 = "sha256-lTKzMphkGgOG2XWqz3TW2G9sISBc/kG7oXqcIH8l+Mg=";
         };
         meta = with lib; {
           description = "Visual Studio Code plugin that autocompletes filenames";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=christian-kohler.path-intellisense";
           homepage = "https://github.com/ChristianKohler/PathIntellisense";
           license = licenses.mit;
-          maintainers = with maintainers; [ imgabe ];
+          maintainers = with maintainers; [ imgabe superherointj ];
         };
       };
 
