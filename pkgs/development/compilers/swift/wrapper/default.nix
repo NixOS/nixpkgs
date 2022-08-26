@@ -1,6 +1,8 @@
-{ stdenv
+{ lib
+, stdenv
 , swift
 , wrapperParams ? swift._wrapperParams
+, useSwiftDriver ? true, swift-driver
 }:
 
 stdenv.mkDerivation (wrapperParams // {
@@ -9,12 +11,14 @@ stdenv.mkDerivation (wrapperParams // {
 
   outputs = [ "out" "man" ];
 
-  # Setup hook variables.
+  # Wrapper and setup hook variables.
   inherit swift;
   inherit (swift)
     swiftOs swiftArch
     swiftModuleSubdir swiftLibSubdir
     swiftStaticModuleSubdir swiftStaticLibSubdir;
+  swiftDriver = if useSwiftDriver
+    then "${swift-driver}/bin/swift-driver" else "";
 
   passAsFile = [ "buildCommand" ];
   buildCommand = ''
@@ -32,6 +36,11 @@ stdenv.mkDerivation (wrapperParams // {
       substituteAll '${./wrapper.sh}' $out/bin/$executable
       chmod a+x $out/bin/$executable
     done
+
+    ${lib.optionalString useSwiftDriver ''
+    # Symlink swift-driver executables.
+    ln -s -t $out/bin/ ${swift-driver}/bin/*
+    ''}
 
     ln -s ${swift.man} $man
 

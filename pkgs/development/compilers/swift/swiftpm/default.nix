@@ -406,6 +406,13 @@ in stdenv.mkDerivation (commonAttrs // {
     swiftpmMakeMutable swift-tools-support-core
     substituteInPlace .build/checkouts/swift-tools-support-core/Sources/TSCTestSupport/XCTestCasePerf.swift \
       --replace 'canImport(Darwin)' 'false'
+
+    # Prevent a warning about SDK directories we don't have.
+    swiftpmMakeMutable swift-driver
+    patch -p1 -d .build/checkouts/swift-driver -i ${substituteAll {
+      src = ../swift-driver/patches/prevent-sdk-dirs-warnings.patch;
+      inherit (builtins) storeDir;
+    }}
   '';
 
   buildPhase = ''

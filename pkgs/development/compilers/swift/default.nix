@@ -53,28 +53,39 @@ let
       inherit (apple_sdk.frameworks) CoreServices Foundation Combine;
     };
 
-    swift = callPackage ./wrapper {
+    swiftNoSwiftDriver = callPackage ./wrapper {
       swift = swift-unwrapped;
+      useSwiftDriver = false;
     };
 
     Dispatch = if stdenv.isDarwin
       then null # part of libsystem
-      else callPackage ./libdispatch { };
+      else callPackage ./libdispatch { swift = swiftNoSwiftDriver; };
 
     Foundation = if stdenv.isDarwin
       then apple_sdk.frameworks.Foundation
-      else callPackage ./foundation { };
+      else callPackage ./foundation { swift = swiftNoSwiftDriver; };
 
     # TODO: Apple distributes a binary XCTest with Xcode, but it is not part of
     # CLTools (or SUS), so would have to figure out how to fetch it. The binary
     # version has several extra features, like a test runner and ObjC support.
     XCTest = callPackage ./xctest {
       inherit (darwin) DarwinTools;
+      swift = swiftNoSwiftDriver;
     };
 
     swiftpm = callPackage ./swiftpm {
       inherit (darwin) DarwinTools cctools;
       inherit (apple_sdk.frameworks) CryptoKit LocalAuthentication;
+      swift = swiftNoSwiftDriver;
+    };
+
+    swift-driver = callPackage ./swift-driver {
+      swift = swiftNoSwiftDriver;
+    };
+
+    swift = callPackage ./wrapper {
+      swift = swift-unwrapped;
     };
 
   };

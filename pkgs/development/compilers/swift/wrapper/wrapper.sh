@@ -63,6 +63,31 @@ case "$firstArg" in
         ;;
 esac
 
+# For many tasks, Swift reinvokes swift-driver, the new driver implementation
+# written in Swift. It needs some help finding the executable, though, and
+# reimplementing the logic here is little effort. These checks follow
+# `shouldDisallowNewDriver`.
+if [[
+    $isFrontend = 0 &&
+    -n "@swiftDriver@" &&
+    -z "${SWIFT_USE_OLD_DRIVER:-}" &&
+    ( "$progName" == "swift" || "$progName" == "swiftc" )
+]]; then
+    prog=@swiftDriver@
+    # Driver mode must be the very first argument.
+    extraBefore+=( "--driver-mode=$progName" )
+    if [[ $isRepl = 1 ]]; then
+        extraBefore+=( "-repl" )
+    fi
+
+    # Ensure swift-driver invokes the unwrapped frontend (instead of finding
+    # the wrapped one via PATH), because we don't have to wrap a second time.
+    export SWIFT_DRIVER_SWIFT_FRONTEND_EXEC="@swift@/bin/swift-frontend"
+
+    # Ensure swift-driver can find the LLDB with Swift support for the REPL.
+    export SWIFT_DRIVER_LLDB_EXEC="@swift@/bin/lldb"
+fi
+
 path_backup="$PATH"
 
 # That @-vars are substituted separately from bash evaluation makes
