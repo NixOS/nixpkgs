@@ -57,6 +57,9 @@ buildPythonPackage rec {
       --replace "--cov=limits" "" \
       --replace "-K" ""
 
+    substituteInPlace setup.py \
+      --replace "versioneer.get_version()" "'${version}'"
+
     # Recreate _version.py, deleted at fetch time due to non-reproducibility.
     echo 'def get_versions(): return {"version": "${version}"}' > limits/_version.py
   '';
