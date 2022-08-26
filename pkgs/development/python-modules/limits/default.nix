@@ -57,6 +57,9 @@ buildPythonPackage rec {
       --replace "--cov=limits" "" \
       --replace "-K" ""
 
+    substituteInPlace setup.py \
+      --replace "versioneer.get_version()" "'${version}'"
+
     # Recreate _version.py, deleted at fetch time due to non-reproducibility.
     echo 'def get_versions(): return {"version": "${version}"}' > limits/_version.py
   '';
@@ -73,8 +76,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Rate limiting utilities";
-    homepage = "https://limits.readthedocs.org/";
+    description = "Rate limiting using various strategies and storage backends such as redis & memcached";
+    homepage = "https://github.com/alisaifee/limits";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

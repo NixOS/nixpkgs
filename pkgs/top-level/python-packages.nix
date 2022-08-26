@@ -10809,6 +10809,10 @@ in {
     cudnnSupport = false;
   };
 
+  thermobeacon-ble = callPackage ../development/python-modules/thermobeacon-ble { };
+
+  thermopro-ble = callPackage ../development/python-modules/thermopro-ble { };
+
   thespian = callPackage ../development/python-modules/thespian { };
 
   thinc = callPackage ../development/python-modules/thinc {

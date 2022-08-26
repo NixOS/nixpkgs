@@ -16163,6 +16163,8 @@ with pkgs;
 
   easypdkprog = callPackage ../development/embedded/easypdkprog { };
 
+  eclint = callPackage ../development/tools/eclint { };
+
   editorconfig-checker = callPackage ../development/tools/misc/editorconfig-checker { };
 
   editorconfig-core-c = callPackage ../development/tools/misc/editorconfig-core-c { };
@@ -31160,6 +31162,8 @@ with pkgs;
   tty-solitaire = callPackage ../applications/misc/tty-solitaire { };
 
   termtosvg = callPackage ../tools/misc/termtosvg { };
+
+  tessen = callPackage ../tools/security/tessen { };
 
   inherit (callPackage ../applications/graphics/tesseract {
     inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;

@@ -29,6 +29,8 @@ buildPythonPackage rec {
   disabledTests = [
     # flaky
     "test_session_scoping_changing"
+    # https://github.com/pallets-eco/flask-sqlalchemy/issues/1084
+    "test_persist_selectable"
   ];
 
   meta = with lib; {
