@@ -49,7 +49,7 @@ buildPythonPackage rec {
   version = "9.2.15";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = pname;
