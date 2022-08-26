@@ -109,8 +109,9 @@ let
         ] ++ optionals withSystemd [
           "cannot:${getBin systemd}/bin/systemd-cat"
         ];
-        fix."$MSMTP" = [ "msmtp" ];
+        fix."$MSMTP" = [ "${getBin binaries}/bin/msmtp" ];
         fake.external = [ "ping" ]
+          ++ [ "${getBin binaries}/bin/msmtp" ]
           ++ optionals (!withSystemd) [ "systemd-cat" ];
       };
 
