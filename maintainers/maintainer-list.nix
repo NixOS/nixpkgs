@@ -15087,4 +15087,10 @@
     github = "yisuidenghua";
     githubId = 102890144;
   };
+  crinklywrappr = {
+    email = "crinklywrappr@pm.me";
+    name = "Daniel Fitzpatrick";
+    github = "crinklywrappr";
+    githubId = 56522;
+  };
 }
