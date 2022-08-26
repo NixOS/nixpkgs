@@ -76,4 +76,48 @@ in
       dir + "/${name}"
   ) (builtins.readDir dir));
 
+  # findBySuffix: String -> Path -> [ Path ]
+  #
+  # Given a suffix and directory, return a filtered list containing the full
+  # path to all files matching the given suffix recursively.
+  #
+  # NOTE: If the path parameter is a derivation output, the derivation must be built
+  #       before evaluation can proceed. This is commonly called "import from derivation"
+  #       or IFD. Unlike a normal dependency, this creates a sequential bottleneck.
+  #       If possible, process such directories in a build script instead of the Nix language.
+  #       Nixpkgs disallows import from derivation. If the path parameter is a local directory,
+  #       this note does not apply.
+  #
+  # Example:
+  #   findSuffix ".h" ./src
+  #
+  # Returns:
+  #  [ "./src/foo.h" ]
+  findSuffix = suffix: dir: (builtins.filter
+    (x: (lib.hasSuffix suffix (toString x)))
+      (lib.filesystem.listFilesRecursive dir)
+  );
+
+  # find: String -> Path -> [ Path ]
+  #
+  # Given a POSIX regular expression and directory, return a filtered list containing the full
+  # path to all files matching the given regex recursively.
+  #
+  # NOTE: If the path parameter is a derivation output, the derivation must be built
+  #       before evaluation can proceed. This is commonly called "import from derivation"
+  #       or IFD. Unlike a normal dependency, this creates a sequential bottleneck.
+  #       If possible, process such directories in a build script instead of the Nix language.
+  #       Nixpkgs disallows import from derivation. If the path parameter is a local directory,
+  #       this note does not apply.
+  #
+  # Example:
+  #   find ".+\\.h" ./src
+  #
+  # Returns:
+  #  [ "./src/foo.h" ]
+  find = pattern: dir: (builtins.filter
+    (x: ((builtins.match pattern (toString x)) != null))
+      (lib.filesystem.listFilesRecursive dir)
+  );
+
 }
