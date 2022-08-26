@@ -32524,6 +32524,8 @@ with pkgs;
 
   enigma = callPackage ../games/enigma { };
 
+  everspace = callPackage ../games/everspace { };
+
   ezquake = callPackage ../games/ezquake { };
 
   fmodex = callPackage ../games/zandronum/fmod.nix { };
