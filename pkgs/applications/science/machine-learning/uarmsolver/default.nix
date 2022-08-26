@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
    owner = "firefly-cpp";
    repo = "uARMSolver";
-   rev = "${version}";
+   rev = version;
    sha256 = "17px69z0kw0z6cip41c45i6srbw56b0md92i9vbqyzinx8b75mzw";
   };
 
