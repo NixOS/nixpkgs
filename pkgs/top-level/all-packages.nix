@@ -10215,6 +10215,8 @@ with pkgs;
 
   qosmic = libsForQt5.callPackage ../applications/graphics/qosmic { };
 
+  qovery-cli = callPackage ../tools/admin/qovery-cli { };
+
   qownnotes = libsForQt5.callPackage ../applications/office/qownnotes { };
 
   qpdf = callPackage ../development/libraries/qpdf { };
