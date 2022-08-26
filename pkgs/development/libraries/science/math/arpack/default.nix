@@ -45,10 +45,6 @@ stdenv.mkDerivation rec {
     install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libarpack.dylib
   '';
 
-  # disable stackprotector on aarch64-darwin for now
-  # https://github.com/NixOS/nixpkgs/issues/127608
-  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
-
   meta = {
     homepage = "https://github.com/opencollab/arpack-ng";
     description = ''
