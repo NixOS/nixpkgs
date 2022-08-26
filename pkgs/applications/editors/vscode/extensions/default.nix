@@ -384,8 +384,8 @@ let
         mktplcRef = {
           name = "ocaml-formatter";
           publisher = "badochov";
-          version = "1.14.0";
-          sha256 = "sha256-Iekh3vwu8iz53rPRsuu1Fx9iA/A97iMd8cPETWavnyA=";
+          version = "2.0.5";
+          sha256 = "sha256-D04EJButnam/l4aAv1yNbHlTKMb3x1yrS47+9XjpCLI=";
         };
         meta = with lib; {
           description = "VSCode Extension Formatter for OCaml language";
