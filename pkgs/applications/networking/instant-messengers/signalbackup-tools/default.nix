@@ -1,24 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, openssl, sqlite }:
+{ lib, stdenv, fetchFromGitHub, openssl, sqlite }:
 
 stdenv.mkDerivation rec {
   pname = "signalbackup-tools";
-  version = "20220810";
+  version = "20220825";
 
   src = fetchFromGitHub {
     owner = "bepaald";
     repo = pname;
     rev = version;
-    sha256 = "sha256-z/RAvNUss9rNuBQvxjJQl66ZMrlxvmS9at8L/vSG0XU=";
+    sha256 = "sha256-dqP30or4UvtnzUW6r0FqQxt1S6Y61Q1CljpAFGq2gSM=";
   };
-
-  # TODO: Remove when updating to next release.
-  patches = [
-    (fetchpatch {
-      name = "fix-platform-checks.patch";
-      url = "https://github.com/bepaald/signalbackup-tools/compare/20220810..a81baf25b6ba63da7d30d9a239e5b4bbc8d1ab4f.patch";
-      sha256 = "sha256-i7fuPBil8zB+V3wHHdcbmP79OZoTfG2ZpXPQ3m7X06c=";
-    })
-  ];
 
   postPatch = ''
     patchShebangs BUILDSCRIPT_MULTIPROC.bash44
