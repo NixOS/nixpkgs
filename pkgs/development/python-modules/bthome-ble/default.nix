@@ -1,4 +1,5 @@
 { lib
+, bluetooth-data-tools
 , bluetooth-sensor-state-data
 , buildPythonPackage
 , fetchFromGitHub
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "bthome-ble";
-  version = "0.3.6";
+  version = "0.3.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Y8BKBi5DZYpUtcJS6lLD+dVPhtL2xavQcPymVhdl7Zw=";
+    hash = "sha256-Gm+x8+wsfCb8ZbktGL7JMM3by6rMM1XsyyHbqMGKy8I=";
   };
 
   nativeBuildInputs = [
@@ -28,6 +29,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    bluetooth-data-tools
     bluetooth-sensor-state-data
     sensor-state-data
     pycryptodomex
