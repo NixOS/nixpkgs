@@ -55,13 +55,13 @@ let base = {
   });
 
   firebird_3 = stdenv.mkDerivation (base // rec {
-    version = "3.0.9";
+    version = "3.0.10";
 
     src = fetchFromGitHub {
       owner = "FirebirdSQL";
       repo = "firebird";
       rev = "v${version}";
-      sha256 = "0axgw4zzb7f7yszr8s7svnspv3mgyvpbkb0b3w6c70fnj10hw21c";
+      sha256 = "sha256-PT2b3989n/7xLGNREWinEey9SGnAXShITdum+yiFlHY=";
     };
 
     buildInputs = base.buildInputs ++ [ zlib libtommath ];
