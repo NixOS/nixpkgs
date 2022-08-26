@@ -31058,6 +31058,8 @@ with pkgs;
 
   termtosvg = callPackage ../tools/misc/termtosvg { };
 
+  tessen = callPackage ../tools/security/tessen { };
+
   inherit (callPackage ../applications/graphics/tesseract {
     inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
   })
