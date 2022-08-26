@@ -1,0 +1,88 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "swift-argument-parser",
+        "repositoryURL": "https://github.com/apple/swift-argument-parser",
+        "state": {
+          "branch": null,
+          "revision": "d2930e8fcf9c33162b9fcc1d522bc975e2d4179b",
+          "version": "1.0.1"
+        }
+      },
+      {
+        "package": "cmark-gfm",
+        "repositoryURL": "https://github.com/apple/swift-cmark.git",
+        "state": {
+          "branch": "release/5.7-gfm",
+          "revision": "792c1c3326327515ce9bf64c44196b7f4daab9a6",
+          "version": null
+        }
+      },
+      {
+        "package": "swift-crypto",
+        "repositoryURL": "https://github.com/apple/swift-crypto.git",
+        "state": {
+          "branch": null,
+          "revision": "9680b7251cd2be22caaed8f1468bd9e8915a62fb",
+          "version": "1.1.2"
+        }
+      },
+      {
+        "package": "SwiftDocCPlugin",
+        "repositoryURL": "https://github.com/apple/swift-docc-plugin",
+        "state": {
+          "branch": null,
+          "revision": "3303b164430d9a7055ba484c8ead67a52f7b74f6",
+          "version": "1.0.0"
+        }
+      },
+      {
+        "package": "SymbolKit",
+        "repositoryURL": "https://github.com/apple/swift-docc-symbolkit",
+        "state": {
+          "branch": "release/5.7",
+          "revision": "8682202025906dce29a8b04f9263f40ba87b89d8",
+          "version": null
+        }
+      },
+      {
+        "package": "CLMDB",
+        "repositoryURL": "https://github.com/apple/swift-lmdb.git",
+        "state": {
+          "branch": "release/5.7",
+          "revision": "6ea45a7ebf6d8f72bd299dfcc3299e284bbb92ee",
+          "version": null
+        }
+      },
+      {
+        "package": "swift-markdown",
+        "repositoryURL": "https://github.com/apple/swift-markdown.git",
+        "state": {
+          "branch": "release/5.7",
+          "revision": "d6cd065a7e4b6c3fad615dcd39890e095a2f63a2",
+          "version": null
+        }
+      },
+      {
+        "package": "swift-nio",
+        "repositoryURL": "https://github.com/apple/swift-nio.git",
+        "state": {
+          "branch": null,
+          "revision": "1d425b0851ffa2695d488cce1d68df2539f42500",
+          "version": "2.31.2"
+        }
+      },
+      {
+        "package": "swift-nio-ssl",
+        "repositoryURL": "https://github.com/apple/swift-nio-ssl.git",
+        "state": {
+          "branch": null,
+          "revision": "2e74773972bd6254c41ceeda827f229bccbf1c0f",
+          "version": "2.15.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

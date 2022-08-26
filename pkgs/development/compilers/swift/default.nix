@@ -92,6 +92,10 @@ let
       inherit (apple_sdk.frameworks) CryptoKit LocalAuthentication;
     };
 
+    swift-docc = callPackage ./swift-docc {
+      inherit (apple_sdk.frameworks) CryptoKit LocalAuthentication;
+    };
+
   };
 
 in self
