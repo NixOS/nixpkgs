@@ -29623,7 +29623,6 @@ with pkgs;
   qemacs = callPackage ../applications/editors/qemacs { };
 
   roxctl = callPackage ../applications/networking/cluster/roxctl {
-    buildGoModule = buildGo117Module;
   };
 
   rqbit = callPackage ../applications/networking/p2p/rqbit {
