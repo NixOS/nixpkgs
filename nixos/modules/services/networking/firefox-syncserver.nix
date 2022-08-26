@@ -312,7 +312,7 @@ in
         enableACME = cfg.singleNode.enableTLS;
         forceSSL = cfg.singleNode.enableTLS;
         locations."/" = {
-          proxyPass = "http://localhost:${toString cfg.settings.port}";
+          proxyPass = "http://127.0.0.1:${toString cfg.settings.port}";
           # source mentions that this header should be set
           extraConfig = ''
             add_header X-Content-Type-Options nosniff;
