@@ -1,7 +1,7 @@
-{ self, callPackage, lib }:
+{ self, callPackage, lib, passthruFun }:
 callPackage ./default.nix {
-  inherit self;
-  packagesAttr = "luajit_2_0.pkgs";
+  sourceVersion = { major = "2"; minor = "0"; patch = "5"; };
+  inherit self passthruFun;
   version = "2.0.5-2022-03-13";
   rev = "93a65d3cc263aef2d2feb3d7ff2206aca3bee17e";
   isStable = true;

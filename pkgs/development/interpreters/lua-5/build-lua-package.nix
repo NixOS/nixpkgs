@@ -1,7 +1,6 @@
 # Generic builder for lua packages
 { lib
 , lua
-, buildPackages
 , wrapLua
 , luarocks
 # Whether the derivation provides a lua module or not.
@@ -14,9 +13,7 @@ pname
 , version
 
 # by default prefix `name` e.g. "lua5.2-${name}"
-, namePrefix ? if lua.pkgs.isLuaJIT
-               then lua.name + "-"
-               else "lua" + lua.luaversion + "-"
+, namePrefix ? "${lua.pname}${lua.sourceVersion.major}.${lua.sourceVersion.minor}-"
 
 # Dependencies for building the package
 , buildInputs ? []

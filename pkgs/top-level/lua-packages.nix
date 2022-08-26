@@ -5,11 +5,12 @@
   for each package in a separate file: the call to the function would
   be almost as must code as the function itself. */
 
-{ stdenv
-, lua
-, pkgs
+{ pkgs
+, stdenv
 , lib
+, lua
 }:
+
 
 self:
 
