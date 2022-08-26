@@ -4130,6 +4130,8 @@ with pkgs;
 
   jwt-hack = callPackage ../tools/security/jwt-hack { } ;
 
+  jwx = callPackage ../tools/security/jwx { } ;
+
   kapacitor = callPackage ../servers/monitoring/kapacitor { };
 
   kaldi = callPackage ../tools/audio/kaldi { };
