@@ -195,13 +195,6 @@ let
 
     (self: super: {
       pydeconz = super.pydeconz.overridePythonAttrs (oldAttrs: rec {
-        version = "102";
-        src = fetchFromGitHub {
-          owner = "Kane610";
-          repo = "deconz";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-Dbhp/+xyyWhFcYp2VRnivn5d1JMR5hBctdArIzLKIjM=";
-        };
         doCheck = false; # requires pytest-aiohttp>=1.0.0
       });
     })
@@ -307,7 +300,7 @@ let
   extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2022.8.6";
+  hassVersion = "2022.8.7";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -325,7 +318,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    hash = "sha256-SRvdBHVGFlbRWiaZJ1gN0C4uOdHmWaAmwGAgihpkUL0=";
+    hash = "sha256-FkI0EHO+M3dpt5xt73QkneQlCqgYUGKuO9MT3bRK2jI=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling

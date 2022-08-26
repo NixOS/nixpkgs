@@ -26,13 +26,13 @@
 
 mkDerivation rec {
   pname = "mlt";
-  version = "7.0.1";
+  version = "7.8.0";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "mlt";
     rev = "v${version}";
-    sha256 = "13c5miph9jjbz69dhy0zvbkk5zbb05dr3vraaci0d5fdbrlhyscf";
+    sha256 = "sha256-r8lvzz083WWlDtjvlsPwvOgplx2lPPkDDf3t0G9PqAQ=";
   };
 
   buildInputs = [

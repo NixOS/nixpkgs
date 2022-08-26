@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "zigpy-zigate";
-  version = "0.9.1";
+  version = "0.9.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zigpy-zigate";
     rev = "refs/tags/${version}";
-    hash = "sha256-H1R+wNUo/J5ATINHrkC4mJ8KKnBxVZUvF6X7y54aiVQ=";
+    hash = "sha256-89e9QkFxBdw5YujL73zR7jys0sCJz5r/jNaVmLxv37g=";
   };
 
   propagatedBuildInputs = [
