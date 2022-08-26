@@ -14242,6 +14242,13 @@
     githubId = 36407913;
     name = "Uli Baum";
   };
+  xerbalind = {
+    name = "Xander Bil";
+    email = "xandbi1@gmail.com";
+    matrix = "@xander:matrix.icth.xyz";
+    github = "xerbalind";
+    githubId = 47951455;
+  };
   xfnw = {
     email = "xfnw+nixos@riseup.net";
     github = "xfnw";
