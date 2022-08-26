@@ -76,8 +76,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Rate limiting utilities";
-    homepage = "https://limits.readthedocs.org/";
+    description = "Rate limiting using various strategies and storage backends such as redis & memcached";
+    homepage = "https://github.com/alisaifee/limits";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
