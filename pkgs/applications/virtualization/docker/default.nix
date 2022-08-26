@@ -21,33 +21,38 @@ rec {
     }:
   let
     docker-runc = runc.overrideAttrs (oldAttrs: {
-      name = "docker-runc-${version}";
+      pname = "docker-runc";
       inherit version;
+
       src = fetchFromGitHub {
         owner = "opencontainers";
         repo = "runc";
         rev = runcRev;
         sha256 = runcSha256;
       };
+
       # docker/runc already include these patches / are not applicable
       patches = [];
     });
 
     docker-containerd = containerd.overrideAttrs (oldAttrs: {
-      name = "docker-containerd-${version}";
+      pname = "docker-containerd";
       inherit version;
+
       src = fetchFromGitHub {
         owner = "containerd";
         repo = "containerd";
         rev = containerdRev;
         sha256 = containerdSha256;
       };
+
       buildInputs = oldAttrs.buildInputs ++ [ libseccomp ];
     });
 
-    docker-tini = tini.overrideAttrs  (oldAttrs: {
-      name = "docker-init-${version}";
+    docker-tini = tini.overrideAttrs (oldAttrs: {
+      pname = "docker-init";
       inherit version;
+
       src = fetchFromGitHub {
         owner = "krallin";
         repo = "tini";
@@ -63,10 +68,9 @@ rec {
       NIX_CFLAGS_COMPILE = "-DMINIMAL=ON";
     });
 
-    moby = buildGoPackage ((optionalAttrs (stdenv.isLinux)) rec {
-      name = "moby-${version}";
+    moby = buildGoPackage (optionalAttrs stdenv.isLinux rec {
+      pname = "moby";
       inherit version;
-      inherit docker-runc docker-containerd docker-proxy docker-tini;
 
       src = moby-src;
 
@@ -75,7 +79,7 @@ rec {
       nativeBuildInputs = [ makeWrapper pkg-config go-md2man go libtool installShellFiles ];
       buildInputs = [ sqlite lvm2 btrfs-progs systemd libseccomp ];
 
-      extraPath = optionals (stdenv.isLinux) (makeBinPath [ iproute2 iptables e2fsprogs xz xfsprogs procps util-linux git ]);
+      extraPath = optionals stdenv.isLinux (makeBinPath [ iproute2 iptables e2fsprogs xz xfsprogs procps util-linux git ]);
 
       extraUserPath = optionals (stdenv.isLinux && !clientOnly) (makeBinPath [ rootlesskit slirp4netns fuse-overlayfs ]);
 
@@ -128,25 +132,17 @@ rec {
           --prefix PATH : "$out/libexec/docker:$extraPath:$extraUserPath"
       '';
 
-      DOCKER_BUILDTAGS = []
-        ++ optional (systemd != null) [ "journald" ]
-        ++ optional (btrfs-progs == null) "exclude_graphdriver_btrfs"
-        ++ optional (lvm2 == null) "exclude_graphdriver_devicemapper"
-        ++ optional (libseccomp != null) "seccomp";
+      DOCKER_BUILDTAGS = [ "journald" "seccomp" ];
     });
 
     plugins = optionals buildxSupport [ docker-buildx ]
       ++ optionals composeSupport [ docker-compose ];
     pluginsRef = symlinkJoin { name = "docker-plugins"; paths = plugins; };
   in
-    buildGoPackage ((optionalAttrs (!clientOnly) {
-
-    inherit docker-runc docker-containerd docker-proxy docker-tini moby;
-
-   }) // rec {
-    inherit version rev;
-
+    buildGoPackage (optionalAttrs (!clientOnly) {
+   } // rec {
     pname = "docker";
+    inherit version;
 
     src = fetchFromGitHub {
       owner = "docker";
@@ -233,7 +229,6 @@ rec {
       description = "An open source project to pack, ship and run any application as a lightweight container";
       license = licenses.asl20;
       maintainers = with maintainers; [ offline tailhook vdemeester periklis mikroskeem maxeaubrey ];
-      platforms = with platforms; linux ++ darwin;
     };
 
     # Exposed for tarsum build on non-linux systems (build-support/docker/default.nix)
