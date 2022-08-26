@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "qingping-ble";
-  version = "0.3.0";
+  version = "0.4.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "bluetooth-devices";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-EZH6G/dvXU1sVH3pYoJeQQkJD1xMKuqb3omCVhHTS0A=";
+    hash = "sha256-AJ5mS5IChbmlyUBpq95malPPh9NnB2p3dzS4fUJAkDI=";
   };
 
   nativeBuildInputs = [
