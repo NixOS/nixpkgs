@@ -26,9 +26,10 @@ stdenv.mkDerivation rec {
     "-Wno-error=stringop-overflow"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "FlatBuffers Compiler and Library in C for C ";
     homepage = "https://github.com/dvidelabs/flatcc";
-    license = [ lib.licenses.asl20 ];
+    license = [ licenses.asl20 ];
+    maintainers = with maintainers; [ onny ];
   };
 }
