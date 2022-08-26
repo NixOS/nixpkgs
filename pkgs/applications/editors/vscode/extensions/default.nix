@@ -1626,6 +1626,21 @@ let
         };
       };
 
+      mkhl.direnv = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "direnv";
+          publisher = "mkhl";
+          version = "0.6.1";
+          sha256 = "sha256-5/Tqpn/7byl+z2ATflgKV1+rhdqj+XMEZNbGwDmGwLQ=";
+        };
+        meta = with lib; {
+          description = "direnv support for Visual Studio Code";
+          license = licenses.bsd0;
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=mkhl.direnv";
+          maintainers = with maintainers; [ nullx76 ];
+        };
+      };
+
       mskelton.one-dark-theme = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "one-dark-theme";
