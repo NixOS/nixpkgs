@@ -218,5 +218,12 @@ in
     mkBootstrapToolsJob = drv:
       assert lib.elem drv.system supportedSystems;
       hydraJob' (lib.addMetaAttrs { inherit maintainers; } drv);
-  in lib.mapAttrsRecursiveCond (as: !lib.isDerivation as) (name: mkBootstrapToolsJob) tools;
+  in lib.mapAttrsRecursiveCond (as: !lib.isDerivation as) (name: mkBootstrapToolsJob)
+    # The `bootstrapTools.${platform}.bootstrapTools` derivation
+    # *unpacks* the bootstrap-files using their own `busybox` binary,
+    # so it will fail unless buildPlatform.canExecute hostPlatform.
+    # Unfortunately `bootstrapTools` also clobbers its own `system`
+    # attribute, so there is no way to detect this -- we must add it
+    # as a special case.
+    (builtins.removeAttrs tools ["bootstrapTools"]);
 }
