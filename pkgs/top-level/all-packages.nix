@@ -11760,6 +11760,8 @@ with pkgs;
 
   upx = callPackage ../tools/compression/upx { };
 
+  upx-unstable = callPackage ../tools/compression/upx/unstable.nix { };
+
   uq = callPackage ../misc/uq { };
 
   uqmi = callPackage ../tools/networking/uqmi { };
