@@ -1957,13 +1957,13 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=ocamllabs.ocaml-platform";
           homepage = "https://github.com/ocamllabs/vscode-ocaml-platform";
           license = licenses.isc;
-          maintainers = with maintainers; [ ratsclub ];
+          maintainers = with maintainers; [ ratsclub superherointj ];
         };
         mktplcRef = {
           name = "ocaml-platform";
           publisher = "ocamllabs";
-          version = "1.10.4";
-          sha256 = "sha256-Qk4wD6gh/xvH6nFBonje4Stz6Y6yaIyxx1TdAXQEycM=";
+          version = "1.10.7";
+          sha256 = "sha256-BxVur+aSbFPyX+DW9tQcfJEyImkbTC6O0uOV2d76au0=";
         };
       };
 
