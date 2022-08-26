@@ -2,7 +2,7 @@
 , fetchurl
 , lib
 , makeWrapper
-, electron_17
+, electron_18
 , makeDesktopItem
 , graphicsmagick
 , writeScript
@@ -50,7 +50,7 @@ let
     installPhase = ''
       runHook preInstall
       mkdir -p $out/bin
-      makeWrapper ${electron_17}/bin/electron $out/bin/obsidian \
+      makeWrapper ${electron_18}/bin/electron $out/bin/obsidian \
         --add-flags $out/share/obsidian/app.asar
       install -m 444 -D resources/app.asar $out/share/obsidian/app.asar
       install -m 444 -D resources/obsidian.asar $out/share/obsidian/obsidian.asar
