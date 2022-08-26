@@ -58,6 +58,8 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     sed -e "1s@.*@#! ${lua}/bin/lua$LUA_SUFFIX@" -i "$out"/bin/*
+    substituteInPlace $out/etc/luarocks/* \
+     --replace '${lua.luaOnBuild}' '${lua}'
 
     for i in "$out"/bin/*; do
         test -L "$i" || {
@@ -85,6 +87,10 @@ stdenv.mkDerivation rec {
     export PATH="src/bin:''${PATH:-}"
     export LUA_PATH="src/?.lua;''${LUA_PATH:-}"
   '';
+
+  disallowedReferences = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    lua.luaOnBuild
+  ];
 
   passthru = {
     updateScript = nix-update-script {
