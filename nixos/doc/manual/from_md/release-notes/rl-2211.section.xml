@@ -472,6 +472,12 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>services.matrix-synapse</literal> systemd unit
+          has been hardened.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Matrix Synapse now requires entries in the
           <literal>state_group_edges</literal> table to be unique, in
           order to prevent accidentally introducing duplicate

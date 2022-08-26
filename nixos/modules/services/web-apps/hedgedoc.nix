@@ -933,6 +933,14 @@ in
                 Required group names.
               '';
             };
+            providerName = mkOption {
+              type = types.str;
+              default = "";
+              example = "My institution";
+              description = lib.mdDoc ''
+                Optional name to be displayed at login form indicating the SAML provider.
+              '';
+            };
             attribute = {
               id = mkOption {
                 type = types.str;

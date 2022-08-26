@@ -4,24 +4,23 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
-, pycryptodomex
 , pytestCheckHook
 , pythonOlder
 , sensor-state-data
 }:
 
 buildPythonPackage rec {
-  pname = "bthome-ble";
-  version = "0.3.8";
+  pname = "thermopro-ble";
+  version = "0.4.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
-    owner = "Bluetooth-Devices";
+    owner = "bluetooth-devices";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-J5i9r2bZtiEOqkQJ6yhTWboqvgo2gsi8z6XeyxtHwSw=";
+    hash = "sha256-5KfR01qsSGF2ZNklhm7he9Hskk8pqC2GEmIcsB4HpRY=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +31,6 @@ buildPythonPackage rec {
     bluetooth-data-tools
     bluetooth-sensor-state-data
     sensor-state-data
-    pycryptodomex
   ];
 
   checkInputs = [
@@ -41,16 +39,16 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=bthome_ble --cov-report=term-missing:skip-covered" ""
+      --replace " --cov=thermopro_ble --cov-report=term-missing:skip-covered" ""
   '';
 
   pythonImportsCheck = [
-    "bthome_ble"
+    "thermopro_ble"
   ];
 
   meta = with lib; {
-    description = "Library for BThome BLE devices";
-    homepage = "https://github.com/Bluetooth-Devices/bthome-ble";
+    description = "Library for Thermopro BLE devices";
+    homepage = "https://github.com/bluetooth-devices/thermopro-ble";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
