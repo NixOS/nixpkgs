@@ -1,7 +1,7 @@
 { lib, buildGoModule, fetchFromGitHub }:
 
 # SHA of ${version} for the tool's help output. Unfortunately this is needed in build flags.
-let rev = "51c79060fc1433233eb43842de564f0f2e47be86";
+let rev = "551bf68c694927839c3add25a2512f880902ee9b";
 in
 buildGoModule rec {
   pname = "sonobuoy";
