@@ -21,12 +21,9 @@
 
 { fullVersion
 , url
-, hash ? ""
-, sha256 ? ""
+, hash
 , supportedCudaVersions ? [ ]
 }:
-
-assert (hash != "") || (sha256 != "");
 
 assert useCudatoolkitRunfile || (libcublas != null);
 
@@ -46,7 +43,7 @@ stdenv.mkDerivation {
   inherit version;
 
   src = fetchurl {
-    inherit url hash sha256;
+    inherit url hash;
   };
 
   # Check and normalize Runpath against DT_NEEDED using autoPatchelf.
