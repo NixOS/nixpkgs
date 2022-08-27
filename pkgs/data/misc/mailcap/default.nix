@@ -9,6 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Xuou8XswSXe6PsuHr61DGfoEQPgl5Pb7puj6L/64h4U=";
   };
 
+  patches = [
+    ./update-mime-types.patch
+  ];
+
   installPhase = ''
     runHook preInstall
 

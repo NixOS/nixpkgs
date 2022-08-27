@@ -1,0 +1,28 @@
+diff --git a/mime.types b/mime.types
+index 220418f..da0ff88 100644
+--- a/mime.types
++++ b/mime.types
+@@ -198,6 +198,7 @@ application/LXF					lxf
+ application/mac-binhex40			hqx
+ application/macwriteii
+ application/mads+xml				mads
++application/manifest+json			webmanifest
+ application/marc				mrc
+ application/marcxml+xml				mrcx
+ application/mathematica				nb ma mb
+@@ -2076,6 +2077,7 @@ application/x-troff-me				me
+ application/x-troff-ms				ms
+ application/x-ustar				ustar
+ application/x-wais-source			src
++application/x-web-app-manifest+json		webapp
+ application/x-xpinstall				xpi
+ application/x-xspf+xml				xspf
+ application/x-xz				xz
+@@ -2106,6 +2108,7 @@ image/x-xbitmap					xbm
+ image/x-xpixmap					xpm
+ image/x-xwindowdump				xwd
+ text/html-sandboxed				sandboxed
++text/x-component				htc
+ text/x-pod					pod
+ text/x-setext					etx
+ video/webm					webm
