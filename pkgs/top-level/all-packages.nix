@@ -1699,6 +1699,48 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit CoreGraphics CoreServices CoreText Foundation OpenGL;
   };
 
+  blackbox-terminal = callPackage ../applications/terminal-emulators/blackbox-terminal {
+    libadwaita = libadwaita.overrideAttrs (_: {
+      version = "unstable-2022-07-28";
+      src = fetchFromGitLab {
+        domain = "gitlab.gnome.org";
+        owner = "gnome";
+        repo = "libadwaita";
+        rev = "161249fa953fb06a146d8d22612711707ede1ea9";
+        hash = "sha256-RyIUpBB1flkFgzv2X6PlfOxSYWGPtkdehiV7Gf1zprA=";
+      };
+    });
+    libmarble = libmarble.overrideAttrs (attrs: {
+      version = "gtk4-unstable-2022-04-19";
+      src = fetchFromGitLab {
+        domain = "gitlab.com";
+        owner = "raggesilver";
+        repo = "marble";
+        rev = "6dcc6fefa35f0151b0549c01bd774750fe6bdef8";
+        hash = "sha256-0VJ9nyjWOOdLBm3ufleS/xcAS5YsSedJ2NtBjyM3uaY=";
+      };
+      buildInputs = attrs.buildInputs ++ [
+        gtk4
+      ];
+    });
+    vte = vte.overrideAttrs (attrs: {
+      version = "gtk4-unstable-2022-08-09";
+      src = fetchFromGitLab {
+        domain = "gitlab.gnome.org";
+        owner = "gnome";
+        repo = "vte";
+        rev = "70366d113516382038c69f863c9915753041e563";
+        sha256 = "sha256-bwnGz9nTxcGjTbIXSqL23XoWW4PdtrvrIDNn+Vb6c5g=";
+      };
+      propagatedBuildInputs = attrs.propagatedBuildInputs ++ [
+        gtk4
+      ];
+      mesonFlags = attrs.mesonFlags ++ [
+        "-Dgtk4=true"
+      ];
+    });
+  };
+
   contour = libsForQt5.callPackage ../applications/terminal-emulators/contour { fmt = fmt_8; };
 
   cool-retro-term = libsForQt5.callPackage ../applications/terminal-emulators/cool-retro-term { };
