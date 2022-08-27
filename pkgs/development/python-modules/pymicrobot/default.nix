@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pymicrobot";
-  version = "0.0.4";
+  version = "0.0.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyMicroBot";
     inherit version;
-    hash = "sha256-lNrohVQruFAtrzTxJ6qEZ8tVM5fgrCRAG7WXJSKMRFs=";
+    hash = "sha256-k+xefVwswTL6ww0k4D6nScjUKUOxOQloXUOZ75S+sbY=";
   };
 
   propagatedBuildInputs = [

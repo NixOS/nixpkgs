@@ -36,11 +36,6 @@ let
       # AMD P-state driver
       X86_AMD_PSTATE = yes;
 
-      # Paragon's NTFS3 driver
-      NTFS3_FS = module;
-      NTFS3_LZX_XPRESS = yes;
-      NTFS3_FS_POSIX_ACL = yes;
-
       # Google's BBRv2 TCP congestion Control
       TCP_CONG_BBR2 = yes;
       DEFAULT_BBR2 = yes;

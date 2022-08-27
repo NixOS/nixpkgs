@@ -451,6 +451,7 @@ let
           "Multicast"
           "AllMulticast"
           "Unmanaged"
+          "Group"
           "RequiredForOnline"
           "RequiredFamilyForOnline"
           "ActivationPolicy"
@@ -463,6 +464,8 @@ let
         (assertValueOneOf "AllMulticast" boolValues)
         (assertValueOneOf "Promiscuous" boolValues)
         (assertValueOneOf "Unmanaged" boolValues)
+        (assertInt "Group")
+        (assertRange "Group" 0 2147483647)
         (assertValueOneOf "RequiredForOnline" (boolValues ++ [
           "missing"
           "off"
@@ -800,10 +803,12 @@ let
 
       sectionDHCPServer = checkUnitConfig "DHCPServer" [
         (assertOnlyFields [
+          "ServerAddress"
           "PoolOffset"
           "PoolSize"
           "DefaultLeaseTimeSec"
           "MaxLeaseTimeSec"
+          "UplinkInterface"
           "EmitDNS"
           "DNS"
           "EmitNTP"
@@ -817,10 +822,15 @@ let
           "EmitLPR"
           "LPR"
           "EmitRouter"
+          "Router"
           "EmitTimezone"
           "Timezone"
           "SendOption"
           "SendVendorOption"
+          "BindToInterface"
+          "RelayTarget"
+          "RelayAgentCircuitId"
+          "RelayAgentRemoteId"
         ])
         (assertInt "PoolOffset")
         (assertMinimum "PoolOffset" 0)
@@ -834,6 +844,7 @@ let
         (assertValueOneOf "EmitLPR" boolValues)
         (assertValueOneOf "EmitRouter" boolValues)
         (assertValueOneOf "EmitTimezone" boolValues)
+        (assertValueOneOf "BindToInterface" boolValues)
       ];
 
       sectionIPv6SendRA = checkUnitConfig "IPv6SendRA" [
@@ -842,6 +853,7 @@ let
           "OtherInformation"
           "RouterLifetimeSec"
           "RouterPreference"
+          "UplinkInterface"
           "EmitDNS"
           "DNS"
           "EmitDomains"

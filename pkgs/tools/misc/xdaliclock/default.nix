@@ -1,23 +1,40 @@
-{ lib, stdenv, fetchurl, libX11, xorgproto, libXt, libICE, libSM, libXext }:
+{ lib, stdenv, fetchurl
+, gtk3
+, wrapGAppsHook
+, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "xdaliclock";
-  version = "2.44";
+  version = "2.45";
 
   src = fetchurl {
-    url="https://www.jwz.org/xdaliclock/${pname}-${version}.tar.gz";
-    sha256 = "1gsgnsm6ql0mcg9zpdkhws3g23r3a92bc3rpg4qbgbmd02nvj3c0";
+    url = "https://www.jwz.org/xdaliclock/${pname}-${version}.tar.gz";
+    hash = "sha256-GHjSUuRHCAVwWcDMRb2ng1aNbheu+xnUBNLqSpPkZeQ=";
   };
 
   # Note: don't change this to set sourceRoot, or updateAutotoolsGnuConfigScriptsHook
   # on aarch64 doesn't find the files to patch and the aarch64 build fails!
   preConfigure = "cd X11";
 
-  buildInputs = [ libX11 xorgproto libXt libICE libSM libXext ];
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook
+  ];
+  buildInputs = [
+    gtk3
+  ];
 
   preInstall = ''
-    mkdir -vp $out/bin $out/share/man/man1
+    mkdir -vp $out/bin $out/share/man/man1 $out/share/gsettings-schemas/$name/glib-2.0/schemas $out/share/pixmaps $out/share/applications
+
+    # https://www.jwz.org/blog/2022/08/dali-clock-2-45-released/#comment-236762
+    gappsWrapperArgs+=(--set MESA_GL_VERSION_OVERRIDE 3.1)
   '';
+
+  installFlags = [
+    "GTK_ICONDIR=${placeholder "out"}/share/pixmaps/"
+    "GTK_APPDIR=${placeholder "out"}/share/applications/"
+  ];
 
   meta = with lib; {
     description = "A clock application that morphs digits when they are changed";
