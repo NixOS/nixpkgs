@@ -10,11 +10,11 @@
 
 let
   pname = "pgadmin";
-  version = "6.12";
+  version = "6.13";
 
   src = fetchurl {
     url = "https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v${version}/source/pgadmin4-${version}.tar.gz";
-    sha256 = "sha256-cO7GdZDfJ0pq1jpMyrVy0UM49WhrKOIJOmMJauSkbyo=";
+    sha256 = "sha256-vLItmE76R1IzgMYEGEvIeOmbfQQac5WK12AkkZknTFU=";
   };
 
   yarnDeps = mkYarnModules {
@@ -72,13 +72,16 @@ let
     azure-identity
   ];
 
-  # override necessary on pgadmin4 6.12
+  # keep the scope, as it is used throughout the derivation and tests
+  # this also makes potential future overrides easier
   pythonPackages = python3.pkgs.overrideScope (final: prev: rec {
-    werkzeug = prev.werkzeug.overridePythonAttrs (oldAttrs: rec {
-      version = "2.0.3";
+    # flask 2.2 is incompatible with pgadmin 6.13
+    # https://redmine.postgresql.org/issues/7651
+    flask = prev.flask.overridePythonAttrs (oldAttrs: rec {
+      version = "2.1.3";
       src = oldAttrs.src.override {
         inherit version;
-        sha256 = "sha256-uGP4/wV8UiFktgZ8niiwQRYbS+W6TQ2s7qpQoWOCLTw=";
+        sha256 = "sha256-FZcuUBffBXXD1sCQuhaLbbkCWeYgrI1+qBOjlrrVtss=";
       };
     });
   });
@@ -124,7 +127,7 @@ pythonPackages.buildPythonApplication rec {
 
     # build the documentation
     cd docs/en_US
-    ${sphinx}/bin/sphinx-build -W -b html -d _build/doctrees . _build/html
+    sphinx-build -W -b html -d _build/doctrees . _build/html
 
     # Build the clean tree
     cd ../../web
@@ -156,7 +159,7 @@ pythonPackages.buildPythonApplication rec {
     cp -v ../pkg/pip/setup_pip.py setup.py
   '';
 
-  nativeBuildInputs = with pythonPackages; [ cython pip ];
+  nativeBuildInputs = with pythonPackages; [ cython pip sphinx ];
   buildInputs = [
     zlib
     pythonPackages.wheel
