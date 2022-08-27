@@ -3,7 +3,7 @@
   lib, stdenv, requireFile, autoPatchelfHook, unzip,
 
   # Everspace Dependencies
-  cairo, gdk-pixbuf, gnome2, gtk2-x11, libGL, openal,
+  cairo, gdk-pixbuf, pango, gtk2-x11, libGL, openal,
 
   # Unreal Engine 4 Dependencies
   xorg
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   buildInputs = [
     cairo
     gdk-pixbuf
-    gnome2.pango
+    pango
     gtk2-x11
     openal
     stdenv.cc.cc.lib
