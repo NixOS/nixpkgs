@@ -214,7 +214,7 @@ in
           inherit (client) id;
           redirectURIs = [ client.callbackURL ];
           name = "OIDC for ${client.id}";
-          secret = "$DEX_CLIENT_${client.id}";
+          secretEnv = "DEX_CLIENT_${client.id}";
         });
       };
     };
