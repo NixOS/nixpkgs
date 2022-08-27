@@ -50,6 +50,8 @@ let
   #INFO: The targetPrefix prepended to binary names to allow multiple binuntils
   # on the PATH to both be usable.
   targetPrefix = lib.optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
+
+  gcc_lto_plugin_path = "${stdenv.cc.cc}/libexec/gcc/${stdenv.targetPlatform.config}/${stdenv.cc.cc.version or "UNKNOWN"}/liblto_plugin.so";
 in
 
 stdenv.mkDerivation {
@@ -200,6 +202,19 @@ stdenv.mkDerivation {
   doInstallCheck = (buildPlatform == hostPlatform) && (hostPlatform == targetPlatform);
 
   enableParallelBuilding = true;
+
+  # Install linker plugin to make 'ar', 'ld' and friends auto-load
+  # linker plugin to handle LTO bytecode without explicit --plugin
+  # parameter.
+  #
+  # We can install the link only if our compiler's host and target
+  # match binutils' host and target.
+  postInstall = lib.optionalString (   stdenv.cc.stdenv.hostPlatform == stdenv.hostPlatform
+                                    && stdenv.cc.stdenv.targetPlatform == stdenv.targetPlatform) ''
+    if [ -e ${gcc_lto_plugin_path} ]; then
+      ln -s ${gcc_lto_plugin_path} $out/lib/bfd-plugins/
+    fi
+  '';
 
   passthru = {
     inherit targetPrefix;
