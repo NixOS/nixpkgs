@@ -19341,6 +19341,8 @@ with pkgs;
 
   liblxi = callPackage ../development/libraries/liblxi { };
 
+  libmarble = callPackage ../development/libraries/libmarble { };
+
   libmaxminddb = callPackage ../development/libraries/libmaxminddb { };
 
   libmcrypt = callPackage ../development/libraries/libmcrypt {};
