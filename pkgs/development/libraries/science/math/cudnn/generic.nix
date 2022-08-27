@@ -21,12 +21,12 @@
 
 { fullVersion
 , url
-, hash ? null
-, sha256 ? null
+, hash ? ""
+, sha256 ? ""
 , supportedCudaVersions ? [ ]
 }:
 
-assert (hash != null) || (sha256 != null);
+assert (hash != "") || (sha256 != "");
 
 assert useCudatoolkitRunfile || (libcublas != null);
 
