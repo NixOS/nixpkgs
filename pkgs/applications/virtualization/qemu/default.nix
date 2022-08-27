@@ -142,6 +142,11 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.com/qemu-project/qemu/-/commit/4367a20cc442c56b05611b4224de9a61908f9eac.patch";
       sha256 = "sha256-hpNu4Zjw1dIbT6Vt57cayHE1Elaltp0a/bsKlDY0Qr8=";
     })
+    (fetchpatch {
+      name = "CVE-2020-14394.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/effaf5a240e03020f4ae953e10b764622c3e87cc.patch";
+      sha256 = "sha256-NobsIxRC+xlyj8d/oD4mqgXAGX37pfww/PQQuKhrTzc=";
+    })
   ]
   ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
 
