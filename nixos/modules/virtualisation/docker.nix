@@ -32,7 +32,7 @@ in
     listenOptions =
       mkOption {
         type = types.listOf types.str;
-        default = ["/run/docker.sock"];
+        default = ["fd://"];
         description =
           lib.mdDoc ''
             A list of unix and tcp docker should listen to. The format follows
@@ -230,7 +230,7 @@ in
 
       virtualisation.docker.daemon.settings = {
         group = "docker";
-        hosts = [ "fd://" ];
+        hosts = mkDefault cfg.listenOptions;
         log-driver = mkDefault cfg.logDriver;
         storage-driver = mkIf (cfg.storageDriver != null) (mkDefault cfg.storageDriver);
         live-restore = mkDefault cfg.liveRestore;
