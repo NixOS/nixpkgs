@@ -1305,6 +1305,8 @@ with pkgs;
 
   ocs-url = libsForQt5.callPackage ../tools/misc/ocs-url { };
 
+  partialzip-rs = callPackage ../tools/networking/partialzip-rs { };
+
   pferd = callPackage ../tools/misc/pferd {};
 
   q = callPackage ../tools/networking/q {};
