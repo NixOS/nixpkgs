@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     # but use a conventional runtime sysconfdir outside the store
     ./add-option-for-installation-sysconfdir.patch
     # https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/merge_requests/654
-    (./0001-Make-gio-2.0-optional-${lib.versions.major version}.patch)
+    (./. + "/0001-Make-gio-2.0-optional-${lib.versions.major version}.patch")
     # TODO (not sent upstream)
     ./0002-Ignore-SCM_CREDS-on-darwin.patch
     ./0003-Ignore-HAVE_CPUID_H-on-aarch64-darwin.patch
