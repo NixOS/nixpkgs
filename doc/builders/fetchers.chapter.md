@@ -163,3 +163,8 @@ or "hg"), `domain` and `fetchSubmodules`.
 If `fetchSubmodules` is `true`, `fetchFromSourcehut` uses `fetchgit`
 or `fetchhg` with `fetchSubmodules` or `fetchSubrepos` set to `true`,
 respectively. Otherwise, the fetcher uses `fetchzip`.
+
+## `fetchPartial` {#fetchpartial}
+
+This is used when you only want to fetch a single file from a huge zip archive. It expects `url`, `file` and `sha256` as arguments.
+Note that the sever where `url` is hosted must support HTTP range requests.

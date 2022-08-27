@@ -851,6 +851,8 @@ with pkgs;
 
   fetchgx = callPackage ../build-support/fetchgx { };
 
+  fetchPartial = callPackage ../build-support/fetchpartial { };
+
   resolveMirrorURLs = {url}: fetchurl {
     showURLs = true;
     inherit url;
