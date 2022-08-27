@@ -878,6 +878,9 @@ let
       SCSI_LOGGING = yes; # SCSI logging facility
       SERIAL_8250  = yes; # 8250/16550 and compatible serial support
 
+      SLAB_FREELIST_HARDENED = whenAtLeast "4.14" yes;
+      SLAB_FREELIST_RANDOM   = whenAtLeast "4.10" yes;
+
       SLIP_COMPRESSED = yes; # CSLIP compressed headers
       SLIP_SMART      = yes;
 
