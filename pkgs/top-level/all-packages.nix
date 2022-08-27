@@ -11997,6 +11997,8 @@ with pkgs;
 
   wireguard-tools = callPackage ../tools/networking/wireguard-tools { };
 
+  wiringpi = callPackage ../os-specific/linux/wiringpi { };
+
   wg-friendly-peer-names = callPackage ../tools/networking/wg-friendly-peer-names { };
 
   wg-netmanager = callPackage ../tools/networking/wg-netmanager {
