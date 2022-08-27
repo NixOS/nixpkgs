@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform, openssl, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, openssl, pkg-config, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "dura";
@@ -21,6 +21,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    Security
   ];
 
   nativeBuildInputs = [
@@ -38,7 +40,6 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/tkellogg/dura";
     license = licenses.asl20;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ drupol ];
   };
 }
