@@ -54,6 +54,11 @@ self: super: {
     Cabal-syntax = self.Cabal-syntax_3_8_1_0;
     process = self.process_1_6_15_0;
   });
+  cabal-install-solver = super.cabal-install-solver.overrideScope (self: super: {
+    Cabal = self.Cabal_3_8_1_0;
+    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
+    process = self.process_1_6_15_0;
+  });
 
   # Pick right versions for GHC-specific packages
   ghc-api-compat = doDistribute self.ghc-api-compat_8_10_7;

@@ -60,6 +60,11 @@ self: super: {
     Cabal-syntax = self.Cabal-syntax_3_8_1_0;
     process = self.process_1_6_15_0;
   });
+  cabal-install-solver = super.cabal-install-solver.overrideScope (self: super: {
+    Cabal = self.Cabal_3_8_1_0;
+    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
+    process = self.process_1_6_15_0;
+  });
 
   # Ignore overly restrictive upper version bounds.
   aeson-diff = doJailbreak super.aeson-diff;
