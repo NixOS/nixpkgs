@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs =
-    [ yasm cmake pkg-config ]
+    [ yasm cmake pkg-config makeWrapper ]
     ++ lib.optional withQT wrapQtAppsHook;
   buildInputs = [
     zlib gettext libvdpau libva libXv sqlite fribidi fontconfig
-    freetype alsa-lib libXext libGLU makeWrapper
+    freetype alsa-lib libXext libGLU
   ] ++ lib.optional withX264 x264
     ++ lib.optional withX265 x265
     ++ lib.optional withXvid xvidcore

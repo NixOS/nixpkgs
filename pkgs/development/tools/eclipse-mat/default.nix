@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     mv $out/share/pixmaps/eclipse64.png $out/share/pixmaps/eclipse.png
   '';
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip makeWrapper ];
   buildInputs = [
     fontconfig
     freetype
@@ -90,7 +90,6 @@ stdenv.mkDerivation rec {
     libX11
     libXrender
     libXtst
-    makeWrapper
     zlib
     shared-mime-info
     webkitgtk

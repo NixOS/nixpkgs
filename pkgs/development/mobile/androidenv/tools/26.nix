@@ -3,9 +3,10 @@
 deployAndroidPackage {
   name = "androidsdk";
   inherit os package;
-  buildInputs = [ makeWrapper ]
-    ++ lib.optional (os == "linux") (
-      (with pkgs; [ autoPatchelfHook glibc freetype fontconfig fontconfig.lib])
+  nativeBuildInputs = [ makeWrapper ]
+    ++ lib.optionals (os == "linux") [ autoPatchelfHook ];
+  buildInputs = lib.optional (os == "linux") (
+      (with pkgs; [ glibc freetype fontconfig fontconfig.lib])
       ++ (with pkgs.xorg; [ libX11 libXrender libXext ])
       ++ (with pkgs_i686; [ glibc xorg.libX11 xorg.libXrender xorg.libXext fontconfig.lib freetype zlib ])
     );

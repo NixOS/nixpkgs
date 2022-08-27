@@ -45,7 +45,7 @@ let
   withPlugins = plugins: let
     vapoursynthWithPlugins = vapoursynth.withPlugins plugins;
   in runCommand "${unwrapped.name}-with-plugins" {
-    buildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
     passthru = { withPlugins = plugins': withPlugins (plugins ++ plugins'); };
   } ''
     mkdir -p $out/bin

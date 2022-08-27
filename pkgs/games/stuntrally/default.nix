@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     ln -s ${tracks} data/tracks
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config makeWrapper ];
   buildInputs = [
     boost
     ogre
@@ -45,7 +45,6 @@ stdenv.mkDerivation rec {
     ois
     SDL2
     libvorbis
-    makeWrapper
     enet
     libXcursor
     bullet

@@ -3148,7 +3148,7 @@ with pkgs;
 
   cabal2nix = symlinkJoin {
     inherit (cabal2nix-unwrapped) name meta;
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ buildPackages.makeWrapper ];
     paths = [ cabal2nix-unwrapped ];
     postBuild = ''
       wrapProgram $out/bin/cabal2nix \
