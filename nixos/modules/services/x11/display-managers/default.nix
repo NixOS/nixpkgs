@@ -24,7 +24,7 @@ let
     Xft.lcdfilter: lcd${fontconfig.subpixel.lcdfilter}
     Xft.hinting: ${if fontconfig.hinting.enable then "1" else "0"}
     Xft.autohint: ${if fontconfig.hinting.autohint then "1" else "0"}
-    Xft.hintstyle: hintslight
+    Xft.hintstyle: ${fontconfig.hinting.style}
   '';
 
   # file provided by services.xserver.displayManager.sessionData.wrapper
