@@ -476,6 +476,8 @@ in {
 
   airly = callPackage ../development/python-modules/airly { };
 
+  airthings-ble = callPackage ../development/python-modules/airthings-ble { };
+
   airthings-cloud = callPackage ../development/python-modules/airthings-cloud { };
 
   airtouch4pyapi = callPackage ../development/python-modules/airtouch4pyapi { };
