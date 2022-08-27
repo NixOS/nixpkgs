@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , autoreconfHook
-# doc: https://github.com/ivmai/bdwgc/blob/v8.0.6/doc/README.macros (LARGE_CONFIG)
+# doc: https://github.com/ivmai/bdwgc/blob/v8.2.2/doc/README.macros (LARGE_CONFIG)
 , enableLargeConfig ? false
 , enableMmap ? true
 , nixVersions
@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "boehm-gc";
-  version = "8.0.6";
+  version = "8.2.2";
 
   src = fetchurl {
     urls = [
       "https://www.hboehm.info/gc/gc_source/gc-${finalAttrs.version}.tar.gz"
       "https://github.com/ivmai/bdwgc/releases/download/v${finalAttrs.version}/gc-${finalAttrs.version}.tar.gz"
     ];
-    sha256 = "sha256-O0kUq8n6dlk1lnc+TaZx1+1NU5Dj1G+/Ll8VXhIb6hE=";
+    sha256 = "sha256-8wEHvLBi4JIKeQ//+lbZUSNIVGhZNkwjoUviZLOINqA=";
   };
 
   outputs = [ "out" "dev" "doc" ];
