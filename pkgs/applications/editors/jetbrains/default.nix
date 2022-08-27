@@ -5,6 +5,7 @@
 , maven
 , autoPatchelfHook
 , libdbusmenu
+, delve
 , vmopts ? null
 }:
 
@@ -135,6 +136,15 @@ let
         maintainers = with maintainers; [ edwtjo gytis-ivaskevicius steinybot AnatolyPopov ];
         platforms = ideaPlatforms;
       };
+    }).overrideAttrs (attrs: {
+      postFixup = (attrs.postFixup or "") + lib.optionalString stdenv.isLinux ''
+        cat >> $out/$pname/bin/idea.properties << EOL
+
+        # The delve Go debugger is packaged with Goland/the Go plugin, but the binary is not correctly linked for NixOS.
+        # This instructs Idea to use the system version of delve instead.
+        dlv.path=${delve}/bin/dlv
+        EOL
+      '';
     });
 
   buildMps = { pname, version, src, license, description, wmClass, product, ... }:
