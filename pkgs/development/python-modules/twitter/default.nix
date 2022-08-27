@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "twitter";
-  version = "1.19.3";
+  version = "1.19.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a56ff9575fbd50a51ce91107dcb5a4c3fd00c2ba1bcb172ce538b0948d3626e6";
+    sha256 = "sha256-g7jSSEpsdEihGuHG9MJTNVFe6NyB272vEsvAocRo72U=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
