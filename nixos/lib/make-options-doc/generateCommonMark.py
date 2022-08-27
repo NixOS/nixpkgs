@@ -1,9 +1,10 @@
 import json
 import sys
+import html
 
 options = json.load(sys.stdin)
 for (name, value) in options.items():
-    print('##', name.replace('<', '\\<').replace('>', '\\>'))
+    print('##', html.escape(name))
     print(value['description'])
     print()
     if 'type' in value:
