@@ -31,7 +31,14 @@ buildPythonPackage rec {
 
   sourceRoot = "source/paperwork-backend";
 
-  patchPhase = ''
+  patches = [
+    # disables a flaky test https://gitlab.gnome.org/World/OpenPaperwork/paperwork/-/issues/1035#note_1493700
+    ./flaky_test.patch
+  ];
+
+  patchFlags = [ "-p2" ];
+
+  postPatch = ''
     echo 'version = "${version}"' > src/paperwork_backend/_version.py
     chmod a+w -R ..
     patchShebangs ../tools
