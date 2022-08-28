@@ -62,8 +62,6 @@ stdenv.mkDerivation rec {
     "-Dsvg-backend=${if svgSupport then "librsvg" else "none"}"
   ];
 
-  CFLAGS = "-Wno-error=comment"; # https://gitlab.gnome.org/GNOME/librsvg/-/issues/856
-
   meta = with lib; {
     description = "Wayland-native application launcher, similar to rofi’s drun mode";
     homepage = "https://codeberg.org/dnkl/fuzzel";
